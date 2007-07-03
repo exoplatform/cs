@@ -13,8 +13,24 @@ import java.util.List;
  * Jun 23, 2007  
  */
 public class Message extends MessageHeader {
+  private String to_ ;
+  private String cc_ ;
+  private String bcc_ ;
   private String body_ ;
+  private String subject_ ;
   private List<Attachment> attachments_ ;
+  
+  public String getMessageTo() { return to_ ; }
+  public void setMessageTo(String s) { to_ = s ; }
+  
+  public String getMessageCc() { return cc_ ; }
+  public void setMessageCc(String s) { cc_ = s ; }
+  
+  public String getMessageBcc() { return bcc_ ; }
+  public void setMessageBcc(String s) { bcc_ = s ; }
+  
+  public String getSubject() { return subject_ ; }
+  public void setSubject(String s) { subject_ = s ; }
   
   public String getMessageBody() { return body_ ; }
   public void   setMessageBody(String s) { body_ =  s ; }

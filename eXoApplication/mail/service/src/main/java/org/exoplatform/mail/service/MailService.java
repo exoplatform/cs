@@ -164,5 +164,28 @@ public interface MailService {
    * @return the number of the new message
    * @throws Exception
    */
-  public int  checkNewMessage(String username, Account account) throws Exception ;
+  public int  checkNewMessage(String username, Account account) throws Exception ;  
+  
+  /**
+   * This method should: 
+   * 1. The service should load  the contacts belong to the user and cache in the service.
+   * 2. The service should return the  list of the contact in the cache.  If the user  hasn't configured
+   *    an contact, an empty list will be cached and return.
+   * @param username
+   * @return contact list
+   * @throws Exception
+   */
+  public List<Contact> getContacts(String username) throws Exception ;
+  
+  /**
+   * This method should: 
+   * 1. Check exists of contact display name.
+   * 2. Add and save contact to current user. 
+   * 3. invalidate or refresh cache list
+   * @param username
+   * @param contact
+   * @return
+   * @throws Exception
+   */
+  public void addContact(String username, Contact contact) throws Exception ;
 }

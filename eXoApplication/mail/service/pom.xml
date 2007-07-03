@@ -13,6 +13,23 @@
   <url>http://www.exoplatform.org</url>
   <description>eXo mail service</description>
   
-  <dependencies>   
+  <dependencies> 
+  	<dependency>
+      <groupId>org.exoplatform.core</groupId>
+      <artifactId>exo.core.component.security</artifactId>
+      <version>${org.exoplatform.core.version}</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.exoplatform.portal</groupId>
+      <artifactId>exo.portal.component.resources</artifactId>
+      <version>${org.exoplatform.portal.version}</version>
+    </dependency>
+    
+  	<dependency>
+      <groupId>org.exoplatform.portal</groupId>
+      <artifactId>exo.portal.component.jcrext</artifactId>
+      <version>${org.exoplatform.portal.version}</version>
+    </dependency>  
   </dependencies>
 </project>
