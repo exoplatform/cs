@@ -16,6 +16,8 @@ import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.MessageHeader;
+import org.exoplatform.registry.JCRRegistryService;
+import org.exoplatform.registry.ServiceRegistry;
 import org.exoplatform.services.jcr.RepositoryService;
 /**
  * Created by The eXo Platform SARL
@@ -25,14 +27,22 @@ import org.exoplatform.services.jcr.RepositoryService;
  */
 public class MailServiceImpl implements MailService{
   
-  final protected static String MAIL_HOME = "mailHome".intern() ;
+  final protected static String ACCOUNT_HOME = "accounts".intern() ;
   
   private DataStorage storage_ ;
-  RepositoryService  repositoryService_ ;
+  private RepositoryService  repositoryService_ ;
+  private JCRRegistryService jcrRegistryService_ ;
+  private Node mailRootNode_ ;
   
-  public MailServiceImpl(RepositoryService  repositoryService) {
+  public MailServiceImpl(RepositoryService  repositoryService, JCRRegistryService jcrRegistryService) 
+  throws Exception{
     repositoryService_ = repositoryService ;
-    
+    jcrRegistryService_ = jcrRegistryService ;
+    ServiceRegistry serviceRegistry = new ServiceRegistry("MailService") ;
+    jcrRegistryService_.createServiceRegistry(serviceRegistry, false) ;
+    String defaultWS = repositoryService_.getDefaultRepository().getConfiguration().getDefaultWorkspaceName() ;
+    Session session = repositoryService_.getDefaultRepository().getSystemSession(defaultWS) ;
+    mailRootNode_ = jcrRegistryService_.getServiceRegistryNode(session, serviceRegistry.getName()) ;
     //storage_ =  storage  ;
   }
   
@@ -124,10 +134,10 @@ public class MailServiceImpl implements MailService{
   }
 
   public void createAccount(String username, Account account) throws Exception {
-    Node mailHome = getMailHome() ;
+    Node mailHome = getAccountHome() ;
     // Add new account node to mailHome node
     
-  }
+ }
   
   public void addContact(String username, Contact contact) throws Exception {
     // TODO Auto-generated method stub
@@ -138,12 +148,14 @@ public class MailServiceImpl implements MailService{
     // TODO Auto-generated method stub
     return null;
   }
-
-  private Node getMailHome() throws Exception {
-    String defaultWS = repositoryService_.getDefaultRepository().getConfiguration().getDefaultWorkspaceName() ;
-    Session session = repositoryService_.getDefaultRepository().getSystemSession(defaultWS) ;
-    if(session.getRootNode().hasNode(MAIL_HOME)) return session.getRootNode().getNode(MAIL_HOME) ;
-    return session.getRootNode().addNode(MAIL_HOME) ;
+  
+  public Contact getContactById(String username, String id) throws Exception {
+    return null ;
+  }
+  
+  private Node getAccountHome() throws Exception {
+    if(mailRootNode_.hasNode(ACCOUNT_HOME)) return mailRootNode_.getNode(ACCOUNT_HOME) ;
+    return mailRootNode_.addNode(ACCOUNT_HOME) ;
   }
 
  

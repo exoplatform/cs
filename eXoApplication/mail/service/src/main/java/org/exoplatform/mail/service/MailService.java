@@ -5,6 +5,8 @@
 package org.exoplatform.mail.service;
 
 import java.util.List;
+
+import javax.jcr.Node;
 /**
  * Created by The eXo Platform SARL
  * Author : Tuan Nguyen
@@ -187,5 +189,17 @@ public interface MailService {
    * @return
    * @throws Exception
    */
+  public Contact getContactById(String username, String id) throws Exception ;
+  
+  /**
+   * This method should: 
+   * 1. Get contact node by identify of current user.
+   * 2. Map contact node to object of Contact class
+   * @param username
+   * @param contact id
+   * @return Contact
+   * @throws Exception
+   */
   public void addContact(String username, Contact contact) throws Exception ;
+  
 }

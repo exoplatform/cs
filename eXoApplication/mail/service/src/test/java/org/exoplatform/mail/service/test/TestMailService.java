@@ -19,6 +19,7 @@ public class TestMailService extends BaseMailTestCase{
   }
   
   public void testAccount() throws Exception {
+    
     assertNotNull(mailHomeNode_) ;
     //Add new account
     Account myaccount = new Account() ;
