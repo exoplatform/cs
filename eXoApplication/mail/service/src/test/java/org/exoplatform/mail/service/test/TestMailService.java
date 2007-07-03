@@ -32,6 +32,7 @@ public class TestMailService extends BaseMailTestCase{
     mailService_.createAccount("hungnguyen", myaccount) ;
     
     //assert added account
+    assertNull(mailService_.getAccountById("myName", "myId")) ;
     
   }
 }
