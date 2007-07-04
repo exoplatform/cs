@@ -27,22 +27,14 @@ import org.exoplatform.services.jcr.RepositoryService;
  */
 public class MailServiceImpl implements MailService{
   
-  final protected static String ACCOUNT_HOME = "accounts".intern() ;
-  
   private DataStorage storage_ ;
   private RepositoryService  repositoryService_ ;
   private JCRRegistryService jcrRegistryService_ ;
-  private Node mailRootNode_ ;
   
   public MailServiceImpl(RepositoryService  repositoryService, JCRRegistryService jcrRegistryService) 
   throws Exception{
     repositoryService_ = repositoryService ;
-    jcrRegistryService_ = jcrRegistryService ;
-    ServiceRegistry serviceRegistry = new ServiceRegistry("MailService") ;
-    jcrRegistryService_.createServiceRegistry(serviceRegistry, false) ;
-    String defaultWS = repositoryService_.getDefaultRepository().getConfiguration().getDefaultWorkspaceName() ;
-    Session session = repositoryService_.getDefaultRepository().getSystemSession(defaultWS) ;
-    mailRootNode_ = jcrRegistryService_.getServiceRegistryNode(session, serviceRegistry.getName()) ;
+    jcrRegistryService_ = jcrRegistryService ;    
     //storage_ =  storage  ;
   }
   
@@ -133,11 +125,9 @@ public class MailServiceImpl implements MailService{
     return 0;
   }
 
-  public void createAccount(String username, Account account) throws Exception {
-    Node mailHome = getAccountHome() ;
-    // Add new account node to mailHome node
+  public void createAccount(String username, Account account) throws Exception {    
     
- }
+  }
   
   public void addContact(String username, Contact contact) throws Exception {
     // TODO Auto-generated method stub
@@ -153,10 +143,11 @@ public class MailServiceImpl implements MailService{
     return null ;
   }
   
-  private Node getAccountHome() throws Exception {
-    if(mailRootNode_.hasNode(ACCOUNT_HOME)) return mailRootNode_.getNode(ACCOUNT_HOME) ;
-    return mailRootNode_.addNode(ACCOUNT_HOME) ;
+  private Node getMailHomeNode(String username) throws Exception {
+    ServiceRegistry serviceRegistry = new ServiceRegistry("MailService") ;
+    jcrRegistryService_.createServiceRegistry(username, serviceRegistry, false) ;
+    String defaultWS = repositoryService_.getDefaultRepository().getConfiguration().getDefaultWorkspaceName() ;
+    Session session = repositoryService_.getDefaultRepository().getSystemSession(defaultWS) ;
+    return jcrRegistryService_.getServiceRegistryNode(session, username, serviceRegistry.getName()) ;
   }
-
- 
 }

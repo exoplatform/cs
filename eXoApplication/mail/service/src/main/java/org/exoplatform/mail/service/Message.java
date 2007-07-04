@@ -18,6 +18,8 @@ public class Message extends MessageHeader {
   private String bcc_ ;
   private String body_ ;
   private String subject_ ;
+  private boolean isUnread_ = false ;
+  
   private List<Attachment> attachments_ ;
   
   public String getMessageTo() { return to_ ; }
@@ -34,6 +36,9 @@ public class Message extends MessageHeader {
   
   public String getMessageBody() { return body_ ; }
   public void   setMessageBody(String s) { body_ =  s ; }
+  
+  public void setUnread(boolean b) { isUnread_ = b ; }
+  public boolean isUnread() { return isUnread_ ; }
   
   public List<Attachment> getAttachments() { return attachments_ ; }
   public void setAttachements(List<Attachment> attachments) { attachments_ = attachments ; }
