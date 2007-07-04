@@ -4,6 +4,8 @@
  **************************************************************************/
 package org.exoplatform.mail.service.test;
 
+import javax.jcr.Node;
+
 import org.exoplatform.mail.service.Account;
 
 /**
@@ -35,5 +37,8 @@ public class TestMailService extends BaseMailTestCase{
     //assert added account
     assertNull(mailService_.getAccountById("myName", "myId")) ;
     
+    Node account = rootNode_.addNode("account1", "exo:account") ;
+    account.addNode("hello") ;
+    rootNode_.save() ;
   }
 }

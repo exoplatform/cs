@@ -4,6 +4,7 @@
  **************************************************************************/
 package org.exoplatform.mail.service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -18,7 +19,12 @@ public class Message extends MessageHeader {
   private String bcc_ ;
   private String body_ ;
   private String subject_ ;
+  private Date sendDate_ ;
+  private Date receivedDate_ ;
   private boolean isUnread_ = false ;
+  
+  private String[] folders_ ;
+  private String[] tags_ ;
   
   private List<Attachment> attachments_ ;
   
@@ -39,6 +45,18 @@ public class Message extends MessageHeader {
   
   public void setUnread(boolean b) { isUnread_ = b ; }
   public boolean isUnread() { return isUnread_ ; }
+  
+  public void setSendDate(Date d) { sendDate_ = d ; }
+  public Date getSendDate() { return sendDate_ ; }
+  
+  public void setReceivedDate(Date d) { receivedDate_ = d ; }
+  public Date getReceivedDate() { return receivedDate_ ; }
+  
+  public void setFolders(String[] folders) { folders_ = folders ; }
+  public String[] getFolders() { return folders_ ; }
+  
+  public void setTags(String[] tags) { tags_ = tags ; }
+  public String[] getTags() { return tags_ ; }
   
   public List<Attachment> getAttachments() { return attachments_ ; }
   public void setAttachements(List<Attachment> attachments) { attachments_ = attachments ; }

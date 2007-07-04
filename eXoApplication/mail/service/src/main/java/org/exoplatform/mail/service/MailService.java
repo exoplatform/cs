@@ -65,7 +65,26 @@ public interface MailService {
    * @param account
    * @throws Exception
    */
-  public void removeAccount(String username, Account account) throws Exception ;
+  public void removeAccount(String username, Account account) throws Exception ;  
+  /**
+   * This method should: 
+   * @param username
+   * @param accountId
+   * @param folderName
+   * @return Folder
+   * @throws Exception
+   */
+  public Folder getFolder(String username, String accountId, String folderName) throws Exception ;  
+  /**
+   * This method should:
+   * 1. Get account
+   * 2. Save folder under account 
+   * @param username
+   * @param accountId
+   * @param folder
+   * @throws Exception
+   */
+  public void saveUserFolder(String username, String accountId, Folder folder) throws Exception ;  
   /**
    * This method should:
    * 1. Move all the message in the  folder to the  default inbox folder

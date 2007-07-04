@@ -64,15 +64,11 @@ public class MailServiceImpl implements MailService{
     
   }
   
-  public Folder getFolder(String username, String folderId) throws Exception {
+  public Folder getFolder(String username, String accountId, String folderName) throws Exception {
     return null ;
   }
   
   public void saveUserFolder(String username, String accountId, Folder folder) throws Exception {
-    
-  }
-  
-  public void removeUserFolder(String username, Folder folder) throws Exception {
     
   }
   
@@ -149,5 +145,25 @@ public class MailServiceImpl implements MailService{
     String defaultWS = repositoryService_.getDefaultRepository().getConfiguration().getDefaultWorkspaceName() ;
     Session session = repositoryService_.getDefaultRepository().getSystemSession(defaultWS) ;
     return jcrRegistryService_.getServiceRegistryNode(session, username, serviceRegistry.getName()) ;
+  }
+  
+  private Node getMessageHome(String username, String accountId) throws Exception {
+    return null ;
+  }
+  
+  private Node getContactHome(String username, String accountId) throws Exception {
+    return null ;
+  }
+  
+  private Node getContactGroupHome(String username, String accountId) throws Exception {
+    return null ;
+  }
+  
+  private Node getFolderHome(String username, String accountId) throws Exception {
+    return null ;
+  }
+  
+  private Node getTagHome(String username, String accountId) throws Exception {
+    return null ;
   }
 }
