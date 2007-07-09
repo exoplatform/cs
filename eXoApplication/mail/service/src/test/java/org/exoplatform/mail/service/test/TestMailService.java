@@ -22,7 +22,7 @@ public class TestMailService extends BaseMailTestCase{
   }
   
   public void testAccount() throws Exception {
-    
+
     assertNotNull(mailHomeNode_) ;
     //Add new account
     Account myaccount = new Account() ;
@@ -34,12 +34,26 @@ public class TestMailService extends BaseMailTestCase{
     myaccount.setSignature("my sign") ;
     myaccount.setDescription("No description ...") ;
     mailService_.createAccount("hungnguyen", myaccount) ;
-    
     //assert added account
-    assertNull(mailService_.getAccountById("myName", "myId")) ;
+    assertNotNull(mailService_.getAccountById("hungnguyen", "myId")) ;
+    assertEquals("my sign", mailService_.getAccountById("hungnguyen", "myId").getSignature());
     
+
+    //update account
+    myaccount.setLabel("new gmail");
+    mailService_.updateAccount("hungnguyen", myaccount);
+    //assert account updated
+    assertEquals("new gmail", mailService_.getAccountById("hungnguyen", "myId").getLabel());
+    
+    //delete account
+    mailService_.removeAccount("hungnguyen", myaccount);
+    //assert account deleted
+    assertNull(mailService_.getAccountById("hungnguyen", "myId"));
+    
+
     Node account = rootNode_.addNode("account1", "exo:account") ;
     rootNode_.save() ;
+
   }
   
   public void testContact() throws Exception {

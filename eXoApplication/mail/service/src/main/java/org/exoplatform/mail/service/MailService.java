@@ -119,7 +119,18 @@ public interface MailService {
    * @return
    * @throws Exception
    */
-  public Message getMessageById(String username, String id) throws Exception ;
+  public Message getMessageById(String username, String nodeName, String accountId) throws Exception ;
+  /**
+   * This method should:
+   * 1. Update the message in the database if it is existed
+   * 2. Update or invalidate the cache if the message is cached
+   * @param username
+   * @param accountId
+   * @param messageName
+   * @param message
+   * @throws Exception
+   */
+  //public void updateMessage(String username, String accountId, String messageName, Message message) throws Exception;
   /**
    * This method should:
    * 1. Remove the message from the database if it is existed
@@ -128,7 +139,7 @@ public interface MailService {
    * @param messageId
    * @throws Exception
    */
-  public void removeMessage(String username, String messageId) throws Exception ;
+  public void removeMessage(String username, String messageId, String accountId) throws Exception ;
   /**
    * This method should:
    * 1. Remove all the messages 
@@ -138,7 +149,7 @@ public interface MailService {
    * @param messageId
    * @throws Exception
    */
-  public void removeMessage(String username, String[] messageId) throws Exception ;
+  public void removeMessage(String username, String[] messageId, String accountId) throws Exception ;
   /**
    * This method should:
    * 1. Check the tag name to see if  the tag name is configured in the account

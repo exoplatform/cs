@@ -13,7 +13,15 @@ import java.io.InputStream;
  * Jun 23, 2007  
  */
 abstract public class Attachment {
-  public String id_ ;
+  private String id_ ;
+  private String mimeType_ ;
+  
+  public String getMimeType() {
+    return mimeType_;
+  }
+  public void setMimeType(String mimeType_) {
+    this.mimeType_ = mimeType_;
+  }
   
   public String getId() { return id_ ; }
   public void setId(String id) { id_ = id ; }
