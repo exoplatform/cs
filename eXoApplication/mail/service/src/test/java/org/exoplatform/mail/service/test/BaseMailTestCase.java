@@ -11,6 +11,7 @@ import javax.jcr.SimpleCredentials;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.RootContainer;
 import org.exoplatform.mail.service.MailService;
+import org.exoplatform.mail.service.impl.MailServiceImpl;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.log.LogService;

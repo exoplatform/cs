@@ -12,6 +12,7 @@ import javax.jcr.Session;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Contact;
 import org.exoplatform.mail.service.Folder;
+import org.exoplatform.mail.service.Group;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.MessageFilter;
@@ -125,11 +126,6 @@ public class MailServiceImpl implements MailService{
     
   }
   
-  public void addContact(String username, Contact contact) throws Exception {
-    // TODO Auto-generated method stub
-    
-  }
-  
   public List<Contact> getContacts(String username) throws Exception {
     // TODO Auto-generated method stub
     return null;
@@ -139,11 +135,46 @@ public class MailServiceImpl implements MailService{
     return null ;
   }
   
-  private Node getMailHomeNode(String username) throws Exception {
+  public void addContact(String username, Contact contact, boolean isAddNew) throws Exception {
+    //  TODO get Contact Home node
+    // check isAddNew parameter ==> do add new or update
+    // create contact Node (node type exo:contact)
+    // Save Contact Home node and save session
+    
+    
+  }
+  
+  public void removeContact(String username, String contactName) throws Exception {
+    // TODO Auto-generated method stub
+    
+  }
+  
+  public void addGroup(String username, Group group, boolean isAddNew) throws Exception {
+    // TODO Auto-generated method stub
+    
+  }
+
+  public List<Contact> getContactByGroup(String username, String groupName) throws Exception {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public List<Group> getGroups(String username) throws Exception {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+    public void removeGroup(String username, String groupName) throws Exception {
+    // TODO Auto-generated method stub
+    
+  }
+  public Node getMailHomeNode(String username) throws Exception {
     ServiceRegistry serviceRegistry = new ServiceRegistry("MailService") ;
-    jcrRegistryService_.createServiceRegistry(username, serviceRegistry, false) ;
     String defaultWS = repositoryService_.getDefaultRepository().getConfiguration().getDefaultWorkspaceName() ;
     Session session = repositoryService_.getDefaultRepository().getSystemSession(defaultWS) ;
+    if(jcrRegistryService_.getUserNode(session, username) == null)
+      jcrRegistryService_.createUserHome(username, false) ;
+    jcrRegistryService_.createServiceRegistry(username, serviceRegistry, false) ;    
     return jcrRegistryService_.getServiceRegistryNode(session, username, serviceRegistry.getName()) ;
   }
   
@@ -152,6 +183,7 @@ public class MailServiceImpl implements MailService{
   }
   
   private Node getContactHome(String username, String accountId) throws Exception {
+    
     return null ;
   }
   
@@ -166,4 +198,7 @@ public class MailServiceImpl implements MailService{
   private Node getTagHome(String username, String accountId) throws Exception {
     return null ;
   }
+
+  
+  
 }

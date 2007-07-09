@@ -7,6 +7,7 @@ package org.exoplatform.mail.service;
 import java.util.List;
 
 import javax.jcr.Node;
+
 /**
  * Created by The eXo Platform SARL
  * Author : Tuan Nguyen
@@ -219,6 +220,20 @@ public interface MailService {
    * @return Contact
    * @throws Exception
    */
-  public void addContact(String username, Contact contact) throws Exception ;
+  public void addContact(String username, Contact contact, boolean isAddNew) throws Exception ;
+  
+  public List <Contact> getContactByGroup(String username, String groupName) throws Exception ;
+  
+  public void removeContact(String username, String contactName) throws Exception ;
+  
+  public List<Group> getGroups(String username) throws Exception ;
+  
+  public void addGroup(String username, Group group, boolean isAddNew) throws Exception ;
+  
+  public void removeGroup(String username, String groupName) throws Exception ;
+  
+  public Node getMailHomeNode(String username) throws Exception ;
+  
+  
   
 }
