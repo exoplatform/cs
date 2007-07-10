@@ -7,7 +7,6 @@ package org.exoplatform.forum.service.test;
 import java.util.Date;
 import java.util.List;
 
-import javax.jcr.Node;
 
 import org.exoplatform.forum.service.Category;
 
@@ -24,7 +23,7 @@ public class TestForumService extends BaseForumTestCase{
     assertNull(null) ;
   }
   
-  public void testCreateCategory() throws Exception {
+  public void testCategory() throws Exception {
     Category cat = new Category() ;
     cat.setId("id") ;
     cat.setOwner("nqhung") ;
@@ -33,11 +32,18 @@ public class TestForumService extends BaseForumTestCase{
     cat.setCreatedDate(new Date()) ;
     cat.setDescription("desciption") ;
     cat.setModifiedBy("nqhung") ;
-    cat.setModifiedDate(new Date()) ;
-    
-    assertNotNull(forumService_.createCategory(cat)) ;
+    cat.setModifiedDate(new Date()) ;    
+    forumService_.createCategory(cat) ;
+    // add category
     assertNotNull(forumService_.getCategory("id")) ;
+    // get categories
     List<Category> categories = forumService_.getCategories() ;
     assertEquals(categories.size(), 1) ;
+    // update category
+    cat.setCategoryName("nguyenkequanghung") ;
+    forumService_.updateCategory(cat) ;
+    Category updatedCat = forumService_.getCategory("id") ;
+    assertNotNull(updatedCat) ;
+    assertEquals("nguyenkequanghung", updatedCat.getCategoryName()) ;
   }
 }

@@ -29,8 +29,8 @@ public class ForumServiceImpl implements ForumService{
                           JCRRegistryService jcrRegistryService)throws Exception {
     storage_ = new JCRDataStorage(repositoryService, jcrRegistryService) ;
   }
-  public Category createCategory(Category category) throws Exception {
-    return storage_.createCategory(category);
+  public void createCategory(Category category) throws Exception {
+    storage_.createCategory(category);
   }
   
   public Category getCategory(String categoryId) throws Exception {
@@ -41,27 +41,22 @@ public class ForumServiceImpl implements ForumService{
     return storage_.getCategories();
   }
   
-  public Category removeCategory(String categoryId) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
+  public void removeCategory(String categoryId) throws Exception {
+    storage_.removeCategory(categoryId) ;
   }
   
-  public Category updateCategory(Category category) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
+  public void updateCategory(Category category) throws Exception {
+    storage_.updateCategory(category) ;    
   }
   
-  public Forum createForum(String categoryId, Forum forum) throws Exception {
+  public void createForum(String categoryId, Forum forum) throws Exception {
     // TODO Auto-generated method stub
-    return null;
   }
-  public Post createPost(String categoryId, String forumId, String topicId, Post post) throws Exception {
+  public void createPost(String categoryId, String forumId, String topicId, Post post) throws Exception {
     // TODO Auto-generated method stub
-    return null;
   }
-  public Topic createTopic(String categoryId, String forumId, Topic topic) throws Exception {
+  public void createTopic(String categoryId, String forumId, Topic topic) throws Exception {
     // TODO Auto-generated method stub
-    return null;
   }
   
   
@@ -94,31 +89,24 @@ public class ForumServiceImpl implements ForumService{
     return null;
   }
   
-  public Forum removeForum(String categoryId, String forumId) throws Exception {
+  public void removeForum(String categoryId, String forumId) throws Exception {
     // TODO Auto-generated method stub
-    return null;
   }
-  public Post removePost(String categoryId, String forumId, String topicId, String postId) throws Exception {
+  public void removePost(String categoryId, String forumId, String topicId, String postId) throws Exception {
     // TODO Auto-generated method stub
-    return null;
   }
-  public Topic removeTopic(String categoryId, String forumId, String topicId) throws Exception {
+  public void removeTopic(String categoryId, String forumId, String topicId) throws Exception {
     // TODO Auto-generated method stub
-    return null;
   }
   
-  public Forum updateForum(String categoryId, Forum newForum) throws Exception {
+  public void updateForum(String categoryId, Forum newForum) throws Exception {
     // TODO Auto-generated method stub
-    return null;
   }
-  public Post updatePost(String categoryId, String forumId, String topicId, Post newPost) throws Exception {
+  public void updatePost(String categoryId, String forumId, String topicId, Post newPost) throws Exception {
     // TODO Auto-generated method stub
-    return null;
   }
-  public Topic updateTopic(String categoryId, String forumId, Topic newTopic) throws Exception {
+  public void updateTopic(String categoryId, String forumId, Topic newTopic) throws Exception {
     // TODO Auto-generated method stub
-    return null;
   }
-
   
 }

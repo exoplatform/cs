@@ -38,26 +38,20 @@ public class JCRDataStorage implements DataStorage{
     jcrRegistryService_ = jcrRegistryService ;
   }
   
-  public Category createCategory(Category category) throws Exception {
+  public void createCategory(Category category) throws Exception {
     Node forumHomeNode = getForumHomeNode() ;
-    if(forumHomeNode.hasNode(category.getCategoryName())) return null;
-    try{
-      Node newCategory = forumHomeNode.addNode(category.getId(), "exo:forumCategory") ;
-      GregorianCalendar calendar = new GregorianCalendar() ;
-      newCategory.setProperty("exo:id", String.valueOf(calendar.getTimeInMillis())) ;
-      newCategory.setProperty("exo:owner", category.getOwner()) ;
-      newCategory.setProperty("exo:createdDate", GregorianCalendar.getInstance()) ;
-      newCategory.setProperty("exo:modifiedBy", category.getModifiedBy()) ;
-      newCategory.setProperty("exo:modifiedDate", GregorianCalendar.getInstance()) ;
-      newCategory.setProperty("exo:name", category.getCategoryName()) ;
-      newCategory.setProperty("exo:description", category.getDescription()) ;
-      newCategory.setProperty("exo:categoryOrder", category.getCategoryOrder()) ;
-      forumHomeNode.save() ;
-      forumHomeNode.getSession().save() ;
-    }catch(Exception e) {
-      return null ;
-    }    
-    return category ;
+    Node newCategory = forumHomeNode.addNode(category.getId(), "exo:forumCategory") ;
+    GregorianCalendar calendar = new GregorianCalendar() ;
+    newCategory.setProperty("exo:id", String.valueOf(calendar.getTimeInMillis())) ;
+    newCategory.setProperty("exo:owner", category.getOwner()) ;
+    newCategory.setProperty("exo:createdDate", GregorianCalendar.getInstance()) ;
+    newCategory.setProperty("exo:modifiedBy", category.getModifiedBy()) ;
+    newCategory.setProperty("exo:modifiedDate", GregorianCalendar.getInstance()) ;
+    newCategory.setProperty("exo:name", category.getCategoryName()) ;
+    newCategory.setProperty("exo:description", category.getDescription()) ;
+    newCategory.setProperty("exo:categoryOrder", category.getCategoryOrder()) ;
+    forumHomeNode.save() ;
+    forumHomeNode.getSession().save() ;    
   }
   
   public List<Category> getCategories() throws Exception {
@@ -97,39 +91,81 @@ public class JCRDataStorage implements DataStorage{
     return cat ;
   }
 
-  public Forum createForum(String categoryId, Forum forum) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
+  public void removeCategory(String categoryId) throws Exception {
+    Node forumHomeNode = getForumHomeNode() ;
+    if(forumHomeNode.hasNode(categoryId)){
+      forumHomeNode.getNode(categoryId).remove() ;
+    }
+    forumHomeNode.save() ;
+    forumHomeNode.getSession().save() ;
   }
-
-  public Post createPost(String categoryId, String forumId, String topicId, Post post) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
+  
+  public void updateCategory(Category category) throws Exception {
+    Node forumHomeNode = getForumHomeNode() ;
+    if(forumHomeNode.hasNode(category.getId())){
+      Node catNode = forumHomeNode.getNode(category.getId()) ;
+      catNode.setProperty("exo:name", category.getCategoryName()) ;
+      catNode.setProperty("exo:categoryOrder", category.getCategoryOrder()) ;
+      GregorianCalendar cal = new GregorianCalendar() ;
+      cal.setTime(category.getCreatedDate()) ;
+      catNode.setProperty("exo:createdDate", cal.getInstance()) ;
+      catNode.setProperty("exo:description", category.getDescription()) ;
+      catNode.setProperty("exo:modifiedBy", category.getModifiedBy()) ;
+      cal.setTime(category.getModifiedDate()) ;
+      catNode.setProperty("exo:modifiedDate", cal.getInstance()) ;
+      catNode.setProperty("exo:owner", category.getOwner()) ;
+    }
+    forumHomeNode.save() ;
+    forumHomeNode.getSession().save() ;
   }
-
-  public Topic createTopic(String categoryId, String forumId, Topic topic) throws Exception {
+  
+  public void createForum(String categoryId, Forum forum) throws Exception {
     // TODO Auto-generated method stub
-    return null;
   }
-
+  
   public Forum getForum(String categoryId, String forumId) throws Exception {
     // TODO Auto-generated method stub
     return null;
   }
-
+  
   public List<Forum> getForums(String categoryId) throws Exception {
     // TODO Auto-generated method stub
     return null;
   }
-
+  
+  public void removeForum(String categoryId, String forumId) throws Exception {
+    // TODO Auto-generated method stub
+  }
+  
+  public void updateForum(String categoryId, Forum newForum) throws Exception {
+    // TODO Auto-generated method stub
+  }
+  
+  
+  public void createPost(String categoryId, String forumId, String topicId, Post post) throws Exception {
+    // TODO Auto-generated method stub
+  }
+  
   public Post getPost(String categoryId, String forumId, String topicId, String postId) throws Exception {
     // TODO Auto-generated method stub
     return null;
   }
-
+  
   public List<Post> getPosts(String categoryId, String forumId, String topicId) throws Exception {
     // TODO Auto-generated method stub
     return null;
+  }
+  
+  public void removePost(String categoryId, String forumId, String topicId, String postId) throws Exception {
+    // TODO Auto-generated method stub
+  }
+  
+  public void updatePost(String categoryId, String forumId, String topicId, Post newPost) throws Exception {
+    // TODO Auto-generated method stub
+  }
+  
+  public void createTopic(String categoryId, String forumId, Topic topic) throws Exception {
+    // TODO Auto-generated method stub
   }
 
   public Topic getTopic(String categoryId, String forumId, String topicId) throws Exception {
@@ -147,44 +183,12 @@ public class JCRDataStorage implements DataStorage{
     return null;
   }
 
-  public Category removeCategory(String categoryId) throws Exception {
+  public void removeTopic(String categoryId, String forumId, String topicId) throws Exception {
     // TODO Auto-generated method stub
-    return null;
   }
 
-  public Forum removeForum(String categoryId, String forumId) throws Exception {
+  public void updateTopic(String categoryId, String forumId, Topic newTopic) throws Exception {
     // TODO Auto-generated method stub
-    return null;
-  }
-
-  public Post removePost(String categoryId, String forumId, String topicId, String postId) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  public Topic removeTopic(String categoryId, String forumId, String topicId) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  public Category updateCategory(Category category) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  public Forum updateForum(String categoryId, Forum newForum) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  public Post updatePost(String categoryId, String forumId, String topicId, Post newPost) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  public Topic updateTopic(String categoryId, String forumId, Topic newTopic) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
   } 
   
   private Node getForumHomeNode() throws Exception {
