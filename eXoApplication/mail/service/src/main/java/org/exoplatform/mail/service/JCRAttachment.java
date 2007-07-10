@@ -19,7 +19,7 @@ import javax.jcr.Session;
 public class JCRAttachment extends Attachment{
 
   @Override
-  InputStream getInputStream(Session session) throws Exception {
+  public InputStream getInputStream(Session session) throws Exception {
     Node attachment ;
     try{
       attachment = (Node)session.getItem(getId()) ;      

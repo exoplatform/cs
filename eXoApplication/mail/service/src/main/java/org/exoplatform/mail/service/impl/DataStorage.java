@@ -29,9 +29,9 @@ public interface DataStorage {
   public void saveAccount(String username, Account account, boolean isNew) throws Exception ;
   public void removeAccount(String username, Account account) throws Exception ;
   
-  public Message getMessageById(String username, String id) throws Exception ;
-  public void saveMessage(String username, Message message, boolean isNew) throws Exception ;
-  public void removeMessage(String username, String messageId) throws Exception ;
-  public void removeMessage(String username, String[] messageId) throws Exception ;
+  public Message getMessageById(String username, String accountId, String id) throws Exception ;
+  public void saveMessage(String username, String accountId, Message message, boolean isNew) throws Exception ;
+  public void removeMessage(String username, String accountId, String messageId) throws Exception ;
+  public void removeMessage(String username, String accountId, String[] messageId) throws Exception ;
   public List<MessageHeader> getMessages(String username, MessageFilter filter) throws Exception ;
 }

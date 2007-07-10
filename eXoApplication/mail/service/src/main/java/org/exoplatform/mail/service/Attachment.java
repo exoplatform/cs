@@ -32,5 +32,5 @@ abstract public class Attachment {
   public void setName(String name_) { this.name_ = name_ ; }
   public String getName() { return name_ ; }
   
-  abstract InputStream getInputStream(Session session) throws Exception ;
+  public abstract InputStream getInputStream(Session session) throws Exception ;
 }
