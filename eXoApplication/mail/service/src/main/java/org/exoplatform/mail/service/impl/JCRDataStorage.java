@@ -42,7 +42,7 @@ public class JCRDataStorage implements DataStorage{
   
 
   public Account getAccountById(String username, String id) throws Exception {
-//  get the account of the specified user with the specified id
+    //  get the account of the specified user with the specified id
     Account account = null;
     QueryManager qm = getMailHomeNode(username).getSession().getWorkspace().getQueryManager();
     StringBuffer queryString = new StringBuffer("//element(*,exo:account)[@exo:id='").
@@ -102,7 +102,7 @@ public class JCRDataStorage implements DataStorage{
       msg.setMessageCc(message.getProperty("exo:cc").getString());
       msg.setMessageBcc(message.getProperty("exo:bcc").getString());
       msg.setMessageBody(message.getProperty("exo:content").getString());
-      PropertyIterator props = message.getProperties();
+      PropertyIterator props = message.getProperties("exo:tags | exo:folders");
       String[] tags = new String[(int)props.getSize()];
       String[] folders = new String[(int)props.getSize()];
       while (props.hasNext()) {
@@ -112,10 +112,10 @@ public class JCRDataStorage implements DataStorage{
       }
       msg.setTags(tags);
       msg.setFolders(folders);
-//      NodeIterator pit = message.getNodes();
+//      NodeIterator msgIt = message.getNodes();
 //      List<Attachment> attachments = new ArrayList<Attachment>();
-//      while (pit.hasNext()) {
-//        Node node = pit.nextNode();
+//      while (msgIt.hasNext()) {
+//        Node node = msgIt.nextNode();
 //        if (node.isNodeType("nt:file")) {
 //          Node content = node.getNode("jcr:content");
 //          attachments.add(new JCRAttachment());
