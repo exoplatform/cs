@@ -12,7 +12,7 @@ import java.util.Date;
 public class Category {
    private String id_;
    private String owner_;
-   private int categoryOrder_;
+   private long categoryOrder_;
    private Date createdDate_;
    private String modifiedBy_;
    private Date modifiedDate_;
@@ -29,8 +29,8 @@ public class Category {
    public void setOwner(String owner){owner_=owner;}
    public String getOwner(){return owner_;}
    
-   public void setCategoryOrder(int categoryOrder){categoryOrder_ = categoryOrder;}
-   public int getCategoryOrder(){return categoryOrder_;}
+   public void setCategoryOrder(long categoryOrder){categoryOrder_ = categoryOrder;}
+   public long getCategoryOrder(){return categoryOrder_;}
    
    public void setCreatedDate(Date createdDate){createdDate_ = createdDate;}
    public Date getCreatedDate(){return createdDate_;}

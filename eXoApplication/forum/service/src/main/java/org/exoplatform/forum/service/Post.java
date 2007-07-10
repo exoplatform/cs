@@ -24,6 +24,8 @@ public class Post {
   private String remoteAddr_;
   private int    attachments_ ;
   
+  public Post(){}
+  
   public String getId() { return id_; }
   public void setId(String id_) { this.id_ = id_; }
   /**

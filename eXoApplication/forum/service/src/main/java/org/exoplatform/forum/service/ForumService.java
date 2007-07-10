@@ -20,7 +20,7 @@ public interface ForumService {
    * @return
    * @throws Exception
    */
-  public List<Category> getCategories(String username) throws Exception;
+  public List<Category> getCategories() throws Exception;
   /**
    * This method should
    * 1. If the list of the categories is not loaded and cached, call the method getCategories() 
@@ -31,7 +31,7 @@ public interface ForumService {
    * @return
    * @throws Exception
    */
-  public Category getCategory(String accessUser, String categoryId) throws Exception;
+  public Category getCategory(String categoryId) throws Exception;
   /**
    * This method should:
    * 1. Check all the mandatory field for the category
@@ -42,7 +42,7 @@ public interface ForumService {
    * @return
    * @throws Exception
    */
-  public Category createCategory(String username, Category category)throws Exception;
+  public Category createCategory(Category category)throws Exception;
   /**
    * This method should: 
    * 1. Remove the category from the database if there is no forum in it. throw an exception if 
@@ -52,7 +52,7 @@ public interface ForumService {
    * @return
    * @throws Exception
    */
-  public Category removeCategory(String username, String categoryId)throws Exception;  
+  public Category removeCategory(String categoryId)throws Exception;  
   /**
    * This method should:
    * 1. Check for the mandatory fields
@@ -64,7 +64,9 @@ public interface ForumService {
    * @return
    * @throws Exception
    */
-  public Category updateCategory(String username, Category category)throws Exception;  
+  public Category updateCategory(Category category)throws Exception;  
+  
+  
   /**
    * This method should: 
    * 1. Load all the forums
@@ -75,7 +77,7 @@ public interface ForumService {
    * @return
    * @throws Exception
    */
-  public List<Forum> getForums(String username, String categoryId)throws Exception;
+  public List<Forum> getForums(String categoryId)throws Exception;
   /**
    * This method should:
    * 1. Find the category id from the forum id
@@ -87,7 +89,7 @@ public interface ForumService {
    * @return
    * @throws Exception
    */
-  public Forum getForum(String username, String forumId)throws Exception;  
+  public Forum getForum(String categoryId, String forumId)throws Exception;  
   /**
    * This method should:
    * 1. Check all the mandatory fields of the forum
@@ -99,7 +101,7 @@ public interface ForumService {
    * @return
    * @throws Exception
    */
-  public Forum createForum(String username, String categoryId, Forum forum) throws Exception;
+  public Forum createForum(String categoryId, Forum forum) throws Exception;
   /**
    * This method should:
    * 1. Check the mandatory fields
@@ -109,7 +111,7 @@ public interface ForumService {
    * @return
    * @throws Exception
    */
-  public Forum updateForum(String username, Forum newForum)throws Exception;
+  public Forum updateForum(String categoryId, Forum newForum)throws Exception;
   /**
    * This method should:
    * 1. Check to see if the user has the right to remove the forum. Throw an exception if the user do not
@@ -121,7 +123,7 @@ public interface ForumService {
    * @return
    * @throws Exception
    */
-  public Forum removeForum(String username, String forumId)throws Exception;   
+  public Forum removeForum(String categoryId, String forumId)throws Exception;   
   /**
    * This method should: 
    * 1. Implement a JCRPageList in jcrext module
@@ -133,7 +135,7 @@ public interface ForumService {
    * @return
    * @throws Exception
    */
-  public PageList getTopics(String username, String forumId) throws Exception;
+  public PageList getTopics(String categoryId, String forumId) throws Exception;
   /**
    * This method should:
    * 
@@ -144,7 +146,8 @@ public interface ForumService {
    * @return
    * @throws Exception
    */
-  public Topic getTopic(String username, String topicId) throws Exception;    
+  public Topic getTopic(String categoryId, String forumId, String topicId) throws Exception;    
+  
   
   /**
    * This method should: 
@@ -157,7 +160,7 @@ public interface ForumService {
    * @return
    * @throws Exception
    */
-  public TopicView getTopicView(String username, String topicId) throws Exception;
+  public TopicView getTopicView(String categoryId, String forumId, String topicId) throws Exception;
   /**
    * This method should:
    * 1. Check the user permission
@@ -171,7 +174,7 @@ public interface ForumService {
    * @return
    * @throws Exception
    */
-  public Topic createTopic(String username, String forumId, Topic topic) throws Exception;
+  public Topic createTopic(String categoryId, String forumId, Topic topic) throws Exception;
   /**
    * This method should:
    * 1. Check the user permission
@@ -184,7 +187,7 @@ public interface ForumService {
    * @return
    * @throws Exception
    */
-  public Topic updateTopic(String username, Topic newTopic) throws Exception;  
+  public Topic updateTopic(String categoryId, String forumId, Topic newTopic) throws Exception;  
   /**
    * This method should:
    * 1. Check the user permission
@@ -195,7 +198,9 @@ public interface ForumService {
    * @return
    * @throws Exception
    */
-  public Topic removeTopic(String username, String topicId) throws Exception;
+  public Topic removeTopic(String categoryId, String forumId, String topicId) throws Exception;
+  
+  
   /**
    * This method should: 
    * 1. Check the user permission
@@ -208,7 +213,7 @@ public interface ForumService {
    * @return
    * @throws Exception
    */
-  public List<Post> getPosts(String username, String topicId)throws Exception;
+  public List<Post> getPosts(String categoryId, String forumId, String topicId)throws Exception;
   /**
    * This method should:
    * 1. Check the user permission
@@ -218,7 +223,7 @@ public interface ForumService {
    * @return
    * @throws Exception
    */
-  public Post getPost(String username, String postId)throws Exception;
+  public Post getPost(String categoryId, String forumId, String topicId, String postId)throws Exception;
   /**
    * This method should: 
    * 1. Check the user permission
@@ -231,7 +236,7 @@ public interface ForumService {
    * @return
    * @throws Exception
    */
-  public Post createPost(String username, String topicId, Post post)throws Exception;
-  public Post updatePost(String postId, Post newPost)throws Exception;
-  public Post removePost(String username, String postId)throws Exception;
+  public Post createPost(String categoryId, String forumId, String topicId, Post post)throws Exception;
+  public Post updatePost(String categoryId, String forumId, String topicId, Post newPost)throws Exception;
+  public Post removePost(String categoryId, String forumId, String topicId, String postId)throws Exception;
 }
