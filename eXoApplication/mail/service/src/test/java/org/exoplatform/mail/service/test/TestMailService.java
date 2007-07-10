@@ -7,7 +7,6 @@ package org.exoplatform.mail.service.test;
 import javax.jcr.Node;
 
 import org.exoplatform.mail.service.Account;
-import org.exoplatform.mail.service.Contact;
 
 /**
  * Created by The eXo Platform SARL
@@ -23,7 +22,7 @@ public class TestMailService extends BaseMailTestCase{
   
   public void testAccount() throws Exception {
 
-    assertNotNull(mailHomeNode_) ;
+    //assertNotNull(mailHomeNode_) ;
     //Add new account
     Account myaccount = new Account() ;
     myaccount.setId("myId") ;
@@ -54,18 +53,5 @@ public class TestMailService extends BaseMailTestCase{
     Node account = rootNode_.addNode("account1", "exo:account") ;
     rootNode_.save() ;
 
-  }
-  
-  public void testContact() throws Exception {
-    Node mailHomeNode = mailService_.getMailHomeNode("vuduytu") ;
-    Node accout = mailHomeNode.addNode("account1", "exo:account") ;
-    
-    // call addContact(...)
-    // prepare Contact object
-    mailService_.addContact("vuduytu", new Contact(), true) ;
-    // assert(some thing)
-    // call getContact(...)
-    //assert (some thing)
-    
   }
 }

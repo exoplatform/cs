@@ -14,6 +14,7 @@ import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.impl.MailServiceImpl;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.jcr.impl.core.SessionImpl;
 import org.exoplatform.services.log.LogService;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.test.BasicTestCase;
@@ -42,7 +43,7 @@ public class BaseMailTestCase extends BasicTestCase {
   protected SimpleCredentials credentials_;
   protected PortalContainer manager_;  
   protected OrganizationService orgService_;  
-  protected Session sysSessionOnDefault_ ;  
+  protected Session session_ ;  
   protected MailService mailService_ ;
   public void setUp() throws Exception{
     
@@ -53,9 +54,9 @@ public class BaseMailTestCase extends BasicTestCase {
     
     manager_ = PortalContainer.getInstance() ;
     if(System.getProperty("java.security.auth.login.config") == null)
-      System.setProperty("java.security.auth.login.config", "src/resource/login.conf" );
+      System.setProperty("java.security.auth.login.config", "src/main/login.conf" );
 
-    credentials_ = new SimpleCredentials(ADMIN, ADMIN.toCharArray());
+    credentials_ = new SimpleCredentials("exo", "exo".toCharArray());
 
     RepositoryService repositoryService = 
       (RepositoryService) manager_.getComponentInstanceOfType(RepositoryService.class);
@@ -63,10 +64,8 @@ public class BaseMailTestCase extends BasicTestCase {
     repository_ = repositoryService.getDefaultRepository();
     mailService_ = (MailService)manager_.getComponentInstanceOfType(MailService.class) ;
     
-    orgService_ = (OrganizationService)manager_.getComponentInstanceOfType(OrganizationService.class);            
-    sysSessionOnDefault_ = repository_.getSystemSession(DEFAULT_WS) ;   
-    rootNode_ = sysSessionOnDefault_.getRootNode(); 
-    if(rootNode_.hasNode(MAIL_HOME)) mailHomeNode_ = rootNode_.getNode(MAIL_HOME) ;
-    else{ mailHomeNode_ = rootNode_.addNode(MAIL_HOME, NT_UNSTRUCTURED) ; }
+    session_ = repository_.getSystemSession(DEFAULT_WS) ;   
+    rootNode_ = session_.getRootNode(); 
+    
   }
 }

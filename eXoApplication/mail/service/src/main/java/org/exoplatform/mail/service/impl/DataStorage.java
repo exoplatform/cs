@@ -23,8 +23,9 @@ public interface DataStorage {
    * @return
    * @throws Exception
    */
+  
   public List<Account> getAccounts(String username) throws Exception ;
-  public Account getAccount(String username, String id) throws Exception ;
+  public Account getAccountById(String username, String id) throws Exception ;
   public void saveAccount(String username, Account account, boolean isNew) throws Exception ;
   public void removeAccount(String username, Account account) throws Exception ;
   
