@@ -9,6 +9,7 @@
   <modules>
     <module>eXoApplication/mail/service</module>
     <module>eXoApplication/forum/service</module>
+    <module>eXoApplication/calendar/service</module>
   </modules>
 
   <build>

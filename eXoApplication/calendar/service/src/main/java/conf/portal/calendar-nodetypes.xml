@@ -1,0 +1,143 @@
+<nodeTypes xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0"
+  xmlns:jcr="http://www.jcp.org/jcr/1.0">
+    
+    <nodeType	name="exo:calendar" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
+  		<supertypes>
+  			<supertype>nt:base</supertype>
+  		</supertypes>
+  		<propertyDefinitions>
+	  		<propertyDefinition name="exo:id" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+	  			<valueConstraints/>
+	  		</propertyDefinition>	  		
+	  		<propertyDefinition name="exo:name" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  				<valueConstraints/>
+	  		</propertyDefinition>	  		
+	  		<propertyDefinition name="exo:description" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  				<valueConstraints/>
+	  		</propertyDefinition>	  		
+	  		<propertyDefinition name="exo:isPrivate" requiredType="Boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  				<valueConstraints/>
+	  		</propertyDefinition>	  	
+	  		<propertyDefinition name="exo:viewPermissions" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
+  				<valueConstraints/>
+	  		</propertyDefinition>	  			
+	  		<propertyDefinition name="exo:editPermissions" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
+  				<valueConstraints/>
+	  		</propertyDefinition>	  			
+  		</propertyDefinitions>
+ 	 	</nodeType> 
+ 	 
+		<nodeType	name="exo:calendarCategory" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
+  		<supertypes>
+  			<supertype>nt:base</supertype>
+  		</supertypes>
+  		<propertyDefinitions>
+	  		<propertyDefinition name="exo:id" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+	  			<valueConstraints/>
+	  		</propertyDefinition>	  		
+	  		<propertyDefinition name="exo:name" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  				<valueConstraints/>
+	  		</propertyDefinition>	  		
+	  		<propertyDefinition name="exo:description" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  				<valueConstraints/>
+	  		</propertyDefinition>	  		
+  		</propertyDefinitions>
+ 	 	</nodeType>  	 
+		
+		<nodeType	name="exo:calendarEvent" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
+  		<supertypes>
+  			<supertype>nt:base</supertype>
+  		</supertypes>
+  		<propertyDefinitions>
+	  		<propertyDefinition name="exo:id" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+	  			<valueConstraints/>
+	  		</propertyDefinition>	  		
+	  		<propertyDefinition name="exo:name" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  				<valueConstraints/>
+	  		</propertyDefinition>	  		
+	  		<propertyDefinition name="exo:description" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  				<valueConstraints/>
+	  		</propertyDefinition>	  		
+	  		<propertyDefinition name="exo:CategoryId" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  				<valueConstraints/>
+	  		</propertyDefinition>	  		
+	  		<propertyDefinition name="exo:calendarId" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  				<valueConstraints/>
+	  		</propertyDefinition>	  		
+	  		<propertyDefinition name="exo:fromDateTime" requiredType="Date" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  				<valueConstraints/>
+	  		</propertyDefinition>	  		
+	  		<propertyDefinition name="exo:toDateTime" requiredType="Date" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  				<valueConstraints/>
+	  		</propertyDefinition>	  		
+	  		<propertyDefinition name="exo:repeat" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  				<valueConstraints/>
+	  		</propertyDefinition>	  		
+	  		<propertyDefinition name="exo:location" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  				<valueConstraints/>
+	  		</propertyDefinition>
+	  		<propertyDefinition name="exo:reminder" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  				<valueConstraints/>
+	  		</propertyDefinition>	
+	  		<propertyDefinition name="exo:alarmBefore" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  				<valueConstraints/>
+	  		</propertyDefinition>
+	  		<propertyDefinition name="exo:isPrivate" requiredType="Boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  				<valueConstraints/>
+	  		</propertyDefinition>
+	  		<propertyDefinition name="exo:eventState" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  				<valueConstraints/>
+	  		</propertyDefinition>
+	  		<propertyDefinition name="exo:invitation" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
+  				<valueConstraints/>
+	  		</propertyDefinition>
+  		</propertyDefinitions>
+ 	 	</nodeType>
+ 	 	<nodeType	name="exo:calendarTask" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
+  		<supertypes>
+  			<supertype>nt:base</supertype>
+  		</supertypes>
+  		<propertyDefinitions>
+	  		<propertyDefinition name="exo:id" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+	  			<valueConstraints/>
+	  		</propertyDefinition>	  		
+	  		<propertyDefinition name="exo:name" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  				<valueConstraints/>
+	  		</propertyDefinition>	  		
+	  		<propertyDefinition name="exo:description" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  				<valueConstraints/>
+	  		</propertyDefinition>	  		
+	  		<propertyDefinition name="exo:calendarId" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  				<valueConstraints/>
+	  		</propertyDefinition>	  		
+	  		<propertyDefinition name="exo:status" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  				<valueConstraints/>
+	  		</propertyDefinition>	  		
+	  		<propertyDefinition name="exo:priority" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  				<valueConstraints/>
+	  		</propertyDefinition>	  		
+	  		<propertyDefinition name="exo:delegations" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
+  				<valueConstraints/>
+	  		</propertyDefinition>	  		
+	  		<propertyDefinition name="exo:startDateTime" requiredType="Date" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  				<valueConstraints/>
+	  		</propertyDefinition>	  		
+	  		<propertyDefinition name="exo:dueDateTime" requiredType="Date" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  				<valueConstraints/>
+	  		</propertyDefinition>	  		
+	  		<propertyDefinition name="exo:reminder" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  				<valueConstraints/>
+	  		</propertyDefinition>	  		
+	  		<propertyDefinition name="exo:note" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  				<valueConstraints/>
+	  		</propertyDefinition>	  		
+  		</propertyDefinitions>
+ 	 	</nodeType> 
+</nodeTypes>  
+  
+   
+  
+
+
+
+  
