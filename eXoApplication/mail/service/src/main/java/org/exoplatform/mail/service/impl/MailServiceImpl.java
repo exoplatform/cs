@@ -11,6 +11,7 @@ import java.util.Properties;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
+import javax.jcr.Property;
 import javax.jcr.Session;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
@@ -22,13 +23,11 @@ import javax.mail.internet.MimeMessage;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Contact;
 import org.exoplatform.mail.service.Folder;
-import org.exoplatform.mail.service.Group;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.MessageHeader;
 import org.exoplatform.registry.JCRRegistryService;
-import org.exoplatform.registry.ServiceRegistry;
 import org.exoplatform.services.jcr.RepositoryService;
 /**
  * Created by The eXo Platform SARL
@@ -73,9 +72,11 @@ public class MailServiceImpl implements MailService{
   public Folder getFolder(String username, String accountId, String folderName) throws Exception {
     // gets the folder of the specified id (from any account of the user username)
     Folder folder = null;
-    Node node = getFolderHome(username, accountId).getNode(folderName);
+    Node folderHome = storage_.getFolderHome(username, accountId);
+    Node node = null;
     // if this folder exists, creates the object and returns it
-    if (node != null) {
+    if (folderHome.hasNode(folderName)) {
+      node = folderHome.getNode(folderName);
       folder = new Folder();
       folder.setLabel(node.getProperty("exo:label").getString());
       folder.setName(node.getProperty("exo:name").getString());
@@ -86,24 +87,24 @@ public class MailServiceImpl implements MailService{
   
   public void saveUserFolder(String username, String accountId, Folder folder) throws Exception {
     // gets the specified account node
-//    Session sess = getMailHomeNode(username).getSession();
-    Node home = getFolderHome(username, accountId);
-    Node myFolder = home.getNode(folder.getName());
-    if (myFolder == null) {
-      // if it doesn't exist, creates it
+    Node home = storage_.getFolderHome(username, accountId);
+    Node myFolder = null;
+    if (home.hasNode(folder.getName())) { // if it exists, gets it
+      myFolder = home.getNode(folder.getName());
+    } else { // if it doesn't exist, creates it
       myFolder = home.addNode(folder.getName(), "exo:folder");
     }
     myFolder.setProperty("exo:label", folder.getLabel());
     myFolder.setProperty("exo:unreadMessages", folder.getNumberOfUnreadMessage());
     myFolder.setProperty("exo:name", folder.getName());
-//    sess.save();
-    myFolder.save();
+
+    home.getSession().save();
   }
   
 
   public void removeUserFolder(String username, Folder folder) throws Exception {
     // gets the specified folder
-    Session sess = getMailHomeNode(username).getSession();
+    Session sess = storage_.getMailHomeNode(username).getSession();
     QueryManager qm = sess.getWorkspace().getQueryManager();
     StringBuffer queryString = new StringBuffer("//element(*,exo:folder)[@exo:name='").
                                   append(folder.getName()).
@@ -118,13 +119,12 @@ public class MailServiceImpl implements MailService{
   
   public void removeUserFolder(String username, Account account, Folder folder) throws Exception {
     //  gets the specified folder
-    Node myFolder = getFolderHome(username, account.getId()).getNode(folder.getName());
+    Node folderHome = storage_.getFolderHome(username, account.getId());
+    Node myFolder = folderHome.getNode(folder.getName());
     if (myFolder != null) {
       myFolder.remove();
     }
-    myFolder.save();
-//    Session sess = myFolder.getSession();
-//    sess.save();
+    folderHome.getSession().save();
   }
   
   public Message getMessageById(String username, String messageName, String accountId) throws Exception {
@@ -142,7 +142,7 @@ public class MailServiceImpl implements MailService{
   public List<MessageHeader> getMessageByFolder(String username, Folder folder, String accountId) throws Exception {
     // gets all the messages from the specified folder
     List<MessageHeader> list = new ArrayList<MessageHeader>();
-    Node folderHome = getFolderHome(username, accountId);
+    Node folderHome = storage_.getFolderHome(username, accountId);
     Node myFolder = folderHome.getNode(folder.getName());
     // if the folder exists, gets the messages in it (exo:mail) to the return list
     if (myFolder != null) {
@@ -188,10 +188,9 @@ public class MailServiceImpl implements MailService{
   }
 
   public void addTag(String username, Message message, String tag) throws Exception {
-    Node homeTags = getTagHome(username, message.getAccountId());
-    if (homeTags.getNode(tag) == null) {
-      // if the tag doesn't exist already, adds it to the tree
-      homeTags.addNode(tag);
+    Node homeTags = storage_.getTagHome(username, message.getAccountId());
+    if (!homeTags.hasNode(tag)) { // if the tag doesn't exist in jcr, we create it
+      homeTags.addNode(tag, "exo:tag");
     }
     // gets the tags from the message
     String[] tags = message.getTags();
@@ -200,7 +199,7 @@ public class MailServiceImpl implements MailService{
     for (int i=0; i<tags.length && addTag; i++) addTag &= tags[i].equalsIgnoreCase(tag);
     if (addTag) {
       tags[tags.length] = tag;
-      Node homeMsg = getMessageHome(username, message.getAccountId());
+      Node homeMsg = storage_.getMessageHome(username, message.getAccountId());
       NodeIterator it = homeMsg.getNodes();
       while (it.hasNext()) {
         Node msg = it.nextNode();
@@ -212,7 +211,7 @@ public class MailServiceImpl implements MailService{
         }
       }
     }
-    homeTags.save();
+    homeTags.getSession().save();
     
   }
   
@@ -229,12 +228,15 @@ public class MailServiceImpl implements MailService{
         removeTag(username, message, tag);
       }
     }
+    Node homeTags = storage_.getTagHome(username, account.getId());
+    if (homeTags.hasNode(tag)) homeTags.getNode(tag).remove();
+    homeTags.getSession().save();
   }
 
   public void removeTag(String username, Message message, String tag) throws Exception {
     String[] tags = message.getTags();
     Node msgNode = null;
-    Node homeMsg = getMessageHome(username, message.getAccountId());
+    Node homeMsg = storage_.getMessageHome(username, message.getAccountId());
     NodeIterator it = homeMsg.getNodes();
     while (it.hasNext()) {
       Node msg = it.nextNode();
@@ -249,6 +251,7 @@ public class MailServiceImpl implements MailService{
         if (!tags[i].equalsIgnoreCase(tag)) msgNode.setProperty("exo:tags", tags[i]);
       }
     }
+    homeMsg.getSession().save();
   }
   
   public int checkNewMessage(String username, Account account) throws Exception {
@@ -264,32 +267,5 @@ public class MailServiceImpl implements MailService{
   public void addContact(String username, Contact contact) throws Exception {
     // TODO Auto-generated method stub
   }
-  
-  private Node getMailHomeNode(String username) throws Exception {
-//    ServiceRegistry serviceRegistry = new ServiceRegistry("MailService") ;
-//    Session session = getJCRSession() ;
-//    if(jcrRegistryService_.getUserNode(session, username) == null)
-//      jcrRegistryService_.createUserHome(username, false) ;
-//    jcrRegistryService_.createServiceRegistry(username, serviceRegistry, false) ;    
-//    return jcrRegistryService_.getServiceRegistryNode(session, username, serviceRegistry.getName()) ;
-    return null;
-  }
-  
-  private Node getMessageHome(String username, String accountId) throws Exception {
-    Node home = getMailHomeNode(username);
-    Account account = getAccountById(username, accountId);
-    return home.getNode(account.getUserDisplayName()).getNode("Messages");
-  }
-  
-  private Node getFolderHome(String username, String accountId) throws Exception {
-    Node home = getMailHomeNode(username);
-    Account account = getAccountById(username, accountId);
-    return home.getNode(account.getUserDisplayName()).getNode("Folders");
-  }
-  
-  private Node getTagHome(String username, String accountId) throws Exception {
-    Node home = getMailHomeNode(username);
-    Account account = getAccountById(username, accountId);
-    return home.getNode(account.getUserDisplayName()).getNode("Tags");
-  }
+
 }

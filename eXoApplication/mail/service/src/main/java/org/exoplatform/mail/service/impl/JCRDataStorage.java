@@ -163,7 +163,7 @@ public class JCRDataStorage implements DataStorage{
     // gets the specified account, and removes it
     accountHome.getNode(account.getUserDisplayName()).remove();
     
-    getJCRSession().save() ;
+    accountHome.save() ;
   }
 
   public void removeMessage(String username, String accountId, String messageId) throws Exception {
@@ -172,7 +172,7 @@ public class JCRDataStorage implements DataStorage{
     Node message = messages.getNode(messageId);
     //  removes it
     if (message != null) message.remove();
-    getJCRSession().save();
+    messages.save();
   }
 
   public void removeMessage(String username, String accountId, String[] messageId) throws Exception {
@@ -201,7 +201,7 @@ public class JCRDataStorage implements DataStorage{
       newAccount.setProperty("exo:signature", account.getSignature());
       newAccount.setProperty("exo:description", account.getDescription());
       // saves changes
-      getJCRSession().save() ;
+      mailHome.save();
     }
   }
 
@@ -239,11 +239,11 @@ public class JCRDataStorage implements DataStorage{
 //        nodeContent.setProperty("jcr:mimeType", file.getMimeType());
 //        nodeContent.setProperty("jcr:data", file.getInputStream(getJCRSession()));
 //      }
-      getJCRSession().save();
+      homeMsg.save();
     }
   }
   
-  private Node getMailHomeNode(String username) throws Exception {
+  public Node getMailHomeNode(String username) throws Exception {
     ServiceRegistry serviceRegistry = new ServiceRegistry("MailService") ;
     Session session = getJCRSession() ;
     if(jcrRegistryService_.getUserNode(session, username) == null)
@@ -252,22 +252,37 @@ public class JCRDataStorage implements DataStorage{
     return jcrRegistryService_.getServiceRegistryNode(session, username, serviceRegistry.getName()) ;
   }
   
-  private Node getMessageHome(String username, String accountId) throws Exception {
+  public Node getMessageHome(String username, String accountId) throws Exception {
     Node home = getMailHomeNode(username);
     Account account = getAccountById(username, accountId);
-    return home.getNode(account.getUserDisplayName()).getNode("Messages");
+    Node returnNode = null;
+    if (home.getNode(account.getUserDisplayName()).hasNode("Messages")) 
+      returnNode = home.getNode(account.getUserDisplayName()).getNode("Messages");
+    else
+      returnNode = home.getNode(account.getUserDisplayName()).addNode("Messages", "nt:unstructured");
+    return returnNode;
   }
   
-  private Node getFolderHome(String username, String accountId) throws Exception {
+  public Node getFolderHome(String username, String accountId) throws Exception {
     Node home = getMailHomeNode(username);
     Account account = getAccountById(username, accountId);
-    return home.getNode(account.getUserDisplayName()).getNode("Folders");
+    Node returnNode = null;
+    if (home.getNode(account.getUserDisplayName()).hasNode("Folders")) 
+      returnNode = home.getNode(account.getUserDisplayName()).getNode("Folders");
+    else
+      returnNode = home.getNode(account.getUserDisplayName()).addNode("Folders", "nt:unstructured");
+    return returnNode;
   }
   
-  private Node getTagHome(String username, String accountId) throws Exception {
+  public Node getTagHome(String username, String accountId) throws Exception {
     Node home = getMailHomeNode(username);
     Account account = getAccountById(username, accountId);
-    return home.getNode(account.getUserDisplayName()).getNode("Tags");
+    Node returnNode = null;
+    if (home.getNode(account.getUserDisplayName()).hasNode("Tags")) 
+      returnNode = home.getNode(account.getUserDisplayName()).getNode("Tags");
+    else
+      returnNode = home.getNode(account.getUserDisplayName()).addNode("Tags", "nt:unstructured");
+    return returnNode;
   }
   
   private Session getJCRSession() throws Exception {

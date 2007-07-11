@@ -50,6 +50,14 @@
   			<valueConstraints/>
   		</propertyDefinition>  		
   	</propertyDefinitions>
+  	<childNodeDefinitions>
+      <childNodeDefinition name="*" defaultPrimaryType="nt:unstructured" autoCreated="false" mandatory="false"
+        onParentVersion="VERSION" protected="false" sameNameSiblings="false">
+        <requiredPrimaryTypes>
+          <requiredPrimaryType>nt:base</requiredPrimaryType>
+        </requiredPrimaryTypes>
+      </childNodeDefinition>
+    </childNodeDefinitions>
   </nodeType>  	
 	
 	<nodeType name="exo:message" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
@@ -169,7 +177,10 @@
   		</propertyDefinition>  		
   	</propertyDefinitions>
   </nodeType>
-</nodeTypes>
-
-
   
+  <nodeType name="exo:tag" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
+  	<supertypes>
+  		<supertype>nt:base</supertype>
+  	</supertypes>
+  </nodeType>
+</nodeTypes>

@@ -4,9 +4,9 @@
  **************************************************************************/
 package org.exoplatform.mail.service.test;
 
-import javax.jcr.Node;
-
 import org.exoplatform.mail.service.Account;
+import org.exoplatform.mail.service.Folder;
+import org.exoplatform.mail.service.Message;
 
 /**
  * Created by The eXo Platform SARL
@@ -45,12 +45,44 @@ public class TestMailService extends BaseMailTestCase{
     assertEquals("new gmail", mailService_.getAccountById("hungnguyen", "myId").getLabel());
     
     //delete account
-    mailService_.removeAccount("hungnguyen", myaccount);
+    //mailService_.removeAccount("hungnguyen", myaccount);
     //assert account deleted
-    assertNull(mailService_.getAccountById("hungnguyen", "myId"));
+    //assertNull(mailService_.getAccountById("hungnguyen", "myId"));
     
+    
+    //create folder
+    Folder folder = new Folder();
+    folder.setId("home");
+    folder.setLabel("home folder");
+    folder.setName("INBOX");
+    folder.setNumberOfUnreadMessage(0);
+    mailService_.saveUserFolder("hungnguyen", "myId", folder);
+    // assert folder created
+    assertNotNull(mailService_.getFolder("hungnguyen", "myId", "INBOX"));
 
-    Node account = rootNode_.addNode("account1", "exo:account") ;
+    // update folder
+    folder.setLabel("Inbox folder");
+    mailService_.saveUserFolder("hungnguyen", "myId", folder);
+    // assert folder modified
+    assertEquals("Inbox folder", mailService_.getFolder("hungnguyen", "myId", "INBOX").getLabel());
+    
+    // delete folder
+    //mailService_.removeUserFolder("hungnguyen", myaccount, folder);
+    // assert folder is deleted
+    //assertNull(mailService_.getFolder("hungnguyen", "myId", "INBOX"));
+    
+    Message message = new Message();
+    message.setSubject("test message");
+    message.setMessageTo("philippe@aristote.fr");
+    message.setMessageBody("This is a message about to be stored in JCR");
+    String[] folders = new String[1];
+    folders[0] = folder.getName();
+    message.setFolders(folders);
+    String[] tags = new String[2];
+    tags[0] = "test"; tags[1] = "jcr";
+    message.setTags(tags);
+    
+    //Node account = rootNode_.addNode("account1", "exo:account") ;
     rootNode_.save() ;
 
   }
