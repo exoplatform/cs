@@ -17,6 +17,7 @@ public class Calendar {
   private boolean isPrivate_ = true ;
   private String[] viewPermission_ ;
   private String[] editPermission_ ;
+  private String[] groups_ ;
   
   public Calendar() {}
   
@@ -65,6 +66,14 @@ public class Calendar {
 
   public String[] getViewPermission() {
     return viewPermission_;
+  }
+
+  public void setGroups(String[] groups_) {
+    this.groups_ = groups_;
+  }
+
+  public String[] getGroups() {
+    return groups_;
   }
   
   

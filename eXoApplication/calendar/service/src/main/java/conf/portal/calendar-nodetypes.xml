@@ -24,6 +24,9 @@
 	  		<propertyDefinition name="exo:editPermissions" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
   				<valueConstraints/>
 	  		</propertyDefinition>	  			
+	  		<propertyDefinition name="exo:groups" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
+  				<valueConstraints/>
+	  		</propertyDefinition>	  			
   		</propertyDefinitions>
  	 	</nodeType> 
  	 
