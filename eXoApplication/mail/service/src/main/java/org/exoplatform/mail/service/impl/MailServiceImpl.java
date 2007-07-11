@@ -5,13 +5,13 @@
 package org.exoplatform.mail.service.impl;
 
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
-import javax.jcr.Property;
 import javax.jcr.Session;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
@@ -165,6 +165,10 @@ public class MailServiceImpl implements MailService{
     return storage_.getMessages(username, filter);
   }
 
+  public void saveMessage(String username, String accountId, Message message, boolean isNew) throws Exception {
+    storage_.saveMessage(username, accountId, message, isNew);
+  }
+  
   public void sendMessage(Message message) throws Exception {
     // sends an email with the parameters in message
     Properties props = new Properties();
@@ -194,32 +198,37 @@ public class MailServiceImpl implements MailService{
     }
     // gets the tags from the message
     String[] tags = message.getTags();
+    String[] newtags = new String[tags.length+1];
+
     boolean addTag = true;
     // if the message already has the tag, addTag will be set to false
-    for (int i=0; i<tags.length && addTag; i++) addTag &= tags[i].equalsIgnoreCase(tag);
+    for (int i=0; i<tags.length && addTag; i++) {
+      addTag &= !tags[i].equalsIgnoreCase(tag);
+      newtags[i] = tags[i];
+    }
     if (addTag) {
-      tags[tags.length] = tag;
+      newtags[tags.length] = tag;
       Node homeMsg = storage_.getMessageHome(username, message.getAccountId());
       NodeIterator it = homeMsg.getNodes();
       while (it.hasNext()) {
         Node msg = it.nextNode();
         // if we find the node representing the message, we modify its property tags
-        if (msg.getProperty("exo:receivedDate").equals(message.getReceivedDate())) {
-          msg.setProperty("exo:tags", tags);
-          msg.save();
+        if (msg.getProperty("exo:receivedDate").getLong() == message.getReceivedDate().getTime()) {
+          msg.setProperty("exo:tags", newtags);
+          homeMsg.getSession().save();
           break;
         }
       }
     }
     homeTags.getSession().save();
-    
   }
   
   public void removeTag(String username, Account account, String tag) throws Exception {
     MessageFilter filter = new MessageFilter("filter by tag "+tag);
+    filter.setAccountId(account.getId());
     String[] tags = {tag};
     filter.setTag(tags);
-    List<MessageHeader> list = getMessageByFilter(username, filter);
+    List<MessageHeader> list = storage_.getMessages(username, filter);
     if (list.size() > 0) {
       Iterator<MessageHeader> it = list.iterator();
       while (it.hasNext()) {
@@ -241,15 +250,17 @@ public class MailServiceImpl implements MailService{
     while (it.hasNext()) {
       Node msg = it.nextNode();
       // if we find the node representing the message, we modify its property tags
-      if (msg.getProperty("exo:receivedDate").equals(message.getReceivedDate())) {
+      if (msg.getProperty("exo:receivedDate").getLong() == message.getReceivedDate().getTime()) {
         msgNode = msg;
         break;
       }
     }
     if (msgNode != null) {
+      String[] newtags = new String[tags.length];
       for (int i=0; i<tags.length; i++) {
-        if (!tags[i].equalsIgnoreCase(tag)) msgNode.setProperty("exo:tags", tags[i]);
+        if (!tags[i].equalsIgnoreCase(tag)) newtags[i] = tags[i];
       }
+      msgNode.setProperty("exo:tags", newtags);
     }
     homeMsg.getSession().save();
   }

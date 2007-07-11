@@ -5,6 +5,8 @@
 package org.exoplatform.mail.service.impl;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.jcr.Node;
@@ -12,6 +14,7 @@ import javax.jcr.NodeIterator;
 import javax.jcr.Property;
 import javax.jcr.PropertyIterator;
 import javax.jcr.Session;
+import javax.jcr.Value;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
@@ -97,21 +100,29 @@ public class JCRDataStorage implements DataStorage{
     //  if this message exists, creates the object and returns it
     if (message != null) {
       msg = new Message();
-      msg.setMessageTo(message.getProperty("exo:to").getString());
-      msg.setSubject(message.getProperty("exo:subject").getString());
-      msg.setMessageCc(message.getProperty("exo:cc").getString());
-      msg.setMessageBcc(message.getProperty("exo:bcc").getString());
-      msg.setMessageBody(message.getProperty("exo:content").getString());
-      PropertyIterator props = message.getProperties("exo:tags | exo:folders");
-      String[] tags = new String[(int)props.getSize()];
-      String[] folders = new String[(int)props.getSize()];
-      while (props.hasNext()) {
-        Property prop = props.nextProperty();
-        if (prop.getName().equals("exo:tags")) tags[tags.length] = prop.getString();
-        else if (prop.getName().equals("exo:folders")) folders[folders.length] = prop.getString();
+      msg.setAccountId(accountId);
+      msg.setId(id);
+      if (message.hasProperty("exo:to")) msg.setMessageTo(message.getProperty("exo:to").getString());
+      if (message.hasProperty("exo:subject")) msg.setSubject(message.getProperty("exo:subject").getString());
+      if (message.hasProperty("exo:cc")) msg.setMessageCc(message.getProperty("exo:cc").getString());
+      if (message.hasProperty("exo:bcc")) msg.setMessageBcc(message.getProperty("exo:bcc").getString());
+      if (message.hasProperty("exo:body")) msg.setMessageBody(message.getProperty("exo:body").getString());
+      if (message.hasProperty("exo:tags")) {
+        Value[] propTags = message.getProperty("exo:tags").getValues();
+        String[] tags = new String[(int)propTags.length];
+        for (int i = 0; i < propTags.length; i++) {
+          tags[i] = propTags[i].getString();
+        }
+        msg.setTags(tags);
       }
-      msg.setTags(tags);
-      msg.setFolders(folders);
+      if (message.hasProperty("exo:folders")) {
+        Value[] propFolders = message.getProperty("exo:folders").getValues();
+        String[] folders = new String[(int)propFolders.length];
+        for (int i = 0; i < propFolders.length; i++) {
+          folders[i] = propFolders[i].getString();
+        }
+        msg.setFolders(folders);
+      }
 //      NodeIterator msgIt = message.getNodes();
 //      List<Attachment> attachments = new ArrayList<Attachment>();
 //      while (msgIt.hasNext()) {
@@ -119,10 +130,19 @@ public class JCRDataStorage implements DataStorage{
 //        if (node.isNodeType("nt:file")) {
 //          Node content = node.getNode("jcr:content");
 //          attachments.add(new JCRAttachment());
-//          //TODO add content
+//          // TODO add content
 //        }
 //      }
 //      msg.setAttachements(attachments);
+      GregorianCalendar cal = new GregorianCalendar();
+      if (message.hasProperty("exo:receivedDate")) {
+        cal.setTimeInMillis(message.getProperty("exo:receivedDate").getLong());
+        msg.setReceivedDate(cal.getTime());
+      }
+      if (message.hasProperty("exo:sendDate")) {
+        cal.setTimeInMillis(message.getProperty("exo:sendDate").getLong());
+        msg.setReceivedDate(cal.getTime());
+      }
     }
     return msg ;
   }
@@ -134,18 +154,20 @@ public class JCRDataStorage implements DataStorage{
     while (mit.hasNext()) {
       boolean addToList = false;
       Node msg = mit.nextNode();
-      Message message = getMessageById(username, msg.getName(), filter.getAccountId());
-      addToList |= message.getMessageBody().contains(filter.getBody());
-      addToList |= message.getSubject().contains(filter.getSubject());
-      //TODO : addToList |= message.getFolders()
-      addToList |= message.getAccountId().equalsIgnoreCase(filter.getAccountId());
-      String[] tags = message.getTags();
-      String[] filterTags = filter.getTag();
-      for (int i = 0; i < tags.length; i++) {
-        for (int j = 0; j < filterTags.length; j++) {
-          if (tags[i].equalsIgnoreCase(filterTags[j])) {
-            addToList |= true;
-            break ;
+      Message message = getMessageById(username, filter.getAccountId(), msg.getName());
+      if (filter.getSubject() != null) addToList |= message.getSubject().contains(filter.getSubject());
+      // condition !addToList : don't check the other filters if the message already correspond
+      if (filter.getBody() != null && !addToList) addToList |= message.getMessageBody().contains(filter.getBody());
+      // TODO : if (filter.getFolder() != null && !addToList)  addToList |= message.getFolders()...
+      if (filter.getTag() != null && !addToList) {
+        String[] tags = message.getTags();
+        String[] filterTags = filter.getTag();
+        for (int i = 0; i < tags.length && !addToList; i++) { // !addToList : stop the loop if one tag matches
+          for (int j = 0; j < filterTags.length; j++) {
+            if (tags[i].equalsIgnoreCase(filterTags[j])) {
+              addToList |= true;
+              break ;
+            }
           }
         }
       }
@@ -163,7 +185,7 @@ public class JCRDataStorage implements DataStorage{
     // gets the specified account, and removes it
     accountHome.getNode(account.getUserDisplayName()).remove();
     
-    accountHome.save() ;
+    accountHome.getSession().save() ;
   }
 
   public void removeMessage(String username, String accountId, String messageId) throws Exception {
@@ -172,7 +194,7 @@ public class JCRDataStorage implements DataStorage{
     Node message = messages.getNode(messageId);
     //  removes it
     if (message != null) message.remove();
-    messages.save();
+    messages.getSession().save();
   }
 
   public void removeMessage(String username, String accountId, String[] messageId) throws Exception {
@@ -201,7 +223,7 @@ public class JCRDataStorage implements DataStorage{
       newAccount.setProperty("exo:signature", account.getSignature());
       newAccount.setProperty("exo:description", account.getDescription());
       // saves changes
-      mailHome.save();
+      mailHome.getSession().save();
     }
   }
 
@@ -219,15 +241,17 @@ public class JCRDataStorage implements DataStorage{
       nodeMsg.setProperty("exo:subject", message.getSubject());
       nodeMsg.setProperty("exo:cc", message.getMessageCc());
       nodeMsg.setProperty("exo:bcc", message.getMessageBcc());
-      nodeMsg.setProperty("exo:content", message.getMessageBody());
+      nodeMsg.setProperty("exo:body", message.getMessageBody());
       nodeMsg.setProperty("exo:isUnread", message.isUnread());
       nodeMsg.setProperty("exo:to", message.getMessageTo());
-      nodeMsg.setProperty("exo:sendDate", message.getSendDate().toString());
-      nodeMsg.setProperty("exo:receivedDate", message.getReceivedDate().toString());
+      if (message.getSendDate() != null)
+        nodeMsg.setProperty("exo:sendDate", message.getSendDate().getTime());
+      if (message.getReceivedDate() != null)
+        nodeMsg.setProperty("exo:receivedDate", message.getReceivedDate().getTime());
       String[] tags = message.getTags();
-      for (int i=0; i<tags.length; i++) nodeMsg.setProperty("exo:tags", tags[i]);
+      nodeMsg.setProperty("exo:tags", tags);
       String[] folders = message.getFolders();
-      for (int i=0; i<folders.length; i++) nodeMsg.setProperty("exo:folders", folders[i]);
+      nodeMsg.setProperty("exo:folders", folders);
 //      List<Attachment> attachments = message.getAttachments();
 //      Iterator<Attachment> it = attachments.iterator();
 //      while (it.hasNext()) {
@@ -239,7 +263,7 @@ public class JCRDataStorage implements DataStorage{
 //        nodeContent.setProperty("jcr:mimeType", file.getMimeType());
 //        nodeContent.setProperty("jcr:data", file.getInputStream(getJCRSession()));
 //      }
-      homeMsg.save();
+      homeMsg.getSession().save();
     }
   }
   
@@ -256,7 +280,7 @@ public class JCRDataStorage implements DataStorage{
     Node home = getMailHomeNode(username);
     Account account = getAccountById(username, accountId);
     Node returnNode = null;
-    if (home.getNode(account.getUserDisplayName()).hasNode("Messages")) 
+    if (home.getNode(account.getUserDisplayName()).hasNode("Messages"))
       returnNode = home.getNode(account.getUserDisplayName()).getNode("Messages");
     else
       returnNode = home.getNode(account.getUserDisplayName()).addNode("Messages", "nt:unstructured");
