@@ -123,7 +123,19 @@ public interface ForumService {
    * @return
    * @throws Exception
    */
-  public void removeForum(String categoryId, String forumId)throws Exception;   
+  public void removeForum(String categoryId, String forumId)throws Exception;  
+  /**
+   * This method should:
+   * 1. Check to see if the user has the right to remove the forum. Throw an exception if the user do not
+   *    have the right
+   * 2. Move the forum data from the database
+   * 3. Invalidate the cache
+   * 
+   * @param forumId
+   * @return
+   * @throws Exception
+   */
+  public void moveForum(String srcCategoryId, String forumId, String destCategoryId)throws Exception;  
   
   
   /**
@@ -199,6 +211,17 @@ public interface ForumService {
    * @throws Exception
    */
   public void removeTopic(String categoryId, String forumId, String topicId) throws Exception;
+  /**
+   * This method should:
+   * 1. Check the user permission
+   * 2. Move the topic from the database, throw exception if  the topic is not existed
+   * 3. Invalidate the TopicView cache
+   * @param username
+   * @param topicId
+   * @return
+   * @throws Exception
+   */
+  public void moveTopic(String srcForumId, String topicId, String destForumId) throws Exception;
   
   
   /**
@@ -239,4 +262,5 @@ public interface ForumService {
   public void createPost(String categoryId, String forumId, String topicId, Post post)throws Exception;
   public void updatePost(String categoryId, String forumId, String topicId, Post newPost)throws Exception;
   public void removePost(String categoryId, String forumId, String topicId, String postId)throws Exception;
+  public void movePost(String srcTopicId, String postId, String destTopicId) throws Exception ;
 }

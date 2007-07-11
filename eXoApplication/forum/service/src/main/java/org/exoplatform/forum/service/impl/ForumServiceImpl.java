@@ -59,7 +59,9 @@ public class ForumServiceImpl implements ForumService{
     // TODO Auto-generated method stub
   }
   
-  
+  public void moveForum(String srcCategoryId, String forumId, String destCategoryId)throws Exception {
+    
+  }
   public Forum getForum(String categoryId, String forumId) throws Exception {
     // TODO Auto-generated method stub
     return null;
@@ -76,6 +78,11 @@ public class ForumServiceImpl implements ForumService{
     // TODO Auto-generated method stub
     return null;
   }
+  
+  public void movePost(String srcTopicId, String postId, String destTopicId) throws Exception {
+    
+  }
+  
   public Topic getTopic(String categoryId, String forumId, String topicId) throws Exception {
     // TODO Auto-generated method stub
     return null;
@@ -87,6 +94,10 @@ public class ForumServiceImpl implements ForumService{
   public PageList getTopics(String categoryId, String forumId) throws Exception {
     // TODO Auto-generated method stub
     return null;
+  }
+  
+  public void moveTopic(String srcForumId, String topicId, String destForumId) throws Exception {
+    
   }
   
   public void removeForum(String categoryId, String forumId) throws Exception {

@@ -140,7 +140,10 @@ public class JCRDataStorage implements DataStorage{
   public void updateForum(String categoryId, Forum newForum) throws Exception {
     // TODO Auto-generated method stub
   }
-  
+  public void moveForum(String srcCategoryId, String forumId, String destCategoryId) throws Exception {
+    // TODO Auto-generated method stub
+    
+  }
   
   public void createPost(String categoryId, String forumId, String topicId, Post post) throws Exception {
     // TODO Auto-generated method stub
@@ -162,6 +165,11 @@ public class JCRDataStorage implements DataStorage{
   
   public void updatePost(String categoryId, String forumId, String topicId, Post newPost) throws Exception {
     // TODO Auto-generated method stub
+  }
+  
+  public void movePost(String srcTopicId, String postId, String destTopicId) throws Exception {
+    // TODO Auto-generated method stub
+    
   }
   
   public void createTopic(String categoryId, String forumId, Topic topic) throws Exception {
@@ -191,6 +199,11 @@ public class JCRDataStorage implements DataStorage{
     // TODO Auto-generated method stub
   } 
   
+  public void moveTopic(String srcForumId, String topicId, String destForumId) throws Exception {
+    // TODO Auto-generated method stub
+    
+  }
+  
   private Node getForumHomeNode() throws Exception {
     ServiceRegistry serviceRegistry = new ServiceRegistry("ForumService") ;
     Session session = getJCRSession() ;
@@ -203,5 +216,11 @@ public class JCRDataStorage implements DataStorage{
       repositoryService_.getDefaultRepository().getConfiguration().getDefaultWorkspaceName() ;
     return repositoryService_.getDefaultRepository().getSystemSession(defaultWS) ;
   }
+
+  
+
+ 
+
+  
   
 }
