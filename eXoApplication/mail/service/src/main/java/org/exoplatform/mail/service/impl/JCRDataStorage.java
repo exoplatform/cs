@@ -96,9 +96,9 @@ public class JCRDataStorage implements DataStorage{
     //  gets a message (email) from its id and username
     Message msg = null;
     Node messages = getMessageHome(username, accountId);
-    Node message = messages.getNode(id);
     //  if this message exists, creates the object and returns it
-    if (message != null) {
+    if (messages.hasNode(id)) {
+      Node message = messages.getNode(id);
       msg = new Message();
       msg.setAccountId(accountId);
       msg.setId(id);
@@ -158,7 +158,18 @@ public class JCRDataStorage implements DataStorage{
       if (filter.getSubject() != null) addToList |= message.getSubject().contains(filter.getSubject());
       // condition !addToList : don't check the other filters if the message already correspond
       if (filter.getBody() != null && !addToList) addToList |= message.getMessageBody().contains(filter.getBody());
-      // TODO : if (filter.getFolder() != null && !addToList)  addToList |= message.getFolders()...
+      if (filter.getFolder() != null && !addToList) {
+        String[] folders = message.getFolders();
+        String[] filterFolders = filter.getFolder();
+        for (int i = 0; i < folders.length && !addToList; i++) { // !addToList : stop the loop if one folder matches
+          for (int j = 0; j < filterFolders.length; j++) {
+            if (folders[i].equalsIgnoreCase(filterFolders[j])) {
+              addToList |= true;
+              break ;
+            }
+          }
+        }
+      }
       if (filter.getTag() != null && !addToList) {
         String[] tags = message.getTags();
         String[] filterTags = filter.getTag();
@@ -186,10 +197,8 @@ public class JCRDataStorage implements DataStorage{
 
   public void removeMessage(String username, String accountId, String messageId) throws Exception {
     Node messages = getMessageHome(username, accountId);
-    //  gets the specified message
-    Node message = messages.getNode(messageId);
     //  removes it
-    if (message != null) message.remove();
+    if (messages.hasNode(messageId)) messages.getNode(messageId).remove();
     messages.getSession().save();
   }
 

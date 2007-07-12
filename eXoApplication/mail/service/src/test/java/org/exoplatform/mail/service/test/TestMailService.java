@@ -117,6 +117,17 @@ public class TestMailService extends BaseMailTestCase{
     msgs = mailService_.getMessageByFilter("hungnguyen", tagFilter);
     assertFalse(msgs.size() > 0);
     
+    // modify message
+    message.setSubject("message test");
+    mailService_.saveMessage("hungnguyen", "myId", message, false);
+    // assert message modified
+    assertEquals("message test", mailService_.getMessageById("hungnguyen", "msg0001", "myId").getSubject());
+    
+    // delete message
+    mailService_.removeMessage("hungnguyen", "msg0001", "myId");
+    // assert message deleted
+    assertNull(mailService_.getMessageById("hungnguyen", "msg0001", "myId"));
+    
     //Node account = rootNode_.addNode("account1", "exo:account") ;
     rootNode_.save() ;
 

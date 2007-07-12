@@ -140,25 +140,12 @@ public class MailServiceImpl implements MailService{
   }
   
   public List<MessageHeader> getMessageByFolder(String username, Folder folder, String accountId) throws Exception {
-    // gets all the messages from the specified folder
-    List<MessageHeader> list = new ArrayList<MessageHeader>();
-    Node msgHome = storage_.getMailHomeNode(username);
-    NodeIterator msgIt = msgHome.getNodes();
-    while (msgIt.hasNext()) {
-      System.out.println("!!!!!!!!! messages found");
-      Node msg = msgIt.nextNode();
-      if (msg.isNodeType("exo:message") && msg.hasProperty("exo:folders")) {
-        Value[] folders = msg.getProperty("exo:folders").getValues();
-        for (int i = 0; i < folders.length; i++) {
-          System.out.println("!!!!!!!!! folders found");
-          if (folders[i].getString().equalsIgnoreCase(folder.getName())) {
-            Message message = getMessageById(username, msg.getName(), accountId);
-            list.add(message);
-          }
-        }
-      }
-    }
-    return list ;
+    // gets all the messages from the specified folder, using a filter
+    MessageFilter filter = new MessageFilter("filter by folder "+folder.getName());
+    filter.setAccountId(accountId);
+    String[] folders = {folder.getName()};
+    filter.setFolder(folders);
+    return storage_.getMessages(username, filter);
   }
  
   
@@ -276,8 +263,5 @@ public class MailServiceImpl implements MailService{
     saveAccount(username, account, true);
   }  
 
-  public void addContact(String username, Contact contact) throws Exception {
-    // TODO Auto-generated method stub
-  }
 
 }

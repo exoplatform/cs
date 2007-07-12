@@ -12,13 +12,10 @@ package org.exoplatform.mail.service;
  */
 public class MessageHeader {
   private String id_ ;
-  private String folderId_ ;
   private String accountId_;
   
   public String getId() { return id_ ; }
   public void setId(String id) { id_ = id; }
-  
-  public String getFolder() { return folderId_ ; }
   
   public String getAccountId() {
     return accountId_;
