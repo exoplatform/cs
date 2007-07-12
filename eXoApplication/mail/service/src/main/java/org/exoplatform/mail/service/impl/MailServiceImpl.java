@@ -5,7 +5,6 @@
 package org.exoplatform.mail.service.impl;
 
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
@@ -13,6 +12,7 @@ import java.util.Properties;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.Session;
+import javax.jcr.Value;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
@@ -142,18 +142,19 @@ public class MailServiceImpl implements MailService{
   public List<MessageHeader> getMessageByFolder(String username, Folder folder, String accountId) throws Exception {
     // gets all the messages from the specified folder
     List<MessageHeader> list = new ArrayList<MessageHeader>();
-    Node folderHome = storage_.getFolderHome(username, accountId);
-    Node myFolder = folderHome.getNode(folder.getName());
-    // if the folder exists, gets the messages in it (exo:mail) to the return list
-    if (myFolder != null) {
-      NodeIterator nit = myFolder.getNodes();
-      while (nit.hasNext()) {
-        Node message = nit.nextNode();
-        if (message.isNodeType("exo:mail")) {
-          MessageHeader header = new MessageHeader();
-          //header.setId(message.getName());
-          //header.setFolderId(folder.getId());
-          list.add(header);
+    Node msgHome = storage_.getMailHomeNode(username);
+    NodeIterator msgIt = msgHome.getNodes();
+    while (msgIt.hasNext()) {
+      System.out.println("!!!!!!!!! messages found");
+      Node msg = msgIt.nextNode();
+      if (msg.isNodeType("exo:message") && msg.hasProperty("exo:folders")) {
+        Value[] folders = msg.getProperty("exo:folders").getValues();
+        for (int i = 0; i < folders.length; i++) {
+          System.out.println("!!!!!!!!! folders found");
+          if (folders[i].getString().equalsIgnoreCase(folder.getName())) {
+            Message message = getMessageById(username, msg.getName(), accountId);
+            list.add(message);
+          }
         }
       }
     }

@@ -203,4 +203,6 @@ public interface MailService {
   public int  checkNewMessage(String username, Account account) throws Exception ;  
   
   public void saveMessage(String username, String accountId, Message message, boolean isNew) throws Exception;
+  
+  public List<MessageHeader> getMessageByFolder(String username, Folder folder, String accountId) throws Exception;
 }

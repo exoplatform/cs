@@ -84,8 +84,7 @@ public class TestMailService extends BaseMailTestCase{
     message.setMessageTo("philippe@aristote.fr");
     message.setMessageBody("This is a message about to be stored in JCR");
     message.setAccountId("myId");
-    String[] folders = new String[1];
-    folders[0] = folder.getName();
+    String[] folders = {folder.getName()};
     message.setFolders(folders);
     String[] tags = {"test", "jcr", "philippe"};
     message.setTags(tags);
@@ -98,6 +97,10 @@ public class TestMailService extends BaseMailTestCase{
     tagFilter.setTag(tags);
     tagFilter.setAccountId("myId");
     List<MessageHeader> msgs = mailService_.getMessageByFilter("hungnguyen", tagFilter);
+    assertTrue(msgs.size() > 0);
+    // get messages by folder
+    msgs = null;
+    msgs = mailService_.getMessageByFolder("hungnguyen", folder, "myId");
     assertTrue(msgs.size() > 0);
     
     // add a tag

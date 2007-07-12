@@ -171,11 +171,7 @@ public class JCRDataStorage implements DataStorage{
           }
         }
       }
-      if (addToList) {
-        MessageHeader header = new MessageHeader();
-        header.setId(msg.getName());
-        list.add(header);
-      }
+      if (addToList) list.add(message);
     }
     return list ;
   }
