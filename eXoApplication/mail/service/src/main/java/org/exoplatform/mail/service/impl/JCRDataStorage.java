@@ -5,14 +5,11 @@
 package org.exoplatform.mail.service.impl;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
-import javax.jcr.Property;
-import javax.jcr.PropertyIterator;
 import javax.jcr.Session;
 import javax.jcr.Value;
 import javax.jcr.query.Query;
@@ -20,6 +17,8 @@ import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 
 import org.exoplatform.mail.service.Account;
+import org.exoplatform.mail.service.Attachment;
+import org.exoplatform.mail.service.JCRAttachment;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.MessageHeader;
@@ -59,12 +58,12 @@ public class JCRDataStorage implements DataStorage{
       Node node = it.nextNode();
       account = new Account();
       account.setId(node.getProperty("exo:id").getString());
-      account.setLabel(node.getProperty("exo:label").getString());
-      account.setUserDisplayName(node.getProperty("exo:userDisplayName").getString());
-      account.setEmailAddress(node.getProperty("exo:emailAddress").getString());
-      account.setEmailReplyAddress(node.getProperty("exo:emailReplyAddress").getString());
-      account.setSignature(node.getProperty("exo:signature").getString());
-      account.setDescription(node.getProperty("exo:description").getString());
+      if (node.hasProperty("exo:label")) account.setLabel(node.getProperty("exo:label").getString());
+      if (node.hasProperty("exo:userDisplayName")) account.setUserDisplayName(node.getProperty("exo:userDisplayName").getString());
+      if (node.hasProperty("exo:emailAddress")) account.setEmailAddress(node.getProperty("exo:emailAddress").getString());
+      if (node.hasProperty("exo:emailReplyAddress")) account.setEmailReplyAddress(node.getProperty("exo:emailReplyAddress").getString());
+      if (node.hasProperty("exo:signature")) account.setSignature(node.getProperty("exo:signature").getString());
+      if (node.hasProperty("exo:description")) account.setDescription(node.getProperty("exo:description").getString());
     }
     return account ;
   }
@@ -78,14 +77,15 @@ public class JCRDataStorage implements DataStorage{
       // browse the accounts and add them to the return list
       Node node = it.nextNode();
       if (node.isNodeType("exo:account")) {
-        Account account = new Account();
-        account.setId(node.getProperty("exo:id").toString());
-        account.setLabel(node.getProperty("exo:label").toString());
-        account.setUserDisplayName(node.getProperty("exo:userDisplayName").toString());
-        account.setEmailAddress(node.getProperty("exo:emailAddress").toString());
-        account.setEmailReplyAddress(node.getProperty("exo:emailReplyAddress").toString());
-        account.setSignature(node.getProperty("exo:signature").toString());
-        account.setDescription(node.getProperty("exo:description").toString());
+//        Account account = new Account();
+//        account.setId(node.getProperty("exo:id").toString());
+//        account.setLabel(node.getProperty("exo:label").toString());
+//        account.setUserDisplayName(node.getProperty("exo:userDisplayName").toString());
+//        account.setEmailAddress(node.getProperty("exo:emailAddress").toString());
+//        account.setEmailReplyAddress(node.getProperty("exo:emailReplyAddress").toString());
+//        account.setSignature(node.getProperty("exo:signature").toString());
+//        account.setDescription(node.getProperty("exo:description").toString());
+        Account account = getAccountById(username, node.getProperty("exo:id").getString());
         accounts.add(account);
       }
     }
@@ -123,17 +123,19 @@ public class JCRDataStorage implements DataStorage{
         }
         msg.setFolders(folders);
       }
-//      NodeIterator msgIt = message.getNodes();
-//      List<Attachment> attachments = new ArrayList<Attachment>();
-//      while (msgIt.hasNext()) {
-//        Node node = msgIt.nextNode();
-//        if (node.isNodeType("nt:file")) {
-//          Node content = node.getNode("jcr:content");
-//          attachments.add(new JCRAttachment());
-//          // TODO add content
-//        }
-//      }
-//      msg.setAttachements(attachments);
+      NodeIterator msgIt = message.getNodes();
+      List<Attachment> attachments = new ArrayList<Attachment>();
+      while (msgIt.hasNext()) {
+        Node node = msgIt.nextNode();
+        if (node.isNodeType("nt:file")) {
+          Attachment file = new JCRAttachment();
+          file.setId(node.getPath());
+          file.setMimeType(node.getNode("jcr:content").getProperty("jcr:mimeType").getString());
+          file.setName(node.getName());
+          attachments.add(file);
+        }
+      }
+      msg.setAttachements(attachments);
       GregorianCalendar cal = new GregorianCalendar();
       if (message.hasProperty("exo:receivedDate")) {
         cal.setTimeInMillis(message.getProperty("exo:receivedDate").getLong());
@@ -156,7 +158,7 @@ public class JCRDataStorage implements DataStorage{
       Node msg = mit.nextNode();
       Message message = getMessageById(username, filter.getAccountId(), msg.getName());
       if (filter.getSubject() != null) addToList |= message.getSubject().contains(filter.getSubject());
-      // condition !addToList : don't check the other filters if the message already correspond
+      // condition !addToList : doesn't check the other filters if the message already corresponds
       if (filter.getBody() != null && !addToList) addToList |= message.getMessageBody().contains(filter.getBody());
       if (filter.getFolder() != null && !addToList) {
         String[] folders = message.getFolders();
