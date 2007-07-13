@@ -30,7 +30,6 @@ import javax.mail.internet.MimeMultipart;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Attachment;
 import org.exoplatform.mail.service.Folder;
-import org.exoplatform.mail.service.JCRAttachment;
 import org.exoplatform.mail.service.MailServerConfiguration;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
@@ -80,7 +79,6 @@ public class MailServiceImpl implements MailService{
   }
   
   public Folder getFolder(String username, String accountId, String folderName) throws Exception {
-    // gets the folder of the specified id (from any account of the user username)
     Folder folder = null;
     Node folderHome = storage_.getFolderHome(username, accountId);
     Node node = null;
@@ -96,14 +94,15 @@ public class MailServiceImpl implements MailService{
   }
   
   public void saveUserFolder(String username, String accountId, Folder folder) throws Exception {
-    // gets the specified account node
+    // gets folder home node of the specified account
     Node home = storage_.getFolderHome(username, accountId);
     Node myFolder = null;
-    if (home.hasNode(folder.getName())) { // if it exists, gets it
+    if (home.hasNode(folder.getName())) { // if the folder exists, gets it
       myFolder = home.getNode(folder.getName());
     } else { // if it doesn't exist, creates it
       myFolder = home.addNode(folder.getName(), "exo:folder");
     }
+    // sets some properties
     myFolder.setProperty("exo:label", folder.getLabel());
     myFolder.setProperty("exo:unreadMessages", folder.getNumberOfUnreadMessage());
     myFolder.setProperty("exo:name", folder.getName());
@@ -113,16 +112,17 @@ public class MailServiceImpl implements MailService{
   
 
   public void removeUserFolder(String username, Folder folder) throws Exception {
-    // gets the specified folder
+    // gets the mail home node
     Session sess = storage_.getMailHomeNode(username).getSession();
     QueryManager qm = sess.getWorkspace().getQueryManager();
+    // gets the specified folder node
     StringBuffer queryString = new StringBuffer("//element(*,exo:folder)[@exo:name='").
                                   append(folder.getName()).
                                   append("']");
     Query query = qm.createQuery(queryString.toString(), Query.XPATH);
     QueryResult result = query.execute();
     NodeIterator it = result.getNodes();
-    // if it exists, removes it
+    // removes the folder it it exists
     if (it.hasNext()) it.nextNode().remove();
     sess.save();
   }
@@ -130,9 +130,8 @@ public class MailServiceImpl implements MailService{
   public void removeUserFolder(String username, Account account, Folder folder) throws Exception {
     //  gets the specified folder
     Node folderHome = storage_.getFolderHome(username, account.getId());
-    Node myFolder = folderHome.getNode(folder.getName());
-    if (myFolder != null) {
-      myFolder.remove();
+    if (folderHome.hasNode(folder.getName())) {
+      folderHome.getNode(folder.getName()).remove();
     }
     folderHome.getSession().save();
   }
@@ -168,12 +167,12 @@ public class MailServiceImpl implements MailService{
   }
   
   public void sendMessage(Message message) throws Exception {
-    // sends an email with the parameters in message
+    // sends an email with the parameters from message
     Properties props = new Properties();
     props.put("mail.smtp.host", "smtp.jcom.net");
     javax.mail.Session session = javax.mail.Session.getDefaultInstance(props, null);
     javax.mail.Message msg = new MimeMessage(session);
-    InternetAddress addressFrom = new InternetAddress("");
+    InternetAddress addressFrom = new InternetAddress("philippe.aristote@gmail.com");
     msg.setFrom(addressFrom);
 
     InternetAddress[] addressTo = new InternetAddress[1];
@@ -196,6 +195,7 @@ public class MailServiceImpl implements MailService{
     }
     // gets the tags from the message
     String[] tags = message.getTags();
+    // creates a new array that will contain all the existing tags, plus the new one
     String[] newtags = new String[tags.length+1];
 
     boolean addTag = true;
@@ -205,15 +205,18 @@ public class MailServiceImpl implements MailService{
       newtags[i] = tags[i];
     }
     if (addTag) {
+      // adds the new tag to the array
       newtags[tags.length] = tag;
       Node homeMsg = storage_.getMessageHome(username, message.getAccountId());
       NodeIterator it = homeMsg.getNodes();
       while (it.hasNext()) {
         Node msg = it.nextNode();
         // if we find the node representing the message, we modify its property tags
+        // since there is no id property in the message node, we use the received date information
+        // to find the specified message (we consider that receivedDate is unique)
         if (msg.getProperty("exo:receivedDate").getLong() == message.getReceivedDate().getTime()) {
           msg.setProperty("exo:tags", newtags);
-          homeMsg.getSession().save();
+          //homeMsg.getSession().save();
           break;
         }
       }
@@ -222,45 +225,55 @@ public class MailServiceImpl implements MailService{
   }
   
   public void removeTag(String username, Account account, String tag) throws Exception {
+    // creates a filter containing the specified tag, to find all messages tagged with tag
     MessageFilter filter = new MessageFilter("filter by tag "+tag);
     filter.setAccountId(account.getId());
     String[] tags = {tag};
     filter.setTag(tags);
+    // creates the list of messages tagged with the specified tag
     List<MessageHeader> list = storage_.getMessages(username, filter);
     if (list.size() > 0) {
       Iterator<MessageHeader> it = list.iterator();
       while (it.hasNext()) {
-        MessageHeader header = it.next();
-        Message message = getMessageById(username, header.getId(), account.getId());
+        Message message = (Message)it.next();
+        //Message message = getMessageById(username, header.getId(), account.getId());
+        // for each message tagged, removes the tag
         removeTag(username, message, tag);
       }
     }
+    // gets the home tag node
     Node homeTags = storage_.getTagHome(username, account.getId());
+    // deletes the node that contains the specified tag
     if (homeTags.hasNode(tag)) homeTags.getNode(tag).remove();
     homeTags.getSession().save();
   }
 
   public void removeTag(String username, Message message, String tag) throws Exception {
     String[] tags = message.getTags();
-    Node msgNode = null;
-    Node homeMsg = storage_.getMessageHome(username, message.getAccountId());
-    NodeIterator it = homeMsg.getNodes();
-    while (it.hasNext()) {
-      Node msg = it.nextNode();
-      // if we find the node representing the message, we modify its property tags
-      if (msg.getProperty("exo:receivedDate").getLong() == message.getReceivedDate().getTime()) {
-        msgNode = msg;
-        break;
-      }
-    }
-    if (msgNode != null) {
+//    Node msgNode = null;
+//    Node homeMsg = storage_.getMessageHome(username, message.getAccountId());
+//    NodeIterator it = homeMsg.getNodes();
+//    // we have to browse all the messages to find the specified one
+//    while (it.hasNext()) {
+//      Node msg = it.nextNode();
+//      // if we find the node representing the message, we modify its property tags
+//      if (msg.getProperty("exo:receivedDate").getLong() == message.getReceivedDate().getTime()) {
+//        msgNode = msg;
+//        break;
+//      }
+//    }
+    // once we have the message node
+//    if (msgNode != null) {
       String[] newtags = new String[tags.length];
       for (int i=0; i<tags.length; i++) {
+        // we copy all the tags except the specified one
         if (!tags[i].equalsIgnoreCase(tag)) newtags[i] = tags[i];
       }
-      msgNode.setProperty("exo:tags", newtags);
-    }
-    homeMsg.getSession().save();
+      message.setTags(newtags);
+      storage_.saveMessage(username, message.getAccountId(), message, false);
+//      msgNode.setProperty("exo:tags", newtags);
+//    }
+//    homeMsg.getSession().save();
   }
   
   public int checkNewMessage(String username, Account account) throws Exception {
