@@ -10,20 +10,12 @@ package org.exoplatform.calendar.service;
  *          hung.nguyen@exoplatform.com
  * Jul 11, 2007  
  */
-public class Group {
-  private String id_ ;
+public class EventCategory {
   private String name_ ;
   private String description_ ;
   
-  public Group() {}
+  public EventCategory() {}
   
-  public void setId(String id_) {
-    this.id_ = id_;
-  }
-  public String getId() {
-    return id_;
-  }
-
   public void setName(String name_) {
     this.name_ = name_;
   }
@@ -39,5 +31,7 @@ public class Group {
   public String getDescription() {
     return description_;
   }
-
+  
+  
+  
 }

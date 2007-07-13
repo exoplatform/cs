@@ -7,10 +7,10 @@ package org.exoplatform.calendar.service.impl;
 import java.util.List;
 
 import org.exoplatform.calendar.service.Calendar;
+import org.exoplatform.calendar.service.CalendarCategory;
 import org.exoplatform.calendar.service.CalendarService;
-import org.exoplatform.calendar.service.Category;
 import org.exoplatform.calendar.service.Event;
-import org.exoplatform.calendar.service.Group;
+import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.Task;
 
 /**
@@ -26,7 +26,7 @@ public class CalendarServiceImpl implements CalendarService{
     
   }
 
-  public void createCategory(String username, Category category) throws Exception {
+  public void createCalendarCategory(String username, CalendarCategory calendarCategory) throws Exception {
     // TODO Auto-generated method stub
     
   }
@@ -36,7 +36,12 @@ public class CalendarServiceImpl implements CalendarService{
     
   }
 
-  public void createGroup(String username, Group group) throws Exception {
+  public void createEvent(Event event) throws Exception {
+    // TODO Auto-generated method stub
+    
+  }
+
+  public void createEventCategory(String username, EventCategory category) throws Exception {
     // TODO Auto-generated method stub
     
   }
@@ -46,22 +51,32 @@ public class CalendarServiceImpl implements CalendarService{
     
   }
 
+  public void createTask(Task task) throws Exception {
+    // TODO Auto-generated method stub
+    
+  }
+
   public Calendar getCalendar(String username, String calendarId) throws Exception {
     // TODO Auto-generated method stub
     return null;
   }
 
-  public List<Calendar> getCalendars(String username) throws Exception {
+  public Calendar getCalendar(String username, String groupId, String calendarId) throws Exception {
     // TODO Auto-generated method stub
     return null;
   }
 
-  public List<Category> getCategories(String username) throws Exception {
+  public List<CalendarCategory> getCalendarCategories(String username) throws Exception {
     // TODO Auto-generated method stub
     return null;
   }
 
-  public Category getCategory(String username, String categoryId) throws Exception {
+  public List<Calendar> getCalendarsByCategory(String username, String calendarCategoryId) throws Exception {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public List<Calendar> getCalendarsByGroup(String groupName) throws Exception {
     // TODO Auto-generated method stub
     return null;
   }
@@ -71,7 +86,17 @@ public class CalendarServiceImpl implements CalendarService{
     return null;
   }
 
+  public Event getEvent(String eventId) throws Exception {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
   public List<Event> getEventByCalendar(String username, String calendarId) throws Exception {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public List<Event> getEventByCalendar(String calendarId) throws Exception {
     // TODO Auto-generated method stub
     return null;
   }
@@ -81,12 +106,17 @@ public class CalendarServiceImpl implements CalendarService{
     return null;
   }
 
-  public Group getGroup(String username, String groupId) throws Exception {
+  public List<Event> getEventByCategory(String categoryId) throws Exception {
     // TODO Auto-generated method stub
     return null;
   }
 
-  public List<Group> getGroups(String username, String groupId) throws Exception {
+  public List<EventCategory> getEventCategories(String username) throws Exception {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public EventCategory getEventCategory(String username, String categoryId) throws Exception {
     // TODO Auto-generated method stub
     return null;
   }
@@ -96,9 +126,24 @@ public class CalendarServiceImpl implements CalendarService{
     return null;
   }
 
+  public Task getTask(String taskId) throws Exception {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
   public List<Task> getTaskByCalendar(String username, String calendarId) throws Exception {
     // TODO Auto-generated method stub
     return null;
+  }
+
+  public List<Task> getTaskByCalendar(String calendarId) throws Exception {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public void removeCalendar(String username, String groupId, String calendarId) throws Exception {
+    // TODO Auto-generated method stub
+    
   }
 
   public void removeCalendar(String username, String calendarId) throws Exception {
@@ -106,22 +151,32 @@ public class CalendarServiceImpl implements CalendarService{
     
   }
 
-  public void removeCategory(String username, String categoryId) throws Exception {
+  public void removeCalendarCategory(String username, String calendarCategoryId) throws Exception {
     // TODO Auto-generated method stub
     
   }
 
-  public void removeEvent(String username, Event event) throws Exception {
+  public void removeEvent(String username, String eventId) throws Exception {
     // TODO Auto-generated method stub
     
   }
 
-  public void removeGroup(String username, Group group) throws Exception {
+  public void removeEvent(String eventId) throws Exception {
     // TODO Auto-generated method stub
     
   }
 
-  public void removeTask(String username, Task task) throws Exception {
+  public void removeEventCategory(String username, String categoryId) throws Exception {
+    // TODO Auto-generated method stub
+    
+  }
+
+  public void removeTask(String username, String taskId) throws Exception {
+    // TODO Auto-generated method stub
+    
+  }
+
+  public void removeTask(String taskId) throws Exception {
     // TODO Auto-generated method stub
     
   }
@@ -131,7 +186,7 @@ public class CalendarServiceImpl implements CalendarService{
     
   }
 
-  public void updateCategory(String username, Category category) throws Exception {
+  public void updateCalendarCategory(String username, CalendarCategory calendarCategory) throws Exception {
     // TODO Auto-generated method stub
     
   }
@@ -141,7 +196,12 @@ public class CalendarServiceImpl implements CalendarService{
     
   }
 
-  public void updateGroup(String username, Group group) throws Exception {
+  public void updateEvent(Event event) throws Exception {
+    // TODO Auto-generated method stub
+    
+  }
+
+  public void updateEventCategory(String username, EventCategory category) throws Exception {
     // TODO Auto-generated method stub
     
   }
@@ -150,5 +210,12 @@ public class CalendarServiceImpl implements CalendarService{
     // TODO Auto-generated method stub
     
   }
+
+  public void updateTask(Task task) throws Exception {
+    // TODO Auto-generated method stub
+    
+  }
+
+  
 
 }

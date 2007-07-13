@@ -1,6 +1,20 @@
 <nodeTypes xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0"
   xmlns:jcr="http://www.jcp.org/jcr/1.0">
     
+    <nodeType	name="exo:eventCategory" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
+  		<supertypes>
+  			<supertype>nt:base</supertype>
+  		</supertypes>
+  		<propertyDefinitions>
+	  		<propertyDefinition name="exo:name" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  				<valueConstraints/>
+	  		</propertyDefinition>	  		
+	  		<propertyDefinition name="exo:description" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  				<valueConstraints/>
+	  		</propertyDefinition>	  		
+  		</propertyDefinitions>
+ 	 	</nodeType>
+ 	 	
     <nodeType	name="exo:calendar" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
   		<supertypes>
   			<supertype>nt:base</supertype>
@@ -15,9 +29,6 @@
 	  		<propertyDefinition name="exo:description" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
   				<valueConstraints/>
 	  		</propertyDefinition>	  		
-	  		<propertyDefinition name="exo:isPrivate" requiredType="Boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  				<valueConstraints/>
-	  		</propertyDefinition>	  	
 	  		<propertyDefinition name="exo:viewPermissions" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
   				<valueConstraints/>
 	  		</propertyDefinition>	  			
@@ -25,6 +36,9 @@
   				<valueConstraints/>
 	  		</propertyDefinition>	  			
 	  		<propertyDefinition name="exo:groups" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
+  				<valueConstraints/>
+	  		</propertyDefinition>
+	  		<propertyDefinition name="exo:categoryId" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
   				<valueConstraints/>
 	  		</propertyDefinition>	  			
   		</propertyDefinitions>

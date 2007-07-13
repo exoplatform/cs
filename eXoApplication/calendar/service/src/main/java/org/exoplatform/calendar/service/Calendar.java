@@ -14,9 +14,10 @@ public class Calendar {
   private String id_ ;
   private String name_ ;
   private String description_ ;
-  private boolean isPrivate_ = true ;
   private String[] viewPermission_ ;
   private String[] editPermission_ ;
+  private boolean isPrivate_ = true ;
+  private String categoryId_ ;
   private String[] groups_ ;
   
   public Calendar() {}
@@ -44,14 +45,6 @@ public class Calendar {
     return description_;
   }
 
-  public void setPrivate(boolean isPrivate_) {
-    this.isPrivate_ = isPrivate_;
-  }
-
-  public boolean isPrivate() {
-    return isPrivate_;
-  }
-
   public void setEditPermission(String[] editPermission_) {
     this.editPermission_ = editPermission_;
   }
@@ -74,6 +67,22 @@ public class Calendar {
 
   public String[] getGroups() {
     return groups_;
+  }
+
+  public void setCategoryId(String categoryId_) {
+    this.categoryId_ = categoryId_;
+  }
+
+  public String getCategoryId() {
+    return categoryId_;
+  }
+
+  public void setPrivate(boolean isPrivate_) {
+    this.isPrivate_ = isPrivate_;
+  }
+
+  public boolean isPrivate() {
+    return isPrivate_;
   }
   
   
