@@ -27,6 +27,7 @@ abstract public class Attachment {
   public String getMimeType() { return mimeType_ ; }
   
   public void setSize(long size_) { this.size_ = size_ ; }
+  
   public long getSize() { return size_ ; }
   
   public void setName(String name_) { this.name_ = name_ ; }

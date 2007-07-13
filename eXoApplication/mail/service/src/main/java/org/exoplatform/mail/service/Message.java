@@ -14,6 +14,7 @@ import java.util.List;
  * Jun 23, 2007  
  */
 public class Message extends MessageHeader {
+  private String from_;
   private String to_ ;
   private String cc_ ;
   private String bcc_ ;
@@ -61,5 +62,11 @@ public class Message extends MessageHeader {
   public List<Attachment> getAttachments() { return attachments_ ; }
   public void setAttachements(List<Attachment> attachments) { attachments_ = attachments ; }
   
-  public Message cloneMessage() { return null ; } 
+  public Message cloneMessage() { return null ; }
+  public String getFrom() {
+    return from_;
+  }
+  public void setFrom(String from) {
+    this.from_ = from;
+  } 
 }

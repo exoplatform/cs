@@ -4,7 +4,10 @@
  **************************************************************************/
 package org.exoplatform.mail.service.impl;
 
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
@@ -12,21 +15,28 @@ import java.util.Properties;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.Session;
-import javax.jcr.Value;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
+import javax.mail.Multipart;
+import javax.mail.Part;
+import javax.mail.Store;
 import javax.mail.Transport;
+import javax.mail.URLName;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 
 import org.exoplatform.mail.service.Account;
-import org.exoplatform.mail.service.Contact;
+import org.exoplatform.mail.service.Attachment;
 import org.exoplatform.mail.service.Folder;
+import org.exoplatform.mail.service.JCRAttachment;
+import org.exoplatform.mail.service.MailServerConfiguration;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.MessageHeader;
+import org.exoplatform.mail.service.SaveMailAttachment;
 import org.exoplatform.registry.JCRRegistryService;
 import org.exoplatform.services.jcr.RepositoryService;
 /**
@@ -254,10 +264,122 @@ public class MailServiceImpl implements MailService{
   }
   
   public int checkNewMessage(String username, Account account) throws Exception {
-    // TODO Auto-generated method stub
-    return 0;
+    MailServerConfiguration conf = account.getConfiguration();
+    System.out.println("\n ### Getting mail from " + conf.getHost() + " ... !");
+    int totalMess = -1;
+    try {
+      Properties props = System.getProperties();
+      if(conf.getProtocol().equals("pop3")) {
+        props.setProperty("mail.pop3.socketFactory.fallback", "false");
+        props.setProperty( "mail.pop3.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+      }
+      Calendar gc = GregorianCalendar.getInstance();
+      
+      javax.mail.Session session = javax.mail.Session.getDefaultInstance(props);
+      URLName url = new URLName(conf.getProtocol(), conf.getHost(), Integer.valueOf(conf.getPort()), conf.getFolder(), conf.getUserName(), conf.getPassword()) ;
+      Store store = session.getStore(url) ;
+      store.connect();
+      javax.mail.Folder folder = store.getFolder(conf.getFolder());
+      folder.open(javax.mail.Folder.READ_ONLY);
+      javax.mail.Message[] mess = folder.getMessages() ;
+      totalMess = mess.length ;
+      System.out.println("\n Total: " + mess.length + " message(s)") ;
+      if(totalMess > 0) {
+        int i = 0 ;
+        while(i < totalMess){       
+          javax.mail.Message mes = mess[i] ;
+          Message newMsg = new Message();
+          newMsg.setAccountId(account.getId());
+          newMsg.setId(String.valueOf(gc.getTimeInMillis()));
+          newMsg.setMessageBcc(getAddress(mes.getRecipients(javax.mail.Message.RecipientType.BCC)));
+          newMsg.setMessageCc(getAddress(mes.getRecipients(javax.mail.Message.RecipientType.CC)));
+          newMsg.setMessageTo(getAddress(mes.getRecipients(javax.mail.Message.RecipientType.TO)));
+          newMsg.setSubject(mes.getSubject());
+          newMsg.setFrom(getAddress(mes.getFrom()));
+          newMsg.setUnread(true);
+          newMsg.setReceivedDate(mes.getReceivedDate());
+          newMsg.setSendDate(mes.getSentDate());
+          newMsg.setAttachements(new ArrayList<Attachment>());
+          String[] folders = {conf.getFolder()};
+          newMsg.setFolders(folders);
+          Object obj = mes.getContent() ;
+          if (obj instanceof Multipart) {
+            setMultiPart((Multipart)obj, newMsg, username);
+          } else {
+            setPart(mes, newMsg, username);
+          }
+          System.out.println("nb attachements "+newMsg.getAttachments().size());
+          storage_.saveMessage(username, account.getId(), newMsg, true);
+          i ++ ;
+        }
+      }
+      folder.close(false);
+      store.close();
+    } catch (Exception e) { e.printStackTrace(); }
+    return totalMess;
   }
-
+  
+  private void setMultiPart(Multipart multipart, Message newMail, String username) {
+    try {
+      int i = 0 ;
+      int n = multipart.getCount() ;
+      while( i < n) {
+        setPart(multipart.getBodyPart(i), newMail, username);
+        i++ ;
+      }     
+    }catch(Exception e) {
+      e.printStackTrace() ;
+    }   
+    
+  }
+  
+  private void setPart(Part part, Message newMail, String username){
+    try {
+      String disposition = part.getDisposition();
+      String contentType = part.getContentType();
+      if (disposition.equalsIgnoreCase(Part.INLINE)) {
+        if (part.isMimeType("text/plain")) {
+          newMail.setMessageBody((String)part.getContent());
+        } else if (!part.isMimeType("text/html")) {
+          MimeMultipart mimeMultiPart = (MimeMultipart)part.getContent() ;
+          newMail.setMessageBody((String)mimeMultiPart.getBodyPart(0).getContent());
+        }
+      } else if (disposition.equalsIgnoreCase(Part.ATTACHMENT)) {
+        SaveMailAttachment file = new SaveMailAttachment();
+        file.setId(storage_.getMessageHome(username, newMail.getAccountId()).getPath()+"/"+newMail.getId()+"/"+part.getFileName());
+        file.setName(part.getFileName());
+        InputStream is = part.getInputStream();
+        file.setInputStream(is);
+        file.setSize(is.available());
+        if (contentType.indexOf(";") > 0) {
+          String[] type = contentType.split(";") ;
+          file.setMimeType(type[0]);
+        } else {
+          file.setMimeType(contentType) ;
+        }
+        newMail.getAttachments().add(file);
+      } else {
+        System.out.println("!!!!!!! mime type not defined");
+      }
+    }catch(Exception e) {
+      e.printStackTrace() ;
+    }
+  }
+  private String getAddress(javax.mail.Address[] addr) {
+    String str = "" ;
+    int i = 0;
+    if(addr != null && addr.length > 0) {
+      while (i < addr.length) {
+        if(str.length() < 1)  {
+          str = addr[i].toString() ;              
+        }else {
+          str = str + ", " + addr[i].toString() ;
+        }           
+        i++ ;
+      }
+    }   
+    return str ;
+  }
 
   public void createAccount(String username, Account account) throws Exception {
     saveAccount(username, account, true);
