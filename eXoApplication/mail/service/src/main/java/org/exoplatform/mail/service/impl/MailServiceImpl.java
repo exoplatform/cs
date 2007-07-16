@@ -211,12 +211,11 @@ public class MailServiceImpl implements MailService{
       NodeIterator it = homeMsg.getNodes();
       while (it.hasNext()) {
         Node msg = it.nextNode();
-        // if we find the node representing the message, we modify its property tags
+        // if we find the node representing the message, we modify its property tags.
         // since there is no id property in the message node, we use the received date information
         // to find the specified message (we consider that receivedDate is unique)
         if (msg.getProperty("exo:receivedDate").getLong() == message.getReceivedDate().getTime()) {
           msg.setProperty("exo:tags", newtags);
-          //homeMsg.getSession().save();
           break;
         }
       }
@@ -235,8 +234,8 @@ public class MailServiceImpl implements MailService{
     if (list.size() > 0) {
       Iterator<MessageHeader> it = list.iterator();
       while (it.hasNext()) {
+        // the list contains Message objects, that inherit from MessageHeader
         Message message = (Message)it.next();
-        //Message message = getMessageById(username, header.getId(), account.getId());
         // for each message tagged, removes the tag
         removeTag(username, message, tag);
       }
@@ -250,30 +249,14 @@ public class MailServiceImpl implements MailService{
 
   public void removeTag(String username, Message message, String tag) throws Exception {
     String[] tags = message.getTags();
-//    Node msgNode = null;
-//    Node homeMsg = storage_.getMessageHome(username, message.getAccountId());
-//    NodeIterator it = homeMsg.getNodes();
-//    // we have to browse all the messages to find the specified one
-//    while (it.hasNext()) {
-//      Node msg = it.nextNode();
-//      // if we find the node representing the message, we modify its property tags
-//      if (msg.getProperty("exo:receivedDate").getLong() == message.getReceivedDate().getTime()) {
-//        msgNode = msg;
-//        break;
-//      }
-//    }
-    // once we have the message node
-//    if (msgNode != null) {
-      String[] newtags = new String[tags.length];
-      for (int i=0; i<tags.length; i++) {
-        // we copy all the tags except the specified one
-        if (!tags[i].equalsIgnoreCase(tag)) newtags[i] = tags[i];
-      }
-      message.setTags(newtags);
-      storage_.saveMessage(username, message.getAccountId(), message, false);
-//      msgNode.setProperty("exo:tags", newtags);
-//    }
-//    homeMsg.getSession().save();
+    String[] newtags = new String[tags.length];
+    for (int i=0; i<tags.length; i++) {
+      // we copy all the tags except the specified one
+      if (!tags[i].equalsIgnoreCase(tag)) newtags[i] = tags[i];
+    }
+    message.setTags(newtags);
+    // saves the message with the new tags
+    storage_.saveMessage(username, message.getAccountId(), message, false);
   }
   
   public int checkNewMessage(String username, Account account) throws Exception {
@@ -299,7 +282,7 @@ public class MailServiceImpl implements MailService{
       System.out.println("\n Total: " + mess.length + " message(s)") ;
       if(totalMess > 0) {
         int i = 0 ;
-        while(i < totalMess){       
+        while(i < totalMess){
           javax.mail.Message mes = mess[i] ;
           Message newMsg = new Message();
           newMsg.setAccountId(account.getId());
@@ -321,7 +304,7 @@ public class MailServiceImpl implements MailService{
           } else {
             setPart(mes, newMsg, username);
           }
-          System.out.println("nb attachements "+newMsg.getAttachments().size());
+          System.out.println("!!!!!!!!! date : "+newMsg.getReceivedDate().getTime());
           storage_.saveMessage(username, account.getId(), newMsg, true);
           i ++ ;
         }
@@ -350,29 +333,33 @@ public class MailServiceImpl implements MailService{
     try {
       String disposition = part.getDisposition();
       String contentType = part.getContentType();
-      if (disposition.equalsIgnoreCase(Part.INLINE)) {
+      if (disposition == null) {
+        // case of a simple plain text email
         if (part.isMimeType("text/plain")) {
           newMail.setMessageBody((String)part.getContent());
-        } else if (!part.isMimeType("text/html")) {
-          MimeMultipart mimeMultiPart = (MimeMultipart)part.getContent() ;
-          newMail.setMessageBody((String)mimeMultiPart.getBodyPart(0).getContent());
         }
-      } else if (disposition.equalsIgnoreCase(Part.ATTACHMENT)) {
-        SaveMailAttachment file = new SaveMailAttachment();
-        file.setId(storage_.getMessageHome(username, newMail.getAccountId()).getPath()+"/"+newMail.getId()+"/"+part.getFileName());
-        file.setName(part.getFileName());
-        InputStream is = part.getInputStream();
-        file.setInputStream(is);
-        file.setSize(is.available());
-        if (contentType.indexOf(";") > 0) {
-          String[] type = contentType.split(";") ;
-          file.setMimeType(type[0]);
+      } else if (disposition.equalsIgnoreCase(Part.ATTACHMENT) || disposition.equalsIgnoreCase(Part.INLINE)) {
+        if ((part.isMimeType("text/html") || part.isMimeType("text/plain")) && !contentType.contains("name=")) {
+          // if the message is in html or is a response/forward (and contains the original message)
+          // the text parts are considered as attached files, hence we manage them here
+          newMail.setMessageBody((String)part.getContent());
         } else {
-          file.setMimeType(contentType) ;
+          // if the mime type is not text, we consider it's a binary file
+          // so we add the file to the attachments
+          SaveMailAttachment file = new SaveMailAttachment();
+          file.setId(storage_.getMessageHome(username, newMail.getAccountId()).getPath()+"/"+newMail.getId()+"/"+part.getFileName());
+          file.setName(part.getFileName());
+          InputStream is = part.getInputStream();
+          file.setInputStream(is);
+          file.setSize(is.available());
+          if (contentType.indexOf(";") > 0) {
+            String[] type = contentType.split(";") ;
+            file.setMimeType(type[0]);
+          } else {
+            file.setMimeType(contentType) ;
+          }
+          newMail.getAttachments().add(file);
         }
-        newMail.getAttachments().add(file);
-      } else {
-        System.out.println("!!!!!!! mime type not defined");
       }
     }catch(Exception e) {
       e.printStackTrace() ;

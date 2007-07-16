@@ -7,9 +7,11 @@ package org.exoplatform.mail.service.test;
 import java.io.BufferedReader;
 import java.io.FileWriter;
 import java.io.InputStreamReader;
+import java.util.Iterator;
 import java.util.List;
 
 import org.exoplatform.mail.service.Account;
+import org.exoplatform.mail.service.Attachment;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailServerConfiguration;
 import org.exoplatform.mail.service.Message;
@@ -83,7 +85,7 @@ public class TestMailService extends BaseMailTestCase{
     MailServerConfiguration conf = new MailServerConfiguration();
     conf.setFolder(folder.getName());
     conf.setUserName("philippe.aristote@gmail.com");
-    conf.setPassword("password");
+    conf.setPassword("ar1983");
     conf.setHost("pop.gmail.com");
     conf.setPort("995");
     conf.setProtocol("pop3");
@@ -95,25 +97,31 @@ public class TestMailService extends BaseMailTestCase{
     // assert new mail(s) downloaded
     assertTrue(nbOfNewMail > -1);
     List<MessageHeader> newMsg = mailService_.getMessageByFolder("hungnguyen", folder, "myId");
-    if (newMsg.size() > 0) {
-      Message msg = (Message)newMsg.get(0);
-      System.out.println("-----------------------------------------");
+    System.out.println("[Total] : " + newMsg.size() + " message(s)") ;
+    Iterator<MessageHeader> it = newMsg.iterator();
+    while (it.hasNext()) {
+      Message msg = (Message)it.next();
+      System.out.println("---------------START--------------------------");
+      System.out.println("[Object]  : " + msg);
       System.out.println("[Subject]  : " + msg.getSubject());
       System.out.println("[Content]  : " + msg.getMessageBody());
-      if (msg.getAttachments().size() > 0) {
-        SaveMailAttachment file = (SaveMailAttachment)msg.getAttachments().get(0);
-        System.out.println("[Attached] : " + file.getName());
-        System.out.println("[Attached Content]");
+      List<Attachment> filesAttached = msg.getAttachments();
+      System.out.println("[Attachments] : "+filesAttached.size()+" file(s)");
+      Iterator<Attachment> itFiles = filesAttached.iterator();
+      while (itFiles.hasNext()) {
+        System.out.println("\t________START FILE___________");
+        SaveMailAttachment file = (SaveMailAttachment)itFiles.next();
+        System.out.println("\t[Attached] : " + file.getName());
+        System.out.println("\t[Attached Content]");
         String line = null;
-        StringBuffer text = new StringBuffer();
         BufferedReader in
           = new BufferedReader(new InputStreamReader(file.getInputStream()));
         while ((line = in.readLine()) != null) {
-          text.append(line);
+          System.out.println("\t"+line);
         }
-        System.out.println(text.toString());
+        System.out.println("\t__________END FILE________");
       }
-      System.out.println("-----------------------------------------");
+      System.out.println("----------------END-------------------------");
     }
     
     // create message
