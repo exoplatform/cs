@@ -1,0 +1,37 @@
+<project>
+  <parent>
+    <groupId>org.exoplatform.cs</groupId>
+    <artifactId>config</artifactId>
+    <version>2.0</version>
+  </parent> 
+
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>exo.cs.eXoApplication.forum.webapp</artifactId>
+  <version>${org.exoplatform.cs.version}</version>
+  <packaging>war</packaging>
+  <name>eXo forum service</name>
+  <url>http://www.exoplatform.org</url>
+  <description>eXo forum service</description>
+  
+  <dependencies> 
+    <dependency>
+      <groupId>org.exoplatform.portal</groupId>
+      <artifactId>exo.portal.webui.portal</artifactId>
+      <version>${org.exoplatform.portal.version}</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <!--
+    <dependency>
+      <groupId>org.exoplatform.cs</groupId>
+      <artifactId>exo.cs.eXoApplication.forum.service</artifactId>
+      <version>${org.exoplatform.cs.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    -->
+  </dependencies>
+
+  <build>
+    <finalName>forum</finalName>
+  </build>
+</project>
