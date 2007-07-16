@@ -3,6 +3,6 @@
 %>
 <div class="$uicomponent.id UIApplication" id="$uicomponent.id">
   <div class="ApplicationMinWidth">
-    This is a test(Tuan)
+    This is a test(Phuong)(...)
   </div>
 </div>
