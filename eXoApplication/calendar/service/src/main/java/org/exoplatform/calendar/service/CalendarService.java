@@ -39,11 +39,11 @@ public interface CalendarService {
    * 1. Get calendar service root node by current user
    * 2. Get Category and return Category object
    * @param username
-   * @param categoryId
+   * @param eventCategoryId
    * @return Category
    * @throws Exception
    */
-  public EventCategory getEventCategory(String username, String categoryId) throws Exception ;
+  public EventCategory getEventCategory(String username, String eventCategoryId) throws Exception ;
   /**
    * This method should:
    * 1. Get calendar service root node by current user
@@ -415,7 +415,5 @@ public interface CalendarService {
    * @throws Exception
    */
   public void removeCalendarCategory(String username, String calendarCategoryId) throws Exception ;
-  
-  
   
 }
