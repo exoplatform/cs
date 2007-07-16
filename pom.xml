@@ -7,7 +7,9 @@
   <packaging>pom</packaging>
 
   <modules>
+    <module>eXoApplication/mail/webapp</module>
     <module>eXoApplication/mail/service</module>
+    <module>eXoApplication/forum/webapp</module>
     <module>eXoApplication/forum/service</module>
     <module>eXoApplication/calendar/service</module>
   </modules>
