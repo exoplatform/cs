@@ -30,11 +30,10 @@ public interface DataStorage {
   public List<Calendar> getCalendarsByCategory(String username, String calendarCategoryId) throws Exception ;
   public List<Calendar> getCalendarsByGroup(String groupName) throws Exception ;
   public Calendar getCalendar(String username, String calendarId) throws Exception ;
-  public Calendar getCalendar(String calendarId) throws Exception ;
-  
+  public Calendar getCalendar(String calendarId) throws Exception ;  
   public void updateCalendar(String username, Calendar calendar) throws Exception ;
-  public void removeCalendar(String username, String groupId, String calendarId) throws Exception ;
   public void removeCalendar(String username, String calendarId) throws Exception ;
+  public void removeCalendar(String calendarId) throws Exception ;
   
   public void createEvent(String username, Event event) throws Exception ;
   public void createEvent(Event event) throws Exception ;

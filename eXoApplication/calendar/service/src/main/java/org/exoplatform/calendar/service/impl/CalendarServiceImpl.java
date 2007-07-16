@@ -12,6 +12,8 @@ import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.Event;
 import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.Task;
+import org.exoplatform.registry.JCRRegistryService;
+import org.exoplatform.services.jcr.RepositoryService;
 
 /**
  * Created by The eXo Platform SARL
@@ -20,12 +22,43 @@ import org.exoplatform.calendar.service.Task;
  * Jul 11, 2007  
  */
 public class CalendarServiceImpl implements CalendarService{
-
+  private JCRDataStorage storage_ ;
+  public CalendarServiceImpl(RepositoryService  repositoryService, 
+                             JCRRegistryService jcrRegistryService) throws Exception {
+    storage_ = new JCRDataStorage(repositoryService, jcrRegistryService) ;
+  }
   public void createCalendar(String username, Calendar calendar) throws Exception {
-    // TODO Auto-generated method stub
-    
+    storage_.createCalendar(username, calendar) ;
+  }
+  
+  public Calendar getCalendar(String username, String calendarId) throws Exception {
+    return storage_.getCalendar(username, calendarId);
+  }
+  
+  public Calendar getCalendar(String calendarId) throws Exception {
+    return storage_.getCalendar(calendarId);
+  }
+  
+  public List<Calendar> getCalendarsByCategory(String username, String calendarCategoryId) throws Exception {
+    return storage_.getCalendarsByCategory(username, calendarCategoryId);
   }
 
+  public List<Calendar> getCalendarsByGroup(String groupName) throws Exception {
+    return storage_.getCalendarsByGroup(groupName);
+  }
+  
+  public void removeCalendar(String username, String calendarId) throws Exception {
+    storage_.removeCalendar(username, calendarId) ;    
+  }
+
+  public void removeCalendar(String calendarId) throws Exception {
+    storage_.removeCalendar(calendarId) ;
+  }
+  
+  public void updateCalendar(String username, Calendar calendar) throws Exception {
+    storage_.updateCalendar(username, calendar) ; 
+  }
+  
   public void createCalendarCategory(String username, CalendarCategory calendarCategory) throws Exception {
     // TODO Auto-generated method stub
     
@@ -56,27 +89,7 @@ public class CalendarServiceImpl implements CalendarService{
     
   }
 
-  public Calendar getCalendar(String username, String calendarId) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  public Calendar getCalendar(String username, String groupId, String calendarId) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
   public List<CalendarCategory> getCalendarCategories(String username) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  public List<Calendar> getCalendarsByCategory(String username, String calendarCategoryId) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  public List<Calendar> getCalendarsByGroup(String groupName) throws Exception {
     // TODO Auto-generated method stub
     return null;
   }
@@ -141,16 +154,6 @@ public class CalendarServiceImpl implements CalendarService{
     return null;
   }
 
-  public void removeCalendar(String username, String groupId, String calendarId) throws Exception {
-    // TODO Auto-generated method stub
-    
-  }
-
-  public void removeCalendar(String username, String calendarId) throws Exception {
-    // TODO Auto-generated method stub
-    
-  }
-
   public void removeCalendarCategory(String username, String calendarCategoryId) throws Exception {
     // TODO Auto-generated method stub
     
@@ -177,11 +180,6 @@ public class CalendarServiceImpl implements CalendarService{
   }
 
   public void removeTask(String taskId) throws Exception {
-    // TODO Auto-generated method stub
-    
-  }
-
-  public void updateCalendar(String username, Calendar calendar) throws Exception {
     // TODO Auto-generated method stub
     
   }

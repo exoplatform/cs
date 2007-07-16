@@ -117,7 +117,7 @@ public interface CalendarService {
    * @return Calendar
    * @throws Exception
    */
-  public Calendar getCalendar(String username, String groupId, String calendarId) throws Exception ;
+  public Calendar getCalendar(String calendarId) throws Exception ;
   
   /**
    * This method should:
@@ -140,7 +140,7 @@ public interface CalendarService {
    * @param calendarId
    * @throws Exception
    */
-  public void removeCalendar(String username, String groupId, String calendarId) throws Exception ;
+  public void removeCalendar(String username, String calendarId) throws Exception ;
   /**
    * This method should:
    * 1. Get calendar service root node by current user
@@ -150,7 +150,7 @@ public interface CalendarService {
    * @param calendarId
    * @throws Exception
    */
-  public void removeCalendar(String username, String calendarId) throws Exception ;
+  public void removeCalendar(String calendarId) throws Exception ;
   
   /**
    * This method should:
