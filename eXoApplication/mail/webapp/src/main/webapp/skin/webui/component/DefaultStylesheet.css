@@ -3,5 +3,71 @@
  */
  
 .UIMailPortlet {
-	border: 1px solid red;
+}
+
+.UIMailPortlet .MailBanner {
+  background: url('DefaultSkin/background/BgBanner457x63.gif') no-repeat left;
+  height: 64px;
+  padding: 0px 1px 0px 155px;
+}
+
+.UIMailPortlet .MailBanner .TopBanner {
+	padding: 11px 0px 0px 44px;
+	margin: 0px 0px 2px 0px;
+
+}
+
+.UIMailPortlet .MailBanner .LeftHorizontalLine {
+  background: url('DefaultSkin/background/LeftHorizontalLine44x2.gif') no-repeat left bottom;	
+  padding-left: 44px;
+  height: 30px;
+}
+
+.UIMailPortlet .MailBanner .RepeatHorizontalLine {
+	font-size: 13px; font-family: tahoma;
+	color: #5f5f5f; font-weight: bold;
+  background: url('DefaultSkin/background/RepeatHorizontalLine1x2.gif') repeat-x bottom;	
+  height: 21px; padding-top: 9px;
+}
+
+.UIMailPortlet .MailBanner .SearchForm {
+  background: url('DefaultSkin/background/RightBottomBanner440x34.gif') no-repeat right;	
+  height: 34px; line-height: 34px;
+	padding-right: 13px;
+	border-right: 1px solid #787e9f;
+}
+
+.UIMailPortlet .MailBanner .Label {
+	float: right;
+	line-height: 20px;
+	margin: 5px 0px;
+	color: #595b6a; 
+}
+
+.UIMailPortlet .MailBanner .Input {
+	width: 195px;
+	float: right;
+	margin: 5px 8px;
+}
+
+.UIMailPortlet .MailBanner .Search {
+  background: url('DefaultSkin/icons/Search16x16.gif') no-repeat ;	
+  height: 16px;
+  width: 16px;
+  float: right;
+  margin: 8px 5px 0px 0px;
+}
+
+.UIMailPortlet .MailBanner .AdvancedSearch {
+  background: url('DefaultSkin/icons/Find16x16.gif') no-repeat ;	
+  height: 16px; width: 16px;
+  float: right;
+  margin: 8px 0px 0px 2px;
+}
+
+.UIMailPortlet .MailBanner .SeparatorLine {
+  background: url('DefaultSkin/background/SeparatorLine2x27.gif') no-repeat ;	
+  height: 27px; width: 2px;
+  float: right;
+  margin: 3px 7px;
 }

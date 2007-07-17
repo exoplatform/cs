@@ -4,8 +4,22 @@
 <div class="$uicomponent.id UIApplication" id="$uicomponent.id">
   <div class="ApplicationMinWidth">
   	<div class="UIMailPortlet">
-	    <div class="MailBanner">Banner</div>
-	    <div class="MailWorkingWorkspace">Working</div>
+	    <div class="MailBanner">
+	    	<div class="LeftHorizontalLine">
+					<div class="RepeatHorizontalLine">a Powerful, Open-source Messaging</div>					
+				</div>
+				<div class="SearchForm">
+					<div class="AdvancedSearch"><span></span></div>
+					<div class="SeparatorLine"><span></span></div>
+					<div class="Search"><span></span></div>
+					<input class="Input" type="text" name=""/>
+					<div class="Label">Search:</div>
+					<div style="clear:right;"><span></span></div>
+				</div>
+			</div>
+	    <div class="MailWorkingArea">
+	    
+			</div>
     </div>
   </div>
 </div>
