@@ -15,24 +15,13 @@ public class EventCategory {
   private String name ;
   private String description ;
   
-  public EventCategory() {}
+  public String getId() { return id ; }
+  public void   setId(String id) { this.id = id ; }
   
-  public void setName(String name_) {
-    this.name = name_;
-  }
+  public String getName() { return name ; }
+  public void   setName(String name) { this.name = name ; }
 
-  public String getName() {
-    return name;
-  }
+  public String getDescription() { return description ; }
+  public void   setDescription(String description) { this.description = description ; }
 
-  public void setDescription(String description_) {
-    this.description = description_;
-  }
-
-  public String getDescription() {
-    return description;
-  }
-  
-  
-  
 }
