@@ -7,6 +7,7 @@ package org.exoplatform.mail.service.impl;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
@@ -269,7 +270,6 @@ public class MailServiceImpl implements MailService{
         props.setProperty("mail.pop3.socketFactory.fallback", "false");
         props.setProperty( "mail.pop3.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
       }
-      Calendar gc = GregorianCalendar.getInstance();
       
       javax.mail.Session session = javax.mail.Session.getDefaultInstance(props);
       URLName url = new URLName(conf.getProtocol(), conf.getHost(), Integer.valueOf(conf.getPort()), conf.getFolder(), conf.getUserName(), conf.getPassword()) ;
@@ -277,23 +277,26 @@ public class MailServiceImpl implements MailService{
       store.connect();
       javax.mail.Folder folder = store.getFolder(conf.getFolder());
       folder.open(javax.mail.Folder.READ_ONLY);
+      // gets the new messages from the folder specified in the configuration object
       javax.mail.Message[] mess = folder.getMessages() ;
       totalMess = mess.length ;
-      System.out.println("\n Total: " + mess.length + " message(s)") ;
       if(totalMess > 0) {
         int i = 0 ;
         while(i < totalMess){
+          // for each new email, creates a Message object and saves it in the repository
           javax.mail.Message mes = mess[i] ;
           Message newMsg = new Message();
+          Calendar gc = GregorianCalendar.getInstance();
+          Date receivedDate = gc.getTime();
           newMsg.setAccountId(account.getId());
-          newMsg.setId(String.valueOf(gc.getTimeInMillis()));
+          newMsg.setId(String.valueOf(receivedDate.getTime()));
           newMsg.setMessageBcc(getAddress(mes.getRecipients(javax.mail.Message.RecipientType.BCC)));
           newMsg.setMessageCc(getAddress(mes.getRecipients(javax.mail.Message.RecipientType.CC)));
           newMsg.setMessageTo(getAddress(mes.getRecipients(javax.mail.Message.RecipientType.TO)));
           newMsg.setSubject(mes.getSubject());
           newMsg.setFrom(getAddress(mes.getFrom()));
           newMsg.setUnread(true);
-          newMsg.setReceivedDate(mes.getReceivedDate());
+          newMsg.setReceivedDate(receivedDate);
           newMsg.setSendDate(mes.getSentDate());
           newMsg.setAttachements(new ArrayList<Attachment>());
           String[] folders = {conf.getFolder()};
@@ -304,7 +307,6 @@ public class MailServiceImpl implements MailService{
           } else {
             setPart(mes, newMsg, username);
           }
-          System.out.println("!!!!!!!!! date : "+newMsg.getReceivedDate().getTime());
           storage_.saveMessage(username, account.getId(), newMsg, true);
           i ++ ;
         }
@@ -334,18 +336,21 @@ public class MailServiceImpl implements MailService{
       String disposition = part.getDisposition();
       String contentType = part.getContentType();
       if (disposition == null) {
-        // case of a simple plain text email
-        if (part.isMimeType("text/plain")) {
-          newMail.setMessageBody((String)part.getContent());
-        }
-      } else if (disposition.equalsIgnoreCase(Part.ATTACHMENT) || disposition.equalsIgnoreCase(Part.INLINE)) {
-        if ((part.isMimeType("text/html") || part.isMimeType("text/plain")) && !contentType.contains("name=")) {
-          // if the message is in html or is a response/forward (and contains the original message)
-          // the text parts are considered as attached files, hence we manage them here
+        if (part.isMimeType("text/plain") || part.isMimeType("text/html")) {
           newMail.setMessageBody((String)part.getContent());
         } else {
-          // if the mime type is not text, we consider it's a binary file
-          // so we add the file to the attachments
+          MimeMultipart mimeMultiPart = (MimeMultipart)part.getContent() ;
+          for (int i=0; i<mimeMultiPart.getCount();i++) {
+            // for each part, set the body content
+            setPart(mimeMultiPart.getBodyPart(i), newMail, username);
+          }
+        }
+      } else {
+        if (disposition.equalsIgnoreCase(Part.INLINE)) {
+          // this must be presented INLINE, hence inside the body of the message
+          newMail.setMessageBody((String)part.getContent());
+        } else {
+          // this part must be presented as an attachment, hence we add it to the attached files
           SaveMailAttachment file = new SaveMailAttachment();
           file.setId(storage_.getMessageHome(username, newMail.getAccountId()).getPath()+"/"+newMail.getId()+"/"+part.getFileName());
           file.setName(part.getFileName());

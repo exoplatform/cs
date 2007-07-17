@@ -102,7 +102,6 @@ public class TestMailService extends BaseMailTestCase{
     while (it.hasNext()) {
       Message msg = (Message)it.next();
       System.out.println("---------------START--------------------------");
-      System.out.println("[Object]  : " + msg);
       System.out.println("[Subject]  : " + msg.getSubject());
       System.out.println("[Content]  : " + msg.getMessageBody());
       List<Attachment> filesAttached = msg.getAttachments();
@@ -113,11 +112,13 @@ public class TestMailService extends BaseMailTestCase{
         SaveMailAttachment file = (SaveMailAttachment)itFiles.next();
         System.out.println("\t[Attached] : " + file.getName());
         System.out.println("\t[Attached Content]");
-        String line = null;
-        BufferedReader in
-          = new BufferedReader(new InputStreamReader(file.getInputStream()));
-        while ((line = in.readLine()) != null) {
-          System.out.println("\t"+line);
+        if (file.getMimeType().equals("text/plain") || file.getMimeType().equals("text/html")) {
+          String line = null;
+          BufferedReader in
+            = new BufferedReader(new InputStreamReader(file.getInputStream()));
+          while ((line = in.readLine()) != null) {
+            System.out.println("\t"+line);
+          }
         }
         System.out.println("\t__________END FILE________");
       }
