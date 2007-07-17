@@ -11,25 +11,26 @@ package org.exoplatform.calendar.service;
  * Jul 11, 2007  
  */
 public class EventCategory {
-  private String name_ ;
-  private String description_ ;
+  private String id ;
+  private String name ;
+  private String description ;
   
   public EventCategory() {}
   
   public void setName(String name_) {
-    this.name_ = name_;
+    this.name = name_;
   }
 
   public String getName() {
-    return name_;
+    return name;
   }
 
   public void setDescription(String description_) {
-    this.description_ = description_;
+    this.description = description_;
   }
 
   public String getDescription() {
-    return description_;
+    return description;
   }
   
   

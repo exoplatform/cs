@@ -11,5 +11,25 @@ package org.exoplatform.calendar.service;
  * Jul 16, 2007  
  */
 public class Reminder {
-
+  private String id ;
+  private String eventId ;
+  private String repeat ;
+  private String reminder ;
+  private String alarmBefore ; 
+  
+  public String getId() { return this.id ; }
+  public void   setId(String id) { this.id = id ; }
+  
+  public String getEventId() { return this.eventId ; }
+  public void   setEventId(String eventId) { this.eventId = eventId ; }
+  
+  public String getRepeat() { return repeat; }
+  public void   setRepeat(String repeat) { this.repeat = repeat; }
+  
+  public String getReminder() { return reminder; }
+  public void   setReminder(String reminder) { this.reminder = reminder; }
+  
+  public String getAlarmBefore() { return alarmBefore; }
+  public void   setAlarmBefore(String alarmBefore) { this.alarmBefore = alarmBefore; }
+  
 }

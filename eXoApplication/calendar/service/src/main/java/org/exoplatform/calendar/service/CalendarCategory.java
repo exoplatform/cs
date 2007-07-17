@@ -4,8 +4,6 @@
  **************************************************************************/
 package org.exoplatform.calendar.service;
 
-import java.util.List;
-
 /**
  * Created by The eXo Platform SARL
  * Author : Hung Nguyen Quang
@@ -13,51 +11,21 @@ import java.util.List;
  * Jul 11, 2007  
  */
 public class CalendarCategory {
-  private String id_ ;
-  private String name_ ;
-  private String description_ ;
-  private String[] calendars_ ;
-  private List<CalendarAlias> publicCalendar_ ;
+  private String id ;
+  private String name ;
+  private String description ;
+  private String[] calendars ;
   
-  public CalendarCategory() {}
+  public String getId() { return id ; }
+  public void setId(String id) { this.id = id ; }
   
-  public void setId(String id_) {
-    this.id_ = id_;
-  }
-  public String getId() {
-    return id_;
-  }
+  public String getName() { return name ; }
+  public void setName(String name) { this.name = name ; }
 
-  public void setName(String name_) {
-    this.name_ = name_;
-  }
+  public String getDescription() { return description ; }
+  public void setDescription(String description) { this.description = description ; }
 
-  public String getName() {
-    return name_;
-  }
-
-  public void setDescription(String description_) {
-    this.description_ = description_;
-  }
-
-  public String getDescription() {
-    return description_;
-  }
-
-  public void setCalendars(String[] calendars_) {
-    this.calendars_ = calendars_;
-  }
-
-  public String[] getCalendars() {
-    return calendars_;
-  }
-
-  public void setPublicCalendar(List<CalendarAlias> publicCalendar_) {
-    this.publicCalendar_ = publicCalendar_;
-  }
-
-  public List<CalendarAlias> getPublicCalendar() {
-    return publicCalendar_;
-  }
+  public String[] getCalendars() { return calendars ; }
+  public void setCalendars(String[] calendars) { this.calendars = calendars ; }
 
 }

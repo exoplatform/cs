@@ -81,27 +81,6 @@ public class JCRDataStorage implements DataStorage{
     return repositoryService_.getDefaultRepository().getSystemSession(defaultWS) ;
   }
 
-
-
-  public void createCalendar(String username, Calendar calendar) throws Exception {
-    Node calendarHome  ;
-    if(calendar.isPrivate()) {
-      calendarHome = getCalendarHome(username) ;
-    }else {
-      calendarHome = getCalendarHome() ;
-    }
-    if(calendarHome.hasNode(calendar.getId())) throw new Exception("This calendar is already exists") ;
-    Node calendarNode = calendarHome.addNode(calendar.getId(), "exo:calendar") ;
-    calendarNode.setProperty("exo:id", calendar.getId()) ;
-    calendarNode.setProperty("exo:name", calendar.getName()) ;
-    calendarNode.setProperty("exo:description", calendar.getDescription()) ;
-    calendarNode.setProperty("exo:categoryId", calendar.getCategoryId()) ;
-    calendarNode.setProperty("exo:viewPermissions", calendar.getViewPermission()) ;
-    calendarNode.setProperty("exo:editPermissions", calendar.getEditPermission()) ;
-    calendarNode.setProperty("exo:groups", calendar.getGroups()) ;
-    calendarHome.getSession().save() ;
-  }
-
   public Calendar getCalendar(String username, String calendarId) throws Exception {
     Node calendarNode = getCalendarHome(username).getNode(calendarId) ;
     Calendar calendar = new Calendar() ;
@@ -111,7 +90,7 @@ public class JCRDataStorage implements DataStorage{
     calendar.setCategoryId(calendarNode.getProperty("exo:categoryId").getString()) ;
     return calendar ;
   }
-
+  
   public Calendar getCalendar(String calendarId) throws Exception {
     Node calendarNode = getCalendarHome().getNode(calendarId) ;
     Calendar calendar = new Calendar() ;
@@ -230,266 +209,170 @@ public class JCRDataStorage implements DataStorage{
     return calendares;
   }
   
-  public void removeCalendar(String username, String calendarId) throws Exception {
-    Node calendarHome = getCalendarHome(username) ;
-    if(calendarHome.hasNode(calendarId)) calendarHome.getNode(calendarId).remove() ;
-    calendarHome.save() ;
-    calendarHome.getSession().save() ;    
-  }
-  
-  public void removeCalendar(String calendarId) throws Exception {
-    Node calendarHome = getCalendarHome() ;
-    if(calendarHome.hasNode(calendarId)) calendarHome.getNode(calendarId).remove() ;
-    calendarHome.save() ;
-    calendarHome.getSession().save() ;
-  }
-  
-  public void updateCalendar(String username, Calendar calendar) throws Exception {
-    Node calendarHome ;
+  public void saveCalendar(String username, Calendar calendar, boolean isNew) throws Exception {
+    Node calendarHome  ;
     if(calendar.isPrivate()) {
       calendarHome = getCalendarHome(username) ;
     }else {
       calendarHome = getCalendarHome() ;
     }
-    Node calNode = calendarHome.getNode(calendar.getId()) ;
-    calNode.setProperty("exo:name", calendar.getName()) ;
-    calNode.setProperty("exo:description", calendar.getDescription()) ;
-    calNode.setProperty("exo:isPrivate", calendar.isPrivate()) ;
-    calNode.setProperty("exo:groups", calendar.getGroups()) ;
-    calNode.setProperty("exo:viewPermissions", calendar.getViewPermission()) ;
-    calNode.setProperty("exo:editPermissions", calendar.getEditPermission()) ;
-    calNode.setProperty("exo:categoryId", calendar.getCategoryId()) ;
-    calNode.save() ;
+    Node calendarNode ;
+    if(isNew) {
+      if(calendarHome.hasNode(calendar.getId())) throw new Exception("This calendar is already exists") ;
+      calendarNode = calendarHome.addNode(calendar.getId(), "exo:calendar") ;
+      calendarNode.setProperty("exo:id", calendar.getId()) ;
+    }else {
+      calendarNode = calendarHome.getNode(calendar.getId()) ;
+    }    
+    calendarNode.setProperty("exo:name", calendar.getName()) ;
+    calendarNode.setProperty("exo:description", calendar.getDescription()) ;
+    calendarNode.setProperty("exo:categoryId", calendar.getCategoryId()) ;
+    calendarNode.setProperty("exo:viewPermissions", calendar.getViewPermission()) ;
+    calendarNode.setProperty("exo:editPermissions", calendar.getEditPermission()) ;
+    calendarNode.setProperty("exo:groups", calendar.getGroups()) ;
+    calendarHome.getSession().save() ;   
+  }
+
+  public Calendar removeCalendar(String username, String calendarId) throws Exception {
+    Node calendarHome = getCalendarHome(username) ;
+    if(calendarHome.hasNode(calendarId)) {
+      Node calNode = calendarHome.getNode(calendarId) ;
+      Calendar calendar = getCalendar(calNode) ;
+      calNode.remove() ;
+      calendarHome.save() ;
+      calendarHome.getSession().save() ;
+      return calendar ;
+    }
+    return null ;
   }
   
-  public void createCalendarCategory(String username, CalendarCategory calendarCategory) throws Exception {
-    // TODO Auto-generated method stub
-    
+  public Calendar removeCalendar(String calendarId) throws Exception {
+    Node calendarHome = getCalendarHome() ;
+    if(calendarHome.hasNode(calendarId)) {
+      Node calNode = calendarHome.getNode(calendarId) ;
+      Calendar calendar = getCalendar(calNode) ;
+      calNode.remove() ;
+      calendarHome.save() ;
+      calendarHome.getSession().save() ;
+      return calendar ;
+    }
+    return null ;
   }
-
-
-
-  public void createEvent(String username, Event event) throws Exception {
-    // TODO Auto-generated method stub
-    
-  }
-
-
-
-  public void createEvent(Event event) throws Exception {
-    // TODO Auto-generated method stub
-    
-  }
-
-
-
-  public void createEventCategory(String username, EventCategory category) throws Exception {
-    // TODO Auto-generated method stub
-    
-  }
-
-
-
-  public void createTask(String username, Task task) throws Exception {
-    // TODO Auto-generated method stub
-    
-  }
-
-
-
-  public void createTask(Task task) throws Exception {
-    // TODO Auto-generated method stub
-    
-  }
-
-
-
   
+  private Calendar getCalendar(Node calNode) throws Exception {
+    Calendar calendar = new Calendar() ;
+    calendar.setId(calNode.getProperty("exo:id").getString()) ;
+    calendar.setName(calNode.getProperty("exo:name").getString()) ;
+    calendar.setDescription(calNode.getProperty("exo:description").getString()) ;
+    calendar.setCategoryId(calNode.getProperty("exo:categoryId").getString()) ;
+    Value[] values = calNode.getProperty("exo:groups").getValues() ;
+    if(values.length == 1 ){      
+      calendar.setGroups(new String[]{values[0].getString()}) ;
+    }else {
+      String[] groups = new String[values.length] ;
+      for(int i = 0; i < values.length - 1; i ++) {
+        groups[i] = values[i].getString() ;
+      }
+      calendar.setGroups(groups) ;
+    }
+    Value[] viewValues = calNode.getProperty("exo:viewPermissions").getValues() ;
+    if(viewValues.length == 1 ){      
+      calendar.setGroups(new String[]{viewValues[0].getString()}) ;
+    }else {
+      String[] views = new String[viewValues.length] ;
+      for(int i = 0; i < viewValues.length - 1; i ++) {
+        views[i] = viewValues[i].getString() ;
+      }
+      calendar.setGroups(views) ;
+    }
+    Value[] editValues = calNode.getProperty("exo:editPermissions").getValues() ;
+    if(editValues.length == 1 ){      
+      calendar.setGroups(new String[]{editValues[0].getString()}) ;
+    }else {
+      String[] edits = new String[editValues.length] ;
+      for(int i = 0; i < editValues.length - 1; i ++) {
+        edits[i] = editValues[i].getString() ;
+      }
+      calendar.setGroups(edits) ;
+    }    
+    return calendar ;
+  }
+  public void createCalendarCategory(String username, CalendarCategory calendarCategory, boolean isNew) throws Exception {
+    // TODO Auto-generated method stub
+    
+  }
 
+  public void createEvent(String username, String calendarId, String eventCategoryId, Event event, boolean isNew) throws Exception {
+    // TODO Auto-generated method stub
+    
+  }
 
+  public void createEvent(String calendarId, String eventCategoryId, Event event, boolean isNew) throws Exception {
+    // TODO Auto-generated method stub
+    
+  }
 
   public List<CalendarCategory> getCalendarCategories(String username) throws Exception {
     // TODO Auto-generated method stub
     return null;
   }
 
-
-
-  
-
-
-
-  public Event getEvent(String username, String eventId) throws Exception {
+  public Event getEvent(String username, String calendarId, String eventCategoryId, String eventId) throws Exception {
     // TODO Auto-generated method stub
     return null;
   }
 
-
-
-  public Event getEvent(String eventId) throws Exception {
+  public Event getEvent(String calendarId, String eventCategoryId, String eventId) throws Exception {
     // TODO Auto-generated method stub
     return null;
   }
-
-
 
   public List<Event> getEventByCalendar(String username, String calendarId) throws Exception {
     // TODO Auto-generated method stub
     return null;
   }
 
-
-
   public List<Event> getEventByCalendar(String calendarId) throws Exception {
     // TODO Auto-generated method stub
     return null;
   }
 
-
-
-  public List<Event> getEventByCategory(String categoryId) throws Exception {
+  public List<EventCategory> getEventCategories(String username, String calendarId) throws Exception {
     // TODO Auto-generated method stub
     return null;
   }
 
-
-
-  public List<EventCategory> getEventCategories(String username) throws Exception {
+  public EventCategory getEventCategory(String username, String calendarId, String eventCategoryId) throws Exception {
     // TODO Auto-generated method stub
     return null;
   }
 
-
-
-  public EventCategory getEventCategory(String username, String categoryId) throws Exception {
+  public CalendarCategory removeCalendarCategory(String username, String calendarCategoryId) throws Exception {
     // TODO Auto-generated method stub
     return null;
   }
 
-
-
-  public Task getTask(String username, String taskId) throws Exception {
+  public Event removeEvent(String username, String calendarId, String eventCategoryId, String eventId) throws Exception {
     // TODO Auto-generated method stub
     return null;
   }
 
+  public void removeEvent(String calendarId, String eventCategoryId, String eventId) throws Exception {
+    // TODO Auto-generated method stub
+    
+  }
 
-
-  public Task getTask(String taskId) throws Exception {
+  public EventCategory removeEventCategory(String username, String calendarId, String eventCategoryId) throws Exception {
     // TODO Auto-generated method stub
     return null;
   }
 
-
-
-  public List<Task> getTaskByCalendar(String username, String calendarId) throws Exception {
+  public void saveEventCategory(String username, String calendarId, EventCategory eventCategory, boolean isNew) throws Exception {
     // TODO Auto-generated method stub
-    return null;
+    
   }
-
-
-
-  public List<Task> getTaskByCalendar(String calendarId) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-
-
   
-
-
-
-  public void removeCalendarCategory(String username, String calendarCategoryId) throws Exception {
-    // TODO Auto-generated method stub
-    
-  }
-
-
-
-  public void removeEvent(String username, String eventId) throws Exception {
-    // TODO Auto-generated method stub
-    
-  }
-
-
-
-  public void removeEvent(String eventId) throws Exception {
-    // TODO Auto-generated method stub
-    
-  }
-
-
-
-  public void removeEventCategory(String username, String categoryId) throws Exception {
-    // TODO Auto-generated method stub
-    
-  }
-
-
-
-  public void removeTask(String username, String taskId) throws Exception {
-    // TODO Auto-generated method stub
-    
-  }
-
-
-
-  public void removeTask(String taskId) throws Exception {
-    // TODO Auto-generated method stub
-    
-  }
-
-
-
   
-
-
-
-  public void updateCalendarCategory(String username, CalendarCategory calendarCategory) throws Exception {
-    // TODO Auto-generated method stub
-    
-  }
-
-
-
-  public void updateEvent(String username, Event event) throws Exception {
-    // TODO Auto-generated method stub
-    
-  }
-
-
-
-  public void updateEvent(Event event) throws Exception {
-    // TODO Auto-generated method stub
-    
-  }
-
-
-
-  public void updateEventCategory(String username, EventCategory category) throws Exception {
-    // TODO Auto-generated method stub
-    
-  }
-
-
-
-  public void updateTask(String username, Task task) throws Exception {
-    // TODO Auto-generated method stub
-    
-  }
-
-
-
-  public void updateTask(Task task) throws Exception {
-    // TODO Auto-generated method stub
-    
-  }
-
-  
-
- 
-
   
   
 }

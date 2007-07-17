@@ -11,79 +11,37 @@ package org.exoplatform.calendar.service;
  * Jul 11, 2007  
  */
 public class Calendar {
-  private String id_ ;
-  private String name_ ;
-  private String description_ ;
-  private String[] viewPermission_ ;
-  private String[] editPermission_ ;
-  private boolean isPrivate_ = true ;
-  private String categoryId_ ;
-  private String[] groups_ ;
+  private String id ;
+  private String name ;
+  private String description ;
+  private String[] viewPermission ;
+  private String[] editPermission ;
+  private boolean isPrivate = true ;
+  private String categoryId ;
+  private String[] groups ;
   
-  public Calendar() {}
+  public String getId() { return id ; }
+  public void setId(String id) { this.id = id ; }
   
-  public void setId(String id_) {
-    this.id_ = id_;
-  }
-  public String getId() {
-    return id_;
-  }
-
-  public void setName(String name_) {
-    this.name_ = name_;
-  }
-
-  public String getName() {
-    return name_;
-  }
-
-  public void setDescription(String description_) {
-    this.description_ = description_;
-  }
-
-  public String getDescription() {
-    return description_;
-  }
-
-  public void setEditPermission(String[] editPermission_) {
-    this.editPermission_ = editPermission_;
-  }
-
-  public String[] getEditPermission() {
-    return editPermission_;
-  }
-
-  public void setViewPermission(String[] viewPermission_) {
-    this.viewPermission_ = viewPermission_;
-  }
-
-  public String[] getViewPermission() {
-    return viewPermission_;
-  }
-
-  public void setGroups(String[] groups_) {
-    this.groups_ = groups_;
-  }
-
-  public String[] getGroups() {
-    return groups_;
-  }
-
-  public void setCategoryId(String categoryId_) {
-    this.categoryId_ = categoryId_;
-  }
-
-  public String getCategoryId() {
-    return categoryId_;
-  }
-
-  public void setPrivate(boolean isPrivate_) {
-    this.isPrivate_ = isPrivate_;
-  }
-
-  public boolean isPrivate() {
-    return isPrivate_;
-  }
+  public String getName() { return name ; }
+  public void setName(String name) { this.name = name ; }
   
+  public String getDescription() { return description ; }
+  public void setDescription(String description) { this.description = description ; }
+
+  public String[] getEditPermission() { return editPermission ; }
+  public void setEditPermission(String[] editPermission) { this.editPermission = editPermission ; }
+  
+  public String[] getViewPermission() { return viewPermission ; }
+  public void setViewPermission(String[] viewPermission) { this.viewPermission = viewPermission ; }
+
+  public String[] getGroups() { return groups ; }
+  public void setGroups(String[] groups) { this.groups = groups ;}
+
+  public String getCategoryId() { return categoryId ; }
+  public void setCategoryId(String categoryId) { this.categoryId = categoryId ; }
+
+  public boolean isPrivate() { return isPrivate ; }
+  public void setPrivate(boolean isPrivate) { this.isPrivate = isPrivate ; }
   
 }

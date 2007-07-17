@@ -11,7 +11,6 @@ import org.exoplatform.calendar.service.CalendarCategory;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.Event;
 import org.exoplatform.calendar.service.EventCategory;
-import org.exoplatform.calendar.service.Task;
 import org.exoplatform.registry.JCRRegistryService;
 import org.exoplatform.services.jcr.RepositoryService;
 
@@ -27,193 +26,93 @@ public class CalendarServiceImpl implements CalendarService{
                              JCRRegistryService jcrRegistryService) throws Exception {
     storage_ = new JCRDataStorage(repositoryService, jcrRegistryService) ;
   }
-  public void createCalendar(String username, Calendar calendar) throws Exception {
-    storage_.createCalendar(username, calendar) ;
+  public void createCalendarCategory(String username, CalendarCategory calendarCategory, boolean isNew) throws Exception {
+    // TODO Auto-generated method stub
+    
   }
-  
+  public void createEvent(String username, String calendarId, String eventCategoryId, Event event, boolean isNew) throws Exception {
+    // TODO Auto-generated method stub
+    
+  }
+  public void createEvent(String calendarId, String eventCategoryId, Event event, boolean isNew) throws Exception {
+    // TODO Auto-generated method stub
+    
+  }
   public Calendar getCalendar(String username, String calendarId) throws Exception {
-    return storage_.getCalendar(username, calendarId);
+    // TODO Auto-generated method stub
+    return null;
   }
-  
   public Calendar getCalendar(String calendarId) throws Exception {
-    return storage_.getCalendar(calendarId);
-  }
-  
-  public List<Calendar> getCalendarsByCategory(String username, String calendarCategoryId) throws Exception {
-    return storage_.getCalendarsByCategory(username, calendarCategoryId);
-  }
-
-  public List<Calendar> getCalendarsByGroup(String groupName) throws Exception {
-    return storage_.getCalendarsByGroup(groupName);
-  }
-  
-  public void removeCalendar(String username, String calendarId) throws Exception {
-    storage_.removeCalendar(username, calendarId) ;    
-  }
-
-  public void removeCalendar(String calendarId) throws Exception {
-    storage_.removeCalendar(calendarId) ;
-  }
-  
-  public void updateCalendar(String username, Calendar calendar) throws Exception {
-    storage_.updateCalendar(username, calendar) ; 
-  }
-  
-  public void createCalendarCategory(String username, CalendarCategory calendarCategory) throws Exception {
     // TODO Auto-generated method stub
-    
+    return null;
   }
-
-  public void createEvent(String username, Event event) throws Exception {
-    // TODO Auto-generated method stub
-    
-  }
-
-  public void createEvent(Event event) throws Exception {
-    // TODO Auto-generated method stub
-    
-  }
-
-  public void createEventCategory(String username, EventCategory category) throws Exception {
-    // TODO Auto-generated method stub
-    
-  }
-
-  public void createTask(String username, Task task) throws Exception {
-    // TODO Auto-generated method stub
-    
-  }
-
-  public void createTask(Task task) throws Exception {
-    // TODO Auto-generated method stub
-    
-  }
-
   public List<CalendarCategory> getCalendarCategories(String username) throws Exception {
     // TODO Auto-generated method stub
     return null;
   }
-
-  public Event getEvent(String username, String eventId) throws Exception {
+  public List<Calendar> getCalendarsByCategory(String username, String calendarCategoryId) throws Exception {
     // TODO Auto-generated method stub
     return null;
   }
-
-  public Event getEvent(String eventId) throws Exception {
+  public List<Calendar> getCalendarsByGroup(String groupName) throws Exception {
     // TODO Auto-generated method stub
     return null;
   }
-
+  public Event getEvent(String username, String calendarId, String eventCategoryId, String eventId) throws Exception {
+    // TODO Auto-generated method stub
+    return null;
+  }
+  public Event getEvent(String calendarId, String eventCategoryId, String eventId) throws Exception {
+    // TODO Auto-generated method stub
+    return null;
+  }
   public List<Event> getEventByCalendar(String username, String calendarId) throws Exception {
     // TODO Auto-generated method stub
     return null;
   }
-
   public List<Event> getEventByCalendar(String calendarId) throws Exception {
     // TODO Auto-generated method stub
     return null;
   }
-
-  public List<Event> getEventByCategory(String username, String categoryId) throws Exception {
+  public List<EventCategory> getEventCategories(String username, String calendarId) throws Exception {
     // TODO Auto-generated method stub
     return null;
   }
-
-  public List<Event> getEventByCategory(String categoryId) throws Exception {
+  public EventCategory getEventCategory(String username, String calendarId, String eventCategoryId) throws Exception {
     // TODO Auto-generated method stub
     return null;
   }
-
-  public List<EventCategory> getEventCategories(String username) throws Exception {
+  public Calendar removeCalendar(String username, String calendarId) throws Exception {
     // TODO Auto-generated method stub
     return null;
   }
-
-  public EventCategory getEventCategory(String username, String categoryId) throws Exception {
+  public Calendar removeCalendar(String calendarId) throws Exception {
     // TODO Auto-generated method stub
     return null;
   }
-
-  public Task getTask(String username, String taskId) throws Exception {
+  public CalendarCategory removeCalendarCategory(String username, String calendarCategoryId) throws Exception {
     // TODO Auto-generated method stub
     return null;
   }
-
-  public Task getTask(String taskId) throws Exception {
+  public Event removeEvent(String username, String calendarId, String eventCategoryId, String eventId) throws Exception {
     // TODO Auto-generated method stub
     return null;
   }
-
-  public List<Task> getTaskByCalendar(String username, String calendarId) throws Exception {
+  public void removeEvent(String calendarId, String eventCategoryId, String eventId) throws Exception {
+    // TODO Auto-generated method stub
+    
+  }
+  public EventCategory removeEventCategory(String username, String calendarId, String eventCategoryId) throws Exception {
     // TODO Auto-generated method stub
     return null;
   }
-
-  public List<Task> getTaskByCalendar(String calendarId) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  public void removeCalendarCategory(String username, String calendarCategoryId) throws Exception {
+  public void saveCalendar(String username, Calendar calendar, boolean isNew) throws Exception {
     // TODO Auto-generated method stub
     
   }
-
-  public void removeEvent(String username, String eventId) throws Exception {
+  public void saveEventCategory(String username, String calendarId, EventCategory eventCategory, boolean isNew) throws Exception {
     // TODO Auto-generated method stub
     
-  }
-
-  public void removeEvent(String eventId) throws Exception {
-    // TODO Auto-generated method stub
-    
-  }
-
-  public void removeEventCategory(String username, String categoryId) throws Exception {
-    // TODO Auto-generated method stub
-    
-  }
-
-  public void removeTask(String username, String taskId) throws Exception {
-    // TODO Auto-generated method stub
-    
-  }
-
-  public void removeTask(String taskId) throws Exception {
-    // TODO Auto-generated method stub
-    
-  }
-
-  public void updateCalendarCategory(String username, CalendarCategory calendarCategory) throws Exception {
-    // TODO Auto-generated method stub
-    
-  }
-
-  public void updateEvent(String username, Event event) throws Exception {
-    // TODO Auto-generated method stub
-    
-  }
-
-  public void updateEvent(Event event) throws Exception {
-    // TODO Auto-generated method stub
-    
-  }
-
-  public void updateEventCategory(String username, EventCategory category) throws Exception {
-    // TODO Auto-generated method stub
-    
-  }
-
-  public void updateTask(String username, Task task) throws Exception {
-    // TODO Auto-generated method stub
-    
-  }
-
-  public void updateTask(Task task) throws Exception {
-    // TODO Auto-generated method stub
-    
-  }
-
-  
+  }  
 
 }
