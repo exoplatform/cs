@@ -5,7 +5,6 @@
 package org.exoplatform.mail.service.test;
 
 import java.io.BufferedReader;
-import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.util.Iterator;
 import java.util.List;
@@ -84,11 +83,11 @@ public class TestMailService extends BaseMailTestCase{
     //  create mail server config
     MailServerConfiguration conf = new MailServerConfiguration();
     conf.setFolder(folder.getName());
-    conf.setUserName("philippe.aristote@gmail.com");
-    conf.setPassword("ar1983");
-    conf.setHost("pop.gmail.com");
-    conf.setPort("995");
-    conf.setProtocol("pop3");
+    conf.setUserName("username"); 
+    conf.setPassword("password");
+    conf.setHost("mail.server.com");
+    conf.setPort("110"); // POP3 : 110, POP3 (SSL) : 995, IMAP : 143, IMAP (SSL) : 993
+    conf.setProtocol("imap"); // pop3 or imap
     myaccount.setConfiguration(conf);
     mailService_.updateAccount("hungnguyen", myaccount);
     

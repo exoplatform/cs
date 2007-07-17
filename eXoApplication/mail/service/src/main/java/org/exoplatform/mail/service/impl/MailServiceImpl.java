@@ -262,6 +262,16 @@ public class MailServiceImpl implements MailService{
   
   public int checkNewMessage(String username, Account account) throws Exception {
     MailServerConfiguration conf = account.getConfiguration();
+    /**
+     * conf contains the following information :
+     * - host : the server ip address or name
+     * - port : POP3 : 110, POP3 (SSL) : 995, IMAP : 143, IMAP (SSL) : 993
+     * - protocol : pop3 or imap
+     * - username
+     * - password
+     * - folder : the folder to open (e.g. INBOX)
+     */
+    
     System.out.println("\n ### Getting mail from " + conf.getHost() + " ... !");
     int totalMess = -1;
     try {
@@ -269,17 +279,23 @@ public class MailServiceImpl implements MailService{
       if(conf.getProtocol().equals("pop3")) {
         props.setProperty("mail.pop3.socketFactory.fallback", "false");
         props.setProperty( "mail.pop3.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+      } else if (conf.getProtocol().equals("imap")) {
+        props.setProperty("mail.imap.socketFactory.fallback", "false");
+        props.setProperty("mail.imap.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
       }
       
       javax.mail.Session session = javax.mail.Session.getDefaultInstance(props);
       URLName url = new URLName(conf.getProtocol(), conf.getHost(), Integer.valueOf(conf.getPort()), conf.getFolder(), conf.getUserName(), conf.getPassword()) ;
       Store store = session.getStore(url) ;
       store.connect();
+      System.out.println("\n ### Connected !");
       javax.mail.Folder folder = store.getFolder(conf.getFolder());
       folder.open(javax.mail.Folder.READ_ONLY);
+      
       // gets the new messages from the folder specified in the configuration object
       javax.mail.Message[] mess = folder.getMessages() ;
       totalMess = mess.length ;
+      System.out.println("\n ### Folder contains "+totalMess+" messages !");
       if(totalMess > 0) {
         int i = 0 ;
         while(i < totalMess){
@@ -348,7 +364,9 @@ public class MailServiceImpl implements MailService{
       } else {
         if (disposition.equalsIgnoreCase(Part.INLINE)) {
           // this must be presented INLINE, hence inside the body of the message
-          newMail.setMessageBody((String)part.getContent());
+          if (part.isMimeType("text/plain") || part.isMimeType("text/html")) {
+            newMail.setMessageBody((String)part.getContent());
+          }
         } else {
           // this part must be presented as an attachment, hence we add it to the attached files
           SaveMailAttachment file = new SaveMailAttachment();
@@ -388,7 +406,6 @@ public class MailServiceImpl implements MailService{
 
   public void createAccount(String username, Account account) throws Exception {
     saveAccount(username, account, true);
-  }  
-
+  }
 
 }
