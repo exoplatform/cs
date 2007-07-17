@@ -3,6 +3,55 @@
  */
  
 .UIMailPortlet {
+
+}
+
+.UIMailPortlet .MailWorkingWorkspace {
+	
+}
+
+.UIMailPortlet .MailWorkingWorkspace .MailControlBar {
+	padding: 5px 5px 0px 5px;
+	height: 31px;
+}
+
+.UIMailPortlet .MailWorkingWorkspace .MailControlBar a.ControlButton {
+	float: left;
+	display: plock;
+	padding: 5px;
+	width: 35px; height: 21px;
+}
+
+.UIMailPortlet .MailWorkingWorkspace .MailControlBar a:hover {
+	background: url('DefaultSkin/background/ControlButtonBG.gif') repeat-y ;
+	border: 1px solid #9d9d9d;
+	text-color: #ffba00;
+}
+
+.UIMailPortlet .MailWorkingWorkspace .MailControlBar .MailIconLabel {
+	line-height: 20px;
+}
+
+.UIMailPortlet .MailWorkingWorkspace .MailControlBar .MailIcon {
+	width: 24px; height: 18px;
+}
+
+.UIMailPortlet .MailWorkingWorkspace .MailControlBar .CheckMailIcon {
+	background: url('DefaultSkin/icons/CheckMailIcon.gif') no-repeat ;
+}
+
+
+
+
+.UIMailPortlet .MailWorkingWorkspace .MailContainerDetail {
+	padding: 0px 5px 5px 5px;
+}
+
+.UIMailPortlet .MailWorkingWorkspace .MailContainerDetail .MailContentNavigation {
+	float: left;
+	width: 200px;	height: 400px;
+	border: 1px solid red;
+
 }
 
 .UIMailPortlet .MailBanner {
@@ -71,3 +120,12 @@
   float: right;
   margin: 3px 7px;
 }
+
+.UIMailPortlet .MailWorkingWorkspace .MailContainerDetail .MailContentWorkingArea {
+	margin: 0px 0px 0px 205px;
+	height: 400px;
+	border: 1px solid red;
+}
+
+
+

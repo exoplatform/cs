@@ -4,6 +4,7 @@
 <div class="$uicomponent.id UIApplication" id="$uicomponent.id">
   <div class="ApplicationMinWidth">
   	<div class="UIMailPortlet">
+
 	    <div class="MailBanner">
 	    	<div class="LeftHorizontalLine">
 					<div class="RepeatHorizontalLine">a Powerful, Open-source Messaging</div>					
@@ -17,9 +18,84 @@
 					<div style="clear:right;"><span></span></div>
 				</div>
 			</div>
-	    <div class="MailWorkingArea">
-	    
+
+	    <div class="MailWorkingWorkspace">
+			 
+			 <div class="MailControlBar">
+					<div class="UIToolbar">
+						<div class="HeaderToolbar">
+							<div class="LeftBar">
+								<div class="RightBar">
+									<div class="CenterBar"
+										<a href="#" class="ControlButton">
+											<div class="CheckMailIcon">
+												<div class="MailIconLabel">CheckMail</div>
+											</div>
+										</a>
+										<a href="#" class="ControlButton">
+											<div class="ComposeIcon">
+												<div class="MailIconLabel"> Compose </div>
+											</div>
+										</a>
+										<div class="MailSeparatorLine"><span></span></div>
+										<a href="#" class="ControlButton">
+											<div class="ReplyIcon">
+												<div class="MailIconLabel"> Reply </div>
+											</div>
+										</a>
+										<a href="#" class="ControlButton">
+											<div class="ReplyAllIcon">
+												<div class="MailIconLabel"> ReplyAll </div>
+											</div>
+										</a>
+										<a href="#" class="ControlButton">
+											<div class="ForwardIcon">
+												<div class="MailIconLabel"> Forward </div>
+											</div>
+										</a>
+										<div class="MailSeparatorLine"><span></span></div>
+										<a href="#" class="ControlButton">
+											<div class="DeleteIcon"><span></span></div>
+										</a>
+										<a href="#" class="ControlButton">
+											<div class="PrintIcon"><span></span></div>
+										</a>
+										<a href="#" class="ControlButton">
+											<div class="ContactsIcon">
+												<div class="MailIconLabel"> Contacts </div>
+											</div>
+										</a>
+										<a href="#" class="ControlButton">
+											<div class="RssIcon">
+												<div class="MailIconLabel"> RSS </div>
+											</div>
+										</a>
+										<div class="MailSeparatorLine"><span></span></div>
+										<a href="#" class="ControlButton">
+											<div class="CustomViewIcon"><span></span></div>
+											<div class="DropDownArrowIcon"><span></span></div>
+										</a>
+										<a href="#" class="ControlButton">
+											<div class="SettingsIcon"><span></span></div>
+										</a>
+										<div style="clear: left"><span></span></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="MailContainerDetail">
+					<div class="MailContentNavigation">
+					fjgvjdb
+					</div>
+					<div class="MailContentWorkingArea">
+					hvbdvjd
+					</div>
+				</div>
+				
 			</div>
+
     </div>
   </div>
 </div>
