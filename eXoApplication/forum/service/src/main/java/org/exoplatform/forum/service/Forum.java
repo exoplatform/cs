@@ -9,28 +9,28 @@ import java.util.Date;
  * March 2, 2007  
  */
 public class Forum {
-  private String id_;
-  private String owner_;
-  private int forumOrder_;
-  private Date createdDate_;
-  private String modifiedBy_;
-  private Date modifiedDate_;
-  private String lastPostBy_;
-  private Date lastPostDate_;
-  private String name_;
-  private String description_;
-  private int postCount_;
-  private int topicCount_;
+  private String id;
+  private String owner;
+  private int forumOrder;
+  private Date createdDate;
+  private String modifiedBy;
+  private Date modifiedDate;
+  private String lastPostBy;
+  private Date lastPostDate;
+  private String name;
+  private String description;
+  private int postCount;
+  private int topicCount;
 
-  private String[] viewForumRole_;
-  private String[] createTopicRole_;
-  private String[] replyTopicRole_;
-  private String[] moderators_;
+  private String[] viewForumRole;
+  private String[] createTopicRole;
+  private String[] replyTopicRole;
+  private String[] moderators;
   
   public Forum() {}
   
-  public void setId(String id){id_ = id;}
-  public String getId(){return id_;}
+  public String getId(){return id;}
+  public void setId(String id){this.id = id;}
   
   /**
    * This method should:
@@ -39,48 +39,48 @@ public class Forum {
    */
   public String getCategoryId(){return null;}
   
-  public void setOwner(String owner){owner_ = owner;}
-  public String getOwner(){return owner_;}
+  public String getOwner(){return owner;}
+  public void setOwner(String owner){this.owner = owner;}
   
-  public void setForumOrder(int forumOrder){forumOrder_ = forumOrder;}
-  public int getForumOrder(){return forumOrder_;}
+  public int getForumOrder(){return forumOrder;}
+  public void setForumOrder(int forumOrder){this.forumOrder = forumOrder;}
   
-  public void setCreatedDate(Date createdDate){createdDate_ = createdDate;}
-  public Date getCreatedDate(){return createdDate_;}
+  public Date getCreatedDate(){return createdDate;}
+  public void setCreatedDate(Date createdDate){this.createdDate = createdDate;}
   
-  public void setModifiedBy(String modifiedBy){modifiedBy_ = modifiedBy;}
-  public String getModifiedBy(){return modifiedBy_;}
+  public String getModifiedBy(){return modifiedBy;}
+  public void setModifiedBy(String modifiedBy){this.modifiedBy = modifiedBy;}
   
-  public void setModifiedDate(Date modifiedDate){modifiedDate_ = modifiedDate;}
-  public Date getModifiedDate(){return modifiedDate_;}
+  public Date getModifiedDate(){return modifiedDate;}
+  public void setModifiedDate(Date modifiedDate){this.modifiedDate = modifiedDate;}
   
-  public void setLastPostBy(String lastPostBy){lastPostBy_ = lastPostBy;}
-  public String getLastPostBy(){return lastPostBy_;}
+  public String getLastPostBy(){return lastPostBy;}
+  public void setLastPostBy(String lastPostBy){this.lastPostBy = lastPostBy;}
   
-  public void setLastPostDate(Date lastPostDate){lastPostDate_ = lastPostDate;}
-  public Date getLastPostDate(){return lastPostDate_;}
+  public Date getLastPostDate(){return lastPostDate;}
+  public void setLastPostDate(Date lastPostDate){this.lastPostDate = lastPostDate;}
   
-  public void setForumName(String forumName){name_ = forumName;}
-  public String getForumName(){return name_;}
+  public String getForumName(){return name;}
+  public void setForumName(String forumName){this.name = forumName;}
   
-  public void setDescription(String description){description_ = description;}
-  public String getDescription(){return description_;}
+  public String getDescription(){return description;}
+  public void setDescription(String description){this.description = description;}
   
-  public void setPostCount(int postCount){postCount_ = postCount;}
-  public int getPostCount(){return postCount_;}
+  public int getPostCount(){return postCount;}
+  public void setPostCount(int postCount){this.postCount = postCount;}
   
-  public void setTopicCount(int topicCount){topicCount_ = topicCount;}
-  public int getTopicCount(){return topicCount_;}
+  public int getTopicCount(){return topicCount;}
+  public void setTopicCount(int topicCount){this.topicCount = topicCount;}
   
-  public void setViewForumRole(String[] viewForumRole){ viewForumRole_ = viewForumRole;}
-  public String[] getViewForumRole(){return viewForumRole_;}
+  public String[] getViewForumRole(){return viewForumRole;}
+  public void setViewForumRole(String[] viewForumRole){this.viewForumRole = viewForumRole;}
   
-  public void setCreateTopicRole(String[] createTopicRole){createTopicRole_ = createTopicRole;}
-  public String[] getCreateTopicRole(){return createTopicRole_;}
+  public String[] getCreateTopicRole(){return createTopicRole;}
+  public void setCreateTopicRole(String[] createTopicRole){this.createTopicRole = createTopicRole;}
   
-  public void setReplyTopicRole(String[] replyTopicRole){replyTopicRole_ = replyTopicRole;}
-  public String[] getReplyTopicRole(){return replyTopicRole_;}
+  public String[] getReplyTopicRole(){return replyTopicRole;}
+  public void setReplyTopicRole(String[] replyTopicRole){this.replyTopicRole = replyTopicRole;}
   
-  public void setModerators(String[] moderators){moderators_ = moderators;}
-  public String[] getModerators(){return moderators_;}  
+  public String[] getModerators(){return moderators;}  
+  public void setModerators(String[] moderators){this.moderators = moderators;}
 }

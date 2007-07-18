@@ -43,6 +43,9 @@
 	  		</propertyDefinition>	  	
 	  		<propertyDefinition name="exo:owner" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
 	  			<valueConstraints/>
+	  		</propertyDefinition>
+	  		<propertyDefinition name="exo:name" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+	  			<valueConstraints/>
 	  		</propertyDefinition>  		
 	  		<propertyDefinition name="exo:createdDate" requiredType="Date" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
 	  			<valueConstraints/>
@@ -57,9 +60,6 @@
 	  			<valueConstraints/>
 	  		</propertyDefinition>
 	  		<propertyDefinition name="exo:lastPostDate" requiredType="Date" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-	  			<valueConstraints/>
-	  		</propertyDefinition>
-	  		<propertyDefinition name="exo:topic" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
 	  			<valueConstraints/>
 	  		</propertyDefinition>
 	  		<propertyDefinition name="exo:description" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">

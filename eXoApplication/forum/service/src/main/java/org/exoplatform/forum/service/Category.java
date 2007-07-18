@@ -10,40 +10,40 @@ import java.util.Date;
  * March 2, 2007  
  */
 public class Category {
-   private String id_;
-   private String owner_;
-   private long categoryOrder_;
-   private Date createdDate_;
-   private String modifiedBy_;
-   private Date modifiedDate_;
-   private String name_;
-   private String description_;   
+   private String id;
+   private String owner;
+   private long categoryOrder;
+   private Date createdDate;
+   private String modifiedBy;
+   private Date modifiedDate;
+   private String name;
+   private String description;   
    
    public Category(){
      
    }
 
-   public void setId(String id){ id_ = id;}
-   public String getId(){return id_;}
+   public String getId(){return id;}
+   public void setId(String id){ this.id = id;}
    
-   public void setOwner(String owner){owner_=owner;}
-   public String getOwner(){return owner_;}
+   public String getOwner(){return owner;}
+   public void setOwner(String owner){this.owner=owner;}
    
-   public void setCategoryOrder(long categoryOrder){categoryOrder_ = categoryOrder;}
-   public long getCategoryOrder(){return categoryOrder_;}
+   public long getCategoryOrder(){return categoryOrder;}
+   public void setCategoryOrder(long categoryOrder){this.categoryOrder = categoryOrder;}
    
-   public void setCreatedDate(Date createdDate){createdDate_ = createdDate;}
-   public Date getCreatedDate(){return createdDate_;}
+   public Date getCreatedDate(){return createdDate;}
+   public void setCreatedDate(Date createdDate){this.createdDate = createdDate;}
    
-   public void setModifiedBy(String modifiedBy) {modifiedBy_ = modifiedBy;}
-   public String getModifiedBy(){return modifiedBy_;}
+   public String getModifiedBy(){return modifiedBy;}
+   public void setModifiedBy(String modifiedBy) {this.modifiedBy = modifiedBy;}
    
-   public void setModifiedDate(Date modifiedDate){modifiedDate_ = modifiedDate;}
-   public Date getModifiedDate(){return modifiedDate_;}
+   public Date getModifiedDate(){return modifiedDate;}
+   public void setModifiedDate(Date modifiedDate){this.modifiedDate = modifiedDate;}
    
-   public void setCategoryName(String categoryName){name_ = categoryName;}
-   public String getCategoryName(){return name_;}
+   public String getCategoryName(){return name;}
+   public void setCategoryName(String categoryName){this.name = categoryName;}
    
-   public void setDescription(String description){description_ = description;}
-   public String getDescription(){return description_;}   
+   public String getDescription(){return description;}   
+   public void setDescription(String description){this.description = description;}
 }

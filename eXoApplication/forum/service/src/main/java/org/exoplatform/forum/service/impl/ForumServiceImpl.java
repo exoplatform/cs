@@ -50,26 +50,63 @@ public class ForumServiceImpl implements ForumService{
   }
   
   public void createForum(String categoryId, Forum forum) throws Exception {
-    // TODO Auto-generated method stub
-  }
-  public void createPost(String categoryId, String forumId, String topicId, Post post) throws Exception {
-    // TODO Auto-generated method stub
-  }
-  public void createTopic(String categoryId, String forumId, Topic topic) throws Exception {
-    // TODO Auto-generated method stub
+    storage_.createForum(categoryId, forum);
   }
   
   public void moveForum(String srcCategoryId, String forumId, String destCategoryId)throws Exception {
-    
+    storage_.moveForum(srcCategoryId, forumId, destCategoryId);
   }
+  
   public Forum getForum(String categoryId, String forumId) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
+    return storage_.getForum(categoryId, forumId);
   }
+  
   public List<Forum> getForums(String categoryId) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
+    return storage_.getForums(categoryId);
   }
+  
+  public void updateForum(String categoryId, Forum newForum) throws Exception {
+	storage_.updateForum(categoryId, newForum);
+  }
+  
+  public void removeForum(String categoryId, String forumId) throws Exception {
+	storage_.removeForum(categoryId, forumId);
+  }
+  
+  public void createTopic(String categoryId, String forumId, Topic topic) throws Exception {
+	 storage_.createTopic(categoryId, forumId, topic);
+  }
+  
+  public Topic getTopic(String categoryId, String forumId, String topicId) throws Exception {
+	return storage_.getTopic(categoryId, forumId, topicId);
+  }
+  
+  public TopicView getTopicView(String categoryId, String forumId, String topicId) throws Exception {
+	  // TODO Auto-generated method stub
+	  return null;
+  }
+  
+  public PageList getTopics(String categoryId, String forumId) throws Exception {
+	  // TODO Auto-generated method stub
+	  return null;
+  }
+  
+  public void moveTopic(String srcForumId, String topicId, String destForumId) throws Exception {
+	  
+  }
+  
+  public void removeTopic(String categoryId, String forumId, String topicId) throws Exception {
+	  // TODO Auto-generated method stub
+  }
+  
+  public void updateTopic(String categoryId, String forumId, Topic newTopic) throws Exception {
+	  // TODO Auto-generated method stub
+  }
+
+  public void createPost(String categoryId, String forumId, String topicId, Post post) throws Exception {
+	  // TODO Auto-generated method stub
+  }
+  
   public Post getPost(String categoryId, String forumId, String topicId, String postId) throws Exception {
     // TODO Auto-generated method stub
     return null;
@@ -83,40 +120,11 @@ public class ForumServiceImpl implements ForumService{
     
   }
   
-  public Topic getTopic(String categoryId, String forumId, String topicId) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
-  }
-  public TopicView getTopicView(String categoryId, String forumId, String topicId) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
-  }
-  public PageList getTopics(String categoryId, String forumId) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
-  }
-  
-  public void moveTopic(String srcForumId, String topicId, String destForumId) throws Exception {
-    
-  }
-  
-  public void removeForum(String categoryId, String forumId) throws Exception {
-    // TODO Auto-generated method stub
-  }
   public void removePost(String categoryId, String forumId, String topicId, String postId) throws Exception {
     // TODO Auto-generated method stub
   }
-  public void removeTopic(String categoryId, String forumId, String topicId) throws Exception {
-    // TODO Auto-generated method stub
-  }
   
-  public void updateForum(String categoryId, Forum newForum) throws Exception {
-    // TODO Auto-generated method stub
-  }
   public void updatePost(String categoryId, String forumId, String topicId, Post newPost) throws Exception {
-    // TODO Auto-generated method stub
-  }
-  public void updateTopic(String categoryId, String forumId, Topic newTopic) throws Exception {
     // TODO Auto-generated method stub
   }
   
