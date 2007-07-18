@@ -9,7 +9,7 @@
 					<div class="RepeatHorizontalLine">a Powerful, Open-source Messaging</div>					
 				</div>
 				<div class="SearchForm">
-					<div class="AdvancedSearch"><span></span></div>
+					<div class="AdvancedSearch" title="Advanced Search"><span></span></div>
 					<div class="SeparatorLine"><span></span></div>
 					<div class="Search"><span></span></div>
 					<input class="Input" type="text" name=""/>
@@ -103,36 +103,40 @@
 								</div>
 							</div>
 						</div>
-						<a class="AddNavigationIcon" href = "#" title="Create new Page Navigation"><span></span></a>
+						<a class="AddNavigationIcon" href = "#" title="New Account"><span></span></a>
 		        <div style="clear: left"><span></span></div>
 						
 						<div class="AccountList">
 							<div class="FolderList">
 								<div class="FolderItemList">
-									<div class="LeftTitleItem">
-										<div class="TitleItem">Folders</div>
+									<div class="TitleItem">
+										<div class="LeftTitleItem" title="Collapse/Expand all"><span></span></div>
+										<div class="LabelTitle">Folders</div>
+						        <div style="clear: left"><span></span></div>
 									</div>
 									<div class="ItemList">
 										<div class="Icon IndexIcon">
-												<div class="Item">Inbox</div>
+												<a href="#" class="Item">Inbox</a>
 										</div>
 										<div class="Icon DraftsIcon">
-												<div class="Item">Drafts</div>
+												<a href="#" class="Item">Drafts</a>
 										</div>
 										<div class="Icon SentIcon">
-												<div class="Item">Sent</div>
+												<a href="#" class="Item">Sent</a>
 										</div>
 										<div class="Icon SpamIcon">
-												<div class="Item">Spam</div>
+												<a href="#" class="Item">Spam</a>
 										</div>
 										<div class="Icon TrashIcon">
-												<div class="Item">Trash</div>
+												<a href="#" class="Item">Trash</a>
 										</div>
 									</div>
 								</div> <!-- FolderItemList -->
 								<div class="MyFolder">
 									<div class="TitleMyFolder">
-										<div class="IconTitle">My Folders</div>
+										<div class="IconTitle" title="Collapse/Expand all"><span></span></div>
+										<div class="LabelTitle">My Folders</div>
+						        <div style="clear: left"><span></span></div>
 									</div>
 									<div class="UITree ScrollArea">
 									  <div class="TreeContainer JSContainer">
@@ -179,9 +183,9 @@
 							</div>	<!-- FolderList -->
 							<div class="TagList">
 								<div class="TitleTagList">
-									<div class="LeftTitleTag">
-										<div class="IconTitle">Tags</div>
-									</div>
+									<div class="LeftTitleTag" title="Collapse/Expand all"><span></span></div>
+									<div class="IconTitle">Tags</div>
+						      <div style="clear: left"><span></span></div>
 								</div>
 								<div class="TagContent">
 									<div class="IconItemTag BlueTag">

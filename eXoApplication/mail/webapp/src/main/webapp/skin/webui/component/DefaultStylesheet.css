@@ -56,7 +56,7 @@
 .UIMailPortlet .MailBanner .AdvancedSearch {
   background: url('DefaultSkin/icons/16x16/FindIcon.gif') no-repeat ;	
   height: 16px; width: 16px;
-  float: right;
+  float: right; cursor: pointer;
   margin: 8px 0px 0px 2px;
 }
 
@@ -144,16 +144,22 @@
 
 /**************************************FolderItemList*********************************/
  
-.UIMailPortlet .MailAccountManagendent .FolderItemList .LeftTitleItem {
-	background: #e6e6e6 url('DefaultSkin/background/LeftTitleItem20x20.gif') no-repeat ;
-	height: 20px; line-height: 20px;
-	padding-left: 20px;	
+.UIMailPortlet .MailAccountManagendent .FolderItemList .TitleItem {
+	background: #e6e6e6 ;
+	height: 20px; 
 }
 
-.UIMailPortlet .MailAccountManagendent .FolderItemList .TitleItem {
+.UIMailPortlet .MailAccountManagendent .FolderItemList .LeftTitleItem {
+	background: url('DefaultSkin/background/LeftTitleItem20x20.gif') no-repeat ;
+	height: 20px; width: 20px;
+	float: left;
+}
+
+.UIMailPortlet .MailAccountManagendent .FolderItemList .LabelTitle {
 	background: url('DefaultSkin/icons/16x16/FolderIcon.gif') no-repeat left center ;
 	height: 20px; line-height: 20px;
 	color: #3d3d3d; font-weight: bold;
+	margin-left: 20px;
 	padding-left: 23px;
 }
 
@@ -161,10 +167,13 @@
 	padding: 3px 0px 5px 22px;
 }
 
+.UIMailPortlet .MailAccountManagendent .FolderItemList a {
+	color: #1e1f21;
+}
+
 .UIMailPortlet .MailAccountManagendent .FolderItemList .Icon {
 	padding-left: 30px;
 	line-height: 28px; height: 28px;
-	color: #1e1f21;
 }
 
 .UIMailPortlet .MailAccountManagendent .FolderItemList .IndexIcon {
@@ -195,9 +204,13 @@
 
 .UIMailPortlet .MailAccountManagendent .MyFolder .IconTitle {
 	background: url('DefaultSkin/background/LeftTitleItem20x20.gif') no-repeat ;
-	height: 20px; line-height: 20px;
-	padding-left: 20px;	
-	color: #3d3d3d; font-weight: bold;	
+	height: 20px; width: 20px;
+	float: left;	
+}
+
+.UIMailPortlet .MailAccountManagendent .MyFolder .LabelTitle {
+	color: #3d3d3d; font-weight: bold;
+	margin-left: 20px;
 }
 
 .UIMailPortlet .MailAccountManagendent .MyFolder .UITree  {
@@ -236,14 +249,15 @@
 
 .UIMailPortlet .MailAccountManagendent .TagList .LeftTitleTag {
 	background: url('DefaultSkin/background/LeftTitleItem20x20.gif') no-repeat ;
-	height: 20px; line-height: 20px;
-	padding-left: 20px;	
+	height: 20px; width: 20px;
+	float: left;
 }
 
 .UIMailPortlet .MailAccountManagendent .TagList .IconTitle {
 	background: url('DefaultSkin/icons/16x16/BlueTag.gif') no-repeat left center;
 	height: 20px; line-height: 20px;
 	padding-left: 20px;	
+	margin-left: 20px;
 	color: #3d3d3d; font-weight: bold;	
 }
 
