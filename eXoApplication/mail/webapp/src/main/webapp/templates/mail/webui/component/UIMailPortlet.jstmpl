@@ -4,12 +4,15 @@
 <div class="$uicomponent.id UIApplication" id="$uicomponent.id">
   <div class="ApplicationMinWidth">
   	<div class="UIMailPortlet">
+<%
+// Start Mail Banner 
+%>
 	    <div class="MailBanner">
 	    	<div class="LeftHorizontalLine">
 					<div class="RepeatHorizontalLine">a Powerful, Open-source Messaging</div>					
 				</div>
 				<div class="SearchForm">
-					<div class="AdvancedSearch" title="Advanced Search"><span></span></div>
+					<div class="AdvancedSearch"><span></span></div>
 					<div class="SeparatorLine"><span></span></div>
 					<div class="Search"><span></span></div>
 					<input class="Input" type="text" name=""/>
@@ -17,74 +20,90 @@
 					<div style="clear:right;"><span></span></div>
 				</div>
 			</div>
+<%
+// End Mail Banner 
+%>
+<%
+// Start Mail Working Workspace 
+%>
 	    <div class="MailWorkingWorkspace">
-			 
+<%
+// Start Mail ControlBar 
+%>			 
 			 <div class="MailControlBar">
 					<div class="UIToolbar">
 						<div class="HeaderToolbar">
 							<div class="LeftBar">
 								<div class="RightBar">
-									<div class="CenterBar"
+									<div class="CenterBar">
 										<a href="#" class="ControlButton">
-											<div class="CheckMailIcon">
+											<div class="MailIcon CheckMailIcon">
 												<div class="MailIconLabel">CheckMail</div>
 											</div>
 										</a>
 										<a href="#" class="ControlButton">
-											<div class="ComposeIcon">
+											<div class="MailIcon ComposeIcon">
 												<div class="MailIconLabel"> Compose </div>
 											</div>
 										</a>
-										<div class="MailSeparatorLine"><span></span></div>
+										<div class="SeparatorLine"><span></span></div>
 										<a href="#" class="ControlButton">
-											<div class="ReplyIcon">
+											<div class="MailIcon ReplyIcon">
 												<div class="MailIconLabel"> Reply </div>
 											</div>
 										</a>
 										<a href="#" class="ControlButton">
-											<div class="ReplyAllIcon">
+											<div class="MailIcon ReplyAllIcon">
 												<div class="MailIconLabel"> ReplyAll </div>
 											</div>
 										</a>
 										<a href="#" class="ControlButton">
-											<div class="ForwardIcon">
+											<div class="MailIcon ForwardIcon">
 												<div class="MailIconLabel"> Forward </div>
 											</div>
 										</a>
-										<div class="MailSeparatorLine"><span></span></div>
+										<div class="SeparatorLine"><span></span></div>
 										<a href="#" class="ControlButton">
-											<div class="DeleteIcon"><span></span></div>
+											<div class="MailIcon DeleteIcon"><span></span></div>
 										</a>
 										<a href="#" class="ControlButton">
-											<div class="PrintIcon"><span></span></div>
+											<div class="MailIcon PrintIcon"><span></span></div>
 										</a>
+										<div class="SeparatorLine"><span></span></div>
 										<a href="#" class="ControlButton">
-											<div class="ContactsIcon">
+											<div class="MailIcon ContactsIcon">
 												<div class="MailIconLabel"> Contacts </div>
 											</div>
 										</a>
 										<a href="#" class="ControlButton">
-											<div class="RssIcon">
+											<div class="MailIcon RssIcon">
 												<div class="MailIconLabel"> RSS </div>
 											</div>
 										</a>
-										<div class="MailSeparatorLine"><span></span></div>
+										<div class="SeparatorLine"><span></span></div>
 										<a href="#" class="ControlButton">
-											<div class="CustomViewIcon"><span></span></div>
+											<div class="MailIcon CustomViewIcon"><span></span></div>
 											<div class="DropDownArrowIcon"><span></span></div>
+											<div style="clear:both;"><span></span></div>
 										</a>
 										<a href="#" class="ControlButton">
-											<div class="SettingsIcon"><span></span></div>
+											<div class="MailIcon SettingsIcon"><span></span></div>
 										</a>
-										<div style="clear: left"><span></span></div>
+										<div style="clear:left;"><span></span></div>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
+				<div style="clear:left;"><span></span></div>
+<%
+// End Mail ControlBar 
+%>
+<%
+// Start Mail Container 
+%>				
 				<div class="MailContainer">
-				
 					<div class="MailAccountManagendent">
 						
 						<div class="UIDropDownItemSelector">
@@ -204,10 +223,116 @@
 							</div>
 						</div>	<!-- AccountList -->
 					</div> <!-- MailAccountManagendent -->
-					<div class="MailContentWorkingArea">
-						fhdfsh
+<%
+// Start Mail Working Detail 
+%>
+					<div class="MailWorkingDetail">
+						
+						<div class="MailList">
+							<div class="MailListActionsbar">
+								<a href="#" class="ControlButton">
+									<div class="MailIcon MoreActionsIcon">
+										<div class="MailIconLabel">More Actions</div>
+										<div class="DropDownArrowIcon"><span></span></div>
+										<div style="clear:left;"><span></span></div>
+									</div>
+								</a>
+								<a href="#" class="ControlButton">
+									<div class="MailIcon ViewIcon">
+										<div class="MailIconLabel">View</div>
+										<div class="DropDownArrowIcon"><span></span></div>
+										<div style="clear:left;"><span></span></div>
+									</div>
+								</a>
+								<a href="#" class="ControlButton">
+									<div class="MailIcon AddEventIcon">
+										<div class="MailIconLabel">Add event</div>
+									</div>
+								</a>
+								<div style="clear:left;"><span></span></div>
+							</div>
+							<div class="MailListDetail">
+								<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
+  								<thead>
+  									<tr>
+      			          <th style="width: 30px;"><input type="checkbox" class="checkbox" value="4"/></th>
+	      							<th style="width: 24px;"><div class="HighlightStarIcon"><span></span></div></th>
+	      		          <th>Sender</th>
+	      		          <th style="width: 24px;"><div class="AttackIcon"><span></span></div></th>
+	 	      	          <th>Subject</th>
+	 	      	          <th style="width: 24px;"><div class="TotalMessageIcon"><span></span></div></th>
+	 	      	          <th>Date & Time</th>
+	 	      	          <th>Size</th>
+	 	      	          <th style="width: 24px;"><div class="priorityIcon"><span></span></div></th>
+	      	 	        </tr>
+	      	 	       </thead>
+	      	 	       <tbody>
+  						      <tr>
+  						        <td><input type="checkbox" class="checkbox" value="4"/></td>
+											<td class="HighlightStarIcon"></td>
+											<td class="text">eXo Platform Collaboration...</td>
+											<td class="text"></td>
+											<td class="text">Welcome to eXo Mail</td>
+											<td class="text"></td>
+											<td class="text">07/02/2007 10:30am</td>
+											<td class="text">10K</td>
+											<td class="text"></td>
+   			     		    </tr>
+							      <tr>
+                      <td><input type="checkbox" class="checkbox" value="4"/></td>
+											<td class="NomalStarIcon"></td>
+											<td class="text"></td>
+											<td class="text"></td>
+											<td class="text"></td>
+											<td class="text"></td>
+											<td class="text"></td>
+											<td class="text"></td>
+											<td class="text"></td>
+			      		    </tr>
+			     		      <tr>
+			     		        <td><input type="checkbox" class="checkbox" value="4"/></td>
+											<td class="NomalStarIcon"></td>
+											<td class="text"></td>
+											<td class="text"></td>
+											<td class="text"></td>
+											<td class="text"></td>
+											<td class="text"></td>
+											<td class="text"></td>
+											<td class="text"></td>
+			      		    </tr>
+								      <tr>
+										  <td><input type="checkbox" class="checkbox" value="4"/></td>
+											<td class="NomalStarIcon"></td>
+											<td class="text"></td>
+											<td class="text"></td>
+											<td class="text"></td>
+											<td class="text"></td>
+											<td class="text"></td>
+											<td class="text"></td>
+											<td class="text"></td>
+					  		    </tr>
+              	   </tbody>
+								</table>
+							</div>
+						</div>
+<%
+// Start Mail Reading Pane 
+%>						
+						<div class="ReadingPane">
+							<div class="ReadingPaneBar">
+								<div class="ReadingPaneTitle">Subject:</div>
+								<div class="MaximizeReadingPane"><span></span></div>
+								<div style="clear:both;"><span></span></div>
+							</div>
+							<div class="ReadingPaneDeltail">
+							bgfbn
+							</div>
+						</div>
+<%
+// End Mail Reading Pane 
+%>						
 					</div>
-		      <div style="clear: left"><span></span></div>
+					<div style="clear:left;"><span></span></div>
 				</div>
 				
 			</div>
