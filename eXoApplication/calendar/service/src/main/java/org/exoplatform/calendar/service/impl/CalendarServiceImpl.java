@@ -26,93 +26,72 @@ public class CalendarServiceImpl implements CalendarService{
                              JCRRegistryService jcrRegistryService) throws Exception {
     storage_ = new JCRDataStorage(repositoryService, jcrRegistryService) ;
   }
-  public void createCalendarCategory(String username, CalendarCategory calendarCategory, boolean isNew) throws Exception {
-    // TODO Auto-generated method stub
-    
-  }
-  public void createEvent(String username, String calendarId, String eventCategoryId, Event event, boolean isNew) throws Exception {
-    // TODO Auto-generated method stub
-    
-  }
-  public void createEvent(String calendarId, String eventCategoryId, Event event, boolean isNew) throws Exception {
-    // TODO Auto-generated method stub
-    
-  }
-  public Calendar getCalendar(String username, String calendarId) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
-  }
-  public Calendar getCalendar(String calendarId) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
-  }
+  
   public List<CalendarCategory> getCalendarCategories(String username) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
+    return storage_.getCalendarCategories(username);
   }
-  public List<Calendar> getCalendarsByCategory(String username, String calendarCategoryId) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
+  public CalendarCategory getCalendarCategory(String username, String calendarCategoryId) throws Exception {
+    return storage_.getCalendarCategory(username, calendarCategoryId) ;
   }
-  public List<Calendar> getCalendarsByGroup(String groupName) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
-  }
-  public Event getEvent(String username, String calendarId, String eventCategoryId, String eventId) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
-  }
-  public Event getEvent(String calendarId, String eventCategoryId, String eventId) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
-  }
-  public List<Event> getEventByCalendar(String username, String calendarId) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
-  }
-  public List<Event> getEventByCalendar(String calendarId) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
-  }
-  public List<EventCategory> getEventCategories(String username, String calendarId) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
-  }
-  public EventCategory getEventCategory(String username, String calendarId, String eventCategoryId) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
-  }
-  public Calendar removeCalendar(String username, String calendarId) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
-  }
-  public Calendar removeCalendar(String calendarId) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
+  public void saveCalendarCategory(String username, CalendarCategory calendarCategory, boolean isNew) throws Exception {
+    storage_.saveCalendarCategory(username, calendarCategory, isNew) ;
   }
   public CalendarCategory removeCalendarCategory(String username, String calendarCategoryId) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
+    return storage_.removeCalendarCategory(username, calendarCategoryId);
   }
-  public Event removeEvent(String username, String calendarId, String eventCategoryId, String eventId) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
+  
+  public Calendar getCalendar(String username, String calendarId) throws Exception {
+    return storage_.getCalendar(username, calendarId);
   }
-  public void removeEvent(String calendarId, String eventCategoryId, String eventId) throws Exception {
-    // TODO Auto-generated method stub
-    
+  public Calendar getCalendar(String calendarId) throws Exception {
+    return storage_.getCalendar(calendarId);
   }
-  public EventCategory removeEventCategory(String username, String calendarId, String eventCategoryId) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
+  public List<Calendar> getCalendarsByCategory(String username, String calendarCategoryId) throws Exception {
+    return storage_.getCalendarsByCategory(username, calendarCategoryId);
+  }
+  public List<Calendar> getCalendarsByGroup(String groupName) throws Exception {
+    return storage_.getCalendarsByGroup(groupName);
   }
   public void saveCalendar(String username, Calendar calendar, boolean isNew) throws Exception {
-    // TODO Auto-generated method stub
-    
+    storage_.saveCalendar(username, calendar, isNew) ;
+  }
+  public Calendar removeCalendar(String username, String calendarId) throws Exception {
+    return storage_.removeCalendar(username, calendarId);
+  }
+  public Calendar removeCalendar(String calendarId) throws Exception {
+    return storage_.removeCalendar(calendarId);
+  }
+  
+  public List<EventCategory> getEventCategories(String username, String calendarId) throws Exception {
+    return storage_.getEventCategories(username, calendarId);
+  }
+  public EventCategory getEventCategory(String username, String calendarId, String eventCategoryId) throws Exception {
+    return storage_.getEventCategory(username, calendarId, eventCategoryId);
   }
   public void saveEventCategory(String username, String calendarId, EventCategory eventCategory, boolean isNew) throws Exception {
-    // TODO Auto-generated method stub
-    
-  }  
-
+    storage_.saveEventCategory(username, calendarId, eventCategory, isNew) ;
+  }
+  public EventCategory removeEventCategory(String username, String calendarId, String eventCategoryId) throws Exception {
+    return storage_.removeEventCategory(username, calendarId,eventCategoryId);
+  }
+  
+  public Event getEvent(String username, String calendarId, String eventCategoryId, String eventId) throws Exception {
+    return storage_.getEvent(username, calendarId, eventCategoryId, eventId);
+  }
+  public Event getEvent(String calendarId, String eventCategoryId, String eventId) throws Exception {
+    return storage_.getEvent(calendarId, eventCategoryId, eventId);
+  }
+  public List<Event> getEventByCalendar(String username, String calendarId) throws Exception {
+    return storage_.getEventByCalendar(username, calendarId);
+  }
+  public List<Event> getEventByCalendar(String calendarId) throws Exception {
+    return storage_.getEventByCalendar(calendarId);
+  } 
+  public void saveEvent(String username, String calendarId, String eventCategoryId, Event event, boolean isNew, boolean isPublicCalendar) throws Exception {
+    storage_.saveEvent(username, calendarId, eventCategoryId, event, isNew, isPublicCalendar) ;
+  }
+  public Event removeEvent(String username, String calendarId, String eventCategoryId, String eventId, boolean isPublicCalendar) throws Exception {
+    return storage_.removeEvent(username, calendarId, eventCategoryId, eventId, isPublicCalendar);
+  }
+  
 }

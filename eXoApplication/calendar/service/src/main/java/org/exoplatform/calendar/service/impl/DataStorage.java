@@ -20,7 +20,8 @@ import org.exoplatform.calendar.service.EventCategory;
 public interface DataStorage {
   
   public List<CalendarCategory> getCalendarCategories(String username) throws Exception ;
-  public void createCalendarCategory(String username, CalendarCategory calendarCategory, boolean isNew) throws Exception ; 
+  public CalendarCategory getCalendarCategory(String username, String calendarCategoryId) throws Exception ;
+  public void saveCalendarCategory(String username, CalendarCategory calendarCategory, boolean isNew) throws Exception ; 
   public CalendarCategory removeCalendarCategory(String username, String calendarCategoryId) throws Exception ;
   
   
@@ -43,9 +44,7 @@ public interface DataStorage {
   public Event getEvent(String calendarId, String eventCategoryId, String eventId) throws Exception ;
   public List<Event> getEventByCalendar(String username, String calendarId) throws Exception ;
   public List<Event> getEventByCalendar(String calendarId) throws Exception ;
-  public void createEvent(String username, String calendarId, String eventCategoryId, Event event, boolean isNew) throws Exception ;
-  public void createEvent(String calendarId, String eventCategoryId, Event event, boolean isNew) throws Exception ;
-  public Event removeEvent(String username, String calendarId, String eventCategoryId, String eventId) throws Exception ;
-  public void removeEvent(String calendarId, String eventCategoryId, String eventId) throws Exception ;
+  public void saveEvent(String username, String calendarId, String eventCategoryId, Event event, boolean isNew, boolean isPublicCalendar) throws Exception ;
+  public Event removeEvent(String username, String calendarId, String eventCategoryId, String eventId, boolean isPublicCalendar) throws Exception ;
   
 }

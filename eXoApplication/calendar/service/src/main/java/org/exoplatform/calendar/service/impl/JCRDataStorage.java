@@ -20,6 +20,7 @@ import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarCategory;
 import org.exoplatform.calendar.service.Event;
 import org.exoplatform.calendar.service.EventCategory;
+import org.exoplatform.calendar.service.Reminder;
 import org.exoplatform.registry.JCRRegistryService;
 import org.exoplatform.registry.ServiceRegistry;
 import org.exoplatform.services.jcr.RepositoryService;
@@ -185,36 +186,39 @@ public class JCRDataStorage implements DataStorage{
     calendar.setName(calNode.getProperty("exo:name").getString()) ;
     calendar.setDescription(calNode.getProperty("exo:description").getString()) ;
     calendar.setCategoryId(calNode.getProperty("exo:categoryId").getString()) ;
-    Value[] values = calNode.getProperty("exo:groups").getValues() ;
-    if(values.length == 1 ){      
-      calendar.setGroups(new String[]{values[0].getString()}) ;
-    }else {
-      String[] groups = new String[values.length] ;
-      for(int i = 0; i < values.length - 1; i ++) {
-        groups[i] = values[i].getString() ;
+    if(!calendar.isPrivate()) {
+      Value[] values = calNode.getProperty("exo:groups").getValues() ;
+      if(values.length == 1 ){      
+        calendar.setGroups(new String[]{values[0].getString()}) ;
+      }else {
+        String[] groups = new String[values.length] ;
+        for(int i = 0; i < values.length - 1; i ++) {
+          groups[i] = values[i].getString() ;
+        }
+        calendar.setGroups(groups) ;
       }
-      calendar.setGroups(groups) ;
+      Value[] viewValues = calNode.getProperty("exo:viewPermissions").getValues() ;
+      if(viewValues.length == 1 ){      
+        calendar.setViewPermission(new String[]{viewValues[0].getString()}) ;
+      }else {
+        String[] views = new String[viewValues.length] ;
+        for(int i = 0; i < viewValues.length - 1; i ++) {
+          views[i] = viewValues[i].getString() ;
+        }
+        calendar.setViewPermission(views) ;
+      }
+      Value[] editValues = calNode.getProperty("exo:editPermissions").getValues() ;
+      if(editValues.length == 1 ){      
+        calendar.setEditPermission(new String[]{editValues[0].getString()}) ;
+      }else {
+        String[] edits = new String[editValues.length] ;
+        for(int i = 0; i < editValues.length - 1; i ++) {
+          edits[i] = editValues[i].getString() ;
+        }
+        calendar.setEditPermission(edits) ;
+      }
     }
-    Value[] viewValues = calNode.getProperty("exo:viewPermissions").getValues() ;
-    if(viewValues.length == 1 ){      
-      calendar.setGroups(new String[]{viewValues[0].getString()}) ;
-    }else {
-      String[] views = new String[viewValues.length] ;
-      for(int i = 0; i < viewValues.length - 1; i ++) {
-        views[i] = viewValues[i].getString() ;
-      }
-      calendar.setGroups(views) ;
-    }
-    Value[] editValues = calNode.getProperty("exo:editPermissions").getValues() ;
-    if(editValues.length == 1 ){      
-      calendar.setGroups(new String[]{editValues[0].getString()}) ;
-    }else {
-      String[] edits = new String[editValues.length] ;
-      for(int i = 0; i < editValues.length - 1; i ++) {
-        edits[i] = editValues[i].getString() ;
-      }
-      calendar.setGroups(edits) ;
-    }    
+        
     return calendar ;
   }  
   
@@ -228,7 +232,12 @@ public class JCRDataStorage implements DataStorage{
     return calendarCategories;
   }
   
-  public void createCalendarCategory(String username, CalendarCategory calendarCategory, boolean isNew) throws Exception {
+  public CalendarCategory getCalendarCategory(String username, String calendarCategoryId) throws Exception {
+    Node calendarCategoryHome = getCalendarCategoryHome(username) ;
+    return getCalendarCategory(calendarCategoryHome.getNode(calendarCategoryId)) ;
+  }
+  
+  public void saveCalendarCategory(String username, CalendarCategory calendarCategory, boolean isNew) throws Exception {
     Node calCategoryHome = getCalendarCategoryHome(username) ;
     Node calCategoryNode ;
     if(isNew) {
@@ -302,6 +311,8 @@ public class JCRDataStorage implements DataStorage{
     }
     eventCategoryNode.setProperty("exo:name", eventCategory.getName()) ;
     eventCategoryNode.setProperty("exo:description", eventCategory.getDescription()) ;
+    calendarNode.save() ;
+    calendarNode.getSession().save() ;
   }
   
   public EventCategory removeEventCategory(String username, String calendarId, String eventCategoryId) throws Exception {
@@ -322,58 +333,148 @@ public class JCRDataStorage implements DataStorage{
     return eventCategory ;
   }
   
-  public void createEvent(String username, String calendarId, String eventCategoryId, Event event, boolean isNew) throws Exception {
-    // TODO Auto-generated method stub
-    
-  }
-
-  public void createEvent(String calendarId, String eventCategoryId, Event event, boolean isNew) throws Exception {
-    // TODO Auto-generated method stub
-    
-  }
-
-  
-
   public Event getEvent(String username, String calendarId, String eventCategoryId, String eventId) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
+    Node calendarNode = getCalendarHome(username).getNode(calendarId) ;
+    if(eventCategoryId != null) {
+      return getEvent(calendarNode.getNode(eventCategoryId).getNode(eventId)) ;
+    }
+    return getEvent(calendarNode.getNode(eventId)) ;
   }
 
   public Event getEvent(String calendarId, String eventCategoryId, String eventId) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
+    Node calendarNode = getCalendarHome().getNode(calendarId) ;
+    if(eventCategoryId != null) {
+      return getEvent(calendarNode.getNode(eventCategoryId).getNode(eventId)) ;
+    }
+    return getEvent(calendarNode.getNode(eventId)) ;
   }
-
+  
   public List<Event> getEventByCalendar(String username, String calendarId) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
+    Node calendarNode = getCalendarHome(username).getNode(calendarId) ;    
+    QueryManager qm = calendarNode.getSession().getWorkspace().getQueryManager();
+    StringBuffer queryString = new StringBuffer("/jcr:root" + calendarNode.getPath() 
+                                                + "//element(*,exo:calendarEvent)") ;
+    Query query = qm.createQuery(queryString.toString(), Query.XPATH);
+    QueryResult result = query.execute();
+    NodeIterator it = result.getNodes();
+    List<Event> events = new ArrayList<Event>() ;
+    while(it.hasNext()) {
+      events.add(getEvent(it.nextNode())) ;
+    }
+    return events ;
   }
 
   public List<Event> getEventByCalendar(String calendarId) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
+    Node calendarNode = getCalendarHome().getNode(calendarId) ;    
+    QueryManager qm = calendarNode.getSession().getWorkspace().getQueryManager();
+    StringBuffer queryString = new StringBuffer("/jcr:root" + calendarNode.getPath() 
+                                                + "//element(*,exo:calendarEvent)") ;
+    Query query = qm.createQuery(queryString.toString(), Query.XPATH);
+    QueryResult result = query.execute();
+    NodeIterator it = result.getNodes();
+    List<Event> events = new ArrayList<Event>() ;
+    while(it.hasNext()) {
+      events.add(getEvent(it.nextNode())) ;
+    }
+    return events ;
   }
-
   
-
-  
-
-
-  public Event removeEvent(String username, String calendarId, String eventCategoryId, String eventId) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
+  public void saveEvent(String username, String calendarId, String eventCategoryId, Event event, boolean isNew, boolean isPublicCalendar) throws Exception {
+    Node calendarNode ;
+    Node eventNode ;
+    if(isPublicCalendar) {
+      calendarNode = getCalendarHome().getNode(calendarId) ;
+    }else {
+      calendarNode = getCalendarHome(username).getNode(calendarId) ;
+    }
+    if(isNew) {
+      if(eventCategoryId != null) {
+        eventNode = calendarNode.getNode(eventCategoryId).addNode(event.getId(), "exo:calendarEvent") ;
+      }else {
+        eventNode = calendarNode.addNode(event.getId(), "exo:calendarEvent") ;
+      }      
+      eventNode.setProperty("exo:id", event.getId()) ;
+    }else {
+      if(eventCategoryId != null) {
+        eventNode = calendarNode.getNode(eventCategoryId).getNode(event.getId()) ;
+      }else {
+        eventNode = calendarNode.getNode(event.getId()) ;
+      }
+    }
+    eventNode.setProperty("exo:name", event.getName()) ;
+    eventNode.setProperty("exo:eventCategoryId", event.getEventCategoryId()) ;
+    eventNode.setProperty("exo:location", event.getLocation()) ;
+    eventNode.setProperty("exo:description", event.getDescription()) ;
+    GregorianCalendar dateTime = new GregorianCalendar() ;
+    dateTime.setTime(event.getFromDateTime()) ;
+    eventNode.setProperty("exo:fromDateTime", dateTime.getInstance()) ;
+    dateTime.setTime(event.getToDateTime()) ;
+    eventNode.setProperty("exo:toDateTime", dateTime.getInstance()) ;
+    eventNode.setProperty("exo:eventType", event.getEventType()) ;
+    eventNode.setProperty("exo:priority", event.getPriority()) ;
+    eventNode.setProperty("exo:isPrivate", event.isPrivate()) ;
+    eventNode.setProperty("exo:eventState", event.getEventState()) ;
+    eventNode.setProperty("exo:invitation", event.getInvitation()) ;
+    // add reminder child node
+    List<Reminder> reminders = event.getReminders() ;
+    for(Reminder rm : reminders) {
+      addReminder(eventNode, rm) ;
+    }
+    calendarNode.save() ;
+    calendarNode.getSession().save() ;
   }
-
-  public void removeEvent(String calendarId, String eventCategoryId, String eventId) throws Exception {
-    // TODO Auto-generated method stub
-    
+  
+  private void addReminder(Node eventNode, Reminder reminder) throws Exception {
+    Node reminderNode = eventNode.addNode(reminder.getId()) ;
+    reminderNode.setProperty("exo:eventId", reminder.getEventId()) ;
+    reminderNode.setProperty("exo:alarmBefore", reminder.getAlarmBefore()) ;
+    reminderNode.setProperty("exo:repeat", reminder.getRepeat()) ;
+    reminderNode.setProperty("exo:reminder", reminder.getReminder()) ;
   }
-
+  private Event getEvent(Node eventNode) throws Exception {
+    Event event = new Event() ;
+    event.setId(eventNode.getProperty("exo:id").getString()) ;
+    event.setCalendarId(eventNode.getProperty("exo:calendarId").getString()) ;
+    event.setName(eventNode.getProperty("exo:name").getString()) ;
+    event.setEventCategoryId(eventNode.getProperty("exo:eventCategoryId").getString()) ;
+    event.setLocation(eventNode.getProperty("exo:location").getString()) ;
+    event.setDescription(eventNode.getProperty("exo:description").getString()) ;
+    event.setFromDateTime(eventNode.getProperty("exo:fromDateTime").getDate().getTime()) ;
+    event.setToDateTime(eventNode.getProperty("exo:toDateTime").getDate().getTime()) ;
+    event.setEventType(eventNode.getProperty("exo:eventType").getString()) ;
+    event.setPriority(eventNode.getProperty("exo:priority").getString()) ;
+    event.setPrivate(eventNode.getProperty("exo:isPrivate").getBoolean()) ;
+    event.setEventState(eventNode.getProperty("exo:eventState").getString()) ;
+    Value[] values = eventNode.getProperty("exo:invitation").getValues() ;
+    if(values.length == 1 ){      
+      event.setInvitation(new String[]{values[0].getString()}) ;
+    }else {
+      String[] invites = new String[values.length] ;
+      for(int i = 0; i < values.length - 1; i ++) {
+        invites[i] = values[i].getString() ;
+      }
+      event.setInvitation(invites) ;
+    }
+    return event ;
+  }
   
-
-  
-  
-  
-  
-  
+  public Event removeEvent(String username, String calendarId, String eventCategoryId, String eventId, boolean isPublicCalendar) throws Exception {
+    Node calendarNode ;
+    Node eventNode ;
+    if(isPublicCalendar) {
+      calendarNode = getCalendarHome().getNode(calendarId) ;
+    }else {
+      calendarNode = getCalendarHome(username).getNode(calendarId) ;
+    }    
+    if(eventCategoryId != null) {
+      eventNode = calendarNode.getNode(eventCategoryId).getNode(eventId) ;
+    }else {
+      eventNode = calendarNode.getNode(eventId) ;
+    }    
+    Event event = getEvent(eventNode) ;
+    eventNode.remove() ;
+    calendarNode.save() ;
+    calendarNode.getSession().save() ;
+    return event;
+  }
 }

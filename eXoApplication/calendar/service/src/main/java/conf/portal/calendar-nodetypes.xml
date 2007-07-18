@@ -71,7 +71,7 @@
 	  		</propertyDefinition>
   		</propertyDefinitions>
   		<childNodeDefinitions>
-	      <childNodeDefinition name="*" defaultPrimaryType="" autoCreated="false" mandatory="true"
+	      <childNodeDefinition name="*" defaultPrimaryType="" autoCreated="false" mandatory="false"
 	        onParentVersion="COPY" protected="false" sameNameSiblings="false">
 	        <requiredPrimaryTypes>
 	          <requiredPrimaryType>exo:reminder</requiredPrimaryType>
@@ -96,7 +96,7 @@
 	  		</propertyDefinition>	  		
   		</propertyDefinitions>
   		<childNodeDefinitions>
-	      <childNodeDefinition name="*" defaultPrimaryType="" autoCreated="false" mandatory="true"
+	      <childNodeDefinition name="*" defaultPrimaryType="" autoCreated="false" mandatory="false"
 	        onParentVersion="COPY" protected="false" sameNameSiblings="false">
 	        <requiredPrimaryTypes>
 	          <requiredPrimaryType>exo:calendarEvent</requiredPrimaryType>
@@ -133,7 +133,7 @@
 	  		</propertyDefinition>	  			
   		</propertyDefinitions>
   		<childNodeDefinitions>
-	      <childNodeDefinition name="*" defaultPrimaryType="" autoCreated="false" mandatory="true"
+	      <childNodeDefinition name="*" defaultPrimaryType="" autoCreated="false" mandatory="false"
 	        onParentVersion="COPY" protected="false" sameNameSiblings="false">
 	        <requiredPrimaryTypes>
 	          <requiredPrimaryType>exo:eventCategory</requiredPrimaryType>
