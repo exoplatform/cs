@@ -4,7 +4,6 @@
 <div class="$uicomponent.id UIApplication" id="$uicomponent.id">
   <div class="ApplicationMinWidth">
   	<div class="UIMailPortlet">
-
 	    <div class="MailBanner">
 	    	<div class="LeftHorizontalLine">
 					<div class="RepeatHorizontalLine">a Powerful, Open-source Messaging</div>					
@@ -18,7 +17,6 @@
 					<div style="clear:right;"><span></span></div>
 				</div>
 			</div>
-
 	    <div class="MailWorkingWorkspace">
 			 
 			 <div class="MailControlBar">
@@ -85,13 +83,127 @@
 						</div>
 					</div>
 				</div>
-				<div class="MailContainerDetail">
-					<div class="MailContentNavigation">
-					fjgvjdb
-					</div>
+				<div class="MailContainer">
+				
+					<div class="MailAccountManagendent">
+						
+						<div class="UIDropDownItemSelector">
+							<div class="ItemSelectorContainer">
+						  	<div class="ItemInfoBar" >
+							  	<div class="LeftItemInfoBar">
+								  	<div class="RightItemInfoBar">
+								  		<div class="MiddleItemInfoBar" title="Show List" >
+								  			<div class="Icon AccountIcon"><span></span></div>
+								  			<div class="SelectedItemLabel">Default Account</div>
+								  			<div class="DropDownSelectIcon"><span></span></div>
+								  			<div style="clear: both;"><span></span></div>
+										  </div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<a class="AddNavigationIcon" href = "#" title="Create new Page Navigation"><span></span></a>
+		        <div style="clear: left"><span></span></div>
+						
+						<div class="AccountList">
+							<div class="FolderList">
+								<div class="FolderItemList">
+									<div class="LeftTitleItem">
+										<div class="TitleItem">Folders</div>
+									</div>
+									<div class="ItemList">
+										<div class="Icon IndexIcon">
+												<div class="Item">Inbox</div>
+										</div>
+										<div class="Icon DraftsIcon">
+												<div class="Item">Drafts</div>
+										</div>
+										<div class="Icon SentIcon">
+												<div class="Item">Sent</div>
+										</div>
+										<div class="Icon SpamIcon">
+												<div class="Item">Spam</div>
+										</div>
+										<div class="Icon TrashIcon">
+												<div class="Item">Trash</div>
+										</div>
+									</div>
+								</div> <!-- FolderItemList -->
+								<div class="MyFolder">
+									<div class="TitleMyFolder">
+										<div class="IconTitle">My Folders</div>
+									</div>
+									<div class="UITree ScrollArea">
+									  <div class="TreeContainer JSContainer">
+									    <div class="Node" style="padding-top: 2px;">
+									   		<div class="ColapseIcon"><span></span></div>
+									   		<div class="Icon Default"><span></span></div>
+									   		<div class="NodeLabel">
+									   			<a href="#">Open source</a>
+									   		</div>
+										    <div class = "ChildrenContainer" actionLink="$actionLink" display = "block">
+												  <div class="Node" style="padding-top: 2px; margin-left: 10px; ">
+											   		<div class="Icon Default"><span></span></div>
+											   		<div class="NodeLabel">
+											   			<a href="#">eXo platform</a>
+											   		</div>
+												  </div>
+												  <div class="Node" style="padding-top: 2px; margin-left: 10px; ">
+											   		<div class="Icon Default"><span></span></div>
+											   		<div class="NodeLabel">
+											   			<a href="#">ObjectWeb</a>
+											   		</div>
+												  </div>
+										    </div>				  	
+										  </div>
+										  <div class="Node" style="padding-top: 2px;">
+									   		<div class="ColapseIcon"><span></span></div>
+									   		<div class="Icon Default"><span></span></div>
+									   		<div class="NodeLabel">
+									   			<a href="#">Customers</a>
+									   		</div>
+										    <div class = "ChildrenContainer" display = "block">
+												  <div class="Node" style="padding-top: 2px; margin-left: 10px; ">
+											   		<div class="Icon Default"><span></span></div>
+											   		<div class="NodeLabel">
+											   			<a href="#">M6 TV</a>
+											   		</div>
+												  </div>
+										    </div>				  	
+										  </div>
+									  </div>  
+									</div>									
+						   		<div style="clear:left"><span></span></div>
+								</div> <!-- MyFolder -->
+							</div>	<!-- FolderList -->
+							<div class="TagList">
+								<div class="TitleTagList">
+									<div class="LeftTitleTag">
+										<div class="IconTitle">Tags</div>
+									</div>
+								</div>
+								<div class="TagContent">
+									<div class="IconItemTag BlueTag">
+										<a href="#">Customers</a>
+									</div>
+									<div class="IconItemTag RedTag">
+										<a href="#">Company</a>
+									</div>
+									<div class="IconItemTag GreenTag">
+										<a href="#">Docs Team</a>
+									</div>
+									<div class="IconItemTag VioletTag">
+										<a href="#">Design Team</a>
+									</div>
+								</div>
+							</div>
+						</div>	<!-- AccountList -->
+					</div> <!-- MailAccountManagendent -->
 					<div class="MailContentWorkingArea">
-					hvbdvjd
+						fhdfsh
 					</div>
+		      <div style="clear: left"><span></span></div>
 				</div>
 				
 			</div>

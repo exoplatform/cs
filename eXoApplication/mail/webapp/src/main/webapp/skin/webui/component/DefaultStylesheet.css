@@ -3,67 +3,13 @@
  */
  
 .UIMailPortlet {
-
 }
-
-.UIMailPortlet .MailWorkingWorkspace {
-	
-}
-
-.UIMailPortlet .MailWorkingWorkspace .MailControlBar {
-	padding: 5px 5px 0px 5px;
-	height: 31px;
-}
-
-.UIMailPortlet .MailWorkingWorkspace .MailControlBar a.ControlButton {
-	float: left;
-	display: plock;
-	padding: 5px;
-	width: 35px; height: 21px;
-}
-
-.UIMailPortlet .MailWorkingWorkspace .MailControlBar a:hover {
-	background: url('DefaultSkin/background/ControlButtonBG.gif') repeat-y ;
-	border: 1px solid #9d9d9d;
-	text-color: #ffba00;
-}
-
-.UIMailPortlet .MailWorkingWorkspace .MailControlBar .MailIconLabel {
-	line-height: 20px;
-}
-
-.UIMailPortlet .MailWorkingWorkspace .MailControlBar .MailIcon {
-	width: 24px; height: 18px;
-}
-
-.UIMailPortlet .MailWorkingWorkspace .MailControlBar .CheckMailIcon {
-	background: url('DefaultSkin/icons/CheckMailIcon.gif') no-repeat ;
-}
-
-
-
-
-.UIMailPortlet .MailWorkingWorkspace .MailContainerDetail {
-	padding: 0px 5px 5px 5px;
-}
-
-.UIMailPortlet .MailWorkingWorkspace .MailContainerDetail .MailContentNavigation {
-	float: left;
-	width: 200px;	height: 400px;
-	border: 1px solid red;
-
-}
-
+ 
+/******************************************** MailBanner ****************************************/
 .UIMailPortlet .MailBanner {
   background: url('DefaultSkin/background/BgBanner457x63.gif') no-repeat left;
   height: 64px;
   padding: 0px 1px 0px 155px;
-}
-
-.UIMailPortlet .MailBanner .TopBanner {
-	padding: 11px 0px 0px 44px;
-	margin: 0px 0px 2px 0px;
-
 }
 
 .UIMailPortlet .MailBanner .LeftHorizontalLine {
@@ -100,7 +46,7 @@
 }
 
 .UIMailPortlet .MailBanner .Search {
-  background: url('DefaultSkin/icons/Search16x16.gif') no-repeat ;	
+  background: url('DefaultSkin/icons/16x16/SearchIcon.gif') no-repeat ;	
   height: 16px;
   width: 16px;
   float: right;
@@ -108,7 +54,7 @@
 }
 
 .UIMailPortlet .MailBanner .AdvancedSearch {
-  background: url('DefaultSkin/icons/Find16x16.gif') no-repeat ;	
+  background: url('DefaultSkin/icons/16x16/FindIcon.gif') no-repeat ;	
   height: 16px; width: 16px;
   float: right;
   margin: 8px 0px 0px 2px;
@@ -121,11 +67,218 @@
   margin: 3px 7px;
 }
 
-.UIMailPortlet .MailWorkingWorkspace .MailContainerDetail .MailContentWorkingArea {
-	margin: 0px 0px 0px 205px;
+/***************************************MailWorkingWorkspace********************************/
+
+.UIMailPortlet .MailWorkingWorkspace {
+	padding: 10px 5px;
+}
+
+.UIMailPortlet .MailWorkingWorkspace .MailControlBar {
+	padding: 5px 5px 0px 5px;
+	height: 31px;
+}
+
+.UIMailPortlet .MailWorkingWorkspace .MailControlBar a.ControlButton {
+	float: left;
+	display: plock;
+	padding: 5px;
+	width: 35px; height: 21px;
+}
+
+.UIMailPortlet .MailWorkingWorkspace .MailControlBar a:hover {
+	background: url('DefaultSkin/background/ControlButtonBG.gif') repeat-y ;
+	border: 1px solid #9d9d9d;
+	text-color: #ffba00;
+}
+
+.UIMailPortlet .MailWorkingWorkspace .MailControlBar .MailIconLabel {
+	line-height: 20px;
+}
+
+.UIMailPortlet .MailWorkingWorkspace .MailControlBar .MailIcon {
+	width: 24px; height: 18px;
+}
+
+.UIMailPortlet .MailWorkingWorkspace .MailControlBar .CheckMailIcon {
+	background: url('DefaultSkin/icons/CheckMailIcon.gif') no-repeat ;
+}
+
+.UIMailPortlet .MailContainer {
+	padding: 0px 5px 5px 5px;
+	border: 1px solid #c2c2c2;
+	background: #f3f3f3;
+	height: 100%;
+}
+
+/**************************************MailContentNavigation*********************************/
+
+.UIMailPortlet .MailContainer .MailAccountManagendent {
+	float: left;
+	width: 215px;
+	padding: 0px 2px;
+}
+
+.UIMailPortlet .MailAccountManagendent .UIDropDownItemSelector {
+	width: 194px;
+	float: left;
+	margin: 10px 0px 1px 0px;
+}
+
+.UIMailPortlet .MailAccountManagendent .AddNavigationIcon {
+	background: url('/eXoResources/icons/24x24/DefaultSkin/EditNavigation.gif') no-repeat left top;
+	cursor: pointer;
+	float: left; margin: 10px 0px 0px 0px;
+	height: 21px; width: 21px;
+	display: block;
+}
+
+.UIMailPortlet .MailAccountManagendent .AccountList {
+}
+
+.UIMailPortlet .MailAccountManagendent .FolderList {
+	background: white;
+	border: 1px solid #a5a5a5;
+	margin: 1px 0px;
+	padding: 1px 1px 30px 1px;
+}
+
+/**************************************FolderItemList*********************************/
+ 
+.UIMailPortlet .MailAccountManagendent .FolderItemList .LeftTitleItem {
+	background: #e6e6e6 url('DefaultSkin/background/LeftTitleItem20x20.gif') no-repeat ;
+	height: 20px; line-height: 20px;
+	padding-left: 20px;	
+}
+
+.UIMailPortlet .MailAccountManagendent .FolderItemList .TitleItem {
+	background: url('DefaultSkin/icons/16x16/FolderIcon.gif') no-repeat left center ;
+	height: 20px; line-height: 20px;
+	color: #3d3d3d; font-weight: bold;
+	padding-left: 23px;
+}
+
+.UIMailPortlet .MailAccountManagendent .FolderItemList .ItemList {
+	padding: 3px 0px 5px 22px;
+}
+
+.UIMailPortlet .MailAccountManagendent .FolderItemList .Icon {
+	padding-left: 30px;
+	line-height: 28px; height: 28px;
+	color: #1e1f21;
+}
+
+.UIMailPortlet .MailAccountManagendent .FolderItemList .IndexIcon {
+	background: url('DefaultSkin/icons/24x24/InboxIcon.gif') no-repeat left center ;
+}
+
+.UIMailPortlet .MailAccountManagendent .FolderItemList .DraftsIcon {
+	background: url('DefaultSkin/icons/24x24/DraftsIcon.gif') no-repeat left center ;
+}
+
+.UIMailPortlet .MailAccountManagendent .FolderItemList .SentIcon {
+	background: url('DefaultSkin/icons/24x24/SentIcon.gif') no-repeat left center ;
+}
+
+.UIMailPortlet .MailAccountManagendent .FolderItemList .SpamIcon {
+	background: url('DefaultSkin/icons/24x24/SpamIcon.gif') no-repeat left center ;
+}
+
+.UIMailPortlet .MailAccountManagendent .FolderItemList .TrashIcon {
+	background: url('DefaultSkin/icons/24x24/TrashIcon.gif') no-repeat left center ;
+}
+
+/**************************************MyFolder*********************************/
+.UIMailPortlet .MailAccountManagendent .MyFolder .TitleMyFolder {
+	background: url('DefaultSkin/background/LineTitle166x1.gif') no-repeat left bottom;
+	height: 20px; line-height: 20px;
+}
+
+.UIMailPortlet .MailAccountManagendent .MyFolder .IconTitle {
+	background: url('DefaultSkin/background/LeftTitleItem20x20.gif') no-repeat ;
+	height: 20px; line-height: 20px;
+	padding-left: 20px;	
+	color: #3d3d3d; font-weight: bold;	
+}
+
+.UIMailPortlet .MailAccountManagendent .MyFolder .UITree  {
+	border: none;
+}
+
+.UIMailPortlet .MyFolder .UITree .ChildrenContainer {
+	padding-left: 15px;
+}
+
+.UIMailPortlet .MyFolder .UITree .Icon {
+	height: 22px; width: 24px;
+}
+
+.UIMailPortlet .MyFolder .UITree .Default {
+	background: url('DefaultSkin/icons/24x24/DefaultIcon.gif') no-repeat center;
+}
+
+.UIMailPortlet .MyFolder .UITree .NodeLabel a {
+	line-height: 20px;
+	font-weight: normal;
+	color: #1e1f21;
+}
+
+/*********************************TagList*************************************/
+
+.UIMailPortlet .MailAccountManagendent .TagList {
+	background: white;
+	border: 1px solid #a5a5a5;
+	margin: 1px 0px;
+}
+
+.UIMailPortlet .MailAccountManagendent .TagList .TitleTagList {
+	background: url('DefaultSkin/background/BgTitleTag1x20.gif') repeat-x ;
+}
+
+.UIMailPortlet .MailAccountManagendent .TagList .LeftTitleTag {
+	background: url('DefaultSkin/background/LeftTitleItem20x20.gif') no-repeat ;
+	height: 20px; line-height: 20px;
+	padding-left: 20px;	
+}
+
+.UIMailPortlet .MailAccountManagendent .TagList .IconTitle {
+	background: url('DefaultSkin/icons/16x16/BlueTag.gif') no-repeat left center;
+	height: 20px; line-height: 20px;
+	padding-left: 20px;	
+	color: #3d3d3d; font-weight: bold;	
+}
+
+.UIMailPortlet .MailAccountManagendent .TagList .TagContent {
+	padding: 8px 0px 8px 18px;
+}
+
+.UIMailPortlet .TagList .TagContent .IconItemTag {
+	padding-left: 25px;
+}
+
+.UIMailPortlet .TagList .TagContent .IconItemTag a{
+	line-height: 20px;
+	color: #3d3d3d;
+}
+
+.UIMailPortlet .TagList .TagContent .BlueTag {
+	background: url('DefaultSkin/icons/16x16/BlueTag.gif') no-repeat left center;
+}
+
+.UIMailPortlet .TagList .TagContent .RedTag {
+	background: url('DefaultSkin/icons/16x16/RedTag.gif') no-repeat left center;
+}
+
+.UIMailPortlet .TagList .TagContent .GreenTag {
+	background: url('DefaultSkin/icons/16x16/GreenTag.gif') no-repeat left center;
+}
+
+.UIMailPortlet .TagList .TagContent .VioletTag {
+	background: url('DefaultSkin/icons/16x16/VioletTag.gif') no-repeat left center;
+}
+/*********************************MailContentWorkingArea*************************************/
+
+.UIMailPortlet .MailWorkingWorkspace .MailContainer .MailContentWorkingArea {
+	margin: 0px 0px 0px 225px;
 	height: 400px;
 	border: 1px solid red;
 }
-
-
-
