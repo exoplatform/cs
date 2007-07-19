@@ -24,28 +24,28 @@ public interface DataStorage {
    public List<Category> getCategories() throws Exception;
    public Category getCategory(String categoryId) throws Exception;
    public void createCategory(Category category)throws Exception;
-   public void removeCategory(String categoryId)throws Exception;  
    public void updateCategory(Category category)throws Exception;  
+   public Category removeCategory(String categoryId)throws Exception;  
    
    public List<Forum> getForums(String categoryId)throws Exception;
    public Forum getForum(String categoryId, String forumId)throws Exception;  
    public void createForum(String categoryId, Forum forum) throws Exception;
    public void updateForum(String categoryId, Forum newForum)throws Exception;
-   public void removeForum(String categoryId, String forumId)throws Exception;
-   public void moveForum(String srcCategoryId, String forumId, String destCategoryId)throws Exception;
+   public Forum removeForum(String categoryId, String forumId)throws Exception;
+   public void moveForum(String forumPath, String destCategoryPath) throws Exception;
    
    public PageList getTopics(String categoryId, String forumId) throws Exception;
    public Topic getTopic(String categoryId, String forumId, String topicId) throws Exception;    
    public TopicView getTopicView(String categoryId, String forumId, String topicId) throws Exception;
    public void createTopic(String categoryId, String forumId, Topic topic) throws Exception;
    public void updateTopic(String categoryId, String forumId, Topic newTopic) throws Exception;  
-   public void removeTopic(String categoryId, String forumId, String topicId) throws Exception;
-   public void moveTopic(String srcForumId, String topicId, String destForumId) throws Exception;
+   public Topic removeTopic(String categoryId, String forumId, String topicId) throws Exception;
+   public void moveTopic(String  topicPath, String destForumPath) throws Exception;
    
    public List<Post> getPosts(String categoryId, String forumId, String topicId)throws Exception;
    public Post getPost(String categoryId, String forumId, String topicId, String postId)throws Exception;
    public void createPost(String categoryId, String forumId, String topicId, Post post)throws Exception;
    public void updatePost(String categoryId, String forumId, String topicId, Post newPost)throws Exception;
-   public void removePost(String categoryId, String forumId, String topicId, String postId)throws Exception;
-   public void movePost(String srcTopicId, String postId, String destTopicId)throws Exception;
+   public Post removePost(String categoryId, String forumId, String topicId, String postId)throws Exception;
+   public void movePost(String postPath, String destTopicPaths) throws Exception ;
 }

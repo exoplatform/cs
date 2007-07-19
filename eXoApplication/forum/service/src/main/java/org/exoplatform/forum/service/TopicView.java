@@ -6,13 +6,27 @@ package org.exoplatform.forum.service;
 
 import java.util.List;
 
+import sun.awt.RepaintArea;
+
 /**
  * Created by The eXo Platform SARL
  * Author : Tuan Nguyen
  *          tuan.nguyen@exoplatform.com
  * Jul 2, 2007  
+ * Editer by Vu Duy Tu
+ * 				tu.duy@exoplatform.com
+ * July 20, 2007
  */
 public class TopicView {
-  private Topic topic_ ;
-  private List<Post> posts_ ;
+  private Topic topic ;
+  private List<Post> posts ;
+  
+  public TopicView() {}
+  
+  public Topic getTopic() { return topic;  }
+	public void setTopicView(Topic topic) {	this.topic = topic; }
+	
+	public List<Post> getTopicView() { return posts; }
+	public void setPostsView(List<Post> posts) {this.posts = posts; }
+	
 }

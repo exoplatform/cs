@@ -8,9 +8,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.jcr.Node;
+import javax.jcr.NodeIterator;
+import javax.jcr.Session;
+import javax.jcr.Value;
+import javax.jcr.nodetype.*;
 
 import org.exoplatform.forum.service.Category;
 import org.exoplatform.forum.service.Forum;
+import org.exoplatform.forum.service.Post;
 import org.exoplatform.forum.service.Topic;
 import org.exoplatform.forum.service.impl.ForumServiceImpl;
 
@@ -44,53 +50,128 @@ public class TestForumService extends BaseForumTestCase{
   }
 
   public void testForum() throws Exception {
-	Category cat = createCategory("id") ;
-	Forum forum = createdForum("idfr");
-	
-	forumService_.createForum(cat.getId(), forum);
-	
-	Forum forum2 = forumService_.getForum(cat.getId(), forum.getId());
-	System.out.print("\n\nTestGetForum:  " + forum2.getForumName()+ "\n\n");
-	
-	//test getListForum
-	List<Forum> Forums = forumService_.getForums(cat.getId());
-	assertEquals(Forums.size(), 1);
-	//test udateForum
-	System.out.print("\n\nName Old Forum:" + forum.getForumName() + "\n\nDescriptionOld:  " + forum.getDescription());
-	forum.setForumName("VuDuyTu");
-	forum.setDescription("Forum nay dung de test updateForum");
-	forumService_.updateForum(cat.getId(), forum);
-	Forum forum1 = forumService_.getForum(cat.getId(), forum.getId());
-	System.out.print("\n\nName New Forum:" + forum1.getForumName() + "\n\nDescriptionNew:  " + forum1.getDescription()+ "\n\n\n");
-	//test move
-	Category newCat = createCategory("di1");
-	forumService_.createCategory(newCat);
-	forumService_.moveForum(cat.getId(), forum.getId(), newCat.getId());
-	Forum forum3 = forumService_.getForum(newCat.getId(), forum.getId());
-	System.out.print("\n\nTestMoveForum:  " + forum3.getForumName()+ "\n\n");
+		Category cat = createCategory("ida") ;
+		forumService_.createCategory(cat) ;
+		Forum forum = createdForum("idfr");
+		
+		forumService_.createForum(cat.getId(), forum);
+		
+		Forum forum2 = forumService_.getForum(cat.getId(), forum.getId());
+		System.out.print("\n\nTestGetForum:  " + forum2.getForumName()+ "\n\n");
+		
+		//test getListForum
+		List<Forum> Forums = forumService_.getForums(cat.getId());
+		assertEquals(Forums.size(), 1);
+		//test udateForum
+		System.out.print("\n\nName Old Forum:" + forum.getForumName() + "\n\nDescriptionOld:  " + forum.getDescription());
+		forum.setForumName("VuDuyTu");
+		forum.setDescription("Forum nay dung de test updateForum");
+		forumService_.updateForum(cat.getId(), forum);
+		Forum forum1 = forumService_.getForum(cat.getId(), forum.getId());
+		System.out.print("\n\nName New Forum:" + forum1.getForumName() + "\n\nDescriptionNew:  " + forum1.getDescription()+ "\n\n\n");
+		//test move
+		Category newCat = createCategory("idb");
+		forumService_.createCategory(newCat);
+		
+		String pathRoot = "/exo:registry/exo:services/ForumService/";
+		String scrPath = pathRoot + cat.getId() + "/" + forum.getId();
+		String destPath = pathRoot+newCat.getId() + "/" + forum.getId();
+		forumService_.moveForum(scrPath, destPath);
+		Forum forum3 = forumService_.getForum(newCat.getId(), forum.getId());
+		System.out.print("\n\nTestMoveForum:  " + forum3.getForumName()+ "\n\n");
   }
   
   public void testTopic() throws Exception {
-	Category cat = createCategory("id") ;
-    Forum forum = createdForum("idfn");
-    forumService_.createForum(cat.getId(), forum);
-    
-	Topic topicnew = createdTopic("idtp");
-	
-	forumService_.createTopic(cat.getId(), forum.getId(), topicnew);
-	
-	Topic topic1 = forumService_.getTopic(cat.getId(), forum.getId(), topicnew.getId());
-	
-	System.out.print("\n\nTestgetTopic TopicName:  " + topic1.getTopicName() + "\nDescription:  " + topic1.getDescription() + "\n\n");
+		Category cat = createCategory("id0") ;
+		forumService_.createCategory(cat) ;
+	    Forum forum = createdForum("idf0");
+	    forumService_.createForum(cat.getId(), forum);
+	    
+		Topic topicnew = createdTopic("idtp0");
+		
+		forumService_.createTopic(cat.getId(), forum.getId(), topicnew);
+		//test getTopic
+		Topic topic1 = forumService_.getTopic(cat.getId(), forum.getId(), topicnew.getId());
+		System.out.print("\n\nTestgetTopic TopicName:  " + topic1.getTopicName() + "\nDescription:  " + topic1.getDescription() + "\n\n");
+		//test updateTopic
+		topicnew.setTopicName("New Test Topic");
+		topicnew.setDescription("Topic nay de test");
+		forumService_.updateTopic(cat.getId(), forum.getId(), topicnew);
+		Topic topic2 = forumService_.getTopic(cat.getId(), forum.getId(), topicnew.getId());
+		System.out.print("\n\nNewTopic TopicName:  " + topic2.getTopicName() + "\nDescriptionNew:  " + topic2.getDescription() + "\n\n");
+		/* test moveTopic test 2 truong hop
+		* Ta dang co category(id =id) co Forum(id = idfn) co Topic(id = idtp)
+		* Va can tao them category(id = di1) co Forum(id = idfr) va ko co Topic
+		*/
+		Category cate = createCategory("id1");
+		forumService_.createCategory(cate) ;
+		Forum forum1 = createdForum("idf1");
+	    forumService_.createForum(cate.getId(), forum1);
+	    //truong hop 1
+		//forumService_.moveTopic(forum.getId(), topicnew.getId(), forum1.getId());
+	  String pathRoot = "/exo:registry/exo:services/ForumService/";
+	  String topicPath = pathRoot + cat.getId() + "/" + forum.getId() + "/" + topicnew.getId();
+	  String destForumPath = pathRoot + cate.getId() + "/" + forum1.getId() + "/" + topicnew.getId();
+	  forumService_.moveTopic(topicPath, destForumPath);
+	  Topic topic3 = forumService_.getTopic(cate.getId(), forum1.getId(), topicnew.getId());
+		System.out.print("\n\nTopicMove TopicName:  " + topic3.getTopicName() + "\nDescriptionNew:  " + topic3.getDescription() + "\n\n");
+		//truong hop 2 move trong cung 1 category
+		Forum forum2 = createdForum("idf2");
+		forumService_.createForum(cate.getId(), forum2);
+		String newdestForumPath = pathRoot + cate.getId() + "/" + forum2.getId() + "/" + topicnew.getId();
+		forumService_.moveTopic(destForumPath, newdestForumPath);
+		Topic topic4 = forumService_.getTopic(cate.getId(), forum2.getId(), topicnew.getId());
+		System.out.print("\n\nTopicMove trong Cate:  " + topic4.getTopicName() + "\nDescriptionNew:  " + topic4.getDescription() + "\n\n");
+		//test removeTopic
+		//Topic topicTem = forumService_.removeTopic(categoryId, forumId, topicId)
+  }
+  
+  public void testPost() throws Exception {
+		Post postNew = createdPost("idp0");
+		forumService_.createPost("id1", "idf2", "idtp0", postNew);
+		//test getPost
+		Post post0 = forumService_.getPost("id1", "idf2", "idtp0", postNew.getId());
+		System.out.println("\n\n Noidung Post0:" + post0.getMessage());
+		//test getPosts
+		List<Post> Posts = forumService_.getPosts("id1", "idf2", "idtp0");
+		System.out.println("\n\nSo post:  " + Posts.size()+"\n\n");
+		// test updatePost
+		postNew.setMessage("Noi dung topic da duoc sua chua");
+		postNew.setSubject("Subject cung da dc sua chua");
+		forumService_.updatePost("id1", "idf2", "idtp0", postNew);
+		Post post1 = forumService_.getPost("id1", "idf2", "idtp0", postNew.getId());
+		System.out.println("\n\n Noidung Post1:" + post1.getMessage()+"\n SubjectNew:  " + post1.getSubject() + "\n\n");
+		// test movePost
+		Topic topic1 = createdTopic("idtp1");
+		forumService_.createTopic("id1", "idf2", topic1);
+		String pathRoot = "/exo:registry/exo:services/ForumService/";
+		String srcPath =  pathRoot + "id1/idf2/idtp0/idp0";
+		String destPath = pathRoot + "id1/idf2/idtp1/idp0";
+		forumService_.movePost(srcPath, destPath);
+		Post post2 = forumService_.getPost("id1", "idf2", "idtp1", postNew.getId());
+		System.out.println("\n\n Noidung Move Post2:" + post2.getMessage()+"\n SubjectNew:  " + post2.getSubject() + "\n\n");
+		//test removePost
+		assertNotNull(forumService_.removePost("id1", "idf2", "idtp1", postNew.getId()));
   }
   
   
   
   
   
-  
-  
-  
+  private Post createdPost( String id) {
+	Post post = new Post();
+	
+	post.setId(id);
+	post.setOwner("duytu");
+	post.setCreatedDate(new Date());
+	post.setModifiedBy("duytu");
+	post.setModifiedDate(new Date());
+	post.setSubject("SubJect");
+	post.setMessage("Noi dung topic test chang co j ");
+	post.setRemoteAddr("khongbiet");
+	
+	return post;
+  }
   private Topic createdTopic( String id) {
 	Topic topicNew = new Topic();
 		  
@@ -102,7 +183,7 @@ public class TestForumService extends BaseForumTestCase{
 	topicNew.setModifiedDate(new Date());
 	topicNew.setLastPostBy("tu");
 	topicNew.setLastPostDate(new Date());
-	topicNew.setDescription(" topic nay dung de test");
+	topicNew.setDescription("TopicDescription");
 	topicNew.setPostCount(0);
 	  
 	return topicNew;

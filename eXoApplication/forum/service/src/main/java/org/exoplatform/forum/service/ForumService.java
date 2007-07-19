@@ -64,7 +64,7 @@ public interface ForumService {
    * @return
    * @throws Exception
    */
-  public void removeCategory(String categoryId)throws Exception;  
+  public Category removeCategory(String categoryId)throws Exception;  
   
   
   /**
@@ -123,7 +123,7 @@ public interface ForumService {
    * @return
    * @throws Exception
    */
-  public void removeForum(String categoryId, String forumId)throws Exception;  
+  public Forum removeForum(String categoryId, String forumId)throws Exception;  
   /**
    * This method should:
    * 1. Check to see if the user has the right to remove the forum. Throw an exception if the user do not
@@ -135,7 +135,7 @@ public interface ForumService {
    * @return
    * @throws Exception
    */
-  public void moveForum(String srcCategoryId, String forumId, String destCategoryId)throws Exception;  
+  public void moveForum(String forumPath, String destCategoryId)throws Exception;  
   
   
   /**
@@ -210,7 +210,7 @@ public interface ForumService {
    * @return
    * @throws Exception
    */
-  public void removeTopic(String categoryId, String forumId, String topicId) throws Exception;
+  public Topic removeTopic(String categoryId, String forumId, String topicId) throws Exception;
   /**
    * This method should:
    * 1. Check the user permission
@@ -221,7 +221,7 @@ public interface ForumService {
    * @return
    * @throws Exception
    */
-  public void moveTopic(String srcForumId, String topicId, String destForumId) throws Exception;
+  public void moveTopic(String  topicPath, String destForumPath) throws Exception;
   
   
   /**
@@ -261,6 +261,6 @@ public interface ForumService {
    */
   public void createPost(String categoryId, String forumId, String topicId, Post post)throws Exception;
   public void updatePost(String categoryId, String forumId, String topicId, Post newPost)throws Exception;
-  public void removePost(String categoryId, String forumId, String topicId, String postId)throws Exception;
-  public void movePost(String srcTopicId, String postId, String destTopicId) throws Exception ;
+  public Post removePost(String categoryId, String forumId, String topicId, String postId)throws Exception;
+  public void movePost(String postPath, String destTopicPaths) throws Exception ;
 }

@@ -41,8 +41,8 @@ public class ForumServiceImpl implements ForumService{
     return storage_.getCategories();
   }
   
-  public void removeCategory(String categoryId) throws Exception {
-    storage_.removeCategory(categoryId) ;
+  public Category removeCategory(String categoryId) throws Exception {
+    return storage_.removeCategory(categoryId) ;
   }
   
   public void updateCategory(Category category) throws Exception {
@@ -53,8 +53,8 @@ public class ForumServiceImpl implements ForumService{
     storage_.createForum(categoryId, forum);
   }
   
-  public void moveForum(String srcCategoryId, String forumId, String destCategoryId)throws Exception {
-    storage_.moveForum(srcCategoryId, forumId, destCategoryId);
+  public void moveForum(String forumPath, String destCategoryPath) throws Exception {
+    storage_.moveForum(forumPath, destCategoryPath);
   }
   
   public Forum getForum(String categoryId, String forumId) throws Exception {
@@ -69,8 +69,8 @@ public class ForumServiceImpl implements ForumService{
 	storage_.updateForum(categoryId, newForum);
   }
   
-  public void removeForum(String categoryId, String forumId) throws Exception {
-	storage_.removeForum(categoryId, forumId);
+  public Forum removeForum(String categoryId, String forumId) throws Exception {
+	return storage_.removeForum(categoryId, forumId);
   }
   
   public void createTopic(String categoryId, String forumId, Topic topic) throws Exception {
@@ -91,41 +91,40 @@ public class ForumServiceImpl implements ForumService{
 	  return null;
   }
   
-  public void moveTopic(String srcForumId, String topicId, String destForumId) throws Exception {
-	  
+  public void moveTopic(String  topicPath, String destForumPath) throws Exception {
+	storage_.moveTopic(topicPath, destForumPath);
   }
   
-  public void removeTopic(String categoryId, String forumId, String topicId) throws Exception {
-	  // TODO Auto-generated method stub
+  public Topic removeTopic(String categoryId, String forumId, String topicId) throws Exception {
+	return storage_.removeTopic(categoryId, forumId, topicId);
   }
   
   public void updateTopic(String categoryId, String forumId, Topic newTopic) throws Exception {
-	  // TODO Auto-generated method stub
+	storage_.updateTopic(categoryId, forumId, newTopic);
   }
 
   public void createPost(String categoryId, String forumId, String topicId, Post post) throws Exception {
-	  // TODO Auto-generated method stub
+	storage_.createPost(categoryId, forumId, topicId, post);
   }
   
   public Post getPost(String categoryId, String forumId, String topicId, String postId) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
+    return storage_.getPost(categoryId, forumId, topicId, postId);
   }
+  
   public List<Post> getPosts(String categoryId, String forumId, String topicId) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
+    return storage_.getPosts(categoryId, forumId, topicId);
   }
   
-  public void movePost(String srcTopicId, String postId, String destTopicId) throws Exception {
-    
+  public void movePost(String postPath, String destTopicPaths) throws Exception {
+    storage_.movePost(postPath, destTopicPaths);
   }
   
-  public void removePost(String categoryId, String forumId, String topicId, String postId) throws Exception {
-    // TODO Auto-generated method stub
+  public Post removePost(String categoryId, String forumId, String topicId, String postId) throws Exception {
+    return storage_.removePost(categoryId, forumId, topicId, postId);
   }
   
   public void updatePost(String categoryId, String forumId, String topicId, Post newPost) throws Exception {
-    // TODO Auto-generated method stub
+    storage_.updatePost(categoryId, forumId, topicId, newPost);
   }
   
 }
