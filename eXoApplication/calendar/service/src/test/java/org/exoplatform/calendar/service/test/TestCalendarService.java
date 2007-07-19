@@ -4,11 +4,15 @@
  **************************************************************************/
 package org.exoplatform.calendar.service.test;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarCategory;
+import org.exoplatform.calendar.service.Event;
 import org.exoplatform.calendar.service.EventCategory;
+import org.exoplatform.calendar.service.Reminder;
 
 /**
  * Created by The eXo Platform SARL
@@ -141,7 +145,63 @@ public class TestCalendarService extends BaseCalendarTestCase{
     calendarService_.removeCalendar("nqhung", "calendarId") ;
   }
   
-  public void testEvent() throws Exception {
-    assertNull(null) ;
+  public void testCalendarEvent() throws Exception {
+    Calendar cal = new Calendar() ;
+    cal.setId("calendarId") ;
+    cal.setName("myCalendar") ;
+    cal.setDescription("Desscription") ;
+    cal.setCategoryId("category1") ;
+    cal.setPrivate(true) ;
+    calendarService_.saveCalendar("nqhung", cal, true) ;
+    
+    EventCategory eventCategory = new EventCategory() ;
+    eventCategory.setId("eventCategoryId") ;
+    eventCategory.setName("eventCategoryName") ;
+    eventCategory.setDescription("description") ;
+    calendarService_.saveEventCategory("nqhung", "calendarId", eventCategory, true) ;
+    
+    Event event = new Event() ;
+    event.setId("eventId") ;
+    event.setCalendarId("calendarId") ;
+    event.setEventCategoryId("eventCategoryId") ;
+    event.setDescription("description") ;
+    event.setName("myEvent") ;
+    event.setEventState("free") ;
+    event.setEventType("event") ;
+    event.setFromDateTime(new Date()) ;
+    event.setToDateTime(new Date()) ;
+    event.setInvitation(new String [] {"nqhung", "dvminh", "ptuan"}) ;
+    event.setLocation("meeting room") ;
+    event.setPriority("hight") ;
+    event.setPrivate(true) ;
+    
+    Reminder reminder = new Reminder() ;
+    reminder.setId("reminderId") ;
+    reminder.setEventId("eventId") ;
+    reminder.setAlarmBefore("5") ;
+    reminder.setReminder("via mail") ;
+    reminder.setRepeat("2") ;
+    List<Reminder> reminders = new ArrayList<Reminder>() ;
+    reminders.add(reminder) ;
+    
+    event.setReminders(reminders) ;
+    
+    calendarService_.saveEvent("nqhung", "calendarId", "eventCategoryId", event, true, false) ;
+    Event ev = calendarService_.getEvent("nqhung", "calendarId", "eventCategoryId", "eventId") ;
+    assertNotNull(ev) ;
+    
+    //update event
+    event.setName("myEventUpdated") ;
+    calendarService_.saveEvent("nqhung", "calendarId", "eventCategoryId", event, false, false) ;
+    ev = calendarService_.getEvent("nqhung", "calendarId", "eventCategoryId", "eventId") ;
+    assertEquals(event.getName(), "myEventUpdated") ;
+    
+    //get event list
+    List<Event> events = calendarService_.getEventByCalendar("nqhung", "calendarId") ;
+    assertEquals(events.size(), 1) ;
+    
+    //remove event
+    ev = calendarService_.removeEvent("nqhung", "calendarId", "eventCategoryId", "eventId", false) ;
+    assertNotNull(ev); 
   }
 }
