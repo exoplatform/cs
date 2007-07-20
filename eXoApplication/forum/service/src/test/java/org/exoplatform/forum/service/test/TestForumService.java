@@ -47,6 +47,8 @@ public class TestForumService extends BaseForumTestCase{
     Category updatedCat = forumService_.getCategory("id") ;
     assertNotNull(updatedCat) ;
     assertEquals("nguyenkequanghung", updatedCat.getCategoryName()) ;
+    // test removeCategory
+    assertNotNull(forumService_.removeCategory("id"));
   }
 
   public void testForum() throws Exception {
@@ -79,6 +81,8 @@ public class TestForumService extends BaseForumTestCase{
 		forumService_.moveForum(scrPath, destPath);
 		Forum forum3 = forumService_.getForum(newCat.getId(), forum.getId());
 		System.out.print("\n\nTestMoveForum:  " + forum3.getForumName()+ "\n\n");
+		// test remove Forum xoa forum3
+		assertNotNull(forumService_.removeForum(newCat.getId(), forum.getId()));
   }
   
   public void testTopic() throws Exception {
@@ -100,8 +104,8 @@ public class TestForumService extends BaseForumTestCase{
 		Topic topic2 = forumService_.getTopic(cat.getId(), forum.getId(), topicnew.getId());
 		System.out.print("\n\nNewTopic TopicName:  " + topic2.getTopicName() + "\nDescriptionNew:  " + topic2.getDescription() + "\n\n");
 		/* test moveTopic test 2 truong hop
-		* Ta dang co category(id =id) co Forum(id = idfn) co Topic(id = idtp)
-		* Va can tao them category(id = di1) co Forum(id = idfr) va ko co Topic
+		* Ta dang co category(id =id0) co Forum(id = idf0) co Topic(id = idtp0)
+		* Va can tao them category(id = di1) co Forum(id = idf1) va ko co Topic
 		*/
 		Category cate = createCategory("id1");
 		forumService_.createCategory(cate) ;
@@ -123,7 +127,11 @@ public class TestForumService extends BaseForumTestCase{
 		Topic topic4 = forumService_.getTopic(cate.getId(), forum2.getId(), topicnew.getId());
 		System.out.print("\n\nTopicMove trong Cate:  " + topic4.getTopicName() + "\nDescriptionNew:  " + topic4.getDescription() + "\n\n");
 		//test removeTopic
-		//Topic topicTem = forumService_.removeTopic(categoryId, forumId, topicId)
+		Topic testRmTopic = createdTopic("rmtp");
+		forumService_.createTopic("id1", "idf1", testRmTopic);
+		assertNotNull(forumService_.getTopic("id1", "idf1", testRmTopic.getId()));
+		Topic topicTem = forumService_.removeTopic("id1", "idf1", testRmTopic.getId());
+		System.out.print("\n\nTopicRemove trong Cate:  " + topicTem.getTopicName() + "\nDescription:  " + topicTem.getDescription() + "\n\n");
   }
   
   public void testPost() throws Exception {

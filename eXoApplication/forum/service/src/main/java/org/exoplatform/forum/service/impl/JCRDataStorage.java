@@ -103,14 +103,13 @@ public class JCRDataStorage implements DataStorage{
       Node catNode = forumHomeNode.getNode(category.getId()) ;
       catNode.setProperty("exo:name", category.getCategoryName()) ;
       catNode.setProperty("exo:categoryOrder", category.getCategoryOrder()) ;
-      GregorianCalendar cal = new GregorianCalendar() ;
-      cal.setTime(category.getCreatedDate()) ;
-      catNode.setProperty("exo:createdDate", cal.getInstance()) ;
+      //GregorianCalendar cal = new GregorianCalendar() ;
+      //cal.setTime(category.getCreatedDate()) ;
+      //catNode.setProperty("exo:createdDate", cal.getInstance()) ;
       catNode.setProperty("exo:description", category.getDescription()) ;
       catNode.setProperty("exo:modifiedBy", category.getModifiedBy()) ;
-      cal.setTime(category.getModifiedDate()) ;
-      catNode.setProperty("exo:modifiedDate", cal.getInstance()) ;
-      catNode.setProperty("exo:owner", category.getOwner()) ;
+      catNode.setProperty("exo:modifiedDate", GregorianCalendar.getInstance()) ;
+      //catNode.setProperty("exo:owner", category.getOwner()) ;
     }
     forumHomeNode.save() ;
     forumHomeNode.getSession().save() ;
@@ -188,9 +187,6 @@ public class JCRDataStorage implements DataStorage{
 		}
   }
   
-  
-  
-  
   private Forum getForum(Node forumNode) throws Exception {
 		Forum forum = new Forum();
 		forum.setId(forumNode.getProperty("exo:id").getString());
@@ -219,13 +215,11 @@ public class JCRDataStorage implements DataStorage{
 		  Node catNode = forumHomeNode.getNode(categoryId) ;
 		  if(catNode.hasNode(newForum.getId())) {
 				Node forumNode = catNode.getNode(newForum.getId());
-				GregorianCalendar calendar = new GregorianCalendar() ;
 				
 				forumNode.setProperty("exo:name", newForum.getForumName());
 				forumNode.setProperty("exo:forumOrder", newForum.getForumOrder());
 				forumNode.setProperty("exo:modifiedBy", newForum.getModifiedBy());
-				calendar.setTime(newForum.getModifiedDate());
-				forumNode.setProperty("exo:modifiedDate", calendar.getInstance());
+				forumNode.setProperty("exo:modifiedDate", GregorianCalendar.getInstance());
 				forumNode.setProperty("exo:description", newForum.getDescription());
 		
 				forumNode.setProperty("exo:viewForumRole", newForum.getViewForumRole());
@@ -239,7 +233,6 @@ public class JCRDataStorage implements DataStorage{
     }
   }
 
-  
   public Forum removeForum(String categoryId, String forumId) throws Exception {
 		Node forumHomeNode = getForumHomeNode();
 		Forum forum = new Forum();
@@ -254,14 +247,12 @@ public class JCRDataStorage implements DataStorage{
 		return null;
   }
   
-  
   public void moveForum(String forumPath, String destCategoryPath)throws Exception {
   	Node forumHomeNode = getForumHomeNode();
   	forumHomeNode.getSession().getWorkspace().move(forumPath, destCategoryPath);
   	forumHomeNode.save() ;
   	forumHomeNode.getSession().save() ;
   }
-  
   
   
   public PageList getTopics(String categoryId, String forumId) throws Exception {
@@ -347,7 +338,6 @@ public class JCRDataStorage implements DataStorage{
 		}
   }
   
-  
   public void updateTopic(String categoryId, String forumId, Topic newTopic) throws Exception {
   	Node forumHomeNode = getForumHomeNode();
     if(forumHomeNode.hasNode(categoryId)) {
@@ -364,7 +354,6 @@ public class JCRDataStorage implements DataStorage{
     forumHomeNode.save() ;
     forumHomeNode.getSession().save() ;
   } 
-
   
   public Topic removeTopic(String categoryId, String forumId, String topicId) throws Exception {
 		Node forumHomeNode = getForumHomeNode();
@@ -380,7 +369,6 @@ public class JCRDataStorage implements DataStorage{
 	  }
     return null;
   }
-  
   
   public void moveTopic(String  topicPath, String destForumPath) throws Exception {
   	Node forumHomeNode = getForumHomeNode();
@@ -414,7 +402,6 @@ public class JCRDataStorage implements DataStorage{
     return null;
   }
   
-  
   public Post getPost(String categoryId, String forumId, String topicId, String postId) throws Exception {
 		Node forumHomeNode = getForumHomeNode();
 		if(forumHomeNode.hasNode(categoryId)) {
@@ -431,7 +418,6 @@ public class JCRDataStorage implements DataStorage{
 		}
     return null;
   }
-  
 
   private Post getPost(Node postNode) throws Exception {
 		Post postNew = new Post();
