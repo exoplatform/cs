@@ -1,0 +1,128 @@
+.UIInsertAddress {
+	width: 760px;
+	background: #f3f3f3;
+	border: 1px solid red;
+}
+
+.UIInsertAddress .InsertAddress {
+	padding: 10px;
+	border: 1px solid #c0c0c0;
+}
+
+.UIInsertAddress .InsertAddressContainer {
+	padding-top: 10px;
+}
+
+.UIInsertAddress .UIGrid th {
+	background: url('DefaultSkin/background/ThGridTitle1x20.gif') repeat-x;
+	line-height: 17px; height: 18px;
+	text-align: left;
+	padding: 0px 5px;
+}
+
+.UIInsertAddress .UIGrid th input {
+	text-align: center;
+	padding-bottom: 2px;
+}
+
+.UIInsertAddress .UIGrid tbody {
+	background: white;	
+	padding-bottom: 10px;
+}
+
+.UIInsertAddress .UIGrid td {
+	height: 23px;
+	padding: 4px 0px 0px 5px;
+}
+
+.UIInsertAddress .UIGrid tr {
+}
+/*********************************************UISearch*****************************************/
+
+.UIInsertAddress .UISearchForm {
+	float: left;
+	width: 310px;
+}
+
+.UIInsertAddress .UISearchForm .SearchIcon {
+  background: url('DefaultSkin/icons/SearchIcon.gif') no-repeat center;
+  float: left;
+  height: 20px; width: 24px;
+}
+
+.UIInsertAddress .AddressesGroup {
+	margin: 0px 8px 0px 315px;
+	text-align: right;
+}
+
+.UIInsertAddress .AddressesGroup .AddressLabel {
+	float: left;
+	width: 170px;
+	padding: 0px 4px;
+}
+
+.UIInsertAddress .AddressesGroup select {
+	width: 220px;
+	margin: 10px 0px 0px 0px;
+	font-size: 11px;
+}
+
+/*********************************************ListAddress*****************************************/
+
+.UIInsertAddress .ListAddress {
+	float: left;
+	width: 355px;
+	height: 340px;
+	overflow-y: auto;
+	overflow-x: hidden;
+	border: 1px solid #b7b7b7;
+}
+
+.UIInsertAddress .ListAddress .UIGrid .DropDownArrowIcon{
+  background: url('DefaultSkin/icons/DropDownArrowIcon.gif') no-repeat right;
+  padding: 0px 10px 0px 4px; 
+  width: 40px;
+  float: left;
+  border: 1px solid red;
+}
+
+.UIInsertAddress .ListAddress .UIGrid thead {
+	border-top: none;
+}
+
+.UIInsertAddress .ListAddress .UIGrid th {
+	border-top: none;
+}
+
+/*******************************************InsertAddressRight***********************************/
+
+.UIInsertAddress .InsertAddressRight {
+	margin-left: 360px;
+}
+
+.UIInsertAddress .InsertAddressContent {
+	padding: 2px 0px;
+}
+
+.UIInsertAddress .UIAction {
+	float: left;
+	width: 50px;
+	padding: 30px 0px 0px 0px;
+}
+
+.UIInsertAddress .Content {
+	margin-left: 53px;
+}
+
+.UIInsertAddress .Content .UIGrid {
+	width: 98.5%;
+	height: 110px;
+}
+
+.UIInsertAddress .Content .UIGrid .DustBin16x16Icon {
+	background-position: right;
+	background-repeat: no-repeat;
+	width: 265px;
+	padding: 2px 16px 0px 0px;
+	height: 18px;
+}
