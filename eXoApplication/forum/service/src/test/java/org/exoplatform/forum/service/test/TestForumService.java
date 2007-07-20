@@ -116,7 +116,19 @@ public class TestForumService extends BaseForumTestCase{
   }
   
   public void testPost() throws Exception {
-  	
+  	Category cat = createCategory("cate");
+		forumService_.createCategory(cat);
+		Forum forum = createdForum("111111");
+		forumService_.createForum(cat.getId(), forum);
+		Topic topic = createdTopic("222222");
+		forumService_.createTopic(cat.getId(), forum.getId(), topic);
+		Post post = createdPost("333333");
+		//add Post
+		forumService_.createPost(cat.getId(), forum.getId(), topic.getId(), post);
+		// getPost
+		assertNotNull(forumService_.getPost(cat.getId(), forum.getId(), topic.getId(), post.getId()));
+		//get ListPost
+		Post newPost = forumService_.getPost(cat.getId(), forum.getId(), topic.getId(), post.getId());
   }
   
   
