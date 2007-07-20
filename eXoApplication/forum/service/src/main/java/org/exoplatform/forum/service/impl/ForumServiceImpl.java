@@ -29,6 +29,7 @@ public class ForumServiceImpl implements ForumService{
                           JCRRegistryService jcrRegistryService)throws Exception {
     storage_ = new JCRDataStorage(repositoryService, jcrRegistryService) ;
   }
+  
   public void createCategory(Category category) throws Exception {
     storage_.createCategory(category);
   }
@@ -66,45 +67,43 @@ public class ForumServiceImpl implements ForumService{
   }
   
   public void updateForum(String categoryId, Forum newForum) throws Exception {
-	storage_.updateForum(categoryId, newForum);
+  	storage_.updateForum(categoryId, newForum);
   }
   
   public Forum removeForum(String categoryId, String forumId) throws Exception {
-	return storage_.removeForum(categoryId, forumId);
+  	return storage_.removeForum(categoryId, forumId);
   }
   
   public void createTopic(String categoryId, String forumId, Topic topic) throws Exception {
-	 storage_.createTopic(categoryId, forumId, topic);
+	  storage_.createTopic(categoryId, forumId, topic);
   }
   
   public Topic getTopic(String categoryId, String forumId, String topicId) throws Exception {
-	return storage_.getTopic(categoryId, forumId, topicId);
+  	return storage_.getTopic(categoryId, forumId, topicId);
   }
   
   public TopicView getTopicView(String categoryId, String forumId, String topicId) throws Exception {
-	  // TODO Auto-generated method stub
-	  return null;
+	  return storage_.getTopicView(categoryId, forumId, topicId);
   }
   
   public PageList getTopics(String categoryId, String forumId) throws Exception {
-	  // TODO Auto-generated method stub
-	  return null;
+	  return storage_.getTopics(categoryId, forumId);
   }
   
   public void moveTopic(String  topicPath, String destForumPath) throws Exception {
-	storage_.moveTopic(topicPath, destForumPath);
+  	storage_.moveTopic(topicPath, destForumPath);
   }
   
   public Topic removeTopic(String categoryId, String forumId, String topicId) throws Exception {
-	return storage_.removeTopic(categoryId, forumId, topicId);
+  	return storage_.removeTopic(categoryId, forumId, topicId);
   }
   
   public void updateTopic(String categoryId, String forumId, Topic newTopic) throws Exception {
-	storage_.updateTopic(categoryId, forumId, newTopic);
+  	storage_.updateTopic(categoryId, forumId, newTopic);
   }
 
   public void createPost(String categoryId, String forumId, String topicId, Post post) throws Exception {
-	storage_.createPost(categoryId, forumId, topicId, post);
+  	storage_.createPost(categoryId, forumId, topicId, post);
   }
   
   public Post getPost(String categoryId, String forumId, String topicId, String postId) throws Exception {

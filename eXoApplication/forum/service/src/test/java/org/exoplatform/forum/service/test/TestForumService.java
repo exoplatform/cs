@@ -48,6 +48,7 @@ public class TestForumService extends BaseForumTestCase{
     assertNotNull(updatedCat) ;
     assertEquals("nguyenkequanghung", updatedCat.getCategoryName()) ;
     // test removeCategory
+    System.out.print("\n\n" + updatedCat.getId() + "\n\n");
     assertNotNull(forumService_.removeCategory("id"));
   }
 
@@ -59,7 +60,7 @@ public class TestForumService extends BaseForumTestCase{
 		forumService_.createForum(cat.getId(), forum);
 		
 		Forum forum2 = forumService_.getForum(cat.getId(), forum.getId());
-		System.out.print("\n\nTestGetForum:  " + forum2.getForumName()+ "\n\n");
+		System.out.print("\n\nTestGetForum:  " + forum2.getId()+ "\n\n");
 		
 		//test getListForum
 		List<Forum> Forums = forumService_.getForums(cat.getId());
@@ -70,7 +71,7 @@ public class TestForumService extends BaseForumTestCase{
 		forum.setDescription("Forum nay dung de test updateForum");
 		forumService_.updateForum(cat.getId(), forum);
 		Forum forum1 = forumService_.getForum(cat.getId(), forum.getId());
-		System.out.print("\n\nName New Forum:" + forum1.getForumName() + "\n\nDescriptionNew:  " + forum1.getDescription()+ "\n\n\n");
+		System.out.print("\n\nName New Forum:" + forum.getId() + "\n\nDescriptionNew:  " + forum1.getDescription()+ "\n\n\n");
 		//test move
 		Category newCat = createCategory("idb");
 		forumService_.createCategory(newCat);
@@ -149,6 +150,7 @@ public class TestForumService extends BaseForumTestCase{
 		forumService_.updatePost("id1", "idf2", "idtp0", postNew);
 		Post post1 = forumService_.getPost("id1", "idf2", "idtp0", postNew.getId());
 		System.out.println("\n\n Noidung Post1:" + post1.getMessage()+"\n SubjectNew:  " + post1.getSubject() + "\n\n");
+		System.out.println("\n" + post1.getId()+"  :  " + post1.getOwner() + "\n\n");
 		// test movePost
 		Topic topic1 = createdTopic("idtp1");
 		forumService_.createTopic("id1", "idf2", topic1);
@@ -158,6 +160,7 @@ public class TestForumService extends BaseForumTestCase{
 		forumService_.movePost(srcPath, destPath);
 		Post post2 = forumService_.getPost("id1", "idf2", "idtp1", postNew.getId());
 		System.out.println("\n\n Noidung Move Post2:" + post2.getMessage()+"\n SubjectNew:  " + post2.getSubject() + "\n\n");
+		System.out.println("\n\n " + post2.getId()+"\n SubjectNew:  " + post2.getSubject() + "\n\n");
 		//test removePost
 		assertNotNull(forumService_.removePost("id1", "idf2", "idtp1", postNew.getId()));
   }
