@@ -11,6 +11,7 @@ import java.util.Date;
 public class Forum {
   private String id;
   private String owner;
+  private String path ;
   private int forumOrder;
   private Date createdDate;
   private String modifiedBy;
@@ -41,6 +42,9 @@ public class Forum {
   
   public String getOwner(){return owner;}
   public void setOwner(String owner){this.owner = owner;}
+  
+  public String getPath() {return path; }
+  public void setPath( String path) { this.path = path;}
   
   public int getForumOrder(){return forumOrder;}
   public void setForumOrder(int forumOrder){this.forumOrder = forumOrder;}

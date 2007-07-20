@@ -16,6 +16,7 @@ import java.util.Date;
 public class Post { 
   private String id;
   private String owner;
+  private String path ;
   private Date createdDate;
   private String modifiedBy;
   private Date modifiedDate;
@@ -41,6 +42,9 @@ public class Post {
 
   public String getOwner(){return owner;}
   public void setOwner(String owner){this.owner = owner;}
+  
+  public String getPath() {return path; }
+  public void setPath( String path) { this.path = path;}
   
   public Date getCreatedDate(){return createdDate;}
   public void setCreatedDate(Date createdDate){this.createdDate = createdDate;}

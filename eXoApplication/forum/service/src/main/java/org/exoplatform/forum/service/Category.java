@@ -12,6 +12,7 @@ import java.util.Date;
 public class Category {
    private String id;
    private String owner;
+   private String path;
    private long categoryOrder;
    private Date createdDate;
    private String modifiedBy;
@@ -28,6 +29,9 @@ public class Category {
    
    public String getOwner(){return owner;}
    public void setOwner(String owner){this.owner=owner;}
+
+   public String getPath() {return path; }
+   public void setPath( String path) { this.path = path;}
    
    public long getCategoryOrder(){return categoryOrder;}
    public void setCategoryOrder(long categoryOrder){this.categoryOrder = categoryOrder;}

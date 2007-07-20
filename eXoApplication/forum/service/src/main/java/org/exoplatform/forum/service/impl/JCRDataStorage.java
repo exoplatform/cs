@@ -53,6 +53,7 @@ public class JCRDataStorage implements DataStorage{
       cat = new Category() ;
       cat.setId(cateNode.getProperty("exo:id").getString()) ;
       cat.setOwner(cateNode.getProperty("exo:owner").getString()) ;
+      cat.setPath(cateNode.getProperty("exo:path").getString()) ;
       cat.setCategoryName(cateNode.getProperty("exo:name").getString()) ;
       cat.setCategoryOrder(cateNode.getProperty("exo:categoryOrder").getLong()) ;
       cat.setCreatedDate(cateNode.getProperty("exo:createdDate").getDate().getTime()) ;
@@ -70,22 +71,23 @@ public class JCRDataStorage implements DataStorage{
     Node catNode = forumHomeNode.getNode(categoryId) ;
     Category cat = new Category() ;
     cat.setId(categoryId) ;
+    cat.setOwner(catNode.getProperty("exo:owner").getString()) ;
+    cat.setPath(catNode.getProperty("exo:path").getString()) ;
     cat.setCategoryName(catNode.getProperty("exo:name").getString()) ;
     cat.setCategoryOrder(catNode.getProperty("exo:categoryOrder").getLong()) ;
     cat.setCreatedDate(catNode.getProperty("exo:createdDate").getDate().getTime()) ;
     cat.setDescription(catNode.getProperty("exo:description").getString()) ;
     cat.setModifiedBy(catNode.getProperty("exo:modifiedBy").getString()) ;
     cat.setModifiedDate(catNode.getProperty("exo:modifiedDate").getDate().getTime()) ;
-    cat.setOwner(catNode.getProperty("exo:owner").getString()) ;
     return cat ;
   }
 
   public void createCategory(Category category) throws Exception {
   	Node forumHomeNode = getForumHomeNode() ;
   	Node newCategory = forumHomeNode.addNode(category.getId(), "exo:forumCategory") ;
-  	GregorianCalendar calendar = new GregorianCalendar() ;
-  	newCategory.setProperty("exo:id", String.valueOf(calendar.getTimeInMillis())) ;
+  	newCategory.setProperty("exo:id", category.getId()) ;
   	newCategory.setProperty("exo:owner", category.getOwner()) ;
+  	newCategory.setProperty("exo:path", newCategory.getPath()) ;
   	newCategory.setProperty("exo:createdDate", GregorianCalendar.getInstance()) ;
   	newCategory.setProperty("exo:modifiedBy", category.getModifiedBy()) ;
   	newCategory.setProperty("exo:modifiedDate", GregorianCalendar.getInstance()) ;
@@ -103,13 +105,9 @@ public class JCRDataStorage implements DataStorage{
       Node catNode = forumHomeNode.getNode(category.getId()) ;
       catNode.setProperty("exo:name", category.getCategoryName()) ;
       catNode.setProperty("exo:categoryOrder", category.getCategoryOrder()) ;
-      //GregorianCalendar cal = new GregorianCalendar() ;
-      //cal.setTime(category.getCreatedDate()) ;
-      //catNode.setProperty("exo:createdDate", cal.getInstance()) ;
       catNode.setProperty("exo:description", category.getDescription()) ;
       catNode.setProperty("exo:modifiedBy", category.getModifiedBy()) ;
       catNode.setProperty("exo:modifiedDate", GregorianCalendar.getInstance()) ;
-      //catNode.setProperty("exo:owner", category.getOwner()) ;
     }
     forumHomeNode.save() ;
     forumHomeNode.getSession().save() ;
@@ -137,8 +135,8 @@ public class JCRDataStorage implements DataStorage{
 		  List<Forum> Forums = new ArrayList<Forum>();
 		  Forum forum;
 		  while (iter.hasNext()) {
-			Node forumNode = iter.nextNode() ;
-			forum = getForum(forumNode);
+				Node forumNode = iter.nextNode() ;
+				forum = getForum(forumNode);
 		    Forums.add(forum);
 		  }
 		  return Forums;
@@ -163,10 +161,10 @@ public class JCRDataStorage implements DataStorage{
 		if(forumHomeNode.hasNode(categoryId)) {
 		  Node catNode = forumHomeNode.getNode(categoryId) ;
 		  Node newForum = catNode.addNode(forum.getId(), "exo:forum");
-		  GregorianCalendar calendar = new GregorianCalendar() ;
 		  
-		  newForum.setProperty("exo:id", String.valueOf(calendar.getTimeInMillis()));
+		  newForum.setProperty("exo:id", forum.getId());
 		  newForum.setProperty("exo:owner", forum.getOwner());
+		  newForum.setProperty("exo:path", newForum.getPath());
 		  newForum.setProperty("exo:name", forum.getForumName());
 		  newForum.setProperty("exo:forumOrder", forum.getForumOrder());
 		  newForum.setProperty("exo:createdDate", GregorianCalendar.getInstance());
@@ -191,6 +189,7 @@ public class JCRDataStorage implements DataStorage{
 		Forum forum = new Forum();
 		forum.setId(forumNode.getProperty("exo:id").getString());
     forum.setOwner(forumNode.getProperty("exo:owner").getString());
+    forum.setPath(forumNode.getProperty("exo:path").getString());
     forum.setForumName(forumNode.getProperty("exo:name").getString());
     forum.setForumOrder(forumNode.getProperty("exo:forumOrder").getType());
     forum.setCreatedDate(forumNode.getProperty("exo:createdDate").getDate().getTime());
@@ -292,6 +291,7 @@ public class JCRDataStorage implements DataStorage{
 	  
 	  topicNew.setId(topicNode.getProperty("exo:id").getString());
 	  topicNew.setOwner(topicNode.getProperty("exo:owner").getString());
+	  topicNew.setPath(topicNode.getProperty("exo:path").getString());
 	  topicNew.setTopicName(topicNode.getProperty("exo:name").getString());
 	  topicNew.setCreatedDate(topicNode.getProperty("exo:createdDate").getDate().getTime());
 	  topicNew.setModifiedBy(topicNode.getProperty("exo:modifiedBy").getString());
@@ -319,10 +319,10 @@ public class JCRDataStorage implements DataStorage{
 		  if(CategoryNode.hasNode(forumId)) {
 				Node forumNode = CategoryNode.getNode(forumId);
 				Node topicNode = forumNode.addNode(topic.getId(), "exo:topic");
-				GregorianCalendar calendar = new GregorianCalendar() ;
 				
-				topicNode.setProperty("exo:id", String.valueOf(calendar.getTimeInMillis()));
+				topicNode.setProperty("exo:id", topic.getId());
 				topicNode.setProperty("exo:owner", topic.getOwner());
+				topicNode.setProperty("exo:path", topicNode.getPath());
 				topicNode.setProperty("exo:name", topic.getTopicName());
 		    topicNode.setProperty("exo:createdDate", GregorianCalendar.getInstance());
 		    topicNode.setProperty("exo:modifiedBy", topic.getModifiedBy());
@@ -372,7 +372,6 @@ public class JCRDataStorage implements DataStorage{
   
   public void moveTopic(String  topicPath, String destForumPath) throws Exception {
   	Node forumHomeNode = getForumHomeNode();
-  	System.out.print("\n\n" + topicPath + "\n" + destForumPath + "\n\n");
   	forumHomeNode.getSession().getWorkspace().move(topicPath, destForumPath);
   	forumHomeNode.save() ;
   	forumHomeNode.getSession().save() ;
@@ -423,6 +422,7 @@ public class JCRDataStorage implements DataStorage{
 		Post postNew = new Post();
 		postNew.setId(postNode.getProperty("exo:id").getString());
 		postNew.setOwner(postNode.getProperty("exo:owner").getString());
+		postNew.setPath(postNode.getProperty("exo:path").getString());
 		postNew.setCreatedDate(postNode.getProperty("exo:createdDate").getDate().getTime());
 		postNew.setModifiedBy(postNode.getProperty("exo:modifiedBy").getString());
 		postNew.setModifiedDate(postNode.getProperty("exo:modifiedDate").getDate().getTime());
@@ -437,19 +437,19 @@ public class JCRDataStorage implements DataStorage{
 		if(forumHomeNode.hasNode(categoryId)) {
 		  Node CategoryNode = forumHomeNode.getNode(categoryId);
 		  if(CategoryNode.hasNode(forumId)) {
-			Node forumNode = CategoryNode.getNode(forumId);
-			Node topicNode = forumNode.getNode(topicId);
-			Node postNode = topicNode.addNode(post.getId(), "exo:post");
-			GregorianCalendar calendar = new GregorianCalendar() ;
-			
-			postNode.setProperty("exo:id", String.valueOf(calendar.getTimeInMillis()));
-			postNode.setProperty("exo:owner", post.getOwner());
-			postNode.setProperty("exo:createdDate", GregorianCalendar.getInstance());
-			postNode.setProperty("exo:modifiedBy", post.getModifiedBy());
-			postNode.setProperty("exo:modifiedDate", GregorianCalendar.getInstance());
-			postNode.setProperty("exo:subject", post.getSubject());
-			postNode.setProperty("exo:message", post.getMessage());
-			postNode.setProperty("exo:remoteAddr", post.getRemoteAddr());
+				Node forumNode = CategoryNode.getNode(forumId);
+				Node topicNode = forumNode.getNode(topicId);
+				Node postNode = topicNode.addNode(post.getId(), "exo:post");
+				
+				postNode.setProperty("exo:id", post.getId());
+				postNode.setProperty("exo:owner", post.getOwner());
+				postNode.setProperty("exo:path", postNode.getPath());
+				postNode.setProperty("exo:createdDate", GregorianCalendar.getInstance());
+				postNode.setProperty("exo:modifiedBy", post.getModifiedBy());
+				postNode.setProperty("exo:modifiedDate", GregorianCalendar.getInstance());
+				postNode.setProperty("exo:subject", post.getSubject());
+				postNode.setProperty("exo:message", post.getMessage());
+				postNode.setProperty("exo:remoteAddr", post.getRemoteAddr());
 		    
 		    forumHomeNode.save() ;
 		    forumHomeNode.getSession().save() ;
@@ -462,15 +462,15 @@ public class JCRDataStorage implements DataStorage{
 		if(forumHomeNode.hasNode(categoryId)) {
 		  Node CategoryNode = forumHomeNode.getNode(categoryId);
 		  if(CategoryNode.hasNode(forumId)) {
-			Node forumNode = CategoryNode.getNode(forumId);
-			Node topicNode = forumNode.getNode(topicId);
-			Node postNode = topicNode.getNode(newPost.getId());
-			
-			postNode.setProperty("exo:modifiedBy", newPost.getModifiedBy());
-			postNode.setProperty("exo:modifiedDate", GregorianCalendar.getInstance());
-			postNode.setProperty("exo:subject", newPost.getSubject());
-			postNode.setProperty("exo:message", newPost.getMessage());
-			postNode.setProperty("exo:remoteAddr", newPost.getRemoteAddr());
+				Node forumNode = CategoryNode.getNode(forumId);
+				Node topicNode = forumNode.getNode(topicId);
+				Node postNode = topicNode.getNode(newPost.getId());
+				
+				postNode.setProperty("exo:modifiedBy", newPost.getModifiedBy());
+				postNode.setProperty("exo:modifiedDate", GregorianCalendar.getInstance());
+				postNode.setProperty("exo:subject", newPost.getSubject());
+				postNode.setProperty("exo:message", newPost.getMessage());
+				postNode.setProperty("exo:remoteAddr", newPost.getRemoteAddr());
 			
 		  }
 		  forumHomeNode.save() ;
@@ -484,13 +484,13 @@ public class JCRDataStorage implements DataStorage{
 		if(forumHomeNode.hasNode(categoryId)) {
 		  Node CategoryNode = forumHomeNode.getNode(categoryId);
 		  if(CategoryNode.hasNode(forumId)) {
-		  post = getPost(categoryId, forumId, topicId, postId);
-			Node forumNode = CategoryNode.getNode(forumId);
-			Node topicNode = forumNode.getNode(topicId);
-			topicNode.getNode(postId).remove();
-			forumHomeNode.save() ;
-			forumHomeNode.getSession().save() ;
-			return post;
+			  post = getPost(categoryId, forumId, topicId, postId);
+				Node forumNode = CategoryNode.getNode(forumId);
+				Node topicNode = forumNode.getNode(topicId);
+				topicNode.getNode(postId).remove();
+				forumHomeNode.save() ;
+				forumHomeNode.getSession().save() ;
+				return post;
 		  }
 		}
 		return null;
