@@ -4,16 +4,10 @@
  **************************************************************************/
 package org.exoplatform.forum.service.test;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import javax.jcr.Node;
-import javax.jcr.NodeIterator;
-import javax.jcr.Session;
-import javax.jcr.Value;
-import javax.jcr.nodetype.*;
 
 import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.forum.service.Category;
@@ -128,42 +122,56 @@ public class TestForumService extends BaseForumTestCase{
 		// getPost
 		assertNotNull(forumService_.getPost(cat.getId(), forum.getId(), topic.getId(), post.getId()));
 		//get ListPost
+		List<Post> posts = forumService_.getPosts(cat.getId(), forum.getId(), topic.getId());
+		assertEquals(posts.size(), 1);
+		// update Post
 		Post newPost = forumService_.getPost(cat.getId(), forum.getId(), topic.getId(), post.getId());
+		newPost.setMessage("New messenger");
+		forumService_.updatePost(cat.getId(), forum.getId(), topic.getId(), newPost);
+		assertEquals("New messenger", forumService_.getPost(cat.getId(), forum.getId(), topic.getId(), newPost.getId()).getMessage());
+		//test movePost
+		Topic topicnew = createdTopic("333334");
+		forumService_.createTopic(cat.getId(), forum.getId(), topicnew);
+		topicnew = forumService_.getTopic(cat.getId(), forum.getId(), topicnew.getId());
+		forumService_.movePost(newPost.getPath(), topicnew.getPath() + "/" + newPost.getId());
+		assertNotNull(forumService_.getPost(cat.getId(), forum.getId(), topicnew.getId(), newPost.getId()));
+		//test remove Post return post
+		assertNotNull(forumService_.removePost(cat.getId(), forum.getId(), topicnew.getId(), newPost.getId()));
   }
   
   
   
   private Post createdPost( String id) {
-	Post post = new Post();
-	
-	post.setId(id);
-	post.setOwner("duytu");
-	post.setCreatedDate(new Date());
-	post.setModifiedBy("duytu");
-	post.setModifiedDate(new Date());
-	post.setSubject("SubJect");
-	post.setMessage("Noi dung topic test chang co j ");
-	post.setRemoteAddr("khongbiet");
-	
-	return post;
-  }
-  private Topic createdTopic( String id) {
-	Topic topicNew = new Topic();
-		  
-	topicNew.setId(id);
-	topicNew.setOwner("duytu");
-	topicNew.setTopicName("TestTopic");
-	topicNew.setCreatedDate(new Date());
-	topicNew.setModifiedBy("vuduytu");
-	topicNew.setModifiedDate(new Date());
-	topicNew.setLastPostBy("tu");
-	topicNew.setLastPostDate(new Date());
-	topicNew.setDescription("TopicDescription");
-	topicNew.setPostCount(0);
-	  
-	return topicNew;
+		Post post = new Post();
+		
+		post.setId(id);
+		post.setOwner("duytu");
+		post.setCreatedDate(new Date());
+		post.setModifiedBy("duytu");
+		post.setModifiedDate(new Date());
+		post.setSubject("SubJect");
+		post.setMessage("Noi dung topic test chang co j ");
+		post.setRemoteAddr("khongbiet");
+		
+		return post;
   }
   
+  private Topic createdTopic( String id) {
+		Topic topicNew = new Topic();
+			  
+		topicNew.setId(id);
+		topicNew.setOwner("duytu");
+		topicNew.setTopicName("TestTopic");
+		topicNew.setCreatedDate(new Date());
+		topicNew.setModifiedBy("vuduytu");
+		topicNew.setModifiedDate(new Date());
+		topicNew.setLastPostBy("tu");
+		topicNew.setLastPostDate(new Date());
+		topicNew.setDescription("TopicDescription");
+		topicNew.setPostCount(0);
+		  
+		return topicNew;
+  }
   
   private Forum createdForum(String idf) {
 		Forum forum = new Forum();
@@ -185,8 +193,6 @@ public class TestForumService extends BaseForumTestCase{
 		forum.setModerators(new String[] {});
 		return forum;
   }
-  
-  
   
   private Category createCategory(String id) {
     Category cat = new Category() ;

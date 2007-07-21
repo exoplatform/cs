@@ -33,7 +33,7 @@ import org.exoplatform.services.jcr.RepositoryService;
  *          tu.duy@exoplatform.com
  * July 16, 2007 
  */
-public class JCRDataStorage implements DataStorage{
+public class JCRDataStorage implements DataStorage {
   private RepositoryService  repositoryService_ ; 
   private JCRRegistryService jcrRegistryService_ ;
   
