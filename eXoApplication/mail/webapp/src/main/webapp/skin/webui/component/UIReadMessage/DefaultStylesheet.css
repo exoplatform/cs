@@ -1,0 +1,221 @@
+.UIReadMessage {
+  padding: 8px;
+}
+
+.UIReadMessage .MailControlBar .ControlButton {
+	float: left;
+	line-height: 26px;
+}
+
+.UIReadMessage .MailControlBar  a {
+	color: #000000;
+	margin: 3px 0px 0px 0px;
+	line-height: 26px;
+}
+
+.UIReadMessage .MailControlBar a:hover {
+	background: url('DefaultSkin/background/ControlButtonBG1x26.gif') repeat-x ;
+	color: blue; border: 1px solid #cbcbcb;
+	height: 24px;
+}
+
+.UIReadMessage .MailControlBar .MailIconLabel {
+	line-height: 24px;
+}
+
+.UIReadMessage .MailControlBar .SeparatorLine {
+  background: url('DefaultSkin/background/SeparatorLine2x26.gif') no-repeat ;	
+  height: 26px; width: 2px;
+  float: left;
+  margin: 3px 5px 2px 5px;
+}
+
+.UIReadMessage .MailControlBar .MailIcon {
+	line-height: 26px;
+	margin: 0px 7px;
+	padding-left: 26px;
+}
+
+.UIReadMessage .MailControlBar .ReplyIcon {
+	background: url('DefaultSkin/icons/24x24/ReplyIcon.gif') no-repeat;
+}
+
+.UIReadMessage .MailControlBar .ReplyAllIcon {
+	background: url('DefaultSkin/icons/24x24/ReplyAllIcon.gif') no-repeat;
+}
+
+.UIReadMessage .MailControlBar .ForwardIcon {
+	background: url('DefaultSkin/icons/24x24/ForwardIcon.gif') no-repeat;
+}
+
+.UIReadMessage .MailControlBar .PrintIcon {
+	background: url('DefaultSkin/icons/24x24/PrintIcon.gif') no-repeat;
+	width: 2px; height: 26px;
+}
+
+.UIReadMessage .MailControlBar .DeleteIcon {
+	background: url('DefaultSkin/icons/24x24/Dustbin.gif') no-repeat;
+	width: 2px; height: 26px;
+}
+
+/*=================================Reading Pane=================*/
+
+.UIReadMessage .MailControlBar .ReadingPane {
+	border: 1px solid #c0c0c0;
+	background: #ffffff;
+}
+
+.UIReadMessage .MailControlBar .ReadingPane .ReadingPaneBar {
+	background: #e7e7e7;
+	height: 25px;
+	border: 1px solid #ffffff;
+}
+
+.UIReadMessage .MailControlBar .ReadingPane .ReadingPaneTitle {
+	float: left;
+	font-weight: bold;
+	font-size: 11px;
+	margin: 5px 0px 0px 10px; 
+}
+
+.UIReadMessage .MailControlBar .ReadingPane .NomalReadingPane {
+  float: right;
+	background: url(DefaultSkin/icons/16x16/NomalReadingPane.gif) no-repeat;
+	width: 17px; height: 16px;
+	margin: 4px 4px 0px 0px;
+	cursor: pointer;
+}
+
+.UIReadMessage .MailControlBar .ReadingPane .MaximizeAllViewBoxStyle {
+  float: right;
+	background: url(DefaultSkin/icons/24x24/MaximizeAllViewBoxStyle.gif) no-repeat;
+	width: 24px; height: 20px;
+	margin: 2px 4px 0px 0px;
+	cursor: pointer;
+}
+
+/*=======================Message Header====================*/
+
+.UIReadMessage .MailControlBar .MessageHeader {
+	padding: 5px;
+	height: 25px;
+}
+
+.UIReadMessage .MailControlBar .MessageCheck {
+	float: left;
+	width: 50px; 
+}
+
+.UIReadMessage .MailControlBar .MessageCheck .CheckBox {
+	float: left;
+}
+
+.UIReadMessage .MailControlBar .MessageCheck .NomalStarIcon {
+	float: left; 
+}
+
+.UIReadMessage .MailControlBar .MessageAddress {
+	float: left; 
+}
+
+.UIReadMessage .MailControlBar .MessageAddress .FieldContainer{
+	line-height: 18px;
+}
+
+.UIReadMessage .MailControlBar .MessageAddress .Title {
+	float: left;
+	color: #6a6a6a;
+	width: 80px;
+	font-weight: bold;
+}
+
+.UIReadMessage .MailControlBar .MessageAddress .Address {
+	float: left;
+	font-weight: bold;
+}
+
+.UIReadMessage .MailControlBar .MessageAddress .LinkAddress {
+	float: left;
+	color: blue;
+	cursor: pointer;
+	font-weight: bold;
+}
+
+.UIReadMessage .MailControlBar .TagIcon {
+	float: left;
+	background: url(DefaultSkin/icons/16x16/RedTag.gif) no-repeat;
+	width: 16px; height: 16px;
+	cursor: pointer;
+	margin: 0px 4px;
+}
+
+.UIReadMessage .MailControlBar .MessageActions {
+	float: right; 
+	width: 160px;
+}
+
+.UIReadMessage .MailControlBar .MessageAttach {
+	float: right; 
+	width: 100px;
+}
+
+.UIReadMessage .MailControlBar .MessageActions .BlueDownArrowIcon {
+	float: left;
+	width: 12px; height: 16px;
+	cursor: pointer;
+}
+
+.UIReadMessage .MailControlBar .MessageActions .ShowHideTitle {
+	float: left;
+	line-height: 20px;
+	color: blue; cursor: pointer;
+}
+
+.UIReadMessage .MailControlBar .MessageActions .Text {
+	float: left;
+	color: #969696;
+	font-weight: nomal;
+}
+
+.UIReadMessage .MailControlBar .MonthDate {
+	float: left;
+	line-height: 20px;
+	font-weight: bold;
+	margin: 0px 4px;
+}
+
+.UIReadMessage .MailControlBar .AttackIcon {
+	float: left;
+	margin: 2px 2px 0px 0px;
+}
+
+.UIReadMessage .MailControlBar .MessageDetail {
+	padding: 10px;
+}
+
+.UIReadMessage .MailControlBar .NomalStarIcon {
+	background: url(DefaultSkin/icons/16x16/NomalStarIcon.gif) no-repeat;
+	width: 16px; height: 16px;
+	margin: 1px 0px 0px 4px; 
+	cursor: pointer;
+}
+
+.UIReadMessage .MailControlBar .BlueDownArrowIcon {
+	width: 16px; height: 16px;
+	margin: 3px 0px 0px 0px;
+	float: left; cursor: pointer;
+}
+
+.UIReadMessage .MailControlBar .ActionsThisMessage {
+	background: url(DefaultSkin/icons/24x24/ThisMessageAction.gif) no-repeat bottom;
+	float: right;
+	cursor: pointer;
+	width: 24px; height: 22px;
+}
+
+.UIReadMessage .MailControlBar .AttackIcon {
+	background: url(DefaultSkin/icons/16x16/AttackmentIcon.gif) no-repeat;
+	width: 16px; height: 16px;
+	margin: 1px 0px 0px 4px;
+	cursor: pointer;
+}
