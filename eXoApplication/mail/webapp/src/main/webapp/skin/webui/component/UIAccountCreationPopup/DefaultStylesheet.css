@@ -1,0 +1,98 @@
+.UIAccountCreationWizard {
+	margin: auto;
+	width: 580px;
+	background: #f3f3f3;
+	border: 2px solid #c0c0c0;
+}
+
+.UIAccountCreationWizard .StepInfos {
+ padding:  5px 20px 10px 20px;
+ background: white;
+}
+
+.UIAccountCreationWizard .StepInfos .InfoTitle {
+	font-size: 11px;
+	line-height: 22px;
+	font-weight: bold;
+}
+
+.UIAccountCreationWizard .StepInfos .Information {
+	font-size: 11px;
+	font-weight: normal;
+	height: auto;
+}
+
+.UIAccountCreationWizard .StepForm {
+	border-top: 1px solid #c0c0c0;
+	border-bottom: 1px solid #c0c0c0;
+}
+
+.UIAccountCreationWizard .UIFormInputSet {
+	margin: auto;
+	width: 500px;
+  padding-top: 18px;
+  padding-bottom: 35px;
+ 
+}
+
+.UIAccountCreationWizard .UIFormInputSet .UIFormGrid {
+	border-collapse: collapse;
+	border-spacing: 0px;
+	width: 100%;
+}
+
+.UIAccountCreationWizard .UIFormGrid td.FieldLabel {
+	padding: 4px;
+	text-align: right;
+	vertical-align: top;
+}
+
+.UIAccountCreationWizard .UIFormGrid td.FieldComponent {
+	padding: 4px;
+}
+
+.UIAccountCreationWizard .UIFormGrid input {
+	width: 246px;
+}
+
+.UIAccountCreationWizard .UIFormGrid textarea {
+	width: 246px;
+	height: 64px;
+	overflow: auto;
+}
+
+.UIAccountCreationWizard .AccountCreationStep1 .UIAction {
+ 	width: 128px;
+}
+
+.UIAccountCreationWizard .AccountCreationStep2 .UIAction {
+ 	width: 182px;
+}
+
+.UIAccountCreationWizard .AccountCreationStep3 #MessagesComeInFolder {
+ 	width: 120px;
+ 	float: left;
+}
+
+.UIAccountCreationWizard .AccountCreationStep3 .UIFormGrid a {
+ 	float: left;
+ 	margin-left: 20px;
+ 	padding-left: 30px;
+ 	height: 24px;
+ 	line-height: 24px;
+ 	display: block;
+ 	color: black;
+ 	background: url('DefaultSkin/background/LightBlueFolder.gif') no-repeat left center;
+}
+
+.UIAccountCreationWizard .AccountCreationStep3 .UIFormGrid a:hover {
+	color: blue;
+}
+
+.UIAccountCreationWizard .AccountCreationStep3 .UIAction {
+ 	width: 182px;
+}
+
+.UIAccountCreationWizard .AccountCreationStep4 .UIAction {
+ 	width: 200px;
+}

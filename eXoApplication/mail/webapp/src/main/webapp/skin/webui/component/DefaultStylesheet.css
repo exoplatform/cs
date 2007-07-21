@@ -1,11 +1,12 @@
 @import url("UIComposerMessagePopup/DefaultStylesheet.css") ;
 @import url("UIReadMessage/DefaultStylesheet.css") ;
-/**
- * UIMailPortlet
- */
+@import url(UIAccountCreationPopup/DefaultStylesheet.css) ;
 @import url("UIAccountSetting/DefaultStylesheet.css");
 @import url("UIMailSetting/DefaultStylesheet.css");
 @import url("UIInsertAddress/DefaultStylesheet.css");
+/**
+ * UIMailPortlet
+ */
  
 .UIMailPortlet {
 }
