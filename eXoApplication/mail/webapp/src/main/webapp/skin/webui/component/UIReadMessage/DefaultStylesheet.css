@@ -24,8 +24,6 @@
 }
 
 .UIReadMessage .MailControlBar .SeparatorLine {
-  background: url('DefaultSkin/background/SeparatorLine2x26.gif') no-repeat ;	
-  height: 26px; width: 2px;
   float: left;
   margin: 3px 5px 2px 5px;
 }
@@ -34,28 +32,6 @@
 	line-height: 26px;
 	margin: 0px 7px;
 	padding-left: 26px;
-}
-
-.UIReadMessage .MailControlBar .ReplyIcon {
-	background: url('DefaultSkin/icons/24x24/ReplyIcon.gif') no-repeat;
-}
-
-.UIReadMessage .MailControlBar .ReplyAllIcon {
-	background: url('DefaultSkin/icons/24x24/ReplyAllIcon.gif') no-repeat;
-}
-
-.UIReadMessage .MailControlBar .ForwardIcon {
-	background: url('DefaultSkin/icons/24x24/ForwardIcon.gif') no-repeat;
-}
-
-.UIReadMessage .MailControlBar .PrintIcon {
-	background: url('DefaultSkin/icons/24x24/PrintIcon.gif') no-repeat;
-	width: 2px; height: 26px;
-}
-
-.UIReadMessage .MailControlBar .DeleteIcon {
-	background: url('DefaultSkin/icons/24x24/Dustbin.gif') no-repeat;
-	width: 2px; height: 26px;
 }
 
 /*=================================Reading Pane=================*/
@@ -80,18 +56,12 @@
 
 .UIReadMessage .MailControlBar .ReadingPane .NomalReadingPane {
   float: right;
-	background: url(DefaultSkin/icons/16x16/NomalReadingPane.gif) no-repeat;
-	width: 17px; height: 16px;
 	margin: 4px 4px 0px 0px;
-	cursor: pointer;
 }
 
 .UIReadMessage .MailControlBar .ReadingPane .MaximizeAllViewBoxStyle {
   float: right;
-	background: url(DefaultSkin/icons/24x24/MaximizeAllViewBoxStyle.gif) no-repeat;
-	width: 24px; height: 20px;
 	margin: 2px 4px 0px 0px;
-	cursor: pointer;
 }
 
 /*=======================Message Header====================*/
@@ -143,9 +113,6 @@
 
 .UIReadMessage .MailControlBar .TagIcon {
 	float: left;
-	background: url(DefaultSkin/icons/16x16/RedTag.gif) no-repeat;
-	width: 16px; height: 16px;
-	cursor: pointer;
 	margin: 0px 4px;
 }
 
@@ -194,28 +161,11 @@
 }
 
 .UIReadMessage .MailControlBar .NomalStarIcon {
-	background: url(DefaultSkin/icons/16x16/NomalStarIcon.gif) no-repeat;
-	width: 16px; height: 16px;
 	margin: 1px 0px 0px 4px; 
-	cursor: pointer;
 }
 
 .UIReadMessage .MailControlBar .BlueDownArrowIcon {
 	width: 16px; height: 16px;
 	margin: 3px 0px 0px 0px;
 	float: left; cursor: pointer;
-}
-
-.UIReadMessage .MailControlBar .ActionsThisMessage {
-	background: url(DefaultSkin/icons/24x24/ThisMessageAction.gif) no-repeat bottom;
-	float: right;
-	cursor: pointer;
-	width: 24px; height: 22px;
-}
-
-.UIReadMessage .MailControlBar .AttackIcon {
-	background: url(DefaultSkin/icons/16x16/AttackmentIcon.gif) no-repeat;
-	width: 16px; height: 16px;
-	margin: 1px 0px 0px 4px;
-	cursor: pointer;
 }

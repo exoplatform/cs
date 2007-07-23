@@ -52,7 +52,6 @@
 					</div>
 				</div>
 			</div>
-			<div style="clear:left;"><span></span></div>
 <!-- End Mail ControlBar -->
 <!-- Start Compose Message Address -->
 			<div class="ComposeMessageAddress">
@@ -65,15 +64,15 @@
   	              <td class="FieldComponent">
   	              	<table>
   	              		<td>
-		  	              	<select name="Phuong" class="selectbox">
+		  	              	<select name="Phuong">
 		  	              		<option value="male" selected="selected">Phuong Pham Dang (phuong.pham@exoplatform.com)</option>
 													<option value="male" selected="selected">Hieu Luong Trung (hieu.luong@exoplatform.com)</option>
 													<option value="female">Nguyet Nguyen Anh (nguyet.nguyen@exoplatform.com)</option>
 												</select>
 											</td>
 											<td style="width: 100px;">
-												<a href="#">|Add CC|</a>
-			                	<a href="#">Add BCC|</a>
+												<a href="#" style="color: blue;">|Add CC|</a>
+			                	<a href="#" style="color: blue;">Add BCC|</a>
 		                	</td>
 	                	</table>
 	                </td>
@@ -81,6 +80,10 @@
 		            <tr>
   	              <td class="FieldLabel">To:</td>
   	              <td class="FieldComponent"><input type="input" class="input" value="Benjamin (benjamin.mestrallet@exoplatform.com)"/></td>
+		            </tr>
+		            <tr>
+  	              <td class="FieldLabel">CC:</td>
+  	              <td class="FieldComponent"><textarea type="input" class="textarea" >Benjamin (benjamin.mestrallet@exoplatform.com),Tuan Nguyen (tuan08@gmail.com)</textarea></td>
 		            </tr>
 		            <tr>
   	              <td class="FieldLabel">Subject:</td>
@@ -92,7 +95,7 @@
   	              	<div class="ZipFileIcon">
   	              		<div >eXo Mail Screenshots.zip - 200K</div>
   	              	</div>
-  	              	<a class="RemoveTitle" href="#">[Remove]</a>
+  	              	<a class="RemoveTitle" href="#" style="color: blue;">[Remove]</a>
   	              	<div style="clear:left;"><span></span></div>
   	              </td>
 		            </tr>

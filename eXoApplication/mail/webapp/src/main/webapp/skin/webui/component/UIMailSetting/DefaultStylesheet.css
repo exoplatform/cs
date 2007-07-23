@@ -19,8 +19,7 @@
 	margin: 1px 4px 0px 4px;
 }
 
-.UIMailSetting .UITabSelector .FlatTabStyle .GeneralIcon {
-	background: url('DefaultSkin/icons/GeneralIcon.gif') no-repeat center;
+.UIMailSetting .UITabSelector .FlatTabStyle .SettingsIcon {
 	height: 25px; width: 24px;
 }
 

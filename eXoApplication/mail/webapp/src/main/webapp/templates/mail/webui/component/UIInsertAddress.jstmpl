@@ -38,12 +38,12 @@
   					<tr>
   			      <th style="width: 30px; padding-top:2px; border-right: 1px solid #e8e8e8;"><input type="checkbox" class="checkbox" value="4"/></th>
  	            <th style="width: 40%; border-right: 1px solid #e8e8e8;">
- 	            	<div class="DropDownArrowIcon">
+ 	            	<div class="BlueDownArrowIcon">
  	            		<div class="Label">Name</div>
  	            	</div>
  	            </th>
  	            <th style="width: 48%;">
- 	            	<div class="DropDownArrowIcon">
+ 	            	<div class="BlueDownArrowIcon">
  	            		<div class="Label">Email</div>
  	            	</div>
  	            </th>
@@ -157,7 +157,9 @@
   							<tr>
   			          <th style="width: 30px; padding-top: 2px; border-right: 1px solid #e8e8e8;"><input type="checkbox" class="checkbox" value="4"/></th>
  	      	        <th style="width: 90%;">
- 	      	        	<div class="DustBin16x16Icon">To:</div>
+ 	      	        	<div class="DustBin16x16Icon" title="Delete Address"><span></span></div>
+ 	      	        	<div style="float: left;">To:</div>
+ 	      	        	<div style="clear: both;"><span></span></div>
  	      	        </th>
   	 	        	</tr>
   	 	       	</thead>
@@ -210,7 +212,9 @@
   							<tr>
   			          <th style="width: 30px; padding-top: 2px; border-right: 1px solid #e8e8e8;"><input type="checkbox" class="checkbox" value="4"/></th>
  	      	        <th style="width: 90%;">
-										<div class="DustBin16x16Icon">Cc:</div>
+										<div class="DustBin16x16Icon" title="Delete Address"><span></span></div>
+ 	      	        	<div style="float: left;">CC:</div>
+ 	      	        	<div style="clear: both;"><span></span></div>
 									</th>
   	 	        	</tr>
   	 	       	</thead>
@@ -263,7 +267,9 @@
   							<tr>
   			          <th style="width: 30px; padding-top: 2px; border-right: 1px solid #e8e8e8;"><input type="checkbox" class="checkbox" value="4"/></th>
  	      	        <th style="width: 90%;">
-										<div class="DustBin16x16Icon">Bcc:</div>
+										<div class="DustBin16x16Icon" title="Delete Address"><span></span></div>
+ 	      	        	<div style="float: left;">BCC:</div>
+ 	      	        	<div style="clear: both;"><span></span></div>
 									</th>
   	 	        	</tr>
   	 	       	</thead>

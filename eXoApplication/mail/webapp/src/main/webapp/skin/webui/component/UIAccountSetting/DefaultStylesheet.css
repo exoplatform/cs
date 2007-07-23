@@ -38,12 +38,16 @@
 	background: url('DefaultSkin/icons/DeleteIcon.gif') no-repeat center ;
 	float: right;
 	height: 18px; width: 20px;
+	cursor: pointer;
+	margin: 0px 0px 0px 4px;
 }
 
 .UIAccountSetting .AccountSettingCategory .HeadTitle .AddIcon {
 	background: url('DefaultSkin/icons/AddIcon.gif') no-repeat center ;
 	float: right;
 	height: 18px; width: 20px;
+	cursor: pointer;
+	margin: 0px 0px 0px 4px;
 }
 
 .UIAccountSetting .AccountSettingCategory .AccountSettingList {

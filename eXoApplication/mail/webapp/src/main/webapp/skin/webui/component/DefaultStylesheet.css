@@ -68,8 +68,6 @@
 }
 
 .UIMailPortlet .MailBanner .SeparatorLine {
-  background: url('DefaultSkin/background/SeparatorLine2x27.gif') no-repeat ;	
-  height: 27px; width: 2px;
   float: right;
   margin: 3px 7px;
 }
@@ -80,18 +78,6 @@
 	padding: 10px 5px;
 }
 
-.UIMailPortlet .MailWorkingWorkspace .MailControlBar {
-	padding: 5px 5px 0px 5px;
-	height: 31px;
-}
-
-.UIMailPortlet .MailWorkingWorkspace .MailControlBar a.ControlButton {
-	float: left;
-	display: plock;
-	padding: 5px;
-	width: 35px; height: 21px;
-}
-
 .UIMailPortlet .MailWorkingWorkspace .MailControlBar a:hover {
 	background: url('DefaultSkin/background/ControlButtonBG.gif') repeat-y ;
 	border: 1px solid #9d9d9d;
@@ -99,15 +85,7 @@
 }
 
 .UIMailPortlet .MailWorkingWorkspace .MailControlBar .MailIconLabel {
-	line-height: 20px;
-}
-
-.UIMailPortlet .MailWorkingWorkspace .MailControlBar .MailIcon {
-	width: 24px; height: 18px;
-}
-
-.UIMailPortlet .MailWorkingWorkspace .MailControlBar .CheckMailIcon {
-	background: url('DefaultSkin/icons/CheckMailIcon.gif') no-repeat ;
+	line-height: 24px;
 }
 
 .UIMailPortlet .MailContainer {
@@ -156,15 +134,11 @@
 	height: 20px; 
 }
 
-.UIMailPortlet .MailAccountManagendent .FolderItemList .LeftTitleItem {
-	background: url('DefaultSkin/background/LeftTitleItem20x20.gif') no-repeat ;
-	height: 20px; width: 20px;
+.UIMailPortlet .MailAccountManagendent .LeftTitleItem {
 	float: left;
 }
 
-.UIMailPortlet .MailAccountManagendent .FolderItemList .LabelTitle {
-	background: url('DefaultSkin/icons/16x16/FolderIcon.gif') no-repeat left center ;
-	height: 20px; line-height: 20px;
+.UIMailPortlet .MailAccountManagendent .LabelTitle {
 	color: #3d3d3d; font-weight: bold;
 	margin-left: 20px;
 	padding-left: 23px;
@@ -187,43 +161,6 @@
 	line-height: 28px; height: 28px;
 }
 
-.UIMailPortlet .MailAccountManagendent .FolderItemList .IndexIcon {
-	background: url('DefaultSkin/icons/24x24/InboxIcon.gif') no-repeat left center ;
-}
-
-.UIMailPortlet .MailAccountManagendent .FolderItemList .DraftsIcon {
-	background: url('DefaultSkin/icons/24x24/DraftsIcon.gif') no-repeat left center ;
-}
-
-.UIMailPortlet .MailAccountManagendent .FolderItemList .SentIcon {
-	background: url('DefaultSkin/icons/24x24/SentIcon.gif') no-repeat left center ;
-}
-
-.UIMailPortlet .MailAccountManagendent .FolderItemList .SpamIcon {
-	background: url('DefaultSkin/icons/24x24/SpamIcon.gif') no-repeat left center ;
-}
-
-.UIMailPortlet .MailAccountManagendent .FolderItemList .TrashIcon {
-	background: url('DefaultSkin/icons/24x24/TrashIcon.gif') no-repeat left center ;
-}
-
-/**************************************MyFolder*********************************/
-.UIMailPortlet .MailAccountManagendent .MyFolder .TitleMyFolder {
-	background: url('DefaultSkin/background/LineTitle166x1.gif') no-repeat left bottom;
-	height: 20px; line-height: 20px;
-}
-
-.UIMailPortlet .MailAccountManagendent .MyFolder .IconTitle {
-	background: url('DefaultSkin/background/LeftTitleItem20x20.gif') no-repeat ;
-	height: 20px; width: 20px;
-	float: left;	
-}
-
-.UIMailPortlet .MailAccountManagendent .MyFolder .LabelTitle {
-	color: #3d3d3d; font-weight: bold;
-	margin-left: 20px;
-}
-
 .UIMailPortlet .MailAccountManagendent .MyFolder .UITree  {
 	border: none;
 }
@@ -234,10 +171,6 @@
 
 .UIMailPortlet .MyFolder .UITree .Icon {
 	height: 22px; width: 24px;
-}
-
-.UIMailPortlet .MyFolder .UITree .Default {
-	background: url('DefaultSkin/icons/24x24/DefaultIcon.gif') no-repeat center;
 }
 
 .UIMailPortlet .MyFolder .UITree .NodeLabel a {
@@ -253,25 +186,19 @@
 
 /*********************************TagList*************************************/
 
+.UIMailPortlet .MailAccountManagendent .IconTagTitle {
+	float: left;
+	padding-left: 20px;
+	font-weight: bold;
+}
+
 .UIMailPortlet .MailAccountManagendent .TagList {
 	background: white;
 	border: 1px solid #a5a5a5;
 	margin: 1px 0px;
 }
 
-.UIMailPortlet .MailAccountManagendent .TagList .TitleTagList {
-	background: url('DefaultSkin/background/BgTitleTag1x20.gif') repeat-x ;
-}
-
-.UIMailPortlet .MailAccountManagendent .TagList .LeftTitleTag {
-	background: url('DefaultSkin/background/LeftTitleItem20x20.gif') no-repeat ;
-	height: 20px; width: 20px;
-	float: left;
-}
-
 .UIMailPortlet .MailAccountManagendent .TagList .IconTitle {
-	background: url('DefaultSkin/icons/16x16/BlueTag.gif') no-repeat left center;
-	height: 20px; line-height: 20px;
 	padding-left: 20px;	
 	margin-left: 20px;
 	color: #3d3d3d; font-weight: bold;	
@@ -294,21 +221,7 @@
 	color: blue;
 }
 
-.UIMailPortlet .TagList .TagContent .BlueTag {
-	background: url('DefaultSkin/icons/16x16/BlueTag.gif') no-repeat left center;
-}
 
-.UIMailPortlet .TagList .TagContent .RedTag {
-	background: url('DefaultSkin/icons/16x16/RedTag.gif') no-repeat left center;
-}
-
-.UIMailPortlet .TagList .TagContent .GreenTag {
-	background: url('DefaultSkin/icons/16x16/GreenTag.gif') no-repeat left center;
-}
-
-.UIMailPortlet .TagList .TagContent .VioletTag {
-	background: url('DefaultSkin/icons/16x16/VioletTag.gif') no-repeat left center;
-}
 /*********************************MailContentWorkingArea*************************************/
 
 
@@ -335,13 +248,7 @@
 	height: 24px;
 }
 
-.UIMailPortlet .MailWorkingWorkspace .MailIconLabel {
-	line-height: 24px;
-}
-
 .UIMailPortlet .MailWorkingWorkspace .SeparatorLine {
-  background: url('DefaultSkin/background/SeparatorLine2x26.gif') no-repeat ;	
-  height: 26px; width: 2px;
   float: left;
   margin: 3px 5px 2px 5px;
 }
@@ -351,66 +258,6 @@
 	margin: 0px 7px;
 	padding-left: 26px;
 }
-
-.UIMailPortlet .MailWorkingWorkspace .MailControlBar .CheckMailIcon {
-	background: url('DefaultSkin/icons/24x24/CheckMailIcon.gif') no-repeat;
-}
-
-.UIMailPortlet .MailWorkingWorkspace .MailControlBar .ComposeIcon {
-	background: url('DefaultSkin/icons/24x24/ComposeIcon.gif') no-repeat;
-}
-
-.UIMailPortlet .MailWorkingWorkspace .MailControlBar .ReplyIcon {
-	background: url('DefaultSkin/icons/24x24/ReplyIcon.gif') no-repeat;
-}
-
-.UIMailPortlet .MailWorkingWorkspace .MailControlBar .ReplyAllIcon {
-	background: url('DefaultSkin/icons/24x24/ReplyAllIcon.gif') no-repeat;
-}
-
-.UIMailPortlet .MailWorkingWorkspace .MailControlBar .ForwardIcon {
-	background: url('DefaultSkin/icons/24x24/ForwardIcon.gif') no-repeat;
-}
-
-.UIMailPortlet .MailWorkingWorkspace .MailControlBar .PrintIcon {
-	background: url('DefaultSkin/icons/24x24/PrintIcon.gif') no-repeat;
-	width: 2px; height: 26px;
-}
-
-.UIMailPortlet .MailWorkingWorkspace .MailControlBar .ContactsIcon {
-	background: url('DefaultSkin/icons/24x24/ContactsIcon.gif') no-repeat;
-}
-
-.UIMailPortlet .MailWorkingWorkspace .MailControlBar .RssIcon {
-	background: url('DefaultSkin/icons/24x24/RssIcon.gif') no-repeat;
-}
-
-.UIMailPortlet .MailWorkingWorkspace .MailControlBar .CustomViewIcon {
-	background: url('DefaultSkin/icons/24x24/CustomViewIcon.gif') no-repeat;
-	float: left;
-	width: 2px;  height: 25px;
-}
-
-.UIMailPortlet .MailWorkingWorkspace .MailControlBar .BlueDownArrowIcon {
-	width: 12px; height: 16px;
-	margin: 5px 6px 0px 0px; float: left;
-}
-
-.UIMailPortlet .MailWorkingWorkspace .MailControlBar .SettingsIcon {
-	background: url('DefaultSkin/icons/24x24/SettingsIcon.gif') no-repeat;
-	width: 2px;  height: 26px;
-}
-
-.UIMailPortlet .MailWorkingWorkspace .MailControlBar .DeleteIcon {
-	background: url('DefaultSkin/icons/24x24/Dustbin.gif') no-repeat;
-	width: 2px; height: 26px;
-}
-
-
-
-
-
-
 
 /*================================= MailContainer ================*/
 
@@ -424,7 +271,7 @@
 
 /*===================================MailWorkingDetail=================*/
 
-.UIMailPortlet .MailWorkingWorkspace .MailContainer .MailContentWorkingArea {
+.UIMailPortlet .MailWorkingWorkspace .MailContainer .MailWorkingDetail {
 	margin: 0px 0px 0px 225px;
 }
 
@@ -450,23 +297,17 @@
 }
 
 .UIMailPortlet .MailWorkingWorkspace .MailListActionsbar .MoreActionsIcon {
-	background: url('DefaultSkin/icons/16x16/MoreActions.gif') no-repeat left;
 	float: left;
-	width: 24px; height: 20px;
 	margin: 2px 0px 0px 10px;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .MailListActionsbar .ViewIcon {
-	background: url('DefaultSkin/icons/16x16/View.gif') no-repeat left;
 	float: left;
-	width: 24px; height: 20px;
 	margin: 2px 0px 0px 10px;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .MailListActionsbar .AddEventIcon {
-	background: url('DefaultSkin/icons/24x24/AddEvent.gif') no-repeat left;
 	float: left;
-	width: 24px; height: 20px;
 	margin: 2px 0px 0px 10px;
 }
 
@@ -485,39 +326,25 @@
 .UIMailPortlet .MailWorkingWorkspace .UIGrid th {
 	background: url(DefaultSkin/background/ThGridRepeatBg1x19.gif) repeat-x;
 	border: 1px solid #d2d4dc;
-	line-height: 19px;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .NomalStarIcon {
-	background: url(DefaultSkin/icons/16x16/NomalStarIcon.gif) no-repeat;
-	width: 16px; height: 16px;
 	margin: 1px 0px 0px 4px; 
-	cursor: pointer;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .HighlightStarIcon {
-	background: url(DefaultSkin/icons/16x16/HighLightStarIcon.gif) no-repeat;
-	width: 16px; height: 16px;
 	margin: 1px 0px 0px 4px;
-	cursor: pointer;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .AttackIcon {
-	background: url(DefaultSkin/icons/16x16/AttackmentIcon.gif) no-repeat;
-	width: 16px; height: 16px;
-	margin: 1px 0px 0px 4px;
-	cursor: pointer;
+	margin: 1px 0px 0px 3px;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .TotalMessageIcon {
-	background: url(DefaultSkin/icons/16x16/TotalMessageIcon.gif) no-repeat;
-	width: 16px; height: 16px;
 	margin: 1px 0px 0px 4px;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .priorityIcon {
-	background: url(DefaultSkin/icons/16x16/NomalPriorityIcon.gif) no-repeat;
-	width: 16px; height: 16px;
 	margin: 1px 0px 0px 4px;
 }
 
@@ -528,6 +355,7 @@
 
 .UIMailPortlet .MailWorkingWorkspace td {
 	border-top: none;
+	height: 20px;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .textBold {
@@ -535,10 +363,7 @@
 }
 
 .UIMailPortlet .MailWorkingWorkspace .ResizeReadingPane {
-	background: url(DefaultSkin/background/ResizeReadingPane38x3.gif) no-repeat;
-	width: 38px; height: 3px;
 	margin: 1px auto 1px auto;
-	cursor: n-resize;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .MailListDetail .BlueDownArrowIcon {
@@ -553,6 +378,15 @@
 	border: 1px solid #c0c0c0;
 	width: 98.8%; 
 	background: #ffffff;
+}
+
+.UIMailPortlet .MailWorkingWorkspace .ReadingPane .ViewBoxStyle {
+	height: 500px;
+}
+
+.UIMailPortlet .MailWorkingWorkspace .ReadingPane .ReadingPaneDeltail {
+	height: 316px;
+	overflow: auto;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .ReadingPane .ReadingPaneBar {
@@ -570,10 +404,7 @@
 
 .UIMailPortlet .MailWorkingWorkspace .ReadingPane .MaximizeReadingPane {
   float: right;
-	background: url(DefaultSkin/icons/16x16/MaximizeReadingPane.gif) no-repeat;
-	width: 17px; height: 16px;
 	margin: 4px 4px 0px 0px;
-	cursor: pointer;
 }
 
 /*=======================Message Header====================*/
@@ -625,10 +456,7 @@
 
 .UIMailPortlet .MailWorkingWorkspace .TagIcon {
 	float: left;
-	background: url(DefaultSkin/icons/16x16/RedTag.gif) no-repeat;
-	width: 16px; height: 16px;
-	cursor: pointer;
-	margin: 0px 4px;
+	margin: 0px 0px 0px 3px;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .MessageActions {
@@ -660,15 +488,279 @@
 	margin: 2px 2px 0px 0px;
 }
 
-.UIMailPortlet .MailWorkingWorkspace .MessageActions .ActionsThisMessage {
-	background: url(DefaultSkin/icons/24x24/ThisMessageAction.gif) no-repeat bottom;
-	float: right;
-	cursor: pointer;
-	width: 24px; height: 22px;
-}
-
 /*=====================MessageDetail===================*/
 
 .UIMailPortlet .MailWorkingWorkspace .MessageDetail {
 	padding: 10px;
 }
+
+/*=====================Page Iterator Container===================*/
+
+.UIMailPortlet .MailWorkingWorkspace .IteratorIcon {
+	float: left;
+	margin: 2px 3px;
+} 
+
+.UIMailPortlet .MailWorkingWorkspace .HiddenIteratorIcon {
+	float: left;
+	margin: 2px 3px;
+	filter:alpha(opacity=30);-moz-opacity:.30;opacity:.30;
+} 
+
+.UIMailPortlet .MailWorkingWorkspace .UIPageIterator {
+	margin: 2px 0px 0px 0px;
+}
+
+/*=====================Mail Icon Public User===================*/
+
+.ReplyIcon {
+	background: url('DefaultSkin/icons/24x24/ReplyIcon.gif') no-repeat;
+}
+
+.ReplyAllIcon {
+	background: url('DefaultSkin/icons/24x24/ReplyAllIcon.gif') no-repeat;
+}
+
+.ForwardIcon {
+	background: url('DefaultSkin/icons/24x24/ForwardIcon.gif') no-repeat;
+}
+
+.PrintIcon {
+	background: url('DefaultSkin/icons/24x24/PrintIcon.gif') no-repeat;
+	width: 2px; height: 26px;
+}
+
+.DeleteIcon {
+	background: url('DefaultSkin/icons/24x24/Dustbin.gif') no-repeat;
+	width: 2px; height: 26px;
+}
+
+.ActionsThisMessage {
+	background: url(DefaultSkin/icons/24x24/ThisMessageAction.gif) no-repeat bottom;
+	cursor: pointer;
+	float: right;
+	width: 24px; height: 22px;
+}
+
+
+.TagIcon {
+	background: url(DefaultSkin/icons/16x16/RedTag.gif) no-repeat;
+	width: 16px; height: 16px;
+	cursor: pointer;
+}
+
+.MaximizeReadingPane {
+	background: url(DefaultSkin/icons/16x16/MaximizeReadingPane.gif) no-repeat;
+	width: 17px; height: 16px;
+	cursor: pointer;
+}
+
+.ResizeReadingPane {
+	background: url(DefaultSkin/background/ResizeReadingPane38x3.gif) no-repeat;
+	width: 38px; height: 3px;
+	cursor: n-resize;
+}
+
+.priorityIcon {
+	background: url(DefaultSkin/icons/16x16/NomalPriorityIcon.gif) no-repeat;
+	width: 16px; height: 16px;
+}
+
+.priorityHighlightIcon {
+	background: url(DefaultSkin/icons/16x16/PriorityHighLight.gif) no-repeat;
+	width: 16px; height: 16px;
+}
+
+.TotalMessageIcon {
+	background: url(DefaultSkin/icons/16x16/TotalMessageIcon.gif) no-repeat;
+	width: 16px; height: 16px;
+}
+
+.CheckMailIcon {
+	background: url('DefaultSkin/icons/24x24/CheckMailIcon.gif') no-repeat ;
+}
+
+.IndexIcon {
+	background: url('DefaultSkin/icons/24x24/InboxIcon.gif') no-repeat left center ;
+}
+
+.DraftsIcon {
+	background: url('DefaultSkin/icons/24x24/DraftsIcon.gif') no-repeat left center ;
+}
+
+.SentIcon {
+	background: url('DefaultSkin/icons/24x24/SentIcon.gif') no-repeat left center ;
+}
+
+.SpamIcon {
+	background: url('DefaultSkin/icons/24x24/SpamIcon.gif') no-repeat left center ;
+}
+
+.TrashIcon {
+	background: url('DefaultSkin/icons/24x24/TrashIcon.gif') no-repeat left center ;
+}
+
+.TitleMyFolder {
+	background: url('DefaultSkin/background/LineTitle166x1.gif') no-repeat left bottom;
+	height: 20px; line-height: 20px;
+}
+
+.Default {
+	background: url('DefaultSkin/icons/24x24/DefaultIcon.gif') no-repeat center;
+}
+
+.TitleTagList {
+	background: url('DefaultSkin/background/BgTitleTag1x20.gif') repeat-x ;
+}
+
+.IconTagTitle {
+	background: url('DefaultSkin/icons/16x16/BlueTag.gif') no-repeat left center;
+	height: 20px; line-height: 20px;
+}
+
+.LeftTitleItem {
+	background: url('DefaultSkin/background/LeftTitleItem20x20.gif') no-repeat ;
+	height: 20px; width: 20px;
+	cursor: pointer;
+}
+
+.BlueTag {
+	background: url('DefaultSkin/icons/16x16/BlueTag.gif') no-repeat left center;
+}
+
+.RedTag {
+	background: url('DefaultSkin/icons/16x16/RedTag.gif') no-repeat left center;
+}
+
+.GreenTag {
+	background: url('DefaultSkin/icons/16x16/GreenTag.gif') no-repeat left center;
+}
+
+.VioletTag {
+	background: url('DefaultSkin/icons/16x16/VioletTag.gif') no-repeat left center;
+}
+
+.ComposeIcon {
+	background: url('DefaultSkin/icons/24x24/ComposeIcon.gif') no-repeat;
+}
+
+.ContactsIcon {
+	background: url('DefaultSkin/icons/24x24/ContactsIcon.gif') no-repeat;
+}
+
+.RssIcon {
+	background: url('DefaultSkin/icons/24x24/RssIcon.gif') no-repeat;
+}
+
+.CustomViewIcon {
+	background: url('DefaultSkin/icons/24x24/CustomViewIcon.gif') no-repeat;
+	float: left;
+	width: 2px;  height: 25px;
+}
+
+.SettingsIcon {
+	background: url('DefaultSkin/icons/24x24/SettingsIcon.gif') no-repeat;
+	width: 2px;  height: 26px;
+}
+
+.SeparatorLine {
+  background: url('DefaultSkin/background/SeparatorLine2x26.gif') no-repeat ;	
+  height: 26px; width: 2px;
+}
+
+.MoreActionsIcon {
+	background: url('DefaultSkin/icons/16x16/MoreActions.gif') no-repeat left;
+	width: 24px; height: 20px;
+}
+
+.ViewIcon {
+	background: url('DefaultSkin/icons/16x16/View.gif') no-repeat left;
+	width: 24px; height: 20px;
+}
+
+.AddEventIcon {
+	background: url('DefaultSkin/icons/24x24/AddEvent.gif') no-repeat left;
+	width: 24px; height: 20px;
+}
+
+.NomalStarIcon {
+	background: url(DefaultSkin/icons/16x16/NomalStarIcon.gif) no-repeat;
+	width: 16px; height: 16px;
+	cursor: pointer;
+}
+
+.HighlightStarIcon {
+	background: url(DefaultSkin/icons/16x16/HighLightStarIcon.gif) no-repeat;
+	width: 16px; height: 16px;
+	cursor: pointer;
+}
+
+.AttackIcon {
+	background: url(DefaultSkin/icons/16x16/AttackmentIcon.gif) no-repeat;
+	width: 16px; height: 16px;
+	cursor: pointer;
+}
+
+.NomalReadingPane {
+	background: url(DefaultSkin/icons/16x16/NomalReadingPane.gif) no-repeat;
+	width: 17px; height: 16px;
+	cursor: pointer;
+}
+
+.MaximizeAllViewBoxStyle {
+	background: url(DefaultSkin/icons/24x24/MaximizeAllViewBoxStyle.gif) no-repeat;
+	width: 24px; height: 20px;
+	cursor: pointer;
+}
+
+.NextPage {
+	background: url(DefaultSkin/icons/16x16/NextPage.gif) no-repeat;
+	width: 16px; height: 16px;
+	cursor: pointer;
+}
+
+.LastPage {
+	background: url(DefaultSkin/icons/16x16/LastPage.gif) no-repeat;
+	width: 16px; height: 16px;
+	cursor: pointer;
+}
+
+.PriorityHighLightIcon {
+	background: url(DefaultSkin/icons/16x16/PriorityHighLight.gif) no-repeat;
+	width: 16px; height: 16px;
+	cursor: pointer;
+}
+
+.PreviousPageIcon{
+	background: url(DefaultSkin/icons/16x16/PreviousPage.gif) no-repeat;
+	width: 16px; height: 16px;
+	cursor: pointer;
+}
+
+.BackPageIcon {
+	background: url(DefaultSkin/icons/16x16/BackPage.gif) no-repeat;
+	width: 16px; height: 16px;
+	cursor: pointer;
+}
+
+.FolderIcon {
+	background: url(DefaultSkin/icons/16x16/FolderIcon.gif) no-repeat;
+	height: 16px;
+}
+
+.AccountIcon {
+	background: url(DefaultSkin/icons/16x16/AccountIcon.gif) no-repeat;
+	height: 16px; width: 17px;
+}
+
+
+
+
+
+
+
+
+
+
+
+

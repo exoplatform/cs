@@ -78,12 +78,11 @@
 	border: 1px solid #b7b7b7;
 }
 
-.UIInsertAddress .ListAddress .UIGrid .DropDownArrowIcon{
-  background: url('DefaultSkin/icons/DropDownArrowIcon.gif') no-repeat right;
+.UIInsertAddress .ListAddress .UIGrid .BlueDownArrowIcon{
   padding: 0px 10px 0px 4px; 
-  width: 40px;
+  width: 34px;
   float: left;
-  border: 1px solid red;
+  cursor: pointer;
 }
 
 .UIInsertAddress .ListAddress .UIGrid thead {
@@ -122,7 +121,7 @@
 .UIInsertAddress .Content .UIGrid .DustBin16x16Icon {
 	background-position: right;
 	background-repeat: no-repeat;
-	width: 265px;
 	padding: 2px 16px 0px 0px;
-	height: 18px;
+	float: right;
+	cursor: pointer;
 }

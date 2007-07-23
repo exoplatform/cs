@@ -14,7 +14,7 @@
 				                <div class="LeftTab">
 				                  <div class="RightTab">                
 				                    <div class="MiddleTab">
-				                    	<div class="TabIcon GeneralIcon"><span></span></div>
+				                    	<div class="TabIcon SettingsIcon"><span></span></div>
 				                    	<a href="#" class="Title">General Settings</a>
 				                    	<div style="clear:left;"><span></span></div>
 				                    </div>

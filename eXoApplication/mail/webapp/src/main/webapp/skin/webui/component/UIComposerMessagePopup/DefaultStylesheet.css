@@ -20,8 +20,6 @@
 }
 
 .UIComposerMessagePopup .MailListActionsbar .SeparatorLine {
-  background: url('DefaultSkin/background/SeparatorLine2x26.gif') no-repeat ;	
-  height: 26px; width: 2px;
   float: left;
   margin: 3px 5px 2px 5px;
 }
@@ -52,14 +50,14 @@
 	background: url('DefaultSkin/icons/24x24/MessagePriority.gif') no-repeat left;
 	float: left;
 	width: 24px; height: 20px;
-	margin: 1px 2px 0px 10px;
+	margin: 1px 2px 0px 6px;
 }
 
 .UIComposerMessagePopup .MailListActionsbar .ControlButton .EditorOptionsIcon {
 	background: url('DefaultSkin/icons/24x24/EditorOptions.gif') no-repeat left;
 	float: left;
 	width: 24px; height: 20px;
-	margin: 1px 2px 0px 10px;
+	margin: 1px 2px 0px 6px;
 }
 
 .UIComposerMessagePopup .MailListActionsbar .ControlButton .BlueDownArrowIcon {
@@ -89,11 +87,16 @@
 }
 
 .UIComposerMessagePopup .UIForm .HorizontalLayout input {
-	width: 100%;
+	width: 99%;
 }
 
 .UIComposerMessagePopup .UIForm .HorizontalLayout select {
-	width: 98%;
+	width: 740px;
+}
+
+.UIComposerMessagePopup .UIForm .HorizontalLayout textarea {
+	width: 845px; height: 40px; 
+	font-family: tahoma;
 }
 
 .UIComposerMessagePopup .ComposeMessageAddress .ZipFileIcon {
