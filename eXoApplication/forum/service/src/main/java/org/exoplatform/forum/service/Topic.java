@@ -21,7 +21,13 @@ public class Topic {
   private Date lastPostDate;
   private String name;
   private String description;
-  private int postCount;  
+  private long postCount = 0;  
+  private long viewCount = 0;  
+  
+  private boolean isModeratePost = false ;
+  private boolean isNotifyWhenAddPost = false ;  
+  private boolean isClosed = false ;
+  private boolean isLock = false ;
   
   public Topic(){ }
   

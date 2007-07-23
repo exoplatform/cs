@@ -22,11 +22,20 @@ public class Forum {
   private String description;
   private int postCount;
   private int topicCount;
+  
+  private boolean isNotifyWhenAddTopic = false ;
+  private boolean isNotifyWhenAddPost = false ;
+  private boolean isModerateTopic = false ;
+  private boolean isModeratePost = false ;
+  private boolean isClosed = false ;
+  private boolean isLock = false ;
+  
 
   private String[] viewForumRole;
   private String[] createTopicRole;
-  private String[] replyTopicRole;
   private String[] moderators;
+  private String[] replyTopicRole;
+  
   
   public Forum() {}
   
