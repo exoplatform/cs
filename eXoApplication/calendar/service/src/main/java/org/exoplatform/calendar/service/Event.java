@@ -17,17 +17,23 @@ import java.util.Map;
 public class Event {
   
   private String id ;
-  private String name ;
+  private String summary ;
   private String location ;
   private String description ;
   private String eventCategoryId ;
   private String calendarId ;
   private Date fromDateTime ;
   private Date toDateTime ;
+  private Date completedDateTime ;
+  // value of eventType: event, task, journal(?)
   private String eventType ;
   private String priority ;
   private boolean isPrivate = true ;
   private String eventState ;
+  //status for event: TENTATIVE, CONFIRMED, CANCELLED. 
+  //       for task:  NEEDS-ACTION, COMPLETED, IN-PROCESS, CANCELLED
+  //       for journal: DRAFT, FINAL, CANCELLED
+  private String status = ""; 
   private String[] invitation ;
   private List<Reminder> reminders ;
   private Map<String, String> properties ;
@@ -37,8 +43,8 @@ public class Event {
   public String getId() { return id; }
   public void   setId(String id) { this.id = id ;}
 
-  public String getName() { return name; }
-  public void   setName(String name) { this.name = name; }
+  public String getSummary() { return summary; }
+  public void   setSummary(String sum) { this.summary = sum; }
 
   public String getDescription() { return description; }
   public void   setDescription(String description) { this.description = description; }
@@ -57,12 +63,18 @@ public class Event {
 
   public Date getToDateTime() { return toDateTime; }
   public void setToDateTime(Date toDateTime) { this.toDateTime = toDateTime; }
-
+  
+  public Date getCompletedDateTime() { return completedDateTime; }
+  public void setCompletedDateTime(Date completedDateTime) { this.completedDateTime = completedDateTime; }
+  
   public String getLocation() { return location; }
   public void   setLocation(String location) { this.location = location; }
   
   public String getEventState() { return eventState; }
   public void   setEventState(String eventState) { this.eventState = eventState; }
+  
+  public String getStatus() { return status; }
+  public void   setStatus(String status) { this.status = status; }
   
   public String getEventType() { return eventType ; }
   public void   setEventType(String eventType) { this.eventType = eventType ; }

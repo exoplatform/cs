@@ -4,6 +4,7 @@
  **************************************************************************/
 package org.exoplatform.calendar.service.impl;
 
+import java.io.InputStream;
 import java.util.List;
 
 import org.exoplatform.calendar.service.Calendar;
@@ -45,6 +46,9 @@ public class CalendarServiceImpl implements CalendarService{
   }
   public Calendar getCalendar(String calendarId) throws Exception {
     return storage_.getCalendar(calendarId);
+  }
+  public List<Calendar> getAllCalendars(String username) throws Exception {
+    return storage_.getAllCalendars(username) ;
   }
   public List<Calendar> getCalendarsByCategory(String username, String calendarCategoryId) throws Exception {
     return storage_.getCalendarsByCategory(username, calendarCategoryId);
@@ -94,4 +98,10 @@ public class CalendarServiceImpl implements CalendarService{
     return storage_.removeEvent(username, calendarId, eventCategoryId, eventId, isPublicCalendar);
   }
   
+  public void importICalendar(String username, InputStream icalInputStream) throws Exception {
+    storage_.importICalendar(username, icalInputStream) ;
+  }
+  public String exportICalendar(String username, String calendarId) throws Exception {
+    return storage_.exportICalendar(username, calendarId) ;
+  }
 }

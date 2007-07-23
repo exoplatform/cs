@@ -4,6 +4,7 @@
  **************************************************************************/
 package org.exoplatform.calendar.service.test;
 
+import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -165,14 +166,14 @@ public class TestCalendarService extends BaseCalendarTestCase{
     event.setCalendarId("calendarId") ;
     event.setEventCategoryId("eventCategoryId") ;
     event.setDescription("description") ;
-    event.setName("myEvent") ;
+    event.setSummary("myEvent") ;
     event.setEventState("free") ;
     event.setEventType("event") ;
     event.setFromDateTime(new Date()) ;
     event.setToDateTime(new Date()) ;
-    event.setInvitation(new String [] {"nqhung", "dvminh", "ptuan"}) ;
+    event.setInvitation(new String [] {"nqhung@yahoo.com", "dvminh@yahoo.com", "ptuan@yahoo.com"}) ;
     event.setLocation("meeting room") ;
-    event.setPriority("hight") ;
+    event.setPriority("1") ;
     event.setPrivate(true) ;
     
     Reminder reminder = new Reminder() ;
@@ -191,17 +192,29 @@ public class TestCalendarService extends BaseCalendarTestCase{
     assertNotNull(ev) ;
     
     //update event
-    event.setName("myEventUpdated") ;
+    event.setSummary("myEventUpdated") ;
+    event.setStatus("TENTATIVE") ;
     calendarService_.saveEvent("nqhung", "calendarId", "eventCategoryId", event, false, false) ;
     ev = calendarService_.getEvent("nqhung", "calendarId", "eventCategoryId", "eventId") ;
-    assertEquals(event.getName(), "myEventUpdated") ;
+    assertEquals(event.getSummary(), "myEventUpdated") ;
     
     //get event list
     List<Event> events = calendarService_.getEventByCalendar("nqhung", "calendarId") ;
     assertEquals(events.size(), 1) ;
     
+    //export/import ical
+    String ical = calendarService_.exportICalendar("nqhung", "calendarId") ;
+    System.out.println("\n\n\n ical ======= " + ical) ;
+    ByteArrayInputStream icalInputStream = new ByteArrayInputStream(ical.getBytes()) ;
+    calendarService_.importICalendar("nqhung", icalInputStream) ;
+    List<CalendarCategory> cateList = calendarService_.getCalendarCategories("nqhung") ;
+    assertEquals(cateList.size(), 1) ;
+    List<Calendar> calList = calendarService_.getAllCalendars("nqhung") ;
+    assertEquals(calList.size(), 2) ;
     //remove event
     ev = calendarService_.removeEvent("nqhung", "calendarId", "eventCategoryId", "eventId", false) ;
     assertNotNull(ev); 
+    
+    
   }
 }

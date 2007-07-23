@@ -4,6 +4,7 @@
  **************************************************************************/
 package org.exoplatform.calendar.service.impl;
 
+import java.io.InputStream;
 import java.util.List;
 
 import org.exoplatform.calendar.service.Calendar;
@@ -26,6 +27,7 @@ public interface DataStorage {
   
   
   public Calendar getCalendar(String username, String calendarId) throws Exception ;
+  public List<Calendar> getAllCalendars(String username) throws Exception ;
   public Calendar getCalendar(String calendarId) throws Exception ;
   public List<Calendar> getCalendarsByCategory(String username, String calendarCategoryId) throws Exception ;
   public List<Calendar> getCalendarsByGroup(String groupName) throws Exception ;  
@@ -47,4 +49,6 @@ public interface DataStorage {
   public void saveEvent(String username, String calendarId, String eventCategoryId, Event event, boolean isNew, boolean isPublicCalendar) throws Exception ;
   public Event removeEvent(String username, String calendarId, String eventCategoryId, String eventId, boolean isPublicCalendar) throws Exception ;
   
+  public void importICalendar(String username, InputStream icalInputStream) throws Exception ;
+  public String exportICalendar(String username, String calendarId) throws Exception ;
 }

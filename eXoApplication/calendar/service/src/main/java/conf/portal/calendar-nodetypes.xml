@@ -30,7 +30,7 @@
 	  		<propertyDefinition name="exo:id" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
 	  			<valueConstraints/>
 	  		</propertyDefinition>	  		
-	  		<propertyDefinition name="exo:name" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+	  		<propertyDefinition name="exo:summary" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
   				<valueConstraints/>
 	  		</propertyDefinition>	
 	  		<propertyDefinition name="exo:location" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
@@ -137,6 +137,12 @@
 	        onParentVersion="COPY" protected="false" sameNameSiblings="false">
 	        <requiredPrimaryTypes>
 	          <requiredPrimaryType>exo:eventCategory</requiredPrimaryType>
+	        </requiredPrimaryTypes>
+	      </childNodeDefinition>
+	      <childNodeDefinition name="*" defaultPrimaryType="" autoCreated="false" mandatory="false"
+	        onParentVersion="COPY" protected="false" sameNameSiblings="false">
+	        <requiredPrimaryTypes>
+	          <requiredPrimaryType>exo:calendarEvent</requiredPrimaryType>
 	        </requiredPrimaryTypes>
 	      </childNodeDefinition>
 	    </childNodeDefinitions>

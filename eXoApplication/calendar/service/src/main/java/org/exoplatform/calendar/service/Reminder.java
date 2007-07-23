@@ -13,9 +13,9 @@ package org.exoplatform.calendar.service;
 public class Reminder {
   private String id ;
   private String eventId ;
-  private String repeat ;
-  private String reminder ;
-  private String alarmBefore ; 
+  private String repeat = "1";
+  private String reminder = "Via email";
+  private String alarmBefore = "5"; 
   
   public String getId() { return this.id ; }
   public void   setId(String id) { this.id = id ; }

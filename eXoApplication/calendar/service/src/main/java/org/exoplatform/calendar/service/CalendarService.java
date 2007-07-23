@@ -4,6 +4,7 @@
  **************************************************************************/
 package org.exoplatform.calendar.service;
 
+import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -69,6 +70,7 @@ public interface CalendarService {
    * @throws Exception
    */
   public Calendar getCalendar(String username, String calendarId) throws Exception ;
+  public List<Calendar> getAllCalendars(String username) throws Exception ;
   /**
    * This method should:
    * 1. Get calendar service root node
@@ -268,4 +270,6 @@ public interface CalendarService {
   public Event removeEvent(String username, String calendarId, String eventCategoryId, String eventId, boolean isPublicCalendar) throws Exception ;
   
   
+  public void importICalendar(String username, InputStream icalInputStream) throws Exception ;
+  public String exportICalendar(String username, String calendarId) throws Exception ;
 }
