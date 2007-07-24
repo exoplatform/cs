@@ -5,10 +5,14 @@
 package org.exoplatform.calendar.service.impl;
 
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarCategory;
+import org.exoplatform.calendar.service.CalendarImportExport;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.Event;
 import org.exoplatform.calendar.service.EventCategory;
@@ -22,10 +26,16 @@ import org.exoplatform.services.jcr.RepositoryService;
  * Jul 11, 2007  
  */
 public class CalendarServiceImpl implements CalendarService{
+  
+  final private static String ICALENDAR = "ICalendar".intern() ;
+  
   private JCRDataStorage storage_ ;
+  private Map<String, CalendarImportExport> calendarImportExport_ = new HashMap<String, CalendarImportExport>() ;
+  
   public CalendarServiceImpl(RepositoryService  repositoryService, 
                              JCRRegistryService jcrRegistryService) throws Exception {
     storage_ = new JCRDataStorage(repositoryService, jcrRegistryService) ;
+    calendarImportExport_.put(ICALENDAR, new ICalendarImportExport(storage_)) ;
   }
   
   public List<CalendarCategory> getCalendarCategories(String username) throws Exception {
@@ -98,10 +108,18 @@ public class CalendarServiceImpl implements CalendarService{
     return storage_.removeEvent(username, calendarId, eventCategoryId, eventId, isPublicCalendar);
   }
   
-  public void importICalendar(String username, InputStream icalInputStream) throws Exception {
-    storage_.importICalendar(username, icalInputStream) ;
+  public void importCalendar(String username, String calendarType, InputStream icalInputStream) throws Exception {
+    CalendarImportExport calendarEngine = calendarImportExport_.get(calendarType) ;
+    if(calendarEngine != null) {
+      calendarEngine.importCalendar(username, icalInputStream) ;
+    }
   }
-  public String exportICalendar(String username, String calendarId) throws Exception {
-    return storage_.exportICalendar(username, calendarId) ;
+  
+  public OutputStream exportCalendar(String username, String calendarId, String calendarType) throws Exception {
+    CalendarImportExport calendarEngine = calendarImportExport_.get(calendarType) ;
+    if(calendarEngine != null) {
+      return calendarEngine.exportCalendar(username, calendarId) ;
+    }
+    return null ;
   }
 }

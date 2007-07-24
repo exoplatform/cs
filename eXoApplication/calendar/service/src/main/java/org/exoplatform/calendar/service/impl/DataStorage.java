@@ -49,6 +49,4 @@ public interface DataStorage {
   public void saveEvent(String username, String calendarId, String eventCategoryId, Event event, boolean isNew, boolean isPublicCalendar) throws Exception ;
   public Event removeEvent(String username, String calendarId, String eventCategoryId, String eventId, boolean isPublicCalendar) throws Exception ;
   
-  public void importICalendar(String username, InputStream icalInputStream) throws Exception ;
-  public String exportICalendar(String username, String calendarId) throws Exception ;
 }

@@ -5,6 +5,7 @@
 package org.exoplatform.calendar.service;
 
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
 
 /**
@@ -270,6 +271,9 @@ public interface CalendarService {
   public Event removeEvent(String username, String calendarId, String eventCategoryId, String eventId, boolean isPublicCalendar) throws Exception ;
   
   
-  public void importICalendar(String username, InputStream icalInputStream) throws Exception ;
-  public String exportICalendar(String username, String calendarId) throws Exception ;
+  //public void importICalendar(String username, InputStream icalInputStream) throws Exception ;
+  //public String exportICalendar(String username, String calendarId) throws Exception ;
+  
+  public void importCalendar(String username, String calendarType, InputStream icalInputStream) throws Exception ;
+  public OutputStream exportCalendar(String username, String calendarId, String calendarType) throws Exception ;
 }

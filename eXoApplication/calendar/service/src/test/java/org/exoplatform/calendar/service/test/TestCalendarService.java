@@ -5,6 +5,7 @@
 package org.exoplatform.calendar.service.test;
 
 import java.io.ByteArrayInputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -203,18 +204,17 @@ public class TestCalendarService extends BaseCalendarTestCase{
     assertEquals(events.size(), 1) ;
     
     //export/import ical
-    String ical = calendarService_.exportICalendar("nqhung", "calendarId") ;
-    System.out.println("\n\n\n ical ======= " + ical) ;
-    ByteArrayInputStream icalInputStream = new ByteArrayInputStream(ical.getBytes()) ;
-    calendarService_.importICalendar("nqhung", icalInputStream) ;
+    OutputStream ical = calendarService_.exportCalendar("nqhung", "calendarId", "ICalendar") ;
+    System.out.println("\n\n\n" + ical.toString()) ;
+    ByteArrayInputStream icalInputStream = new ByteArrayInputStream(ical.toString().getBytes()) ;
+    calendarService_.importCalendar("nqhung", "ICalendar", icalInputStream) ;
     List<CalendarCategory> cateList = calendarService_.getCalendarCategories("nqhung") ;
     assertEquals(cateList.size(), 1) ;
     List<Calendar> calList = calendarService_.getAllCalendars("nqhung") ;
     assertEquals(calList.size(), 2) ;
     //remove event
     ev = calendarService_.removeEvent("nqhung", "calendarId", "eventCategoryId", "eventId", false) ;
-    assertNotNull(ev); 
-    
+    assertNotNull(ev);     
     
   }
 }

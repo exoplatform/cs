@@ -9,7 +9,9 @@ import java.io.InputStream;
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -21,11 +23,6 @@ import javax.jcr.query.QueryResult;
 
 import net.fortuna.ical4j.data.CalendarOutputter;
 import net.fortuna.ical4j.data.CalendarBuilder;
-import net.fortuna.ical4j.data.CalendarParser;
-import net.fortuna.ical4j.data.CalendarParserImpl;
-import net.fortuna.ical4j.data.ContentHandler;
-import net.fortuna.ical4j.data.UnfoldingReader;
-import net.fortuna.ical4j.model.Component;
 import net.fortuna.ical4j.model.ComponentList;
 import net.fortuna.ical4j.model.DateTime;
 import net.fortuna.ical4j.model.Property;
@@ -60,6 +57,7 @@ import org.exoplatform.services.jcr.RepositoryService;
  * Jul 10, 2007  
  */
 public class JCRDataStorage implements DataStorage{
+  
   final private static String CALENDARS = "calendars".intern() ;
   final private static String EVENTS = "events".intern() ;
   final private static String TASKS = "tasks".intern() ;
@@ -102,7 +100,7 @@ public class JCRDataStorage implements DataStorage{
     return calendarServiceHome.addNode(CALENDARS) ;
   }
   
-  private Node getCalendarCategoryHome(String username) throws Exception {
+  public Node getCalendarCategoryHome(String username) throws Exception {
     Node calendarServiceHome = getCalendarServiceHome(username) ;
     if(calendarServiceHome.hasNode(CALENDAR_CATEGORIES)) return calendarServiceHome.getNode(CALENDAR_CATEGORIES) ;
     return calendarServiceHome.addNode(CALENDAR_CATEGORIES) ;
@@ -542,7 +540,7 @@ public class JCRDataStorage implements DataStorage{
     return reminders ;
   }
   
-  private String getEventCategoryId(String username, String calendarId, String eventCategoryName) throws Exception {
+  public String getEventCategoryId(String username, String calendarId, String eventCategoryName) throws Exception {
     List<EventCategory> eventCatList = getEventCategories(username, calendarId) ;
     if(eventCatList.size() < 1) return null ;
     for(EventCategory evCat : eventCatList) {
@@ -550,7 +548,8 @@ public class JCRDataStorage implements DataStorage{
     }
     return null ;
   }
-  public void importICalendar(String username, InputStream icalInputStream) throws Exception {
+  
+  /*public void importICalendar(String username, InputStream icalInputStream) throws Exception {
     CalendarBuilder calendarBuilder = new CalendarBuilder() ;
     net.fortuna.ical4j.model.Calendar iCalendar = calendarBuilder.build(icalInputStream) ;
     GregorianCalendar currentDateTime = new GregorianCalendar() ;
@@ -708,9 +707,10 @@ public class JCRDataStorage implements DataStorage{
       event.getProperties().add(id) ; 
       calendar.getComponents().add(event);
     }
+    
     ByteArrayOutputStream bout = new ByteArrayOutputStream();
     CalendarOutputter output = new CalendarOutputter();
     output.output(calendar, bout) ;
     return bout.toString() ;
-  }
+  }*/
 }
