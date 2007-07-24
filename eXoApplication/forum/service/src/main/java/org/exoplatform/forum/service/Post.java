@@ -7,11 +7,12 @@ package org.exoplatform.forum.service ;
 import java.util.Date;
 /**
  * Created by The eXo Platform SARL
- * Author : Lai Van Khoi
- *          laivankhoi46pm1@yahoo.com
- * Edited by Nguyen Van Duc
- *           ducnv82@gmail.com
- * March 2, 2007  
+ * Author : Tuan Nguyen
+ *          tuan.nguyen@exoplatform.com
+ * Jul 2, 2007  
+ * Editer by Vu Duy Tu
+ * 				tu.duy@exoplatform.com
+ * July 16, 2007
  */
 public class Post { 
   private String id;

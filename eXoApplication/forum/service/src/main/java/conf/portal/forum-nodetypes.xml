@@ -1,7 +1,7 @@
 <nodeTypes xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0"
   xmlns:jcr="http://www.jcp.org/jcr/1.0">
     
-    <nodeType	name="exo:post" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
+    <nodeType name="exo:post" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
   		<supertypes>
   			<supertype>nt:base</supertype>
   		</supertypes>
@@ -71,7 +71,22 @@
 	  		<propertyDefinition name="exo:description" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
 	  			<valueConstraints/>
 	  		</propertyDefinition>
-	  		<propertyDefinition name="exo:postCount" requiredType="Integer" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+	  		<propertyDefinition name="exo:postCount" requiredType="Long" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+	  			<valueConstraints/>
+	  		</propertyDefinition>
+	  		<propertyDefinition name="exo:viewCount" requiredType="Long" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+	  			<valueConstraints/>
+	  		</propertyDefinition>
+	  		<propertyDefinition name="exo:isModeratePost" requiredType="boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+	  			<valueConstraints/>
+	  		</propertyDefinition>
+	  		<propertyDefinition name="exo:isNotifyWhenAddPost" requiredType="boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+	  			<valueConstraints/>
+	  		</propertyDefinition>
+	  		<propertyDefinition name="exo:isClosed" requiredType="boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+	  			<valueConstraints/>
+	  		</propertyDefinition>
+	  		<propertyDefinition name="exo:isLock" requiredType="boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
 	  			<valueConstraints/>
 	  		</propertyDefinition>
 	  	</propertyDefinitions>
@@ -129,6 +144,24 @@
 	  		<propertyDefinition name="exo:topicCount" requiredType="Integer" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
 	  			<valueConstraints/>
 	  		</propertyDefinition>
+	  		<propertyDefinition name="exo:isNotifyWhenAddTopic" requiredType="boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+	  			<valueConstraints/>
+	  		</propertyDefinition>
+	  		<propertyDefinition name="exo:isNotifyWhenAddPost" requiredType="boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+	  			<valueConstraints/>
+	  		</propertyDefinition>
+	  		<propertyDefinition name="exo:isModerateTopic" requiredType="boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+	  			<valueConstraints/>
+	  		</propertyDefinition>
+	  		<propertyDefinition name="exo:isModeratePost" requiredType="boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+	  			<valueConstraints/>
+	  		</propertyDefinition>
+	  		<propertyDefinition name="exo:isClosed" requiredType="boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+	  			<valueConstraints/>
+	  		</propertyDefinition>
+	  		<propertyDefinition name="exo:isLock" requiredType="boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+	  			<valueConstraints/>
+	  		</propertyDefinition>
 	  		<propertyDefinition name="exo:viewForumRole" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
 	  			<valueConstraints/>
 	  		</propertyDefinition>
@@ -142,6 +175,7 @@
 	  			<valueConstraints/>
 	  		</propertyDefinition>
 	  	</propertyDefinitions>
+	  	
 	  	<childNodeDefinitions>
 	  		<childNodeDefinition	name="*" defaultPrimaryType="exo:topic" autoCreated="false" mandatory="false" onParentVersion="VERSION" protected="false" sameNameSiblings="false">
 	  			<requiredPrimaryTypes>
@@ -184,6 +218,7 @@
 	  			<valueConstraints/>
 	  		</propertyDefinition>  		
 	  	</propertyDefinitions>
+	  	
 	  	<childNodeDefinitions>
 	  		<childNodeDefinition	name="*" defaultPrimaryType="exo:forum" autoCreated="false" mandatory="false" onParentVersion="VERSION" protected="false" sameNameSiblings="false">
 	  			<requiredPrimaryTypes>
@@ -193,10 +228,3 @@
 	  	</childNodeDefinitions>
 	  </nodeType> 
 </nodeTypes>  
-  
-   
-  
-
-
-
-  

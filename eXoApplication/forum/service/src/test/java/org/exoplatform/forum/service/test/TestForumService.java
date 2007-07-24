@@ -137,6 +137,8 @@ public class TestForumService extends BaseForumTestCase{
 		assertNotNull(forumService_.getPost(cat.getId(), forum.getId(), topicnew.getId(), newPost.getId()));
 		//test remove Post return post
 		assertNotNull(forumService_.removePost(cat.getId(), forum.getId(), topicnew.getId(), newPost.getId()));
+		//getViewPost
+		System.out.print("\n\n" + topicnew.getViewCount() + "\n\n");
   }
   
   
@@ -169,6 +171,11 @@ public class TestForumService extends BaseForumTestCase{
 		topicNew.setLastPostDate(new Date());
 		topicNew.setDescription("TopicDescription");
 		topicNew.setPostCount(0);
+		topicNew.setViewCount(0);
+		topicNew.setIsNotifyWhenAddPost(false);
+		topicNew.setIsModeratePost(false);
+		topicNew.setIsClosed(false);
+		topicNew.setIsLock(false);
 		  
 		return topicNew;
   }
@@ -187,6 +194,14 @@ public class TestForumService extends BaseForumTestCase{
 		forum.setDescription("description");
 		forum.setPostCount(0);
 		forum.setTopicCount(0);
+		
+		forum.setIsNotifyWhenAddTopic(false);
+		forum.setIsNotifyWhenAddPost(false);
+		forum.setIsModeratePost(false);
+		forum.setIsModerateTopic(false);
+		forum.setIsClosed(false);
+		forum.setIsLock(false);
+	  
 		forum.setViewForumRole(new String[] {});
 		forum.setCreateTopicRole(new String[] {});
 		forum.setReplyTopicRole(new String[] {});

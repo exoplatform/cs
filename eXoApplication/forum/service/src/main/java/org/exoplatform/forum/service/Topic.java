@@ -22,8 +22,8 @@ public class Topic {
   private String name;
   private String description;
   private long postCount = 0;  
-  private long viewCount = 0;  
-  
+	private long viewCount = 0;
+
   private boolean isModeratePost = false ;
   private boolean isNotifyWhenAddPost = false ;  
   private boolean isClosed = false ;
@@ -58,9 +58,24 @@ public class Topic {
   public String getDescription(){return description;}
   public void setDescription(String description){this.description = description;}
   
-  public int getPostCount(){return postCount;}
-  public void setPostCount(int postCount){this.postCount = postCount;}
+  public long getPostCount(){return postCount;}
+  public void setPostCount(long postCount){this.postCount = postCount;}
 
+  public long getViewCount(){return viewCount;}
+  public void setViewCount(long viewCount){this.viewCount = viewCount;}
+
+  public boolean getIsModeratePost() { return isModeratePost;}
+  public void setIsModeratePost(boolean isModeratePost) { this.isModeratePost = isModeratePost;}
+
+  public boolean getIsNotifyWhenAddPost() { return isNotifyWhenAddPost;}
+  public void setIsNotifyWhenAddPost(boolean isNotifyWhenAddPost) { this.isNotifyWhenAddPost = isNotifyWhenAddPost;}
+  
+  public boolean getIsClosed() { return isClosed;}
+  public void setIsClosed(boolean isClosed) { this.isClosed = isClosed;}
+  
+  public boolean getIsLock() { return isLock;}
+  public void setIsLock(boolean isLock) { this.isLock = isLock;}
+  
   public String getId() { return id; }
   public void setId(String id) { this.id = id; }
 

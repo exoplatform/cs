@@ -29,7 +29,6 @@ public class Forum {
   private boolean isModeratePost = false ;
   private boolean isClosed = false ;
   private boolean isLock = false ;
-  
 
   private String[] viewForumRole;
   private String[] createTopicRole;
@@ -84,6 +83,24 @@ public class Forum {
   
   public int getTopicCount(){return topicCount;}
   public void setTopicCount(int topicCount){this.topicCount = topicCount;}
+  
+  public boolean getIsNotifyWhenAddTopic() { return isNotifyWhenAddTopic;	}
+  public void setIsNotifyWhenAddTopic(boolean isNotifyWhenAddTopic) {this.isNotifyWhenAddTopic = isNotifyWhenAddTopic;}
+  
+  public boolean getIsNotifyWhenAddPost() {return isNotifyWhenAddPost; }
+  public void setIsNotifyWhenAddPost(boolean isNotifyWhenAddPost) { this.isNotifyWhenAddPost = isNotifyWhenAddPost;}
+  
+  public boolean getIsModerateTopic() { return isModerateTopic;}
+  public void setIsModerateTopic(boolean isModerateTopic) { this.isModerateTopic = isModerateTopic;}
+ 
+  public boolean getIsModeratePost() { return isModeratePost;}
+  public void setIsModeratePost(boolean isModeratePost) { this.isModeratePost = isModeratePost;}
+  
+  public boolean getIsClosed() { return isClosed;}
+  public void setIsClosed(boolean isClosed) { this.isClosed = isClosed;}
+  
+  public boolean getIsLock() { return isLock;}
+  public void setIsLock(boolean isLock) { this.isLock = isLock;}
   
   public String[] getViewForumRole(){return viewForumRole;}
   public void setViewForumRole(String[] viewForumRole){this.viewForumRole = viewForumRole;}
