@@ -41,7 +41,7 @@
 							              <div class="NormalTab">
 							                <div class="LeftTab">
 							                  <div class="RightTab">                
-							                    <div class="MiddleTab">Idetity Settings</div>
+							                    <div class="MiddleTab">Identity Settings</div>
 							                  </div>
 							                </div>
 							              </div>
@@ -225,7 +225,7 @@
 															<td class="FieldLabel">Apply Signature by:</td>
 															<td class="FieldComponent">
 																<select onchange="" name="" class="selectbox">
-																	<option>Using “Add Signature” button in mail compose </option>
+																	<option>Using ï¿½Add Signature button in mail compose </option>
 																</select>
 															</td>
 														</tr>

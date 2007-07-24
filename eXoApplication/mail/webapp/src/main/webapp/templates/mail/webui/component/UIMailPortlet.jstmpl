@@ -92,7 +92,7 @@
 <!-- End Mail ControlBar -->
 <!-- Start Mail Container -->
 				<div class="MailContainer">
-					<div class="MailAccountManagendent">
+					<div class="MailAccountManagement">
 						
 						<div class="UIDropDownItemSelector">
 							<div class="ItemSelectorContainer">
@@ -118,13 +118,11 @@
 								<div class="FolderItemList">
 									<div class="TitleItem">
 										<div class="LeftTitleItem" title="Collapse/Expand all"><span></span></div>
-										<div class="LabelTitle FolderIcon">Folders</div>
+										<div class="Title FolderIcon">Folders</div>
 						        <div style="clear: left"><span></span></div>
 									</div>
 									<div class="ItemList">
-										<div class="Icon IndexIcon">
-												<a href="#" class="Item">Inbox</a>
-										</div>
+										<a href="#" class="Item InboxIcon">Inbox<span>(5)</span></a>
 										<div class="Icon DraftsIcon">
 												<a href="#" class="Item">Drafts</a>
 										</div>
@@ -142,10 +140,10 @@
 								<div class="MyFolder">
 									<div class="TitleMyFolder">
 										<div class="LeftTitleItem" title="Collapse/Expand all"><span></span></div>
-										<div class="LabelTitle FolderIcon">My Folders</div>
+										<div class="Title">My Folders</div>
 						        <div style="clear: left"><span></span></div>
 									</div>
-									<div class="UITree ScrollArea">
+									<div class="UITree">
 									  <div class="TreeContainer JSContainer">
 									    <div class="Node" style="padding-top: 2px;">
 									   		<div class="ColapseIcon"><span></span></div>
@@ -153,7 +151,7 @@
 									   		<div class="NodeLabel">
 									   			<a href="#">Open source</a>
 									   		</div>
-										    <div class = "ChildrenContainer" actionLink="$actionLink" display = "block">
+										    <div class="ChildrenContainer" display = "block">
 												  <div class="Node" style="padding-top: 2px; margin-left: 10px; ">
 											   		<div class="Icon Default"><span></span></div>
 											   		<div class="NodeLabel">
@@ -190,16 +188,14 @@
 <!-- End MyFolder -->								
 							</div>
 <!-- End FolderList -->								
-							<div class="TagList">
-								<div class="TitleTagList">
-									<div class="LeftTitleItem" title="Collapse/Expand all"><span></span></div>
-									<div class="IconTagTitle">Tags</div>
+							<div class="UITag">
+								<div class="TagTitleBar">
+									<div class="SwitchButton ExpandButton" title="Collapse/Expand all"><span></span></div>
+									<div class="TagTitle TagIcon">Tags</div>
 						      <div style="clear: left"><span></span></div>
 								</div>
-								<div class="TagContent">
-									<div class="IconItemTag BlueTag">
-										<a href="#">Customers</a>
-									</div>
+								<div class="TagsList">
+									<a class="BlueTag" href="#">Customers</a>
 									<div class="IconItemTag RedTag">
 										<a href="#">Company</a>
 									</div>
@@ -218,49 +214,41 @@
 <!--  Start Mail Working Detail -->
 					<div class="MailWorkingDetail">
 						
-						<div class="MailList">
-							<div class="MailListActionsbar">
-								<div style="float: left;">
-									<a href="#" class="ControlButton">
-										<div class="MoreActionsIcon"><span></span></div>
-										<div class="MailIconLabel">More Actions</div>
-										<div class="BlueDownArrowIcon"><span></span></div>
-										<div style="clear:left;"><span></span></div>
-									</a>
-									<a href="#" class="ControlButton">
-										<div class="ViewIcon"><span></span></div>
-										<div class="MailIconLabel">View</div>
-										<div class="BlueDownArrowIcon"><span></span></div>
-										<div style="clear:left;"><span></span></div>
-									</a>
-									<a href="#" class="ControlButton">
-										<div class="AddEventIcon"><span></span></div>
-										<div class="MailIconLabel">Add event</div>
-										<div style="clear:left;"><span></span></div>
-									</a>
-									<div style="clear:left;"><span></span></div>
-								</div>
-								<div style="float: right; width: 350px;">
-									<div class="UIPageIterator">
-										<div class="PageIteratorContainer">
-	  									<div class="RightPageIteratorBlock">
-	    	  							<a title="Back 10 pages" class="HiddenIteratorIcon PreviousPageIcon"/></a>        
-	    	  							<a title="Previous Page" class="HiddenIteratorIcon BackPageIcon"></a>
-	    									<div class="Number">7</div>
-	    	  				 			<a title="Next Page" class="IteratorIcon NextPage" href="#"/></a>
-	    	 				  			<a title="Next 10 pages" class="IteratorIcon LastPage"><span/></a>
-										    <div style="clear: left;"><span/></div>
-										  </div>
-										  <div class="LeftPageIteratorBlock">
-										  	<div class="TotalPages">Message(s) page 20 of 140:</div>
-										  </div>
-										  <div style="clear: right;"><span></span></div>
-									  </div>
+						<div class="MailActionsBar">
+							<div style="float: left;">
+								<a href="#" class="MailActionButton">
+									<div class="MoreActionsIcon">
+										<div class="DownArrow1Icon">More Actions</div>
 									</div>
-								</div>
-								<div style="clear: both;"><span></span></div>
+								</a>
+								<a href="#" class="ControlButton">
+									<div class="MailViewIcon"><span></span></div>
+									<div class="MailIconLabel">View</div>
+									<div class="BlueDownArrowIcon"><span></span></div>
+									<div style="clear:left;"><span></span></div>
+								</a>
+								<a href="#" class="ControlButton">
+									<div class="AddEventIcon"><span></span></div>
+									<div class="MailIconLabel">Add event</div>
+									<div style="clear:left;"><span></span></div>
+								</a>
+								<div style="clear:left;"><span></span></div>
 							</div>
-							<div class="MailListDetail">
+							<div style="float: right; width: 350px;">
+								<div class="MailPageIterator">
+									<div class="MailIteratorContainer">
+  										<div class="FloatBlock TotalPages">Message(s)<span>20 of 140</span></div>
+	  							<a title="First Page" class="FloatBlock FirstPageArrow"><span></span></a>        
+	  							<a title="Previous Page" class="FloatBlock PreviousPageArrow"><span></span></a>
+									<div class="FloatBlock CurrentPageNumber">1</div>
+	  				 			<a title="Next Page" class="FloatBlock NextPageArrow" href="#"><span></span></a>
+	 				  			<a title="Last Page" class="FloatBlock LastPageArrow" href="#"><span></span></a>
+								    <div style="clear: left;"><span/></div>
+								  </div>
+								</div>
+							</div>
+							<div style="clear: both;"><span></span></div>
+							<div class="MailsList">
 								<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
   								<thead>
   									<tr>
@@ -345,11 +333,11 @@
 <!--  Start Mail Reading Pane -->
 						<div class="ReadingPane">
 							<div class="ReadingPaneBar">
-								<div class="ReadingPaneTitle">Subject:Chao anh</div>
-								<div class="MaximizeReadingPane" title="Maximize Reading Pane"><span></span></div>
+								<div class="SubjectTitle">Subject:Chao anh</div>
+								<div class="ReadingPaneSwitcher MaximizeButton" title="Maximize Reading Pane"><span></span></div>
 								<div style="clear:both;"><span></span></div>
 							</div>
-							<div class="ReadingPaneDeltail">
+							<div class="ReadingPaneDetails">
 <!--  Start DecoratorBox ViewBoxStyle -->
 								<div class="DecoratorBox">
 									<div class="ViewBoxStyle">
