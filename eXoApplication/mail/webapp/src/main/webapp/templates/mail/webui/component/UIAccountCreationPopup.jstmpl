@@ -5,14 +5,14 @@
 			<div class="InfoTitle">
 				Step 1 : Account name & User name.
 			</div>
-			<div class="Information">
+			<div>
 				- Enter the name to indentify this particular account, for example "Company Account". <br/>
 				- Enter the incoming user name given to you by your email provider, for example "Dada". <br/>
 			</div>
 		</div>
 		
-		<div class="StepForm">
-			<div class="UIFormInputSet">
+		<div class="UIForm StepForm">
+			<div class="HorizontalLayout">
 				<table class="UIFormGrid">
 					<tbody>
 						<tr>
@@ -71,7 +71,7 @@
 			<div class="InfoTitle">
 				Step 2 : Mail Identity Settings.
 			</div>
-			<div class="Information">
+			<div>
 				Mail identity is the name and emal address used in your email correspondence. Each
 				mail account has an identity, which is the information comes with your outgoing
 				messages that identifies you to mail recipients when the receive your mails.
@@ -79,8 +79,8 @@
 			</div>
 		</div>
 		
-		<div class="StepForm">
-			<div class="UIFormInputSet">
+		<div class="UIForm StepForm">
+			<div class="HorizontalLayout">
 				<table class="UIFormGrid">
 					<tbody>
 						<tr>
@@ -150,7 +150,7 @@
 			<div class="InfoTitle">
 				Step 3 : Sever Information.
 			</div>
-			<div class="Information">
+			<div>
 			- Select a type of incoming server you are using. <br/>
 			- Enter the incoming server name, for example: mail.exo.com <br/>
 			- Set up a place for your imcoming messages.
@@ -158,8 +158,8 @@
 			</div>
 		</div>
 		
-		<div class="StepForm">
-			<div class="UIFormInputSet">
+		<div class="UIForm StepForm">
+			<div class="HorizontalLayout">
 				<table class="UIFormGrid">
 					<tbody>
 						<tr>
@@ -232,14 +232,14 @@
 			<div class="InfoTitle">
 				Step 4 : Verifying Information.
 			</div>
-			<div class="Information">
+			<div>
 			Verify that your setting information below is correct before save
 			 and exit the New Account Creation Wizard.			
 			</div>
 		</div>
 		
-		<div class="StepForm">
-			<div class="UIFormInputSet">
+		<div class="UIForm StepForm">
+			<div class="HorizontalLayout">
 				<table class="UIFormGrid">
 					<tbody>
 						<tr>
