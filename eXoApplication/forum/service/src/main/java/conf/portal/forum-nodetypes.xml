@@ -32,6 +32,12 @@
 	  		</propertyDefinition>
 	  		<propertyDefinition name="exo:remoteAddr" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
 	  			<valueConstraints/>
+	  		</propertyDefinition>
+	  		<propertyDefinition name="exo:icon" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+	  			<valueConstraints/>
+	  		</propertyDefinition>
+	  		<propertyDefinition name="exo:isApproved" requiredType="boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+	  			<valueConstraints/>
   			</propertyDefinition>
   		</propertyDefinitions>
  	 	</nodeType> 
@@ -77,6 +83,9 @@
 	  		<propertyDefinition name="exo:viewCount" requiredType="Long" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
 	  			<valueConstraints/>
 	  		</propertyDefinition>
+	  		<propertyDefinition name="exo:icon" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+	  			<valueConstraints/>
+	  		</propertyDefinition>
 	  		<propertyDefinition name="exo:isModeratePost" requiredType="boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
 	  			<valueConstraints/>
 	  		</propertyDefinition>
@@ -87,6 +96,9 @@
 	  			<valueConstraints/>
 	  		</propertyDefinition>
 	  		<propertyDefinition name="exo:isLock" requiredType="boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+	  			<valueConstraints/>
+	  		</propertyDefinition>
+	  		<propertyDefinition name="exo:isApproved" requiredType="boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
 	  			<valueConstraints/>
 	  		</propertyDefinition>
 	  	</propertyDefinitions>

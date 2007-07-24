@@ -23,11 +23,14 @@ public class Topic {
   private String description;
   private long postCount = 0;  
 	private long viewCount = 0;
-
+	private String icon ;
+	
   private boolean isModeratePost = false ;
   private boolean isNotifyWhenAddPost = false ;  
   private boolean isClosed = false ;
   private boolean isLock = false ;
+  private boolean isApproved = false ;
+  
   
   public Topic(){ }
   
@@ -78,6 +81,12 @@ public class Topic {
   
   public String getId() { return id; }
   public void setId(String id) { this.id = id; }
+  
+  public String getIcon() { return icon;}
+  public void setIcon( String icon) { this.icon = icon;}
+  
+  public boolean getIsApproved() { return isApproved;}
+  public void setIsApproved(boolean isApproved) { this.isApproved = isApproved;}
 
   /**
    * This method should calculate the forum id base on the topic id

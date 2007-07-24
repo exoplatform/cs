@@ -5,6 +5,7 @@
 package org.exoplatform.forum.service.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -327,12 +328,13 @@ public class JCRDataStorage implements DataStorage {
 	  topicNew.setDescription(topicNode.getProperty("exo:description").getString());
 	  topicNew.setPostCount(topicNode.getProperty("exo:postCount").getLong());
 	  topicNew.setViewCount(topicNode.getProperty("exo:viewCount").getLong());
+	  topicNew.setIcon(topicNode.getProperty("exo:icon").getString());
 	  
 	  topicNew.setIsNotifyWhenAddPost(topicNode.getProperty("exo:isNotifyWhenAddPost").getBoolean());
 	  topicNew.setIsModeratePost(topicNode.getProperty("exo:isModeratePost").getBoolean());
 	  topicNew.setIsClosed(topicNode.getProperty("exo:isClosed").getBoolean());
 	  topicNew.setIsLock(topicNode.getProperty("exo:isLock").getBoolean());
-	  
+	  topicNew.setIsApproved(topicNode.getProperty("exo:isApproved").getBoolean());	  
 	  return topicNew;
   }
 
@@ -364,17 +366,35 @@ public class JCRDataStorage implements DataStorage {
 		    topicNode.setProperty("exo:description", topic.getDescription());
 		    topicNode.setProperty("exo:postCount", 0);
 		    topicNode.setProperty("exo:viewCount", 1);
+		    topicNode.setProperty("exo:icon", topic.getIcon());
 		    
 		    topicNode.setProperty("exo:isModeratePost", topic.getIsModeratePost());
 		    topicNode.setProperty("exo:isNotifyWhenAddPost", topic.getIsNotifyWhenAddPost());
 		    topicNode.setProperty("exo:isClosed", topic.getIsClosed());
 		    topicNode.setProperty("exo:isLock", topic.getIsLock());
+		    topicNode.setProperty("exo:isApproved", topic.getIsApproved());
 			  // setTopicCount for Forum
 		    long newTopicCount = forumNode.getProperty("exo:topicCount").getLong() + 1;
 			  forumNode.setProperty("exo:topicCount", newTopicCount );
 		    
 		    forumHomeNode.save() ;
 		    forumHomeNode.getSession().save() ;
+		    // createPost first
+//		    GregorianCalendar calendar = new GregorianCalendar() ;
+//				String id = String.valueOf(calendar.getTimeInMillis());
+//		    Post post = new Post();
+//		    post.setId(id);
+//				post.setOwner(topic.getOwner());
+//				post.setCreatedDate(topicNode.getProperty("exo:createdDate").getDate().getTime());
+//				post.setModifiedBy(topic.getModifiedBy());
+//				post.setModifiedDate(topicNode.getProperty("exo:createdDate").getDate().getTime());
+//				post.setSubject(topic.getTopicName());
+//				post.setMessage(topic.getDescription());
+//				post.setRemoteAddr("");
+//				post.setIcon(topic.getIcon());
+//				post.setIsApproved(false);
+//				
+//				createPost(categoryId, forumId, topic.getId(), post);
 		  }
 		}
   }
@@ -391,11 +411,13 @@ public class JCRDataStorage implements DataStorage {
 		  topicNode.setProperty("exo:modifiedBy", newTopic.getModifiedBy());
 		  topicNode.setProperty("exo:modifiedDate", GregorianCalendar.getInstance());
 		  topicNode.setProperty("exo:description", newTopic.getDescription());
+		  topicNode.setProperty("exo:icon", newTopic.getIcon());
 		  
 		  topicNode.setProperty("exo:isModeratePost", newTopic.getIsModeratePost());
 	    topicNode.setProperty("exo:isNotifyWhenAddPost", newTopic.getIsNotifyWhenAddPost());
 	    topicNode.setProperty("exo:isClosed", newTopic.getIsClosed());
 	    topicNode.setProperty("exo:isLock", newTopic.getIsLock());
+	    topicNode.setProperty("exo:isApproved", newTopic.getIsApproved());
 	    
     }
     forumHomeNode.save() ;
@@ -483,6 +505,8 @@ public class JCRDataStorage implements DataStorage {
 		postNew.setSubject(postNode.getProperty("exo:subject").getString());
 		postNew.setMessage(postNode.getProperty("exo:message").getString());
 		postNew.setRemoteAddr(postNode.getProperty("exo:remoteAddr").getString());
+		postNew.setIcon(postNode.getProperty("exo:icon").getString());
+		postNew.setIsApproved(postNode.getProperty("exo:isApproved").getBoolean());
 		return postNew;
   }
   
@@ -504,6 +528,8 @@ public class JCRDataStorage implements DataStorage {
 				postNode.setProperty("exo:subject", post.getSubject());
 				postNode.setProperty("exo:message", post.getMessage());
 				postNode.setProperty("exo:remoteAddr", post.getRemoteAddr());
+				postNode.setProperty("exo:icon", post.getIcon());
+				postNode.setProperty("exo:isApproved", post.getIsApproved());
 		    // setPostCount for Topic
 				long topicPostCount = topicNode.getProperty("exo:postCount").getLong() + 1;
 				topicNode.setProperty("exo:postCount", topicPostCount );
@@ -532,7 +558,8 @@ public class JCRDataStorage implements DataStorage {
 				postNode.setProperty("exo:subject", newPost.getSubject());
 				postNode.setProperty("exo:message", newPost.getMessage());
 				postNode.setProperty("exo:remoteAddr", newPost.getRemoteAddr());
-			
+				postNode.setProperty("exo:icon", newPost.getIcon());
+				postNode.setProperty("exo:isApproved", newPost.getIsApproved());
 		  }
 		  forumHomeNode.save() ;
 		  forumHomeNode.getSession().save() ;

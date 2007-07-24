@@ -25,9 +25,11 @@ public class Post {
   private String message;
   private String remoteAddr;
   private int    attachments ;
+  private String icon; 
+  private boolean isApproved = false ;
   
-  public Post(){}
   
+  public Post() {}
   public String getId() { return id; }
   public void setId(String id) { this.id = id; }
   /**
@@ -67,4 +69,10 @@ public class Post {
   
   public int  getNumberOfAttachment() { return attachments ; }
   public void setNumberOfAttachment(int number) { this.attachments = number ;}
+  
+  public String getIcon() { return icon;}
+  public void setIcon( String icon) { this.icon = icon;}
+  
+  public boolean getIsApproved() { return isApproved;}
+  public void setIsApproved(boolean isApproved) { this.isApproved = isApproved;}
 }

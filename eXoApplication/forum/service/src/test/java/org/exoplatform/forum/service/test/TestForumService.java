@@ -154,6 +154,8 @@ public class TestForumService extends BaseForumTestCase{
 		post.setSubject("SubJect");
 		post.setMessage("Noi dung topic test chang co j ");
 		post.setRemoteAddr("khongbiet");
+		post.setIcon("classNameIcon");
+		post.setIsApproved(false);
 		
 		return post;
   }
@@ -176,7 +178,8 @@ public class TestForumService extends BaseForumTestCase{
 		topicNew.setIsModeratePost(false);
 		topicNew.setIsClosed(false);
 		topicNew.setIsLock(false);
-		  
+		topicNew.setIcon("classNameIcon");
+		topicNew.setIsApproved(false);  
 		return topicNew;
   }
   
