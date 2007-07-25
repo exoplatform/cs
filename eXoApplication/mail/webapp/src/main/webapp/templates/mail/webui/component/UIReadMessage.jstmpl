@@ -8,26 +8,26 @@
 							<div class="RightBar">
 								<div class="CenterBar">
 									<a href="#" class="ControlButton">
-										<div class="MailIcon ReplyIcon">
-											<div class="MailIconLabel"> Reply </div>
+										<div class="IconHolder ReplyIcon">
+											<div class="Label"> Reply </div>
 										</div>
 									</a>
 									<a href="#" class="ControlButton">
-										<div class="MailIcon ReplyAllIcon">
-											<div class="MailIconLabel"> ReplyAll </div>
+										<div class="IconHolder ReplyAllIcon">
+											<div class="Label"> ReplyAll </div>
 										</div>
 									</a>
 									<a href="#" class="ControlButton">
-										<div class="MailIcon ForwardIcon">
-											<div class="MailIconLabel"> Forward </div>
+										<div class="IconHolder ForwardIcon">
+											<div class="Label"> Forward </div>
 										</div>
 									</a>
 									<div class="SeparatorLine"><span></span></div>
 									<a href="#" class="ControlButton">
-										<div class="MailIcon DeleteIcon" title="Delete selected item(s)"><span></span></div>
+										<div class="IconHolder DeleteIcon" title="Delete selected item(s)"><span></span></div>
 									</a>
 									<a href="#" class="ControlButton">
-										<div class="MailIcon PrintIcon" title="Print selected mail(s)"><span></span></div>
+										<div class="IconHolder PrintIcon" title="Print selected mail(s)"><span></span></div>
 									</a>
 									<div class="SeparatorLine"><span></span></div>
 									<div style="clear:left;"><span></span></div>
@@ -39,7 +39,7 @@
 <!--  Start Mail Reading Pane -->
 				<div class="ReadingPane">
 					<div class="ReadingPaneBar">
-						<div class="ReadingPaneTitle">Subject: Melissa Theuriau Background for M6</div>
+						<div class="Subject">Subject: Melissa Theuriau Background for M6</div>
 						<div class="NomalReadingPane" title="Maximize Reading Pane"><span></span></div>
 						<div class="MaximizeAllViewBoxStyle" title="Maximize All Viewboxstyle"><span></span></div>
 						<div style="clear:both;"><span></span></div>
@@ -70,7 +70,7 @@
 													</div>
 												</div>
 												<div class="MessageActions" >
-													<div class="BlueDownArrowIcon"><span></span></div>
+													<div class="DownArrow1Icon"><span></span></div>
 													<div class="ShowHideTitle">Hide deails</div>
 													<div class="MonthDate">June 26</div>
 													<div class="AttackIcon"><span></span></div>

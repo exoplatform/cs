@@ -3,7 +3,7 @@
 	
 		<div class="AccountSettingCategory">
 			<div class="HeadTitle">
-				<div class="LabelTitle">Accounts</div>
+				<div class="Title">Accounts</div>
 				<div class="IconTitle">
 					<div class="DeleteIcon"><span></span></div>
 					<div class="AddIcon"><span></span></div>
@@ -134,7 +134,7 @@
 	
 		<div class="AccountSettingCategory">
 			<div class="HeadTitle">
-				<div class="LabelTitle">Accounts</div>
+				<div class="Title">Accounts</div>
 				<div class="IconTitle">
 					<div class="DeleteIcon" title="Delete Account"><span></span></div>
 					<div class="AddIcon" title="Add Account"><span></span></div>
@@ -302,7 +302,7 @@
 	
 		<div class="AccountSettingCategory">
 			<div class="HeadTitle">
-				<div class="LabelTitle">Accounts</div>
+				<div class="Title">Accounts</div>
 				<div class="IconTitle">
 					<div class="DeleteIcon" title="Delete Account"><span></span></div>
 					<div class="AddIcon" title="Add Account"><span></span></div>

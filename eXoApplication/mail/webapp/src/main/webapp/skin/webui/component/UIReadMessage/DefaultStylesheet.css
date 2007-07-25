@@ -15,11 +15,11 @@
 
 .UIReadMessage .MailControlBar a:hover {
 	background: url('DefaultSkin/background/ControlButtonBG1x26.gif') repeat-x ;
-	color: blue; border: 1px solid #cbcbcb;
+	color: #126ca5; border: 1px solid #cbcbcb;
 	height: 24px;
 }
 
-.UIReadMessage .MailControlBar .MailIconLabel {
+.UIReadMessage .MailControlBar .Label {
 	line-height: 24px;
 }
 
@@ -28,7 +28,7 @@
   margin: 3px 5px 2px 5px;
 }
 
-.UIReadMessage .MailControlBar .MailIcon {
+.UIReadMessage .MailControlBar .IconHolder {
 	line-height: 26px;
 	margin: 0px 7px;
 	padding-left: 26px;
@@ -47,7 +47,7 @@
 	border: 1px solid #ffffff;
 }
 
-.UIReadMessage .MailControlBar .ReadingPane .ReadingPaneTitle {
+.UIReadMessage .MailControlBar .ReadingPane .Subject {
 	float: left;
 	font-weight: bold;
 	font-size: 11px;
@@ -106,7 +106,7 @@
 
 .UIReadMessage .MailControlBar .MessageAddress .LinkAddress {
 	float: left;
-	color: blue;
+	color: #126ca5;
 	cursor: pointer;
 	font-weight: bold;
 }
@@ -126,16 +126,17 @@
 	width: 100px;
 }
 
-.UIReadMessage .MailControlBar .MessageActions .BlueDownArrowIcon {
+.UIReadMessage .MailControlBar .MessageActions .DownArrow1Icon {
 	float: left;
 	width: 12px; height: 16px;
 	cursor: pointer;
+	margin: 3px 0px 0px 0px;
 }
 
 .UIReadMessage .MailControlBar .MessageActions .ShowHideTitle {
 	float: left;
 	line-height: 20px;
-	color: blue; cursor: pointer;
+	color: #126ca5; cursor: pointer;
 }
 
 .UIReadMessage .MailControlBar .MessageActions .Text {
@@ -162,10 +163,4 @@
 
 .UIReadMessage .MailControlBar .NomalStarIcon {
 	margin: 1px 0px 0px 4px; 
-}
-
-.UIReadMessage .MailControlBar .BlueDownArrowIcon {
-	width: 16px; height: 16px;
-	margin: 3px 0px 0px 0px;
-	float: left; cursor: pointer;
 }

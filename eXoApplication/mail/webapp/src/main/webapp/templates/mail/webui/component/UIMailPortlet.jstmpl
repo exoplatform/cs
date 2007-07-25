@@ -29,57 +29,57 @@
 								<div class="RightBar">
 									<div class="CenterBar">
 										<a href="#" class="ControlButton">
-											<div class="MailIcon CheckMailIcon">
-												<div class="MailIconLabel">CheckMail</div>
+											<div class="IconHolder CheckMailIcon">
+												<div class="Label">CheckMail</div>
 											</div>
 										</a>
 										<a href="#" class="ControlButton">
-											<div class="MailIcon ComposeIcon">
-												<div class="MailIconLabel"> Compose </div>
-											</div>
-										</a>
-										<div class="SeparatorLine"><span></span></div>
-										<a href="#" class="ControlButton">
-											<div class="MailIcon ReplyIcon">
-												<div class="MailIconLabel"> Reply </div>
-											</div>
-										</a>
-										<a href="#" class="ControlButton">
-											<div class="MailIcon ReplyAllIcon">
-												<div class="MailIconLabel"> ReplyAll </div>
-											</div>
-										</a>
-										<a href="#" class="ControlButton">
-											<div class="MailIcon ForwardIcon">
-												<div class="MailIconLabel"> Forward </div>
+											<div class="IconHolder ComposeIcon">
+												<div class="Label"> Compose </div>
 											</div>
 										</a>
 										<div class="SeparatorLine"><span></span></div>
 										<a href="#" class="ControlButton">
-											<div class="MailIcon DeleteIcon" title="Delete selected item(s)"><span></span></div>
-										</a>
-										<a href="#" class="ControlButton">
-											<div class="MailIcon PrintIcon" title="Print selected mail(s)"><span></span></div>
-										</a>
-										<div class="SeparatorLine"><span></span></div>
-										<a href="#" class="ControlButton">
-											<div class="MailIcon ContactsIcon">
-												<div class="MailIconLabel"> Contacts </div>
+											<div class="IconHolder ReplyIcon">
+												<div class="Label"> Reply </div>
 											</div>
 										</a>
 										<a href="#" class="ControlButton">
-											<div class="MailIcon RssIcon">
-												<div class="MailIconLabel"> RSS </div>
+											<div class="IconHolder ReplyAllIcon">
+												<div class="Label"> ReplyAll </div>
+											</div>
+										</a>
+										<a href="#" class="ControlButton">
+											<div class="IconHolder ForwardIcon">
+												<div class="Label"> Forward </div>
 											</div>
 										</a>
 										<div class="SeparatorLine"><span></span></div>
 										<a href="#" class="ControlButton">
-											<div class="MailIcon CustomViewIcon" title="Custome panels view"><span></span></div>
+											<div class="IconHolder DeleteIcon" title="Delete selected item(s)"><span></span></div>
+										</a>
+										<a href="#" class="ControlButton">
+											<div class="IconHolder PrintIcon" title="Print selected mail(s)"><span></span></div>
+										</a>
+										<div class="SeparatorLine"><span></span></div>
+										<a href="#" class="ControlButton">
+											<div class="IconHolder ContactsIcon">
+												<div class="Label"> Contacts </div>
+											</div>
+										</a>
+										<a href="#" class="ControlButton">
+											<div class="IconHolder RssIcon">
+												<div class="Label"> RSS </div>
+											</div>
+										</a>
+										<div class="SeparatorLine"><span></span></div>
+										<a href="#" class="ControlButton">
+											<div class="IconHolder CustomViewIcon" title="Custome panels view"><span></span></div>
 											<div class="DownArrow1Icon"><span></span></div>
 											<div style="clear:both;"><span></span></div>
 										</a>
 										<a href="#" class="ControlButton">
-											<div class="MailIcon SettingsIcon" title="Mail settings"><span></span></div>
+											<div class="IconHolder SettingsIcon" title="Mail settings"><span></span></div>
 										</a>
 										<div style="clear:left;"><span></span></div>
 									</div>
@@ -214,7 +214,7 @@
 								</a>
 								<a href="#" class="ControlButton">
 									<div class="AddEventIcon">
-										<div class="MailIconLabel">Add event</div>
+										<div class="Label">Add event</div>
 									</div>
 								</a>
 								<div class="MailPageIterator">
@@ -320,7 +320,7 @@
 <!--  Start Mail Reading Pane -->
 						<div class="ReadingPane">
 							<div class="ReadingPaneBar">
-								<div class="ReadingPaneTitle">Subject:Chao anh</div>
+								<div class="Subject">Subject:Chao anh</div>
 								<div class="MaximizeReadingPane" title="Maximize Reading Pane"><span></span></div>
 								<div style="clear:both;"><span></span></div>
 							</div>

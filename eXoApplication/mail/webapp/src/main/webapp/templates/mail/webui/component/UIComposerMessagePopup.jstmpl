@@ -1,7 +1,7 @@
 <div class="$uicomponent.id UIApplication" id="$uicomponent.id">
   <div class="ApplicationMinWidth">
   
-  	<div class="UIComposerMessagePopup" style="padding: 5px;" >
+  	<div class="UIMessageCompose" style="padding: 5px;" >
 			<div class="UIToolbar">
 				<div class="HeaderToolbar">
 					<div class="LeftBar">
@@ -9,41 +9,39 @@
 							<div class="CenterBar">
 								<div class="MailListActionsbar">
 									<a href="#" class="ControlButton">
-										<div class="MailIcon SendMailIcon">
-											<div class="MailIconLabel">Send mail</div>
+										<div class="IconHolder SendMailIcon">
+											<div class="Label">Send mail</div>
 										</div>
 									</a>
 									<div class="SeparatorLine"><span></span></div>
 									<a href="#" class="ControlButton">
-										<div class="MailIcon SaveAsADraftIcon">
-											<div class="MailIconLabel">Save as a Draft</div>
+										<div class="IconHolder SaveAsADraftIcon">
+											<div class="Label">Save as a Draft</div>
 										</div>
 									</a>
 									<div class="SeparatorLine"><span></span></div>
 									<a href="#" class="ControlButton">
-										<div class="MailIcon DiscardIcon">
-											<div class="MailIconLabel">Discard</div>
+										<div class="IconHolder DiscardIcon">
+											<div class="Label">Discard</div>
 										</div>
 									</a>
 									<div class="SeparatorLine"><span></span></div>
 									<a href="#" class="ControlButton">
-										<div class="MailIcon AttachFileIcon">
-											<div class="MailIconLabel">Attach File</div>
+										<div class="IconHolder AttachFileIcon">
+											<div class="Label">Attach File</div>
 										</div>
 									</a>
 									<div class="SeparatorLine"><span></span></div>
 									<a href="#" class="ControlButton">
-										<div class="PriorityIcon"><span></span></div>
-										<div class="MailIconLabel2">Message Priority</div>
-										<div class="BlueDownArrowIcon"><span></span></div>
-										<div style="clear:left;"><span></span></div>
+										<div class="IconHolder PriorityIcon">
+											<div class="Label DownArrow1Icon">Message Priority</div>
+										</div>
 									</a>
 									<div class="SeparatorLine"><span></span></div>
 									<a href="#" class="ControlButton">
-										<div class="EditorOptionsIcon"><span></span></div>
-										<div class="MailIconLabel2">Editor Options</div>
-										<div class="BlueDownArrowIcon"><span></span></div>
-										<div style="clear:left;"><span></span></div>
+										<div class="IconHolder EditorOptionsIcon">
+											<div class="Label DownArrow1Icon">Editor Options</div>
+										</div>
 									</a>
 									<div style="clear:left;"><span></span></div>
 								</div>
@@ -53,8 +51,8 @@
 				</div>
 			</div>
 <!-- End Mail ControlBar -->
-<!-- Start Compose Message Address -->
-			<div class="ComposeMessageAddress">
+<!-- Start  Message Address -->
+			<div class="MessageAddress">
 				<div class="UIForm $uicomponent.id">
 				  <div class="HorizontalLayout">
 				    <div class="FormContainer">
@@ -70,9 +68,9 @@
 													<option value="female">Nguyet Nguyen Anh (nguyet.nguyen@exoplatform.com)</option>
 												</select>
 											</td>
-											<td style="width: 100px;">
-												<a href="#" style="color: blue;">|Add CC|</a>
-			                	<a href="#" style="color: blue;">Add BCC|</a>
+											<td class="AddAddress">
+												<a href="#" class="ColorTextLink">|Add CC|</a>
+			                	<a href="#" class="ColorTextLink">Add BCC|</a>
 		                	</td>
 	                	</table>
 	                </td>
@@ -95,7 +93,7 @@
   	              	<div class="ZipFileIcon">
   	              		<div >eXo Mail Screenshots.zip - 200K</div>
   	              	</div>
-  	              	<a class="RemoveTitle" href="#" style="color: blue;">[Remove]</a>
+  	              	<a href="#" class="RemoveTitle">[Remove]</a>
   	              	<div style="clear:left;"><span></span></div>
   	              </td>
 		            </tr>
@@ -106,7 +104,7 @@
 			</div>
 <!-- End Compose Message Address -->
 <!-- Start Compose Message Detail -->
-			<div class="ComposeMessagecontent">
+			<div class="Messagecontent">
 				<div class="TextArea">
 				</div>
 				<div class="MessageContent">

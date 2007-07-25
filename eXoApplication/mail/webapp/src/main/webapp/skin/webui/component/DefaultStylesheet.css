@@ -84,7 +84,7 @@
 	text-color: #126ca5;
 }
 
-.UIMailPortlet .MailWorkingWorkspace .MailControlBar .MailIconLabel {
+.UIMailPortlet .MailWorkingWorkspace .MailControlBar .Label {
 	line-height: 24px;
 }
 
@@ -261,7 +261,7 @@
   margin: 3px 5px 2px 5px;
 }
 
-.UIMailPortlet .MailWorkingWorkspace .MailIcon {
+.UIMailPortlet .MailWorkingWorkspace .IconHolder {
 	line-height: 26px;
 	margin: 0px 7px;
 	padding-left: 26px;
@@ -313,12 +313,12 @@
 
 .UIMailPortlet .MailWorkingWorkspace .MailActionsbar .AddEventIcon {
 	margin: 2px 0px 0px 10px;
-	line-height: 24px;
+	line-height: 20px;
 	padding-left: 24px;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .MailActionsbar .DownArrow1Icon {
-	height: 24px; line-height: 24px;
+	line-height: 20px;
 	background-position: right;
 	padding-right: 16px; 
 }
@@ -401,7 +401,7 @@
 	border: 1px solid #ffffff;
 }
 
-.UIMailPortlet .MailWorkingWorkspace .ReadingPane .ReadingPaneTitle {
+.UIMailPortlet .MailWorkingWorkspace .ReadingPane .Subject {
 	float: left;
 	font-weight: bold;
 	font-size: 11px;
@@ -709,17 +709,14 @@
 
 .MoreActionsIcon {
 	background: url('DefaultSkin/icons/16x16/MoreActions.gif') no-repeat left;
-	height: 20px;
 }
 
 .ViewIcon {
 	background: url('DefaultSkin/icons/16x16/View.gif') no-repeat left;
-	height: 20px;
 }
 
 .AddEventIcon {
 	background: url('DefaultSkin/icons/24x24/AddEvent.gif') no-repeat left;
-	height: 20px;
 }
 
 .NomalStarIcon {
