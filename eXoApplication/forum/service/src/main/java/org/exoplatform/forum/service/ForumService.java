@@ -149,7 +149,7 @@ public interface ForumService {
    * @return
    * @throws Exception
    */
-  public PageList getTopics(String categoryId, String forumId) throws Exception;
+  public JCRPageList getTopics(String categoryId, String forumId) throws Exception;
   /**
    * This method should:
    * 

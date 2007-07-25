@@ -12,6 +12,7 @@ import java.util.List;
 import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.forum.service.Category;
 import org.exoplatform.forum.service.Forum;
+import org.exoplatform.forum.service.JCRPageList;
 import org.exoplatform.forum.service.Post;
 import org.exoplatform.forum.service.Topic;
 import org.exoplatform.forum.service.impl.ForumServiceImpl;
@@ -91,8 +92,13 @@ public class TestForumService extends BaseForumTestCase{
 		//get Topic
 		assertNotNull(forumService_.getTopic(cat.getId(), forum.getId(), topic.getId()));
 		//get PageList Topic
-		PageList pagelits = forumService_.getTopics(cat.getId(), forum.getId());
-		assertEquals(pagelits.getAvailable(), 1);
+		JCRPageList pagelist = forumService_.getTopics(cat.getId(), forum.getId());
+		assertEquals(pagelist.getAvailable(), 1);
+    List list = pagelist.getPage(1, session_) ;
+    assertEquals(list.size(), 1);
+    List page = pagelist.getPage(1, session_) ;
+    assertEquals(page.size(), 1);    
+    
 		// update Topic
 		Topic newTopic = forumService_.getTopic(cat.getId(), forum.getId(), topic.getId());
 		newTopic.setTopicName("New Name topic");

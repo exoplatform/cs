@@ -10,6 +10,7 @@ import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.forum.service.Category;
 import org.exoplatform.forum.service.Forum;
 import org.exoplatform.forum.service.ForumService;
+import org.exoplatform.forum.service.JCRPageList;
 import org.exoplatform.forum.service.Post;
 import org.exoplatform.forum.service.Topic;
 import org.exoplatform.forum.service.TopicView;
@@ -86,7 +87,7 @@ public class ForumServiceImpl implements ForumService{
 	  return storage_.getTopicView(categoryId, forumId, topicId);
   }
   
-  public PageList getTopics(String categoryId, String forumId) throws Exception {
+  public JCRPageList getTopics(String categoryId, String forumId) throws Exception {
 	  return storage_.getTopics(categoryId, forumId);
   }
   

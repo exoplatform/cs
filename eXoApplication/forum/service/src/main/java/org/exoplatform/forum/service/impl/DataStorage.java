@@ -9,6 +9,7 @@ import java.util.List;
 import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.forum.service.Category;
 import org.exoplatform.forum.service.Forum;
+import org.exoplatform.forum.service.JCRPageList;
 import org.exoplatform.forum.service.Post;
 import org.exoplatform.forum.service.Topic;
 import org.exoplatform.forum.service.TopicView;
@@ -34,7 +35,7 @@ public interface DataStorage {
    public Forum removeForum(String categoryId, String forumId)throws Exception;
    public void moveForum(String forumPath, String destCategoryPath) throws Exception;
    
-   public PageList getTopics(String categoryId, String forumId) throws Exception;
+   public JCRPageList getTopics(String categoryId, String forumId) throws Exception;
    public Topic getTopic(String categoryId, String forumId, String topicId) throws Exception;    
    public TopicView getTopicView(String categoryId, String forumId, String topicId) throws Exception;
    public void createTopic(String categoryId, String forumId, Topic topic) throws Exception;

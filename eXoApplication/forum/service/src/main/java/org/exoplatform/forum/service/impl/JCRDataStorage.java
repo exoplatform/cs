@@ -18,6 +18,8 @@ import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.forum.service.Category;
 import org.exoplatform.forum.service.Forum;
+import org.exoplatform.forum.service.ForumPageList;
+import org.exoplatform.forum.service.JCRPageList;
 import org.exoplatform.forum.service.Post;
 import org.exoplatform.forum.service.Topic;
 import org.exoplatform.forum.service.TopicView;
@@ -277,20 +279,20 @@ public class JCRDataStorage implements DataStorage {
   }
   
   
-  public PageList getTopics(String categoryId, String forumId) throws Exception {
+  public JCRPageList getTopics(String categoryId, String forumId) throws Exception {
     Node forumHomeNode = getForumHomeNode();
     if(forumHomeNode.hasNode(categoryId)) {
   	  Node CategoryNode = forumHomeNode.getNode(categoryId);
 		  Node forumNode = CategoryNode.getNode(forumId);
 		  NodeIterator iter = forumNode.getNodes();
-		  List <Topic> topics = new ArrayList<Topic>();
+      /*List <Topic> topics = new ArrayList<Topic>();
 		  Topic topic;
 		  while (iter.hasNext()) {
 	      Node topicNode = iter.nextNode();
 	      topic = getTopicNode(topicNode);
 	      topics.add(topic);
-      }
-		  PageList pagelist = new ObjectPageList(topics, 10);
+      }*/
+		  JCRPageList pagelist = new ForumPageList(iter, 10, forumNode.getPath(), false);
 		  return pagelist;
     }
 	  return null;
