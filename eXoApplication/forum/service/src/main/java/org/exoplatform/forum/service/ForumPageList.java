@@ -43,6 +43,7 @@ public class ForumPageList extends JCRPageList {
         iter_ = node.getNodes() ;
       }
     }
+    setAvailablePage(iter_.getSize()) ;
     Node currentNode ;
     long pageSize = getPageSize() ;
     long position = 0 ;

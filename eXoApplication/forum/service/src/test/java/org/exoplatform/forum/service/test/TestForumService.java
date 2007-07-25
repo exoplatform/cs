@@ -82,7 +82,7 @@ public class TestForumService extends BaseForumTestCase{
   public void testTopic() throws Exception {
   	GregorianCalendar calendar = new GregorianCalendar() ;
 		String id = String.valueOf(calendar.getTimeInMillis());
-		Category cat = createCategory("Cat");
+    Category cat = createCategory("Cat");
 		forumService_.createCategory(cat);
 		Forum forum = createdForum(id);
 		forumService_.createForum(cat.getId(), forum);

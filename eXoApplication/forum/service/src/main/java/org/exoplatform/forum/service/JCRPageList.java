@@ -20,7 +20,7 @@ abstract public class JCRPageList {
   private long pageSize_ ;
   protected long available_ = 0;
   protected long availablePage_  = 1;
-  protected long currentPage_ = -1 ;
+  protected long currentPage_ = 1 ;
   protected List currentListPage_ ;
   
   public JCRPageList(long pageSize) {
@@ -72,11 +72,11 @@ abstract public class JCRPageList {
       long pages = available / pageSize_ ;
       if ( available % pageSize_ > 0) pages++ ;
       availablePage_ = pages ;
-      currentPage_ =  1 ;
+      //currentPage_ =  1 ;
     }
   }
   
-  public long getFrom() { 
+  /*public long getFrom() { 
     return (currentPage_ - 1) * pageSize_ ; 
   }
   
@@ -84,5 +84,5 @@ abstract public class JCRPageList {
     long to = currentPage_  * pageSize_ ; 
     if (to > available_ ) to = available_ ;
     return to ;
-  }
+  }*/
 }
