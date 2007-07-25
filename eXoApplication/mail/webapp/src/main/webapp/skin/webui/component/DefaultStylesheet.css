@@ -81,7 +81,7 @@
 .UIMailPortlet .MailWorkingWorkspace .MailControlBar a:hover {
 	background: url('DefaultSkin/background/ControlButtonBG.gif') repeat-y ;
 	border: 1px solid #9d9d9d;
-	text-color: #ffba00;
+	text-color: #126ca5;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .MailControlBar .MailIconLabel {
@@ -97,19 +97,19 @@
 
 /**************************************MailContentNavigation*********************************/
 
-.UIMailPortlet .MailContainer .MailAccountManagendent {
+.UIMailPortlet .MailContainer .MailAccountManagement {
 	float: left;
 	width: 215px;
 	padding: 0px 2px;
 }
 
-.UIMailPortlet .MailAccountManagendent .UIDropDownItemSelector {
+.UIMailPortlet .MailAccountManagement .UIDropDownItemSelector {
 	width: 194px;
 	float: left;
 	margin: 10px 0px 1px 0px;
 }
 
-.UIMailPortlet .MailAccountManagendent .AddNavigationIcon {
+.UIMailPortlet .MailAccountManagement .AddNavigationIcon {
 	background: url('/eXoResources/icons/24x24/DefaultSkin/EditNavigation.gif') no-repeat left top;
 	cursor: pointer;
 	float: left; margin: 10px 0px 0px 0px;
@@ -117,10 +117,10 @@
 	display: block;
 }
 
-.UIMailPortlet .MailAccountManagendent .AccountList {
+.UIMailPortlet .MailAccountManagement .AccountList {
 }
 
-.UIMailPortlet .MailAccountManagendent .FolderList {
+.UIMailPortlet .MailAccountManagement .FolderList {
 	background: white;
 	border: 1px solid #a5a5a5;
 	margin: 1px 0px;
@@ -129,39 +129,46 @@
 
 /**************************************FolderItemList*********************************/
  
-.UIMailPortlet .MailAccountManagendent .FolderItemList .TitleItem {
+.UIMailPortlet .MailQuantity {
+	font-weight: bold;
+}
+ 
+.UIMailPortlet .MailAccountManagement .FolderItemList .TitleItem {
 	background: #e6e6e6 ;
 	height: 20px; 
 }
 
-.UIMailPortlet .MailAccountManagendent .LeftTitleItem {
+.UIMailPortlet .MailAccountManagement .DownArrow3Icon {
 	float: left;
 }
 
-.UIMailPortlet .MailAccountManagendent .LabelTitle {
+.UIMailPortlet .MailAccountManagement .Title {
 	color: #3d3d3d; font-weight: bold;
 	margin-left: 20px;
 	padding-left: 23px;
+	line-height: 18px;
 }
 
-.UIMailPortlet .MailAccountManagendent .FolderItemList .ItemList {
+.UIMailPortlet .MailAccountManagement .FolderItemList .ItemList {
 	padding: 3px 0px 5px 22px;
 }
 
-.UIMailPortlet .MailAccountManagendent .FolderItemList a {
+.UIMailPortlet .MailAccountManagement .FolderItemList a {
 	color: #1e1f21;
+	display: block;
 }
 
-.UIMailPortlet .MailAccountManagendent .FolderItemList a:hover {
-	color: blue;
+.UIMailPortlet .MailAccountManagement .FolderItemList a:hover {
+	color: #126ca5;
 }
 
-.UIMailPortlet .MailAccountManagendent .FolderItemList .Icon {
+.UIMailPortlet .MailAccountManagement .FolderItemList .Icon {
 	padding-left: 30px;
-	line-height: 28px; height: 28px;
+	line-height: 24px; 
+	margin: 2px 0px; width: auto;
 }
 
-.UIMailPortlet .MailAccountManagendent .MyFolder .UITree  {
+.UIMailPortlet .MailAccountManagement .MyFolder .UITree  {
 	border: none;
 }
 
@@ -181,44 +188,45 @@
 
 .UIMailPortlet .UITree .TreeContainer .NodeLabel a:hover {
 	font-weight: normal;
-	color: blue;
+	color: #126ca5;
 }
 
 /*********************************TagList*************************************/
 
-.UIMailPortlet .MailAccountManagendent .IconTagTitle {
+.UIMailPortlet .MailAccountManagement .TagTitle {
 	float: left;
 	padding-left: 20px;
 	font-weight: bold;
 }
 
-.UIMailPortlet .MailAccountManagendent .TagList {
+.UIMailPortlet .MailAccountManagement .UITag {
 	background: white;
 	border: 1px solid #a5a5a5;
 	margin: 1px 0px;
 }
 
-.UIMailPortlet .MailAccountManagendent .TagList .IconTitle {
+.UIMailPortlet .MailAccountManagement .UITag .IconTitle {
 	padding-left: 20px;	
 	margin-left: 20px;
 	color: #3d3d3d; font-weight: bold;	
 }
 
-.UIMailPortlet .MailAccountManagendent .TagList .TagContent {
+.UIMailPortlet .MailAccountManagement .UITag .TagsList {
 	padding: 8px 0px 8px 18px;
 }
 
-.UIMailPortlet .TagList .TagContent .IconItemTag {
+.UIMailPortlet .UITag .TagsList .IconItemTag {
 	padding-left: 25px;
 }
 
-.UIMailPortlet .TagList .TagContent .IconItemTag a {
+.UIMailPortlet .UITag .TagsList a {
 	line-height: 20px;
 	color: #3d3d3d;
+	display: block;
 }
 
-.UIMailPortlet .TagList .TagContent .IconItemTag a:hover {
-	color: blue;
+.UIMailPortlet .UITag .TagsList a:hover {
+	color: #126ca5;
 }
 
 
@@ -244,7 +252,7 @@
 
 .UIMailPortlet .MailWorkingWorkspace  .MailControlBar a:hover {
 	background: url('DefaultSkin/background/ControlButtonBG1x26.gif') repeat-x ;
-	color: blue; border: 1px solid #cbcbcb;
+	color: #126ca5; border: 1px solid #cbcbcb;
 	height: 24px;
 }
 
@@ -275,7 +283,7 @@
 	margin: 0px 0px 0px 225px;
 }
 
-.UIMailPortlet .MailWorkingDetail .MailListActionsbar {
+.UIMailPortlet .MailWorkingDetail .MailActionsbar {
 	background: url('DefaultSkin/background/MailListControlbarBG1x24.gif') repeat-x;
 	height: 24px;
 	width: 98.8%;
@@ -283,38 +291,36 @@
 	border-right: 1px solid #c0c0c0;
 }
 
-.UIMailPortlet .MailWorkingWorkspace  .MailListActionsbar a {
+.UIMailPortlet .MailWorkingWorkspace  .MailActionsbar a {
 	color: #000000;
 }
 
-.UIMailPortlet .MailWorkingWorkspace  .MailListActionsbar a:hover {
-	color: blue;
+.UIMailPortlet .MailWorkingWorkspace  .MailActionsbar a:hover {
+	color: #126ca5;
 }
 
-.UIMailPortlet .MailWorkingWorkspace .MailListActionsbar .MailIconLabel {
+.UIMailPortlet .MailWorkingWorkspace .MailActionsbar .MoreActionsIcon {
+	margin: 2px 0px 0px 10px;
 	line-height: 24px;
-	float: left;
+	padding-left: 24px;
 }
 
-.UIMailPortlet .MailWorkingWorkspace .MailListActionsbar .MoreActionsIcon {
-	float: left;
+.UIMailPortlet .MailWorkingWorkspace .MailActionsbar .ViewIcon {
 	margin: 2px 0px 0px 10px;
+	line-height: 24px;
+	padding-left: 24px;
 }
 
-.UIMailPortlet .MailWorkingWorkspace .MailListActionsbar .ViewIcon {
-	float: left;
+.UIMailPortlet .MailWorkingWorkspace .MailActionsbar .AddEventIcon {
 	margin: 2px 0px 0px 10px;
+	line-height: 24px;
+	padding-left: 24px;
 }
 
-.UIMailPortlet .MailWorkingWorkspace .MailListActionsbar .AddEventIcon {
-	float: left;
-	margin: 2px 0px 0px 10px;
-}
-
-.UIMailPortlet .MailWorkingWorkspace .MailListActionsbar .BlueDownArrowIcon {
-	width: 16px; height: 16px;
-	margin: 5px 0px 0px 0px;
-	float: left;
+.UIMailPortlet .MailWorkingWorkspace .MailActionsbar .DownArrow1Icon {
+	height: 24px; line-height: 24px;
+	background-position: right;
+	padding-right: 16px; 
 }
 
 /*================================== UIGrid===============*/
@@ -366,7 +372,7 @@
 	margin: 1px auto 1px auto;
 }
 
-.UIMailPortlet .MailWorkingWorkspace .MailListDetail .BlueDownArrowIcon {
+.UIMailPortlet .MailWorkingWorkspace .MailListDetail .DownArrow1Icon {
 	width: 16px; height: 16px;
 	margin: 3px 0px 0px 0px;
 	float: left; cursor: pointer;
@@ -449,7 +455,7 @@
 
 .UIMailPortlet .MailWorkingWorkspace .MessageAddress .LinkAddress {
 	float: left;
-	color: blue;
+	color: #2276ab;
 	cursor: pointer;
 	font-weight: bold;
 }
@@ -464,7 +470,7 @@
 	width: 160px;
 }
 
-.UIMailPortlet .MailWorkingWorkspace .MessageActions .BlueDownArrowIcon {
+.UIMailPortlet .MailWorkingWorkspace .MessageActions .DownArrow1Icon {
 	float: left;
 	width: 12px; height: 20px;
 	cursor: pointer;
@@ -473,7 +479,7 @@
 .UIMailPortlet .MailWorkingWorkspace .MessageActions .ShowHideTitle {
 	float: left;
 	line-height: 20px;
-	color: blue; cursor: pointer;
+	color: #126ca5; cursor: pointer;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .MessageActions .MonthDate {
@@ -496,20 +502,54 @@
 
 /*=====================Page Iterator Container===================*/
 
-.UIMailPortlet .MailWorkingWorkspace .IteratorIcon {
+.UIMailPortlet .MailWorkingWorkspace .FloatBlock {
 	float: left;
 	margin: 2px 3px;
 } 
 
-.UIMailPortlet .MailWorkingWorkspace .HiddenIteratorIcon {
+.UIMailPortlet .MailWorkingWorkspace .FloatBlockHidden {
 	float: left;
 	margin: 2px 3px;
 	filter:alpha(opacity=30);-moz-opacity:.30;opacity:.30;
 } 
 
-.UIMailPortlet .MailWorkingWorkspace .UIPageIterator {
+.UIMailPortlet .MailWorkingWorkspace .MailPageIterator {
+	float: right;
 	margin: 2px 0px 0px 0px;
+	width: 350px;
 }
+
+.MailPageIterator .MailIteratorContainer {
+	float:right;
+	line-height:22px;
+	overflow:hidden;
+	padding:0px 10px 0px 15px;
+}
+
+.MailPageIterator .MailIteratorContainer .RightPageIteratorBlock {
+	float:right;
+}
+
+.MailPageIterator .MailIteratorContainer .LeftPageIteratorBlock {
+	float:right;
+	margin-right:15px;
+}
+
+.MailPageIterator .TotalPages {
+	float:left;
+	line-height:19px;
+	vertical-align:middle;
+}
+
+.MailPageIterator .Number {
+	float:left;
+	line-height:19px;
+	vertical-align:middle;
+	font-weight: bold;
+	margin: 0px 2px;
+}
+
+
 
 /*=====================Mail Icon Public User===================*/
 
@@ -580,7 +620,7 @@
 	background: url('DefaultSkin/icons/24x24/CheckMailIcon.gif') no-repeat ;
 }
 
-.IndexIcon {
+.InboxIcon {
 	background: url('DefaultSkin/icons/24x24/InboxIcon.gif') no-repeat left center ;
 }
 
@@ -609,17 +649,16 @@
 	background: url('DefaultSkin/icons/24x24/DefaultIcon.gif') no-repeat center;
 }
 
-.TitleTagList {
+.TagTitleBar {
 	background: url('DefaultSkin/background/BgTitleTag1x20.gif') repeat-x ;
 }
 
-.IconTagTitle {
+.TagIcon {
 	background: url('DefaultSkin/icons/16x16/BlueTag.gif') no-repeat left center;
 	height: 20px; line-height: 20px;
 }
 
-.LeftTitleItem {
-	background: url('DefaultSkin/background/LeftTitleItem20x20.gif') no-repeat ;
+.DownArrow3Icon {
 	height: 20px; width: 20px;
 	cursor: pointer;
 }
@@ -670,17 +709,17 @@
 
 .MoreActionsIcon {
 	background: url('DefaultSkin/icons/16x16/MoreActions.gif') no-repeat left;
-	width: 24px; height: 20px;
+	height: 20px;
 }
 
 .ViewIcon {
 	background: url('DefaultSkin/icons/16x16/View.gif') no-repeat left;
-	width: 24px; height: 20px;
+	height: 20px;
 }
 
 .AddEventIcon {
 	background: url('DefaultSkin/icons/24x24/AddEvent.gif') no-repeat left;
-	width: 24px; height: 20px;
+	height: 20px;
 }
 
 .NomalStarIcon {
@@ -713,13 +752,13 @@
 	cursor: pointer;
 }
 
-.NextPage {
+.NextPageArrow {
 	background: url(DefaultSkin/icons/16x16/NextPage.gif) no-repeat;
 	width: 16px; height: 16px;
 	cursor: pointer;
 }
 
-.LastPage {
+.LastPageArrow {
 	background: url(DefaultSkin/icons/16x16/LastPage.gif) no-repeat;
 	width: 16px; height: 16px;
 	cursor: pointer;
@@ -731,13 +770,13 @@
 	cursor: pointer;
 }
 
-.PreviousPageIcon{
+.FirstPageArrow{
 	background: url(DefaultSkin/icons/16x16/PreviousPage.gif) no-repeat;
 	width: 16px; height: 16px;
 	cursor: pointer;
 }
 
-.BackPageIcon {
+.PreviousPageArrow {
 	background: url(DefaultSkin/icons/16x16/BackPage.gif) no-repeat;
 	width: 16px; height: 16px;
 	cursor: pointer;

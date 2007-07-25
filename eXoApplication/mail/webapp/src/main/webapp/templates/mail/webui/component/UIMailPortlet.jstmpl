@@ -75,7 +75,7 @@
 										<div class="SeparatorLine"><span></span></div>
 										<a href="#" class="ControlButton">
 											<div class="MailIcon CustomViewIcon" title="Custome panels view"><span></span></div>
-											<div class="BlueDownArrowIcon"><span></span></div>
+											<div class="DownArrow1Icon"><span></span></div>
 											<div style="clear:both;"><span></span></div>
 										</a>
 										<a href="#" class="ControlButton">
@@ -102,7 +102,7 @@
 								  		<div class="MiddleItemInfoBar" title="Show List" >
 								  			<div class="Icon AccountIcon"><span></span></div>
 								  			<div class="SelectedItemLabel">Default Account</div>
-								  			<div class="DropDownSelectIcon"><span></span></div>
+								  			<div class="DownArrow1Icon"><span></span></div>
 								  			<div style="clear: both;"><span></span></div>
 										  </div>
 										</div>
@@ -117,33 +117,25 @@
 							<div class="FolderList">
 								<div class="FolderItemList">
 									<div class="TitleItem">
-										<div class="LeftTitleItem" title="Collapse/Expand all"><span></span></div>
+										<div class="DownArrow3Icon" title="Collapse/Expand all"><span></span></div>
 										<div class="Title FolderIcon">Folders</div>
 						        <div style="clear: left"><span></span></div>
 									</div>
 									<div class="ItemList">
-										<a href="#" class="Item InboxIcon">Inbox<span>(5)</span></a>
-										<div class="Icon DraftsIcon">
-												<a href="#" class="Item">Drafts</a>
-										</div>
-										<div class="Icon SentIcon">
-												<a href="#" class="Item">Sent</a>
-										</div>
-										<div class="Icon SpamIcon">
-												<a href="#" class="Item">Spam</a>
-										</div>
-										<div class="Icon TrashIcon">
-												<a href="#" class="Item">Trash</a>
-										</div>
+										<a href="#"  class="Icon InboxIcon">Inbox<span class="MailQuantity">(9)</span></a>
+										<a href="#" class="Icon DraftsIcon">Drafts<span class="MailQuantity">(3)</span></a>
+										<a href="#" class="Icon SentIcon">Sent<span class="MailQuantity">(8)</span></a>
+										<a href="#" class="Icon SpamIcon">Spam<span class="MailQuantity">(2)</span></a>
+										<a href="#" class="Icon TrashIcon">Trash<span class="MailQuantity">(5)</span></a>
 									</div>
 								</div> <!-- FolderItemList -->
 								<div class="MyFolder">
 									<div class="TitleMyFolder">
-										<div class="LeftTitleItem" title="Collapse/Expand all"><span></span></div>
-										<div class="Title">My Folders</div>
+										<div class="DownArrow3Icon" title="Collapse/Expand all"><span></span></div>
+										<div class="Title FolderIcon">My Folders</div>
 						        <div style="clear: left"><span></span></div>
 									</div>
-									<div class="UITree">
+									<div class="UITree ScrollArea">
 									  <div class="TreeContainer JSContainer">
 									    <div class="Node" style="padding-top: 2px;">
 									   		<div class="ColapseIcon"><span></span></div>
@@ -151,7 +143,7 @@
 									   		<div class="NodeLabel">
 									   			<a href="#">Open source</a>
 									   		</div>
-										    <div class="ChildrenContainer" display = "block">
+										    <div class = "ChildrenContainer" actionLink="$actionLink" display = "block">
 												  <div class="Node" style="padding-top: 2px; margin-left: 10px; ">
 											   		<div class="Icon Default"><span></span></div>
 											   		<div class="NodeLabel">
@@ -190,21 +182,15 @@
 <!-- End FolderList -->								
 							<div class="UITag">
 								<div class="TagTitleBar">
-									<div class="SwitchButton ExpandButton" title="Collapse/Expand all"><span></span></div>
+									<div class="DownArrow3Icon" title="Collapse/Expand all"><span></span></div>
 									<div class="TagTitle TagIcon">Tags</div>
 						      <div style="clear: left"><span></span></div>
 								</div>
 								<div class="TagsList">
-									<a class="BlueTag" href="#">Customers</a>
-									<div class="IconItemTag RedTag">
-										<a href="#">Company</a>
-									</div>
-									<div class="IconItemTag GreenTag">
-										<a href="#">Docs Team</a>
-									</div>
-									<div class="IconItemTag VioletTag">
-										<a href="#">Design Team</a>
-									</div>
+									<a href="#" class="IconItemTag BlueTag">Customers</a>
+									<a href="#" class="IconItemTag RedTag">Company</a>
+									<a href="#" class="IconItemTag GreenTag">Docs Team</a>
+									<a href="#" class="IconItemTag VioletTag">Design Team</a>
 								</div>
 							</div>
 						</div>	
@@ -214,41 +200,42 @@
 <!--  Start Mail Working Detail -->
 					<div class="MailWorkingDetail">
 						
-						<div class="MailActionsBar">
-							<div style="float: left;">
-								<a href="#" class="MailActionButton">
+						<div class="MailList">
+							<div class="MailActionsbar">
+								<a href="#" class="ControlButton">
 									<div class="MoreActionsIcon">
 										<div class="DownArrow1Icon">More Actions</div>
 									</div>
 								</a>
 								<a href="#" class="ControlButton">
-									<div class="MailViewIcon"><span></span></div>
-									<div class="MailIconLabel">View</div>
-									<div class="BlueDownArrowIcon"><span></span></div>
-									<div style="clear:left;"><span></span></div>
+									<div class="ViewIcon">
+										<div class="DownArrow1Icon">View</div>
+									</div>
 								</a>
 								<a href="#" class="ControlButton">
-									<div class="AddEventIcon"><span></span></div>
-									<div class="MailIconLabel">Add event</div>
-									<div style="clear:left;"><span></span></div>
+									<div class="AddEventIcon">
+										<div class="MailIconLabel">Add event</div>
+									</div>
 								</a>
-								<div style="clear:left;"><span></span></div>
-							</div>
-							<div style="float: right; width: 350px;">
 								<div class="MailPageIterator">
 									<div class="MailIteratorContainer">
-  										<div class="FloatBlock TotalPages">Message(s)<span>20 of 140</span></div>
-	  							<a title="First Page" class="FloatBlock FirstPageArrow"><span></span></a>        
-	  							<a title="Previous Page" class="FloatBlock PreviousPageArrow"><span></span></a>
-									<div class="FloatBlock CurrentPageNumber">1</div>
-	  				 			<a title="Next Page" class="FloatBlock NextPageArrow" href="#"><span></span></a>
-	 				  			<a title="Last Page" class="FloatBlock LastPageArrow" href="#"><span></span></a>
-								    <div style="clear: left;"><span/></div>
+  									<div class="RightPageIteratorBlock">
+    	  							<a title="First Page" class="FloatBlockHidden FirstPageArrow"/></a>        
+    	  							<a title="Previous Page" class="FloatBlockHidden PreviousPageArrow"></a>
+    									<div class="Number">1</div>
+    	  				 			<a title="Next Page" class="FloatBlock NextPageArrow" href="#"/></a>
+    	 				  			<a title="Last Page" class="FloatBlock LastPageArrow"><span/></a>
+									    <div style="clear: left;"><span/></div>
+									  </div>
+									  <div class="LeftPageIteratorBlock">
+									  	<div class="TotalPages">Message(s)<span class="MailQuantity">20 of 140</span></div>
+									  </div>
+									  <div style="clear: right;"><span></span></div>
 								  </div>
 								</div>
+								<div style="clear: both;"><span/></div>
 							</div>
-							<div style="clear: both;"><span></span></div>
-							<div class="MailsList">
+							<div class="MailListDetail">
 								<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
   								<thead>
   									<tr>
@@ -256,20 +243,20 @@
 	      							<th style="width: 24px;"><div class="HighlightStarIcon" title="Add star for this message"><span></span></div></th>
 	      		          <th style="padding-left: 8px; width: 24%;">
 		      		          <div style="float: left;" >Sender</div>
-		      		          <div class="BlueDownArrowIcon" title="Sort by sender"><span></span></div>
+		      		          <div class="DownArrow1Icon" title="Sort by sender"><span></span></div>
 		      		          <div style="clear:left;"><span></span></div>
 	      		          </th>
 	      		          <th style="width: 24px;"><div class="AttackIcon" title="Attchments"><span></span></div></th>
 	      		          <th style="width: 24px; border-right: 1px solid #f8f8f8;"></th>
 	 	      	          <th style="padding-left: 8px;">
 		      		          <div style="float: left;">Subject</div>
-		      		          <div class="BlueDownArrowIcon" title="Sort by subject"><span></span></div>
+		      		          <div class="DownArrow1Icon" title="Sort by subject"><span></span></div>
 		      		          <div style="clear:left;"><span></span></div>
 	      		          </th>
 	 	      	          <th style="width: 24px;"><div class="TotalMessageIcon" title="Total message(s) in conversation"><span></span></div></th>
 	 	      	          <th style="width: 120px; padding-left: 8px;">
 	 	      	          	<div style="float: left;">Date & Time</div>
-		      		          <div class="BlueDownArrowIcon" title="Sort by Date & time"><span></span></div>
+		      		          <div class="DownArrow1Icon" title="Sort by Date & time"><span></span></div>
 		      		          <div style="clear:left;"><span></span></div>
 	 	      	          </th>
 	 	      	          <th>Size</th>
@@ -333,11 +320,11 @@
 <!--  Start Mail Reading Pane -->
 						<div class="ReadingPane">
 							<div class="ReadingPaneBar">
-								<div class="SubjectTitle">Subject:Chao anh</div>
-								<div class="ReadingPaneSwitcher MaximizeButton" title="Maximize Reading Pane"><span></span></div>
+								<div class="ReadingPaneTitle">Subject:Chao anh</div>
+								<div class="MaximizeReadingPane" title="Maximize Reading Pane"><span></span></div>
 								<div style="clear:both;"><span></span></div>
 							</div>
-							<div class="ReadingPaneDetails">
+							<div class="ReadingPaneDeltail">
 <!--  Start DecoratorBox ViewBoxStyle -->
 								<div class="DecoratorBox">
 									<div class="ViewBoxStyle">
@@ -389,7 +376,7 @@
 															</div>
 														</div>
 														<div class="MessageActions" >
-															<div class="BlueDownArrowIcon"><span></span></div>
+															<div class="DownArrow1Icon"><span></span></div>
 															<div class="ShowHideTitle">Hide deails</div>
 															<div class="MonthDate">June 26</div>
 															<div class="AttackIcon"><span></span></div>
