@@ -15,10 +15,6 @@ import java.util.Properties;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
-import javax.jcr.Session;
-import javax.jcr.query.Query;
-import javax.jcr.query.QueryManager;
-import javax.jcr.query.QueryResult;
 import javax.mail.Multipart;
 import javax.mail.Part;
 import javax.mail.Store;
@@ -80,61 +76,20 @@ public class MailServiceImpl implements MailService{
   }
   
   public Folder getFolder(String username, String accountId, String folderName) throws Exception {
-    Folder folder = null;
-    Node folderHome = storage_.getFolderHome(username, accountId);
-    Node node = null;
-    // if this folder exists, creates the object and returns it
-    if (folderHome.hasNode(folderName)) {
-      node = folderHome.getNode(folderName);
-      folder = new Folder();
-      folder.setLabel(node.getProperty("exo:label").getString());
-      folder.setName(node.getProperty("exo:name").getString());
-      folder.setNumberOfUnreadMessage((int)node.getProperty("exo:unreadMessages").getLong());
-    }
-    return folder ;
+    return storage_.getFolder(username, accountId, folderName);
   }
   
   public void saveUserFolder(String username, String accountId, Folder folder) throws Exception {
-    // gets folder home node of the specified account
-    Node home = storage_.getFolderHome(username, accountId);
-    Node myFolder = null;
-    if (home.hasNode(folder.getName())) { // if the folder exists, gets it
-      myFolder = home.getNode(folder.getName());
-    } else { // if it doesn't exist, creates it
-      myFolder = home.addNode(folder.getName(), "exo:folder");
-    }
-    // sets some properties
-    myFolder.setProperty("exo:label", folder.getLabel());
-    myFolder.setProperty("exo:unreadMessages", folder.getNumberOfUnreadMessage());
-    myFolder.setProperty("exo:name", folder.getName());
-
-    home.getSession().save();
+    storage_.saveUserFolder(username, accountId, folder);
   }
   
 
   public void removeUserFolder(String username, Folder folder) throws Exception {
-    // gets the mail home node
-    Session sess = storage_.getMailHomeNode(username).getSession();
-    QueryManager qm = sess.getWorkspace().getQueryManager();
-    // gets the specified folder node
-    StringBuffer queryString = new StringBuffer("//element(*,exo:folder)[@exo:name='").
-                                  append(folder.getName()).
-                                  append("']");
-    Query query = qm.createQuery(queryString.toString(), Query.XPATH);
-    QueryResult result = query.execute();
-    NodeIterator it = result.getNodes();
-    // removes the folder it it exists
-    if (it.hasNext()) it.nextNode().remove();
-    sess.save();
+    storage_.removeUserFolder(username, folder);
   }
   
   public void removeUserFolder(String username, Account account, Folder folder) throws Exception {
-    //  gets the specified folder
-    Node folderHome = storage_.getFolderHome(username, account.getId());
-    if (folderHome.hasNode(folder.getName())) {
-      folderHome.getNode(folder.getName()).remove();
-    }
-    folderHome.getSession().save();
+    storage_.removeUserFolder(username, account, folder);
   }
   
   public Message getMessageById(String username, String messageName, String accountId) throws Exception {
@@ -150,12 +105,7 @@ public class MailServiceImpl implements MailService{
   }
   
   public List<MessageHeader> getMessageByFolder(String username, Folder folder, String accountId) throws Exception {
-    // gets all the messages from the specified folder, using a filter
-    MessageFilter filter = new MessageFilter("filter by folder "+folder.getName());
-    filter.setAccountId(accountId);
-    String[] folders = {folder.getName()};
-    filter.setFolder(folders);
-    return storage_.getMessages(username, filter);
+    return storage_.getMessageByFolder(username, folder, accountId);
   }
  
   
@@ -262,26 +212,18 @@ public class MailServiceImpl implements MailService{
   
   public int checkNewMessage(String username, Account account) throws Exception {
     MailServerConfiguration conf = account.getConfiguration();
-    /**
-     * conf contains the following information :
-     * - host : the server ip address or name
-     * - port : POP3 : 110, POP3 (SSL) : 995, IMAP : 143, IMAP (SSL) : 993
-     * - protocol : pop3 or imap
-     * - username
-     * - password
-     * - folder : the folder to open (e.g. INBOX)
-     */
-    
     System.out.println("\n ### Getting mail from " + conf.getHost() + " ... !");
     int totalMess = -1;
     try {
       Properties props = System.getProperties();
+      String socketFactoryClass = "javax.net.SocketFactory";
+      if (conf.isSsl()) socketFactoryClass = "javax.net.ssl.SSLSocketFactory";
       if(conf.getProtocol().equals("pop3")) {
         props.setProperty("mail.pop3.socketFactory.fallback", "false");
-        props.setProperty( "mail.pop3.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+        props.setProperty( "mail.pop3.socketFactory.class", socketFactoryClass);
       } else if (conf.getProtocol().equals("imap")) {
         props.setProperty("mail.imap.socketFactory.fallback", "false");
-        props.setProperty("mail.imap.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+        props.setProperty("mail.imap.socketFactory.class", socketFactoryClass);
       }
       
       javax.mail.Session session = javax.mail.Session.getDefaultInstance(props);

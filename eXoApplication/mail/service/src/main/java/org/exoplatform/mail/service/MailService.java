@@ -100,7 +100,28 @@ public interface MailService {
    */
   public void removeUserFolder(String username, Account account, Folder folder) throws Exception ;
   
-  
+  /** This method should:
+    * 1. Check the tag name to see if  the tag name is configured in the account
+    * 2. Check to see if the tag is already set in the message
+    * 3. Add the tag to the message and save the message.
+    * 4. Invalidate or update the cache.
+    * @param username
+    * @param message
+    * @param tag
+    * @throws Exception
+    */
+   public void addTag(String username, Message message, String tag) throws Exception ;
+   /**
+    * This method should: 
+    * 1. Remove the tag from the message
+    * 2. Save the message into the database
+    * 3. Update or invalidate the cache
+    * @param username
+    * @param message
+    * @param tag
+    * @throws Exception
+    */
+   public void removeTag(String username, Message message, String tag) throws Exception ;
   /**
    * This method should:
    * 1. Find all the message that has the tag , remove the tag from the message and save
@@ -112,6 +133,7 @@ public interface MailService {
    * @throws Exception
    */
   public void removeTag(String username, Account account, String tag) throws Exception ;
+  
   /**
    * This method should:
    * 1. Load the message from the database if it existed and return.
@@ -123,6 +145,20 @@ public interface MailService {
    * @throws Exception
    */
   public Message getMessageById(String username, String nodeName, String accountId) throws Exception ;
+  /**
+   * This method should:
+   * 1. Find all the message according the parameter that is specified in the filter object
+   * 
+   * @param username
+   * @param filter
+   * @return
+   * @throws Exception
+   */
+  public List<MessageHeader> getMessageByFilter(String username, MessageFilter filter) throws Exception ;
+  
+  public List<MessageHeader> getMessageByFolder(String username, Folder folder, String accountId) throws Exception;
+  
+  public void saveMessage(String username, String accountId, Message message, boolean isNew) throws Exception;
   /**
    * This method should:
    * 1. Update the message in the database if it is existed
@@ -153,39 +189,7 @@ public interface MailService {
    * @throws Exception
    */
   public void removeMessage(String username, String[] messageId, String accountId) throws Exception ;
-  /**
-   * This method should:
-   * 1. Check the tag name to see if  the tag name is configured in the account
-   * 2. Check to see if the tag is already set in the message
-   * 3. Add the tag to the message and save the message.
-   * 4. Invalidate or update the cache.
-   * @param username
-   * @param message
-   * @param tag
-   * @throws Exception
-   */
-  public void addTag(String username, Message message, String tag) throws Exception ;
-  /**
-   * This method should: 
-   * 1. Remove the tag from the message
-   * 2. Save the message into the database
-   * 3. Update or invalidate the cache
-   * @param username
-   * @param message
-   * @param tag
-   * @throws Exception
-   */
-  public void removeTag(String username, Message message, String tag) throws Exception ;
-  /**
-   * This method should:
-   * 1. Find all the message according the parameter that is specified in the filter object
-   * 
-   * @param username
-   * @param filter
-   * @return
-   * @throws Exception
-   */
-  public List<MessageHeader> getMessageByFilter(String username, MessageFilter filter) throws Exception ;
+
   /**
    * This method should send out the message
    * @param message
@@ -201,8 +205,5 @@ public interface MailService {
    * @throws Exception
    */
   public int  checkNewMessage(String username, Account account) throws Exception ;  
-  
-  public void saveMessage(String username, String accountId, Message message, boolean isNew) throws Exception;
-  
-  public List<MessageHeader> getMessageByFolder(String username, Folder folder, String accountId) throws Exception;
+
 }

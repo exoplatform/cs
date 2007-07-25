@@ -20,7 +20,7 @@ import javax.jcr.query.QueryResult;
 
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Attachment;
-import org.exoplatform.mail.service.JCRAttachment;
+import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.MessageHeader;
@@ -184,6 +184,15 @@ public class JCRDataStorage implements DataStorage{
     }
     return list ;
   }
+  
+  public List<MessageHeader> getMessageByFolder(String username, Folder folder, String accountId) throws Exception {
+    // gets all the messages from the specified folder, using a filter
+    MessageFilter filter = new MessageFilter("filter by folder "+folder.getName());
+    filter.setAccountId(accountId);
+    String[] folders = {folder.getName()};
+    filter.setFolder(folders);
+    return getMessages(username, filter);
+  }
 
   public void removeAccount(String username, Account account) throws Exception {
     Node accountHome = getMailHomeNode(username) ;
@@ -271,6 +280,63 @@ public class JCRDataStorage implements DataStorage{
       }
       homeMsg.getSession().save();
     }
+  }
+  
+  public Folder getFolder(String username, String accountId, String folderName) throws Exception {
+    Folder folder = null;
+    Node folderHome = getFolderHome(username, accountId);
+    Node node = null;
+    // if this folder exists, creates the object and returns it
+    if (folderHome.hasNode(folderName)) {
+      node = folderHome.getNode(folderName);
+      folder = new Folder();
+      folder.setLabel(node.getProperty("exo:label").getString());
+      folder.setName(node.getProperty("exo:name").getString());
+      folder.setNumberOfUnreadMessage((int)node.getProperty("exo:unreadMessages").getLong());
+    }
+    return folder ;
+  }
+  
+  public void saveUserFolder(String username, String accountId, Folder folder) throws Exception {
+    // gets folder home node of the specified account
+    Node home = getFolderHome(username, accountId);
+    Node myFolder = null;
+    if (home.hasNode(folder.getName())) { // if the folder exists, gets it
+      myFolder = home.getNode(folder.getName());
+    } else { // if it doesn't exist, creates it
+      myFolder = home.addNode(folder.getName(), "exo:folder");
+    }
+    // sets some properties
+    myFolder.setProperty("exo:label", folder.getLabel());
+    myFolder.setProperty("exo:unreadMessages", folder.getNumberOfUnreadMessage());
+    myFolder.setProperty("exo:name", folder.getName());
+
+    home.getSession().save();
+  }
+  
+  public void removeUserFolder(String username, Folder folder) throws Exception {
+    // gets the mail home node
+    Session sess = getMailHomeNode(username).getSession();
+    QueryManager qm = sess.getWorkspace().getQueryManager();
+    // gets the specified folder node
+    StringBuffer queryString = new StringBuffer("//element(*,exo:folder)[@exo:name='").
+                                  append(folder.getName()).
+                                  append("']");
+    Query query = qm.createQuery(queryString.toString(), Query.XPATH);
+    QueryResult result = query.execute();
+    NodeIterator it = result.getNodes();
+    // removes the folder it it exists
+    if (it.hasNext()) it.nextNode().remove();
+    sess.save();
+  }
+  
+  public void removeUserFolder(String username, Account account, Folder folder) throws Exception {
+    //  gets the specified folder
+    Node folderHome = getFolderHome(username, account.getId());
+    if (folderHome.hasNode(folder.getName())) {
+      folderHome.getNode(folder.getName()).remove();
+    }
+    folderHome.getSession().save();
   }
   
   public Node getMailHomeNode(String username) throws Exception {

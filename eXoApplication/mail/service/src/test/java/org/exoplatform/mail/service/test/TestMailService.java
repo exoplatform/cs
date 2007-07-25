@@ -83,11 +83,12 @@ public class TestMailService extends BaseMailTestCase{
     //  create mail server config
     MailServerConfiguration conf = new MailServerConfiguration();
     conf.setFolder(folder.getName());
-    conf.setUserName("username"); 
-    conf.setPassword("password");
-    conf.setHost("mail.server.com");
-    conf.setPort("110"); // POP3 : 110, POP3 (SSL) : 995, IMAP : 143, IMAP (SSL) : 993
+    conf.setUserName("exo@exo-postfix"); 
+    conf.setPassword("exo");
+    conf.setHost("192.168.1.67");
+    conf.setPort("143"); // POP3 : 110, POP3 (SSL) : 995, IMAP : 143, IMAP (SSL) : 993
     conf.setProtocol("imap"); // pop3 or imap
+    conf.setSsl(false);
     myaccount.setConfiguration(conf);
     mailService_.updateAccount("hungnguyen", myaccount);
     

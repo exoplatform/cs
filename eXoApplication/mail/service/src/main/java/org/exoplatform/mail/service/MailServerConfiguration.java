@@ -5,11 +5,23 @@
 package org.exoplatform.mail.service;
 
 /**
+ * <p>
  * Created by The eXo Platform SARL
  * Author : Hung Nguyen
  *          hung.nguyen@exoplatform.com
  * July 2, 2007  
- * 
+ * <br/><br/>
+ * MailServerConfiguration contains the following information :
+ * <ul>
+ * <li>host : the server ip address or fqdn</li>
+ * <li>port : POP3 : 110, POP3 (SSL) : 995, IMAP : 143, IMAP (SSL) : 993</li>
+ * <li>protocol : pop3 or imap</li>
+ * <li>ssl : true if you want to encrypt with ssl, false otherwise</li>
+ * <li>username</li>
+ * <li>password</li>
+ * <li>folder : the folder to open (e.g. INBOX)</li>
+ * </ul>
+ * </p>
  */
 public class MailServerConfiguration {
   private String protocol ;
@@ -18,6 +30,7 @@ public class MailServerConfiguration {
   private String folder ;
   private String username ;
   private String password ;
+  private boolean ssl_;
   
   /**
    * The protocol_ supported by mail server ex: pop3, imap
@@ -40,5 +53,8 @@ public class MailServerConfiguration {
   
   public String getPassword() { return password ; }
   public void   setPassword(String s) { password = s ; }
+  
+  public boolean isSsl() {  return ssl_;  }
+  public void setSsl(boolean ssl) { this.ssl_ = ssl; }
   
 }
