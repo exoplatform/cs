@@ -14,37 +14,37 @@ package org.exoplatform.mail.service;
  * 
  */
 public class Folder {
-  private String id_ ;
-  private String name_ ;
-  private String label_ ;
-  private int unreadMessage_ ;
+  private String id ;
+  private String name ;
+  private String label ;
+  private int unreadMessage ;
   
   /**
    * The id folder should have the form AccountId/DefaultFolder/folderName or AccountId/UserFolder/folderName
    * @return the id of the folder
    */
-  public String getId()  { return id_ ; }
-  public void   setId(String s) { id_ = s ; }
+  public String getId()  { return id ; }
+  public void   setId(String s) { id = s ; }
   
   /**
    * The name of the folder like Inbox, Sent, MyFolder
    * @return The name of the folder
    */
-  public String getName() { return name_ ; }
-  public void   setName(String s) { name_ = s ; }
+  public String getName() { return name ; }
+  public void   setName(String s) { name = s ; }
   
   /**
    * The display label of the folder like Inbox, Sent, MyFolder
    * @return The label of the folder
    */
-  public String getLabel() { return label_ ; }
-  public void   setLabel(String s) { label_ = s ; }
+  public String getLabel() { return label ; }
+  public void   setLabel(String s) { label = s ; }
   
   /**
    * @return  The number of the unread messages
    */
-  public int  getNumberOfUnreadMessage() { return unreadMessage_ ; }
-  public void setNumberOfUnreadMessage(int number) { unreadMessage_ = number ; }
+  public int  getNumberOfUnreadMessage() { return unreadMessage ; }
+  public void setNumberOfUnreadMessage(int number) { unreadMessage = number ; }
   
   /**
    * @return Calculate and return the account id  of the folder base on the id of  the folder

@@ -11,31 +11,31 @@ package org.exoplatform.mail.service;
  * Jun 23, 2007  
  */
 public class MessageFilter {
-  private String name_ ;
-  private String accountId_ ;
-  private String[] folder_ ;
-  private String[] tag_ ;
-  private String subject_ ;
-  private String body_ ;
+  private String name ;
+  private String accountId ;
+  private String[] folder ;
+  private String[] tag ;
+  private String subject ;
+  private String body ;
 
   public MessageFilter(String name) {
-    name_ = name ;
+    this.name = name ;
   }
   
-  public String getName() { return name_ ; }
+  public String getName() { return name ; }
   
-  public String getAccountId() { return accountId_ ; }
-  public void setAccountId(String id) { accountId_ =  id ; }
+  public String getAccountId() { return accountId ; }
+  public void setAccountId(String id) { accountId =  id ; }
   
-  public String[] getFolder() { return folder_ ; }
-  public void setFolder(String[] folder) { folder_ = folder ; }
+  public String[] getFolder() { return folder ; }
+  public void setFolder(String[] folder) { this.folder = folder ; }
   
-  public String[] getTag() { return tag_ ; }
-  public void setTag(String[] tag) { tag_ = tag ; }
+  public String[] getTag() { return tag ; }
+  public void setTag(String[] tag) { this.tag = tag ; }
   
-  public String getSubject() { return subject_ ; }
-  public void setSubject(String subject) { subject_ = subject ; }
+  public String getSubject() { return subject ; }
+  public void setSubject(String subject) { this.subject = subject ; }
   
-  public String getBody() { return body_ ; }
-  public void setBody(String body) { body_ = body ; }
+  public String getBody() { return body ; }
+  public void setBody(String body) { this.body = body ; }
 }

@@ -11,14 +11,9 @@ package org.exoplatform.mail.service;
  * Jul 10, 2007  
  */
 public class Tag {
-  private String value_;
-
-  public String getValue() {
-    return value_;
-  }
-
-  public void setValue(String value) {
-    this.value_ = value;
-  }
   
+  private String value;
+
+  public String getValue() { return value ; }
+  public void setValue(String value) { this.value = value ; }  
 }

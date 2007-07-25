@@ -12,33 +12,33 @@ package org.exoplatform.mail.service;
  * 
  */
 public class MailServerConfiguration {
-  private String protocol_ ;
-  private String host_ ;
-  private String port_ ;
-  private String folder_ ;
-  private String username_ ;
-  private String password_ ;
+  private String protocol ;
+  private String host ;
+  private String port ;
+  private String folder ;
+  private String username ;
+  private String password ;
   
   /**
    * The protocol_ supported by mail server ex: pop3, imap
    * @return the protocol_
    */
-  public String getProtocol()  { return protocol_ ; }
-  public void   setProtocol(String s) { protocol_ = s ; }
+  public String getProtocol()  { return protocol ; }
+  public void   setProtocol(String s) { protocol = s ; }
   
-  public String getHost() { return host_ ; }
-  public void   setHost(String s) { host_ = s ; }
+  public String getHost() { return host ; }
+  public void   setHost(String s) { host = s ; }
   
-  public String getPort() { return port_ ; }
-  public void   setPort(String s) { port_ = s ; }
+  public String getPort() { return port ; }
+  public void   setPort(String s) { port = s ; }
   
-  public String getFolder() { return folder_ ; }
-  public void   setFolder(String s) { folder_ = s ; }
+  public String getFolder() { return folder ; }
+  public void   setFolder(String s) { folder = s ; }
   
-  public String getUserName() { return username_ ; }
-  public void   setUserName(String s) { username_ = s ; }
+  public String getUserName() { return username ; }
+  public void   setUserName(String s) { username = s ; }
   
-  public String getPassword() { return password_ ; }
-  public void   setPassword(String s) { password_ = s ; }
+  public String getPassword() { return password ; }
+  public void   setPassword(String s) { password = s ; }
   
 }

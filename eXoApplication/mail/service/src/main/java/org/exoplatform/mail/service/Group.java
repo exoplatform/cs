@@ -13,24 +13,24 @@ package org.exoplatform.mail.service;
  */
 public class Group {
   
-  private String groupName_ ;
-  private String[] permissions_ ;
-  private String description_ ;
+  private String groupName ;
+  private String[] permissions ;
+  private String description ;
   
   /**
    * The groupName_ of the contact for ex: friends, ...
    * @return the groupName_ of the group
    */
-  public String getGroupName()  { return groupName_ ; }
-  public void   setGroupName(String s) { groupName_ = s ; }
+  public String getGroupName()  { return groupName ; }
+  public void   setGroupName(String s) { groupName = s ; }
   
-  public String[] getPermissions() {return permissions_ ; }
-  public void setPermissions(String[] per) { permissions_ = per ; }
+  public String[] getPermissions() {return permissions ; }
+  public void setPermissions(String[] per) { permissions = per ; }
   /**
    * The display description_ of the group
    * @return The group description
    */
-  public String getDescription() { return description_ ; }
-  public void   setDescription(String s) { description_ = s ; }
+  public String getDescription() { return description ; }
+  public void   setDescription(String s) { description = s ; }
   
 }

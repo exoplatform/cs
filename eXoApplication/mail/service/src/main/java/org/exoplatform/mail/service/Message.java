@@ -14,59 +14,56 @@ import java.util.List;
  * Jun 23, 2007  
  */
 public class Message extends MessageHeader {
-  private String from_;
-  private String to_ ;
-  private String cc_ ;
-  private String bcc_ ;
-  private String body_ ;
-  private String subject_ ;
-  private Date sendDate_ ;
-  private Date receivedDate_ ;
-  private boolean isUnread_ = false ;
+  private String from;
+  private String to ;
+  private String cc ;
+  private String bcc ;
+  private String body ;
+  private String subject ;
+  private Date sendDate ;
+  private Date receivedDate ;
+  private boolean isUnread = false ;
   
-  private String[] folders_ ;
-  private String[] tags_ ;
+  private String[] folders ;
+  private String[] tags ;
   
-  private List<Attachment> attachments_ ;
+  private List<Attachment> attachments ;
   
-  public String getMessageTo() { return to_ ; }
-  public void setMessageTo(String s) { to_ = s ; }
+  public String getMessageTo() { return to ; }
+  public void setMessageTo(String s) { to = s ; }
   
-  public String getMessageCc() { return cc_ ; }
-  public void setMessageCc(String s) { cc_ = s ; }
+  public String getMessageCc() { return cc ; }
+  public void setMessageCc(String s) { cc = s ; }
   
-  public String getMessageBcc() { return bcc_ ; }
-  public void setMessageBcc(String s) { bcc_ = s ; }
+  public String getMessageBcc() { return bcc ; }
+  public void setMessageBcc(String s) { bcc = s ; }
   
-  public String getSubject() { return subject_ ; }
-  public void setSubject(String s) { subject_ = s ; }
+  public String getSubject() { return subject ; }
+  public void setSubject(String s) { subject = s ; }
   
-  public String getMessageBody() { return body_ ; }
-  public void   setMessageBody(String s) { body_ =  s ; }
+  public String getMessageBody() { return body ; }
+  public void   setMessageBody(String s) { body =  s ; }
   
-  public void setUnread(boolean b) { isUnread_ = b ; }
-  public boolean isUnread() { return isUnread_ ; }
+  public void setUnread(boolean b) { isUnread = b ; }
+  public boolean isUnread() { return isUnread ; }
   
-  public void setSendDate(Date d) { sendDate_ = d ; }
-  public Date getSendDate() { return sendDate_ ; }
+  public Date getSendDate() { return sendDate ; }
+  public void setSendDate(Date d) { sendDate = d ; }
   
-  public void setReceivedDate(Date d) { receivedDate_ = d ; }
-  public Date getReceivedDate() { return receivedDate_ ; }
+  public Date getReceivedDate() { return receivedDate ; }
+  public void setReceivedDate(Date d) { receivedDate = d ; }
   
-  public void setFolders(String[] folders) { folders_ = folders ; }
-  public String[] getFolders() { return folders_ ; }
+  public String[] getFolders() { return folders ; }
+  public void setFolders(String[] folders) { this.folders = folders ; }
   
-  public void setTags(String[] tags) { tags_ = tags ; }
-  public String[] getTags() { return tags_ ; }
+  public String[] getTags() { return tags ; }
+  public void setTags(String[] tags) { this.tags = tags ; }
   
-  public List<Attachment> getAttachments() { return attachments_ ; }
-  public void setAttachements(List<Attachment> attachments) { attachments_ = attachments ; }
+  public List<Attachment> getAttachments() { return attachments ; }
+  public void setAttachements(List<Attachment> attachments) { this.attachments = attachments ; }
   
   public Message cloneMessage() { return null ; }
-  public String getFrom() {
-    return from_;
-  }
-  public void setFrom(String from) {
-    this.from_ = from;
-  } 
+  
+  public String getFrom() { return from ; }
+  public void setFrom(String from) { this.from = from ; } 
 }

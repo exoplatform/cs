@@ -18,15 +18,10 @@ import javax.jcr.Session;
  */
 public class SaveMailAttachment extends Attachment{
   
-  private InputStream inputStream_;
+  private InputStream inputStream;
   
-  public void setInputStream(InputStream is) {
-    inputStream_ = is;
-  }
-  
-  public InputStream getInputStream() {
-    return inputStream_;
-  }
+  public InputStream getInputStream() { return inputStream ; }
+  public void setInputStream(InputStream is) { inputStream = is ; }
   
   @Override
   public InputStream getInputStream(Session session) throws Exception {

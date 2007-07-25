@@ -11,17 +11,13 @@ package org.exoplatform.mail.service;
  * Jun 23, 2007  
  */
 public class MessageHeader {
-  private String id_ ;
-  private String accountId_;
+  private String id ;
+  private String accountId;
   
-  public String getId() { return id_ ; }
-  public void setId(String id) { id_ = id; }
+  public String getId() { return id ; }
+  public void setId(String id) { this.id = id; }
   
-  public String getAccountId() {
-    return accountId_;
-  }
-  public void setAccountId(String accountId) {
-    this.accountId_ = accountId;
-  }
+  public String getAccountId() { return accountId ; }
+  public void setAccountId(String accountId) { this.accountId = accountId ; }
 
 }
