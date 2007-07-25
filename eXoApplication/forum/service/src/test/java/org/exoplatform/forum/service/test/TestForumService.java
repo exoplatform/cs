@@ -4,11 +4,14 @@
  **************************************************************************/
 package org.exoplatform.forum.service.test;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Random;
 
 
+import org.apache.poi.hssf.record.formula.functions.Int;
 import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.forum.service.Category;
 import org.exoplatform.forum.service.Forum;
@@ -122,16 +125,27 @@ public class TestForumService extends BaseForumTestCase{
 		forumService_.createForum(cat.getId(), forum);
 		Topic topic = createdTopic("222222");
 		forumService_.createTopic(cat.getId(), forum.getId(), topic);
-		Post post = createdPost("333333");
-		//add Post
-		forumService_.createPost(cat.getId(), forum.getId(), topic.getId(), post);
+		List<Post> posts = new ArrayList<Post>();
+		Random rand = new Random();
+		for (int i = 0; i < 25; ++i) {
+		  Post post = createdPost(String.valueOf(rand.nextInt(99999999)));
+		  posts.add(post);
+		  forumService_.createPost(cat.getId(), forum.getId(), topic.getId(), post);
+		}
 		// getPost
-		assertNotNull(forumService_.getPost(cat.getId(), forum.getId(), topic.getId(), post.getId()));
+		assertNotNull(forumService_.getPost(cat.getId(), forum.getId(), topic.getId(), posts.get(0).getId()));
 		//get ListPost
-		List<Post> posts = forumService_.getPosts(cat.getId(), forum.getId(), topic.getId());
-		assertEquals(posts.size(), 2);// size = 2 (first post and new post)
-		// update Post
-		Post newPost = forumService_.getPost(cat.getId(), forum.getId(), topic.getId(), post.getId());
+		JCRPageList pagePosts = forumService_.getPosts(cat.getId(), forum.getId(), topic.getId());
+		assertEquals(pagePosts.getAvailable(), posts.size() + 1);// size = 26 (first post and new postList)
+    List page1 = pagePosts.getPage(1, session_) ;
+    assertEquals(page1.size(), 10);  
+    List page2 = pagePosts.getPage(2, session_) ;
+    assertEquals(page2.size(), 10);  
+    List page3 = pagePosts.getPage(3, session_) ;
+    assertEquals(page3.size(), 6);  
+		// update Post First
+		Post newPost = (Post)pagePosts.getPage(1, session_).get(0);
+		
 		newPost.setMessage("New messenger");
 		forumService_.updatePost(cat.getId(), forum.getId(), topic.getId(), newPost);
 		assertEquals("New messenger", forumService_.getPost(cat.getId(), forum.getId(), topic.getId(), newPost.getId()).getMessage());
@@ -144,7 +158,7 @@ public class TestForumService extends BaseForumTestCase{
 		//test remove Post return post
 		assertNotNull(forumService_.removePost(cat.getId(), forum.getId(), topicnew.getId(), newPost.getId()));
 		//getViewPost
-		System.out.print("\n\n" + topicnew.getViewCount() + "\n\n");
+//		System.out.print("\n\n" + topicnew.getViewCount() + "\n\n");
   }
   
   

@@ -110,9 +110,9 @@ public class ForumServiceImpl implements ForumService{
   public Post getPost(String categoryId, String forumId, String topicId, String postId) throws Exception {
     return storage_.getPost(categoryId, forumId, topicId, postId);
   }
-  
-  public List<Post> getPosts(String categoryId, String forumId, String topicId) throws Exception {
-    return storage_.getPosts(categoryId, forumId, topicId);
+
+  public JCRPageList getPosts(String categoryId, String forumId, String topicId) throws Exception {
+  	return storage_.getPosts(categoryId, forumId, topicId);
   }
   
   public void movePost(String postPath, String destTopicPaths) throws Exception {

@@ -236,11 +236,11 @@ public interface ForumService {
    * @return
    * @throws Exception
    */
-  public List<Post> getPosts(String categoryId, String forumId, String topicId)throws Exception;
+  public JCRPageList getPosts(String categoryId, String forumId, String topicId)throws Exception;
   /**
    * This method should:
    * 1. Check the user permission
-   * 2. Load the Post data from the database
+   * 2. Load the Page Post data from the database
    * @param username
    * @param postId
    * @return

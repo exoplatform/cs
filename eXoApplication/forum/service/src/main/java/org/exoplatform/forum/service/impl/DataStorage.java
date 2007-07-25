@@ -43,7 +43,7 @@ public interface DataStorage {
    public Topic removeTopic(String categoryId, String forumId, String topicId) throws Exception;
    public void moveTopic(String  topicPath, String destForumPath) throws Exception;
    
-   public List<Post> getPosts(String categoryId, String forumId, String topicId)throws Exception;
+   public JCRPageList getPosts(String categoryId, String forumId, String topicId)throws Exception;
    public Post getPost(String categoryId, String forumId, String topicId, String postId)throws Exception;
    public void createPost(String categoryId, String forumId, String topicId, Post post)throws Exception;
    public void updatePost(String categoryId, String forumId, String topicId, Post newPost)throws Exception;

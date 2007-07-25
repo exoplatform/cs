@@ -19,14 +19,14 @@ import sun.awt.RepaintArea;
  */
 public class TopicView {
   private Topic topic ;
-  private List<Post> posts ;
+  private JCRPageList pagePosts ;
   
   public TopicView() {}
   
   public Topic getTopic() { return topic;  }
 	public void setTopicView(Topic topic) {	this.topic = topic; }
 	
-	public List<Post> getTopicView() { return posts; }
-	public void setPostsView(List<Post> posts) {this.posts = posts; }
+	public JCRPageList getTopicView() { return pagePosts; }
+	public void setPostsView(JCRPageList pagePosts) {this.pagePosts = pagePosts; }
 	
 }
