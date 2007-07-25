@@ -110,95 +110,92 @@
 								</div>
 							</div>
 						</div>
-						<a class="AddNavigationIcon" href = "#" title="New Account"><span></span></a>
+						<a class="AddAccountIcon" href = "#" title="Add New Account"><span></span></a>
 		        <div style="clear: left"><span></span></div>
 						
-						<div class="AccountList">
-							<div class="FolderList">
-								<div class="FolderItemList">
-									<div class="TitleItem">
-										<div class="DownArrow3Icon" title="Collapse/Expand all"><span></span></div>
-										<div class="Title FolderIcon">Folders</div>
-						        <div style="clear: left"><span></span></div>
-									</div>
-									<div class="ItemList">
-										<a href="#"  class="Icon InboxIcon">Inbox<span class="MailQuantity">(9)</span></a>
-										<a href="#" class="Icon DraftsIcon">Drafts<span class="MailQuantity">(3)</span></a>
-										<a href="#" class="Icon SentIcon">Sent<span class="MailQuantity">(8)</span></a>
-										<a href="#" class="Icon SpamIcon">Spam<span class="MailQuantity">(2)</span></a>
-										<a href="#" class="Icon TrashIcon">Trash<span class="MailQuantity">(5)</span></a>
-									</div>
-								</div> <!-- FolderItemList -->
-								<div class="MyFolder">
-									<div class="TitleMyFolder">
-										<div class="DownArrow3Icon" title="Collapse/Expand all"><span></span></div>
-										<div class="Title FolderIcon">My Folders</div>
-						        <div style="clear: left"><span></span></div>
-									</div>
-									<div class="UITree ScrollArea">
-									  <div class="TreeContainer JSContainer">
-									    <div class="Node" style="padding-top: 2px;">
-									   		<div class="ColapseIcon"><span></span></div>
-									   		<div class="Icon Default"><span></span></div>
-									   		<div class="NodeLabel">
-									   			<a href="#">Open source</a>
-									   		</div>
-										    <div class = "ChildrenContainer" actionLink="$actionLink" display = "block">
-												  <div class="Node" style="padding-top: 2px; margin-left: 10px; ">
-											   		<div class="Icon Default"><span></span></div>
-											   		<div class="NodeLabel">
-											   			<a href="#">eXo platform</a>
-											   		</div>
-												  </div>
-												  <div class="Node" style="padding-top: 2px; margin-left: 10px; ">
-											   		<div class="Icon Default"><span></span></div>
-											   		<div class="NodeLabel">
-											   			<a href="#">ObjectWeb</a>
-											   		</div>
-												  </div>
-										    </div>				  	
-										  </div>
-										  <div class="Node" style="padding-top: 2px;">
-									   		<div class="ColapseIcon"><span></span></div>
-									   		<div class="Icon Default"><span></span></div>
-									   		<div class="NodeLabel">
-									   			<a href="#">Customers</a>
-									   		</div>
-										    <div class = "ChildrenContainer" display = "block">
-												  <div class="Node" style="padding-top: 2px; margin-left: 10px; ">
-											   		<div class="Icon Default"><span></span></div>
-											   		<div class="NodeLabel">
-											   			<a href="#">M6 TV</a>
-											   		</div>
-												  </div>
-										    </div>				  	
-										  </div>
-									  </div>  
-									</div>									
-						   		<div style="clear:left"><span></span></div>
-								</div> 
-<!-- End MyFolder -->								
+						<div class="AccountFolderList">
+							<div class="FolderListTitleBar">
+								<div class="DownArrow3Icon" title="Collapse this Panel"><span></span></div>
+								<div class="Title FolderIcon">Folders</div>
+				        <div style="clear: left"><span></span></div>
 							</div>
-<!-- End FolderList -->								
-							<div class="UITag">
-								<div class="TagTitleBar">
+							<div class="MailFolderList">
+								<a href="#"  class="Icon InboxIcon">Inbox<span class="MailQuantity">(9)</span></a>
+								<a href="#" class="Icon DraftsIcon">Drafts<span class="MailQuantity">(3)</span></a>
+								<a href="#" class="Icon SentIcon">Sent<span class="MailQuantity">(8)</span></a>
+								<a href="#" class="Icon SpamIcon">Spam<span class="MailQuantity">(2)</span></a>
+								<a href="#" class="Icon TrashIcon">Trash<span class="MailQuantity">(5)</span></a>
+							</div>
+							<div class="MyFolder">
+								<div class="TitleBar">
 									<div class="DownArrow3Icon" title="Collapse/Expand all"><span></span></div>
-									<div class="TagTitle TagIcon">Tags</div>
-						      <div style="clear: left"><span></span></div>
+									<div class="Title">My Folders</div>
+					        <div style="clear: left"><span></span></div>
 								</div>
-								<div class="TagsList">
-									<a href="#" class="IconItemTag BlueTag">Customers</a>
-									<a href="#" class="IconItemTag RedTag">Company</a>
-									<a href="#" class="IconItemTag GreenTag">Docs Team</a>
-									<a href="#" class="IconItemTag VioletTag">Design Team</a>
-								</div>
+								<div class="UITree">
+								  <div class="TreeContainer JSContainer">
+								    <div class="Node" style="padding-top: 2px;">
+								   		<div class="ColapseIcon"><span></span></div>
+								   		<div class="Icon Default"><span></span></div>
+								   		<div class="NodeLabel">
+								   			<a href="#">Open source</a>
+								   		</div>
+									    <div class="ChildrenContainer" actionLink="$actionLink" display="block">
+											  <div class="Node" style="padding-top: 2px; margin-left: 10px; ">
+										   		<div class="Icon Default"><span></span></div>
+										   		<div class="NodeLabel">
+										   			<a href="#">eXo platform</a>
+										   		</div>
+											  </div>
+											  <div class="Node" style="padding-top: 2px; margin-left: 10px; ">
+										   		<div class="Icon Default"><span></span></div>
+										   		<div class="NodeLabel">
+										   			<a href="#">ObjectWeb</a>
+										   		</div>
+											  </div>
+									    </div>				  	
+									  </div>
+									  <div class="Node" style="padding-top: 2px;">
+								   		<div class="ColapseIcon"><span></span></div>
+								   		<div class="Icon Default"><span></span></div>
+								   		<div class="NodeLabel">
+								   			<a href="#">Customers</a>
+								   		</div>
+									    <div class = "ChildrenContainer" display = "block">
+											  <div class="Node" style="padding-top: 2px; margin-left: 10px; ">
+										   		<div class="Icon Default"><span></span></div>
+										   		<div class="NodeLabel">
+										   			<a href="#">M6 TV</a>
+										   		</div>
+											  </div>
+									    </div>				  	
+									  </div>
+								  </div>  
+								</div>									
+					   		<div style="clear:left"><span></span></div>
+							</div> 
+<!-- End MyFolder -->								
+						</div>
+						
+<!--  Start UITag -->
+						<div class="UITag">
+							<div class="TagTitleBar">
+								<div class="DownArrow3Icon" title="Collapse/Expand all"><span></span></div>
+								<div class="TagTitle TagIcon">Tags</div>
+					      <div style="clear: left"><span></span></div>
 							</div>
-						</div>	
-<!-- End AccountList -->						
-					</div> 
-<!-- End Mail AccountManagendent -->					
+							<div class="TagsList">
+								<a href="#" class="IconHolder BlueTag">Customers</a>
+								<a href="#" class="IconHolder RedTag">Company</a>
+								<a href="#" class="IconHolder GreenTag">Docs Team</a>
+								<a href="#" class="IconHolder VioletTag">Design Team</a>
+							</div>
+						</div>
+<!-- End UITag -->											
+					</div>
+<!-- End Mail AccountManagement -->					
 <!--  Start Mail Working Detail -->
-					<div class="MailWorkingDetail">
+					<div class="MailWorkingDetails">
 						
 						<div class="MailList">
 							<div class="MailActionsbar">
@@ -220,8 +217,8 @@
 								<div class="MailPageIterator">
 									<div class="MailIteratorContainer">
   									<div class="RightPageIteratorBlock">
-    	  							<a title="First Page" class="FloatBlockHidden FirstPageArrow"/></a>        
-    	  							<a title="Previous Page" class="FloatBlockHidden PreviousPageArrow"></a>
+    	  							<a title="First Page" class="FloatBlock DisabledFirstPageArrow"/></a>        
+    	  							<a title="Previous Page" class="FloatBlock DisabledPreviousPageArrow"></a>
     									<div class="Number">1</div>
     	  				 			<a title="Next Page" class="FloatBlock NextPageArrow" href="#"/></a>
     	 				  			<a title="Last Page" class="FloatBlock LastPageArrow"><span/></a>
@@ -242,31 +239,25 @@
       			          <th style="width: 30px;"><input type="checkbox" class="checkbox" title="Check all" value="4"/></th>
 	      							<th style="width: 24px;"><div class="HighlightStarIcon" title="Add star for this message"><span></span></div></th>
 	      		          <th style="padding-left: 8px; width: 24%;">
-		      		          <div style="float: left;" >Sender</div>
-		      		          <div class="DownArrow1Icon" title="Sort by sender"><span></span></div>
-		      		          <div style="clear:left;"><span></span></div>
+		      		          <div class="DownArrow1Icon" title="Sort by sender">Sender</div>
 	      		          </th>
-	      		          <th style="width: 24px;"><div class="AttackIcon" title="Attchments"><span></span></div></th>
+	      		          <th style="width: 24px;"><div class="AttachmentIcon" title="Attchments"><span></span></div></th>
 	      		          <th style="width: 24px; border-right: 1px solid #f8f8f8;"></th>
 	 	      	          <th style="padding-left: 8px;">
-		      		          <div style="float: left;">Subject</div>
-		      		          <div class="DownArrow1Icon" title="Sort by subject"><span></span></div>
-		      		          <div style="clear:left;"><span></span></div>
+		      		          <div class="DownArrow1Icon" title="Sort by subject">Subject</div>
 	      		          </th>
 	 	      	          <th style="width: 24px;"><div class="TotalMessageIcon" title="Total message(s) in conversation"><span></span></div></th>
 	 	      	          <th style="width: 120px; padding-left: 8px;">
-	 	      	          	<div style="float: left;">Date & Time</div>
-		      		          <div class="DownArrow1Icon" title="Sort by Date & time"><span></span></div>
-		      		          <div style="clear:left;"><span></span></div>
+		      		          <div class="DownArrow1Icon" title="Sort by Date & time">Date & Time</div>
 	 	      	          </th>
 	 	      	          <th>Size</th>
-	 	      	          <th style="width: 24px;"><div class="priorityIcon"><span></span></div></th>
+	 	      	          <th style="width: 24px;"><div class="PriorityIcon"><span></span></div></th>
 	      	 	        </tr>
 	      	 	       </thead>
 	      	 	       <tbody>
   						      <tr>
   						        <td><input type="checkbox" class="checkbox" value="4"/></td>
-											<td style="padding: 0px;"><div class="HighlightStarIcon" ><span></span></div></td>
+											<td style="padding: 0px;"><div class="StarredIcon" ><span></span></div></td>
 											<td class="text">eXo Platform Collaboration...</td>
 											<td class="text"></td>
 											<td style="padding: 0px; border-right: 1px solid #ffffff;"></td>
@@ -278,19 +269,19 @@
    			     		    </tr>
 							      <tr>
                       <td><input type="checkbox" class="checkbox" value="4"/></td>
-											<td style="padding: 0px;"><div class="NomalStarIcon"><span></span></div></td>
+											<td style="padding: 0px;"><div class="UnStarredIcon"><span></span></div></td>
 											<td class="textBold">Brice Revenant</td>
-											<td style="padding: 0px;"><div class="AttackIcon"><span></span></div></td>
+											<td style="padding: 0px;"><div class="AttachmentIcon"><span></span></div></td>
 											<td style="padding: 0px; border-right: 1px solid #ffffff;"></td>
 											<td class="text">[exo-vn] M6</td>
 											<td style="padding: 0px;"></td>
 											<td class="text">07/05/2007 10:30am</td>
 											<td class="text">13K</td>
-											<td style="padding: 0px;"><div class="priorityHighlightIcon"><span></span></div></td>
+											<td style="padding: 0px;"><div class="HighPriority">!</div></td>
 			      		    </tr>
 			     		      <tr>
 			     		        <td><input type="checkbox" class="checkbox" value="4"/></td>
-											<td style="padding: 0px;"><div class="NomalStarIcon"><span></span></div></td>
+											<td style="padding: 0px;"><div class="UnStarredIcon"><span></span></div></td>
 											<td class="text"></td>
 											<td style="padding: 0px;"></td>
 											<td style="padding: 0px; border-right: 1px solid #ffffff;"><div class="TagIcon"><span></span></div></td>
@@ -302,15 +293,15 @@
 			      		    </tr>
 								      <tr>
 										  <td><input type="checkbox" class="checkbox" value="4"/></td>
-											<td style="padding: 0px;"><div class="NomalStarIcon"><span></span></div></td>
+											<td style="padding: 0px;"><div class="StarredIcon"><span></span></div></td>
 											<td class="text"></td>
-											<td style="padding: 0px;"><div class="AttackIcon"><span></span></div></td>
-											<td style="padding: 0px; border-right: 1px solid #ffffff;"></td>
+											<td style="padding: 0px;"><div class="AttachmentIcon"><span></span></div></td>
+											<td style="padding: 0px; border-right: 0px;"></td>
 											<td class="text"></td>
 											<td style="padding: 0px;"></td>
 											<td class="text"></td>
 											<td class="text"></td>
-											<td style="padding: 0px;"><div class="priorityHighlightIcon"><span></span></div></td>
+											<td style="padding: 0px;"><div class="HighPriority">!</div></td>
 					  		    </tr>
               	   </tbody>
 								</table>
@@ -324,7 +315,7 @@
 								<div class="MaximizeReadingPane" title="Maximize Reading Pane"><span></span></div>
 								<div style="clear:both;"><span></span></div>
 							</div>
-							<div class="ReadingPaneDeltail">
+							<div class="ReadingPaneDetails">
 <!--  Start DecoratorBox ViewBoxStyle -->
 								<div class="DecoratorBox">
 									<div class="ViewBoxStyle">
@@ -339,7 +330,7 @@
 													<div class="MessageHeader">
 														<div class="MessageCheck">
 															<div><input type="checkbox" class="CheckBox" value="4"/></div>
-															<div class="NomalStarIcon" title="Add star for this message"><span></span></div>
+															<div class="UnStarredIcon" title="Add star for this message"><span></span></div>
 															<div style="clear: left;"><span></span></div>
 														</div>
 														<div class="MessageAddress">
@@ -379,13 +370,13 @@
 															<div class="DownArrow1Icon"><span></span></div>
 															<div class="ShowHideTitle">Hide deails</div>
 															<div class="MonthDate">June 26</div>
-															<div class="AttackIcon"><span></span></div>
-															<div class="ActionsThisMessage" title="Actions on this message"><span></span></div>
+															<div class="AttachmentIcon"><span></span></div>
+															<div class="MessageActions" title="Actions on this message"><span></span></div>
 															<div style="clear: both;"><span></span></div>
 														</div>
 														<div style="clear: both;"><span></span></div>
 													</div>
-													<div class="MessageDetail">
+													<div class="MessageDetails">
 														Hi Phuong,<p>
  
 So I learnt that you are currently sick. I wish you will recover ASAP. I'm not sure if you was able to be at the university for your lessons. Probably next week when you feel better.

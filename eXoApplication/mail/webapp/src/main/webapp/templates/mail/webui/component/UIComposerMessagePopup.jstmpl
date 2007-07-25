@@ -104,10 +104,8 @@
 			</div>
 <!-- End Compose Message Address -->
 <!-- Start Compose Message Detail -->
-			<div class="Messagecontent">
-				<div class="TextArea">
-				</div>
-				<div class="MessageContent">
+			<div class="MessageContent">
+				<div class="PlainTextMessage">
 					Hi Benjamin !<p>
 					Could you please have a look on these screenshots for mail and forum.<p>
 					Thanks!<p>

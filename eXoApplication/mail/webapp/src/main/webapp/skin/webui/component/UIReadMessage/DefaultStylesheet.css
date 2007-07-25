@@ -80,7 +80,7 @@
 	float: left;
 }
 
-.UIReadMessage .MailControlBar .MessageCheck .NomalStarIcon {
+.UIReadMessage .MailControlBar .MessageCheck .UnStarredIcon {
 	float: left; 
 }
 
@@ -104,7 +104,7 @@
 	font-weight: bold;
 }
 
-.UIReadMessage .MailControlBar .MessageAddress .LinkAddress {
+.UIReadMessage .MailControlBar .MessageAddress .SenderAddress {
 	float: left;
 	color: #126ca5;
 	cursor: pointer;
@@ -121,7 +121,7 @@
 	width: 160px;
 }
 
-.UIReadMessage .MailControlBar .MessageAttach {
+.UIReadMessage .MailControlBar .MessageAttachment {
 	float: right; 
 	width: 100px;
 }
@@ -139,7 +139,7 @@
 	color: #126ca5; cursor: pointer;
 }
 
-.UIReadMessage .MailControlBar .MessageActions .Text {
+.UIReadMessage .MailControlBar .MessageActions .HeadlineText {
 	float: left;
 	color: #969696;
 	font-weight: nomal;
@@ -152,7 +152,7 @@
 	margin: 0px 4px;
 }
 
-.UIReadMessage .MailControlBar .AttackIcon {
+.UIReadMessage .MailControlBar .AttachmentIcon {
 	float: left;
 	margin: 2px 2px 0px 0px;
 }
@@ -161,6 +161,6 @@
 	padding: 10px;
 }
 
-.UIReadMessage .MailControlBar .NomalStarIcon {
+.UIReadMessage .MailControlBar .UnStarredIcon {
 	margin: 1px 0px 0px 4px; 
 }

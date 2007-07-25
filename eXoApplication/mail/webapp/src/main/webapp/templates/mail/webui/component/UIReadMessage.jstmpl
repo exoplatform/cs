@@ -14,7 +14,7 @@
 									</a>
 									<a href="#" class="ControlButton">
 										<div class="IconHolder ReplyAllIcon">
-											<div class="Label"> ReplyAll </div>
+											<div class="Label"> Reply All </div>
 										</div>
 									</a>
 									<a href="#" class="ControlButton">
@@ -59,13 +59,13 @@
 											<div class="MessageHeader">
 												<div class="MessageCheck">
 													<div><input type="checkbox" class="CheckBox" value="4"/></div>
-													<div class="NomalStarIcon" title="Add star for this message"><span></span></div>
+													<div class="UnStarredIcon" title="Add star for this message"><span></span></div>
 													<div style="clear: left;"><span></span></div>
 												</div>
 												<div class="MessageAddress">
 													<div class="FieldContainer">
-														<div class="LinkAddress">Brice Revenant (brice.revenant@gmail.com)</div>
-														<div class="Text">To: Me</div>
+														<div class="SenderAddress">Brice Revenant (brice.revenant@gmail.com)</div>
+														<div class="HeadlineText">To: Me</div>
 														<div style="clear: left;"><span></span></div>
 													</div>
 												</div>
@@ -73,8 +73,8 @@
 													<div class="DownArrow1Icon"><span></span></div>
 													<div class="ShowHideTitle">Hide deails</div>
 													<div class="MonthDate">June 26</div>
-													<div class="AttackIcon"><span></span></div>
-													<div class="ActionsThisMessage" title="Actions on this message"><span></span></div>
+													<div class="AttachmentIcon"><span></span></div>
+													<div class="MessageActions" title="Actions on this message"><span></span></div>
 													<div style="clear: both;"><span></span></div>
 												</div>
 												<div style="clear: both;"><span></span></div>
@@ -110,19 +110,19 @@
 											<div class="MessageHeader">
 												<div class="MessageCheck">
 													<div><input type="checkbox" class="CheckBox" value="4"/></div>
-													<div class="NomalStarIcon" title="Add star for this message"><span></span></div>
+													<div class="UnStarredIcon" title="Add star for this message"><span></span></div>
 													<div style="clear: left;"><span></span></div>
 												</div>
 												<div class="MessageAddress">
 													<div class="FieldContainer">
-														<div class="LinkAddress">Brice Revenant (brice.revenant@gmail.com)</div>
-														<div class="Text">Hi Phuong, yes, absolutely, in the destop WebOS</div>
+														<div class="SenderAddress">Brice Revenant (brice.revenant@gmail.com)</div>
+														<div class="HeadlineText">Hi Phuong, yes, absolutely, in the destop WebOS</div>
 														<div style="clear: left;"><span></span></div>
 													</div>
 												</div>
-												<div class="MessageAttach" >
+												<div class="MessageAttachment" >
 													<div class="MonthDate">June 26</div>
-													<div class="AttackIcon"><span></span></div>
+													<div class="AttachmentIcon"><span></span></div>
 													<div style="clear: both;"><span></span></div>
 												</div>
 												<div style="clear: both;"><span></span></div>
@@ -152,19 +152,19 @@
 											<div class="MessageHeader">
 												<div class="MessageCheck">
 													<div><input type="checkbox" class="CheckBox" value="4"/></div>
-													<div class="NomalStarIcon" title="Add star for this message"><span></span></div>
+													<div class="UnStarredIcon" title="Add star for this message"><span></span></div>
 													<div style="clear: left;"><span></span></div>
 												</div>
 												<div class="MessageAddress">
 													<div class="FieldContainer">
-														<div class="LinkAddress">Brice Revenant (brice.revenant@gmail.com)</div>
-														<div class="Text">Hi Phuong, yes, absolutely, in the destop WebOS</div>
+														<div class="SenderAddress">Brice Revenant (brice.revenant@gmail.com)</div>
+														<div class="HeadlineText">Hi Phuong, yes, absolutely, in the destop WebOS</div>
 														<div style="clear: left;"><span></span></div>
 													</div>
 												</div>
-												<div class="MessageAttach" >
+												<div class="MessageAttachment" >
 													<div class="MonthDate">June 26</div>
-													<div class="AttackIcon"><span></span></div>
+													<div class="AttachmentIcon"><span></span></div>
 													<div style="clear: both;"><span></span></div>
 												</div>
 												<div style="clear: both;"><span></span></div>
@@ -194,19 +194,19 @@
 											<div class="MessageHeader">
 												<div class="MessageCheck">
 													<div><input type="checkbox" class="CheckBox" value="4"/></div>
-													<div class="NomalStarIcon" title="Add star for this message"><span></span></div>
+													<div class="UnStarredIcon" title="Add star for this message"><span></span></div>
 													<div style="clear: left;"><span></span></div>
 												</div>
 												<div class="MessageAddress">
 													<div class="FieldContainer">
-														<div class="LinkAddress">Brice Revenant (brice.revenant@gmail.com)</div>
-														<div class="Text">Hi Phuong, yes, absolutely, in the destop WebOS</div>
+														<div class="SenderAddress">Brice Revenant (brice.revenant@gmail.com)</div>
+														<div class="HeadlineText">Hi Phuong, yes, absolutely, in the destop WebOS</div>
 														<div style="clear: left;"><span></span></div>
 													</div>
 												</div>
-												<div class="MessageAttach" >
+												<div class="MessageAttachment" >
 													<div class="MonthDate">June 26</div>
-													<div class="AttackIcon"><span></span></div>
+													<div class="AttachmentIcon"><span></span></div>
 													<div style="clear: both;"><span></span></div>
 												</div>
 												<div style="clear: both;"><span></span></div>
@@ -236,19 +236,19 @@
 											<div class="MessageHeader">
 												<div class="MessageCheck">
 													<div><input type="checkbox" class="CheckBox" value="4"/></div>
-													<div class="NomalStarIcon" title="Add star for this message"><span></span></div>
+													<div class="UnStarredIcon" title="Add star for this message"><span></span></div>
 													<div style="clear: left;"><span></span></div>
 												</div>
 												<div class="MessageAddress">
 													<div class="FieldContainer">
-														<div class="LinkAddress">Brice Revenant (brice.revenant@gmail.com)</div>
-														<div class="Text">Hi Phuong, yes, absolutely, in the destop WebOS</div>
+														<div class="SenderAddress">Brice Revenant (brice.revenant@gmail.com)</div>
+														<div class="HeadlineText">Hi Phuong, yes, absolutely, in the destop WebOS</div>
 														<div style="clear: left;"><span></span></div>
 													</div>
 												</div>
-												<div class="MessageAttach" >
+												<div class="MessageAttachment" >
 													<div class="MonthDate">June 26</div>
-													<div class="AttackIcon"><span></span></div>
+													<div class="AttachmentIcon"><span></span></div>
 													<div style="clear: both;"><span></span></div>
 												</div>
 												<div style="clear: both;"><span></span></div>
@@ -278,19 +278,19 @@
 											<div class="MessageHeader">
 												<div class="MessageCheck">
 													<div><input type="checkbox" class="CheckBox" value="4"/></div>
-													<div class="NomalStarIcon" title="Add star for this message"><span></span></div>
+													<div class="UnStarredIcon" title="Add star for this message"><span></span></div>
 													<div style="clear: left;"><span></span></div>
 												</div>
 												<div class="MessageAddress">
 													<div class="FieldContainer">
-														<div class="LinkAddress">Brice Revenant (brice.revenant@gmail.com)</div>
-														<div class="Text">Hi Phuong, yes, absolutely, in the destop WebOS</div>
+														<div class="SenderAddress">Brice Revenant (brice.revenant@gmail.com)</div>
+														<div class="HeadlineText">Hi Phuong, yes, absolutely, in the destop WebOS</div>
 														<div style="clear: left;"><span></span></div>
 													</div>
 												</div>
-												<div class="MessageAttach" >
+												<div class="MessageAttachment" >
 													<div class="MonthDate">June 26</div>
-													<div class="AttackIcon"><span></span></div>
+													<div class="AttachmentIcon"><span></span></div>
 													<div style="clear: both;"><span></span></div>
 												</div>
 												<div style="clear: both;"><span></span></div>

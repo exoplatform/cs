@@ -68,6 +68,7 @@
 }
 
 .UIMailPortlet .MailBanner .SeparatorLine {
+	background: url('DefaultSkin/background/SeparatorLineBaner2x26.gif') no-repeat ;
   float: right;
   margin: 3px 7px;
 }
@@ -130,7 +131,8 @@
 /**************************************FolderItemList*********************************/
  
 .UIMailPortlet .MailQuantity {
-	font-weight: bold;
+	padding-left: 3px;
+	color: #333333;
 }
  
 .UIMailPortlet .MailAccountManagement .FolderItemList .TitleItem {
@@ -334,15 +336,15 @@
 	border: 1px solid #d2d4dc;
 }
 
-.UIMailPortlet .MailWorkingWorkspace .NomalStarIcon {
+.UIMailPortlet .MailWorkingWorkspace .UnStarredIcon {
 	margin: 1px 0px 0px 4px; 
 }
 
-.UIMailPortlet .MailWorkingWorkspace .HighlightStarIcon {
+.UIMailPortlet .MailWorkingWorkspace .StarredIcon {
 	margin: 1px 0px 0px 4px;
 }
 
-.UIMailPortlet .MailWorkingWorkspace .AttackIcon {
+.UIMailPortlet .MailWorkingWorkspace .AttachmentIcon {
 	margin: 1px 0px 0px 3px;
 }
 
@@ -350,7 +352,7 @@
 	margin: 1px 0px 0px 4px;
 }
 
-.UIMailPortlet .MailWorkingWorkspace .priorityIcon {
+.UIMailPortlet .MailWorkingWorkspace .PriorityIcon {
 	margin: 1px 0px 0px 4px;
 }
 
@@ -429,7 +431,7 @@
 	float: left;
 }
 
-.UIMailPortlet .MailWorkingWorkspace .MessageCheck .NomalStarIcon {
+.UIMailPortlet .MailWorkingWorkspace .MessageCheck .UnStarredIcon {
 	float: left; 
 }
 
@@ -575,7 +577,7 @@
 	width: 2px; height: 26px;
 }
 
-.ActionsThisMessage {
+.MessageActions {
 	background: url(DefaultSkin/icons/24x24/ThisMessageAction.gif) no-repeat bottom;
 	cursor: pointer;
 	float: right;
@@ -719,19 +721,19 @@
 	background: url('DefaultSkin/icons/24x24/AddEvent.gif') no-repeat left;
 }
 
-.NomalStarIcon {
+.UnStarredIcon {
 	background: url(DefaultSkin/icons/16x16/NomalStarIcon.gif) no-repeat;
 	width: 16px; height: 16px;
 	cursor: pointer;
 }
 
-.HighlightStarIcon {
+.StarredIcon {
 	background: url(DefaultSkin/icons/16x16/HighLightStarIcon.gif) no-repeat;
 	width: 16px; height: 16px;
 	cursor: pointer;
 }
 
-.AttackIcon {
+.AttachmentIcon {
 	background: url(DefaultSkin/icons/16x16/AttackmentIcon.gif) no-repeat;
 	width: 16px; height: 16px;
 	cursor: pointer;
@@ -761,8 +763,7 @@
 	cursor: pointer;
 }
 
-.PriorityHighLightIcon {
-	background: url(DefaultSkin/icons/16x16/PriorityHighLight.gif) no-repeat;
+.HighPriority {
 	width: 16px; height: 16px;
 	cursor: pointer;
 }
