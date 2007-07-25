@@ -4,12 +4,12 @@
 	border: 1px solid red;
 }
 
-.UIInsertAddress .InsertAddress {
+.UIInsertAddress .InsertAddressContainer {
 	padding: 10px;
 	border: 1px solid #c0c0c0;
 }
 
-.UIInsertAddress .InsertAddressContainer {
+.UIInsertAddress .AddressContainer {
 	padding-top: 10px;
 }
 
@@ -22,7 +22,7 @@
 
 .UIInsertAddress .UIGrid th input {
 	text-align: center;
-	padding-bottom: 2px;
+	margin: 2px 0px 0px 0px;
 }
 
 .UIInsertAddress .UIGrid tbody {
@@ -35,8 +35,15 @@
 	padding: 4px 0px 0px 5px;
 }
 
-.UIInsertAddress .UIGrid tr {
+.UIInsertAddress .UIGrid td.BorderAddress {
+	border-right: 1px solid #e8e8e8;
 }
+
+.UIInsertAddress .UIAction {
+	width: 140px;
+	padding-left: 60px;
+}
+
 /*********************************************UISearch*****************************************/
 
 .UIInsertAddress .UISearchForm {
@@ -78,6 +85,11 @@
 	border: 1px solid #b7b7b7;
 }
 
+
+.UIInsertAddress .ListAddress .UIGrid {
+	border: none;
+}
+
 .UIInsertAddress .ListAddress .UIGrid .BlueDownArrowIcon{
   padding: 0px 10px 0px 4px; 
   width: 34px;
@@ -86,16 +98,21 @@
 }
 
 .UIInsertAddress .ListAddress .UIGrid thead {
-	border-top: none;
+	border: none;
 }
 
 .UIInsertAddress .ListAddress .UIGrid th {
+	border-left: none;
 	border-top: none;
 }
 
-/*******************************************InsertAddressRight***********************************/
+.UIInsertAddress .ListAddress .UIGrid td {
+	border-left: none;
+}
 
-.UIInsertAddress .InsertAddressRight {
+/*******************************************InsertedAddress***********************************/
+
+.UIInsertAddress .InsertedAddress {
 	margin-left: 360px;
 }
 
@@ -103,7 +120,7 @@
 	padding: 2px 0px;
 }
 
-.UIInsertAddress .UIAction {
+.UIInsertAddress .InsertAddressContent .UIAction {
 	float: left;
 	width: 50px;
 	padding: 30px 0px 0px 0px;

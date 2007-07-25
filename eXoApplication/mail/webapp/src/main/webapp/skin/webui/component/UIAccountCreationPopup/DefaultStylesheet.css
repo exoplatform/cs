@@ -21,6 +21,12 @@
 	border-bottom: 1px solid #c0c0c0;
 }
 
+.UIAccountCreationWizard .UIFormInputSet {
+	margin: auto;
+	width: 500px; height: 175px;
+  padding-top: 18px;
+}
+
 .UIAccountCreationWizard .StepForm .HorizontalLayout {
 	border: none;
 }
