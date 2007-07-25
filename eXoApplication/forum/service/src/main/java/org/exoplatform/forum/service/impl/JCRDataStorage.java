@@ -395,7 +395,6 @@ public class JCRDataStorage implements DataStorage {
 				post.setIsApproved(false);
 				
 				createPost(categoryId, forumId, topic.getId(), post);
-				
 		  }
 		}
   }
