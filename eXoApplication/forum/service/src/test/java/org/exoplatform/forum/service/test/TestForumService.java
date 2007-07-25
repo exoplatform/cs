@@ -123,7 +123,7 @@ public class TestForumService extends BaseForumTestCase{
 		assertNotNull(forumService_.getPost(cat.getId(), forum.getId(), topic.getId(), post.getId()));
 		//get ListPost
 		List<Post> posts = forumService_.getPosts(cat.getId(), forum.getId(), topic.getId());
-		assertEquals(posts.size(), 1);
+		assertEquals(posts.size(), 2);// size = 2 (first post and new post)
 		// update Post
 		Post newPost = forumService_.getPost(cat.getId(), forum.getId(), topic.getId(), post.getId());
 		newPost.setMessage("New messenger");

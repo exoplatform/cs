@@ -377,24 +377,25 @@ public class JCRDataStorage implements DataStorage {
 		    long newTopicCount = forumNode.getProperty("exo:topicCount").getLong() + 1;
 			  forumNode.setProperty("exo:topicCount", newTopicCount );
 		    
-		    forumHomeNode.save() ;
-		    forumHomeNode.getSession().save() ;
+			  forumHomeNode.save() ;
+			  forumHomeNode.getSession().save() ;
 		    // createPost first
-//		    GregorianCalendar calendar = new GregorianCalendar() ;
-//				String id = String.valueOf(calendar.getTimeInMillis());
-//		    Post post = new Post();
-//		    post.setId(id);
-//				post.setOwner(topic.getOwner());
-//				post.setCreatedDate(topicNode.getProperty("exo:createdDate").getDate().getTime());
-//				post.setModifiedBy(topic.getModifiedBy());
-//				post.setModifiedDate(topicNode.getProperty("exo:createdDate").getDate().getTime());
-//				post.setSubject(topic.getTopicName());
-//				post.setMessage(topic.getDescription());
-//				post.setRemoteAddr("");
-//				post.setIcon(topic.getIcon());
-//				post.setIsApproved(false);
-//				
-//				createPost(categoryId, forumId, topic.getId(), post);
+		    GregorianCalendar calendar = new GregorianCalendar() ;
+				String id = String.valueOf(calendar.getTimeInMillis());
+		    Post post = new Post();
+		    post.setId(id);
+				post.setOwner(topic.getOwner());
+				post.setCreatedDate(topicNode.getProperty("exo:createdDate").getDate().getTime());
+				post.setModifiedBy(topic.getModifiedBy());
+				post.setModifiedDate(topicNode.getProperty("exo:createdDate").getDate().getTime());
+				post.setSubject(topic.getTopicName());
+				post.setMessage(topic.getDescription());
+				post.setRemoteAddr("");
+				post.setIcon(topic.getIcon());
+				post.setIsApproved(false);
+				
+				createPost(categoryId, forumId, topic.getId(), post);
+				
 		  }
 		}
   }
