@@ -65,8 +65,6 @@ public interface ForumService {
    * @throws Exception
    */
   public Category removeCategory(String categoryId)throws Exception;  
-  
-  
   /**
    * This method should: 
    * 1. Load all the forums

@@ -15,6 +15,8 @@ import javax.jcr.Session;
  * Author : Hung Ngyen Quang
  *          hung.nguyen@exoplatform.com
  * Jul 9, 2007  
+ * 
+ * wrong location , SaveMailAttachment should be SavedMailAttachment
  */
 public class SaveMailAttachment extends Attachment{
   

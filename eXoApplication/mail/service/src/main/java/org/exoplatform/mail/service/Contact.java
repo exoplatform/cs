@@ -10,6 +10,7 @@ package org.exoplatform.mail.service;
  *          hung.nguyen@exoplatform.com
  * July 2, 2007  
  * 
+ * TODO: Remove
  */
 public class Contact {
   private String id ;

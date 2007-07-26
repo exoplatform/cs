@@ -4,6 +4,7 @@
  **************************************************************************/
 package org.exoplatform.mail.service;
 
+import java.util.HashMap;
 /**
  * <p>
  * Created by The eXo Platform SARL
@@ -23,7 +24,8 @@ package org.exoplatform.mail.service;
  * </ul>
  * </p>
  */
-public class MailServerConfiguration {
+//TOTO: rename to AccountProperties
+public class MailServerConfiguration extends HashMap<String, String> {
   private String protocol ;
   private String host ;
   private String port ;

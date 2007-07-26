@@ -28,6 +28,7 @@ public class Account {
   private List<Folder> userFolders ;  
   private List<String> tags ;
   private List<MessageFilter> filters ;
+  //TODO: use AccountProperty
   private MailServerConfiguration mailServerConfiguration ;
   
   /**

@@ -31,6 +31,6 @@ abstract public class Attachment {
   
   public String getName() { return name ; }
   public void setName(String name_) { this.name = name_ ; }
-  
+  //TODO: should not have  Session in the api
   public abstract InputStream getInputStream(Session session) throws Exception ;
 }

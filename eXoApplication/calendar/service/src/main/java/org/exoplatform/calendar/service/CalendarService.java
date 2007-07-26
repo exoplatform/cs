@@ -7,6 +7,12 @@ package org.exoplatform.calendar.service;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
+/**
+ * TODO: make  2 set of api:
+ * 1. user calendar
+ * 2. group calendar
+ */
+import java.util.Map;
 
 /**
  * Created by The eXo Platform SARL
@@ -71,8 +77,10 @@ public interface CalendarService {
    * @throws Exception
    */
   public Calendar getCalendar(String username, String calendarId) throws Exception ;
+  //TODO:  getUserCalendars
   public List<Calendar> getAllCalendars(String username) throws Exception ;
   /**
+   * 
    * This method should:
    * 1. Get calendar service root node
    * 2. Get group node
@@ -83,6 +91,7 @@ public interface CalendarService {
    * @return Calendar
    * @throws Exception
    */
+  //TODO: getGroupCalendar(String groupId, calendarId)
   public Calendar getCalendar(String calendarId) throws Exception ;
   /**
    * This method should:
@@ -93,6 +102,7 @@ public interface CalendarService {
    * @return Calendar list
    * @throws Exception
    */
+  //TODO: move to the user section
   public List<Calendar> getCalendarsByCategory(String username, String calendarCategoryId) throws Exception ;
   /**
    * This method should:
@@ -103,6 +113,7 @@ public interface CalendarService {
    * @return Calendar list
    * @throws Exception
    */
+  //TODO: groupName to groupID, rename to getGroupCalendars
   public List<Calendar> getCalendarsByGroup(String groupName) throws Exception ;  
   /**
    * This method should:
@@ -115,6 +126,7 @@ public interface CalendarService {
    * @param isNew
    * @throws Exception
    */
+  //TODO: rename to saveUserCalendar and saveGroupCalendar
   public void saveCalendar(String username, Calendar calendar, boolean isNew) throws Exception ;
   /**
    * This method should:
@@ -128,6 +140,7 @@ public interface CalendarService {
    * @return Calendar
    * @throws Exception
    */
+  //TODO: removeUserCanlendar and removeGroupCalendar
   public Calendar removeCalendar(String username, String calendarId) throws Exception ;
   /**
    * This method should:
@@ -141,7 +154,7 @@ public interface CalendarService {
    */
   public Calendar removeCalendar(String calendarId) throws Exception ;
   
-  
+  //TODO: move event category to Calendar object, should have only the method removeEventCategory
   /**
    * This method should:
    * 1. Get calendar service root node by current user
@@ -153,6 +166,7 @@ public interface CalendarService {
    * @return Category
    * @throws Exception
    */
+  //TODO: maybe we do not need this
   public EventCategory getEventCategory(String username, String calendarId, String eventCategoryId) throws Exception ;
   /**
    * This method should:
@@ -206,6 +220,7 @@ public interface CalendarService {
    * @return Event
    * @throws Exception
    */
+  //TODO: we do not need eventCategory
   public Event getEvent(String username, String calendarId, String eventCategoryId, String eventId) throws Exception ;
   /**
    * This method should:
@@ -239,6 +254,7 @@ public interface CalendarService {
    * @return event list
    * @throws Exception
    */
+  //TODO: missing parameter EventQuery
   public List<Event> getEventByCalendar(String calendarId) throws Exception ;
   /**
    * This method should:
@@ -254,6 +270,7 @@ public interface CalendarService {
    * @param isNew
    * @throws Exception
    */  
+  //TODO: use Calendar object instead of calendarId. no need of eventCategoryID and isPublic...
   public void saveEvent(String username, String calendarId, String eventCategoryId, Event event, boolean isNew, boolean isPublicCalendar) throws Exception ;
   /**
    * This method should:
@@ -270,10 +287,13 @@ public interface CalendarService {
    */
   public Event removeEvent(String username, String calendarId, String eventCategoryId, String eventId, boolean isPublicCalendar) throws Exception ;
   
+  //TODO: missing the method List<CalendarCateory> getGroupCalendarForUser(String username) 
   
   //public void importICalendar(String username, InputStream icalInputStream) throws Exception ;
   //public String exportICalendar(String username, String calendarId) throws Exception ;
+  //TOTO: use CalendarImportExport
   
+  public Map<String, CalendarImportExport>  getCalendarImportExports() ;
   public void importCalendar(String username, String calendarType, InputStream icalInputStream) throws Exception ;
   public OutputStream exportCalendar(String username, String calendarId, String calendarType) throws Exception ;
 }
