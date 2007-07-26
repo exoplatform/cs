@@ -18,6 +18,7 @@ import org.exoplatform.forum.service.Forum;
 import org.exoplatform.forum.service.JCRPageList;
 import org.exoplatform.forum.service.Post;
 import org.exoplatform.forum.service.Topic;
+import org.exoplatform.forum.service.TopicView;
 import org.exoplatform.forum.service.impl.ForumServiceImpl;
 
 
@@ -134,21 +135,26 @@ public class TestForumService extends BaseForumTestCase{
 		}
 		// getPost
 		assertNotNull(forumService_.getPost(cat.getId(), forum.getId(), topic.getId(), posts.get(0).getId()));
+		// TopicView
+		TopicView topicView = forumService_.getTopicView(cat.getId(), forum.getId(), topic.getId());
 		//get ListPost
-		JCRPageList pagePosts = forumService_.getPosts(cat.getId(), forum.getId(), topic.getId());
+		JCRPageList pagePosts = topicView.getPageList();//forumService_.getPosts(cat.getId(), forum.getId(), topic.getId());
 		assertEquals(pagePosts.getAvailable(), posts.size() + 1);// size = 26 (first post and new postList)
     List page1 = pagePosts.getPage(1, session_) ;
     assertEquals(page1.size(), 10);  
     List page2 = pagePosts.getPage(2, session_) ;
     assertEquals(page2.size(), 10);  
     List page3 = pagePosts.getPage(3, session_) ;
-    assertEquals(page3.size(), 6);  
+    assertEquals(page3.size(), 6);
 		// update Post First
 		Post newPost = (Post)pagePosts.getPage(1, session_).get(0);
-		
 		newPost.setMessage("New messenger");
 		forumService_.updatePost(cat.getId(), forum.getId(), topic.getId(), newPost);
 		assertEquals("New messenger", forumService_.getPost(cat.getId(), forum.getId(), topic.getId(), newPost.getId()).getMessage());
+//		List<Post> posts1 = topicView.getAllPost(session_);
+//		for (int i = 0; i < posts1.size(); i++) {
+//			System.out.print("\n" + posts1.get(i).getId() + "\n");
+//		}
 		//test movePost
 		Topic topicnew = createdTopic("333334");
 		forumService_.createTopic(cat.getId(), forum.getId(), topicnew);
@@ -157,7 +163,7 @@ public class TestForumService extends BaseForumTestCase{
 		assertNotNull(forumService_.getPost(cat.getId(), forum.getId(), topicnew.getId(), newPost.getId()));
 		//test remove Post return post
 		assertNotNull(forumService_.removePost(cat.getId(), forum.getId(), topicnew.getId(), newPost.getId()));
-		//getViewPost
+//		//getViewPost
 //		System.out.print("\n\n" + topicnew.getViewCount() + "\n\n");
   }
   

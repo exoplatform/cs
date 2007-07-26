@@ -333,7 +333,7 @@ public class JCRDataStorage implements DataStorage {
   public TopicView getTopicView(String categoryId, String forumId, String topicId) throws Exception {
 	  TopicView topicview = new TopicView();
 	  topicview.setTopicView(getTopic(categoryId, forumId, topicId));
-	  topicview.setPostsView(getPosts(categoryId, forumId, topicId));
+	  topicview.setPageList(getPosts(categoryId, forumId, topicId));
   	return topicview;
   }
   

@@ -38,7 +38,7 @@ public class ForumPageList extends JCRPageList {
         Query query = qm.createQuery(value_, Query.XPATH);
         QueryResult result = query.execute();
         iter_ = result.getNodes();
-      }else {
+      } else {
         Node node = (Node)session.getItem(value_) ;
         iter_ = node.getNodes() ;
       }
@@ -52,7 +52,7 @@ public class ForumPageList extends JCRPageList {
       position = (page-1) * pageSize ;
       iter_.skip(position) ;
     }
-    currentListPage_ = new ArrayList() ;
+    currentListPage_ = new ArrayList<Object>() ;
     for(int i = 0; i < pageSize; i ++) {
       if(iter_.hasNext()){
         currentNode = iter_.nextNode() ;
@@ -107,6 +107,7 @@ public class ForumPageList extends JCRPageList {
     if(topicNode.hasProperty("exo:isApproved")) topicNew.setIsApproved(topicNode.getProperty("exo:isApproved").getBoolean());
     return topicNew;
   }
-  
-  public List getAll() throws Exception  { return null ; }
+
+	@Override
+	public List getAll() throws Exception {return null;}
 }
