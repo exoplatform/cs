@@ -6,8 +6,6 @@ package org.exoplatform.forum.service;
 
 import java.util.List;
 
-import sun.awt.RepaintArea;
-
 /**
  * Created by The eXo Platform SARL
  * Author : Tuan Nguyen
