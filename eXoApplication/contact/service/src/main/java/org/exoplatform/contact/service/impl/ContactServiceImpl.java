@@ -6,7 +6,6 @@ package org.exoplatform.contact.service.impl;
 
 import java.util.List;
 
-import org.exoplatform.calendar.service.impl.JCRDataStorage;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
