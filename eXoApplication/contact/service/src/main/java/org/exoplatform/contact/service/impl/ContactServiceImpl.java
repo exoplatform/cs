@@ -6,9 +6,12 @@ package org.exoplatform.contact.service.impl;
 
 import java.util.List;
 
+import org.exoplatform.calendar.service.impl.JCRDataStorage;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
+import org.exoplatform.registry.JCRRegistryService;
+import org.exoplatform.services.jcr.RepositoryService;
 
 /**
  * Created by The eXo Platform SARL
@@ -17,7 +20,12 @@ import org.exoplatform.contact.service.ContactService;
  * Jul 11, 2007  
  */
 public class ContactServiceImpl implements ContactService{
+  private JCRDataStorage storage_ ;
   
+  public ContactServiceImpl(RepositoryService  repositoryService, 
+      JCRRegistryService jcrRegistryService) throws Exception {
+      storage_ = new JCRDataStorage(repositoryService, jcrRegistryService) ;
+  }
   public List<Contact> getPublicContact() throws Exception {
     return null ;
   }
