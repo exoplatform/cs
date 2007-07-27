@@ -6,7 +6,6 @@ package org.exoplatform.forum.service.impl;
 
 import java.util.List;
 
-import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.forum.service.Category;
 import org.exoplatform.forum.service.Forum;
 import org.exoplatform.forum.service.JCRPageList;
@@ -24,14 +23,12 @@ public interface DataStorage {
   
    public List<Category> getCategories() throws Exception;
    public Category getCategory(String categoryId) throws Exception;
-   public void createCategory(Category category)throws Exception;
-   public void updateCategory(Category category)throws Exception;  
+   public void saveCategory(Category category, boolean isNew)throws Exception;
    public Category removeCategory(String categoryId)throws Exception;  
    
    public List<Forum> getForums(String categoryId)throws Exception;
    public Forum getForum(String categoryId, String forumId)throws Exception;  
-   public void createForum(String categoryId, Forum forum) throws Exception;
-   public void updateForum(String categoryId, Forum newForum)throws Exception;
+   public void saveForum(String categoryId, Forum forum, boolean isNew) throws Exception;
    public Forum removeForum(String categoryId, String forumId)throws Exception;
    public void moveForum(String forumPath, String destCategoryPath) throws Exception;
    

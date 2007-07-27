@@ -42,7 +42,7 @@ public interface ForumService {
    * @return
    * @throws Exception
    */
-  public void createCategory(Category category)throws Exception;
+  public void saveCategory(Category category, boolean isNew)throws Exception;
   /**
    * This method should:
    * 1. Check for the mandatory fields
@@ -51,16 +51,6 @@ public interface ForumService {
    * 
    * @param categoryId
    * @param newCategory
-   * @return
-   * @throws Exception
-   */
-  public void updateCategory(Category category)throws Exception;    
-  /**
-   * This method should: 
-   * 1. Remove the category from the database if there is no forum in it. throw an exception if 
-   *    there are one or more forum in the category
-   * 2. Invalidate the cache
-   * @param categoryId
    * @return
    * @throws Exception
    */
@@ -99,25 +89,13 @@ public interface ForumService {
    * @return
    * @throws Exception
    */
-  public void createForum(String categoryId, Forum forum) throws Exception;
+  public void saveForum(String categoryId, Forum forum, boolean isNew) throws Exception;
   /**
    * This method should:
    * 1. Check the mandatory fields
    * 2. Update the forum data in the database
    * 3. Invalidate or update the cache
    * @param newForum
-   * @return
-   * @throws Exception
-   */
-  public void updateForum(String categoryId, Forum newForum)throws Exception;
-  /**
-   * This method should:
-   * 1. Check to see if the user has the right to remove the forum. Throw an exception if the user do not
-   *    have the right
-   * 2. Remove the forum data from the database
-   * 3. Invalidate the cache
-   * 
-   * @param forumId
    * @return
    * @throws Exception
    */

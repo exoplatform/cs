@@ -6,7 +6,6 @@ package org.exoplatform.forum.service.impl;
 
 import java.util.List;
 
-import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.forum.service.Category;
 import org.exoplatform.forum.service.Forum;
 import org.exoplatform.forum.service.ForumService;
@@ -31,8 +30,8 @@ public class ForumServiceImpl implements ForumService{
     storage_ = new JCRDataStorage(repositoryService, jcrRegistryService) ;
   }
   
-  public void createCategory(Category category) throws Exception {
-    storage_.createCategory(category);
+  public void saveCategory(Category category, boolean isNew) throws Exception {
+    storage_.saveCategory(category, isNew);
   }
   
   public Category getCategory(String categoryId) throws Exception {
@@ -47,12 +46,8 @@ public class ForumServiceImpl implements ForumService{
     return storage_.removeCategory(categoryId) ;
   }
   
-  public void updateCategory(Category category) throws Exception {
-    storage_.updateCategory(category) ;    
-  }
-  
-  public void createForum(String categoryId, Forum forum) throws Exception {
-    storage_.createForum(categoryId, forum);
+  public void saveForum(String categoryId, Forum forum, boolean isNew) throws Exception {
+    storage_.saveForum(categoryId, forum, isNew);
   }
   
   public void moveForum(String forumPath, String destCategoryPath) throws Exception {
@@ -65,10 +60,6 @@ public class ForumServiceImpl implements ForumService{
   
   public List<Forum> getForums(String categoryId) throws Exception {
     return storage_.getForums(categoryId);
-  }
-  
-  public void updateForum(String categoryId, Forum newForum) throws Exception {
-  	storage_.updateForum(categoryId, newForum);
   }
   
   public Forum removeForum(String categoryId, String forumId) throws Exception {
