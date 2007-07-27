@@ -36,7 +36,7 @@ public class ContactServiceImpl implements ContactService{
     // TODO Auto-generated method stub
     return null;
   }
-  public Contact getContact(String username, String groupId, String contactId) throws Exception {
+  public Contact getContact(String username, String contactId) throws Exception {
     // TODO Auto-generated method stub
     return null;
   }
@@ -44,7 +44,7 @@ public class ContactServiceImpl implements ContactService{
     // TODO Auto-generated method stub
     
   }
-  public Contact removeContact(String username, String groupId, String contactId) throws Exception {
+  public Contact removeContact(String username, String contactId) throws Exception {
     // TODO Auto-generated method stub
     return null;
   }

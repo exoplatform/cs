@@ -110,17 +110,14 @@ public class JCRDataStorage implements DataStorage{
   	return contacts;
   }
 
-  public Contact getContact(String username, String groupId, String contactId) throws Exception {
+  public Contact getContact(String username, String contactId) throws Exception {
     Node contactHomeNode = getContactHome(username);
-    Node contactGroupHomeNode = getContactGroupHome(username);
-    if(contactGroupHomeNode.hasNode(groupId)) {
-    	if(contactHomeNode.hasNode(contactId)) {
-    		Node contactNode = contactHomeNode.getNode(contactId);
-    		Contact contact = new Contact();
-    		contact = getContact(contactNode);
-    		return contact;
-    	}
-    }
+  	if(contactHomeNode.hasNode(contactId)) {
+  		Node contactNode = contactHomeNode.getNode(contactId);
+  		Contact contact = new Contact();
+  		contact = getContact(contactNode);
+  		return contact;
+  	}
   	return null;
   }
 
@@ -130,7 +127,7 @@ public class JCRDataStorage implements DataStorage{
   }
 
   public ContactGroup getGroup(String username, String groupId) throws Exception {
-    // TODO Auto-generated method stub
+  	Node contactGroupHomeNode = getContactGroupHome(username);
     return null;
   }
 
@@ -144,7 +141,7 @@ public class JCRDataStorage implements DataStorage{
     return null;
   }
 
-  public Contact removeContact(String username, String groupId, String contactId) throws Exception {
+  public Contact removeContact(String username, String contactId) throws Exception {
     // TODO Auto-generated method stub
     return null;
   }
