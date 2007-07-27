@@ -6,16 +6,21 @@ package org.exoplatform.contact.service.impl;
 
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.jcr.Node;
+import javax.jcr.NodeIterator;
 import javax.jcr.Session;
+import javax.jcr.Value;
 
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.registry.JCRRegistryService;
 import org.exoplatform.registry.ServiceRegistry;
 import org.exoplatform.services.jcr.RepositoryService;
+
+//import com.sun.org.apache.xalan.internal.xsltc.NodeIterator;
 
 /**
  * Created by The eXo Platform SARL
@@ -64,14 +69,59 @@ public class JCRDataStorage implements DataStorage{
     return repositoryService_.getDefaultRepository().getSystemSession(defaultWS) ;
   }
 
+  private String [] ValuesToStrings(Value[] Val) {
+		String[] Str = new String[(int) Val.length];
+		for(int i = 0; i < Val.length; ++i) {
+		  Str[i] = Val[i].toString();
+		}
+		return Str;
+  }
+  
+  private Contact getContact(Node contactNode) throws Exception {
+  	Contact contact = new Contact();
+		if(contactNode.hasProperty("exo:id"))contact.setId(contactNode.getProperty("exo:id").getString());
+		if(contactNode.hasProperty("exo:firstName"))contact.setFirstName(contactNode.getProperty("exo:firstName").getString());
+		if(contactNode.hasProperty("exo:lastName"))contact.setLastName(contactNode.getProperty("exo:lastName").getString());
+		if(contactNode.hasProperty("exo:emailAddress"))contact.setEmailAddress(contactNode.getProperty("exo:emailAddress").getString());
+		if(contactNode.hasProperty("exo:homePhone"))contact.setHomePhone(contactNode.getProperty("exo:homePhone").getString());
+		if(contactNode.hasProperty("exo:workPhone"))contact.setWorkPhone(contactNode.getProperty("exo:workPhone").getString());
+		if(contactNode.hasProperty("exo:homeAddress"))contact.setHomeAddress(contactNode.getProperty("exo:homeAddress").getString());
+		if(contactNode.hasProperty("exo:country"))contact.setCountry(contactNode.getProperty("exo:country").getString());
+		if(contactNode.hasProperty("exo:postalCode"))contact.setPostalCode(contactNode.getProperty("exo:postalCode").getString());
+		if(contactNode.hasProperty("exo:personalSite"))contact.setPersonalSite(contactNode.getProperty("exo:personalSite").getString());
+		if(contactNode.hasProperty("exo:organization"))contact.setOrganization(contactNode.getProperty("exo:organization").getString());
+		if(contactNode.hasProperty("exo:jobTitle"))contact.setJobTitle(contactNode.getProperty("exo:jobTitle").getString());
+		if(contactNode.hasProperty("exo:companyAddress"))contact.setCompanyAddress(contactNode.getProperty("exo:companyAddress").getString());
+		if(contactNode.hasProperty("exo:companySite"))contact.setCompanySite(contactNode.getProperty("exo:companySite").getString());
+		if(contactNode.hasProperty("exo:groups"))contact.setGroups(ValuesToStrings(contactNode.getProperty("exo:groups").getValues()));
+		return contact;
+  }
+
   public List<Contact> getAllContact(String username) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
+  	Node contactHomeNode = getContactHome(username);
+  	List<Contact> contacts = new ArrayList<Contact>();
+  	NodeIterator iter = contactHomeNode.getNodes();
+  	Contact contact;
+  	while (iter.hasNext()) {
+			Node contactNode = iter.nextNode();
+			contact = getContact(contactNode);
+			contacts.add(contact);
+		}
+  	return contacts;
   }
 
   public Contact getContact(String username, String groupId, String contactId) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
+    Node contactHomeNode = getContactHome(username);
+    Node contactGroupHomeNode = getContactGroupHome(username);
+    if(contactGroupHomeNode.hasNode(groupId)) {
+    	if(contactHomeNode.hasNode(contactId)) {
+    		Node contactNode = contactHomeNode.getNode(contactId);
+    		Contact contact = new Contact();
+    		contact = getContact(contactNode);
+    		return contact;
+    	}
+    }
+  	return null;
   }
 
   public List<Contact> getContactsByGroup(String username, String groupId) throws Exception {
