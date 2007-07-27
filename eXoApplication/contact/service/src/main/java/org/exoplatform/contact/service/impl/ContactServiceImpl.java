@@ -25,48 +25,45 @@ public class ContactServiceImpl implements ContactService{
       JCRRegistryService jcrRegistryService) throws Exception {
       storage_ = new JCRDataStorage(repositoryService, jcrRegistryService) ;
   }
+  
   public List<Contact> getPublicContact() throws Exception {
     return null ;
   }
+  
   public List<Contact> getAllContact(String username) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
+    return storage_.getAllContact(username);
   }
+  
   public List<Contact> getContactsByGroup(String username, String groupId) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
+    return storage_.getContactsByGroup(username, groupId);
   }
+  
   public Contact getContact(String username, String contactId) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
+    return storage_.getContact(username, contactId);
   }
+  
   public void saveContact(String username, Contact contact, boolean isNew) throws Exception {
-    // TODO Auto-generated method stub
-    
+    storage_.saveContact(username, contact, isNew);    
   }
+  
   public Contact removeContact(String username, String contactId) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
+    return storage_.removeContact(username, contactId);
   }
-  
-  
+   
   public List<ContactGroup> getGroups(String username) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
-  }
-  public ContactGroup getGroup(String username, String groupId) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
-  }
-  public void saveGroup(String username, ContactGroup group, boolean isNew) throws Exception {
-    // TODO Auto-generated method stub
-    
-  }
-  public ContactGroup removeGroup(String username, String groupId) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
+    return storage_.getGroups(username);
   }
   
-
+  public ContactGroup getGroup(String username, String groupId) throws Exception {
+    return storage_.getGroup(username, groupId);
+  }
+  
+  public void saveGroup(String username, ContactGroup group, boolean isNew) throws Exception {
+    storage_.saveGroup(username, group, isNew);    
+  }
+  
+  public ContactGroup removeGroup(String username, String groupId) throws Exception {
+    return storage_.removeGroup(username, groupId);
+  }
   
 }
