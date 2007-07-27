@@ -66,8 +66,8 @@ public class ForumServiceImpl implements ForumService{
   	return storage_.removeForum(categoryId, forumId);
   }
   
-  public void createTopic(String categoryId, String forumId, Topic topic) throws Exception {
-	  storage_.createTopic(categoryId, forumId, topic);
+  public void saveTopic(String categoryId, String forumId, Topic topic, boolean isNew) throws Exception {
+	  storage_.saveTopic(categoryId, forumId, topic, isNew);
   }
   
   public Topic getTopic(String categoryId, String forumId, String topicId) throws Exception {
@@ -89,13 +89,9 @@ public class ForumServiceImpl implements ForumService{
   public Topic removeTopic(String categoryId, String forumId, String topicId) throws Exception {
   	return storage_.removeTopic(categoryId, forumId, topicId);
   }
-  
-  public void updateTopic(String categoryId, String forumId, Topic newTopic) throws Exception {
-  	storage_.updateTopic(categoryId, forumId, newTopic);
-  }
 
-  public void createPost(String categoryId, String forumId, String topicId, Post post) throws Exception {
-  	storage_.createPost(categoryId, forumId, topicId, post);
+  public void savePost(String categoryId, String forumId, String topicId, Post post, boolean isNew) throws Exception {
+  	storage_.savePost(categoryId, forumId, topicId, post, isNew);
   }
   
   public Post getPost(String categoryId, String forumId, String topicId, String postId) throws Exception {
@@ -112,10 +108,6 @@ public class ForumServiceImpl implements ForumService{
   
   public Post removePost(String categoryId, String forumId, String topicId, String postId) throws Exception {
     return storage_.removePost(categoryId, forumId, topicId, postId);
-  }
-  
-  public void updatePost(String categoryId, String forumId, String topicId, Post newPost) throws Exception {
-    storage_.updatePost(categoryId, forumId, topicId, newPost);
   }
   
 }

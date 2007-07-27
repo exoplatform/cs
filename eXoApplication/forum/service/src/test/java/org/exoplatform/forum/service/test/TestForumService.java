@@ -10,16 +10,12 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Random;
 
-
-import org.apache.poi.hssf.record.formula.functions.Int;
-import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.forum.service.Category;
 import org.exoplatform.forum.service.Forum;
 import org.exoplatform.forum.service.JCRPageList;
 import org.exoplatform.forum.service.Post;
 import org.exoplatform.forum.service.Topic;
 import org.exoplatform.forum.service.TopicView;
-import org.exoplatform.forum.service.impl.ForumServiceImpl;
 
 
 /**
@@ -92,7 +88,7 @@ public class TestForumService extends BaseForumTestCase{
 		forumService_.saveForum(cat.getId(), forum, true);
 		Topic topic = createdTopic("1111");
 		// add Topic
-		forumService_.createTopic(cat.getId(), forum.getId(), topic);
+		forumService_.saveTopic(cat.getId(), forum.getId(), topic, true);
 		//get Topic
 		assertNotNull(forumService_.getTopic(cat.getId(), forum.getId(), topic.getId()));
 		//get PageList Topic
@@ -106,7 +102,7 @@ public class TestForumService extends BaseForumTestCase{
 		// update Topic
 		Topic newTopic = forumService_.getTopic(cat.getId(), forum.getId(), topic.getId());
 		newTopic.setTopicName("New Name topic");
-		forumService_.updateTopic(cat.getId(), forum.getId(), newTopic);
+		forumService_.saveTopic(cat.getId(), forum.getId(), newTopic, false);
 		assertEquals("New Name topic", forumService_.getTopic(cat.getId(), forum.getId(), topic.getId()).getTopicName());
 		// move Topic
 		// move topic from forum to forum 1
@@ -125,13 +121,13 @@ public class TestForumService extends BaseForumTestCase{
 		Forum forum = createdForum("111111");
 		forumService_.saveForum(cat.getId(), forum, true);
 		Topic topic = createdTopic("222222");
-		forumService_.createTopic(cat.getId(), forum.getId(), topic);
+		forumService_.saveTopic(cat.getId(), forum.getId(), topic, true);
 		List<Post> posts = new ArrayList<Post>();
 		Random rand = new Random();
 		for (int i = 0; i < 25; ++i) {
 		  Post post = createdPost(String.valueOf(rand.nextInt(99999999)));
 		  posts.add(post);
-		  forumService_.createPost(cat.getId(), forum.getId(), topic.getId(), post);
+		  forumService_.savePost(cat.getId(), forum.getId(), topic.getId(), post, true);
 		}
 		// getPost
 		assertNotNull(forumService_.getPost(cat.getId(), forum.getId(), topic.getId(), posts.get(0).getId()));
@@ -149,7 +145,7 @@ public class TestForumService extends BaseForumTestCase{
 		// update Post First
 		Post newPost = (Post)pagePosts.getPage(1, session_).get(0);
 		newPost.setMessage("New messenger");
-		forumService_.updatePost(cat.getId(), forum.getId(), topic.getId(), newPost);
+		forumService_.savePost(cat.getId(), forum.getId(), topic.getId(), newPost, false);
 		assertEquals("New messenger", forumService_.getPost(cat.getId(), forum.getId(), topic.getId(), newPost.getId()).getMessage());
 //		List<Post> posts1 = topicView.getAllPost(session_);
 //		for (int i = 0; i < posts1.size(); i++) {
@@ -157,7 +153,7 @@ public class TestForumService extends BaseForumTestCase{
 //		}
 		//test movePost
 		Topic topicnew = createdTopic("333334");
-		forumService_.createTopic(cat.getId(), forum.getId(), topicnew);
+		forumService_.saveTopic(cat.getId(), forum.getId(), topicnew, true);
 		topicnew = forumService_.getTopic(cat.getId(), forum.getId(), topicnew.getId());
 		forumService_.movePost(newPost.getPath(), topicnew.getPath() + "/" + newPost.getId());
 		assertNotNull(forumService_.getPost(cat.getId(), forum.getId(), topicnew.getId(), newPost.getId()));

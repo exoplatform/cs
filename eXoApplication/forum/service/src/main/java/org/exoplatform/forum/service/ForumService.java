@@ -155,14 +155,15 @@ public interface ForumService {
    * 2. Check all the mandatory field of the topic object
    * 3. Save the topic data into the database
    * 4. Invalidate the TopicView if neccessary
-   * 
-   * @param username
    * @param forumId
    * @param topic
+   * @param isNew TODO
+   * @param username
+   * 
    * @return
    * @throws Exception
    */
-  public void createTopic(String categoryId, String forumId, Topic topic) throws Exception;
+  public void saveTopic(String categoryId, String forumId, Topic topic, boolean isNew) throws Exception;
   /**
    * This method should:
    * 1. Check the user permission
@@ -172,17 +173,6 @@ public interface ForumService {
    * @param username
    * @param topicId
    * @param newTopic
-   * @return
-   * @throws Exception
-   */
-  public void updateTopic(String categoryId, String forumId, Topic newTopic) throws Exception;  
-  /**
-   * This method should:
-   * 1. Check the user permission
-   * 2. Remove the topic from the database, throw exception if  the topic is not existed
-   * 3. Invalidate the TopicView cache
-   * @param username
-   * @param topicId
    * @return
    * @throws Exception
    */
@@ -229,14 +219,14 @@ public interface ForumService {
    * 2. Check the madatory field of the post
    * 3. Save the post data into the database
    * 4. Invalidate the TopicView data cache
-   * @param username
    * @param topicId
    * @param post
+   * @param isNew TODO
+   * @param username
    * @return
    * @throws Exception
    */
-  public void createPost(String categoryId, String forumId, String topicId, Post post)throws Exception;
-  public void updatePost(String categoryId, String forumId, String topicId, Post newPost)throws Exception;
+  public void savePost(String categoryId, String forumId, String topicId, Post post, boolean isNew)throws Exception;
   public Post removePost(String categoryId, String forumId, String topicId, String postId)throws Exception;
   public void movePost(String postPath, String destTopicPaths) throws Exception ;
 }

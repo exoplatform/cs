@@ -301,83 +301,68 @@ public class JCRDataStorage implements DataStorage {
   }
   
  
-  public void createTopic(String categoryId, String forumId, Topic topic) throws Exception {
+  public void saveTopic(String categoryId, String forumId, Topic topic, boolean isNew) throws Exception {
 		Node forumHomeNode = getForumHomeNode();
 		if(forumHomeNode.hasNode(categoryId)) {
 		  Node CategoryNode = forumHomeNode.getNode(categoryId);
 		  if(CategoryNode.hasNode(forumId)) {
 				Node forumNode = CategoryNode.getNode(forumId);
-				Node topicNode = forumNode.addNode(topic.getId(), "exo:topic");
-				
-				topicNode.setProperty("exo:id", topic.getId());
-				topicNode.setProperty("exo:owner", topic.getOwner());
-				topicNode.setProperty("exo:path", topicNode.getPath());
-				topicNode.setProperty("exo:name", topic.getTopicName());
-		    topicNode.setProperty("exo:createdDate", GregorianCalendar.getInstance());
-		    topicNode.setProperty("exo:modifiedBy", topic.getModifiedBy());
-		    topicNode.setProperty("exo:modifiedDate", GregorianCalendar.getInstance());
-		    topicNode.setProperty("exo:lastPostBy", topic.getLastPostBy());
-		    topicNode.setProperty("exo:lastPostDate", GregorianCalendar.getInstance());
-		    topicNode.setProperty("exo:description", topic.getDescription());
-		    topicNode.setProperty("exo:postCount", 0);
-		    topicNode.setProperty("exo:viewCount", 1);
-		    topicNode.setProperty("exo:icon", topic.getIcon());
-		    
-		    topicNode.setProperty("exo:isModeratePost", topic.getIsModeratePost());
+				Node topicNode;
+				if(isNew) {
+					topicNode = forumNode.addNode(topic.getId(), "exo:topic");
+					topicNode.setProperty("exo:id", topic.getId());
+					topicNode.setProperty("exo:path", topicNode.getPath());
+					topicNode.setProperty("exo:createdDate", GregorianCalendar.getInstance());
+					topicNode.setProperty("exo:lastPostBy", topic.getLastPostBy());
+					topicNode.setProperty("exo:lastPostDate", GregorianCalendar.getInstance());
+					topicNode.setProperty("exo:postCount", 0);
+					topicNode.setProperty("exo:viewCount", 1);
+				} else {
+					topicNode = forumNode.getNode(topic.getId());
+				}
+			  topicNode.setProperty("exo:owner", topic.getOwner());
+			  topicNode.setProperty("exo:name", topic.getTopicName());
+			  topicNode.setProperty("exo:modifiedBy", topic.getModifiedBy());
+			  topicNode.setProperty("exo:modifiedDate", GregorianCalendar.getInstance());
+			  topicNode.setProperty("exo:description", topic.getDescription());
+			  topicNode.setProperty("exo:icon", topic.getIcon());
+			  
+			  topicNode.setProperty("exo:isModeratePost", topic.getIsModeratePost());
 		    topicNode.setProperty("exo:isNotifyWhenAddPost", topic.getIsNotifyWhenAddPost());
 		    topicNode.setProperty("exo:isClosed", topic.getIsClosed());
 		    topicNode.setProperty("exo:isLock", topic.getIsLock());
 		    topicNode.setProperty("exo:isApproved", topic.getIsApproved());
-			  // setTopicCount for Forum
-		    long newTopicCount = forumNode.getProperty("exo:topicCount").getLong() + 1;
-			  forumNode.setProperty("exo:topicCount", newTopicCount );
-		    
-			  forumHomeNode.save() ;
-			  forumHomeNode.getSession().save() ;
-		    // createPost first
-		    GregorianCalendar calendar = new GregorianCalendar() ;
-				String id = String.valueOf(calendar.getTimeInMillis());
-		    Post post = new Post();
-		    post.setId(id);
-				post.setOwner(topic.getOwner());
-				post.setCreatedDate(topicNode.getProperty("exo:createdDate").getDate().getTime());
-				post.setModifiedBy(topic.getModifiedBy());
-				post.setModifiedDate(topicNode.getProperty("exo:createdDate").getDate().getTime());
-				post.setSubject(topic.getTopicName());
-				post.setMessage(topic.getDescription());
-				post.setRemoteAddr("");
-				post.setIcon(topic.getIcon());
-				post.setIsApproved(false);
-				
-				createPost(categoryId, forumId, topic.getId(), post);
+
+		    if(isNew) {
+		    	// setTopicCount for Forum
+			    long newTopicCount = forumNode.getProperty("exo:topicCount").getLong() + 1;
+				  forumNode.setProperty("exo:topicCount", newTopicCount );
+				  
+				  forumHomeNode.save() ;
+				  forumHomeNode.getSession().save() ;
+			    // createPost first
+			    GregorianCalendar calendar = new GregorianCalendar() ;
+					String id = String.valueOf(calendar.getTimeInMillis());
+			    Post post = new Post();
+			    post.setId(id);
+					post.setOwner(topic.getOwner());
+					post.setCreatedDate(topicNode.getProperty("exo:createdDate").getDate().getTime());
+					post.setModifiedBy(topic.getModifiedBy());
+					post.setModifiedDate(topicNode.getProperty("exo:createdDate").getDate().getTime());
+					post.setSubject(topic.getTopicName());
+					post.setMessage(topic.getDescription());
+					post.setRemoteAddr("");
+					post.setIcon(topic.getIcon());
+					post.setIsApproved(false);
+					
+					savePost(categoryId, forumId, topic.getId(), post, true);
+		    } else {
+				  forumHomeNode.save() ;
+				  forumHomeNode.getSession().save() ;
+		    }
 		  }
 		}
   }
-  
-  public void updateTopic(String categoryId, String forumId, Topic newTopic) throws Exception {
-  	Node forumHomeNode = getForumHomeNode();
-    if(forumHomeNode.hasNode(categoryId)) {
-  	  Node CategoryNode = forumHomeNode.getNode(categoryId);
-		  Node forumNode = CategoryNode.getNode(forumId);
-		  Node topicNode = forumNode.getNode(newTopic.getId());
-		  
-		  topicNode.setProperty("exo:owner", newTopic.getOwner());
-		  topicNode.setProperty("exo:name", newTopic.getTopicName());
-		  topicNode.setProperty("exo:modifiedBy", newTopic.getModifiedBy());
-		  topicNode.setProperty("exo:modifiedDate", GregorianCalendar.getInstance());
-		  topicNode.setProperty("exo:description", newTopic.getDescription());
-		  topicNode.setProperty("exo:icon", newTopic.getIcon());
-		  
-		  topicNode.setProperty("exo:isModeratePost", newTopic.getIsModeratePost());
-	    topicNode.setProperty("exo:isNotifyWhenAddPost", newTopic.getIsNotifyWhenAddPost());
-	    topicNode.setProperty("exo:isClosed", newTopic.getIsClosed());
-	    topicNode.setProperty("exo:isLock", newTopic.getIsLock());
-	    topicNode.setProperty("exo:isApproved", newTopic.getIsApproved());
-	    
-    }
-    forumHomeNode.save() ;
-    forumHomeNode.getSession().save() ;
-  } 
   
   public Topic removeTopic(String categoryId, String forumId, String topicId) throws Exception {
 		Node forumHomeNode = getForumHomeNode();
@@ -459,19 +444,23 @@ public class JCRDataStorage implements DataStorage {
     return postNew;
   }
   
-  public void createPost(String categoryId, String forumId, String topicId, Post post) throws Exception {
+  public void savePost(String categoryId, String forumId, String topicId, Post post, boolean isNew) throws Exception {
 		Node forumHomeNode = getForumHomeNode();
 		if(forumHomeNode.hasNode(categoryId)) {
 		  Node CategoryNode = forumHomeNode.getNode(categoryId);
 		  if(CategoryNode.hasNode(forumId)) {
 				Node forumNode = CategoryNode.getNode(forumId);
 				Node topicNode = forumNode.getNode(topicId);
-				Node postNode = topicNode.addNode(post.getId(), "exo:post");
-				
-				postNode.setProperty("exo:id", post.getId());
-				postNode.setProperty("exo:owner", post.getOwner());
-				postNode.setProperty("exo:path", postNode.getPath());
-				postNode.setProperty("exo:createdDate", GregorianCalendar.getInstance());
+				Node postNode;
+				if(isNew) {
+					postNode = topicNode.addNode(post.getId(), "exo:post");
+					postNode.setProperty("exo:id", post.getId());
+					postNode.setProperty("exo:owner", post.getOwner());
+					postNode.setProperty("exo:path", postNode.getPath());
+					postNode.setProperty("exo:createdDate", GregorianCalendar.getInstance());
+				} else {
+					postNode = topicNode.getNode(post.getId());
+				}
 				postNode.setProperty("exo:modifiedBy", post.getModifiedBy());
 				postNode.setProperty("exo:modifiedDate", GregorianCalendar.getInstance());
 				postNode.setProperty("exo:subject", post.getSubject());
@@ -479,39 +468,17 @@ public class JCRDataStorage implements DataStorage {
 				postNode.setProperty("exo:remoteAddr", post.getRemoteAddr());
 				postNode.setProperty("exo:icon", post.getIcon());
 				postNode.setProperty("exo:isApproved", post.getIsApproved());
-		    // setPostCount for Topic
-				long topicPostCount = topicNode.getProperty("exo:postCount").getLong() + 1;
-				topicNode.setProperty("exo:postCount", topicPostCount );
-				// setPostCount for Forum
-				long forumPostCount = forumNode.getProperty("exo:postCount").getLong() + 1;
-				forumNode.setProperty("exo:postCount", forumPostCount );
-				
+				if(isNew) {
+			    // setPostCount for Topic
+					long topicPostCount = topicNode.getProperty("exo:postCount").getLong() + 1;
+					topicNode.setProperty("exo:postCount", topicPostCount );
+					// setPostCount for Forum
+					long forumPostCount = forumNode.getProperty("exo:postCount").getLong() + 1;
+					forumNode.setProperty("exo:postCount", forumPostCount );
+				}
 		    forumHomeNode.save() ;
 		    forumHomeNode.getSession().save() ;
-		    
 		  }
-		}
-  }
-  
-  public void updatePost(String categoryId, String forumId, String topicId, Post newPost) throws Exception {
-    Node forumHomeNode = getForumHomeNode();
-		if(forumHomeNode.hasNode(categoryId)) {
-		  Node CategoryNode = forumHomeNode.getNode(categoryId);
-		  if(CategoryNode.hasNode(forumId)) {
-				Node forumNode = CategoryNode.getNode(forumId);
-				Node topicNode = forumNode.getNode(topicId);
-				Node postNode = topicNode.getNode(newPost.getId());
-				
-				postNode.setProperty("exo:modifiedBy", newPost.getModifiedBy());
-				postNode.setProperty("exo:modifiedDate", GregorianCalendar.getInstance());
-				postNode.setProperty("exo:subject", newPost.getSubject());
-				postNode.setProperty("exo:message", newPost.getMessage());
-				postNode.setProperty("exo:remoteAddr", newPost.getRemoteAddr());
-				postNode.setProperty("exo:icon", newPost.getIcon());
-				postNode.setProperty("exo:isApproved", newPost.getIsApproved());
-		  }
-		  forumHomeNode.save() ;
-		  forumHomeNode.getSession().save() ;
 		}
   }
   
