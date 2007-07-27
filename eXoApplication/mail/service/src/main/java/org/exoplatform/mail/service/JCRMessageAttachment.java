@@ -10,29 +10,36 @@ import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
 import javax.jcr.Session;
 
+import org.exoplatform.container.PortalContainer;
+import org.exoplatform.services.jcr.RepositoryService;
+
 /**
  * Created by The eXo Platform SARL
  * Author : Hung Ngyen Quang
  *          hung.nguyen@exoplatform.com
  * Jul 9, 2007  
  * 
- * wrong location , SaveMailAttachment should be SavedMailAttachment
+ * TODO: wrong location, rename to JCRMesageAttachment
  */
-public class SaveMailAttachment extends Attachment{
+public class JCRMessageAttachment extends Attachment{
+  private String workspace ;
   
-  private InputStream inputStream;
-  
-  public InputStream getInputStream() { return inputStream ; }
-  public void setInputStream(InputStream is) { inputStream = is ; }
+  public String getWorkspace() { return workspace ; }
+  public void setWorkspace(String ws) { workspace = ws ; }
   
   @Override
-  public InputStream getInputStream(Session session) throws Exception {
+  public InputStream getInputStream() throws Exception {
     Node attachment ;
     try{
-      attachment = (Node)session.getItem(getId()) ;      
+      attachment = (Node)getSesison().getItem(getId()) ;      
     }catch (ItemNotFoundException e) {
       return null ;
     }
     return attachment.getNode("jcr:content").getProperty("jcr:data").getStream() ;
+  }
+  
+  private Session getSesison()throws Exception {
+    RepositoryService repoService = (RepositoryService)PortalContainer.getInstance().getComponentInstanceOfType(RepositoryService.class) ;
+    return repoService.getDefaultRepository().getSystemSession(workspace) ;
   }
 }

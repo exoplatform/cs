@@ -25,6 +25,7 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
 import org.exoplatform.mail.service.Account;
+import org.exoplatform.mail.service.AccountData;
 import org.exoplatform.mail.service.Attachment;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailServerConfiguration;
@@ -32,7 +33,7 @@ import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.MessageHeader;
-import org.exoplatform.mail.service.SaveMailAttachment;
+import org.exoplatform.mail.service.BufferAttachment;
 import org.exoplatform.registry.JCRRegistryService;
 import org.exoplatform.services.jcr.RepositoryService;
 /**
@@ -48,6 +49,10 @@ public class MailServiceImpl implements MailService{
   public MailServiceImpl(RepositoryService  repositoryService, 
                          JCRRegistryService jcrRegistryService) throws Exception {
     storage_ = new JCRDataStorage(repositoryService, jcrRegistryService) ;      
+  }
+  
+  public List<AccountData> getAccountDatas() throws Exception {
+    return null ;
   }
   
   /**
@@ -311,7 +316,7 @@ public class MailServiceImpl implements MailService{
           }
         } else {
           // this part must be presented as an attachment, hence we add it to the attached files
-          SaveMailAttachment file = new SaveMailAttachment();
+          BufferAttachment file = new BufferAttachment();
           file.setId(storage_.getMessageHome(username, newMail.getAccountId()).getPath()+"/"+newMail.getId()+"/"+part.getFileName());
           file.setName(part.getFileName());
           InputStream is = part.getInputStream();

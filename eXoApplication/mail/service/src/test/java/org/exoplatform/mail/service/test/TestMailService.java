@@ -15,7 +15,7 @@ import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailServerConfiguration;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.MessageHeader;
-import org.exoplatform.mail.service.SaveMailAttachment;
+import org.exoplatform.mail.service.BufferAttachment;
 
 /**
  * Created by The eXo Platform SARL
@@ -109,7 +109,7 @@ public class TestMailService extends BaseMailTestCase{
       Iterator<Attachment> itFiles = filesAttached.iterator();
       while (itFiles.hasNext()) {
         System.out.println("\t________START FILE___________");
-        SaveMailAttachment file = (SaveMailAttachment)itFiles.next();
+        BufferAttachment file = (BufferAttachment)itFiles.next();
         System.out.println("\t[Attached] : " + file.getName());
         System.out.println("\t[Attached Content]");
         if (file.getMimeType().equals("text/plain") || file.getMimeType().equals("text/html")) {

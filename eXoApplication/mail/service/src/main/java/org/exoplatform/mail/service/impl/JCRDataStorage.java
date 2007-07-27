@@ -24,7 +24,7 @@ import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.MessageHeader;
-import org.exoplatform.mail.service.SaveMailAttachment;
+import org.exoplatform.mail.service.BufferAttachment;
 import org.exoplatform.registry.JCRRegistryService;
 import org.exoplatform.registry.ServiceRegistry;
 import org.exoplatform.services.jcr.RepositoryService;
@@ -123,7 +123,7 @@ public class JCRDataStorage implements DataStorage{
       while (msgIt.hasNext()) {
         Node node = msgIt.nextNode();
         if (node.isNodeType("nt:file")) {
-          SaveMailAttachment file = new SaveMailAttachment();
+          BufferAttachment file = new BufferAttachment();
           file.setId(node.getPath());
           file.setMimeType(node.getNode("jcr:content").getProperty("jcr:mimeType").getString());
           file.setName(node.getName());
@@ -267,7 +267,7 @@ public class JCRDataStorage implements DataStorage{
       List<Attachment> attachments = message.getAttachments();
       Iterator<Attachment> it = attachments.iterator();
       while (it.hasNext()) {
-        SaveMailAttachment file = (SaveMailAttachment)it.next();
+        BufferAttachment file = (BufferAttachment)it.next();
         Node nodeFile = null;
         if (!nodeMsg.hasNode(file.getName())) nodeFile = nodeMsg.addNode(file.getName(), "nt:file");
         else nodeFile = nodeMsg.getNode(file.getName());

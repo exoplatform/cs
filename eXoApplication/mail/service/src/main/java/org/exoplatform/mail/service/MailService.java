@@ -14,7 +14,8 @@ import java.util.List;
  * Jun 23, 2007  
  */
 public interface MailService {
-  //TODO: add method List<AccoutData> getAccountData
+  
+  public List<AccountData> getAccountDatas() throws Exception ;
   
   /**
    * This method should: 
