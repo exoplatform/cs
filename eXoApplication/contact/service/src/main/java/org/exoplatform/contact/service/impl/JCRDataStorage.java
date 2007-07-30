@@ -13,6 +13,9 @@ import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.Session;
 import javax.jcr.Value;
+import javax.jcr.query.Query;
+import javax.jcr.query.QueryManager;
+import javax.jcr.query.QueryResult;
 
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactGroup;
@@ -70,7 +73,7 @@ public class JCRDataStorage implements DataStorage{
   }
 
   private String [] ValuesToStrings(Value[] Val) {
-		String[] Str = new String[(int) Val.length];
+		String[] Str = new String[Val.length];
 		for(int i = 0; i < Val.length; ++i) {
 		  Str[i] = Val[i].toString();
 		}
@@ -94,7 +97,7 @@ public class JCRDataStorage implements DataStorage{
 		if(contactNode.hasProperty("exo:companyAddress"))contact.setCompanyAddress(contactNode.getProperty("exo:companyAddress").getString());
 		if(contactNode.hasProperty("exo:companySite"))contact.setCompanySite(contactNode.getProperty("exo:companySite").getString());
 		if(contactNode.hasProperty("exo:groups"))contact.setGroups(ValuesToStrings(contactNode.getProperty("exo:groups").getValues()));
-		return contact;
+    return contact;
   }
 
   public List<Contact> getAllContact(String username) throws Exception {
@@ -121,19 +124,53 @@ public class JCRDataStorage implements DataStorage{
   	return null;
   }
 
+  // ??? viet ham test;
   public List<Contact> getContactsByGroup(String username, String groupId) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
+    Node contactHome = getContactHome(username);
+    QueryManager qm = contactHome.getSession().getWorkspace().getQueryManager();
+    StringBuffer queryString = new StringBuffer("/jcr:root" + contactHome.getPath() 
+                                                + "//element(*,exo:contact)[@exo:groupId='").
+                                                append(groupId).
+                                                append("']");
+    Query query = qm.createQuery(queryString.toString(), Query.XPATH);
+    QueryResult result = query.execute();
+    NodeIterator it = result.getNodes();
+    List<Contact> contacts = new ArrayList<Contact>();
+    while (it.hasNext()) {
+      contacts.add(getContact(it.nextNode()));
+    }
+    return contacts ;
+  }
+ 
+  private ContactGroup getGroup(Node contactGroupNode) throws Exception {
+    ContactGroup contactGroup = new ContactGroup();
+    if (contactGroupNode.hasProperty("exo:id")) contactGroup.setId(contactGroupNode.getProperty("exo:id").getString());
+    if (contactGroupNode.hasProperty("exo:name")) contactGroup.setName(contactGroupNode.getProperty("exo:name").getString());
+    return contactGroup;
   }
 
   public ContactGroup getGroup(String username, String groupId) throws Exception {
   	Node contactGroupHomeNode = getContactGroupHome(username);
+    if (contactGroupHomeNode.hasNode(groupId)) {
+      Node contactGroupNode = contactGroupHomeNode.getNode(groupId);
+      ContactGroup contactGroup = new ContactGroup();
+      contactGroup = getGroup(contactGroupNode);
+      return contactGroup;
+    }
     return null;
   }
 
   public List<ContactGroup> getGroups(String username) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
+    Node contactGroupHomeNode = getContactGroupHome(username);
+    List<ContactGroup> contactGroups = new ArrayList<ContactGroup>();
+    NodeIterator iter = contactGroupHomeNode.getNodes();
+    ContactGroup contactGroup;
+    while (iter.hasNext()) {
+      Node contactGroupNode = iter.nextNode();
+      contactGroup = getGroup(contactGroupNode);
+      contactGroups.add(contactGroup);
+    }
+    return contactGroups;
   }
 
   public List<Contact> getPublicContact() throws Exception {
@@ -142,24 +179,68 @@ public class JCRDataStorage implements DataStorage{
   }
 
   public Contact removeContact(String username, String contactId) throws Exception {
-    // TODO Auto-generated method stub
+    Node contactHomeNode = getContactHome(username);
+    Contact contact = new Contact();
+    if (contactHomeNode.hasNode(contactId)) {
+      contact = getContact(username, contactId);
+      contactHomeNode.getNode(contactId).remove();
+      
+      contactHomeNode.getSession().save();
+      return contact;
+    }
     return null;
   }
 
   public ContactGroup removeGroup(String username, String groupId) throws Exception {
-    // TODO Auto-generated method stub
+    Node contactGroupHomeNode = getContactGroupHome(username);
+    ContactGroup contactGroup = new ContactGroup();
+    if (contactGroupHomeNode.hasNode(groupId)) {
+      contactGroup = getGroup(username, groupId);
+      contactGroupHomeNode.getNode(groupId).remove();
+      contactGroupHomeNode.save();
+      contactGroupHomeNode.getSession().save();
+      return contactGroup;
+    }
     return null;
   }
 
   public void saveContact(String username, Contact contact, boolean isNew) throws Exception {
-    // TODO Auto-generated method stub
+    Node contactHomeNode = getContactHome(username);
+    Node contactNode;
+    if (isNew) {
+      contactNode = contactHomeNode.addNode(contact.getId(), "exo:contact"); 
+      contactNode.setProperty("exo:id", contact.getId());
+    } else {
+      contactNode = contactHomeNode.getNode(contact.getId());
+    }
+    contactNode.setProperty("exo:firstName", contact.getFirstName());
+    contactNode.setProperty("exo:lastName", contact.getLastName());
+    contactNode.setProperty("exo:emailAddress", contact.getEmailAddress());
+    contactNode.setProperty("exo:homePhone", contact.getHomePhone());
+    contactNode.setProperty("exo:workPhone", contact.getWorkPhone());
+    contactNode.setProperty("exo:homeAddress", contact.getHomeAddress());
+    contactNode.setProperty("exo:country", contact.getCountry());
+    contactNode.setProperty("exo:postalCode", contact.getPostalCode());
+    contactNode.setProperty("exo:personalSite", contact.getPersonalSite());
+    contactNode.setProperty("exo:organization", contact.getOrganization());
+    contactNode.setProperty("exo:jobTitle", contact.getJobTitle());
+    contactNode.setProperty("exo:companyAddress", contact.getCompanyAddress()); 
+    contactNode.setProperty("exo:companySite", contact.getCompanySite());
+    contactNode.setProperty("exo:groups", contact.getGroups());
     
+    contactHomeNode.getSession().save();
   }
 
   public void saveGroup(String username, ContactGroup group, boolean isNew) throws Exception {
-    // TODO Auto-generated method stub
-    
-  }
-
-  
+    Node groupHomeNode = getContactGroupHome(username);
+    Node groupNode;
+    if (isNew) {
+      groupNode = groupHomeNode.addNode(group.getId(), "exo:contactGroup");
+      groupNode.setProperty("exo:id", group.getId());
+    } else {
+      groupNode = groupHomeNode.getNode(group.getId());
+    }
+    groupNode.setProperty("exo:name", group.getName());
+    groupHomeNode.getSession().save();
+  }  
 }
