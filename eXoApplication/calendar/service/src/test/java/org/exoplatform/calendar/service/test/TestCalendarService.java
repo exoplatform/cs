@@ -231,9 +231,6 @@ public class TestCalendarService extends BaseCalendarTestCase{
     ByteArrayInputStream icalInputStream = new ByteArrayInputStream(ical.toString().getBytes()) ;
     importExport.importCalendar("nqhung", icalInputStream) ;
     List<CalendarCategory> cateList = calendarService_.getCalendarCategories("nqhung") ;
-    for(CalendarCategory cc : cateList) {
-      System.out.println("\n catname === " + cc.getName()) ;
-    }
     assertEquals(cateList.size(), 2) ;
     List<Calendar> calList = calendarService_.getUserCalendars("nqhung") ;
     assertEquals(calList.size(), 2) ;

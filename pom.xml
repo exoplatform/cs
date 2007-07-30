@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.exoplatform.cs</groupId>
   <artifactId>config</artifactId>
-  <name>eXo Groupware Config</name>
+  <name>eXo Collaboration Suite Config</name>
   <version>2.0</version>
   <packaging>pom</packaging>
 
