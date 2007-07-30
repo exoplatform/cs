@@ -38,7 +38,7 @@ public class TestContactService extends BaseContactTestCase{
     contact.setPersonalSite("homepage");
     contact.setOrganization("test");
     contact.setJobTitle("Developer");
-    contact.setCompanyAddress("Trang Duy Hung");
+    contact.setCompanyAddress("Tran Duy Hung");
     contact.setCompanySite("eXo");
     contact.setGroups(new String[] {"friend", "work"});
     // test addContact
@@ -58,7 +58,7 @@ public class TestContactService extends BaseContactTestCase{
     // get contact by groupId
     contacts = contactService_.getContactsByGroup("exo","friend" );
     assertNotNull(contacts);
-    System.out.println("\n\n\n contactsize : " + contacts.size() + "\n\n\n");
+    System.out.println("\n\n\n contactsize : " + contacts.get(0).getCompanyAddress() + "\n\n\n");
     //assertEquals(contacts.size(), 1) ;
     
     //test removeContact

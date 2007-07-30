@@ -34,8 +34,8 @@ public class ContactServiceImpl implements ContactService{
     return storage_.getAllContact(username);
   }
   
-  public List<Contact> getContactsByGroup(String username, String groupId) throws Exception {
-    return storage_.getContactsByGroup(username, groupId);
+  public List<Contact> getContactsByGroup(String username, String groupName) throws Exception {
+    return storage_.getContactsByGroup(username, groupName);
   }
   
   public Contact getContact(String username, String contactId) throws Exception {

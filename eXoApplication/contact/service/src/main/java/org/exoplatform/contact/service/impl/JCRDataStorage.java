@@ -128,13 +128,12 @@ public class JCRDataStorage implements DataStorage{
   	return null;
   }
 
-  // ??? viet ham test;
-  public List<Contact> getContactsByGroup(String username, String groupId) throws Exception {
+  public List<Contact> getContactsByGroup(String username, String groupName) throws Exception {
     Node contactHome = getContactHome(username);
     QueryManager qm = contactHome.getSession().getWorkspace().getQueryManager();
     StringBuffer queryString = new StringBuffer("/jcr:root" + contactHome.getPath() 
-                                                + "//element(*,exo:contact)[@exo:groupId='").
-                                                append(groupId).
+                                                + "//element(*,exo:contact)[@exo:groups='").
+                                                append(groupName).
                                                 append("']");
     Query query = qm.createQuery(queryString.toString(), Query.XPATH);
     QueryResult result = query.execute();
