@@ -4,8 +4,7 @@
  **************************************************************************/
 package org.exoplatform.calendar.service.impl;
 
-import java.io.InputStream;
-import java.io.OutputStream;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +15,8 @@ import org.exoplatform.calendar.service.CalendarImportExport;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.Event;
 import org.exoplatform.calendar.service.EventCategory;
+import org.exoplatform.calendar.service.EventQuery;
+import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.registry.JCRRegistryService;
 import org.exoplatform.services.jcr.RepositoryService;
 
@@ -51,64 +52,86 @@ public class CalendarServiceImpl implements CalendarService{
     return storage_.removeCalendarCategory(username, calendarCategoryId);
   }
   
-  public Calendar getCalendar(String username, String calendarId) throws Exception {
-    return storage_.getCalendar(username, calendarId);
+  public Calendar getUserCalendar(String username, String calendarId) throws Exception {
+    return storage_.getUserCalendar(username, calendarId);
   }
-  public Calendar getCalendar(String calendarId) throws Exception {
-    return storage_.getCalendar(calendarId);
+  public List<Calendar> getUserCalendars(String username) throws Exception {
+    return storage_.getUserCalendars(username) ;
   }
-  public List<Calendar> getAllCalendars(String username) throws Exception {
-    return storage_.getAllCalendars(username) ;
+  public List<Calendar> getUserCalendarsByCategory(String username, String calendarCategoryId) throws Exception {
+    return storage_.getUserCalendarsByCategory(username, calendarCategoryId);
   }
-  public List<Calendar> getCalendarsByCategory(String username, String calendarCategoryId) throws Exception {
-    return storage_.getCalendarsByCategory(username, calendarCategoryId);
+  public void saveUserCalendar(String username, Calendar calendar, boolean isNew) throws Exception {
+    storage_.saveUserCalendar(username, calendar, isNew) ;
   }
-  public List<Calendar> getCalendarsByGroup(String groupName) throws Exception {
-    return storage_.getCalendarsByGroup(groupName);
-  }
-  public void saveCalendar(String username, Calendar calendar, boolean isNew) throws Exception {
-    storage_.saveCalendar(username, calendar, isNew) ;
-  }
-  public Calendar removeCalendar(String username, String calendarId) throws Exception {
-    return storage_.removeCalendar(username, calendarId);
-  }
-  public Calendar removeCalendar(String calendarId) throws Exception {
-    return storage_.removeCalendar(calendarId);
+  public Calendar removeUserCalendar(String username, String calendarId) throws Exception {
+    return storage_.removeUserCalendar(username, calendarId);
   }
   
-  public List<EventCategory> getEventCategories(String username, String calendarId) throws Exception {
-    return storage_.getEventCategories(username, calendarId);
+  
+  public Calendar getGroupCalendar(String calendarId) throws Exception {
+    return storage_.getGroupCalendar(calendarId);
   }
-  public EventCategory getEventCategory(String username, String calendarId, String eventCategoryId) throws Exception {
-    return storage_.getEventCategory(username, calendarId, eventCategoryId);
+  public List<GroupCalendarData> getGroupCalendars(String[] groupIds) throws Exception {
+    return storage_.getGroupCalendars(groupIds);
   }
-  public void saveEventCategory(String username, String calendarId, EventCategory eventCategory, boolean isNew) throws Exception {
-    storage_.saveEventCategory(username, calendarId, eventCategory, isNew) ;
+  public void saveGroupCalendar(Calendar calendar, boolean isNew) throws Exception {
+    storage_.saveGroupCalendar(calendar, isNew) ;
   }
-  public EventCategory removeEventCategory(String username, String calendarId, String eventCategoryId) throws Exception {
-    return storage_.removeEventCategory(username, calendarId,eventCategoryId);
+  public Calendar removeGroupCalendar(String calendarId) throws Exception {
+    return storage_.removeGroupCalendar(calendarId);
   }
   
-  public Event getEvent(String username, String calendarId, String eventCategoryId, String eventId) throws Exception {
-    return storage_.getEvent(username, calendarId, eventCategoryId, eventId);
+  
+  public void saveUserEventCategory(String username, Calendar calendar, EventCategory eventCategory, boolean isNew) throws Exception {
+    storage_.saveUserEventCategory(username, calendar, eventCategory, isNew) ;
   }
-  public Event getEvent(String calendarId, String eventCategoryId, String eventId) throws Exception {
-    return storage_.getEvent(calendarId, eventCategoryId, eventId);
+  public EventCategory removeUserEventCategory(String username, String calendarId, String eventCategoryId) throws Exception {
+    return storage_.removeUserEventCategory(username, calendarId,eventCategoryId);
+  }  
+  public void saveGroupEventCategory(Calendar calendar, EventCategory eventCategory, boolean isNew) throws Exception {
+    storage_.saveGroupEventCategory(calendar, eventCategory, isNew) ;
   }
-  public List<Event> getEventByCalendar(String username, String calendarId) throws Exception {
-    return storage_.getEventByCalendar(username, calendarId);
+  public EventCategory removeGroupEventCategory(String calendarId, String eventCategoryId) throws Exception {
+    return storage_.removeGroupEventCategory(calendarId, eventCategoryId);
   }
-  public List<Event> getEventByCalendar(String calendarId) throws Exception {
-    return storage_.getEventByCalendar(calendarId);
+  
+  
+  public Event getUserEvent(String username, String calendarId, String eventCategoryId, String eventId) throws Exception {
+    return storage_.getUserEvent(username, calendarId, eventCategoryId, eventId);
+  }
+  public List<Event> getUserEventByCalendar(String username, String calendarId) throws Exception {
+    return storage_.getUserEventByCalendar(username, calendarId);
+  }
+  public List<Event> getEvents(EventQuery eventQuery) throws Exception {
+    return storage_.getEvents(eventQuery) ;
+  }
+  public void saveUserEvent(String username, String calendarId, Event event, boolean isNew) throws Exception {
+    storage_.saveUserEvent(username, calendarId, event, isNew) ;
+  }
+  public Event removeUserEvent(String username, String calendarId, String eventCategoryId, String eventId) throws Exception {
+    return storage_.removeUserEvent(username, calendarId, eventCategoryId, eventId);
+  }
+  
+  
+  public Event getGroupEvent(String calendarId, String eventCategoryId, String eventId) throws Exception {
+    return storage_.getGroupEvent(calendarId, eventCategoryId, eventId);
+  }  
+  public List<Event> getGroupEventByCalendar(String calendarId) throws Exception {
+    return storage_.getGroupEventByCalendar(calendarId);
   } 
-  public void saveEvent(String username, String calendarId, String eventCategoryId, Event event, boolean isNew, boolean isPublicCalendar) throws Exception {
-    storage_.saveEvent(username, calendarId, eventCategoryId, event, isNew, isPublicCalendar) ;
-  }
-  public Event removeEvent(String username, String calendarId, String eventCategoryId, String eventId, boolean isPublicCalendar) throws Exception {
-    return storage_.removeEvent(username, calendarId, eventCategoryId, eventId, isPublicCalendar);
+  public void saveGroupEvent(String calendarId, Event event, boolean isNew) throws Exception {
+    storage_.saveGroupEvent(calendarId, event, isNew) ;
+  }  
+  public Event removeGroupEvent(String calendarId, String eventCategoryId, String eventId) throws Exception {
+    return storage_.removeGroupEvent(calendarId, eventCategoryId, eventId);
   }
   
-  public void importCalendar(String username, String calendarType, InputStream icalInputStream) throws Exception {
+  public Map<String, CalendarImportExport>  getCalendarImportExports() {
+    return calendarImportExport_ ;
+  }
+  
+  /*public void importCalendar(String username, String calendarType, InputStream icalInputStream) throws Exception {
     CalendarImportExport calendarEngine = calendarImportExport_.get(calendarType) ;
     if(calendarEngine != null) {
       calendarEngine.importCalendar(username, icalInputStream) ;
@@ -121,5 +144,8 @@ public class CalendarServiceImpl implements CalendarService{
       return calendarEngine.exportCalendar(username, calendarId) ;
     }
     return null ;
-  }
+  }*/
+
+  
+  
 }

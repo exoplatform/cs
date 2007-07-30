@@ -4,6 +4,8 @@
  **************************************************************************/
 package org.exoplatform.calendar.service;
 
+import java.util.List;
+
 /**
  * Created by The eXo Platform SARL
  * Author : Hung Nguyen Quang
@@ -13,18 +15,23 @@ package org.exoplatform.calendar.service;
 public class Calendar {
   private String id ;
   private String name ;
+  private String calendarPath ;
   private String description ;
   private String[] viewPermission ;
   private String[] editPermission ;
   private boolean isPrivate = true ;
   private String categoryId ;
   private String[] groups ;
+  private List<EventCategory> eventCategories ;
   
   public String getId() { return id ; }
   public void setId(String id) { this.id = id ; }
   
   public String getName() { return name ; }
   public void setName(String name) { this.name = name ; }
+  
+  public String getCalendarPath() { return calendarPath ; }
+  public void setCalendarPath(String path) { this.calendarPath = path ; }
   
   public String getDescription() { return description ; }
   public void setDescription(String description) { this.description = description ; }
@@ -43,5 +50,8 @@ public class Calendar {
 
   public boolean isPrivate() { return isPrivate ; }
   public void setPrivate(boolean isPrivate) { this.isPrivate = isPrivate ; }
+  
+  public List<EventCategory> getEventCategories() { return eventCategories ; }
+  public void setEventCategories(List<EventCategory> evCate) { eventCategories = evCate ; }
   
 }
