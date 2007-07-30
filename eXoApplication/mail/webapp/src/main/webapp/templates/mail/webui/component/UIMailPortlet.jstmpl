@@ -102,7 +102,7 @@
 								  		<div class="MiddleItemInfoBar" title="Show List" >
 								  			<div class="Icon AccountIcon"><span></span></div>
 								  			<div class="SelectedItemLabel">Default Account</div>
-								  			<div class="DownArrow1Icon"><span></span></div>
+								  			<div class="DropDownSelectIcon"><span></span></div>
 								  			<div style="clear: both;"><span></span></div>
 										  </div>
 										</div>
@@ -136,19 +136,19 @@
 								  <div class="TreeContainer JSContainer">
 								    <div class="Node" style="padding-top: 2px;">
 								   		<div class="ColapseIcon"><span></span></div>
-								   		<div class="Icon Default"><span></span></div>
+								   		<div class="IconFolder Open"><span></span></div>
 								   		<div class="NodeLabel">
 								   			<a href="#">Open source</a>
 								   		</div>
 									    <div class="ChildrenContainer" actionLink="$actionLink" display="block">
 											  <div class="Node" style="padding-top: 2px; margin-left: 10px; ">
-										   		<div class="Icon Default"><span></span></div>
+										   		<div class="IconFolder Close"><span></span></div>
 										   		<div class="NodeLabel">
 										   			<a href="#">eXo platform</a>
 										   		</div>
 											  </div>
 											  <div class="Node" style="padding-top: 2px; margin-left: 10px; ">
-										   		<div class="Icon Default"><span></span></div>
+										   		<div class="IconFolder Close"><span></span></div>
 										   		<div class="NodeLabel">
 										   			<a href="#">ObjectWeb</a>
 										   		</div>
@@ -157,13 +157,13 @@
 									  </div>
 									  <div class="Node" style="padding-top: 2px;">
 								   		<div class="ColapseIcon"><span></span></div>
-								   		<div class="Icon Default"><span></span></div>
+								   		<div class="IconFolder Open"><span></span></div>
 								   		<div class="NodeLabel">
 								   			<a href="#">Customers</a>
 								   		</div>
 									    <div class = "ChildrenContainer" display = "block">
 											  <div class="Node" style="padding-top: 2px; margin-left: 10px; ">
-										   		<div class="Icon Default"><span></span></div>
+										   		<div class="IconFolder Close"><span></span></div>
 										   		<div class="NodeLabel">
 										   			<a href="#">M6 TV</a>
 										   		</div>
@@ -173,10 +173,9 @@
 								  </div>  
 								</div>									
 					   		<div style="clear:left"><span></span></div>
-							</div> 
-<!-- End MyFolder -->								
+							</div> 							
 						</div>
-						
+<!-- End AccountFolderList -->							
 <!--  Start UITag -->
 						<div class="UITag">
 							<div class="TagTitleBar">
@@ -194,11 +193,11 @@
 <!-- End UITag -->											
 					</div>
 <!-- End Mail AccountManagement -->					
-<!--  Start Mail Working Detail -->
+<!--  Start Mail Working Details -->
 					<div class="MailWorkingDetails">
 						
 						<div class="MailList">
-							<div class="MailActionsbar">
+							<div class="MailActionsBar">
 								<a href="#" class="ControlButton">
 									<div class="MoreActionsIcon">
 										<div class="DownArrow1Icon">More Actions</div>
@@ -217,8 +216,8 @@
 								<div class="MailPageIterator">
 									<div class="MailIteratorContainer">
   									<div class="RightPageIteratorBlock">
-    	  							<a title="First Page" class="FloatBlock DisabledFirstPageArrow"/></a>        
-    	  							<a title="Previous Page" class="FloatBlock DisabledPreviousPageArrow"></a>
+    	  							<a title="First Page" class="FloatBlockHidden FirstPageArrow"/></a>        
+    	  							<a title="Previous Page" class="FloatBlockHidden PreviousPageArrow"></a>
     									<div class="Number">1</div>
     	  				 			<a title="Next Page" class="FloatBlock NextPageArrow" href="#"/></a>
     	 				  			<a title="Last Page" class="FloatBlock LastPageArrow"><span/></a>
@@ -230,7 +229,7 @@
 									  <div style="clear: right;"><span></span></div>
 								  </div>
 								</div>
-								<div style="clear: both;"><span/></div>
+								<div style="clear: left;"><span/></div>
 							</div>
 							<div class="MailListDetail">
 								<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
@@ -265,7 +264,7 @@
 											<td class="text">(5)</td>
 											<td class="text">07/02/2007 10:30am</td>
 											<td>10K</td>
-											<td style="padding: 0px;"></td>
+											<td style="padding: 0px;" class="textBold"></td>
    			     		    </tr>
 							      <tr>
                       <td><input type="checkbox" class="checkbox" value="4"/></td>
@@ -273,11 +272,11 @@
 											<td class="textBold">Brice Revenant</td>
 											<td style="padding: 0px;"><div class="AttachmentIcon"><span></span></div></td>
 											<td style="padding: 0px; border-right: 1px solid #ffffff;"></td>
-											<td class="text">[exo-vn] M6</td>
+											<td class="textBold">[exo-vn] M6</td>
 											<td style="padding: 0px;"></td>
-											<td class="text">07/05/2007 10:30am</td>
-											<td class="text">13K</td>
-											<td style="padding: 0px;"><div class="HighPriority">!</div></td>
+											<td class="textBold">07/05/2007 10:30am</td>
+											<td class="textBold">13K</td>
+											<td style="padding: 0px;" class="textBold"><div class="HighPriority">!</div></td>
 			      		    </tr>
 			     		      <tr>
 			     		        <td><input type="checkbox" class="checkbox" value="4"/></td>
@@ -289,19 +288,19 @@
 											<td style="padding: 0px;"></td>
 											<td class="text"></td>
 											<td class="text"></td>
-											<td style="padding: 0px;"></td>
+											<td style="padding: 0px;" class="textBold"></td>
 			      		    </tr>
 								      <tr>
 										  <td><input type="checkbox" class="checkbox" value="4"/></td>
 											<td style="padding: 0px;"><div class="StarredIcon"><span></span></div></td>
 											<td class="text"></td>
 											<td style="padding: 0px;"><div class="AttachmentIcon"><span></span></div></td>
-											<td style="padding: 0px; border-right: 0px;"></td>
+											<td style="padding: 0px; border-right: 1px solid white;"></td>
 											<td class="text"></td>
 											<td style="padding: 0px;"></td>
 											<td class="text"></td>
 											<td class="text"></td>
-											<td style="padding: 0px;"><div class="HighPriority">!</div></td>
+											<td style="padding: 0px;" class="textBold"><div class="HighPriority">!</div></td>
 					  		    </tr>
               	   </tbody>
 								</table>
@@ -336,7 +335,7 @@
 														<div class="MessageAddress">
 															<div class="FieldContainer">
 																<div class="Title">From:</div>
-																<div class="LinkAddress">Brice Revenant (brice.revenant@gmail.com)</div>
+																<div class="LinkAddress"><span>Brice Revenant</span>(brice.revenant@gmail.com)</div>
 																<div style="clear: left;"><span></span></div>
 															</div>
 															<div class="FieldContainer">
@@ -346,7 +345,7 @@
 															</div>
 															<div class="FieldContainer">
 																<div class="Title">To:</div>
-																<div class="LinkAddress">Phuong (phuong.pham@exoplatform.com)</div>
+																<div class="LinkAddress"><span>Phuong</span> (phuong.pham@exoplatform.com)</div>
 																<div style="clear: left;"><span></span></div>
 															</div>
 															<div class="FieldContainer">
@@ -356,7 +355,7 @@
 															</div>
 															<div class="FieldContainer">
 																<div class="Title">Supject:</div>
-																<div class="Address">Chao anh</div>
+																<div class="Address"><span>Chao anh</span></div>
 																<div style="clear: left;"><span></span></div>
 															</div>
 															<div class="FieldContainer">
@@ -370,8 +369,7 @@
 															<div class="DownArrow1Icon"><span></span></div>
 															<div class="ShowHideTitle">Hide deails</div>
 															<div class="MonthDate">June 26</div>
-															<div class="AttachmentIcon"><span></span></div>
-															<div class="MessageActions" title="Actions on this message"><span></span></div>
+															<div class="Actions" title="Actions on this message"><span></span></div>
 															<div style="clear: both;"><span></span></div>
 														</div>
 														<div style="clear: both;"><span></span></div>

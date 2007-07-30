@@ -28,6 +28,7 @@
 	line-height: 26px;
 	margin: 1px 7px 0px 7px;
 	padding-left: 26px;
+	width: auto;
 }
 
 .UIMessageCompose .MailListActionsbar .ControlButton .SendMailIcon {
@@ -70,7 +71,7 @@
 	width: 100px;
 }
 
-.UIMessageCompose .MessageAddress .AddAddress .ColorTextLink {
+.UIMessageCompose .MessageAddress .AddAddress a {
 	color:#126ca5;
 }
 
@@ -91,7 +92,7 @@
 }
 
 .UIMessageCompose .UIForm .HorizontalLayout textarea {
-	width: 845px; height: 40px; 
+	width: 99%; height: 40px; 
 	font-family: tahoma;
 }
 
@@ -100,9 +101,10 @@
 	background: url('DefaultSkin/icons/16x16/ZipFile.gif') no-repeat left;
 	line-height: 16px; 
 	padding-left: 20px;
+	width: auto;
 }
 
-.UIMessageCompose .MessageAddress .RemoveTitle {
+.UIMessageCompose .MessageAddress .RemoveButton {
 	float: left;
 	margin: 0px 0px 0px 5px;
 	color: #126ca5;
@@ -116,10 +118,9 @@
 		border-top: 1px solid white;
 }
 
-.UIMessageCompose .Messagecontent .MessageContent {
+.UIMessageCompose .MessageContent .PlainTextMessage {
 	height: 250px;
 	border: 1px solid  #cbcbcb;
+	border-top: none;
 	padding: 10px;
 }
-
-

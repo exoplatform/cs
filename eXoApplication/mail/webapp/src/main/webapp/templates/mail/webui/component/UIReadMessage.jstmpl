@@ -40,8 +40,8 @@
 				<div class="ReadingPane">
 					<div class="ReadingPaneBar">
 						<div class="Subject">Subject: Melissa Theuriau Background for M6</div>
-						<div class="NomalReadingPane" title="Maximize Reading Pane"><span></span></div>
-						<div class="MaximizeAllViewBoxStyle" title="Maximize All Viewboxstyle"><span></span></div>
+						<div class="MaximizePaneButton" title="Maximize Reading Pane"><span></span></div>
+						<div class="ExpandMessageBoxes" title="Expand all messages"><span></span></div>
 						<div style="clear:both;"><span></span></div>
 					</div>
 					<div class="ReadingPaneDeltail">

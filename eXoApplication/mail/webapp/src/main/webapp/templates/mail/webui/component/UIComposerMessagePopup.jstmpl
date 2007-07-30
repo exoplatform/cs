@@ -69,8 +69,8 @@
 												</select>
 											</td>
 											<td class="AddAddress">
-												<a href="#" class="ColorTextLink">|Add CC|</a>
-			                	<a href="#" class="ColorTextLink">Add BCC|</a>
+												<a href="#">|Add CC|</a>
+			                	<a href="#">Add BCC|</a>
 		                	</td>
 	                	</table>
 	                </td>
@@ -90,10 +90,10 @@
 		            <tr>
   	              <td class="FieldLabel">Attachments:</td>
   	              <td class="FieldComponent">
-  	              	<div class="ZipFileIcon">
-  	              		<div >eXo Mail Screenshots.zip - 200K</div>
+  	              	<div class="AttachmentIcon ZipFileIcon">
+  	              		<div>eXo Mail Screenshots.zip - 200K</div>
   	              	</div>
-  	              	<a href="#" class="RemoveTitle">[Remove]</a>
+  	              	<a href="#" class="RemoveButton">[Remove]</a>
   	              	<div style="clear:left;"><span></span></div>
   	              </td>
 		            </tr>
