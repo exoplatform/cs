@@ -5,6 +5,7 @@
 package org.exoplatform.mail.service;
 
 import java.util.HashMap;
+//TODO delete
 /**
  * <p>
  * Created by The eXo Platform SARL

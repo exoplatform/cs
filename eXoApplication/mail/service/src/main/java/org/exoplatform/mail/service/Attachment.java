@@ -6,8 +6,6 @@ package org.exoplatform.mail.service;
 
 import java.io.InputStream;
 
-import javax.jcr.Session;
-
 /**
  * Created by The eXo Platform SARL
  * Author : Tuan Nguyen

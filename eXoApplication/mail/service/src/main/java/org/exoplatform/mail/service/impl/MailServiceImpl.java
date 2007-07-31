@@ -27,13 +27,12 @@ import javax.mail.internet.MimeMultipart;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.AccountData;
 import org.exoplatform.mail.service.Attachment;
+import org.exoplatform.mail.service.BufferAttachment;
 import org.exoplatform.mail.service.Folder;
-import org.exoplatform.mail.service.MailServerConfiguration;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.MessageHeader;
-import org.exoplatform.mail.service.BufferAttachment;
 import org.exoplatform.registry.JCRRegistryService;
 import org.exoplatform.services.jcr.RepositoryService;
 /**
@@ -107,14 +106,9 @@ public class MailServiceImpl implements MailService{
   
   public void removeMessage(String username, String[] messageName, String accountId) throws Exception {
     storage_.removeMessage(username, accountId, messageName);
-  }
+  } 
   
-  public List<MessageHeader> getMessageByFolder(String username, Folder folder, String accountId) throws Exception {
-    return storage_.getMessageByFolder(username, folder, accountId);
-  }
- 
-  
-  public List<MessageHeader> getMessageByFilter(String username, MessageFilter filter) throws Exception {
+  public List<MessageHeader> getMessages(String username, MessageFilter filter) throws Exception {
     return storage_.getMessages(username, filter);
   }
 
@@ -216,27 +210,26 @@ public class MailServiceImpl implements MailService{
   }
   
   public int checkNewMessage(String username, Account account) throws Exception {
-    MailServerConfiguration conf = account.getConfiguration();
-    System.out.println("\n ### Getting mail from " + conf.getHost() + " ... !");
+    System.out.println("\n ### Getting mail from " + account.getHost() + " ... !");
     int totalMess = -1;
     try {
       Properties props = System.getProperties();
       String socketFactoryClass = "javax.net.SocketFactory";
-      if (conf.isSsl()) socketFactoryClass = "javax.net.ssl.SSLSocketFactory";
-      if(conf.getProtocol().equals("pop3")) {
+      if (account.isSsl()) socketFactoryClass = "javax.net.ssl.SSLSocketFactory";
+      if(account.getProtocol().equals("pop3")) {
         props.setProperty("mail.pop3.socketFactory.fallback", "false");
         props.setProperty( "mail.pop3.socketFactory.class", socketFactoryClass);
-      } else if (conf.getProtocol().equals("imap")) {
+      } else if (account.getProtocol().equals("imap")) {
         props.setProperty("mail.imap.socketFactory.fallback", "false");
         props.setProperty("mail.imap.socketFactory.class", socketFactoryClass);
       }
       
       javax.mail.Session session = javax.mail.Session.getDefaultInstance(props);
-      URLName url = new URLName(conf.getProtocol(), conf.getHost(), Integer.valueOf(conf.getPort()), conf.getFolder(), conf.getUserName(), conf.getPassword()) ;
+      URLName url = new URLName(account.getProtocol(), account.getHost(), Integer.valueOf(account.getPort()), account.getFolder(), account.getUserName(), account.getPassword()) ;
       Store store = session.getStore(url) ;
       store.connect();
       System.out.println("\n ### Connected !");
-      javax.mail.Folder folder = store.getFolder(conf.getFolder());
+      javax.mail.Folder folder = store.getFolder(account.getFolder());
       folder.open(javax.mail.Folder.READ_ONLY);
       
       // gets the new messages from the folder specified in the configuration object
@@ -262,7 +255,7 @@ public class MailServiceImpl implements MailService{
           newMsg.setReceivedDate(receivedDate);
           newMsg.setSendDate(mes.getSentDate());
           newMsg.setAttachements(new ArrayList<Attachment>());
-          String[] folders = {conf.getFolder()};
+          String[] folders = {account.getFolder()};
           newMsg.setFolders(folders);
           Object obj = mes.getContent() ;
           if (obj instanceof Multipart) {

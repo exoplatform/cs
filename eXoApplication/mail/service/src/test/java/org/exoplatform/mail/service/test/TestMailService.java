@@ -11,11 +11,11 @@ import java.util.List;
 
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Attachment;
-import org.exoplatform.mail.service.Folder;
-import org.exoplatform.mail.service.MailServerConfiguration;
-import org.exoplatform.mail.service.Message;
-import org.exoplatform.mail.service.MessageHeader;
 import org.exoplatform.mail.service.BufferAttachment;
+import org.exoplatform.mail.service.Folder;
+import org.exoplatform.mail.service.Message;
+import org.exoplatform.mail.service.MessageFilter;
+import org.exoplatform.mail.service.MessageHeader;
 
 /**
  * Created by The eXo Platform SARL
@@ -41,6 +41,13 @@ public class TestMailService extends BaseMailTestCase{
     myaccount.setEmailReplyAddress("hung.nguyen@exoplatform.com") ;
     myaccount.setSignature("my sign") ;
     myaccount.setDescription("No description ...") ;
+    
+    myaccount.setServerProperty("username", "philippe.aristote@gmail.com"); 
+    myaccount.setServerProperty("password", "");
+    myaccount.setServerProperty("host", "pop.gmail.com");
+    myaccount.setServerProperty("port", "995"); // POP3 : 110, POP3 (SSL) : 995, IMAP : 143, IMAP (SSL) : 993
+    myaccount.setServerProperty("protocol", "pop3"); // pop3 or imap
+    myaccount.setServerProperty("ssl", "true");
     mailService_.createAccount("hungnguyen", myaccount) ;
     //assert added account
     assertNotNull(mailService_.getAccountById("hungnguyen", "myId")) ;
@@ -81,22 +88,21 @@ public class TestMailService extends BaseMailTestCase{
     //assertNull(mailService_.getFolder("hungnguyen", "myId", "INBOX"));
     
     //  create mail server config
-    MailServerConfiguration conf = new MailServerConfiguration();
-    conf.setFolder(folder.getName());
-    conf.setUserName("exo@exo-postfix"); 
-    conf.setPassword("exo");
-    conf.setHost("192.168.1.67");
-    conf.setPort("143"); // POP3 : 110, POP3 (SSL) : 995, IMAP : 143, IMAP (SSL) : 993
-    conf.setProtocol("imap"); // pop3 or imap
-    conf.setSsl(false);
-    myaccount.setConfiguration(conf);
+//    MailServerConfiguration conf = new MailServerConfiguration();
+    
+//    myaccount.setConfiguration(conf);
+    myaccount.setServerProperty("folder",folder.getName());
     mailService_.updateAccount("hungnguyen", myaccount);
     
     // get mail
     int nbOfNewMail = mailService_.checkNewMessage("hungnguyen", myaccount);
     // assert new mail(s) downloaded
     assertTrue(nbOfNewMail > -1);
-    List<MessageHeader> newMsg = mailService_.getMessageByFolder("hungnguyen", folder, "myId");
+    MessageFilter filter = new MessageFilter("filter by folder "+folder);
+    String[] folders = {folder.getName()};
+    filter.setFolder(folders);
+    filter.setAccountId("myId");
+    List<MessageHeader> newMsg = mailService_.getMessages("hungnguyen", filter);
     System.out.println("[Total] : " + newMsg.size() + " message(s)") ;
     Iterator<MessageHeader> it = newMsg.iterator();
     while (it.hasNext()) {

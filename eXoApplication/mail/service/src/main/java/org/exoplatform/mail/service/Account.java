@@ -4,6 +4,7 @@
  **************************************************************************/
 package org.exoplatform.mail.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,7 +30,7 @@ public class Account {
   private List<String> tags ;
   private List<MessageFilter> filters ;
   //TODO: use AccountProperty
-  private MailServerConfiguration mailServerConfiguration ;
+//  private MailServerConfiguration mailServerConfiguration ;
   
   /**
    * The id of the account for ex: GmailAccount, YahooAccount
@@ -90,9 +91,32 @@ public class Account {
   /**
    * @return Return a mail server configuration of account
    */
-  public MailServerConfiguration getConfiguration() { return mailServerConfiguration ; }
-  public void setConfiguration(MailServerConfiguration config) { mailServerConfiguration = config ; }
+//  public MailServerConfiguration getConfiguration() { return mailServerConfiguration ; }
+//  public void setConfiguration(MailServerConfiguration config) { mailServerConfiguration = config ; }
   
   public Folder  getFolderByName(String name) { return null ; }
   
+  /**
+   * Manages the server properties, based on the serverProperties attribute
+   */
+  public void setServerProperty(String key, String value) {
+    if (serverProperties == null) serverProperties = new HashMap<String, String>();
+    serverProperties.put(key, value) ;
+  }
+  
+  public Map<String, String> getServerProperties() { return serverProperties ; }
+  
+  public String getProtocol()  { return serverProperties.get("protocol") ; }
+  
+  public String getHost()  { return serverProperties.get("host") ; }
+  
+  public String getPort()  { return serverProperties.get("port") ; }
+  
+  public String getFolder()  { return serverProperties.get("folder") ; }
+  
+  public String getUserName()  { return serverProperties.get("username") ; }
+  
+  public String getPassword()  { return serverProperties.get("password") ; }
+  
+  public boolean isSsl()  { return serverProperties.get("ssl").equalsIgnoreCase("true");  }
 }

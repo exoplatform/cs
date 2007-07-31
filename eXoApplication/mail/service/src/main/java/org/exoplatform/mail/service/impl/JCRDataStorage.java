@@ -20,11 +20,11 @@ import javax.jcr.query.QueryResult;
 
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Attachment;
+import org.exoplatform.mail.service.BufferAttachment;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.MessageHeader;
-import org.exoplatform.mail.service.BufferAttachment;
 import org.exoplatform.registry.JCRRegistryService;
 import org.exoplatform.registry.ServiceRegistry;
 import org.exoplatform.services.jcr.RepositoryService;
@@ -67,6 +67,14 @@ public class JCRDataStorage implements DataStorage{
       if (node.hasProperty("exo:emailReplyAddress")) account.setEmailReplyAddress(node.getProperty("exo:emailReplyAddress").getString());
       if (node.hasProperty("exo:signature")) account.setSignature(node.getProperty("exo:signature").getString());
       if (node.hasProperty("exo:description")) account.setDescription(node.getProperty("exo:description").getString());
+      if (node.hasProperty("exo:serverProperties")) {
+        Value[] properties = node.getProperty("exo:serverProperties").getValues();
+        for (int i=0; i<properties.length; i++) {
+          String property = properties[i].getString();
+          int index = property.indexOf('=');
+          if (index != -1) account.setServerProperty(property.substring(0, index), property.substring(index+1));
+        }
+      }
     }
     return account ;
   }
@@ -184,15 +192,6 @@ public class JCRDataStorage implements DataStorage{
     }
     return list ;
   }
-  
-  public List<MessageHeader> getMessageByFolder(String username, Folder folder, String accountId) throws Exception {
-    // gets all the messages from the specified folder, using a filter
-    MessageFilter filter = new MessageFilter("filter by folder "+folder.getName());
-    filter.setAccountId(accountId);
-    String[] folders = {folder.getName()};
-    filter.setFolder(folders);
-    return getMessages(username, filter);
-  }
 
   public void removeAccount(String username, Account account) throws Exception {
     Node accountHome = getMailHomeNode(username) ;
@@ -234,6 +233,13 @@ public class JCRDataStorage implements DataStorage{
       newAccount.setProperty("exo:emailReplyAddress", account.getEmailReplyAddress());
       newAccount.setProperty("exo:signature", account.getSignature());
       newAccount.setProperty("exo:description", account.getDescription());
+      Iterator it = account.getServerProperties().keySet().iterator();
+      ArrayList<String> values = new ArrayList<String>(account.getServerProperties().size());
+      while (it.hasNext()) {
+        String key = it.next().toString();
+        values.add(key+"="+account.getServerProperties().get(key));
+      }
+      newAccount.setProperty("exo:serverProperties", values.toArray(new String[account.getServerProperties().size()]));
       // saves changes
       mailHome.getSession().save();
     }

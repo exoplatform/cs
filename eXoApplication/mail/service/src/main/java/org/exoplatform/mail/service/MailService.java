@@ -42,7 +42,7 @@ public interface MailService {
   public Account getAccountById(String username, String id) throws Exception ;
   
   /**
-   * TODO: use save for create and update 
+   * Use save for create and update 
    * 
    * This method should:
    * 1. Check all the madatory  field of the account and save the account into the database. The method 
@@ -159,11 +159,7 @@ public interface MailService {
    * @return
    * @throws Exception
    */
-  //TODO: rename to getMessages(...)
-  public List<MessageHeader> getMessageByFilter(String username, MessageFilter filter) throws Exception ;
-  
-  //TODO: remove
-  public List<MessageHeader> getMessageByFolder(String username, Folder folder, String accountId) throws Exception;
+  public List<MessageHeader> getMessages(String username, MessageFilter filter) throws Exception ;
   
   public void saveMessage(String username, String accountId, Message message, boolean isNew) throws Exception;
   /**
