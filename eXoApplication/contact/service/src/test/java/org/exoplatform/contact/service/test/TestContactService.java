@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactGroup;
+import org.exoplatform.contact.service.GroupContactData;
 
 
 
@@ -59,6 +60,17 @@ public class TestContactService extends BaseContactTestCase{
     assertNotNull(contacts);
     assertEquals(contacts.size(), 1) ;
     
+    //share contact
+    Contact cont = contactService_.getContact("exo", "id") ;
+    assertNotNull(contactService_.shareContact(cont, new String[]{"users"})) ;
+    
+    List<GroupContactData> sharedContact = contactService_.getPublicContacts(new String[]{"users"}) ;
+    assertEquals(sharedContact.size(), 1) ;
+    System.out.println("sharedContact.size() ==== " + sharedContact.size()) ;
+    assertEquals(sharedContact.get(0).getContacts().size(), 1) ;
+    System.out.println("sharedContact.get(0).getContacts().size() ==== " + sharedContact.get(0).getContacts().size()) ;
+    assertEquals(sharedContact.get(0).getName(),"users") ;
+    System.out.println("sharedContact.get(0).getName() ==== " + sharedContact.get(0).getName()) ;
     //test removeContact
     assertNotNull(contactService_.removeContact("exo", contact.getId()));
     assertNull(contactService_.getContact("exo", contact.getId())); 

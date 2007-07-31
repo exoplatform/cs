@@ -13,7 +13,7 @@ import java.util.List;
  * Jul 11, 2007  
  */
 public interface ContactService {
-  public List<Contact> getPublicContact() throws Exception ;
+  
   public List<Contact> getAllContact(String username) throws Exception ;
   public List<Contact> getContactsByGroup(String username, String groupId) throws Exception ;
   public Contact getContact(String username, String contactId) throws Exception ;
@@ -25,4 +25,6 @@ public interface ContactService {
   public void saveGroup(String username, ContactGroup group, boolean isNew) throws Exception ;
   public ContactGroup removeGroup(String username, String groupId) throws Exception ;
   
+  public Contact shareContact(Contact contact, String[] groupIds) throws Exception ;
+  public List<GroupContactData> getPublicContacts(String[] groupIds) throws Exception ;
 }

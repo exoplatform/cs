@@ -13,6 +13,7 @@ package org.exoplatform.contact.service;
  */
 public class Contact {
   private String id ;
+  private String path ;
   private String firstName ;
   private String lastName ;
   private String emailAddress ;
@@ -30,6 +31,9 @@ public class Contact {
   
   public String getId()  { return id ; }
   public void   setId(String s) { id = s ; }
+  
+  public String getPath()  { return path ; }
+  public void   setPath(String p) { path = p ; }
   
   public String getFirstName()  { return firstName ; }
   public void   setFirstName(String s) { firstName = s ; }

@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactGroup;
+import org.exoplatform.contact.service.GroupContactData;
 
 
 
@@ -31,4 +32,6 @@ public interface DataStorage {
   public void saveGroup(String username, ContactGroup group, boolean isNew) throws Exception ;
   public ContactGroup removeGroup(String username, String groupId) throws Exception ;
   
+  public Contact shareContact(Contact contact, String[] groupIds) throws Exception ;
+  public List<GroupContactData> getPublicContacts(String[] groupIds) throws Exception ;
 }

@@ -9,6 +9,7 @@ import java.util.List;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
+import org.exoplatform.contact.service.GroupContactData;
 import org.exoplatform.registry.JCRRegistryService;
 import org.exoplatform.services.jcr.RepositoryService;
 
@@ -64,6 +65,14 @@ public class ContactServiceImpl implements ContactService{
   
   public ContactGroup removeGroup(String username, String groupId) throws Exception {
     return storage_.removeGroup(username, groupId);
+  }
+
+  public List<GroupContactData> getPublicContacts(String[] groupIds) throws Exception {
+    return storage_.getPublicContacts(groupIds);
+  }
+
+  public Contact shareContact(Contact contact, String[] groupIds) throws Exception {
+    return storage_.shareContact(contact, groupIds);
   }
   
 }
