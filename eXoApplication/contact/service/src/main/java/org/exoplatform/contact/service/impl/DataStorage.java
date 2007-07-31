@@ -21,7 +21,7 @@ public interface DataStorage {
   
   public List<Contact> getPublicContact() throws Exception ;
   public List<Contact> getAllContact(String username) throws Exception ;
-  public List<Contact> getContactsByGroup(String username, String groupName) throws Exception ;
+  public List<Contact> getContactsByGroup(String username, String groupId) throws Exception ;
   public Contact getContact(String username, String contactId) throws Exception ;
   public void saveContact(String username, Contact contact, boolean isNew) throws Exception ;
   public Contact removeContact(String username, String contactId) throws Exception ;

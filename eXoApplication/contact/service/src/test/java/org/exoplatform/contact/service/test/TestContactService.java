@@ -56,15 +56,13 @@ public class TestContactService extends BaseContactTestCase{
     assertEquals(contacts.size(), 1);
     
     // get contact by groupId
-    contacts = contactService_.getContactsByGroup("exo","friend" );
+    contacts = contactService_.getContactsByGroup("exo","work" );
     assertNotNull(contacts);
-    System.out.println("\n\n\n contactsize : " + contacts.get(0).getCompanyAddress() + "\n\n\n");
-    //assertEquals(contacts.size(), 1) ;
+    assertEquals(contacts.size(), 1) ;
     
     //test removeContact
     assertNotNull(contactService_.removeContact("exo", contact.getId()));
-    assertNull(contactService_.getContact("exo", contact.getId()));
-    
+    assertNull(contactService_.getContact("exo", contact.getId())); 
   }
   
   public void testGroupContact() throws Exception {

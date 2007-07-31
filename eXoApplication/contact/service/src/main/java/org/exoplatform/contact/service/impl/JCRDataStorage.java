@@ -73,67 +73,67 @@ public class JCRDataStorage implements DataStorage{
   }
 
   private String [] ValuesToStrings(Value[] Val) throws Exception {
-  	if(Val.length == 1) {
-  		return new String[]{Val[0].getString()};
-  	}else {
-			String[] Str = new String[Val.length];
-			for(int i = 0; i < Val.length; ++i) {
-			  Str[i] = Val[i].getString();
-			}
-		return Str;
-  	}
+    if(Val.length == 1) {
+      return new String[]{Val[0].getString()};
+    }else {
+      String[] Str = new String[Val.length];
+      for(int i = 0; i < Val.length; ++i) {
+        Str[i] = Val[i].getString();
+      }
+    return Str;
+    }
   }
   
   private Contact getContact(Node contactNode) throws Exception {
-  	Contact contact = new Contact();
-		if(contactNode.hasProperty("exo:id"))contact.setId(contactNode.getProperty("exo:id").getString());
-		if(contactNode.hasProperty("exo:firstName"))contact.setFirstName(contactNode.getProperty("exo:firstName").getString());
-		if(contactNode.hasProperty("exo:lastName"))contact.setLastName(contactNode.getProperty("exo:lastName").getString());
-		if(contactNode.hasProperty("exo:emailAddress"))contact.setEmailAddress(contactNode.getProperty("exo:emailAddress").getString());
-		if(contactNode.hasProperty("exo:homePhone"))contact.setHomePhone(contactNode.getProperty("exo:homePhone").getString());
-		if(contactNode.hasProperty("exo:workPhone"))contact.setWorkPhone(contactNode.getProperty("exo:workPhone").getString());
-		if(contactNode.hasProperty("exo:homeAddress"))contact.setHomeAddress(contactNode.getProperty("exo:homeAddress").getString());
-		if(contactNode.hasProperty("exo:country"))contact.setCountry(contactNode.getProperty("exo:country").getString());
-		if(contactNode.hasProperty("exo:postalCode"))contact.setPostalCode(contactNode.getProperty("exo:postalCode").getString());
-		if(contactNode.hasProperty("exo:personalSite"))contact.setPersonalSite(contactNode.getProperty("exo:personalSite").getString());
-		if(contactNode.hasProperty("exo:organization"))contact.setOrganization(contactNode.getProperty("exo:organization").getString());
-		if(contactNode.hasProperty("exo:jobTitle"))contact.setJobTitle(contactNode.getProperty("exo:jobTitle").getString());
-		if(contactNode.hasProperty("exo:companyAddress"))contact.setCompanyAddress(contactNode.getProperty("exo:companyAddress").getString());
-		if(contactNode.hasProperty("exo:companySite"))contact.setCompanySite(contactNode.getProperty("exo:companySite").getString());
-		if(contactNode.hasProperty("exo:groups"))contact.setGroups(ValuesToStrings(contactNode.getProperty("exo:groups").getValues()));
+    Contact contact = new Contact();
+    if(contactNode.hasProperty("exo:id"))contact.setId(contactNode.getProperty("exo:id").getString());
+    if(contactNode.hasProperty("exo:firstName"))contact.setFirstName(contactNode.getProperty("exo:firstName").getString());
+    if(contactNode.hasProperty("exo:lastName"))contact.setLastName(contactNode.getProperty("exo:lastName").getString());
+    if(contactNode.hasProperty("exo:emailAddress"))contact.setEmailAddress(contactNode.getProperty("exo:emailAddress").getString());
+    if(contactNode.hasProperty("exo:homePhone"))contact.setHomePhone(contactNode.getProperty("exo:homePhone").getString());
+    if(contactNode.hasProperty("exo:workPhone"))contact.setWorkPhone(contactNode.getProperty("exo:workPhone").getString());
+    if(contactNode.hasProperty("exo:homeAddress"))contact.setHomeAddress(contactNode.getProperty("exo:homeAddress").getString());
+    if(contactNode.hasProperty("exo:country"))contact.setCountry(contactNode.getProperty("exo:country").getString());
+    if(contactNode.hasProperty("exo:postalCode"))contact.setPostalCode(contactNode.getProperty("exo:postalCode").getString());
+    if(contactNode.hasProperty("exo:personalSite"))contact.setPersonalSite(contactNode.getProperty("exo:personalSite").getString());
+    if(contactNode.hasProperty("exo:organization"))contact.setOrganization(contactNode.getProperty("exo:organization").getString());
+    if(contactNode.hasProperty("exo:jobTitle"))contact.setJobTitle(contactNode.getProperty("exo:jobTitle").getString());
+    if(contactNode.hasProperty("exo:companyAddress"))contact.setCompanyAddress(contactNode.getProperty("exo:companyAddress").getString());
+    if(contactNode.hasProperty("exo:companySite"))contact.setCompanySite(contactNode.getProperty("exo:companySite").getString());
+    if(contactNode.hasProperty("exo:groups"))contact.setGroups(ValuesToStrings(contactNode.getProperty("exo:groups").getValues()));
     return contact;
   }
 
   public List<Contact> getAllContact(String username) throws Exception {
-  	Node contactHomeNode = getContactHome(username);
-  	List<Contact> contacts = new ArrayList<Contact>();
-  	NodeIterator iter = contactHomeNode.getNodes();
-  	Contact contact;
-  	while (iter.hasNext()) {
-			Node contactNode = iter.nextNode();
-			contact = getContact(contactNode);
-			contacts.add(contact);
-		}
-  	return contacts;
+    Node contactHomeNode = getContactHome(username);
+    List<Contact> contacts = new ArrayList<Contact>();
+    NodeIterator iter = contactHomeNode.getNodes();
+    Contact contact;
+    while (iter.hasNext()) {
+      Node contactNode = iter.nextNode();
+      contact = getContact(contactNode);
+      contacts.add(contact);
+    }
+    return contacts;
   }
 
   public Contact getContact(String username, String contactId) throws Exception {
     Node contactHomeNode = getContactHome(username);
-  	if(contactHomeNode.hasNode(contactId)) {
-  		Node contactNode = contactHomeNode.getNode(contactId);
-  		Contact contact = new Contact();
-  		contact = getContact(contactNode);
-  		return contact;
-  	}
-  	return null;
+    if(contactHomeNode.hasNode(contactId)) {
+      Node contactNode = contactHomeNode.getNode(contactId);
+      Contact contact = new Contact();
+      contact = getContact(contactNode);
+      return contact;
+    }
+    return null;
   }
 
-  public List<Contact> getContactsByGroup(String username, String groupName) throws Exception {
+  public List<Contact> getContactsByGroup(String username, String groupId) throws Exception {
     Node contactHome = getContactHome(username);
     QueryManager qm = contactHome.getSession().getWorkspace().getQueryManager();
     StringBuffer queryString = new StringBuffer("/jcr:root" + contactHome.getPath() 
                                                 + "//element(*,exo:contact)[@exo:groups='").
-                                                append(groupName).
+                                                append(groupId).
                                                 append("']");
     Query query = qm.createQuery(queryString.toString(), Query.XPATH);
     QueryResult result = query.execute();
@@ -153,7 +153,7 @@ public class JCRDataStorage implements DataStorage{
   }
 
   public ContactGroup getGroup(String username, String groupId) throws Exception {
-  	Node contactGroupHomeNode = getContactGroupHome(username);
+    Node contactGroupHomeNode = getContactGroupHome(username);
     if (contactGroupHomeNode.hasNode(groupId)) {
       Node contactGroupNode = contactGroupHomeNode.getNode(groupId);
       ContactGroup contactGroup = new ContactGroup();
