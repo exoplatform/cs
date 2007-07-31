@@ -5,8 +5,6 @@
 package org.exoplatform.forum.service;
 
 import java.util.List;
-
-import org.exoplatform.commons.utils.PageList;
 /**
  * Created by The eXo Platform SARL  
  */
@@ -86,6 +84,7 @@ public interface ForumService {
    * 
    * @param categoryId
    * @param forum
+   * @param isNew
    * @return
    * @throws Exception
    */
@@ -157,7 +156,7 @@ public interface ForumService {
    * 4. Invalidate the TopicView if neccessary
    * @param forumId
    * @param topic
-   * @param isNew TODO
+   * @param isNew
    * @param username
    * 
    * @return
@@ -221,7 +220,7 @@ public interface ForumService {
    * 4. Invalidate the TopicView data cache
    * @param topicId
    * @param post
-   * @param isNew TODO
+   * @param isNew
    * @param username
    * @return
    * @throws Exception

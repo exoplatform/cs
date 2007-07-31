@@ -4,7 +4,6 @@
  **************************************************************************/
 package org.exoplatform.contact.service.test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.exoplatform.contact.service.Contact;
