@@ -3,6 +3,20 @@
 %>
 <div class="UIForumPortlet UIApplication" style="height: 400px;">
   <div class="ApplicationMinWidth">
-    This is a test
+<!-- Start Mail Banner -->
+	    <div class="ForumBanner">
+	    	<div class="LeftBanner">
+	    		<div class="BannerTitle">Exchange with the others</div>
+					<div class="SearchForm">
+						<div class="AdvancedSearch" title="Advance Search"><span></span></div>
+						<div class="SeparatorLine"><span></span></div>
+						<div class="Search" title="Search"><span></span></div>
+						<input class="Input" type="text" name=""/>
+						<div class="Label">Search:</div>
+						<div style="clear:right;"><span></span></div>
+					</div>
+				</div>
+			</div>
+<!-- End Mail Banner -->
   </div>
 </div>
