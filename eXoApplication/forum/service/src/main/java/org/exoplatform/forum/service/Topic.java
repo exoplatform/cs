@@ -31,6 +31,8 @@ public class Topic {
   private boolean isLock = false ;
   private boolean isApproved = false ;
   
+  private String[] viewPermissions;
+  private String[] editPermissions;
   
   public Topic(){ }
   

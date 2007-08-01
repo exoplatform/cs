@@ -33,6 +33,7 @@ public class Forum {
   private String[] viewForumRole;
   private String[] createTopicRole;
   private String[] moderators;
+  
   private String[] replyTopicRole;
   
   
