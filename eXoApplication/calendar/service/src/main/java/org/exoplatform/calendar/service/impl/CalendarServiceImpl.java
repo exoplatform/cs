@@ -145,12 +145,5 @@ public class CalendarServiceImpl implements CalendarService{
     }
     return null ;
   }*/
-
-  
-  
-
-	public Map<String, CalendarImportExport> getCalendarImportExports() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 }
