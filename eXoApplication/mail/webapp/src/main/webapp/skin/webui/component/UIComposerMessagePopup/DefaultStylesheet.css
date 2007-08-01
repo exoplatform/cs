@@ -81,6 +81,7 @@
 
 .UIMessageCompose .UIForm .HorizontalLayout {
 	padding: 10px;
+	border: 1px solid #cccccc;
 }
 
 .UIMessageCompose .UIForm .HorizontalLayout input {

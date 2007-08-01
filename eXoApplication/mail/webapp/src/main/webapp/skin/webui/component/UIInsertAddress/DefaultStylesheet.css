@@ -35,7 +35,7 @@
 	padding: 4px 0px 0px 5px;
 }
 
-.UIInsertAddress .UIGrid td.BorderAddress {
+.UIInsertAddress .UIGrid .BorderAddress {
 	border-right: 1px solid #e8e8e8;
 }
 
@@ -78,8 +78,8 @@
 
 .UIInsertAddress .ListAddress {
 	float: left;
-	width: 355px;
-	height: 340px;
+	background: white;
+	width: 355px;	height: 340px;
 	overflow-y: auto;
 	overflow-x: hidden;
 	border: 1px solid #b7b7b7;
@@ -87,7 +87,9 @@
 
 
 .UIInsertAddress .ListAddress .UIGrid {
-	border: none;
+	border-top: none;
+	border-left: none;
+	border-right: none;
 }
 
 .UIInsertAddress .ListAddress .UIGrid .BlueDownArrowIcon{

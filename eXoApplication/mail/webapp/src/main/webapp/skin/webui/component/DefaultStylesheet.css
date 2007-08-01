@@ -111,7 +111,7 @@
 }
 
 .UIMailPortlet .MailAccountManagement .AddAccountIcon {
-	background: url('/eXoResources/icons/24x24/DefaultSkin/EditNavigation.gif') no-repeat left top;
+	background: url('/eXoResources/skin/DefaultSkin/skinIcons/24x24/icons/EditNavigation.gif') no-repeat left top;
 	cursor: pointer;
 	float: left; margin: 10px 0px 0px 0px;
 	height: 21px; width: 21px;
@@ -505,13 +505,14 @@
 
 .UIMailPortlet .MailWorkingWorkspace .MessageActions .ShowHideTitle {
 	float: left;
+	font-size: 11px;
 	padding-left: 2px;
 	color: #126ca5; cursor: pointer;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .MessageActions .MonthDate {
 	float: left;
-	font-weight: bold;
+	font-size: 11px; font-weight: bold;
 	margin: 0px 4px;
 }
 
@@ -665,8 +666,12 @@
 	background: url('DefaultSkin/icons/24x24/TrashIcon.gif') no-repeat left center ;
 }
 
-.Close {
+.CloseFolder {
 	background: url('DefaultSkin/icons/24x24/DefaultIcon.gif') no-repeat center;
+}
+
+.OpenFolder {
+	background: url('DefaultSkin/icons/24x24/OpenFolder.gif') no-repeat center;
 }
 
 .TagTitleBar {

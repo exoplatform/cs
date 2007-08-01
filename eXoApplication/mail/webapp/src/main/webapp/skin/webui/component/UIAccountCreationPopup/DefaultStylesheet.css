@@ -19,12 +19,8 @@
 .UIAccountCreationWizard .StepForm {
 	border-top: 1px solid #c0c0c0;
 	border-bottom: 1px solid #c0c0c0;
-}
-
-.UIAccountCreationWizard .UIFormInputSet {
-	margin: auto;
-	width: 500px; height: 175px;
-  padding-top: 18px;
+	padding: 20px 0px 0px 0px;
+	height: 180px;
 }
 
 .UIAccountCreationWizard .StepForm .HorizontalLayout {
@@ -50,7 +46,7 @@
  	padding-left: 30px;
  	line-height: 24px;
  	color: black;
- 	background: url('/eXoResources/icons/24x24/DefaultSkin/LightBlueFolder.gif') no-repeat left center;
+ 	background: url('/eXoResources/skin/DefaultSkin/skinIcons/24x24/icons/LightBlueFolder.gif') no-repeat left center;
 }
 
 .UIAccountCreationWizard .AccountCreationStep3 .UIFormGrid a:hover {
