@@ -202,6 +202,8 @@ public class TestForumService extends BaseForumTestCase{
 		topicNew.setIsLock(false);
 		topicNew.setIcon("classNameIcon");
 		topicNew.setIsApproved(false);  
+		topicNew.setViewPermissions(new String[] {});
+		topicNew.setEditPermissions(new String[] {});
 		return topicNew;
   }
   

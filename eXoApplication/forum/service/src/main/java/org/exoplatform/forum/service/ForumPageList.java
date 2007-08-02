@@ -10,6 +10,7 @@ import java.util.List;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.Session;
+import javax.jcr.Value;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
@@ -105,9 +106,23 @@ public class ForumPageList extends JCRPageList {
     if(topicNode.hasProperty("exo:isClosed")) topicNew.setIsClosed(topicNode.getProperty("exo:isClosed").getBoolean());
     if(topicNode.hasProperty("exo:isLock")) topicNew.setIsLock(topicNode.getProperty("exo:isLock").getBoolean());
     if(topicNode.hasProperty("exo:isApproved")) topicNew.setIsApproved(topicNode.getProperty("exo:isApproved").getBoolean());
+    if(topicNode.hasProperty("exo:viewPermissions")) topicNew.setViewPermissions(ValuesToStrings(topicNode.getProperty("exo:viewPermissions").getValues()));
+    if(topicNode.hasProperty("exo:editPermissions")) topicNew.setEditPermissions(ValuesToStrings(topicNode.getProperty("exo:editPermissions").getValues()));
     return topicNew;
   }
-
+  
+  private String [] ValuesToStrings(Value[] Val) throws Exception {
+  	if(Val.length == 1) {
+  		return new String[]{Val[0].getString()};
+  	}else {
+			String[] Str = new String[Val.length];
+			for(int i = 0; i < Val.length; ++i) {
+			  Str[i] = Val[i].getString();
+			}
+		return Str;
+  	}
+  }
+  
 	@Override
 	public List getAll() throws Exception {return null;}
 }

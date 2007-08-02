@@ -90,6 +90,12 @@ public class Topic {
   public boolean getIsApproved() { return isApproved;}
   public void setIsApproved(boolean isApproved) { this.isApproved = isApproved;}
 
+  public String[] getViewPermissions(){return viewPermissions;}
+  public void setViewPermissions(String[] viewPermissions){this.viewPermissions = viewPermissions;}
+  
+  public String[] getEditPermissions(){return editPermissions;}
+  public void setEditPermissions(String[] editPermissions){this.editPermissions = editPermissions;}
+  
   /**
    * This method should calculate the forum id base on the topic id
    * @return

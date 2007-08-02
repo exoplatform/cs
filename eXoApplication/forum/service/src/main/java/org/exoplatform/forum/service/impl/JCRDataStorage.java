@@ -290,6 +290,8 @@ public class JCRDataStorage implements DataStorage {
     if(topicNode.hasProperty("exo:isClosed")) topicNew.setIsClosed(topicNode.getProperty("exo:isClosed").getBoolean());
     if(topicNode.hasProperty("exo:isLock")) topicNew.setIsLock(topicNode.getProperty("exo:isLock").getBoolean());
     if(topicNode.hasProperty("exo:isApproved")) topicNew.setIsApproved(topicNode.getProperty("exo:isApproved").getBoolean());
+    if(topicNode.hasProperty("exo:viewPermissions")) topicNew.setViewPermissions(ValuesToStrings(topicNode.getProperty("exo:viewPermissions").getValues()));
+    if(topicNode.hasProperty("exo:editPermissions")) topicNew.setEditPermissions(ValuesToStrings(topicNode.getProperty("exo:editPermissions").getValues()));
     return topicNew;
   }
 
@@ -332,6 +334,8 @@ public class JCRDataStorage implements DataStorage {
 		    topicNode.setProperty("exo:isClosed", topic.getIsClosed());
 		    topicNode.setProperty("exo:isLock", topic.getIsLock());
 		    topicNode.setProperty("exo:isApproved", topic.getIsApproved());
+		    topicNode.setProperty("exo:viewPermissions", topic.getViewPermissions());
+		    topicNode.setProperty("exo:editPermissions", topic.getEditPermissions());
 
 		    if(isNew) {
 		    	// setTopicCount for Forum
