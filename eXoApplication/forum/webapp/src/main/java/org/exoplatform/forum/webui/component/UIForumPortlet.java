@@ -17,7 +17,7 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
  */
 @ComponentConfig(
    lifecycle = UIApplicationLifecycle.class,
-   template = "app:/templates/forum/webui/component/ThreadsInForum.jstmpl"
+   template = "app:/templates/forum/webui/component/UIPostsInThread.jstmpl"
 )
 
 public class UIForumPortlet extends UIPortletApplication {

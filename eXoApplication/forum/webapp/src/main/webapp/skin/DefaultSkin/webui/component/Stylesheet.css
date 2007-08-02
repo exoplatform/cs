@@ -1,6 +1,7 @@
 @import url("UIForumPortlet/Stylesheet.css") ;
 @import url("UICategory/Stylesheet.css") ;
 @import url("UIThreadsInForum/Stylesheet.css") ;
+@import url("UIPostsInThread/Stylesheet.css") ;
 
 /**************************** UIActionForum *********************************/
 .UIActionForum .ActionButton .NormalStyle {
