@@ -16,21 +16,6 @@
 	margin: 5px 0px 0px 0px;
 }
 
-.UIForumWorkingWorkspace .ForumToolBar .BarLeft {
-	background: url('background/ForumToolBarLeft3x26.gif') no-repeat left ;
-	padding-left: 3px;
-}
-
-.UIForumWorkingWorkspace .ForumToolBar .BarRight {
-	background: url('background/ForumToolBarRight3x26.gif') no-repeat right ;
-	padding-right: 3px;
-}
-
-.UIForumWorkingWorkspace .ForumToolBar .BarCenter {
-	background: url('background/ForumToolBarCenter1x26.gif') repeat-x ;
-	height: 26px;
-}
-
 .UIForumWorkingWorkspace .ForumToolBar .ForumToolBarTitle {
 	float: left;
 	font-weight: bold;

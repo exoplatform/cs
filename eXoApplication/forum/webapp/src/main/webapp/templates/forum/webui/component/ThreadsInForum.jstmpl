@@ -20,7 +20,15 @@
 	</div>
 	<div class="ThreadsInForumContainer">
 		<div class="ForumToolbar">
-			ForumToolbar
+			<div class="ForumToolBar">
+		  <div class="BarLeft">
+		  	<div class="BarRight">
+		  		<div class="BarCenter">
+		  		  ForumToolBar
+		  		</div>
+		  	</div>
+		  </div>
+	  </div>
 		</div>
 		<table class="UIGridForum" cellspacing="0" borderspacing="0">
 			<thead>

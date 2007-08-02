@@ -29,3 +29,31 @@
 .UIActionForum .ActionButton .NormalStyle .LabelIcon {
 	line-height: 20px;
 }
+
+/**************************** ForumToolBar *********************************/
+.ForumToolBar {
+	height: 26px;
+	margin: 5px 0px 0px 0px;
+}
+
+.ForumToolBar .BarLeft {
+	background: url('background/ForumToolBarLeft3x26.gif') no-repeat left ;
+	padding-left: 3px;
+}
+
+.ForumToolBar .BarRight {
+	background: url('background/ForumToolBarRight3x26.gif') no-repeat right ;
+	padding-right: 3px;
+}
+
+.ForumToolBar .BarCenter {
+	background: url('background/ForumToolBarCenter1x26.gif') repeat-x ;
+	height: 26px;
+}
+
+.ForumToolBar .ForumToolBarTitle {
+	float: left;
+	font-weight: bold;
+	line-height: 24px;
+	margin: 0px 0px 0px 8px;
+}
