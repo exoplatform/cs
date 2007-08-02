@@ -1,0 +1,12 @@
+.UIThreadsInForum {
+	border: solid 1px red;
+	height: 400px;
+}
+
+.UIThreadsInForum .UIActionForum {
+	width: 103px;
+}
+
+.UIThreadsInForum .AddTheradIcon {
+	background: url('icons/16x16/AddNewThreadIcon.gif') left center;
+}

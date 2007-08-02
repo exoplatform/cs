@@ -1,2 +1,31 @@
 @import url("UIForumPortlet/Stylesheet.css") ;
 @import url("UICategory/Stylesheet.css") ;
+@import url("UIThreadsInForum/Stylesheet.css") ;
+
+/**************************** UIActionForum *********************************/
+.UIActionForum .ActionButton .NormalStyle {
+}
+
+.UIActionForum .ActionButton .NormalStyle .ButtonLeft {
+  background: url('background/buttoms/LeftNormalStyleButton7x20.gif') no-repeat left top;
+  padding: 0px 0px 0px 7px;
+}
+
+.UIActionForum .ActionButton .NormalStyle .ButtonRight {
+  background: url('background/buttoms/RightNormalStyleButton7x20.gif') no-repeat right top;
+  padding: 0px 7px 0px 0px ;
+}
+
+.UIActionForum .ActionButton .NormalStyle .ButtonMiddle {
+  line-height: 20px;
+	background: url('background/buttoms/MiddleNormalStyleButton1x20.gif') repeat-x top;
+}
+
+.UIActionForum .ActionButton .NormalStyle .IconButtom {
+	background-repeat: no-repeat;
+	padding-left: 20px;
+}
+
+.UIActionForum .ActionButton .NormalStyle .LabelIcon {
+	line-height: 20px;
+}
