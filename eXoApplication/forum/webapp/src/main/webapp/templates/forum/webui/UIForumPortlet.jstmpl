@@ -42,20 +42,26 @@
 		</div>		
 <!-- End UIBreadcumbs -->
 
-<!-- Star UIForumToolbar -->
-		<div class="UIForumToolbar">
-			<div class="ToolbarCotainer">
-				<div class="Icon AddCategory">Add new Category</div>
-				<div class="SeparatorLine"><span></span></div>
-				<div class="Icon AddForum">Add new Forum</div>
-				<div class="SeparatorLine"><span></span></div>
-				<div class="Icon ManageModerators">Manage Moderators</div>
-				<div class="SeparatorLine"><span></span></div>
-				<div class="Icon ForumOption">Forums Options</div>
-				<div style="clear: left;"><span></span></div>
+<!-- Star UIForumControlbar -->
+		<div class="UIForumControlbar">
+			<div class="LeftForumControlbar">
+				<div class="RightForumControlbar">
+					<div class="CenterForumControlbar"
+						<div class="ControlbarCotainer">
+							<div class="Icon AddCategory">Add new Category</div>
+							<div class="SeparatorLine"><span></span></div>
+							<div class="Icon AddForum">Add new Forum</div>
+							<div class="SeparatorLine"><span></span></div>
+							<div class="Icon ManageModerators">Manage Moderators</div>
+							<div class="SeparatorLine"><span></span></div>
+							<div class="Icon ForumOption">Forums Options</div>
+							<div style="clear: left;"><span></span></div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
-<!-- End UIToobar -->
+<!-- End UIForumControlbar -->
 	
 		<div style="height:300px;"><span></span></div>	
 	
