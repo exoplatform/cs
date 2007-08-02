@@ -2,8 +2,9 @@
  * Copyright 2001-2007 The eXo Platform SARL         All rights reserved.  *
  * Please look at license.txt in info directory for more license detail.   *
  **************************************************************************/
-package org.exoplatform.mail.webui.component;
+package org.exoplatform.mail.webui.popup;
 
+import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIContainer;
 
 /**
@@ -13,12 +14,13 @@ import org.exoplatform.webui.core.UIContainer;
  * Aus 01, 2007 2:48:18 PM 
  */
 
-public class UINavigationContainer extends UIContainer  {
+@ComponentConfig(
+    template =  "app:/templates/mail/webui/component/UIAdvancedSearch.gtmpl"
+)
+public class UIAdvancedSearch extends UIContainer  {
   
-  public UINavigationContainer() throws Exception {
-    addChild(UISelectAccountForm.class, null, null) ;
-    addChild(UIFolderContainer.class, null, null) ;
-    addChild(UITags.class, null, null) ;
+  public UIAdvancedSearch() throws Exception {
+    // Add components of advanced search here 
   }
 
   

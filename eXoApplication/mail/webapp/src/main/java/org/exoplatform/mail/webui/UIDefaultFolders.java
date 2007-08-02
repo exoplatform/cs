@@ -2,7 +2,7 @@
  * Copyright 2001-2006 The eXo Platform SARL         All rights reserved.  *
  * Please look at license.txt in info directory for more license detail.   *
  **************************************************************************/
-package org.exoplatform.mail.webui.component ;
+package org.exoplatform.mail.webui ;
 
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -18,18 +18,23 @@ import org.exoplatform.webui.event.EventListener;
  */
 
 @ComponentConfig(
-    template =  "app:/templates/mail/webui/component/UITagFolders.jstmpl",
+    template =  "app:/templates/mail/webui/component/UIDefaultFolders.jstmpl",
     events = {
-        @EventConfig(listeners = UITags.ChangeTagActionListener.class),
+        @EventConfig(listeners = UIDefaultFolders.ChangeFolderActionListener.class),
+        @EventConfig(listeners = UIDefaultFolders.RemoveAllMessagesActionListener.class)
     }
 )
 
-public class UITags extends UIComponent {
-  public UITags() throws Exception {}
+public class UIDefaultFolders extends UIComponent {
+  public UIDefaultFolders() throws Exception {}
   
-  
-  static public class ChangeTagActionListener extends EventListener<UITags> {
-    public void execute(Event<UITags> event) throws Exception {
+  static public class ChangeFolderActionListener extends EventListener<UIDefaultFolders> {
+    public void execute(Event<UIDefaultFolders> event) throws Exception {
+      String path = event.getRequestContext().getRequestParameter(OBJECTID) ;      
+    }
+  }
+  static public class RemoveAllMessagesActionListener extends EventListener<UIDefaultFolders> {
+    public void execute(Event<UIDefaultFolders> event) throws Exception {
       String path = event.getRequestContext().getRequestParameter(OBJECTID) ;      
     }
   }

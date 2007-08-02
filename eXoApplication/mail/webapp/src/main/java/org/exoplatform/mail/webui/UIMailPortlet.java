@@ -2,9 +2,9 @@
  * Copyright 2001-2003 The eXo Platform SARL         All rights reserved.  *
  * Please look at license.txt in info directory for more license detail.   *
  **************************************************************************/
-package org.exoplatform.mail.webui.component;
+package org.exoplatform.mail.webui;
 
-import org.exoplatform.mail.webui.component.popup.UIPopupAction;
+import org.exoplatform.mail.webui.popup.UIPopupAction;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.UIPortletApplication;
@@ -17,15 +17,15 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
  */
 @ComponentConfig(
    lifecycle = UIApplicationLifecycle.class,
-   template = "app:/templates/mail/webui/component/UIInsertAddress.jstmpl"
+   template = "app:/templates/mail/webui/component/UIMailPortlet.jstmpl"
 )
 public class UIMailPortlet extends UIPortletApplication {
   public UIMailPortlet() throws Exception {
-    addChild(UIBannerContainer.class, null, null) ;
-    addChild(UIActionBar.class, null, null) ;
-    addChild(UINavigationContainer.class, null, null) ;
-    addChild(UIMessageArea.class, null, null) ;
-    addChild(UIPopupAction.class, null, null).setRendered(false) ;
+    //addChild(UIBannerContainer.class, null, null) ;
+    //addChild(UIActionBar.class, null, null) ;
+    //addChild(UINavigationContainer.class, null, null) ;
+    //addChild(UIMessageArea.class, null, null) ;
+    //addChild(UIPopupAction.class, null, null).setRendered(false) ;
     
     //UIPopupWindow uiPopupWindow = createUIComponent(UIPopupWindow.class, null, null) ;
     //uiPopupWindow.setShow(true) ;

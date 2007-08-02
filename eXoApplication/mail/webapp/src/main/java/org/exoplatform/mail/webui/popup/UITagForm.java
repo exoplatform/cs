@@ -2,7 +2,7 @@
  * Copyright 2001-2006 The eXo Platform SARL         All rights reserved.  *
  * Please look at license.txt in info directory for more license detail.   *
  **************************************************************************/
-package org.exoplatform.mail.webui.component;
+package org.exoplatform.mail.webui.popup;
 
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -10,7 +10,7 @@ import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
-import org.exoplatform.webui.form.UIFormStringInput;
+
 
 /**
  * Created by The eXo Platform SARL
@@ -20,20 +20,24 @@ import org.exoplatform.webui.form.UIFormStringInput;
  */
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
-    template = "app:/templates/mail/webui/component/UISelectAccountForm.jstmpl",
+    template = "app:/templates/mail/webui/component/UITagForm.jstmpl",
     events = {
-      @EventConfig(listeners = UISelectAccountForm.AddAccountActionListener.class)      
+      @EventConfig(listeners = UITagForm.SaveActionListener.class), 
+      @EventConfig(listeners = UITagForm.CancelActionListener.class)
     }
 )
-public class UISelectAccountForm extends UIForm {
+public class UITagForm extends UIForm {
   
-  public UISelectAccountForm() {
-    
+  public UITagForm() { }
+  
+  static  public class SaveActionListener extends EventListener<UITagForm> {
+    public void execute(Event<UITagForm> event) throws Exception {
+      UITagForm uiForm = event.getSource() ;
+    }
   }
-  
-  static  public class AddAccountActionListener extends EventListener<UISelectAccountForm> {
-    public void execute(Event<UISelectAccountForm> event) throws Exception {
-      UISelectAccountForm uiForm = event.getSource() ;
+  static  public class CancelActionListener extends EventListener<UITagForm> {
+    public void execute(Event<UITagForm> event) throws Exception {
+      UITagForm uiForm = event.getSource() ;
     }
   }
 }

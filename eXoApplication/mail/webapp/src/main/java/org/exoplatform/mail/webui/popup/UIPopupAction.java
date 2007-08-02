@@ -2,9 +2,9 @@
  * Copyright 2001-2006 The eXo Platform SARL         All rights reserved.  *
  * Please look at license.txt in info directory for more license detail.   *
  **************************************************************************/
-package org.exoplatform.mail.webui.component.popup;
+package org.exoplatform.mail.webui.popup;
 
-import org.exoplatform.mail.webui.component.popup.UIPopupComponent;
+import org.exoplatform.mail.webui.popup.UIPopupComponent;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIComponent;

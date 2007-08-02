@@ -2,7 +2,7 @@
  * Copyright 2001-2007 The eXo Platform SARL         All rights reserved.  *
  * Please look at license.txt in info directory for more license detail.   *
  **************************************************************************/
-package org.exoplatform.mail.webui.component.popup;
+package org.exoplatform.mail.webui.popup;
 
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIContainer;
@@ -15,12 +15,12 @@ import org.exoplatform.webui.core.UIContainer;
  */
 
 @ComponentConfig(
-    template =  "app:/templates/mail/webui/component/UIAdvancedSearch.gtmpl"
+    template =  "app:/templates/mail/webui/component/UIRSSManager.gtmpl"
 )
-public class UIAdvancedSearch extends UIContainer  {
+public class UIRSSManager extends UIContainer  {
   
-  public UIAdvancedSearch() throws Exception {
-    // Add components of advanced search here 
+  public UIRSSManager() throws Exception {
+    // Add components of rss here 
   }
 
   

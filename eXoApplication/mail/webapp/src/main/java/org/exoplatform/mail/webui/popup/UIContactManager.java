@@ -2,7 +2,7 @@
  * Copyright 2001-2007 The eXo Platform SARL         All rights reserved.  *
  * Please look at license.txt in info directory for more license detail.   *
  **************************************************************************/
-package org.exoplatform.mail.webui.component;
+package org.exoplatform.mail.webui.popup;
 
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIContainer;
@@ -15,14 +15,12 @@ import org.exoplatform.webui.core.UIContainer;
  */
 
 @ComponentConfig(
-    template =  "app:/templates/mail/webui/component/UIMessageArea.gtmpl"
+    template =  "app:/templates/mail/webui/component/UIContactManager.gtmpl"
 )
-public class UIMessageArea extends UIContainer  {
+public class UIContactManager extends UIContainer  {
   
-  public UIMessageArea() throws Exception {
-    addChild(UIMessageActionBar.class, null, null) ;
-    addChild(UIMessageList.class, null, null) ;
-    addChild(UIMessagePreview.class, null, null) ;
+  public UIContactManager() throws Exception {
+    // Add components of contact here 
   }
 
   

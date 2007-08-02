@@ -2,7 +2,7 @@
  * Copyright 2001-2007 The eXo Platform SARL         All rights reserved.  *
  * Please look at license.txt in info directory for more license detail.   *
  **************************************************************************/
-package org.exoplatform.mail.webui.component.popup;
+package org.exoplatform.mail.webui;
 
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIContainer;
@@ -15,12 +15,11 @@ import org.exoplatform.webui.core.UIContainer;
  */
 
 @ComponentConfig(
-    template =  "app:/templates/mail/webui/component/UIContactManager.gtmpl"
+    template =  "app:/templates/mail/webui/component/UIMailBanner.jstmpl"
 )
-public class UIContactManager extends UIContainer  {
-  
-  public UIContactManager() throws Exception {
-    // Add components of contact here 
+public class UIBannerContainer extends UIContainer  {
+    public UIBannerContainer() throws Exception {
+    addChild(UISearchForm.class, null, null) ;
   }
 
   

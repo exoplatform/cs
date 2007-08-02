@@ -9,9 +9,9 @@
   <artifactId>exo.cs.eXoApplication.forum.webapp</artifactId>
   <version>${org.exoplatform.cs.version}</version>
   <packaging>war</packaging>
-  <name>eXo forum service</name>
+  <name>eXo forum application</name>
   <url>http://www.exoplatform.org</url>
-  <description>eXo forum service</description>
+  <description>eXo forum application</description>
   
   <dependencies> 
     <dependency>
@@ -21,14 +21,13 @@
       <scope>provided</scope>
     </dependency>
 
-    <!--
     <dependency>
       <groupId>org.exoplatform.cs</groupId>
       <artifactId>exo.cs.eXoApplication.forum.service</artifactId>
       <version>${org.exoplatform.cs.version}</version>
       <scope>provided</scope>
     </dependency>
-    -->
+    
   </dependencies>
 
   <build>

@@ -9,9 +9,9 @@
   <artifactId>exo.cs.eXoApplication.mail.webapp</artifactId>
   <version>${org.exoplatform.cs.version}</version>
   <packaging>war</packaging>
-  <name>eXo mail service</name>
+  <name>eXo mail application</name>
   <url>http://www.exoplatform.org</url>
-  <description>eXo mail service</description>
+  <description>eXo mail pplication</description>
   
   <dependencies> 
     <dependency>
@@ -20,14 +20,12 @@
       <version>${org.exoplatform.portal.version}</version>
       <scope>provided</scope>
     </dependency>
-    <!--
     <dependency>
       <groupId>org.exoplatform.cs</groupId>
       <artifactId>exo.cs.eXoApplication.mail.service</artifactId>
       <version>${org.exoplatform.cs.version}</version>
       <scope>provided</scope>
-    </dependency>
-    -->
+    </dependency>    
   </dependencies>
 
   <build>

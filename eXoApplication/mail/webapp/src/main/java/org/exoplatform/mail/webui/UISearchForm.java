@@ -2,7 +2,7 @@
  * Copyright 2001-2006 The eXo Platform SARL         All rights reserved.  *
  * Please look at license.txt in info directory for more license detail.   *
  **************************************************************************/
-package org.exoplatform.mail.webui.component.popup;
+package org.exoplatform.mail.webui;
 
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -10,7 +10,7 @@ import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
-
+import org.exoplatform.webui.form.UIFormStringInput;
 
 /**
  * Created by The eXo Platform SARL
@@ -20,24 +20,21 @@ import org.exoplatform.webui.form.UIForm;
  */
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
-    template = "app:/templates/mail/webui/component/UIFolderForm.jstmpl",
+    template = "app:/templates/mail/webui/component/UISearchForm.jstmpl",
     events = {
-      @EventConfig(listeners = UIFolderForm.SaveActionListener.class), 
-      @EventConfig(listeners = UIFolderForm.CancelActionListener.class)
+      @EventConfig(listeners = UISearchForm.SearchActionListener.class)      
     }
 )
-public class UIFolderForm extends UIForm {
+public class UISearchForm extends UIForm {
+  final static  private String FIELD_SEARCHVALUE = "inputValue" ;
   
-  public UIFolderForm() { }
-  
-  static  public class SaveActionListener extends EventListener<UIFolderForm> {
-    public void execute(Event<UIFolderForm> event) throws Exception {
-      UIFolderForm uiForm = event.getSource() ;
-    }
+  public UISearchForm() {
+    addChild(new UIFormStringInput(FIELD_SEARCHVALUE, FIELD_SEARCHVALUE, null)) ;
   }
-  static  public class CancelActionListener extends EventListener<UIFolderForm> {
-    public void execute(Event<UIFolderForm> event) throws Exception {
-      UIFolderForm uiForm = event.getSource() ;
+  
+  static  public class SearchActionListener extends EventListener<UISearchForm> {
+    public void execute(Event<UISearchForm> event) throws Exception {
+      UISearchForm uiForm = event.getSource() ;
     }
   }
 }

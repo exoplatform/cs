@@ -2,7 +2,7 @@
  * Copyright 2001-2006 The eXo Platform SARL         All rights reserved.  *
  * Please look at license.txt in info directory for more license detail.   *
  **************************************************************************/
-package org.exoplatform.mail.webui.component.popup;
+package org.exoplatform.mail.webui.popup;
 
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -20,24 +20,24 @@ import org.exoplatform.webui.form.UIForm;
  */
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
-    template = "app:/templates/mail/webui/component/UITagForm.jstmpl",
+    template = "app:/templates/mail/webui/component/UIFolderForm.jstmpl",
     events = {
-      @EventConfig(listeners = UITagForm.SaveActionListener.class), 
-      @EventConfig(listeners = UITagForm.CancelActionListener.class)
+      @EventConfig(listeners = UIFolderForm.SaveActionListener.class), 
+      @EventConfig(listeners = UIFolderForm.CancelActionListener.class)
     }
 )
-public class UITagForm extends UIForm {
+public class UIFolderForm extends UIForm {
   
-  public UITagForm() { }
+  public UIFolderForm() { }
   
-  static  public class SaveActionListener extends EventListener<UITagForm> {
-    public void execute(Event<UITagForm> event) throws Exception {
-      UITagForm uiForm = event.getSource() ;
+  static  public class SaveActionListener extends EventListener<UIFolderForm> {
+    public void execute(Event<UIFolderForm> event) throws Exception {
+      UIFolderForm uiForm = event.getSource() ;
     }
   }
-  static  public class CancelActionListener extends EventListener<UITagForm> {
-    public void execute(Event<UITagForm> event) throws Exception {
-      UITagForm uiForm = event.getSource() ;
+  static  public class CancelActionListener extends EventListener<UIFolderForm> {
+    public void execute(Event<UIFolderForm> event) throws Exception {
+      UIFolderForm uiForm = event.getSource() ;
     }
   }
 }

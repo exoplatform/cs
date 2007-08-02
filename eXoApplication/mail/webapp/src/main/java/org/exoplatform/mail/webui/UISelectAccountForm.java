@@ -2,7 +2,7 @@
  * Copyright 2001-2006 The eXo Platform SARL         All rights reserved.  *
  * Please look at license.txt in info directory for more license detail.   *
  **************************************************************************/
-package org.exoplatform.mail.webui.component;
+package org.exoplatform.mail.webui;
 
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -20,21 +20,20 @@ import org.exoplatform.webui.form.UIFormStringInput;
  */
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
-    template = "app:/templates/mail/webui/component/UISearchForm.jstmpl",
+    template = "app:/templates/mail/webui/component/UISelectAccountForm.jstmpl",
     events = {
-      @EventConfig(listeners = UISearchForm.SearchActionListener.class)      
+      @EventConfig(listeners = UISelectAccountForm.AddAccountActionListener.class)      
     }
 )
-public class UISearchForm extends UIForm {
-  final static  private String FIELD_SEARCHVALUE = "inputValue" ;
+public class UISelectAccountForm extends UIForm {
   
-  public UISearchForm() {
-    addChild(new UIFormStringInput(FIELD_SEARCHVALUE, FIELD_SEARCHVALUE, null)) ;
+  public UISelectAccountForm() {
+    
   }
   
-  static  public class SearchActionListener extends EventListener<UISearchForm> {
-    public void execute(Event<UISearchForm> event) throws Exception {
-      UISearchForm uiForm = event.getSource() ;
+  static  public class AddAccountActionListener extends EventListener<UISelectAccountForm> {
+    public void execute(Event<UISelectAccountForm> event) throws Exception {
+      UISelectAccountForm uiForm = event.getSource() ;
     }
   }
 }
