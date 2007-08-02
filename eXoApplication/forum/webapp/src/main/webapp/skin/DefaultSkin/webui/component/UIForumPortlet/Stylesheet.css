@@ -16,26 +16,24 @@
 .UIForumPortlet .ForumBanner .BannerTitle {
 	color: #ffa200;
 	font-size: 14px; font-weight: bold;
-	font-family: Tahoma;
-	padding: 8px 0px 0px 40px;
+	padding: 12px 0px 0px 40px;
 }
 
 .UIForumPortlet .ForumBanner .SearchForm {
-  height: 34px; line-height: 34px;
 	padding-right: 13px;
 }
 
 .UIForumPortlet .ForumBanner .Label {
 	float: right;
 	line-height: 20px;
-	margin: 5px 0px;
+	margin: 2px 0px;
 	color: #595b6a; 
 }
 
 .UIForumPortlet .ForumBanner .Input {
 	width: 195px;
 	float: right;
-	margin: 5px 8px;
+	margin: 0px 8px;
 }
 
 .UIForumPortlet .ForumBanner .Search {
@@ -43,7 +41,7 @@
   height: 16px;
   width: 16px;
   float: right;
-  margin: 8px 5px 0px 0px;
+  margin: 3px 5px 0px 0px;
   cursor: pointer;
 }
 
@@ -51,11 +49,140 @@
   background: url('icons/16x16/FindIcon.gif') no-repeat ;	
   height: 16px; width: 16px;
   float: right; cursor: pointer;
-  margin: 8px 0px 0px 2px;
+  margin: 3px 0px 0px 2px;
 }
 
 .UIForumPortlet .ForumBanner .SeparatorLine {
-	background: url('background/SeparatorLineBaner2x26.gif') no-repeat ;
+	background: url('background/SeparatorLine2x27.gif') no-repeat ;
   float: right;
-  margin: 3px 7px;
+  margin: 0px 7px;
+  height: 27px; width: 2px;
+}
+
+/******************************************** UIBreadcumbs ****************************************/
+
+.UIForumPortlet .UIBreadcumbs {
+	background: #f6f6f6;
+	border: 1px solid #e2e2e2;
+	padding: 0px 15px 0px 10px;
+	margin: 3px 10px;
+}
+
+.UIForumPortlet .UIBreadcumbs .BreadcumbsInfoBar {
+	float: left;
+	background: none;
+}
+
+.UIForumPortlet .UIBreadcumbs .BreadcumbsInfoBar .OpenIcon {
+	float:left;
+	background: url('icons/24x24/OpenFolder.gif') no-repeat ;
+	width: 24px; height: 24px;
+}
+
+.UIForumPortlet .UIBreadcumbs .BreadcumbsInfoBar a.Selected {
+	float: left;
+	color: #1e1f21;	font-weight: bold;
+	padding: 0px 5px;
+	line-height: 25px;
+}
+
+.UIForumPortlet .UIBreadcumbs .BreadcumbsInfoBar .RightArrowIcon {
+	float: left;
+	background: url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/BlueNextArrow.gif') no-repeat ;
+	width: 16px; height: 16px;	
+	margin: 6px 0px 0px 0px;
+}
+
+.UIForumPortlet .UIBreadcumbs .RSSBar {
+	float: right;
+}
+
+.UIForumPortlet .UIBreadcumbs .RSSBar .SeparatorLine {
+	background: url('background/SeparatorLine2x27.gif') no-repeat left;
+	padding-left: 12px;
+}
+
+.UIForumPortlet .UIBreadcumbs .RSSBar .RSSIcon {
+	padding: 0px 0px 0px 28px;
+	line-height: 25px;
+	background: url('icons/16x16/RSSIcon.gif') no-repeat left;
+}
+
+/******************************************** UIForumToolbar ****************************************/
+.UIForumPortlet .UIForumToolbar {
+	border: 1px solid #9499d8;
+	margin: 7px 10px;
+	height: 30px;
+}
+
+.UIForumPortlet .UIForumToolbar .ToolbarCotainer {
+	border: 2px solid white;
+	border-bottom: none;
+	background: url('background/BgToolbar1x28.gif') repeat-x ;
+	padding: 0px 0px 0px 13px;
+	line-height: 28px;
+}
+
+.UIForumPortlet .UIForumToolbar .Icon {
+	float: left;
+	padding-left: 30px;
+	margin: 0px 13px;
+}
+
+.UIForumPortlet .UIForumToolbar .SeparatorLine {
+	float: left;
+	background: url('background/SeparatorLineToolbar1x27.gif') no-repeat ;
+	height: 27px;
+	width: 2px;
+}
+
+.UIForumPortlet .UIForumToolbar .AddCategory {
+	background: url('icons/24x24/AddCategory.gif') no-repeat left center;
+	margin: 0px 13px 0px 0px;
+}
+
+.UIForumPortlet .UIForumToolbar .AddForum {
+	background: url('icons/24x24/AddNewForum.gif') no-repeat left center ;
+}
+
+.UIForumPortlet .UIForumToolbar .ManageModerators {
+	background: url('icons/24x24/Manage.gif') no-repeat left center ;
+}
+
+.UIForumPortlet .UIForumToolbar .ForumOption {
+	background: url('icons/24x24/ForumOption.gif') no-repeat left center ;
+}
+
+
+
+
+
+
+
+
+/******************************************** ForumContains ****************************************/
+
+.UIForumPortlet .ForumContains {
+	border: 1px solid #cdcdcd;
+	line-height: 42px; 
+	margin: 10px;
+	padding: 0px 0px 0px 15px;
+}
+
+.UIForumPortlet .ForumContains .IconPost {
+	float: left;
+	padding: 0px 31px;
+	font-size: 12px;
+}
+
+.UIForumPortlet .ForumContains .NewPost {
+	background: url('icons/24x24/NewPostIcon.gif') no-repeat left;
+}
+
+.UIForumPortlet .ForumContains .NoNewPost {
+	background: url('icons/24x24/NoNewPostIcon.gif') no-repeat left;
+}
+
+.UIForumPortlet .ForumContains .ClosedPost {
+	background: url('icons/24x24/ClosePostIcon.gif') no-repeat left;
 }

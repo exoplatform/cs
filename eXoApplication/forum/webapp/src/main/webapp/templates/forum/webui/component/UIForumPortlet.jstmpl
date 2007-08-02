@@ -1,22 +1,74 @@
 <%
 // move this to the method processRender
 %>
-<div class="UIForumPortlet UIApplication" style="height: 400px;">
+<div class="UIForumPortlet UIApplication" >
   <div class="ApplicationMinWidth">
-<!-- Start Mail Banner -->
-	    <div class="ForumBanner">
-	    	<div class="LeftBanner">
-	    		<div class="BannerTitle">Exchange with the others</div>
-					<div class="SearchForm">
-						<div class="AdvancedSearch" title="Advance Search"><span></span></div>
-						<div class="SeparatorLine"><span></span></div>
-						<div class="Search" title="Search"><span></span></div>
-						<input class="Input" type="text" name=""/>
-						<div class="Label">Search:</div>
-						<div style="clear:right;"><span></span></div>
+  
+<!-- Start Forum Banner -->
+    <div class="ForumBanner">
+    	<div class="LeftBanner">
+    		<div class="BannerTitle">Exchange with the others</div>
+				<div class="SearchForm">
+					<div class="AdvancedSearch" title="Advance Search"><span></span></div>
+					<div class="SeparatorLine"><span></span></div>
+					<div class="Search" title="Search"><span></span></div>
+					<input class="Input" type="text" name=""/>
+					<div class="Label">Search:</div>
+					<div style="clear:right;"><span></span></div>
+				</div>
+			</div>
+		</div>
+<!-- End Forum Banner -->
+	
+<!-- Start UIBreadcumbs -->
+		<div class="UIBreadcumbs">
+			<div class="LeftBreadcumbs">
+				<div class="RightBreadcumbs"> 
+					<div class="CenterBreadcumbs">
+						<div class="BreadcumbsInfoBar">
+							<div class="OpenIcon"><span></span></div>
+							<a href="#" class="Selected">eXo Forums</a>
+							<div class="RightArrowIcon"><span></span></div>
+						</div>
+						<div class="RSSBar">
+							<div class="SeparatorLine">
+								<div class="RSSIcon">RSS</div>	
+							</div>							
+						</div>
+						<div style="clear: both"><span></span></div>
 					</div>
 				</div>
 			</div>
-<!-- End Mail Banner -->
-  </div>
+		</div>		
+<!-- End UIBreadcumbs -->
+
+<!-- Star UIForumToolbar -->
+		<div class="UIForumToolbar">
+			<div class="ToolbarCotainer">
+				<div class="Icon AddCategory">Add new Category</div>
+				<div class="SeparatorLine"><span></span></div>
+				<div class="Icon AddForum">Add new Forum</div>
+				<div class="SeparatorLine"><span></span></div>
+				<div class="Icon ManageModerators">Manage Moderators</div>
+				<div class="SeparatorLine"><span></span></div>
+				<div class="Icon ForumOption">Forums Options</div>
+				<div style="clear: left;"><span></span></div>
+			</div>
+		</div>
+<!-- End UIToobar -->
+	
+		<div style="height:300px;"><span></span></div>	
+	
+	
+	
+<!-- Star ForumContains -->
+		<div class="ForumContains">
+			<div class="IconPost NewPost">Forum Contains New Posts</div>
+			<div class="IconPost NoNewPost">Forum Contains No New Posts</div>
+			<div class="IconPost ClosedPost">Forum is Closed for Posting</div>
+			<div style="clear: left;"><span></span></div>
+	  </div>
+<!-- End ForumContains -->
+
+	</div>
 </div>
