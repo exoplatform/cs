@@ -22,7 +22,7 @@ public class Message extends MessageHeader {
   private String subject ;
   private Date sendDate ;
   private Date receivedDate ;
-  private boolean isUnread = false ;
+  private boolean isUnread = true ;
   
   private String[] folders ;
   private String[] tags ;

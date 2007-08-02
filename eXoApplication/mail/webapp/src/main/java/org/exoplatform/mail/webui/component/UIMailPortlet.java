@@ -4,6 +4,7 @@
  **************************************************************************/
 package org.exoplatform.mail.webui.component;
 
+import org.exoplatform.mail.webui.component.popup.UIPopupAction;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.UIPortletApplication;
@@ -20,7 +21,13 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 )
 public class UIMailPortlet extends UIPortletApplication {
   public UIMailPortlet() throws Exception {
-    UIPopupWindow uiPopupWindow = createUIComponent(UIPopupWindow.class, null, null) ;
-    uiPopupWindow.setShow(true) ;
+    addChild(UIBannerContainer.class, null, null) ;
+    addChild(UIActionBar.class, null, null) ;
+    addChild(UINavigationContainer.class, null, null) ;
+    addChild(UIMessageArea.class, null, null) ;
+    addChild(UIPopupAction.class, null, null).setRendered(false) ;
+    
+    //UIPopupWindow uiPopupWindow = createUIComponent(UIPopupWindow.class, null, null) ;
+    //uiPopupWindow.setShow(true) ;
   }
 } 
