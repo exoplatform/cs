@@ -46,7 +46,7 @@
 		<div class="UIForumControlbar">
 			<div class="LeftForumControlbar">
 				<div class="RightForumControlbar">
-					<div class="CenterForumControlbar"
+					<div class="CenterForumControlbar">
 						<div class="ControlbarCotainer">
 							<div class="Icon AddCategory">Add new Category</div>
 							<div class="SeparatorLine"><span></span></div>
