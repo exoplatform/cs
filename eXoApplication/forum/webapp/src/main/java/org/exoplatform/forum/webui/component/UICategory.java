@@ -4,10 +4,7 @@
  **************************************************************************/
 package org.exoplatform.forum.webui.component;
 
-import org.exoplatform.webui.application.WebuiApplication;
-import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
-import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 
 /**
@@ -17,17 +14,10 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
  */
 @ComponentConfig(
    lifecycle = UIApplicationLifecycle.class,
-   template = "app:/templates/forum/webui/component/ThreadsInForum.jstmpl"
+   template = "app:/templates/forum/webui/component/UICategory.jstmpl"
 )
-
-public class UIForumPortlet extends UIPortletApplication {
-	public UIForumPortlet() throws Exception {
+public class UICategory extends UIForumPortlet {
+  public UICategory() throws Exception {
     
-  }
-  
-  @Override
-  public void processRender(WebuiApplication arg0, WebuiRequestContext arg1) throws Exception {
-  	System.out.println("\n\n =================> Hello the world\n\n"); 
-  	super.processRender(arg0, arg1);
   }
 }

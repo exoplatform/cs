@@ -30,7 +30,7 @@
 		  </div>
 	  </div>
 		</div>
-		<table class="UIGridForum" cellspacing="0" borderspacing="0">
+		<table class="UIGrid" cellspacing="0" borderspacing="0">
 			<thead>
 				<th>
 					<tr></tr>
