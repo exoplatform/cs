@@ -1,0 +1,143 @@
+.UIForumWorkingWorkspace {
+	width: auto;
+	padding: 10px;
+}
+
+.UIForumWorkingWorkspace .ForumToolBar a {
+	color: black;
+}
+
+.UIForumWorkingWorkspace .ForumToolBar a:hover {
+	color: #126ca5;
+}
+
+.UIForumWorkingWorkspace .ForumToolBar {
+	height: 26px;
+	margin: 5px 0px 0px 0px;
+}
+
+.UIForumWorkingWorkspace .ForumToolBar .BarLeft {
+	background: url('DefaultSkin/background/ForumToolBarLeft3x26.gif') no-repeat left ;
+	padding-left: 3px;
+}
+
+.UIForumWorkingWorkspace .ForumToolBar .BarRight {
+	background: url('DefaultSkin/background/ForumToolBarRight3x26.gif') no-repeat right ;
+	padding-right: 3px;
+}
+
+.UIForumWorkingWorkspace .ForumToolBar .BarCenter {
+	background: url('DefaultSkin/background/ForumToolBarCenter1x26.gif') repeat-x ;
+	height: 26px;
+}
+
+.UIForumWorkingWorkspace .ForumToolBar .ForumToolBarTitle {
+	float: left;
+	font-weight: bold;
+	line-height: 24px;
+	margin: 0px 0px 0px 8px;
+}
+
+.UIForumWorkingWorkspace .ForumToolBar .DownArrow1Icon {
+	float: right;
+	width: 16px; height: 16px; 
+	margin: 5px 5px 0px 0px
+	
+}
+
+.UIForumWorkingWorkspace .ForumToolBar .NextArrow1Icon {
+	float: right;
+	width: 16px; height: 16px; 
+	margin: 5px 5px 0px 0px
+	
+}
+
+.UIForumWorkingWorkspace .ForumToolBar .ForumToolBarActions {
+	float: right;
+	width: 150px;
+	margin: 5px 0px 0px 0px;
+}
+
+.UIForumWorkingWorkspace .ForumToolBar .ForumToolBarActions .ManageCategory {
+	background: url('DefaultSkin/icons/16x16/ManageCategory.gif') no-repeat ;
+	float: right;
+	cursor: pointer;
+	padding-left: 20px;
+	line-height: 16px;
+}
+
+.UIForumWorkingWorkspace .ForumToolBar .ForumToolBarActions .SeparatorLine {
+	background: url('DefaultSkin/background/SeparatorLine2x19.gif') no-repeat ;
+	float: right;
+	width: 2px; height: 19px;
+	margin: 0px 5px 0px 5px;
+}
+/*=============================Forum list====================*/
+
+.UIForumWorkingWorkspace .ForumList a {
+	color: #126ca5;
+}
+
+.UIForumWorkingWorkspace .ForumList .UIGrid th {
+	background: url(DefaultSkin/background/ForumTitleBar1x19.gif) repeat-x;
+	border: 1px solid #d2d4dc;
+}
+
+.UIForumWorkingWorkspace .ForumList .OldRow {
+	background: #f4f4f4;
+}
+
+.UIForumWorkingWorkspace .ForumList .ForumIcon {
+	background: url('DefaultSkin/icons/24x24/ForumIcon.gif') no-repeat ;
+	width: 22px; height: 22px;
+	margin: 5px 0px 0px 14px;
+}
+
+.UIForumWorkingWorkspace .ForumList .ForumTitle {
+	font-weight: bold;
+	color: #126ca5;
+	cursor: pointer;
+}
+
+.UIForumWorkingWorkspace .ForumList .LastPost {
+	font-weight: bold;
+	color: #126ca5;
+	cursor: pointer;
+	padding-left: 18px;
+}
+
+.UIForumWorkingWorkspace .ForumList .ForumQuantity {
+	font-weight: normal;
+	color: black;
+	cursor: normal;
+}
+
+.UIForumWorkingWorkspace .ForumList .ModeratorLink {
+	float: left;
+	font-weight: bold;
+}
+
+.UIForumWorkingWorkspace .ForumList .EmoticonsIcon {
+	float: left;
+	background: url('DefaultSkin/icons/16x16/EmoticonsIcon.gif') no-repeat ;
+	width: 16px; height: 16px;
+	margin: 0px 4px;
+}
+
+.UIForumWorkingWorkspace .ForumList .ChartIcon {
+	background: url('DefaultSkin/icons/24x24/ChartIcon.gif') no-repeat ;
+	width: 22px; height: 22px;
+	margin: 0px 4px;
+}
+
+.UIForumWorkingWorkspace .ForumList .UserIcon {
+	background: url('DefaultSkin/icons/24x24/UserIcon.gif') no-repeat ;
+	width: 22px; height: 22px;
+	margin: 0px 4px;
+}
+
+
+
+
+
+

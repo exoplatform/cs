@@ -1,0 +1,16 @@
+@import url("UIViewForum/DefaultStylesheet.css") ;
+@import url("UICategory/DefaultStylesheet.css") ;
+
+/**
+ * UIForumPortlet
+ */
+ 
+.UIForumPortlet {
+	border: solid 1px red;
+}
+ 
+/******************************************** ForumBanner ****************************************/
+.UIForumPortlet .ForumBanner {
+  height: 64px;
+  padding: 0px 1px 0px 155px;
+}
