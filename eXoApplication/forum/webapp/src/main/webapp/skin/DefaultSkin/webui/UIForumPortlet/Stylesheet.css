@@ -153,6 +153,32 @@
 	background: url('icons/24x24/ForumOption.gif') no-repeat left center ;
 }
 
+/******************************************** UIDescription ****************************************/
+
+.UIForumPortlet .UIDescription {
+	border: 1px solid #cdcdcd;
+	line-height: 28px;
+	padding-left: 10px; margin: 0px 10px 10px 10px;
+}
+
+.UIForumPortlet .Forum {
+	color: #373737;
+	font-size: 12px;
+}
+
+.UIForumPortlet .NameForum {
+	color: #373737;
+	font-size: 12px;
+	font-weight: bold;
+}
+
+.UIForumPortlet .Description {
+	color: #5a5a5a;
+	padding: 0px 5px;
+}
+
+
+
 /******************************************** ForumContains ****************************************/
 
 .UIForumPortlet .ForumContains {
