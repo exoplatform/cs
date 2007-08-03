@@ -1,4 +1,247 @@
 .UIPostsInThread {
-	border: solid 1px red;
-	height: 400px;
+	border: solid 1px blue;
+}
+
+.UIPostsInThread .ButtomAndPageIteratorContainer {
+	margin: 10px 10px 0px 10px;
+}
+
+.UIPostsInThread .PostReplyIcon {
+	background: url('icons/16x16/PostReplyIcon.gif') no-repeat left 2px ;
+}
+
+/********************************* PostsInThreadContainer ************************************/
+
+.UIPostsInThread .PostsInThreadContainer {
+	margin: 0px 10px;
+}
+
+.UIPostsInThread .ToolbarActionsContainer {
+	padding-right: 10px;
+}
+
+.UIPostsInThread .ForumToolbar .IconToolbar {
+	float: right;
+	padding-left: 23px;
+	line-height: 25px;
+	margin: 1px 10px;
+}
+
+.UIPostsInThread .ForumToolbar .SeparatorLine {
+	float: right;
+	background: url('background/SeparatorLine2x19.gif') no-repeat center ;
+	height: 19px; width: 2px;	
+	margin-top: 4px;
+}
+
+.UIPostsInThread .ForumToolbar .SearchIcon {
+	background-repeat: no-repeat;
+	background-position: left center;
+	width: auto; height: auto;
+}
+
+.UIPostsInThread .ForumToolbar .ExpandButton {
+	float: right;
+	background: url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/BlueDownArrow.gif') no-repeat center ;
+	height: 16px; width: 16px;	
+	margin: 7px 10px 0px 0px;
+}
+
+.UIPostsInThread .ForumToolbar .ToolIcon {
+	background: url('icons/16x16/ToolIcon.gif') no-repeat center left;
+}
+
+.UIPostsInThread .ForumToolbar .VoteIcon {
+	background: url('icons/16x16/VoteIcon.gif') no-repeat center left;
+}
+
+.UIPostsInThread .ForumToolbar .TagIcon {
+	background: url('icons/16x16/TagIcon.gif') no-repeat center left;
+}
+
+/*************************************** ContentContainer ************************************/
+
+.UIPostsInThread .ContentContainer {
+	border: 1px solid #c4c4c4;
+	margin: 3px 0px;
+}
+
+.UIPostsInThread .MemberContainer {
+	float: left;
+	width: 192px;
+	border-right: 1px solid #c4c4c4;
+}
+
+.UIPostsInThread .MemberContent {
+	background: #eeedf7;
+	border: 1px solid white;
+	padding: 10px 15px;
+}	
+
+.UIPostsInThread .MemberContent .State {
+	float: left;	
+	width: 16px;
+	height: 20px;
+}
+
+.UIPostsInThread .MemberContent .AvailableIcon {
+	background: url('icons/16x16/OnlineIcon.gif') no-repeat center;
+}
+
+.UIPostsInThread .MemberContent .Name {
+	float: left;
+	color: #135bbe;
+	font-size: 14px; font-weight: bold;
+	line-height: 20px;
+	padding: 0px 5px;
+}
+
+.UIPostsInThread .MemberContent .Action {
+	background: url('icons/16x16/DropDownIcon.gif') no-repeat center 4px;
+	float: left;
+	width: 16px; height: 20px;
+}
+
+.UIPostsInThread .MemberContent .Rank {
+	color: #2c2c2c;
+	font-size: 12px;
+	padding: 0px 0px 0px 2px;
+}
+
+.UIPostsInThread .Img {
+	border: 1px solid #484848;
+	padding: 1px;
+	background: white;
+	margin: 8px 0px;
+}
+
+.UIPostsInThread .MemberContent .InfoMember {
+	line-height: 18px;
+	color: #2c2c2c;
+}
+
+/************************************** PostViewContainer ***********************************/
+
+.UIPostsInThread .PostViewContainer {
+	margin-left: 200px;
+	color: #2c2c2c;
+}
+	
+.UIPostsInThread .PostViewContainer .PostViewTitle {
+	border-bottom: 1px solid #d8d8d8;
+	padding: 5px 0px 3px 0px;
+}
+
+.UIPostsInThread .PostViewContainer .PostViewIcon {
+	font-weight: bold; font-size: 12px;
+	font-family: arial;
+	line-height: 20px;
+	padding-left: 20px;
+}
+
+.UIPostsInThread .PostViewContainer .PostTime {
+	padding: 2px 0px 0px 20px;
+}
+
+.UIPostsInThread .PostViewContainer .PostContent {
+	padding: 0px 5px;
+}
+
+.UIPostsInThread .PostViewContainer a {
+	color: blue;
+}
+
+.UIPostsInThread .PostViewContainer .AttachmentContainer .AttachmentTitle {
+	background: #e7e7e7 url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/AttachmentIcon.gif') no-repeat 3px center;
+	padding-left: 20px;
+	line-height: 25px;
+	font-weight: bold;
+}
+
+.UIPostsInThread .PostViewContainer .AttachmentContainer .Attachment1 {
+	float: left;
+	width: 200px;
+	padding: 15px;
+}
+
+.UIPostsInThread .PostViewContainer .AttachmentContainer .Attachment2 {
+	padding: 15px 10px;
+	margin-left: 220px;
+}
+
+.UIPostsInThread .PostViewContainer .AttachmentContainer .Attachment3 {
+	float: left;
+	width: 300px;
+	padding: 15px;
+}
+
+.UIPostsInThread .PostViewContainer .AttachmentContainer .Attachment4 {
+	padding: 15px 10px;
+	margin-left: 320px;
+	width: 300px;
+}
+
+.UIPostsInThread .AttachmentContainer .Img {
+	float: left;
+	margin: 0px 10px 0px 0px;
+}
+
+.UIPostsInThread .PostViewContainer .AttachmentContainer .AttachmentIcon {
+	color: #1555b5;
+	font-weight: bold;
+	padding-left: 25px;
+	line-height: 20px;
+}
+
+.UIPostsInThread .PostViewContainer .AttachmentContainer  .AttachmentInfo {
+	float: right;
+}
+
+.UIPostsInThread .PostViewContainer .AttachmentContainer .WordIcon {
+	background: url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/WordIcon.gif') no-repeat left center;
+}
+
+.UIPostsInThread .PostViewContainer .AttachmentContainer .PPTIcon {
+	background: url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/PPTIcon.gif') no-repeat left center;
+}
+
+.UIPostsInThread .PostViewContainer .AttachmentContainer .PNGIcon {
+	background: url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/PNGIcon.gif') no-repeat left center;
+}
+
+.UIPostsInThread .PostViewContainer .AttachmentContainer .JPGIcon {
+	background: url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/JPGIcon.gif') no-repeat left center;
+}
+
+.UIPostsInThread .PostViewContainer .AttachmentContainer .Size {
+	padding-left: 25px;
+}
+
+.UIPostsInThread .PostViewContainer .FootPost {
+	border-top: 1px dotted #9b9b9b;
+	padding: 5px 0px 0px 0px;
+	width: auto;
+}
+
+.UIPostsInThread .PostViewContainer .PostInfo {
+	float: left;
+	line-height: 18px;
+}
+
+.UIPostsInThread .PostViewContainer .ButtonContainer {
+	float: right;
+	padding: 10px 0px 0px 0px;
+}
+
+/***************************************** Quote ****************************************/
+
+.UIPostsInThread .PostViewContainer .QuoteContent {
+	padding: 10px;
+}
+
+.UIPostsInThread .PostViewContainer .Quote {
+	background: #ededf7;
+	border: 1px solid #d8d8d8;
+	padding: 0px 10px;
+	margin: 5px 0px;
 }
