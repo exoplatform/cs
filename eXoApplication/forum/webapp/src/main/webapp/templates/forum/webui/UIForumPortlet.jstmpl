@@ -1,80 +1,93 @@
 <%
 // move this to the method processRender
 %>
-<div class="UIForumPortlet UIApplication" >
-  <div class="ApplicationMinWidth">
-  
+<div class="UIForumPortlet" >
 <!-- Start Forum Banner -->
-    <div class="ForumBanner">
-    	<div class="LeftBanner">
-    		<div class="BannerTitle">Exchange with the others</div>
-				<div class="SearchForm">
-					<div class="AdvancedSearch" title="Advance Search"><span></span></div>
-					<div class="SeparatorLine"><span></span></div>
-					<div class="Search" title="Search"><span></span></div>
-					<input class="Input" type="text" name=""/>
-					<div class="Label">Search:</div>
-					<div style="clear:right;"><span></span></div>
-				</div>
+	<div class="ForumBanner">
+		<div class="LeftBanner">
+			<div class="BannerTitle">Exchange with the others</div>
+			<div class="SearchForm">
+				<div class="AdvancedSearch" title="Advance Search"><span></span></div>
+				<div class="SeparatorLine"><span></span></div>
+				<div class="Search" title="Search"><span></span></div>
+				<input class="Input" type="text" name=""/>
+				<div class="Label">Search:</div>
+				<div style="clear:right;"><span></span></div>
 			</div>
 		</div>
+	</div>
 <!-- End Forum Banner -->
 	
 <!-- Start UIBreadcumbs -->
-		<div class="UIBreadcumbs">
-			<div class="LeftBreadcumbs">
-				<div class="RightBreadcumbs"> 
-					<div class="CenterBreadcumbs">
-						<div class="BreadcumbsInfoBar">
-							<div class="OpenIcon"><span></span></div>
-							<a href="#" class="Selected">eXo Forums</a>
-							<div class="RightArrowIcon"><span></span></div>
-						</div>
-						<div class="RSSBar">
-							<div class="SeparatorLine">
-								<div class="RSSIcon">RSS</div>	
-							</div>							
-						</div>
-						<div style="clear: both"><span></span></div>
+	<div class="UIBreadcumbs">
+		<div class="LeftBreadcumbs">
+			<div class="RightBreadcumbs"> 
+				<div class="CenterBreadcumbs">
+					<div class="BreadcumbsInfoBar">
+						<div class="OpenIcon"><span></span></div>
+						<a href="#" class="Selected">eXo Forums</a>
+						<div class="RightArrowIcon"><span></span></div>
 					</div>
+					<div class="RSSBar">
+						<div class="SeparatorLine">
+							<div class="RSSIcon">RSS</div>	
+						</div>							
+					</div>
+					<div style="clear: both"><span></span></div>
 				</div>
 			</div>
-		</div>		
+		</div>
+	</div>		
 <!-- End UIBreadcumbs -->
 
-<!-- Star UIForumControlbar -->
-		<div class="UIForumControlbar">
-			<div class="LeftForumControlbar">
-				<div class="RightForumControlbar">
-					<div class="CenterForumControlbar">
-						<div class="ControlbarCotainer">
-							<div class="Icon AddCategory">Add new Category</div>
-							<div class="SeparatorLine"><span></span></div>
-							<div class="Icon AddForum">Add new Forum</div>
-							<div class="SeparatorLine"><span></span></div>
-							<div class="Icon ManageModerators">Manage Moderators</div>
-							<div class="SeparatorLine"><span></span></div>
-							<div class="Icon ForumOption">Forums Options</div>
-							<div style="clear: left;"><span></span></div>
-						</div>
+<!-- Start UIForumControlbar -->
+	<div class="UIForumControlbar">
+		<div class="LeftForumControlbar">
+			<div class="RightForumControlbar">
+				<div class="CenterForumControlbar">
+					<div class="ControlbarCotainer">
+						<div class="Icon AddCategory">Add new Category</div>
+						<div class="SeparatorLine"><span></span></div>
+						<div class="Icon AddForum">Add new Forum</div>
+						<div class="SeparatorLine"><span></span></div>
+						<div class="Icon ManageModerators">Manage Moderators</div>
+						<div class="SeparatorLine"><span></span></div>
+						<div class="Icon ForumOption">Forums Options</div>
+						<div style="clear: left;"><span></span></div>
 					</div>
 				</div>
 			</div>
 		</div>
+	</div>
 <!-- End UIForumControlbar -->
+
+<!-- Start UIDescription -->
+	<div class="UIDescription">
+		<div class="LeftDescription">
+			<div class="RightDescription">
+				<div class="CenterDescription">
+					<span class="Forum">Forum:</span> 
+					<span class="NameForum">eXo Vietnam</span>
+					<span class="Description">Discuss among eXo VN employees about life, work and news</span>
+				</div>
+			</div>
+		</div>
+	</div>
+<!-- End UIDescription -->
+
+
 	
-		<div style="height:300px;"><span></span></div>	
+	<div style="height:300px;"><span></span></div>	
 	
 	
 	
-<!-- Star ForumContains -->
-		<div class="ForumContains">
-			<div class="IconPost NewPost">Forum Contains New Posts</div>
-			<div class="IconPost NoNewPost">Forum Contains No New Posts</div>
-			<div class="IconPost ClosedPost">Forum is Closed for Posting</div>
-			<div style="clear: left;"><span></span></div>
-	  </div>
+<!-- Start ForumContains -->
+	<div class="ForumContains">
+		<div class="IconPost NewPost">Forum Contains New Posts</div>
+		<div class="IconPost NoNewPost">Forum Contains No New Posts</div>
+		<div class="IconPost ClosedPost">Forum is Closed for Posting</div>
+		<div style="clear: left;"><span></span></div>
+  </div>
 <!-- End ForumContains -->
 
-	</div>
 </div>
