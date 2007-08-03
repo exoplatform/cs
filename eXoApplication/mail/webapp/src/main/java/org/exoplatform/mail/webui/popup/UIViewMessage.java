@@ -20,7 +20,7 @@ import org.exoplatform.webui.event.EventListener;
  */
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
-    template = "app:/templates/mail/webui/component/UIViewMessage.jstmpl",
+    template = "app:/templates/mail/webui/UIViewMessage.jstmpl",
     events = {
       @EventConfig(listeners = UIViewMessage.ReplyActionListener.class),      
       @EventConfig(listeners = UIViewMessage.ReplyAllActionListener.class),

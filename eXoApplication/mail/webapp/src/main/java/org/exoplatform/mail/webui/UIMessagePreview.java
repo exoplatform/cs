@@ -18,7 +18,7 @@ import org.exoplatform.webui.event.EventListener;
  */
 
 @ComponentConfig(
-    template =  "app:/templates/mail/webui/component/UIMessagePreview.jstmpl",
+    template =  "app:/templates/mail/webui/UIMessagePreview.jstmpl",
     events = {
         @EventConfig(listeners = UIMessagePreview.ChangePreviewActionListener.class)
     }

@@ -20,7 +20,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
  */
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
-    template = "app:/templates/mail/webui/component/UISearchForm.jstmpl",
+    template = "app:/templates/mail/webui/UISearchForm.jstmpl",
     events = {
       @EventConfig(listeners = UISearchForm.SearchActionListener.class)      
     }

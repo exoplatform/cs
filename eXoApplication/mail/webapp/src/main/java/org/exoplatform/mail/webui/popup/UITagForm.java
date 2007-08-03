@@ -20,7 +20,7 @@ import org.exoplatform.webui.form.UIForm;
  */
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
-    template = "app:/templates/mail/webui/component/UITagForm.jstmpl",
+    template = "app:/templates/mail/webui/UITagForm.jstmpl",
     events = {
       @EventConfig(listeners = UITagForm.SaveActionListener.class), 
       @EventConfig(listeners = UITagForm.CancelActionListener.class)

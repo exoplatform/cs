@@ -17,7 +17,7 @@ import org.exoplatform.webui.event.EventListener;
  * Aus 01, 2007 2:48:18 PM 
  */
 @ComponentConfig(
-    template =  "app:/templates/mail/webui/component/UIActionBar.gtmpl",
+    template =  "app:/templates/mail/webui/UIActionBar.jstmpl",
     events = {
         @EventConfig(listeners = UIActionBar.ComposeActionListener.class),
         @EventConfig(listeners = UIActionBar.CheckMailActionListener.class),

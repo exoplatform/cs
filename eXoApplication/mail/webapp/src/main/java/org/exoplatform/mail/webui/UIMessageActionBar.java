@@ -17,7 +17,7 @@ import org.exoplatform.webui.event.EventListener;
  * Aus 01, 2007 2:48:18 PM 
  */
 @ComponentConfig(
-    template =  "app:/templates/mail/webui/component/UIMessageActionBar.gtmpl",
+    template =  "app:/templates/mail/webui/UIMessageActionBar.gtmpl",
     events = {
         @EventConfig(listeners = UIMessageActionBar.ReplyActionListener.class),
         @EventConfig(listeners = UIMessageActionBar.ReplyAllActionListener.class),

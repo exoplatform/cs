@@ -18,7 +18,7 @@ import org.exoplatform.webui.event.EventListener;
  */
 
 @ComponentConfig(
-    template =  "app:/templates/mail/webui/component/UITagFolders.jstmpl",
+    template =  "app:/templates/mail/webui/UITagFolders.jstmpl",
     events = {
         @EventConfig(listeners = UITags.ChangeTagActionListener.class)
     }

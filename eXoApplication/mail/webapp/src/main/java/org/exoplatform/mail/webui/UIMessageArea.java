@@ -15,7 +15,7 @@ import org.exoplatform.webui.core.UIContainer;
  */
 
 @ComponentConfig(
-    template =  "app:/templates/mail/webui/component/UIMessageArea.gtmpl"
+    template =  "app:/templates/mail/webui/UIMessageArea.jstmpl"
 )
 public class UIMessageArea extends UIContainer  {
   

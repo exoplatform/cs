@@ -15,7 +15,7 @@ import org.exoplatform.webui.core.UIContainer;
  */
 
 @ComponentConfig(
-    template =  "app:/templates/mail/webui/component/UIRSSManager.gtmpl"
+    template =  "app:/templates/mail/webui/UIRSSManager.jstmpl"
 )
 public class UIRSSManager extends UIContainer  {
   

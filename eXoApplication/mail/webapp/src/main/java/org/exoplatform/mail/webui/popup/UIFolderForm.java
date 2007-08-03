@@ -20,7 +20,7 @@ import org.exoplatform.webui.form.UIForm;
  */
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
-    template = "app:/templates/mail/webui/component/UIFolderForm.jstmpl",
+    template = "app:/templates/mail/webui/UIFolderForm.jstmpl",
     events = {
       @EventConfig(listeners = UIFolderForm.SaveActionListener.class), 
       @EventConfig(listeners = UIFolderForm.CancelActionListener.class)

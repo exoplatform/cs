@@ -18,7 +18,7 @@ import org.exoplatform.webui.event.EventListener;
  */
 
 @ComponentConfig(
-    template =  "app:/templates/mail/webui/component/UIDefaultFolders.jstmpl",
+    template =  "app:/templates/mail/webui/UIDefaultFolders.jstmpl",
     events = {
         @EventConfig(listeners = UIDefaultFolders.ChangeFolderActionListener.class),
         @EventConfig(listeners = UIDefaultFolders.RemoveAllMessagesActionListener.class)

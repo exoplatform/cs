@@ -13,8 +13,9 @@ import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
 
 /**
- * Created by The eXo Platform SARL Author : pham tuan phamtuanchip@yahoo.de Oct
- * 03, 2006 9:43:23 AM
+ * Created by The eXo Platform SARL 
+ * Author : hung.nguyen@exoplatform.com
+ * Aug 02, 2007 9:43:23 AM
  */
 @ComponentConfig( lifecycle = Lifecycle.class )
 public class UIPopupAction extends UIContainer {

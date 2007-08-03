@@ -15,7 +15,7 @@ import org.exoplatform.webui.core.UIContainer;
  */
 
 @ComponentConfig(
-    template =  "app:/templates/mail/webui/component/UIMailBanner.jstmpl"
+    template =  "app:/templates/mail/webui/UIMailBanner.jstmpl"
 )
 public class UIBannerContainer extends UIContainer  {
     public UIBannerContainer() throws Exception {

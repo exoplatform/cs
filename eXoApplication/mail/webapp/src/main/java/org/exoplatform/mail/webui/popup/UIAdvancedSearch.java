@@ -15,7 +15,7 @@ import org.exoplatform.webui.core.UIContainer;
  */
 
 @ComponentConfig(
-    template =  "app:/templates/mail/webui/component/UIAdvancedSearch.gtmpl"
+    template =  "app:/templates/mail/webui/UIAdvancedSearch.jstmpl"
 )
 public class UIAdvancedSearch extends UIContainer  {
   

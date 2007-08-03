@@ -15,7 +15,7 @@ import org.exoplatform.webui.core.UIContainer;
  */
 
 @ComponentConfig(
-    template =  "app:/templates/mail/webui/component/UIContactManager.gtmpl"
+    template =  "app:/templates/mail/webui/UIContactManager.jstmpl"
 )
 public class UIContactManager extends UIContainer  {
   
