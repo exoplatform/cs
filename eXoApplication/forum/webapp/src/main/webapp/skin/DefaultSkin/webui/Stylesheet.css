@@ -1,7 +1,6 @@
 @import url("UIForumPortlet/Stylesheet.css") ;
 @import url("UICategory/Stylesheet.css") ;
 @import url("UIThreadsInForum/Stylesheet.css") ;
-@import url("UIPostsInThread/Stylesheet.css") ;
 
 /**************************** UIActionForum *********************************/
 .UIActionForum .ActionButton .NormalStyle {
@@ -32,29 +31,52 @@
 }
 
 /**************************** ForumToolBar *********************************/
-.ForumToolBar {
+.ForumToolbar {
 	height: 26px;
 	margin: 5px 0px 0px 0px;
 }
 
-.ForumToolBar .BarLeft {
+.ForumToolbar .LeftBar {
 	background: url('background/ForumToolBarLeft3x26.gif') no-repeat left ;
 	padding-left: 3px;
 }
 
-.ForumToolBar .BarRight {
+.ForumToolbar .RightBar {
 	background: url('background/ForumToolBarRight3x26.gif') no-repeat right ;
 	padding-right: 3px;
 }
 
-.ForumToolBar .BarCenter {
+.ForumToolbar .CenterBar {
 	background: url('background/ForumToolBarCenter1x26.gif') repeat-x ;
 	height: 26px;
 }
 
-.ForumToolBar .ForumToolBarTitle {
-	float: left;
-	font-weight: bold;
-	line-height: 24px;
-	margin: 0px 0px 0px 8px;
+/*========================Icons=====================================*/
+
+.BusyIcon {
+	background: url('skinIcons/16x16/icons/BusyIcon.gif') no-repeat ;
+}
+
+.BigGrinIcon {
+	background: url('skinIcons/16x16/icons/BigGrinIcon.gif') no-repeat ;
+}
+
+.OfflineIcon {
+	background: url('skinIcons/16x16/icons/OfflineIcon.gif') no-repeat ;
+}
+
+.OnlineIcon {
+	background: url('skinIcons/16x16/icons/OnlineIcon.gif') no-repeat ;
+}
+
+.ContainNewPostIcon {
+	background: url('skinIcons/24x24/icons/NewPostIcon.gif') no-repeat ;
+}
+
+.ForumCloseIcon {
+	background: url('skinIcons/24x24/icons/ForumCloseIcon.gif') no-repeat ;
+}
+
+.NoNewPostIcon {
+	background: url('skinIcons/24x24/icons/NoNewPostIcon.gif') no-repeat ;
 }
