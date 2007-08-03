@@ -1,0 +1,324 @@
+<div class="UIInsertAddress">
+	<div class="InsertAddressContainer">
+		<div class="UISearch">
+		  <div class="UIBarStyle">
+			  <div class="NormalBarStyle">
+			    <div class="LeftBar">
+			      <div class="RightBar">
+			        <div class="MiddleBar">
+							  <div class="UISearchForm">
+						      <div class="QuickSet">
+						        <div class="SearchTitle">Search:</div>
+						        <input name="" class="Input" />
+				            <a class="SearchIcon" href="#" title="Quick Search"><span></span></a>
+						      </div>  
+							  </div>
+							  <div class="AddressesGroup">
+									<div class="AddressLabel">Addresses from group:</div>
+									<select name="" class="Selectbox">
+										<option value="" selected="selected">eXo VN</option>
+									</select>
+							  	<div style="clear: left"><span></span></div>
+							  </div>
+							  <div style="clear: left"><span></span></div>
+			        </div>
+			      </div>
+			    </div>
+			  </div>
+		  </div>        
+		</div>
+		
+		<div class="AddressContainer">
+			<div class="ListAddress">
+			
+				<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
+	  				<thead>
+	  					<tr>
+	  			      <th style="width: 30px;" class="BorderAddress"><input type="checkbox" class="checkbox" value="4"/></th>
+	 	            <th style="width: 40%;" class="BorderAddress">
+	 	            	<div class="BlueDownArrowIcon">
+	 	            		<div class="Label">Name</div>
+	 	            	</div>
+	 	            </th>
+	 	            <th style="width: 48%;" >
+	 	            	<div class="BlueDownArrowIcon">
+	 	            		<div class="Label">Email</div>
+	 	            	</div>
+	 	            </th>
+	  	 	     	</tr>
+	  	 	   	</thead>
+	  	 	    <tbody>
+	  				  <tr>
+	  			      <td class="BorderAddress"><input type="checkbox" class="checkbox" value="4"/></td>
+							<td class="text BorderAddress"></td>
+							<td class="text"></td>
+	   			    </tr>
+					  <tr>
+	        	<td class="BorderAddress"><input type="checkbox" class="checkbox" value="4"/></td>
+							<td class="text BorderAddress" ></td>
+							<td class="text"></td>
+	      		</tr>
+	     		  <tr>
+	     		    <td class="BorderAddress"><input type="checkbox" class="checkbox" value="4"/></td>
+							<td class="text BorderAddress"></td>
+							<td class="text"></td>
+	      		</tr>
+						<tr>
+						  <td class="BorderAddress"><input type="checkbox" class="checkbox" value="4"/></td>
+							<td class="text BorderAddress"></td>
+							<td class="text"></td>
+			  		</tr>
+			  		<tr>
+						  <td class="BorderAddress"><input type="checkbox" class="checkbox" value="4"/></td>
+							<td class="text BorderAddress"></td>
+							<td class="text"></td>
+			  		</tr>
+			  		<tr>
+						  <td class="BorderAddress"><input type="checkbox" class="checkbox" value="4"/></td>
+							<td class="text BorderAddress"></td>
+							<td class="text"></td>
+			  		</tr>
+			  		<tr>
+						  <td class="BorderAddress"><input type="checkbox" class="checkbox" value="4"/></td>
+							<td class="text BorderAddress"></td>
+							<td class="text"></td>
+			  		</tr>
+			  		<tr>
+						  <td class="BorderAddress"><input type="checkbox" class="checkbox" value="4"/></td>
+							<td class="text BorderAddress"></td>
+							<td class="text"></td>
+			  		</tr>
+			  		<tr>
+						  <td class="BorderAddress"><input type="checkbox" class="checkbox" value="4"/></td>
+							<td class="text BorderAddress"></td>
+							<td class="text"></td>
+			  		</tr>
+			  		<tr>
+						  <td class="BorderAddress"><input type="checkbox" class="checkbox" value="4"/></td>
+							<td class="text BorderAddress"></td>
+							<td class="text"></td>
+			  		</tr>
+			  		<tr>
+						  <td class="BorderAddress"><input type="checkbox" class="checkbox" value="4"/></td>
+							<td class="text BorderAddress"></td>
+							<td class="text"></td>
+			  		</tr>
+			  		<tr>
+						  <td class="BorderAddress"><input type="checkbox" class="checkbox" value="4"/></td>
+							<td class="text BorderAddress"></td>
+							<td class="text"></td>
+			  		</tr>
+			  		<tr>
+						  <td class="BorderAddress"><input type="checkbox" class="checkbox" value="4"/></td>
+							<td class="text BorderAddress"></td>
+							<td class="text"></td>
+			  		</tr>
+			  		<tr>
+						  <td class="BorderAddress"><input type="checkbox" class="checkbox" value="4"/></td>
+							<td class="text BorderAddress"></td>
+							<td class="text"></td>
+			  		</tr>
+			  		<tr>
+						  <td class="BorderAddress"><input type="checkbox" class="checkbox" value="4"/></td>
+							<td class="text BorderAddress"></td>
+							<td class="text"></td>
+			  		</tr>
+	  	  </tbody>
+				</table>			
+						
+			</div>
+			<div class="InsertedAddress">
+				<div class="InsertAddressContent">
+					
+					<div class="UIAction" >
+					  <div class="ActionContainer">
+					    <div class="ActionButton">
+					      <div class="LightBlueStyle">
+					        <div class="ButtonLeft">
+					          <div class="ButtonRight">
+					            <div class="ButtonMiddle">
+					              <a class="ActionText" href="#">To</a>
+					            </div>
+					          </div>
+					        </div>
+					      </div>
+					    </div>
+					  </div>
+					</div>	
+					
+					<div class="Content">
+						
+						<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
+	  						<thead>
+	  							<tr>
+	  			          <th style="width: 30px;" class="BorderAddress"><input type="checkbox" class="checkbox" value="4"/></th>
+	 	      	        <th style="width: 90%;">
+	 	      	        	<div class="DustBin16x16Icon" title="Delete Address"><span></span></div>
+	 	      	        	<div style="float: left;">To:</div>
+	 	      	        	<div style="clear: both;"><span></span></div>
+	 	      	        </th>
+	  	 	        	</tr>
+	  	 	       	</thead>
+	  	 	       <tbody>
+	  						 <tr>
+	  						    <td class="BorderAddress"><input type="checkbox" class="checkbox" value="4"/></td>
+									<td class="text"></td>
+	   			     	 </tr>
+					     <tr>
+	        			<td class="BorderAddress"><input type="checkbox" class="checkbox" value="4"/></td>
+									<td class="text"></td>
+	      		    </tr>
+	     		      <tr>
+	     		        <td class="BorderAddress"><input type="checkbox" class="checkbox" value="4"/></td>
+									<td class="text"></td>
+	      		    </tr>
+						     
+	  	  		</tbody>
+						</table>			
+						
+						
+					</div>
+					
+				</div>
+				
+				<div class="InsertAddressContent">
+					
+					<div class="UIAction" >
+					  <div class="ActionContainer">
+					    <div class="ActionButton">
+					      <div class="LightBlueStyle">
+					        <div class="ButtonLeft">
+					          <div class="ButtonRight">
+					            <div class="ButtonMiddle">
+					              <a class="ActionText" href="#">Cc</a>
+					            </div>
+					          </div>
+					        </div>
+					      </div>
+					    </div>
+					  </div>
+					</div>	
+					
+					<div class="Content">
+						
+						<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
+	  						<thead>
+	  							<tr>
+	  			          <th style="width: 30px;" class="BorderAddress"><input type="checkbox" class="checkbox" value="4"/></th>
+	 	      	        <th style="width: 90%;">
+										<div class="DustBin16x16Icon" title="Delete Address"><span></span></div>
+	 	      	        	<div style="float: left;">CC:</div>
+	 	      	        	<div style="clear: both;"><span></span></div>
+									</th>
+	  	 	        	</tr>
+	  	 	       	</thead>
+	  	 	       <tbody>
+	  						 <tr>
+	  						    <td class="BorderAddress"><input type="checkbox" class="checkbox" value="4"/></td>
+									<td class="text"></td>
+	   			     	 </tr>
+					     <tr>
+	        			<td class="BorderAddress"><input type="checkbox" class="checkbox" value="4"/></td>
+									<td class="text"></td>
+	      		    </tr>
+	     		      <tr>
+	     		        <td class="BorderAddress"><input type="checkbox" class="checkbox" value="4"/></td>
+									<td class="text"></td>
+	      		    </tr>
+						     
+	  	  		</tbody>
+						</table>			
+						
+						
+					</div>
+					
+				</div>
+				
+				<div class="InsertAddressContent">
+					
+					<div class="UIAction" >
+					  <div class="ActionContainer">
+					    <div class="ActionButton">
+					      <div class="LightBlueStyle">
+					        <div class="ButtonLeft">
+					          <div class="ButtonRight">
+					            <div class="ButtonMiddle">
+					              <a class="ActionText" href="#">Bcc</a>
+					            </div>
+					          </div>
+					        </div>
+					      </div>
+					    </div>
+					  </div>
+					</div>	
+					
+					<div class="Content">
+						
+						<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
+	  						<thead>
+	  							<tr>
+	  			          <th style="width: 30px;" class="BorderAddress"><input type="checkbox" class="checkbox" value="4"/></th>
+	 	      	        <th style="width: 90%;">
+										<div class="DustBin16x16Icon" title="Delete Address"><span></span></div>
+	 	      	        	<div style="float: left;">BCC:</div>
+	 	      	        	<div style="clear: both;"><span></span></div>
+									</th>
+	  	 	        	</tr>
+	  	 	       	</thead>
+	  	 	       <tbody>
+	  						 <tr>
+	  						    <td class="BorderAddress"><input type="checkbox" class="checkbox" value="4"/></td>
+									<td class="text"></td>
+	   			     	 </tr>
+					     <tr>
+	        			<td class="BorderAddress"><input type="checkbox" class="checkbox" value="4"/></td>
+									<td class="text"></td>
+	      		    </tr>
+	     		      <tr>
+	     		        <td class="BorderAddress"><input type="checkbox" class="checkbox" value="4"/></td>
+									<td class="text"></td>
+	      		    </tr>
+						     
+	  	  		</tbody>
+						</table>			
+						
+						
+					</div>
+					
+				</div>
+				
+			</div>
+			
+		  <div style="clear: left"><span></span></div>
+		</div>
+
+	</div>
+	
+	<div class="UIAction" >
+	  <div class="ActionContainer">
+	    <div class="ActionButton">
+	      <div class="LightBlueStyle">
+	        <div class="ButtonLeft">
+	          <div class="ButtonRight">
+	            <div class="ButtonMiddle">
+	              <a class="ActionText" href="#">Ok</a>
+	            </div>
+	          </div>
+	        </div>
+	      </div>
+	    </div>
+	    <div class="ActionButton">
+	      <div class="LightBlueStyle">
+	        <div class="ButtonLeft">
+	          <div class="ButtonRight">
+	            <div class="ButtonMiddle">
+	              <a class="ActionText" href="#">Cancel</a>
+	            </div>
+	          </div>
+	        </div>
+	      </div>
+	    </div>
+	  </div>
+	</div>	
+	
+</div>

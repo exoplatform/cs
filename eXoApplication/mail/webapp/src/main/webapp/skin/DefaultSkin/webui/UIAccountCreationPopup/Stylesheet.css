@@ -1,0 +1,62 @@
+.UIAccountCreationWizard {
+	margin: auto;
+	width: 580px;
+	background: #f3f3f3;
+	border: 2px solid #c0c0c0;
+}
+
+.UIAccountCreationWizard .StepInfos {
+ padding:  5px 20px 10px 20px;
+ background: white;
+}
+
+.UIAccountCreationWizard .StepInfos .InfoTitle {
+	font-size: 11px;
+	line-height: 22px;
+	font-weight: bold;
+}
+
+.UIAccountCreationWizard .StepForm {
+	border-top: 1px solid #c0c0c0;
+	border-bottom: 1px solid #c0c0c0;
+	padding: 20px 0px 0px 0px;
+	height: 180px;
+}
+
+.UIAccountCreationWizard .StepForm .HorizontalLayout {
+	border: none;
+}
+
+.UIAccountCreationWizard .AccountCreationStep1 .UIAction {
+ 	width: 128px;
+}
+
+.UIAccountCreationWizard .AccountCreationStep2 .UIAction {
+ 	width: 182px;
+}
+
+.UIAccountCreationWizard .AccountCreationStep3 #MessagesComeInFolder {
+ 	width: 120px;
+ 	float: left;
+}
+
+.UIAccountCreationWizard .AccountCreationStep3 .UIFormGrid a {
+ 	float: left;
+ 	margin-left: 20px;
+ 	padding-left: 30px;
+ 	line-height: 24px;
+ 	color: black;
+ 	background: url('/eXoResources/skin/DefaultSkin/skinIcons/24x24/icons/LightBlueFolder.gif') no-repeat left center;
+}
+
+.UIAccountCreationWizard .AccountCreationStep3 .UIFormGrid a:hover {
+	color: blue;
+}
+
+.UIAccountCreationWizard .AccountCreationStep3 .UIAction {
+ 	width: 182px;
+}
+
+.UIAccountCreationWizard .AccountCreationStep4 .UIAction {
+ 	width: 200px;
+}

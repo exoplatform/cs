@@ -1,0 +1,405 @@
+<%
+// move this to the method processRender
+%>
+<div class="$uicomponent.id UIApplication" id="$uicomponent.id">
+  <div class="ApplicationMinWidth">
+  	<div class="UIMailPortlet">
+<!-- Start Mail Banner -->
+	    <div class="MailBanner">
+	    	<div class="LeftHorizontalLine">
+					<div class="RepeatHorizontalLine">a Powerful, Open-source Messaging</div>					
+				</div>
+				<div class="SearchForm">
+					<div class="AdvancedSearch" title="Advance Search"><span></span></div>
+					<div class="SeparatorLine"><span></span></div>
+					<div class="Search" title="Search"><span></span></div>
+					<input class="Input" type="text" name=""/>
+					<div class="Label">Search:</div>
+					<div style="clear:right;"><span></span></div>
+				</div>
+			</div>
+<!-- End Mail Banner -->
+<!-- Start Mail Working Workspace -->
+	    <div class="MailWorkingWorkspace">
+<!-- Start Mail ControlBar -->
+		   <div class="MailControlBar">
+					<div class="UIToolbar">
+						<div class="HeaderToolbar">
+							<div class="LeftBar">
+								<div class="RightBar">
+									<div class="CenterBar">
+										<a href="#" class="ControlButton">
+											<div class="IconHolder CheckMailIcon">
+												<div class="Label">CheckMail</div>
+											</div>
+										</a>
+										<a href="#" class="ControlButton">
+											<div class="IconHolder ComposeIcon">
+												<div class="Label"> Compose </div>
+											</div>
+										</a>
+										<div class="SeparatorLine"><span></span></div>
+										<a href="#" class="ControlButton">
+											<div class="IconHolder ReplyIcon">
+												<div class="Label"> Reply </div>
+											</div>
+										</a>
+										<a href="#" class="ControlButton">
+											<div class="IconHolder ReplyAllIcon">
+												<div class="Label"> ReplyAll </div>
+											</div>
+										</a>
+										<a href="#" class="ControlButton">
+											<div class="IconHolder ForwardIcon">
+												<div class="Label"> Forward </div>
+											</div>
+										</a>
+										<div class="SeparatorLine"><span></span></div>
+										<a href="#" class="ControlButton">
+											<div class="IconHolder DeleteIcon" title="Delete selected item(s)"><span></span></div>
+										</a>
+										<a href="#" class="ControlButton">
+											<div class="IconHolder PrintIcon" title="Print selected mail(s)"><span></span></div>
+										</a>
+										<div class="SeparatorLine"><span></span></div>
+										<a href="#" class="ControlButton">
+											<div class="IconHolder ContactsIcon">
+												<div class="Label"> Contacts </div>
+											</div>
+										</a>
+										<a href="#" class="ControlButton">
+											<div class="IconHolder RssIcon">
+												<div class="Label"> RSS </div>
+											</div>
+										</a>
+										<div class="SeparatorLine"><span></span></div>
+										<a href="#" class="ControlButton">
+											<div class="IconHolder CustomViewIcon" title="Custome panels view"><span></span></div>
+											<div class="DownArrow1Icon"><span></span></div>
+											<div style="clear:both;"><span></span></div>
+										</a>
+										<a href="#" class="ControlButton">
+											<div class="IconHolder SettingsIcon" title="Mail settings"><span></span></div>
+										</a>
+										<div style="clear:left;"><span></span></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div style="clear:left;"><span></span></div>
+<!-- End Mail ControlBar -->
+<!-- Start Mail Container -->
+				<div class="MailContainer">
+					<div class="MailAccountManagement">
+						
+						<div class="UIDropDownItemSelector">
+							<div class="ItemSelectorContainer">
+						  	<div class="ItemInfoBar" >
+							  	<div class="LeftItemInfoBar">
+								  	<div class="RightItemInfoBar">
+								  		<div class="MiddleItemInfoBar" title="Show List" >
+								  			<div class="Icon AccountIcon"><span></span></div>
+								  			<div class="SelectedItemLabel">Default Account</div>
+								  			<div class="DropDownSelectIcon"><span></span></div>
+								  			<div style="clear: both;"><span></span></div>
+										  </div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<a class="AddAccountIcon" href = "#" title="Add New Account"><span></span></a>
+		        <div style="clear: left"><span></span></div>
+						
+						<div class="AccountFolderList">
+							<div class="FolderListTitleBar">
+								<div class="DownArrow3Icon" title="Collapse this Panel"><span></span></div>
+								<div class="Title FolderIcon">Folders</div>
+				        <div style="clear: left"><span></span></div>
+							</div>
+							<div class="MailFolderList">
+								<a href="#"  class="Icon InboxIcon">Inbox<span class="MailQuantity">(9)</span></a>
+								<a href="#" class="Icon DraftsIcon">Drafts<span class="MailQuantity">(3)</span></a>
+								<a href="#" class="Icon SentIcon">Sent<span class="MailQuantity">(8)</span></a>
+								<a href="#" class="Icon SpamIcon">Spam<span class="MailQuantity">(2)</span></a>
+								<a href="#" class="Icon TrashIcon">Trash<span class="MailQuantity">(5)</span></a>
+							</div>
+							<div class="MyFolder">
+								<div class="TitleBar">
+									<div class="DownArrow3Icon" title="Collapse/Expand all"><span></span></div>
+									<div class="Title">My Folders</div>
+					        <div style="clear: left"><span></span></div>
+								</div>
+								<div class="UITree">
+								  <div class="TreeContainer JSContainer">
+								    <div class="Node" style="padding-top: 2px;">
+								   		<div class="ColapseIcon"><span></span></div>
+								   		<div class="IconFolder OpenFolder"><span></span></div>
+								   		<div class="NodeLabel">
+								   			<a href="#">Open source</a>
+								   		</div>
+									    <div class="ChildrenContainer" actionLink="$actionLink" display="block">
+											  <div class="Node" style="padding-top: 2px; margin-left: 10px; ">
+										   		<div class="IconFolder CloseFolder"><span></span></div>
+										   		<div class="NodeLabel">
+										   			<a href="#">eXo platform</a>
+										   		</div>
+											  </div>
+											  <div class="Node" style="padding-top: 2px; margin-left: 10px; ">
+										   		<div class="IconFolder CloseFolder"><span></span></div>
+										   		<div class="NodeLabel">
+										   			<a href="#">ObjectWeb</a>
+										   		</div>
+											  </div>
+									    </div>				  	
+									  </div>
+									  <div class="Node" style="padding-top: 2px;">
+								   		<div class="ColapseIcon"><span></span></div>
+								   		<div class="IconFolder OpenFolder"><span></span></div>
+								   		<div class="NodeLabel">
+								   			<a href="#">Customers</a>
+								   		</div>
+									    <div class = "ChildrenContainer" display = "block">
+											  <div class="Node" style="padding-top: 2px; margin-left: 10px; ">
+										   		<div class="IconFolder CloseFolder"><span></span></div>
+										   		<div class="NodeLabel">
+										   			<a href="#">M6 TV</a>
+										   		</div>
+											  </div>
+									    </div>				  	
+									  </div>
+								  </div>  
+								</div>									
+					   		<div style="clear:left"><span></span></div>
+							</div> 							
+						</div>
+<!-- End AccountFolderList -->							
+<!--  Start UITag -->
+						<div class="UITag">
+							<div class="TagTitleBar">
+								<div class="DownArrow3Icon" title="Collapse/Expand all"><span></span></div>
+								<div class="TagTitle TagIcon">Tags</div>
+					      <div style="clear: left"><span></span></div>
+							</div>
+							<div class="TagsList">
+								<a href="#" class="IconHolder BlueTag">Customers</a>
+								<a href="#" class="IconHolder RedTag">Company</a>
+								<a href="#" class="IconHolder GreenTag">Docs Team</a>
+								<a href="#" class="IconHolder VioletTag">Design Team</a>
+							</div>
+						</div>
+<!-- End UITag -->											
+					</div>
+<!-- End Mail AccountManagement -->					
+<!--  Start Mail Working Details -->
+					<div class="MailWorkingDetails">
+						
+						<div class="MailList">
+							<div class="MailActionsBar">
+								<a href="#" class="ControlButton">
+									<div class="MoreActionsIcon">
+										<div class="DownArrow1Icon">More Actions</div>
+									</div>
+								</a>
+								<a href="#" class="ControlButton">
+									<div class="ViewIcon">
+										<div class="DownArrow1Icon">View</div>
+									</div>
+								</a>
+								<a href="#" class="ControlButton">
+									<div class="AddEventIcon">
+										<div class="Label">Add event</div>
+									</div>
+								</a>
+								<div class="MailPageIterator">
+									<div class="MailIteratorContainer">
+  									<div class="RightPageIteratorBlock">
+    	  							<a title="First Page" class="FloatBlockHidden FirstPageArrow"/></a>        
+    	  							<a title="Previous Page" class="FloatBlockHidden PreviousPageArrow"></a>
+    									<div class="Number">1</div>
+    	  				 			<a title="Next Page" class="FloatBlock NextPageArrow" href="#"/></a>
+    	 				  			<a title="Last Page" class="FloatBlock LastPageArrow"><span/></a>
+									    <div style="clear: left;"><span/></div>
+									  </div>
+									  <div class="LeftPageIteratorBlock">
+									  	<div class="TotalPages">Message(s)<span class="MailQuantity">20 of 140</span></div>
+									  </div>
+									  <div style="clear: right;"><span></span></div>
+								  </div>
+								</div>
+								<div style="clear: left;"><span/></div>
+							</div>
+							<div class="MailListDetail">
+								<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
+  								<thead>
+  									<tr>
+      			          <th style="width: 30px;"><input type="checkbox" class="checkbox" title="Check all" value="4"/></th>
+	      							<th style="width: 24px;"><div class="HighlightStarIcon" title="Add star for this message"><span></span></div></th>
+	      		          <th style="padding-left: 8px; width: 24%;">
+		      		          <div class="DownArrow1Icon" title="Sort by sender">Sender</div>
+	      		          </th>
+	      		          <th style="width: 24px;"><div class="AttachmentIcon" title="Attchments"><span></span></div></th>
+	      		          <th style="width: 24px; border-right: 1px solid #f8f8f8;"></th>
+	 	      	          <th style="padding-left: 8px;">
+		      		          <div class="DownArrow1Icon" title="Sort by subject">Subject</div>
+	      		          </th>
+	 	      	          <th style="width: 24px;"><div class="TotalMessageIcon" title="Total message(s) in conversation"><span></span></div></th>
+	 	      	          <th style="width: 120px; padding-left: 8px;">
+		      		          <div class="DownArrow1Icon" title="Sort by Date & time">Date & Time</div>
+	 	      	          </th>
+	 	      	          <th>Size</th>
+	 	      	          <th style="width: 24px;"><div class="PriorityIcon"><span></span></div></th>
+	      	 	        </tr>
+	      	 	       </thead>
+	      	 	       <tbody>
+  						      <tr>
+  						        <td><input type="checkbox" class="checkbox" value="4"/></td>
+											<td style="padding: 0px;"><div class="StarredIcon" ><span></span></div></td>
+											<td class="text">eXo Platform Collaboration...</td>
+											<td class="text"></td>
+											<td style="padding: 0px; border-right: 1px solid #ffffff;"></td>
+											<td class="text">Welcome to eXo Mail</td>
+											<td class="text">(5)</td>
+											<td class="text">07/02/2007 10:30am</td>
+											<td>10K</td>
+											<td style="padding: 0px;" class="textBold"></td>
+   			     		    </tr>
+							      <tr>
+                      <td><input type="checkbox" class="checkbox" value="4"/></td>
+											<td style="padding: 0px;"><div class="UnStarredIcon"><span></span></div></td>
+											<td class="textBold">Brice Revenant</td>
+											<td style="padding: 0px;"><div class="AttachmentIcon"><span></span></div></td>
+											<td style="padding: 0px; border-right: 1px solid #ffffff;"></td>
+											<td class="textBold">[exo-vn] M6</td>
+											<td style="padding: 0px;"></td>
+											<td class="textBold">07/05/2007 10:30am</td>
+											<td class="textBold">13K</td>
+											<td style="padding: 0px;" class="textBold"><div class="HighPriority">!</div></td>
+			      		    </tr>
+			     		      <tr>
+			     		        <td><input type="checkbox" class="checkbox" value="4"/></td>
+											<td style="padding: 0px;"><div class="UnStarredIcon"><span></span></div></td>
+											<td class="text"></td>
+											<td style="padding: 0px;"></td>
+											<td style="padding: 0px; border-right: 1px solid #ffffff;"><div class="TagIcon"><span></span></div></td>
+											<td class="text"></td>
+											<td style="padding: 0px;"></td>
+											<td class="text"></td>
+											<td class="text"></td>
+											<td style="padding: 0px;" class="textBold"></td>
+			      		    </tr>
+								      <tr>
+										  <td><input type="checkbox" class="checkbox" value="4"/></td>
+											<td style="padding: 0px;"><div class="StarredIcon"><span></span></div></td>
+											<td class="text"></td>
+											<td style="padding: 0px;"><div class="AttachmentIcon"><span></span></div></td>
+											<td style="padding: 0px; border-right: 1px solid white;"></td>
+											<td class="text"></td>
+											<td style="padding: 0px;"></td>
+											<td class="text"></td>
+											<td class="text"></td>
+											<td style="padding: 0px;" class="textBold"><div class="HighPriority">!</div></td>
+					  		    </tr>
+              	   </tbody>
+								</table>
+							</div>
+						</div>
+						<div class="ResizeReadingPane"><span></span></div>
+<!--  Start Mail Reading Pane -->
+						<div class="ReadingPane">
+							<div class="ReadingPaneBar">
+								<div class="Subject">Subject:Chao anh</div>
+								<div class="MaximizeReadingPane" title="Maximize Reading Pane"><span></span></div>
+								<div style="clear:both;"><span></span></div>
+							</div>
+							<div class="ReadingPaneDetails">
+<!--  Start DecoratorBox ViewBoxStyle -->
+								<div class="DecoratorBox">
+									<div class="ViewBoxStyle">
+										<div class="TopLeftViewBoxStyle">
+											<div class="TopRightViewBoxStyle">
+												<div class="TopCenterViewBoxStyle"><span></span></div>										
+											</div>
+										</div>
+										<div class="MiddleLeftViewBoxStyle">
+											<div class="MiddleRightViewBoxStyle">
+												<div class="MiddleCenterViewBoxStyle">
+													<div class="MessageHeader">
+														<div class="MessageCheck">
+															<div><input type="checkbox" class="CheckBox" value="4"/></div>
+															<div class="UnStarredIcon" title="Add star for this message"><span></span></div>
+															<div style="clear: left;"><span></span></div>
+														</div>
+														<div class="MessageAddress">
+															<div class="FieldContainer">
+																<div class="Title">From:</div>
+																<div class="LinkAddress"><span>Brice Revenant</span>(brice.revenant@gmail.com)</div>
+																<div style="clear: left;"><span></span></div>
+															</div>
+															<div class="FieldContainer">
+																<div class="Title">Reply-to:</div>
+																<div class="LinkAddress">brice.revenant@exoplatform.com</div>
+																<div style="clear: left;"><span></span></div>
+															</div>
+															<div class="FieldContainer">
+																<div class="Title">To:</div>
+																<div class="LinkAddress"><span>Phuong</span> (phuong.pham@exoplatform.com)</div>
+																<div style="clear: left;"><span></span></div>
+															</div>
+															<div class="FieldContainer">
+																<div class="Title">Date & time:</div>
+																<div class="Address">06/30/2007, 12:40 am</div>
+																<div style="clear: left;"><span></span></div>
+															</div>
+															<div class="FieldContainer">
+																<div class="Title">Supject:</div>
+																<div class="Address"><span>Chao anh</span></div>
+																<div style="clear: left;"><span></span></div>
+															</div>
+															<div class="FieldContainer">
+																<div class="Title">Tag:</div>
+																<div class="TagIcon"><span></span></div>
+																<div class="Address">Company</div>
+																<div style="clear: left;"><span></span></div>
+															</div>
+														</div>
+														<div class="MessageActions" >
+															<div class="DownArrow1Icon"><span></span></div>
+															<div class="ShowHideTitle">Hide deails</div>
+															<div class="MonthDate">June 26</div>
+															<div class="Actions" title="Actions on this message"><span></span></div>
+															<div style="clear: both;"><span></span></div>
+														</div>
+														<div style="clear: both;"><span></span></div>
+													</div>
+													<div class="MessageDetails">
+														Hi Phuong,<p>
+ 
+So I learnt that you are currently sick. I wish you will recover ASAP. I'm not sure if you was able to be at the university for your lessons. Probably next week when you feel better.
+Tomorrow morning, we'll show the prototype to M6 with Benjamin. We'll think about you, you really did a great job for the UI. I'm sure it will help to succeed.</p>
+													</div>											
+												</div>										
+											</div>
+										</div>
+										<div class="BottomLeftViewBoxStyle">
+											<div class="BottomRightViewBoxStyle">
+												<div class="BottomCenterViewBoxStyle"><span></span></div>										
+											</div>
+										</div>
+									</div>
+								</div>
+<!--  End DecoratorBox ViewBoxStyle -->
+							</div>
+						</div>
+<!--  End Mail Reading Pane -->
+					</div>
+					<div style="clear:left;"><span></span></div>
+				</div>
+				
+			</div>
+
+    </div>
+  </div>
+</div>
