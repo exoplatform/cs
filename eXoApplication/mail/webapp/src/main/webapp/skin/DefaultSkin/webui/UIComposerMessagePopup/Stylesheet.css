@@ -10,7 +10,7 @@
 }
 
 .UIMessageCompose .MailListActionsbar a:hover {
-	background: url('DefaultSkin/background/ControlButtonBG1x26.gif') repeat-x ;
+	background: url('background/ControlButtonBG1x26.gif') repeat-x ;
 	color: #126ca5; border: 1px solid #cbcbcb;
 	height: 24px;
 }
@@ -32,27 +32,27 @@
 }
 
 .UIMessageCompose .MailListActionsbar .ControlButton .SendMailIcon {
-	background: url('DefaultSkin/icons/24x24/SendMail.gif') no-repeat;
+	background: url('icons/24x24/SendMail.gif') no-repeat;
 }
 
 .UIMessageCompose .MailListActionsbar .ControlButton .SaveAsADraftIcon {
-	background: url('DefaultSkin/icons/24x24/SaveAsADraft.gif') no-repeat;
+	background: url('icons/24x24/SaveAsADraft.gif') no-repeat;
 }
 
 .UIMessageCompose .MailListActionsbar .ControlButton .DiscardIcon {
-	background: url('DefaultSkin/icons/24x24/Discard.gif') no-repeat;
+	background: url('icons/24x24/Discard.gif') no-repeat;
 }
 
 .UIMessageCompose .MailListActionsbar .ControlButton .AttachFileIcon {
-	background: url('DefaultSkin/icons/24x24/AttachFiles.gif') no-repeat;
+	background: url('icons/24x24/AttachFiles.gif') no-repeat;
 }
 
 .UIMessageCompose .MailListActionsbar .ControlButton .PriorityIcon {
-	background: url('DefaultSkin/icons/24x24/MessagePriority.gif') no-repeat left;
+	background: url('icons/24x24/MessagePriority.gif') no-repeat left;
 }
 
 .UIMessageCompose .MailListActionsbar .ControlButton .EditorOptionsIcon {
-	background: url('DefaultSkin/icons/24x24/EditorOptions.gif') no-repeat left;
+	background: url('icons/24x24/EditorOptions.gif') no-repeat left;
 }
 
 .UIMessageCompose .MailListActionsbar .ControlButton .DownArrow1Icon {
@@ -99,7 +99,7 @@
 
 .UIMessageCompose .MessageAddress .ZipFileIcon {
 	float: left;
-	background: url('DefaultSkin/icons/16x16/ZipFile.gif') no-repeat left;
+	background: url('icons/16x16/ZipFile.gif') no-repeat left;
 	line-height: 16px; 
 	padding-left: 20px;
 	width: auto;

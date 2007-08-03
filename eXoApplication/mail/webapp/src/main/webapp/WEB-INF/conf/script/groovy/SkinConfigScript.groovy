@@ -1,5 +1,5 @@
 SkinService.addSkin(
     "mail/MailPortlet",
     "Default",
-    "/mail/skin/webui/component/DefaultStylesheet.css"
+    "/mail/skin/DefaultSkin/webui/Stylesheet.css"
 ) ;

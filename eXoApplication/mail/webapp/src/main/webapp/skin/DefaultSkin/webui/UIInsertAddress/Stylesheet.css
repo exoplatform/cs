@@ -14,7 +14,7 @@
 }
 
 .UIInsertAddress .UIGrid th {
-	background: url('DefaultSkin/background/ThGridTitle1x20.gif') repeat-x;
+	background: url('background/ThGridTitle1x20.gif') repeat-x;
 	line-height: 17px; height: 18px;
 	text-align: left;
 	padding: 0px 5px;
@@ -52,7 +52,7 @@
 }
 
 .UIInsertAddress .UISearchForm .SearchIcon {
-  background: url('DefaultSkin/icons/SearchIcon.gif') no-repeat center;
+  background: url('icons/SearchIcon.gif') no-repeat center;
   float: left;
   height: 20px; width: 24px;
 }

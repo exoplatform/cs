@@ -14,7 +14,7 @@
 }
 
 .UIReadMessage .MailControlBar a:hover {
-	background: url('DefaultSkin/background/ControlButtonBG1x26.gif') repeat-x ;
+	background: url('background/ControlButtonBG1x26.gif') repeat-x ;
 	color: #126ca5; border: 1px solid #cbcbcb;
 	height: 24px;
 }

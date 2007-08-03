@@ -1,0 +1,94 @@
+
+.ReplyIcon {
+	background: url('icons/ReplyIcon.gif') no-repeat;
+}
+
+.ReplyAllIcon {
+	background: url('icons/ReplyAllIcon.gif') no-repeat;
+}
+
+.ForwardIcon {
+	background: url('icons/ForwardIcon.gif') no-repeat;
+}
+
+.PrintIcon {
+	background: url('icons/PrintIcon.gif') no-repeat;
+	width: 2px; height: 26px;
+}
+
+.DeleteIcon {
+	background: url('icons/Dustbin.gif') no-repeat;
+	width: 2px; height: 26px;
+}
+
+.Actions {
+	background: url(icons/ThisMessageAction.gif) no-repeat bottom;
+	cursor: pointer;
+	float: left;
+	width: 24px; height: 22px;
+}
+
+.CheckMailIcon {
+	background: url('icons/CheckMailIcon.gif') no-repeat ;
+}
+
+.InboxIcon {
+	background: url('icons/InboxIcon.gif') no-repeat left center ;
+}
+
+.DraftsIcon {
+	background: url('icons/DraftsIcon.gif') no-repeat left center ;
+}
+
+.SentIcon {
+	background: url('icons/SentIcon.gif') no-repeat left center ;
+}
+
+.SpamIcon {
+	background: url('icons/SpamIcon.gif') no-repeat left center ;
+}
+
+.TrashIcon {
+	background: url('icons/TrashIcon.gif') no-repeat left center ;
+}
+
+.CloseFolder {
+	background: url('icons/DefaultIcon.gif') no-repeat center;
+}
+
+.OpenFolder {
+	background: url('icons/OpenFolder.gif') no-repeat center;
+}
+
+.ComposeIcon {
+	background: url('icons/ComposeIcon.gif') no-repeat;
+}
+
+.ContactsIcon {
+	background: url('icons/ContactsIcon.gif') no-repeat;
+}
+
+.RssIcon {
+	background: url('icons/RssIcon.gif') no-repeat;
+}
+
+.CustomViewIcon {
+	background: url('icons/CustomViewIcon.gif') no-repeat;
+	float: left;
+	width: 2px;  height: 25px;
+}
+
+.SettingsIcon {
+	background: url('icons/SettingsIcon.gif') no-repeat;
+	width: 2px;  height: 26px;
+}
+
+.AddEventIcon {
+	background: url('icons/AddEvent.gif') no-repeat left;
+}
+
+.MaximizeAllViewBoxStyle {
+	background: url(icons/MaximizeAllViewBoxStyle.gif) no-repeat;
+	width: 24px; height: 20px;
+	cursor: pointer;
+}

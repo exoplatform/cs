@@ -17,7 +17,7 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
  */
 @ComponentConfig(
    lifecycle = UIApplicationLifecycle.class,
-   template = "app:/templates/mail/webui/component/UIMailPortlet.jstmpl"
+   template = "app:/templates/mail/webui/UIMailPortlet.jstmpl"
 )
 public class UIMailPortlet extends UIPortletApplication {
   public UIMailPortlet() throws Exception {

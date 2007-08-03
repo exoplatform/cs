@@ -19,7 +19,7 @@
 }
 
 .UIAccountSetting .AccountSettingCategory .CategoryControlBar {
-	background: url('DefaultSkin/background/BgTitleTag1x20.gif') repeat-x ;
+	background: url('background/BgTitleTag1x20.gif') repeat-x ;
 	height: 20px; line-height: 20px;
 	padding: 0px 10px 0px 8px;
 }
@@ -31,7 +31,7 @@
 }
 
 .UIAccountSetting .AccountSettingCategory .CategoryControlBar .DeleteIcon {
-	background: url('DefaultSkin/icons/DeleteIcon.gif') no-repeat center ;
+	background: url('icons/DeleteIcon.gif') no-repeat center ;
 	float: right;
 	height: 18px; width: 20px;
 	cursor: pointer;
@@ -39,7 +39,7 @@
 }
 
 .UIAccountSetting .AccountSettingCategory .CategoryControlBar .AddIcon {
-	background: url('DefaultSkin/icons/AddIcon.gif') no-repeat center ;
+	background: url('icons/AddIcon.gif') no-repeat center ;
 	float: right;
 	height: 18px; width: 20px;
 	cursor: pointer;
@@ -61,7 +61,7 @@
 	padding: 0px 27px;
 	margin: 2px 0px;
 	line-height: 22px;
-	background: #cbdaf4 url('DefaultSkin/icons/SelectedIcon.gif') no-repeat 9px center ;
+	background: #cbdaf4 url('icons/SelectedIcon.gif') no-repeat 9px center ;
 }
 /************************************AccountSettingContainer*************************************/
 
@@ -70,7 +70,7 @@
 }
 
 .UIAccountSetting .UIHorizontalTabs {
-	background: url('DefaultSkin/background/HorizontalTabBackground.gif') repeat-x bottom;
+	background: url('background/HorizontalTabBackground.gif') repeat-x bottom;
 }
 
 .UIAccountSetting .UIHorizontalTabs .NormalTabStyle .SelectedTab {
@@ -126,7 +126,7 @@
 }
 
 .UIAccountSetting .ServerSettings .UIFormGrid .DefaultIcon {
-	background: url('DefaultSkin/icons/DefaultIcon.gif') no-repeat left center;
+	background: url('icons/DefaultIcon.gif') no-repeat left center;
 	padding-left: 24px; 
 }
 

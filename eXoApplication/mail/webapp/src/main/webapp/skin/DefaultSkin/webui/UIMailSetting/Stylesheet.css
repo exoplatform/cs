@@ -24,12 +24,12 @@
 }
 
 .UIMailSetting .UITabSelector .FlatTabStyle .ShortcutKeyIcon {
-	background: url('DefaultSkin/icons/ShortcutkeyIcon.gif') no-repeat center;
+	background: url('icons/ShortcutkeyIcon.gif') no-repeat center;
 	height: 27px; width: 24px;
 }
 
 .UIMailSetting .UITabSelector .FlatTabStyle .AccountIcon {
-	background: url('DefaultSkin/icons/AccountIcon.gif') no-repeat center;
+	background: url('icons/AccountIcon.gif') no-repeat center;
 	height: 25px; width: 24px;
 }
 
