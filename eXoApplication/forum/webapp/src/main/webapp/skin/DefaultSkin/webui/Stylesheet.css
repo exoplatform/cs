@@ -1,24 +1,32 @@
-@import url("UIForumPortlet/Stylesheet.css") ;
-@import url("UICategory/Stylesheet.css") ;
-@import url("UIThreadsInForum/Stylesheet.css") ;
+@import url('skinIcons/16x16/icons/Stylesheet.css') ;
+@import url('skinIcons/24x24/icons/Stylesheet.css') ;
+@import url('UIForumPortlet/Stylesheet.css') ;
+@import url('UICategory/Stylesheet.css') ;
+@import url('UIThreadsInForum/Stylesheet.css') ;
+@import url('UIPostsInThread/Stylesheet.css') ;
 
 /**************************** UIActionForum *********************************/
+.UIActionForum .ActionButton {
+	margin: 0px 3px;
+	float: left;
+}
+ 
 .UIActionForum .ActionButton .NormalStyle {
 }
-
+ 
 .UIActionForum .ActionButton .NormalStyle .ButtonLeft {
-  background: url('background/buttoms/LeftNormalStyleButton7x20.gif') no-repeat left top;
+  background: url('background/buttons/LeftNormalStyleButton7x22.gif') no-repeat left top;
   padding: 0px 0px 0px 7px;
 }
 
 .UIActionForum .ActionButton .NormalStyle .ButtonRight {
-  background: url('background/buttoms/RightNormalStyleButton7x20.gif') no-repeat right top;
+  background: url('background/buttons/RightNormalStyleButton7x22.gif') no-repeat right top;
   padding: 0px 7px 0px 0px ;
 }
 
 .UIActionForum .ActionButton .NormalStyle .ButtonMiddle {
-  line-height: 20px;
-	background: url('background/buttoms/MiddleNormalStyleButton1x20.gif') repeat-x top;
+  line-height: 22px;
+	background: url('background/buttons/MiddleNormalStyleButton1x22.gif') repeat-x top;
 }
 
 .UIActionForum .ActionButton .NormalStyle .IconButtom {
@@ -27,7 +35,7 @@
 }
 
 .UIActionForum .ActionButton .NormalStyle .LabelIcon {
-	line-height: 20px;
+	line-height: 22px;
 }
 
 /**************************** ForumToolBar *********************************/
@@ -37,17 +45,17 @@
 }
 
 .ForumToolbar .LeftBar {
-	background: url('background/ForumToolBarLeft3x26.gif') no-repeat left ;
+	background: url('background/ForumToolBarLeft3x26.gif') no-repeat left top;
 	padding-left: 3px;
 }
 
 .ForumToolbar .RightBar {
-	background: url('background/ForumToolBarRight3x26.gif') no-repeat right ;
+	background: url('background/ForumToolBarRight3x26.gif') no-repeat right top;
 	padding-right: 3px;
 }
 
 .ForumToolbar .CenterBar {
-	background: url('background/ForumToolBarCenter1x26.gif') repeat-x ;
+	background: url('background/ForumToolBarCenter1x26.gif') repeat-x top;
 	height: 26px;
 }
 
