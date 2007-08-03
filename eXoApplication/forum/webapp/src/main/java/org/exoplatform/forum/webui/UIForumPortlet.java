@@ -19,6 +19,10 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 )
 public class UIForumPortlet extends UIPortletApplication {
   public UIForumPortlet() throws Exception {
-    
+    //addChild(UIBannerContainer.class, null, null) ;
+    //addChild(UIBreadcumbs.class, null, null) ;
+    //addChild(UICategories.class, null, null) ;
+    //addChild(UIForumInfo.class, null, null) ;
+    //addChild(UIForumContainer.class, null, null).setRendered(false) ;
   }
 }
