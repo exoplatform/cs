@@ -1,5 +1,5 @@
 .UIThreadsInForum {
-	border: solid 1px red;
+	padding: 10px;
 	height: 400px;
 }
 
@@ -9,4 +9,37 @@
 
 .UIThreadsInForum .AddTheradIcon {
 	background: url('icons/16x16/AddNewThreadIcon.gif') left center;
+}
+
+.UIThreadsInForum .ButtomAndPageIteratorContainer .UIPageIterator {
+	width: 60%;
+	float: right;
+}
+
+.UIThreadsInForum .ForumToolbar .ToolIcon {
+	float: right;
+	line-height: 16px; 
+	padding-left: 18px;
+	margin: 1px 5px 0px 0px;
+	cursor: pointer;
+}
+
+.UIThreadsInForum .ForumToolbar .ModeratedIcon {
+	float: right;
+	line-height: 16px; 
+	padding-left: 18px;
+	margin: 1px 5px 0px 0px;
+	cursor: pointer;
+}
+
+.UIThreadsInForum .ForumToolbar .SeachIcon {
+	float: right;
+	line-height: 16px; 
+	padding-left: 18px;
+	margin: 1px 5px 0px 0px;
+	cursor: pointer;
+}
+
+.UIThreadsInForum .ForumToolbar .ToolbarActionsContainer {
+	width: 300px;
 }

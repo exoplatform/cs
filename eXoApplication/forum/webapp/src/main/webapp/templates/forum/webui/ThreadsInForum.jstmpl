@@ -13,23 +13,259 @@
 		  	</div>
 		  </div>
 		</div>
-		<div class="UIPageIterator" style="margin-left: 110px; border: solid 1px red; line-height: 20px;">
-		UIPageIterator
+		
+		<div class="UIPageIterator">
+			<div class="PageIteratorContainer">
+			  <div class="RightPageIteratorBlock">
+			    <a title="Back 10 pages" class="Icon DisableLastTopPageIcon"/>        
+			    <a title="Previous Page" class="Icon DisableLastPageIcon"><span/></a>
+			  <div class="Number">
+			    <a class="PageSelected" href="#">1</a>
+			  </div>
+			    <a title="Next Page" class="Icon DisableNextPageIcon"><span/></a>
+			    <a title="Next 10 pages" class="Icon DisableNextTopPageIcon"><span/></a>
+			    <div style="clear: left;"><span/></div>
+			  </div>
+			  <div class="LeftPageIteratorBlock">
+			  	<div class="TotalPages">Total pages:</div>
+			  	<div class="PagesTotalNumber">1</div>
+			  	<div style="clear: left;"><span/></div>
+			  </div>
+		  </div>
+		  <div style="clear: right;"><span/></div>
 		</div>
-		<div style="clear: left;"><span></span></div>
+
+		<div style="clear: both;"><span></span></div>
 	</div>
 	<div class="ThreadsInForumContainer">
-		<div class="ForumToolbar">
-			<div class="ForumToolBar">
-		  <div class="BarLeft">
-		  	<div class="BarRight">
-		  		<div class="BarCenter">
-		  		  ForumToolBar
-		  		</div>
+		<div class="ForumCategory">
+		  <div class="ForumToolbar">
+			  <div class="LeftBar">
+			  	<div class="RightBar">
+			  		<div class="CenterBar">
+			  			<div class="Title"><span style="font-weight: normal;">Thread in forum: </span>eXo vietnam</div>
+				  		<div class="ToolbarActionsContainer">
+								<a class="ModeratedIcon">Moderation</a>
+			  				<div class="SeparatorLine"><span></span></div>
+								<a class="SeachIcon">Search forum</a>
+								<div class="SeparatorLine"><span></span></div>
+								<a class="ToolIcon">Forum tool</a>
+								<div style="clear: both;"><span></span></div>
+							</div>
+							<div style="clear: both;"><span></span></div>
+			  		</div>
+			  	</div>
+			  </div>
+		  </div>
+		  <div class="ContentContainer">
+			  <div class="ForumList">
+			  	<table cellspacing="0" borderspacing="0" id="" class="UIGrid">
+			  		<thead>
+			  			<tr>
+			      		<th style="width: 40px;"></th>
+			      		<th style="width: 40px;"></th>
+				      	<th>Forums</th>
+				      	<th style="width: 40px;"></th>
+				      	<th style="width: 40px;"></th>
+				      	<th style="width: 40px;"></th>
+				      	<th style="width: 40px;"></th>
+				      	<th style="width: 30%;">Last posts</th>
+				      	<th style="width: 50px;">Threads</th>
+				      	<th style="width: 50px;">Posts</th>
+				 	      <th style="width: 17%;">Moderator</th>
+				      </tr>
+				    </thead>
+				    <tbody>
+			  			<tr>
+								<td style="padding: 0px;"><div class="ForumStatusIcon NoNewPostIcon" title="Forum Contains No New Post"><span></span></div></td>
+								<td style="padding: 0px;"><div class="ForumStatusIcon NoNewPostIcon" title="Forum Contains No New Post"><span></span></div></td>
+								<td >
+									<a href="#" class="LastPostTitle Worker1"><span style="font-weight: normal;">Sticky: </span>Improve Portal 2.0 ( 1  2  3  4  5 ... Last page )</span></a>
+									<div class="ForumDescription">eXo news, event, release and update</div>
+								</td>
+								<td style="padding: 0px;"><div class="ForumStatusIcon NoNewPostIcon" title="Forum Contains No New Post"><span></span></div></td>
+								<td class="Tdbox">150</td>
+								<td style="padding: 0px;"><div class="ForumStatusIcon NoNewPostIcon" title="Forum Contains No New Post"><span></span></div></td>
+								<td style="padding: 0px;"><div class="ForumStatusIcon NoNewPostIcon" title="Forum Contains No New Post"><span></span></div></td>
+							 	<td >
+							 		<a href="#" class="LastPostTitle Worker1">Release portal 2.0 beta</a>
+									<div class="LastPostInfos">by <a href="#">benjamin.mestrallet</a><span class="DateTime">(07/20/2007, 10:20 AM)</span></div>
+								</td>
+							 	<td class="Tdbox">150</td>
+								<td class="Tdbox">1450</td>
+								<td >
+									<div class="EmoticonsIcon BigGrinIcon"><span></span></div>
+									<a href="#" class="Moderator">benjamin.mestrallet</a>
+									<div style="clear: left;"><span></span></div>
+								</td>
+			   			</tr>
+							<tr class="OddRow">
+								<td style="padding: 0px;"><div class="ForumStatusIcon NoNewPostIcon" title="Forum Contains No New Post"><span></span></div></td>
+								<td style="padding: 0px;"><div class="ForumStatusIcon NoNewPostIcon" title="Forum Contains No New Post"><span></span></div></td>
+								<td >
+									<a href="#" class="LastPostTitle Worker1">Annoucements<span class="ForumQuantity">(5 viewing)</span></a>
+									<div class="ForumDescription">eXo news, event, release and update</div>
+								</td>
+								<td style="padding: 0px;"><div class="ForumStatusIcon NoNewPostIcon" title="Forum Contains No New Post"><span></span></div></td>
+								<td class="Tdbox">150</td>
+								<td style="padding: 0px;"><div class="ForumStatusIcon NoNewPostIcon" title="Forum Contains No New Post"><span></span></div></td>
+								<td style="padding: 0px;"><div class="ForumStatusIcon NoNewPostIcon" title="Forum Contains No New Post"><span></span></div></td>
+							 	<td >
+							 		<a href="#" class="LastPostTitle Worker1">Release portal 2.0 beta</a>
+									<div class="LastPostInfos">by <a href="#">benjamin.mestrallet</a><span class="DateTime">(07/20/2007, 10:20 AM)</span></div>
+								</td>
+							 	<td class="Tdbox">150</td>
+								<td class="Tdbox">1450</td>
+								<td >
+									<div class="EmoticonsIcon BigGrinIcon"><span></span></div>
+									<a href="#" class="Moderator">benjamin.mestrallet</a>
+									<div style="clear: left;"><span></span></div>
+								</td>
+			   			</tr>
+						  <tr>
+								<td style="padding: 0px;"><div class="ForumStatusIcon NoNewPostIcon" title="Forum Contains No New Post"><span></span></div></td>
+								<td style="padding: 0px;"><div class="ForumStatusIcon NoNewPostIcon" title="Forum Contains No New Post"><span></span></div></td>
+								<td >
+									<a href="#" class="LastPostTitle Worker1">Annoucements<span class="ForumQuantity">(5 viewing)</span></a>
+									<div class="ForumDescription">eXo news, event, release and update</div>
+								</td>
+								<td style="padding: 0px;"><div class="ForumStatusIcon NoNewPostIcon" title="Forum Contains No New Post"><span></span></div></td>
+								<td class="Tdbox">150</td>
+								<td style="padding: 0px;"><div class="ForumStatusIcon NoNewPostIcon" title="Forum Contains No New Post"><span></span></div></td>
+								<td style="padding: 0px;"><div class="ForumStatusIcon NoNewPostIcon" title="Forum Contains No New Post"><span></span></div></td>
+							 	<td >
+							 		<a href="#" class="LastPostTitle Worker1">Release portal 2.0 beta</a>
+									<div class="LastPostInfos">by <a href="#">benjamin.mestrallet</a><span class="DateTime">(07/20/2007, 10:20 AM)</span></div>
+								</td>
+							 	<td class="Tdbox">150</td>
+								<td class="Tdbox">1450</td>
+								<td >
+									<div class="EmoticonsIcon BigGrinIcon"><span></span></div>
+									<a href="#" class="Moderator">benjamin.mestrallet</a>
+									<div style="clear: left;"><span></span></div>
+								</td>
+			   			</tr>
+						  <tr class="OddRow">
+								<td style="padding: 0px;"><div class="ForumStatusIcon NoNewPostIcon" title="Forum Contains No New Post"><span></span></div></td>
+								<td style="padding: 0px;"><div class="ForumStatusIcon NoNewPostIcon" title="Forum Contains No New Post"><span></span></div></td>
+								<td >
+									<a href="#" class="LastPostTitle Worker1">Annoucements<span class="ForumQuantity">(5 viewing)</span></a>
+									<div class="ForumDescription">eXo news, event, release and update</div>
+								</td>
+								<td style="padding: 0px;"><div class="ForumStatusIcon NoNewPostIcon" title="Forum Contains No New Post"><span></span></div></td>
+								<td class="Tdbox">150</td>
+								<td style="padding: 0px;"><div class="ForumStatusIcon NoNewPostIcon" title="Forum Contains No New Post"><span></span></div></td>
+								<td style="padding: 0px;"><div class="ForumStatusIcon NoNewPostIcon" title="Forum Contains No New Post"><span></span></div></td>
+							 	<td >
+							 		<a href="#" class="LastPostTitle Worker1">Release portal 2.0 beta</a>
+									<div class="LastPostInfos">by <a href="#">benjamin.mestrallet</a><span class="DateTime">(07/20/2007, 10:20 AM)</span></div>
+								</td>
+							 	<td class="Tdbox">150</td>
+								<td class="Tdbox">1450</td>
+								<td >
+									<div class="EmoticonsIcon BigGrinIcon"><span></span></div>
+									<a href="#" class="Moderator">benjamin.mestrallet</a>
+									<div style="clear: left;"><span></span></div>
+								</td>
+			   			</tr>
+			   			<tr>
+								<td style="padding: 0px;"><div class="ForumStatusIcon NoNewPostIcon" title="Forum Contains No New Post"><span></span></div></td>
+								<td style="padding: 0px;"><div class="ForumStatusIcon NoNewPostIcon" title="Forum Contains No New Post"><span></span></div></td>
+								<td >
+									<a href="#" class="LastPostTitle Worker1">Annoucements<span class="ForumQuantity">(5 viewing)</span></a>
+									<div class="ForumDescription">eXo news, event, release and update</div>
+								</td>
+								<td style="padding: 0px;"><div class="ForumStatusIcon NoNewPostIcon" title="Forum Contains No New Post"><span></span></div></td>
+								<td class="Tdbox">150</td>
+								<td style="padding: 0px;"><div class="ForumStatusIcon NoNewPostIcon" title="Forum Contains No New Post"><span></span></div></td>
+								<td style="padding: 0px;"><div class="ForumStatusIcon NoNewPostIcon" title="Forum Contains No New Post"><span></span></div></td>
+							 	<td >
+							 		<a href="#" class="LastPostTitle Worker1">Release portal 2.0 beta</a>
+									<div class="LastPostInfos">by <a href="#">benjamin.mestrallet</a><span class="DateTime">(07/20/2007, 10:20 AM)</span></div>
+								</td>
+							 	<td class="Tdbox">150</td>
+								<td class="Tdbox">1450</td>
+								<td >
+									<div class="EmoticonsIcon BigGrinIcon"><span></span></div>
+									<a href="#" class="Moderator">benjamin.mestrallet</a>
+									<div style="clear: left;"><span></span></div>
+								</td>
+			   			</tr>
+			   			<tr class="OddRow">
+								<td style="padding: 0px;"><div class="ForumStatusIcon NoNewPostIcon" title="Forum Contains No New Post"><span></span></div></td>
+								<td style="padding: 0px;"><div class="ForumStatusIcon NoNewPostIcon" title="Forum Contains No New Post"><span></span></div></td>
+								<td >
+									<a href="#" class="LastPostTitle Worker1">Annoucements<span class="ForumQuantity">(5 viewing)</span></a>
+									<div class="ForumDescription">eXo news, event, release and update</div>
+								</td>
+								<td style="padding: 0px;"><div class="ForumStatusIcon NoNewPostIcon" title="Forum Contains No New Post"><span></span></div></td>
+								<td class="Tdbox">150</td>
+								<td style="padding: 0px;"><div class="ForumStatusIcon NoNewPostIcon" title="Forum Contains No New Post"><span></span></div></td>
+								<td style="padding: 0px;"><div class="ForumStatusIcon NoNewPostIcon" title="Forum Contains No New Post"><span></span></div></td>
+							 	<td >
+							 		<a href="#" class="LastPostTitle Worker1">Release portal 2.0 beta</a>
+									<div class="LastPostInfos">by <a href="#">benjamin.mestrallet</a><span class="DateTime">(07/20/2007, 10:20 AM)</span></div>
+								</td>
+							 	<td class="Tdbox">150</td>
+								<td class="Tdbox">1450</td>
+								<td >
+									<div class="EmoticonsIcon BigGrinIcon"><span></span></div>
+									<a href="#" class="Moderator">benjamin.mestrallet</a>
+									<div style="clear: left;"><span></span></div>
+								</td>
+			   			</tr>
+			   			<tr>
+								<td style="padding: 0px;"><div class="ForumStatusIcon NoNewPostIcon" title="Forum Contains No New Post"><span></span></div></td>
+								<td style="padding: 0px;"><div class="ForumStatusIcon NoNewPostIcon" title="Forum Contains No New Post"><span></span></div></td>
+								<td >
+									<a href="#" class="LastPostTitle Worker1">Annoucements<span class="ForumQuantity">(5 viewing)</span></a>
+									<div class="ForumDescription">eXo news, event, release and update</div>
+								</td>
+								<td style="padding: 0px;"><div class="ForumStatusIcon NoNewPostIcon" title="Forum Contains No New Post"><span></span></div></td>
+								<td class="Tdbox">150</td>
+								<td style="padding: 0px;"><div class="ForumStatusIcon NoNewPostIcon" title="Forum Contains No New Post"><span></span></div></td>
+								<td style="padding: 0px;"><div class="ForumStatusIcon NoNewPostIcon" title="Forum Contains No New Post"><span></span></div></td>
+							 	<td >
+							 		<a href="#" class="LastPostTitle Worker1">Release portal 2.0 beta</a>
+									<div class="LastPostInfos">by <a href="#">benjamin.mestrallet</a><span class="DateTime">(07/20/2007, 10:20 AM)</span></div>
+								</td>
+							 	<td class="Tdbox">150</td>
+								<td class="Tdbox">1450</td>
+								<td >
+									<div class="EmoticonsIcon BigGrinIcon"><span></span></div>
+									<a href="#" class="Moderator">benjamin.mestrallet</a>
+									<div style="clear: left;"><span></span></div>
+								</td>
+			   			</tr>
+			   			<tr class="OddRow">
+								<td style="padding: 0px;"><div class="ForumStatusIcon NoNewPostIcon" title="Forum Contains No New Post"><span></span></div></td>
+								<td style="padding: 0px;"><div class="ForumStatusIcon NoNewPostIcon" title="Forum Contains No New Post"><span></span></div></td>
+								<td >
+									<a href="#" class="LastPostTitle Worker1">Annoucements<span class="ForumQuantity">(5 viewing)</span></a>
+									<div class="ForumDescription">eXo news, event, release and update</div>
+								</td>
+								<td style="padding: 0px;"><div class="ForumStatusIcon NoNewPostIcon" title="Forum Contains No New Post"><span></span></div></td>
+								<td class="Tdbox">150</td>
+								<td style="padding: 0px;"><div class="ForumStatusIcon NoNewPostIcon" title="Forum Contains No New Post"><span></span></div></td>
+								<td style="padding: 0px;"><div class="ForumStatusIcon NoNewPostIcon" title="Forum Contains No New Post"><span></span></div></td>
+							 	<td >
+							 		<a href="#" class="LastPostTitle Worker1">Release portal 2.0 beta</a>
+									<div class="LastPostInfos">by <a href="#">benjamin.mestrallet</a><span class="DateTime">(07/20/2007, 10:20 AM)</span></div>
+								</td>
+							 	<td class="Tdbox">150</td>
+								<td class="Tdbox">1450</td>
+								<td >
+									<div class="EmoticonsIcon BigGrinIcon"><span></span></div>
+									<a href="#" class="Moderator">benjamin.mestrallet</a>
+									<div style="clear: left;"><span></span></div>
+								</td>
+			   			</tr>
+			      </tbody>
+				  </table>							
+			  	
 		  	</div>
 		  </div>
 	  </div>
-		</div>
 		<table class="UIGrid" cellspacing="0" borderspacing="0">
 			<thead>
 				<th>
@@ -41,3 +277,14 @@
 		</table>
 	</div>
 </div>
+
+
+
+
+
+
+
+
+
+
+

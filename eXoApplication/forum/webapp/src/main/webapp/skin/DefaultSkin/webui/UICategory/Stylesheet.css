@@ -3,122 +3,6 @@
 	padding: 10px;
 }
 
-.UIForumWorkingWorkspace .ForumToolbar a {
-	color: black;
-}
-
-.UIForumWorkingWorkspace .ForumToolbar a:hover {
-	color: #126ca5;
-}
-
-.UIForumWorkingWorkspace .ForumToolbar {
-	height: 26px;
-	margin: 5px 0px 0px 0px;
-}
-
-.UIForumWorkingWorkspace .ForumToolbar .Title {
-	float: left;
-	font-weight: bold;
-	line-height: 24px;
-	margin: 0px 0px 0px 8px;
-}
-
-.UIForumWorkingWorkspace .ForumToolbar .CollapseButton {
-	background: url('icons/16x16/Collapser.gif') no-repeat ;
-	float: right;
-	width: 16px; height: 16px; 
-	margin: 5px 5px 0px 0px;
-	cursor: pointer;
-	
-}
-
-.UIForumWorkingWorkspace .ForumToolbar .ExpandButton {
-	background: url('icons/16x16/Expand.gif') no-repeat ;
-	float: right;
-	width: 16px; height: 16px; 
-	margin: 5px 5px 0px 0px;
-	cursor: pointer;
-	
-}
-
-.UIForumWorkingWorkspace .ForumToolbar .ToolbarActionsContainer {
-	float: right;
-	width: 150px;
-	margin: 5px 0px 0px 0px;
-}
-
-.UIForumWorkingWorkspace .ForumToolbar .ToolbarActionsContainer .ManageCategoryButton {
-	background: url('icons/16x16/ManageCategory.gif') no-repeat ;
-	float: right;
-	cursor: pointer;
-	padding-left: 20px;
-	line-height: 16px;
-}
-
-.UIForumWorkingWorkspace .ForumToolbar .ToolbarActionsContainer .SeparatorLine {
-	background: url('background/SeparatorLine2x19.gif') no-repeat ;
-	float: right;
-	width: 2px; height: 19px;
-	margin: 0px 5px 0px 5px;
-}
-/*=============================Forum list====================*/
-
-.UIForumWorkingWorkspace .ContentContainer .ForumList a {
-	color: #126ca5;
-}
-
-.UIForumWorkingWorkspace .ContentContainer .ForumStatsList a {
-	color: #126ca5;
-}
-
-.UIForumWorkingWorkspace .ContentContainer .UIGrid th {
-	background: url(background/ForumTitleBar1x19.gif) repeat-x;
-	border: 1px solid #d2d4dc;
-}
-
-.UIForumWorkingWorkspace .ContentContainer .UIGrid td {
-	padding: 5px 0px 0px 5px;
-}
-
-.UIForumWorkingWorkspace .ContentContainer .ForumStatusIcon {
-	width: 22px; height: 22px;
-	margin: 9px 0px 0px 10px;
-}
-
-.UIForumWorkingWorkspace .ContentContainer .ForumTitle {
-	font-weight: bold;
-}
-
-.UIForumWorkingWorkspace .ContentContainer .LastPostTitle {
-	font-weight: bold;
-	color: #126ca5;
-	cursor: pointer;
-	padding-left: 18px;
-}
-
-.UIForumWorkingWorkspace .ContentContainer .ForumQuantity {
-	font-weight: normal;
-	color: black;
-	cursor: normal;
-}
-
-.UIForumWorkingWorkspace .ContentContainer .Moderator {
-	float: left;
-	font-weight: bold;
-	line-height: 30px;
-}
-
-.UIForumWorkingWorkspace .ContentContainer .EmoticonsIcon {
-	float: left;
-	width: 16px; height: 16px;
-	margin: 8px 4px 0px 4px;
-}
-
-.UIForumWorkingWorkspace .ContentContainer .ChartIcon {
-	background: url('icons/24x24/ChartIcon.gif') no-repeat ;
-	width: 24px; height: 22px;
-	margin: 0px 4px;
-}
 
 .UIForumWorkingWorkspace .ContentContainer .UserIcon {
 	background: url('icons/24x24/UserIcon.gif') no-repeat ;
@@ -126,15 +10,11 @@
 	margin: 0px 4px;
 }
 
-.UIForumWorkingWorkspace .ContentContainer .UIGrid .Tdbox  {
-	padding: 13px 0px 0px 7px;
+
+.UIForumWorkingWorkspace .ContentContainer .ChartIcon {
+	background: url('icons/24x24/ChartIcon.gif') no-repeat ;
+	width: 24px; height: 22px;
+	margin: 0px 4px;
 }
 
-.UIForumWorkingWorkspace .ContentContainer .ForumDescription {
-	line-height: 22px;
-}
-
-.UIForumWorkingWorkspace .ContentContainer .LastPostInfos {
-	line-height: 22px;
-}
 

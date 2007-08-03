@@ -51,6 +51,128 @@
 	height: 26px;
 }
 
+.ForumToolbar a {
+	color: black;
+}
+
+.ForumToolbar a:hover {
+	color: #126ca5;
+}
+
+.ForumToolbar .Title {
+	float: left;
+	font-weight: bold;
+	line-height: 24px;
+	margin: 0px 0px 0px 8px;
+}
+
+.ForumToolbar .CollapseButton {
+	background: url('skinIcons/16x16/icons/Collapser.gif') no-repeat ;
+	float: right;
+	width: 16px; height: 16px; 
+	margin: 5px 5px 0px 0px;
+	cursor: pointer;
+	
+}
+
+.ForumToolbar .ExpandButton {
+	background: url('skinIcons/16x16/icons/Expand.gif') no-repeat ;
+	float: right;
+	width: 16px; height: 16px; 
+	margin: 5px 5px 0px 0px;
+	cursor: pointer;
+	
+}
+
+.ForumToolbar .ToolbarActionsContainer {
+	float: right;
+	width: 150px;
+	margin: 5px 0px 0px 0px;
+}
+
+.ForumToolbar .ToolbarActionsContainer .ManageCategoryButton {
+	float: right;
+	cursor: pointer;
+	padding-left: 20px;
+	line-height: 16px;
+}
+
+.ForumToolbar .ToolbarActionsContainer .SeparatorLine {
+	background: url('background/SeparatorLine2x19.gif') no-repeat ;
+	float: right;
+	width: 2px; height: 19px;
+	margin: 0px 5px 0px 5px;
+}
+
+/*=============================Content Container====================*/
+
+.ContentContainer  {
+	padding-left: 1px;
+}
+
+.ContentContainer .ForumList a {
+	color: #126ca5;
+}
+
+.ContentContainer .ForumStatsList a {
+	color: #126ca5;
+}
+
+.ContentContainer .UIGrid th {
+	background: url(background/ForumTitleBar1x19.gif) repeat-x;
+	border: 1px solid #d2d4dc;
+}
+
+.ContentContainer .UIGrid td {
+	padding: 5px 0px 0px 5px;
+}
+
+.ContentContainer .ForumStatusIcon {
+	width: 22px; height: 22px;
+	margin: 9px 0px 0px 10px;
+}
+
+.ContentContainer .ForumTitle {
+	font-weight: bold;
+}
+
+.ContentContainer .LastPostTitle {
+	font-weight: bold;
+	color: #126ca5;
+	cursor: pointer;
+	padding-left: 18px;
+}
+
+.ContentContainer .ForumQuantity {
+	font-weight: normal;
+	color: black;
+	cursor: normal;
+}
+
+.ContentContainer .Moderator {
+	float: left;
+	font-weight: bold;
+	line-height: 30px;
+}
+
+.ContentContainer .EmoticonsIcon {
+	float: left;
+	width: 16px; height: 16px;
+	margin: 8px 4px 0px 4px;
+}
+
+.ContentContainer .UIGrid .Tdbox  {
+	padding: 13px 0px 0px 7px;
+}
+
+.ContentContainer .ForumDescription {
+	line-height: 22px;
+}
+
+.ContentContainer .LastPostInfos {
+	line-height: 22px;
+}
+
 /*========================Icons=====================================*/
 
 .BusyIcon {
@@ -62,7 +184,7 @@
 }
 
 .OfflineIcon {
-	background: url('skinIcons/16x16/icons/OfflineIcon.gif') no-repeat ;
+	background: url('skinIcons/16x16/icons/OffLineIcon.gif') no-repeat ;
 }
 
 .OnlineIcon {
@@ -80,3 +202,20 @@
 .NoNewPostIcon {
 	background: url('skinIcons/24x24/icons/NoNewPostIcon.gif') no-repeat ;
 }
+
+.ManageCategoryButton {
+	background: url('skinIcons/16x16/icons/ManageCategory.gif') no-repeat ;
+}
+
+.ToolIcon {
+	background: url('skinIcons/16x16/icons/ToolIcon.gif') no-repeat ;
+}
+
+.ModeratedIcon {
+	background: url('skinIcons/16x16/icons/ModeratedIcon.gif') no-repeat ;
+}
+
+.SeachIcon {
+	background: url('skinIcons/16x16/icons/SeachIcon.gif') no-repeat ;
+}
+
