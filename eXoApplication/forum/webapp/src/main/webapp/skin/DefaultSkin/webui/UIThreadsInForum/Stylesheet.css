@@ -1,6 +1,5 @@
 .UIThreadsInForum {
 	padding: 10px;
-	height: 400px;
 }
 
 .UIThreadsInForum .UIActionForum {
@@ -16,7 +15,7 @@
 	float: right;
 }
 
-.UIThreadsInForum .ForumToolbar .ToolIcon {
+.UIThreadsInForum .ForumToolbar .StatusIcon {
 	float: right;
 	line-height: 16px; 
 	padding-left: 18px;
@@ -24,22 +23,73 @@
 	cursor: pointer;
 }
 
-.UIThreadsInForum .ForumToolbar .ModeratedIcon {
-	float: right;
-	line-height: 16px; 
-	padding-left: 18px;
-	margin: 1px 5px 0px 0px;
-	cursor: pointer;
-}
-
-.UIThreadsInForum .ForumToolbar .SeachIcon {
-	float: right;
-	line-height: 16px; 
-	padding-left: 18px;
-	margin: 1px 5px 0px 0px;
-	cursor: pointer;
+.UIThreadsInForum .ForumToolbar .DownArrow1Icon {
+	background-position: right;
+	padding-right: 16px;
+	line-height: 16px;
 }
 
 .UIThreadsInForum .ForumToolbar .ToolbarActionsContainer {
 	width: 300px;
 }
+
+.UIThreadsInForum .ContentContainer .Title {
+	color: #204aa0;
+}
+
+.UIThreadsInForum .ContentContainer .TitleNewpost {
+	font-weight: bold;
+	color: #204aa0;
+	float: left;
+	line-height: 18px;
+}
+
+.UIThreadsInForum .ContentContainer .Text {
+	padding-left: 18px;
+}
+
+.UIThreadsInForum .ContentContainer .PostInfos {
+	float: right;
+	line-height: 22px;
+}
+
+.UIThreadsInForum .ContentContainer .StatusIcon {
+	margin: 12px 0px 0px 12px;
+	width: 16px; height: 16px;
+}
+
+.UIThreadsInForum .ContentContainer .ThreadStatusIcon {
+	margin: 8px 0px 0px 8px;
+	width: 24px; height: 24px;
+}
+
+.UIThreadsInForum .ContentContainer .AttachmentIcon {
+	margin: 2px 0px 0px 8px;
+	width: 16px; height: 16px;
+}
+
+.UIThreadsInForum .ContentContainer .LeftArrowIcon {
+	margin: 0px 2px 0px 0px;
+	width: 16px; height: 16px;
+	float: left;
+	cursor: pointer;
+}
+
+.UIThreadsInForum .ContentContainer .RightArrowIcon {
+	margin: 3px 0px 0px 2px;
+	width: 16px; height: 16px;
+	float: Right;
+	cursor: pointer;
+}
+
+.UIThreadsInForum .ContentContainer .DownArrow1Icon {
+	background-position: right;
+	padding-right: 16px;
+	line-height: 18px;
+	width: 60px;
+	cursor: pointer;
+}
+
+
+
+

@@ -219,3 +219,60 @@
 	background: url('skinIcons/16x16/icons/SeachIcon.gif') no-repeat ;
 }
 
+.StickyIcon {
+	background: url('skinIcons/16x16/icons/StickyIcon.gif') no-repeat ;
+}
+
+.BlueTagIcon {
+	background: url('skinIcons/16x16/icons/BlueTagIcon.gif') no-repeat ;
+}
+
+.GreenTagIcon {
+	background: url('skinIcons/16x16/icons/GreenTagIcon.gif') no-repeat ;
+}
+
+.RedTagIcon {
+	background: url('skinIcons/16x16/icons/RedTagIcon.gif') no-repeat ;
+}
+
+.VioletTagIcon {
+	background: url('skinIcons/16x16/icons/VioletTagIcon.gif') no-repeat ;
+}
+
+.LeftArrowIcon {
+	background: url('skinIcons/16x16/icons/LeftArrowIcon.gif') no-repeat ;
+}
+
+.RightArrowIcon {
+	background: url('skinIcons/16x16/icons/LeftArrowIcon.gif') no-repeat ;
+}
+
+.BlueTagIcon {
+	background: url('skinIcons/16x16/icons/BlueTagIcon.gif') no-repeat ;
+}
+
+.HotThreadNewPost {
+	background: url('skinIcons/24x24/icons/HotThreadNewPost.gif') no-repeat ;
+}
+
+.HotThreadNoNewPost {
+	background: url('skinIcons/24x24/icons/HotThreadNoNewPost.gif') no-repeat ;
+}
+
+.ThreadIsClose {
+	background: url('skinIcons/24x24/icons/ThreadIsClose.gif') no-repeat ;
+}
+
+.ThreadNewPost {
+	background: url('skinIcons/24x24/icons/ThreadNewPost.gif') no-repeat ;
+}
+
+.ThreadNoNewPost {
+	background: url('skinIcons/24x24/icons/ThreadNoNewPost.gif') no-repeat ;
+}
+
+.AttachmentIcon {
+	background: url('skinIcons/16x16/icons/AttachmentIcon.gif') no-repeat ;
+}
+
+
