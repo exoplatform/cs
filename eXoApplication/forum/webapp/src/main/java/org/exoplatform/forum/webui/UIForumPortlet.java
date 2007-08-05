@@ -15,13 +15,13 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
  */
 @ComponentConfig(
    lifecycle = UIApplicationLifecycle.class,
-   template = "app:/templates/forum/webui/ThreadsInForum.jstmpl"
+   template = "app:/templates/forum/webui/UIForumPortlet.jstmpl"
 )
 public class UIForumPortlet extends UIPortletApplication {
   public UIForumPortlet() throws Exception {
     //addChild(UIBannerContainer.class, null, null) ;
     //addChild(UIBreadcumbs.class, null, null) ;
-    //addChild(UICategories.class, null, null) ;
+    addChild(UICategories.class, null, null) ;
     //addChild(UIForumInfo.class, null, null) ;
     //addChild(UIForumContainer.class, null, null).setRendered(false) ;
   }

@@ -76,8 +76,7 @@
 <!-- End UIDescription -->
 
 
-	
-	<div style="height:300px;"><span></span></div>	
+	<% uicomponent.renderChild(0) %>
 	
 	
 	
