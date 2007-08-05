@@ -1,0 +1,75 @@
+.BusyIcon {
+	background: url('icons/BusyIcon.gif') no-repeat ;
+}
+
+.BigGrinIcon {
+	background: url('icons/BigGrinIcon.gif') no-repeat ;
+}
+
+.OfflineIcon {
+	background: url('icons/OffLineIcon.gif') no-repeat ;
+}
+
+.OnlineIcon {
+	background: url('icons/OnlineIcon.gif') no-repeat ;
+}
+
+.ManageCategoryButton {
+	background: url('icons/ManageCategory.gif') no-repeat ;
+}
+
+.ToolIcon {
+	background: url('icons/ToolIcon.gif') no-repeat ;
+}
+
+.ModeratedIcon {
+	background: url('icons/ModeratedIcon.gif') no-repeat ;
+}
+
+.SeachIcon {
+	background: url('icons/SeachIcon.gif') no-repeat ;
+}
+
+.StickyIcon {
+	background: url('icons/StickyIcon.gif') no-repeat ;
+}
+
+.BlueTagIcon {
+	background: url('icons/BlueTagIcon.gif') no-repeat ;
+}
+
+.GreenTagIcon {
+	background: url('icons/GreenTagIcon.gif') no-repeat ;
+}
+
+.RedTagIcon {
+	background: url('icons/RedTagIcon.gif') no-repeat ;
+}
+
+.VioletTagIcon {
+	background: url('icons/VioletTagIcon.gif') no-repeat ;
+}
+
+.LeftArrowIcon {
+	background: url('icons/LeftArrowIcon.gif') no-repeat ;
+}
+
+.RightArrowIcon {
+	background: url('icons/LeftArrowIcon.gif') no-repeat ;
+}
+
+.BlueTagIcon {
+	background: url('icons/BlueTagIcon.gif') no-repeat ;
+}
+
+.AttachmentIcon {
+	background: url('icons/AttachmentIcon.gif') no-repeat ;
+}
+
+.ExpandButton {
+	background: url('skinIcons/16x16/icons/Expand.gif') no-repeat ;
+}
+
+.CollapseButton {
+	background: url('skinIcons/icons/16x16/Collapser.gif') no-repeat ;
+}

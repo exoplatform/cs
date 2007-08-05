@@ -66,15 +66,17 @@
 	margin: 3px 0px;
 }
 
+.UIPostsInThread .TBMemberContainer {
+	background: #eeedf7;
+	border: 1px solid white;
+
+}
+
 .UIPostsInThread .MemberContainer {
-	float: left;
 	width: 192px;
-	border-right: 1px solid #c4c4c4;
 }
 
 .UIPostsInThread .MemberContent {
-	background: #eeedf7;
-	border: 1px solid white;
 	padding: 10px 15px;
 }	
 
@@ -123,7 +125,6 @@
 /************************************** PostViewContainer ***********************************/
 
 .UIPostsInThread .PostViewContainer {
-	margin-left: 200px;
 	color: #2c2c2c;
 }
 	

@@ -1,0 +1,70 @@
+.UICategories {
+}
+
+.UICategories .UIForumWorkingWorkspace {
+	width: auto;
+	padding: 0px 10px;
+}
+
+.UICategories .ContentContainer .UserIcon {
+	background: url('icons/24x24/UserIcon.gif') no-repeat ;
+	width: 24px; height: 22px;
+	margin: 0px 4px;
+}
+
+.UICategories .ContentContainer .ChartIcon {
+	background: url('icons/24x24/ChartIcon.gif') no-repeat ;
+	width: 24px; height: 22px;
+	margin: 0px 4px;
+}
+
+/**************************** UICategories ForumToolBar *********************************/
+.UICategories .ForumToolbar a {
+	color: black;
+}
+
+.UICategories .ForumToolbar a:hover {
+	color: #126ca5;
+}
+
+.UICategories .ForumToolbar .Title {
+	float: left;
+	font-weight: bold;
+	line-height: 24px;
+	margin: 0px 0px 0px 8px;
+}
+
+.UICategories .ForumToolbar .CollapseButton {
+	float: right;
+	width: 16px; height: 16px; 
+	margin: 5px 5px 0px 0px;
+	cursor: pointer;
+	
+}
+
+.UICategories .ForumToolbar .ExpandButton {
+	float: right;
+	width: 16px; height: 16px; 
+	margin: 5px 5px 0px 0px;
+	cursor: pointer;
+}
+
+.UICategories .ForumToolbar .ToolbarActionsContainer {
+	float: right;
+	width: 150px;
+	margin: 5px 0px 0px 0px;
+}
+
+.UICategories .ForumToolbar .ToolbarActionsContainer .ManageCategoryButton {
+	float: right;
+	cursor: pointer;
+	padding-left: 20px;
+	line-height: 16px;
+}
+
+.UICategories .ForumToolbar .ToolbarActionsContainer .SeparatorLine {
+	background: url('background/SeparatorLine2x19.gif') no-repeat ;
+	float: right;
+	width: 2px; height: 19px;
+	margin: 0px 5px 0px 5px;
+}
