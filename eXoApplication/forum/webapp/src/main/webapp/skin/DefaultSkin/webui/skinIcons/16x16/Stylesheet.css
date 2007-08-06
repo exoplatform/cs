@@ -26,6 +26,10 @@
 	background: url('icons/ModeratedIcon.gif') no-repeat ;
 }
 
+.ModerationIcon {
+	background: url('icons/ModerationIcon.gif') no-repeat ;
+}
+
 .SeachIcon {
 	background: url('icons/SeachIcon.gif') no-repeat ;
 }
@@ -73,3 +77,12 @@
 .CollapseButton {
 	background: url('icons/Collapser.gif') no-repeat ;
 }
+
+.Voted {
+	background: url('icons/SmallYellowStar.gif') no-repeat ;
+}
+
+.Unvoted {
+	background: url('icons/SmallGreyStar.gif') no-repeat ;
+}
+

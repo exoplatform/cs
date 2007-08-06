@@ -19,7 +19,7 @@
 .UIThreadsInForum .ForumToolbar .StatusIcon {
 	float: right;
 	line-height: 16px; 
-	padding-left: 18px;
+	padding-left: 22px;
 	margin: 1px 5px 0px 0px;
 	cursor: pointer;
 }
@@ -37,7 +37,7 @@
 
 .UIThreadsInForum .ForumToolbar .ToolbarActionsContainer {
 	float: right;
-	width: 300px;
+	width: 330px;
 	margin: 4px 0px 0px 0px;
 }
 
@@ -66,13 +66,22 @@
 	width: 16px; height: 16px;
 }
 
+.UIThreadsInForum .ContentContainer .AvgRatingImages {
+	margin: 12px 0px 0px 5px;
+}
+
+.UIThreadsInForum .ContentContainer .VoteIcon {
+	width: 16px; height: 16px;
+	float: left;
+}
+
 .UIThreadsInForum .ContentContainer .ThreadStatusIcon {
 	margin: 8px 0px 0px 8px;
 	width: 24px; height: 24px;
 }
 
 .UIThreadsInForum .ContentContainer .AttachmentIcon {
-	margin: 2px 0px 0px 8px;
+	margin: 2px 0px 0px 12px;
 	width: 16px; height: 16px;
 }
 
@@ -97,6 +106,31 @@
 	width: 60px;
 	cursor: pointer;
 }
+
+.UIThreadsInForum .LeftStartsList {
+	float: left;
+	width: 60%;
+	margin: 5px 0px 0px 0px;
+}
+
+.UIThreadsInForum .RightStartsList {
+	float: right;
+	width: 39%;
+	margin: 5px 0px 0px 0px;
+}
+
+.UIThreadsInForum .RightStartsList .BoldTitle {
+	font-weight: bold;
+	line-height: 18px;
+}
+
+.UIThreadsInForum .ThreadsStartsList .ContentContainer {
+	border: 1px solid #b7b7b7;
+	border-top: none;
+	padding: 5px;
+}
+
+
 
 
 

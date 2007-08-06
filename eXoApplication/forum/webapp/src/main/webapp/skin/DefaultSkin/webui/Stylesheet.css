@@ -7,7 +7,7 @@
 
 /**************************** UIActionForum *********************************/
 .UIForumPortlet .UIActionForum .ActionButton {
-	margin: 0px 3px;
+	margin: 2px 3px 0px 3px;
 	float: left;
 }
  
@@ -42,6 +42,29 @@
 /**************************** UIForumPortlet ForumToolBar *********************************/
 .UIForumPortlet .ForumToolbar {
 	height: 26px;
+}
+
+.UIForumPortlet .ForumToolbar .CollapseButton {
+	float: right;
+	width: 16px; height: 16px; 
+	margin: 5px 5px 0px 0px;
+	cursor: pointer;
+	
+}
+
+.UIForumPortlet .ForumToolbar .ExpandButton {
+	float: right;
+	width: 16px; height: 16px; 
+	margin: 5px 5px 0px 0px;
+	cursor: pointer;
+}
+
+.UIForumPortlet a {
+	color: #000000;
+}
+
+.UIForumPortlet a:hover {
+	color: #126ca5;
 }
 
 .UIForumPortlet .ForumToolbar .Title {
@@ -81,7 +104,7 @@
 }
 
 .UIForumPortlet .ContentContainer .ForumStatsList a {
-	color: #126ca5;
+	color: #058ee6;
 }
 
 .UIForumPortlet .ContentContainer .UIGrid th {
@@ -91,6 +114,8 @@
 
 .UIForumPortlet .ContentContainer .UIGrid td {
 	padding: 5px 0px 0px 5px;
+	border-right: 1px solid #e4e4e4;
+	border-left: 1px solid #e4e4e4;
 }
 
 .UIForumPortlet .ContentContainer .ForumStatusIcon {
@@ -128,7 +153,8 @@
 }
 
 .UIForumPortlet .ContentContainer .UIGrid .Tdbox  {
-	padding: 13px 0px 0px 7px;
+	padding: 13px 8px 0px 7px;
+	text-align: right;
 }
 
 .UIForumPortlet .ContentContainer .ForumDescription {

@@ -46,13 +46,13 @@
 			<div class="RightForumControlbar">
 				<div class="CenterForumControlbar">
 					<div class="ControlbarCotainer">
-						<div class="Icon AddCategory">Add new Category</div>
+						<a href="#" class="Icon AddCategory">Add new Category</a>
 						<div class="SeparatorLine"><span></span></div>
-						<div class="Icon AddForum">Add new Forum</div>
+						<a href="#" class="Icon AddForum">Add new Forum</a>
 						<div class="SeparatorLine"><span></span></div>
-						<div class="Icon ManageModerators">Manage Moderators</div>
+						<a href="#" class="Icon ManageModerators">Manage Moderators</a>
 						<div class="SeparatorLine"><span></span></div>
-						<div class="Icon ForumOption">Forums Options</div>
+						<a href="#" class="Icon ForumOption">Forums Options</a>
 						<div style="clear: left;"><span></span></div>
 					</div>
 				</div>
