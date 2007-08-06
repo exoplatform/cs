@@ -16,7 +16,7 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
  */
 @ComponentConfig(
    lifecycle = UIApplicationLifecycle.class,
-   template = "app:/templates/forum/webui/UIForumPortlet.jstmpl"
+   template = "app:/templates/forum/webui/UIPrintView.jstmpl"
 )
 public class UIForumPortlet extends UIPortletApplication {
   public UIForumPortlet() throws Exception {

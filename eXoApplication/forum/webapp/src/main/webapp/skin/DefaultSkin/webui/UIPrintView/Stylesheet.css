@@ -1,0 +1,50 @@
+.UIPrintView {
+	font-size: 12px;
+	border: 1px solid red;
+}
+
+.UIPrintView .PrintViewContainer {
+	border: 1px solid #b3b3b3;
+	margin: 10px 10px 0px 10px;
+	padding: 0px 10px 10px 10px;
+}
+
+.UIPrintView .PrintViewContainer .TitlePrintView {
+	border-bottom: 1px solid #c1c1c1;
+	line-height: 30px;
+}
+
+.UIPrintView .TitlePrintView .UserName {
+	float: left;
+	font-size: 16px;
+	font-weight: bold;
+}
+
+.UIPrintView .TitlePrintView .PostTime {
+	float: right;
+}
+
+.UIPrintView .PrintViewContainer .PostViewTitle {
+	font-weight: bold;
+	line-height: 40px;
+}
+
+.UIPrintView .PrintViewContainer .PostContent a {
+	color: black;
+}
+
+.UIPrintView .PrintViewContainer .QuoteContent {
+	padding: 0px 30px;
+}
+
+.UIPrintView .PrintViewContainer .Quote {
+	border-top: 1px solid #c1c1c1;
+	border-bottom: 1px solid #c1c1c1;
+	padding: 10px 0px;
+	margin: 5px 0px 10px 0px;
+}
+
+.UIPrintView .PrintTime {
+	line-height: 30px;
+	margin: 0px 10px;
+}

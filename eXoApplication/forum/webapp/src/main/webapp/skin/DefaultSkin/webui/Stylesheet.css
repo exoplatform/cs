@@ -4,6 +4,7 @@
 @import url('UICategories/Stylesheet.css') ;
 @import url('UIThreadsInForum/Stylesheet.css') ;
 @import url('UIPostsInThread/Stylesheet.css') ;
+@import url('UIPrintView/Stylesheet.css') ;
 
 /**************************** UIActionForum *********************************/
 .UIForumPortlet .UIActionForum .ActionButton {
