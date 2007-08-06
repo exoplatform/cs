@@ -60,19 +60,22 @@
 }
 
 /*************************************** ContentContainer ************************************/
-
 .UIPostsInThread .ContentContainer {
-	border: 1px solid #c4c4c4;
 	margin: 3px 0px;
 }
 
-.UIPostsInThread .TBMemberContainer {
-	background: #eeedf7;
-	border: 1px solid white;
+.UIPostsInThread .TablePost {
+	border-collapse: separate;
+	border: 1px solid #c4c4c4;
+}
 
+*html .UIPostsInThread .MemberContainer {
+	border: none;
 }
 
 .UIPostsInThread .MemberContainer {
+	background: #eeedf7;
+	border: 1px solid white;
 	width: 192px;
 }
 
@@ -126,8 +129,10 @@
 
 .UIPostsInThread .PostViewContainer {
 	color: #2c2c2c;
+	border-left: solid 1px #c4c4c4;
+	padding: 0px 8px;
 }
-	
+
 .UIPostsInThread .PostViewContainer .PostViewTitle {
 	border-bottom: 1px solid #d8d8d8;
 	padding: 5px 0px 3px 0px;

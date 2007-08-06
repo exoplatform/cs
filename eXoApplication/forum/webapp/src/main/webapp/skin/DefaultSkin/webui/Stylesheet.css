@@ -15,27 +15,28 @@
 }
  
 .UIForumPortlet .UIActionForum .ActionButton .NormalStyle .ButtonLeft {
-  background: url('background/buttons/LeftNormalStyleButton7x20.gif') no-repeat left top;
+  background: url('background/buttons/LeftNormalStyleButton7x22.gif') no-repeat left top;
   padding: 0px 0px 0px 7px;
 }
 
 .UIForumPortlet .UIActionForum .ActionButton .NormalStyle .ButtonRight {
-  background: url('background/buttons/RightNormalStyleButton7x20.gif') no-repeat right top;
+  background: url('background/buttons/RightNormalStyleButton7x22.gif') no-repeat right top;
   padding: 0px 7px 0px 0px ;
 }
 
 .UIForumPortlet .UIActionForum .ActionButton .NormalStyle .ButtonMiddle {
-  line-height: 22px;
-	background: url('background/buttons/MiddleNormalStyleButton1x20.gif') repeat-x top;
+  line-height: 20px;
+	background: url('background/buttons/MiddleNormalStyleButton1x22.gif') repeat-x top;
+	height: 22px;
 }
 
 .UIForumPortlet .UIActionForum .ActionButton .NormalStyle .IconButtom {
 	background-repeat: no-repeat;
-	padding-left: 20px;
+	padding: 0px 3px 0px 20px;
 }
 
 .UIForumPortlet .UIActionForum .ActionButton .NormalStyle .LabelIcon {
-	line-height: 22px;
+	line-height: 20px;
 }
 
 /**************************** UIForumPortlet ForumToolBar *********************************/
