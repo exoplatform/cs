@@ -29,7 +29,7 @@
 	background: url('background/buttons/MiddleNormalStyleButton1x22.gif') repeat-x top;
 }
 
-.UIForumPortlet .UIActionForum .ActionButton .NormalStyle .IconButtom {
+.UIForumPortlet .UIActionForum .ActionButton .NormalStyle .IconButton {
 	background-repeat: no-repeat;
 	padding: 0px 3px 0px 20px;
 	cursor: pointer;
