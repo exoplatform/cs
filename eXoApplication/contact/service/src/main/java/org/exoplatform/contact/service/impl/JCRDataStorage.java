@@ -82,6 +82,12 @@ public class JCRDataStorage implements DataStorage{
     return contactServiceHome.addNode(CONTACT_GROUP) ;
   }
   
+  private Node getPublicContactHome() throws Exception {
+    Node contactServiceHome = getPublicContactServiceHome() ;
+    if(contactServiceHome.hasNode(CONTACTS)) return contactServiceHome.getNode(CONTACTS) ;
+    return contactServiceHome.addNode(CONTACTS) ;
+  }
+  
   private Session getJCRSession() throws Exception {
     String defaultWS = 
       repositoryService_.getDefaultRepository().getConfiguration().getDefaultWorkspaceName() ;
@@ -115,7 +121,7 @@ public class JCRDataStorage implements DataStorage{
     if(contactNode.hasProperty("exo:jobTitle"))contact.setJobTitle(contactNode.getProperty("exo:jobTitle").getString());
     if(contactNode.hasProperty("exo:companyAddress"))contact.setCompanyAddress(contactNode.getProperty("exo:companyAddress").getString());
     if(contactNode.hasProperty("exo:companySite"))contact.setCompanySite(contactNode.getProperty("exo:companySite").getString());
-    if(contactNode.hasProperty("exo:groups"))contact.setGroups(ValuesToStrings(contactNode.getProperty("exo:groups").getValues()));
+    if(contactNode.hasProperty("exo:groups"))contact.setCategories(ValuesToStrings(contactNode.getProperty("exo:groups").getValues()));
     contact.setPath(contactNode.getPath()) ;
     return contact;
   }
@@ -245,7 +251,7 @@ public class JCRDataStorage implements DataStorage{
     contactNode.setProperty("exo:jobTitle", contact.getJobTitle());
     contactNode.setProperty("exo:companyAddress", contact.getCompanyAddress()); 
     contactNode.setProperty("exo:companySite", contact.getCompanySite());
-    contactNode.setProperty("exo:groups", contact.getGroups());
+    contactNode.setProperty("exo:groups", contact.getCategories());
     
     contactHomeNode.getSession().save();
   }
@@ -317,5 +323,25 @@ public class JCRDataStorage implements DataStorage{
     }
     publicGroupHome.getSession().save() ;
     return contact;
+  }
+
+  public Contact getSharedContact(String contactId) throws Exception {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public List<GroupContactData> getSharedContacts(String[] groupIds) throws Exception {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public Contact removeSharedContact(String contactId) throws Exception {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public void saveSharedContact(Contact contact, boolean isNew) throws Exception {
+    // TODO Auto-generated method stub
+    
   }  
 }

@@ -40,7 +40,7 @@ public class TestContactService extends BaseContactTestCase{
     contact.setJobTitle("Developer");
     contact.setCompanyAddress("Tran Duy Hung");
     contact.setCompanySite("eXo");
-    contact.setGroups(new String[] {"friend", "work"});
+    contact.setCategories(new String[] {"friend", "work"});
     // test addContact
     contactService_.saveContact("exo", contact, true);
     

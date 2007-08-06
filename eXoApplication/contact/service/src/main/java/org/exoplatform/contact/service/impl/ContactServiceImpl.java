@@ -74,5 +74,25 @@ public class ContactServiceImpl implements ContactService{
   public Contact shareContact(Contact contact, String[] groupIds) throws Exception {
     return storage_.shareContact(contact, groupIds);
   }
+
+  public Contact getSharedContact(String contactId) throws Exception {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public List<GroupContactData> getSharedContacts(String[] groupIds) throws Exception {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public Contact removeSharedContact(String contactId) throws Exception {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public void saveSharedContact(Contact contact, boolean isNew) throws Exception {
+    // TODO Auto-generated method stub
+    
+  }
   
 }

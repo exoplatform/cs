@@ -27,6 +27,11 @@ public interface DataStorage {
   public void saveContact(String username, Contact contact, boolean isNew) throws Exception ;
   public Contact removeContact(String username, String contactId) throws Exception ;
   
+  public List<GroupContactData> getSharedContacts(String[] groupIds) throws Exception ;
+  public Contact getSharedContact(String contactId) throws Exception ;
+  public void saveSharedContact(Contact contact, boolean isNew) throws Exception ;
+  public Contact removeSharedContact(String contactId) throws Exception ;
+  
   public List<ContactGroup> getGroups(String username) throws Exception ;
   public ContactGroup getGroup(String username, String groupId) throws Exception ;
   public void saveGroup(String username, ContactGroup group, boolean isNew) throws Exception ;

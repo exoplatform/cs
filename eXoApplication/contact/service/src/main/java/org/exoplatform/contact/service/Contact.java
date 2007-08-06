@@ -27,7 +27,7 @@ public class Contact {
   private String jobTitle ;
   private String companyAddress ;
   private String companySite ;  
-  private String[] groups ;
+  private String[] categories ;
   
   public String getId()  { return id ; }
   public void   setId(String s) { id = s ; }
@@ -74,7 +74,7 @@ public class Contact {
   public String getJobTitle() { return jobTitle ; }
   public void   setJobTitle(String s) { jobTitle = s ; }
   
-  public String[] getGroups() { return groups ; }
-  public void   setGroups(String[] s) { groups = s ; }
+  public String[] getCategories() { return categories ; }
+  public void   setCategories(String[] s) { categories = s ; }
   
 }
