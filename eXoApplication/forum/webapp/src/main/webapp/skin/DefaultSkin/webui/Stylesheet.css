@@ -42,7 +42,17 @@
 /**************************** UIForumPortlet ForumToolBar *********************************/
 .UIForumPortlet .ForumToolbar {
 	height: 26px;
-	margin: 5px 0px 0px 0px;
+}
+
+.UIForumPortlet .ForumToolbar .Title {
+	float: left;
+	font-weight: bold;
+	margin: 6px 0px 0px 8px;
+}
+
+.UIForumPortlet .ForumToolbar .SeparatorLine {
+	background: url(background/SeparatorLine2x19.gif) no-repeat;
+	width: 2px; height: 19px;
 }
 
 .UIForumPortlet .ForumToolbar .LeftBar {

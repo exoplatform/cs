@@ -76,19 +76,19 @@
 				    </thead>
 				    <tbody>
 			  			<tr>
-								<td style="padding: 0px;"><div class="ThreadStatusIcon HotThreadNewPost" title="Forum Contains No New Post"><span></span></div></td>
-								<td style="padding: 0px;"><div class="StatusIcon BlueNote16x16Icon" title="Forum Contains No New Post"><span></span></div></td>
+								<td style="padding: 0px;"><div class="ThreadStatusIcon HotThreadNewPost" title="Hot thread with new post"><span></span></div></td>
+								<td style="padding: 0px;"><div class="StatusIcon BlueNote16x16Icon" ><span></span></div></td>
 								<td >
-									<div class="Text StickyIcon">Sticky: <a href="#" class="Title">Improve Portal 2.0 ( 1  2  3  4  5 ... Last page )</a></div>
+									<div class="Text StickyIcon" title="Sticky Thread">Sticky: <a href="#" class="Title">Improve Portal 2.0 ( 1  2  3  4  5 ... Last page )</a></div>
 									<div ><a href="#" class="LastPostInfos PostBy">thu.nguyen</a></div>
 								</td>
-								<td style="padding: 0px;"><div class="StatusIcon ModeratedIcon" title="Forum Contains No New Post"><span></span></div></td>
+								<td style="padding: 0px;"><div class="StatusIcon ModeratedIcon" title="2 Moderated posts"><span></span></div></td>
 								<td class="Tdbox">15</td>
-								<td style="padding: 0px;"><div class="RatingIcon" title="Forum Contains No New Post"><span></span></div></td>
-								<td style="padding: 0px;"><div class="StatusIcon RedTagIcon" title="Forum Contains No New Post"><span></span></div></td>
+								<td style="padding: 0px;"><div class="RatingIcon" title="Thread Rating: 3 votes, 5 average"><span></span></div></td>
+								<td style="padding: 0px;"><div class="StatusIcon RedTagIcon" title="Thread tagged as Design Team"><span></span></div></td>
 							 	<td >
 							 		<div class="DateTime">07/22/2007, 1:30 pm</div>
-							 		<div class="RightArrowIcon"><span></span></div>
+							 		<div class="RightArrowIcon" title="Go to last posts"><span></span></div>
 									<div class="PostInfos LastPostInfos">by <a href="#" class="PostBy">thu.nguyen</a></div>
 									<div style="clear: right;"><span></span></div>
 								</td>
@@ -96,19 +96,19 @@
 								<td class="Tdbox">1450</td>
 			   			</tr>
 			   			<tr class="OddRow">
-								<td style="padding: 0px;"><div class="ThreadStatusIcon HotThreadNoNewPost" title="Forum Contains No New Post"><span></span></div></td>
-								<td style="padding: 0px;"><div class="StatusIcon BlueNote16x16Icon" title="Forum Contains No New Post"><span></span></div></td>
+								<td style="padding: 0px;"><div class="ThreadStatusIcon HotThreadNoNewPost" title="Hot thread with no new post"><span></span></div></td>
+								<td style="padding: 0px;"><div class="StatusIcon BlueNote16x16Icon" ><span></span></div></td>
 								<td >
-									<div class="Text StickyIcon">Sticky: <a href="#" class="Title">Improve Portal 2.0 ( 1  2  3  4  5 ... Last page )</a></div>
+									<div class="Text StickyIcon" title="Sticky Thread">Sticky: <a href="#" class="Title">Improve Portal 2.0 ( 1  2  3  4  5 ... Last page )</a></div>
 									<div ><a href="#" class="LastPostInfos PostBy">thu.nguyen</a></div>
 								</td>
-								<td style="padding: 0px;"><div class="StatusIcon" title="Forum Contains No New Post"><span></span></div></td>
+								<td style="padding: 0px;"><div class="StatusIcon" title="Moderated posts"><span></span></div></td>
 								<td class="Tdbox">50</td>
-								<td style="padding: 0px;"><div class="RatingIcon" title="Forum Contains No New Post"><span></span></div></td>
-								<td style="padding: 0px;"><div class="StatusIcon GreenTagIcon" title="Forum Contains No New Post"><span></span></div></td>
+								<td style="padding: 0px;"><div class="RatingIcon" title="Thread Rating: 3 votes, 5 average"><span></span></div></td>
+								<td style="padding: 0px;"><div class="StatusIcon GreenTagIcon" title="Thread tagged as Design Team"><span></span></div></td>
 							 	<td >
 							 		<div class="DateTime">07/22/2007, 1:30 pm</div>
-							 		<div class="RightArrowIcon"><span></span></div>
+							 		<div class="RightArrowIcon" title="Go to last posts"><span></span></div>
 									<div class="PostInfos LastPostInfos">by <a href="#" class="PostBy">thu.nguyen</a></div>
 									<div style="clear: right;"><span></span></div>
 								</td>
@@ -116,21 +116,21 @@
 								<td class="Tdbox">1450</td>
 			   			</tr>
 			   			<tr>
-								<td style="padding: 0px;"><div class="ThreadStatusIcon ThreadIsClose" title="Forum Contains No New Post"><span></span></div></td>
+								<td style="padding: 0px;"><div class="ThreadStatusIcon ThreadIsClose" title="Thread Is Close"><span></span></div></td>
 								<td style="padding: 0px;"><div class="StatusIcon BlueNote16x16Icon" title="Forum Contains No New Post"><span></span></div></td>
 								<td >
-									<div class="LeftArrowIcon"><span></span></div>
+									<div class="LeftArrowIcon" title="Go to first new post"><span></span></div>
 									<a href="#" class="TitleNewpost">Improve Portal 2.0 ( 1  2  3  4  5 ... Last page )</a>
 									<div style="clear: left"><span></span></div>
-									<div ><a class="LastPostInfos PostBy">thu.nguyen</a></div>
+									<div ><a href="#" class="LastPostInfos PostBy">thu.nguyen</a></div>
 								</td>
-								<td style="padding: 0px;"><div class="StatusIcon ModeratedIcon" title="Forum Contains No New Post"><span></span></div></td>
+								<td style="padding: 0px;"><div class="StatusIcon ModeratedIcon" title="2 Moderated posts"><span></span></div></td>
 								<td class="Tdbox">5</td>
-								<td style="padding: 0px;"><div class="RatingIcon" title="Forum Contains No New Post"><span></span></div></td>
-								<td style="padding: 0px;"><div class="StatusIcon BlueTagIcon" title="Forum Contains No New Post"><span></span></div></td>
+								<td style="padding: 0px;"><div class="RatingIcon" title="Thread Rating: 3 votes, 5 average"><span></span></div></td>
+								<td style="padding: 0px;"><div class="StatusIcon BlueTagIcon" title="Thread tagged as Design Team"><span></span></div></td>
 							 	<td >
 							 		<div class="DateTime">07/22/2007, 1:30 pm</div>
-							 		<div class="RightArrowIcon"><span></span></div>
+							 		<div class="RightArrowIcon" title="Go to last posts"><span></span></div>
 									<div class="PostInfos LastPostInfos">by <a href="#" class="PostBy">thu.nguyen</a></div>
 									<div style="clear: right;"><span></span></div>
 								</td>
@@ -138,21 +138,21 @@
 								<td class="Tdbox">1450</td>
 			   			</tr>
 			   			<tr class="OddRow">
-								<td style="padding: 0px;"><div class="ThreadStatusIcon ThreadNewPost" title="Forum Contains No New Post"><span></span></div></td>
+								<td style="padding: 0px;"><div class="ThreadStatusIcon ThreadNewPost" title="Thread new post"><span></span></div></td>
 								<td style="padding: 0px;"><div class="StatusIcon BlueNote16x16Icon" title="Forum Contains No New Post"><span></span></div></td>
 								<td >
-									<div class="LeftArrowIcon"><span></span></div>
+									<div class="LeftArrowIcon" title="Go to first new post"><span></span></div>
 									<a href="#" class="TitleNewpost">Improve Portal 2.0 ( 1  2  3  4  5 ... Last page )</a>
 									<div style="clear: left"><span></span></div>
-									<div ><a class="LastPostInfos PostBy">thu.nguyen</a></div>
+									<div ><a href="#" class="LastPostInfos PostBy">thu.nguyen</a></div>
 								</td>
-								<td style="padding: 0px;"><div class="StatusIcon" title="Forum Contains No New Post"><span></span></div></td>
+								<td style="padding: 0px;"><div class="StatusIcon" title="Moderated posts"><span></span></div></td>
 								<td class="Tdbox">10</td>
-								<td style="padding: 0px;"><div class="RatingIcon" title="Forum Contains No New Post"><span></span></div></td>
-								<td style="padding: 0px;"><div class="StatusIcon VioletTagIcon" title="Forum Contains No New Post"><span></span></div></td>
+								<td style="padding: 0px;"><div class="RatingIcon" title="Thread Rating: 3 votes, 5 average"><span></span></div></td>
+								<td style="padding: 0px;"><div class="StatusIcon VioletTagIcon" title="Thread tagged as Design Team"><span></span></div></td>
 							 	<td >
 							 		<div class="DateTime">07/22/2007, 1:30 pm</div>
-							 		<div class="RightArrowIcon"><span></span></div>
+							 		<div class="RightArrowIcon" title="Go to last posts"><span></span></div>
 									<div class="PostInfos LastPostInfos">by <a href="#" class="PostBy">thu.nguyen</a></div>
 									<div style="clear: right;"><span></span></div>
 								</td>
@@ -160,21 +160,21 @@
 								<td class="Tdbox">1450</td>
 			   			</tr>
 			   			<tr>
-								<td style="padding: 0px;"><div class="ThreadStatusIcon ThreadNoNewPost" title="Forum Contains No New Post"><span></span></div></td>
+								<td style="padding: 0px;"><div class="ThreadStatusIcon ThreadNoNewPost" title="Thread no new post"><span></span></div></td>
 								<td style="padding: 0px;"><div class="StatusIcon BlueNote16x16Icon" title="Forum Contains No New Post"><span></span></div></td>
 								<td >
-									<div class="LeftArrowIcon"><span></span></div>
+									<div class="LeftArrowIcon" title="Go to first new post"><span></span></div>
 									<a href="#" class="TitleNewpost">Improve Portal 2.0 ( 1  2  3  4  5 ... Last page )</a>
 									<div style="clear: left"><span></span></div>
-									<div ><a class="LastPostInfos PostBy">thu.nguyen</a></div>
+									<div ><a href="#" class="LastPostInfos PostBy">thu.nguyen</a></div>
 								</td>
-								<td style="padding: 0px;"><div class="StatusIcon ModeratedIcon" title="Forum Contains No New Post"><span></span></div></td>
+								<td style="padding: 0px;"><div class="StatusIcon ModeratedIcon" title="2 Moderated posts"><span></span></div></td>
 								<td class="Tdbox">15</td>
-								<td style="padding: 0px;"><div class="RatingIcon" title=""><span></span></div></td>
+								<td style="padding: 0px;"><div class="RatingIcon" title="Thread Rating: 3 votes, 5 average"><span></span></div></td>
 								<td style="padding: 0px;"><div class="StatusIcon " ><span></span></div></td>
 							 	<td >
 							 		<div class="DateTime">07/22/2007, 1:30 pm</div>
-							 		<div class="RightArrowIcon"><span></span></div>
+							 		<div class="RightArrowIcon" title="Go to last posts"><span></span></div>
 									<div class="PostInfos LastPostInfos">by <a href="#" class="PostBy">thu.nguyen</a></div>
 									<div style="clear: right;"><span></span></div>
 								</td>
@@ -182,19 +182,19 @@
 								<td class="Tdbox">1450</td>
 			   			</tr>
 			   			<tr class="OddRow">
-								<td style="padding: 0px;"><div class="ThreadStatusIcon HotThreadNewPost" title="Forum Contains No New Post"><span></span></div></td>
+								<td style="padding: 0px;"><div class="ThreadStatusIcon HotThreadNewPost" title="Hot thread with new post"><span></span></div></td>
 								<td style="padding: 0px;"><div class="StatusIcon BlueNote16x16Icon" title="Forum Contains No New Post"><span></span></div></td>
 								<td >
-									<div>Sticky: <a href="#" class="Title">Improve Portal 2.0 ( 1  2  3  4  5 ... Last page )</a></div>
+									<a href="#" class="Title">Improve Portal 2.0 ( 1  2  3  4  5 ... Last page )</a>
 									<div ><a href="#" class="LastPostInfos PostBy">thu.nguyen</a></div>
 								</td>
-								<td style="padding: 0px;"><div class="StatusIcon" title="Forum Contains No New Post"><span></span></div></td>
+								<td style="padding: 0px;"><div class="StatusIcon" title="Moderated posts"><span></span></div></td>
 								<td class="Tdbox">10</td>
-								<td style="padding: 0px;"><div class="RatingIcon" title="Forum Contains No New Post"><span></span></div></td>
+								<td style="padding: 0px;"><div class="RatingIcon" title="Thread Rating: 3 votes, 5 average"><span></span></div></td>
 								<td style="padding: 0px;"><div class="StatusIcon " ><span></span></div></td>
 							 	<td >
 							 		<div class="DateTime">07/22/2007, 1:30 pm</div>
-							 		<div class="RightArrowIcon"><span></span></div>
+							 		<div class="RightArrowIcon" title="Go to last posts"><span></span></div>
 									<div class="PostInfos LastPostInfos">by <a href="#" class="PostBy">thu.nguyen</a></div>
 									<div style="clear: right;"><span></span></div>
 								</td>
@@ -202,19 +202,19 @@
 								<td class="Tdbox">1450</td>
 			   			</tr>
 			   			<tr>
-								<td style="padding: 0px;"><div class="ThreadStatusIcon HotThreadNewPost" title="Forum Contains No New Post"><span></span></div></td>
+								<td style="padding: 0px;"><div class="ThreadStatusIcon HotThreadNewPost" title="Hot thread with new post"><span></span></div></td>
 								<td style="padding: 0px;"><div class="StatusIcon BlueNote16x16Icon" title="Forum Contains No New Post"><span></span></div></td>
 								<td >
-									<div>Sticky: <a href="#" class="Title">Improve Portal 2.0 ( 1  2  3  4  5 ... Last page )</a></div>
+									<a href="#" class="Title">Improve Portal 2.0 ( 1  2  3  4  5 ... Last page )</a>
 									<div ><a href="#" class="LastPostInfos PostBy">thu.nguyen</a></div>
 								</td>
-								<td style="padding: 0px;"><div class="StatusIcon" title="Forum Contains No New Post"><span></span></div></td>
+								<td style="padding: 0px;"><div class="StatusIcon" title="Moderated posts"><span></span></div></td>
 								<td class="Tdbox">5</td>
-								<td style="padding: 0px;"><div class="RatingIcon" title="Forum Contains No New Post"><span></span></div></td>
-								<td style="padding: 0px;"><div class="StatusIcon RedTagIcon" title="Forum Contains No New Post"><span></span></div></td>
+								<td style="padding: 0px;"><div class="RatingIcon" title="Thread Rating: 3 votes, 5 average"><span></span></div></td>
+								<td style="padding: 0px;"><div class="StatusIcon RedTagIcon" title="Thread tagged as Design Team"><span></span></div></td>
 							 	<td >
 							 		<div class="DateTime">07/22/2007, 1:30 pm</div>
-							 		<div class="RightArrowIcon"><span></span></div>
+							 		<div class="RightArrowIcon" title="Go to last posts"><span></span></div>
 									<div class="PostInfos LastPostInfos">by <a href="#" class="PostBy">thu.nguyen</a></div>
 									<div style="clear: right;"><span></span></div>
 								</td>
@@ -222,19 +222,19 @@
 								<td class="Tdbox">1450</td>
 			   			</tr>
 			   			<tr class="OddRow">
-								<td style="padding: 0px;"><div class="ThreadStatusIcon HotThreadNewPost" title="Forum Contains No New Post"><span></span></div></td>
-								<td style="padding: 0px;"><div class="StatusIcon" title="Forum Contains No New Post"><span></span></div></td>
+								<td style="padding: 0px;"><div class="ThreadStatusIcon HotThreadNewPost" title="Hot thread with new post"><span></span></div></td>
+								<td style="padding: 0px;"><div class="StatusIcon" title="Moderated posts"><span></span></div></td>
 								<td >
-									<div>Sticky: <a href="#" class="Title">Improve Portal 2.0 ( 1  2  3  4  5 ... Last page )</a></div>
+									<a href="#" class="Title">Improve Portal 2.0 ( 1  2  3  4  5 ... Last page )</a>
 									<div ><a href="#" class="LastPostInfos PostBy">thu.nguyen</a></div>
 								</td>
 								<td style="padding: 0px;"><div class="StatusIcon ModeratedIcon" title="Forum Contains No New Post"><span></span></div></td>
 								<td class="Tdbox">1</td>
-								<td style="padding: 0px;"><div class="RatingIcon" title="Forum Contains No New Post"><span></span></div></td>
-								<td style="padding: 0px;"><div class="StatusIcon RedTagIcon" title="Forum Contains No New Post"><span></span></div></td>
+								<td style="padding: 0px;"><div class="RatingIcon" title="Thread Rating: 3 votes, 5 average"><span></span></div></td>
+								<td style="padding: 0px;"><div class="StatusIcon RedTagIcon" title="Thread tagged as Design Team"><span></span></div></td>
 							 	<td >
 							 		<div class="DateTime">07/22/2007, 1:30 pm</div>
-							 		<div class="RightArrowIcon"><span></span></div>
+							 		<div class="RightArrowIcon" title="Go to last posts"><span></span></div>
 									<div class="PostInfos LastPostInfos">by <a href="#" class="PostBy">thu.nguyen</a></div>
 									<div style="clear: right;"><span></span></div>
 								</td>
@@ -242,19 +242,19 @@
 								<td class="Tdbox">1450</td>
 			   			</tr>
 			   			<tr>
-								<td style="padding: 0px;"><div class="ThreadStatusIcon HotThreadNewPost" title="Forum Contains No New Post"><span></span></div></td>
+								<td style="padding: 0px;"><div class="ThreadStatusIcon HotThreadNewPost" title="Hot thread with new post"><span></span></div></td>
 								<td style="padding: 0px;"><div class="StatusIcon BlueNote16x16Icon" title="Forum Contains No New Post"><span></span></div></td>
 								<td >
-									<div>Sticky: <a href="#" class="Title">Improve Portal 2.0 ( 1  2  3  4  5 ... Last page )</a></div>
+									<a href="#" class="Title">Improve Portal 2.0 ( 1  2  3  4  5 ... Last page )</a>
 									<div ><a href="#" class="LastPostInfos PostBy">thu.nguyen</a></div>
 								</td>
-								<td style="padding: 0px;"><div class="StatusIcon" title="Forum Contains No New Post"><span></span></div></td>
+								<td style="padding: 0px;"><div class="StatusIcon" title="Moderated posts"><span></span></div></td>
 								<td class="Tdbox">10</td>
-								<td style="padding: 0px;"><div class="RatingIcon" title="Forum Contains No New Post"><span></span></div></td>
-								<td style="padding: 0px;"><div class="StatusIcon RedTagIcon" title="Forum Contains No New Post"><span></span></div></td>
+								<td style="padding: 0px;"><div class="RatingIcon" title="Thread Rating: 3 votes, 5 average"><span></span></div></td>
+								<td style="padding: 0px;"><div class="StatusIcon RedTagIcon" title="Thread tagged as Design Team"><span></span></div></td>
 							 	<td >
 							 		<div class="DateTime">07/22/2007, 1:30 pm</div>
-							 		<div class="RightArrowIcon"><span></span></div>
+							 		<div class="RightArrowIcon" title="Go to last posts"><span></span></div>
 									<div class="PostInfos LastPostInfos">by <a href="#" class="PostBy">thu.nguyen</a></div>
 									<div style="clear: right;"><span></span></div>
 								</td>

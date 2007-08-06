@@ -67,9 +67,9 @@
 }
 
 .ExpandButton {
-	background: url('skinIcons/16x16/icons/Expand.gif') no-repeat ;
+	background: url('icons/Expand.gif') no-repeat ;
 }
 
 .CollapseButton {
-	background: url('skinIcons/icons/16x16/Collapser.gif') no-repeat ;
+	background: url('icons/Collapser.gif') no-repeat ;
 }

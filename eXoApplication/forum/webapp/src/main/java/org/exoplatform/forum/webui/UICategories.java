@@ -15,7 +15,7 @@ import org.exoplatform.webui.core.UIContainer;
  */
 
 @ComponentConfig(
-    template =  "app:/templates/forum/webui/UIPostsInThread.jstmpl"
+    template =  "app:/templates/forum/webui/ThreadsInForum.jstmpl"
 )
 public class UICategories extends UIContainer  {
   public UICategories() throws Exception {    

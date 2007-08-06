@@ -19,19 +19,17 @@
 }
 
 /**************************** UICategories ForumToolBar *********************************/
+
+.UICategories .ForumToolbar {
+	margin: 5px 0px 0px 0px;
+}
+
 .UICategories .ForumToolbar a {
 	color: black;
 }
 
 .UICategories .ForumToolbar a:hover {
 	color: #126ca5;
-}
-
-.UICategories .ForumToolbar .Title {
-	float: left;
-	font-weight: bold;
-	line-height: 24px;
-	margin: 0px 0px 0px 8px;
 }
 
 .UICategories .ForumToolbar .CollapseButton {
@@ -63,7 +61,6 @@
 }
 
 .UICategories .ForumToolbar .ToolbarActionsContainer .SeparatorLine {
-	background: url('background/SeparatorLine2x19.gif') no-repeat ;
 	float: right;
 	width: 2px; height: 19px;
 	margin: 0px 5px 0px 5px;

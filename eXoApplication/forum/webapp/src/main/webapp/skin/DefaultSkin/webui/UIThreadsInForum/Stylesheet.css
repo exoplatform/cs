@@ -13,6 +13,7 @@
 .UIThreadsInForum .ButtomAndPageIteratorContainer .UIPageIterator {
 	width: 60%;
 	float: right;
+	margin: 2px auto 0px 0px;
 }
 
 .UIThreadsInForum .ForumToolbar .StatusIcon {
@@ -29,8 +30,15 @@
 	line-height: 16px;
 }
 
+.UIThreadsInForum .ForumToolbar .SeparatorLine {
+	float: right;
+	margin: 0px 4px;
+}
+
 .UIThreadsInForum .ForumToolbar .ToolbarActionsContainer {
+	float: right;
 	width: 300px;
+	margin: 4px 0px 0px 0px;
 }
 
 .UIThreadsInForum .ContentContainer .Title {
@@ -76,7 +84,7 @@
 }
 
 .UIThreadsInForum .ContentContainer .RightArrowIcon {
-	margin: 3px 0px 0px 2px;
+	margin: 3px 4px 0px 2px;
 	width: 16px; height: 16px;
 	float: Right;
 	cursor: pointer;
