@@ -9,7 +9,7 @@
 		  		<div class="ButtonLeft">
 		  			<div class="ButtonRight">
 		  				<div class="ButtonMiddle">
-		  					<div class="IconButtom PostReplyIcon"><span class="LabelIcon"></span>New Thread</div>
+		  					<div class="IconButton PostReplyIcon"><span class="LabelIcon"></span>New Thread</div>
 		  				</div>
 		  			</div>
 		  		</div>
@@ -54,7 +54,7 @@
 						<td class="MemberContainer">
 				  		<div class="MemberContent">
 					  		<div class="MemberName">
-					  			<div class="State AvailableIcon"><span></span></div>
+					  			<div class="State AvailableIcon" title="Phuong’s Available"><span></span></div>
 					  			<div class="Name">phuong.pham</div>
 					  			<div class="Action"><span></span></div>
 					  			<div style="clear: left;"><span></span></div>
@@ -113,7 +113,7 @@
 									  		<div class="ButtonLeft">
 									  			<div class="ButtonRight">
 									  				<div class="ButtonMiddle">
-									  					<div class="IconButtom PostReplyIcon"><span class="LabelIcon"></span>Edit</div>
+									  					<div class="IconButton PostReplyIcon" title="Edit Message"><span class="LabelIcon"></span>Edit</div>
 									  				</div>
 									  			</div>
 									  		</div>
@@ -124,7 +124,7 @@
 									  		<div class="ButtonLeft">
 									  			<div class="ButtonRight">
 									  				<div class="ButtonMiddle">
-									  					<div class="IconButtom PostReplyIcon"><span class="LabelIcon"></span>Delete</div>
+									  					<div class="IconButton PostReplyIcon" title="Delete this Post"><span class="LabelIcon"></span>Delete</div>
 									  				</div>
 									  			</div>
 									  		</div>
@@ -135,7 +135,7 @@
 									  		<div class="ButtonLeft">
 									  			<div class="ButtonRight">
 									  				<div class="ButtonMiddle">
-									  					<div class="IconButtom PostReplyIcon"><span class="LabelIcon"></span>Quote</div>
+									  					<div class="IconButton PostReplyIcon" title="Reply With Quote"><span class="LabelIcon"></span>Quote</div>
 									  				</div>
 									  			</div>
 									  		</div>
@@ -162,9 +162,9 @@
 		  		<tr>
 <!-- Start MemberContainer -->	  
 						<td class="MemberContainer"> 
-				  		<div class="MemberContent" style="height: 290px;">
+				  		<div class="MemberContent">
 					  		<div class="MemberName">
-					  			<div class="State AvailableIcon"><span></span></div>
+					  			<div class="State BusyIcon" title="Thu’s Busy"><span></span></div>
 					  			<div class="Name">thu.nguyen</div>
 					  			<div class="Action"><span></span></div>
 					  			<div style="clear: left;"><span></span></div>
@@ -192,10 +192,10 @@
 				  			<div class="QuoteContent">
 				  				<div>Quote:</div>
 						  		<div class="Quote">
-						  			<br>Enjoy the comfort of a room and meals with nice seafood, have fun on the beach with all eXo staffs in Cua Lo was my special time.
+						  			<span>Originally Posted by</span> <strong>phuong.pham</strong><br><br>
+						  			Enjoy the comfort of a room and meals with nice seafood, have fun on the beach with all eXo staffs in Cua Lo was my special time.
 										Compared to other places I have ever been, our rates are very reasonable. Cua Lo is a great place to have a true beach experience!<br><br>
-										See on my flickr: <a href="#">http://www.flickr.com/photos/10701064@N08/?saved=1</a><br><br>
-										Pham Dang Phuong<br><br>
+										See on my flickr: <a href="#">http://www.flickr.com/photos/10701064@N08/?saved=1</a>
 									</div>
 								</div>
 								
@@ -206,22 +206,42 @@
 				  			<div class="AttachmentTitle">Attachments:</div>
 				  			<div class="AttachmentContent">
 				  				<div class="Attachment3">
-				  					<img src="/forum/skin/DefaultSkin/webui/background/Attachment1.gif" class="Img" />
-										<div class="AttachmentInfo">
-											<div class="AttachmentIcon JPGIcon">About the trip.doc</div>
-											<div class="Size">Size: 49K</div>
-											<div class="Icon View">View</div>
-											<div class="Icon Download">Download</div>
-										</div>
-										<div style="clear: both;"><span></span></div>
+				  					<table class="TableAttachment" cellspacing="0" borderspacing="0">
+				  						<tbody>
+												<tr>
+													<td style="width: 20%">
+								  					<img src="/forum/skin/DefaultSkin/webui/background/Attachment1.gif" class="Img" />
+													</td>
+													<td>
+														<div class="AttachmentIcon JPGIcon">About the trip.doc</div>
+														<div class="Size">Size: 49K</div>
+														<div class="Action">
+															<div class="Icon View">View</div>
+															<div class="Icon Download">Download</div>
+														</div>
+													</td>
+												</tr>	
+				  						</tbody>
+				  					</table>
 				  				</div>
 				  				<div class="Attachment4">
-				  					<img src="/forum/skin/DefaultSkin/webui/background/Attachment2.gif" class="Img" />
-										<div class="AttachmentInfo">
-											<div class="AttachmentIcon PNGIcon">Images presentation.ppt</div>
-											<div class="Size">Size: 49K</div>
-										</div>
-										<div style="clear: both;"><span></span></div>
+				  					<table class="TableAttachment" cellspacing="0" borderspacing="0">
+				  						<tbody>
+												<tr>
+													<td style="width: 20%">
+								  					<img src="/forum/skin/DefaultSkin/webui/background/Attachment2.gif" class="Img" />
+													</td>
+													<td>
+														<div class="AttachmentIcon PNGIcon">Images presentation.ppt</div>
+														<div class="Size">Size: 49K</div>
+														<div class="Action">
+															<div class="Icon View">View</div>
+															<div class="Icon Download">Download</div>
+														</div>
+													</td>
+												</tr>	
+				  						</tbody>
+				  					</table>
 				  				</div>
 				  			</div>
 				  		</div>
@@ -238,7 +258,7 @@
 									  		<div class="ButtonLeft">
 									  			<div class="ButtonRight">
 									  				<div class="ButtonMiddle">
-									  					<div class="IconButtom PostReplyIcon"><span class="LabelIcon"></span>Quote</div>
+									  					<div class="IconButton PostReplyIcon" title="Reply With Quote"><span class="LabelIcon"></span>Quote</div>
 									  				</div>
 									  			</div>
 									  		</div>

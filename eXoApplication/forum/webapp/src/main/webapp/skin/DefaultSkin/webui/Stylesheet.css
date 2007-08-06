@@ -27,12 +27,12 @@
 .UIForumPortlet .UIActionForum .ActionButton .NormalStyle .ButtonMiddle {
   line-height: 20px;
 	background: url('background/buttons/MiddleNormalStyleButton1x22.gif') repeat-x top;
-	height: 22px;
 }
 
 .UIForumPortlet .UIActionForum .ActionButton .NormalStyle .IconButtom {
 	background-repeat: no-repeat;
 	padding: 0px 3px 0px 20px;
+	cursor: pointer;
 }
 
 .UIForumPortlet .UIActionForum .ActionButton .NormalStyle .LabelIcon {

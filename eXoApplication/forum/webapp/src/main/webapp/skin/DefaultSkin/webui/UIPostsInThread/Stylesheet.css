@@ -1,5 +1,4 @@
 .UIPostsInThread {
-	border: solid 1px blue;
 }
 
 .UIPostsInThread .ButtomAndPageIteratorContainer {
@@ -45,6 +44,7 @@
 	background: url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/BlueDownArrow.gif') no-repeat center ;
 	height: 16px; width: 16px;	
 	margin: 7px 10px 0px 0px;
+	cursor: pointer;
 }
 
 .UIPostsInThread .ForumToolbar .ToolIcon {
@@ -87,10 +87,15 @@
 	float: left;	
 	width: 16px;
 	height: 20px;
+	cursor: pointer;
 }
 
 .UIPostsInThread .MemberContent .AvailableIcon {
 	background: url('icons/16x16/OnlineIcon.gif') no-repeat center;
+}
+
+.UIPostsInThread .MemberContent .BusyIcon {
+	background: url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/BusyIcon.gif') no-repeat center;
 }
 
 .UIPostsInThread .MemberContent .Name {
@@ -105,6 +110,7 @@
 	background: url('icons/16x16/DropDownIcon.gif') no-repeat center 4px;
 	float: left;
 	width: 16px; height: 20px;
+	cursor: pointer;
 }
 
 .UIPostsInThread .MemberContent .Rank {
@@ -118,6 +124,7 @@
 	padding: 1px;
 	background: white;
 	margin: 8px 0px;
+	cursor: pointer;
 }
 
 .UIPostsInThread .MemberContent .InfoMember {
@@ -194,13 +201,35 @@
 
 .UIPostsInThread .PostViewContainer .AttachmentContainer .AttachmentIcon {
 	color: #1555b5;
-	font-weight: bold;
+	height: 20px; line-height: 20px;
 	padding-left: 25px;
-	line-height: 20px;
+	font-weight: bold;
+	cursor: pointer;
 }
 
-.UIPostsInThread .PostViewContainer .AttachmentContainer  .AttachmentInfo {
+.UIPostsInThread .PostViewContainer .AttachmentContainer .AttachmentInfo {
 	float: right;
+}
+
+.UIPostsInThread .PostViewContainer .AttachmentContainer .Action {
+	padding-top: 50px;
+}
+
+.UIPostsInThread .PostViewContainer .AttachmentContainer .Action .Icon {
+	float: left;
+	color: #1555b5;
+	padding-left: 20px;
+	line-height: 20px;
+	margin-right: 10px;
+	cursor: pointer;
+}
+
+.UIPostsInThread .PostViewContainer .AttachmentContainer .Action .View {
+	background: url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/ViewIcon.gif') no-repeat left center;
+}
+
+.UIPostsInThread .PostViewContainer .AttachmentContainer .Action .Download {
+	background: url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/DownloadIcon.gif') no-repeat left center;
 }
 
 .UIPostsInThread .PostViewContainer .AttachmentContainer .WordIcon {
@@ -248,6 +277,6 @@
 .UIPostsInThread .PostViewContainer .Quote {
 	background: #ededf7;
 	border: 1px solid #d8d8d8;
-	padding: 0px 10px;
+	padding: 10px 15px;
 	margin: 5px 0px;
 }

@@ -6,7 +6,7 @@
 		  		<div class="ButtonLeft">
 		  			<div class="ButtonRight">
 		  				<div class="ButtonMiddle">
-		  					<div class="IconButtom AddTheradIcon"><span class="LabelIcon"></span>New Thread</div>
+		  					<div class="IconButton AddTheradIcon"><span class="LabelIcon"></span>New Thread</div>
 		  				</div>
 		  			</div>
 		  		</div>
