@@ -1,0 +1,8 @@
+<div class="UIBannerContainer">
+	<div class="ForumBanner">
+		<div class="LeftBanner">
+			<div class="BannerTitle">Exchange with the others</div>
+			<%uicomponent.renderChild(0)%>
+		</div>
+	</div>
+</div>

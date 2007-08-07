@@ -1,0 +1,18 @@
+<div class="UIForumControlbar">
+	<div class="LeftForumControlbar">
+		<div class="RightForumControlbar">
+			<div class="CenterForumControlbar">
+				<div class="ControlbarCotainer">
+					<a href="#" class="Icon AddCategory">Add new Category</a>
+					<div class="SeparatorLine"><span></span></div>
+					<a href="#" class="Icon AddForum">Add new Forum</a>
+					<div class="SeparatorLine"><span></span></div>
+					<a href="#" class="Icon ManageModerators">Manage Moderators</a>
+					<div class="SeparatorLine"><span></span></div>
+					<a href="#" class="Icon ForumOption">Forums Options</a>
+					<div style="clear: left;"><span></span></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

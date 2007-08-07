@@ -1,0 +1,6 @@
+<%
+// move this to the method processRender
+%>
+<div class="UIForumPortlet" >
+	<% uicomponent.renderChildren()%>
+</div>

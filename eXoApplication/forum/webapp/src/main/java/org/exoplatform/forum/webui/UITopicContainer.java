@@ -18,7 +18,7 @@ import org.exoplatform.webui.event.EventListener;
  */
 
 @ComponentConfig(
-    template =  "app:/templates/forum/webui/UITopicContainer.jstmpl", 
+    template =  "app:/templates/forum/webui/UITopicContainer.gtmpl", 
     events = {
       @EventConfig(listeners = UITopicContainer.AddTopicActionListener.class )  
     }

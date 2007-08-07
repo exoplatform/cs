@@ -15,9 +15,11 @@ import org.exoplatform.webui.core.UIContainer;
  */
 
 @ComponentConfig(
-    template =  "app:/templates/forum/webui/UICategoriesSummary.jstmpl"
+    template =  "app:/templates/forum/webui/UICategoriesSummary.gtmpl"
 )
 public class UICategoriesSummary extends UIContainer  {
-  public UICategoriesSummary() throws Exception {    
+  public UICategoriesSummary() throws Exception {
+  	addChild(UICategoryInfo.class, null, null);
+  	addChild(UIForumIconState.class, null, null);
   }  
 }

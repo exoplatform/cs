@@ -4,7 +4,6 @@
  **************************************************************************/
 package org.exoplatform.forum.webui;
 
-import org.exoplatform.forum.webui.popup.UIPopupAction;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
@@ -16,14 +15,15 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
  */
 @ComponentConfig(
    lifecycle = UIApplicationLifecycle.class,
-   template = "app:/templates/forum/webui/UIPrintView.jstmpl"
+   template = "app:/templates/forum/webui/UIForumPortlet.gtmpl"
 )
 public class UIForumPortlet extends UIPortletApplication {
   public UIForumPortlet() throws Exception {
-    //addChild(UIBannerContainer.class, null, null) ;
-    //addChild(UIBreadcumbs.class, null, null) ;
+    addChild(UIBannerContainer.class, null, null) ;
+    addChild(UIBreadcumbs.class, null, null) ;
+    addChild(UIForumControlbar.class, null, null);
     addChild(UICategories.class, null, null) ;
-    //addChild(UIForumInfo.class, null, null) ;
+    addChild(UICategoriesSummary.class, null, null) ;
     //addChild(UIForumContainer.class, null, null).setRendered(false) ;
   }
 }

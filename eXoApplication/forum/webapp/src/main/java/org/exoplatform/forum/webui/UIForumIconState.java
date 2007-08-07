@@ -15,9 +15,9 @@ import org.exoplatform.webui.core.UIContainer;
  */
 
 @ComponentConfig(
-    template =  "app:/templates/forum/webui/UIForumInfo.jstmpl"
+    template =  "app:/templates/forum/webui/UIForumExplainationIcons.gtmpl"
 )
-public class UIForumInfo extends UIContainer  {
-  public UIForumInfo() throws Exception {    
+public class UIForumIconState extends UIContainer  {
+  public UIForumIconState() throws Exception {    
   }  
 }

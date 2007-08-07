@@ -19,7 +19,7 @@ import org.exoplatform.webui.form.UIForm;
  */
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
-    template = "app:/templates/forum/webui/UIForumLinks.jstmpl",
+    template = "app:/templates/forum/webui/UIForumLinks.gtmpl",
     events = {
       @EventConfig(listeners = UIForumLinks.SelectActionListener.class)      
     }

@@ -15,14 +15,14 @@ import org.exoplatform.webui.core.UIContainer;
  */
 
 @ComponentConfig(
-    template =  "app:/templates/forum/webui/UIForumContainer.jstmpl"
+    template =  "app:/templates/forum/webui/UIForumContainer.gtmpl"
 )
 public class UIForumContainer extends UIContainer  {
   public UIForumContainer() throws Exception {
     addChild(UIBannerContainer.class, null, null) ;
     addChild(UIBreadcumbs.class, null, null) ;
     addChild(UITopicContainer.class, null, null) ;
-    addChild(UIForumInfo.class, null, null) ;
+    addChild(UIForumInfos.class, null, null) ;
     addChild(UIForumLinks.class, null, null) ;
   }  
 }

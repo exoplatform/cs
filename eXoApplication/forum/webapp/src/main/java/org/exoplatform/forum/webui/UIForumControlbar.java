@@ -15,10 +15,10 @@ import org.exoplatform.webui.core.UIContainer;
  */
 
 @ComponentConfig(
-    template =  "app:/templates/forum/webui/UIBannerContainer.gtmpl"
+    template =  "app:/templates/forum/webui/UIForumControlbar.gtmpl" +
+    		""
 )
-public class UIBannerContainer extends UIContainer  {
-  public UIBannerContainer() throws Exception {
-    addChild(UISearchForm.class, null, null) ;
+public class UIForumControlbar extends UIContainer  {
+  public UIForumControlbar() throws Exception {    
   }  
 }

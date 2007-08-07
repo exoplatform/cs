@@ -17,7 +17,8 @@ import org.exoplatform.webui.event.EventListener;
  * Aus 01, 2007 2:48:18 PM 
  */
 @ComponentConfig(
-    template =  "app:/templates/forum/webui/UIBreadcumbs.jstmpl",
+    template =  "app:/templates/forum/webui/UIBreadcumbs.gtmpl" +
+    		"",
     events = {
         @EventConfig(listeners = UIBreadcumbs.ChangePathActionListener.class),
         @EventConfig(listeners = UIBreadcumbs.RssActionListener.class)

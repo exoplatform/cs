@@ -1,6 +1,3 @@
-<%
-// move this to the method processRender
-%>
 <div class="UIPostsInThread">
 	<div class="ButtomAndPageIteratorContainer">
 		<div class="UIActionForum" style="float: left;">

@@ -1,0 +1,8 @@
+<%
+import org.exoplatform.forum.webui.UICategoryInfo ;
+import org.exoplatform.forum.webui.UIForumIconState ;
+%>
+<div class="UICategoriesSummary">	
+	<% uicomponent.renderChild(UICategoryInfo.class)%>
+	<% uicomponent.renderChild(UIForumIconState.class)%>
+</div>

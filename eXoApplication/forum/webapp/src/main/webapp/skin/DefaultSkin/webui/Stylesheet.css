@@ -94,7 +94,23 @@
 	height: 26px;
 }
 
-/*=============================Content Container====================*/
+/*=============================Content UICategoriesSummary====================*/
+
+.UIForumPortlet .UICategoriesSummary {
+	padding: 5px 10px;
+}
+
+.UIForumPortlet .ContentContainer .UserIcon {
+	background: url('UICategories/icons/24x24/UserIcon.gif') no-repeat ;
+	width: 24px; height: 22px;
+	margin: 0px 4px;
+}
+
+.UIForumPortlet .ContentContainer .ChartIcon {
+	background: url('UICategories/icons/24x24/ChartIcon.gif') no-repeat ;
+	width: 24px; height: 22px;
+	margin: 0px 4px;
+}
 
 .UIForumPortlet .ContentContainer {
 	padding-left: 1px;
@@ -165,6 +181,3 @@
 .UIForumPortlet .ContentContainer .LastPostInfos {
 	line-height: 22px;
 }
-
-
-
