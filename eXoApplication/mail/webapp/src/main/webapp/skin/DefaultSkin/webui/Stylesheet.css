@@ -106,11 +106,50 @@
 	padding: 0px 2px;
 }
 
-.UIMailPortlet .UINavigationContainer .UIDropDownItemSelector {
+.UIMailPortlet .UISelectAccount {
+}
+
+.UIMailPortlet .UISelectAccount .ItemSelectorContainer {
 	width: 194px;
 	float: left;
 	margin: 10px 0px 1px 0px;
+	border-right: none;
+	height: 19px;
 }
+
+.UIMailPortlet .UISelectAccount .ItemInfoBar {
+	background: white url(background/DropDownItemSelectorBG1x2.gif) repeat-x top;
+	padding-left: 5px;
+	border: 1px solid #929292;
+	cursor: pointer;
+}
+
+.UIMailPortlet .UISelectAccount .ItemInfoBar .SelectedItemLabel {
+	float: left;
+	line-height: 19px;
+	font-size: 10px; font-weight: bold; color: #333333;
+	margin-left: 7px;
+}
+
+.UIMailPortlet .UISelectAccount .ItemInfoBarDisable .SelectedItemLabel {
+	float: left;
+	line-height: 19px;
+	font-weight: bold;
+	margin-left: 8px;
+	overflow: hidden;
+}
+
+.UIMailPortlet .UISelectAccount .DropDownSelectIcon {
+	float: right; 
+	width: 20px; height: 19px;
+	background: url('background/DropDownButton.gif') no-repeat right;
+	cursor: pointer;	
+}
+
+.UIMailPortlet .UISelectAccount .UIItemList .ItemSelectorLabel {
+	text-transform: capitalize; 
+}
+
 
 .UIMailPortlet .UINavigationContainer .AddAccountIcon {
 	background: url('/eXoResources/skin/DefaultSkin/skinIcons/24x24/icons/EditNavigation.gif') no-repeat left top;
