@@ -41,7 +41,7 @@
 					        if(i%2 == 0) classRow = "whileRow";
 					        else classRow = "OddRow";
 					        i++;
-					     %>
+					    %>
 					    	<tr class="$classRow">
 									<td style="padding: 0px;"><div class="ForumStatusIcon NoNewPostIcon" title="Forum Contains No New Post"><span></span></div></td>
 									<td >

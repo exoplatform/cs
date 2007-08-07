@@ -1,6 +1,6 @@
 <%
-import org.exoplatform.forum.webui.UICategoryInfo ;
-import org.exoplatform.forum.webui.UIForumIconState ;
+	import org.exoplatform.forum.webui.UICategoryInfo ;
+	import org.exoplatform.forum.webui.UIForumIconState ;
 %>
 <div class="UICategoriesSummary">	
 	<% uicomponent.renderChild(UICategoryInfo.class)%>

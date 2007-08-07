@@ -1,45 +1,45 @@
-.UIPostsInThread {
+.UITopicContainer {
 }
 
-.UIPostsInThread .ButtomAndPageIteratorContainer {
+.UITopicContainer .ButtomAndPageIteratorContainer {
 	margin: 10px 10px 0px 10px;
 }
 
-.UIPostsInThread .PostReplyIcon {
+.UITopicContainer .PostReplyIcon {
 	background: url('icons/16x16/PostReplyIcon.gif') no-repeat left 2px ;
 }
 
 /********************************* PostsInThreadContainer ************************************/
 
-.UIPostsInThread .PostsInThreadContainer {
+.UITopicContainer .PostsInThreadContainer {
 	margin: 0px 10px;
 }
 
-.UIPostsInThread .ToolbarActionsContainer {
+.UITopicContainer .ToolbarActionsContainer {
 	padding-right: 10px;
 }
 
-.UIPostsInThread .ForumToolbar .IconToolbar {
+.UITopicContainer .ForumToolbar .IconToolbar {
 	float: right;
 	padding-left: 23px;
 	line-height: 25px;
 	margin: 1px 10px;
 }
 
-.UIPostsInThread .ForumToolbar .SeparatorLine {
+.UITopicContainer .ForumToolbar .SeparatorLine {
 	float: right;
 	background: url('background/SeparatorLine2x19.gif') no-repeat center ;
 	height: 19px; width: 2px;	
 	margin-top: 4px;
 }
 
-.UIPostsInThread .ForumToolbar .SearchIcon {
+.UITopicContainer .ForumToolbar .SearchIcon {
 	background-repeat: no-repeat;
 	background-position: left center;
 	width: auto; height: auto;
 }
 
-.UIPostsInThread .ForumToolbar .ExpandButton {
+.UITopicContainer .ForumToolbar .ExpandButton {
 	float: right;
 	background: url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/BlueDownArrow.gif') no-repeat center ;
 	height: 16px; width: 16px;	
@@ -47,58 +47,58 @@
 	cursor: pointer;
 }
 
-.UIPostsInThread .ForumToolbar .ToolIcon {
+.UITopicContainer .ForumToolbar .ToolIcon {
 	background: url('icons/16x16/ToolIcon.gif') no-repeat center left;
 }
 
-.UIPostsInThread .ForumToolbar .VoteIcon {
+.UITopicContainer .ForumToolbar .VoteIcon {
 	background: url('icons/16x16/VoteIcon.gif') no-repeat center left;
 }
 
-.UIPostsInThread .ForumToolbar .TagIcon {
+.UITopicContainer .ForumToolbar .TagIcon {
 	background: url('icons/16x16/TagIcon.gif') no-repeat center left;
 }
 
 /*************************************** ContentContainer ************************************/
-.UIPostsInThread .ContentContainer {
+.UITopicContainer .ContentContainer {
 	margin: 3px 0px;
 }
 
-.UIPostsInThread .TablePost {
+.UITopicContainer .TablePost {
 	border-collapse: separate;
 	border: 1px solid #c4c4c4;
 }
 
-*html .UIPostsInThread .MemberContainer {
+*html .UITopicContainer .MemberContainer {
 	border: none;
 }
 
-.UIPostsInThread .MemberContainer {
+.UITopicContainer .MemberContainer {
 	background: #eeedf7;
 	border: 1px solid white;
 	width: 192px;
 }
 
-.UIPostsInThread .MemberContent {
+.UITopicContainer .MemberContent {
 	padding: 10px 15px;
 }	
 
-.UIPostsInThread .MemberContent .State {
+.UITopicContainer .MemberContent .State {
 	float: left;	
 	width: 16px;
 	height: 20px;
 	cursor: pointer;
 }
 
-.UIPostsInThread .MemberContent .AvailableIcon {
+.UITopicContainer .MemberContent .AvailableIcon {
 	background: url('icons/16x16/OnlineIcon.gif') no-repeat center;
 }
 
-.UIPostsInThread .MemberContent .BusyIcon {
+.UITopicContainer .MemberContent .BusyIcon {
 	background: url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/BusyIcon.gif') no-repeat center;
 }
 
-.UIPostsInThread .MemberContent .Name {
+.UITopicContainer .MemberContent .Name {
 	float: left;
 	color: #135bbe;
 	font-size: 14px; font-weight: bold;
@@ -106,20 +106,20 @@
 	padding: 0px 5px;
 }
 
-.UIPostsInThread .MemberContent .Action {
+.UITopicContainer .MemberContent .Action {
 	background: url('icons/16x16/DropDownIcon.gif') no-repeat center 4px;
 	float: left;
 	width: 16px; height: 20px;
 	cursor: pointer;
 }
 
-.UIPostsInThread .MemberContent .Rank {
+.UITopicContainer .MemberContent .Rank {
 	color: #2c2c2c;
 	font-size: 12px;
 	padding: 0px 0px 0px 2px;
 }
 
-.UIPostsInThread .Img {
+.UITopicContainer .Img {
 	border: 1px solid #484848;
 	padding: 1px;
 	background: white;
@@ -127,79 +127,79 @@
 	cursor: pointer;
 }
 
-.UIPostsInThread .MemberContent .InfoMember {
+.UITopicContainer .MemberContent .InfoMember {
 	line-height: 18px;
 	color: #2c2c2c;
 }
 
 /************************************** PostViewContainer ***********************************/
 
-.UIPostsInThread .PostViewContainer {
+.UITopicContainer .PostViewContainer {
 	color: #2c2c2c;
 	border-left: solid 1px #c4c4c4;
 	padding: 0px 8px;
 }
 
-.UIPostsInThread .PostViewContainer .PostViewTitle {
+.UITopicContainer .PostViewContainer .PostViewTitle {
 	border-bottom: 1px solid #d8d8d8;
 	padding: 5px 0px 3px 0px;
 }
 
-.UIPostsInThread .PostViewContainer .PostViewIcon {
+.UITopicContainer .PostViewContainer .PostViewIcon {
 	font-weight: bold; font-size: 12px;
 	font-family: arial;
 	line-height: 20px;
 	padding-left: 20px;
 }
 
-.UIPostsInThread .PostViewContainer .PostTime {
+.UITopicContainer .PostViewContainer .PostTime {
 	padding: 2px 0px 0px 20px;
 }
 
-.UIPostsInThread .PostViewContainer .PostContent {
+.UITopicContainer .PostViewContainer .PostContent {
 	padding: 0px 5px;
 }
 
-.UIPostsInThread .PostViewContainer a {
+.UITopicContainer .PostViewContainer a {
 	color: blue;
 }
 
-.UIPostsInThread .PostViewContainer .AttachmentContainer .AttachmentTitle {
+.UITopicContainer .PostViewContainer .AttachmentContainer .AttachmentTitle {
 	background: #e7e7e7 url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/AttachmentIcon.gif') no-repeat 3px center;
 	padding-left: 20px;
 	line-height: 25px;
 	font-weight: bold;
 }
 
-.UIPostsInThread .PostViewContainer .AttachmentContainer .Attachment1 {
+.UITopicContainer .PostViewContainer .AttachmentContainer .Attachment1 {
 	float: left;
 	width: 200px;
 	padding: 15px;
 }
 
-.UIPostsInThread .PostViewContainer .AttachmentContainer .Attachment2 {
+.UITopicContainer .PostViewContainer .AttachmentContainer .Attachment2 {
 	padding: 15px 10px;
 	margin-left: 220px;
 }
 
-.UIPostsInThread .PostViewContainer .AttachmentContainer .Attachment3 {
+.UITopicContainer .PostViewContainer .AttachmentContainer .Attachment3 {
 	float: left;
 	width: 300px;
 	padding: 15px;
 }
 
-.UIPostsInThread .PostViewContainer .AttachmentContainer .Attachment4 {
+.UITopicContainer .PostViewContainer .AttachmentContainer .Attachment4 {
 	padding: 15px 10px;
 	margin-left: 320px;
 	width: 300px;
 }
 
-.UIPostsInThread .AttachmentContainer .Img {
+.UITopicContainer .AttachmentContainer .Img {
 	float: left;
 	margin: 0px 10px 0px 0px;
 }
 
-.UIPostsInThread .PostViewContainer .AttachmentContainer .AttachmentIcon {
+.UITopicContainer .PostViewContainer .AttachmentContainer .AttachmentIcon {
 	color: #1555b5;
 	height: 20px; line-height: 20px;
 	padding-left: 25px;
@@ -207,15 +207,15 @@
 	cursor: pointer;
 }
 
-.UIPostsInThread .PostViewContainer .AttachmentContainer .AttachmentInfo {
+.UITopicContainer .PostViewContainer .AttachmentContainer .AttachmentInfo {
 	float: right;
 }
 
-.UIPostsInThread .PostViewContainer .AttachmentContainer .Action {
+.UITopicContainer .PostViewContainer .AttachmentContainer .Action {
 	padding-top: 50px;
 }
 
-.UIPostsInThread .PostViewContainer .AttachmentContainer .Action .Icon {
+.UITopicContainer .PostViewContainer .AttachmentContainer .Action .Icon {
 	float: left;
 	color: #1555b5;
 	padding-left: 20px;
@@ -224,57 +224,57 @@
 	cursor: pointer;
 }
 
-.UIPostsInThread .PostViewContainer .AttachmentContainer .Action .View {
+.UITopicContainer .PostViewContainer .AttachmentContainer .Action .View {
 	background: url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/ViewIcon.gif') no-repeat left center;
 }
 
-.UIPostsInThread .PostViewContainer .AttachmentContainer .Action .Download {
+.UITopicContainer .PostViewContainer .AttachmentContainer .Action .Download {
 	background: url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/DownloadIcon.gif') no-repeat left center;
 }
 
-.UIPostsInThread .PostViewContainer .AttachmentContainer .WordIcon {
+.UITopicContainer .PostViewContainer .AttachmentContainer .WordIcon {
 	background: url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/WordIcon.gif') no-repeat left center;
 }
 
-.UIPostsInThread .PostViewContainer .AttachmentContainer .PPTIcon {
+.UITopicContainer .PostViewContainer .AttachmentContainer .PPTIcon {
 	background: url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/PPTIcon.gif') no-repeat left center;
 }
 
-.UIPostsInThread .PostViewContainer .AttachmentContainer .PNGIcon {
+.UITopicContainer .PostViewContainer .AttachmentContainer .PNGIcon {
 	background: url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/PNGIcon.gif') no-repeat left center;
 }
 
-.UIPostsInThread .PostViewContainer .AttachmentContainer .JPGIcon {
+.UITopicContainer .PostViewContainer .AttachmentContainer .JPGIcon {
 	background: url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/JPGIcon.gif') no-repeat left center;
 }
 
-.UIPostsInThread .PostViewContainer .AttachmentContainer .Size {
+.UITopicContainer .PostViewContainer .AttachmentContainer .Size {
 	padding-left: 25px;
 }
 
-.UIPostsInThread .PostViewContainer .FootPost {
+.UITopicContainer .PostViewContainer .FootPost {
 	border-top: 1px dotted #9b9b9b;
 	padding: 5px 0px 0px 0px;
 	width: auto;
 }
 
-.UIPostsInThread .PostViewContainer .PostInfo {
+.UITopicContainer .PostViewContainer .PostInfo {
 	float: left;
 	line-height: 18px;
 }
 
-.UIPostsInThread .PostViewContainer .ButtonContainer {
+.UITopicContainer .PostViewContainer .ButtonContainer {
 	float: right;
 	padding: 10px 0px 0px 0px;
 }
 
 /***************************************** Quote ****************************************/
 
-.UIPostsInThread .PostViewContainer .QuoteContent {
+.UITopicContainer .PostViewContainer .QuoteContent {
 	padding: 10px;
 }
 
-.UIPostsInThread .PostViewContainer .Quote {
+.UITopicContainer .PostViewContainer .Quote {
 	background: #ededf7;
 	border: 1px solid #d8d8d8;
 	padding: 10px 15px;
