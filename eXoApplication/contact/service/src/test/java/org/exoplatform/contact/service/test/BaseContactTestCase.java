@@ -41,7 +41,8 @@ public class BaseContactTestCase extends BasicTestCase {
   protected PortalContainer manager_;  
   protected Session session_ ;  
   protected ContactService contactService_ ;
-  public void setUp() throws Exception{
+  
+  public void setUp() throws Exception {
     
     LogService logService = 
       (LogService) RootContainer.getInstance().getComponentInstanceOfType(LogService.class); 

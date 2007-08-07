@@ -20,7 +20,6 @@ import org.exoplatform.contact.service.GroupContactData;
  */
 public interface DataStorage {
   
-  public List<Contact> getPublicContact() throws Exception ;
   public List<Contact> getAllContact(String username) throws Exception ;
   public List<Contact> getContactsByGroup(String username, String groupId) throws Exception ;
   public Contact getContact(String username, String contactId) throws Exception ;

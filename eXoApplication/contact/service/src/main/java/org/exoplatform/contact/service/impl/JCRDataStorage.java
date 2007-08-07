@@ -11,7 +11,6 @@ import java.util.List;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
-import javax.jcr.Property;
 import javax.jcr.PropertyIterator;
 import javax.jcr.Session;
 import javax.jcr.Value;
@@ -34,7 +33,7 @@ import org.exoplatform.services.jcr.RepositoryService;
  *          hung.nguyen@exoplatform.com
  * Jul 10, 2007  
  */
-public class JCRDataStorage implements DataStorage{
+public class JCRDataStorage implements DataStorage {
   
   final private static String CONTACTS = "contacts".intern() ;
   final private static String CONTACT_GROUP = "contactGroup".intern() ;
@@ -198,11 +197,6 @@ public class JCRDataStorage implements DataStorage{
     return contactGroups;
   }
 
-  public List<Contact> getPublicContact() throws Exception {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
   public Contact removeContact(String username, String contactId) throws Exception {
     Node contactHomeNode = getContactHome(username);
     Contact contact = new Contact();
@@ -271,6 +265,7 @@ public class JCRDataStorage implements DataStorage{
 
   public List<GroupContactData> getPublicContacts(String[] groupIds) throws Exception {
     Node publicGroupHome = getPublicContactGroupHome() ;
+    System.out.println("\n\n\n ccccc" + publicGroupHome.getPath() );
     List<Contact> contacts  ;
     List<GroupContactData> contactByGroup = new ArrayList<GroupContactData>() ;
     for(String groupId : groupIds) {
@@ -326,22 +321,85 @@ public class JCRDataStorage implements DataStorage{
   }
 
   public Contact getSharedContact(String contactId) throws Exception {
-    // TODO Auto-generated method stub
+    Node contactHomeNode = getPublicContactHome();
+    if(contactHomeNode.hasNode(contactId)) {
+      Node contactNode = contactHomeNode.getNode(contactId);
+      Contact contact = new Contact();
+      contact = getContact(contactNode);
+      return contact;
+    }
     return null;
   }
 
+  // add  saiiiiiiiiiiiii
+  public List<Contact> getSharedContactsByGroup(String groupId) throws Exception {
+    Node contactHome = getPublicContactHome();
+    System.out.println("\n\n\n getSharedContactsByGroup size:" + contactHome.getPath() );
+    QueryManager qm = contactHome.getSession().getWorkspace().getQueryManager();
+    StringBuffer queryString = new StringBuffer("/jcr:root" + contactHome.getPath() 
+                                                + "//element(*,exo:contact)[@exo:groups='").
+                                                append(groupId).
+                                                append("']");
+    Query query = qm.createQuery(queryString.toString(), Query.XPATH);
+    QueryResult result = query.execute();
+    NodeIterator it = result.getNodes();
+    List<Contact> contacts = new ArrayList<Contact>();
+    while (it.hasNext()) {
+      contacts.add(getContact(it.nextNode()));
+    }
+    
+    return contacts ;
+  }
+  
   public List<GroupContactData> getSharedContacts(String[] groupIds) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
+    Node publicGroupHome = getPublicContactGroupHome();
+    List<Contact> contacts  ;
+    List<GroupContactData> contactByGroup = new ArrayList<GroupContactData>() ;
+    for(String groupId : groupIds) {
+      if (publicGroupHome.hasNode(groupId)) {
+        contacts = getSharedContactsByGroup(groupId);
+        contactByGroup.add(new GroupContactData(groupId, contacts));
+      }
+    }
+    return contactByGroup;
   }
 
   public Contact removeSharedContact(String contactId) throws Exception {
-    // TODO Auto-generated method stub
+    Node contactHomeNode = getPublicContactHome();
+    Contact contact = new Contact();
+    if (contactHomeNode.hasNode(contactId)) {
+      contact = getSharedContact(contactId);
+      contactHomeNode.getNode(contactId).remove();
+      contactHomeNode.getSession().save();
+      return contact;
+    }
     return null;
   }
 
   public void saveSharedContact(Contact contact, boolean isNew) throws Exception {
-    // TODO Auto-generated method stub
+    Node contactHomeNode = getPublicContactHome();
+    Node contactNode;
+    if (isNew) {
+      contactNode = contactHomeNode.addNode(contact.getId(), "exo:contact"); 
+      contactNode.setProperty("exo:id", contact.getId());
+    } else {
+      contactNode = contactHomeNode.getNode(contact.getId());
+    }
+    contactNode.setProperty("exo:firstName", contact.getFirstName());
+    contactNode.setProperty("exo:lastName", contact.getLastName());
+    contactNode.setProperty("exo:emailAddress", contact.getEmailAddress());
+    contactNode.setProperty("exo:homePhone", contact.getHomePhone());
+    contactNode.setProperty("exo:workPhone", contact.getWorkPhone());
+    contactNode.setProperty("exo:homeAddress", contact.getHomeAddress());
+    contactNode.setProperty("exo:country", contact.getCountry());
+    contactNode.setProperty("exo:postalCode", contact.getPostalCode());
+    contactNode.setProperty("exo:personalSite", contact.getPersonalSite());
+    contactNode.setProperty("exo:organization", contact.getOrganization());
+    contactNode.setProperty("exo:jobTitle", contact.getJobTitle());
+    contactNode.setProperty("exo:companyAddress", contact.getCompanyAddress()); 
+    contactNode.setProperty("exo:companySite", contact.getCompanySite());
+    contactNode.setProperty("exo:groups", contact.getCategories());
     
+    contactHomeNode.getSession().save(); 
   }  
 }

@@ -32,4 +32,5 @@ public interface ContactService {
   
   public Contact shareContact(Contact contact, String[] groupIds) throws Exception ;
   public List<GroupContactData> getPublicContacts(String[] groupIds) throws Exception ;
+
 }

@@ -27,10 +27,6 @@ public class ContactServiceImpl implements ContactService{
       storage_ = new JCRDataStorage(repositoryService, jcrRegistryService) ;
   }
   
-  public List<Contact> getPublicContact() throws Exception {
-    return null ;
-  }
-  
   public List<Contact> getAllContact(String username) throws Exception {
     return storage_.getAllContact(username);
   }
@@ -76,23 +72,19 @@ public class ContactServiceImpl implements ContactService{
   }
 
   public Contact getSharedContact(String contactId) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
+    return storage_.getSharedContact(contactId);
   }
 
   public List<GroupContactData> getSharedContacts(String[] groupIds) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
+    return storage_.getSharedContacts(groupIds);
   }
 
   public Contact removeSharedContact(String contactId) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
+    return storage_.removeSharedContact(contactId);
   }
 
   public void saveSharedContact(Contact contact, boolean isNew) throws Exception {
-    // TODO Auto-generated method stub
-    
+    storage_.saveSharedContact(contact, isNew);
   }
   
 }
