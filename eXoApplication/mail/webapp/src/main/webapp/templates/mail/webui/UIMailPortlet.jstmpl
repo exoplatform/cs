@@ -4,8 +4,8 @@
 <div class="$uicomponent.id UIApplication" id="$uicomponent.id">
   <div class="ApplicationMinWidth">
   	<div class="UIMailPortlet">
-<!-- Start Mail Banner -->
-	    <div class="MailBanner">
+<!-- Start Mail Banner Container -->
+	    <div class="UIBannerContainer">
 	    	<div class="LeftHorizontalLine">
 					<div class="RepeatHorizontalLine">a Powerful, Open-source Messaging</div>					
 				</div>
@@ -18,11 +18,11 @@
 					<div style="clear:right;"><span></span></div>
 				</div>
 			</div>
-<!-- End Mail Banner -->
+<!-- End Mail Banner Container -->
 <!-- Start Mail Working Workspace -->
 	    <div class="MailWorkingWorkspace">
-<!-- Start Mail ControlBar -->
-		   <div class="MailControlBar">
+<!-- Start Mail Action Bar -->
+		   <div class="UIActionBar">
 					<div class="UIToolbar">
 						<div class="HeaderToolbar">
 							<div class="LeftBar">
@@ -88,19 +88,18 @@
 						</div>
 					</div>
 				</div>
-				<div style="clear:left;"><span></span></div>
-<!-- End Mail ControlBar -->
+				<div style="clear: left;"><span></span></div>
+<!-- End Mail Action Bar -->
 <!-- Start Mail Container -->
 				<div class="MailContainer">
-					<div class="MailAccountManagement">
+					<div class="UINavigationContainer">
 						
-						<div class="UIDropDownItemSelector">
+						<div class="UISelectAccount">
 							<div class="ItemSelectorContainer">
 						  	<div class="ItemInfoBar" >
 							  	<div class="LeftItemInfoBar">
 								  	<div class="RightItemInfoBar">
 								  		<div class="MiddleItemInfoBar" title="Show List" >
-								  			<div class="Icon AccountIcon"><span></span></div>
 								  			<div class="SelectedItemLabel">Default Account</div>
 								  			<div class="DropDownSelectIcon"><span></span></div>
 								  			<div style="clear: both;"><span></span></div>
@@ -109,11 +108,12 @@
 									</div>
 								</div>
 							</div>
+							<a class="AddAccountIcon" href = "#" title="Add New Account"><span></span></a>
+		        	<div style="clear: left"><span></span></div>
 						</div>
-						<a class="AddAccountIcon" href = "#" title="Add New Account"><span></span></a>
-		        <div style="clear: left"><span></span></div>
 						
-						<div class="AccountFolderList">
+						
+						<div class="UIFolderContainer">
 							<div class="FolderListTitleBar">
 								<div class="DownArrow3Icon" title="Collapse this Panel"><span></span></div>
 								<div class="Title FolderIcon">Folders</div>
@@ -175,9 +175,9 @@
 					   		<div style="clear:left"><span></span></div>
 							</div> 							
 						</div>
-<!-- End AccountFolderList -->							
-<!--  Start UITag -->
-						<div class="UITag">
+						
+<!--  Start Tag Container -->
+						<div class="UITagContainer">
 							<div class="TagTitleBar">
 								<div class="DownArrow3Icon" title="Collapse/Expand all"><span></span></div>
 								<div class="TagTitle TagIcon">Tags</div>
@@ -190,70 +190,69 @@
 								<a href="#" class="IconHolder VioletTag">Design Team</a>
 							</div>
 						</div>
-<!-- End UITag -->											
+<!-- End Tag Container -->											
 					</div>
-<!-- End Mail AccountManagement -->					
-<!--  Start Mail Working Details -->
-					<div class="MailWorkingDetails">
+<!-- End Mail UINavigationContainer -->					
+<!--  Start Mail Message Area  -->
+					<div class="UIMessageArea">
 						
-						<div class="MailList">
-							<div class="MailActionsBar">
-								<a href="#" class="ControlButton">
-									<div class="MoreActionsIcon">
-										<div class="DownArrow1Icon">More Actions</div>
-									</div>
-								</a>
-								<a href="#" class="ControlButton">
-									<div class="ViewIcon">
-										<div class="DownArrow1Icon">View</div>
-									</div>
-								</a>
-								<a href="#" class="ControlButton">
-									<div class="AddEventIcon">
-										<div class="Label">Add event</div>
-									</div>
-								</a>
-								<div class="MailPageIterator">
-									<div class="MailIteratorContainer">
-  									<div class="RightPageIteratorBlock">
-    	  							<a title="First Page" class="FloatBlockHidden FirstPageArrow"/></a>        
-    	  							<a title="Previous Page" class="FloatBlockHidden PreviousPageArrow"></a>
-    									<div class="Number">1</div>
-    	  				 			<a title="Next Page" class="FloatBlock NextPageArrow" href="#"/></a>
-    	 				  			<a title="Last Page" class="FloatBlock LastPageArrow"><span/></a>
-									    <div style="clear: left;"><span/></div>
-									  </div>
-									  <div class="LeftPageIteratorBlock">
-									  	<div class="TotalPages">Message(s)<span class="MailQuantity">20 of 140</span></div>
-									  </div>
-									  <div style="clear: right;"><span></span></div>
-								  </div>
+						<div class="UIMessageActionsBar">
+							<a href="#" class="ControlButton">
+								<div class="MoreActionsIcon">
+									<div class="DownArrow1Icon">More Actions</div>
 								</div>
-								<div style="clear: left;"><span/></div>
+							</a>
+							<a href="#" class="ControlButton">
+								<div class="ViewIcon">
+									<div class="DownArrow1Icon">View</div>
+								</div>
+							</a>
+							<a href="#" class="ControlButton">
+								<div class="AddEventIcon">
+									<div class="Label">Add event</div>
+								</div>
+							</a>
+							<div class="UIMessagePageList">
+								<div class="MailIteratorContainer">
+  								<div class="RightPageIteratorBlock">
+		  							<a title="First Page" class="FloatBlockHidden FirstPageArrow"/></a>        
+		  							<a title="Previous Page" class="FloatBlockHidden PreviousPageArrow"></a>
+										<div class="Number">1</div>
+		  				 			<a title="Next Page" class="FloatBlock NextPageArrow" href="#"/></a>
+		 				  			<a title="Last Page" class="FloatBlock LastPageArrow"><span/></a>
+								    <div style="clear: left;"><span/></div>
+								  </div>
+								  <div class="LeftPageIteratorBlock">
+								  	<div class="TotalPages">Message(s)<span class="MailQuantity">20 of 140</span></div>
+								  </div>
+								  <div style="clear: right;"><span></span></div>
+							  </div>
 							</div>
-							<div class="MailListDetail">
-								<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
-  								<thead>
-  									<tr>
-      			          <th style="width: 30px;"><input type="checkbox" class="checkbox" title="Check all" value="4"/></th>
-	      							<th style="width: 24px;"><div class="HighlightStarIcon" title="Add star for this message"><span></span></div></th>
-	      		          <th style="padding-left: 8px; width: 24%;">
-		      		          <div class="DownArrow1Icon" title="Sort by sender">Sender</div>
-	      		          </th>
-	      		          <th style="width: 24px;"><div class="AttachmentIcon" title="Attchments"><span></span></div></th>
-	      		          <th style="width: 24px; border-right: 1px solid #f8f8f8;"></th>
-	 	      	          <th style="padding-left: 8px;">
-		      		          <div class="DownArrow1Icon" title="Sort by subject">Subject</div>
-	      		          </th>
-	 	      	          <th style="width: 24px;"><div class="TotalMessageIcon" title="Total message(s) in conversation"><span></span></div></th>
-	 	      	          <th style="width: 120px; padding-left: 8px;">
-		      		          <div class="DownArrow1Icon" title="Sort by Date & time">Date & Time</div>
-	 	      	          </th>
-	 	      	          <th>Size</th>
-	 	      	          <th style="width: 24px;"><div class="PriorityIcon"><span></span></div></th>
-	      	 	        </tr>
-	      	 	       </thead>
-	      	 	       <tbody>
+							<div style="clear: left;"><span/></div>
+						</div>
+						<div class="UIMessageList">
+							<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
+  							<thead>
+  								<tr>
+  			          	<th style="width: 30px;"><input type="checkbox" class="checkbox" title="Check all" value="4"/></th>
+      							<th style="width: 24px;"><div class="HighlightStarIcon" title="Add star for this message"><span></span></div></th>
+      		          <th style="padding-left: 8px; width: 24%;">
+	      		          <div class="DownArrow1Icon" title="Sort by sender">Sender</div>
+      		          </th>
+      		          <th style="width: 24px;"><div class="AttachmentIcon" title="Attchments"><span></span></div></th>
+      		          <th style="width: 24px; border-right: 1px solid #f8f8f8;"></th>
+ 	      	          <th style="padding-left: 8px;">
+	      		          <div class="DownArrow1Icon" title="Sort by subject">Subject</div>
+      		          </th>
+ 	      	          <th style="width: 24px;"><div class="TotalMessageIcon" title="Total message(s) in conversation"><span></span></div></th>
+ 	      	          <th style="width: 120px; padding-left: 8px;">
+	      		          <div class="DownArrow1Icon" title="Sort by Date & time">Date & Time</div>
+ 	      	          </th>
+ 	      	          <th>Size</th>
+ 	      	          <th style="width: 24px;"><div class="PriorityIcon"><span></span></div></th>
+      	 	        </tr>
+      	 	      </thead>
+  	 	       			<tbody>
   						      <tr>
   						        <td><input type="checkbox" class="checkbox" value="4"/></td>
 											<td style="padding: 0px;"><div class="StarredIcon" ><span></span></div></td>
@@ -265,9 +264,9 @@
 											<td class="text">07/02/2007 10:30am</td>
 											<td>10K</td>
 											<td style="padding: 0px;" class="textBold"></td>
-   			     		    </tr>
-							      <tr>
-                      <td><input type="checkbox" class="checkbox" value="4"/></td>
+   			     		  	</tr>
+						     	  <tr>
+	                  	<td><input type="checkbox" class="checkbox" value="4"/></td>
 											<td style="padding: 0px;"><div class="UnStarredIcon"><span></span></div></td>
 											<td class="textBold">Brice Revenant</td>
 											<td style="padding: 0px;"><div class="AttachmentIcon"><span></span></div></td>
@@ -290,7 +289,7 @@
 											<td class="text"></td>
 											<td style="padding: 0px;" class="textBold"></td>
 			      		    </tr>
-								      <tr>
+								    <tr>
 										  <td><input type="checkbox" class="checkbox" value="4"/></td>
 											<td style="padding: 0px;"><div class="StarredIcon"><span></span></div></td>
 											<td class="text"></td>
@@ -302,13 +301,12 @@
 											<td class="text"></td>
 											<td style="padding: 0px;" class="textBold"><div class="HighPriority">!</div></td>
 					  		    </tr>
-              	   </tbody>
-								</table>
-							</div>
+      	   			 </tbody>
+							</table>
 						</div>
 						<div class="ResizeReadingPane"><span></span></div>
 <!--  Start Mail Reading Pane -->
-						<div class="ReadingPane">
+						<div class="UIMessagePreview">
 							<div class="ReadingPaneBar">
 								<div class="Subject">Subject:Chao anh</div>
 								<div class="MaximizeReadingPane" title="Maximize Reading Pane"><span></span></div>
@@ -397,7 +395,7 @@ Tomorrow morning, we'll show the prototype to M6 with Benjamin. We'll think abou
 					</div>
 					<div style="clear:left;"><span></span></div>
 				</div>
-				
+<!-- End Mail Container -->
 			</div>
 
     </div>

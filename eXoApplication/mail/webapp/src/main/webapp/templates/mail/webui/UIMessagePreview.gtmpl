@@ -1,0 +1,86 @@
+<div class="ResizeReadingPane"><span></span></div>
+<div class="UIMessagePreview">
+	<div class="ReadingPaneBar">
+		<div class="Subject">Subject:Chao anh</div>
+		<div class="MaximizeReadingPane" title="Maximize Reading Pane"><span></span></div>
+		<div style="clear:both;"><span></span></div>
+	</div>
+	<div class="ReadingPaneDetails">
+<!--  Start DecoratorBox ViewBoxStyle -->
+		<div class="DecoratorBox">
+			<div class="ViewBoxStyle">
+				<div class="TopLeftViewBoxStyle">
+					<div class="TopRightViewBoxStyle">
+						<div class="TopCenterViewBoxStyle"><span></span></div>										
+					</div>
+				</div>
+				<div class="MiddleLeftViewBoxStyle">
+					<div class="MiddleRightViewBoxStyle">
+						<div class="MiddleCenterViewBoxStyle">
+							<div class="MessageHeader">
+								<div class="MessageCheck">
+									<div><input type="checkbox" class="CheckBox" value="4"/></div>
+									<div class="UnStarredIcon" title="Add star for this message"><span></span></div>
+									<div style="clear: left;"><span></span></div>
+								</div>
+								<div class="MessageAddress">
+									<div class="FieldContainer">
+										<div class="Title">From:</div>
+										<div class="LinkAddress"><span>Brice Revenant</span>(brice.revenant@gmail.com)</div>
+										<div style="clear: left;"><span></span></div>
+									</div>
+									<div class="FieldContainer">
+										<div class="Title">Reply-to:</div>
+										<div class="LinkAddress">brice.revenant@exoplatform.com</div>
+										<div style="clear: left;"><span></span></div>
+									</div>
+									<div class="FieldContainer">
+										<div class="Title">To:</div>
+										<div class="LinkAddress"><span>Phuong</span> (phuong.pham@exoplatform.com)</div>
+										<div style="clear: left;"><span></span></div>
+									</div>
+									<div class="FieldContainer">
+										<div class="Title">Date & time:</div>
+										<div class="Address">06/30/2007, 12:40 am</div>
+										<div style="clear: left;"><span></span></div>
+									</div>
+									<div class="FieldContainer">
+										<div class="Title">Supject:</div>
+										<div class="Address"><span>Chao anh</span></div>
+										<div style="clear: left;"><span></span></div>
+									</div>
+									<div class="FieldContainer">
+										<div class="Title">Tag:</div>
+										<div class="TagIcon"><span></span></div>
+										<div class="Address">Company</div>
+										<div style="clear: left;"><span></span></div>
+									</div>
+								</div>
+								<div class="MessageActions" >
+									<div class="DownArrow1Icon"><span></span></div>
+									<div class="ShowHideTitle">Hide deails</div>
+									<div class="MonthDate">June 26</div>
+									<div class="Actions" title="Actions on this message"><span></span></div>
+									<div style="clear: both;"><span></span></div>
+								</div>
+								<div style="clear: both;"><span></span></div>
+							</div>
+							<div class="MessageDetails">
+								Hi Phuong,<p>
+ 
+So I learnt that you are currently sick. I wish you will recover ASAP. I'm not sure if you was able to be at the university for your lessons. Probably next week when you feel better.
+Tomorrow morning, we'll show the prototype to M6 with Benjamin. We'll think about you, you really did a great job for the UI. I'm sure it will help to succeed.</p>
+							</div>											
+						</div>										
+					</div>
+				</div>
+				<div class="BottomLeftViewBoxStyle">
+					<div class="BottomRightViewBoxStyle">
+						<div class="BottomCenterViewBoxStyle"><span></span></div>										
+					</div>
+				</div>
+			</div>
+		</div>
+<!--  End DecoratorBox ViewBoxStyle -->
+	</div>
+</div>

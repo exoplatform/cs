@@ -1,0 +1,34 @@
+<div class="UIMessageActionsBar">
+	<a href="#" class="ControlButton">
+		<div class="MoreActionsIcon">
+			<div class="DownArrow1Icon">More Actions</div>
+		</div>
+	</a>
+	<a href="#" class="ControlButton">
+		<div class="ViewIcon">
+			<div class="DownArrow1Icon">View</div>
+		</div>
+	</a>
+	<a href="#" class="ControlButton">
+		<div class="AddEventIcon">
+			<div class="Label">Add event</div>
+		</div>
+	</a>
+	<div class="UIMessagePageList">
+		<div class="MailIteratorContainer">
+  		<div class="RightPageIteratorBlock">
+  			<a title="First Page" class="FloatBlockHidden FirstPageArrow"/></a>        
+  			<a title="Previous Page" class="FloatBlockHidden PreviousPageArrow"></a>
+				<div class="Number">1</div>
+  			<a title="Next Page" class="FloatBlock NextPageArrow" href="#"/></a>
+ 				<a title="Last Page" class="FloatBlock LastPageArrow"><span/></a>
+		    <div style="clear: left;"><span/></div>
+		  </div>
+		  <div class="LeftPageIteratorBlock">
+		  	<div class="TotalPages">Message(s)<span class="MailQuantity">20 of 140</span></div>
+		  </div>
+		  <div style="clear: right;"><span></span></div>
+	  </div>
+	</div>
+	<div style="clear: left;"><span/></div>
+</div>
