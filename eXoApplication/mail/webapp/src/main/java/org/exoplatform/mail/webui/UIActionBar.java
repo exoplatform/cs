@@ -4,10 +4,12 @@
  **************************************************************************/
 package org.exoplatform.mail.webui;
 
+import org.exoplatform.mail.webui.popup.UIComposeForm;
 import org.exoplatform.mail.webui.popup.UIPopupAction;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIContainer;
+import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
@@ -42,12 +44,14 @@ public class UIActionBar extends UIContainer {
       UIActionBar uiActionBar = event.getSource() ; 
       System.out.println(" =========== > Compose Action");
       UIMailPortlet mailPortlet = (UIMailPortlet)uiActionBar.getParent() ;
-      UIPopupAction uiPopupAction = mailPortlet.getChild(UIPopupAction.class) ;
-      uiPopupAction.activate(UISelectAccountForm.class, 600) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+      UIPopupWindow uiPopupAction = mailPortlet.getChild(UIPopupWindow.class) ;
+      uiPopupAction.setRendered(true);
+      uiPopupAction.setShow(true);
+      //uiPopupAction.activate(UISelectAccountForm.class, 600) ;
+      //event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }
-  } 
-     
+  }
+  
   static public class ContactActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {
       UIActionBar uiActionBar = event.getSource() ;      

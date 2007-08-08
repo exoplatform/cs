@@ -10,7 +10,7 @@
 		<%uicomponent.renderChild(UIMessageActionBar.class);%>
 		<%uicomponent.renderChild(UIMessageList.class);%>
 	</div>
-	<div class="ResizeReadingPane"><span></span></div>
+	<div class="ResizeReadingPane" onmousedown="eXo.mail.UIMailPortlet.resizeMessageArea();"><span></span></div>
 	<%uicomponent.renderChild(UIMessagePreview.class);%>
 
 </div>

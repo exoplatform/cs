@@ -4,9 +4,12 @@
  **************************************************************************/
 package org.exoplatform.mail.webui;
 
+
+import org.exoplatform.mail.webui.popup.UIComposeForm;
 import org.exoplatform.mail.webui.popup.UIPopupAction;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
+import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 
@@ -25,12 +28,16 @@ public class UIMailPortlet extends UIPortletApplication {
     addChild(UIActionBar.class, null, null) ;
     addChild(UINavigationContainer.class, null, null) ;
     addChild(UIMessageArea.class, null, null) ;
-    //addChild(UIPopupAction.class, null, null).setRendered(false) ;
-
     
+    UIPopupWindow popupCompose = addChild(UIPopupWindow.class, null, null) ;
+    popupCompose.setRendered(false);
+    popupCompose.setWindowSize(400, 400);
+    UIComposeForm formCompose = createUIComponent(UIComposeForm.class, null, null);
+    popupCompose.setUIComponent(formCompose);
+
     //addChild(UIMailContainer.class, null, null) ;
     
-    addChild(UIPopupAction.class, null, null) ;
+    //addChild(UIPopupAction.class, null, null) ;
   }
   
   public void cancelAction() throws Exception {

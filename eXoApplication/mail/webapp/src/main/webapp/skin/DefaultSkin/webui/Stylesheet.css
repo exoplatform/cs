@@ -339,7 +339,8 @@
 /*===================================MailWorkingDetail=================*/
 
 .UIMailPortlet .MailWorkingWorkspace .MailContainer .UIMessageArea {
-	margin: 0px 0px 0px 225px;
+	/*margin: 0px 0px 0px 225px;*/
+	overflow: auto;
 }
 
 .UIMailPortlet .UIMessageArea .UIMessageActionsBar {

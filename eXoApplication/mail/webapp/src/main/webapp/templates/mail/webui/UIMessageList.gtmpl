@@ -2,7 +2,7 @@
 	<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
   							<thead>
   								<tr>
-  			          	<th style="width: 30px;"><input type="checkbox" class="checkbox" title="Check all" value="4"/></th>
+  			          	<th style="width: 30px;"><input type="checkbox" class="checkbox" title="Check all" value="4" onclick="eXo.mail.UIMailPortlet.checkAllMessages();"/></th>
   							<th style="width: 24px;"><div class="HighlightStarIcon" title="Add star for this message"><span></span></div></th>
   		          <th style="padding-left: 8px; width: 24%;">
   		          <div class="DownArrow1Icon" title="Sort by sender">Sender</div>

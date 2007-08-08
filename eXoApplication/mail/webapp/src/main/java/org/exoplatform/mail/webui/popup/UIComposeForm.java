@@ -20,7 +20,7 @@ import org.exoplatform.webui.form.UIForm;
  */
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
-    template = "app:/templates/mail/webui/UIComposeForm.jstmpl",
+    template = "app:/templates/mail/webui/UIComposeForm.gtmpl",
     events = {
       @EventConfig(listeners = UIComposeForm.SendActionListener.class),      
       @EventConfig(listeners = UIComposeForm.SaveDraftActionListener.class),
