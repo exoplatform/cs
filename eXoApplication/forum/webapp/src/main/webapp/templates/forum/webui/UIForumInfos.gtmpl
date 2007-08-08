@@ -1,24 +1,4 @@
 <div class="UIForumInfos">
-	<div class="ThreadsStartsList LeftStartsList">
-		<div class="ForumCategory">
-		  <div class="ForumToolbar">
-			  <div class="LeftBar">
-			  	<div class="RightBar">
-			  		<div class="CenterBar">
-			  			<div class="Title">Moderators(10)</div>
-				  		<div class="CollapseButton" title="Expand category"><span></span></div>
-							<div style="clear: both;"><span></span></div>
-			  		</div>
-			  	</div>
-			  </div>
-		  </div>
-		  <div class="ContentContainer">
-			  <div class="ForumList">
-			  	<div class="text"> <a href="#"> benjamin.mestrallet </a>,<a href="#"> brice.revenant </a> ,<a href="#"> dung.nguyen </a> ,<a href="#"> jeremi </a> ,<a href="#"> hieu.luong </a> ,<a href="#"> tuan.nguyen </a>,<a href="#"> tuan.pham </a></div>
-		  	</div>
-		  </div>
-	  </div>
-	</div>
 	<div class="ThreadsStartsList RightStartsList">
 		<div class="ForumCategory">
 		  <div class="ForumToolbar">
@@ -42,5 +22,25 @@
 		  </div>
 	  </div>
 	</div>
-	<div style="clear: both;"><span></span></div>
+	<div class="ThreadsStartsList LeftStartsList">
+		<div class="ForumCategory">
+		  <div class="ForumToolbar">
+			  <div class="LeftBar">
+			  	<div class="RightBar">
+			  		<div class="CenterBar">
+			  			<div class="Title">Moderators(10)</div>
+				  		<div class="CollapseButton" title="Expand category"><span></span></div>
+							<div style="clear: both;"><span></span></div>
+			  		</div>
+			  	</div>
+			  </div>
+		  </div>
+		  <div class="ContentContainer">
+			  <div class="ForumList">
+			  	<div class="text"> <a href="#"> benjamin.mestrallet </a>,<a href="#"> brice.revenant </a> ,<a href="#"> dung.nguyen </a> ,<a href="#"> jeremi </a> ,<a href="#"> hieu.luong </a> ,<a href="#"> tuan.nguyen </a>,<a href="#"> tuan.pham </a></div>
+		  	</div>
+		  </div>
+	  </div>
+	</div>
+	<div style="clear: right;"><span></span></div>
 </div>

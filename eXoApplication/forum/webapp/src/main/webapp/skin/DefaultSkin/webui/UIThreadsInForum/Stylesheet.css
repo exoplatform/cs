@@ -108,15 +108,13 @@
 }
 
 .UIForumContainer .LeftStartsList {
-	float: left;
-	width: 60%;
-	margin: 5px 0px 0px 0px;
+	margin: 5px 310px 0px 0px;
 }
 
 .UIForumContainer .RightStartsList {
 	float: right;
-	width: 39%;
-	margin: 5px 0px 0px 0px;
+	width: 300px;
+	margin: 0px;
 }
 
 .UIForumContainer .RightStartsList .BoldTitle {
@@ -128,6 +126,7 @@
 	border: 1px solid #b7b7b7;
 	border-top: none;
 	padding: 5px;
+	height: 75px;
 }
 
 

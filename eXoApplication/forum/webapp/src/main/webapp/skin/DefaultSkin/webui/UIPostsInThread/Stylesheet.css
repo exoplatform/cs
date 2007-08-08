@@ -69,10 +69,6 @@
 	border: 1px solid #c4c4c4;
 }
 
-*html .UITopicContainer .MemberContainer {
-	border: none;
-}
-
 .UITopicContainer .MemberContainer {
 	background: #eeedf7;
 	border: 1px solid white;

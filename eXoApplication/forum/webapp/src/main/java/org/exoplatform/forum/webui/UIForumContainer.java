@@ -22,7 +22,8 @@ public class UIForumContainer extends UIContainer  {
 //    addChild(UIBannerContainer.class, null, null) ;
 //    addChild(UIBreadcumbs.class, null, null) ;
   	addChild(UIForumDescription.class, null, null) ;
-  	addChild(UITopicContainer.class, null, null) ;
+  	addChild(UITopicList.class, null, null) ;
     addChild(UIForumSummary.class, null, null) ;
+//    addChild(UITopicContainer.class, null, null) ;
   }  
 }
