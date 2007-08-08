@@ -2,13 +2,16 @@
  * Copyright 2001-2006 The eXo Platform SARL         All rights reserved.  *
  * Please look at license.txt in info directory for more license detail.   *
  **************************************************************************/
-package org.exoplatform.forum.webui ;
+package org.exoplatform.forum.webui;
 
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIComponent;
+import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.form.UIForm;
+import org.exoplatform.webui.form.UIFormStringInput;
 
 /**
  * Created by The eXo Platform SARL
@@ -16,23 +19,23 @@ import org.exoplatform.webui.event.EventListener;
  *          hung.nguyen@exoplatform.com
  * Aus 01, 2007 2:48:18 PM 
  */
-
 @ComponentConfig(
-    template =  "app:/templates/forum/webui/UITopicList.gtmpl",
+    lifecycle = UIFormLifecycle.class,
+    template = "app:/templates/forum/webui/UIPostPreview.gtmpl",
     events = {
-        @EventConfig(listeners = UITopicList.SelectTopicActionListener.class)
-        
+      @EventConfig(listeners = UIPostPreview.BackActionListener.class)
     }
 )
-
-public class UITopicList extends UIComponent {
-  public UITopicList() throws Exception {}
+public class UIPostPreview extends UIComponent {
   
   
-  static public class SelectTopicActionListener extends EventListener<UITopicList> {
-    public void execute(Event<UITopicList> event) throws Exception {      
-      String path = event.getRequestContext().getRequestParameter(OBJECTID) ;      
-    }
+  public UIPostPreview() {
+    
   }
   
+  static  public class BackActionListener extends EventListener<UIPostPreview> {
+    public void execute(Event<UIPostPreview> event) throws Exception {
+      UIPostPreview uiForm = event.getSource() ;
+    }
+  }
 }

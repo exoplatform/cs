@@ -19,11 +19,10 @@ import org.exoplatform.webui.core.UIContainer;
 )
 public class UIForumContainer extends UIContainer  {
   public UIForumContainer() throws Exception {
-//    addChild(UIBannerContainer.class, null, null) ;
-//    addChild(UIBreadcumbs.class, null, null) ;
-  	addChild(UIForumDescription.class, null, null) ;
-  	addChild(UITopicList.class, null, null) ;
+    addChild(UIForumDescription.class, null, null) ;
+    
+    addChild(UITopicContainer.class, null, null) ;
+    addChild(UITopicDetailContainer.class, null, null) ;
     addChild(UIForumSummary.class, null, null) ;
-//    addChild(UITopicContainer.class, null, null) ;
   }  
 }

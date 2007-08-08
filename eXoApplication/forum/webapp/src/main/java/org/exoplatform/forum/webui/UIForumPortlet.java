@@ -21,9 +21,8 @@ public class UIForumPortlet extends UIPortletApplication {
   public UIForumPortlet() throws Exception {
     addChild(UIBannerContainer.class, null, null) ;
     addChild(UIBreadcumbs.class, null, null) ;
-//    addChild(UIForumControlbar.class, null, null);
-//    addChild(UICategories.class, null, null) ;
-//    addChild(UICategoriesSummary.class, null, null) ;
-    addChild(UIForumContainer.class, null, null) ;
+    addChild(UICategoryContainer.class, null, null) ;
+    //addChild(UIForumContainer.class, null, null) ;
+    //addChild(UIPostPreview.class, null, null) ;
   }
 }

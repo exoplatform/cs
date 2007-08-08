@@ -9,6 +9,7 @@ import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.form.UIForm;
 
 /**
  * Created by The eXo Platform SARL
@@ -23,9 +24,11 @@ import org.exoplatform.webui.event.EventListener;
       @EventConfig(listeners = UITopicContainer.AddTopicActionListener.class )  
     }
 )
-public class UITopicContainer extends UIContainer  {
+public class UITopicContainer extends UIForm  {
   public UITopicContainer() throws Exception {
-    addChild(UITopicList.class, null, null) ;    
+    // render Topic page list
+    // render topic action bar
+    // render topic page list
   }
   
   static public class AddTopicActionListener extends EventListener<UITopicContainer> {

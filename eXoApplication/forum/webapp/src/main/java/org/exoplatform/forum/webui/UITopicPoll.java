@@ -9,6 +9,7 @@ import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.form.UIForm;
 
 /**
  * Created by The eXo Platform SARL
@@ -16,27 +17,22 @@ import org.exoplatform.webui.event.EventListener;
  *          hung.nguyen@exoplatform.com
  * Aus 01, 2007 2:48:18 PM 
  */
+
 @ComponentConfig(
-    template =  "app:/templates/forum/webui/UIBreadcumbs.gtmpl" ,
+    template =  "app:/templates/forum/webui/UITopicPoll.gtmpl", 
     events = {
-        @EventConfig(listeners = UIBreadcumbs.ChangePathActionListener.class),
-        @EventConfig(listeners = UIBreadcumbs.RssActionListener.class)
+      @EventConfig(listeners = UITopicPoll.VoteActionListener.class )  
     }
 )
-
-public class UIBreadcumbs extends UIContainer {
+public class UITopicPoll extends UIForm  {
+  public UITopicPoll() throws Exception {
+    
+    
+  }
   
-  public UIBreadcumbs()throws Exception {}
-  
-  static public class ChangePathActionListener extends EventListener<UIBreadcumbs> {
-    public void execute(Event<UIBreadcumbs> event) throws Exception {
-      UIBreadcumbs uiActionBar = event.getSource() ;      
+  static public class VoteActionListener extends EventListener<UITopicPoll> {
+    public void execute(Event<UITopicPoll> event) throws Exception {
+      String path = event.getRequestContext().getRequestParameter(OBJECTID) ;      
     }
-  }  
-  
-  static public class RssActionListener extends EventListener<UIBreadcumbs> {
-    public void execute(Event<UIBreadcumbs> event) throws Exception {
-      UIBreadcumbs uiActionBar = event.getSource() ;      
-    }
-  }  
+  }
 }

@@ -15,10 +15,12 @@ import org.exoplatform.webui.core.UIContainer;
  */
 
 @ComponentConfig(
-    template =  "app:/templates/forum/webui/UIForumControlbar.gtmpl" +
-    		""
+    template =  "app:/templates/forum/webui/UICategoryContainer.gtmpl"
 )
-public class UIForumControlbar extends UIContainer  {
-  public UIForumControlbar() throws Exception {    
+public class UICategoryContainer extends UIContainer  {
+  public UICategoryContainer() throws Exception {
+    addChild(UIForumActionBar.class, null, null);
+    addChild(UICategories.class, null, null) ;
+    addChild(UICategoriesSummary.class, null, null) ;
   }  
 }
