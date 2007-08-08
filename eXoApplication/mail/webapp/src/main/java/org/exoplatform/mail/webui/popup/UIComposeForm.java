@@ -4,6 +4,7 @@
  **************************************************************************/
 package org.exoplatform.mail.webui.popup;
 
+import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
@@ -31,9 +32,18 @@ import org.exoplatform.webui.form.UIForm;
       @EventConfig(listeners = UIComposeForm.CancelActionListener.class)
     }
 )
-public class UIComposeForm extends UIForm {
+public class UIComposeForm extends UIForm implements UIPopupComponent{
   
   public UIComposeForm() {
+    
+  }
+  
+  public void activate() throws Exception {
+    // TODO Auto-generated method stub
+    
+  }
+  public void deActivate() throws Exception {
+    // TODO Auto-generated method stub
     
   }
   
@@ -75,6 +85,9 @@ public class UIComposeForm extends UIForm {
   static  public class CancelActionListener extends EventListener<UIComposeForm> {
     public void execute(Event<UIComposeForm> event) throws Exception {
       UIComposeForm uiForm = event.getSource() ;
+      UIMailPortlet mailPortlet = event.getSource().getAncestorOfType(UIMailPortlet.class) ;
+      mailPortlet.cancelAction() ;
     }
   }
+  
 }

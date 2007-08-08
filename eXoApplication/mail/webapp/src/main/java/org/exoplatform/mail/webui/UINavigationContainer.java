@@ -6,6 +6,7 @@ package org.exoplatform.mail.webui;
 
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIContainer;
+import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
 
 /**
  * Created by The eXo Platform SARL
@@ -20,8 +21,8 @@ public class UINavigationContainer extends UIContainer  {
   
   public UINavigationContainer() throws Exception {
     addChild(UISelectAccountForm.class, null, null) ;
-    addChild(UIFolderContainer.class, null, null) ;
-    addChild(UITags.class, null, null) ;
+    //addChild(UIFolderContainer.class, null, null) ;
+    //addChild(UITags.class, null, null) ;
   }
 
   

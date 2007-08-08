@@ -4,6 +4,8 @@
  **************************************************************************/
 package org.exoplatform.mail.webui;
 
+import org.exoplatform.mail.webui.popup.UIPopupAction;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
@@ -24,8 +26,17 @@ public class UIMailPortlet extends UIPortletApplication {
     addChild(UINavigationContainer.class, null, null) ;
     addChild(UIMessageArea.class, null, null) ;
     //addChild(UIPopupAction.class, null, null).setRendered(false) ;
+
     
-    //UIPopupWindow uiPopupWindow = createUIComponent(UIPopupWindow.class, null, null) ;
-    //uiPopupWindow.setShow(true) ;
+    //addChild(UIMailContainer.class, null, null) ;
+    
+    addChild(UIPopupAction.class, null, null) ;
   }
-}
+  
+  public void cancelAction() throws Exception {
+    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+    UIPopupAction popupAction = getChild(UIPopupAction.class) ;
+    popupAction.deActivate() ;
+    context.addUIComponentToUpdateByAjax(popupAction) ;
+  }
+} 

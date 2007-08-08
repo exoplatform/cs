@@ -9,7 +9,7 @@
 								<div class="Label">CheckMail</div>
 							</div>
 						</a>
-						<a href="#" class="ControlButton">
+						<a href="<%=uicomponent.event("Compose")%>" class="ControlButton">
 							<div class="IconHolder ComposeIcon">
 								<div class="Label"> Compose </div>
 							</div>

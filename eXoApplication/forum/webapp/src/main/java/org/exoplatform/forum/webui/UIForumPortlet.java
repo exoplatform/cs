@@ -9,9 +9,9 @@ import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 
 /**
- * Author : Nhu Dinh Thuan
- *          nhudinhthuan@yahoo.com
- * May 30, 2006
+ * Author : Nguyen Quang Hung
+ *          hung.nguyen@exoplatform.com
+ * Aug 01, 2007
  */
 @ComponentConfig(
    lifecycle = UIApplicationLifecycle.class,

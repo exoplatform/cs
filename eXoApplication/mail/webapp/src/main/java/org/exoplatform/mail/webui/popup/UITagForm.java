@@ -26,9 +26,18 @@ import org.exoplatform.webui.form.UIForm;
       @EventConfig(listeners = UITagForm.CancelActionListener.class)
     }
 )
-public class UITagForm extends UIForm {
+public class UITagForm extends UIForm implements UIPopupComponent{
   
   public UITagForm() { }
+  
+  public void activate() throws Exception {
+    // TODO Auto-generated method stub
+    
+  }
+  public void deActivate() throws Exception {
+    // TODO Auto-generated method stub
+    
+  }
   
   static  public class SaveActionListener extends EventListener<UITagForm> {
     public void execute(Event<UITagForm> event) throws Exception {
@@ -40,4 +49,5 @@ public class UITagForm extends UIForm {
       UITagForm uiForm = event.getSource() ;
     }
   }
+  
 }
