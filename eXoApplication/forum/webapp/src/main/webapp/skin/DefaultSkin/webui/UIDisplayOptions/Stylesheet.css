@@ -1,0 +1,29 @@
+.UIDisplayOptions {
+	width: 500px;
+	border: solid 1px red;
+	padding: 10px;
+}
+
+.UIDisplayOptions .UIForm {
+	border: 1px solid #bcbcbc;
+	background: #f7f7f7;
+}
+
+.UIDisplayOptions .TitleBar {
+	text-align: center;
+	line-height: 20px;
+	padding-top: 10px;
+	font-weight: bold;
+}
+
+.UIDisplayOptions .UIForm .HorizontalLayout {
+	padding: 10px 10px 20px 10px;
+	border: none;
+}
+
+.UIDisplayOptions .UIAction {
+	width: 200px;
+}
+
+
+

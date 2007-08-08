@@ -1,0 +1,49 @@
+<div class="UITag">
+
+	<div class="TagContent">
+		<div class="TagControlBar">
+			<div class="TagTitle">Tags</div>
+			<div class="TagIcon DustBin16x16Icon"><span></span></div>
+			<div class="TagIcon	EditIcon"><span></span></div>
+			<div class="TagIcon AddNewNodeIcon"><span></span></div>
+	  	<div style="clear: both"><span></span></div>
+		</div>
+		<div class="TagsList">
+			<a href="#" class="IconHolder Normal BlueTagIcon">Customers</a>
+			<a href="#" class="IconHolder Selected RedTagIcon">Company</a>
+			<a href="#" class="IconHolder Normal GreenTagIcon">Docs Team</a>
+			<a href="#" class="IconHolder Normal VioletTagIcon">Design Team</a>
+		</div>
+	</div>
+	
+	<div class="UIAction"> 
+    <div class="ActionContainer">
+
+        <div class="ActionButton">
+          <div class="LightBlueStyle">
+            <div class="ButtonLeft">
+              <div class="ButtonRight">
+                <div class="ButtonMiddle">
+                  <a href="#">OK</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="ActionButton">
+          <div class="LightBlueStyle">
+            <div class="ButtonLeft">
+              <div class="ButtonRight">
+                <div class="ButtonMiddle">
+                  <a href="#">Cancel</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+                    
+    </div>
+  </div>
+	
+</div>
