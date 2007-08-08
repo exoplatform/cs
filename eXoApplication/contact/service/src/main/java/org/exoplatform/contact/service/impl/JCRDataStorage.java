@@ -265,7 +265,6 @@ public class JCRDataStorage implements DataStorage {
 
   public List<GroupContactData> getPublicContacts(String[] groupIds) throws Exception {
     Node publicGroupHome = getPublicContactGroupHome() ;
-    System.out.println("\n\n\n ccccc" + publicGroupHome.getPath() );
     List<Contact> contacts  ;
     List<GroupContactData> contactByGroup = new ArrayList<GroupContactData>() ;
     for(String groupId : groupIds) {
@@ -331,10 +330,8 @@ public class JCRDataStorage implements DataStorage {
     return null;
   }
 
-  // add  saiiiiiiiiiiiii
   public List<Contact> getSharedContactsByGroup(String groupId) throws Exception {
     Node contactHome = getPublicContactHome();
-    System.out.println("\n\n\n getSharedContactsByGroup size:" + contactHome.getPath() );
     QueryManager qm = contactHome.getSession().getWorkspace().getQueryManager();
     StringBuffer queryString = new StringBuffer("/jcr:root" + contactHome.getPath() 
                                                 + "//element(*,exo:contact)[@exo:groups='").
@@ -347,19 +344,16 @@ public class JCRDataStorage implements DataStorage {
     while (it.hasNext()) {
       contacts.add(getContact(it.nextNode()));
     }
-    
     return contacts ;
   }
   
   public List<GroupContactData> getSharedContacts(String[] groupIds) throws Exception {
-    Node publicGroupHome = getPublicContactGroupHome();
-    List<Contact> contacts  ;
     List<GroupContactData> contactByGroup = new ArrayList<GroupContactData>() ;
-    for(String groupId : groupIds) {
-      if (publicGroupHome.hasNode(groupId)) {
-        contacts = getSharedContactsByGroup(groupId);
-        contactByGroup.add(new GroupContactData(groupId, contacts));
-      }
+    List<Contact> contacts;
+    for(String groupId : groupIds) { 
+      contacts = getSharedContactsByGroup(groupId);
+      if(contacts.size() > 0)
+        contactByGroup.add(new GroupContactData(groupId, contacts));     
     }
     return contactByGroup;
   }
@@ -401,5 +395,5 @@ public class JCRDataStorage implements DataStorage {
     contactNode.setProperty("exo:groups", contact.getCategories());
     
     contactHomeNode.getSession().save(); 
-  }  
+  }
 }

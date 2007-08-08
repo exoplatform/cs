@@ -30,7 +30,7 @@ public interface ContactService {
   public void saveGroup(String username, ContactGroup group, boolean isNew) throws Exception ;
   public ContactGroup removeGroup(String username, String groupId) throws Exception ;
   
-  public Contact shareContact(Contact contact, String[] groupIds) throws Exception ;
+  public Contact shareContact(Contact contact, String[] groupIds) throws Exception;
   public List<GroupContactData> getPublicContacts(String[] groupIds) throws Exception ;
 
 }

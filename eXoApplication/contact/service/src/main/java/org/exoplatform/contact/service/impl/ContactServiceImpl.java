@@ -85,6 +85,5 @@ public class ContactServiceImpl implements ContactService{
 
   public void saveSharedContact(Contact contact, boolean isNew) throws Exception {
     storage_.saveSharedContact(contact, isNew);
-  }
-  
+  } 
 }

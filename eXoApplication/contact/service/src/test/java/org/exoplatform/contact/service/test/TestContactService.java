@@ -113,8 +113,6 @@ public class TestContactService extends BaseContactTestCase{
   
   public void  testSharedContact() throws Exception {
     Contact contact = createContact("1", new String[] {"friend", "work"});
-
-    // test addSharedContact
     contactService_.saveSharedContact(contact, true);
     
     // test getSharedContact
@@ -124,18 +122,13 @@ public class TestContactService extends BaseContactTestCase{
     contact.setHomeAddress("Cau Giay");
     contactService_.saveSharedContact(contact, false);
     assertEquals("Cau Giay", contactService_.getSharedContact(contact.getId()).getHomeAddress());     
-  
-    //  getSharedContacts
-    Contact cont = contactService_.getSharedContact("1");
-    assertNotNull(contactService_.shareContact(cont, new String[]{"users"})) ;
     
+    //  getSharedContacts by groups
     Contact contact2 = createContact("2", new String[] {"friend", "work"});
-    contactService_.saveSharedContact(contact2, true);
-    Contact cont2 = contactService_.getSharedContact("2");
-    assertNotNull(contactService_.shareContact(cont2, new String[] {"users"}));
+    contactService_.saveSharedContact(contact2, true); 
     
-    List<GroupContactData> sharedContact = contactService_.getSharedContacts(new String[]{"users"}) ;
-    System.out.println("\n\n\n" + sharedContact.get(0).getContacts().size()+ "\n\n");
+    List<GroupContactData> sharedContact = contactService_.getSharedContacts(new String[]{"work"}) ;
+    assertEquals(sharedContact.size(), 1) ;
     assertEquals(sharedContact.get(0).getContacts().size(), 2) ;
     
     //  test removeSharedContact
