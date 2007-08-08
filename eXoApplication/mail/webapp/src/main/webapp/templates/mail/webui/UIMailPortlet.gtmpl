@@ -1,0 +1,30 @@
+<%
+	import org.exoplatform.mail.webui.UIBannerContainer ;
+	import org.exoplatform.mail.webui.UIActionBar ;
+	import org.exoplatform.mail.webui.UINavigationContainer ;
+	import org.exoplatform.mail.webui.UIMessageArea ;
+// move this to the method processRender
+%>
+<div class="$uicomponent.id UIApplication" id="$uicomponent.id">
+  <div class="ApplicationMinWidth">
+  	<div class="UIMailPortlet">
+<!-- Start Mail Banner -->
+  	<%uicomponent.renderChild(UIBannerContainer.class);%>
+<!-- End Mail Banner -->
+<!-- Start Mail Working Workspace -->
+	    <div class="MailWorkingWorkspace">
+<!-- Start Mail ControlBar -->
+			<%uicomponent.renderChild(UIActionBar.class);%>
+<!-- End Mail ControlBar -->
+<!-- Start Mail Container -->
+				<div class="MailContainer">
+					<%uicomponent.renderChild(UINavigationContainer.class);%>
+<!-- End Mail AccountManagement -->
+<!-- Start Mail Working Details -->
+					<%uicomponent.renderChild(UIMessageArea.class);%>
+					<div style="clear:left;"><span></span></div>
+				</div>
+			</div>
+    </div>
+  </div>
+</div>

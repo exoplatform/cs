@@ -18,7 +18,7 @@ import org.exoplatform.webui.event.EventListener;
  */
 
 @ComponentConfig(
-    template =  "app:/templates/mail/webui/UIDefaultFolders.jstmpl",
+    template =  "app:/templates/mail/webui/UICustomizeFolders.gtmpl",
     events = {
         @EventConfig(listeners = UICustomizeFolders.ChangeFolderActionListener.class),
         @EventConfig(listeners = UICustomizeFolders.AddFolderActionListener.class),

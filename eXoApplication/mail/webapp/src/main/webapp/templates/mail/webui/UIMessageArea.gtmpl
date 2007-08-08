@@ -1,0 +1,16 @@
+<%
+	import org.exoplatform.mail.webui.UIMessageActionBar ;
+	import org.exoplatform.mail.webui.UIMessageList ;
+	import org.exoplatform.mail.webui.UIMessagePreview ;
+%>
+
+<div class="MailWorkingDetails">
+
+	<div class="UIMessageArea">
+		<%uicomponent.renderChild(UIMessageActionBar.class);%>
+		<%uicomponent.renderChild(UIMessageList.class);%>
+	</div>
+	<div class="ResizeReadingPane"><span></span></div>
+	<%uicomponent.renderChild(UIMessagePreview.class);%>
+
+</div>

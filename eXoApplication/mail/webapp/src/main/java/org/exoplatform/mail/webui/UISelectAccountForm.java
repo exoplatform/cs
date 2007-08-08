@@ -20,7 +20,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
  */
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
-    template = "app:/templates/mail/webui/UISelectAccountForm.jstmpl",
+    template = "app:/templates/mail/webui/UISelectAccountForm.gtmpl",
     events = {
       @EventConfig(listeners = UISelectAccountForm.AddAccountActionListener.class)      
     }

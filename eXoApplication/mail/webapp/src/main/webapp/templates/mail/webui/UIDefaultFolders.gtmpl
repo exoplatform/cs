@@ -1,0 +1,12 @@
+<div class="FolderListTitleBar">
+	<div class="DownArrow3Icon" title="Collapse this Panel"><span></span></div>
+	<div class="Title FolderIcon">Folders</div>
+	<div style="clear: left"><span></span></div>
+</div>
+<div class="MailFolderList">
+	<a href="#"  class="Icon InboxIcon">Inbox<span class="MailQuantity">(9)</span></a>
+	<a href="#" class="Icon DraftsIcon">Drafts<span class="MailQuantity">(3)</span></a>
+	<a href="#" class="Icon SentIcon">Sent<span class="MailQuantity">(8)</span></a>
+	<a href="#" class="Icon SpamIcon">Spam<span class="MailQuantity">(2)</span></a>
+	<a href="#" class="Icon TrashIcon">Trash<span class="MailQuantity">(5)</span></a>
+</div>

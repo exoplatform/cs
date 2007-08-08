@@ -18,7 +18,7 @@ import org.exoplatform.webui.event.EventListener;
  */
 
 @ComponentConfig(
-    template =  "app:/templates/mail/webui/UIMessageList.jstmpl",
+    template =  "app:/templates/mail/webui/UIMessageList.gtmpl",
     events = {
         @EventConfig(listeners = UIMessageList.SelectMessageActionListener.class),
         @EventConfig(listeners = UIMessageList.AddStarActionListener.class),

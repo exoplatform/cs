@@ -4,6 +4,7 @@
  **************************************************************************/
 package org.exoplatform.mail.webui;
 
+import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIContainer;
 
 /**
@@ -12,7 +13,9 @@ import org.exoplatform.webui.core.UIContainer;
  *          hung.nguyen@exoplatform.com
  * Aus 01, 2007 2:48:18 PM 
  */
-
+@ComponentConfig (
+  template = "app:/templates/mail/webui/UINavigationContainer.gtmpl"
+)
 public class UINavigationContainer extends UIContainer  {
   
   public UINavigationContainer() throws Exception {

@@ -106,7 +106,10 @@
 	padding: 0px 2px;
 }
 
-.UIMailPortlet .UISelectAccount {
+.UIMailPortlet .UIDropDownItemSelector {
+	float: left;
+	margin: 5px 0 0;
+	width: 194px;
 }
 
 .UIMailPortlet .UISelectAccount .ItemSelectorContainer {
@@ -154,7 +157,7 @@
 .UIMailPortlet .UINavigationContainer .AddAccountIcon {
 	background: url('/eXoResources/skin/DefaultSkin/skinIcons/24x24/icons/EditNavigation.gif') no-repeat left top;
 	cursor: pointer;
-	float: left; margin: 10px 0px 0px 0px;
+	float: right; margin: 5px 0px 0px 0px;
 	height: 21px; width: 21px;
 	display: block;
 }
@@ -441,15 +444,16 @@
 
 .UIMailPortlet .MailWorkingWorkspace .UIMessagePreview {
 	border: 1px solid #c0c0c0;
-	width: 98.8%; 
+	/*width: 98.8%;*/ 
 	background: #ffffff;
+	margin: 0 0 0 225px;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .UIMessagePreview .ViewBoxStyle {
 	height: 442px;
 }
 
-.UIMailPortlet .MailWorkingWorkspace .UIMessagePreview .ReadingPaneDeltail {
+.UIMailPortlet .MailWorkingWorkspace .UIMessagePreview .ReadingPaneDetails {
 	height: 316px;
 	overflow: auto;
 }
