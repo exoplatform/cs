@@ -108,14 +108,14 @@
 	background: url('icons/16x16/RSSIcon.gif') no-repeat left;
 }
 
-/******************************************** UIForumControlbar ****************************************/
-.UIForumPortlet .UIForumControlbar {
+/******************************************** UIForumActionBar ****************************************/
+.UIForumPortlet .UIForumActionBar {
 	border: 1px solid #9499d8;
 	margin: 7px 10px;
 	height: 30px;
 }
 
-.UIForumPortlet .UIForumControlbar .ControlbarCotainer {
+.UIForumPortlet .UIForumActionBar .ControlbarCotainer {
 	border: 2px solid white;
 	border-bottom: none;
 	background: url('background/BgToolbar1x28.gif') repeat-x ;
@@ -123,33 +123,33 @@
 	line-height: 28px;
 }
 
-.UIForumPortlet .UIForumControlbar .Icon {
+.UIForumPortlet .UIForumActionBar .Icon {
 	float: left;
 	padding-left: 30px;
 	margin: 0px 13px;
 }
 
-.UIForumPortlet .UIForumControlbar .SeparatorLine {
+.UIForumPortlet .UIForumActionBar .SeparatorLine {
 	float: left;
 	background: url('background/SeparatorLineToolbar1x27.gif') no-repeat ;
 	height: 27px;
 	width: 2px;
 }
 
-.UIForumPortlet .UIForumControlbar .AddCategory {
+.UIForumPortlet .UIForumActionBar .AddCategory {
 	background: url('icons/24x24/AddCategory.gif') no-repeat left center;
 	margin: 0px 13px 0px 0px;
 }
 
-.UIForumPortlet .UIForumControlbar .AddForum {
+.UIForumPortlet .UIForumActionBar .AddForum {
 	background: url('icons/24x24/AddNewForum.gif') no-repeat left center ;
 }
 
-.UIForumPortlet .UIForumControlbar .ManageModerators {
+.UIForumPortlet .UIForumActionBar .ManageModerators {
 	background: url('icons/24x24/Manage.gif') no-repeat left center ;
 }
 
-.UIForumPortlet .UIForumControlbar .ForumOption {
+.UIForumPortlet .UIForumActionBar .ForumOption {
 	background: url('icons/24x24/ForumOption.gif') no-repeat left center ;
 }
 

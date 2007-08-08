@@ -1,0 +1,10 @@
+<%  
+	import org.exoplatform.forum.webui.UIForumActionBar ;
+	import org.exoplatform.forum.webui.UICategories ;
+	import org.exoplatform.forum.webui.UICategoriesSummary ;
+%>
+<div class="UICategoryContainer">
+	<% uicomponent.renderChild(UIForumActionBar.class) %>
+	<% uicomponent.renderChild(UICategories.class) %>
+	<% uicomponent.renderChild(UICategoriesSummary.class) %>
+</div>

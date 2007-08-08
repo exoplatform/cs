@@ -1,7 +1,7 @@
-<div class="UIForumControlbar">
-	<div class="LeftForumControlbar">
-		<div class="RightForumControlbar">
-			<div class="CenterForumControlbar">
+<div class="UIForumActionBar">
+	<div class="LeftForumActionBar">
+		<div class="RightForumActionBar">
+			<div class="CenterForumActionBar">
 				<div class="ControlbarCotainer">
 					<a href="#" class="Icon AddCategory">Add new Category</a>
 					<div class="SeparatorLine"><span></span></div>

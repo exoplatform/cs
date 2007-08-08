@@ -10,7 +10,7 @@
 	background: url('icons/16x16/AddNewThreadIcon.gif') left center;
 }
 
-.UIForumContainer .ButtomAndPageIteratorContainer .UIPageIterator {
+.UIForumContainer .ButtomAndPagePageListContainer .UIPageIterator {
 	width: 60%;
 	float: right;
 	margin: 2px auto 0px 0px;
