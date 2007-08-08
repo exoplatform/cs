@@ -1,0 +1,101 @@
+<div class="UIMoveThreads">
+	<div class="TitleMoveThreads">Choose a Destination Forum:</div>
+	<div class="UITree ScrollArea">
+	  <div class="TreeContainer JSContainer">
+
+	    <div class="Node">
+	     	<div class="Icon ForumIcon"><span></span></div>  
+	     	<div class="NodeLabel">    
+	     		<a href="#" class="NodeSelected">eXo Platform SAS</a> 
+	      </div> 		  
+	      <div style="clear: left;"><span></span></div>    	      		
+			  <div display="block" class="ChildrenContainer">
+			    <div class="Node Selected">
+			      <div class="Icon ThreadsIcon"><span></span></div>
+			      <div class="NodeLabel"> 
+				      <a href="#" class="">Annoucements</a>  
+				    </div>
+				    <div style="clear: left;"><span></span></div>
+			    </div> 
+			    <div class="Node">
+			      <div class="Icon ThreadsIcon"><span></span></div>
+			      <div class="NodeLabel"> 	
+			      	<a href="#" class="">eXo Vietnam</a>  
+			      </div>
+			      <div style="clear: left;"><span></span></div>
+			    </div> 
+			    <div class="Node">
+			      <div class="Icon ThreadsIcon"><span></span></div>
+			      <div class="NodeLabel"> 	
+			      	<a href="#" class="">eXo France</a>  
+			      </div>
+			      <div style="clear: left;"><span></span></div>
+			    </div> 
+			    <div class="Node">
+			      <div class="Icon ThreadsIcon"><span></span></div>
+			      <div class="NodeLabel"> 	
+			      	<a href="#" class="">eXo Ukrain</a>  
+			      </div>
+			      <div style="clear: left;"><span></span></div>
+			    </div> 
+		    </div>		
+		  </div>
+			
+	    <div class="Node">
+	      <div class="Icon ForumIcon"><span></span></div>  
+	      <div class="NodeLabel">    
+	        <a href="#" class="">eXo Projects Forums</a>  
+	      </div> 	
+	      <div style="clear: left;"><span></span></div>	      	      		
+		  </div>
+			
+	    <div class="Node">
+	     <div class="Icon ForumIcon"><span></span></div>  
+	     <div class="NodeLabel">    
+	       <a href="#" class="">Technical Forums</a>  
+	     </div> 	
+	     <div style="clear: left;"><span></span></div>	      	      		
+		  </div>
+			
+	    <div class="Node">
+	     <div class="Icon ForumIcon"><span></span></div>  
+	     <div class="NodeLabel">    
+	       <a href="#" class="">Others</a>  
+	     </div> 	
+	     <div style="clear: left;"><span></span></div>	      	      		
+		  </div>
+			
+	  </div>  
+	</div>
+	
+	<div class="UIAction"> 
+    <div class="ActionContainer">
+      
+        <div class="ActionButton">
+          <div class="LightBlueStyle">
+            <div class="ButtonLeft">
+              <div class="ButtonRight">
+                <div class="ButtonMiddle">
+                  <a href="#">Save</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        <div class="ActionButton">
+          <div class="LightBlueStyle">
+            <div class="ButtonLeft">
+              <div class="ButtonRight">
+                <div class="ButtonMiddle">
+                  <a href="#">Cancel</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+                
+    </div>
+  </div>
+	
+</div>

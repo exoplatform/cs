@@ -1,0 +1,22 @@
+<div class="UIForumLinks">
+	<div class="UIForm $uicomponent.id">
+	  <div class="HorizontalLayout">
+	    <div class="FormContainer">
+		  	<table class="UIFormGrid">
+		  		<tbody>
+		  			<tr>
+		  				<td class="FieldLabel">Forum Links:</td>
+		  				<td class="FieldComponent">
+		  					<select name="" class="selectbox">
+									<option value="" selected="selected">eXo VN Vacations</option>
+								</select>
+		  					<input type="button" name="" class="button" value="Go"/>
+		  				</td>
+		  			</tr>
+		  		</tbody>
+		  	</table>
+		  </div>
+		</div>
+		<div style="clear: right;"><span></span></div>
+	</div>
+</div>

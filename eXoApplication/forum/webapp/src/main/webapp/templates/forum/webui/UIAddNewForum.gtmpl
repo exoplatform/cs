@@ -1,4 +1,22 @@
 <div class="UIAddNewForum">	
+	
+	<div class="UIForm AddForum">
+		<div class="HorizontalLayout">
+	  	<table class="UIFormGrid">
+	  		<tbody>
+	  			<tr>
+	  				<td class="FieldLabel">Add Forum to Category:</td>
+	  				<td class="FieldComponent">
+	  					<select name="" class="selectbox">
+								<option value="" selected="selected">eXo Platform SAS</option>
+							</select>
+	  				</td>
+	  			</tr>
+	  		</tbody>
+	  	</table>
+	  </div>
+  </div>
+	
 	<div class="UIFormTabPane">
 	  <div class="UITabPane">
 			<div class="TabPaneContent">
@@ -49,7 +67,7 @@
 			    	<div class="HorizontalLayout">
 			        <div class="UITabContentContainer">
 		            
-		            <div style="display: block;" id="UITabContent" class="UITabContent">
+		            <div style="display: none;" id="UITabContent" class="UITabContent">
 		            
 		              <div class="UIFormInputSet NewForum">
 		              	<table class="UIFormGrid">
@@ -135,7 +153,7 @@
 		
 		            </div>
 		            
-		            <div style="display: none;" id="UITabContent" class="UITabContent">
+		            <div style="display: block;" id="UITabContent" class="UITabContent">
 		              
 		              <div class="ForumPermission">
 			              <table cellspacing="0" borderspacing="0" id="PermissionInfo" class="UIGrid">

@@ -1,0 +1,61 @@
+.UIMoveThreads {
+	border: 1px solid red;
+	width: 310px;
+	padding: 10px;
+	color: #272727;
+}
+
+.UIMoveThreads .TitleMoveThreads {
+	padding-left: 10px;
+	line-height: 20px;
+}
+
+.UIMoveThreads .UITree {
+	border: 1px solid #a5a5a5;
+	padding: 3px 1px;
+}
+
+.UIMoveThreads .UITree .TreeContainer {
+	background: none;
+}
+
+.UIMoveThreads .UITree .TreeContainer .Node {
+	width: auto;
+}
+
+.UIMoveThreads .UITree .TreeContainer .Node .Icon {
+	height: 24px;
+}
+
+.UIMoveThreads .UITree .TreeContainer .ForumIcon {
+	background: url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/ForumIcon.gif') no-repeat left center;
+}
+
+.UIMoveThreads .UITree .TreeContainer .ThreadsIcon {
+	background: url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/ThreadIcon.gif') no-repeat left center;
+}
+
+.UIMoveThreads .UITree .TreeContainer .Node .NodeLabel a {
+	font-weight: normal;
+	color: #272727;
+	line-height: 20px;
+	margin: 0px;
+}
+
+.UIMoveThreads .UITree .TreeContainer .Selected {
+	background: #d8d9ee;
+	margin: 0px;
+	height: 20px;
+}
+
+.UIMoveThreads .UITree .TreeContainer .Node .ChildrenContainer {
+	padding-left: 20px;
+}
+
+.UIMoveThreads .UITree .TreeContainer .ChildrenContainer .Node {
+	padding-left: 5px;
+}
+
+.UIMoveThreads .UIAction {
+	width: 130px;
+}

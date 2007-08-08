@@ -4,6 +4,11 @@
 	padding: 10px;
 }
 
+.UIAddNewForum .AddForum .HorizontalLayout {
+	border: none;
+	padding: 5px;
+}
+
 .UIAddNewForum .UIForm .HorizontalLayout .NewForum {
 	width: 400px;
 	padding: 20px 0px 40px 0px;
