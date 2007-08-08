@@ -1,0 +1,22 @@
+.UIAutoPruning {
+	background-color: #ffffff;
+	padding: 8px;
+}
+
+.UIAutoPruning .AutoPruningContainer {
+	background-color: #f7f7f7;
+	padding: 8px;
+	border: 1px solid #b4b4b4;
+}
+
+.UIAutoPruning .UIAction {
+	width:65px;
+}
+
+.UIAutoPruning .UIFormWithTitle {
+	margin: 8px auto ;
+}
+
+.UIFormWithTitle .UIForm .UIAction {
+	width: 125px;
+}

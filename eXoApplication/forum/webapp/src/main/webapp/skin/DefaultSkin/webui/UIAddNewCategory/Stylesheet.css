@@ -1,0 +1,14 @@
+.UIAddNewCategory {
+	background-color: #ffffff;
+	padding: 8px;
+}
+
+.UIAddNewCategory .UIAction {
+	width: 130px;
+}
+
+.UIAddNewCategory .HorizontalLayout {
+	border:1px solid #AEAEAE;
+	background-color: #f7f7f7;
+	padding: 8px 0px 0px 0px;
+}

@@ -1,0 +1,47 @@
+.UIViewPoll {
+	background-color: #ffffff;
+	padding: 8px;
+}
+
+.UIViewPoll .UIAction {
+	width: 65px;
+}
+
+.UIViewPoll .UIGrid .Number {
+	text-align: center;
+}
+
+.UIViewPoll .TotalVotes {
+	font-weight: bold;
+	text-align: right;
+	line-height: 22px;
+}
+
+.UIViewPoll .Chart1 {
+	float: left;
+	width: 24%; height: 14px;
+	background-color: #f60703;
+}
+
+.UIViewPoll .Chart2 {
+	float: left;
+	width: 26%; height: 14px;
+	background-color: #f6e303;
+}
+
+.UIViewPoll .Chart3 {
+	float: left;
+	width: 27%; height: 14px;
+	background-color: #356adf;
+}
+
+.UIViewPoll .Chart4 {
+	float: left;
+	width: 23%; height: 14px;
+	background-color: #35df79;
+}
+
+.UIViewPoll .Percentage {
+	float: right;
+	padding-right: 5px;
+}

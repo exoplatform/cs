@@ -5,6 +5,13 @@
 @import url('UIThreadsInForum/Stylesheet.css') ;
 @import url('UIPostsInThread/Stylesheet.css') ;
 @import url('UIPrintView/Stylesheet.css') ;
+@import url('UIForumOptions/Stylesheet.css') ;
+@import url('UIAddPoll/Stylesheet.css') ;
+@import url('UIMergeThreads/Stylesheet.css') ;
+@import url('UIAutoPruning/Stylesheet.css') ;
+@import url('UIUserManagement/Stylesheet.css') ;
+@import url('UIViewPoll/Stylesheet.css') ;
+@import url('UIAddNewCategory/Stylesheet.css') ;
 
 /**************************** UIActionForum *********************************/
 .UIForumPortlet .UIActionForum .ActionButton {
