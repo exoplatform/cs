@@ -1,5 +1,5 @@
 <div class="UITopicContainer">
-	<div class="ButtomAndPagePageListContainer">
+	<div class="ButtomAndPageListContainer">
 		<div class="UIActionForum" style="float: left;">
 		  <div class="ActionButton">
 		  	<div class="NormalStyle">
@@ -59,12 +59,73 @@
 		  </div>
 		  
 		  <div class="ContentContainer">
-				<% uicomponent.renderChild(UITopicList.class) %>
+				<div class="UITopicList">
+				  <table cellspacing="0" borderspacing="0" id="" class="UIGrid">
+				  	<thead>
+				  		<tr>
+				  			<th style="width: 40px;"></th>
+				  			<th style="width: 40px;"></th>
+				      	<th>Thread/Thread starter</th>
+				      	<th style="width: 40px;"></th>
+				      	<th style="width: 40px;"><div class="AttachmentIcon" ><span></span></div></th>
+				      	<th style="width: 90px;">Rating</th>
+				      	<th style="width: 40px;"></th>
+				      	<th style="width: 130px;"><div class="DownArrow1Icon">Last posts</div></th>
+				      	<th style="width: 50px;">Threads</th>
+				      	<th style="width: 50px;">Posts</th>
+				      	<th style="width: 30px;"><input type="checkbox" class="checkbox" title="Check all" value="4"/></th>
+				      </tr>
+				    </thead>
+				    <tbody>
+				    	<% 
+					    	String classRow = "whileRow";
+					    	int i = 0;
+					    	while( i < 6) {
+					        if(i%2 == 0) classRow = "whileRow";
+					        else classRow = "OddRow";
+					        i++;
+					    %>
+				  			<tr class="$classRow">
+									<td style="padding: 0px;"><div class="ThreadStatusIcon HotThreadNewPost" title="Hot thread with new post"><span></span></div></td>
+									<td style="padding: 0px;"><div class="StatusIcon BlueNote16x16Icon" ><span></span></div></td>
+									<td >
+										<div class="Text StickyIcon" title="Sticky Thread">Sticky: <a href="#" class="Title">Improve Portal 2.0 ( 1  2  3  4  5 ... Last page )</a></div>
+										<div ><a href="#" class="LastPostInfos PostBy"><%=classRow%></a></div>
+									</td>
+									<td style="padding: 0px;"><div class="StatusIcon ModeratedIcon" title="2 Moderated posts"><span></span></div></td>
+									<td class="Tdbox">15</td>
+									<td style="padding: 0px;">
+										<div class="RatingInfoContainer">
+				   							<div class="AvgRatingImages" title="Thread Rating: 3 votes, 5 average">
+				   				<div class="VoteIcon Voted"><span/></div>
+				   				<div class="VoteIcon Voted"><span/></div>
+				  				<div class="VoteIcon Voted"><span/></div>
+									<div class="VoteIcon Unvoted"><span/></div>
+				 					<div class="VoteIcon Unvoted"><span/></div>
+				 					<div style="clear: left;"><span></span></div>
+				 							  </div>
+				   							  </div>
+									</td>
+									<td style="padding: 0px;"><div class="StatusIcon RedTagIcon" title="Thread tagged as Design Team"><span></span></div></td>
+								 	<td >
+								 		<div class="DateTime">07/22/2007, 1:30 pm</div>
+								 		<div class="RightArrowIcon" title="Go to last posts"><span></span></div>
+										<div class="PostInfos LastPostInfos">by <a href="#" class="PostBy">thu.nguyen</a></div>
+										<div style="clear: right;"><span></span></div>
+									</td>
+								 	<td class="Tdbox">10</td>
+									<td class="Tdbox">1450</td>
+									<td class="Tdbox"><input type="checkbox" class="checkbox" value="4"/></td>
+				   			</tr>
+					   	<% } %>
+				    </tbody>
+				  </table>							
+				</div>
 			</div>
 		  
 	  </div>
 	</div>
-	<div class="ButtomAndPageIteratorContainer">
+	<div class="ButtomAndPageListContainer">
 		<div class="UIActionForum" style="float: left;">
 		  <div class="ActionButton">
 		  	<div class="NormalStyle">

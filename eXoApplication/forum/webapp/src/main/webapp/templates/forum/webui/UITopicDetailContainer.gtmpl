@@ -1,1 +1,8 @@
-UITopicDetailContainer.gtmpl
+<%  
+	import org.exoplatform.forum.webui.UITopicPoll ;
+	import org.exoplatform.forum.webui.UITopicDetail ;
+%>
+<div class="UITopicDetailContainer">
+	<% uicomponent.renderChild(UITopicPoll.class) %>
+	<% uicomponent.renderChild(UITopicDetail.class) %>
+</div>

@@ -19,7 +19,7 @@ import org.exoplatform.webui.form.UIForm;
  */
 
 @ComponentConfig(
-    template =  "app:/templates/forum/webui/UITopicDetailContainer.gtmpl", 
+    template =  "app:/templates/forum/webui/UITopicDetail.gtmpl", 
     events = {
       @EventConfig(listeners = UITopicDetail.AddPostActionListener.class )  
     }
