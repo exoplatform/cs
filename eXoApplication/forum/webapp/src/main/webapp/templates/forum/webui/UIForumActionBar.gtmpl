@@ -1,9 +1,17 @@
+<%
+import org.exoplatform.forum.webui.popup.UIPopupAction ;
+%>
+
+<%uicomponent.renderChild(UIPopupAction.class) ;%>
+
 <div class="UIForumActionBar">
 	<div class="LeftForumActionBar">
 		<div class="RightForumActionBar">
 			<div class="CenterForumActionBar">
 				<div class="ControlbarCotainer">
-					<a href="#" class="Icon AddCategory">Add new Category</a>
+					<a href="<%=uicomponent.event("AddCategory")%>" class="Icon AddCategory">
+						Add new Category
+					</a>
 					<div class="SeparatorLine"><span></span></div>
 					<a href="#" class="Icon AddForum">Add new Forum</a>
 					<div class="SeparatorLine"><span></span></div>
@@ -15,4 +23,5 @@
 			</div>
 		</div>
 	</div>
+	
 </div>

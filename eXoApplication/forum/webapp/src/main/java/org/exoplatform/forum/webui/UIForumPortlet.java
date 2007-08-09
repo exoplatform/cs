@@ -4,6 +4,8 @@
  **************************************************************************/
 package org.exoplatform.forum.webui;
 
+import org.exoplatform.forum.webui.popup.UIPopupAction;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
@@ -24,5 +26,13 @@ public class UIForumPortlet extends UIPortletApplication {
     //addChild(UICategoryContainer.class, null, null) ;
     addChild(UIForumContainer.class, null, null) ;
     //addChild(UIPostPreview.class, null, null) ;
+    
+    addChild(UIPopupAction.class, null, null).setRendered(false) ;
+  }
+  public void cancelAction() throws Exception {
+    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+    UIPopupAction popupAction = getChild(UIPopupAction.class) ;
+    popupAction.deActivate() ;
+    context.addUIComponentToUpdateByAjax(popupAction) ;
   }
 }

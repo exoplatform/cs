@@ -4,6 +4,7 @@
  **************************************************************************/
 package org.exoplatform.forum.webui.popup;
 
+import org.exoplatform.forum.webui.UIForumPortlet;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
@@ -36,6 +37,8 @@ public class UICategoryForm extends UIForm {
   static  public class SaveActionListener extends EventListener<UICategoryForm> {
     public void execute(Event<UICategoryForm> event) throws Exception {
       UICategoryForm uiForm = event.getSource() ;
+      UIForumPortlet forumPortlet = event.getSource().getAncestorOfType(UIForumPortlet.class) ;
+      forumPortlet.cancelAction() ;
     }
   }
   static  public class CancelActionListener extends EventListener<UICategoryForm> {
