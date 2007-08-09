@@ -25,7 +25,6 @@ import org.exoplatform.registry.JCRRegistryService;
 import org.exoplatform.registry.ServiceRegistry;
 import org.exoplatform.services.jcr.RepositoryService;
 
-//import com.sun.org.apache.xalan.internal.xsltc.NodeIterator;
 
 /**
  * Created by The eXo Platform SARL
@@ -168,19 +167,17 @@ public class JCRDataStorage implements DataStorage {
  
   private ContactGroup getGroup(Node contactGroupNode) throws Exception {
     ContactGroup contactGroup = new ContactGroup();
-    if (contactGroupNode.hasProperty("exo:id")) contactGroup.setId(contactGroupNode.getProperty("exo:id").getString());
-    if (contactGroupNode.hasProperty("exo:name")) contactGroup.setName(contactGroupNode.getProperty("exo:name").getString());
+    if (contactGroupNode.hasProperty("exo:id")) 
+      contactGroup.setId(contactGroupNode.getProperty("exo:id").getString());
+    if (contactGroupNode.hasProperty("exo:name")) 
+      contactGroup.setName(contactGroupNode.getProperty("exo:name").getString());
     return contactGroup;
   }
 
   public ContactGroup getGroup(String username, String groupId) throws Exception {
     Node contactGroupHomeNode = getContactGroupHome(username);
-    if (contactGroupHomeNode.hasNode(groupId)) {
-      Node contactGroupNode = contactGroupHomeNode.getNode(groupId);
-      ContactGroup contactGroup = new ContactGroup();
-      contactGroup = getGroup(contactGroupNode);
-      return contactGroup;
-    }
+    if (contactGroupHomeNode.hasNode(groupId))
+      return getGroup(contactGroupHomeNode.getNode(groupId)) ;
     return null;
   }
 
@@ -188,22 +185,18 @@ public class JCRDataStorage implements DataStorage {
     Node contactGroupHomeNode = getContactGroupHome(username);
     List<ContactGroup> contactGroups = new ArrayList<ContactGroup>();
     NodeIterator iter = contactGroupHomeNode.getNodes();
-    ContactGroup contactGroup;
     while (iter.hasNext()) {
       Node contactGroupNode = iter.nextNode();
-      contactGroup = getGroup(contactGroupNode);
-      contactGroups.add(contactGroup);
+      contactGroups.add(getGroup(contactGroupNode));
     }
     return contactGroups;
   }
 
   public Contact removeContact(String username, String contactId) throws Exception {
     Node contactHomeNode = getContactHome(username);
-    Contact contact = new Contact();
     if (contactHomeNode.hasNode(contactId)) {
-      contact = getContact(username, contactId);
+      Contact contact = getContact(username, contactId);
       contactHomeNode.getNode(contactId).remove();
-      
       contactHomeNode.getSession().save();
       return contact;
     }
@@ -212,9 +205,8 @@ public class JCRDataStorage implements DataStorage {
 
   public ContactGroup removeGroup(String username, String groupId) throws Exception {
     Node contactGroupHomeNode = getContactGroupHome(username);
-    ContactGroup contactGroup = new ContactGroup();
     if (contactGroupHomeNode.hasNode(groupId)) {
-      contactGroup = getGroup(username, groupId);
+      ContactGroup contactGroup = getGroup(username, groupId);
       contactGroupHomeNode.getNode(groupId).remove();
       contactGroupHomeNode.save();
       contactGroupHomeNode.getSession().save();
@@ -308,8 +300,8 @@ public class JCRDataStorage implements DataStorage {
           Value value = values[i];
           String uuid = value.getString();
           Node refNode = publicGroupHome.getSession().getNodeByUUID(uuid);       
-          if(refNode.getPath().equals(groupNode.getPath()))return null ;
-          vals.add(value);
+          if(!refNode.getPath().equals(groupNode.getPath()))
+            vals.add(value);
         }
         vals.add(value2add);
         contactNode.setProperty("exo:category", vals.toArray(new Value[vals.size()]));        
@@ -330,7 +322,7 @@ public class JCRDataStorage implements DataStorage {
     return null;
   }
 
-  public List<Contact> getSharedContactsByGroup(String groupId) throws Exception {
+  private List<Contact> getSharedContactsByGroup(String groupId) throws Exception {
     Node contactHome = getPublicContactHome();
     QueryManager qm = contactHome.getSession().getWorkspace().getQueryManager();
     StringBuffer queryString = new StringBuffer("/jcr:root" + contactHome.getPath() 
@@ -360,9 +352,8 @@ public class JCRDataStorage implements DataStorage {
 
   public Contact removeSharedContact(String contactId) throws Exception {
     Node contactHomeNode = getPublicContactHome();
-    Contact contact = new Contact();
     if (contactHomeNode.hasNode(contactId)) {
-      contact = getSharedContact(contactId);
+      Contact contact = getSharedContact(contactId);
       contactHomeNode.getNode(contactId).remove();
       contactHomeNode.getSession().save();
       return contact;

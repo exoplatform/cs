@@ -13,8 +13,10 @@
     <module>eXoApplication/forum/webapp</module>
     <module>eXoApplication/forum/service</module>
     
+    <module>eXoApplication/calendar/webapp</module>
     <module>eXoApplication/calendar/service</module>
     
+    <module>eXoApplication/contact/webapp</module>
     <module>eXoApplication/contact/service</module>
   </modules>
 
