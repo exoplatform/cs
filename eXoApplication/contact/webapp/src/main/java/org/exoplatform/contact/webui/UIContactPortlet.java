@@ -19,8 +19,8 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 )
 public class UIContactPortlet extends UIPortletApplication {
   public UIContactPortlet() throws Exception {
-    addChild(UIBannerContainer.class, null, null) ;
-    addChild(UIActionBar.class, null, null) ;
-    addChild(UIWorkingContainer.class, null, null) ;
+    //addChild(UIBannerContainer.class, null, null) ;
+    //addChild(UIActionBar.class, null, null) ;
+    //addChild(UIWorkingContainer.class, null, null) ;
   }
 }
