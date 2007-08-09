@@ -29,7 +29,8 @@ public class UITopicDetail extends UIForm  {
     // render post page list
     // render actions bar
     // render posts detail and post actions
-    
+    addChild(UIPostRules.class, null, null);
+    addChild(UIForumLinks.class, null, null);
   }
   
   static public class AddPostActionListener extends EventListener<UITopicDetail> {

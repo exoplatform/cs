@@ -15,10 +15,9 @@ import org.exoplatform.webui.core.UIContainer;
  */
 
 @ComponentConfig(
-    template =  "app:/templates/forum/webui/UIForumInfos.gtmpl"
+    template =  "app:/templates/forum/webui/UIPostRules.gtmpl"
 )
-public class UIForumInfos extends UIContainer  {
-  public UIForumInfos() throws Exception { 
-  	addChild(UIPostRules.class, null, null);
+public class UIPostRules extends UIContainer  {
+  public UIPostRules() throws Exception {    
   }  
 }
