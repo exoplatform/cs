@@ -15,7 +15,7 @@ import org.exoplatform.webui.core.UIContainer;
  */
 
 @ComponentConfig(
-    template =  "app:/templates/calendar/webui/UIWorkingContainer.gtmpl"
+    template =  "app:/templates/contact/webui/UIWorkingContainer.gtmpl"
 )
 public class UIWorkingContainer extends UIContainer  {
   public UIWorkingContainer() throws Exception {
