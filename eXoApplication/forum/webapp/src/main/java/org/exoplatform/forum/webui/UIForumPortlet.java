@@ -23,11 +23,11 @@ public class UIForumPortlet extends UIPortletApplication {
   public UIForumPortlet() throws Exception {
     addChild(UIBannerContainer.class, null, null) ;
     addChild(UIBreadcumbs.class, null, null) ;
-    //addChild(UICategoryContainer.class, null, null) ;
-    addChild(UIForumContainer.class, null, null) ;
+    addChild(UICategoryContainer.class, null, null) ;
+    //addChild(UIForumContainer.class, null, null) ;
     //addChild(UIPostPreview.class, null, null) ;
     
-    addChild(UIPopupAction.class, null, null).setRendered(false) ;
+    addChild(UIPopupAction.class, null, null) ;
   }
   public void cancelAction() throws Exception {
     WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;

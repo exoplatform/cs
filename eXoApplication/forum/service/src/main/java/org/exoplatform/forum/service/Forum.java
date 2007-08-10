@@ -16,8 +16,9 @@ public class Forum {
   private Date createdDate;
   private String modifiedBy;
   private Date modifiedDate;
-  private String lastPostBy;
-  private Date lastPostDate;
+  //private String lastPostBy;
+  //private Date lastPostDate;
+  private String lastPostPath;
   private String name;
   private String description;
   private int postCount;
@@ -67,11 +68,15 @@ public class Forum {
   public Date getModifiedDate(){return modifiedDate;}
   public void setModifiedDate(Date modifiedDate){this.modifiedDate = modifiedDate;}
   
-  public String getLastPostBy(){return lastPostBy;}
-  public void setLastPostBy(String lastPostBy){this.lastPostBy = lastPostBy;}
+//  public String getLastPostBy(){return lastPostBy;}
+//  public void setLastPostBy(String lastPostBy){this.lastPostBy = lastPostBy;}
+//  
+//  public Date getLastPostDate(){return lastPostDate;}
+//  public void setLastPostDate(Date lastPostDate){this.lastPostDate = lastPostDate;}
   
-  public Date getLastPostDate(){return lastPostDate;}
-  public void setLastPostDate(Date lastPostDate){this.lastPostDate = lastPostDate;}
+  
+  public String getLastPostPath(){return name;}
+  public void setLastPostPath(String lastPostPath){this.lastPostPath = lastPostPath;}
   
   public String getForumName(){return name;}
   public void setForumName(String forumName){this.name = forumName;}

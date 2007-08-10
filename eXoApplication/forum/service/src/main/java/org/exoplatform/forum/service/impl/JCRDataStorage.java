@@ -5,6 +5,7 @@
 package org.exoplatform.forum.service.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -168,8 +169,9 @@ public class JCRDataStorage implements DataStorage {
 		    ForumNode.setProperty("exo:owner", forum.getOwner());
 		    ForumNode.setProperty("exo:path", ForumNode.getPath());
 		    ForumNode.setProperty("exo:createdDate", GregorianCalendar.getInstance());
-		    ForumNode.setProperty("exo:lastPostBy", forum.getLastPostBy());
-		    ForumNode.setProperty("exo:lastPostDate", GregorianCalendar.getInstance());
+//		    ForumNode.setProperty("exo:lastPostBy", forum.getLastPostBy());
+//		    ForumNode.setProperty("exo:lastPostDate", GregorianCalendar.getInstance());
+		    ForumNode.setProperty("exo:lastPostPath", "");
 		    ForumNode.setProperty("exo:postCount", 0);
 		    ForumNode.setProperty("exo:topicCount", 0);
 		  } else {
@@ -208,8 +210,9 @@ public class JCRDataStorage implements DataStorage {
     forum.setCreatedDate(forumNode.getProperty("exo:createdDate").getDate().getTime());
     forum.setModifiedBy(forumNode.getProperty("exo:modifiedBy").getString());
     forum.setModifiedDate(forumNode.getProperty("exo:modifiedDate").getDate().getTime());
-    forum.setLastPostBy(forumNode.getProperty("exo:lastPostBy").getString());
-    forum.setLastPostDate(forumNode.getProperty("exo:lastPostDate").getDate().getTime());
+//    forum.setLastPostBy(forumNode.getProperty("exo:lastPostBy").getString());
+//    forum.setLastPostDate(forumNode.getProperty("exo:lastPostDate").getDate().getTime());
+    forum.setLastPostPath(forumNode.getProperty("exo:lastPostBy").getString());
     forum.setDescription(forumNode.getProperty("exo:description").getString());
     forum.setPostCount(forumNode.getProperty("exo:postCount").getType());
     forum.setTopicCount(forumNode.getProperty("exo:topicCount").getType());
@@ -301,7 +304,7 @@ public class JCRDataStorage implements DataStorage {
     if(topicNode.hasProperty("exo:isLock")) topicNew.setIsLock(topicNode.getProperty("exo:isLock").getBoolean());
     if(topicNode.hasProperty("exo:isApproved")) topicNew.setIsApproved(topicNode.getProperty("exo:isApproved").getBoolean());
     if(topicNode.hasProperty("exo:viewPermissions")) topicNew.setViewPermissions(ValuesToStrings(topicNode.getProperty("exo:viewPermissions").getValues()));
-    if(topicNode.hasProperty("exo:editPermissions")) topicNew.setEditPermissions(ValuesToStrings(topicNode.getProperty("exo:editPermissions").getValues()));
+    if(topicNode.hasProperty("exo:editPermissions")) topicNew.setEditPermissions(ValuesToStrings(topicNode.getProperty("exo:viewPermissions").getValues()));
     return topicNew;
   }
 
@@ -489,6 +492,7 @@ public class JCRDataStorage implements DataStorage {
 					// setPostCount for Forum
 					long forumPostCount = forumNode.getProperty("exo:postCount").getLong() + 1;
 					forumNode.setProperty("exo:postCount", forumPostCount );
+					forumNode.setProperty("exo:lastPostPath", postNode.getPath());
 				}
 		    forumHomeNode.save() ;
 		    forumHomeNode.getSession().save() ;

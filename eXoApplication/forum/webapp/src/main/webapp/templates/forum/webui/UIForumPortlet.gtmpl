@@ -1,6 +1,7 @@
 <%
-// move this to the method processRender
+import org.exoplatform.forum.webui.popup.UIPopupAction ;
 %>
-<div class="UIForumPortlet" >
-	<% uicomponent.renderChildren()%>
+
+<div class="UIForumPortlet" id="$uicomponent.id">
+	<% uicomponent.renderChildren() ;%>
 </div>

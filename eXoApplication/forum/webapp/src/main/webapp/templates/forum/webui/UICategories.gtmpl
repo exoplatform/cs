@@ -1,14 +1,24 @@
+<%
+	import org.exoplatform.forum.service.Category; 
+	import org.exoplatform.forum.service.Forum; 
+	import java.util.GregorianCalendar;
+%>
 <div class="UICategories" id="UICategories">
 	<div class="UIForumWorkingWorkspace">
 		<div class="UIForumCategories">
 		<% // Start ForumCategory%>
+		<% 
+			List categories = uicomponent.getcategoryList();
+			 for(category in categories) {
+			 String title = category.getCategoryName();
+		 %>
 			<div class="ForumCategory">
 			  <div class="ForumToolbar">
 				  <div class="LeftBar">
 				  	<div class="RightBar">
 				  		<div class="CenterBar">
-				  			<div class="Title">eXo Platform SAS</div>
-				  			<div class="CollapseButton" title="Expand category"><span></span></div>
+				  			<div class="Title">$title</div>
+				  			<div class="ExpandButton" title="Collapser category"><span></span></div>
 				  			<div class="ToolbarActionsContainer">
 				  				<div class="SeparatorLine"><span></span></div>
 									<a class="ManageCategoryButton">Manage Category</a>
@@ -37,13 +47,28 @@
 					    <% 
 					    	String classRow = "whileRow";
 					    	int i = 0;
-					    	while( i < 6) {
+					    	List forums = uicomponent.getforumList(category.getId());
+				        GregorianCalendar calendar = new GregorianCalendar() ;
+				        long toDay = calendar.getTime().getTime();
+			 					for(forum in forums) {
 					        if(i%2 == 0) classRow = "whileRow";
 					        else classRow = "OddRow";
 					        i++;
+					        String forumTitle = "";
+					        String classIconForum = "NoNewPostIcon";
+					        String titleIconForum = "Forum Contains No New Post";
+					        if(forum.getIsLock() == true){
+					          classIconForum = "ForumCloseIcon";
+					          titleIconForum = "Forum is Closed for Posting";
+					        }
+					        long createdDate = forum.getCreatedDate().getTime();
+					        if((toDay-createdDate)/86400000 < 4){
+					          classIconForum = "ContainNewPostIcon";
+					          titleIconForum = "Forum Contains New Posts";
+					        }
 					    %>
 					    	<tr class="$classRow">
-									<td style="padding: 0px;"><div class="ForumStatusIcon NoNewPostIcon" title="Forum Contains No New Post"><span></span></div></td>
+									<td style="padding: 0px;"><div class="ForumStatusIcon $classIconForum" title=""><span></span></div></td>
 									<td >
 										<a href="#" class="ForumTitle">Annoucements<span class="ForumQuantity">(5 viewing)</span></a>
 										<div class="ForumDescription">eXo news, event, release and update</div>
@@ -67,68 +92,8 @@
 				  	
 			  	</div>
 			  </div>
-		  </div>
-		<% //BusyIcon, OnlineIcon %>
-		
-			<div class="ForumCategory">
-			  <div class="ForumToolbar">
-				  <div class="LeftBar">
-				  	<div class="RightBar">
-				  		<div class="CenterBar">
-				  			<div class="Title">eXo Projects Forums</div>
-				  			<div class="ExpandButton" title="Collapser category"><span></span></div>
-				  			<div class="ToolbarActionsContainer">
-				  				<div class="SeparatorLine"><span></span></div>
-									<a class="ManageCategoryButton">Manage Category</a>
-									<div style="clear: both;"><span></span></div>
-								</div>
-								<div style="clear: both;"><span></span></div>
-				  		</div>
-				  	</div>
-				  </div>
-			  </div>
-			  <div class="ContentContainer"><span></span></div>
 			</div>	
-			
-			<div class="ForumCategory">
-			  <div class="ForumToolbar">
-				  <div class="LeftBar">
-				  	<div class="RightBar">
-				  		<div class="CenterBar">
-				  			<div class="Title">Technical Forums</div>
-				  			<div class="ExpandButton" title="Collapser category"><span></span></div>
-				  			<div class="ToolbarActionsContainer">
-				  				<div class="SeparatorLine"><span></span></div>
-									<a class="ManageCategoryButton">Manage Category</a>
-									<div style="clear: both;"><span></span></div>
-								</div>
-								<div style="clear: both;"><span></span></div>
-				  		</div>
-				  	</div>
-				  </div>
-			  </div>
-			  <div class="ContentContainer"><span></span></div>
-			</div>	
-			
-			<div class="ForumCategory">
-			  <div class="ForumToolbar">
-				  <div class="LeftBar">
-				  	<div class="RightBar">
-				  		<div class="CenterBar">
-				  			<div class="Title">Other</div>
-				  			<div class="ExpandButton" title="Collapser category"><span></span></div>
-				  			<div class="ToolbarActionsContainer">
-				  				<div class="SeparatorLine"><span></span></div>
-									<a class="ManageCategoryButton">Manage Category</a>
-									<div style="clear: both;"><span></span></div>
-								</div>
-								<div style="clear: both;"><span></span></div>
-				  		</div>
-				  	</div>
-				  </div>
-			  </div>
-			  <div class="ContentContainer"><span></span></div>
-			</div>	
+		<% } %>
 		<% // End ForumCategory%>
 		</div>
 	</div>

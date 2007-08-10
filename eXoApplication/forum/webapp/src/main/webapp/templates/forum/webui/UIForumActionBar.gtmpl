@@ -1,8 +1,4 @@
-<%
-import org.exoplatform.forum.webui.popup.UIPopupAction ;
-%>
 
-<%uicomponent.renderChild(UIPopupAction.class) ;%>
 
 <div class="UIForumActionBar">
 	<div class="LeftForumActionBar">

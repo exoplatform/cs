@@ -112,15 +112,13 @@ public class ForumPageList extends JCRPageList {
   }
   
   private String [] ValuesToStrings(Value[] Val) throws Exception {
-  	if(Val.length == 1) {
+  	if(Val.length == 1)
   		return new String[]{Val[0].getString()};
-  	}else {
-			String[] Str = new String[Val.length];
-			for(int i = 0; i < Val.length; ++i) {
-			  Str[i] = Val[i].getString();
-			}
+		String[] Str = new String[Val.length];
+		for(int i = 0; i < Val.length; ++i) {
+		  Str[i] = Val[i].getString();
+		}
 		return Str;
-  	}
   }
   
 	@Override

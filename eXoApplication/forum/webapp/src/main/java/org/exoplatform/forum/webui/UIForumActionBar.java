@@ -35,6 +35,7 @@ public class UIForumActionBar extends UIContainer  {
   static public class AddCategoryActionListener extends EventListener<UIForumActionBar> {
     public void execute(Event<UIForumActionBar> event) throws Exception {
       UIForumActionBar uiActionBar = event.getSource() ;
+      System.out.println(" ========= > s") ;
       UIForumPortlet forumPortlet = event.getSource().getAncestorOfType(UIForumPortlet.class) ;
       UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;
       popupAction.activate(UICategoryForm.class, 600) ;
