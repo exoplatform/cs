@@ -5,7 +5,7 @@
 package org.exoplatform.calendar.webui;
 
 import org.exoplatform.webui.config.annotation.ComponentConfig;
-import org.exoplatform.webui.core.UIContainer;
+import org.exoplatform.webui.core.UIComponent;
 
 /**
  * Created by The eXo Platform SARL
@@ -15,11 +15,12 @@ import org.exoplatform.webui.core.UIContainer;
  */
 
 @ComponentConfig(
-    template =  "app:/templates/contact/webui/UIWorkingContainer.gtmpl"
+    template =  "app:/templates/calendar/webui/UICalendarViewContainer.gtmpl"
 )
-public class UIWorkingContainer extends UIContainer  {
-  public UIWorkingContainer() throws Exception {
-    //addChild(UICalendarContainer.class, null, null) ;
-    //addChild(UICalendarViewContainer.class, null, null) ;
+public class UICalendarViewContainer extends UIComponent  {
+  public UICalendarViewContainer() throws Exception {
+    //addChild(UITimeView.class, null, null) ;
+    //addChild(UIListView.class, null, null) ;
+    //addChild(UIEventPreview.class, null, null) ;
   }  
 }

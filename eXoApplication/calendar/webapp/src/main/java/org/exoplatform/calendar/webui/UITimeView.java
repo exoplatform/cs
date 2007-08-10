@@ -15,10 +15,10 @@ import org.exoplatform.webui.core.UIComponent;
  */
 
 @ComponentConfig(
-    template =  "app:/templates/calendar/webui/UICalendarView.gtmpl"
+    template =  "app:/templates/calendar/webui/UITimeView.gtmpl"
 )
-public class UICalendarView extends UIComponent  {
-  public UICalendarView() throws Exception {
+public class UITimeView extends UIComponent  {
+  public UITimeView() throws Exception {
     
   }  
 }
