@@ -12,6 +12,9 @@ import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.Session;
 import javax.jcr.Value;
+import javax.jcr.query.Query;
+import javax.jcr.query.QueryManager;
+import javax.jcr.query.QueryResult;
 
 import org.exoplatform.forum.service.Category;
 import org.exoplatform.forum.service.Forum;
@@ -45,7 +48,14 @@ public class JCRDataStorage implements DataStorage {
   
   public List<Category> getCategories() throws Exception {
     Node forumHomeNode = getForumHomeNode() ;
-    NodeIterator iter = forumHomeNode.getNodes() ;
+    QueryManager qm = forumHomeNode.getSession().getWorkspace().getQueryManager();
+    StringBuffer queryString = new StringBuffer("/jcr:root" + forumHomeNode.getPath() 
+                                                + "//element(*,exo:forumCategory) order by @exo:categoryOrder ascending");
+    Query query = qm.createQuery(queryString.toString(), Query.XPATH);
+    QueryResult result = query.execute();
+    NodeIterator iter = result.getNodes();
+    
+    //NodeIterator iter = forumHomeNode.getNodes() ;
     List<Category> categories = new ArrayList<Category>() ;
     Category cat ;
     while(iter.hasNext()) {
@@ -520,15 +530,12 @@ public class JCRDataStorage implements DataStorage {
   
   
   private String [] ValuesToStrings(Value[] Val) throws Exception {
-  	if(Val.length == 1) {
-  		return new String[]{Val[0].getString()};
-  	}else {
-			String[] Str = new String[Val.length];
-			for(int i = 0; i < Val.length; ++i) {
-			  Str[i] = Val[i].getString();
-			}
+  	if(Val.length == 1) return new String[]{Val[0].getString()};
+		String[] Str = new String[Val.length];
+		for(int i = 0; i < Val.length; ++i) {
+		  Str[i] = Val[i].getString();
+		}
 		return Str;
-  	}
   }
   
   private Node getForumHomeNode() throws Exception {
