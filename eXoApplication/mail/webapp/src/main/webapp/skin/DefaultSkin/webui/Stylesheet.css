@@ -338,8 +338,11 @@
 
 /*===================================MailWorkingDetail=================*/
 
+.UIMailPortlet .MailWorkingDetails {
+	margin: 0px 0px 0px 225px;
+}
+
 .UIMailPortlet .MailWorkingWorkspace .MailContainer .UIMessageArea {
-	/*margin: 0px 0px 0px 225px;*/
 	overflow: auto;
 }
 
@@ -447,7 +450,6 @@
 	border: 1px solid #c0c0c0;
 	/*width: 98.8%;*/ 
 	background: #ffffff;
-	margin: 0 0 0 225px;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .UIMessagePreview .ViewBoxStyle {
