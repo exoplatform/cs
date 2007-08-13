@@ -5,6 +5,7 @@
 	import org.exoplatform.mail.webui.UIMessageArea ;
 // move this to the method processRender
 	def rcontext = _ctx.getRequestContext() ;
+  rcontext.getJavascriptManager().importJavascript('eXo.core.Spliter');
   rcontext.getJavascriptManager().importJavascript('eXo.mail.UIMailPortlet','/mail/javascript/');
 %>
 <div class="$uicomponent.id UIApplication" id="$uicomponent.id">

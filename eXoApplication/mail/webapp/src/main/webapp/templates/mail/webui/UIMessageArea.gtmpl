@@ -4,13 +4,13 @@
 	import org.exoplatform.mail.webui.UIMessagePreview ;
 %>
 
-<div class="MailWorkingDetails">
-
-	<div class="UIMessageArea">
+<div class="MailWorkingDetails SpliterContainer">
+	<div class="UIMessageArea SpliterResizableArea">		
 		<%uicomponent.renderChild(UIMessageActionBar.class);%>
 		<%uicomponent.renderChild(UIMessageList.class);%>
 	</div>
-	<div class="ResizeReadingPane" onmousedown="eXo.mail.UIMailPortlet.resizeMessageArea();"><span></span></div>
-	<%uicomponent.renderChild(UIMessagePreview.class);%>
-
+	<div class="ResizeReadingPane" onmousedown="eXo.core.Spliter.exeRowSplit(event, this);"><span></span></div>
+	<div  class="SpliterResizableArea">
+		<%uicomponent.renderChild(UIMessagePreview.class);%>
+	</div>
 </div>
