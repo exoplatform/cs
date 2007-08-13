@@ -47,3 +47,16 @@
 .DeleteEventIcon {
 	background: url('icons/DeleteEvent.gif') no-repeat;
 }
+
+.AttachmentIcon {
+	background: url('icons/AttackmentIcon.gif') no-repeat;
+}
+
+.FullEvent {
+	background: url('icons/FullEvent.gif') no-repeat;
+	width: 16px; height: 16px;
+}
+
+.ViewOnCalendar {
+	background: url('icons/ViewOnCalendar.gif') no-repeat;
+}

@@ -354,6 +354,15 @@
 	border-bottom: none;
 }
 
+.UIEventListView .EventListContent .ViewBar {
+	background: url('background/EventListBarBG1x31.gif') repeat-x ;	
+	height: 30px;
+	padding: 0px 8px;
+	border: 1px solid #c7c7c7;
+	border-bottom: none;
+	margin-top: 4px;
+}
+
 .UIEventListView .EventListContent .EventList {
 	padding-left: 1px;
 }
@@ -373,6 +382,92 @@
 .UIEventListView .EventListContent .ListBar .Label {
 	float: right;
 	margin: 7px 4px 0px 3px;
+}
+
+.UIEventListView .EventListContent .ViewBar .Label {
+	float: left;
+	margin: 7px 4px 0px 3px;
+	font-weight: bold;
+}
+
+.UIEventListView .EventListContent .ViewBar .FullEvent {
+	float: right;
+	margin: 7px 4px 0px 3px;
+	cursor: pointer;
+}
+
+.UIEventListView .EventListContent .AttachmentIcon {
+	margin: 3px;
+	width: 16px height: 16px;
+}
+
+.UIEventListView .EventListContent .ViewContainer {
+	border: 1px solid #c7c7c7;
+}
+
+.UIEventListView .EventListContent .ViewContainer td{
+	border: none;
+}
+
+.UIEventListView .EventListContent .ViewContainer table{
+	border: none;
+}
+
+.UIEventListView .EventListContent .ViewContainer .AttachmentIcon {
+	line-height: 16px;
+	padding-left: 18px;
+}
+
+.UIEventListView .EventListContent .ViewContainer a {
+	color: #1756d5;
+	text-decoration: underline;
+}
+
+.UIEventListView .EventListContent .ViewContainer .Actions {
+	text-align: right;
+	padding-right: 10px;
+	line-height: 20px;
+}
+
+.UIEventListView .EventListContent .ViewContainer .Text {
+	line-height: 20px;
+}
+
+.UIEventListView .EventListContent .ViewContainer .Img {
+	width: 175px; height: 110px;
+	margin: 5px auto; border: 1px solid #ffffff;
+}
+
+.UIEventListView .EventListContent .ViewContainer .EventDescription {
+	background: url('background/Event33x12.gif') no-repeat ;
+	padding-left: 40px; line-height: 14px;
+	color: #3ca094;
+}
+
+.UIEventListView .EventListContent .ViewContainer .SeparatorDotLine {
+	float: left;
+	background: url('background/SeparatorDotLine1x25.gif') no-repeat ;
+	width: 1px; height: 25px;
+	margin: 3px 5px;
+}
+
+.UIEventListView .EventListContent .ViewContainer .ActionsContainer {
+	background: url('background/DotLine2x1.gif') repeat-x top ;
+	margin: 0px 0px 0px 33px;
+}
+
+.UIEventListView .EventListContent .ViewContainer .ActionsContainer a {
+	color: #000000;
+	text-decoration: none;
+}
+
+.UIEventListView .EventListContent .ViewContainer .ActionsContainer a:hover {
+	color: #1756d5;
+}
+
+.UIEventListView .EventListContent .ViewContainer .EditIcon {
+	background-repeat: no-repeat;
+	width: 50px;
 }
 
 .UIEventListView .EventListContent select {
