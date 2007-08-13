@@ -65,7 +65,6 @@
 						    	String classRow = "whileRow";
 						    	int i = 0;
 				 					for(forum in forums) {
-				 						Post lastPost = uicomponent.getLastPost(category.getId(), forum.getId());
 				 						Topic topicNewPost = uicomponent.getTopicNewPost(category.getId(), forum.getId());
 				 						
 						        if(i%2 == 0) classRow = "whileRow";
@@ -87,8 +86,8 @@
 						        String forumDescription = forum.getDescription();
 						        String topicNewPostIcon = topicNewPost.getIcon();
 						        String topicNewPostTitle = topicNewPost.getTopicName();
-						        String lastPostBy = lastPost.getOwner();
-						        String dateTime = lastPost.getCreatedDate().getDate().getTime().getString();
+						        String lastPostBy = topicNewPost.getLastPostBy();
+						        String dateTime = topicNewPost.getLastPostDate().getDate().getTime().getString();
 						        int topicCount = forum.getTopicCount();
 						        int postCount = forum.getPostCount();
 						        String [] forumModerators = forum.getModerators();

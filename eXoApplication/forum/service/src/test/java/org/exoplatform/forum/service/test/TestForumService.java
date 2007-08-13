@@ -63,8 +63,8 @@ public class TestForumService extends BaseForumTestCase{
   	assertNotNull(forumService_.getForum(cat.getId(), forum.getId()));
   	Forum forumNew  = forumService_.getForum(cat.getId(), forum.getId());
 		// getForumByPath
-  	Forum forumN = (Forum)forumService_.getObjectByPath(forumNew.getPath());
-  	assertEquals(forumN.getDescription(),forumNew.getDescription());
+//  	Forum forumN = (Forum)forumService_.getObjectByPath(forumNew.getPath());
+//  	assertEquals(forumN.getDescription(),forumNew.getDescription());
 		// getList Forum
   	List<Forum> forums = forumService_.getForums(cat.getId());
   	assertEquals(forums.size(), 1);
@@ -155,8 +155,8 @@ public class TestForumService extends BaseForumTestCase{
 //		for (int i = 0; i < posts1.size(); i++) {
 //			System.out.print("\n" + posts1.get(i).getId() + "\n");
 //		}
-		Post testp = (Post)forumService_.getObjectByPath(newPost.getPath());
-		assertEquals(testp.getMessage(), newPost.getMessage());
+//		Post testp = (Post)forumService_.getObjectByPath(newPost.getPath());
+//		assertEquals(testp.getMessage(), newPost.getMessage());
 		//test movePost
 		
 		Topic topicnew = createdTopic("333334");

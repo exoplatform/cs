@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.exoplatform.forum.service.Category;
 import org.exoplatform.forum.service.Forum;
+import org.exoplatform.forum.service.ForumLinkData;
 import org.exoplatform.forum.service.JCRPageList;
 import org.exoplatform.forum.service.Post;
 import org.exoplatform.forum.service.Topic;
@@ -46,6 +47,6 @@ public interface DataStorage {
    public Post removePost(String categoryId, String forumId, String topicId, String postId)throws Exception;
    public void movePost(String postPath, String destTopicPaths) throws Exception ;
    
-   public Object getObjectByPath(String path) throws Exception ;
+   //public Object getObjectByPath(String path) throws Exception ;
    public List<ForumLinkData> getAllLink() throws Exception ;
 }

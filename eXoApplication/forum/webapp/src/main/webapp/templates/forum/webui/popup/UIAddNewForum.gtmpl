@@ -32,7 +32,7 @@
 			                <div class="SelectedTab">
 			                  <div class="LeftTab">
 			                    <div class="RightTab">
-					                  <div onclick="" class="MiddleTab">New Forum</div>
+					                  <div onclick="eXo.webui.UIHorizontalTabs.displayTabContent(this)" class="MiddleTab">New Forum</div>
 					                </div>
 			                  </div>
 			                </div>
@@ -42,7 +42,7 @@
 			                <div class="NormalTab">
 			                  <div class="LeftTab">
 			                    <div class="RightTab">
-					                  <div onclick="" class="MiddleTab">Moderation Options</div>
+					                  <div onclick="eXo.webui.UIHorizontalTabs.displayTabContent(this)" class="MiddleTab">Moderation Options</div>
 					                </div>
 			                  </div>
 			                </div>
@@ -52,7 +52,7 @@
 			                <div class="NormalTab">
 			                  <div class="LeftTab">
 			                    <div class="RightTab">
-					                  <div onclick="" class="MiddleTab">Forum Permission</div>
+					                  <div onclick="eXo.webui.UIHorizontalTabs.displayTabContent(this)" class="MiddleTab">Forum Permission</div>
 					                </div>
 			                  </div>
 			                </div>

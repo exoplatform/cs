@@ -539,7 +539,6 @@ public class JCRDataStorage implements DataStorage {
   }
   
   
-  
   private String [] ValuesToStrings(Value[] Val) throws Exception {
   	if(Val.length == 1) return new String[]{Val[0].getString()};
 		String[] Str = new String[Val.length];
@@ -562,20 +561,19 @@ public class JCRDataStorage implements DataStorage {
     return repositoryService_.getDefaultRepository().getSystemSession(defaultWS) ;
   }
   
-  public Object getObjectByPath(String path) throws Exception {
-    Object object = new Object();
-    Node forumHomeNode = getForumHomeNode();
-    path = path.substring(forumHomeNode.getPath().length()+1);
-    Node myNode = forumHomeNode.getNode(path);
-    if(myNode.getPrimaryNodeType().getName() == "exo:post") {
-      object = (Object)getPost(myNode);
-    }else if(myNode.getPrimaryNodeType().getName() == "exo:topic") {
-      object = (Object)getTopicNode(myNode);
-    }else if(myNode.getPrimaryNodeType().getName() == "exo:forum") {
-      object = (Object)getForum(myNode);
-    } else return null;
-    return object;
-  }
+//  public Object getObjectByPath(String path) throws Exception {
+//    Object object = new Object();
+//    Node myNode = (Node)getJCRSession().getItem(path);
+//    if(myNode.getPrimaryNodeType().getName() == "exo:post") {
+//      object = (Object)getPost(myNode);
+//    }else if(myNode.getPrimaryNodeType().getName() == "exo:topic") {
+//      object = (Object)getTopicNode(myNode);
+//    }else if(myNode.getPrimaryNodeType().getName() == "exo:forum") {
+//      object = (Object)getForum(myNode);
+//    } else return null;
+//    return object;
+//  }
+  
   public List<ForumLinkData> getAllLink() throws Exception {
     return null ;
   }

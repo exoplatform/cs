@@ -22,7 +22,8 @@ import org.exoplatform.webui.form.UIFormStringInput;
  */
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
-    template = "system:/groovy/webui/form/UIFormWithTitle.gtmpl",
+//    template = "system:/groovy/webui/form/UIFormWithTitle.gtmpl",
+    template = "app:/templates/forum/webui/popup/UIAddNewForum.gtmpl",
     events = {
       @EventConfig(listeners = UIForumForm.SaveActionListener.class), 
       @EventConfig(listeners = UIForumForm.CancelActionListener.class, phase=Phase.DECODE)
