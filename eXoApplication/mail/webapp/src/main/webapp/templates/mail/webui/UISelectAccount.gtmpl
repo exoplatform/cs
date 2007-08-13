@@ -1,4 +1,5 @@
 <div class="UISelectAccount">
+<%uiform.begin();%>
 	<div class="ItemSelectorContainer">
   	<div class="ItemInfoBar" >
 	  	<div class="LeftItemInfoBar">
@@ -12,6 +13,7 @@
 			</div>
 		</div>
 	</div>
-	<a class="AddAccountIcon" href = "#" title="Add New Account"><span></span></a>
+	<a class="AddAccountIcon" href = "<%=uicomponent.event("SaveAccount")%>" title="Add New Account"><span></span></a>
 	<div style="clear: left"><span></span></div>
+	<%uiform.end();%>
 </div>

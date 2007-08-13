@@ -4,7 +4,7 @@
 			<div class="LeftBar">
 				<div class="RightBar">
 					<div class="CenterBar">
-						<a href="#" class="ControlButton">
+						<a href="<%=uicomponent.event("CheckMail")%>" class="ControlButton">
 							<div class="IconHolder CheckMailIcon">
 								<div class="Label">CheckMail</div>
 							</div>
@@ -54,7 +54,7 @@
 							<div class="DownArrow1Icon"><span></span></div>
 							<div style="clear:both;"><span></span></div>
 						</a>
-						<a href="#" class="ControlButton">
+						<a href="<%=uicomponent.event("MailSettings")%>" class="ControlButton">
 							<div class="IconHolder SettingsIcon" title="Mail settings"><span></span></div>
 						</a>
 						<div style="clear:left;"><span></span></div>

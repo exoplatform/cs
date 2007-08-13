@@ -3,6 +3,7 @@
 	import org.exoplatform.mail.webui.UIActionBar ;
 	import org.exoplatform.mail.webui.UINavigationContainer ;
 	import org.exoplatform.mail.webui.UIMessageArea ;
+	import org.exoplatform.mail.webui.popup.UIPopupAction;
 // move this to the method processRender
 	def rcontext = _ctx.getRequestContext() ;
   rcontext.getJavascriptManager().importJavascript('eXo.core.Spliter');
@@ -25,6 +26,7 @@
 <!-- End Mail AccountManagement -->
 <!-- Start Mail Working Details -->
 					<%uicomponent.renderChild(UIMessageArea.class);%>
+					<%uicomponent.renderChild(UIPopupAction.class);%>
 					<div style="clear:left;"><span></span></div>
 				</div>
 			</div>

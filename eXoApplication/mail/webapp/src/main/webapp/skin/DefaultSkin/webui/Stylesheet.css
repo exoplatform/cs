@@ -159,7 +159,7 @@
 .UIMailPortlet .UINavigationContainer .AddAccountIcon {
 	background: url('/eXoResources/skin/DefaultSkin/skinIcons/24x24/icons/EditNavigation.gif') no-repeat left top;
 	cursor: pointer;
-	float: right; margin: 5px 0px 0px 0px;
+	float: right; margin: 10px 0px 0px 0px;
 	height: 21px; width: 21px;
 	display: block;
 }

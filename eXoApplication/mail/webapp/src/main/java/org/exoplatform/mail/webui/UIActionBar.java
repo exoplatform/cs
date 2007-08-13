@@ -5,11 +5,11 @@
 package org.exoplatform.mail.webui;
 
 import org.exoplatform.mail.webui.popup.UIComposeForm;
+import org.exoplatform.mail.webui.popup.UIMailSettings;
 import org.exoplatform.mail.webui.popup.UIPopupAction;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIContainer;
-import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
@@ -25,7 +25,8 @@ import org.exoplatform.webui.event.EventListener;
         @EventConfig(listeners = UIActionBar.ComposeActionListener.class),
         @EventConfig(listeners = UIActionBar.CheckMailActionListener.class),
         @EventConfig(listeners = UIActionBar.RssActionListener.class),
-        @EventConfig(listeners = UIActionBar.ContactActionListener.class)
+        @EventConfig(listeners = UIActionBar.ContactActionListener.class),
+        @EventConfig(listeners = UIActionBar.MailSettingsActionListener.class)
     }
 )
 
@@ -35,7 +36,8 @@ public class UIActionBar extends UIContainer {
   
   static  public class CheckMailActionListener extends EventListener<UIActionBar> {    
     public void execute(Event<UIActionBar> event) throws Exception {
-      UIActionBar uiActionBar = event.getSource() ;      
+      UIActionBar uiActionBar = event.getSource() ;
+      System.out.println(" =========== > Check Mail");
     }
   }
 
@@ -43,12 +45,21 @@ public class UIActionBar extends UIContainer {
     public void execute(Event<UIActionBar> event) throws Exception {
       UIActionBar uiActionBar = event.getSource() ; 
       System.out.println(" =========== > Compose Action");
-      UIMailPortlet mailPortlet = (UIMailPortlet)uiActionBar.getParent() ;
-      UIPopupWindow uiPopupAction = mailPortlet.getChild(UIPopupWindow.class) ;
-      uiPopupAction.setRendered(true);
-      uiPopupAction.setShow(true);
-      //uiPopupAction.activate(UISelectAccountForm.class, 600) ;
-      //event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+      UIMailPortlet mailPortlet = uiActionBar.getParent() ;
+      UIPopupAction uiPopupAction = mailPortlet.getChild(UIPopupAction.class) ;
+      uiPopupAction.activate(UIComposeForm.class, 600) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+    }
+  }
+  
+  static public class MailSettingsActionListener extends EventListener<UIActionBar> {
+    public void execute(Event<UIActionBar> event) throws Exception {
+      UIActionBar uiActionBar = event.getSource() ; 
+      System.out.println(" =========== > Mail Settings Action");
+      UIMailPortlet mailPortlet = uiActionBar.getParent() ;
+      UIPopupAction uiPopupAction = mailPortlet.getChild(UIPopupAction.class) ;
+      uiPopupAction.activate(UIMailSettings.class, 600) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }
   }
   
@@ -56,11 +67,11 @@ public class UIActionBar extends UIContainer {
     public void execute(Event<UIActionBar> event) throws Exception {
       UIActionBar uiActionBar = event.getSource() ;      
     }
-  }  
+  }
   
   static public class RssActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {
       UIActionBar uiActionBar = event.getSource() ;      
     }
-  }  
+  }
 }

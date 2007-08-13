@@ -7,6 +7,8 @@ package org.exoplatform.mail.webui;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.exoplatform.mail.webui.popup.UIAccountCreation;
+import org.exoplatform.mail.webui.popup.UIPopupAction;
 import org.exoplatform.mail.webui.popup.UIPopupComponent;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -16,9 +18,7 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
-import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
-import org.exoplatform.webui.form.UIFormStringInput;
 
 /**
  * Created by The eXo Platform SARL
@@ -28,7 +28,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
  */
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
-    template = "app:/templates/mail/webui/UISelectAccountForm.gtmpl",
+    template = "app:/templates/mail/webui/UISelectAccount.gtmpl",
     events = {
       @EventConfig( listeners = UISelectAccountForm.SaveAccountActionListener.class),
       @EventConfig(phase = Phase.DECODE, listeners = UISelectAccountForm.CancelAccountActionListener.class)
@@ -56,6 +56,10 @@ public class UISelectAccountForm extends UIForm implements UIPopupComponent{
     public void execute(Event<UISelectAccountForm> event) throws Exception {
       UISelectAccountForm uiForm = event.getSource() ;
       System.out.println("========> AddAccountActionListener") ;
+      UIMailPortlet mailPortlet = uiForm.getAncestorOfType(UIMailPortlet.class);
+      UIPopupAction popupAction = mailPortlet.getChild(UIPopupAction.class);
+      popupAction.activate(UIAccountCreation.class, 600);
+      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   }
   static  public class CancelAccountActionListener extends EventListener<UISelectAccountForm> {
@@ -64,4 +68,5 @@ public class UISelectAccountForm extends UIForm implements UIPopupComponent{
       
     }
   }  
+ 
 }
