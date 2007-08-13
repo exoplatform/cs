@@ -359,11 +359,26 @@
 }
 
 .UIEventListView .EventListContent .AddCategoryIcon {
-	background: url('background/EventListBarBG1x31.gif') no-repeat ;
+	background: url('skinIcons/16x16/icons/AddCategory.gif') no-repeat ;
 	float: right;
 	width: 16px; height: 16px;
-	margin: 3px 0px 0px 3px;
+	margin: 7px 6px 0px 3px;
 }
+
+.UIEventListView .EventListContent .ComboBox {
+	float: right;
+	margin: 5px 6px 0px 3px;
+}
+
+.UIEventListView .EventListContent .ListBar .Label {
+	float: right;
+	margin: 7px 4px 0px 3px;
+}
+
+.UIEventListView .EventListContent select {
+	width: 150px; height: 18px;
+}
+
 
 .UIEventListView a {
 	color: #000000;
@@ -384,7 +399,7 @@
 
 /*====================Event Month View=====================*/
 
-.UIEventMonthView .EventMonthContainer {
+.UIEventMonthView .EventMonthContent .RowContainerDay {
 	height: 464px;
 	overflow: auto;
 }
@@ -429,12 +444,15 @@
 	border-right: 1px solid #c7c7c7;
 }
 
-.UIEventMonthView .EventMonthContent  .UIGrid th {
+.UIEventMonthView .EventMonthContent  .WeekList {
 	background: url('background/TitleBarBG1x23.gif') repeat-x ;	
   height: 23px;
-	border-right: 1px solid #c7c7c7;
-	border-bottom: 1px solid #c7c7c7;
+}
+
+.UIEventMonthView .EventMonthContent  .WeekTitle {
+	float: left;
 	text-align: center;
+	line-height: 22px;
 	width: 14%;
 }
 
