@@ -39,11 +39,11 @@ public class TestForumService extends BaseForumTestCase{
     List<Category> categories = forumService_.getCategories() ;
     assertEquals(categories.size(), 1) ;
     // update category
-    cat.setCategoryName("nguyenkequanghung") ;
+    cat.setCategoryName("1234567890") ;
     forumService_.saveCategory(cat, false) ;
     Category updatedCat = forumService_.getCategory("id") ;
     assertNotNull(updatedCat) ;
-    assertEquals("nguyenkequanghung", updatedCat.getCategoryName()) ;
+    assertEquals("1234567890", updatedCat.getCategoryName()) ;
     // test removeCategory
     assertNotNull(forumService_.removeCategory("id"));
   }
@@ -62,7 +62,10 @@ public class TestForumService extends BaseForumTestCase{
   	// getForum
   	assertNotNull(forumService_.getForum(cat.getId(), forum.getId()));
   	Forum forumNew  = forumService_.getForum(cat.getId(), forum.getId());
-  	// getList Forum
+		// getForumByPath
+  	Forum forumN = (Forum)forumService_.getObjectByPath(forumNew.getPath());
+  	assertEquals(forumN.getDescription(),forumNew.getDescription());
+		// getList Forum
   	List<Forum> forums = forumService_.getForums(cat.getId());
   	assertEquals(forums.size(), 1);
   	// update Forum
@@ -133,6 +136,7 @@ public class TestForumService extends BaseForumTestCase{
 		assertNotNull(forumService_.getPost(cat.getId(), forum.getId(), topic.getId(), posts.get(0).getId()));
 		// TopicView
 		TopicView topicView = forumService_.getTopicView(cat.getId(), forum.getId(), topic.getId());
+		Topic topi = forumService_.getTopic(cat.getId(), forum.getId(), topic.getId());
 		//get ListPost
 		JCRPageList pagePosts = topicView.getPageList();//forumService_.getPosts(cat.getId(), forum.getId(), topic.getId());
 		assertEquals(pagePosts.getAvailable(), posts.size() + 1);// size = 26 (first post and new postList)
@@ -151,7 +155,10 @@ public class TestForumService extends BaseForumTestCase{
 //		for (int i = 0; i < posts1.size(); i++) {
 //			System.out.print("\n" + posts1.get(i).getId() + "\n");
 //		}
+		Post testp = (Post)forumService_.getObjectByPath(newPost.getPath());
+		assertEquals(testp.getMessage(), newPost.getMessage());
 		//test movePost
+		
 		Topic topicnew = createdTopic("333334");
 		forumService_.saveTopic(cat.getId(), forum.getId(), topicnew, true);
 		topicnew = forumService_.getTopic(cat.getId(), forum.getId(), topicnew.getId());
@@ -216,8 +223,9 @@ public class TestForumService extends BaseForumTestCase{
 		forum.setCreatedDate(new Date());
 		forum.setModifiedBy("duytu");
 		forum.setModifiedDate(new Date());
-		forum.setLastPostBy("duytu");
-		forum.setLastPostDate(new Date());
+//		forum.setLastPostBy("duytu");
+//		forum.setLastPostDate(new Date());
+		forum.setLastPostPath("");
 		forum.setDescription("description");
 		forum.setPostCount(0);
 		forum.setTopicCount(0);

@@ -44,4 +44,6 @@ public interface DataStorage {
    public void savePost(String categoryId, String forumId, String topicId, Post post, boolean isNew)throws Exception;
    public Post removePost(String categoryId, String forumId, String topicId, String postId)throws Exception;
    public void movePost(String postPath, String destTopicPaths) throws Exception ;
+   
+   public Object getObjectByPath(String path) throws Exception ;
 }

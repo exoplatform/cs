@@ -75,7 +75,7 @@ public class Forum {
 //  public void setLastPostDate(Date lastPostDate){this.lastPostDate = lastPostDate;}
   
   
-  public String getLastPostPath(){return name;}
+  public String getLastPostPath(){return lastPostPath;}
   public void setLastPostPath(String lastPostPath){this.lastPostPath = lastPostPath;}
   
   public String getForumName(){return name;}

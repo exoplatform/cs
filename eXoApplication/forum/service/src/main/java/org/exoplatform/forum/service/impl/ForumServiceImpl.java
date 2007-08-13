@@ -109,5 +109,9 @@ public class ForumServiceImpl implements ForumService{
   public Post removePost(String categoryId, String forumId, String topicId, String postId) throws Exception {
     return storage_.removePost(categoryId, forumId, topicId, postId);
   }
+
+	public Object getObjectByPath(String path) throws Exception {
+		return storage_.getObjectByPath(path);
+	}
   
 }

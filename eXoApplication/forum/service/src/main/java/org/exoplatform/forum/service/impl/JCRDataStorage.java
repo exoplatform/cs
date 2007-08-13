@@ -212,7 +212,7 @@ public class JCRDataStorage implements DataStorage {
     forum.setModifiedDate(forumNode.getProperty("exo:modifiedDate").getDate().getTime());
 //    forum.setLastPostBy(forumNode.getProperty("exo:lastPostBy").getString());
 //    forum.setLastPostDate(forumNode.getProperty("exo:lastPostDate").getDate().getTime());
-    forum.setLastPostPath(forumNode.getProperty("exo:lastPostBy").getString());
+    forum.setLastPostPath(forumNode.getProperty("exo:lastPostPath").getString());
     forum.setDescription(forumNode.getProperty("exo:description").getString());
     forum.setPostCount(forumNode.getProperty("exo:postCount").getType());
     forum.setTopicCount(forumNode.getProperty("exo:topicCount").getType());
@@ -532,6 +532,20 @@ public class JCRDataStorage implements DataStorage {
   	forumHomeNode.getSession().save() ;
   }
   
+  public Object getObjectByPath(String path) throws Exception {
+  	Object object = new Object();
+  	Node forumHomeNode = getForumHomeNode();
+  	path = path.substring(forumHomeNode.getPath().length()+1);
+		Node myNode = forumHomeNode.getNode(path);
+		if(myNode.getPrimaryNodeType().getName() == "exo:post") {
+			object = (Object)getPost(myNode);
+		}else if(myNode.getPrimaryNodeType().getName() == "exo:topic") {
+			object = (Object)getTopicNode(myNode);
+		}else if(myNode.getPrimaryNodeType().getName() == "exo:forum") {
+			object = (Object)getForum(myNode);
+		} else return null;
+  	return object;
+	}
   
   private String [] ValuesToStrings(Value[] Val) throws Exception {
   	if(Val.length == 1) return new String[]{Val[0].getString()};
