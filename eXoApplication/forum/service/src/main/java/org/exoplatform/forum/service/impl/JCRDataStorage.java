@@ -19,6 +19,7 @@ import javax.jcr.query.QueryResult;
 
 import org.exoplatform.forum.service.Category;
 import org.exoplatform.forum.service.Forum;
+import org.exoplatform.forum.service.ForumLinkData;
 import org.exoplatform.forum.service.ForumPageList;
 import org.exoplatform.forum.service.JCRPageList;
 import org.exoplatform.forum.service.Post;
@@ -574,5 +575,8 @@ public class JCRDataStorage implements DataStorage {
       object = (Object)getForum(myNode);
     } else return null;
     return object;
+  }
+  public List<ForumLinkData> getAllLink() throws Exception {
+    return null ;
   }
 }

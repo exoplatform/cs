@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.exoplatform.forum.service.Category;
 import org.exoplatform.forum.service.Forum;
+import org.exoplatform.forum.service.ForumLinkData;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.service.JCRPageList;
 import org.exoplatform.forum.service.Post;
@@ -117,5 +118,9 @@ public class ForumServiceImpl implements ForumService{
 	public Object getObjectByPath(String path) throws Exception {
 		return storage_.getObjectByPath(path);
 	}
+  
+  public List<ForumLinkData> getAllLink()throws Exception {
+    return storage_.getAllLink() ;
+  }
   
 }
