@@ -1,1 +1,492 @@
-Hello! This is Calendar Application
+<div class="$uicomponent.id UIApplication" id="$uicomponent.id">
+  <div class="ApplicationMinWidth">
+  	<div class="UICalendarPortlet">
+<!-- Start Mail Banner Container -->
+	    <div class="UIBannerContainer">
+	    	<div class="LeftHorizontalLine">
+					<div class="RepeatHorizontalLine">a Powerful, Open-source Calendar</div>					
+				</div>
+				<div class="SearchForm">
+					<div class="AdvancedSearch" title="Advance Search"><span></span></div>
+					<div class="SeparatorLine"><span></span></div>
+					<div class="Search" title="Search"><span></span></div>
+					<input class="Input" type="text" name=""/>
+					<div class="Label">Search:</div>
+					<div style="clear:right;"><span></span></div>
+				</div>
+			</div>
+<!-- End Mail Banner Container -->
+<!-- Start Mail Working Workspace -->
+	    <div class="CalendarWorkingWorkspace">
+<!-- Start Mail Action Bar -->
+		    <div class="UIActionBar">
+					<div class="UIToolbar">
+						<div class="HeaderToolbar">
+							<div class="LeftBar">
+								<div class="RightBar">
+									<div class="CenterBar">
+										<div class="Title ControlButton">Quick add:</div>
+										<a href="#" class="ControlButton">
+											<div class="IconHolder AddEventIcon">Event</div>
+										</a>
+										<a href="#" class="ControlButton">
+											<div class="IconHolder AddTaskIcon">Task</div>
+										</a>
+										<div class="SeparatorLine"><span></span></div>
+										<div class="Title ControlButton">Calendar View:</div>
+										<a href="#" class="ControlButton">
+											<div class="IconHolder DayIcon">
+												<div class="DownArrow1Icon">Day</div>
+											</div>
+										</a>
+										<div class="SeparatorLine"><span></span></div>
+										<a href="#" class="ControlButton">
+											<div class="IconHolder TaskIcon"> Tasks </div>
+										</a>
+										<div class="SeparatorLine"><span></span></div>
+										<a href="#" class="ControlButton">
+											<div class="IconHolder CalendarSettingIcon"> Setting </div>
+										</a>
+										<div class="SeparatorLine"><span></span></div>
+										<a href="#" class="ControlButton">
+											<div class="IconHolder PrintIcon">Print </div>
+										</a>
+										<div class="SeparatorLine"><span></span></div>
+										<a href="#" class="ControlButton">
+											<div class="IconHolder LayoutSwitcherIcon" title="Layout Switcher"><span></span></div>
+										</a>
+										<a href="#" class="RightControlButton">
+											<div class="NextIcon" title="Next day"><span></span></div>
+										</a>
+										<div class="Title RightControlButton">06/12</div>
+										<a href="#" class="RightControlButton">
+											<div class="BackIcon" title="Back day"><span></span></div>
+										</a>
+										<div class="SeparatorLine RightLine"><span></span></div>
+										<a href="#" class="RightControlButton">
+											<div class="IconHolder TodayIcon">Today</div>
+										</a>
+										<div class="SeparatorLine RightLine"><span></span></div>
+										<div style="clear:left;"><span></span></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+<!-- End Mail Action Bar -->
+<!-- Start Calendar Working Container -->
+				<div class="UICalendarWorkingContainer">
+					<div class="UICalendarContainer">
+						<div class="UIMiniCalendar">
+							<div class="MiniCalendarContainer">
+								This is Minicalendar
+							</div>
+						</div>
+						<div class="UICalendars">
+							<div class="TitleBar">
+								<div class="Title">Calendars</div>
+								<div class="ActionsButton" title="Calendar actions"><span></span></div>
+								<div style="clear: both"><span></span></div>
+							</div>
+							<div class="ContentContainer">
+								<div class="MyCalendar">
+									<div class="CalendarTitle">
+										<div class="CollapserFlatStyle" title="Collapser my calendar"><span></span></div>
+										<div class="Label">My calendar</div>
+									</div>
+									<div class="MyCalendarContainer">
+										
+										<div class="UIVTab">  	
+				  						<div class="CalendarSelectedFlatStyle">
+				  							<div class="GroupItem">
+				  								<div class="GroupColor1">
+						  							<div title="Collapser calendar group" class="CollapserFlatStyle"><span></span></div>
+						  							<div class="CheckBox"><input type="checkbox"/></div>
+						  							<div class="CalendarGroupIcon" onclick=""><a href="#" >Company group</a></div>
+						  							<div style="clear: both"><span></span></div>
+						  						</div>
+					  						</div>
+				  						</div>	
+				  							
+				  						<div class="UIVTabContent" >
+				  							<div class="CalendarItem">
+					  							<div class="CalendarColor1">
+					  								<div class="CheckBox"><input type="checkbox"/></div>
+					  								<div class="CalendarIcon"><a href="#" >Meeting</a></div>
+					  								<div style="clear: both"><span></span></div>
+					  							</div>
+					  						</div>
+					  						<div class="CalendarItem">
+					  							<div class="CalendarColor2">
+					  								<div class="CheckBox"><input type="checkbox"/></div>
+					  								<div class="CalendarIcon"><a href="#" >Football</a></div>
+					  								<div style="clear: both"><span></span></div>
+					  							</div>
+					  						</div>
+				  						</div>
+					  				</div>	
+					  				<div class="CalendarItem">
+			  							<div class="CalendarColor3">
+			  								<div class="CheckBox"><input type="checkbox"/></div>
+			  								<div class="CalendarIcon"><a href="#" >Family</a></div>
+			  								<div style="clear: both"><span></span></div>
+			  							</div>
+			  						</div>
+			  						<div class="CalendarItem">
+			  							<div class="CalendarColor4">
+			  								<div class="CheckBox"><input type="checkbox"/></div>
+			  								<div class="CalendarIcon"><a href="#" >Work</a></div>
+			  								<div style="clear: both"><span></span></div>
+			  							</div>
+			  						</div>
+										
+									</div>
+								</div>
+								<div class="OtherCalendar">
+									<div class="CalendarTitle">
+										<div class="CollapserFlatStyle" title="Collapser other calendar"><span></span></div>
+										<div class="Label">Other calendar</div>
+									</div>
+									<div class="OtherCalendarContainer">
+										<div class="CalendarItem">
+			  							<div class="CalendarColor5">
+			  								<div class="CheckBox"><input type="checkbox"/></div>
+			  								<div class="CalendarIcon"><a href="#" >Benjamin's Calendar</a></div>
+			  								<div style="clear: both"><span></span></div>
+			  							</div>
+			  						</div>
+			  						<div class="CalendarItem">
+			  							<div class="CalendarColor6">
+			  								<div class="CheckBox"><input type="checkbox"/></div>
+			  								<div class="CalendarIcon"><a href="#" >Brice's Calendar</a></div>
+			  								<div style="clear: both"><span></span></div>
+			  							</div>
+			  						</div>
+			  						<div class="CalendarItem">
+			  							<div class="CalendarColor7">
+			  								<div class="CheckBox"><input type="checkbox"/></div>
+			  								<div class="CalendarIcon"><a href="#" >Tuan's Calendar</a></div>
+			  								<div style="clear: both"><span></span></div>
+			  							</div>
+			  						</div>
+	  				
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+<!-- Start Calendar View-->
+					<div class="UICalendarView">
+<!-- Start Event Day View-->
+						<div class="UIEventDayView" style="display: none;">
+							<div class="TitleBar">Tuesday, June 12, 2007</div>
+							<div class="EventAllDay">
+								<div class="EventAllDayColor2">
+									<div class="EventAllDAyDescription">Events happen all day go here</div>
+								</div>
+							</div>
+							<div class="EventDayContainer">
+								<div class="EventDayContent">
+									kjbhskdjhfgvnidhnviofdvvhnifgvnifnifikjgfv
+								</div>
+							</div>
+						</div> 
+<!-- End Event Day View-->
+<!-- Start Event List View-->
+						<div class="UIEventListView" style="display: none;">
+							<div class="TitleBar">Event list</div>
+							<div class="EventListContainer">
+								<div class="EventListContent">
+									<div class="ListBar">
+										<a href="#" class="ControlButton">
+											<div class="IconHolder AddEventIcon"> Add event </div>
+										</a>
+										<div class="SeparatorLine"><span></span></div>
+										<a href="#" class="ControlButton">
+											<div class="IconHolder DeleteEventIcon"> Delete event </div>
+										</a>
+										<div class="AddCategoryIcon"><span></span></div>
+										<div style="clear: both"><span></span></div>
+									</div>
+									
+
+
+									<div class="EventList">
+										<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
+			  							<thead>
+			  								<tr>
+			  			          	<th style="width: 30px;"><input type="checkbox" class="checkbox" title="Check all" value="4"/></th>
+			      							<th style="width: 24px;"><div class="AttachmentIcon" title="Attachment of event"><span></span></div></th>
+			      		          <th >Event</th>
+			 	      	          <th >Date & time</th>
+			      	 	        </tr>
+			      	 	      </thead>
+			  	 	       			<tbody>
+			  						      <tr>
+			  						        <td><input type="checkbox" class="checkbox" value="4"/></td>
+														<td style="padding: 0px;"><div class="AttachmentIcon" ><span></span></div></td>
+														<td class="text">Play football in the team to agaist the young team in the  ...</td>
+														<td class="text">07/02/2007 10:30am</td>
+			   			     		  	</tr>
+									     	  <tr>
+				                  	<td><input type="checkbox" class="checkbox" value="4"/></td>
+														<td style="padding: 0px;"><div class="AttachmentIcon"><span></span></div></td>
+														<td class="textBold">Nite Party at Brice's house.</td>
+														<td class="textBold">07/05/2007 10:30am</td>
+						      		    </tr>
+						     		      <tr>
+						     		        <td><input type="checkbox" class="checkbox" value="4"/></td>
+														<td style="padding: 0px;"><div class="AttachmentIcon"><span></span></div></td>
+														<td class="text">Watch The Kingkong movie on HBO chanel .</td>
+														<td class="text">15/06/2007 12:30 PM</td>
+						      		    </tr>
+											    <tr>
+													  <td><input type="checkbox" class="checkbox" value="4"/></td>
+														<td style="padding: 0px;"><div class="AttachmentIcon"><span></span></div></td>
+														<td class="text">Talk to my cousin on the phone, he will call from France </td>
+														<td class="text">24/06/2007 12:30 PM</td>
+								  		    </tr>
+			      	   			 </tbody>
+										</table>
+									</div>
+
+
+
+								</div>
+							</div>
+						</div>	
+<!-- End Event List View-->
+<!-- Start Event Month View-->
+						<div class="UIEventMonthView" style="display: block;">
+							<div class="TitleBar">June, 2007</div>
+							<div class="EventMonthContainer">
+								<div class="EventMonthContent">
+								
+										<div class="RowContainerDay">
+				        			<table class="UIGrid" id="RowContainerDay" cellspacing="0" borderspacing="0">
+			        					<thead>
+				        					<tr>
+				        						<th style="color: red;">Sunday</th>
+				        						<th >Monday</th>
+				        						<th >Tuesday</th>
+				        						<th >Wednesday</th>
+				        						<th >Thursday</th>
+				        						<th >Friday</th>	                					
+				        						<th >Saturday</th>
+				        					</tr>					        			
+				        				</thead>
+				        				<tbody>
+				        					<tr>
+				        						<td class="CalendarContentDisable">
+				        							<div class="DisableDay">28/5</div>
+				        							<div class="DayContent"><span></span></div>
+														</td>
+				        						<td class="CalendarContentDisable">
+				        							<div class="DisableDay">29</div>
+															<div class="DayContent">
+				        								<div class="EventOnDayBorder"
+																	<div class="EventOnDayContent">
+																		<div class="EventOnDayLabel">Event of the ...</div>
+																	</div>
+																</div>
+																<div class="EventOnDayBorder">
+																	<div class="EventOnDayContent">
+																		<div class="EventOnDayLabel">Nite Party at ...</div>
+																	</div>
+																</div>
+															</div>
+															<div class="ViewMoreIcon" title="View all event on day">+7 More</div>
+														</td>
+				        						<td class="CalendarContentDisable">
+															<div class="DisableDay">30</div>
+															<div class="DayContent"><span></span></div>
+														</td>
+				        						<td class="CalendarContentDisable">
+															<div class="DisableDay">31</div>
+															<div class="DayContent"><span></span></div>
+														</td>
+				        						<td class="CalendarContentNomal">
+				        							<div class="WeekSuburd">1/6</div>
+															<div class="DayContent">
+				        								<div class="EventOnDayBorder"
+																	<div class="EventOnDayContent">
+																		<div class="EventOnDayLabel">Event of the ...</div>
+																	</div>
+																</div>
+																<div class="EventOnDayBorder">
+																	<div class="EventOnDayContent">
+																		<div class="EventOnDayLabel">Nite Party at ...</div>
+																	</div>
+																</div>
+															</div>
+															<div class="ViewMoreIcon" title="View all event on day">+7 More</div>
+														</td>
+				        						<td class="CalendarContentNomal">
+															<div class="WeekSuburd">2</div>
+															<div class="DayContent"><span></span></div>
+														</td>
+				        						<td class="CalendarContentNomal">
+															<div class="WeekSuburd">3</div>
+															<div class="DayContent"><span></span></div>
+														</td>					        						        						
+				        					</tr>							        					
+				        				
+				        					<tr>
+				        						<td class="CalendarContentNomal">
+				        							<div class="WeekSuburd">4</div>
+				        							<div class="DayContent"><span></span></div>
+														</td>
+				        						<td class="CalendarContentNomal">
+				        							<div class="WeekSuburd">5</div>
+				        							<div class="DayContent"><span></span></div>															
+														</td>
+				        						<td class="CalendarContentNomal">
+															<div class="WeekSuburd">6</div>
+															<div class="DayContent"><span></span></div>
+														</td>
+				        						<td class="CalendarContentNomal">
+															<div class="WeekSuburd">7</div>
+															<div class="DayContent"><span></span></div>
+														</td>
+				        						<td class="CalendarContentNomal">
+				        							<div class="WeekSuburd">8</div>
+				        							<div class="DayContent"><span></span></div>																
+														</td>
+				        						<td class="CalendarContentNomal">
+															<div class="WeekSuburd">9</div>
+															<div class="DayContent"><span></span></div>
+														</td>
+				        						<td class="CalendarContentNomal">
+															<div class="WeekSuburd">10</div>
+															<div class="DayContent"><span></span></div>
+														</td>					        						        						
+				        					</tr>						        					
+				        				
+				        					<tr>
+				        						<td class="CalendarContentNomal">
+				        							<div class="WeekSuburd">11</div>
+				        							<div class="DayContent"><span></span></div>
+														</td>
+				        						<td class="CalendarMatchedEventContent">
+				        							<div class="WeekSuburd">
+				        								<div class="Today">12</div>
+				        								<div style="clear: right;"><span></span></div>
+				        							</div>
+				        							<div class="DayContent">
+				        								<div class="EventOnDayBorder"
+																	<div class="EventOnDayContent">
+																		<div class="EventOnDayLabel">Event of the ...</div>
+																	</div>
+																</div>
+																<div class="EventOnDayBorder">
+																	<div class="EventOnDayContent">
+																		<div class="EventOnDayLabel">Nite Party at ...</div>
+																	</div>
+																</div>
+															</div>
+															<div class="ViewMoreIcon" title="View all event on day">+7 More</div>														
+														</td>
+				        						<td class="CalendarContentNomal">
+															<div class="WeekSuburd">13</div>
+															<div class="DayContent"><span></span></div>
+														</td>
+				        						<td class="CalendarContentNomal">
+															<div class="WeekSuburd">14</div>
+															<div class="DayContent"><span></span></div>
+														</td>
+				        						<td class="CalendarContentNomal">
+				        							<div class="WeekSuburd">15</div>
+				        							<div class="DayContent"><span></span></div>																
+														</td>
+				        						<td class="CalendarContentNomal">
+															<div class="WeekSuburd">16</div>
+															<div class="DayContent"><span></span></div>
+														</td>
+				        						<td class="CalendarContentNomal">
+															<div class="WeekSuburd">17</div>
+															<div class="DayContent"><span></span></div>
+														</td>					        						        						
+				        					</tr>					        					
+				        				
+				        					<tr>
+				        						<td class="CalendarContentNomal">
+				        							<div class="WeekSuburd">18</div>
+				        							<div class="DayContent"><span></span></div>					        			
+														</td>
+				        						<td class="CalendarContentNomal">
+				        							<div class="WeekSuburd">19</div>
+				        							<div class="DayContent"><span></span></div>																
+														</td>
+				        						<td class="CalendarContentNomal">
+															<div class="WeekSuburd">20</div>
+															<div class="DayContent"><span></span></div>
+														</td>
+				        						<td class="CalendarContentNomal">
+															<div class="WeekSuburd">21</div>
+															<div class="DayContent"><span></span></div>
+														</td>
+				        						<td class="CalendarContentNomal">
+				        							<div class="WeekSuburd">22</div>
+				        							<div class="DayContent"><span></span></div>																
+														</td>
+				        						<td class="CalendarContentNomal">
+															<div class="WeekSuburd">23</div>
+															<div class="DayContent"><span></span></div>
+														</td>
+				        						<td class="CalendarContentNomal">
+															<div class="WeekSuburd">24</div>
+															<div class="DayContent"><span></span></div>
+														</td>					        						        						
+				        					</tr>					        					
+				        				
+				        					<tr>
+				        						<td class="CalendarContentNomal">
+				        							<div class="WeekSuburd">25</div>
+				        							<div class="DayContent"><span></span></div>
+														</td>
+				        						<td class="CalendarContentNomal">
+				        							<div class="WeekSuburd">26</div>
+				        							<div class="DayContent"><span></span></div>																
+														</td>
+				        						<td class="CalendarContentNomal">
+															<div class="WeekSuburd">27</div>
+															<div class="DayContent"><span></span></div>
+														</td>
+				        						<td class="CalendarContentNomal">
+															<div class="WeekSuburd">28</div>
+															<div class="DayContent"><span></span></div>
+														</td>
+				        						<td class="CalendarContentNomal">
+				        							<div class="WeekSuburd">29</div>
+				        							<div class="DayContent"><span></span></div>																
+														</td>
+				        						<td class="CalendarContentNomal">
+															<div class="WeekSuburd">30</div>
+															<div class="DayContent"><span></span></div>
+														</td>
+				        						<td class="CalendarContentDisable">
+															<div class="DisableDay">1</div>
+															<div class="DayContent"><span></span></div>
+														</td>					        						        						
+				        					</tr>							        					
+				        				</tbody>
+				        				
+				        			</table>
+				        		</div>
+
+									</div>
+								
+								</div>
+							</div>
+						</div>	
+<!-- End Event Month View-->
+					<div style="clear: left;"><span></span></div>
+<!-- End Calendar View-->	
+				</div>
+<!-- End Calendar Working Container-->
+			</div>
+
+    </div>
+  </div>
+</div>

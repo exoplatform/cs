@@ -1,0 +1,500 @@
+@import url("skinIcons/16x16/Stylesheet.css") ;
+@import url("skinIcons/24x24/Stylesheet.css") ;
+
+
+/******************************************** MailBanner ****************************************/
+.UICalendarPortlet .UIBannerContainer {
+  background: #fbfbfb url('background/BgBanner457x62.gif') no-repeat left;
+  height: 62px;
+  padding-left: 235px;
+}
+
+.UICalendarPortlet .UIBannerContainer .LeftHorizontalLine {
+  background: url('background/LeftHorizontalLine44x2.gif') no-repeat left bottom;	
+  padding-left: 44px;
+  height: 34px;
+}
+
+.UICalendarPortlet .UIBannerContainer .RepeatHorizontalLine {
+	font-size: 13px; font-family: tahoma;
+	color: #5f5f5f; font-weight: bold;
+  background: url('background/RepeatHorizontalLine1x2.gif') repeat-x bottom;	
+  height: 22px; padding-top: 12px;
+}
+
+.UICalendarPortlet .UIBannerContainer .SearchForm {
+  background: url('background/RightBottomBanner440x28.gif') no-repeat right;	
+  height: 28px; line-height: 28px;
+	padding-right: 13px;
+}
+
+.UICalendarPortlet .UIBannerContainer .Label {
+	float: right;
+	line-height: 20px;
+	margin: 5px 0px;
+	color: #595b6a; 
+}
+
+.UICalendarPortlet .UIBannerContainer .Input {
+	width: 195px;
+	float: right;
+	margin: 3px 8px;
+}
+
+.UICalendarPortlet .UIBannerContainer .Search {
+  background: url('skinIcons/16x16/icons/SearchIcon.gif') no-repeat ;	
+  height: 16px;
+  width: 16px;
+  float: right;
+  margin: 8px 5px 0px 0px;
+  cursor: pointer;
+}
+
+.UICalendarPortlet .UIBannerContainer .AdvancedSearch {
+  background: url('skinIcons/16x16/icons/FindIcon.gif') no-repeat ;	
+  height: 16px; width: 16px;
+  float: right; cursor: pointer;
+  margin: 8px 0px 0px 2px;
+}
+
+.UICalendarPortlet .UIBannerContainer .SeparatorLine {
+	background: url('background/SeparatorLineBaner2x26.gif') no-repeat ;
+  float: right; width: 2px; height: 26px;
+  margin: 0px 7px;
+}
+
+/***************************************Calendar Working Container********************************/
+
+.UICalendarPortlet .CalendarWorkingWorkspace {
+	padding: 10px 5px;
+}
+
+
+/*=========================Calendar ControlBar======================================*/
+
+
+.UICalendarPortlet .CalendarWorkingWorkspace .UIActionBar .Title {
+	margin: 8px 4px 0px 4px;
+}
+
+.UICalendarPortlet .CalendarWorkingWorkspace .UIActionBar {
+	height: 31px;
+}
+
+.UICalendarPortlet .CalendarWorkingWorkspace .ControlButton {
+	float: left;
+	line-height: 18px;
+}
+
+.UICalendarPortlet .CalendarWorkingWorkspace .RightControlButton {
+	float: right;
+	line-height: 18px;
+}
+
+.UICalendarPortlet .CalendarWorkingWorkspace  .UIActionBar a {
+	color: #000000;
+	margin: 3px 0px 0px 0px;
+}
+
+.UICalendarPortlet .CalendarWorkingWorkspace  .UIActionBar a:hover {
+	background: url('background/ControlButtonBG1x26.gif') repeat-x ;
+	color: #126ca5; border: 1px solid #cbcbcb;
+	height: 24px;
+}
+
+.UICalendarPortlet .CalendarWorkingWorkspace .SeparatorLine {
+  float: left;
+  margin: 3px 5px 2px 5px;
+}
+
+.UICalendarPortlet .CalendarWorkingWorkspace .NextIcon {
+  margin-top: 6px;
+}
+
+.UICalendarPortlet .CalendarWorkingWorkspace .BackIcon {
+  margin-top: 6px;
+}
+
+.UICalendarPortlet .CalendarWorkingWorkspace .RightLine {
+  float: right;
+  margin: 3px 5px 2px 5px;
+}
+
+.UICalendarPortlet .CalendarWorkingWorkspace .IconHolder {
+	line-height: 18px;
+	margin: 5px 7px 0px 7px;
+	padding-left: 26px;
+}
+
+.UICalendarPortlet .CalendarWorkingWorkspace .LayoutSwitcherIcon {
+	padding-left: 0px;
+	width: 22px; height: 18px;
+}
+
+.UICalendarPortlet .CalendarWorkingWorkspace .UIActionBar .DownArrow1Icon {
+	line-height: 18px;
+	background-position: right;
+	padding-right: 16px; 
+}
+
+/*==================Calendar Working Container===================*/
+
+
+.UICalendarPortlet .UICalendarWorkingContainer {
+	background-color: #f3f3f3;
+	border: 1px solid #c7c7c7;
+}
+
+.UICalendarContainer {
+	float: left;
+	width: 225px;
+	padding: 8px;
+}
+
+.UIMiniCalendar {
+	border: 1px solid #c7c7c7;
+}
+
+.UIMiniCalendar .MiniCalendarContainer {
+	height: 140px;
+	border: 1px solid #ffffff;
+	background: #e9edf9 url('background/MiniCalendarBG1x17.gif') repeat-x bottom;
+}
+
+.UICalendars {
+	background-color: #ffffff;
+	border: 1px solid #c7c7c7;
+	margin: 4px 0px 0px 0px;
+}
+
+.UICalendars .ContentContainer {
+	height: 300px;
+	overflow: auto;
+}
+
+.UICalendars .ActionsButton {
+	float: right;
+  background: url('background/ActionsButton.gif') no-repeat ;	
+  width: 17px; height: 15px;
+  margin: 3px 4px 0px 0px;
+  cursor: pointer;
+}
+
+.UICalendars .Title {
+	float: left;
+  line-height: 22px;
+  font-weight: bold;
+  margin-left: 6px;
+}
+
+.UICalendars .Label {
+	float: left;
+  line-height: 18px;
+  margin-left: 3px;
+}
+
+.UICalendars .CalendarTitle {
+	background: url('background/TitleBarBG136x1.gif') no-repeat bottom left ;	
+	height: 18px;
+	padding-top: 5px;
+}
+
+.UICalendars .CollapserFlatStyle {
+	background: url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/BlackNextArrow.gif') no-repeat ;
+	width: 13px; height: 16px;
+	float: left;
+	margin: 1px 0px 0px 3px;
+	cursor: pointer;
+	background-position: left;
+}
+
+.UICalendars .MyCalendarContainer {
+	padding: 8px;
+}
+
+.UICalendars .MyCalendarContainer .GroupItem {
+	border: 1px solid #c7c7c7;
+}
+
+.UICalendars .MyCalendarContainer .GroupItem .GroupColor1 {
+	border: 1px solid #ffffff;
+	background-color: #edd5ff;
+}
+
+.UICalendars .CalendarGroupIcon {
+  padding-left: 19px; height: 16px;
+  margin: 1px 3px 0px 0px;
+  float: left;
+  line-height: 16px;
+  font-weight: bold;
+}
+
+.UICalendars .CalendarIcon {
+  padding-left: 19px; height: 16px;
+  margin: 1px 3px 0px 0px;
+  float: left;
+  line-height: 16px;
+}
+
+.UICalendars .CheckBox {
+  margin: 0px 3px 0px 0px;
+  float: left;
+}
+
+.UICalendars a {
+	color: #000000;
+}
+
+.UICalendars a:hover {
+	color: #1756d5;
+}
+
+.UICalendars .CalendarItem {
+	border: 1px solid #c7c7c7;
+	margin-top: 6px;
+}
+
+.UICalendars .UIVTabContent {
+	border: 1px solid #e7e7e7;
+	border-top: none;
+	padding: 1px 8px 8px 25px;
+}
+
+.UICalendars .CalendarItem .CalendarColor1 {
+	border: 1px solid #ffffff;
+	background-color: #e5eaff;
+}
+
+.UICalendars .CalendarItem .CalendarColor2 {
+	border: 1px solid #ffffff;
+	background-color: #f6ffe5;
+}
+
+.UICalendars .CalendarItem .CalendarColor3 {
+	border: 1px solid #ffffff;
+	background-color: #ffe5fd;
+}
+
+.UICalendars .CalendarItem .CalendarColor4 {
+	border: 1px solid #ffffff;
+	background-color: #d7d8ff;
+}
+
+.UICalendars .CalendarItem .CalendarColor5 {
+	border: 1px solid #ffffff;
+	background-color: #f4e5ff;
+}
+
+.UICalendars .CalendarItem .CalendarColor6 {
+	border: 1px solid #ffffff;
+	background-color: #fff1bb;
+}
+
+.UICalendars .CalendarItem .CalendarColor7 {
+	border: 1px solid #ffffff;
+	background-color: #fefdc9;
+}
+
+.UICalendars .OtherCalendarContainer {
+	padding: 8px;
+}
+
+/*====================Calendar View=====================*/
+
+.UICalendarView {
+	margin-left: 243px;
+	border-left: 1px solid #c7c7c7;
+}
+
+.UICalendarView .TitleBar {
+	font-weight: bold;
+	line-height: 22px;
+	text-align: center;
+}
+
+.UICalendarView .EventAllDay {
+	border: 1px solid #ffffff;
+}
+
+.UICalendarView .EventAllDay .EventAllDayColor2 {
+	border: 1px solid #c7c7c7;
+	background-color: #f6ffe5;
+	padding: 6px;
+}
+
+.UICalendarView .EventDayContainer {
+	height: 437px;
+	overflow: auto;
+	border-top: 1px solid #c7c7c7;
+}
+
+.UICalendarView .EventDayContent {
+	height: 800px;
+	background-color: #ffffff;
+}
+
+/*====================Event List View=====================*/
+
+.UIEventListView .EventListContainer {
+	height: 466px;
+	overflow: auto;
+}
+
+.UIEventListView .EventListContent {
+	height: 600px;
+	background-color: #ffffff;
+	padding: 8px;
+}
+
+.UIEventListView .EventListContent .ListBar {
+	background: url('background/EventListBarBG1x31.gif') repeat-x ;	
+	height: 31px;
+	padding: 0px 8px;
+	border: 1px solid #c7c7c7;
+	border-bottom: none;
+}
+
+.UIEventListView .EventListContent .EventList {
+	padding-left: 1px;
+}
+
+.UIEventListView .EventListContent .AddCategoryIcon {
+	background: url('background/EventListBarBG1x31.gif') no-repeat ;
+	float: right;
+	width: 16px; height: 16px;
+	margin: 3px 0px 0px 3px;
+}
+
+.UIEventListView a {
+	color: #000000;
+	margin: 3px 0px 0px 0px;
+}
+
+.UIEventListView a:hover {
+	color: #1756d5;
+}
+
+
+.UIEventListView .EventListContent  .UIGrid th {
+	background: url('background/TitleBarBG1x23.gif') repeat-x ;	
+  height: 23px;
+	border-right: 1px solid #c7c7c7;
+	border-bottom: 1px solid #c7c7c7;
+}
+
+/*====================Event Month View=====================*/
+
+.UIEventMonthView .EventMonthContainer {
+	height: 464px;
+	overflow: auto;
+}
+
+.UIEventMonthView .EventMonthContent {
+	background-color: #ffffff;
+	margin-top: 4px;
+}
+
+.UIEventMonthView .EventMonthContent  .WeekSuburd {
+	text-align: right;
+	border-top: 1px solid #c7c7c7;
+	padding: 2px 6px;
+}
+
+.UIEventMonthView .EventMonthContent  .DisableDay {
+	text-align: right;
+	border-top: 1px solid #c7c7c7;
+	padding: 2px 6px;
+	color: #909090;
+}
+
+.UIEventMonthView .EventMonthContent .WeekSuburd .Today {
+	border: 1px solid red;
+	background-color: #ffffff;
+	float: right;
+	width: 18px;
+	text-align: center;
+}
+
+.UIEventMonthView .EventMonthContent .ViewMoreIcon {
+	background: url('skinIcons/16x16/icons/ViewMoreEvent.gif') no-repeat right;
+	line-height: 16px;
+	padding-right: 18px;
+	text-align: right;
+	cursor: pointer;
+	color: #0e31ff;
+	
+}
+
+.UIEventMonthView .EventMonthContent  .UIGrid td {
+	border-right: 1px solid #c7c7c7;
+}
+
+.UIEventMonthView .EventMonthContent  .UIGrid th {
+	background: url('background/TitleBarBG1x23.gif') repeat-x ;	
+  height: 23px;
+	border-right: 1px solid #c7c7c7;
+	border-bottom: 1px solid #c7c7c7;
+	text-align: center;
+	width: 14%;
+}
+
+.UIEventMonthView .EventMonthContent .DayContent {
+	height: 100px;
+}
+
+.UIEventMonthView .EventMonthContent  .RowContainerDay {
+	padding: 0px ;
+}
+
+.UIEventMonthView .EventMonthContent  .RowContainerDay .CalendarContentNomal {
+	background: #ffffff;
+	padding: 0px;
+}
+
+.UIEventMonthView .EventMonthContent  .RowContainerDay .CalendarContentDisable {
+	background: #f3f3f3;
+	padding: 0px;
+}
+
+.UIEventMonthView .EventMonthContent  .RowContainerDay .CalendarMatchedEventContent {
+	background: #cadbff;
+	padding: 0px;
+}
+
+
+.UIEventMonthView .EventMonthContent  .RowContainerDay .NormalDayLabel {
+	text-align: right;
+}
+
+.UIEventMonthView .EventMonthContent  .RowContainerDay .CurrentMonthLabel {
+	font-weight: bold;
+}
+
+.UIEventMonthView .EventMonthContent .EventOnDayBorder {
+	border: 1px solid #e4e4e4;
+	margin: 3px;
+}
+
+.UIEventMonthView .EventMonthContent .EventOnDayContent {
+	width: auto; height: 20px;
+	background: #fff8c7;
+	border: 1px solid #ffffff;
+}
+
+.UIEventMonthView .EventMonthContent .EventOnDayLabel {
+	line-height: 20px;
+	text-align: center;
+}
+
+/*==========================================*/
+.UICalendarPortlet .SeparatorLine {
+  background: url('background/SeparatorLine2x26.gif') no-repeat ;	
+  height: 26px; width: 2px;
+}
+
+.UICalendarPortlet .TitleBar {
+  background: url('background/TitleBarBG1x23.gif') repeat-x ;	
+  height: 23px;
+}
+
+

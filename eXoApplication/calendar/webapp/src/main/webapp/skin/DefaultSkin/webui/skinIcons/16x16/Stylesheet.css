@@ -1,0 +1,49 @@
+.DayIcon {
+	background: url('icons/DayIcon.gif') no-repeat;
+}
+
+.FindIcon {
+	background: url('icons/FindIcon.gif') no-repeat;
+}
+
+.PrintIcon {
+	background: url('icons/PrintIcon.gif') no-repeat;
+}
+
+.SearchIcon {
+	background: url('icons/SearchIcon.gif') no-repeat;
+}
+
+.TaskIcon {
+	background: url('icons/TaskIcon.gif') no-repeat;
+}
+
+.TodayIcon {
+	background: url('icons/TodayIcon.gif') no-repeat;
+}
+
+.CalendarSettingIcon {
+	background: url('icons/CalendarSettingIcon.gif') no-repeat;
+}
+
+.NextIcon {
+	background: url('icons/NextIcon.gif') no-repeat;
+	width: 10px;height: 16px;
+}
+
+.BackIcon {
+	background: url('icons/BackIcon.gif') no-repeat;
+	width: 10px;height: 16px;
+}
+
+.CalendarGroupIcon {
+	background: url('icons/CalendarGroupIcon.gif') no-repeat;
+}
+
+.CalendarIcon {
+	background: url('icons/CalendarIcon.gif') no-repeat;
+}
+
+.DeleteEventIcon {
+	background: url('icons/DeleteEvent.gif') no-repeat;
+}
