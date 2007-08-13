@@ -184,8 +184,8 @@ public class JCRDataStorage implements DataStorage {
 		  ForumNode.setProperty("exo:modifiedDate", GregorianCalendar.getInstance());
 		  ForumNode.setProperty("exo:description", forum.getDescription());
 		  
-		  ForumNode.setProperty("exo:isNotifyWhenAddTopic", forum.getIsNotifyWhenAddTopic());
-		  ForumNode.setProperty("exo:isNotifyWhenAddPost", forum.getIsNotifyWhenAddPost());
+		  ForumNode.setProperty("exo:notifyWhenAddTopic", forum.getNotifyWhenAddTopic());
+		  ForumNode.setProperty("exo:notifyWhenAddPost", forum.getNotifyWhenAddPost());
 		  ForumNode.setProperty("exo:isModerateTopic", forum.getIsModerateTopic());
 		  ForumNode.setProperty("exo:isModeratePost", forum.getIsModeratePost());
 		  ForumNode.setProperty("exo:isClosed", forum.getIsClosed());
@@ -218,13 +218,13 @@ public class JCRDataStorage implements DataStorage {
     forum.setPostCount(forumNode.getProperty("exo:postCount").getType());
     forum.setTopicCount(forumNode.getProperty("exo:topicCount").getType());
 
-    forum.setIsNotifyWhenAddTopic(forumNode.getProperty("exo:isNotifyWhenAddTopic").getBoolean());
-    forum.setIsNotifyWhenAddPost(forumNode.getProperty("exo:isNotifyWhenAddPost").getBoolean());
     forum.setIsModerateTopic(forumNode.getProperty("exo:isModerateTopic").getBoolean());
     forum.setIsModeratePost(forumNode.getProperty("exo:isModeratePost").getBoolean());
     forum.setIsClosed(forumNode.getProperty("exo:isClosed").getBoolean());
     forum.setIsLock(forumNode.getProperty("exo:isLock").getBoolean());
     
+    forum.setNotifyWhenAddPost(ValuesToStrings(forumNode.getProperty("exo:notifyWhenAddTopic").getValues()));
+    forum.setNotifyWhenAddTopic(ValuesToStrings(forumNode.getProperty("exo:notifyWhenAddPost").getValues()));
     forum.setViewForumRole(ValuesToStrings(forumNode.getProperty("exo:viewForumRole").getValues()));
     forum.setCreateTopicRole(ValuesToStrings(forumNode.getProperty("exo:createTopicRole").getValues()));
     forum.setReplyTopicRole(ValuesToStrings(forumNode.getProperty("exo:replyTopicRole").getValues()));

@@ -1,7 +1,7 @@
 .UIAddNewForum {
 	border: 1px solid red;
-	width: 660px;
 	padding: 10px;
+	height: 400px;
 }
 
 .UIAddNewForum .AddForum .HorizontalLayout {
@@ -9,21 +9,21 @@
 	padding: 5px;
 }
 
-.UIAddNewForum .UIForm .HorizontalLayout .NewForum {
+.UIAddNewForum .HorizontalLayout .NewForum {
 	width: 400px;
 	padding: 20px 0px 40px 0px;
 }
 
-.UIAddNewForum .UIForm .HorizontalLayout .NewForum textarea {
+.UIAddNewForum .HorizontalLayout .NewForum textarea {
 	height: 100px;
 }
 
-.UIAddNewForum .UIForm .HorizontalLayout .ModerationOptions  {
+.UIAddNewForum .HorizontalLayout .ModerationOptions  {
 	width: 510px;
 	padding: 20px 0px 60px 0px;
 }
 
-.UIAddNewForum .UIForm .HorizontalLayout .ModerationOptions textarea {
+.UIAddNewForum .HorizontalLayout .ModerationOptions textarea {
 	width: 340px;
 	height: 40px;
 }

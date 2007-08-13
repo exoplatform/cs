@@ -159,10 +159,10 @@
 	  		<propertyDefinition name="exo:topicCount" requiredType="Integer" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
 	  			<valueConstraints/>
 	  		</propertyDefinition>
-	  		<propertyDefinition name="exo:isNotifyWhenAddTopic" requiredType="boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+	  		<propertyDefinition name="exo:notifyWhenAddTopic" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
 	  			<valueConstraints/>
 	  		</propertyDefinition>
-	  		<propertyDefinition name="exo:isNotifyWhenAddPost" requiredType="boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+	  		<propertyDefinition name="exo:notifyWhenAddPost" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
 	  			<valueConstraints/>
 	  		</propertyDefinition>
 	  		<propertyDefinition name="exo:isModerateTopic" requiredType="boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">

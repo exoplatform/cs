@@ -47,8 +47,6 @@ public class UICategoryForm extends UIForm implements UIPopupComponent{
 	public static final String FIELD_CATEGORYORDER_INPUT = "CategoryOrder" ;
 	public static final String FIELD_TEXT_AREA = "Description" ;
   
-	
-	
   public UICategoryForm() throws Exception {
   	UIFormStringInput categoryTitle = new UIFormStringInput(FIELD_CATEGORYTITLE_INPUT, FIELD_CATEGORYTITLE_INPUT, null);
   	UIFormStringInput categoryOrder = new UIFormStringInput(FIELD_CATEGORYORDER_INPUT, FIELD_CATEGORYORDER_INPUT, null);

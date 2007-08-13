@@ -24,8 +24,8 @@ public class Forum {
   private int postCount;
   private int topicCount;
   
-  private boolean isNotifyWhenAddTopic = false ;
-  private boolean isNotifyWhenAddPost = false ;
+  private String[] notifyWhenAddTopic ;
+  private String[] notifyWhenAddPost ;
   private boolean isModerateTopic = false ;
   private boolean isModeratePost = false ;
   private boolean isClosed = false ;
@@ -90,11 +90,11 @@ public class Forum {
   public int getTopicCount(){return topicCount;}
   public void setTopicCount(int topicCount){this.topicCount = topicCount;}
   
-  public boolean getIsNotifyWhenAddTopic() { return isNotifyWhenAddTopic;	}
-  public void setIsNotifyWhenAddTopic(boolean isNotifyWhenAddTopic) {this.isNotifyWhenAddTopic = isNotifyWhenAddTopic;}
+  public String[] getNotifyWhenAddTopic() { return notifyWhenAddTopic;	}
+  public void setNotifyWhenAddTopic(String[] notifyWhenAddTopic) {this.notifyWhenAddTopic = notifyWhenAddTopic;}
   
-  public boolean getIsNotifyWhenAddPost() {return isNotifyWhenAddPost; }
-  public void setIsNotifyWhenAddPost(boolean isNotifyWhenAddPost) { this.isNotifyWhenAddPost = isNotifyWhenAddPost;}
+  public String[] getNotifyWhenAddPost() {return notifyWhenAddPost; }
+  public void setNotifyWhenAddPost(String[] notifyWhenAddPost) { this.notifyWhenAddPost = notifyWhenAddPost;}
   
   public boolean getIsModerateTopic() { return isModerateTopic;}
   public void setIsModerateTopic(boolean isModerateTopic) { this.isModerateTopic = isModerateTopic;}

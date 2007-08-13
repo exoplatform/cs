@@ -35,7 +35,7 @@ public class UICategories extends UIContainer  {
   	
   }
 
-	private List<Category> getcategoryList() throws Exception {
+	private List<Category> getCategoryList() throws Exception {
 		List<Category> categoryList = forumService.getCategories();
 //		GregorianCalendar calendar = new GregorianCalendar() ;
 //  	for (int i = 0; i < categoryList.size(); i++) {
@@ -49,7 +49,7 @@ public class UICategories extends UIContainer  {
   	return categoryList;
 	}  
 	
-	private List<Forum> getforumList(String categoryId) throws Exception {
+	private List<Forum> getForumList(String categoryId) throws Exception {
 		List<Forum> forumList = forumService.getForums(categoryId);
 		//forumList.get(0).get//getDescription()//getForumName();
 		return forumList;

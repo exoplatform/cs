@@ -49,7 +49,7 @@ public class UIForumActionBar extends UIContainer  {
       System.out.println(" ========= > s") ;
       UIForumPortlet forumPortlet = event.getSource().getAncestorOfType(UIForumPortlet.class) ;
       UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;
-      popupAction.activate(UIForumForm.class, 600) ;
+      popupAction.activate(UIForumForm.class, 662) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   }  

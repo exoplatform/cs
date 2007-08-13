@@ -10,7 +10,7 @@
 		<div class="UIForumCategories">
 		<% // Start ForumCategory%>
 		<% 
-			List categories = uicomponent.getcategoryList();
+			List categories = uicomponent.getCategoryList();
 			 for(category in categories) {
 			 String title = category.getCategoryName();
 		 %>
@@ -47,7 +47,7 @@
 					    </thead>
 					    <tbody>
 					    <% 
-					    	List forums = uicomponent.getforumList(category.getId());
+					    	List forums = uicomponent.getForumList(category.getId());
 					    	if(forums.size() == 0) {
 					    %>
 					    	<tr>

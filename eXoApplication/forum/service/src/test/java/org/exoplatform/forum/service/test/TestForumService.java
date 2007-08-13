@@ -230,8 +230,8 @@ public class TestForumService extends BaseForumTestCase{
 		forum.setPostCount(0);
 		forum.setTopicCount(0);
 		
-		forum.setIsNotifyWhenAddTopic(false);
-		forum.setIsNotifyWhenAddPost(false);
+		forum.setNotifyWhenAddTopic(new String[] {});
+		forum.setNotifyWhenAddPost(new String[] {});
 		forum.setIsModeratePost(false);
 		forum.setIsModerateTopic(false);
 		forum.setIsClosed(false);
