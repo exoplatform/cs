@@ -1,6 +1,8 @@
 <%
 	import org.exoplatform.forum.service.Category; 
 	import org.exoplatform.forum.service.Forum; 
+	import org.exoplatform.forum.service.Topic; 
+	import org.exoplatform.forum.service.Post; 
 	import java.util.GregorianCalendar;
 %>
 <div class="UICategories" id="UICategories">
@@ -45,48 +47,74 @@
 					    </thead>
 					    <tbody>
 					    <% 
-					    	String classRow = "whileRow";
-					    	int i = 0;
 					    	List forums = uicomponent.getforumList(category.getId());
-				        GregorianCalendar calendar = new GregorianCalendar() ;
-				        long toDay = calendar.getTime().getTime();
-			 					for(forum in forums) {
-					        if(i%2 == 0) classRow = "whileRow";
-					        else classRow = "OddRow";
-					        i++;
-					        String forumTitle = "";
-					        String classIconForum = "NoNewPostIcon";
-					        String titleIconForum = "Forum Contains No New Post";
-					        if(forum.getIsLock() == true){
-					          classIconForum = "ForumCloseIcon";
-					          titleIconForum = "Forum is Closed for Posting";
-					        }
-					        long createdDate = forum.getCreatedDate().getTime();
-					        if((toDay-createdDate)/86400000 < 4){
-					          classIconForum = "ContainNewPostIcon";
-					          titleIconForum = "Forum Contains New Posts";
-					        }
+					    	if(forums.size() == 0) {
 					    %>
-					    	<tr class="$classRow">
-									<td style="padding: 0px;"><div class="ForumStatusIcon $classIconForum" title=""><span></span></div></td>
-									<td >
-										<a href="#" class="ForumTitle">Annoucements<span class="ForumQuantity">(5 viewing)</span></a>
-										<div class="ForumDescription">eXo news, event, release and update</div>
-									</td>
-								 	<td >
-								 		<a href="#" class="LastPostTitle Worker1">Release portal 2.0 beta</a>
-										<div class="LastPostInfos">by <a href="#">benjamin.mestrallet</a><span class="DateTime">(07/20/2007, 10:20 AM)</span></div>
-									</td>
-								 	<td class="Tdbox">150</td>
-									<td class="Tdbox">1450</td>
-									<td >
-										<div class="EmoticonsIcon BigGrinIcon"><span></span></div>
-										<a href="#" class="Moderator">benjamin.mestrallet</a>
-										<div style="clear: left;"><span></span></div>
-									</td>
-									<td class="Tdbox"><input type="checkbox" class="checkbox" value="4"/></td>
-				   			</tr>
-				   		<%} %>
+					    	<tr>
+					    		<td></td>
+					    		<td>No Forum !</td>
+					    		<td>No Post !</td>
+					    		<td>0</td>
+					    		<td>0</td>
+					    		<td></td>
+					    	</tr>
+					    <% }else {%>
+					      <%
+					        GregorianCalendar calendar = new GregorianCalendar() ;
+					        long toDay = calendar.getTime().getTime();
+						    	String classRow = "whileRow";
+						    	int i = 0;
+				 					for(forum in forums) {
+				 						Post lastPost = uicomponent.getLastPost(category.getId(), forum.getId());
+				 						Topic topicNewPost = uicomponent.getTopicNewPost(category.getId(), forum.getId());
+				 						
+						        if(i%2 == 0) classRow = "whileRow";
+						        else classRow = "OddRow";
+						        i++;
+						        String classIconForum = "NoNewPostIcon";
+						        String titleIconForum = "Forum Contains No New Post";
+						        if(forum.getIsLock() == true){
+						          classIconForum = "ForumCloseIcon";
+						          titleIconForum = "Forum is Closed for Posting";
+						        }
+						        long createdDate = lastPost.getCreatedDate().getTime();
+						        if((toDay-createdDate)/86400000 < 4){
+						          classIconForum = "ContainNewPostIcon";
+						          titleIconForum = "Forum Contains New Posts";
+						        }
+						        
+						        String forumTitle = forum.getForumName();
+						        String forumDescription = forum.getDescription();
+						        String topicNewPostIcon = topicNewPost.getIcon();
+						        String topicNewPostTitle = topicNewPost.getTopicName();
+						        String lastPostBy = lastPost.getOwner();
+						        String dateTime = lastPost.getCreatedDate().getDate().getTime().getString();
+						        int topicCount = forum.getTopicCount();
+						        int postCount = forum.getPostCount();
+						        String [] forumModerators = forum.getModerators();
+						    %>
+							    	<tr class="$classRow">
+											<td style="padding: 0px;"><div class="ForumStatusIcon $classIconForum" title="$titleIconForum"><span></span></div></td>
+											<td >
+												<a href="#" class="ForumTitle">$forumTitle<span class="ForumQuantity">(5 viewing)</span></a>
+												<div class="ForumDescription">$forumDescription</div>
+											</td>
+										 	<td >
+										 		<a href="#" class="LastPostTitle $topicNewPostIcon">$topicNewPostTitle</a>
+												<div class="LastPostInfos">by <a href="#">$lastPostBy</a><span class="DateTime">($dateTime)</span></div>
+											</td>
+										 	<td class="Tdbox">$topicCount</td>
+											<td class="Tdbox">$postCount</td>
+											<td >
+												<div class="EmoticonsIcon BigGrinIcon"><span></span></div>
+												<a href="#" class="Moderator">$forumModerators</a>
+												<div style="clear: left;"><span></span></div>
+											</td>
+											<td class="Tdbox"><input type="checkbox" class="checkbox" value="4"/></td>
+						   			</tr>
+					   		<% } 
+					   		 }
+					    %>
 						  </tbody>
 					  </table>							
 				  	

@@ -5,6 +5,7 @@
 package org.exoplatform.forum.webui;
 
 import org.exoplatform.forum.webui.popup.UICategoryForm;
+import org.exoplatform.forum.webui.popup.UIForumForm;
 import org.exoplatform.forum.webui.popup.UIPopupAction;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -35,7 +36,6 @@ public class UIForumActionBar extends UIContainer  {
   static public class AddCategoryActionListener extends EventListener<UIForumActionBar> {
     public void execute(Event<UIForumActionBar> event) throws Exception {
       UIForumActionBar uiActionBar = event.getSource() ;
-      System.out.println(" ========= > s") ;
       UIForumPortlet forumPortlet = event.getSource().getAncestorOfType(UIForumPortlet.class) ;
       UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;
       popupAction.activate(UICategoryForm.class, 600) ;
@@ -46,6 +46,11 @@ public class UIForumActionBar extends UIContainer  {
   static public class AddForumActionListener extends EventListener<UIForumActionBar> {
     public void execute(Event<UIForumActionBar> event) throws Exception {
       UIForumActionBar uiActionBar = event.getSource() ;      
+      System.out.println(" ========= > s") ;
+      UIForumPortlet forumPortlet = event.getSource().getAncestorOfType(UIForumPortlet.class) ;
+      UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;
+      popupAction.activate(UIForumForm.class, 600) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   }  
   static public class ManageModeratorActionListener extends EventListener<UIForumActionBar> {

@@ -12,6 +12,7 @@ import org.exoplatform.forum.service.Category;
 import org.exoplatform.forum.service.Forum;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.service.Post;
+import org.exoplatform.forum.service.Topic;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIContainer;
 
@@ -55,10 +56,26 @@ public class UICategories extends UIContainer  {
 		return forumList;
 	}
 	
-	private Post getLastPost(String forumId) throws Exception {
-		
-		return null;
+	private Post getLastPost(String categoryId, String forumId) throws Exception {
+		Forum forum = forumService.getForum(categoryId, forumId);
+		Post lastPost = (Post)forumService.getObjectByPath(forum.getLastPostPath());
+		return lastPost;
 	}
+	
+	private Topic getTopicNewPost(String categoryId, String forumId) throws Exception {
+		Forum forum = forumService.getForum(categoryId, forumId);
+		String path = forum.getLastPostPath();
+		int t = 0;
+    for (int i = path.length()-1; i >=0 ; i--) {
+    	t++;
+			if(path.charAt(i) == '/') break;
+		}
+    Topic topicNewPost = (Topic)forumService.getObjectByPath(path.substring(0, path.length() - t));
+    return topicNewPost;
+	}
+	
+	
+	
 }
 
 

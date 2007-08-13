@@ -1,5 +1,5 @@
 <div class="UIAddNewForum">	
-	
+	<% uiform.begin() %>	
 	<div class="UIForm AddForum">
 		<div class="HorizontalLayout">
 	  	<table class="UIFormGrid">
@@ -358,33 +358,25 @@
 		          </div>
 					    <div class="UIAction">
 					      <div class="ActionContainer">
-				          
-				            <div class="ActionButton">
-				              <div class="LightBlueStyle">
-											  <div class="ButtonLeft">
-												  <div class="ButtonRight">
-												    <div class="ButtonMiddle">
-											        <a href="#">Save</a>
-												    </div>
-											    </div>
-												</div>
-											</div>
-										</div>
-			            
-				            <div class="ActionButton">
-				              <div class="LightBlueStyle">
-											  <div class="ButtonLeft">
-												  <div class="ButtonRight">
-												    <div class="ButtonMiddle">
-											        <a href="#">Cancel</a>
-												    </div>
-											    </div>
-												</div>
-											</div>
-										</div>
-			            
-			          </div>
-		 	        </div>
+					        <% for(action in uicomponent.getActions()) { %>
+					            <div class="ActionButton">
+					              <div class="LightBlueStyle">
+					                <div class="ButtonLeft">
+					                  <div class="ButtonRight">
+					                    <div class="ButtonMiddle">
+					                      <% 
+					                        String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action) 
+					                        String link = uicomponent.event(action) ;
+					                      %>
+					                      <a href="$link">$actionLabel</a>
+					                    </div>
+					                  </div>
+					                </div>
+					              </div>
+					            </div>
+					          <%}%> 
+					      </div>
+					    </div>
 		 	        
 				    </div>
 			  </div>
@@ -392,4 +384,5 @@
 			</div>  
 	  </div>  
 	</div>
+	<%uiform.end()%>
 </div>
