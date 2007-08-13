@@ -137,6 +137,14 @@ public interface ForumService {
    */
   public Topic getTopic(String categoryId, String forumId, String topicId) throws Exception;    
   /**
+   * This method should:
+   * 1. Load the topic from the database
+   * @param topicPath
+   * @return
+   * @throws Exception
+   */
+  public Topic getTopicByPath(String topicPath) throws Exception;
+  /**
    * This method should: 
    * 1. Load the topic and the list of the post belong to the topic. Create the TopicView object and 
    *    cache the topic view
@@ -228,5 +236,5 @@ public interface ForumService {
   public void savePost(String categoryId, String forumId, String topicId, Post post, boolean isNew)throws Exception;
   public Post removePost(String categoryId, String forumId, String topicId, String postId)throws Exception;
   public void movePost(String postPath, String destTopicPaths) throws Exception ;
-  public Object getObjectByPath(String path) throws Exception ;
+  //public Object getObjectByPath(String path) throws Exception ;
 }

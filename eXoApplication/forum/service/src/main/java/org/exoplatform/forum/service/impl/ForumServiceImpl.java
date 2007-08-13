@@ -74,6 +74,10 @@ public class ForumServiceImpl implements ForumService{
   	return storage_.getTopic(categoryId, forumId, topicId);
   }
   
+  public Topic getTopicByPath(String topicPath) throws Exception{
+    return storage_.getTopicByPath(topicPath) ;
+  }
+  
   public TopicView getTopicView(String categoryId, String forumId, String topicId) throws Exception {
 	  return storage_.getTopicView(categoryId, forumId, topicId);
   }

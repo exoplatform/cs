@@ -281,7 +281,12 @@ public class JCRDataStorage implements DataStorage {
     }
     return null;
   }
-
+	
+  public Topic getTopicByPath(String topicPath)throws Exception {
+    Node topicNode = (Node)getJCRSession().getItem(topicPath) ;
+    return getTopicNode(topicNode) ;
+  }
+  
   private Topic getTopicNode(Node topicNode) throws Exception {
     Topic topicNew = new Topic();    
     if(topicNode.hasProperty("exo:id")) topicNew.setId(topicNode.getProperty("exo:id").getString());
@@ -532,20 +537,7 @@ public class JCRDataStorage implements DataStorage {
   	forumHomeNode.getSession().save() ;
   }
   
-  public Object getObjectByPath(String path) throws Exception {
-  	Object object = new Object();
-  	Node forumHomeNode = getForumHomeNode();
-  	path = path.substring(forumHomeNode.getPath().length()+1);
-		Node myNode = forumHomeNode.getNode(path);
-		if(myNode.getPrimaryNodeType().getName() == "exo:post") {
-			object = (Object)getPost(myNode);
-		}else if(myNode.getPrimaryNodeType().getName() == "exo:topic") {
-			object = (Object)getTopicNode(myNode);
-		}else if(myNode.getPrimaryNodeType().getName() == "exo:forum") {
-			object = (Object)getForum(myNode);
-		} else return null;
-  	return object;
-	}
+  
   
   private String [] ValuesToStrings(Value[] Val) throws Exception {
   	if(Val.length == 1) return new String[]{Val[0].getString()};
@@ -567,5 +559,20 @@ public class JCRDataStorage implements DataStorage {
     String defaultWS = 
       repositoryService_.getDefaultRepository().getConfiguration().getDefaultWorkspaceName() ;
     return repositoryService_.getDefaultRepository().getSystemSession(defaultWS) ;
+  }
+  
+  public Object getObjectByPath(String path) throws Exception {
+    Object object = new Object();
+    Node forumHomeNode = getForumHomeNode();
+    path = path.substring(forumHomeNode.getPath().length()+1);
+    Node myNode = forumHomeNode.getNode(path);
+    if(myNode.getPrimaryNodeType().getName() == "exo:post") {
+      object = (Object)getPost(myNode);
+    }else if(myNode.getPrimaryNodeType().getName() == "exo:topic") {
+      object = (Object)getTopicNode(myNode);
+    }else if(myNode.getPrimaryNodeType().getName() == "exo:forum") {
+      object = (Object)getForum(myNode);
+    } else return null;
+    return object;
   }
 }
