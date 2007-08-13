@@ -1,0 +1,558 @@
+
+/******************************************** MailBanner ****************************************/
+.UIContactPortlet .UIBannerContainer {
+  background: url('background/BgBanner457x63.gif') no-repeat left;
+  height: 64px;
+  padding: 0px 1px 0px 240px;
+}
+
+.UIContactPortlet .UIBannerContainer .LeftHorizontalLine {
+  height: 30px;
+}
+
+.UIContactPortlet .UIBannerContainer .RepeatHorizontalLine {
+	font-size: 13px; font-family: tahoma;
+	color: #fc7203; font-weight: bold;
+  background: url('background/RepeatHorizontalLine1x2.gif') repeat-x bottom;	
+  height: 21px; padding-top: 9px;
+}
+
+.UIContactPortlet .UIBannerContainer .SearchForm {
+  background: url('background/RightBottomBanner440x34.gif') no-repeat right;	
+  height: 34px; line-height: 34px;
+	padding-right: 13px;
+	border-right: 1px solid #787e9f;
+}
+
+.UIContactPortlet .UIBannerContainer .Label {
+	float: right;
+	line-height: 20px;
+	margin: 5px 0px;
+	color: #595b6a; 
+}
+
+.UIContactPortlet .UIBannerContainer .Input {
+	width: 195px;
+	float: right;
+	margin: 5px 8px;
+}
+
+.UIContactPortlet .UIBannerContainer .Search {
+  background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/SearchIcon.gif') no-repeat ;	
+  height: 16px;
+  width: 16px;
+  float: right;
+  margin: 8px 5px 0px 0px;
+  cursor: pointer;
+}
+
+.UIContactPortlet .UIBannerContainer .AdvancedSearch {
+  background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/FindIcon.gif') no-repeat ;	
+  height: 16px; width: 16px;
+  float: right; cursor: pointer;
+  margin: 8px 0px 0px 2px;
+}
+
+.UIContactPortlet .UIBannerContainer .SeparatorLine {
+	background: url('background/SeparatorLineBaner2x26.gif') no-repeat ;
+  float: right;
+  margin: 3px 7px;
+  height: 26px; width: 2px;
+}
+
+.UIContactPortlet .IconHolder {
+	line-height: 26px;
+	margin: 2px 7px 0px 7px;
+	padding-left: 26px;
+	background-position: left center;
+	background-repeat: no-repeat;
+}
+
+.UIContactPortlet .SeparatorLine {
+  background: url('background/SeparatorLine2x26.gif') no-repeat ;	
+  height: 26px; width: 2px;
+}
+
+.UIContactPortlet .ControlButton {
+	float: left;
+	margin: 0px 3px;
+}
+
+/*********************************** UIActionBar ***************************************/
+
+.UIContactPortlet .UIActionBar {
+	padding: 10px 5px 0px 5px;
+}
+
+.UIContactPortlet .UIActionBar .SeparatorLine {
+	float: left;
+	margin:3px 5px 2px;
+}
+
+.UIContactPortlet .UIActionBar a {
+	color: black;
+}
+
+.UIContactPortlet .UIActionBar a:hover {
+	background: url('background/ControlButtonBG1x26.gif') repeat-y ;
+	border: 1px solid #9d9d9d;
+	color: #126ca5;
+}
+
+.UIContactPortlet .UIActionBar .Label {
+	line-height: 24px;
+}
+
+.UIContactPortlet .UIActionBar .BlueCirclePlusIcon {
+	width: auto;
+	height: auto;
+}
+
+.UIContactPortlet .UIActionBar .DownArrow1Icon {
+	background-position:right center;
+	padding-right:16px;
+}
+
+.UIContactPortlet .UIActionBar .ImportContact {
+	background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/ImportalContactIcon.gif') no-repeat center ;
+	height: 26px; width: 21px;
+	margin: 4px 10px 0px 40px;
+	float: left;
+	cursor: pointer;
+}
+
+.UIContactPortlet .UIActionBar .ExportContact {
+	background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/ExportContactIcon.gif') no-repeat center ;
+	height: 26px; width: 21px;
+	margin: 4px 10px 0px 10px;
+	float: left;
+	cursor: pointer;
+}
+
+
+/************************************** UIWorkingContainer *******************************/
+
+
+.UIContactPortlet .UIWorkingContainer {
+	padding: 0px 5px 5px 5px;
+	border: 1px solid #c2c2c2;
+	background: #f3f3f3;
+	margin: 0px 5px 10px 5px;
+	height: auto;
+}
+
+
+/*======================== UINavigationContainer =========================*/
+
+.UIContactPortlet .UIWorkingContainer .UINavigationContainer {
+	float: left;
+	width: 215px;
+	padding: 7px 2px 3px 2px;
+}
+
+/*============================== TagList ================================*/
+
+.UIContactPortlet .UINavigationContainer .UIAddressBooks {
+	background: white;
+	border: 1px solid #a5a5a5;
+	margin: 1px 0px;
+}
+
+.UIContactPortlet .UINavigationContainer .UIAddressBooks a {
+	color: #1e1f21;
+}
+
+.UIContactPortlet .UINavigationContainer .UITag {
+	background: white;
+	border: 1px solid #a5a5a5;
+	margin: 1px 0px;
+	padding: 0px;
+	width: auto;
+}
+
+.UIContactPortlet .UINavigationContainer .TitleBar {
+	background: url('background/BgTitleBar1x24.gif') repeat-x;
+	height: 24xp; line-height: 24px;
+}
+
+.UIContactPortlet .UINavigationContainer .DownArrow3Icon {
+	float: left;
+	background: url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/BlackDownArrow.gif') no-repeat left center;
+	cursor:pointer;
+	margin: 2px;
+	height:16px;
+	width:16px;
+}
+
+.UIContactPortlet .UINavigationContainer .TitleIcon {
+	padding-left: 20px;	
+	margin-left: 20px;
+	color: #3d3d3d; font-weight: bold;	
+	float: none;
+}
+
+.UIContactPortlet .UINavigationContainer .AddressTitle {
+	background: url('background/LineTitle166x1.gif') no-repeat left bottom;
+	line-height: 20px;
+	margin: 0px 0px 5px 0px;
+}
+
+.UIContactPortlet .UINavigationContainer .ItemList {
+	padding: 0px 18px;
+	height: 24px; line-height: 24px;
+}
+
+.UIContactPortlet .UINavigationContainer .ItemList a {
+	padding: 3px 0px 3px 26px;
+}
+
+.UIContactPortlet .UINavigationContainer .Selected {
+	background: #e6e8f5;
+	margin: 0px 2px;
+}
+
+.UIContactPortlet .UINavigationContainer .Selected a {
+	color: #058ee6;
+}
+
+.UIContactPortlet .UINavigationContainer .Normal {
+	margin: 0px 2px;
+}
+
+.UIContactPortlet .UINavigationContainer .ListContent {
+	padding: 8px 0px 8px 18px;
+}
+
+.UIContactPortlet .UINavigationContainer .ListContent a {
+	line-height: 20px;
+	color: #3d3d3d;
+	display: block;
+}
+
+.UIContactPortlet .UINavigationContainer .ListContent a:hover {
+	color: #126ca5;
+}
+
+.UIContactPortlet .UINavigationContainer .PersonalAddress {
+	padding: 5px 0px 10px 0px;
+}
+
+.UIContactPortlet .UINavigationContainer .PublicAddress {
+	padding: 5px 0px 20px 0px;
+}
+
+/*============================== UIContactContainer ================================*/
+
+.UIContactPortlet .UIContactContainer {
+	margin-left: 225px;
+}
+
+.UIContactPortlet .UIContactActionsBar {
+	background: url('background/BgTitleBar1x24.gif') repeat-x;
+	height: 24px;
+	width: 98.7%;
+	border-left: 1px solid #c0c0c0;
+	border-right: 1px solid #c0c0c0;
+}
+
+.UIContactPortlet .UIContactActionsBar .SeparatorLine {
+	float: left;
+	background: url('background/SeparatorLine2x17.gif') no-repeat;
+	width: 2px;
+	height: 17px;
+	margin-top: 3px;
+}
+
+.UIContactPortlet .UIContactContainer  .UIContactActionsBar .Icon {
+	margin: 2px 7px 0px 7px;
+	width: 20px; height: 20px;
+	background-repeat: no-repeat;
+}
+
+.UIContactPortlet .UIContactContainer  .UIContactActionsBar .IconHolder {
+	line-height: 20px;
+}
+
+.UIContactPortlet .UIContactContainer  .UIContactActionsBar a {
+	color: #000000;
+}
+
+.UIContactPortlet .UIContactContainer  .UIContactActionsBar a:hover {
+	color: #126ca5;
+}
+
+.UIContactPortlet .UIContactContainer .UIContactActionsBar .MoreActionsIcon {
+	margin: 2px 0px 0px 10px;
+	line-height: 24px;
+	padding-left: 24px;
+}
+
+.UIContactPortlet .UIContactContainer .UIContactActionsBar .ViewIcon {
+	margin: 2px 0px 0px 10px;
+	line-height: 24px;
+	padding-left: 24px;
+}
+
+.UIContactPortlet .UIContactContainer .UIContactActionsBar .AddEventIcon {
+	margin: 2px 0px 0px 10px;
+	line-height: 20px;
+	padding-left: 24px;
+}
+
+.UIContactPortlet .UIContactContainer .UIContactActionsBar .DownArrow1Icon {
+	line-height: 20px;
+	background-position: right;
+	padding-right: 16px; 
+}
+
+/*=====================Page Iterator Container===================*/
+
+.UIContactPortlet .UIContactContainer .FloatBlock {
+	float: left;
+	margin: 2px 3px;
+} 
+
+.UIContactPortlet .UIContactContainer .FloatBlockHidden {
+	float: left;
+	margin: 2px 3px;
+	filter:alpha(opacity=30);-moz-opacity:.30;opacity:.30;
+} 
+
+.UIContactPortlet .UIContactContainer .UIAddressPageList {
+	margin: 0px;
+}
+
+.UIAddressPageList .ContactIteratorContainer {
+	line-height:22px;
+	padding: 0px 10px 0px 15px;
+}
+
+.UIAddressPageList .ContactIteratorContainer .RightPageIteratorBlock {
+	float:right;
+}
+
+.UIAddressPageList .ContactIteratorContainer .LeftPageIteratorBlock {
+	float:right;
+	margin-right:15px;
+}
+
+.UIAddressPageList .TotalPages {
+	float:left;
+	line-height:19px;
+	vertical-align:middle;
+}
+
+.UIAddressPageList .Number {
+	float:left;
+	line-height:19px;
+	vertical-align:middle;
+	font-weight: bold;
+	margin: 0px 2px;
+}
+
+/*================================== UIGrid===============*/
+
+.UIContactPortlet .UIContactContainer .UIMessageList {
+	padding-left: 1px;
+}
+
+.UIContactPortlet .UIContactContainer .UIGrid {
+	border-top: none;
+}
+
+.UIContactPortlet .UIContactContainer .UIGrid th {
+	background: url(background/ThGridRepeatBg1x19.gif) repeat-x;
+	text-align: left;
+	border-bottom: 1px solid #d8d8d8;
+	border-top: none;
+}
+
+.UIContactPortlet .UIContactContainer .UIGrid .Icon {
+	width: 24px; height: 18px;
+	background-position: center;
+}
+
+.UIContactPortlet .UIContactContainer .UIGrid .State {
+	padding-left: 20px;
+	width: auto;
+}
+
+.UIContactPortlet .UIContactContainer .UnStarredIcon {
+	margin: 1px 0px 0px 4px; 
+}
+
+.UIContactPortlet .UIContactContainer .StarredIcon {
+	margin: 1px 0px 0px 4px;
+}
+
+.UIContactPortlet .UIContactContainer .AttachmentIcon {
+	margin: 1px 0px 0px 3px;
+}
+
+.UIContactPortlet .UIContactContainer .TotalMessageIcon {
+	margin: 1px 0px 0px 4px;
+}
+
+.UIContactPortlet .UIContactContainer .PriorityIcon {
+	margin: 1px 0px 0px 4px;
+}
+
+.UIContactPortlet .UIContactContainer table {
+	width: 99%; 
+	background: #ffffff;
+}
+
+.UIContactPortlet .UIContactContainer td {
+	border-top: none;
+	height: 20px;
+	padding-left: 10px;
+}
+
+.UIContactPortlet .UIContactContainer .text {
+	border-right: 1px solid #e8e8e8;
+}
+
+.UIContactPortlet .UIContactContainer .textBold {
+	font-weight: bold;
+}
+
+.UIContactPortlet .UIContactContainer .ResizeReadingPane {
+	margin: 1px auto 1px auto;
+	background: url('background/ResizeReadingPane38x3.gif') no-repeat;
+	width: 38px; height: 3px;
+	cursor: n-resize;
+}
+
+.UIContactPortlet .UIContactContainer .UIMessageList .DownArrow1Icon {
+	height: 16px; width: 60px;
+	line-height: 16px;
+	margin: 3px 0px 0px 0px;
+	cursor: pointer;
+	background-position: right;
+	padding-right: 16px;
+}
+
+/*=================================Contac Pane=================*/
+
+.UIContactPortlet .UIContactContainer .UIContactPane {
+	border: 1px solid #c0c0c0;
+	background: #ffffff;
+	width: 98.7%;
+}
+
+.UIContactPortlet .UIContactContainer .UIContactPane .ViewBoxStyle {
+}
+
+.UIContactPortlet .UIContactContainer .UIContactPane .ContactPaneDetails {
+	height: 265px;
+	overflow: auto;
+}
+
+.UIContactPortlet .UIContactContainer .UIContactPane .ContactPaneBar {
+	background: #e7e7e7;
+	height: 25px;
+	border: 1px solid #ffffff;
+}
+
+.UIContactPortlet .UIContactContainer .UIContactPane .Subject {
+	float: left;
+	font-weight: bold;
+	font-size: 11px;
+	margin: 5px 0px 0px 10px; 
+	padding-left: 20px;
+	background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/ContactIcon.gif') no-repeat left center;
+}
+
+.UIContactPortlet .UIContactContainer .UIContactPane .MaximizeContactPane {
+  float: right;
+	margin: 4px 4px 0px 0px;
+	padding-right: 20px;
+	line-height: 20px;
+	background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/MaximizeReadingPane.gif') no-repeat right center;
+}
+
+/*================================= UIContactSummaryPane ===============================*/
+
+.UIContactPortlet .ContactPaneContainer {
+	padding: 10px 15px;
+	color: #1e1f21;
+}
+
+.UIContactPortlet .ContactPaneContainer .Avatar {
+	float: left;
+	padding: 0px 0px 5px 0px;
+}
+
+.UIContactPortlet .ContactPaneContainer .Name {
+	margin-left: 80px;
+}
+
+.UIContactPortlet .ContactPaneContainer .State {
+	background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/OnlineIcon.gif') no-repeat left center;
+	padding-left: 20px;
+	line-height: 25px;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.UIContactPortlet .ContactPaneContainer .Job {
+	font-size: 13px;
+	padding-left: 20px;
+}
+
+.UIContactPortlet .ContactPaneContainer .InfoContainer {
+	padding: 5px 0px;
+}
+
+.UIContactPortlet .InfoContainer .TitleInfo {
+	color: #f56301;
+	font-size: 14px;
+	border-bottom: 1px solid #cbcbcb;
+	padding: 0px 0px 5px;
+}
+
+.UIContactPortlet .InfoContainer .Content {
+	padding: 10px 0px;
+	line-height: 20px;
+	font-size: 12px;
+}
+
+.UIContactPortlet .InfoContainer .Content a {
+	color: blue;
+}
+
+.UIContactPortlet .InfoContainer .LeftContent {
+	float: left;
+	width: 250px;
+}
+
+.UIContactPortlet .InfoContainer .RightContent {
+	margin-left: 300px;
+}
+
+.UIContactPortlet .InfoContainer .Content .InfoLabel1 {
+	float: left;
+	width: 70px;
+}
+
+.UIContactPortlet .InfoContainer .Content .InfoLabel {
+	width: 100px;
+	float: left;
+}
+
+.UIContactPortlet .InfoContainer .Content .Info1 {
+	margin-left: 73px;
+}
+
+.UIContactPortlet .InfoContainer .Content .Info {
+	background: none;
+	margin-left: 110px;
+}
+
+.UIContactPortlet .InfoContainer .Content .Email {
+	background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/EmailIcon.gif') no-repeat left center;
+	padding-left: 20px;
+	margin-left: 50px;
+}
+
+

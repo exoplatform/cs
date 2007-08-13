@@ -1,0 +1,112 @@
+
+.AddressOptionIcon {
+	background: url('icons/AddressOptionIcon.gif') no-repeat left center;
+}
+
+.CustomLayoutIcon {
+	background: url('icons/CustomLayoutIcon.gif') no-repeat left center;
+}
+
+.ViewIcon {
+	background: url('icons/ViewIcon.gif') no-repeat left center;
+}
+
+.AddressIcon {
+	background: url('icons/AddressBookIcon.gif') no-repeat left center;
+}
+
+.MyLDAPIcon {
+	background: url('icons/MyLDAPIcon.gif') no-repeat left center;
+}
+
+.EmailListIcon {
+	background: url('icons/EmailListIcon.gif') no-repeat left center;
+}
+
+.TagIcon {
+	background: url('icons/BlueTag.gif') no-repeat left center;
+}
+
+.BlueTag {
+	background: url('icons/BlueTag.gif') no-repeat left center;
+}
+
+.RedTag {
+	background: url('icons/RedTag.gif') no-repeat left center;
+}
+
+.GreenTag {
+	background: url('icons/GreenTag.gif') no-repeat left center;
+}
+
+.VioletTag {
+	background: url('icons/VioletTag.gif') no-repeat left center;
+}
+
+.MoveIcon {
+	background: url('icons/MoveActionIcon.gif') no-repeat left center;
+}
+
+.EditIcon {
+	background: url('icons/EditIcon.gif') no-repeat left center;
+}
+
+.ChatIcon {
+	background: url('icons/GoChatIcon.gif') no-repeat left center;
+	width: 16px ; height: 20px;
+}
+
+.SelectTagIcon {
+	background: url('icons/TagIcon.gif') no-repeat left center;
+}
+
+.SelectTagIcon {
+	background: url('icons/TagIcon.gif') no-repeat left center;
+}
+
+.MessageIcon {
+	background: url('icons/MessageIcon.gif') no-repeat left center;
+}
+
+.PrintIcon {
+	background: url('icons/PrintIcon.gif') no-repeat left center;
+}
+
+.NextPageArrow {
+	background: url('icons/NextPage.gif') no-repeat;
+	width: 16px; height: 16px;
+	cursor: pointer;
+}
+
+.LastPageArrow {
+	background: url('icons/LastPage.gif') no-repeat;
+	width: 16px; height: 16px;
+	cursor: pointer;
+}
+
+.FirstPageArrow{
+	background: url('icons/PreviousPage.gif') no-repeat;
+	width: 16px; height: 16px;
+	cursor: pointer;
+}
+
+.PreviousPageArrow {
+	background: url('icons/BackPage.gif') no-repeat;
+	width: 16px; height: 16px;
+	cursor: pointer;
+}
+
+.OnlineIcon {
+	background: url('icons/OnlineIcon.gif') no-repeat;
+	height: 16px; width: 17px;
+}
+
+.OfflineIcon {
+	background: url('icons/OffLineIcon.gif') no-repeat;
+	height: 16px; width: 17px;
+}
+
+.BusyIcon {
+	background: url('icons/BusyIcon.gif') no-repeat;
+	height: 16px; width: 17px;
+}
