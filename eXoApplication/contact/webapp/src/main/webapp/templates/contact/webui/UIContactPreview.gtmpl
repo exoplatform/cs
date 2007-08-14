@@ -1,0 +1,165 @@
+<div class="UIContactPreview">
+	<div class="ContactPreviewBar">
+		<div class="Subject">Contact Details</div>
+		<div class="MaximizeContactPane" title="Maximize Reading Pane">Last updated: 07/18/2007 10:30 am</div>
+		<div style="clear:both;"><span></span></div>
+	</div>
+	<div class="ContactPreviewDetails">
+<!--  Start DecoratorBox ViewBoxStyle -->
+		<div class="DecoratorBox">
+			<div class="ViewBoxStyle">
+				<div class="TopLeftViewBoxStyle">
+					<div class="TopRightViewBoxStyle">
+						<div class="TopCenterViewBoxStyle"><span></span></div>										
+					</div>
+				</div>
+				<div class="MiddleLeftViewBoxStyle">
+					<div class="MiddleRightViewBoxStyle">
+						<div class="MiddleCenterViewBoxStyle">
+							<div class="ContactPreviewContainer"	>
+								<img src="/contact/skin/DefaultSkin/webui/background/Img1.gif" class="Avatar"/>
+								<div class="Member">
+									<div class="State">Benjamin, Mestrallet</div>
+									<div class="Job">Founder of eXo Platform SAS</div>
+								</div>
+								<div style="clear: left;"><span></span></div>
+								<div class="InfoContainer">
+									<div class="TitleInfo">Profile</div>
+									<div class="Content">
+										<div class="LeftContent">
+											<div class="InfoItem">
+												<div class="InfoLabel">Nick name:</div>
+												<div class="Info">Benj</div>
+											</div>
+											<div class="InfoItem">
+												<div class="InfoLabel">Gender:</div>
+												<div class="Info">Male</div>
+											</div>
+											<div class="InfoItem">
+												<div class="InfoLabel">Birthday:</div>
+												<div class="Info">01/01/1978</div>
+											</div>
+											<div class="InfoItem">
+												<div class="InfoLabel">Anniversary:</div>
+												<div class="Info">07/18/2007 </div>
+											</div>
+										</div>
+										<div class="RightContent">
+											<div class="InfoItem">
+												<div class="InfoLabel1">Email 1:</div>
+												<div class="Info1 Email"><a href="#">benjamin.mestrallet@exoplatform.com </a>(Preferred)</div>
+											</div>													
+											<div class="InfoItem">
+												<div class="InfoLabel1">Email 2:</div>
+												<div class="Info Email"><a href="#">benjamin.mestrallet@mac.com</a></div>
+											</div>													
+										</div>
+										<div style="clear: left;"><span></span></div>
+									</div>
+								</div>
+								<div class="InfoContainer">
+									<div class="TitleInfo">Instant Messaging Contacts</div>
+									<div class="Content">
+										<div class="LeftContent">
+											<div class="InfoItem">
+												<div class="InfoLabel">eXo Chat:</div>
+												<div class="Info">benjamin.mestrallet</div>
+											</div>
+											<div class="InfoItem">
+												<div class="InfoLabel">Google:</div>
+												<div class="Info">benjamin.mestrallet</div>
+											</div>
+											<div class="InfoItem">
+												<div class="InfoLabel">MSN:</div>
+												<div class="Info">benj_mes</div>
+											</div>
+											<div class="InfoItem">
+												<div class="InfoLabel">AOL/AIM:</div>
+												<div class="Info">benj_mestrallet</div>
+											</div>
+										</div>
+										<div class="RightContent">
+											<div class="InfoItem">
+												<div class="InfoLabel1">Yahoo!:</div>
+												<div class="Info1">benjamin.mestrallet</div>
+											</div>													
+											<div class="InfoItem">
+												<div class="InfoLabel1">ICR:</div>
+												<div class="Info1">benjamin.mestrallet</div>
+											</div>													
+											<div class="InfoItem">
+												<div class="InfoLabel1">Skype:</div>
+												<div class="Info1">benjamin.mestrallet</div>
+											</div>													
+											<div class="InfoItem">
+												<div class="InfoLabel1">ICQ:</div>
+												<div class="Info1">benj_mestrallet</div>
+											</div>													
+										</div>
+										<div style="clear: left;"><span></span></div>
+									</div>
+								</div>
+								<div class="InfoContainer">
+									<div class="TitleInfo">Home</div>
+									<div class="Content">
+										<div class="LeftContent">
+											<div class="InfoItem">
+												<div class="InfoLabel">Street:</div>
+												<div class="Info">CP 6 - PIBS Vannes</div>
+											</div>
+											<div class="InfoItem">
+												<div class="InfoLabel">City:</div>
+												<div class="Info">Paris</div>
+											</div>
+											<div class="InfoItem">
+												<div class="InfoLabel">State/Province:</div>
+												<div class="Info">Paris</div>
+											</div>
+											<div class="InfoItem">
+												<div class="InfoLabel">Postal Code:</div>
+												<div class="Info">56038</div>
+											</div>
+											<div class="InfoItem">
+												<div class="InfoLabel">Country/Region:</div>
+												<div class="Info">France</div>
+											</div>
+										</div>
+										<div class="RightContent">
+											<div class="InfoItem">
+												<div class="InfoLabel">Home Phone 1:</div>
+												<div class="Info">123456789</div>
+											</div>													
+											<div class="InfoItem">
+												<div class="InfoLabel">Home Phone 2:</div>
+												<div class="Info">2345678</div>
+											</div>													
+											<div class="InfoItem">
+												<div class="InfoLabel">Home Fax:</div>
+												<div class="Info">34567890</div>
+											</div>													
+											<div class="InfoItem">
+												<div class="InfoLabel">Mobile Phone:</div>
+												<div class="Info">098888888</div>
+											</div>													
+											<div class="InfoItem">
+												<div class="InfoLabel">Web Page:</div>
+												<div class="Info">http://www.exoplatform.com</div>
+											</div>													
+										</div>
+										<div style="clear: left;"><span></span></div>
+									</div>
+								</div>
+							</div>
+						</div>										
+					</div>
+				</div>
+				<div class="BottomLeftViewBoxStyle">
+					<div class="BottomRightViewBoxStyle">
+						<div class="BottomCenterViewBoxStyle"><span></span></div>										
+					</div>
+				</div>
+			</div>
+		</div>
+<!--  End DecoratorBox ViewBoxStyle -->
+	</div>
+</div>

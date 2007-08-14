@@ -1,0 +1,39 @@
+<div class="UIActionBar">
+		<div class="UIToolbar">
+			<div class="HeaderToolbar">
+				<div class="LeftBar">
+					<div class="RightBar">
+						<div class="CenterBar">
+							<a href="#" class="ControlButton">
+								<div class="IconHolder BlueCirclePlusIcon">
+									<div class="DownArrow1Icon">Add New</div>
+								</div>
+							</a>
+							<div class="ImportContact" title="Import Contacts">
+								<span></span>
+							</div>
+							<div class="ExportContact" title="Export Contacts">
+								<span></span>
+							</div>
+							<div class="SeparatorLine"><span></span></div>
+							<a href="#" class="ControlButton">
+								<div class="IconHolder ViewIcon">
+									<div class="DownArrow1Icon">Contacts View</div>
+								</div>
+							</a>
+							<a href="#" class="ControlButton">
+								<div class="IconHolder CustomLayoutIcon">
+									<div class="DownArrow1Icon">Custom Layout View</div>
+								</div>
+							</a>
+							<a href="#" class="ControlButton">
+								<div class="IconHolder AddressOptionIcon">Address Book Options</div>
+							</a>
+							<div style="clear:left;"><span></span></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div style="clear: left;"><span></span></div>

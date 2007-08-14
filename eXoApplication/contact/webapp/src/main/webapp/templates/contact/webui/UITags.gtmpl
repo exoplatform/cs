@@ -1,0 +1,13 @@
+<div class="UITags">
+				<div class="TitleBar">
+					<div class="DownArrow3Icon" title="Collapse/Expand all"><span></span></div>
+					<div class="TitleIcon BlueTag">Tags</div>
+		      <div style="clear: left"><span></span></div>
+				</div>
+				<div class="ListContent">
+					<a href="#" class="IconHolder BlueTag">Customers</a>
+					<a href="#" class="IconHolder RedTag">Company</a>
+					<a href="#" class="IconHolder GreenTag">Docs Team</a>
+					<a href="#" class="IconHolder VioletTag">Design Team</a>
+				</div>
+</div>

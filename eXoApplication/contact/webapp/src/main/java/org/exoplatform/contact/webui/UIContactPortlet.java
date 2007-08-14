@@ -15,12 +15,12 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
  */
 @ComponentConfig(
    lifecycle = UIApplicationLifecycle.class,
-   template = "app:/templates/contact/webui/UIVCards.gtmpl"
+   template = "app:/templates/contact/webui/UIContactPortlet.gtmpl"
 )
 public class UIContactPortlet extends UIPortletApplication {
   public UIContactPortlet() throws Exception {
-    //addChild(UIBannerContainer.class, null, null) ;
-    //addChild(UIActionBar.class, null, null) ;
-    //addChild(UIWorkingContainer.class, null, null) ;
+    addChild(UIBannerContainer.class, null, null) ;
+    addChild(UIActionBar.class, null, null) ;
+    addChild(UIWorkingContainer.class, null, null) ;
   }
 }

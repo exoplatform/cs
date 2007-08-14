@@ -19,7 +19,7 @@ import org.exoplatform.webui.core.UIContainer;
 )
 public class UIContactContainer extends UIContainer  {
   public UIContactContainer() throws Exception {
-    //addChild(UIContacts.class, null, null) ;
-    //addChild(UIContactPreview.class, null, null) ;
+    addChild(UIContacts.class, null, null) ;
+    addChild(UIContactPreview.class, null, null) ;
   }  
 }

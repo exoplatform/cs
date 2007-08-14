@@ -1,0 +1,101 @@
+<div class="UIContacts">
+			
+				<div class="UIContactActionsBar">
+					<a href="#" class="ControlButton">
+						<div class="IconHolder MoveIcon">Move</div>
+					</a>
+					<div class="SeparatorLine"><span></span></div>
+					<a href="#" class="ControlButton">
+						<div class="IconHolder EditIcon">Edit</div>
+					</a>
+					<div class="SeparatorLine"><span></span></div>
+					<a href="#" class="ControlButton">
+						<div class="Icon ChatIcon"><span></span></div>
+					</a>
+					<a href="#" class="ControlButton">
+						<div class="Icon SelectTagIcon"><span></span></div>
+					</a>
+					<a href="#" class="ControlButton">
+						<div class="Icon MessageIcon"><span></span></div>
+					</a>
+					<div class="SeparatorLine"><span></span></div>
+					<a href="#" class="ControlButton">
+						<div class="Icon DustBin16x16Icon "><span></span></div>
+					</a>
+					<a href="#" class="ControlButton">
+						<div class="DownArrow1Icon" title="Collapse/Expand all">
+							<div class="Icon PrintIcon"><span></span></div>
+						</div>
+					</a>
+					
+					<div class="UIAddressPageList">
+						<div class="ContactIteratorContainer">
+	  					<div class="RightPageIteratorBlock">
+	  						<a title="First Page" class="FloatBlockHidden FirstPageArrow"/></a>        
+	  						<a title="Previous Page" class="FloatBlockHidden PreviousPageArrow"></a>
+								<div class="Number">Contacts 1 - 20 of 45</div>
+	  				 		<a title="Next Page" class="FloatBlock NextPageArrow" href="#"/></a>
+	 				  		<a title="Last Page" class="FloatBlock LastPageArrow"><span/></a>
+						    <div style="clear: left;"><span/></div>
+						  </div>
+					  </div>
+					</div>
+					<div style="clear: left;"><span/></div>
+				</div>
+				
+				<div class="UIMessageList">
+					<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
+	  				<thead>
+	  					<tr>
+	  			      <th style="width: 23px; padding-left: 7px;" class="text"><input type="checkbox" class="checkbox" title="Check all" value="4"/></th>
+	  						<th style="width: 24px;" class="text"><div class="Icon BlueTag"><span></span></div></th>
+	  		        <th style="width: 24%; padding-left: 7px;" class="text">
+	  		        	<div class="DownArrow1Icon" >Name</div>
+	  		        </th>
+	 	      	    <th class="text" style="padding-left: 7px;">
+	  		        	<div class="DownArrow1Icon" title="Sort by subject">Email</div>
+	  		        </th>
+	 	      	    <th style="width: 120px; padding-left: 7px;" class="text">
+	  		        	<div class="DownArrow1Icon" title="Sort by Date & time">Organition</div>
+	 	      	    </th>
+	 	      	    <th style="padding-left: 7px;">Work Phone</th>
+	  	 	       	</tr>
+	  	 	    </thead>
+  	 	      <tbody>
+  						<tr>
+  						  <td class="text" style="padding-left: 7px;"><input type="checkbox" class="checkbox" value="4"/></td>
+								<td class="text" style="padding: 0px;"><div class="Icon" ><span></span></div></td>
+								<td class="text"><div class="State OnlineIcon" title="Availabel">Benjamin, Mestrallet</div></td>
+								<td class="text">benjamin.mestrallet@exoplatform.com</td>
+								<td class="text">eXo Platform</td>
+								<td>04 2663 367</td>
+   			     	</tr>
+			     	  <tr>
+          			<td class="text" style="padding-left: 7px;"><input type="checkbox" class="checkbox" value="4"/></td>
+								<td class="text" style="padding: 0px;"><div class="Icon RedTag"><span></span></div></td>
+								<td class="text"><div class="State OfflineIcon" title="Invisible">Benjamin, Mestrallet</div></td>
+								<td class="text">benjamin.mestrallet@exoplatform.com</td>
+								<td class="text">eXo Platform</td>
+								<td>04 2663 367</td>
+      		    </tr>
+     		      <tr>
+     		        <td class="text" style="padding-left: 7px;"><input type="checkbox" class="checkbox" value="4"/></td>
+								<td class="text" style="padding: 0px;"><div class="Icon"><span></span></div></td>
+								<td class="text"><div class="State BusyIcon" title="Busy">Benjamin, Mestrallet</div></td>
+								<td class="text">benjamin.mestrallet@exoplatform.com</td>
+								<td class="text">eXo Platform</td>
+								<td>04 2663 367</td>
+      		    </tr>
+					    <tr>
+							  <td class="text" style="padding-left: 7px;"><input type="checkbox" class="checkbox" value="4"/></td>
+								<td class="text" style="padding: 0px;"><div class="Icon"><span></span></div></td>
+								<td class="text"><div class="State OfflineIcon" title="Invisible">Benjamin, Mestrallet</div></td>
+								<td class="text">benjamin.mestrallet@exoplatform.com</td>
+								<td class="text">eXo Platform</td>
+								<td>04 2663 367</td>
+		  		    </tr>
+  	   			</tbody>
+					</table>
+				</div>
+				
+			</div>

@@ -1,0 +1,14 @@
+<%
+	import org.exoplatform.contact.webui.UIAddressBooks;
+	import org.exoplatform.contact.webui.UITags;
+%>
+
+<div class="UINavigationContainer">
+<!-- Start UIAddressBooks -->			
+	<% uicomponent.renderChild(UIAddressBooks.class) ;%>	
+<!-- End UIAddressBooks -->	
+	
+<!-- Start UITags -->	
+	<% uicomponent.renderChild(UITags.class) ;%>
+<!-- End UITags -->
+		</div>
