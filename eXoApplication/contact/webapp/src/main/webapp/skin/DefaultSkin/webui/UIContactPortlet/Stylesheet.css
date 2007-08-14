@@ -432,29 +432,29 @@
 	padding-right: 16px;
 }
 
-/*=================================Contac Pane=================*/
+/*=================================UIContactPreview=================*/
 
-.UIContactPortlet .UIContactContainer .UIContactPane {
+.UIContactPortlet .UIContactContainer .UIContactPreview {
 	border: 1px solid #c0c0c0;
 	background: #ffffff;
 	width: 98.7%;
 }
 
-.UIContactPortlet .UIContactContainer .UIContactPane .ViewBoxStyle {
+.UIContactPortlet .UIContactContainer .UIContactPreview .ViewBoxStyle {
 }
 
-.UIContactPortlet .UIContactContainer .UIContactPane .ContactPaneDetails {
+.UIContactPortlet .UIContactContainer .UIContactPreview .ContactPreviewDetails {
 	height: 265px;
 	overflow: auto;
 }
 
-.UIContactPortlet .UIContactContainer .UIContactPane .ContactPaneBar {
+.UIContactPortlet .UIContactContainer .UIContactPreview .ContactPreviewBar {
 	background: #e7e7e7;
 	height: 25px;
 	border: 1px solid #ffffff;
 }
 
-.UIContactPortlet .UIContactContainer .UIContactPane .Subject {
+.UIContactPortlet .UIContactContainer .UIContactPreview .Subject {
 	float: left;
 	font-weight: bold;
 	font-size: 11px;
@@ -463,7 +463,7 @@
 	background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/ContactIcon.gif') no-repeat left center;
 }
 
-.UIContactPortlet .UIContactContainer .UIContactPane .MaximizeContactPane {
+.UIContactPortlet .UIContactContainer .UIContactPreview .MaximizeContactPane {
   float: right;
 	margin: 4px 4px 0px 0px;
 	padding-right: 20px;
@@ -473,22 +473,22 @@
 
 /*================================= UIContactSummaryPane ===============================*/
 
-.UIContactPortlet .ContactPaneContainer {
+.UIContactPortlet .ContactPreviewContainer {
 	padding: 10px 15px;
 	color: #1e1f21;
 }
 
-.UIContactPortlet .ContactPaneContainer .Avatar {
+.UIContactPortlet .ContactPreviewContainer .Avatar {
 	float: left;
 	margin: 0px 0px 5px 0px;
 	border: 1px solid #545454;
 }
 
-.UIContactPortlet .ContactPaneContainer .Name {
+.UIContactPortlet .ContactPreviewContainer .Member {
 	margin-left: 80px;
 }
 
-.UIContactPortlet .ContactPaneContainer .State {
+.UIContactPortlet .ContactPreviewContainer .State {
 	background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/OnlineIcon.gif') no-repeat left center;
 	padding-left: 20px;
 	line-height: 25px;
@@ -496,12 +496,12 @@
 	font-weight: bold;
 }
 
-.UIContactPortlet .ContactPaneContainer .Job {
+.UIContactPortlet .ContactPreviewContainer .Job {
 	font-size: 13px;
 	padding-left: 20px;
 }
 
-.UIContactPortlet .ContactPaneContainer .InfoContainer {
+.UIContactPortlet .ContactPreviewContainer .InfoContainer {
 	padding: 5px 0px;
 }
 
