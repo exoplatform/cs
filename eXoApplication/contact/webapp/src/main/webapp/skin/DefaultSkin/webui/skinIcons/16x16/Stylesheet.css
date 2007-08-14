@@ -101,16 +101,16 @@
 }
 
 .OnlineIcon {
-	background: url('icons/OnlineIcon.gif') no-repeat;
+	background: url('icons/OnlineIcon.png') no-repeat;
 	height: 16px; width: 17px;
 }
 
 .OfflineIcon {
-	background: url('icons/OffLineIcon.gif') no-repeat;
+	background: url('icons/OffLineIcon.png') no-repeat;
 	height: 16px; width: 17px;
 }
 
 .BusyIcon {
-	background: url('icons/BusyIcon.gif') no-repeat;
+	background: url('icons/BusyIcon.png') no-repeat;
 	height: 16px; width: 17px;
 }
