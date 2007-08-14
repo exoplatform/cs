@@ -19,8 +19,10 @@ import org.exoplatform.webui.core.UIContainer;
 )
 public class UICategoryContainer extends UIContainer  {
   public UICategoryContainer() throws Exception {
+    
     addChild(UIForumActionBar.class, null, null);
     addChild(UICategories.class, null, null) ;
+    //addChild(UICategory.class, null, null) ;
     addChild(UICategoriesSummary.class, null, null) ;
   }  
 }

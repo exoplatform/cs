@@ -33,6 +33,12 @@
     </dependency> 
     
     <dependency>
+      <groupId>org.exoplatform.jcr</groupId>
+      <artifactId>exo.jcr.component.ext</artifactId>
+      <version>${org.exoplatform.jcr.version}</version>
+    </dependency> 
+    
+    <dependency>
       <groupId>ical4j</groupId>
       <artifactId>ical4j</artifactId>
       <version>0.9.20</version>

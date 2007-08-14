@@ -26,6 +26,8 @@ import org.exoplatform.calendar.service.Reminder;
 import org.exoplatform.registry.JCRRegistryService;
 import org.exoplatform.registry.ServiceRegistry;
 import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.jcr.ext.common.SessionProvider ;
+
 
 /**
  * Created by The eXo Platform SARL
@@ -60,7 +62,7 @@ public class JCRDataStorage implements DataStorage{
   private Node getCalendarHome() throws Exception {
     Node calendarServiceHome = getCalendarServiceHome() ;
     if(calendarServiceHome.hasNode(CALENDARS)) return calendarServiceHome.getNode(CALENDARS) ;
-    return calendarServiceHome.addNode(CALENDARS) ;
+    return calendarServiceHome.addNode(CALENDARS, "nt:unstructured") ;
   }
   
   private Node getCalendarServiceHome(String username) throws Exception {
@@ -75,25 +77,26 @@ public class JCRDataStorage implements DataStorage{
   private Node getCalendarHome(String username) throws Exception {
     Node calendarServiceHome = getCalendarServiceHome(username) ;
     if(calendarServiceHome.hasNode(CALENDARS)) return calendarServiceHome.getNode(CALENDARS) ;
-    return calendarServiceHome.addNode(CALENDARS) ;
+    return calendarServiceHome.addNode(CALENDARS, "nt:unstructured") ;
   }
   
   protected Node getCalendarCategoryHome(String username) throws Exception {
     Node calendarServiceHome = getCalendarServiceHome(username) ;
     if(calendarServiceHome.hasNode(CALENDAR_CATEGORIES)) return calendarServiceHome.getNode(CALENDAR_CATEGORIES) ;
-    return calendarServiceHome.addNode(CALENDAR_CATEGORIES) ;
+    return calendarServiceHome.addNode(CALENDAR_CATEGORIES, "nt:unstructured") ;
   }
   
   private Node getCalendarGroupHome() throws Exception {
     Node calendarServiceHome = getCalendarServiceHome() ;
     if(calendarServiceHome.hasNode(CALENDAR_GROUPS)) return calendarServiceHome.getNode(CALENDAR_GROUPS) ;
-    return calendarServiceHome.addNode(CALENDAR_GROUPS) ;
+    return calendarServiceHome.addNode(CALENDAR_GROUPS, "nt:unstructured") ;
   }
   
   private Session getJCRSession() throws Exception {
+    SessionProvider sessionProvider = SessionProvider.createSystemProvider() ; 
     String defaultWS = 
       repositoryService_.getDefaultRepository().getConfiguration().getDefaultWorkspaceName() ;
-    return repositoryService_.getDefaultRepository().getSystemSession(defaultWS) ;
+    return sessionProvider.getSession(defaultWS, repositoryService_.getCurrentRepository()) ;    
   }
 
   public Calendar getUserCalendar(String username, String calendarId) throws Exception {

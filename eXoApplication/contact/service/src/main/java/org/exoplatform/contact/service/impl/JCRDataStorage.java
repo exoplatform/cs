@@ -24,6 +24,7 @@ import org.exoplatform.contact.service.GroupContactData;
 import org.exoplatform.registry.JCRRegistryService;
 import org.exoplatform.registry.ServiceRegistry;
 import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 
 
 /**
@@ -65,31 +66,32 @@ public class JCRDataStorage implements DataStorage {
   private Node getContactHome(String username) throws Exception {
     Node contactServiceHome = getContactServiceHome(username) ;
     if(contactServiceHome.hasNode(CONTACTS)) return contactServiceHome.getNode(CONTACTS) ;
-    return contactServiceHome.addNode(CONTACTS) ;
+    return contactServiceHome.addNode(CONTACTS, "nt:unstructured") ;
   }
   
   private Node getContactGroupHome(String username) throws Exception {
     Node contactServiceHome = getContactServiceHome(username) ;
     if(contactServiceHome.hasNode(CONTACT_GROUP)) return contactServiceHome.getNode(CONTACT_GROUP) ;
-    return contactServiceHome.addNode(CONTACT_GROUP) ;
+    return contactServiceHome.addNode(CONTACT_GROUP, "nt:unstructured") ;
   }
   
   private Node getPublicContactGroupHome() throws Exception {
     Node contactServiceHome = getPublicContactServiceHome() ;
     if(contactServiceHome.hasNode(CONTACT_GROUP)) return contactServiceHome.getNode(CONTACT_GROUP) ;
-    return contactServiceHome.addNode(CONTACT_GROUP) ;
+    return contactServiceHome.addNode(CONTACT_GROUP,"nt:unstructured") ;
   }
   
   private Node getPublicContactHome() throws Exception {
     Node contactServiceHome = getPublicContactServiceHome() ;
     if(contactServiceHome.hasNode(CONTACTS)) return contactServiceHome.getNode(CONTACTS) ;
-    return contactServiceHome.addNode(CONTACTS) ;
+    return contactServiceHome.addNode(CONTACTS, "nt:unstructured") ;
   }
   
   private Session getJCRSession() throws Exception {
+    SessionProvider sessionProvider = SessionProvider.createSystemProvider() ;
     String defaultWS = 
       repositoryService_.getDefaultRepository().getConfiguration().getDefaultWorkspaceName() ;
-    return repositoryService_.getDefaultRepository().getSystemSession(defaultWS) ;
+    return sessionProvider.getSession(defaultWS, repositoryService_.getCurrentRepository());
   }
 
   private String [] ValuesToStrings(Value[] Val) throws Exception {

@@ -48,35 +48,19 @@ public class JCRDataStorage implements DataStorage{
 
   public Account getAccountById(String username, String id) throws Exception {
     //  get the account of the specified user with the specified id
-    Account account = null;
-    QueryManager qm = getMailHomeNode(username).getSession().getWorkspace().getQueryManager();
+    /*QueryManager qm = getMailHomeNode(username).getSession().getWorkspace().getQueryManager();
     StringBuffer queryString = new StringBuffer("//element(*,exo:account)[@exo:id='").
                                   append(id).
                                   append("']");
     Query query = qm.createQuery(queryString.toString(), Query.XPATH);
     QueryResult result = query.execute();
-    NodeIterator it = result.getNodes();
-    // if an account is found, creates the object
-    if (it.hasNext()) {
-      Node node = it.nextNode();
-      account = new Account();
-      account.setId(node.getProperty("exo:id").getString());
-      if (node.hasProperty("exo:label")) account.setLabel(node.getProperty("exo:label").getString());
-      if (node.hasProperty("exo:userDisplayName")) account.setUserDisplayName(node.getProperty("exo:userDisplayName").getString());
-      if (node.hasProperty("exo:emailAddress")) account.setEmailAddress(node.getProperty("exo:emailAddress").getString());
-      if (node.hasProperty("exo:emailReplyAddress")) account.setEmailReplyAddress(node.getProperty("exo:emailReplyAddress").getString());
-      if (node.hasProperty("exo:signature")) account.setSignature(node.getProperty("exo:signature").getString());
-      if (node.hasProperty("exo:description")) account.setDescription(node.getProperty("exo:description").getString());
-      if (node.hasProperty("exo:serverProperties")) {
-        Value[] properties = node.getProperty("exo:serverProperties").getValues();
-        for (int i=0; i<properties.length; i++) {
-          String property = properties[i].getString();
-          int index = property.indexOf('=');
-          if (index != -1) account.setServerProperty(property.substring(0, index), property.substring(index+1));
-        }
-      }
+    NodeIterator it = result.getNodes();*/
+    Node mailHome = getMailHomeNode(username) ;
+    //  if an account is found, creates the object
+    if(mailHome.hasNode(id)) {
+      return getAccount(mailHome.getNode(id)) ;
     }
-    return account ;
+    return null ;
   }
 
   public List<Account> getAccounts(String username) throws Exception {
@@ -88,69 +72,41 @@ public class JCRDataStorage implements DataStorage{
       // browse the accounts and add them to the return list
       Node node = it.nextNode();
       if (node.isNodeType("exo:account")) {
-        Account account = getAccountById(username, node.getProperty("exo:id").getString());
-        accounts.add(account);
+        accounts.add(getAccount(node));
       }
     }
     return accounts ;
   }
-
-  public Message getMessageById(String username, String accountId, String id) throws Exception {
-    //  gets a message (email) from its id and username
-    Message msg = null;
-    Node messages = getMessageHome(username, accountId);
-    //  if this message exists, creates the object and returns it
-    if (messages.hasNode(id)) {
-      Node message = messages.getNode(id);
-      msg = new Message();
-      msg.setAccountId(accountId);
-      msg.setId(id);
-      if (message.hasProperty("exo:to")) msg.setMessageTo(message.getProperty("exo:to").getString());
-      if (message.hasProperty("exo:subject")) msg.setSubject(message.getProperty("exo:subject").getString());
-      if (message.hasProperty("exo:cc")) msg.setMessageCc(message.getProperty("exo:cc").getString());
-      if (message.hasProperty("exo:bcc")) msg.setMessageBcc(message.getProperty("exo:bcc").getString());
-      if (message.hasProperty("exo:body")) msg.setMessageBody(message.getProperty("exo:body").getString());
-      if (message.hasProperty("exo:tags")) {
-        Value[] propTags = message.getProperty("exo:tags").getValues();
-        String[] tags = new String[(int)propTags.length];
-        for (int i = 0; i < propTags.length; i++) {
-          tags[i] = propTags[i].getString();
-        }
-        msg.setTags(tags);
-      }
-      if (message.hasProperty("exo:folders")) {
-        Value[] propFolders = message.getProperty("exo:folders").getValues();
-        String[] folders = new String[(int)propFolders.length];
-        for (int i = 0; i < propFolders.length; i++) {
-          folders[i] = propFolders[i].getString();
-        }
-        msg.setFolders(folders);
-      }
-      NodeIterator msgIt = message.getNodes();
-      List<Attachment> attachments = new ArrayList<Attachment>();
-      while (msgIt.hasNext()) {
-        Node node = msgIt.nextNode();
-        if (node.isNodeType("nt:file")) {
-          BufferAttachment file = new BufferAttachment();
-          file.setId(node.getPath());
-          file.setMimeType(node.getNode("jcr:content").getProperty("jcr:mimeType").getString());
-          file.setName(node.getName());
-          file.setInputStream(node.getNode("jcr:content").getProperty("jcr:data").getStream());
-          attachments.add(file);
-        }
-      }
-      msg.setAttachements(attachments);
-      GregorianCalendar cal = new GregorianCalendar();
-      if (message.hasProperty("exo:receivedDate")) {
-        cal.setTimeInMillis(message.getProperty("exo:receivedDate").getLong());
-        msg.setReceivedDate(cal.getTime());
-      }
-      if (message.hasProperty("exo:sendDate")) {
-        cal.setTimeInMillis(message.getProperty("exo:sendDate").getLong());
-        msg.setReceivedDate(cal.getTime());
+  
+  private Account getAccount(Node accountNode) throws Exception{
+    Account account = new Account();
+    account.setId(accountNode.getProperty("exo:id").getString());
+    if (accountNode.hasProperty("exo:label")) account.setLabel(accountNode.getProperty("exo:label").getString());
+    if (accountNode.hasProperty("exo:userDisplayName")) account.setUserDisplayName(accountNode.getProperty("exo:userDisplayName").getString());
+    if (accountNode.hasProperty("exo:emailAddress")) account.setEmailAddress(accountNode.getProperty("exo:emailAddress").getString());
+    if (accountNode.hasProperty("exo:emailReplyAddress")) account.setEmailReplyAddress(accountNode.getProperty("exo:emailReplyAddress").getString());
+    if (accountNode.hasProperty("exo:signature")) account.setSignature(accountNode.getProperty("exo:signature").getString());
+    if (accountNode.hasProperty("exo:description")) account.setDescription(accountNode.getProperty("exo:description").getString());
+    if (accountNode.hasProperty("exo:serverProperties")) {
+      Value[] properties = accountNode.getProperty("exo:serverProperties").getValues();
+      for (int i=0; i<properties.length; i++) {
+        String property = properties[i].getString();
+        int index = property.indexOf('=');
+        if (index != -1) account.setServerProperty(property.substring(0, index), property.substring(index+1));
       }
     }
-    return msg ;
+    return account ;
+  }
+  public Message getMessageById(String username, String accountId, String id) throws Exception {
+    //  gets a message (email) from its id and username
+    Node messageHome = getMessageHome(username, accountId);
+    //  if this message exists, creates the object and returns it
+    if (messageHome.hasNode(id)) {
+      Message msg = getMessage(messageHome.getNode(id));
+      msg.setAccountId(accountId);
+      return msg ;
+    }
+    return null ;
   }
 
   public List<MessageHeader> getMessages(String username, MessageFilter filter) throws Exception {
@@ -159,8 +115,8 @@ public class JCRDataStorage implements DataStorage{
     NodeIterator mit = homeMsg.getNodes();
     while (mit.hasNext()) {
       boolean addToList = false;
-      Node msg = mit.nextNode();
-      Message message = getMessageById(username, filter.getAccountId(), msg.getName());
+      Message message = getMessage(mit.nextNode()) ; 
+      message.setAccountId(filter.getAccountId()) ;
       if (filter.getSubject() != null) addToList |= message.getSubject().contains(filter.getSubject());
       // condition !addToList : doesn't check the other filters if the message already corresponds
       if (filter.getBody() != null && !addToList) addToList |= message.getMessageBody().contains(filter.getBody());
@@ -192,12 +148,61 @@ public class JCRDataStorage implements DataStorage{
     }
     return list ;
   }
-
+  
+  private Message getMessage(Node messageNode) throws Exception {
+    Message msg = new Message();
+    if (messageNode.hasProperty("exo:id")) msg.setMessageTo(messageNode.getProperty("exo:id").getString());
+    if (messageNode.hasProperty("exo:to")) msg.setMessageTo(messageNode.getProperty("exo:to").getString());
+    if (messageNode.hasProperty("exo:subject")) msg.setSubject(messageNode.getProperty("exo:subject").getString());
+    if (messageNode.hasProperty("exo:cc")) msg.setMessageCc(messageNode.getProperty("exo:cc").getString());
+    if (messageNode.hasProperty("exo:bcc")) msg.setMessageBcc(messageNode.getProperty("exo:bcc").getString());
+    if (messageNode.hasProperty("exo:body")) msg.setMessageBody(messageNode.getProperty("exo:body").getString());
+    if (messageNode.hasProperty("exo:tags")) {
+      Value[] propTags = messageNode.getProperty("exo:tags").getValues();
+      String[] tags = new String[propTags.length];
+      for (int i = 0; i < propTags.length; i++) {
+        tags[i] = propTags[i].getString();
+      }
+      msg.setTags(tags);
+    }
+    if (messageNode.hasProperty("exo:folders")) {
+      Value[] propFolders = messageNode.getProperty("exo:folders").getValues();
+      String[] folders = new String[propFolders.length];
+      for (int i = 0; i < propFolders.length; i++) {
+        folders[i] = propFolders[i].getString();
+      }
+      msg.setFolders(folders);
+    }
+    NodeIterator msgIt = messageNode.getNodes();
+    List<Attachment> attachments = new ArrayList<Attachment>();
+    while (msgIt.hasNext()) {
+      Node node = msgIt.nextNode();
+      if (node.isNodeType("nt:file")) {
+        BufferAttachment file = new BufferAttachment();
+        file.setId(node.getPath());
+        file.setMimeType(node.getNode("jcr:content").getProperty("jcr:mimeType").getString());
+        file.setName(node.getName());
+        file.setInputStream(node.getNode("jcr:content").getProperty("jcr:data").getStream());
+        attachments.add(file);
+      }
+    }
+    msg.setAttachements(attachments);
+    GregorianCalendar cal = new GregorianCalendar();
+    if (messageNode.hasProperty("exo:receivedDate")) {
+      cal.setTimeInMillis(messageNode.getProperty("exo:receivedDate").getLong());
+      msg.setReceivedDate(cal.getTime());
+    }
+    if (messageNode.hasProperty("exo:sendDate")) {
+      cal.setTimeInMillis(messageNode.getProperty("exo:sendDate").getLong());
+      msg.setReceivedDate(cal.getTime());
+    }
+    return msg ;
+  }
+  
   public void removeAccount(String username, Account account) throws Exception {
     Node accountHome = getMailHomeNode(username) ;
     // gets the specified account, and removes it
-    accountHome.getNode(account.getUserDisplayName()).remove();
-    
+    accountHome.getNode(account.getUserDisplayName()).remove();    
     accountHome.getSession().save() ;
   }
 
@@ -220,13 +225,13 @@ public class JCRDataStorage implements DataStorage{
     Node mailHome = getMailHomeNode(username) ;
     Node newAccount = null;
     if (isNew) { // creates the node
-      newAccount = mailHome.addNode(account.getUserDisplayName(), "exo:account");
+      newAccount = mailHome.addNode(account.getId(), "exo:account");
+      newAccount.setProperty("exo:id", account.getId());
     } else { // gets the specified account
-      newAccount = mailHome.getNode(account.getUserDisplayName());
+      newAccount = mailHome.getNode(account.getId());
     }
     if (newAccount != null) {
       // add some properties
-      newAccount.setProperty("exo:id", account.getId());
       newAccount.setProperty("exo:label", account.getLabel());
       newAccount.setProperty("exo:userDisplayName", account.getUserDisplayName());
       newAccount.setProperty("exo:emailAddress", account.getEmailAddress());
