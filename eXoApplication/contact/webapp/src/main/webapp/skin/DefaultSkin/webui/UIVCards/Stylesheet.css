@@ -1,0 +1,126 @@
+.UIVCards {
+}
+
+.UIVCards .UIVCardsContent {
+	padding: 10px;
+	border: solid 1px red;
+}
+
+.UIVCards .UIVCardsContent .WorkVCardsContent{
+	padding: 5px;
+}
+
+.UIVCards .UIVCardsContent .WorkVCardsContent .LeftVCardsContent {
+	width: 49%;
+	float: left;
+	border: solid 1px #c0c0c0;
+}
+
+.UIVCards .UIVCardsContent .WorkVCardsContent .RightVCardsContent {
+	width: 49%;
+	float: right;
+	border: solid 1px #c0c0c0;
+}
+
+.UIVCards .SelectedVCardContent .TopTitleVCards{
+	background: #bec0fd;
+}
+
+.UIVCards .NormalVCardsContent .TopTitleVCards{
+	background: #d7ddfe;
+}
+
+.UIVCards .TopTitleVCards {
+	height: 24px;
+	margin: 1px;
+}
+
+.UIVCards .IConVCards {
+	width: 16px;
+	height: 16px;
+	float: left;
+}
+
+.UIVCards .TopTitleVCards .ContentTopTitleVCards {
+	line-height: 24px;
+	float: left;
+}
+
+.UIVCards .TopTitleVCards .ContentTopTitleVCards .AvailableIconVCards {
+	background: url('icons/16x16/AvailableIcon.gif') no-repeat ;
+	margin: 5px 5px 0px 5px;
+	curser: pointer;
+}
+
+.UIVCards .TopTitleVCards .ContentTopTitleVCards .InvisibleIconVCards {
+	background: url('icons/16x16/InvisibleIcon.gif') no-repeat ;
+	margin: 5px 5px 0px 5px;
+	curser: pointer;
+}
+
+.UIVCards .TopTitleVCards .ContentTopTitleVCards .LabelTopTiltlVCards {
+	font-weight: bold;
+	color: #1e1f21;
+	line-height: 25px;
+	float: left;
+}
+
+.UIVCards .TopTitleVCards .RedTagVCards {
+	background: url('icons/16x16/RedTag.gif') no-repeat ;
+	margin: 5px 5px 0px 5px;
+	cursor: pointer;
+	float: right;
+}
+
+.UIVCards .TopTitleVCards .VioletTagVCards {
+	background: url('icons/16x16/VioletTag.gif') no-repeat ;
+	margin: 5px 5px 0px 5px;
+	cursor: pointer;
+	float: right;
+}
+
+.UIVCards .ContainerVCards  {
+	padding: 8px 10px 10px 10px;
+}
+
+.UIVCards .ContainerVCards .AvatasMemberVCards {
+	float: left;
+	width: 63px;
+	height: 81px;
+	background: url('background/AvatasMember63x81.gif') no-repeat ;
+	border: solid 1px #545454;
+	
+}
+.UIVCards .ContainerVCards .WorkContainerVCards {
+	float: left;
+	padding-left: 10px;
+}
+
+.UIVCards .ContainerVCards .WorkContainerVCards .JobMemberVCards {
+	font-size: 12px;
+	color: #1e1f21;
+	font-weight: bold;
+}
+
+.UIVCards .ContainerVCards .WorkContainerVCards .InformationsMemberVCards {
+	padding: 10px 0px 0px 0px;
+}
+
+.UIVCards .ContainerVCards .WorkContainerVCards .InformationsMemberVCards .LabelContentVCards {
+	font-size: 11px;
+	color: black;
+	float: left;
+	line-height: 18px;
+}
+
+.UIVCards .ContainerVCards .WorkContainerVCards .InformationsMemberVCards .IconMailVCards {
+	background: url('icons/16x16/MailMemberIcon.gif') no-repeat ;
+	margin: 1px 5px 0px 5px;
+}
+
+.UIVCards .ContainerVCards .WorkContainerVCards .InformationsMemberVCards .LabelMailVCards {
+	font-size: 11px;
+	color: #0a41ae;
+	float: left;
+	line-height: 18px;
+}

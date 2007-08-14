@@ -15,7 +15,7 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
  */
 @ComponentConfig(
    lifecycle = UIApplicationLifecycle.class,
-   template = "app:/templates/contact/webui/UIContactPortlet.gtmpl"
+   template = "app:/templates/contact/webui/UIVCards.gtmpl"
 )
 public class UIContactPortlet extends UIPortletApplication {
   public UIContactPortlet() throws Exception {
