@@ -1,194 +1,221 @@
+
 <div class="UIVCards">
+	<div class="VCardsBar">
+		<div class="Subject">Vcards in eXo Platform</div>
+	</div>
 	<div class="UIVCardsContent">
 	  <div class="WorkVCardsContent">
 		  <div class="LeftVCardsContent">
-		  	<div class="SelectedVCardContent">
-			  	<div class="TopTitleVCards">
-			  		<div class="ContentTopTitleVCards">
-				  		<div class="IConVCards AvailableIconVCards"><span></span></div>
-				  		<div class="LabelTopTiltlVCards">Benjamin, Mestrallet</div>
-				  		<div style="clear: left;"><span></span></div>
-			  		</div>
-			  		<div class="IConVCards RedTagVCards"><span></span></div>
+		  
+		  	<div class="VCardContent SelectedVCard">
+			  	<div class="TitleVCards">
+				  	<div class="StateIcon OnlineIcon">Benjamin, Mestrallet</div>
+			  		<div class="TagIcon RedTag"><span></span></div>
 			  		<div style="clear: both;"><span></span></div>
 			  	</div>
 			  	<div class="ContainerVCards">
-			  		<div class="AvatasIcon AvatasMemberVCards"><span></span></div>
+			  		<img src="/contact/skin/DefaultSkin/webui/background/Img1.gif" class="AvatasIcon"/>
 			  		<div class="WorkContainerVCards">
-			  		  <div class="JobMemberVCards">Founder of eXo Platform SAS</div>
-			  		  <div class="InformationsMemberVCards">
-			  		  	<div class="MailMemberVCards">
-			  		  		<div class="LabelContentVCards">Email:</div>
-			  		  		<div class="ContentMailVCards">
-			  		  			<div class="IConVCards IconMailVCards"><span></span></div>
-			  		  			<div class="LabelMailVCards"> benjamin.mestrallet@exoplatfor...</div>
-			  		  			<div style="clear: left;"><span></span></div>
-			  		  		</div>
-			  		  		<div style="clear: left;"><span></span></div>
+			  		  <div class="JobMember">Founder of eXo Platform SAS</div>
+			  		  <div class="InformationsMember">
+			  		  	<div class="InfoMember">
+			  		  		<span class="LabelContent">Email1:</span>
+			  		  		<span class="InfoContent MailIcon"><a href="#">benjamin.mestrallet@exoplatform.com</a></span>
 			  		  	</div>
-			  		  	<div class="WorkPhoneMemberVCards">
-			  		  		<label class="LabelContentVCards">Work phone:</label>
-			  		  		<label class="LabelContentVCards"> 04 2663367</label>
-			  		  		<div style="clear: left;"><span></span></div>
+			  		  	<div class="InfoMember">
+			  		  		<span class="LabelContent">Emai2:</span>
+			  		  		<span class="InfoContent MailIcon"><a href="#"> benjamin.mestrallet@mac.com</a></span>
 			  		  	</div>
-			  		  	<div class="PhoneNumberMemBerVCards">
-			  		  		<label class="LabelContentVCards">Mobile:</label>
-			  		  		<label class="LabelContentVCards"> 0988888888</label>
-			  		  		<div style="clear: left;"><span></span></div>
+			  		  	<div class="InfoMember">
+			  		  		<span class="LabelContent">Work phone:</span>
+			  		  		<span class="LabelContent"> 04 2663367</span>
 			  		  	</div>
-			  		  	<div class="WebsiteMemberVCards">
-			  		  		<div class="LabelContentVCards">Website:</div>
-			  		  		<div class="LabelMailVCards"> http://www.exoplatform.com</div>
-			  		  		<div style="clear: left;"><span></span></div>
+			  		  	<div class="InfoMember">
+			  		  		<span class="LabelContent">Mobile:</span>
+			  		  		<span class="LabelContent"> 0988888888</span>
+			  		  	</div>
+			  		  	<div class="InfoMember">
+			  		  		<span class="LabelContent">Website:</span>
+			  		  		<span class="LabelContent"><a href="#">http://www.exoplatform.com</a></span>
 			  		  	</div>
 			  		  </div>
 			  		</div>
 			  		<div style="clear: left;"><span></span></div>
 			  	</div>
 			  </div>
-		  </div>
-		  <div class="RightVCardsContent">
-		  	<div class="NormalVCardsContent">
-			  	<div class="TopTitleVCards">
-			  		<div class="ContentTopTitleVCards">
-				  		<div class="IConVCards AvailableIconVCards "><span></span></div>
-				  		<div class="LabelTopTiltlVCards">Benjamin, Mestrallet</div>
-				  		<div style="clear: left;"><span></span></div>
-			  		</div>
-			  		<div class="IConVCards RedTagVCards"><span></span></div>
+		  
+		  	<div class="VCardContent NormalVCard">
+			  	<div class="TitleVCards">
+				  	<div class="StateIcon OnlineIcon">Dzung, Nguyen</div>
+			  		<div class="TagIcon"><span></span></div>
 			  		<div style="clear: both;"><span></span></div>
 			  	</div>
 			  	<div class="ContainerVCards">
-			  		<div class="AvatasIcon AvatasMemberVCards"><span></span></div>
+			  		<img src="/contact/skin/DefaultSkin/webui/background/Img3.gif" class="AvatasIcon"/>
 			  		<div class="WorkContainerVCards">
-			  		  <div class="JobMemberVCards">Founder of eXo Platform SAS</div>
-			  		  <div class="InformationsMemberVCards">
-			  		  	<div class="MailMemberVCards">
-			  		  		<div class="LabelContentVCards">Email:</div>
-			  		  		<div class="ContentMailVCards">
-			  		  			<div class="IConVCards IconMailVCards"><span></span></div>
-			  		  			<div class="LabelMailVCards"> benjamin.mestrallet@exoplatfor...</div>
-			  		  			<div style="clear: left;"><span></span></div>
-			  		  		</div>
-			  		  		<div style="clear: left;"><span></span></div>
+			  		  <div class="JobMember">Network Manager</div>
+			  		  <div class="InformationsMember">
+			  		  	<div class="InfoMember">
+			  		  		<span class="LabelContent">Email:</span>
+			  		  		<span class="InfoContent MailIcon"><a href="#">dung.nguyen@exoplatform.com</a></span>
 			  		  	</div>
-			  		  	<div class="WorkPhoneMemberVCards">
-			  		  		<label class="LabelContentVCards">Work phone:</label>
-			  		  		<label class="LabelContentVCards"> 04 2663367</label>
-			  		  		<div style="clear: left;"><span></span></div>
+			  		  	<div class="InfoMember">
+			  		  		<span class="LabelContent">Work phone:</span>
+			  		  		<span class="LabelContent"> 04 2663367</span>
 			  		  	</div>
-			  		  	<div class="PhoneNumberMemBerVCards">
-			  		  		<label class="LabelContentVCards">Mobile:</label>
-			  		  		<label class="LabelContentVCards"> 0988888888</label>
-			  		  		<div style="clear: left;"><span></span></div>
+			  		  	<div class="InfoMember">
+			  		  		<span class="LabelContent">Mobile:</span>
+			  		  		<span class="LabelContent"> 0988888888</span>
 			  		  	</div>
-			  		  	<div class="WebsiteMemberVCards">
-			  		  		<div class="LabelContentVCards">Website:</div>
-			  		  		<div class="LabelMailVCards"> http://www.exoplatform.com</div>
-			  		  		<div style="clear: left;"><span></span></div>
+			  		  	<div class="InfoMember">
+			  		  		<span class="LabelContent">Website:</span>
+			  		  		<span class="LabelContent"><a href="#">http://www.exoplatform.com</a></span>
 			  		  	</div>
 			  		  </div>
 			  		</div>
 			  		<div style="clear: left;"><span></span></div>
 			  	</div>
-		  	</div>
+			  </div>	
+		  	
+		  	<div class="VCardContent NormalVCard">
+			  	<div class="TitleVCards">
+				  	<div class="StateIcon OnlineIcon">Gennady, Azarenkov</div>
+			  		<div class="TagIcon BlueTag"><span></span></div>
+			  		<div style="clear: both;"><span></span></div>
+			  	</div>
+			  	<div class="ContainerVCards">
+			  		<img src="/contact/skin/DefaultSkin/webui/background/Img3.gif" class="AvatasIcon"/>
+			  		<div class="WorkContainerVCards">
+			  		  <div class="JobMember">Java Developer</div>
+			  		  <div class="InformationsMember">
+			  		  	<div class="InfoMember">
+			  		  		<span class="LabelContent">Email:</span>
+			  		  		<span class="InfoContent MailIcon"><a href="#">gennady.Azarenkov@exoplatform.com</a></span>
+			  		  	</div>
+			  		  	<div class="InfoMember">
+			  		  		<span class="LabelContent">Work phone:</span>
+			  		  		<span class="LabelContent"> 04 2663367</span>
+			  		  	</div>
+			  		  	<div class="InfoMember">
+			  		  		<span class="LabelContent">Mobile:</span>
+			  		  		<span class="LabelContent"> 0988888888</span>
+			  		  	</div>
+			  		  	<div class="InfoMember">
+			  		  		<span class="LabelContent">Website:</span>
+			  		  		<span class="LabelContent"><a href="#">http://www.exoplatform.com</a></span>
+			  		  	</div>
+			  		  </div>
+			  		</div>
+			  		<div style="clear: left;"><span></span></div>
+			  	</div>
+			  </div>	
+		  		
+		  </div>
+		  
+		  <div class="RightVCardsContent">
+		  
+		  	<div class="VCardContent NormalVCard">
+			  	<div class="TitleVCards">
+				  	<div class="StateIcon OnlineIcon">Brice, Revenant</div>
+			  		<div class="TagIcon"><span></span></div>
+			  		<div style="clear: both;"><span></span></div>
+			  	</div>
+			  	<div class="ContainerVCards">
+			  		<img src="/contact/skin/DefaultSkin/webui/background/Img4.gif" class="AvatasIcon"/>
+			  		<div class="WorkContainerVCards">
+			  		  <div class="JobMember">Customer Operationsr</div>
+			  		  <div class="InformationsMember">
+			  		  	<div class="InfoMember">
+			  		  		<span class="LabelContent">Email:</span>
+			  		  		<span class="InfoContent MailIcon"><a href="#">brice.revenant@exoplatform.com</a></span>
+			  		  	</div>
+			  		  	<div class="InfoMember">
+			  		  		<span class="LabelContent">Work phone:</span>
+			  		  		<span class="LabelContent"> 04 2663367</span>
+			  		  	</div>
+			  		  	<div class="InfoMember">
+			  		  		<span class="LabelContent">Mobile:</span>
+			  		  		<span class="LabelContent"> 0988888888</span>
+			  		  	</div>
+			  		  	<div class="InfoMember">
+			  		  		<span class="LabelContent">Website:</span>
+			  		  		<span class="LabelContent"><a href="#">http://www.exoplatform.com</a></span>
+			  		  	</div>
+			  		  </div>
+			  		</div>
+			  		<div style="clear: left;"><span></span></div>
+			  	</div>
+			  </div>	
+		  
+		  	<div class="VCardContent NormalVCard">
+			  	<div class="TitleVCards">
+				  	<div class="StateIcon OnlineIcon">Francios, Moron</div>
+			  		<div class="TagIcon"><span></span></div>
+			  		<div style="clear: both;"><span></span></div>
+			  	</div>
+			  	<div class="ContainerVCards">
+			  		<img src="/contact/skin/DefaultSkin/webui/background/Img5.gif" class="AvatasIcon"/>
+			  		<div class="WorkContainerVCards">
+			  		  <div class="JobMember">Director of eXo Platform SAS</div>
+			  		  <div class="InformationsMember">
+			  		  	<div class="InfoMember">
+			  		  		<span class="LabelContent">Email:</span>
+			  		  		<span class="InfoContent MailIcon"><a href="#">francois.moron@exoplatform.com</a></span>
+			  		  	</div>
+			  		  	<div class="InfoMember">
+			  		  		<span class="LabelContent">Work phone:</span>
+			  		  		<span class="LabelContent"> 04 2663367</span>
+			  		  	</div>
+			  		  	<div class="InfoMember">
+			  		  		<span class="LabelContent">Mobile:</span>
+			  		  		<span class="LabelContent"> 0988888888</span>
+			  		  	</div>
+			  		  	<div class="InfoMember">
+			  		  		<span class="LabelContent">Website:</span>
+			  		  		<span class="LabelContent"><a href="#">http://www.exoplatform.com</a></span>
+			  		  	</div>
+			  		  </div>
+			  		</div>
+			  		<div style="clear: left;"><span></span></div>
+			  	</div>
+			  </div>	
+		  
+		  	<div class="VCardContent NormalVCard">
+			  	<div class="TitleVCards">
+				  	<div class="StateIcon OnlineIcon">Hieu, Luong Trung</div>
+			  		<div class="TagIcon VioletTag"><span></span></div>
+			  		<div style="clear: both;"><span></span></div>
+			  	</div>
+			  	<div class="ContainerVCards">
+			  		<img src="/contact/skin/DefaultSkin/webui/background/Img3.gif" class="AvatasIcon"/>
+			  		<div class="WorkContainerVCards">
+			  		  <div class="JobMember">Web Designer</div>
+			  		  <div class="InformationsMember">
+			  		  	<div class="InfoMember">
+			  		  		<span class="LabelContent">Email:</span>
+			  		  		<span class="InfoContent MailIcon"><a href="#">hieu.luong@exoplatform.com</a></span>
+			  		  	</div>
+			  		  	<div class="InfoMember">
+			  		  		<span class="LabelContent">Work phone:</span>
+			  		  		<span class="LabelContent"> 04 2663367</span>
+			  		  	</div>
+			  		  	<div class="InfoMember">
+			  		  		<span class="LabelContent">Mobile:</span>
+			  		  		<span class="LabelContent"> 0988888888</span>
+			  		  	</div>
+			  		  	<div class="InfoMember">
+			  		  		<span class="LabelContent">Website:</span>
+			  		  		<span class="LabelContent"><a href="#">http://www.exoplatform.com</a></span>
+			  		  	</div>
+			  		  </div>
+			  		</div>
+			  		<div style="clear: left;"><span></span></div>
+			  	</div>
+			  </div>	
+		  	
 		  </div>
 		  <div style="clear: both;"><span></span></div>
 		</div>
-		<div class="WorkVCardsContent">
-		  <div class="LeftVCardsContent">
-		  	<div class="NormalVCardsContent">
-			  	<div class="TopTitleVCards">
-			  		<div class="ContentTopTitleVCards">
-				  		<div class="IConVCards InvisibleIconVCards"><span></span></div>
-				  		<div class="LabelTopTiltlVCards">Benjamin, Mestrallet</div>
-				  		<div style="clear: left;"><span></span></div>
-			  		</div>
-			  		<div class="IConVCards EmptyTagVCards"><span></span></div>
-			  		<div style="clear: both;"><span></span></div>
-			  	</div>
-			  	<div class="ContainerVCards">
-			  		<div class="AvatasIcon AvatasMemberVCards"><span></span></div>
-			  		<div class="WorkContainerVCards">
-			  		  <div class="JobMemberVCards">Founder of eXo Platform SAS</div>
-			  		  <div class="InformationsMemberVCards">
-			  		  	<div class="MailMemberVCards">
-			  		  		<div class="LabelContentVCards">Email:</div>
-			  		  		<div class="ContentMailVCards">
-			  		  			<div class="IConVCards IconMailVCards"><span></span></div>
-			  		  			<div class="LabelMailVCards"> benjamin.mestrallet@exoplatfor...</div>
-			  		  			<div style="clear: left;"><span></span></div>
-			  		  		</div>
-			  		  		<div style="clear: left;"><span></span></div>
-			  		  	</div>
-			  		  	<div class="WorkPhoneMemberVCards">
-			  		  		<label class="LabelContentVCards">Work phone:</label>
-			  		  		<label class="LabelContentVCards"> 04 2663367</label>
-			  		  		<div style="clear: left;"><span></span></div>
-			  		  	</div>
-			  		  	<div class="PhoneNumberMemBerVCards">
-			  		  		<label class="LabelContentVCards">Mobile:</label>
-			  		  		<label class="LabelContentVCards"> 0988888888</label>
-			  		  		<div style="clear: left;"><span></span></div>
-			  		  	</div>
-			  		  	<div class="WebsiteMemberVCards">
-			  		  		<div class="LabelContentVCards">Website:</div>
-			  		  		<div class="LabelMailVCards"> http://www.exoplatform.com</div>
-			  		  		<div style="clear: left;"><span></span></div>
-			  		  	</div>
-			  		  </div>
-			  		</div>
-			  		<div style="clear: left;"><span></span></div>
-			  	</div>
-			  </div>
-		  </div>
-		  <div class="RightVCardsContent">
-		  	<div class="NormalVCardsContent">
-			  	<div class="TopTitleVCards">
-			  		<div class="ContentTopTitleVCards">
-				  		<div class="IConVCards AvailableIconVCards"><span></span></div>
-				  		<div class="LabelTopTiltlVCards">Benjamin, Mestrallet</div>
-				  		<div style="clear: left;"><span></span></div>
-			  		</div>
-			  		<div class="IConVCards VioletTagVCards"><span></span></div>
-			  		<div style="clear: both;"><span></span></div>
-			  	</div>
-			  	<div class="ContainerVCards">
-			  		<div class="AvatasIcon EmptyAvatasMemberVCards"><span></span></div>
-			  		<div class="WorkContainerVCards">
-			  		  <div class="JobMemberVCards">Founder of eXo Platform SAS</div>
-			  		  <div class="InformationsMemberVCards">
-			  		  	<div class="MailMemberVCards">
-			  		  		<div class="LabelContentVCards">Email:</div>
-			  		  		<div class="ContentMailVCards">
-			  		  			<div class="IConVCards IconMailVCards"><span></span></div>
-			  		  			<div class="LabelMailVCards"> benjamin.mestrallet@exoplatfor...</div>
-			  		  			<div style="clear: left;"><span></span></div>
-			  		  		</div>
-			  		  		<div style="clear: left;"><span></span></div>
-			  		  	</div>
-			  		  	<div class="WorkPhoneMemberVCards">
-			  		  		<label class="LabelContentVCards">Work phone:</label>
-			  		  		<label class="LabelContentVCards"> 04 2663367</label>
-			  		  		<div style="clear: left;"><span></span></div>
-			  		  	</div>
-			  		  	<div class="PhoneNumberMemBerVCards">
-			  		  		<label class="LabelContentVCards">Mobile:</label>
-			  		  		<label class="LabelContentVCards"> 0988888888</label>
-			  		  		<div style="clear: left;"><span></span></div>
-			  		  	</div>
-			  		  	<div class="WebsiteMemberVCards">
-			  		  		<div class="LabelContentVCards">Website:</div>
-			  		  		<div class="LabelMailVCards"> http://www.exoplatform.com</div>
-			  		  		<div style="clear: left;"><span></span></div>
-			  		  	</div>
-			  		  </div>
-			  		</div>
-			  		<div style="clear: left;"><span></span></div>
-			  	</div>
-			  </div>
-		  </div>
-		  <div style="clear: both;"><span></span></div>
-		</div>
+		
 	</div>
 </div>
