@@ -1,9 +1,23 @@
 .UIVCards {
+	border: 1px solid #c0c0c0;
+	padding: 1px;
+}
+
+.UIVCards .VCardsBar {
+	background: #e7e7e7;
+	line-height: 27px;
+	padding: 0px 0px 0px 5px ;
+}
+
+.UIVCards .VCardsBar .Subject {
+	background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/VcardIcon.gif') no-repeat left center;
+	padding-left: 25px;
+	font-size: 14px;
+	font-weight: bold;
 }
 
 .UIVCards .UIVCardsContent {
-	padding: 10px;
-	border: solid 1px red;
+	padding: 5px;
 }
 
 .UIVCards .UIVCardsContent .WorkVCardsContent{
