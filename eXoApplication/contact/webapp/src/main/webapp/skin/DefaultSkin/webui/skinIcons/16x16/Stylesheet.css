@@ -72,6 +72,14 @@
 	background: url('icons/PrintIcon.gif') no-repeat left center;
 }
 
+.AddEmailIcon {
+	background: url('icons/AddEmailIcon.gif') no-repeat center;
+}
+
+.DeleteEmailIcon {
+	background: url('icons/DeleteEmailIcon.gif') no-repeat center;
+}
+
 .NextPageArrow {
 	background: url('icons/NextPage.gif') no-repeat;
 	width: 16px; height: 16px;

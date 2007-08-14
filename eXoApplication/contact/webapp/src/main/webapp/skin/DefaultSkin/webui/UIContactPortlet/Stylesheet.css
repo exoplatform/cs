@@ -147,7 +147,7 @@
 .UIContactPortlet .UIWorkingContainer .UINavigationContainer {
 	float: left;
 	width: 215px;
-	padding: 7px 2px 3px 2px;
+	padding: 7px 2px 0px 2px;
 }
 
 /*============================== TagList ================================*/
@@ -480,7 +480,8 @@
 
 .UIContactPortlet .ContactPaneContainer .Avatar {
 	float: left;
-	padding: 0px 0px 5px 0px;
+	margin: 0px 0px 5px 0px;
+	border: 1px solid #545454;
 }
 
 .UIContactPortlet .ContactPaneContainer .Name {
@@ -532,27 +533,27 @@
 
 .UIContactPortlet .InfoContainer .Content .InfoLabel1 {
 	float: left;
-	width: 70px;
+	width: 60px;
 }
 
 .UIContactPortlet .InfoContainer .Content .InfoLabel {
-	width: 100px;
+	width: 90px;
 	float: left;
 }
 
 .UIContactPortlet .InfoContainer .Content .Info1 {
-	margin-left: 73px;
+	margin-left: 65px;
 }
 
 .UIContactPortlet .InfoContainer .Content .Info {
 	background: none;
-	margin-left: 110px;
+	margin-left: 100px;
 }
 
 .UIContactPortlet .InfoContainer .Content .Email {
 	background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/EmailIcon.gif') no-repeat left center;
 	padding-left: 20px;
-	margin-left: 50px;
+	margin-left: 60px;
 }
 
 
