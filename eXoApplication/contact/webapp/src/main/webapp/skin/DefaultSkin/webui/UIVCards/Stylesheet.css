@@ -83,14 +83,22 @@
 	padding: 8px 10px 10px 10px;
 }
 
-.UIVCards .ContainerVCards .AvatasMemberVCards {
+.UIVCards .ContainerVCards .AvatasIcon {
 	float: left;
 	width: 63px;
 	height: 81px;
-	background: url('background/AvatasMember63x81.gif') no-repeat ;
 	border: solid 1px #545454;
 	
 }
+
+.UIVCards .ContainerVCards .AvatasMemberVCards {
+	background: url('background/AvatasMember63x81.gif') no-repeat ;
+}
+
+.UIVCards .ContainerVCards .EmptyAvatasMemberVCards {
+	background: url('background/EmptyAvatasMember.gif') no-repeat ;
+}
+
 .UIVCards .ContainerVCards .WorkContainerVCards {
 	float: left;
 	padding-left: 10px;

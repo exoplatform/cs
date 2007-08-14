@@ -13,7 +13,7 @@
 			  		<div style="clear: both;"><span></span></div>
 			  	</div>
 			  	<div class="ContainerVCards">
-			  		<div class="AvatasMemberVCards"><span></span></div>
+			  		<div class="AvatasIcon AvatasMemberVCards"><span></span></div>
 			  		<div class="WorkContainerVCards">
 			  		  <div class="JobMemberVCards">Founder of eXo Platform SAS</div>
 			  		  <div class="InformationsMemberVCards">
@@ -59,7 +59,7 @@
 			  		<div style="clear: both;"><span></span></div>
 			  	</div>
 			  	<div class="ContainerVCards">
-			  		<div class="AvatasMemberVCards"><span></span></div>
+			  		<div class="AvatasIcon AvatasMemberVCards"><span></span></div>
 			  		<div class="WorkContainerVCards">
 			  		  <div class="JobMemberVCards">Founder of eXo Platform SAS</div>
 			  		  <div class="InformationsMemberVCards">
@@ -97,18 +97,18 @@
 		</div>
 		<div class="WorkVCardsContent">
 		  <div class="LeftVCardsContent">
-		  	<div class="SelectedVCardContent">
+		  	<div class="NormalVCardsContent">
 			  	<div class="TopTitleVCards">
 			  		<div class="ContentTopTitleVCards">
 				  		<div class="IConVCards InvisibleIconVCards"><span></span></div>
 				  		<div class="LabelTopTiltlVCards">Benjamin, Mestrallet</div>
 				  		<div style="clear: left;"><span></span></div>
 			  		</div>
-			  		<div class="IConVCards RedTagVCards"><span></span></div>
+			  		<div class="IConVCards EmptyTagVCards"><span></span></div>
 			  		<div style="clear: both;"><span></span></div>
 			  	</div>
 			  	<div class="ContainerVCards">
-			  		<div class="AvatasMemberVCards"><span></span></div>
+			  		<div class="AvatasIcon AvatasMemberVCards"><span></span></div>
 			  		<div class="WorkContainerVCards">
 			  		  <div class="JobMemberVCards">Founder of eXo Platform SAS</div>
 			  		  <div class="InformationsMemberVCards">
@@ -143,18 +143,18 @@
 			  </div>
 		  </div>
 		  <div class="RightVCardsContent">
-		  	<div class="NormalVCardContent">
+		  	<div class="NormalVCardsContent">
 			  	<div class="TopTitleVCards">
 			  		<div class="ContentTopTitleVCards">
 				  		<div class="IConVCards AvailableIconVCards"><span></span></div>
 				  		<div class="LabelTopTiltlVCards">Benjamin, Mestrallet</div>
 				  		<div style="clear: left;"><span></span></div>
 			  		</div>
-			  		<div class="IConVCards RedTagVCards"><span></span></div>
+			  		<div class="IConVCards VioletTagVCards"><span></span></div>
 			  		<div style="clear: both;"><span></span></div>
 			  	</div>
 			  	<div class="ContainerVCards">
-			  		<div class="AvatasMemberVCards"><span></span></div>
+			  		<div class="AvatasIcon EmptyAvatasMemberVCards"><span></span></div>
 			  		<div class="WorkContainerVCards">
 			  		  <div class="JobMemberVCards">Founder of eXo Platform SAS</div>
 			  		  <div class="InformationsMemberVCards">
