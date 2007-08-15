@@ -28,8 +28,7 @@ import org.exoplatform.webui.form.UIForm;
       @EventConfig(listeners = UIComposeForm.AttachmentActionListener.class),
       @EventConfig(listeners = UIComposeForm.RemoveAttachmentActionListener.class),
       @EventConfig(listeners = UIComposeForm.PriorityActionListener.class),
-      @EventConfig(listeners = UIComposeForm.SelectContactActionListener.class),
-      @EventConfig(listeners = UIComposeForm.CancelActionListener.class)
+      @EventConfig(listeners = UIComposeForm.SelectContactActionListener.class)
     }
 )
 public class UIComposeForm extends UIForm implements UIPopupComponent{
@@ -50,44 +49,46 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
   static  public class SendActionListener extends EventListener<UIComposeForm> {
     public void execute(Event<UIComposeForm> event) throws Exception {
       UIComposeForm uiForm = event.getSource() ;
+      System.out.println(" ==========> SendActionListener") ;
     }
   }
   static  public class SaveDraftActionListener extends EventListener<UIComposeForm> {
     public void execute(Event<UIComposeForm> event) throws Exception {
       UIComposeForm uiForm = event.getSource() ;
+      System.out.println(" ==========> SaveDraftActionListener") ;
     }
   }
   static  public class DiscardChangeActionListener extends EventListener<UIComposeForm> {
-    public void execute(Event<UIComposeForm> event) throws Exception {
-      UIComposeForm uiForm = event.getSource() ;
-    }
-  }
-  static  public class AttachmentActionListener extends EventListener<UIComposeForm> {
-    public void execute(Event<UIComposeForm> event) throws Exception {
-      UIComposeForm uiForm = event.getSource() ;
-    }
-  }
-  static  public class RemoveAttachmentActionListener extends EventListener<UIComposeForm> {
-    public void execute(Event<UIComposeForm> event) throws Exception {
-      UIComposeForm uiForm = event.getSource() ;
-    }
-  }
-  static  public class PriorityActionListener extends EventListener<UIComposeForm> {
-    public void execute(Event<UIComposeForm> event) throws Exception {
-      UIComposeForm uiForm = event.getSource() ;
-    }
-  }
-  static  public class SelectContactActionListener extends EventListener<UIComposeForm> {
-    public void execute(Event<UIComposeForm> event) throws Exception {
-      UIComposeForm uiForm = event.getSource() ;
-    }
-  }
-  static  public class CancelActionListener extends EventListener<UIComposeForm> {
     public void execute(Event<UIComposeForm> event) throws Exception {
       UIComposeForm uiForm = event.getSource() ;
       UIMailPortlet mailPortlet = event.getSource().getAncestorOfType(UIMailPortlet.class) ;
       mailPortlet.cancelAction() ;
     }
   }
+  static  public class AttachmentActionListener extends EventListener<UIComposeForm> {
+    public void execute(Event<UIComposeForm> event) throws Exception {
+      UIComposeForm uiForm = event.getSource() ;
+      System.out.println(" ==========> AttachmentActionListener") ;
+    }
+  }
+  static  public class RemoveAttachmentActionListener extends EventListener<UIComposeForm> {
+    public void execute(Event<UIComposeForm> event) throws Exception {
+      UIComposeForm uiForm = event.getSource() ;
+      System.out.println(" ==========> RemoveAttachmentActionListener") ;
+    }
+  }
+  static  public class PriorityActionListener extends EventListener<UIComposeForm> {
+    public void execute(Event<UIComposeForm> event) throws Exception {
+      UIComposeForm uiForm = event.getSource() ;
+      System.out.println(" ==========> PriorityActionListener") ;
+    }
+  }
+  static  public class SelectContactActionListener extends EventListener<UIComposeForm> {
+    public void execute(Event<UIComposeForm> event) throws Exception {
+      UIComposeForm uiForm = event.getSource() ;
+      System.out.println(" ==========> SelectContactActionListener") ;
+    }
+  }
+  
   
 }

@@ -1,10 +1,10 @@
 <%
-	import org.exoplatform.mail.webui.UISelectAccountForm ;
+	import org.exoplatform.mail.webui.UISelectAccount ;
 	import org.exoplatform.mail.webui.UIFolderContainer ;
 	import org.exoplatform.mail.webui.UITags ; 
 %>
 <div class="UINavigationContainer">
-	<%uicomponent.renderChild(UISelectAccountForm.class);%>
+	<%uicomponent.renderChild(UISelectAccount.class);%>
 	<%uicomponent.renderChild(UIFolderContainer.class);%>
 	<%uicomponent.renderChild(UITags.class);%>
 </div>

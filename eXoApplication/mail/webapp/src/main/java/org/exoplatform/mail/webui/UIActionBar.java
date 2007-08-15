@@ -47,7 +47,7 @@ public class UIActionBar extends UIContainer {
       System.out.println(" =========== > Compose Action");
       UIMailPortlet mailPortlet = uiActionBar.getParent() ;
       UIPopupAction uiPopupAction = mailPortlet.getChild(UIPopupAction.class) ;
-      uiPopupAction.activate(UIComposeForm.class, 600) ;
+      uiPopupAction.activate(UIComposeForm.class, 1000) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }
   }

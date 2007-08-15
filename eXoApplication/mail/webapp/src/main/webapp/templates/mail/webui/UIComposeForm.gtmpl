@@ -1,3 +1,4 @@
+<% uiform.begin() %>
 <div class="$uicomponent.id UIApplication" id="$uicomponent.id">
   <div class="ApplicationMinWidth">
   
@@ -8,25 +9,25 @@
 						<div class="RightBar">
 							<div class="CenterBar">
 								<div class="MailListActionsbar">
-									<a href="#" class="ControlButton">
+									<a href="<%=uicomponent.event("Send")%>" class="ControlButton">
 										<div class="IconHolder SendMailIcon">
 											<div class="Label">Send mail</div>
 										</div>
 									</a>
 									<div class="SeparatorLine"><span></span></div>
-									<a href="#" class="ControlButton">
+									<a href="<%=uicomponent.event("SaveDraft")%>" class="ControlButton">
 										<div class="IconHolder SaveAsADraftIcon">
 											<div class="Label">Save as a Draft</div>
 										</div>
 									</a>
 									<div class="SeparatorLine"><span></span></div>
-									<a href="#" class="ControlButton">
+									<a href="<%=uicomponent.event("DiscardChange")%>" class="ControlButton">
 										<div class="IconHolder DiscardIcon">
 											<div class="Label">Discard</div>
 										</div>
 									</a>
 									<div class="SeparatorLine"><span></span></div>
-									<a href="#" class="ControlButton">
+									<a href="<%=uicomponent.event("Attachment")%>" class="ControlButton">
 										<div class="IconHolder AttachFileIcon">
 											<div class="Label">Attach File</div>
 										</div>
@@ -122,3 +123,4 @@
   
   </div>
 </div>
+<% uiform.end() %>

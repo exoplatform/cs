@@ -8,7 +8,6 @@ package org.exoplatform.mail.webui;
 import org.exoplatform.mail.webui.popup.UIPopupAction;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
-import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 

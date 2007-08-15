@@ -19,7 +19,7 @@ import org.exoplatform.webui.core.UIContainer;
 public class UINavigationContainer extends UIContainer  {
   
   public UINavigationContainer() throws Exception {
-    addChild(UISelectAccountForm.class, null, null) ;
+    addChild(UISelectAccount.class, null, null) ;
     addChild(UIFolderContainer.class, null, null) ;
     addChild(UITags.class, null, null) ;
   }
