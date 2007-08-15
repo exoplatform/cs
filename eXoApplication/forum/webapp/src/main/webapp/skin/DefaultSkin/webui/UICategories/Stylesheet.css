@@ -8,32 +8,32 @@
 
 /**************************** UICategories ForumToolBar *********************************/
 
-.UICategories .ForumToolbar {
+.UIForumCategory .ForumToolbar {
 	margin: 5px 0px 0px 0px;
 }
 
-.UICategories .ForumToolbar a {
+.UIForumCategory .ForumToolbar a {
 	color: black;
 }
 
-.UICategories .ForumToolbar a:hover {
+.UIForumCategory .ForumToolbar a:hover {
 	color: #126ca5;
 }
 
-.UICategories .ForumToolbar .ToolbarActionsContainer {
+.UIForumCategory .ForumToolbar .ToolbarActionsContainer {
 	float: right;
 	width: 150px;
 	margin: 5px 0px 0px 0px;
 }
 
-.UICategories .ForumToolbar .ToolbarActionsContainer .ManageCategoryButton {
+.UIForumCategory .ForumToolbar .ToolbarActionsContainer .ManageCategoryButton {
 	float: right;
 	cursor: pointer;
 	padding-left: 20px;
 	line-height: 16px;
 }
 
-.UICategories .ForumToolbar .ToolbarActionsContainer .SeparatorLine {
+.UIForumCategory .ForumToolbar .ToolbarActionsContainer .SeparatorLine {
 	float: right;
 	width: 2px; height: 19px;
 	margin: 0px 5px 0px 5px;

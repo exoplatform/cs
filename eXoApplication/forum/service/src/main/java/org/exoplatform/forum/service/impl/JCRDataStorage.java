@@ -5,7 +5,6 @@
 package org.exoplatform.forum.service.impl;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -163,38 +162,38 @@ public class JCRDataStorage implements DataStorage {
 		Node forumHomeNode = getForumHomeNode() ;
 		if(forumHomeNode.hasNode(categoryId)) {
 		  Node catNode = forumHomeNode.getNode(categoryId) ;
-		  Node ForumNode;
+		  Node forumNode;
 		  if(isNew) {
-		    ForumNode = catNode.addNode(forum.getId(), "exo:forum");
-		    ForumNode.setProperty("exo:id", forum.getId());
-		    ForumNode.setProperty("exo:owner", forum.getOwner());
-		    ForumNode.setProperty("exo:path", ForumNode.getPath());
-		    ForumNode.setProperty("exo:createdDate", GregorianCalendar.getInstance());
-//		    ForumNode.setProperty("exo:lastPostBy", forum.getLastPostBy());
-//		    ForumNode.setProperty("exo:lastPostDate", GregorianCalendar.getInstance());
-		    ForumNode.setProperty("exo:lastPostPath", "");
-		    ForumNode.setProperty("exo:postCount", 0);
-		    ForumNode.setProperty("exo:topicCount", 0);
+		    forumNode = catNode.addNode(forum.getId(), "exo:forum");
+		    forumNode.setProperty("exo:id", forum.getId());
+		    forumNode.setProperty("exo:owner", forum.getOwner());
+		    forumNode.setProperty("exo:path", forumNode.getPath());
+		    forumNode.setProperty("exo:createdDate", GregorianCalendar.getInstance());
+//		    forumNode.setProperty("exo:lastPostBy", forum.getLastPostBy());
+//		    forumNode.setProperty("exo:lastPostDate", GregorianCalendar.getInstance());
+		    forumNode.setProperty("exo:lastPostPath", forum.getLastPostPath());
+		    forumNode.setProperty("exo:postCount", 0);
+		    forumNode.setProperty("exo:topicCount", 0);
 		  } else {
-		  	ForumNode = catNode.getNode(forum.getId());
+		  	forumNode = catNode.getNode(forum.getId());
 		  }
-		  ForumNode.setProperty("exo:name", forum.getForumName());
-		  ForumNode.setProperty("exo:forumOrder", forum.getForumOrder());
-		  ForumNode.setProperty("exo:modifiedBy", forum.getModifiedBy());
-		  ForumNode.setProperty("exo:modifiedDate", GregorianCalendar.getInstance());
-		  ForumNode.setProperty("exo:description", forum.getDescription());
+		  forumNode.setProperty("exo:name", forum.getForumName());
+		  forumNode.setProperty("exo:forumOrder", forum.getForumOrder());
+		  forumNode.setProperty("exo:modifiedBy", forum.getModifiedBy());
+		  forumNode.setProperty("exo:modifiedDate", GregorianCalendar.getInstance());
+		  forumNode.setProperty("exo:description", forum.getDescription());
 		  
-		  ForumNode.setProperty("exo:notifyWhenAddTopic", forum.getNotifyWhenAddTopic());
-		  ForumNode.setProperty("exo:notifyWhenAddPost", forum.getNotifyWhenAddPost());
-		  ForumNode.setProperty("exo:isModerateTopic", forum.getIsModerateTopic());
-		  ForumNode.setProperty("exo:isModeratePost", forum.getIsModeratePost());
-		  ForumNode.setProperty("exo:isClosed", forum.getIsClosed());
-		  ForumNode.setProperty("exo:isLock", forum.getIsLock());
+		  forumNode.setProperty("exo:notifyWhenAddTopic", forum.getNotifyWhenAddTopic());
+		  forumNode.setProperty("exo:notifyWhenAddPost", forum.getNotifyWhenAddPost());
+		  forumNode.setProperty("exo:isModerateTopic", forum.getIsModerateTopic());
+		  forumNode.setProperty("exo:isModeratePost", forum.getIsModeratePost());
+		  forumNode.setProperty("exo:isClosed", forum.getIsClosed());
+		  forumNode.setProperty("exo:isLock", forum.getIsLock());
 		  
-		  ForumNode.setProperty("exo:viewForumRole", forum.getViewForumRole());
-		  ForumNode.setProperty("exo:createTopicRole", forum.getCreateTopicRole());
-		  ForumNode.setProperty("exo:replyTopicRole", forum.getReplyTopicRole());
-		  ForumNode.setProperty("exo:moderators", forum.getModerators());
+		  forumNode.setProperty("exo:viewForumRole", forum.getViewForumRole());
+		  forumNode.setProperty("exo:createTopicRole", forum.getCreateTopicRole());
+		  forumNode.setProperty("exo:replyTopicRole", forum.getReplyTopicRole());
+		  forumNode.setProperty("exo:moderators", forum.getModerators());
 		  
 		  forumHomeNode.save() ;
 		  forumHomeNode.getSession().save() ;
@@ -207,7 +206,7 @@ public class JCRDataStorage implements DataStorage {
     forum.setOwner(forumNode.getProperty("exo:owner").getString());
     forum.setPath(forumNode.getProperty("exo:path").getString());
     forum.setForumName(forumNode.getProperty("exo:name").getString());
-    forum.setForumOrder(forumNode.getProperty("exo:forumOrder").getType());
+    forum.setForumOrder(Integer.valueOf(forumNode.getProperty("exo:forumOrder").getString()));
     forum.setCreatedDate(forumNode.getProperty("exo:createdDate").getDate().getTime());
     forum.setModifiedBy(forumNode.getProperty("exo:modifiedBy").getString());
     forum.setModifiedDate(forumNode.getProperty("exo:modifiedDate").getDate().getTime());
@@ -215,8 +214,8 @@ public class JCRDataStorage implements DataStorage {
 //    forum.setLastPostDate(forumNode.getProperty("exo:lastPostDate").getDate().getTime());
     forum.setLastPostPath(forumNode.getProperty("exo:lastPostPath").getString());
     forum.setDescription(forumNode.getProperty("exo:description").getString());
-    forum.setPostCount(forumNode.getProperty("exo:postCount").getType());
-    forum.setTopicCount(forumNode.getProperty("exo:topicCount").getType());
+    forum.setPostCount(Integer.valueOf(forumNode.getProperty("exo:postCount").getString()));
+    forum.setTopicCount(Integer.valueOf(forumNode.getProperty("exo:topicCount").getString()));
 
     forum.setIsModerateTopic(forumNode.getProperty("exo:isModerateTopic").getBoolean());
     forum.setIsModeratePost(forumNode.getProperty("exo:isModeratePost").getBoolean());

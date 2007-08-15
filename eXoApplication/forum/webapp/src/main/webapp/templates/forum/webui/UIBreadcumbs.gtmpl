@@ -4,8 +4,13 @@
 			<div class="CenterBreadcumbs">
 				<div class="BreadcumbsInfoBar">
 					<div class="OpenIcon"><span></span></div>
-					<a href="#" class="Selected">eXo Forums</a>
-					<div class="RightArrowIcon"><span></span></div>
+					<% 
+					//for(action in uicomponent.getActions()) {
+					//	String link = uicomponent.event(action) ;
+					%>
+						<a href="link" class="Selected">eXo Forums</a>
+						<div class="RightArrowIcon"><span></span></div>
+				<%//} %>
 				</div>
 				<div class="RSSBar">
 					<div class="SeparatorLine">

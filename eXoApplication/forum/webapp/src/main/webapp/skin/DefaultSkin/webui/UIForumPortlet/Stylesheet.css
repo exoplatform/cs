@@ -141,10 +141,6 @@
 	margin: 0px 13px 0px 0px;
 }
 
-.UIForumPortlet .UIForumActionBar .AddForum {
-	background: url('icons/24x24/AddNewForum.gif') no-repeat left center ;
-}
-
 .UIForumPortlet .UIForumActionBar .ManageModerators {
 	background: url('icons/24x24/Manage.gif') no-repeat left center ;
 }

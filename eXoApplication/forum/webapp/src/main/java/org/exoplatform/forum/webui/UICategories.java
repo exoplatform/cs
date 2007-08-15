@@ -12,8 +12,14 @@ import org.exoplatform.forum.service.Category;
 import org.exoplatform.forum.service.Forum;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.service.Topic;
+import org.exoplatform.forum.webui.popup.UIForumForm;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
+import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIContainer;
+import org.exoplatform.webui.event.Event;
+import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.event.Event.Phase;
 
 /**
  * Created by The eXo Platform SARL
@@ -23,13 +29,15 @@ import org.exoplatform.webui.core.UIContainer;
  */
 
 @ComponentConfig(
-    template =  "app:/templates/forum/webui/UICategories.gtmpl"
+    template =  "app:/templates/forum/webui/UICategories.gtmpl",
+    events = {
+    	@EventConfig(listeners = UICategories.OpenCategory.class)
+    }
 )
 public class UICategories extends UIContainer  {
 	protected ForumService forumService = (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
 	
   public UICategories() throws Exception {
-  	
 //  	UICategories uicomponent = this;
 //  	List category = uicomponent.getcategoryList();
   	
@@ -37,21 +45,11 @@ public class UICategories extends UIContainer  {
 
 	private List<Category> getCategoryList() throws Exception {
 		List<Category> categoryList = forumService.getCategories();
-//		GregorianCalendar calendar = new GregorianCalendar() ;
-//  	for (int i = 0; i < categoryList.size(); i++) {
-//  		System.out.println("\n\n" + categoryList.get(i).getDescription() + "  :  " + categoryList.get(i).getCategoryOrder() + "\n\n");
-//  		System.out.println("\n\n" + categoryList.get(i).getCreatedDate().toString()+ "\n\n");
-//  		System.out.println("\n\n" + calendar.getTime().toString()+ "\n\n");
-//  		long a = categoryList.get(i).getCreatedDate().getTime();
-//  		long b = calendar.getTime().getTime();
-//  		System.out.println("\n\n" + (b - a)/(86400000)+ "\n\n");
-//		}
   	return categoryList;
 	}  
 	
 	private List<Forum> getForumList(String categoryId) throws Exception {
 		List<Forum> forumList = forumService.getForums(categoryId);
-		//forumList.get(0).get//getDescription()//getForumName();
 		return forumList;
 	}
 	
@@ -64,6 +62,7 @@ public class UICategories extends UIContainer  {
 	private Topic getTopicNewPost(String categoryId, String forumId) throws Exception {
 		Forum forum = forumService.getForum(categoryId, forumId);
 		String path = forum.getLastPostPath();
+		if(path.length() < 1) return null;
 		int t = 0;
     for (int i = path.length()-1; i >=0 ; i--) {
     	t++;
@@ -73,7 +72,18 @@ public class UICategories extends UIContainer  {
     return topicNewPost;
 	}
 	
-	
+	static public class OpenCategory extends EventListener<UICategories> {
+		public void execute(Event<UICategories> event) throws Exception {
+			UICategories uiContainer = event.getSource();
+			String categoryId = event.getRequestContext().getRequestParameter(OBJECTID)  ;
+			UICategoryContainer categoryContainer = event.getSource().getAncestorOfType(UICategoryContainer.class) ;
+			categoryContainer.isRenderCategories = false ;
+			categoryContainer.getChild(UICategories.class).setRendered(false) ;
+			UICategory uiCategory = categoryContainer.getChild(UICategory.class) ;
+			uiCategory.update(categoryId) ;
+			uiCategory.setRendered(true) ;
+		}
+	}
 	
 }
 

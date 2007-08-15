@@ -62,6 +62,8 @@ public class TestForumService extends BaseForumTestCase{
   	// getForum
   	assertNotNull(forumService_.getForum(cat.getId(), forum.getId()));
   	Forum forumNew  = forumService_.getForum(cat.getId(), forum.getId());
+//  	Date a = new Date();
+//  	System.out.println(forumNew.getCreatedDate().toString());
 		// getForumByPath
 //  	Forum forumN = (Forum)forumService_.getObjectByPath(forumNew.getPath());
 //  	assertEquals(forumN.getDescription(),forumNew.getDescription());

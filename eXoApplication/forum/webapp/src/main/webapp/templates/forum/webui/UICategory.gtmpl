@@ -1,0 +1,167 @@
+<%
+	import org.exoplatform.forum.service.Category; 
+	import org.exoplatform.forum.service.Forum; 
+	import org.exoplatform.forum.service.Topic; 
+	import org.exoplatform.forum.service.Post; 
+	import java.util.GregorianCalendar;
+	
+%>
+<% Category category = uicomponent.getCategory(); %>
+<div class="UIForumCategory" style="padding: 2px 10px;">
+  <div class="ForumToolbar">
+	  <div class="LeftBar">
+	  	<div class="RightBar">
+	  		<div class="CenterBar CategoryDetectPosition">
+	  			<div class="Title"><%=category.getCategoryName()%></div>
+	  			<div class="ExpandButton" title="Collapser category"><span></span></div>
+	  			<% String showCategory = "eXo.webui.UIPopupSelectCategory.show(this, event);" %>
+	  			<div class="ToolbarActionsContainer" onclick="$showCategory">
+	  				<div class="SeparatorLine"><span></span></div>
+						<a class="ManageCategoryButton">Manage Categoryss</a>
+						<div style="clear: both;"><span></span></div>
+					
+			        <% /*Begin Popup Menu*/ %>
+				      <div style="position: relative;">
+					      <div class="UIPopupCategory" style="display: none;">
+					      	<div class="PopupCategoryDecorator">
+					      
+					        <div class="UIRightClickPopupMenu" style="display: block;">
+										<div class="TopLeftRightClickPopupMenu">
+											<div class="TopRightRightClickPopupMenu">
+												<div class="TopCenterRightClickPopupMenu"><span></span></div>
+											</div>
+										</div>
+										<div class="MiddleLeftRightClickPopupMenu">
+											<div class="MiddleRightRightClickPopupMenu">
+										
+												  <div class="UIRightPopupMenuContainer">
+													  <%//for(action in uicomponent.getActions()) {%>
+													  
+													   	<a class="MenuItem" href=""> 	
+																<div class="ItemIcon AddForumIcon" onclick="">
+																	Add New Forum
+																</div>
+														 	</a>
+															
+													  <%//}%>
+													  <div class="RightClickCustomItem"></div>
+													</div>
+										
+											</div>
+										</div>
+										<div class="BottomLeftRightClickPopupMenu">
+											<div class="BottomRightRightClickPopupMenu">
+												<div class="BottomCenterRightClickPopupMenu"><span></span></div>
+											</div>
+										</div>
+									</div>
+					      </div>
+					      
+					      </div>
+					    </div>
+				      <% /*End Popup Menu*/ %>
+					
+					</div>
+					<div style="clear: both;"><span></span></div>
+	  		</div>
+	  	</div>
+	  </div>
+  </div>
+  <div class="ContentContainer">
+	  <div class="ForumList">
+	  	<table cellspacing="0" borderspacing="0" id="" class="UIGrid">
+	  		<thead>
+	  			<tr>
+	      		<th style="width: 40px;"></th>
+		      	<th>Forums</th>
+		      	<th style="width: 30%;">Last posts</th>
+		      	<th style="width: 50px;">Threads</th>
+		      	<th style="width: 50px;">Posts</th>
+		 	      <th style="width: 17%;">Moderator</th>
+		 	      <th style="width: 30px;"><input type="checkbox" class="checkbox" title="Check all" value="4"/></th>
+		      </tr>
+		    </thead>
+		    <tbody>
+		    <% 
+		    	List forums = uicomponent.getForumList(category.getId());
+		    	if(forums.size() == 0) {
+		    %>
+		    	<tr>
+		    		<td></td>
+		    		<td>No Forum !</td>
+		    		<td>No Post !</td>
+		    		<td>0</td>
+		    		<td>0</td>
+		    		<td></td>
+		    	</tr>
+		    <% }else {%>
+		      <%
+		        GregorianCalendar calendar = new GregorianCalendar() ;
+		        long toDay = calendar.getTime().getTime();
+			    	String classRow = "whileRow";
+			    	int i = 0;
+	 					for(forum in forums) {
+			        if(i%2 == 0) classRow = "whileRow";
+			        else classRow = "OddRow";
+			        i++;
+			        String classIconForum = "NoNewPostIcon";
+			        String titleIconForum = "Forum Contains No New Post";
+			        if(forum.getIsLock() == true){
+			          classIconForum = "ForumCloseIcon";
+			          titleIconForum = "Forum is Closed for Posting";
+			        }
+			        String forumTitle = forum.getForumName();
+			        String forumDescription = forum.getDescription();
+			        String topicNewPostIcon = "";
+			        String topicNewPostTitle = "";
+			        String lastPostBy = "";
+			        String dateTime = "";
+			        
+	 						Topic topicNewPost = uicomponent.getTopicNewPost(category.getId(), forum.getId());
+	 						if(topicNewPost != null) {
+				        topicNewPostIcon = topicNewPost.getIcon();
+				        topicNewPostTitle = topicNewPost.getTopicName();
+				        lastPostBy = topicNewPost.getLastPostBy();
+				        dateTime = topicNewPost.getLastPostDate().getDate().getTime().getString();
+				        long createdDate = topicNewPost.getLastPostDate().getDate().getTime();
+				        if((toDay-createdDate)/86400000 < 4){
+				          classIconForum = "ContainNewPostIcon";
+				          titleIconForum = "Forum Contains New Posts";
+				        }
+			        }
+			        String topicCount = (String)forum.getTopicCount();
+			        String postCount = (String)forum.getPostCount();
+			        String [] forumModerators = forum.getModerators();
+			    %>
+				    	<tr class="$classRow">
+								<td style="padding: 0px;"><div class="ForumStatusIcon $classIconForum" title="$titleIconForum"><span></span></div></td>
+								<td >
+									<a href="#" class="ForumTitle">$forumTitle<span class="ForumQuantity">(5 viewing)</span></a>
+									<div class="ForumDescription">$forumDescription</div>
+								</td>
+							 	<td >
+							 	<% if(topicNewPost != null) { %>
+							 		<a href="#" class="LastPostTitle $topicNewPostIcon">$topicNewPostTitle</a>
+									<div class="LastPostInfos">by <a href="#">$lastPostBy</a><span class="DateTime">($dateTime)</span></div>
+								<% } %>	
+								</td>
+							 	<td class="Tdbox">$topicCount</td>
+								<td class="Tdbox">$postCount</td>
+								<td >
+								<% for(forumModerator in forumModerators) { %>
+									<div class="EmoticonsIcon BigGrinIcon"><span></span></div>
+									<a href="#" class="Moderator">$forumModerator</a>
+								<% } %>
+									<div style="clear: left;"><span></span></div>
+								</td>
+								<td class="Tdbox"><input type="checkbox" class="checkbox" value="4"/></td>
+			   			</tr>
+		   		<% } 
+		   		 }
+		    %>
+			  </tbody>
+		  </table>							
+	  	
+  	</div>
+  </div>
+</div>	

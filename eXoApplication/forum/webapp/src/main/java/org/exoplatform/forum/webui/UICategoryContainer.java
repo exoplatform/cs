@@ -18,11 +18,15 @@ import org.exoplatform.webui.core.UIContainer;
     template =  "app:/templates/forum/webui/UICategoryContainer.gtmpl"
 )
 public class UICategoryContainer extends UIContainer  {
+	protected boolean isRenderCategories = true ; 
   public UICategoryContainer() throws Exception {
     
     addChild(UIForumActionBar.class, null, null);
     addChild(UICategories.class, null, null) ;
-    //addChild(UICategory.class, null, null) ;
+    addChild(UICategory.class, null, null) ;
     addChild(UICategoriesSummary.class, null, null) ;
-  }  
+  } 
+  private boolean isRenderCategories () {
+  	return isRenderCategories ;
+  }
 }

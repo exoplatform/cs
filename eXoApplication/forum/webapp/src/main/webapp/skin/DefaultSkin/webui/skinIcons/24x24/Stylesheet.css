@@ -29,3 +29,7 @@
 .ThreadNoNewPost {
 	background: url('icons/ThreadNoNewPost.gif') no-repeat ;
 }
+
+.AddForumIcon {
+	background: url('icons/AddNewForum.gif') no-repeat left center ;
+}

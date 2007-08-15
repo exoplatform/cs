@@ -4,11 +4,13 @@
  **************************************************************************/
 package org.exoplatform.forum.webui.popup;
 
+import org.exoplatform.forum.webui.UIForumPortlet;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormStringInput;
 
@@ -20,27 +22,40 @@ import org.exoplatform.webui.form.UIFormStringInput;
  */
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
-    template = "app:/templates/forum/webui/UIModeratorManagementForm.gtmpl",
+    template = "app:/templates/forum/webui/popup/UIModeratorsManagement.gtmpl",
     events = {
       @EventConfig(listeners = UIModeratorManagementForm.SaveActionListener.class), 
-      @EventConfig(listeners = UIModeratorManagementForm.CancelActionListener.class)
+      @EventConfig(listeners = UIModeratorManagementForm.CancelActionListener.class, phase=Phase.DECODE)
     }
 )
-public class UIModeratorManagementForm extends UIForm {
+public class UIModeratorManagementForm extends UIForm implements UIPopupComponent {
   
   
-  public UIModeratorManagementForm() {
+  public UIModeratorManagementForm() throws Exception {
     
   }
+  
+  public void activate() throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+	public void deActivate() throws Exception {
+		// TODO Auto-generated method stub
+	}
   
   static  public class SaveActionListener extends EventListener<UIModeratorManagementForm> {
     public void execute(Event<UIModeratorManagementForm> event) throws Exception {
       UIModeratorManagementForm uiForm = event.getSource() ;
+      UIForumPortlet forumPortlet = event.getSource().getAncestorOfType(UIForumPortlet.class) ;
+      forumPortlet.cancelAction() ;
     }
   }
+  
   static  public class CancelActionListener extends EventListener<UIModeratorManagementForm> {
     public void execute(Event<UIModeratorManagementForm> event) throws Exception {
       UIModeratorManagementForm uiForm = event.getSource() ;
+      UIForumPortlet forumPortlet = event.getSource().getAncestorOfType(UIForumPortlet.class) ;
+      forumPortlet.cancelAction() ;
     }
   }
 }

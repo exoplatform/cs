@@ -82,7 +82,6 @@
 		              			</tr>
 		              		<% ++i;
 		              			} %>
-
 		              		</tbody>
 		              	</table>
 		              </div>
@@ -94,36 +93,17 @@
 									<div class="UIFormInputSet ModerationOptions">
 		              	<table class="UIFormGrid">
 		              		<tbody>
+		              			<% int t = 5; 
+		              		  while(t < 9) {%>
 		              			<tr>
-		              				<td class="FieldLabel">Email addresses to notify when there is a new Post:</td>
+		              				<% String label = uicomponent.getLabel(uiform.getChild(t).getName()) %>
+		              				<td class="FieldLabel">$label</td>
 		              				<td class="FieldComponent">
-		              					<textarea name="description" class="textarea"></textarea>
+		              					<% uiform.renderChild(t) %>
 		              				</td>
 		              			</tr>
-		              			<tr>
-		              				<td class="FieldLabel">Email addresses to notify when there is a new Thread:</td>
-		              				<td class="FieldComponent">
-		              					<textarea name="description" class="textarea"></textarea>
-		              				</td>
-		              			</tr>
-		              			<tr>
-		              				<td class="FieldLabel">Moderate Post:</td>
-		              				<td class="FieldComponent">
-		              					<input type="checkbox" class="checkbox" name=""/>
-		              				</td>
-		              			</tr>
-		              			<tr>
-		              				<td class="FieldLabel">Moderate Thread:</td>
-		              				<td class="FieldComponent">
-		              					<input type="checkbox" class="checkbox" name=""/>
-		              				</td>
-		              			</tr>
-		              			<tr>
-		              				<td class="FieldLabel">Moderate Attachments:</td>
-		              				<td class="FieldComponent">
-		              					<input type="checkbox" class="checkbox" name=""/>
-		              				</td>
-		              			</tr>
+		              		<% ++t;
+		              			} %>
 		              		</tbody>
 		              	</table>
 		              </div>

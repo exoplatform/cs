@@ -4,6 +4,8 @@
  **************************************************************************/
 package org.exoplatform.forum.webui;
 
+import org.exoplatform.container.PortalContainer;
+import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIContainer;
@@ -23,14 +25,14 @@ import org.exoplatform.webui.event.EventListener;
         @EventConfig(listeners = UIBreadcumbs.RssActionListener.class)
     }
 )
-
 public class UIBreadcumbs extends UIContainer {
-  
+
   public UIBreadcumbs()throws Exception {}
   
   static public class ChangePathActionListener extends EventListener<UIBreadcumbs> {
     public void execute(Event<UIBreadcumbs> event) throws Exception {
       UIBreadcumbs uiActionBar = event.getSource() ;      
+      System.out.println("====================> testOpen");
     }
   }  
   
@@ -39,4 +41,7 @@ public class UIBreadcumbs extends UIContainer {
       UIBreadcumbs uiActionBar = event.getSource() ;      
     }
   }  
+
+  
+  
 }

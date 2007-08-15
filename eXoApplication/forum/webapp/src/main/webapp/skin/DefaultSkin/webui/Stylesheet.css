@@ -109,6 +109,16 @@
 	height: 26px;
 }
 
+.UIForumCategory .ForumToolbar .UIPopupCategory {
+	left: 5px;
+	position:absolute;
+	top:3px;
+	width: auto;
+}
+
+.UIForumCategory .ForumToolbar .UIRightClickPopupMenu {
+	width:150px;
+}
 /*=============================Content UICategoriesSummary====================*/
 
 .UIForumPortlet .UICategoriesSummary {

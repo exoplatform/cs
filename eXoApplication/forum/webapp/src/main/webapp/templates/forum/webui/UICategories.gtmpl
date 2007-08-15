@@ -13,19 +13,15 @@
 			List categories = uicomponent.getCategoryList();
 			 for(category in categories) {
 			 String title = category.getCategoryName();
+			 
 		 %>
-			<div class="ForumCategory">
+			<div class="UIForumCategory">
 			  <div class="ForumToolbar">
 				  <div class="LeftBar">
 				  	<div class="RightBar">
 				  		<div class="CenterBar">
-				  			<div class="Title">$title</div>
+				  			<div class="Title"><a href="<%=uicomponent.event("OpenCategory", category.getId())%>">$title</a></div>
 				  			<div class="ExpandButton" title="Collapser category"><span></span></div>
-				  			<div class="ToolbarActionsContainer">
-				  				<div class="SeparatorLine"><span></span></div>
-									<a class="ManageCategoryButton">Manage Category</a>
-									<div style="clear: both;"><span></span></div>
-								</div>
 								<div style="clear: both;"><span></span></div>
 				  		</div>
 				  	</div>
@@ -42,7 +38,6 @@
 					      	<th style="width: 50px;">Threads</th>
 					      	<th style="width: 50px;">Posts</th>
 					 	      <th style="width: 17%;">Moderator</th>
-					 	      <th style="width: 30px;"><input type="checkbox" class="checkbox" title="Check all" value="4"/></th>
 					      </tr>
 					    </thead>
 					    <tbody>
@@ -65,8 +60,6 @@
 						    	String classRow = "whileRow";
 						    	int i = 0;
 				 					for(forum in forums) {
-				 						Topic topicNewPost = uicomponent.getTopicNewPost(category.getId(), forum.getId());
-				 						
 						        if(i%2 == 0) classRow = "whileRow";
 						        else classRow = "OddRow";
 						        i++;
@@ -76,20 +69,27 @@
 						          classIconForum = "ForumCloseIcon";
 						          titleIconForum = "Forum is Closed for Posting";
 						        }
-						        long createdDate = lastPost.getCreatedDate().getTime();
-						        if((toDay-createdDate)/86400000 < 4){
-						          classIconForum = "ContainNewPostIcon";
-						          titleIconForum = "Forum Contains New Posts";
-						        }
-						        
 						        String forumTitle = forum.getForumName();
 						        String forumDescription = forum.getDescription();
-						        String topicNewPostIcon = topicNewPost.getIcon();
-						        String topicNewPostTitle = topicNewPost.getTopicName();
-						        String lastPostBy = topicNewPost.getLastPostBy();
-						        String dateTime = topicNewPost.getLastPostDate().getDate().getTime().getString();
-						        int topicCount = forum.getTopicCount();
-						        int postCount = forum.getPostCount();
+						        String topicNewPostIcon = "";
+						        String topicNewPostTitle = "";
+						        String lastPostBy = "";
+						        String dateTime = "";
+						        
+				 						Topic topicNewPost = uicomponent.getTopicNewPost(category.getId(), forum.getId());
+				 						if(topicNewPost != null) {
+							        topicNewPostIcon = topicNewPost.getIcon();
+							        topicNewPostTitle = topicNewPost.getTopicName();
+							        lastPostBy = topicNewPost.getLastPostBy();
+							        dateTime = topicNewPost.getLastPostDate().getDate().getTime().getString();
+							        long createdDate = topicNewPost.getLastPostDate().getDate().getTime();
+							        if((toDay-createdDate)/86400000 < 4){
+							          classIconForum = "ContainNewPostIcon";
+							          titleIconForum = "Forum Contains New Posts";
+							        }
+						        }
+						        String topicCount = (String)forum.getTopicCount();
+						        String postCount = (String)forum.getPostCount();
 						        String [] forumModerators = forum.getModerators();
 						    %>
 							    	<tr class="$classRow">
@@ -99,17 +99,20 @@
 												<div class="ForumDescription">$forumDescription</div>
 											</td>
 										 	<td >
+										 	<% if(topicNewPost != null) { %>
 										 		<a href="#" class="LastPostTitle $topicNewPostIcon">$topicNewPostTitle</a>
 												<div class="LastPostInfos">by <a href="#">$lastPostBy</a><span class="DateTime">($dateTime)</span></div>
+											<% } %>	
 											</td>
 										 	<td class="Tdbox">$topicCount</td>
 											<td class="Tdbox">$postCount</td>
 											<td >
+											<% for(forumModerator in forumModerators) { %>
 												<div class="EmoticonsIcon BigGrinIcon"><span></span></div>
-												<a href="#" class="Moderator">$forumModerators</a>
+												<a href="#" class="Moderator">$forumModerator</a>
+											<% } %>
 												<div style="clear: left;"><span></span></div>
 											</td>
-											<td class="Tdbox"><input type="checkbox" class="checkbox" value="4"/></td>
 						   			</tr>
 					   		<% } 
 					   		 }
