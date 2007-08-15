@@ -1,5 +1,4 @@
-function UIForumPortlet() {
-};
+function UIForumPortlet() {};
 
 UIForumPortlet.prototype.test = function () {
 	alert("test");
