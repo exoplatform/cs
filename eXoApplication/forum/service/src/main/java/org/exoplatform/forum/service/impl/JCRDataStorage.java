@@ -547,7 +547,7 @@ public class JCRDataStorage implements DataStorage {
 		return Str;
   }
   
-  private Node getForumHomeNode() throws Exception {
+  protected Node getForumHomeNode() throws Exception {
     ServiceRegistry serviceRegistry = new ServiceRegistry("ForumService") ;
     Session session = getJCRSession() ;
     jcrRegistryService_.createServiceRegistry(serviceRegistry, false) ;    

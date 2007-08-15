@@ -123,4 +123,8 @@ public class ForumServiceImpl implements ForumService{
     return storage_.getAllLink() ;
   }
   
+  public String getForumHomePath() throws Exception {
+  	return storage_.getForumHomeNode().getPath() ;
+  }
+  
 }

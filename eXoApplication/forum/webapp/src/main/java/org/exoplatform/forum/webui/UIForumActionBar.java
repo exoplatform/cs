@@ -4,6 +4,7 @@
  **************************************************************************/
 package org.exoplatform.forum.webui;
 
+import org.exoplatform.forum.service.Forum;
 import org.exoplatform.forum.webui.popup.UICategoryForm;
 import org.exoplatform.forum.webui.popup.UIForumForm;
 import org.exoplatform.forum.webui.popup.UIModeratorManagementForm;
@@ -47,10 +48,11 @@ public class UIForumActionBar extends UIContainer  {
   static public class AddForumActionListener extends EventListener<UIForumActionBar> {
     public void execute(Event<UIForumActionBar> event) throws Exception {
       UIForumActionBar uiActionBar = event.getSource() ;      
-      System.out.println(" ========= > s") ;
       UIForumPortlet forumPortlet = event.getSource().getAncestorOfType(UIForumPortlet.class) ;
       UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;
-      popupAction.activate(UIForumForm.class, 662) ;
+      UIForumForm forumForm = popupAction.createUIComponent(UIForumForm.class, null, null) ;
+      forumForm.setCategoryValue("", true) ;
+      popupAction.activate(forumForm, 662, 466) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   } 

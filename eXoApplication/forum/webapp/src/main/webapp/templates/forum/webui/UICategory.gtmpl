@@ -7,7 +7,7 @@
 	
 %>
 <% Category category = uicomponent.getCategory(); %>
-<div class="UIForumCategory" style="padding: 2px 10px;">
+<div class="UIForumCategory" id="$uicomponent.id" style="padding: 2px 10px;">
   <div class="ForumToolbar">
 	  <div class="LeftBar">
 	  	<div class="RightBar">
@@ -37,8 +37,8 @@
 												  <div class="UIRightPopupMenuContainer">
 													  <%//for(action in uicomponent.getActions()) {%>
 													  
-													   	<a class="MenuItem" href=""> 	
-																<div class="ItemIcon AddForumIcon" onclick="">
+													   	<a class="MenuItem" href="<%=uicomponent.event("AddForum")%>"> 	
+																<div class="ItemIcon AddForumIcon">
 																	Add New Forum
 																</div>
 														 	</a>

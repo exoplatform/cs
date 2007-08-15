@@ -7,7 +7,7 @@
 						Add new Category
 					</a>
 					<div class="SeparatorLine"><span></span></div>
-					<a href="<%=uicomponent.event("AddForum")%>" class="Icon AddForum">Add new Forum</a>
+					<a href="<%=uicomponent.event("AddForum")%>" class="Icon AddForumIcon">Add new Forum</a>
 					<div class="SeparatorLine"><span></span></div>
 					<a href="<%=uicomponent.event("ManageModerator")%>" class="Icon ManageModerators">Manage Moderators</a>
 					<div class="SeparatorLine"><span></span></div>

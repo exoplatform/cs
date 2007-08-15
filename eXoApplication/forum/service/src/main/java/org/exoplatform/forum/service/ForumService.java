@@ -238,4 +238,6 @@ public interface ForumService {
   public void movePost(String postPath, String destTopicPaths) throws Exception ;
   //public Object getObjectByPath(String path) throws Exception ;
   public List<ForumLinkData> getAllLink()throws Exception ;
+  
+  public String getForumHomePath() throws Exception ;
 }

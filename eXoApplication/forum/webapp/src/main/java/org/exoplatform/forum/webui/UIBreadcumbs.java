@@ -4,6 +4,8 @@
  **************************************************************************/
 package org.exoplatform.forum.webui;
 
+import javax.jcr.Node;
+
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -26,9 +28,20 @@ import org.exoplatform.webui.event.EventListener;
     }
 )
 public class UIBreadcumbs extends UIContainer {
-
-  public UIBreadcumbs()throws Exception {}
+	private Node currentNode_ ;
+	private String[] breadcumbs ;
+	private String forumHomePath_ ;
+  public UIBreadcumbs()throws Exception {
+  	ForumService forumService = (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
+  	forumHomePath_ = forumService.getForumHomePath() ;
+  	
+  }
   
+  public void setCurrentNode(Node selectedNode) throws Exception {
+  	currentNode_ = selectedNode ;
+  	//forumService_.getForumHomePath() ;
+  	
+  }
   static public class ChangePathActionListener extends EventListener<UIBreadcumbs> {
     public void execute(Event<UIBreadcumbs> event) throws Exception {
       UIBreadcumbs uiActionBar = event.getSource() ;      

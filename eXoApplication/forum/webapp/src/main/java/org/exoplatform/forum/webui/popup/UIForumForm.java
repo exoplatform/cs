@@ -15,6 +15,7 @@ import org.exoplatform.forum.service.Category;
 import org.exoplatform.forum.service.Forum;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.webui.UICategories;
+import org.exoplatform.forum.webui.UICategory;
 import org.exoplatform.forum.webui.UICategoryContainer;
 import org.exoplatform.forum.webui.UIForumPortlet;
 import org.exoplatform.portal.application.PortalRequestContext;
@@ -51,6 +52,7 @@ import org.exoplatform.webui.form.validator.PositiveNumberFormatValidator;
 )
 public class UIForumForm extends UIForm implements UIPopupComponent{
 	ForumService forumService =  (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
+	private boolean isCategoriesUpdate = true;
 	public static final String FIELD_CATEGORY_SELECTBOX = "Category" ;
 	public static final String FIELD_FORUMTITLE_INPUT = "ForumTitle" ;
 	public static final String FIELD_FORUMORDER_INPUT = "ForumOrder" ;
@@ -111,12 +113,17 @@ public class UIForumForm extends UIForm implements UIPopupComponent{
 		// TODO Auto-generated method stub
 	}
   
-
+	public void setCategoryValue(String categoryId, boolean isEditable) throws Exception {
+		if(!isEditable) getUIFormSelectBox(FIELD_CATEGORY_SELECTBOX).setValue(categoryId) ;
+		getUIFormSelectBox(FIELD_CATEGORY_SELECTBOX).setEnable(isEditable) ;
+		isCategoriesUpdate = isEditable;
+	}
 	
   static  public class SaveActionListener extends EventListener<UIForumForm> {
     public void execute(Event<UIForumForm> event) throws Exception {
       UIForumForm uiForm = event.getSource() ;
-      String categoryId = uiForm.getUIFormSelectBox(FIELD_CATEGORY_SELECTBOX).getValue();
+      UIFormSelectBox categorySelectBox = uiForm.getUIFormSelectBox(FIELD_CATEGORY_SELECTBOX);
+      String categoryId = categorySelectBox.getValue();
       String forumTitle = uiForm.getUIStringInput(FIELD_FORUMTITLE_INPUT).getValue();
       String forumOrder = uiForm.getUIStringInput(FIELD_FORUMORDER_INPUT).getValue();
       String forumStatus = uiForm.getUIFormSelectBox(FIELD_FORUMSTATUS_SELECTBOX).getValue();
@@ -125,12 +132,11 @@ public class UIForumForm extends UIForm implements UIPopupComponent{
       String whenNewPost = uiForm.getUIFormTextAreaInput(FIELD_NOTIFYWHENADDPOST_MULTIVALUE).getValue();
       String[] notifyWhenAddTopic;
       String[] notifyWhenAddPost;
-      if(whenNewTopic != null && whenNewTopic.length() > 0) {
-        notifyWhenAddTopic = whenNewTopic.split(",") ;
-      } else notifyWhenAddTopic = new String[] {};
-      if(whenNewPost != null && whenNewPost.length() > 1) { 
-      	notifyWhenAddPost =  whenNewPost.split(",");
-      }else notifyWhenAddPost = new String[] {};
+      if(whenNewTopic != null && whenNewTopic.length() > 0) notifyWhenAddTopic = whenNewTopic.split(",") ;
+      else notifyWhenAddTopic = new String[] {};
+      
+      if(whenNewPost != null && whenNewPost.length() > 0) notifyWhenAddPost =  whenNewPost.split(",");
+      else notifyWhenAddPost = new String[] {};
       
       Boolean  ModerateTopic = (Boolean) uiForm.getUIFormCheckBoxInput(FIELD_MODERATETHREAD_CHECKBOX).getValue();
       Boolean  ModeratePost = (Boolean) uiForm.getUIFormCheckBoxInput(FIELD_MODERATEPOST_CHECKBOX).getValue();
@@ -158,32 +164,33 @@ public class UIForumForm extends UIForm implements UIPopupComponent{
       newForum.setNotifyWhenAddPost(notifyWhenAddPost);
       newForum.setIsModeratePost(ModeratePost);
       newForum.setIsModerateTopic(ModerateTopic);
-      boolean statusClosed = false;
-      boolean statusLock = false;
       if(forumStatus == "locked") {
-      	statusLock	= true;
-      	statusClosed = false;
+      	newForum.setIsClosed(true);
       }
       if(forumStatus == "closed") {
-      	statusLock	= false;
-      	statusClosed = true;
+      	newForum.setIsLock(true) ;
       }
-      newForum.setIsClosed(statusClosed);
-      newForum.setIsLock(statusLock);
+      
+      
   	  
-      newForum.setViewForumRole(new String[] {});
-      newForum.setCreateTopicRole(new String[] {});
+      newForum.setViewForumRole(new String[] {"member:/admin"});
+      newForum.setCreateTopicRole(new String[] {"member:/admin"});
       newForum.setReplyTopicRole(new String[] {});
-  		newForum.setModerators(new String[] {});
+  		newForum.setModerators(new String[] {"member:/admin"});
   		
   		ForumService forumService =  (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
       forumService.saveForum(categoryId, newForum, true);
       
       UIForumPortlet forumPortlet = event.getSource().getAncestorOfType(UIForumPortlet.class) ;
       forumPortlet.cancelAction() ;
-      UICategories uiCategories = forumPortlet.getChild(UICategoryContainer.class).getChild(UICategories.class) ;
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
-      context.addUIComponentToUpdateByAjax(uiCategories) ;
+      if(uiForm.isCategoriesUpdate) {
+        UICategories uiCategories = forumPortlet.getChild(UICategoryContainer.class).getChild(UICategories.class) ;
+        context.addUIComponentToUpdateByAjax(uiCategories) ;
+      }else {
+      	UICategory uiCategory = forumPortlet.getChild(UICategoryContainer.class).getChild(UICategory.class) ;
+      	context.addUIComponentToUpdateByAjax(uiCategory) ;
+      }
     }
   }
   
