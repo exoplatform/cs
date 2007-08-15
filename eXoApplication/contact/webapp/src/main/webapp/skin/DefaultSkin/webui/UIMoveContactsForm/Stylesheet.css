@@ -1,0 +1,40 @@
+.UIMoveContactsForm {
+	border: 1px solid red;
+	width: 370px;
+	color: #272727;
+	background: #f3f3f3;
+	padding: 10px;
+}
+
+.UIMoveContactsForm .TitleMoveContactsForm {
+	line-height: 30px;
+	width: 240px;
+	margin: auto;
+}
+
+.UIMoveContactsForm .MoveContactsFormContainer {
+	border: 1px solid #a5a5a5;
+	padding: 7px 1px;
+	background: white;
+	width: 240px;
+	margin : auto;
+}
+
+.UIMoveContactsForm .MoveContactsFormContainer .ItemList {
+	line-height: 24px;
+	padding-left: 15px;
+}
+
+.UIMoveContactsForm .MoveContactsFormContainer .SelectedItem {
+	background: #d8d9ee;
+}
+
+.UIMoveContactsForm .MoveContactsFormContainer .ItemList .Icon {
+	padding-left: 24px;
+}
+
+.UIMoveContactsForm .UIAction {
+	width: 130px;
+}
+
+

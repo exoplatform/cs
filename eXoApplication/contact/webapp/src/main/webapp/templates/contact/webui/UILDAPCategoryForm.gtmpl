@@ -1,0 +1,74 @@
+
+<div class="UILDAPCategoryForm">
+	<div class="Form">
+		<div class="HorizontalLayout">
+	
+				<table class="UIFormGrid">
+					<tbody>
+						<tr>
+							<td class="FieldLabel">Street:</td>
+							<td class="FieldComponent">
+								<input type="text" name=""/>
+							</td>
+						</tr>
+						<tr>
+							<td class="FieldLabel">City:</td>
+							<td class="FieldComponent">
+								<input type="text" name=""/>
+							</td>
+						</tr>
+						<tr>
+							<td class="FieldLabel">State/Province:</td>
+							<td class="FieldComponent">
+								<input type="text" name=""/>
+							</td>
+						</tr>
+						<tr>
+							<td class="FieldLabel">Postal Code:</td>
+							<td class="FieldComponent">
+								<input type="text" name=""/>
+							</td>
+						</tr>
+						<tr>
+							<td class="FieldLabel">Country/Region:</td>
+							<td class="FieldComponent">
+								<input type="text" name=""/>
+							</td>
+						</tr>
+						<tr>
+							<td class="FieldLabel">Home Phone 1:</td>
+							<td class="FieldComponent">
+								<input type="text" name=""/>
+							</td>
+						</tr>
+						<tr>
+							<td class="FieldLabel">Home Phone 2:</td>
+							<td class="FieldComponent">
+								<input type="text" name=""/>
+							</td>
+						</tr>
+						<tr>
+							<td class="FieldLabel">Home Fax:</td>
+							<td class="FieldComponent">
+								<input type="text" name=""/>
+							</td>
+						</tr>
+						<tr>
+							<td class="FieldLabel">Mobile Phone:</td>
+							<td class="FieldComponent">
+								<input type="text" name=""/>
+							</td>
+						</tr>
+						<tr>
+							<td class="FieldLabel">Web Page:</td>
+							<td class="FieldComponent">
+								<input type="text" name=""/>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+
+						
+		</div>
+	</div>
+</div>

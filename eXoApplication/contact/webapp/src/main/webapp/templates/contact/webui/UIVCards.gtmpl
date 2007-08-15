@@ -23,7 +23,7 @@
 			  		  		<span class="InfoContent MailIcon"><a href="#">benjamin.mestrallet@exoplatform.com</a></span>
 			  		  	</div>
 			  		  	<div class="InfoMember">
-			  		  		<span class="LabelContent">Emai2:</span>
+			  		  		<span class="LabelContent">Email2:</span>
 			  		  		<span class="InfoContent MailIcon"><a href="#"> benjamin.mestrallet@mac.com</a></span>
 			  		  	</div>
 			  		  	<div class="InfoMember">
@@ -46,7 +46,7 @@
 		  
 		  	<div class="VCardContent NormalVCard">
 			  	<div class="TitleVCards">
-				  	<div class="StateIcon OnlineIcon">Dzung, Nguyen</div>
+				  	<div class="StateIcon OfflineIcon">Dzung, Nguyen</div>
 			  		<div class="TagIcon"><span></span></div>
 			  		<div style="clear: both;"><span></span></div>
 			  	</div>
@@ -116,7 +116,7 @@
 		  
 		  	<div class="VCardContent NormalVCard">
 			  	<div class="TitleVCards">
-				  	<div class="StateIcon OnlineIcon">Brice, Revenant</div>
+				  	<div class="StateIcon OfflineIcon">Brice, Revenant</div>
 			  		<div class="TagIcon"><span></span></div>
 			  		<div style="clear: both;"><span></span></div>
 			  	</div>
@@ -149,7 +149,7 @@
 		  
 		  	<div class="VCardContent NormalVCard">
 			  	<div class="TitleVCards">
-				  	<div class="StateIcon OnlineIcon">Francios, Moron</div>
+				  	<div class="StateIcon BusyIcon">Francios, Moron</div>
 			  		<div class="TagIcon"><span></span></div>
 			  		<div style="clear: both;"><span></span></div>
 			  	</div>
@@ -182,7 +182,7 @@
 		  
 		  	<div class="VCardContent NormalVCard">
 			  	<div class="TitleVCards">
-				  	<div class="StateIcon OnlineIcon">Hieu, Luong Trung</div>
+				  	<div class="StateIcon OfflineIcon">Hieu, Luong Trung</div>
 			  		<div class="TagIcon VioletTag"><span></span></div>
 			  		<div style="clear: both;"><span></span></div>
 			  	</div>

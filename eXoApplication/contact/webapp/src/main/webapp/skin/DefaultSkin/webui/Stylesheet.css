@@ -2,3 +2,5 @@
 @import url('UIVCards/Stylesheet.css') ;
 @import url("UIContactPortlet/Stylesheet.css") ;
 @import url("UIAddNewContact/Stylesheet.css") ;
+@import url("UIMoveContactsForm/Stylesheet.css") ;
+@import url("UILDAPCategoryForm/Stylesheet.css") ;
