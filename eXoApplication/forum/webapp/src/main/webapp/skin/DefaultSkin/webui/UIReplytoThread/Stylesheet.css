@@ -1,0 +1,17 @@
+.UIReplytoThread {
+	border: 1px solid red;
+	width: 710px;
+	padding: 10px;
+}
+
+.UIReplytoThread .UIForm .HorizontalLayout .UIFormInputSet {
+	padding: 10px;
+}
+
+.UIReplytoThread .UIForm .HorizontalLayout .Textinput {
+	width: 565px;
+}
+
+.UIReplytoThread .UIAction { 
+	width: 300px;
+}

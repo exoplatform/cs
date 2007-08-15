@@ -1,0 +1,17 @@
+.UIPostNewThread {
+	border: 1px solid red;
+	width: 710px;
+	padding: 10px;
+}
+
+.UIPostNewThread .UIForm .HorizontalLayout .UIFormInputSet {
+	padding: 10px;
+}
+
+.UIPostNewThread .UIForm .HorizontalLayout .Textinput {
+	width: 565px;
+}
+
+.UIPostNewThread .UIAction { 
+	width: 350px;
+}

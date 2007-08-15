@@ -5,14 +5,12 @@
 @import url('UIThreadsInForum/Stylesheet.css') ;
 @import url('UIPostsInThread/Stylesheet.css') ;
 @import url('UIPrintView/Stylesheet.css') ;
-
 @import url('UITag/Stylesheet.css') ;
 @import url('UIAddNewForum/Stylesheet.css') ;
 @import url('UIDisplayOptions/Stylesheet.css') ;
 @import url('UIForumLinks/Stylesheet.css') ;
 @import url('UIModeratorsManagement/Stylesheet.css') ;
 @import url('UIMoveThreads/Stylesheet.css') ;
-
 @import url('UIForumOptions/Stylesheet.css') ;
 @import url('UIAddPoll/Stylesheet.css') ;
 @import url('UIMergeThreads/Stylesheet.css') ;
@@ -20,6 +18,11 @@
 @import url('UIUserManagement/Stylesheet.css') ;
 @import url('UIViewPoll/Stylesheet.css') ;
 @import url('UIAddNewCategory/Stylesheet.css') ;
+@import url('UITopicPoll/Stylesheet.css') ;
+@import url('UIPostNewThread/Stylesheet.css') ;
+@import url('UIReplytoThread/Stylesheet.css') ;
+@import url('UISendPrivateMessage/Stylesheet.css') ;
+@import url('UIMergePosts/Stylesheet.css') ;
 
 /**************************** UIActionForum *********************************/
 .UIForumPortlet .UIActionForum .ActionButton {
@@ -139,6 +142,7 @@
 
 .UIForumPortlet .ContentContainer {
 	padding-left: 1px;
+	margin: 3px 0px;
 }
 
 .UIForumPortlet .ContentContainer .UITopicList a {

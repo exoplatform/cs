@@ -1,0 +1,64 @@
+<div class="UISendPrivateMessage">
+	<div class="SendPrivateMessage">
+	
+		<div class="UIForm">
+    	<div class="HorizontalLayout">
+		  	<table class="UIFormGrid">
+		  		<tbody>
+		  			<tr>
+		  				<td class="FieldLabel">Receipient:</td>
+		  				<td class="FieldComponent">
+		  					<input type="text" name="" class="Textinput"/>
+		  				</td>
+		  			</tr>
+		  			<tr>
+		  				<td class="FieldLabel">Subject:</td>
+		  				<td class="FieldComponent">
+		  					<input type="text" name="" class="Textinput"/>
+		  				</td>
+		  			</tr>
+		  			<tr>
+		  				<td class="FieldLabel">Message:</td>
+		  				<td class="FieldComponent">
+		  					<textarea class="textarea" name="description" style="width: 565px; height: 265px;"></textarea>
+		  				</td>
+		  			</tr>
+		  			<tr>
+		  				<td class="FieldLabel">Attach File:</td>
+		  				<td class="FieldComponent">
+		  					<input type="file" value="" id="file" name="file"/>
+		  			</tr>
+		  		</tbody>
+		  	</table>
+		  </div>
+	  </div>
+
+	  <div class="UIAction">
+		  <div class="ActionContainer">
+		    <div class="ActionButton">
+		      <div class="LightBlueStyle">
+					  <div class="ButtonLeft">
+						  <div class="ButtonRight">
+						    <div class="ButtonMiddle">
+					        <a href="#">Send</a>
+						    </div>
+					    </div>
+						</div>
+					</div>
+				</div>
+				<div class="ActionButton">
+		      <div class="LightBlueStyle">
+					  <div class="ButtonLeft">
+						  <div class="ButtonRight">
+						    <div class="ButtonMiddle">
+					        <a href="#">Cancel</a>
+						    </div>
+					    </div>
+						</div>
+					</div>
+				</div>
+		  </div>
+		</div>
+
+	</div>
+</div>

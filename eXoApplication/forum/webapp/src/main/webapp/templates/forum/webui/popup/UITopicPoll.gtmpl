@@ -1,0 +1,80 @@
+
+<div class="UITopicPoll"> 	
+			
+ 	<div class="ForumToolbar">
+	  <div class="LeftBar">
+	  	<div class="RightBar">
+	  		<div class="CenterBar">
+	  			<div class="Title">Poll: Who is the most beautiful Miss eXo in swimming suite?</div>
+  				<div class="CollapseButton"><span></span></div>
+  				<div class="SeparatorLine"><span></span></div>
+					<a class="Icon ColsePoll">Colse Poll</a>
+  				<div class="SeparatorLine"><span></span></div>
+					<a class="Icon EditPoll">Edit Poll</a>
+					<div style="clear: both;"><span></span></div>
+	  		</div>
+	  	</div>
+	  </div>
+  </div>
+	
+	<div class="TopicPollContainer">
+		<div class="PollTime">This Poll will be closed on 08 - 18 - 2007 at 8:30 am </div>
+		<div class="TopicPollContent">
+			<div class="PollQuestion">Who is the most beautiful Miss eXo in swimming suite?</div>
+			<div class="PollContent">
+			
+				<div class="UIForm">
+					<div class="HorizontalLayout">
+		        <table class="UIFormGrid">
+		          <tbody>
+		            <tr>
+		              <td class="FieldComponent">
+		              <input type="radio" class="radio" value=""/>
+		              </td>
+	                <td class="FieldLabel">Miss Anh Nguyet (Little Moon)</td>
+		            </tr>
+		            <tr>
+		              <td class="FieldComponent">
+		              <input type="radio" class="radio" value=""/>
+		              </td>
+	                <td class="FieldLabel">Miss Ngoc Thuy (Meek Lion)</td>
+		            </tr>
+		            <tr>
+		              <td class="FieldComponent">
+		              <input type="radio" class="radio" value=""/>
+		              </td>
+	                <td class="FieldLabel">Miss Doan Thu (Duck Mother)</td>
+		            </tr>
+		            <tr>
+		              <td class="FieldComponent">
+		              <input type="radio" class="radio" value=""/>
+		              </td>
+	                <td class="FieldLabel">Miss Thanh Hoa (Hunted Flower)</td>
+		            </tr>
+		          </tbody>
+		        </table>
+		      </div>
+		    </div>
+		    					
+			</div>
+		</div>
+		
+		<div class="UIAction"> 
+	    <div class="ActionContainer">
+        <div class="ActionButton">
+          <div class="LightBlueStyle">
+            <div class="ButtonLeft">
+              <div class="ButtonRight">
+                <div class="ButtonMiddle">
+                  <a href="#">Vote now</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+		
+	</div>
+	
+</div>  

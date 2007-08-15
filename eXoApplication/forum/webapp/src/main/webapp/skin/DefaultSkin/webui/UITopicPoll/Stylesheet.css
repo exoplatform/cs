@@ -1,0 +1,69 @@
+.UITopicPoll {
+	margin: 0px 0px 5px 0px;
+}
+
+.UITopicPoll .ForumToolbar .Icon {
+	float: right;
+	padding-left: 25px;
+	line-height: 20px;
+	margin: 3px 10px 0px 0px;
+}
+
+.UITopicPoll .ForumToolbar .SeparatorLine {
+	float: right;
+	margin: 4px 10px 0px 0px;
+}
+
+.UITopicPoll .ForumToolbar .ColsePoll {
+	background: url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/ClosePollIcon.gif') no-repeat left center;
+}
+
+.UITopicPoll .ForumToolbar .EditPoll {
+	background: url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/EditPollIcon.gif')  no-repeat left center;
+}
+
+.UITopicPoll .TopicPollContainer {
+	border: 1px solid #b7b7b7;
+	border-top: none;
+	padding: 0px 0px 5px 0px;
+}
+
+.UITopicPoll .TopicPollContainer .PollTime {
+	background: url('background/BgPollTitle1x20.gif') repeat-x;
+	height: 20px; line-height: 20px;
+	text-align: center;
+}
+
+.UITopicPoll .TopicPollContainer .TopicPollContent {
+	border: 1px solid #d2d2d2;
+	padding: 10px 15px;
+	width: 500px;
+	margin: 10px auto 0px auto;
+}
+
+.UITopicPoll .TopicPollContainer .TopicPollContent .PollQuestion {
+	font-weight: bold;
+	line-height: 20px;
+}
+
+.UITopicPoll .TopicPollContainer .UIForm .HorizontalLayout {
+	border: none;
+}
+
+.UITopicPoll .UIForm .HorizontalLayout .UIFormGrid td.FieldLabel {
+	text-align: left;
+	line-height: 22px;
+	padding: 2px;
+}
+
+.UITopicPoll .UIForm .HorizontalLayout .UIFormGrid td.FieldComponent {
+	width: 20px;
+	padding: 4px 0px 0px 10px;
+}
+
+.UITopicPoll .UIAction {
+	width: 80px;
+}
+
+
+

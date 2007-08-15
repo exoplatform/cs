@@ -1,0 +1,288 @@
+<%  
+	import org.exoplatform.forum.webui.UIPostRules ;
+	import org.exoplatform.forum.webui.UIForumLinks ;
+%>
+
+
+<div class="UITopicDetail">
+
+	<div class="ButtomAndPageListContainer">
+		<div class="UIActionForum" style="float: left;">
+		  <div class="ActionButton">
+		  	<div class="NormalStyle">
+		  		<div class="ButtonLeft">
+		  			<div class="ButtonRight">
+		  				<div class="ButtonMiddle">
+		  					<div class="IconButton PostReplyIcon"><span class="LabelIcon"></span>New Thread</div>
+		  				</div>
+		  			</div>
+		  		</div>
+		  	</div>
+		  </div>
+		</div>
+		<div class="UIPageIterator1" style="margin-left: 120px; width: auto;border: solid 1px red; line-height: 20px;">
+			UIPageIterator
+		</div>
+		<div style="clear: left;"><span></span></div>
+	</div>
+	
+	
+<!-- Start PostsInThreadContainer -->	
+	<div class="PostsInThreadContainer">
+	  <div class="ForumToolbar">
+		  <div class="LeftBar">
+		  	<div class="RightBar">
+		  		<div class="CenterBar">
+		  			<div class="ToolbarActionsContainer">
+							<a class="IconToolbar TagIcon">Tag</a>
+		  				<div class="SeparatorLine"><span></span></div>
+							<a class="IconToolbar VoteIcon">Vote Thread</a>
+		  				<div class="SeparatorLine"><span></span></div>
+							<a class="IconToolbar SearchIcon">Search Thread</a>
+		  				<div class="SeparatorLine"><span></span></div>
+		  				<div class="ExpandButton"><span></span></div>
+							<a class="IconToolbar ToolIcon">Thread Tools</a>
+		  				<div style="clear: right;"><span></span></div>
+						</div>
+		  		</div>
+		  	</div>
+		  </div>
+	  </div>
+	  
+<!-- Start ContentContainer -->
+	  <div class="ContentContainer">
+		  <table class="TablePost" cellspacing="0" borderspacing="0">
+		  	<tbody>
+		  		<tr>
+<!-- Start MemberContainer -->	  
+						<td class="MemberContainer">
+				  		<div class="MemberContent">
+					  		<div class="MemberName">
+					  			<div class="State AvailableIcon" title="Phuong’s Available"><span></span></div>
+					  			<div class="Name">phuong.pham</div>
+					  			<div class="Action"><span></span></div>
+					  			<div style="clear: left;"><span></span></div>
+					  		</div>
+					  		<div class="Rank">Junior Member</div>
+					  		<img src="/forum/skin/DefaultSkin/webui/background/Avatar1.gif" class="Img" />
+					  		<div class="InfoMember">
+					  			<div>Join Date: Feb 2006</div>
+									<div>Posts: 150</div>
+									<div>Location: Hanoi, Vietnam</div>
+					  		</div>
+					  	</div>
+					  </td>
+	<!-- End MemberContainer -->
+	
+	
+	<!-- Start PostViewContainer -->
+						<td class="PostViewContainer">
+					  	
+				  		<div class="PostViewTitle">
+				  			<div class="PostViewIcon WeatherSun">eXo VN Vacations</div>
+				  			<div class="PostTime">Posted: July 19, 2007, 08:30 am</div>
+				  		</div>
+				  		
+				  		<div class="PostContent">
+				  			<br>
+				  			Enjoy the comfort of a room and meals with nice seafood, have fun on the beach with all eXo staffs in Cua Lo was my special time.
+								Compared to other places I have ever been, our rates are very reasonable. Cua Lo is a great place to have a true beach experience!<br><br>
+								See on my flickr: <a href="#">http://www.flickr.com/photos/10701064@N08/?saved=1</a><br><br>
+								Pham Dang Phuong<br><br>
+				  		</div>
+				  		
+				  		<div class="AttachmentContainer">
+				  			<div class="AttachmentTitle">Attachments:</div>
+				  			<div class="AttachmentContent">
+				  				<div class="Attachment1">
+										<div class="AttachmentIcon WordIcon">About the trip.doc</div>
+										<div class="Size">Size: 49K</div>
+				  				</div>
+				  				<div class="Attachment2">
+										<div class="AttachmentIcon PPTIcon">Images presentation.ppt</div>
+										<div class="Size">Size: 49K</div>
+				  				</div>
+				  			</div>
+				  		</div>
+				  		
+				  		<div class="FootPost">
+				  			<div class="PostInfo">
+					  			<div>Last edited by <a href="#">phuong.pham</a> on Mon July 19, 2007, 11:38 am</div>
+									<div>Reason: Add new</div>
+								</div>
+								<div class="ButtonContainer">
+									<div class="UIActionForum">
+									  <div class="ActionButton">
+									  	<div class="NormalStyle">
+									  		<div class="ButtonLeft">
+									  			<div class="ButtonRight">
+									  				<div class="ButtonMiddle">
+									  					<div class="IconButton PostReplyIcon" title="Edit Message"><span class="LabelIcon"></span>Edit</div>
+									  				</div>
+									  			</div>
+									  		</div>
+									  	</div>
+									  </div>
+									  <div class="ActionButton">
+									  	<div class="NormalStyle">
+									  		<div class="ButtonLeft">
+									  			<div class="ButtonRight">
+									  				<div class="ButtonMiddle">
+									  					<div class="IconButton PostReplyIcon" title="Delete this Post"><span class="LabelIcon"></span>Delete</div>
+									  				</div>
+									  			</div>
+									  		</div>
+									  	</div>
+									  </div>
+									  <div class="ActionButton">
+									  	<div class="NormalStyle">
+									  		<div class="ButtonLeft">
+									  			<div class="ButtonRight">
+									  				<div class="ButtonMiddle">
+									  					<div class="IconButton PostReplyIcon" title="Reply With Quote"><span class="LabelIcon"></span>Quote</div>
+									  				</div>
+									  			</div>
+									  		</div>
+									  	</div>
+									  </div>
+									</div>
+								</div>
+								<div style="clear: both"><span></span></div>
+				  		</div>
+					  		
+					  </td>
+	<!-- End PostViewContainer -->
+					</tr>
+				</tbody>
+      </table>
+	  </div>
+<!-- End ContentContainer -->
+
+
+<!-- Start ContentContainer -->
+	  <div class="ContentContainer">
+		  <table class="TablePost" cellspacing="0" borderspacing="0">
+		  	<tbody>
+		  		<tr>
+<!-- Start MemberContainer -->	  
+						<td class="MemberContainer"> 
+				  		<div class="MemberContent">
+					  		<div class="MemberName">
+					  			<div class="State BusyIcon" title="Thu’s Busy"><span></span></div>
+					  			<div class="Name">thu.nguyen</div>
+					  			<div class="Action"><span></span></div>
+					  			<div style="clear: left;"><span></span></div>
+					  		</div>
+					  		<div class="Rank">Junior Member</div>
+					  		<img src="/forum/skin/DefaultSkin/webui/background/Avatar2.gif" class="Img" />
+					  		<div class="InfoMember">
+					  			<div>Join Date: April, 2007</div>
+									<div>Posts: 25</div>
+									<div>Location: Hanoi, Vietnam</div>
+					  		</div>
+					  	</div>
+					  </td>
+<!-- End MemberContainer -->
+
+
+<!-- Start PostViewContainer -->
+						<td class="PostViewContainer">
+				  		<div class="PostViewTitle">
+				  			<div class="PostViewIcon Woman3">Fun and advantures with the beach</div>
+				  			<div class="PostTime">Posted: July 10, 2007, 10:30 am</div>
+				  		</div>
+				  		
+				  		<div class="PostContent">
+				  			<div class="QuoteContent">
+				  				<div>Quote:</div>
+						  		<div class="Quote">
+						  			<span>Originally Posted by</span> <strong>phuong.pham</strong><br><br>
+						  			Enjoy the comfort of a room and meals with nice seafood, have fun on the beach with all eXo staffs in Cua Lo was my special time.
+										Compared to other places I have ever been, our rates are very reasonable. Cua Lo is a great place to have a true beach experience!<br><br>
+										See on my flickr: <a href="#">http://www.flickr.com/photos/10701064@N08/?saved=1</a>
+									</div>
+								</div>
+								
+								
+				  		</div>
+				  		
+				  		<div class="AttachmentContainer">
+				  			<div class="AttachmentTitle">Attachments:</div>
+				  			<div class="AttachmentContent">
+				  				<div class="Attachment3">
+				  					<table class="TableAttachment" cellspacing="0" borderspacing="0">
+				  						<tbody>
+												<tr>
+													<td style="width: 20%">
+								  					<img src="/forum/skin/DefaultSkin/webui/background/Attachment1.gif" class="Img" />
+													</td>
+													<td>
+														<div class="AttachmentIcon JPGIcon">About the trip.doc</div>
+														<div class="Size">Size: 49K</div>
+														<div class="Action">
+															<div class="Icon View">View</div>
+															<div class="Icon Download">Download</div>
+														</div>
+													</td>
+												</tr>	
+				  						</tbody>
+				  					</table>
+				  				</div>
+				  				<div class="Attachment4">
+				  					<table class="TableAttachment" cellspacing="0" borderspacing="0">
+				  						<tbody>
+												<tr>
+													<td style="width: 20%">
+								  					<img src="/forum/skin/DefaultSkin/webui/background/Attachment2.gif" class="Img" />
+													</td>
+													<td>
+														<div class="AttachmentIcon PNGIcon">Images presentation.ppt</div>
+														<div class="Size">Size: 49K</div>
+														<div class="Action">
+															<div class="Icon View">View</div>
+															<div class="Icon Download">Download</div>
+														</div>
+													</td>
+												</tr>	
+				  						</tbody>
+				  					</table>
+				  				</div>
+				  			</div>
+				  		</div>
+				  		
+				  		<div class="FootPost">
+				  			<div class="PostInfo">
+					  			<div>Last edited by <a href="#">phuong.pham</a> on Mon July 19, 2007, 11:38 am</div>
+									<div>Reason: Add new</div>
+								</div>
+								<div class="ButtonContainer">
+									<div class="UIActionForum">
+									  <div class="ActionButton">
+									  	<div class="NormalStyle">
+									  		<div class="ButtonLeft">
+									  			<div class="ButtonRight">
+									  				<div class="ButtonMiddle">
+									  					<div class="IconButton PostReplyIcon" title="Reply With Quote"><span class="LabelIcon"></span>Quote</div>
+									  				</div>
+									  			</div>
+									  		</div>
+									  	</div>
+									  </div>
+									</div>
+								</div>
+								<div style="clear: both"><span></span></div>
+				  		</div>
+						</td>
+	<!-- End PostViewContainer -->
+					</tr>
+				</tbody>
+      </table>
+	  </div>
+<!-- End ContentContainer -->
+
+
+	</div>	
+<!-- End PostsInThreadContainer -->
+<% uicomponent.renderChild(UIPostRules.class) %>
+<% uicomponent.renderChild(UIForumLinks.class) %>
+</div>
