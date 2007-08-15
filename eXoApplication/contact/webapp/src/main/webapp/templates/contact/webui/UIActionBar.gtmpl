@@ -4,7 +4,7 @@
 				<div class="LeftBar">
 					<div class="RightBar">
 						<div class="CenterBar">
-							<a href="#" class="ControlButton">
+							<a href="<%uicomponent.event("AddContact")%>" class="ControlButton">
 								<div class="IconHolder BlueCirclePlusIcon">
 									<div class="DownArrow1Icon">Add New</div>
 								</div>

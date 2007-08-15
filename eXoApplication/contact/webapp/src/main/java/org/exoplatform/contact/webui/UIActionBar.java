@@ -20,7 +20,8 @@ import org.exoplatform.webui.event.EventListener;
 @ComponentConfig(
     template =  "app:/templates/contact/webui/UIActionBar.gtmpl", 
     events = {
-        @EventConfig(listeners = UIActionBar.ChangeViewActionListener.class)
+        @EventConfig(listeners = UIActionBar.ChangeViewActionListener.class),
+        @EventConfig(listeners = UIActionBar.AddContactActionListener.class)
     }
 )
 public class UIActionBar extends UIContainer  {
@@ -32,6 +33,13 @@ public class UIActionBar extends UIContainer  {
       UIActionBar uiActionBar = event.getSource() ;      
     }
   }  
+  static public class AddContactActionListener extends EventListener<UIActionBar> {
+    public void execute(Event<UIActionBar> event) throws Exception {
+      UIActionBar uiActionBar = event.getSource() ;
+      System.out.println("============ > AddContactActionListener");
+      //asdfasdfasd
+    }
+  }
   
   
 }

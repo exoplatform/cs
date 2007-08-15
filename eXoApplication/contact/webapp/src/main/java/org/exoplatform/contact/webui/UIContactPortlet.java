@@ -22,5 +22,6 @@ public class UIContactPortlet extends UIPortletApplication {
     addChild(UIBannerContainer.class, null, null) ;
     addChild(UIActionBar.class, null, null) ;
     addChild(UIWorkingContainer.class, null, null) ;
+    //hello
   }
 }
