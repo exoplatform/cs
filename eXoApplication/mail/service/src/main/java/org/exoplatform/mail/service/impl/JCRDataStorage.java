@@ -28,6 +28,7 @@ import org.exoplatform.mail.service.MessageHeader;
 import org.exoplatform.registry.JCRRegistryService;
 import org.exoplatform.registry.ServiceRegistry;
 import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 
 /**
  * Created by The eXo Platform SARL
@@ -393,8 +394,9 @@ public class JCRDataStorage implements DataStorage{
   }
   
   private Session getJCRSession() throws Exception {
+    SessionProvider sessionProvider = SessionProvider.createSystemProvider() ;
     String defaultWS = 
       repositoryService_.getDefaultRepository().getConfiguration().getDefaultWorkspaceName() ;
-    return repositoryService_.getDefaultRepository().getSystemSession(defaultWS) ;
+    return sessionProvider.getSession(defaultWS, repositoryService_.getCurrentRepository()) ;
   }
 }
