@@ -9,3 +9,11 @@
 .LayoutSwitcherIcon {
 	background: url('icons/LayoutSwitcherIcon.gif') no-repeat;
 }
+
+.DeleteEventIcon {
+	background: url('icons/DeleteEvent.gif') no-repeat;
+}
+
+.DeleteTaskIcon {
+	background: url('icons/DeleteTask.gif') no-repeat;
+}

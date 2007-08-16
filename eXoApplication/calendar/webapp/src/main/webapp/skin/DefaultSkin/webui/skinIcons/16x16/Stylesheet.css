@@ -44,19 +44,27 @@
 	background: url('icons/CalendarIcon.gif') no-repeat;
 }
 
-.DeleteEventIcon {
-	background: url('icons/DeleteEvent.gif') no-repeat;
-}
-
 .AttachmentIcon {
-	background: url('icons/AttackmentIcon.gif') no-repeat;
+	background: url('icons/AttachmentIcon.gif') no-repeat;
 }
 
-.FullEvent {
-	background: url('icons/FullEvent.gif') no-repeat;
-	width: 16px; height: 16px;
+.MaximizeButton {
+	background: url('icons/MaximizeReadingPane.gif') no-repeat;
+	width: 17px; height: 16px;
 }
 
 .ViewOnCalendar {
 	background: url('icons/ViewOnCalendar.gif') no-repeat;
+}
+
+.EditEventIcon {
+	background: url('icons/EditEvent.gif') no-repeat;
+}
+
+.EditTaskIcon {
+	background: url('icons/EditTask.gif') no-repeat;
+}
+
+.StatusIcon {
+	background: url('icons/SelectIcon.gif') no-repeat;
 }
