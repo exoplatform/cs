@@ -343,35 +343,37 @@
 /*====================Event List View=====================*/
 
 .UIEventListView .EventListContainer {
-	height: 466px;
+	height: 490px;
 	overflow: auto;
 }
 
 .UIEventListView .EventListContent {
-	height: 600px;
-	background-color: #ffffff;
-	padding: 8px;
+	margin-right: 3px;
+}
+
+.UIEventListView .EventListContent .ViewEvent {
+	padding: 1px;
+	background-color: #ffffff ;
+	border: 1px solid #c7c7c7;
 }
 
 .UIEventListView .EventListContent .ListBar {
 	background: url('background/TitleBarBG1x26.gif') repeat-x ;	
 	height: 26px;
 	padding: 0px 8px;
-	border: 1px solid #c7c7c7;
-	border-bottom: none;
+	border-left: 1px solid #c7c7c7;
+	border-right: 1px solid #c7c7c7;
 }
 
 .UIEventListView .EventListContent .ViewBar {
-	background: url('background/EventListBarBG1x31.gif') repeat-x ;	
+	background-color: #e7e7e7 ;	
 	height: 30px;
 	padding: 0px 8px;
-	border: 1px solid #c7c7c7;
-	border-bottom: none;
-	margin-top: 4px;
 }
 
 .UIEventListView .EventListContent .EventList {
 	padding-left: 1px;
+	background-color: #ffffff;
 }
 
 .UIEventListView .EventListContent .AddCategoryIcon {
@@ -415,7 +417,7 @@
 }
 
 .UIEventListView .EventListContent .ViewContainer {
-	border: 1px solid #c7c7c7;
+	padding: 4px;
 }
 
 .UIEventListView .EventListContent .ViewContainer td{
@@ -466,7 +468,7 @@
 
 .UIEventListView .EventListContent .ViewContainer .ActionsContainer {
 	background: url('background/DotLine2x1.gif') repeat-x top ;
-	margin: 0px 0px 0px 33px;
+	margin: 0px 10px 0px 33px;
 }
 
 .UIEventListView .EventListContent .ViewContainer .ActionsContainer a {
@@ -500,12 +502,11 @@
 
 
 .UIEventListView .EventListContent  .UIGrid th {
-	background: url('background/TitleBarBG1x23.gif') repeat-x ;	
-  height: 23px;
+	background: url('background/TitleBarBG1x20.gif') repeat-x ;	
+  height: 20px;
 	border-right: 1px solid #c7c7c7;
-	border-bottom: 1px solid #c7c7c7;
+	border-bottom: none;
 }
-
 /*====================Event Month View=====================*/
 
 .UIEventMonthView .EventMonthContent .RowContainerDay {
@@ -737,10 +738,6 @@
 	margin-right: 10px;
 }
 
-.UITaskListView .TaskListContent .ResizeReadingPane {
-	margin: 1px auto 1px auto;
-}
-
 .UITaskListView .TaskListContent .ViewContainer .ActionsContainer a {
 	color: #000000;
 	text-decoration: none;
@@ -791,5 +788,6 @@
 	background: url('background/ResizeReadingPane38x3.gif') no-repeat;
 	width: 38px; height: 3px;
 	cursor: n-resize;
+	margin: 1px auto 1px auto;
 }
 
