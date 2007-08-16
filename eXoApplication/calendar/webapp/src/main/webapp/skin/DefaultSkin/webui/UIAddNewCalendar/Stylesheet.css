@@ -1,0 +1,89 @@
+.UIAddNewCalendar {
+	width: 95%;
+	margin: 10px auto;
+	border: none;
+}
+
+.UIAddNewCalendar .UIForm .HorizontalLayout {	
+	border: none;
+}
+
+.UITabPane .UITabContentContainer {
+	border: none;
+}
+
+.UITabPane .UITabContentContainer .UITabContent {
+	background: #efefef;
+	border: solid 1px #cdcdcd;
+	border-top: none;
+	padding: 7px;
+}
+
+.UIAddNewCalendar  .UIAction {	
+	width: 130px;
+}
+
+.UIAddNewCalendar .UIPermissionForm .HorizontalLayout {	
+	border: solid 1px #b7b7b7;
+}
+
+.UIAddNewCalendar .UIForm .UITabPane .UITabContentContainer {		
+	border: solid 1px red;
+}
+
+.UIAddNewCalendar .UIFormGrid td.FieldLabel {	
+	width: 128px;
+}
+
+.UIAddNewCalendar .UIForm .HorizontalLayout .UIAction {	
+	width: 160px;
+}
+
+.UIAddNewCalendar .UIPermissionManager .UIFormWithTitle {
+	width: auto;
+}
+
+.UIAddNewCalendar .UIFormWithTitle .HorizontalLayout .FormContainer  {
+	border: none;
+	padding: 5px 0px;
+}
+
+.UIAddNewCalendar .UIPermissionInfo {
+	padding-bottom: 10px;
+}
+
+.UIAddNewCalendar .UIPermissionInfo .UIGrid .OverflowContainer  {
+	width: 50px;
+}
+
+.UIAddNewCalendar .UIFormWithTitle .HorizontalLayout .AddIcon16x16   {
+	width: 16px;
+	height: 16px;
+}
+
+.UIAddNewCalendar .UIFormWithTitle .HorizontalLayout .SelectUserIcon   {
+	background: url('icons/16x16/SmallUserIcon.gif') no-repeat ;
+}
+
+.UIAddNewCalendar .UIFormWithTitle .HorizontalLayout .SelectMemberIcon   {
+	background: url('icons/16x16/SmallMemberIcon.gif') no-repeat ;
+}
+
+.UIAddNewCalendar .UIFormWithTitle .HorizontalLayout .AddAnyIcon   {
+	background: url('icons/16x16/SmallGroupIcon.gif') no-repeat ;
+}
+
+.UIAddNewCalendar .FormContainer input {
+	width: 235px;
+	font-size: 11px;
+}
+
+.UIAddNewCalendar .FormContainer textarea {
+	width: 230px;
+	font-size: 11px;
+}
+
+.UIAddNewCalendar .FormContainer select {
+	width: 230px;
+	font-size: 11px;
+}

@@ -1,6 +1,11 @@
 @import url("skinIcons/16x16/Stylesheet.css") ;
 @import url("skinIcons/24x24/Stylesheet.css") ;
-
+@import url("UIAddNewCalendar/Stylesheet.css") ;
+@import url("UICalendarSettings/Stylesheet.css") ;
+@import url("UISendMail/Stylesheet.css") ;
+@import url("UIExportCalendar/Stylesheet.css") ;
+@import url("UIImportCalendar/Stylesheet.css") ;
+@import url("UIAddCalendarGroup/Stylesheet.css") ;
 
 /******************************************** MailBanner ****************************************/
 .UICalendarPortlet .UIBannerContainer {

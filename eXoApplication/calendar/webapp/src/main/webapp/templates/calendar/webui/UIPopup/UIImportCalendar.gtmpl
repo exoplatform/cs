@@ -1,0 +1,88 @@
+<div style="width: 550px; display: block; visibility: visible; z-index: 4; top: 131px; left: 309px;" id="SearchUser" exo:minheight="200" exo:minwidth="200" class="UIPopupWindow UIDragObject">
+  <div class="NormalStyle">
+   	<div class="TopLeftCornerDecorator">
+     	<div class="TopRightCornerDecorator">
+       	<div class="TopCenterDecorator">
+         	<div class="OverflowContainer">
+          	<div class="PopupTitleIcon"><span></span></div>
+          	<div onclick="" title="Close Window" class="CloseButton"><span></span></div>
+           	<div class="PopupTitle">Import Calendar</div>
+         	</div>
+       	</div>
+     	</div>
+    </div>
+    <div class="MiddleLeftSideDecorator">
+      <div class="MiddleRightSideDecorator">
+       	<div class="MiddleCenterDecorator">
+         	<div class="UIWindowContent">
+         		<div style="width: 100%;">
+         			<div class="PopupContent" style="height: 300px;">
+         				<div class="UIForm UIImportCalendar">
+         					<form class="UIForm">
+         						<div class="UIHorizontalLayout">
+	         							<div class="FormContainer">
+	         								<table class="UIFormGrid">
+	         									<tr>
+	         										<td class="FieldLabel">Select Import File:</td>
+	         										<td class="FieldComponent">
+	         											<input type="file" value="" name="file"></input>
+															</td>
+	         									</tr>
+	         									<tr>
+	         										<td class="FieldLabel">Select Calendar:</td>
+	         										<td class="FieldComponent">
+	         											<select class="selectbox" name="company">
+ 																	<option>Company</option>
+ 																	<option>Company</option>
+ 																	<option>Company</option>
+ 																</select>
+															</td>
+	         									</tr>
+	         								</table>
+	         								<div class="UIAction"> 
+												    <div class="ActionContainer">
+												      <div class="ActionButton">
+												        <div class="LightBlueStyle" >
+												          <div class="ButtonLeft">
+												            <div class="ButtonRight">
+												              <div class="ButtonMiddle">
+												                  <a href="">Import</a>
+												              </div>
+												            </div>
+												          </div>
+												        </div>
+												      </div>
+												    </div>
+												    <div class="ActionContainer">
+												      <div class="ActionButton">
+												        <div class="LightBlueStyle" >
+												          <div class="ButtonLeft">
+												            <div class="ButtonRight">
+												              <div class="ButtonMiddle">
+												                  <a href="">Cancel</a>
+												              </div>
+												            </div>
+												          </div>
+												        </div>
+												      </div>
+												    </div>
+												  </div>
+	         							</div>
+         						</div>
+         					</form>
+         				</div>
+         			</div>
+         		</div>
+ 				 	</div>
+    		</div>
+   		</div>
+  	</div>
+   	<div class="BottomLeftCornerDecorator">
+    	<div class="BottomRightCornerDecorator">
+       	<div class="BottomCenterDecorator">
+     			<div class="ResizeButton"><span></span></div>
+    		</div>
+    	</div>
+   	</div>
+ 	</div>
+</div>

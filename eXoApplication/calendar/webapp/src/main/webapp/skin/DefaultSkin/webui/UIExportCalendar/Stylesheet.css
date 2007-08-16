@@ -1,0 +1,45 @@
+.UIExportCalendar {
+	width: 95%;
+	margin: 10px auto;
+}
+
+.UIExportCalendar .UIHorizontalLayout {
+	background: #efefef;
+	border: solid 1px #cdcdcd;
+}
+
+.UIExportCalendar .UIHorizontalLayout .FormContainer {
+	padding-top: 10px;
+	width: 400px;
+	margin: auto;
+}
+
+.UIExportCalendar .FormContainer .UIFormGrid .FieldLabel {
+	width: 128px;
+	text-align: right;
+	padding: 4px;
+}
+
+.UIExportCalendar .FormContainer .UIFormGrid .FieldComponent {
+	padding: 4px;
+}
+
+.UIExportCalendar .FormContainer .UIFormGrid input {
+	width: 235px;
+	font-size: 11px;
+}
+
+.UIExportCalendar .FormContainer .UIFormGrid textarea {
+	width: 230px;
+	font-size: 11px;
+}
+
+.UIExportCalendar .FormContainer .UIFormGrid select {
+	width: 235px;
+	font-size: 11px;
+}
+
+.UIExportCalendar .FormContainer .UIAction{
+	width: 160px;
+	padding-left: 90px;
+}
