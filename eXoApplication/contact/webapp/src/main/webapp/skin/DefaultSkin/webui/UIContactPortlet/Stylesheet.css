@@ -81,7 +81,7 @@
 /*********************************** UIActionBar ***************************************/
 
 .UIContactPortlet .UIActionBar {
-	padding: 10px 5px 0px 5px;
+	padding: 10px 0px 0px 0px;
 }
 
 .UIContactPortlet .UIActionBar .SeparatorLine {
@@ -132,12 +132,15 @@
 
 /************************************** UIWorkingContainer *******************************/
 
+.UIContactPortlet .ContactContainer {
+	padding: 0px 5px 5px 5px;
+	height: 100%;
+}
 
 .UIContactPortlet .UIWorkingContainer {
 	padding: 0px 5px 5px 5px;
 	border: 1px solid #c2c2c2;
 	background: #f3f3f3;
-	margin: 0px 5px 10px 5px;
 	height: auto;
 }
 
@@ -528,7 +531,7 @@
 }
 
 .UIContactPortlet .InfoContainer .RightContent {
-	margin-left: 300px;
+	margin-left: 255px;
 }
 
 .UIContactPortlet .InfoContainer .Content .InfoLabel1 {

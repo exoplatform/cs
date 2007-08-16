@@ -1,0 +1,15 @@
+.UIAddNewAddressBook {
+	width: 500px;
+	border: 1px solid red;
+	background: #f3f3f3;
+	padding: 20px;
+}
+
+.UIAddNewAddressBook .UIForm .HorizontalLayout {
+	border: none;
+}
+
+.UIAddNewAddressBook .UIAction {
+	width: 130px;
+	padding: 25px 0px 10px 20px;
+}

@@ -1,0 +1,50 @@
+<div class="UIAddNewAddressBook">
+
+	<div class="UIForm">
+		<div class="HorizontalLayout">
+	
+			<table class="UIFormGrid">
+				<tbody>
+					<tr>
+						<td class="FieldLabel">Address Book Name:</td>
+						<td class="FieldComponent">
+							<input type="text" name=""/>
+						</td>
+					</tr>
+					<tr>
+						<td class="FieldLabel">Host Name:</td>
+						<td class="FieldComponent">
+							<textarea name="" class="textarea"></textarea>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			
+			<div class="UIAction">
+		  	<div class="ActionContainer">
+			    <div class="ActionButton">
+			      <div class="LightBlueStyle">
+							<div class="ButtonLeft">
+								<div class="ButtonRight">
+								  <div class="ButtonMiddle"><a href="#">Save</a></div>
+							  </div>
+							</div>
+						</div>
+					</div>
+					
+		    	<div class="ActionButton">
+		      	<div class="LightBlueStyle">
+						 	<div class="ButtonLeft">
+							  <div class="ButtonRight">
+							    <div class="ButtonMiddle"><a href="#">Cancel</a></div>
+						    </div>
+							</div>
+						</div>
+					</div>
+				</div>
+		 	</div>
+			 	 		
+		</div>
+	</div>
+
+</div>

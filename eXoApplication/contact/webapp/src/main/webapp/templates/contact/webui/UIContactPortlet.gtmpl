@@ -9,13 +9,15 @@
 <!-- Start UIBannerContainer -->
 	<% uicomponent.renderChild(UIBannerContainer.class) ;%>
 <!-- End UIBannerContainer -->
-	
-<!-- Start Mail Action Bar -->
+
+<div class="ContactContainer">	
+	<!-- Start Action Bar -->
 	<% uicomponent.renderChild(UIActionBar.class) ;%>  
-<!-- End Mail Action Bar -->	
+	<!-- End Action Bar -->	
 	
-<!-- Start UIWorkingContainer -->
+	<!-- Start UIWorkingContainer -->
 	<% uicomponent.renderChild(UIWorkingContainer.class) ;%>	
-<!-- End UIWorkingContainer -->
+	<!-- End UIWorkingContainer -->
+</div>
 	
 </div>
