@@ -33,7 +33,7 @@ public class UIBreadcumbs extends UIContainer {
 	private String forumHomePath_ ;
   public UIBreadcumbs()throws Exception {
   	ForumService forumService = (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
-  	forumHomePath_ = forumService.getForumHomePath() ;
+  	//forumHomePath_ = forumService.getForumHomePath() ;
   	
   }
   
