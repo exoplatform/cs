@@ -2,7 +2,8 @@
 				<div class="TitleBar">
 					<div class="DownArrow3Icon" title="Collapse/Expand all"><span></span></div>
 					<div class="TitleIcon BlueTag">Tags</div>
-		      <div style="clear: left"><span></span></div>
+					<div class="ActionIcon"><span/></div>
+		      <div style="clear: both"><span></span></div>
 				</div>
 				<div class="ListContent">
 					<a href="#" class="IconHolder BlueTag">Customers</a>
