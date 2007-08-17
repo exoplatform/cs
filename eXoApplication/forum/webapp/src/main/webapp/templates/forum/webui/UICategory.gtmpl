@@ -42,6 +42,21 @@
 																	Add New Forum
 																</div>
 														 	</a>
+													   	<a class="MenuItem" href="<%=uicomponent.event("AddForum")%>"> 	
+																<div class="ItemIcon AddForumIcon">
+																	Add New Forum
+																</div>
+														 	</a>
+													   	<a class="MenuItem" href="<%=uicomponent.event("AddForum")%>"> 	
+																<div class="ItemIcon AddForumIcon">
+																	Add New Forum
+																</div>
+														 	</a>
+													   	<a class="MenuItem" href="<%=uicomponent.event("AddForum")%>"> 	
+																<div class="ItemIcon AddForumIcon">
+																	Add New Forum
+																</div>
+														 	</a>
 															
 													  <%//}%>
 													  <div class="RightClickCustomItem"></div>
@@ -116,8 +131,8 @@
 			        String topicNewPostTitle = "";
 			        String lastPostBy = "";
 			        String dateTime = "";
-			        
-	 						Topic topicNewPost = uicomponent.getTopicNewPost(category.getId(), forum.getId());
+			        System.out.println("============>Order: " + forum.getForumOrder() + "   Trang thai: " + forum.getIsLock());
+	 						Topic topicNewPost = uicomponent.getLastTopic(forum.getLastTopicPath());
 	 						if(topicNewPost != null) {
 				        topicNewPostIcon = topicNewPost.getIcon();
 				        topicNewPostTitle = topicNewPost.getTopicName();

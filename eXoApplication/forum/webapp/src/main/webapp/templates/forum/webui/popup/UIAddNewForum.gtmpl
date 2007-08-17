@@ -72,7 +72,7 @@
 		              	<table class="UIFormGrid">
 		              		<tbody>
 		              		<% int i = 1; 
-		              		  while(i < 5) {%>
+		              		  while(i < 6) {%>
 		              			<tr>
 		              				<% String label = uicomponent.getLabel(uiform.getChild(i).getName()) %>
 		              				<td class="FieldLabel">$label</td>
@@ -93,8 +93,8 @@
 									<div class="UIFormInputSet ModerationOptions">
 		              	<table class="UIFormGrid">
 		              		<tbody>
-		              			<% int t = 5; 
-		              		  while(t < 9) {%>
+		              			<% int t = 6; 
+		              		  while(t < 10) {%>
 		              			<tr>
 		              				<% String label = uicomponent.getLabel(uiform.getChild(t).getName()) %>
 		              				<td class="FieldLabel">$label</td>

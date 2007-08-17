@@ -76,7 +76,7 @@
 						        String lastPostBy = "";
 						        String dateTime = "";
 						        
-				 						Topic topicNewPost = uicomponent.getTopicNewPost(category.getId(), forum.getId());
+				 						Topic topicNewPost = uicomponent.getLastTopic(forum.getLastTopicPath());
 				 						if(topicNewPost != null) {
 							        topicNewPostIcon = topicNewPost.getIcon();
 							        topicNewPostTitle = topicNewPost.getTopicName();

@@ -50,8 +50,7 @@ public class JCRDataStorage implements DataStorage {
   public List<Category> getCategories() throws Exception {
     Node forumHomeNode = getForumHomeNode() ;
     QueryManager qm = forumHomeNode.getSession().getWorkspace().getQueryManager();
-    StringBuffer queryString = new StringBuffer("/jcr:root" + forumHomeNode.getPath() 
-                                                + "//element(*,exo:forumCategory) order by @exo:categoryOrder ascending");
+    StringBuffer queryString = new StringBuffer("/jcr:root" + forumHomeNode.getPath() +"//element(*,exo:forumCategory) order by @exo:categoryOrder ascending");
     Query query = qm.createQuery(queryString.toString(), Query.XPATH);
     QueryResult result = query.execute();
     NodeIterator iter = result.getNodes();
@@ -132,8 +131,14 @@ public class JCRDataStorage implements DataStorage {
   public List<Forum> getForums(String categoryId) throws Exception {
 		Node forumHomeNode = getForumHomeNode();
 		if(forumHomeNode.hasNode(categoryId)) {
-		  Node catNode = forumHomeNode.getNode(categoryId) ;
-		  NodeIterator iter = catNode.getNodes();
+			Node catNode = forumHomeNode.getNode(categoryId) ;
+	    QueryManager qm = forumHomeNode.getSession().getWorkspace().getQueryManager();
+	    StringBuffer queryString = new StringBuffer("/jcr:root" + catNode.getPath() + "//element(*,exo:forum) order by @exo:forumOrder ascending");
+	    Query query = qm.createQuery(queryString.toString() , Query.XPATH);
+	    QueryResult result = query.execute();
+	    NodeIterator iter = result.getNodes();
+		
+	    //NodeIterator iter = catNode.getNodes();
 		  List<Forum> Forums = new ArrayList<Forum>();
 		  Forum forum;
 		  while (iter.hasNext()) {
@@ -143,7 +148,7 @@ public class JCRDataStorage implements DataStorage {
 		  }
 		  return Forums;
 		}
-    return null;
+    return null; 
   }
 
   public Forum getForum(String categoryId, String forumId) throws Exception {
@@ -171,7 +176,7 @@ public class JCRDataStorage implements DataStorage {
 		    forumNode.setProperty("exo:createdDate", GregorianCalendar.getInstance());
 //		    forumNode.setProperty("exo:lastPostBy", forum.getLastPostBy());
 //		    forumNode.setProperty("exo:lastPostDate", GregorianCalendar.getInstance());
-		    forumNode.setProperty("exo:lastPostPath", forum.getLastPostPath());
+		    forumNode.setProperty("exo:lastPostPath", forum.getLastTopicPath());
 		    forumNode.setProperty("exo:postCount", 0);
 		    forumNode.setProperty("exo:topicCount", 0);
 		  } else {
@@ -212,7 +217,7 @@ public class JCRDataStorage implements DataStorage {
     forum.setModifiedDate(forumNode.getProperty("exo:modifiedDate").getDate().getTime());
 //    forum.setLastPostBy(forumNode.getProperty("exo:lastPostBy").getString());
 //    forum.setLastPostDate(forumNode.getProperty("exo:lastPostDate").getDate().getTime());
-    forum.setLastPostPath(forumNode.getProperty("exo:lastPostPath").getString());
+    forum.setLastTopicPath(forumNode.getProperty("exo:lastPostPath").getString());
     forum.setDescription(forumNode.getProperty("exo:description").getString());
     forum.setPostCount(Integer.valueOf(forumNode.getProperty("exo:postCount").getString()));
     forum.setTopicCount(Integer.valueOf(forumNode.getProperty("exo:topicCount").getString()));
@@ -283,8 +288,11 @@ public class JCRDataStorage implements DataStorage {
   }
 	
   public Topic getTopicByPath(String topicPath)throws Exception {
-    Node topicNode = (Node)getJCRSession().getItem(topicPath) ;
-    return getTopicNode(topicNode) ;
+    try {
+      return getTopicNode((Node)getJCRSession().getItem(topicPath)) ;
+    }catch(Exception e) {
+    	return null ;
+    }
   }
   
   private Topic getTopicNode(Node topicNode) throws Exception {

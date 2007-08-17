@@ -59,17 +59,8 @@ public class UICategories extends UIContainer  {
 //		return lastPost;
 //	}
 	
-	private Topic getTopicNewPost(String categoryId, String forumId) throws Exception {
-		Forum forum = forumService.getForum(categoryId, forumId);
-		String path = forum.getLastPostPath();
-		if(path.length() < 1) return null;
-		int t = 0;
-    for (int i = path.length()-1; i >=0 ; i--) {
-    	t++;
-			if(path.charAt(i) == '/') break;
-		}
-    Topic topicNewPost = forumService.getTopicByPath(path.substring(0, path.length() - t));
-    return topicNewPost;
+	private Topic getLastTopic(String topicPath) throws Exception {
+		return forumService.getTopicByPath(topicPath) ;
 	}
 	
 	static public class OpenCategory extends EventListener<UICategories> {

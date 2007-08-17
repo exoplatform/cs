@@ -49,7 +49,7 @@ public class UICategoryForm extends UIForm implements UIPopupComponent{
   
   public UICategoryForm() throws Exception {
   	UIFormStringInput categoryTitle = new UIFormStringInput(FIELD_CATEGORYTITLE_INPUT, FIELD_CATEGORYTITLE_INPUT, null);
-  	UIFormStringInput categoryOrder = new UIFormStringInput(FIELD_CATEGORYORDER_INPUT, FIELD_CATEGORYORDER_INPUT, null);
+  	UIFormStringInput categoryOrder = new UIFormStringInput(FIELD_CATEGORYORDER_INPUT, FIELD_CATEGORYORDER_INPUT, "0");
   	categoryOrder.addValidator(PositiveNumberFormatValidator.class);
   	UIFormStringInput description = new UIFormTextAreaInput(FIELD_TEXT_AREA, FIELD_TEXT_AREA, null);
   	 addUIFormInput(categoryTitle);
@@ -63,7 +63,7 @@ public class UICategoryForm extends UIForm implements UIPopupComponent{
 	}
 	public void deActivate() throws Exception {
 		// TODO Auto-generated method stub
-		System.out.println("\n\n description: sfdsf\n\n");
+		//System.out.println("\n\n description: sfdsf\n\n");
 	}
 	
   static  public class SaveActionListener extends EventListener<UICategoryForm> {
@@ -76,7 +76,7 @@ public class UICategoryForm extends UIForm implements UIPopupComponent{
       GregorianCalendar calendar = new GregorianCalendar() ;
       PortalRequestContext pContext = Util.getPortalRequestContext();
       String userName = pContext.getRemoteUser() ;
-  		String id = String.valueOf(calendar.getTimeInMillis());
+  		String id = "Cate" + String.valueOf(calendar.getTimeInMillis());
   		
       Category cat = new Category();
       cat.setId(id) ;

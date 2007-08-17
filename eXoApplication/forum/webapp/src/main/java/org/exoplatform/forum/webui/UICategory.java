@@ -34,6 +34,7 @@ import org.exoplatform.webui.event.EventListener;
 )
 public class UICategory extends UIContainer  {
 	private String categoryId ;
+	private	ForumService forumService = (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
   public UICategory() throws Exception {
 
   }
@@ -43,29 +44,17 @@ public class UICategory extends UIContainer  {
   }
   
   private Category getCategory() throws Exception{
-  	ForumService forumService = (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
 		return forumService.getCategory(categoryId);
 	}
-  
 	private List<Forum> getForumList(String categoryId) throws Exception {
-		ForumService forumService = (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
 		List<Forum> forumList = forumService.getForums(categoryId);
 		return forumList;
 	}
 	
-	private Topic getTopicNewPost(String categoryId, String forumId) throws Exception {
-		ForumService forumService = (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
-		Forum forum = forumService.getForum(categoryId, forumId);
-		String path = forum.getLastPostPath();
-		if(path.length() < 1) return null;
-		int t = 0;
-    for (int i = path.length()-1; i >=0 ; i--) {
-    	t++;
-			if(path.charAt(i) == '/') break;
-		}
-    Topic topicNewPost = forumService.getTopicByPath(path.substring(0, path.length() - t));
-    return topicNewPost;
+	private Topic getLastTopic(String topicPath) throws Exception {
+		return forumService.getTopicByPath(topicPath) ;
 	}
+	
   
   static public class AddForumActionListener extends EventListener<UICategory> {
     public void execute(Event<UICategory> event) throws Exception {
