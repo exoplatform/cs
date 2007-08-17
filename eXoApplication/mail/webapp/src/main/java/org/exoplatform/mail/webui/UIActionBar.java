@@ -4,6 +4,8 @@
  **************************************************************************/
 package org.exoplatform.mail.webui;
 
+import org.exoplatform.mail.webui.popup.UIAccountCreation;
+import org.exoplatform.mail.webui.popup.UIAccountCreationContainer;
 import org.exoplatform.mail.webui.popup.UIComposeForm;
 import org.exoplatform.mail.webui.popup.UIMailSettings;
 import org.exoplatform.mail.webui.popup.UIPopupAction;
@@ -65,7 +67,7 @@ public class UIActionBar extends UIContainer {
   
   static public class ContactActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {
-      UIActionBar uiActionBar = event.getSource() ;      
+      UIActionBar uiActionBar = event.getSource() ;   
     }
   }
   

@@ -2,61 +2,73 @@
 	margin: auto;
 	width: 580px;
 	background: #f3f3f3;
-	border: 2px solid #c0c0c0;
+	border: 1px solid #c0c0c0;
+}
+.UIAccountCreationWizard .AccountCreationStep {
+}
+.UIAccountCreationWizard .AccountCreationStep .InfoContainer{
+	border:1px solid #939393 ;
+	border-bottom: none;
+	padding: 5px;
 }
 
-.UIAccountCreationWizard .StepInfos {
+.UIAccountCreationWizard .AccountCreationStep .StepInfos{
  padding:  5px 20px 10px 20px;
  background: white;
 }
 
-.UIAccountCreationWizard .StepInfos .InfoTitle {
-	font-size: 11px;
+.UIAccountCreationWizard .AccountCreationStep .StepInfos .InfoTitle{
+  font-size: 11px;
 	line-height: 22px;
 	font-weight: bold;
 }
 
-.UIAccountCreationWizard .StepForm {
-	border-top: 1px solid #c0c0c0;
-	border-bottom: 1px solid #c0c0c0;
-	padding: 20px 0px 0px 0px;
-	height: 180px;
+.UIAccountCreationWizard .FieldLabel {
+	width: 150px;
 }
 
-.UIAccountCreationWizard .StepForm .HorizontalLayout {
-	border: none;
+.UIAccountCreationWizard .UITabContent {
+	height: 200px;
 }
 
-.UIAccountCreationWizard .AccountCreationStep1 .UIAction {
- 	width: 128px;
+.UIAccountCreationWizard .UIWizardAction {
+	background: #f9f9f9;
+	border: none ;
+	border-top: 1px solid #939393 ;
+	border-bottom: 1px solid #b7b7b7 ;
+	height: 34px;
 }
 
-.UIAccountCreationWizard .AccountCreationStep2 .UIAction {
- 	width: 182px;
+.UIAccountCreationWizard .UIWizardAction .StepNavigationTitle {
+  float: left;
+  height: 33px; line-height: 33px; vertical-align: middle;
+  font-size: 11px; font-weight: bold;
+  margin: 0px 10px 0px 15px;
 }
 
-.UIAccountCreationWizard .AccountCreationStep3 #MessagesComeInFolder {
- 	width: 120px;
- 	float: left;
+.UIAccountCreationWizard .UIWizardAction .StepNavigationBar {
+  float: left;
+  height: 34px; line-height: 34px; vertical-align: middle;
 }
 
-.UIAccountCreationWizard .AccountCreationStep3 .UIFormGrid a {
- 	float: left;
- 	margin-left: 20px;
- 	padding-left: 30px;
- 	line-height: 24px;
- 	color: black;
- 	background: url('/eXoResources/skin/DefaultSkin/skinIcons/24x24/icons/LightBlueFolder.gif') no-repeat left center;
+.UIAccountCreationWizard .UIWizardAction .StepNavigationBar a{
+  float: left;
+  width: 18px; height: 18px; 
+  line-height: 18px; vertical-align: middle;
+  font-size: 11px; font-weight: bold;
+  text-align: center; text-decoration: none; color: black;
+  margin: 7px 3px 0px 3px;
+  border: solid 1px gray;
 }
 
-.UIAccountCreationWizard .AccountCreationStep3 .UIFormGrid a:hover {
-	color: blue;
+.UIAccountCreationWizard .UIWizardAction .StepNavigationBar a:hover {
+  height: 18px; line-height: 18px; vertical-align: middle;
+  color: orange;
+  background: #f8f8f8;
+  border: solid 1px #fdb913 ;
 }
 
-.UIAccountCreationWizard .AccountCreationStep3 .UIAction {
- 	width: 182px;
+.UIAccountCreationWizard .UIWizardAction .StepNavigationBar a.SelectedStep {
+  color: red;
 }
-
-.UIAccountCreationWizard .AccountCreationStep4 .UIAction {
- 	width: 200px;
-}
+ 

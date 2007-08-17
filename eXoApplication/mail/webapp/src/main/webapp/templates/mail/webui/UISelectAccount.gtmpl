@@ -5,7 +5,9 @@
 	  	<div class="LeftItemInfoBar">
 		  	<div class="RightItemInfoBar">
 		  		<div class="MiddleItemInfoBar" title="Show List" >
-		  			<div class="SelectedItemLabel">Default Account</div>
+		  			<div class="SelectedItemLabel">
+		  				<%uicomponent.renderChildren()%>
+		  			</div>
 		  			<div class="DropDownSelectIcon"><span></span></div>
 		  			<div style="clear: both;"><span></span></div>
 				  </div>
@@ -13,7 +15,7 @@
 			</div>
 		</div>
 	</div>
-	<a class="AddAccountIcon" href = "<%=uicomponent.event("SaveAccount")%>" title="Add New Account"><span></span></a>
+	<a class="AddAccountIcon" href = "<%=uicomponent.event("AddAccount")%>" title="Add New Account"><span></span></a>
 	<div style="clear: left"><span></span></div>
 	<%uiform.end();%>
 </div>

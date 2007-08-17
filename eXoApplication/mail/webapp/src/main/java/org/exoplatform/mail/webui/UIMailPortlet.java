@@ -8,6 +8,7 @@ package org.exoplatform.mail.webui;
 import org.exoplatform.mail.webui.popup.UIPopupAction;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
+import org.exoplatform.webui.core.UIPopupMessages;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 
@@ -29,7 +30,12 @@ public class UIMailPortlet extends UIPortletApplication {
     addChild(UIPopupAction.class, null, null) ;
     //addChild(UIMailContainer.class, null, null) ;
   }
-  
+  public void renderPopupMessages() throws Exception {
+    UIPopupMessages popupMess = getUIPopupMessages();
+    if(popupMess == null)  return ;
+    WebuiRequestContext  context =  WebuiRequestContext.getCurrentInstance() ;
+    popupMess.processRender(context);
+  }
   public void cancelAction() throws Exception {
     WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
     UIPopupAction popupAction = getChild(UIPopupAction.class) ;

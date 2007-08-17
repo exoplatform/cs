@@ -1,312 +1,115 @@
-<br/><br/><br/><br/><br/><br/><br/><br/>
-<div class="UIAccountCreationWizard">
-	<div class="AccountCreationStep1">
-		<div class="StepInfos">
-			<div class="InfoTitle">
-				Step 1 : Account name & User name.
-			</div>
-			<div>
-				- Enter the name to indentify this particular account, for example "Company Account". <br/>
-				- Enter the incoming user name given to you by your email provider, for example "Dada". <br/>
-			</div>
-		</div>
-		
-		<div class="UIForm StepForm">
-			<div class="HorizontalLayout">
-				<table class="UIFormGrid">
-					<tbody>
-						<tr>
-							<td class="FieldLabel">Account Name :</td>
-							<td class="FieldComponent">
-								<input id="AccountName" type="text" name="AccountName"/>
-							</td>
-						</tr>
-						<tr>
-							<td class="FieldLabel">Incoming User Name :</td>
-							<td class="FieldComponent">
-								<input id="IncomingUserName" type="text" name="IncomingUserName"/>
-							</td>
-						</tr>
-						<tr>
-							<td class="FieldLabel">Account Description :</td>
-							<td class="FieldComponent">
-								<textarea  id="AccountDescription"  name="AccountDescription" ></textarea>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
-
-		<div class="UIAction">
-	  	<div class="ActionContainer">
-		    <div class="ActionButton">
-		      <div class="LightBlueStyle">
-						<div class="ButtonLeft">
-							<div class="ButtonRight">
-							  <div class="ButtonMiddle"><a href="#">Next</a></div>
-						  </div>
-						</div>
-					</div>
-				</div>
-	    
-        <div class="ActionButton">
-          <div class="LightBlueStyle">
-					 	<div class="ButtonLeft">
-						  <div class="ButtonRight">
-						    <div class="ButtonMiddle"><a href="#">Cancel</a></div>
-					    </div>
-						</div>
-					</div>
-				</div>
-			</div>
- 		</div>     
+<%
+	import org.exoplatform.mail.webui.WizardStep ; 
+  def rcontext = _ctx.getRequestContext() ;
+	rcontext.getJavascriptManager().importJavascript('eXo.webui.UIHorizontalTabs') ;
+	int step = uicomponent.getSelectedStep();
+	String compName = uicomponent.getName() ;
+%>
+<div class="$compName UIAccountCreationWizard">
+	<div class="UIFormTabPane" >
+	  <div class="UITabPane">
+			<div class="TabPaneContent">
+		    <div class="WorkingArea">		     	
+				 <%
+	          for(WizardStep inputSet in uicomponent.getChildren()) {
+	        		String display="none;" ;
+	        		if(inputSet.isRendered()) display="block;" ;
+	        		boolean renderResource = uicomponent.hasRenderResourceTabName(); 
+              String tabName = inputSet.getName() ; 
+              if(renderResource) {
+                tabName = _ctx.appRes(compName + ".tab.info." + inputSet.name) ;
+              }
+	        		boolean renderTab = uicomponent.hasWithRenderTab();
+              if(renderTab){
+	        %>	
+				        <div style="display:$display">        
+					        <div class="AccountCreationStep">
+										<div class="StepInfos">
+											<div class="InfoTitle">
+												 $tabName
+											</div>
+										</div>
+										<div class="InfoContainer">
+											<%
+											 for(String info in inputSet.getInfoMessage()) {
+											 	println "- " + _ctx.appRes(info) + "<br/>" ;
+											 }
+											%>
+										</div>	
+									</div>
+				        </div>
+	        <%  }
+	          }
+	        %>
+	        <%uiform.begin()%>
+	        <input type="hidden" id="<%=uicomponent.RENDER_TAB%>" name="<%=uicomponent.RENDER_TAB%>" value="$uicomponent.renderTabId">
+		    	<div class="HorizontalLayout">
+		        <div class="UITabContentContainer">
+	            <%
+	              for(formInput in uicomponent.getChildren()) { 
+	                String display = "none;" ;
+	                if(formInput.isRendered()) display="block;" ;
+	            %>
+	                <div class="UITabContent" id="UITabContent" style="display: $display;">
+	                  <%uicomponent.renderUIComponent(formInput) ;%>
+	                </div>
+	            <%}%>
+	          </div>
+	          <div class="UIWizardAction">
+	          	<%if(uicomponent.showStepActions()){%>
+		          	<div class="StepNavigationBar">	       
+						      <div class="StepNavigationTitle">
+						        <%=_ctx.appRes(uicomponent.getId() + ".label.wizardSteps")%>:
+						      </div>
+						      <%                
+		  						      List children  = uicomponent.getChildren();
+		  						      int numberSteps = uicomponent.getNumberSteps();    
+		  						      String actionLink = "#";    					     	
+												int i = 1;				     	  						     			       	
+								        while(i <= numberSteps) {
+								          int j = i;
+								          if(j < 1){
+								            i++;
+								            continue;
+								          }
+								          if(i != step) {
+								            actionLink = uicomponent.event("ViewStep"+String.valueOf(i));
+								            print "<a href=\"$actionLink\">" ;
+								          } else print "<a href=\"#\" class=\"SelectedStep\">" ;
+								          print String.valueOf(j);
+								          println "</a>";
+								          i++;
+								        }
+									  	%>    	        
+					    	</div>
+					    <%}%>
+					    <div class="UIAction" style="float:right;">
+					      <div class="ActionContainer">
+				          <%for(action in uicomponent.getActions()) { %>
+				            <div class="ActionButton">
+				              <div class="LightBlueStyle">
+											  <div class="ButtonLeft">
+												  <div class="ButtonRight">
+												    <div class="ButtonMiddle">
+													    <% 
+													      String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action);
+													      String link = uicomponent.event(action) ;
+											        %>
+											        <a href="$link">$actionLabel</a>
+												    </div>
+											    </div>
+												</div>
+											</div>
+										</div>
+			            <%}%>
+			          </div>
+		 	        </div>
+		 	        <div style="clear:right;"><span></span></div>
+	 	        </div>
+	          <%uiform.end()%>
+			    </div>
+			  </div>
+			</div>  
+	  </div>  
 	</div>
-</div>		
-
-<br/><br/><br/><br/><br/><br/><br/><br/>
-<div class="UIAccountCreationWizard">
-	<div class="AccountCreationStep2">
-		<div class="StepInfos">
-			<div class="InfoTitle">
-				Step 2 : Mail Identity Settings.
-			</div>
-			<div>
-				Mail identity is the name and emal address used in your email correspondence. Each
-				mail account has an identity, which is the information comes with your outgoing
-				messages that identifies you to mail recipients when the receive your mails.
-				To set up your mail identities, let's enter the information in the fields below.
-			</div>
-		</div>
-		
-		<div class="UIForm StepForm">
-			<div class="HorizontalLayout">
-				<table class="UIFormGrid">
-					<tbody>
-						<tr>
-							<td class="FieldLabel">You Outgoing Name :</td>
-							<td class="FieldComponent">
-								<input id="YouOutgoingName" type="text" name="YouOutgoingName"/>
-							</td>
-						</tr>
-						<tr>
-							<td class="FieldLabel">Email Address :</td>
-							<td class="FieldComponent">
-								<input id="EmailAddress" type="text" name="EmailAddress"/>
-							</td>
-						</tr>
-						<tr>
-							<td class="FieldLabel">Reply-to Address :</td>
-							<td class="FieldComponent">
-								<input id="AccountDescription" type="text" name="AccountDescription"/>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
-
-		<div class="UIAction">
-	  	<div class="ActionContainer">
-	  		<div class="ActionButton">
-		      <div class="LightBlueStyle">
-						<div class="ButtonLeft">
-							<div class="ButtonRight">
-							  <div class="ButtonMiddle"><a href="#">Back</a></div>
-						  </div>
-						</div>
-					</div>
-				</div>
-				
-		    <div class="ActionButton">
-		      <div class="LightBlueStyle">
-						<div class="ButtonLeft">
-							<div class="ButtonRight">
-							  <div class="ButtonMiddle"><a href="#">Next</a></div>
-						  </div>
-						</div>
-					</div>
-				</div>
-	    
-        <div class="ActionButton">
-          <div class="LightBlueStyle">
-					 	<div class="ButtonLeft">
-						  <div class="ButtonRight">
-						    <div class="ButtonMiddle"><a href="#">Cancel</a></div>
-					    </div>
-						</div>
-					</div>
-				</div>
-			</div>
- 		</div>     
-	</div>
-</div>	
-
-
-<br/><br/><br/><br/><br/><br/><br/><br/>
-<div class="UIAccountCreationWizard">
-	<div class="AccountCreationStep3">
-		<div class="StepInfos">
-			<div class="InfoTitle">
-				Step 3 : Sever Information.
-			</div>
-			<div>
-			- Select a type of incoming server you are using. <br/>
-			- Enter the incoming server name, for example: mail.exo.com <br/>
-			- Set up a place for your imcoming messages.
-			
-			</div>
-		</div>
-		
-		<div class="UIForm StepForm">
-			<div class="HorizontalLayout">
-				<table class="UIFormGrid">
-					<tbody>
-						<tr>
-							<td class="FieldLabel">Server Type :</td>
-							<td class="FieldComponent">
-								POP3 Mail Sever
-							</td>
-						</tr>
-						<tr>
-							<td class="FieldLabel">Incoming Server :</td>
-							<td class="FieldComponent">
-								<input id="IncomingServer" type="text" name="IncomingServer"/>
-							</td>
-						</tr>
-						<tr>
-							<td class="FieldLabel">Messages come in folder :</td>
-							<td class="FieldComponent">
-								<input id="MessagesComeInFolder" type="text" name="MessagesComeInFolder"/>
-								<a href="#">Choose Folder</a>
-								<div style="clear: left"><span></span></div>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
-
-		<div class="UIAction">
-	  	<div class="ActionContainer">
-	  		<div class="ActionButton">
-		      <div class="LightBlueStyle">
-						<div class="ButtonLeft">
-							<div class="ButtonRight">
-							  <div class="ButtonMiddle"><a href="#">Back</a></div>
-						  </div>
-						</div>
-					</div>
-				</div>
-				
-		    <div class="ActionButton">
-		      <div class="LightBlueStyle">
-						<div class="ButtonLeft">
-							<div class="ButtonRight">
-							  <div class="ButtonMiddle"><a href="#">Next</a></div>
-						  </div>
-						</div>
-					</div>
-				</div>
-	    
-        <div class="ActionButton">
-          <div class="LightBlueStyle">
-					 	<div class="ButtonLeft">
-						  <div class="ButtonRight">
-						    <div class="ButtonMiddle"><a href="#">Cancel</a></div>
-					    </div>
-						</div>
-					</div>
-				</div>
-			</div>
- 		</div>     
-	</div>
-</div>	
-
-
-
-<br/><br/><br/><br/><br/><br/><br/><br/>
-<div class="UIAccountCreationWizard">
-	<div class="AccountCreationStep4">
-		<div class="StepInfos">
-			<div class="InfoTitle">
-				Step 4 : Verifying Information.
-			</div>
-			<div>
-			Verify that your setting information below is correct before save
-			 and exit the New Account Creation Wizard.			
-			</div>
-		</div>
-		
-		<div class="UIForm StepForm">
-			<div class="HorizontalLayout">
-				<table class="UIFormGrid">
-					<tbody>
-						<tr>
-							<td class="FieldLabel">Account Name :</td>
-							<td class="FieldComponent">eXo Account</td>
-						</tr>
-						<tr>
-							<td class="FieldLabel">Incoming User Name :</td>
-							<td class="FieldComponent">phuong.pham</td>
-						</tr>
-						<tr>
-							<td class="FieldLabel">Outgoing User Name :</td>
-							<td class="FieldComponent">Phuong Pham</td>
-						</tr>
-						<tr>
-							<td class="FieldLabel">Email Address :</td>
-							<td class="FieldComponent">phuong.pham@exoplatform</td>
-						</tr>
-						<tr>
-							<td class="FieldLabel">Incoming Server Name :</td>
-							<td class="FieldComponent">exoplatform.com</td>
-						</tr>
-						<tr>
-							<td class="FieldLabel">Incoming Server Type :</td>
-							<td class="FieldComponent">POP3 Mail Server</td>
-						</tr>
-						<tr>
-							<td class="FieldLabel">Incoming mail will be in folder :</td>
-							<td class="FieldComponent">Inbox</td>
-						</tr>													
-					</tbody>
-				</table>
-			</div>
-		</div>
-
-		<div class="UIAction">
-	  	<div class="ActionContainer">
-	  		<div class="ActionButton">
-		      <div class="LightBlueStyle">
-						<div class="ButtonLeft">
-							<div class="ButtonRight">
-							  <div class="ButtonMiddle"><a href="#">Back</a></div>
-						  </div>
-						</div>
-					</div>
-				</div>
-				
-		    <div class="ActionButton">
-		      <div class="LightBlueStyle">
-						<div class="ButtonLeft">
-							<div class="ButtonRight">
-							  <div class="ButtonMiddle"><a href="#">Finish</a></div>
-						  </div>
-						</div>
-					</div>
-				</div>
-	    
-        <div class="ActionButton">
-          <div class="LightBlueStyle">
-					 	<div class="ButtonLeft">
-						  <div class="ButtonRight">
-						    <div class="ButtonMiddle"><a href="#">Cancel</a></div>
-					    </div>
-						</div>
-					</div>
-				</div>
-			</div>
- 		</div>     
-	</div>
-</div>	
+</div>
