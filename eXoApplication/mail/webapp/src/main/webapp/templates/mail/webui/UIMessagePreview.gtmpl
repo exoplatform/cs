@@ -1,6 +1,6 @@
 <div class="UIMessagePreview">
 	<div class="ReadingPaneBar">
-		<div class="Subject">Subject:Chao anh</div>
+		<div class="Subject"><span>Subject: </span><span>Chao anh</span></div>
 		<div class="MaximizeReadingPane" title="Maximize Reading Pane"><span></span></div>
 		<div style="clear:both;"><span></span></div>
 	</div>
@@ -18,7 +18,6 @@
 						<div class="MiddleCenterViewBoxStyle">
 							<div class="MessageHeader">
 								<div class="MessageCheck">
-									<div><input type="checkbox" class="CheckBox" value="4"/></div>
 									<div class="UnStarredIcon" title="Add star for this message"><span></span></div>
 									<div style="clear: left;"><span></span></div>
 								</div>

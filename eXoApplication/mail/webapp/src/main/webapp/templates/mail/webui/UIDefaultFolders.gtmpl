@@ -1,7 +1,8 @@
-<div class="FolderListTitleBar">
+<div class="TitleBar">
 	<div class="DownArrow3Icon" title="Collapse this Panel"><span></span></div>
 	<div class="Title FolderIcon">Folders</div>
-	<div style="clear: left"><span></span></div>
+	<div class="ActionIcon"><span></span></div>
+	<div style="clear: both"><span></span></div>
 </div>
 <div class="MailFolderList">
 	<a href="#"  class="Icon InboxIcon">Inbox<span class="MailQuantity">(9)</span></a>

@@ -1,12 +1,9 @@
 
-.DownArrow1Icon {
-	background: url('icons/DownArrow1Icon.gif') no-repeat;
-}
-
 .TagIcon {
 	background: url('icons/RedTag.gif') no-repeat;
 	width: 16px; height: 16px;
 	cursor: pointer;
+	float: left;
 }
 
 .MaximizeReadingPane {
@@ -30,15 +27,14 @@
 	width: 16px; height: 16px;
 }
 
-.TagIcon {
-	background: url('icons/BlueTag.gif') no-repeat left center;
-	height: 20px; line-height: 20px;
-}
-
 .DownArrow3Icon {
 	background: url('icons/BlackDownArrow.gif') no-repeat left center;
 	height: 16px; width: 16px;
 	cursor: pointer;
+}
+
+.AddressIcon {
+	background: url('icons/AddressBookIcon.gif') no-repeat left center;
 }
 
 .BlueTag {
@@ -61,8 +57,20 @@
 	background: url('icons/MoreActions.gif') no-repeat left;
 }
 
-.ViewIcon {
+.View {
 	background: url('icons/View.gif') no-repeat left;
+}
+
+.ReplyIcon {
+	background: url('icons/ReplyIcon.gif') no-repeat left 6px;
+}
+
+.ReplyAllIcon {
+	background: url('icons/ReplyAllIcon.gif') no-repeat left 6px;
+}
+
+.ForwardIcon {
+	background: url('icons/ForwardIcon.gif') no-repeat left 6px;
 }
 
 .UnStarredIcon {

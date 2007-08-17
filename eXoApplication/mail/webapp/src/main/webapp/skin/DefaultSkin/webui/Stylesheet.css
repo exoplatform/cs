@@ -12,9 +12,7 @@
  
 .UIMailPortlet {
 }
-.SpliterResizableArea {
-	overflow: auto ;
-} 
+ 
 /******************************************** MailBanner ****************************************/
 .UIMailPortlet .UIBannerContainer {
   background: url('background/BgBanner457x63.gif') no-repeat left;
@@ -89,10 +87,6 @@
 	text-color: #126ca5;
 }
 
-.UIMailPortlet .MailWorkingWorkspace .UIActionBar .Label {
-	line-height: 24px;
-}
-
 .UIMailPortlet .MailContainer {
 	padding: 0px 5px 5px 5px;
 	border: 1px solid #c2c2c2;
@@ -155,7 +149,6 @@
 	text-transform: capitalize; 
 }
 
-
 .UIMailPortlet .UINavigationContainer .AddAccountIcon {
 	background: url('/eXoResources/skin/DefaultSkin/skinIcons/24x24/icons/EditNavigation.gif') no-repeat left top;
 	cursor: pointer;
@@ -167,8 +160,8 @@
 .UIMailPortlet .UINavigationContainer .UIFolderContainer {
 	background: white;
 	border: 1px solid #a5a5a5;
-	margin: 1px 0px;
-	padding: 1px 1px 30px 1px;
+	margin: 2px 0px 7px 0px;
+	padding: 0px 0px 30px 0px;
 }
 
 /**************************************UIFolderContainer*********************************/
@@ -183,16 +176,17 @@
 	margin: 2px;
 }
  
-.UIMailPortlet .UINavigationContainer .UIFolderContainer .FolderListTitleBar {
-	background: #e6e6e6 ;
-	height: 20px; line-height: 20px;
-}
-
 .UIMailPortlet .UINavigationContainer .Title {
 	color: #3d3d3d; font-weight: bold;
-	margin-left: 20px;
 	padding-left: 23px;
-	line-height: 18px;
+	float: left;
+}
+
+.UIMailPortlet .UINavigationContainer .ActionIcon {
+	background: url('/mail/skin/DefaultSkin/webui/skinIcons/16x16/icons/ActionIcon.gif') no-repeat center;
+	float: right;
+	width: 20px;
+	height: 20px;	
 }
 
 .UIMailPortlet .UINavigationContainer .UIFolderContainer .MailFolderList {
@@ -217,6 +211,7 @@
 .UIMailPortlet .UINavigationContainer .MyFolder .TitleBar {
 	background: url('background/LineTitle166x1.gif') no-repeat left bottom;
 	height: 20px; line-height: 20px;
+	border: none;
 }
 
 .UIMailPortlet .UINavigationContainer .MyFolder .Title {
@@ -224,32 +219,22 @@
 	padding-left: 18px;
 }
 
-.UIMailPortlet .UINavigationContainer .MyFolder .UITree  {
-	border: none;
-}
-
 .UIMailPortlet .UINavigationContainer .MyFolder .Icon  {
 	padding: 0px;
 }
 
-.UIMailPortlet .MyFolder .UITree .ChildrenContainer {
+.UIMailPortlet .MyFolder .ChildrenContainer {
 	padding-left: 15px;
 }
 
-.UIMailPortlet .MyFolder .UITree .IconFolder {
-	float:left; 
-	width: 24px; height: 24px;
-}
-
-.UIMailPortlet .MyFolder .UITree .NodeLabel a {
-	line-height: 20px;
-	font-weight: normal;
+.UIMailPortlet .MyFolder .IconFolder {
+	height: 24px; line-height: 24px;
 	color: #1e1f21;
+	padding-left: 28px;
 }
 
-.UIMailPortlet .UITree .TreeContainer .NodeLabel a:hover {
-	font-weight: normal;
-	color: #126ca5;
+.UIMailPortlet .MyFolder .MyFolderContent {
+	padding: 5px 0px 0px 17px;
 }
 
 /*********************************TagList*************************************/
@@ -258,6 +243,7 @@
 	float: left;
 	padding-left: 20px;
 	font-weight: bold;
+	line-height: 23px;
 }
 
 .UIMailPortlet .UINavigationContainer .UITagContainer {
@@ -273,7 +259,7 @@
 }
 
 .UIMailPortlet .UINavigationContainer .UITagContainer .TagsList {
-	padding: 8px 0px 8px 18px;
+	padding: 8px 0px 8px 15px;
 }
 
 .UIMailPortlet .UITagContainer .TagsList .IconItemTag {
@@ -326,18 +312,21 @@
 .UIMailPortlet .MailWorkingWorkspace .IconHolder {
 	line-height: 26px;
 	margin: 0px 7px;
-	padding-left: 26px;
+	padding-left: 30px;
+}
+
+.UIMailPortlet .MailWorkingWorkspace .UIActionBar .DownArrow1Icon {
+	padding-right: 20px;
 }
 
 /*================================= MailContainer ================*/
 
 .UIMailPortlet .MailWorkingWorkspace .MailContainer {
-	padding: 0px 0px 5px 6px;
+	padding: 0px 6px 5px 6px;
  	border: 1px solid #c2c2c2;
  	background: #f3f3f3;
  	height: 100%;
 }
-
 
 /*===================================MailWorkingDetail=================*/
 
@@ -346,19 +335,31 @@
 }
 
 .UIMailPortlet .MailWorkingWorkspace .MailContainer .UIMessageArea {
-	overflow: auto;
+	background: white;
+	border-top: none;
 }
 
 .UIMailPortlet .UIMessageArea .UIMessageActionsBar {
-	background: url('background/MailListControlbarBG1x24.gif') repeat-x;
-	height: 24px;
-	width: 98.7%;
-	border-left: 1px solid #c0c0c0;
-	border-right: 1px solid #c0c0c0;
+	background: url('background/BgMessageActionsBar1x29.gif') repeat-x;
+	height: 29px;
+	padding-left: 8px;
+}
+
+.UIMailPortlet .MailWorkingWorkspace .UIMessageActionsBar .SeparatorLine {
+	background: url('background/SeparatorDottedLine2x23.gif') no-repeat;
+	height: 23px;
+	margin: 2px;
+	padding: 0px;
 }
 
 .UIMailPortlet .MailWorkingWorkspace  .UIMessageActionsBar a {
 	color: #000000;
+}
+
+.UIMailPortlet .MailWorkingWorkspace .UIMessageActionsBar .IconHolder {
+	height: 24px;
+	width: 24px;
+	padding: 0px;
 }
 
 .UIMailPortlet .MailWorkingWorkspace  .UIMessageActionsBar a:hover {
@@ -367,24 +368,24 @@
 
 .UIMailPortlet .MailWorkingWorkspace .UIMessageActionsBar .MoreActionsIcon {
 	margin: 2px 0px 0px 10px;
-	line-height: 24px;
+	line-height: 29px;
 	padding-left: 24px;
 }
 
-.UIMailPortlet .MailWorkingWorkspace .UIMessageActionsBar .ViewIcon {
+.UIMailPortlet .MailWorkingWorkspace .UIMessageActionsBar .View {
 	margin: 2px 0px 0px 10px;
-	line-height: 24px;
+	line-height: 29px;
 	padding-left: 24px;
 }
 
-.UIMailPortlet .MailWorkingWorkspace .UIMessageActionsBar .AddEventIcon {
+.UIMailPortlet .MailWorkingWorkspace .UIActionBar .AddEventIcon {
 	margin: 2px 0px 0px 10px;
-	line-height: 20px;
-	padding-left: 24px;
+	line-height: 25px;
+	background-position: left center;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .UIMessageActionsBar .DownArrow1Icon {
-	line-height: 20px;
+	line-height: 25px;
 	background-position: right;
 	padding-right: 16px; 
 }
@@ -395,9 +396,28 @@
 	padding-left: 1px;
 }
 
+.UIMailPortlet .MailWorkingWorkspace .UIGrid {
+	border-bottom: 1px solid #e8e8e8;
+	border-right: none;
+	border-left: none;	
+}
+
+.UIMailPortlet .MailWorkingWorkspace .UIGrid thead {
+	border-right: none;
+	border-left: none;
+}
+
 .UIMailPortlet .MailWorkingWorkspace .UIGrid th {
 	background: url(background/ThGridRepeatBg1x19.gif) repeat-x;
 	border: 1px solid #d2d4dc;
+	border-left: none;
+	border-right: 1px solid #e8e8e8;
+}
+
+.UIMailPortlet .MailWorkingWorkspace .UIGrid .IconTag {
+	width: 16px;
+	height: 16px;
+	margin-left: 4px;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .UnStarredIcon {
@@ -421,13 +441,17 @@
 }
 
 .UIMailPortlet .MailWorkingWorkspace table {
-	width: 99%; 
 	background: #ffffff;
 }
 
+.UIMailPortlet .MailWorkingWorkspace td.Border {
+	border-right: 1px solid #e8e8e8;
+}
+
 .UIMailPortlet .MailWorkingWorkspace td {
-	border-top: none;
 	height: 20px;
+	border-left: none;
+	border-right: 1px solid #e8e8e8;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .textBold {
@@ -435,7 +459,7 @@
 }
 
 .UIMailPortlet .MailWorkingWorkspace .ResizeReadingPane {
-	margin: 1px auto 1px auto;
+	margin: 0px auto;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .UIMessageList .DownArrow1Icon {
@@ -449,19 +473,24 @@
 
 /*=================================Reading Pane=================*/
 
-.UIMailPortlet .MailWorkingWorkspace .UIMessagePreview {
+.SpliterResizableArea {
+	overflow-y: auto ;
+	overflow-x: hidden ;
+	background: white;
 	border: 1px solid #c0c0c0;
-	/*width: 98.8%;*/ 
+	width: 99%;
+}
+
+.UIMailPortlet .MailWorkingWorkspace .UIMessagePreview {
 	background: #ffffff;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .UIMessagePreview .ViewBoxStyle {
-	height: 442px;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .UIMessagePreview .ReadingPaneDetails {
-	height: 316px;
 	overflow: auto;
+	padding: 5px;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .UIMessagePreview .ReadingPaneBar {
@@ -484,15 +513,19 @@
 
 /*=======================Message Header====================*/
 
+.UIMailPortlet .DecoratorBox .MiddleCenterViewBoxStyle {
+	padding: 10px;
+}
+
 .UIMailPortlet .MailWorkingWorkspace .MessageHeader {
 	font-size: 12px;
-	padding: 5px; 
 	height: 120px;
+	border-bottom: 1px dotted #acacac;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .MessageCheck {
 	float: left;
-	width: 50px; 
+	width: 30px; 
 }
 
 .UIMailPortlet .MailWorkingWorkspace .MessageCheck .CheckBox {
@@ -522,10 +555,6 @@
 	padding-left: 2px;
 }
 
-.UIMailPortlet .MailWorkingWorkspace .MessageAddress span {
-	font-weight: bold;
-}
-
 .UIMailPortlet .MailWorkingWorkspace .MessageAddress .LinkAddress {
 	float: left;
 	color: #2276ab;
@@ -534,11 +563,6 @@
 
 .UIMailPortlet .MailWorkingWorkspace .MessageAddress .LinkAddress span {
 	font-weight: bold;
-}
-
-.UIMailPortlet .MailWorkingWorkspace .TagIcon {
-	float: left;
-	margin: 0px 0px 0px 3px;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .MessageActions {
@@ -582,12 +606,12 @@
 
 .UIMailPortlet .MailWorkingWorkspace .FloatBlock {
 	float: left;
-	margin: 2px 3px;
+	margin: 5px 3px;
 } 
 
 .UIMailPortlet .MailWorkingWorkspace .FloatBlockHidden {
 	float: left;
-	margin: 2px 3px;
+	margin: 5px 3px;
 	filter:alpha(opacity=30);-moz-opacity:.30;opacity:.30;
 } 
 
@@ -596,7 +620,7 @@
 }
 
 .UIMessagePageList .MailIteratorContainer {
-	line-height:22px;
+	line-height: 29px;
 	padding: 0px 10px 0px 15px;
 }
 
@@ -611,28 +635,29 @@
 
 .UIMessagePageList .TotalPages {
 	float:left;
-	line-height:19px;
+	line-height:25px;
 	vertical-align:middle;
 }
 
 .UIMessagePageList .Number {
 	float:left;
-	line-height:19px;
+	line-height: 25px;
 	vertical-align:middle;
 	font-weight: bold;
 	margin: 0px 2px;
 }
 
-/*=====================Mail Icon Public User===================*/
-
 .ResizeReadingPane {
-	background: url('background/ResizeReadingPane38x3.gif') no-repeat;
-	width: 38px; height: 3px;
-	cursor: row-resize;
+	background: url('background/ResizeReadingPane38x3.gif') no-repeat center;
+	height: 5px;
+	cursor: n-resize;
 }
 
-.TagTitleBar {
-	background: url('background/BgTitleTag1x20.gif') repeat-x ;
+.UIMailPortlet .TitleBar {
+	background: url('background/BgTitle1x23.gif') repeat-x ;
+	height: 23px; line-height: 23px;
+	padding: 0px 4px 0px 0px;
+	border-bottom: 1px solid #bfc2cd;
 }
 
 .SeparatorLine {

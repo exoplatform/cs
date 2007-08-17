@@ -1,16 +1,4 @@
 
-.ReplyIcon {
-	background: url('icons/ReplyIcon.gif') no-repeat;
-}
-
-.ReplyAllIcon {
-	background: url('icons/ReplyAllIcon.gif') no-repeat;
-}
-
-.ForwardIcon {
-	background: url('icons/ForwardIcon.gif') no-repeat;
-}
-
 .PrintIcon {
 	background: url('icons/PrintIcon.gif') no-repeat;
 	width: 2px; height: 26px;
@@ -53,11 +41,11 @@
 }
 
 .CloseFolder {
-	background: url('icons/DefaultIcon.gif') no-repeat center;
+	background: url('icons/DefaultIcon.gif') no-repeat left center;
 }
 
 .OpenFolder {
-	background: url('icons/OpenFolder.gif') no-repeat center;
+	background: url('icons/OpenFolder.gif') no-repeat left center;
 }
 
 .ComposeIcon {
@@ -75,12 +63,12 @@
 .CustomViewIcon {
 	background: url('icons/CustomViewIcon.gif') no-repeat;
 	float: left;
-	width: 2px;  height: 25px;
+	height: 25px;
 }
 
 .SettingsIcon {
-	background: url('icons/SettingsIcon.gif') no-repeat;
-	width: 2px;  height: 26px;
+	background: url('icons/SettingsIcon.gif') no-repeat left center;
+	height: 26px;
 }
 
 .AddEventIcon {

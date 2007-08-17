@@ -15,32 +15,15 @@
 							</div>
 						</a>
 						<div class="SeparatorLine"><span></span></div>
+						
 						<a href="#" class="ControlButton">
-							<div class="IconHolder ReplyIcon">
-								<div class="Label"> Reply </div>
+							<div class="IconHolder AddressIcon">
+								<div class="Label"> Address Book </div>
 							</div>
 						</a>
 						<a href="#" class="ControlButton">
-							<div class="IconHolder ReplyAllIcon">
-								<div class="Label"> ReplyAll </div>
-							</div>
-						</a>
-						<a href="#" class="ControlButton">
-							<div class="IconHolder ForwardIcon">
-								<div class="Label"> Forward </div>
-							</div>
-						</a>
-						<div class="SeparatorLine"><span></span></div>
-						<a href="#" class="ControlButton">
-							<div class="IconHolder DeleteIcon" title="Delete selected item(s)"><span></span></div>
-						</a>
-						<a href="#" class="ControlButton">
-							<div class="IconHolder PrintIcon" title="Print selected mail(s)"><span></span></div>
-						</a>
-						<div class="SeparatorLine"><span></span></div>
-						<a href="#" class="ControlButton">
-							<div class="IconHolder ContactsIcon">
-								<div class="Label"> Contacts </div>
+							<div class="IconHolder AddEventIcon">
+								<div class="Label">Add event</div>
 							</div>
 						</a>
 						<a href="#" class="ControlButton">
@@ -50,12 +33,12 @@
 						</a>
 						<div class="SeparatorLine"><span></span></div>
 						<a href="#" class="ControlButton">
-							<div class="IconHolder CustomViewIcon" title="Custome panels view"><span></span></div>
-							<div class="DownArrow1Icon"><span></span></div>
-							<div style="clear:both;"><span></span></div>
+							<div class="IconHolder CustomViewIcon" title="Custome panels view">
+								<div class="DownArrow1Icon">Custom Layout View</div>
+							</div>
 						</a>
 						<a href="<%=uicomponent.event("MailSettings")%>" class="ControlButton">
-							<div class="IconHolder SettingsIcon" title="Mail settings"><span></span></div>
+							<div class="IconHolder SettingsIcon" title="Mail settings">Settings</div>
 						</a>
 						<div style="clear:left;"><span></span></div>
 					</div>

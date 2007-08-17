@@ -1,17 +1,29 @@
 <div class="UIMessageActionsBar">
 	<a href="#" class="ControlButton">
+		<div class="IconHolder ReplyIcon"><span></span></div>
+	</a>
+	<a href="#" class="ControlButton">
+		<div class="IconHolder ReplyAllIcon"><span></span></div>
+	</a>
+	<a href="#" class="ControlButton">
+		<div class="IconHolder ForwardIcon"><span></span></div>
+	</a>
+	<div class="SeparatorLine"><span></span></div>
+	<a href="#" class="ControlButton">
+		<div class="IconHolder DeleteIcon"><span></span></div>
+	</a>
+	<a href="#" class="ControlButton">
+		<div class="IconHolder PrintIcon"><span></span></div>
+	</a>
+	<div class="SeparatorLine"><span></span></div>
+	<a href="#" class="ControlButton">
 		<div class="MoreActionsIcon">
 			<div class="DownArrow1Icon">More Actions</div>
 		</div>
 	</a>
 	<a href="#" class="ControlButton">
-		<div class="ViewIcon">
+		<div class="View">
 			<div class="DownArrow1Icon">View</div>
-		</div>
-	</a>
-	<a href="#" class="ControlButton">
-		<div class="AddEventIcon">
-			<div class="Label">Add event</div>
 		</div>
 	</a>
 	<div class="UIMessagePageList">

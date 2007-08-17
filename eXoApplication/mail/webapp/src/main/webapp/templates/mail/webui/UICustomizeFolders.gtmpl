@@ -4,45 +4,11 @@
 		<div class="Title">My Folders</div>
 		<div style="clear: left"><span></span></div>
 	</div>
-	<div class="UITree">
-	  <div class="TreeContainer JSContainer">
-	    <div class="Node" style="padding-top: 2px;">
-	   		<div class="ColapseIcon"><span></span></div>
-	   		<div class="IconFolder OpenFolder"><span></span></div>
-	   		<div class="NodeLabel">
-	   			<a href="#">Open source</a>
-	   		</div>
-		    <div class="ChildrenContainer" style="display: block">
-				  <div class="Node" style="padding-top: 2px; margin-left: 10px; ">
-			   		<div class="IconFolder CloseFolder"><span></span></div>
-			   		<div class="NodeLabel">
-			   			<a href="#">eXo platform</a>
-			   		</div>
-				  </div>
-				  <div class="Node" style="padding-top: 2px; margin-left: 10px; ">
-			   		<div class="IconFolder CloseFolder"><span></span></div>
-			   		<div class="NodeLabel">
-			   			<a href="#">ObjectWeb</a>
-			   		</div>
-				  </div>
-		    </div>
-		  </div>
-		  <div class="Node" style="padding-top: 2px;">
-	   		<div class="ColapseIcon"><span></span></div>
-	   		<div class="IconFolder OpenFolder"><span></span></div>
-	   		<div class="NodeLabel">
-	   			<a href="#">Customers</a>
-	   		</div>
-		    <div class="ChildrenContainer"style="display: block;">
-				  <div class="Node" style="padding-top: 2px; margin-left: 10px; ">
-			   		<div class="IconFolder CloseFolder"><span></span></div>
-			   		<div class="NodeLabel">
-			   			<a href="#">M6 TV</a>
-			   		</div>
-				  </div>
-		    </div>				  	
-		  </div>
-	  </div>
+	<div class="MyFolderContent">
+	  <div class="IconFolder OpenFolder">Open source</div>
+	  <div class="IconFolder CloseFolder">eXo platform</div>
+	  <div class="IconFolder CloseFolder">ObjectWeb</div>
+	  <div class="IconFolder CloseFolder">Customers</div>
+	  <div class="IconFolder CloseFolder">M6 TV</div>
 	</div>
-  <div style="clear:left;"><span></span></div>
 </div>
