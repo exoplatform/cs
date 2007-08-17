@@ -114,3 +114,8 @@
 	background: url('icons/BusyIcon.png') no-repeat;
 	height: 16px; width: 17px;
 }
+
+.AddNew {
+	background: url('icons/Add.gif') no-repeat center;
+	height: 20px; width: 24px;
+}
