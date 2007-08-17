@@ -2,9 +2,10 @@
 	import org.exoplatform.contact.webui.UIBannerContainer;
 	import org.exoplatform.contact.webui.UIActionBar;
 	import org.exoplatform.contact.webui.UIWorkingContainer;
+	import org.exoplatform.contact.webui.popup.UIPopupAction ;
 %>
 
-<div class="UIContactPortlet">
+<div class="UIContactPortlet"id="$uicomponent.id">
 
 <!-- Start UIBannerContainer -->
 	<% uicomponent.renderChild(UIBannerContainer.class) ;%>
@@ -19,5 +20,9 @@
 	<% uicomponent.renderChild(UIWorkingContainer.class) ;%>	
 	<!-- End UIWorkingContainer -->
 </div>
-	
+
+<!-- Start UIPopupAction -->
+	<% uicomponent.renderChild(UIPopupAction.class) ;%>	
+<!-- End UIPopupAction -->	
+
 </div>

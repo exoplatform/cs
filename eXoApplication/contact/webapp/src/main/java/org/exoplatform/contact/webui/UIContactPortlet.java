@@ -4,6 +4,8 @@
  **************************************************************************/
 package org.exoplatform.contact.webui;
 
+import org.exoplatform.contact.webui.popup.UIPopupAction;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
@@ -22,6 +24,13 @@ public class UIContactPortlet extends UIPortletApplication {
     addChild(UIBannerContainer.class, null, null) ;
     addChild(UIActionBar.class, null, null) ;
     addChild(UIWorkingContainer.class, null, null) ;
-    //hello
+    addChild(UIPopupAction.class, null, null) ;
+  }
+  
+  public void cancelAction() throws Exception {
+    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+    UIPopupAction popupAction = getChild(UIPopupAction.class) ;
+    popupAction.deActivate() ;
+    context.addUIComponentToUpdateByAjax(popupAction) ;
   }
 }

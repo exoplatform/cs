@@ -4,7 +4,7 @@
 				<div class="LeftBar">
 					<div class="RightBar">
 						<div class="CenterBar">
-							<a href="<%uicomponent.event("AddContact")%>" class="ControlButton">
+							<a href="<%=uicomponent.event("AddContact")%>" class="ControlButton">
 								<div class="IconHolder BlueCirclePlusIcon">
 									<div class="DownArrow1Icon">Add New</div>
 								</div>
@@ -16,17 +16,17 @@
 								<span></span>
 							</div>
 							<div class="SeparatorLine"><span></span></div>
-							<a href="#" class="ControlButton">
+							<a href="<%=uicomponent.event("ContactsView")%>" class="ControlButton">
 								<div class="IconHolder ViewIcon">
 									<div class="DownArrow1Icon">Contacts View</div>
 								</div>
 							</a>
-							<a href="#" class="ControlButton">
+							<a href="<%=uicomponent.event("CustomLayout")%>" class="ControlButton">
 								<div class="IconHolder CustomLayoutIcon">
 									<div class="DownArrow1Icon">Custom Layout View</div>
 								</div>
 							</a>
-							<a href="#" class="ControlButton">
+							<a href="<%=uicomponent.event("AddressBook")%>" class="ControlButton">
 								<div class="IconHolder AddressOptionIcon">Address Book Options</div>
 							</a>
 							<div style="clear:left;"><span></span></div>
