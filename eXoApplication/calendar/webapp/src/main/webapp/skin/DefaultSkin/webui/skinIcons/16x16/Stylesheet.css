@@ -68,3 +68,7 @@
 .StatusIcon {
 	background: url('icons/SelectIcon.gif') no-repeat;
 }
+
+.AddCategory {
+	background: url('icons/AddCategory.gif') no-repeat;
+}

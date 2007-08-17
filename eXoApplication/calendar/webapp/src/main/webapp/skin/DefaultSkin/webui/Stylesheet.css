@@ -6,6 +6,11 @@
 @import url("UIExportCalendar/Stylesheet.css") ;
 @import url("UIImportCalendar/Stylesheet.css") ;
 @import url("UIAddCalendarGroup/Stylesheet.css") ;
+@import url("UIAddTask/Stylesheet.css") ;
+@import url("UIQuickAddTask/Stylesheet.css") ;
+@import url("UIQuickAddEvent/Stylesheet.css") ;
+@import url("UISetting/Stylesheet.css") ;
+@import url("UIReminder/Stylesheet.css") ;
 
 /******************************************** MailBanner ****************************************/
 .UICalendarPortlet .UIBannerContainer {

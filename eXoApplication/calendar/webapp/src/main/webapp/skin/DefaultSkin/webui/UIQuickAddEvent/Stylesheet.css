@@ -1,0 +1,27 @@
+.UIQuickAddEvent {
+	background-color: #ffffff;
+	padding: 8px;
+}
+
+.UIQuickAddEvent .HorizontalLayout {
+	background-color: #f7f7f7;
+	padding: 8px;
+}
+
+.UIQuickAddEvent .UIAction {
+	width: 125px;
+}
+
+.UIQuickAddEvent .UIFormWithTitle {
+	margin: 8px auto ;
+}
+
+.UIQuickAddEvent .HorizontalLayout .DateTime {
+	float: left;
+	margin-right: 3px;
+}
+
+.UIQuickAddEvent .HorizontalLayout .DateTime input {
+	font-size: 11px;
+	width: 104px;
+}

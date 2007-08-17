@@ -1,0 +1,117 @@
+<div style="width: 550px; display: block; visibility: visible; z-index: 4; top: 50px; left: 309px;" id="SearchUser" exo:minheight="400" exo:minwidth="200" class="UIPopupWindow UIDragObject">
+  <div class="NormalStyle">
+   	<div class="TopLeftCornerDecorator">
+     	<div class="TopRightCornerDecorator">
+       	<div class="TopCenterDecorator">
+         	<div class="OverflowContainer">
+          	<div class="PopupTitleIcon"><span></span></div>
+          	<div onclick="" title="Close Window" class="CloseButton"><span></span></div>
+           	<div class="PopupTitle">Quick add event</div>
+         	</div>
+       	</div>
+     	</div>
+    </div>
+    <div class="MiddleLeftSideDecorator">
+      <div class="MiddleRightSideDecorator">
+       	<div class="MiddleCenterDecorator">
+         	<div class="UIWindowContent">
+         		<div class="UIQuickAddEvent">
+         			<div class="QuickAddEventContainer">
+         				<form method="post" action="" id="UIMembershipTypeForm" name="UIMembershipTypeForm" class="UIForm">
+						  		<div class="HorizontalLayout">
+						   			<div class="FormContainer">
+						     			<table class="UIFormGrid">
+						            <tbody>
+         									<tr>
+														<td class="FieldLabel">Event:</td>
+														<td class="FieldComponent"><textarea title="Textarea"></textarea></td>
+													</tr>
+													<tr>
+														<td class="FieldLabel">Date from:</td>
+														<td class="FieldComponent">
+															<div class="DateTime"><input type="text" id="name" name="name"/></div>
+															<div class="DateTime"> To: </div>
+															<div class="DateTime"><input type="text" id="name" name="name"/></div>
+															<div class="DateTime"><input style="width: 20px;" type="checkbox"/> All day</div>
+															<div style="clear: left;"><span></span></div>
+														</td>
+													</tr>
+													<tr>
+														<td class="FieldLabel">Reminder:</td>
+														<td class="FieldComponent">
+															<div class=""><input style="width: 15px;" type="checkbox"/> Popup</div>
+															<div class=""><input style="width: 15px;" type="checkbox"/> Email</div>
+														</td>
+													</tr>
+													<tr>
+														<td class="FieldLabel">Time reminder:</td>
+														<td class="FieldComponent">
+															<select name="user.gender" class="selectbox">
+																<option value="" selected="selected">20 min</option>
+															</select>
+														</td>
+													</tr>
+													<tr>
+						  	           	<td class="FieldLabel">Calendar: </td>
+						  	           	<td class="FieldComponent">
+							  	           	<select name="user.gender" class="selectbox">
+																<option value="" selected="selected">Company</option>
+															</select>
+														</td>
+							            </tr>
+							            <tr>
+						  	           	<td class="FieldLabel">Category: </td>
+						  	           	<td class="FieldComponent">
+							  	           	<select name="user.gender" class="selectbox">
+																<option value="" selected="selected">eXo</option>
+															</select>
+														</td>
+							            </tr>
+						      			</tbody>
+						      		</table>
+								     
+								    </div>
+								  </div>
+							  </form>
+         			</div>
+         			<div class="UIAction"> 
+				        <div class="ActionContainer">
+			            <div class="ActionButton">
+			              <div class="LightBlueStyle">
+			                <div class="ButtonLeft">
+			                  <div class="ButtonRight">
+			                    <div class="ButtonMiddle">
+			                      <a href="#">Add</a>
+			                    </div>
+			                  </div>
+			                </div>
+			              </div>
+			            </div>
+			            <div class="ActionButton">
+			              <div class="LightBlueStyle">
+			                <div class="ButtonLeft">
+			                  <div class="ButtonRight">
+			                    <div class="ButtonMiddle">
+			                      <a href="#">Cancel</a>
+			                    </div>
+			                  </div>
+			                </div>
+			              </div>
+			            </div>
+				        </div>
+				      </div>
+         		</div>
+         	</div>
+    		</div>
+   		</div>
+  	</div>
+   	<div class="BottomLeftCornerDecorator">
+    	<div class="BottomRightCornerDecorator">
+       	<div class="BottomCenterDecorator">
+     			<div class="ResizeButton"><span></span></div>
+    		</div>
+    	</div>
+   	</div>
+ 	</div>
+</div>
+         			
