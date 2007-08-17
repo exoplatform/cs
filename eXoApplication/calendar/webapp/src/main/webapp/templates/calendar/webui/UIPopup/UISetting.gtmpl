@@ -17,9 +17,6 @@
          	<div class="UIWindowContent">
          		<div class="UISetting">
          			<div class="SettingContainer">
-         			
-         			
-         			
          				<form method="post" action="" id="UIMembershipTypeForm" name="UIMembershipTypeForm" class="UIForm">
 						  		<div class="HorizontalLayout">
 						   			<div class="FormContainer">
@@ -82,11 +79,6 @@
 								    </div>
 								  </div>
 							  </form>
-						            
-						            
-         			
-         			
-         			
          			</div>
          			<div class="UIAction"> 
 				        <div class="ActionContainer">

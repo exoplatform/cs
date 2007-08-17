@@ -18,8 +18,6 @@
          		<div class="UIReminder">
          			<div class="ReminderContainer">
          			
-         			
-         			
          				<div class="Title"> Go to the My Dinh </div>
          				<div class="Title">Due: Monday, june 25,2007 9:45 AM</div>
          				<table cellspacing="0" borderspacing="0" id="PermissionInfo" class="UIGrid">
@@ -89,6 +87,30 @@
 				            </div>
 						      </div>
 						    </div>
+						    <div class="Text">click Snooze to be reminded again in:</div>
+						    <div class="SelectBox">
+	  	           	<select name="user.gender" class="selectbox">
+										<option value="" selected="selected">Medium</option>
+									</select>
+								</div>
+								<div class="Button">
+									<div class="UIAction"> 
+						        <div class="ActionContainer">
+					            <div class="ActionButton">
+					              <div class="LightBlueStyle">
+					                <div class="ButtonLeft">
+					                  <div class="ButtonRight">
+					                    <div class="ButtonMiddle">
+					                      <a href="#">Snooze</a>
+					                    </div>
+					                  </div>
+					                </div>
+					              </div>
+					            </div>
+						        </div>
+						      </div>
+								</div>
+								<div style="clear: left;"><span></span></div> 
          			</div>
          			<div class="UIAction"> 
 				        <div class="ActionContainer">

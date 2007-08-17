@@ -17,6 +17,26 @@
 	width: 155px;
 }
 
+.UIReminder .ReminderContainer .SelectBox {
+	float: left;
+	margin: 3px 0px 0px 3px;
+}
+
+.UIReminder .ReminderContainer .SelectBox select {
+	width: 400px;
+	height: 18px;
+	font-size: 11px;
+}
+
+.UIReminder .ReminderContainer .Button {
+	float: left;
+}
+
+.UIReminder .ReminderContainer .Button .UIAction {
+	width: 65px;
+	padding: 2px;
+}
+
 .UIReminder .TaskIcon {
 	width: 16px; height: 16px;
 	margin: 3px 0px 0px 4px;
@@ -26,3 +46,4 @@
 	padding:  0px 0px 10px 20px;
 	font-weight: bold;
 }
+

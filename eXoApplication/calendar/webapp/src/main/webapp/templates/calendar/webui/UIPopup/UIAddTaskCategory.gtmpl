@@ -21,17 +21,16 @@
          					<form class="UIForm">
          						<div class="UIHorizontalLayout">
          							<div class="FormContainer">
-         							
-         									<table class="UIGrid" cellspacing="0" borderspacing="0">
- 														<thead>
- 															<tr>
- 																<th>Task category</th>
- 																<th>Description</th>
- 																<th>Action</th>
- 															</tr>
- 														</thead>
- 														<tbody>
- 															<tr class="EvenRow">
+         								<table class="UIGrid" cellspacing="0" borderspacing="0">
+ 													<thead>
+ 														<tr>
+ 															<th>Task category</th>
+ 															<th>Description</th>
+ 															<th>Action</th>
+ 														</tr>
+ 													</thead>
+ 													<tbody>
+ 														<tr class="EvenRow">
  															<td class="text">any</td>
  															<td class="text">true</td>
  															<td class="text">true</td>
@@ -44,49 +43,48 @@
  																	</div>
  																</div>
  															</td>
- 															</tr>
- 															<tr class="OddRow">
- 															<td class="text">user</td>
- 															<td class="text">false</td>
- 															<td class="text">false</td>
- 															<td class="text">false</td>
- 															<td>
- 																<div class="ActionContainer" style="margin: 0px auto;">
- 																	<div class="OverflowContainer" style="margin: auto;">
- 																		<a class="EditIcon" title="Edit" href="#"><span></span></a>
- 																		<a class="DeleteIcon" title="Delete" href="#"><span></span></a>
- 																	</div>
- 																</div>
- 															</td>
- 															</tr>
- 														</tbody>
- 													</table>
-													<div class="UIPageIterator">
-														<div class="PageIteratorContainer">
-														  <div class="RightPageIteratorBlock">
-														    	  <a href="#" class="Icon LastTopPageIcon" title=""></a>
-														    	  <a class="Icon DisableLastTopPageIcon" title=""></a>        
-														    	  <a href="#" class="Icon LastPageIcon" title=""></a>
-														    	  <a class="Icon DisableLastPageIcon" title=""><span></span></a>
-														    <div class="Number">
-														            <a href="#" class="PageSelected"><span></span></a>
-														            <a href="#"><span></span></a>
-														    </div>
-														    	   <a href="#" class="Icon NextPageIcon" title=""></a>
-														    	   <a class="Icon DisableNextPageIcon" title=""><span></span></a>
-														    	   <a href="#" class="Icon NextTopPageIcon" title=""></a>
-														    	   <a class="Icon DisableNextTopPageIcon" title=""><span></span></a>
-														    	   <a class="Icon DisableNextTopPageIcon" title=""><span></span></a>
-														    <div style="clear: left"><span></span></div>
-														  </div>
-														  <div class="LeftPageIteratorBlock">
-														  	<div class="TotalPages"><span></span></div>
-														  	<div class="PagesTotalNumber"><span></span></div>
-														  	<div style="clear: left"><span></span></div>
-														  </div>
+ 														</tr>
+	 													<tr class="OddRow">
+	 														<td class="text">user</td>
+	 														<td class="text">false</td>
+	 														<td class="text">false</td>
+	 														<td class="text">false</td>
+	 														<td>
+	 															<div class="ActionContainer" style="margin: 0px auto;">
+	 																<div class="OverflowContainer" style="margin: auto;">
+	 																	<a class="EditIcon" title="Edit" href="#"><span></span></a>
+	 																	<a class="DeleteIcon" title="Delete" href="#"><span></span></a>
+	 																</div>
+	 															</div>
+	 														</td>
+ 														</tr>
+ 													</tbody>
+ 												</table>
+												<div class="UIPageIterator">
+													<div class="PageIteratorContainer">
+													  <div class="RightPageIteratorBlock">
+											    	  <a href="#" class="Icon LastTopPageIcon" title=""></a>
+											    	  <a class="Icon DisableLastTopPageIcon" title=""></a>        
+											    	  <a href="#" class="Icon LastPageIcon" title=""></a>
+											    	  <a class="Icon DisableLastPageIcon" title=""><span></span></a>
+													    <div class="Number">
+										            <a href="#" class="PageSelected"><span></span></a>
+										            <a href="#"><span></span></a>
+													    </div>
+										    	    <a href="#" class="Icon NextPageIcon" title=""></a>
+										    	    <a class="Icon DisableNextPageIcon" title=""><span></span></a>
+										    	    <a href="#" class="Icon NextTopPageIcon" title=""></a>
+										    	    <a class="Icon DisableNextTopPageIcon" title=""><span></span></a>
+										    	    <a class="Icon DisableNextTopPageIcon" title=""><span></span></a>
+													    <div style="clear: left"><span></span></div>
 													  </div>
-													  <div style="clear: right"><span></span></div>
-													</div>        												
+													  <div class="LeftPageIteratorBlock">
+													  	<div class="TotalPages"><span></span></div>
+													  	<div class="PagesTotalNumber"><span></span></div>
+													  	<div style="clear: left"><span></span></div>
+													  </div>
+												  </div>
+												  <div style="clear: right"><span></span></div>
  												</div>
          							</div>
          						</div>
