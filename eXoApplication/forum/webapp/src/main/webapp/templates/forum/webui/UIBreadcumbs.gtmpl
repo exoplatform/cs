@@ -5,12 +5,13 @@
 				<div class="BreadcumbsInfoBar">
 					<div class="OpenIcon"><span></span></div>
 					<% 
-					//for(action in uicomponent.getActions()) {
-					//	String link = uicomponent.event(action) ;
+						for(path in uicomponent.getBreadcumbs()) {
+							String link = uicomponent.event("ChangePath", path) ;
+							String name = path.substring(path.lastIndexOf("/") + 1) ;
 					%>
-						<a href="link" class="Selected">eXo Forums</a>
-						<div class="RightArrowIcon"><span></span></div>
-				<%//} %>
+							<a href="$link" class="Selected">$name</a>
+							<div class="RightArrowIcon"><span></span></div>
+				  <%} %>
 				</div>
 				<div class="RSSBar">
 					<div class="SeparatorLine">

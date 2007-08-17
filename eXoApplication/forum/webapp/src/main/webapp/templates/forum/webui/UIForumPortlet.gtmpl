@@ -8,5 +8,12 @@
 %>
 
 <div class="UIForumPortlet" id="$uicomponent.id">
-	<% uicomponent.renderChildren() ;%>
+	<% 
+		List children = uicomponent.getChildren() ;
+    for(component in children) {
+      if(component.isRendered()){
+				uicomponent.renderChild(component.getClass()) ;      
+      }
+    }
+	%>
 </div>

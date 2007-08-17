@@ -4,9 +4,12 @@
  **************************************************************************/
 package org.exoplatform.forum.webui;
 
+import java.util.List;
+
 import org.exoplatform.forum.webui.popup.UIPopupAction;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
+import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 
@@ -16,7 +19,7 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
  * Aug 01, 2007
  */
 @ComponentConfig(
-   lifecycle = UIApplicationLifecycle.class,
+   lifecycle = UIApplicationLifecycle.class, 
    template = "app:/templates/forum/webui/UIForumPortlet.gtmpl"
 )
 public class UIForumPortlet extends UIPortletApplication {
@@ -24,9 +27,8 @@ public class UIForumPortlet extends UIPortletApplication {
     addChild(UIBannerContainer.class, null, null) ;
     addChild(UIBreadcumbs.class, null, null) ;
     addChild(UICategoryContainer.class, null, null) ;
-    //addChild(UIForumContainer.class, null, null) ;
-    //addChild(UIPostPreview.class, null, null) ;
-    
+    addChild(UIForumContainer.class, null, null).setRendered(false) ;
+    addChild(UIPostPreview.class, null, null).setRendered(false) ;
     addChild(UIPopupAction.class, null, null) ;
   }
   public void cancelAction() throws Exception {

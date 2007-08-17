@@ -4,15 +4,24 @@
  **************************************************************************/
 package org.exoplatform.forum.webui;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.jcr.Node;
+import javax.jcr.Session;
 
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.forum.service.ForumService;
+import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.jcr.ext.app.SessionProviderService;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.services.jcr.util.IdGenerator ;
 
 /**
  * Created by The eXo Platform SARL
@@ -29,23 +38,61 @@ import org.exoplatform.webui.event.EventListener;
 )
 public class UIBreadcumbs extends UIContainer {
 	private Node currentNode_ ;
-	private String[] breadcumbs ;
+	private List<String> breadcumbs_ = new ArrayList<String>();
 	private String forumHomePath_ ;
   public UIBreadcumbs()throws Exception {
   	ForumService forumService = (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
   	//forumHomePath_ = forumService.getForumHomePath() ;
-  	
+    breadcumbs_.add(forumHomePath_) ;
+    IdGenerator.generate() ;
   }
   
   public void setCurrentNode(Node selectedNode) throws Exception {
   	currentNode_ = selectedNode ;
-  	//forumService_.getForumHomePath() ;
-  	
+    breadcumbs_ = new ArrayList<String> () ;
+    if(selectedNode.getPath().length() > forumHomePath_.length()) {
+      Node parentNode = selectedNode.getParent() ;
+      while(!forumHomePath_.equals(parentNode.getPath())) {
+        breadcumbs_.add(parentNode.getPath()) ;
+        parentNode = parentNode.getParent() ;
+      }
+    }
+    breadcumbs_.add(forumHomePath_) ;
   }
+  
+  private List<String> getBreadcumbs() throws Exception {
+    return breadcumbs_ ;
+  }
+  
   static public class ChangePathActionListener extends EventListener<UIBreadcumbs> {
     public void execute(Event<UIBreadcumbs> event) throws Exception {
-      UIBreadcumbs uiActionBar = event.getSource() ;      
-      System.out.println("====================> testOpen");
+      UIBreadcumbs uiBreadcums = event.getSource() ;      
+      String path = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      SessionProviderService service = 
+        (SessionProviderService)PortalContainer.getComponent(SessionProviderService.class) ;
+      String userId = Util.getPortalRequestContext().getRemoteUser() ;
+      SessionProvider sessionProvider = service.getSessionProvider(userId) ;
+      if(sessionProvider == null) {
+        sessionProvider = new SessionProvider(null) ;
+        service.setSessionProvider(userId, sessionProvider) ;
+      }
+      RepositoryService repositoryService = (RepositoryService)PortalContainer.getComponent(RepositoryService.class) ;
+      String defaultWS = repositoryService.getCurrentRepository().getConfiguration().getDefaultWorkspaceName() ;
+      Session session = sessionProvider.getSession(defaultWS, repositoryService.getCurrentRepository()) ;
+      Node selectNode = (Node)session.getItem(path) ;
+      String type = selectNode.getPrimaryNodeType().getName() ;
+      uiBreadcums.setCurrentNode(selectNode) ;
+      if(type.equals("exo:forumCategory")) {
+        
+      }else if(type.equals("exo:forum")) {
+        
+      }else if(type.equals("exo:topic")) {
+        
+      }else { //forum home
+        
+      }
+        
+      System.out.println("====================> " + selectNode.getPrimaryNodeType().getName());
     }
   }  
   
