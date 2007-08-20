@@ -13,6 +13,7 @@
 			List categories = uicomponent.getCategoryList();
 			 for(category in categories) {
 			 String title = category.getCategoryName();
+			 String description = category.getDescription()
 			 
 		 %>
 			<div class="UIForumCategory">
@@ -20,7 +21,7 @@
 				  <div class="LeftBar">
 				  	<div class="RightBar">
 				  		<div class="CenterBar">
-				  			<div class="Title"><a href="<%=uicomponent.event("OpenCategory", category.getId())%>">$title</a></div>
+				  			<div class="Title" title="$description"><a href="<%=uicomponent.event("OpenCategory", category.getId())%>">$title</a></div>
 				  			<div class="ExpandButton" title="Collapser category"><span></span></div>
 								<div style="clear: both;"><span></span></div>
 				  		</div>

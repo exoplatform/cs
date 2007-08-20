@@ -50,9 +50,9 @@ public class ForumServiceImpl implements ForumService{
   public void saveForum(String categoryId, Forum forum, boolean isNew) throws Exception {
     storage_.saveForum(categoryId, forum, isNew);
   }
-  
-  public void moveForum(String forumPath, String destCategoryPath) throws Exception {
-    storage_.moveForum(forumPath, destCategoryPath);
+
+	public void moveForum(String forumId, String forumPath, String destCategoryPath) throws Exception {
+    storage_.moveForum(forumId, forumPath, destCategoryPath);
   }
   
   public Forum getForum(String categoryId, String forumId) throws Exception {
@@ -125,6 +125,6 @@ public class ForumServiceImpl implements ForumService{
   
   public String getForumHomePath() throws Exception {
   	return storage_.getForumHomeNode().getPath() ;
-  }
+	}
   
 }

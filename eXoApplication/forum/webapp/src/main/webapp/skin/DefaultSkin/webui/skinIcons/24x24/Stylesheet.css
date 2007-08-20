@@ -30,6 +30,41 @@
 	background: url('icons/ThreadNoNewPost.gif') no-repeat ;
 }
 
+/*******************************  MenuCategoryIcon    **************************************/
 .AddForumIcon {
 	background: url('icons/AddNewForum.gif') no-repeat left center ;
 }
+
+.EditForumIcon {
+	background: url('icons/EditForum.gif') no-repeat left center ;
+}
+
+.SetLockedIcon {
+	background: url('icons/Lock.gif') no-repeat left center ;
+}
+
+.SetUnLockIcon {
+	background: url('icons/UnLock.gif') no-repeat left center ;
+}
+
+.SetCloseIcon {
+	background: url('icons/CloseSelectedForum.gif') no-repeat left center ;
+}
+
+.SetOpenIcon {
+	background: url('icons/OpenSelectedForum.gif') no-repeat left center ;
+}
+
+.MoveForumIcon {
+	background: url('icons/MoveSelectedForum.gif') no-repeat left center ;
+}
+
+
+
+
+
+
+
+
+
+

@@ -53,7 +53,7 @@ public class TestForumService extends BaseForumTestCase{
   	forumService_.saveCategory(cat, true);
   	
   	GregorianCalendar calendar = new GregorianCalendar() ;
-		String id = String.valueOf(calendar.getTimeInMillis());
+		String id = "forum"+String.valueOf(calendar.getTimeInMillis());
   	Forum forum = createdForum(id);
   	//forum la forum khoi tao
   	// add forum
@@ -69,7 +69,7 @@ public class TestForumService extends BaseForumTestCase{
 		// getList Forum
   	List<Forum> forums0 = new ArrayList<Forum>();
   	for (int i = 0; i < 15; i++) {
-  		forums0.add(createdForum(String.valueOf(11111 + i)));
+  		forums0.add(createdForum("forum" + String.valueOf(11111 + i)));
   		forumService_.saveForum(cat.getId(), forums0.get(i), true);
   	}
   	List<Forum> forums = forumService_.getForums(cat.getId());
@@ -85,10 +85,17 @@ public class TestForumService extends BaseForumTestCase{
   	Category cate = createCategory("idC1");
   	forumService_.saveCategory(cate, true);
   	Category cateNew = forumService_.getCategory("idC1");
-  	forumService_.moveForum(forumNew.getPath(), cateNew.getPath() + "/" + forumNew.getId());
+  	Category cat_ = forumService_.getCategory("idC0");
+  	String oldPath = forumNew.getPath();
+  	forumService_.moveForum(forumNew.getId(), oldPath, cateNew.getPath());
   	assertNotNull(forumService_.getForum("idC1", forumNew.getId()));
+  	Forum test = forumService_.getForum("idC1", forumNew.getId());
+  	System.out.println("\n =============== > HHH:  " + test.getPath()) ;
+  	System.out.println("\n =============== > HHH:  " + cat_.getPath()) ;
+  	forumService_.moveForum(test.getId(), test.getPath(), cat_.getPath());
+  	
   	// remove Forum return Forum
-  	assertNotNull(forumService_.removeForum("idC1", forumNew.getId()));
+  	//assertNotNull(forumService_.removeForum("idC1", forumNew.getId()));
   }
   
   public void testTopic() throws Exception {
@@ -137,7 +144,7 @@ public class TestForumService extends BaseForumTestCase{
 		List<Post> posts = new ArrayList<Post>();
 		Random rand = new Random();
 		for (int i = 0; i < 25; ++i) {
-		  Post post = createdPost(String.valueOf(rand.nextInt(99999999)));
+		  Post post = createdPost("topic" + String.valueOf(rand.nextInt(99999999)));
 		  posts.add(post);
 		  forumService_.savePost(cat.getId(), forum.getId(), topic.getId(), post, true);
 		}

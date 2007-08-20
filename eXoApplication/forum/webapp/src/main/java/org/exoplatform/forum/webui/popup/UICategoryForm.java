@@ -45,13 +45,13 @@ public class UICategoryForm extends UIForm implements UIPopupComponent{
 	
 	public static final String FIELD_CATEGORYTITLE_INPUT = "CategoryTitle" ;
 	public static final String FIELD_CATEGORYORDER_INPUT = "CategoryOrder" ;
-	public static final String FIELD_TEXT_AREA = "Description" ;
+	public static final String FIELD_DESCRIPTION_TEXTAREA = "Description" ;
   
   public UICategoryForm() throws Exception {
   	UIFormStringInput categoryTitle = new UIFormStringInput(FIELD_CATEGORYTITLE_INPUT, FIELD_CATEGORYTITLE_INPUT, null);
   	UIFormStringInput categoryOrder = new UIFormStringInput(FIELD_CATEGORYORDER_INPUT, FIELD_CATEGORYORDER_INPUT, "0");
   	categoryOrder.addValidator(PositiveNumberFormatValidator.class);
-  	UIFormStringInput description = new UIFormTextAreaInput(FIELD_TEXT_AREA, FIELD_TEXT_AREA, null);
+  	UIFormStringInput description = new UIFormTextAreaInput(FIELD_DESCRIPTION_TEXTAREA, FIELD_DESCRIPTION_TEXTAREA, null);
   	 addUIFormInput(categoryTitle);
   	 addUIFormInput(categoryOrder);
   	 addUIFormInput(description);
@@ -71,7 +71,7 @@ public class UICategoryForm extends UIForm implements UIPopupComponent{
       UICategoryForm uiForm = event.getSource() ;
       String categoryTitle = uiForm.getUIStringInput(FIELD_CATEGORYTITLE_INPUT).getValue();
       String categoryOrder = uiForm.getUIStringInput(FIELD_CATEGORYORDER_INPUT).getValue();
-      String description = uiForm.getUIFormTextAreaInput(FIELD_TEXT_AREA).getValue();
+      String description = uiForm.getUIFormTextAreaInput(FIELD_DESCRIPTION_TEXTAREA).getValue();
       
       GregorianCalendar calendar = new GregorianCalendar() ;
       PortalRequestContext pContext = Util.getPortalRequestContext();
@@ -91,7 +91,6 @@ public class UICategoryForm extends UIForm implements UIPopupComponent{
       ForumService forumService =  (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
       forumService.saveCategory(cat, true);
       
-//      Category cate = forumService.getCategory(id);
       UIForumPortlet forumPortlet = event.getSource().getAncestorOfType(UIForumPortlet.class) ;
       forumPortlet.cancelAction() ;
       UICategories uiCategories = forumPortlet.getChild(UICategoryContainer.class).getChild(UICategories.class) ;

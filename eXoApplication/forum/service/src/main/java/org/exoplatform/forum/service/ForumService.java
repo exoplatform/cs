@@ -94,25 +94,25 @@ public interface ForumService {
    * 1. Check the mandatory fields
    * 2. Update the forum data in the database
    * 3. Invalidate or update the cache
-   * @param newForum
+   * @param categoryId
+   * @param forumId
    * @return
    * @throws Exception
    */
   public Forum removeForum(String categoryId, String forumId)throws Exception;  
-  /**
+	/**
    * This method should:
    * 1. Check to see if the user has the right to remove the forum. Throw an exception if the user do not
    *    have the right
    * 2. Move the forum data from the database
    * 3. Invalidate the cache
-   * 
-   * @param forumId
+   * @param forumId 
+   * @param forumPath
+   * @param destCategoryPath
    * @return
    * @throws Exception
    */
-  public void moveForum(String forumPath, String destCategoryId)throws Exception;  
-  
-  
+  public void moveForum(String forumId, String forumPath, String destCategoryPath)throws Exception;  
   /**
    * This method should: 
    * 1. Implement a JCRPageList in jcrext module

@@ -95,6 +95,7 @@
 .UIForumPortlet .ForumToolbar .SeparatorLine {
 	background: url(background/SeparatorLine2x19.gif) no-repeat;
 	width: 2px; height: 19px;
+	margin: 3px;
 }
 
 .UIForumPortlet .ForumToolbar .LeftBar {
@@ -112,15 +113,19 @@
 	height: 26px;
 }
 
-.UIForumCategory .ForumToolbar .UIPopupCategory {
-	left: 5px;
+.UIForumPortlet .ForumToolbar .UIPopupCategory {
+	left: -20px;
 	position:absolute;
 	top:3px;
 	width: auto;
 }
 
-.UIForumCategory .ForumToolbar .UIRightClickPopupMenu {
-	width:150px;
+.UIForumPortlet .ForumToolbar .UIRightClickPopupMenu {
+	width:175px;
+}
+
+.Vista .UIForumPortlet .ForumToolbar .UIRightClickPopupMenu {
+	width:190px;
 }
 /*=============================Content UICategoriesSummary====================*/
 
@@ -209,5 +214,21 @@
 
 .UIForumPortlet .ContentContainer .LastPostInfos {
 	line-height: 22px;
+}
+/******************************  OverButton  ***************************************/
+.UIForumPortlet .UICategoryStyle .LeftOverButton {
+	background: url('background/LeftOverButton5x22.gif') no-repeat left top;
+	padding-left: 5px;
+}
+
+.UIForumPortlet .UICategoryStyle .RightOverButton {
+	background: url('background/RightOverButton5x22.gif') no-repeat right top;
+	padding-right: 5px;
+}
+
+.UIForumPortlet .UICategoryStyle .CenterOverButton {
+	background: url('background/CenterOverButton1x22.gif') repeat-x top;
+	height: 22px;
+	padding-left: 3px;
 }
 
