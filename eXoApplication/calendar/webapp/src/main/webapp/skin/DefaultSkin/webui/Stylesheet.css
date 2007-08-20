@@ -329,51 +329,51 @@
 	padding: 8px;
 }
 
-/*====================Calendar View=====================*/
+/*====================View Calendar =====================*/
 
-.UICalendarView {
+.UIViewCalendar {
 	margin-left: 243px;
 }
 
-.UICalendarView .EventAllDay {
+.UIViewCalendar .EventAllDay {
 	border: 1px solid #ffffff;
 }
 
-.UICalendarView .EventAllDay .EventAllDayColor2 {
+.UIViewCalendar .EventAllDay .EventAllDayColor2 {
 	border: 1px solid #c7c7c7;
 	background-color: #f6ffe5;
 	padding: 6px;
 }
 
-.UICalendarView .EventDayContainer {
+.UIViewCalendar .EventDayContainer {
 	height: 437px;
 	overflow: auto;
 	border-top: 1px solid #c7c7c7;
 }
 
-.UICalendarView .EventDayContent {
+.UIViewCalendar .EventDayContent {
 	height: 800px;
 	background-color: #ffffff;
 }
 
 /*====================Event List View=====================*/
 
-.UIEventListView .EventListContainer {
+.UIViewEventList .EventListContainer {
 	height: 490px;
 	overflow: auto;
 }
 
-.UIEventListView .EventListContent {
+.UIViewEventList .EventListContent {
 	margin-right: 3px;
 }
 
-.UIEventListView .EventListContent .ViewEvent {
+.UIViewEventList .EventListContent .ViewEvent {
 	padding: 1px;
 	background-color: #ffffff ;
 	border: 1px solid #c7c7c7;
 }
 
-.UIEventListView .EventListContent .ListBar {
+.UIViewEventList .EventListContent .ListBar {
 	background: url('background/TitleBarBG1x26.gif') repeat-x ;	
 	height: 26px;
 	padding: 0px 8px;
@@ -381,182 +381,180 @@
 	border-right: 1px solid #c7c7c7;
 }
 
-.UIEventListView .EventListContent .ViewBar {
+.UIViewEventList .EventListContent .ViewBar {
 	background-color: #e7e7e7 ;	
 	height: 30px;
 	padding: 0px 8px;
 }
 
-.UIEventListView .EventListContent .EventList {
+.UIViewEventList .EventListContent .EventList {
 	padding-left: 1px;
 	background-color: #ffffff;
 }
 
-.UIEventListView .EventListContent .AddCategoryIcon {
+.UIViewEventList .EventListContent .AddCategoryIcon {
 	background: url('skinIcons/16x16/icons/AddCategory.gif') no-repeat ;
 	float: right;
 	width: 16px; height: 16px;
 	margin: 5px 6px 0px 3px;
 }
 
-.UIEventListView .EventListContent .IconHolder {
-	line-height: 18px;
+.UIViewEventList .EventListContent .IconHolder {
 	margin: 2px 7px 0px 7px;
-	padding-left: 26px;
 }
 
-.UIEventListView .EventListContent .ComboBox {
+.UIViewEventList .EventListContent .ComboBox {
 	float: right;
 	margin: 3px 6px 0px 3px;
 }
 
-.UIEventListView .EventListContent .ListBar .Label {
+.UIViewEventList .EventListContent .ListBar .Label {
 	float: right;
 	margin: 7px 4px 0px 3px;
 }
 
-.UIEventListView .EventListContent .ViewBar .Label {
+.UIViewEventList .EventListContent .ViewBar .Label {
 	float: left;
 	margin: 7px 4px 0px 3px;
 	font-weight: bold;
 }
 
-.UIEventListView .EventListContent .ViewBar .MaximizeButton {
+.UIViewEventList .EventListContent .ViewBar .MaximizeButton {
 	float: right;
 	margin: 7px 4px 0px 3px;
 	cursor: pointer;
 }
 
-.UIEventListView .EventListContent .AttachmentIcon {
+.UIViewEventList .EventListContent .AttachmentIcon {
 	margin: 3px;
 	width: 16px; height: 16px;
 }
 
-.UIEventListView .EventListContent .ViewContainer {
+.UIViewEventList .EventListContent .ViewContainer {
 	padding: 4px;
 }
 
-.UIEventListView .EventListContent .ViewContainer td{
+.UIViewEventList .EventListContent .ViewContainer td{
 	border: none;
 }
 
-.UIEventListView .EventListContent .ViewContainer table{
+.UIViewEventList .EventListContent .ViewContainer table{
 	border: none;
 }
 
-.UIEventListView .EventListContent .ViewContainer .AttachmentIcon {
+.UIViewEventList .EventListContent .ViewContainer .AttachmentIcon {
 	line-height: 16px;
 	padding-left: 18px;
 }
 
-.UIEventListView .EventListContent .ViewContainer a {
+.UIViewEventList .EventListContent .ViewContainer a {
 	color: #1756d5;
 	text-decoration: underline;
 }
 
-.UIEventListView .EventListContent .ViewContainer .Actions {
+.UIViewEventList .EventListContent .ViewContainer .Actions {
 	line-height: 20px;
 }
 
-.UIEventListView .EventListContent .ViewContainer .Text {
+.UIViewEventList .EventListContent .ViewContainer .Text {
 	line-height: 20px;
 }
 
-.UIEventListView .EventListContent .ViewContainer .Img {
+.UIViewEventList .EventListContent .ViewContainer .Img {
 	width: 175px; height: 110px;
 	margin: 5px auto; border: 1px solid #ffffff;
 }
 
-.UIEventListView .EventListContent .ViewContainer .EventDescription {
+.UIViewEventList .EventListContent .ViewContainer .EventDescription {
 	background: url('background/Event33x12.gif') no-repeat ;
 	padding-left: 40px; line-height: 14px;
 	color: #3ca094;
 }
 
-.UIEventListView .EventListContent .ViewContainer .SeparatorDotLine {
+.UIViewEventList .EventListContent .ViewContainer .SeparatorDotLine {
 	float: left;
 	background: url('background/SeparatorDotLine1x25.gif') no-repeat ;
 	width: 1px; height: 25px;
 	margin: 3px 5px;
 }
 
-.UIEventListView .EventListContent .ViewContainer .ActionsContainer {
+.UIViewEventList .EventListContent .ViewContainer .ActionsContainer {
 	background: url('background/DotLine2x1.gif') repeat-x top ;
 	margin: 0px 10px 0px 33px;
 }
 
-.UIEventListView .EventListContent .ViewContainer .ActionsContainer a {
+.UIViewEventList .EventListContent .ViewContainer .ActionsContainer a {
 	color: #000000;
 	text-decoration: none;
 }
 
-.UIEventListView .EventListContent .ViewContainer .ActionsContainer a:hover {
+.UIViewEventList .EventListContent .ViewContainer .ActionsContainer a:hover {
 	color: #1756d5;
 }
 
-.UIEventListView .EventListContent .ViewContainer .EditIcon {
+.UIViewEventList .EventListContent .ViewContainer .EditIcon {
 	background-repeat: no-repeat;
 	width: 50px;
 }
 
-.UIEventListView .EventListContent select {
+.UIViewEventList .EventListContent select {
 	width: 150px; height: 18px;
 	font-size: 11px;
 }
 
 
-.UIEventListView a {
+.UIViewEventList a {
 	color: #000000;
 	margin: 3px 0px 0px 0px;
 }
 
-.UIEventListView a:hover {
+.UIViewEventList a:hover {
 	color: #058ee6;
 }
 
 
-.UIEventListView .EventListContent  .UIGrid th {
+.UIViewEventList .EventListContent  .UIGrid th {
 	background: url('background/TitleBarBG1x20.gif') repeat-x ;	
   height: 20px;
 	border-right: 1px solid #c7c7c7;
 	border-bottom: none;
 }
-/*====================Event Month View=====================*/
+/*====================View Event Month =====================*/
 
-.UIEventMonthView {
+.UIViewEventMonth {
 	border-left: 1px solid #c7c7c7;
 }
 
-.UIEventMonthView .TitleBar {
+.UIViewEventMonth .TitleBar {
 	text-align: center;
 	font-weight: bold;
 	line-height: 22px;
 }
 
-.UIEventMonthView .EventMonthContent .RowContainerDay {
-	height: 464px;
+.UIViewEventMonth .EventMonthContent .RowContainerDay {
+	height: 440px;
 	overflow: auto;
 }
 
-.UIEventMonthView .EventMonthContent {
+.UIViewEventMonth .EventMonthContent {
 	background-color: #ffffff;
 	margin-top: 4px;
 }
 
-.UIEventMonthView .EventMonthContent  .WeekSuburd {
+.UIViewEventMonth .EventMonthContent  .DayBox {
 	text-align: right;
 	border-top: 1px solid #c7c7c7;
 	padding: 2px 6px;
 }
 
-.UIEventMonthView .EventMonthContent  .DisableDay {
+.UIViewEventMonth .EventMonthContent  .DisableDay {
 	text-align: right;
 	border-top: 1px solid #c7c7c7;
 	padding: 2px 6px;
 	color: #909090;
 }
 
-.UIEventMonthView .EventMonthContent .WeekSuburd .Today {
+.UIViewEventMonth .EventMonthContent .DayBox .Today {
 	border: 1px solid red;
 	background-color: #ffffff;
 	float: right;
@@ -564,7 +562,7 @@
 	text-align: center;
 }
 
-.UIEventMonthView .EventMonthContent .ViewMoreIcon {
+.UIViewEventMonth .EventMonthContent .ViewMoreIcon {
 	background: url('skinIcons/16x16/icons/ViewMoreEvent.gif') no-repeat right;
 	line-height: 16px;
 	padding-right: 18px;
@@ -574,81 +572,81 @@
 	
 }
 
-.UIEventMonthView .EventMonthContent  .UIGrid td {
+.UIViewEventMonth .EventMonthContent  .UIGrid td {
 	border-right: 1px solid #c7c7c7;
 }
 
-.UIEventMonthView .EventMonthContent  .WeekList {
+.UIViewEventMonth .EventMonthContent  .WeekList {
 	background: url('background/TitleBarBG1x23.gif') repeat-x ;	
   height: 23px;
 }
 
-.UIEventMonthView .EventMonthContent  .WeekTitle {
+.UIViewEventMonth .EventMonthContent  .WeekTitle {
 	float: left;
 	text-align: center;
 	line-height: 22px;
 	width: 14%;
 }
 
-.UIEventMonthView .EventMonthContent .DayContent {
+.UIViewEventMonth .EventMonthContent .DayContent {
 	height: 100px;
 }
 
-.UIEventMonthView .EventMonthContent  .RowContainerDay {
+.UIViewEventMonth .EventMonthContent  .RowContainerDay {
 	padding: 0px ;
 }
 
-.UIEventMonthView .EventMonthContent  .RowContainerDay .CalendarContentNomal {
+.UIViewEventMonth .EventMonthContent  .RowContainerDay .CalendarContentNomal {
 	background: #ffffff;
 	padding: 0px;
 }
 
-.UIEventMonthView .EventMonthContent  .RowContainerDay .CalendarContentDisable {
+.UIViewEventMonth .EventMonthContent  .RowContainerDay .CalendarContentDisable {
 	background: #f3f3f3;
 	padding: 0px;
 }
 
-.UIEventMonthView .EventMonthContent  .RowContainerDay .CalendarMatchedEventContent {
+.UIViewEventMonth .EventMonthContent  .RowContainerDay .CalendarMatchedEventContent {
 	background: #cadbff;
 	padding: 0px;
 }
 
 
-.UIEventMonthView .EventMonthContent  .RowContainerDay .NormalDayLabel {
+.UIViewEventMonth .EventMonthContent  .RowContainerDay .NormalDayLabel {
 	text-align: right;
 }
 
-.UIEventMonthView .EventMonthContent  .RowContainerDay .CurrentMonthLabel {
+.UIViewEventMonth .EventMonthContent  .RowContainerDay .CurrentMonthLabel {
 	font-weight: bold;
 }
 
-.UIEventMonthView .EventMonthContent .EventOnDayBorder {
+.UIViewEventMonth .EventMonthContent .EventOnDayBorder {
 	border: 1px solid #e4e4e4;
 	margin: 3px;
 }
 
-.UIEventMonthView .EventMonthContent .EventOnDayContent {
+.UIViewEventMonth .EventMonthContent .EventOnDayContent {
 	width: auto; height: 20px;
 	background: #fff8c7;
 	border: 1px solid #ffffff;
 }
 
-.UIEventMonthView .EventMonthContent .EventOnDayLabel {
+.UIViewEventMonth .EventMonthContent .EventOnDayLabel {
 	line-height: 20px;
 	text-align: center;
 }
 
-/*====================Task List View=====================*/
+/*====================View Task List =====================*/
 
-.UITaskListView .TaskListContainer {
+.UIViewTaskList .TaskListContainer {
 	height: 490px;
 }
 
-.UITaskListView .TaskListContent {
+.UIViewTaskList .TaskListContent {
 	padding-right: 3px;
 }
 
-.UITaskListView .TaskListContent .ListBar {
+.UIViewTaskList .TaskListContent .ListBar {
 	background: url('background/TitleBarBG1x26.gif') repeat-x ;	
 	height: 26px;
 	padding: 0px 8px;
@@ -656,139 +654,139 @@
 	border-right: 1px solid #c7c7c7;
 }
 
-.UITaskListView .TaskListContent .ViewTask {
+.UIViewTaskList .TaskListContent .ViewTask {
 	padding: 1px;
 	background-color: #ffffff ;
 	border: 1px solid #c7c7c7;
 }
 
-.UITaskListView .TaskListContent .ViewBar {
+.UIViewTaskList .TaskListContent .ViewBar {
 	background-color: #e7e7e7 ;	
 	height: 30px;
 	padding: 0px 8px;
 }
 
-.UITaskListView .TaskListContent .TaskList {
+.UIViewTaskList .TaskListContent .TaskList {
 	padding-left: 1px;
 	background-color: #ffffff;
 }
 
-.UITaskListView .TaskListContent .AddCategoryIcon {
+.UIViewTaskList .TaskListContent .AddCategoryIcon {
 	background: url('skinIcons/16x16/icons/AddCategory.gif') no-repeat ;
 	float: right;
 	width: 16px; height: 16px;
 	margin: 5px 6px 0px 3px;
 }
 
-.UITaskListView .TaskListContent .ComboBox {
+.UIViewTaskList .TaskListContent .ComboBox {
 	float: right;
 	margin: 3px 6px 0px 3px;
 }
 
-.UITaskListView .TaskListContent .ListBar .Label {
+.UIViewTaskList .TaskListContent .ListBar .Label {
 	float: right;
 	margin: 7px 4px 0px 3px;
 }
 
-.UITaskListView .TaskListContent .ViewBar .Label {
+.UIViewTaskList .TaskListContent .ViewBar .Label {
 	float: left;
 	margin: 7px 4px 0px 3px;
 	font-weight: bold;
 }
 
-.UITaskListView .TaskListContent .ViewBar .MaximizeButton {
+.UIViewTaskList .TaskListContent .ViewBar .MaximizeButton {
 	float: right;
 	margin: 7px 4px 0px 3px;
 	cursor: pointer;
 }
 
-.UITaskListView .TaskListContent .AttachmentIcon {
+.UIViewTaskList .TaskListContent .AttachmentIcon {
 	margin: 3px;
 	width: 16px; height: 16px;
 }
 
-.UITaskListView .TaskListContent .ViewContainer {
+.UIViewTaskList .TaskListContent .ViewContainer {
 	padding: 4px;
 }
 
-.UITaskListView .TaskListContent .ViewContainer td{
+.UIViewTaskList .TaskListContent .ViewContainer td{
 	border: none;
 }
 
-.UITaskListView .TaskListContent .ViewContainer table{
+.UIViewTaskList .TaskListContent .ViewContainer table{
 	border: none;
 }
 
-.UITaskListView .TaskListContent .ViewContainer .AttachmentIcon {
+.UIViewTaskList .TaskListContent .ViewContainer .AttachmentIcon {
 	line-height: 16px;
 	padding-left: 18px;
 }
 
-.UITaskListView .TaskListContent .ViewContainer a {
+.UIViewTaskList .TaskListContent .ViewContainer a {
 	color: #058ee6;
 	text-decoration: underline;
 }
 
-.UITaskListView .TaskListContent .ViewContainer .Actions {
+.UIViewTaskList .TaskListContent .ViewContainer .Actions {
 	line-height: 20px;
 }
 
-.UITaskListView .TaskListContent .ViewContainer .Text {
+.UIViewTaskList .TaskListContent .ViewContainer .Text {
 	line-height: 20px;
 }
 
-.UITaskListView .TaskListContent .ViewContainer .Img {
+.UIViewTaskList .TaskListContent .ViewContainer .Img {
 	width: 175px; height: 110px;
 	margin: 5px auto; border: 1px solid #ffffff;
 }
 
-.UITaskListView .TaskListContent .ViewContainer .TaskDescription {
+.UIViewTaskList .TaskListContent .ViewContainer .TaskDescription {
 	line-height: 14px;
 	font-weight: bold;
 	color: #2c498b;
 }
 
-.UITaskListView .TaskListContent .ViewContainer .SeparatorDotLine {
+.UIViewTaskList .TaskListContent .ViewContainer .SeparatorDotLine {
 	float: left;
 	background: url('background/SeparatorDotLine1x25.gif') no-repeat ;
 	width: 1px; height: 25px;
 	margin: 3px 5px;
 }
 
-.UITaskListView .TaskListContent .ViewContainer .ActionsContainer {
+.UIViewTaskList .TaskListContent .ViewContainer .ActionsContainer {
 	background: url('background/DotLine2x1.gif') repeat-x top ;
 	margin-right: 10px;
 }
 
-.UITaskListView .TaskListContent .ViewContainer .ActionsContainer a {
+.UIViewTaskList .TaskListContent .ViewContainer .ActionsContainer a {
 	color: #000000;
 	text-decoration: none;
 }
 
-.UITaskListView .TaskListContent .ViewContainer .ActionsContainer a:hover {
+.UIViewTaskList .TaskListContent .ViewContainer .ActionsContainer a:hover {
 	color: #1756d5;
 }
 
-.UITaskListView .TaskListContent select {
+.UIViewTaskList .TaskListContent select {
 	width: 150px; height: 18px;
 	font-size: 11px;
 }
 
-.UITaskListView .TaskListContent .DownArrow1Icon {
+.UIViewTaskList .TaskListContent .DownArrow1Icon {
 	line-height: 18px;
 	background-position: right;
 	padding-right: 16px; 
 }
 
-.UITaskListView a {
+.UIViewTaskList a {
 	color: #000000;
 }
 
-.UITaskListView a:hover {
+.UIViewTaskList a:hover {
 	color: #058ee6;
 }
 
-.UITaskListView .TaskListContent  .UIGrid th {
+.UIViewTaskList .TaskListContent  .UIGrid th {
 	background: url('background/TitleBarBG1x20.gif') repeat-x ;	
   height: 20px;
 	border-right: 1px solid #c7c7c7;

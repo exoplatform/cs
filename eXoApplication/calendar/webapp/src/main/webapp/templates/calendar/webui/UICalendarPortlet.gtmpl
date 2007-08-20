@@ -176,14 +176,14 @@
 							</div>
 						</div>
 					</div>
-<!-- Start Calendar View-->
-					<div class="UICalendarView">
-<!-- Start Event Day View-->
-						<div class="UIEventDayView" style="display: none;">
+<!-- Start View Calendar-->
+					<div class="UIViewCalendar">
+<!-- Start Event Preview-->
+						<div class="UIEventPreView" style="display: none;">
 							<div class="TitleBar">Tuesday, June 12, 2007</div>
 							<div class="EventAllDay">
 								<div class="EventAllDayColor2">
-									<div class="EventAllDAyDescription">Events happen all day go here</div>
+									<div class="EventAllDayDescription">Events happen all day go here</div>
 								</div>
 							</div>
 							<div class="EventDayContainer">
@@ -192,9 +192,9 @@
 								</div>
 							</div>
 						</div> 
-<!-- End Event Day View-->
-<!-- Start Event List View-->
-						<div class="UIEventListView" style="display: none;">
+<!-- End Event Preview-->
+<!-- Start View Event List -->
+						<div class="UIViewEventList" style="display: block;">
 							<div class="EventListContainer">
 								<div class="EventListContent">
 									<div class="ListBar">
@@ -359,9 +359,9 @@
 								</div>
 							</div>
 						</div>	
-<!-- End Event List View-->
-<!-- Start Event Month View-->
-						<div class="UIEventMonthView" style="display: block;">
+<!-- End View Event List -->
+<!-- Start View Event Month -->
+						<div class="UIViewEventMonth" style="display: none;">
 							<div class="TitleBar">June, 2007</div>
 							<div class="EventMonthContainer">
 								<div class="EventMonthContent">
@@ -409,7 +409,7 @@
 														<div class="DayContent"><span></span></div>
 													</td>
 			        						<td class="CalendarContentNomal">
-			        							<div class="WeekSuburd">1/6</div>
+			        							<div class="DayBox">1/6</div>
 														<div class="DayContent">
 			        								<div class="EventOnDayBorder">
 																<div class="EventOnDayContent">
@@ -425,53 +425,53 @@
 														<div class="ViewMoreIcon" title="View all event on day">+7 More</div>
 													</td>
 			        						<td class="CalendarContentNomal">
-														<div class="WeekSuburd">2</div>
+														<div class="DayBox">2</div>
 														<div class="DayContent"><span></span></div>
 													</td>
 			        						<td class="CalendarContentNomal">
-														<div class="WeekSuburd">3</div>
+														<div class="DayBox">3</div>
 														<div class="DayContent"><span></span></div>
 													</td>					        						        						
 			        					</tr>							        					
 			        				
 			        					<tr>
 			        						<td class="CalendarContentNomal">
-			        							<div class="WeekSuburd">4</div>
+			        							<div class="DayBox">4</div>
 			        							<div class="DayContent"><span></span></div>
 													</td>
 			        						<td class="CalendarContentNomal">
-			        							<div class="WeekSuburd">5</div>
+			        							<div class="DayBox">5</div>
 			        							<div class="DayContent"><span></span></div>															
 													</td>
 			        						<td class="CalendarContentNomal">
-														<div class="WeekSuburd">6</div>
+														<div class="DayBox">6</div>
 														<div class="DayContent"><span></span></div>
 													</td>
 			        						<td class="CalendarContentNomal">
-														<div class="WeekSuburd">7</div>
+														<div class="DayBox">7</div>
 														<div class="DayContent"><span></span></div>
 													</td>
 			        						<td class="CalendarContentNomal">
-			        							<div class="WeekSuburd">8</div>
+			        							<div class="DayBox">8</div>
 			        							<div class="DayContent"><span></span></div>																
 													</td>
 			        						<td class="CalendarContentNomal">
-														<div class="WeekSuburd">9</div>
+														<div class="DayBox">9</div>
 														<div class="DayContent"><span></span></div>
 													</td>
 			        						<td class="CalendarContentNomal">
-														<div class="WeekSuburd">10</div>
+														<div class="DayBox">10</div>
 														<div class="DayContent"><span></span></div>
 													</td>					        						        						
 			        					</tr>						        					
 			        				
 			        					<tr>
 			        						<td class="CalendarContentNomal">
-			        							<div class="WeekSuburd">11</div>
+			        							<div class="DayBox">11</div>
 			        							<div class="DayContent"><span></span></div>
 													</td>
 			        						<td class="CalendarMatchedEventContent">
-			        							<div class="WeekSuburd">
+			        							<div class="DayBox">
 			        								<div class="Today">12</div>
 			        								<div style="clear: right;"><span></span></div>
 			        							</div>
@@ -490,81 +490,81 @@
 														<div class="ViewMoreIcon" title="View all event on day">+7 More</div>														
 													</td>
 			        						<td class="CalendarContentNomal">
-														<div class="WeekSuburd">13</div>
+														<div class="DayBox">13</div>
 														<div class="DayContent"><span></span></div>
 													</td>
 			        						<td class="CalendarContentNomal">
-														<div class="WeekSuburd">14</div>
+														<div class="DayBox">14</div>
 														<div class="DayContent"><span></span></div>
 													</td>
 			        						<td class="CalendarContentNomal">
-			        							<div class="WeekSuburd">15</div>
+			        							<div class="DayBox">15</div>
 			        							<div class="DayContent"><span></span></div>																
 													</td>
 			        						<td class="CalendarContentNomal">
-														<div class="WeekSuburd">16</div>
+														<div class="DayBox">16</div>
 														<div class="DayContent"><span></span></div>
 													</td>
 			        						<td class="CalendarContentNomal">
-														<div class="WeekSuburd">17</div>
+														<div class="DayBox">17</div>
 														<div class="DayContent"><span></span></div>
 													</td>					        						        						
 			        					</tr>					        					
 			        				
 			        					<tr>
 			        						<td class="CalendarContentNomal">
-			        							<div class="WeekSuburd">18</div>
+			        							<div class="DayBox">18</div>
 			        							<div class="DayContent"><span></span></div>					        			
 													</td>
 			        						<td class="CalendarContentNomal">
-			        							<div class="WeekSuburd">19</div>
+			        							<div class="DayBox">19</div>
 			        							<div class="DayContent"><span></span></div>																
 													</td>
 			        						<td class="CalendarContentNomal">
-														<div class="WeekSuburd">20</div>
+														<div class="DayBox">20</div>
 														<div class="DayContent"><span></span></div>
 													</td>
 			        						<td class="CalendarContentNomal">
-														<div class="WeekSuburd">21</div>
+														<div class="DayBox">21</div>
 														<div class="DayContent"><span></span></div>
 													</td>
 			        						<td class="CalendarContentNomal">
-			        							<div class="WeekSuburd">22</div>
+			        							<div class="DayBox">22</div>
 			        							<div class="DayContent"><span></span></div>																
 													</td>
 			        						<td class="CalendarContentNomal">
-														<div class="WeekSuburd">23</div>
+														<div class="DayBox">23</div>
 														<div class="DayContent"><span></span></div>
 													</td>
 			        						<td class="CalendarContentNomal">
-														<div class="WeekSuburd">24</div>
+														<div class="DayBox">24</div>
 														<div class="DayContent"><span></span></div>
 													</td>					        						        						
 			        					</tr>					        					
 			        				
 			        					<tr>
 			        						<td class="CalendarContentNomal">
-			        							<div class="WeekSuburd">25</div>
+			        							<div class="DayBox">25</div>
 			        							<div class="DayContent"><span></span></div>
 													</td>
 			        						<td class="CalendarContentNomal">
-			        							<div class="WeekSuburd">26</div>
+			        							<div class="DayBox">26</div>
 			        							<div class="DayContent"><span></span></div>																
 													</td>
 			        						<td class="CalendarContentNomal">
-														<div class="WeekSuburd">27</div>
+														<div class="DayBox">27</div>
 														<div class="DayContent"><span></span></div>
 													</td>
 			        						<td class="CalendarContentNomal">
-														<div class="WeekSuburd">28</div>
+														<div class="DayBox">28</div>
 														<div class="DayContent"><span></span></div>
 													</td>
 			        						<td class="CalendarContentNomal">
-			        							<div class="WeekSuburd">29</div>
+			        							<div class="DayBox">29</div>
 			        							<div class="DayContent"><span></span></div>																
 													</td>
 			        						<td class="CalendarContentNomal">
-														<div class="WeekSuburd">30</div>
+														<div class="DayBox">30</div>
 														<div class="DayContent"><span></span></div>
 													</td>
 			        						<td class="CalendarContentDisable">
@@ -608,9 +608,9 @@
 								</div>
 							</div>
 						</div>
-<!-- End Event Month View-->
-<!-- Start Task List View-->
-						<div class="UITaskListView" style="display: none;">
+<!-- End View Event Month -->
+<!-- Start View Task List -->
+						<div class="UIViewTaskList" style="display: none;">
 							<div class="TaskListContainer">
 								<div class="TaskListContent">
 									<div class="ListBar">
@@ -778,9 +778,9 @@
 								</div>
 							</div>
 						</div>	
-<!-- End Task List View-->
+<!-- End View Task List -->
 					</div>	
-<!-- End Calendar View-->	
+<!-- End View Calendar -->	
 				</div>
 <!-- End Calendar Working Container-->
 			</div>
