@@ -1,0 +1,58 @@
+.UIAddNewEvent {
+	background-color: #ffffff;
+	padding: 8px;
+}
+
+.UIAddNewEvent .HorizontalLayout {
+	background-color: #f7f7f7;
+	padding: 8px;
+}
+
+.UIAddNewEvent .UIAction {
+	width: 125px;
+}
+
+.UIAddNewEvent .UIFormWithTitle {
+	margin: 8px auto ;
+}
+
+.UIAddNewEvent .AddCategory {
+	width: 16px; height: 16px;
+	margin: 1px 0px 0px 6px;
+}
+
+.UIAddNewEvent .HorizontalLayout .DateTime {
+	float: left;
+	margin-right: 3px;
+}
+
+.UIAddNewEvent .HorizontalLayout .DateTime input {
+	font-size: 11px;
+	width: 104px;
+}
+
+.UIAddNewEvent .HorizontalLayout .AddIcon16x16 {
+	width: 16px;
+	height: 16px;
+	margin: 0px 2px;
+}
+
+.UIAddNewEvent .HorizontalLayout .SelectUserIcon {
+	background: url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/SmallUserIcon.gif') no-repeat;
+}
+
+.UIAddNewEvent .HorizontalLayout .SelectMemberIcon {
+	background: url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/SmallGroupIcon.gif') no-repeat;
+}
+
+.UIAddNewEvent .HorizontalLayout .AddAnyIcon {
+	background: url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/SmallMemberIcon.gif') no-repeat;
+}
+
+.UIAddNewEvent .HorizontalLayout .UIAction {
+	width: 65px;
+	float: left;
+	padding: 0px;
+	margin-left: 4px; 
+}
+

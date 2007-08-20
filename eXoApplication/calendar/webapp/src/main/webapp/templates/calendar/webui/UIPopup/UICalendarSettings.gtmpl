@@ -164,30 +164,29 @@
 																	<div class="UIPageIterator">
 																		<div class="PageIteratorContainer">
 																		  <div class="RightPageIteratorBlock">
-																		    	  <a href="#" class="Icon LastTopPageIcon" title=""></a>
-																		    	  <a class="Icon DisableLastTopPageIcon" title=""></a>        
-																		    	  <a href="#" class="Icon LastPageIcon" title=""></a>
-																		    	  <a class="Icon DisableLastPageIcon" title=""><span></span></a>
+																    	  <a href="#" class="Icon LastTopPageIcon" title=""></a>
+																    	  <a class="Icon DisableLastTopPageIcon" title=""></a>        
+																    	  <a href="#" class="Icon LastPageIcon" title=""></a>
+																    	  <a class="Icon DisableLastPageIcon" title=""><span></span></a>
 																		    <div class="Number">
-																		            <a href="#" class="PageSelected"><span></span></a>
-																		            <a href="#"><span></span></a>
+															            <a href="#" class="PageSelected">1</a>
+															            <a href="#">2</a>
 																		    </div>
-																		    	   <a href="#" class="Icon NextPageIcon" title=""></a>
-																		    	   <a class="Icon DisableNextPageIcon" title=""><span></span></a>
-																		    	   <a href="#" class="Icon NextTopPageIcon" title=""></a>
-																		    	   <a class="Icon DisableNextTopPageIcon" title=""><span></span></a>
-																		    	   <a class="Icon DisableNextTopPageIcon" title=""><span></span></a>
+															    	   	<a href="#" class="Icon NextPageIcon" title=""><span></span></a>
+															    	   	<a class="Icon DisableNextPageIcon" title=""><span></span></a>
+															    	   	<a href="#" class="Icon NextTopPageIcon" title=""></a>
+															    	   	<a class="Icon DisableNextTopPageIcon" title=""><span></span></a>
 																		    <div style="clear: left"><span></span></div>
 																		  </div>
 																		  <div class="LeftPageIteratorBlock">
-																		  	<div class="TotalPages"><span></span></div>
-																		  	<div class="PagesTotalNumber"><span></span></div>
+																		  	<div class="TotalPages">Total pages</div>
+																		  	<div class="PagesTotalNumber">1</div>
 																		  	<div style="clear: left"><span></span></div>
 																		  </div>
 																	  </div>
 																	  <div style="clear: right"><span></span></div>
 																	</div>        												
-         												</div>
+		     												</div>
          												<div class="UIFormWithTitle UIPermissionForm">
          													<div class="TitleBar">Add/Edit a permission to that Calendar</div>
          													<form class="UIForm">

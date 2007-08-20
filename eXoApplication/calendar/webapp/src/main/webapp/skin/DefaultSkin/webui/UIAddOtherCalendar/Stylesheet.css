@@ -1,0 +1,87 @@
+.UIAddEmailAddress {
+	width: 95%;
+	margin: 10px auto;
+}
+
+.UIAddEmailAddress .UIHorizontalLayout {
+	background: #efefef;
+	border: solid 1px #cdcdcd;
+}
+
+.UIAddEmailAddress .UIHorizontalLayout .FormContainer {
+	padding: 10px;
+}
+
+.UIAddEmailAddress .FormContainer .UIFormGrid .FieldComponent {
+	padding: 4px;
+}
+
+.UIAddEmailAddress .UIAction{
+	width: 80px;
+}
+
+.UIAddEmailAddress .UIPropertyTab .UIGrid .Icon16x16{
+	margin-right: 3px;
+}
+
+.UIAddEmailAddress .SearchPublic {
+	padding-bottom: 10px;
+}
+
+.UIAddEmailAddress .SearchPublic .UIFormGrid .FieldLabel {
+	width: 60px;
+	text-align: right;
+}
+
+.UIAddEmailAddress .SearchPublic .UIFormGrid input {
+	width: 200px;
+}
+
+.UIAddEmailAddress .SearchPublic .UIFormGrid select {
+	width: 110px;
+}
+
+.UIAddEmailAddress .SearchPublic .UIAction {
+	width: 70px;
+	margin: 3px 0px 0px 0px;
+}
+
+.UIAddEmailAddress .SearchPublic .LeftSearchPublic{
+	background: url('background/LeftPublicCalendar5x40.gif') no-repeat left;
+	padding-left: 5px;
+}
+
+.UIAddEmailAddress .SearchPublic .RightSearchPublic{
+	background: url('background/RightPublicCalendar5x40.gif') no-repeat right;
+	padding-right: 5px;
+}
+
+.UIAddEmailAddress .SearchPublic .MiddleSerchPublic{
+	background: url('background/MiddlePublicCalendar1x40.gif') repeat-x center;
+	height: 40px;
+	line-height: 36px;
+}
+
+.UIAddEmailAddress .UIPropertyTab {
+	border: solid 1px #b7b7b7;
+}
+
+.UIAddEmailAddress .UIPropertyTab .UIGrid {
+	width: 95%;
+	margin: auto;
+}
+
+.UIAddEmailAddress .UIPropertyTab .UIFormGrid {
+	margin: 10px 0px;
+}
+
+.UIAddEmailAddress .UIPropertyTab .UIFormGrid .FieldLabel {
+	width: 60px;
+	text-align: right;
+	line-height: 24px;
+}
+
+.UIAddEmailAddress .UIPropertyTab .UIFormGrid select {
+	width: 210px;
+	line-height: 24px;
+}

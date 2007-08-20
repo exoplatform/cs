@@ -61,18 +61,6 @@
 	height: 16px;
 }
 
-.UIAddNewCalendar .UIFormWithTitle .HorizontalLayout .SelectUserIcon   {
-	background: url('icons/16x16/SmallUserIcon.gif') no-repeat ;
-}
-
-.UIAddNewCalendar .UIFormWithTitle .HorizontalLayout .SelectMemberIcon   {
-	background: url('icons/16x16/SmallMemberIcon.gif') no-repeat ;
-}
-
-.UIAddNewCalendar .UIFormWithTitle .HorizontalLayout .AddAnyIcon   {
-	background: url('icons/16x16/SmallGroupIcon.gif') no-repeat ;
-}
-
 .UIAddNewCalendar .FormContainer input {
 	width: 235px;
 	font-size: 11px;

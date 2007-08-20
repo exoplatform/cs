@@ -69,6 +69,19 @@
 	background: url('icons/SelectIcon.gif') no-repeat;
 }
 
+.AddAnyIcon {
+	background: url('icons/SmallGroupIcon.gif') no-repeat;
+}
+
+.SelectMemberIcon {
+	background: url('icons/SmallMemberIcon.gif') no-repeat;
+}
+
+.SelectUserIcon {
+	background: url('icons/SmallUserIcon.gif') no-repeat;
+	border: solid 1px red;
+}
+
 .AddCategory {
 	background: url('icons/AddCategory.gif') no-repeat;
 }
