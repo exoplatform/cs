@@ -364,10 +364,10 @@ public class JCRDataStorage implements DataStorage{
     Node home = getMailHomeNode(username);
     Account account = getAccountById(username, accountId);
     Node returnNode = null;
-    if (home.getNode(account.getUserDisplayName()).hasNode("Messages"))
-      returnNode = home.getNode(account.getUserDisplayName()).getNode("Messages");
+    if (home.getNode(account.getId()).hasNode("Messages"))
+      returnNode = home.getNode(account.getId()).getNode("Messages");
     else
-      returnNode = home.getNode(account.getUserDisplayName()).addNode("Messages", "nt:unstructured");
+      returnNode = home.getNode(account.getId()).addNode("Messages", "nt:unstructured");
     return returnNode;
   }
   
@@ -375,10 +375,10 @@ public class JCRDataStorage implements DataStorage{
     Node home = getMailHomeNode(username);
     Account account = getAccountById(username, accountId);
     Node returnNode = null;
-    if (home.getNode(account.getUserDisplayName()).hasNode("Folders")) 
-      returnNode = home.getNode(account.getUserDisplayName()).getNode("Folders");
+    if (home.getNode(account.getId()).hasNode("Folders")) 
+      returnNode = home.getNode(account.getId()).getNode("Folders");
     else
-      returnNode = home.getNode(account.getUserDisplayName()).addNode("Folders", "nt:unstructured");
+      returnNode = home.getNode(account.getId()).addNode("Folders", "nt:unstructured");
     return returnNode;
   }
   
@@ -386,10 +386,10 @@ public class JCRDataStorage implements DataStorage{
     Node home = getMailHomeNode(username);
     Account account = getAccountById(username, accountId);
     Node returnNode = null;
-    if (home.getNode(account.getUserDisplayName()).hasNode("Tags")) 
-      returnNode = home.getNode(account.getUserDisplayName()).getNode("Tags");
+    if (home.getNode(account.getId()).hasNode("Tags")) 
+      returnNode = home.getNode(account.getId()).getNode("Tags");
     else
-      returnNode = home.getNode(account.getUserDisplayName()).addNode("Tags", "nt:unstructured");
+      returnNode = home.getNode(account.getId()).addNode("Tags", "nt:unstructured");
     return returnNode;
   }
   

@@ -42,8 +42,8 @@ public class TestMailService extends BaseMailTestCase{
     myaccount.setSignature("my sign") ;
     myaccount.setDescription("No description ...") ;
     
-    myaccount.setServerProperty("username", "philippe.aristote@gmail.com"); 
-    myaccount.setServerProperty("password", "");
+    myaccount.setServerProperty("username", "exomailtest@gmail.com"); 
+    myaccount.setServerProperty("password", "exoadmin");
     myaccount.setServerProperty("host", "pop.gmail.com");
     myaccount.setServerProperty("port", "995"); // POP3 : 110, POP3 (SSL) : 995, IMAP : 143, IMAP (SSL) : 993
     myaccount.setServerProperty("protocol", "pop3"); // pop3 or imap
@@ -52,6 +52,8 @@ public class TestMailService extends BaseMailTestCase{
     //assert added account
     assertNotNull(mailService_.getAccountById("hungnguyen", "myId")) ;
     assertEquals("my sign", mailService_.getAccountById("hungnguyen", "myId").getSignature());
+    List<Account> accounts = mailService_.getAccounts("hungnguyen") ;
+    assertEquals(accounts.size(), 1) ;
     
 
     //update account
@@ -69,7 +71,7 @@ public class TestMailService extends BaseMailTestCase{
     //create folder
     Folder folder = new Folder();
     folder.setId("home");
-    folder.setLabel("home folder");
+    folder.setLabel("homefolder");
     folder.setName("INBOX");
     folder.setNumberOfUnreadMessage(0);
     mailService_.saveUserFolder("hungnguyen", "myId", folder);
@@ -129,7 +131,7 @@ public class TestMailService extends BaseMailTestCase{
         System.out.println("\t__________END FILE________");
       }
       System.out.println("----------------END-------------------------");
-    }
+    } 
     
     // create message
 //    Message message = new Message();
