@@ -112,61 +112,67 @@
             String classRow = "whileRow";
             int i = 0;
              for(forum in forums) {
-              if(i%2 == 0) classRow = "whileRow";
-              else classRow = "OddRow";
-              i++;
-              String classIconForum = "NoNewPostIcon";
-              String titleIconForum = "Forum Contains No New Post";
-              if(forum.getIsLock() == true){
-                classIconForum = "ForumCloseIcon";
-                titleIconForum = "Forum is Closed for Posting";
-              }
-              String forumTitle = forum.getForumName();
-              String forumDescription = forum.getDescription();
-              String topicNewPostIcon = "";
-              String topicNewPostTitle = "";
-              String lastPostBy = "";
-              String dateTime = "";
-               Topic topicNewPost = uicomponent.getLastTopic(forum.getLastTopicPath());
-               if(topicNewPost != null) {
-                topicNewPostIcon = topicNewPost.getIcon();
-                topicNewPostTitle = topicNewPost.getTopicName();
-                lastPostBy = topicNewPost.getLastPostBy();
-                dateTime = topicNewPost.getLastPostDate().getDate().getTime().getString();
-                long createdDate = topicNewPost.getLastPostDate().getDate().getTime();
-                if((toDay-createdDate)/86400000 < 4){
-                  classIconForum = "ContainNewPostIcon";
-                  titleIconForum = "Forum Contains New Posts";
-                }
-              }
-              String topicCount = (String)forum.getTopicCount();
-              String postCount = (String)forum.getPostCount();
-              String [] forumModerators = forum.getModerators();
+             	//if(!forum.getIsClosed() && ) {
+	              if(i%2 == 0) classRow = "whileRow";
+	              else classRow = "OddRow";
+	              i++;
+	              String classIconForum = "ForumNormalIcon";
+	              String titleIconForum = "Forum Contains No New Post";
+	              if(forum.getIsLock() == true){
+	                classIconForum = "ForumLockedIcon";
+	                titleIconForum = "Forum is Closed for Posting";
+	              }
+	              if(forum.getIsClosed() == true){
+	                classIconForum = "ForumCloseIcon";
+	                titleIconForum = "Forum is Closed for Posting";
+	              }
+	              String forumTitle = forum.getForumName();
+	              String forumDescription = forum.getDescription();
+	              String topicNewPostIcon = "";
+	              String topicNewPostTitle = "";
+	              String lastPostBy = "";
+	              String dateTime = "";
+	               Topic topicNewPost = uicomponent.getLastTopic(forum.getLastTopicPath());
+	               if(topicNewPost != null) {
+	                topicNewPostIcon = topicNewPost.getIcon();
+	                topicNewPostTitle = topicNewPost.getTopicName();
+	                lastPostBy = topicNewPost.getLastPostBy();
+	                dateTime = topicNewPost.getLastPostDate().getDate().getTime().getString();
+	                long createdDate = topicNewPost.getLastPostDate().getDate().getTime();
+	                if((toDay-createdDate)/86400000 < 4){
+	                  classIconForum = "ForumNewPostIcon";
+	                  titleIconForum = "Forum Contains New Posts";
+	                }
+	              }
+	              String topicCount = (String)forum.getTopicCount();
+	              String postCount = (String)forum.getPostCount();
+	              String [] forumModerators = forum.getModerators();
           %>
-              <tr class="$classRow">
-                <td style="padding: 0px;"><div class="ForumStatusIcon $classIconForum" title="$titleIconForum"><span></span></div></td>
-                <td >
-                  <a href="#" class="ForumTitle">$forumTitle<span class="ForumQuantity">&nbsp;(5 viewing)</span></a>
-                  <div class="ForumDescription">$forumDescription</div>
-                </td>
-                 <td >
-                 <% if(topicNewPost != null) { %>
-                   <a href="#" class="LastPostTitle $topicNewPostIcon">$topicNewPostTitle</a>
-                  <div class="LastPostInfos">by <a href="#">$lastPostBy</a><span class="DateTime">($dateTime)</span></div>
-                <% } %>  
-                </td>
-                 <td class="Tdbox">$topicCount</td>
-                <td class="Tdbox">$postCount</td>
-                <td >
-                <% for(forumModerator in forumModerators) { %>
-                  <div class="EmoticonsIcon BigGrinIcon"><span></span></div>
-                  <a href="#" class="Moderator">$forumModerator</a>
-                <% } %>
-                  <div style="clear: left;"><span></span></div>
-                </td>
-                <td class="Tdbox"><% uicomponent.renderChild(forum.getId())%></td>
-               </tr>
-           <% } 
+	              <tr class="$classRow">
+	                <td style="padding: 0px;"><div class="ForumStatusIcon $classIconForum" title="$titleIconForum"><span></span></div></td>
+	                <td >
+	                  <a href="#" class="ForumTitle">$forumTitle<span class="ForumQuantity">&nbsp;(5 viewing)</span></a>
+	                  <div class="ForumDescription">$forumDescription</div>
+	                </td>
+	                 <td >
+	                 <% if(topicNewPost != null) { %>
+	                   <a href="#" class="LastPostTitle $topicNewPostIcon">$topicNewPostTitle</a>
+	                  <div class="LastPostInfos">by <a href="#">$lastPostBy</a><span class="DateTime">($dateTime)</span></div>
+	                <% } %>  
+	                </td>
+	                 <td class="Tdbox">$topicCount</td>
+	                <td class="Tdbox">$postCount</td>
+	                <td >
+	                <% for(forumModerator in forumModerators) { %>
+	                  <div class="EmoticonsIcon BigGrinIcon"><span></span></div>
+	                  <a href="#" class="Moderator">$forumModerator</a>
+	                <% } %>
+	                  <div style="clear: left;"><span></span></div>
+	                </td>
+	                <td class="Tdbox"><% uicomponent.renderChild(forum.getId())%></td>
+	               </tr>
+           <% //	} 
+            	}
             }
         %>
         </tbody>

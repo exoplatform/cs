@@ -187,15 +187,3 @@
 	padding: 0px 31px;
 	font-size: 12px;
 }
-
-.UIForumPortlet .ForumContains .NewPost {
-	background: url('icons/24x24/NewPostIcon.gif') no-repeat left;
-}
-
-.UIForumPortlet .ForumContains .NoNewPost {
-	background: url('icons/24x24/NoNewPostIcon.gif') no-repeat left;
-}
-
-.UIForumPortlet .ForumContains .ClosedPost {
-	background: url('icons/24x24/ClosePostIcon.gif') no-repeat left;
-}

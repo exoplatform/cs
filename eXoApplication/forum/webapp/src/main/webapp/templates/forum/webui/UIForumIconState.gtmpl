@@ -1,8 +1,8 @@
 <div class="UIForumExplainationIcons">
 	<div class="ForumContains">
-		<div class="IconPost NewPost">Forum Contains New Posts</div>
-		<div class="IconPost NoNewPost">Forum Contains No New Posts</div>
-		<div class="IconPost ClosedPost">Forum is Closed for Posting</div>
+		<div class="IconPost ForumNormalIcon">Forum Contains New Posts</div>
+		<div class="IconPost ForumNewPostIcon">Forum Contains No New Posts</div>
+		<div class="IconPost ForumLockedIcon">Forum is Closed for Posting</div>
 		<div style="clear: left;"><span></span></div>
   </div>
 </div>

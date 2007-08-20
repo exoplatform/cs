@@ -44,7 +44,8 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
         @EventConfig(listeners = UICategory.SetUnLockActionListener.class),
         @EventConfig(listeners = UICategory.SetOpenActionListener.class),
         @EventConfig(listeners = UICategory.SetCloseActionListener.class),
-        @EventConfig(listeners = UICategory.MoveForumActionListener.class)
+        @EventConfig(listeners = UICategory.MoveForumActionListener.class),
+        @EventConfig(listeners = UICategory.RemoveForumActionListener.class)
     }
 )
 public class UICategory extends UIForm  {
@@ -255,7 +256,6 @@ public class UICategory extends UIForm  {
   	}
   }
 
-  
   static public class MoveForumActionListener extends EventListener<UICategory> {
   	public void execute(Event<UICategory> event) throws Exception {
   		UICategory uiCategory = event.getSource() ;
@@ -275,6 +275,29 @@ public class UICategory extends UIForm  {
     		moveForumForm.setListForum(forums, uiCategory.categoryId);
     		popupAction.activate(moveForumForm, 400, 165) ;
     		event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+  		} else {
+  			Object[] args = { };
+  			throw new MessageException(new ApplicationMessage("UICategory.msg.notCheck", args, ApplicationMessage.WARNING)) ;
+  		}	
+  	}
+  }
+  
+  static public class RemoveForumActionListener extends EventListener<UICategory> {
+  	public void execute(Event<UICategory> event) throws Exception {
+  		UICategory uiCategory = event.getSource() ;
+  		List<UIComponent> children = uiCategory.getChildren() ;
+  		List<Forum> forums = new ArrayList<Forum>() ;
+  		for(UIComponent child : children) {
+  			if(child instanceof UIFormCheckBoxInput) {
+  				if(((UIFormCheckBoxInput)child).isChecked()) {
+  					forums.add(uiCategory.forumService.getForum(uiCategory.categoryId, ((UIFormCheckBoxInput)child).getName()));
+  				}
+  			}
+  		}
+  		if((forums.size() > 0)) {
+  			for (Forum forum : forums) {
+  				uiCategory.forumService.removeForum(uiCategory.categoryId, forum.getId()) ;
+  			}
   		} else {
   			Object[] args = { };
   			throw new MessageException(new ApplicationMessage("UICategory.msg.notCheck", args, ApplicationMessage.WARNING)) ;

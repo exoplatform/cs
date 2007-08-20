@@ -1,14 +1,19 @@
-.ContainNewPostIcon {
-	background: url('icons/NewPostIcon.gif') no-repeat ;
+.ForumNewPostIcon {
+	background: url('icons/ForumNewPostIcon.gif') no-repeat ;
+}
+
+.ForumLockedIcon {
+	background: url('icons/ForumCloseIcon.gif') no-repeat ;
 }
 
 .ForumCloseIcon {
 	background: url('icons/ForumCloseIcon.gif') no-repeat ;
 }
 
-.NoNewPostIcon {
+.ForumNormalIcon {
 	background: url('icons/NoNewPostIcon.gif') no-repeat ;
 }
+
 
 .HotThreadNewPost {
 	background: url('icons/HotThreadNewPost.gif') no-repeat ;
