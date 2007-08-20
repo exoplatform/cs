@@ -1,14 +1,4 @@
 
-.PrintIcon {
-	background: url('icons/PrintIcon.gif') no-repeat;
-	width: 2px; height: 26px;
-}
-
-.DeleteIcon {
-	background: url('icons/Dustbin.gif') no-repeat;
-	width: 2px; height: 26px;
-}
-
 .Actions {
 	background: url(icons/ThisMessageAction.gif) no-repeat bottom;
 	cursor: pointer;
@@ -63,12 +53,10 @@
 .CustomViewIcon {
 	background: url('icons/CustomViewIcon.gif') no-repeat;
 	float: left;
-	height: 25px;
 }
 
 .SettingsIcon {
 	background: url('icons/SettingsIcon.gif') no-repeat left center;
-	height: 26px;
 }
 
 .AddEventIcon {

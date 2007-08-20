@@ -73,6 +73,16 @@
 	background: url('icons/ForwardIcon.gif') no-repeat left 6px;
 }
 
+.PrintIcon {
+	background: url('icons/PrintIcon.gif') no-repeat center;
+	width: 2px; height: 26px;
+}
+
+.DeleteIcon {
+	background: url('icons/Dustbin.gif') no-repeat center;
+	width: 2px; height: 26px;
+}
+
 .UnStarredIcon {
 	background: url('icons/NomalStarIcon.gif') no-repeat;
 	width: 16px; height: 16px;

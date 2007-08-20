@@ -2,7 +2,7 @@
 	<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
   	<thead>
   		<tr>
-  			<th style="width: 30px;" class="Border"><input type="checkbox" class="checkbox" title="Check all" value="4" onclick="eXo.mail.UIMailPortlet.checkAllMessages();"/></th>
+  			<th style="width: 20px; padding-left: 7px; " class="Border"><input type="checkbox" class="checkbox" title="Check all" value="4" onclick="eXo.mail.UIMailPortlet.checkAllMessages();"/></th>
   			<th style="width: 24px;"><div class="StarredIcon" title="Add star for this message"><span></span></div></th>
   		  <th style="padding-left: 8px; width: 24%;">
   		  	<div class="DownArrow1Icon" title="Sort by sender">Sender</div>
@@ -23,9 +23,9 @@
   	<tbody>
   		<tr>
 	  		<td><input type="checkbox" class="checkbox" value="4"/></td>
-				<td style="padding: 0px;"><div class="StarredIcon" ><span></span></div></td>
+				<td style="padding: 0px auto;"><div class="StarredIcon" ><span></span></div></td>
 				<td class="text">eXo Platform Collaboration...</td>
-				<td class="text"></td>
+				<td style="padding: 0px auto;"></td>
 				<td style="padding: 0px; border-right: 1px solid #ffffff;"></td>
 				<td class="text">Welcome to eXo Mail</td>
 				<td class="text">(5)</td>
@@ -35,9 +35,9 @@
    		</tr>
  	  	<tr>
   			<td><input type="checkbox" class="checkbox" value="4"/></td>
-				<td style="padding: 0px;"><div class="UnStarredIcon"><span></span></div></td>
+				<td style="padding: 0px auto;"><div class="UnStarredIcon"><span></span></div></td>
 				<td class="textBold">Brice Revenant</td>
-				<td style="padding: 0px;"><div class="AttachmentIcon"><span></span></div></td>
+				<td style="padding: 0px auto;"><div class="AttachmentIcon"><span></span></div></td>
 				<td style="padding: 0px; border-right: 1px solid #ffffff;"></td>
 				<td class="textBold">[exo-vn] M6</td>
 				<td style="padding: 0px;"></td>
@@ -47,9 +47,9 @@
   		</tr>
  	  	<tr>
   			<td><input type="checkbox" class="checkbox" value="4"/></td>
-				<td style="padding: 0px;"><div class="StarredIcon"><span></span></div></td>
+				<td style="padding: 0px auto;"><div class="StarredIcon"><span></span></div></td>
 				<td class="text">Brice Revenant</td>
-				<td style="padding: 0px;"></td>
+				<td style="padding: 0px auto;"></td>
 				<td style="padding: 0px; border-right: 1px solid #ffffff;"><div class="IconTag RedTag"><span></span></div></td>
 				<td class="text">[exo-vn] M6</td>
 				<td style="padding: 0px;"></td>
@@ -59,9 +59,9 @@
   		</tr>
   		<tr>
 	  		<td><input type="checkbox" class="checkbox" value="4"/></td>
-				<td style="padding: 0px;"><div class="UnStarredIcon" ><span></span></div></td>
+				<td style="padding: 0px auto;"><div class="UnStarredIcon" ><span></span></div></td>
 				<td class="text">Brice Revenant</td>
-				<td style="padding: 0px;"><div class="AttachmentIcon"><span></span></div></td>
+				<td style="padding: 0px auto;"><div class="AttachmentIcon"><span></span></div></td>
 				<td style="padding: 0px; border-right: 1px solid #ffffff;"><div class="IconTag BlueTag"><span></span></div></td>
 				<td class="text">[exo-vn] M6</td>
 				<td class="text">[7]</td>
@@ -71,9 +71,9 @@
    		</tr>
  		  <tr>
  		    <td></td>
-				<td style="padding: 0px;"></td>
+				<td style="padding: 0px auto;"></td>
 				<td class="text"></td>
-				<td style="padding: 0px;"></td>
+				<td style="padding: 0px auto;"></td>
 				<td style="padding: 0px; border-right: 1px solid #ffffff;"></td>
 				<td class="text"></td>
 				<td style="padding: 0px;"></td>
@@ -83,9 +83,9 @@
   		</tr>
  			<tr>
 			  <td></td>
-				<td style="padding: 0px;"></td>
+				<td style="padding: 0px auto;"></td>
 				<td class="text"></td>
-				<td style="padding: 0px;"></td>
+				<td style="padding: 0px auto;"></td>
 				<td style="padding: 0px; border-right: 1px solid white;"></td>
 				<td class="text"></td>
 				<td style="padding: 0px;"></td>
@@ -95,9 +95,9 @@
   		</tr>
 	    <tr>
 			  <td></td>
-				<td style="padding: 0px;"></td>
+				<td style="padding: 0px auto;"></td>
 				<td class="text"></td>
-				<td style="padding: 0px;"></td>
+				<td style="padding: 0px auto;"></td>
 				<td style="padding: 0px; border-right: 1px solid white;"></td>
 				<td class="text"></td>
 				<td style="padding: 0px;"></td>
@@ -107,9 +107,9 @@
   		</tr>
     	<tr>
 			  <td></td>
-				<td style="padding: 0px;"></td>
+				<td style="padding: 0pxv;"></td>
 				<td class="text"></td>
-				<td style="padding: 0px;"></td>
+				<td style="padding: 0px auto;"></td>
 				<td style="padding: 0px; border-right: 1px solid white;"></td>
 				<td class="text"></td>
 				<td style="padding: 0px;"></td>
@@ -119,9 +119,9 @@
   		</tr>
     	<tr>
 			  <td></td>
-				<td style="padding: 0px;"></td>
+				<td style="padding: 0px auto;"></td>
 				<td class="text"></td>
-				<td style="padding: 0px;"></td>
+				<td style="padding: 0px auto;"></td>
 				<td style="padding: 0px; border-right: 1px solid white;"></td>
 				<td class="text"></td>
 				<td style="padding: 0px;"></td>
