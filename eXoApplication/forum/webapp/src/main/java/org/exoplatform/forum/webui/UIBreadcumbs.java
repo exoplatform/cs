@@ -86,11 +86,13 @@ public class UIBreadcumbs extends UIContainer {
         forumPortelt.getChild(UICategoryContainer.class).setRendered(false) ;
         forumPortelt.getChild(UIForumContainer.class).setRendered(true) ;
       }else if(type.equals("exo:forumCategory")) {
+        forumPortelt.getChild(UICategoryContainer.class).getChild(UIForumActionBar.class).setRendered(false) ;
         forumPortelt.getChild(UICategoryContainer.class).setRendered(false) ;
         forumPortelt.getChild(UICategoryContainer.class).getChild(UICategories.class).setRendered(false) ;
         forumPortelt.getChild(UICategoryContainer.class).getChild(UICategory.class).setRendered(true) ;
         forumPortelt.getChild(UIForumContainer.class).setRendered(true) ;        
       }else { //forum home        
+        forumPortelt.getChild(UICategoryContainer.class).getChild(UIForumActionBar.class).setRendered(true) ;
         forumPortelt.getChild(UICategoryContainer.class).setRendered(true) ;
         forumPortelt.getChild(UICategoryContainer.class).getChild(UICategories.class).setRendered(true) ;
         forumPortelt.getChild(UICategoryContainer.class).getChild(UICategory.class).setRendered(false) ;

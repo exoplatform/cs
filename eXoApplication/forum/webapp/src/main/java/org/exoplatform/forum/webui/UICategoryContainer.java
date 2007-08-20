@@ -23,7 +23,7 @@ public class UICategoryContainer extends UIContainer  {
     
     addChild(UIForumActionBar.class, null, null);
     addChild(UICategories.class, null, null) ;
-    addChild(UICategory.class, null, null) ;
+    addChild(UICategory.class, null, null).setRendered(false) ;
     addChild(UICategoriesSummary.class, null, null) ;
   } 
   private boolean isRenderCategories () {

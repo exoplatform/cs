@@ -67,7 +67,8 @@ public class UICategories extends UIContainer  {
 		public void execute(Event<UICategories> event) throws Exception {
 			UICategories uiContainer = event.getSource();
 			String categoryId = event.getRequestContext().getRequestParameter(OBJECTID)  ;
-			UICategoryContainer categoryContainer = event.getSource().getAncestorOfType(UICategoryContainer.class) ;
+      UICategoryContainer categoryContainer = uiContainer.getAncestorOfType(UICategoryContainer.class) ;
+      categoryContainer.getChild(UIForumActionBar.class).setRendered(false) ;
 			categoryContainer.isRenderCategories = false ;
 			categoryContainer.getChild(UICategories.class).setRendered(false) ;
 			UICategory uiCategory = categoryContainer.getChild(UICategory.class) ;
