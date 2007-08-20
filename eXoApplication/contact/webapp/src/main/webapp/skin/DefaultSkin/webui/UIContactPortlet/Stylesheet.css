@@ -86,7 +86,16 @@
 
 .UIContactPortlet .UIActionBar .SeparatorLine {
 	float: left;
-	margin:3px 5px 2px;
+	margin: 3px 5px 2px;
+}
+
+.UIContactPortlet .UIActionBar .IconHolder {
+	margin: 0px 7px;
+	line-height: 24px;
+}
+
+.UIContactPortlet .UIActionBar .ControlButton {
+	margin: 3px 3px 0px 3px;
 }
 
 .UIContactPortlet .UIActionBar a {
@@ -94,9 +103,11 @@
 }
 
 .UIContactPortlet .UIActionBar a:hover {
-	background: url('background/ControlButtonBG1x26.gif') repeat-y ;
+	background: url('background/ControlButtonBG1x26.gif') repeat-x ;
 	border: 1px solid #9d9d9d;
 	color: #126ca5;
+	height: 24px;
+	line-height: 24px;
 }
 
 .UIContactPortlet .UIActionBar .Label {
@@ -129,7 +140,6 @@
 	cursor: pointer;
 }
 
-
 /************************************** UIWorkingContainer *******************************/
 
 .UIContactPortlet .ContactContainer {
@@ -143,7 +153,6 @@
 	background: #f3f3f3;
 	height: auto;
 }
-
 
 /*======================== UINavigationContainer =========================*/
 
@@ -175,7 +184,7 @@
 
 .UIContactPortlet .UINavigationContainer .TitleBar {
 	background: url('background/BgTitleBar1x24.gif') repeat-x;
-	height: 24xp; line-height: 24px;
+	height: 24px; line-height: 24px;
 	padding-right: 5px;
 }
 
@@ -208,7 +217,7 @@
 }
 
 .UIContactPortlet .UINavigationContainer .ItemList {
-	padding: 0px 18px;
+	padding: 0px 13px;
 	height: 24px; line-height: 24px;
 }
 
@@ -218,7 +227,7 @@
 
 .UIContactPortlet .UINavigationContainer .Selected {
 	background: #e6e8f5;
-	margin: 0px 2px;
+	margin: 0px 1px;
 }
 
 .UIContactPortlet .UINavigationContainer .Selected a {
@@ -226,11 +235,11 @@
 }
 
 .UIContactPortlet .UINavigationContainer .Normal {
-	margin: 0px 2px;
+	margin: 0px 1px;
 }
 
 .UIContactPortlet .UINavigationContainer .ListContent {
-	padding: 8px 0px 8px 18px;
+	padding: 8px 0px 8px 12px;
 }
 
 .UIContactPortlet .UINavigationContainer .ListContent a {
@@ -428,7 +437,7 @@
 }
 
 .UIContactPortlet .UIContactContainer .UIMessageList .DownArrow1Icon {
-	height: 16px; width: 60px;
+	height: 16px; width: 50px;
 	line-height: 16px;
 	margin: 3px 0px 0px 0px;
 	cursor: pointer;
@@ -445,6 +454,7 @@
 }
 
 .UIContactPortlet .UIContactContainer .UIContactPreview .ViewBoxStyle {
+	padding: 3px;
 }
 
 .UIContactPortlet .UIContactContainer .UIContactPreview .ContactPreviewDetails {
