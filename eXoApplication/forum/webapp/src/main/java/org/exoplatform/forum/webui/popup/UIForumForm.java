@@ -20,6 +20,7 @@ import org.exoplatform.forum.webui.UICategoryContainer;
 import org.exoplatform.forum.webui.UIForumPortlet;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.jcr.util.IdGenerator;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -176,10 +177,10 @@ public class UIForumForm extends UIForm implements UIPopupComponent{
       Boolean  ModerateTopic = (Boolean) uiForm.getUIFormCheckBoxInput(FIELD_MODERATETHREAD_CHECKBOX).getValue();
       Boolean  ModeratePost = (Boolean) uiForm.getUIFormCheckBoxInput(FIELD_MODERATEPOST_CHECKBOX).getValue();
       
-      GregorianCalendar calendar = new GregorianCalendar() ;
       PortalRequestContext pContext = Util.getPortalRequestContext();
       String userName = pContext.getRemoteUser() ;
-  		String id = "Forum" + String.valueOf(calendar.getTimeInMillis());
+//      GregorianCalendar calendar = new GregorianCalendar() ;
+//  		String id = "Forum" + String.valueOf(calendar.getTimeInMillis());
   		
   		Forum newForum = new Forum();
   		
@@ -216,7 +217,7 @@ public class UIForumForm extends UIForm implements UIPopupComponent{
       	forumService.saveForum(categoryId, newForum, false);
       }
       else {
-      	newForum.setId(id);
+      	newForum.setId(IdGenerator.generate().substring(5, 20));
       	forumService.saveForum(categoryId, newForum, true);
       }
       

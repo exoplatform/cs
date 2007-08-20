@@ -15,6 +15,7 @@ import org.exoplatform.forum.webui.UICategoryContainer;
 import org.exoplatform.forum.webui.UIForumPortlet;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.jcr.util.IdGenerator;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -73,13 +74,13 @@ public class UICategoryForm extends UIForm implements UIPopupComponent{
       String categoryOrder = uiForm.getUIStringInput(FIELD_CATEGORYORDER_INPUT).getValue();
       String description = uiForm.getUIFormTextAreaInput(FIELD_DESCRIPTION_TEXTAREA).getValue();
       
-      GregorianCalendar calendar = new GregorianCalendar() ;
       PortalRequestContext pContext = Util.getPortalRequestContext();
       String userName = pContext.getRemoteUser() ;
-  		String id = "Cate" + String.valueOf(calendar.getTimeInMillis());
+//      GregorianCalendar calendar = new GregorianCalendar() ;
+//  		String id = "Cate" + String.valueOf(calendar.getTimeInMillis());
   		
       Category cat = new Category();
-      cat.setId(id) ;
+      cat.setId(IdGenerator.generate().substring(5, 20)) ;
       cat.setOwner(userName) ;
       cat.setCategoryName(categoryTitle) ;
       cat.setCategoryOrder(Long.parseLong(categoryOrder)) ;
