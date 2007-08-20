@@ -11,4 +11,5 @@ UIForumPortlet.prototype.OverButtun = function(oject) {
 };
 
 
+
 eXo.forum.UIForumPortlet = new UIForumPortlet() ;

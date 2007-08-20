@@ -1,17 +1,17 @@
 .ForumNewPostIcon {
-	background: url('icons/ForumNewPostIcon.gif') no-repeat ;
+	background: url('icons/ForumNewPostIcon.gif') no-repeat left center;
 }
 
 .ForumLockedIcon {
-	background: url('icons/ForumCloseIcon.gif') no-repeat ;
+	background: url('icons/ForumCloseIcon.gif') no-repeat left center ;
 }
 
 .ForumCloseIcon {
-	background: url('icons/ForumCloseIcon.gif') no-repeat ;
+	background: url('icons/ForumCloseIcon.gif') no-repeat left center ;
 }
 
 .ForumNormalIcon {
-	background: url('icons/NoNewPostIcon.gif') no-repeat ;
+	background: url('icons/ForumNormalIcon.gif') no-repeat  left center;
 }
 
 
