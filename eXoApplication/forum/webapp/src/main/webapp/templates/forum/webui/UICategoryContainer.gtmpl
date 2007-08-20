@@ -5,14 +5,12 @@
 	import org.exoplatform.forum.webui.UICategoriesSummary ;
 %>
 <div class="UICategoryContainer">
-	<%  
-		boolean isRenger = uicomponent.isRenderCategories();
+	<% 
+		List children = uicomponent.getChildren() ;
+    for(child in children) {
+      if(child.isRendered()){
+				uicomponent.renderChild(child.getClass()) ;      
+      }
+    }
 	%>
-	<% if(isRenger){ %>
-		<% uicomponent.renderChild(UIForumActionBar.class) %>
-		<% uicomponent.renderChild(UICategories.class) %>
-	<% }else { %>
-		<% uicomponent.renderChild(UICategory.class) %>
-	<% } %>
-	<% uicomponent.renderChild(UICategoriesSummary.class) %>
 </div>

@@ -37,7 +37,6 @@ import org.exoplatform.services.jcr.util.IdGenerator ;
     }
 )
 public class UIBreadcumbs extends UIContainer {
-	private Node currentNode_ ;
 	private List<String> breadcumbs_ = new ArrayList<String>();
 	private String forumHomePath_ ;
   public UIBreadcumbs()throws Exception {
@@ -48,7 +47,7 @@ public class UIBreadcumbs extends UIContainer {
   }
   
   public void setCurrentNode(Node selectedNode) throws Exception {
-  	currentNode_ = selectedNode ;
+  	//currentNode_ = selectedNode ;
     breadcumbs_ = new ArrayList<String> () ;
     if(selectedNode.getPath().length() > forumHomePath_.length()) {
       Node parentNode = selectedNode.getParent() ;
@@ -82,17 +81,16 @@ public class UIBreadcumbs extends UIContainer {
       Node selectNode = (Node)session.getItem(path) ;
       String type = selectNode.getPrimaryNodeType().getName() ;
       uiBreadcums.setCurrentNode(selectNode) ;
-      if(type.equals("exo:forumCategory")) {
-        
-      }else if(type.equals("exo:forum")) {
-        
-      }else if(type.equals("exo:topic")) {
-        
-      }else { //forum home
-        
+      UIForumPortlet forumPortelt = uiBreadcums.getAncestorOfType(UIForumPortlet.class) ;
+      if(type.equals("exo:forumCategory") || type.equals("exo:forum") || type.equals("exo:topic")) {
+        forumPortelt.getChild(UICategoryContainer.class).setRendered(false) ;
+        forumPortelt.getChild(UIForumContainer.class).setRendered(true) ;
+      }else { //forum home        
+        forumPortelt.getChild(UICategoryContainer.class).setRendered(true) ;
+        forumPortelt.getChild(UICategoryContainer.class).getChild(UICategories.class).setRendered(true) ;
+        forumPortelt.getChild(UICategoryContainer.class).getChild(UICategory.class).setRendered(false) ;
+        forumPortelt.getChild(UIForumContainer.class).setRendered(false) ;        
       }
-        
-      System.out.println("====================> " + selectNode.getPrimaryNodeType().getName());
     }
   }  
   
