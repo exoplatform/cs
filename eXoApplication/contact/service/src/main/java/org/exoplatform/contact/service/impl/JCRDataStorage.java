@@ -95,9 +95,7 @@ public class JCRDataStorage implements DataStorage {
   }
 
   private String [] ValuesToStrings(Value[] Val) throws Exception {
-    if(Val.length == 1) {
-      return new String[]{Val[0].getString()};
-    }
+    if(Val.length == 1) return new String[]{Val[0].getString()};
     String[] Str = new String[Val.length];
     for(int i = 0; i < Val.length; ++i) {
       Str[i] = Val[i].getString();
