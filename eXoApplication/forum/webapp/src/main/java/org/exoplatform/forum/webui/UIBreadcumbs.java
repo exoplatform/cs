@@ -82,9 +82,14 @@ public class UIBreadcumbs extends UIContainer {
       String type = selectNode.getPrimaryNodeType().getName() ;
       uiBreadcums.setCurrentNode(selectNode) ;
       UIForumPortlet forumPortelt = uiBreadcums.getAncestorOfType(UIForumPortlet.class) ;
-      if(type.equals("exo:forumCategory") || type.equals("exo:forum") || type.equals("exo:topic")) {
+      if(type.equals("exo:forum") || type.equals("exo:topic")) {
         forumPortelt.getChild(UICategoryContainer.class).setRendered(false) ;
         forumPortelt.getChild(UIForumContainer.class).setRendered(true) ;
+      }else if(type.equals("exo:forumCategory")) {
+        forumPortelt.getChild(UICategoryContainer.class).setRendered(false) ;
+        forumPortelt.getChild(UICategoryContainer.class).getChild(UICategories.class).setRendered(false) ;
+        forumPortelt.getChild(UICategoryContainer.class).getChild(UICategory.class).setRendered(true) ;
+        forumPortelt.getChild(UIForumContainer.class).setRendered(true) ;        
       }else { //forum home        
         forumPortelt.getChild(UICategoryContainer.class).setRendered(true) ;
         forumPortelt.getChild(UICategoryContainer.class).getChild(UICategories.class).setRendered(true) ;
