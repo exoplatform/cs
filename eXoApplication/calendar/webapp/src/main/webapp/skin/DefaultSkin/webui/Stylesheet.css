@@ -455,8 +455,6 @@
 }
 
 .UIEventListView .EventListContent .ViewContainer .Actions {
-	text-align: right;
-	padding-right: 10px;
 	line-height: 20px;
 }
 
@@ -524,6 +522,16 @@
 	border-bottom: none;
 }
 /*====================Event Month View=====================*/
+
+.UIEventMonthView {
+	border-left: 1px solid #c7c7c7;
+}
+
+.UIEventMonthView .TitleBar {
+	text-align: center;
+	font-weight: bold;
+	line-height: 22px;
+}
 
 .UIEventMonthView .EventMonthContent .RowContainerDay {
 	height: 464px;
@@ -722,8 +730,6 @@
 }
 
 .UITaskListView .TaskListContent .ViewContainer .Actions {
-	text-align: right;
-	padding-right: 10px;
 	line-height: 20px;
 }
 

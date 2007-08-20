@@ -85,3 +85,13 @@
 .AddCategory {
 	background: url('icons/AddCategory.gif') no-repeat;
 }
+
+.ViewAttachmentIcon {
+	background: url('icons/ViewIcon.gif') no-repeat;
+	height: 16px;
+}
+
+.DownLoadAttachmentIcon {
+	background: url('icons/DownLoadIcon.gif') no-repeat;
+	height: 16px;
+}
