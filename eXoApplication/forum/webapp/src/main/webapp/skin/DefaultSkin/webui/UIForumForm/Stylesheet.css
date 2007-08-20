@@ -1,0 +1,83 @@
+.UIForumForm {
+	padding: 10px;
+	height: 400px;
+}
+
+.UIForumForm .AddForum .HorizontalLayout {
+	border: none;
+	padding: 5px;
+}
+
+.UIForumForm .HorizontalLayout .NewForum {
+	width: 400px;
+	padding: 20px 0px 40px 0px;
+}
+
+.UIForumForm .HorizontalLayout .NewForum textarea {
+	height: 100px;
+}
+
+.UIForumForm .HorizontalLayout .ModerationOptions  {
+	width: 510px;
+	padding: 20px 0px 60px 0px;
+}
+
+.UIForumForm .HorizontalLayout .ModerationOptions textarea {
+	width: 340px;
+	height: 40px;
+}
+
+.UIForumForm .ForumPermission {
+	padding: 5px;
+}
+
+.UIForumForm .ForumPermission .UIFormWithTitle {
+	margin: 10px auto 0px auto;
+}
+
+.UIForumForm .ForumPermission .HorizontalLayout .UIFormInputSet {
+	padding: 0px;
+}
+
+.UIForumForm .ForumPermission .UIFormInputSet .FormContainer {
+	border: none;
+	padding: 0px;
+}
+
+.UIForumForm .ForumPermission .UIGrid .OverflowContainer {
+	width: 50px;
+}
+
+.UIForumForm .ForumPermission .UIFormGrid td.FieldLabel {
+	width: 100px;
+}
+
+.UIForumForm .ForumPermission .UIFormGrid input.radio {
+	margin: 0px;	
+}
+
+.UIForumForm .ForumPermission .AddIcon16x16 {
+	width: 16px;
+	height: 16px;
+	margin: 0px 2px;
+}
+
+.UIForumForm .ForumPermission .SelectUserIcon {
+	background: url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/SmallUserIcon.gif') no-repeat;
+}
+
+.UIForumForm .ForumPermission .SelectMemberIcon {
+	background: url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/SmallGroupIcon.gif') no-repeat;
+}
+
+.UIForumForm .ForumPermission .AddAnyIcon {
+	background: url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/SmallMemberIcon.gif') no-repeat;
+}
+
+.UIForumForm .ForumPermission .UIAction {
+	padding: 0px 0px 5px 0px;
+}
+
+.UIForumForm .UIAction {
+	width: 140px;
+}

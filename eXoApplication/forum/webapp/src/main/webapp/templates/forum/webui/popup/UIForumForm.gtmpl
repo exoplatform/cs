@@ -1,4 +1,4 @@
-<div class="UIAddNewForum">	
+<div class="UIForumForm">	
 	<% uiform.begin() %>	
 	<div class="UIForm AddForum">
 		<div class="HorizontalLayout">
@@ -72,7 +72,7 @@
 		              	<table class="UIFormGrid">
 		              		<tbody>
 		              		<% int i = 1; 
-		              		  while(i < 6) {%>
+		              		  while(i < 5) {%>
 		              			<tr>
 		              				<% String label = uicomponent.getLabel(uiform.getChild(i).getName()) %>
 		              				<td class="FieldLabel">$label</td>
@@ -93,8 +93,8 @@
 									<div class="UIFormInputSet ModerationOptions">
 		              	<table class="UIFormGrid">
 		              		<tbody>
-		              			<% int t = 6; 
-		              		  while(t < 10) {%>
+		              			<% int t = 5; 
+		              		  while(t < 9) {%>
 		              			<tr>
 		              				<% String label = uicomponent.getLabel(uiform.getChild(t).getName()) %>
 		              				<td class="FieldLabel">$label</td>
@@ -131,7 +131,7 @@
 	              <div class="ButtonRight">
 	                <div class="ButtonMiddle">
 	                  <% 
-	                    String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action) ;
+	                    String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action) 
 	                    String link = uicomponent.event(action) ;
 	                  %>
 	                  <a href="$link">$actionLabel</a>

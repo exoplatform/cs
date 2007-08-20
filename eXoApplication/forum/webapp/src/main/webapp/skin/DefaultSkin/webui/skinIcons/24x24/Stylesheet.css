@@ -40,6 +40,18 @@
 	background: url('icons/AddNewForum.gif') no-repeat left center ;
 }
 
+.NewPost {
+	background: url('icons/NewPostIcon.gif') no-repeat left;
+}
+
+.NoNewPost {
+	background: url('icons/NoNewPostIcon.gif') no-repeat left;
+}
+
+.ClosedPost {
+	background: url('icons/ClosePostIcon.gif') no-repeat left;
+}
+
 .EditForumIcon {
 	background: url('icons/EditForum.gif') no-repeat left center ;
 }
@@ -64,7 +76,13 @@
 	background: url('icons/MoveSelectedForum.gif') no-repeat left center ;
 }
 
+.ManageModerators {
+	background: url('icons/24x24/Manage.gif') no-repeat left center ;
+}
 
+.ForumOption {
+	background: url('icons/24x24/ForumOption.gif') no-repeat left center ;
+}
 
 
 

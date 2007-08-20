@@ -22,7 +22,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
  */
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
-    template = "app:/templates/forum/webui/popup/UIForumOptions.gtmpl",
+    template = "app:/templates/forum/webui/popup/UIForumOptionsForm.gtmpl",
     events = {
       @EventConfig(listeners = UIForumOptionForm.SaveActionListener.class), 
       @EventConfig(listeners = UIForumOptionForm.CancelActionListener.class, phase=Phase.DECODE)

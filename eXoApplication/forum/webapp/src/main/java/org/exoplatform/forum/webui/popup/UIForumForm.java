@@ -44,7 +44,7 @@ import org.exoplatform.webui.form.validator.PositiveNumberFormatValidator;
  */
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
-    template = "app:/templates/forum/webui/popup/UIAddNewForum.gtmpl",
+    template = "app:/templates/forum/webui/popup/UIForumForm.gtmpl",
     events = {
       @EventConfig(listeners = UIForumForm.SaveActionListener.class), 
       @EventConfig(listeners = UIForumForm.CancelActionListener.class, phase=Phase.DECODE)

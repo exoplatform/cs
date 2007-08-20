@@ -35,7 +35,7 @@ import org.exoplatform.webui.form.validator.PositiveNumberFormatValidator;
  */
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
-    template = "app:/templates/forum/webui/popup/UIAddNewCategory.gtmpl",
+    template = "app:/templates/forum/webui/popup/UICategoryForm.gtmpl",
     events = {
       @EventConfig(listeners = UICategoryForm.SaveActionListener.class), 
       @EventConfig(listeners = UICategoryForm.CancelActionListener.class, phase=Phase.DECODE)
