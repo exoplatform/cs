@@ -3,15 +3,15 @@ function UIMailPortlet(){
 UIMailPortlet.prototype.selectItem = function(obj) {
 	var DOMUtil = eXo.core.DOMUtil ;
 	var tr = DOMUtil.findAncestorByTagName(obj, "tr") ;
-	var text = DOMUtil.getChildrenByTagName(tr,"td") ;
-	var tlen = text.length ;
 	if(obj.checked) {
-		for(var i = 0 ; i < tlen ; i++) {
-			text[i].className =  "textBold" ;
+		if (!tr.getAttribute("tmpClass")) {			
+			tr.setAttribute("tmpClass", tr.className) ;
+			tr.className = "SelectedItem" ;
 		}
 	} else {
-		for(var i = 0 ; i < tlen ; i++) {
-			text[i].className =  "text" ;
+		if (tr.getAttribute("tmpClass")) {			
+			tr.className = tr.getAttribute("tmpClass") ;
+			tr.removeAttribute("tmpClass") ;
 		}
 	}
 }
@@ -33,5 +33,13 @@ UIMailPortlet.prototype.checkAll = function(obj) {
 		}
 	}
 } ;
+UIMailPortlet.prototype.setStars = function(obj) {
+	if(obj.className == "UnStarredIcon") {
+		obj.className = "StarredIcon"
+	} else {
+		obj.className = "UnStarredIcon"
+	}
+} ;
+UIMailPortlet.prototype.readMessage = function() {} ;
 
 eXo.mail.UIMailPortlet = new UIMailPortlet();
