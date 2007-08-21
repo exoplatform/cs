@@ -89,7 +89,7 @@
 									<td style="padding: 0px;"><div class="ThreadStatusIcon HotThreadNewPost" title="Hot thread with new post"><span></span></div></td>
 									<td style="padding: 0px;"><div class="StatusIcon BlueNote16x16Icon" ><span></span></div></td>
 									<td >
-										<div class="Text StickyIcon" title="Sticky Thread">Sticky: <a href="" class="Title">Improve Portal 2.0 ( 1  2  3  4  5 ... Last page )</a></div>
+										<div class="Text StickyIcon" title="Sticky Thread">Sticky: <a href="<%=uicomponent.event("OpenTopicLink", " ")%>" class="Title">Improve Portal 2.0 ( 1  2  3  4  5 ... Last page )</a></div>
 										<div ><a href="#" class="LastPostInfos PostBy"><%=classRow%></a></div>
 									</td>
 									<td style="padding: 0px;"><div class="StatusIcon ModeratedIcon" title="2 Moderated posts"><span></span></div></td>

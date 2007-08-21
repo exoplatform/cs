@@ -40,7 +40,7 @@ public class UITopicContainer extends UIForm  {
 
   static public class OpenTopicLink extends EventListener<UITopicContainer> {
   	public void execute(Event<UITopicContainer> event) throws Exception {
-  		String path = event.getRequestContext().getRequestParameter(OBJECTID) ;      
+  		String path = event.getRequestContext().getRequestParameter(OBJECTID) ; 
   	}
   }
   
