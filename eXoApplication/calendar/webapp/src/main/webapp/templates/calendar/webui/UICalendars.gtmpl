@@ -1,0 +1,146 @@
+<div class="UICalendars">
+	<div class="TitleBar">
+		<div class="Title">Calendars</div>
+		<div class="ActionsButton" title="Calendar actions" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
+			<% /*Begin Popup Menu*/ %>
+	      <div style="position: relative;">
+		      <div class="UIPopupCategory" style="display: none;">
+		      	<div class="PopupCategoryDecorator">
+		      
+			        <div class="UIRightClickPopupMenu" style="display: block;">
+							  <div class="TopLeftRightClickPopupMenu">
+	          			<div class="TopRightRightClickPopupMenu">
+	            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
+	          			</div>
+	        			</div>
+				        <div class="MiddleLeftRightClickPopupMenu">
+				          <div class="MiddleRightRightClickPopupMenu">
+	              		<div class="UIRightPopupMenuContainer">
+		                   <a class="MenuItem" href="<%=uicomponent.event("AddCalendarCategory")%>">   
+		                    <div class="ItemIcon AddGroupIcon">
+		                      Add new Group
+		                    </div>
+		                   </a>
+		                   <a class="MenuItem" href="<%=uicomponent.event("AddCalendar")%>">   
+		                    <div class="ItemIcon AddCalendarIcon">
+		                      Add new Calendar
+		                    </div>
+		                   </a>
+		                   <a class="MenuItem" href="#">   
+		                    <div class="ItemIcon AddpuplicCalendarIcon">
+		                      Add puplic Calendar
+		                    </div>
+		                   </a>
+		                   <a class="MenuItem" href="#">   
+		                    <div class="ItemIcon ImportCalendarIcon">
+		                      Import Calendar
+		                    </div>
+		                   </a>
+		                   <a class="MenuItem" href="#">   
+		                    <div class="ItemIcon SettingCalendarIcon">
+		                      Setting Calendar
+		                    </div>
+		                   </a>
+	              		</div>
+	          			</div>
+	        			</div>
+				        <div class="BottomLeftRightClickPopupMenu">
+				          <div class="BottomRightRightClickPopupMenu">
+				            <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+				          </div>
+				        </div>
+	      			</div>
+	      			
+				    </div>
+				  </div>
+				</div>
+			<% /*End Popup Menu*/ %>
+		</div>
+		<div style="clear: both"><span></span></div>
+	</div>
+	<div class="ContentContainer">
+		<div class="MyCalendar">
+			<div class="CalendarTitle">
+				<div class="CollapserFlatStyle" title="Collapser my calendar"><span></span></div>
+				<div class="Label">My calendar</div>
+			</div>
+			<div class="MyCalendarContainer">
+				
+				<div class="UIVTab">  	
+  						<div class="CalendarSelectedFlatStyle">
+  							<div class="GroupItem">
+  								<div class="GroupColor1">
+  							<div title="Collapser calendar group" class="CollapserFlatStyle"><span></span></div>
+  							<div class="CheckBox"><input type="checkbox"/></div>
+  							<div class="CalendarGroupIcon" onclick=""><a href="#" >Company group</a></div>
+  							<div style="clear: both"><span></span></div>
+  						</div>
+  						</div>
+  						</div>	
+  							
+  						<div class="UIVTabContent" >
+  							<div class="CalendarItem">
+  							<div class="CalendarColor1">
+  								<div class="CheckBox"><input type="checkbox"/></div>
+  								<div class="CalendarIcon"><a href="#" >Meeting</a></div>
+  								<div style="clear: both"><span></span></div>
+  							</div>
+  						</div>
+  						<div class="CalendarItem">
+  							<div class="CalendarColor2">
+  								<div class="CheckBox"><input type="checkbox"/></div>
+  								<div class="CalendarIcon"><a href="#" >Football</a></div>
+  								<div style="clear: both"><span></span></div>
+  							</div>
+  						</div>
+  						</div>
+  				</div>	
+  				<div class="CalendarItem">
+  							<div class="CalendarColor3">
+  								<div class="CheckBox"><input type="checkbox"/></div>
+  								<div class="CalendarIcon"><a href="#" >Family</a></div>
+  								<div style="clear: both"><span></span></div>
+  							</div>
+  						</div>
+  						<div class="CalendarItem">
+  							<div class="CalendarColor4">
+  								<div class="CheckBox"><input type="checkbox"/></div>
+  								<div class="CalendarIcon"><a href="#" >Work</a></div>
+  								<div style="clear: both"><span></span></div>
+  							</div>
+  						</div>
+				
+			</div>
+		</div>
+		<div class="OtherCalendar">
+			<div class="CalendarTitle">
+				<div class="CollapserFlatStyle" title="Collapser other calendar"><span></span></div>
+				<div class="Label">Other calendar</div>
+			</div>
+			<div class="OtherCalendarContainer">
+				<div class="CalendarItem">
+  							<div class="CalendarColor5">
+  								<div class="CheckBox"><input type="checkbox"/></div>
+  								<div class="CalendarIcon"><a href="#" >Benjamin's Calendar</a></div>
+  								<div style="clear: both"><span></span></div>
+  							</div>
+  						</div>
+  						<div class="CalendarItem">
+  							<div class="CalendarColor6">
+  								<div class="CheckBox"><input type="checkbox"/></div>
+  								<div class="CalendarIcon"><a href="#" >Brice's Calendar</a></div>
+  								<div style="clear: both"><span></span></div>
+  							</div>
+  						</div>
+  						<div class="CalendarItem">
+  							<div class="CalendarColor7">
+  								<div class="CheckBox"><input type="checkbox"/></div>
+  								<div class="CalendarIcon"><a href="#" >Tuan's Calendar</a></div>
+  								<div style="clear: both"><span></span></div>
+  							</div>
+  						</div>
+  				
+								</div>
+		</div>
+	</div>
+</div>

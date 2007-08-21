@@ -29,6 +29,7 @@ import org.exoplatform.webui.event.EventListener;
 )
 public class UICalendars extends UIComponent  {
   public UICalendars() throws Exception {
+    
   } 
   
   static  public class AddCalendarActionListener extends EventListener<UICalendars> {

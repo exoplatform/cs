@@ -1,0 +1,55 @@
+<div class="UIActionBar">
+	<div class="UIToolbar">
+		<div class="HeaderToolbar">
+			<div class="LeftBar">
+				<div class="RightBar">
+					<div class="CenterBar">
+						<div class="Title ControlButton">Quick add:</div>
+						<a href="#" class="ControlButton">
+							<div class="IconHolder AddEventIcon">Event</div>
+						</a>
+						<a href="#" class="ControlButton">
+							<div class="IconHolder AddTaskIcon">Task</div>
+						</a>
+						<div class="SeparatorLine"><span></span></div>
+						<div class="Title ControlButton">Calendar View:</div>
+						<a href="#" class="ControlButton">
+							<div class="IconHolder DayIcon">
+								<div class="DownArrow1Icon">Day</div>
+							</div>
+						</a>
+						<div class="SeparatorLine"><span></span></div>
+						<a href="#" class="ControlButton">
+							<div class="IconHolder TaskIcon"> Tasks </div>
+						</a>
+						<div class="SeparatorLine"><span></span></div>
+						<a href="#" class="ControlButton">
+							<div class="IconHolder CalendarSettingIcon"> Setting </div>
+						</a>
+						<div class="SeparatorLine"><span></span></div>
+						<a href="#" class="ControlButton">
+							<div class="IconHolder PrintIcon">Print </div>
+						</a>
+						<div class="SeparatorLine"><span></span></div>
+						<a href="#" class="ControlButton">
+							<div class="IconHolder LayoutSwitcherIcon" title="Layout Switcher"><span></span></div>
+						</a>
+						<a href="#" class="RightControlButton">
+							<div class="NextIcon" title="Next day"><span></span></div>
+						</a>
+						<div class="Title RightControlButton">06/12</div>
+						<a href="#" class="RightControlButton">
+							<div class="BackIcon" title="Back day"><span></span></div>
+						</a>
+						<div class="SeparatorLine RightLine"><span></span></div>
+						<a href="#" class="RightControlButton">
+							<div class="IconHolder TodayIcon">Today</div>
+						</a>
+						<div class="SeparatorLine RightLine"><span></span></div>
+						<div style="clear:left;"><span></span></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

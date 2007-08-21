@@ -21,7 +21,8 @@ import org.exoplatform.webui.form.UIFormStringInput;
  */
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
-    template = "app:/templates/calendar/webui/UICalendarForm.gtmpl",
+    //template = "app:/templates/calendar/webui/UICalendarForm.gtmpl",
+    template = "system:/groovy/webui/form/UIForm.gtmpl", 
     events = {
       @EventConfig(listeners = UICalendarForm.SaveActionListener.class),
       @EventConfig(listeners = UICalendarForm.CancelActionListener.class)

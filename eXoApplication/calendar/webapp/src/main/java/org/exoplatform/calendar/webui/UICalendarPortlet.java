@@ -16,16 +16,15 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
  * Aug 01, 2007
  */
 @ComponentConfig(
-   lifecycle = UIApplicationLifecycle.class,
-
+   lifecycle = UIApplicationLifecycle.class, 
    template = "app:/templates/calendar/webui/UICalendarPortlet.gtmpl"
 
 )
 public class UICalendarPortlet extends UIPortletApplication {
   public UICalendarPortlet() throws Exception {
-    //addChild(UIBannerContainer.class, null, null) ;
-    //addChild(UIActionBar.class, null, null) ;
-    //addChild(UIWorkingContainer.class, null, null) ;
+    addChild(UIBannerContainer.class, null, null) ;
+    addChild(UIActionBar.class, null, null) ;
+    addChild(UICalendarWorkingContainer.class, null, null) ;
     addChild(UIPopupAction.class, null, null) ;
   }
   

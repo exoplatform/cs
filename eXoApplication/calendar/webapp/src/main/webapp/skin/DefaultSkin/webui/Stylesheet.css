@@ -156,6 +156,16 @@
 
 /*==================Calendar Working Container===================*/
 
+.UICalendarPortlet .TitleBar .UIPopupCategory {
+	left: 21px;
+	position:absolute;
+	top: 19px;
+	width: auto;
+}
+
+.UICalendarPortlet .TitleBar .UIRightClickPopupMenu {
+	width:160px;
+}
 
 .UICalendarPortlet .UICalendarWorkingContainer {
 	background-color: #f3f3f3;
@@ -806,3 +816,7 @@
 	margin: 1px auto 1px auto;
 }
 
+/*===================UIForm=======================*/
+.UIForm .HorizontalLayout .FormContainer .UIAction {  
+  width: 200px;
+}
