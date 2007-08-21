@@ -175,7 +175,7 @@
 	                <% } %>
 	                  <div style="clear: left;"><span></span></div>
 	                </td>
-	                <td class="Tdbox"><% uicomponent.renderChild(forum.getId())%></td>
+	                <td class="Tdbox" onclick="eXo.forum.UIForumPortlet.selectItem(this.firstChild)"><% uicomponent.renderChild(forum.getId())%></td>
 	               </tr>
            <% //	} 
             	}

@@ -240,3 +240,6 @@
 .UIRightClickPopupMenu .UIRightPopupMenuContainer a:hover.DisableMenuItem {
 	color:#cccccc ;	
 }
+.UIForumCategory .ForumList .SelectedItem {
+	background: yellow ;
+}
