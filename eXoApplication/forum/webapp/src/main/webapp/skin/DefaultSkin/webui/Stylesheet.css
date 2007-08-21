@@ -189,7 +189,7 @@
 .UIForumPortlet .ContentContainer .ForumQuantity {
 	font-weight: normal;
 	color: black;
-	cursor: normal;
+	cursor: default;
 }
 
 .UIForumPortlet .ContentContainer .Moderator {

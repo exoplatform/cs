@@ -85,6 +85,9 @@ public class UICategories extends UIContainer  {
       System.out.println("\n\n--------------->  id:  " + forumId);
       UIForumPortlet forumPortlet = uiContainer.getAncestorOfType(UIForumPortlet.class) ;
       forumPortlet.updateIsRendered(2);
+      UIForumContainer uiForumContainer = forumPortlet.getChild(UIForumContainer.class) ;
+  		uiForumContainer.getChild(UITopicDetailContainer.class).setRendered(false) ;
+  		uiForumContainer.getChild(UITopicContainer.class).setRendered(true) ;
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
       context.addUIComponentToUpdateByAjax(forumPortlet) ;
     }

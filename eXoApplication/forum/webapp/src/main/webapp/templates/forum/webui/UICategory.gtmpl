@@ -157,7 +157,7 @@
 	              <tr class="$classRow">
 	                <td style="padding: 0px;"><div class="ForumStatusIcon $classIconForum" title="$titleIconForum"><span></span></div></td>
 	                <td >
-	                  <a href="#" class="ForumTitle">$forumTitle<span class="ForumQuantity">&nbsp;(5 viewing)</span></a>
+	                  <a href="<%=uicomponent.event("OpenForumLink", forum.getId())%>" class="ForumTitle">$forumTitle<span class="ForumQuantity">&nbsp;(5 viewing)</span></a>
 	                  <div class="ForumDescription">$forumDescription</div>
 	                </td>
 	                 <td >

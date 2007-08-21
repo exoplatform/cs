@@ -316,9 +316,12 @@ public class UICategory extends UIForm  {
     public void execute(Event<UICategory> event) throws Exception {
       UICategory uiCategory = event.getSource();
       String forumId = event.getRequestContext().getRequestParameter(OBJECTID)  ;
-      System.out.println("\n\n--------------->  id:  " + forumId);
+      System.out.println("\n\n--------------->  forumId:  " + forumId);
       UIForumPortlet forumPortlet = uiCategory.getAncestorOfType(UIForumPortlet.class) ;
       forumPortlet.updateIsRendered(2);
+      UIForumContainer uiForumContainer = forumPortlet.getChild(UIForumContainer.class) ;
+  		uiForumContainer.getChild(UITopicDetailContainer.class).setRendered(false) ;
+  		uiForumContainer.getChild(UITopicContainer.class).setRendered(true) ;
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
       context.addUIComponentToUpdateByAjax(forumPortlet) ;
     }
