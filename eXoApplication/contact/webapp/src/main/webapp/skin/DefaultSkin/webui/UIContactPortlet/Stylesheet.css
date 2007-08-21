@@ -282,21 +282,23 @@
 	margin-top: 3px;
 }
 
-.UIContactPortlet .UIContactContainer  .UIContactActionsBar .Icon {
+.UIContactPortlet .UIContactContainer .UIContactActionsBar .Icon {
 	margin: 2px 7px 0px 7px;
 	width: 20px; height: 20px;
 	background-repeat: no-repeat;
+	background-position: center;
 }
 
-.UIContactPortlet .UIContactContainer  .UIContactActionsBar .IconHolder {
+.UIContactPortlet .UIContactContainer .UIContactActionsBar .IconHolder {
 	line-height: 20px;
+	height: auto;
 }
 
-.UIContactPortlet .UIContactContainer  .UIContactActionsBar a {
+.UIContactPortlet .UIContactContainer .UIContactActionsBar a {
 	color: #000000;
 }
 
-.UIContactPortlet .UIContactContainer  .UIContactActionsBar a:hover {
+.UIContactPortlet .UIContactContainer .UIContactActionsBar a:hover {
 	color: #126ca5;
 }
 
@@ -363,7 +365,7 @@
 	margin: 0px 2px;
 }
 
-/*================================== UIGrid===============*/
+/*================================== UIGrid========================================*/
 
 .UIContactPortlet .UIContactContainer .UIMessageList {
 	padding-left: 1px;
@@ -388,14 +390,6 @@
 .UIContactPortlet .UIContactContainer .UIGrid .State {
 	padding-left: 20px;
 	width: auto;
-}
-
-.UIContactPortlet .UIContactContainer .UnStarredIcon {
-	margin: 1px 0px 0px 4px; 
-}
-
-.UIContactPortlet .UIContactContainer .StarredIcon {
-	margin: 1px 0px 0px 4px;
 }
 
 .UIContactPortlet .UIContactContainer .AttachmentIcon {
@@ -445,7 +439,7 @@
 	padding-right: 16px;
 }
 
-/*=================================UIContactPreview=================*/
+/*=================================UIContactPreview==================================*/
 
 .UIContactPortlet .UIContactContainer .UIContactPreview {
 	border: 1px solid #c0c0c0;
@@ -569,5 +563,3 @@
 	padding-left: 20px;
 	margin-left: 60px;
 }
-
-
