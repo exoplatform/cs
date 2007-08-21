@@ -45,7 +45,8 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
         @EventConfig(listeners = UICategory.SetOpenActionListener.class),
         @EventConfig(listeners = UICategory.SetCloseActionListener.class),
         @EventConfig(listeners = UICategory.MoveForumActionListener.class),
-        @EventConfig(listeners = UICategory.RemoveForumActionListener.class)
+        @EventConfig(listeners = UICategory.RemoveForumActionListener.class),
+        @EventConfig(listeners = UICategory.OpenForumLink.class)
     }
 )
 public class UICategory extends UIForm  {
@@ -307,21 +308,13 @@ public class UICategory extends UIForm  {
   
   static public class OpenForumLink extends EventListener<UICategory> {
     public void execute(Event<UICategory> event) throws Exception {
-      UICategory uiContainer = event.getSource();
+      UICategory uiCategory = event.getSource();
       String forumId = event.getRequestContext().getRequestParameter(OBJECTID)  ;
       System.out.println("\n\n--------------->  id:  " + forumId);
-      UIForumPortlet forumPortlet = uiContainer.getAncestorOfType(UIForumPortlet.class) ;
-      forumPortlet.getChild(UICategoryContainer.class).setRendered(false);
-      forumPortlet.getChild(UIForumContainer.class).setRendered(true);
-      
+      UIForumPortlet forumPortlet = uiCategory.getAncestorOfType(UIForumPortlet.class) ;
+      forumPortlet.updateIsRendered(2);
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
       context.addUIComponentToUpdateByAjax(forumPortlet) ;
-//      categoryContainer.getChild(UIForumActionBar.class).setRendered(false) ;
-//      categoryContainer.isRenderCategories = false ;
-//      categoryContainer.getChild(UICategory.class).setRendered(false) ;
-//      UICategory uiCategory = categoryContainer.getChild(UICategory.class) ;
-//      uiCategory.update(categoryId) ;
-//      uiCategory.setRendered(true) ;
     }
   }
   

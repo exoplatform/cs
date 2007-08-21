@@ -31,7 +31,8 @@ import org.exoplatform.webui.event.Event.Phase;
 @ComponentConfig(
     template =  "app:/templates/forum/webui/UICategories.gtmpl",
     events = {
-    	@EventConfig(listeners = UICategories.OpenCategory.class)
+    	@EventConfig(listeners = UICategories.OpenCategory.class),
+    	@EventConfig(listeners = UICategories.OpenForumLink.class)
     }
 )
 public class UICategories extends UIContainer  {
@@ -76,6 +77,20 @@ public class UICategories extends UIContainer  {
 			uiCategory.setRendered(true) ;
 		}
 	}
+	
+	static public class OpenForumLink extends EventListener<UICategories> {
+    public void execute(Event<UICategories> event) throws Exception {
+    	UICategories uiContainer = event.getSource();
+      String forumId = event.getRequestContext().getRequestParameter(OBJECTID)  ;
+      System.out.println("\n\n--------------->  id:  " + forumId);
+      UIForumPortlet forumPortlet = uiContainer.getAncestorOfType(UIForumPortlet.class) ;
+      forumPortlet.updateIsRendered(2);
+      WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+      context.addUIComponentToUpdateByAjax(forumPortlet) ;
+    }
+  }
+	
+	
 	
 }
 

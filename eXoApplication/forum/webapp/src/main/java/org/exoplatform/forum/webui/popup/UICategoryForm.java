@@ -80,7 +80,7 @@ public class UICategoryForm extends UIForm implements UIPopupComponent{
 //  		String id = "Cate" + String.valueOf(calendar.getTimeInMillis());
   		
       Category cat = new Category();
-      cat.setId(IdGenerator.generate().substring(5, 20)) ;
+      cat.setId("Category" + IdGenerator.generate()) ;
       cat.setOwner(userName) ;
       cat.setCategoryName(categoryTitle) ;
       cat.setCategoryOrder(Long.parseLong(categoryOrder)) ;

@@ -7,6 +7,7 @@ package org.exoplatform.forum.webui;
 import java.util.List;
 
 import org.exoplatform.forum.webui.popup.UIPopupAction;
+import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIComponent;
@@ -23,15 +24,41 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
    template = "app:/templates/forum/webui/UIForumPortlet.gtmpl"
 )
 public class UIForumPortlet extends UIPortletApplication {
+	private boolean isCategoryRendered = true;
+	private boolean isForumRendered = false;
+	private boolean isPostRendered = false;
   public UIForumPortlet() throws Exception {
     addChild(UIBannerContainer.class, null, null) ;
     addChild(UIBreadcumbs.class, null, null) ;
-    addChild(UICategoryContainer.class, null, null) ;
-    addChild(UIForumContainer.class, null, null).setRendered(false) ;
-    addChild(UIPostPreview.class, null, null).setRendered(false) ;
+    addChild(UICategoryContainer.class, null, null).setRendered(isCategoryRendered) ;
+    addChild(UIForumContainer.class, null, null).setRendered(isForumRendered) ;
+    addChild(UIPostPreview.class, null, null).setRendered(isPostRendered) ;
     addChild(UIPopupAction.class, null, null) ;
   }
-  public void cancelAction() throws Exception {
+
+	public void updateIsRendered(int selected) {
+	  if(selected == 1) {
+	  	isCategoryRendered = true ;
+	  	isForumRendered = false ;
+	  	isPostRendered = false ;
+	  } else {
+		  if(selected == 2) {
+		  	isForumRendered = true ;
+		  	isCategoryRendered = false ;
+		  	isPostRendered = false ;
+		  } else {
+		  	isPostRendered = true ;
+		  	isForumRendered = false ;
+		  	isCategoryRendered = false ;
+		  }
+	  }
+	  getChild(UICategoryContainer.class).setRendered(isCategoryRendered) ;
+	  getChild(UIForumContainer.class).setRendered(isForumRendered) ;
+	  getChild(UIPostPreview.class).setRendered(isPostRendered) ;
+  }
+
+
+	public void cancelAction() throws Exception {
     WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
     UIPopupAction popupAction = getChild(UIPopupAction.class) ;
     popupAction.deActivate() ;

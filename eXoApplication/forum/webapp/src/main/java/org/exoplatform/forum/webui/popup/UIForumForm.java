@@ -217,7 +217,7 @@ public class UIForumForm extends UIForm implements UIPopupComponent{
       	forumService.saveForum(categoryId, newForum, false);
       }
       else {
-      	newForum.setId(IdGenerator.generate().substring(5, 20));
+      	newForum.setId("forum" + IdGenerator.generate());
       	forumService.saveForum(categoryId, newForum, true);
       }
       

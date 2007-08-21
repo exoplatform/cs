@@ -21,7 +21,8 @@ import org.exoplatform.webui.form.UIForm;
 @ComponentConfig(
     template =  "app:/templates/forum/webui/UITopicContainer.gtmpl", 
     events = {
-      @EventConfig(listeners = UITopicContainer.AddTopicActionListener.class )  
+      @EventConfig(listeners = UITopicContainer.AddTopicActionListener.class ),  
+      @EventConfig(listeners = UITopicContainer.OpenTopicLink.class )  
     }
 )
 public class UITopicContainer extends UIForm  {
@@ -36,4 +37,31 @@ public class UITopicContainer extends UIForm  {
       String path = event.getRequestContext().getRequestParameter(OBJECTID) ;      
     }
   }
+
+  static public class OpenTopicLink extends EventListener<UITopicContainer> {
+  	public void execute(Event<UITopicContainer> event) throws Exception {
+  		String path = event.getRequestContext().getRequestParameter(OBJECTID) ;      
+  	}
+  }
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
 }
