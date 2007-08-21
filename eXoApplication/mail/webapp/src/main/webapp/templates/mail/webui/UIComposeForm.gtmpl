@@ -107,7 +107,8 @@
 <!-- Start Compose Message Detail -->
 			<div class="MessageContent">
 				<div class="PlainTextMessage">
-					Hi Benjamin !<p>
+				<textarea style="width:100%;">
+				 Hi Benjamin !<p>
 					Could you please have a look on these screenshots for mail and forum.<p>
 					Thanks!<p>
 					-Phuong<p>
@@ -116,6 +117,8 @@
 					Phuong Pham Dang<p>
 					eXo Platform SAS<p>
 					Vietnam Office</p>
+				</textarea>
+					
 				</div>
 			</div>
 <!-- End Compose Message Detail -->

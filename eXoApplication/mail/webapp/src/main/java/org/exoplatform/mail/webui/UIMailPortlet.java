@@ -6,6 +6,7 @@ package org.exoplatform.mail.webui;
 
 
 import org.exoplatform.mail.webui.popup.UIPopupAction;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIPopupMessages;
@@ -29,6 +30,10 @@ public class UIMailPortlet extends UIPortletApplication {
     addChild(UIMessageArea.class, null, null) ;
     addChild(UIPopupAction.class, null, null) ;
     //addChild(UIMailContainer.class, null, null) ;
+  }
+  
+  public String getCurrentUser() {
+    return Util.getPortalRequestContext().getRemoteUser() ;
   }
   public void renderPopupMessages() throws Exception {
     UIPopupMessages popupMess = getUIPopupMessages();

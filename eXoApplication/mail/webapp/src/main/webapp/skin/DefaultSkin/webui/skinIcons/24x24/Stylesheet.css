@@ -1,4 +1,6 @@
-
+.Folder {
+	background: url('icons/DefaultIcon.gif') no-repeat left center;
+}
 .Actions {
 	background: url(icons/ThisMessageAction.gif) no-repeat bottom;
 	cursor: pointer;
@@ -11,6 +13,9 @@
 }
 
 .InboxIcon {
+	background: url('icons/InboxIcon.gif') no-repeat left center ;
+}
+.inboxIcon {
 	background: url('icons/InboxIcon.gif') no-repeat left center ;
 }
 

@@ -2,7 +2,7 @@
 	import org.exoplatform.mail.webui.UIDefaultFolders ;
 	import org.exoplatform.mail.webui.UICustomizeFolders ;
 %>
-<div class="UIFolderContainer">
+<div class="UIFolderContainer" id="<%=uicomponent.getId()%>">
 		<%uicomponent.renderChild(UIDefaultFolders.class);%>
 		<%uicomponent.renderChild(UICustomizeFolders.class);%>
 </div>

@@ -1,21 +1,7 @@
 <div class="UISelectAccount">
-<%uiform.begin();%>
-	<div class="ItemSelectorContainer">
-  	<div class="ItemInfoBar" >
-	  	<div class="LeftItemInfoBar">
-		  	<div class="RightItemInfoBar">
-		  		<div class="MiddleItemInfoBar" title="Show List" >
-		  			<div class="SelectedItemLabel">
-		  				<%uicomponent.renderChildren()%>
-		  			</div>
-		  			<div class="DropDownSelectIcon"><span></span></div>
-		  			<div style="clear: both;"><span></span></div>
-				  </div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<a class="AddAccountIcon" href = "<%=uicomponent.event("AddAccount")%>" title="Add New Account"><span></span></a>
-	<div style="clear: left"><span></span></div>
+	<%uiform.begin();%>
+		<%uicomponent.renderChildren()%>
+		<a class="AddAccountIcon" href = "<%=uicomponent.event("AddAccount")%>" title="Add New Account"><span></span></a>
+		<div style="clear:left;"><span></span></div>
 	<%uiform.end();%>
 </div>

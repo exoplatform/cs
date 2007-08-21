@@ -11,6 +11,7 @@ import org.exoplatform.mail.webui.UIFormInputSetWithAction;
 import org.exoplatform.mail.webui.Utils;
 import org.exoplatform.mail.webui.WizardStep;
 import org.exoplatform.webui.core.model.SelectItemOption;
+import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 
@@ -24,7 +25,10 @@ import org.exoplatform.webui.form.UIFormStringInput;
 public class UIAccountWizardStep3 extends UIFormInputSetWithAction  implements WizardStep{
   public static final String FIELD_SERVERTYPE = "serverType" ;
   public static final String FIELD_INCOMINGSERVER = "incomingServer" ;
+  public static final String FIELD_INCOMINGPORT = "incomeingPort" ;
   public static final String FIELD_OUTGOINGSERVER = "outgoingServer" ;
+  public static final String FIELD_OUTGOINGPORT = "outgoingPort" ;
+  public static final String FIELD_USESSL = "isSsl" ;
   public static final String FIELD_STOREFOLDER = "storeFolder" ;
   
   private boolean isValid_ = false ;
@@ -35,9 +39,14 @@ public class UIAccountWizardStep3 extends UIFormInputSetWithAction  implements W
     setComponentConfig(getClass(), null) ; 
     addChild(new UIFormSelectBox(FIELD_SERVERTYPE, null, getServerTypeValues())) ;
     addChild(new UIFormStringInput(FIELD_INCOMINGSERVER, null, null)) ;
+    addChild(new UIFormStringInput(FIELD_INCOMINGPORT, null, null)) ;
+    
     addChild(new UIFormStringInput(FIELD_OUTGOINGSERVER, null, null)) ;
+    addChild(new UIFormStringInput(FIELD_OUTGOINGPORT, null, null)) ;
     addChild(new UIFormStringInput(FIELD_STOREFOLDER, null,null)) ;
-    setActionInfo(FIELD_STOREFOLDER, UIAccountCreation.ACT_SELETFOLDER) ;
+    addChild(new UIFormCheckBoxInput<Boolean>(FIELD_USESSL, null,null)) ;
+    
+   // setActionInfo(FIELD_STOREFOLDER, UIAccountCreation.ACT_SELETFOLDER) ;
     infoMessage_.clear() ;
     infoMessage_.add("UIAccountWizardStep3.info.label1") ;
     infoMessage_.add("UIAccountWizardStep3.info.label2") ;
@@ -88,11 +97,29 @@ public class UIAccountWizardStep3 extends UIFormInputSetWithAction  implements W
   protected void setIncomingServer(String value) {
     getUIStringInput(FIELD_INCOMINGSERVER).setValue(value) ;
   }
+  protected String getIncomingPort() {
+    return getUIStringInput(FIELD_INCOMINGPORT).getValue() ;
+  }
+  protected void setIncomingPort(String value) {
+    getUIStringInput(FIELD_INCOMINGPORT).setValue(value) ;
+  }
   protected String getOutgoingServer() {
     return getUIStringInput(FIELD_OUTGOINGSERVER).getValue() ;
   }
   protected void setOutgoingServer(String value) {
     getUIStringInput(FIELD_OUTGOINGSERVER).setValue(value) ;
+  }
+  protected String getOutgoingPort() {
+    return getUIStringInput(FIELD_OUTGOINGPORT).getValue() ;
+  }
+  protected void setOutgoingPort(String value) {
+    getUIStringInput(FIELD_OUTGOINGPORT).setValue(value) ;
+  }
+  protected boolean getIsSSL() {
+    return getUIFormCheckBoxInput(FIELD_USESSL).isChecked() ;
+  }
+  protected void setIsSSL(boolean value) {
+    getUIFormCheckBoxInput(FIELD_USESSL).setChecked(value) ;
   }
   protected String getStoreFolder() {
     return getUIStringInput(FIELD_STOREFOLDER).getValue() ;

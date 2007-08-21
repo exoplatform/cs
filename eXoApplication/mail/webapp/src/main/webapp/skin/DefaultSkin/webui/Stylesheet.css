@@ -100,12 +100,26 @@
 	width: 194px;
 	margin-bottom: 1px;
 }
-
+.UIMailPortlet .UISelectAccount .selectbox {
+	float: left;
+	margin: 5px 0 0;
+	width: 194px;
+	line-height: 20px;
+	height: 20px;
+}
 .UIMailPortlet .UISelectAccount .ItemSelectorContainer {
 	width: 194px;
 	float: left;
 	margin: 7px 0px 1px 0px;
 	border-right: none;
+}
+
+.UIMailPortlet .UISelectAccount .UIDropDownControl {
+	width: 194px;
+  float: left;
+	margin: 10px 0px 1px 0px;
+	border-right: none;
+	height: 19px;
 }
 
 .UIMailPortlet .UISelectAccount .ItemInfoBar {
@@ -144,7 +158,7 @@
 .UIMailPortlet .UINavigationContainer .AddAccountIcon {
 	background: url('/eXoResources/skin/DefaultSkin/skinIcons/24x24/icons/EditNavigation.gif') no-repeat left top;
 	cursor: pointer;
-	float: right; margin: 7px 0px 0px 0px;
+	float: right; margin: 5px 0px 0px 0px;
 	height: 21px; width: 21px;
 	display: block;
 }

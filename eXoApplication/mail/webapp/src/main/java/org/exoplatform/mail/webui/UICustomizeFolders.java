@@ -4,6 +4,10 @@
  **************************************************************************/
 package org.exoplatform.mail.webui ;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.exoplatform.mail.service.Folder;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIComponent;
@@ -30,7 +34,11 @@ import org.exoplatform.webui.event.EventListener;
 
 public class UICustomizeFolders extends UIComponent {
   public UICustomizeFolders() throws Exception {}
-  
+  public List<Folder> getFolders() throws Exception{
+    List<Folder> folders = new ArrayList<Folder>() ;
+    
+    return folders ;
+  }
   static public class ChangeFolderActionListener extends EventListener<UICustomizeFolders> {
     public void execute(Event<UICustomizeFolders> event) throws Exception {
       String path = event.getRequestContext().getRequestParameter(OBJECTID) ;      

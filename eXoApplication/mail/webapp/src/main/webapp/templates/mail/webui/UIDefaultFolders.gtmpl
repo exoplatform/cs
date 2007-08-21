@@ -1,13 +1,21 @@
-<div class="TitleBar">
-	<div class="DownArrow3Icon" title="Collapse this Panel"><span></span></div>
-	<div class="Title FolderIcon">Folders</div>
-	<div class="ActionIcon"><span></span></div>
-	<div style="clear: both"><span></span></div>
-</div>
-<div class="MailFolderList">
-	<a href="#"  class="Icon InboxIcon">Inbox<span class="MailQuantity">(9)</span></a>
-	<a href="#" class="Icon DraftsIcon">Drafts<span class="MailQuantity">(3)</span></a>
-	<a href="#" class="Icon SentIcon">Sent<span class="MailQuantity">(8)</span></a>
-	<a href="#" class="Icon SpamIcon">Spam<span class="MailQuantity">(2)</span></a>
-	<a href="#" class="Icon TrashIcon">Trash<span class="MailQuantity">(5)</span></a>
+<%
+	import org.exoplatform.mail.service.Folder;
+	String compId = uicomponent.getId() ;
+%>
+<div class="$compId" id="$compId">
+	<div class="TitleBar">
+		<div class="DownArrow3Icon" title="Collapse this Panel"><span></span></div>
+		<div class="Title FolderIcon">Folders</div>
+		<div class="ActionIcon"><span></span></div>
+		<div style="clear: both"><span></span></div>
+	</div>
+	<div class="MailFolderList">
+		<%for(Folder f : uicomponent.getFolders()) {
+			String name = f.getName() ;
+			String icon = name + "Icon" ;
+			int unreadMess = f.getNumberOfUnreadMessage();
+		%>
+		<a href="<%=uicomponent.event("ChangeFolder")%>"  class="Icon Folder $icon">$name<span class="MailQuantity">($unreadMess)</span></a>
+		<%}%>
+	</div>
 </div>
