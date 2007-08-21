@@ -234,5 +234,9 @@
 }
 
 .UIRightClickPopupMenu .UIRightPopupMenuContainer .DisableMenuItem {
-	color:red ;	
+	color:#cccccc ;	
+}
+
+.UIRightClickPopupMenu .UIRightPopupMenuContainer a:hover.DisableMenuItem {
+	color:#cccccc ;	
 }
