@@ -42,18 +42,18 @@ import org.exoplatform.services.jcr.RepositoryService;
  * Jun 23, 2007  
  */
 public class MailServiceImpl implements MailService{
-  
+
   private JCRDataStorage storage_ ;
-  
+
   public MailServiceImpl(RepositoryService  repositoryService, 
-                         JCRRegistryService jcrRegistryService) throws Exception {
+      JCRRegistryService jcrRegistryService) throws Exception {
     storage_ = new JCRDataStorage(repositoryService, jcrRegistryService) ;      
   }
-  
+
   public List<AccountData> getAccountDatas() throws Exception {
     return null ;
   }
-  
+
   /**
    * @param username
    * @return
@@ -62,52 +62,52 @@ public class MailServiceImpl implements MailService{
   public List<Account> getAccounts(String username) throws Exception {
     return storage_.getAccounts(username);
   }
-  
+
   public Account getAccountById(String username, String id) throws Exception {
     return storage_.getAccountById(username, id);
   }
-  
+
   public void saveAccount(String username, Account account, boolean isNew) throws Exception {
     storage_.saveAccount(username, account, isNew);
   }
-  
+
   public void updateAccount(String username, Account account) throws Exception {
     saveAccount(username, account, false);
   }
-  
+
   public void removeAccount(String username, Account account) throws Exception {
     storage_.removeAccount(username, account);
   }
-  
+
   public Folder getFolder(String username, String accountId, String folderName) throws Exception {
     return storage_.getFolder(username, accountId, folderName);
   }
-  
+
   public void saveUserFolder(String username, String accountId, Folder folder) throws Exception {
     storage_.saveUserFolder(username, accountId, folder);
   }
-  
+
 
   public void removeUserFolder(String username, Folder folder) throws Exception {
     storage_.removeUserFolder(username, folder);
   }
-  
+
   public void removeUserFolder(String username, Account account, Folder folder) throws Exception {
     storage_.removeUserFolder(username, account, folder);
   }
-  
+
   public Message getMessageById(String username, String messageName, String accountId) throws Exception {
     return storage_.getMessageById(username, accountId, messageName);
   }
-  
+
   public void removeMessage(String username, String messageName, String accountId) throws Exception {
     storage_.removeMessage(username, accountId, messageName);
   }
-  
+
   public void removeMessage(String username, String[] messageName, String accountId) throws Exception {
     storage_.removeMessage(username, accountId, messageName);
   } 
-  
+
   public List<MessageHeader> getMessages(String username, MessageFilter filter) throws Exception {
     return storage_.getMessages(username, filter);
   }
@@ -115,7 +115,7 @@ public class MailServiceImpl implements MailService{
   public void saveMessage(String username, String accountId, Message message, boolean isNew) throws Exception {
     storage_.saveMessage(username, accountId, message, isNew);
   }
-  
+
   public void sendMessage(Message message) throws Exception {
     // sends an email with the parameters from message
     Properties props = new Properties();
@@ -128,7 +128,7 @@ public class MailServiceImpl implements MailService{
     InternetAddress[] addressTo = new InternetAddress[1];
     addressTo[0] = new InternetAddress(message.getMessageTo());
     msg.setRecipients(javax.mail.Message.RecipientType.TO, addressTo);
-   
+
     // Optional : You can also set your custom headers in the Email if you Want
     msg.addHeader("MyHeaderName", "myHeaderValue");
 
@@ -172,7 +172,7 @@ public class MailServiceImpl implements MailService{
     }
     homeTags.getSession().save();
   }
-  
+
   public void removeTag(String username, Account account, String tag) throws Exception {
     // creates a filter containing the specified tag, to find all messages tagged with tag
     MessageFilter filter = new MessageFilter("filter by tag "+tag);
@@ -208,7 +208,7 @@ public class MailServiceImpl implements MailService{
     // saves the message with the new tags
     storage_.saveMessage(username, message.getAccountId(), message, false);
   }
-  
+
   public int checkNewMessage(String username, Account account) throws Exception {
     System.out.println("\n ### Getting mail from " + account.getHost() + " ... !");
     int totalMess = -1;
@@ -223,7 +223,6 @@ public class MailServiceImpl implements MailService{
         props.setProperty("mail.imap.socketFactory.fallback", "false");
         props.setProperty("mail.imap.socketFactory.class", socketFactoryClass);
       }
-      
       javax.mail.Session session = javax.mail.Session.getDefaultInstance(props);
       URLName url = new URLName(account.getProtocol(), account.getHost(), Integer.valueOf(account.getPort()), account.getFolder(), account.getUserName(), account.getPassword()) ;
       Store store = session.getStore(url) ;
@@ -231,7 +230,7 @@ public class MailServiceImpl implements MailService{
       System.out.println("\n ### Connected !");
       javax.mail.Folder folder = store.getFolder(account.getFolder());
       folder.open(javax.mail.Folder.READ_ONLY);
-      
+
       // gets the new messages from the folder specified in the configuration object
       javax.mail.Message[] mess = folder.getMessages() ;
       totalMess = mess.length ;
@@ -265,14 +264,27 @@ public class MailServiceImpl implements MailService{
           }
           storage_.saveMessage(username, account.getId(), newMsg, true);
           i ++ ;
+          for(String f : folders) {
+            Folder fd = storage_.getFolder(username, account.getId(), f) ;
+            if(fd == null) {
+              fd = new Folder() ;
+              fd.setName(f) ;
+              fd.setLabel(f) ;
+              fd.setPersonalFolder(false) ;
+            }  
+            fd.setNumberOfUnreadMessage(fd.getNumberOfUnreadMessage()+1) ;
+            storage_.saveUserFolder(username, account.getId(), fd) ;
+          }
         }
       }
       folder.close(false);
       store.close();
-    } catch (Exception e) { e.printStackTrace(); }
+    }  catch (Exception e) { 
+      throw e ;
+    }
     return totalMess;
   }
-  
+
   private void setMultiPart(Multipart multipart, Message newMail, String username) {
     try {
       int i = 0 ;
@@ -284,9 +296,9 @@ public class MailServiceImpl implements MailService{
     }catch(Exception e) {
       e.printStackTrace() ;
     }   
-    
+
   }
-  
+
   private void setPart(Part part, Message newMail, String username){
     try {
       String disposition = part.getDisposition();
@@ -346,6 +358,10 @@ public class MailServiceImpl implements MailService{
 
   public void createAccount(String username, Account account) throws Exception {
     saveAccount(username, account, true);
+  }
+
+  public List<Folder> getFolders(String username, String accountId, boolean isPersonal) throws Exception {
+    return storage_.getFolders(username, accountId, isPersonal);
   }
 
 }

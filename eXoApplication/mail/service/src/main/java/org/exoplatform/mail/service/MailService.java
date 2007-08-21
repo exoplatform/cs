@@ -72,7 +72,15 @@ public interface MailService {
    * @throws Exception
    */
   public void removeAccount(String username, Account account) throws Exception ;
-  
+  /**
+   * This method should: 
+   * @param username
+   * @param accountId
+   * @param isPersonal
+   * @return List folder
+   * @throws Exception
+   */
+  public List<Folder> getFolders(String username, String accountId, boolean isPersonal) throws Exception ;
   /**
    * This method should: 
    * @param username

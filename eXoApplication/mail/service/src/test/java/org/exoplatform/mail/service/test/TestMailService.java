@@ -50,8 +50,8 @@ public class TestMailService extends BaseMailTestCase{
     myaccount.setServerProperty("ssl", "true");
     mailService_.createAccount("hungnguyen", myaccount) ;
     //assert added account
-    assertNotNull(mailService_.getAccountById("hungnguyen", "myId")) ;
-    assertEquals("my sign", mailService_.getAccountById("hungnguyen", "myId").getSignature());
+    assertNotNull(mailService_.getAccountById("hungnguyen", "accountmyId")) ;
+    assertEquals("my sign", mailService_.getAccountById("hungnguyen", "accountmyId").getSignature());
     List<Account> accounts = mailService_.getAccounts("hungnguyen") ;
     assertEquals(accounts.size(), 1) ;
     
@@ -60,7 +60,7 @@ public class TestMailService extends BaseMailTestCase{
     myaccount.setLabel("new gmail");
     mailService_.updateAccount("hungnguyen", myaccount);
     //assert account updated
-    assertEquals("new gmail", mailService_.getAccountById("hungnguyen", "myId").getLabel());
+    assertEquals("new gmail", mailService_.getAccountById("hungnguyen", "accountmyId").getLabel());
     
     //delete account
     //mailService_.removeAccount("hungnguyen", myaccount);
@@ -74,15 +74,15 @@ public class TestMailService extends BaseMailTestCase{
     folder.setLabel("homefolder");
     folder.setName("INBOX");
     folder.setNumberOfUnreadMessage(0);
-    mailService_.saveUserFolder("hungnguyen", "myId", folder);
+    mailService_.saveUserFolder("hungnguyen", "accountmyId", folder);
     // assert folder created
-    assertNotNull(mailService_.getFolder("hungnguyen", "myId", "INBOX"));
+    assertNotNull(mailService_.getFolder("hungnguyen", "accountmyId", "INBOX"));
 
     // update folder
     folder.setLabel("Inbox folder");
-    mailService_.saveUserFolder("hungnguyen", "myId", folder);
+    mailService_.saveUserFolder("hungnguyen", "accountmyId", folder);
     // assert folder modified
-    assertEquals("Inbox folder", mailService_.getFolder("hungnguyen", "myId", "INBOX").getLabel());
+    assertEquals("Inbox folder", mailService_.getFolder("hungnguyen", "accountmyId", "INBOX").getLabel());
     
     // delete folder
     //mailService_.removeUserFolder("hungnguyen", myaccount, folder);
@@ -103,7 +103,7 @@ public class TestMailService extends BaseMailTestCase{
     MessageFilter filter = new MessageFilter("filter by folder "+folder);
     String[] folders = {folder.getName()};
     filter.setFolder(folders);
-    filter.setAccountId("myId");
+    filter.setAccountId("accountmyId");
     List<MessageHeader> newMsg = mailService_.getMessages("hungnguyen", filter);
     System.out.println("[Total] : " + newMsg.size() + " message(s)") ;
     Iterator<MessageHeader> it = newMsg.iterator();

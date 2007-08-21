@@ -25,6 +25,7 @@ import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.MessageHeader;
+import org.exoplatform.mail.service.Utils;
 import org.exoplatform.registry.JCRRegistryService;
 import org.exoplatform.registry.ServiceRegistry;
 import org.exoplatform.services.jcr.RepositoryService;
@@ -40,12 +41,12 @@ public class JCRDataStorage implements DataStorage{
   private RepositoryService  repositoryService_ ;
   private JCRRegistryService jcrRegistryService_ ;
   //private SimpleCredentials credentials_ = new SimpleCredentials("exoadmin", "exo".toCharArray());
-  
+
   public JCRDataStorage(RepositoryService  repositoryService, JCRRegistryService jcrRegistryService) {
     repositoryService_ = repositoryService ;
     jcrRegistryService_ = jcrRegistryService ;
   }
-  
+
 
   public Account getAccountById(String username, String id) throws Exception {
     //  get the account of the specified user with the specified id
@@ -78,18 +79,18 @@ public class JCRDataStorage implements DataStorage{
     }
     return accounts ;
   }
-  
-  private Account getAccount(Node accountNode) throws Exception{
+
+  public Account getAccount(Node accountNode) throws Exception{
     Account account = new Account();
-    account.setId(accountNode.getProperty("exo:id").getString());
-    if (accountNode.hasProperty("exo:label")) account.setLabel(accountNode.getProperty("exo:label").getString());
-    if (accountNode.hasProperty("exo:userDisplayName")) account.setUserDisplayName(accountNode.getProperty("exo:userDisplayName").getString());
-    if (accountNode.hasProperty("exo:emailAddress")) account.setEmailAddress(accountNode.getProperty("exo:emailAddress").getString());
-    if (accountNode.hasProperty("exo:emailReplyAddress")) account.setEmailReplyAddress(accountNode.getProperty("exo:emailReplyAddress").getString());
-    if (accountNode.hasProperty("exo:signature")) account.setSignature(accountNode.getProperty("exo:signature").getString());
-    if (accountNode.hasProperty("exo:description")) account.setDescription(accountNode.getProperty("exo:description").getString());
-    if (accountNode.hasProperty("exo:serverProperties")) {
-      Value[] properties = accountNode.getProperty("exo:serverProperties").getValues();
+    account.setId(accountNode.getProperty(Utils.EXO_ID).getString());
+    if (accountNode.hasProperty(Utils.EXO_LABEL)) account.setLabel(accountNode.getProperty(Utils.EXO_LABEL).getString());
+    if (accountNode.hasProperty(Utils.EXO_USERDISPLAYNAME)) account.setUserDisplayName(accountNode.getProperty(Utils.EXO_USERDISPLAYNAME).getString());
+    if (accountNode.hasProperty(Utils.EXO_EMAILADDRESS)) account.setEmailAddress(accountNode.getProperty(Utils.EXO_EMAILADDRESS).getString());
+    if (accountNode.hasProperty(Utils.EXO_REPLYEMAIL)) account.setEmailReplyAddress(accountNode.getProperty(Utils.EXO_REPLYEMAIL).getString());
+    if (accountNode.hasProperty(Utils.EXO_SIGNATURE)) account.setSignature(accountNode.getProperty(Utils.EXO_SIGNATURE).getString());
+    if (accountNode.hasProperty(Utils.EXO_DESCRIPTION)) account.setDescription(accountNode.getProperty(Utils.EXO_DESCRIPTION).getString());
+    if (accountNode.hasProperty(Utils.EXO_SERVERPROPERTIES)) {
+      Value[] properties = accountNode.getProperty(Utils.EXO_SERVERPROPERTIES).getValues();
       for (int i=0; i<properties.length; i++) {
         String property = properties[i].getString();
         int index = property.indexOf('=');
@@ -149,25 +150,25 @@ public class JCRDataStorage implements DataStorage{
     }
     return list ;
   }
-  
-  private Message getMessage(Node messageNode) throws Exception {
+
+  public Message getMessage(Node messageNode) throws Exception {
     Message msg = new Message();
-    if (messageNode.hasProperty("exo:id")) msg.setMessageTo(messageNode.getProperty("exo:id").getString());
-    if (messageNode.hasProperty("exo:to")) msg.setMessageTo(messageNode.getProperty("exo:to").getString());
-    if (messageNode.hasProperty("exo:subject")) msg.setSubject(messageNode.getProperty("exo:subject").getString());
-    if (messageNode.hasProperty("exo:cc")) msg.setMessageCc(messageNode.getProperty("exo:cc").getString());
-    if (messageNode.hasProperty("exo:bcc")) msg.setMessageBcc(messageNode.getProperty("exo:bcc").getString());
-    if (messageNode.hasProperty("exo:body")) msg.setMessageBody(messageNode.getProperty("exo:body").getString());
-    if (messageNode.hasProperty("exo:tags")) {
-      Value[] propTags = messageNode.getProperty("exo:tags").getValues();
+    if (messageNode.hasProperty(Utils.EXO_ID)) msg.setMessageTo(messageNode.getProperty(Utils.EXO_ID).getString());
+    if (messageNode.hasProperty(Utils.EXO_TO)) msg.setMessageTo(messageNode.getProperty(Utils.EXO_TO).getString());
+    if (messageNode.hasProperty(Utils.EXO_SUBJECT)) msg.setSubject(messageNode.getProperty(Utils.EXO_SUBJECT).getString());
+    if (messageNode.hasProperty(Utils.EXO_CC)) msg.setMessageCc(messageNode.getProperty(Utils.EXO_CC).getString());
+    if (messageNode.hasProperty(Utils.EXO_BCC)) msg.setMessageBcc(messageNode.getProperty(Utils.EXO_BCC).getString());
+    if (messageNode.hasProperty(Utils.EXO_BODY)) msg.setMessageBody(messageNode.getProperty(Utils.EXO_BODY).getString());
+    if (messageNode.hasProperty(Utils.EXO_TAGS)) {
+      Value[] propTags = messageNode.getProperty(Utils.EXO_TAGS).getValues();
       String[] tags = new String[propTags.length];
       for (int i = 0; i < propTags.length; i++) {
         tags[i] = propTags[i].getString();
       }
       msg.setTags(tags);
     }
-    if (messageNode.hasProperty("exo:folders")) {
-      Value[] propFolders = messageNode.getProperty("exo:folders").getValues();
+    if (messageNode.hasProperty(Utils.EXO_FOLDERS)) {
+      Value[] propFolders = messageNode.getProperty(Utils.EXO_FOLDERS).getValues();
       String[] folders = new String[propFolders.length];
       for (int i = 0; i < propFolders.length; i++) {
         folders[i] = propFolders[i].getString();
@@ -178,28 +179,28 @@ public class JCRDataStorage implements DataStorage{
     List<Attachment> attachments = new ArrayList<Attachment>();
     while (msgIt.hasNext()) {
       Node node = msgIt.nextNode();
-      if (node.isNodeType("nt:file")) {
+      if (node.isNodeType(Utils.NT_FILE)) {
         BufferAttachment file = new BufferAttachment();
         file.setId(node.getPath());
-        file.setMimeType(node.getNode("jcr:content").getProperty("jcr:mimeType").getString());
+        file.setMimeType(node.getNode(Utils.JCR_CONTENT).getProperty(Utils.JCR_MIMETYPE).getString());
         file.setName(node.getName());
-        file.setInputStream(node.getNode("jcr:content").getProperty("jcr:data").getStream());
+        file.setInputStream(node.getNode(Utils.JCR_CONTENT).getProperty(Utils.JCR_DATA).getStream());
         attachments.add(file);
       }
     }
     msg.setAttachements(attachments);
     GregorianCalendar cal = new GregorianCalendar();
-    if (messageNode.hasProperty("exo:receivedDate")) {
-      cal.setTimeInMillis(messageNode.getProperty("exo:receivedDate").getLong());
+    if (messageNode.hasProperty(Utils.EXO_RECEIVEDDATE)) {
+      cal.setTimeInMillis(messageNode.getProperty(Utils.EXO_RECEIVEDDATE).getLong());
       msg.setReceivedDate(cal.getTime());
     }
-    if (messageNode.hasProperty("exo:sendDate")) {
-      cal.setTimeInMillis(messageNode.getProperty("exo:sendDate").getLong());
+    if (messageNode.hasProperty(Utils.EXO_SENDDATE)) {
+      cal.setTimeInMillis(messageNode.getProperty(Utils.EXO_SENDDATE).getLong());
       msg.setReceivedDate(cal.getTime());
     }
     return msg ;
   }
-  
+
   public void removeAccount(String username, Account account) throws Exception {
     Node accountHome = getMailHomeNode(username) ;
     // gets the specified account, and removes it
@@ -225,27 +226,28 @@ public class JCRDataStorage implements DataStorage{
     // creates or updates an account, depending on the isNew flag
     Node mailHome = getMailHomeNode(username) ;
     Node newAccount = null;
+    String accId = Utils.KEY_ACCOUNT + account.getId() ;
     if (isNew) { // creates the node
-      newAccount = mailHome.addNode(account.getId(), "exo:account");
-      newAccount.setProperty("exo:id", account.getId());
+      newAccount = mailHome.addNode(accId, Utils.EXO_ACCOUNT);
+      newAccount.setProperty(Utils.EXO_ID, accId);
     } else { // gets the specified account
-      newAccount = mailHome.getNode(account.getId());
+      newAccount = mailHome.getNode(accId);
     }
     if (newAccount != null) {
       // add some properties
-      newAccount.setProperty("exo:label", account.getLabel());
-      newAccount.setProperty("exo:userDisplayName", account.getUserDisplayName());
-      newAccount.setProperty("exo:emailAddress", account.getEmailAddress());
-      newAccount.setProperty("exo:emailReplyAddress", account.getEmailReplyAddress());
-      newAccount.setProperty("exo:signature", account.getSignature());
-      newAccount.setProperty("exo:description", account.getDescription());
+      newAccount.setProperty(Utils.EXO_LABEL, account.getLabel());
+      newAccount.setProperty(Utils.EXO_USERDISPLAYNAME, account.getUserDisplayName());
+      newAccount.setProperty(Utils.EXO_EMAILADDRESS, account.getEmailAddress());
+      newAccount.setProperty(Utils.EXO_REPLYEMAIL, account.getEmailReplyAddress());
+      newAccount.setProperty(Utils.EXO_SIGNATURE, account.getSignature());
+      newAccount.setProperty(Utils.EXO_DESCRIPTION, account.getDescription());
       Iterator it = account.getServerProperties().keySet().iterator();
       ArrayList<String> values = new ArrayList<String>(account.getServerProperties().size());
       while (it.hasNext()) {
         String key = it.next().toString();
         values.add(key+"="+account.getServerProperties().get(key));
       }
-      newAccount.setProperty("exo:serverProperties", values.toArray(new String[account.getServerProperties().size()]));
+      newAccount.setProperty(Utils.EXO_SERVERPROPERTIES, values.toArray(new String[account.getServerProperties().size()]));
       // saves changes
       mailHome.getSession().save();
     }
@@ -255,45 +257,45 @@ public class JCRDataStorage implements DataStorage{
     Node homeMsg = getMessageHome(username, accountId);
     Node nodeMsg = null;
     if (isNew) { // creates the node
-      nodeMsg = homeMsg.addNode(message.getId(), "exo:message");
+      nodeMsg = homeMsg.addNode(message.getId(), Utils.EXO_MESSAGE);
     } else { // gets the specified message
       nodeMsg = homeMsg.getNode(message.getId());
     }
     if (nodeMsg != null) {
       // add some properties
-      nodeMsg.setProperty("exo:to", message.getMessageTo());
-      nodeMsg.setProperty("exo:subject", message.getSubject());
-      nodeMsg.setProperty("exo:cc", message.getMessageCc());
-      nodeMsg.setProperty("exo:bcc", message.getMessageBcc());
-      nodeMsg.setProperty("exo:body", message.getMessageBody());
-      nodeMsg.setProperty("exo:isUnread", message.isUnread());
-      nodeMsg.setProperty("exo:to", message.getMessageTo());
+      nodeMsg.setProperty(Utils.EXO_TO, message.getMessageTo());
+      nodeMsg.setProperty(Utils.EXO_SUBJECT, message.getSubject());
+      nodeMsg.setProperty(Utils.EXO_CC, message.getMessageCc());
+      nodeMsg.setProperty(Utils.EXO_BCC, message.getMessageBcc());
+      nodeMsg.setProperty(Utils.EXO_BODY, message.getMessageBody());
+      nodeMsg.setProperty(Utils.EXO_ISUNREAD, message.isUnread());
+      nodeMsg.setProperty(Utils.EXO_TO, message.getMessageTo());
       if (message.getSendDate() != null)
-        nodeMsg.setProperty("exo:sendDate", message.getSendDate().getTime());
+        nodeMsg.setProperty(Utils.EXO_SENDDATE, message.getSendDate().getTime());
       if (message.getReceivedDate() != null)
-        nodeMsg.setProperty("exo:receivedDate", message.getReceivedDate().getTime());
+        nodeMsg.setProperty(Utils.EXO_RECEIVEDDATE, message.getReceivedDate().getTime());
       String[] tags = message.getTags();
-      nodeMsg.setProperty("exo:tags", tags);
+      nodeMsg.setProperty(Utils.EXO_TAGS, tags);
       String[] folders = message.getFolders();
-      nodeMsg.setProperty("exo:folders", folders);
+      nodeMsg.setProperty(Utils.EXO_FOLDERS, folders);
       List<Attachment> attachments = message.getAttachments();
       Iterator<Attachment> it = attachments.iterator();
       while (it.hasNext()) {
         BufferAttachment file = (BufferAttachment)it.next();
         Node nodeFile = null;
-        if (!nodeMsg.hasNode(file.getName())) nodeFile = nodeMsg.addNode(file.getName(), "nt:file");
+        if (!nodeMsg.hasNode(file.getName())) nodeFile = nodeMsg.addNode(file.getName(), Utils.NT_FILE);
         else nodeFile = nodeMsg.getNode(file.getName());
         Node nodeContent = null;
-        if (!nodeFile.hasNode("jcr:content")) nodeContent = nodeFile.addNode("jcr:content", "nt:resource");
-        else nodeContent = nodeFile.getNode("jcr:content");
-        nodeContent.setProperty("jcr:mimeType", file.getMimeType());
-        nodeContent.setProperty("jcr:data", file.getInputStream());
-        nodeContent.setProperty("jcr:lastModified", Calendar.getInstance().getTimeInMillis());
+        if (!nodeFile.hasNode(Utils.JCR_CONTENT)) nodeContent = nodeFile.addNode(Utils.JCR_CONTENT, Utils.NT_RESOURCE);
+        else nodeContent = nodeFile.getNode(Utils.JCR_CONTENT);
+        nodeContent.setProperty(Utils.JCR_MIMETYPE, file.getMimeType());
+        nodeContent.setProperty(Utils.JCR_DATA, file.getInputStream());
+        nodeContent.setProperty(Utils.JCR_LASTMODIFIED, Calendar.getInstance().getTimeInMillis());
       }
       homeMsg.getSession().save();
     }
   }
-  
+
   public Folder getFolder(String username, String accountId, String folderName) throws Exception {
     Folder folder = null;
     Node folderHome = getFolderHome(username, accountId);
@@ -302,13 +304,26 @@ public class JCRDataStorage implements DataStorage{
     if (folderHome.hasNode(folderName)) {
       node = folderHome.getNode(folderName);
       folder = new Folder();
-      folder.setLabel(node.getProperty("exo:label").getString());
-      folder.setName(node.getProperty("exo:name").getString());
-      folder.setNumberOfUnreadMessage((int)node.getProperty("exo:unreadMessages").getLong());
+      folder.setLabel(node.getProperty(Utils.EXO_LABEL).getString());
+      folder.setName(node.getProperty(Utils.EXO_NAME).getString());
+      folder.setPersonalFolder(node.getProperty(Utils.EXO_PERSONAL).getBoolean()) ;
+      folder.setNumberOfUnreadMessage((long)node.getProperty(Utils.EXO_UNREADMESSAGES).getLong());
     }
     return folder ;
   }
   
+  public List<Folder> getFolders(String username, String accountId, boolean isPersonal) throws Exception {
+    List<Folder> folders = new ArrayList<Folder>() ;
+    Node folderHomeNode = getFolderHome(username, accountId) ;
+    NodeIterator iter = folderHomeNode.getNodes() ;
+    while (iter.hasNext()){
+      Node folder = (Node)iter.next() ;
+      if(isPersonal == folder.getProperty(Utils.EXO_PERSONAL).getBoolean()) ;
+      folders.add(getFolder(username, accountId, folder.getName())) ;
+    }
+    return folders ;
+  }
+
   public void saveUserFolder(String username, String accountId, Folder folder) throws Exception {
     // gets folder home node of the specified account
     Node home = getFolderHome(username, accountId);
@@ -316,24 +331,24 @@ public class JCRDataStorage implements DataStorage{
     if (home.hasNode(folder.getName())) { // if the folder exists, gets it
       myFolder = home.getNode(folder.getName());
     } else { // if it doesn't exist, creates it
-      myFolder = home.addNode(folder.getName(), "exo:folder");
+      myFolder = home.addNode(folder.getName(), Utils.EXO_FOLDER);
     }
     // sets some properties
-    myFolder.setProperty("exo:label", folder.getLabel());
-    myFolder.setProperty("exo:unreadMessages", folder.getNumberOfUnreadMessage());
-    myFolder.setProperty("exo:name", folder.getName());
-
+    myFolder.setProperty(Utils.EXO_LABEL, folder.getLabel());
+    myFolder.setProperty(Utils.EXO_UNREADMESSAGES, folder.getNumberOfUnreadMessage());
+    myFolder.setProperty(Utils.EXO_NAME, folder.getName());
+    myFolder.setProperty(Utils.EXO_PERSONAL, folder.isPersonalFolder()) ;
     home.getSession().save();
   }
-  
+
   public void removeUserFolder(String username, Folder folder) throws Exception {
     // gets the mail home node
     Session sess = getMailHomeNode(username).getSession();
     QueryManager qm = sess.getWorkspace().getQueryManager();
     // gets the specified folder node
     StringBuffer queryString = new StringBuffer("//element(*,exo:folder)[@exo:name='").
-                                  append(folder.getName()).
-                                  append("']");
+    append(folder.getName()).
+    append("']");
     Query query = qm.createQuery(queryString.toString(), Query.XPATH);
     QueryResult result = query.execute();
     NodeIterator it = result.getNodes();
@@ -341,7 +356,7 @@ public class JCRDataStorage implements DataStorage{
     if (it.hasNext()) it.nextNode().remove();
     sess.save();
   }
-  
+
   public void removeUserFolder(String username, Account account, Folder folder) throws Exception {
     //  gets the specified folder
     Node folderHome = getFolderHome(username, account.getId());
@@ -350,7 +365,7 @@ public class JCRDataStorage implements DataStorage{
     }
     folderHome.getSession().save();
   }
-  
+
   public Node getMailHomeNode(String username) throws Exception {
     ServiceRegistry serviceRegistry = new ServiceRegistry("MailService") ;
     Session session = getJCRSession() ;
@@ -359,41 +374,41 @@ public class JCRDataStorage implements DataStorage{
     jcrRegistryService_.createServiceRegistry(username, serviceRegistry, false) ;    
     return jcrRegistryService_.getServiceRegistryNode(session, username, serviceRegistry.getName()) ;
   }
-  
+
   public Node getMessageHome(String username, String accountId) throws Exception {
     Node home = getMailHomeNode(username);
     Account account = getAccountById(username, accountId);
     Node returnNode = null;
-    if (home.getNode(account.getId()).hasNode("Messages"))
-      returnNode = home.getNode(account.getId()).getNode("Messages");
+    if (home.getNode(account.getId()).hasNode(Utils.KEY_MESSAGE))
+      returnNode = home.getNode(account.getId()).getNode(Utils.KEY_MESSAGE);
     else
-      returnNode = home.getNode(account.getId()).addNode("Messages", "nt:unstructured");
+      returnNode = home.getNode(account.getId()).addNode(Utils.KEY_MESSAGE, Utils.NT_UNSTRUCTURED);
     return returnNode;
   }
-  
+
   public Node getFolderHome(String username, String accountId) throws Exception {
     Node home = getMailHomeNode(username);
     Account account = getAccountById(username, accountId);
     Node returnNode = null;
-    if (home.getNode(account.getId()).hasNode("Folders")) 
-      returnNode = home.getNode(account.getId()).getNode("Folders");
+    if (home.getNode(account.getId()).hasNode(Utils.KEY_FOLDERS)) 
+      returnNode = home.getNode(account.getId()).getNode(Utils.KEY_FOLDERS);
     else
-      returnNode = home.getNode(account.getId()).addNode("Folders", "nt:unstructured");
+      returnNode = home.getNode(account.getId()).addNode(Utils.KEY_FOLDERS, Utils.NT_UNSTRUCTURED);
     return returnNode;
   }
-  
+
   public Node getTagHome(String username, String accountId) throws Exception {
     Node home = getMailHomeNode(username);
     Account account = getAccountById(username, accountId);
     Node returnNode = null;
-    if (home.getNode(account.getId()).hasNode("Tags")) 
-      returnNode = home.getNode(account.getId()).getNode("Tags");
+    if (home.getNode(account.getId()).hasNode(Utils.KEY_TAGS)) 
+      returnNode = home.getNode(account.getId()).getNode(Utils.KEY_TAGS);
     else
-      returnNode = home.getNode(account.getId()).addNode("Tags", "nt:unstructured");
+      returnNode = home.getNode(account.getId()).addNode(Utils.KEY_TAGS, Utils.NT_UNSTRUCTURED);
     return returnNode;
   }
-  
-  private Session getJCRSession() throws Exception {
+
+  public Session getJCRSession() throws Exception {
     SessionProvider sessionProvider = SessionProvider.createSystemProvider() ;
     String defaultWS = 
       repositoryService_.getDefaultRepository().getConfiguration().getDefaultWorkspaceName() ;

@@ -17,7 +17,8 @@ public class Folder {
   private String id ;
   private String name ;
   private String label ;
-  private int unreadMessage ;
+  private long unreadMessage = 0 ;
+  private boolean isPersonalFolder = true ;
   
   /**
    * The id folder should have the form AccountId/DefaultFolder/folderName or AccountId/UserFolder/folderName
@@ -43,11 +44,14 @@ public class Folder {
   /**
    * @return  The number of the unread messages
    */
-  public int  getNumberOfUnreadMessage() { return unreadMessage ; }
-  public void setNumberOfUnreadMessage(int number) { unreadMessage = number ; }
+  public long  getNumberOfUnreadMessage() { return unreadMessage ; }
+  public void setNumberOfUnreadMessage(long number) { unreadMessage = number ; }
   
   /**
    * @return Calculate and return the account id  of the folder base on the id of  the folder
    */
   public String getAccountId() { return null ; }
+  
+  public boolean  isPersonalFolder() { return isPersonalFolder ; }
+  public void setPersonalFolder(boolean isPersonal) { isPersonalFolder = isPersonal ; }
 }

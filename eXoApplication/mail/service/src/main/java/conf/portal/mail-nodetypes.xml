@@ -19,7 +19,10 @@
   		</propertyDefinition>  		
   		<propertyDefinition name="exo:unreadMessages" requiredType="Long" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
   			<valueConstraints/>
-  		</propertyDefinition>  		
+  		</propertyDefinition>  	
+  		<propertyDefinition name="exo:personal" requiredType="Boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  			<valueConstraints/>
+  		</propertyDefinition>  			
   	</propertyDefinitions>
   </nodeType>
   
