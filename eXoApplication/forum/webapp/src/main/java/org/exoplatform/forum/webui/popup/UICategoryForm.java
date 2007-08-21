@@ -11,11 +11,11 @@ import org.exoplatform.container.PortalContainer;
 import org.exoplatform.forum.service.Category;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.webui.UICategories;
+import org.exoplatform.forum.webui.UICategory;
 import org.exoplatform.forum.webui.UICategoryContainer;
 import org.exoplatform.forum.webui.UIForumPortlet;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.services.jcr.util.IdGenerator;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -43,7 +43,7 @@ import org.exoplatform.webui.form.validator.PositiveNumberFormatValidator;
     }
 )
 public class UICategoryForm extends UIForm implements UIPopupComponent{
-	
+	private String categoryId = "";
 	public static final String FIELD_CATEGORYTITLE_INPUT = "CategoryTitle" ;
 	public static final String FIELD_CATEGORYORDER_INPUT = "CategoryOrder" ;
 	public static final String FIELD_DESCRIPTION_TEXTAREA = "Description" ;
@@ -67,6 +67,15 @@ public class UICategoryForm extends UIForm implements UIPopupComponent{
 		//System.out.println("\n\n description: sfdsf\n\n");
 	}
 	
+	public void setCategoryValue(Category category, boolean isUpdate) {
+		if(isUpdate) {
+			this.categoryId = category.getId() ;
+			getUIStringInput(FIELD_CATEGORYTITLE_INPUT).setValue(category.getCategoryName()) ;
+      getUIStringInput(FIELD_CATEGORYORDER_INPUT).setValue(Long.toString(category.getCategoryOrder())) ;
+      getUIFormTextAreaInput(FIELD_DESCRIPTION_TEXTAREA).setDefaultValue(category.getDescription()) ;
+		}
+  }
+	
   static  public class SaveActionListener extends EventListener<UICategoryForm> {
     public void execute(Event<UICategoryForm> event) throws Exception {
       UICategoryForm uiForm = event.getSource() ;
@@ -76,11 +85,9 @@ public class UICategoryForm extends UIForm implements UIPopupComponent{
       
       PortalRequestContext pContext = Util.getPortalRequestContext();
       String userName = pContext.getRemoteUser() ;
-//      GregorianCalendar calendar = new GregorianCalendar() ;
-//  		String id = "Cate" + String.valueOf(calendar.getTimeInMillis());
-  		
+      GregorianCalendar calendar = new GregorianCalendar() ;
+  		String id = "category" + Long.toString(calendar.getTimeInMillis(), 22);
       Category cat = new Category();
-      cat.setId("Category" + IdGenerator.generate()) ;
       cat.setOwner(userName) ;
       cat.setCategoryName(categoryTitle) ;
       cat.setCategoryOrder(Long.parseLong(categoryOrder)) ;
@@ -89,23 +96,33 @@ public class UICategoryForm extends UIForm implements UIPopupComponent{
       cat.setModifiedBy(userName) ;
       cat.setModifiedDate(new Date()) ;
       
-      ForumService forumService =  (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
-      forumService.saveCategory(cat, true);
-      
       UIForumPortlet forumPortlet = event.getSource().getAncestorOfType(UIForumPortlet.class) ;
-      forumPortlet.cancelAction() ;
-      UICategories uiCategories = forumPortlet.getChild(UICategoryContainer.class).getChild(UICategories.class) ;
-      WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
-      context.addUIComponentToUpdateByAjax(uiCategories) ;
+      ForumService forumService =  (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
       
+      if(uiForm.categoryId.length() > 0) {
+      	cat.setId(uiForm.categoryId) ;
+      	forumService.saveCategory(cat, false);
+      	forumPortlet.cancelAction() ;
+      	UICategory uiCategory = forumPortlet.getChild(UICategoryContainer.class).getChild(UICategory.class) ;
+      	WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+      	context.addUIComponentToUpdateByAjax(uiCategory) ;
+      } else {
+      	cat.setId(id.toUpperCase()) ;
+      	forumService.saveCategory(cat, true);
+      	forumPortlet.cancelAction() ;
+      	UICategories uiCategories = forumPortlet.getChild(UICategoryContainer.class).getChild(UICategories.class) ;
+      	WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+      	context.addUIComponentToUpdateByAjax(uiCategories) ;
+      }
     }
   }
   
   static  public class CancelActionListener extends EventListener<UICategoryForm> {
     public void execute(Event<UICategoryForm> event) throws Exception {
-      UICategoryForm uiForm = event.getSource() ;
       UIForumPortlet forumPortlet = event.getSource().getAncestorOfType(UIForumPortlet.class) ;
       forumPortlet.cancelAction() ;
     }
-  }	
+  }
+
+	
 }

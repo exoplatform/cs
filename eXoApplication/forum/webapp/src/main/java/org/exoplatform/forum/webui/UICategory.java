@@ -12,6 +12,7 @@ import org.exoplatform.forum.service.Category;
 import org.exoplatform.forum.service.Forum;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.service.Topic;
+import org.exoplatform.forum.webui.popup.UICategoryForm;
 import org.exoplatform.forum.webui.popup.UIForumForm;
 import org.exoplatform.forum.webui.popup.UIMoveForumForm;
 import org.exoplatform.forum.webui.popup.UIPopupAction;
@@ -39,6 +40,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
 		lifecycle = UIFormLifecycle.class ,
     template =  "app:/templates/forum/webui/UICategory.gtmpl",
     events = {
+        @EventConfig(listeners = UICategory.EditCategoryActionListener.class),
         @EventConfig(listeners = UICategory.AddForumActionListener.class),
         @EventConfig(listeners = UICategory.EditForumActionListener.class),
         @EventConfig(listeners = UICategory.SetLockedActionListener.class),
@@ -81,6 +83,19 @@ public class UICategory extends UIForm  {
 	
 	private Topic getLastTopic(String topicPath) throws Exception {
 		return forumService.getTopicByPath(topicPath) ;
+	}
+	
+	
+	static public class EditCategoryActionListener extends EventListener<UICategory> {
+		public void execute(Event<UICategory> event) throws Exception {
+			UICategory uiCategory = event.getSource() ;      
+			UIForumPortlet forumPortlet = event.getSource().getAncestorOfType(UIForumPortlet.class) ;
+			UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;
+			UICategoryForm categoryForm = popupAction.createUIComponent(UICategoryForm.class, null, null) ;
+			categoryForm.setCategoryValue(uiCategory.getCategory(), true) ;
+			popupAction.activate(categoryForm, 600, 400) ;
+			event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+		}
 	}
 	
   

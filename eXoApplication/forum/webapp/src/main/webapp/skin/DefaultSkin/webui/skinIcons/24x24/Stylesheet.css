@@ -36,20 +36,12 @@
 }
 
 /*******************************  MenuCategoryIcon    **************************************/
+.EditCategoryIcon {
+	background: url('icons/EditCategory.gif') no-repeat left center ;
+}
+
 .AddForumIcon {
 	background: url('icons/AddNewForum.gif') no-repeat left center ;
-}
-
-.NewPost {
-	background: url('icons/NewPostIcon.gif') no-repeat left;
-}
-
-.NoNewPost {
-	background: url('icons/NoNewPostIcon.gif') no-repeat left;
-}
-
-.ClosedPost {
-	background: url('icons/ClosePostIcon.gif') no-repeat left;
 }
 
 .EditForumIcon {

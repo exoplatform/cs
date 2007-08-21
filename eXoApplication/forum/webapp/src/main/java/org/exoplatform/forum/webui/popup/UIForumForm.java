@@ -179,9 +179,8 @@ public class UIForumForm extends UIForm implements UIPopupComponent{
       
       PortalRequestContext pContext = Util.getPortalRequestContext();
       String userName = pContext.getRemoteUser() ;
-//      GregorianCalendar calendar = new GregorianCalendar() ;
-//  		String id = "Forum" + String.valueOf(calendar.getTimeInMillis());
-  		
+      GregorianCalendar calendar = new GregorianCalendar() ;
+  		String id = "forum" + Long.toString(calendar.getTimeInMillis(), 18);
   		Forum newForum = new Forum();
   		
   		newForum.setForumName(forumTitle);
@@ -217,7 +216,7 @@ public class UIForumForm extends UIForm implements UIPopupComponent{
       	forumService.saveForum(categoryId, newForum, false);
       }
       else {
-      	newForum.setId("forum" + IdGenerator.generate());
+      	newForum.setId(id.toUpperCase());
       	forumService.saveForum(categoryId, newForum, true);
       }
       
