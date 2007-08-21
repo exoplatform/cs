@@ -17,7 +17,7 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
  */
 @ComponentConfig(
    lifecycle = UIApplicationLifecycle.class, 
-   template = "app:/templates/calendar/webui/UICalendarPortlet.gtmpl"
+   template = "app:/templates/calendar/webui/UIPopup/UIAddNewEvent.gtmpl"
 
 )
 public class UICalendarPortlet extends UIPortletApplication {

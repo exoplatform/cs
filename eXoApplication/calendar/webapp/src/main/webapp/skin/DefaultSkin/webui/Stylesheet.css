@@ -18,7 +18,8 @@
 @import url("UIAddGroup/Stylesheet.css") ;
 
 
-/******************************************** MailBanner ****************************************/
+/*=========================== MailBanner ==================================*/
+
 .UICalendarPortlet .UIBannerContainer {
   background: #fbfbfb url('background/BgBanner457x62.gif') no-repeat left;
   height: 62px;
@@ -79,7 +80,7 @@
   margin: 0px 7px;
 }
 
-/***************************************Calendar Working Container********************************/
+/*==============================Calendar Working Container================================*/
 
 .UICalendarPortlet .CalendarWorkingWorkspace {
 	padding: 10px 5px;
