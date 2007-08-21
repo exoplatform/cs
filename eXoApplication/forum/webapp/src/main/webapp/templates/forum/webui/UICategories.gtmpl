@@ -5,7 +5,7 @@
 	import org.exoplatform.forum.service.Post; 
 	import java.util.GregorianCalendar;
 %>
-<div class="UICategories" id="UICategories">
+<div class="UICategories" id="$uicomponent.id">
 	<div class="UIForumWorkingWorkspace">
 		<div class="UIForumCategories">
 		<% // Start ForumCategory%>

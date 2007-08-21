@@ -4,7 +4,7 @@
 	import org.exoplatform.forum.webui.UICategory ;
 	import org.exoplatform.forum.webui.UICategoriesSummary ;
 %>
-<div class="UICategoryContainer">
+<div class="UICategoryContainer" id="$uicomponent.id">
 	<% 
 		List children = uicomponent.getChildren() ;
     for(child in children) {

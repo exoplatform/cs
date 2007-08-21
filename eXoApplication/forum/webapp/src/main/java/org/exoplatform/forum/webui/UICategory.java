@@ -19,6 +19,7 @@ import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
@@ -117,8 +118,10 @@ public class UICategory extends UIForm  {
     		popupAction.activate(forumForm, 662, 466) ;
     		event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
   		} else {
-  			Object[] args = {  };
-        throw new MessageException(new ApplicationMessage("UICategory.msg.notCheck", args, ApplicationMessage.WARNING)) ;
+  			UIApplication uiApp = uiCategory.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UICategory.msg.notCheck", null, ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
   		}
   	}
   }
@@ -144,16 +147,19 @@ public class UICategory extends UIForm  {
   				forum.setIsLock(true) ;
   				uiCategory.forumService.saveForum(uiCategory.categoryId, forum, false);
 				}
-  			WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
-  			context.addUIComponentToUpdateByAjax(uiCategory) ;
+//  			WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+//  			context.addUIComponentToUpdateByAjax(uiCategory) ;
   		}  
+  		UIApplication uiApp = uiCategory.getAncestorOfType(UIApplication.class) ;
   		if((forums.size() == 0) && (sms.length() == 0)) {
-				Object[] args = { };
-				throw new MessageException(new ApplicationMessage("UICategory.msg.notCheck", args, ApplicationMessage.WARNING)) ;
+				uiApp.addMessage(new ApplicationMessage("UICategory.msg.notCheck", null, ApplicationMessage.WARNING)) ;
+				event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+				return ;
 			}	
 			if(sms.length() > 0) {
 				Object[] args = { sms };
-				throw new MessageException(new ApplicationMessage("UICategory.msg.locked", args, ApplicationMessage.WARNING)) ;
+				uiApp.addMessage(new ApplicationMessage("UICategory.msg.locked", args, ApplicationMessage.WARNING)) ;
+				event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
 			}
   	}
   }
