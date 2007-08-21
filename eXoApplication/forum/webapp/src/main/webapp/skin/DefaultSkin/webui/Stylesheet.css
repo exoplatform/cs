@@ -125,7 +125,8 @@
 }
 
 .Vista .UIForumPortlet .ForumToolbar .UIRightClickPopupMenu {
-	width:190px;
+	min-width:190px;
+	white-space: nowrap;
 }
 /*=============================Content UICategoriesSummary====================*/
 
@@ -232,3 +233,6 @@
 	padding-left: 3px;
 }
 
+.UIRightClickPopupMenu .UIRightPopupMenuContainer .DisableMenuItem {
+	color:red ;	
+}

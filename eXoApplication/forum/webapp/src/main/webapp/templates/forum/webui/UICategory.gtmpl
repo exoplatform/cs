@@ -16,19 +16,19 @@
 	  			<div class="Title"><%=category.getCategoryName()%></div>
 	  			<div class="ExpandButton" title="Collapser category"><span></span></div>
 	  			<% 
-	  				String showCategory = "eXo.webui.UIPopupSelectCategory.show(this, event);" 
-	  				String styleSkin = uicomponent.id;//UICategory
+	  				String showCategory = "eXo.forum.UIForumPortlet.checkAction(this, event, 2);" 
+	  				String styleSkin = uicomponent.id; //UICategory
 	  			%>
 	  			<div class="SeparatorLine"><span></span></div>
 	  			<div class="ToolbarActionsContainer" onclick="$showCategory">
-		  			<div class="$styleSkin" onmouseover="eXo.forum.UIForumPortlet.OverButtun(this)" onmouseout="eXo.forum.UIForumPortlet.OverButtun(this)">
+		  			<div class="$styleSkin" onmouseover="eXo.forum.UIForumPortlet.OverButton(this)" onmouseout="eXo.forum.UIForumPortlet.OverButton(this)">
 		  				<div class="LeftOverButton">
 		  					<div class="RightOverButton">
 		  						<div class="CenterOverButton">
 										<div class="ManageCategoryButton"><a>Manage Categoryss</a></div>
 								  </div>
 								</div>
-							</div>
+							</div></div>
 							<% /*Begin Popup Menu*/ %>
 				      <div style="position: relative;">
 					      <div class="UIPopupCategory" style="display: none;">
@@ -44,6 +44,11 @@
 	                      <div class="MiddleRightRightClickPopupMenu">
 	                    
 	                          <div class="UIRightPopupMenuContainer">
+	                          		<a class="MenuItem" href="javascript:void(0) ;">   
+	                                <div class="ItemIcon">
+	                                  Edit category
+	                                </div>
+	                               </a>
 	                            <%
 	                            	for(action in uicomponent.getActions()) {
 	                            	if(action.indexOf("Link") > 0) continue ;
@@ -72,7 +77,7 @@
 	              </div>
 	            </div>
 	            <% /*End Popup Menu*/ %>
-          	</div>
+          	
           </div>
           <div style="clear: both;"><span></span></div>
         </div>
@@ -81,7 +86,7 @@
   </div>
   <div class="ContentContainer">
     <div class="ForumList">
-      <table cellspacing="0" borderspacing="0" id="" class="UIGrid">
+      <table cellspacing="0" borderspacing="0" class="UIGrid">
         <thead>
           <tr>
             <th style="width: 40px;"></th>
@@ -90,7 +95,7 @@
             <th style="width: 50px;">Threads</th>
             <th style="width: 50px;">Posts</th>
              <th style="width: 17%;">Moderator</th>
-             <th style="width: 30px;"><input type="checkbox" class="checkbox" title="Check all" value="4"/></th>
+             <th style="width: 30px;"><input type="checkbox" class="checkbox" title="Check all" value="4" onClick="eXo.forum.UIForumPortlet.checkAll(this);"/></th>
           </tr>
         </thead>
         <tbody>
@@ -152,7 +157,7 @@
 	              <tr class="$classRow">
 	                <td style="padding: 0px;"><div class="ForumStatusIcon $classIconForum" title="$titleIconForum"><span></span></div></td>
 	                <td >
-	                  <a href="<%=uicomponent.event("OpenForumLink", forum.getId())%>" class="ForumTitle">$forumTitle<span class="ForumQuantity">&nbsp;(5 viewing)</span></a>
+	                  <a href="#" class="ForumTitle">$forumTitle<span class="ForumQuantity">&nbsp;(5 viewing)</span></a>
 	                  <div class="ForumDescription">$forumDescription</div>
 	                </td>
 	                 <td >
