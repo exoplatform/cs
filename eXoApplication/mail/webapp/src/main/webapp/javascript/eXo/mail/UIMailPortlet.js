@@ -1,31 +1,37 @@
 function UIMailPortlet(){
 };
-
-UIMailPortlet.prototype.checkAllMessages = function() {
-	var tableMsg = document.getElementById("UIListUsers");
-	var tableMsgBody = tableMsg.getElementsByTagName("tbody")[0];
-	var msgSelectorList = eXo.core.DOMUtil.findDescendantsByClass(tableMsgBody, "input", "checkbox");
-	for (var i=0; i<msgSelectorList.length; i++) msgSelectorList[i].checked = !msgSelectorList[i].checked;
-};
-
-//UIMailPortlet.prototype.resizeMessageArea = function() {
-//	var portlet = document.getElementById("UIMailPortlet");
-//	var msgArea = eXo.core.DOMUtil.findFirstDescendantByClass(portlet, "div", "UIMessageArea");
-//	//var msgList = document.getElementById("UIListUsers");
-//	var resizeZone = eXo.core.DOMUtil.findFirstDescendantByClass(portlet, "div", "ResizeReadingPane");
-//	var msgPreview = eXo.core.DOMUtil.findFirstDescendantByClass(portlet, "div", "UIMessagePreview");
-//	portlet.onmousemove = function(e) {
-//		var posy = eXo.core.Browser.findMouseYInPage(e);
-//		var msgAreaTop = msgArea.offsetTop;
-//		var msgPrevTop = msgPreview.offsetTop;
-//		msgArea.style.height = (posy-2-msgAreaTop) + "px";
-//		msgPreview.style.height = (posy+3-msgPrevTop) + "px";
-//	};
-//	portlet.onmouseup = function(e) {
-//		portlet.onmousemove = null;
-//	};
-//};
-
-
+UIMailPortlet.prototype.selectItem = function(obj) {
+	var DOMUtil = eXo.core.DOMUtil ;
+	var tr = DOMUtil.findAncestorByTagName(obj, "tr") ;
+	var text = DOMUtil.getChildrenByTagName(tr,"td") ;
+	var tlen = text.length ;
+	if(obj.checked) {
+		for(var i = 0 ; i < tlen ; i++) {
+			text[i].className =  "textBold" ;
+		}
+	} else {
+		for(var i = 0 ; i < tlen ; i++) {
+			text[i].className =  "text" ;
+		}
+	}
+}
+UIMailPortlet.prototype.checkAll = function(obj) {
+	var DOMUtil = eXo.core.DOMUtil ;
+	var thead = DOMUtil.findAncestorByTagName(obj, "thead") ;
+	var tbody = DOMUtil.findNextElementByTagName(thead, "tbody") ;
+	var checkboxes = DOMUtil.findDescendantsByClass(tbody, "input", "checkbox") ;
+	var len = checkboxes.length ;
+	if (obj.checked){
+		for(var i = 0 ; i < len ; i++) {
+			checkboxes[i].checked = true ;
+			this.selectItem(checkboxes[i]) ;
+		}
+	} else {
+		for(var i = 0 ; i < len ; i++) {
+			checkboxes[i].checked = false ;
+			this.selectItem(checkboxes[i]) ;
+		}
+	}
+} ;
 
 eXo.mail.UIMailPortlet = new UIMailPortlet();
