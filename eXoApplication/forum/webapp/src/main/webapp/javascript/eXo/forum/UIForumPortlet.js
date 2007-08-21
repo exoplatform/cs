@@ -71,5 +71,17 @@ UIForumPortlet.prototype.checkAction = function(obj, evt) {
 		}
 	}
 } ;
-
+UIForumPortlet.prototype.expandCollapse = function(obj) {
+	var forumToolbar = eXo.core.DOMUtil.findAncestorByClass(obj,"ForumToolbar") ;
+	var contentContainer = eXo.core.DOMUtil.findNextElementByTagName(forumToolbar, "div") ;
+	if (contentContainer.style.display != "none") {
+		contentContainer.style.display = "none" ;
+		obj.className = "ExpandButton" ;
+		obj.setAttribute("title","Expand") ;
+	} else {
+		contentContainer.style.display = "block" ;
+		obj.className = "CollapseButton" ;
+		obj.setAttribute("title","Collapse") ;
+	}
+} ;
 eXo.forum.UIForumPortlet = new UIForumPortlet() ;

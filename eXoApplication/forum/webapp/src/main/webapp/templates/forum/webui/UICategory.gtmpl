@@ -14,7 +14,7 @@
 	  	<div class="RightBar">
 	  		<div class="CenterBar CategoryDetectPosition">
 	  			<div class="Title"><%=category.getCategoryName()%></div>
-	  			<div class="ExpandButton" title="Collapser category"><span></span></div>
+	  			<div class="CollapseButton" title="Collapse" onclick="eXo.forum.UIForumPortlet.expandCollapse(this) ;"><span></span></div>
 	  			<% 
 	  				String showCategory = "eXo.forum.UIForumPortlet.checkAction(this, event, 2);" 
 	  				String styleSkin = uicomponent.id; //UICategory
@@ -51,7 +51,6 @@
 	                               </a>
 	                            <%
 	                            	for(action in uicomponent.getActions()) {
-	                            	if(action.indexOf("Link") > 0) continue ;
 	                            	String nameItem = _ctx.appRes(uicomponent.getName() + ".action." + action);
 	                            	String classIconItem = action + "Icon";
 	                            %>
