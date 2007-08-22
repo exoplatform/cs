@@ -124,6 +124,12 @@
 	width:175px;
 }
 
+.UIForumPortlet .ForumToolbar .UIRightClickPopupMenu .LineMenu {
+	width:150px;
+	margin: 4px auto;
+	border-top: solid 1px #7b7b7b;
+}
+
 .Vista .UIForumPortlet .ForumToolbar .UIRightClickPopupMenu {
 	min-width:190px;
 	white-space: nowrap;

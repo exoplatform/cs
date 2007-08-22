@@ -55,8 +55,8 @@
 	                                  <%=nameItem%>
 	                                </div>
 	                               </a>
-	                          <%  if(action.indexOf("EditCategory") > 0) { %>
-                               <div style="border: solid 1px #7b7b7b; width: 150px;"><span></span></div>
+	                          <%  if(action.equals("EditCategory")) { %>
+                               <div class="LineMenu"><span></span></div>
                             <%  }
                             	} 
                             %>
