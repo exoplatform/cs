@@ -1,3 +1,12 @@
+<%
+	import org.exoplatform.forum.webui.UITopicContainer ;  
+	import org.exoplatform.forum.service.Forum ;
+	import org.exoplatform.forum.service.JCRPageList ;
+%>
+<%  
+	Forum forum = uicomponent.getForum() ;
+	String forumName = forum.getForumName();
+%>
 <div class="UITopicContainer">
   <% uiform.begin() %>
 	<div class="ButtomAndPageListContainer">
@@ -7,7 +16,9 @@
 		  		<div class="ButtonLeft">
 		  			<div class="ButtonRight">
 		  				<div class="ButtonMiddle">
-		  					<div class="IconButton AddTheradIcon"><span class="LabelIcon"></span>New Thread</div>
+		  					<a href="<%=uicomponent.event("AddTopic")%>">
+		  						<div class="IconButton AddTheradIcon"><span class="LabelIcon"></span>New Thread</div>
+		  					</a>
 		  				</div>
 		  			</div>
 		  		</div>
@@ -44,7 +55,7 @@
 			  <div class="LeftBar">
 			  	<div class="RightBar">
 			  		<div class="CenterBar">
-			  			<div class="Title"><span style="font-weight: normal;">Thread in forum: </span>eXo vietnam</div>
+			  			<div class="Title"><span style="font-weight: normal;">Thread in forum: </span>$forumName</div>
 				  		<div class="ToolbarActionsContainer">
 								<a class="StatusIcon ModerationIcon"><div class="DownArrow1Icon">Moderation</div></a>
 			  				<div class="SeparatorLine"><span></span></div>
@@ -97,15 +108,15 @@
 									<td class="Tdbox">15</td>
 									<td style="padding: 0px;">
 										<div class="RatingInfoContainer">
-				   							<div class="AvgRatingImages" title="Thread Rating: 3 votes, 5 average">
-				   				<div class="VoteIcon Voted"><span/></div>
-				   				<div class="VoteIcon Voted"><span/></div>
-				  				<div class="VoteIcon Voted"><span/></div>
-									<div class="VoteIcon Unvoted"><span/></div>
-				 					<div class="VoteIcon Unvoted"><span/></div>
-				 					<div style="clear: left;"><span></span></div>
-				 							  </div>
-				   							  </div>
+				   						<div class="AvgRatingImages" title="Thread Rating: 3 votes, 5 average">
+							   				<div class="VoteIcon Voted"><span/></div>
+							   				<div class="VoteIcon Voted"><span/></div>
+							  				<div class="VoteIcon Voted"><span/></div>
+												<div class="VoteIcon Unvoted"><span/></div>
+							 					<div class="VoteIcon Unvoted"><span/></div>
+							 					<div style="clear: left;"><span></span></div>
+				 							</div>
+				   					</div>
 									</td>
 									<td style="padding: 0px;"><div class="StatusIcon RedTagIcon" title="Thread tagged as Design Team"><span></span></div></td>
 								 	<td >

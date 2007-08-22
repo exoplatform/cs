@@ -16,8 +16,6 @@ public class Forum {
   private Date createdDate;
   private String modifiedBy;
   private Date modifiedDate;
-  //private String lastPostBy;
-  //private Date lastPostDate;
   private String lastTopicPath;
   private String name;
   private String description;

@@ -57,7 +57,7 @@ public class UICategory extends UIForm  {
 	private	ForumService forumService = (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
   
 	public UICategory() throws Exception {
-
+	  
   }
   
   public void update(String id) throws Exception {
@@ -93,7 +93,7 @@ public class UICategory extends UIForm  {
 			UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;
 			UICategoryForm categoryForm = popupAction.createUIComponent(UICategoryForm.class, null, null) ;
 			categoryForm.setCategoryValue(uiCategory.getCategory(), true) ;
-			popupAction.activate(categoryForm, 600, 400) ;
+			popupAction.activate(categoryForm, 580, 220) ;
 			event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
 		}
 	}
@@ -331,12 +331,13 @@ public class UICategory extends UIForm  {
     public void execute(Event<UICategory> event) throws Exception {
       UICategory uiCategory = event.getSource();
       String forumId = event.getRequestContext().getRequestParameter(OBJECTID)  ;
-      System.out.println("\n\n--------------->  forumId:  " + forumId);
       UIForumPortlet forumPortlet = uiCategory.getAncestorOfType(UIForumPortlet.class) ;
       forumPortlet.updateIsRendered(2);
       UIForumContainer uiForumContainer = forumPortlet.getChild(UIForumContainer.class) ;
   		uiForumContainer.getChild(UITopicDetailContainer.class).setRendered(false) ;
-  		uiForumContainer.getChild(UITopicContainer.class).setRendered(true) ;
+      uiForumContainer.getChild(UIForumDescription.class).setForumIds(uiCategory.categoryId, forumId);
+  		UITopicContainer uiTopicContainer = uiForumContainer.getChild(UITopicContainer.class).setRendered(true) ;
+      uiTopicContainer.setForumIds(uiCategory.categoryId, forumId) ;
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
       context.addUIComponentToUpdateByAjax(forumPortlet) ;
     }

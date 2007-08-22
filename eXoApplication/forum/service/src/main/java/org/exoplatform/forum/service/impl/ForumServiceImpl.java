@@ -119,6 +119,10 @@ public class ForumServiceImpl implements ForumService{
 //		return storage_.getObjectByPath(path);
 //	}
   
+  public List getPage(long page, JCRPageList pageList) throws Exception {
+    return storage_.getPage(page, pageList) ;
+  }
+  
   public List<ForumLinkData> getAllLink()throws Exception {
     return storage_.getAllLink() ;
   }

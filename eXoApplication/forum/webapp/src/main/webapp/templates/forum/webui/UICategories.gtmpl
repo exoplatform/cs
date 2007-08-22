@@ -63,13 +63,17 @@
 				 					for(forum in forums) {
 						        if(i%2 == 0) classRow = "whileRow";
 						        else classRow = "OddRow";
-						        i++;
-						        String classIconForum = "NoNewPostIcon";
-						        String titleIconForum = "Forum Contains No New Post";
-						        if(forum.getIsLock() == true){
-						          classIconForum = "ForumCloseIcon";
-						          titleIconForum = "Forum is Closed for Posting";
-						        }
+						        String classIconForum = "ForumNormalIcon";
+						        ++i;
+			              String titleIconForum = "Forum Contains No New Post";
+			              if(forum.getIsLock() == true){
+			                classIconForum = "ForumLockedIcon";
+			                titleIconForum = "Forum is Closed for Posting";
+			              }
+			              if(forum.getIsClosed() == true){
+			                classIconForum = "ForumCloseIcon";
+			                titleIconForum = "Forum is Closed for Posting";
+			              }
 						        String forumTitle = forum.getForumName();
 						        String forumDescription = forum.getDescription();
 						        String topicNewPostIcon = "";
@@ -92,11 +96,12 @@
 						        String topicCount = (String)forum.getTopicCount();
 						        String postCount = (String)forum.getPostCount();
 						        String [] forumModerators = forum.getModerators();
+						        String id = category.getId() + "," + forum.getId();
 						    %>
 							    	<tr class="$classRow">
 											<td style="padding: 0px;"><div class="ForumStatusIcon $classIconForum" title="$titleIconForum"><span></span></div></td>
 											<td >
-												<a href="<%=uicomponent.event("OpenForumLink", forum.getId())%>" class="ForumTitle">$forumTitle<span class="ForumQuantity">(5 viewing)</span></a>
+												<a href="<%=uicomponent.event("OpenForumLink", id)%>" class="ForumTitle">$forumTitle<span class="ForumQuantity">(5 viewing)</span></a>
 												<div class="ForumDescription">$forumDescription</div>
 											</td>
 										 	<td >

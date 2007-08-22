@@ -540,7 +540,10 @@ public class JCRDataStorage implements DataStorage {
   	forumHomeNode.getSession().save() ;
   }
   
-  
+  public List getPage(long page, JCRPageList pageList) throws Exception {
+    return pageList.getPage(page, getForumHomeNode().getSession()) ;
+  }
+
   private String [] ValuesToStrings(Value[] Val) throws Exception {
   	if(Val.length == 1) return new String[]{Val[0].getString()} ;
 		String[] Str = new String[Val.length] ;

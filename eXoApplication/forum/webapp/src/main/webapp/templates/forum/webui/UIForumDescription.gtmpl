@@ -1,10 +1,15 @@
+<%  
+	import org.exoplatform.forum.webui.UIForumDescription ;
+	import org.exoplatform.forum.service.Forum ;
+%>
+<% Forum forum = uicomponent.getForum(); %>
 <div class="UIForumDescription">
 	<div class="LeftDescription">
 		<div class="RightDescription">
 			<div class="CenterDescription">
 				<span class="Forum">Forum:</span> 
-				<span class="NameForum">eXo Vietnam</span>
-				<span class="Description">Discuss among eXo VN employees about life, work and news</span>
+				<span class="NameForum"><%=forum.getForumName()%></span>
+				<span class="Description"><%=forum.getDescription()%></span>
 			</div>
 		</div>
 	</div>

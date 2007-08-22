@@ -10,6 +10,7 @@ import java.util.GregorianCalendar;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.forum.service.Category;
 import org.exoplatform.forum.service.ForumService;
+import org.exoplatform.forum.webui.ForumNameValidator;
 import org.exoplatform.forum.webui.UICategories;
 import org.exoplatform.forum.webui.UICategory;
 import org.exoplatform.forum.webui.UICategoryContainer;
@@ -50,7 +51,8 @@ public class UICategoryForm extends UIForm implements UIPopupComponent{
   
   public UICategoryForm() throws Exception {
   	UIFormStringInput categoryTitle = new UIFormStringInput(FIELD_CATEGORYTITLE_INPUT, FIELD_CATEGORYTITLE_INPUT, null);
-  	UIFormStringInput categoryOrder = new UIFormStringInput(FIELD_CATEGORYORDER_INPUT, FIELD_CATEGORYORDER_INPUT, "0");
+  	categoryTitle.addValidator(ForumNameValidator.class);
+    UIFormStringInput categoryOrder = new UIFormStringInput(FIELD_CATEGORYORDER_INPUT, FIELD_CATEGORYORDER_INPUT, "0");
   	categoryOrder.addValidator(PositiveNumberFormatValidator.class);
   	UIFormStringInput description = new UIFormTextAreaInput(FIELD_DESCRIPTION_TEXTAREA, FIELD_DESCRIPTION_TEXTAREA, null);
   	 addUIFormInput(categoryTitle);
@@ -89,10 +91,10 @@ public class UICategoryForm extends UIForm implements UIPopupComponent{
   		String id = "category" + Long.toString(calendar.getTimeInMillis(), 22);
       Category cat = new Category();
       cat.setOwner(userName) ;
-      cat.setCategoryName(categoryTitle) ;
+      cat.setCategoryName(categoryTitle.trim()) ;
       cat.setCategoryOrder(Long.parseLong(categoryOrder)) ;
       cat.setCreatedDate(new Date()) ;
-      cat.setDescription(description) ;
+      cat.setDescription(description.trim()) ;
       cat.setModifiedBy(userName) ;
       cat.setModifiedDate(new Date()) ;
       

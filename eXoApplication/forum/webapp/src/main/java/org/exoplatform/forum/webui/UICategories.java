@@ -82,12 +82,14 @@ public class UICategories extends UIContainer  {
     public void execute(Event<UICategories> event) throws Exception {
     	UICategories uiContainer = event.getSource();
       String forumId = event.getRequestContext().getRequestParameter(OBJECTID)  ;
-      System.out.println("\n\n--------------->  id:  " + forumId);
+      String []id = forumId.trim().split(",");
       UIForumPortlet forumPortlet = uiContainer.getAncestorOfType(UIForumPortlet.class) ;
       forumPortlet.updateIsRendered(2);
       UIForumContainer uiForumContainer = forumPortlet.getChild(UIForumContainer.class) ;
-  		uiForumContainer.getChild(UITopicDetailContainer.class).setRendered(false) ;
-  		uiForumContainer.getChild(UITopicContainer.class).setRendered(true) ;
+      uiForumContainer.getChild(UITopicDetailContainer.class).setRendered(false) ;
+      uiForumContainer.getChild(UIForumDescription.class).setForumIds(id[0], id[1]);
+      UITopicContainer uiTopicContainer = uiForumContainer.getChild(UITopicContainer.class).setRendered(true) ;
+      uiTopicContainer.setForumIds(id[0], id[1]) ;
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
       context.addUIComponentToUpdateByAjax(forumPortlet) ;
     }

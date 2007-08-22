@@ -4,6 +4,9 @@
  **************************************************************************/
 package org.exoplatform.forum.webui;
 
+import org.exoplatform.container.PortalContainer;
+import org.exoplatform.forum.service.Forum;
+import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIContainer;
 
@@ -18,6 +21,19 @@ import org.exoplatform.webui.core.UIContainer;
     template =  "app:/templates/forum/webui/UIForumDescription.gtmpl"
 )
 public class UIForumDescription extends UIContainer  {
+  private String forumId ;
+  private String categoryId ;
   public UIForumDescription() throws Exception {    
-  }  
+  }
+  
+  public void setForumIds(String categoryId, String forumId) {
+    this.forumId = forumId ;
+    this.categoryId = categoryId ;
+  }
+  
+  private Forum getForum() throws Exception {
+    ForumService forumService = (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
+    return forumService.getForum(categoryId, forumId);
+  }
+  
 }

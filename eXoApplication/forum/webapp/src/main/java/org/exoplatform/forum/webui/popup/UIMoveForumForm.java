@@ -34,7 +34,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
  */
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
-    template = "app:/templates/forum/webui/popup/UIAddNewCategory.gtmpl",
+    template = "app:/templates/forum/webui/popup/UICategoryForm.gtmpl",
     events = {
       @EventConfig(listeners = UIMoveForumForm.SaveActionListener.class), 
       @EventConfig(listeners = UIMoveForumForm.CancelActionListener.class, phase=Phase.DECODE)

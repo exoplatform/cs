@@ -90,10 +90,7 @@ public class TestForumService extends BaseForumTestCase{
   	forumService_.moveForum(forumNew.getId(), oldPath, cateNew.getPath());
   	assertNotNull(forumService_.getForum("idC1", forumNew.getId()));
   	Forum test = forumService_.getForum("idC1", forumNew.getId());
-  	System.out.println("\n =============== > HHH:  " + test.getPath()) ;
-  	System.out.println("\n =============== > HHH:  " + cat_.getPath()) ;
   	forumService_.moveForum(test.getId(), test.getPath(), cat_.getPath());
-  	
   	// remove Forum return Forum
   	//assertNotNull(forumService_.removeForum("idC1", forumNew.getId()));
   }
@@ -117,7 +114,8 @@ public class TestForumService extends BaseForumTestCase{
     assertEquals(list.size(), 1);
     List page = pagelist.getPage(1, session_) ;
     assertEquals(page.size(), 1);    
-    
+    List<Topic> page9 = forumService_.getPage(1, pagelist);
+    System.out.println("\n\n\n =====  page9:  " + page9.get(0).getDescription() );
 		// update Topic
 		Topic newTopic = forumService_.getTopic(cat.getId(), forum.getId(), topic.getId());
 		newTopic.setTopicName("New Name topic");
@@ -174,14 +172,20 @@ public class TestForumService extends BaseForumTestCase{
 //		Post testp = (Post)forumService_.getObjectByPath(newPost.getPath());
 //		assertEquals(testp.getMessage(), newPost.getMessage());
 		//test movePost
+    
+    
+//    List<Post> postss = pagePosts.getAllChild();
+//    for( Post postt : postss) {
+//      System.out.println("\n\n=========----->> PostId:   " + postt.getId());
+//    }
 		
-		Topic topicnew = createdTopic("333334");
-		forumService_.saveTopic(cat.getId(), forum.getId(), topicnew, true);
-		topicnew = forumService_.getTopic(cat.getId(), forum.getId(), topicnew.getId());
-		forumService_.movePost(newPost.getPath(), topicnew.getPath() + "/" + newPost.getId());
-		assertNotNull(forumService_.getPost(cat.getId(), forum.getId(), topicnew.getId(), newPost.getId()));
-		//test remove Post return post
-		assertNotNull(forumService_.removePost(cat.getId(), forum.getId(), topicnew.getId(), newPost.getId()));
+//		Topic topicnew = createdTopic("333334");
+//		forumService_.saveTopic(cat.getId(), forum.getId(), topicnew, true);
+//		topicnew = forumService_.getTopic(cat.getId(), forum.getId(), topicnew.getId());
+//		forumService_.movePost(newPost.getPath(), topicnew.getPath() + "/" + newPost.getId());
+//		assertNotNull(forumService_.getPost(cat.getId(), forum.getId(), topicnew.getId(), newPost.getId()));
+//		//test remove Post return post
+//		assertNotNull(forumService_.removePost(cat.getId(), forum.getId(), topicnew.getId(), newPost.getId()));
 //		//getViewPost
 //		System.out.print("\n\n" + topicnew.getViewCount() + "\n\n");
   }

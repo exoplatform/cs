@@ -122,5 +122,8 @@ public class ForumPageList extends JCRPageList {
   }
   
 	@Override
-	public List getAll() throws Exception {return null;}
+	public List getAll() throws Exception { return null; }
+
+
+
 }
