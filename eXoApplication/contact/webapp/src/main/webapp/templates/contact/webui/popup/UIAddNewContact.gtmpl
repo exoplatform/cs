@@ -1,3 +1,5 @@
+
+
 <div class="UIAddNewContact">
 	<% uiform.begin() %>
 	<div class="UIForm AddContact">
@@ -38,6 +40,16 @@
 			                  </div>
 			                </div>
 			              </div>
+			              
+			              <div class="UITab NormalTabStyle">
+			                <div class="NormalTab">
+			                  <div class="LeftTab">
+			                    <div class="RightTab">
+					                  <div class="MiddleTab" onclick="eXo.webui.UIHorizontalTabs.displayTabContent(this)">Work</div>
+					                </div>
+			                  </div>
+			                </div>
+			              </div>
 		            
 			              <div class="UITab NormalTabStyle">
 			                <div class="NormalTab">
@@ -59,15 +71,7 @@
 			                </div>
 			              </div>
 				            
-			              <div class="UITab NormalTabStyle">
-			                <div class="NormalTab">
-			                  <div class="LeftTab">
-			                    <div class="RightTab">
-					                  <div class="MiddleTab" onclick="eXo.webui.UIHorizontalTabs.displayTabContent(this)">Work</div>
-					                </div>
-			                  </div>
-			                </div>
-			              </div>
+			    
 				            
 			              <div class="UITab NormalTabStyle">
 			                <div class="NormalTab">
@@ -78,6 +82,19 @@
 			                  </div>
 			                </div>
 			              </div>
+				            
+				            
+			              <div class="UITab NormalTabStyle">
+			                <div class="NormalTab">
+			                  <div class="LeftTab">
+			                    <div class="RightTab">
+					                  <div class="MiddleTab" onclick="eXo.webui.UIHorizontalTabs.displayTabContent(this)">Sharing</div>
+					                </div>
+			                  </div>
+			                </div>
+			              </div>
+				            
+				          
 				            
 					        </div>
 					      </div>
@@ -132,13 +149,14 @@
 					        </div>
 				        	
 				        </div>
+				        
 								<div style="display: none;" id="UITabContent" class="UITabContent">
 									
 									<div class="UIFormInputSet InstantMessaging">
 										<table class="UIFormGrid">
 											<tbody>
 						            <% 
-						   						while(i < 16) {
+						   						while(i < 18) {
 										   	%>
 						            <tr>
 					                <td class="FieldLabel"><%=uicomponent.getLabel(uiform.getChild(i).getName())%>:</td>
@@ -180,7 +198,7 @@
 										<table class="UIFormGrid">
 											<tbody>
 						            <% 
-						   						while(i < 36) {
+						   						while(i < 35) {
 										   	%>
 						            <tr>
 					                <td class="FieldLabel"><%=uicomponent.getLabel(uiform.getChild(i).getName())%>:</td>
@@ -206,12 +224,38 @@
 						              	 <% uiform.renderChild(i) %>
 						              </td>
 						            </tr>
+						            <% i++ ; %>
 											</tbody>
 										</table>
 									</div>
 			        
-			      		</div>
 			      	</div>
+			      	
+			      	<div style="display: none;" id="UITabContent" class="UITabContent">
+									
+									<div class="UIFormInputSet Work">
+										<table class="UIFormGrid">
+											<tbody>
+												<tr>
+					                <td class="FieldLabel"><%=uicomponent.getLabel(uiform.getChild(i).getName())%>:</td>
+						              <td class="FieldComponent">
+						              	<% uiform.renderChild(i) %>	
+						              </td>
+						            </tr>
+						             <% i++ ; %>
+												<tr>
+					                <td class="FieldLabel"><%=uicomponent.getLabel(uiform.getChild(i).getName())%>:</td>
+						              <td class="FieldComponent">
+						              	<% uiform.renderChild(i) %>
+						              	<a href="#"><img src="/eXoResources/skin/sharedImages/Blank.gif" class="PermissionSettingIcon"></a>
+						              </td>
+						            </tr>
+											</tbody>
+										</table>
+									</div>
+			        
+			      	</div>
+			      	
 			      </div>
 			      	
 	        </div>
