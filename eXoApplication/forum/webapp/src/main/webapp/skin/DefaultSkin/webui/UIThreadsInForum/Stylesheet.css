@@ -59,12 +59,13 @@
 }
 
 .UIForumContainer .ContentContainer .StatusIcon {
-	margin: 12px 0px 0px 12px;
+	margin: auto;
 	width: 16px; height: 16px;
 }
 
 .UIForumContainer .ContentContainer .AvgRatingImages {
-	margin: 12px 0px 0px 5px;
+	margin: auto;
+	width: 82px;
 }
 
 .UIForumContainer .ContentContainer .VoteIcon {
@@ -73,7 +74,7 @@
 }
 
 .UIForumContainer .ContentContainer .ThreadStatusIcon {
-	margin: 8px 0px 0px 8px;
+	margin: auto;
 	width: 24px; height: 24px;
 }
 

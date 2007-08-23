@@ -110,6 +110,7 @@ public class UITopicForm extends UIForm implements UIPopupComponent{
       topicNew.setIsModeratePost(false);
       topicNew.setIsClosed(false);
       topicNew.setIsLock(false);
+      topicNew.setIsSticky(false);
       
       topicNew.setIcon("classNameIcon");
       topicNew.setAttachmentFirstPost(0) ;

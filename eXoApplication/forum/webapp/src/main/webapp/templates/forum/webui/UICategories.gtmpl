@@ -98,16 +98,17 @@
 						        String postCount = (String)forum.getPostCount();
 						        String [] forumModerators = forum.getModerators();
 						        String id = category.getId() + "," + forum.getId();
+						        
 						    %>
 							    	<tr class="$classRow">
-											<td style="padding: 0px;"><div class="ForumStatusIcon $classIconForum" title="$titleIconForum"><span></span></div></td>
+											<td class="Tdbox"><div class="ForumStatusIcon $classIconForum" title="$titleIconForum"><span></span></div></td>
 											<td >
 												<a href="<%=uicomponent.event("OpenForumLink", id)%>" class="ForumTitle">$forumTitle</a><span class="ForumQuantity">&nbsp;(5 viewing)</span>
 												<div class="ForumDescription">$forumDescription</div>
 											</td>
 										 	<td >
 										 	<% if(topicNewPost != null) { %>
-										 		<div class="LastPostIcon $topicNewPostIcon"><a class="LastPostTitle">$topicNewPostTitle</a></div>
+										 		<div class="LastPostIcon $topicNewPostIcon" title="Go to first Post in Therad '$topicNewPostTitle' "><a class="LastPostTitle">$topicNewPostTitle</a></div>
 												<div class="LastPostInfos">by&nbsp;<a style="color: #058EE6;" href="#">$lastPostBy</a><span class="DateTime">&nbsp;($dateTime)</span></div>
 											<% } %>	
 											</td>
