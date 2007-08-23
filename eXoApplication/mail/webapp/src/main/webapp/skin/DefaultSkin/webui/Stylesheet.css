@@ -287,14 +287,21 @@
 	line-height: 26px;
 }
 
-.UIMailPortlet .MailWorkingWorkspace  .UIActionBar a {
+.UIMailPortlet .MailWorkingWorkspace .SelectButton {
+	float:left;
+	line-height:18px;
+	margin-top:3px;
+	cursor: pointer;
+}
+
+.UIMailPortlet .MailWorkingWorkspace  .UIActionBar a.ControlButton {
 	color: #000000;
 	margin: 3px 0px 0px 0px;
 	line-height: 26px;
 	border-width: 1px ;
 }
 
-.UIMailPortlet .MailWorkingWorkspace  .UIActionBar a:hover {
+.UIMailPortlet .MailWorkingWorkspace  .UIActionBar a:hover.ControlButton {
 	background: url('background/ControlButtonBG1x26.gif') repeat-x ;
 	color: #126ca5; border: 1px solid #cbcbcb;
 	height: 24px;
@@ -313,6 +320,16 @@
 
 .UIMailPortlet .MailWorkingWorkspace .UIActionBar .DownArrow1Icon {
 	padding-right: 20px;
+}
+
+.UIMailPortlet .UIActionBar .UIPopupCategory {
+	left: -5px;
+	position:absolute;
+	top: 28px;
+}
+
+.UIMailPortlet .UIActionBar .UIPopupCategory .UIRightClickPopupMenu {
+	width: 150px;
 }
 
 /*================================= MailContainer ================*/
@@ -341,11 +358,29 @@
 	padding-left: 8px;
 }
 
+.UIMailPortlet .UIMessageActionsBar .UIPopupCategory  {
+	left: -30px;
+	top: 3px;
+}
+
+.UIMailPortlet .UIMessageActionsBar .MoreActionsIcon .UIRightClickPopupMenu  {
+	width: 130px;
+}
+
+.UIMailPortlet .UIMessageActionsBar .UIRightClickPopupMenu .ItemIcon {
+	width: auto;
+	background-position: left center;
+}
+
 .UIMailPortlet .MailWorkingWorkspace .UIMessageActionsBar .SeparatorLine {
 	background: url('background/SeparatorDottedLine2x23.gif') no-repeat;
 	height: 23px;
 	margin: 2px;
 	padding: 0px;
+}
+
+.UIMailPortlet .MailWorkingWorkspace .UIMessageActionsBar .SelectButton {
+	margin: 0px;
 }
 
 .UIMailPortlet .MailWorkingWorkspace  .UIMessageActionsBar a {
@@ -460,10 +495,6 @@
 
 .UIMailPortlet .MailWorkingWorkspace input.checkbox {
 	margin: 2px 0px 0px 0px;
-}
-
-.UIMailPortlet .MailWorkingWorkspace .textBold {
-	font-weight: bold;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .ResizeReadingPane {
@@ -694,6 +725,7 @@
 
 .SelectedItem {
 	background: #eceffc ;
+	font-weight: bold;
 }
 
 .UIMailPortlet .UIDefaultFolders .NormalLabel {

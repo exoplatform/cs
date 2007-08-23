@@ -24,7 +24,7 @@
 								<div class="MessageAddress">
 									<div class="FieldContainer">
 										<div class="Title">From:</div>
-										<div class="LinkAddress"><span>Brice Revenant</span>(brice.revenant@gmail.com)</div>
+										<div class="LinkAddress"><span>Brice Revenant</span> &lt; brice.revenant@gmail.com &gt;</div>
 										<div style="clear: left;"><span></span></div>
 									</div>
 									<div class="FieldContainer">
@@ -34,7 +34,7 @@
 									</div>
 									<div class="FieldContainer">
 										<div class="Title">To:</div>
-										<div class="LinkAddress"><span>Phuong</span> (phuong.pham@exoplatform.com)</div>
+										<div class="LinkAddress"><span>Phuong</span> &lt; phuong.pham@exoplatform.com &gt;</div>
 										<div style="clear: left;"><span></span></div>
 									</div>
 									<div class="FieldContainer">

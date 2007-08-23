@@ -32,11 +32,61 @@
 							</div>
 						</a>
 						<div class="SeparatorLine"><span></span></div>
-						<a href="#" class="ControlButton">
+						
+						<div class="SelectButton" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
+							
 							<div class="IconHolder CustomViewIcon" title="Custome panels view">
 								<div class="DownArrow1Icon">Custom Layout View</div>
 							</div>
-						</a>
+							
+							<% /*Begin Popup Menu*/ %>
+							<div style="position: relative;">
+		      			<div class="UIPopupCategory" style="display: none;">
+		      				<div class="UIRightClickPopupMenu" style="display: block;">
+									  <div class="TopLeftRightClickPopupMenu">
+			          			<div class="TopRightRightClickPopupMenu">
+			            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
+			          			</div>
+			        			</div>
+						        <div class="MiddleLeftRightClickPopupMenu">
+						          <div class="MiddleRightRightClickPopupMenu">
+			              		<div class="UIRightPopupMenuContainer">
+													<a class="MenuItem" href="#">   
+				                    <div class="ItemIcon DefaultLayoutIcon">
+				                      Default 
+				                    </div>
+			                    </a>
+			                    <a class="MenuItem" href="#">   
+				                    <div class="ItemIcon HideFolderListIcon">
+				                      Hide Folder List
+				                    </div>
+			                    </a>
+			                    <a class="MenuItem" href="#">   
+				                    <div class="ItemIcon HideMessagesPaneIcon">
+				                      Hide Messages Pane
+				                    </div>
+			                    </a>
+			                    <a class="MenuItem" href="#">   
+				                    <div class="ItemIcon HideReadingPaneIcon">
+				                      Hide Reading Pane
+				                    </div>
+			                    </a>
+												</div>
+				          		</div>
+				        		</div>
+							      <div class="BottomLeftRightClickPopupMenu">
+							        <div class="BottomRightRightClickPopupMenu">
+							          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+							        </div>
+							      </div>
+				      			
+							    </div>
+		      			</div>
+		      		</div>
+		      		<% /*End Popup Menu*/ %>
+		      		
+						</div>
+						
 						<a href="<%=uicomponent.event("MailSettings")%>" class="ControlButton">
 							<div class="IconHolder SettingsIcon" title="Mail settings">Settings</div>
 						</a>

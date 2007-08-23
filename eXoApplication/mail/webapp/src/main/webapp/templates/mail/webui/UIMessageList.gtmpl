@@ -36,14 +36,14 @@
  	  	<tr class="NormalItem">
   			<td><input type="checkbox" class="checkbox" value="4" onclick="eXo.mail.UIMailPortlet.selectItem(this) ;"/></td>
 				<td style="padding: 0px auto;"><div class="UnStarredIcon" onclick="eXo.mail.UIMailPortlet.setStars(this) ;"><span></span></div></td>
-				<td class="textBold">Brice Revenant</td>
+				<td>Brice Revenant</td>
 				<td style="padding: 0px auto;"><div class="AttachmentIcon"><span></span></div></td>
 				<td style="padding: 0px; border-right: 1px solid #ffffff;"></td>
-				<td class="textBold">[exo-vn] M6</td>
+				<td>[exo-vn] M6</td>
 				<td style="padding: 0px;"></td>
-				<td class="textBold">07/05/2007 10:30am</td>
-				<td class="textBold">13K</td>
-				<td style="padding: 0px;" class="textBold"><div class="HighPriority">!</div></td>
+				<td>07/05/2007 10:30am</td>
+				<td>13K</td>
+				<td style="padding: 0px;"><div class="HighPriority">!</div></td>
   		</tr>
  	  	<tr class="NormalItem">
   			<td><input type="checkbox" class="checkbox" value="4" onclick="eXo.mail.UIMailPortlet.selectItem(this) ;"/></td>

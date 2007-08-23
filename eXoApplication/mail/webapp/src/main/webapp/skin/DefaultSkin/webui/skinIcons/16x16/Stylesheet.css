@@ -73,9 +73,65 @@
 	background: url('icons/ForwardIcon.gif') no-repeat left 6px;
 }
 
+.DefaultLayoutIcon {
+	background: url('icons/DefaultLayout.gif') no-repeat left 6px;
+}
+
+.HideFolderListIcon {
+	background: url('icons/HideFolderList.gif') no-repeat left 6px;
+}
+
+.HideMessagesPaneIcon {
+	background: url('icons/HideMessagesPane.gif') no-repeat left 6px;
+}
+
+.HideReadingPaneIcon {
+	background: url('icons/HideReadingPane.gif') no-repeat left 6px;
+}
+
 .PrintIcon {
 	background: url('icons/PrintIcon.gif') no-repeat center;
 	width: 2px; height: 26px;
+}
+
+.MarkReadIcon {
+	background: url('icons/MarkReadIcon.gif') no-repeat;
+}
+
+.MarkReadIcon {
+	background: url('icons/MarkReadIcon.gif') no-repeat;
+}
+
+.RemoveStarIcon {
+	background: url('icons/RemoveStarIcon.gif') no-repeat;
+}
+
+.MoveMessageIcon {
+	background: url('icons/MoveMessageIcon.gif') no-repeat;
+}
+
+.ImportMessageIcon {
+	background: url('icons/ImportMessageIcon.gif') no-repeat;
+}
+
+.EmportMessageIcon {
+	background: url('icons/EmportMessageIcon.gif') no-repeat;
+}
+
+.AllMessagesIcon {
+	background: url('icons/AllMessagesIcon.gif') no-repeat;
+}
+
+.UnreadMessagesIcon {
+	background: url('icons/UnreadMessagesIcon.gif') no-repeat;
+}
+
+.ReadMessagesIcon {
+	background: url('icons/ReadMessagesIcon.gif') no-repeat;
+}
+
+.MessagesAttachmentIcon {
+	background: url('icons/MessagesAttachmentIcon.gif') no-repeat;
 }
 
 .DeleteIcon {
