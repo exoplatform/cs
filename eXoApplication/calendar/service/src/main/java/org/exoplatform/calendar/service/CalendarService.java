@@ -15,6 +15,7 @@ import java.util.Map;
  */
 public interface CalendarService {
   
+  public List<CalendarCategory> getCategories(String username) throws Exception ;
   /**
    * This method should:
    * 1. Get calendar service root node by current user
@@ -24,7 +25,7 @@ public interface CalendarService {
    * @return Calendar Category list
    * @throws Exception
    */
-  public List<CalendarCategory> getCalendarCategories(String username) throws Exception ;
+  public List<GroupCalendarData> getCalendarCategories(String username) throws Exception ;
   /**
    * This method should:
    * 1. Get calendar service root node by current user

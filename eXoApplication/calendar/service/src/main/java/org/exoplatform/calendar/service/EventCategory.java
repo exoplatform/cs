@@ -4,6 +4,8 @@
  **************************************************************************/
 package org.exoplatform.calendar.service;
 
+import org.exoplatform.services.jcr.util.IdGenerator;
+
 /**
  * Created by The eXo Platform SARL
  * Author : Hung Nguyen Quang
@@ -15,6 +17,9 @@ public class EventCategory {
   private String name ;
   private String description ;
   
+  public EventCategory() {
+    id = "EventCategory" + IdGenerator.generate() ;
+  }
   public String getId() { return id ; }
   public void   setId(String id) { this.id = id ; }
   

@@ -6,6 +6,8 @@ package org.exoplatform.calendar.service;
 
 import java.util.List;
 
+import org.exoplatform.services.jcr.util.IdGenerator;
+
 /**
  * Created by The eXo Platform SARL
  * Author : Hung Nguyen Quang
@@ -19,11 +21,14 @@ public class Calendar {
   private String description ;
   private String[] viewPermission ;
   private String[] editPermission ;
-  private boolean isPrivate = true ;
+  private boolean isPublic = false ;
   private String categoryId ;
   private String[] groups ;
   private List<EventCategory> eventCategories ;
   
+  public Calendar() throws Exception{
+    id = "calendar" + IdGenerator.generate() ;
+  }
   public String getId() { return id ; }
   public void setId(String id) { this.id = id ; }
   
@@ -48,8 +53,8 @@ public class Calendar {
   public String getCategoryId() { return categoryId ; }
   public void setCategoryId(String categoryId) { this.categoryId = categoryId ; }
 
-  public boolean isPrivate() { return isPrivate ; }
-  public void setPrivate(boolean isPrivate) { this.isPrivate = isPrivate ; }
+  public boolean isPublic() { return isPublic ; }
+  public void setPublic(boolean isPublic) { this.isPublic = isPublic ; }
   
   public List<EventCategory> getEventCategories() { return eventCategories ; }
   public void setEventCategories(List<EventCategory> evCate) { eventCategories = evCate ; }

@@ -128,9 +128,7 @@ public class JCRDataStorage implements DataStorage{
     return calendares;
   }
   public void saveUserCalendar(String username, Calendar calendar, boolean isNew) throws Exception {
-    Node calendarHome  ;
-    if(calendar.isPrivate()) calendarHome = getCalendarHome(username) ;
-    else calendarHome = getCalendarHome() ;
+    Node calendarHome = getCalendarHome(username) ;
     Node calendarNode ;
     if(isNew) {
       if(calendarHome.hasNode(calendar.getId())) throw new Exception("This calendar is already exists") ;
@@ -168,8 +166,6 @@ public class JCRDataStorage implements DataStorage{
     return null ;
   }
   
-  
-  
   public Calendar getGroupCalendar(String calendarId) throws Exception {
     Node calendarNode = getCalendarHome().getNode(calendarId) ;
     return getCalendar(null, calendarNode) ;
@@ -194,7 +190,7 @@ public class JCRDataStorage implements DataStorage{
         while(it.hasNext()){
           calendars.add(getCalendar(null, it.nextNode())) ;
         }
-        groupCalendars.add(new GroupCalendarData(groupId, calendars)) ;
+        groupCalendars.add(new GroupCalendarData(groupId, groupId, calendars)) ;
       }
     }
     
@@ -219,7 +215,7 @@ public class JCRDataStorage implements DataStorage{
     calendarNode.setProperty("exo:groups", calendar.getGroups()) ;
     
     //  Check to save group
-    Node calendarGroups = getCalendarGroupHome() ;
+    /*Node calendarGroups = getCalendarGroupHome() ;
     Node groupNode ;
     for(String group : calendar.getGroups()) {
       if(calendarGroups.hasNode(group)) {
@@ -235,7 +231,7 @@ public class JCRDataStorage implements DataStorage{
         groupNode.setProperty("exo:calendarIds", new String[] {calendar.getId()}) ;
         //calendarGroups.getSession().save() ;
       }
-    }
+    }*/
     calendarHome.getSession().save() ;
     
   }  
@@ -279,7 +275,7 @@ public class JCRDataStorage implements DataStorage{
     if(calNode.hasProperty("exo:name")) calendar.setName(calNode.getProperty("exo:name").getString()) ;
     if(calNode.hasProperty("exo:description")) calendar.setDescription(calNode.getProperty("exo:description").getString()) ;
     if(calNode.hasProperty("exo:categoryId")) calendar.setCategoryId(calNode.getProperty("exo:categoryId").getString()) ;
-    if(!calendar.isPrivate()) {
+    if(!calendar.isPublic()) {
       if(calNode.hasProperty("exo:groups")){
         Value[] values = calNode.getProperty("exo:groups").getValues() ;
         if(values.length == 1 ){      
@@ -319,13 +315,37 @@ public class JCRDataStorage implements DataStorage{
         }
       }      
     }
-    
-    calendar.setEventCategories(getEventCategories(username, calNode.getProperty("exo:id").getString())) ;
-    
+    calendar.setEventCategories(getEventCategories(username, calNode.getProperty("exo:id").getString())) ;    
     return calendar ;
   }  
   
-  public List<CalendarCategory> getCalendarCategories(String username) throws Exception {
+  public List<GroupCalendarData> getCalendarCategories(String username) throws Exception {
+    Node calendarHome = getCalendarHome(username) ;
+    NodeIterator iter = getCalendarCategoryHome(username).getNodes() ;
+    List<GroupCalendarData> calendarCategories = new ArrayList<GroupCalendarData> () ;
+    List<Calendar> calendars ;
+    QueryManager qm = calendarHome.getSession().getWorkspace().getQueryManager();
+    while(iter.hasNext()){      
+      Node categoryNode =  iter.nextNode() ;
+      String categoryId = categoryNode.getProperty("exo:id").getString() ;     
+      StringBuffer queryString = 
+        new StringBuffer("/jcr:root" + calendarHome.getPath() 
+                       + "//element(*,exo:calendar)[@exo:categoryId='").append(categoryId).append("']");
+      Query query = qm.createQuery(queryString.toString(), Query.XPATH);
+      QueryResult result = query.execute();
+      NodeIterator it = result.getNodes();
+      calendars = new ArrayList<Calendar> () ;
+      if(it.hasNext()) {
+        while(it.hasNext()){
+          calendars.add(getCalendar(username, it.nextNode())) ;
+        }        
+      }
+      calendarCategories.add(new GroupCalendarData(categoryId, categoryNode.getProperty("exo:name").getString(), calendars)) ;
+    }
+    return calendarCategories;
+  }
+  
+  public List<CalendarCategory> getCategories(String username) throws Exception {
     Node calendarCategoryHome = getCalendarCategoryHome(username) ;
     NodeIterator iter = calendarCategoryHome.getNodes() ;
     List<CalendarCategory> calendarCategories = new ArrayList<CalendarCategory> () ;
@@ -352,7 +372,7 @@ public class JCRDataStorage implements DataStorage{
     }
     calCategoryNode.setProperty("exo:name", calendarCategory.getName()) ;
     calCategoryNode.setProperty("exo:description", calendarCategory.getDescription()) ;
-    calCategoryNode.setProperty("exo:calendarIds", calendarCategory.getCalendars()) ;
+    //calCategoryNode.setProperty("exo:calendarIds", calendarCategory.getCalendars()) ;
     calCategoryHome.getSession().save() ;
   }
   
@@ -361,7 +381,7 @@ public class JCRDataStorage implements DataStorage{
     Node calCategoryNode = calCategoryHome.getNode(calendarCategoryId) ; 
     Node calendarHome = getCalendarHome(username) ;
     CalendarCategory calCategory = getCalendarCategory(calCategoryNode) ;
-    if(calCategory.getCalendars() != null){
+    /*if(calCategory.getCalendars() != null){
       for(String calendarId : calCategory.getCalendars()) {
         if(calendarHome.hasNode(calendarId)) {
           Node calendar = calendarHome.getNode(calendarId) ;
@@ -371,7 +391,7 @@ public class JCRDataStorage implements DataStorage{
           }        
         }
       }
-    }
+    }*/
     calCategoryNode.remove() ;
     calCategoryHome.save() ;
     calendarHome.save() ;
@@ -384,7 +404,7 @@ public class JCRDataStorage implements DataStorage{
     if(calCategoryNode.hasProperty("exo:id")) calCategory.setId(calCategoryNode.getProperty("exo:id").getString()) ;
     if(calCategoryNode.hasProperty("exo:name")) calCategory.setName(calCategoryNode.getProperty("exo:name").getString()) ;
     if(calCategoryNode.hasProperty("exo:description")) calCategory.setDescription(calCategoryNode.getProperty("exo:description").getString()) ;
-    if(calCategoryNode.hasProperty("exo:calendarIds")) {
+    /*if(calCategoryNode.hasProperty("exo:calendarIds")) {
       Value[] calendarValues = calCategoryNode.getProperty("exo:calendarIds").getValues() ;
       if(calendarValues.length == 1 ){      
         calCategory.setCalendars(new String[]{calendarValues[0].getString()}) ;
@@ -395,7 +415,7 @@ public class JCRDataStorage implements DataStorage{
         }
         calCategory.setCalendars(calendars) ;
       }
-    }   
+    }   */
     return calCategory ;
   }
   

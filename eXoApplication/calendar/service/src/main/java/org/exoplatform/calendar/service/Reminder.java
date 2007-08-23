@@ -4,6 +4,8 @@
  **************************************************************************/
 package org.exoplatform.calendar.service;
 
+import org.exoplatform.services.jcr.util.IdGenerator;
+
 /**
  * Created by The eXo Platform SARL
  * Author : Tuan Nguyen
@@ -17,6 +19,9 @@ public class Reminder {
   private String reminder = "Via email";
   private String alarmBefore = "5"; 
   
+  public Reminder() {
+    id = "Reminder" + IdGenerator.generate() ;
+  }
   public String getId() { return this.id ; }
   public void   setId(String id) { this.id = id ; }
   

@@ -39,7 +39,11 @@ public class CalendarServiceImpl implements CalendarService{
     calendarImportExport_.put(ICALENDAR, new ICalendarImportExport(storage_)) ;
   }
   
-  public List<CalendarCategory> getCalendarCategories(String username) throws Exception {
+  public List<CalendarCategory> getCategories(String username) throws Exception {
+    return storage_.getCategories(username) ;
+  }
+  
+  public List<GroupCalendarData> getCalendarCategories(String username) throws Exception {
     return storage_.getCalendarCategories(username);
   }
   public CalendarCategory getCalendarCategory(String username, String calendarCategoryId) throws Exception {

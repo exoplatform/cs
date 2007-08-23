@@ -7,6 +7,7 @@ package org.exoplatform.calendar.webui;
 import org.exoplatform.calendar.webui.popup.UIPopupAction;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
+import org.exoplatform.webui.core.UIPopupMessages;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 
@@ -33,5 +34,12 @@ public class UICalendarPortlet extends UIPortletApplication {
     UIPopupAction popupAction = getChild(UIPopupAction.class) ;
     popupAction.deActivate() ;
     context.addUIComponentToUpdateByAjax(popupAction) ;
+  }
+  
+  private void renderPopupMessages() throws Exception {
+    UIPopupMessages popupMess = getUIPopupMessages();
+    if(popupMess == null)  return ;
+    WebuiRequestContext  context =  WebuiRequestContext.getCurrentInstance() ;
+    popupMess.processRender(context);
   }
 }

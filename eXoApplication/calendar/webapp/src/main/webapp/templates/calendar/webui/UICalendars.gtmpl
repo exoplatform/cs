@@ -1,4 +1,5 @@
 <div class="UICalendars">
+<%uiform.begin()%>
 	<div class="TitleBar">
 		<div class="Title">Calendars</div>
 		<div class="ActionsButton" title="Calendar actions" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
@@ -65,192 +66,58 @@
 				<div class="Label">My calendar</div>
 			</div>
 			<div class="MyCalendarContainer">
-				
+				<%
+					List groupCalendars = uicomponent.getPersonalCategories() ;
+					for(groupData in groupCalendars) {
+				%>
 				<div class="UIVTab">  	
   				<div class="CalendarSelectedFlatStyle">
-  					<div class="GroupItem" onmousedown="eXo.webui.UIPopupSelectCategory.show(this, event);">
+  					<div class="GroupItem">
   						<div class="GroupColor1">
   							<div title="Collapser calendar group" class="CollapserFlatStyle"><span></span></div>
   							<div class="CheckBox"><input type="checkbox"/></div>
-  							<div class="CalendarGroupIcon" ><a href="#" >Company group</a></div>
+  							<div class="CalendarGroupIcon" onclick=""><a href="#" ><%=groupData.getName()%></a></div>
   							<div style="clear: both"><span></span></div>
   						</div>
-  						<% /*Begin Popup Menu*/ %>
-				      <div style="position: relative;">
-					      <div class="UIPopupCategory" style="display: none; left: 10px;">
-					      	<div class="PopupCategoryDecorator">
-					      
-						        <div class="UIRightClickPopupMenu" style="display: block;">
-										  <div class="TopLeftRightClickPopupMenu">
-				          			<div class="TopRightRightClickPopupMenu">
-				            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
-				          			</div>
-				        			</div>
-							        <div class="MiddleLeftRightClickPopupMenu">
-							          <div class="MiddleRightRightClickPopupMenu">
-				              		<div class="UIRightPopupMenuContainer">
-					                   <a class="MenuItem" href="#">   
-					                    <div class="ItemIcon AddCalendarIcon">
-					                      Add new calendar
-					                    </div>
-					                   </a>
-					                   <a class="MenuItem" href="#">   
-					                    <div class="ItemIcon PasteGroupIcon">
-					                      Paste group
-					                    </div>
-					                   </a>
-					                   <a class="MenuItem" href="#">   
-					                    <div class="ItemIcon EditGroupIcon">
-					                      Edit group
-					                    </div>
-					                   </a>
-					                   <a class="MenuItem" href="#">   
-					                    <div class="ItemIcon DeleteGroupIcon">
-					                      Delete group
-					                    </div>
-					                   </a>
-				              		</div>
-				          			</div>
-				        			</div>
-							        <div class="BottomLeftRightClickPopupMenu">
-							          <div class="BottomRightRightClickPopupMenu">
-							            <div class="BottomCenterRightClickPopupMenu"><span></span></div>
-							          </div>
-							        </div>
-				      			</div>
-				      			
-							    </div>
-							  </div>
-							</div>
-						<% /*End Popup Menu*/ %>
   					</div>
-  				</div>	
-  							
+  				</div>
   				<div class="UIVTabContent" >
-  					<div class="CalendarItem" onmousedown="eXo.webui.UIPopupSelectCategory.show(this, event);">
+				<%	
+						List calendars = groupData.getCalendars() ;
+						for(calendar in calendars) {
+				%>
+  					<div class="CalendarItem">
   						<div class="CalendarColor1">
   							<div class="CheckBox"><input type="checkbox"/></div>
-  							<div class="CalendarIcon"><a href="#" >Meeting</a></div>
-  							<div style="clear: both"><span></span></div>
-  						</div>
-  						<% /*Begin Popup Menu*/ %>
-				      <div style="position: relative;">
-					      <div class="UIPopupCategory" style="display: none; left: 1px;">
-					      	<div class="PopupCategoryDecorator">
-					      
-						        <div class="UIRightClickPopupMenu" style="display: block;">
-										  <div class="TopLeftRightClickPopupMenu">
-				          			<div class="TopRightRightClickPopupMenu">
-				            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
-				          			</div>
-				        			</div>
-							        <div class="MiddleLeftRightClickPopupMenu">
-							          <div class="MiddleRightRightClickPopupMenu">
-				              		<div class="UIRightPopupMenuContainer">
-					                  <a class="MenuItem" href="#">   
-					                    <div class="ItemIcon AddNewEventIcon">
-					                      Add new event
-					                    </div>
-				                    </a>
-				                    <a class="MenuItem" href="#">   
-					                    <div class="ItemIcon CutCalendarIcon">
-					                      Cut calendar
-					                    </div>
-				                    </a>
-				                    <a class="MenuItem" href="#">   
-					                    <div class="ItemIcon CopyCalendarIcon">
-					                      Copy calendar
-					                    </div>
-				                    </a>
-				                    <a class="MenuItem" href="#">   
-					                    <div class="ItemIcon DeleteCalendarIcon">
-					                      Delete calendar
-					                    </div>
-				                    </a>
-				                    <a class="MenuItem" href="#">   
-					                    <div class="ItemIcon SettingCalendarIcon">
-					                      Setting calendar
-					                    </div>
-				                    </a>
-				                    <a class="MenuItem" href="#">   
-					                    <div class="ItemIcon ExportCalendarIcon">
-					                      Export calendar
-					                    </div>
-				                    </a>
-				                    <div class="CalendarTableColor">
-															<div class="CalendarRowColor">
-																<div class="ColorSuburd LightCyan"><span></span></div>
-																<div class="ColorSuburd NaryBlue"><span></span></div>
-																<div class="ColorSuburd DarkNaryBlue"><span></span></div>
-																<div class="ColorSuburd Violet"><span></span></div>
-																<div class="ColorSuburd PingViolet"><span></span></div>
-																<div class="ColorSuburd Ping"><span></span></div>
-																<div class="ColorSuburd Red"><span></span></div>
-																<div class="ColorSuburd Blue"><span></span></div>
-																<div style="clear: left"><span></span></div>
-															</div>
-															<div class="CalendarRowColor">
-																<div class="ColorSuburd DarkOrange"><span></span></div>
-																<div class="ColorSuburd LightOrange"><span></span></div>
-																<div class="ColorSuburd Cream"><span></span></div>
-																<div class="ColorSuburd Earth"><span></span></div>
-																<div class="SelectColorSuburd LightGreen"><span></span></div>
-																<div class="ColorSuburd Green"><span></span></div>
-																<div class="ColorSuburd BlueSky"><span></span></div>
-																<div class="ColorSuburd c9a54a"><span></span></div>
-																<div style="clear: left"><span></span></div>
-															</div>
-															<div class="CalendarRowColor">
-																<div class="ColorSuburd ddc69c"><span></span></div>
-																<div class="ColorSuburd c5c493"><span></span></div>
-																<div class="ColorSuburd c97c6c3"><span></span></div>
-																<div class="ColorSuburd c1d3f3"><span></span></div>
-																<div class="ColorSuburd a2b4c3"><span></span></div>
-																<div class="ColorSuburd c8afc6"><span></span></div>
-																<div class="ColorSuburd dab2b1"><span></span></div>
-																<div class="ColorSuburd b2b1da"><span></span></div>
-																<div style="clear: left"><span></span></div>
-															</div>
-														</div>											
-				              		</div>
-				          			</div>
-				        			</div>
-							        <div class="BottomLeftRightClickPopupMenu">
-							          <div class="BottomRightRightClickPopupMenu">
-							            <div class="BottomCenterRightClickPopupMenu"><span></span></div>
-							          </div>
-							        </div>
-				      			</div>
-				      			
-							    </div>
-							  </div>
-							</div>
-							<% /*End Popup Menu*/ %>
-  					</div>
-  					<div class="CalendarItem" >
-  						<div class="CalendarColor2">
-  							<div class="CheckBox"><input type="checkbox"/></div>
-  							<div class="CalendarIcon"><a href="#" >Football</a></div>
+  							<div class="CalendarIcon"><a href="#" ><%=calendar.getName()%></a></div>
   							<div style="clear: both"><span></span></div>
   						</div>
   					</div>
-  				</div>
-  			</div>	
-  			<div class="CalendarItem">
-  				<div class="CalendarColor3">
-  					<div class="CheckBox"><input type="checkbox"/></div>
-  					<div class="CalendarIcon"><a href="#" >Family</a></div>
-  					<div style="clear: both"><span></span></div>
-  				</div>
-  			</div>
-  			<div class="CalendarItem">
-  				<div class="CalendarColor4">
-  					<div class="CheckBox"><input type="checkbox"/></div>
-  					<div class="CalendarIcon"><a href="#" >Work</a></div>
-  					<div style="clear: both"><span></span></div>
-  				</div>
-  			</div>
-				
+				<%
+						}
+				%>
+					</div>
+				</div>	
+				<%
+					}
+				%>
+  				
+  			
+  				<!--  <div class="CalendarItem">
+  							<div class="CalendarColor3">
+  								<div class="CheckBox"><input type="checkbox"/></div>
+  								<div class="CalendarIcon"><a href="#" >Family</a></div>
+  								<div style="clear: both"><span></span></div>
+  							</div>
+  						</div>
+  						<div class="CalendarItem">
+  							<div class="CalendarColor4">
+  								<div class="CheckBox"><input type="checkbox"/></div>
+  								<div class="CalendarIcon"><a href="#" >Work</a></div>
+  								<div style="clear: both"><span></span></div>
+  							</div>
+  						</div>
+				-->
 			</div>
 		</div>
 		<div class="OtherCalendar">
@@ -259,77 +126,30 @@
 				<div class="Label">Other calendar</div>
 			</div>
 			<div class="OtherCalendarContainer">
-				<div class="CalendarItem" onmousedown="eXo.webui.UIPopupSelectCategory.show(this, event);">
-  				<div class="CalendarColor5">
-  					<div class="CheckBox"><input type="checkbox"/></div>
-  					<div class="CalendarIcon"><a href="#" >Benjamin's Calendar</a></div>
-  					<div style="clear: both"><span></span></div>
-  				</div>
-  				<% /*Begin Popup Menu*/ %>
-		      <div style="position: relative;">
-			      <div class="UIPopupCategory" style="display: none; left: 1px;">
-			      	<div class="PopupCategoryDecorator">
-			      
-				        <div class="UIRightClickPopupMenu" style="display: block;">
-								  <div class="TopLeftRightClickPopupMenu">
-		          			<div class="TopRightRightClickPopupMenu">
-		            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
-		          			</div>
-		        			</div>
-					        <div class="MiddleLeftRightClickPopupMenu">
-					          <div class="MiddleRightRightClickPopupMenu">
-		              		<div class="UIRightPopupMenuContainer">
-			                  <a class="MenuItem" href="#">   
-			                    <div class="ItemIcon AddCalendarIcon">
-			                      Add new calendar
-			                    </div>
-			                  </a>
-			                  <a class="MenuItem" href="#">   
-			                    <div class="ItemIcon CopyCalendarIcon">
-			                      Copy calendar
-			                    </div>
-			                  </a>
-			                  <a class="MenuItem" href="#">   
-			                    <div class="ItemIcon DeleteCalendarIcon">
-			                      Delete calendar
-			                    </div>
-			                  </a>
-			                  <a class="MenuItem" href="#">   
-			                    <div class="ItemIcon SendToFriend">
-			                      Send to friend
-			                    </div>
-			                  </a>
-		              		</div>
-		          			</div>
-		        			</div>
-					        <div class="BottomLeftRightClickPopupMenu">
-					          <div class="BottomRightRightClickPopupMenu">
-					            <div class="BottomCenterRightClickPopupMenu"><span></span></div>
-					          </div>
-					        </div>
-		      			</div>
-		      			
-					    </div>
-					  </div>
-					</div>
-					<% /*End Popup Menu*/ %>
-  			</div>
-  			<div class="CalendarItem">
-  				<div class="CalendarColor6">
-  					<div class="CheckBox"><input type="checkbox"/></div>
-  					<div class="CalendarIcon"><a href="#" >Brice's Calendar</a></div>
-  					<div style="clear: both"><span></span></div>
-  				</div>
-  			</div>
-  			<div class="CalendarItem">
-  				<div class="CalendarColor7">
-  					<div class="CheckBox"><input type="checkbox"/></div>
-  					<div class="CalendarIcon"><a href="#" >Tuan's Calendar</a></div>
-  					<div style="clear: both"><span></span></div>
-  				</div>
-  			</div>
+				<div class="CalendarItem">
+  							<div class="CalendarColor5">
+  								<div class="CheckBox"><input type="checkbox"/></div>
+  								<div class="CalendarIcon"><a href="#" >Benjamin's Calendar</a></div>
+  								<div style="clear: both"><span></span></div>
+  							</div>
+  						</div>
+  						<div class="CalendarItem">
+  							<div class="CalendarColor6">
+  								<div class="CheckBox"><input type="checkbox"/></div>
+  								<div class="CalendarIcon"><a href="#" >Brice's Calendar</a></div>
+  								<div style="clear: both"><span></span></div>
+  							</div>
+  						</div>
+  						<div class="CalendarItem">
+  							<div class="CalendarColor7">
+  								<div class="CheckBox"><input type="checkbox"/></div>
+  								<div class="CalendarIcon"><a href="#" >Tuan's Calendar</a></div>
+  								<div style="clear: both"><span></span></div>
+  							</div>
+  						</div>
   				
-			</div>
+								</div>
 		</div>
 	</div>
+<%uiform.end()%>
 </div>

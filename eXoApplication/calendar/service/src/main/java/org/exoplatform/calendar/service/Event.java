@@ -8,6 +8,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.exoplatform.services.jcr.util.IdGenerator;
+
 /**
  * Created by The eXo Platform SARL
  * Author : Hung Nguyen Quang
@@ -38,7 +40,9 @@ public class Event {
   private List<Reminder> reminders ;
   private Map<String, String> properties ;
   
-  
+  public Event() {
+    id = "Event" + IdGenerator.generate() ;
+  }
    
   public String getId() { return id; }
   public void   setId(String id) { this.id = id ;}

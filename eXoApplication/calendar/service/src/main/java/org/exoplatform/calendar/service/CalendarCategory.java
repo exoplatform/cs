@@ -4,6 +4,8 @@
  **************************************************************************/
 package org.exoplatform.calendar.service;
 
+import org.exoplatform.services.jcr.util.IdGenerator;
+
 /**
  * Created by The eXo Platform SARL
  * Author : Hung Nguyen Quang
@@ -14,7 +16,11 @@ public class CalendarCategory {
   private String id ;
   private String name ;
   private String description ;
-  private String[] calendars ;
+  //private String[] calendars ;
+  
+  public CalendarCategory() {
+    id = "CalendarCategory" + IdGenerator.generate() ;
+  }
   
   public String getId() { return id ; }
   public void setId(String id) { this.id = id ; }
@@ -25,7 +31,7 @@ public class CalendarCategory {
   public String getDescription() { return description ; }
   public void setDescription(String description) { this.description = description ; }
 
-  public String[] getCalendars() { return calendars ; }
-  public void setCalendars(String[] calendars) { this.calendars = calendars ; }
+  //public String[] getCalendars() { return calendars ; }
+  //public void setCalendars(String[] calendars) { this.calendars = calendars ; }
 
 }

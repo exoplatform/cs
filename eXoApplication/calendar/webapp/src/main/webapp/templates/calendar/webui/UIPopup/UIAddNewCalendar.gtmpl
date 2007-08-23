@@ -196,9 +196,9 @@
 	         																<tbody>
 	         																	<tr>
 	         																		<td class="FieldComponent">
-	         																			<td class="permission">
+	         																			<td>
 	         																				<td class="UIFormInputSet">
-	         																					<div class="UIFormInputSetWithAction">
+	         																					<div>
 	         																						<div class="FormContainer">
 	         																							<table class="UIFormGrid">
 									         																<tbody>

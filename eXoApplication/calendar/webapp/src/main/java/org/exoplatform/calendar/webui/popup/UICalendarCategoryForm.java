@@ -6,7 +6,10 @@ package org.exoplatform.calendar.webui.popup;
 
 import org.exoplatform.calendar.service.CalendarCategory;
 import org.exoplatform.calendar.service.CalendarService;
+import org.exoplatform.calendar.webui.UICalendarContainer;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
+import org.exoplatform.calendar.webui.UICalendarWorkingContainer;
+import org.exoplatform.calendar.webui.UICalendars;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.util.IdGenerator;
@@ -66,6 +69,8 @@ public class UICalendarCategoryForm extends UIForm implements UIPopupComponent{
       calendarService.saveCalendarCategory(username, category, uiForm.isAddNew) ;
       UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
       calendarPortlet.cancelAction() ;
+      UICalendars uiCalendars = calendarPortlet.getChild(UICalendarWorkingContainer.class).getChild(UICalendarContainer.class).getChild(UICalendars.class) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendars) ; ;
     }
   }
   static  public class CancelActionListener extends EventListener<UICalendarCategoryForm> {

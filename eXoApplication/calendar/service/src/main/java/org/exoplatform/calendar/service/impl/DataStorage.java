@@ -32,7 +32,8 @@ public interface DataStorage {
   public void saveGroupCalendar(Calendar calendar, boolean isNew) throws Exception ;  
   public Calendar removeGroupCalendar(String calendarId) throws Exception ;
   
-  public List<CalendarCategory> getCalendarCategories(String username) throws Exception ;
+  public List<CalendarCategory> getCategories(String username) throws Exception ;
+  public List<GroupCalendarData> getCalendarCategories(String username) throws Exception ;
   public CalendarCategory getCalendarCategory(String username, String calendarCategoryId) throws Exception ;
   public void saveCalendarCategory(String username, CalendarCategory calendarCategory, boolean isNew) throws Exception ; 
   public CalendarCategory removeCalendarCategory(String username, String calendarCategoryId) throws Exception ;

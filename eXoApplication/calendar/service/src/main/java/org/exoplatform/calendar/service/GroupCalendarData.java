@@ -13,13 +13,18 @@ import java.util.List;
  * Jul 11, 2007  
  */
 public class GroupCalendarData {
+  private String id ;
   private String name ;
   private List<Calendar> calendars ;
   
-  public GroupCalendarData(String name, List<Calendar> calendars) throws Exception {
+  public GroupCalendarData(String id, String name, List<Calendar> calendars) throws Exception {
+    this.id = id ;
     this.name = name ;
     this.calendars = calendars ;
   }
+  public String getId() { return id ; }
+  public void setId(String id) { this.id = id ; }
+  
   public String getName() { return name ; }
   public void setName(String name) { this.name = name ; }
 
