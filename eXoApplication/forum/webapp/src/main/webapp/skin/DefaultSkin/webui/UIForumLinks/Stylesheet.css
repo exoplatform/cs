@@ -11,8 +11,14 @@
 
 .UIForumLinks .HorizontalLayout .UIFormGrid td.FieldLabel {
 	line-height: 20px;
+	white-space:nowrap;
 }
 
 .UIForumLinks .HorizontalLayout .UIFormGrid input.button {
 	width: 30px;
+	float: left;
+}
+
+.UIForumLinks .UIForm .HorizontalLayout select {
+	float:left;
 }

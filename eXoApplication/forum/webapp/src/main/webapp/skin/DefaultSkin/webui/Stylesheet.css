@@ -84,7 +84,7 @@
 }
 
 .UIForumPortlet a:hover {
-	color: #126ca5;
+	color: #058ee6;
 }
 
 .UIForumPortlet .ForumToolbar .Title {
@@ -155,11 +155,10 @@
 
 .UIForumPortlet .ContentContainer {
 	padding-left: 1px;
-	margin: 3px 0px;
 }
 
 .UIForumPortlet .ContentContainer .UITopicList a {
-	color: #126ca5;
+	color: #058ee6;
 }
 
 .UIForumPortlet .ContentContainer .ForumStatsList a {
@@ -189,7 +188,7 @@
 
 .UIForumPortlet .ContentContainer .LastPostTitle {
 	font-weight: bold;
-	color: #126ca5;
+	color: #058ee6;
 }
 
 .UIForumPortlet .ContentContainer .LastPostIcon {
@@ -207,13 +206,17 @@
 .UIForumPortlet .ContentContainer .Moderator {
 	float: left;
 	font-weight: bold;
-	line-height: 30px;
+}
+
+.UIForumPortlet .ContentContainer .ModeratorContent {
+	float: left;
+	padding: 2px 8px 0px 0px;
 }
 
 .UIForumPortlet .ContentContainer .EmoticonsIcon {
 	float: left;
 	width: 16px; height: 16px;
-	margin: 8px 4px 0px 4px;
+	margin: 0px 4px;
 }
 
 .UIForumPortlet .ContentContainer .UIGrid .Tdbox  {

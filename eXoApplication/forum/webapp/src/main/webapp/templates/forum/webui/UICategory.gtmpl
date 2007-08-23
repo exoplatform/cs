@@ -170,8 +170,11 @@
 									<td class="Tdbox">$postCount</td>
 									<td >
 									<% for(forumModerator in forumModerators) { %>
-										<div class="EmoticonsIcon BigGrinIcon"><span></span></div>
-										<a href="#" class="Moderator">$forumModerator</a>
+										<div class="ModeratorContent">
+											<div class="EmoticonsIcon BigGrinIcon"><span></span></div>
+											<a href="#" class="Moderator">$forumModerator</a>
+											<div style="clear: left;"><span></span></div>
+										</div>
 									<% } %>
 	                  <div style="clear: left;"><span></span></div>
 	                </td>

@@ -11,6 +11,7 @@
 									<option value="" selected="selected">eXo VN Vacations</option>
 								</select>
 		  					<input type="button" name="" class="button" value="Go"/>
+		  					<div style="clear: left;"><span></span></div>
 		  				</td>
 		  			</tr>
 		  		</tbody>
