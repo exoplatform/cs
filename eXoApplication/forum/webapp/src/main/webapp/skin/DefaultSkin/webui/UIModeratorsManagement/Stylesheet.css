@@ -1,0 +1,64 @@
+.UIModeratorsManagement {
+	width: 660px;
+	padding: 10px;
+}
+
+.UIModeratorsManagement .ModeratorsManagement .HorizontalLayout {
+	border: none;
+	padding: 5px;
+}
+
+.UIModeratorsManagement .ModeratorsGroup {
+	padding: 5px;
+}
+
+.UIModeratorsManagement .ModeratorsGroup .UIFormWithTitle {
+	margin: 10px auto 0px auto;
+}
+
+.UIModeratorsManagement .ModeratorsGroup .HorizontalLayout .UIFormInputSet {
+	padding: 0px;
+}
+
+.UIModeratorsManagement .ModeratorsGroup .UIFormInputSet .FormContainer {
+	border: none;
+	padding: 0px;
+}
+
+.UIModeratorsManagement .ModeratorsGroup .UIGrid .OverflowContainer {
+	width: 50px;
+}
+
+.UIModeratorsManagement .ModeratorsGroup .UIFormGrid td.FieldLabel {
+	width: 100px;
+}
+
+.UIModeratorsManagement .ModeratorsGroup .UIFormGrid input.radio {
+	margin: 0px;	
+}
+
+.UIModeratorsManagement .ModeratorsGroup .AddIcon16x16 {
+	width: 16px;
+	height: 16px;
+	margin: 0px 2px;
+}
+
+.UIModeratorsManagement .ModeratorsGroup .SelectUserIcon {
+	background: url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/SmallUserIcon.gif') no-repeat;
+}
+
+.UIModeratorsManagement .ModeratorsGroup .SelectMemberIcon {
+	background: url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/SmallGroupIcon.gif') no-repeat;
+}
+
+.UIModeratorsManagement .ModeratorsGroup .AddAnyIcon {
+	background: url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/SmallMemberIcon.gif') no-repeat;
+}
+
+.UIModeratorsManagement .ModeratorsGroup .UIAction {
+	width: 130px;
+}
+
+.UIModeratorsManagement .UIAction {
+	width: 130px;
+}

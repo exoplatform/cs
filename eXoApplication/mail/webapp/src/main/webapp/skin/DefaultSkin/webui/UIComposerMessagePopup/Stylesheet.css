@@ -49,6 +49,7 @@
 
 .UIMessageCompose .MailListActionsbar .ControlButton .PriorityIcon {
 	background: url('icons/24x24/MessagePriority.gif') no-repeat left;
+	height: auto;
 }
 
 .UIMessageCompose .MailListActionsbar .ControlButton .EditorOptionsIcon {
@@ -63,37 +64,53 @@
 
 /*===========================Compose Message Address==================================*/
 
-.UIMessageCompose .MessageAddress {
+.UIMailPortlet .MailWorkingWorkspace .UIMessageCompose .MessageAddress {
 	background: #f3f3f3;
+	float: none;
 }
 
 .UIMessageCompose .MessageAddress .AddAddress {
 	width: 100px;
+	float: right;
+	padding: 0px 25px;
 }
 
 .UIMessageCompose .MessageAddress .AddAddress a {
 	color:#126ca5;
 }
 
+.UIMessageCompose .MessageAddress .UIComposeForm .UIFormGrid {
+	width: 95%;
+}
+
+.UIMessageCompose table {
+	background: none;
+}
+
 .UIMessageCompose .UIForm .HorizontalLayout td.FieldLabel {
 	font-weight: bold;
 }
 
+.UIMessageCompose .UIForm .HorizontalLayout td {
+	border: none;
+}	
+	
 .UIMessageCompose .UIForm .HorizontalLayout {
-	padding: 10px;
+	padding: 10px 0px;
 	border: 1px solid #cccccc;
 }
 
 .UIMessageCompose .UIForm .HorizontalLayout input {
-	width: 99%;
+	width: 95%;
 }
 
 .UIMessageCompose .UIForm .HorizontalLayout select {
-	width: 740px;
+	width: 78%;
+	float: left;
 }
 
 .UIMessageCompose .UIForm .HorizontalLayout textarea {
-	width: 99%; height: 40px; 
+	width: 95%; height: 40px; 
 	font-family: tahoma;
 }
 
@@ -110,13 +127,11 @@
 	margin: 0px 0px 0px 5px;
 	color: #126ca5;
 }
+
 /*=========================Text Actions Bar=============================*/
-.UIMessageCompose .Messagecontent .TextArea {
-	background: #f3f3f3;
-	height: 25px;
-	border-left: 1px solid #cbcbcb;
-	border-right: 1px solid #cbcbcb;
-		border-top: 1px solid white;
+
+.UIMessageCompose .MessageContent {
+	background: white;
 }
 
 .UIMessageCompose .MessageContent .PlainTextMessage {

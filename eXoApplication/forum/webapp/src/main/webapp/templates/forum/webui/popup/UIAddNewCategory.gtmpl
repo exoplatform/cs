@@ -1,0 +1,55 @@
+<div class="UIAddNewCategory">
+	<% uiform.begin() %>
+		<div class="HorizontalLayout">
+			<div class="UIFormInputSet">
+				<table class="UIFormGrid">
+				  <tbody>            
+        <% 
+	        for(field in uiform.getChildren()) { 
+	          if(field.isRendered()) {
+        %>
+              <tr>
+	              <%fieldName = uicomponent.getLabel(field.getName());%>
+	              <%if(!fieldName.equals(uicomponent.getId())) { %>                        
+  	              <td class="FieldLabel">
+                    <%if(fieldName != null && fieldName.length() > 0) {%> 
+                      <%=uicomponent.getLabel(field.getName()) %>
+                    <%}%>
+                  </td>
+  	              <td class="FieldComponent"><% uiform.renderField(field) %></td>
+	              <%} else {%>
+	                <td class="FieldComponent" colspan="2"><% uiform.renderField(field) %></td>
+	              <%}%>
+	            </tr>
+        <%
+	          }
+	        }
+        %>            
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="UIAction">
+      <div class="ActionContainer">
+        <% for(action in uicomponent.getActions()) { %>
+            <div class="ActionButton">
+              <div class="LightBlueStyle">
+                <div class="ButtonLeft">
+                  <div class="ButtonRight">
+                    <div class="ButtonMiddle">
+                      <% 
+                        String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action); 
+                        String link = uicomponent.event(action) ;
+                      %>
+                      <a href="$link">$actionLabel</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <%}%> 
+      </div>
+    </div>
+  <%uiform.end()%>
+</div>
+

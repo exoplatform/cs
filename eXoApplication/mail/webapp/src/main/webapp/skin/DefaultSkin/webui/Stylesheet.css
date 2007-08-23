@@ -95,31 +95,23 @@
 	padding: 0px 2px;
 }
 
-.UIMailPortlet .UIDropDownItemSelector {
-	float: left;
-	width: 194px;
+.UIMailPortlet .UISelectAccount {
 	margin-bottom: 1px;
 }
+
 .UIMailPortlet .UISelectAccount .selectbox {
 	float: left;
-	margin: 5px 0 0;
+	margin: 8px 0px 0px 0px;
 	width: 194px;
 	line-height: 20px;
 	height: 20px;
 }
+
 .UIMailPortlet .UISelectAccount .ItemSelectorContainer {
 	width: 194px;
 	float: left;
 	margin: 7px 0px 1px 0px;
 	border-right: none;
-}
-
-.UIMailPortlet .UISelectAccount .UIDropDownControl {
-	width: 194px;
-  float: left;
-	margin: 10px 0px 1px 0px;
-	border-right: none;
-	height: 19px;
 }
 
 .UIMailPortlet .UISelectAccount .ItemInfoBar {
@@ -156,10 +148,10 @@
 }
 
 .UIMailPortlet .UINavigationContainer .AddAccountIcon {
-	background: url('/eXoResources/skin/DefaultSkin/skinIcons/24x24/icons/EditNavigation.gif') no-repeat left top;
+	background: url('/mail/skin/DefaultSkin/webui/skinIcons/24x24/icons/EditSelectAccount.gif') no-repeat left top;
 	cursor: pointer;
-	float: right; margin: 5px 0px 0px 0px;
-	height: 21px; width: 21px;
+	float: right; margin: 8px 0px 0px 0px;
+	height: 22px; width: 21px;
 	display: block;
 }
 
@@ -366,6 +358,7 @@
 	height: 26px;
 	width: 24px;
 	padding: 0px;
+	background-position: center;
 }
 
 .UIMailPortlet .MailWorkingWorkspace  .UIMessageActionsBar a:hover {
@@ -452,6 +445,10 @@
 	background: #ffffff;
 }
 
+.UIMailPortlet .MailWorkingWorkspace .UIMessageCompose table {
+	background: none;
+}
+
 .UIMailPortlet .MailWorkingWorkspace td.Border {
 	border-right: 1px solid #e8e8e8;
 }
@@ -496,9 +493,6 @@
 
 .UIMailPortlet .MailWorkingWorkspace .UIMessagePreview {
 	background: #ffffff;
-}
-
-.UIMailPortlet .MailWorkingWorkspace .UIMessagePreview .ViewBoxStyle {
 }
 
 .UIMailPortlet .MailWorkingWorkspace .UIMessagePreview .ReadingPaneDetails {
@@ -684,9 +678,11 @@
 	text-align: center;
 	color: #585858;
 }
+
 .NormalItem {
-	background:#ffffff ;
+	background: #ffffff ;
 }
+
 .SelectedItem {
-	background:#ffffcc ;
+	background: #eceffc ;
 }

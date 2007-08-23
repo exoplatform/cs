@@ -3,53 +3,68 @@
   <div class="ApplicationMinWidth">
   
   	<div class="UIMessageCompose" style="padding: 5px;" >
+  	
 			<div class="UIToolbar">
 				<div class="HeaderToolbar">
 					<div class="LeftBar">
 						<div class="RightBar">
 							<div class="CenterBar">
 								<div class="MailListActionsbar">
+								
 									<a href="<%=uicomponent.event("Send")%>" class="ControlButton">
 										<div class="IconHolder SendMailIcon">
 											<div class="Label">Send mail</div>
 										</div>
 									</a>
+									
 									<div class="SeparatorLine"><span></span></div>
+									
 									<a href="<%=uicomponent.event("SaveDraft")%>" class="ControlButton">
 										<div class="IconHolder SaveAsADraftIcon">
 											<div class="Label">Save as a Draft</div>
 										</div>
 									</a>
+									
 									<div class="SeparatorLine"><span></span></div>
+									
 									<a href="<%=uicomponent.event("DiscardChange")%>" class="ControlButton">
 										<div class="IconHolder DiscardIcon">
 											<div class="Label">Discard</div>
 										</div>
 									</a>
+									
 									<div class="SeparatorLine"><span></span></div>
+									
 									<a href="<%=uicomponent.event("Attachment")%>" class="ControlButton">
 										<div class="IconHolder AttachFileIcon">
 											<div class="Label">Attach File</div>
 										</div>
 									</a>
+									
 									<div class="SeparatorLine"><span></span></div>
+									
 									<a href="#" class="ControlButton">
 										<div class="IconHolder PriorityIcon">
 											<div class="Label DownArrow1Icon">Message Priority</div>
 										</div>
 									</a>
+									
 									<div class="SeparatorLine"><span></span></div>
+									
 									<a href="#" class="ControlButton">
 										<div class="IconHolder EditorOptionsIcon">
 											<div class="Label DownArrow1Icon">Editor Options</div>
 										</div>
 									</a>
+									
 									<div style="clear:left;"><span></span></div>
+									
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
+				
 			</div>
 <!-- End Mail ControlBar -->
 <!-- Start  Message Address -->
@@ -61,19 +76,16 @@
 	              <tr>
   	              <td class="FieldLabel">From:</td>
   	              <td class="FieldComponent">
-  	              	<table>
-  	              		<td>
 		  	              	<select name="Phuong">
 		  	              		<option value="male" selected="selected">Phuong Pham Dang (phuong.pham@exoplatform.com)</option>
 													<option value="male" selected="selected">Hieu Luong Trung (hieu.luong@exoplatform.com)</option>
 													<option value="female">Nguyet Nguyen Anh (nguyet.nguyen@exoplatform.com)</option>
 												</select>
-											</td>
-											<td class="AddAddress">
+											<div class="AddAddress">
 												<a href="#">|Add CC|</a>
 			                	<a href="#">Add BCC|</a>
-		                	</td>
-	                	</table>
+		                	</div>
+		                	<div style="clear: both"><span></span></div>
 	                </td>
 		            </tr>
 		            <tr>
@@ -107,18 +119,19 @@
 <!-- Start Compose Message Detail -->
 			<div class="MessageContent">
 				<div class="PlainTextMessage">
-				<textarea style="width:100%;">
-				 Hi Benjamin !<p>
-					Could you please have a look on these screenshots for mail and forum.<p>
-					Thanks!<p>
-					-Phuong<p>
-					-----------------------<p>
-
-					Phuong Pham Dang<p>
-					eXo Platform SAS<p>
-					Vietnam Office</p>
-				</textarea>
-					
+				
+					<textarea style="width:99%; height: 200px; text-align: left">
+						Hi Benjamin !
+							Could you please have a look on these screenshots for mail and forum.
+							Thanks!
+							-Phuong
+							-----------------------
+			
+							Phuong Pham Dang
+							eXo Platform SAS
+							Vietnam Office
+					</textarea>
+						
 				</div>
 			</div>
 <!-- End Compose Message Detail -->

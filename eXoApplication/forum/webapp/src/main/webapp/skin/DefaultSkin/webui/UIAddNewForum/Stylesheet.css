@@ -1,0 +1,83 @@
+.UIAddNewForum {
+	padding: 10px;
+	height: 400px;
+}
+
+.UIAddNewForum .AddForum .HorizontalLayout {
+	border: none;
+	padding: 5px;
+}
+
+.UIAddNewForum .HorizontalLayout .NewForum {
+	width: 400px;
+	padding: 20px 0px 40px 0px;
+}
+
+.UIAddNewForum .HorizontalLayout .NewForum textarea {
+	height: 100px;
+}
+
+.UIAddNewForum .HorizontalLayout .ModerationOptions  {
+	width: 510px;
+	padding: 20px 0px 60px 0px;
+}
+
+.UIAddNewForum .HorizontalLayout .ModerationOptions textarea {
+	width: 340px;
+	height: 40px;
+}
+
+.UIAddNewForum .ForumPermission {
+	padding: 5px;
+}
+
+.UIAddNewForum .ForumPermission .UIFormWithTitle {
+	margin: 10px auto 0px auto;
+}
+
+.UIAddNewForum .ForumPermission .HorizontalLayout .UIFormInputSet {
+	padding: 0px;
+}
+
+.UIAddNewForum .ForumPermission .UIFormInputSet .FormContainer {
+	border: none;
+	padding: 0px;
+}
+
+.UIAddNewForum .ForumPermission .UIGrid .OverflowContainer {
+	width: 50px;
+}
+
+.UIAddNewForum .ForumPermission .UIFormGrid td.FieldLabel {
+	width: 100px;
+}
+
+.UIAddNewForum .ForumPermission .UIFormGrid input.radio {
+	margin: 0px;	
+}
+
+.UIAddNewForum .ForumPermission .AddIcon16x16 {
+	width: 16px;
+	height: 16px;
+	margin: 0px 2px;
+}
+
+.UIAddNewForum .ForumPermission .SelectUserIcon {
+	background: url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/SmallUserIcon.gif') no-repeat;
+}
+
+.UIAddNewForum .ForumPermission .SelectMemberIcon {
+	background: url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/SmallGroupIcon.gif') no-repeat;
+}
+
+.UIAddNewForum .ForumPermission .AddAnyIcon {
+	background: url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/SmallMemberIcon.gif') no-repeat;
+}
+
+.UIAddNewForum .ForumPermission .UIAction {
+	padding: 0px 0px 5px 0px;
+}
+
+.UIAddNewForum .UIAction {
+	width: 140px;
+}
