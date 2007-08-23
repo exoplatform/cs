@@ -81,10 +81,8 @@
 	padding: 10px 5px;
 }
 
-.UIMailPortlet .MailWorkingWorkspace .UIActionBar a:hover {
-	background: url('background/ControlButtonBG.gif') repeat-y ;
-	border: 1px solid #9d9d9d;
-	text-color: #126ca5;
+.UIMailPortlet .MailWorkingWorkspace .UIActionBar .Label {
+	line-height: 24px;
 }
 
 /**************************************MailContentNavigation*********************************/
