@@ -10,7 +10,7 @@
 	        </div>
 	      </div>
 	    </div>
-	   </div>
+	  </div>
     <div class="MiddleLeftSideDecorator">
       <div class="MiddleRightSideDecorator">
 	      <div class="MiddleCenterDecorator">
@@ -35,18 +35,38 @@
 												<tr>
 													<td class="FieldLabel">Poll Option 1:</td>
 													<td class="FieldComponent"><input type="text" id="" name=""/></td>
+													<td class="FieldIcon">
+														<div class="Icon"><span></span></div>
+														<div class="Icon"><span></span></div>
+														<div style="clear: left;"><span></span></div>
+													</td>
 												</tr>
 												<tr>
 													<td class="FieldLabel">Poll Option 2:</td>
 													<td class="FieldComponent"><input type="text" id="" name=""/></td>
+													<td class="FieldIcon">
+														<div class="Icon"><span></span></div>
+														<div class="Icon"><span></span></div>
+														<div style="clear: left;"><span></span></div>
+													</td>
 												</tr>
 												<tr>
 													<td class="FieldLabel">Poll Option 3:</td>
 													<td class="FieldComponent"><input type="text" id="" name=""/></td>
+													<td class="FieldIcon">
+														<div class="Icon"><span></span></div>
+														<div class="Icon"><span></span></div>
+														<div style="clear: left;"><span></span></div>
+													</td>
 												</tr>
 												<tr>
 													<td class="FieldLabel">Poll Option 4:</td>
 													<td class="FieldComponent"><input type="text" id="" name=""/></td>
+													<td class="FieldIcon">
+														<div class="Icon AddNewNodeIcon" title="Add Poll Option"><span></span></div>
+														<div class="Icon DeletePortalIcon" title="Delete Poll Option"><span></span></div>
+														<div style="clear: left;"><span></span></div>
+													</td>
 												</tr>
 											</tbody>
 										</table>

@@ -31,3 +31,22 @@
 .UIAddPoll .HorizontalLayout .UIFormGrid td.FieldLabel {
 	width: 140px;
 }
+
+.UIAddPoll .HorizontalLayout .UIFormGrid td.FieldIcon {
+	width: 110px;
+	padding: 4px 0px;
+}
+
+.UIAddPoll .Icon {
+	width: 16px; height: 16px;
+	float: left;
+	margin: 0px 2px;
+}
+
+.UIAddPoll .AddNewNodeIcon {
+	cursor: pointer;
+}
+
+.UIAddPoll .DeletePortalIcon {
+	cursor: pointer;
+}

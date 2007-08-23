@@ -1,0 +1,130 @@
+<div style="width: 550px; display: block; visibility: visible; z-index: 4; top: 131px; left: 309px;" id="SearchUser" exo:minheight="200" exo:minwidth="200" class="UIPopupWindow UIDragObject">
+ 	<div class="NormalStyle">
+	  <div class="TopLeftCornerDecorator">
+	    <div class="TopRightCornerDecorator">
+	      <div class="TopCenterDecorator">
+	        <div class="OverflowContainer">
+		        <div class="PopupTitleIcon"><span/></div>
+	         	<div onclick="" title="Close Window" class="CloseButton"><span><span/></div>
+	       	 	<div class="PopupTitle">Add a Poll to Thread</div>
+	        </div>
+	      </div>
+	    </div>
+	  </div>
+    <div class="MiddleLeftSideDecorator">
+      <div class="MiddleRightSideDecorator">
+	      <div class="MiddleCenterDecorator">
+        	<div class="UIWindowContent">
+
+						<div class="UIViewMemberProfile">
+							<div class="ViewMemberProfileContainer">
+								<div class="TitleBar">View Member Profile of : <span class="UserLabel"> phuong.pham</span></div>
+								<div class="ViewContainer">
+									<table class="TablePost" cellspacing="0" borderspacing="0">
+		  							<tbody>
+		  								<tr>
+<!-- Start MemberContainer -->	  
+												<td class="MemberContainer">
+										  		<div class="MemberContent">
+											  		<img src="/forum/skin/DefaultSkin/webui/background/Avatar1.gif" class="Img" />
+											  		<div class="Rank">Junior Member</div>
+											  		<div class="InfoMember">
+											  			<div>Join Date: Feb 2006</div>
+															<div>Posts: 150</div>
+															<div>Last Post: 07-22-2007, 10: 30 am</div>
+											  		</div>
+											  	</div>
+											  </td>
+			<!-- End MemberContainer -->
+			<!-- Start PostViewContainer -->
+												<td class="ProfileContainer">
+													<table class="TablePost" cellspacing="0" borderspacing="0">
+		  											<tbody>
+		  												<tr>
+																<td class="Label">User name:</td>
+																<td class="LabelProfile"> phuong.pham</td>
+															</tr>
+															<tr>
+																<td class="Label">First name: </td>
+																<td class="LabelProfile">Phuong</td>
+															</tr>
+															<tr>
+																<td class="Label">Last name:</td>
+																<td class="LabelProfile"> Pham</td>
+															</tr>
+															<tr>
+																<td class="Label">Birthday: </td>
+																<td class="LabelProfile">05 - 01 - 1979</td>
+															</tr>
+															<tr>
+																<td class="Label">Gender: </td>
+																<td class="LabelProfile">male</td>
+															</tr>
+															<tr>
+																<td class="Label">Email 1: </td>
+																<td class="LabelLink">phuong.pham@exoplatform.com</td>
+															</tr>
+															<tr>
+																<td class="Label">Email 2: </td>
+																<td class="LabelLink">phuongexodesign@gmail.com</td>
+															</tr>
+															<tr>
+																<td class="Label">Job title:</td>
+																<td class="LabelProfile"> Webdesigner</td>
+															</tr>
+															<tr>
+																<td class="Label">Location: </td>
+																<td class="LabelProfile">Hanoi, Vietnam</td>
+															</tr>
+															<tr>
+																<td class="Label">Work phone: </td>
+																<td class="LabelProfile">04.266 3367</td>
+															</tr>
+															<tr>
+																<td class="Label">Mobile phone: </td>
+																<td class="LabelProfile">0972 975 767</td>
+															</tr>
+															<tr>
+																<td class="Label">Website: </td>
+																<td class="LabelLink">http://www.phuongdesign.com</td>
+															</tr>
+														</tbody>
+													</table>
+											  </td>
+	<!-- End PostViewContainer -->
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+							<div class="UIAction">
+				      	<div class="ActionContainer">
+			          
+			            <div class="ActionButton">
+			              <div class="LightBlueStyle">
+										  <div class="ButtonLeft">
+											  <div class="ButtonRight">
+											    <div class="ButtonMiddle">
+										        <a href="#">Close</a>
+											    </div>
+										    </div>
+											</div>
+										</div>
+									</div>
+		          	</div>
+	 	        	</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+  	<div class="BottomLeftCornerDecorator">
+	 		<div class="BottomRightCornerDecorator">
+	   	  <div class="BottomCenterDecorator">
+					<div class="ResizeButton"><span/></div>
+				</div>
+	  	</div>
+  	</div>
+	</div>
+</div>
