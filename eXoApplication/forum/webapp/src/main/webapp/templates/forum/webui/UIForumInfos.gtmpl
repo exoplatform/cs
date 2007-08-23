@@ -12,7 +12,7 @@
 			  	<div class="RightBar">
 			  		<div class="CenterBar">
 			  			<div class="Title">Moderators(10)</div>
-				  		<div class="CollapseButton" title="Expand category"><span></span></div>
+				  		<div class="CollapseButton" title="Collapse" onclick="eXo.forum.UIForumPortlet.expandCollapse(this) ;"><span></span></div>
 							<div style="clear: both;"><span></span></div>
 			  		</div>
 			  	</div>

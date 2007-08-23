@@ -85,7 +85,7 @@
 				      	<th style="width: 130px;"><div class="DownArrow1Icon">Last posts</div></th>
 				      	<th style="width: 50px;">Threads</th>
 				      	<th style="width: 50px;">Posts</th>
-				      	<th style="width: 30px;"><input type="checkbox" class="checkbox" title="Check all" value="4"/></th>
+				      	<th style="width: 30px;"><input type="checkbox" class="checkbox" title="Check all" value="4" onClick="eXo.forum.UIForumPortlet.checkAll(this);"/></th>
 				      </tr>
 				    </thead>
 				    <tbody>
@@ -127,7 +127,7 @@
 									</td>
 								 	<td class="Tdbox">10</td>
 									<td class="Tdbox">1450</td>
-									<td class="Tdbox"><input type="checkbox" class="checkbox" value="4"/></td>
+									<td class="Tdbox"><input type="checkbox" class="checkbox" value="4"  onclick="eXo.forum.UIForumPortlet.selectItem(this)"/></td>
 				   			</tr>
 					   	<% } %>
 				    </tbody>

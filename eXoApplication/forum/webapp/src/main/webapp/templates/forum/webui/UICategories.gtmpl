@@ -22,7 +22,7 @@
 				  	<div class="RightBar">
 				  		<div class="CenterBar">
 				  			<div class="Title" title="$description"><a href="<%=uicomponent.event("OpenCategory", category.getId())%>">$title</a></div>
-				  			<div class="ExpandButton" title="Collapser category"><span></span></div>
+				  			<div class="CollapseButton" title="Collapse"  onclick="eXo.forum.UIForumPortlet.expandCollapse(this) ;"><span></span></div>
 								<div style="clear: both;"><span></span></div>
 				  		</div>
 				  	</div>

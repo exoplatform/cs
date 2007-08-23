@@ -2,16 +2,28 @@ function UIForumPortlet() {};
 UIForumPortlet.prototype.selectItem = function(obj) {
 	var DOMUtil = eXo.core.DOMUtil ;
 	var tr = DOMUtil.findAncestorByTagName(obj, "tr") ;
+	var table = DOMUtil.findAncestorByTagName(obj, "table") ;
+	var tbody = DOMUtil.findAncestorByTagName(obj, "tbody") ;
+	var checkbox = DOMUtil.findFirstDescendantByClass(table, "input", "checkbox") ;
+	var checkboxes = DOMUtil.findDescendantsByClass(tbody, "input", "checkbox") ;
+	var chklen = checkboxes.length ;
 	if(obj.checked) {
 		if (!tr.getAttribute("tmpClass")) {			
 			tr.setAttribute("tmpClass", tr.className) ;
 			tr.className = "SelectedItem" ;
 		}
+		var j = 0 ;
+		for(var i = 0 ; i < chklen ; i++) {
+			if (checkboxes[i].checked) j++ ;
+			else break ;
+		}
+		if (j == chklen) checkbox.checked = true ;
 	} else {
 		if (tr.getAttribute("tmpClass")) {			
 			tr.className = tr.getAttribute("tmpClass") ;
 			tr.removeAttribute("tmpClass") ;
-		}
+		}		
+		checkbox.checked = false ;
 	}
 } ;
 UIForumPortlet.prototype.checkAll = function(obj) {

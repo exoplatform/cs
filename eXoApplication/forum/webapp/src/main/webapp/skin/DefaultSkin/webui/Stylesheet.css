@@ -252,6 +252,6 @@
 .UIRightClickPopupMenu .UIRightPopupMenuContainer a:hover.DisableMenuItem {
 	color:#cccccc ;	
 }
-.UIForumCategory .ForumList .SelectedItem {
+.SelectedItem {
 	background: #ffffcc ;
 }
