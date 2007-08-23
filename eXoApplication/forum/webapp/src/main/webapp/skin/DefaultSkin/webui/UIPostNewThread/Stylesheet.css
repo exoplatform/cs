@@ -1,5 +1,5 @@
 .UIPostNewThread {
-	width: 710px;
+	width: 620px;
 	padding: 10px;
 }
 
@@ -7,10 +7,15 @@
 	padding: 10px;
 }
 
-.UIPostNewThread .UIForm .HorizontalLayout .Textinput {
-	width: 565px;
+.UIPostNewThread .UIForm .HorizontalLayout input {
+	width: 430px;
 }
 
 .UIPostNewThread .UIAction { 
 	width: 350px;
+}
+
+.UIPostNewThread .UIForm .HorizontalLayout textarea { 
+	width: 430px; 
+	height: 265px;
 }

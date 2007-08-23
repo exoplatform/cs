@@ -84,14 +84,12 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
       UITopicContainer uiTopicContainer = event.getSource() ;
       UIForumPortlet forumPortlet = event.getSource().getAncestorOfType(UIForumPortlet.class) ;
       UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;
-      popupAction.activate(UITopicForm.class, 600) ;
+      UITopicForm topicForm = popupAction.createUIComponent(UITopicForm.class, null, null) ;
+      topicForm.setTopicIds(uiTopicContainer.categoryId, uiTopicContainer.forumId) ;
+      popupAction.activate(topicForm, 670, 440) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   }
-
-  
-  
-  
   
   static public class OpenTopicActionListener extends EventListener<UITopicContainer> {
   	public void execute(Event<UITopicContainer> event) throws Exception {

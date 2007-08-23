@@ -1,5 +1,5 @@
 <div class="UIPostNewThread">
-	
+	<% uiform.begin() %>
 	<div class="UIFormTabPane">
 	  <div class="UITabPane">
 			<div class="TabPaneContent">
@@ -36,41 +36,37 @@
 					    </div>
 					  </div>
 		      </div>
-	        <form method="post" action="" id="" name="" class="UIForm">
-			    	<div class="HorizontalLayout">
-			        <div class="UITabContentContainer">
-		            
-		            <div style="display: block;" id="UITabContent" class="UITabContent">
-		            
-		              <div class="UIFormInputSet ThreadContent">
-		              	<table class="UIFormGrid">
-		              		<tbody>
-		              			<tr>
-		              				<td class="FieldLabel">Thread Title:</td>
-		              				<td class="FieldComponent">
-		              					<input type="text" name="" class="Textinput"/>
-		              				</td>
-		              			</tr>
-		              			<tr>
-		              				<td class="FieldLabel">Message:</td>
-		              				<td class="FieldComponent">
-		              					<textarea class="textarea" name="description" style="width: 565px; height: 265px;"></textarea>
-		              				</td>
-		              			</tr>
-		              			<tr>
-		              				<td class="FieldLabel">Attach File:</td>
-		              				<td class="FieldComponent">
-		              					<input type="file" value="" id="file" name="file"/>
-		              			</tr>
-		              		</tbody>
-		              	</table>
-		              </div>
-		           
-		            </div>
-		        
-		          </div>
-		 	        
-				    </div>
+		    	<div class="HorizontalLayout">
+		        <div class="UITabContentContainer">
+	            <div style="display: block;" id="UITabContent" class="UITabContent">
+	              <div class="UIFormInputSet ThreadContent">
+	              	<table class="UIFormGrid">
+	              		<tbody>
+	              		
+	              			<tr>
+	                      <td class="FieldLabel"><%=_ctx.appRes("UITopicForm.label.ThreadTitle")%>:</td>
+	                      <td class="FieldComponent">
+	                        <%uiform.renderChild("ThreadTitle");%>
+	                      </td>
+                      </tr>
+	              			<tr>
+	                      <td class="FieldLabel"><%=_ctx.appRes("UITopicForm.label.Messenger")%>:</td>
+	                      <td class="FieldComponent">
+	                        <%uiform.renderChild("Messenger"); %>
+	                      </td>
+                      </tr>
+                      
+	              			<tr>
+	              				<td class="FieldLabel">Attach File:</td>
+	              				<td class="FieldComponent">
+	              					<input type="file" value="" id="file" name="file"/>
+	              			</tr>
+	              		</tbody>
+	              	</table>
+	              </div>
+	            </div>
+	          </div>
+			    </div>
 			  </div>
 			  
 			</div>  
@@ -79,44 +75,23 @@
 
   <div class="UIAction">
 	  <div class="ActionContainer">
-	  
+	  <%
+	  for( action in uicomponent.getActionsTopic())  { 
+	  	String label = _ctx.appRes(uicomponent.getId() + ".action." + action) ;
+	  %>
 	    <div class="ActionButton">
 	      <div class="LightBlueStyle">
 				  <div class="ButtonLeft">
 					  <div class="ButtonRight">
 					    <div class="ButtonMiddle">
-				        <a href="#">Preview this Thread</a>
+				        <a href="<%=uicomponent.event(action)%>">$label</a>
 					    </div>
 				    </div>
 					</div>
 				</div>
 			</div>
-	
-	    <div class="ActionButton">
-	      <div class="LightBlueStyle">
-				  <div class="ButtonLeft">
-					  <div class="ButtonRight">
-					    <div class="ButtonMiddle">
-				        <a href="#">Submit this Thread</a>
-					    </div>
-				    </div>
-					</div>
-				</div>
-			</div>
-			
-			<div class="ActionButton">
-	      <div class="LightBlueStyle">
-				  <div class="ButtonLeft">
-					  <div class="ButtonRight">
-					    <div class="ButtonMiddle">
-				        <a href="#">Cancel</a>
-					    </div>
-				    </div>
-					</div>
-				</div>
-			</div>
-	    
+		<% } %>
 	  </div>
 	</div>
-
+  <%uiform.end()%>
 </div>

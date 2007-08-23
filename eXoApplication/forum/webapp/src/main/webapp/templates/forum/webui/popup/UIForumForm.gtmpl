@@ -5,7 +5,7 @@
       <table class="UIFormGrid">
         <tbody>
           <tr>
-          <% String labelBox = uicomponent.getLabel(uiform.getChild(0).getName()) %>
+          <% String labelBox = uicomponent.getLabel("Category") %>
             <td class="FieldLabel">$labelBox:</td>
             <td class="FieldComponent">
               <% uiform.renderChild("Category") %>

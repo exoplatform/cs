@@ -46,6 +46,16 @@ public class TestForumService extends BaseForumTestCase{
     assertEquals("1234567890", updatedCat.getCategoryName()) ;
     // test removeCategory
     assertNotNull(forumService_.removeCategory("id"));
+    
+    
+    GregorianCalendar calendar = new GregorianCalendar() ;
+    long date = calendar.getTimeInMillis(); 
+    
+//    System.out.println("\n\n=====> New Day: " +date+  "Cate Day: " + cat.getCreatedDate().getTime() );
+//    Date postDate = new Date();
+//    String dateTime = postDate.getMonth() + "/" + postDate.getDate() + "/" + (1900 + postDate.getYear());
+//      System.out.println("\n\n   :   " + dateTime);
+    
   }
 
   public void testForum() throws Exception {
@@ -97,7 +107,7 @@ public class TestForumService extends BaseForumTestCase{
   
   public void testTopic() throws Exception {
   	GregorianCalendar calendar = new GregorianCalendar() ;
-		String id = String.valueOf(calendar.getTimeInMillis());
+		String id = "cat" + String.valueOf(calendar.getTimeInMillis());
     Category cat = createCategory("Cat");
 		forumService_.saveCategory(cat, true);
 		Forum forum = createdForum(id);
@@ -228,6 +238,7 @@ public class TestForumService extends BaseForumTestCase{
 		topicNew.setIsClosed(false);
 		topicNew.setIsLock(false);
 		topicNew.setIcon("classNameIcon");
+		topicNew.setAttachmentFirstPost(0) ;
 		topicNew.setIsApproved(false);  
 		topicNew.setViewPermissions(new String[] {});
 		topicNew.setEditPermissions(new String[] {});

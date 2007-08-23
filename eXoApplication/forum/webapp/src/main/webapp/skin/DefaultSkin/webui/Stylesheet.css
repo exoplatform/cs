@@ -183,12 +183,17 @@
 
 .UIForumPortlet .ContentContainer .ForumTitle {
 	font-weight: bold;
+	padding-bottom: 4px;
 }
 
 .UIForumPortlet .ContentContainer .LastPostTitle {
 	font-weight: bold;
 	color: #126ca5;
+}
+
+.UIForumPortlet .ContentContainer .LastPostIcon {
 	cursor: pointer;
+	line-height: 18px;
 	padding-left: 18px;
 }
 
@@ -216,11 +221,11 @@
 }
 
 .UIForumPortlet .ContentContainer .ForumDescription {
-	line-height: 22px;
+	line-height: 14px;
 }
 
 .UIForumPortlet .ContentContainer .LastPostInfos {
-	line-height: 22px;
+	line-height: 20px;
 }
 /******************************  OverButton  ***************************************/
 .UIForumPortlet .UICategoryStyle .LeftOverButton {

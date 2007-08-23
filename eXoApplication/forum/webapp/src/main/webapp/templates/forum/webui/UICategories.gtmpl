@@ -57,7 +57,7 @@
 					    <% }else {%>
 					      <%
 					        GregorianCalendar calendar = new GregorianCalendar() ;
-					        long toDay = calendar.getTime().getTime();
+					        long toDay = calendar.getTimeInMillis();
 						    	String classRow = "whileRow";
 						    	int i = 0;
 				 					for(forum in forums) {
@@ -86,10 +86,11 @@
 							        topicNewPostIcon = topicNewPost.getIcon();
 							        topicNewPostTitle = topicNewPost.getTopicName();
 							        lastPostBy = topicNewPost.getLastPostBy();
-							        dateTime = topicNewPost.getLastPostDate().getDate().getTime().getString();
-							        long createdDate = topicNewPost.getLastPostDate().getDate().getTime();
+							        Date postDate = topicNewPost.getLastPostDate();
+							        dateTime = (1+postDate.getMonth()) + "/" + postDate.getDate() + "/" + (1900 + postDate.getYear());
+							        long createdDate = topicNewPost.getLastPostDate().getTime();
 							        if((toDay-createdDate)/86400000 < 4){
-							          classIconForum = "ContainNewPostIcon";
+							          classIconForum = "ForumNewPostIcon";
 							          titleIconForum = "Forum Contains New Posts";
 							        }
 						        }
@@ -101,13 +102,13 @@
 							    	<tr class="$classRow">
 											<td style="padding: 0px;"><div class="ForumStatusIcon $classIconForum" title="$titleIconForum"><span></span></div></td>
 											<td >
-												<a href="<%=uicomponent.event("OpenForumLink", id)%>" class="ForumTitle">$forumTitle<span class="ForumQuantity">(5 viewing)</span></a>
+												<a href="<%=uicomponent.event("OpenForumLink", id)%>" class="ForumTitle">$forumTitle</a><span class="ForumQuantity">&nbsp;(5 viewing)</span>
 												<div class="ForumDescription">$forumDescription</div>
 											</td>
 										 	<td >
 										 	<% if(topicNewPost != null) { %>
-										 		<a href="#" class="LastPostTitle $topicNewPostIcon">$topicNewPostTitle</a>
-												<div class="LastPostInfos">by <a href="#">$lastPostBy</a><span class="DateTime">($dateTime)</span></div>
+										 		<div class="LastPostIcon $topicNewPostIcon"><a class="LastPostTitle">$topicNewPostTitle</a></div>
+												<div class="LastPostInfos">by&nbsp;<a style="color: #058EE6;" href="#">$lastPostBy</a><span class="DateTime">&nbsp;($dateTime)</span></div>
 											<% } %>	
 											</td>
 										 	<td class="Tdbox">$topicCount</td>

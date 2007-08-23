@@ -74,7 +74,7 @@ public class Forum {
   
   
   public String getLastTopicPath(){return lastTopicPath;}
-  public void setLastTopicPath(String lastPostPath){this.lastTopicPath = lastPostPath;}
+  public void setLastTopicPath(String lastTopicPath){this.lastTopicPath = lastTopicPath;}
   
   public String getForumName(){return name;}
   public void setForumName(String forumName){this.name = forumName;}
