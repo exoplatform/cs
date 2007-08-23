@@ -11,6 +11,7 @@ import java.util.Map;
 import javax.mail.AuthenticationFailedException;
 
 import org.exoplatform.mail.service.Account;
+import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.webui.Selector;
 import org.exoplatform.mail.webui.UIMailPortlet;
@@ -157,13 +158,13 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
   protected void loadForm() {
 
   }
-  protected void saveForm(String accname, String description, String displayName, 
+  protected Account saveForm(String accname, String description, String displayName, 
       String email, String replyMail, String serverType, String serverIncoming, String incomingPort, 
       String serverOutgoing, String outgoingPort, String storeFolder,boolean isSSL, String userName, 
       String password) throws Exception {
     MailService mailSrv = getApplicationComponent(MailService.class) ;
     Account account = new Account() ;
-    account.setId(IdGenerator.generate()) ;
+    //account.setId(IdGenerator.generate()) ;
     account.setLabel(accname) ;
     account.setDescription(description) ;
     account.setUserDisplayName(displayName) ;
@@ -182,18 +183,28 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
     account.setEmailReplyAddress(replyMail) ;
     String currentUser = Util.getPortalRequestContext().getRemoteUser() ;
     mailSrv.createAccount(currentUser, account) ;
+    return account ;
   }
-  protected void getMail() throws Exception {
+  protected void getMail(String accountId) throws Exception {
     MailService mailSvr = getApplicationComponent(MailService.class) ;
     UIMailPortlet uiPortlet = getAncestorOfType(UIMailPortlet.class) ;
-    UINavigationContainer uiNavigation = uiPortlet.getChild(UINavigationContainer.class) ;
     String username = uiPortlet.getCurrentUser() ;
-    String  id = uiNavigation.getChild(UISelectAccount.class).getSelectedValue() ;
-    Account account = mailSvr.getAccountById(username, id) ;
+    Account account = mailSvr.getAccountById(username, accountId) ;
     mailSvr.checkNewMessage(username, account) ;
+    String[] defaultFolders =  {"Drafts","Sent", "Spam", "Trash"} ;
+    for(String defaultFolerName : defaultFolders) {
+      Folder folder = mailSvr.getFolder(username, accountId, defaultFolerName) ;
+      if(folder == null) {
+        folder = new Folder() ;
+        folder.setName(defaultFolerName) ;
+        folder.setLabel(defaultFolerName) ;
+        folder.setPersonalFolder(false) ;
+        mailSvr.saveUserFolder(username, accountId, folder) ;
+      }
+    }
     //mailSvr.getMessages(getCurrentUser(), filter) ;
   }
-  
+
   protected void resetForm() {}
 
   public void activate() throws Exception {
@@ -307,24 +318,26 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
       isSSL = uiAccWs3.getIsSSL() ;
       userName = uiAccWs4.getUserName() ;
       password = null ;
+      Account acc = null ;
       if(uiAccWs4.getIsSavePass()) password = uiAccWs4.getPassword() ;
       UIApplication uiApp = uiAccCreation.getAncestorOfType(UIApplication.class) ;
       UIMailPortlet uiPortlet = uiAccCreation.getAncestorOfType(UIMailPortlet.class) ;
       try {
-        uiAccCreation.saveForm(accname, description, displayName, email, replyMail, serverType, 
+        acc = uiAccCreation.saveForm(accname, description, displayName, email, replyMail, serverType, 
             serverIncoming,incomingPort, serverOutgoin, outgoingPort, storeFolder, isSSL, userName, password) ;
         UINavigationContainer uiNavigation = uiPortlet.getChild(UINavigationContainer.class) ;
         uiNavigation.getChild(UISelectAccount.class).refreshItems() ;
         uiApp.addMessage(new ApplicationMessage("UIAccountCreation.msg.create-acc-successfully", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
       } catch (Exception e) {
         uiApp.addMessage(new ApplicationMessage("UIAccountCreation.msg.create-acc-unsuccessfully", null, ApplicationMessage.ERROR)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         e.printStackTrace() ;
         return ;
       } 
-      if(uiAccWs5.isGetmail())
+      if(uiAccWs5.isGetmail()) {
         try {
-          uiAccCreation.getMail() ;
+          uiAccCreation.getMail(acc.getId()) ;
         } catch (AuthenticationFailedException afe) {
           uiApp.addMessage(new ApplicationMessage("UIAccountCreation.msg.userName-password-incorrect", null, ApplicationMessage.ERROR)) ;
           uiAccCreation.viewStep(4) ;
@@ -337,9 +350,9 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
           e.printStackTrace() ;
           return ;
         }
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        uiAccCreation.getAncestorOfType(UIPopupAction.class).deActivate() ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet) ;
+      }
+      uiAccCreation.getAncestorOfType(UIPopupAction.class).deActivate() ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet) ;
     }
   }
 

@@ -226,7 +226,7 @@ public class JCRDataStorage implements DataStorage{
     // creates or updates an account, depending on the isNew flag
     Node mailHome = getMailHomeNode(username) ;
     Node newAccount = null;
-    String accId = Utils.KEY_ACCOUNT + account.getId() ;
+    String accId = account.getId() ;
     if (isNew) { // creates the node
       newAccount = mailHome.addNode(accId, Utils.EXO_ACCOUNT);
       newAccount.setProperty(Utils.EXO_ID, accId);
@@ -311,14 +311,13 @@ public class JCRDataStorage implements DataStorage{
     }
     return folder ;
   }
-  
-  public List<Folder> getFolders(String username, String accountId, boolean isPersonal) throws Exception {
+
+  public List<Folder> getFolders(String username, String accountId) throws Exception {
     List<Folder> folders = new ArrayList<Folder>() ;
     Node folderHomeNode = getFolderHome(username, accountId) ;
     NodeIterator iter = folderHomeNode.getNodes() ;
     while (iter.hasNext()){
       Node folder = (Node)iter.next() ;
-      if(isPersonal == folder.getProperty(Utils.EXO_PERSONAL).getBoolean()) ;
       folders.add(getFolder(username, accountId, folder.getName())) ;
     }
     return folders ;

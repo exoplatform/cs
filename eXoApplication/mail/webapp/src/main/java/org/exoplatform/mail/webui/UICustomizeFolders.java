@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.exoplatform.mail.service.Folder;
+import org.exoplatform.mail.service.MailService;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIComponent;
@@ -33,15 +34,37 @@ import org.exoplatform.webui.event.EventListener;
 )
 
 public class UICustomizeFolders extends UIComponent {
+  private String currentFolder_ = null ;
+  
   public UICustomizeFolders() throws Exception {}
   public List<Folder> getFolders() throws Exception{
     List<Folder> folders = new ArrayList<Folder>() ;
-    
+    MailService mailSvr = getApplicationComponent(MailService.class) ;
+    String username = getAncestorOfType(UIMailPortlet.class).getCurrentUser() ;
+    String accountId = getAncestorOfType(UINavigationContainer.class).
+    getChild(UISelectAccount.class).getSelectedValue() ;
+    try {
+      folders.addAll(mailSvr.getFolders(username, accountId, true)) ;
+    } catch (Exception e){
+      //e.printStackTrace() ;
+    }
     return folders ;
   }
+  public String[] getActions() {
+    return new String[] {"AddFolder"} ;
+  }
+  public String getSelectedFolder(){return currentFolder_ ;}
+  protected void setSelectedFolder(String folderName) { currentFolder_ = folderName ;}
+  
   static public class ChangeFolderActionListener extends EventListener<UICustomizeFolders> {
     public void execute(Event<UICustomizeFolders> event) throws Exception {
-      String path = event.getRequestContext().getRequestParameter(OBJECTID) ;      
+      String folderName = event.getRequestContext().getRequestParameter(OBJECTID) ; 
+      UICustomizeFolders uiCFolder = event.getSource() ;
+      UIFolderContainer uiFolderContainer = uiCFolder.getAncestorOfType(UIFolderContainer.class) ;
+      UIDefaultFolders uiDFolder = uiFolderContainer.getChild(UIDefaultFolders.class) ;
+      uiCFolder.setSelectedFolder(folderName) ;
+      uiDFolder.setSelectedFolder(null) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer) ;
     }
   }
   static public class AddFolderActionListener extends EventListener<UICustomizeFolders> {

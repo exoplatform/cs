@@ -9,9 +9,11 @@ import java.util.List;
 
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
+import org.exoplatform.mail.webui.popup.UIFolderForm;
+import org.exoplatform.mail.webui.popup.UIPopupAction;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIComponent;
+import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
@@ -26,17 +28,19 @@ import org.exoplatform.webui.event.EventListener;
     template =  "app:/templates/mail/webui/UIDefaultFolders.gtmpl",
     events = {
         @EventConfig(listeners = UIDefaultFolders.ChangeFolderActionListener.class),
+        @EventConfig(listeners = UIDefaultFolders.AddFolderActionListener.class),
         @EventConfig(listeners = UIDefaultFolders.RemoveAllMessagesActionListener.class)
     }
 )
 
-public class UIDefaultFolders extends UIComponent {
+public class UIDefaultFolders extends UIContainer {
   private String currentFolder_ = null ;
   
   public UIDefaultFolders() throws Exception {}
 
-  public String getSelectedFolder(){return currentFolder_ ;}
-  public void setSelectedFolder(String folderName) { currentFolder_ = folderName ;}
+  public String getSelectedFolder(){
+    return currentFolder_ ;}
+  protected void setSelectedFolder(String folderName) { currentFolder_ = folderName ;}
   
   public List<Folder> getFolders() throws Exception{
     List<Folder> folders = new ArrayList<Folder>() ;
@@ -47,14 +51,32 @@ public class UIDefaultFolders extends UIComponent {
     try {
       folders.addAll(mailSvr.getFolders(username, accountId, false)) ;
     } catch (Exception e){
-      e.printStackTrace() ;
+      //e.printStackTrace() ;
     }
     return folders ;
   } 
-
+  public String[] getActions() {
+    return new String[] {"AddFolder"} ;
+  }
+  static public class AddFolderActionListener extends EventListener<UIDefaultFolders> {
+    public void execute(Event<UIDefaultFolders> event) throws Exception {
+      System.out.println("\n\n AddFolderActionListener");
+      UIDefaultFolders uiFolder = event.getSource() ;
+      UIPopupAction uiPopup = uiFolder.getAncestorOfType(UIMailPortlet.class).getChild(UIPopupAction.class) ;
+      uiPopup.activate(UIFolderForm.class, 450) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiFolder.getAncestorOfType(UIMailPortlet.class)) ;
+    }
+  }
   static public class ChangeFolderActionListener extends EventListener<UIDefaultFolders> {
     public void execute(Event<UIDefaultFolders> event) throws Exception {
-      String path = event.getRequestContext().getRequestParameter(OBJECTID) ;      
+      System.out.println("\n\n ChangeFolderActionListener");
+      String folderId = event.getRequestContext().getRequestParameter(OBJECTID) ;  
+      UIDefaultFolders uiDFolder = event.getSource() ;
+      UIFolderContainer uiFolderContainer = uiDFolder.getAncestorOfType(UIFolderContainer.class) ;
+      UICustomizeFolders uiCFolder = uiFolderContainer.getChild(UICustomizeFolders.class) ;
+      uiDFolder.setSelectedFolder(folderId) ;
+      uiCFolder.setSelectedFolder(null) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer) ;
     }
   }
   static public class RemoveAllMessagesActionListener extends EventListener<UIDefaultFolders> {

@@ -60,12 +60,14 @@ public class UISelectAccount extends UIForm {
   public String getSelectedValue() {
     return getChild(UIFormSelectBox.class).getValue() ;
   }
-  
+  public void setSelectedValue(String value) {
+    getChild(UIFormSelectBox.class).setValue(value) ;
+  }
   public void refreshItems() throws Exception {
     getChild(UIFormSelectBox.class).getOptions().clear() ;
     getChild(UIFormSelectBox.class).setOptions(getValues()) ;
   }
-  
+
   static  public class AddAccountActionListener extends EventListener<UISelectAccount> {
     public void execute(Event<UISelectAccount> event) throws Exception {
       System.out.println("========> AddAccountActionListener") ;

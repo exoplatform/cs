@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.exoplatform.services.jcr.util.IdGenerator;
+
 /**
  * Created by The eXo Platform SARL
  * Author : Tuan Nguyen
@@ -31,6 +33,10 @@ public class Account {
   private List<MessageFilter> filters ;
   //TODO: use AccountProperty
 //  private MailServerConfiguration mailServerConfiguration ;
+  
+  public Account() {
+    id = Utils.KEY_ACCOUNT + IdGenerator.generate() ;
+  }
   
   /**
    * The id of the account for ex: GmailAccount, YahooAccount

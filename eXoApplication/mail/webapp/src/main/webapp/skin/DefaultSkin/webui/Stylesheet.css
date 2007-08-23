@@ -668,6 +668,17 @@
 	border-bottom: 1px solid #bfc2cd;
 }
 
+.UIMailPortlet .TitleBar .UIPopupCategory {
+	left: 20px;
+	position:absolute;
+	top: 20px;
+	width: auto;
+}
+
+.UIMailPortlet .TitleBar .UIRightClickPopupMenu {
+	width:175px;
+}
+
 .SeparatorLine {
   background: url('background/SeparatorLine2x26.gif') no-repeat ;	
   height: 26px; width: 2px;
@@ -685,4 +696,16 @@
 
 .SelectedItem {
 	background: #eceffc ;
+}
+
+.UIMailPortlet .UIDefaultFolders .NormalLabel {
+	font-weight: normal ;
+}
+
+.UIMailPortlet .UIDefaultFolders .SelectedLabel {
+	font-weight: bold ;
+}
+
+.UIMailPortlet .UIFolderForm .UIAction {
+ 	width: 200px;
 }

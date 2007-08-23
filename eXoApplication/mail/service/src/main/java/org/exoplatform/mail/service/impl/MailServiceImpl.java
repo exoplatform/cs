@@ -361,7 +361,14 @@ public class MailServiceImpl implements MailService{
   }
 
   public List<Folder> getFolders(String username, String accountId, boolean isPersonal) throws Exception {
-    return storage_.getFolders(username, accountId, isPersonal);
+    List<Folder> folders = new ArrayList<Folder>() ;
+    for(Folder folder : storage_.getFolders(username, accountId))  
+      if(isPersonal) {
+        if(folder.isPersonalFolder()) folders.add(folder) ;
+      } else {
+        if(!folder.isPersonalFolder()) folders.add(folder) ;
+      }
+    return folders ;
   }
 
 }

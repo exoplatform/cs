@@ -1,14 +1,24 @@
-<div class="MyFolder">
-	<div class="TitleBar">
-		<div class="DownArrow3Icon" title="Collapse/Expand all"><span></span></div>
-		<div class="Title">My Folders</div>
-		<div style="clear: left"><span></span></div>
-	</div>
-	<div class="MyFolderContent">
-	  <div class="IconFolder OpenFolder">Open source</div>
-	  <div class="IconFolder CloseFolder">eXo platform</div>
-	  <div class="IconFolder CloseFolder">ObjectWeb</div>
-	  <div class="IconFolder CloseFolder">Customers</div>
-	  <div class="IconFolder CloseFolder">M6 TV</div>
+<%
+	import org.exoplatform.mail.service.Folder;
+	String compId = uicomponent.getId() ;
+%>
+<div class="$compId" id="$compId">
+	<div class="MyFolder">
+		<div class="TitleBar">
+			<div class="DownArrow3Icon" title="Collapse/Expand all"><span></span></div>
+			<div class="Title">My Folders</div>
+			<div style="clear: left"><span></span></div>
+		</div>
+		<div class="MyFolderContent">
+		<%for(Folder f : uicomponent.getFolders()) {
+			String name = f.getName() ;
+			long unreadMess = f.getNumberOfUnreadMessage();
+			String cssClass = "CloseFolder" ;
+			String actionLink = uicomponent.event('ChangeFolder',name);
+			if(name.equals(uicomponent.getSelectedFolder())) cssClass = "OpenFolder" ;
+		%>
+			<a href="$actionLink"  class="IconFolder Folder $cssClass">$name<span>($unreadMess)</span></a>
+		<%}%>
+		</div>
 	</div>
 </div>

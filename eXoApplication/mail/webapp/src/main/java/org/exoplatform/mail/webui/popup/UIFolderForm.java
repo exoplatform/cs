@@ -4,12 +4,21 @@
  **************************************************************************/
 package org.exoplatform.mail.webui.popup;
 
+import org.exoplatform.mail.service.Folder;
+import org.exoplatform.mail.service.MailService;
+import org.exoplatform.mail.webui.UICustomizeFolders;
+import org.exoplatform.mail.webui.UIMailPortlet;
+import org.exoplatform.mail.webui.UISelectAccount;
+import org.exoplatform.mail.webui.Utils;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
+import org.exoplatform.webui.form.UIFormStringInput;
 
 
 /**
@@ -20,24 +29,70 @@ import org.exoplatform.webui.form.UIForm;
  */
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
-    template = "app:/templates/mail/webui/UIFolderForm.jstmpl",
+    template = "system:/groovy/webui/form/UIForm.gtmpl",
     events = {
       @EventConfig(listeners = UIFolderForm.SaveActionListener.class), 
       @EventConfig(listeners = UIFolderForm.CancelActionListener.class)
     }
 )
-public class UIFolderForm extends UIForm {
-  
-  public UIFolderForm() { }
-  
+public class UIFolderForm extends UIForm implements UIPopupComponent {
+  final public static String FIELD_NAME = "folderName" ;
+  public UIFolderForm() { 
+    addUIFormInput(new UIFormStringInput(FIELD_NAME, FIELD_NAME, null)) ;
+  }
+
+  public void activate() throws Exception {
+    // TODO Auto-generated method stub
+
+  }
+  public void deActivate() throws Exception {
+    // TODO Auto-generated method stub
+
+  }
+
   static  public class SaveActionListener extends EventListener<UIFolderForm> {
     public void execute(Event<UIFolderForm> event) throws Exception {
       UIFolderForm uiForm = event.getSource() ;
+      MailService mailSvr = uiForm.getApplicationComponent(MailService.class) ;
+      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+      String folderName = uiForm.getUIStringInput(FIELD_NAME).getValue() ;
+      UIMailPortlet uiPortlet = uiForm.getAncestorOfType(UIMailPortlet.class) ;
+      String username = uiPortlet.getCurrentUser() ;
+      String accountId =  uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
+      UICustomizeFolders uiCustomizeFolders = uiPortlet.findFirstComponentOfType(UICustomizeFolders.class) ;
+      if(Utils.isEmptyField(folderName)) {
+        uiApp.addMessage(new ApplicationMessage("UIFolderForm.msg.name-required", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
+      try {
+        Folder folder = mailSvr.getFolder(username, accountId, folderName) ;
+        if(folder == null) {
+          folder = new Folder() ;
+          folder.setLabel(folderName) ;
+          folder.setName(folderName) ;
+          mailSvr.saveUserFolder(username, accountId, folder) ;
+          uiApp.addMessage(new ApplicationMessage("UIFolderForm.msg.add-folder-successfuly", new Object[]{folderName})) ;
+        } else {
+          uiApp.addMessage(new ApplicationMessage("UIFolderForm.msg.folder-exist", new Object[]{folderName})) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        }
+      } catch (Exception e){
+        uiApp.addMessage(new ApplicationMessage("UIFolderForm.msg.error-create-folder", null)) ;
+        e.printStackTrace() ;
+      }
+      uiForm.getAncestorOfType(UIPopupAction.class).deActivate() ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiCustomizeFolders) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
     }
   }
   static  public class CancelActionListener extends EventListener<UIFolderForm> {
     public void execute(Event<UIFolderForm> event) throws Exception {
       UIFolderForm uiForm = event.getSource() ;
+      uiForm.getAncestorOfType(UIPopupAction.class).deActivate() ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
     }
   }
 }
