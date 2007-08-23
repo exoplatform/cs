@@ -14,6 +14,88 @@
 	background: url('icons/DeleteEvent.gif') no-repeat;
 }
 
+.SettingCalendarIcon {
+	background: url('icons/SettingCalendarIcon.gif') no-repeat;
+}
+
+.ImportCalendarIcon {
+	background: url('icons/ImportCalendarIcon.gif') no-repeat;
+}
+
+.AddpuplicCalendarIcon {
+	background: url('icons/AddpuplicCalendarIcon.gif') no-repeat;
+}
+
+.AddCalendarIcon {
+	background: url('icons/AddCalendarIcon.gif') no-repeat;
+}
+
+.AddGroupIcon {
+	background: url('icons/AddGroupIcon.gif') no-repeat;
+}
+
 .DeleteTaskIcon {
 	background: url('icons/DeleteTask.gif') no-repeat;
 }
+
+.ScheduleIcon {
+	background: url('icons/ScheduleIcon.gif') no-repeat;
+}
+
+.EventIcon24 {
+	background: url('icons/EventIcon24.gif') no-repeat;
+}
+
+.MonthIcon {
+	background: url('icons/MonthIcon.gif') no-repeat;
+}
+
+.WeekWorkIcon {
+	background: url('icons/WeekWorkIcon.gif') no-repeat;
+}
+
+.WeekIcon {
+	background: url('icons/WeekIcon.gif') no-repeat;
+}
+
+.DayIcon24 {
+	background: url('icons/DayIcon24.gif') no-repeat;
+}
+
+.DeleteGroupIcon {
+	background: url('icons/DeleteGroupIcon.gif') no-repeat;
+}
+
+.EditGroupIcon {
+	background: url('icons/EditGroupIcon.gif') no-repeat;
+}
+
+.PasteGroupIcon {
+	background: url('icons/PasteGroupIcon.gif') no-repeat;
+}
+
+.ExportCalendarIcon {
+	background: url('icons/ExportCalendarIcon.gif') no-repeat;
+}
+
+.CopyCalendarIcon {
+	background: url('icons/CopyCalendarIcon.gif') no-repeat;
+}
+
+.CutCalendarIcon {
+	background: url('icons/CutCalendarIcon.gif') no-repeat;
+}
+
+.DeleteCalendarIcon {
+	background: url('icons/DeleteCalendarIcon.gif') no-repeat;
+}
+
+.AddNewEventIcon {
+	background: url('icons/AddNewEventIcon.gif') no-repeat;
+}
+
+.SendToFriend {
+	background: url('icons/SendToFriend.gif') no-repeat;
+}
+
+

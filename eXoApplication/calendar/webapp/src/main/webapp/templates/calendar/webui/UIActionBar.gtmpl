@@ -13,11 +13,66 @@
 						</a>
 						<div class="SeparatorLine"><span></span></div>
 						<div class="Title ControlButton">Calendar View:</div>
-						<a href="#" class="ControlButton">
+						<div class="SelectButton" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
 							<div class="IconHolder DayIcon">
-								<div class="DownArrow1Icon">Day</div>
+								<div class="DownArrow1Icon" >Day</div>
 							</div>
-						</a>
+							<% /*Begin Popup Menu*/ %>
+							<div style="position: relative;">
+		      			<div class="UIPopupCategory" style="display: none;">
+		      				<div class="UIRightClickPopupMenu" style="display: block;">
+									  <div class="TopLeftRightClickPopupMenu">
+			          			<div class="TopRightRightClickPopupMenu">
+			            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
+			          			</div>
+			        			</div>
+						        <div class="MiddleLeftRightClickPopupMenu">
+						          <div class="MiddleRightRightClickPopupMenu">
+			              		<div class="UIRightPopupMenuContainer">
+													<a class="MenuItem" href="#">   
+				                    <div class="ItemIcon DayIcon24">
+				                      Day
+				                    </div>
+			                    </a>
+			                    <a class="MenuItem" href="#">   
+				                    <div class="ItemIcon WeekIcon">
+				                      Week
+				                    </div>
+			                    </a>
+			                    <a class="MenuItem" href="#">   
+				                    <div class="ItemIcon WeekWorkIcon">
+				                      Week work
+				                    </div>
+			                    </a>
+			                    <a class="MenuItem" href="#">   
+				                    <div class="ItemIcon MonthIcon">
+				                      Month
+				                    </div>
+			                    </a>
+			                    <a class="MenuItem" href="#">   
+				                    <div class="ItemIcon EventIcon24">
+				                      Event
+				                    </div>
+			                    </a>
+			                    <a class="MenuItem" href="#">   
+				                    <div class="ItemIcon ScheduleIcon">
+				                      Schedule
+				                    </div>
+			                    </a>
+												</div>
+				          		</div>
+				        		</div>
+							      <div class="BottomLeftRightClickPopupMenu">
+							        <div class="BottomRightRightClickPopupMenu">
+							          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+							        </div>
+							      </div>
+				      			
+							    </div>
+		      			</div>
+		      		</div>
+		      		<% /*End Popup Menu*/ %>
+						</div>
 						<div class="SeparatorLine"><span></span></div>
 						<a href="#" class="ControlButton">
 							<div class="IconHolder TaskIcon"> Tasks </div>

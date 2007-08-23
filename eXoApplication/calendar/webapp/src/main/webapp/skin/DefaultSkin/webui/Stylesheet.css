@@ -104,6 +104,13 @@
 	line-height: 18px;
 }
 
+.UICalendarPortlet .CalendarWorkingWorkspace .SelectButton {
+	float: left;
+	line-height: 18px;
+	margin-top: 3px;
+}
+
+
 .UICalendarPortlet .CalendarWorkingWorkspace .RightControlButton {
 	float: right;
 	line-height: 18px;
@@ -118,6 +125,17 @@
 	background: url('background/ControlButtonBG1x26.gif') repeat-x ;
 	color: #058ee6; border: 1px solid #cbcbcb;
 	height: 24px;
+}
+
+.UICalendarPortlet .CalendarWorkingWorkspace  .UIPopupCategory a {
+	color: #000000;
+	margin: 0px;
+}
+
+.UICalendarPortlet .CalendarWorkingWorkspace  .UIPopupCategory a:hover {
+	background: none ;
+	color: #058ee6; border: none;
+	height: auto;
 }
 
 .UICalendarPortlet .CalendarWorkingWorkspace .SeparatorLine {
@@ -153,6 +171,7 @@
 	line-height: 18px;
 	background-position: right;
 	padding-right: 16px; 
+	cursor: pointer;
 }
 
 /*==================Calendar Working Container===================*/
@@ -820,4 +839,124 @@
 /*===================UIForm=======================*/
 .UIForm .HorizontalLayout .FormContainer .UIAction {  
   width: 200px;
+}
+
+/*=====================Table Color===========================*/
+
+
+.UIPopupCategory .CalendarTableColor {
+	background: #e4eaf5;
+	padding: 5px;
+}
+
+.UIPopupCategory .CalendarTableColor .ColorSuburd {
+	float: left;
+	width: 12px; height: 12px;
+	margin: 2px;
+	border: 1px solid #ffffff;
+	cursor:pointer;
+}
+
+.UIPopupCategory .CalendarTableColor .SelectColorSuburd {
+	float: left;
+	width: 12px; height: 12px;
+	margin: 2px;
+	border: 1px solid red;
+}
+
+
+.UIPopupCategory .CalendarTableColor .LightCyan {
+	background: #49e3d2;
+}
+
+.UIPopupCategory .CalendarTableColor .NaryBlue {
+	background: #61a9e9;
+}
+
+.UIPopupCategory .CalendarTableColor .DarkNaryBlue {
+	background: #5fa7ce;
+}
+
+.UIPopupCategory .CalendarTableColor .Violet {
+	background: #ac6fe9;
+}
+
+.UIPopupCategory .CalendarTableColor .PingViolet {
+	background: #d385ce;
+}
+
+.UIPopupCategory .CalendarTableColor .Ping {
+	background: #f589b6;
+}
+
+.UIPopupCategory .CalendarTableColor .Red {
+	background: #ee7166;
+}
+
+.UIPopupCategory .CalendarTableColor .Blue {
+	background: #6f66ed;
+}
+
+.UIPopupCategory .CalendarTableColor .DarkOrange {
+	background: #f4992f;
+}
+
+.UIPopupCategory .CalendarTableColor .LightOrange {
+	background: #fbc62c;
+}
+
+.UIPopupCategory .CalendarTableColor .Cream {
+	background: #fce177;
+}
+
+.UIPopupCategory .CalendarTableColor .Earth {
+	background: #d9d840;
+}
+
+.UIPopupCategory .CalendarTableColor .LightGreen {
+	background: #f6fee6;
+}
+
+.UIPopupCategory .CalendarTableColor .Green {
+	background: #00cc44;
+}
+
+.UIPopupCategory .CalendarTableColor .BlueSky {
+	background: #bde7ee;
+}
+
+.UIPopupCategory .CalendarTableColor .c9a54a {
+	background: #c9a54a;
+}
+
+.UIPopupCategory .CalendarTableColor .ddc69c {
+	background: #ddc69c;
+}
+
+.UIPopupCategory .CalendarTableColor .c5c493 {
+	background: #c5c493;
+}
+
+.UIPopupCategory .CalendarTableColor .c97c6c3 {
+	background: #97c6c3;
+}
+
+.UIPopupCategory .CalendarTableColor .c1d3f3 {
+	background: #c1d3f3;
+}
+
+.UIPopupCategory .CalendarTableColor .a2b4c3 {
+	background: #a2b4c3;
+}
+
+.UIPopupCategory .CalendarTableColor .c8afc6 {
+	background: #c8afc6;
+}
+
+.UIPopupCategory .CalendarTableColor .dab2b1 {
+	background: #dab2b1;
+}
+
+.UIPopupCategory .CalendarTableColor .b2b1da {
+	background: #b2b1da;
 }
