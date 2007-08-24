@@ -16,7 +16,7 @@
 	float: right;
 	line-height: 16px; 
 	padding-left: 22px;
-	margin: 1px 5px 0px 0px;
+	margin: 4px 5px 0px 0px;
 	cursor: pointer;
 }
 
@@ -26,16 +26,10 @@
 	line-height: 16px;
 }
 
-.UIForumContainer .ForumToolbar .ToolbarActionsContainer .SeparatorLine {
+.UIForumContainer .SeparatorLine {
 	float: right;
-	margin: 0px 4px;
 }
 
-.UIForumContainer .ForumToolbar .ToolbarActionsContainer {
-	float: right;
-	width: 330px;
-	margin: 4px 0px 0px 0px;
-}
 
 .UIForumPortlet .UIForumContainer .ContentContainer .UITopicList .Title {
 	color: #204aa0;

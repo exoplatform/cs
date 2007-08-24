@@ -56,13 +56,14 @@
 			  	<div class="RightBar">
 			  		<div class="CenterBar">
 			  			<div class="Title"><span style="font-weight: normal;">Thread in forum: </span>$forumName</div>
-				  		<div class="ToolbarActionsContainer">
-								<a class="StatusIcon ModerationIcon"><div class="DownArrow1Icon">Moderation</div></a>
-			  				<div class="SeparatorLine"><span></span></div>
-								<a class="StatusIcon SeachIcon">Search forum</a>
-								<div class="SeparatorLine"><span></span></div>
-								<a class="StatusIcon ToolIcon"><div class="DownArrow1Icon">Forum tool</div></a>
-								<div style="clear: both;"><span></span></div>
+							<div class="StatusIcon ModerationIcon" >
+								<a class="DownArrow1Icon">Moderation</a>
+							</div>
+		  				<div class="SeparatorLine"><span></span></div>
+							<a class="StatusIcon SeachIcon">Search forum</a>
+							<div class="SeparatorLine"><span></span></div>
+							<div class="StatusIcon ToolIcon">
+								<a class="DownArrow1Icon">Forum tool</a>
 							</div>
 							<div style="clear: both;"><span></span></div>
 			  		</div>

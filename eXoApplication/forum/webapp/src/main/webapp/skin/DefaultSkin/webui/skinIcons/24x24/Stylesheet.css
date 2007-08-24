@@ -76,9 +76,87 @@
 	background: url('icons/ForumOption.gif') no-repeat left center ;
 }
 
+/*===========================thread bar menu icon===========================*/
 
+.ApproveThreadsIcon {
+	background: url('icons/ApproveThreadsIcon.gif') no-repeat left center ;
+}
 
+.ClosethisForumIcon {
+	background: url('icons/ClosethisForumIcon.gif') no-repeat left center ;
+}
 
+.CloseThreadsIcon {
+	background: url('icons/CloseThreadsIcon.gif') no-repeat left center ;
+}
+
+.DeleteThisForumIcon {
+	background: url('icons/DeleteThisForumIcon.gif') no-repeat left center ;
+}
+
+.DeleteThreadsIcon {
+	background: url('icons/DeleteThreadsIcon.gif') no-repeat left center ;
+}
+
+.DisplayOptionsIcon {
+	background: url('icons/DisplayOptionsIcon.gif') no-repeat left center ;
+}
+
+.EditSelectedThreadIcon {
+	background: url('icons/EditSelectedThreadIcon.gif') no-repeat left center ;
+}
+
+.EditthisForumIcon {
+	background: url('icons/EditthisForumIcon.gif') no-repeat left center ;
+}
+
+.LockthisForumIcon {
+	background: url('icons/LockthisForumIcon.gif') no-repeat left center ;
+}
+
+.MergeThreadsIcon {
+	background: url('icons/MergeThreadsIcon.gif') no-repeat left center ;
+}
+
+.MovethisForumIcon {
+	background: url('icons/MovethisForumIcon.gif') no-repeat left center ;
+}
+
+.MoveThreadsIcon {
+	background: url('icons/MoveThreadsIcon.gif') no-repeat left center ;
+}
+
+.OpenthisForumIcon {
+	background: url('icons/OpenthisForumIcon.gif') no-repeat left center ;
+}
+
+.OpenThreadsIcon {
+	background: url('icons/OpenThreadsIcon.gif') no-repeat left center ;
+}
+
+.PostnewThreadIcon {
+	background: url('icons/PostnewThreadIcon.gif') no-repeat left center ;
+}
+
+.StickThreadsIcon {
+	background: url('icons/StickThreadsIcon.gif') no-repeat left center ;
+}
+
+.ThreadsAuto-PruningIcon {
+	background: url('icons/ThreadsAuto-PruningIcon.gif') no-repeat left center ;
+}
+
+.UnapproveThreadsIcon {
+	background: url('icons/UnapproveThreadsIcon.gif') no-repeat left center ;
+}
+
+.UnLockthisForumIcon {
+	background: url('icons/UnLockthisForumIcon.gif') no-repeat left center ;
+}
+
+.UnStickThreadsIcon {
+	background: url('icons/UnStickThreadsIcon.gif') no-repeat left center ;
+}
 
 
 

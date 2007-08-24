@@ -89,3 +89,7 @@
 .NormalTopicIcon {
 	background: url('icons/NormalTopicIcon.gif') no-repeat left;
 }
+
+.Download {
+	background: url('icons/DownLoadIcon.gif') no-repeat left;
+}
