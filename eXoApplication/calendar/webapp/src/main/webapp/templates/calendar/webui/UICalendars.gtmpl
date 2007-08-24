@@ -28,11 +28,6 @@
 		                    </div>
 		                   </a>
 		                   <a class="MenuItem" href="#">   
-		                    <div class="ItemIcon AddpuplicCalendarIcon">
-		                      Add puplic Calendar
-		                    </div>
-		                   </a>
-		                   <a class="MenuItem" href="#">   
 		                    <div class="ItemIcon ImportCalendarIcon">
 		                      Import Calendar
 		                    </div>
@@ -115,12 +110,7 @@
 								                    <div class="ItemIcon AddCalendarIcon">
 								                      Add new Calendar
 								                    </div>
-								                   </a>
-								                   <a class="MenuItem" href="#">   
-								                    <div class="ItemIcon AddpuplicCalendarIcon">
-								                      Add puplic Calendar
-								                    </div>
-								                   </a>
+								                   </a>								                   
 								                   <a class="MenuItem" href="#">   
 								                    <div class="ItemIcon ImportCalendarIcon">
 								                      Import Calendar

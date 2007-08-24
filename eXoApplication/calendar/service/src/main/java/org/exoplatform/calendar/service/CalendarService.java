@@ -157,7 +157,7 @@ public interface CalendarService {
   public Calendar removeGroupCalendar(String calendarId) throws Exception ;
   
   
-  
+  public List<EventCategory> getEventCategories(String username) throws Exception ;
   /**
    * This method should:
    * 1. Get calendar service root node by current user
@@ -170,7 +170,7 @@ public interface CalendarService {
    * @param isNew
    * @throws Exception
    */
-  public void saveUserEventCategory(String username, Calendar calendar, EventCategory eventCategory, boolean isNew) throws Exception ;
+  public void saveEventCategory(String username, EventCategory eventCategory, boolean isNew) throws Exception ;
   /**
    * This method should:
    * 1. Get calendar service root node by current user
@@ -183,7 +183,7 @@ public interface CalendarService {
    * @return EventCategory
    * @throws Exception
    */
-  public EventCategory removeUserEventCategory(String username, String calendarId, String eventCategoryId) throws Exception ;  
+  public EventCategory removeEventCategory(String username, String eventCategoryName) throws Exception ;  
   /**
    * This method should:
    * 1. Get calendar service root node by current user
@@ -196,7 +196,7 @@ public interface CalendarService {
    * @param isNew
    * @throws Exception
    */
-  public void saveGroupEventCategory(Calendar calendar, EventCategory eventCategory, boolean isNew) throws Exception ;
+  //public void saveGroupEventCategory(Calendar calendar, EventCategory eventCategory, boolean isNew) throws Exception ;
   /**
    * This method should:
    * 1. Get calendar service root node by current user
@@ -209,7 +209,7 @@ public interface CalendarService {
    * @return EventCategory
    * @throws Exception
    */
-  public EventCategory removeGroupEventCategory(String calendarId, String eventCategoryId) throws Exception ;
+  //public EventCategory removeGroupEventCategory(String calendarId, String eventCategoryId) throws Exception ;
   
   
   /**
@@ -224,7 +224,7 @@ public interface CalendarService {
    * @return Event
    * @throws Exception
    */
-  public Event getUserEvent(String username, String calendarId, String eventCategoryId, String eventId) throws Exception ;
+  public Event getUserEvent(String username, String calendarId, String eventId) throws Exception ;
   /**
    * This method should:
    * 1. Get calendar service root node by current user
@@ -274,7 +274,7 @@ public interface CalendarService {
    * @return Event
    * @throws Exception
    */
-  public Event removeUserEvent(String username, String calendarId, String categoryId, String eventId) throws Exception ;
+  public Event removeUserEvent(String username, String calendarId, String eventId) throws Exception ;
   
   
   /**
@@ -288,7 +288,7 @@ public interface CalendarService {
    * @return Event
    * @throws Exception
    */
-  public Event getGroupEvent(String calendarId, String eventCategoryId, String eventId) throws Exception ;
+  public Event getGroupEvent(String calendarId, String eventId) throws Exception ;
   /**
    * This method should:
    * 1. Get calendar service root node by current user
@@ -328,7 +328,7 @@ public interface CalendarService {
    * @return Event
    * @throws Exception
    */
-  public Event removeGroupEvent(String calendarId, String categoryId, String eventId) throws Exception ;
+  public Event removeGroupEvent(String calendarId, String eventId) throws Exception ;
   
   //TODO: missing the method List<CalendarCateory> getGroupCalendarForUser(String username) 
   

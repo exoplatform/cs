@@ -4,7 +4,6 @@
  **************************************************************************/
 package org.exoplatform.calendar.service;
 
-import org.exoplatform.services.jcr.util.IdGenerator;
 
 /**
  * Created by The eXo Platform SARL
@@ -13,15 +12,8 @@ import org.exoplatform.services.jcr.util.IdGenerator;
  * Jul 11, 2007  
  */
 public class EventCategory {
-  private String id ;
   private String name ;
   private String description ;
-  
-  public EventCategory() {
-    id = "EventCategory" + IdGenerator.generate() ;
-  }
-  public String getId() { return id ; }
-  public void   setId(String id) { this.id = id ; }
   
   public String getName() { return name ; }
   public void   setName(String name) { this.name = name ; }

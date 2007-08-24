@@ -38,24 +38,20 @@ public interface DataStorage {
   public void saveCalendarCategory(String username, CalendarCategory calendarCategory, boolean isNew) throws Exception ; 
   public CalendarCategory removeCalendarCategory(String username, String calendarCategoryId) throws Exception ;
   
+  public List<EventCategory> getEventCategories(String username) throws Exception ;
+  public void saveEventCategory(String username, EventCategory eventCategory, boolean isNew) throws Exception ;
+  public EventCategory removeEventCategory(String username, String eventCategoryId) throws Exception ;
   
-  public void saveUserEventCategory(String username, Calendar calendar, EventCategory eventCategory, boolean isNew) throws Exception ;
-  public EventCategory removeUserEventCategory(String username, String calendarId, String eventCategoryId) throws Exception ;
-  
-  public void saveGroupEventCategory(Calendar calendar, EventCategory eventCategory, boolean isNew) throws Exception ;
-  public EventCategory removeGroupEventCategory(String calendarId, String eventCategoryId) throws Exception ;
-  
-  
-  public Event getUserEvent(String username, String calendarId, String eventCategoryId, String eventId) throws Exception ;
+  public Event getUserEvent(String username, String eventCategoryId, String eventId) throws Exception ;
   public List<Event> getUserEventByCalendar(String username, String calendarId) throws Exception ;
   public List<Event> getEvents(EventQuery eventQuery) throws Exception ;
   public void saveUserEvent(String username, String calendarId, Event event, boolean isNew) throws Exception ;
-  public Event removeUserEvent(String username, String calendarId, String categoryId, String eventId) throws Exception ;
+  public Event removeUserEvent(String username, String calendarId, String eventId) throws Exception ;
   
   
-  public Event getGroupEvent(String calendarId, String eventCategoryId, String eventId) throws Exception ;
+  public Event getGroupEvent(String calendarId, String eventId) throws Exception ;
   public List<Event> getGroupEventByCalendar(String calendarId) throws Exception ;
   public void saveGroupEvent(String calendarId, Event event, boolean isNew) throws Exception ;
-  public Event removeGroupEvent(String calendarId, String categoryId, String eventId) throws Exception ;
+  public Event removeGroupEvent(String calendarId, String eventId) throws Exception ;
   
 }

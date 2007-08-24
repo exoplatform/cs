@@ -144,15 +144,16 @@ public class TestCalendarService extends BaseCalendarTestCase{
     EventCategory eventCategory = new EventCategory() ;
     eventCategory.setName("eventCategoryName") ;
     eventCategory.setDescription("description") ;
-    calendarService_.saveUserEventCategory("nqhung", cal, eventCategory, true) ;
+    calendarService_.saveEventCategory("nqhung", eventCategory, true) ;
     
     //update Event category
-    eventCategory.setName("eventCategoryNameUpdated") ;
-    calendarService_.saveUserEventCategory("nqhung", cal, eventCategory, false) ;
+    eventCategory.setDescription("eventCategoryNameUpdated") ;
+    calendarService_.saveEventCategory("nqhung", eventCategory, false) ;
     
     //remove Event category
-    EventCategory eventCat = calendarService_.removeUserEventCategory("nqhung", cal.getId(), eventCategory.getId()) ;
-    assertEquals(eventCat.getName(), "eventCategoryNameUpdated") ;
+    EventCategory eventCat = calendarService_.removeEventCategory("nqhung", eventCategory.getName()) ;
+    assertNotNull(eventCat) ;
+    assertEquals(eventCat.getDescription(), "eventCategoryNameUpdated") ;
     
     calendarService_.removeUserCalendar("nqhung", cal.getId()) ;
     calendarService_.removeCalendarCategory("nqhung", calCategory.getId()) ;
@@ -178,12 +179,12 @@ public class TestCalendarService extends BaseCalendarTestCase{
     //eventCategory.setId("eventCategoryId") ;
     eventCategory.setName("eventCategoryName") ;
     eventCategory.setDescription("description") ;
-    calendarService_.saveUserEventCategory("nqhung", cal, eventCategory, true) ;
+    calendarService_.saveEventCategory("nqhung", eventCategory, true) ;
     
     Event event = new Event() ;
     //event.setId("eventId") ;
     event.setCalendarId(cal.getId()) ;
-    event.setEventCategoryId(eventCategory.getId()) ;
+    event.setEventCategoryId(eventCategory.getName()) ;
     event.setDescription("description") ;
     event.setSummary("myEvent") ;
     event.setEventState("free") ;
@@ -207,14 +208,14 @@ public class TestCalendarService extends BaseCalendarTestCase{
     event.setReminders(reminders) ;
     
     calendarService_.saveUserEvent("nqhung", cal.getId(), event, true) ;
-    Event ev = calendarService_.getUserEvent("nqhung", cal.getId(), eventCategory.getId(), event.getId()) ;
+    Event ev = calendarService_.getUserEvent("nqhung", cal.getId(), event.getId()) ;
     assertNotNull(ev) ;
     
     //update event
     event.setSummary("myEventUpdated") ;
     event.setStatus("TENTATIVE") ;
     calendarService_.saveUserEvent("nqhung", cal.getId(), event, false) ;
-    ev = calendarService_.getUserEvent("nqhung", cal.getId(), eventCategory.getId(), event.getId()) ;
+    ev = calendarService_.getUserEvent("nqhung", cal.getId(), event.getId()) ;
     assertEquals(event.getSummary(), "myEventUpdated") ;
     
     //get event list
@@ -232,7 +233,7 @@ public class TestCalendarService extends BaseCalendarTestCase{
     List<Calendar> calList = calendarService_.getUserCalendars("nqhung") ;
     assertEquals(calList.size(), 2) ;
     //remove event
-    ev = calendarService_.removeUserEvent("nqhung", cal.getId(), eventCategory.getId(), event.getId()) ;
+    ev = calendarService_.removeUserEvent("nqhung", cal.getId(), event.getId()) ;
     assertNotNull(ev);     
     
   }

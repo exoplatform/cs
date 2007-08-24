@@ -86,23 +86,25 @@ public class CalendarServiceImpl implements CalendarService{
     return storage_.removeGroupCalendar(calendarId);
   }
   
-  
-  public void saveUserEventCategory(String username, Calendar calendar, EventCategory eventCategory, boolean isNew) throws Exception {
-    storage_.saveUserEventCategory(username, calendar, eventCategory, isNew) ;
+  public List<EventCategory> getEventCategories(String username) throws Exception {
+    return storage_.getEventCategories(username) ;
   }
-  public EventCategory removeUserEventCategory(String username, String calendarId, String eventCategoryId) throws Exception {
-    return storage_.removeUserEventCategory(username, calendarId,eventCategoryId);
+  public void saveEventCategory(String username, EventCategory eventCategory, boolean isNew) throws Exception {
+    storage_.saveEventCategory(username, eventCategory, isNew) ;
+  }
+  public EventCategory removeEventCategory(String username, String eventCategoryName) throws Exception {
+    return storage_.removeEventCategory(username,eventCategoryName);
   }  
-  public void saveGroupEventCategory(Calendar calendar, EventCategory eventCategory, boolean isNew) throws Exception {
+  /*public void saveGroupEventCategory(Calendar calendar, EventCategory eventCategory, boolean isNew) throws Exception {
     storage_.saveGroupEventCategory(calendar, eventCategory, isNew) ;
   }
   public EventCategory removeGroupEventCategory(String calendarId, String eventCategoryId) throws Exception {
     return storage_.removeGroupEventCategory(calendarId, eventCategoryId);
-  }
+  }*/
   
   
-  public Event getUserEvent(String username, String calendarId, String eventCategoryId, String eventId) throws Exception {
-    return storage_.getUserEvent(username, calendarId, eventCategoryId, eventId);
+  public Event getUserEvent(String username, String calendarId, String eventId) throws Exception {
+    return storage_.getUserEvent(username, calendarId, eventId);
   }
   public List<Event> getUserEventByCalendar(String username, String calendarId) throws Exception {
     return storage_.getUserEventByCalendar(username, calendarId);
@@ -113,13 +115,13 @@ public class CalendarServiceImpl implements CalendarService{
   public void saveUserEvent(String username, String calendarId, Event event, boolean isNew) throws Exception {
     storage_.saveUserEvent(username, calendarId, event, isNew) ;
   }
-  public Event removeUserEvent(String username, String calendarId, String eventCategoryId, String eventId) throws Exception {
-    return storage_.removeUserEvent(username, calendarId, eventCategoryId, eventId);
+  public Event removeUserEvent(String username, String calendarId, String eventId) throws Exception {
+    return storage_.removeUserEvent(username, calendarId, eventId);
   }
   
   
-  public Event getGroupEvent(String calendarId, String eventCategoryId, String eventId) throws Exception {
-    return storage_.getGroupEvent(calendarId, eventCategoryId, eventId);
+  public Event getGroupEvent(String calendarId, String eventId) throws Exception {
+    return storage_.getGroupEvent(calendarId, eventId);
   }  
   public List<Event> getGroupEventByCalendar(String calendarId) throws Exception {
     return storage_.getGroupEventByCalendar(calendarId);
@@ -127,8 +129,8 @@ public class CalendarServiceImpl implements CalendarService{
   public void saveGroupEvent(String calendarId, Event event, boolean isNew) throws Exception {
     storage_.saveGroupEvent(calendarId, event, isNew) ;
   }  
-  public Event removeGroupEvent(String calendarId, String eventCategoryId, String eventId) throws Exception {
-    return storage_.removeGroupEvent(calendarId, eventCategoryId, eventId);
+  public Event removeGroupEvent(String calendarId, String eventId) throws Exception {
+    return storage_.removeGroupEvent(calendarId, eventId);
   }
   
   public Map<String, CalendarImportExport>  getCalendarImportExports() {

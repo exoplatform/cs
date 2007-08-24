@@ -57,10 +57,6 @@ public class ICalendarImportExport implements CalendarImportExport{
   
   public OutputStream exportCalendar(String username, String calendarId) throws Exception {
     List<Event> events ;
-    Calendar exoCalendar ;
-    if(username != null) exoCalendar = storage_.getUserCalendar(username, calendarId) ;
-    else exoCalendar = storage_.getGroupCalendar(calendarId) ;
-    
     if(username != null) events = storage_.getUserEventByCalendar(username, calendarId) ;
     else events = storage_.getGroupEventByCalendar(calendarId) ;
     
@@ -93,10 +89,7 @@ public class ICalendarImportExport implements CalendarImportExport{
       .add(net.fortuna.ical4j.model.parameter.Value.TEXT);
       
       if(exoEvent.getEventCategoryId() != null){
-        for(EventCategory category : exoCalendar.getEventCategories()) {
-          if(category.getId().equals(exoEvent.getEventCategoryId()))
-            event.getProperties().add(new Categories(category.getName())) ;
-        }
+        event.getProperties().add(new Categories(exoEvent.getEventCategoryId())) ;
         //EventCategory category = storage_.getEventCategory(username, calendarId, exoEvent.getEventCategoryId()) ;  
         event.getProperties().getProperty(Property.CATEGORIES).getParameters()
         .add(net.fortuna.ical4j.model.parameter.Value.TEXT);
@@ -179,17 +172,15 @@ public class ICalendarImportExport implements CalendarImportExport{
         event = (VEvent)obj ;
         String eventCategoryId = null ;
         if(event.getProperty(Property.CATEGORIES) != null) {
-          eventCategoryId = storage_.getEventCategoryId(username, exoCalendar.getId(), 
-                                         event.getProperty(Property.CATEGORIES).getValue()) ;
-          if(eventCategoryId == null){
-            currentDateTime = new GregorianCalendar() ;
-            EventCategory evCate = new EventCategory() ;
-            evCate.setId(String.valueOf(currentDateTime.getTimeInMillis())) ;
-            evCate.setName(event.getProperty(Property.CATEGORIES).getValue()) ;
-            evCate.setDescription(event.getProperty(Property.CATEGORIES).getValue()) ;
-            storage_.saveUserEventCategory(username, exoCalendar, evCate, true) ;
-            eventCategoryId = evCate.getId() ;
-          }          
+          currentDateTime = new GregorianCalendar() ;
+          EventCategory evCate = new EventCategory() ;
+          evCate.setName(event.getProperty(Property.CATEGORIES).getValue()) ;
+          evCate.setDescription(event.getProperty(Property.CATEGORIES).getValue()) ;
+          try{
+            storage_.saveEventCategory(username, evCate, true) ;
+          }catch(Exception e){            
+          }
+          eventCategoryId = evCate.getName() ;
         }
         exoEvent = new Event() ;
         currentDateTime = new GregorianCalendar() ;
