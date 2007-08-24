@@ -51,16 +51,15 @@ public class UITopicDetail extends UIForm  {
   }
   
   private Topic getTopic() throws Exception {
+   // System.out.println("\n\n\n\n getTopic" + categoryId+ forumId+ topicId );
     return forumService.getTopic(categoryId, forumId, topicId) ;
   }
   
   private JCRPageList getPagePosts() throws Exception {
-    System.out.println("\n\n\n\n" + categoryId+ forumId+ topicId );
     return forumService.getPosts(categoryId, forumId, topicId) ;
   }
   
   private List<Post> getPostPageList( long page) throws Exception {
-    System.out.println("\n\n\n\n jdsfl dsfjo fiodf: " + page );
     JCRPageList pageList = getPagePosts() ;
     List<Post> postList = forumService.getPage(page, pageList) ;
     return postList ;

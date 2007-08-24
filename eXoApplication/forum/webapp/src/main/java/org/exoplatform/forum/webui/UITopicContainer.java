@@ -100,7 +100,6 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
   	public void execute(Event<UITopicContainer> event) throws Exception {
   		UITopicContainer uiTopicContainer = event.getSource();
   		String topicId = event.getRequestContext().getRequestParameter(OBJECTID) ; 
-  		System.out.println("\n\n topicId:  " + topicId);
   		UIForumContainer uiForumContainer = uiTopicContainer.getAncestorOfType(UIForumContainer.class) ;
       UITopicDetailContainer uiTopicDetailContainer = uiForumContainer.getChild(UITopicDetailContainer.class) ;
       uiTopicDetailContainer.setRendered(true) ;
