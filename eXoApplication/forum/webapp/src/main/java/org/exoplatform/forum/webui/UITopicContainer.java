@@ -23,6 +23,7 @@ import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
+import org.exoplatform.webui.form.UIFormCheckBoxInput;
 
 /**
  * Created by The eXo Platform SARL
@@ -47,9 +48,6 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
     // render Topic page list
     // render topic action bar
     // render topic page list
-    List<Topic> topics = getTopicPageLits(1);
-    for(Topic topic : topics) {
-    }
   }
   
   public void activate() throws Exception {
@@ -76,6 +74,13 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
   private List<Topic> getTopicPageLits(long page) throws Exception {
     JCRPageList pageList = getPageTopics();
     List<Topic> topicList = forumService.getPage(page, pageList);
+    for(Topic topic : topicList) {
+      if(getUIFormCheckBoxInput(topic.getId()) != null) {
+        getUIFormCheckBoxInput(topic.getId()).setChecked(false) ;
+      }else {
+        addUIFormInput(new UIFormCheckBoxInput(topic.getId(), topic.getId(), false) );
+      }
+    }
     return topicList ;
   }
   

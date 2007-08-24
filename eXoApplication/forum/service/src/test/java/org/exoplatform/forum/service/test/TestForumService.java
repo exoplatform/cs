@@ -55,7 +55,9 @@ public class TestForumService extends BaseForumTestCase{
 //    Date postDate = new Date();
 //    String dateTime = postDate.getMonth() + "/" + postDate.getDate() + "/" + (1900 + postDate.getYear());
 //      System.out.println("\n\n   :   " + dateTime);
-    
+//    String a = "sdffklj fdsk f;sl fksd";
+//    a = a.substring(0, 30);
+//    a.length()
   }
 
   public void testForum() throws Exception {

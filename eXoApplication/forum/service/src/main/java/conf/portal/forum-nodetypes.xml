@@ -101,6 +101,9 @@
 	  		<propertyDefinition name="exo:isApproved" requiredType="boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
 	  			<valueConstraints/>
 	  		</propertyDefinition>
+	  		<propertyDefinition name="exo:isSticky" requiredType="boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+	  			<valueConstraints/>
+	  		</propertyDefinition>
 	  		<propertyDefinition name="exo:viewPermissions" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
 	  			<valueConstraints/>
 	  		</propertyDefinition>

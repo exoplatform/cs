@@ -88,13 +88,13 @@ public class UITopicForm extends UIForm implements UIPopupComponent{
       String topicTitle = uiForm.getUIStringInput(FIELD_TOPICTITLE_INPUT).getValue().trim();
       String messenger = uiForm.getUIFormTextAreaInput(FIELD_MESSENGER_TEXTAREA).getValue() ;
       
-      GregorianCalendar calendar = new GregorianCalendar() ;
-      String id = "topic" + Long.toString(calendar.getTimeInMillis(), 20);
-      PortalRequestContext pContext = Util.getPortalRequestContext();
-      String userName = pContext.getRemoteUser() ;
+//      GregorianCalendar calendar = new GregorianCalendar() ;
+//      String id = "topic" + Long.toString(calendar.getTimeInMillis(), 20);
+//      PortalRequestContext pContext = Util.getPortalRequestContext();
+      String userName = Util.getPortalRequestContext().getRemoteUser() ;
       
       Topic topicNew = new Topic();
-      topicNew.setId(id.toUpperCase());
+//      topicNew.setId(id.toUpperCase());
       topicNew.setOwner(userName);
       topicNew.setTopicName(topicTitle);
       topicNew.setCreatedDate(new Date());
@@ -112,7 +112,7 @@ public class UITopicForm extends UIForm implements UIPopupComponent{
       topicNew.setIsLock(false);
       topicNew.setIsSticky(false);
       
-      topicNew.setIcon("classNameIcon");
+      topicNew.setIcon("");
       topicNew.setAttachmentFirstPost(0) ;
       topicNew.setIsApproved(false);  
       topicNew.setViewPermissions(new String[] {});

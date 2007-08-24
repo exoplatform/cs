@@ -5,6 +5,8 @@
 package org.exoplatform.forum.service ;
 
 import java.util.Date;
+
+import org.exoplatform.services.jcr.util.IdGenerator;
 /**
  * March 2, 2007  
  */
@@ -36,7 +38,9 @@ public class Forum {
   private String[] replyTopicRole;
   
   
-  public Forum() {}
+  public Forum() {
+    id = ("forum" + IdGenerator.generate()).toUpperCase() ;
+  }
   
   public String getId(){return id;}
   public void setId(String id){this.id = id;}

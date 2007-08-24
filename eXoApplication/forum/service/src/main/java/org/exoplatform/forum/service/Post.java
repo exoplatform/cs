@@ -5,6 +5,8 @@
 package org.exoplatform.forum.service ;
 
 import java.util.Date;
+
+import org.exoplatform.services.jcr.util.IdGenerator;
 /**
  * Created by The eXo Platform SARL
  * Author : Tuan Nguyen
@@ -29,7 +31,10 @@ public class Post {
   private boolean isApproved = false ;
   
   
-  public Post() {}
+  public Post() {
+    id = ("post" + IdGenerator.generate()).toUpperCase() ;
+  }
+  
   public String getId() { return id; }
   public void setId(String id) { this.id = id; }
   /**

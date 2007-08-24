@@ -140,6 +140,8 @@
 	 						Topic topicNewPost = uicomponent.getLastTopic(forum.getLastTopicPath());
 	 						if(topicNewPost != null) {
 				        topicNewPostIcon = topicNewPost.getIcon();
+				        if(topicNewPostIcon.length() <= 0)
+							        	topicNewPostIcon = "NormalTopicIcon" ;
 				        topicNewPostTitle = topicNewPost.getTopicName();
 				        lastPostBy = topicNewPost.getLastPostBy();
 				        Date postDate = topicNewPost.getLastPostDate();

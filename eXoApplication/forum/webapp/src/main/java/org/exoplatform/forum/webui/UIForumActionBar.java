@@ -4,13 +4,19 @@
  **************************************************************************/
 package org.exoplatform.forum.webui;
 
+import java.util.List;
+
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.forum.service.Forum;
+import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.webui.popup.UICategoryForm;
 import org.exoplatform.forum.webui.popup.UIForumForm;
 import org.exoplatform.forum.webui.popup.UIModeratorManagementForm;
 import org.exoplatform.forum.webui.popup.UIPopupAction;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -48,22 +54,31 @@ public class UIForumActionBar extends UIContainer  {
   static public class AddForumActionListener extends EventListener<UIForumActionBar> {
     public void execute(Event<UIForumActionBar> event) throws Exception {
       UIForumActionBar uiActionBar = event.getSource() ;      
-      UIForumPortlet forumPortlet = event.getSource().getAncestorOfType(UIForumPortlet.class) ;
-      UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;
-      UIForumForm forumForm = popupAction.createUIComponent(UIForumForm.class, null, null) ;
-      forumForm.setCategoryValue("", true) ;
-      popupAction.activate(forumForm, 662, 466) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+      ForumService forumService =  (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
+      List cates = forumService.getCategories() ;
+      if(cates.size() > 0) {
+        UIForumPortlet forumPortlet = event.getSource().getAncestorOfType(UIForumPortlet.class) ;
+        UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;
+        UIForumForm forumForm = popupAction.createUIComponent(UIForumForm.class, null, null) ;
+        forumForm.setCategoryValue("", true) ;
+        popupAction.activate(forumForm, 662, 466) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+      } else {
+        UIApplication uiApp = uiActionBar.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UIForumActionBar.msg.notCategory", null, ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
     }
   } 
   
   static public class ManageModeratorActionListener extends EventListener<UIForumActionBar> {
     public void execute(Event<UIForumActionBar> event) throws Exception {
-      UIForumActionBar uiActionBar = event.getSource() ;      
-      UIForumPortlet forumPortlet = event.getSource().getAncestorOfType(UIForumPortlet.class) ;
-      UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;
-      popupAction.activate(UIModeratorManagementForm.class, 662) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+      UIForumActionBar uiActionBar = event.getSource() ;
+        UIForumPortlet forumPortlet = event.getSource().getAncestorOfType(UIForumPortlet.class) ;
+        UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;
+        popupAction.activate(UIModeratorManagementForm.class, 662) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   }  
   

@@ -79,12 +79,12 @@
 				  			<th style="width: 40px;"></th>
 				      	<th>Thread/Thread starter</th>
 				      	<th style="width: 40px;"></th>
-				      	<th style="width: 40px;"><div class="AttachmentIcon" ><span></span></div></th>
+				      	<th style="width: 40px;"><div class="AttachmentIcon" title="Attachment(s) in Thread"><span></span></div></th>
 				      	<th style="width: 96px;">Rating</th>
 				      	<th style="width: 40px;"></th>
 				      	<th style="width: 130px;"><div class="DownArrow1Icon">Last posts</div></th>
-				      	<th style="width: 50px;">Threads</th>
-				      	<th style="width: 50px;">Posts</th>
+				      	<th style="width: 50px;">Replies</th>
+				      	<th style="width: 50px;">Views</th>
 				      	<th style="width: 30px;"><input type="checkbox" class="checkbox" title="Check all" value="4" onClick="eXo.forum.UIForumPortlet.checkAll(this);"/></th>
 				      </tr>
 				    </thead>
@@ -98,19 +98,24 @@
 					        else classRow = "OddRow";
 					        i++;
 					        String topicId = topic.getId();
+					        String iconClassTopic = topic.getIcon();
+					        if(iconClassTopic.length() <= 0) iconClassTopic = "NormalTopicIcon";
 					        String topicTitle = topic.getTopicName();
 					        String topicBy = topic.getOwner();
+					        String postNewBy = topic.getLastPostBy() ;
 					        String lastPostDate = topic.getLastPostDate().toString() ;
+					        lastPostDate = lastPostDate.substring(0, (lastPostDate.length() - 8))
 					        String titlePost = topic.getDescription();
 					        if(titlePost.length() > 100) {
 					        	titlePost = titlePost.substring(0, 99) + "...";
 					        }
+					        String attachment = String.valueOf(topic.getAttachmentFirstPost());
 					        String postCount = String.valueOf(topic.getPostCount());
 					        String postView = String.valueOf(topic.getViewCount());
 					    %>
 				  			<tr class="$classRow">
 									<td class="Tdbox"><div class="ThreadStatusIcon HotThreadNewPost" title="Hot thread with new post"><span></span></div></td>
-									<td class="Tdbox"><div class="StatusIcon BlueNote16x16Icon" ><span></span></div></td>
+									<td class="Tdbox"><div class="StatusIcon $iconClassTopic" ><span></span></div></td>
 									<td >
 										<div >
 										<% if(topic.getIsSticky()) {%>
@@ -122,7 +127,7 @@
 										<div ><a href="#" class="LastPostInfos PostBy">$topicBy</a></div>
 									</td>
 									<td class="Tdbox"><div class="StatusIcon ModeratedIcon" title="2 Moderated posts"><span></span></div></td>
-									<td class="Tdbox">15</td>
+									<td class="Tdbox">$attachment</td>
 									<td class="Tdbox">
 										<div class="RatingInfoContainer">
 				   						<div class="AvgRatingImages" title="Thread Rating: 3 votes, 5 average">
@@ -139,13 +144,13 @@
 								 	<td >
 								 		<div class="DateTime">$lastPostDate</div>
 								 		<div title="Go to last posts"><a href="#"><span class="RightArrowIcon"></span></a></div>
-										<div class="PostInfos LastPostInfos">by <a href="#" class="PostBy">thu.nguyen</a></div>
+										<div class="PostInfos LastPostInfos">by <a href="#" class="PostBy">$postNewBy</a></div>
 										<div style="clear: right;"><span></span></div>
 									</td>
 								 	<td class="Tdbox" align="center"><div>$postCount</div></td>
 									<td class="Tdbox" align="center">$postView</td>
 									<td class="Tdbox" align="center">
-										<input type="checkbox" class="checkbox" value="4"/>
+										<% uicomponent.renderChild(topic.getId())%>
 									</td>
 				   			</tr>
 					   	<% } %>

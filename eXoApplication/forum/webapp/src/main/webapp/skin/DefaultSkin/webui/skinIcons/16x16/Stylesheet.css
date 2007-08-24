@@ -85,3 +85,7 @@
 .Unvoted {
 	background: url('icons/SmallGreyStar.gif') no-repeat ;
 }
+
+.NormalTopicIcon {
+	background: url('icons/NormalTopicIcon.gif') no-repeat left;
+}

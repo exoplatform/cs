@@ -6,6 +6,8 @@ package org.exoplatform.forum.service ;
 
 import java.util.Date;
 
+import org.exoplatform.services.jcr.util.IdGenerator;
+
 /**
  * Created by The eXo Platform SARL
  * March 2, 2007  
@@ -31,11 +33,14 @@ public class Topic {
   private boolean isClosed = false ;
   private boolean isLock = false ;
   private boolean isApproved = false ;
+  private boolean isSticky = false ;
   
   private String[] viewPermissions;
   private String[] editPermissions;
   
-  public Topic(){ }
+  public Topic(){ 
+    id = ("topic" + IdGenerator.generate()).toUpperCase() ;
+  }
   
   public String getOwner(){return owner;} 
   public void setOwner(String owner){this.owner = owner;}
@@ -93,6 +98,9 @@ public class Topic {
   
   public boolean getIsApproved() { return isApproved;}
   public void setIsApproved(boolean isApproved) { this.isApproved = isApproved;}
+
+  public boolean getIsSticky() { return isSticky;}
+  public void setIsSticky(boolean isSticky) { this.isSticky = isSticky;}
 
   public String[] getViewPermissions(){return viewPermissions;}
   public void setViewPermissions(String[] viewPermissions){this.viewPermissions = viewPermissions;}

@@ -36,7 +36,7 @@
 				      		<th style="width: 40px;"></th>
 					      	<th>Forums</th>
 					      	<th style="width: 30%;">Last posts</th>
-					      	<th style="width: 50px;">Replies</th>
+					      	<th style="width: 50px;">Threads</th>
 					      	<th style="width: 50px;">Posts</th>
 					 	      <th style="width: 17%;">Moderator</th>
 					      </tr>
@@ -84,6 +84,8 @@
 				 						Topic topicNewPost = uicomponent.getLastTopic(forum.getLastTopicPath());
 				 						if(topicNewPost != null) {
 							        topicNewPostIcon = topicNewPost.getIcon();
+							        if(topicNewPostIcon.length() <= 0)
+							        	topicNewPostIcon = "NormalTopicIcon" ;
 							        topicNewPostTitle = topicNewPost.getTopicName();
 							        lastPostBy = topicNewPost.getLastPostBy();
 							        Date postDate = topicNewPost.getLastPostDate();
@@ -106,11 +108,14 @@
 												<a href="<%=uicomponent.event("OpenForumLink", id)%>" class="ForumTitle">$forumTitle</a><span class="ForumQuantity">&nbsp;(5 viewing)</span>
 												<div class="ForumDescription">$forumDescription</div>
 											</td>
-										 	<td >
 										 	<% if(topicNewPost != null) { %>
+										 	<td >
 										 		<div class="LastPostIcon $topicNewPostIcon" title="Go to first Post in Therad '$topicNewPostTitle' "><a class="LastPostTitle">$topicNewPostTitle</a></div>
 												<div class="LastPostInfos">by&nbsp;<a style="color: #058EE6;" href="#">$lastPostBy</a><span class="DateTime">&nbsp;($dateTime)</span></div>
-											<% } %>	
+											<% } else { %>	
+											<td class="Tdbox" style="height: 40px;">
+													Not Topic !	
+											<% } %>
 											</td>
 										 	<td class="Tdbox">$topicCount</td>
 											<td class="Tdbox">$postCount</td>

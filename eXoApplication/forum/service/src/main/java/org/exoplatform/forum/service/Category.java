@@ -6,6 +6,9 @@ package org.exoplatform.forum.service ;
 
 import java.util.Date;
 
+import org.exoplatform.services.jcr.datamodel.Identifier;
+import org.exoplatform.services.jcr.util.IdGenerator;
+
 /**
  * March 2, 2007  
  */
@@ -21,7 +24,7 @@ public class Category {
    private String description;   
    
    public Category(){
-     
+     id = ("category" + IdGenerator.generate()).toUpperCase() ;
    }
 
    public String getId(){return id;}
