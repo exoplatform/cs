@@ -19,13 +19,20 @@ public class Utils {
   public static final String SVR_USERNAME = "username".intern() ;
   public static final String SVR_PASSWORD = "password".intern() ; 
   public static final String SVR_SSL =  "ssl".intern() ;
-  
+
   public static final String POP3 = "pop3".intern() ;
   public static final String IMAP = "imap".intern() ;
-  
-  
+
+
   public static boolean isEmptyField(String value) {
     return value == null || value.trim().length() == 0 ;
   }
-  
- }
+  public static boolean isNumber(String number) {
+    try {
+      Long.parseLong(number.trim()) ;
+    } catch(NumberFormatException nfe) {
+      return false;
+    }
+    return true ;
+  }
+}

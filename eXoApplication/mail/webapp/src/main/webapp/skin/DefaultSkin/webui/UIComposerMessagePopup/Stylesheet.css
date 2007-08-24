@@ -89,6 +89,7 @@
 
 .UIMessageCompose .UIForm .HorizontalLayout td.FieldLabel {
 	font-weight: bold;
+	width: 120px;
 }
 
 .UIMessageCompose .UIForm .HorizontalLayout td {
@@ -101,12 +102,11 @@
 }
 
 .UIMessageCompose .UIForm .HorizontalLayout input {
-	width: 95%;
+	width: 90%;
 }
 
 .UIMessageCompose .UIForm .HorizontalLayout select {
-	width: 78%;
-	float: left;
+	width: 90%;
 }
 
 .UIMessageCompose .UIForm .HorizontalLayout textarea {
@@ -140,3 +140,7 @@
 	border-top: none;
 	padding: 10px;
 }
+.UIMessageCompose .MessageContent .PlainTextMessage .textarea {
+	width:99%; height: 200px; text-align: left ;
+}
+

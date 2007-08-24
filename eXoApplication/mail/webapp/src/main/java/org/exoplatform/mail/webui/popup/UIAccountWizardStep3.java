@@ -58,10 +58,14 @@ public class UIAccountWizardStep3 extends UIFormInputSetWithAction  implements W
   
 
   public boolean isFieldsValid() {
-    return !(Utils.isEmptyField(getIncomingServer()) || Utils.isEmptyField(getOutgoingServer()) 
-             || Utils.isEmptyField(getStoreFolder())) ;
+    return !(Utils.isEmptyField(getIncomingServer()) 
+             || Utils.isEmptyField(getOutgoingServer()) 
+             || Utils.isEmptyField(getStoreFolder()))
+             && (Utils.isNumber(getIncomingPort()) 
+             && Utils.isNumber(getOutgoingPort())) ;
     //return isValid_ ;
   }
+  
   protected void fieldsValid(boolean isValid) {
     isValid_ = isValid ;
   }

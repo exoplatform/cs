@@ -4,12 +4,15 @@
  **************************************************************************/
 package org.exoplatform.mail.webui;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.mail.AuthenticationFailedException;
 
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.webui.popup.UIAccountCreation;
-import org.exoplatform.mail.webui.popup.UIAccountCreationContainer;
+import org.exoplatform.mail.webui.popup.UIPopupActionContainer;
 import org.exoplatform.mail.webui.popup.UIComposeForm;
 import org.exoplatform.mail.webui.popup.UIMailSettings;
 import org.exoplatform.mail.webui.popup.UIPopupAction;
@@ -18,6 +21,7 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIContainer;
+import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
@@ -49,16 +53,20 @@ public class UIActionBar extends UIContainer {
       UIMailPortlet uiPortlet = uiActionBar.getAncestorOfType(UIMailPortlet.class) ;
       UINavigationContainer uiNavigation = uiPortlet.getChild(UINavigationContainer.class) ;
       UISelectAccount uiSelect = uiNavigation.getChild(UISelectAccount.class) ;
+      UIFolderContainer uiFolderContainer = uiNavigation.getChild(UIFolderContainer.class) ;
       MailService mailSvr = uiActionBar.getApplicationComponent(MailService.class) ;
-      String username =  uiPortlet.getCurrentUser() ;
-      String accId = uiSelect.getSelectedValue() ;
-      Account account = mailSvr.getAccountById(username, accId) ;
-      System.out.println("\n\n account " + account.getId());
-      UIDefaultFolders uiDefaultFolders = uiNavigation.getChild(UIFolderContainer.class).getChild(UIDefaultFolders.class) ;
       UIApplication uiApp = uiActionBar.getAncestorOfType(UIApplication.class) ;
+      String accId = uiSelect.getSelectedValue() ;
+      if(Utils.isEmptyField(accId)) {
+        uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.account-list-empty", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
+      String username =  uiPortlet.getCurrentUser() ;
+      Account account = mailSvr.getAccountById(username, accId) ;
       try {
         mailSvr.checkNewMessage(username, account) ;
-        //event.getRequestContext().addUIComponentToUpdateByAjax(uiDefaultFolders) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer) ;
       } catch (AuthenticationFailedException afe) {
         afe.printStackTrace() ;
         uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.userName-password-incorrect", null)) ;
@@ -75,9 +83,28 @@ public class UIActionBar extends UIContainer {
     public void execute(Event<UIActionBar> event) throws Exception {
       UIActionBar uiActionBar = event.getSource() ; 
       System.out.println(" =========== > Compose Action");
-      UIMailPortlet mailPortlet = uiActionBar.getParent() ;
-      UIPopupAction uiPopupAction = mailPortlet.getChild(UIPopupAction.class) ;
-      uiPopupAction.activate(UIComposeForm.class, 1000) ;
+      UIMailPortlet uiPortlet = uiActionBar.getParent() ;
+      UIApplication uiApp = uiActionBar.getAncestorOfType(UIApplication.class) ;
+      UINavigationContainer uiNavigation = uiPortlet.getChild(UINavigationContainer.class) ;
+      UISelectAccount uiSelect = uiNavigation.getChild(UISelectAccount.class) ;
+      String accId = uiSelect.getSelectedValue() ;
+      if(Utils.isEmptyField(accId)) {
+        uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.account-list-empty", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
+      UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
+      UIPopupActionContainer uiPopupContainer = uiPopupAction.activate(UIPopupActionContainer.class, 1000) ;
+      
+      UIComposeForm uiComposeForm = uiPopupContainer.createUIComponent(UIComposeForm.class, null, null);
+      List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
+      MailService mailSvr = uiActionBar.getApplicationComponent(MailService.class) ;
+      String username = uiActionBar.getAncestorOfType(UIMailPortlet.class).getCurrentUser() ;
+      for(Account acc : mailSvr.getAccounts(username)) {
+        options.add(new SelectItemOption<String>(acc.getEmailAddress(), acc.getId())) ;
+      }
+      uiComposeForm.setFieldFromValue(options) ;
+      uiPopupContainer.addChild(uiComposeForm) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }
   }

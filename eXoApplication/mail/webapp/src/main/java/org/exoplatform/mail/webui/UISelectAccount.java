@@ -10,7 +10,7 @@ import java.util.List;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.webui.popup.UIAccountCreation;
-import org.exoplatform.mail.webui.popup.UIAccountCreationContainer;
+import org.exoplatform.mail.webui.popup.UIPopupActionContainer;
 import org.exoplatform.mail.webui.popup.UIPopupAction;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -74,7 +74,7 @@ public class UISelectAccount extends UIForm {
       UISelectAccount uiForm = event.getSource() ;
       UIMailPortlet uiPortlet = uiForm.getAncestorOfType(UIMailPortlet.class) ;
       UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class) ;
-      UIAccountCreationContainer uiAccContainer = uiPortlet.createUIComponent(UIAccountCreationContainer.class, null, null) ;
+      UIPopupActionContainer uiAccContainer = uiPortlet.createUIComponent(UIPopupActionContainer.class, null, null) ;
       uiAccContainer.addChild(UIAccountCreation.class, null, null) ;
       uiPopup.activate(uiAccContainer, 700, 500, true) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup) ;
