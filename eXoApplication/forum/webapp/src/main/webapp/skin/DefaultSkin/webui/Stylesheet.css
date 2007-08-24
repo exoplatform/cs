@@ -187,14 +187,16 @@
 }
 
 .UIForumPortlet .ContentContainer .LastPostTitle {
+	float: left;
 	font-weight: bold;
-	color: #058ee6;
+	color: #204aa0;
+	line-height: 18px;
 }
 
 .UIForumPortlet .ContentContainer .LastPostIcon {
-	cursor: pointer;
-	line-height: 18px;
-	padding-left: 18px;
+	float: left;
+	width: 18px;
+	height: 18px;
 }
 
 .UIForumPortlet .ContentContainer .ForumQuantity {

@@ -37,9 +37,9 @@
 	margin: 4px 0px 0px 0px;
 }
 
-.UIForumContainer .ContentContainer .Title {
+.UIForumPortlet .UIForumContainer .ContentContainer .UITopicList .Title {
 	color: #204aa0;
-	font-size: 12px;
+	font-size: 12px; font-weight: bold;
 }
 
 .UIForumContainer .ContentContainer .TitleNewpost {

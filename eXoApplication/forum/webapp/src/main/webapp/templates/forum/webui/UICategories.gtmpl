@@ -110,8 +110,9 @@
 											</td>
 										 	<% if(topicNewPost != null) { %>
 										 	<td >
-										 		<div class="LastPostIcon $topicNewPostIcon" title="Go to first Post in Therad '$topicNewPostTitle' "><a class="LastPostTitle">$topicNewPostTitle</a></div>
+										 		<div class="LastPostIcon $topicNewPostIcon" ><span></span></div><a href="#" title="Go to first Post in Therad '$topicNewPostTitle' " class="LastPostTitle">$topicNewPostTitle</a>
 												<div class="LastPostInfos">by&nbsp;<a style="color: #058EE6;" href="#">$lastPostBy</a><span class="DateTime">&nbsp;($dateTime)</span></div>
+												<div style="clear: left;"><span></span></div>
 											<% } else { %>	
 											<td class="Tdbox" style="height: 40px;">
 													Not Topic !	
