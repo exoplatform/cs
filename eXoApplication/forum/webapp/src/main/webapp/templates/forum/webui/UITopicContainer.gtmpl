@@ -149,9 +149,7 @@
 									</td>
 								 	<td class="Tdbox" align="center"><div>$postCount</div></td>
 									<td class="Tdbox" align="center">$postView</td>
-									<td class="Tdbox" align="center">
-										<% uicomponent.renderChild(topic.getId())%>
-									</td>
+									<td class="Tdbox" align="center" onClick="eXo.forum.UIForumPortlet.selectItem(this.firstChild);"><% uicomponent.renderChild(topic.getId())%></td>
 				   			</tr>
 					   	<% } %>
 				    </tbody>
