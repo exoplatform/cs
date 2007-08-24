@@ -3,6 +3,12 @@
 	import org.exoplatform.forum.webui.UITopicDetail ;
 %>
 <div class="UITopicDetailContainer">
-	<% uicomponent.renderChild(UITopicPoll.class) %>
-	<% uicomponent.renderChild(UITopicDetail.class) %>
+	<% 
+		List children = uicomponent.getChildren() ;
+    for(component in children) {
+      if(component.isRendered()){
+				uicomponent.renderChild(component.getClass()) ;      
+      }
+    }
+	%>
 </div>

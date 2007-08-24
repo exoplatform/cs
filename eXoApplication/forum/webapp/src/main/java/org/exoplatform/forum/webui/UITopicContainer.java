@@ -99,10 +99,13 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
   static public class OpenTopicActionListener extends EventListener<UITopicContainer> {
   	public void execute(Event<UITopicContainer> event) throws Exception {
   		UITopicContainer uiTopicContainer = event.getSource();
-  		String path = event.getRequestContext().getRequestParameter(OBJECTID) ; 
-  		System.out.println("\n\n topicId:  " + path);
+  		String topicId = event.getRequestContext().getRequestParameter(OBJECTID) ; 
+  		System.out.println("\n\n topicId:  " + topicId);
   		UIForumContainer uiForumContainer = uiTopicContainer.getAncestorOfType(UIForumContainer.class) ;
-  		uiForumContainer.getChild(UITopicDetailContainer.class).setRendered(true) ;
+      UITopicDetailContainer uiTopicDetailContainer = uiForumContainer.getChild(UITopicDetailContainer.class) ;
+      uiTopicDetailContainer.setRendered(true) ;
+      UITopicDetail uiTopicDetail = uiTopicDetailContainer.getChild(UITopicDetail.class) ;
+      uiTopicDetail.setPostIds(uiTopicContainer.categoryId, uiTopicContainer.forumId, topicId) ;
   		uiForumContainer.getChild(UITopicContainer.class).setRendered(false) ;
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
       context.addUIComponentToUpdateByAjax(uiForumContainer) ;

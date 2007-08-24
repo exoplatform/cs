@@ -55,8 +55,6 @@ public class JCRDataStorage implements DataStorage {
     Query query = qm.createQuery(queryString.toString(), Query.XPATH) ;
     QueryResult result = query.execute() ;
     NodeIterator iter = result.getNodes() ;
-    
-    //NodeIterator iter = forumHomeNode.getNodes() ;
     List<Category> categories = new ArrayList<Category>() ;
     Category cat ;
     while(iter.hasNext()) {

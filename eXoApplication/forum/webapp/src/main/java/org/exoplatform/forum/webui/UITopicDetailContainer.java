@@ -26,7 +26,7 @@ import org.exoplatform.webui.form.UIForm;
 )
 public class UITopicDetailContainer extends UIContainer  {
   public UITopicDetailContainer() throws Exception {
-    addChild(UITopicPoll.class, null, null) ;
+    addChild(UITopicPoll.class, null, null).setRendered(false) ;
     addChild(UITopicDetail.class, null, null) ;
   }
   
