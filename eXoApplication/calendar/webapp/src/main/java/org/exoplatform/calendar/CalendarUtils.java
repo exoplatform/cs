@@ -25,4 +25,13 @@ public class CalendarUtils {
     }
     return groups ;
   }
+  static public String[] getAllGroups() throws Exception {
+    OrganizationService organization = (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
+    Object[] objs = organization.getGroupHandler().getAllGroups().toArray() ;
+    String[] groups = new String[objs.length] ;
+    for(int i = 0; i < objs.length ; i ++) {
+      groups[i] = ((GroupImpl)objs[i]).getId() ;
+    }
+    return groups ;
+  }
 }

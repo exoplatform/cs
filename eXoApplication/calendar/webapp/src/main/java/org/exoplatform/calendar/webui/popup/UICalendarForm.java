@@ -7,6 +7,7 @@ package org.exoplatform.calendar.webui.popup;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarCategory;
 import org.exoplatform.calendar.service.CalendarService;
@@ -26,6 +27,7 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
+import org.exoplatform.webui.form.UIFormInputInfo;
 import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
@@ -58,6 +60,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent{
   final public static String ISPUBLIC = "isPublic" ;
   final public static String SHARED_GROUPS = "sharedGroups" ;
   final public static String EDIT_PERMISSION = "editPermission" ;
+  final public static String SELECT_GROUPS = "selectGroups" ;
   
   public UICalendarForm() throws Exception{
     super("UICalendarForm", false);
@@ -79,7 +82,13 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent{
     UIFormInputWithActions sharing = new UIFormInputWithActions("sharing") ;
     List<ActionData> actions = new ArrayList<ActionData> () ;
     sharing.addUIFormInput(new UIFormCheckBoxInput<Boolean>(ISPUBLIC, ISPUBLIC, null)) ;
-    sharing.addUIFormInput(new UIFormTextAreaInput(SHARED_GROUPS, SHARED_GROUPS, null)) ;
+    sharing.addUIFormInput(new UIFormInputInfo(SELECT_GROUPS, SELECT_GROUPS, null)) ;
+    String[] groups = CalendarUtils.getAllGroups() ;
+    for(String group : groups) {
+      if(sharing.getUIFormCheckBoxInput(group) != null)sharing.getUIFormCheckBoxInput(group).setChecked(false) ;
+      else sharing.addUIFormInput(new UIFormCheckBoxInput(group, group, false)) ;
+    }
+    /*sharing.addUIFormInput(new UIFormTextAreaInput(SHARED_GROUPS, SHARED_GROUPS, null)) ;
     
     ActionData sharedGroups = new ActionData() ;
     sharedGroups.setActionListener("SelectGroup") ;
@@ -88,7 +97,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent{
     sharedGroups.setCssIconClass("AddIcon16x16 SelectMemberIcon") ;    
     actions.add(sharedGroups) ;
     sharing.setActionField(SHARED_GROUPS, actions) ;
-    
+    */
     actions = new ArrayList<ActionData> () ;
     sharing.addUIFormInput(new UIFormStringInput(EDIT_PERMISSION, null, null)) ;
     ActionData editPermissions = new ActionData() ;
@@ -140,15 +149,18 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent{
       boolean isPublic = uiForm.getUIFormCheckBoxInput(ISPUBLIC).isChecked() ;
       calendar.setPublic(isPublic) ;
       if(isPublic) {
-        String groups = uiForm.getUIFormTextAreaInput(SHARED_GROUPS).getValue() ;
-        if(groups != null && groups.length() > 0) {
-          calendar.setGroups(groups.split(",")) ;
-        }else {
+        String[] groupList = CalendarUtils.getAllGroups() ;
+        List<String> selected = new ArrayList<String>() ;
+        for(String groupId : groupList) {
+          if(uiForm.getUIFormCheckBoxInput(groupId).isChecked()) selected.add(groupId) ;
+        }
+        if(selected.size() < 1){
           UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
           uiApp.addMessage(new ApplicationMessage("UICalendarForm.msg.group-empty", null, ApplicationMessage.WARNING) ) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;
         }
+        calendar.setGroups(selected.toArray(new String[]{})) ;
         String editPermission = uiForm.getUIStringInput(EDIT_PERMISSION).getValue() ;
         if(editPermission != null && editPermission.length() > 0) {
           calendar.setEditPermission(editPermission.split(",")) ;

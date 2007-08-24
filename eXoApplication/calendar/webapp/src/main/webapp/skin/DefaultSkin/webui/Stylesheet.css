@@ -296,6 +296,14 @@
   line-height: 16px;
 }
 
+.UICalendars .DownArrow1Icon {
+  height: 16px;
+  margin: 1px 3px 0px 0px;
+  float: right;
+  width: 16px;
+  cursor: pointer;
+}
+
 .UICalendars .CheckBox {
   margin: 0px 3px 0px 0px;
   float: left;
