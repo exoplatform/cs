@@ -51,7 +51,6 @@ public class UITopicDetail extends UIForm  {
   }
   
   private Topic getTopic() throws Exception {
-   // System.out.println("\n\n\n\n getTopic" + categoryId+ forumId+ topicId );
     return forumService.getTopic(categoryId, forumId, topicId) ;
   }
   

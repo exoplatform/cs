@@ -32,7 +32,8 @@ import org.exoplatform.webui.event.Event.Phase;
     template =  "app:/templates/forum/webui/UICategories.gtmpl",
     events = {
     	@EventConfig(listeners = UICategories.OpenCategory.class),
-    	@EventConfig(listeners = UICategories.OpenForumLink.class)
+    	@EventConfig(listeners = UICategories.OpenForumLink.class),
+    	@EventConfig(listeners = UICategories.OpenLastTopicLink.class)
     }
 )
 public class UICategories extends UIContainer  {
@@ -95,6 +96,24 @@ public class UICategories extends UIContainer  {
     }
   }
 	
+  static public class OpenLastTopicLink extends EventListener<UICategories> {
+    public void execute(Event<UICategories> event) throws Exception {
+      UICategories uiContainer = event.getSource();
+      String Id = event.getRequestContext().getRequestParameter(OBJECTID)  ;
+      String []id = Id.trim().split(",");
+      UIForumPortlet uiForumPortlet = uiContainer.getAncestorOfType(UIForumPortlet.class) ;
+      uiForumPortlet.updateIsRendered(2);
+      UIForumContainer uiForumContainer = uiForumPortlet.getChild(UIForumContainer.class) ;
+      UITopicDetailContainer uiTopicDetailContainer = uiForumContainer.getChild(UITopicDetailContainer.class) ;
+      uiTopicDetailContainer.setRendered(true) ;
+      UITopicDetail uiTopicDetail = uiTopicDetailContainer.getChild(UITopicDetail.class) ;
+      uiForumContainer.getChild(UIForumDescription.class).setForumIds(id[0], id[1]);
+      uiTopicDetail.setPostIds(id[0], id[1], id[2]) ;
+      uiForumContainer.getChild(UITopicContainer.class).setRendered(false) ;
+      WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+      context.addUIComponentToUpdateByAjax(uiForumPortlet) ;
+    }
+  }
 	
 	
 }

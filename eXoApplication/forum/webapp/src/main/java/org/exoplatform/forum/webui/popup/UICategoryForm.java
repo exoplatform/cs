@@ -10,7 +10,7 @@ import java.util.GregorianCalendar;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.forum.service.Category;
 import org.exoplatform.forum.service.ForumService;
-import org.exoplatform.forum.webui.ForumNameValidator;
+import org.exoplatform.forum.webui.EmptyNameValidator;
 import org.exoplatform.forum.webui.UICategories;
 import org.exoplatform.forum.webui.UICategory;
 import org.exoplatform.forum.webui.UICategoryContainer;
@@ -51,7 +51,7 @@ public class UICategoryForm extends UIForm implements UIPopupComponent{
   
   public UICategoryForm() throws Exception {
   	UIFormStringInput categoryTitle = new UIFormStringInput(FIELD_CATEGORYTITLE_INPUT, FIELD_CATEGORYTITLE_INPUT, null);
-  	categoryTitle.addValidator(ForumNameValidator.class);
+  	categoryTitle.addValidator(EmptyNameValidator.class);
     UIFormStringInput categoryOrder = new UIFormStringInput(FIELD_CATEGORYORDER_INPUT, FIELD_CATEGORYORDER_INPUT, "0");
   	categoryOrder.addValidator(PositiveNumberFormatValidator.class);
   	UIFormStringInput description = new UIFormTextAreaInput(FIELD_DESCRIPTION_TEXTAREA, FIELD_DESCRIPTION_TEXTAREA, null);

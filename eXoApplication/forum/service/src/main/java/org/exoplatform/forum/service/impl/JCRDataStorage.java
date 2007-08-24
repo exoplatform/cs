@@ -275,7 +275,8 @@ public class JCRDataStorage implements DataStorage {
 			// setViewCount for Topic
 			long newViewCount = topicNode.getProperty("exo:viewCount").getLong() + 1 ;
 			topicNode.setProperty("exo:viewCount", newViewCount) ;
-			System.out.println("\n\n\n\n\n TopicView: " + newViewCount);
+      forumHomeNode.save() ;
+      forumHomeNode.getSession().save() ;
 		  return topicNew ;
     }
     return null ;

@@ -136,6 +136,7 @@
 			        String topicNewPostTitle = "";
 			        String lastPostBy = "";
 			        String dateTime = "";
+			        String openLinkLastPost = "#";
 			        
 	 						Topic topicNewPost = uicomponent.getLastTopic(forum.getLastTopicPath());
 	 						if(topicNewPost != null) {
@@ -151,6 +152,7 @@
 				          classIconForum = "ForumNewPostIcon";
 				          titleIconForum = "Forum Contains New Posts";
 				        }
+				        openLinkLastPost = uicomponent.event("OpenLastTopicLink", (forum.getId()+","+topicNewPost.getId()))
 			        }
 			        String topicCount = (String)forum.getTopicCount();
 			        String postCount = (String)forum.getPostCount();
@@ -164,27 +166,29 @@
 	                </td>
 	                 <td >
              <% if(topicNewPost != null) { %>
-								 		<div class="LastPostIcon $topicNewPostIcon" ><span></span></div><a href="#" title="Go to first Post in Therad '$topicNewPostTitle' " class="LastPostTitle">$topicNewPostTitle</a>
-										<div class="LastPostInfos">by&nbsp;<a style="color: #058EE6;" href="#">$lastPostBy</a><span class="DateTime">&nbsp;($dateTime)</span></div>
+								 		<div class="LastPostIcon $topicNewPostIcon" ><span></span></div><a href="$openLinkLastPost" title="Go to first Post in Therad '$topicNewPostTitle' " class="LastPostTitle">$topicNewPostTitle</a>
 										<div style="clear: left;"><span></span></div>
-									<% } %>	
+										<div class="LastPostInfos">by&nbsp;<a style="color: #058EE6;" href="#">$lastPostBy</a><span class="DateTime">&nbsp;($dateTime)</span></div>
+							  <% } else { %>	
+									<td class="Tdbox" style="height: 40px;">
+											Not Topic !	
+							  <% } %>	
 									</td>
 								 	<td class="Tdbox">$topicCount</td>
 									<td class="Tdbox">$postCount</td>
 									<td >
-									<% for(forumModerator in forumModerators) { %>
+							  <% for(forumModerator in forumModerators) { %>
 										<div class="ModeratorContent">
 											<div class="EmoticonsIcon BigGrinIcon"><span></span></div>
 											<a href="#" class="Moderator">$forumModerator</a>
 											<div style="clear: left;"><span></span></div>
 										</div>
-									<% } %>
+								<% } %>
 	                  <div style="clear: left;"><span></span></div>
 	                </td>
 	                <td class="Tdbox" onclick="eXo.forum.UIForumPortlet.selectItem(this.firstChild)"><% uicomponent.renderChild(forum.getId())%></td>
 	               </tr>
-           <% //	} 
-            	}
+           <%	} 
             }
         %>
         </tbody>

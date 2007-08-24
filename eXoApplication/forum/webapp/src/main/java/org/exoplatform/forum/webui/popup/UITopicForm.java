@@ -10,7 +10,7 @@ import java.util.GregorianCalendar;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.service.Topic;
-import org.exoplatform.forum.webui.ForumNameValidator;
+import org.exoplatform.forum.webui.EmptyNameValidator;
 import org.exoplatform.forum.webui.UIForumPortlet;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.util.Util;
@@ -49,7 +49,7 @@ public class UITopicForm extends UIForm implements UIPopupComponent{
   private String forumId ;
   public UITopicForm() throws Exception {
     UIFormStringInput forumTitle = new UIFormStringInput(FIELD_TOPICTITLE_INPUT, FIELD_TOPICTITLE_INPUT, null);
-    forumTitle.addValidator(ForumNameValidator.class) ;
+    forumTitle.addValidator(EmptyNameValidator.class) ;
     UIFormTextAreaInput messenger = new UIFormTextAreaInput(FIELD_MESSENGER_TEXTAREA, FIELD_MESSENGER_TEXTAREA, null);
     
     addUIFormInput(forumTitle);

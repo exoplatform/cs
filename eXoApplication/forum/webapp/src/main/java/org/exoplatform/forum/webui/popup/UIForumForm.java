@@ -13,7 +13,7 @@ import org.exoplatform.container.PortalContainer;
 import org.exoplatform.forum.service.Category;
 import org.exoplatform.forum.service.Forum;
 import org.exoplatform.forum.service.ForumService;
-import org.exoplatform.forum.webui.ForumNameValidator;
+import org.exoplatform.forum.webui.EmptyNameValidator;
 import org.exoplatform.forum.webui.UICategories;
 import org.exoplatform.forum.webui.UICategory;
 import org.exoplatform.forum.webui.UICategoryContainer;
@@ -74,7 +74,7 @@ public class UIForumForm extends UIForm implements UIPopupComponent{
   	UIFormSelectBox categoryId = new UIFormSelectBox(FIELD_CATEGORY_SELECTBOX, FIELD_CATEGORY_SELECTBOX, list) ;
   	categoryId.setDefaultValue(categorys.get(0).getId());
   	UIFormStringInput forumTitle = new UIFormStringInput(FIELD_FORUMTITLE_INPUT, FIELD_FORUMTITLE_INPUT, null);
-  	forumTitle.addValidator(ForumNameValidator.class) ;
+  	forumTitle.addValidator(EmptyNameValidator.class) ;
     UIFormStringInput forumOrder = new UIFormStringInput(FIELD_FORUMORDER_INPUT, FIELD_FORUMORDER_INPUT, "0");
   	forumOrder.addValidator(PositiveNumberFormatValidator.class) ;
   	List<SelectItemOption<String>> ls = new ArrayList<SelectItemOption<String>>() ;
@@ -89,7 +89,7 @@ public class UIForumForm extends UIForm implements UIPopupComponent{
     forumStatus.setDefaultValue("unlock");
     
   	UIFormStringInput description = new UIFormTextAreaInput(FIELD_DESCRIPTION_TEXTAREA, FIELD_DESCRIPTION_TEXTAREA, null);
-  	
+    description.addValidator(EmptyNameValidator.class) ;
   	UIFormTextAreaInput notifyWhenAddPost = new UIFormTextAreaInput(FIELD_NOTIFYWHENADDPOST_MULTIVALUE, FIELD_NOTIFYWHENADDPOST_MULTIVALUE, null);
   	UIFormTextAreaInput notifyWhenAddTopic = new UIFormTextAreaInput(FIELD_NOTIFYWHENADDTOPIC_MULTIVALUE, FIELD_NOTIFYWHENADDTOPIC_MULTIVALUE, null);
   	
