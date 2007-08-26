@@ -1,29 +1,13 @@
 @import url('skinIcons/16x16/Stylesheet.css') ;
 @import url('skinIcons/24x24/Stylesheet.css') ;
-@import url('UIForumPortlet/Stylesheet.css') ;
+@import url('popup/Stylesheet.css') ;
 @import url('UICategories/Stylesheet.css') ;
-@import url('UIThreadsInForum/Stylesheet.css') ;
-@import url('UIPostsInThread/Stylesheet.css') ;
-@import url('UIPrintView/Stylesheet.css') ;
-@import url('UITag/Stylesheet.css') ;
-@import url('UIForumForm/Stylesheet.css') ;
-@import url('UIDisplayOptions/Stylesheet.css') ;
+@import url('UIForumContainer/Stylesheet.css') ;
 @import url('UIForumLinks/Stylesheet.css') ;
-@import url('UIModeratorsManagementForm/Stylesheet.css') ;
-@import url('UIMoveThreads/Stylesheet.css') ;
-@import url('UIForumOptionsForm/Stylesheet.css') ;
-@import url('UIAddPoll/Stylesheet.css') ;
-@import url('UIMergeThreads/Stylesheet.css') ;
-@import url('UIAutoPruning/Stylesheet.css') ;
-@import url('UIUserManagement/Stylesheet.css') ;
-@import url('UIViewPoll/Stylesheet.css') ;
-@import url('UICategoryForm/Stylesheet.css') ;
-@import url('UIViewMemberProfile/Stylesheet.css') ;
+@import url('UIForumPortlet/Stylesheet.css') ;
+@import url('UIPrintView/Stylesheet.css') ;
+@import url('UITopicDetail/Stylesheet.css') ;
 @import url('UITopicPoll/Stylesheet.css') ;
-@import url('UIPostNewThread/Stylesheet.css') ;
-@import url('UIReplytoThread/Stylesheet.css') ;
-@import url('UISendPrivateMessage/Stylesheet.css') ;
-@import url('UIMergePosts/Stylesheet.css') ;
 
 /**************************** UIActionForum *********************************/
 .UIForumPortlet .UIActionForum .ActionButton {
@@ -135,109 +119,7 @@
 	min-width:190px;
 	white-space: nowrap;
 }
-/*=============================Content UICategoriesSummary====================*/
 
-.UIForumPortlet .UICategoriesSummary {
-	padding: 5px 10px;
-}
-
-.UIForumPortlet .ContentContainer .UserIcon {
-	background: url('UICategories/icons/24x24/UserIcon.gif') no-repeat ;
-	width: 24px; height: 22px;
-	margin: 0px 4px;
-}
-
-.UIForumPortlet .ContentContainer .ChartIcon {
-	background: url('UICategories/icons/24x24/ChartIcon.gif') no-repeat ;
-	width: 24px; height: 22px;
-	margin: 0px 4px;
-}
-
-.UIForumPortlet .ContentContainer {
-	padding-left: 1px;
-}
-
-.UIForumPortlet .ContentContainer .UITopicList a {
-	color: #058ee6;
-}
-
-.UIForumPortlet .ContentContainer .ForumStatsList a {
-	color: #058ee6;
-}
-
-.UIForumPortlet .ContentContainer .UIGrid th {
-	background: url(background/ForumTitleBar1x19.gif) repeat-x;
-	border: 1px solid #d2d4dc;
-}
-
-.UIForumPortlet .ContentContainer .UIGrid td {
-	padding: 5px 0px 0px 5px;
-	border-right: 1px solid #e4e4e4;
-	border-left: 1px solid #e4e4e4;
-}
-
-.UIForumPortlet .ContentContainer .ForumStatusIcon {
-	width: 22px; height: 22px;
-	margin: auto;
-}
-
-.UIForumPortlet .ContentContainer .ForumTitle {
-	font-weight: bold;
-	padding-bottom: 4px;
-}
-
-.UIForumPortlet .ContentContainer .LastPostTitle {
-	float: left;
-	font-weight: bold;
-	color: #204aa0;
-	line-height: 18px;
-}
-
-.UIForumPortlet .ContentContainer .LastPostIcon {
-	float: left;
-	width: 18px;
-	height: 18px;
-}
-
-.UIForumPortlet .ContentContainer .ForumQuantity {
-	font-weight: normal;
-	color: black;
-	cursor: default;
-}
-
-.UIForumPortlet .ContentContainer .Moderator {
-	float: left;
-	font-weight: bold;
-}
-
-.UIForumPortlet .ContentContainer .ModeratorContent {
-	float: left;
-	padding: 2px 8px 0px 0px;
-}
-
-.UIForumPortlet .ContentContainer .EmoticonsIcon {
-	float: left;
-	width: 16px; height: 16px;
-	margin: 0px 4px;
-}
-
-.UIForumPortlet .ContentContainer .UIGrid .Tdbox  {
-	padding: 0px;
-	text-align: center;
-	vertical-align: middle;
-}
-
-.UIForumPortlet .ContentContainer .ForumDescription {
-	line-height: 14px;
-}
-
-.UIForumPortlet .ContentContainer .LastPostInfos {
-	line-height: 22px;
-}
-
-.UIForumPortlet .ContentContainer .UITopicList .PostBy {
-	color: #038ee6;
-}
 /******************************  OverButton  ***************************************/
 .UIForumPortlet .UICategoryStyle .LeftOverButton {
 	background: url('background/LeftOverButton5x22.gif') no-repeat left top;
@@ -262,6 +144,7 @@
 .UIRightClickPopupMenu .UIRightPopupMenuContainer a:hover.DisableMenuItem {
 	color:#cccccc ;	
 }
+
 .SelectedItem {
 	background: #ffffcc ;
 }

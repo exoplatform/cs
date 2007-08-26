@@ -14,14 +14,6 @@
 	margin: 4px 10px 0px 0px;
 }
 
-.UITopicPoll .ForumToolbar .ColsePoll {
-	background: url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/ClosePollIcon.gif') no-repeat left center;
-}
-
-.UITopicPoll .ForumToolbar .EditPoll {
-	background: url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/EditPollIcon.gif')  no-repeat left center;
-}
-
 .UITopicPoll .TopicPollContainer {
 	border: 1px solid #b7b7b7;
 	border-top: none;
@@ -64,6 +56,3 @@
 .UITopicPoll .UIAction {
 	width: 80px;
 }
-
-
-

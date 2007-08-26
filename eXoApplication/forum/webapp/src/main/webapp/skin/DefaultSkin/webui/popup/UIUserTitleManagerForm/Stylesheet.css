@@ -1,0 +1,22 @@
+.UIUserTitleManagerForm {
+	background-color: #ffffff;
+	padding: 8px;
+}
+
+.UIUserTitleManagerForm .UserManagementContainer {
+	background-color: #f7f7f7;
+	padding: 8px;
+	border: 1px solid #b4b4b4;
+}
+
+.UIUserTitleManagerForm .UIAction {
+	width: 110px;
+}
+
+.UIUserTitleManagerForm .UIFormWithTitle {
+	margin: 8px auto ;
+}
+
+.UIUserTitleManagerForm .UIAction {
+	width: 125px;
+}

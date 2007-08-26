@@ -1,0 +1,52 @@
+.UIAddPollForm {
+	background-color: #ffffff;
+	padding: 8px;
+}
+
+.UIAddPollForm .HorizontalLayout {
+	background-color: #f7f7f7;
+	padding-top: 8px;
+}
+
+.UIAddPollForm .UIAction {
+	width: 250px;
+}
+
+.UIAddPollForm .Line {
+	background: url('background/Line1x2.gif') repeat-x;
+	width: 90%; height: 2px;
+	margin: 4px auto 8px auto;
+}
+
+.UIAddPollForm .HorizontalLayout .Title {
+	padding-left: 16px;
+	color: #000000;
+}
+
+.UIAddPollForm .Label {
+	text-align: left;
+	padding: 4px;
+}
+
+.UIAddPollForm .HorizontalLayout .UIFormGrid td.FieldLabel {
+	width: 140px;
+}
+
+.UIAddPollForm .HorizontalLayout .UIFormGrid td.FieldIcon {
+	width: 110px;
+	padding: 4px 0px;
+}
+
+.UIAddPollForm .Icon {
+	width: 16px; height: 16px;
+	float: left;
+	margin: 0px 2px;
+}
+
+.UIAddPollForm .AddNewNodeIcon {
+	cursor: pointer;
+}
+
+.UIAddPollForm .DeletePortalIcon {
+	cursor: pointer;
+}

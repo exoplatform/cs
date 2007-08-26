@@ -1,0 +1,52 @@
+.UIMoveTopicForm {
+	width: 310px;
+	padding: 10px;
+	color: #272727;
+}
+
+.UIMoveTopicForm .TitleMoveThreads {
+	padding-left: 10px;
+	line-height: 20px;
+}
+
+.UIMoveTopicForm .UITree {
+	border: 1px solid #a5a5a5;
+	padding: 3px 1px;
+}
+
+.UIMoveTopicForm .UITree .TreeContainer {
+	background: none;
+}
+
+.UIMoveTopicForm .UITree .TreeContainer .Node {
+	width: auto;
+}
+
+.UIMoveTopicForm .UITree .TreeContainer .Node .Icon {
+	height: 24px;
+}
+
+.UIMoveTopicForm .UITree .TreeContainer .Node .NodeLabel a {
+	font-weight: normal;
+	color: #272727;
+	line-height: 20px;
+	margin: 0px;
+}
+
+.UIMoveTopicForm .UITree .TreeContainer .Selected {
+	background: #d8d9ee;
+	margin: 0px;
+	height: 20px;
+}
+
+.UIMoveTopicForm .UITree .TreeContainer .Node .ChildrenContainer {
+	padding-left: 20px;
+}
+
+.UIMoveTopicForm .UITree .TreeContainer .ChildrenContainer .Node {
+	padding-left: 5px;
+}
+
+.UIMoveTopicForm .UIAction {
+	width: 130px;
+}

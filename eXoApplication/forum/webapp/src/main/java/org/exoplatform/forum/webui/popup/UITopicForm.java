@@ -41,18 +41,18 @@ import sun.security.action.GetLongAction;
       @EventConfig(listeners = UITopicForm.CancelAction.class)
     }
 )
-public class UITopicForm extends UIForm implements UIPopupComponent{
+public class UITopicForm extends UIForm implements UIPopupComponent {
   public static final String FIELD_TOPICTITLE_INPUT = "ThreadTitle" ;
   public static final String FIELD_MESSENGER_TEXTAREA = "Messenger" ;
   
   private String categoryId; 
   private String forumId ;
   public UITopicForm() throws Exception {
-    UIFormStringInput forumTitle = new UIFormStringInput(FIELD_TOPICTITLE_INPUT, FIELD_TOPICTITLE_INPUT, null);
-    forumTitle.addValidator(EmptyNameValidator.class) ;
+    UIFormStringInput topicTitle = new UIFormStringInput(FIELD_TOPICTITLE_INPUT, FIELD_TOPICTITLE_INPUT, null);
+    topicTitle.addValidator(EmptyNameValidator.class) ;
     UIFormTextAreaInput messenger = new UIFormTextAreaInput(FIELD_MESSENGER_TEXTAREA, FIELD_MESSENGER_TEXTAREA, null);
     
-    addUIFormInput(forumTitle);
+    addUIFormInput(topicTitle);
     addUIFormInput(messenger);
   }
   
@@ -77,7 +77,7 @@ public class UITopicForm extends UIForm implements UIPopupComponent{
   static  public class PreviewThread extends EventListener<UITopicForm> {
     public void execute(Event<UITopicForm> event) throws Exception {
       UITopicForm uiForm = event.getSource() ;
-      UIForumPortlet forumPortlet = event.getSource().getAncestorOfType(UIForumPortlet.class) ;
+      UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
       forumPortlet.cancelAction() ;
     }
   }
@@ -88,13 +88,9 @@ public class UITopicForm extends UIForm implements UIPopupComponent{
       String topicTitle = uiForm.getUIStringInput(FIELD_TOPICTITLE_INPUT).getValue().trim();
       String messenger = uiForm.getUIFormTextAreaInput(FIELD_MESSENGER_TEXTAREA).getValue() ;
       
-//      GregorianCalendar calendar = new GregorianCalendar() ;
-//      String id = "topic" + Long.toString(calendar.getTimeInMillis(), 20);
-//      PortalRequestContext pContext = Util.getPortalRequestContext();
       String userName = Util.getPortalRequestContext().getRemoteUser() ;
       
       Topic topicNew = new Topic();
-//      topicNew.setId(id.toUpperCase());
       topicNew.setOwner(userName);
       topicNew.setTopicName(topicTitle);
       topicNew.setCreatedDate(new Date());
@@ -126,10 +122,11 @@ public class UITopicForm extends UIForm implements UIPopupComponent{
       context.addUIComponentToUpdateByAjax(forumPortlet) ;
     }
   }
+  
   static  public class CancelAction extends EventListener<UITopicForm> {
     public void execute(Event<UITopicForm> event) throws Exception {
       UITopicForm uiForm = event.getSource() ;
-      UIForumPortlet forumPortlet = event.getSource().getAncestorOfType(UIForumPortlet.class) ;
+      UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
       forumPortlet.cancelAction() ;
     }
   }

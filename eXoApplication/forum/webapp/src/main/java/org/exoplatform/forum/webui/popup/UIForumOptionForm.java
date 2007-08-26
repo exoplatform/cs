@@ -12,7 +12,6 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
-import org.exoplatform.webui.form.UIFormStringInput;
 
 /**
  * Created by The eXo Platform SARL
@@ -46,7 +45,7 @@ public class UIForumOptionForm extends UIForm implements UIPopupComponent {
   static  public class SaveActionListener extends EventListener<UIForumOptionForm> {
     public void execute(Event<UIForumOptionForm> event) throws Exception {
       UIForumOptionForm uiForm = event.getSource() ;
-      UIForumPortlet forumPortlet = event.getSource().getAncestorOfType(UIForumPortlet.class) ;
+      UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
       forumPortlet.cancelAction() ;
     }
   }
@@ -54,7 +53,7 @@ public class UIForumOptionForm extends UIForm implements UIPopupComponent {
   static  public class CancelActionListener extends EventListener<UIForumOptionForm> {
     public void execute(Event<UIForumOptionForm> event) throws Exception {
       UIForumOptionForm uiForm = event.getSource() ;
-      UIForumPortlet forumPortlet = event.getSource().getAncestorOfType(UIForumPortlet.class) ;
+      UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
       forumPortlet.cancelAction() ;
     }
   }

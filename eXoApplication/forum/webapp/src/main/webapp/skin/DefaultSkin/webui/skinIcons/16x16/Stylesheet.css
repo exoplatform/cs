@@ -93,3 +93,19 @@
 .Download {
 	background: url('icons/DownLoadIcon.gif') no-repeat left;
 }
+
+.ColsePoll {
+	background: url('icons/ClosePollIcon.gif') no-repeat left center;
+}
+
+.EditPoll {
+	background: url('icons/EditPollIcon.gif')  no-repeat left center;
+}
+
+.ForumIcon {
+	background: url('icons/ForumIcon.gif') no-repeat left center;
+}
+
+.ThreadsIcon {
+	background: url('icons/ThreadIcon.gif') no-repeat left center;
+}

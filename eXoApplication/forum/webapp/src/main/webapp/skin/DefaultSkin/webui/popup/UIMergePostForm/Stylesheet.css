@@ -1,0 +1,28 @@
+.UIMergePostForm {
+	border: 1px solid #b7b7b7;
+	width: 700px;
+	margin: 10px;
+}
+
+.UIMergePostForm .MergePostsContainer {
+	border: 1px solid white;
+	background: #f7f7f7;
+	padding: 10px;
+}
+
+.UIMergePostForm .UIForm .HorizontalLayout {
+	border: none;
+	padding: 0px 20px;
+}
+
+.UIMergePostForm .UIForm .HorizontalLayout select {
+	width: 374px;
+}
+
+.UIMergePostForm .UIForm .HorizontalLayout .Textinput {
+	width: 370px;
+}
+
+.UIMergePostForm .UIAction { 
+	width: 170px;
+}

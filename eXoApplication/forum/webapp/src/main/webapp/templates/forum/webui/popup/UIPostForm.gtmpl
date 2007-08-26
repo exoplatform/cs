@@ -1,4 +1,4 @@
-<div class="UITopicForm">
+<div class="UIPostForm">
 	<% uiform.begin() %>
 	<div class="UIFormTabPane">
 	  <div class="UITabPane">
@@ -46,7 +46,7 @@
 	              			<tr>
 	                      <td class="FieldLabel"><%=_ctx.appRes("UITopicForm.label.ThreadTitle")%>:</td>
 	                      <td class="FieldComponent">
-	                        <%uiform.renderChild("ThreadTitle");%>
+	                        <%uiform.renderChild("PostTitle");%>
 	                      </td>
                       </tr>
 	              			<tr>
@@ -93,5 +93,6 @@
 		<% } %>
 	  </div>
 	</div>
+
   <%uiform.end()%>
 </div>

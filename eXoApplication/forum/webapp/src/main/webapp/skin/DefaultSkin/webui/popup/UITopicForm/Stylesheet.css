@@ -1,0 +1,21 @@
+.UITopicForm {
+	width: 620px;
+	padding: 10px;
+}
+
+.UITopicForm .UIForm .HorizontalLayout .UIFormInputSet {
+	padding: 10px;
+}
+
+.UITopicForm .UIForm .HorizontalLayout input {
+	width: 430px;
+}
+
+.UITopicForm .UIAction { 
+	width: 350px;
+}
+
+.UITopicForm .UIForm .HorizontalLayout textarea { 
+	width: 430px; 
+	height: 265px;
+}

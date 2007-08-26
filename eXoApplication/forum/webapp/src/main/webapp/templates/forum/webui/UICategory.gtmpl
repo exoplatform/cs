@@ -93,8 +93,8 @@
             <th style="width: 30%;">Last posts</th>
             <th style="width: 50px;">Threads</th>
             <th style="width: 50px;">Posts</th>
-             <th style="width: 17%;">Moderator</th>
-             <th style="width: 30px;"><input type="checkbox" class="checkbox" title="Check all" value="4" onClick="eXo.forum.UIForumPortlet.checkAll(this);"/></th>
+            <th style="width: 17%;">Moderator</th>
+            <th style="width: 30px;"><input type="checkbox" class="checkbox" title="Check all" value="4" onClick="eXo.forum.UIForumPortlet.checkAll(this);"/></th>
           </tr>
         </thead>
         <tbody>
@@ -108,6 +108,7 @@
             <td>No Post !</td>
             <td>0</td>
             <td>0</td>
+            <td></td>
             <td></td>
           </tr>
         <% }else {%>

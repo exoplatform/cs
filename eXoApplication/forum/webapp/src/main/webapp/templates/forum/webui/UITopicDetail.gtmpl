@@ -9,7 +9,7 @@
 %>
 
 <div class="UITopicDetail">
-
+<% uiform.begin() %>
 	<div class="ButtomAndPageListContainer">
 		<div class="UIActionForum" style="float: left;">
 		  <div class="ActionButton">
@@ -17,7 +17,7 @@
 		  		<div class="ButtonLeft">
 		  			<div class="ButtonRight">
 		  				<div class="ButtonMiddle">
-		  					<a href="<%//=uicomponent.event("AddPost")%>">
+		  					<a href="<%=uicomponent.event("AddPost")%>">
 		  						<div class="IconButton PostReplyIcon"><span class="LabelIcon"></span>New Post</div>
 		  					</a>
 		  				</div>
@@ -202,6 +202,7 @@
 		</div>
 		<div style="clear: left;"><span></span></div>
 	</div>
-<% uicomponent.renderChild(UIPostRules.class) %>
-<% uicomponent.renderChild(UIForumLinks.class) %>
+<%uiform.end()%>
+<% //uicomponent.renderChild(UIPostRules.class) %>
+<% //uicomponent.renderChild(UIForumLinks.class) %>
 </div>

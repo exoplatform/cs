@@ -176,10 +176,7 @@ public class UIForumForm extends UIForm implements UIPopupComponent{
       Boolean  ModerateTopic = (Boolean) uiForm.getUIFormCheckBoxInput(FIELD_MODERATETHREAD_CHECKBOX).getValue();
       Boolean  ModeratePost = (Boolean) uiForm.getUIFormCheckBoxInput(FIELD_MODERATEPOST_CHECKBOX).getValue();
       
-//      PortalRequestContext pContext = Util.getPortalRequestContext();
       String userName = Util.getPortalRequestContext().getRemoteUser() ;
-//      GregorianCalendar calendar = new GregorianCalendar() ;
-//  		String id = "forum" + Long.toString(calendar.getTimeInMillis(), 18);
   		Forum newForum = new Forum();
   		
   		newForum.setForumName(forumTitle);

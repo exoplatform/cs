@@ -1,212 +1,181 @@
-<div style="width: 650px; display: block; visibility: visible; z-index: 4; top: 50px; left: 300px;" id="SearchUser"  class="UIPopupWindow UIDragObject">
- 	<div class="NormalStyle">
-	  <div class="TopLeftCornerDecorator">
-	    <div class="TopRightCornerDecorator">
-	      <div class="TopCenterDecorator">
-	        <div class="OverflowContainer">
-		        <div class="PopupTitleIcon"><span></span></div>
-		        <div onclick="" title="Close Window" class="CloseButton"><span><span/></div>
-		       	<div class="PopupTitle">Threads Auto-Pruning Management</div>
-	        </div>
-	      </div>
-	    </div>
-	  </div>
-    <div class="MiddleLeftSideDecorator">
-      <div class="MiddleRightSideDecorator">
-	      <div class="MiddleCenterDecorator">
-        	<div class="UIWindowContent">
-        		<div class="UIAutoPruning">
-        			<div class="AutoPruningContainer">
-								<form method="post" action="" class="UIForm">
-	        				<div class="AutoPruningList">
-	        					
-	        					<table cellspacing="0" borderspacing="0" id="UIGrid" class="UIGrid">
-  										<thead>
-  											<tr>
-	          							<th>Thread</th>
-	      									<th>Age of Thread (Days)</th>
-								          <th>Frequency (Posts)</th>
-								          <th>Action</th>
-								        </tr>
-  										</thead>
-  										<tbody>
-	     									<tr class="EvenRow">
-  												<td class="text">eXo VN Vactions</td>
-													<td class="text">3</td>
-													<td class="text">2</td>
-													<td>         
-	        									<div style="margin: 0px auto;" class="ActionContainer">
-	          									<div style="margin: auto;" class="OverflowContainer">          
-										            <a title="Edit Page" href="#" class="EditInfoIcon"><span/></a>		          
-										            <a title="Delete Page" href="#" class="DeleteIcon"><span/></a>		          
-	         										</div>
-	        									</div>
-	      									</td>
-		    								</tr>
-	      								<tr class="OddRow">
-												  <td class="text">eXo VN Sports Activities</td>
-													<td class="text">3</td>
-													<td class="text">2</td>
-			  									<td>         
-										        <div style="margin: 0px auto;" class="ActionContainer">
-										          <div style="margin: auto;" class="OverflowContainer">          
-										            <a title="Edit Page" href="#" class="EditInfoIcon"><span/></a>		          
-										            <a title="Delete Page" href="#" class="DeleteIcon"><span/></a>		          
-										          </div>
-	       										</div>
-	      									</td>
-										    </tr>
-		     							  <tr class="EvenRow">
-												  <td class="text">CSS and HTML in Design Team</td>
-													<td class="text">3</td>
-													<td class="text">2</td>
-				  								<td>         
-										        <div style="margin: 0px auto;" class="ActionContainer">
-										          <div style="margin: auto;" class="OverflowContainer">          
-										            <a title="Edit Page" href="#" class="EditInfoIcon"><span/></a>		          
-										            <a title="Delete Page" href="#" class="DeleteIcon"><span/></a>		          
-										          </div>
-										        </div>
-										      </td>
-											  </tr>
-		      							<tr class="OddRow">
-												  <td class="text">Specs for Forums and Calendar in Collaboration Suite</td>
-													<td class="text">3</td>
-													<td class="text">2</td>
-				 									<td>         
-										        <div style="margin: 0px auto;" class="ActionContainer">
-										          <div style="margin: auto;" class="OverflowContainer">          
-										            <a title="Edit Page" href="#" class="EditInfoIcon"><span/></a>		          
-										            <a title="Delete Page" href="#" class="DeleteIcon"><span/></a>		          
-										          </div>
-										        </div>
-										      </td>
-											  </tr>
-		      							<tr class="EvenRow">
-												  <td class="text">Java Trainoing for eXo Java developers</td>
-													<td class="text">3</td>
-													<td class="text">2</td>
-				  								<td>         
-										        <div style="margin: 0px auto;" class="ActionContainer">
-										          <div style="margin: auto;" class="OverflowContainer">          
-										            <a title="Edit Page" href="#" class="EditInfoIcon"><span/></a>		          
-										            <a title="Delete Page" href="#" class="DeleteIcon"><span/></a>		          
-										          </div>
-										        </div>
-										      </td>
-											  </tr>
-										  </tbody>
-										</table>
-	        					<div class="UIPageIterator">
-											<div class="PageIteratorContainer">
- 												<div class="RightPageIteratorBlock">
-    	  									<a title="Back 10 pages" class="Icon DisableLastTopPageIcon"></a>        
-	  										<a title="Previous Page" class="Icon DisableLastPageIcon"><span></span></a>
-												<div class="Number">
-            								<a class="PageSelected" href="#">1</a>
-								            <a href="#">2</a>
-								            <a href="#">3</a>
-    											</div>
-									    	  <a title="Next Page" class="Icon NextPageIcon" href="#"></a>
-									    	  <a title="Next 10 pages" class="Icon DisableNextTopPageIcon"><span></span></a>
-									    		<div style="clear: left;"><span><span/></div>
-									  		</div>
-									  		<div class="LeftPageIteratorBlock">
-										  		<div class="TotalPages">Total pages:</div>
-										  		<div class="PagesTotalNumber">3</div>
-										  		<div style="clear: left;"><span></span></div>
-									  		</div>
-								  		</div>
-								  		<div style="clear: right;"><span></span></div>
-								  	</div>
-	        				</div>
-	        				<div style="clear: left;"><span></span></div>
-								</form>
-								<div class="AddAutoPruning">
-        					<div class="UIFormWithTitle UIMembershipTypeForm">
-									  <div class="TitleBar">Add Thread Auto-Pruning</div>
-								  	<form method="post" action="" id="UIMembershipTypeForm" name="UIMembershipTypeForm" class="UIForm">
-								  		<div class="HorizontalLayout">
-								   			<div class="FormContainer">
-								     			<table class="UIFormGrid">
-								            <tbody>
-								            	<tr>
-																<td class="FieldLabel">Choose Thread:</td>
-																<td class="FieldComponent">
-																	<select name="user.gender" class="selectbox">
-																		<option value="" selected="selected">eXo VN Lifestyles</option>
-																	</select>
-																</td>
-															</tr>
-								             	<tr>
-								  	           	<td class="FieldLabel">Age of Thread: </td>
-								  	            <td class="FieldComponent"><input type="text" id="name" name="name"/></td>
-									            </tr>
-									            <tr>
-								  	           	<td class="FieldLabel">Frequency(Less than): </td>
-								  	            <td class="FieldComponent"><input type="text" id="name" name="name"/></td>
-									            </tr>
-								      			</tbody>
-								      		</table>
-										      <div class="UIAction"> 
-										        <div class="ActionContainer">
-									            <div class="ActionButton">
-									              <div class="LightBlueStyle">
-									                <div class="ButtonLeft">
-									                  <div class="ButtonRight">
-									                    <div class="ButtonMiddle">
-									                      <a href="#">Save</a>
-									                    </div>
-									                  </div>
-									                </div>
-									              </div>
-									            </div>
-									            <div class="ActionButton">
-									              <div class="LightBlueStyle">
-									                <div class="ButtonLeft">
-									                  <div class="ButtonRight">
-									                    <div class="ButtonMiddle">
-									                      <a href="#">Reset</a>
-									                    </div>
-									                  </div>
-									                </div>
-									              </div>
-									            </div>
-										        </div>
-										      </div>
-										    </div>
-										  </div>
-									  </form>
-	        				</div>
-	        			</div>
-							</div>
-							<div class="UIAction">
-				      	<div class="ActionContainer">
-			            <div class="ActionButton">
-			              <div class="LightBlueStyle">
-										  <div class="ButtonLeft">
-											  <div class="ButtonRight">
-											    <div class="ButtonMiddle">
-										        <a href="#">Close</a>
-											    </div>
-										    </div>
-											</div>
-										</div>
-									</div>
-		          	</div>
-	 	        	</div>
-						</div>
-
-					</div>
-				</div>
-			</div>
-		</div>
-  	<div class="BottomLeftCornerDecorator">
-	 		<div class="BottomRightCornerDecorator">
-	   	  <div class="BottomCenterDecorator">
-					<div class="ResizeButton"><span/></div>
-				</div>
-	  	</div>
-  	</div>
-	</div>
+<div class="UIAutoPruning">
+  <div class="AutoPruningContainer">
+    <div class="UIForm">
+      <div class="AutoPruningList">
+        
+        <table cellspacing="0" borderspacing="0" id="UIGrid" class="UIGrid">
+          <thead>
+            <tr>
+              <th>Thread</th>
+              <th>Age of Thread (Days)</th>
+              <th>Frequency (Posts)</th>
+              <th>Action</th>
+             </tr>
+          </thead>
+          <tbody>
+             <tr class="EvenRow">
+              <td class="text">eXo VN Vactions</td>
+              <td class="text">3</td>
+              <td class="text">2</td>
+              <td>         
+                <div style="margin: 0px auto;" class="ActionContainer">
+                  <div style="margin: auto;" class="OverflowContainer">          
+                    <a title="Edit Page" href="#" class="EditInfoIcon"><span/></a>              
+                    <a title="Delete Page" href="#" class="DeleteIcon"><span/></a>              
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr class="OddRow">
+              <td class="text">eXo VN Sports Activities</td>
+              <td class="text">3</td>
+              <td class="text">2</td>
+              <td>         
+                <div style="margin: 0px auto;" class="ActionContainer">
+                  <div style="margin: auto;" class="OverflowContainer">          
+                    <a title="Edit Page" href="#" class="EditInfoIcon"><span/></a>              
+                    <a title="Delete Page" href="#" class="DeleteIcon"><span/></a>              
+                  </div>
+                 </div>
+              </td>
+            </tr>
+             <tr class="EvenRow">
+              <td class="text">CSS and HTML in Design Team</td>
+              <td class="text">3</td>
+              <td class="text">2</td>
+              <td>         
+                <div style="margin: 0px auto;" class="ActionContainer">
+                  <div style="margin: auto;" class="OverflowContainer">          
+                    <a title="Edit Page" href="#" class="EditInfoIcon"><span/></a>              
+                    <a title="Delete Page" href="#" class="DeleteIcon"><span/></a>              
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr class="OddRow">
+              <td class="text">Specs for Forums and Calendar in Collaboration Suite</td>
+              <td class="text">3</td>
+              <td class="text">2</td>
+              <td>         
+                <div style="margin: 0px auto;" class="ActionContainer">
+                  <div style="margin: auto;" class="OverflowContainer">          
+                    <a title="Edit Page" href="#" class="EditInfoIcon"><span/></a>              
+                    <a title="Delete Page" href="#" class="DeleteIcon"><span/></a>              
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr class="EvenRow">
+              <td class="text">Java Trainoing for eXo Java developers</td>
+              <td class="text">3</td>
+              <td class="text">2</td>
+              <td>         
+                <div style="margin: 0px auto;" class="ActionContainer">
+                  <div style="margin: auto;" class="OverflowContainer">          
+                    <a title="Edit Page" href="#" class="EditInfoIcon"><span/></a>              
+                    <a title="Delete Page" href="#" class="DeleteIcon"><span/></a>              
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="UIPageIterator">
+          <div class="PageIteratorContainer">
+             <div class="RightPageIteratorBlock">
+              <a title="Back 10 pages" class="Icon DisableLastTopPageIcon"></a>        
+              <a title="Previous Page" class="Icon DisableLastPageIcon"><span></span></a>
+              <div class="Number">
+                <a class="PageSelected" href="#">1</a>
+                <a href="#">2</a>
+                <a href="#">3</a>
+              </div>
+              <a title="Next Page" class="Icon NextPageIcon" href="#"></a>
+              <a title="Next 10 pages" class="Icon DisableNextTopPageIcon"><span></span></a>
+              <div style="clear: left;"><span><span/></div>
+            </div>
+              <div class="LeftPageIteratorBlock">
+                <div class="TotalPages">Total pages:</div>
+                <div class="PagesTotalNumber">3</div>
+                <div style="clear: left;"><span></span></div>
+              </div>
+          </div>
+          <div style="clear: right;"><span></span></div>
+        </div>
+      </div>
+    <div style="clear: left;"><span></span></div>
+  </div>
+  <div class="AddAutoPruning">
+    <div class="UIFormWithTitle UIMembershipTypeForm">
+      <div class="TitleBar">Add Thread Auto-Pruning</div>
+        <div class="UIForm">
+          <div class="HorizontalLayout">
+             <div class="FormContainer">
+               <table class="UIFormGrid">
+                <tbody>
+                  <tr>
+                    <td class="FieldLabel">Choose Thread:</td>
+                    <td class="FieldComponent">
+                      <select name="user.gender" class="selectbox">
+                        <option value="" selected="selected">eXo VN Lifestyles</option>
+                      </select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="FieldLabel">Age of Thread: </td>
+                    <td class="FieldComponent"><input type="text" id="name" name="name"/></td>
+                  </tr>
+                  <tr>
+                    <td class="FieldLabel">Frequency(Less than): </td>
+                    <td class="FieldComponent"><input type="text" id="name" name="name"/></td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="UIAction"> 
+                <div class="ActionContainer">
+                  <div class="ActionButton">
+                    <div class="LightBlueStyle">
+                      <div class="ButtonLeft">
+                        <div class="ButtonRight">
+                          <div class="ButtonMiddle">
+                            <a href="#">Save</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="ActionButton">
+                    <div class="LightBlueStyle">
+                      <div class="ButtonLeft">
+                        <div class="ButtonRight">
+                          <div class="ButtonMiddle">
+                            <a href="#">Reset</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="UIAction">
+    <div class="ActionContainer">
+      <div class="ActionButton">
+        <div class="LightBlueStyle">
+          <div class="ButtonLeft">
+            <div class="ButtonRight">
+              <div class="ButtonMiddle">
+                <a href="#">Close</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

@@ -1,0 +1,52 @@
+.UITagForm {
+	width: 200px; 
+	padding: 10px;
+}
+
+.UITagForm .TagContent {
+	border: 1px solid #a5a5a5;
+}
+
+.UITagForm .TagControlBar {
+	background: url('background/BgTitleTag1x25.gif') repeat-x;
+	line-height: 25px;
+	padding: 0px 5px 0px 10px;
+}
+
+.UITagForm .TagTitle {
+	float: left;
+	font-weight: bold;
+}
+
+.UITagForm .TagIcon {
+	float: right;
+	margin: 5px 3px;
+}
+
+.UITagForm .TagsList {
+	padding: 10px 1px 20px 1px;
+}
+
+.UITagForm .TagsList a {
+	line-height: 20px;
+	color: #3d3d3d;
+	display: block;
+}
+
+.UITagForm .TagsList a:hover {
+	color: #126ca5;
+}
+
+.UITagForm .TagsList .IconHolder {
+	line-height: 26px;
+	padding-left: 32px;
+	background-position: 10px center;
+}
+
+.UITagForm .TagsList .Selected {
+	background: #e8e8ef url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/RedTagIcon.gif') no-repeat 10px center;
+}
+
+.UITagForm .UIAction {
+	width: 120px;
+}
