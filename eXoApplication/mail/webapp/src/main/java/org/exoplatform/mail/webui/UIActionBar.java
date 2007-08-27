@@ -36,6 +36,8 @@ import org.exoplatform.webui.event.EventListener;
     events = {
         @EventConfig(listeners = UIActionBar.ComposeActionListener.class),
         @EventConfig(listeners = UIActionBar.CheckMailActionListener.class),
+        @EventConfig(listeners = UIActionBar.AddressActionListener.class),
+        @EventConfig(listeners = UIActionBar.AddEventActionListener.class),
         @EventConfig(listeners = UIActionBar.RssActionListener.class),
         @EventConfig(listeners = UIActionBar.ContactActionListener.class),
         @EventConfig(listeners = UIActionBar.MailSettingsActionListener.class)
@@ -108,7 +110,33 @@ public class UIActionBar extends UIContainer {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }
   }
-
+  
+  static public class AddressActionListener extends EventListener<UIActionBar> {
+    public void execute(Event<UIActionBar> event) throws Exception {
+      UIActionBar uiActionBar = event.getSource() ; 
+      System.out.println(" =========== > AddAddressActionListener");
+    }
+  }
+  static public class AddEventActionListener extends EventListener<UIActionBar> {
+    public void execute(Event<UIActionBar> event) throws Exception {
+      UIActionBar uiActionBar = event.getSource() ; 
+      System.out.println(" =========== > AddEventActionListener");
+    }
+  }
+  static public class RssActionListener extends EventListener<UIActionBar> {
+    public void execute(Event<UIActionBar> event) throws Exception {
+      UIActionBar uiActionBar = event.getSource() ; 
+      System.out.println(" =========== > RssActionListener");
+    }
+  }
+  static public class ChangeViewActionListener extends EventListener<UIActionBar> {
+    public void execute(Event<UIActionBar> event) throws Exception {
+      UIActionBar uiActionBar = event.getSource() ; 
+      System.out.println(" =========== > ChangeViewActionListener");
+      String viewType = event.getRequestContext().getRequestParameter(OBJECTID) ;  
+      System.out.println(" =========== > viewType " + viewType);
+    }
+  }
   static public class MailSettingsActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {
       UIActionBar uiActionBar = event.getSource() ; 
@@ -126,9 +154,4 @@ public class UIActionBar extends UIContainer {
     }
   }
 
-  static public class RssActionListener extends EventListener<UIActionBar> {
-    public void execute(Event<UIActionBar> event) throws Exception {
-      UIActionBar uiActionBar = event.getSource() ;      
-    }
-  }
 }

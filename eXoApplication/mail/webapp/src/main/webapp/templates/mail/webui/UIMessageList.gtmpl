@@ -1,4 +1,10 @@
-<div class="UIMessageList">
+<%
+ import org.exoplatform.mail.service.Message;
+ String compId = uicomponent.getId() ;
+ 
+%>
+
+<div class="UIMessageList" id="$compId">
 	<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
   	<thead>
   		<tr>
@@ -21,6 +27,22 @@
   	 	</tr>
   	</thead>
   	<tbody>
+  	<%
+			for(Message msg : uicomponent.getMessageByFolder()) {
+		%>
+		<tr class="NormalItem">
+	  		<td><input type="checkbox" class="checkbox" value="4" onclick="eXo.mail.UIMailPortlet.selectItem(this) ;"/></td>
+				<td style="padding: 0px auto;"><div class="StarredIcon" onclick="eXo.mail.UIMailPortlet.setStars(this) ;" ><span></span></div></td>
+				<td class="text"><%=msg.getFrom()%></td>
+				<td style="padding: 0px auto;"></td>
+				<td style="padding: 0px; border-right: 1px solid #ffffff;"></td>
+				<td class="text"><%=msg.getSubject()%></td>
+				<td class="text">(5)</td>
+				<td class="text"><%=msg.getSendDate()%></td>
+				<td>10K</td>
+				<td style="padding: 0px;" class="text"></td>
+   	 </tr>
+		<%}%>
   		<tr class="NormalItem">
 	  		<td><input type="checkbox" class="checkbox" value="4" onclick="eXo.mail.UIMailPortlet.selectItem(this) ;"/></td>
 				<td style="padding: 0px auto;"><div class="StarredIcon" onclick="eXo.mail.UIMailPortlet.setStars(this) ;" ><span></span></div></td>

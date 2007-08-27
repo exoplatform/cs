@@ -4,6 +4,14 @@
  **************************************************************************/
 package org.exoplatform.mail.webui ;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.exoplatform.mail.service.Folder;
+import org.exoplatform.mail.service.MailService;
+import org.exoplatform.mail.service.Message;
+import org.exoplatform.mail.service.MessageFilter;
+import org.exoplatform.mail.service.MessageHeader;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIComponent;
@@ -27,9 +35,37 @@ import org.exoplatform.webui.event.EventListener;
 )
 
 public class UIMessageList extends UIComponent {
+  private String selectedMessageId_ = null ;
+  private String selectedFolderId_ = null ;
+
   public UIMessageList() throws Exception {}
+
+  protected String getSelectedMessageId() {return selectedMessageId_ ;}
+  protected void setSelectedMessageId(String messageId) {selectedMessageId_ = messageId ;}
+  
+  protected String getSelectedFolderId() {return selectedFolderId_ ;}
+  protected void setSelectedFolderId(String folderId) {selectedFolderId_ = folderId ;}
   
   
+  protected List<Message> getMessageByFolder() throws Exception {
+    List<Message> messageList = new ArrayList<Message>() ;
+    if(getSelectedFolderId() != null) {
+      MailService mailSvr = getApplicationComponent(MailService.class) ;
+      String username = getAncestorOfType(UIMailPortlet.class).getCurrentUser() ;
+      String accountId = getAncestorOfType(UIMailPortlet.class).
+      findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
+      MessageFilter filter = new MessageFilter("filterByFolder") ;
+      Folder folder = mailSvr.getFolder(username, accountId, getSelectedFolderId()) ;
+      filter.setFolder(new String[]{folder.getName()}) ;
+      filter.setAccountId(accountId) ;
+      List<MessageHeader> messageHeaders = new ArrayList<MessageHeader>() ;
+      messageHeaders.addAll(mailSvr.getMessages(username, filter)) ;
+      for(MessageHeader mh : messageHeaders) {
+        messageList.add((Message)mh) ;
+      }
+    }
+    return messageList ;
+  }
   static public class SelectMessageActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
       String path = event.getRequestContext().getRequestParameter(OBJECTID) ;      

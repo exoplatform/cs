@@ -7,7 +7,11 @@ package org.exoplatform.mail.webui.popup;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.exoplatform.mail.service.Attachment;
+import org.exoplatform.mail.service.MailService;
+import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.webui.UIMailPortlet;
+import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.mail.webui.Utils;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -51,18 +55,18 @@ import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
 public class UIComposeForm extends UIForm implements UIPopupComponent{
   final static public String FIELD_FROM_INPUT = "fromInput" ;
   final static public String FIELD_FROM = "from" ;
+  final static public String FIELD_SUBJECT = "subject" ;
   final static public String FIELD_TO = "to" ;
   final static public String FIELD_CC = "cc" ;
   final static public String FIELD_BCC = "bcc" ;
-  final static public String FIELD_SUBJECT = "subject" ;
   final static public String FIELD_ATTACHMENTS = "attachments" ;
   final static public String FIELD_MESSAGECONTENT = "messageContent" ;
   final static public String ACT_TO = "To" ;
   final static public String ACT_CC = "ToCC" ;
   final static public String ACT_BCC = "ToBCC" ;
   final static public String ACT_REMOVE = "remove" ;
-  List<ActionData> uploadedFiles_ = new ArrayList<ActionData>() ;
-  
+  List<Attachment> attachments_ = new ArrayList<Attachment>() ;
+
   public UIComposeForm() throws Exception {
     UIFormInputWithActions inputSet = new UIFormInputWithActions(FIELD_FROM_INPUT); 
     List<SelectItemOption<String>>  options = new ArrayList<SelectItemOption<String>>() ;
@@ -74,7 +78,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
     toAction.setActionName(ACT_TO);    
     actions.add(toAction);
     inputSet.setActionField(FIELD_TO, actions) ;
-    
+
     actions = new ArrayList<ActionData>() ;
     ActionData ccAction = new ActionData() ;
     ccAction.setActionListener(ACT_CC) ;
@@ -82,7 +86,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
     ccAction.setActionName(ACT_CC);
     actions.add(ccAction);
     inputSet.setActionField(FIELD_CC, actions) ;
-    
+
     actions = new ArrayList<ActionData>() ;
     ActionData bccAction = new ActionData() ;
     bccAction.setActionListener(ACT_BCC) ;
@@ -90,15 +94,13 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
     bccAction.setActionName(ACT_BCC);    
     actions.add(bccAction);
     inputSet.setActionField(FIELD_BCC, actions) ;
-    
-    
-    
 
+    inputSet.addUIFormInput(new UIFormStringInput(FIELD_SUBJECT, null, null)) ;
     inputSet.addUIFormInput(new UIFormStringInput(FIELD_TO, null, null)) ;
     inputSet.addUIFormInput(new UIFormStringInput(FIELD_CC, null, null)) ;
     inputSet.addUIFormInput(new UIFormStringInput(FIELD_BCC, null, null)) ;
     inputSet.addUIFormInput(new UIFormInputInfo(FIELD_ATTACHMENTS, FIELD_ATTACHMENTS, null)) ;
-   
+
     inputSet.setActionField(FIELD_ATTACHMENTS, getUploadFileList()) ;
 
     addUIFormInput(inputSet) ;
@@ -106,50 +108,70 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
   }
 
   public List<ActionData> getUploadFileList() { 
-    return uploadedFiles_ ;
+    List<ActionData> uploadedFiles = new ArrayList<ActionData>() ;
+    for(Attachment attachdata : attachments_) {
+      ActionData fileUpload = new ActionData() ;
+      fileUpload.setActionListener("") ;
+      fileUpload.setActionType(ActionData.TYPE_ICON) ;
+      fileUpload.setCssIconClass("AttachmentIcon ZipFileIcon") ;
+      fileUpload.setActionName(attachdata.getName() + " ("+attachdata.getSize()+" Kb)" ) ;
+      fileUpload.setShowLabel(true) ;
+      uploadedFiles.add(fileUpload) ;
+      ActionData removeAction = new ActionData() ;
+      removeAction.setActionListener("RemoveAttachment") ;
+      removeAction.setActionName(ACT_REMOVE) ;
+      removeAction.setActionType(ActionData.TYPE_LINK) ;
+      removeAction.setBreakLine(true) ;
+      uploadedFiles.add(removeAction) ;
+    }
+    return uploadedFiles ;
   }
-  public void setUploadFileList(String fileName, String fileSize,String mimeType) throws Exception {
-    ActionData fileUpload = new ActionData() ;
-    fileUpload.setActionListener("") ;
-    fileUpload.setActionType(ActionData.TYPE_ICON) ;
-    fileUpload.setCssIconClass("AttachmentIcon ZipFileIcon") ;
-    fileUpload.setActionName(fileName + " ("+fileSize+")" ) ;
-    fileUpload.setShowLabel(true) ;
-    uploadedFiles_.add(fileUpload) ;
-    ActionData removeAction = new ActionData() ;
-    removeAction.setActionListener("RemoveAttachment") ;
-    removeAction.setActionName(ACT_REMOVE) ;
-    removeAction.setActionType(ActionData.TYPE_LINK) ;
-    removeAction.setBreakLine(true) ;
-    uploadedFiles_.add(removeAction) ;
+  public void refreshUploadFileList() throws Exception {
     UIFormInputWithActions inputSet = getChildById(FIELD_FROM_INPUT) ;
-    inputSet.setActionField(FIELD_ATTACHMENTS, uploadedFiles_) ;
+    inputSet.setActionField(FIELD_ATTACHMENTS, getUploadFileList()) ;
+  }
+  public void addUploadFileList(Attachment attachfile) {
+    attachments_.add(attachfile) ;
+  }
+  public void removeUploadFileList() {
+    attachments_.clear() ;
+  }
+  public List<Attachment> getAttachFileList() {
+    return attachments_ ;
   }
   public String getFieldFromValue() {
     UIFormInputWithActions inputSet = getChildById(FIELD_FROM_INPUT) ;
     return inputSet.getUIFormSelectBox(FIELD_FROM).getValue() ;
   }
-  
+
   public void setFieldFromValue(List<SelectItemOption<String>> options) {
     UIFormInputWithActions inputSet = getChildById(FIELD_FROM_INPUT) ;
     inputSet.getUIFormSelectBox(FIELD_FROM).setOptions(options) ;
   }
-   
+
+  public String getFieldSubjectValue() {
+    UIFormInputWithActions inputSet = getChildById(FIELD_FROM_INPUT) ;
+    return inputSet.getUIStringInput(FIELD_SUBJECT).getValue() ;
+  }
+  public void setFieldSubjectValue(String value) {
+    UIFormInputWithActions inputSet = getChildById(FIELD_FROM_INPUT) ;
+    inputSet.getUIFormSelectBox(FIELD_SUBJECT).setValue(value) ;
+  }
   public String getFieldToValue() {
     UIFormInputWithActions inputSet = getChildById(FIELD_FROM_INPUT) ;
     return inputSet.getUIStringInput(FIELD_TO).getValue() ;
   }
-   
+
   public String getFieldCcValue() {
     UIFormInputWithActions inputSet = getChildById(FIELD_FROM_INPUT) ;
     return inputSet.getUIStringInput(FIELD_CC).getValue() ;
   }
-   
+
   public String getFieldBccValue() {
     UIFormInputWithActions inputSet = getChildById(FIELD_FROM_INPUT) ;
     return inputSet.getUIStringInput(FIELD_BCC).getValue() ;
   }
-   
+
   public String getFieldAttachmentsValue() {
     UIFormInputWithActions inputSet = getChildById(FIELD_FROM_INPUT) ;
     return inputSet.getUIFormInputInfo(FIELD_ATTACHMENTS).getValue() ;
@@ -171,7 +193,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
     // TODO Auto-generated method stub
 
   }
-   
+
   static  public class SendActionListener extends EventListener<UIComposeForm> {
     public void execute(Event<UIComposeForm> event) throws Exception {
       UIComposeForm uiForm = event.getSource() ;
@@ -182,6 +204,38 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
+      String from = uiForm.getFieldFromValue() ;
+      String subject = uiForm.getFieldSubjectValue() ;
+      String to = uiForm.getFieldToValue() ;
+      String cc = uiForm.getFieldCcValue() ;
+      String bcc = uiForm.getFieldBccValue() ;
+      String body = uiForm.getFieldMessageContentValue() ;
+      UIMailPortlet uiPortlet = uiForm.getAncestorOfType(UIMailPortlet.class) ;
+      UISelectAccount uiSelectAcc = uiPortlet.findFirstComponentOfType(UISelectAccount.class) ;
+      String accountId = uiSelectAcc.getSelectedValue() ;
+      MailService mailSvr = uiForm.getApplicationComponent(MailService.class) ;
+      try {
+        Message message = new Message() ;
+        message.setAccountId(accountId) ;
+        message.setAttachements(uiForm.getAttachFileList()) ;
+        message.setFrom(from) ;
+        message.setSubject(subject) ;
+        message.setMessageTo(to) ;
+        message.setMessageCc(cc) ;
+        message.setMessageBcc(bcc) ;
+        message.setMessageBody(body) ;
+        mailSvr.sendMessage(message) ;
+        UIPopupAction uiChildPopup = uiForm.getAncestorOfType(UIPopupAction.class) ;
+        uiChildPopup.deActivate() ;
+      }catch (Exception e) {
+        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.send-mail-error", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        e.printStackTrace() ;
+        return ;
+      }
+      uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.send-mail-succsessfuly", null)) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet) ;
     }
   }
   static  public class SaveDraftActionListener extends EventListener<UIComposeForm> {

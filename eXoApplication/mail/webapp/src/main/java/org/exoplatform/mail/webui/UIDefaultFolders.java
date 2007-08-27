@@ -72,11 +72,15 @@ public class UIDefaultFolders extends UIContainer {
       System.out.println("\n\n ChangeFolderActionListener");
       String folderId = event.getRequestContext().getRequestParameter(OBJECTID) ;  
       UIDefaultFolders uiDFolder = event.getSource() ;
+      UIMailPortlet uiPortlet = uiDFolder.getAncestorOfType(UIMailPortlet.class);
       UIFolderContainer uiFolderContainer = uiDFolder.getAncestorOfType(UIFolderContainer.class) ;
       UICustomizeFolders uiCFolder = uiFolderContainer.getChild(UICustomizeFolders.class) ;
       uiDFolder.setSelectedFolder(folderId) ;
+      UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
+      uiMessageList.setSelectedFolderId(folderId) ;
       uiCFolder.setSelectedFolder(null) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList) ;
     }
   }
   static public class RemoveAllMessagesActionListener extends EventListener<UIDefaultFolders> {

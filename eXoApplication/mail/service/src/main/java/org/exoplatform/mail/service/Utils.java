@@ -4,6 +4,9 @@
  **************************************************************************/
 package org.exoplatform.mail.service;
 
+import javax.mail.Session;
+import javax.mail.Transport;
+
 
 /**
  * Created by The eXo Platform SARL
@@ -12,10 +15,25 @@ package org.exoplatform.mail.service;
  * Aug 20, 2007  
  */
 public class Utils {
+  
+   
+  
+  public static final String SVR_SMTP_AUTH = "mail.smtp.auth".intern() ;
+  public static final String SVR_SMTP_SOCKETFACTORY_FALLBACK = "mail.smtp.socketFactory.fallback".intern() ;
+  public static final String SVR_SMTP_SOCKETFACTORY_PORT = "mail.smtp.socketFactory.port".intern() ;
+  public static final String SVR_SMTP_SOCKETFACTORY_CLASS = "mail.smtp.socketFactory.class".intern() ;
+  public static final String SVR_SSL_CLASSNAME = "javax.net.ssl.SSLSocketFactory".intern() ;
+  public static final String SVR_MAIL_SMTP_DEBUG = "mail.smtp.debug".intern() ;
+  public static final String SVR_MAIL_DEBUG = "mail.debug".intern() ;
+  public static final String SVR_SMTP_STARTTLS_ENABLE = "mail.smtp.starttls.enable".intern() ;
+  public static final String SVR_SMTP = "smtp" ;
   public static final String SVR_PROTOCOL = "protocol".intern() ;
-  public static final String SVR_SMTP = "mail.smtp.host".intern() ;
-  public static final String SVR_HOST = "host".intern() ;
-  public static final String SVR_PORT = "port".intern() ;
+  public static final String SVR_SMTP_HOST = "mail.smtp.host".intern() ;
+  public static final String SVR_SMTP_PORT = "mail.smtp.port".intern() ;  
+  public static final String SVR_SMTP_USER = "mail.smtp.user".intern() ;
+  public static final String SVR_SMTP_PASSWORD = "mail.smtp.user".intern() ;
+  public static final String SVR_POP_HOST = "host".intern() ;
+  public static final String SVR_POP_PORT = "port".intern() ;
   public static final String SVR_FOLDER = "folder".intern() ;
   public static final String SVR_USERNAME = "username".intern() ;
   public static final String SVR_PASSWORD = "password".intern() ; 
@@ -25,6 +43,7 @@ public class Utils {
   public static final String KEY_MESSAGE = "Messages".intern() ;
   public static final String KEY_TAGS = "Tags".intern() ;
   public static final String KEY_ACCOUNT = "account".intern() ;
+  public static final String KEY_HEADER = "mailHeader".intern() ;
   
   public static final String EXO_ACCOUNT = "exo:account".intern() ;
   public static final String EXO_ID = "exo:id".intern() ;
@@ -42,7 +61,7 @@ public class Utils {
   public static final String EXO_TAGS = "exo:tags".intern() ;
   public static final String EXO_FOLDERS = "exo:folders".intern() ;
   public static final String EXO_PERSONAL = "exo:personal".intern() ;
-  public static final String EXO_RECEIVEDDATE = "exo:receivedDate".intern() ;
+  public static final String EXO_RECEIVEDDATE = "exo:receivedDate".intern() ; 
   public static final String EXO_SENDDATE = "exo:sendDate".intern() ;
   public static final String EXO_SERVERPROPERTIES = "exo:serverProperties".intern() ;
   public static final String EXO_MESSAGE = "exo:message".intern() ;
@@ -60,7 +79,7 @@ public class Utils {
   public static final String JCR_MIMETYPE = "jcr:mimeType".intern() ;
   public static final String JCR_DATA = "jcr:data".intern() ;
   
-  
+  public static final String MIMETYPE_TEXTPLAIN = "text/plain".intern() ;
   
   
 }

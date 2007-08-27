@@ -17,6 +17,7 @@ import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.mail.Multipart;
 import javax.mail.Part;
+import javax.mail.Session;
 import javax.mail.Store;
 import javax.mail.Transport;
 import javax.mail.URLName;
@@ -33,8 +34,10 @@ import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.MessageHeader;
+import org.exoplatform.mail.service.Utils;
 import org.exoplatform.registry.JCRRegistryService;
 import org.exoplatform.services.jcr.RepositoryService;
+
 /**
  * Created by The eXo Platform SARL
  * Author : Tuan Nguyen
@@ -116,32 +119,61 @@ public class MailServiceImpl implements MailService{
     storage_.saveMessage(username, accountId, message, isNew);
   }
 
-  public void sendMessage(Message message) throws Exception {
-    // sends an email with the parameters from message
+  public void sendMessage(String username, Message message) throws Exception {
+    String accountId = message.getAccountId() ;
+    Account acc = getAccountById(username, accountId) ;
+    acc.getServerProperties().get(Utils.SVR_SMTP_USER) ;
+    String from = message.getFrom() ;
+    String host = acc.getServerProperties().get(Utils.SVR_SMTP_HOST) ;
+    String port  = acc.getServerProperties().get(Utils.SVR_SMTP_PORT) ;
     Properties props = new Properties();
-    props.put("mail.smtp.host", "smtp.jcom.net");
-    javax.mail.Session session = javax.mail.Session.getDefaultInstance(props, null);
+    props.put(Utils.SVR_SMTP_USER, from) ;
+    props.put(Utils.SVR_SMTP_HOST, host) ;
+    props.put(Utils.SVR_SMTP_PORT, port) ;
+    if(Boolean.parseBoolean(acc.getServerProperties().get(Utils.SVR_SSL)))  props.put(Utils.SVR_SSL, "true");
+    props.put(Utils.SVR_SMTP_STARTTLS_ENABLE,"true");
+    props.put(Utils.SVR_SMTP_AUTH, "true");
+    props.put(Utils.SVR_SMTP_SOCKETFACTORY_PORT, port);
+    props.put(Utils.SVR_SMTP_SOCKETFACTORY_CLASS,  Utils.SVR_SSL_CLASSNAME);
+    props.put(Utils.SVR_SMTP_SOCKETFACTORY_FALLBACK, "false");
+    props.put(Utils.SVR_MAIL_DEBUG, acc.getServerProperties().get(Utils.SVR_MAIL_DEBUG));
+    props.put(Utils.SVR_MAIL_SMTP_DEBUG, acc.getServerProperties().get(Utils.SVR_MAIL_SMTP_DEBUG));
+    Session session = Session.getInstance(props, null);
+    Transport transport = session.getTransport(Utils.SVR_SMTP);
+    transport.connect(host, acc.getUserName(), acc.getPassword()) ;
     javax.mail.Message msg = new MimeMessage(session);
-    InternetAddress addressFrom = new InternetAddress("philippe.aristote@gmail.com");
+
+    InternetAddress addressFrom = new InternetAddress(message.getFrom());
     msg.setFrom(addressFrom);
-
-    InternetAddress[] addressTo = new InternetAddress[1];
-    addressTo[0] = new InternetAddress(message.getMessageTo());
-    msg.setRecipients(javax.mail.Message.RecipientType.TO, addressTo);
-
-    // Optional : You can also set your custom headers in the Email if you Want
-    msg.addHeader("MyHeaderName", "myHeaderValue");
-
-    // Setting the Subject and Content Type
+    String[] toMails = message.getMessageTo().split(";") ;
+    InternetAddress[] addressTo = null ;
+    if(toMails != null && toMails.length > 0) {
+      addressTo = new InternetAddress[toMails.length];
+      for(int i = 0 ; i < toMails.length ; i ++){
+        addressTo[i] = new InternetAddress(toMails[i]) ;
+      }
+    } else {
+      addressTo = new InternetAddress[1] ;
+      addressTo[0].setAddress(message.getMessageTo()) ;
+    }
+    msg.setRecipients(javax.mail.Message.RecipientType.CC,
+        InternetAddress.parse(message.getMessageCc(), true));
+    msg.setRecipients(javax.mail.Message.RecipientType.BCC,
+        InternetAddress.parse(message.getMessageBcc(), false));
     msg.setSubject(message.getSubject());
-    msg.setContent(message.getMessageBody(), "text/plain");
-    Transport.send(msg);
+    msg.setSentDate(message.getSendDate());
+    msg.setContent(message.getMessageBody(), Utils.MIMETYPE_TEXTPLAIN);
+    msg.saveChanges();
+    transport.sendMessage(msg, addressTo);
+
+  }
+  public void sendMessage(Message message) throws Exception {
   }
 
   public void addTag(String username, Message message, String tag) throws Exception {
     Node homeTags = storage_.getTagHome(username, message.getAccountId());
     if (!homeTags.hasNode(tag)) { // if the tag doesn't exist in jcr, we create it
-      homeTags.addNode(tag, "exo:tag");
+      homeTags.addNode(tag, Utils.EXO_TAGS);
     }
     // gets the tags from the message
     String[] tags = message.getTags();
@@ -164,8 +196,8 @@ public class MailServiceImpl implements MailService{
         // if we find the node representing the message, we modify its property tags.
         // since there is no id property in the message node, we use the received date information
         // to find the specified message (we consider that receivedDate is unique)
-        if (msg.getProperty("exo:receivedDate").getLong() == message.getReceivedDate().getTime()) {
-          msg.setProperty("exo:tags", newtags);
+        if (msg.getProperty(Utils.EXO_RECEIVEDDATE).getLong() == message.getReceivedDate().getTime()) {
+          msg.setProperty(Utils.EXO_TAGS, newtags);
           break;
         }
       }

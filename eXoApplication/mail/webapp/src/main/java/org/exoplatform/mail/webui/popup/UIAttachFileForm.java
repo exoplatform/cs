@@ -4,8 +4,9 @@
  **************************************************************************/
 package org.exoplatform.mail.webui.popup;
 
-import org.exoplatform.commons.utils.MimeTypeResolver;
+import org.exoplatform.mail.service.BufferAttachment;
 import org.exoplatform.mail.webui.UIMailPortlet;
+import org.exoplatform.upload.UploadResource;
 import org.exoplatform.upload.UploadService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -16,8 +17,6 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
-import org.exoplatform.webui.form.UIFormInputWithActions;
-import org.exoplatform.webui.form.UIFormMultiValueInputSet;
 import org.exoplatform.webui.form.UIFormUploadInput;
 
 /**
@@ -59,13 +58,14 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
       UIAttachFileForm uiForm = event.getSource();
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       UIFormUploadInput input = (UIFormUploadInput)uiForm.getUIInput(FIELD_UPLOAD);
-      if(input.getUploadResource() == null) {
+      UploadResource uploadResource = input.getUploadResource() ;
+      if(uploadResource == null) {
         uiApp.addMessage(new ApplicationMessage("UIAttachFileForm.msg.fileName-error", null, 
             ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-      String fileName = input.getUploadResource().getFileName() ;
+      String fileName = uploadResource.getFileName() ;
       if(fileName == null || fileName.equals("")) {
         uiApp.addMessage(new ApplicationMessage("UIAttachFileForm.msg.fileName-error", null, 
             ApplicationMessage.WARNING)) ;
@@ -74,16 +74,18 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
       }
       UIPopupActionContainer uiPopupActionContainer = uiForm.getAncestorOfType(UIPopupActionContainer.class) ;
       try {
-        byte[] content = input.getUploadData() ;
-        MimeTypeResolver mimeTypeSolver = new MimeTypeResolver() ;
-        String mimeType = mimeTypeSolver.getMimeType(fileName) ;
-        String fileSize = String.valueOf((((float)(content.length/100))/10)) +" Kb";     
-        String[] arrValues = {fileName, fileSize +" Kb", mimeType} ;
-        UploadService uploadService = uiForm.getApplicationComponent(UploadService.class) ;
-        UIFormUploadInput uiChild = uiForm.getChild(UIFormUploadInput.class) ;
-        uploadService.removeUpload(uiChild.getUploadId()) ;
         UIComposeForm uiComposeForm = uiPopupActionContainer.getChild(UIComposeForm.class) ;
-        uiComposeForm.setUploadFileList(fileName, fileSize, mimeType) ;
+        BufferAttachment attachfile = new BufferAttachment() ;
+         attachfile.setName(uploadResource.getFileName()) ;
+         attachfile.setInputStream( input.getUploadDataAsStream()) ;
+         attachfile.setMimeType(uploadResource.getMimeType()) ;
+        byte[] content = input.getUploadData() ;
+         String fileSize = String.valueOf((((int)(content.length/100))/10));  
+         attachfile.setSize(Long.parseLong(fileSize)) ;
+         uiComposeForm.addUploadFileList(attachfile) ;
+         uiComposeForm.refreshUploadFileList() ;
+         UploadService uploadService = uiForm.getApplicationComponent(UploadService.class) ;
+         uploadService.removeUpload(input.getUploadId()) ;
       } catch(Exception e) {
         uiApp.addMessage(new ApplicationMessage("UIAttachFileForm.msg.upload-error", null, 
             ApplicationMessage.WARNING)) ;

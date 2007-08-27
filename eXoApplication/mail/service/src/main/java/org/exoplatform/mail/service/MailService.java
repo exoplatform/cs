@@ -208,6 +208,13 @@ public interface MailService {
    */
   public void sendMessage(Message message) throws Exception ;
   /**
+   * This method should send out the message
+   * @param username
+   * @param message
+   * @throws Exception
+   */
+  public void sendMessage(String username, Message message) throws Exception ;
+  /**
    * This method should check  for the new message in the mail server, download and save them in the 
    * Inbox folder
    * @param username

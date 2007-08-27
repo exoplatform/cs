@@ -22,7 +22,8 @@ import org.exoplatform.webui.form.UIFormStringInput;
     lifecycle = UIFormLifecycle.class,
     template = "app:/templates/mail/webui/UISearchForm.gtmpl",
     events = {
-      @EventConfig(listeners = UISearchForm.SearchActionListener.class)      
+      @EventConfig(listeners = UISearchForm.SearchActionListener.class),
+      @EventConfig(listeners = UISearchForm.AdvancedSearchActionListener.class)
     }
 )
 public class UISearchForm extends UIForm {
@@ -35,6 +36,13 @@ public class UISearchForm extends UIForm {
   static  public class SearchActionListener extends EventListener<UISearchForm> {
     public void execute(Event<UISearchForm> event) throws Exception {
       UISearchForm uiForm = event.getSource() ;
+      System.out.println("========> SearchActionListener");
+    }
+  }
+  static  public class AdvancedSearchActionListener extends EventListener<UISearchForm> {
+    public void execute(Event<UISearchForm> event) throws Exception {
+      UISearchForm uiForm = event.getSource() ;
+      System.out.println("========> AdvancedSearchActionListener");
     }
   }
 }

@@ -6,6 +6,7 @@ package org.exoplatform.mail.service.test;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -16,6 +17,7 @@ import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.MessageHeader;
+import org.exoplatform.mail.service.Utils;
 
 /**
  * Created by The eXo Platform SARL
@@ -34,7 +36,7 @@ public class TestMailService extends BaseMailTestCase{
     //assertNotNull(mailHomeNode_) ;
     //Add new account
     Account myaccount = new Account() ;
-    myaccount.setId("myId") ;
+    //myaccount.setId("myId") ;
     myaccount.setLabel("My Google Mail") ;
     myaccount.setUserDisplayName("Hung Nguyen") ;
     myaccount.setEmailAddress("nguyenkequanghung@gmail.com") ;
@@ -48,10 +50,23 @@ public class TestMailService extends BaseMailTestCase{
     myaccount.setServerProperty("port", "995"); // POP3 : 110, POP3 (SSL) : 995, IMAP : 143, IMAP (SSL) : 993
     myaccount.setServerProperty("protocol", "pop3"); // pop3 or imap
     myaccount.setServerProperty("ssl", "true");
+    
+    myaccount.setServerProperty("mail.smtp.user", "exomailtest@gmail.com");
+    myaccount.setServerProperty("mail.smtp.host", "smtp.gmail.com");
+    myaccount.setServerProperty("mail.smtp.port", "465");
+    myaccount.setServerProperty("ssl", "true");
+    myaccount.setServerProperty("mail.smtp.debug", "true");
+    myaccount.setServerProperty("mail.debug", "true");
+    myaccount.setServerProperty("mail.smtp.starttls.enable","true");
+    myaccount.setServerProperty("mail.smtp.auth", "true");
+    myaccount.setServerProperty("mail.smtp.socketFactory.port", "465");
+    myaccount.setServerProperty("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+    myaccount.setServerProperty("mail.smtp.socketFactory.fallback", "false");
+    
     mailService_.createAccount("hungnguyen", myaccount) ;
     //assert added account
-    assertNotNull(mailService_.getAccountById("hungnguyen", "accountmyId")) ;
-    assertEquals("my sign", mailService_.getAccountById("hungnguyen", "accountmyId").getSignature());
+    assertNotNull(mailService_.getAccountById("hungnguyen", myaccount.getId())) ;
+    assertEquals("my sign", mailService_.getAccountById("hungnguyen", myaccount.getId()).getSignature());
     List<Account> accounts = mailService_.getAccounts("hungnguyen") ;
     assertEquals(accounts.size(), 1) ;
     
@@ -60,7 +75,7 @@ public class TestMailService extends BaseMailTestCase{
     myaccount.setLabel("new gmail");
     mailService_.updateAccount("hungnguyen", myaccount);
     //assert account updated
-    assertEquals("new gmail", mailService_.getAccountById("hungnguyen", "accountmyId").getLabel());
+    assertEquals("new gmail", mailService_.getAccountById("hungnguyen", myaccount.getId()).getLabel());
     
     //delete account
     //mailService_.removeAccount("hungnguyen", myaccount);
@@ -74,15 +89,15 @@ public class TestMailService extends BaseMailTestCase{
     folder.setLabel("homefolder");
     folder.setName("INBOX");
     folder.setNumberOfUnreadMessage(0);
-    mailService_.saveUserFolder("hungnguyen", "accountmyId", folder);
+    mailService_.saveUserFolder("hungnguyen", myaccount.getId(), folder);
     // assert folder created
-    assertNotNull(mailService_.getFolder("hungnguyen", "accountmyId", "INBOX"));
+    assertNotNull(mailService_.getFolder("hungnguyen", myaccount.getId(), "INBOX"));
 
     // update folder
     folder.setLabel("Inbox folder");
-    mailService_.saveUserFolder("hungnguyen", "accountmyId", folder);
+    mailService_.saveUserFolder("hungnguyen", myaccount.getId(), folder);
     // assert folder modified
-    assertEquals("Inbox folder", mailService_.getFolder("hungnguyen", "accountmyId", "INBOX").getLabel());
+    assertEquals("Inbox folder", mailService_.getFolder("hungnguyen",myaccount.getId(), "INBOX").getLabel());
     
     // delete folder
     //mailService_.removeUserFolder("hungnguyen", myaccount, folder);
@@ -96,14 +111,14 @@ public class TestMailService extends BaseMailTestCase{
     myaccount.setServerProperty("folder",folder.getName());
     mailService_.updateAccount("hungnguyen", myaccount);
     
-    // get mail
-    int nbOfNewMail = mailService_.checkNewMessage("hungnguyen", myaccount);
+    /*// get mail
+    int nbOfNewMail = 0 ; // = mailService_.checkNewMessage("hungnguyen", myaccount);
     // assert new mail(s) downloaded
     assertTrue(nbOfNewMail > -1);
     MessageFilter filter = new MessageFilter("filter by folder "+folder);
     String[] folders = {folder.getName()};
     filter.setFolder(folders);
-    filter.setAccountId("accountmyId");
+    filter.setAccountId(myaccount.getId());
     List<MessageHeader> newMsg = mailService_.getMessages("hungnguyen", filter);
     System.out.println("[Total] : " + newMsg.size() + " message(s)") ;
     Iterator<MessageHeader> it = newMsg.iterator();
@@ -132,61 +147,71 @@ public class TestMailService extends BaseMailTestCase{
       }
       System.out.println("----------------END-------------------------");
     } 
-    
+    */
     // create message
-//    Message message = new Message();
-//    message.setReceivedDate(Calendar.getInstance().getTime());
-//    message.setId("msg0001");
-//    message.setSubject("test message");
-//    message.setMessageTo("philippe@aristote.fr");
-//    message.setMessageBody("This is a message about to be stored in JCR");
-//    message.setAccountId("myId");
-//    String[] folders = {folder.getName()};
-//    message.setFolders(folders);
-//    String[] tags = {"test", "jcr", "philippe"};
-//    message.setTags(tags);
-//    // save message
-//    mailService_.saveMessage("hungnguyen", "myId", message, true);
-//    // assert message created
-//    assertNotNull(mailService_.getMessageById("hungnguyen", "msg0001", "myId"));
-//    // assert message searched by tag
-//    MessageFilter tagFilter = new MessageFilter("tagFilter");
-//    tagFilter.setTag(tags);
-//    tagFilter.setAccountId("myId");
-//    List<MessageHeader> msgs = mailService_.getMessageByFilter("hungnguyen", tagFilter);
-//    assertTrue(msgs.size() > 0);
-//    // get messages by folder
-//    msgs = null;
-//    msgs = mailService_.getMessageByFolder("hungnguyen", folder, "myId");
-//    assertTrue(msgs.size() > 0);
-//    
-//    // add a tag
-//    mailService_.addTag("hungnguyen", message, "message");
-//    String[] newtag = {"message"};
-//    //assert tag is added
-//    tagFilter.setTag(newtag);
-//    msgs = null;
-//    msgs = mailService_.getMessageByFilter("hungnguyen", tagFilter);
-//    assertTrue(msgs.size() > 0);
-//    // remove a tag
-//    mailService_.removeTag("hungnguyen", myaccount, "message");
-//    msgs = null;
-//    msgs = mailService_.getMessageByFilter("hungnguyen", tagFilter);
-//    assertFalse(msgs.size() > 0);
-//    
-//    // modify message
-//    message.setSubject("message test");
-//    mailService_.saveMessage("hungnguyen", "myId", message, false);
-//    // assert message modified
-//    assertEquals("message test", mailService_.getMessageById("hungnguyen", "msg0001", "myId").getSubject());
-//    
-//    // delete message
-//    mailService_.removeMessage("hungnguyen", "msg0001", "myId");
-//    // assert message deleted
-//    assertNull(mailService_.getMessageById("hungnguyen", "msg0001", "myId"));
     
-    //Node account = rootNode_.addNode("account1", "exo:account") ;
-    rootNode_.save() ;
+    System.out.println("----------------SENDING MAIL-------------------");
+     Message message = new Message();
+   // message.setReceivedDate(Calendar.getInstance().getTime());
+     //message.setId("msg0001");
+     message.setFrom("exomailtest@gmail.com") ;
+     message.setSubject("test message");
+     message.setMessageTo("exomailtest@gmail.com");
+     message.setMessageCc("phamtuanchip@yahoo.de");
+     message.setMessageBcc("phamtuanchip@yahoo.de");
+     message.setMessageBody("This is a message about to send to test");
+     message.setAccountId(myaccount.getId());
+     message.setSendDate(new Date()) ;
+     //mailService_.sendMessage(message) ;
+     
+     mailService_.sendMessage(message) ;
+     mailService_.sendMessage("hungnguyen", message) ;
+   // String[] folders = {folder.getName()};
+//////    message.setFolders(folders);
+//////    String[] tags = {"test", "jcr", "philippe"};
+//////    message.setTags(tags);
+//////    // save message
+//////    mailService_.saveMessage("hungnguyen", "myId", message, true);
+//////    // assert message created
+//////    assertNotNull(mailService_.getMessageById("hungnguyen", "msg0001", "myId"));
+//////    // assert message searched by tag
+//////    MessageFilter tagFilter = new MessageFilter("tagFilter");
+//////    tagFilter.setTag(tags);
+//////    tagFilter.setAccountId("myId");
+//////    List<MessageHeader> msgs = mailService_.getMessageByFilter("hungnguyen", tagFilter);
+//////    assertTrue(msgs.size() > 0);
+//////    // get messages by folder
+//////    msgs = null;
+//////    msgs = mailService_.getMessageByFolder("hungnguyen", folder, "myId");
+//////    assertTrue(msgs.size() > 0);
+//////    
+//////    // add a tag
+//////    mailService_.addTag("hungnguyen", message, "message");
+//////    String[] newtag = {"message"};
+//////    //assert tag is added
+//////    tagFilter.setTag(newtag);
+//////    msgs = null;
+//////    msgs = mailService_.getMessageByFilter("hungnguyen", tagFilter);
+//////    assertTrue(msgs.size() > 0);
+//////    // remove a tag
+//////    mailService_.removeTag("hungnguyen", myaccount, "message");
+//////    msgs = null;
+//////    msgs = mailService_.getMessageByFilter("hungnguyen", tagFilter);
+//////    assertFalse(msgs.size() > 0);
+//////    
+//////    // modify message
+//////    message.setSubject("message test");
+//////    mailService_.saveMessage("hungnguyen", "myId", message, false);
+//////    // assert message modified
+//////    assertEquals("message test", mailService_.getMessageById("hungnguyen", "msg0001", "myId").getSubject());
+//////    
+//////    // delete message
+//////    mailService_.removeMessage("hungnguyen", "msg0001", "myId");
+//////    // assert message deleted
+//////    assertNull(mailService_.getMessageById("hungnguyen", "msg0001", "myId"));
+////    
+////    //Node account = rootNode_.addNode("account1", "exo:account") ;
+//    rootNode_.save() ;
 
   }
 }
