@@ -396,19 +396,20 @@
 
 /*====================Event List View=====================*/
 
-.UIEventView .EventListContainer {
-	height: 490px;
+.UIListView {
 	overflow: auto;
 	padding-right: 3px;
 }
 
-.UIEventView .EventListContainer .UIPreview {
+.UIPreview {
 	padding: 1px;
 	background-color: #ffffff ;
 	border: 1px solid #c7c7c7;
+	overflow: auto;
+	margin-right: 3px;
 }
 
-.UIEventView .EventListContainer .ListBar {
+.UIListView .ListBar {
 	background: url('background/TitleBarBG1x26.gif') repeat-x ;	
 	height: 26px;
 	padding: 0px 8px;
@@ -416,139 +417,139 @@
 	border-right: 1px solid #c7c7c7;
 }
 
-.UIEventView .EventListContainer .ViewBar {
+.ViewBar {
 	background-color: #e7e7e7 ;	
 	height: 30px;
 	padding: 0px 8px;
 }
 
-.UIEventView .EventListContainer .ListView {
+.UIListView .ListView {
 	padding-left: 1px;
 	background-color: #ffffff;
 }
 
-.UIEventView .EventListContainer .AddCategoryIcon {
+.UIListView .AddCategoryIcon {
 	background: url('skinIcons/16x16/icons/AddCategory.gif') no-repeat ;
 	float: right;
 	width: 16px; height: 16px;
 	margin: 5px 6px 0px 3px;
 }
 
-.UIEventView .EventListContainer .IconHolder {
+.UIListView .IconHolder {
 	margin: 2px 7px 0px 7px;
 }
 
-.UIEventView .EventListContainer .ComboBox {
+.UIListView .ComboBox {
 	float: right;
 	margin: 3px 6px 0px 3px;
 }
 
-.UIEventView .EventListContainer .ListBar .Label {
+.UIListView .ListBar .Label {
 	float: right;
 	margin: 7px 4px 0px 3px;
 }
 
-.UIEventView .EventListContainer .ViewBar .Label {
+.UIPreview .ViewBar .Label {
 	float: left;
 	margin: 7px 4px 0px 3px;
 	font-weight: bold;
 }
 
-.UIEventView .EventListContainer .ViewBar .MaximizeButton {
+.UIPreview .ViewBar .MaximizeButton {
 	float: right;
 	margin: 7px 4px 0px 3px;
 	cursor: pointer;
 }
 
-.UIEventView .EventListContainer .AttachmentIcon {
+.UIPreview .AttachmentIcon {
 	margin: 3px;
 	width: 16px; height: 16px;
 }
 
-.UIEventView .EventListContainer .ViewContainer {
+.UIPreview .ViewContainer {
 	padding: 4px;
 }
 
-.UIEventView .EventListContainer .ViewContainer td{
+.UIPreview .ViewContainer td{
 	border: none;
 }
 
-.UIEventView .EventListContainer .ViewContainer table{
+.UIPreview .ViewContainer table{
 	border: none;
 }
 
-.UIEventView .EventListContainer .ViewContainer .AttachmentIcon {
+.UIPreview .ViewContainer .AttachmentIcon {
 	line-height: 16px;
 	padding-left: 18px;
 }
 
-.UIEventView .EventListContainer .ViewContainer a {
+.UIPreview .ViewContainer a {
 	color: #1756d5;
 	text-decoration: underline;
 }
 
-.UIEventView .EventListContainer .ViewContainer .Actions {
+.UIPreview .ViewContainer .Actions {
 	line-height: 20px;
 }
 
-.UIEventView .EventListContainer .ViewContainer .Text {
+.UIPreview .ViewContainer .Text {
 	line-height: 20px;
 }
 
-.UIEventView .EventListContainer .ViewContainer .Img {
+.UIPreview .ViewContainer .Img {
 	width: 175px; height: 110px;
 	margin: 5px auto; border: 1px solid #ffffff;
 }
 
-.UIEventView .EventListContainer .ViewContainer .EventDescription {
+.UIPreview .ViewContainer .EventDescription {
 	background: url('background/Event33x12.gif') no-repeat ;
 	padding-left: 40px; line-height: 14px;
 	color: #3ca094;
 }
 
-.UIEventView .EventListContainer .ViewContainer .SeparatorDotLine {
+.UIPreview .ViewContainer .SeparatorDotLine {
 	float: left;
 	background: url('background/SeparatorDotLine1x25.gif') no-repeat ;
 	width: 1px; height: 25px;
 	margin: 3px 5px;
 }
 
-.UIEventView .EventListContainer .ViewContainer .ActionsContainer {
+.UIPreview .ViewContainer .ActionsContainer {
 	background: url('background/DotLine2x1.gif') repeat-x top ;
 	margin: 0px 10px 0px 33px;
 }
 
-.UIEventView .EventListContainer .ViewContainer .ActionsContainer a {
+.UIPreview .ViewContainer .ActionsContainer a {
 	color: #000000;
 	text-decoration: none;
 }
 
-.UIEventView .EventListContainer .ViewContainer .ActionsContainer a:hover {
+.UIPreview .ViewContainer .ActionsContainer a:hover {
 	color: #1756d5;
 }
 
-.UIEventView .EventListContainer .ViewContainer .EditIcon {
+.UIPreview .ViewContainer .EditIcon {
 	background-repeat: no-repeat;
 	width: 50px;
 }
 
-.UIEventView .EventListContainer select {
+.UIPreview select {
 	width: 150px; height: 18px;
 	font-size: 11px;
 }
 
 
-.UIEventView a {
+.UIPreview a {
 	color: #000000;
 	margin: 3px 0px 0px 0px;
 }
 
-.UIEventView a:hover {
+.UIPreview a:hover {
 	color: #058ee6;
 }
 
 
-.UIEventView .EventListContainer  .UIGrid th {
+.UIPreview .UIGrid th {
 	background: url('background/TitleBarBG1x20.gif') repeat-x ;	
   height: 20px;
 	border-right: 1px solid #c7c7c7;

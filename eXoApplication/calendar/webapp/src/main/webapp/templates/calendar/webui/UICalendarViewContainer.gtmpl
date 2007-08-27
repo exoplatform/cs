@@ -1,4 +1,10 @@
 <div class="UICalendarViewContainer">
+	<%
+		List children = uicomponent.getChildren() ;
+		for{child in children} {
+			if(child.isRendered()) uicomponent.renderChild(child.getClass()) ;
+		}
+	%>
 <!-- Start Event Preview-->
 	<div class="UIDayView" style="display: none;">
 		<div class="TitleBar">Tuesday, June 12, 2007</div>
@@ -15,171 +21,7 @@
 	</div> 
 <!-- End Event Preview-->
 <!-- Start View Event List -->
-	<div class="UIEventView" style="display: none;">
-		<div class="EventListContainer">
-			<div class="UIListView">
-				<div class="ListBar">
-					<a href="#" class="ControlButton">
-						<div class="IconHolder AddEventIcon"> Add event </div>
-					</a>
-					<div class="SeparatorLine"><span></span></div>
-					<a href="#" class="ControlButton">
-						<div class="IconHolder DeleteEventIcon"> Delete event </div>
-					</a>
-					<div class="AddCategoryIcon"><span></span></div>
-					<div class="ComboBox">
-						<select name="Phuong">
-  	              		<option value="" selected="selected">Meeting</option>
-							<option value="">Football</option>
-							<option value="">Tenis</option>
-						</select>
-					</div>
-					<div class="Label">Show category:</div> 
-					<div style="clear: both"><span></span></div>
-				</div>
-
-				<div class="ListView">
-					<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
-  							<thead>
-  								<tr>
-  			          	<th style="width: 30px;"><input type="checkbox" class="checkbox" title="Check all" value="4"/></th>
-  							<th style="width: 24px;"><div class="AttachmentIcon" title="Attachment of event"><span></span></div></th>
-  		          <th >Event</th>
- 	      	          <th >Date & time</th>
-  	 	        </tr>
-  	 	      </thead>
-  	 	       			<tbody>
-  						      <tr>
-  						        <td><input type="checkbox" class="checkbox" value="4"/></td>
-									<td style="padding: 0px;"><div class="AttachmentIcon" ><span></span></div></td>
-									<td class="text">Play football in the team to agaist the young team in the  ...</td>
-									<td class="text">07/02/2007 10:30am</td>
-   			     		  	</tr>
-				     	  <tr>
-              	<td><input type="checkbox" class="checkbox" value="4"/></td>
-									<td style="padding: 0px;"><div class="AttachmentIcon"><span></span></div></td>
-									<td class="textBold">Nite Party at Brice's house.</td>
-									<td class="textBold">07/05/2007 10:30am</td>
-	      		    </tr>
-	     		      <tr>
-	     		        <td><input type="checkbox" class="checkbox" value="4"/></td>
-									<td style="padding: 0px;"><div class="AttachmentIcon"><span></span></div></td>
-									<td class="text">Watch The Kingkong movie on HBO chanel .</td>
-									<td class="text">15/06/2007 12:30 PM</td>
-	      		    </tr>
-						    <tr>
-								  <td><input type="checkbox" class="checkbox" value="4"/></td>
-									<td style="padding: 0px;"><div class="AttachmentIcon"><span></span></div></td>
-									<td class="text">Talk to my cousin on the phone, he will call from France </td>
-									<td class="text">24/06/2007 12:30 PM</td>
-			  		    </tr>
-  	   			 </tbody>
-					</table>
-				</div>
-			</div>
-			<div class="ResizeReadingPane"><span></span></div>
-			<div class="UIPreview">
-				<div class="ViewBar">
-					<div class="Label">View Event</div> 
-					<div class="MaximizeButton" title="View full - size event"><span></span></div>
-					<div style="clear: both"><span></span></div>
-				</div>
-				<div class="ViewContainer">
-					<div class="DecoratorBox">
-						<div class="ViewBoxStyle">
-							<div class="TopLeftViewBoxStyle">
-								<div class="TopRightViewBoxStyle">
-									<div class="TopCenterViewBoxStyle"><span></span></div>										
-								</div>
-							</div>
-							<div class="MiddleLeftViewBoxStyle">
-								<div class="MiddleRightViewBoxStyle">
-									<div class="MiddleCenterViewBoxStyle">
-										<table class="UIGrid" id="RowContainerDay" cellspacing="0" borderspacing="0">
-		        					<tr>
-		        						<td style="border-right: 1px solid #c7c7c7;width: 185px;">
-		        							<div class="Text">From: <span style="color: #1756d5;">Tuesday,  Jun, 12 , 6:00 AM</span> </div>
-		        							<div class="Text">To:   <span style="color: #1756d5;">Sunday, Jun,  20 , 8:00 PM</span> </div>
-		        							<div><a href="#" class="AttachmentIcon">Foto football group.png </a></div>
-		        							<img src="/calendar/skin/DefaultSkin/webui/background/Image1.gif" class="Img" />
-		        							<div class="Actions"> 435Kb <a href="#" class="IconHolder ViewAttachmentIcon"> View </a> <a href="#" class="IconHolder DownLoadAttachmentIcon"> Dowload </a></div> 
-												</td>
-		        						<td >
-		        							<div class="EventDescription">Play football in the team to agaist the young team in the company and make a bet with Thuy.</div>
-		        							<table class="UIGrid" id="RowContainerDay" cellspacing="0" borderspacing="0">
-					        					<tr>
-					        						<td style="width: 26px;"></td>
-					        						<td class="Text" style="width: 100px;">Place:</td>
-					        						<td class="Text">Van Bao "Stadium" - Kim Ma - Ha noi.</td>
-					        					</tr>	
-					        					<tr>
-					        						<td ></td>
-					        						<td class="Text">Repeat Event:         </td>
-					        						<td class="Text">Daily.</td>
-					        					</tr>	
-					        					<tr>
-					        						<td ></td>
-					        						<td class="Text">Description:            </td>
-					        						<td class="Text">The old team always wins the young team.</td>
-					        					</tr>	
-					        					<tr>
-					        						<td ></td>
-					        						<td class="Text">Event Reminder:      </td>
-					        						<td class="Text">Email.</td>
-					        					</tr>	
-					        					<tr>
-					        						<td ></td>
-					        						<td class="Text">Reminder time:       </td>
-					        						<td class="Text">25mins.</td>
-					        					</tr>	
-					        					<tr>
-					        						<td ></td>
-					        						<td class="Text">Event Sharing:        </td>
-					        						<td class="Text">Private.</td>
-					        					</tr>	
-					        					<tr>
-					        						<td ></td>
-					        						<td class="Text">Show this event as:  </td>
-					        						<td class="Text">Available.</td>
-					        					</tr>	
-					        					<tr>
-					        						<td ></td>
-					        						<td class="Text">Meeting invitation:   </td>
-					        						<td class="Text">hieultcntt@gmail.com</td>
-					        					</tr>							        					
-						        			</table>
-						        			<div class="ActionsContainer">
-						        				<a href="#" class="ControlButton">
-															<div class="IconHolder ViewOnCalendar"> View On Calendar </div>
-														</a>
-														<div class="SeparatorDotLine"><span></span></div>
-														<a href="#" class="ControlButton">
-															<div class="IconHolder EditEventIcon"> Edit event </div>
-														</a>
-														<div class="SeparatorDotLine"><span></span></div>
-														<a href="#" class="ControlButton">
-															<div class="IconHolder DeleteEventIcon"> Delete event </div>
-														</a>
-														<div style="clear:left;"><span></span></div>
-						        			</div>
-												</td>
-		        					</tr>							        					
-			        			</table>
-							</div>										
-								</div>
-							</div>
-							<div class="BottomLeftViewBoxStyle">
-								<div class="BottomRightViewBoxStyle">
-									<div class="BottomCenterViewBoxStyle"><span></span></div>										
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>	
-
-		</div>
-	</div>	
+	
 <!-- End View Event List -->
 <!-- Start View Event Month -->
 	<div class="UIMonthView" style="display: none;">
@@ -431,7 +273,7 @@
 	</div>
 <!-- End View Event Month -->
 <!-- Start View Task List -->
-	<div class="UITaskView" style="display: block;">
+	<div class="UITaskView" style="display: none;">
 		<div class="TaskListContainer">
 			<div class="UIListView">
 				<div class="ListBar">
