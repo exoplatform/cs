@@ -16,12 +16,13 @@ import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
  */
 
 @ComponentConfig(
-    lifecycle = UIContainerLifecycle.class 
-    //template =  "app:/templates/calendar/webui/UICalendarWorkingContainer.gtmpl"
+    lifecycle = UIContainerLifecycle.class ,
+    template =  "app:/templates/calendar/webui/UICalendarWorkingContainer.gtmpl"
 )
 public class UICalendarWorkingContainer extends UIContainer  {
   public UICalendarWorkingContainer() throws Exception {
     addChild(UICalendarContainer.class, null, null) ;
     addChild(UICalendarViewContainer.class, null, null) ;
-  }  
+  }
+  
 }
