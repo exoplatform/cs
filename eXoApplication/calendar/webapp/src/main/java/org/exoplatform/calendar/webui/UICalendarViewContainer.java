@@ -4,6 +4,7 @@
  **************************************************************************/
 package org.exoplatform.calendar.webui;
 
+import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIComponent;
 
@@ -17,13 +18,13 @@ import org.exoplatform.webui.core.UIComponent;
 @ComponentConfig(
     template =  "app:/templates/calendar/webui/UICalendarViewContainer.gtmpl"
 )
-public class UICalendarViewContainer extends UIComponent  {
+public class UICalendarViewContainer extends UIContainer  {
   public UICalendarViewContainer() throws Exception {
     //addChild(UIDayView.class, null, null) ;
     //addChild(UIWeekView.class, null, null) ;
     //addChild(UIMonthView.class, null, null) ;
     //addChild(UIYearView.class, null, null) ;
-    //addChild(UIListView.class, null, null) ;
-    //addChild(UIPreview.class, null, null) ;
+    addChild(UIListView.class, null, null).setRendered(true) ;
+    addChild(UIPreview.class, null, null).setRendered(true) ;
   }  
 }

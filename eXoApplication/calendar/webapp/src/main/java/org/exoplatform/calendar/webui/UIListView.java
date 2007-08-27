@@ -4,6 +4,8 @@
  **************************************************************************/
 package org.exoplatform.calendar.webui;
 
+import org.exoplatform.calendar.service.CalendarService;
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
@@ -22,17 +24,34 @@ import org.exoplatform.webui.form.UIFormStringInput;
     lifecycle = UIFormLifecycle.class,
     template = "app:/templates/calendar/webui/UIListView.gtmpl",
     events = {
-      @EventConfig(listeners = UIListView.AddEventActionListener.class)      
+      @EventConfig(listeners = UIListView.AddEventActionListener.class),      
+      @EventConfig(listeners = UIListView.DeleteEventActionListener.class),
+      @EventConfig(listeners = UIListView.ChangeCategoryActionListener.class)
     }
 )
 public class UIListView extends UIForm {
   
   public UIListView() {
+    CalendarService calendarService = (CalendarService)PortalContainer.getComponent(CalendarService.class) ;
+    //calendarService.getEventCategories(Utils.)
   }
   
   static  public class AddEventActionListener extends EventListener<UIListView> {
     public void execute(Event<UIListView> event) throws Exception {
       UIListView uiForm = event.getSource() ;
+      System.out.println(" ===========> AddEventActionListener") ;
     }
   }
+  static  public class DeleteEventActionListener extends EventListener<UIListView> {
+    public void execute(Event<UIListView> event) throws Exception {
+      UIListView uiForm = event.getSource() ;
+      System.out.println(" ===========> DeleteEventActionListener") ;
+    }
+  }
+  static  public class ChangeCategoryActionListener extends EventListener<UIListView> {
+    public void execute(Event<UIListView> event) throws Exception {
+      UIListView uiForm = event.getSource() ;
+    }
+  }
+  
 }
