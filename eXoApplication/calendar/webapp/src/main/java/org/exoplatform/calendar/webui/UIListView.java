@@ -4,8 +4,12 @@
  **************************************************************************/
 package org.exoplatform.calendar.webui;
 
+import java.util.List;
+
 import org.exoplatform.calendar.service.CalendarService;
+import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
@@ -31,9 +35,9 @@ import org.exoplatform.webui.form.UIFormStringInput;
 )
 public class UIListView extends UIForm {
   
-  public UIListView() {
+  public UIListView() throws Exception{
     CalendarService calendarService = (CalendarService)PortalContainer.getComponent(CalendarService.class) ;
-    //calendarService.getEventCategories(Utils.)
+    //List<EventCategory> eventCategories = calendarService.getEventCategories(Util.getPortalRequestContext().getRemoteUser()) ;
   }
   
   static  public class AddEventActionListener extends EventListener<UIListView> {

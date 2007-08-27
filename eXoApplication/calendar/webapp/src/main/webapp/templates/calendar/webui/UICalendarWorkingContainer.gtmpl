@@ -1,5 +1,4 @@
-
 <div class="UICalendarWorkingContainer">
-	<%uicomponent.rederChildren()%>
-	<div style="clear: left"><span></span></div>
+ <%uicomponent.renderChildren()%>
+ <div style="clear: left"><span></span></div>
 </div>
