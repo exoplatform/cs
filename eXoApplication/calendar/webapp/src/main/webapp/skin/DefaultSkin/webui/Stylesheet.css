@@ -371,6 +371,7 @@
 
 .UICalendarViewContainer {
 	margin-left: 243px;
+	padding-bottom: 8px;
 }
 
 .UICalendarViewContainer .EventAllDay {
@@ -398,15 +399,6 @@
 
 .UIListView {
 	overflow: auto;
-	padding-right: 3px;
-}
-
-.UIPreview {
-	padding: 1px;
-	background-color: #ffffff ;
-	border: 1px solid #c7c7c7;
-	overflow: auto;
-	margin-right: 3px;
 }
 
 .UIListView .ListBar {
@@ -415,49 +407,82 @@
 	padding: 0px 8px;
 	border-left: 1px solid #c7c7c7;
 	border-right: 1px solid #c7c7c7;
+	margin-right: 4px;
 }
 
-.ViewBar {
-	background-color: #e7e7e7 ;	
-	height: 30px;
-	padding: 0px 8px;
+.UIListView .ListBar .ComboBox {
+	float: right;
+	margin: 3px 6px 0px 3px;
 }
 
-.UIListView .ListView {
-	padding-left: 1px;
-	background-color: #ffffff;
+
+.UIListView .ListBar select {
+	width: 150px; height: 18px;
+	font-size: 11px;
 }
 
-.UIListView .AddCategoryIcon {
+
+.UIListView .ListBar a {
+	color: #000000;
+}
+
+.UIListView .ListBar a:hover {
+	color: #058ee6;
+}
+.UIListView .ListBar .Label {
+	float: right;
+	margin: 7px 4px 0px 3px;
+}
+
+
+.UIListView .ListBar .AddCategoryIcon {
 	background: url('skinIcons/16x16/icons/AddCategory.gif') no-repeat ;
 	float: right;
 	width: 16px; height: 16px;
 	margin: 5px 6px 0px 3px;
 }
 
-.UIListView .IconHolder {
-	margin: 2px 7px 0px 7px;
+.UIListView .ListView {
+	padding-left: 1px;
 }
 
-.UIListView .ComboBox {
-	float: right;
-	margin: 3px 6px 0px 3px;
+.UIListView .ListView table {
+	width: 99.4%;
+	background-color: #ffffff;
 }
 
-.UIListView .ListBar .Label {
-	float: right;
-	margin: 7px 4px 0px 3px;
+.UIListView .ListView td {
+	border-top: none;
+}
+
+.UIListView .ListView .UIGrid th {
+	background: url('background/TitleBarBG1x20.gif') repeat-x ;	
+  height: 20px;
+	border-right: 1px solid #c7c7c7;
+}
+
+.UIPreview {
+	padding: 1px;
+	background-color: #ffffff ;
+	border: 1px solid #c7c7c7;
+	margin-right: 4px;
+}
+
+.UIPreview .ViewBar {
+	background-color: #e7e7e7 ;	
+	height: 30px;
+	padding: 0px 8px;
 }
 
 .UIPreview .ViewBar .Label {
 	float: left;
-	margin: 7px 4px 0px 3px;
+	margin: 7px 0px 0px 0px;
 	font-weight: bold;
 }
 
 .UIPreview .ViewBar .MaximizeButton {
 	float: right;
-	margin: 7px 4px 0px 3px;
+	margin: 7px 0px 0px 0px;
 	cursor: pointer;
 }
 
@@ -476,6 +501,7 @@
 
 .UIPreview .ViewContainer table{
 	border: none;
+	width: 99.4%;
 }
 
 .UIPreview .ViewContainer .AttachmentIcon {
@@ -498,7 +524,7 @@
 
 .UIPreview .ViewContainer .Img {
 	width: 175px; height: 110px;
-	margin: 5px auto; border: 1px solid #ffffff;
+	margin: 5px auto; 
 }
 
 .UIPreview .ViewContainer .EventDescription {
@@ -517,6 +543,7 @@
 .UIPreview .ViewContainer .ActionsContainer {
 	background: url('background/DotLine2x1.gif') repeat-x top ;
 	margin: 0px 10px 0px 33px;
+	padding-top: 2px;
 }
 
 .UIPreview .ViewContainer .ActionsContainer a {
@@ -533,28 +560,6 @@
 	width: 50px;
 }
 
-.UIPreview select {
-	width: 150px; height: 18px;
-	font-size: 11px;
-}
-
-
-.UIPreview a {
-	color: #000000;
-	margin: 3px 0px 0px 0px;
-}
-
-.UIPreview a:hover {
-	color: #058ee6;
-}
-
-
-.UIPreview .UIGrid th {
-	background: url('background/TitleBarBG1x20.gif') repeat-x ;	
-  height: 20px;
-	border-right: 1px solid #c7c7c7;
-	border-bottom: none;
-}
 /*====================View Event Month =====================*/
 
 .UIMonthView {
