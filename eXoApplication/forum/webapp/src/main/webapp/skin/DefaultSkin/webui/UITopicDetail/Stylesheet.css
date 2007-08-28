@@ -17,32 +17,10 @@
 	padding-right: 10px;
 }
 
-.UITopicDetail .ForumToolbar .IconToolbar {
-	float: right;
-	padding-left: 23px;
-	line-height: 25px;
-	margin: 1px 10px;
-}
-
-.UITopicDetail .ForumToolbar .SeparatorLine {
-	float: right;
-	background: url('background/SeparatorLine2x19.gif') no-repeat center ;
-	height: 19px; width: 2px;	
-	margin-top: 4px;
-}
-
 .UITopicDetail .ForumToolbar .SearchIcon {
 	background-repeat: no-repeat;
 	background-position: left center;
 	width: auto; height: auto;
-}
-
-.UITopicDetail .ForumToolbar .ExpandButton {
-	float: right;
-	background: url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/BlueDownArrow.gif') no-repeat center ;
-	height: 16px; width: 16px;	
-	margin: 7px 10px 0px 0px;
-	cursor: pointer;
 }
 
 .UITopicDetail .ForumToolbar .ToolIcon {
@@ -207,23 +185,23 @@
 }
 
 .UITopicDetail .PostViewContainer .AttachmentContainer .Action .View {
-	background: url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/ViewIcon.gif') no-repeat left center;
+	background: url('icons/16x16/ViewIcon.gif') no-repeat left center;
 }
 
 .UITopicDetail .PostViewContainer .AttachmentContainer .WordIcon {
-	background: url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/WordIcon.gif') no-repeat left center;
+	background: url('icons/16x16/WordIcon.gif') no-repeat left center;
 }
 
 .UITopicDetail .PostViewContainer .AttachmentContainer .PPTIcon {
-	background: url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/PPTIcon.gif') no-repeat left center;
+	background: url('icons/16x16/PPTIcon.gif') no-repeat left center;
 }
 
 .UITopicDetail .PostViewContainer .AttachmentContainer .PNGIcon {
-	background: url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/PNGIcon.gif') no-repeat left center;
+	background: url('icons/16x16/PNGIcon.gif') no-repeat left center;
 }
 
 .UITopicDetail .PostViewContainer .AttachmentContainer .JPGIcon {
-	background: url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/JPGIcon.gif') no-repeat left center;
+	background: url('icons/16x16/JPGIcon.gif') no-repeat left center;
 }
 
 .UITopicDetail .PostViewContainer .AttachmentContainer .Size {

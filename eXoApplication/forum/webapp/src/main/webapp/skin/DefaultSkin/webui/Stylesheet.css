@@ -148,3 +148,7 @@
 .SelectedItem {
 	background: #ffffcc ;
 }
+
+.DisableLabel {
+	opacity:0.3;
+}

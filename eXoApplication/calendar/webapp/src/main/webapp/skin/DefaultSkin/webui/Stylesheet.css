@@ -404,17 +404,20 @@
 .UIListView .ListBar {
 	background: url('background/TitleBarBG1x26.gif') repeat-x ;	
 	height: 26px;
-	padding: 0px 8px;
 	border-left: 1px solid #c7c7c7;
 	border-right: 1px solid #c7c7c7;
-	margin-right: 4px;
+	width: 99.2%;
 }
 
+.UIListView .ListBar .Refresh16x16Icon {
+	float: left;
+	margin: 3px 4px 0px 8px;
+	width: 18px; height: 18px;
+}
 .UIListView .ListBar select {
 	width: 150px; height: 18px;
 	font-size: 11px;
 }
-
 
 .UIListView .ListBar a {
 	color: #000000;
@@ -440,7 +443,7 @@
 	padding-left: 1px;
 }
 
-.UIListView .EventCategory {
+.UIListView .ListBar .EventCategory {
 	float: right;
 	margin: 3px 6px 0px 3px;
 }
@@ -475,7 +478,7 @@
 
 .UIPreview .ViewBar .Label {
 	float: left;
-	margin: 7px 0px 0px 0px;
+	margin: 7px 0px 0px 4px;
 	font-weight: bold;
 }
 

@@ -40,14 +40,189 @@
 		  	<div class="RightBar">
 		  		<div class="CenterBar">
 		  			<div class="ToolbarActionsContainer">
-							<a class="IconToolbar TagIcon">Tag</a>
+		  				<div class="StatusIcon ModerationIcon" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
+								<a class="DownArrow1Icon">Moderation</a>
+								<% /*Begin Popup Menu*/ %>
+								<div style="position: relative;">
+			      			<div class="UIPopupCategory" style="display: none; ">
+			      				<div class="UIRightClickPopupMenu" style="display: block; left: -70px;">
+										  <div class="TopLeftRightClickPopupMenu">
+				          			<div class="TopRightRightClickPopupMenu">
+				            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
+				          			</div>
+				        			</div>
+							        <div class="MiddleLeftRightClickPopupMenu">
+							          <div class="MiddleRightRightClickPopupMenu">
+				              		<div class="UIRightPopupMenuContainer">
+														<div class="MenuItem" href="#">   
+					                    <div class="ItemIcon MergeSelectedPostsIcon DisableLabel">
+					                      Merge Selected Posts
+					                    </div>
+				                    </div>
+				                    <a class="MenuItem">   
+					                    <div class="ItemIcon MoveSelectedPostIcon">
+					                      Move Selected Post(s)
+					                    </div>
+				                    </a>
+				                    <a class="MenuItem" href="#">   
+					                    <div class="ItemIcon CopySelectedPostIcon">
+					                     Copy Selected Post(s)
+					                    </div>
+				                    </a>
+				                    <div class="MenuItem" href="#">   
+					                    <div class="ItemIcon PastePostsIcon DisableLabel">
+					                      Paste Posts
+					                    </div>
+				                    </div>
+				                    <div class="MenuItem">   
+					                    <div class="ItemIcon ApprovePostsIcon DisableLabel">
+					                      Approve Posts
+					                    </div>
+				                    </div>
+				                    <a class="MenuItem" href="#">   
+					                    <div class="ItemIcon UnapprovePostsIcon">
+					                      Unapprove Posts
+					                    </div>
+				                    </a>
+				                    <div class="MenuItem" href="#">   
+					                    <div class="ItemIcon ApproveAttachmentsIcon DisableLabel">
+					                      Approve Attachments
+					                    </div>
+				                    </div>
+				                    <a class="MenuItem" href="#">   
+					                    <div class="ItemIcon UnapproveAttachmentsIcon">
+					                      Unapprove Attachments
+					                    </div>
+				                    </a>
+				                    <a class="MenuItem">   
+					                    <div class="ItemIcon DeleteSelectedPostIcon">
+					                      Delete Selected Post(s)
+					                    </div>
+				                    </a>
+													</div>
+					          		</div>
+					        		</div>
+								      <div class="BottomLeftRightClickPopupMenu">
+								        <div class="BottomRightRightClickPopupMenu">
+								          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+								        </div>
+								      </div>
+					      			
+								    </div>
+			      			</div>
+			      		</div>
+			      		<% /*End Popup Menu*/ %>
+		  				</div>
 		  				<div class="SeparatorLine"><span></span></div>
-							<a class="IconToolbar VoteIcon">Vote Thread</a>
+							<a class="StatusIcon TagIcon">Tag</a>
 		  				<div class="SeparatorLine"><span></span></div>
-							<a class="IconToolbar SearchIcon">Search Thread</a>
+							<a class="StatusIcon VoteIcon">Vote Thread</a>
 		  				<div class="SeparatorLine"><span></span></div>
-		  				<div class="ExpandButton"><span></span></div>
-							<a class="IconToolbar ToolIcon">Thread Tools</a>
+							<a class="StatusIcon SearchIcon">Search Thread</a>
+		  				<div class="SeparatorLine"><span></span></div>
+		  				<div class="StatusIcon ToolIcon" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
+								<a class="DownArrow1Icon">Thread Tools</a>
+								<% /*Begin Popup Menu*/ %>
+								<div style="position: relative;">
+			      			<div class="UIPopupCategory" style="display: none; ">
+			      				<div class="UIRightClickPopupMenu" style="display: block;">
+										  <div class="TopLeftRightClickPopupMenu">
+				          			<div class="TopRightRightClickPopupMenu">
+				            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
+				          			</div>
+				        			</div>
+							        <div class="MiddleLeftRightClickPopupMenu">
+							          <div class="MiddleRightRightClickPopupMenu">
+				              		<div class="UIRightPopupMenuContainer">
+														<a class="MenuItem" href="#">   
+					                    <div class="ItemIcon PrintThisPageIcon">
+					                      Print this Page
+					                    </div>
+				                    </a>
+				                    <a class="MenuItem" href="#">   
+					                    <div class="ItemIcon EmailThisPageIcon">
+					                      Email this Page
+					                    </div>
+				                    </a>
+				                    <a class="MenuItem" href="#">   
+					                    <div class="ItemIcon AddPollThreadIcon">
+					                      Add a Poll to this Thread
+					                    </div>
+				                    </a>
+				                    <a class="MenuItem" href="#">   
+					                    <div class="ItemIcon EditSelectedThreadIcon">
+					                      Manage User Titles
+					                    </div>
+				                    </a>
+				                    <div class="MenuItem">   
+					                    <div class="ItemIcon OpenThreadsIcon DisableLabel">
+					                      Open this Thread
+					                    </div>
+				                    </div>
+				                    <a class="MenuItem" href="#">   
+					                    <div class="ItemIcon CloseThreadsIcon">
+					                     Close this Thread
+					                    </div>
+				                    </a>
+				                    <a class="MenuItem" href="#">   
+					                    <div class="ItemIcon LockthisForumIcon">
+					                      Lock this Thread
+					                    </div>
+				                    </a>
+				                    <div class="MenuItem">   
+					                    <div class="ItemIcon UnLockthisForumIcon DisableLabel">
+					                      UnLock this Thread
+					                    </div>
+				                    </div>
+				                    <a class="MenuItem" href="#">   
+					                    <div class="ItemIcon MoveThreadsIcon">
+					                      Move this Thread
+					                    </div>
+				                    </a>
+				                    <a class="MenuItem" href="#">   
+					                    <div class="ItemIcon StickThreadsIcon">
+					                      Stick this Thread
+					                    </div>
+				                    </a>
+				                    <div class="MenuItem">   
+					                    <div class="ItemIcon StickThreadsIcon DisableLabel">
+					                      Unstick this Thread
+					                    </div>
+				                    </div>
+				                    <a class="MenuItem">   
+					                    <div class="ItemIcon SplitThisThreadIcon">
+					                      Split this Thread
+					                    </div>
+				                    </a>
+				                    <div class="MenuItem">   
+					                    <div class="ItemIcon ApproveThreadsIcon DisableLabel">
+					                      Approve this Thread
+					                    </div>
+				                    </div>
+				                    <a class="MenuItem" href="#">   
+					                    <div class="ItemIcon UnapproveThreadsIcon">
+					                     Unapprove this Thread
+					                    </div>
+				                    </a>
+				                    <a class="MenuItem" href="#">   
+					                    <div class="ItemIcon DeleteThreadsIcon">
+					                      Delete this Thread
+					                    </div>
+				                    </a>
+													</div>
+					          		</div>
+					        		</div>
+								      <div class="BottomLeftRightClickPopupMenu">
+								        <div class="BottomRightRightClickPopupMenu">
+								          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+								        </div>
+								      </div>
+					      			
+								    </div>
+			      			</div>
+			      		</div>
+			      		<% /*End Popup Menu*/ %>
+		  				</div>
 		  				<div style="clear: right;"><span></span></div>
 						</div>
 		  		</div>

@@ -56,14 +56,174 @@
 			  	<div class="RightBar">
 			  		<div class="CenterBar">
 			  			<div class="Title"><span style="font-weight: normal;">Thread in forum: </span>$forumName</div>
-							<div class="StatusIcon ModerationIcon" >
+							<div class="StatusIcon ModerationIcon" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
 								<a class="DownArrow1Icon">Moderation</a>
+								<% /*Begin Popup Menu*/ %>
+								<div style="position: relative;">
+			      			<div class="UIPopupCategory" style="display: none; ">
+			      				<div class="UIRightClickPopupMenu" style="display: block; left: -70px;">
+										  <div class="TopLeftRightClickPopupMenu">
+				          			<div class="TopRightRightClickPopupMenu">
+				            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
+				          			</div>
+				        			</div>
+							        <div class="MiddleLeftRightClickPopupMenu">
+							          <div class="MiddleRightRightClickPopupMenu">
+				              		<div class="UIRightPopupMenuContainer">
+														<a class="MenuItem" href="#">   
+					                    <div class="ItemIcon EditSelectedThreadIcon">
+					                      Edit Selected Thread
+					                    </div>
+				                    </a>
+				                    <div class="MenuItem">   
+					                    <div class="ItemIcon OpenThreadsIcon DisableLabel">
+					                      Open Threads
+					                    </div>
+				                    </div>
+				                    <a class="MenuItem" href="#">   
+					                    <div class="ItemIcon CloseThreadsIcon">
+					                     Close Threads
+					                    </div>
+				                    </a>
+				                    <a class="MenuItem" href="#">   
+					                    <div class="ItemIcon LockthisForumIcon">
+					                      Lock Threads
+					                    </div>
+				                    </a>
+				                    <div class="MenuItem">   
+					                    <div class="ItemIcon UnLockthisForumIcon DisableLabel">
+					                      UnLock Threads
+					                    </div>
+				                    </div>
+				                    <a class="MenuItem" href="#">   
+					                    <div class="ItemIcon MoveThreadsIcon">
+					                      Move Threads
+					                    </div>
+				                    </a>
+				                    <a class="MenuItem" href="#">   
+					                    <div class="ItemIcon ThreadsAuto-PruningIcon">
+					                      Threads Auto-Pruning
+					                    </div>
+				                    </a>
+				                    <a class="MenuItem" href="#">   
+					                    <div class="ItemIcon StickThreadsIcon">
+					                      Stick Threads
+					                    </div>
+				                    </a>
+				                    <div class="MenuItem">   
+					                    <div class="ItemIcon StickThreadsIcon DisableLabel">
+					                      Stick Threads
+					                    </div>
+				                    </div>
+				                    <div class="MenuItem">   
+					                    <div class="ItemIcon MergeThreadsIcon DisableLabel">
+					                      Merge Threads
+					                    </div>
+				                    </div>
+				                    <div class="MenuItem">   
+					                    <div class="ItemIcon ApproveThreadsIcon DisableLabel">
+					                      Approve Threads
+					                    </div>
+				                    </div>
+				                    <a class="MenuItem" href="#">   
+					                    <div class="ItemIcon UnapproveThreadsIcon">
+					                     Unapprove Threads
+					                    </div>
+				                    </a>
+				                    <a class="MenuItem" href="#">   
+					                    <div class="ItemIcon DeleteThreadsIcon">
+					                      Delete Threads
+					                    </div>
+				                    </a>
+													</div>
+					          		</div>
+					        		</div>
+								      <div class="BottomLeftRightClickPopupMenu">
+								        <div class="BottomRightRightClickPopupMenu">
+								          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+								        </div>
+								      </div>
+					      			
+								    </div>
+			      			</div>
+			      		</div>
+			      		<% /*End Popup Menu*/ %>
 							</div>
 		  				<div class="SeparatorLine"><span></span></div>
 							<a class="StatusIcon SeachIcon">Search forum</a>
 							<div class="SeparatorLine"><span></span></div>
-							<div class="StatusIcon ToolIcon">
+							<div class="StatusIcon ToolIcon" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
 								<a class="DownArrow1Icon">Forum tool</a>
+								<% /*Begin Popup Menu*/ %>
+								<div style="position: relative;">
+			      			<div class="UIPopupCategory" style="display: none; ">
+			      				<div class="UIRightClickPopupMenu" style="display: block;">
+										  <div class="TopLeftRightClickPopupMenu">
+				          			<div class="TopRightRightClickPopupMenu">
+				            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
+				          			</div>
+				        			</div>
+							        <div class="MiddleLeftRightClickPopupMenu">
+							          <div class="MiddleRightRightClickPopupMenu">
+				              		<div class="UIRightPopupMenuContainer">
+														<a class="MenuItem" href="#">   
+					                    <div class="ItemIcon PostnewThreadIcon">
+					                      Post new Thread
+					                    </div>
+				                    </a>
+				                    <a class="MenuItem" href="#">   
+					                    <div class="ItemIcon DisplayOptionsIcon">
+					                      Display Options
+					                    </div>
+				                    </a>
+				                    <a class="MenuItem" href="#">   
+					                    <div class="ItemIcon EditthisForumIcon">
+					                     Edit this Forum
+					                    </div>
+				                    </a>
+				                    <a class="MenuItem" href="#">   
+					                    <div class="ItemIcon LockthisForumIcon">
+					                      Lock this Forum
+					                    </div>
+				                    </a>
+				                    <div class="MenuItem">   
+					                    <div class="ItemIcon UnLockthisForumIcon DisableLabel">
+					                      UnLock this  Forum
+					                    </div>
+				                    </div>
+				                    <a class="MenuItem" href="#">   
+					                    <div class="ItemIcon ClosethisForumIcon">
+					                      Close this Forum
+					                    </div>
+				                    </a>
+				                    <div class="MenuItem">   
+					                    <div class="ItemIcon OpenthisForumIcon DisableLabel">
+					                      Open this Forum
+					                    </div>
+				                    </div>
+				                    <a class="MenuItem" href="#">   
+					                    <div class="ItemIcon MovethisForumIcon">
+					                      Move this Forum
+					                    </div>
+				                    </a>
+				                    <a class="MenuItem" href="#">   
+					                    <div class="ItemIcon DeleteThisForumIcon">
+					                      Delete this Forum
+					                    </div>
+				                    </a>
+													</div>
+					          		</div>
+					        		</div>
+								      <div class="BottomLeftRightClickPopupMenu">
+								        <div class="BottomRightRightClickPopupMenu">
+								          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+								        </div>
+								      </div>
+					      			
+								    </div>
+			      			</div>
+			      		</div>
+			      		<% /*End Popup Menu*/ %>
 							</div>
 							<div style="clear: both;"><span></span></div>
 			  		</div>
