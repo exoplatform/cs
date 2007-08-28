@@ -1,4 +1,8 @@
-<div class="UIContactPreview">
+<% 
+	import org.exoplatform.contact.service.Contact;
+	String compId = uicomponent.getId() ;
+%>
+<div class="UIContactPreview" id="$compId">
 	<div class="ContactPreviewBar">
 		<div class="Subject">Contact Details</div>
 		<div class="MaximizeContactPane" title="Maximize Reading Pane">Last updated: 07/18/2007 10:30 am</div>
@@ -16,11 +20,15 @@
 				<div class="MiddleLeftViewBoxStyle">
 					<div class="MiddleRightViewBoxStyle">
 						<div class="MiddleCenterViewBoxStyle">
-							<div class="ContactPreviewContainer"	>
+						<% 
+							Contact c = uicomponent.getContact();
+							if(c != null) {
+						%>
+							<div class="ContactPreviewContainer"	>								
 								<img src="/contact/skin/DefaultSkin/webui/background/Img1.gif" class="Avatar"/>
 								<div class="Member">
-									<div class="State">Benjamin, Mestrallet</div>
-									<div class="Job">Founder of eXo Platform SAS</div>
+									<div class="State"><%=c.getFullName()%></div>
+									<div class="Job"><%=c.getJobTitle()%></div>
 								</div>
 								<div style="clear: left;"><span></span></div>
 								<div class="InfoContainer">
@@ -29,7 +37,7 @@
 										<div class="LeftContent">
 											<div class="InfoItem">
 												<div class="InfoLabel">Nick name:</div>
-												<div class="Info">Benj</div>
+												<div class="Info"><%=c.getNickName()%></div>
 											</div>
 											<div class="InfoItem">
 												<div class="InfoLabel">Gender:</div>
@@ -47,7 +55,7 @@
 										<div class="RightContent">
 											<div class="InfoItem">
 												<div class="InfoLabel1">Email 1:</div>
-												<div class="Info1 Email"><a href="#">benjamin.mestrallet@exoplatform.com </a>(Preferred)</div>
+												<div class="Info1 Email"><a href="#"><%=c.getEmailAddress()%> </a>(Preferred)</div>
 											</div>													
 											<div class="InfoItem">
 												<div class="InfoLabel1">Email 2:</div>
@@ -63,37 +71,37 @@
 										<div class="LeftContent">
 											<div class="InfoItem">
 												<div class="InfoLabel">eXo Chat:</div>
-												<div class="Info">benjamin.mestrallet</div>
+												<div class="Info"><%=c.getExoId()%></div>
 											</div>
 											<div class="InfoItem">
 												<div class="InfoLabel">Google:</div>
-												<div class="Info">benjamin.mestrallet</div>
+												<div class="Info"><%=c.getGoogleId()%></div>
 											</div>
 											<div class="InfoItem">
 												<div class="InfoLabel">MSN:</div>
-												<div class="Info">benj_mes</div>
+												<div class="Info"><%=c.getMsnId()%></div>
 											</div>
 											<div class="InfoItem">
 												<div class="InfoLabel">AOL/AIM:</div>
-												<div class="Info">benj_mestrallet</div>
+												<div class="Info"><%=c.getAolId()%></div>
 											</div>
 										</div>
 										<div class="RightContent">
 											<div class="InfoItem">
 												<div class="InfoLabel1">Yahoo!:</div>
-												<div class="Info1">benjamin.mestrallet</div>
+												<div class="Info1"><%=c.getYahooId()%></div>
 											</div>													
 											<div class="InfoItem">
 												<div class="InfoLabel1">ICR:</div>
-												<div class="Info1">benjamin.mestrallet</div>
+												<div class="Info1"><%=c.getIcrId()%></div>
 											</div>													
 											<div class="InfoItem">
 												<div class="InfoLabel1">Skype:</div>
-												<div class="Info1">benjamin.mestrallet</div>
+												<div class="Info1"><%=c.getSkypeId()%></div>
 											</div>													
 											<div class="InfoItem">
 												<div class="InfoLabel1">ICQ:</div>
-												<div class="Info1">benj_mestrallet</div>
+												<div class="Info1"><%=c.getIcqId()%></div>
 											</div>													
 										</div>
 										<div style="clear: left;"><span></span></div>
@@ -105,52 +113,54 @@
 										<div class="LeftContent">
 											<div class="InfoItem">
 												<div class="InfoLabel">Street:</div>
-												<div class="Info">CP 6 - PIBS Vannes</div>
+												<div class="Info"><%=c.getHomeAddress()%></div>
 											</div>
 											<div class="InfoItem">
 												<div class="InfoLabel">City:</div>
-												<div class="Info">Paris</div>
+												<div class="Info"><%=c.getHomeCity()%></div>
 											</div>
 											<div class="InfoItem">
 												<div class="InfoLabel">State/Province:</div>
-												<div class="Info">Paris</div>
+												<div class="Info"><%=c.getHomeState_province()%></div>
 											</div>
 											<div class="InfoItem">
 												<div class="InfoLabel">Postal Code:</div>
-												<div class="Info">56038</div>
+												<div class="Info"><%=c.getHomePostalCode()%></div>
 											</div>
 											<div class="InfoItem">
 												<div class="InfoLabel">Country/Region:</div>
-												<div class="Info">France</div>
+												<div class="Info"><%=c.getHomeCountry()%></div>
 											</div>
 										</div>
 										<div class="RightContent">
 											<div class="InfoItem">
 												<div class="InfoLabel">Home Phone 1:</div>
-												<div class="Info">123456789</div>
+												<div class="Info"><%=c.getHomePhone1()%></div>
 											</div>													
 											<div class="InfoItem">
 												<div class="InfoLabel">Home Phone 2:</div>
-												<div class="Info">2345678</div>
+												<div class="Info"><%=c.getHomePhone2()%></div>
 											</div>													
 											<div class="InfoItem">
 												<div class="InfoLabel">Home Fax:</div>
-												<div class="Info">34567890</div>
+												<div class="Info"><%=c.getHomeFax()%></div>
 											</div>													
 											<div class="InfoItem">
 												<div class="InfoLabel">Mobile Phone:</div>
-												<div class="Info">098888888</div>
+												<div class="Info"><%=c.getMobilePhone()%></div>
 											</div>													
 											<div class="InfoItem">
 												<div class="InfoLabel">Web Page:</div>
-												<div class="Info">http://www.exoplatform.com</div>
+												<div class="Info"><%=c.getPersonalSite()%></div>
 											</div>													
 										</div>
 										<div style="clear: left;"><span></span></div>
 									</div>
 								</div>
 							</div>
-						</div>										
+							<%}%>
+						</div>	
+															
 					</div>
 				</div>
 				<div class="BottomLeftViewBoxStyle">

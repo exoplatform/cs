@@ -1,43 +1,41 @@
 <div class="UIAddressBooks">
-				<div class="TitleBar">
-					<div class="DownArrow3Icon" title="Collapse/Expand all"><span></span></div>
-					<div class="TitleIcon AddressIcon">Address Books</div>
-					<div class="ActionIcon"><span/></div>
-		      <div style="clear: both"><span></span></div>
-				</div>
-				<div class="PersonalAddress">
-					<div class="AddressTitle">
-						<div class="DownArrow3Icon" title="Collapse/Expand all"><span></span></div>
-						<div class="Label">Personal Address Book</div>
-			      <div style="clear: left"><span></span></div>
-					</div>
-					<div  class="ItemList Selected">
-						<a href="#" class="IconHolder AddressIcon">eXo Platform</a>
-					</div>
-					<div class="ItemList Normal">
-						<a href="#" class="IconHolder AddressIcon">Friends</a>
-					</div>
-					<div class="ItemList Normal">
-						<a href="#" class="IconHolder MyLDAPIcon">My LDAP</a>
-					</div>
-					<div class="ItemList Normal">
-						<a href="#" class="IconHolder AddressIcon">Email List</a>
-					</div>
-				</div>
-				<div class="PublicAddress">
-					<div class="AddressTitle">
-						<div class="DownArrow3Icon" title="Collapse/Expand all"><span></span></div>
-						<div class="Label">Public Address Book</div>
-			      <div style="clear: left"><span></span></div>
-					</div>
-					<div class="ItemList Normal">
-						<a href="#" class="IconHolder AddressIcon">User</a>
-					</div>
-					<div class="ItemList Normal">
-						<a href="#" class="IconHolder AddressIcon">Admin</a>
-					</div>
-					<div class="ItemList Normal">
-						<a href="#" class="IconHolder AddressIcon">Portal</a>
-					</div>
-				</div>
-			</div>
+	<div class="TitleBar">
+		<div class="DownArrow3Icon" title="Collapse/Expand all"><span></span></div>
+		<div class="TitleIcon AddressIcon">Address Books</div>
+		<div class="ActionIcon"><span/></div>
+  <div style="clear: both"><span></span></div>
+	</div>
+	<div class="PersonalAddress">
+		<div class="AddressTitle">
+			<div class="DownArrow3Icon" title="Collapse/Expand all"><span></span></div>
+			<div class="Label">Personal Address Book</div>
+      <div style="clear: left"><span></span></div>
+		</div>
+		<%  
+			List contactGroups = uicomponent.getGroups();
+			for(contactGroup in contactGroups) {
+			String actionLink1  = uicomponent.event("SelectGroup", contactGroup.getId()) ;			
+		%>
+		<div  class="ItemList Selected">
+			<a href="$actionLink1" class="IconHolder AddressIcon"><%=contactGroup.getName()%></a>
+		</div>
+		<% } %>
+		
+	</div>
+	<div class="PublicAddress">
+		<div class="AddressTitle">
+			<div class="DownArrow3Icon" title="Collapse/Expand all"><span></span></div>
+			<div class="Label">Public Address Book</div>
+      <div style="clear: left"><span></span></div>
+		</div>
+		<%
+			List groupContactData = uicomponent.getSharedContact();
+			for(group in groupContactData) {
+			String actionLink2  = uicomponent.event("SelectShareGroup", group.getName()) ;			
+		%>
+		<div class="ItemList Normal">
+			<a href="$actionLink2" class="IconHolder AddressIcon"><%=group.getName()%></a>
+		</div>
+		<% } %>
+	</div>
+</div>

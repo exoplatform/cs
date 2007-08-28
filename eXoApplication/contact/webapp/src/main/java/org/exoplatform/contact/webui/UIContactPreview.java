@@ -4,6 +4,7 @@
  **************************************************************************/
 package org.exoplatform.contact.webui;
 
+import org.exoplatform.contact.service.Contact;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIComponent;
 
@@ -18,7 +19,11 @@ import org.exoplatform.webui.core.UIComponent;
     template =  "app:/templates/contact/webui/UIContactPreview.gtmpl"
 )
 public class UIContactPreview extends UIComponent  {
-  public UIContactPreview() throws Exception {
-    
-  }  
+  private Contact contact_ = null; 
+  
+  public UIContactPreview() throws Exception { }
+  
+  public void setContact(Contact c) { contact_ = c; }
+  
+  public Contact getContact() { return contact_;  }
 }

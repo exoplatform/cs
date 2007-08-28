@@ -1,0 +1,44 @@
+
+<div class="Profile">
+  <div class="FormContainer">
+	      <table class="UIFormGrid">
+      <tbody>
+      	<tr>
+            <td colspan="2" class="FieldComponent">
+					   	
+					      <div class="FormContainer">
+					        <table class="UIFormGrid">
+					          <tbody>
+					            <%								
+					      			  for (field in uicomponent.getChidren()) {
+									   	%>
+					            <tr>
+				                <td class="FieldLabel"><%=uicomponent.getLabel(field.getName())%>:</td>
+					              <td class="FieldComponent">
+					              	 <% uicomponent.renderField() %>
+					              </td>
+					            </tr>
+					            <%} %>
+					          </tbody>
+					        </table>
+					        
+					      </div>
+							</td>
+		        </tr>
+	      	</tbody>
+	      </table>
+	    </div>
+	    
+	<div class="AvatarContent">
+		<div class="Label">Picture:</div>
+		<img src="/contact/skin/DefaultSkin/webui/background/Img2.gif" class="Avatar"/>
+		<div class="Action">	
+			<a href="#">Change | </a>
+			<a href="#">Delete</a>
+		</div>
+	</div>
+	
+	<div style="clear: left;"><span></span></div>
+</div>
+
+				        

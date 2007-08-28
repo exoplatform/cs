@@ -1,4 +1,9 @@
-<div class="UIContacts">
+<% 
+	import org.exoplatform.contact.service.Contact;
+	String compId = uicomponent.getId() ;	
+%>
+
+<div class="$compId" id = "$compId">
 			
 				<div class="UIContactActionsBar">
 					<a href="#" class="ControlButton">
@@ -62,38 +67,20 @@
 	  	 	       	</tr>
 	  	 	    </thead>
   	 	      <tbody>
+  	 	      <%  
+							List contacts = uicomponent.getContacts();
+							for(Contact contact : contacts) {
+								String actionLink  = uicomponent.event("SelectedContact", contact.getId()) ;
+						%>
   						<tr>
   						  <td class="text" style="padding-left: 7px;"><input type="checkbox" class="checkbox" value="4"/></td>
 								<td class="text" style="padding: 0px;"><div class="Icon" ><span></span></div></td>
-								<td class="text"><div class="State OnlineIcon" title="Availabel">Benjamin, Mestrallet</div></td>
-								<td class="text">benjamin.mestrallet@exoplatform.com</td>
-								<td class="text">eXo Platform</td>
-								<td>04 2663 367</td>
+								<td class="text"><div class="State OnlineIcon" title="Availabel"><a href="$actionLink"><%=contact.getFullName()%></a></div></td>
+								<td class="text"><a href="$actionLink"><%=contact.getEmailAddress()%></a></td>
+								<td class="text"><a href="$actionLink"><%=contact.getJobTitle()%></a></td>
+								<td><a href="$actionLink"><%=contact.getWorkPhone1()%></a></td>
    			     	</tr>
-			     	  <tr>
-          			<td class="text" style="padding-left: 7px;"><input type="checkbox" class="checkbox" value="4"/></td>
-								<td class="text" style="padding: 0px;"><div class="Icon RedTag"><span></span></div></td>
-								<td class="text"><div class="State OfflineIcon" title="Invisible">Benjamin, Mestrallet</div></td>
-								<td class="text">benjamin.mestrallet@exoplatform.com</td>
-								<td class="text">eXo Platform</td>
-								<td>04 2663 367</td>
-      		    </tr>
-     		      <tr>
-     		        <td class="text" style="padding-left: 7px;"><input type="checkbox" class="checkbox" value="4"/></td>
-								<td class="text" style="padding: 0px;"><div class="Icon"><span></span></div></td>
-								<td class="text"><div class="State BusyIcon" title="Busy">Benjamin, Mestrallet</div></td>
-								<td class="text">benjamin.mestrallet@exoplatform.com</td>
-								<td class="text">eXo Platform</td>
-								<td>04 2663 367</td>
-      		    </tr>
-					    <tr>
-							  <td class="text" style="padding-left: 7px;"><input type="checkbox" class="checkbox" value="4"/></td>
-								<td class="text" style="padding: 0px;"><div class="Icon"><span></span></div></td>
-								<td class="text"><div class="State OfflineIcon" title="Invisible">Benjamin, Mestrallet</div></td>
-								<td class="text">benjamin.mestrallet@exoplatform.com</td>
-								<td class="text">eXo Platform</td>
-								<td>04 2663 367</td>
-		  		    </tr>
+			     	<% } %>  
   	   			</tbody>
 					</table>
 				</div>

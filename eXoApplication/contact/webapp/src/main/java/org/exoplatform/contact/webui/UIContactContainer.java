@@ -18,8 +18,10 @@ import org.exoplatform.webui.core.UIContainer;
     template =  "app:/templates/contact/webui/UIContactContainer.gtmpl"
 )
 public class UIContactContainer extends UIContainer  {
+  
   public UIContactContainer() throws Exception {
     addChild(UIContacts.class, null, null) ;
     addChild(UIContactPreview.class, null, null) ;
   }  
+  
 }

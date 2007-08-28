@@ -32,5 +32,11 @@ public interface ContactService {
   
   public Contact shareContact(Contact contact, String[] groupIds) throws Exception;
   public List<GroupContactData> getPublicContacts(String[] groupIds) throws Exception ;
+  
+  public List<Tag> getTags(String username) throws Exception ;
+  public List<Contact> getContactByTag(String username, String tagName) throws Exception ;
+  public void addTag(String username, List<String> contactIds, Tag tag) throws Exception ;
+  public Tag removeTag(String username, String tagName) throws Exception ;
+  
 
 }

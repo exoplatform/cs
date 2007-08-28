@@ -10,6 +10,7 @@ import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.GroupContactData;
+import org.exoplatform.contact.service.Tag;
 import org.exoplatform.registry.JCRRegistryService;
 import org.exoplatform.services.jcr.RepositoryService;
 
@@ -86,4 +87,17 @@ public class ContactServiceImpl implements ContactService{
   public void saveSharedContact(Contact contact, boolean isNew) throws Exception {
     storage_.saveSharedContact(contact, isNew);
   } 
+  
+  public List<Tag> getTags(String username) throws Exception {
+    return storage_.getTags(username);
+  }
+  public List<Contact> getContactByTag(String username, String tagName) throws Exception {
+    return storage_.getContactByTag(username, tagName);
+  }
+  public void addTag(String username, List<String> contactIds, Tag tag) throws Exception {
+    storage_.addTag(username, contactIds, tag);
+  }
+  public Tag removeTag(String username, String tagName) throws Exception {
+    return storage_.removeTag(username, tagName);
+  }
 }

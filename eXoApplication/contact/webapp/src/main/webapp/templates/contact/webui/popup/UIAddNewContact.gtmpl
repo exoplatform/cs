@@ -247,7 +247,8 @@
 					                <td class="FieldLabel"><%=uicomponent.getLabel(uiform.getChild(i).getName())%>:</td>
 						              <td class="FieldComponent">
 						              	<% uiform.renderChild(i) %>
-						              	<a href="#"><img src="/eXoResources/skin/sharedImages/Blank.gif" class="PermissionSettingIcon"></a>
+														<a href="<%=uicomponent.event("SharedGroups")%>"><img src="/eXoResources/skin/sharedImages/Blank.gif" class="PermissionSettingIcon"></a>
+						              	
 						              </td>
 						            </tr>
 											</tbody>
@@ -259,6 +260,7 @@
 			      </div>
 			      	
 	        </div>
+			  </div>
 			  </div>
 			  
 			</div>  

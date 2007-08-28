@@ -4,7 +4,6 @@
  **************************************************************************/
 package org.exoplatform.contact.service;
 
-import org.exoplatform.services.jcr.util.IdGenerator;
 
 /**
  * Created by The eXo Platform SARL
@@ -13,18 +12,10 @@ import org.exoplatform.services.jcr.util.IdGenerator;
  * July 2, 2007  
  * 
  */
-public class ContactGroup {
-  private String id ;
+public class Tag {
+  
   private String name ;
-  
-  public ContactGroup() {
-    id = "ContactGroup" + IdGenerator.generate() ;
-  }
-  
-  public String getId()  { return id ; }
-  public void   setId(String s) { id = s ; }
-  
-  public String getName()  { return name ; }
-  public void   setName(String s) { name = s ; }
-  
+  public void setName(String name) { this.name = name ; }
+  public String getName() { return name ; }
+    
 }

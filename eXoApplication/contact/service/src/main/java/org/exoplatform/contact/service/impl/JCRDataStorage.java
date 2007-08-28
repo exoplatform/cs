@@ -21,6 +21,7 @@ import javax.jcr.query.QueryResult;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.GroupContactData;
+import org.exoplatform.contact.service.Tag;
 import org.exoplatform.registry.JCRRegistryService;
 import org.exoplatform.registry.ServiceRegistry;
 import org.exoplatform.services.jcr.RepositoryService;
@@ -37,6 +38,7 @@ public class JCRDataStorage implements DataStorage {
   
   final private static String CONTACTS = "contacts".intern() ;
   final private static String CONTACT_GROUP = "contactGroup".intern() ;
+  final private static String TAGS = "tags".intern() ;
   
   private RepositoryService  repositoryService_ ; 
   private JCRRegistryService jcrRegistryService_ ;
@@ -75,6 +77,12 @@ public class JCRDataStorage implements DataStorage {
     return contactServiceHome.addNode(CONTACT_GROUP, "nt:unstructured") ;
   }
   
+  private Node getTagHome(String username) throws Exception {
+    Node contactServiceHome = getContactServiceHome(username) ;
+    if(contactServiceHome.hasNode(TAGS)) return contactServiceHome.getNode(TAGS) ;
+    return contactServiceHome.addNode(TAGS, "nt:unstructured") ;
+  }
+  
   private Node getPublicContactGroupHome() throws Exception {
     Node contactServiceHome = getPublicContactServiceHome() ;
     if(contactServiceHome.hasNode(CONTACT_GROUP)) return contactServiceHome.getNode(CONTACT_GROUP) ;
@@ -105,21 +113,49 @@ public class JCRDataStorage implements DataStorage {
   
   private Contact getContact(Node contactNode) throws Exception {
     Contact contact = new Contact();
-    if(contactNode.hasProperty("exo:id"))contact.setId(contactNode.getProperty("exo:id").getString());
+    if(contactNode.hasProperty("exo:id")) contact.setId(contactNode.getProperty("exo:id").getString()) ;
+    if(contactNode.hasProperty("exo:fullName"))contact.setFullName(contactNode.getProperty("exo:fullName").getString());
     if(contactNode.hasProperty("exo:firstName"))contact.setFirstName(contactNode.getProperty("exo:firstName").getString());
+    if(contactNode.hasProperty("exo:middleName"))contact.setMiddleName(contactNode.getProperty("exo:middleName").getString());
     if(contactNode.hasProperty("exo:lastName"))contact.setLastName(contactNode.getProperty("exo:lastName").getString());
-    if(contactNode.hasProperty("exo:emailAddress"))contact.setEmailAddress(contactNode.getProperty("exo:emailAddress").getString());
-    if(contactNode.hasProperty("exo:homePhone"))contact.setHomePhone(contactNode.getProperty("exo:homePhone").getString());
-    if(contactNode.hasProperty("exo:workPhone"))contact.setWorkPhone(contactNode.getProperty("exo:workPhone").getString());
-    if(contactNode.hasProperty("exo:homeAddress"))contact.setHomeAddress(contactNode.getProperty("exo:homeAddress").getString());
-    if(contactNode.hasProperty("exo:country"))contact.setCountry(contactNode.getProperty("exo:country").getString());
-    if(contactNode.hasProperty("exo:postalCode"))contact.setPostalCode(contactNode.getProperty("exo:postalCode").getString());
-    if(contactNode.hasProperty("exo:personalSite"))contact.setPersonalSite(contactNode.getProperty("exo:personalSite").getString());
-    if(contactNode.hasProperty("exo:organization"))contact.setOrganization(contactNode.getProperty("exo:organization").getString());
+    if(contactNode.hasProperty("exo:nickName"))contact.setNickName(contactNode.getProperty("exo:nickName").getString());
     if(contactNode.hasProperty("exo:jobTitle"))contact.setJobTitle(contactNode.getProperty("exo:jobTitle").getString());
-    if(contactNode.hasProperty("exo:companyAddress"))contact.setCompanyAddress(contactNode.getProperty("exo:companyAddress").getString());
-    if(contactNode.hasProperty("exo:companySite"))contact.setCompanySite(contactNode.getProperty("exo:companySite").getString());
-    if(contactNode.hasProperty("exo:groups"))contact.setCategories(ValuesToStrings(contactNode.getProperty("exo:groups").getValues()));
+    if(contactNode.hasProperty("exo:emailAddress"))contact.setEmailAddress(contactNode.getProperty("exo:emailAddress").getString());
+    
+    if(contactNode.hasProperty("exo:exoId"))contact.setExoId(contactNode.getProperty("exo:exoId").getString());
+    if(contactNode.hasProperty("exo:googleId"))contact.setGoogleId(contactNode.getProperty("exo:googleId").getString());
+    if(contactNode.hasProperty("exo:msnId"))contact.setMsnId(contactNode.getProperty("exo:msnId").getString());
+    if(contactNode.hasProperty("exo:aolId"))contact.setAolId(contactNode.getProperty("exo:aolId").getString());
+    if(contactNode.hasProperty("exo:yahooId"))contact.setYahooId(contactNode.getProperty("exo:yahooId").getString());
+    if(contactNode.hasProperty("exo:icrId"))contact.setIcrId(contactNode.getProperty("exo:icrId").getString());
+    if(contactNode.hasProperty("exo:skypeId"))contact.setSkypeId(contactNode.getProperty("exo:skypeId").getString());
+    if(contactNode.hasProperty("exo:icqId"))contact.setIcqId(contactNode.getProperty("exo:icqId").getString());
+    
+    if(contactNode.hasProperty("exo:homeAddress"))contact.setHomeAddress(contactNode.getProperty("exo:homeAddress").getString());
+    if(contactNode.hasProperty("exo:homeCity"))contact.setHomeCity(contactNode.getProperty("exo:homeCity").getString());
+    if(contactNode.hasProperty("exo:homeState_province"))contact.setHomeState_province(contactNode.getProperty("exo:homeState_province").getString());
+    if(contactNode.hasProperty("exo:homePostalCode"))contact.setHomePostalCode(contactNode.getProperty("exo:homePostalCode").getString());
+    if(contactNode.hasProperty("exo:homeCountry"))contact.setHomeCountry(contactNode.getProperty("exo:homeCountry").getString());
+    if(contactNode.hasProperty("exo:homePhone1"))contact.setHomePhone1(contactNode.getProperty("exo:homePhone1").getString());
+    if(contactNode.hasProperty("exo:homePhone2"))contact.setHomePhone2(contactNode.getProperty("exo:homePhone2").getString());
+    if(contactNode.hasProperty("exo:homeFax"))contact.setHomeFax(contactNode.getProperty("exo:homeFax").getString());
+    if(contactNode.hasProperty("exo:personalSite"))contact.setPersonalSite(contactNode.getProperty("exo:personalSite").getString());
+    
+    if(contactNode.hasProperty("exo:workAddress"))contact.setWorkAddress(contactNode.getProperty("exo:workAddress").getString());
+    if(contactNode.hasProperty("exo:workCity"))contact.setWorkCity(contactNode.getProperty("exo:workCity").getString());
+    if(contactNode.hasProperty("exo:workState_province"))contact.setWorkStateProvince(contactNode.getProperty("exo:workState_province").getString());
+    if(contactNode.hasProperty("exo:workPostalCode"))contact.setWorkPostalCode(contactNode.getProperty("exo:workPostalCode").getString());
+    if(contactNode.hasProperty("exo:workCountry"))contact.setWorkCountry(contactNode.getProperty("exo:workCountry").getString());
+    if(contactNode.hasProperty("exo:workPhone1"))contact.setWorkPhone1(contactNode.getProperty("exo:workPhone1").getString());
+    if(contactNode.hasProperty("exo:workPhone2"))contact.setWorkPhone2(contactNode.getProperty("exo:workPhone2").getString());
+    if(contactNode.hasProperty("exo:workFax"))contact.setWorkFax(contactNode.getProperty("exo:workFax").getString());
+    if(contactNode.hasProperty("exo:mobilePhone"))contact.setMobilePhone(contactNode.getProperty("exo:mobilePhone").getString());
+    if(contactNode.hasProperty("exo:webPage"))contact.setWebPage(contactNode.getProperty("exo:webPage").getString());
+    
+    if(contactNode.hasProperty("exo:note"))contact.setNote(contactNode.getProperty("exo:note").getString());
+    
+    if(contactNode.hasProperty("exo:categories"))contact.setCategories(ValuesToStrings(contactNode.getProperty("exo:categories").getValues()));
+    
     contact.setPath(contactNode.getPath()) ;
     return contact;
   }
@@ -141,9 +177,7 @@ public class JCRDataStorage implements DataStorage {
     Node contactHomeNode = getContactHome(username);
     if(contactHomeNode.hasNode(contactId)) {
       Node contactNode = contactHomeNode.getNode(contactId);
-      Contact contact = new Contact();
-      contact = getContact(contactNode);
-      return contact;
+      return getContact(contactNode);
     }
     return null;
   }
@@ -152,7 +186,7 @@ public class JCRDataStorage implements DataStorage {
     Node contactHome = getContactHome(username);
     QueryManager qm = contactHome.getSession().getWorkspace().getQueryManager();
     StringBuffer queryString = new StringBuffer("/jcr:root" + contactHome.getPath() 
-                                                + "//element(*,exo:contact)[@exo:groups='").
+                                                + "//element(*,exo:contact)[@exo:categories='").
                                                 append(groupId).
                                                 append("']");
     Query query = qm.createQuery(queryString.toString(), Query.XPATH);
@@ -224,20 +258,47 @@ public class JCRDataStorage implements DataStorage {
     } else {
       contactNode = contactHomeNode.getNode(contact.getId());
     }
+    
+    contactNode.setProperty("exo:fullName", contact.getFullName());
     contactNode.setProperty("exo:firstName", contact.getFirstName());
+    contactNode.setProperty("exo:middleName", contact.getMiddleName());
     contactNode.setProperty("exo:lastName", contact.getLastName());
-    contactNode.setProperty("exo:emailAddress", contact.getEmailAddress());
-    contactNode.setProperty("exo:homePhone", contact.getHomePhone());
-    contactNode.setProperty("exo:workPhone", contact.getWorkPhone());
-    contactNode.setProperty("exo:homeAddress", contact.getHomeAddress());
-    contactNode.setProperty("exo:country", contact.getCountry());
-    contactNode.setProperty("exo:postalCode", contact.getPostalCode());
-    contactNode.setProperty("exo:personalSite", contact.getPersonalSite());
-    contactNode.setProperty("exo:organization", contact.getOrganization());
+    contactNode.setProperty("exo:nickName", contact.getNickName());
     contactNode.setProperty("exo:jobTitle", contact.getJobTitle());
-    contactNode.setProperty("exo:companyAddress", contact.getCompanyAddress()); 
-    contactNode.setProperty("exo:companySite", contact.getCompanySite());
-    contactNode.setProperty("exo:groups", contact.getCategories());
+    contactNode.setProperty("exo:emailAddress", contact.getEmailAddress());
+    
+    contactNode.setProperty("exo:exoId", contact.getExoId());
+    contactNode.setProperty("exo:googleId", contact.getGoogleId());
+    contactNode.setProperty("exo:msnId", contact.getMsnId());
+    contactNode.setProperty("exo:aolId", contact.getAolId());
+    contactNode.setProperty("exo:yahooId", contact.getYahooId());
+    contactNode.setProperty("exo:icrId", contact.getIcrId());
+    contactNode.setProperty("exo:skypeId", contact.getSkypeId());
+    contactNode.setProperty("exo:icqId", contact.getIcqId());
+    
+    contactNode.setProperty("exo:homeAddress", contact.getHomeAddress());
+    contactNode.setProperty("exo:homeCity", contact.getHomeCity());
+    contactNode.setProperty("exo:homeState_province", contact.getHomeState_province());
+    contactNode.setProperty("exo:homePostalCode", contact.getHomePostalCode());
+    contactNode.setProperty("exo:homeCountry", contact.getHomeCountry());
+    contactNode.setProperty("exo:homePhone1", contact.getHomePhone1());
+    contactNode.setProperty("exo:homePhone2", contact.getHomePhone2());
+    contactNode.setProperty("exo:homeFax", contact.getHomeFax());
+    contactNode.setProperty("exo:personalSite", contact.getPersonalSite());
+    
+    contactNode.setProperty("exo:workAddress", contact.getWorkAddress());
+    contactNode.setProperty("exo:workCity", contact.getWorkCity());
+    contactNode.setProperty("exo:workState_province", contact.getWorkStateProvince());
+    contactNode.setProperty("exo:workPostalCode", contact.getWorkPostalCode());
+    contactNode.setProperty("exo:workCountry", contact.getWorkCountry());
+    contactNode.setProperty("exo:workPhone1", contact.getWorkPhone1());
+    contactNode.setProperty("exo:workPhone2", contact.getWorkPhone2());
+    contactNode.setProperty("exo:workFax", contact.getWorkFax());
+    contactNode.setProperty("exo:mobilePhone", contact.getMobilePhone());
+    contactNode.setProperty("exo:webPage", contact.getWebPage());
+    
+    contactNode.setProperty("exo:note", contact.getNote());
+    contactNode.setProperty("exo:categories", contact.getCategories());
     
     contactHomeNode.getSession().save();
   }
@@ -326,7 +387,7 @@ public class JCRDataStorage implements DataStorage {
     Node contactHome = getPublicContactHome();
     QueryManager qm = contactHome.getSession().getWorkspace().getQueryManager();
     StringBuffer queryString = new StringBuffer("/jcr:root" + contactHome.getPath() 
-                                                + "//element(*,exo:contact)[@exo:groups='").
+                                                + "//element(*,exo:contact)[@exo:categories='").
                                                 append(groupId).
                                                 append("']");
     Query query = qm.createQuery(queryString.toString(), Query.XPATH);
@@ -370,21 +431,130 @@ public class JCRDataStorage implements DataStorage {
     } else {
       contactNode = contactHomeNode.getNode(contact.getId());
     }
+    contactNode.setProperty("exo:fullName", contact.getFullName());
     contactNode.setProperty("exo:firstName", contact.getFirstName());
+    contactNode.setProperty("exo:middleName", contact.getMiddleName());
     contactNode.setProperty("exo:lastName", contact.getLastName());
-    contactNode.setProperty("exo:emailAddress", contact.getEmailAddress());
-    contactNode.setProperty("exo:homePhone", contact.getHomePhone());
-    contactNode.setProperty("exo:workPhone", contact.getWorkPhone());
-    contactNode.setProperty("exo:homeAddress", contact.getHomeAddress());
-    contactNode.setProperty("exo:country", contact.getCountry());
-    contactNode.setProperty("exo:postalCode", contact.getPostalCode());
-    contactNode.setProperty("exo:personalSite", contact.getPersonalSite());
-    contactNode.setProperty("exo:organization", contact.getOrganization());
+    contactNode.setProperty("exo:nickName", contact.getNickName());
     contactNode.setProperty("exo:jobTitle", contact.getJobTitle());
-    contactNode.setProperty("exo:companyAddress", contact.getCompanyAddress()); 
-    contactNode.setProperty("exo:companySite", contact.getCompanySite());
-    contactNode.setProperty("exo:groups", contact.getCategories());
+    contactNode.setProperty("exo:emailAddress", contact.getEmailAddress());
+    
+    contactNode.setProperty("exo:exoId", contact.getExoId());
+    contactNode.setProperty("exo:googleId", contact.getGoogleId());
+    contactNode.setProperty("exo:msnId", contact.getMsnId());
+    contactNode.setProperty("exo:aolId", contact.getAolId());
+    contactNode.setProperty("exo:yahooId", contact.getYahooId());
+    contactNode.setProperty("exo:icrId", contact.getIcrId());
+    contactNode.setProperty("exo:skypeId", contact.getSkypeId());
+    contactNode.setProperty("exo:icqId", contact.getIcqId());
+    
+    contactNode.setProperty("exo:homeAddress", contact.getHomeAddress());
+    contactNode.setProperty("exo:homeCity", contact.getHomeCity());
+    contactNode.setProperty("exo:homeState_province", contact.getHomeState_province());
+    contactNode.setProperty("exo:homePostalCode", contact.getHomePostalCode());
+    contactNode.setProperty("exo:homeCountry", contact.getHomeCountry());
+    contactNode.setProperty("exo:homePhone1", contact.getHomePhone1());
+    contactNode.setProperty("exo:homePhone2", contact.getHomePhone2());
+    contactNode.setProperty("exo:homeFax", contact.getHomeFax());
+    contactNode.setProperty("exo:personalSite", contact.getPersonalSite());
+    
+    contactNode.setProperty("exo:workAddress", contact.getWorkAddress());
+    contactNode.setProperty("exo:workCity", contact.getWorkCity());
+    contactNode.setProperty("exo:workState_province", contact.getWorkStateProvince());
+    contactNode.setProperty("exo:workPostalCode", contact.getWorkPostalCode());
+    contactNode.setProperty("exo:workCountry", contact.getWorkCountry());
+    contactNode.setProperty("exo:workPhone1", contact.getWorkPhone1());
+    contactNode.setProperty("exo:workPhone2", contact.getWorkPhone2());
+    contactNode.setProperty("exo:workFax", contact.getWorkFax());
+    contactNode.setProperty("exo:mobilePhone", contact.getMobilePhone());
+    contactNode.setProperty("exo:webPage", contact.getWebPage());
+    
+    contactNode.setProperty("exo:note", contact.getNote());
+    contactNode.setProperty("exo:categories", contact.getCategories());
     
     contactHomeNode.getSession().save(); 
+  }
+
+  private void saveSharedGroup(ContactGroup group, boolean isNew) throws Exception  {
+    Node sharedGroupHomeNode = getPublicContactGroupHome();
+    Node groupNode;
+    if (isNew) {
+      groupNode = sharedGroupHomeNode.addNode(group.getId(), "exo:contactGroup");
+      groupNode.setProperty("exo:id", "contactGroup" + group.getId());
+    } else {
+      groupNode = sharedGroupHomeNode.getNode(group.getId());
+    }
+    groupNode.setProperty("exo:name", group.getName());
+    sharedGroupHomeNode.getSession().save();
+  } 
+  
+  private Tag getTag(Node tagNode) throws Exception {
+    Tag tag = new Tag();
+    if (tagNode.hasProperty("exo:name"))
+      tag.setName(tagNode.getProperty("exo:name").getString());
+    return tag;
+  }
+  
+  public List<Tag> getTags(String username) throws Exception {
+    Node tagHomeNode = getTagHome(username);
+    List<Tag> tags = new ArrayList<Tag>();
+    NodeIterator iter = tagHomeNode.getNodes();
+    while (iter.hasNext()) {
+      Node tagNode = iter.nextNode();
+      tags.add(getTag(tagNode));
+    }
+    return tags;
+  }
+
+  public List<Contact> getContactByTag(String username, String tagName) throws Exception {
+    Node contactHome = getContactHome(username);
+    QueryManager qm = contactHome.getSession().getWorkspace().getQueryManager();
+    StringBuffer queryString = new StringBuffer("/jcr:root" + contactHome.getPath() 
+                                                + "//element(*,exo:contact)[@exo:tags='").
+                                                append(tagName).
+                                                append("']");
+    Query query = qm.createQuery(queryString.toString(), Query.XPATH);
+    QueryResult result = query.execute();
+    NodeIterator it = result.getNodes();
+    List<Contact> contacts = new ArrayList<Contact>();
+    while (it.hasNext()) {
+      contacts.add(getContact(it.nextNode()));
+    }
+    return contacts ;
+  } 
+  
+  public void addTag(String username, List<String> contactIds, Tag tag) throws Exception {
+    Node tagHomeNode = getTagHome(username);
+    List<Tag> existTags = getTags(username);
+    Node tagNode = null ;
+    for (int i = 0; i < existTags.size(); i ++) {
+      if (existTags.get(i).getName().equalsIgnoreCase(tag.getName()))
+        {
+        tagNode = tagHomeNode.getNode(tag.getName());
+        break;
+        }
+    }
+    if (tagNode == null) {
+      tagNode = tagHomeNode.addNode(tag.getName(), "exo:tag") ;
+      tagNode.setProperty("exo:name", tag.getName());
+    }
+    tagHomeNode.getSession().save();
+    
+    Node contactHomeNode = getContactHome(username);
+    for (int i = 0; i < contactIds.size(); i ++) {
+      Node contactNode = contactHomeNode.getNode(contactIds.get(i));
+      Contact c = getContact(contactNode);
+      String[] tags = new String[c.getTags().length + 1]; 
+      for (int j = 0; j < c.getTags().length; j ++) {
+        tags[i] = c.getTags()[i];
+      }
+      tags[c.getTags().length] = tag.getName();
+      contactNode.setProperty("exo:tags", tags);
+      contactHomeNode.getSession().save();
+    }
+  }  
+  
+  public Tag removeTag(String username, String tagName) throws Exception {
+    return null;
   }
 }

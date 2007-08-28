@@ -17,7 +17,7 @@ import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
  */
 
 @ComponentConfig(
-    lifecycle = UIContainerLifecycle.class
+   lifecycle = UIContainerLifecycle.class
 )
 public class UIPopupContainer extends UIContainer implements UIPopupComponent {
   public UIPopupContainer() throws Exception {    
