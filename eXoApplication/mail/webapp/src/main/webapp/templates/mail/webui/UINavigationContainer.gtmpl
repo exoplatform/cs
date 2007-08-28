@@ -3,7 +3,7 @@
 	import org.exoplatform.mail.webui.UIFolderContainer ;
 	import org.exoplatform.mail.webui.UITags ; 
 %>
-<div class="UINavigationContainer">
+<div class="UINavigationContainer" id="<%=uicomponent.getId()%>">
 	<%uicomponent.renderChild(UISelectAccount.class);%>
 	<%uicomponent.renderChild(UIFolderContainer.class);%>
 	<%uicomponent.renderChild(UITags.class);%>

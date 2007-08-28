@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.exoplatform.mail.webui.UIFormInputSetWithAction;
-import org.exoplatform.mail.webui.Utils;
+import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.WizardStep;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
@@ -28,8 +28,16 @@ public class UIAccountWizardStep3 extends UIFormInputSetWithAction  implements W
   public static final String FIELD_INCOMINGPORT = "incomeingPort" ;
   public static final String FIELD_OUTGOINGSERVER = "outgoingServer" ;
   public static final String FIELD_OUTGOINGPORT = "outgoingPort" ;
-  public static final String FIELD_USESSL = "isSsl" ;
+  public static final String FIELD_USESSL = "isSsl".intern() ;
   public static final String FIELD_STOREFOLDER = "storeFolder" ;
+  public static final String DEFAULT_POP_PORT = "110".intern() ;
+  public static final String DEFAULT_SMTP_PORT = "25".intern() ;
+  public static final String DEFAULT_POPSSL_PORT = "995".intern() ;
+  public static final String DEFAULT_SMTPSSL_PORT = "465".intern() ;
+  
+  public static final String DEFAULT_IMAP_PORT = "143".intern() ;
+  public static final String DEFAULT_IMAPSSL_PORT = "993".intern() ;
+  
   
   private boolean isValid_ = false ;
   private List<String> infoMessage_ = new ArrayList<String>() ;
@@ -38,15 +46,17 @@ public class UIAccountWizardStep3 extends UIFormInputSetWithAction  implements W
     super(id) ;
     setComponentConfig(getClass(), null) ; 
     addChild(new UIFormSelectBox(FIELD_SERVERTYPE, null, getServerTypeValues())) ;
+    UIFormSelectBox uiSelect = getUIFormSelectBox(FIELD_SERVERTYPE) ;
+    uiSelect.setOnChange(UIAccountCreation.ACT_CHANGE_TYPE) ;
+    addChild(new UIFormCheckBoxInput<Boolean>(FIELD_USESSL, null,null)) ;
+    UIFormCheckBoxInput uiCheckBox = getUIFormCheckBoxInput(FIELD_USESSL) ;
+    uiCheckBox.setOnChange(UIAccountCreation.ACT_CHANGE_SSL) ;
     addChild(new UIFormStringInput(FIELD_INCOMINGSERVER, null, null)) ;
     addChild(new UIFormStringInput(FIELD_INCOMINGPORT, null, null)) ;
-    
     addChild(new UIFormStringInput(FIELD_OUTGOINGSERVER, null, null)) ;
     addChild(new UIFormStringInput(FIELD_OUTGOINGPORT, null, null)) ;
     addChild(new UIFormStringInput(FIELD_STOREFOLDER, null,null)) ;
-    addChild(new UIFormCheckBoxInput<Boolean>(FIELD_USESSL, null,null)) ;
-    
-   // setActionInfo(FIELD_STOREFOLDER, UIAccountCreation.ACT_SELETFOLDER) ;
+    setDefaultValue(uiSelect.getValue(), uiCheckBox.isChecked()) ;
     infoMessage_.clear() ;
     infoMessage_.add("UIAccountWizardStep3.info.label1") ;
     infoMessage_.add("UIAccountWizardStep3.info.label2") ;
@@ -56,6 +66,25 @@ public class UIAccountWizardStep3 extends UIFormInputSetWithAction  implements W
     return infoMessage_ ;
   } 
   
+  protected void setDefaultValue(String serverType,boolean isSSL) {
+    if(serverType.equals(Utils.POP3)) {
+      if(isSSL) {
+        getUIStringInput(FIELD_INCOMINGPORT).setValue(DEFAULT_POPSSL_PORT) ;
+        getUIStringInput(FIELD_OUTGOINGPORT).setValue(DEFAULT_SMTPSSL_PORT) ;
+      } else {
+        getUIStringInput(FIELD_INCOMINGPORT).setValue(DEFAULT_POP_PORT) ;
+        getUIStringInput(FIELD_OUTGOINGPORT).setValue(DEFAULT_SMTP_PORT) ;
+      }
+    } else {
+      if(isSSL) {
+        getUIStringInput(FIELD_INCOMINGPORT).setValue(DEFAULT_IMAPSSL_PORT) ;
+        getUIStringInput(FIELD_OUTGOINGPORT).setValue(DEFAULT_SMTP_PORT) ;
+      } else {
+        getUIStringInput(FIELD_INCOMINGPORT).setValue(DEFAULT_IMAP_PORT) ;
+        getUIStringInput(FIELD_OUTGOINGPORT).setValue(DEFAULT_SMTP_PORT) ;
+      }
+    }
+  }
 
   public boolean isFieldsValid() {
     return !(Utils.isEmptyField(getIncomingServer()) 

@@ -7,7 +7,7 @@ package org.exoplatform.mail.webui.popup;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.exoplatform.mail.webui.Utils;
+import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.WizardStep;
 import org.exoplatform.webui.form.UIFormInputSet;
 import org.exoplatform.webui.form.UIFormStringInput;
@@ -23,6 +23,7 @@ public class UIAccountWizardStep2 extends UIFormInputSet implements WizardStep{
   public static final String FIELD_OUTGOINGNAME = "outgoingName" ;
   public static final String FIELD_EMAILADDRESS = "emailAddress" ;
   public static final String FIELD_EMAILREPLY = "emailReply" ;
+  public static final String FIELD_SIGNATURE = "signature" ;
   
   private boolean isValid_ = false ;
   private List<String> infoMessage_ = new ArrayList<String>() ;
@@ -33,6 +34,7 @@ public class UIAccountWizardStep2 extends UIFormInputSet implements WizardStep{
     addChild(new UIFormStringInput(FIELD_OUTGOINGNAME, null, null)) ;
     addChild(new UIFormStringInput(FIELD_EMAILADDRESS, null, null)) ;
     addChild(new UIFormStringInput(FIELD_EMAILREPLY, null, null)) ;
+    addChild(new UIFormStringInput(FIELD_SIGNATURE, null, null)) ;
     infoMessage_.clear() ;
     infoMessage_.add("UIAccountWizardStep2.info.label1") ;
   }
@@ -83,6 +85,12 @@ public class UIAccountWizardStep2 extends UIFormInputSet implements WizardStep{
     getUIStringInput(FIELD_EMAILREPLY).setValue(value) ;
   }
 
+  protected void setSignature(String value) {
+    getUIStringInput(FIELD_SIGNATURE).setValue(value) ;
+  }
+  protected String getSignature() {
+    return getUIStringInput(FIELD_SIGNATURE).getValue() ;
+  }
 
 
 

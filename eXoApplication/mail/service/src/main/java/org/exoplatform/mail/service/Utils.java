@@ -4,10 +4,6 @@
  **************************************************************************/
 package org.exoplatform.mail.service;
 
-import javax.mail.Session;
-import javax.mail.Transport;
-
-
 /**
  * Created by The eXo Platform SARL
  * Author : Pham Tuan
@@ -81,5 +77,18 @@ public class Utils {
   
   public static final String MIMETYPE_TEXTPLAIN = "text/plain".intern() ;
   
-  
+  public static final String POP3 = "pop3".intern() ;
+  public static final String IMAP = "imap".intern() ;
+
+  public static boolean isEmptyField(String value) {
+    return value == null || value.trim().length() == 0 ;
+  }
+  public static boolean isNumber(String number) {
+    try {
+      Long.parseLong(number.trim()) ;
+    } catch(NumberFormatException nfe) {
+      return false;
+    }
+    return true ;
+  }
 }

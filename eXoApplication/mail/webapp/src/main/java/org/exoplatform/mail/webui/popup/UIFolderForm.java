@@ -9,7 +9,7 @@ import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.webui.UICustomizeFolders;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UISelectAccount;
-import org.exoplatform.mail.webui.Utils;
+import org.exoplatform.mail.service.Utils;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;

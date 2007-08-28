@@ -17,7 +17,7 @@ import org.exoplatform.mail.webui.Selector;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UINavigationContainer;
 import org.exoplatform.mail.webui.UISelectAccount;
-import org.exoplatform.mail.webui.Utils;
+import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.WizardStep;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -45,6 +45,8 @@ import org.exoplatform.services.jcr.util.IdGenerator ;
       @EventConfig(listeners = UIAccountCreation.ViewStep1ActionListener.class),
       @EventConfig(listeners = UIAccountCreation.ViewStep2ActionListener.class),
       @EventConfig(listeners = UIAccountCreation.ViewStep3ActionListener.class),
+      @EventConfig(listeners = UIAccountCreation.ChangeServerTypeActionListener.class),
+      @EventConfig(listeners = UIAccountCreation.ChangeCheckedActionListener.class),
       @EventConfig(listeners = UIAccountCreation.ViewStep4ActionListener.class),
       @EventConfig(listeners = UIAccountCreation.ViewStep5ActionListener.class),
       @EventConfig(listeners = UIAccountCreation.SelectFolderActionListener.class),
@@ -74,6 +76,8 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
   final static public String[] ACT_SELETFOLDER = {"SelectFolder"} ;
   final static public String ACT_CHECKSAVEPASS =  "CheckSavePass" ;
   final static public String[] ACT_CHECKGETMAIL = {"CheckGetMail"} ;
+  final static public String  ACT_CHANGE_TYPE = "ChangeServerType".intern()  ;
+  final static public String  ACT_CHANGE_SSL =  "ChangeChecked".intern()  ;
 
   public UIAccountCreation() throws Exception {
     super("UIAccountCreation") ;
@@ -158,32 +162,22 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
   protected void loadForm() {
 
   }
-  protected Account saveForm(String accname, String description, String displayName, 
-      String email, String replyMail, String serverType, String serverIncoming, String incomingPort, 
-      String serverOutgoing, String outgoingPort, String storeFolder,boolean isSSL, String userName, 
-      String password) throws Exception {
-    MailService mailSrv = getApplicationComponent(MailService.class) ;
-    Account account = new Account() ;
-    //account.setId(IdGenerator.generate()) ;
-    account.setLabel(accname) ;
-    account.setDescription(description) ;
-    account.setUserDisplayName(displayName) ;
-    account.setEmailAddress(email);
-    account.setEmailReplyAddress(replyMail) ;
-    account.setServerProperty(Utils.SVR_PROTOCOL, serverType) ;
-    account.setServerProperty(Utils.SVR_HOST, serverIncoming) ;
-    account.setServerProperty(Utils.SVR_SMTP, serverIncoming) ;
-    account.setServerProperty(Utils.SVR_FOLDER, storeFolder) ;
-    account.setServerProperty(Utils.SVR_SSL, String.valueOf(isSSL)) ;
-    account.setServerProperty(Utils.SVR_PORT, incomingPort) ;
-    account.setServerProperty(Utils.SVR_PASSWORD, password) ;
-    account.setServerProperty(Utils.SVR_USERNAME, userName) ;
-    account.setEmailAddress(email) ;
-    account.setDescription(description) ;
-    account.setEmailReplyAddress(replyMail) ;
-    String currentUser = Util.getPortalRequestContext().getRemoteUser() ;
-    mailSrv.createAccount(currentUser, account) ;
-    return account ;
+  protected void saveForm(String currentUser, Account account) throws Exception {
+    MailService mailSvr = getApplicationComponent(MailService.class) ;
+    mailSvr.createAccount(currentUser, account) ;
+    String[] defaultFolders =  {"Drafts","Sent", "Spam", "Trash"} ;
+    UIMailPortlet uiPortlet = getAncestorOfType(UIMailPortlet.class) ;
+    String username = uiPortlet.getCurrentUser() ;
+    for(String defaultFolerName : defaultFolders) {
+      Folder folder = mailSvr.getFolder(username, account.getId(), defaultFolerName) ;
+      if(folder == null) {
+        folder = new Folder() ;
+        folder.setName(defaultFolerName) ;
+        folder.setLabel(defaultFolerName) ;
+        folder.setPersonalFolder(false) ;
+        mailSvr.saveUserFolder(username, account.getId(), folder) ;
+      }
+    }
   }
   protected void getMail(String accountId) throws Exception {
     MailService mailSvr = getApplicationComponent(MailService.class) ;
@@ -191,18 +185,6 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
     String username = uiPortlet.getCurrentUser() ;
     Account account = mailSvr.getAccountById(username, accountId) ;
     mailSvr.checkNewMessage(username, account) ;
-    String[] defaultFolders =  {"Drafts","Sent", "Spam", "Trash"} ;
-    for(String defaultFolerName : defaultFolders) {
-      Folder folder = mailSvr.getFolder(username, accountId, defaultFolerName) ;
-      if(folder == null) {
-        folder = new Folder() ;
-        folder.setName(defaultFolerName) ;
-        folder.setLabel(defaultFolerName) ;
-        folder.setPersonalFolder(false) ;
-        mailSvr.saveUserFolder(username, accountId, folder) ;
-      }
-    }
-    //mailSvr.getMessages(getCurrentUser(), filter) ;
   }
 
   protected void resetForm() {}
@@ -301,34 +283,54 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
       UIAccountWizardStep3 uiAccWs3 = uiAccCreation.getChildById(UIAccountCreation.FIELD_STEP3) ;
       UIAccountWizardStep4 uiAccWs4 = uiAccCreation.getChildById(UIAccountCreation.FIELD_STEP4) ;
       UIAccountWizardStep5 uiAccWs5 = uiAccCreation.getChildById(UIAccountCreation.FIELD_STEP5) ;
-      String accname, description, displayName, email, replyMail, serverType, serverIncoming, 
-      incomingPort, serverOutgoin, outgoingPort, storeFolder, userName, password ;
+      String accname, description, displayName, email, replyMail, signature, protocol, popHost, 
+      popPort, smtpHost, smtpPort, storeFolder, userName, password ;
       boolean isSSL ;
       accname = uiAccWs1.getAccName() ;
       description = uiAccWs1.getAccDescription() ;
       displayName = uiAccWs2.getOutgoingName() ;
       email = uiAccWs2.getEmailAddress() ;
       replyMail = uiAccWs2.getEmailReply() ;
-      serverType = uiAccWs3.getServerType() ;
-      serverIncoming = uiAccWs3.getIncomingServer() ;
-      incomingPort = uiAccWs3.getIncomingPort() ;
-      serverOutgoin = uiAccWs3.getOutgoingServer() ;
-      outgoingPort = uiAccWs3.getOutgoingPort() ;
+      signature = uiAccWs2.getSignature() ;
+      protocol = uiAccWs3.getServerType() ;
+      popHost = uiAccWs3.getIncomingServer() ;
+      popPort = uiAccWs3.getIncomingPort() ;
+      smtpHost = uiAccWs3.getOutgoingServer() ;
+      smtpPort = uiAccWs3.getOutgoingPort() ;
       storeFolder = uiAccWs3.getStoreFolder() ;
       isSSL = uiAccWs3.getIsSSL() ;
       userName = uiAccWs4.getUserName() ;
+      
       password = null ;
-      Account acc = null ;
+      Account acc = new Account() ;
       if(uiAccWs4.getIsSavePass()) password = uiAccWs4.getPassword() ;
+      acc.setLabel(accname) ;
+      acc.setDescription(description) ;
+      acc.setUserDisplayName(displayName) ;
+      acc.setEmailAddress(email) ;
+      acc.setEmailReplyAddress(replyMail) ;
+      acc.setSignature(signature) ;
+      acc.setServerProperty(Utils.SVR_USERNAME, userName); 
+      acc.setServerProperty(Utils.SVR_PASSWORD, password);
+      acc.setServerProperty(Utils.SVR_POP_HOST, popHost);
+      acc.setServerProperty(Utils.SVR_POP_PORT, popPort);  
+      acc.setServerProperty(Utils.SVR_PROTOCOL, protocol);  
+      acc.setServerProperty(Utils.SVR_SSL, String.valueOf(isSSL));
+      acc.setServerProperty(Utils.SVR_FOLDER, storeFolder) ;
+      acc.setServerProperty(Utils.SVR_SMTP_USER, userName);
+      acc.setServerProperty(Utils.SVR_SMTP_HOST, smtpHost);
+      acc.setServerProperty(Utils.SVR_SMTP_PORT, smtpPort);
+      
       UIApplication uiApp = uiAccCreation.getAncestorOfType(UIApplication.class) ;
       UIMailPortlet uiPortlet = uiAccCreation.getAncestorOfType(UIMailPortlet.class) ;
+      UINavigationContainer uiNavigation = uiPortlet.getChild(UINavigationContainer.class) ;
       try {
-        acc = uiAccCreation.saveForm(accname, description, displayName, email, replyMail, serverType, 
-            serverIncoming,incomingPort, serverOutgoin, outgoingPort, storeFolder, isSSL, userName, password) ;
-        UINavigationContainer uiNavigation = uiPortlet.getChild(UINavigationContainer.class) ;
+         uiAccCreation.saveForm(uiPortlet.getCurrentUser(), acc) ;
         uiNavigation.getChild(UISelectAccount.class).refreshItems() ;
         uiApp.addMessage(new ApplicationMessage("UIAccountCreation.msg.create-acc-successfully", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        uiAccCreation.getAncestorOfType(UIPopupAction.class).deActivate() ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiAccCreation.getAncestorOfType(UIPopupAction.class)) ;
       } catch (Exception e) {
         uiApp.addMessage(new ApplicationMessage("UIAccountCreation.msg.create-acc-unsuccessfully", null, ApplicationMessage.ERROR)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -351,8 +353,7 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
           return ;
         }
       }
-      uiAccCreation.getAncestorOfType(UIPopupAction.class).deActivate() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiNavigation) ;
     }
   }
 
@@ -403,6 +404,21 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
   public static class SelectFolderActionListener extends EventListener<UIAccountCreation> {
     public void execute(Event<UIAccountCreation> event) throws Exception {
       System.out.println("\n\n SelectFolderActionListener");
+    } 
+  }
+  public static class ChangeServerTypeActionListener extends EventListener<UIAccountCreation> {
+    public void execute(Event<UIAccountCreation> event) throws Exception {
+      System.out.println("\n\n ChangeServerTypeActionListener");
+      UIAccountCreation uiAccCreation = event.getSource() ;
+      UIAccountWizardStep3 uiWs3 = uiAccCreation.getChildById(FIELD_STEP3) ;
+      uiWs3.setDefaultValue(uiWs3.getServerType(), uiWs3.getIsSSL()) ;
+    } 
+  }
+  public static class ChangeCheckedActionListener extends EventListener<UIAccountCreation> {
+    public void execute(Event<UIAccountCreation> event) throws Exception {
+      System.out.println("\n\n ChangeCheckedActionListener"); UIAccountCreation uiAccCreation = event.getSource() ;
+      UIAccountWizardStep3 uiWs3 = uiAccCreation.getChildById(FIELD_STEP3) ;
+      uiWs3.setDefaultValue(uiWs3.getServerType(), uiWs3.getIsSSL()) ;
     } 
   }
 }

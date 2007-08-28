@@ -122,40 +122,27 @@ public class MailServiceImpl implements MailService{
   public void sendMessage(String username, Message message) throws Exception {
     String accountId = message.getAccountId() ;
     Account acc = getAccountById(username, accountId) ;
-    acc.getServerProperties().get(Utils.SVR_SMTP_USER) ;
-    String from = message.getFrom() ;
+    String smtpUser = acc.getServerProperties().get(Utils.SVR_SMTP_USER) ;
     String host = acc.getServerProperties().get(Utils.SVR_SMTP_HOST) ;
     String port  = acc.getServerProperties().get(Utils.SVR_SMTP_PORT) ;
+    String isSSl =  acc.getServerProperties().get(Utils.SVR_SSL)  ;
     Properties props = new Properties();
-    props.put(Utils.SVR_SMTP_USER, from) ;
+    props.put(Utils.SVR_SMTP_USER, smtpUser) ;
     props.put(Utils.SVR_SMTP_HOST, host) ;
     props.put(Utils.SVR_SMTP_PORT, port) ;
-    if(Boolean.parseBoolean(acc.getServerProperties().get(Utils.SVR_SSL)))  props.put(Utils.SVR_SSL, "true");
+    props.put(Utils.SVR_SSL, isSSl);
     props.put(Utils.SVR_SMTP_STARTTLS_ENABLE,"true");
     props.put(Utils.SVR_SMTP_AUTH, "true");
     props.put(Utils.SVR_SMTP_SOCKETFACTORY_PORT, port);
-    props.put(Utils.SVR_SMTP_SOCKETFACTORY_CLASS,  Utils.SVR_SSL_CLASSNAME);
+    props.put(Utils.SVR_SMTP_SOCKETFACTORY_CLASS,  "javax.net.ssl.SSLSocketFactory");
     props.put(Utils.SVR_SMTP_SOCKETFACTORY_FALLBACK, "false");
-    props.put(Utils.SVR_MAIL_DEBUG, acc.getServerProperties().get(Utils.SVR_MAIL_DEBUG));
-    props.put(Utils.SVR_MAIL_SMTP_DEBUG, acc.getServerProperties().get(Utils.SVR_MAIL_SMTP_DEBUG));
     Session session = Session.getInstance(props, null);
     Transport transport = session.getTransport(Utils.SVR_SMTP);
     transport.connect(host, acc.getUserName(), acc.getPassword()) ;
     javax.mail.Message msg = new MimeMessage(session);
-
     InternetAddress addressFrom = new InternetAddress(message.getFrom());
     msg.setFrom(addressFrom);
-    String[] toMails = message.getMessageTo().split(";") ;
-    InternetAddress[] addressTo = null ;
-    if(toMails != null && toMails.length > 0) {
-      addressTo = new InternetAddress[toMails.length];
-      for(int i = 0 ; i < toMails.length ; i ++){
-        addressTo[i] = new InternetAddress(toMails[i]) ;
-      }
-    } else {
-      addressTo = new InternetAddress[1] ;
-      addressTo[0].setAddress(message.getMessageTo()) ;
-    }
+    InternetAddress[] addressTo = InternetAddress.parse(message.getMessageTo()) ;
     msg.setRecipients(javax.mail.Message.RecipientType.CC,
         InternetAddress.parse(message.getMessageCc(), true));
     msg.setRecipients(javax.mail.Message.RecipientType.BCC,
@@ -165,7 +152,6 @@ public class MailServiceImpl implements MailService{
     msg.setContent(message.getMessageBody(), Utils.MIMETYPE_TEXTPLAIN);
     msg.saveChanges();
     transport.sendMessage(msg, addressTo);
-
   }
   public void sendMessage(Message message) throws Exception {
   }
@@ -258,6 +244,7 @@ public class MailServiceImpl implements MailService{
       javax.mail.Session session = javax.mail.Session.getDefaultInstance(props);
       URLName url = new URLName(account.getProtocol(), account.getHost(), Integer.valueOf(account.getPort()), account.getFolder(), account.getUserName(), account.getPassword()) ;
       Store store = session.getStore(url) ;
+      System.out.println(url);
       store.connect();
       System.out.println("\n ### Connected !");
       javax.mail.Folder folder = store.getFolder(account.getFolder());

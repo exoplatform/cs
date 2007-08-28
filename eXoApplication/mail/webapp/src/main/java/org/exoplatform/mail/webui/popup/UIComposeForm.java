@@ -10,9 +10,11 @@ import java.util.List;
 import org.exoplatform.mail.service.Attachment;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
+import org.exoplatform.mail.webui.UIFolderContainer;
 import org.exoplatform.mail.webui.UIMailPortlet;
+import org.exoplatform.mail.webui.UINavigationContainer;
 import org.exoplatform.mail.webui.UISelectAccount;
-import org.exoplatform.mail.webui.Utils;
+import org.exoplatform.mail.service.Utils;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -212,8 +214,12 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
       String body = uiForm.getFieldMessageContentValue() ;
       UIMailPortlet uiPortlet = uiForm.getAncestorOfType(UIMailPortlet.class) ;
       UISelectAccount uiSelectAcc = uiPortlet.findFirstComponentOfType(UISelectAccount.class) ;
+      UINavigationContainer uiNavigationContainer = uiPortlet.findFirstComponentOfType(UINavigationContainer.class) ;
+      UIFolderContainer uiFolderContainer = uiNavigationContainer.getChild(UIFolderContainer.class) ;
       String accountId = uiSelectAcc.getSelectedValue() ;
+      String usename = uiPortlet.getCurrentUser() ;
       MailService mailSvr = uiForm.getApplicationComponent(MailService.class) ;
+      UIPopupAction uiChildPopup = uiForm.getAncestorOfType(UIPopupAction.class) ;
       try {
         Message message = new Message() ;
         message.setAccountId(accountId) ;
@@ -224,18 +230,18 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
         message.setMessageCc(cc) ;
         message.setMessageBcc(bcc) ;
         message.setMessageBody(body) ;
-        mailSvr.sendMessage(message) ;
-        UIPopupAction uiChildPopup = uiForm.getAncestorOfType(UIPopupAction.class) ;
+        mailSvr.sendMessage(usename, message) ;
         uiChildPopup.deActivate() ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
       }catch (Exception e) {
         uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.send-mail-error", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         e.printStackTrace() ;
         return ;
       }
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer) ;
       uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.send-mail-succsessfuly", null)) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet) ;
     }
   }
   static  public class SaveDraftActionListener extends EventListener<UIComposeForm> {
