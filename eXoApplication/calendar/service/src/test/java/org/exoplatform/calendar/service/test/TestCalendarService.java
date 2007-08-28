@@ -219,12 +219,14 @@ public class TestCalendarService extends BaseCalendarTestCase{
     assertEquals(event.getSummary(), "myEventUpdated") ;
     
     //get event list
-    List<Event> events = calendarService_.getUserEventByCalendar("nqhung", cal.getId()) ;
+    List<String> calendarIds = new ArrayList<String>() ;
+    calendarIds.add(cal.getId()) ;
+    List<Event> events = calendarService_.getUserEventByCalendar("nqhung", calendarIds) ;
     assertEquals(events.size(), 1) ;
     
     //export/import ical
     ICalendarImportExport importExport = (ICalendarImportExport)calendarService_.getCalendarImportExports().get("ICalendar") ;
-    OutputStream ical = importExport.exportCalendar("nqhung", cal.getId()) ;
+    OutputStream ical = importExport.exportCalendar("nqhung", calendarIds) ;
     System.out.println("\n\n\n" + ical.toString()) ;
     ByteArrayInputStream icalInputStream = new ByteArrayInputStream(ical.toString().getBytes()) ;
     importExport.importCalendar("nqhung", icalInputStream) ;

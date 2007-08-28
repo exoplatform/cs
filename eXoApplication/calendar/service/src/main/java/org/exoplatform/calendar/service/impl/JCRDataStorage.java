@@ -490,17 +490,14 @@ public class JCRDataStorage implements DataStorage{
     return getEvent(calendarNode.getNode(eventId)) ;
   }
   
-  public List<Event> getUserEventByCalendar(String username, String calendarId) throws Exception {
-    Node calendarNode = getCalendarHome(username).getNode(calendarId) ;    
-    QueryManager qm = calendarNode.getSession().getWorkspace().getQueryManager();
-    StringBuffer queryString = new StringBuffer("/jcr:root" + calendarNode.getPath() 
-                                                + "//element(*,exo:calendarEvent)") ;
-    Query query = qm.createQuery(queryString.toString(), Query.XPATH);
-    QueryResult result = query.execute();
-    NodeIterator it = result.getNodes();
+  public List<Event> getUserEventByCalendar(String username, List<String> calendarIds) throws Exception {
     List<Event> events = new ArrayList<Event>() ;
-    while(it.hasNext()) {
-      events.add(getEvent(it.nextNode())) ;
+    for(String calendarId : calendarIds) {
+      Node calendarNode = getCalendarHome(username).getNode(calendarId) ;
+      NodeIterator it = calendarNode.getNodes();
+      while(it.hasNext()) {
+        events.add(getEvent(it.nextNode())) ;
+      }
     }
     return events ;
   }
@@ -541,17 +538,14 @@ public class JCRDataStorage implements DataStorage{
     return getEvent(calendarNode.getNode(eventId)) ;
   }
   
-  public List<Event> getGroupEventByCalendar(String calendarId) throws Exception {
-    Node calendarNode = getCalendarHome().getNode(calendarId) ;    
-    QueryManager qm = calendarNode.getSession().getWorkspace().getQueryManager();
-    StringBuffer queryString = new StringBuffer("/jcr:root" + calendarNode.getPath() 
-                                                + "//element(*,exo:calendarEvent)") ;
-    Query query = qm.createQuery(queryString.toString(), Query.XPATH);
-    QueryResult result = query.execute();
-    NodeIterator it = result.getNodes();
+  public List<Event> getGroupEventByCalendar(List<String> calendarIds) throws Exception {
     List<Event> events = new ArrayList<Event>() ;
-    while(it.hasNext()) {
-      events.add(getEvent(it.nextNode())) ;
+    for(String calendarId : calendarIds){
+      Node calendarNode = getCalendarHome().getNode(calendarId) ;    
+      NodeIterator it = calendarNode.getNodes();
+      while(it.hasNext()) {
+        events.add(getEvent(it.nextNode())) ;
+      }
     }
     return events ;
   }

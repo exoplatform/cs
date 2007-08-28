@@ -136,12 +136,6 @@
 	      <childNodeDefinition name="*" defaultPrimaryType="" autoCreated="false" mandatory="false"
 	        onParentVersion="COPY" protected="false" sameNameSiblings="false">
 	        <requiredPrimaryTypes>
-	          <requiredPrimaryType>exo:eventCategory</requiredPrimaryType>
-	        </requiredPrimaryTypes>
-	      </childNodeDefinition>
-	      <childNodeDefinition name="*" defaultPrimaryType="" autoCreated="false" mandatory="false"
-	        onParentVersion="COPY" protected="false" sameNameSiblings="false">
-	        <requiredPrimaryTypes>
 	          <requiredPrimaryType>exo:calendarEvent</requiredPrimaryType>
 	        </requiredPrimaryTypes>
 	      </childNodeDefinition>

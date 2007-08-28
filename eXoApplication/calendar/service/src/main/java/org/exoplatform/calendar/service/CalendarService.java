@@ -235,7 +235,7 @@ public interface CalendarService {
    * @return event list
    * @throws Exception
    */
-  public List<Event> getUserEventByCalendar(String username, String calendarId) throws Exception ;
+  public List<Event> getUserEventByCalendar(String username, List<String> calendarIds) throws Exception ;
   /**
    * This method should:
    * 1. Get calendar service root node by current user
@@ -299,7 +299,7 @@ public interface CalendarService {
    * @return event list
    * @throws Exception
    */
-  public List<Event> getGroupEventByCalendar(String calendarId) throws Exception ;
+  public List<Event> getGroupEventByCalendar(List<String> calendarIds) throws Exception ;
   /**
    * This method should:
    * 1. Get calendar service root node by username

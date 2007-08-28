@@ -6,6 +6,7 @@ package org.exoplatform.calendar.service;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.List;
 
 
 /**
@@ -16,5 +17,5 @@ import java.io.OutputStream;
  */
 public interface CalendarImportExport {  
   public void importCalendar(String username, InputStream icalInputStream) throws Exception ;
-  public OutputStream exportCalendar(String username, String calendarId) throws Exception ;
+  public OutputStream exportCalendar(String username, List<String> calendarIds) throws Exception ;
 }

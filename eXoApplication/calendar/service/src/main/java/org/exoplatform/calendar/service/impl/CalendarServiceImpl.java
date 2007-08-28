@@ -106,8 +106,8 @@ public class CalendarServiceImpl implements CalendarService{
   public Event getUserEvent(String username, String calendarId, String eventId) throws Exception {
     return storage_.getUserEvent(username, calendarId, eventId);
   }
-  public List<Event> getUserEventByCalendar(String username, String calendarId) throws Exception {
-    return storage_.getUserEventByCalendar(username, calendarId);
+  public List<Event> getUserEventByCalendar(String username, List<String> calendarIds) throws Exception {
+    return storage_.getUserEventByCalendar(username, calendarIds);
   }
   public List<Event> getEvents(EventQuery eventQuery) throws Exception {
     return storage_.getEvents(eventQuery) ;
@@ -123,8 +123,8 @@ public class CalendarServiceImpl implements CalendarService{
   public Event getGroupEvent(String calendarId, String eventId) throws Exception {
     return storage_.getGroupEvent(calendarId, eventId);
   }  
-  public List<Event> getGroupEventByCalendar(String calendarId) throws Exception {
-    return storage_.getGroupEventByCalendar(calendarId);
+  public List<Event> getGroupEventByCalendar(List<String> calendarIds) throws Exception {
+    return storage_.getGroupEventByCalendar(calendarIds);
   } 
   public void saveGroupEvent(String calendarId, Event event, boolean isNew) throws Exception {
     storage_.saveGroupEvent(calendarId, event, isNew) ;
