@@ -13,13 +13,12 @@ import javax.mail.AuthenticationFailedException;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
+import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.Selector;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UINavigationContainer;
 import org.exoplatform.mail.webui.UISelectAccount;
-import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.WizardStep;
-import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -29,7 +28,6 @@ import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIFormTabPane;
-import org.exoplatform.services.jcr.util.IdGenerator ;
 /**
  * Created by The eXo Platform SARL
  * Author : Philippe Aristote
@@ -76,8 +74,13 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
   final static public String[] ACT_SELETFOLDER = {"SelectFolder"} ;
   final static public String ACT_CHECKSAVEPASS =  "CheckSavePass" ;
   final static public String[] ACT_CHECKGETMAIL = {"CheckGetMail"} ;
-  final static public String  ACT_CHANGE_TYPE = "ChangeServerType".intern()  ;
-  final static public String  ACT_CHANGE_SSL =  "ChangeChecked".intern()  ;
+  final static public String ACT_CHANGE_TYPE = "ChangeServerType".intern()  ;
+  final static public String ACT_CHANGE_SSL =  "ChangeChecked".intern()  ;
+  final static public String FD_DRAFTS = "Drafts".intern() ;
+  final static public String FD_SENT = "Sent".intern() ;
+  final static public String FD_SPAM = "Spam".intern() ;
+  final static public String FD_TRASH = "Trash".intern() ;
+  final static public String[] defaultFolders_ =  {FD_DRAFTS, FD_SENT, FD_SPAM, FD_TRASH} ;
 
   public UIAccountCreation() throws Exception {
     super("UIAccountCreation") ;
@@ -165,10 +168,9 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
   protected void saveForm(String currentUser, Account account) throws Exception {
     MailService mailSvr = getApplicationComponent(MailService.class) ;
     mailSvr.createAccount(currentUser, account) ;
-    String[] defaultFolders =  {"Drafts","Sent", "Spam", "Trash"} ;
     UIMailPortlet uiPortlet = getAncestorOfType(UIMailPortlet.class) ;
     String username = uiPortlet.getCurrentUser() ;
-    for(String defaultFolerName : defaultFolders) {
+    for(String defaultFolerName : defaultFolders_) {
       Folder folder = mailSvr.getFolder(username, account.getId(), defaultFolerName) ;
       if(folder == null) {
         folder = new Folder() ;
@@ -300,7 +302,7 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
       storeFolder = uiAccWs3.getStoreFolder() ;
       isSSL = uiAccWs3.getIsSSL() ;
       userName = uiAccWs4.getUserName() ;
-      
+
       password = null ;
       Account acc = new Account() ;
       if(uiAccWs4.getIsSavePass()) password = uiAccWs4.getPassword() ;
@@ -320,12 +322,12 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
       acc.setServerProperty(Utils.SVR_SMTP_USER, userName);
       acc.setServerProperty(Utils.SVR_SMTP_HOST, smtpHost);
       acc.setServerProperty(Utils.SVR_SMTP_PORT, smtpPort);
-      
+
       UIApplication uiApp = uiAccCreation.getAncestorOfType(UIApplication.class) ;
       UIMailPortlet uiPortlet = uiAccCreation.getAncestorOfType(UIMailPortlet.class) ;
       UINavigationContainer uiNavigation = uiPortlet.getChild(UINavigationContainer.class) ;
       try {
-         uiAccCreation.saveForm(uiPortlet.getCurrentUser(), acc) ;
+        uiAccCreation.saveForm(uiPortlet.getCurrentUser(), acc) ;
         uiNavigation.getChild(UISelectAccount.class).refreshItems() ;
         uiApp.addMessage(new ApplicationMessage("UIAccountCreation.msg.create-acc-successfully", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;

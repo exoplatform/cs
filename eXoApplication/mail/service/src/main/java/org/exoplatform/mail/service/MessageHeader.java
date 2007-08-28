@@ -4,6 +4,8 @@
  **************************************************************************/
 package org.exoplatform.mail.service;
 
+import org.exoplatform.services.jcr.util.IdGenerator;
+
 /**
  * Created by The eXo Platform SARL
  * Author : Tuan Nguyen
@@ -14,6 +16,9 @@ public class MessageHeader {
   private String id ;
   private String accountId;
   
+  public MessageHeader() {
+    id = "MessageHeader" + IdGenerator.generate() ;
+  }
   public String getId() { return id ; }
   public void setId(String id) { this.id = id; }
   

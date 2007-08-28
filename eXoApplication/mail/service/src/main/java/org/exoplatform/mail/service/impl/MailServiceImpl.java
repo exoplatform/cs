@@ -143,10 +143,12 @@ public class MailServiceImpl implements MailService{
     InternetAddress addressFrom = new InternetAddress(message.getFrom());
     msg.setFrom(addressFrom);
     InternetAddress[] addressTo = InternetAddress.parse(message.getMessageTo()) ;
-    msg.setRecipients(javax.mail.Message.RecipientType.CC,
-        InternetAddress.parse(message.getMessageCc(), true));
-    msg.setRecipients(javax.mail.Message.RecipientType.BCC,
-        InternetAddress.parse(message.getMessageBcc(), false));
+    if(message.getMessageCc() != null) {
+      msg.setRecipients(javax.mail.Message.RecipientType.CC, InternetAddress.parse(message.getMessageCc(), true));
+    }
+    if(message.getMessageBcc() != null) {   
+      msg.setRecipients(javax.mail.Message.RecipientType.BCC, InternetAddress.parse(message.getMessageBcc(), false));
+    }
     msg.setSubject(message.getSubject());
     msg.setSentDate(message.getSendDate());
     msg.setContent(message.getMessageBody(), Utils.MIMETYPE_TEXTPLAIN);
@@ -244,7 +246,6 @@ public class MailServiceImpl implements MailService{
       javax.mail.Session session = javax.mail.Session.getDefaultInstance(props);
       URLName url = new URLName(account.getProtocol(), account.getHost(), Integer.valueOf(account.getPort()), account.getFolder(), account.getUserName(), account.getPassword()) ;
       Store store = session.getStore(url) ;
-      System.out.println(url);
       store.connect();
       System.out.println("\n ### Connected !");
       javax.mail.Folder folder = store.getFolder(account.getFolder());
@@ -263,7 +264,6 @@ public class MailServiceImpl implements MailService{
           Calendar gc = GregorianCalendar.getInstance();
           Date receivedDate = gc.getTime();
           newMsg.setAccountId(account.getId());
-          newMsg.setId(String.valueOf(receivedDate.getTime()));
           newMsg.setMessageBcc(getAddress(mes.getRecipients(javax.mail.Message.RecipientType.BCC)));
           newMsg.setMessageCc(getAddress(mes.getRecipients(javax.mail.Message.RecipientType.CC)));
           newMsg.setMessageTo(getAddress(mes.getRecipients(javax.mail.Message.RecipientType.TO)));

@@ -29,6 +29,7 @@ public class Message extends MessageHeader {
   
   private List<Attachment> attachments ;
   
+  public Message() {super() ;}
   public String getMessageTo() { return to ; }
   public void setMessageTo(String s) { to = s ; }
   

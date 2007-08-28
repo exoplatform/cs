@@ -5,16 +5,17 @@
 package org.exoplatform.mail.webui.popup;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.exoplatform.mail.service.Attachment;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
+import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.UIFolderContainer;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UINavigationContainer;
 import org.exoplatform.mail.webui.UISelectAccount;
-import org.exoplatform.mail.service.Utils;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -220,16 +221,17 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
       String usename = uiPortlet.getCurrentUser() ;
       MailService mailSvr = uiForm.getApplicationComponent(MailService.class) ;
       UIPopupAction uiChildPopup = uiForm.getAncestorOfType(UIPopupAction.class) ;
+      Message message = new Message() ;
+      message.setSendDate(new Date()) ;
+      message.setAccountId(accountId) ;
+      message.setFrom(from) ;
+      message.setSubject(subject) ;
+      message.setMessageTo(to) ;
+      message.setMessageCc(cc) ;
+      message.setMessageBcc(bcc) ;
+      message.setAttachements(uiForm.getAttachFileList()) ;
+      message.setMessageBody(body) ;
       try {
-        Message message = new Message() ;
-        message.setAccountId(accountId) ;
-        message.setAttachements(uiForm.getAttachFileList()) ;
-        message.setFrom(from) ;
-        message.setSubject(subject) ;
-        message.setMessageTo(to) ;
-        message.setMessageCc(cc) ;
-        message.setMessageBcc(bcc) ;
-        message.setMessageBody(body) ;
         mailSvr.sendMessage(usename, message) ;
         uiChildPopup.deActivate() ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
@@ -238,6 +240,16 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         e.printStackTrace() ;
         return ;
+      }
+      try {
+        message.setFolders(new String[]{UIAccountCreation.FD_SENT}) ;
+        mailSvr.saveMessage(usename, accountId, message, true) ;
+      }
+      catch (Exception e) {
+        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.save-sent-error", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        e.printStackTrace() ;
+        uiChildPopup.deActivate() ;
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer) ;
       uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.send-mail-succsessfuly", null)) ;
