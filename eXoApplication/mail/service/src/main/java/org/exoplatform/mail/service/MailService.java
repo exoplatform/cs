@@ -113,6 +113,7 @@ public interface MailService {
    */
   public void removeUserFolder(String username, Account account, Folder folder) throws Exception ;
   
+  public List<Tag> getTags(String username, String accountId) throws Exception ;
   /** This method should:
     * 1. Check the tag name to see if  the tag name is configured in the account
     * 2. Check to see if the tag is already set in the message
@@ -123,7 +124,7 @@ public interface MailService {
     * @param tag
     * @throws Exception
     */
-   public void addTag(String username, Message message, String tag) throws Exception ;
+   public void addTag(String username, String accountId, List<String> messagesId, Tag tag) throws Exception ;
    /**
     * This method should: 
     * 1. Remove the tag from the message
@@ -134,7 +135,7 @@ public interface MailService {
     * @param tag
     * @throws Exception
     */
-   public void removeTag(String username, Message message, String tag) throws Exception ;
+   public void removeMessageTag(String username, String accountId, String messageId, String tag) throws Exception ;
   /**
    * This method should:
    * 1. Find all the message that has the tag , remove the tag from the message and save
@@ -145,7 +146,7 @@ public interface MailService {
    * @param tag
    * @throws Exception
    */
-  public void removeTag(String username, Account account, String tag) throws Exception ;
+  public void removeTag(String username, String accountId, String tag) throws Exception ;
   
   /**
    * This method should:

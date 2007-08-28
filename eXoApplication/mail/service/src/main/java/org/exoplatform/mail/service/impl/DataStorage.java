@@ -14,6 +14,7 @@ import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.MessageHeader;
+import org.exoplatform.mail.service.Tag;
 
 /**
  * Created by The eXo Platform SARL
@@ -53,16 +54,11 @@ public interface DataStorage {
   public void saveUserFolder(String username, String accountId, Folder folder) throws Exception ;
 
   public void removeUserFolder(String username, Folder folder) throws Exception ;
-
   public void removeUserFolder(String username, Account account, Folder folder) throws Exception ;
-
-  public Node getMailHomeNode(String username) throws Exception ;
-
-  public Node getMessageHome(String username, String accountId) throws Exception ;
-
-  public Node getFolderHome(String username, String accountId) throws Exception ;
-
-  public Node getTagHome(String username, String accountId) throws Exception ;
-
-  public Session getJCRSession() throws Exception ;
+  
+  public List<Tag> getTags(String username, String accountId) throws Exception ;
+  public void addTag(String username, String accountId, List<String> messagesId, Tag tag) throws Exception ;
+  public void removeMessageTag(String username, String accountId, String messageId, String tagName) throws Exception ;
+  public void removeTag(String username, String accountId, String tagName) throws Exception ;
+  
 }

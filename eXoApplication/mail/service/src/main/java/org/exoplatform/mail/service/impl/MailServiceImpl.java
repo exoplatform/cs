@@ -34,6 +34,7 @@ import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.MessageHeader;
+import org.exoplatform.mail.service.Tag;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.registry.JCRRegistryService;
 import org.exoplatform.services.jcr.RepositoryService;
@@ -155,78 +156,8 @@ public class MailServiceImpl implements MailService{
     msg.saveChanges();
     transport.sendMessage(msg, addressTo);
   }
+  
   public void sendMessage(Message message) throws Exception {
-  }
-
-  public void addTag(String username, Message message, String tag) throws Exception {
-    Node homeTags = storage_.getTagHome(username, message.getAccountId());
-    if (!homeTags.hasNode(tag)) { // if the tag doesn't exist in jcr, we create it
-      homeTags.addNode(tag, Utils.EXO_TAGS);
-    }
-    // gets the tags from the message
-    String[] tags = message.getTags();
-    // creates a new array that will contain all the existing tags, plus the new one
-    String[] newtags = new String[tags.length+1];
-
-    boolean addTag = true;
-    // if the message already has the tag, addTag will be set to false
-    for (int i=0; i<tags.length && addTag; i++) {
-      addTag &= !tags[i].equalsIgnoreCase(tag);
-      newtags[i] = tags[i];
-    }
-    if (addTag) {
-      // adds the new tag to the array
-      newtags[tags.length] = tag;
-      Node homeMsg = storage_.getMessageHome(username, message.getAccountId());
-      NodeIterator it = homeMsg.getNodes();
-      while (it.hasNext()) {
-        Node msg = it.nextNode();
-        // if we find the node representing the message, we modify its property tags.
-        // since there is no id property in the message node, we use the received date information
-        // to find the specified message (we consider that receivedDate is unique)
-        if (msg.getProperty(Utils.EXO_RECEIVEDDATE).getLong() == message.getReceivedDate().getTime()) {
-          msg.setProperty(Utils.EXO_TAGS, newtags);
-          break;
-        }
-      }
-    }
-    homeTags.getSession().save();
-  }
-
-  public void removeTag(String username, Account account, String tag) throws Exception {
-    // creates a filter containing the specified tag, to find all messages tagged with tag
-    MessageFilter filter = new MessageFilter("filter by tag "+tag);
-    filter.setAccountId(account.getId());
-    String[] tags = {tag};
-    filter.setTag(tags);
-    // creates the list of messages tagged with the specified tag
-    List<MessageHeader> list = storage_.getMessages(username, filter);
-    if (list.size() > 0) {
-      Iterator<MessageHeader> it = list.iterator();
-      while (it.hasNext()) {
-        // the list contains Message objects, that inherit from MessageHeader
-        Message message = (Message)it.next();
-        // for each message tagged, removes the tag
-        removeTag(username, message, tag);
-      }
-    }
-    // gets the home tag node
-    Node homeTags = storage_.getTagHome(username, account.getId());
-    // deletes the node that contains the specified tag
-    if (homeTags.hasNode(tag)) homeTags.getNode(tag).remove();
-    homeTags.getSession().save();
-  }
-
-  public void removeTag(String username, Message message, String tag) throws Exception {
-    String[] tags = message.getTags();
-    String[] newtags = new String[tags.length];
-    for (int i=0; i<tags.length; i++) {
-      // we copy all the tags except the specified one
-      if (!tags[i].equalsIgnoreCase(tag)) newtags[i] = tags[i];
-    }
-    message.setTags(newtags);
-    // saves the message with the new tags
-    storage_.saveMessage(username, message.getAccountId(), message, false);
   }
 
   public int checkNewMessage(String username, Account account) throws Exception {
@@ -390,4 +321,21 @@ public class MailServiceImpl implements MailService{
     return folders ;
   }
 
+  public void addTag(String username, String accountId, List<String> messagesId, Tag tag)
+      throws Exception {
+    storage_.addTag(username, accountId, messagesId, tag);
+  }
+
+  public List<Tag> getTags(String username, String accountId) throws Exception {
+    return storage_.getTags(username, accountId);
+  }
+
+  public void removeMessageTag(String username, String accountId, String messageId, String tag)
+      throws Exception {
+    storage_.removeMessageTag(username, accountId, messageId, tag);   
+  }
+
+  public void removeTag(String username, String accountId, String tag) throws Exception {
+    storage_.removeTag(username, accountId, tag);
+  }
 }

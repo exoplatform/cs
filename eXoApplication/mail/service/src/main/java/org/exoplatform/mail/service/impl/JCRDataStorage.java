@@ -9,6 +9,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Arrays;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -25,6 +26,7 @@ import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.MessageHeader;
+import org.exoplatform.mail.service.Tag;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.registry.JCRRegistryService;
 import org.exoplatform.registry.ServiceRegistry;
@@ -365,7 +367,7 @@ public class JCRDataStorage implements DataStorage{
     folderHome.getSession().save();
   }
 
-  public Node getMailHomeNode(String username) throws Exception {
+  private Node getMailHomeNode(String username) throws Exception {
     ServiceRegistry serviceRegistry = new ServiceRegistry("MailService") ;
     Session session = getJCRSession() ;
     if(jcrRegistryService_.getUserNode(session, username) == null)
@@ -375,17 +377,12 @@ public class JCRDataStorage implements DataStorage{
   }
 
   public Node getMessageHome(String username, String accountId) throws Exception {
-    Node home = getMailHomeNode(username);
-    Account account = getAccountById(username, accountId);
-    Node returnNode = null;
-    if (home.getNode(account.getId()).hasNode(Utils.KEY_MESSAGE))
-      returnNode = home.getNode(account.getId()).getNode(Utils.KEY_MESSAGE);
-    else
-      returnNode = home.getNode(account.getId()).addNode(Utils.KEY_MESSAGE, Utils.NT_UNSTRUCTURED);
-    return returnNode;
+    Node accountHome = getMailHomeNode(username).getNode(accountId);
+    if(accountHome.hasNode(Utils.KEY_MESSAGE)) return accountHome.getNode(Utils.KEY_MESSAGE) ;
+    else return accountHome.addNode(Utils.KEY_MESSAGE, Utils.NT_UNSTRUCTURED) ;
   }
 
-  public Node getFolderHome(String username, String accountId) throws Exception {
+  private Node getFolderHome(String username, String accountId) throws Exception {
     Node home = getMailHomeNode(username);
     Account account = getAccountById(username, accountId);
     Node returnNode = null;
@@ -396,15 +393,10 @@ public class JCRDataStorage implements DataStorage{
     return returnNode;
   }
 
-  public Node getTagHome(String username, String accountId) throws Exception {
-    Node home = getMailHomeNode(username);
-    Account account = getAccountById(username, accountId);
-    Node returnNode = null;
-    if (home.getNode(account.getId()).hasNode(Utils.KEY_TAGS)) 
-      returnNode = home.getNode(account.getId()).getNode(Utils.KEY_TAGS);
-    else
-      returnNode = home.getNode(account.getId()).addNode(Utils.KEY_TAGS, Utils.NT_UNSTRUCTURED);
-    return returnNode;
+  private Node getTagHome(String username, String accountId) throws Exception {
+    Node accountNode = getMailHomeNode(username).getNode(accountId);
+    if(accountNode.hasNode(Utils.KEY_TAGS)) return accountNode.getNode(Utils.KEY_TAGS) ;
+    else return accountNode.addNode(Utils.KEY_TAGS, Utils.NT_UNSTRUCTURED) ;    
   }
 
   public Session getJCRSession() throws Exception {
@@ -413,4 +405,104 @@ public class JCRDataStorage implements DataStorage{
       repositoryService_.getDefaultRepository().getConfiguration().getDefaultWorkspaceName() ;
     return sessionProvider.getSession(defaultWS, repositoryService_.getCurrentRepository()) ;
   }
+
+
+  public void addTag(String username, String accountId, List<String> messageIds, Tag tag)
+      throws Exception {    
+    Node tagHome = getTagHome(username, accountId) ;
+    if(!tagHome.hasNode(tag.getName())) {
+      Node tagNode = tagHome.addNode(tag.getName(), "exo:tag") ;
+      tagNode.setProperty("exo:name", tag.getName()) ;
+    }
+    tagHome.getSession().save() ;
+    Node messageHome = getMessageHome(username, accountId) ; 
+    for(String id : messageIds) {
+      if(messageHome.hasNode(id)) {
+        Node messageNode = messageHome.getNode(id) ;
+        if (messageNode.hasProperty("exo:tags")) {
+          Value[] values = messageNode.getProperty("exo:tags").getValues() ;
+          String[] tags = new String[values.length + 1] ;
+          boolean hasTag = false ;
+          for(int i = 0; i < values.length; i ++) {
+            if(values[i].getString().equals(tag.getName())) {
+              hasTag = true ;
+            }
+            tags[i] = values[i].getString() ;
+          }
+          if(!hasTag) {
+            tags[values.length] = tag.getName() ;
+            messageNode.setProperty("exo:tags", tags) ;
+          } 
+        }else {
+          messageNode.setProperty("exo:tags", new String[]{tag.getName()}) ;
+        }
+      }
+    }
+    messageHome.getSession().save() ;
+  }
+
+
+  public List<Tag> getTags(String username, String accountId) throws Exception {
+    List<Tag> tags = new ArrayList<Tag>() ;
+    Node tagHomeNode = getTagHome(username, accountId) ;
+    NodeIterator iter = tagHomeNode.getNodes() ;
+    while (iter.hasNext()){
+      Node tagNode = (Node)iter.next() ;
+      Tag tag = new Tag();
+      tag.setName(tagNode.getProperty("exo:name").getString()) ;
+      tags.add(tag);
+    }
+    return tags ;
+  }
+
+
+  public void removeMessageTag(String username, String accountId, String messageId, String tagName)
+      throws Exception {
+    Node messageHome = getMessageHome(username, accountId) ;
+    if (messageHome.hasNode(messageId)) {
+      Node messageNode = messageHome.getNode(messageId) ;
+      if (messageNode.hasProperty("exo:tags")) {
+        Message message = getMessage(messageNode) ;
+        String[] tags = message.getTags() ;
+
+        List<String> listTags = Arrays.asList(tags) ;
+        if (listTags.contains(tagName)) ; 
+          listTags.remove(listTags.indexOf(tagName)) ;
+          
+        tags = (String[]) listTags.toArray() ;
+        message.setTags(tags) ;
+        
+        saveMessage(username, message.getAccountId(), message, false) ;
+      }
+    }
+    messageHome.getSession().save() ;
+  }
+
+
+  public void removeTag(String username, String accountId, String tagName) throws Exception {
+    // remove tag in all messages
+    MessageFilter filter = new MessageFilter("filter by tag " + tagName ) ;
+    filter.setAccountId(accountId) ;
+    String[] tags = {tagName} ;
+    filter.setTag(tags) ;
+    List<MessageHeader> list = getMessages(username, filter) ;
+    if (list.size() > 0) {
+      Iterator<MessageHeader> it = list.iterator();
+      while (it.hasNext()) {
+        // the list contains Message objects, that inherit from MessageHeader
+        Message message = (Message)it.next();
+        String messageId = message.getId();
+        // for each message tagged, removes the tag
+        removeTag(username, messageId, tagName);
+      }
+    }
+    
+    // remove tag node
+    Node tagHomeNode = getTagHome(username, accountId) ;
+    if (tagHomeNode.hasNode(tagName)) {
+      tagHomeNode.getNode(tagName).remove() ;
+    }
+    
+    tagHomeNode.getSession().save() ;
+  } 
 }
