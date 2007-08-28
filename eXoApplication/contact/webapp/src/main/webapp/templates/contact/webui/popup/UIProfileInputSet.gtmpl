@@ -1,34 +1,33 @@
-
-<div class="Profile">
+<div class="Profile $uicomponent.id">
   <div class="FormContainer">
-	      <table class="UIFormGrid">
+	  <table class="UIFormGrid">
       <tbody>
       	<tr>
-            <td colspan="2" class="FieldComponent">
+          <td colspan="2" class="FieldComponent">
 					   	
-					      <div class="FormContainer">
-					        <table class="UIFormGrid">
-					          <tbody>
-					            <%								
-					      			  for (field in uicomponent.getChidren()) {
-									   	%>
-					            <tr>
-				                <td class="FieldLabel"><%=uicomponent.getLabel(field.getName())%>:</td>
-					              <td class="FieldComponent">
-					              	 <% uicomponent.renderField() %>
-					              </td>
-					            </tr>
-					            <%} %>
-					          </tbody>
-					        </table>
-					        
-					      </div>
-							</td>
-		        </tr>
-	      	</tbody>
-	      </table>
-	    </div>
-	    
+			      <div class="FormContainer">
+			        <table class="UIFormGrid">
+			          <tbody>
+			            <%								
+			      			  for (field in uicomponent.getChidren()) {
+			      			  String label = _ctx.appRes(uicomponent.getParent().id+ ".label." + field.getId()) ;
+							   	%>
+			            <tr>
+		                <td class="FieldLabel"> $label </td>
+			              <td class="FieldComponent">
+			              	 <%uicomponent.renderUIComponent(field) %>
+			              </td>
+			            </tr>
+			            <%} %>
+			          </tbody>
+			        </table>
+			        
+			      </div>
+					</td>
+		    </tr>
+	    </tbody>
+	  </table>
+	</div>
 	<div class="AvatarContent">
 		<div class="Label">Picture:</div>
 		<img src="/contact/skin/DefaultSkin/webui/background/Img2.gif" class="Avatar"/>

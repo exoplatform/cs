@@ -4,11 +4,18 @@
  **************************************************************************/
 package org.exoplatform.contact.webui.popup;
 
+import java.util.List;
+
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
+import org.exoplatform.webui.core.UIContainer;
+import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.form.UIFormInputSet;
+import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormMultiValueInputSet;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.validator.EmailAddressValidator;
+
 
 /**
  * Created by The eXo Platform SARL
@@ -30,7 +37,7 @@ public class UIProfileInputSet extends UIFormInputSet {
   
   public UIProfileInputSet(String id) throws Exception {
     super(id) ;
-    
+    setComponentConfig(getClass(), null) ;  
     addUIFormInput(new UIFormStringInput(FIELD_FULLNAME_INPUT, FIELD_FULLNAME_INPUT, null));
     addUIFormInput(new UIFormStringInput(FIELD_FIRSTNAME_INPUT, FIELD_FIRSTNAME_INPUT, null));
     addUIFormInput(new UIFormStringInput(FIELD_MIDDLENAME_INPUT, FIELD_MIDDLENAME_INPUT, null));
@@ -41,7 +48,13 @@ public class UIProfileInputSet extends UIFormInputSet {
     .addValidator(EmailAddressValidator.class));
     
   }
-
+  public List<UIComponent> getChidren(){
+    return super.getChildren() ;
+  }
+  public void processRender(WebuiRequestContext context) throws Exception {
+    super.processRender(context) ;
+  }
+  
   protected String getFieldFullNameValue() {
     return getUIStringInput(FIELD_FULLNAME_INPUT).getValue() ;
   }

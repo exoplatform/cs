@@ -103,6 +103,7 @@
 	width: 194px;
 	line-height: 20px;
 	height: 20px;
+	border: 1px solid #A5A5A5;
 }
 
 .UIMailPortlet .UISelectAccount .ItemSelectorContainer {
@@ -422,7 +423,7 @@
 	padding-right: 18px; 
 }
 
-/*================================== UIGrid===============*/
+/*================================== UIGrid==============================*/
 
 .UIMailPortlet .MailWorkingWorkspace .UIMessageList {
 	padding-left: 1px;
@@ -474,7 +475,7 @@
 	margin: 1px 0px 0px 4px;
 }
 
-.UIMailPortlet .MailWorkingWorkspace table {
+.UIMailPortlet .MailWorkingWorkspace .UIGrid {
 	background: #ffffff;
 }
 
@@ -482,11 +483,11 @@
 	background: none;
 }
 
-.UIMailPortlet .MailWorkingWorkspace td.Border {
+.UIMailPortlet .MailWorkingWorkspace .UIGrid td.Border {
 	border-right: 1px solid #e8e8e8;
 }
 
-.UIMailPortlet .MailWorkingWorkspace td {
+.UIMailPortlet .MailWorkingWorkspace .UIGrid td {
 	height: 20px; line-height: 20px;
 	border-left: none;
 	border-right: 1px solid #e8e8e8;

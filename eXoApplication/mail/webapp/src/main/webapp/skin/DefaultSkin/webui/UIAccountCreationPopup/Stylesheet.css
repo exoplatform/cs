@@ -1,19 +1,18 @@
 .UIAccountCreationWizard {
-	margin: auto;
-	width: 580px;
 	background: #f3f3f3;
 	border: 1px solid #c0c0c0;
 }
-.UIAccountCreationWizard .AccountCreationStep {
+.UIAccountCreationWizard .UIFormTabPane {
+	padding: 0px;
 }
+
 .UIAccountCreationWizard .AccountCreationStep .InfoContainer{
-	border:1px solid #939393 ;
-	border-bottom: none;
-	padding: 5px;
+	padding: 0px 20px 10px 20px;
+	background: white;
 }
 
 .UIAccountCreationWizard .AccountCreationStep .StepInfos{
- padding:  5px 20px 10px 20px;
+ padding:  5px 20px;
  background: white;
 }
 
@@ -24,31 +23,24 @@
 }
 
 .UIAccountCreationWizard .FieldLabel {
-	width: 150px;
-}
-
-.UIAccountCreationWizard .UITabContent {
-	height: 200px;
+	width: 170px;
 }
 
 .UIAccountCreationWizard .UIWizardAction {
-	background: #f9f9f9;
-	border: none ;
-	border-top: 1px solid #939393 ;
-	border-bottom: 1px solid #b7b7b7 ;
-	height: 34px;
+	height: 36px;
+  padding: 0px 15px;
 }
 
 .UIAccountCreationWizard .UIWizardAction .StepNavigationTitle {
   float: left;
   height: 33px; line-height: 33px; vertical-align: middle;
   font-size: 11px; font-weight: bold;
-  margin: 0px 10px 0px 15px;
+  margin: 0px 10px 0px 0px;
 }
 
 .UIAccountCreationWizard .UIWizardAction .StepNavigationBar {
   float: left;
-  height: 34px; line-height: 34px; vertical-align: middle;
+  height: 36px; line-height: 36px;
 }
 
 .UIAccountCreationWizard .UIWizardAction .StepNavigationBar a{
@@ -71,4 +63,23 @@
 .UIAccountCreationWizard .UIWizardAction .StepNavigationBar a.SelectedStep {
   color: red;
 }
- 
+
+.UIAccountCreationWizard .UIFormTabPane .TabPaneContent .UITabContentContainer {
+	border: 1px solid #c0c0c0;
+	border-left: none;
+	border-right: none;
+}
+
+.UIAccountCreationWizard .UITabPane .TabPaneContent .UITabContentContainer .UITabContent {
+	border-right: none;
+	border-left: none;
+	border-top: 1px solid white;
+	border-bottom: 1px solid white;
+	padding: 10px 0px;
+	height: 200px;
+}
+
+.UIAccountCreationWizard .UIForm .HorizontalLayout .UIFormInputSet {
+	width: 400px;
+	margin: auto;
+}
