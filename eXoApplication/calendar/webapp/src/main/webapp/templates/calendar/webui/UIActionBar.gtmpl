@@ -13,12 +13,12 @@
 						</a>
 						<div class="SeparatorLine"><span></span></div>
 						<div class="Title ControlButton">Calendar View:</div>
-						<div class="SelectButton" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
+						<div class="SelectButton" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);" style="position: relative;">
 							<div class="IconHolder DayIcon">
 								<div class="DownArrow1Icon" >Day</div>
 							</div>
 							<% /*Begin Popup Menu*/ %>
-							<div style="position: relative;">
+							<!--<div style="position: relative;">-->
 		      			<div class="UIPopupCategory" style="display: none;">
 		      				<div class="UIRightClickPopupMenu" style="display: block;">
 									  <div class="TopLeftRightClickPopupMenu">
@@ -70,7 +70,7 @@
 				      			
 							    </div>
 		      			</div>
-		      		</div>
+		      		<!--</div>-->
 		      		<% /*End Popup Menu*/ %>
 						</div>
 						<div class="SeparatorLine"><span></span></div>

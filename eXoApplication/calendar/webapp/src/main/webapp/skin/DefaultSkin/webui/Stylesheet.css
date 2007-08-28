@@ -973,3 +973,10 @@
 .UIPopupCategory .CalendarTableColor .b2b1da {
 	background: #b2b1da;
 }
+/* Popup Menu Positioning*/
+.UIActionBar .SelectButton .UIPopupCategory {
+	top: 25px;
+	left: 7px ;
+}
+.UICalendars .TitleBar .UIPopupCategory {
+}
