@@ -84,7 +84,7 @@
 				%>
   					<div class="CalendarItem">
   						<div class="CalendarColor1">
-  							<div class="CheckBox"><input type="checkbox"/></div>
+  							<div class="CheckBox"><%uiform.renderField(calendar.getId())%></div>
   							<div class="CalendarIcon"><a href="#" ><%=calendar.getName()%></a></div>
   							<div class="DownArrow1Icon" title="Calendar actions" onclick="eXo.calendar.UICalendarPortlet.show(this, event);"><span></span></div>
   							<div style="clear: both"><span></span></div>
@@ -128,7 +128,7 @@
 				%>
   					<div class="CalendarItem">
   						<div class="CalendarColor1">
-  							<div class="CheckBox"><input type="checkbox"/></div>
+  							<div class="CheckBox"><%uiform.renderField(calendar.getId())%></div>
   							<div class="CalendarIcon"><a href="#" ><%=calendar.getName()%></a></div>
   							<div style="clear: both"><span></span></div>
   						</div>

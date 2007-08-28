@@ -410,12 +410,6 @@
 	margin-right: 4px;
 }
 
-.UIListView .ListBar .ComboBox {
-	float: right;
-	margin: 3px 6px 0px 3px;
-}
-
-
 .UIListView .ListBar select {
 	width: 150px; height: 18px;
 	font-size: 11px;
@@ -449,6 +443,7 @@
 .UIListView .EventCategory {
 	float: right;
 	margin: 3px 6px 0px 3px;
+}
 
 .UIListView .ListView table {
 	width: 99.4%;

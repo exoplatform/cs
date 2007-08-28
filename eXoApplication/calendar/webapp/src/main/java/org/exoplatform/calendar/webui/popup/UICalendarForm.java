@@ -48,7 +48,7 @@ import org.exoplatform.webui.form.validator.EmptyFieldValidator;
     template = "system:/groovy/webui/form/UIFormTabPane.gtmpl", 
     events = {
       @EventConfig(listeners = UICalendarForm.SelectGroupActionListener.class),
-      @EventConfig(listeners = UICalendarForm.SelectPermissionActionListener.class),
+      @EventConfig(listeners = UICalendarForm.SelectPermissionActionListener.class, phase=Phase.DECODE),
       @EventConfig(listeners = UICalendarForm.SaveActionListener.class),
       @EventConfig(listeners = UICalendarForm.CancelActionListener.class, phase=Phase.DECODE)
     }
@@ -79,7 +79,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent{
     calendarDetail.setRendered(true) ;
     addChild(calendarDetail) ;
     
-    UIFormInputWithActions sharing = new UIFormInputWithActions("sharing") ;
+    UIFormInputWithActions sharing = new UIFormInputWithActions("public") ;
     List<ActionData> actions = new ArrayList<ActionData> () ;
     sharing.addUIFormInput(new UIFormCheckBoxInput<Boolean>(ISPUBLIC, ISPUBLIC, null)) ;
     sharing.addUIFormInput(new UIFormInputInfo(SELECT_GROUPS, SELECT_GROUPS, null)) ;

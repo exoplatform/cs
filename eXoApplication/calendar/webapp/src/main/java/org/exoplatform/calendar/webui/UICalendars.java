@@ -22,6 +22,7 @@ import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
+import org.exoplatform.webui.form.UIFormCheckBoxInput;
 
 /**
  * Created by The eXo Platform SARL
@@ -46,14 +47,32 @@ public class UICalendars extends UIForm  {
   private List<GroupCalendarData> getPersonalCategories() throws Exception{
     CalendarService calendarService = (CalendarService)PortalContainer.getComponent(CalendarService.class) ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
-    return calendarService.getCalendarCategories(username);
+    List<GroupCalendarData> groupCalendars = calendarService.getCalendarCategories(username) ;
+    for(GroupCalendarData group : groupCalendars) {
+      List<Calendar> calendars = group.getCalendars() ;
+      for(Calendar calendar : calendars) {
+        if(getUIFormCheckBoxInput(calendar.getId()) == null){
+          addUIFormInput(new UIFormCheckBoxInput<Boolean>(calendar.getId(), calendar.getId(), false)) ;
+        }
+      }
+    }
+    return groupCalendars;
   }
   
   private List<GroupCalendarData> getSharedGroups() throws Exception{
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     String[] groups = CalendarUtils.getUserGroups(username) ;
     CalendarService calendarService = (CalendarService)PortalContainer.getComponent(CalendarService.class) ;
-    return calendarService.getGroupCalendars(groups) ;
+    List<GroupCalendarData> groupCalendars = calendarService.getGroupCalendars(groups) ;
+    for(GroupCalendarData group : groupCalendars) {
+      List<Calendar> calendars = group.getCalendars() ;
+      for(Calendar calendar : calendars) {
+        if(getUIFormCheckBoxInput(calendar.getId()) == null){
+          addUIFormInput(new UIFormCheckBoxInput<Boolean>(calendar.getId(), calendar.getId(), false)) ;
+        }
+      }
+    }
+    return groupCalendars ;
   }
   
   static  public class AddCalendarActionListener extends EventListener<UICalendars> {
