@@ -446,6 +446,10 @@
 	padding-left: 1px;
 }
 
+.UIListView .EventCategory {
+	float: right;
+	margin: 3px 6px 0px 3px;
+
 .UIListView .ListView table {
 	width: 99.4%;
 	background-color: #ffffff;

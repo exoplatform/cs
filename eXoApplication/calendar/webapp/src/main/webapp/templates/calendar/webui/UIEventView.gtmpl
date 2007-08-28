@@ -1,0 +1,54 @@
+<div class="UIListView">
+<%uiform.begin()%>
+	<div class="ListBar">
+		<a href="<%=uicomponent.event("AddEvent")%>" class="ControlButton">
+			<div class="IconHolder AddEventIcon"> Add event </div>
+		</a>
+		<div class="SeparatorLine"><span></span></div>
+		<a href="<%=uicomponent.event("DeleteEvent")%>" class="ControlButton">
+			<div class="IconHolder DeleteEventIcon"> Delete event </div>
+		</a>
+		<a href="<%=uicomponent.event("AddCategory")%>">
+			<div class="AddCategoryIcon"><span></span></div>
+		</a>
+		<div class="EventCategory">
+			<% 
+				uiform.renderField("eventCategories") ;
+			%>			
+		</div>
+		<div class="Label">Show category:</div> 
+		<div style="clear: both"><span></span></div>
+	</div>
+
+	<div class="ListView">
+		<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
+  		<thead>
+  			<tr>
+  			  <th style="width: 30px;"><input type="checkbox" class="checkbox" title="Check all" value="4"/></th>
+  				<th style="width: 24px;"><div class="AttachmentIcon" title="Attachment of event"><span></span></div></th>
+  		    <th >Event</th>
+ 	      	<th >Start</th>
+ 	      	<th >End</th>
+  	 	  </tr>
+  	 	</thead>
+  	 	  <tbody>
+  				<%
+  					List events = uicomponent.getList() ;
+  					for(event in events){
+  					%>
+  						<tr>
+		  					<td><input type="checkbox" class="checkbox" value="4"/></td>
+								<td style="padding: 0px;"><div class="AttachmentIcon" ><span></span></div></td>
+								<td class="text"><%=event.getSummary()%></td>
+								<td class="text"><%=event.getFromDateTime()%></td>
+								<td class="text"><%=event.getToDateTime()%></td>
+		   			  </tr>
+  					<%
+  					}
+  				%>
+  	   	</tbody>
+		</table>
+	</div>
+	<%uiform.end()%>
+</div>
+<div class="ResizeReadingPane"><span></span></div>
