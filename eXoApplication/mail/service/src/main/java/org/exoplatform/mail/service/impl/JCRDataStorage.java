@@ -157,6 +157,7 @@ public class JCRDataStorage implements DataStorage{
   public Message getMessage(Node messageNode) throws Exception {
     Message msg = new Message();
     if (messageNode.hasProperty(Utils.EXO_ID)) msg.setId(messageNode.getProperty(Utils.EXO_ID).getString());
+    if (messageNode.hasProperty(Utils.EXO_ACCOUNT)) msg.setAccountId(messageNode.getProperty(Utils.EXO_ACCOUNT).getString()) ;
     if (messageNode.hasProperty(Utils.EXO_TO)) msg.setMessageTo(messageNode.getProperty(Utils.EXO_TO).getString());
     if (messageNode.hasProperty(Utils.EXO_SUBJECT)) msg.setSubject(messageNode.getProperty(Utils.EXO_SUBJECT).getString());
     if (messageNode.hasProperty(Utils.EXO_CC)) msg.setMessageCc(messageNode.getProperty(Utils.EXO_CC).getString());
@@ -267,6 +268,7 @@ public class JCRDataStorage implements DataStorage{
     if (nodeMsg != null) {
       // add some properties
       nodeMsg.setProperty(Utils.EXO_ID, message.getId());
+      nodeMsg.setProperty(Utils.EXO_ACCOUNT, accountId);
       nodeMsg.setProperty(Utils.EXO_TO, message.getMessageTo());
       nodeMsg.setProperty(Utils.EXO_SUBJECT, message.getSubject());
       nodeMsg.setProperty(Utils.EXO_CC, message.getMessageCc());
@@ -422,7 +424,6 @@ public class JCRDataStorage implements DataStorage{
     Node messageHome = getMessageHome(username, accountId) ; 
     for(String id : messageIds) {
       if(messageHome.hasNode(id)) {
-        System.out.println("===>>>>>>>>>>>>>>>>>>>>>>>.." + id);
         Node messageNode = messageHome.getNode(id) ;
         if (messageNode.hasProperty("exo:tags")) {
           Value[] values = messageNode.getProperty("exo:tags").getValues() ;
@@ -461,26 +462,26 @@ public class JCRDataStorage implements DataStorage{
   }
 
 
-  public void removeMessageTag(String username, String accountId, String messageId, String tagName)
+  public void removeMessageTag(String username, String accountId, List<String> messageIds, String tagName)
   throws Exception {
     Node messageHome = getMessageHome(username, accountId) ;
+    for (String messageId : messageIds) {
+      if (messageHome.hasNode(messageId)) {
+        Node messageNode = messageHome.getNode(messageId) ;
+        if (messageNode.hasProperty("exo:tags")) {
+          Message message = getMessage(messageNode) ;
+          String[] tags = message.getTags();
 
-    if (messageHome.hasNode(messageId)) {
-      Node messageNode = messageHome.getNode(messageId) ;
-      if (messageNode.hasProperty("exo:tags")) {
-        Message message = getMessage(messageNode) ;
-        String[] tags = message.getTags() ;
+          List<String> listTags = new ArrayList<String>(Arrays.asList(tags)) ;
+          listTags.remove(tagName);        
+          tags = (String[]) listTags.toArray(new String[listTags.size()]) ;
 
-        List<String> listTags = Arrays.asList(tags) ;
-        if (listTags.contains(tagName)) ; 
-        listTags.remove(listTags.indexOf(tagName)) ;
+          message.setTags(tags) ;
 
-        tags = (String[]) listTags.toArray() ;
-        message.setTags(tags) ;
-
-        saveMessage(username, message.getAccountId(), message, false) ;
-      }
-    } 
+          saveMessage(username, message.getAccountId(), message, false) ;
+        }
+      } 
+    }
     messageHome.getSession().save() ;
   }
 
