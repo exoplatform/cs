@@ -58,7 +58,7 @@ public interface DataStorage {
   
   public List<Tag> getTags(String username, String accountId) throws Exception ;
   public void addTag(String username, String accountId, List<String> messagesId, Tag tag) throws Exception ;
-  public void removeMessageTag(String username, String accountId, String messageId, String tagName) throws Exception ;
+  public void removeMessageTag(String username, String accountId, List<String> messageIds, String tagName) throws Exception ;
   public void removeTag(String username, String accountId, String tagName) throws Exception ;
   
 }

@@ -330,9 +330,9 @@ public class MailServiceImpl implements MailService{
     return storage_.getTags(username, accountId);
   }
 
-  public void removeMessageTag(String username, String accountId, String messageId, String tag)
+  public void removeMessageTag(String username, String accountId, List<String> messageIds, String tag)
       throws Exception {
-    storage_.removeMessageTag(username, accountId, messageId, tag);   
+    storage_.removeMessageTag(username, accountId, messageIds, tag);   
   }
 
   public void removeTag(String username, String accountId, String tag) throws Exception {

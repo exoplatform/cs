@@ -462,46 +462,37 @@ public class JCRDataStorage implements DataStorage{
   }
 
 
-  public void removeMessageTag(String username, String accountId, List<String> messageIds, String tagName)
+  public void removeMessageTag(String username, String accountId, List<String> messageIds, String tagName) 
   throws Exception {
-    Node messageHome = getMessageHome(username, accountId) ;
+    Node messageHome = getMessageHome(username, accountId);
     for (String messageId : messageIds) {
       if (messageHome.hasNode(messageId)) {
-        Node messageNode = messageHome.getNode(messageId) ;
+        Node messageNode = messageHome.getNode(messageId);
         if (messageNode.hasProperty("exo:tags")) {
-          Message message = getMessage(messageNode) ;
+          Message message = getMessage(messageNode);
           String[] tags = message.getTags();
 
-          List<String> listTags = new ArrayList<String>(Arrays.asList(tags)) ;
-          listTags.remove(tagName);        
-          tags = (String[]) listTags.toArray(new String[listTags.size()]) ;
+          List<String> listTags = new ArrayList<String>(Arrays.asList(tags));
+          listTags.remove(tagName);
+          tags = (String[]) listTags.toArray(new String[listTags.size()]);
 
-          message.setTags(tags) ;
+          message.setTags(tags);
 
-          saveMessage(username, message.getAccountId(), message, false) ;
+          saveMessage(username, message.getAccountId(), message, false);
         }
-      } 
+      }
     }
-    messageHome.getSession().save() ;
+    messageHome.getSession().save();
   }
 
 
   public void removeTag(String username, String accountId, String tagName) throws Exception {
-    // remove tag in all messages
-    MessageFilter filter = new MessageFilter("filter by tag " + tagName ) ;
-    filter.setAccountId(accountId) ;
-    String[] tags = {tagName} ;
-    filter.setTag(tags) ;
-    List<MessageHeader> list = getMessages(username, filter) ;
-    if (list.size() > 0) {
-      Iterator<MessageHeader> it = list.iterator();
-      while (it.hasNext()) {
-        // the list contains Message objects, that inherit from MessageHeader
-        Message message = (Message)it.next();
-        String messageId = message.getId();
-        // for each message tagged, removes the tag
-        removeTag(username, messageId, tagName);
-      }
+    // remove this tag in all messages
+    List<Message> listMessage = getMessageByTag(username, accountId, tagName);
+    for (Message message : listMessage) {
+      List<String> listTag = new ArrayList<String>();
+      listTag.add(message.getId());
+      removeMessageTag(username, accountId, listTag, tagName);
     }
 
     // remove tag node
