@@ -82,15 +82,15 @@
 	background: url('icons/ApproveThreadsIcon.gif') no-repeat ;
 }
 
-.ClosethisForumIcon {
-	background: url('icons/ClosethisForumIcon.gif') no-repeat ;
-}
-
 .CloseThreadsIcon {
 	background: url('icons/CloseThreadsIcon.gif') no-repeat ;
 }
 
 .DeleteThisForumIcon {
+	background: url('icons/DeleteThisForumIcon.gif') no-repeat ;
+}
+
+.RemoveForumIcon {
 	background: url('icons/DeleteThisForumIcon.gif') no-repeat ;
 }
 
@@ -110,10 +110,6 @@
 	background: url('icons/EditthisForumIcon.gif') no-repeat ;
 }
 
-.LockthisForumIcon {
-	background: url('icons/LockthisForumIcon.gif') no-repeat ;
-}
-
 .MergeThreadsIcon {
 	background: url('icons/MergeThreadsIcon.gif') no-repeat ;
 }
@@ -124,10 +120,6 @@
 
 .MoveThreadsIcon {
 	background: url('icons/MoveThreadsIcon.gif') no-repeat ;
-}
-
-.OpenthisForumIcon {
-	background: url('icons/OpenthisForumIcon.gif') no-repeat ;
 }
 
 .OpenThreadsIcon {
@@ -146,27 +138,9 @@
 	background: url('icons/ThreadsAuto-PruningIcon.gif') no-repeat ;
 }
 
-.UnapproveThreadsIcon {
-	background: url('icons/UnapproveThreadsIcon.gif') no-repeat ;
-}
-
-.UnLockthisForumIcon {
-	background: url('icons/UnLockthisForumIcon.gif') no-repeat ;
-}
-
 .DeleteCategoryIcon {
 	background: url('icons/DeleteCategoryIcon.gif') no-repeat ;
 }
-
-.EditCategoryIcon {
-	background: url('icons/EditCategoryIcon.gif') no-repeat ;
-}
-
-
-
-
-
-
 
 .ModerationPostIcon {
 	background: url('icons/ModerationPostIcon.gif') no-repeat ;
@@ -210,10 +184,6 @@
 
 .SplitThisThreadIcon {
 	background: url('icons/SplitThisThreadIcon.gif') no-repeat ;
-}
-
-.ManageUserTitlesIcon {
-	background: url('icons/ManageUserTitlesIcon.gif') no-repeat ;
 }
 
 .AddPollThreadIcon {

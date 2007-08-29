@@ -150,7 +150,7 @@
 					                    </div>
 				                    </a>
 				                    <a class="MenuItem" href="#">   
-					                    <div class="ItemIcon EditSelectedThreadIcon">
+					                    <div class="ItemIcon ManageModerators">
 					                      Manage User Titles
 					                    </div>
 				                    </a>
@@ -165,12 +165,12 @@
 					                    </div>
 				                    </a>
 				                    <a class="MenuItem" href="#">   
-					                    <div class="ItemIcon LockthisForumIcon">
+					                    <div class="ItemIcon SetLockedIcon">
 					                      Lock this Thread
 					                    </div>
 				                    </a>
 				                    <div class="MenuItem">   
-					                    <div class="ItemIcon UnLockthisForumIcon DisableLabel">
+					                    <div class="ItemIcon SetUnLockIcon DisableLabel">
 					                      UnLock this Thread
 					                    </div>
 				                    </div>
@@ -200,7 +200,7 @@
 					                    </div>
 				                    </div>
 				                    <a class="MenuItem" href="#">   
-					                    <div class="ItemIcon UnapproveThreadsIcon">
+					                    <div class="ItemIcon UnapprovePostsIcon">
 					                     Unapprove this Thread
 					                    </div>
 				                    </a>

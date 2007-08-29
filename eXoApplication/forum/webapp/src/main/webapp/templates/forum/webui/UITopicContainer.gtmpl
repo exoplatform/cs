@@ -86,12 +86,12 @@
 					                    </div>
 				                    </a>
 				                    <a class="MenuItem" href="#">   
-					                    <div class="ItemIcon LockthisForumIcon">
+					                    <div class="ItemIcon SetLockedIcon">
 					                      Lock Threads
 					                    </div>
 				                    </a>
 				                    <div class="MenuItem">   
-					                    <div class="ItemIcon UnLockthisForumIcon DisableLabel">
+					                    <div class="ItemIcon SetUnLockIcon DisableLabel">
 					                      UnLock Threads
 					                    </div>
 				                    </div>
@@ -126,7 +126,7 @@
 					                    </div>
 				                    </div>
 				                    <a class="MenuItem" href="#">   
-					                    <div class="ItemIcon UnapproveThreadsIcon">
+					                    <div class="ItemIcon UnapprovePostsIcon">
 					                     Unapprove Threads
 					                    </div>
 				                    </a>
@@ -182,22 +182,22 @@
 					                    </div>
 				                    </a>
 				                    <a class="MenuItem" href="#">   
-					                    <div class="ItemIcon LockthisForumIcon">
+					                    <div class="ItemIcon SetLockedIcon">
 					                      Lock this Forum
 					                    </div>
 				                    </a>
 				                    <div class="MenuItem">   
-					                    <div class="ItemIcon UnLockthisForumIcon DisableLabel">
+					                    <div class="ItemIcon SetUnLockIcon DisableLabel">
 					                      UnLock this  Forum
 					                    </div>
 				                    </div>
 				                    <a class="MenuItem" href="#">   
-					                    <div class="ItemIcon ClosethisForumIcon">
+					                    <div class="ItemIcon SetCloseIcon">
 					                      Close this Forum
 					                    </div>
 				                    </a>
 				                    <div class="MenuItem">   
-					                    <div class="ItemIcon OpenthisForumIcon DisableLabel">
+					                    <div class="ItemIcon SetOpenIcon DisableLabel">
 					                      Open this Forum
 					                    </div>
 				                    </div>
