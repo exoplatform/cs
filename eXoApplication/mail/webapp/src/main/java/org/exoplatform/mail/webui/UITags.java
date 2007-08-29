@@ -4,6 +4,10 @@
  **************************************************************************/
 package org.exoplatform.mail.webui ;
 
+import java.util.List;
+
+import org.exoplatform.container.PortalContainer;
+import org.exoplatform.mail.service.MailService;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIComponent;
@@ -27,6 +31,10 @@ import org.exoplatform.webui.event.EventListener;
 public class UITags extends UIComponent {
   public UITags() throws Exception {}
   
+  private List getTags() throws Exception {
+    MailService mailService = (MailService)PortalContainer.getComponent(MailService.class) ;
+    return null ;
+  }
   
   static public class ChangeTagActionListener extends EventListener<UITags> {
     public void execute(Event<UITags> event) throws Exception {

@@ -163,7 +163,7 @@ public class TestMailService extends BaseMailTestCase{
 
     return myaccount;
   }
-
+  
   private Message createNewMessage(String subject, String accountId) {
     Message myMsg = new Message();
     myMsg.setFrom("nam.phung@exoplatform.com");
