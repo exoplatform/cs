@@ -6,6 +6,7 @@ package org.exoplatform.mail.service.test;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -17,7 +18,7 @@ import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.MessageHeader;
-import org.exoplatform.mail.service.Utils;
+import org.exoplatform.mail.service.Tag;
 
 /**
  * Created by The eXo Platform SARL
@@ -32,13 +33,11 @@ public class TestMailService extends BaseMailTestCase{
   }
   
   public void testAccount() throws Exception {
-
    
-    Account myaccount = testCreateNewAccount() ;
+    Account myaccount = createNewAccount() ;
     
     //assertNotNull(mailHomeNode_) ;
     //Add new account
-    
     
     mailService_.createAccount("hungnguyen", myaccount) ;
     //assert added account
@@ -127,64 +126,105 @@ public class TestMailService extends BaseMailTestCase{
     // create message
     
     System.out.println("----------------SENDING MAIL-------------------");
-     Message message = testCreateNewMessage(myaccount.getId()) ;
+     Message message = createNewMessage("Test Message" , myaccount.getId()) ;
      mailService_.sendMessage("hungnguyen", message) ;
      System.out.println("[Subject]  : " + message.getSubject());
      System.out.println("[Content]  : " + message.getMessageBody());
      System.out.println("---------------- MAIL SENT-------------------");
-
   }
   
-  public Account testCreateNewAccount() {
-    Account myaccount = new Account() ;
-    myaccount.setLabel("My Google Mail") ;
-    myaccount.setUserDisplayName("Exo Admin") ;
-    myaccount.setEmailAddress("exomailtest@gmail.com") ;
-    myaccount.setEmailReplyAddress("exomailtest@gmail.com") ;
-    myaccount.setSignature("my sign") ;
-    myaccount.setDescription("No description ...") ;
-    myaccount.setServerProperty("username", "exomailtest@gmail.com"); 
+  private Account createNewAccount() {
+    Account myaccount = new Account();
+    myaccount.setLabel("My Google Mail");
+    myaccount.setUserDisplayName("Exo Admin");
+    myaccount.setEmailAddress("exomailtest@gmail.com");
+    myaccount.setEmailReplyAddress("exomailtest@gmail.com");
+    myaccount.setSignature("my sign");
+    myaccount.setDescription("No description ...");
+    myaccount.setServerProperty("username", "exomailtest@gmail.com");
     myaccount.setServerProperty("password", "exoadmin");
     myaccount.setServerProperty("host", "pop.gmail.com");
-    myaccount.setServerProperty("port", "995"); // POP3 : 110, POP3 (SSL) : 995, IMAP : 143, IMAP (SSL) : 993
+    myaccount.setServerProperty("port", "995"); // POP3 : 110, POP3 (SSL) : 995,
+    // IMAP : 143, IMAP (SSL) : 993
     myaccount.setServerProperty("protocol", "pop3"); // pop3 or imap
     myaccount.setServerProperty("ssl", "true");
-    
+
     myaccount.setServerProperty("mail.smtp.user", "exomailtest@gmail.com");
     myaccount.setServerProperty("mail.smtp.host", "smtp.gmail.com");
     myaccount.setServerProperty("mail.smtp.port", "465");
     myaccount.setServerProperty("ssl", "true");
     myaccount.setServerProperty("mail.smtp.debug", "true");
     myaccount.setServerProperty("mail.debug", "true");
-    myaccount.setServerProperty("mail.smtp.starttls.enable","true");
+    myaccount.setServerProperty("mail.smtp.starttls.enable", "true");
     myaccount.setServerProperty("mail.smtp.auth", "true");
     myaccount.setServerProperty("mail.smtp.socketFactory.port", "465");
     myaccount.setServerProperty("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
     myaccount.setServerProperty("mail.smtp.socketFactory.fallback", "false");
-    
-    return myaccount ;
+
+    return myaccount;
   }
-  
-  public Message testCreateNewMessage(String accountId) {
-    //TODO code create message here
-    Message myMsg = new Message() ;
-    myMsg.setFrom("exomailtest@gmail.com") ;
-    myMsg.setSubject("test message");
-    myMsg.setMessageTo("exomailtest@gmail.com");
-    myMsg.setMessageCc("phamtuanchip@yahoo.de");
-    myMsg.setMessageBcc("phamtuanchip@yahoo.de");
-    myMsg.setMessageBody("This is a message about to send to test");
+
+  private Message createNewMessage(String subject, String accountId) {
+    Message myMsg = new Message();
+    myMsg.setFrom("nam.phung@exoplatform.com");
+    myMsg.setSubject(subject);
+    myMsg.setMessageTo("nam.phung@exoplatform.com");
+    myMsg.setMessageCc("nam.phung@exoplatform.com");
+    myMsg.setMessageBcc("nam.phung@exoplatform.com");
+    myMsg.setMessageBody("This is a message for test !");
+    myMsg.setAttachements(new ArrayList<Attachment>());
     myMsg.setAccountId(accountId);
-    myMsg.setSendDate(new Date()) ;
-    return myMsg ;
+    myMsg.setSendDate(new Date());
+    return myMsg;
   }
-   
-  public void testSendMessage(Message msg) {
+
+  public void testTag() throws Exception{
+    Account myaccount = createNewAccount();
+    mailService_.createAccount("namphung", myaccount) ;
+    assertNotNull(mailService_.getAccountById("namphung", myaccount.getId()));
     
-  }
-  public void testGetNewMessage(Account acc) {
+    Message myMessage = createNewMessage( "Test Message 1", myaccount.getId());
+    mailService_.saveMessage("namphung", myaccount.getId(), myMessage, true);
+    Message myMessage2 = createNewMessage( "Test Message 2", myaccount.getId());
+    mailService_.saveMessage("namphung", myaccount.getId(), myMessage2, true);
     
-  }
-  
-  
+    List<String> listMessage = new ArrayList<String>();
+    listMessage.add(myMessage.getId());
+    listMessage.add(myMessage2.getId());
+    
+    Tag tag = new Tag();
+    tag.setName("exo");
+    mailService_.addTag("namphung", myaccount.getId(), listMessage, tag);
+    Tag tag2 = new Tag();
+    tag2.setName("xwiki");
+    mailService_.addTag("namphung", myaccount.getId(), listMessage, tag2);
+    Tag tag3 = new Tag();
+    tag3.setName("myproject");
+    listMessage.remove(0);
+    mailService_.addTag("namphung", myaccount.getId(), listMessage, tag3);
+    
+    // assert number of tags.
+    assertEquals("Number of tag is incorrect !", 3, mailService_.getTags("namphung", myaccount.getId()).size());
+    
+    // assert tag's message
+    assertEquals("Number of messages in tag 'exo' is incorrect !", 2, mailService_.getMessageByTag("namphung", myaccount.getId(), tag.getName()).size());
+    assertEquals("Number of messages in tag 'myproject' is incorrect !", 1, mailService_.getMessageByTag("namphung", myaccount.getId(), tag3.getName()).size());
+    
+    // assert message's tags
+    assertEquals("Number of tag in tag 'myMessage' is incorrect !", 2, mailService_.getMessageByTag("namphung", myaccount.getId(), tag.getName()).get(0).getTags().length);
+    assertEquals("Number of tag in tag 'myMessage2' is incorrect !", 3, mailService_.getMessageByTag("namphung", myaccount.getId(), tag.getName()).get(1).getTags().length);
+    
+    // assert remove tag in a message
+//    myMessage = mailService_.getMessageByTag("namphung", myaccount.getId(), tag.getName()).get(0);
+//    mailService_.removeMessageTag("namphung", myaccount.getId(), listMessage, tag.getName());
+//    myMessage = mailService_.getMessageByTag("namphung", myaccount.getId(), tag2.getName()).get(0);
+//    assertEquals(1, myMessage.getTags().length);
+    
+    // assert remove tag
+//    mailService_.removeTag("namphung", myaccount.getId(), tag2.getName());
+//    assertEquals("Number of tags after remove tag2 is invalid !", 2,  mailService_.getTags("namphung", myaccount.getId()).size());
+//    assertEquals("Number of tag in tag 'myMessage2' after remove tag2 is incorrect !", 2, mailService_.getMessageByTag("namphung", myaccount.getId(), tag3.getName()).get(0).getTags().length);
+       
+    // delete account
+  }  
 }
