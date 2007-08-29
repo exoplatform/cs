@@ -137,7 +137,7 @@ public class JCRDataStorage implements DataStorage{
         }
       }
       if (filter.getTag() != null && !addToList) {
-        
+
         String[] tags = message.getTags();
         String[] filterTags = filter.getTag();
         for (int i = 0; i < tags.length && !addToList; i++) { // !addToList : stop the loop if one tag matches
@@ -156,7 +156,7 @@ public class JCRDataStorage implements DataStorage{
 
   public Message getMessage(Node messageNode) throws Exception {
     Message msg = new Message();
-    if (messageNode.hasProperty(Utils.EXO_ID)) msg.setId(messageNode.getName());
+    if (messageNode.hasProperty(Utils.EXO_ID)) msg.setId(messageNode.getProperty(Utils.EXO_ID).getString());
     if (messageNode.hasProperty(Utils.EXO_TO)) msg.setMessageTo(messageNode.getProperty(Utils.EXO_TO).getString());
     if (messageNode.hasProperty(Utils.EXO_SUBJECT)) msg.setSubject(messageNode.getProperty(Utils.EXO_SUBJECT).getString());
     if (messageNode.hasProperty(Utils.EXO_CC)) msg.setMessageCc(messageNode.getProperty(Utils.EXO_CC).getString());
@@ -266,6 +266,7 @@ public class JCRDataStorage implements DataStorage{
     }
     if (nodeMsg != null) {
       // add some properties
+      nodeMsg.setProperty(Utils.EXO_ID, message.getId());
       nodeMsg.setProperty(Utils.EXO_TO, message.getMessageTo());
       nodeMsg.setProperty(Utils.EXO_SUBJECT, message.getSubject());
       nodeMsg.setProperty(Utils.EXO_CC, message.getMessageCc());
@@ -282,18 +283,20 @@ public class JCRDataStorage implements DataStorage{
       String[] folders = message.getFolders();
       nodeMsg.setProperty(Utils.EXO_FOLDERS, folders);
       List<Attachment> attachments = message.getAttachments();
-      Iterator<Attachment> it = attachments.iterator();
-      while (it.hasNext()) {
-        BufferAttachment file = (BufferAttachment)it.next();
-        Node nodeFile = null;
-        if (!nodeMsg.hasNode(file.getName())) nodeFile = nodeMsg.addNode(file.getName(), Utils.NT_FILE);
-        else nodeFile = nodeMsg.getNode(file.getName());
-        Node nodeContent = null;
-        if (!nodeFile.hasNode(Utils.JCR_CONTENT)) nodeContent = nodeFile.addNode(Utils.JCR_CONTENT, Utils.NT_RESOURCE);
-        else nodeContent = nodeFile.getNode(Utils.JCR_CONTENT);
-        nodeContent.setProperty(Utils.JCR_MIMETYPE, file.getMimeType());
-        nodeContent.setProperty(Utils.JCR_DATA, file.getInputStream());
-        nodeContent.setProperty(Utils.JCR_LASTMODIFIED, Calendar.getInstance().getTimeInMillis());
+      if(attachments != null) { 
+        Iterator<Attachment> it = attachments.iterator();
+        while (it.hasNext()) {
+          BufferAttachment file = (BufferAttachment)it.next();
+          Node nodeFile = null;
+          if (!nodeMsg.hasNode(file.getName())) nodeFile = nodeMsg.addNode(file.getName(), Utils.NT_FILE);
+          else nodeFile = nodeMsg.getNode(file.getName());
+          Node nodeContent = null;
+          if (!nodeFile.hasNode(Utils.JCR_CONTENT)) nodeContent = nodeFile.addNode(Utils.JCR_CONTENT, Utils.NT_RESOURCE);
+          else nodeContent = nodeFile.getNode(Utils.JCR_CONTENT);
+          nodeContent.setProperty(Utils.JCR_MIMETYPE, file.getMimeType());
+          nodeContent.setProperty(Utils.JCR_DATA, file.getInputStream());
+          nodeContent.setProperty(Utils.JCR_LASTMODIFIED, Calendar.getInstance().getTimeInMillis());
+        }
       }
       homeMsg.getSession().save();
     }
@@ -409,7 +412,7 @@ public class JCRDataStorage implements DataStorage{
 
 
   public void addTag(String username, String accountId, List<String> messageIds, Tag tag)
-      throws Exception {    
+  throws Exception {    
     Node tagHome = getTagHome(username, accountId) ;
     if(!tagHome.hasNode(tag.getName())) {
       Node tagNode = tagHome.addNode(tag.getName(), "exo:tag") ;
@@ -459,9 +462,9 @@ public class JCRDataStorage implements DataStorage{
 
 
   public void removeMessageTag(String username, String accountId, String messageId, String tagName)
-      throws Exception {
+  throws Exception {
     Node messageHome = getMessageHome(username, accountId) ;
-   
+
     if (messageHome.hasNode(messageId)) {
       Node messageNode = messageHome.getNode(messageId) ;
       if (messageNode.hasProperty("exo:tags")) {
@@ -470,11 +473,11 @@ public class JCRDataStorage implements DataStorage{
 
         List<String> listTags = Arrays.asList(tags) ;
         if (listTags.contains(tagName)) ; 
-          listTags.remove(listTags.indexOf(tagName)) ;
-          
+        listTags.remove(listTags.indexOf(tagName)) ;
+
         tags = (String[]) listTags.toArray() ;
         message.setTags(tags) ;
-        
+
         saveMessage(username, message.getAccountId(), message, false) ;
       }
     } 
@@ -499,16 +502,16 @@ public class JCRDataStorage implements DataStorage{
         removeTag(username, messageId, tagName);
       }
     }
-    
+
     // remove tag node
     Node tagHomeNode = getTagHome(username, accountId) ;
     if (tagHomeNode.hasNode(tagName)) {
       tagHomeNode.getNode(tagName).remove() ;
     }
-    
+
     tagHomeNode.getSession().save() ;
   } 
-  
+
   public List<Message> getMessageByTag(String username, String accountId, String tagName)
   throws Exception {
     List<Message> messages = new ArrayList<Message>();
