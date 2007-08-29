@@ -53,8 +53,8 @@ public class JCRDataStorage implements DataStorage{
   public Account getAccountById(String username, String id) throws Exception {
     //  get the account of the specified user with the specified id
     /*QueryManager qm = getMailHomeNode(username).getSession().getWorkspace().getQueryManager();
-    StringBuffer queryString = new StringBuffer("//element(*,exo:account)[@exo:id='").
-                                  append(id).
+    StringBuffer queryString = new StringBuffer("/jcr:root" +currentAccount.getPath() + "//element(*,exo:message)[@exo:tags='").
+                                  append(tagName).
                                   append("']");
     Query query = qm.createQuery(queryString.toString(), Query.XPATH);
     QueryResult result = query.execute();
@@ -137,6 +137,7 @@ public class JCRDataStorage implements DataStorage{
         }
       }
       if (filter.getTag() != null && !addToList) {
+        
         String[] tags = message.getTags();
         String[] filterTags = filter.getTag();
         for (int i = 0; i < tags.length && !addToList; i++) { // !addToList : stop the loop if one tag matches
@@ -155,7 +156,7 @@ public class JCRDataStorage implements DataStorage{
 
   public Message getMessage(Node messageNode) throws Exception {
     Message msg = new Message();
-    if (messageNode.hasProperty(Utils.EXO_ID)) msg.setMessageTo(messageNode.getProperty(Utils.EXO_ID).getString());
+    if (messageNode.hasProperty(Utils.EXO_ID)) msg.setId(messageNode.getName());
     if (messageNode.hasProperty(Utils.EXO_TO)) msg.setMessageTo(messageNode.getProperty(Utils.EXO_TO).getString());
     if (messageNode.hasProperty(Utils.EXO_SUBJECT)) msg.setSubject(messageNode.getProperty(Utils.EXO_SUBJECT).getString());
     if (messageNode.hasProperty(Utils.EXO_CC)) msg.setMessageCc(messageNode.getProperty(Utils.EXO_CC).getString());
@@ -418,6 +419,7 @@ public class JCRDataStorage implements DataStorage{
     Node messageHome = getMessageHome(username, accountId) ; 
     for(String id : messageIds) {
       if(messageHome.hasNode(id)) {
+        System.out.println("===>>>>>>>>>>>>>>>>>>>>>>>.." + id);
         Node messageNode = messageHome.getNode(id) ;
         if (messageNode.hasProperty("exo:tags")) {
           Value[] values = messageNode.getProperty("exo:tags").getValues() ;
@@ -459,6 +461,7 @@ public class JCRDataStorage implements DataStorage{
   public void removeMessageTag(String username, String accountId, String messageId, String tagName)
       throws Exception {
     Node messageHome = getMessageHome(username, accountId) ;
+   
     if (messageHome.hasNode(messageId)) {
       Node messageNode = messageHome.getNode(messageId) ;
       if (messageNode.hasProperty("exo:tags")) {
@@ -474,7 +477,7 @@ public class JCRDataStorage implements DataStorage{
         
         saveMessage(username, message.getAccountId(), message, false) ;
       }
-    }
+    } 
     messageHome.getSession().save() ;
   }
 
@@ -505,4 +508,21 @@ public class JCRDataStorage implements DataStorage{
     
     tagHomeNode.getSession().save() ;
   } 
+  
+  public List<Message> getMessageByTag(String username, String accountId, String tagName)
+  throws Exception {
+    List<Message> messages = new ArrayList<Message>();
+    QueryManager qm = getMailHomeNode(username).getSession().getWorkspace().getQueryManager();
+    StringBuffer queryString = new StringBuffer("/jcr:root" + getMailHomeNode(username).getNode(accountId).getPath() + "//element(*,exo:message)[@exo:tags='").
+    append(tagName).
+    append("']");
+    Query query = qm.createQuery(queryString.toString(), Query.XPATH);
+    QueryResult result = query.execute();
+    NodeIterator it = result.getNodes();
+    while(it.hasNext()) {
+      Message message = getMessage(it.nextNode());
+      messages.add(message);
+    }
+    return messages;
+  }
 }

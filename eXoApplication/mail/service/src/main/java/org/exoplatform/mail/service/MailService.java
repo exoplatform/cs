@@ -113,6 +113,7 @@ public interface MailService {
    */
   public void removeUserFolder(String username, Account account, Folder folder) throws Exception ;
   
+  public List<Message> getMessageByTag(String username, String accountId, String tagName) throws Exception ;
   public List<Tag> getTags(String username, String accountId) throws Exception ;
   /** This method should:
     * 1. Check the tag name to see if  the tag name is configured in the account
@@ -147,6 +148,7 @@ public interface MailService {
    * @throws Exception
    */
   public void removeTag(String username, String accountId, String tag) throws Exception ;
+  
   
   /**
    * This method should:
