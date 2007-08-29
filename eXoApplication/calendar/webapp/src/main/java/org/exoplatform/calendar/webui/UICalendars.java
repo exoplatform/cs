@@ -12,7 +12,9 @@ import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.webui.popup.UICalendarCategoryForm;
 import org.exoplatform.calendar.webui.popup.UICalendarForm;
+import org.exoplatform.calendar.webui.popup.UIEventForm;
 import org.exoplatform.calendar.webui.popup.UIPopupAction;
+import org.exoplatform.calendar.webui.popup.UIPopupContainer;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -36,6 +38,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
     template =  "app:/templates/calendar/webui/UICalendars.gtmpl",
     events = {
         @EventConfig(listeners = UICalendars.AddCalendarActionListener.class),
+        @EventConfig(listeners = UICalendars.AddEventActionListener.class),
         @EventConfig(listeners = UICalendars.AddCalendarCategoryActionListener.class)
     }
 )
@@ -78,17 +81,31 @@ public class UICalendars extends UIForm  {
   static  public class AddCalendarActionListener extends EventListener<UICalendars> {
     public void execute(Event<UICalendars> event) throws Exception {
       UICalendars uiComponent = event.getSource() ;
-      UICalendarPortlet forumPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
-      UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;
-      popupAction.activate(UICalendarForm.class, 600) ;
+      UICalendarPortlet uiCalendarPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
+      UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
+      UIPopupContainer uiPopupContainer = uiCalendarPortlet.createUIComponent(UIPopupContainer.class, null, null) ;
+      uiPopupContainer.addChild(UICalendarForm.class, null, null) ;
+      popupAction.activate(uiPopupContainer, 600, 0, true) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   }
+  static  public class AddEventActionListener extends EventListener<UICalendars> {
+    public void execute(Event<UICalendars> event) throws Exception {
+      UICalendars uiComponent = event.getSource() ;
+      UICalendarPortlet uiCalendarPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
+      UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
+      UIPopupContainer uiPopupContainer = uiCalendarPortlet.createUIComponent(UIPopupContainer.class, null, null) ;
+      uiPopupContainer.addChild(UIEventForm.class, null, null) ;
+      popupAction.activate(uiPopupContainer, 700, 0, true) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+    }
+  }
+  
   static  public class AddCalendarCategoryActionListener extends EventListener<UICalendars> {
     public void execute(Event<UICalendars> event) throws Exception {
       UICalendars uiComponent = event.getSource() ;
-      UICalendarPortlet forumPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
-      UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;
+      UICalendarPortlet uiCalendarPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
+      UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
       popupAction.activate(UICalendarCategoryForm.class, 600) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }

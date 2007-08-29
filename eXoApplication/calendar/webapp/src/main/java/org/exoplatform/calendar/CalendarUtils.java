@@ -16,6 +16,8 @@ import org.exoplatform.services.organization.impl.GroupImpl;
  * Jul 11, 2007  
  */
 public class CalendarUtils {
+  final public static String SEMICOLON = ";".intern() ;
+  final public static String COLON = ",".intern() ;
   static public String[] getUserGroups(String username) throws Exception {
     OrganizationService organization = (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
     Object[] objs = organization.getGroupHandler().findGroupsOfUser(username).toArray() ;
@@ -33,5 +35,8 @@ public class CalendarUtils {
       groups[i] = ((GroupImpl)objs[i]).getId() ;
     }
     return groups ;
+  }
+  public static boolean isEmpty(String value) {
+    return (value == null || value.trim().length() == 0) ;
   }
 }
