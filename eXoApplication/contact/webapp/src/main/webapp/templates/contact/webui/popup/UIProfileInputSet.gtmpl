@@ -1,5 +1,5 @@
 <div class="Profile $uicomponent.id">
-  <div class="FormContainer">
+  <div class="FormContainer ProfileContainer">
 	  <table class="UIFormGrid">
       <tbody>
       	<tr>
