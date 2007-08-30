@@ -13,6 +13,7 @@ import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarCategory;
 import org.exoplatform.calendar.service.CalendarImportExport;
 import org.exoplatform.calendar.service.CalendarService;
+import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.Event;
 import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.EventQuery;
@@ -135,6 +136,15 @@ public class CalendarServiceImpl implements CalendarService{
   
   public Map<String, CalendarImportExport>  getCalendarImportExports() {
     return calendarImportExport_ ;
+  }
+
+  public void saveCalendarSetting(String username, CalendarSetting setting) throws Exception {
+    storage_.saveCalendarSetting(username, setting) ;
+    
+  }
+  
+  public CalendarSetting getCalendarSetting(String username) throws Exception {
+    return storage_.getCalendarSetting(username) ;
   }
   
   /*public void importCalendar(String username, String calendarType, InputStream icalInputStream) throws Exception {

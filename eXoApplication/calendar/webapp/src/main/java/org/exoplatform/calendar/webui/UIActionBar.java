@@ -4,6 +4,9 @@
  **************************************************************************/
 package org.exoplatform.calendar.webui;
 
+import org.exoplatform.calendar.webui.popup.UICalendarSettingForm;
+import org.exoplatform.calendar.webui.popup.UIEventCategoryForm;
+import org.exoplatform.calendar.webui.popup.UIPopupAction;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIContainer;
@@ -20,7 +23,8 @@ import org.exoplatform.webui.event.EventListener;
 @ComponentConfig(
     template =  "app:/templates/calendar/webui/UIActionBar.gtmpl", 
     events = {
-        @EventConfig(listeners = UIActionBar.ChangeViewActionListener.class)
+        @EventConfig(listeners = UIActionBar.ChangeViewActionListener.class),
+        @EventConfig(listeners = UIActionBar.SettingActionListener.class)
     }
 )
 public class UIActionBar extends UIContainer  {
@@ -32,6 +36,14 @@ public class UIActionBar extends UIContainer  {
       UIActionBar uiActionBar = event.getSource() ;      
     }
   }  
-  
+  static public class SettingActionListener extends EventListener<UIActionBar> {
+    public void execute(Event<UIActionBar> event) throws Exception {
+      UIActionBar uiActionBar = event.getSource() ;
+      UICalendarPortlet calendarPortlet = uiActionBar.getAncestorOfType(UICalendarPortlet.class) ;
+      UIPopupAction popupAction = calendarPortlet.getChild(UIPopupAction.class) ;
+      popupAction.activate(UICalendarSettingForm.class, 600) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+    }
+  }
   
 }

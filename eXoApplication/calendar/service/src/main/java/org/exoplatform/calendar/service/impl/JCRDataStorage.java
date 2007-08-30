@@ -18,6 +18,7 @@ import javax.jcr.query.QueryResult;
 
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarCategory;
+import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.Event;
 import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.EventQuery;
@@ -42,6 +43,7 @@ public class JCRDataStorage implements DataStorage{
   final private static String TASKS = "tasks".intern() ;
   final private static String CALENDAR_CATEGORIES = "categories".intern() ;
   final private static String CALENDAR_GROUPS = "groups".intern() ;
+  final private static String CALENDAR_SETTING = "calendarSetting".intern() ;
   final private static String EVENT_CATEGORIES = "eventCategories".intern() ;
   
   private RepositoryService  repositoryService_ ; 
@@ -321,8 +323,7 @@ public class JCRDataStorage implements DataStorage{
           calendar.setEditPermission(edits) ;
         }
       }      
-    }
-    calendar.setEventCategories(getEventCategories(username, calNode.getProperty("exo:id").getString())) ;    
+    }   
     return calendar ;
   }  
   
@@ -662,6 +663,45 @@ public class JCRDataStorage implements DataStorage{
     return reminders ;
   }
   
+  public void saveCalendarSetting(String username, CalendarSetting setting) throws Exception {
+    Node calendarHome = getCalendarServiceHome(username) ;
+    Node settingNode ;
+    if(calendarHome.hasNode(CALENDAR_SETTING)) settingNode = calendarHome.getNode(CALENDAR_SETTING) ;
+    else settingNode = calendarHome.addNode(CALENDAR_SETTING, "exo:calendarSetting") ;
+    settingNode.setProperty("exo:viewType", setting.getViewType()) ;
+    settingNode.setProperty("exo:timeInterval", setting.getTimeInterval()) ;
+    settingNode.setProperty("exo:weekStartOn", setting.getWeekStartOn()) ;
+    settingNode.setProperty("exo:dateFormat", setting.getDateFormat()) ;
+    settingNode.setProperty("exo:timeFormat", setting.getTimeFormat()) ;
+    settingNode.setProperty("exo:location", setting.getLocation()) ;
+    settingNode.setProperty("exo:defaultCalendars", setting.getDefaultCalendars()) ;
+    calendarHome.getSession().save() ;
+  }
+  
+  public CalendarSetting getCalendarSetting(String username) throws Exception{
+    Node calendarHome = getCalendarServiceHome(username) ;
+    if(calendarHome.hasNode(CALENDAR_SETTING)){
+      CalendarSetting calendarSetting = new CalendarSetting() ;
+      Node settingNode = calendarHome.getNode(CALENDAR_SETTING) ;      
+      calendarSetting.setViewType(settingNode.getProperty("exo:viewType").getString()) ;
+      calendarSetting.setTimeInterval(settingNode.getProperty("exo:timeInterval").getLong()) ;
+      calendarSetting.setWeekStartOn(settingNode.getProperty("exo:weekStartOn").getString()) ;
+      calendarSetting.setDateFormat(settingNode.getProperty("exo:dateFormat").getString()) ;
+      calendarSetting.setTimeFormat(settingNode.getProperty("exo:timeFormat").getString()) ;
+      if(settingNode.hasProperty("exo:location"))calendarSetting.setLocation(settingNode.getProperty("exo:location").getString()) ;
+      if(settingNode.hasProperty("exo:defaultCalendars")){
+        Value[] values = settingNode.getProperty("exo:defaultCalendars").getValues() ;
+        String[] calendars = new String[values.length] ;
+        for(int i = 0; i < values.length; i++) {
+          calendars[i] = values[i].getString() ;
+        }
+        calendarSetting.setDefaultCalendars(calendars) ;
+      }
+      return calendarSetting ;
+    }
+    return null ;
+    
+  }
   /*public String getEventCategoryId(String username, String calendarId, String eventCategoryName) throws Exception {
     List<EventCategory> eventCatList = getEventCategories(username, calendarId) ;
     if(eventCatList.size() < 1) return null ;

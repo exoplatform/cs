@@ -24,7 +24,7 @@ public class Calendar {
   private boolean isPublic = false ;
   private String categoryId ;
   private String[] groups ;
-  private List<EventCategory> eventCategories ;
+  //private List<EventCategory> eventCategories ;
   
   public Calendar() throws Exception{
     id = "calendar" + IdGenerator.generate() ;
@@ -56,7 +56,7 @@ public class Calendar {
   public boolean isPublic() { return isPublic ; }
   public void setPublic(boolean isPublic) { this.isPublic = isPublic ; }
   
-  public List<EventCategory> getEventCategories() { return eventCategories ; }
-  public void setEventCategories(List<EventCategory> evCate) { eventCategories = evCate ; }
+  //public List<EventCategory> getEventCategories() { return eventCategories ; }
+  //public void setEventCategories(List<EventCategory> evCate) { eventCategories = evCate ; }
   
 }

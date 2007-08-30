@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarCategory;
+import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.Event;
 import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.EventQuery;
@@ -54,4 +55,6 @@ public interface DataStorage {
   public void saveGroupEvent(String calendarId, Event event, boolean isNew) throws Exception ;
   public Event removeGroupEvent(String calendarId, String eventId) throws Exception ;
   
+  public void saveCalendarSetting(String username, CalendarSetting setting) throws Exception ;
+  public CalendarSetting getCalendarSetting(String username) throws Exception ;
 }

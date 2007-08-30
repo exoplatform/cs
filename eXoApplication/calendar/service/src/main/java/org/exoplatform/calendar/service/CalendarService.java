@@ -330,7 +330,7 @@ public interface CalendarService {
    */
   public Event removeGroupEvent(String calendarId, String eventId) throws Exception ;
   
-  //TODO: missing the method List<CalendarCateory> getGroupCalendarForUser(String username) 
-  
+  public void saveCalendarSetting(String username, CalendarSetting setting) throws Exception ;
+  public CalendarSetting getCalendarSetting(String username) throws Exception ;
   public Map<String, CalendarImportExport>  getCalendarImportExports() ;  
 }

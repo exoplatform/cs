@@ -78,7 +78,7 @@
 							<div class="IconHolder TaskIcon"> Tasks </div>
 						</a>
 						<div class="SeparatorLine"><span></span></div>
-						<a href="#" class="ControlButton">
+						<a href="<%=uicomponent.event("Setting")%>" class="ControlButton">
 							<div class="IconHolder CalendarSettingIcon"> Setting </div>
 						</a>
 						<div class="SeparatorLine"><span></span></div>
