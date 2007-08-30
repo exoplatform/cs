@@ -1,3 +1,4 @@
+<%uiform.begin()%>
 <div style="width: 550px; display: block; visibility: visible; z-index: 4; top: 131px; left: 309px;" id="SearchUser" exo:minheight="200" exo:minwidth="200" class="UIPopupWindow UIDragObject">
   <div class="NormalStyle">
    	<div class="TopLeftCornerDecorator">
@@ -187,3 +188,4 @@
    	</div>
  	</div>
 </div>
+<%uiform.end()%>

@@ -11,7 +11,9 @@ import java.util.List;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.webui.popup.UIEventCategoryForm;
+import org.exoplatform.calendar.webui.popup.UIEventForm;
 import org.exoplatform.calendar.webui.popup.UIPopupAction;
+import org.exoplatform.calendar.webui.popup.UIPopupContainer;
 
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.webui.util.Util;
@@ -84,6 +86,12 @@ public class UICalendarView extends UIForm {
     public void execute(Event<UICalendarView> event) throws Exception {
       UICalendarView uiForm = event.getSource() ;
       System.out.println(" ===========> AddEventActionListener") ;
+      UICalendarPortlet uiPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
+      UIPopupAction uiParenPopup = uiPortlet.getChild(UIPopupAction.class) ;
+      UIPopupContainer uiPopupContainer = uiPortlet.createUIComponent(UIPopupContainer.class, null, null) ;
+      uiPopupContainer.addChild(UIEventForm.class, null, null) ;
+      uiParenPopup.activate(uiPopupContainer, 600, 0, true) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiParenPopup) ;
     }
   }
   static  public class DeleteEventActionListener extends EventListener<UICalendarView> {

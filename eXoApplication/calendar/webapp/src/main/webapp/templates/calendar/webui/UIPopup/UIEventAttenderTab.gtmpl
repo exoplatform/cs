@@ -1,3 +1,299 @@
-<div class="$uicomponent.id" id="$uicomponent.id">
- UIEventAttender
+
+<div class="UIAddNewEvent $uicomponent.id" id="$uicomponent.id">
+ <div class="NewEventAttendee">
+ 		<div class="UIFormInputSet">
+ 			<div class="UIFormInputSetWithAction">
+ 				<div class="FormContainer">
+ 					<div class="DateTimeContainer">
+ 						<div class="Field">
+ 							<%uicomponent.renderChild(uicomponent.getAllDateField().getId())%>
+ 						</div>
+ 						<div class="Label">
+ 							<%=_ctx.appRes(uicomponent.getFormName() + ".label." + uicomponent.getAllDateField().getId())%>:
+ 						</div>
+ 						<div class="Field">
+ 							<%uicomponent.renderChild(uicomponent.getToField().getId())%>
+ 						</div>
+ 						<div class="Label">
+ 							<%=_ctx.appRes(uicomponent.getFormName() + ".label." + uicomponent.getToField().getId())%>:
+ 						</div>
+ 						<div class="Field">
+ 							 <%uicomponent.renderChild(uicomponent.getFromField().getId())%>
+ 						</div>
+ 						<div class="Label">
+ 							<%=_ctx.appRes(uicomponent.getFormName() + ".label." + uicomponent.getFromField().getId())%>:
+ 						</div>
+ 						<div style="clear: right;"><span></span></div>
+ 					</div>
+ 					<div class="TitleBar">
+						<div class="BackIcon" title="Back day"><span></span></div>
+						<div class="Title">June 20, 2007</div>
+						<div class="NextIcon" title="Next day"><span></span></div>
+						<div class="TimeNumber" style="text-align: right; width: 12px;">12</div>
+						<div class="TimeNumber">11</div>
+						<div class="TimeNumber">10</div>
+						<div class="TimeNumber">9</div>
+						<div class="TimeNumber">8</div>
+						<div class="TimeNumber">7</div>
+						<div class="TimeNumber">6</div>
+						<div class="TimeNumber">5</div>
+						<div class="TimeNumber">4</div>
+						<div class="TimeNumber">3</div>
+						<div class="TimeNumber">2</div>
+						<div class="TimeNumber">1</div>
+						<div class="TimeNumber">12</div>
+						<div class="TimeNumber">11</div>
+						<div class="TimeNumber">10</div>
+						<div class="TimeNumber">9</div>
+						<div class="TimeNumber">8</div>
+						<div class="TimeNumber">7</div>
+						<div class="TimeNumber">6</div>
+						<div class="TimeNumber">5</div>
+						<div class="TimeNumber">4</div>
+						<div class="TimeNumber">3</div>
+						<div class="TimeNumber">2</div>
+						<div class="TimeNumber">1</div>
+						<div class="TimeNumber">12</div>
+ 					</div>
+ 					<table class="UIGrid" id="RowContainerDay" cellspacing="0" borderspacing="0">
+            <tbody>
+            	<tr>
+								<td style="width: 150px;">
+									<div class="DeleteUserIcon" title="Delete username"><span></span></div>
+									<div class="SaveUserIcon" title="Save username"><span></span></div>
+									<div class="AddUserIcon" title="Add username"><span></span></div>
+									<div class="Title">Participancs</div>
+									<div style="clear: both">
+								</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="BusyTime">&nbsp;</td>
+								<td class="BusyTime">&nbsp;</td>
+								<td class="BusyTime">&nbsp;</td>
+								<td class="BusyTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="BusyTime">&nbsp;</td>
+								<td class="BusyTime">&nbsp;</td>
+								<td class="BusyTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="BusyTime">&nbsp;</td>
+								<td class="BusyTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+							</tr>
+             	
+             	<tr>
+								<td style="width: 150px;">
+									<div class="Input"><input style="width: 15px;" type="checkbox"/></div>
+									<div class="Title">Brice Revanant</div>
+									<div style="clear: left;"><span></span></div>
+								</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="BusyTime">&nbsp;</td>
+								<td class="BusyTime">&nbsp;</td>
+								<td class="BusyTime">&nbsp;</td>
+								<td class="BusyTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+							</tr>
+							<%for(String s in uicomponent.getParticipancs().keySet()) {}%>
+							<tr>
+								<td style="width: 150px;">
+									<div class="Input"><input style="width: 15px;" type="checkbox"/></div>
+									<div class="Input"><input type="text" /></div>
+									<div style="clear: left;"><span></span></div>
+								</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="BusyTime">&nbsp;</td>
+								<td class="BusyTime">&nbsp;</td>
+								<td class="BusyTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+							</tr>
+							
+							<tr>
+								<td style="width: 150px;">
+									<div class="Input"><input style="width: 15px;" type="checkbox"/></div>
+									<div class="Input"><input type="text" /></div>
+									<div style="clear: left;"><span></span></div>
+								</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="BusyTime">&nbsp;</td>
+								<td class="BusyTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+								<td class="FreeTime">&nbsp;</td>
+							</tr>
+      			  
+      			</tbody>
+      		</table>
+      		<div class="ThiefBox">
+      			<div class="Label">Busy time</div>
+      			<div class="BusyTime"><span></span></div>
+      			<div class="Label">Free time</div>
+      			<div class="FreeTime"><span></span></div>
+      			<div style="clear: right;"><span></span></div>
+      		</div>
+		    </div>
+ 			</div>
+ 		</div>
+ 	</div>
 </div>

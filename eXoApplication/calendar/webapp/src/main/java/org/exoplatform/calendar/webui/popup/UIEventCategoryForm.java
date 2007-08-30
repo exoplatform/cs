@@ -69,7 +69,15 @@ public class UIEventCategoryForm extends UIForm implements UIPopupComponent{
       eventCat.setDescription(description) ;
       calendarService.saveEventCategory(username, eventCat, true) ;
       UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
-      calendarPortlet.cancelAction() ;
+      UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
+      if(uiPopupContainer == null) calendarPortlet.cancelAction() ;
+      else {
+        uiPopupContainer.getChild(UIPopupAction.class).deActivate() ;
+        UIEventForm uiEventForm = uiPopupContainer.getChild(UIEventForm.class) ;
+        uiEventForm.refreshCategory() ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupContainer.getChild(UIPopupAction.class)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupContainer) ;
+      }
       UIListView uiListView = calendarPortlet.getChild(UICalendarWorkingContainer.class)
       .getChild(UICalendarViewContainer.class).getChild(UIListView.class) ;
       uiListView.update() ;
@@ -80,7 +88,12 @@ public class UIEventCategoryForm extends UIForm implements UIPopupComponent{
     public void execute(Event<UIEventCategoryForm> event) throws Exception {
       UIEventCategoryForm uiForm = event.getSource() ;
       UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
-      calendarPortlet.cancelAction() ;
+      UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
+      if(uiPopupContainer == null) calendarPortlet.cancelAction() ;
+      else {
+        uiPopupContainer.getChild(UIPopupAction.class).deActivate() ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupContainer.getChild(UIPopupAction.class));
+      }
     }
   }
 }
