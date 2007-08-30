@@ -189,14 +189,13 @@ public interface ForumService {
    * 1. Check the user permission
    * 2. Move the topic from the database, throw exception if  the topic is not existed
    * 3. Invalidate the TopicView cache
-   * @param username
-   * @param topicId
+   * @param topicId 
+   * @param topicPath
+   * @param destForumPath
    * @return
    * @throws Exception
    */
-  public void moveTopic(String  topicPath, String destForumPath) throws Exception;
-  
-  
+  public void moveTopic(String topicId, String  topicPath, String destForumPath) throws Exception;
   /**
    * This method should: 
    * 1. Check the user permission
@@ -235,7 +234,7 @@ public interface ForumService {
    */
   public void savePost(String categoryId, String forumId, String topicId, Post post, boolean isNew)throws Exception;
   public Post removePost(String categoryId, String forumId, String topicId, String postId)throws Exception;
-  public void movePost(String postPath, String destTopicPaths) throws Exception ;
+  public void movePost(String postId, String postPath, String destTopicPath) throws Exception ;
   //public Object getObjectByPath(String path) throws Exception ;
   public List<ForumLinkData> getAllLink()throws Exception ;
   public List getPage(long page, JCRPageList pageList) throws Exception ;

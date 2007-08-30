@@ -414,10 +414,13 @@ public class JCRDataStorage implements DataStorage {
     return null ;
   }
   
-  public void moveTopic(String  topicPath, String destForumPath) throws Exception {
+  public void moveTopic(String topicId, String  topicPath, String destForumPath) throws Exception {
   	Node forumHomeNode = getForumHomeNode() ;
-  	forumHomeNode.getSession().getWorkspace().move(topicPath, destForumPath) ;
-  	forumHomeNode.save() ;
+    String newTopicPath = destForumPath + "/" + topicId;
+    forumHomeNode.getSession().getWorkspace().move(topicPath, newTopicPath) ;
+    Node topicNode = (Node)getJCRSession().getItem(newTopicPath) ;
+    topicNode.setProperty("exo:path", newTopicPath) ;
+    forumHomeNode.save() ;
   	forumHomeNode.getSession().save() ;
   }
   
@@ -536,9 +539,12 @@ public class JCRDataStorage implements DataStorage {
 		return null;
   }
   
-  public void movePost(String postPath, String destTopicPaths) throws Exception {
+  public void movePost(String postId, String postPath, String destTopicPath) throws Exception {
   	Node forumHomeNode = getForumHomeNode() ;
-  	forumHomeNode.getSession().getWorkspace().move(postPath, destTopicPaths) ;
+    String newPostPath = destTopicPath + "/" + postId;
+    forumHomeNode.getSession().getWorkspace().move(postPath, newPostPath) ;
+    Node postNode = (Node)getJCRSession().getItem(newPostPath) ;
+    postNode.setProperty("exo:path", newPostPath) ;
   	forumHomeNode.save() ;
   	forumHomeNode.getSession().save() ;
   }

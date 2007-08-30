@@ -87,8 +87,8 @@ public class ForumServiceImpl implements ForumService{
 	  return storage_.getTopics(categoryId, forumId);
   }
   
-  public void moveTopic(String  topicPath, String destForumPath) throws Exception {
-  	storage_.moveTopic(topicPath, destForumPath);
+  public void moveTopic(String topicId, String  topicPath, String destForumPath) throws Exception {
+  	storage_.moveTopic(topicId, topicPath, destForumPath);
   }
   
   public Topic removeTopic(String categoryId, String forumId, String topicId) throws Exception {
@@ -107,8 +107,8 @@ public class ForumServiceImpl implements ForumService{
   	return storage_.getPosts(categoryId, forumId, topicId);
   }
   
-  public void movePost(String postPath, String destTopicPaths) throws Exception {
-    storage_.movePost(postPath, destTopicPaths);
+  public void movePost(String postId, String postPath, String destTopicPath) throws Exception {
+    storage_.movePost(postId, postPath, destTopicPath);
   }
   
   public Post removePost(String categoryId, String forumId, String topicId, String postId) throws Exception {

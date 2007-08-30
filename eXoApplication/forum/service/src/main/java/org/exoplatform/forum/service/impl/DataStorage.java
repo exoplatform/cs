@@ -39,13 +39,13 @@ public interface DataStorage {
    public TopicView getTopicView(String categoryId, String forumId, String topicId) throws Exception;
    public void saveTopic(String categoryId, String forumId, Topic topic, boolean isNew) throws Exception;
    public Topic removeTopic(String categoryId, String forumId, String topicId) throws Exception;
-   public void moveTopic(String  topicPath, String destForumPath) throws Exception;
+   public void moveTopic(String topicId, String  topicPath, String destForumPath) throws Exception;
    
    public JCRPageList getPosts(String categoryId, String forumId, String topicId)throws Exception;
    public Post getPost(String categoryId, String forumId, String topicId, String postId)throws Exception;
    public void savePost(String categoryId, String forumId, String topicId, Post post, boolean isNew)throws Exception;
    public Post removePost(String categoryId, String forumId, String topicId, String postId)throws Exception;
-   public void movePost(String postPath, String destTopicPaths) throws Exception ;
+   public void movePost(String postId, String postPath, String destTopicPath) throws Exception ;
    
    //public Object getObjectByPath(String path) throws Exception ;
    public List getPage(long page, JCRPageList pageList) throws Exception ;
