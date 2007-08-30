@@ -32,7 +32,7 @@
 							<div class="Icon PrintIcon"><span></span></div>
 						</div>
 					</a>
-					<a href="<%=uicomponent.event("AddTag", "idlist")%>" class="ControlButton">
+					<a href="<%=uicomponent.event("AddTag")%>" class="ControlButton">
 						<div class="IconHolder MoveIcon">Add to Tag</div>
 					</a>
 					

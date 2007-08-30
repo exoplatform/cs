@@ -17,10 +17,14 @@ import org.exoplatform.contact.webui.popup.UIPopupContainer;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.organization.impl.GroupImpl;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.form.UIForm;
+import org.exoplatform.webui.form.UIFormCheckBoxInput;
+import org.exoplatform.webui.form.UIFormInputWithActions;
 
 /**
  * Created by The eXo Platform SARL
@@ -37,12 +41,35 @@ import org.exoplatform.webui.event.EventListener;
     }
 )
 
-public class UIContacts extends UIContainer  {
+public class UIContacts extends UIForm  {
   private String selectedGroupId_ ;
   private String selectedTag_;
   private boolean selectTag = false;
   private boolean isPersonalContact_ = true ;
-  public UIContacts() throws Exception {} 
+  
+  public static String[] FIELD_SHAREDCONTACT_BOX = null;
+  public static final String FIELD_CHECKCONTACT_CHECKBOX =  "checkContact" ;
+  
+  public UIContacts() throws Exception {
+    UIFormInputWithActions ShareTab = new UIFormInputWithActions(FIELD_CHECKCONTACT_CHECKBOX) ;
+    getChildren().clear() ;
+    FIELD_SHAREDCONTACT_BOX = new String[getContacts().size()];
+    for(int i = 0; i < FIELD_SHAREDCONTACT_BOX.length; i ++) {
+      FIELD_SHAREDCONTACT_BOX[i] = getContacts().get(i).getId();
+      ShareTab.addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_SHAREDCONTACT_BOX[i],"", false));
+    }
+    addUIFormInput(ShareTab) ;
+  } 
+  
+  public List<String> getCheckedContacts() {
+    List<String> sharedGroups = new ArrayList<String>() ;
+    for (int i = 0; i < FIELD_SHAREDCONTACT_BOX.length; i ++) {
+      if (getUIFormCheckBoxInput(FIELD_SHAREDCONTACT_BOX[i]).isChecked()) {
+        sharedGroups.add(FIELD_SHAREDCONTACT_BOX[i]) ;
+      }
+    }
+    return sharedGroups ;
+  }
   
   static public class AddTagActionListener extends EventListener<UIContacts> {
     public void execute(Event<UIContacts> event) throws Exception {

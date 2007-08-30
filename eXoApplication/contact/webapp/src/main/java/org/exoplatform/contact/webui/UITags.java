@@ -37,17 +37,7 @@ public class UITags extends UIComponent  {
   
   public List<Tag> getTags() throws Exception {
     ContactService contactService = this.getApplicationComponent(ContactService.class);
-    String username = Util.getPortalRequestContext().getRemoteUser() ;   
-    
-    List<String> contactIds = new ArrayList<String>() ;
-    List<Contact> contacts = contactService.getAllContact(username);
-    for (Contact contact : contacts) {
-      contactIds.add(contact.getId()) ;
-    }
-    Tag tag = new Tag() ;
-    tag.setName("Customer") ;
-    contactService.addTag(username, contactIds, tag) ;
-    
+    String username = Util.getPortalRequestContext().getRemoteUser() ;    
     return contactService.getTags(username);
   }
   

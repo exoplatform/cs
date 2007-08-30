@@ -72,7 +72,7 @@ public class UICategorySelect extends UIForm {
   
   public void setCategoryList(List<SelectItemOption<String>> options ) {
     UIFormInputWithActions iput = getChildById(INPUT_CATEGORY) ;
-    iput.getUIFormSelectBox(FIELD_CATEGORY).setOptions(options) ;
+     iput.getUIFormSelectBox(FIELD_CATEGORY).setOptions(options) ;
   }
   
   static  public class AddCategoryActionListener extends EventListener<UICategorySelect> {

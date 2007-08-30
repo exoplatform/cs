@@ -56,7 +56,6 @@ public class UICategoryForm extends UIForm implements UIPopupComponent{
   static  public class SaveActionListener extends EventListener<UICategoryForm> {
     public void execute(Event<UICategoryForm> event) throws Exception {
       UICategoryForm uiForm = event.getSource() ;
-      ContactService contactService = uiForm.getApplicationComponent(ContactService.class);
       String  groupName = uiForm.getUIStringInput(FIELD_CATEGORYNAME_INPUT).getValue(); 
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       if (groupName == null || groupName.trim().length() == 0) {
@@ -67,11 +66,12 @@ public class UICategoryForm extends UIForm implements UIPopupComponent{
       ContactGroup group = new ContactGroup();
       group.setName(groupName);
       String username = Util.getPortalRequestContext().getRemoteUser() ;
+      ContactService contactService = uiForm.getApplicationComponent(ContactService.class);
       contactService.saveGroup(username, group, true);  
       UIPopupContainer popupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
-      UICategorySelect uiCategorySelect = popupContainer.findFirstComponentOfType(UICategorySelect.class);
-      List<SelectItemOption<String>> ls = uiCategorySelect.getCategoryList();
-      uiCategorySelect.setCategoryList(ls);
+//      UICategorySelect uiCategorySelect = popupContainer.findFirstComponentOfType(UICategorySelect.class);
+//      List<SelectItemOption<String>> ls = uiCategorySelect.getCategoryList();
+//      uiCategorySelect.setCategoryList(ls);
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
       context.addUIComponentToUpdateByAjax(popupContainer) ;
     }

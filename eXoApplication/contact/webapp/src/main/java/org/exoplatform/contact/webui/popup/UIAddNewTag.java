@@ -4,12 +4,17 @@
  **************************************************************************/
 package org.exoplatform.contact.webui.popup;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
+import org.exoplatform.contact.service.Tag;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContacts;
+import org.exoplatform.contact.webui.UITags;
+import org.exoplatform.contact.webui.UIWorkingContainer;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -57,7 +62,6 @@ public class UIAddNewTag extends UIForm implements UIPopupComponent {
   static  public class SaveActionListener extends EventListener<UIAddNewTag> {
     public void execute(Event<UIAddNewTag> event) throws Exception {
       UIAddNewTag uiForm = event.getSource() ;
-      ContactService contactService = uiForm.getApplicationComponent(ContactService.class);
       String  tagName = uiForm.getUIStringInput(FIELD_TAGNAME_INPUT).getValue(); 
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       if (tagName == null || tagName.trim().length() == 0) {
@@ -65,14 +69,25 @@ public class UIAddNewTag extends UIForm implements UIPopupComponent {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ; 
       }
-      UIContacts uiContacts = uiForm.getAncestorOfType(UIContacts.class);
-      uiContacts.getUIComponentName() ;
+ 
+      UIWorkingContainer uiWorkingContainer = uiForm.getAncestorOfType(UIWorkingContainer.class);
+      UIContacts uiContacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class);
+      List<String> contactIds = uiContacts.getCheckedContacts();
+      Tag tag = new Tag() ;
+      tag.setName(tagName) ;
+      ContactService contactService = uiForm.getApplicationComponent(ContactService.class);
+      String username = Util.getPortalRequestContext().getRemoteUser() ;
+      contactService.addTag(username, contactIds, tag);
+ 
       
       
+ 
+      UITags uiTags = uiWorkingContainer.findFirstComponentOfType(UITags.class);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiTags) ;
+ 
       
       ContactGroup group = new ContactGroup();
      // group.setName(groupName);
-      String username = Util.getPortalRequestContext().getRemoteUser() ;
       contactService.saveGroup(username, group, true);  
       UIPopupContainer popupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       UICategorySelect uiCategorySelect = popupContainer.findFirstComponentOfType(UICategorySelect.class);
@@ -80,6 +95,7 @@ public class UIAddNewTag extends UIForm implements UIPopupComponent {
       uiCategorySelect.setCategoryList(ls);
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
       context.addUIComponentToUpdateByAjax(popupContainer) ;
+ 
     }
   }
   
