@@ -32,8 +32,7 @@
 							<div class="Icon PrintIcon"><span></span></div>
 						</div>
 					</a>
-					javasc ...actionListener,objectid=" "
-					<a href="<%=uicomponent.event("AddTag", "id1|id2")%>" class="ControlButton">
+					<a href="<%=uicomponent.event("AddTag", "idlist")%>" class="ControlButton">
 						<div class="IconHolder MoveIcon">Add to Tag</div>
 					</a>
 					

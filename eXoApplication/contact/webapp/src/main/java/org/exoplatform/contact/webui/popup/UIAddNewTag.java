@@ -66,12 +66,12 @@ public class UIAddNewTag extends UIForm implements UIPopupComponent {
         return ; 
       }
       UIContacts uiContacts = uiForm.getAncestorOfType(UIContacts.class);
-      uiContacts.getUIComponentName()
+      uiContacts.getUIComponentName() ;
       
       
       
       ContactGroup group = new ContactGroup();
-      group.setName(groupName);
+     // group.setName(groupName);
       String username = Util.getPortalRequestContext().getRemoteUser() ;
       contactService.saveGroup(username, group, true);  
       UIPopupContainer popupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
