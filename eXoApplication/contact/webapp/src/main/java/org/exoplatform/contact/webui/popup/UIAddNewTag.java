@@ -9,6 +9,7 @@ import java.util.List;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.webui.UIContactPortlet;
+import org.exoplatform.contact.webui.UIContacts;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -36,11 +37,11 @@ import org.exoplatform.webui.form.UIFormStringInput;
       @EventConfig(listeners = UICategoryForm.CancelActionListener.class)
     }
 )
-public class UICategoryForm extends UIForm implements UIPopupComponent{
-  public static final String FIELD_CATEGORYNAME_INPUT = "categoryName";
+public class UIAddNewTag extends UIForm implements UIPopupComponent {
+  public static final String FIELD_TAGNAME_INPUT = "tagName";
   
-  public UICategoryForm() {
-    addUIFormInput(new UIFormStringInput(FIELD_CATEGORYNAME_INPUT, FIELD_CATEGORYNAME_INPUT, null));
+  public UIAddNewTag() {
+    addUIFormInput(new UIFormStringInput(FIELD_TAGNAME_INPUT, FIELD_TAGNAME_INPUT, null));
   }
   
   public String[] getActions() { return new String[] {"Save", "Cancel"} ; }
@@ -53,17 +54,22 @@ public class UICategoryForm extends UIForm implements UIPopupComponent{
     // TODO Auto-generated method stub
   }
   
-  static  public class SaveActionListener extends EventListener<UICategoryForm> {
-    public void execute(Event<UICategoryForm> event) throws Exception {
-      UICategoryForm uiForm = event.getSource() ;
+  static  public class SaveActionListener extends EventListener<UIAddNewTag> {
+    public void execute(Event<UIAddNewTag> event) throws Exception {
+      UIAddNewTag uiForm = event.getSource() ;
       ContactService contactService = uiForm.getApplicationComponent(ContactService.class);
-      String  groupName = uiForm.getUIStringInput(FIELD_CATEGORYNAME_INPUT).getValue(); 
+      String  tagName = uiForm.getUIStringInput(FIELD_TAGNAME_INPUT).getValue(); 
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-      if (groupName == null || groupName.trim().length() == 0) {
-        uiApp.addMessage(new ApplicationMessage("UICategoryForm.msg.categoryName-required", null)) ;
+      if (tagName == null || tagName.trim().length() == 0) {
+        uiApp.addMessage(new ApplicationMessage("UIAddNewTag.msg.tagName-required", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ; 
       }
+      UIContacts uiContacts = uiForm.getAncestorOfType(UIContacts.class);
+      uiContacts.getUIComponentName()
+      
+      
+      
       ContactGroup group = new ContactGroup();
       group.setName(groupName);
       String username = Util.getPortalRequestContext().getRemoteUser() ;

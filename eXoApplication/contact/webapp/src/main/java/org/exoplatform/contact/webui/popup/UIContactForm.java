@@ -12,8 +12,10 @@ import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.impl.GroupImpl;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -157,7 +159,10 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
       UIContactForm uiForm = event.getSource() ;
       Contact contact = new Contact(); 
       UIProfileInputSet profileTab = uiForm.getChildById(INPUT_PROFILETAB) ;
-      if (profileTab.getFieldFullNameValue().equals("")) {
+      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+      if (profileTab.getFieldFullNameValue() == null || profileTab.getFieldFullNameValue().trim().length() == 0) {
+        uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.fullname-required", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ; 
       } else {
         contact.setFullName(profileTab.getFieldFullNameValue());
@@ -211,6 +216,7 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
         if (sharedGroups.toString().equals("")) {
           UIPopupContainer popupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
           UICategorySelect uiCategorySelect = popupContainer.getChild(UICategorySelect.class); 
+          
           String categoryId = uiCategorySelect.getSelectedCategory();
           contact.setCategories(new String[] { categoryId });
           contactService.saveContact(username, contact, true);
@@ -221,9 +227,7 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
         UIContactPortlet contactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
         contactPortlet.cancelAction() ;  
         event.getRequestContext().addUIComponentToUpdateByAjax(contactPortlet) ;
-       
-      }
-       
+      }  
     }
   }
   

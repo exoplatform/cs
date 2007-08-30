@@ -91,8 +91,8 @@ public class ContactServiceImpl implements ContactService{
   public List<Tag> getTags(String username) throws Exception {
     return storage_.getTags(username);
   }
-  public List<Contact> getContactByTag(String username, String tagName) throws Exception {
-    return storage_.getContactByTag(username, tagName);
+  public List<Contact> getContactsByTag(String username, String tagName) throws Exception {
+    return storage_.getContactsByTag(username, tagName);
   }
   public void addTag(String username, List<String> contactIds, Tag tag) throws Exception {
     storage_.addTag(username, contactIds, tag);

@@ -4,11 +4,13 @@
  **************************************************************************/
 package org.exoplatform.contact.service.test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.GroupContactData;
+import org.exoplatform.contact.service.Tag;
 
 
 
@@ -19,49 +21,47 @@ import org.exoplatform.contact.service.GroupContactData;
  * July 3, 2007  
  */
 public class TestContactService extends BaseContactTestCase{
-
+  private String username = "exo";
+  
   public void testContactService() throws Exception {
     assertNull(null) ;
   }
   
   public void  testContact() throws Exception {
-    Contact contact = createContact(new String[] {"friend", "work"});
+    Contact contact = createContact();
+    contact.setCategories(new String[] { "friend", "work" });
     
     // addContact
-    contactService_.saveContact("exo", contact, true);
-    System.out.println("\n \n  saved contact id ===== " + contact.getId());
+    contactService_.saveContact(username, contact, true);
     
     // getContact
-    assertNotNull(contactService_.getContact("exo", contact.getId()));
+    assertNotNull(contactService_.getContact(username, contact.getId()));
     
     // updateContact
     contact.setHomeAddress("Thanh Xuan Ha Noi");
-    contactService_.saveContact("exo", contact, false);
-    assertEquals("Thanh Xuan Ha Noi", contactService_.getContact("exo", contact.getId()).getHomeAddress());
+    contactService_.saveContact(username, contact, false);
+    assertEquals("Thanh Xuan Ha Noi", contactService_.getContact(username, contact.getId()).getHomeAddress());
     
     // getListContact
-    List<Contact> contacts = contactService_.getAllContact("exo");
-    
-    for (int i= 0; i < contacts.size(); i ++) {
-      System.out.println("\n\n contacsssss idddd" + contacts.get(i).getId());
-    }
-    
+    List<Contact> contacts = contactService_.getAllContact(username);
     assertEquals(contacts.size(), 1);
     
     // get contact by groupId
-    Contact contact2 = createContact(new String[] {"friend", "work"});
-    contactService_.saveContact("exo", contact2, true);
-    Contact contact3 = createContact(new String[] {"friendd", "workk"});
-    contactService_.saveContact("exo", contact3, true);
-    contacts = contactService_.getContactsByGroup("exo","work" );
-    assertEquals(contacts.size(), 2) ;
+    Contact contact2 = createContact();
+    contact2.setCategories(new String[] {"friend", "work"});
+    contactService_.saveContact(username, contact2, true);
+    Contact contact3 = createContact();
+    contact3.setCategories(new String[] {"friendd", "workk"});
+    contactService_.saveContact(username, contact3, true);
+    contacts = contactService_.getContactsByGroup(username,"work" );
+    assertEquals(contacts.size(), 2) ;    
     
-    //share contact
-    //Contact cont = contactService_.getContact("exo", "id1") ;
-    //assertNotNull(contactService_.shareContact(cont, new String[]{"users"})) ;
-    //add
-    //Contact cont2 = contactService_.getContact("exo", "id2");
-    //assertNotNull(contactService_.shareContact(cont2, new String[]{"users"})) ;
+    // share contact
+//    Contact  = contactService_.getContact(username, "id1") ;
+//    assertNotNull(contactService_.shareContact(cont, new String[]{"users"})) ;
+//    add
+//    Contact cont2 = contactService_.getContact(username, "id2");
+//    assertNotNull(contactService_.shareContact(cont2, new String[]{"users"})) ;
     
 //    List<GroupContactData> sharedContact = contactService_.getPublicContacts(new String[]{"users"}) ;
 //    assertEquals(sharedContact.size(), 1) ;
@@ -72,11 +72,11 @@ public class TestContactService extends BaseContactTestCase{
 //    System.out.println("sharedContact.get(0).getName() ==== " + sharedContact.get(0).getName()) ;
     
     // removeContact
-   /* assertNotNull(contactService_.removeContact("exo", contact.getId()));
-    assertNull(contactService_.getContact("exo", contact.getId())); */
+   /* assertNotNull(contactService_.removeContact(username, contact.getId()));
+    assertNull(contactService_.getContact(username, contact.getId())); */
   }
   
-  private Contact createContact(String[] categories) {
+  private Contact createContact() {
   	Contact contact = new Contact();
     
     contact.setFullName("fullName");
@@ -118,35 +118,73 @@ public class TestContactService extends BaseContactTestCase{
     contact.setWebPage("webPage");
     
     contact.setNote("note");
-    
-    contact.setCategories(categories);    
-    
     return contact;
   }
   
   public void testGroupContact() throws Exception {
     ContactGroup contactGroup = new ContactGroup();
-    contactGroup.setId("id");
     contactGroup.setName("groupping");
     
     // test addGroup
-    contactService_.saveGroup("exo", contactGroup, true);
+    contactService_.saveGroup(username, contactGroup, true);
     
     // test getGroup
-    assertNotNull(contactService_.getGroup("exo", contactGroup.getId()));
+    assertNotNull(contactService_.getGroup(username, contactGroup.getId()));
+    
+    
     
     // test updateGroup
     contactGroup.setName("groupper");
-    contactService_.saveGroup("exo", contactGroup, false);
-    assertEquals("groupper", contactService_.getGroup("exo", contactGroup.getId()).getName());
+    contactService_.saveGroup(username, contactGroup, false);
+    assertEquals("groupper", contactService_.getGroup(username, contactGroup.getId()).getName());
+    
+    Contact contact = createContact();
+    contact.setCategories(new String[] { contactGroup.getId() , "exoooo"});
+    contactService_.saveContact(username, contact, true);
+    System.out.println("\n\n group of contact 1:" + contactService_.getContact(username, contact.getId()).getCategories().length);
     
     // test removeGroup
-    assertNotNull(contactService_.removeGroup("exo", contactGroup.getId()));
-    assertNull(contactService_.getGroup("exo", contactGroup.getId()));
+    assertNotNull(contactService_.removeGroup(username, contactGroup.getId()));
+    assertNull(contactService_.getGroup(username, contactGroup.getId()));
+    System.out.println("\n\n group of contact 2:" + contactService_.getContact(username, contact.getId()).getCategories().length);
   } 
   
+  public void testTag() throws Exception {
+  
+    // addTag & getContactsByTag
+    Contact contact1 = createContact();
+    contactService_.saveContact(username, contact1, true);
+    Contact contact2 = createContact();
+    contactService_.saveContact(username, contact2, true); 
+    List<String> contactIds = new ArrayList<String>() ;
+    contactIds.add(contact1.getId()) ;
+    contactIds.add(contact2.getId());
+    
+    Tag tag = new Tag() ;
+    tag.setName("Company") ;
+    contactService_.addTag(username, contactIds, tag) ;
+    assertEquals(contactService_.getContactsByTag(username, tag.getName()).size(), 2);
+    
+    Tag tag2 = new Tag() ;
+    tag2.setName("Customer") ;
+    contactService_.addTag(username, contactIds, tag2) ;
+    Contact c = contactService_.getContact(username, contact1.getId());
+    String[] tags = c.getTags(); 
+    
+    List<Contact> contacts = contactService_.getContactsByTag(username, tag2.getName());
+    System.out.println("\n\n get contact by tag : " + contacts.size() + "\n\n");
+    
+    // getTags
+    assertEquals(contactService_.getTags(username).size(), 2);
+    
+    // removeTag
+    assertNotNull(contactService_.removeTag(username, tag.getName()));
+    assertEquals(contactService_.getTags(username).size(), 1); 
+  }
+  
   public void  testSharedContact() throws Exception {
-    Contact contact = createContact(new String[] {"friend", "work"});
+    Contact contact = createContact();
+    contact.setCategories(new String[] {"friend", "work"});
     contactService_.saveSharedContact(contact, true);
     
     // test getSharedContact
@@ -158,7 +196,8 @@ public class TestContactService extends BaseContactTestCase{
     assertEquals("Cau Giay", contactService_.getSharedContact(contact.getId()).getHomeAddress());     
     
     //  getSharedContacts by groups
-    Contact contact2 = createContact(new String[] {"friend", "work"});
+    Contact contact2 = createContact();
+    contact2.setCategories(new String[] {"friend", "work"});
     contactService_.saveSharedContact(contact2, true); 
     
     List<GroupContactData> sharedContact = contactService_.getSharedContacts(new String[]{"work"}) ;

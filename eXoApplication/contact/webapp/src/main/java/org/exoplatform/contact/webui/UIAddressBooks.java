@@ -74,6 +74,7 @@ public class UIAddressBooks extends UIComponent  {
       UIWorkingContainer uiWorkingContainer = uiForm.getAncestorOfType(UIWorkingContainer.class) ;
       
       UIContacts uiContacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class) ; 
+      uiContacts.setSelectTag(false);
       uiContacts.setGroupId(groupId) ;
       uiContacts.setIsPersonalContact(true) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts) ;
@@ -95,6 +96,7 @@ public class UIAddressBooks extends UIComponent  {
       UIWorkingContainer uiWorkingContainer = uiForm.getAncestorOfType(UIWorkingContainer.class) ;
       
       UIContacts uiContacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class) ; 
+      uiContacts.setSelectTag(false);
       uiContacts.setGroupId(groupId) ;
       uiContacts.setIsPersonalContact(false) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts) ;

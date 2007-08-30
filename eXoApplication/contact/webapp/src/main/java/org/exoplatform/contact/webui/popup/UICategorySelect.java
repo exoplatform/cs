@@ -30,10 +30,9 @@ import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
 
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
-    template = "system:/groovy/webui/form/UIForm.gtmpl", 
+    template = "app:/templates/contact/webui/popup/UICategorySelect.gtmpl", 
     events = {
-      @EventConfig(listeners = UICategorySelect.AddCategoryActionListener.class), 
-      @EventConfig(listeners = UICategorySelect.OnchangeActionListener.class)    
+      @EventConfig(listeners = UICategorySelect.AddCategoryActionListener.class)    
     }
 )
 public class UICategorySelect extends UIForm {
@@ -59,9 +58,7 @@ public class UICategorySelect extends UIForm {
     UIFormInputWithActions input = getChildById(INPUT_CATEGORY) ;
     return input.getUIFormSelectBox(FIELD_CATEGORY).getValue() ;
   }
-  
-  public String[] getActions() { return new String[]{} ; }
-  
+
   public List<SelectItemOption<String>> getCategoryList() throws Exception {
     ContactService contactService = getApplicationComponent(ContactService.class) ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
@@ -86,10 +83,5 @@ public class UICategorySelect extends UIForm {
       popupAction.activate(UICategoryForm.class, 600) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
-  }  
-  
-  static  public class OnchangeActionListener extends EventListener<UICategorySelect> {
-    public void execute(Event<UICategorySelect> event) throws Exception {
-    }
-  }    
+  }      
 }

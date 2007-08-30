@@ -136,7 +136,7 @@
   		</propertyDefinition>  				
   	</propertyDefinitions>
   </nodeType>
-  <nodeType name="exo:tag" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
+  <nodeType name="exo:contactTag" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
   	<supertypes>
   		<supertype>nt:base</supertype>
   	</supertypes>

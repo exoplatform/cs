@@ -5,10 +5,13 @@
 		<div class="ActionIcon"><span></span></div>
   	<div style="clear: none"><span></span></div>
 	</div>
+	<%  
+		List tags = uicomponent.getTags();
+		for(tag in tags) {
+		String actionLink  = uicomponent.event("SelectTag", tag.getName()) ;			
+	%>
 	<div class="ListContent">
-		<a href="#" class="IconHolder BlueTag">Customers</a>
-		<a href="#" class="IconHolder RedTag">Company</a>
-		<a href="#" class="IconHolder GreenTag">Docs Team</a>
-		<a href="#" class="IconHolder VioletTag">Design Team</a>
+		<a href="$actionLink" class="IconHolder BlueTag"><%=tag.getName()%></a>
 	</div>
+	<% } %>
 </div>

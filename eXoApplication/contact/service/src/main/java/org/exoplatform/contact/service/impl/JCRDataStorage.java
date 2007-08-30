@@ -103,7 +103,7 @@ public class JCRDataStorage implements DataStorage {
   }
 
   private String [] ValuesToStrings(Value[] Val) throws Exception {
-    if(Val.length == 1) return new String[]{Val[0].getString()};
+    //if(Val.length == 1) return new String[]{Val[0].getString()};
     String[] Str = new String[Val.length];
     for(int i = 0; i < Val.length; ++i) {
       Str[i] = Val[i].getString();
@@ -155,7 +155,7 @@ public class JCRDataStorage implements DataStorage {
     if(contactNode.hasProperty("exo:note"))contact.setNote(contactNode.getProperty("exo:note").getString());
     
     if(contactNode.hasProperty("exo:categories"))contact.setCategories(ValuesToStrings(contactNode.getProperty("exo:categories").getValues()));
-    
+    if(contactNode.hasProperty("exo:tags")) contact.setTags(ValuesToStrings(contactNode.getProperty("exo:tags").getValues()));
     contact.setPath(contactNode.getPath()) ;
     return contact;
   }
@@ -241,14 +241,30 @@ public class JCRDataStorage implements DataStorage {
     Node contactGroupHomeNode = getContactGroupHome(username);
     if (contactGroupHomeNode.hasNode(groupId)) {
       ContactGroup contactGroup = getGroup(username, groupId);
+      
       contactGroupHomeNode.getNode(groupId).remove();
       contactGroupHomeNode.save();
       contactGroupHomeNode.getSession().save();
+      
+      List<Contact> contacts = getContactsByGroup(username, groupId);
+      for (Contact contact : contacts) {
+        String[] oldGroups = contact.getCategories();
+        String[] newGroups = new String[oldGroups.length - 1] ;
+        int i = 0 ;
+        for (String oldGroup : oldGroups) {
+          if (!oldGroup.equalsIgnoreCase(contactGroup.getId())) {
+            newGroups[i] = oldGroup;
+            i ++ ;
+          }
+        } 
+        contact.setCategories(newGroups);
+        saveContact(username, contact, false);
+      }
       return contactGroup;
     }
     return null;
   }
-
+  
   public void saveContact(String username, Contact contact, boolean isNew) throws Exception {
     Node contactHomeNode = getContactHome(username);
     Node contactNode;
@@ -299,6 +315,7 @@ public class JCRDataStorage implements DataStorage {
     
     contactNode.setProperty("exo:note", contact.getNote());
     contactNode.setProperty("exo:categories", contact.getCategories());
+    contactNode.setProperty("exo:tags", contact.getTags());
     
     contactHomeNode.getSession().save();
   }
@@ -495,6 +512,13 @@ public class JCRDataStorage implements DataStorage {
     return tag;
   }
   
+  public Tag getTag(String username, String tagName) throws Exception {
+    Node tagHomeNode = getTagHome(username);
+    if (tagHomeNode.hasNode(tagName)) 
+      return getTag(tagHomeNode.getNode(tagName));
+    return null ;
+  }
+  
   public List<Tag> getTags(String username) throws Exception {
     Node tagHomeNode = getTagHome(username);
     List<Tag> tags = new ArrayList<Tag>();
@@ -506,7 +530,7 @@ public class JCRDataStorage implements DataStorage {
     return tags;
   }
 
-  public List<Contact> getContactByTag(String username, String tagName) throws Exception {
+  public List<Contact> getContactsByTag(String username, String tagName) throws Exception {
     Node contactHome = getContactHome(username);
     QueryManager qm = contactHome.getSession().getWorkspace().getQueryManager();
     StringBuffer queryString = new StringBuffer("/jcr:root" + contactHome.getPath() 
@@ -515,13 +539,13 @@ public class JCRDataStorage implements DataStorage {
                                                 append("']");
     Query query = qm.createQuery(queryString.toString(), Query.XPATH);
     QueryResult result = query.execute();
-    NodeIterator it = result.getNodes();
+    NodeIterator it = result.getNodes();    
     List<Contact> contacts = new ArrayList<Contact>();
     while (it.hasNext()) {
       contacts.add(getContact(it.nextNode()));
     }
     return contacts ;
-  } 
+  }  
   
   public void addTag(String username, List<String> contactIds, Tag tag) throws Exception {
     Node tagHomeNode = getTagHome(username);
@@ -535,26 +559,55 @@ public class JCRDataStorage implements DataStorage {
         }
     }
     if (tagNode == null) {
-      tagNode = tagHomeNode.addNode(tag.getName(), "exo:tag") ;
+      tagNode = tagHomeNode.addNode(tag.getName(), "exo:contactTag") ;
       tagNode.setProperty("exo:name", tag.getName());
     }
     tagHomeNode.getSession().save();
     
     Node contactHomeNode = getContactHome(username);
-    for (int i = 0; i < contactIds.size(); i ++) {
-      Node contactNode = contactHomeNode.getNode(contactIds.get(i));
-      Contact c = getContact(contactNode);
-      String[] tags = new String[c.getTags().length + 1]; 
-      for (int j = 0; j < c.getTags().length; j ++) {
-        tags[i] = c.getTags()[i];
+    for (String contactId : contactIds) {
+      Contact contact = getContact(contactHomeNode.getNode(contactId));
+      String[] newTags ;
+      if (contact.getTags() != null && contact.getTags().length > 0) {
+        String[] oldTags = contact.getTags();
+        newTags = new String[oldTags.length + 1];
+        for (int j = 0; j < oldTags.length; j ++)
+          newTags[j] = oldTags[j];
+        newTags[newTags.length - 1] = tag.getName();
+      } else {
+        newTags = new String[1];
+        newTags[0] = tag.getName();
       }
-      tags[c.getTags().length] = tag.getName();
-      contactNode.setProperty("exo:tags", tags);
-      contactHomeNode.getSession().save();
+      contact.setTags(newTags);
+      saveContact(username, contact, false);
     }
-  }  
+  }
   
   public Tag removeTag(String username, String tagName) throws Exception {
+    Node tagHomeNode = getTagHome(username);
+    if (tagHomeNode.hasNode(tagName)) {
+      Tag tag = getTag(username, tagName);
+      
+      tagHomeNode.getNode(tagName).remove();
+      tagHomeNode.save();
+      tagHomeNode.getSession().save();
+      
+      List<Contact> contacts = getContactsByTag(username, tagName);
+      for (Contact contact : contacts) {
+        String[] oldTags = contact.getTags();
+        String[] newTags = new String[oldTags.length - 1];
+        int i = 0;
+        for (String oldTag : oldTags) {
+          if (!oldTag.equalsIgnoreCase(tagName)) {
+            newTags[i] = oldTag;
+            i ++;
+          }
+        }
+        contact.setTags(newTags);
+        saveContact(username, contact, false);
+      }
+      return tag;
+    }
     return null;
   }
 }

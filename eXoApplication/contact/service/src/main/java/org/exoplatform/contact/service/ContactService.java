@@ -34,7 +34,7 @@ public interface ContactService {
   public List<GroupContactData> getPublicContacts(String[] groupIds) throws Exception ;
   
   public List<Tag> getTags(String username) throws Exception ;
-  public List<Contact> getContactByTag(String username, String tagName) throws Exception ;
+  public List<Contact> getContactsByTag(String username, String tagName) throws Exception ;
   public void addTag(String username, List<String> contactIds, Tag tag) throws Exception ;
   public Tag removeTag(String username, String tagName) throws Exception ;
   

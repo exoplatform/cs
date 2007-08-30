@@ -23,6 +23,7 @@
 
 <!-- Start UIPopupAction -->
 	<% uicomponent.renderChild(UIPopupAction.class) ;%>	
+	<%uicomponent.renderPopupMessages();%>
 <!-- End UIPopupAction -->	
 
 </div>
