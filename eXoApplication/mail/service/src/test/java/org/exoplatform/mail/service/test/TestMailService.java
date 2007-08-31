@@ -216,7 +216,9 @@ public class TestMailService extends BaseMailTestCase{
     
     // assert remove tag in a message
 //    myMessage = mailService_.getMessageByTag("namphung", myaccount.getId(), tag.getName()).get(0);
-//    mailService_.removeMessageTag("namphung", myaccount.getId(), listMessage, tag.getName());
+//    List<String> t = new ArrayList<String>();
+//    t.add(tag.getName());  
+//    mailService_.removeMessageTag("namphung", myaccount.getId(), listMessage, t);
 //    myMessage = mailService_.getMessageByTag("namphung", myaccount.getId(), tag2.getName()).get(0);
 //    assertEquals(1, myMessage.getTags().length);
     
