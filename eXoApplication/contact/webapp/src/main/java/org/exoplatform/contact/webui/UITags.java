@@ -49,7 +49,6 @@ public class UITags extends UIComponent  {
       UIContacts uiContacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class) ;
       ContactService contactService = uiForm.getApplicationComponent(ContactService.class);
       String username = Util.getPortalRequestContext().getRemoteUser() ;
-      System.out.println("\n\n tag name :" + tagName + "\n\n");
       List<Contact> contacts = contactService.getContactsByTag(username, tagName);
       
       uiContacts.setContacts(contacts);

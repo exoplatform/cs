@@ -4,7 +4,6 @@
  **************************************************************************/
 package org.exoplatform.contact.webui;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.exoplatform.contact.service.Contact;
@@ -36,7 +35,7 @@ public class UIContactContainer extends UIContainer  {
       List<Contact> contacts = contactSvr.getContactsByGroup(username, groupId) ;
       uiContacts.setContacts(contacts) ;
       if(contacts.size() > 0) {
-        uiContactPreview.setContact(contacts.get(0)) ;
+        uiContactPreview.setContact(contacts.get(contacts.size() - 1)) ;
       }
     }
   }

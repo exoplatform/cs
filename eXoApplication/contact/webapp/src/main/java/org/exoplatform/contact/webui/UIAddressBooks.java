@@ -81,7 +81,7 @@ public class UIAddressBooks extends UIComponent  {
       
       UIContactPreview uiContactPreview = uiWorkingContainer.findFirstComponentOfType(UIContactPreview.class);
       Contact contact = null ;
-      if (contacts.size() > 0)  contact = contacts.get(0);
+      if (contacts.size() > 0)  contact = contacts.get(contacts.size() - 1);
       uiContactPreview.setContact(contact);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContactPreview) ;
     }
@@ -100,7 +100,7 @@ public class UIAddressBooks extends UIComponent  {
       UIContactPreview uiContactPreview = uiWorkingContainer.findFirstComponentOfType(UIContactPreview.class);
       Contact contact = null ;
       if (contacts.size() > 0)
-        contact = contacts.get(0);
+        contact = contacts.get(contacts.size() - 1);
       uiContactPreview.setContact(contact);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContactPreview) ;
     }

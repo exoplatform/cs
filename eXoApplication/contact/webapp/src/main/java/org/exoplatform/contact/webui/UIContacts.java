@@ -10,15 +10,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.exoplatform.contact.service.Contact;
-import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.webui.popup.UIAddNewTag;
 import org.exoplatform.contact.webui.popup.UIPopupAction;
 import org.exoplatform.contact.webui.popup.UIPopupContainer;
-import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.services.jcr.util.IdGenerator;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -50,6 +47,7 @@ public class UIContacts extends UIForm  {
   
   public void setContacts(List<Contact> contacts) {
     getChildren().clear() ;
+    contactMap.clear();
     for(Contact contact : contacts) {
       addUIFormInput(new UIFormCheckBoxInput<Boolean>(contact.getId(),contact.getId(), false));
       contactMap.put(contact.getId(), contact) ;
@@ -57,14 +55,14 @@ public class UIContacts extends UIForm  {
   }
   
   public List<String> getCheckedContacts() throws Exception {
-    List<String> checkedContacs = new ArrayList<String>() ;
+    List<String> checkedContacts = new ArrayList<String>() ;
     for (Contact contact : getContacts()) {
       UIFormCheckBoxInput uiCheckBox = getChildById(contact.getId()) ;
       if(uiCheckBox != null && uiCheckBox.isChecked()) {
-        checkedContacs.add(contact.getId()) ;
+        checkedContacts.add(contact.getId()) ;
       }
     }
-    return checkedContacs ;
+    return checkedContacts ;
   }
   
   static public class AddTagActionListener extends EventListener<UIContacts> {
@@ -73,8 +71,9 @@ public class UIContacts extends UIForm  {
       UIContactPortlet contactPortlet = uiContact.getAncestorOfType(UIContactPortlet.class) ;
       UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
       UIPopupContainer popupContainer = popupAction.createUIComponent(UIPopupContainer.class, null, null) ;
+      popupContainer.setId("AddTagPopupContainer") ;
       popupContainer.addChild(UIAddNewTag.class, null, null) ;
-      popupAction.activate(popupContainer, 500, 120, true) ;
+      popupAction.activate(popupContainer, 600, 0, true) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   }

@@ -6,6 +6,8 @@ package org.exoplatform.contact.webui.popup;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.Tag;
 import org.exoplatform.contact.webui.UIContactPortlet;
@@ -20,7 +22,6 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
-import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormStringInput;
 
 /**
@@ -41,23 +42,22 @@ public class UIAddNewTag extends UIForm implements UIPopupComponent {
   public static final String FIELD_TAGNAME_INPUT = "tagName";
   
   public static String[] FIELD_SHAREDCONTACT_BOX = null;
-  public static final String INPUT_SHARETAB =  "shareContactTab" ;
   
   public UIAddNewTag() throws Exception {
     addUIFormInput(new UIFormStringInput(FIELD_TAGNAME_INPUT, FIELD_TAGNAME_INPUT, null));
 
-    UIFormInputWithActions ShareTab = new UIFormInputWithActions(INPUT_SHARETAB) ;
     ContactService contactService = getApplicationComponent(ContactService.class);
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     List<Tag> tags = contactService.getTags(username);
-    getChildren().clear();
+
     FIELD_SHAREDCONTACT_BOX = new String[tags.size()];
     for (int i = 0 ; i < tags.size(); i ++) {
       FIELD_SHAREDCONTACT_BOX[i] = tags.get(i).getName();
-      ShareTab.addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_SHAREDCONTACT_BOX[i], FIELD_SHAREDCONTACT_BOX[i], false));
+      addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_SHAREDCONTACT_BOX[i], FIELD_SHAREDCONTACT_BOX[i], false));
     }
-    addUIFormInput(ShareTab);
   }
+  
+  public String getLabel(String id) {return id;} 
   
   public String[] getActions() { return new String[] {"Save", "Cancel"} ; }
   
@@ -69,24 +69,43 @@ public class UIAddNewTag extends UIForm implements UIPopupComponent {
     // TODO Auto-generated method stub
   }
   
+  public List<String> getCheckedTags() throws Exception {
+    List<String> checkedTags = new ArrayList<String>();
+    for (int i = 0; i < FIELD_SHAREDCONTACT_BOX.length; i ++) {
+      if (getUIFormCheckBoxInput(FIELD_SHAREDCONTACT_BOX[i]).isChecked()) {
+        checkedTags.add(FIELD_SHAREDCONTACT_BOX[i]);
+      }
+    }
+    return checkedTags;
+  }
+  
   static  public class SaveActionListener extends EventListener<UIAddNewTag> {
     public void execute(Event<UIAddNewTag> event) throws Exception {
       UIAddNewTag uiForm = event.getSource() ;
-      String  tagName = uiForm.getUIStringInput(FIELD_TAGNAME_INPUT).getValue(); 
-      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-      if (tagName == null || tagName.trim().length() == 0) {
-        uiApp.addMessage(new ApplicationMessage("UIAddNewTag.msg.tagName-required", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ; 
-      }
+      
+      
+//      String  tagName = uiForm.getUIStringInput(FIELD_TAGNAME_INPUT).getValue(); 
+//      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+//      if (tagName == null || tagName.trim().length() == 0) {
+//        uiApp.addMessage(new ApplicationMessage("UIAddNewTag.msg.tagName-required", null)) ;
+//        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+//        return ; 
+//      }
+      
       UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class);
       UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class);
       List<String> contactIds = uiContacts.getCheckedContacts();
-      Tag tag = new Tag() ;
-      tag.setName(tagName) ;
+      List<Tag> tags = new ArrayList<Tag>();
+      Tag tag = new Tag();
+      for (String tagName : uiForm.getCheckedTags()) {
+        tag.setName(tagName) ;
+        tags.add(tag);
+      }
+      tag.setName(uiForm.getUIStringInput(FIELD_TAGNAME_INPUT).getValue());
+      tags.add(tag);
       ContactService contactService = uiForm.getApplicationComponent(ContactService.class);
       String username = Util.getPortalRequestContext().getRemoteUser() ;
-      contactService.addTag(username, contactIds, new ArrayList<Tag>());
+      contactService.addTag(username, contactIds, tags);
     
       uiContactPortlet.cancelAction() ;  
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContactPortlet) ;
