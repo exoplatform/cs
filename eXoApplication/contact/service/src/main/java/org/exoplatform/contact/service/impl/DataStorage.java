@@ -42,7 +42,7 @@ public interface DataStorage {
   
   public List<Tag> getTags(String username) throws Exception ;
   public List<Contact> getContactsByTag(String username, String tagName) throws Exception ;
-  public void addTag(String username, List<String> contactIds, Tag tag) throws Exception ;
+  public void addTag(String username, List<String> contactIds, List<Tag> tags) throws Exception ;
   public Tag removeTag(String username, String tagName) throws Exception ;
   public void removeContactTag(String username, List<String>contactIds, List<String> tags) throws Exception ;
 }

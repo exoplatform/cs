@@ -8,7 +8,9 @@ package org.exoplatform.contact.service.impl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -548,13 +550,18 @@ public class JCRDataStorage implements DataStorage {
     return contacts ;
   }  
   
-  public void addTag(String username, List<String> contactIds, Tag tag) throws Exception {
+  public void addTag(String username, List<String> contactIds, List<Tag> tags) throws Exception {
     Node tagHomeNode = getTagHome(username);
-    if(!tagHomeNode.hasNode(tag.getName())) {
-      Node tagNode = tagHomeNode.addNode(tag.getName(), "exo:contactTag") ;
-      tagNode.setProperty("exo:name", tag.getName());
-      tagNode.setProperty("exo:description", tag.getDescription());
+    Map<String, String> tagMap = new HashMap<String, String> () ;
+    for(Tag tag : tags) {
+      if(!tagHomeNode.hasNode(tag.getName())) {
+        Node tagNode = tagHomeNode.addNode(tag.getName(), "exo:contactTag") ;
+        tagNode.setProperty("exo:name", tag.getName());
+        tagNode.setProperty("exo:description", tag.getDescription());
+      }
+      tagMap.put(tag.getName(), tag.getName()) ;
     }
+    
     tagHomeNode.getSession().save() ;
     Node contactHomeNode = getContactHome(username);
     Node contactNode ;
@@ -563,15 +570,9 @@ public class JCRDataStorage implements DataStorage {
         contactNode = contactHomeNode.getNode(contactId) ;
         if(contactNode.hasProperty("exo:tags")){
           Value[] values = contactNode.getProperty("exo:tags").getValues() ;
-          List<String> tags = new ArrayList<String>() ;
-          for(Value value : values) { tags.add(value.getString()) ; }
-          if(!tags.contains(tag.getName())) {
-            tags.add(tag.getName()) ;
-            contactNode.setProperty("exo:tags", tags.toArray(new String[]{})) ;
-          }
-        }else {
-          contactNode.setProperty("exo:tags", new String[]{tag.getName()}) ;
+          for(Value value : values) { tagMap.put(value.getString(), value.getString()) ; }          
         }
+        contactNode.setProperty("exo:tags", tagMap.values().toArray(new String[]{})) ;
       }
     }
     contactHomeNode.getSession().save() ;
