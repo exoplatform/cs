@@ -52,7 +52,7 @@
 		</div>
 		<div style="clear: both"><span></span></div>
 	</div>
-	<div class="MailFolderList" style="border: 1px solid red;">
+	<div class="MailFolderList">
 		<%for(Folder f : uicomponent.getFolders()) {
 			String name = f.getName() ;
 			String icon = name + "Icon" ;
