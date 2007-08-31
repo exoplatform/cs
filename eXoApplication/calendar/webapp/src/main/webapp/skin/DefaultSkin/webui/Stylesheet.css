@@ -440,6 +440,9 @@
 	margin:auto;
 	cursor: n-resize;
 }
+.UIDayView .UIGrid {
+	width: 98%;
+}
 
 /*====================Week View============================*/
 
