@@ -3,7 +3,7 @@
 	import org.exoplatform.contact.webui.UIContacts;
 %>
 
-<div class="UIContactContainer">
+<div class="UIContactContainer" id="$uicomponent.id">
 <!--  Start UIContacts-->
 	<% uicomponent.renderChild(UIContacts.class) ;%>			
 <!--  End UIContacts -->

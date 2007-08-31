@@ -69,9 +69,9 @@ public class UICategoryForm extends UIForm implements UIPopupComponent{
       ContactService contactService = uiForm.getApplicationComponent(ContactService.class);
       contactService.saveGroup(username, group, true);  
       UIPopupContainer popupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
-//      UICategorySelect uiCategorySelect = popupContainer.findFirstComponentOfType(UICategorySelect.class);
-//      List<SelectItemOption<String>> ls = uiCategorySelect.getCategoryList();
-//      uiCategorySelect.setCategoryList(ls);
+      UICategorySelect uiCategorySelect = popupContainer.findFirstComponentOfType(UICategorySelect.class);
+      List<SelectItemOption<String>> ls = uiCategorySelect.getCategoryList();
+      uiCategorySelect.setCategoryList(ls);
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
       context.addUIComponentToUpdateByAjax(popupContainer) ;
     }

@@ -19,6 +19,7 @@ import org.exoplatform.webui.core.UIComponent;
     template =  "app:/templates/contact/webui/UIContactPreview.gtmpl"
 )
 public class UIContactPreview extends UIComponent  {
+
   private Contact contact_ = null; 
   
   public UIContactPreview() throws Exception { }

@@ -1,9 +1,10 @@
-<% 
+<%
 	import org.exoplatform.contact.service.Contact;
 	String compId = uicomponent.getId() ;	
 %>
 
-<div class="$compId" id = "$compId">
+<%uiform.begin()%>
+<div class="$compId">
 			
 				<div class="UIContactActionsBar">
 					<a href="#" class="ControlButton">
@@ -71,14 +72,25 @@
 	  	 	    </thead>
   	 	      <tbody>
   	 	      <%  
-							List contacts = uicomponent.getContacts();
-							for(Contact contact : contacts) {
+							Contact[] contacts = uicomponent.getContacts();
+							for(contact in contacts) {
 								String actionLink  = uicomponent.event("SelectedContact", contact.getId()) ;
+								checkboxField = uicomponent.getChildById(contact.getId()) ;
 						%>
   						<tr>
-  						  <td class="text" style="padding-left: 7px;"><input type="checkbox" class="checkbox" value="<%=contact.getId()%>"/></td>
+  						  <td class="text" style="padding-left: 7px;">
+  						  	<%
+  						  		if(checkboxField != null) uicomponent.renderField(checkboxField) ;
+  						  	%>
+  						  </td>
 								<td class="text" style="padding: 0px;"><div class="Icon" ><span></span></div></td>
-								<td class="text"><div class="State OnlineIcon" title="Availabel"><a href="$actionLink"><%=contact.getFullName()%></a></div></td>
+								<td class="text">
+									<div class="State OnlineIcon" title="Availabel">
+										<a href="$actionLink">
+											<%=contact.getFullName()%>
+										</a>
+									</div>
+								</td>
 								<td class="text"><a href="$actionLink"><%=contact.getEmailAddress()%></a></td>
 								<td class="text"><a href="$actionLink"><%=contact.getJobTitle()%></a></td>
 								<td><a href="$actionLink"><%=contact.getWorkPhone1()%></a></td>
@@ -89,3 +101,4 @@
 				</div>
 				
 			</div>
+<%uiform.end()%>	

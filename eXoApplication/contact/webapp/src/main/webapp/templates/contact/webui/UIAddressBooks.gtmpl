@@ -31,7 +31,7 @@
 		<%
 			List groupContactData = uicomponent.getSharedContact();
 			for(group in groupContactData) {
-			String actionLink2  = uicomponent.event("SelectShareGroup", group.getName()) ;			
+			String actionLink2  = uicomponent.event("SelectSharedGroup", group.getName()) ;			
 		%>
 		<div class="ItemList Normal">
 			<a href="$actionLink2" class="IconHolder AddressIcon"><%=group.getName()%></a>

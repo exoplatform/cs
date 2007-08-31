@@ -4,25 +4,18 @@
  **************************************************************************/
 package org.exoplatform.contact.webui.popup;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import org.exoplatform.contact.service.Contact;
-import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.Tag;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContacts;
 import org.exoplatform.contact.webui.UITags;
-import org.exoplatform.contact.webui.UIWorkingContainer;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
-import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
-import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
@@ -38,8 +31,8 @@ import org.exoplatform.webui.form.UIFormStringInput;
     lifecycle = UIFormLifecycle.class,
     template = "system:/groovy/webui/form/UIForm.gtmpl", 
     events = {
-      @EventConfig(listeners = UICategoryForm.SaveActionListener.class),      
-      @EventConfig(listeners = UICategoryForm.CancelActionListener.class)
+      @EventConfig(listeners = UIAddNewTag.SaveActionListener.class),      
+      @EventConfig(listeners = UIAddNewTag.CancelActionListener.class)
     }
 )
 public class UIAddNewTag extends UIForm implements UIPopupComponent {
@@ -69,43 +62,31 @@ public class UIAddNewTag extends UIForm implements UIPopupComponent {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ; 
       }
- 
-      UIWorkingContainer uiWorkingContainer = uiForm.getAncestorOfType(UIWorkingContainer.class);
-      UIContacts uiContacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class);
+      UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class);
+      UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class);
       List<String> contactIds = uiContacts.getCheckedContacts();
+      for (String contactId : contactIds) {
+        System.out.println("contact Id selected : " + contactId + "\n\n");
+      }
       Tag tag = new Tag() ;
       tag.setName(tagName) ;
       ContactService contactService = uiForm.getApplicationComponent(ContactService.class);
       String username = Util.getPortalRequestContext().getRemoteUser() ;
       contactService.addTag(username, contactIds, tag);
- 
       
-      
- 
-      UITags uiTags = uiWorkingContainer.findFirstComponentOfType(UITags.class);
+      UITags uiTags = uiContactPortlet.findFirstComponentOfType(UITags.class);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiTags) ;
- 
-      
-      ContactGroup group = new ContactGroup();
-     // group.setName(groupName);
-      contactService.saveGroup(username, group, true);  
-      UIPopupContainer popupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
-      UICategorySelect uiCategorySelect = popupContainer.findFirstComponentOfType(UICategorySelect.class);
-      List<SelectItemOption<String>> ls = uiCategorySelect.getCategoryList();
-      uiCategorySelect.setCategoryList(ls);
-      WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
-      context.addUIComponentToUpdateByAjax(popupContainer) ;
- 
+    
+      uiContactPortlet.cancelAction() ;  
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContactPortlet) ;
     }
   }
   
-  static  public class CancelActionListener extends EventListener<UICategoryForm> {
-    public void execute(Event<UICategoryForm> event) throws Exception {
-      UICategoryForm uiForm = event.getSource() ;
-      UIPopupAction uiPopup = uiForm.getAncestorOfType(UIPopupAction.class) ;
-      UIPopupContainer popupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
-      uiPopup.deActivate() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(popupContainer.getAncestorOfType(UIContactPortlet.class)) ;
+  static  public class CancelActionListener extends EventListener<UIAddNewTag> {
+    public void execute(Event<UIAddNewTag> event) throws Exception {
+      UIAddNewTag uiForm = event.getSource() ;
+      UIContactPortlet contactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
+      contactPortlet.cancelAction() ; 
     }
   }
 }

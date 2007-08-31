@@ -32,16 +32,14 @@ import org.exoplatform.webui.event.EventListener;
     template =  "app:/templates/contact/webui/UIAddressBooks.gtmpl", 
     events = {
         @EventConfig(listeners = UIAddressBooks.SelectGroupActionListener.class),
-        @EventConfig(listeners = UIAddressBooks.SelectShareGroupActionListener.class)      
+        @EventConfig(listeners = UIAddressBooks.SelectSharedGroupActionListener.class)      
     }  
 )
 public class UIAddressBooks extends UIComponent  {
   private Map<String, List<Contact>> sharedContactMap_  = new HashMap<String, List<Contact>>() ;
-
   public UIAddressBooks() throws Exception {
 
   }
-
   public List<ContactGroup> getGroups()throws Exception {
     ContactService contactService = this.getApplicationComponent(ContactService.class);
     String username = Util.getPortalRequestContext().getRemoteUser() ;    
@@ -70,40 +68,39 @@ public class UIAddressBooks extends UIComponent  {
   static  public class SelectGroupActionListener extends EventListener<UIAddressBooks> {
     public void execute(Event<UIAddressBooks> event) throws Exception {
       UIAddressBooks uiForm = event.getSource() ;
-      String groupId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+       
       UIWorkingContainer uiWorkingContainer = uiForm.getAncestorOfType(UIWorkingContainer.class) ;
+      ContactService contactService = uiForm.getApplicationComponent(ContactService.class) ;
+      String username = Util.getPortalRequestContext().getRemoteUser() ;
+      String groupId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      List<Contact> contacts = contactService.getContactsByGroup(username, groupId);      
       
       UIContacts uiContacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class) ; 
-      uiContacts.setSelectTag(false);
-      uiContacts.setGroupId(groupId) ;
-      uiContacts.setIsPersonalContact(true) ;
+      uiContacts.setContacts(contacts);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts) ;
       
       UIContactPreview uiContactPreview = uiWorkingContainer.findFirstComponentOfType(UIContactPreview.class);
-      ContactService contactService = uiForm.getApplicationComponent(ContactService.class) ;
-      String username = Util.getPortalRequestContext().getRemoteUser() ;
       Contact contact = null ;
-      if (contactService.getContactsByGroup(username, groupId).size() > 0) 
-        contact = contactService.getContactsByGroup(username, groupId).get(0);
+      if (contacts.size() > 0)  contact = contacts.get(0);
       uiContactPreview.setContact(contact);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContactPreview) ;
     }
   }
-  static  public class SelectShareGroupActionListener extends EventListener<UIAddressBooks> {
+  static  public class SelectSharedGroupActionListener extends EventListener<UIAddressBooks> {
     public void execute(Event<UIAddressBooks> event) throws Exception {
       UIAddressBooks uiForm = event.getSource() ;
-      String groupId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UIWorkingContainer uiWorkingContainer = uiForm.getAncestorOfType(UIWorkingContainer.class) ;
-      
+      ContactService contactService = uiForm.getApplicationComponent(ContactService.class) ;
+      String groupId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      List<Contact> contacts = contactService.getSharedContacts(new String[] { groupId }).get(0).getContacts();      
       UIContacts uiContacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class) ; 
-      uiContacts.setSelectTag(false);
-      uiContacts.setGroupId(groupId) ;
-      uiContacts.setIsPersonalContact(false) ;
+      uiContacts.setContacts(contacts);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts) ;
       
       UIContactPreview uiContactPreview = uiWorkingContainer.findFirstComponentOfType(UIContactPreview.class);
-      ContactService contactService = uiForm.getApplicationComponent(ContactService.class) ;
-      Contact contact = contactService.getSharedContacts(new String[] { groupId }).get(0).getContacts().get(0);
+      Contact contact = null ;
+      if (contacts.size() > 0)
+        contact = contacts.get(0);
       uiContactPreview.setContact(contact);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContactPreview) ;
     }
