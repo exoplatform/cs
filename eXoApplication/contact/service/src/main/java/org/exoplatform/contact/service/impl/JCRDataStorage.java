@@ -7,6 +7,7 @@ package org.exoplatform.contact.service.impl;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.jcr.Node;
@@ -549,65 +550,71 @@ public class JCRDataStorage implements DataStorage {
   
   public void addTag(String username, List<String> contactIds, Tag tag) throws Exception {
     Node tagHomeNode = getTagHome(username);
-    List<Tag> existTags = getTags(username);
-    Node tagNode = null ;
-    for (int i = 0; i < existTags.size(); i ++) {
-      if (existTags.get(i).getName().equalsIgnoreCase(tag.getName()))
-        {
-        tagNode = tagHomeNode.getNode(tag.getName());
-        break;
-        }
-    }
-    if (tagNode == null) {
-      tagNode = tagHomeNode.addNode(tag.getName(), "exo:contactTag") ;
+    if(!tagHomeNode.hasNode(tag.getName())) {
+      Node tagNode = tagHomeNode.addNode(tag.getName(), "exo:contactTag") ;
       tagNode.setProperty("exo:name", tag.getName());
+      tagNode.setProperty("exo:description", tag.getDescription());
     }
-    tagHomeNode.getSession().save();
-    
+    tagHomeNode.getSession().save() ;
     Node contactHomeNode = getContactHome(username);
-    for (String contactId : contactIds) {
-      Contact contact = getContact(contactHomeNode.getNode(contactId));
-      String[] newTags ;
-      if (contact.getTags() != null && contact.getTags().length > 0) {
-        String[] oldTags = contact.getTags();
-        newTags = new String[oldTags.length + 1];
-        for (int j = 0; j < oldTags.length; j ++)
-          newTags[j] = oldTags[j];
-        newTags[newTags.length - 1] = tag.getName();
-      } else {
-        newTags = new String[1];
-        newTags[0] = tag.getName();
+    Node contactNode ;
+    for(String contactId : contactIds) {
+      if(contactHomeNode.hasNode(contactId)) {
+        contactNode = contactHomeNode.getNode(contactId) ;
+        if(contactNode.hasProperty("exo:tags")){
+          Value[] values = contactNode.getProperty("exo:tags").getValues() ;
+          List<String> tags = new ArrayList<String>() ;
+          for(Value value : values) { tags.add(value.getString()) ; }
+          if(!tags.contains(tag.getName())) {
+            tags.add(tag.getName()) ;
+            contactNode.setProperty("exo:tags", tags.toArray(new String[]{})) ;
+          }
+        }else {
+          contactNode.setProperty("exo:tags", new String[]{tag.getName()}) ;
+        }
       }
-      contact.setTags(newTags);
-      saveContact(username, contact, false);
     }
+    contactHomeNode.getSession().save() ;
   }
   
   public Tag removeTag(String username, String tagName) throws Exception {
     Node tagHomeNode = getTagHome(username);
     if (tagHomeNode.hasNode(tagName)) {
       Tag tag = getTag(username, tagName);
-      
       tagHomeNode.getNode(tagName).remove();
       tagHomeNode.save();
       tagHomeNode.getSession().save();
-      
+      Node contactHome = getContactHome(username) ;
       List<Contact> contacts = getContactsByTag(username, tagName);
       for (Contact contact : contacts) {
-        String[] oldTags = contact.getTags();
-        String[] newTags = new String[oldTags.length - 1];
-        int i = 0;
-        for (String oldTag : oldTags) {
-          if (!oldTag.equalsIgnoreCase(tagName)) {
-            newTags[i] = oldTag;
-            i ++;
-          }
-        }
-        contact.setTags(newTags);
-        saveContact(username, contact, false);
+        List<String> tags = new ArrayList<String>(Arrays.asList(contact.getTags()));
+        tags.remove(tagName) ;
+        contactHome.getNode(contact.getId()).setProperty("exo:tags", tags.toArray(new String[]{})) ;        
       }
+      contactHome.getSession().save() ;
       return tag;
     }
     return null;
+  }
+  
+  public void removeContactTag(String username, List<String> contactIds, List<String> tags) throws Exception {
+    Node contactHome = getContactHome(username) ;
+    Node contact ;
+    for(String contactId : contactIds) {
+      if(contactHome.hasNode(contactId)) {
+        contact = contactHome.getNode(contactId) ;
+        if(contact.hasProperty("exo:tags")){
+          Value[] values = contact.getProperty("exo:tags").getValues() ;
+          List<String> tagList = new ArrayList<String>() ;
+          for(Value value : values) { tagList.add(value.getString()) ; }
+          for(String tag : tags) {
+            if(tagList.contains(tag)) tagList.remove(tag) ;
+          }
+          contact.setProperty("exo:tags", tagList.toArray(new String[]{})) ;
+          contact.save() ;
+        }
+      }
+    }
+    contactHome.getSession().save() ;
   }
 }

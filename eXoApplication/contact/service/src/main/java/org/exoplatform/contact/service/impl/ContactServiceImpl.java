@@ -100,4 +100,7 @@ public class ContactServiceImpl implements ContactService{
   public Tag removeTag(String username, String tagName) throws Exception {
     return storage_.removeTag(username, tagName);
   }
+  public void removeContactTag(String username, List<String>contactIds, List<String> tags) throws Exception {
+    storage_.removeContactTag(username, contactIds, tags) ;
+  }
 }
