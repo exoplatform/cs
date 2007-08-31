@@ -8,10 +8,6 @@
 	padding-top: 8px;
 }
 
-.UIAddPollForm .UIAction {
-	width: 250px;
-}
-
 .UIAddPollForm .Line {
 	background: url('background/Line1x2.gif') repeat-x;
 	width: 90%; height: 2px;

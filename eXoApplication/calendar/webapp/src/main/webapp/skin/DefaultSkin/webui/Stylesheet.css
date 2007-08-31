@@ -16,7 +16,7 @@
 @import url("UISetting/Stylesheet.css") ;
 @import url("UIReminder/Stylesheet.css") ;
 @import url("UIAddGroup/Stylesheet.css") ;
-
+@import url("UIAddEventCategory/Stylesheet.css") ;
 
 /*=========================== MailBanner ==================================*/
 
@@ -853,9 +853,6 @@
 }
 
 /*===================UIForm=======================*/
-.UIForm .HorizontalLayout .FormContainer .UIAction {  
-  width: 200px;
-}
 
 /*=====================Table Color===========================*/
 

@@ -1,10 +1,10 @@
 .UITagForm {
-	width: 200px; 
 	padding: 10px;
+	background:#ffffff;
 }
 
 .UITagForm .TagContent {
-	border: 1px solid #a5a5a5;
+	border: 1px solid #c7c7c7;
 }
 
 .UITagForm .TagControlBar {
@@ -45,8 +45,4 @@
 
 .UITagForm .TagsList .Selected {
 	background: #e8e8ef url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/RedTagIcon.gif') no-repeat 10px center;
-}
-
-.UITagForm .UIAction {
-	width: 120px;
 }

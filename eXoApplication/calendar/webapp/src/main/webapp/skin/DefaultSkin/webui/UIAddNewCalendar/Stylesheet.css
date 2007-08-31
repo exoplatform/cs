@@ -1,9 +1,46 @@
-.UIFormTabPane  .UIAction {	
-	width: 130px;
+.UIAddNewCalendar {
+	background: #ffffff;
+	padding:8px;
 }
 
-.UICalendarForm .AddIcon16x16   {
+.UIAddNewCalendar .UIForm .HorizontalLayout {
+	border: none;
+}
+
+.UIAddNewCalendar .UIFormWithTitle .HorizontalLayout {
+	border: 1px solid #c7c7c7;
+	border-top: none;
+}
+
+.UIAddNewCalendar .UIFormWithTitle .HorizontalLayout .FormContainer {
+	border: none;
+	padding: 4px;
+}
+
+.UIAddNewCalendar .UITabContentContainer .UITabContent {
+	border: none;
+}
+
+.UIAddNewCalendar .FormContainer .UIFormGrid .FieldLabel {
+	width: 128px;
+	text-align: right;
+	padding: 4px;
+}
+
+.UIAddNewCalendar .HorizontalLayout .AddIcon16x16 {
 	width: 16px;
 	height: 16px;
+	margin: 0px 2px;
 }
 
+.UIAddNewCalendar .HorizontalLayout .SelectUserIcon {
+	background: url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/SmallUserIcon.gif') no-repeat;
+}
+
+.UIAddNewCalendar .HorizontalLayout .SelectMemberIcon {
+	background: url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/SmallGroupIcon.gif') no-repeat;
+}
+
+.UIAddNewCalendar .HorizontalLayout .AddAnyIcon {
+	background: url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/SmallMemberIcon.gif') no-repeat;
+}

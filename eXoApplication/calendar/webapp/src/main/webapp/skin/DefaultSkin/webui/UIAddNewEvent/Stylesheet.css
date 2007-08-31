@@ -7,12 +7,12 @@
 	border: none;
 }
 
-.UIAddNewEvent .UIAction {
-	width: 135px;
-}
-
 .UIAddNewEvent .UIFormWithTitle {
 	margin: 8px auto ;
+}
+
+.UIAddNewEvent .UITabContentContainer .UITabContent {
+	border:none;
 }
 
 .UIAddNewEvent .AddEmailAddress {
@@ -59,7 +59,6 @@
 }
 
 .UIAddNewEvent .HorizontalLayout .FieldComponent .UIAction {
-	width: 75px;
 	float: left;
 	padding: 0px;
 	margin-left: 4px; 
@@ -79,6 +78,7 @@
 
 .UIAddNewEvent .NewEventAttendee .Label {
 	float: right;
+	margin: 0px 3px;
 }
 
 .UIAddNewEvent .NewEventAttendee .Field {
@@ -93,10 +93,12 @@
 
 .UIAddNewEvent .NewEventAttendee .FreeTime {
 	background-color: white; 
+	width: 11px;
 }
 
 .UIAddNewEvent .NewEventAttendee .BusyTime {
 	background-color: #c41616;
+	width: 11px;
 }
 
 .UIAddNewEvent .NewEventAttendee .UIGrid .Title {

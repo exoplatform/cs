@@ -1,11 +1,10 @@
 .UISendPrivateMessage {
-	border: 1px solid #b7b7b7;
-	width: 700px;
-	margin: 10px;
+	padding: 10px;
+	background:#ffffff;
 }
 
-.UISendPrivateMessage .SendPrivateMessageContainer {
-	border: 1px solid white;
+.UISendPrivateMessage .SendPrivateMessage {
+	border:1px solid #c7c7c7;
 	background: #f7f7f7;
 	padding: 10px;
 }
@@ -18,10 +17,6 @@
 	padding: 10px;
 }
 
-.UISendPrivateMessage .UIForm .HorizontalLayout .Textinput {
-	width: 565px;
-}
-
-.UISendPrivateMessage .UIAction { 
-	width: 140px;
+.UISendPrivateMessage .UIForm .HorizontalLayout .Textarea {
+	width: 370px; height: 265px;
 }

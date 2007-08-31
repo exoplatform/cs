@@ -1,7 +1,6 @@
 .UIMoveTopicForm {
-	width: 310px;
 	padding: 10px;
-	color: #272727;
+	background: #ffffff;
 }
 
 .UIMoveTopicForm .TitleMoveThreads {
@@ -33,6 +32,10 @@
 	margin: 0px;
 }
 
+.UIMoveTopicForm .UITree .TreeContainer .Node .NodeLabel a:hover {
+	color: #058ee6;
+}
+
 .UIMoveTopicForm .UITree .TreeContainer .Selected {
 	background: #d8d9ee;
 	margin: 0px;
@@ -45,8 +48,4 @@
 
 .UIMoveTopicForm .UITree .TreeContainer .ChildrenContainer .Node {
 	padding-left: 5px;
-}
-
-.UIMoveTopicForm .UIAction {
-	width: 130px;
 }

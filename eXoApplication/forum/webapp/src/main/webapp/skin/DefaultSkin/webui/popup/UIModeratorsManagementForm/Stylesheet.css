@@ -1,5 +1,6 @@
 .UIModeratorsManagementForm {
 	padding: 10px;
+	background:#ffffff;
 }
 
 .UIModeratorsManagementForm .ModeratorsManagementContainer {
@@ -7,7 +8,6 @@
 }
 
 .UIModeratorsManagementForm .ModeratorsManagementContainer .ManagementContent {
-	border: 1px solid white;
 	background: #f3f3f3;
 	padding: 10px;
 }
@@ -65,9 +65,9 @@
 }
 
 .UIModeratorsManagementForm .ModeratorsGroup .UIAction {
-	width: 130px;
+	width: auto;
 }
 
 .UIModeratorsManagementForm .UIAction {
-	width: 130px;
+	width: auto;
 }

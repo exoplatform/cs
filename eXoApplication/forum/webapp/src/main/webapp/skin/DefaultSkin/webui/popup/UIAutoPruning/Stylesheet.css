@@ -9,14 +9,10 @@
 	border: 1px solid #b4b4b4;
 }
 
-.UIAutoPruning .UIAction {
-	width:65px;
-}
-
 .UIAutoPruning .UIFormWithTitle {
 	margin: 8px auto ;
 }
 
 .UIAutoPruning .UIFormWithTitle .UIAction {
-	width: 125px;
+	width: auto;
 }
