@@ -48,9 +48,6 @@ public class UITagForm extends UIForm implements UIPopupComponent{
   }
   public void createCheckBoxTagList(List<Tag> listTags) {
     removeChild(UIFormCheckBoxInput.class);
-    Tag t = new Tag();
-    t.setName("My Company");
-    listTags.add(t);
     for(Tag tag : listTags) {
       addUIFormInput(new UIFormCheckBoxInput<Boolean>(tag.getName(), tag.getName(), null)) ;
     }
