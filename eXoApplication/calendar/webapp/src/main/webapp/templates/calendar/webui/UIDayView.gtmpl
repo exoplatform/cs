@@ -7,7 +7,217 @@
 	</div>
 	<div class="EventDayContainer">
 		<div class="EventDayContent">
-			kjbhskdjhfgvnidhnviofdvvhnifgvnifnifikjgfv
+			<table class="UIGrid" id="RowContainerDay" cellspacing="0" borderspacing="0">
+				<col width="40px"><col>
+				<tbody>
+					<tr>
+						<td class="TdTime">12AM</td>
+						<td>&nbsp</td>
+					</tr>
+					<tr>
+						<td ></td>
+						<td class="TdDotLine">&nbsp</td>
+					</tr>
+					<tr>
+						<td class="TdTime">1AM</td>
+						<td class="TdLine">&nbsp</td>
+					</tr>
+					<tr>
+						<td ></td>
+						<td class="TdDotLine">&nbsp</td>
+					</tr>
+					<tr>
+						<td class="TdTime">2AM</td>
+						<td class="TdLine">&nbsp</td>
+					</tr>
+					<tr>
+						<td ></td>
+						<td class="TdDotLine">&nbsp</td>
+					</tr>
+					<tr>
+						<td class="TdTime">3AM</td>
+						<td class="TdLine">&nbsp</td>
+					</tr>
+					<tr>
+						<td ></td>
+						<td class="TdDotLine">&nbsp</td>
+					</tr>
+					<tr>
+						<td class="TdTime">4AM</td>
+						<td class="TdLine">&nbsp</td>
+					</tr>
+					<tr>
+						<td ></td>
+						<td class="TdDotLine">&nbsp</td>
+					</tr>
+					<tr>
+						<td class="TdTime">5AM</td>
+						<td class="TdLine">
+							<div class="EventContainerBoder"
+								<div class="EventContainerBar">5:35 AM - 7:00 AM</div>
+								<div class="EventContainer">Talk to my cousin on the phone, he will call from France</div>
+								<div class="ResizeEventContainer"><span></span></div>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td ></td>
+						<td class="TdDotLine">&nbsp</td>
+					</tr>
+					<tr>
+						<td class="TdTime">6AM</td>
+						<td class="TdLine">&nbsp</td>
+					</tr>
+					<tr>
+						<td ></td>
+						<td class="TdDotLine">&nbsp</td>
+					</tr>
+					<tr>
+						<td class="TdTime">7AM</td>
+						<td class="TdLine">&nbsp</td>
+					</tr>
+					<tr>
+						<td ></td>
+						<td class="TdDotLine">&nbsp</td>
+					</tr>
+					<tr>
+						<td class="TdTime">8AM</td>
+						<td class="TdLine">&nbsp</td>
+					</tr>
+					<tr>
+						<td ></td>
+						<td class="TdDotLine">&nbsp</td>
+					</tr>
+					<tr>
+						<td class="TdTime">9AM</td>
+						<td class="TdLine">&nbsp</td>
+					</tr>
+					<tr>
+						<td ></td>
+						<td class="TdDotLine">&nbsp</td>
+					</tr>
+					<tr>
+						<td class="TdTime">10AM</td>
+						<td class="TdLine">&nbsp</td>
+					</tr>
+					<tr>
+						<td ></td>
+						<td class="TdDotLine">&nbsp</td>
+					</tr>
+					<tr>
+						<td class="TdTime">11AM</td>
+						<td class="TdLine">&nbsp</td>
+					</tr>
+					<tr>
+						<td ></td>
+						<td class="TdDotLine">&nbsp</td>
+					</tr>
+					<tr>
+						<td class="TdTime">12PM</td>
+						<td class="TdLine">&nbsp</td>
+					</tr>
+					<tr>
+						<td ></td>
+						<td class="TdDotLine">&nbsp</td>
+					</tr>
+					<tr>
+						<td class="TdTime">1PM</td>
+						<td class="TdLine">&nbsp</td>
+					</tr>
+					<tr>
+						<td ></td>
+						<td class="TdDotLine">&nbsp</td>
+					</tr>
+					<tr>
+						<td class="TdTime">2PM</td>
+						<td class="TdLine">&nbsp</td>
+					</tr>
+					<tr>
+						<td ></td>
+						<td class="TdDotLine">&nbsp</td>
+					</tr>
+					<tr>
+						<td class="TdTime">3PM</td>
+						<td class="TdLine">&nbsp</td>
+					</tr>
+					<tr>
+						<td ></td>
+						<td class="TdDotLine">&nbsp</td>
+					</tr>
+					<tr>
+						<td class="TdTime">4PM</td>
+						<td class="TdLine">&nbsp</td>
+					</tr>
+					<tr>
+						<td ></td>
+						<td class="TdDotLine">&nbsp</td>
+					</tr>
+					<tr>
+						<td class="TdTime">5PM</td>
+						<td class="TdLine">&nbsp</td>
+					</tr>
+					<tr>
+						<td ></td>
+						<td class="TdDotLine">&nbsp</td>
+					</tr>
+					<tr>
+						<td class="TdTime">6PM</td>
+						<td class="TdLine">&nbsp</td>
+					</tr>
+					<tr>
+						<td ></td>
+						<td class="TdDotLine">&nbsp</td>
+					</tr>
+					<tr>
+						<td class="TdTime">7PM</td>
+						<td class="TdLine">&nbsp</td>
+					</tr>
+					<tr>
+						<td ></td>
+						<td class="TdDotLine">&nbsp</td>
+					</tr>
+					<tr>
+						<td class="TdTime">8PM</td>
+						<td class="TdLine">&nbsp</td>
+					</tr>
+					<tr>
+						<td ></td>
+						<td class="TdDotLine">&nbsp</td>
+					</tr>
+					<tr>
+						<td class="TdTime">9PM</td>
+						<td class="TdLine">&nbsp</td>
+					</tr>
+					<tr>
+						<td ></td>
+						<td class="TdDotLine">&nbsp</td>
+					</tr>
+					<tr>
+						<td class="TdTime">10PM</td>
+						<td class="TdLine">&nbsp</td>
+					</tr>
+					<tr>
+						<td ></td>
+						<td class="TdDotLine">&nbsp</td>
+					</tr>
+					<tr>
+						<td class="TdTime">11PM</td>
+						<td class="TdLine">&nbsp</td>
+					</tr>
+					<tr>
+						<td ></td>
+						<td class="TdDotLine">&nbsp</td>
+					</tr>
+					<tr>
+						<td class="TdTime">12PM</td>
+						<td class="TdLine">&nbsp</td>
+					</tr>
+					<tr>
+						<td ></td>
+						<td class="TdDotLine">&nbsp</td>
+					</tr>
+				</tbody>
+			</table>
 		</div>
 	</div>
 </div> 
