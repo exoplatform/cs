@@ -8,11 +8,8 @@ import java.util.List;
 
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
-import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.UIComponent;
-import org.exoplatform.webui.form.UIFormInputSet;
 import org.exoplatform.webui.form.UIFormInputWithActions;
-import org.exoplatform.webui.form.UIFormMultiValueInputSet;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.validator.EmailAddressValidator;
 
@@ -26,7 +23,7 @@ import org.exoplatform.webui.form.validator.EmailAddressValidator;
 @ComponentConfig(
     template = "app:/templates/contact/webui/popup/UIProfileInputSet.gtmpl"
 )
-public class UIProfileInputSet extends UIFormInputSet {
+public class UIProfileInputSet extends UIFormInputWithActions {
   public static final String FIELD_FULLNAME_INPUT = "fullName";
   public static final String FIELD_FIRSTNAME_INPUT = "firstName";
   public static final String FIELD_MIDDLENAME_INPUT = "middleName";

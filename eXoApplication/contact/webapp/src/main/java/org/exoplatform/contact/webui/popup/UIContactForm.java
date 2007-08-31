@@ -20,7 +20,6 @@ import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
-import org.exoplatform.webui.form.UIFormInputSet;
 import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTabPane;
@@ -86,10 +85,10 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
     super("UIContactForm", false);
     UIProfileInputSet ProfileTab = new UIProfileInputSet(INPUT_PROFILETAB) ;
     
-    UIFormInputSet IMContactTab = new UIFormInputSet(INPUT_IMCONTACTTAB) ;
-    UIFormInputSet HomeTab = new UIFormInputSet(INPUT_HOMETAB) ;
-    UIFormInputSet WorkTab = new UIFormInputSet(INPUT_WORKTAB) ;
-    UIFormInputSet NoteTab = new UIFormInputSet(INPUT_NODETAB) ;
+    UIFormInputWithActions IMContactTab = new UIFormInputWithActions(INPUT_IMCONTACTTAB) ;
+    UIFormInputWithActions HomeTab = new UIFormInputWithActions(INPUT_HOMETAB) ;
+    UIFormInputWithActions WorkTab = new UIFormInputWithActions(INPUT_WORKTAB) ;
+    UIFormInputWithActions NoteTab = new UIFormInputWithActions(INPUT_NODETAB) ;
     UIFormInputWithActions ShareTab = new UIFormInputWithActions(INPUT_SHARETAB) ;
 
     WorkTab.addUIFormInput(new UIFormStringInput(FIELD_WORKADDRESS_INPUT, FIELD_WORKADDRESS_INPUT, null));
