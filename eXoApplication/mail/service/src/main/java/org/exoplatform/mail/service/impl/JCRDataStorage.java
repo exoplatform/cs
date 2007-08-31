@@ -433,14 +433,14 @@ public class JCRDataStorage implements DataStorage{
       Map<String, String> messageTagMap = new HashMap<String, String> () ;
       if(messageHome.hasNode(messageId)) {
         Node messageNode = messageHome.getNode(messageId) ;
-        if(messageNode.hasProperty("exo:tags")) {
-          Value[] values = messageNode.getProperty("exo:tags").getValues() ;
+        if(messageNode.hasProperty(Utils.EXO_TAGS)) {
+          Value[] values = messageNode.getProperty(Utils.EXO_TAGS).getValues() ;
           for(Value value : values) {
             messageTagMap.put(value.getString(), value.getString()) ;
           }
         }
         messageTagMap.putAll(tagMap) ;
-        messageNode.setProperty("exo:tags", messageTagMap.values().toArray(new String[]{})) ;
+        messageNode.setProperty(Utils.EXO_TAGS, messageTagMap.values().toArray(new String[]{})) ;
         messageNode.save() ;
       }
     }
