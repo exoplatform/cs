@@ -4,12 +4,12 @@
  **************************************************************************/
 package org.exoplatform.contact.webui.popup;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.Tag;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContacts;
-import org.exoplatform.contact.webui.UITags;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -19,6 +19,8 @@ import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
+import org.exoplatform.webui.form.UIFormCheckBoxInput;
+import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormStringInput;
 
 /**
@@ -29,7 +31,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
  */
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
-    template = "system:/groovy/webui/form/UIForm.gtmpl", 
+    template = "app:/templates/contact/webui/popup/UIAddNewTag.gtmpl", 
     events = {
       @EventConfig(listeners = UIAddNewTag.SaveActionListener.class),      
       @EventConfig(listeners = UIAddNewTag.CancelActionListener.class)
@@ -38,8 +40,23 @@ import org.exoplatform.webui.form.UIFormStringInput;
 public class UIAddNewTag extends UIForm implements UIPopupComponent {
   public static final String FIELD_TAGNAME_INPUT = "tagName";
   
-  public UIAddNewTag() {
+  public static String[] FIELD_SHAREDCONTACT_BOX = null;
+  public static final String INPUT_SHARETAB =  "shareContactTab" ;
+  
+  public UIAddNewTag() throws Exception {
     addUIFormInput(new UIFormStringInput(FIELD_TAGNAME_INPUT, FIELD_TAGNAME_INPUT, null));
+
+    UIFormInputWithActions ShareTab = new UIFormInputWithActions(INPUT_SHARETAB) ;
+    ContactService contactService = getApplicationComponent(ContactService.class);
+    String username = Util.getPortalRequestContext().getRemoteUser() ;
+    List<Tag> tags = contactService.getTags(username);
+    getChildren().clear();
+    FIELD_SHAREDCONTACT_BOX = new String[tags.size()];
+    for (int i = 0 ; i < tags.size(); i ++) {
+      FIELD_SHAREDCONTACT_BOX[i] = tags.get(i).getName();
+      ShareTab.addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_SHAREDCONTACT_BOX[i], FIELD_SHAREDCONTACT_BOX[i], false));
+    }
+    addUIFormInput(ShareTab);
   }
   
   public String[] getActions() { return new String[] {"Save", "Cancel"} ; }
@@ -65,17 +82,11 @@ public class UIAddNewTag extends UIForm implements UIPopupComponent {
       UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class);
       UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class);
       List<String> contactIds = uiContacts.getCheckedContacts();
-      for (String contactId : contactIds) {
-        System.out.println("contact Id selected : " + contactId + "\n\n");
-      }
       Tag tag = new Tag() ;
       tag.setName(tagName) ;
       ContactService contactService = uiForm.getApplicationComponent(ContactService.class);
       String username = Util.getPortalRequestContext().getRemoteUser() ;
-      contactService.addTag(username, contactIds, tag);
-      
-      UITags uiTags = uiContactPortlet.findFirstComponentOfType(UITags.class);
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiTags) ;
+      contactService.addTag(username, contactIds, new ArrayList<Tag>());
     
       uiContactPortlet.cancelAction() ;  
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContactPortlet) ;
