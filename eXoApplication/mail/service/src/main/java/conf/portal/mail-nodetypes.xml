@@ -192,7 +192,7 @@
   	</propertyDefinitions>
   </nodeType>
   
-  <nodeType name="exo:tag" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
+  <nodeType name="exo:mailtag" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
   	<supertypes>
   		<supertype>nt:base</supertype>
   	</supertypes>

@@ -417,16 +417,16 @@ public class JCRDataStorage implements DataStorage{
   throws Exception {    
     Node tagHome = getTagHome(username, accountId) ;
     if(!tagHome.hasNode(tag.getName())) {
-      Node tagNode = tagHome.addNode(tag.getName(), "exo:tag") ;
-      tagNode.setProperty("exo:name", tag.getName()) ;
+      Node tagNode = tagHome.addNode(tag.getName(), Utils.EXO_MAILTAG) ;
+      tagNode.setProperty(Utils.EXO_NAME, tag.getName()) ;
     }
     tagHome.getSession().save() ;
     Node messageHome = getMessageHome(username, accountId) ; 
     for(String id : messageIds) {
       if(messageHome.hasNode(id)) {
         Node messageNode = messageHome.getNode(id) ;
-        if (messageNode.hasProperty("exo:tags")) {
-          Value[] values = messageNode.getProperty("exo:tags").getValues() ;
+        if (messageNode.hasProperty(Utils.EXO_TAGS)) {
+          Value[] values = messageNode.getProperty(Utils.EXO_TAGS).getValues() ;
           String[] tags = new String[values.length + 1] ;
           boolean hasTag = false ;
           for(int i = 0; i < values.length; i ++) {
@@ -437,10 +437,10 @@ public class JCRDataStorage implements DataStorage{
           }
           if(!hasTag) {
             tags[values.length] = tag.getName() ;
-            messageNode.setProperty("exo:tags", tags) ;
+            messageNode.setProperty(Utils.EXO_TAGS, tags) ;
           } 
         }else {
-          messageNode.setProperty("exo:tags", new String[]{tag.getName()}) ;
+          messageNode.setProperty(Utils.EXO_TAGS, new String[]{tag.getName()}) ;
         }
       }
     }
@@ -468,7 +468,7 @@ public class JCRDataStorage implements DataStorage{
     for (String messageId : messageIds) {
       if (messageHome.hasNode(messageId)) {
         Node messageNode = messageHome.getNode(messageId);
-        if (messageNode.hasProperty("exo:tags")) {
+        if (messageNode.hasProperty(Utils.EXO_TAGS)) {
           Message message = getMessage(messageNode);
           String[] tags = message.getTags();
 
