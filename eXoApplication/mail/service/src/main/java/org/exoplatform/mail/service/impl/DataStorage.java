@@ -57,7 +57,7 @@ public interface DataStorage {
   public void removeUserFolder(String username, Account account, Folder folder) throws Exception ;
   
   public List<Tag> getTags(String username, String accountId) throws Exception ;
-  public void addTag(String username, String accountId, List<String> messagesId, Tag tag) throws Exception ;
+  public void addTag(String username, String accountId, List<String> messagesId, List<Tag> listTag) throws Exception ;
   public void removeMessageTag(String username, String accountId, List<String> messageIds, List<String> tagNames) throws Exception ;
   public void removeTag(String username, String accountId, String tagName) throws Exception ;
   

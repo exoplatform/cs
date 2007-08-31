@@ -7,9 +7,11 @@ package org.exoplatform.mail.service.impl;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Arrays;
+import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -413,35 +415,33 @@ public class JCRDataStorage implements DataStorage{
   }
 
 
-  public void addTag(String username, String accountId, List<String> messageIds, Tag tag)
+  public void addTag(String username, String accountId, List<String> messageIds, List<Tag> tagList)
   throws Exception {    
+    Map<String, String> tagMap = new HashMap<String, String> () ;
     Node tagHome = getTagHome(username, accountId) ;
-    if(!tagHome.hasNode(tag.getName())) {
-      Node tagNode = tagHome.addNode(tag.getName(), Utils.EXO_MAILTAG) ;
-      tagNode.setProperty(Utils.EXO_NAME, tag.getName()) ;
+    for(Tag tag : tagList) {
+      if(!tagHome.hasNode(tag.getName())) {
+        Node tagNode = tagHome.addNode(tag.getName(), Utils.EXO_MAILTAG) ;
+        tagNode.setProperty(Utils.EXO_NAME, tag.getName()) ;
+      }
+      tagMap.put(tag.getName(), tag.getName()) ;      
     }
     tagHome.getSession().save() ;
-    Node messageHome = getMessageHome(username, accountId) ; 
-    for(String id : messageIds) {
-      if(messageHome.hasNode(id)) {
-        Node messageNode = messageHome.getNode(id) ;
-        if (messageNode.hasProperty(Utils.EXO_TAGS)) {
-          Value[] values = messageNode.getProperty(Utils.EXO_TAGS).getValues() ;
-          String[] tags = new String[values.length + 1] ;
-          boolean hasTag = false ;
-          for(int i = 0; i < values.length; i ++) {
-            if(values[i].getString().equals(tag.getName())) {
-              hasTag = true ;
-            }
-            tags[i] = values[i].getString() ;
+    
+    Node messageHome = getMessageHome(username, accountId) ;
+    for(String messageId : messageIds) {
+      Map<String, String> messageTagMap = new HashMap<String, String> () ;
+      if(messageHome.hasNode(messageId)) {
+        Node messageNode = messageHome.getNode(messageId) ;
+        if(messageNode.hasProperty("exo:tags")) {
+          Value[] values = messageNode.getProperty("exo:tags").getValues() ;
+          for(Value value : values) {
+            messageTagMap.put(value.getString(), value.getString()) ;
           }
-          if(!hasTag) {
-            tags[values.length] = tag.getName() ;
-            messageNode.setProperty(Utils.EXO_TAGS, tags) ;
-          } 
-        }else {
-          messageNode.setProperty(Utils.EXO_TAGS, new String[]{tag.getName()}) ;
         }
+        messageTagMap.putAll(tagMap) ;
+        messageNode.setProperty("exo:tags", messageTagMap.values().toArray(new String[]{})) ;
+        messageNode.save() ;
       }
     }
     messageHome.getSession().save() ;
@@ -488,13 +488,13 @@ public class JCRDataStorage implements DataStorage{
   public void removeTag(String username, String accountId, String tagName) throws Exception {
     // remove this tag in all messages
     List<Message> listMessage = getMessageByTag(username, accountId, tagName);
-    for (Message message : listMessage) {
-      List<String> listMess = new ArrayList<String>();
-      List<String> listTag = new ArrayList<String>();
-      listMess.add(message.getId());
-      listTag.add(tagName);
-      removeMessageTag(username, accountId, listMess, listTag);
+    List<String> listTag = new ArrayList<String>();
+    List<String> listMessageId = new ArrayList<String>();
+    for (Message mess : listMessage) {
+      listMessageId.add(mess.getId());
     }
+    listTag.add(tagName);
+    removeMessageTag(username, accountId, listMessageId, listTag);
 
     // remove tag node
     Node tagHomeNode = getTagHome(username, accountId) ;

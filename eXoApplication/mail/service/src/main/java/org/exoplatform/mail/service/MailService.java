@@ -125,7 +125,7 @@ public interface MailService {
     * @param tag
     * @throws Exception
     */
-   public void addTag(String username, String accountId, List<String> messagesId, Tag tag) throws Exception ;
+   public void addTag(String username, String accountId, List<String> messagesId, List<Tag> tag) throws Exception ;
    /**
     * This method should: 
     * 1. Remove the tag from the message

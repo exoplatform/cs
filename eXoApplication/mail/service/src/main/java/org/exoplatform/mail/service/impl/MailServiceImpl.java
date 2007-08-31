@@ -321,7 +321,7 @@ public class MailServiceImpl implements MailService{
     return folders ;
   }
 
-  public void addTag(String username, String accountId, List<String> messagesId, Tag tag)
+  public void addTag(String username, String accountId, List<String> messagesId, List<Tag> tag)
       throws Exception {
     storage_.addTag(username, accountId, messagesId, tag);
   }
