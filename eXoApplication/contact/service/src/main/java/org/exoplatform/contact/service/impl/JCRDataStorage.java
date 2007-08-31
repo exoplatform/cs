@@ -565,14 +565,18 @@ public class JCRDataStorage implements DataStorage {
     tagHomeNode.getSession().save() ;
     Node contactHomeNode = getContactHome(username);
     Node contactNode ;
+    Map<String, String> contactTagMap ;
     for(String contactId : contactIds) {
+      contactTagMap = new HashMap<String, String> () ;
       if(contactHomeNode.hasNode(contactId)) {
         contactNode = contactHomeNode.getNode(contactId) ;
         if(contactNode.hasProperty("exo:tags")){
           Value[] values = contactNode.getProperty("exo:tags").getValues() ;
-          for(Value value : values) { tagMap.put(value.getString(), value.getString()) ; }          
+          for(Value value : values) { contactTagMap.put(value.getString(), value.getString()) ; }          
         }
-        contactNode.setProperty("exo:tags", tagMap.values().toArray(new String[]{})) ;
+        contactTagMap.putAll(tagMap) ;
+        contactNode.setProperty("exo:tags", contactTagMap.values().toArray(new String[]{})) ;
+        contactNode.save() ;
       }
     }
     contactHomeNode.getSession().save() ;
