@@ -462,7 +462,7 @@ public class JCRDataStorage implements DataStorage{
   }
 
 
-  public void removeMessageTag(String username, String accountId, List<String> messageIds, String tagName) 
+  public void removeMessageTag(String username, String accountId, List<String> messageIds, List<String> tagNames) 
   throws Exception {
     Node messageHome = getMessageHome(username, accountId);
     for (String messageId : messageIds) {
@@ -471,9 +471,8 @@ public class JCRDataStorage implements DataStorage{
         if (messageNode.hasProperty(Utils.EXO_TAGS)) {
           Message message = getMessage(messageNode);
           String[] tags = message.getTags();
-
-          List<String> listTags = new ArrayList<String>(Arrays.asList(tags));
-          listTags.remove(tagName);
+          List<String> listTags = new ArrayList<String>(Arrays.asList(tags));         
+          for (String tagName : tagNames) listTags.remove(tagName);
           tags = (String[]) listTags.toArray(new String[listTags.size()]);
 
           message.setTags(tags);
@@ -490,9 +489,11 @@ public class JCRDataStorage implements DataStorage{
     // remove this tag in all messages
     List<Message> listMessage = getMessageByTag(username, accountId, tagName);
     for (Message message : listMessage) {
+      List<String> listMess = new ArrayList<String>();
       List<String> listTag = new ArrayList<String>();
-      listTag.add(message.getId());
-      removeMessageTag(username, accountId, listTag, tagName);
+      listMess.add(message.getId());
+      listTag.add(tagName);
+      removeMessageTag(username, accountId, listMess, listTag);
     }
 
     // remove tag node

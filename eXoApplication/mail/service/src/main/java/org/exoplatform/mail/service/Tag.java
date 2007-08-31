@@ -13,7 +13,11 @@ package org.exoplatform.mail.service;
 public class Tag {
   
   private String name;
+  private String desc;
   
   public String getName() { return name ; }
-  public void setName(String value) { this.name = value ; }  
+  public void setName(String value) { this.name = value ; } 
+  
+  public String getDescription() {return desc ;}
+  public void setDescription(String desc) {this.desc = desc ;}
 }

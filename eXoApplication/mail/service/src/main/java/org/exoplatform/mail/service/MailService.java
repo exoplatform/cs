@@ -133,10 +133,10 @@ public interface MailService {
     * 3. Update or invalidate the cache
     * @param username
     * @param message
-    * @param tag
+    * @param tags
     * @throws Exception
     */
-   public void removeMessageTag(String username, String accountId, List<String> messageId, String tag) throws Exception ;
+   public void removeMessageTag(String username, String accountId, List<String> messageId, List<String> tags) throws Exception ;
   /**
    * This method should:
    * 1. Find all the message that has the tag , remove the tag from the message and save
