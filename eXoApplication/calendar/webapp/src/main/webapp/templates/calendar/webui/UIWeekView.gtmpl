@@ -19,7 +19,7 @@
 				<td class="EventAllday">&nbsp</td>
 				<td class="EventAllday">
 					<div class="EventContainerBoder"
-						<div class="EventContainer">Talk to my cousin on ...</div>
+						<div class="EventContainer" style="height: 22px;">Talk to my cousin on ...</div>
 					</div>
 				</td>
 				<td class="EventAllday">&nbsp</td>
