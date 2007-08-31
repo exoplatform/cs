@@ -4,6 +4,14 @@
  **************************************************************************/
 package org.exoplatform.mail.webui;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.exoplatform.mail.service.MailService;
+import org.exoplatform.mail.service.Tag;
+import org.exoplatform.mail.webui.popup.UIPopupAction;
+import org.exoplatform.mail.webui.popup.UITagForm;
+import org.exoplatform.web.command.handler.GetApplicationHandler;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIContainer;
@@ -76,7 +84,19 @@ public class UIMessageActionBar extends UIContainer {
   }
   static public class AddTagActionListener extends EventListener<UIMessageActionBar> {
     public void execute(Event<UIMessageActionBar> event) throws Exception {
-      UIMessageActionBar uiActionBar = event.getSource() ;      
+      UIMessageActionBar uiActionBar = event.getSource() ; 
+      UIMailPortlet uiPortlet = uiActionBar.getAncestorOfType(UIMailPortlet.class);
+      UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class);
+      UITagForm uiTagForm = uiActionBar.createUIComponent(UITagForm.class, null, null) ;
+      String username = uiPortlet.getCurrentUser();
+      MailService mailService = uiActionBar.getApplicationComponent(MailService.class);
+      UINavigationContainer uiNavigation = uiPortlet.getChild(UINavigationContainer.class) ;
+      UISelectAccount uiSelect = uiNavigation.getChild(UISelectAccount.class) ;
+      String accId = uiSelect.getSelectedValue() ;
+      List<Tag> listTags = mailService.getTags(username, accId);
+      uiTagForm.createCheckBoxTagList(listTags) ;
+      uiPopupAction.activate(uiTagForm, 600, 0, true);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
     }
   }
   static public class MoveMessagesActionListener extends EventListener<UIMessageActionBar> {

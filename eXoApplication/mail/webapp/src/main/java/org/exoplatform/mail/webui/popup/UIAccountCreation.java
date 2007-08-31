@@ -76,11 +76,12 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
   final static public String[] ACT_CHECKGETMAIL = {"CheckGetMail"} ;
   final static public String ACT_CHANGE_TYPE = "ChangeServerType".intern()  ;
   final static public String ACT_CHANGE_SSL =  "ChangeChecked".intern()  ;
+  final static public String FD_INBOX = "Inbox".intern();
   final static public String FD_DRAFTS = "Drafts".intern() ;
   final static public String FD_SENT = "Sent".intern() ;
   final static public String FD_SPAM = "Spam".intern() ;
   final static public String FD_TRASH = "Trash".intern() ;
-  final static public String[] defaultFolders_ =  {FD_DRAFTS, FD_SENT, FD_SPAM, FD_TRASH} ;
+  final static public String[] defaultFolders_ =  {FD_INBOX ,FD_DRAFTS, FD_SENT, FD_SPAM, FD_TRASH} ;
 
   public UIAccountCreation() throws Exception {
     super("UIAccountCreation") ;
