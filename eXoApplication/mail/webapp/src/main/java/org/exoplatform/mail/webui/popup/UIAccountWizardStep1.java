@@ -7,6 +7,7 @@ package org.exoplatform.mail.webui.popup;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.WizardStep;
 import org.exoplatform.webui.form.UIFormInputSet;
@@ -69,6 +70,9 @@ public class UIAccountWizardStep1 extends UIFormInputSet implements WizardStep {
   }
   protected void setAccDescription(String value){
     getUIStringInput(FIELD_ACCDESCRIPTION).setValue(value) ;
+  }
+  public void fillFields(Account acc) {
+    fillFields(acc.getLabel(), acc.getDescription()) ;
   }
    
 }

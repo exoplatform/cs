@@ -7,11 +7,16 @@ package org.exoplatform.mail.webui.popup;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.faces.component.UIInput;
+
 import org.exoplatform.mail.webui.UIFormInputSetWithAction;
+import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.WizardStep;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
+import org.exoplatform.webui.form.UIFormInputSet;
+import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 
@@ -22,7 +27,8 @@ import org.exoplatform.webui.form.UIFormStringInput;
  * Aug 16, 2007  
  */
 
-public class UIAccountWizardStep3 extends UIFormInputSetWithAction  implements WizardStep{
+public class UIAccountWizardStep3 extends UIFormInputSet  implements WizardStep{
+  
   public static final String FIELD_SERVERTYPE = "serverType" ;
   public static final String FIELD_INCOMINGSERVER = "incomingServer" ;
   public static final String FIELD_INCOMINGPORT = "incomeingPort" ;
@@ -110,11 +116,14 @@ public class UIAccountWizardStep3 extends UIFormInputSetWithAction  implements W
   protected void resetFields(){
     reset() ;
   }
-  protected void fillFields(String serverType, String incomingServer,String outgoingServer, String storeFolder){
+  protected void fillFields(String serverType, boolean isSsl, String incomingServer, String popPort,String outgoingServer, String smtpPort, String storeFolder){
     setServerType(serverType) ;
     setIncomingServer(incomingServer) ;
+    setIncomingPort(popPort) ;
     setOutgoingServer(outgoingServer) ;
+    setOutgoingPort(smtpPort) ;
     setStoreFolder(storeFolder) ;
+    setIsSSL(isSsl) ;
   }
   
   protected String getServerType() {
@@ -167,5 +176,17 @@ public class UIAccountWizardStep3 extends UIFormInputSetWithAction  implements W
     options.add(new SelectItemOption<String>(Utils.POP3, Utils.POP3));
     options.add(new SelectItemOption<String>(Utils.IMAP, Utils.IMAP)) ;
     return options ;
+  }
+  public void fillFields(Account acc) {
+    String serverType, incomingServer, popPort, outgoingServer, smtpPort, storeFolder ;
+    boolean isSSL = false ;
+    serverType = acc.getProtocol() ;
+    storeFolder = acc.getFolder() ;
+    isSSL = Boolean.parseBoolean(acc.getServerProperties().get(Utils.SVR_SSL)) ;
+    incomingServer = acc.getServerProperties().get(Utils.SVR_POP_HOST) ;
+    popPort = acc.getServerProperties().get(Utils.SVR_POP_PORT) ;
+    outgoingServer = acc.getServerProperties().get(Utils.SVR_SMTP_HOST) ;
+    smtpPort = acc.getServerProperties().get(Utils.SVR_SMTP_PORT) ;
+    fillFields(serverType, isSSL, incomingServer, popPort, outgoingServer, smtpPort, storeFolder) ;
   }
 }

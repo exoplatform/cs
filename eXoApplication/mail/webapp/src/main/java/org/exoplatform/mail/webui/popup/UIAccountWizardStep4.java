@@ -7,6 +7,7 @@ package org.exoplatform.mail.webui.popup;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.WizardStep;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
@@ -24,7 +25,7 @@ public class UIAccountWizardStep4 extends UIFormInputSet implements WizardStep {
   public static final String FIELD_USERNAME = "userName" ;
   public static final String FIELD_PASSWORD = "password" ;
   public static final String FIELD_SAVEPASSWORD = "savePassword" ;
-  
+
   private List<String> infoMessage_ = new ArrayList<String>() ;
   private boolean isValid_ = false ;
   public UIAccountWizardStep4(String id) throws Exception {
@@ -70,19 +71,23 @@ public class UIAccountWizardStep4 extends UIFormInputSet implements WizardStep {
   protected void setUserName(String value) {
     getUIStringInput(FIELD_USERNAME).setValue(value) ;
   }
-  
+
   protected String getPassword() {
     return getUIStringInput(FIELD_PASSWORD).getValue() ;
   }
   protected void setPassword(String value) {
     getUIStringInput(FIELD_PASSWORD).setValue(value) ;
   }
-  
+
   protected boolean getIsSavePass() {
     return getUIFormCheckBoxInput(FIELD_SAVEPASSWORD).isChecked() ;
   }
   protected void setIsSavePass(boolean value) {
     getUIFormCheckBoxInput(FIELD_SAVEPASSWORD).setChecked(value) ;
+  }
+
+  public void fillFields(Account acc) {
+    fillFields(acc.getUserName(), acc.getPassword()) ;
   }
 
 }

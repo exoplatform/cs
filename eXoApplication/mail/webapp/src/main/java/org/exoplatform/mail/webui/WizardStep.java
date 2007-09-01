@@ -6,6 +6,8 @@ package org.exoplatform.mail.webui;
 
 import java.util.List;
 
+import org.exoplatform.mail.service.Account;
+
 /**
  * Created by The eXo Platform SARL
  * Author : Pham Tuan
@@ -15,4 +17,5 @@ import java.util.List;
 public interface WizardStep {
   public List<String> getInfoMessage() ;
   public boolean isFieldsValid() ;
+  public void fillFields(Account acc) ;
 }

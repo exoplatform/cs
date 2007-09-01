@@ -7,6 +7,7 @@ package org.exoplatform.mail.webui.popup;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.WizardStep;
 import org.exoplatform.webui.form.UIFormInputSet;
@@ -50,10 +51,11 @@ public class UIAccountWizardStep2 extends UIFormInputSet implements WizardStep{
   protected void resetFields(){
     reset() ;
   }
-  protected void fillFields(String outgoingName, String emailAddress, String emailReply){
+  protected void fillFields(String outgoingName, String emailAddress, String emailReply, String signature){
     setOutgoingName(outgoingName);
     setEmailAddress(emailAddress) ;
     setEmailReply(emailReply) ;
+    setSignature(signature) ;
   }
   
   public boolean isFieldsValid() {
@@ -90,6 +92,9 @@ public class UIAccountWizardStep2 extends UIFormInputSet implements WizardStep{
   }
   protected String getSignature() {
     return getUIStringInput(FIELD_SIGNATURE).getValue() ;
+  }
+  public void fillFields(Account acc) {
+   fillFields(acc.getUserDisplayName(), acc.getEmailAddress(), acc.getEmailReplyAddress(), acc.getSignature()) ;
   }
 
 

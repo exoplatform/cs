@@ -64,22 +64,19 @@
 						      <%                
 		  						      List children  = uicomponent.getChildren();
 		  						      int numberSteps = uicomponent.getNumberSteps();    
-		  						      String actionLink = "#";    					     	
-												int i = 1;				     	  						     			       	
-								        while(i <= numberSteps) {
-								          int j = i;
-								          if(j < 1){
-								            i++;
-								            continue;
-								          }
-								          if(i != step) {
-								            actionLink = uicomponent.event("ViewStep"+String.valueOf(i));
-								            print "<a href=\"$actionLink\">" ;
-								          } else print "<a href=\"#\" class=\"SelectedStep\">" ;
-								          print String.valueOf(j);
-								          println "</a>";
-								          i++;
-								        }
+		  						      String actionLink = "#";  
+		  						      i = 1 ;
+		  						      for(c in children) {
+		  						      	actionLink = "#";  
+			  						       if(i != uicomponent.getCurrentStep()) { 
+			  						       	actionLink = uicomponent.event("ViewStep"+String.valueOf(i)); 
+			  						       }
+			  						       print "<a href=\"$actionLink\">" ;
+			  						       print i ;
+			  						       println "</a>";
+			  						       i++ ;
+		  						      }  		 			     	
+												 
 									  	%>    	        
 					    	</div>
 					    <%}%>
