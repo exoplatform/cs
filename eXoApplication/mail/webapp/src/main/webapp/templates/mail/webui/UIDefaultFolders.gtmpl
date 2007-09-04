@@ -63,7 +63,9 @@
 			  cssClass = "SelectedLabel" ;
 			}
 		%>
-		<a href="$actionLink"  class="Icon Folder $icon $cssClass">$name<span class="MailQuantity">($unreadMess)</span></a>
+		<a href="$actionLink"  class="Icon Folder $icon $cssClass">$name
+			<% if(unreadMess > 0) { print "<span class=\"MailQuantity\">($unreadMess)</span>"}%>
+		</a>
 		<%}%>
 	</div>
 </div>

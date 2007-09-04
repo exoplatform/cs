@@ -7,16 +7,12 @@ package org.exoplatform.mail.webui.popup;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.faces.component.UIInput;
-
-import org.exoplatform.mail.webui.UIFormInputSetWithAction;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.WizardStep;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormInputSet;
-import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 
@@ -36,11 +32,14 @@ public class UIAccountWizardStep3 extends UIFormInputSet  implements WizardStep{
   public static final String FIELD_OUTGOINGPORT = "outgoingPort" ;
   public static final String FIELD_USESSL = "isSsl".intern() ;
   public static final String FIELD_STOREFOLDER = "storeFolder" ;
+  
+  public static final String DEFAULT_POP_SERVER = "pop.gmail.com".intern() ;
+  public static final String DEFAULT_SMTP_SERVER = "smtp.gmail.com".intern() ;
   public static final String DEFAULT_POP_PORT = "110".intern() ;
   public static final String DEFAULT_SMTP_PORT = "25".intern() ;
   public static final String DEFAULT_POPSSL_PORT = "995".intern() ;
   public static final String DEFAULT_SMTPSSL_PORT = "465".intern() ;
-  
+  public static final String DEFAULT_SERVER_FOLDER = "Inbox".intern() ;
   public static final String DEFAULT_IMAP_PORT = "143".intern() ;
   public static final String DEFAULT_IMAPSSL_PORT = "993".intern() ;
   
@@ -63,6 +62,7 @@ public class UIAccountWizardStep3 extends UIFormInputSet  implements WizardStep{
     addChild(new UIFormStringInput(FIELD_OUTGOINGPORT, null, null)) ;
     addChild(new UIFormStringInput(FIELD_STOREFOLDER, null,null)) ;
     setDefaultValue(uiSelect.getValue(), uiCheckBox.isChecked()) ;
+    resetFields() ;
     infoMessage_.clear() ;
     infoMessage_.add("UIAccountWizardStep3.info.label1") ;
     infoMessage_.add("UIAccountWizardStep3.info.label2") ;
@@ -115,6 +115,11 @@ public class UIAccountWizardStep3 extends UIFormInputSet  implements WizardStep{
   
   protected void resetFields(){
     reset() ;
+    setIncomingServer(DEFAULT_POP_SERVER) ;
+    setIncomingPort(DEFAULT_POP_PORT) ;
+    setOutgoingServer(DEFAULT_SMTP_SERVER) ;
+    setOutgoingPort(DEFAULT_SMTP_PORT) ;
+    setStoreFolder(DEFAULT_SERVER_FOLDER) ;
   }
   protected void fillFields(String serverType, boolean isSsl, String incomingServer, String popPort,String outgoingServer, String smtpPort, String storeFolder){
     setServerType(serverType) ;

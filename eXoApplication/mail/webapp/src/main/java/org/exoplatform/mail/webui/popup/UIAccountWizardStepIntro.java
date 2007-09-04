@@ -12,7 +12,6 @@ import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.WizardStep;
 import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.services.jcr.ext.access.SetAccessControlContextAction;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.form.UIFormInputSet;
 import org.exoplatform.webui.form.UIFormSelectBox;
@@ -31,10 +30,9 @@ public class UIAccountWizardStepIntro extends UIFormInputSet implements WizardSt
   public static final String FIELD_ACCOUNTS = "acoounts" ;
   private boolean isValid_ = false ;
   private List<String> infoMessage_ = new ArrayList<String>() ;
-  
+
   public UIAccountWizardStepIntro(String id) throws Exception {
     setId(id) ;
-    
     List<SelectItemOption<String>> folderOptions = new ArrayList<SelectItemOption<String>>() ;
     folderOptions.add(new SelectItemOption<String>(ITEM_ADDNEW, ITEM_ADDNEW)) ;
     folderOptions.add(new SelectItemOption<String>(ITEM_EDIT, ITEM_EDIT)) ;
@@ -49,7 +47,7 @@ public class UIAccountWizardStepIntro extends UIFormInputSet implements WizardSt
   public List<String> getInfoMessage() {
     return infoMessage_ ;
   } 
-  
+
   public List<SelectItemOption<String>> getAccounts() throws Exception  {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     if(!isCreateNew()) {
@@ -61,17 +59,18 @@ public class UIAccountWizardStepIntro extends UIFormInputSet implements WizardSt
     }
     return options ;
   }
-  
+
   protected void lockFields(boolean isLock) {
     boolean isEditable = !isLock ;
-    
+    getUIFormSelectBox(FIELD_SELECT).setEnable(isEditable) ;
+    getUIFormSelectBox(FIELD_ACCOUNTS).setEnable(isEditable) ;
   }
   protected void resetFields(){
     reset() ;
   }
-  
+
   public boolean isFieldsValid() {
-    return true ;
+    return !Utils.isEmptyField(getSelectedAccount()) || isCreateNew() ;
   }
   protected void fieldsValid(boolean isValid) {
     isValid_ = isValid ;
@@ -85,14 +84,15 @@ public class UIAccountWizardStepIntro extends UIFormInputSet implements WizardSt
   protected void setSelectedAccount(String value){
     getUIFormSelectBox(FIELD_ACCOUNTS).setValue(value) ;
   }
+
   protected boolean isCreateNew() {return getSelectType().equals(ITEM_ADDNEW) ;}
   protected String getSelectType() {
     return getUIFormSelectBox(FIELD_SELECT).getValue() ;
   }
   public void fillFields(Account acc) {
     // TODO Auto-generated method stub
-  
+
   }
- 
-   
+
+
 }

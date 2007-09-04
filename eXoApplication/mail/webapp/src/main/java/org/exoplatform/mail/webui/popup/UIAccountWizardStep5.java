@@ -40,7 +40,7 @@ public class UIAccountWizardStep5 extends UIFormInputSet implements WizardStep {
   protected void fillFields(String accname, String accOutgoingName, 
       String email, String serverName, String serverType, String storeFolder) {
     setFieldAccName(accname) ;
-    setFieldAccName(accOutgoingName) ;
+    setFieldAccDisplayName(accOutgoingName) ;
     setFieldAccMail(email) ;
     setFieldAccPOP(serverName) ;
     setFieldAccServerType(serverType) ;

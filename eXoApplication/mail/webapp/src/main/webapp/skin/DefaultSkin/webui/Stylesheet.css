@@ -106,6 +106,11 @@
 	border: 1px solid #A5A5A5;
 }
 
+.UIMailPortlet .UISelectAccount .UIRightClickPopupMenu {
+	 top :5px;
+	 left:100px ;
+}
+
 .UIMailPortlet .UISelectAccount .ItemSelectorContainer {
 	width: 194px;
 	float: left;

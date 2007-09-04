@@ -2,7 +2,6 @@
 	import org.exoplatform.mail.webui.WizardStep ; 
   def rcontext = _ctx.getRequestContext() ;
 	rcontext.getJavascriptManager().importJavascript('eXo.webui.UIHorizontalTabs') ;
-	int step = uicomponent.getSelectedStep();
 	String compName = uicomponent.getName() ;
 %>
 <div class="$compName UIAccountCreationWizard">
@@ -65,13 +64,16 @@
 		  						      List children  = uicomponent.getChildren();
 		  						      int numberSteps = uicomponent.getNumberSteps();    
 		  						      String actionLink = "#";  
+		  						      String cssClass = "" ; 
 		  						      i = 1 ;
 		  						      for(c in children) {
 		  						      	actionLink = "#";  
+		  						      	cssClass = "SelectedStep" ; 
 			  						       if(i != uicomponent.getCurrentStep()) { 
-			  						       	actionLink = uicomponent.event("ViewStep"+String.valueOf(i)); 
+			  						       	actionLink = uicomponent.event("ViewStep", String.valueOf(i)); 
+			  						       	cssClass = "";
 			  						       }
-			  						       print "<a href=\"$actionLink\">" ;
+			  						       print "<a href=\"$actionLink\" class=\"$cssClass\" >"  ;
 			  						       print i ;
 			  						       println "</a>";
 			  						       i++ ;
