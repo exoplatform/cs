@@ -210,7 +210,7 @@ public class JCRDataStorage implements DataStorage{
   public void removeAccount(String username, Account account) throws Exception {
     Node accountHome = getMailHomeNode(username) ;
     // gets the specified account, and removes it
-    accountHome.getNode(account.getUserDisplayName()).remove();    
+    accountHome.getNode(account.getId()).remove();    
     accountHome.getSession().save() ;
   }
 
