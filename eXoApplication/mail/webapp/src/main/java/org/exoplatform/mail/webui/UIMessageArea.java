@@ -20,7 +20,7 @@ import org.exoplatform.webui.core.UIContainer;
 public class UIMessageArea extends UIContainer  {
   
   public UIMessageArea() throws Exception {
-    addChild(UIMessageActionBar.class, null, null) ;
+    //addChild(UIMessageActionBar.class, null, null) ;
     addChild(UIMessageList.class, null, null) ;
     addChild(UIMessagePreview.class, null, null) ;
   }

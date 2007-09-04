@@ -12,6 +12,9 @@ import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.MessageHeader;
+import org.exoplatform.mail.service.Tag;
+import org.exoplatform.mail.webui.popup.UIPopupAction;
+import org.exoplatform.mail.webui.popup.UITagForm;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIComponent;
@@ -30,7 +33,18 @@ import org.exoplatform.webui.event.EventListener;
     events = {
         @EventConfig(listeners = UIMessageList.SelectMessageActionListener.class),
         @EventConfig(listeners = UIMessageList.AddStarActionListener.class),
-        @EventConfig(listeners = UIMessageList.RemoveStarActionListener.class)
+        @EventConfig(listeners = UIMessageList.RemoveStarActionListener.class),
+        @EventConfig(listeners = UIMessageList.ReplyActionListener.class),
+        @EventConfig(listeners = UIMessageList.ReplyAllActionListener.class),
+        @EventConfig(listeners = UIMessageList.ForwardActionListener.class), 
+        @EventConfig(listeners = UIMessageList.MarkAsReadActionListener.class),
+        @EventConfig(listeners = UIMessageList.MarkAsUnReadActionListener.class),
+        @EventConfig(listeners = UIMessageList.AddStarActionListener.class),
+        @EventConfig(listeners = UIMessageList.RemoveStarActionListener.class),
+        @EventConfig(listeners = UIMessageList.AddTagActionListener.class),
+        @EventConfig(listeners = UIMessageList.MoveMessagesActionListener.class),
+        @EventConfig(listeners = UIMessageList.ImportActionListener.class),
+        @EventConfig(listeners = UIMessageList.ExportActionListener.class)
     }
 )
 
@@ -79,6 +93,72 @@ public class UIMessageList extends UIComponent {
   static public class RemoveStarActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
       String path = event.getRequestContext().getRequestParameter(OBJECTID) ;      
+    }
+  }
+  
+  static  public class ReplyActionListener extends EventListener<UIMessageList> {    
+    public void execute(Event<UIMessageList> event) throws Exception {
+      UIMessageList uiActionBar = event.getSource() ;      
+    }
+  }
+
+  static public class ReplyAllActionListener extends EventListener<UIMessageList> {
+    public void execute(Event<UIMessageList> event) throws Exception {
+      UIMessageList uiActionBar = event.getSource() ;      
+    }
+  } 
+     
+  static public class ForwardActionListener extends EventListener<UIMessageList> {
+    public void execute(Event<UIMessageList> event) throws Exception {
+      UIMessageList uiActionBar = event.getSource() ;      
+    }
+  }  
+  
+  static public class MarkAsReadActionListener extends EventListener<UIMessageList> {
+    public void execute(Event<UIMessageList> event) throws Exception {
+      UIMessageList uiActionBar = event.getSource() ;      
+    }
+  }
+  
+  static public class MarkAsUnReadActionListener extends EventListener<UIMessageList> {
+    public void execute(Event<UIMessageList> event) throws Exception {
+      UIMessageList uiActionBar = event.getSource() ;      
+    }
+  }
+
+  static public class AddTagActionListener extends EventListener<UIMessageList> {
+    public void execute(Event<UIMessageList> event) throws Exception {
+      UIMessageList uiActionBar = event.getSource() ; 
+      UIMailPortlet uiPortlet = uiActionBar.getAncestorOfType(UIMailPortlet.class);
+      UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class);
+      UITagForm uiTagForm = uiActionBar.createUIComponent(UITagForm.class, null, null) ;
+      String username = uiPortlet.getCurrentUser();
+      MailService mailService = uiActionBar.getApplicationComponent(MailService.class);
+      UINavigationContainer uiNavigation = uiPortlet.getChild(UINavigationContainer.class) ;
+      UISelectAccount uiSelect = uiNavigation.getChild(UISelectAccount.class) ;
+      String accId = uiSelect.getSelectedValue() ;
+      List<Tag> listTags = mailService.getTags(username, accId);
+      uiTagForm.createCheckBoxTagList(listTags) ;
+      uiPopupAction.activate(uiTagForm, 600, 0, true);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
+    }
+  }
+  
+  static public class MoveMessagesActionListener extends EventListener<UIMessageList> {
+    public void execute(Event<UIMessageList> event) throws Exception {
+      UIMessageList uiActionBar = event.getSource() ;      
+    }
+  }
+  
+  static public class ImportActionListener extends EventListener<UIMessageList> {
+    public void execute(Event<UIMessageList> event) throws Exception {
+      UIMessageList uiActionBar = event.getSource() ;      
+    }
+  }
+  
+  static public class ExportActionListener extends EventListener<UIMessageList> {
+    public void execute(Event<UIMessageList> event) throws Exception {
+      UIMessageList uiActionBar = event.getSource() ;      
     }
   }
 }
