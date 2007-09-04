@@ -11,6 +11,8 @@ import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Utils;
+import org.exoplatform.mail.webui.UIMailPortlet;
+import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -92,13 +94,18 @@ public class UIAccountList extends UIGrid  implements UIPopupComponent{
       System.out.println("=====>>> DeleteActionListener");
       UIAccountList uiAccountList = event.getSource() ;
       String accId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      System.out.println("accId " + accId);
       UIApplication uiApp = uiAccountList.getAncestorOfType(UIApplication.class) ;
       MailService mailSvr = uiAccountList.getApplicationComponent(MailService.class) ;
       String username = event.getRequestContext().getRemoteUser() ;
+      UIMailPortlet uiPortlet = uiAccountList.getAncestorOfType(UIMailPortlet.class) ;
       Account account = mailSvr.getAccountById(username, accId) ;
       try {
         mailSvr.removeAccount(username, account) ;
+        UISelectAccount uiSelectAccount = uiPortlet.findFirstComponentOfType(UISelectAccount.class) ;
+        uiSelectAccount.refreshItems() ;
+        uiAccountList.updateGrid() ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiAccountList.getAncestorOfType(UIPopupAction.class)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiSelectAccount) ;
       } catch (Exception e) {
         uiApp.addMessage(new ApplicationMessage("UIAccountList.msg.remove-accout-error", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;

@@ -54,7 +54,7 @@ public class UIAccountWizardStepIntro extends UIFormInputSet implements WizardSt
       MailService mailSvr = getApplicationComponent(MailService.class) ;
       String username = Util.getPortalRequestContext().getRemoteUser() ;
       for(Account acc : mailSvr.getAccounts(username)) {
-        options.add(new SelectItemOption<String>(acc.getLabel(), acc.getId())) ;
+        options.add(new SelectItemOption<String>(acc.getUserDisplayName(), acc.getId())) ;
       }  
     }
     return options ;
