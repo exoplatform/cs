@@ -20,6 +20,8 @@ import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.form.UIForm;
+import org.exoplatform.webui.form.UIFormCheckBoxInput;
 
 /**
  * Created by The eXo Platform SARL
@@ -48,7 +50,7 @@ import org.exoplatform.webui.event.EventListener;
     }
 )
 
-public class UIMessageList extends UIComponent {
+public class UIMessageList extends UIForm {
   private String selectedMessageId_ = null ;
   private String selectedFolderId_ = null ;
 
@@ -60,6 +62,16 @@ public class UIMessageList extends UIComponent {
   protected String getSelectedFolderId() {return selectedFolderId_ ;}
   protected void setSelectedFolderId(String folderId) {selectedFolderId_ = folderId ;}
   
+  public void initCheckboxForMessages()throws Exception {
+    List<Message> messageList = getMessageByFolder();
+    for (Message msg : messageList) {
+      addChild(new UIFormCheckBoxInput<Boolean>(msg.getId(), msg.getId(), null));
+    }
+  }   
+  
+  public void removeCheckboxForMessages() throws Exception {
+    //TODO: remove all checkboxs for message list before change folder
+  }
   
   protected List<Message> getMessageByFolder() throws Exception {
     List<Message> messageList = new ArrayList<Message>() ;
@@ -80,11 +92,13 @@ public class UIMessageList extends UIComponent {
     }
     return messageList ;
   }
+  
   static public class SelectMessageActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
       String path = event.getRequestContext().getRequestParameter(OBJECTID) ;      
     }
   }
+  
   static public class AddStarActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
       String path = event.getRequestContext().getRequestParameter(OBJECTID) ;      
