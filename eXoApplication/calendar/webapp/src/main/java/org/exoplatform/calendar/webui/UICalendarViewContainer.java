@@ -20,11 +20,11 @@ import org.exoplatform.webui.core.UIComponent;
 )
 public class UICalendarViewContainer extends UIContainer  {
   public UICalendarViewContainer() throws Exception {
-    //addChild(UIDayView.class, null, null) ;
+    addChild(UIDayView.class, null, null) ;
     //addChild(UIWeekView.class, null, null) ;
     //addChild(UIMonthView.class, null, null) ;
     //addChild(UIYearView.class, null, null) ;
-    addChild(UIListView.class, null, null).setRendered(true) ;
-    addChild(UIPreview.class, null, null).setRendered(true) ;
+    //addChild(UIListView.class, null, null).setRendered(true) ;
+    //addChild(UIPreview.class, null, null).setRendered(true) ;
   }  
 }
