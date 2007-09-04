@@ -511,7 +511,7 @@
 	overflow: auto;
 }
 
-.UIListView .ListBar {
+.ListBar {
 	background: url('background/TitleBarBG1x26.gif') repeat-x ;	
 	height: 26px;
 	border-left: 1px solid #c7c7c7;
@@ -519,55 +519,57 @@
 	width: 99.2%;
 }
 
-.UIListView .ListBar .Refresh16x16Icon {
+.ListBar .Refresh16x16Icon {
 	float: left;
 	margin: 3px 4px 0px 8px;
 	width: 18px; height: 18px;
 }
-.UIListView .ListBar select {
+.ListBar select {
 	width: 150px; height: 18px;
 	font-size: 11px;
 }
 
-.UIListView .ListBar a {
+.ListBar a {
 	color: #000000;
 }
 
-.UIListView .ListBar a:hover {
+.ListBar a:hover {
 	color: #058ee6;
 }
-.UIListView .ListBar .Label {
+.ListBar .Label {
 	float: right;
 	margin: 7px 4px 0px 3px;
 }
 
 
-.UIListView .ListBar .AddCategoryIcon {
+.ListBar .AddCategoryIcon {
 	background: url('skinIcons/16x16/icons/AddCategory.gif') no-repeat ;
 	float: right;
 	width: 16px; height: 16px;
 	margin: 5px 6px 0px 3px;
 }
 
-.UIListView .ListView {
-	padding-left: 1px;
-}
-
-.UIListView .ListBar .EventCategory {
+.ListBar .EventCategory {
 	float: right;
 	margin: 3px 6px 0px 3px;
 }
 
-.UIListView .ListView table {
+.UIListView {
+	padding-left: 1px;
+}
+
+
+
+.UIListView  table {
 	width: 99.4%;
 	background-color: #ffffff;
 }
 
-.UIListView .ListView td {
+.UIListView  td {
 	border-top: none;
 }
 
-.UIListView .ListView .UIGrid th {
+.UIListView .UIGrid th {
 	background: url('background/TitleBarBG1x20.gif') repeat-x ;	
   height: 20px;
 	border-right: 1px solid #c7c7c7;
@@ -953,6 +955,9 @@
 .UICalendarPortlet .TitleBar {
   background: url('background/TitleBarBG1x23.gif') repeat-x ;	
   height: 23px;
+  line-height: 23px ;
+  text-align: center ;
+  font-weight: bold ;
 }
 
 .UICalendarPortlet .ResizeReadingPane {

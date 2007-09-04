@@ -1,4 +1,3 @@
-<div class="UIListView">
 <%uiform.begin()%>
 	<div class="ListBar">
 		<a href="<%=uicomponent.event("AddEvent")%>" class="ControlButton">
@@ -20,7 +19,7 @@
 		<div style="clear: both"><span></span></div>
 	</div>
 
-	<div class="ListView">
+	<div class="UIListView">
 		<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
   		<thead>
   			<tr>
@@ -49,6 +48,5 @@
   	   	</tbody>
 		</table>
 	</div>
-	<%uiform.end()%>
-</div>
+<%uiform.end()%>
 <div class="ResizeReadingPane"><span></span></div>

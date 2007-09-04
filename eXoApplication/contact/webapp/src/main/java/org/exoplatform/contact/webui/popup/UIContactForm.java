@@ -163,70 +163,70 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
         uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.fullname-required", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ; 
-      } else {
-        contact.setFullName(profileTab.getFieldFullNameValue());
-        contact.setFirstName(profileTab.getFieldFirstNameValue());
-        contact.setMiddleName(profileTab.getFieldMiddleNameValue());
-        contact.setLastName(profileTab.getFieldLastNameValue());
-        contact.setNickName(profileTab.getFieldNickNameValue());
-        contact.setJobTitle(profileTab.getFieldJobNameValue());
-        contact.setEmailAddress(profileTab.getFieldEmailValue());
-        
-        contact.setWorkAddress(uiForm.getUIStringInput(FIELD_WORKADDRESS_INPUT).getValue());
-        contact.setWorkCity(uiForm.getUIStringInput(FIELD_WORKCITY_INPUT).getValue());
-        contact.setWorkStateProvince(uiForm.getUIStringInput(FIELD_WORKSTATE_INPUT).getValue());
-        contact.setWorkPostalCode(uiForm.getUIStringInput(FIELD_WORKPOSTALCODE_INPUT).getValue());
-        contact.setWorkCountry(uiForm.getUIStringInput(FIELD_WORKCOUNTRY_INPUT).getValue());
-        contact.setWorkPhone1(uiForm.getUIStringInput(FIELD_WORKPHONE1_INPUT).getValue());
-        contact.setWorkPhone2(uiForm.getUIStringInput(FIELD_WORKPHONE2_INPUT).getValue());
-        contact.setWorkFax(uiForm.getUIStringInput(FIELD_WORKFAX_INPUT).getValue());
-        contact.setMobilePhone(uiForm.getUIStringInput(FIELD_WORKMOBILEPHONE_INPUT).getValue());
-        contact.setWebPage(uiForm.getUIStringInput(FIELD_WORKWEBPAGE_INPUT).getValue());
+      } 
+      contact.setFullName(profileTab.getFieldFullNameValue());
+      contact.setFirstName(profileTab.getFieldFirstNameValue());
+      contact.setMiddleName(profileTab.getFieldMiddleNameValue());
+      contact.setLastName(profileTab.getFieldLastNameValue());
+      contact.setNickName(profileTab.getFieldNickNameValue());
+      contact.setJobTitle(profileTab.getFieldJobNameValue());
+      contact.setEmailAddress(profileTab.getFieldEmailValue());
       
-        contact.setExoId(uiForm.getUIStringInput(FIELD_EXOCHAT_INPUT).getValue());
-        contact.setGoogleId(uiForm.getUIStringInput(FIELD_GOOGLE_INPUT).getValue());
-        contact.setMsnId(uiForm.getUIStringInput(FIELD_MSN_INPUT).getValue());
-        contact.setAolId(uiForm.getUIStringInput(FIELD_AOLAIM_INPUT).getValue());
-        contact.setYahooId(uiForm.getUIStringInput(FIELD_YAHOO_INPUT).getValue());
-        contact.setIcrId(uiForm.getUIStringInput(FIELD_ICR_INPUT).getValue() );
-        contact.setSkypeId(uiForm.getUIStringInput(FIELD_SKYPE_INPUT).getValue());
-        contact.setIcqId(uiForm.getUIStringInput(FIELD_ICQ_INPUT).getValue());
-        
-        contact.setHomeAddress(uiForm.getUIStringInput(FIELD_HOMEADDRESS_INPUT).getValue());
-        contact.setHomeCity(uiForm.getUIStringInput(FIELD_HOMECITY_INPUT).getValue());
-        contact.setHomeState_province(uiForm.getUIStringInput(FIELD_HOMESTATE_INPUT).getValue());
-        contact.setHomePostalCode(uiForm.getUIStringInput(FIELD_HOMEPOSTALCODE_INPUT).getValue());
-        contact.setHomeCountry(uiForm.getUIStringInput(FIELD_HOMECOUNTRY_INPUT).getValue());
-        contact.setHomePhone1(uiForm.getUIStringInput(FIELD_HOMEPHONE1_INPUT).getValue() );
-        contact.setHomePhone2(uiForm.getUIStringInput(FIELD_HOMEPHONE2_INPUT).getValue());
-        contact.setHomeFax(uiForm.getUIStringInput(FIELD_HOMEFAX_INPUT).getValue());
-        contact.setPersonalSite(uiForm.getUIStringInput(FIELD_PERSONALSITE_INPUT).getValue());
-        contact.setNote(uiForm.getUIFormTextAreaInput(FIELD_NOTE_INPUT).getValue());
-   
-        ContactService contactService = uiForm.getApplicationComponent(ContactService.class);  
-        String username = Util.getPortalRequestContext().getRemoteUser() ;
-        
-        StringBuffer sharedGroups = new StringBuffer("");
-        for (int i = 0; i < FIELD_SHAREDCONTACT_BOX.length; i ++) {
-          if (uiForm.getUIFormCheckBoxInput(FIELD_SHAREDCONTACT_BOX[i]).isChecked()) {
-            sharedGroups.append(FIELD_SHAREDCONTACT_BOX[i] + ",");
-          }
+      contact.setWorkAddress(uiForm.getUIStringInput(FIELD_WORKADDRESS_INPUT).getValue());
+      contact.setWorkCity(uiForm.getUIStringInput(FIELD_WORKCITY_INPUT).getValue());
+      contact.setWorkStateProvince(uiForm.getUIStringInput(FIELD_WORKSTATE_INPUT).getValue());
+      contact.setWorkPostalCode(uiForm.getUIStringInput(FIELD_WORKPOSTALCODE_INPUT).getValue());
+      contact.setWorkCountry(uiForm.getUIStringInput(FIELD_WORKCOUNTRY_INPUT).getValue());
+      contact.setWorkPhone1(uiForm.getUIStringInput(FIELD_WORKPHONE1_INPUT).getValue());
+      contact.setWorkPhone2(uiForm.getUIStringInput(FIELD_WORKPHONE2_INPUT).getValue());
+      contact.setWorkFax(uiForm.getUIStringInput(FIELD_WORKFAX_INPUT).getValue());
+      contact.setMobilePhone(uiForm.getUIStringInput(FIELD_WORKMOBILEPHONE_INPUT).getValue());
+      contact.setWebPage(uiForm.getUIStringInput(FIELD_WORKWEBPAGE_INPUT).getValue());
+    
+      contact.setExoId(uiForm.getUIStringInput(FIELD_EXOCHAT_INPUT).getValue());
+      contact.setGoogleId(uiForm.getUIStringInput(FIELD_GOOGLE_INPUT).getValue());
+      contact.setMsnId(uiForm.getUIStringInput(FIELD_MSN_INPUT).getValue());
+      contact.setAolId(uiForm.getUIStringInput(FIELD_AOLAIM_INPUT).getValue());
+      contact.setYahooId(uiForm.getUIStringInput(FIELD_YAHOO_INPUT).getValue());
+      contact.setIcrId(uiForm.getUIStringInput(FIELD_ICR_INPUT).getValue() );
+      contact.setSkypeId(uiForm.getUIStringInput(FIELD_SKYPE_INPUT).getValue());
+      contact.setIcqId(uiForm.getUIStringInput(FIELD_ICQ_INPUT).getValue());
+      
+      contact.setHomeAddress(uiForm.getUIStringInput(FIELD_HOMEADDRESS_INPUT).getValue());
+      contact.setHomeCity(uiForm.getUIStringInput(FIELD_HOMECITY_INPUT).getValue());
+      contact.setHomeState_province(uiForm.getUIStringInput(FIELD_HOMESTATE_INPUT).getValue());
+      contact.setHomePostalCode(uiForm.getUIStringInput(FIELD_HOMEPOSTALCODE_INPUT).getValue());
+      contact.setHomeCountry(uiForm.getUIStringInput(FIELD_HOMECOUNTRY_INPUT).getValue());
+      contact.setHomePhone1(uiForm.getUIStringInput(FIELD_HOMEPHONE1_INPUT).getValue() );
+      contact.setHomePhone2(uiForm.getUIStringInput(FIELD_HOMEPHONE2_INPUT).getValue());
+      contact.setHomeFax(uiForm.getUIStringInput(FIELD_HOMEFAX_INPUT).getValue());
+      contact.setPersonalSite(uiForm.getUIStringInput(FIELD_PERSONALSITE_INPUT).getValue());
+      contact.setNote(uiForm.getUIFormTextAreaInput(FIELD_NOTE_INPUT).getValue());
+ 
+      ContactService contactService = uiForm.getApplicationComponent(ContactService.class);  
+      String username = Util.getPortalRequestContext().getRemoteUser() ;
+      
+      StringBuffer sharedGroups = new StringBuffer("");
+      for (int i = 0; i < FIELD_SHAREDCONTACT_BOX.length; i ++) {
+        if (uiForm.getUIFormCheckBoxInput(FIELD_SHAREDCONTACT_BOX[i]).isChecked()) {
+          sharedGroups.append(FIELD_SHAREDCONTACT_BOX[i] + ",");
         }
-        if (sharedGroups.toString().equals("")) {
-          UIPopupContainer popupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
-          UICategorySelect uiCategorySelect = popupContainer.getChild(UICategorySelect.class); 
-          
-          String categoryId = uiCategorySelect.getSelectedCategory();
-          contact.setCategories(new String[] { categoryId });
-          contactService.saveContact(username, contact, true);
-        } else {
-          contact.setCategories(sharedGroups.toString().split(","));
-          contactService.saveSharedContact(contact, true);
-        }
-        UIContactPortlet contactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
-        contactPortlet.cancelAction() ;  
-        event.getRequestContext().addUIComponentToUpdateByAjax(contactPortlet) ;
-      }  
+      }
+      if (sharedGroups.toString().equals("")) {
+        UIPopupContainer popupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
+        UICategorySelect uiCategorySelect = popupContainer.getChild(UICategorySelect.class); 
+        
+        String categoryId = uiCategorySelect.getSelectedCategory();
+        contact.setCategories(new String[] { categoryId });
+        contactService.saveContact(username, contact, true);
+      } else {
+        contact.setCategories(sharedGroups.toString().split(","));
+        contactService.saveSharedContact(contact, true);
+      }
+      UIContactPortlet contactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
+      contactPortlet.cancelAction() ;  
+      event.getRequestContext().addUIComponentToUpdateByAjax(contactPortlet) ;
+       
     }
   }
   

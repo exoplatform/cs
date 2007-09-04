@@ -7,7 +7,8 @@ package org.exoplatform.calendar.webui;
 import java.util.List;
 
 import org.exoplatform.webui.config.annotation.ComponentConfig;
-import org.exoplatform.webui.core.UIComponent;
+import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 
 /**
  * Created by The eXo Platform SARL
@@ -16,12 +17,22 @@ import org.exoplatform.webui.core.UIComponent;
  * Aus 01, 2007 2:48:18 PM 
  */
 @ComponentConfig(
-    template = "app:/templates/calendar/webui/UIDayView.gtmpl"
+    lifecycle = UIFormLifecycle.class,
+    template = "app:/templates/calendar/webui/UIDayView.gtmpl", 
+    events = {
+      @EventConfig(listeners = UICalendarView.RefreshActionListener.class),
+      @EventConfig(listeners = UICalendarView.AddEventActionListener.class),      
+      @EventConfig(listeners = UICalendarView.DeleteEventActionListener.class),
+      @EventConfig(listeners = UICalendarView.ChangeCategoryActionListener.class), 
+      @EventConfig(listeners = UICalendarView.AddCategoryActionListener.class)
+    }
     
 )
-public class UIDayView extends UIComponent {
+public class UIDayView extends UICalendarView {
   
-  public UIDayView() {}
+  public UIDayView() throws Exception{
+    super() ;
+  }
   
   private List getEventList() {
     return null ;
