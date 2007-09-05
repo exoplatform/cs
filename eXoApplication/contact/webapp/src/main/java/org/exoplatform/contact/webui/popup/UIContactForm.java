@@ -141,7 +141,7 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
     setRenderedChild(UIProfileInputSet.class) ; 
    
   }
-
+  
   public String[] getActions() { return new String[] {"Save", "Cancel"} ; }
   
   
@@ -151,6 +151,53 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
 
   public void deActivate() throws Exception {
     // TODO Auto-generated method stub  
+  }
+  
+  public void setValues(String contactId) throws Exception {
+    
+    ContactService contactService = getApplicationComponent(ContactService.class);
+    String username = Util.getPortalRequestContext().getRemoteUser() ;
+    Contact contact = contactService.getContact(username, contactId);
+    
+    UIProfileInputSet profileTab = getChildById(INPUT_PROFILETAB) ;
+    profileTab.setFieldFullNameValue(contact.getFullName());
+    profileTab.setFieldFirstNameValue(contact.getFirstName());
+    profileTab.setFieldMiddleNameValue(contact.getMiddleName());
+    profileTab.setFieldLastNameValue(contact.getLastName());
+    profileTab.setFieldNickNameValue(contact.getNickName());
+    profileTab.setFieldJobNameValue(contact.getJobTitle());
+    profileTab.setFieldEmailValue(contact.getEmailAddress());
+    
+    getUIStringInput(FIELD_WORKADDRESS_INPUT).setValue(contact.getWorkAddress());
+    getUIStringInput(FIELD_WORKCITY_INPUT).setValue(contact.getWorkCity());
+    getUIStringInput(FIELD_WORKSTATE_INPUT).setValue(contact.getWorkStateProvince());
+    getUIStringInput(FIELD_WORKPOSTALCODE_INPUT).setValue(contact.getWorkPostalCode());
+    getUIStringInput(FIELD_WORKCOUNTRY_INPUT).setValue(contact.getWorkCountry());
+    getUIStringInput(FIELD_WORKPHONE1_INPUT).setValue(contact.getWorkPhone1());
+    getUIStringInput(FIELD_WORKPHONE2_INPUT).setValue(contact.getWorkPhone2());
+    getUIStringInput(FIELD_WORKFAX_INPUT).setValue(contact.getWorkFax());
+    getUIStringInput(FIELD_WORKMOBILEPHONE_INPUT).setValue(contact.getMobilePhone());
+    getUIStringInput(FIELD_WORKWEBPAGE_INPUT).setValue(contact.getWebPage());
+    
+    getUIStringInput(FIELD_EXOCHAT_INPUT).setValue(contact.getExoId());
+    getUIStringInput(FIELD_GOOGLE_INPUT).setValue(contact.getGoogleId());
+    getUIStringInput(FIELD_MSN_INPUT).setValue(contact.getMsnId());
+    getUIStringInput(FIELD_AOLAIM_INPUT).setValue(contact.getAolId());
+    getUIStringInput(FIELD_YAHOO_INPUT).setValue(contact.getYahooId());
+    getUIStringInput(FIELD_ICR_INPUT).setValue(contact.getIcrId());
+    getUIStringInput(FIELD_SKYPE_INPUT).setValue(contact.getSkypeId());
+    getUIStringInput(FIELD_ICQ_INPUT).setValue(contact.getIcqId());
+    
+    getUIStringInput(FIELD_HOMEADDRESS_INPUT).setValue(contact.getHomeAddress());
+    getUIStringInput(FIELD_HOMECITY_INPUT).setValue(contact.getHomeCity());
+    getUIStringInput(FIELD_HOMESTATE_INPUT).setValue(contact.getHomeState_province());
+    getUIStringInput(FIELD_HOMEPOSTALCODE_INPUT).setValue(contact.getHomePostalCode());
+    getUIStringInput(FIELD_HOMECOUNTRY_INPUT).setValue(contact.getHomeCountry());
+    getUIStringInput(FIELD_HOMEPHONE1_INPUT).setValue(contact.getHomePhone1());
+    getUIStringInput(FIELD_HOMEPHONE2_INPUT).setValue(contact.getHomePhone2());
+    getUIStringInput(FIELD_HOMEFAX_INPUT).setValue(contact.getHomeFax());
+    getUIStringInput(FIELD_PERSONALSITE_INPUT).setValue(contact.getPersonalSite());
+    getUIStringInput(FIELD_NOTE_INPUT).setValue(contact.getNote());
   }
   
   static  public class SaveActionListener extends EventListener<UIContactForm> {

@@ -13,9 +13,10 @@ import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.webui.popup.UIAddNewTag;
 import org.exoplatform.contact.webui.popup.UIPopupAction;
 import org.exoplatform.contact.webui.popup.UIPopupContainer;
-import org.exoplatform.services.jcr.util.IdGenerator;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -34,7 +35,8 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
     template =  "app:/templates/contact/webui/UIContacts.gtmpl",
     events = {
         @EventConfig(listeners = UIContacts.SelectedContactActionListener.class),
-        @EventConfig(listeners = UIContacts.AddTagActionListener.class)
+        @EventConfig(listeners = UIContacts.AddTagActionListener.class),
+        @EventConfig(listeners = UIContacts.EditContactActionListener.class)
     }
 )
 
@@ -68,6 +70,13 @@ public class UIContacts extends UIForm  {
   static public class AddTagActionListener extends EventListener<UIContacts> {
     public void execute(Event<UIContacts> event) throws Exception {
       UIContacts uiContact = event.getSource() ;
+      
+      if (uiContact.getCheckedContacts().size() == 0) {
+        UIApplication uiApp = uiContact.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UIContacts.msg.checkContact-required", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
       UIContactPortlet contactPortlet = uiContact.getAncestorOfType(UIContactPortlet.class) ;
       UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
       UIPopupContainer popupContainer = popupAction.createUIComponent(UIPopupContainer.class, null, null) ;
@@ -92,4 +101,24 @@ public class UIContacts extends UIForm  {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContactContainer);
     }
   }
+  
+  static public class EditContactActionListener extends EventListener<UIContacts> {
+    public void execute(Event<UIContacts> event) throws Exception {
+      UIContacts uiContacts = event.getSource();
+      String contactId = event.getRequestContext().getRequestParameter(OBJECTID);
+      System.out.println("\n\n id: " + contactId + "\n\n");
+//      UIContactPortlet contactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class) ;
+//      UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
+//      UIPopupContainer popupContainer = popupAction.createUIComponent(UIPopupContainer.class, null, null) ;
+//      popupContainer.addChild(UICategorySelect.class, null, null) ;
+//      popupContainer.addChild(UIContactForm.class, null, null) ;
+//      
+//      UIContactForm uiContactForm = popupContainer.findFirstComponentOfType(UIContactForm.class);
+//      uiContactForm.setValues(contactId);
+//
+//      popupAction.activate(popupContainer, 800, 450, true) ;
+//      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+    }
+  }
+  
 }

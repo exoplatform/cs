@@ -1,3 +1,4 @@
+
 <div class="UITags">
 	<div class="TitleBar">
 		<div class="DownArrow3Icon" title="Collapse/Expand all"><span></span></div>
@@ -5,13 +6,13 @@
 		<div class="ActionIcon"><span></span></div>
   	<div style="clear: none"><span></span></div>
 	</div>
-	<%  
-		List tags = uicomponent.getTags();
-		for(tag in tags) {
-		String actionLink  = uicomponent.event("SelectTag", tag.getName()) ;			
-	%>
 	<div class="ListContent">
-		<a href="$actionLink" class="IconHolder BlueTag"><%=tag.getName()%></a>
+		<%  
+			List tags = uicomponent.getTags();
+			for(tag in tags) {
+			String actionLink  = uicomponent.event("SelectTag", tag.getName()) ;			
+		%>
+			<a href="$actionLink" class="IconHolder BlueTag"><%=tag.getName()%></a>
+		<% } %>
 	</div>
-	<% } %>
 </div>

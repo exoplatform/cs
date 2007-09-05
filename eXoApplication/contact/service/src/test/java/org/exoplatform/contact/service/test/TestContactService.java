@@ -141,47 +141,50 @@ public class TestContactService extends BaseContactTestCase{
     Contact contact = createContact();
     contact.setCategories(new String[] { contactGroup.getId() , "exoooo"});
     contactService_.saveContact(username, contact, true);
-    System.out.println("\n\n group of contact 1:" + contactService_.getContact(username, contact.getId()).getCategories().length);
     
     // test removeGroup
     assertNotNull(contactService_.removeGroup(username, contactGroup.getId()));
     assertNull(contactService_.getGroup(username, contactGroup.getId()));
-    System.out.println("\n\n group of contact 2:" + contactService_.getContact(username, contact.getId()).getCategories().length);
   } 
   
-  public void testTag() throws Exception {
+  public void testTag() throws Exception {  
   
     // addTag & getContactsByTag
     Contact contact1 = createContact();
     contactService_.saveContact(username, contact1, true);
     Contact contact2 = createContact();
-    contactService_.saveContact(username, contact2, true); 
+    contact2.setCategories(new String[] {"friend", "work"});
+    contactService_.saveSharedContact(contact2, true); 
     List<String> contactIds = new ArrayList<String>() ;
     contactIds.add(contact1.getId()) ;
     contactIds.add(contact2.getId());
     
-    /*Tag tag = new Tag() ;
+    Tag tag = new Tag() ;
     tag.setName("Company") ;
-    contactService_.addTag(username, contactIds, tag) ;
-    assertEquals(contactService_.getContactsByTag(username, tag.getName()).size(), 2);
     
-    Tag tag2 = new Tag() ;
-    tag2.setName("Customer") ;
-    contactService_.addTag(username, contactIds, tag2) ;
-    Contact c = contactService_.getContact(username, contact1.getId());
-    //String[] tags = c.getTags(); 
+    List<Tag> tags = new ArrayList<Tag>();
+    tags.add(tag);    
+    contactService_.addTag(username, contactIds, tags) ;
+    assertEquals(contactService_.getContactsByTag(username, tag.getName()).size(), 1);
+    assertEquals(contactService_.getSharedContactsByTag(tag.getName()).size(), 1);
     
-    List<Contact> contacts = contactService_.getContactsByTag(username, tag2.getName());
-    System.out.println("\n\n get contact by tag : " + contacts.size() + "\n\n");
-    
-    // getTags
-    assertEquals(contactService_.getTags(username).size(), 2);
-    
-    // removeTag
-    assertNotNull(contactService_.removeTag(username, tag.getName()));
-    assertEquals(contactService_.getTags(username).size(), 1); */
+//    Tag tag2 = new Tag() ;
+//    tag2.setName("Customer") ;
+//    contactService_.addTag(username, contactIds, tag2) ;
+//    Contact c = contactService_.getContact(username, contact1.getId());
+//    //String[] tags = c.getTags(); 
+//    
+//    List<Contact> contacts = contactService_.getContactsByTag(username, tag2.getName());
+//    System.out.println("\n\n get contact by tag : " + contacts.size() + "\n\n");
+//    
+//    // getTags
+//    assertEquals(contactService_.getTags(username).size(), 2);
+//    
+//    // removeTag
+//    assertNotNull(contactService_.removeTag(username, tag.getName()));
+//    assertEquals(contactService_.getTags(username).size(), 1);
   }
-  
+  /*
   public void  testSharedContact() throws Exception {
     Contact contact = createContact();
     contact.setCategories(new String[] {"friend", "work"});
@@ -208,4 +211,5 @@ public class TestContactService extends BaseContactTestCase{
     assertNotNull(contactService_.removeSharedContact(contact.getId()));
     assertNull(contactService_.getSharedContact(contact.getId()));
   }
+  */
 }

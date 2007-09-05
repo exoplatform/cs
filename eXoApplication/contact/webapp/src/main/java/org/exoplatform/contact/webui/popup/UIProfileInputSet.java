@@ -74,7 +74,25 @@ public class UIProfileInputSet extends UIFormInputWithActions {
     return getUIStringInput(FIELD_EMAIL_INPUT).getValue();
   }
   
-  protected String getImageUrl(){
-    return null ;
+  protected void setFieldFullNameValue(String s) {
+    getUIStringInput(FIELD_FULLNAME_INPUT).setValue(s);
+  }
+  protected void setFieldFirstNameValue(String s) {
+    getUIStringInput(FIELD_FIRSTNAME_INPUT).setValue(s);
+  }
+  protected void setFieldMiddleNameValue(String s) {
+    getUIStringInput(FIELD_MIDDLENAME_INPUT).setValue(s);
+  }
+  protected void setFieldLastNameValue(String s) {
+    getUIStringInput(FIELD_LASTNAME_INPUT).setValue(s);
+  }
+  protected void setFieldNickNameValue(String s) {
+    getUIStringInput(FIELD_NICKNAME_INPUT).setValue(s);
+  }
+  protected void setFieldJobNameValue(String s) {
+    getUIStringInput(FIELD_JOBTITLE_INPUT).setValue(s);
+  }
+  protected void setFieldEmailValue(String s) {
+    getUIStringInput(FIELD_EMAIL_INPUT).setValue(s);
   }
 }

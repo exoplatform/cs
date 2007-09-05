@@ -6,8 +6,8 @@ package org.exoplatform.contact.webui.popup;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.MissingResourceException;
 
-import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.Tag;
 import org.exoplatform.contact.webui.UIContactPortlet;
@@ -40,9 +40,9 @@ import org.exoplatform.webui.form.UIFormStringInput;
 )
 public class UIAddNewTag extends UIForm implements UIPopupComponent {
   public static final String FIELD_TAGNAME_INPUT = "tagName";
-  
+
   public static String[] FIELD_SHAREDCONTACT_BOX = null;
-  
+
   public UIAddNewTag() throws Exception {
     addUIFormInput(new UIFormStringInput(FIELD_TAGNAME_INPUT, FIELD_TAGNAME_INPUT, null));
 
@@ -56,11 +56,20 @@ public class UIAddNewTag extends UIForm implements UIPopupComponent {
       addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_SHAREDCONTACT_BOX[i], FIELD_SHAREDCONTACT_BOX[i], false));
     }
   }
-  
-  public String getLabel(String id) {return id;} 
-  
+
+  public String getLabel(String id) throws Exception {
+    try {
+      return  super.getLabel(id) ;
+    }
+    catch (MissingResourceException mre) {
+
+    }
+    return null ;
+
+  } 
+
   public String[] getActions() { return new String[] {"Save", "Cancel"} ; }
-  
+
   public void activate() throws Exception {
     // TODO Auto-generated method stub
   }
@@ -68,7 +77,7 @@ public class UIAddNewTag extends UIForm implements UIPopupComponent {
   public void deActivate() throws Exception {
     // TODO Auto-generated method stub
   }
-  
+
   public List<String> getCheckedTags() throws Exception {
     List<String> checkedTags = new ArrayList<String>();
     for (int i = 0; i < FIELD_SHAREDCONTACT_BOX.length; i ++) {
@@ -78,40 +87,41 @@ public class UIAddNewTag extends UIForm implements UIPopupComponent {
     }
     return checkedTags;
   }
-  
+
   static  public class SaveActionListener extends EventListener<UIAddNewTag> {
     public void execute(Event<UIAddNewTag> event) throws Exception {
       UIAddNewTag uiForm = event.getSource() ;
-      
-      
-//      String  tagName = uiForm.getUIStringInput(FIELD_TAGNAME_INPUT).getValue(); 
-//      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-//      if (tagName == null || tagName.trim().length() == 0) {
-//        uiApp.addMessage(new ApplicationMessage("UIAddNewTag.msg.tagName-required", null)) ;
-//        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-//        return ; 
-//      }
-      
       UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class);
       UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class);
       List<String> contactIds = uiContacts.getCheckedContacts();
       List<Tag> tags = new ArrayList<Tag>();
-      Tag tag = new Tag();
+      Tag tag;
+      String inputTag = uiForm.getUIStringInput(FIELD_TAGNAME_INPUT).getValue(); 
+      if (inputTag != null && (!inputTag.trim().equals(""))) {
+        tag = new Tag();
+        tag.setName(inputTag);
+        tags.add(tag);
+      }
       for (String tagName : uiForm.getCheckedTags()) {
+        tag = new Tag();
         tag.setName(tagName) ;
         tags.add(tag);
       }
-      tag.setName(uiForm.getUIStringInput(FIELD_TAGNAME_INPUT).getValue());
-      tags.add(tag);
+      if (tags.size() == 0) {
+        UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UIAddNewTag.msg.tagName-required", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
       ContactService contactService = uiForm.getApplicationComponent(ContactService.class);
       String username = Util.getPortalRequestContext().getRemoteUser() ;
       contactService.addTag(username, contactIds, tags);
-    
+
       uiContactPortlet.cancelAction() ;  
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContactPortlet) ;
     }
   }
-  
+
   static  public class CancelActionListener extends EventListener<UIAddNewTag> {
     public void execute(Event<UIAddNewTag> event) throws Exception {
       UIAddNewTag uiForm = event.getSource() ;

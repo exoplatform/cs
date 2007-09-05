@@ -550,6 +550,51 @@ public class JCRDataStorage implements DataStorage {
     return contacts ;
   }  
   
+  public List<Contact> getSharedContactsByTag(String tagName) throws Exception {
+    Node contactHome = getPublicContactHome();
+    QueryManager qm = contactHome.getSession().getWorkspace().getQueryManager();
+    StringBuffer queryString = new StringBuffer("/jcr:root" + contactHome.getPath() 
+                                                + "//element(*,exo:contact)[@exo:tags='").
+                                                append(tagName).
+                                                append("']");
+    Query query = qm.createQuery(queryString.toString(), Query.XPATH);
+    QueryResult result = query.execute();
+    NodeIterator it = result.getNodes();    
+    List<Contact> contacts = new ArrayList<Contact>();
+    while (it.hasNext()) {
+      contacts.add(getContact(it.nextNode()));
+    }
+    return contacts ;
+  }
+  
+//  public void addTa(String username, List<String> contactIds, List<Tag> tags) throws Exception {
+//    Node tagHomeNode = getTagHome(username);
+//    Map<String, String> tagMap = new HashMap<String, String> () ;
+//    for(Tag tag : tags) {
+//      if(!tagHomeNode.hasNode(tag.getName())) {
+//        Node tagNode = tagHomeNode.addNode(tag.getName(), "exo:contactTag") ;
+//        tagNode.setProperty("exo:name", tag.getName());
+//        tagNode.setProperty("exo:description", tag.getDescription());
+//      }
+//      tagMap.put(tag.getName(), tag.getName()) ;
+//    }
+//    tagHomeNode.getSession().save() ;
+//    Node contactHomeNode = getContactHome(username);
+//    getPublicContactHome();
+//    Node contactNode ;
+//    for(String contactId : contactIds) {
+//      if(contactHomeNode.hasNode(contactId)) {
+//        contactNode = contactHomeNode.getNode(contactId) ;
+//        if(contactNode.hasProperty("exo:tags")){
+//          Value[] values = contactNode.getProperty("exo:tags").getValues() ;
+//          for(Value value : values) { tagMap.put(value.getString(), value.getString()) ; }          
+//        }
+//        contactNode.setProperty("exo:tags", tagMap.values().toArray(new String[]{})) ;
+//      }
+//    }
+//    contactHomeNode.getSession().save() ;
+//  }
+  
   public void addTag(String username, List<String> contactIds, List<Tag> tags) throws Exception {
     Node tagHomeNode = getTagHome(username);
     Map<String, String> tagMap = new HashMap<String, String> () ;
@@ -561,25 +606,25 @@ public class JCRDataStorage implements DataStorage {
       }
       tagMap.put(tag.getName(), tag.getName()) ;
     }
-    
     tagHomeNode.getSession().save() ;
     Node contactHomeNode = getContactHome(username);
-    Node contactNode ;
-    Map<String, String> contactTagMap ;
+    Node publicContactHomeNode = getPublicContactHome();
+    Node contactNode = null ;
     for(String contactId : contactIds) {
-      contactTagMap = new HashMap<String, String> () ;
-      if(contactHomeNode.hasNode(contactId)) {
-        contactNode = contactHomeNode.getNode(contactId) ;
-        if(contactNode.hasProperty("exo:tags")){
-          Value[] values = contactNode.getProperty("exo:tags").getValues() ;
-          for(Value value : values) { contactTagMap.put(value.getString(), value.getString()) ; }          
+      
+      if(contactHomeNode.hasNode(contactId)) contactNode = contactHomeNode.getNode(contactId) ;
+      else
+        if (publicContactHomeNode.hasNode(contactId)) {
+          contactNode = publicContactHomeNode.getNode(contactId);
         }
-        contactTagMap.putAll(tagMap) ;
-        contactNode.setProperty("exo:tags", contactTagMap.values().toArray(new String[]{})) ;
-        contactNode.save() ;
+      if(contactNode.hasProperty("exo:tags")){
+        Value[] values = contactNode.getProperty("exo:tags").getValues() ;
+        for(Value value : values) { tagMap.put(value.getString(), value.getString()) ; }          
       }
+      contactNode.setProperty("exo:tags", tagMap.values().toArray(new String[]{})) ;
     }
     contactHomeNode.getSession().save() ;
+    publicContactHomeNode.getSession().save();
   }
   
   public Tag removeTag(String username, String tagName) throws Exception {

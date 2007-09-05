@@ -4,6 +4,7 @@
  **************************************************************************/
 package org.exoplatform.contact.webui;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.exoplatform.contact.service.Contact;
@@ -49,7 +50,10 @@ public class UITags extends UIComponent  {
       UIContacts uiContacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class) ;
       ContactService contactService = uiForm.getApplicationComponent(ContactService.class);
       String username = Util.getPortalRequestContext().getRemoteUser() ;
-      List<Contact> contacts = contactService.getContactsByTag(username, tagName);
+      List<Contact> contacts = new ArrayList<Contact>(); 
+      contacts.addAll(contactService.getContactsByTag(username, tagName));
+      contacts.addAll(contactService.getSharedContactsByTag(tagName));
+      System.out.println("\n\n size contact :" + contacts.size() + "\n\n");
       
       uiContacts.setContacts(contacts);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts) ;

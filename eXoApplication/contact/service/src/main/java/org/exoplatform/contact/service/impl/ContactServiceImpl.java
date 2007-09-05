@@ -20,7 +20,7 @@ import org.exoplatform.services.jcr.RepositoryService;
  *          hung.nguyen@exoplatform.com
  * Jul 11, 2007  
  */
-public class ContactServiceImpl implements ContactService{
+public class ContactServiceImpl implements ContactService {
   private JCRDataStorage storage_ ;
   
   public ContactServiceImpl(RepositoryService  repositoryService, 
@@ -94,12 +94,19 @@ public class ContactServiceImpl implements ContactService{
   public List<Contact> getContactsByTag(String username, String tagName) throws Exception {
     return storage_.getContactsByTag(username, tagName);
   }
+  
+  public List<Contact> getSharedContactsByTag(String tagName) throws Exception {
+    return storage_.getSharedContactsByTag(tagName);
+  }
+  
   public void addTag(String username, List<String> contactIds, List<Tag> tags) throws Exception {
     storage_.addTag(username, contactIds, tags);
   }
+  
   public Tag removeTag(String username, String tagName) throws Exception {
     return storage_.removeTag(username, tagName);
   }
+  
   public void removeContactTag(String username, List<String>contactIds, List<String> tags) throws Exception {
     storage_.removeContactTag(username, contactIds, tags) ;
   }
