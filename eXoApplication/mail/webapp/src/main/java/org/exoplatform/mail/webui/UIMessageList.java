@@ -73,6 +73,8 @@ public class UIMessageList extends UIForm {
   public void addCheckboxForMessages() throws Exception {
     List<Message> messageList = getShowMessageList();
     for (Message msg : messageList) {
+      UIFormCheckBoxInput<Boolean> checkbox = getChildById(msg.getId());
+      if (checkbox != null) removeChild(getUIFormCheckBoxInput(msg.getId()).getClass());
       addChild(new UIFormCheckBoxInput<Boolean>(msg.getId(), msg.getId(), null));
     }
   }
