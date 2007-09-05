@@ -16,9 +16,10 @@ import org.exoplatform.services.jcr.util.IdGenerator;
  *          hung.nguyen@exoplatform.com
  * Jul 11, 2007  
  */
-public class Event {
+public class CalendarEvent {
   
   private String id ;
+  
   private String summary ;
   private String location ;
   private String description ;
@@ -40,7 +41,7 @@ public class Event {
   private List<Reminder> reminders ;
   private Map<String, String> properties ;
   
-  public Event() {
+  public CalendarEvent() {
     id = "Event" + IdGenerator.generate() ;
   }
    

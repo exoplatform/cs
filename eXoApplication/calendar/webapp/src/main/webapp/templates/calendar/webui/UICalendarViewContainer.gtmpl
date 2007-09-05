@@ -27,7 +27,7 @@
   							<div class="WeekTitle">Friday</div>
   							<div class="WeekTitle">Saturday</div>
   							<div style="clear: left"><span></span></div>
-  						</div>
+  			</div>
 				<div class="RowContainerDay">
 			<table class="UIGrid" id="RowContainerDay" cellspacing="0" borderspacing="0">
 				<col width="14%"><col width="14%"><col width="14%"><col width="14%"><col width="14%"><col width="14%"><col width="14%">

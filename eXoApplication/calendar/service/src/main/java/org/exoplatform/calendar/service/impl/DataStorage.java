@@ -9,7 +9,7 @@ import java.util.List;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarCategory;
 import org.exoplatform.calendar.service.CalendarSetting;
-import org.exoplatform.calendar.service.Event;
+import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.GroupCalendarData;
@@ -43,17 +43,17 @@ public interface DataStorage {
   public void saveEventCategory(String username, EventCategory eventCategory, boolean isNew) throws Exception ;
   public EventCategory removeEventCategory(String username, String eventCategoryId) throws Exception ;
   
-  public Event getUserEvent(String username, String eventCategoryId, String eventId) throws Exception ;
-  public List<Event> getUserEventByCalendar(String username, List<String> calendarIds) throws Exception ;
-  public List<Event> getEvents(EventQuery eventQuery) throws Exception ;
-  public void saveUserEvent(String username, String calendarId, Event event, boolean isNew) throws Exception ;
-  public Event removeUserEvent(String username, String calendarId, String eventId) throws Exception ;
+  public CalendarEvent getUserEvent(String username, String eventCategoryId, String eventId) throws Exception ;
+  public List<CalendarEvent> getUserEventByCalendar(String username, List<String> calendarIds) throws Exception ;
+  public List<CalendarEvent> getEvents(EventQuery eventQuery) throws Exception ;
+  public void saveUserEvent(String username, String calendarId, CalendarEvent event, boolean isNew) throws Exception ;
+  public CalendarEvent removeUserEvent(String username, String calendarId, String eventId) throws Exception ;
   
   
-  public Event getGroupEvent(String calendarId, String eventId) throws Exception ;
-  public List<Event> getGroupEventByCalendar(List<String> calendarIds) throws Exception ;
-  public void saveGroupEvent(String calendarId, Event event, boolean isNew) throws Exception ;
-  public Event removeGroupEvent(String calendarId, String eventId) throws Exception ;
+  public CalendarEvent getGroupEvent(String calendarId, String eventId) throws Exception ;
+  public List<CalendarEvent> getGroupEventByCalendar(List<String> calendarIds) throws Exception ;
+  public void saveGroupEvent(String calendarId, CalendarEvent event, boolean isNew) throws Exception ;
+  public CalendarEvent removeGroupEvent(String calendarId, String eventId) throws Exception ;
   
   public void saveCalendarSetting(String username, CalendarSetting setting) throws Exception ;
   public CalendarSetting getCalendarSetting(String username) throws Exception ;

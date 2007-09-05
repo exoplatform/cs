@@ -17,7 +17,7 @@
 			%>			
 		</div>
 		<div class="Label">Show category:</div> 
-		<div style="clear: both"><span></span></div>
+		<div style="clear: both;"><span></span></div>
 	</div>
 	<!-- Day View template -->
 	<div class="UIDayView">
@@ -38,7 +38,7 @@
 						</tr>
 						<tr>
 							<td ></td>
-							<td class="TdDotLine">&nbsp</td>
+							<td class="TdDotLine">&nbsp;</td>
 						</tr>
 						<tr>
 							<td class="TdTime">1AM</td>
@@ -75,7 +75,7 @@
 						<tr>
 							<td class="TdTime">5AM</td>
 							<td class="TdLine">
-								<div class="EventContainerBoder"
+								<div class="EventContainerBoder">
 									<div class="EventContainerBar">5:35 AM - 7:00 AM</div>
 									<div class="EventContainer">Talk to my cousin on the phone, he will call from France</div>
 									<div class="ResizeEventContainer"><span></span></div>

@@ -56,17 +56,17 @@ public class UICalendarView extends UIForm {
     getUIFormSelectBox(EVENT_CATEGORIES).setOptions(options) ;
   }
   
-  public List<org.exoplatform.calendar.service.Event> getList() throws Exception {
+  public List<org.exoplatform.calendar.service.CalendarEvent> getList() throws Exception {
     CalendarService calendarService = (CalendarService)PortalContainer.getComponent(CalendarService.class) ;
-    List<org.exoplatform.calendar.service.Event> events = new ArrayList<org.exoplatform.calendar.service.Event>() ;
+    List<org.exoplatform.calendar.service.CalendarEvent> events = new ArrayList<org.exoplatform.calendar.service.CalendarEvent>() ;
     if(privateCalendarIds.size() > 0) {
       events = calendarService.getUserEventByCalendar(Util.getPortalRequestContext().getRemoteUser(), privateCalendarIds)  ;
     }
     if(publicCalendarIds.size() > 0) {
       if(events.size() > 0) {
-        List<org.exoplatform.calendar.service.Event> publicEvents = 
+        List<org.exoplatform.calendar.service.CalendarEvent> publicEvents = 
           calendarService.getGroupEventByCalendar(publicCalendarIds) ;
-        for(org.exoplatform.calendar.service.Event event : publicEvents) {
+        for(org.exoplatform.calendar.service.CalendarEvent event : publicEvents) {
           events.add(event) ;
         }
       }else {

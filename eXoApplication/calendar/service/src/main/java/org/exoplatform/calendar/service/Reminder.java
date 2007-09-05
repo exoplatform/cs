@@ -13,6 +13,13 @@ import org.exoplatform.services.jcr.util.IdGenerator;
  * Jul 16, 2007  
  */
 public class Reminder {
+  
+  final public static String REPEAT = "1" ;
+  final public static String UNREPEAT = "0" ;
+  final public static String TYPE_EMAIL = "email" ;
+  final public static String TYPE_POPUP = "popup" ;
+  final public static String TYPE_BOTH = "both" ;
+  
   private String id ;
   private String eventId ;
   private String repeat = "1";

@@ -14,7 +14,7 @@ import org.exoplatform.calendar.service.CalendarCategory;
 import org.exoplatform.calendar.service.CalendarImportExport;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
-import org.exoplatform.calendar.service.Event;
+import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.GroupCalendarData;
@@ -104,33 +104,33 @@ public class CalendarServiceImpl implements CalendarService{
   }*/
   
   
-  public Event getUserEvent(String username, String calendarId, String eventId) throws Exception {
+  public CalendarEvent getUserEvent(String username, String calendarId, String eventId) throws Exception {
     return storage_.getUserEvent(username, calendarId, eventId);
   }
-  public List<Event> getUserEventByCalendar(String username, List<String> calendarIds) throws Exception {
+  public List<CalendarEvent> getUserEventByCalendar(String username, List<String> calendarIds) throws Exception {
     return storage_.getUserEventByCalendar(username, calendarIds);
   }
-  public List<Event> getEvents(EventQuery eventQuery) throws Exception {
+  public List<CalendarEvent> getEvents(EventQuery eventQuery) throws Exception {
     return storage_.getEvents(eventQuery) ;
   }
-  public void saveUserEvent(String username, String calendarId, Event event, boolean isNew) throws Exception {
+  public void saveUserEvent(String username, String calendarId, CalendarEvent event, boolean isNew) throws Exception {
     storage_.saveUserEvent(username, calendarId, event, isNew) ;
   }
-  public Event removeUserEvent(String username, String calendarId, String eventId) throws Exception {
+  public CalendarEvent removeUserEvent(String username, String calendarId, String eventId) throws Exception {
     return storage_.removeUserEvent(username, calendarId, eventId);
   }
   
   
-  public Event getGroupEvent(String calendarId, String eventId) throws Exception {
+  public CalendarEvent getGroupEvent(String calendarId, String eventId) throws Exception {
     return storage_.getGroupEvent(calendarId, eventId);
   }  
-  public List<Event> getGroupEventByCalendar(List<String> calendarIds) throws Exception {
+  public List<CalendarEvent> getGroupEventByCalendar(List<String> calendarIds) throws Exception {
     return storage_.getGroupEventByCalendar(calendarIds);
   } 
-  public void saveGroupEvent(String calendarId, Event event, boolean isNew) throws Exception {
+  public void saveGroupEvent(String calendarId, CalendarEvent event, boolean isNew) throws Exception {
     storage_.saveGroupEvent(calendarId, event, isNew) ;
   }  
-  public Event removeGroupEvent(String calendarId, String eventId) throws Exception {
+  public CalendarEvent removeGroupEvent(String calendarId, String eventId) throws Exception {
     return storage_.removeGroupEvent(calendarId, eventId);
   }
   

@@ -12,7 +12,7 @@ import java.util.List;
 
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarCategory;
-import org.exoplatform.calendar.service.Event;
+import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.service.Reminder;
@@ -181,7 +181,7 @@ public class TestCalendarService extends BaseCalendarTestCase{
     eventCategory.setDescription("description") ;
     calendarService_.saveEventCategory("nqhung", eventCategory, true) ;
     
-    Event event = new Event() ;
+    CalendarEvent event = new CalendarEvent() ;
     //event.setId("eventId") ;
     event.setCalendarId(cal.getId()) ;
     event.setEventCategoryId(eventCategory.getName()) ;
@@ -208,7 +208,7 @@ public class TestCalendarService extends BaseCalendarTestCase{
     event.setReminders(reminders) ;
     
     calendarService_.saveUserEvent("nqhung", cal.getId(), event, true) ;
-    Event ev = calendarService_.getUserEvent("nqhung", cal.getId(), event.getId()) ;
+    CalendarEvent ev = calendarService_.getUserEvent("nqhung", cal.getId(), event.getId()) ;
     assertNotNull(ev) ;
     
     //update event
@@ -221,7 +221,7 @@ public class TestCalendarService extends BaseCalendarTestCase{
     //get event list
     List<String> calendarIds = new ArrayList<String>() ;
     calendarIds.add(cal.getId()) ;
-    List<Event> events = calendarService_.getUserEventByCalendar("nqhung", calendarIds) ;
+    List<CalendarEvent> events = calendarService_.getUserEventByCalendar("nqhung", calendarIds) ;
     assertEquals(events.size(), 1) ;
     
     //export/import ical

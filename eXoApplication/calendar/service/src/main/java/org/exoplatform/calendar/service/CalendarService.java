@@ -224,7 +224,7 @@ public interface CalendarService {
    * @return Event
    * @throws Exception
    */
-  public Event getUserEvent(String username, String calendarId, String eventId) throws Exception ;
+  public CalendarEvent getUserEvent(String username, String calendarId, String eventId) throws Exception ;
   /**
    * This method should:
    * 1. Get calendar service root node by current user
@@ -235,7 +235,7 @@ public interface CalendarService {
    * @return event list
    * @throws Exception
    */
-  public List<Event> getUserEventByCalendar(String username, List<String> calendarIds) throws Exception ;
+  public List<CalendarEvent> getUserEventByCalendar(String username, List<String> calendarIds) throws Exception ;
   /**
    * This method should:
    * 1. Get calendar service root node by current user
@@ -245,7 +245,7 @@ public interface CalendarService {
    * @return event list
    * @throws Exception
    */
-  public List<Event> getEvents(EventQuery eventQuery) throws Exception ;
+  public List<CalendarEvent> getEvents(EventQuery eventQuery) throws Exception ;
   /**
    * This method should:
    * 1. Get calendar service root node by username
@@ -260,7 +260,7 @@ public interface CalendarService {
    * @param isNew
    * @throws Exception
    */  
-  public void saveUserEvent(String username, String calendarId, Event event, boolean isNew) throws Exception ;
+  public void saveUserEvent(String username, String calendarId, CalendarEvent event, boolean isNew) throws Exception ;
   /**
    * This method should:
    * 1. Get calendar service root node by current user
@@ -274,7 +274,7 @@ public interface CalendarService {
    * @return Event
    * @throws Exception
    */
-  public Event removeUserEvent(String username, String calendarId, String eventId) throws Exception ;
+  public CalendarEvent removeUserEvent(String username, String calendarId, String eventId) throws Exception ;
   
   
   /**
@@ -288,7 +288,7 @@ public interface CalendarService {
    * @return Event
    * @throws Exception
    */
-  public Event getGroupEvent(String calendarId, String eventId) throws Exception ;
+  public CalendarEvent getGroupEvent(String calendarId, String eventId) throws Exception ;
   /**
    * This method should:
    * 1. Get calendar service root node by current user
@@ -299,7 +299,7 @@ public interface CalendarService {
    * @return event list
    * @throws Exception
    */
-  public List<Event> getGroupEventByCalendar(List<String> calendarIds) throws Exception ;
+  public List<CalendarEvent> getGroupEventByCalendar(List<String> calendarIds) throws Exception ;
   /**
    * This method should:
    * 1. Get calendar service root node by username
@@ -314,7 +314,7 @@ public interface CalendarService {
    * @param isNew
    * @throws Exception
    */  
-  public void saveGroupEvent(String calendarId, Event event, boolean isNew) throws Exception ;
+  public void saveGroupEvent(String calendarId, CalendarEvent event, boolean isNew) throws Exception ;
   /**
    * This method should:
    * 1. Get calendar service root node by current user
@@ -328,7 +328,7 @@ public interface CalendarService {
    * @return Event
    * @throws Exception
    */
-  public Event removeGroupEvent(String calendarId, String eventId) throws Exception ;
+  public CalendarEvent removeGroupEvent(String calendarId, String eventId) throws Exception ;
   
   public void saveCalendarSetting(String username, CalendarSetting setting) throws Exception ;
   public CalendarSetting getCalendarSetting(String username) throws Exception ;

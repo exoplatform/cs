@@ -37,7 +37,7 @@ import net.fortuna.ical4j.model.property.Version;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarCategory;
 import org.exoplatform.calendar.service.CalendarImportExport;
-import org.exoplatform.calendar.service.Event;
+import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.Reminder;
 
@@ -56,7 +56,7 @@ public class ICalendarImportExport implements CalendarImportExport{
   }
   
   public OutputStream exportCalendar(String username, List<String> calendarIds) throws Exception {
-    List<Event> events ;
+    List<CalendarEvent> events ;
     if(username != null) events = storage_.getUserEventByCalendar(username, calendarIds) ;
     else events = storage_.getGroupEventByCalendar(calendarIds) ;
     
@@ -65,7 +65,7 @@ public class ICalendarImportExport implements CalendarImportExport{
     calendar.getProperties().add(Version.VERSION_2_0);
     calendar.getProperties().add(CalScale.GREGORIAN);
     
-    for(Event exoEvent : events) {
+    for(CalendarEvent exoEvent : events) {
       long start = exoEvent.getFromDateTime().getTime() ;
       long end = exoEvent.getToDateTime().getTime() ;
       String summary = exoEvent.getSummary() ;
@@ -166,7 +166,7 @@ public class ICalendarImportExport implements CalendarImportExport{
     
     ComponentList componentList = iCalendar.getComponents() ;
     VEvent event ;
-    Event exoEvent ;
+    CalendarEvent exoEvent ;
     for(Object obj : componentList) {
       if(obj instanceof VEvent){
         event = (VEvent)obj ;
@@ -182,7 +182,7 @@ public class ICalendarImportExport implements CalendarImportExport{
           }
           eventCategoryId = evCate.getName() ;
         }
-        exoEvent = new Event() ;
+        exoEvent = new CalendarEvent() ;
         currentDateTime = new GregorianCalendar() ;
         exoEvent.setId(String.valueOf(currentDateTime.getTimeInMillis())) ;
         exoEvent.setCalendarId(exoCalendar.getId()) ;

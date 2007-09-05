@@ -19,7 +19,7 @@ import javax.jcr.query.QueryResult;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarCategory;
 import org.exoplatform.calendar.service.CalendarSetting;
-import org.exoplatform.calendar.service.Event;
+import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.GroupCalendarData;
@@ -486,13 +486,13 @@ public class JCRDataStorage implements DataStorage{
   }
   // Event APIs
   
-  public Event getUserEvent(String username, String calendarId, String eventId) throws Exception {
+  public CalendarEvent getUserEvent(String username, String calendarId, String eventId) throws Exception {
     Node calendarNode = getCalendarHome(username).getNode(calendarId) ;
     return getEvent(calendarNode.getNode(eventId)) ;
   }
   
-  public List<Event> getUserEventByCalendar(String username, List<String> calendarIds) throws Exception {
-    List<Event> events = new ArrayList<Event>() ;
+  public List<CalendarEvent> getUserEventByCalendar(String username, List<String> calendarIds) throws Exception {
+    List<CalendarEvent> events = new ArrayList<CalendarEvent>() ;
     for(String calendarId : calendarIds) {
       Node calendarNode = getCalendarHome(username).getNode(calendarId) ;
       NodeIterator it = calendarNode.getNodes();
@@ -503,29 +503,29 @@ public class JCRDataStorage implements DataStorage{
     return events ;
   }
   
-  public List<Event> getEvents(EventQuery eventQuery) throws Exception {
+  public List<CalendarEvent> getEvents(EventQuery eventQuery) throws Exception {
     Session session = getJCRSession() ;
     QueryManager qm = session.getWorkspace().getQueryManager() ;
     Query query = qm.createQuery(eventQuery.getQueryStatement(), Query.XPATH) ;
     QueryResult result = query.execute();
     NodeIterator it = result.getNodes();
-    List<Event> events = new ArrayList<Event>() ;
+    List<CalendarEvent> events = new ArrayList<CalendarEvent>() ;
     while(it.hasNext()) {
       events.add(getEvent(it.nextNode())) ;
     }
     return events ;
   }
   
-  public void saveUserEvent(String username, String calendarId, Event event, boolean isNew) throws Exception {
+  public void saveUserEvent(String username, String calendarId, CalendarEvent event, boolean isNew) throws Exception {
     Node calendarNode = getCalendarHome(username).getNode(calendarId);
     saveEvent(calendarNode, event, isNew) ;
   }
   
-  public Event removeUserEvent(String username, String calendarId, String eventId) throws Exception {
+  public CalendarEvent removeUserEvent(String username, String calendarId, String eventId) throws Exception {
     Node calendarNode = getCalendarHome(username).getNode(calendarId);
     if(calendarNode.hasNode(eventId)){
       Node eventNode = calendarNode.getNode(eventId) ;
-      Event event = getEvent(eventNode) ;
+      CalendarEvent event = getEvent(eventNode) ;
       eventNode.remove() ;
       calendarNode.save() ;
       calendarNode.getSession().save() ;
@@ -534,13 +534,13 @@ public class JCRDataStorage implements DataStorage{
     return null ;
   }
   
-  public Event getGroupEvent(String calendarId, String eventId) throws Exception {
+  public CalendarEvent getGroupEvent(String calendarId, String eventId) throws Exception {
     Node calendarNode = getCalendarHome().getNode(calendarId) ;
     return getEvent(calendarNode.getNode(eventId)) ;
   }
   
-  public List<Event> getGroupEventByCalendar(List<String> calendarIds) throws Exception {
-    List<Event> events = new ArrayList<Event>() ;
+  public List<CalendarEvent> getGroupEventByCalendar(List<String> calendarIds) throws Exception {
+    List<CalendarEvent> events = new ArrayList<CalendarEvent>() ;
     for(String calendarId : calendarIds){
       Node calendarNode = getCalendarHome().getNode(calendarId) ;    
       NodeIterator it = calendarNode.getNodes();
@@ -551,16 +551,16 @@ public class JCRDataStorage implements DataStorage{
     return events ;
   }
   
-  public void saveGroupEvent(String calendarId, Event event, boolean isNew) throws Exception {
+  public void saveGroupEvent(String calendarId, CalendarEvent event, boolean isNew) throws Exception {
     Node calendarNode = getCalendarHome().getNode(calendarId) ;
     saveEvent(calendarNode, event, isNew) ;
   }
   
-  public Event removeGroupEvent(String calendarId, String eventId) throws Exception {
+  public CalendarEvent removeGroupEvent(String calendarId, String eventId) throws Exception {
     Node calendarNode = getCalendarHome().getNode(calendarId) ;
     if(calendarNode.hasNode(eventId)){
       Node eventNode = calendarNode.getNode(eventId) ;
-      Event event = getEvent(eventNode) ;
+      CalendarEvent event = getEvent(eventNode) ;
       eventNode.remove() ;
       calendarNode.save() ;
       calendarNode.getSession().save() ;
@@ -583,8 +583,8 @@ public class JCRDataStorage implements DataStorage{
     reminderNode.setProperty("exo:reminder", reminder.getReminder()) ;
   }
   
-  private Event getEvent(Node eventNode) throws Exception {
-    Event event = new Event() ;
+  private CalendarEvent getEvent(Node eventNode) throws Exception {
+    CalendarEvent event = new CalendarEvent() ;
     if(eventNode.hasProperty("exo:id")) event.setId(eventNode.getProperty("exo:id").getString()) ;
     if(eventNode.hasProperty("exo:calendarId"))event.setCalendarId(eventNode.getProperty("exo:calendarId").getString()) ;
     if(eventNode.hasProperty("exo:summary")) event.setSummary(eventNode.getProperty("exo:summary").getString()) ;
@@ -613,7 +613,7 @@ public class JCRDataStorage implements DataStorage{
     return event ;
   }
   
-  private void saveEvent(Node calendarNode, Event event, boolean isNew) throws Exception {
+  private void saveEvent(Node calendarNode, CalendarEvent event, boolean isNew) throws Exception {
     Node eventNode ;
     if(isNew) {
       eventNode = calendarNode.addNode(event.getId(), "exo:calendarEvent") ;
