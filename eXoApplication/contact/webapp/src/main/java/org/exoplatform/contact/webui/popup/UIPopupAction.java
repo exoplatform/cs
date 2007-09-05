@@ -4,6 +4,8 @@
  **************************************************************************/
 package org.exoplatform.contact.webui.popup;
 
+import java.util.List;
+
 import org.exoplatform.contact.webui.popup.UIPopupComponent;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -28,7 +30,21 @@ public class UIPopupAction extends UIContainer {
     renderChildren(context) ;
     context.getWriter().append("</span>");
   }
-
+  
+  /*public void renderChildren(WebuiRequestContext context) throws Exception {
+    List<UIComponent> list = getChildren() ;
+    for(UIComponent child :  list) {
+      if(child.isRendered()) {
+        if(child instanceof UIPopupWindow) {
+          context.getWriter().append("<span class=\"").append(child.getId()).append("\"");
+          child.processRender(context) ;
+          context.getWriter().append("</span>") ;
+        }
+        
+      }
+    }
+  }*/
+  
   public <T extends UIComponent> T activate(Class<T> type, int width) throws Exception {
     return activate(type, null, width, 0);
   }

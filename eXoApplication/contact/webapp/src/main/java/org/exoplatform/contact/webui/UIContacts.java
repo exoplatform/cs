@@ -79,10 +79,8 @@ public class UIContacts extends UIForm  {
       }
       UIContactPortlet contactPortlet = uiContact.getAncestorOfType(UIContactPortlet.class) ;
       UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
-      UIPopupContainer popupContainer = popupAction.createUIComponent(UIPopupContainer.class, null, null) ;
-      popupContainer.setId("AddTagPopupContainer") ;
-      popupContainer.addChild(UIAddNewTag.class, null, null) ;
-      popupAction.activate(popupContainer, 600, 0, true) ;
+      UIAddNewTag uiAddTag = popupAction.createUIComponent(UIAddNewTag.class, null, null) ;
+      popupAction.activate(uiAddTag, 600, 0, true) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   }

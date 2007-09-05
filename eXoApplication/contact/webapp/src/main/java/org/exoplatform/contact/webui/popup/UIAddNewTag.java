@@ -14,6 +14,7 @@ import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContacts;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -44,6 +45,7 @@ public class UIAddNewTag extends UIForm implements UIPopupComponent {
   public static String[] FIELD_SHAREDCONTACT_BOX = null;
 
   public UIAddNewTag() throws Exception {
+    setId("UITagForm") ;
     addUIFormInput(new UIFormStringInput(FIELD_TAGNAME_INPUT, FIELD_TAGNAME_INPUT, null));
 
     ContactService contactService = getApplicationComponent(ContactService.class);
@@ -56,7 +58,7 @@ public class UIAddNewTag extends UIForm implements UIPopupComponent {
       addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_SHAREDCONTACT_BOX[i], FIELD_SHAREDCONTACT_BOX[i], false));
     }
   }
-
+  
   public String getLabel(String id) throws Exception {
     try {
       return  super.getLabel(id) ;

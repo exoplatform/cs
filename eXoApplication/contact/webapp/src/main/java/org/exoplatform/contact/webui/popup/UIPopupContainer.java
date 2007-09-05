@@ -23,10 +23,9 @@ public class UIPopupContainer extends UIContainer implements UIPopupComponent {
   public UIPopupContainer() throws Exception {    
     addChild(UIPopupAction.class, null, "contactAction") ;
   }
-
+  
   public void activate() throws Exception {
-    // TODO Auto-generated method stub
-    
+    // TODO Auto-generated method stub    
   }
 
   public void deActivate() throws Exception {
