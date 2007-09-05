@@ -1,14 +1,18 @@
-<div class="UITagContainer">
+<%
+  import org.exoplatform.mail.service.Tag;
+%>
+<div class="UITagContainer" id="<%=uicomponent.getId()%>">
 	<div class="TitleBar">
 		<div class="DownArrow3Icon" title="Collapse/Expand all"><span></span></div>
 		<div class="TagTitle BlueTag">Tags</div>
 		<div class="ActionIcon"><span/></div>
   <div style="clear: both"><span></span></div>
-	</div>
+	</div>	
 	<div class="TagsList">
-		<a href="#" class="IconHolder BlueTag">Customers</a>
-		<a href="#" class="IconHolder RedTag">Company</a>
-		<a href="#" class="IconHolder GreenTag">Docs Team</a>
-		<a href="#" class="IconHolder VioletTag">Design Team</a>
+	  <%
+     for(Tag tag : uicomponent.getTags()) {
+    %>
+		  <a href="#" class="IconHolder BlueTag"><%=tag.getName()%></a>		
+		<%}%>
 	</div>
 </div>

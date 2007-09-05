@@ -5,12 +5,20 @@
 package org.exoplatform.mail.webui.popup;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.exoplatform.mail.service.MailService;
+import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.Tag;
 import org.exoplatform.mail.service.Utils;
+import org.exoplatform.mail.webui.UIFolderContainer;
+import org.exoplatform.mail.webui.UIMailPortlet;
+import org.exoplatform.mail.webui.UISelectAccount;
+import org.exoplatform.mail.webui.UITags;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -24,6 +32,8 @@ import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
+
+import com.sun.corba.se.pept.protocol.MessageMediator;
 
 
 /**
@@ -43,9 +53,12 @@ import org.exoplatform.webui.form.UIFormStringInput;
 public class UITagForm extends UIForm implements UIPopupComponent{
   public static final String SELECT_AVAIABLE_TAG = "New Tag";
   
+  public Map<String, String> messageMap = new HashMap<String, String>() ;
+  
   public UITagForm() { 
     addChild(new UIFormStringInput(SELECT_AVAIABLE_TAG, null, null));
   }
+  
   public void createCheckBoxTagList(List<Tag> listTags) {
     removeChild(UIFormCheckBoxInput.class);
     for(Tag tag : listTags) {
@@ -60,12 +73,34 @@ public class UITagForm extends UIForm implements UIPopupComponent{
   
   static  public class SaveActionListener extends EventListener<UITagForm> {
     public void execute(Event<UITagForm> event) throws Exception {
-      UITagForm uiForm = event.getSource() ;
+      UITagForm uiTagForm = event.getSource(); 
+      UIMailPortlet uiPortlet = uiTagForm.getAncestorOfType(UIMailPortlet.class);
+      String newTagName = uiTagForm.getUIStringInput(SELECT_AVAIABLE_TAG).getValue();
+      List<String> messageList = new ArrayList<String>();
+      messageList = Arrays.asList(uiTagForm.messageMap.values().toArray(new String[]{}));
+      MailService service = uiTagForm.getApplicationComponent(MailService.class);
+      List<Tag> tagList = new ArrayList<Tag>();
+
+      if (newTagName != null && newTagName != "") {
+        Tag newTag = new Tag();
+        newTag.setName(newTagName);
+        tagList.add(newTag);
+      }
+      
+      String username = uiPortlet.getCurrentUser() ;
+      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
+      service.addTag(username, accountId, messageList, tagList);
+      uiPortlet.cancelAction() ;
+      UITags uiTags = uiPortlet.findFirstComponentOfType(UITags.class) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiTags) ;
     }
   }
+  
   static  public class CancelActionListener extends EventListener<UITagForm> {
     public void execute(Event<UITagForm> event) throws Exception {
       UITagForm uiForm = event.getSource() ;
+      UIMailPortlet uiPortlet = uiForm.getAncestorOfType(UIMailPortlet.class);
+      uiPortlet.cancelAction();
     }
   }
    

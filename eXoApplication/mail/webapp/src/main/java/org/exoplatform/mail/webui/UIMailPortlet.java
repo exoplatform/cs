@@ -35,6 +35,7 @@ public class UIMailPortlet extends UIPortletApplication {
   public String getCurrentUser() {
     return Util.getPortalRequestContext().getRemoteUser() ;
   }
+  
   public void renderPopupMessages() throws Exception {
     UIPopupMessages popupMess = getUIPopupMessages();
     if(popupMess == null)  return ;

@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.mail.service.MailService;
+import org.exoplatform.mail.service.Tag;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIComponent;
@@ -31,9 +32,12 @@ import org.exoplatform.webui.event.EventListener;
 public class UITags extends UIComponent {
   public UITags() throws Exception {}
   
-  private List getTags() throws Exception {
+  private List<Tag> getTags() throws Exception {
     MailService mailService = (MailService)PortalContainer.getComponent(MailService.class) ;
-    return null ;
+    String username = getAncestorOfType(UIMailPortlet.class).getCurrentUser() ;
+    String accountId = getAncestorOfType(UINavigationContainer.class).
+    getChild(UISelectAccount.class).getSelectedValue() ;
+    return mailService.getTags(username, accountId) ;
   }
   
   static public class ChangeTagActionListener extends EventListener<UITags> {

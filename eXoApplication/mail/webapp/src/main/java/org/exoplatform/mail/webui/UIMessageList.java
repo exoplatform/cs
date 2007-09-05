@@ -18,10 +18,13 @@ import org.exoplatform.mail.webui.popup.UITagForm;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIComponent;
+import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
+
+import com.sun.corba.se.spi.legacy.connection.GetEndPointInfoAgainException;
 
 /**
  * Created by The eXo Platform SARL
@@ -31,6 +34,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
  */
 
 @ComponentConfig(
+    lifecycle = UIFormLifecycle.class,
     template =  "app:/templates/mail/webui/UIMessageList.gtmpl",
     events = {
         @EventConfig(listeners = UIMessageList.SelectMessageActionListener.class),
@@ -68,6 +72,17 @@ public class UIMessageList extends UIForm {
       addChild(new UIFormCheckBoxInput<Boolean>(msg.getId(), msg.getId(), null));
     }
   }   
+  
+  public List<String> getCheckedMessage() throws Exception {
+    List<String> messageList = new ArrayList<String>();
+    for (Message msg : getMessageByFolder()) {
+      UIFormCheckBoxInput<Boolean> uiCheckbox = getChildById(msg.getId());
+      if (uiCheckbox != null && uiCheckbox.isChecked()) {
+        messageList.add(msg.getId());
+      }
+    }
+    return messageList;
+  }
   
   public void removeCheckboxForMessages() throws Exception {
     //TODO: remove all checkboxs for message list before change folder
@@ -142,17 +157,20 @@ public class UIMessageList extends UIForm {
 
   static public class AddTagActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
-      UIMessageList uiActionBar = event.getSource() ; 
-      UIMailPortlet uiPortlet = uiActionBar.getAncestorOfType(UIMailPortlet.class);
+      UIMessageList uiMessageList = event.getSource() ; 
+      UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class);
-      UITagForm uiTagForm = uiActionBar.createUIComponent(UITagForm.class, null, null) ;
+      UITagForm uiTagForm = uiMessageList.createUIComponent(UITagForm.class, null, null) ;
       String username = uiPortlet.getCurrentUser();
-      MailService mailService = uiActionBar.getApplicationComponent(MailService.class);
+      MailService mailService = uiMessageList.getApplicationComponent(MailService.class);
       UINavigationContainer uiNavigation = uiPortlet.getChild(UINavigationContainer.class) ;
       UISelectAccount uiSelect = uiNavigation.getChild(UISelectAccount.class) ;
       String accId = uiSelect.getSelectedValue() ;
       List<Tag> listTags = mailService.getTags(username, accId);
       uiTagForm.createCheckBoxTagList(listTags) ;
+      for (String msgId : uiMessageList.getCheckedMessage()) {
+        uiTagForm.messageMap.put(msgId, msgId); 
+      }     
       uiPopupAction.activate(uiTagForm, 600, 0, true);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
     }
