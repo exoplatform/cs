@@ -173,7 +173,7 @@
     	</thead>
     	<tbody>
     	<%
-  			for(Message msg : uicomponent.getMessageByFolder()) {
+  			for(Message msg : uicomponent.getShowMessageList()) {
   			  String actionLink = uicomponent.event("SelectMessage", msg.getId());
   			  checkboxField = uicomponent.getChildById(msg.getId());
   		%>

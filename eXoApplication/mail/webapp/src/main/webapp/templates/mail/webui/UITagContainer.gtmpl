@@ -11,8 +11,10 @@
 	<div class="TagsList">
 	  <%
      for(Tag tag : uicomponent.getTags()) {
+       String tagname = tag.getName();
+       String actionLink = uicomponent.event("ChangeTag", tagname);
     %>
-		  <a href="#" class="IconHolder BlueTag"><%=tag.getName()%></a>		
+		  <a href="$actionLink" class="IconHolder BlueTag"><%=tag.getName()%></a>		
 		<%}%>
 	</div>
 </div>

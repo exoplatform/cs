@@ -78,8 +78,9 @@ public class UIDefaultFolders extends UIContainer {
       uiDFolder.setSelectedFolder(folderId) ;
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
       uiMessageList.setSelectedFolderId(folderId) ;
-      uiMessageList.initCheckboxForMessages();
+      uiMessageList.addCheckboxForMessages();
       uiCFolder.setSelectedFolder(null) ;
+      uiMessageList.setSelectedTagName(null) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList) ;
     }

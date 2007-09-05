@@ -57,6 +57,7 @@ import com.sun.corba.se.spi.legacy.connection.GetEndPointInfoAgainException;
 public class UIMessageList extends UIForm {
   private String selectedMessageId_ = null ;
   private String selectedFolderId_ = null ;
+  private String selectedTagName_ = null ;
 
   public UIMessageList() throws Exception {}
 
@@ -66,16 +67,26 @@ public class UIMessageList extends UIForm {
   protected String getSelectedFolderId() {return selectedFolderId_ ;}
   protected void setSelectedFolderId(String folderId) {selectedFolderId_ = folderId ;}
   
-  public void initCheckboxForMessages()throws Exception {
-    List<Message> messageList = getMessageByFolder();
+  protected String getSelectedTagName() {return selectedTagName_ ;}
+  protected void setSelectedTagName(String tagName) {selectedTagName_ = tagName ;}
+  
+  public void addCheckboxForMessages() throws Exception {
+    List<Message> messageList = getShowMessageList();
     for (Message msg : messageList) {
       addChild(new UIFormCheckBoxInput<Boolean>(msg.getId(), msg.getId(), null));
     }
-  }   
+  }
+  
+  public void removeCheckboxForMessage() throws Exception {
+    List<Message> messageList = getShowMessageList();
+    for (Message msg : messageList) {
+      removeChildById(msg.getId());
+    }
+  }
   
   public List<String> getCheckedMessage() throws Exception {
     List<String> messageList = new ArrayList<String>();
-    for (Message msg : getMessageByFolder()) {
+    for (Message msg : getShowMessageList()) {
       UIFormCheckBoxInput<Boolean> uiCheckbox = getChildById(msg.getId());
       if (uiCheckbox != null && uiCheckbox.isChecked()) {
         messageList.add(msg.getId());
@@ -88,13 +99,13 @@ public class UIMessageList extends UIForm {
     //TODO: remove all checkboxs for message list before change folder
   }
   
-  protected List<Message> getMessageByFolder() throws Exception {
-    List<Message> messageList = new ArrayList<Message>() ;
+  protected List<Message> getShowMessageList() throws Exception {
+    List<Message> messageList = new ArrayList<Message>();
+    MailService mailSvr = getApplicationComponent(MailService.class) ;
+    String username = getAncestorOfType(UIMailPortlet.class).getCurrentUser() ;
+    String accountId = getAncestorOfType(UIMailPortlet.class).
+    findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
     if(getSelectedFolderId() != null) {
-      MailService mailSvr = getApplicationComponent(MailService.class) ;
-      String username = getAncestorOfType(UIMailPortlet.class).getCurrentUser() ;
-      String accountId = getAncestorOfType(UIMailPortlet.class).
-      findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
       MessageFilter filter = new MessageFilter("filterByFolder") ;
       Folder folder = mailSvr.getFolder(username, accountId, getSelectedFolderId()) ;
       filter.setFolder(new String[]{folder.getName()}) ;
@@ -104,8 +115,11 @@ public class UIMessageList extends UIForm {
       for(MessageHeader mh : messageHeaders) {
         messageList.add((Message)mh) ;
       }
+    } else if(getSelectedTagName() != null) {
+      setSelectedFolderId(null);
+      messageList =  mailSvr.getMessageByTag(username, accountId, getSelectedTagName()); 
     }
-    return messageList ;
+    return messageList;
   }
   
   static public class SelectMessageActionListener extends EventListener<UIMessageList> {

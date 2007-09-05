@@ -9,6 +9,8 @@ import java.util.List;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Tag;
+import org.exoplatform.mail.webui.popup.UIMailSettings;
+import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIComponent;
@@ -42,7 +44,15 @@ public class UITags extends UIComponent {
   
   static public class ChangeTagActionListener extends EventListener<UITags> {
     public void execute(Event<UITags> event) throws Exception {
-      String path = event.getRequestContext().getRequestParameter(OBJECTID) ;      
+      String tagname = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      UITags uiTags = event.getSource();
+      UIMailPortlet uiPortlet = uiTags.getAncestorOfType(UIMailPortlet.class);
+      UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
+      uiMessageList.setSelectedFolderId(null);
+      uiMessageList.setSelectedTagName(tagname);
+      uiMessageList.addCheckboxForMessages();
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiTags);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList);
     }
   }
 }
