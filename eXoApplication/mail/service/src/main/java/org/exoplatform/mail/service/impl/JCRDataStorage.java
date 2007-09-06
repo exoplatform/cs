@@ -160,6 +160,7 @@ public class JCRDataStorage implements DataStorage{
     Message msg = new Message();
     if (messageNode.hasProperty(Utils.EXO_ID)) msg.setId(messageNode.getProperty(Utils.EXO_ID).getString());
     if (messageNode.hasProperty(Utils.EXO_ACCOUNT)) msg.setAccountId(messageNode.getProperty(Utils.EXO_ACCOUNT).getString()) ;
+    if (messageNode.hasProperty(Utils.EXO_FROM)) msg.setFrom(messageNode.getProperty(Utils.EXO_FROM).getString());
     if (messageNode.hasProperty(Utils.EXO_TO)) msg.setMessageTo(messageNode.getProperty(Utils.EXO_TO).getString());
     if (messageNode.hasProperty(Utils.EXO_SUBJECT)) msg.setSubject(messageNode.getProperty(Utils.EXO_SUBJECT).getString());
     if (messageNode.hasProperty(Utils.EXO_CC)) msg.setMessageCc(messageNode.getProperty(Utils.EXO_CC).getString());
@@ -195,11 +196,13 @@ public class JCRDataStorage implements DataStorage{
       }
     }
     msg.setAttachements(attachments);
+    
     GregorianCalendar cal = new GregorianCalendar();
     if (messageNode.hasProperty(Utils.EXO_RECEIVEDDATE)) {
       cal.setTimeInMillis(messageNode.getProperty(Utils.EXO_RECEIVEDDATE).getLong());
       msg.setReceivedDate(cal.getTime());
     }
+
     if (messageNode.hasProperty(Utils.EXO_SENDDATE)) {
       cal.setTimeInMillis(messageNode.getProperty(Utils.EXO_SENDDATE).getLong());
       msg.setReceivedDate(cal.getTime());
@@ -271,6 +274,7 @@ public class JCRDataStorage implements DataStorage{
       // add some properties
       nodeMsg.setProperty(Utils.EXO_ID, message.getId());
       nodeMsg.setProperty(Utils.EXO_ACCOUNT, accountId);
+      nodeMsg.setProperty(Utils.EXO_FROM, message.getFrom());
       nodeMsg.setProperty(Utils.EXO_TO, message.getMessageTo());
       nodeMsg.setProperty(Utils.EXO_SUBJECT, message.getSubject());
       nodeMsg.setProperty(Utils.EXO_CC, message.getMessageCc());

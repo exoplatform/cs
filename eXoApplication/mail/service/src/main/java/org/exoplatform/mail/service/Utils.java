@@ -49,6 +49,7 @@ public class Utils {
   public static final String EXO_REPLYEMAIL = "exo:emailReplyAddress".intern() ;
   public static final String EXO_SIGNATURE = "exo:signature".intern() ;
   public static final String EXO_DESCRIPTION = "exo:description".intern() ;
+  public static final String EXO_FROM = "exo:from".intern();
   public static final String EXO_TO = "exo:to".intern() ;
   public static final String EXO_SUBJECT = "exo:subject".intern() ;
   public static final String EXO_CC = "exo:cc".intern() ;
