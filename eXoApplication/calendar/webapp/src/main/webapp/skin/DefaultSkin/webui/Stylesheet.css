@@ -459,10 +459,14 @@
   height: 23px;
 	border-right: 1px solid #c7c7c7;
 	width: 13.4%;
+	border-top:none;
+	border-bottom:none;
+	border-left: none;
 }
 
 .UIWeekView .UIGrid {
 	width: 98%;
+	border: 0px;
 }
 
 .UIWeekView .TdLine{
@@ -479,10 +483,12 @@
 
 .UIWeekView .UIGrid td{
 	padding: 0px;
+	border-left: none;
 }
 
 .UIWeekView .EventAllday{
 	background: #DFE6F8;
+	border-top: none;
 }
 
 .UIWeekView .Today{
@@ -503,6 +509,170 @@
 	border:1px solid #ffffff;
 	border-top: none;
 	background:#e5eaff;
+}
+
+/*====================Schedule View============================*/
+
+.UIScheduleView {
+	border-left: 1px solid #c7c7c7;
+	border-bottom: 1px solid #c7c7c7;
+	background-color: white;
+	overflow:auto;
+	height: 480px;
+}
+
+.UIScheduleView .UIGrid th {
+	background: url('background/TitleBarBG1x23.gif') repeat-x ;	
+  height: 23px;
+	border-right: 1px solid #c7c7c7;
+	width: 22%;
+	border-top:none;
+	border-bottom:none;
+	border-left: none;
+}
+
+.UIScheduleView .UIGrid {
+	width: 98%;
+	border: 0px;
+}
+
+.UIScheduleView .TdLine{
+	border-top:  1px solid #c7c7c7;
+}
+
+.UIScheduleView .TimeBusy{
+	border: 1px solid #ffffff;
+	background: #FFF6A3;
+}
+
+.UIScheduleView .TimeVeryBusy{
+	border: 1px solid #ffffff;
+	background: #FFDCDC;
+}
+
+.UIScheduleView .TimeHost{
+	border: 1px solid #ffffff;
+	background: #F79090;
+}
+
+.UIScheduleView .TimeVeryHost{
+	border: 1px solid #ffffff;
+	background: #F10000;
+}
+
+.UIScheduleView .TdDotLine{
+	border-top:  1px dotted #c7c7c7;
+}
+
+.UIScheduleView .TdTime{
+	text-align: right;
+}
+
+.UIScheduleView .UIGrid td{
+	padding: 0px;
+	border-left: none;
+}
+
+.UIScheduleView .EventContainerBoder{
+	border:1px solid #808080;
+}
+
+.UIScheduleView .EventContainerBar{
+	border:1px solid #ffffff;
+	border-bottom: none;
+	background:#cdd7ff;
+}
+
+.UIScheduleView .EventContainer{
+	border:1px solid #ffffff;
+	border-top: none;
+	background:#e5eaff;
+}
+
+/*====================Year View=====================*/
+
+.UIYearView {
+	border-left: 1px solid #c7c7c7;
+	border-bottom: 1px solid #c7c7c7;
+	background-color: white;
+	overflow:auto;
+	height: 480px;
+}
+
+.UIYearView .UIGrid td {
+	border-top: 1px solid #c7c7c7;
+}
+
+.UIYearView .DayWorkingArea {
+	padding: 5px;
+}
+
+.UIYearView .RowContainerDay .CalendarContentNomal {
+	background: #ffffff;
+	padding: 0px;
+}
+
+.UIYearView .RowContainerDay .CalendarMatchedEventContent {
+	background: #CADBFF;
+	padding: 0px;
+}
+
+.UIYearView .WhiteWeekSuburdbar {
+	background: url('background/TitleBarBG1x23.gif') repeat-x ;
+	height: 23px;
+	text-align: center;
+	line-height: 23px;
+}
+
+.UIYearView .WeekList .SundayTitle {
+	float: left;
+	font-weight: bold; color: red;
+	line-height: 20px;
+	width: 14%;
+	text-align: center;
+}
+
+.UIYearView .WeekList .DayTitle {
+	float: left;
+	font-weight: bold; color: #0796d2;
+	line-height: 20px;
+	width: 14%;
+	text-align: center;
+}
+
+.UIYearView .MonthList {
+	padding: 8px;
+}
+
+.UIYearView .DayList {
+	border: 1px solid #c7c7c7;
+	padding: 4px;
+	background:#ffffff;
+}
+
+.UIYearView .DayList .CalendarBoldDay {
+	font-weight:bolder;
+}
+
+.UIYearView .MonthList .WeekList {
+	padding-left: 4px;
+}
+
+.UIYearView .MonthList .UIGrid table {
+	border: none;
+}
+
+.UIYearView .MonthList .UIGrid {
+	border: none;
+}
+
+.UIYearView .MonthList .UIGrid td {
+	border: 1px solid white;
+	background: #f3f3f3;
+	text-align: center;
+	padding: 0px;
+	vertical-align: middle;
+	
 }
 
 /*====================Event List View=====================*/
