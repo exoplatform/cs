@@ -4,6 +4,7 @@
  **************************************************************************/
 package org.exoplatform.mail.webui ;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.exoplatform.container.PortalContainer;
@@ -34,12 +35,15 @@ import org.exoplatform.webui.event.EventListener;
 public class UITags extends UIComponent {
   public UITags() throws Exception {}
   
-  private List<Tag> getTags() throws Exception {
+  public List<Tag> getTags() throws Exception {
+    List<Tag> tagList = new ArrayList<Tag>();
     MailService mailService = (MailService)PortalContainer.getComponent(MailService.class) ;
-    String username = getAncestorOfType(UIMailPortlet.class).getCurrentUser() ;
-    String accountId = getAncestorOfType(UINavigationContainer.class).
-    getChild(UISelectAccount.class).getSelectedValue() ;
-    return mailService.getTags(username, accountId) ;
+    UIMailPortlet uiPortlet = getAncestorOfType(UIMailPortlet.class);
+    String username = uiPortlet.getCurrentUser() ;
+    String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
+    if (accountId != null && accountId != "")  
+      tagList = mailService.getTags(username, accountId);
+    return tagList;
   }
   
   static public class ChangeTagActionListener extends EventListener<UITags> {
