@@ -37,7 +37,7 @@
 									</div>
 									<div class="FieldContainer">
 										<div class="Title">Reply-to:</div>
-										<div class="LinkAddress">brice.revenant@exoplatform.com</div>
+										<div class="LinkAddress"><%=msg.getReplyTo()%></div>
 										<div style="clear: left;"><span></span></div>
 									</div>
 									<div class="FieldContainer">

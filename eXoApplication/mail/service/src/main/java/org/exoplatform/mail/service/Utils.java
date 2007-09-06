@@ -57,6 +57,7 @@ public class Utils {
   public static final String EXO_FROM = "exo:from".intern();
   public static final String EXO_TO = "exo:to".intern() ;
   public static final String EXO_SUBJECT = "exo:subject".intern() ;
+  public static final String EXO_REPLYTO = "exo:replyto".intern();
   public static final String EXO_CC = "exo:cc".intern() ;
   public static final String EXO_BCC= "exo:bcc".intern() ;
   public static final String EXO_BODY = "exo:body".intern() ;

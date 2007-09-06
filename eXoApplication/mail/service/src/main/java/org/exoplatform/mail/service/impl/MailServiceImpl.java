@@ -200,6 +200,7 @@ public class MailServiceImpl implements MailService{
           newMsg.setMessageTo(getAddress(mes.getRecipients(javax.mail.Message.RecipientType.TO)));
           newMsg.setSubject(mes.getSubject());
           newMsg.setFrom(getAddress(mes.getFrom()));
+          newMsg.setReplyTo(getAddress(mes.getReplyTo()));
           newMsg.setUnread(true);
           newMsg.setReceivedDate(receivedDate);
           newMsg.setSendDate(mes.getSentDate());

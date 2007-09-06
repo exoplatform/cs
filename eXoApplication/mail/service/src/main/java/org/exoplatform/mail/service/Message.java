@@ -20,6 +20,7 @@ public class Message extends MessageHeader {
   private String bcc ;
   private String body ;
   private String subject ;
+  private String replyTo ;
   private Date sendDate ;
   private Date receivedDate ;
   private boolean isUnread = true ;
@@ -67,4 +68,7 @@ public class Message extends MessageHeader {
   
   public String getFrom() { return from ; }
   public void setFrom(String from) { this.from = from ; } 
+  
+  public String getReplyTo() { return replyTo; }
+  public void setReplyTo(String replyTo) { this.replyTo = replyTo; }
 }
