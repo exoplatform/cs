@@ -4,6 +4,11 @@
  **************************************************************************/
 package org.exoplatform.mail.service;
 
+import java.text.DateFormat;
+import java.text.Format;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Created by The eXo Platform SARL
  * Author : Pham Tuan
@@ -85,6 +90,7 @@ public class Utils {
   public static boolean isEmptyField(String value) {
     return value == null || value.trim().length() == 0 ;
   }
+  
   public static boolean isNumber(String number) {
     try {
       Long.parseLong(number.trim()) ;
@@ -92,5 +98,11 @@ public class Utils {
       return false;
     }
     return true ;
+  }
+  
+  public static String formatDate(String format, Date date) {
+    Format formatter ;
+    formatter = new SimpleDateFormat(format);
+    return formatter.format(date);
   }
 }

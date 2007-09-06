@@ -1,5 +1,6 @@
 <%
  import org.exoplatform.mail.service.Message;
+ import org.exoplatform.mail.service.Utils; 
  String compId = uicomponent.getId() ;
  
 %>
@@ -189,7 +190,7 @@
   				<td style="padding: 0px; border-right: 1px solid #ffffff;"></td>
   				<td class="text"><a href="$actionLink"><%=msg.getSubject()%></a></td>
   				<td class="text">(5)</td>
-  				<td class="text"><a href="$actionLink"><%=msg.getReceivedDate()%></a></td>
+  				<td class="text"><a href="$actionLink"><%=Utils.formatDate('MM/dd/yyyy HH:mm aaa', msg.getReceivedDate())%></a></td>
   				<td><a href="$actionLink">10M</a></td>
   				<td style="padding: 0px;" class="text"></td>
      	 </tr>
