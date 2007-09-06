@@ -4,7 +4,7 @@
 	import org.exoplatform.mail.webui.UIMessagePreview ;
 %>
 
-<div class="MailWorkingDetails SpliterContainer">
+<div class="MailWorkingDetails SpliterContainer" id="<%=uicomponent.getId()%>">
 	<div class="UIMessageArea SpliterResizableArea">		
 		<%uicomponent.renderChild(UIMessageList.class);%>
 	</div>

@@ -1,4 +1,12 @@
-<div class="UIMessagePreview">
+<%
+  import org.exoplatform.mail.service.Message;
+  import org.exoplatform.mail.service.Utils; 
+  Message msg = uicomponent.getMessage();
+%>
+<div class="UIMessagePreview" id="<%=uicomponent.getId()%>">
+<%
+  if (msg != null) {
+%>
 	<div class="ReadingPaneBar">
 		<div class="Subject"><span>Subject: </span><span>Chao anh</span></div>
 		<div class="MaximizeReadingPane" title="Maximize Reading Pane"><span></span></div>
@@ -24,7 +32,7 @@
 								<div class="MessageAddress">
 									<div class="FieldContainer">
 										<div class="Title">From:</div>
-										<div class="LinkAddress"><span>Brice Revenant</span> &lt; brice.revenant@gmail.com &gt;</div>
+										<div class="LinkAddress"><span><%=msg.getFrom()%></span> &lt; brice.revenant@gmail.com &gt;</div>
 										<div style="clear: left;"><span></span></div>
 									</div>
 									<div class="FieldContainer">
@@ -39,12 +47,12 @@
 									</div>
 									<div class="FieldContainer">
 										<div class="Title">Date & time:</div>
-										<div class="Address">06/30/2007, 12:40 am</div>
+										<div class="Address"><%=Utils.formatDate('MMM dd, yyyy HH:mm aaa', msg.getReceivedDate())%></div>
 										<div style="clear: left;"><span></span></div>
 									</div>
 									<div class="FieldContainer">
 										<div class="Title">Supject:</div>
-										<div class="Address"><span>Chao anh</span></div>
+										<div class="Address"><span><%=msg.getSubject()%></span></div>
 										<div style="clear: left;"><span></span></div>
 									</div>
 									<div class="FieldContainer">
@@ -81,4 +89,5 @@ Tomorrow morning, we'll show the prototype to M6 with Benjamin. We'll think abou
 		</div>
 <!--  End DecoratorBox ViewBoxStyle -->
 	</div>
+<%}%>	
 </div>

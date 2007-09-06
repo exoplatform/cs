@@ -4,6 +4,7 @@
  **************************************************************************/
 package org.exoplatform.mail.webui ;
 
+import org.exoplatform.mail.service.Message;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIComponent;
@@ -18,19 +19,15 @@ import org.exoplatform.webui.event.EventListener;
  */
 
 @ComponentConfig(
-    template =  "app:/templates/mail/webui/UIMessagePreview.gtmpl",
-    events = {
-        @EventConfig(listeners = UIMessagePreview.ChangePreviewActionListener.class)
-    }
+    template =  "app:/templates/mail/webui/UIMessagePreview.gtmpl"
 )
 
 public class UIMessagePreview extends UIComponent {
+  private Message selectedMessage_ = null;
+  
   public UIMessagePreview() throws Exception {}
   
+  public Message getMessage() throws Exception { return selectedMessage_; }
   
-  static public class ChangePreviewActionListener extends EventListener<UIMessagePreview> {
-    public void execute(Event<UIMessagePreview> event) throws Exception {
-      String path = event.getRequestContext().getRequestParameter(OBJECTID) ;      
-    }
-  }
+  public void setMessage(Message msg) throws Exception { selectedMessage_ = msg; }
 }

@@ -15,6 +15,7 @@ import org.exoplatform.mail.service.MessageHeader;
 import org.exoplatform.mail.service.Tag;
 import org.exoplatform.mail.webui.popup.UIPopupAction;
 import org.exoplatform.mail.webui.popup.UITagForm;
+import org.exoplatform.web.command.handler.GetApplicationHandler;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIComponent;
@@ -104,9 +105,9 @@ public class UIMessageList extends UIForm {
   protected List<Message> getShowMessageList() throws Exception {
     List<Message> messageList = new ArrayList<Message>();
     MailService mailSvr = getApplicationComponent(MailService.class) ;
-    String username = getAncestorOfType(UIMailPortlet.class).getCurrentUser() ;
-    String accountId = getAncestorOfType(UIMailPortlet.class).
-    findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
+    UIMailPortlet uiPortlet = getAncestorOfType(UIMailPortlet.class);
+    String username = uiPortlet.getCurrentUser() ;
+    String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
     if(getSelectedFolderId() != null) {
       MessageFilter filter = new MessageFilter("filterByFolder") ;
       Folder folder = mailSvr.getFolder(username, accountId, getSelectedFolderId()) ;
@@ -126,7 +127,21 @@ public class UIMessageList extends UIForm {
   
   static public class SelectMessageActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
-      String path = event.getRequestContext().getRequestParameter(OBJECTID) ;      
+      String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      System.out.println("==========test=======>>> " + msgId);
+      UIMessageList uiMessageList = event.getSource();
+      UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
+      UIMessagePreview uiMessagePreview = uiPortlet.findFirstComponentOfType(UIMessagePreview.class);
+      UIMessageArea uiMessageArea = uiPortlet.findFirstComponentOfType(UIMessageArea.class);
+      String username = uiPortlet.getCurrentUser();
+      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      MailService mailServ = uiPortlet.getApplicationComponent(MailService.class);
+      Message msg = mailServ.getMessageById(username, msgId, accountId);
+      uiMessageList.setSelectedMessageId(msgId);
+      
+      uiMessagePreview.setMessage(msg);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageArea);
+      //event.getRequestContext().addUIComponentToUpdateByAjax(uiMessagePreview);
     }
   }
   

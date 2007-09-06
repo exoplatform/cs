@@ -150,7 +150,7 @@
   
   <% /*End Message Action Bar*/ %>
   
-  <div class="UIMessageList" id="$compId">
+  <div class="UIMessageList">
   	<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
     	<thead>
     		<tr>
@@ -190,7 +190,7 @@
   				<td style="padding: 0px; border-right: 1px solid #ffffff;"></td>
   				<td class="text"><a href="$actionLink"><%=msg.getSubject()%></a></td>
   				<td class="text">(5)</td>
-  				<td class="text"><a href="$actionLink"><%=Utils.formatDate('MM/dd/yyyy HH:mm aaa', msg.getReceivedDate())%></a></td>
+  				<td class="text"><a href="$actionLink"><%=Utils.formatDate('MMM dd, yyyy HH:mm aaa', msg.getReceivedDate())%></a></td>
   				<td><a href="$actionLink">10M</a></td>
   				<td style="padding: 0px;" class="text"></td>
      	 </tr>

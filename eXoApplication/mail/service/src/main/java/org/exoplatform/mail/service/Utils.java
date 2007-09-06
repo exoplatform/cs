@@ -101,8 +101,7 @@ public class Utils {
   }
   
   public static String formatDate(String format, Date date) {
-    Format formatter ;
-    formatter = new SimpleDateFormat(format);
+    Format formatter = new SimpleDateFormat(format);
     return formatter.format(date);
   }
 }
