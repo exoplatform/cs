@@ -32,7 +32,7 @@
 								<div class="MessageAddress">
 									<div class="FieldContainer">
 										<div class="Title">From:</div>
-										<div class="LinkAddress"><span><%=msg.getFrom()%></span> &lt; brice.revenant@gmail.com &gt;</div>
+										<div class="LinkAddress"><span><%=msg.getFrom()%></span> &lt;  &gt;</div>
 										<div style="clear: left;"><span></span></div>
 									</div>
 									<div class="FieldContainer">
@@ -42,7 +42,7 @@
 									</div>
 									<div class="FieldContainer">
 										<div class="Title">To:</div>
-										<div class="LinkAddress"><span>Phuong</span> &lt; phuong.pham@exoplatform.com &gt;</div>
+										<div class="LinkAddress"><%=msg.getMessageTo()%></div>
 										<div style="clear: left;"><span></span></div>
 									</div>
 									<div class="FieldContainer">
@@ -55,12 +55,20 @@
 										<div class="Address"><span><%=msg.getSubject()%></span></div>
 										<div style="clear: left;"><span></span></div>
 									</div>
-									<div class="FieldContainer">
-										<div class="Title">Tag:</div>
-										<div class="TagIcon"><span></span></div>
-										<div class="Address">Company</div>
-										<div style="clear: left;"><span></span></div>
-									</div>
+									<%
+									  if (msg.getTags() != null && msg.getTags().length > 0) {
+									%>
+  									<div class="FieldContainer">
+  										<div class="Title">Tag:</div>
+  										<div class="TagIcon"><span></span></div>
+  								    <%
+  								      for (tag in msg.getTags()) {
+  								    %>
+  										  <div class="Address" style="font-weight: italic"><a href=""><%=tag%></a></div>
+  										<%}%>
+  										<div style="clear: left;"><span></span></div>
+  									</div>
+									<%}%>
 								</div>
 								<div class="MessageActions" >
 									<div class="DownArrow1Icon"><span></span></div>
@@ -72,10 +80,7 @@
 								<div style="clear: both;"><span></span></div>
 							</div>
 							<div class="MessageDetails">
-								Hi Phuong,<p>
- 
-So I learnt that you are currently sick. I wish you will recover ASAP. I'm not sure if you was able to be at the university for your lessons. Probably next week when you feel better.
-Tomorrow morning, we'll show the prototype to M6 with Benjamin. We'll think about you, you really did a great job for the UI. I'm sure it will help to succeed.</p>
+								<%=msg.getMessageBody()%>
 							</div>											
 						</div>										
 					</div>
