@@ -22,7 +22,7 @@ public class UICalendarViewContainer extends UIContainer  {
   public UICalendarViewContainer() throws Exception {
     addChild(UIMonthView.class, null, null) ;
     addChild(UIDayView.class, null, null).setRendered(false) ;
-    addChild(UIWeekView.class, null, null) ;
+    addChild(UIWeekView.class, null, null).setRendered(false) ;
     //addChild(UIYearView.class, null, null) ;
     //addChild(UIListView.class, null, null).setRendered(true) ;
     //addChild(UIPreview.class, null, null).setRendered(true) ;
