@@ -134,10 +134,14 @@ public class CalendarServiceImpl implements CalendarService{
     return storage_.removeGroupEvent(calendarId, eventId);
   }
   
-  public Map<String, CalendarImportExport>  getCalendarImportExports() {
-    return calendarImportExport_ ;
+  public CalendarImportExport  getCalendarImportExports(String type) {
+    return calendarImportExport_.get(type) ;
   }
-
+  
+  public String[] getExportImportType() throws Exception {
+    return calendarImportExport_.keySet().toArray(new String[]{}) ;
+  }
+  
   public void saveCalendarSetting(String username, CalendarSetting setting) throws Exception {
     storage_.saveCalendarSetting(username, setting) ;
     

@@ -124,6 +124,10 @@ public class ICalendarImportExport implements CalendarImportExport{
       event.getProperties().add(id) ; 
       calendar.getComponents().add(event);
     }
+    VEvent event = new VEvent(new DateTime(), "hello") ;
+    Uid id = new Uid("eventid") ; 
+    event.getProperties().add(id) ;
+    calendar.getComponents().add(event);
     
     ByteArrayOutputStream bout = new ByteArrayOutputStream();
     CalendarOutputter output = new CalendarOutputter();
@@ -148,7 +152,6 @@ public class ICalendarImportExport implements CalendarImportExport{
     if(!isExists) {
       CalendarCategory calendarCate = new CalendarCategory() ;
       currentDateTime = new GregorianCalendar() ;
-      calendarCate.setId(String.valueOf(currentDateTime.getTimeInMillis())) ;
       calendarCate.setDescription("Imported icalendar category") ;
       calendarCate.setName("Imported") ;
       categoryId = calendarCate.getId() ;
@@ -157,7 +160,6 @@ public class ICalendarImportExport implements CalendarImportExport{
       categoryId = cat.getProperty("exo:id").getString() ;
     }
     Calendar exoCalendar = new Calendar() ;
-    exoCalendar.setId(String.valueOf(currentDateTime.getTimeInMillis())) ;
     exoCalendar.setName(iCalendar.getProductId().getValue()) ;
     exoCalendar.setDescription(iCalendar.getProductId().getValue()) ;
     exoCalendar.setCategoryId(categoryId) ;
@@ -184,7 +186,6 @@ public class ICalendarImportExport implements CalendarImportExport{
         }
         exoEvent = new CalendarEvent() ;
         currentDateTime = new GregorianCalendar() ;
-        exoEvent.setId(String.valueOf(currentDateTime.getTimeInMillis())) ;
         exoEvent.setCalendarId(exoCalendar.getId()) ;
         exoEvent.setEventCategoryId(eventCategoryId) ;
         if(event.getSummary() != null) exoEvent.setSummary(event.getSummary().getValue()) ;
@@ -198,7 +199,6 @@ public class ICalendarImportExport implements CalendarImportExport{
         exoEvent.setPrivate(true) ;
         Reminder reminder = new Reminder() ;
         currentDateTime = new GregorianCalendar() ;
-        reminder.setId(String.valueOf(currentDateTime.getTimeInMillis())) ;
         reminder.setEventId(exoEvent.getId()) ;
         List<Reminder> reminders = new ArrayList<Reminder>() ;
         reminders.add(reminder) ;

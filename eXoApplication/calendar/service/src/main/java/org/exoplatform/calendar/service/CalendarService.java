@@ -332,5 +332,6 @@ public interface CalendarService {
   
   public void saveCalendarSetting(String username, CalendarSetting setting) throws Exception ;
   public CalendarSetting getCalendarSetting(String username) throws Exception ;
-  public Map<String, CalendarImportExport>  getCalendarImportExports() ;  
+  public CalendarImportExport getCalendarImportExports(String type) ;
+  public String[] getExportImportType() throws Exception ;
 }
