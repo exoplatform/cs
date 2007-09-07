@@ -293,19 +293,25 @@ public class MailServiceImpl implements MailService{
     }
   }
   private String getAddress(javax.mail.Address[] addr) {
+    InternetAddress[] internetAddress = ((InternetAddress[]) addr);
     String str = "" ;
     int i = 0;
-    if(addr != null && addr.length > 0) {
-      while (i < addr.length) {
+    if(internetAddress != null && internetAddress.length > 0) {
+      while (i < internetAddress.length) {
+        String personal = internetAddress[i].getPersonal();
+        String address = internetAddress[i].getAddress();
+        String sender = address + ";" + address;
+        if (personal != null && personal != "") 
+          sender = personal + ";" + address;
         if(str.length() < 1)  {
-          str = addr[i].toString() ;              
+          str = sender ;              
         }else {
-          str = str + ", " + addr[i].toString() ;
+          str = str + "," + sender ;
         }           
         i++ ;
       }
     }   
-    return str ;
+    return str;
   }
 
   public void createAccount(String username, Account account) throws Exception {

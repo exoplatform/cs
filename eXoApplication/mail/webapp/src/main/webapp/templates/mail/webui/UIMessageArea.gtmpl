@@ -1,5 +1,4 @@
 <%
-	import org.exoplatform.mail.webui.UIMessageActionBar ;
 	import org.exoplatform.mail.webui.UIMessageList ;
 	import org.exoplatform.mail.webui.UIMessagePreview ;
 %>

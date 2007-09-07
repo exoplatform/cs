@@ -142,47 +142,6 @@
     </childNodeDefinitions>
   </nodeType>
   
-  <nodeType name="exo:contact" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
-  	<supertypes>
-  		<supertype>nt:base</supertype>
-  	</supertypes>
-  	<propertyDefinitions>
-  		<propertyDefinition name="exo:contactName" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition>
-  		<propertyDefinition name="exo:emailAddress" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition>  		
-  		<propertyDefinition name="exo:homePhone" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition>  		
-  		<propertyDefinition name="exo:workPhone" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition>  		
-  		<propertyDefinition name="exo:city" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition>  		
-  		<propertyDefinition name="exo:country" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition>  		
-  		<propertyDefinition name="exo:postalCode" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition>  		
-  		<propertyDefinition name="exo:personalSite" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition>  		
-  		<propertyDefinition name="exo:organization" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition>  		
-  		<propertyDefinition name="exo:jobTitle" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition>  		
-  		<propertyDefinition name="exo:groups" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
-  			<valueConstraints/>
-  		</propertyDefinition>  		
-  	</propertyDefinitions>
-  </nodeType>
-  
   <nodeType name="exo:group" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
   	<supertypes>
   		<supertype>nt:base</supertype>
