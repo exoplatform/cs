@@ -49,7 +49,7 @@ import org.exoplatform.webui.form.validator.EmptyFieldValidator;
     //template = "app:/templates/calendar/webui/UICalendarForm.gtmpl",
     template = "system:/groovy/webui/form/UIFormTabPane.gtmpl", 
     events = {
-      @EventConfig(listeners = UICalendarForm.SelectPublicActionListener.class,  phase=Phase.DECODE),
+      //(listeners = UICalendarForm.SelectPublicActionListener.class,  phase=Phase.DECODE),
       @EventConfig(listeners = UICalendarForm.AddCategoryActionListener.class,  phase=Phase.DECODE),
       @EventConfig(listeners = UICalendarForm.SelectPermissionActionListener.class, phase=Phase.DECODE),
       @EventConfig(listeners = UICalendarForm.SaveActionListener.class),
@@ -87,8 +87,8 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
 
     UIFormInputWithActions sharing = new UIFormInputWithActions(INPUT_SHARE) ;
     sharing.addUIFormInput(new UIFormCheckBoxInput<Boolean>(ISPUBLIC, ISPUBLIC, null)) ;
-    UIFormCheckBoxInput uiCheckbox = sharing.getUIFormCheckBoxInput(ISPUBLIC) ;
-    uiCheckbox.setOnChange("SelectPublic") ;
+    /*UIFormCheckBoxInput uiCheckbox = sharing.getUIFormCheckBoxInput(ISPUBLIC) ;
+    uiCheckbox.setOnChange("SelectPublic") ;*/
     sharing.addUIFormInput(new UIFormInputInfo(SELECT_GROUPS, SELECT_GROUPS, null)) ;
     String[] groups = CalendarUtils.getAllGroups() ;
     for(String group : groups) {
@@ -117,7 +117,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
     sharing.setRendered(false) ;
     addChild(sharing) ;
     
-    lockCheckBoxFields(!uiCheckbox.isChecked());
+    //lockCheckBoxFields(!uiCheckbox.isChecked());
   }
 
   public String[] getActions(){
@@ -163,7 +163,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
     }
     fieldInput.setValue(sb.toString()) ;
   }
-  static  public class SelectPublicActionListener extends EventListener<UICalendarForm> {
+  /*static  public class SelectPublicActionListener extends EventListener<UICalendarForm> {
     public void execute(Event<UICalendarForm> event) throws Exception {
       UICalendarForm uiForm = event.getSource() ;
       System.out.println(" ============= > SelectPublicActionListener");
@@ -176,7 +176,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
     }
-  }
+  }*/
   static  public class AddCategoryActionListener extends EventListener<UICalendarForm> {
     public void execute(Event<UICalendarForm> event) throws Exception {
       UICalendarForm uiForm = event.getSource() ;

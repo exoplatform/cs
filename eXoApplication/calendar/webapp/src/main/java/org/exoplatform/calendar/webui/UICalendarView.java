@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.webui.popup.UIEventCategoryForm;
@@ -17,6 +18,8 @@ import org.exoplatform.calendar.webui.popup.UIPopupContainer;
 
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -35,7 +38,7 @@ public class UICalendarView extends UIForm {
   protected boolean isShowEvent = true;
   protected List<String> privateCalendarIds = new ArrayList<String>() ;
   protected List<String> publicCalendarIds = new ArrayList<String>() ;
-  
+
   public UICalendarView() throws Exception{
     CalendarService calendarService = (CalendarService)PortalContainer.getComponent(CalendarService.class) ;
     List<EventCategory> eventCategories = calendarService.getEventCategories(Util.getPortalRequestContext().getRemoteUser()) ;
@@ -45,7 +48,7 @@ public class UICalendarView extends UIForm {
     }
     addUIFormInput(new UIFormSelectBox(EVENT_CATEGORIES, EVENT_CATEGORIES, options)) ;
   }
-  
+
   public void update() throws Exception {
     CalendarService calendarService = (CalendarService)PortalContainer.getComponent(CalendarService.class) ;
     List<EventCategory> eventCategories = calendarService.getEventCategories(Util.getPortalRequestContext().getRemoteUser()) ;
@@ -55,7 +58,7 @@ public class UICalendarView extends UIForm {
     }
     getUIFormSelectBox(EVENT_CATEGORIES).setOptions(options) ;
   }
-  
+
   public List<org.exoplatform.calendar.service.CalendarEvent> getList() throws Exception {
     CalendarService calendarService = (CalendarService)PortalContainer.getComponent(CalendarService.class) ;
     List<org.exoplatform.calendar.service.CalendarEvent> events = new ArrayList<org.exoplatform.calendar.service.CalendarEvent>() ;
@@ -74,7 +77,7 @@ public class UICalendarView extends UIForm {
       }
     }
     return events ;
-         
+
   }
   static  public class RefreshActionListener extends EventListener<UICalendarView> {
     public void execute(Event<UICalendarView> event) throws Exception {
@@ -86,12 +89,20 @@ public class UICalendarView extends UIForm {
     public void execute(Event<UICalendarView> event) throws Exception {
       UICalendarView uiForm = event.getSource() ;
       System.out.println(" ===========> AddEventActionListener") ;
-      UICalendarPortlet uiPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
-      UIPopupAction uiParenPopup = uiPortlet.getChild(UIPopupAction.class) ;
-      UIPopupContainer uiPopupContainer = uiPortlet.createUIComponent(UIPopupContainer.class, null, null) ;
-      uiPopupContainer.addChild(UIEventForm.class, null, null) ;
-      uiParenPopup.activate(uiPopupContainer, 600, 0, true) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiParenPopup) ;
+      CalendarService calendarService = uiForm.getApplicationComponent(CalendarService.class) ;
+      String username = event.getRequestContext().getRemoteUser() ;
+      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+      if(calendarService.getUserCalendars(username).size() <= 0) {
+        uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.calendar-list-empty", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+      } else {
+        UICalendarPortlet uiPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
+        UIPopupAction uiParenPopup = uiPortlet.getChild(UIPopupAction.class) ;
+        UIPopupContainer uiPopupContainer = uiPortlet.createUIComponent(UIPopupContainer.class, null, null) ;
+        uiPopupContainer.addChild(UIEventForm.class, null, null) ;
+        uiParenPopup.activate(uiPopupContainer, 600, 0, true) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiParenPopup) ;
+      }
     }
   }
   static  public class DeleteEventActionListener extends EventListener<UICalendarView> {
@@ -115,5 +126,5 @@ public class UICalendarView extends UIForm {
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   }
-  
+
 }

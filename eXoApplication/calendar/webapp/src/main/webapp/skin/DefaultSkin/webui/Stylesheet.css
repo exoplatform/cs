@@ -866,7 +866,7 @@
 	margin-top: 4px;
 }
 
-.UIMonthView .EventMonthContent  .DayBox {
+.UIMonthView .EventMonthContent .DayBox {
 	text-align: right;
 	border-top: 1px solid #c7c7c7;
 	padding: 2px 6px;
@@ -879,12 +879,11 @@
 	color: #909090;
 }
 
-.UIMonthView .EventMonthContent .DayBox .Today {
-	border: 1px solid red;
-	background-color: #ffffff;
-	float: right;
-	width: 18px;
-	text-align: center;
+.UIMonthView .EventMonthContent .Today {
+	text-align: right;
+	border-top: 1px solid #c7c7c7;
+	padding: 2px 6px;
+	color : red;
 }
 
 .UIMonthView .EventMonthContent .ViewMoreIcon {

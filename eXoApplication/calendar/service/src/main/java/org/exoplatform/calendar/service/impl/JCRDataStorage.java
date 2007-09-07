@@ -628,9 +628,9 @@ public class JCRDataStorage implements DataStorage{
     eventNode.setProperty("exo:description", event.getDescription()) ;
     GregorianCalendar dateTime = new GregorianCalendar() ;
     dateTime.setTime(event.getFromDateTime()) ;
-    eventNode.setProperty("exo:fromDateTime", dateTime.getInstance()) ;
+    eventNode.setProperty("exo:fromDateTime", dateTime) ;
     dateTime.setTime(event.getToDateTime()) ;
-    eventNode.setProperty("exo:toDateTime", dateTime.getInstance()) ;
+    eventNode.setProperty("exo:toDateTime", dateTime) ;
     eventNode.setProperty("exo:eventType", event.getEventType()) ;
     eventNode.setProperty("exo:priority", event.getPriority()) ;
     eventNode.setProperty("exo:isPrivate", event.isPrivate()) ;

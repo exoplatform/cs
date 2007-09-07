@@ -7,6 +7,7 @@ package org.exoplatform.calendar.webui.popup;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
+import org.exoplatform.calendar.webui.UICalendarView;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
 import org.exoplatform.calendar.webui.UICalendarWorkingContainer;
 import org.exoplatform.calendar.webui.UIListView;
@@ -78,10 +79,9 @@ public class UIEventCategoryForm extends UIForm implements UIPopupComponent{
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupContainer.getChild(UIPopupAction.class)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupContainer) ;
       }
-      UIListView uiListView = calendarPortlet.getChild(UICalendarWorkingContainer.class)
-      .getChild(UICalendarViewContainer.class).getChild(UIListView.class) ;
-      uiListView.update() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiListView) ;
+      UICalendarView uiCalendarView = calendarPortlet.findFirstComponentOfType(UICalendarView.class) ;
+      uiCalendarView.update() ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarView) ;
     }
   }
   static  public class CancelActionListener extends EventListener<UIEventCategoryForm> {

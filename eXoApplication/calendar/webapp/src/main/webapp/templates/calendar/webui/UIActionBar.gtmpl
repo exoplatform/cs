@@ -29,7 +29,7 @@
 						        <div class="MiddleLeftRightClickPopupMenu">
 						          <div class="MiddleRightRightClickPopupMenu">
 			              		<div class="UIRightPopupMenuContainer">
-													<a class="MenuItem" href="#">   
+													<a class="MenuItem" href="<%=uicomponent.event("ChangeView", uicomponent.DAY_VIEW)%>">   
 				                    <div class="ItemIcon DayIcon24">
 				                      Day
 				                    </div>
@@ -44,7 +44,7 @@
 				                      Week work
 				                    </div>
 			                    </a>
-			                    <a class="MenuItem" href="#">   
+			                    <a class="MenuItem" href="<%=uicomponent.event("ChangeView", uicomponent.MONTH_VIEW)%>">   
 				                    <div class="ItemIcon MonthIcon">
 				                      Month
 				                    </div>

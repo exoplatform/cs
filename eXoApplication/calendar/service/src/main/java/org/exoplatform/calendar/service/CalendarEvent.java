@@ -17,9 +17,26 @@ import org.exoplatform.services.jcr.util.IdGenerator;
  * Jul 11, 2007  
  */
 public class CalendarEvent {
+  final public static String TYPE_EVENT = "event".intern() ;
+  final public static String TYPE_TASK = "task".intern() ;
+  final public static String TYPE_JOURNAL = "journal".intern() ;
+  
+  final public static String TENTATIVE = "tentative".intern() ;
+  final public static String CONFIRMED = "confirmed".intern() ;
+  final public static String CANCELLED = "canceled".intern() ;
+  
+  final public static String NEEDS_ACTION = "needs-action".intern() ;
+  final public static String COMPLETED = "completed".intern() ;
+  final public static String IN_PROCESS = "in-process".intern() ;
+  
+  final public static String DRAFT = "draft".intern() ;
+  final public static String FINAL = "final".intern() ;
+  
+  final public static String[] EVENT_STATUS = {TENTATIVE, CONFIRMED, CANCELLED} ;
+  final public static String[] TASK_STATUS = {NEEDS_ACTION, COMPLETED, IN_PROCESS, CANCELLED} ;
+  final public static String[] JOURNAL_STATUS = {DRAFT, FINAL, CANCELLED} ;
   
   private String id ;
-  
   private String summary ;
   private String location ;
   private String description ;

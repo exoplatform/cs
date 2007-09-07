@@ -1,0 +1,99 @@
+<!-- Start View Event Month -->
+	<%
+		int currentDay = uicomponent.getCurrentDay() ;
+		int currentMonth = uicomponent.getCurrentMonth() ;
+		String currentMonthName = uicomponent.getMonthName(currentMonth) ;
+		int currentYear = uicomponent.getCurrentYear() ;
+	%>
+	<div class="UIMonthView" id="$uicomponent.id">
+		<div class="TitleBar">$currentMonthName,  $currentYear</div>
+		<div class="EventMonthContainer">
+			<div class="EventMonthContent">
+				<div class="WeekList">
+					<%
+						String cssStyle = "" ;
+						String dayLabel = "" ;
+					 	for(day in uicomponent.getDaysName()) {
+							cssStyle = "" ;
+							if(day.equals(uicomponent.SUNDAY)) cssStyle = "color: red;" ;
+							dayLabel = _ctx.appRes("UICalendarView.label." + day) ;
+					%>
+  						<div class="WeekTitle" style="$cssStyle">$dayLabel</div>
+	  			<%
+	  				}
+	  			%>			
+  				<div style="clear: left"><span></span></div>
+  			</div>
+				<div class="RowContainerDay">
+			<table class="UIGrid" id="RowContainerDay" cellspacing="0" borderspacing="0">
+			<%
+				startDayOfWeek = uicomponent.getStartDayOfWeek(currentYear, currentMonth, 10) ;
+				week = 0 ; 
+				table = "" ;
+				clazz ="" ;
+				dayOfMonth = 1 ;
+				validDay = 1 ;
+				cssClass = "CalendarContentNomal" ;
+				daysInMonth = uicomponent.getDaysInMonth() ;
+				while ( week++ <= 4 ) {
+			    table += "<tr>";
+			    dayOfWeek = 1 ;
+			    while (dayOfWeek++ <= 7) {
+			      if (week == 0 && startDayOfWeek == dayOfWeek) {
+			        validDay = 1;
+			      } else if (validDay == 1 && dayOfMonth > daysInMonth) {
+			        validDay = 0;
+			      }
+			      if (validDay) {
+			        if (dayOfMonth == currentDay) {
+			          clazz = 'Today';
+			        } else if (dayOfWeek == 1 || dayOfWeek == 7) {
+			          clazz = 'DayBox';
+			        } else {
+			          clazz = 'DayBox';
+			        }
+			        eventList = uicomponent.getEventsData().get(dayOfMonth) ;
+			        size = eventList.size() ;
+			        events = "" ;
+			        viewMore = "" ;
+							if(eventList != null && size > 0) {
+								for(event in eventList) {
+									begin = event.getFromDateTime() ;
+									end = event.getToDateTime();
+									events = events + "<div startTime='$begin' endTime='$end' class=\"EventOnDayContent\" onclick=\"alert(this.getAttribute('startTime'))\"><div class=\"EventOnDayLabel\">"+event.getSummary()+"</div></div>"
+								}
+							}
+							if(size > 2) {
+								moreSize =  size - 2  ;
+								viewMore = viewMore + "<div class=\"ViewMoreIcon\" title=\"View all event on day\"> +" +moreSize+ "More </div>"	
+							}
+			        table = table + "<td  class='CalendarContentNomal'> <div class='DayBox $clazz' >" + dayOfMonth + "</div> <div class='DayContent'>" ;
+							if(eventList != null && size > 0) {
+								table = table + "<div class=\"EventOnDayBorder\">" ;
+								table = table + events ;
+								table = table + viewMore ;
+								table = table + "</div>" ;
+							}
+							table = table + "</div></td>" ;
+			        dayOfMonth++ ;
+			      } else {
+			        table = table + "<td class='CalendarContentDisable'> <div class='DisableDay'><span></span></div> <div class='DayContent'><span></span></div></td>" ;
+			      }
+			    }
+			    table += "</tr>" ;
+  			}	
+  			
+			%>
+			
+				<col width="14%"><col width="14%"><col width="14%"><col width="14%"><col width="14%"><col width="14%"><col width="14%">
+				<tbody>
+				 <%println table ;%>
+				
+				  					
+				</tbody>
+			</table>
+		</div>
+			</div>
+		</div>
+	</div>
+<!-- End View Event Month -->

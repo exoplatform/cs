@@ -14,11 +14,13 @@ import org.exoplatform.services.jcr.util.IdGenerator;
  */
 public class Reminder {
   
-  final public static String REPEAT = "1" ;
-  final public static String UNREPEAT = "0" ;
-  final public static String TYPE_EMAIL = "email" ;
-  final public static String TYPE_POPUP = "popup" ;
-  final public static String TYPE_BOTH = "both" ;
+  final public static String REPEAT = "1".intern() ;
+  final public static String UNREPEAT = "0".intern() ;
+  final public static String TYPE_EMAIL = "email".intern() ;
+  final public static String TYPE_POPUP = "popup".intern() ;
+  final public static String TYPE_BOTH = "both".intern() ;
+  
+  final public static String[] REMINDER_TYPES = {TYPE_EMAIL, TYPE_POPUP, TYPE_BOTH} ;
   
   private String id ;
   private String eventId ;
