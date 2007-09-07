@@ -10,13 +10,11 @@ import java.util.List;
 import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.content.service.ContentDAO;
 import org.exoplatform.content.model.ContentItem;
 import org.exoplatform.content.model.ContentNode;
-import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.content.service.ContentDAO;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIBreadcumbs;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.UIPageIterator;
@@ -66,13 +64,7 @@ public class UIDetailContent extends UIContainer {
       PageList pageList = service.getContentData(node_);
       uiIterator_.setPageList(pageList);
     }catch (Exception e) {
-      UIApplication uiApp = getAncestorOfType(UIApplication.class);
-      //TODO: Tung.Pham modified
-      //-----------------
-      //uiApp.addMessage(new ApplicationMessage(e.getMessage(), null, ApplicationMessage.ERROR));
-      uiApp.addMessage(new ApplicationMessage("UIDetailContent.msg.NotFound", null, ApplicationMessage.ERROR));
       uiIterator_.setPageList(new ObjectPageList(new ArrayList(), 10)) ;
-      //-----------------
     }
   }
   

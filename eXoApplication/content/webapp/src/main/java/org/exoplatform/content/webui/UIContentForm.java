@@ -99,7 +99,7 @@ public class UIContentForm extends UIForm {
       if(!contentNode.getType().equals("desc")){
         if(contentNode.getUrl() == null || contentNode.getUrl().trim().length() == 0) {
           UIApplication uiApp = event.getRequestContext().getUIApplication() ;
-          uiApp.addMessage(new ApplicationMessage("UIContentForm.msg.UrlNull", null, ApplicationMessage.WARNING)) ;
+          uiApp.addMessage(new ApplicationMessage("UIContentForm.msg.UrlNull", null, ApplicationMessage.ERROR)) ;
           return ;  
         }
       }
@@ -108,7 +108,7 @@ public class UIContentForm extends UIForm {
         ContentNode existingNode = uiNav.findNode(contentNode.getId()) ;
         if(existingNode != null) {
           UIApplication uiApp = event.getRequestContext().getUIApplication() ;
-          uiApp.addMessage(new ApplicationMessage("UIContentForm.msg.SameNode", null, ApplicationMessage.WARNING)) ;
+          uiApp.addMessage(new ApplicationMessage("UIContentForm.msg.SameNode", null, ApplicationMessage.INFO)) ;
           return ;
         }
         uiNav.save(contentNode);
