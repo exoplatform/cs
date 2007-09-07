@@ -16,12 +16,12 @@ import org.exoplatform.webui.core.UIComponent;
  * Aus 01, 2007 2:48:18 PM 
  */
 @ComponentConfig(
-    template = "app:/templates/calendar/webui/UIWeekView.gtmpl"
+    template = "app:/templates/calendar/webui/UIYearView.gtmpl"
     
 )
-public class UIWeekView extends UICalendarView {
+public class UIYearView extends UICalendarView {
   
-  public UIWeekView() throws Exception {
+  public UIYearView() throws Exception {
     super() ;
   }
   

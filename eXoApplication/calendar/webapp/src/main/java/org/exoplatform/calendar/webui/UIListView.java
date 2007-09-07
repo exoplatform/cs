@@ -15,6 +15,7 @@ import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
  * Aus 01, 2007 2:48:18 PM 
  */
 @ComponentConfig(   
+    template = "app:/templates/calendar/webui/UIListView.gtmpl",
     lifecycle = UIFormLifecycle.class,
     events = {
       @EventConfig(listeners = UICalendarView.RefreshActionListener.class),
@@ -25,11 +26,9 @@ import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
     }
 )
 public class UIListView extends UICalendarView {
-  
   public UIListView() throws Exception{
     super() ;
   } 
-  
   public String getTemplate(){
     if(isShowEvent) return "app:/templates/calendar/webui/UIEventView.gtmpl" ;
     return "app:/templates/calendar/webui/UITaskView.gtmpl" ;

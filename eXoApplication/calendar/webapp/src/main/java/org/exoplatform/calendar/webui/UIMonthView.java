@@ -42,30 +42,7 @@ import org.jgroups.ExitEvent;
 
 )
 public class UIMonthView extends UICalendarView {
-
-  final public static String JANUARY = "January".intern() ;
-  final public static String FEBRUARY = "February".intern() ;
-  final public static String MARCH = "March".intern() ;
-  final public static String APRIL = "April".intern() ;
-  final public static String MAY = "May".intern() ;
-  final public static String JUNE = "June".intern() ;
-  final public static String JULY = "July".intern() ;
-  final public static String AUGUST = "August".intern() ;
-  final public static String SEPTEMBER = "September".intern() ;
-  final public static String OCTOBER = "October".intern() ;
-  final public static String NOVEMBER = "November".intern() ;
-  final public static String DECEMBER = "December".intern() ;
-  final public static String[] MONTHS = {JANUARY, FEBRUARY, MARCH, APRIL, MAY, JUNE, JULY, AUGUST, SEPTEMBER, OCTOBER, NOVEMBER, DECEMBER} ;
-
-  final public static String MONDAY = "Monday".intern() ;
-  final public static String TUESDAY = "Tuesday".intern() ;
-  final public static String WEDNESDAY = "Wednesday".intern() ;
-  final public static String THURSDAY = "Thursday".intern() ;
-  final public static String FRIDAY = "Friday".intern() ;
-  final public static String SATURDAY = "Saturday".intern() ;
-  final public static String SUNDAY = "Sunday".intern() ;
-  final public static String[] DAYS = {SUNDAY, MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY} ; 
-
+  
   public java.util.Calendar calendar_ = java.util.Calendar.getInstance() ;
 
   private int currentDay_ = 0 ;
@@ -73,11 +50,6 @@ public class UIMonthView extends UICalendarView {
   private int currentYear_ = 1900 ;
 
   private Map<String, String> calendarIds_ = new HashMap<String, String>() ;
-  final public static Map<Integer, String> monthsName_ = new HashMap<Integer, String>() ;
-
-  private Map<Integer, String> daysMap_ = new HashMap<Integer, String>() ;
-
-  private Map<Integer, String> monthsMap_ = new HashMap<Integer, String>() ;
 
   private List<CalendarEvent> allEvent_ = new ArrayList<CalendarEvent>() ;
   private Map<Integer, List<CalendarEvent>> eventData_ = new HashMap<Integer, List<CalendarEvent>>() ;
@@ -88,16 +60,6 @@ public class UIMonthView extends UICalendarView {
     currentDay_ = calendar_.get(java.util.Calendar.DATE) ;
     currentMonth_ = calendar_.get(java.util.Calendar.MONTH) ;
     currentYear_  = calendar_.get(java.util.Calendar.YEAR) ;
-    int i = 0 ; 
-    for(String month : MONTHS) {
-      monthsMap_.put(i, month) ;
-      i++ ;
-    }
-    int j = 1 ;
-    for(String month : DAYS) {
-      daysMap_.put(j, month) ;
-      j++ ;
-    }
     refreshSelectedCalendarIds() ;
     refreshEvents() ;
   }
@@ -105,32 +67,34 @@ public class UIMonthView extends UICalendarView {
     List<String> calendarIds = new ArrayList<String>(getCalendarIds().values()) ;
     CalendarService calendarService = getApplicationComponent(CalendarService.class) ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
-    for(int k =1 ;  k <= getDaysInMonth(); k++) {
+    for(int day =1 ;  day <= getDaysInMonth(); day++) {
       List<CalendarEvent> existEvents = new ArrayList<CalendarEvent>() ;
       List<CalendarEvent> allEvents = calendarService.getUserEventByCalendar(username, calendarIds) ;
       for(CalendarEvent ce : allEvents) {
-        GregorianCalendar gc = new GregorianCalendar(getCurrentYear(), getCurrentMonth(), k) ;
+        GregorianCalendar gc = new GregorianCalendar(getCurrentYear(), getCurrentMonth(), day) ;
         Date tempDate = gc.getTime() ;
         Date fromDate = ce.getFromDateTime() ;
         Date endDate = ce.getToDateTime() ;
-        if((tempDate.getTime() >= fromDate.getTime() && tempDate.getTime() <= endDate.getTime()))  {
+        gc.setTime(fromDate) ;
+        int beginDay = gc.get(java.util.Calendar.DATE) ;
+        gc.setTime(endDate) ;
+        int endDay = gc.get(java.util.Calendar.DATE) ;
+        if((fromDate.before(tempDate) && endDate.after(tempDate))||(beginDay == day) || (endDay == day) )  {
           existEvents.add(ce) ;
         } 
       }
-      eventData_.put(k, existEvents) ;
+      eventData_.put(day, existEvents) ;
     }
   }
   protected void addCalendarId(String id) {calendarIds_.put(id,id) ;}
   protected Map<String, String> getCalendarIds() {return calendarIds_ ;}
-  private int getCurrentDay() {return currentDay_; }  
-  protected void setCurrentDay(int day) {currentDay_ = day; }  
-  private int getCurrentMonth() {return currentMonth_; }  
-  protected void setCurrentMonth(int month) {currentMonth_ = month; }  
-  private int getCurrentYear() {return currentYear_;}
-  protected void setCurrentYear(int year) {currentYear_ = year;}
-
-  private  String getMonthName(int month) {return monthsMap_.get(month).toString() ;} ;
-  private  String getDayName(int day) {return daysMap_.get(day).toString() ;} ;
+  
+ // private int getCurrentDay() {return currentDay_; }  
+  // void setCurrentDay(int day) {currentDay_ = day; }  
+  //private int getCurrentMonth() {return currentMonth_; }  
+ // protected void setCurrentMonth(int month) {currentMonth_ = month; }  
+  //private int getCurrentYear() {return currentYear_;}
+  //protected void setCurrentYear(int year) {currentYear_ = year;}
 
   private List getEventList() {
     return null ;
@@ -148,24 +112,11 @@ public class UIMonthView extends UICalendarView {
     refreshSelectedCalendarIds() ;
     refreshEvents() ;
   }
-  private int getDaysInMonth() {
-    int month = getCurrentMonth() ;
-    int year =  getCurrentYear();
-    Integer[] days = {31, ((!((year % 4 ) == 0) && ( (year % 100  == 0) || ( year % 400 != 0) ))? 29:28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31} ;
-    return days[month] ;
-  }
   private Date getDateOf(int year, int month, int day) {
     GregorianCalendar gc = new GregorianCalendar(year, month, day) ;
     return gc.getTime() ;
   }
   
-  private int getDayOfWeek(int year, int month, int day) {
-    GregorianCalendar gc = new GregorianCalendar(year, month, day) ;
-    return gc.get(java.util.Calendar.DAY_OF_WEEK) ;
-  }
-  private String[] getMonthsName() { return MONTHS ;}
-  private String[] getDaysName() {return DAYS ;}
-
   private Map<Integer, List<CalendarEvent>> getEventsData() {
     return eventData_ ;
   }

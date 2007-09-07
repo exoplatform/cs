@@ -1,8 +1,10 @@
 /***************************************************************************
- * Copyright 2001-2007 The eXo Platform SARL         All rights reserved.  *
+ * Copyright 2001-2006 The eXo Platform SARL         All rights reserved.  *
  * Please look at license.txt in info directory for more license detail.   *
  **************************************************************************/
 package org.exoplatform.calendar.webui;
+
+import java.util.List;
 
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIComponent;
@@ -13,12 +15,18 @@ import org.exoplatform.webui.core.UIComponent;
  *          hung.nguyen@exoplatform.com
  * Aus 01, 2007 2:48:18 PM 
  */
-
 @ComponentConfig(
-    template =  "app:/templates/calendar/webui/UITimeView.gtmpl"
-)
-public class UITimeView extends UIComponent  {
-  public UITimeView() throws Exception {
+    template = "app:/templates/calendar/webui/UITaskView.gtmpl"
     
-  }  
+)
+public class UITaskView extends UICalendarView {
+  
+  public UITaskView() throws Exception {
+    super() ;
+  }
+  
+  private List getEventList() {
+    return null ;
+  }
+  
 }

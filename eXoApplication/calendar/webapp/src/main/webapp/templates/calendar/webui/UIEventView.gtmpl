@@ -1,4 +1,3 @@
-<%uiform.begin()%>
 	<div class="ListBar">
 		<a href="<%=uicomponent.event("AddEvent")%>" class="ControlButton">
 			<div class="IconHolder AddEventIcon"> Add event </div>
@@ -48,5 +47,4 @@
   	   	</tbody>
 		</table>
 	</div>
-<%uiform.end()%>
 <div class="ResizeReadingPane"><span></span></div>

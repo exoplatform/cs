@@ -5,10 +5,15 @@
 package org.exoplatform.calendar.webui;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
-import org.exoplatform.calendar.service.Calendar;
+import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.webui.popup.UIEventCategoryForm;
@@ -35,9 +40,40 @@ import org.exoplatform.webui.form.UIFormSelectBox;
 
 public class UICalendarView extends UIForm {
   final static protected String EVENT_CATEGORIES = "eventCategories".intern() ;
+  
+  final public static String JANUARY = "January".intern() ;
+  final public static String FEBRUARY = "February".intern() ;
+  final public static String MARCH = "March".intern() ;
+  final public static String APRIL = "April".intern() ;
+  final public static String MAY = "May".intern() ;
+  final public static String JUNE = "June".intern() ;
+  final public static String JULY = "July".intern() ;
+  final public static String AUGUST = "August".intern() ;
+  final public static String SEPTEMBER = "September".intern() ;
+  final public static String OCTOBER = "October".intern() ;
+  final public static String NOVEMBER = "November".intern() ;
+  final public static String DECEMBER = "December".intern() ;
+  final public static String[] MONTHS = {JANUARY, FEBRUARY, MARCH, APRIL, MAY, JUNE, JULY, AUGUST, SEPTEMBER, OCTOBER, NOVEMBER, DECEMBER} ;
+
+  final public static String MONDAY = "Monday".intern() ;
+  final public static String TUESDAY = "Tuesday".intern() ;
+  final public static String WEDNESDAY = "Wednesday".intern() ;
+  final public static String THURSDAY = "Thursday".intern() ;
+  final public static String FRIDAY = "Friday".intern() ;
+  final public static String SATURDAY = "Saturday".intern() ;
+  final public static String SUNDAY = "Sunday".intern() ;
+  final public static String[] DAYS = {SUNDAY, MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY} ; 
+  
+  public Calendar calendar_ = Calendar.getInstance() ;
+  
   protected boolean isShowEvent = true;
+  
   protected List<String> privateCalendarIds = new ArrayList<String>() ;
   protected List<String> publicCalendarIds = new ArrayList<String>() ;
+  
+  final public static Map<Integer, String> monthsName_ = new HashMap<Integer, String>() ;
+  private Map<Integer, String> daysMap_ = new HashMap<Integer, String>() ;
+  private Map<Integer, String> monthsMap_ = new HashMap<Integer, String>() ;
 
   public UICalendarView() throws Exception{
     CalendarService calendarService = (CalendarService)PortalContainer.getComponent(CalendarService.class) ;
@@ -47,8 +83,38 @@ public class UICalendarView extends UIForm {
       options.add(new SelectItemOption<String>(category.getName(), category.getName())) ;
     }
     addUIFormInput(new UIFormSelectBox(EVENT_CATEGORIES, EVENT_CATEGORIES, options)) ;
+    
+    int i = 0 ; 
+    for(String month : MONTHS) {
+      monthsMap_.put(i, month) ;
+      i++ ;
+    }
+    int j = 1 ;
+    for(String month : DAYS) {
+      daysMap_.put(j, month) ;
+      j++ ;
+    }
   }
-
+  protected String[] getMonthsName() { return MONTHS ;}
+  protected String[] getDaysName() {return DAYS ;}
+  
+  protected int getDaysInMonth() {
+    int month = getCurrentMonth() ;
+    int year =  getCurrentYear();
+    Integer[] days = {31, ((!((year % 4 ) == 0) && ( (year % 100  == 0) || ( year % 400 != 0) ))? 29:28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31} ;
+    return days[month] ;
+  }
+  protected int getDaysInMonth(int month, int year) {
+    Integer[] days = {31, ((year % 4 == 0)? 29:28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31} ;
+    return days[month] ;
+  }
+  protected int getDayOfWeek(int year, int month, int day) {
+    GregorianCalendar gc = new GregorianCalendar(year, month, day) ;
+    return gc.get(java.util.Calendar.DAY_OF_WEEK) ;
+  }
+  protected  String getMonthName(int month) {return monthsMap_.get(month).toString() ;} ;
+  protected  String getDayName(int day) {return daysMap_.get(day).toString() ;} ;
+  
   public void update() throws Exception {
     CalendarService calendarService = (CalendarService)PortalContainer.getComponent(CalendarService.class) ;
     List<EventCategory> eventCategories = calendarService.getEventCategories(Util.getPortalRequestContext().getRemoteUser()) ;
@@ -59,17 +125,17 @@ public class UICalendarView extends UIForm {
     getUIFormSelectBox(EVENT_CATEGORIES).setOptions(options) ;
   }
 
-  public List<org.exoplatform.calendar.service.CalendarEvent> getList() throws Exception {
+  public List<CalendarEvent> getList() throws Exception {
     CalendarService calendarService = (CalendarService)PortalContainer.getComponent(CalendarService.class) ;
-    List<org.exoplatform.calendar.service.CalendarEvent> events = new ArrayList<org.exoplatform.calendar.service.CalendarEvent>() ;
+    List<CalendarEvent> events = new ArrayList<CalendarEvent>() ;
     if(privateCalendarIds.size() > 0) {
       events = calendarService.getUserEventByCalendar(Util.getPortalRequestContext().getRemoteUser(), privateCalendarIds)  ;
     }
     if(publicCalendarIds.size() > 0) {
       if(events.size() > 0) {
-        List<org.exoplatform.calendar.service.CalendarEvent> publicEvents = 
+        List<CalendarEvent> publicEvents = 
           calendarService.getGroupEventByCalendar(publicCalendarIds) ;
-        for(org.exoplatform.calendar.service.CalendarEvent event : publicEvents) {
+        for(CalendarEvent event : publicEvents) {
           events.add(event) ;
         }
       }else {
@@ -77,8 +143,20 @@ public class UICalendarView extends UIForm {
       }
     }
     return events ;
-
   }
+  
+  protected Date getCurrentDate() {return calendar_.getTime() ;} 
+  protected void setCurrentDate(Date value) {calendar_.setTime(value) ;} 
+  
+  protected int getCurrentDay() {return calendar_.get(Calendar.DATE) ;}
+  protected void setCurrentDay(int day) {calendar_.set(Calendar.DATE, day) ;}
+  
+  protected int getCurrentMonth() {return calendar_.get(Calendar.MONTH) ;}
+  protected void setCurrentMonth(int month) {calendar_.set(Calendar.MONTH, month) ;}
+  
+  protected int getCurrentYear() {return calendar_.get(Calendar.YEAR) ;}
+  protected void setCurrentYear(int year) {calendar_.set(Calendar.YEAR, year) ;}
+  
   static  public class RefreshActionListener extends EventListener<UICalendarView> {
     public void execute(Event<UICalendarView> event) throws Exception {
       UICalendarView uiForm = event.getSource() ;

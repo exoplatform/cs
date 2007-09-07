@@ -1,3 +1,7 @@
+<%
+	uiform.begin()
+ 	_ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");
+%>
 <div class="UIScheduleView">
 	<table class="UIGrid" id="RowContainerDay" cellspacing="0" borderspacing="0">
 		<thead>
@@ -432,3 +436,4 @@
 		</tbody>
 	</table>
 </div>
+<%uiform.end()%>

@@ -1,11 +1,12 @@
-<!-- Start View Event Month -->
 	<%
 		int currentDay = uicomponent.getCurrentDay() ;
 		int currentMonth = uicomponent.getCurrentMonth() ;
 		String currentMonthName = uicomponent.getMonthName(currentMonth) ;
 		int currentYear = uicomponent.getCurrentYear() ;
+	uiform.begin()
+ 	_ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");
 	%>
-	<div class="UIMonthView" id="$uicomponent.id">
+	<div class="UIMonthView">
 		<div class="TitleBar">$currentMonthName,  $currentYear</div>
 		<div class="EventMonthContainer">
 			<div class="EventMonthContent">
@@ -56,18 +57,25 @@
 			        size = eventList.size() ;
 			        events = "" ;
 			        viewMore = "" ;
+			        month = currentMonth + 1 ;
 							if(eventList != null && size > 0) {
 								for(event in eventList) {
+									if(eventList.indexOf(event) > 2) {break ;}
 									begin = event.getFromDateTime() ;
 									end = event.getToDateTime();
-									events = events + "<div startTime='$begin' endTime='$end' class=\"EventOnDayContent\" onclick=\"alert(this.getAttribute('startTime'))\"><div class=\"EventOnDayLabel\">"+event.getSummary()+"</div></div>"
+									sumary = event.getSummary() ;
+									title = sumary ;
+									if(sumary.length() > 15) { 
+										sumary = sumary.substring(0,15) + "..."  ;
+									}
+									events = events + "<div day='$dayOfMonth' class=\"EventOnDayContent\"><div class=\"EventOnDayLabel\" title=\"$title\">"+ sumary +"</div></div>"
 								}
 							}
-							if(size > 2) {
-								moreSize =  size - 2  ;
-								viewMore = viewMore + "<div class=\"ViewMoreIcon\" title=\"View all event on day\"> +" +moreSize+ "More </div>"	
+							if(size > 3) {
+								moreSize =  size - 3  ;
+								viewMore = viewMore + "<div class=\"ViewMoreIcon\" title=\"View all event on day\"> + " +moreSize+ " More </div>"	
 							}
-			        table = table + "<td  class='CalendarContentNomal'> <div class='DayBox $clazz' >" + dayOfMonth + "</div> <div class='DayContent'>" ;
+			        table = table + "<td  class='CalendarContentNomal'> <div class='DayBox $clazz' >" + dayOfMonth + "/" + month + "</div> <div class='DayContent'>" ;
 							if(eventList != null && size > 0) {
 								table = table + "<div class=\"EventOnDayBorder\">" ;
 								table = table + events ;
@@ -87,13 +95,11 @@
 			
 				<col width="14%"><col width="14%"><col width="14%"><col width="14%"><col width="14%"><col width="14%"><col width="14%">
 				<tbody>
-				 <%println table ;%>
-				
-				  					
+				<%println table ;%>
 				</tbody>
 			</table>
 		</div>
 			</div>
 		</div>
 	</div>
-<!-- End View Event Month -->
+<%uiform.end()%>	 

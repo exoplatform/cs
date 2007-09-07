@@ -80,8 +80,9 @@ public class UIEventCategoryForm extends UIForm implements UIPopupComponent{
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupContainer) ;
       }
       UICalendarView uiCalendarView = calendarPortlet.findFirstComponentOfType(UICalendarView.class) ;
+      UICalendarViewContainer uiViewContainer = calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
       uiCalendarView.update() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarView) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiViewContainer) ;
     }
   }
   static  public class CancelActionListener extends EventListener<UIEventCategoryForm> {

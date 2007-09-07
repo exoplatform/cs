@@ -29,36 +29,16 @@
 						        <div class="MiddleLeftRightClickPopupMenu">
 						          <div class="MiddleRightRightClickPopupMenu">
 			              		<div class="UIRightPopupMenuContainer">
-													<a class="MenuItem" href="<%=uicomponent.event("ChangeView", uicomponent.DAY_VIEW)%>">   
-				                    <div class="ItemIcon DayIcon24">
-				                      Day
-				                    </div>
-			                    </a>
-			                    <a class="MenuItem" href="#">   
-				                    <div class="ItemIcon WeekIcon">
-				                      Week
-				                    </div>
-			                    </a>
-			                    <a class="MenuItem" href="#">   
-				                    <div class="ItemIcon WeekWorkIcon">
-				                      Week work
-				                    </div>
-			                    </a>
-			                    <a class="MenuItem" href="<%=uicomponent.event("ChangeView", uicomponent.MONTH_VIEW)%>">   
-				                    <div class="ItemIcon MonthIcon">
-				                      Month
-				                    </div>
-			                    </a>
-			                    <a class="MenuItem" href="#">   
-				                    <div class="ItemIcon EventIcon24">
-				                      Event
-				                    </div>
-			                    </a>
-			                    <a class="MenuItem" href="#">   
-				                    <div class="ItemIcon ScheduleIcon">
-				                      Schedule
-				                    </div>
-			                    </a>
+			              			<%for(viewType in uicomponent.getViewTypes()){
+			              				icon = viewType + "Icon" ;
+			              				actionLink = uicomponent.event("ChangeView", viewType) ;
+			              			%>
+														<a class="MenuItem" href="$actionLink">   
+					                    <div class="ItemIcon $icon ">
+					                      $viewType
+					                    </div>
+				                    </a>
+			                    <%}%>
 												</div>
 				          		</div>
 				        		</div>

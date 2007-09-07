@@ -4,8 +4,8 @@
  **************************************************************************/
 package org.exoplatform.calendar.webui;
 
-import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
+import org.exoplatform.webui.core.UIComponent;
 
 /**
  * Created by The eXo Platform SARL
@@ -15,17 +15,10 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
  */
 
 @ComponentConfig(
-    template =  "app:/templates/calendar/webui/UICalendarViewContainer.gtmpl"
+    template =  "app:/templates/calendar/webui/UIScheduleView.gtmpl"
 )
-public class UICalendarViewContainer extends UIContainer  {
-  public UICalendarViewContainer() throws Exception {
-    addChild(UIMonthView.class, null, null) ;
-    addChild(UIDayView.class, null, null) ;
-    addChild(UIWeekView.class, null, null) ;
-    addChild(UIYearView.class, null, null) ;
-    addChild(UIListView.class, null, null) ;
-    addChild(UIScheduleView.class, null, null) ;
-
-    setRenderedChild(UIMonthView.class) ;
+public class UIScheduleView extends UICalendarView  {
+  public UIScheduleView() throws Exception {
+    
   }  
 }

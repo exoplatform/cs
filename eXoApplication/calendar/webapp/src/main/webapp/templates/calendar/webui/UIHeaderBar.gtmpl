@@ -1,0 +1,19 @@
+<div class="UIHeaderBar ListBar">
+		<a href="<%=uicomponent.event("AddEvent")%>" class="ControlButton">
+			<div class="IconHolder AddEventIcon"> Add event </div>
+		</a>
+		<div class="SeparatorLine"><span></span></div>
+		<a href="<%=uicomponent.event("DeleteEvent")%>" class="ControlButton">
+			<div class="IconHolder DeleteEventIcon"> Delete event </div>
+		</a>
+		<a href="<%=uicomponent.event("AddCategory")%>">
+			<div class="AddCategoryIcon"><span></span></div>
+		</a>
+		<div class="EventCategory">
+			<% 
+				uiform.renderField("eventCategories") ;
+			%>			
+		</div>
+		<div class="Label">Show category:</div> 
+		<div style="clear: both;"><span></span></div>
+</div>
