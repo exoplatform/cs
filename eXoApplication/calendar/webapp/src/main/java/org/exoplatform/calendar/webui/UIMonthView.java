@@ -112,15 +112,10 @@ public class UIMonthView extends UICalendarView {
         GregorianCalendar gc = new GregorianCalendar(getCurrentYear(), getCurrentMonth(), k) ;
         Date tempDate = gc.getTime() ;
         Date fromDate = ce.getFromDateTime() ;
-        System.out.println("\n\n event " + ce.getSummary());
-        System.out.println("\n\n from " + ce.getFromDateTime());
-        System.out.println("\n\n to " + ce.getToDateTime());
-        
         Date endDate = ce.getToDateTime() ;
-        if(tempDate.getTime() >= fromDate.getTime() && tempDate.getTime() <= endDate.getTime())  {
+        if((tempDate.getTime() >= fromDate.getTime() && tempDate.getTime() <= endDate.getTime()))  {
           existEvents.add(ce) ;
         } 
-       //if(allEvents.indexOf(ce) == 3) break ;
       }
       eventData_.put(k, existEvents) ;
     }
@@ -163,10 +158,7 @@ public class UIMonthView extends UICalendarView {
     GregorianCalendar gc = new GregorianCalendar(year, month, day) ;
     return gc.getTime() ;
   }
-  private int getStartDayOfWeek(int year, int month, int day) {
-    GregorianCalendar gc = new GregorianCalendar(year, month, day) ;
-    return gc.getFirstDayOfWeek() ;
-  }
+  
   private int getDayOfWeek(int year, int month, int day) {
     GregorianCalendar gc = new GregorianCalendar(year, month, day) ;
     return gc.get(java.util.Calendar.DAY_OF_WEEK) ;

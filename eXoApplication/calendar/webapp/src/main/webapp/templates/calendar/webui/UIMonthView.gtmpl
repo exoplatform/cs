@@ -27,19 +27,19 @@
 				<div class="RowContainerDay">
 			<table class="UIGrid" id="RowContainerDay" cellspacing="0" borderspacing="0">
 			<%
-				startDayOfWeek = uicomponent.getStartDayOfWeek(currentYear, currentMonth, 10) ;
 				week = 0 ; 
 				table = "" ;
 				clazz ="" ;
 				dayOfMonth = 1 ;
-				validDay = 1 ;
+				validDay = 0 ;
 				cssClass = "CalendarContentNomal" ;
 				daysInMonth = uicomponent.getDaysInMonth() ;
-				while ( week++ <= 4 ) {
+				while ( week++ < 6   ) {
 			    table += "<tr>";
-			    dayOfWeek = 1 ;
-			    while (dayOfWeek++ <= 7) {
-			      if (week == 0 && startDayOfWeek == dayOfWeek) {
+			    dayOfWeek = 0 ;
+			    while (dayOfWeek++ < 7) {
+			    	startDayOfWeek = uicomponent.getDayOfWeek(currentYear, currentMonth, dayOfMonth) ;
+			      if (week == 1 && startDayOfWeek == dayOfWeek) {
 			        validDay = 1;
 			      } else if (validDay == 1 && dayOfMonth > daysInMonth) {
 			        validDay = 0;
