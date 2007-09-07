@@ -186,8 +186,20 @@
   	  		</td>
   				<td style="padding: 0px auto;"><div class="StarredIcon" onclick="eXo.mail.UIMailPortlet.setStars(this) ;" ><span></span></div></td>
   				<td class="text"><a href="$actionLink"><%=msg.getFrom()%><a></td>
-  				<td style="padding: 0px auto;"></td>
-  				<td style="padding: 0px; border-right: 1px solid #ffffff;"></td>
+  				<td style="padding: 0px auto;">
+  				  <% 
+  				    if (msg.getAttachments().size() > 0) {
+  				  %>
+  				  <a href="$actionLink"><div class="AttachmentIcon"><span></span></div></a>
+  				  <%}%>
+  				</td>
+  				<td style="padding: 0px; border-right: 1px solid #ffffff;">
+  				  <% 
+              if (msg.getTags()!= null) {
+            %>
+              <a href="$actionLink" class="IconHolder RedTag"><span></span></a>
+            <%}%>
+  				</td>
   				<td class="text"><a href="$actionLink"><%=msg.getSubject()%></a></td>
   				<td class="text">(5)</td>
   				<td class="text"><a href="$actionLink"><%=Utils.formatDate('MMM dd, yyyy HH:mm aaa', msg.getReceivedDate())%></a></td>
