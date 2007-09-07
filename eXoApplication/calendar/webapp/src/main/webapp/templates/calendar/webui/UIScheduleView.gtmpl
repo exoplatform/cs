@@ -1,15 +1,13 @@
-<div class="UIWeekView">
+<div class="UIScheduleView">
 	<table class="UIGrid" id="RowContainerDay" cellspacing="0" borderspacing="0">
 		<thead>
 			<tr>
 				<th style="width: 40px"></th>
-				<th >Sun, jun 10</th>
-				<th >Mon, jun 11</th>
-				<th >Tue, jun 12</th>
-				<th >Wed, jun 13</th>
-				<th >Thu, jun 14</th>
-				<th >Fri, jun 15</th>
-				<th >Sat, jun 16</th>
+				<th style="width: 30px">All</th>
+				<th >Work</th>
+				<th >Meeting</th>
+				<th >Family</th>
+				<th >Entertaiment</th>
 			</tr>
 		</thead>
 		<tbody >
@@ -24,8 +22,6 @@
 				</td>
 				<td class="EventAllday">&nbsp</td>
 				<td class="EventAllday">&nbsp</td>
-				<td class="EventAllday">&nbsp</td>
-				<td class="EventAllday">&nbsp</td>
 			</tr>
 			<tr>
 				<td class="TdTime" style="border-top: 1px solid #c7c7c7;">12AM</td>
@@ -34,16 +30,12 @@
 				<td class="TdLine Today">&nbsp</td>
 				<td class="TdLine">&nbsp</td>
 				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
 			</tr>
 			<tr>
 				<td >&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine Today">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 			</tr>
@@ -54,16 +46,12 @@
 				<td class="TdLine Today">&nbsp</td>
 				<td class="TdLine">&nbsp</td>
 				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
 			</tr>
 			<tr>
 				<td >&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine Today">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 			</tr>
@@ -74,16 +62,12 @@
 				<td class="TdLine Today">&nbsp</td>
 				<td class="TdLine">&nbsp</td>
 				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
 			</tr>
 			<tr>
 				<td >&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine Today">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 			</tr>
@@ -94,26 +78,20 @@
 				<td class="TdLine Today">&nbsp</td>
 				<td class="TdLine">&nbsp</td>
 				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
 			</tr>
 			<tr>
 				<td >&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine Today">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 			</tr>
 			<tr>
 				<td class="TdTime">4AM</td>
-				<td class="TdLine">&nbsp</td>
+				<td class="TdLine TimeBusy">&nbsp</td>
 				<td class="TdLine">&nbsp</td>
 				<td class="TdLine Today">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
 				<td class="TdLine">&nbsp</td>
 				<td class="TdLine">&nbsp</td>
 			</tr>
@@ -122,14 +100,28 @@
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine Today">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 			</tr>
 			<tr>
 				<td class="TdTime">5AM</td>
 				<td class="TdLine"></td>
+				<td class="TdLine">&nbsp</td>
+				<td class="TdLine Today">&nbsp</td>
+				<td class="TdLine">&nbsp</td>
+				<td class="TdLine">&nbsp</td>
+			</tr>
+			<tr>
+				<td >&nbsp</td>
+				<td class="TdDotLine">&nbsp</td>
+				<td class="TdDotLine">&nbsp</td>
+				<td class="TdDotLine Today">&nbsp</td>
+				<td class="TdDotLine">&nbsp</td>
+				<td class="TdDotLine">&nbsp</td>
+			</tr>
+			<tr>
+				<td class="TdTime">6AM</td>
+				<td class="TdLine TimeBusy">&nbsp</td>
 				<td class="TdLine">&nbsp</td>
 				<td class="TdLine Today">
 					<div class="EventContainerBoder"
@@ -140,46 +132,20 @@
 				</td>
 				<td class="TdLine">&nbsp</td>
 				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
 			</tr>
 			<tr>
 				<td >&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine Today">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-			</tr>
-			<tr>
-				<td class="TdTime">6AM</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine Today">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-			</tr>
-			<tr>
-				<td >&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine Today">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 			</tr>
 			<tr>
 				<td class="TdTime">7AM</td>
-				<td class="TdLine">&nbsp</td>
+				<td class="TdLine TimeVeryBusy">&nbsp</td>
 				<td class="TdLine">&nbsp</td>
 				<td class="TdLine Today">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
 				<td class="TdLine">&nbsp</td>
 				<td class="TdLine">&nbsp</td>
 			</tr>
@@ -188,18 +154,14 @@
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine Today">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 			</tr>
 			<tr>
 				<td class="TdTime">8AM</td>
-				<td class="TdLine">&nbsp</td>
+				<td class="TdLine TimeHost">&nbsp</td>
 				<td class="TdLine">&nbsp</td>
 				<td class="TdLine Today">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
 				<td class="TdLine">&nbsp</td>
 				<td class="TdLine">&nbsp</td>
 			</tr>
@@ -208,18 +170,14 @@
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine Today">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 			</tr>
 			<tr>
 				<td class="TdTime">9AM</td>
-				<td class="TdLine">&nbsp</td>
+				<td class="TdLine TimeVeryHost">&nbsp</td>
 				<td class="TdLine">&nbsp</td>
 				<td class="TdLine Today">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
 				<td class="TdLine">&nbsp</td>
 				<td class="TdLine">&nbsp</td>
 			</tr>
@@ -228,8 +186,6 @@
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine Today">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 			</tr>
@@ -240,16 +196,12 @@
 				<td class="TdLine Today">&nbsp</td>
 				<td class="TdLine">&nbsp</td>
 				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
 			</tr>
 			<tr>
 				<td >&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine Today">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 			</tr>
@@ -260,16 +212,12 @@
 				<td class="TdLine Today">&nbsp</td>
 				<td class="TdLine">&nbsp</td>
 				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
 			</tr>
 			<tr>
 				<td >&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine Today">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 			</tr>
@@ -280,16 +228,12 @@
 				<td class="TdLine Today">&nbsp</td>
 				<td class="TdLine">&nbsp</td>
 				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
 			</tr>
 			<tr>
 				<td >&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine Today">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 			</tr>
@@ -300,16 +244,12 @@
 				<td class="TdLine Today">&nbsp</td>
 				<td class="TdLine">&nbsp</td>
 				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
 			</tr>
 			<tr>
 				<td >&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine Today">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 			</tr>
@@ -320,16 +260,12 @@
 				<td class="TdLine Today">&nbsp</td>
 				<td class="TdLine">&nbsp</td>
 				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
 			</tr>
 			<tr>
 				<td >&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine Today">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 			</tr>
@@ -340,16 +276,12 @@
 				<td class="TdLine Today">&nbsp</td>
 				<td class="TdLine">&nbsp</td>
 				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
 			</tr>
 			<tr>
 				<td >&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine Today">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 			</tr>
@@ -360,16 +292,12 @@
 				<td class="TdLine Today">&nbsp</td>
 				<td class="TdLine">&nbsp</td>
 				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
 			</tr>
 			<tr>
 				<td >&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine Today">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 			</tr>
@@ -380,16 +308,12 @@
 				<td class="TdLine Today">&nbsp</td>
 				<td class="TdLine">&nbsp</td>
 				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
 			</tr>
 			<tr>
 				<td >&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine Today">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 			</tr>
@@ -400,16 +324,12 @@
 				<td class="TdLine Today">&nbsp</td>
 				<td class="TdLine">&nbsp</td>
 				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
 			</tr>
 			<tr>
 				<td >&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine Today">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 			</tr>
@@ -420,16 +340,12 @@
 				<td class="TdLine Today">&nbsp</td>
 				<td class="TdLine">&nbsp</td>
 				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
 			</tr>
 			<tr>
 				<td >&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine Today">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 			</tr>
@@ -440,16 +356,12 @@
 				<td class="TdLine Today">&nbsp</td>
 				<td class="TdLine">&nbsp</td>
 				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
 			</tr>
 			<tr>
 				<td >&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine Today">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 			</tr>
@@ -460,16 +372,12 @@
 				<td class="TdLine Today">&nbsp</td>
 				<td class="TdLine">&nbsp</td>
 				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
 			</tr>
 			<tr>
 				<td >&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine Today">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 			</tr>
@@ -480,16 +388,12 @@
 				<td class="TdLine Today">&nbsp</td>
 				<td class="TdLine">&nbsp</td>
 				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
 			</tr>
 			<tr>
 				<td >&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine Today">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 			</tr>
@@ -500,16 +404,12 @@
 				<td class="TdLine Today">&nbsp</td>
 				<td class="TdLine">&nbsp</td>
 				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
 			</tr>
 			<tr>
 				<td >&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine Today">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 			</tr>
@@ -520,8 +420,6 @@
 				<td class="TdLine Today">&nbsp</td>
 				<td class="TdLine">&nbsp</td>
 				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
 			</tr>
 			<tr>
 				<td >&nbsp</td>
@@ -530,9 +428,7 @@
 				<td class="TdDotLine Today">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
 				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
 			</tr>
 		</tbody>
 	</table>
-</div> 
+</div>
