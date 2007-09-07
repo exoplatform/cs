@@ -32,7 +32,7 @@
 								<div class="MessageAddress">
 									<div class="FieldContainer">
 										<div class="Title">From:</div>
-										<div class="LinkAddress"><span><%=msg.getFrom()%></span> &lt;  &gt;</div>
+										<div class="LinkAddress"><span><%=msg.getFrom()%></span></div>
 										<div style="clear: left;"><span></span></div>
 									</div>
 									<div class="FieldContainer">

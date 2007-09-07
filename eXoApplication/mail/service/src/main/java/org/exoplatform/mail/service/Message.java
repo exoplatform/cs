@@ -24,6 +24,7 @@ public class Message extends MessageHeader {
   private Date sendDate ;
   private Date receivedDate ;
   private boolean isUnread = true ;
+  private long size ;
   
   private String[] folders ;
   private String[] tags ;
@@ -71,4 +72,7 @@ public class Message extends MessageHeader {
   
   public String getReplyTo() { return replyTo; }
   public void setReplyTo(String replyTo) { this.replyTo = replyTo; }
+  
+  public long getSize() { return size; }
+  public void setSize(long size) { this.size = size; }
 }

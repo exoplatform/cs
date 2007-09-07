@@ -61,6 +61,7 @@ public class Utils {
   public static final String EXO_CC = "exo:cc".intern() ;
   public static final String EXO_BCC= "exo:bcc".intern() ;
   public static final String EXO_BODY = "exo:body".intern() ;
+  public static final String EXO_SIZE = "exo:size".intern();
   public static final String EXO_TAGS = "exo:tags".intern() ;
   public static final String EXO_FOLDERS = "exo:folders".intern() ;
   public static final String EXO_PERSONAL = "exo:personal".intern() ;

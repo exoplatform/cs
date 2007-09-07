@@ -119,6 +119,10 @@
         protected="false" multiple="false">
         <valueConstraints/>
       </propertyDefinition> 
+      <propertyDefinition name="exo:size" requiredType="Long" autoCreated="false" mandatory="false" onParentVersion="COPY"
+        protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition> 
       <propertyDefinition name="exo:folders" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY"
         protected="false" multiple="true">
         <valueConstraints/>        

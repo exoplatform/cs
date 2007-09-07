@@ -167,6 +167,7 @@ public class JCRDataStorage implements DataStorage{
     if (messageNode.hasProperty(Utils.EXO_BCC)) msg.setMessageBcc(messageNode.getProperty(Utils.EXO_BCC).getString());
     if (messageNode.hasProperty(Utils.EXO_REPLYTO)) msg.setReplyTo(messageNode.getProperty(Utils.EXO_REPLYTO).getString());
     if (messageNode.hasProperty(Utils.EXO_BODY)) msg.setMessageBody(messageNode.getProperty(Utils.EXO_BODY).getString());
+    if (messageNode.hasProperty(Utils.EXO_SIZE)) msg.setSize(messageNode.getProperty(Utils.EXO_SIZE).getLong());
     if (messageNode.hasProperty(Utils.EXO_TAGS)) {
       Value[] propTags = messageNode.getProperty(Utils.EXO_TAGS).getValues();
       String[] tags = new String[propTags.length];
@@ -282,6 +283,7 @@ public class JCRDataStorage implements DataStorage{
       nodeMsg.setProperty(Utils.EXO_BCC, message.getMessageBcc());
       nodeMsg.setProperty(Utils.EXO_BODY, message.getMessageBody());
       nodeMsg.setProperty(Utils.EXO_REPLYTO, message.getReplyTo());
+      nodeMsg.setProperty(Utils.EXO_SIZE, message.getSize());
       nodeMsg.setProperty(Utils.EXO_ISUNREAD, message.isUnread());
       nodeMsg.setProperty(Utils.EXO_TO, message.getMessageTo());
       if (message.getSendDate() != null)

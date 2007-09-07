@@ -203,7 +203,7 @@
   				<td class="text"><a href="$actionLink"><%=msg.getSubject()%></a></td>
   				<td class="text">(5)</td>
   				<td class="text"><a href="$actionLink"><%=Utils.formatDate('MMM dd, yyyy HH:mm aaa', msg.getReceivedDate())%></a></td>
-  				<td><a href="$actionLink">10M</a></td>
+  				<td><a href="$actionLink"><%=(int)(msg.getSize()/1024)%> KB</a></td>
   				<td style="padding: 0px;" class="text"></td>
      	 </tr>
   		<%}%>
