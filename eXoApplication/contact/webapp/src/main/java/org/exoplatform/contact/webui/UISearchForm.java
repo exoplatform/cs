@@ -34,7 +34,7 @@ public class UISearchForm extends UIForm {
   
   static  public class SearchActionListener extends EventListener<UISearchForm> {
     public void execute(Event<UISearchForm> event) throws Exception {
-      UISearchForm uiForm = event.getSource() ;
+      
     }
   }
 }

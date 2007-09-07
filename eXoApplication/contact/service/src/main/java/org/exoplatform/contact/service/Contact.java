@@ -22,6 +22,8 @@ public class Contact {
   private String middleName ;
   private String lastName ;
   private String nickName ;
+  private String gender ;
+  private String birthday ;
   private String jobTitle ;
   private String emailAddress ;
   
@@ -59,6 +61,7 @@ public class Contact {
   
   private String[] categories ;
   private String[] tags ;
+  private String[] editPermission ;
   
   public Contact() {
     id = "Contact" + IdGenerator.generate() ;
@@ -84,6 +87,12 @@ public class Contact {
   
   public String getNickName()  { return nickName ; }
   public void   setNickName(String s) { nickName = s ; }
+  
+  public String getGender() { return gender ; }
+  public void setGender(String s) { gender = s ; }
+
+  public String getBirthday() { return birthday ; }
+  public void setBirthday(String s) { birthday = s ; }
   
   public String getJobTitle() { return jobTitle ; }
   public void   setJobTitle(String s) { jobTitle = s ; }
@@ -180,5 +189,8 @@ public class Contact {
   
   public String[] getTags() { return tags ; }
   public void   setTags(String[] s) { tags = s ; }
-  
+
+  public String[] getEditPermission() { return editPermission ; }
+
+  public void setEditPermission(String[] s) { editPermission = s ; }
 }

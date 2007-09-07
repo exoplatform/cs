@@ -1,18 +1,17 @@
 <%
 	import org.exoplatform.contact.webui.UIContactPreview;
 	import org.exoplatform.contact.webui.UIContacts;
+	String compId = uicomponent.getId() ;
 %>
 
-<div class="UIContactContainer" id="$uicomponent.id">
+<div class="UIContactContainer" id="$compId">
 <!--  Start UIContacts-->
 	<% uicomponent.renderChild(UIContacts.class) ;%>			
 <!--  End UIContacts -->
 			<div class="ResizeReadingPane"><span></span></div>
-
 		
 <!--  Start UIContactPreview-->
 	<% uicomponent.renderChild(UIContactPreview.class) ;%>		
 <!--  End UIContactPreview -->		
-		
 		
 </div>

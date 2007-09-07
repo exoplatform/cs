@@ -18,7 +18,7 @@ public interface ContactService {
   public List<Contact> getContactsByGroup(String username, String groupId) throws Exception ;
   public Contact getContact(String username, String contactId) throws Exception ;
   public void saveContact(String username, Contact contact, boolean isNew) throws Exception ;
-  public Contact removeContact(String username, String contactId) throws Exception ;
+  public List<Contact> removeContacts(String username, List<String> contactIds) throws Exception ;
   
   public List<GroupContactData> getSharedContacts(String[] groupIds) throws Exception ;
   public Contact getSharedContact(String contactId) throws Exception ;
@@ -30,12 +30,11 @@ public interface ContactService {
   public void saveGroup(String username, ContactGroup group, boolean isNew) throws Exception ;
   public ContactGroup removeGroup(String username, String groupId) throws Exception ;
   
-  public Contact shareContact(Contact contact, String[] groupIds) throws Exception;
+  public List<Contact> shareContacts(String username, List<String> contactIds, String[] groupIds) throws Exception;
   public List<GroupContactData> getPublicContacts(String[] groupIds) throws Exception ;
   
   public List<Tag> getTags(String username) throws Exception ;
   public List<Contact> getContactsByTag(String username, String tagName) throws Exception ;
-  public List<Contact> getSharedContactsByTag(String tagName) throws Exception ;
   public void addTag(String username, List<String> contactIds, List<Tag> tags) throws Exception ;
   public Tag removeTag(String username, String tagName) throws Exception ;
   public void removeContactTag(String username, List<String>contactIds, List<String> tags) throws Exception ;

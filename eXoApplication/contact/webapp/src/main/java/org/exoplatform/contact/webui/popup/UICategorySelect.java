@@ -7,6 +7,7 @@ package org.exoplatform.contact.webui.popup;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.portal.webui.util.Util;
@@ -42,8 +43,10 @@ public class UICategorySelect extends UIForm {
   public UICategorySelect() throws Exception {
     UIFormInputWithActions input = new UIFormInputWithActions(INPUT_CATEGORY) ;
     input.addUIFormInput(new UIFormSelectBox(FIELD_CATEGORY, FIELD_CATEGORY, getCategoryList())) ;
-    UIFormSelectBox uiSelectBox = input.getUIFormSelectBox(FIELD_CATEGORY) ;
-    uiSelectBox.setOnChange("Onchange") ;
+    // need ?
+//    UIFormSelectBox uiSelectBox = input.getUIFormSelectBox(FIELD_CATEGORY) ;
+//    uiSelectBox.setOnChange("Onchange") ;
+    
     List<ActionData> actions = new ArrayList<ActionData>() ;
     ActionData addAction = new ActionData() ;
     addAction.setActionType(ActionData.TYPE_ICON) ;
@@ -53,6 +56,7 @@ public class UICategorySelect extends UIForm {
     input.setActionField(FIELD_CATEGORY, actions) ;
     addUIFormInput(input) ;
   }
+  
   
   public String getSelectedCategory() {
     UIFormInputWithActions input = getChildById(INPUT_CATEGORY) ;
@@ -74,6 +78,17 @@ public class UICategorySelect extends UIForm {
     UIFormInputWithActions iput = getChildById(INPUT_CATEGORY) ;
      iput.getUIFormSelectBox(FIELD_CATEGORY).setOptions(options) ;
   }
+  
+  public void setValues(String contactId) throws Exception {
+    ContactService contactService = getApplicationComponent(ContactService.class);
+    String username = Util.getPortalRequestContext().getRemoteUser() ;
+    Contact contact = contactService.getContact(username, contactId);
+    if (contact != null) {
+      getUIFormSelectBox(FIELD_CATEGORY).setValue(contact.getCategories()[0]);
+    }
+  }
+  
+  public void disableSelect() { getUIFormSelectBox(FIELD_CATEGORY).setEnable(false) ; }
   
   static  public class AddCategoryActionListener extends EventListener<UICategorySelect> {
     public void execute(Event<UICategorySelect> event) throws Exception {

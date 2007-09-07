@@ -165,8 +165,7 @@ public class TestContactService extends BaseContactTestCase{
     List<Tag> tags = new ArrayList<Tag>();
     tags.add(tag);    
     contactService_.addTag(username, contactIds, tags) ;
-    assertEquals(contactService_.getContactsByTag(username, tag.getName()).size(), 1);
-    assertEquals(contactService_.getSharedContactsByTag(tag.getName()).size(), 1);
+    assertEquals(contactService_.getContactsByTag(username, tag.getName()).size(), 2);
     
 //    Tag tag2 = new Tag() ;
 //    tag2.setName("Customer") ;

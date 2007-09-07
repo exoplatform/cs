@@ -44,8 +44,8 @@ public class ContactServiceImpl implements ContactService {
     storage_.saveContact(username, contact, isNew);    
   }
   
-  public Contact removeContact(String username, String contactId) throws Exception {
-    return storage_.removeContact(username, contactId);
+  public List<Contact> removeContacts(String username, List<String> contactIds) throws Exception {
+    return storage_.removeContacts(username, contactIds);
   }
    
   public List<ContactGroup> getGroups(String username) throws Exception {
@@ -68,8 +68,8 @@ public class ContactServiceImpl implements ContactService {
     return storage_.getPublicContacts(groupIds);
   }
 
-  public Contact shareContact(Contact contact, String[] groupIds) throws Exception {
-    return storage_.shareContact(contact, groupIds);
+  public List<Contact> shareContacts(String username, List<String> contactIds, String[] groupIds) throws Exception {
+    return storage_.shareContacts(username, contactIds, groupIds) ;
   }
 
   public Contact getSharedContact(String contactId) throws Exception {
@@ -95,10 +95,6 @@ public class ContactServiceImpl implements ContactService {
     return storage_.getContactsByTag(username, tagName);
   }
   
-  public List<Contact> getSharedContactsByTag(String tagName) throws Exception {
-    return storage_.getSharedContactsByTag(tagName);
-  }
-  
   public void addTag(String username, List<String> contactIds, List<Tag> tags) throws Exception {
     storage_.addTag(username, contactIds, tags);
   }
@@ -110,4 +106,7 @@ public class ContactServiceImpl implements ContactService {
   public void removeContactTag(String username, List<String>contactIds, List<String> tags) throws Exception {
     storage_.removeContactTag(username, contactIds, tags) ;
   }
+  
+  
+  
 }

@@ -37,7 +37,7 @@ public class UIActionBar extends UIContainer  {
   
   static public class ChangeViewActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {
-      UIActionBar uiActionBar = event.getSource() ;      
+      
     }
   }  
   static public class AddContactActionListener extends EventListener<UIActionBar> {
@@ -48,6 +48,7 @@ public class UIActionBar extends UIContainer  {
       UIPopupContainer popupContainer = popupAction.createUIComponent(UIPopupContainer.class, null, "AddNewContact") ;
       popupContainer.addChild(UICategorySelect.class, null, null) ;
       popupContainer.addChild(UIContactForm.class, null, null) ;
+      UIContactForm.isNew_ = true ;
       popupAction.activate(popupContainer, 800, 450, true) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
@@ -55,21 +56,18 @@ public class UIActionBar extends UIContainer  {
   
   static public class ContactsViewActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {
-      UIActionBar uiActionBar = event.getSource();
       System.out.println("\n\n\n ContactsViewActionListener\n\n\n");
     }  
   }
   
   static public class CustomLayoutActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {
-      UIActionBar uiActionBar = event.getSource();
       System.out.println("\n\n\n CustomLayoutActionListener\n\n\n");
     }  
   }
   
   static public class AddressBookActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {
-      UIActionBar uiActionBar = event.getSource();
       System.out.println("\n\n\n AddressBookActionListener\n\n\n");
     }  
   }

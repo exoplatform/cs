@@ -122,6 +122,8 @@ public class JCRDataStorage implements DataStorage {
     if(contactNode.hasProperty("exo:middleName"))contact.setMiddleName(contactNode.getProperty("exo:middleName").getString());
     if(contactNode.hasProperty("exo:lastName"))contact.setLastName(contactNode.getProperty("exo:lastName").getString());
     if(contactNode.hasProperty("exo:nickName"))contact.setNickName(contactNode.getProperty("exo:nickName").getString());
+    if(contactNode.hasProperty("exo:gender"))contact.setGender(contactNode.getProperty("exo:gender").getString());
+    if(contactNode.hasProperty("exo:birthday"))contact.setBirthday(contactNode.getProperty("exo:birthday").getString());
     if(contactNode.hasProperty("exo:jobTitle"))contact.setJobTitle(contactNode.getProperty("exo:jobTitle").getString());
     if(contactNode.hasProperty("exo:emailAddress"))contact.setEmailAddress(contactNode.getProperty("exo:emailAddress").getString());
     
@@ -159,6 +161,8 @@ public class JCRDataStorage implements DataStorage {
     
     if(contactNode.hasProperty("exo:categories"))contact.setCategories(ValuesToStrings(contactNode.getProperty("exo:categories").getValues()));
     if(contactNode.hasProperty("exo:tags")) contact.setTags(ValuesToStrings(contactNode.getProperty("exo:tags").getValues()));
+    if(contactNode.hasProperty("exo:editPermission")) contact.setEditPermission(ValuesToStrings(contactNode.getProperty("exo:editPermission").getValues()));
+     
     contact.setPath(contactNode.getPath()) ;
     return contact;
   }
@@ -229,17 +233,37 @@ public class JCRDataStorage implements DataStorage {
     return contactGroups;
   }
 
-  public Contact removeContact(String username, String contactId) throws Exception {
+  public List<Contact> removeContacts(String username, List<String> contactIds) throws Exception {
     Node contactHomeNode = getContactHome(username);
-    if (contactHomeNode.hasNode(contactId)) {
-      Contact contact = getContact(username, contactId);
-      contactHomeNode.getNode(contactId).remove();
-      contactHomeNode.getSession().save();
-      return contact;
-    }
-    return null;
+    Node publicContactHomeNode = getPublicContactHome() ;
+    List<Contact> contacts = new ArrayList<Contact>() ;
+    Contact contact ;
+    for (String contactId : contactIds)    
+      if (contactHomeNode.hasNode(contactId)) {
+        contact = getContact(username, contactId);
+        if(canDelete(username, contact)) {
+          contactHomeNode.getNode(contactId).remove();
+          contactHomeNode.getSession().save();
+        }else {
+          contacts.add(contact) ;
+        }
+      }else {
+        if(publicContactHomeNode.hasNode(contactId)){
+          contact = getContact(username, contactId);
+          if(canDelete(username, contact)) {
+            publicContactHomeNode.getNode(contactId).remove();
+            publicContactHomeNode.getSession().save();
+          }else {
+            contacts.add(contact) ;
+          }
+        }
+      }
+    return contacts ;
   }
-
+  
+  private boolean canDelete(String username, Contact contact) {
+    return true ;
+  }
   public ContactGroup removeGroup(String username, String groupId) throws Exception {
     Node contactGroupHomeNode = getContactGroupHome(username);
     if (contactGroupHomeNode.hasNode(groupId)) {
@@ -283,6 +307,8 @@ public class JCRDataStorage implements DataStorage {
     contactNode.setProperty("exo:middleName", contact.getMiddleName());
     contactNode.setProperty("exo:lastName", contact.getLastName());
     contactNode.setProperty("exo:nickName", contact.getNickName());
+    contactNode.setProperty("exo:gender", contact.getGender()) ;
+    contactNode.setProperty("exo:birthday", contact.getBirthday()) ;
     contactNode.setProperty("exo:jobTitle", contact.getJobTitle());
     contactNode.setProperty("exo:emailAddress", contact.getEmailAddress());
     
@@ -319,6 +345,7 @@ public class JCRDataStorage implements DataStorage {
     contactNode.setProperty("exo:note", contact.getNote());
     contactNode.setProperty("exo:categories", contact.getCategories());
     contactNode.setProperty("exo:tags", contact.getTags());
+    contactNode.setProperty("exo:editPermission", contact.getEditPermission());
     
     contactHomeNode.getSession().save();
   }
@@ -357,10 +384,12 @@ public class JCRDataStorage implements DataStorage {
     }
     return contactByGroup ;
   }
-
-  public Contact shareContact(Contact contact, String[] groupIds) throws Exception {
+  
+  public List<Contact> shareContacts(String username, List<String> contactIds, String[] groupIds) throws Exception {
     Node groupNode ;
     Node publicGroupHome = getPublicContactGroupHome() ;
+    List<Contact> contacts = new ArrayList<Contact>() ;
+    Contact contact ;
     for(String groupId : groupIds){
       if(publicGroupHome.hasNode(groupId)) groupNode = publicGroupHome.getNode(groupId) ;
       else {
@@ -369,27 +398,31 @@ public class JCRDataStorage implements DataStorage {
         groupNode.setProperty("exo:name", groupId) ;
         groupNode.addMixin("mix:referenceable") ;        
       }
-      Value value2add = publicGroupHome.getSession().getValueFactory().createValue(groupNode); 
-      Node contactNode = (Node)publicGroupHome.getSession().getItem(contact.getPath()) ;
-      if (!contactNode.isNodeType("exo:categorized")) {     
-        contactNode.addMixin("exo:categorized");    
-        contactNode.setProperty("exo:category", new Value[] {value2add});
-      } else {
-        List<Value> vals = new ArrayList<Value>();
-        Value[] values = contactNode.getProperty("exo:category").getValues();
-        for (int i = 0; i < values.length; i++) {
-          Value value = values[i];
-          String uuid = value.getString();
-          Node refNode = publicGroupHome.getSession().getNodeByUUID(uuid);       
-          if(!refNode.getPath().equals(groupNode.getPath()))
-            vals.add(value);
+      for (String contactId : contactIds) {
+        contact = getContact(username, contactId) ;
+        contacts.add(contact) ;
+        Value value2add = publicGroupHome.getSession().getValueFactory().createValue(groupNode); 
+        Node contactNode = (Node)publicGroupHome.getSession().getItem(contact.getPath()) ;
+        if (!contactNode.isNodeType("exo:categorized")) {     
+          contactNode.addMixin("exo:categorized");    
+          contactNode.setProperty("exo:category", new Value[] {value2add});
+        } else {
+          List<Value> vals = new ArrayList<Value>();
+          Value[] values = contactNode.getProperty("exo:category").getValues();
+          for (int i = 0; i < values.length; i++) {
+            Value value = values[i];
+            String uuid = value.getString();
+            Node refNode = publicGroupHome.getSession().getNodeByUUID(uuid);       
+            if(!refNode.getPath().equals(groupNode.getPath()))
+              vals.add(value);
+          }
+          vals.add(value2add);
+          contactNode.setProperty("exo:category", vals.toArray(new Value[vals.size()]));        
         }
-        vals.add(value2add);
-        contactNode.setProperty("exo:category", vals.toArray(new Value[vals.size()]));        
       }
     }
     publicGroupHome.getSession().save() ;
-    return contact;
+    return contacts;
   }
 
   public Contact getSharedContact(String contactId) throws Exception {
@@ -456,6 +489,8 @@ public class JCRDataStorage implements DataStorage {
     contactNode.setProperty("exo:middleName", contact.getMiddleName());
     contactNode.setProperty("exo:lastName", contact.getLastName());
     contactNode.setProperty("exo:nickName", contact.getNickName());
+    contactNode.setProperty("exo:gender", contact.getGender()) ;
+    contactNode.setProperty("exo:birthday", contact.getBirthday());
     contactNode.setProperty("exo:jobTitle", contact.getJobTitle());
     contactNode.setProperty("exo:emailAddress", contact.getEmailAddress());
     
@@ -491,6 +526,7 @@ public class JCRDataStorage implements DataStorage {
     
     contactNode.setProperty("exo:note", contact.getNote());
     contactNode.setProperty("exo:categories", contact.getCategories());
+    contactNode.setProperty("exo:editPermission", contact.getEditPermission());
     
     contactHomeNode.getSession().save(); 
   }
@@ -534,6 +570,7 @@ public class JCRDataStorage implements DataStorage {
   }
 
   public List<Contact> getContactsByTag(String username, String tagName) throws Exception {
+    //query on private contacts
     Node contactHome = getContactHome(username);
     QueryManager qm = contactHome.getSession().getWorkspace().getQueryManager();
     StringBuffer queryString = new StringBuffer("/jcr:root" + contactHome.getPath() 
@@ -547,20 +584,15 @@ public class JCRDataStorage implements DataStorage {
     while (it.hasNext()) {
       contacts.add(getContact(it.nextNode()));
     }
-    return contacts ;
-  }  
-  
-  public List<Contact> getSharedContactsByTag(String tagName) throws Exception {
-    Node contactHome = getPublicContactHome();
-    QueryManager qm = contactHome.getSession().getWorkspace().getQueryManager();
-    StringBuffer queryString = new StringBuffer("/jcr:root" + contactHome.getPath() 
+    //query on public contacts
+    Node publicContactHome = getPublicContactHome();
+    queryString = new StringBuffer("/jcr:root" + publicContactHome.getPath() 
                                                 + "//element(*,exo:contact)[@exo:tags='").
                                                 append(tagName).
                                                 append("']");
-    Query query = qm.createQuery(queryString.toString(), Query.XPATH);
-    QueryResult result = query.execute();
-    NodeIterator it = result.getNodes();    
-    List<Contact> contacts = new ArrayList<Contact>();
+    query = qm.createQuery(queryString.toString(), Query.XPATH);
+    result = query.execute();
+    it = result.getNodes();    
     while (it.hasNext()) {
       contacts.add(getContact(it.nextNode()));
     }
@@ -610,13 +642,12 @@ public class JCRDataStorage implements DataStorage {
     Node contactHomeNode = getContactHome(username);
     Node publicContactHomeNode = getPublicContactHome();
     Node contactNode = null ;
-    for(String contactId : contactIds) {
-      
-      if(contactHomeNode.hasNode(contactId)) contactNode = contactHomeNode.getNode(contactId) ;
-      else
-        if (publicContactHomeNode.hasNode(contactId)) {
-          contactNode = publicContactHomeNode.getNode(contactId);
-        }
+    for(String contactId : contactIds) {      
+      if(contactHomeNode.hasNode(contactId)) {
+        contactNode = contactHomeNode.getNode(contactId) ;
+      } else if (publicContactHomeNode.hasNode(contactId)) {
+        contactNode = publicContactHomeNode.getNode(contactId);       
+      } 
       if(contactNode.hasProperty("exo:tags")){
         Value[] values = contactNode.getProperty("exo:tags").getValues() ;
         for(Value value : values) { tagMap.put(value.getString(), value.getString()) ; }          

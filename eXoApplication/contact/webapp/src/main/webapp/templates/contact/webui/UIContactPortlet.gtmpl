@@ -3,9 +3,10 @@
 	import org.exoplatform.contact.webui.UIActionBar;
 	import org.exoplatform.contact.webui.UIWorkingContainer;
 	import org.exoplatform.contact.webui.popup.UIPopupAction ;
+	String compId = uicomponent.getId() ;
 %>
 
-<div class="UIContactPortlet"id="$uicomponent.id">
+<div class="UIContactPortlet"id="$compId">
 
 <!-- Start UIBannerContainer -->
 	<% uicomponent.renderChild(UIBannerContainer.class) ;%>

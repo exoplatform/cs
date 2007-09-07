@@ -16,23 +16,20 @@
 					<a href="#" class="ControlButton">
 						<div class="Icon ChatIcon"><span></span></div>
 					</a>
-					<a href="#" class="ControlButton">
+					<a href="<%=uicomponent.event("AddTag")%>" class="ControlButton">
 						<div class="Icon SelectTagIcon"><span></span></div>
 					</a>
 					<a href="#" class="ControlButton">
 						<div class="Icon MessageIcon"><span></span></div>
 					</a>
 					<div class="SeparatorLine"><span></span></div>
-					<a href="#" class="ControlButton">
+					<a href="<%=uicomponent.event("DeleteContacts")%>" class="ControlButton">
 						<div class="Icon DustBin16x16Icon "><span></span></div>
 					</a>
 					<a href="#" class="ControlButton">
 						<div class="DownArrow1Icon" title="Collapse/Expand all">
 							<div class="Icon PrintIcon"><span></span></div>
 						</div>
-					</a>
-					<a href="<%=uicomponent.event("AddTag")%>" class="ControlButton">
-						<div class="IconHolder MoveIcon">Add to Tag</div>
 					</a>
 					
 					<div class="UIAddressPageList">
@@ -66,6 +63,7 @@
 	  		        	<div class="DownArrow1Icon" title="Sort by Date & time">Organition</div>
 	 	      	    </th>
 	 	      	    <th style="padding-left: 7px;">Work Phone</th>
+	 	      	    <th style="padding-left: 7px;">Action</th>
 	  	 	       	</tr>
 	  	 	    </thead>
   	 	      <tbody>
@@ -94,7 +92,7 @@
 								<td class="text"><a href="$actionLink"><%=contact.getJobTitle()%></a></td>
 								<td><a href="$actionLink"><%=contact.getWorkPhone1()%></a></td>
 								<td>
-									<a href="$actionLink2" class="ControlButton"><div class="IconHolder EditIcon">Edit</div></a>
+									<a href="$actionLink2" class="ControlButton"><div class="IconHolder EditIcon"><span></span></div></a>
 								</td>
    			     	</tr>
 			     	<% } %>  

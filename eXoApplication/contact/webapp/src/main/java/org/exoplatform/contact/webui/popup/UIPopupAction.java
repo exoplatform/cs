@@ -4,8 +4,6 @@
  **************************************************************************/
 package org.exoplatform.contact.webui.popup;
 
-import java.util.List;
-
 import org.exoplatform.contact.webui.popup.UIPopupComponent;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;

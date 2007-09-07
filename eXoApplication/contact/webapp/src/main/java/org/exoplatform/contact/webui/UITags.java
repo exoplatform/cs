@@ -4,10 +4,7 @@
  **************************************************************************/
 package org.exoplatform.contact.webui;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.Tag;
 import org.exoplatform.portal.webui.util.Util;
@@ -46,24 +43,15 @@ public class UITags extends UIComponent  {
       UITags uiForm = event.getSource() ;
       String tagName = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UIWorkingContainer uiWorkingContainer = uiForm.getAncestorOfType(UIWorkingContainer.class) ;
-      
-      UIContacts uiContacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class) ;
       ContactService contactService = uiForm.getApplicationComponent(ContactService.class);
       String username = Util.getPortalRequestContext().getRemoteUser() ;
-      List<Contact> contacts = new ArrayList<Contact>(); 
-      contacts.addAll(contactService.getContactsByTag(username, tagName));
-      contacts.addAll(contactService.getSharedContactsByTag(tagName));
-      System.out.println("\n\n size contact :" + contacts.size() + "\n\n");
-      
-      uiContacts.setContacts(contacts);
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts) ;
+      UIContacts uiContacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class) ;
+      uiContacts.setContacts(contactService.getContactsByTag(username, tagName)) ;
+      //event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts) ;
       
       UIContactPreview uiContactPreview = uiWorkingContainer.findFirstComponentOfType(UIContactPreview.class);
-      Contact contact = null ;
-      if (contacts.size() > 0) 
-        contact = contacts.get(0);
-      uiContactPreview.setContact(contact);
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiContactPreview) ;
+      uiContactPreview.updateContact() ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer) ;
     }
   }
 }

@@ -4,7 +4,7 @@
 %>
 
 
-<div class="UIWorkingContainer">
+<div class="UIWorkingContainer" id="<%=uicomponent.getId()%>">
 <!-- Start UINavigationContainer -->
 	<% uicomponent.renderChild(UINavigationContainer.class) ;%>		
 <!-- End UINavigationContainer -->
