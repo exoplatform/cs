@@ -402,35 +402,50 @@
 }
 
 .UIDayView .EventDayContent .TdLine{
+	text-align: right;
 	border-top:  1px solid #c7c7c7;
+	border-left: none ;
 }
 
 .UIDayView .EventDayContent .TdDotLine{
 	border-top:  1px dotted #c7c7c7;
+	border-left: none ;
 }
 
-.UIDayView .EventDayContent .TdTime{
-	text-align: right;
+.UIDayView .EventDayContent .TdTop {
+	border-top: none ;
+	border-left: none ;
 }
 
 .UIDayView .EventDayContent .UIGrid td{
 	padding: 0px;
+	height: 30px ;
+	*height: 29px ; /* fixed for IE */
+	border-right: none ;	
 }
 
-.UIDayView .EventDayContent .EventContainerBoder{
+.UIDayView .EventDayContent .HourPoint {
+	height: 60px ;
+	border: 1px solid white ;
+}
+
+.UIDayView .EventDayContent .EventContainerBorder{
 	border:1px solid #808080;
+	position: absolute;
+	background:#e5eaff;
 }
 
 .UIDayView .EventDayContent .EventContainerBar{
 	border:1px solid #ffffff;
 	border-bottom: none;
 	background:#cdd7ff;
+	cursor: move;
 }
 
 .UIDayView .EventDayContent .EventContainer{
 	border:1px solid #ffffff;
 	border-top: none;
-	background:#e5eaff;
+	border-bottom: none;
 }
 
 .UIDayView .EventDayContent .ResizeEventContainer{
@@ -441,9 +456,9 @@
 	cursor: n-resize;
 }
 .UIDayView .UIGrid {
-	width: 98%;
+	width: 100% ;
+	*width: 98%;  /* fixed for IE */
 }
-
 /*====================Week View============================*/
 
 .UIWeekView {

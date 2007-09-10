@@ -1,4 +1,6 @@
-<%
+<% 
+	def rcontext = _ctx.getRequestContext() ;
+  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.showEvent() ;');
 	uiform.begin()
  	_ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");
 %>
@@ -9,218 +11,218 @@
 				<div class="EventAllDayDescription">Events happen all day go here</div>
 			</div>
 		</div>
-		<div class="EventDayContainer">
+		<div class="EventDayContainer" style="position:relative ;">
 			<div class="EventDayContent">
-				<table class="UIGrid" id="RowContainerDay" cellspacing="0" borderspacing="0">
-					<col width="40px"><col>
-					<tbody>
-						<tr>
-							<td class="TdTime">12AM</td>
-							<td>&nbsp</td>
-						</tr>
-						<tr>
-							<td ></td>
-							<td class="TdDotLine">&nbsp;</td>
-						</tr>
-						<tr>
-							<td class="TdTime">1AM</td>
-							<td class="TdLine">&nbsp</td>
-						</tr>
-						<tr>
-							<td ></td>
-							<td class="TdDotLine">&nbsp</td>
-						</tr>
-						<tr>
-							<td class="TdTime">2AM</td>
-							<td class="TdLine">&nbsp</td>
-						</tr>
-						<tr>
-							<td ></td>
-							<td class="TdDotLine">&nbsp</td>
-						</tr>
-						<tr>
-							<td class="TdTime">3AM</td>
-							<td class="TdLine">&nbsp</td>
-						</tr>
-						<tr>
-							<td ></td>
-							<td class="TdDotLine">&nbsp</td>
-						</tr>
-						<tr>
-							<td class="TdTime">4AM</td>
-							<td class="TdLine">&nbsp</td>
-						</tr>
-						<tr>
-							<td ></td>
-							<td class="TdDotLine">&nbsp</td>
-						</tr>
-						<tr>
-							<td class="TdTime">5AM</td>
-							<td class="TdLine">
-								<div class="EventContainerBoder">
-									<div class="EventContainerBar">5:35 AM - 7:00 AM</div>
+				<table class="UIGrid" id="RowContainerDay" cellspacing="0" borderspacing="0" cellpadding="0" style="table-layout:fixed ;"><tbody><tr>
+					<td style="width:40px ;">
+						<div>
+							<div class="HourPoint">12 AM</div>
+							<div class="HourPoint">1 AM</div>
+							<div class="HourPoint">2 AM</div>
+							<div class="HourPoint">3 AM</div>
+							<div class="HourPoint">4 AM</div>
+							<div class="HourPoint">5 AM</div>
+							<div class="HourPoint">6 AM</div>
+							<div class="HourPoint">7 AM</div>
+							<div class="HourPoint">8 AM</div>
+							<div class="HourPoint">9 AM</div>
+							<div class="HourPoint">10 AM</div>
+							<div class="HourPoint">11 AM</div>
+							<div class="HourPoint">12 PM</div>
+							<div class="HourPoint">1 PM</div>
+							<div class="HourPoint">2 PM</div>
+							<div class="HourPoint">3 PM</div>
+							<div class="HourPoint">4 PM</div>
+							<div class="HourPoint">5 PM</div>
+							<div class="HourPoint">6 PM</div>
+							<div class="HourPoint">7 PM</div>
+							<div class="HourPoint">8 PM</div>
+							<div class="HourPoint">9 PM</div>
+							<div class="HourPoint">10 PM</div>
+							<div class="HourPoint">11 PM</div>
+						</div>					
+					</td>
+					<td>
+						<div style="position:relative ;">
+							<div>								
+								<div class="EventContainerBorder" startTime="300" endTime="420">
+									<div class="EventContainerBar">5:00 AM - 7:00 AM</div>
 									<div class="EventContainer">Talk to my cousin on the phone, he will call from France</div>
 									<div class="ResizeEventContainer"><span></span></div>
 								</div>
-							</td>
-						</tr>
-						<tr>
-							<td ></td>
-							<td class="TdDotLine">&nbsp</td>
-						</tr>
-						<tr>
-							<td class="TdTime">6AM</td>
-							<td class="TdLine">&nbsp</td>
-						</tr>
-						<tr>
-							<td ></td>
-							<td class="TdDotLine">&nbsp</td>
-						</tr>
-						<tr>
-							<td class="TdTime">7AM</td>
-							<td class="TdLine">&nbsp</td>
-						</tr>
-						<tr>
-							<td ></td>
-							<td class="TdDotLine">&nbsp</td>
-						</tr>
-						<tr>
-							<td class="TdTime">8AM</td>
-							<td class="TdLine">&nbsp</td>
-						</tr>
-						<tr>
-							<td ></td>
-							<td class="TdDotLine">&nbsp</td>
-						</tr>
-						<tr>
-							<td class="TdTime">9AM</td>
-							<td class="TdLine">&nbsp</td>
-						</tr>
-						<tr>
-							<td ></td>
-							<td class="TdDotLine">&nbsp</td>
-						</tr>
-						<tr>
-							<td class="TdTime">10AM</td>
-							<td class="TdLine">&nbsp</td>
-						</tr>
-						<tr>
-							<td ></td>
-							<td class="TdDotLine">&nbsp</td>
-						</tr>
-						<tr>
-							<td class="TdTime">11AM</td>
-							<td class="TdLine">&nbsp</td>
-						</tr>
-						<tr>
-							<td ></td>
-							<td class="TdDotLine">&nbsp</td>
-						</tr>
-						<tr>
-							<td class="TdTime">12PM</td>
-							<td class="TdLine">&nbsp</td>
-						</tr>
-						<tr>
-							<td ></td>
-							<td class="TdDotLine">&nbsp</td>
-						</tr>
-						<tr>
-							<td class="TdTime">1PM</td>
-							<td class="TdLine">&nbsp</td>
-						</tr>
-						<tr>
-							<td ></td>
-							<td class="TdDotLine">&nbsp</td>
-						</tr>
-						<tr>
-							<td class="TdTime">2PM</td>
-							<td class="TdLine">&nbsp</td>
-						</tr>
-						<tr>
-							<td ></td>
-							<td class="TdDotLine">&nbsp</td>
-						</tr>
-						<tr>
-							<td class="TdTime">3PM</td>
-							<td class="TdLine">&nbsp</td>
-						</tr>
-						<tr>
-							<td ></td>
-							<td class="TdDotLine">&nbsp</td>
-						</tr>
-						<tr>
-							<td class="TdTime">4PM</td>
-							<td class="TdLine">&nbsp</td>
-						</tr>
-						<tr>
-							<td ></td>
-							<td class="TdDotLine">&nbsp</td>
-						</tr>
-						<tr>
-							<td class="TdTime">5PM</td>
-							<td class="TdLine">&nbsp</td>
-						</tr>
-						<tr>
-							<td ></td>
-							<td class="TdDotLine">&nbsp</td>
-						</tr>
-						<tr>
-							<td class="TdTime">6PM</td>
-							<td class="TdLine">&nbsp</td>
-						</tr>
-						<tr>
-							<td ></td>
-							<td class="TdDotLine">&nbsp</td>
-						</tr>
-						<tr>
-							<td class="TdTime">7PM</td>
-							<td class="TdLine">&nbsp</td>
-						</tr>
-						<tr>
-							<td ></td>
-							<td class="TdDotLine">&nbsp</td>
-						</tr>
-						<tr>
-							<td class="TdTime">8PM</td>
-							<td class="TdLine">&nbsp</td>
-						</tr>
-						<tr>
-							<td ></td>
-							<td class="TdDotLine">&nbsp</td>
-						</tr>
-						<tr>
-							<td class="TdTime">9PM</td>
-							<td class="TdLine">&nbsp</td>
-						</tr>
-						<tr>
-							<td ></td>
-							<td class="TdDotLine">&nbsp</td>
-						</tr>
-						<tr>
-							<td class="TdTime">10PM</td>
-							<td class="TdLine">&nbsp</td>
-						</tr>
-						<tr>
-							<td ></td>
-							<td class="TdDotLine">&nbsp</td>
-						</tr>
-						<tr>
-							<td class="TdTime">11PM</td>
-							<td class="TdLine">&nbsp</td>
-						</tr>
-						<tr>
-							<td ></td>
-							<td class="TdDotLine">&nbsp</td>
-						</tr>
-						<tr>
-							<td class="TdTime">12PM</td>
-							<td class="TdLine">&nbsp</td>
-						</tr>
-						<tr>
-							<td ></td>
-							<td class="TdDotLine">&nbsp</td>
-						</tr>
-					</tbody>
+								<div class="EventContainerBorder" startTime="360" endTime="540">
+									<div class="EventContainerBar">6:00 AM - 9:00 AM</div>
+									<div class="EventContainer">Talk to my cousin on the phone, he will call from France</div>
+									<div class="ResizeEventContainer"><span></span></div>
+								</div>
+								<div class="EventContainerBorder" startTime="420" endTime="600">
+									<div class="EventContainerBar">7:00 AM - 10:00 AM</div>
+									<div class="EventContainer">Talk to my cousin on the phone, he will call from France</div>
+									<div class="ResizeEventContainer"><span></span></div>
+								</div>
+								<div class="EventContainerBorder" startTime="420" endTime="660">
+									<div class="EventContainerBar">7:00 AM - 10:00 AM</div>
+									<div class="EventContainer">Talk to my cousin on the phone, he will call from France</div>
+									<div class="ResizeEventContainer"><span></span></div>
+								</div>
+								<table  cellspacing="0" borderspacing="0" width="100%">
+									<tbody>
+										<tr>							
+											<td class="TdTop">&nbsp</td>
+										</tr>
+										<tr>							
+											<td class="TdDotLine">&nbsp;</td>
+										</tr>
+										<tr>							
+											<td class="TdLine">&nbsp</td>
+										</tr>
+										<tr>							
+											<td class="TdDotLine">&nbsp</td>
+										</tr>
+										<tr>							
+											<td class="TdLine">&nbsp</td>
+										</tr>
+										<tr>							
+											<td class="TdDotLine">&nbsp</td>
+										</tr>
+										<tr>							
+											<td class="TdLine">&nbsp</td>
+										</tr>
+										<tr>							
+											<td class="TdDotLine">&nbsp</td>
+										</tr>
+										<tr>							
+											<td class="TdLine">&nbsp</td>
+										</tr>
+										<tr>							
+											<td class="TdDotLine">&nbsp</td>
+										</tr>
+										<tr>							
+											<td class="TdLine">&nbsp</td>
+										</tr>
+										<tr>							
+											<td class="TdDotLine">&nbsp</td>
+										</tr>
+										<tr>							
+											<td class="TdLine">&nbsp</td>
+										</tr>
+										<tr>							
+											<td class="TdDotLine">&nbsp</td>
+										</tr>
+										<tr>							
+											<td class="TdLine">&nbsp</td>
+										</tr>
+										<tr>							
+											<td class="TdDotLine">&nbsp</td>
+										</tr>
+										<tr>							
+											<td class="TdLine">&nbsp</td>
+										</tr>
+										<tr>							
+											<td class="TdDotLine">&nbsp</td>
+										</tr>
+										<tr>							
+											<td class="TdLine">&nbsp</td>
+										</tr>
+										<tr>							
+											<td class="TdDotLine">&nbsp</td>
+										</tr>
+										<tr>							
+											<td class="TdLine">&nbsp</td>
+										</tr>
+										<tr>							
+											<td class="TdDotLine">&nbsp</td>
+										</tr>
+										<tr>							
+											<td class="TdLine">&nbsp</td>
+										</tr>
+										<tr>							
+											<td class="TdDotLine">&nbsp</td>
+										</tr>
+										<tr>							
+											<td class="TdLine">&nbsp</td>
+										</tr>
+										<tr>							
+											<td class="TdDotLine">&nbsp</td>
+										</tr>
+										<tr>							
+											<td class="TdLine">&nbsp</td>
+										</tr>
+										<tr>							
+											<td class="TdDotLine">&nbsp</td>
+										</tr>
+										<tr>							
+											<td class="TdLine">&nbsp</td>
+										</tr>
+										<tr>							
+											<td class="TdDotLine">&nbsp</td>
+										</tr>
+										<tr>							
+											<td class="TdLine">&nbsp</td>
+										</tr>
+										<tr>							
+											<td class="TdDotLine">&nbsp</td>
+										</tr>
+										<tr>							
+											<td class="TdLine">&nbsp</td>
+										</tr>
+										<tr>							
+											<td class="TdDotLine">&nbsp</td>
+										</tr>
+										<tr>							
+											<td class="TdLine">&nbsp</td>
+										</tr>
+										<tr>							
+											<td class="TdDotLine">&nbsp</td>
+										</tr>
+										<tr>							
+											<td class="TdLine">&nbsp</td>
+										</tr>
+										<tr>							
+											<td class="TdDotLine">&nbsp</td>
+										</tr>
+										<tr>							
+											<td class="TdLine">&nbsp</td>
+										</tr>
+										<tr>							
+											<td class="TdDotLine">&nbsp</td>
+										</tr>
+										<tr>							
+											<td class="TdLine">&nbsp</td>
+										</tr>
+										<tr>							
+											<td class="TdDotLine">&nbsp</td>
+										</tr>
+										<tr>							
+											<td class="TdLine">&nbsp</td>
+										</tr>
+										<tr>							
+											<td class="TdDotLine">&nbsp</td>
+										</tr>
+										<tr>							
+											<td class="TdLine">&nbsp</td>
+										</tr>
+										<tr>							
+											<td class="TdDotLine">&nbsp</td>
+										</tr>
+										<tr>							
+											<td class="TdLine">&nbsp</td>
+										</tr>
+										<tr>							
+											<td class="TdDotLine">&nbsp</td>
+										</tr>
+										<tr>							
+											<td class="TdLine">&nbsp</td>
+										</tr>
+										<tr>							
+											<td class="TdDotLine">&nbsp</td>
+										</tr>										
+									</tbody>
+								</table>	
+							</div>
+						</div>
+					</td>
+				</tr></tbody>
 				</table>
 			</div>
 		</div>
