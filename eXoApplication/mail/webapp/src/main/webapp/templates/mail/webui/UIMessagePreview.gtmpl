@@ -1,6 +1,7 @@
 <%
   import org.exoplatform.mail.service.Message;
   import org.exoplatform.mail.service.Utils; 
+  import org.exoplatform.mail.service.Attachment;
   Message msg = uicomponent.getMessage();
 %>
 <div class="UIMessagePreview" id="<%=uicomponent.getId()%>">
@@ -56,14 +57,14 @@
 									</div>
 									<div class="FieldContainer">
 										<div class="Title">Date & time:</div>
-										<div class="Address"><%=Utils.formatDate('MMM dd, yyyy HH:mm aaa', msg.getReceivedDate())%></div>
+										<div class="Address"><%=Utils.formatDate('EEEE, dd MMMM, yyyy HH:mm:ss aaa', msg.getReceivedDate())%></div>
 										<div style="clear: left;"><span></span></div>
 									</div>
 									<div class="FieldContainer">
 										<div class="Title">Supject:</div>
 										<div class="Address"><span><%=msg.getSubject()%></span></div>
 										<div style="clear: left;"><span></span></div>
-									</div>
+									</div>																		
 									<%
 									  if (msg.getTags() != null && msg.getTags().length > 0) {
 									%>
@@ -78,6 +79,25 @@
   										<div style="clear: left;"><span></span></div>
   									</div>
 									<%}%>
+									
+									<div class="FieldContainer">
+                    <div class="Title">Attachment:</div>
+                    <div class="Address">
+                      <%
+                        if (msg.getAttachments().size() > 0) {
+                          int i = 1;
+                          for (Attachment att : msg.getAttachments()) {  
+                      %>
+                            <%if ((msg.getAttachments().size() > 1) && (i > 1)) {%>, <%}%>    
+                            <span><a href="#"><%=att.getName()%> (<%=att.getSize()%>KB)</a> </span>
+                      <%
+                            i++;
+                          }
+                        }
+                      %>
+                    </div>
+                    <div style="clear: left;"><span></span></div>
+                  </div>
 								</div>
 								<div class="MessageActions" >
 									<div class="DownArrow1Icon"><span></span></div>
