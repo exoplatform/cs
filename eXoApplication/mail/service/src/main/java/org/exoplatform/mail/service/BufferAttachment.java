@@ -5,6 +5,9 @@
 package org.exoplatform.mail.service;
 
 import java.io.InputStream;
+//import org.exoplatform.download.DownloadResource;
+//import org.exoplatform.download.DownloadService;
+//import org.exoplatform.container.PortalContainer;
 
 /**
  * Created by The eXo Platform SARL
@@ -16,7 +19,12 @@ public class BufferAttachment extends Attachment{
   
   private InputStream inputStream;
   
-  public InputStream getInputStream(){ return inputStream ; }
+  public InputStream getInputStream()throws Exception{
+    /*DownloadService downloadService = (DownloadService)PortalContainer.getComponent(DownloadService.class) ;
+    DownloadResource downloadResource = downloadService.getDownloadResource(getId()) ;
+    downloadResource.getInputStream() ;*/
+    return inputStream ; 
+  }
   public void setInputStream(InputStream is){ inputStream = is ; }
   
 }

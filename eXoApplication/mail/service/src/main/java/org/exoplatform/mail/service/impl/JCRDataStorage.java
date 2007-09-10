@@ -25,6 +25,7 @@ import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Attachment;
 import org.exoplatform.mail.service.BufferAttachment;
 import org.exoplatform.mail.service.Folder;
+import org.exoplatform.mail.service.JCRMessageAttachment;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.MessageHeader;
@@ -184,16 +185,17 @@ public class JCRDataStorage implements DataStorage{
       }
       msg.setFolders(folders);
     }
-    NodeIterator msgIt = messageNode.getNodes();
+    NodeIterator msgAttachmentIt = messageNode.getNodes();
     List<Attachment> attachments = new ArrayList<Attachment>();
-    while (msgIt.hasNext()) {
-      Node node = msgIt.nextNode();
+    while (msgAttachmentIt.hasNext()) {
+      Node node = msgAttachmentIt.nextNode();
       if (node.isNodeType(Utils.NT_FILE)) {
-        BufferAttachment file = new BufferAttachment();
+        JCRMessageAttachment file = new JCRMessageAttachment();
         file.setId(node.getPath());
         file.setMimeType(node.getNode(Utils.JCR_CONTENT).getProperty(Utils.JCR_MIMETYPE).getString());
         file.setName(node.getName());
-        file.setInputStream(node.getNode(Utils.JCR_CONTENT).getProperty(Utils.JCR_DATA).getStream());
+        file.setWorkspace(node.getSession().getWorkspace().getName()) ;
+        //file.setInputStream(node.getNode(Utils.JCR_CONTENT).getProperty(Utils.JCR_DATA).getStream());
         attachments.add(file);
       }
     }
