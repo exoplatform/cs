@@ -128,7 +128,6 @@ public class UIMessageList extends UIForm {
   static public class SelectMessageActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      System.out.println("==========test=======>>> " + msgId);
       UIMessageList uiMessageList = event.getSource();
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       UIMessagePreview uiMessagePreview = uiPortlet.findFirstComponentOfType(UIMessagePreview.class);
@@ -141,7 +140,6 @@ public class UIMessageList extends UIForm {
       
       uiMessagePreview.setMessage(msg);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageArea);
-      //event.getRequestContext().addUIComponentToUpdateByAjax(uiMessagePreview);
     }
   }
   

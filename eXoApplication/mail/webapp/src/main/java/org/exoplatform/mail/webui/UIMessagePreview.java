@@ -19,7 +19,10 @@ import org.exoplatform.webui.event.EventListener;
  */
 
 @ComponentConfig(
-    template =  "app:/templates/mail/webui/UIMessagePreview.gtmpl"
+    template =  "app:/templates/mail/webui/UIMessagePreview.gtmpl",
+    events = {
+        @EventConfig(listeners = UIMessagePreview.DownloadAttachmentActionListener.class)
+    }
 )
 
 public class UIMessagePreview extends UIComponent {
@@ -30,4 +33,11 @@ public class UIMessagePreview extends UIComponent {
   public Message getMessage() throws Exception { return selectedMessage_; }
   
   public void setMessage(Message msg) throws Exception { selectedMessage_ = msg; }
+  
+  public static class DownloadAttachmentActionListener extends EventListener<UIMessagePreview> {
+    public void execute(Event<UIMessagePreview> event) throws Exception {
+      String attId = event.getRequestContext().getRequestParameter(OBJECTID);
+      System.out.println("===================>>>> " + attId);
+    }
+  }
 }
