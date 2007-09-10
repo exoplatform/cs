@@ -613,12 +613,19 @@
 }
 
 .UIYearView .RowContainerDay .CalendarMatchedEventContent {
-	background: #CADBFF;
+	background: #dae2f4;
 	padding: 0px;
 }
 
-.UIYearView .WhiteWeekSuburdbar {
+.UIYearView .WeekSuburdbar {
 	background: url('background/TitleBarBG1x23.gif') repeat-x ;
+	height: 23px;
+	text-align: center;
+	line-height: 23px;
+}
+
+.UIYearView .CurrentWeekSuburdbar {
+	background: url('background/CurrentTitleBarBG1x23.gif') repeat-x ;
 	height: 23px;
 	text-align: center;
 	line-height: 23px;
@@ -672,6 +679,14 @@
 	text-align: center;
 	padding: 0px;
 	vertical-align: middle;
+	
+}
+
+.UIYearView .MonthList .Today {
+	border: 1px solid red;
+	background: #ffffff;
+	color: #0b18c8;
+	font-weight: bolder;
 	
 }
 
@@ -1127,6 +1142,15 @@
   line-height: 23px ;
   text-align: center ;
   font-weight: bold ;
+}
+
+.UICalendarPortlet .CurrentTitleBar {
+  background: url('background/CurrentTitleBarBG1x23.gif') repeat-x ;	
+  height: 23px;
+  line-height: 23px ;
+  text-align: center ;
+  font-weight: bold ;
+	color: #0b18c8;
 }
 
 .UICalendarPortlet .ResizeReadingPane {
