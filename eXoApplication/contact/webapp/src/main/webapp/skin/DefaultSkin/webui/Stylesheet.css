@@ -1,8 +1,8 @@
 @import url("skinIcons/16x16/Stylesheet.css");
 @import url('UIVCards/Stylesheet.css') ;
 @import url("UIContactPortlet/Stylesheet.css") ;
-@import url("UIAddNewContact/Stylesheet.css") ;
 @import url("UIMoveContactsForm/Stylesheet.css") ;
 @import url("UILDAPCategoryForm/Stylesheet.css") ;
 @import url("UIAddNewAddressBook/Stylesheet.css") ;
-@import url("UIProfileInputSet/Stylesheet.css") ;
+@import url("popup/UIAddNewContact/Stylesheet.css") ;
+@import url("popup/UIProfileInputSet/Stylesheet.css") ;

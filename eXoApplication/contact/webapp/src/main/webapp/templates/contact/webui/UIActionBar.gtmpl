@@ -4,8 +4,8 @@
 				<div class="LeftBar">
 					<div class="RightBar">
 						<div class="CenterBar">
-							<a href="<%=uicomponent.event("AddContact")%>" class="ControlButton">
-								<div class="IconHolder BlueCirclePlusIcon">
+							<a href="#" class="ControlButton">
+								<div class="IconHolder BlueCirclePlusIcon" onclick="<%=uicomponent.event("AddContact")%>">
 									<div class="DownArrow1Icon">Add New</div>
 								</div>
 							</a>
@@ -16,16 +16,53 @@
 								<span></span>
 							</div>
 							<div class="SeparatorLine"><span></span></div>
-							<a href="<%=uicomponent.event("ContactsView")%>" class="ControlButton">
+							<div class="SelectButton" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
 								<div class="IconHolder ViewIcon">
 									<div class="DownArrow1Icon">Contacts View</div>
 								</div>
-							</a>
-							<a href="<%=uicomponent.event("CustomLayout")%>" class="ControlButton">
+									<% /*Begin Popup Menu*/ %>
+									<div style="position: relative;">
+				      			<div class="UIPopupCategory" style="display: none;">
+				      				<div class="UIRightClickPopupMenu" style="display: block;">
+											  <div class="TopLeftRightClickPopupMenu">
+					          			<div class="TopRightRightClickPopupMenu">
+					            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
+					          			</div>
+					        			</div>
+								        <div class="MiddleLeftRightClickPopupMenu">
+								          <div class="MiddleRightRightClickPopupMenu">
+					              		<div class="UIRightPopupMenuContainer">
+					                    <a class="MenuItem" href="#">   
+						                    <div class="ItemIcon ContactListIcon">
+						                      Contact List
+						                    </div>
+					                    </a>
+					                    <a class="MenuItem" href="#">   
+						                    <div class="ItemIcon ContactIcon">
+						                      Detailed Cards
+						                    </div>
+					                    </a>
+														</div>
+						          		</div>
+						        		</div>
+									      <div class="BottomLeftRightClickPopupMenu">
+									        <div class="BottomRightRightClickPopupMenu">
+									          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+									        </div>
+									      </div>
+						      			
+									    </div>
+				      			</div>
+				      		</div>
+				      		<% /*End Popup Menu*/ %>
+							</div>
+							
+							<div class="SelectButton">
 								<div class="IconHolder CustomLayoutIcon">
 									<div class="DownArrow1Icon">Custom Layout View</div>
 								</div>
-							</a>
+							</div>
+							
 							<a href="<%=uicomponent.event("AddressBook")%>" class="ControlButton">
 								<div class="IconHolder AddressOptionIcon">Address Book Options</div>
 							</a>

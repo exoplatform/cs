@@ -119,3 +119,11 @@
 	background: url('icons/Add.gif') no-repeat center;
 	height: 20px; width: 24px;
 }
+
+.ContactIcon {
+	background: url('icons/ContactIcon.gif') no-repeat center;
+}
+
+.ContactListIcon {
+	background: url('icons/ContactListIcon.gif') no-repeat center;
+}

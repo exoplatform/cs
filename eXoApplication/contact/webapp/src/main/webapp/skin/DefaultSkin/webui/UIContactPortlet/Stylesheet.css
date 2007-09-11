@@ -78,6 +78,17 @@
 	margin: 0px 3px;
 }
 
+.UIContactPortlet .SelectButton {
+	float:left;
+	line-height:18px;
+	margin-top:3px;
+	cursor: pointer;
+}
+
+.UIContactPortlet .SelectButton .ItemIcon {
+	background-position: left center;
+}
+
 /*********************************** UIActionBar ***************************************/
 
 .UIContactPortlet .UIActionBar {
@@ -92,17 +103,14 @@
 .UIContactPortlet .UIActionBar .IconHolder {
 	margin: 0px 7px;
 	line-height: 24px;
+	color: black;
 }
 
 .UIContactPortlet .UIActionBar .ControlButton {
 	margin: 3px 3px 0px 3px;
 }
 
-.UIContactPortlet .UIActionBar a {
-	color: black;
-}
-
-.UIContactPortlet .UIActionBar a:hover {
+.UIContactPortlet .UIActionBar .ControlButton a:hover {
 	background: url('background/ControlButtonBG1x26.gif') repeat-x ;
 	border: 1px solid #9d9d9d;
 	color: #126ca5;
@@ -140,6 +148,14 @@
 	cursor: pointer;
 }
 
+.UIContactPortlet .UIActionBar .UIPopupCategory {
+	left: 0px;
+	top: 0px;
+}
+
+.UIContactPortlet .UIActionBar .UIRightClickPopupMenu {
+	width: 140px;
+}
 /************************************** UIWorkingContainer *******************************/
 
 .UIContactPortlet .ContactContainer {
