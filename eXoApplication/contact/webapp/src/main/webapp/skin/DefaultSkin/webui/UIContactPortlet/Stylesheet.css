@@ -89,6 +89,9 @@
 	background-position: left center;
 }
 
+.UIContactPortlet .UIRightClickPopupMenu .ItemIcon {
+	width: auto;
+}
 /*********************************** UIActionBar ***************************************/
 
 .UIContactPortlet .UIActionBar {

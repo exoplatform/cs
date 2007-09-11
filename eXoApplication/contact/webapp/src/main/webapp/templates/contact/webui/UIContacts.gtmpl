@@ -65,7 +65,7 @@
 	 	      	    </th>
 	 	      	    <th style="padding-left: 7px;">Work Phone</th>
 	 	      	    <th style="padding-left: 7px;">Action</th>
-	  	 	       	</tr>
+	  	 	      </tr>
 	  	 	    </thead>
   	 	      <tbody>
   	 	      <%  
@@ -75,7 +75,7 @@
 								checkboxField = uicomponent.getChildById(contact.getId()) ;
 								String actionLink2 = uicomponent.event("EditContact", contact.getId()) ;
 						%>
-  						<tr>
+  						<tr onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
   						  <td class="text" style="padding-left: 7px;">
   						  	<%
   						  		if(checkboxField != null) uicomponent.renderField(checkboxField) ;
@@ -95,6 +95,68 @@
 								<td>
 									<a href="$actionLink2" class="ControlButton"><div class="IconHolder EditIcon"><span></span></div></a>
 								</td>
+								
+								<% /*Begin Popup Menu*/ %>
+								<div style="position: relative;">
+			      			<div class="UIPopupCategory" style="display: none;">
+			      				<div class="UIRightClickPopupMenu" style="display: block;">
+										  <div class="TopLeftRightClickPopupMenu">
+				          			<div class="TopRightRightClickPopupMenu">
+				            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
+				          			</div>
+				        			</div>
+							        <div class="MiddleLeftRightClickPopupMenu">
+							          <div class="MiddleRightRightClickPopupMenu">
+				              		<div class="UIRightPopupMenuContainer">
+														<a class="MenuItem" href="#">   
+					                    <div class="ItemIcon EditIcon">
+					                      Edit Contact 
+					                    </div>
+				                    </a>
+				                    <a class="MenuItem" href="#">   
+					                    <div class="ItemIcon EmailIcon">
+					                      Send Email
+					                    </div>
+				                    </a>
+				                    <a class="MenuItem" href="#">   
+					                    <div class="ItemIcon InstantMessage">
+					                      Instant Message
+					                    </div>
+				                    </a>
+				                    <a class="MenuItem" href="#">   
+					                    <div class="ItemIcon BlueTag">
+					                      Tag
+					                    </div>
+				                    </a>
+				                    <a class="MenuItem" href="#">   
+					                    <div class="ItemIcon MoveContactIcon">
+					                      Move Contact
+					                    </div>
+				                    </a>
+				                    <a class="MenuItem" href="#">   
+					                    <div class="ItemIcon DeleteContactIcon">
+					                      Delete Contact
+					                    </div> 
+				                    </a>
+				                    <a class="MenuItem" href="#">   
+					                    <div class="ItemIcon PrintIcon">
+					                      Print this Contact 
+					                    </div>
+				                    </a>
+													</div>
+					          		</div>
+					        		</div>
+								      <div class="BottomLeftRightClickPopupMenu">
+								        <div class="BottomRightRightClickPopupMenu">
+								          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+								        </div>
+								      </div>
+					      			
+								    </div>
+			      			</div>
+			      		</div>
+			      		<% /*End Popup Menu*/ %>
+								
    			     	</tr>
 			     	<% } %>  
   	   			</tbody>

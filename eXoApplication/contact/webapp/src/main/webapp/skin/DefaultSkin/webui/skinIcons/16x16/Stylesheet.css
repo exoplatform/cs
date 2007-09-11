@@ -56,10 +56,6 @@
 	background: url('icons/TagIcon.gif') no-repeat left center;
 }
 
-.SelectTagIcon {
-	background: url('icons/TagIcon.gif') no-repeat left center;
-}
-
 .MessageIcon {
 	background: url('icons/MessageIcon.gif') no-repeat left center;
 }
@@ -126,4 +122,20 @@
 
 .ContactListIcon {
 	background: url('icons/ContactListIcon.gif') no-repeat center;
+}
+
+.EmailIcon {
+	background: url('icons/EmailIcon.gif') no-repeat left center;
+}
+
+.InstantMessage {
+	background: url('icons/InstantMessage.gif') no-repeat left center;
+}
+
+.MoveContactIcon {
+	background: url('icons/MoveIcon.gif') no-repeat left center;
+}
+
+.DeleteContactIcon {
+	background: url('icons/DeleteContactIcon.gif') no-repeat left center;
 }
