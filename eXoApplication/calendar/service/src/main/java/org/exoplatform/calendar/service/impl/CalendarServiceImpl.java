@@ -29,7 +29,7 @@ import org.exoplatform.services.jcr.RepositoryService;
  */
 public class CalendarServiceImpl implements CalendarService{
   
-  final private static String ICALENDAR = "ICalendar".intern() ;
+  final private static String ICALENDAR = "ICalendar(.ics)".intern() ;
   
   private JCRDataStorage storage_ ;
   private Map<String, CalendarImportExport> calendarImportExport_ = new HashMap<String, CalendarImportExport>() ;
