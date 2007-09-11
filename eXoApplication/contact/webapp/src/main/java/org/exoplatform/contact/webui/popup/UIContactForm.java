@@ -4,6 +4,8 @@
  **************************************************************************/
 package org.exoplatform.contact.webui.popup;
 
+import java.util.Date;
+
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.webui.UIContactPortlet;
@@ -307,7 +309,9 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
       } else 
           uicontacts.updateContact(contact, isNew_) ;
       UIContactPreview uiContactPreview = uiContactPortlet.findFirstComponentOfType(UIContactPreview.class) ;
-      if (contact.getId().equals(uiContactPreview.getContact().getId())) uiContactPreview.setContact(contact) ;
+      uiContactPreview.setLastUpdated(new Date()) ;
+      if (uiContactPreview.getContact() != null && contact.getId().equals(uiContactPreview.getContact().getId())) 
+        uiContactPreview.setContact(contact) ;
       uiContactPortlet.cancelAction() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContactPortlet) ;
     }

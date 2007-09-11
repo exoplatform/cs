@@ -4,6 +4,8 @@
  **************************************************************************/
 package org.exoplatform.contact.webui;
 
+import java.util.Date;
+
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIComponent;
@@ -19,14 +21,16 @@ import org.exoplatform.webui.core.UIComponent;
     template =  "app:/templates/contact/webui/UIContactPreview.gtmpl"
 )
 public class UIContactPreview extends UIComponent  {
-
-  private Contact contact_ = null; 
+  private Contact contact_ ; 
+  private Date lastUpdated_ ;
   
   public UIContactPreview() throws Exception { }
   
   public void setContact(Contact c) { contact_ = c; }
-  
   public Contact getContact() { return contact_; }
+  
+  public void setLastUpdated(Date s) { lastUpdated_ = s ; }
+  public Date getLastUpdated() { return lastUpdated_ ; }
   
   public void updateContact() throws Exception {
     UIWorkingContainer uiWorkingContainer = getAncestorOfType(UIWorkingContainer.class) ; 

@@ -5,7 +5,7 @@
 <div class="UIContactPreview" id="$compId">
 	<div class="ContactPreviewBar">
 		<div class="Subject">Contact Details</div>
-		<div class="MaximizeContactPane" title="Maximize Reading Pane">Last updated: 07/18/2007 10:30 am</div>
+		<div class="MaximizeContactPane" title="Maximize Reading Pane">Last updated: <%=uicomponent.getLastUpdated()%></div>
 		<div style="clear:both;"><span></span></div>
 	</div>
 	<div class="ContactPreviewDetails">

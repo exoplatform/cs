@@ -52,8 +52,8 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
 public class UIContacts extends UIForm  {
   private boolean addressBookSelected = true ;
   private boolean personalAddressBookSelected = true ;
-  private String groupId_ ;
-  private String tagName_ ;
+  private String groupId_ = "";
+  private String tagName_ = "";
   public boolean viewContactsList = true ;
   private Map<String, Contact> contactMap = new HashMap<String, Contact> () ;
   public UIContacts() throws Exception {
