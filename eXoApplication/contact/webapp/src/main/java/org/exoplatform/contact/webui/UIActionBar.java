@@ -26,14 +26,19 @@ import org.exoplatform.webui.event.EventListener;
     events = {
         @EventConfig(listeners = UIActionBar.ChangeViewActionListener.class),
         @EventConfig(listeners = UIActionBar.AddContactActionListener.class),
-        @EventConfig(listeners = UIActionBar.ContactsViewActionListener.class),
+        @EventConfig(listeners = UIActionBar.ChangeContactsViewActionListener.class),
         @EventConfig(listeners = UIActionBar.CustomLayoutActionListener.class),
         @EventConfig(listeners = UIActionBar.AddressBookActionListener.class)
     }
 )
 public class UIActionBar extends UIContainer  {
-  public UIActionBar() throws Exception {    
-  } 
+  final public static String CONTACTS_LIST = "ContactList".intern() ;
+  final public static String DETAILED_CARDS = "Contact".intern() ;
+  final public static String[] VIEW_TYPES = { CONTACTS_LIST, DETAILED_CARDS } ;
+  
+  public UIActionBar() throws Exception { } 
+  
+  public String[] getViewTypes() { return VIEW_TYPES ; }
   
   static public class ChangeViewActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {
@@ -54,9 +59,22 @@ public class UIActionBar extends UIContainer  {
     }
   }
   
-  static public class ContactsViewActionListener extends EventListener<UIActionBar> {
-    public void execute(Event<UIActionBar> event) throws Exception {
-      System.out.println("\n\n\n ContactsViewActionListener\n\n\n");
+  static public class ChangeContactsViewActionListener extends EventListener<UIActionBar> {
+    public void execute(Event<UIActionBar> event) throws Exception {      
+      UIActionBar uiActionBar = event.getSource() ;
+      UIContactPortlet uiContactPortlet = uiActionBar.getAncestorOfType(UIContactPortlet.class) ;
+      
+      UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;      
+      UIContactPreview uiContactPreview = uiContactPortlet.findFirstComponentOfType(UIContactPreview.class) ;
+      String viewType = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      if (viewType.equals(CONTACTS_LIST)) {
+        uiContactPreview.setRendered(true) ;
+        uiContacts.setViewContactsList(true) ;  
+      } else if (viewType.equals(DETAILED_CARDS)){ 
+        uiContactPreview.setRendered(false) ;
+        uiContacts.setViewContactsList(false) ;
+      }
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
     }  
   }
   

@@ -29,7 +29,7 @@
       <div style="clear: left"><span></span></div>
 		</div>
 		<%
-			List groupContactData = uicomponent.getSharedContact();
+			List groupContactData = uicomponent.getSharedContactGroups();
 			for(group in groupContactData) {
 			String actionLink2  = uicomponent.event("SelectSharedGroup", group.getName()) ;			
 		%>

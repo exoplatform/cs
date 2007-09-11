@@ -32,16 +32,17 @@
 								        <div class="MiddleLeftRightClickPopupMenu">
 								          <div class="MiddleRightRightClickPopupMenu">
 					              		<div class="UIRightPopupMenuContainer">
-					                    <a class="MenuItem" href="#">   
-						                    <div class="ItemIcon ContactListIcon">
-						                      Contact List
+					                  <% 
+					                  	for(viewType in uicomponent.getViewTypes()) { 
+					                  		icon = viewType + "Icon" ;
+					                  		actionLink = uicomponent.event("ChangeContactsView", viewType) ;	
+					                  %>
+					                    <a class="MenuItem" href="$actionLink">   
+						                    <div class="ItemIcon $icon">
+						                      $viewType
 						                    </div>
 					                    </a>
-					                    <a class="MenuItem" href="#">   
-						                    <div class="ItemIcon ContactIcon">
-						                      Detailed Cards
-						                    </div>
-					                    </a>
+					                  <% } %>  
 														</div>
 						          		</div>
 						        		</div>

@@ -47,11 +47,12 @@ public class UITags extends UIComponent  {
       String username = Util.getPortalRequestContext().getRemoteUser() ;
       UIContacts uiContacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class) ;
       uiContacts.setContacts(contactService.getContactsByTag(username, tagName)) ;
-      //event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts) ;
+      uiContacts.setAddressBookSelected(false) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts) ;
       
       UIContactPreview uiContactPreview = uiWorkingContainer.findFirstComponentOfType(UIContactPreview.class);
       uiContactPreview.updateContact() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContactPreview) ;
     }
   }
 }

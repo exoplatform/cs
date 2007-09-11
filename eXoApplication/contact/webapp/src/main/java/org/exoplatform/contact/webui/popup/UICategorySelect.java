@@ -43,9 +43,8 @@ public class UICategorySelect extends UIForm {
   public UICategorySelect() throws Exception {
     UIFormInputWithActions input = new UIFormInputWithActions(INPUT_CATEGORY) ;
     input.addUIFormInput(new UIFormSelectBox(FIELD_CATEGORY, FIELD_CATEGORY, getCategoryList())) ;
-    // need ?
-//    UIFormSelectBox uiSelectBox = input.getUIFormSelectBox(FIELD_CATEGORY) ;
-//    uiSelectBox.setOnChange("Onchange") ;
+    UIFormSelectBox uiSelectBox = input.getUIFormSelectBox(FIELD_CATEGORY) ;
+    uiSelectBox.setOnChange("Onchange") ;
     
     List<ActionData> actions = new ArrayList<ActionData>() ;
     ActionData addAction = new ActionData() ;

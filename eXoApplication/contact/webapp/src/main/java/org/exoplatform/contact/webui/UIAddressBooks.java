@@ -49,7 +49,7 @@ public class UIAddressBooks extends UIComponent  {
   public List<Contact> getContactMapValue(String groupId) {
     return sharedContactMap_.get(groupId) ;
   }
-  public List<GroupContactData> getSharedContact() throws Exception {
+  public List<GroupContactData> getSharedContactGroups() throws Exception {
     sharedContactMap_.clear() ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     OrganizationService organizationService = getApplicationComponent(OrganizationService.class) ;
@@ -74,12 +74,14 @@ public class UIAddressBooks extends UIComponent  {
       String username = Util.getPortalRequestContext().getRemoteUser() ;
       UIContacts uiContacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class) ;
       uiContacts.setGroupId(groupId) ;
+      uiContacts.setAddressBookSelected(true) ;
+      uiContacts.setPersonalAddressBookSelected(true) ;
       uiContacts.setContacts(contactService.getContactsByGroup(username, groupId)) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts) ;
+      //event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts) ;
       
       UIContactPreview uiContactPreview = uiWorkingContainer.findFirstComponentOfType(UIContactPreview.class);
       uiContactPreview.updateContact() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiContactPreview) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer) ;
     }
   }
   static  public class SelectSharedGroupActionListener extends EventListener<UIAddressBooks> {
@@ -92,6 +94,8 @@ public class UIAddressBooks extends UIComponent  {
       if (contactService.getSharedContacts(new String[] {groupId}) != null)
         uiContacts.setContacts(contactService.getSharedContacts(new String[] {groupId}).get(0).getContacts()) ;
       uiContacts.setGroupId(groupId) ;
+      uiContacts.setAddressBookSelected(true) ;
+      uiContacts.setPersonalAddressBookSelected(false) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts) ;
       
       UIContactPreview uiContactPreview = uiWorkingContainer.findFirstComponentOfType(UIContactPreview.class);

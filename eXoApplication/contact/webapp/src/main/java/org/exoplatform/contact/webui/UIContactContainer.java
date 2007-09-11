@@ -29,15 +29,17 @@ public class UIContactContainer extends UIContainer  {
     UIContactPreview uiContactPreview = addChild(UIContactPreview.class, null, null) ;
     
     String username = Util.getPortalRequestContext().getRemoteUser() ;
-    ContactService contactSvr = getApplicationComponent(ContactService.class) ;
-    if(contactSvr.getGroups(username).size() > 0) {
-      String groupId = contactSvr.getGroups(username).get(0).getId() ;
-      List<Contact> contacts = contactSvr.getContactsByGroup(username, groupId) ;
+    ContactService contactService = getApplicationComponent(ContactService.class) ;
+    if(contactService.getGroups(username).size() > 0) {
+      String groupId = contactService.getGroups(username).get(0).getId() ;
+      List<Contact> contacts = contactService.getContactsByGroup(username, groupId) ;
       uiContacts.setContacts(contacts) ;
       uiContacts.setGroupId(groupId) ;
       if(contacts.size() > 0) {
         uiContactPreview.setContact(uiContacts.getContacts()[0]) ;
       }
     }
+
   }
+
 }

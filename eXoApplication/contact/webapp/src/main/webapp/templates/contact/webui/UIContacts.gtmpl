@@ -1,13 +1,14 @@
 <%
 	import org.exoplatform.contact.service.Contact;
-	String compId = uicomponent.getId() ;	
 %>
 
-<%uiform.begin()%>
-<div class="$compId">
+<%uiform.begin()
+	if(uicomponent.getViewContactsList()) {
+%>
+
 			
 				<div class="UIContactActionsBar">
-					<a href="#" class="ControlButton">
+					<a href="<%=uicomponent.event("MoveContact")%>" class="ControlButton">
 						<div class="IconHolder MoveIcon">Move</div>
 					</a>
 					<div class="SeparatorLine"><span></span></div>
@@ -17,14 +18,14 @@
 						<div class="Icon ChatIcon"><span></span></div>
 					</a>
 					<a href="<%=uicomponent.event("AddTag")%>" class="ControlButton">
-						<div class="Icon SelectTagIcon"><span></span></div>
+						<div class="Icon SelectTagIcon"title="add tag"><span></span></div>
 					</a>
 					<a href="#" class="ControlButton">
 						<div class="Icon MessageIcon"><span></span></div>
 					</a>
 					<div class="SeparatorLine"><span></span></div>
 					<a href="<%=uicomponent.event("DeleteContacts")%>" class="ControlButton">
-						<div class="Icon DustBin16x16Icon "><span></span></div>
+						<div class="Icon DustBin16x16Icon " title="delete"><span></span></div>
 					</a>
 					<a href="#" class="ControlButton">
 						<div class="DownArrow1Icon" title="Collapse/Expand all">
@@ -99,6 +100,60 @@
   	   			</tbody>
 					</table>
 				</div>
-				
-			</div>
+<% 
+	} else { 
+%>
+	<div class="UIVCards">
+	<div class="VCardsBar">
+		<div class="Subject">Vcards in eXo Platform</div>
+	</div>
+	<div class="UIVCardsContent">
+	  <div class="WorkVCardsContent">
+				<% 
+					for(contact in uicomponent.getContacts()){		 
+				%>		  
+		  <div class="LeftVCardsContent">
+		  	<div class="VCardContent SelectedVCard">
+			  	<div class="TitleVCards">
+				  	<div class="StateIcon OnlineIcon"><%=contact.getFullName()%></div>
+			  		<div class="TagIcon RedTag"><span></span></div>
+			  		<div style="clear: both;"><span></span></div>
+			  	</div>
+			  	<div class="ContainerVCards">
+			  		<img src="/contact/skin/DefaultSkin/webui/background/Img1.gif" class="AvatasIcon"/>
+			  		<div class="WorkContainerVCards">
+			  		  <div class="JobMember"><%=contact.getJobTitle()%></div>
+			  		  <div class="InformationsMember">
+			  		  	<div class="InfoMember">
+			  		  		<span class="LabelContent">Email1:</span>
+			  		  		<span class="InfoContent MailIcon"><a href="#"><%=contact.getEmailAddress()%></a></span>
+			  		  	</div>
+			  		  	
+			  		  	<div class="InfoMember">
+			  		  		<span class="LabelContent">Work phone:</span>
+			  		  		<span class="LabelContent"><%=contact.getWorkPhone1()%></span>
+			  		  	</div>
+			  		  	<div class="InfoMember">
+			  		  		<span class="LabelContent">Mobile:</span>
+			  		  		<span class="LabelContent"><%=contact.getMobilePhone()%></span>
+			  		  	</div>
+			  		  	<div class="InfoMember">
+			  		  		<span class="LabelContent">Website:</span>
+			  		  		<span class="LabelContent"><a href="#"><%=contact.getWebPage()%></a></span>
+			  		  	</div>
+			  		  </div>
+			  		</div>
+			  		<div style="clear: left;"><span></span></div>
+			  	</div>
+			  </div>
+		  </div>
+			  <% } %>		
+		  
+		  <div style="clear: both;"><span></span></div>
+		</div>
+		
+	</div>
+</div>
+<% } %>			
+			
 <%uiform.end()%>	

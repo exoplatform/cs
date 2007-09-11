@@ -40,7 +40,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
 )
 public class UITagForm extends UIForm implements UIPopupComponent {
   public static final String FIELD_TAGNAME_INPUT = "tagName";
-  public static String[] FIELD_SHAREDCONTACT_BOX = null;
+  public static String[] FIELD_TAG_BOX = null;
   private List<String> contactIds_ ;
 
   public UITagForm() throws Exception {
@@ -50,10 +50,10 @@ public class UITagForm extends UIForm implements UIPopupComponent {
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     List<Tag> tags = contactService.getTags(username);
 
-    FIELD_SHAREDCONTACT_BOX = new String[tags.size()];
+    FIELD_TAG_BOX = new String[tags.size()];
     for (int i = 0 ; i < tags.size(); i ++) {
-      FIELD_SHAREDCONTACT_BOX[i] = tags.get(i).getName();
-      addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_SHAREDCONTACT_BOX[i], FIELD_SHAREDCONTACT_BOX[i], false));
+      FIELD_TAG_BOX[i] = tags.get(i).getName();
+      addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_TAG_BOX[i], FIELD_TAG_BOX[i], false));
     }
   }
   
@@ -72,9 +72,9 @@ public class UITagForm extends UIForm implements UIPopupComponent {
 
   public List<String> getCheckedTags() throws Exception {
     List<String> checkedTags = new ArrayList<String>();
-    for (int i = 0; i < FIELD_SHAREDCONTACT_BOX.length; i ++) {
-      if (getUIFormCheckBoxInput(FIELD_SHAREDCONTACT_BOX[i]).isChecked()) {
-        checkedTags.add(FIELD_SHAREDCONTACT_BOX[i]);
+    for (int i = 0; i < FIELD_TAG_BOX.length; i ++) {
+      if (getUIFormCheckBoxInput(FIELD_TAG_BOX[i]).isChecked()) {
+        checkedTags.add(FIELD_TAG_BOX[i]);
       }
     }
     return checkedTags;

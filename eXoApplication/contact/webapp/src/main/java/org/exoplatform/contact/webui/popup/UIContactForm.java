@@ -301,7 +301,11 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
       }
       UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
       UIContacts uicontacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
-      if (uicontacts.getGroupId().equals(categoryId)) uicontacts.updateContact(contact, isNew_) ;
+      if (isNew_) {
+        if (uicontacts.getGroupId().equals(categoryId))
+          uicontacts.updateContact(contact, isNew_) ;
+      } else 
+          uicontacts.updateContact(contact, isNew_) ;
       UIContactPreview uiContactPreview = uiContactPortlet.findFirstComponentOfType(UIContactPreview.class) ;
       if (contact.getId().equals(uiContactPreview.getContact().getId())) uiContactPreview.setContact(contact) ;
       uiContactPortlet.cancelAction() ;

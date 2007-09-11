@@ -19,7 +19,7 @@
 							</div>
 							<% /*Begin Popup Menu*/ %>
 							<!--<div style="position: relative;">-->
-		      			<div class="UIPopupCategory" style="display: none; z-index: 1000 ;">
+		      			<div class="UIPopupCategory" style="display: none;">
 		      				<div class="UIRightClickPopupMenu" style="display: block;">
 									  <div class="TopLeftRightClickPopupMenu">
 			          			<div class="TopRightRightClickPopupMenu">
