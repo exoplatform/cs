@@ -7,6 +7,8 @@
   <packaging>pom</packaging>
 
   <modules>
+    <module>eXoApplication/web/csportal</module>
+    
     <module>eXoApplication/mail/webapp</module>
     <module>eXoApplication/mail/service</module>
     
