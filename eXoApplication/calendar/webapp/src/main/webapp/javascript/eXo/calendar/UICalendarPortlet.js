@@ -3,8 +3,8 @@ function UICalendarPortlet() {
 }
 /* for general calendar */
 UICalendarPortlet.prototype.show = function(obj, evt) {
-	if(!evt) evt = window.event ;
-	evt.cancelBubble = true ;
+	_e = window.event || evt ;
+	_e.cancelBubble = true ;
 	var uiCalendarPortlet =	document.getElementById("UICalendarPortlet") ;
 	var contentContainer = eXo.core.DOMUtil.findFirstDescendantByClass(uiCalendarPortlet, "div", "ContentContainer") ;
 	var	uiPopupCategory = eXo.core.DOMUtil.findNextElementByTagName(contentContainer,  "div") ;
@@ -65,7 +65,6 @@ UICalendarPortlet.prototype.setSize = function(obj) {
 
 UICalendarPortlet.prototype.setWidth = function(element, width) {
 	element.style.width = width + "%" ;
-	//element.style.left = this.extra + "px" ;
 } ;
 
 UICalendarPortlet.prototype.getInterval = function() {
@@ -81,7 +80,7 @@ UICalendarPortlet.prototype.getInterval = function() {
 	return interval ;
 } ;
 
-UICalendarPortlet.prototype.adjustWidth = function(totalWidth) {
+UICalendarPortlet.prototype.adjustWidth = function() {
 	var UICalendarPortlet = eXo.calendar.UICalendarPortlet ;
 	var inter = UICalendarPortlet.getInterval() ;	
 	var el = UICalendarPortlet.getElements() ;
@@ -107,7 +106,7 @@ UICalendarPortlet.prototype.showEvent = function() {
 		marker = eXo.core.DOMUtil.findFirstChildByClass(el.children[i], "div", "ResizeEventContainer") ;
 		marker.onmousedown = UICalendarPortlet.initResize ;		
 	}
-	UICalendarPortlet.adjustWidth(890) ;
+	UICalendarPortlet.adjustWidth() ;
 } ;
 
 /* for resizing event box */
@@ -115,7 +114,7 @@ UICalendarPortlet.prototype.initResize = function(evt) {
 	eXo.calendar.UICalendarPortlet.resize(evt, this) ;
 } ;
 UICalendarPortlet.prototype.resize = function(evt, markerobj) {
-	_e = (window.event) ? window.event : evt ;
+	_e = window.event || evt ;
 	_e.cancelBubble = true ;
 	this.posY = _e.clientY ;
 	var UICalendarPortlet = eXo.calendar.UICalendarPortlet ;
