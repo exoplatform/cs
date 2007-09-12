@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.exoplatform.mail.service.Attachment;
+import org.exoplatform.mail.service.BufferAttachment;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.Utils;
@@ -52,7 +53,8 @@ import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
       @EventConfig(listeners = UIComposeForm.PriorityActionListener.class),
       @EventConfig(listeners = UIComposeForm.SelectContactActionListener.class),
       @EventConfig(listeners = UIComposeForm.ToCCActionListener.class),
-      @EventConfig(listeners = UIComposeForm.ToBCCActionListener.class)
+      @EventConfig(listeners = UIComposeForm.ToBCCActionListener.class),
+      @EventConfig(listeners = UIComposeForm.SaveSentFolderActionListener.class)
     }
 )
 public class UIComposeForm extends UIForm implements UIPopupComponent{
@@ -122,7 +124,8 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
       uploadedFiles.add(fileUpload) ;
       ActionData removeAction = new ActionData() ;
       removeAction.setActionListener("RemoveAttachment") ;
-      removeAction.setActionName(ACT_REMOVE) ;
+      removeAction.setActionName(ACT_REMOVE);
+      removeAction.setActionParameter(attachdata.getId());
       removeAction.setActionType(ActionData.TYPE_LINK) ;
       removeAction.setBreakLine(true) ;
       uploadedFiles.add(removeAction) ;
@@ -133,9 +136,12 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
     UIFormInputWithActions inputSet = getChildById(FIELD_FROM_INPUT) ;
     inputSet.setActionField(FIELD_ATTACHMENTS, getUploadFileList()) ;
   }
-  public void addUploadFileList(Attachment attachfile) {
+  public void addToUploadFileList(Attachment attachfile) {
     attachments_.add(attachfile) ;
   }
+  public void removeFromUploadFileList(Attachment attachfile) {
+    attachments_.remove(attachfile);
+  }  
   public void removeUploadFileList() {
     attachments_.clear() ;
   }
@@ -282,8 +288,16 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
   }
   static  public class RemoveAttachmentActionListener extends EventListener<UIComposeForm> {
     public void execute(Event<UIComposeForm> event) throws Exception {
-      UIComposeForm uiForm = event.getSource() ;
-      System.out.println(" ==========> RemoveAttachmentActionListener") ;
+      UIComposeForm uiComposeForm = event.getSource() ;
+      String attFileId = event.getRequestContext().getRequestParameter(OBJECTID);
+      BufferAttachment attachfile = new BufferAttachment();
+      for (Attachment att : uiComposeForm.attachments_) {
+        if (att.getId().equals(attFileId)) {
+          attachfile = (BufferAttachment) att;
+        }
+      }
+      uiComposeForm.removeFromUploadFileList(attachfile);
+      uiComposeForm.refreshUploadFileList() ;
     }
   }
   static  public class PriorityActionListener extends EventListener<UIComposeForm> {
@@ -316,4 +330,11 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
       System.out.println(" ==========> ToBCCActionListener") ;
     }
   }
+  static  public class SaveSentFolderActionListener extends EventListener<UIComposeForm> {
+    public void execute(Event<UIComposeForm> event) throws Exception {
+      UIComposeForm uiForm = event.getSource() ;
+      System.out.println(" ==========> SaveSentFolderActionListener") ;
+    }
+  }
+  
 }

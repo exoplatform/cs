@@ -4,7 +4,10 @@
  **************************************************************************/
 package org.exoplatform.mail.service.impl;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -13,6 +16,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
+import javax.activation.DataHandler;
+import javax.activation.FileDataSource;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.mail.Multipart;
@@ -22,8 +27,11 @@ import javax.mail.Store;
 import javax.mail.Transport;
 import javax.mail.URLName;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+import javax.mail.internet.MimePartDataSource;
+import javax.mail.util.ByteArrayDataSource;
 
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.AccountData;
@@ -38,6 +46,7 @@ import org.exoplatform.mail.service.Tag;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.registry.JCRRegistryService;
 import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.jcr.util.IdGenerator;
 
 /**
  * Created by The eXo Platform SARL
@@ -141,6 +150,7 @@ public class MailServiceImpl implements MailService{
     Transport transport = session.getTransport(Utils.SVR_SMTP);
     transport.connect(host, acc.getUserName(), acc.getPassword()) ;
     javax.mail.Message msg = new MimeMessage(session);
+    
     InternetAddress addressFrom = new InternetAddress(message.getFrom());
     msg.setFrom(addressFrom);
     InternetAddress[] addressTo = InternetAddress.parse(message.getMessageTo()) ;
@@ -152,7 +162,28 @@ public class MailServiceImpl implements MailService{
     }
     msg.setSubject(message.getSubject());
     msg.setSentDate(message.getSendDate());
-    msg.setContent(message.getMessageBody(), Utils.MIMETYPE_TEXTPLAIN);
+   
+    MimeBodyPart mimeBodyPart1 = new MimeBodyPart();
+    mimeBodyPart1.setText(message.getMessageBody(), "us-ascii");
+    
+    Multipart multiPart = new MimeMultipart();
+    multiPart.addBodyPart(mimeBodyPart1);
+    
+    List<Attachment> attachList = message.getAttachments();
+    for (Attachment att : attachList) {
+      BufferAttachment attach = (BufferAttachment) att;
+      InputStream is = attach.getInputStream();
+          
+      MimeBodyPart mimeBodyPart = new MimeBodyPart();
+      ByteArrayDataSource byteArrayDataSource = new ByteArrayDataSource(is, att.getMimeType());
+      mimeBodyPart.setDataHandler(new DataHandler(byteArrayDataSource));
+      
+      mimeBodyPart.setDisposition("ATTACHMENT");
+      mimeBodyPart.setFileName(attach.getName());
+      multiPart.addBodyPart(mimeBodyPart);
+    }        
+    msg.setContent(multiPart);
+    
     msg.saveChanges();
     transport.sendMessage(msg, addressTo);
   }
@@ -273,7 +304,8 @@ public class MailServiceImpl implements MailService{
         } else {
           // this part must be presented as an attachment, hence we add it to the attached files
           BufferAttachment file = new BufferAttachment();
-          file.setId(storage_.getMessageHome(username, newMail.getAccountId()).getPath()+"/"+newMail.getId()+"/"+part.getFileName());
+          file.setId("Attachment" + IdGenerator.generate());
+          //file.setId(storage_.getMessageHome(username, newMail.getAccountId()).getPath()+"/"+newMail.getId()+"/"+part.getFileName());
           file.setName(part.getFileName());
           InputStream is = part.getInputStream();
           file.setInputStream(is);

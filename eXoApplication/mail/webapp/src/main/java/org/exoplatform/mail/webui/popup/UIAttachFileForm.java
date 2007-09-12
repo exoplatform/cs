@@ -6,6 +6,7 @@ package org.exoplatform.mail.webui.popup;
 
 import org.exoplatform.mail.service.BufferAttachment;
 import org.exoplatform.mail.webui.UIMailPortlet;
+import org.exoplatform.services.jcr.util.IdGenerator;
 import org.exoplatform.upload.UploadResource;
 import org.exoplatform.upload.UploadService;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -18,6 +19,8 @@ import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormUploadInput;
+
+import com.thoughtworks.xstream.core.ReferenceByIdMarshaller.IDGenerator;
 
 /**
  * Created by The eXo Platform SARL
@@ -41,9 +44,6 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
 
   public UIAttachFileForm() throws Exception {
     setMultiPart(true) ;
-    //UIFormMultiValueInputSet multiUpload = new UIFormMultiValueInputSet(FIELD_UPLOAD, FIELD_UPLOAD) ;
-    //multiUpload.setType(UIFormUploadInput.class) ;
-    //addUIFormInput(multiUpload) ;
     UIFormUploadInput uiInput = new UIFormUploadInput(FIELD_UPLOAD, FIELD_UPLOAD) ;
     uiInput.setEditable(false);
     addUIFormInput(uiInput) ;
@@ -76,19 +76,18 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
       try {
         UIComposeForm uiComposeForm = uiPopupActionContainer.getChild(UIComposeForm.class) ;
         BufferAttachment attachfile = new BufferAttachment() ;
+         attachfile.setId("Attachment" + IdGenerator.generate());
          attachfile.setName(uploadResource.getFileName()) ;
-         attachfile.setInputStream( input.getUploadDataAsStream()) ;
+         attachfile.setInputStream(input.getUploadDataAsStream()) ;
          attachfile.setMimeType(uploadResource.getMimeType()) ;
-        byte[] content = input.getUploadData() ;
-         String fileSize = String.valueOf((((int)(content.length/100))/10));  
-         attachfile.setSize(Long.parseLong(fileSize)) ;
-         uiComposeForm.addUploadFileList(attachfile) ;
+         attachfile.setSize((long)uploadResource.getUploadedSize());
+         uiComposeForm.addToUploadFileList(attachfile) ;
          uiComposeForm.refreshUploadFileList() ;
          UploadService uploadService = uiForm.getApplicationComponent(UploadService.class) ;
          uploadService.removeUpload(input.getUploadId()) ;
       } catch(Exception e) {
         uiApp.addMessage(new ApplicationMessage("UIAttachFileForm.msg.upload-error", null, 
-            ApplicationMessage.WARNING)) ;
+            ApplicationMessage.WARNING));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         e.printStackTrace() ;
         return ;

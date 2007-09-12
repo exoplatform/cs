@@ -94,13 +94,13 @@
                               <%
                                 if (att.getSize() > 1024) {
                               %> 
-                                <%=(int)(att.getSize()/1024)%> KB
+                                <%=(int)(att.getSize()/1024)%>KB
                               <%
                                 } else {              
                               %> 
                                 <%=att.getSize()%>B
                               <%}%>
-                            )</a> </span>
+                            )</a></span>
                       <%
                             i++;
                           }

@@ -4,6 +4,15 @@
  **************************************************************************/
 package org.exoplatform.mail.webui ;
 
+import java.io.ByteArrayInputStream;
+import java.util.List;
+
+import org.exoplatform.container.PortalContainer;
+import org.exoplatform.download.DownloadResource;
+import org.exoplatform.download.DownloadService;
+import org.exoplatform.download.InputStreamDownloadResource;
+import org.exoplatform.mail.service.Attachment;
+import org.exoplatform.mail.service.JCRMessageAttachment;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -36,8 +45,23 @@ public class UIMessagePreview extends UIComponent {
   
   public static class DownloadAttachmentActionListener extends EventListener<UIMessagePreview> {
     public void execute(Event<UIMessagePreview> event) throws Exception {
+      UIMessagePreview uiMessagePreview = event.getSource();
       String attId = event.getRequestContext().getRequestParameter(OBJECTID);
-      System.out.println("===================>>>> " + attId);
+      List<Attachment> attList = uiMessagePreview.selectedMessage_.getAttachments();
+      JCRMessageAttachment att = new JCRMessageAttachment();
+      for (Attachment attach : attList) {
+        if (attach.getId().equals(attId)) {
+          att = (JCRMessageAttachment)attach;
+        }
+      }
+      ByteArrayInputStream bis = (ByteArrayInputStream)att.getInputStream();
+      DownloadResource dresource = new InputStreamDownloadResource(bis, att.getMimeType());
+      DownloadService dservice = (DownloadService)PortalContainer.getInstance().getComponentInstanceOfType(DownloadService.class);
+      dresource.setDownloadName(att.getName());
+      String downloadLink = dservice.getDownloadLink(dservice.addDownloadResource(dresource));
+      UIMailPortlet uiPortlet = uiMessagePreview.getAncestorOfType(UIMailPortlet.class);
+      event.getRequestContext().getJavascriptManager().addJavascript("ajaxRedirect('" + downloadLink + "');");
+      uiPortlet.cancelAction() ;
     }
   }
 }
