@@ -112,22 +112,21 @@ public class ICalendarImportExport implements CalendarImportExport{
         event.getProperties().getProperty(Property.STATUS).getParameters()
         .add(net.fortuna.ical4j.model.parameter.Value.TEXT);
       }
-      String[] attendees = exoEvent.getInvitation() ; 
-      for(int i = 0; i < attendees.length; i++ ) {
-        if(attendees[i] != null) {
-          event.getProperties().add(new Attendee(attendees[i]));          
+      String[] attendees = exoEvent.getInvitation() ;
+      if(attendees != null && attendees.length > 0) {
+        for(int i = 0; i < attendees.length; i++ ) {
+          if(attendees[i] != null) {
+            event.getProperties().add(new Attendee(attendees[i]));          
+          }
         }
+        event.getProperties().getProperty(Property.ATTENDEE).getParameters()
+        .add(net.fortuna.ical4j.model.parameter.Value.TEXT);
       }
-      event.getProperties().getProperty(Property.ATTENDEE).getParameters()
-      .add(net.fortuna.ical4j.model.parameter.Value.TEXT);
+      
       Uid id = new Uid(exoEvent.getId()) ; 
       event.getProperties().add(id) ; 
       calendar.getComponents().add(event);
     }
-    VEvent event = new VEvent(new DateTime(), "hello") ;
-    Uid id = new Uid("eventid") ; 
-    event.getProperties().add(id) ;
-    calendar.getComponents().add(event);
     
     ByteArrayOutputStream bout = new ByteArrayOutputStream();
     CalendarOutputter output = new CalendarOutputter();
@@ -135,7 +134,7 @@ public class ICalendarImportExport implements CalendarImportExport{
     return bout;
   }
 
-  public void importCalendar(String username, InputStream icalInputStream) throws Exception {
+  public void importCalendar(String username, InputStream icalInputStream, String calendarName) throws Exception {
     CalendarBuilder calendarBuilder = new CalendarBuilder() ;
     net.fortuna.ical4j.model.Calendar iCalendar = calendarBuilder.build(icalInputStream) ;
     GregorianCalendar currentDateTime = new GregorianCalendar() ;
@@ -160,7 +159,7 @@ public class ICalendarImportExport implements CalendarImportExport{
       categoryId = cat.getProperty("exo:id").getString() ;
     }
     Calendar exoCalendar = new Calendar() ;
-    exoCalendar.setName(iCalendar.getProductId().getValue()) ;
+    exoCalendar.setName(calendarName) ;
     exoCalendar.setDescription(iCalendar.getProductId().getValue()) ;
     exoCalendar.setCategoryId(categoryId) ;
     exoCalendar.setPublic(true) ;
