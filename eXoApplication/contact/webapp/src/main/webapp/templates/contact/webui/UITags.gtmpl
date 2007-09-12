@@ -1,4 +1,3 @@
-
 <div class="UITags" id="<%=uicomponent.getId()%>">
 	<div class="TitleBar">
 		<div class="DownArrow3Icon" title="Collapse/Expand all"><span></span></div>

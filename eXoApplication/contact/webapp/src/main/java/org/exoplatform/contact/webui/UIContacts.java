@@ -87,8 +87,9 @@ public class UIContacts extends UIForm  {
     if (isNew) addUIFormInput(new UIFormCheckBoxInput<Boolean>(contact.getId(), contact.getId(), false)) ;
     contactMap.put(contact.getId(), contact) ;
   }
+  
   public void removeContacts(List<Contact> contacts) {
-    for (Contact contact : contacts)  contactMap.remove(contact.getId()) ;
+    for (Contact contact : contacts) { contactMap.remove(contact.getId()) ; }
   }
   
   public Contact[] getContacts() throws Exception {

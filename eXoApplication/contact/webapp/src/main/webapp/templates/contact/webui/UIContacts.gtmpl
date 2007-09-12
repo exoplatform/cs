@@ -5,8 +5,6 @@
 <%uiform.begin()
 	if(uicomponent.getViewContactsList()) {
 %>
-
-			
 				<div class="UIContactActionsBar">
 					<a href="<%=uicomponent.event("MoveContact")%>" class="ControlButton">
 						<div class="IconHolder MoveIcon">Move</div>

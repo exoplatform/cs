@@ -77,7 +77,6 @@ public class UIAddressBooks extends UIComponent  {
       uiContacts.setAddressBookSelected(true) ;
       uiContacts.setPersonalAddressBookSelected(true) ;
       uiContacts.setContacts(contactService.getContactsByGroup(username, groupId)) ;
-      //event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts) ;
       
       UIContactPreview uiContactPreview = uiWorkingContainer.findFirstComponentOfType(UIContactPreview.class);
       uiContactPreview.updateContact() ;
@@ -91,16 +90,15 @@ public class UIAddressBooks extends UIComponent  {
       String groupId = event.getRequestContext().getRequestParameter(OBJECTID) ;    
       ContactService contactService = uiForm.getApplicationComponent(ContactService.class);
       UIContacts uiContacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class) ; 
-      if (contactService.getSharedContacts(new String[] {groupId}) != null)
+      if (contactService.getSharedContacts(new String[] {groupId}) != null && contactService.getSharedContacts(new String[] {groupId}).size() > 0)
         uiContacts.setContacts(contactService.getSharedContacts(new String[] {groupId}).get(0).getContacts()) ;
       uiContacts.setGroupId(groupId) ;
       uiContacts.setAddressBookSelected(true) ;
       uiContacts.setPersonalAddressBookSelected(false) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts) ;
       
       UIContactPreview uiContactPreview = uiWorkingContainer.findFirstComponentOfType(UIContactPreview.class);
       uiContactPreview.updateContact() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiContactPreview) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer) ;
     }
   }
 }

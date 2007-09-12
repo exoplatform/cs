@@ -62,8 +62,7 @@ public class UIActionBar extends UIContainer  {
   static public class ChangeContactsViewActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {      
       UIActionBar uiActionBar = event.getSource() ;
-      UIContactPortlet uiContactPortlet = uiActionBar.getAncestorOfType(UIContactPortlet.class) ;
-      
+      UIContactPortlet uiContactPortlet = uiActionBar.getAncestorOfType(UIContactPortlet.class) ; 
       UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;      
       UIContactPreview uiContactPreview = uiContactPortlet.findFirstComponentOfType(UIContactPreview.class) ;
       String viewType = event.getRequestContext().getRequestParameter(OBJECTID) ;

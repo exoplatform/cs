@@ -142,7 +142,6 @@
 	float: left;
 	cursor: pointer;
 }
-
 .UIContactPortlet .UIActionBar .ExportContact {
 	background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/ExportContactIcon.gif') no-repeat center ;
 	height: 26px; width: 21px;
@@ -492,10 +491,14 @@
 
 .UIContactPortlet .UIContactContainer .UIContactPreview .MaximizeContactPane {
   float: right;
-	margin: 4px 4px 0px 0px;
-	padding-right: 20px;
-	line-height: 20px;
-	background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/MaximizeReadingPane.gif') no-repeat right center;
+	width: 30px;
+	height: 25px;
+	background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/MaximizeReadingPane.gif') no-repeat center;
+}
+
+.UIContactPortlet .UIContactContainer .UIContactPreview .LastUpdated {
+	float: right;
+	line-height: 25px;
 }
 
 /*================================= UIContactSummaryPane ===============================*/

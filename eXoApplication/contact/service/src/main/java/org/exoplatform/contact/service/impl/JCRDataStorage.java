@@ -241,7 +241,7 @@ public class JCRDataStorage implements DataStorage {
     for (String contactId : contactIds)    
       if (contactHomeNode.hasNode(contactId)) {
         contact = getContact(username, contactId);
-        if(canDelete(username, contact)) {
+        if(canRemove(username, contact)) {
           contactHomeNode.getNode(contactId).remove();
           contactHomeNode.getSession().save();
         }else {
@@ -249,8 +249,8 @@ public class JCRDataStorage implements DataStorage {
         }
       }else {
         if(publicContactHomeNode.hasNode(contactId)){
-          contact = getContact(username, contactId);
-          if(canDelete(username, contact)) {
+          contact = getSharedContact(contactId);
+          if(canRemove(username, contact)) {
             publicContactHomeNode.getNode(contactId).remove();
             publicContactHomeNode.getSession().save();
           }else {
@@ -261,18 +261,49 @@ public class JCRDataStorage implements DataStorage {
     return contacts ;
   }
   
-  private boolean canDelete(String username, Contact contact) {
+  private boolean canRemove(String username, Contact contact) {
     return true ;
   }
+  private boolean canMove(String username, Contact contact) {
+    return true ;
+  }
+  
+  public List<Contact> moveContacts(String username, List<String> contactIds, String[] groupId) throws Exception {
+    Node contactHomeNode = getContactHome(username);
+    Node publicContactHomeNode = getPublicContactHome() ;
+    Contact contact ;
+    List<Contact> contacts = new ArrayList<Contact>() ;
+    Node contactNode ;
+    for (String contactId : contactIds)    
+      if (contactHomeNode.hasNode(contactId)) {
+        contact = getContact(username, contactId);
+        if(canMove(username, contact)) {
+          contactNode = contactHomeNode.getNode(contactId) ;
+          contactNode.setProperty("exo:categories", groupId);
+          contactHomeNode.getSession().save();
+          contacts.add(contact) ;
+        }
+      }else {
+        if(publicContactHomeNode.hasNode(contactId)){
+          contact = getSharedContact(contactId);
+          if(canMove(username, contact)) {
+            contactNode =  publicContactHomeNode.getNode(contactId);
+            contactNode.setProperty("exo:categories", groupId);
+            publicContactHomeNode.getSession().save();
+            contacts.add(contact) ;
+          }
+        }
+      }
+    return contacts ;
+  }
+  
   public ContactGroup removeGroup(String username, String groupId) throws Exception {
     Node contactGroupHomeNode = getContactGroupHome(username);
     if (contactGroupHomeNode.hasNode(groupId)) {
       ContactGroup contactGroup = getGroup(username, groupId);
-      
       contactGroupHomeNode.getNode(groupId).remove();
       contactGroupHomeNode.save();
       contactGroupHomeNode.getSession().save();
-      
       List<Contact> contacts = getContactsByGroup(username, groupId);
       for (Contact contact : contacts) {
         String[] oldGroups = contact.getCategories();

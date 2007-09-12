@@ -167,7 +167,7 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
       for (String category : categories) getUIFormCheckBoxInput(category).setChecked(true) ;
       String[] editPermission = contact.getEditPermission();
       StringBuffer editPermissionBuffer = new StringBuffer("");
-      if (editPermission.length > 0) editPermissionBuffer.append(editPermission[0]);
+      if (editPermission != null && editPermission.length > 0) editPermissionBuffer.append(editPermission[0]);
       for (int i = 1; i < editPermission.length; i ++) editPermissionBuffer.append("," + editPermission[i]);
       getUIStringInput(FIELD_EDITPERMISSION_INPUT).setValue(editPermissionBuffer.toString());
     }    
@@ -277,7 +277,9 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
       contact.setPersonalSite(uiForm.getUIStringInput(FIELD_PERSONALSITE_INPUT).getValue());
       contact.setNote(uiForm.getUIFormTextAreaInput(FIELD_NOTE_INPUT).getValue());
 
-      String categoryId = "";
+      UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
+      UIContacts uicontacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
+      
       if (uiForm.getUIFormCheckBoxInput(FIELD_ISPUBLIC_BOX).isChecked()) {
         StringBuffer sharedGroups = new StringBuffer("");
         for (int i = 0; i < FIELD_SHAREDCONTACT_BOX.length; i ++) {
@@ -292,22 +294,30 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
         }   
         if (uiForm.getUIStringInput(FIELD_EDITPERMISSION_INPUT).getValue() != null)
           contact.setEditPermission(uiForm.getUIStringInput(FIELD_EDITPERMISSION_INPUT).getValue().split(","));
-        contact.setCategories(sharedGroups.toString().split(","));
-        contactService.saveSharedContact(contact, isNew_);  
+        String[] categories = sharedGroups.toString().split(",") ;
+        contact.setCategories(categories);
+        contactService.saveSharedContact(contact, isNew_);
+        
+        if (isNew_) {
+          for (String category : categories) {
+            if (category.equals(uicontacts.getGroupId())) {
+              uicontacts.updateContact(contact, isNew_) ;
+              break ;
+            }
+          }
+        } else uicontacts.updateContact(contact, isNew_) ; 
       } else {
         UIPopupContainer popupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
         UICategorySelect uiCategorySelect = popupContainer.getChild(UICategorySelect.class); 
-        categoryId = uiCategorySelect.getSelectedCategory();
-        contact.setCategories(new String[] { categoryId });
+        String category = uiCategorySelect.getSelectedCategory();
+        contact.setCategories(new String[] { category });
         contactService.saveContact(username, contact, isNew_);
+        if (isNew_) {
+          if (uicontacts.getGroupId().equals(category)) uicontacts.updateContact(contact, isNew_) ;
+        } else uicontacts.updateContact(contact, isNew_) ;
       }
-      UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
-      UIContacts uicontacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
-      if (isNew_) {
-        if (uicontacts.getGroupId().equals(categoryId))
-          uicontacts.updateContact(contact, isNew_) ;
-      } else 
-          uicontacts.updateContact(contact, isNew_) ;
+      
+      
       UIContactPreview uiContactPreview = uiContactPortlet.findFirstComponentOfType(UIContactPreview.class) ;
       uiContactPreview.setLastUpdated(new Date()) ;
       if (uiContactPreview.getContact() != null && contact.getId().equals(uiContactPreview.getContact().getId())) 

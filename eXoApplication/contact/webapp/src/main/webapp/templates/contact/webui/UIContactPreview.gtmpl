@@ -5,7 +5,11 @@
 <div class="UIContactPreview" id="$compId">
 	<div class="ContactPreviewBar">
 		<div class="Subject">Contact Details</div>
-		<div class="MaximizeContactPane" title="Maximize Reading Pane">Last updated: <%=uicomponent.getLastUpdated()%></div>
+		<a class="MaximizeContactPane" title="Maximize Reading Pane"  href="<%=uicomponent.event("MaximizeContactPane")%>">
+		</a>
+		<span class="LastUpdated">
+				Last updated: <%=uicomponent.getLastUpdated()%>
+		</span>
 		<div style="clear:both;"><span></span></div>
 	</div>
 	<div class="ContactPreviewDetails">

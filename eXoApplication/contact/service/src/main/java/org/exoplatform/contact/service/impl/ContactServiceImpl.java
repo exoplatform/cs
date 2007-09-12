@@ -47,6 +47,10 @@ public class ContactServiceImpl implements ContactService {
   public List<Contact> removeContacts(String username, List<String> contactIds) throws Exception {
     return storage_.removeContacts(username, contactIds);
   }
+  
+  public List<Contact> moveContacts(String username, List<String> contactIds, String[] groupId) throws Exception {
+    return storage_.moveContacts(username, contactIds, groupId) ;
+  }
    
   public List<ContactGroup> getGroups(String username) throws Exception {
     return storage_.getGroups(username);
