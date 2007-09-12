@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.MissingResourceException;
 
+import net.fortuna.ical4j.model.ValidationException;
+
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarImportExport;
 import org.exoplatform.calendar.service.CalendarService;
@@ -21,8 +23,10 @@ import org.exoplatform.download.DownloadResource;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
@@ -84,6 +88,7 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
   static  public class SaveActionListener extends EventListener<UIExportForm> {
     public void execute(Event<UIExportForm> event) throws Exception {
       UIExportForm uiForm = event.getSource() ;
+      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       CalendarService calendarService = (CalendarService)PortalContainer.getComponent(CalendarService.class) ;
       List<UIComponent> children = uiForm.getChildren() ;
       List<String> calendarIds = new ArrayList<String> () ;
@@ -97,7 +102,14 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
       String type = uiForm.getUIFormSelectBox(uiForm.TYPE).getValue() ;
       String name = uiForm.getUIStringInput(uiForm.NAME).getValue() ;
       CalendarImportExport importExport = calendarService.getCalendarImportExports(type) ;
-      OutputStream out = importExport.exportCalendar(Util.getPortalRequestContext().getRemoteUser(), calendarIds) ;
+      OutputStream out = null ;
+      try {
+        out = importExport.exportCalendar(Util.getPortalRequestContext().getRemoteUser(), calendarIds) ;        
+      }catch(ValidationException e) {
+        uiApp.addMessage(new ApplicationMessage("UIExportForm.msg.event-does-not-existing", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
       ByteArrayInputStream is = new ByteArrayInputStream(out.toString().getBytes()) ;
       DownloadResource dresource = new InputStreamDownloadResource(is, "text/iCalendar") ;
       DownloadService dservice = (DownloadService)PortalContainer.getInstance().getComponentInstanceOfType(DownloadService.class) ;

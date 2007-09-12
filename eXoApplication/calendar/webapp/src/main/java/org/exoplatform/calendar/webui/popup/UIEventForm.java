@@ -90,13 +90,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   final public static String ITEM_REPEAT = "true".intern() ;
   final public static String ITEM_UNREPEAT = "false".intern() ;
 
-
-  final public static String ITEM_HIGHT = "hight".intern() ;
-  final public static String ITEM_NORMAL = "normal".intern() ;
-  final public static String ITEM_LOW = "low".intern() ;
-
-  final public static String[] PRRIORITY = {ITEM_HIGHT, ITEM_NORMAL, ITEM_LOW} ;
-
   private List<Attachment> attachments_ = new ArrayList<Attachment>() ;
 
   public UIEventForm() throws Exception {
@@ -177,9 +170,9 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
 
   private List<SelectItemOption<String>> getPriority() throws Exception {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-    for(String prio : PRRIORITY) {
-      options.add(new SelectItemOption<String>(prio, prio)) ;
-    }
+    options.add(new SelectItemOption<String>("hight", "1")) ;
+    options.add(new SelectItemOption<String>("normal", "2")) ;
+    options.add(new SelectItemOption<String>("low", "3")) ;
     return options ;
   }
   protected void refreshCategory()throws Exception {
