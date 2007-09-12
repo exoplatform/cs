@@ -243,6 +243,20 @@
 	padding: 3px 0px 3px 26px;
 }
 
+.UIContactPortlet .UINavigationContainer .UIPopupCategory a.MenuItem {
+	padding: 0px;
+	color: #1E1F21;
+}
+
+.UIContactPortlet .UINavigationContainer .UIRightClickPopupMenu {
+	width: 130px;
+}
+
+.UIContactPortlet .UINavigationContainer .UIPopupCategory {
+	top: -5px;
+	left: 0px;
+}
+
 .UIContactPortlet .UINavigationContainer .Selected {
 	background: #e6e8f5;
 	margin: 0px 1px;

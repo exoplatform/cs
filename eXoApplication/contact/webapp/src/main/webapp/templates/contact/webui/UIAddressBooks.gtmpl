@@ -16,8 +16,62 @@
 			for(contactGroup in contactGroups) {
 			String actionLink1  = uicomponent.event("SelectGroup", contactGroup.getId()) ;			
 		%>
-		<div  class="ItemList Selected">
+		<div  class="ItemList Selected" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
 			<a href="$actionLink1" class="IconHolder AddressIcon"><%=contactGroup.getName()%></a>
+			<% /*Begin Popup Menu*/ %>
+				<div style="position: relative;">
+	  			<div class="UIPopupCategory" style="display: none;">
+	  				<div class="UIRightClickPopupMenu" style="display: block;">
+						  <div class="TopLeftRightClickPopupMenu">
+          			<div class="TopRightRightClickPopupMenu">
+            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
+          			</div>
+        			</div>
+			        <div class="MiddleLeftRightClickPopupMenu">
+			          <div class="MiddleRightRightClickPopupMenu">
+              		<div class="UIRightPopupMenuContainer">
+                    <a class="MenuItem" href="#">   
+	                    <div class="ItemIcon ShareIcon">
+	                      Share
+	                    </div>
+                    </a>
+                    <a class="MenuItem" href="#">   
+	                    <div class="ItemIcon ExportAddressIcon">
+	                      Export
+	                    </div>
+                    </a>
+                    <a class="MenuItem" href="#">   
+	                    <div class="ItemIcon EditActionIcon">
+	                      Edit
+	                    </div>
+                    </a>
+                    <a class="MenuItem" href="#">   
+	                    <div class="ItemIcon EmailIcon">
+	                      Send Emai
+	                    </div>
+                    </a>
+                    <a class="MenuItem" href="#">   
+	                    <div class="ItemIcon DeleteIcon">
+	                      Delete
+	                    </div> 
+                    </a>
+                    <a class="MenuItem" href="#">   
+	                    <div class="ItemIcon PrintIcon">
+	                      Print  
+	                    </div>
+                    </a>
+									</div>
+	          		</div>
+	        		</div>
+				      <div class="BottomLeftRightClickPopupMenu">
+				        <div class="BottomRightRightClickPopupMenu">
+				          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+				        </div>
+				      </div>
+				    </div>
+  				</div>
+  			</div>
+  		<% /*End Popup Menu*/ %>
 		</div>
 		<% } %>
 		

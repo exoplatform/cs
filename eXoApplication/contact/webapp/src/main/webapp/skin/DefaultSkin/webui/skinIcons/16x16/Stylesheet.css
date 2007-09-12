@@ -139,3 +139,19 @@
 .DeleteContactIcon {
 	background: url('icons/DeleteContactIcon.gif') no-repeat left center;
 }
+
+.ShareIcon {
+	background: url('icons/ShareIcon.gif') no-repeat left center;
+}
+
+.ExportAddressIcon {
+	background: url('icons/ExportAddressIcon.gif') no-repeat left center;
+}
+
+.EditActionIcon {
+	background: url('icons/EditActionIcon.gif') no-repeat left center;
+}
+
+.DeleteIcon {
+	background: url('icons/DeleteIcon.gif') no-repeat left center;
+}
