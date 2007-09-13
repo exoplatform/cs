@@ -8,11 +8,13 @@ import java.util.List;
 
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarCategory;
+import org.exoplatform.calendar.service.CalendarImportExport;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.GroupCalendarData;
+import org.exoplatform.calendar.service.RssData;
 
 /**
  * Created by The eXo Platform SARL
@@ -57,4 +59,5 @@ public interface DataStorage {
   
   public void saveCalendarSetting(String username, CalendarSetting setting) throws Exception ;
   public CalendarSetting getCalendarSetting(String username) throws Exception ;
+  public void generateRss(String username, List<String> calendarIds, RssData rssData, CalendarImportExport importExport) throws Exception ;
 }

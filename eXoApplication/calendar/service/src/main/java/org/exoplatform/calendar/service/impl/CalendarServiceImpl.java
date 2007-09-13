@@ -18,6 +18,7 @@ import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.GroupCalendarData;
+import org.exoplatform.calendar.service.RssData;
 import org.exoplatform.registry.JCRRegistryService;
 import org.exoplatform.services.jcr.RepositoryService;
 
@@ -151,19 +152,8 @@ public class CalendarServiceImpl implements CalendarService{
     return storage_.getCalendarSetting(username) ;
   }
   
-  /*public void importCalendar(String username, String calendarType, InputStream icalInputStream) throws Exception {
-    CalendarImportExport calendarEngine = calendarImportExport_.get(calendarType) ;
-    if(calendarEngine != null) {
-      calendarEngine.importCalendar(username, icalInputStream) ;
-    }
+  public void generateRss(String username, List<String> calendarIds, RssData rssData) throws Exception {
+    storage_.generateRss(username, calendarIds, rssData, calendarImportExport_.get(ICALENDAR)) ;
   }
-  
-  public OutputStream exportCalendar(String username, String calendarId, String calendarType) throws Exception {
-    CalendarImportExport calendarEngine = calendarImportExport_.get(calendarType) ;
-    if(calendarEngine != null) {
-      return calendarEngine.exportCalendar(username, calendarId) ;
-    }
-    return null ;
-  }*/
 	
 }

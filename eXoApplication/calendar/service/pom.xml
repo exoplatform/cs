@@ -44,5 +44,12 @@
       <version>0.9.20</version>
       <scope>compile</scope>
     </dependency>
+    
+    <dependency>
+      <groupId>rome</groupId>
+      <artifactId>rome</artifactId>
+      <version>0.8</version>
+      <scope>compile</scope>
+    </dependency>
   </dependencies>
 </project>

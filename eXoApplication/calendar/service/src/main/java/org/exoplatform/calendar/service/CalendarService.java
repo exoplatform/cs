@@ -334,4 +334,6 @@ public interface CalendarService {
   public CalendarSetting getCalendarSetting(String username) throws Exception ;
   public CalendarImportExport getCalendarImportExports(String type) ;
   public String[] getExportImportType() throws Exception ;
+  public void generateRss(String username, List<String> calendarIds, RssData rssData) throws Exception ;
+  
 }

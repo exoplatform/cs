@@ -161,6 +161,18 @@
 	  		</propertyDefinition>	  					
   		</propertyDefinitions>
  	 	</nodeType>
+ 	 	
+ 	 	<nodeType	name="exo:iCalData" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
+  		<supertypes>
+  			<supertype>nt:base</supertype>
+  		</supertypes>
+  		<propertyDefinitions>
+	  		<propertyDefinition name="exo:data" requiredType="Binary" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+	  			<valueConstraints/>
+	  		</propertyDefinition>	  		
+  		</propertyDefinitions>
+ 	 	</nodeType>
+ 	 	
  	 	<nodeType	name="exo:calendarSetting" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
   		<supertypes>
   			<supertype>nt:base</supertype>
