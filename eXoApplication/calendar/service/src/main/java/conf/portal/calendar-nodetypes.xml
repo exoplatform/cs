@@ -173,6 +173,23 @@
   		</propertyDefinitions>
  	 	</nodeType>
  	 	
+ 	 	<nodeType	name="exo:rssData" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
+  		<supertypes>
+  			<supertype>nt:base</supertype>
+  		</supertypes>
+  		<propertyDefinitions>
+	  		<propertyDefinition name="exo:baseUrl" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+	  			<valueConstraints/>
+	  		</propertyDefinition>	  		
+	  		<propertyDefinition name="exo:title" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+	  			<valueConstraints/>
+	  		</propertyDefinition>	  		
+	  		<propertyDefinition name="exo:content" requiredType="Binary" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+	  			<valueConstraints/>
+	  		</propertyDefinition>	  		
+  		</propertyDefinitions>
+ 	 	</nodeType>
+ 	 	
  	 	<nodeType	name="exo:calendarSetting" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
   		<supertypes>
   			<supertype>nt:base</supertype>

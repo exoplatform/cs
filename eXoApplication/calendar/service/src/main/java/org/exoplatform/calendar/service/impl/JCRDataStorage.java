@@ -787,25 +787,20 @@ public class JCRDataStorage implements DataStorage{
       SyndFeedOutput output = new SyndFeedOutput();      
       String feedXML = output.outputString(feed);      
       feedXML = StringUtils.replace(feedXML,"&amp;","&");      
-      storeXML(feedXML, rssHomeNode, rssData.getName()); 
+      storeXML(feedXML, rssHomeNode, rssData.getName(), rssData); 
       rssHomeNode.getSession().save() ;
     } catch (Exception e) {
       e.printStackTrace();
     }     
   }
   
-  private void storeXML(String feedXML, Node rssHome, String rssNodeName) throws Exception{
-    Node contentNode = null ;
-    if(rssHome.hasNode(rssNodeName)){
-      Node rss = rssHome.getNode(rssNodeName);
-      contentNode = rss.getNode(JCR_CONTENT);      
-    }else {
-      Node rss = rssHome.addNode(rssNodeName, NT_FILE);
-      contentNode = rss.addNode(JCR_CONTENT, NT_RESOURCE);
-    }
-    contentNode.setProperty(JCR_DATA, new ByteArrayInputStream(feedXML.getBytes()));
-    contentNode.setProperty(JCR_MIMETYPE, "text/xml");
-    contentNode.setProperty(JCR_LASTMODIFIED, new GregorianCalendar());
+  private void storeXML(String feedXML, Node rssHome, String rssNodeName, RssData rssData) throws Exception{
+    Node rss ;
+    if(rssHome.hasNode(rssNodeName)) rss = rssHome.getNode(rssNodeName);
+    else rss = rssHome.addNode(rssNodeName, "exo:rssData");
+    rss.setProperty("exo:baseUrl", rssData.getUrl()) ;
+    rss.setProperty("exo:title", rssData.getTitle()) ;
+    rss.setProperty("exo:content", new ByteArrayInputStream(feedXML.getBytes()));
   }
 
   private String getEntryUrl(String portalName, String wsName, String path, String baseUrl) throws Exception{
@@ -814,3 +809,4 @@ public class JCRDataStorage implements DataStorage{
     return url.toString();
   }
 }
+
