@@ -1,8 +1,10 @@
 <%
 	import org.exoplatform.contact.service.Contact;
-%>
-
-<%uiform.begin()
+	def rcontext = _ctx.getRequestContext() ;  
+	rcontext.getJavascriptManager().importJavascript("eXo.contact.UIContactPortlet","/contact/javascript") ;
+	rcontext.getJavascriptManager().addJavascript("eXo.contact.ContextMenu.init({'preventDefault':false, 'preventForms':false}) ;") ;
+	rcontext.getJavascriptManager().addJavascript("eXo.contact.ContextMenu.attach('UIContactList', 'UIContactListPopuMenu') ;") ;
+	uiform.begin()
 	if(uicomponent.getViewContactsList()) {
 %>
 				<div class="UIContactActionsBar">
@@ -73,7 +75,7 @@
 								checkboxField = uicomponent.getChildById(contact.getId()) ;
 								String actionLink2 = uicomponent.event("EditContact", contact.getId()) ;
 						%>
-  						<tr onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
+  						<tr class="UIContactList">
   						  <td class="text" style="padding-left: 7px;">
   						  	<%
   						  		if(checkboxField != null) uicomponent.renderField(checkboxField) ;
@@ -94,74 +96,73 @@
 									<a href="$actionLink2" class="ControlButton"><div class="IconHolder EditIcon"><span></span></div></a>
 								</td>
 								
-								<% /*Begin Popup Menu*/ %>
-								<div style="position: relative;">
-			      			<div class="UIPopupCategory" style="display: none;">
-			      				<div class="UIRightClickPopupMenu" style="display: block;">
-										  <div class="TopLeftRightClickPopupMenu">
-				          			<div class="TopRightRightClickPopupMenu">
-				            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
-				          			</div>
-				        			</div>
-							        <div class="MiddleLeftRightClickPopupMenu">
-							          <div class="MiddleRightRightClickPopupMenu">
-				              		<div class="UIRightPopupMenuContainer">
-				              		<% 
-				              			String[] selections = uicomponent.getSelections() ;
-				              		%>
-														<a class="MenuItem" href="<%=uicomponent.event("ContactPopup", selections[0])%>">   
-					                    <div class="ItemIcon EditIcon">
-					                      <%=selections[0]%>
-					                    </div>
-				                    </a>
-				                    <a class="MenuItem" href="<%=uicomponent.event("ContactPopup", selections[1])%>">   
-					                    <div class="ItemIcon EmailIcon">
-					                      <%=selections[1]%>
-					                    </div>
-				                    </a>
-				                    <a class="MenuItem" href="<%=uicomponent.event("ContactPopup", selections[2])%>">   
-					                    <div class="ItemIcon InstantMessage">
-					                      <%=selections[2]%>
-					                    </div>
-				                    </a>
-				                    <a class="MenuItem" href="<%=uicomponent.event("ContactPopup", selections[3])%>">   
-					                    <div class="ItemIcon BlueTag">
-					                      <%=selections[3]%>
-					                    </div>
-				                    </a>
-				                    <a class="MenuItem" href="<%=uicomponent.event("ContactPopup", selections[4])%>">   
-					                    <div class="ItemIcon MoveContactIcon">
-					                      <%=selections[4]%>
-					                    </div>
-				                    </a>
-				                    <a class="MenuItem" href="<%=uicomponent.event("ContactPopup", selections[5])%>">   
-					                    <div class="ItemIcon DeleteContactIcon">
-					                      <%=selections[5]%>
-					                    </div> 
-				                    </a>
-				                    <a class="MenuItem" href="<%=uicomponent.event("ContactPopup", selections[6])%>">   
-					                    <div class="ItemIcon PrintIcon">
-					                      <%=selections[6]%>
-					                    </div>
-				                    </a>
-													</div>
-					          		</div>
-					        		</div>
-								      <div class="BottomLeftRightClickPopupMenu">
-								        <div class="BottomRightRightClickPopupMenu">
-								          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
-								        </div>
-								      </div>
-					      			
-								    </div>
-			      			</div>
-			      		</div>
-			      		<% /*End Popup Menu*/ %>
+								
 								
    			     	</tr>
 			     	<% } %>  
   	   			</tbody>
 					</table>
+					<% /*Begin Popup Menu*/ %>						
+
+  				<div class="UIRightClickPopupMenu" id="UIContactListPopuMenu">
+						  <div class="TopLeftRightClickPopupMenu" id="test">
+          			<div class="TopRightRightClickPopupMenu">
+            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
+          			</div>
+        			</div>
+			        <div class="MiddleLeftRightClickPopupMenu">
+			          <div class="MiddleRightRightClickPopupMenu">
+              		<div class="UIRightPopupMenuContainer">
+              		<% 
+              			String[] selections = uicomponent.getSelections() ;
+              		%>
+										<a class="MenuItem" href="<%=uicomponent.event("ContactPopup", selections[0])%>">   
+	                    <div class="ItemIcon EditIcon">
+	                      <%=selections[0]%>
+	                    </div>
+                    </a>
+                    <a class="MenuItem" href="<%=uicomponent.event("ContactPopup", selections[1])%>">   
+	                    <div class="ItemIcon EmailIcon">
+	                      <%=selections[1]%>
+	                    </div>
+                    </a>
+                    <a class="MenuItem" href="<%=uicomponent.event("ContactPopup", selections[2])%>">   
+	                    <div class="ItemIcon InstantMessage">
+	                      <%=selections[2]%>
+	                    </div>
+                    </a>
+                    <a class="MenuItem" href="<%=uicomponent.event("ContactPopup", selections[3])%>">   
+	                    <div class="ItemIcon BlueTag">
+	                      <%=selections[3]%>
+	                    </div>
+                    </a>
+                    <a class="MenuItem" href="<%=uicomponent.event("ContactPopup", selections[4])%>">   
+	                    <div class="ItemIcon MoveContactIcon">
+	                      <%=selections[4]%>
+	                    </div>
+                    </a>
+                    <a class="MenuItem" href="<%=uicomponent.event("ContactPopup", selections[5])%>">   
+	                    <div class="ItemIcon DeleteContactIcon">
+	                      <%=selections[5]%>
+	                    </div> 
+                    </a>
+                    <a class="MenuItem" href="<%=uicomponent.event("ContactPopup", selections[6])%>">   
+	                    <div class="ItemIcon PrintIcon">
+	                      <%=selections[6]%>
+	                    </div>
+                    </a>
+									</div>
+	          		</div>
+	        		</div>
+				      <div class="BottomLeftRightClickPopupMenu">
+				        <div class="BottomRightRightClickPopupMenu">
+				          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+				        </div>
+				      </div>
+	      			
+				    </div>		      		
+
+  		<% /*End Popup Menu*/ %>
 				</div>
 <% 
 	} else { 
