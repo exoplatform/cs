@@ -17,6 +17,7 @@ import org.exoplatform.calendar.webui.popup.UIExportForm;
 import org.exoplatform.calendar.webui.popup.UIImportForm;
 import org.exoplatform.calendar.webui.popup.UIPopupAction;
 import org.exoplatform.calendar.webui.popup.UIPopupContainer;
+import org.exoplatform.calendar.webui.popup.UIRssForm;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -44,7 +45,8 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
         @EventConfig(listeners = UICalendars.AddEventActionListener.class),
         @EventConfig(listeners = UICalendars.AddCalendarCategoryActionListener.class),
         @EventConfig(listeners = UICalendars.ExportCalendarActionListener.class), 
-        @EventConfig(listeners = UICalendars.ImportCalendarActionListener.class)
+        @EventConfig(listeners = UICalendars.ImportCalendarActionListener.class),
+        @EventConfig(listeners = UICalendars.GenerateRssActionListener.class)
     }
 )
 public class UICalendars extends UIForm  {
@@ -138,6 +140,16 @@ public class UICalendars extends UIForm  {
       UICalendarPortlet uiCalendarPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
       popupAction.activate(UIImportForm.class, 600) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+    }
+  }
+  
+  static  public class GenerateRssActionListener extends EventListener<UICalendars> {
+    public void execute(Event<UICalendars> event) throws Exception {
+      UICalendars uiComponent = event.getSource() ;
+      UICalendarPortlet uiCalendarPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
+      UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
+      popupAction.activate(UIRssForm.class, 600) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   }

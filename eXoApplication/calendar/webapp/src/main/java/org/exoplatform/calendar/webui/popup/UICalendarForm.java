@@ -180,7 +180,6 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
   static  public class AddCategoryActionListener extends EventListener<UICalendarForm> {
     public void execute(Event<UICalendarForm> event) throws Exception {
       UICalendarForm uiForm = event.getSource() ;
-      System.out.println(" ============= > AddCategoryActionListener");
       uiForm.setRenderedChild(INPUT_CALENDAR) ;
       UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       UIPopupAction uiChildPopup = uiPopupContainer.getChild(UIPopupAction.class);
@@ -191,7 +190,6 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
 
   static  public class SelectPermissionActionListener extends EventListener<UICalendarForm> {
     public void execute(Event<UICalendarForm> event) throws Exception {
-      System.out.println(" ============= > SelectPermissionActionListener");
       UICalendarForm uiForm = event.getSource() ;
       uiForm.setRenderedChild(INPUT_SHARE) ;
       if(!uiForm.getUIFormCheckBoxInput(ISPUBLIC).isChecked()) {
@@ -244,9 +242,8 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
           uiApp.addMessage(new ApplicationMessage("UICalendarForm.msg.category-empty", null, ApplicationMessage.WARNING) ) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;
-        } else {
-          calendarService.saveUserCalendar(username, calendar, true) ;
-        }
+        } 
+        calendarService.saveUserCalendar(username, calendar, true) ;        
       }
       UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
       calendarPortlet.cancelAction() ;

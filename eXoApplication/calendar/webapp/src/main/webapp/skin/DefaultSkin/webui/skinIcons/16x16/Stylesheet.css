@@ -10,6 +10,9 @@
 .PrintIcon {
 	background: url('icons/PrintIcon.gif') no-repeat;
 }
+.RssIcon {
+	background: url('icons/RssIcon.gif') no-repeat;
+}
 
 .SearchIcon {
 	background: url('icons/SearchIcon.gif') no-repeat;

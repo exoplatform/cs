@@ -22,6 +22,9 @@
 	background: url('icons/ImportCalendarIcon.gif') no-repeat;
 }
 
+.GenerateRssIcon {
+	background: url('icons/GenerateRssIcon.gif') no-repeat;
+}
 .AddpuplicCalendarIcon {
 	background: url('icons/AddpuplicCalendarIcon.gif') no-repeat;
 }

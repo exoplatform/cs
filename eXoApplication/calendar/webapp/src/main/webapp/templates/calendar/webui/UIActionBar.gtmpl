@@ -62,6 +62,10 @@
 							<div class="IconHolder CalendarSettingIcon"> Setting </div>
 						</a>
 						<div class="SeparatorLine"><span></span></div>
+						<a href="<%=uicomponent.event("Rss")%>" class="ControlButton">
+							<div class="IconHolder RssIcon">RSS</div>
+						</a>
+						<div class="SeparatorLine"><span></span></div>
 						<a href="#" class="ControlButton">
 							<div class="IconHolder PrintIcon">Print </div>
 						</a>
