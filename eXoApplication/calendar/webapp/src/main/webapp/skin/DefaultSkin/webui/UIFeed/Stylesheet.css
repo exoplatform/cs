@@ -1,0 +1,21 @@
+.UIFeed {
+	margin: 10px;
+	border: 1px solid #c7c7c7;
+}
+
+.UIFeed .FeedContent {
+	border: 1px solid white;
+	background: #f7f7f7;
+	padding: 15px 30px;
+}
+
+.UIFeed .FeedContent a {
+	display: block;
+	color: black;
+}
+
+.UIFeed .FeedContent a.Icon {
+	padding-left: 25px;
+	line-height: 25px;
+	background-position: left center;
+}

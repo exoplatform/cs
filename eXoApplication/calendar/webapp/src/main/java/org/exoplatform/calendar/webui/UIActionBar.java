@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.exoplatform.calendar.webui.popup.UICalendarSettingForm;
+import org.exoplatform.calendar.webui.popup.UIFeed;
 import org.exoplatform.calendar.webui.popup.UIPopupAction;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -28,7 +29,8 @@ import sun.security.provider.SHA;
     template =  "app:/templates/calendar/webui/UIActionBar.gtmpl", 
     events = {
         @EventConfig(listeners = UIActionBar.ChangeViewActionListener.class),
-        @EventConfig(listeners = UIActionBar.SettingActionListener.class)
+        @EventConfig(listeners = UIActionBar.SettingActionListener.class),
+        @EventConfig(listeners = UIActionBar.RSSActionListener.class)
     }
 )
 public class UIActionBar extends UIContainer  {
@@ -63,5 +65,14 @@ public class UIActionBar extends UIContainer  {
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   }
-
+  
+  static public class RSSActionListener extends EventListener<UIActionBar> {
+    public void execute(Event<UIActionBar> event) throws Exception {
+      UIActionBar uiActionBar = event.getSource() ;
+      UICalendarPortlet calendarPortlet = uiActionBar.getAncestorOfType(UICalendarPortlet.class) ;
+      UIPopupAction popupAction = calendarPortlet.getChild(UIPopupAction.class) ;
+      popupAction.activate(UIFeed.class, 250) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+    }
+  }
 }

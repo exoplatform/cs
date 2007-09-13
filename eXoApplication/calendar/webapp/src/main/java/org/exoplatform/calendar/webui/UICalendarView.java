@@ -79,6 +79,7 @@ public class UICalendarView extends UIForm {
     CalendarService calendarService = (CalendarService)PortalContainer.getComponent(CalendarService.class) ;
     List<EventCategory> eventCategories = calendarService.getEventCategories(Util.getPortalRequestContext().getRemoteUser()) ;
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
+    options.add(new SelectItemOption<String>("all", "")) ;
     for(EventCategory category : eventCategories) {
       options.add(new SelectItemOption<String>(category.getName(), category.getName())) ;
     }

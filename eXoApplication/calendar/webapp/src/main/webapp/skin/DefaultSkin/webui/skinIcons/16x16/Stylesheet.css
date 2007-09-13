@@ -99,3 +99,7 @@
 	background: url('icons/DownLoadIcon.gif') no-repeat;
 	height: 16px;
 }
+
+.IconFeed {
+	background: url('icons/FeedIcon.gif') no-repeat;
+}
