@@ -332,13 +332,13 @@ public class MailServiceImpl implements MailService{
       while (i < internetAddress.length) {
         String personal = internetAddress[i].getPersonal();
         String address = internetAddress[i].getAddress();
-        String sender = address + ";" + address;
+        String sender = address + " <" + address + ">";
         if (personal != null && personal != "") 
-          sender = personal + ";" + address;
+          sender = personal + " <" + address + ">";
         if(str.length() < 1)  {
           str = sender ;              
         }else {
-          str = str + "," + sender ;
+          str += "," + sender ;
         }           
         i++ ;
       }
