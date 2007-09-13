@@ -279,7 +279,6 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
 
       UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
       UIContacts uicontacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
-      
       if (uiForm.getUIFormCheckBoxInput(FIELD_ISPUBLIC_BOX).isChecked()) {
         StringBuffer sharedGroups = new StringBuffer("");
         for (int i = 0; i < FIELD_SHAREDCONTACT_BOX.length; i ++) {
@@ -297,7 +296,7 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
         String[] categories = sharedGroups.toString().split(",") ;
         contact.setCategories(categories);
         contactService.saveSharedContact(contact, isNew_);
-        
+
         if (isNew_) {
           for (String category : categories) {
             if (category.equals(uicontacts.getGroupId())) {
@@ -314,7 +313,10 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
         contactService.saveContact(username, contact, isNew_);
         if (isNew_) {
           if (uicontacts.getGroupId().equals(category)) uicontacts.updateContact(contact, isNew_) ;
-        } else uicontacts.updateContact(contact, isNew_) ;
+        } else {
+          
+          uicontacts.updateContact(contact, isNew_) ;
+        }
       }
       
       
@@ -340,8 +342,9 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
   static  public class CancelActionListener extends EventListener<UIContactForm> {
     public void execute(Event<UIContactForm> event) throws Exception {
       UIContactForm uiForm = event.getSource() ;
-      UIContactPortlet contactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
-      contactPortlet.cancelAction() ;      
+      UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
+      uiContactPortlet.cancelAction() ; 
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContactPortlet) ;
     }
   }  
 }

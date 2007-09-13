@@ -46,6 +46,7 @@ public class UIContactPreview extends UIComponent  {
     UIWorkingContainer uiWorkingContainer = getAncestorOfType(UIWorkingContainer.class) ; 
     UIContacts uicontacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class) ;
     if (uicontacts.getContacts().length > 0 ) setContact(uicontacts.getContacts()[0]) ;
+    else setContact(null) ;
   }
   
   static public class MaximizeContactPaneActionListener extends EventListener<UIContactPreview> {
@@ -63,6 +64,5 @@ public class UIContactPreview extends UIComponent  {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContactContainer) ;
     }
   }
-  
-  
+
 }

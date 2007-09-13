@@ -13,13 +13,13 @@
 		
 					<div class="SeparatorLine"><span></span></div>
 					<a href="#" class="ControlButton">
-						<div class="Icon ChatIcon"><span></span></div>
+						<div class="Icon ChatIcon" title="chat"><span></span></div>
 					</a>
 					<a href="<%=uicomponent.event("AddTag")%>" class="ControlButton">
 						<div class="Icon SelectTagIcon"title="add tag"><span></span></div>
 					</a>
 					<a href="#" class="ControlButton">
-						<div class="Icon MessageIcon"><span></span></div>
+						<div class="Icon MessageIcon" title="send mail"><span></span></div>
 					</a>
 					<div class="SeparatorLine"><span></span></div>
 					<a href="<%=uicomponent.event("DeleteContacts")%>" class="ControlButton">
@@ -106,39 +106,42 @@
 							        <div class="MiddleLeftRightClickPopupMenu">
 							          <div class="MiddleRightRightClickPopupMenu">
 				              		<div class="UIRightPopupMenuContainer">
-														<a class="MenuItem" href="#">   
+				              		<% 
+				              			String[] selections = uicomponent.getSelections() ;
+				              		%>
+														<a class="MenuItem" href="<%=uicomponent.event("ContactPopup", selections[0])%>">   
 					                    <div class="ItemIcon EditIcon">
-					                      Edit Contact 
+					                      <%=selections[0]%>
 					                    </div>
 				                    </a>
-				                    <a class="MenuItem" href="#">   
+				                    <a class="MenuItem" href="<%=uicomponent.event("ContactPopup", selections[1])%>">   
 					                    <div class="ItemIcon EmailIcon">
-					                      Send Email
+					                      <%=selections[1]%>
 					                    </div>
 				                    </a>
-				                    <a class="MenuItem" href="#">   
+				                    <a class="MenuItem" href="<%=uicomponent.event("ContactPopup", selections[2])%>">   
 					                    <div class="ItemIcon InstantMessage">
-					                      Instant Message
+					                      <%=selections[2]%>
 					                    </div>
 				                    </a>
-				                    <a class="MenuItem" href="#">   
+				                    <a class="MenuItem" href="<%=uicomponent.event("ContactPopup", selections[3])%>">   
 					                    <div class="ItemIcon BlueTag">
-					                      Tag
+					                      <%=selections[3]%>
 					                    </div>
 				                    </a>
-				                    <a class="MenuItem" href="#">   
+				                    <a class="MenuItem" href="<%=uicomponent.event("ContactPopup", selections[4])%>">   
 					                    <div class="ItemIcon MoveContactIcon">
-					                      Move Contact
+					                      <%=selections[4]%>
 					                    </div>
 				                    </a>
-				                    <a class="MenuItem" href="#">   
+				                    <a class="MenuItem" href="<%=uicomponent.event("ContactPopup", selections[5])%>">   
 					                    <div class="ItemIcon DeleteContactIcon">
-					                      Delete Contact
+					                      <%=selections[5]%>
 					                    </div> 
 				                    </a>
-				                    <a class="MenuItem" href="#">   
+				                    <a class="MenuItem" href="<%=uicomponent.event("ContactPopup", selections[6])%>">   
 					                    <div class="ItemIcon PrintIcon">
-					                      Print this Contact 
+					                      <%=selections[6]%>
 					                    </div>
 				                    </a>
 													</div>

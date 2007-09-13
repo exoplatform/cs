@@ -27,19 +27,17 @@ public class UIContactContainer extends UIContainer  {
   public UIContactContainer() throws Exception {
     UIContacts uiContacts = addChild(UIContacts.class, null, null) ;
     UIContactPreview uiContactPreview = addChild(UIContactPreview.class, null, null) ;
-    
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     ContactService contactService = getApplicationComponent(ContactService.class) ;
-    if(contactService.getGroups(username).size() > 0) {
+    if(contactService.getGroups(username) != null &&contactService.getGroups(username).size() > 0) {
       String groupId = contactService.getGroups(username).get(0).getId() ;
       List<Contact> contacts = contactService.getContactsByGroup(username, groupId) ;
-      uiContacts.setContacts(contacts) ;
-      uiContacts.setGroupId(groupId) ;
-      if(contacts.size() > 0) {
-        uiContactPreview.setContact(uiContacts.getContacts()[0]) ;
+      if(contacts != null && contacts.size() > 0) {
+        uiContacts.setContacts(contacts) ;
+        uiContacts.setGroupId(groupId) ;
+        uiContactPreview.setContact(contacts.get(0)) ;
       }
     }
-
   }
 
 }

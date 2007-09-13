@@ -4,6 +4,8 @@
  **************************************************************************/
 package org.exoplatform.contact.webui;
 
+import org.exoplatform.contact.service.ContactService;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIContainer;
 
@@ -19,7 +21,13 @@ import org.exoplatform.webui.core.UIContainer;
 )
 public class UINavigationContainer extends UIContainer  {
   public UINavigationContainer() throws Exception {
-    addChild(UIAddressBooks.class, null, null) ;
+    UIAddressBooks uiAddressBook = addChild(UIAddressBooks.class, null, null) ;
     addChild(UITags.class, null, null) ;
+    String username = Util.getPortalRequestContext().getRemoteUser() ;
+    ContactService contactService = getApplicationComponent(ContactService.class) ;
+    if(contactService.getGroups(username) != null &&contactService.getGroups(username).size() > 0) {
+      String groupId = contactService.getGroups(username).get(0).getId() ;
+      uiAddressBook.setSelectedGroup(groupId) ;
+    }
   }  
 }

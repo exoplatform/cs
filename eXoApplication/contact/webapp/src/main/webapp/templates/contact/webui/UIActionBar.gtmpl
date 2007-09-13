@@ -35,9 +35,8 @@
 					                  <% 
 					                  	for(viewType in uicomponent.getViewTypes()) { 
 					                  		icon = viewType + "Icon" ;
-					                  		actionLink = uicomponent.event("ChangeContactsView", viewType) ;	
 					                  %>
-					                    <a class="MenuItem" href="$actionLink">   
+					                    <a class="MenuItem" href="<%=uicomponent.event("ChangeContactsView", viewType)%>">   
 						                    <div class="ItemIcon $icon">
 						                      $viewType
 						                    </div>

@@ -4,16 +4,19 @@
  **************************************************************************/
 package org.exoplatform.contact.webui.popup;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
-import org.exoplatform.contact.service.GroupContactData;
 import org.exoplatform.contact.webui.UIAddressBooks;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContacts;
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.organization.OrganizationService;
+import org.exoplatform.services.organization.impl.GroupImpl;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
@@ -51,6 +54,9 @@ public class UIMoveContactForm extends UIForm implements UIPopupComponent {
   public void setGroupId(String groupId) { groupId_ = groupId ; }
   public String getGroupId() { return groupId_ ; }
   
+  public void setContacts(List<String> contactIds) { contactIds_ = contactIds ; }
+  public List<String> getContacts() { return contactIds_ ; }
+  
   public String[] getActions() { return new String[] {"Save", "Cancel"} ; }
   
   public List<ContactGroup> getContactGroups() throws Exception { 
@@ -59,15 +65,17 @@ public class UIMoveContactForm extends UIForm implements UIPopupComponent {
     return uiAddressBook.getGroups() ; 
   }
   
-  public List<GroupContactData> getSharedContactGroups() throws Exception {
-    UIContactPortlet uiContactPortlet = getAncestorOfType(UIContactPortlet.class) ;
-    UIAddressBooks uiAddressBook = uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class) ;
-    return uiAddressBook.getSharedContactGroups() ;
+  public List<String> getSharedContactGroups() throws Exception {
+    List<String> groupsName = new ArrayList<String>() ;
+    OrganizationService organizationService = (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
+    Object[] groups = organizationService.getGroupHandler().getAllGroups().toArray() ;
+    for(Object group : groups) {
+      String groupName = ((GroupImpl)group).getId() ;
+      groupsName.add(groupName) ;
+    }
+    return groupsName ;
   }
-  
-  public void setContacts(List<String> contactIds) { contactIds_ = contactIds ; }
-  public List<String> getContacts() { return contactIds_ ; }
-  
+
   static  public class SelectGroupActionListener extends EventListener<UIMoveContactForm> {
     public void execute(Event<UIMoveContactForm> event) throws Exception {
       UIMoveContactForm uiMoveContactForm = event.getSource() ;
@@ -84,7 +92,6 @@ public class UIMoveContactForm extends UIForm implements UIPopupComponent {
       uiContactPortlet.cancelAction() ;
     }
   }
-  
   
   static  public class SaveActionListener extends EventListener<UIMoveContactForm> {
     public void execute(Event<UIMoveContactForm> event) throws Exception {

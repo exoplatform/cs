@@ -36,19 +36,22 @@ import org.exoplatform.webui.event.EventListener;
     }  
 )
 public class UIAddressBooks extends UIComponent  {
+  
   private Map<String, List<Contact>> sharedContactMap_  = new HashMap<String, List<Contact>>() ;
-  public UIAddressBooks() throws Exception {
-
-  }
+  public UIAddressBooks() throws Exception { }
+  private String selectedGroup_ = "";
+  
   public List<ContactGroup> getGroups()throws Exception {
     ContactService contactService = this.getApplicationComponent(ContactService.class);
     String username = Util.getPortalRequestContext().getRemoteUser() ;    
     return contactService.getGroups(username);
   }
   
-  public List<Contact> getContactMapValue(String groupId) {
-    return sharedContactMap_.get(groupId) ;
-  }
+  public void setSelectedGroup(String groupId) { selectedGroup_ = groupId ; }
+  public String getSelectedGroup() { return selectedGroup_ ; }
+  
+  public List<Contact> getContactMapValue(String groupId) { return sharedContactMap_.get(groupId) ; }
+  
   public List<GroupContactData> getSharedContactGroups() throws Exception {
     sharedContactMap_.clear() ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
@@ -67,10 +70,11 @@ public class UIAddressBooks extends UIComponent  {
 
   static  public class SelectGroupActionListener extends EventListener<UIAddressBooks> {
     public void execute(Event<UIAddressBooks> event) throws Exception {
-      UIAddressBooks uiForm = event.getSource() ;  
-      UIWorkingContainer uiWorkingContainer = uiForm.getAncestorOfType(UIWorkingContainer.class) ;
+      UIAddressBooks uiAddressBook = event.getSource() ;  
+      UIWorkingContainer uiWorkingContainer = uiAddressBook.getAncestorOfType(UIWorkingContainer.class) ;
       String groupId = event.getRequestContext().getRequestParameter(OBJECTID) ;    
-      ContactService contactService = uiForm.getApplicationComponent(ContactService.class);
+      ContactService contactService = uiAddressBook.getApplicationComponent(ContactService.class);
+      uiAddressBook.setSelectedGroup(groupId) ;
       String username = Util.getPortalRequestContext().getRemoteUser() ;
       UIContacts uiContacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class) ;
       uiContacts.setGroupId(groupId) ;
@@ -85,10 +89,11 @@ public class UIAddressBooks extends UIComponent  {
   }
   static  public class SelectSharedGroupActionListener extends EventListener<UIAddressBooks> {
     public void execute(Event<UIAddressBooks> event) throws Exception {
-      UIAddressBooks uiForm = event.getSource() ;  
-      UIWorkingContainer uiWorkingContainer = uiForm.getAncestorOfType(UIWorkingContainer.class) ;
+      UIAddressBooks uiAddressBook = event.getSource() ;  
+      UIWorkingContainer uiWorkingContainer = uiAddressBook.getAncestorOfType(UIWorkingContainer.class) ;
       String groupId = event.getRequestContext().getRequestParameter(OBJECTID) ;    
-      ContactService contactService = uiForm.getApplicationComponent(ContactService.class);
+      ContactService contactService = uiAddressBook.getApplicationComponent(ContactService.class);
+      uiAddressBook.setSelectedGroup(groupId) ;
       UIContacts uiContacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class) ; 
       if (contactService.getSharedContacts(new String[] {groupId}) != null && contactService.getSharedContacts(new String[] {groupId}).size() > 0)
         uiContacts.setContacts(contactService.getSharedContacts(new String[] {groupId}).get(0).getContacts()) ;

@@ -20,17 +20,13 @@
 		<% } } else {
 				 List sharedContactGroups = uicomponent.getSharedContactGroups();
 				 for(sharedContactGroup in sharedContactGroups) {
-				   String actionLink  = uicomponent.event("SelectGroup", sharedContactGroup.getName()) ;		
+				   String actionLink  = uicomponent.event("SelectGroup", sharedContactGroup) ;		
 		%>
 		<div class="ItemList NormalItem">
-			<div class="Icon AddressIcon"><a href="$actionLink"><%=sharedContactGroup.getName()%></a></div>
+			<div class="Icon AddressIcon"><a href="$actionLink"><%=sharedContactGroup%></a></div>
 		</div>
 		<% } } %>
 	</div>
-	
-	
-	
-	
 	
 	<div class="UIAction">
 			      <div class="ActionContainer">
@@ -53,40 +49,6 @@
 	            <%}%>
 	          </div>
  </div>
-	
-	
-	
-<%
- /* 
-		<div class="UIAction"> 
-    <div class="ActionContainer">
-        <div class="ActionButton">
-          <div class="LightBlueStyle">
-            <div class="ButtonLeft">
-              <div class="ButtonRight">
-                <div class="ButtonMiddle">
-                  <a href="#">Save</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="ActionButton">
-          <div class="LightBlueStyle">
-            <div class="ButtonLeft">
-              <div class="ButtonRight">
-                <div class="ButtonMiddle">
-                  <a href="#">Cancel</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-    </div>
-  </div>
-	
-	*/
-%>
 	
 	
 </div>

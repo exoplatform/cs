@@ -14,9 +14,11 @@
 		<%  
 			List contactGroups = uicomponent.getGroups();
 			for(contactGroup in contactGroups) {
-			String actionLink1  = uicomponent.event("SelectGroup", contactGroup.getId()) ;			
+			cssClass = "Normal" ;
+			String actionLink1  = uicomponent.event("SelectGroup", contactGroup.getId()) ;	
+			if(contactGroup.getId().equals(uicomponent.getSelectedGroup()))	cssClass = "Selected" ;		
 		%>
-		<div  class="ItemList Selected" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
+		<div  class="ItemList $cssClass" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
 			<a href="$actionLink1" class="IconHolder AddressIcon"><%=contactGroup.getName()%></a>
 			<% /*Begin Popup Menu*/ %>
 				<div style="position: relative;">
@@ -85,9 +87,11 @@
 		<%
 			List groupContactData = uicomponent.getSharedContactGroups();
 			for(group in groupContactData) {
+			cssClass = "Normal" ;
 			String actionLink2  = uicomponent.event("SelectSharedGroup", group.getName()) ;			
+			if(group.getName().equals(uicomponent.getSelectedGroup()))	cssClass = "Selected" ;
 		%>
-		<div class="ItemList Normal">
+		<div class="ItemList $cssClass">
 			<a href="$actionLink2" class="IconHolder AddressIcon"><%=group.getName()%></a>
 		</div>
 		<% } %>
