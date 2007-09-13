@@ -42,17 +42,17 @@
 									<div class="FieldContainer">
 										<div class="Title">From:</div>
 										<div class="LinkAddress">
-										  <span><%=msg.getFrom().split(";")[0]%> </span> &lt; <%=msg.getFrom().split(";")[1]%> &gt;</div>
+										  <span><%=msg.getFrom()%></span></div>
 										<div style="clear: left;"><span></span></div>
 									</div>
 									<div class="FieldContainer">
 										<div class="Title">Reply-to:</div>
-										<div class="LinkAddress"><%=msg.getReplyTo().split(";")[0]%> </span>  &lt; <%=msg.getReplyTo().split(";")[1]%> &gt;</div>
+										<div class="LinkAddress"><%=msg.getReplyTo()%></div>
 										<div style="clear: left;"><span></span></div>
 									</div>
 									<div class="FieldContainer">
 										<div class="Title">To:</div>
-										<div class="LinkAddress"><%=msg.getMessageTo().split(";")[1]%></div>
+										<div class="LinkAddress"><%=msg.getMessageTo()%></div>
 										<div style="clear: left;"><span></span></div>
 									</div>
 									<div class="FieldContainer">

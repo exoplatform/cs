@@ -104,7 +104,7 @@ public class UIActionBar extends UIContainer {
       MailService mailSvr = uiActionBar.getApplicationComponent(MailService.class) ;
       String username = uiActionBar.getAncestorOfType(UIMailPortlet.class).getCurrentUser() ;
       for(Account acc : mailSvr.getAccounts(username)) {
-        options.add(new SelectItemOption<String>(acc.getEmailAddress(), acc.getId())) ;
+        options.add(new SelectItemOption<String>(acc.getEmailAddress(), acc.getEmailAddress())) ;
       }
       uiComposeForm.setFieldFromValue(options) ;
       uiPopupContainer.addChild(uiComposeForm) ;

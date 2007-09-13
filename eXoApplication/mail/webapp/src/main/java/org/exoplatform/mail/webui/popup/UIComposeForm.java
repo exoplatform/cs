@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Attachment;
 import org.exoplatform.mail.service.BufferAttachment;
 import org.exoplatform.mail.service.MailService;
@@ -202,6 +203,34 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
     // TODO Auto-generated method stub
 
   }
+  
+  private Message createMessage() throws Exception {
+    Message message = new Message();
+    UIMailPortlet uiPortlet = getAncestorOfType(UIMailPortlet.class);
+    UISelectAccount uiSelectAcc = uiPortlet.findFirstComponentOfType(UISelectAccount.class) ;
+    String accountId = uiSelectAcc.getSelectedValue() ;
+    String usename = uiPortlet.getCurrentUser() ;
+    MailService mailSvr = this.getApplicationComponent(MailService.class) ;
+    Account account = mailSvr.getAccountById(usename, accountId);
+    String from = this.getFieldFromValue() ;
+    String subject = this.getFieldSubjectValue() ;
+    String to = this.getFieldToValue() ;
+    String cc = this.getFieldCcValue() ;
+    String bcc = this.getFieldBccValue() ;
+    String body = this.getFieldMessageContentValue() ;
+    message.setSendDate(new Date()) ;
+    message.setAccountId(accountId) ;
+    message.setFrom(from) ;
+    message.setSubject(subject) ;
+    message.setMessageTo(to) ;
+    message.setMessageCc(cc) ;
+    message.setMessageBcc(bcc) ;
+    message.setReplyTo(from);
+    message.setAttachements(this.getAttachFileList()) ;
+    message.setMessageBody(body) ;
+    message.setReplyTo(account.getEmailReplyAddress());
+    return message;
+  }
 
   static  public class SendActionListener extends EventListener<UIComposeForm> {
     public void execute(Event<UIComposeForm> event) throws Exception {
@@ -213,12 +242,6 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-      String from = uiForm.getFieldFromValue() ;
-      String subject = uiForm.getFieldSubjectValue() ;
-      String to = uiForm.getFieldToValue() ;
-      String cc = uiForm.getFieldCcValue() ;
-      String bcc = uiForm.getFieldBccValue() ;
-      String body = uiForm.getFieldMessageContentValue() ;
       UIMailPortlet uiPortlet = uiForm.getAncestorOfType(UIMailPortlet.class) ;
       UISelectAccount uiSelectAcc = uiPortlet.findFirstComponentOfType(UISelectAccount.class) ;
       UINavigationContainer uiNavigationContainer = uiPortlet.findFirstComponentOfType(UINavigationContainer.class) ;
@@ -227,16 +250,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
       String usename = uiPortlet.getCurrentUser() ;
       MailService mailSvr = uiForm.getApplicationComponent(MailService.class) ;
       UIPopupAction uiChildPopup = uiForm.getAncestorOfType(UIPopupAction.class) ;
-      Message message = new Message() ;
-      message.setSendDate(new Date()) ;
-      message.setAccountId(accountId) ;
-      message.setFrom(from) ;
-      message.setSubject(subject) ;
-      message.setMessageTo(to) ;
-      message.setMessageCc(cc) ;
-      message.setMessageBcc(bcc) ;
-      message.setAttachements(uiForm.getAttachFileList()) ;
-      message.setMessageBody(body) ;
+      Message message = uiForm.createMessage() ;      
       try {
         mailSvr.sendMessage(usename, message) ;
         uiChildPopup.deActivate() ;
