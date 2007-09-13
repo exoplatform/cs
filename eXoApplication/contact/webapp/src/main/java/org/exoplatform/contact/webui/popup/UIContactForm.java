@@ -8,6 +8,7 @@ import java.util.Date;
 
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactService;
+import org.exoplatform.contact.webui.UIAddressBooks;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContactPreview;
 import org.exoplatform.contact.webui.UIContacts;
@@ -279,6 +280,8 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
 
       UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
       UIContacts uicontacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
+      UIAddressBooks uiAddressBook = uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class) ;
+      UIContactPreview uiContactPreview = uiContactPortlet.findFirstComponentOfType(UIContactPreview.class) ;
       if (uiForm.getUIFormCheckBoxInput(FIELD_ISPUBLIC_BOX).isChecked()) {
         StringBuffer sharedGroups = new StringBuffer("");
         for (int i = 0; i < FIELD_SHAREDCONTACT_BOX.length; i ++) {
@@ -296,15 +299,20 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
         String[] categories = sharedGroups.toString().split(",") ;
         contact.setCategories(categories);
         contactService.saveSharedContact(contact, isNew_);
-
         if (isNew_) {
+          if (uiAddressBook.getSelectedGroup().equals("")) uiAddressBook.setSelectedGroup(categories[0]) ;
           for (String category : categories) {
-            if (category.equals(uicontacts.getGroupId())) {
+            if (category.equals(uiAddressBook.getSelectedGroup())) {
               uicontacts.updateContact(contact, isNew_) ;
+              uiContactPreview.updateContact() ;
               break ;
             }
           }
-        } else uicontacts.updateContact(contact, isNew_) ; 
+        } else {
+          uicontacts.updateContact(contact, isNew_) ;
+          if (uiContactPreview.getContact() != null && contact.getId().equals(uiContactPreview.getContact().getId())) 
+            uiContactPreview.setContact(contact) ;
+        }
       } else {
         UIPopupContainer popupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
         UICategorySelect uiCategorySelect = popupContainer.getChild(UICategorySelect.class); 
@@ -312,18 +320,16 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
         contact.setCategories(new String[] { category });
         contactService.saveContact(username, contact, isNew_);
         if (isNew_) {
-          if (uicontacts.getGroupId().equals(category)) uicontacts.updateContact(contact, isNew_) ;
-        } else {
-          
+          if (uiAddressBook.getSelectedGroup().equals("")) uiAddressBook.setSelectedGroup(category) ;
+          if (uiAddressBook.getSelectedGroup().equals(category)) uicontacts.updateContact(contact, isNew_) ;
+          uiContactPreview.updateContact() ;
+        } else {          
           uicontacts.updateContact(contact, isNew_) ;
+          if (uiContactPreview.getContact() != null && contact.getId().equals(uiContactPreview.getContact().getId())) 
+            uiContactPreview.setContact(contact) ;
         }
       }
-      
-      
-      UIContactPreview uiContactPreview = uiContactPortlet.findFirstComponentOfType(UIContactPreview.class) ;
       uiContactPreview.setLastUpdated(new Date()) ;
-      if (uiContactPreview.getContact() != null && contact.getId().equals(uiContactPreview.getContact().getId())) 
-        uiContactPreview.setContact(contact) ;
       uiContactPortlet.cancelAction() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContactPortlet) ;
     }

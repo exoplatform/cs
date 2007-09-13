@@ -8,9 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.MissingResourceException;
 
+import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.Tag;
 import org.exoplatform.contact.webui.UIContactPortlet;
+import org.exoplatform.contact.webui.UIContacts;
 import org.exoplatform.contact.webui.UITags;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -49,7 +51,6 @@ public class UITagForm extends UIForm implements UIPopupComponent {
     ContactService contactService = getApplicationComponent(ContactService.class);
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     List<Tag> tags = contactService.getTags(username);
-
     FIELD_TAG_BOX = new String[tags.size()];
     for (int i = 0 ; i < tags.size(); i ++) {
       FIELD_TAG_BOX[i] = tags.get(i).getName();
@@ -57,6 +58,9 @@ public class UITagForm extends UIForm implements UIPopupComponent {
     }
   }
   
+  public String[] getActions() { return new String[] {"Save", "Cancel"} ; }
+  public void activate() throws Exception {}
+  public void deActivate() throws Exception {}
   public String getLabel(String id) throws Exception {
     try {
       return  super.getLabel(id) ;
@@ -64,11 +68,9 @@ public class UITagForm extends UIForm implements UIPopupComponent {
       return id ;  
     }
   } 
-
-  public String[] getActions() { return new String[] {"Save", "Cancel"} ; }
-  public void update(List<String> contactIds) { contactIds_ = contactIds ; }
-  public void activate() throws Exception {}
-  public void deActivate() throws Exception {}
+ 
+  public void setContacts(List<String> contactIds) { contactIds_ = contactIds ; }
+  public List<String> getContacts() { return contactIds_ ; }
 
   public List<String> getCheckedTags() throws Exception {
     List<String> checkedTags = new ArrayList<String>();
@@ -82,33 +84,41 @@ public class UITagForm extends UIForm implements UIPopupComponent {
   
   static  public class SaveActionListener extends EventListener<UITagForm> {
     public void execute(Event<UITagForm> event) throws Exception {
-      UITagForm uiForm = event.getSource() ;
+      UITagForm uiTagForm = event.getSource() ;
       List<Tag> tags = new ArrayList<Tag>();
       Tag tag;
-      String inputTag = uiForm.getUIStringInput(FIELD_TAGNAME_INPUT).getValue(); 
+      String inputTag = uiTagForm.getUIStringInput(FIELD_TAGNAME_INPUT).getValue(); 
       if (inputTag != null && inputTag.trim().length() > 0) {
         tag = new Tag();
         tag.setName(inputTag);
         tags.add(tag);
       }
-      for (String tagName : uiForm.getCheckedTags()) {
+      for (String tagName : uiTagForm.getCheckedTags()) {
         tag = new Tag();
         tag.setName(tagName) ;
         tags.add(tag);
       }
       if (tags.size() == 0) {
-        UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+        UIApplication uiApp = uiTagForm.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UIAddNewTag.msg.tagName-required", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
       
-      ContactService contactService = uiForm.getApplicationComponent(ContactService.class);
+      ContactService contactService = uiTagForm.getApplicationComponent(ContactService.class);
       String username = Util.getPortalRequestContext().getRemoteUser() ;
-      contactService.addTag(username, uiForm.contactIds_, tags);
-      UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class);
+      contactService.addTag(username, uiTagForm.getContacts(), tags);
+      UIContactPortlet uiContactPortlet = uiTagForm.getAncestorOfType(UIContactPortlet.class);
+      UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
+      Contact contact ;
+      for (String contactId : uiTagForm.getContacts()) {
+        contact = contactService.getContact(username, contactId) ;
+        if (contact == null) contact = contactService.getSharedContact(contactId) ;
+        uiContacts.updateContact(contact, false) ;
+      }
       UITags uiTags = uiContactPortlet.findFirstComponentOfType(UITags.class) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiTags) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts) ;
       uiContactPortlet.cancelAction() ;  
     }
   }

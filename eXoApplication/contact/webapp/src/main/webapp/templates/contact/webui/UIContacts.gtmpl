@@ -74,6 +74,8 @@
 								String actionLink  = uicomponent.event("SelectedContact", contact.getId()) ;
 								checkboxField = uicomponent.getChildById(contact.getId()) ;
 								String actionLink2 = uicomponent.event("EditContact", contact.getId()) ;
+								iconTag = "Icon" ;
+								if (contact.getTags() != null && contact.getTags().length > 0) iconTag = "Icon BlueTag" ;
 						%>
   						<tr class="UIContactList">
   						  <td class="text" style="padding-left: 7px;">
@@ -81,7 +83,7 @@
   						  		if(checkboxField != null) uicomponent.renderField(checkboxField) ;
   						  	%>
   						  </td>
-								<td class="text" style="padding: 0px;"><div class="Icon" ><span></span></div></td>
+								<td class="text" style="padding: 0px;"><div class="$iconTag" ><span></span></div></td>
 								<td class="text">
 									<div class="State OnlineIcon" title="Availabel">
 										<a href="$actionLink">
@@ -95,9 +97,7 @@
 								<td>
 									<a href="$actionLink2" class="ControlButton"><div class="IconHolder EditIcon"><span></span></div></a>
 								</td>
-								
-								
-								
+
    			     	</tr>
 			     	<% } %>  
   	   			</tbody>

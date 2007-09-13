@@ -34,7 +34,6 @@ public class UIContactContainer extends UIContainer  {
       List<Contact> contacts = contactService.getContactsByGroup(username, groupId) ;
       if(contacts != null && contacts.size() > 0) {
         uiContacts.setContacts(contacts) ;
-        uiContacts.setGroupId(groupId) ;
         uiContactPreview.setContact(contacts.get(0)) ;
       }
     }

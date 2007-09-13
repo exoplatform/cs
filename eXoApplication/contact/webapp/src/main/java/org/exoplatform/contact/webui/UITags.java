@@ -47,7 +47,6 @@ public class UITags extends UIComponent  {
       String username = Util.getPortalRequestContext().getRemoteUser() ;
       UIContacts uiContacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class) ;
       uiContacts.setContacts(contactService.getContactsByTag(username, tagName)) ;
-      uiContacts.setAddressBookSelected(false) ;
       
       UIContactPreview uiContactPreview = uiWorkingContainer.findFirstComponentOfType(UIContactPreview.class);
       uiContactPreview.updateContact() ;
