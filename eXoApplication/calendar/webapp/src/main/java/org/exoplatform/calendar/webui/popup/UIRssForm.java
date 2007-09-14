@@ -78,7 +78,7 @@ public class UIRssForm extends UIFormTabPane implements UIPopupComponent{
       options.add(new SelectItemOption<String>(vs, vs)) ;
     }
     rssInfo.addUIFormInput(new UIFormSelectBox(VERSION, VERSION, options)) ;
-    rssInfo.addUIFormInput(new UIFormStringInput(URL, URL, "http://localhost:8080/portal/iCalRss")) ;
+    rssInfo.addUIFormInput(new UIFormStringInput(URL, URL, "http://localhost:8080/calendar/iCalRss")) ;
     rssInfo.addUIFormInput(new UIFormTextAreaInput(DESCRIPTION, DESCRIPTION, "This RSS provided by eXo Platform opensource company")) ;
     rssInfo.addUIFormInput(new UIFormStringInput(COPYRIGHT, COPYRIGHT, "Copyright by 2000-2005 eXo Platform SARL")) ;
     rssInfo.addUIFormInput(new UIFormStringInput(LINK, LINK, "www.exoplatform.org")) ;    
