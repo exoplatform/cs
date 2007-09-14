@@ -151,6 +151,13 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
   public List<Attachment> getAttachFileList() {
     return attachments_ ;
   }
+  public Message getMessage() { 
+    return message_; 
+  }
+  public void setMessage(Message message) {
+    this.message_ = message;
+  }
+  
   public String getFieldFromValue() {
     UIFormInputWithActions inputSet = getChildById(FIELD_FROM_INPUT) ;
     return inputSet.getUIFormSelectBox(FIELD_FROM).getValue() ;
@@ -167,7 +174,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
   }
   public void setFieldSubjectValue(String value) {
     UIFormInputWithActions inputSet = getChildById(FIELD_FROM_INPUT) ;
-    inputSet.getUIFormSelectBox(FIELD_SUBJECT).setValue(value) ;
+    inputSet.getUIStringInput(FIELD_SUBJECT).setValue(value) ;
   }
   public String getFieldToValue() {
     UIFormInputWithActions inputSet = getChildById(FIELD_FROM_INPUT) ;
