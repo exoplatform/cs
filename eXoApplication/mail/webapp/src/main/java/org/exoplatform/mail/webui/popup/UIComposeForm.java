@@ -271,7 +271,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
         return ;
       }
       try {
-        message.setFolders(new String[]{UIAccountCreation.FD_SENT}) ;
+        message.setFolders(new String[]{Utils.FD_SENT}) ;
         mailSvr.saveMessage(usename, accountId, message, true) ;
       }
       catch (Exception e) {
@@ -300,7 +300,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
       Message message = uiForm.getNewMessage(null) ;   
       
       try {
-        message.setFolders(new String[]{UIAccountCreation.FD_DRAFTS}) ;
+        message.setFolders(new String[]{Utils.FD_DRAFTS}) ;
         mailSvr.saveMessage(usename, accountId, message, true) ;
       }
       catch (Exception e) {

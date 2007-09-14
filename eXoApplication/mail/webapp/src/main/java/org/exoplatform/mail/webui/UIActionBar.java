@@ -56,6 +56,8 @@ public class UIActionBar extends UIContainer {
       UIMailPortlet uiPortlet = uiActionBar.getAncestorOfType(UIMailPortlet.class) ;
       UINavigationContainer uiNavigation = uiPortlet.getChild(UINavigationContainer.class) ;
       UISelectAccount uiSelect = uiNavigation.getChild(UISelectAccount.class) ;
+      UIMessageArea uiMessageArea = uiPortlet.findFirstComponentOfType(UIMessageArea.class);
+      UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
       UIFolderContainer uiFolderContainer = uiNavigation.getChild(UIFolderContainer.class) ;
       MailService mailSvr = uiActionBar.getApplicationComponent(MailService.class) ;
       UIApplication uiApp = uiActionBar.getAncestorOfType(UIApplication.class) ;
@@ -69,7 +71,9 @@ public class UIActionBar extends UIContainer {
       Account account = mailSvr.getAccountById(username, accId) ;
       try {
         mailSvr.checkNewMessage(username, account) ;
+        uiMessageList.setSelectedFolderId(Utils.FD_INBOX);
         event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageArea);
       } catch (AuthenticationFailedException afe) {
         afe.printStackTrace() ;
         uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.userName-password-incorrect", null)) ;

@@ -13,6 +13,8 @@ import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.MessageHeader;
 import org.exoplatform.mail.service.Tag;
+import org.exoplatform.mail.service.Utils;
+import org.exoplatform.mail.webui.popup.UIAccountCreation;
 import org.exoplatform.mail.webui.popup.UIPopupAction;
 import org.exoplatform.mail.webui.popup.UITagForm;
 import org.exoplatform.web.command.handler.GetApplicationHandler;
@@ -57,7 +59,7 @@ import com.sun.corba.se.spi.legacy.connection.GetEndPointInfoAgainException;
 
 public class UIMessageList extends UIForm {
   private String selectedMessageId_ = null ;
-  private String selectedFolderId_ = null ;
+  private String selectedFolderId_ = Utils.FD_INBOX ;
   private String selectedTagName_ = null ;
 
   public UIMessageList() throws Exception {}
