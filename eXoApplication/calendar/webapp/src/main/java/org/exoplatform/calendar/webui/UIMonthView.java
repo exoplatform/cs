@@ -51,7 +51,6 @@ public class UIMonthView extends UICalendarView {
 
   private Map<String, String> calendarIds_ = new HashMap<String, String>() ;
 
-  private List<CalendarEvent> allEvent_ = new ArrayList<CalendarEvent>() ;
   private Map<Integer, List<CalendarEvent>> eventData_ = new HashMap<Integer, List<CalendarEvent>>() ;
 
   public UIMonthView() throws Exception{
@@ -67,9 +66,9 @@ public class UIMonthView extends UICalendarView {
     List<String> calendarIds = new ArrayList<String>(getCalendarIds().values()) ;
     CalendarService calendarService = getApplicationComponent(CalendarService.class) ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
+    List<CalendarEvent> allEvents = calendarService.getUserEventByCalendar(username, calendarIds) ;
     for(int day =1 ;  day <= getDaysInMonth(); day++) {
       List<CalendarEvent> existEvents = new ArrayList<CalendarEvent>() ;
-      List<CalendarEvent> allEvents = calendarService.getUserEventByCalendar(username, calendarIds) ;
       for(CalendarEvent ce : allEvents) {
         GregorianCalendar gc = new GregorianCalendar(getCurrentYear(), getCurrentMonth(), day) ;
         Date tempDate = gc.getTime() ;
