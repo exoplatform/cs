@@ -36,11 +36,11 @@ UICalendarPortlet.prototype.changeAction = function(obj, id) {
 	var actions = eXo.core.DOMUtil.findDescendantsByTagName(obj, "a") ;
 	var len = actions.length ;
 	var href = "" ;
-	var pattern = /\=.*\'/ ;
+	var pattern = /objectId\=.*id/ ;
 	for(var i = 0 ; i < len ; i++) {
 		href = String(actions[i].href) ;
 		if (!pattern.test(href)) continue ;
-		actions[i].href = href.replace(pattern,"="+id+"'") ;
+		actions[i].href = href.replace(pattern,"objectId="+id) ;
 	}
 }
 
@@ -229,7 +229,7 @@ UICalendarPortlet.prototype.addSelection = function(evt) {
 	var div = document.createElement("div") ;
 	div.className = "selection" ;
 	div.setAttribute("id", "selection") ;
-	UICalendarPortlet.selectionY = eXo.core.Browser.findMouseRelativeY(UICalendarPortlet.viewer, _e) ;//_e.pageY ;
+	UICalendarPortlet.selectionY = eXo.core.Browser.findMouseRelativeY(UICalendarPortlet.viewer, _e) ;
 	UICalendarPortlet.selection = div ;
 	div.innerHTML = "<span></span>" ;			
 	UICalendarPortlet.viewer.appendChild(div) ;
