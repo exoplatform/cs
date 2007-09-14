@@ -91,11 +91,11 @@ public class Utils {
   public static final String POP3 = "pop3".intern() ;
   public static final String IMAP = "imap".intern() ;
   
-  final static public String FD_INBOX = "Inbox".intern();
-  final static public String FD_DRAFTS = "Drafts".intern() ;
-  final static public String FD_SENT = "Sent".intern() ;
-  final static public String FD_SPAM = "Spam".intern() ;
-  final static public String FD_TRASH = "Trash".intern() ;
+  public static final String FD_INBOX = "Inbox".intern();
+  public static final String FD_DRAFTS = "Drafts".intern() ;
+  public static final String FD_SENT = "Sent".intern() ;
+  public static final String FD_SPAM = "Spam".intern() ;
+  public static final String FD_TRASH = "Trash".intern() ;
 
   public static boolean isEmptyField(String value) {
     return value == null || value.trim().length() == 0 ;
