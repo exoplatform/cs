@@ -31,6 +31,7 @@ import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormSelectBox;
 
+
 /**
  * Created by The eXo Platform SARL
  * Author : Hung Nguyen
@@ -40,7 +41,7 @@ import org.exoplatform.webui.form.UIFormSelectBox;
 
 public class UICalendarView extends UIForm {
   final static protected String EVENT_CATEGORIES = "eventCategories".intern() ;
-  
+
   final public static String JANUARY = "January".intern() ;
   final public static String FEBRUARY = "February".intern() ;
   final public static String MARCH = "March".intern() ;
@@ -62,15 +63,23 @@ public class UICalendarView extends UIForm {
   final public static String FRIDAY = "Friday".intern() ;
   final public static String SATURDAY = "Saturday".intern() ;
   final public static String SUNDAY = "Sunday".intern() ;
-  final public static String[] DAYS = {SUNDAY, MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY} ; 
-  
+  final public static String[] DAYS = {SUNDAY, MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY} ;
+
+  final public static int DAY_BEGIN = 1 ;
+  final public static int MONTH_BEGIN = 0 ;
+  final public static int MONTH_END = 11 ;
+
+  final public static String ACT_NEXT = "MoveNext".intern() ;
+
+  final public static String ACT_PREVIOUS  = "MovePrevious".intern() ;
+
   public Calendar calendar_ = Calendar.getInstance() ;
-  
+
   protected boolean isShowEvent = true;
-  
+
   protected List<String> privateCalendarIds = new ArrayList<String>() ;
   protected List<String> publicCalendarIds = new ArrayList<String>() ;
-  
+
   final public static Map<Integer, String> monthsName_ = new HashMap<Integer, String>() ;
   private Map<Integer, String> daysMap_ = new HashMap<Integer, String>() ;
   private Map<Integer, String> monthsMap_ = new HashMap<Integer, String>() ;
@@ -84,7 +93,7 @@ public class UICalendarView extends UIForm {
       options.add(new SelectItemOption<String>(category.getName(), category.getName())) ;
     }
     addUIFormInput(new UIFormSelectBox(EVENT_CATEGORIES, EVENT_CATEGORIES, options)) ;
-    
+
     int i = 0 ; 
     for(String month : MONTHS) {
       monthsMap_.put(i, month) ;
@@ -98,7 +107,7 @@ public class UICalendarView extends UIForm {
   }
   protected String[] getMonthsName() { return MONTHS ;}
   protected String[] getDaysName() {return DAYS ;}
-  
+
   protected int getDaysInMonth() {
     int month = getCurrentMonth() ;
     int year =  getCurrentYear();
@@ -115,7 +124,7 @@ public class UICalendarView extends UIForm {
   }
   protected  String getMonthName(int month) {return monthsMap_.get(month).toString() ;} ;
   protected  String getDayName(int day) {return daysMap_.get(day).toString() ;} ;
-  
+
   public void update() throws Exception {
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     List<EventCategory> eventCategories = calendarService.getEventCategories(Util.getPortalRequestContext().getRemoteUser()) ;
@@ -146,19 +155,83 @@ public class UICalendarView extends UIForm {
     }
     return events ;
   }
-  
+
+  protected void DayMove(int day, int month, int year) {
+    setCurrentDay(day) ;
+    setCurrentDay(month) ;
+    setCurrentDay(year) ;
+  }
+
+  protected void DayNext() {
+    if(getCurrentDay() <= getDaysInMonth()) {
+      setCurrentDay(getCurrentDay() + 1) ;
+    } else { 
+      MonthNext() ;
+    }
+  }
+
+  protected void DayBack() {
+    if(getCurrentDay() > DAY_BEGIN) {
+      setCurrentDay(getCurrentDay() - 1) ;
+    } else {
+      MonthBack() ;
+    }
+  }
+
+  protected void MonthNext() {
+    if(getCurrentMonth() <= MONTH_END){ 
+      setCurrentMonth(getCurrentMonth() + 1) ;
+      setCurrentDay(DAY_BEGIN) ;
+    } else {
+      YearNext() ;
+    }
+  }
+  protected void MonthBack() {
+    if(getCurrentMonth() > MONTH_BEGIN) {
+      setCurrentMonth(getCurrentMonth() - 1) ;
+      setCurrentDay(getDaysInMonth(getCurrentMonth(), getCurrentYear())) ;
+    } else {
+      YearBack() ;
+    }
+  }
+  protected void YearNext() {
+    setCurrentYear(getCurrentYear() + 1) ;
+    setCurrentMonth(MONTH_BEGIN) ;
+    setCurrentDay(DAY_BEGIN) ;
+  }
+  protected void YearBack() {
+    setCurrentYear(getCurrentYear() - 1) ;
+    setCurrentMonth(MONTH_END) ;
+    setCurrentDay(getDaysInMonth(getCurrentMonth(), getCurrentYear())) ;
+  }
+
+  protected boolean isToday(int day, int month, int year) {
+    Calendar currentCal = Calendar.getInstance() ;
+    boolean isCurrentDay = currentCal.get(Calendar.DATE) == day ;
+    boolean isCurrentMonth = currentCal.get(Calendar.MONTH) == month ;
+    boolean isCurrentYear = currentCal.get(Calendar.YEAR) == year ;
+    return (isCurrentDay && isCurrentMonth && isCurrentYear ) ;
+  }
+
+  protected boolean isCurrentMonth(int month, int year) {
+    Calendar currentCal = Calendar.getInstance() ;
+    boolean isCurrentMonth = currentCal.get(Calendar.MONTH) == month ;
+    boolean isCurrentYear = currentCal.get(Calendar.YEAR) == year ;
+    return (isCurrentMonth && isCurrentYear ) ;
+  }
+
   protected Date getCurrentDate() {return calendar_.getTime() ;} 
   protected void setCurrentDate(Date value) {calendar_.setTime(value) ;} 
-  
+
   protected int getCurrentDay() {return calendar_.get(Calendar.DATE) ;}
   protected void setCurrentDay(int day) {calendar_.set(Calendar.DATE, day) ;}
-  
+
   protected int getCurrentMonth() {return calendar_.get(Calendar.MONTH) ;}
   protected void setCurrentMonth(int month) {calendar_.set(Calendar.MONTH, month) ;}
-  
+
   protected int getCurrentYear() {return calendar_.get(Calendar.YEAR) ;}
   protected void setCurrentYear(int year) {calendar_.set(Calendar.YEAR, year) ;}
-  
+
   static  public class RefreshActionListener extends EventListener<UICalendarView> {
     public void execute(Event<UICalendarView> event) throws Exception {
       UICalendarView uiForm = event.getSource() ;
@@ -197,6 +270,7 @@ public class UICalendarView extends UIForm {
       System.out.println(" ===========> ChangeCategoryActionListener") ;
     }
   }
+
   static  public class AddCategoryActionListener extends EventListener<UICalendarView> {
     public void execute(Event<UICalendarView> event) throws Exception {
       UICalendarView listView = event.getSource() ;
@@ -206,5 +280,4 @@ public class UICalendarView extends UIForm {
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   }
-
 }
