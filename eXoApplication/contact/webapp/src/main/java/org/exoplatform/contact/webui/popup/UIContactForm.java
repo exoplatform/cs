@@ -168,8 +168,11 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
       for (String category : categories) getUIFormCheckBoxInput(category).setChecked(true) ;
       String[] editPermission = contact.getEditPermission();
       StringBuffer editPermissionBuffer = new StringBuffer("");
-      if (editPermission != null && editPermission.length > 0) editPermissionBuffer.append(editPermission[0]);
-      for (int i = 1; i < editPermission.length; i ++) editPermissionBuffer.append("," + editPermission[i]);
+      if (editPermission != null && editPermission.length > 0) {
+        editPermissionBuffer.append(editPermission[0]);
+        for (int i = 1; i < editPermission.length; i ++) editPermissionBuffer.append("," + editPermission[i]);
+      }
+      
       getUIStringInput(FIELD_EDITPERMISSION_INPUT).setValue(editPermissionBuffer.toString());
     }    
     getUIFormCheckBoxInput(FIELD_ISPUBLIC_BOX).setEnable(false) ;
@@ -300,7 +303,11 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
         contact.setCategories(categories);
         contactService.saveSharedContact(contact, isNew_);
         if (isNew_) {
-          if (uiAddressBook.getSelectedGroup().equals("")) uiAddressBook.setSelectedGroup(categories[0]) ;
+          if (uiAddressBook.getSelectedGroup().equals("")) {
+            uiAddressBook.setAddressBookSelected(true) ;
+            uiAddressBook.setPersonalAddressBookSelected(false) ;
+            uiAddressBook.setSelectedGroup(categories[0]) ;
+          }
           for (String category : categories) {
             if (category.equals(uiAddressBook.getSelectedGroup())) {
               uicontacts.updateContact(contact, isNew_) ;
@@ -320,7 +327,11 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
         contact.setCategories(new String[] { category });
         contactService.saveContact(username, contact, isNew_);
         if (isNew_) {
-          if (uiAddressBook.getSelectedGroup().equals("")) uiAddressBook.setSelectedGroup(category) ;
+          if (uiAddressBook.getSelectedGroup().equals("")) {
+            uiAddressBook.setAddressBookSelected(true) ;
+            uiAddressBook.setPersonalAddressBookSelected(true) ;
+            uiAddressBook.setSelectedGroup(category) ;
+          }
           if (uiAddressBook.getSelectedGroup().equals(category)) uicontacts.updateContact(contact, isNew_) ;
           uiContactPreview.updateContact() ;
         } else {          

@@ -38,7 +38,7 @@
 			if(group.getName().equals(uicomponent.getSelectedGroup()))	cssClass = "Selected" ;
 		%>
 		<div class="ItemList $cssClass">
-			<a id="<%= contactGroup.getId() %>" href="$actionLink2" class="IconHolder AddressIcon"><%=group.getName()%></a>
+			<a id="<%= group.getName() %>" href="$actionLink2" class="IconHolder AddressIcon"><%=group.getName()%></a>
 		</div>
 		<% } %>
 	</div>

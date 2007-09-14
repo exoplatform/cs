@@ -45,8 +45,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
         @EventConfig(listeners = UIContacts.EditContactActionListener.class),
         @EventConfig(phase=Phase.DECODE, listeners = UIContacts.DeleteContactsActionListener.class,
             confirm = "UIContacts.msg.confirm-delete"),
-        @EventConfig(listeners = UIContacts.MoveContactActionListener.class),
-        @EventConfig(listeners = UIContacts.ContactPopupActionListener.class)
+        @EventConfig(listeners = UIContacts.MoveContactsActionListener.class)
     }
 )
 
@@ -80,8 +79,7 @@ public class UIContacts extends UIForm  {
   
   public void updateContact(Contact contact, boolean isNew) { 
     if (isNew) addUIFormInput(new UIFormCheckBoxInput<Boolean>(contact.getId(), contact.getId(), false)) ;
-    contactMap.put(contact.getId(), contact) ;
-    String s = contact.getFullName() == null ? "aa" : "bb" ; 
+    contactMap.put(contact.getId(), contact) ; 
   }
   
   public void removeContacts(List<Contact> contacts) throws Exception {
@@ -105,90 +103,6 @@ public class UIContacts extends UIForm  {
     return checkedContacts ;
   }
   
-  static public class AddTagActionListener extends EventListener<UIContacts> {
-    public void execute(Event<UIContacts> event) throws Exception {
-      UIContacts uiContacts = event.getSource() ;
-//      String contactId = event.getRequestContext().getRequestParameter(OBJECTID);
-//      System.out.println("\n\n contactid : " + contactId + "\n\n");
-      List<String> contactIds = uiContacts.getCheckedContacts() ;
-      if (contactIds.size() == 0) {
-        UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIContacts.msg.checkContact-required", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
-      }
-      UIContactPortlet contactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class) ;
-      UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
-      UITagForm uiTagForm = popupAction.createUIComponent(UITagForm.class, null, null) ;
-      uiTagForm.setContacts(contactIds) ;
-      popupAction.activate(uiTagForm, 600, 0, true) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
-    }
-  }
-  
-  static public class DeleteContactsActionListener extends EventListener<UIContacts> {
-    public void execute(Event<UIContacts> event) throws Exception {
-      UIContacts uiContacts = event.getSource();
-      List<String> contactIds = uiContacts.getCheckedContacts() ;
-      if (contactIds.size() == 0) {
-        UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIContacts.msg.checkContact-required", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
-      }
-      ContactService contactService = uiContacts.getApplicationComponent(ContactService.class);
-      String username = Util.getPortalRequestContext().getRemoteUser() ;
-      List<Contact> removedContacts = new ArrayList<Contact>();
-      for (String contactId : contactIds) {
-        if (contactService.getContact(username, contactId) != null)
-          removedContacts.add(contactService.getContact(username, contactId)) ;
-        if (contactService.getSharedContact(contactId) != null)
-          removedContacts.add(contactService.getSharedContact(contactId)) ;
-      }
-      List<Contact> unremovedContacts = contactService.removeContacts(username, contactIds) ;
-      if (unremovedContacts.size() > 0) 
-        System.out.println("\n\n unremoved contact size :" + unremovedContacts.size() + "\n\n");
-      uiContacts.removeContacts(removedContacts) ;
-      UIWorkingContainer uiWorkingContainer = uiContacts.getAncestorOfType(UIWorkingContainer.class) ;
-      UIContactPreview uiContactPreview = uiWorkingContainer.findFirstComponentOfType(UIContactPreview.class) ;
-      uiContactPreview.updateContact() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer) ;
-    }
-  }
-  
-  static public class MoveContactActionListener extends EventListener<UIContacts> {
-    public void execute(Event<UIContacts> event) throws Exception {
-      UIContacts uiContacts = event.getSource();
-      List<String> contactIds = uiContacts.getCheckedContacts() ;
-      if (contactIds.size() == 0) {
-        UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIContacts.msg.checkContact-required", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
-      }
-      UIContactPortlet uicontactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class) ;
-      UIPopupAction popupAction = uicontactPortlet.getChild(UIPopupAction.class) ;
-      UIMoveContactForm uiMoveForm = popupAction.createUIComponent(UIMoveContactForm.class, null, null) ;
-      UIAddressBooks uiAddressBook = uicontactPortlet.findFirstComponentOfType(UIAddressBooks.class) ;
-      uiMoveForm.setPersonalAddressBookSelected(uiAddressBook.getPersonalAddressBookSelected()) ;
-      uiMoveForm.setContacts(contactIds) ;
-      uiMoveForm.setGroupId(uiAddressBook.getSelectedGroup()) ;
-      popupAction.activate(uiMoveForm, 600, 0, true) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
-    }
-  }
-  
-  static public class SelectedContactActionListener extends EventListener<UIContacts> {
-    public void execute(Event<UIContacts> event) throws Exception {
-      UIContacts uiContacts = event.getSource();
-      String contactId = event.getRequestContext().getRequestParameter(OBJECTID);
-      UIContactContainer uiContactContainer = uiContacts.getAncestorOfType(UIContactContainer.class);
-      UIContactPreview uiContactPreview = uiContactContainer.findFirstComponentOfType(UIContactPreview.class);
-      uiContactPreview.setContact(uiContacts.contactMap.get(contactId));
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiContactContainer);
-    }
-  }
-
   static public class EditContactActionListener extends EventListener<UIContacts> {
     public void execute(Event<UIContacts> event) throws Exception {
       UIContacts uiContacts = event.getSource();
@@ -198,7 +112,6 @@ public class UIContacts extends UIForm  {
       UIPopupContainer popupContainer = popupAction.createUIComponent(UIPopupContainer.class, null, "UITagForm") ;
       popupContainer.addChild(UICategorySelect.class, null, null) ;
       popupContainer.addChild(UIContactForm.class, null, null) ;
-    
       UICategorySelect uiCategorySelect = popupContainer.findFirstComponentOfType(UICategorySelect.class);
       uiCategorySelect.setValues(contactId);
       ContactService contactService = uiContacts.getApplicationComponent(ContactService.class);
@@ -210,32 +123,101 @@ public class UIContacts extends UIForm  {
     }
   }
   
-  public static class ContactPopupActionListener extends EventListener<UIContacts> {
+  static public class AddTagActionListener extends EventListener<UIContacts> {
     public void execute(Event<UIContacts> event) throws Exception {
       UIContacts uiContacts = event.getSource() ;
-      UIContactPortlet uiContactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class) ;       
-      String viewType = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      System.out.println("\n\n view type :" + viewType + "\n\n");
-      if (viewType.equals(EDIT_CONTACT)) {
-        
-      } else if (viewType.equals(SEND_EMAIL)){ 
-     
-      } else if (viewType.equals(INSTACE_MESSAGE)){ 
-     
-      } else if (viewType.equals(TAG)){ 
-     
-      } else if (viewType.equals(MOVE_CONTACT)){ 
-     
-      } else if (viewType.equals(SEND_EMAIL)){ 
-     
-      } else if (viewType.equals(DELETE_CONTACT)){ 
-     
-      } else if (viewType.equals(PRINT_CONTACT)){ 
-     
-      }
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
+      String contactId = event.getRequestContext().getRequestParameter(OBJECTID);
+      List<String> contactIds = new ArrayList<String>();
+      if (contactId != null) contactIds.add(contactId) ;
+      else {
+        contactIds = uiContacts.getCheckedContacts() ;
+        if (contactIds.size() == 0) {
+          UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
+          uiApp.addMessage(new ApplicationMessage("UIContacts.msg.checkContact-required", null)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        }
+      }    
+      UIContactPortlet contactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class) ;
+      UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
+      UITagForm uiTagForm = popupAction.createUIComponent(UITagForm.class, null, null) ;
+      uiTagForm.setContacts(contactIds) ;
+      popupAction.activate(uiTagForm, 600, 0, true) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   }
   
+  static public class MoveContactsActionListener extends EventListener<UIContacts> {
+    public void execute(Event<UIContacts> event) throws Exception {
+      UIContacts uiContacts = event.getSource();
+      String contactId = event.getRequestContext().getRequestParameter(OBJECTID);   
+      List<String> contactIds = new ArrayList<String>();
+      if (contactId != null) contactIds.add(contactId) ;
+      else {
+        contactIds = uiContacts.getCheckedContacts() ;
+        if (contactIds.size() == 0) {
+          UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
+          uiApp.addMessage(new ApplicationMessage("UIContacts.msg.checkContact-required", null)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        }
+      }    
+      UIContactPortlet uiContactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class) ;
+      UIPopupAction popupAction = uiContactPortlet.getChild(UIPopupAction.class) ;
+      UIMoveContactForm uiMoveForm = popupAction.createUIComponent(UIMoveContactForm.class, null, null) ;
+      UIAddressBooks uiAddressBook = uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class) ;
+      uiMoveForm.setPersonalAddressBookSelected(uiAddressBook.getPersonalAddressBookSelected()) ;
+      uiMoveForm.setContacts(contactIds) ;
+      uiMoveForm.setGroupId(uiAddressBook.getSelectedGroup()) ;
+      popupAction.activate(uiMoveForm, 600, 0, true) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+    }
+  }
+  
+  static public class DeleteContactsActionListener extends EventListener<UIContacts> {
+    public void execute(Event<UIContacts> event) throws Exception {
+      UIContacts uiContacts = event.getSource();
+      String contactId = event.getRequestContext().getRequestParameter(OBJECTID);   
+      List<String> contactIds = new ArrayList<String>();
+      if (contactId != null) contactIds.add(contactId) ;
+      else {
+        contactIds = uiContacts.getCheckedContacts() ;
+        if (contactIds.size() == 0) {
+          UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
+          uiApp.addMessage(new ApplicationMessage("UIContacts.msg.checkContact-required", null)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        }
+      }
+      ContactService contactService = uiContacts.getApplicationComponent(ContactService.class);
+      String username = Util.getPortalRequestContext().getRemoteUser() ;
+      List<Contact> removedContacts = new ArrayList<Contact>();
+      for (String removedContactId : contactIds) {
+        if (contactService.getContact(username, removedContactId) != null) {
+          removedContacts.add(contactService.getContact(username, removedContactId)) ;
+        } else if (contactService.getSharedContact(removedContactId) != null)    
+          removedContacts.add(contactService.getSharedContact(removedContactId)) ;
+      }
+      List<Contact> unremovedContacts = contactService.removeContacts(username, contactIds) ;
+      if (unremovedContacts.size() > 0) 
+        System.out.println("\n\n unremoved contact size :" + unremovedContacts.size() + "\n\n");
+      uiContacts.removeContacts(removedContacts) ;
+      UIWorkingContainer uiWorkingContainer = uiContacts.getAncestorOfType(UIWorkingContainer.class) ;
+      UIContactPreview uiContactPreview = uiWorkingContainer.findFirstComponentOfType(UIContactPreview.class) ;
+      uiContactPreview.updateContact() ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer) ;
+    }
+  }
+
+  static public class SelectedContactActionListener extends EventListener<UIContacts> {
+    public void execute(Event<UIContacts> event) throws Exception {
+      UIContacts uiContacts = event.getSource();
+      String contactId = event.getRequestContext().getRequestParameter(OBJECTID);
+      UIContactContainer uiContactContainer = uiContacts.getAncestorOfType(UIContactContainer.class);
+      UIContactPreview uiContactPreview = uiContactContainer.findFirstComponentOfType(UIContactPreview.class);
+      uiContactPreview.setContact(uiContacts.contactMap.get(contactId));
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContactContainer);
+    }
+  }  
   
 }

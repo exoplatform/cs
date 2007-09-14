@@ -4,6 +4,7 @@
  **************************************************************************/
 package org.exoplatform.contact.webui;
 
+import org.exoplatform.contact.webui.popup.UIAddressBookForm;
 import org.exoplatform.contact.webui.popup.UICategorySelect;
 import org.exoplatform.contact.webui.popup.UIContactForm;
 import org.exoplatform.contact.webui.popup.UIPopupAction;
@@ -24,14 +25,18 @@ import org.exoplatform.webui.event.EventListener;
 @ComponentConfig(
     template =  "app:/templates/contact/webui/UIActionBar.gtmpl", 
     events = {
+        @EventConfig(listeners = UIActionBar.AddNewActionListener.class),
         @EventConfig(listeners = UIActionBar.ChangeViewActionListener.class),
-        @EventConfig(listeners = UIActionBar.AddContactActionListener.class),
         @EventConfig(listeners = UIActionBar.ChangeContactsViewActionListener.class),
         @EventConfig(listeners = UIActionBar.CustomLayoutActionListener.class),
         @EventConfig(listeners = UIActionBar.AddressBookActionListener.class)
     }
 )
 public class UIActionBar extends UIContainer  {
+  final public static String CONTACT = "Contact".intern() ;
+  final public static String ADDRESSBOOK = "Address".intern() ;
+  final public static String[] ADDNEW_TYPES = { CONTACT, ADDRESSBOOK } ;
+  
   final public static String CONTACTS_LIST = "ContactList".intern() ;
   final public static String DETAILED_CARDS = "Contact".intern() ;
   final public static String[] VIEW_TYPES = { CONTACTS_LIST, DETAILED_CARDS } ;
@@ -39,24 +44,32 @@ public class UIActionBar extends UIContainer  {
   public UIActionBar() throws Exception { } 
   
   public String[] getViewTypes() { return VIEW_TYPES ; }
+  public String[] getAddNewTypes() { return ADDNEW_TYPES ; }
   
   static public class ChangeViewActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {
       
     }
   }  
-  static public class AddContactActionListener extends EventListener<UIActionBar> {
+  
+  static public class AddNewActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {
       UIActionBar uiActionBar = event.getSource() ;
       UIContactPortlet contactPortlet = uiActionBar.getAncestorOfType(UIContactPortlet.class) ;
       UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
-      UIPopupContainer popupContainer = popupAction.createUIComponent(UIPopupContainer.class, null, "AddNewContact") ;
-      popupContainer.addChild(UICategorySelect.class, null, null) ;
-      popupContainer.addChild(UIContactForm.class, null, null) ;
-      UIContactForm.isNew_ = true ;
-      popupAction.activate(popupContainer, 800, 450, true) ;
+      String addNewType = event.getRequestContext().getRequestParameter(OBJECTID) ;      
+      if (addNewType.equals(CONTACT)) {
+        UIPopupContainer popupContainer = popupAction.createUIComponent(UIPopupContainer.class, null, "AddNewContact") ;
+        popupContainer.addChild(UICategorySelect.class, null, null) ;
+        popupContainer.addChild(UIContactForm.class, null, null) ;
+        UIContactForm.isNew_ = true ;
+        popupAction.activate(popupContainer, 800, 450, true) ;        
+      } else if (addNewType.equals(ADDRESSBOOK)) {
+        UIAddressBookForm uiAddressBookForm = popupAction.createUIComponent(UIAddressBookForm.class, null, "AddNewAddressBook") ;
+        popupAction.activate(uiAddressBookForm, 500, 0, true) ;
+      }
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
-    }
+    }  
   }
   
   static public class ChangeContactsViewActionListener extends EventListener<UIActionBar> {
