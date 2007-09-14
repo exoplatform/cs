@@ -48,10 +48,11 @@ UICalendarPortlet.prototype.changeAction = function(obj, id) {
 
 UICalendarPortlet.prototype.init = function() {
 	var rowContainerDay = document.getElementById("RowContainerDay") ;
+	if (!rowContainerDay) return false ;
 	this.viewer = eXo.core.DOMUtil.findFirstDescendantByClass(rowContainerDay, "div", "EventBoardContainer") ;//eXo.core.DOMUtil.findAncestorByClass(rowContainerDay, "EventDayContainer") ;
 	this.step = 60 ;
-	//var eventBoardContainer = eXo.core.DOMUtil.findFirstDescendantByClass(this.viewer, "div", "EventBoardContainer") ;
 	this.viewer.onmousedown = eXo.calendar.UICalendarPortlet.addSelection ;
+	return true ;
 } ;
 
 UICalendarPortlet.prototype.getElements = function() {
@@ -109,7 +110,7 @@ UICalendarPortlet.prototype.adjustWidth = function() {
 
 UICalendarPortlet.prototype.showEvent = function() {
 	var UICalendarPortlet = eXo.calendar.UICalendarPortlet ;
-	UICalendarPortlet.init() ;
+	if (!UICalendarPortlet.init()) return ;
 	var el = UICalendarPortlet.getElements() ;
 	var marker = null ;
 	for(var i = 0 ; i < el.count ; i ++ ) {
@@ -229,7 +230,7 @@ UICalendarPortlet.prototype.addSelection = function(evt) {
 	var div = document.createElement("div") ;
 	div.className = "selection" ;
 	div.setAttribute("id", "selection") ;
-	UICalendarPortlet.selectionY = eXo.core.Browser.findMouseRelativeY(UICalendarPortlet.viewer, _e) ;
+	UICalendarPortlet.selectionY = eXo.core.Browser.findMouseRelativeY(UICalendarPortlet.viewer, _e) + window.scrollTop ;
 	UICalendarPortlet.selection = div ;
 	div.innerHTML = "<span></span>" ;			
 	UICalendarPortlet.viewer.appendChild(div) ;
