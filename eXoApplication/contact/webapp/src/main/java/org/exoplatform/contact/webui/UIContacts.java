@@ -81,6 +81,7 @@ public class UIContacts extends UIForm  {
   public void updateContact(Contact contact, boolean isNew) { 
     if (isNew) addUIFormInput(new UIFormCheckBoxInput<Boolean>(contact.getId(), contact.getId(), false)) ;
     contactMap.put(contact.getId(), contact) ;
+    String s = contact.getFullName() == null ? "aa" : "bb" ; 
   }
   
   public void removeContacts(List<Contact> contacts) throws Exception {
@@ -107,6 +108,8 @@ public class UIContacts extends UIForm  {
   static public class AddTagActionListener extends EventListener<UIContacts> {
     public void execute(Event<UIContacts> event) throws Exception {
       UIContacts uiContacts = event.getSource() ;
+//      String contactId = event.getRequestContext().getRequestParameter(OBJECTID);
+//      System.out.println("\n\n contactid : " + contactId + "\n\n");
       List<String> contactIds = uiContacts.getCheckedContacts() ;
       if (contactIds.size() == 0) {
         UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;

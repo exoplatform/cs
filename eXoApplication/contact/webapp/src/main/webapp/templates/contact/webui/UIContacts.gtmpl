@@ -87,13 +87,13 @@
 								<td class="text">
 									<div class="State OnlineIcon" title="Availabel">
 										<a href="$actionLink">
-											<%=contact.getFullName()%>
+											<%=(contact.getFullName()==null ? "" : contact.getFullName())%>
 										</a>
 									</div>
 								</td>
-								<td class="text"><a href="$actionLink"><%=contact.getEmailAddress()%></a></td>
-								<td class="text"><a href="$actionLink"><%=contact.getJobTitle()%></a></td>
-								<td><a href="$actionLink"><%=contact.getWorkPhone1()%></a></td>
+								<td class="text"><a href="$actionLink"><%=(contact.getEmailAddress()==null ? "" : contact.getEmailAddress())%></a></td>
+								<td class="text"><a href="$actionLink"><%=(contact.getJobTitle()==null ? "" : contact.getJobTitle())%></a></td>
+								<td><a href="$actionLink"><%=(contact.getWorkPhone1()==null ? "" : contact.getWorkPhone1())%></a></td>
 								<td>
 									<a href="$actionLink2" class="ControlButton"><div class="IconHolder EditIcon"><span></span></div></a>
 								</td>
@@ -116,37 +116,37 @@
               		<% 
               			String[] selections = uicomponent.getSelections() ;
               		%>
-										<a class="MenuItem" href="<%=uicomponent.event("ContactPopup", selections[0])%>">   
+										<a class="MenuItem" href="<%=uicomponent.event("EditContact", "id")%>">   
 	                    <div class="ItemIcon EditIcon">
 	                      <%=selections[0]%>
 	                    </div>
                     </a>
-                    <a class="MenuItem" href="<%=uicomponent.event("ContactPopup", selections[1])%>">   
+                    <a class="MenuItem" href="<%=uicomponent.event("SendEmail", "id")%>">   
 	                    <div class="ItemIcon EmailIcon">
 	                      <%=selections[1]%>
 	                    </div>
                     </a>
-                    <a class="MenuItem" href="<%=uicomponent.event("ContactPopup", selections[2])%>">   
+                    <a class="MenuItem" href="<%=uicomponent.event("InstantMessage", "id")%>">   
 	                    <div class="ItemIcon InstantMessage">
 	                      <%=selections[2]%>
 	                    </div>
                     </a>
-                    <a class="MenuItem" href="<%=uicomponent.event("ContactPopup", selections[3])%>">   
+                    <a class="MenuItem" href="<%=uicomponent.event("AddTag", "id")%>">   
 	                    <div class="ItemIcon BlueTag">
 	                      <%=selections[3]%>
 	                    </div>
                     </a>
-                    <a class="MenuItem" href="<%=uicomponent.event("ContactPopup", selections[4])%>">   
+                    <a class="MenuItem" href="<%=uicomponent.event("MoveContact", "id")%>">   
 	                    <div class="ItemIcon MoveContactIcon">
 	                      <%=selections[4]%>
 	                    </div>
                     </a>
-                    <a class="MenuItem" href="<%=uicomponent.event("ContactPopup", selections[5])%>">   
+                    <a class="MenuItem" href="<%=uicomponent.event("DeleteContacts", "id")%>">   
 	                    <div class="ItemIcon DeleteContactIcon">
 	                      <%=selections[5]%>
 	                    </div> 
                     </a>
-                    <a class="MenuItem" href="<%=uicomponent.event("ContactPopup", selections[6])%>">   
+                    <a class="MenuItem" href="<%=uicomponent.event("PrintContact", "id")%>">   
 	                    <div class="ItemIcon PrintIcon">
 	                      <%=selections[6]%>
 	                    </div>
@@ -179,31 +179,30 @@
 		  <div class="LeftVCardsContent">
 		  	<div class="VCardContent SelectedVCard">
 			  	<div class="TitleVCards">
-				  	<div class="StateIcon OnlineIcon"><%=contact.getFullName()%></div>
+				  	<div class="StateIcon OnlineIcon"><%=(contact.getFullName()==null ? "" : contact.getFullName())%></div>
 			  		<div class="TagIcon RedTag"><span></span></div>
 			  		<div style="clear: both;"><span></span></div>
 			  	</div>
 			  	<div class="ContainerVCards">
 			  		<img src="/contact/skin/DefaultSkin/webui/background/Img1.gif" class="AvatasIcon"/>
 			  		<div class="WorkContainerVCards">
-			  		  <div class="JobMember"><%=contact.getJobTitle()%></div>
+			  		  <div class="JobMember"><%=(contact.getJobTitle()==null ? "" : contact.getJobTitle())%></div>
 			  		  <div class="InformationsMember">
 			  		  	<div class="InfoMember">
 			  		  		<span class="LabelContent">Email1:</span>
-			  		  		<span class="InfoContent MailIcon"><a href="#"><%=contact.getEmailAddress()%></a></span>
+			  		  		<span class="InfoContent MailIcon"><a href="#"><%=(contact.getEmailAddress()== null ? "" : contact.getEmailAddress())%></a></span>
 			  		  	</div>
-			  		  	
 			  		  	<div class="InfoMember">
 			  		  		<span class="LabelContent">Work phone:</span>
-			  		  		<span class="LabelContent"><%=contact.getWorkPhone1()%></span>
+			  		  		<span class="LabelContent"><%=(contact.getWorkPhone1()==null ? "" : contact.getWorkPhone1())%></span>
 			  		  	</div>
 			  		  	<div class="InfoMember">
 			  		  		<span class="LabelContent">Mobile:</span>
-			  		  		<span class="LabelContent"><%=contact.getMobilePhone()%></span>
+			  		  		<span class="LabelContent"><%=(contact.getMobilePhone()==null ? "" : contact.getMobilePhone())%></span>
 			  		  	</div>
 			  		  	<div class="InfoMember">
 			  		  		<span class="LabelContent">Website:</span>
-			  		  		<span class="LabelContent"><a href="#"><%=contact.getWebPage()%></a></span>
+			  		  		<span class="LabelContent"><a href="#"><%=(contact.getWebPage()==null ? "" : contact.getWebPage())%></a></span>
 			  		  	</div>
 			  		  </div>
 			  		</div>
