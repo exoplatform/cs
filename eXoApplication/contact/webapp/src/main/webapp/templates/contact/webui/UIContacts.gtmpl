@@ -2,8 +2,7 @@
 	import org.exoplatform.contact.service.Contact;
 	def rcontext = _ctx.getRequestContext() ;  
 	rcontext.getJavascriptManager().importJavascript("eXo.contact.UIContactPortlet","/contact/javascript") ;
-	rcontext.getJavascriptManager().addJavascript("eXo.contact.ContextMenu.init({'preventDefault':false, 'preventForms':false}) ;") ;
-	rcontext.getJavascriptManager().addJavascript("eXo.contact.ContextMenu.attach('UIContactList', 'UIContactListPopuMenu') ;") ;
+	rcontext.getJavascriptManager().addJavascript("eXo.contact.UIContactPortlet.showContextMenu() ;") ;
 	uiform.begin()
 	if(uicomponent.getViewContactsList()) {
 %>
@@ -104,7 +103,7 @@
 					</table>
 					<% /*Begin Popup Menu*/ %>						
 
-  				<div class="UIRightClickPopupMenu" id="UIContactListPopuMenu">
+  				<div class="UIRightClickPopupMenu" id="UIContactListPopuMenu" eXoCallback="eXo.contact.UIContactPortlet.contactCallback">
 						  <div class="TopLeftRightClickPopupMenu" id="test">
           			<div class="TopRightRightClickPopupMenu">
             			<div class="TopCenterRightClickPopupMenu"><span></span></div>

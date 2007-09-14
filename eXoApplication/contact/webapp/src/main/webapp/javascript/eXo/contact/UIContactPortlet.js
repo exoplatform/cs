@@ -1,11 +1,59 @@
 eXo.require('eXo.calendar.UICalendarPortlet','/calendar/javascript/');
+function UIContactPortlet() {
+	
+}
+UIContactPortlet.prototype.showContextMenu = function() {
+	var ContextMenu = eXo.contact.ContextMenu ;
+	var config = {
+		'preventDefault':false, 
+		'preventForms':false
+	} ;	
+	ContextMenu.init(config) ;		
+	ContextMenu.attach('UIContactList', 'UIContactListPopuMenu') ;
+	ContextMenu.attach('ItemList', 'UIAddressBookPopupMenu') ;	
+} ;
+
+UIContactPortlet.prototype.contactCallback = function(evt) {
+	var ContextMenu = eXo.contact.ContextMenu ;
+	var _e = window.event || evt ;
+	_e.cancelBubble = true ;
+	var src = null ;
+	if (ContextMenu.IE) {
+		src = _e.srcElement;
+	} else {
+		src = _e.target;
+	}
+	var tr = eXo.core.DOMUtil.findAncestorByTagName(src, "tr") ;
+	var checkbox = eXo.core.DOMUtil.findFirstDescendantByClass(tr, "input", "checkbox") ;
+	var id = checkbox.name ;
+	eXo.calendar.UICalendarPortlet.changeAction(ContextMenu.menuElement, id) ;	
+} ;
+UIContactPortlet.prototype.addressBookCallback = function(evt) {
+	var ContextMenu = eXo.contact.ContextMenu ;
+	var _e = window.event || evt ;
+	
+	var src = null ;
+	if (ContextMenu.IE) {
+		src = _e.srcElement;
+	} else {
+		src = _e.target;
+	}
+	var a = (src.nodeName.toLowerCase() == "a") ? src : eXo.core.DOMUtil.findFirstChildByClass(src, "a", "IconHolder") ;	
+	eXo.calendar.UICalendarPortlet.changeAction(ContextMenu.menuElement, a.id) ;
+} ;
 function ContextMenu(){
 	this.menus = new Array,
 	this.attachedElement = null ;
 	this.menuElement = null ;
 	this.preventDefault = true ;
 	this.preventForms = true ;
-} 
+	this.showCallback = new Array() ;
+}
+ContextMenu.prototype.getCallback = function(menuId) {
+	var menus = document.getElementById(menuId) ;
+	var callback = menus.getAttribute("eXoCallback") ;
+	return callback ;
+} ;
 ContextMenu.prototype.init = function(conf) {
 	var ContextMenu = eXo.contact.ContextMenu ;
 	if ( document.all && document.getElementById && !window.opera ) {
@@ -41,7 +89,7 @@ ContextMenu.prototype.attach = function(classNames, menuId) {
 
 	if (typeof(classNames) == "object") {
 		for (x = 0; x < classNames.length; x++) {
-			ContextMenu.menus[classNames[x]] = menuId;
+			ContextMenu.menus[classNames[x]] = menuId ;
 		}
 	}
 } ;
@@ -117,16 +165,11 @@ ContextMenu.prototype.show = function(evt) {
 
 	if (menuElementId) {
 		ContextMenu.menuElement = document.getElementById(menuElementId) ;
-		var src = null ;
-		if (ContextMenu.IE) {
-			src = _e.srcElement;
-		} else {
-			src = _e.target;
-		}
-		var tr = eXo.core.DOMUtil.findAncestorByTagName(src, "tr") ;
-		var checkbox = eXo.core.DOMUtil.findFirstDescendantByClass(tr, "input", "checkbox") ;
-		var id = checkbox.name ;
-		eXo.calendar.UICalendarPortlet.changeAction(ContextMenu.menuElement, id) ;
+		var callback = ContextMenu.getCallback(menuElementId) ;
+		if(callback) {
+			callback = callback + "(_e)" ;
+			eval(callback) ;
+		}		
 		var top = eXo.core.Browser.findMouseYInPage(_e) ;
 		var left = eXo.core.Browser.findMouseXInPage(_e) ;
 		eXo.core.DOMUtil.listHideElements(ContextMenu.menuElement) ;
@@ -138,3 +181,4 @@ ContextMenu.prototype.show = function(evt) {
 	return ContextMenu.getReturnValue(_e) ;
 } ;
 eXo.contact.ContextMenu = new ContextMenu() ;
+eXo.contact.UIContactPortlet = new UIContactPortlet() ;
