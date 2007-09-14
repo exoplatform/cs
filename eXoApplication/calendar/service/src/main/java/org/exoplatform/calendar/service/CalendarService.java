@@ -7,6 +7,8 @@ package org.exoplatform.calendar.service;
 import java.util.List;
 import java.util.Map;
 
+import javax.jcr.Node;
+
 /**
  * Created by The eXo Platform SARL
  * Author : Hung Nguyen Quang
@@ -335,5 +337,6 @@ public interface CalendarService {
   public CalendarImportExport getCalendarImportExports(String type) ;
   public String[] getExportImportType() throws Exception ;
   public void generateRss(String username, List<String> calendarIds, RssData rssData) throws Exception ;
-  
+  public List<FeedData> getFeeds(String username) throws Exception  ;
+  public Node getRssHome(String username) throws Exception ;
 }

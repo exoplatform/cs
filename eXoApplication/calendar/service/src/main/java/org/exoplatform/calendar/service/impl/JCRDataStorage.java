@@ -27,11 +27,13 @@ import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.EventQuery;
+import org.exoplatform.calendar.service.FeedData;
 import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.service.Reminder;
 import org.exoplatform.calendar.service.RssData;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.xml.PortalContainerInfo;
 import org.exoplatform.registry.JCRRegistryService;
 import org.exoplatform.registry.ServiceRegistry;
@@ -63,13 +65,7 @@ public class JCRDataStorage implements DataStorage{
   final private static String CALENDAR_GROUPS = "groups".intern() ;
   final private static String CALENDAR_SETTING = "calendarSetting".intern() ;
   final private static String EVENT_CATEGORIES = "eventCategories".intern() ;
-  static private String JCR_CONTENT = "jcr:content".intern() ;
-  static private String JCR_DATA = "jcr:data".intern() ;
-  static private String JCR_MIMETYPE = "jcr:mimeType".intern() ;
-  static private String JCR_LASTMODIFIED = "jcr:lastModified".intern() ;
   static private String NT_UNSTRUCTURED = "nt:unstructured".intern() ;
-  static private String NT_FILE = "nt:file".intern() ;
-  static private String NT_RESOURCE = "nt:resource".intern() ;
   
   private RepositoryService  repositoryService_ ; 
   private JCRRegistryService jcrRegistryService_ ;
@@ -108,7 +104,7 @@ public class JCRDataStorage implements DataStorage{
     return calendarServiceHome.addNode(CALENDARS, NT_UNSTRUCTURED) ;
   }
   
-  private Node getRssHome(String username) throws Exception {
+  public Node getRssHome(String username) throws Exception {
     Node calendarServiceHome = getCalendarServiceHome(username) ;
     if(calendarServiceHome.hasNode(FEED)) return calendarServiceHome.getNode(FEED) ;
     return calendarServiceHome.addNode(FEED, NT_UNSTRUCTURED) ;
@@ -734,6 +730,27 @@ public class JCRDataStorage implements DataStorage{
     return null ;
   }
   
+  public List<FeedData> getFeeds(String username) throws Exception {
+    List<FeedData> feeds = new ArrayList<FeedData>() ;
+    Node rssHome = getRssHome(username) ;
+    NodeIterator iter = rssHome.getNodes() ;
+    while(iter.hasNext()) {
+      Node feedNode = iter.nextNode() ;
+      if(feedNode.isNodeType("exo:rssData")) {
+        FeedData feed = new FeedData() ;
+        feed.setTitle(feedNode.getProperty("exo:title").getString()) ;
+        StringBuffer url = new StringBuffer(feedNode.getProperty("exo:baseUrl").getString()) ;  
+        url.append("/").append(PortalContainer.getInstance().getPortalContainerInfo().getContainerName()) ;
+        url.append("/").append(feedNode.getSession().getWorkspace().getName()) ;
+        url.append("/").append(username)  ;
+        url.append("/").append(feedNode.getName())  ;
+        feed.setUrl(url.toString()) ;
+        feeds.add(feed) ;
+      }
+    }
+    return feeds ;
+  }
+  
   public void generateRss(String username, List<String> calendarIds, RssData rssData, 
       CalendarImportExport importExport) throws Exception {
     Node rssHomeNode = getRssHome(username) ;
@@ -759,18 +776,17 @@ public class JCRDataStorage implements DataStorage{
         ids.add(calendarId) ;
         OutputStream out = importExport.exportCalendar(username, ids) ;
         ByteArrayInputStream is = new ByteArrayInputStream(out.toString().getBytes()) ;
-        String path = null ;
-        if(is.available() > 0) {
-          if(iCalHome.hasNode(calendarId + ".ics")){
-            iCalHome.getNode(calendarId + ".ics").setProperty("exo:data", is) ;
-            path = iCalHome.getNode(calendarId + ".ics").getPath() ;
-          }else {
-            Node ical = iCalHome.addNode(calendarId + ".ics", "exo:iCalData") ;
-            ical.setProperty("exo:data", is) ;
-            path = ical.getPath() ;
-          }
-        }        
-        String url = getEntryUrl(portalName, rssHomeNode.getSession().getWorkspace().getName(), path, rssData.getUrl()) ;
+        
+        if(iCalHome.hasNode(calendarId + ".ics")){
+          iCalHome.getNode(calendarId + ".ics").setProperty("exo:data", is) ;          
+        }else {
+          Node ical = iCalHome.addNode(calendarId + ".ics", "exo:iCalData") ;
+          ical.setProperty("exo:data", is) ;
+        }
+        StringBuffer path = new StringBuffer("/") ;
+        path.append(iCalHome.getName()).append("/").append(iCalHome.getNode(calendarId + ".ics").getName());        
+        String url = getEntryUrl(portalName, rssHomeNode.getSession().getWorkspace().getName(), 
+            username, path.toString(), rssData.getUrl()) ;
         Calendar exoCal = getUserCalendar(username, calendarId) ;
         entry = new SyndEntryImpl();
         entry.setTitle(exoCal.getName());                
@@ -803,9 +819,12 @@ public class JCRDataStorage implements DataStorage{
     rss.setProperty("exo:content", new ByteArrayInputStream(feedXML.getBytes()));
   }
 
-  private String getEntryUrl(String portalName, String wsName, String path, String baseUrl) throws Exception{
+  private String getEntryUrl(String portalName, String wsName, String username, String path, String baseUrl) throws Exception{
     StringBuilder url = new StringBuilder(baseUrl) ;
-    url.append("/").append(portalName).append("/").append(wsName).append(path) ;           
+    url.append("/").append(portalName)
+    .append("/").append(wsName)
+    .append("/").append(username)
+    .append(path) ;
     return url.toString();
   }
 }

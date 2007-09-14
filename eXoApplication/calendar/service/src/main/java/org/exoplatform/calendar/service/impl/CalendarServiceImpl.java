@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.jcr.Node;
+
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarCategory;
 import org.exoplatform.calendar.service.CalendarImportExport;
@@ -17,6 +19,7 @@ import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.EventQuery;
+import org.exoplatform.calendar.service.FeedData;
 import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.service.RssData;
 import org.exoplatform.registry.JCRRegistryService;
@@ -156,4 +159,11 @@ public class CalendarServiceImpl implements CalendarService{
     storage_.generateRss(username, calendarIds, rssData, calendarImportExport_.get(ICALENDAR)) ;
   }
 	
+  public List<FeedData> getFeeds(String username) throws Exception {
+    return storage_.getFeeds(username) ;
+  }
+  
+  public Node getRssHome(String username) throws Exception {
+    return storage_.getRssHome(username) ;
+  }
 }
