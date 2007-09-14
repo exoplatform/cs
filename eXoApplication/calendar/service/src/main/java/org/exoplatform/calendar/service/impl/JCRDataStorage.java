@@ -94,8 +94,13 @@ public class JCRDataStorage implements DataStorage{
     Session session = getJCRSession() ;
     if(jcrRegistryService_.getUserNode(session, username) == null)
       jcrRegistryService_.createUserHome(username, false) ;
-    jcrRegistryService_.createServiceRegistry(username, serviceRegistry, false) ;    
-    return jcrRegistryService_.getServiceRegistryNode(session, username, serviceRegistry.getName()) ;
+    jcrRegistryService_.createServiceRegistry(username, serviceRegistry, false) ;
+    Node calServiceNode = jcrRegistryService_.getServiceRegistryNode(session, username, serviceRegistry.getName()) ;
+    if(!calServiceNode.hasNode(CALENDAR_SETTING)) {
+      addCalendarSetting(calServiceNode, new CalendarSetting()) ;
+      calServiceNode.getSession().save() ;
+    }
+    return calServiceNode ;
   }
   
   private Node getCalendarHome(String username) throws Exception {
@@ -692,6 +697,11 @@ public class JCRDataStorage implements DataStorage{
   
   public void saveCalendarSetting(String username, CalendarSetting setting) throws Exception {
     Node calendarHome = getCalendarServiceHome(username) ;
+    addCalendarSetting(calendarHome, setting) ;
+    calendarHome.getSession().save() ;
+  }
+  
+  private void addCalendarSetting(Node calendarHome, CalendarSetting setting) throws Exception {
     Node settingNode ;
     if(calendarHome.hasNode(CALENDAR_SETTING)) settingNode = calendarHome.getNode(CALENDAR_SETTING) ;
     else settingNode = calendarHome.addNode(CALENDAR_SETTING, "exo:calendarSetting") ;
@@ -701,10 +711,10 @@ public class JCRDataStorage implements DataStorage{
     settingNode.setProperty("exo:dateFormat", setting.getDateFormat()) ;
     settingNode.setProperty("exo:timeFormat", setting.getTimeFormat()) ;
     settingNode.setProperty("exo:location", setting.getLocation()) ;
-    settingNode.setProperty("exo:defaultCalendars", setting.getDefaultCalendars()) ;
-    calendarHome.getSession().save() ;
+    settingNode.setProperty("exo:baseURL", setting.getBaseURL()) ;
+    settingNode.setProperty("exo:defaultPrivateCalendars", setting.getDefaultPrivateCalendars()) ;
+    settingNode.setProperty("exo:defaultPublicCalendars", setting.getDefaultPublicCalendars()) ;
   }
-  
   public CalendarSetting getCalendarSetting(String username) throws Exception{
     Node calendarHome = getCalendarServiceHome(username) ;
     if(calendarHome.hasNode(CALENDAR_SETTING)){
@@ -723,7 +733,7 @@ public class JCRDataStorage implements DataStorage{
         for(int i = 0; i < values.length; i++) {
           calendars[i] = values[i].getString() ;
         }
-        calendarSetting.setDefaultCalendars(calendars) ;
+        calendarSetting.setDefaultPrivateCalendars(calendars) ;
       }
       return calendarSetting ;
     }

@@ -37,7 +37,7 @@
 		                      Generate RSS
 		                    </div>
 		                   </a>
-		                   <a class="MenuItem" href="#">   
+		                   <a class="MenuItem" href="<%=uicomponent.event("CalendarSetting")%>">   
 		                    <div class="ItemIcon SettingCalendarIcon">
 		                      Calendar setting
 		                    </div>

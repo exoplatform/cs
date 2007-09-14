@@ -36,7 +36,20 @@ public class CalendarSetting {
   private String dateFormat ;
   private String timeFormat ;
   private String location ;
-  private String[] defaultCalendars ;
+  private String baseURL ;
+  private String[] defaultPrivateCalendars ;
+  private String[] defaultPublicCalendars ;
+  
+  public CalendarSetting() {
+    viewType = DAY_VIEW ;
+    timeInterval = 5 ;
+    weekStartOn = MONDAY ;
+    dateFormat = "dd/MM/yyyy" ;
+    timeFormat = " HH:mm:ss" ;
+    baseURL = "http://localhost:8080/calendar/iCalRss" ;
+    defaultPrivateCalendars = new String[]{} ;
+    defaultPublicCalendars = new String[]{} ;
+  }
   
   public void setViewType(String viewType) { this.viewType = viewType ; }
   public String getViewType() { return viewType ; }
@@ -56,8 +69,13 @@ public class CalendarSetting {
   public void setLocation(String location) { this.location = location ; }
   public String getLocation() { return location ; }
   
-  public void setDefaultCalendars(String[] defaultCalendars) { this.defaultCalendars = defaultCalendars ; }
-  public String[] getDefaultCalendars() { return defaultCalendars ; }
+  public void setBaseURL(String url) { this.baseURL = url ; }
+  public String getBaseURL() { return baseURL ; }
   
+  public void setDefaultPrivateCalendars(String[] defaultCalendars) { this.defaultPrivateCalendars = defaultCalendars ; }
+  public String[] getDefaultPrivateCalendars() { return defaultPrivateCalendars ; }
   
+  public void setDefaultPublicCalendars(String[] defaultCalendars) { this.defaultPublicCalendars = defaultCalendars ; }
+  public String[] getDefaultPublicCalendars() { return defaultPublicCalendars ; }
 }
+

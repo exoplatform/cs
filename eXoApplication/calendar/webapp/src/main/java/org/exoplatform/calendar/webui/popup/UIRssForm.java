@@ -58,6 +58,8 @@ public class UIRssForm extends UIFormTabPane implements UIPopupComponent{
     new String[]{"rss_2.0","rss_1.0","rss_0.94","rss_0.93","rss_0.92","rss_0.91","rss_0.90"} ;
   public UIRssForm() throws Exception{
     super("UIRssForm", false);
+    CalendarService calendarService = CalendarUtils.getCalendarService() ;
+    String username = Util.getPortalRequestContext().getRemoteUser() ;
     UIFormInputWithActions rssInfo = new UIFormInputWithActions("rssInfo") ;
     rssInfo.addUIFormInput(new UIFormStringInput(NAME, NAME, "eXoCalendar.rss")) ;
     rssInfo.addUIFormInput(new UIFormStringInput(TITLE, TITLE, null)) ;
@@ -66,7 +68,7 @@ public class UIRssForm extends UIFormTabPane implements UIPopupComponent{
       options.add(new SelectItemOption<String>(vs, vs)) ;
     }
     rssInfo.addUIFormInput(new UIFormSelectBox(VERSION, VERSION, options)) ;
-    rssInfo.addUIFormInput(new UIFormStringInput(URL, URL, "http://localhost:8080/calendar/iCalRss")) ;
+    rssInfo.addUIFormInput(new UIFormStringInput(URL, URL, calendarService.getCalendarSetting(username).getBaseURL())) ;
     rssInfo.addUIFormInput(new UIFormTextAreaInput(DESCRIPTION, DESCRIPTION, "This RSS provided by eXo Platform opensource company")) ;
     rssInfo.addUIFormInput(new UIFormStringInput(COPYRIGHT, COPYRIGHT, "Copyright by 2000-2005 eXo Platform SARL")) ;
     rssInfo.addUIFormInput(new UIFormStringInput(LINK, LINK, "www.exoplatform.org")) ;    
@@ -74,8 +76,8 @@ public class UIRssForm extends UIFormTabPane implements UIPopupComponent{
     rssInfo.setRendered(true) ;
     addUIFormInput(rssInfo) ;
     UIFormInputWithActions rssCalendars = new UIFormInputWithActions("rssCalendars") ;
-    CalendarService calendarService = CalendarUtils.getCalendarService() ;
-    List<Calendar> calendars = calendarService.getUserCalendars(Util.getPortalRequestContext().getRemoteUser()) ;
+    
+    List<Calendar> calendars = calendarService.getUserCalendars(username) ;
     for(Calendar calendar : calendars) {
       rssCalendars.addUIFormInput(new UIFormCheckBoxInput<Boolean>(calendar.getName(), calendar.getId(), true)) ;
     }
@@ -118,12 +120,17 @@ public class UIRssForm extends UIFormTabPane implements UIPopupComponent{
       rssData.setDescription(uiForm.getUIStringInput(uiForm.DESCRIPTION).getValue()) ;
       rssData.setCopyright(uiForm.getUIStringInput(uiForm.COPYRIGHT).getValue()) ;
       rssData.setLink(uiForm.getUIStringInput(uiForm.LINK).getValue()) ;
-      rssData.setTitle(uiForm.getUIStringInput(uiForm.TITLE).getValue()) ;
+      String title = uiForm.getUIStringInput(uiForm.TITLE).getValue() ;
+      rssData.setTitle(title) ;
       rssData.setVersion(uiForm.getUIFormSelectBox(uiForm.VERSION).getValue()) ;
       rssData.setPubDate(uiForm.getUIFormDateTimeInput(uiForm.PUBLIC_DATE).getCalendar().getTime()) ;
       calendarService.generateRss(Util.getPortalRequestContext().getRemoteUser(), calendarIds, rssData) ;
       UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
-      calendarPortlet.cancelAction() ;      
+      calendarPortlet.cancelAction() ;  
+      Object[] object = new Object[]{title} ;
+      uiApp.addMessage(new ApplicationMessage("UIRssForm.msg.feed-has-been-generated", object)) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+      return ;
     }
   }
   

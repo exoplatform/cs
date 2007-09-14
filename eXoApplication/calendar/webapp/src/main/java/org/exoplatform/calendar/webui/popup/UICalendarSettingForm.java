@@ -51,6 +51,7 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
   final private static String DATE_FORMAT = "dateFormat".intern() ;
   final private static String TIME_FORMAT = "timeFormat".intern() ;
   final private static String LOCATION = "location".intern() ;
+  final private static String BASE_URL = "baseURL".intern() ;
   final private static String DEFAULT_CALENDARS = "defaultCalendars".intern() ;
   
   private List<Calendar> calendars_ ;
@@ -76,7 +77,7 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
     int i = 5 ;
     while(i < 121) {
       timeInterval.add(new SelectItemOption<String>(i + " minutes", String.valueOf(i))) ;
-      i = i + 5 ;
+      i += 5;
     }
     setting.addUIFormInput(new UIFormSelectBox(TIME_INTERVAL, TIME_INTERVAL, timeInterval)) ;
     
@@ -91,25 +92,25 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
     setting.addUIFormInput(new UIFormSelectBox(WEEK_START_ON, WEEK_START_ON, weekStartOn)) ;
     
     List<SelectItemOption<String>> dateFormat = new ArrayList<SelectItemOption<String>>() ;
-    dateFormat.add(new SelectItemOption<String>("dd/mm/yyyy", "dd/mm/yyyy")) ;
-    dateFormat.add(new SelectItemOption<String>("dd-mm-yyyy", "dd-mm-yyyy")) ;
-    dateFormat.add(new SelectItemOption<String>("yy/mm/dd", "yy/mm/dd")) ;
+    dateFormat.add(new SelectItemOption<String>("dd/mm/yyyy", "dd/MM/yyyy")) ;
+    dateFormat.add(new SelectItemOption<String>("dd-mm-yyyy", "dd-MM-yyyy")) ;
+    dateFormat.add(new SelectItemOption<String>("mm/dd/yyyy", "mm/dd/yyyy")) ;
+    dateFormat.add(new SelectItemOption<String>("mm-dd-yyyy", "mm-dd-yyyy")) ;
     setting.addUIFormInput(new UIFormSelectBox(DATE_FORMAT, DATE_FORMAT, dateFormat)) ;
     
     List<SelectItemOption<String>> timeFormat = new ArrayList<SelectItemOption<String>>() ;
-    timeFormat.add(new SelectItemOption<String>("24 Hour", "24")) ;
-    timeFormat.add(new SelectItemOption<String>("AM/PM", "12")) ;
+    timeFormat.add(new SelectItemOption<String>("24 Hours", " HH:mm:ss")) ;
+    timeFormat.add(new SelectItemOption<String>("AM/PM", "  HH:mm aaa")) ;
     
     setting.addUIFormInput(new UIFormSelectBox(TIME_FORMAT, TIME_FORMAT, timeFormat)) ;
     setting.addUIFormInput(new UIFormStringInput(LOCATION, LOCATION, null)) ;
+    setting.addUIFormInput(new UIFormStringInput(BASE_URL, BASE_URL, null)) ;
     addUIFormInput(setting) ;
-    
-    UIFormInputWithActions defaultCalendars = new UIFormInputWithActions("defaultCalendars") ;
-    
+    UIFormInputWithActions defaultCalendars = new UIFormInputWithActions("defaultCalendars") ;    
     calendars_ = cservice.getUserCalendars(username) ;
     List<String> settedCalendars = new ArrayList<String>() ;
-    if(calendarSetting != null && calendarSetting.getDefaultCalendars() != null) {
-      settedCalendars = new ArrayList<String>(Arrays.asList(calendarSetting.getDefaultCalendars())) ;
+    if(calendarSetting != null && calendarSetting.getDefaultPrivateCalendars() != null) {
+      settedCalendars = new ArrayList<String>(Arrays.asList(calendarSetting.getDefaultPrivateCalendars())) ;
     }
     for(Calendar calendar : calendars_) {
       UIFormCheckBoxInput checkBox = new UIFormCheckBoxInput(calendar.getName(), calendar.getId(), false) ;
@@ -128,17 +129,12 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
       setting.getUIFormSelectBox(DATE_FORMAT).setValue(calendarSetting.getDateFormat()) ;
       setting.getUIFormSelectBox(TIME_FORMAT).setValue(calendarSetting.getTimeFormat()) ;
       setting.getUIStringInput(LOCATION).setValue(calendarSetting.getLocation()) ;      
+      setting.getUIStringInput(BASE_URL).setValue(calendarSetting.getBaseURL()) ;
     }
   }
   
-  public void activate() throws Exception {
-    // TODO Auto-generated method stub
-    
-  }
-  public void deActivate() throws Exception {
-    // TODO Auto-generated method stub
-    
-  }
+  public void activate() throws Exception {}
+  public void deActivate() throws Exception {}
   
   static  public class SaveActionListener extends EventListener<UICalendarSettingForm> {
     public void execute(Event<UICalendarSettingForm> event) throws Exception {
@@ -159,7 +155,7 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
           }
         }
       } 
-      if(defaultCalendars.size() > 0)calendarSetting.setDefaultCalendars(defaultCalendars.toArray(new String[] {})) ;
+      if(defaultCalendars.size() > 0)calendarSetting.setDefaultPrivateCalendars(defaultCalendars.toArray(new String[] {})) ;
       CalendarService cservice = CalendarUtils.getCalendarService() ;
       cservice.saveCalendarSetting(Util.getPortalRequestContext().getRemoteUser(), calendarSetting) ;
       UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
