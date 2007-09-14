@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 
+import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.EventCategory;
@@ -21,7 +22,6 @@ import org.exoplatform.calendar.webui.popup.UIEventForm;
 import org.exoplatform.calendar.webui.popup.UIPopupAction;
 import org.exoplatform.calendar.webui.popup.UIPopupContainer;
 
-import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.core.UIApplication;
@@ -76,7 +76,7 @@ public class UICalendarView extends UIForm {
   private Map<Integer, String> monthsMap_ = new HashMap<Integer, String>() ;
 
   public UICalendarView() throws Exception{
-    CalendarService calendarService = (CalendarService)PortalContainer.getComponent(CalendarService.class) ;
+    CalendarService calendarService = CalendarUtils.getCalendarService() ;
     List<EventCategory> eventCategories = calendarService.getEventCategories(Util.getPortalRequestContext().getRemoteUser()) ;
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     options.add(new SelectItemOption<String>("all", "")) ;
@@ -117,9 +117,10 @@ public class UICalendarView extends UIForm {
   protected  String getDayName(int day) {return daysMap_.get(day).toString() ;} ;
   
   public void update() throws Exception {
-    CalendarService calendarService = (CalendarService)PortalContainer.getComponent(CalendarService.class) ;
+    CalendarService calendarService = CalendarUtils.getCalendarService() ;
     List<EventCategory> eventCategories = calendarService.getEventCategories(Util.getPortalRequestContext().getRemoteUser()) ;
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
+    options.add(new SelectItemOption<String>("all", "")) ;
     for(EventCategory category : eventCategories) {
       options.add(new SelectItemOption<String>(category.getName(), category.getName())) ;
     }
@@ -127,7 +128,7 @@ public class UICalendarView extends UIForm {
   }
 
   public List<CalendarEvent> getList() throws Exception {
-    CalendarService calendarService = (CalendarService)PortalContainer.getComponent(CalendarService.class) ;
+    CalendarService calendarService = CalendarUtils.getCalendarService() ;
     List<CalendarEvent> events = new ArrayList<CalendarEvent>() ;
     if(privateCalendarIds.size() > 0) {
       events = calendarService.getUserEventByCalendar(Util.getPortalRequestContext().getRemoteUser(), privateCalendarIds)  ;

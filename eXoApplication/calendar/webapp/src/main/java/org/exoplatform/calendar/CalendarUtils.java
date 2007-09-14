@@ -4,6 +4,7 @@
  **************************************************************************/
 package org.exoplatform.calendar;
 
+import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.impl.GroupImpl;
@@ -41,4 +42,7 @@ public class CalendarUtils {
     return (value == null || value.trim().length() == 0) ;
   }
   
+  static public CalendarService getCalendarService() throws Exception {
+    return (CalendarService)PortalContainer.getComponent(CalendarService.class) ;
+  }
 }

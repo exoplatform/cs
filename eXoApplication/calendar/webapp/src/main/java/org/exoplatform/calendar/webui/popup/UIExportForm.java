@@ -13,11 +13,11 @@ import java.util.MissingResourceException;
 
 import net.fortuna.ical4j.model.ValidationException;
 
+import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarImportExport;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
-import org.exoplatform.calendar.webui.UICalendars;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadResource;
 import org.exoplatform.download.DownloadService;
@@ -89,7 +89,7 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
     public void execute(Event<UIExportForm> event) throws Exception {
       UIExportForm uiForm = event.getSource() ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-      CalendarService calendarService = (CalendarService)PortalContainer.getComponent(CalendarService.class) ;
+      CalendarService calendarService = CalendarUtils.getCalendarService() ;
       List<UIComponent> children = uiForm.getChildren() ;
       List<String> calendarIds = new ArrayList<String> () ;
       for(UIComponent child : children) {

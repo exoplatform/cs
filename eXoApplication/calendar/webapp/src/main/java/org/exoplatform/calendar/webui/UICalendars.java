@@ -18,12 +18,9 @@ import org.exoplatform.calendar.webui.popup.UIImportForm;
 import org.exoplatform.calendar.webui.popup.UIPopupAction;
 import org.exoplatform.calendar.webui.popup.UIPopupContainer;
 import org.exoplatform.calendar.webui.popup.UIRssForm;
-import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIComponent;
-import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -55,7 +52,7 @@ public class UICalendars extends UIForm  {
   } 
   
   private List<GroupCalendarData> getPersonalCategories() throws Exception{
-    CalendarService calendarService = (CalendarService)PortalContainer.getComponent(CalendarService.class) ;
+    CalendarService calendarService = CalendarUtils.getCalendarService() ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     List<GroupCalendarData> groupCalendars = calendarService.getCalendarCategories(username) ;
     for(GroupCalendarData group : groupCalendars) {
@@ -72,7 +69,7 @@ public class UICalendars extends UIForm  {
   private List<GroupCalendarData> getSharedGroups() throws Exception{
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     String[] groups = CalendarUtils.getUserGroups(username) ;
-    CalendarService calendarService = (CalendarService)PortalContainer.getComponent(CalendarService.class) ;
+    CalendarService calendarService = CalendarUtils.getCalendarService() ;
     List<GroupCalendarData> groupCalendars = calendarService.getGroupCalendars(groups) ;
     for(GroupCalendarData group : groupCalendars) {
       List<Calendar> calendars = group.getCalendars() ;
@@ -125,7 +122,7 @@ public class UICalendars extends UIForm  {
       UICalendarPortlet uiCalendarPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
       UIExportForm exportForm = popupAction.createUIComponent(UIExportForm.class, null, "UIExportForm") ;
-      CalendarService calendarService = (CalendarService)PortalContainer.getComponent(CalendarService.class) ;
+      CalendarService calendarService = CalendarUtils.getCalendarService();
       List<Calendar> calendars = calendarService.getUserCalendars(Util.getPortalRequestContext().getRemoteUser()) ;
       exportForm.update(calendars, selectedCalendarId, calendarService.getExportImportType()) ;
       popupAction.activate(exportForm, 600, 0) ;

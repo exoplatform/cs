@@ -16,7 +16,6 @@ import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.Reminder;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UIMonthView;
-import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.mail.Attachment;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -150,7 +149,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   }
   private List<SelectItemOption<String>> getCalendar() throws Exception {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-    CalendarService calendarService = (CalendarService)PortalContainer.getComponent(CalendarService.class) ;
+    CalendarService calendarService = CalendarUtils.getCalendarService() ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     List<Calendar> calendars = calendarService.getUserCalendars(username) ;
     for(Calendar c : calendars) {
@@ -160,7 +159,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   }
   private List<SelectItemOption<String>> getCategory() throws Exception {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-    CalendarService calendarService = (CalendarService)PortalContainer.getComponent(CalendarService.class) ;
+    CalendarService calendarService = CalendarUtils.getCalendarService() ;
     List<EventCategory> eventCategories = calendarService.getEventCategories(Util.getPortalRequestContext().getRemoteUser()) ;
     for(EventCategory category : eventCategories) {
       options.add(new SelectItemOption<String>(category.getName(), category.getName())) ;

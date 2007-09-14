@@ -8,11 +8,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
-import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -56,7 +56,7 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
   private List<Calendar> calendars_ ;
   public UICalendarSettingForm() throws Exception{
     super("UICalendarSettingForm", false) ;
-    CalendarService cservice = (CalendarService)PortalContainer.getComponent(CalendarService.class) ;
+    CalendarService cservice = CalendarUtils.getCalendarService() ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     CalendarSetting calendarSetting = cservice.getCalendarSetting(username) ;
     
@@ -160,7 +160,7 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
         }
       } 
       if(defaultCalendars.size() > 0)calendarSetting.setDefaultCalendars(defaultCalendars.toArray(new String[] {})) ;
-      CalendarService cservice = (CalendarService)PortalContainer.getComponent(CalendarService.class) ;
+      CalendarService cservice = CalendarUtils.getCalendarService() ;
       cservice.saveCalendarSetting(Util.getPortalRequestContext().getRemoteUser(), calendarSetting) ;
       UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
       calendarPortlet.cancelAction() ;

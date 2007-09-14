@@ -4,26 +4,15 @@
  **************************************************************************/
 package org.exoplatform.calendar.webui.popup;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.MissingResourceException;
 
-import net.fortuna.ical4j.model.ValidationException;
-
+import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.Calendar;
-import org.exoplatform.calendar.service.CalendarImportExport;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.RssData;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
-import org.exoplatform.calendar.webui.UICalendars;
-import org.exoplatform.container.PortalContainer;
-import org.exoplatform.download.DownloadResource;
-import org.exoplatform.download.DownloadService;
-import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -34,7 +23,6 @@ import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
-import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormDateTimeInput;
 import org.exoplatform.webui.form.UIFormInputWithActions;
@@ -86,7 +74,7 @@ public class UIRssForm extends UIFormTabPane implements UIPopupComponent{
     rssInfo.setRendered(true) ;
     addUIFormInput(rssInfo) ;
     UIFormInputWithActions rssCalendars = new UIFormInputWithActions("rssCalendars") ;
-    CalendarService calendarService = (CalendarService)PortalContainer.getComponent(CalendarService.class) ;
+    CalendarService calendarService = CalendarUtils.getCalendarService() ;
     List<Calendar> calendars = calendarService.getUserCalendars(Util.getPortalRequestContext().getRemoteUser()) ;
     for(Calendar calendar : calendars) {
       rssCalendars.addUIFormInput(new UIFormCheckBoxInput<Boolean>(calendar.getName(), calendar.getId(), true)) ;
@@ -102,7 +90,7 @@ public class UIRssForm extends UIFormTabPane implements UIPopupComponent{
     public void execute(Event<UIRssForm> event) throws Exception {
       UIRssForm uiForm = event.getSource() ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-      CalendarService calendarService = (CalendarService)PortalContainer.getComponent(CalendarService.class) ;
+      CalendarService calendarService = CalendarUtils.getCalendarService();
       UIFormInputWithActions rssCalendars = uiForm.getChildById("rssCalendars") ;
       List<UIComponent> children = rssCalendars.getChildren() ;
       List<String> calendarIds = new ArrayList<String> () ;

@@ -7,18 +7,14 @@ package org.exoplatform.calendar.webui.popup;
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarCategory;
 import org.exoplatform.calendar.service.CalendarService;
-import org.exoplatform.calendar.webui.UICalendarContainer;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
-import org.exoplatform.calendar.webui.UICalendarWorkingContainer;
 import org.exoplatform.calendar.webui.UICalendars;
-import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.util.IdGenerator;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
-import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -70,7 +66,7 @@ public class UICalendarCategoryForm extends UIForm implements UIPopupComponent{
         return ;
       }
       String description = uiForm.getUIFormTextAreaInput(DESCRIPTION).getValue() ;
-      CalendarService calendarService = (CalendarService)PortalContainer.getComponent(CalendarService.class) ;
+      CalendarService calendarService = CalendarUtils.getCalendarService() ;
       CalendarCategory category = new CalendarCategory() ;
       category.setId("category" + IdGenerator.generate()) ;
       category.setName(categoryName) ;

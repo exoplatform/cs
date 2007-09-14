@@ -4,16 +4,13 @@
  **************************************************************************/
 package org.exoplatform.calendar.webui.popup;
 
+import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarView;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
-import org.exoplatform.calendar.webui.UICalendarWorkingContainer;
-import org.exoplatform.calendar.webui.UIListView;
-import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
@@ -60,8 +57,7 @@ public class UIEventCategoryForm extends UIForm implements UIPopupComponent{
   static  public class SaveActionListener extends EventListener<UIEventCategoryForm> {
     public void execute(Event<UIEventCategoryForm> event) throws Exception {
       UIEventCategoryForm uiForm = event.getSource() ;
-      CalendarService calendarService = 
-        (CalendarService)PortalContainer.getComponent(CalendarService.class) ;
+      CalendarService calendarService = CalendarUtils.getCalendarService();
       String name = uiForm.getUIStringInput(UIEventCategoryForm.EVENT_CATEGORY_NAME).getValue() ;
       String description = uiForm.getUIStringInput(UIEventCategoryForm.DESCRIPTION).getValue() ;
       String username = Util.getPortalRequestContext().getRemoteUser() ;

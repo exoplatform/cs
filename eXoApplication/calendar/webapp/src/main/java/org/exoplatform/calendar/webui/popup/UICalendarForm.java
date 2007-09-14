@@ -17,7 +17,6 @@ import org.exoplatform.calendar.webui.UICalendarContainer;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarWorkingContainer;
 import org.exoplatform.calendar.webui.UICalendars;
-import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -125,7 +124,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
   }
   private  List<SelectItemOption<String>> getCategory() throws Exception {
     String username = Util.getPortalRequestContext().getRemoteUser() ;
-    CalendarService calendarService = (CalendarService)PortalContainer.getComponent(CalendarService.class) ;
+    CalendarService calendarService = CalendarUtils.getCalendarService() ;
     List<CalendarCategory> categories = calendarService.getCategories(username) ;
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     for(CalendarCategory category : categories) {
@@ -212,7 +211,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
     public void execute(Event<UICalendarForm> event) throws Exception {
       UICalendarForm uiForm = event.getSource() ;
       String username = Util.getPortalRequestContext().getRemoteUser() ;
-      CalendarService calendarService = (CalendarService)PortalContainer.getComponent(CalendarService.class) ;
+      CalendarService calendarService = CalendarUtils.getCalendarService() ;
       Calendar calendar = new Calendar() ;
       calendar.setName(uiForm.getUIStringInput(DISPLAY_NAME).getValue()) ;
       calendar.setDescription(uiForm.getUIFormTextAreaInput(DESCRIPTION).getValue()) ;
