@@ -85,6 +85,8 @@ public class Utils {
   public static final String JCR_DATA = "jcr:data".intern() ;
   
   public static final String MIMETYPE_TEXTPLAIN = "text/plain".intern() ;
+  public static final String ATTACHMENT = "ATTACHMENT".intern();
+  public static final String INLINE = "INLINE".intern();
   
   public static final String POP3 = "pop3".intern() ;
   public static final String IMAP = "imap".intern() ;

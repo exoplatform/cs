@@ -72,6 +72,8 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
   final static public String ACT_BCC = "ToBCC" ;
   final static public String ACT_REMOVE = "remove" ;
   List<Attachment> attachments_ = new ArrayList<Attachment>() ;
+  Message message_ = null;
+  String typeSend_ = "Send" ; // send a new, draft, reply, forward,
 
   public UIComposeForm() throws Exception {
     UIFormInputWithActions inputSet = new UIFormInputWithActions(FIELD_FROM_INPUT); 
@@ -204,8 +206,9 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
 
   }
   
-  private Message createMessage() throws Exception {
+  private Message getNewMessage(Message oldMessage) throws Exception {
     Message message = new Message();
+    if (oldMessage != null) { message = oldMessage; }
     UIMailPortlet uiPortlet = getAncestorOfType(UIMailPortlet.class);
     UISelectAccount uiSelectAcc = uiPortlet.findFirstComponentOfType(UISelectAccount.class) ;
     String accountId = uiSelectAcc.getSelectedValue() ;
@@ -249,7 +252,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
       String usename = uiPortlet.getCurrentUser() ;
       MailService mailSvr = uiForm.getApplicationComponent(MailService.class) ;
       UIPopupAction uiChildPopup = uiForm.getAncestorOfType(UIPopupAction.class) ;
-      Message message = uiForm.createMessage() ;      
+      Message message = uiForm.getNewMessage(null) ;      
       try {
         mailSvr.sendMessage(usename, message) ;
         uiChildPopup.deActivate() ;
@@ -278,7 +281,30 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
   static  public class SaveDraftActionListener extends EventListener<UIComposeForm> {
     public void execute(Event<UIComposeForm> event) throws Exception {
       UIComposeForm uiForm = event.getSource() ;
-      System.out.println(" ==========> SaveDraftActionListener") ;
+      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+      UIMailPortlet uiPortlet = uiForm.getAncestorOfType(UIMailPortlet.class) ;
+      UISelectAccount uiSelectAcc = uiPortlet.findFirstComponentOfType(UISelectAccount.class) ;
+      UINavigationContainer uiNavigationContainer = uiPortlet.findFirstComponentOfType(UINavigationContainer.class) ;
+      UIFolderContainer uiFolderContainer = uiNavigationContainer.getChild(UIFolderContainer.class) ;
+      String accountId = uiSelectAcc.getSelectedValue() ;
+      String usename = uiPortlet.getCurrentUser() ;
+      MailService mailSvr = uiForm.getApplicationComponent(MailService.class) ;
+      UIPopupAction uiChildPopup = uiForm.getAncestorOfType(UIPopupAction.class) ;
+      Message message = uiForm.getNewMessage(null) ;   
+      
+      try {
+        message.setFolders(new String[]{UIAccountCreation.FD_DRAFTS}) ;
+        mailSvr.saveMessage(usename, accountId, message, true) ;
+      }
+      catch (Exception e) {
+        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.save-draft-error", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        e.printStackTrace() ;
+        uiChildPopup.deActivate() ;
+      }
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer) ;
+      uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.save-mail-draff", null)) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
     }
   }
   static  public class DiscardChangeActionListener extends EventListener<UIComposeForm> {

@@ -282,8 +282,8 @@ public class JCRDataStorage implements DataStorage{
       nodeMsg.setProperty(Utils.EXO_FROM, setAddress(message.getFrom()));
       nodeMsg.setProperty(Utils.EXO_TO, setAddress(message.getMessageTo()));
       nodeMsg.setProperty(Utils.EXO_SUBJECT, message.getSubject());
-      nodeMsg.setProperty(Utils.EXO_CC, message.getMessageCc());
-      nodeMsg.setProperty(Utils.EXO_BCC, message.getMessageBcc());
+      nodeMsg.setProperty(Utils.EXO_CC, setAddress(message.getMessageCc()));
+      nodeMsg.setProperty(Utils.EXO_BCC, setAddress(message.getMessageBcc()));
       nodeMsg.setProperty(Utils.EXO_BODY, message.getMessageBody());
       nodeMsg.setProperty(Utils.EXO_REPLYTO, setAddress(message.getReplyTo()));
       nodeMsg.setProperty(Utils.EXO_SIZE, message.getSize());
@@ -318,21 +318,23 @@ public class JCRDataStorage implements DataStorage{
   
   public String setAddress(String strAddress) throws Exception {
     String str = "";
-    InternetAddress[] internetAddress = InternetAddress.parse(strAddress);
-    int i = 0;
-    if(internetAddress != null && internetAddress.length > 0) {
-      while (i < internetAddress.length) {
-        String personal = internetAddress[i].getPersonal();
-        String address = internetAddress[i].getAddress();
-        String sender = address + ";" + address;
-        if (personal != null && personal != "") 
-          sender = personal + " ;" + address ;
-        if(str.length() < 1)  {
-          str = sender ;              
-        }else {
-          str += "," + sender ;
-        }           
-        i++ ;
+    if (strAddress != null && strAddress.trim() != ""){
+      InternetAddress[] internetAddress = InternetAddress.parse(strAddress);
+      int i = 0;
+      if(internetAddress != null && internetAddress.length > 0) {
+        while (i < internetAddress.length) {
+          String personal = internetAddress[i].getPersonal();
+          String address = internetAddress[i].getAddress();
+          String sender = address + ";" + address;
+          if (personal != null && personal != "") 
+            sender = personal + " ;" + address ;
+          if(str.length() < 1)  {
+            str = sender ;              
+          }else {
+            str += "," + sender ;
+          }           
+          i++ ;
+        }
       }
     }
     return str ;

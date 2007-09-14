@@ -153,7 +153,7 @@ public class MailServiceImpl implements MailService{
     
     InternetAddress addressFrom = new InternetAddress(message.getFrom());
     msg.setFrom(addressFrom);
-    InternetAddress[] addressTo = InternetAddress.parse(message.getMessageTo()) ;
+    msg.setRecipients(javax.mail.Message.RecipientType.TO, InternetAddress.parse(message.getMessageTo()));
     if(message.getMessageCc() != null) {
       msg.setRecipients(javax.mail.Message.RecipientType.CC, InternetAddress.parse(message.getMessageCc(), true));
     }
@@ -165,6 +165,7 @@ public class MailServiceImpl implements MailService{
    
     MimeBodyPart mimeBodyPart1 = new MimeBodyPart();
     mimeBodyPart1.setText(message.getMessageBody(), "us-ascii");
+    mimeBodyPart1.setDisposition(Utils.INLINE);
     
     Multipart multiPart = new MimeMultipart();
     multiPart.addBodyPart(mimeBodyPart1);
@@ -178,14 +179,14 @@ public class MailServiceImpl implements MailService{
       ByteArrayDataSource byteArrayDataSource = new ByteArrayDataSource(is, att.getMimeType());
       mimeBodyPart.setDataHandler(new DataHandler(byteArrayDataSource));
       
-      mimeBodyPart.setDisposition("ATTACHMENT");
+      mimeBodyPart.setDisposition(Utils.ATTACHMENT);
       mimeBodyPart.setFileName(attach.getName());
       multiPart.addBodyPart(mimeBodyPart);
     }        
     msg.setContent(multiPart);
     
     msg.saveChanges();
-    transport.sendMessage(msg, addressTo);
+    transport.sendMessage(msg, msg.getAllRecipients());
   }
   
   public void sendMessage(Message message) throws Exception {
