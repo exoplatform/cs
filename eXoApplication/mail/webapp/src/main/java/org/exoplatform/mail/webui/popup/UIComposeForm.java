@@ -298,7 +298,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
       MailService mailSvr = uiForm.getApplicationComponent(MailService.class) ;
       UIPopupAction uiChildPopup = uiForm.getAncestorOfType(UIPopupAction.class) ;
       Message message = uiForm.getNewMessage(null) ;   
-      
+      message.isUnread();
       try {
         message.setFolders(new String[]{Utils.FD_DRAFTS}) ;
         mailSvr.saveMessage(usename, accountId, message, true) ;
@@ -312,6 +312,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
       event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer) ;
       uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.save-mail-draff", null)) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+      uiPortlet.cancelAction();
     }
   }
   static  public class DiscardChangeActionListener extends EventListener<UIComposeForm> {

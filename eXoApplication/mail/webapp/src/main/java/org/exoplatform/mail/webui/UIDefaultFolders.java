@@ -38,8 +38,7 @@ public class UIDefaultFolders extends UIContainer {
   
   public UIDefaultFolders() throws Exception {}
 
-  public String getSelectedFolder(){
-    return currentFolder_ ;}
+  public String getSelectedFolder(){ return currentFolder_ ; }
   protected void setSelectedFolder(String folderName) { currentFolder_ = folderName ;}
   
   public List<Folder> getFolders() throws Exception{
