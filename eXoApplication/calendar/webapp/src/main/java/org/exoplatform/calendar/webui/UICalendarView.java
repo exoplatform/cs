@@ -65,15 +65,11 @@ public class UICalendarView extends UIForm {
   final public static String SUNDAY = "Sunday".intern() ;
   final public static String[] DAYS = {SUNDAY, MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY} ;
 
-  final public static int DAY_BEGIN = 1 ;
-  final public static int MONTH_BEGIN = 0 ;
-  final public static int MONTH_END = 11 ;
-
   final public static String ACT_NEXT = "MoveNext".intern() ;
 
   final public static String ACT_PREVIOUS  = "MovePrevious".intern() ;
 
-  public Calendar calendar_ = Calendar.getInstance() ;
+  public Calendar calendar_ = GregorianCalendar.getInstance() ;
 
   protected boolean isShowEvent = true;
 
@@ -93,7 +89,7 @@ public class UICalendarView extends UIForm {
       options.add(new SelectItemOption<String>(category.getName(), category.getName())) ;
     }
     addUIFormInput(new UIFormSelectBox(EVENT_CATEGORIES, EVENT_CATEGORIES, options)) ;
-
+    calendar_.setLenient(false) ;
     int i = 0 ; 
     for(String month : MONTHS) {
       monthsMap_.put(i, month) ;
@@ -105,18 +101,21 @@ public class UICalendarView extends UIForm {
       j++ ;
     }
   }
-  protected String[] getMonthsName() { return MONTHS ;}
-  protected String[] getDaysName() {return DAYS ;}
-
+  protected String[] getMonthsName() { 
+    return MONTHS ;
+  }
+  protected String[] getDaysName() { 
+    return DAYS ;
+  }
   protected int getDaysInMonth() {
-    int month = getCurrentMonth() ;
-    int year =  getCurrentYear();
-    Integer[] days = {31, ((!((year % 4 ) == 0) && ( (year % 100  == 0) || ( year % 400 != 0) ))? 29:28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31} ;
-    return days[month] ;
+    Calendar cal = GregorianCalendar.getInstance() ;
+    cal.set(getCurrentYear(), getCurrentMonth(), getCurrentDay()) ;
+    return cal.getActualMaximum(Calendar.DAY_OF_MONTH) ;
   }
   protected int getDaysInMonth(int month, int year) {
-    Integer[] days = {31, ((year % 4 == 0)? 29:28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31} ;
-    return days[month] ;
+    Calendar cal = GregorianCalendar.getInstance() ;
+    cal.set(year, month, getCurrentDay()) ;
+    return cal.getActualMaximum(Calendar.DAY_OF_MONTH) ;
   }
   protected int getDayOfWeek(int year, int month, int day) {
     GregorianCalendar gc = new GregorianCalendar(year, month, day) ;
@@ -161,50 +160,6 @@ public class UICalendarView extends UIForm {
     setCurrentDay(month) ;
     setCurrentDay(year) ;
   }
-
-  protected void DayNext() {
-    if(getCurrentDay() <= getDaysInMonth()) {
-      setCurrentDay(getCurrentDay() + 1) ;
-    } else { 
-      MonthNext() ;
-    }
-  }
-
-  protected void DayBack() {
-    if(getCurrentDay() > DAY_BEGIN) {
-      setCurrentDay(getCurrentDay() - 1) ;
-    } else {
-      MonthBack() ;
-    }
-  }
-
-  protected void MonthNext() {
-    if(getCurrentMonth() <= MONTH_END){ 
-      setCurrentMonth(getCurrentMonth() + 1) ;
-      setCurrentDay(DAY_BEGIN) ;
-    } else {
-      YearNext() ;
-    }
-  }
-  protected void MonthBack() {
-    if(getCurrentMonth() > MONTH_BEGIN) {
-      setCurrentMonth(getCurrentMonth() - 1) ;
-      setCurrentDay(getDaysInMonth(getCurrentMonth(), getCurrentYear())) ;
-    } else {
-      YearBack() ;
-    }
-  }
-  protected void YearNext() {
-    setCurrentYear(getCurrentYear() + 1) ;
-    setCurrentMonth(MONTH_BEGIN) ;
-    setCurrentDay(DAY_BEGIN) ;
-  }
-  protected void YearBack() {
-    setCurrentYear(getCurrentYear() - 1) ;
-    setCurrentMonth(MONTH_END) ;
-    setCurrentDay(getDaysInMonth(getCurrentMonth(), getCurrentYear())) ;
-  }
-
   protected boolean isToday(int day, int month, int year) {
     Calendar currentCal = Calendar.getInstance() ;
     boolean isCurrentDay = currentCal.get(Calendar.DATE) == day ;
@@ -226,6 +181,9 @@ public class UICalendarView extends UIForm {
   protected int getCurrentDay() {return calendar_.get(Calendar.DATE) ;}
   protected void setCurrentDay(int day) {calendar_.set(Calendar.DATE, day) ;}
 
+  protected int getCurrentWeek() {return calendar_.get(Calendar.WEEK_OF_YEAR) ;}
+  protected void setCurrentWeek(int week) {calendar_.set(Calendar.WEEK_OF_YEAR, week) ;}
+  
   protected int getCurrentMonth() {return calendar_.get(Calendar.MONTH) ;}
   protected void setCurrentMonth(int month) {calendar_.set(Calendar.MONTH, month) ;}
 

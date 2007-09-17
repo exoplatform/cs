@@ -18,6 +18,17 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
     template =  "app:/templates/calendar/webui/UICalendarViewContainer.gtmpl"
 )
 public class UICalendarViewContainer extends UIContainer  {
+  
+  final public static String DAY_VIEW = "UIDayView".intern() ;
+  final public static String WEEK_VIEW = "UIWeekView".intern() ;
+  final public static String MONTH_VIEW = "UIMonthView".intern() ;
+  final public static String YEAR_VIEW = "UIYearView".intern() ;
+  final public static String LIST_VIEW = "UIListView".intern() ;
+  final public static String SCHEDULE_VIEW = "UIScheduleView".intern() ;
+  
+  final public static String[] TYPES = {DAY_VIEW, WEEK_VIEW, MONTH_VIEW, YEAR_VIEW, LIST_VIEW, SCHEDULE_VIEW} ;
+  
+  
   public UICalendarViewContainer() throws Exception {
     addChild(UIMonthView.class, null, null) ;
     addChild(UIDayView.class, null, null) ;
@@ -26,6 +37,6 @@ public class UICalendarViewContainer extends UIContainer  {
     addChild(UIListView.class, null, null) ;
     addChild(UIScheduleView.class, null, null) ;
 
-    setRenderedChild(UIMonthView.class) ;
+    setRenderedChild(UIDayView.class) ;
   }  
 }

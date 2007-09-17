@@ -1,11 +1,31 @@
 <% 
 	def rcontext = _ctx.getRequestContext() ;
+  rcontext.getJavascriptManager().importJavascript('eXo.calendar.UICalendarPortlet');
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.showEvent() ;');
+	int currentDay = uicomponent.getCurrentDay() ;
+	int currentMonth = uicomponent.getCurrentMonth() ;
+	String currentMonthName = uicomponent.getMonthName(currentMonth) ;
+	int currentYear = uicomponent.getCurrentYear() ;
+	String currentDayName = uicomponent.getDayName(uicomponent.getDayOfWeek(currentYear, currentMonth, currentDay)) ;
+		
 	uiform.begin()
  	_ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");
+ 	String linkDayNext = uicomponent.event(uicomponent.ACT_NEXT) ;
+ 	String linkDayPrevious = uicomponent.event(uicomponent.ACT_PREVIOUS) ;
 %>
 	<div class="UIDayView">
-		<div class="TitleBar">Tuesday, June 12, 2007</div>
+		<div class="TitleBar">		
+			<div  style="width: 300px;border:solid 1px red; margin:auto;">		
+				<a href="$linkDayNext" class="RightControlButton">
+					<div class="NextIcon" title="Next day"><span></span></div>
+				</a>
+				<div class="Title RightControlButton">$currentDayName, $currentMonthName, $currentDay,  $currentYear</div>
+				<a href="$linkDayPrevious" class="RightControlButton">
+					<div class="BackIcon" title="Previous day"><span></span></div>
+				</a>
+				<div style="clear:right;"></div>
+			</div>
+		</div>
 		<div class="EventAllDay">
 			<div class="EventAllDayColor2">
 				<div class="EventAllDayDescription">Events happen all day go here</div>

@@ -5,6 +5,7 @@
 package org.exoplatform.calendar;
 
 import org.exoplatform.calendar.service.CalendarService;
+import org.exoplatform.calendar.webui.UIMonthView;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.impl.GroupImpl;
@@ -38,7 +39,7 @@ public class CalendarUtils {
     }
     return groups ;
   }
-  public static boolean isEmpty(String value) {
+  public boolean isEmpty(String value) {
     return (value == null || value.trim().length() == 0) ;
   }
   

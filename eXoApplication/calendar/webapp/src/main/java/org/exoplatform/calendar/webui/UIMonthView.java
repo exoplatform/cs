@@ -21,6 +21,8 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
+import org.exoplatform.webui.event.Event;
+import org.exoplatform.webui.event.EventListener;
 import org.jgroups.ExitEvent;
 
 /**
@@ -37,17 +39,13 @@ import org.jgroups.ExitEvent;
       @EventConfig(listeners = UICalendarView.AddEventActionListener.class),      
       @EventConfig(listeners = UICalendarView.DeleteEventActionListener.class),
       @EventConfig(listeners = UICalendarView.ChangeCategoryActionListener.class), 
+      @EventConfig(listeners = UIMonthView.MoveNextActionListener.class), 
+      @EventConfig(listeners = UIMonthView.MovePreviousActionListener.class),
       @EventConfig(listeners = UICalendarView.AddCategoryActionListener.class)
     }
 
 )
 public class UIMonthView extends UICalendarView {
-  
-  public java.util.Calendar calendar_ = java.util.Calendar.getInstance() ;
-
-  private int currentDay_ = 0 ;
-  private int currentMonth_ = 0 ;
-  private int currentYear_ = 1900 ;
 
   private Map<String, String> calendarIds_ = new HashMap<String, String>() ;
 
@@ -55,10 +53,6 @@ public class UIMonthView extends UICalendarView {
 
   public UIMonthView() throws Exception{
     super() ;
-    calendar_.setTime(new Date()) ;
-    currentDay_ = calendar_.get(java.util.Calendar.DATE) ;
-    currentMonth_ = calendar_.get(java.util.Calendar.MONTH) ;
-    currentYear_  = calendar_.get(java.util.Calendar.YEAR) ;
     refreshSelectedCalendarIds() ;
     refreshEvents() ;
   }
@@ -87,16 +81,16 @@ public class UIMonthView extends UICalendarView {
   }
   protected void addCalendarId(String id) {calendarIds_.put(id,id) ;}
   protected Map<String, String> getCalendarIds() {return calendarIds_ ;}
-  
- // private int getCurrentDay() {return currentDay_; }  
+
+  // private int getCurrentDay() {return currentDay_; }  
   // void setCurrentDay(int day) {currentDay_ = day; }  
   //private int getCurrentMonth() {return currentMonth_; }  
- // protected void setCurrentMonth(int month) {currentMonth_ = month; }  
+  // protected void setCurrentMonth(int month) {currentMonth_ = month; }  
   //private int getCurrentYear() {return currentYear_;}
   //protected void setCurrentYear(int year) {currentYear_ = year;}
 
-  private List getEventList() {
-    return null ;
+  private List getEventList()throws Exception {
+    return getList() ;
   }
 
   protected void refreshSelectedCalendarIds() throws Exception {
@@ -115,8 +109,42 @@ public class UIMonthView extends UICalendarView {
     GregorianCalendar gc = new GregorianCalendar(year, month, day) ;
     return gc.getTime() ;
   }
-  
+
   private Map<Integer, List<CalendarEvent>> getEventsData() {
     return eventData_ ;
   }
+
+  protected void monthNext(int months) {
+    if(calendar_.get(java.util.Calendar.MONTH) == java.util.Calendar.DECEMBER) {
+      calendar_.roll(java.util.Calendar.YEAR, true) ;
+      calendar_.set(java.util.Calendar.MONTH, java.util.Calendar.JANUARY) ;
+    } else {
+      calendar_.roll(java.util.Calendar.MONTH, months) ;
+    }
+  }
+  protected void monthBack(int months) {
+    if(calendar_.get(java.util.Calendar.MONTH) == java.util.Calendar.JANUARY) {
+      calendar_.roll(java.util.Calendar.YEAR, false) ;
+      calendar_.set(java.util.Calendar.MONTH, java.util.Calendar.DECEMBER) ;
+    } else {
+      calendar_.roll(java.util.Calendar.MONTH, months) ;
+    }
+  }
+
+  static  public class MoveNextActionListener extends EventListener<UIMonthView> {
+    public void execute(Event<UIMonthView> event) throws Exception {
+      UIMonthView calendarview = event.getSource() ;
+      calendarview.monthNext(1) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
+    }
+  }
+
+  static  public class MovePreviousActionListener extends EventListener<UIMonthView> {
+    public void execute(Event<UIMonthView> event) throws Exception {
+      UIMonthView calendarview = event.getSource() ;
+      calendarview.monthBack(-1) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
+    }
+  }
+
 }

@@ -34,16 +34,8 @@ import sun.security.provider.SHA;
     }
 )
 public class UIActionBar extends UIContainer  {
-  final public static String DAY_VIEW = "UIDayView".intern() ;
-  final public static String WEEK_VIEW = "UIWeekView".intern() ;
-  final public static String MONTH_VIEW = "UIMonthView".intern() ;
-  final public static String YEAR_VIEW = "UIYearView".intern() ;
-  final public static String LIST_VIEW = "UIListView".intern() ;
-  final public static String SCHEDULE_VIEW = "UIScheduleView".intern() ;
-  final public static String[] TYPES = {DAY_VIEW, WEEK_VIEW, MONTH_VIEW, YEAR_VIEW, LIST_VIEW, SCHEDULE_VIEW} ;
-  private Map<String, String> children_ = new HashMap<String, String>() ;
-  
-  private String[] getViewTypes() {return TYPES ;} 
+
+  private String[] getViewTypes() {return UICalendarViewContainer.TYPES ;} 
   
   static public class ChangeViewActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {

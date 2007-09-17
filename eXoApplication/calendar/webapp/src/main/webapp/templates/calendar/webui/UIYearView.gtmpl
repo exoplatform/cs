@@ -2,8 +2,22 @@
 	uiform.begin()
  	_ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");
 	int currentYear = uicomponent.getCurrentYear() ;
+	String linkDayNext = uicomponent.event(uicomponent.ACT_NEXT) ;
+ 	String linkDayPrevious = uicomponent.event(uicomponent.ACT_PREVIOUS) ;
 %>
 <div class="UIYearView" style="display: block;">
+	<div class="TitleBar">		
+		<div  style="width: 300px;border:solid 1px red; margin:auto;">		
+			<a href="$linkDayNext" class="RightControlButton">
+				<div class="NextIcon" title="Next year"><span></span></div>
+			</a>
+			<div class="Title RightControlButton">$currentYear</div>
+			<a href="$linkDayPrevious" class="RightControlButton">
+				<div class="BackIcon" title="Previous year"><span></span></div>
+			</a>
+			<div style="clear:right;"></div>
+		</div>
+	</div>
 	<div class="DayWorkingArea">
 		<div class="RowContainerDay">
 			<table class="UIGrid" id="RowContainerDay" cellspacing="0" borderspacing="0">
@@ -17,7 +31,7 @@
 	        			i = 0 
 	        			while (i++ < 3) {
 	        				cssClass = "CalendarContentNomal" ;
-	        				if(uicomponent.getCurrentMonth() == month) {
+	        				if(uicomponent.isCurrentMonth(month, currentYear)) {
 		        				cssClass = "CalendarMatchedEventContent" ;
 		        			}
 		        		monthName = uicomponent.getMonthName(month) ;

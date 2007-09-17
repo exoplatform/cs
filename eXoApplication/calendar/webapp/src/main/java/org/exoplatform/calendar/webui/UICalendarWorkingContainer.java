@@ -16,7 +16,7 @@ import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
  */
 
 @ComponentConfig(
-    //lifecycle = UIContainerLifecycle.class,  
+    lifecycle = UIContainerLifecycle.class,  
     template =  "app:/templates/calendar/webui/UICalendarWorkingContainer.gtmpl"
 
 )

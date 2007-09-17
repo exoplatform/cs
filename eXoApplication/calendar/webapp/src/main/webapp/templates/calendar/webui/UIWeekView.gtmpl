@@ -1,542 +1,84 @@
 <%
+	import java.util.Calendar;
 	uiform.begin()
  	_ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");
+  int currentDay = uicomponent.getCurrentDay() ;
+	int currentMonth = uicomponent.getCurrentMonth() ;
+ 	int currentYear = uicomponent.getCurrentYear() ;
+ 	String linkDayNext = uicomponent.event(uicomponent.ACT_NEXT) ;
+ 	String linkDayPrevious = uicomponent.event(uicomponent.ACT_PREVIOUS) ;
+ 	int weekNumber = uicomponent.getCurrentWeek() ;
+  println	currentDay ;
+  println	"//";
+  println	currentMonth ;
 %>
 <div class="UIWeekView">
+	<div class="TitleBar">		
+		<div  style="width: 300px;border:solid 1px red; margin:auto;">		
+			<a href="$linkDayNext" class="RightControlButton">
+				<div class="NextIcon" title="Next year"><span></span></div>
+			</a>
+			<div class="Title RightControlButton">Week  $weekNumber $currentYear</div>
+			<a href="$linkDayPrevious" class="RightControlButton">
+				<div class="BackIcon" title="Previous year"><span></span></div>
+			</a>
+			<div style="clear:right;"></div>
+		</div>
+	</div>
 	<table class="UIGrid" id="RowContainerDay" cellspacing="0" borderspacing="0">
 		<thead>
 			<tr>
 				<th style="width: 40px"></th>
-				<th >Sun, jun 10</th>
-				<th >Mon, jun 11</th>
-				<th >Tue, jun 12</th>
-				<th >Wed, jun 13</th>
-				<th >Thu, jun 14</th>
-				<th >Fri, jun 15</th>
-				<th >Sat, jun 16</th>
+				<%
+				  for(cl in uicomponent.getDaysOfWeek(weekNumber)) {
+				  String name = cl.get(Calendar.DAY_OF_WEEK);
+				  String date = cl.get(Calendar.DATE) ;
+				  String month = cl.get(Calendar.MONTH)  ;
+				%>
+					<th >$name, $date / $month</th>
+				<%
+				 }
+				%>
 			</tr>
 		</thead>
 		<tbody >
 			<tr>
-				<td style="width: 40px">&nbsp</td>
-				<td class="EventAllday">&nbsp</td>
-				<td class="EventAllday">&nbsp</td>
-				<td class="EventAllday">
-					<div class="EventContainerBoder"
-						<div class="EventContainer" style="height: 22px;">Talk to my cousin on ...</div>
-					</div>
-				</td>
-				<td class="EventAllday">&nbsp</td>
-				<td class="EventAllday">&nbsp</td>
-				<td class="EventAllday">&nbsp</td>
-				<td class="EventAllday">&nbsp</td>
-			</tr>
+					<td style="width: 40px">&nbsp</td>
+					<%
+				 		cssClass = "" ;
+				 		for(dayName in uicomponent.getDaysName()) {
+				 	%>
+					<td class="EventAllday">
+							<!-- <div class="EventContainer" style="height: 22px;">Talk to my cousin on ...</div> -->
+					</td>
+					<%}%>
+				</tr>
+			
+			<%
+				i = 0;
+				while (i++ < 24) {
+			%>
 			<tr>
-				<td class="TdTime" style="border-top: 1px solid #c7c7c7;">12AM</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine Today">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
+				<td class="TdTime" style="border-top: 1px solid #c7c7c7;">$i :00</td>
+			 	<%
+			 		for(dayName in uicomponent.getDaysName()) {
+			 		  if(dayName.equals(uicomponent.getDayName(uicomponent.getDayOfWeek(currentYear, currentMonth, currentDay)))){	
+			 		  	cssClass = "Today" ;
+			 		  } else {
+			 				cssClass = "" ;
+			 		  }
+			 	%>
+				 		<td class="TdLine $cssClass">
+							<!--  <div class="EventContainerBoder"
+								<div class="EventContainerBar">5:35 AM - 7:00 AM</div>
+								<div class="EventContainer">Talk to my cousin on ...</div>
+								<div class="ResizeEventContainer"><span></span></div>
+							</div>
+							-->
+						</td>
+			 	<%}%>
 			</tr>
-			<tr>
-				<td >&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine Today">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-			</tr>
-			<tr>
-				<td class="TdTime">1AM</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine Today">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-			</tr>
-			<tr>
-				<td >&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine Today">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-			</tr>
-			<tr>
-				<td class="TdTime">2AM</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine Today">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-			</tr>
-			<tr>
-				<td >&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine Today">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-			</tr>
-			<tr>
-				<td class="TdTime">3AM</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine Today">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-			</tr>
-			<tr>
-				<td >&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine Today">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-			</tr>
-			<tr>
-				<td class="TdTime">4AM</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine Today">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-			</tr>
-			<tr>
-				<td >&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine Today">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-			</tr>
-			<tr>
-				<td class="TdTime">5AM</td>
-				<td class="TdLine"></td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine Today">
-					<div class="EventContainerBoder"
-						<div class="EventContainerBar">5:35 AM - 7:00 AM</div>
-						<div class="EventContainer">Talk to my cousin on ...</div>
-						<div class="ResizeEventContainer"><span></span></div>
-					</div>
-				</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-			</tr>
-			<tr>
-				<td >&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine Today">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-			</tr>
-			<tr>
-				<td class="TdTime">6AM</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine Today">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-			</tr>
-			<tr>
-				<td >&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine Today">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-			</tr>
-			<tr>
-				<td class="TdTime">7AM</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine Today">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-			</tr>
-			<tr>
-				<td >&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine Today">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-			</tr>
-			<tr>
-				<td class="TdTime">8AM</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine Today">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-			</tr>
-			<tr>
-				<td >&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine Today">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-			</tr>
-			<tr>
-				<td class="TdTime">9AM</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine Today">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-			</tr>
-			<tr>
-				<td >&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine Today">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-			</tr>
-			<tr>
-				<td class="TdTime">10AM</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine Today">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-			</tr>
-			<tr>
-				<td >&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine Today">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-			</tr>
-			<tr>
-				<td class="TdTime">11AM</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine Today">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-			</tr>
-			<tr>
-				<td >&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine Today">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-			</tr>
-			<tr>
-				<td class="TdTime">12PM</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine Today">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-			</tr>
-			<tr>
-				<td >&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine Today">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-			</tr>
-			<tr>
-				<td class="TdTime">1PM</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine Today">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-			</tr>
-			<tr>
-				<td >&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine Today">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-			</tr>
-			<tr>
-				<td class="TdTime">2PM</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine Today">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-			</tr>
-			<tr>
-				<td >&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine Today">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-			</tr>
-			<tr>
-				<td class="TdTime">3PM</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine Today">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-			</tr>
-			<tr>
-				<td >&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine Today">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-			</tr>
-			<tr>
-				<td class="TdTime">4PM</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine Today">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-			</tr>
-			<tr>
-				<td >&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine Today">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-			</tr>
-			<tr>
-				<td class="TdTime">5PM</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine Today">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-			</tr>
-			<tr>
-				<td >&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine Today">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-			</tr>
-			<tr>
-				<td class="TdTime">6PM</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine Today">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-			</tr>
-			<tr>
-				<td >&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine Today">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-			</tr>
-			<tr>
-				<td class="TdTime">7PM</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine Today">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-			</tr>
-			<tr>
-				<td >&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine Today">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-			</tr>
-			<tr>
-				<td class="TdTime">8PM</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine Today">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-			</tr>
-			<tr>
-				<td >&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine Today">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-			</tr>
-			<tr>
-				<td class="TdTime">9PM</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine Today">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-			</tr>
-			<tr>
-				<td >&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine Today">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-			</tr>
-			<tr>
-				<td class="TdTime">10PM</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine Today">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-			</tr>
-			<tr>
-				<td >&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine Today">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-			</tr>
-			<tr>
-				<td class="TdTime">11PM</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine Today">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-			</tr>
-			<tr>
-				<td >&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine Today">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-			</tr>
-			<tr>
-				<td class="TdTime">12PM</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine Today">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-				<td class="TdLine">&nbsp</td>
-			</tr>
-			<tr>
-				<td >&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine Today">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-				<td class="TdDotLine">&nbsp</td>
-			</tr>
+			<%}%>
 		</tbody>
 	</table>
 </div> 
