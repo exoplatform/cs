@@ -8,9 +8,6 @@
  	String linkDayNext = uicomponent.event(uicomponent.ACT_NEXT) ;
  	String linkDayPrevious = uicomponent.event(uicomponent.ACT_PREVIOUS) ;
  	int weekNumber = uicomponent.getCurrentWeek() ;
-  println	currentDay ;
-  println	"//";
-  println	currentMonth ;
 %>
 <div class="UIWeekView">
 	<div class="TitleBar">		
@@ -31,11 +28,13 @@
 				<th style="width: 40px"></th>
 				<%
 				  for(cl in uicomponent.getDaysOfWeek(weekNumber)) {
-				  String name = cl.get(Calendar.DAY_OF_WEEK);
-				  String date = cl.get(Calendar.DATE) ;
-				  String month = cl.get(Calendar.MONTH)  ;
+					  String day = uicomponent.getDayName(cl.get(Calendar.DAY_OF_WEEK));
+					  String dayName = day.substring(0,3) ;
+					  String date = cl.get(Calendar.DATE) ;
+					  String month = uicomponent.getMonthName(cl.get(Calendar.MONTH))  ;
+					  String monthName = month.substring(0,3) ;
 				%>
-					<th >$name, $date / $month</th>
+					<th>$dayName, $date / $monthName</th>
 				<%
 				 }
 				%>

@@ -45,6 +45,7 @@ public class UIWeekView extends UICalendarView {
       calendar_.roll(Calendar.WEEK_OF_YEAR, weeks) ;
     }
   }
+  
   protected void weekBack(int weeks) {
     if(getCurrentWeek() == calendar_.getActualMinimum(Calendar.WEEK_OF_YEAR)) {
       calendar_.roll(Calendar.YEAR, false) ;
@@ -53,15 +54,35 @@ public class UIWeekView extends UICalendarView {
       calendar_.roll(Calendar.WEEK_OF_YEAR, weeks) ;
     }
   }
-
-  protected Calendar nextDayOf(int value, int day,int month,int year) {
+  
+  protected Calendar nextDayOf(int day,int month,int year) {
     Calendar cl = new GregorianCalendar(year, month, day) ;
-    cl.roll(Calendar.DATE, day + value) ;
+    if(cl.getActualMaximum(Calendar.DAY_OF_MONTH) == day) {
+      if(cl.get(Calendar.MONTH) == Calendar.DECEMBER){
+        cl.roll(Calendar.YEAR, true) ;
+        cl.set(Calendar.MONTH, Calendar.JANUARY) ;
+      } else {
+        cl.roll(Calendar.MONTH, true) ;
+      } 
+      cl.set(Calendar.DATE, cl.getActualMinimum(Calendar.DAY_OF_MONTH)) ;
+    } else {
+      cl.roll(Calendar.DATE, true) ;
+    }
     return cl ;
   }
-  protected Calendar previousDayOf(int value, int day,int month,int year) {
+  protected Calendar previousDayOf(int day,int month,int year) {
     Calendar cl = new GregorianCalendar(year, month, day) ;
-    cl.roll(Calendar.DATE, day + value) ;
+    if(cl.getActualMinimum(Calendar.DAY_OF_MONTH) == day) {
+      if(cl.get(Calendar.MONTH) == Calendar.JANUARY){
+        cl.roll(Calendar.YEAR, false) ;
+        cl.set(Calendar.MONTH, Calendar.DECEMBER) ;
+      } else { 
+        cl.roll(Calendar.MONTH, false) ;
+      }
+      cl.set(Calendar.DATE, cl.getActualMaximum(Calendar.DAY_OF_MONTH)) ;
+    } else {
+      cl.roll(Calendar.DATE, false) ;
+    }
     return cl ;
   }
   protected List<Calendar> getDaysOfWeek(int week) {
@@ -71,10 +92,10 @@ public class UIWeekView extends UICalendarView {
     int day = cl.get(Calendar.DATE) ;
     int month = cl.get(Calendar.MONTH) ;
     int year = cl.get(Calendar.YEAR) ;
-    calendarData.add(previousDayOf(-1, day, month, year)) ;
+    calendarData.add(previousDayOf(day, month, year)) ;
     calendarData.add(cl) ;
-    for(int d = 1 ;  d < 5 ; d++) {
-      cl = nextDayOf(d, day, month, year) ;
+    for(int d = 1 ;  d < 6 ; d++) {
+      cl = nextDayOf(cl.get(Calendar.DATE), cl.get(Calendar.MONTH), cl.get(Calendar.YEAR)) ;
       calendarData.add(cl) ;
     }
     return calendarData ;
