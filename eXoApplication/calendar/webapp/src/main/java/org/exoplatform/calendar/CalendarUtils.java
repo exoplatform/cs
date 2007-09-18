@@ -20,7 +20,7 @@ import org.exoplatform.services.organization.impl.GroupImpl;
 public class CalendarUtils {
   final public static String SEMICOLON = ";".intern() ;
   final public static String COLON = ",".intern() ;
-  
+  final public static String UNDERSCORE = "_".intern() ;
   static public String[] getUserGroups(String username) throws Exception {
     OrganizationService organization = (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
     Object[] objs = organization.getGroupHandler().findGroupsOfUser(username).toArray() ;

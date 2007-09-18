@@ -4,26 +4,25 @@
  **************************************************************************/
 package org.exoplatform.calendar.webui;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
+import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
-import org.jgroups.ExitEvent;
+import org.exoplatform.webui.form.UIFormCheckBoxInput;
 
 /**
  * Created by The eXo Platform SARL
@@ -41,6 +40,7 @@ import org.jgroups.ExitEvent;
       @EventConfig(listeners = UICalendarView.ChangeCategoryActionListener.class), 
       @EventConfig(listeners = UIMonthView.MoveNextActionListener.class), 
       @EventConfig(listeners = UIMonthView.MovePreviousActionListener.class),
+      @EventConfig(listeners = UICalendarView.EventSelectActionListener.class), 
       @EventConfig(listeners = UICalendarView.AddCategoryActionListener.class)
     }
 
@@ -49,45 +49,56 @@ public class UIMonthView extends UICalendarView {
 
   private Map<String, String> calendarIds_ = new HashMap<String, String>() ;
 
-  private Map<Integer, List<CalendarEvent>> eventData_ = new HashMap<Integer, List<CalendarEvent>>() ;
+  private Map<String, List<CalendarEvent>> eventData_ = new HashMap<String, List<CalendarEvent>>() ;
 
   public UIMonthView() throws Exception{
     super() ;
     refreshSelectedCalendarIds() ;
     refreshEvents() ;
   }
+  
+  private boolean isSameDate(java.util.Calendar date1, java.util.Calendar date2) {
+    return ( date1.get(java.util.Calendar.DATE) == date2.get(java.util.Calendar.DATE) &&
+             date1.get(java.util.Calendar.MONTH) == date2.get(java.util.Calendar.MONTH) &&
+             date1.get(java.util.Calendar.YEAR) == date2.get(java.util.Calendar.YEAR)
+            ) ;
+  }
   protected void refreshEvents() throws Exception {
     List<String> calendarIds = new ArrayList<String>(getCalendarIds().values()) ;
     CalendarService calendarService = getApplicationComponent(CalendarService.class) ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     List<CalendarEvent> allEvents = calendarService.getUserEventByCalendar(username, calendarIds) ;
+    removeChild(UIFormCheckBoxInput.class) ;
     for(int day =1 ;  day <= getDaysInMonth(); day++) {
       List<CalendarEvent> existEvents = new ArrayList<CalendarEvent>() ;
       for(CalendarEvent ce : allEvents) {
-        GregorianCalendar gc = new GregorianCalendar(getCurrentYear(), getCurrentMonth(), day) ;
-        Date tempDate = gc.getTime() ;
-        Date fromDate = ce.getFromDateTime() ;
-        Date endDate = ce.getToDateTime() ;
-        gc.setTime(fromDate) ;
-        int beginDay = gc.get(java.util.Calendar.DATE) ;
-        gc.setTime(endDate) ;
-        int endDay = gc.get(java.util.Calendar.DATE) ;
-        if((fromDate.before(tempDate) && endDate.after(tempDate))||(beginDay == day) || (endDay == day) )  {
+        java.util.Calendar tempDate = new GregorianCalendar(getCurrentYear(), getCurrentMonth(), day) ;
+        java.util.Calendar fromDate = new GregorianCalendar() ;
+        fromDate.setTime(ce.getFromDateTime()) ;
+        java.util.Calendar endDate = new GregorianCalendar() ;
+        endDate.setTime(ce.getToDateTime()) ;
+        if((fromDate.before(tempDate) && endDate.after(tempDate))||
+            (isSameDate(tempDate, fromDate)) || 
+            (isSameDate(tempDate, endDate))) {
           existEvents.add(ce) ;
+          addChild(new UIFormCheckBoxInput<Boolean>(ce.getId(), ce.getId(), false)) ;
         } 
       }
-      eventData_.put(day, existEvents) ;
+      String key = keyGen(day, getCurrentMonth(), getCurrentYear()) ;
+      eventData_.put(key, existEvents) ;
     }
+  }
+  protected  List<CalendarEvent> getEventsByQuery(String query) throws Exception {
+    List<CalendarEvent> allEvents = new ArrayList<CalendarEvent>() ;
+    CalendarService calService = getApplicationComponent(CalendarService.class) ;
+    EventQuery eventQuery = new EventQuery() ;
+    java.util.Calendar cal =  GregorianCalendar.getInstance() ;
+    //eventQuery.setFromDate(cal.getTime()) ;
+    allEvents = calService.getEvents(eventQuery) ;
+    return allEvents ;
   }
   protected void addCalendarId(String id) {calendarIds_.put(id,id) ;}
   protected Map<String, String> getCalendarIds() {return calendarIds_ ;}
-
-  // private int getCurrentDay() {return currentDay_; }  
-  // void setCurrentDay(int day) {currentDay_ = day; }  
-  //private int getCurrentMonth() {return currentMonth_; }  
-  // protected void setCurrentMonth(int month) {currentMonth_ = month; }  
-  //private int getCurrentYear() {return currentYear_;}
-  //protected void setCurrentYear(int year) {currentYear_ = year;}
 
   private List getEventList()throws Exception {
     return getList() ;
@@ -110,7 +121,10 @@ public class UIMonthView extends UICalendarView {
     return gc.getTime() ;
   }
 
-  private Map<Integer, List<CalendarEvent>> getEventsData() {
+  private String keyGen(int day, int month, int year) {
+    return String.valueOf(day) + CalendarUtils.UNDERSCORE +  String.valueOf(month) +  CalendarUtils.UNDERSCORE + String.valueOf(year); 
+  }
+  private Map<String, List<CalendarEvent>> getEventsData() {
     return eventData_ ;
   }
 
@@ -130,19 +144,30 @@ public class UIMonthView extends UICalendarView {
       calendar_.roll(java.util.Calendar.MONTH, months) ;
     }
   }
-
+  protected List<CalendarEvent> getSelectedEvents() {
+    List<CalendarEvent> events = new ArrayList<CalendarEvent>() ;
+    for(List<CalendarEvent> items : getEventsData().values()) {
+      for(CalendarEvent ce : items) {
+       UIFormCheckBoxInput<Boolean>  checkbox = getChildById(ce.getId())  ;
+       if(checkbox != null && checkbox.isChecked()) events.add(ce) ;
+      }
+    }
+    System.out.println("\n\n checked list size "+ events.size());
+    return events ; 
+  }
   static  public class MoveNextActionListener extends EventListener<UIMonthView> {
     public void execute(Event<UIMonthView> event) throws Exception {
       UIMonthView calendarview = event.getSource() ;
       calendarview.monthNext(1) ;
+      calendarview.refreshEvents() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
     }
   }
-
   static  public class MovePreviousActionListener extends EventListener<UIMonthView> {
     public void execute(Event<UIMonthView> event) throws Exception {
       UIMonthView calendarview = event.getSource() ;
       calendarview.monthBack(-1) ;
+      calendarview.refreshEvents() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
     }
   }

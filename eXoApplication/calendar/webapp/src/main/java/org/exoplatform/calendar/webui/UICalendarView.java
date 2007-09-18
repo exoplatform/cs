@@ -183,13 +183,21 @@ public class UICalendarView extends UIForm {
 
   protected int getCurrentWeek() {return calendar_.get(Calendar.WEEK_OF_YEAR) ;}
   protected void setCurrentWeek(int week) {calendar_.set(Calendar.WEEK_OF_YEAR, week) ;}
-  
+
   protected int getCurrentMonth() {return calendar_.get(Calendar.MONTH) ;}
   protected void setCurrentMonth(int month) {calendar_.set(Calendar.MONTH, month) ;}
 
   protected int getCurrentYear() {return calendar_.get(Calendar.YEAR) ;}
   protected void setCurrentYear(int year) {calendar_.set(Calendar.YEAR, year) ;}
 
+  private void removeEvents(List<CalendarEvent> events) throws Exception {
+    CalendarService calService = getApplicationComponent(CalendarService.class) ;
+    String username = Util.getPortalRequestContext().getRemoteUser() ;
+    System.out.println("\n\n checked list size "+ events.size());
+    for (CalendarEvent ce : events) {
+      calService.removeUserEvent(username, ce.getCalendarId(), ce.getId()) ;
+    }
+  }
   static  public class RefreshActionListener extends EventListener<UICalendarView> {
     public void execute(Event<UICalendarView> event) throws Exception {
       UICalendarView uiForm = event.getSource() ;
@@ -220,6 +228,20 @@ public class UICalendarView extends UIForm {
     public void execute(Event<UICalendarView> event) throws Exception {
       UICalendarView uiForm = event.getSource() ;
       System.out.println(" ===========> DeleteEventActionListener") ;
+      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+      if(uiForm instanceof UIMonthView ) {
+        try {
+          uiForm.removeEvents(((UIMonthView)uiForm).getSelectedEvents()) ;
+          ((UIMonthView)uiForm).refreshEvents() ;
+          uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.delete-event-successfully", null)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        } catch (Exception e) {
+          e.printStackTrace() ;
+          uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.delete-event-error", null, ApplicationMessage.WARNING)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        }
+      }
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
     }
   }
   static  public class ChangeCategoryActionListener extends EventListener<UICalendarView> {
@@ -228,7 +250,10 @@ public class UICalendarView extends UIForm {
       System.out.println(" ===========> ChangeCategoryActionListener") ;
     }
   }
-
+  static  public class EventSelectActionListener extends EventListener<UICalendarView> {
+    public void execute(Event<UICalendarView> event) throws Exception {
+    }
+  }
   static  public class AddCategoryActionListener extends EventListener<UICalendarView> {
     public void execute(Event<UICalendarView> event) throws Exception {
       UICalendarView listView = event.getSource() ;

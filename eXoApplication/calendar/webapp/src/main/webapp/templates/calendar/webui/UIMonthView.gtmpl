@@ -75,12 +75,13 @@
 									println "/" ;
 									println month ;
 									println "</div> <div class='DayContent'>" ;
-					        eventList = uicomponent.getEventsData().get(dayOfMonth) ;
+					        eventList = uicomponent.getEventsData().get(uicomponent.keyGen(dayOfMonth, currentMonth, currentYear)) ;
 						      if(eventList != null) {
 						        size = eventList.size() ;
 						        events = "" ;
 						        viewMore = "" ;
 										if(size > 0) {
+											println "<div class=\"EventOnDayBorder\">" ;
 											for(event in eventList) {
 												if(eventList.indexOf(event) > 2) {break ;}
 												begin = event.getFromDateTime() ;
@@ -90,19 +91,23 @@
 												if(sumary.length() > 15) { 
 													sumary = sumary.substring(0,15) + "..."  ;
 												}
-												events = events + "<div day='$dayOfMonth' class=\"EventOnDayContent\"><div class=\"EventOnDayLabel\" title=\"$title\">"+ sumary +"</div></div>"
+												println "<div day=\"$dayOfMonth\" class=\"EventOnDayContent\">" ;
+											 	println	"<div style=\"float:left;margin:3px 0px 0px 2px;\">" ;
+												uicomponent.renderField(uicomponent.getChildById(event.getId())) ;
+												println "</div>" ;
+												println "<div class=\"EventOnDayLabel\" title=\"$title\">" ;
+												println sumary ;
+												println "</div></div>" ;
+												println "<div style=\"clear:left;\"><span></span></div>" ;
+											}
+											if(size > 3) {
+												moreSize =  size - 3  ;
+												println "<div class=\"ViewMoreIcon\" title=\"View all event on day\"> + " ;
+												println moreSize ;
+												println " More </div>" ;	
 											}
 										}
-										if(size > 3) {
-											moreSize =  size - 3  ;
-											viewMore = viewMore + "<div class=\"ViewMoreIcon\" title=\"View all event on day\"> + " +moreSize+ " More </div>"	
-										}
-										if(size > 0) {
-											println "<div class=\"EventOnDayBorder\">" ;
-											println events ;
-											println viewMore ;
-											println "</div>" ;
-										}
+										println "</div>" ;
 									}
 									println "</div></td>" ;
 					        dayOfMonth++ ;
