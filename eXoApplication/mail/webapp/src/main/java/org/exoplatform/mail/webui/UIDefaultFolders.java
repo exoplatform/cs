@@ -7,10 +7,16 @@ package org.exoplatform.mail.webui ;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
+import org.exoplatform.mail.service.Message;
+import org.exoplatform.mail.service.MessageFilter;
+import org.exoplatform.mail.service.MessageHeader;
+import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.popup.UIFolderForm;
 import org.exoplatform.mail.webui.popup.UIPopupAction;
+import org.exoplatform.web.command.handler.GetApplicationHandler;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIContainer;
@@ -34,7 +40,7 @@ import org.exoplatform.webui.event.EventListener;
 )
 
 public class UIDefaultFolders extends UIContainer {
-  private String currentFolder_ = null ;
+  private String currentFolder_ = Utils.FD_INBOX ;
   
   public UIDefaultFolders() throws Exception {}
 
@@ -57,6 +63,25 @@ public class UIDefaultFolders extends UIContainer {
   public String[] getActions() {
     return new String[] {"AddFolder"} ;
   }
+  
+  public long getNumberOfUnreadMessage(String selectedFolderName) throws Exception {
+    MessageFilter filter = new MessageFilter("filterByFolder") ;
+    MailService mailServ = getApplicationComponent(MailService.class);
+    UIMailPortlet uiPortlet = getAncestorOfType(UIMailPortlet.class);
+    String username = uiPortlet.getCurrentUser() ;
+    String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
+    Folder folder = mailServ.getFolder(username, accountId, selectedFolderName) ;
+    filter.setFolder(new String[]{folder.getName()}) ;
+    filter.setAccountId(accountId) ;
+    long number = 0;
+    List<MessageHeader> messageHeaders = mailServ.getMessages(username, filter);
+    for (MessageHeader mh : messageHeaders) {
+      Message mes = (Message) mh;
+      if (mes.isUnread()) number++ ;
+    }
+    return number;
+  } 
+  
   static public class AddFolderActionListener extends EventListener<UIDefaultFolders> {
     public void execute(Event<UIDefaultFolders> event) throws Exception {
       System.out.println("\n\n AddFolderActionListener");
@@ -78,7 +103,10 @@ public class UIDefaultFolders extends UIContainer {
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
       UIMessageArea uiMessageArea = uiMessageList.getParent();
       uiMessageList.setSelectedFolderId(folderId) ;
-      uiMessageList.addCheckboxForMessages();
+      MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
+      String username = uiPortlet.getCurrentUser();
+      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      uiMessageList.setMessageList(mailSrv.getMessageByFolder(username, accountId, folderId));
       uiCFolder.setSelectedFolder(null) ;
       uiMessageList.setSelectedTagName(null) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer) ;

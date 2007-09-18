@@ -4,6 +4,11 @@
  **************************************************************************/
 package org.exoplatform.mail.webui;
 
+import java.util.List;
+
+import org.exoplatform.mail.service.MailService;
+import org.exoplatform.mail.service.Message;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIContainer;
 
@@ -20,7 +25,15 @@ import org.exoplatform.webui.core.UIContainer;
 public class UIMessageArea extends UIContainer  {
   
   public UIMessageArea() throws Exception {
-    addChild(UIMessageList.class, null, null) ;
-    addChild(UIMessagePreview.class, null, null) ;
+    UIMessageList uiMessageList = addChild(UIMessageList.class, null, null);
+    addChild(UIMessagePreview.class, null, null);
+    MailService mailSrv = getApplicationComponent(MailService.class);
+    String username = Util.getPortalRequestContext().getRemoteUser();
+    String accountId = mailSrv.getAccounts(username).get(0).getId();
+    String selectedFolderId = uiMessageList.getSelectedFolderId();
+    if (accountId != null && accountId != "" && selectedFolderId != null && selectedFolderId != "") {
+      List<Message> messageList = mailSrv.getMessageByFolder(username, accountId, selectedFolderId);
+      uiMessageList.setMessageList(messageList);
+    }
   }
 }

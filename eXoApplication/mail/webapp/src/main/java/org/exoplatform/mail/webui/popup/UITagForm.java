@@ -18,6 +18,7 @@ import org.exoplatform.mail.service.Tag;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.UIFolderContainer;
 import org.exoplatform.mail.webui.UIMailPortlet;
+import org.exoplatform.mail.webui.UIMessageArea;
 import org.exoplatform.mail.webui.UIMessageList;
 import org.exoplatform.mail.webui.UINavigationContainer;
 import org.exoplatform.mail.webui.UISelectAccount;
@@ -93,7 +94,7 @@ public class UITagForm extends UIForm implements UIPopupComponent{
     public void execute(Event<UITagForm> event) throws Exception {
       UITagForm uiTagForm = event.getSource(); 
       UIMailPortlet uiPortlet = uiTagForm.getAncestorOfType(UIMailPortlet.class);
-      UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
+      UIMessageArea uiMessageArea = uiPortlet.findFirstComponentOfType(UIMessageArea.class);
       String newTagName = uiTagForm.getUIStringInput(SELECT_AVAIABLE_TAG).getValue();
       List<String> messageList = new ArrayList<String>();
       messageList = Arrays.asList(uiTagForm.messageMap.values().toArray(new String[]{}));
@@ -115,7 +116,7 @@ public class UITagForm extends UIForm implements UIPopupComponent{
       uiPortlet.cancelAction() ;
       UITags uiTags = uiPortlet.findFirstComponentOfType(UITags.class) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiTags) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageArea) ;
     }
   }
   

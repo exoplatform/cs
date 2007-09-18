@@ -53,6 +53,10 @@ public class UITags extends UIComponent {
       UIMailPortlet uiPortlet = uiTags.getAncestorOfType(UIMailPortlet.class);
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
       uiMessageList.setSelectedFolderId(null);
+      MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
+      String username = uiPortlet.getCurrentUser();
+      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      uiMessageList.setMessageList(mailSrv.getMessageByTag(username, accountId, tagname));
       uiMessageList.setSelectedTagName(tagname);
       uiMessageList.addCheckboxForMessages();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiTags);

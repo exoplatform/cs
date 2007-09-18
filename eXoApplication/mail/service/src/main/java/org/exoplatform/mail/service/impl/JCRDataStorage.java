@@ -210,7 +210,7 @@ public class JCRDataStorage implements DataStorage{
 
     if (messageNode.hasProperty(Utils.EXO_SENDDATE)) {
       cal.setTimeInMillis(messageNode.getProperty(Utils.EXO_SENDDATE).getLong());
-      msg.setReceivedDate(cal.getTime());
+      msg.setSendDate(cal.getTime());
     }
     return msg ;
   }
@@ -318,24 +318,28 @@ public class JCRDataStorage implements DataStorage{
   
   public String setAddress(String strAddress) throws Exception {
     String str = "";
-    if (strAddress != null && strAddress.trim() != ""){
-      InternetAddress[] internetAddress = InternetAddress.parse(strAddress);
-      int i = 0;
-      if(internetAddress != null && internetAddress.length > 0) {
-        while (i < internetAddress.length) {
-          String personal = internetAddress[i].getPersonal();
-          String address = internetAddress[i].getAddress();
-          String sender = address + ";" + address;
-          if (personal != null && personal != "") 
-            sender = personal + " ;" + address ;
-          if(str.length() < 1)  {
-            str = sender ;              
-          }else {
-            str += "," + sender ;
-          }           
-          i++ ;
+    try {
+      if (strAddress != null && strAddress.trim() != ""){
+        InternetAddress[] internetAddress = InternetAddress.parse(strAddress);
+        int i = 0;
+        if(internetAddress != null && internetAddress.length > 0) {
+          while (i < internetAddress.length) {
+            String personal = internetAddress[i].getPersonal();
+            String address = internetAddress[i].getAddress();
+            String sender = address + ";" + address;
+            if (personal != null && personal != "") 
+              sender = personal + " ;" + address ;
+            if(str.length() < 1)  {
+              str = sender ;              
+            }else {
+              str += "," + sender ;
+            }           
+            i++ ;
+          }
         }
       }
+    } catch(Exception e) {
+      str = strAddress;
     }
     return str ;
   }

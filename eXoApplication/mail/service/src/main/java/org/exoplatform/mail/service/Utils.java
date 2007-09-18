@@ -4,7 +4,6 @@
  **************************************************************************/
 package org.exoplatform.mail.service;
 
-import java.text.DateFormat;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -113,5 +112,16 @@ public class Utils {
   public static String formatDate(String format, Date date) {
     Format formatter = new SimpleDateFormat(format);
     return formatter.format(date);
+  }
+    
+  public static String formatAddress(String strAdd) {
+    String inetAddress = "" ;
+    String[] senders = strAdd.split(",");
+    for (int i = 0; i < senders.length; i++) {
+      String sender = senders[i].trim();
+      if (i !=0) inetAddress += ",";
+      inetAddress += sender.split(";")[0].trim() + "<" + sender.split(";")[1] + ">";
+    }
+    return inetAddress;
   }
 }

@@ -11,10 +11,10 @@
   <a href="<%=uicomponent.event("Reply")%>" class="ControlButton">
     <div class="IconHolder ReplyIcon"><span></span></div>
   </a>
-  <a href="#" class="ControlButton">
+  <a href="<%=uicomponent.event("ReplyAll")%>" class="ControlButton">
     <div class="IconHolder ReplyAllIcon"><span></span></div>
   </a>
-  <a href="#" class="ControlButton">
+  <a href="<%=uicomponent.event("Forward")%>" class="ControlButton">
     <div class="IconHolder ForwardIcon"><span></span></div>
   </a>
   <div class="SeparatorLine"><span></span></div>
@@ -174,7 +174,7 @@
     	</thead>
     	<tbody>
     	<%
-  			for(Message msg : uicomponent.getShowMessageList()) {
+  			for(Message msg : uicomponent.getMessageList()) {
   			  String actionLink = uicomponent.event("SelectMessage", msg.getId());
   			  checkboxField = uicomponent.getChildById(msg.getId());
   		%>
@@ -202,7 +202,15 @@
   				</td>
   				<td class="text"><a href="$actionLink"><%=msg.getSubject()%></a></td>
   				<td class="text">(5)</td>
-  				<td class="text"><a href="$actionLink"><%=Utils.formatDate('MMM dd, yyyy HH:mm aaa', msg.getReceivedDate())%></a></td>
+  				<td class="text">
+  				  <a href="$actionLink">
+  				    <%if (msg.getReceivedDate() != null) { %>
+  				      <%=Utils.formatDate('MMM dd, yyyy HH:mm aaa', msg.getReceivedDate())%>
+  				    <%} else if (msg.getSendDate() != null){%>
+  				      <%=Utils.formatDate('MMM dd, yyyy HH:mm aaa', msg.getSendDate())%>
+  				    <%}%>
+  				  </a>
+  				</td>
   				<td><a href="$actionLink">
   				   <%
   				     if (msg.getSize() > 1024) {

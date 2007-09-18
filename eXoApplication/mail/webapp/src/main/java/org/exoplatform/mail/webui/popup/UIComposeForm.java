@@ -180,6 +180,11 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
     UIFormInputWithActions inputSet = getChildById(FIELD_FROM_INPUT) ;
     return inputSet.getUIStringInput(FIELD_TO).getValue() ;
   }
+  
+  public void setFieldToValue(String value) {
+    UIFormInputWithActions inputSet = getChildById(FIELD_FROM_INPUT);
+    inputSet.getUIStringInput(FIELD_TO).setValue(value);
+  }
 
   public String getFieldCcValue() {
     UIFormInputWithActions inputSet = getChildById(FIELD_FROM_INPUT) ;
@@ -201,6 +206,12 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
   public String getFieldMessageContentValue() {
     return getFieldMessageContent().getValue() ;
   }
+  
+  public void setFieldMessageContentValue(String value) {
+    UIFormTextAreaInput uiMessageContent = getChildById(FIELD_MESSAGECONTENT) ;
+    uiMessageContent.setValue(value);
+  }
+  
   public void resetFields() {
     reset() ;
   }
@@ -237,6 +248,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
     message.setMessageBcc(bcc) ;
     message.setAttachements(this.getAttachFileList()) ;
     message.setMessageBody(body) ;
+    message.setUnread(false);
     message.setReplyTo(account.getUserDisplayName()+ "<" + account.getEmailReplyAddress() + ">");
     return message;
   }
@@ -298,7 +310,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
       MailService mailSvr = uiForm.getApplicationComponent(MailService.class) ;
       UIPopupAction uiChildPopup = uiForm.getAncestorOfType(UIPopupAction.class) ;
       Message message = uiForm.getNewMessage(null) ;   
-      message.isUnread();
+      message.setUnread(true);
       try {
         message.setFolders(new String[]{Utils.FD_DRAFTS}) ;
         mailSvr.saveMessage(usename, accountId, message, true) ;

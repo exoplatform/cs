@@ -4,22 +4,15 @@
  **************************************************************************/
 package org.exoplatform.mail.service.impl;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
 import javax.activation.DataHandler;
-import javax.activation.FileDataSource;
-import javax.jcr.Node;
-import javax.jcr.NodeIterator;
 import javax.mail.Multipart;
 import javax.mail.Part;
 import javax.mail.Session;
@@ -30,7 +23,6 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
-import javax.mail.internet.MimePartDataSource;
 import javax.mail.util.ByteArrayDataSource;
 
 import org.exoplatform.mail.service.Account;
@@ -383,5 +375,20 @@ public class MailServiceImpl implements MailService{
   public List<Message> getMessageByTag(String username, String accountId, String tagName)
       throws Exception {
     return storage_.getMessageByTag(username, accountId, tagName);
+  }
+  
+  public List<Message> getMessageByFolder(String username, String accountId, String folderName) 
+      throws Exception {
+    List<Message> messageList = new ArrayList<Message>();
+    MessageFilter filter = new MessageFilter("Filter By Folder") ;
+    Folder folder = getFolder(username, accountId, folderName) ;
+    filter.setFolder(new String[]{folder.getName()} ) ;
+    filter.setAccountId(accountId) ;
+    List<MessageHeader> messageHeaders = new ArrayList<MessageHeader>() ;
+    messageHeaders.addAll(getMessages(username, filter)) ;
+    for(MessageHeader mh : messageHeaders) {
+      messageList.add((Message)mh) ;
+    }
+    return messageList;
   }
 }
