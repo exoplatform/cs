@@ -73,14 +73,6 @@ public class UIMessageList extends UIForm {
   protected String getSelectedTagName() {return selectedTagName_ ;}
   protected void setSelectedTagName(String tagName) {selectedTagName_ = tagName ;}
   
-  public void addCheckboxForMessages() throws Exception {
-    for (Message msg : getMessageList()) {
-      UIFormCheckBoxInput<Boolean> checkbox = getChildById(msg.getId());
-      if (checkbox != null) removeChild(getUIFormCheckBoxInput(msg.getId()).getClass());
-      addChild(new UIFormCheckBoxInput<Boolean>(msg.getId(), msg.getId(), null));
-    }
-  }
-  
   public void setMessageList(List<Message> messageList) throws Exception {
     getChildren().clear();
     messageMap_.clear();
@@ -103,8 +95,8 @@ public class UIMessageList extends UIForm {
   
   public void removeMessages(List<Message> messages) throws Exception {
     for (Message message : messages) {
+      removeChildById(message.getId());
       messageMap_.remove(message.getId());
-      removeChild(getUIFormCheckBoxInput(message.getId()).getClass());
     }
   }
   
