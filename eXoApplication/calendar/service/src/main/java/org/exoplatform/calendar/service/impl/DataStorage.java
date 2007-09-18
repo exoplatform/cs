@@ -48,13 +48,14 @@ public interface DataStorage {
   
   public CalendarEvent getUserEvent(String username, String eventCategoryId, String eventId) throws Exception ;
   public List<CalendarEvent> getUserEventByCalendar(String username, List<String> calendarIds) throws Exception ;
-  public List<CalendarEvent> getEvents(EventQuery eventQuery) throws Exception ;
+  public List<CalendarEvent> getUserEvents(String username, EventQuery eventQuery) throws Exception ;
   public void saveUserEvent(String username, String calendarId, CalendarEvent event, boolean isNew) throws Exception ;
   public CalendarEvent removeUserEvent(String username, String calendarId, String eventId) throws Exception ;
   
   
   public CalendarEvent getGroupEvent(String calendarId, String eventId) throws Exception ;
   public List<CalendarEvent> getGroupEventByCalendar(List<String> calendarIds) throws Exception ;
+  public List<CalendarEvent> getPublicEvents(EventQuery eventQuery) throws Exception ;
   public void saveGroupEvent(String calendarId, CalendarEvent event, boolean isNew) throws Exception ;
   public CalendarEvent removeGroupEvent(String calendarId, String eventId) throws Exception ;
   

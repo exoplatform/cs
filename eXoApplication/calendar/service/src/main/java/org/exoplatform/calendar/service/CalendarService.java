@@ -247,7 +247,7 @@ public interface CalendarService {
    * @return event list
    * @throws Exception
    */
-  public List<CalendarEvent> getEvents(EventQuery eventQuery) throws Exception ;
+  public List<CalendarEvent> getUserEvents(String username, EventQuery eventQuery) throws Exception ;
   /**
    * This method should:
    * 1. Get calendar service root node by username
@@ -302,6 +302,7 @@ public interface CalendarService {
    * @throws Exception
    */
   public List<CalendarEvent> getGroupEventByCalendar(List<String> calendarIds) throws Exception ;
+  public List<CalendarEvent> getPublicEvents(EventQuery eventQuery) throws Exception ;
   /**
    * This method should:
    * 1. Get calendar service root node by username

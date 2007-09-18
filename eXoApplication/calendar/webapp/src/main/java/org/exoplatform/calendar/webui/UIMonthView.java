@@ -64,10 +64,16 @@ public class UIMonthView extends UICalendarView {
             ) ;
   }
   protected void refreshEvents() throws Exception {
-    List<String> calendarIds = new ArrayList<String>(getCalendarIds().values()) ;
     CalendarService calendarService = getApplicationComponent(CalendarService.class) ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
-    List<CalendarEvent> allEvents = calendarService.getUserEventByCalendar(username, calendarIds) ;
+    EventQuery eventQuery = new EventQuery() ;
+    java.util.Calendar fromcalendar = new GregorianCalendar(getCurrentYear(), getCurrentMonth(), 1) ;
+    eventQuery.setFromDate(fromcalendar) ;
+    java.util.Calendar tocalendar = new GregorianCalendar(getCurrentYear(), getCurrentMonth(), getDaysInMonth()) ;
+    eventQuery.setToDate(tocalendar) ;
+    List<CalendarEvent> allEvents = calendarService.getUserEvents(username, eventQuery);    
+    allEvents.addAll(calendarService.getPublicEvents(eventQuery))  ;
+    
     removeChild(UIFormCheckBoxInput.class) ;
     for(int day =1 ;  day <= getDaysInMonth(); day++) {
       List<CalendarEvent> existEvents = new ArrayList<CalendarEvent>() ;
@@ -88,15 +94,7 @@ public class UIMonthView extends UICalendarView {
       eventData_.put(key, existEvents) ;
     }
   }
-  protected  List<CalendarEvent> getEventsByQuery(String query) throws Exception {
-    List<CalendarEvent> allEvents = new ArrayList<CalendarEvent>() ;
-    CalendarService calService = getApplicationComponent(CalendarService.class) ;
-    EventQuery eventQuery = new EventQuery() ;
-    java.util.Calendar cal =  GregorianCalendar.getInstance() ;
-    //eventQuery.setFromDate(cal.getTime()) ;
-    allEvents = calService.getEvents(eventQuery) ;
-    return allEvents ;
-  }
+  
   protected void addCalendarId(String id) {calendarIds_.put(id,id) ;}
   protected Map<String, String> getCalendarIds() {return calendarIds_ ;}
 

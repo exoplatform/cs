@@ -4,9 +4,14 @@
  **************************************************************************/
 package org.exoplatform.calendar.webui.popup;
 
+import java.util.GregorianCalendar;
+import java.util.List;
+
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarCategory;
+import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
+import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendars;
 import org.exoplatform.portal.webui.util.Util;
@@ -59,13 +64,13 @@ public class UICalendarCategoryForm extends UIForm implements UIPopupComponent{
     public void execute(Event<UICalendarCategoryForm> event) throws Exception {
       UICalendarCategoryForm uiForm = event.getSource() ;
       String categoryName = uiForm.getUIStringInput(CATEGORY_NAME).getValue() ;
+      String description = uiForm.getUIFormTextAreaInput(DESCRIPTION).getValue() ;
       UIApplication app = uiForm.getAncestorOfType(UIApplication.class) ;
       if(CalendarUtils.isEmpty(categoryName)) {
         app.addMessage(new ApplicationMessage("UICalendarCategoryForm.msg.category-name-required", null, ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(app.getUIPopupMessages()) ;
         return ;
       }
-      String description = uiForm.getUIFormTextAreaInput(DESCRIPTION).getValue() ;
       CalendarService calendarService = CalendarUtils.getCalendarService() ;
       CalendarCategory category = new CalendarCategory() ;
       category.setId("category" + IdGenerator.generate()) ;
@@ -84,7 +89,7 @@ public class UICalendarCategoryForm extends UIForm implements UIPopupComponent{
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupContainer.getAncestorOfType(UIPopupAction.class)) ;
       }  
       UICalendars uiCalendars = calendarPortlet.findFirstComponentOfType(UICalendars.class) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendars) ; ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendars) ; 
     }
   }
   static  public class CancelActionListener extends EventListener<UICalendarCategoryForm> {

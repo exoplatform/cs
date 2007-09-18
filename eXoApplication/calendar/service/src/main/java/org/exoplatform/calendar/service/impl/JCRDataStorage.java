@@ -79,8 +79,10 @@ public class JCRDataStorage implements DataStorage{
   private Node getCalendarServiceHome() throws Exception {
     ServiceRegistry serviceRegistry = new ServiceRegistry("CalendarService") ;
     Session session = getJCRSession() ;
-    jcrRegistryService_.createServiceRegistry(serviceRegistry, false) ;    
-    return jcrRegistryService_.getServiceRegistryNode(session, serviceRegistry.getName()) ;
+    jcrRegistryService_.createServiceRegistry(serviceRegistry, false) ;
+    Node node = jcrRegistryService_.getServiceRegistryNode(session, serviceRegistry.getName()) ;
+    session.logout() ;
+    return node ;
   }
   
   private Node getCalendarHome() throws Exception {
@@ -100,6 +102,7 @@ public class JCRDataStorage implements DataStorage{
       addCalendarSetting(calServiceNode, new CalendarSetting()) ;
       calServiceNode.getSession().save() ;
     }
+    session.logout() ;
     return calServiceNode ;
   }
   
@@ -535,13 +538,14 @@ public class JCRDataStorage implements DataStorage{
     return events ;
   }
   
-  public List<CalendarEvent> getEvents(EventQuery eventQuery) throws Exception {
-    Session session = getJCRSession() ;
-    QueryManager qm = session.getWorkspace().getQueryManager() ;
+  public List<CalendarEvent> getUserEvents(String username, EventQuery eventQuery) throws Exception {
+    Node calendarHome = getCalendarHome(username) ;
+    eventQuery.setCalendarPath(calendarHome.getPath()) ;
+    QueryManager qm = calendarHome.getSession().getWorkspace().getQueryManager() ;
+    List<CalendarEvent> events = new ArrayList<CalendarEvent>() ;
     Query query = qm.createQuery(eventQuery.getQueryStatement(), Query.XPATH) ;
     QueryResult result = query.execute();
     NodeIterator it = result.getNodes();
-    List<CalendarEvent> events = new ArrayList<CalendarEvent>() ;
     while(it.hasNext()) {
       events.add(getEvent(it.nextNode())) ;
     }
@@ -579,6 +583,20 @@ public class JCRDataStorage implements DataStorage{
       while(it.hasNext()) {
         events.add(getEvent(it.nextNode())) ;
       }
+    }
+    return events ;
+  }
+  
+  public List<CalendarEvent> getPublicEvents(EventQuery eventQuery) throws Exception {
+    Node calendarHome = getCalendarHome() ;
+    eventQuery.setCalendarPath(calendarHome.getPath()) ;
+    QueryManager qm = calendarHome.getSession().getWorkspace().getQueryManager() ;
+    List<CalendarEvent> events = new ArrayList<CalendarEvent>() ;
+    Query query = qm.createQuery(eventQuery.getQueryStatement(), Query.XPATH) ;
+    QueryResult result = query.execute();
+    NodeIterator it = result.getNodes();
+    while(it.hasNext()) {
+      events.add(getEvent(it.nextNode())) ;
     }
     return events ;
   }

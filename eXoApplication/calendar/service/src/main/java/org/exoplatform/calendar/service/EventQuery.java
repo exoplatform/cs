@@ -4,7 +4,7 @@
  **************************************************************************/
 package org.exoplatform.calendar.service;
 
-import java.sql.Date;
+import org.exoplatform.commons.utils.ISO8601;
 
 /**
  * Created by The eXo Platform SARL
@@ -14,46 +14,80 @@ import java.sql.Date;
  */
 public class EventQuery {
   private String eventType ;
-  private String categoryId = null ;
-  private Date fromDate  = null ;
-  private Date toDate = null ;
+  private String[] categoryIds = null ;
+  private String[] calendarIds = null ;
+  private java.util.Calendar fromDate  = null ;
+  private java.util.Calendar toDate = null ;
   private String calendarPath ;
+  private String statement ;
   
   public String getEventType() { return eventType ; }
   public void setEventType(String eventType) { this.eventType = eventType ; }
   
-  public String getCategoryId() { return categoryId ; }
-  public void setCategoryId(String categoryId) { this.categoryId = categoryId ; }
+  public String[] getCategoryId() { return categoryIds ; }
+  public void setCategoryId(String[] categoryIds) { this.categoryIds = categoryIds ; }
   
-  public Date getFromDate() { return fromDate ; }
-  public void setFromDate(Date fromDate) { this.fromDate = fromDate ; }
+  public String[] getCalendarId() { return calendarIds ; }
+  public void setCalendarId(String[] calendarIds) { this.calendarIds = calendarIds ; }
   
-  public Date getToDate() { return toDate ; }
-  public void setToDate(Date toDate) { this.toDate = toDate ; }
+  public java.util.Calendar getFromDate() { return fromDate ; }
+  public void setFromDate(java.util.Calendar fromDate) { this.fromDate = fromDate ; }
+  
+  public java.util.Calendar getToDate() { return toDate ; }
+  public void setToDate(java.util.Calendar toDate) { this.toDate = toDate ; }
   
   public String getCalendarPath() { return calendarPath ; }
   public void setCalendarPath(String calendarPath) { this.calendarPath = calendarPath ; }
   
+  public void setStatement(String st){ statement = st ; }
   public String getQueryStatement() throws Exception {
     StringBuffer queryString = new StringBuffer("/jcr:root" + calendarPath + "//element(*,exo:calendarEvent)") ;
-    if( categoryId != null || fromDate != null || toDate != null) {
-      queryString.append("[") ;
-      boolean hasConjuntion = false ;
-      if(categoryId != null) {
-        queryString.append("@exo:eventCategoryId='" + categoryId +"'") ;
-        hasConjuntion = true ;
+    boolean hasConjuntion = false ;
+    StringBuffer stringBuffer = new StringBuffer("[") ;
+    //desclared category query
+    if(categoryIds != null && categoryIds.length > 0) {
+      stringBuffer.append("(") ;      
+      for(int i = 0; i < categoryIds.length; i ++) {
+        if(i ==  0) stringBuffer.append("@exo:eventCategoryId='" + categoryIds[i] +"'") ;
+        else stringBuffer.append(" or @exo:eventCategoryId='" + categoryIds[i] +"'") ;
       }
-      if(fromDate != null) {
-        if(hasConjuntion)  queryString.append(" and ") ;
-        queryString.append("@exo:fromDateTime >='" + fromDate +"'") ;
-        hasConjuntion = true ;
-      }
-      if(toDate != null) {
-        if(hasConjuntion)  queryString.append(" and ") ;
-        queryString.append("@exo:toDateTime <='" + toDate +"'") ;
-      }
-      queryString.append("]") ;
+      stringBuffer.append(")") ;
+      hasConjuntion = true ;
     }
-    return queryString.toString() ;
+    // desclared calendar query
+    if(calendarIds != null && calendarIds.length > 0) {
+      if(hasConjuntion) stringBuffer.append(" and (") ;
+      else stringBuffer.append("(") ;
+      for(int i = 0; i < calendarIds.length; i ++) {
+        if(i == 0) stringBuffer.append("@exo:calendarId='" + calendarIds[i] +"'") ;
+        else stringBuffer.append(" or @exo:calendarId='" + calendarIds[i] +"'") ;
+      }
+      stringBuffer.append(")") ;
+      hasConjuntion = true ;
+    }
+    
+    // desclared Date time
+    if(fromDate != null && toDate != null){
+      if(hasConjuntion) stringBuffer.append(" and (") ;
+      else stringBuffer.append("(") ;
+      stringBuffer.append("@exo:fromDateTime >= xs:dateTime('"+ISO8601.format(fromDate)+"') and ") ;
+      stringBuffer.append("@exo:toDateTime < xs:dateTime('"+ISO8601.format(toDate)+"')") ;
+      stringBuffer.append(")") ;      
+    }else if(fromDate != null) {
+      if(hasConjuntion) stringBuffer.append(" and (") ;
+      else stringBuffer.append("(") ;
+      stringBuffer.append("@exo:fromDateTime >= xs:dateTime('"+ISO8601.format(fromDate)+"')") ;
+      stringBuffer.append(")") ;
+      hasConjuntion = true ;
+    }else if(toDate != null) {
+      if(hasConjuntion) stringBuffer.append(" and (") ;
+      else stringBuffer.append("(") ;
+      stringBuffer.append("@exo:toDateTime < xs:dateTime('"+ISO8601.format(toDate)+"')") ;
+      stringBuffer.append(")") ;
+      hasConjuntion = true ;
+    }
+    stringBuffer.append("]") ;
+    if(stringBuffer.length() > 2) queryString.append(stringBuffer.toString()) ;
+    return queryString.toString() ;    
   }
 }
