@@ -195,7 +195,7 @@ public interface MailService {
    * @param messageId
    * @throws Exception
    */
-  public void removeMessage(String username, String messageId, String accountId) throws Exception ;
+  public void removeMessage(String username, String accountId, String messageId) throws Exception ;
   /**
    * This method should:
    * 1. Remove all the messages 
@@ -205,7 +205,7 @@ public interface MailService {
    * @param messageId
    * @throws Exception
    */
-  public void removeMessage(String username, String[] messageId, String accountId) throws Exception ;
+  public void removeMessage(String username, String accountId, List<String> messageIds) throws Exception ;
 
   /**
    * This method should send out the message
@@ -228,6 +228,6 @@ public interface MailService {
    * @return the number of the new message
    * @throws Exception
    */
-  public int  checkNewMessage(String username, Account account) throws Exception ;  
+  public List<Message>  checkNewMessage(String username, Account account) throws Exception ;  
 
 }

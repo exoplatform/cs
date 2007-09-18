@@ -56,8 +56,8 @@
 		<%for(Folder f : uicomponent.getFolders()) {
 			String name = f.getName() ;
 			String icon = name + "Icon" ;
-			long unreadMess = uicomponent.getNumberOfUnreadMessage(f.name);
-			String actionLink = uicomponent.event('ChangeFolder',name);
+			long unreadMess = uicomponent.getNumberOfUnreadMessage(f.getName());
+			String actionLink = uicomponent.event('ChangeFolder', name);
 			String cssClass = "NormalLabel" ;
 			if(name.equals(uicomponent.getSelectedFolder())) {
 			  cssClass = "SelectedLabel" ;

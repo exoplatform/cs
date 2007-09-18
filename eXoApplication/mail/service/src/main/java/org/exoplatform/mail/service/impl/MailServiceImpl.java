@@ -105,12 +105,12 @@ public class MailServiceImpl implements MailService{
     return storage_.getMessageById(username, accountId, messageName);
   }
 
-  public void removeMessage(String username, String messageName, String accountId) throws Exception {
-    storage_.removeMessage(username, accountId, messageName);
+  public void removeMessage(String username, String accountId, String messageId) throws Exception {
+    storage_.removeMessage(username, accountId, messageId);
   }
 
-  public void removeMessage(String username, String[] messageName, String accountId) throws Exception {
-    storage_.removeMessage(username, accountId, messageName);
+  public void removeMessage(String username,String accountId, List<String> messageIds) throws Exception {
+    storage_.removeMessage(username, accountId, messageIds);
   } 
 
   public List<MessageHeader> getMessages(String username, MessageFilter filter) throws Exception {
@@ -184,8 +184,9 @@ public class MailServiceImpl implements MailService{
   public void sendMessage(Message message) throws Exception {
   }
 
-  public int checkNewMessage(String username, Account account) throws Exception {
+  public List<Message> checkNewMessage(String username, Account account) throws Exception {
     System.out.println("\n ### Getting mail from " + account.getHost() + " ... !");
+    List<Message> messageList = new ArrayList<Message>();
     int totalMess = -1;
     try {
       Properties props = System.getProperties();
@@ -239,6 +240,7 @@ public class MailServiceImpl implements MailService{
             setPart(mes, newMsg, username);
           }
           storage_.saveMessage(username, account.getId(), newMsg, true);
+          messageList.add(newMsg);
           i ++ ;
           for(String f : folders) {
             Folder fd = storage_.getFolder(username, account.getId(), f) ;
@@ -258,7 +260,7 @@ public class MailServiceImpl implements MailService{
     }  catch (Exception e) { 
       throw e ;
     }
-    return totalMess;
+    return messageList;
   }
 
   private void setMultiPart(Multipart multipart, Message newMail, String username) {

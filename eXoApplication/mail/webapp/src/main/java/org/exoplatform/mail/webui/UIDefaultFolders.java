@@ -65,19 +65,14 @@ public class UIDefaultFolders extends UIContainer {
   }
   
   public long getNumberOfUnreadMessage(String selectedFolderName) throws Exception {
-    MessageFilter filter = new MessageFilter("filterByFolder") ;
-    MailService mailServ = getApplicationComponent(MailService.class);
-    UIMailPortlet uiPortlet = getAncestorOfType(UIMailPortlet.class);
-    String username = uiPortlet.getCurrentUser() ;
-    String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
-    Folder folder = mailServ.getFolder(username, accountId, selectedFolderName) ;
-    filter.setFolder(new String[]{folder.getName()}) ;
-    filter.setAccountId(accountId) ;
     long number = 0;
-    List<MessageHeader> messageHeaders = mailServ.getMessages(username, filter);
-    for (MessageHeader mh : messageHeaders) {
-      Message mes = (Message) mh;
-      if (mes.isUnread()) number++ ;
+    MailService mailSrv = getApplicationComponent(MailService.class);
+    UIMailPortlet uiPortlet = getAncestorOfType(UIMailPortlet.class);
+    String username = uiPortlet.getCurrentUser();
+    String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+    List<Message> messageList = mailSrv.getMessageByFolder(username, accountId, selectedFolderName);
+    for (Message message : messageList) {
+      if (message.isUnread()) { number++ ; }
     }
     return number;
   } 

@@ -229,10 +229,10 @@ public class JCRDataStorage implements DataStorage{
     messages.getSession().save();
   }
 
-  public void removeMessage(String username, String accountId, String[] messageId) throws Exception {
+  public void removeMessage(String username, String accountId, List<String> messageIds) throws Exception {
     //  loops on the message names array, and removes each message
-    for (int i=0; i<messageId.length; i++) {
-      removeMessage(username, messageId[i], accountId);
+    for (String messageId : messageIds) {
+      removeMessage(username, accountId, messageId);
     }
   }
 

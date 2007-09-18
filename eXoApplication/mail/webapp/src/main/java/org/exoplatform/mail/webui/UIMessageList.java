@@ -10,11 +10,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.exoplatform.mail.service.Account;
-import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
-import org.exoplatform.mail.service.MessageFilter;
-import org.exoplatform.mail.service.MessageHeader;
 import org.exoplatform.mail.service.Tag;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.popup.UIComposeForm;
@@ -47,6 +44,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
         @EventConfig(listeners = UIMessageList.ReplyActionListener.class),
         @EventConfig(listeners = UIMessageList.ReplyAllActionListener.class),
         @EventConfig(listeners = UIMessageList.ForwardActionListener.class), 
+        @EventConfig(listeners = UIMessageList.DeleteActionListener.class),
         @EventConfig(listeners = UIMessageList.MarkAsReadActionListener.class),
         @EventConfig(listeners = UIMessageList.MarkAsUnReadActionListener.class),
         @EventConfig(listeners = UIMessageList.AddStarActionListener.class),
@@ -97,6 +95,12 @@ public class UIMessageList extends UIForm {
     messageMap_.put(message.getId(), message);
   }
   
+  public void addMessageList(List<Message> messageList) throws Exception {
+    for (Message message : messageList) {
+      updateMessage(message, true);
+    }
+  }
+  
   public void removeMessages(List<Message> messages) throws Exception {
     for (Message message : messages) {
       messageMap_.remove(message.getId());
@@ -108,12 +112,12 @@ public class UIMessageList extends UIForm {
     return new ArrayList<Message>(messageMap_.values());
   }
   
-  public List<String> getCheckedMessage() throws Exception {
-    List<String> messageList = new ArrayList<String>();
+  public List<Message> getCheckedMessage() throws Exception {
+    List<Message> messageList = new ArrayList<Message>();
     for (Message msg : getMessageList()) {
       UIFormCheckBoxInput<Boolean> uiCheckbox = getChildById(msg.getId());
       if (uiCheckbox != null && uiCheckbox.isChecked()) {
-        messageList.add(msg.getId());
+        messageList.add(msg);
       }
     }
     return messageList;
@@ -259,15 +263,43 @@ public class UIMessageList extends UIForm {
     }
   }  
   
+  static public class DeleteActionListener extends EventListener<UIMessageList> {
+    public void execute(Event<UIMessageList> event) throws Exception {
+      UIMessageList uiMessageList = event.getSource();
+      System.out.println("======== >>> DeleteActionListener");
+      UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
+      UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
+      UIMessageArea uiMessageArea = uiPortlet.findFirstComponentOfType(UIMessageArea.class);
+      UITags uiTags = uiPortlet.findFirstComponentOfType(UITags.class); 
+      MailService mailSrv = uiMessageList.getApplicationComponent(MailService.class);
+      String username = uiPortlet.getCurrentUser();
+      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      List<Message> checkedMessageList = uiMessageList.getCheckedMessage();
+      List<String> messageIdList = new ArrayList<String>();
+      for (Message message : checkedMessageList) {
+        messageIdList.add(message.getId());
+      }
+      try {
+        mailSrv.removeMessage(username, accountId, messageIdList);
+        uiMessageList.removeMessages(checkedMessageList);
+      } catch (Exception e) {
+        System.err.println("Error : Exception occur while delete message");
+      }
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageArea);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiTags);
+    }
+  }
+  
   static public class MarkAsReadActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
-      UIMessageList uiActionBar = event.getSource() ;      
+      UIMessageList uiMessageList = event.getSource() ;      
     }
   }
   
   static public class MarkAsUnReadActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
-      UIMessageList uiActionBar = event.getSource() ;      
+      UIMessageList uiMessageList = event.getSource() ;      
     }
   }
 
@@ -284,8 +316,8 @@ public class UIMessageList extends UIForm {
       String accId = uiSelect.getSelectedValue() ;
       List<Tag> listTags = mailService.getTags(username, accId);
       uiTagForm.createCheckBoxTagList(listTags) ;
-      for (String msgId : uiMessageList.getCheckedMessage()) {
-        uiTagForm.messageMap.put(msgId, msgId); 
+      for (Message msg : uiMessageList.getCheckedMessage()) {
+        uiTagForm.messageMap.put(msg.getId(), msg.getId()); 
       }     
       uiPopupAction.activate(uiTagForm, 600, 0, true);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
@@ -294,19 +326,19 @@ public class UIMessageList extends UIForm {
   
   static public class MoveMessagesActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
-      UIMessageList uiActionBar = event.getSource() ;      
+      UIMessageList uiMessageList = event.getSource() ;      
     }
   }
   
   static public class ImportActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
-      UIMessageList uiActionBar = event.getSource() ;      
+      UIMessageList uiMessageList = event.getSource() ;      
     }
   }
   
   static public class ExportActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
-      UIMessageList uiActionBar = event.getSource() ;      
+      UIMessageList uiMessageList = event.getSource() ;      
     }
   }
 }

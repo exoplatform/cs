@@ -11,6 +11,7 @@ import javax.mail.AuthenticationFailedException;
 
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
+import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.popup.UIAccountCreation;
 import org.exoplatform.mail.webui.popup.UIPopupActionContainer;
@@ -69,9 +70,11 @@ public class UIActionBar extends UIContainer {
       }
       String username =  uiPortlet.getCurrentUser() ;
       Account account = mailSvr.getAccountById(username, accId) ;
+      List<Message> messageList = new ArrayList<Message>();
       try {
-        mailSvr.checkNewMessage(username, account) ;
+        messageList = mailSvr.checkNewMessage(username, account) ;
         uiMessageList.setSelectedFolderId(Utils.FD_INBOX);
+        uiMessageList.addMessageList(messageList) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageArea);
       } catch (AuthenticationFailedException afe) {

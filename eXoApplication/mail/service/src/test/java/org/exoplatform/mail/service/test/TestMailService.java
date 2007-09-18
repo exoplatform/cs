@@ -88,8 +88,8 @@ public class TestMailService extends BaseMailTestCase{
     mailService_.updateAccount("hungnguyen", myaccount);
     
     // get mail
-    int nbOfNewMail = mailService_.checkNewMessage("hungnguyen", myaccount);
-    assertTrue(nbOfNewMail > -1);
+    List<Message> nbOfNewMail = mailService_.checkNewMessage("hungnguyen", myaccount);
+    assertTrue(nbOfNewMail.size() > -1);
     MessageFilter filter = new MessageFilter("filter by folder "+folder);
     String[] folders = {folder.getName()};
     filter.setFolder(folders);
