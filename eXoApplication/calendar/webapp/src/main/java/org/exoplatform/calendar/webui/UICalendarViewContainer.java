@@ -37,6 +37,6 @@ public class UICalendarViewContainer extends UIContainer  {
     addChild(UIListView.class, null, null) ;
     addChild(UIScheduleView.class, null, null) ;
 
-    setRenderedChild(UIDayView.class) ;
+    setRenderedChild(UIMonthView.class) ;
   }  
 }

@@ -40,77 +40,80 @@
   			</div>
 				<div class="RowContainerDay">
 			<table class="UIGrid" id="RowContainerDay" cellspacing="0" borderspacing="0">
-			<%
-				week = 0 ; 
-				table = "" ;
-				clazz ="" ;
-				dayOfMonth = 1 ;
-				validDay = 0 ;
-				cssClass = "CalendarContentNomal" ;
-				daysInMonth = uicomponent.getDaysInMonth() ;
-				while ( week++ < 6   ) {
-			    table += "<tr>";
-			    dayOfWeek = 0 ;
-			    while (dayOfWeek++ < 7) {
-			    	startDayOfWeek = uicomponent.getDayOfWeek(currentYear, currentMonth, dayOfMonth) ;
-			      if (week == 1 && startDayOfWeek == dayOfWeek) {
-			        validDay = 1;
-			      } else if (validDay == 1 && dayOfMonth > daysInMonth) {
-			        validDay = 0;
-			      }
-			      if (validDay) {
-			        if (uicomponent.isToday(dayOfMonth, currentMonth, currentYear )) {
-			          clazz = 'Today';
-			        } else if (dayOfWeek == 1 || dayOfWeek == 7) {
-			          clazz = 'DayBox';
-			        } else {
-			          clazz = 'DayBox';
-			        }
-				      month = currentMonth + 1 ;
-			        table = table + "<td  class='CalendarContentNomal'> <div class='DayBox $clazz' >" + dayOfMonth + "/" + month + "</div> <div class='DayContent'>" ;
-			        eventList = uicomponent.getEventsData().get(dayOfMonth) ;
-				      if(eventList != null) {
-				        size = eventList.size() ;
-				        events = "" ;
-				        viewMore = "" ;
-								if(size > 0) {
-									for(event in eventList) {
-										if(eventList.indexOf(event) > 2) {break ;}
-										begin = event.getFromDateTime() ;
-										end = event.getToDateTime();
-										sumary = event.getSummary() ;
-										title = sumary ;
-										if(sumary.length() > 15) { 
-											sumary = sumary.substring(0,15) + "..."  ;
-										}
-										events = events + "<div day='$dayOfMonth' class=\"EventOnDayContent\"><div class=\"EventOnDayLabel\" title=\"$title\">"+ sumary +"</div></div>"
-									}
-								}
-								if(size > 3) {
-									moreSize =  size - 3  ;
-									viewMore = viewMore + "<div class=\"ViewMoreIcon\" title=\"View all event on day\"> + " +moreSize+ " More </div>"	
-								}
-								if(size > 0) {
-									table = table + "<div class=\"EventOnDayBorder\">" ;
-									table = table + events ;
-									table = table + viewMore ;
-									table = table + "</div>" ;
-								}
-							}
-							table = table + "</div></td>" ;
-			        dayOfMonth++ ;
-			      } else {
-			        table = table + "<td class='CalendarContentDisable'> <div class='DisableDay'><span></span></div> <div class='DayContent'><span></span></div></td>" ;
-			      }
-			    }
-			    table += "</tr>" ;
-  			}	
-  			
-			%>
-			
 				<col width="14%"><col width="14%"><col width="14%"><col width="14%"><col width="14%"><col width="14%"><col width="14%">
 				<tbody>
-				<%println table ;%>
+				
+					<%
+						week = 0 ; 
+						table = "" ;
+						clazz ="" ;
+						dayOfMonth = 1 ;
+						validDay = 0 ;
+						cssClass = "CalendarContentNomal" ;
+						daysInMonth = uicomponent.getDaysInMonth() ;
+						while ( week++ < 6   ) {
+					    println "<tr>";
+					    dayOfWeek = 0 ;
+					    while (dayOfWeek++ < 7) {
+					    	startDayOfWeek = uicomponent.getDayOfWeek(currentYear, currentMonth, dayOfMonth) ;
+					      if (week == 1 && startDayOfWeek == dayOfWeek) {
+					        validDay = 1;
+					      } else if (validDay == 1 && dayOfMonth > daysInMonth) {
+					        validDay = 0;
+					      }
+					      if (validDay) {
+					        if (uicomponent.isToday(dayOfMonth, currentMonth, currentYear )) {
+					          clazz = 'Today';
+					        } else if (dayOfWeek == 1 || dayOfWeek == 7) {
+					          clazz = 'DayBox';
+					        } else {
+					          clazz = 'DayBox';
+					        }
+						      month = currentMonth + 1 ;
+					        println "<td  class='CalendarContentNomal'> <div class='DayBox $clazz' >" ;
+					        println dayOfMonth ;
+									println "/" ;
+									println month ;
+									println "</div> <div class='DayContent'>" ;
+					        eventList = uicomponent.getEventsData().get(dayOfMonth) ;
+						      if(eventList != null) {
+						        size = eventList.size() ;
+						        events = "" ;
+						        viewMore = "" ;
+										if(size > 0) {
+											for(event in eventList) {
+												if(eventList.indexOf(event) > 2) {break ;}
+												begin = event.getFromDateTime() ;
+												end = event.getToDateTime();
+												sumary = event.getSummary() ;
+												title = sumary ;
+												if(sumary.length() > 15) { 
+													sumary = sumary.substring(0,15) + "..."  ;
+												}
+												events = events + "<div day='$dayOfMonth' class=\"EventOnDayContent\"><div class=\"EventOnDayLabel\" title=\"$title\">"+ sumary +"</div></div>"
+											}
+										}
+										if(size > 3) {
+											moreSize =  size - 3  ;
+											viewMore = viewMore + "<div class=\"ViewMoreIcon\" title=\"View all event on day\"> + " +moreSize+ " More </div>"	
+										}
+										if(size > 0) {
+											println "<div class=\"EventOnDayBorder\">" ;
+											println events ;
+											println viewMore ;
+											println "</div>" ;
+										}
+									}
+									println "</div></td>" ;
+					        dayOfMonth++ ;
+					      } else {
+					        println "<td class='CalendarContentDisable'> <div class='DisableDay'><span></span></div> <div class='DayContent'><span></span></div></td>" ;
+					      }
+					    }
+					    println "</tr>" ;
+		  			}	
+		  			
+					%>
 				</tbody>
 			</table>
 		</div>
