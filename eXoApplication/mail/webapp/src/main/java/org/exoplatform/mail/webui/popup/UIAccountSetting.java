@@ -80,5 +80,5 @@ public class UIAccountSetting extends UIFormTabPane {
     setRenderedChild(TAB_ACCOUNT);
   }
 
-  public String[] getActions() {return new String[]{"Save", "Close"};}
+  public String[] getActions() {return new String[]{"Save", "Cancel"};}
 }
