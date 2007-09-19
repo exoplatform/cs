@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
+import org.exoplatform.contact.webui.UIAddressBooks;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -21,6 +22,8 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormStringInput;
+import org.exoplatform.webui.form.UIFormTextAreaInput;
+
 
 /**
  * Created by The eXo Platform SARL
@@ -36,54 +39,79 @@ import org.exoplatform.webui.form.UIFormStringInput;
       @EventConfig(listeners = UICategoryForm.CancelActionListener.class)
     }
 )
-public class UICategoryForm extends UIForm implements UIPopupComponent{
+public class UICategoryForm extends UIForm implements UIPopupComponent {
+  public static boolean isNew_ = true;
+  public static String groupId_ ;
   public static final String FIELD_CATEGORYNAME_INPUT = "categoryName";
+  public static final String FIELD_DESCRIPTION_INPUT = "description";
   
   public UICategoryForm() {
-    addUIFormInput(new UIFormStringInput(FIELD_CATEGORYNAME_INPUT, FIELD_CATEGORYNAME_INPUT, null));
+    addUIFormInput(new UIFormStringInput(FIELD_CATEGORYNAME_INPUT, FIELD_CATEGORYNAME_INPUT, null));    
+    addUIFormInput(new UIFormTextAreaInput(FIELD_DESCRIPTION_INPUT, FIELD_DESCRIPTION_INPUT, null)) ;    
   }
   
   public String[] getActions() { return new String[] {"Save", "Cancel"} ; }
+  public void activate() throws Exception { }
+  public void deActivate() throws Exception { }
   
-  public void activate() throws Exception {
-    // TODO Auto-generated method stub
-  }
-
-  public void deActivate() throws Exception {
-    // TODO Auto-generated method stub
+  public void setValues(String groupId) throws Exception {
+    ContactService contactService = getApplicationComponent(ContactService.class);
+    String username = Util.getPortalRequestContext().getRemoteUser() ;
+    ContactGroup contactGroup = contactService.getGroup(username, groupId) ;
+    if (contactGroup != null) {
+      groupId_ = groupId ;
+      getUIStringInput(FIELD_CATEGORYNAME_INPUT).setValue(contactGroup.getName()) ;
+      getUIFormTextAreaInput(FIELD_DESCRIPTION_INPUT).setValue(contactGroup.getDescription()) ;
+    }
   }
   
   static  public class SaveActionListener extends EventListener<UICategoryForm> {
     public void execute(Event<UICategoryForm> event) throws Exception {
-      UICategoryForm uiForm = event.getSource() ;
-      String  groupName = uiForm.getUIStringInput(FIELD_CATEGORYNAME_INPUT).getValue(); 
-      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+      UICategoryForm uiCategoryForm = event.getSource() ;
+      String  groupName = uiCategoryForm.getUIStringInput(FIELD_CATEGORYNAME_INPUT).getValue(); 
+      UIApplication uiApp = uiCategoryForm.getAncestorOfType(UIApplication.class) ;
       if (groupName == null || groupName.trim().length() == 0) {
         uiApp.addMessage(new ApplicationMessage("UICategoryForm.msg.categoryName-required", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ; 
       }
-      ContactGroup group = new ContactGroup();
-      group.setName(groupName);
+      ContactGroup group ; 
       String username = Util.getPortalRequestContext().getRemoteUser() ;
-      ContactService contactService = uiForm.getApplicationComponent(ContactService.class);
-      contactService.saveGroup(username, group, true);  
-      UIPopupContainer popupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
-      UICategorySelect uiCategorySelect = popupContainer.findFirstComponentOfType(UICategorySelect.class);
-      List<SelectItemOption<String>> ls = uiCategorySelect.getCategoryList();
-      uiCategorySelect.setCategoryList(ls);
-      WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
-      context.addUIComponentToUpdateByAjax(popupContainer) ;
+      ContactService contactService = uiCategoryForm.getApplicationComponent(ContactService.class);
+      if (isNew_) group = new ContactGroup() ;
+      else group = contactService.getGroup(username, groupId_) ;
+      group.setName(groupName) ;
+      group.setDescription(uiCategoryForm.getUIFormTextAreaInput(FIELD_DESCRIPTION_INPUT).getValue()) ;
+      if (isNew_) contactService.saveGroup(username, group, true) ; 
+      else contactService.saveGroup(username, group, false) ;
+
+      UIPopupContainer popupContainer = uiCategoryForm.getAncestorOfType(UIPopupContainer.class) ;
+      if (popupContainer != null) {
+        UICategorySelect uiCategorySelect = popupContainer.findFirstComponentOfType(UICategorySelect.class);
+        List<SelectItemOption<String>> ls = uiCategorySelect.getCategoryList();
+        uiCategorySelect.setCategoryList(ls);
+        WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+        context.addUIComponentToUpdateByAjax(uiCategorySelect) ;
+        UIPopupAction uiPopupAction = popupContainer.getChild(UIPopupAction.class) ;
+        uiPopupAction.deActivate() ;
+        context.addUIComponentToUpdateByAjax(popupContainer) ;
+      } else {
+        UIContactPortlet uiContactPortlet = uiCategoryForm.getAncestorOfType(UIContactPortlet.class) ;
+        UIAddressBooks uiAddressBook = uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook) ;
+        uiContactPortlet.cancelAction() ;
+      }
     }
   }
   
   static  public class CancelActionListener extends EventListener<UICategoryForm> {
     public void execute(Event<UICategoryForm> event) throws Exception {
-      UICategoryForm uiForm = event.getSource() ;
-      UIPopupAction uiPopup = uiForm.getAncestorOfType(UIPopupAction.class) ;
-      UIPopupContainer popupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
-      uiPopup.deActivate() ;
+      UICategoryForm uiCategoryForm = event.getSource() ;
+      UIPopupAction uiPopupAction = uiCategoryForm.getAncestorOfType(UIPopupAction.class) ;
+      UIPopupContainer popupContainer = uiCategoryForm.getAncestorOfType(UIPopupContainer.class) ;
+      uiPopupAction.deActivate() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupContainer.getAncestorOfType(UIContactPortlet.class)) ;
     }
   }
+  
 }

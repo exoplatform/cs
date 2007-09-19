@@ -39,9 +39,9 @@ import org.exoplatform.webui.form.UIFormTextAreaInput;
     lifecycle = UIFormLifecycle.class,
     template = "system:/groovy/webui/form/UIFormTabPane.gtmpl",
     events = {
-      @EventConfig(listeners = UIContactForm.AddCategoryActionListener.class),
       @EventConfig(listeners = UIContactForm.SaveActionListener.class),      
-      @EventConfig(listeners = UIContactForm.CancelActionListener.class)
+      @EventConfig(listeners = UIContactForm.CancelActionListener.class),
+      @EventConfig(listeners = UIContactForm.ChangeImageActionListener.class)
     }
 )
 public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
@@ -180,15 +180,15 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
     getUIStringInput(FIELD_EDITPERMISSION_INPUT).setEditable(false) ;
     
     UIProfileInputSet profileTab = getChildById(INPUT_PROFILETAB) ;
-    profileTab.setFieldFullNameValue(contact.getFullName());
-    profileTab.setFieldFirstNameValue(contact.getFirstName());
-    profileTab.setFieldMiddleNameValue(contact.getMiddleName());
-    profileTab.setFieldLastNameValue(contact.getLastName());
-    profileTab.setFieldNickNameValue(contact.getNickName());
-    profileTab.setFieldGenderValue(contact.getGender());
-    profileTab.setFieldBirthdayValue(contact.getBirthday());
-    profileTab.setFieldJobNameValue(contact.getJobTitle());
-    profileTab.setFieldEmailValue(contact.getEmailAddress());
+    profileTab.setFieldFullName(contact.getFullName());
+    profileTab.setFieldFirstName(contact.getFirstName());
+    profileTab.setFieldMiddleName(contact.getMiddleName());
+    profileTab.setFieldLastName(contact.getLastName());
+    profileTab.setFieldNickName(contact.getNickName());
+    profileTab.setFieldGender(contact.getGender());
+    profileTab.setFieldBirthday(contact.getBirthday());
+    profileTab.setFieldJobName(contact.getJobTitle());
+    profileTab.setFieldEmail(contact.getEmailAddress());
     
     getUIStringInput(FIELD_WORKADDRESS_INPUT).setValue(contact.getWorkAddress());
     getUIStringInput(FIELD_WORKCITY_INPUT).setValue(contact.getWorkCity());
@@ -224,8 +224,8 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
   
   static  public class SaveActionListener extends EventListener<UIContactForm> {
     public void execute(Event<UIContactForm> event) throws Exception {
-      UIContactForm uiForm = event.getSource() ;
-      ContactService contactService = uiForm.getApplicationComponent(ContactService.class);  
+      UIContactForm uiContactForm = event.getSource() ;
+      ContactService contactService = uiContactForm.getApplicationComponent(ContactService.class);  
       String username = Util.getPortalRequestContext().getRemoteUser() ;
       Contact contact ;
       if (isNew_) contact = new Contact() ;
@@ -233,72 +233,72 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
         contact = contactService.getContact(username, contactId_);
         if (contact == null) contact = contactService.getSharedContact(contactId_);
       }
-      UIProfileInputSet profileTab = uiForm.getChildById(INPUT_PROFILETAB) ;
-      if (profileTab.getFieldFullNameValue() == null || profileTab.getFieldFullNameValue().trim().length() == 0) {
-        UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+      UIProfileInputSet profileTab = uiContactForm.getChildById(INPUT_PROFILETAB) ;
+      if (profileTab.getFieldFullName() == null || profileTab.getFieldFullName().trim().length() == 0) {
+        UIApplication uiApp = uiContactForm.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.fullname-required", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ; 
       } 
-      contact.setFullName(profileTab.getFieldFullNameValue());
-      contact.setFirstName(profileTab.getFieldFirstNameValue());
-      contact.setMiddleName(profileTab.getFieldMiddleNameValue());
-      contact.setLastName(profileTab.getFieldLastNameValue());
-      contact.setNickName(profileTab.getFieldNickNameValue());
-      contact.setGender(profileTab.getFieldGenderValue()) ;
-      contact.setBirthday(profileTab.getFieldBirthdayValue()) ;
-      contact.setJobTitle(profileTab.getFieldJobNameValue());
-      contact.setEmailAddress(profileTab.getFieldEmailValue());
+      contact.setFullName(profileTab.getFieldFullName());
+      contact.setFirstName(profileTab.getFieldFirstName());
+      contact.setMiddleName(profileTab.getFieldMiddleName());
+      contact.setLastName(profileTab.getFieldLastName());
+      contact.setNickName(profileTab.getFieldNickName());
+      contact.setGender(profileTab.getFieldGender()) ;
+      contact.setBirthday(profileTab.getFieldBirthday()) ;
+      contact.setJobTitle(profileTab.getFieldJobName());
+      contact.setEmailAddress(profileTab.getFieldEmail());
       
-      contact.setWorkAddress(uiForm.getUIStringInput(FIELD_WORKADDRESS_INPUT).getValue());
-      contact.setWorkCity(uiForm.getUIStringInput(FIELD_WORKCITY_INPUT).getValue());
-      contact.setWorkStateProvince(uiForm.getUIStringInput(FIELD_WORKSTATE_INPUT).getValue());
-      contact.setWorkPostalCode(uiForm.getUIStringInput(FIELD_WORKPOSTALCODE_INPUT).getValue());
-      contact.setWorkCountry(uiForm.getUIStringInput(FIELD_WORKCOUNTRY_INPUT).getValue());
-      contact.setWorkPhone1(uiForm.getUIStringInput(FIELD_WORKPHONE1_INPUT).getValue());
-      contact.setWorkPhone2(uiForm.getUIStringInput(FIELD_WORKPHONE2_INPUT).getValue());
-      contact.setWorkFax(uiForm.getUIStringInput(FIELD_WORKFAX_INPUT).getValue());
-      contact.setMobilePhone(uiForm.getUIStringInput(FIELD_WORKMOBILEPHONE_INPUT).getValue());
-      contact.setWebPage(uiForm.getUIStringInput(FIELD_WORKWEBPAGE_INPUT).getValue());
+      contact.setWorkAddress(uiContactForm.getUIStringInput(FIELD_WORKADDRESS_INPUT).getValue());
+      contact.setWorkCity(uiContactForm.getUIStringInput(FIELD_WORKCITY_INPUT).getValue());
+      contact.setWorkStateProvince(uiContactForm.getUIStringInput(FIELD_WORKSTATE_INPUT).getValue());
+      contact.setWorkPostalCode(uiContactForm.getUIStringInput(FIELD_WORKPOSTALCODE_INPUT).getValue());
+      contact.setWorkCountry(uiContactForm.getUIStringInput(FIELD_WORKCOUNTRY_INPUT).getValue());
+      contact.setWorkPhone1(uiContactForm.getUIStringInput(FIELD_WORKPHONE1_INPUT).getValue());
+      contact.setWorkPhone2(uiContactForm.getUIStringInput(FIELD_WORKPHONE2_INPUT).getValue());
+      contact.setWorkFax(uiContactForm.getUIStringInput(FIELD_WORKFAX_INPUT).getValue());
+      contact.setMobilePhone(uiContactForm.getUIStringInput(FIELD_WORKMOBILEPHONE_INPUT).getValue());
+      contact.setWebPage(uiContactForm.getUIStringInput(FIELD_WORKWEBPAGE_INPUT).getValue());
     
-      contact.setExoId(uiForm.getUIStringInput(FIELD_EXOCHAT_INPUT).getValue());
-      contact.setGoogleId(uiForm.getUIStringInput(FIELD_GOOGLE_INPUT).getValue());
-      contact.setMsnId(uiForm.getUIStringInput(FIELD_MSN_INPUT).getValue());
-      contact.setAolId(uiForm.getUIStringInput(FIELD_AOLAIM_INPUT).getValue());
-      contact.setYahooId(uiForm.getUIStringInput(FIELD_YAHOO_INPUT).getValue());
-      contact.setIcrId(uiForm.getUIStringInput(FIELD_ICR_INPUT).getValue() );
-      contact.setSkypeId(uiForm.getUIStringInput(FIELD_SKYPE_INPUT).getValue());
-      contact.setIcqId(uiForm.getUIStringInput(FIELD_ICQ_INPUT).getValue());
+      contact.setExoId(uiContactForm.getUIStringInput(FIELD_EXOCHAT_INPUT).getValue());
+      contact.setGoogleId(uiContactForm.getUIStringInput(FIELD_GOOGLE_INPUT).getValue());
+      contact.setMsnId(uiContactForm.getUIStringInput(FIELD_MSN_INPUT).getValue());
+      contact.setAolId(uiContactForm.getUIStringInput(FIELD_AOLAIM_INPUT).getValue());
+      contact.setYahooId(uiContactForm.getUIStringInput(FIELD_YAHOO_INPUT).getValue());
+      contact.setIcrId(uiContactForm.getUIStringInput(FIELD_ICR_INPUT).getValue() );
+      contact.setSkypeId(uiContactForm.getUIStringInput(FIELD_SKYPE_INPUT).getValue());
+      contact.setIcqId(uiContactForm.getUIStringInput(FIELD_ICQ_INPUT).getValue());
       
-      contact.setHomeAddress(uiForm.getUIStringInput(FIELD_HOMEADDRESS_INPUT).getValue());
-      contact.setHomeCity(uiForm.getUIStringInput(FIELD_HOMECITY_INPUT).getValue());
-      contact.setHomeState_province(uiForm.getUIStringInput(FIELD_HOMESTATE_INPUT).getValue());
-      contact.setHomePostalCode(uiForm.getUIStringInput(FIELD_HOMEPOSTALCODE_INPUT).getValue());
-      contact.setHomeCountry(uiForm.getUIStringInput(FIELD_HOMECOUNTRY_INPUT).getValue());
-      contact.setHomePhone1(uiForm.getUIStringInput(FIELD_HOMEPHONE1_INPUT).getValue() );
-      contact.setHomePhone2(uiForm.getUIStringInput(FIELD_HOMEPHONE2_INPUT).getValue());
-      contact.setHomeFax(uiForm.getUIStringInput(FIELD_HOMEFAX_INPUT).getValue());
-      contact.setPersonalSite(uiForm.getUIStringInput(FIELD_PERSONALSITE_INPUT).getValue());
-      contact.setNote(uiForm.getUIFormTextAreaInput(FIELD_NOTE_INPUT).getValue());
+      contact.setHomeAddress(uiContactForm.getUIStringInput(FIELD_HOMEADDRESS_INPUT).getValue());
+      contact.setHomeCity(uiContactForm.getUIStringInput(FIELD_HOMECITY_INPUT).getValue());
+      contact.setHomeState_province(uiContactForm.getUIStringInput(FIELD_HOMESTATE_INPUT).getValue());
+      contact.setHomePostalCode(uiContactForm.getUIStringInput(FIELD_HOMEPOSTALCODE_INPUT).getValue());
+      contact.setHomeCountry(uiContactForm.getUIStringInput(FIELD_HOMECOUNTRY_INPUT).getValue());
+      contact.setHomePhone1(uiContactForm.getUIStringInput(FIELD_HOMEPHONE1_INPUT).getValue() );
+      contact.setHomePhone2(uiContactForm.getUIStringInput(FIELD_HOMEPHONE2_INPUT).getValue());
+      contact.setHomeFax(uiContactForm.getUIStringInput(FIELD_HOMEFAX_INPUT).getValue());
+      contact.setPersonalSite(uiContactForm.getUIStringInput(FIELD_PERSONALSITE_INPUT).getValue());
+      contact.setNote(uiContactForm.getUIFormTextAreaInput(FIELD_NOTE_INPUT).getValue());
 
-      UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
+      UIContactPortlet uiContactPortlet = uiContactForm.getAncestorOfType(UIContactPortlet.class) ;
       UIContacts uicontacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
       UIAddressBooks uiAddressBook = uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class) ;
       UIContactPreview uiContactPreview = uiContactPortlet.findFirstComponentOfType(UIContactPreview.class) ;
-      if (uiForm.getUIFormCheckBoxInput(FIELD_ISPUBLIC_BOX).isChecked()) {
+      if (uiContactForm.getUIFormCheckBoxInput(FIELD_ISPUBLIC_BOX).isChecked()) {
         StringBuffer sharedGroups = new StringBuffer("");
         for (int i = 0; i < FIELD_SHAREDCONTACT_BOX.length; i ++) {
-          if (uiForm.getUIFormCheckBoxInput(FIELD_SHAREDCONTACT_BOX[i]).isChecked())
+          if (uiContactForm.getUIFormCheckBoxInput(FIELD_SHAREDCONTACT_BOX[i]).isChecked())
             sharedGroups.append(FIELD_SHAREDCONTACT_BOX[i] + ",");
         }
         if (sharedGroups.toString().equals("")) {
-          UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+          UIApplication uiApp = uiContactForm.getAncestorOfType(UIApplication.class) ;
           uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.selectSharedGroups-required", null)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ; 
         }   
-        if (uiForm.getUIStringInput(FIELD_EDITPERMISSION_INPUT).getValue() != null)
-          contact.setEditPermission(uiForm.getUIStringInput(FIELD_EDITPERMISSION_INPUT).getValue().split(","));
+        if (uiContactForm.getUIStringInput(FIELD_EDITPERMISSION_INPUT).getValue() != null)
+          contact.setEditPermission(uiContactForm.getUIStringInput(FIELD_EDITPERMISSION_INPUT).getValue().split(","));
         String[] categories = sharedGroups.toString().split(",") ;
         contact.setCategories(categories);
         contactService.saveSharedContact(contact, isNew_);
@@ -321,7 +321,7 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
             uiContactPreview.setContact(contact) ;
         }
       } else {
-        UIPopupContainer popupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
+        UIPopupContainer popupContainer = uiContactForm.getAncestorOfType(UIPopupContainer.class) ;
         UICategorySelect uiCategorySelect = popupContainer.getChild(UICategorySelect.class); 
         String category = uiCategorySelect.getSelectedCategory();
         contact.setCategories(new String[] { category });
@@ -346,16 +346,6 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
     }
   }
   
-  static  public class AddCategoryActionListener extends EventListener<UIContactForm> {
-    public void execute(Event<UIContactForm> event) throws Exception {
-      UIContactForm uiForm = event.getSource() ;
-      UIPopupContainer popupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
-      UIPopupAction popupAction = popupContainer.getChild(UIPopupAction.class) ;
-      popupAction.activate(UICategoryForm.class, 600) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;      
-    }
-  }
-  
   static  public class CancelActionListener extends EventListener<UIContactForm> {
     public void execute(Event<UIContactForm> event) throws Exception {
       UIContactForm uiForm = event.getSource() ;
@@ -363,5 +353,16 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
       uiContactPortlet.cancelAction() ; 
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContactPortlet) ;
     }
-  }  
+  }
+  
+  static  public class ChangeImageActionListener extends EventListener<UIContactForm> {
+    public void execute(Event<UIContactForm> event) throws Exception {
+      UIContactForm uiForm = event.getSource() ;
+      UIPopupContainer popupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
+      UIPopupAction popupAction = popupContainer.getChild(UIPopupAction.class) ;
+      popupAction.activate(UIImageForm.class, 600) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+    }
+  }
+  
 }

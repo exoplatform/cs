@@ -25,7 +25,6 @@ import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
-import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 
@@ -43,7 +42,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
         @EventConfig(listeners = UIContacts.SelectedContactActionListener.class),
         @EventConfig(listeners = UIContacts.AddTagActionListener.class),
         @EventConfig(listeners = UIContacts.EditContactActionListener.class),
-        @EventConfig(phase=Phase.DECODE, listeners = UIContacts.DeleteContactsActionListener.class,
+        @EventConfig(listeners = UIContacts.DeleteContactsActionListener.class,
             confirm = "UIContacts.msg.confirm-delete"),
         @EventConfig(listeners = UIContacts.MoveContactsActionListener.class)
     }

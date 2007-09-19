@@ -4,7 +4,7 @@
  **************************************************************************/
 package org.exoplatform.contact.webui;
 
-import org.exoplatform.contact.webui.popup.UIAddressBookForm;
+import org.exoplatform.contact.webui.popup.UICategoryForm;
 import org.exoplatform.contact.webui.popup.UICategorySelect;
 import org.exoplatform.contact.webui.popup.UIContactForm;
 import org.exoplatform.contact.webui.popup.UIPopupAction;
@@ -36,21 +36,16 @@ public class UIActionBar extends UIContainer  {
   final public static String CONTACT = "Contact".intern() ;
   final public static String ADDRESSBOOK = "Address".intern() ;
   final public static String[] ADDNEW_TYPES = { CONTACT, ADDRESSBOOK } ;
-  
   final public static String CONTACTS_LIST = "ContactList".intern() ;
   final public static String DETAILED_CARDS = "Contact".intern() ;
   final public static String[] VIEW_TYPES = { CONTACTS_LIST, DETAILED_CARDS } ;
-  
   public UIActionBar() throws Exception { } 
-  
   public String[] getViewTypes() { return VIEW_TYPES ; }
   public String[] getAddNewTypes() { return ADDNEW_TYPES ; }
   
   static public class ChangeViewActionListener extends EventListener<UIActionBar> {
-    public void execute(Event<UIActionBar> event) throws Exception {
-      
-    }
-  }  
+    public void execute(Event<UIActionBar> event) throws Exception { }
+  } 
   
   static public class AddNewActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {
@@ -65,8 +60,9 @@ public class UIActionBar extends UIContainer  {
         UIContactForm.isNew_ = true ;
         popupAction.activate(popupContainer, 800, 450, true) ;        
       } else if (addNewType.equals(ADDRESSBOOK)) {
-        UIAddressBookForm uiAddressBookForm = popupAction.createUIComponent(UIAddressBookForm.class, null, "AddNewAddressBook") ;
-        popupAction.activate(uiAddressBookForm, 500, 0, true) ;
+        UICategoryForm uiCategoryForm = popupAction.createUIComponent(UICategoryForm.class, null, "UICategoryForm") ;
+        UICategoryForm.isNew_ = true ;
+        popupAction.activate(uiCategoryForm, 500, 0, true) ;
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }  

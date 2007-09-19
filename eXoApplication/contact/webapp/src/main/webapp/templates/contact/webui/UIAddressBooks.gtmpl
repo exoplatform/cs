@@ -1,3 +1,5 @@
+
+
 <div class="UIAddressBooks" id="<%=uicomponent.getId()%>">
 	<div class="TitleBar">
 		<div class="DownArrow3Icon" title="Collapse/Expand all"><span></span></div>
@@ -34,11 +36,11 @@
 			List groupContactData = uicomponent.getSharedContactGroups();
 			for(group in groupContactData) {
 			cssClass = "Normal" ;
-			String actionLink2  = uicomponent.event("SelectSharedGroup", group.getName()) ;			
+			String actionLink2  = uicomponent.event("SelectSharedGroup", group.getName()) ;
 			if(group.getName().equals(uicomponent.getSelectedGroup()))	cssClass = "Selected" ;
 		%>
 		<div class="ItemList $cssClass">
-			<a id="<%= group.getName() %>" href="$actionLink2" class="IconHolder AddressIcon"><%=group.getName()%></a>
+			<a id="<%=group.getName()%>" href="$actionLink2" class="IconHolder AddressIcon"><%=group.getName()%></a>
 		</div>
 		<% } %>
 	</div>
@@ -46,7 +48,7 @@
 	
 	<% /*Begin Popup Menu*/ %>
 				
-	  	<div class="UIRightClickPopupMenu"   id="UIAddressBookPopupMenu" eXoCallback="eXo.contact.UIContactPortlet.addressBookCallback">
+	  	<div class="UIRightClickPopupMenu" id="UIAddressBookPopupMenu" eXoCallback="eXo.contact.UIContactPortlet.addressBookCallback">
 			  <div class="TopLeftRightClickPopupMenu">
 	  		<div class="TopRightRightClickPopupMenu">
 				<div class="TopCenterRightClickPopupMenu"><span></span></div>
@@ -65,7 +67,7 @@
 	              Export
 	            </div>
 	        </a>
-	        <a class="MenuItem" href="<%=uicomponent.event("AddressPopup", "id")%>">   
+	        <a class="MenuItem" href="<%=uicomponent.event("EditGroup", "id")%>">   
 	            <div class="ItemIcon EditActionIcon">
 	              Edit
 	            </div>
@@ -75,7 +77,7 @@
 	              Send Emai
 	            </div>
 	        </a>
-	        <a class="MenuItem" href="<%=uicomponent.event("AddressPopup", "id")%>">   
+	        <a class="MenuItem" href="<%=uicomponent.event("DeleteGroup", "id")%>">   
 	            <div class="ItemIcon DeleteIcon">
 	              Delete
 	            </div> 

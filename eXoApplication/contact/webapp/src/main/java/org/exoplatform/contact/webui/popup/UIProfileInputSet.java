@@ -39,9 +39,9 @@ public class UIProfileInputSet extends UIFormInputWithActions {
   public static final String FIELD_BIRTHDAY_DATETIME = "birthday" ;
   public static final String FIELD_JOBTITLE_INPUT = "jobTitle";
   public static final String FIELD_EMAIL_INPUT = "preferredEmail" ;
-  
   public static final String MALE = "male" ;
   public static final String FEMALE = "female" ;
+  private String imageSource ;
   
   public UIProfileInputSet(String id) throws Exception {
     super(id) ;
@@ -61,75 +61,39 @@ public class UIProfileInputSet extends UIFormInputWithActions {
     addUIFormInput(new UIFormStringInput(FIELD_JOBTITLE_INPUT, FIELD_JOBTITLE_INPUT, null));
     addUIFormInput(new UIFormStringInput(FIELD_EMAIL_INPUT, FIELD_EMAIL_INPUT, null)
     .addValidator(EmailAddressValidator.class));
-    
   }
-  public List<UIComponent> getChidren(){
-    return super.getChildren() ;
-  }
-  public void processRender(WebuiRequestContext context) throws Exception {
-    super.processRender(context) ;
-  }
+  public List<UIComponent> getChidren(){ return super.getChildren() ; }
+  public void processRender(WebuiRequestContext context) throws Exception { super.processRender(context) ; }
   
-  protected String getFieldFullNameValue() {
-    return getUIStringInput(FIELD_FULLNAME_INPUT).getValue() ;
-  }
-  protected void setFieldFullNameValue(String s) {
-    getUIStringInput(FIELD_FULLNAME_INPUT).setValue(s);
-  }
+  protected String getFieldFullName() { return getUIStringInput(FIELD_FULLNAME_INPUT).getValue() ; }
+  protected void setFieldFullName(String s) { getUIStringInput(FIELD_FULLNAME_INPUT).setValue(s); }
   
-  protected String getFieldFirstNameValue() {
-    return getUIStringInput(FIELD_FIRSTNAME_INPUT).getValue() ;
-  }
-  protected void setFieldFirstNameValue(String s) {
-    getUIStringInput(FIELD_FIRSTNAME_INPUT).setValue(s);
-  }
+  protected String getFieldFirstName() { return getUIStringInput(FIELD_FIRSTNAME_INPUT).getValue() ; }
+  protected void setFieldFirstName(String s) { getUIStringInput(FIELD_FIRSTNAME_INPUT).setValue(s); }
   
-  protected String getFieldMiddleNameValue() {
-    return getUIStringInput(FIELD_MIDDLENAME_INPUT).getValue() ;
-  }
-  protected void setFieldMiddleNameValue(String s) {
-    getUIStringInput(FIELD_MIDDLENAME_INPUT).setValue(s);
-  }
+  protected String getFieldMiddleName() { return getUIStringInput(FIELD_MIDDLENAME_INPUT).getValue() ; }
+  protected void setFieldMiddleName(String s) { getUIStringInput(FIELD_MIDDLENAME_INPUT).setValue(s); }
   
-  protected String getFieldLastNameValue() {
-    return getUIStringInput(FIELD_LASTNAME_INPUT).getValue() ;
-  }
-  protected void setFieldLastNameValue(String s) {
-    getUIStringInput(FIELD_LASTNAME_INPUT).setValue(s);
-  }
+  protected String getFieldLastName() { return getUIStringInput(FIELD_LASTNAME_INPUT).getValue() ; }
+  protected void setFieldLastName(String s) { getUIStringInput(FIELD_LASTNAME_INPUT).setValue(s); }
   
-  protected String getFieldNickNameValue() {
-    return getUIStringInput(FIELD_NICKNAME_INPUT).getValue() ;
-  }
-  protected void setFieldNickNameValue(String s) {
-    getUIStringInput(FIELD_NICKNAME_INPUT).setValue(s);
-  }
+  protected String getFieldNickName() { return getUIStringInput(FIELD_NICKNAME_INPUT).getValue() ; }
+  protected void setFieldNickName(String s) { getUIStringInput(FIELD_NICKNAME_INPUT).setValue(s); }
   
-  protected String getFieldGenderValue() {
-    return getChild(UIFormRadioBoxInput.class).getValue();
-  }
-  protected void setFieldGenderValue(String s) {
-    getChild(UIFormRadioBoxInput.class).setValue(s);
-  }
+  protected String getFieldGender() { return getChild(UIFormRadioBoxInput.class).getValue(); }
+  protected void setFieldGender(String s) { getChild(UIFormRadioBoxInput.class).setValue(s); }
   
-  protected String getFieldBirthdayValue() {
-    return getChild(UIFormDateTimeInput.class).getValue();
-  }
-  protected void setFieldBirthdayValue(String s) {
-    getChild(UIFormDateTimeInput.class).setValue(s) ;
-  }
+  protected String getFieldBirthday() { return getChild(UIFormDateTimeInput.class).getValue(); }
+  protected void setFieldBirthday(String s) { getChild(UIFormDateTimeInput.class).setValue(s) ; }
   
-  protected String getFieldJobNameValue() {
-    return getUIStringInput(FIELD_JOBTITLE_INPUT).getValue() ;
-  }
-  protected void setFieldJobNameValue(String s) {
-    getUIStringInput(FIELD_JOBTITLE_INPUT).setValue(s);
-  }
+  protected String getFieldJobName() { return getUIStringInput(FIELD_JOBTITLE_INPUT).getValue() ; }
+  protected void setFieldJobName(String s) { getUIStringInput(FIELD_JOBTITLE_INPUT).setValue(s); }
   
-  protected String getFieldEmailValue() {
-    return getUIStringInput(FIELD_EMAIL_INPUT).getValue();
-  }
-  protected void setFieldEmailValue(String s) {
-    getUIStringInput(FIELD_EMAIL_INPUT).setValue(s);
-  }
+  protected String getFieldEmail() { return getUIStringInput(FIELD_EMAIL_INPUT).getValue(); }
+  protected void setFieldEmail(String s) { getUIStringInput(FIELD_EMAIL_INPUT).setValue(s); }
+  
+  protected void setImageSource(String s) { imageSource = s ; }
+  protected String getImageSource() { return imageSource ; }
+  
 }
+

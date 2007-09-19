@@ -45,7 +45,6 @@ public class UICategorySelect extends UIForm {
     input.addUIFormInput(new UIFormSelectBox(FIELD_CATEGORY, FIELD_CATEGORY, getCategoryList())) ;
     UIFormSelectBox uiSelectBox = input.getUIFormSelectBox(FIELD_CATEGORY) ;
     uiSelectBox.setOnChange("Onchange") ;
-    
     List<ActionData> actions = new ArrayList<ActionData>() ;
     ActionData addAction = new ActionData() ;
     addAction.setActionType(ActionData.TYPE_ICON) ;
@@ -55,8 +54,7 @@ public class UICategorySelect extends UIForm {
     input.setActionField(FIELD_CATEGORY, actions) ;
     addUIFormInput(input) ;
   }
-  
-  
+
   public String getSelectedCategory() {
     UIFormInputWithActions input = getChildById(INPUT_CATEGORY) ;
     return input.getUIFormSelectBox(FIELD_CATEGORY).getValue() ;
@@ -82,20 +80,18 @@ public class UICategorySelect extends UIForm {
     ContactService contactService = getApplicationComponent(ContactService.class);
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     Contact contact = contactService.getContact(username, contactId);
-    if (contact != null) {
-      getUIFormSelectBox(FIELD_CATEGORY).setValue(contact.getCategories()[0]);
-    }
+    if (contact != null) getUIFormSelectBox(FIELD_CATEGORY).setValue(contact.getCategories()[0]) ;
   }
-  
   public void disableSelect() { getUIFormSelectBox(FIELD_CATEGORY).setEnable(false) ; }
   
   static  public class AddCategoryActionListener extends EventListener<UICategorySelect> {
     public void execute(Event<UICategorySelect> event) throws Exception {
-      UICategorySelect uiForm = event.getSource() ;
-      UIPopupContainer popupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
+      UICategorySelect uiCategorySelect = event.getSource() ;
+      UIPopupContainer popupContainer = uiCategorySelect.getAncestorOfType(UIPopupContainer.class) ;
       UIPopupAction popupAction = popupContainer.getChild(UIPopupAction.class) ;
       popupAction.activate(UICategoryForm.class, 600) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
-  }      
+  }
+
 }

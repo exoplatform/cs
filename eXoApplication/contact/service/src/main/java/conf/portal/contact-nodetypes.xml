@@ -129,8 +129,16 @@
   		</propertyDefinition>  		
   		<propertyDefinition name="exo:tags" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
   			<valueConstraints/>
-  		</propertyDefinition>  		
+  		</propertyDefinition>  	  			
   	</propertyDefinitions>
+  	<childNodeDefinitions>
+      <childNodeDefinition name="*" defaultPrimaryType="" autoCreated="false" mandatory="false"
+        onParentVersion="COPY" protected="false" sameNameSiblings="false">
+        <requiredPrimaryTypes>
+          <requiredPrimaryType>nt:file</requiredPrimaryType>
+        </requiredPrimaryTypes>
+      </childNodeDefinition>
+    </childNodeDefinitions>
   </nodeType>
   <nodeType name="exo:contactGroup" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
   	<supertypes>
@@ -142,7 +150,10 @@
   		</propertyDefinition>
   		<propertyDefinition name="exo:name" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
   			<valueConstraints/>
-  		</propertyDefinition>  				
+  		</propertyDefinition> 
+  		<propertyDefinition name="exo:description" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  			<valueConstraints/>
+  		</propertyDefinition> 				
   	</propertyDefinitions>
   </nodeType>
   <nodeType name="exo:contactTag" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">

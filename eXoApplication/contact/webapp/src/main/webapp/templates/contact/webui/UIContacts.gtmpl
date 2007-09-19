@@ -1,3 +1,4 @@
+
 <%
 	import org.exoplatform.contact.service.Contact;
 	def rcontext = _ctx.getRequestContext() ;  

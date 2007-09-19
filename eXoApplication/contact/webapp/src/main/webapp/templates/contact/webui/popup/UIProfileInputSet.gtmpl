@@ -1,3 +1,4 @@
+
 <div class="Profile $uicomponent.id">
   <div class="FormContainer ProfileContainer">
 	  <table class="UIFormGrid">
@@ -30,14 +31,16 @@
 	</div>
 	<div class="AvatarContent">
 		<div class="Label">Picture:</div>
-		<img src="/contact/skin/DefaultSkin/webui/background/Img2.gif" class="Avatar"/>
+		<img src="<%=(uicomponent.getImageSource()==null ? "/contact/skin/DefaultSkin/webui/background/Img2.gif": uicomponent.getImageSource())%>" class="Avatar"/>
 		<div class="Action">	
-			<a href="#">Change | </a>
+			<a href="<%=uicomponent.getParent().event("ChangeImage")%>">Change | </a>
 			<a href="#">Delete</a>
+			<% println uicomponent.getImageSource() %>
 		</div>
 	</div>
 	
 	<div style="clear: left;"><span></span></div>
 </div>
+
 
 				        

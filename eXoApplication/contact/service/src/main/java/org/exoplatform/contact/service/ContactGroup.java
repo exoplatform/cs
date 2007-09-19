@@ -16,6 +16,7 @@ import org.exoplatform.services.jcr.util.IdGenerator;
 public class ContactGroup {
   private String id ;
   private String name ;
+  private String description ;
   
   public ContactGroup() {
     id = "ContactGroup" + IdGenerator.generate() ;
@@ -27,4 +28,6 @@ public class ContactGroup {
   public String getName()  { return name ; }
   public void   setName(String s) { name = s ; }
   
+  public String getDescription() { return description ; }
+  public void setDescription(String s) { description = s ;}
 }
