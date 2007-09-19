@@ -73,3 +73,15 @@
 	width: 24px; height: 20px;
 	cursor: pointer;
 }
+
+.AddAccount {
+	background: url('icons/AddAccount.gif') no-repeat;
+}
+
+.EditAccount {
+	background: url('icons/EditAccount.gif') no-repeat;
+}
+
+.DeleteAccount {
+	background: url('icons/DeleteAccount.gif') no-repeat;
+}
