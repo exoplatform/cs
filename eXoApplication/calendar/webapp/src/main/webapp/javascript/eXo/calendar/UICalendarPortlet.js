@@ -4,9 +4,27 @@ function UICalendarPortlet() {
 	
 }
 /* for general calendar */
+UICalendarPortlet.prototype.hide = function() {
+	var ln = eXo.core.DOMUtil.hideElementList.length ;
+	if (ln > 0) {
+		for (var i = 0; i < ln; i++) {
+			eXo.core.DOMUtil.hideElementList[i].style.display = "none" ;
+		}
+	}
+} ;
+
+UICalendarPortlet.prototype.showHide = function(obj) {	
+	if (obj.style.display != "block") {
+		eXo.calendar.UICalendarPortlet.hide() ;
+		obj.style.display = "block" ;
+		eXo.core.DOMUtil.listHideElements(obj) ;
+	} else {
+		obj.style.display = "none" ;
+	}
+} ;
 UICalendarPortlet.prototype.show = function(obj, evt) {
 	var _e = window.event || evt ;
-	_e.cancelBubble = true ;
+	_e.cancelBubble = true ;	
 	var uiCalendarPortlet =	document.getElementById("UICalendarPortlet") ;
 	var contentContainer = eXo.core.DOMUtil.findFirstDescendantByClass(uiCalendarPortlet, "div", "ContentContainer") ;
 	var	uiPopupCategory = eXo.core.DOMUtil.findNextElementByTagName(contentContainer,  "div") ;
@@ -15,11 +33,10 @@ UICalendarPortlet.prototype.show = function(obj, evt) {
 	
 	var fixIETop = (navigator.userAgent.indexOf("MSIE") >= 0) ? 2.5*obj.offsetHeight : obj.offsetHeight ;
 	eXo.webui.UIContextMenu.changeAction(uiPopupCategory, obj.id) ;
-	uiPopupCategory.style.display = "block" ;
+	eXo.calendar.UICalendarPortlet.showHide(uiPopupCategory) ;
 	uiPopupCategory.style.top = obj.offsetTop + fixIETop - contentContainer.scrollTop + "px" ;
-	uiPopupCategory.style.left = obj.offsetLeft - contentContainer.scrollLeft + "px" ;
+	uiPopupCategory.style.left = obj.offsetLeft - contentContainer.scrollLeft + "px" ;	
 	
-	eXo.core.DOMUtil.listHideElements(uiPopupCategory) ;
 } ;
 
 UICalendarPortlet.prototype.showAction = function(obj, evt) {
@@ -241,19 +258,16 @@ UISelection.prototype.init = function(evt) {
 	_e.cancelBubble = true ;
 	var UISelection = eXo.calendar.UISelection ;
 	var Container = this ;
-//	var extraY = (eXo.core.DOMUtil.findAncestorByClass(this, "EventDayContainer")) ? eXo.core.DOMUtil.findAncestorByClass(this, "EventDayContainer").scrollTop : 0 ;
 	var selection = document.getElementById("selection") ;
 	if (selection) Container.removeChild(selection) ;
-	var div = document.createElement("div") ;
-	div.className = "selection" ;
-	div.setAttribute("id", "selection") ;
+	UISelection.selection = document.createElement("div") ;
+	UISelection.selection.className = "selection" ;
+	UISelection.selection.setAttribute("id", "selection") ;
 	UISelection.selectionY = eXo.core.Browser.findMouseRelativeY(Container, _e) ;
-	UISelection.selection = div ;
-	div.innerHTML = "<span></span>" ;
-	Container.appendChild(div) ;
+	UISelection.selection.innerHTML = "<span></span>" ;
+	Container.appendChild(UISelection.selection) ;
 	Container.onmousemove = UISelection.resize ;
 	Container.onmouseup = UISelection.clear ;
-//	window.status = eXo.core.Browser.findMouseRelativeY(this, _e) ;
 } ;
 
 UISelection.prototype.resize = function(evt) {
@@ -271,7 +285,6 @@ UISelection.prototype.resize = function(evt) {
 	}
 //	window.status = UISelection.selection.offsetParent.className + " | " + eXo.core.Browser.findMouseRelativeY(this, _e);
 } ;
-
 UISelection.prototype.clear = function() {	
 	this.onmousemove = null ;
 } ;
