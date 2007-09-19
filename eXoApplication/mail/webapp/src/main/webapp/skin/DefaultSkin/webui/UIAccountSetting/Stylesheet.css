@@ -1,6 +1,4 @@
 .UIAccountSetting {
-	width: 700px;
-	border: 1px solid red;
 	background: #f3f3f3;
 }
 
@@ -9,7 +7,7 @@
 	padding: 10px;
 }
 
-/************************************AccountSettingCategory**************************************/
+/*===========================AccountSettingCategory===========================*/
 
 .UIAccountSetting .AccountSettingCategory {
 	width: 212px; height: 355px;
@@ -101,7 +99,6 @@
 
 .UIAccountSetting .UITabPane .UIForm {
 	height: 297px;
-	padding: 10px;
 }
 
 .UIAccountSetting .UITabPane .UIForm .HorizontalLayout {
@@ -130,13 +127,9 @@
 	padding-left: 24px; 
 }
 
-.UIAccountSetting .UIForm .UIAction {
-	width: 150px;
-	padding: 13px 0px 0px 100px;
+.UIAccountSetting .UIForm .HorizontalLayout .UIFormInputSet {
+	padding: 15px 10px;
+	height: 287px;
 }
 
 /************************************UIAction*************************************/
-
-.UIAccountSetting .UIAction {
-	width: 130px;
-}
