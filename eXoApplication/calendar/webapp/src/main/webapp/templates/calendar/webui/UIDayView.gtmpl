@@ -1,6 +1,6 @@
 <% 
 	def rcontext = _ctx.getRequestContext() ;
-  rcontext.getJavascriptManager().importJavascript('eXo.calendar.UICalendarPortlet');
+  //rcontext.getJavascriptManager().importJavascript('eXo.calendar.UICalendarPortlet');
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.showEvent() ;');
 	int currentDay = uicomponent.getCurrentDay() ;
 	int currentMonth = uicomponent.getCurrentMonth() ;
@@ -63,8 +63,8 @@
 						</div>					
 					</td>
 					<td>
-						<div style="position:relative ;">
-							<div>								
+						<div class="EventBoard" style="position:relative ;">
+							<div class="EventBoardContainer">
 								<div class="EventContainerBorder" startTime="300" endTime="420">
 									<div class="EventContainerBar">5:00 AM - 7:00 AM</div>
 									<div class="EventContainer">Talk to my cousin on the phone, he will call from France</div>
@@ -88,151 +88,151 @@
 								<table  cellspacing="0" borderspacing="0" width="100%">
 									<tbody>
 										<tr>							
-											<td class="TdTop">&nbsp</td>
+											<td class="TdTop"><span></span></td>
 										</tr>
 										<tr>							
-											<td class="TdDotLine">&nbsp;</td>
+											<td class="TdDotLine"><span></span></td>
 										</tr>
 										<tr>							
-											<td class="TdLine">&nbsp</td>
+											<td class="TdLine"><span></span></td>
 										</tr>
 										<tr>							
-											<td class="TdDotLine">&nbsp</td>
+											<td class="TdDotLine"><span></span></td>
 										</tr>
 										<tr>							
-											<td class="TdLine">&nbsp</td>
+											<td class="TdLine"><span></span></td>
 										</tr>
 										<tr>							
-											<td class="TdDotLine">&nbsp</td>
+											<td class="TdDotLine"><span></span></td>
 										</tr>
 										<tr>							
-											<td class="TdLine">&nbsp</td>
+											<td class="TdLine"><span></span></td>
 										</tr>
 										<tr>							
-											<td class="TdDotLine">&nbsp</td>
+											<td class="TdDotLine"><span></span></td>
 										</tr>
 										<tr>							
-											<td class="TdLine">&nbsp</td>
+											<td class="TdLine"><span></span></td>
 										</tr>
 										<tr>							
-											<td class="TdDotLine">&nbsp</td>
+											<td class="TdDotLine"><span></span></td>
 										</tr>
 										<tr>							
-											<td class="TdLine">&nbsp</td>
+											<td class="TdLine"><span></span></td>
 										</tr>
 										<tr>							
-											<td class="TdDotLine">&nbsp</td>
+											<td class="TdDotLine"><span></span></td>
 										</tr>
 										<tr>							
-											<td class="TdLine">&nbsp</td>
+											<td class="TdLine"><span></span></td>
 										</tr>
 										<tr>							
-											<td class="TdDotLine">&nbsp</td>
+											<td class="TdDotLine"><span></span></td>
 										</tr>
 										<tr>							
-											<td class="TdLine">&nbsp</td>
+											<td class="TdLine"><span></span></td>
 										</tr>
 										<tr>							
-											<td class="TdDotLine">&nbsp</td>
+											<td class="TdDotLine"><span></span></td>
 										</tr>
 										<tr>							
-											<td class="TdLine">&nbsp</td>
+											<td class="TdLine"><span></span></td>
 										</tr>
 										<tr>							
-											<td class="TdDotLine">&nbsp</td>
+											<td class="TdDotLine"><span></span></td>
 										</tr>
 										<tr>							
-											<td class="TdLine">&nbsp</td>
+											<td class="TdLine"><span></span></td>
 										</tr>
 										<tr>							
-											<td class="TdDotLine">&nbsp</td>
+											<td class="TdDotLine"><span></span></td>
 										</tr>
 										<tr>							
-											<td class="TdLine">&nbsp</td>
+											<td class="TdLine"><span></span></td>
 										</tr>
 										<tr>							
-											<td class="TdDotLine">&nbsp</td>
+											<td class="TdDotLine"><span></span></td>
 										</tr>
 										<tr>							
-											<td class="TdLine">&nbsp</td>
+											<td class="TdLine"><span></span></td>
 										</tr>
 										<tr>							
-											<td class="TdDotLine">&nbsp</td>
+											<td class="TdDotLine"><span></span></td>
 										</tr>
 										<tr>							
-											<td class="TdLine">&nbsp</td>
+											<td class="TdLine"><span></span></td>
 										</tr>
 										<tr>							
-											<td class="TdDotLine">&nbsp</td>
+											<td class="TdDotLine"><span></span></td>
 										</tr>
 										<tr>							
-											<td class="TdLine">&nbsp</td>
+											<td class="TdLine"><span></span></td>
 										</tr>
 										<tr>							
-											<td class="TdDotLine">&nbsp</td>
+											<td class="TdDotLine"><span></span></td>
 										</tr>
 										<tr>							
-											<td class="TdLine">&nbsp</td>
+											<td class="TdLine"><span></span></td>
 										</tr>
 										<tr>							
-											<td class="TdDotLine">&nbsp</td>
+											<td class="TdDotLine"><span></span></td>
 										</tr>
 										<tr>							
-											<td class="TdLine">&nbsp</td>
+											<td class="TdLine"><span></span></td>
 										</tr>
 										<tr>							
-											<td class="TdDotLine">&nbsp</td>
+											<td class="TdDotLine"><span></span></td>
 										</tr>
 										<tr>							
-											<td class="TdLine">&nbsp</td>
+											<td class="TdLine"><span></span></td>
 										</tr>
 										<tr>							
-											<td class="TdDotLine">&nbsp</td>
+											<td class="TdDotLine"><span></span></td>
 										</tr>
 										<tr>							
-											<td class="TdLine">&nbsp</td>
+											<td class="TdLine"><span></span></td>
 										</tr>
 										<tr>							
-											<td class="TdDotLine">&nbsp</td>
+											<td class="TdDotLine"><span></span></td>
 										</tr>
 										<tr>							
-											<td class="TdLine">&nbsp</td>
+											<td class="TdLine"><span></span></td>
 										</tr>
 										<tr>							
-											<td class="TdDotLine">&nbsp</td>
+											<td class="TdDotLine"><span></span></td>
 										</tr>
 										<tr>							
-											<td class="TdLine">&nbsp</td>
+											<td class="TdLine"><span></span></td>
 										</tr>
 										<tr>							
-											<td class="TdDotLine">&nbsp</td>
+											<td class="TdDotLine"><span></span></td>
 										</tr>
 										<tr>							
-											<td class="TdLine">&nbsp</td>
+											<td class="TdLine"><span></span></td>
 										</tr>
 										<tr>							
-											<td class="TdDotLine">&nbsp</td>
+											<td class="TdDotLine"><span></span></td>
 										</tr>
 										<tr>							
-											<td class="TdLine">&nbsp</td>
+											<td class="TdLine"><span></span></td>
 										</tr>
 										<tr>							
-											<td class="TdDotLine">&nbsp</td>
+											<td class="TdDotLine"><span></span></td>
 										</tr>
 										<tr>							
-											<td class="TdLine">&nbsp</td>
+											<td class="TdLine"><span></span></td>
 										</tr>
 										<tr>							
-											<td class="TdDotLine">&nbsp</td>
+											<td class="TdDotLine"><span></span></td>
 										</tr>
 										<tr>							
-											<td class="TdLine">&nbsp</td>
+											<td class="TdLine"><span></span></td>
 										</tr>
 										<tr>							
-											<td class="TdDotLine">&nbsp</td>
+											<td class="TdDotLine"><span></span></td>
 										</tr>
 										<tr>							
-											<td class="TdLine">&nbsp</td>
+											<td class="TdLine"><span></span></td>
 										</tr>
 										<tr>							
 											<td class="TdDotLine">&nbsp</td>
@@ -246,6 +246,5 @@
 				</table>
 			</div>
 		</div>
-	</div>
-	
+	</div>	
 <%uiform.end()%>	 
