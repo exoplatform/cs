@@ -1,3 +1,5 @@
+eXo.require('eXo.webui.UIContextMenu') ;
+
 function UICalendarPortlet() {
 	
 }
@@ -49,9 +51,9 @@ UICalendarPortlet.prototype.changeAction = function(obj, id) {
 UICalendarPortlet.prototype.init = function() {
 	var rowContainerDay = document.getElementById("RowContainerDay") ;
 	if (!rowContainerDay) return false ;
-	this.viewer = eXo.core.DOMUtil.findFirstDescendantByClass(rowContainerDay, "div", "EventBoardContainer") ;//eXo.core.DOMUtil.findAncestorByClass(rowContainerDay, "EventDayContainer") ;
+	this.viewer = eXo.core.DOMUtil.findFirstDescendantByClass(rowContainerDay, "div", "EventBoardContainer") ;
 	this.step = 60 ;
-	this.viewer.onmousedown = eXo.calendar.UICalendarPortlet.addSelection ;
+	this.viewer.onmousedown = eXo.calendar.UISelection.init ;//eXo.calendar.UICalendarPortlet.addSelection ;
 	return true ;
 } ;
 
@@ -215,40 +217,64 @@ UICalendarPortlet.prototype.minutesToHour = function(mins) {
 	} 
 } ;
 
-UICalendarPortlet.prototype.adjustTime = function() {
-	
+/* for showing context menu */
+
+UICalendarPortlet.prototype.showContextMenu = function() {	
+	var UIContextMenu = eXo.webui.UIContextMenu ;
+	var config = {
+		'preventDefault':false, 
+		'preventForms':false
+	} ;	
+	UIContextMenu.init(config) ;
+	UIContextMenu.attach(["CalendarContentNomal","CalendarContentDisable"],"UIMonthViewRightMenu") ;	
+	UIContextMenu.attach("EventOnDayLabel","UIMonthViewEventRightMenu") ;	
 } ;
 
 /* for selection creation */
 
-UICalendarPortlet.prototype.addSelection = function(evt) {
+function UISelection() {
+	
+}
+
+UISelection.prototype.init = function(evt) {
 	var _e = window.event || evt ;
 	_e.cancelBubble = true ;
-	var UICalendarPortlet = eXo.calendar.UICalendarPortlet ;
+	var UISelection = eXo.calendar.UISelection ;
+	var Container = this ;
+//	var extraY = (eXo.core.DOMUtil.findAncestorByClass(this, "EventDayContainer")) ? eXo.core.DOMUtil.findAncestorByClass(this, "EventDayContainer").scrollTop : 0 ;
 	var selection = document.getElementById("selection") ;
-	if (selection) UICalendarPortlet.viewer.removeChild(selection) ;
+	if (selection) Container.removeChild(selection) ;
 	var div = document.createElement("div") ;
 	div.className = "selection" ;
 	div.setAttribute("id", "selection") ;
-	UICalendarPortlet.selectionY = eXo.core.Browser.findMouseRelativeY(UICalendarPortlet.viewer, _e) + window.scrollTop ;
-	UICalendarPortlet.selection = div ;
-	div.innerHTML = "<span></span>" ;			
-	UICalendarPortlet.viewer.appendChild(div) ;
-	UICalendarPortlet.viewer.onmousemove = UICalendarPortlet.resizeSelection ;
-	UICalendarPortlet.viewer.onmouseup = UICalendarPortlet.removeSelection ;
+	UISelection.selectionY = eXo.core.Browser.findMouseRelativeY(Container, _e) ;
+	UISelection.selection = div ;
+	div.innerHTML = "<span></span>" ;
+	Container.appendChild(div) ;
+	Container.onmousemove = UISelection.resize ;
+	Container.onmouseup = UISelection.clear ;
+	window.status = eXo.core.Browser.findMouseRelativeY(this, _e) ;
 } ;
-UICalendarPortlet.prototype.resizeSelection = function(evt) {
+
+UISelection.prototype.resize = function(evt) {
 	var _e = window.event || evt ;
-	_e.cancelBubble = true ;
-	var UICalendarPortlet = eXo.calendar.UICalendarPortlet ;
-	UICalendarPortlet.selection.style.top = UICalendarPortlet.selectionY + "px" ;
-	UICalendarPortlet.selection.style.height = Math.abs(UICalendarPortlet.selectionY - eXo.core.Browser.findMouseRelativeY(UICalendarPortlet.viewer, _e)) + "px" ;
+	_e.cancelBubble = true ;	
+	var UISelection = eXo.calendar.UISelection ;
+	var delta = UISelection.selectionY - eXo.core.Browser.findMouseRelativeY(this, _e) ;
+	if (delta < 0) {
+		UISelection.selection.style.top = UISelection.selectionY + "px" ;
+		UISelection.selection.style.height = Math.abs(delta) + "px" ;
+	} else {
+		UISelection.selection.style.bottom = UISelection.selectionY + "px" ;
+		UISelection.selection.style.top = eXo.core.Browser.findMouseRelativeY(this, _e) + "px" ;
+		UISelection.selection.style.height = Math.abs(delta) + "px" ;
+	}
+	window.status = UISelection.selection.offsetParent.className + " | " + eXo.core.Browser.findMouseRelativeY(this, _e);
 } ;
-UICalendarPortlet.prototype.removeSelection = function(evt) {	
-	var _e = window.event || evt ;
-	_e.cancelBubble = true ;
-	var UICalendarPortlet = eXo.calendar.UICalendarPortlet ;
-	UICalendarPortlet.viewer.onmousemove = null ;
+
+UISelection.prototype.clear = function() {	
+	this.onmousemove = null ;
 } ;
 
 eXo.calendar.UICalendarPortlet = new UICalendarPortlet() ;
+eXo.calendar.UISelection = new UISelection() ;

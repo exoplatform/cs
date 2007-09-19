@@ -1,4 +1,7 @@
 	<%
+	def rcontext = _ctx.getRequestContext() ;
+  //rcontext.getJavascriptManager().importJavascript('eXo.webui.UIContextMenu');
+  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.showContextMenu() ;');
 	uiform.begin()
  	_ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");
  	int currentDay = uicomponent.getCurrentDay() ;
@@ -125,4 +128,50 @@
 			</div>
 		</div>
 	</div>
-<%uiform.end()%>	 
+<%uiform.end()%>
+<% /*Begin Popup Menu*/ %>
+  			
+  				<div class="UIRightClickPopupMenu" id="UIMonthViewRightMenu">
+						  <div class="TopLeftRightClickPopupMenu">
+          			<div class="TopRightRightClickPopupMenu">
+            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
+          			</div>
+        			</div>
+			        <div class="MiddleLeftRightClickPopupMenu">
+			          <div class="MiddleRightRightClickPopupMenu">
+              		<div class="UIRightPopupMenuContainer">
+              			&nbsp;&nbsp;&nbsp;Menu 1
+									</div>
+	          		</div>
+	        		</div>
+				      <div class="BottomLeftRightClickPopupMenu">
+				        <div class="BottomRightRightClickPopupMenu">
+				          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+				        </div>
+				      </div>
+	      		</div>
+
+  		<% /*End Popup Menu*/ %>
+  		<% /*Begin Popup Menu*/ %>
+  			
+  				<div class="UIRightClickPopupMenu" id="UIMonthViewEventRightMenu">
+						  <div class="TopLeftRightClickPopupMenu">
+          			<div class="TopRightRightClickPopupMenu">
+            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
+          			</div>
+        			</div>
+			        <div class="MiddleLeftRightClickPopupMenu">
+			          <div class="MiddleRightRightClickPopupMenu">
+              		<div class="UIRightPopupMenuContainer">
+              			&nbsp;&nbsp;&nbsp;Menu 2
+									</div>
+	          		</div>
+	        		</div>
+				      <div class="BottomLeftRightClickPopupMenu">
+				        <div class="BottomRightRightClickPopupMenu">
+				          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+				        </div>
+				      </div>
+	      		</div>
+
+  		<% /*End Popup Menu*/ %>
