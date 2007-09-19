@@ -17,102 +17,103 @@
 		</div>
 		
 		<div class="AccountSettingContainer">
-			<div class="AccountSettingContainerForm">	
-				
-				<div class="UIFormTabPane">
-					<div class="UITabPane">
-					  <div class="TabPaneContent">
-					  	<div class="WorkingArea">
-					      <div class="UIHorizontalTabs">
-					        <div class="LeftHorizontalTabs">
-						     	  <div class="RightHorizontalTabs">
-						     	    <div class="CenterHorizontalTabs">
-								        <div class="TabsContainer">
-							            <div class="UITab NormalTabStyle">
-							              <div class="SelectedTab">
-							                <div class="LeftTab">
-							                  <div class="RightTab">                
-							                    <div class="MiddleTab">Account</div>
-							                  </div>
-							                </div>
-							              </div>
-							              <div class="NormalTab">
-							                <div class="LeftTab">
-							                  <div class="RightTab">                
-							                    <div class="MiddleTab">Identity Settings</div>
-							                  </div>
-							                </div>
-							              </div>
-							              <div class="NormalTab">
-							                <div class="LeftTab">
-							                  <div class="RightTab">                
-							                    <div class="MiddleTab">Server Settings</div>
-							                  </div>
-							                </div>
-							              </div>
-							            </div>              
-								        </div>
-								      </div>
-								    </div>
-								  </div>
-					      </div>
-					      <div class="UITabContentContainer">
-					        <div class="UITabContent" >
-				        		<div class="UIForm Account">
-				        			<div class="HorizontalLayout">
-												<div class="FormContainer">
-		  										<table class="UIFormGrid">
-		  											<tr>
-															<td class="FieldLabel">Account Name:</td>
-															<td class="FieldComponent"><input type="text" value="" name=""/></td>
-														</tr>
-														<tr>
-															<td class="FieldLabel">Incoming User Name:</td>
-															<td class="FieldComponent"><input type="text" value="" name=""/></td>
-														</tr>
-														<tr>
-															<td class="FieldLabel">Account Description:</td>
-															<td class="FieldComponent"><textarea name="description" class="textarea"></textarea></td>
-														</tr>
-		  										</table>
-		  									</div>
-		  								</div>
-				        		</div>
-					        </div>
-					      </div>  
-					    </div>
-					  </div>  
-					</div>  
-				</div>
-			
-			</div>
-		</div>
+			<div class="AccountSettingContainerForm">					
+  			<%
+  		    def rcontext = _ctx.getRequestContext() ;
+  		    rcontext.getJavascriptManager().importJavascript('eXo.webui.UIHorizontalTabs') ;
+  		  %>
+
+    		<div class="UIFormTabPane">
+    		  <div class="UITabPane">
+    		    <div class="TabPaneContent">
+    		      <%String workingAreaCssClass="WorkingArea" ;%>
+    		      <div class="$workingAreaCssClass">
+    		        <div class="UIHorizontalTabs" >
+    		          <div class="LeftHorizontalTabs">
+    		            <div class="RightHorizontalTabs">
+    		              <div class="CenterHorizontalTabs">
+    		                <div class="TabsContainer">
+    		                  <%
+    		                    for(inputSet in uicomponent.getChildren()) {
+    		                      String className="NormalTab" ;
+    		                      if(inputSet.isRendered()) className="SelectedTab" ;
+    		                      boolean renderResource = uicomponent.hasRenderResourceTabName(); 
+    		                      String tabName = inputSet.getName() ; 
+    		                      if(renderResource) {
+    		                        tabName = _ctx.appRes(uicomponent.getName() + ".tab.label." + inputSet.name) ;
+    		                      }
+    		                      
+    		                      boolean renderTab = uicomponent.hasWithRenderTab();
+    		                      if(renderTab){
+    		                  %>
+    		                      <div class="UITab NormalTabStyle">
+    		                        <div class="$className">
+    		                          <div class="LeftTab">
+    		                            <div class="RightTab">
+    		                              <div class="MiddleTab" onClick="eXo.webui.UIHorizontalTabs.changeTabForUIFormTabpane(this, '$uiform.id', '$inputSet.id')">$tabName</div>
+    		                            </div>
+    		                          </div>
+    		                        </div>
+    		                      </div>
+    		                  <%  }
+    		                    }
+    		                  %>
+    		                </div>
+    		              </div>
+    		            </div>
+    		          </div>
+    		        </div>
+    		        <%uiform.begin()%>
+    		        <input type="hidden" id="<%=uicomponent.RENDER_TAB%>" name="<%=uicomponent.RENDER_TAB%>" value="$uicomponent.renderTabId">
+    		        <div class="HorizontalLayout">
+    		          <div class="UITabContentContainer">
+    		            <%
+    		              for(formInput in uicomponent.getChildren()) { 
+    		                String display = "none" ;
+    		                if(formInput.isRendered()) display="block" ;
+    		            %>
+    		                <div class="UITabContent" id="UITabContent"  style="display: $display;">
+    		                  <%
+    		                    uicomponent.renderUIComponent(formInput) ;
+    		                  %>
+    		                </div>
+    		            <%}%>
+    		          </div>
+    		        </div>
+    		        <%uiform.end()%>
+    		      </div>
+    		    </div>  
+    		  </div>  
+    		  
+    		</div>  			
+  	</div>
+  </div>
 		
 	</div>	
-	
-	<div class="UIAction"> 
-	  <table class="ActionContainer" align="center">
-		 	<tr>
-			  <td align="center">
-			  	<a href="#" class="ActionButton LightBlueStyle">
-	      	  <div class="ButtonLeft">
-	        	  <div class="ButtonRight">
-	          	  <div class="ButtonMiddle"> Save </div>
-	            </div>
-	          </div>
-	        </a>
-	  			<a href="#" class="ActionButton LightBlueStyle">
-	      	  <div class="ButtonLeft">
-	        	  <div class="ButtonRight">
-	          	  <div class="ButtonMiddle"> Close </div>
-	            </div>
-	          </div>
-	        </a>
-	  		</td>
-			</tr>
-	 	</table>
-	</div>	
-	
+
+	<div class="UIAction">
+    <table class="ActionContainer" align="center">
+      <tr>
+        <td align="center">
+          <%for(action in uicomponent.getActions()) { 
+            String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action);
+            String link = uicomponent.event(action) ;
+          %>
+          <a href="$link" class="ActionButton LightBlueStyle">
+            <div class="ButtonLeft">
+              <div class="ButtonRight">
+                <div class="ButtonMiddle">
+                 $actionLabel
+                </div>
+              </div>
+            </div>
+          </a>
+          <%}%>
+        </td>
+      </tr>
+    </table>
+  </div>
+
 </div>
 
 <!-- End Account Tab -->

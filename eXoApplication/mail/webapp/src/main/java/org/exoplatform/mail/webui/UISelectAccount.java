@@ -12,6 +12,7 @@ import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.popup.UIAccountCreation;
 import org.exoplatform.mail.webui.popup.UIAccountList;
+import org.exoplatform.mail.webui.popup.UIAccountSetting;
 import org.exoplatform.mail.webui.popup.UIPopupActionContainer;
 import org.exoplatform.mail.webui.popup.UIPopupAction;
 import org.exoplatform.portal.webui.util.Util;
@@ -38,6 +39,7 @@ import org.exoplatform.webui.form.UIFormSelectBox;
     template = "app:/templates/mail/webui/UISelectAccount.gtmpl",
     events = {
       @EventConfig( listeners = UISelectAccount.AddAccountActionListener.class),
+      @EventConfig( listeners = UISelectAccount.EditAccountActionListener.class),
       @EventConfig( listeners = UISelectAccount.DeleteAccountActionListener.class),
       @EventConfig( listeners = UISelectAccount.SelectAccountActionListener.class)
     }
@@ -75,7 +77,7 @@ public class UISelectAccount extends UIForm {
 
   @Override
   public String[] getActions() {
-    return new String[] {"AddAccount", "DeleteAccount"} ;
+    return new String[] {"AddAccount", "EditAccount", "DeleteAccount"} ;
   }
 
   static  public class AddAccountActionListener extends EventListener<UISelectAccount> {
@@ -86,10 +88,24 @@ public class UISelectAccount extends UIForm {
       UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class) ;
       UIPopupActionContainer uiAccContainer = uiPortlet.createUIComponent(UIPopupActionContainer.class, null, null) ;
       uiAccContainer.addChild(UIAccountCreation.class, null, null) ;
-      uiPopup.activate(uiAccContainer, 700, 500, true) ;
+      uiPopup.activate(uiAccContainer, 700, 385, true) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup) ;
     }
   }
+  
+  static  public class EditAccountActionListener extends EventListener<UISelectAccount> {
+    public void execute(Event<UISelectAccount> event) throws Exception {
+      System.out.println("========> AddAccountActionListener") ;
+      UISelectAccount uiForm = event.getSource() ;
+      UIMailPortlet uiPortlet = uiForm.getAncestorOfType(UIMailPortlet.class) ;
+      UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class) ;
+      UIPopupActionContainer uiAccContainer = uiPortlet.createUIComponent(UIPopupActionContainer.class, null, null) ;
+      uiAccContainer.addChild(UIAccountSetting.class, null, null) ;
+      uiPopup.activate(uiAccContainer, 750, 450, true) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup) ;
+    }
+  }
+  
   static  public class DeleteAccountActionListener extends EventListener<UISelectAccount> {
     public void execute(Event<UISelectAccount> event) throws Exception {
       System.out.println("========> DeleteAccountActionListener") ;

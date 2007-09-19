@@ -39,7 +39,6 @@ import org.exoplatform.webui.form.UIFormTabPane;
     lifecycle = UIFormLifecycle.class,
     template =  "app:/templates/mail/webui/UIAccountCreation.gtmpl",
     events = {
-      @EventConfig(listeners = UIAccountCreation.ChangeTypeActionListener.class),
       @EventConfig(listeners = UIAccountCreation.ViewStepActionListener.class),
       @EventConfig(listeners = UIAccountCreation.ChangeServerTypeActionListener.class),
       @EventConfig(listeners = UIAccountCreation.ChangeCheckedActionListener.class),
@@ -52,7 +51,7 @@ import org.exoplatform.webui.form.UIFormTabPane;
 )
 public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent, Selector {
 
-  private int wizardMaxStep_ = 6 ;
+  private int wizardMaxStep_ = 5 ;
   private int currentStep_ = 1 ;
   private int wizardMinStep_ = 1 ;
   private boolean isAddNew_ = true ;
@@ -61,7 +60,6 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
   private Map<Integer, String> chidrenMap_ = new HashMap<Integer, String>() ; 
 
   final static public String POPUPID = "UIAccountCreationWizardPopup" ;
-  final static public String INPUT_STEPINTRO = "step0" ;
   final static public String INPUT_STEP1 = "step1" ;
   final static public String INPUT_STEP2 = "step2" ;
   final static public String INPUT_STEP3 = "step3" ;
@@ -82,7 +80,6 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
 
   public UIAccountCreation() throws Exception {
     super("UIAccountCreation") ;
-    addUIComponentInput(new UIAccountWizardStepIntro(INPUT_STEPINTRO)) ;
     addUIComponentInput(new UIAccountWizardStep1(INPUT_STEP1)) ;
     addUIComponentInput(new UIAccountWizardStep2(INPUT_STEP2)) ;
     addUIComponentInput(new UIAccountWizardStep3(INPUT_STEP3)) ;
@@ -134,12 +131,7 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
   }
   protected void saveForm(String currentUser, Account account) throws Exception {
     MailService mailSvr = getApplicationComponent(MailService.class) ;
-    UIAccountWizardStepIntro wsIntro = getChildById(INPUT_STEPINTRO) ;
-    if(wsIntro.isCreateNew()) {
-      mailSvr.createAccount(currentUser, account) ;
-    } else {
-      mailSvr.updateAccount(currentUser, account) ;
-    }
+    mailSvr.createAccount(currentUser, account) ;
     UIMailPortlet uiPortlet = getAncestorOfType(UIMailPortlet.class) ;
     String username = uiPortlet.getCurrentUser() ;
     for(String defaultFolerName : defaultFolders_) {
@@ -162,13 +154,11 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
   }
 
   protected void resetForm() {
-    UIAccountWizardStepIntro uiAccWsIntro = getChildById(UIAccountCreation.INPUT_STEPINTRO) ;
     UIAccountWizardStep1 uiAccWs1 = getChildById(UIAccountCreation.INPUT_STEP1) ;
     UIAccountWizardStep2 uiAccWs2 = getChildById(UIAccountCreation.INPUT_STEP2) ;
     UIAccountWizardStep3 uiAccWs3 = getChildById(UIAccountCreation.INPUT_STEP3) ;
     UIAccountWizardStep4 uiAccWs4 = getChildById(UIAccountCreation.INPUT_STEP4) ;
     UIAccountWizardStep5 uiAccWs5 = getChildById(UIAccountCreation.INPUT_STEP5) ;
-    uiAccWsIntro.resetFields() ;
     uiAccWs1.resetFields() ;
     uiAccWs2.resetFields() ;
     uiAccWs3.resetFields() ;
@@ -177,7 +167,6 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
   }
 
   protected void fillForm(Account acc) {
-    UIAccountWizardStepIntro uiAccWsIntro = getChildById(UIAccountCreation.INPUT_STEPINTRO) ;
     UIAccountWizardStep1 uiAccWs1 = getChildById(UIAccountCreation.INPUT_STEP1) ;
     UIAccountWizardStep2 uiAccWs2 = getChildById(UIAccountCreation.INPUT_STEP2) ;
     UIAccountWizardStep3 uiAccWs3 = getChildById(UIAccountCreation.INPUT_STEP3) ;
@@ -207,25 +196,13 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
       UIAccountCreation uiAccCreation = event.getSource() ;
       String step = event.getRequestContext().getRequestParameter(OBJECTID) ;
       WizardStep wss = (WizardStep)uiAccCreation.getChildById(uiAccCreation.getCurrentChild()) ;
-      UIAccountWizardStepIntro uiAccWsIntro = uiAccCreation.getChildById(UIAccountCreation.INPUT_STEPINTRO) ;
       UIAccountWizardStep1 uiAccWs1 = uiAccCreation.getChildById(UIAccountCreation.INPUT_STEP1) ;
       UIAccountWizardStep2 uiAccWs2 = uiAccCreation.getChildById(UIAccountCreation.INPUT_STEP2) ;
       UIAccountWizardStep3 uiAccWs3 = uiAccCreation.getChildById(UIAccountCreation.INPUT_STEP3) ;
       UIAccountWizardStep4 uiAccWs4 = uiAccCreation.getChildById(UIAccountCreation.INPUT_STEP4) ;
       UIAccountWizardStep5 uiAccWs5 = uiAccCreation.getChildById(UIAccountCreation.INPUT_STEP5) ;
       if(wss.isFieldsValid()) { 
-        if(uiAccWsIntro.isRendered()) {
-          if(uiAccWsIntro.isCreateNew()) {
-            uiAccCreation.resetForm() ;
-          } else {
-            String accId = uiAccWsIntro.getSelectedAccount() ;
-            String username = event.getRequestContext().getRemoteUser() ;
-            MailService mailSvr = uiAccCreation.getApplicationComponent(MailService.class) ;
-            Account acc = mailSvr.getAccountById(username, accId) ;
-            uiAccCreation.fillForm(acc) ;
-          }
-        }
-
+        uiAccCreation.resetForm() ;
         uiAccCreation.viewStep(Integer.parseInt(step)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiAccCreation.getAncestorOfType(UIPopupAction.class)) ;
       } else {
@@ -251,7 +228,6 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
           return ;
         }
       }
-      UIAccountWizardStepIntro uiAccWsIntro = uiAccCreation.getChildById(INPUT_STEPINTRO) ;
       UIAccountWizardStep1 uiAccWs1 = uiAccCreation.getChildById(UIAccountCreation.INPUT_STEP1) ;
       UIAccountWizardStep2 uiAccWs2 = uiAccCreation.getChildById(UIAccountCreation.INPUT_STEP2) ;
       UIAccountWizardStep3 uiAccWs3 = uiAccCreation.getChildById(UIAccountCreation.INPUT_STEP3) ;
@@ -276,13 +252,8 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
       userName = uiAccWs4.getUserName() ;
       password = uiAccWs4.getPassword() ;
       Account acc = null ;
-      if(uiAccWsIntro.isCreateNew()) acc = new Account() ;
-      else {
-        String username = event.getRequestContext().getRemoteUser() ;
-        String accId = uiAccWsIntro.getSelectedAccount() ;
-        MailService mailSvr = uiAccCreation.getApplicationComponent(MailService.class) ;
-        acc = mailSvr.getAccountById(username, accId) ;
-      }
+      acc = new Account() ;
+
       if(!uiAccWs4.getIsSavePass()) password = null ;
 
       acc.setLabel(accname) ;
@@ -340,7 +311,6 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
   public static class NextActionListener extends EventListener<UIAccountCreation>{
     public void execute(Event<UIAccountCreation> event) throws Exception {
       UIAccountCreation uiAccCreation = event.getSource() ;
-      UIAccountWizardStepIntro uiAccWsIntro = uiAccCreation.getChildById(UIAccountCreation.INPUT_STEPINTRO) ;
       UIAccountWizardStep1 uiAccWs1 = uiAccCreation.getChildById(UIAccountCreation.INPUT_STEP1) ;
       UIAccountWizardStep2 uiAccWs2 = uiAccCreation.getChildById(UIAccountCreation.INPUT_STEP2) ;
       UIAccountWizardStep3 uiAccWs3 = uiAccCreation.getChildById(UIAccountCreation.INPUT_STEP3) ;
@@ -353,13 +323,6 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
         uiApp.addMessage(new ApplicationMessage("UIAccountCreation.msg.fields-requirement", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
       } else {
-        if(uiAccWsIntro.isRendered() && !uiAccWsIntro.isCreateNew()) {
-          String accId = uiAccWsIntro.getSelectedAccount() ;
-          String username = event.getRequestContext().getRemoteUser() ;
-          MailService mailSvr = uiAccCreation.getApplicationComponent(MailService.class) ;
-          Account acc = mailSvr.getAccountById(username, accId) ;
-          uiAccCreation.fillForm(acc) ;
-        }
         if(uiAccWs4.isRendered()) {
           String accname = uiAccWs1.getAccName() ;
           String accOutgoingName = uiAccWs2.getOutgoingName() ;
@@ -393,25 +356,6 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
   public static class SelectFolderActionListener extends EventListener<UIAccountCreation> {
     public void execute(Event<UIAccountCreation> event) throws Exception {
       System.out.println("\n\n SelectFolderActionListener");
-    } 
-  }
-  public static class ChangeTypeActionListener extends EventListener<UIAccountCreation> {
-    public void execute(Event<UIAccountCreation> event) throws Exception {
-      System.out.println("\n\n ChangeServerTypeActionListener");
-      UIAccountCreation uiAccCreation = event.getSource() ;
-      UIAccountWizardStepIntro uiWsIntro = uiAccCreation.getChildById(INPUT_STEPINTRO) ;
-      uiWsIntro.setAccounts(uiWsIntro.getAccounts()) ;
-      if(uiWsIntro.isFieldsValid()) {
-        if(uiWsIntro.isCreateNew()) {
-          uiAccCreation.resetForm() ;
-        } else {
-          String accId = uiWsIntro.getSelectedAccount() ;
-          String username = event.getRequestContext().getRemoteUser() ;
-          MailService mailSvr = uiAccCreation.getApplicationComponent(MailService.class) ;
-          Account acc = mailSvr.getAccountById(username, accId) ;
-          uiAccCreation.fillForm(acc) ;
-        }
-      }
     } 
   }
 
