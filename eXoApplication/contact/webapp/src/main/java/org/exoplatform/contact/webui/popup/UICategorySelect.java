@@ -89,7 +89,8 @@ public class UICategorySelect extends UIForm {
       UICategorySelect uiCategorySelect = event.getSource() ;
       UIPopupContainer popupContainer = uiCategorySelect.getAncestorOfType(UIPopupContainer.class) ;
       UIPopupAction popupAction = popupContainer.getChild(UIPopupAction.class) ;
-      popupAction.activate(UICategoryForm.class, 600) ;
+      UICategoryForm uiCategoryForm = popupAction.createUIComponent(UICategoryForm.class, null, "UICategoryForm") ;
+      popupAction.activate(uiCategoryForm, 600, 0 , true) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   }

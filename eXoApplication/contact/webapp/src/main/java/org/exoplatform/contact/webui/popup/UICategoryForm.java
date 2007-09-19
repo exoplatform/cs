@@ -92,9 +92,9 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
         uiCategorySelect.setCategoryList(ls);
         WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
         context.addUIComponentToUpdateByAjax(uiCategorySelect) ;
-        UIPopupAction uiPopupAction = popupContainer.getChild(UIPopupAction.class) ;
-        uiPopupAction.deActivate() ;
-        context.addUIComponentToUpdateByAjax(popupContainer) ;
+        popupContainer.cancelAction() ;
+        UIContactPortlet uiContactPortlet = popupContainer.getAncestorOfType(UIContactPortlet.class) ;
+        context.addUIComponentToUpdateByAjax(uiContactPortlet) ;
       } else {
         UIContactPortlet uiContactPortlet = uiCategoryForm.getAncestorOfType(UIContactPortlet.class) ;
         UIAddressBooks uiAddressBook = uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class) ;
