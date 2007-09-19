@@ -1,5 +1,4 @@
-eXo.require('eXo.webui.UIContextMenu');
-eXo.require('eXo.calendar.UICalendarPortlet','/calendar/javascript/');
+eXo.require('eXo.webui.UIContextMenu') ;
 function UIContactPortlet() {
 	
 }
@@ -27,7 +26,7 @@ UIContactPortlet.prototype.contactCallback = function(evt) {
 	var tr = eXo.core.DOMUtil.findAncestorByTagName(src, "tr") ;
 	var checkbox = eXo.core.DOMUtil.findFirstDescendantByClass(tr, "input", "checkbox") ;
 	var id = checkbox.name ;
-	eXo.calendar.UICalendarPortlet.changeAction(UIContextMenu.menuElement, id) ;	
+	eXo.webui.UIContextMenu.changeAction(UIContextMenu.menuElement, id) ;
 } ;
 UIContactPortlet.prototype.addressBookCallback = function(evt) {
 	var UIContextMenu = eXo.webui.UIContextMenu ;
@@ -40,7 +39,7 @@ UIContactPortlet.prototype.addressBookCallback = function(evt) {
 		src = _e.target;
 	}
 	var a = (src.nodeName.toLowerCase() == "a") ? src : eXo.core.DOMUtil.findFirstChildByClass(src, "a", "IconHolder") ;	
-	eXo.calendar.UICalendarPortlet.changeAction(UIContextMenu.menuElement, a.id) ;
+	eXo.webui.UIContextMenu.changeAction(UIContextMenu.menuElement, a.id) ;
 } ;
 //function ContextMenu(){
 //	this.menus = new Array,

@@ -14,7 +14,7 @@ UICalendarPortlet.prototype.show = function(obj, evt) {
 	if (!uiPopupCategory) return ;
 	
 	var fixIETop = (navigator.userAgent.indexOf("MSIE") >= 0) ? 2.5*obj.offsetHeight : obj.offsetHeight ;
-	this.changeAction(uiPopupCategory, obj.id) ;
+	eXo.webui.UIContextMenu.changeAction(uiPopupCategory, obj.id) ;
 	uiPopupCategory.style.display = "block" ;
 	uiPopupCategory.style.top = obj.offsetTop + fixIETop - contentContainer.scrollTop + "px" ;
 	uiPopupCategory.style.left = obj.offsetLeft - contentContainer.scrollLeft + "px" ;
@@ -34,17 +34,17 @@ UICalendarPortlet.prototype.showAction = function(obj, evt) {
 //	var uiPopupCategory = eXo.core.DOMUtil.findFirstDescendantByClass(obj, "div", "UIPopupCategory") ;
 } ;
 
-UICalendarPortlet.prototype.changeAction = function(obj, id) {
-	var actions = eXo.core.DOMUtil.findDescendantsByTagName(obj, "a") ;
-	var len = actions.length ;
-	var href = "" ;
-	var pattern = /objectId\=.*id/ ;
-	for(var i = 0 ; i < len ; i++) {
-		href = String(actions[i].href) ;
-		if (!pattern.test(href)) continue ;
-		actions[i].href = href.replace(pattern,"objectId="+id) ;
-	}
-}
+//UICalendarPortlet.prototype.changeAction = function(obj, id) {
+//	var actions = eXo.core.DOMUtil.findDescendantsByTagName(obj, "a") ;
+//	var len = actions.length ;
+//	var href = "" ;
+//	var pattern = /objectId\=.*id/ ;
+//	for(var i = 0 ; i < len ; i++) {
+//		href = String(actions[i].href) ;
+//		if (!pattern.test(href)) continue ;
+//		actions[i].href = href.replace(pattern,"objectId="+id) ;
+//	}
+//}
 
 /* for event */
 
@@ -253,7 +253,7 @@ UISelection.prototype.init = function(evt) {
 	Container.appendChild(div) ;
 	Container.onmousemove = UISelection.resize ;
 	Container.onmouseup = UISelection.clear ;
-	window.status = eXo.core.Browser.findMouseRelativeY(this, _e) ;
+//	window.status = eXo.core.Browser.findMouseRelativeY(this, _e) ;
 } ;
 
 UISelection.prototype.resize = function(evt) {
@@ -269,7 +269,7 @@ UISelection.prototype.resize = function(evt) {
 		UISelection.selection.style.top = eXo.core.Browser.findMouseRelativeY(this, _e) + "px" ;
 		UISelection.selection.style.height = Math.abs(delta) + "px" ;
 	}
-	window.status = UISelection.selection.offsetParent.className + " | " + eXo.core.Browser.findMouseRelativeY(this, _e);
+//	window.status = UISelection.selection.offsetParent.className + " | " + eXo.core.Browser.findMouseRelativeY(this, _e);
 } ;
 
 UISelection.prototype.clear = function() {	
