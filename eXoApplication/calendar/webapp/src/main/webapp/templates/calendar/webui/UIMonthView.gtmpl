@@ -54,7 +54,7 @@
 						validDay = 0 ;
 						cssClass = "CalendarContentNomal" ;
 						daysInMonth = uicomponent.getDaysInMonth() ;
-						while ( week++ < 6   ) {
+						while (week++ < uicomponent.getWeeksOfTheMonth(currentYear, currentMonth, 1)) {
 					    println "<tr>";
 					    dayOfWeek = 0 ;
 					    while (dayOfWeek++ < 7) {
@@ -65,7 +65,7 @@
 					        validDay = 0;
 					      }
 					      if (validDay) {
-					        if (uicomponent.isToday(dayOfMonth, currentMonth, currentYear )) {
+					        if (uicomponent.isCurrentDay(dayOfMonth, currentMonth, currentYear )) {
 					          clazz = 'Today';
 					        } else if (dayOfWeek == 1 || dayOfWeek == 7) {
 					          clazz = 'DayBox';

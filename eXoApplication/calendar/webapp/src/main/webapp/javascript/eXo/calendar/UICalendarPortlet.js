@@ -78,6 +78,7 @@ UICalendarPortlet.prototype.getElements = function() {
 	var elements = eXo.core.DOMUtil.findDescendantsByClass(this.viewer, "div", "EventContainerBorder") ;
 	var len = elements.length ;
 	var el = {
+		
 		children: elements,
 		count : len
 	}

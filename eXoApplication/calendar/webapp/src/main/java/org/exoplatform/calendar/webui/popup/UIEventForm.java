@@ -15,6 +15,9 @@ import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.Reminder;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
+import org.exoplatform.calendar.webui.UICalendarView;
+import org.exoplatform.calendar.webui.UICalendarViewContainer;
+import org.exoplatform.calendar.webui.UIListView;
 import org.exoplatform.calendar.webui.UIMonthView;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.mail.Attachment;
@@ -108,8 +111,8 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     List<ActionData> actions = new ArrayList<ActionData>() ;
     actions.add(addCategoryAction) ;
     eventDetailTab.setActionField(FIELD_CATEGORY,actions) ;
-    eventDetailTab.addUIFormInput(new UIFormDateTimeInput(FIELD_FROM, FIELD_FROM, new Date()));
-    eventDetailTab.addUIFormInput(new UIFormDateTimeInput(FIELD_TO, FIELD_TO, new Date()));
+    eventDetailTab.addUIFormInput(new UIFormDateTimeInput(FIELD_FROM, FIELD_FROM, null));
+    eventDetailTab.addUIFormInput(new UIFormDateTimeInput(FIELD_TO, FIELD_TO, null));
     eventDetailTab.addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_CHECKALL, FIELD_CHECKALL, null));
     eventDetailTab.addUIFormInput(new UIFormStringInput(FIELD_PLACE, FIELD_PLACE, null));
     eventDetailTab.addUIFormInput(new UIFormSelectBox(FIELD_REPEAT, FIELD_REPEAT, getRepeater())) ;
@@ -445,6 +448,8 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     public void execute(Event<UIEventForm> event) throws Exception {
       UIEventForm uiForm = event.getSource() ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+      UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
+      UICalendarViewContainer uiViewContainer = calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
       if(uiForm.isEventDetailValid()) {
         CalendarService calendarService = uiForm.getApplicationComponent(CalendarService.class) ;
         String username = event.getRequestContext().getRemoteUser() ;
@@ -463,11 +468,8 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
         calendarEvent.setPriority(uiForm.getEventPriority()) ; 
         try {
           calendarService.saveUserEvent(username, calendarId, calendarEvent, true) ;
-          UIMonthView uiMonthView = uiForm.getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UIMonthView.class) ;
-          if(uiMonthView != null) { 
-            uiMonthView.refresh() ;
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiMonthView) ;
-          }
+          uiViewContainer.refresh() ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiViewContainer) ;
           uiForm.getAncestorOfType(UIPopupAction.class).deActivate() ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
           uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.add-event-successfully", null));

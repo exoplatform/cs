@@ -53,16 +53,13 @@ public class UIMonthView extends UICalendarView {
 
   public UIMonthView() throws Exception{
     super() ;
-    refreshSelectedCalendarIds() ;
-    refreshEvents() ;
+    refresh() ;
   }
   
-  private boolean isSameDate(java.util.Calendar date1, java.util.Calendar date2) {
-    return ( date1.get(java.util.Calendar.DATE) == date2.get(java.util.Calendar.DATE) &&
-             date1.get(java.util.Calendar.MONTH) == date2.get(java.util.Calendar.MONTH) &&
-             date1.get(java.util.Calendar.YEAR) == date2.get(java.util.Calendar.YEAR)
-            ) ;
+  protected int getWeeksOfTheMonth(int year, int month, int day) {
+    return new GregorianCalendar(year, month, day).getActualMaximum(java.util.Calendar.WEEK_OF_MONTH) ;
   }
+  
   protected void refreshEvents() throws Exception {
     CalendarService calendarService = getApplicationComponent(CalendarService.class) ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
@@ -118,29 +115,15 @@ public class UIMonthView extends UICalendarView {
     GregorianCalendar gc = new GregorianCalendar(year, month, day) ;
     return gc.getTime() ;
   }
-
-  private String keyGen(int day, int month, int year) {
-    return String.valueOf(day) + CalendarUtils.UNDERSCORE +  String.valueOf(month) +  CalendarUtils.UNDERSCORE + String.valueOf(year); 
-  }
   private Map<String, List<CalendarEvent>> getEventsData() {
     return eventData_ ;
   }
 
   protected void monthNext(int months) {
-    if(calendar_.get(java.util.Calendar.MONTH) == java.util.Calendar.DECEMBER) {
-      calendar_.roll(java.util.Calendar.YEAR, true) ;
-      calendar_.set(java.util.Calendar.MONTH, java.util.Calendar.JANUARY) ;
-    } else {
-      calendar_.roll(java.util.Calendar.MONTH, months) ;
-    }
+    calendar_.add(java.util.Calendar.MONTH, months) ;
   }
   protected void monthBack(int months) {
-    if(calendar_.get(java.util.Calendar.MONTH) == java.util.Calendar.JANUARY) {
-      calendar_.roll(java.util.Calendar.YEAR, false) ;
-      calendar_.set(java.util.Calendar.MONTH, java.util.Calendar.DECEMBER) ;
-    } else {
-      calendar_.roll(java.util.Calendar.MONTH, months) ;
-    }
+    calendar_.add(java.util.Calendar.MONTH, months) ;
   }
   protected List<CalendarEvent> getSelectedEvents() {
     List<CalendarEvent> events = new ArrayList<CalendarEvent>() ;
@@ -150,14 +133,13 @@ public class UIMonthView extends UICalendarView {
        if(checkbox != null && checkbox.isChecked()) events.add(ce) ;
       }
     }
-    System.out.println("\n\n checked list size "+ events.size());
     return events ; 
   }
   static  public class MoveNextActionListener extends EventListener<UIMonthView> {
     public void execute(Event<UIMonthView> event) throws Exception {
       UIMonthView calendarview = event.getSource() ;
       calendarview.monthNext(1) ;
-      calendarview.refreshEvents() ;
+      calendarview.refresh() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
     }
   }
@@ -165,7 +147,7 @@ public class UIMonthView extends UICalendarView {
     public void execute(Event<UIMonthView> event) throws Exception {
       UIMonthView calendarview = event.getSource() ;
       calendarview.monthBack(-1) ;
-      calendarview.refreshEvents() ;
+      calendarview.refresh() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
     }
   }

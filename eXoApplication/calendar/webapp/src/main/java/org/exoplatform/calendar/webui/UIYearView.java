@@ -35,15 +35,12 @@ public class UIYearView extends UICalendarView {
   }
 
   protected void yearNext(int years) {
-    calendar_.roll(Calendar.YEAR, years) ;
-    calendar_.set(Calendar.MONTH, Calendar.JANUARY) ;
-    calendar_.set(Calendar.DATE, calendar_.getMinimum(Calendar.DAY_OF_MONTH)) ;
+    calendar_.add(Calendar.YEAR, years) ;
   }
   protected void yearBack(int years) {
-    calendar_.roll(Calendar.YEAR, years) ;
-    calendar_.set(Calendar.MONTH, Calendar.JANUARY) ;
-    calendar_.set(Calendar.DATE, calendar_.getMinimum(Calendar.DAY_OF_MONTH)) ;
+    calendar_.add(Calendar.YEAR, years) ;
   }
+  public void refresh() {}
   
   private List getEventList() {
     return null ;
@@ -53,6 +50,7 @@ public class UIYearView extends UICalendarView {
     public void execute(Event<UIYearView> event) throws Exception {
       UIYearView calendarview = event.getSource() ;
       calendarview.yearNext(1) ;
+      calendarview.refresh() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
     }
   }
@@ -61,6 +59,7 @@ public class UIYearView extends UICalendarView {
     public void execute(Event<UIYearView> event) throws Exception {
       UIYearView calendarview = event.getSource() ;
       calendarview.yearBack(-1) ;
+      calendarview.refresh() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
     }
   }

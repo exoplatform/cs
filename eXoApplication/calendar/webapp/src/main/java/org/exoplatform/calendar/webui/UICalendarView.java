@@ -39,7 +39,7 @@ import org.exoplatform.webui.form.UIFormSelectBox;
  * Aus 01, 2007 2:48:18 PM 
  */
 
-public class UICalendarView extends UIForm {
+public abstract class UICalendarView extends UIForm {
   final static protected String EVENT_CATEGORIES = "eventCategories".intern() ;
 
   final public static String JANUARY = "January".intern() ;
@@ -64,12 +64,16 @@ public class UICalendarView extends UIForm {
   final public static String SATURDAY = "Saturday".intern() ;
   final public static String SUNDAY = "Sunday".intern() ;
   final public static String[] DAYS = {SUNDAY, MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY} ;
+  final public static int TYPE_DATE = 1 ;
+  final public static int TYPE_WEEK = 2 ;
+  final public static int TYPE_MONTH = 3 ;
+  final public static int TYPE_YEAR = 4 ;
 
   final public static String ACT_NEXT = "MoveNext".intern() ;
 
   final public static String ACT_PREVIOUS  = "MovePrevious".intern() ;
 
-  public Calendar calendar_ = GregorianCalendar.getInstance() ;
+  protected Calendar calendar_ = GregorianCalendar.getInstance() ;
 
   protected boolean isShowEvent = true;
 
@@ -79,7 +83,9 @@ public class UICalendarView extends UIForm {
   final public static Map<Integer, String> monthsName_ = new HashMap<Integer, String>() ;
   private Map<Integer, String> daysMap_ = new HashMap<Integer, String>() ;
   private Map<Integer, String> monthsMap_ = new HashMap<Integer, String>() ;
-
+  
+  public abstract void refresh()throws Exception  ;
+  
   public UICalendarView() throws Exception{
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     List<EventCategory> eventCategories = calendarService.getEventCategories(Util.getPortalRequestContext().getRemoteUser()) ;
@@ -107,14 +113,25 @@ public class UICalendarView extends UIForm {
   protected String[] getDaysName() { 
     return DAYS ;
   }
+
+  protected Calendar getDateByValue(int year, int month, int day, int type, int value) {
+    Calendar cl = new GregorianCalendar(year, month, day) ;
+    switch (type){
+    case TYPE_DATE : cl.add(Calendar.DATE, value) ;break;
+    case TYPE_WEEK : cl.add(Calendar.WEEK_OF_YEAR, value) ;break;
+    case TYPE_MONTH : cl.add(Calendar.MONTH, value) ;break;
+    case TYPE_YEAR : cl.add(Calendar.YEAR, value) ;break;
+    default: System.out.println("Invalid type.");break;
+    }
+    return cl ;
+  }
+
   protected int getDaysInMonth() {
-    Calendar cal = GregorianCalendar.getInstance() ;
-    cal.set(getCurrentYear(), getCurrentMonth(), getCurrentDay()) ;
+    Calendar cal = new GregorianCalendar(getCurrentYear(), getCurrentMonth(), getCurrentDay()) ;
     return cal.getActualMaximum(Calendar.DAY_OF_MONTH) ;
   }
   protected int getDaysInMonth(int month, int year) {
-    Calendar cal = GregorianCalendar.getInstance() ;
-    cal.set(year, month, getCurrentDay()) ;
+    Calendar cal = new GregorianCalendar(year, month, 1) ;
     return cal.getActualMaximum(Calendar.DAY_OF_MONTH) ;
   }
   protected int getDayOfWeek(int year, int month, int day) {
@@ -123,7 +140,10 @@ public class UICalendarView extends UIForm {
   }
   protected  String getMonthName(int month) {return monthsMap_.get(month).toString() ;} ;
   protected  String getDayName(int day) {return daysMap_.get(day).toString() ;} ;
-
+  
+  protected String keyGen(int day, int month, int year) {
+    return String.valueOf(day) + CalendarUtils.UNDERSCORE +  String.valueOf(month) +  CalendarUtils.UNDERSCORE + String.valueOf(year); 
+  }
   public void update() throws Exception {
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     List<EventCategory> eventCategories = calendarService.getEventCategories(Util.getPortalRequestContext().getRemoteUser()) ;
@@ -155,26 +175,38 @@ public class UICalendarView extends UIForm {
     return events ;
   }
 
-  protected void DayMove(int day, int month, int year) {
+  protected void gotoDate(int day, int month, int year) {
     setCurrentDay(day) ;
     setCurrentDay(month) ;
     setCurrentDay(year) ;
   }
-  protected boolean isToday(int day, int month, int year) {
+  protected boolean isCurrentDay(int day, int month, int year) {
     Calendar currentCal = Calendar.getInstance() ;
     boolean isCurrentDay = currentCal.get(Calendar.DATE) == day ;
     boolean isCurrentMonth = currentCal.get(Calendar.MONTH) == month ;
     boolean isCurrentYear = currentCal.get(Calendar.YEAR) == year ;
     return (isCurrentDay && isCurrentMonth && isCurrentYear ) ;
   }
-
+  protected boolean isCurrentWeek(int week, int month, int year) {
+    Calendar currentCal = Calendar.getInstance() ;
+    boolean isCurrentWeek = currentCal.get(Calendar.WEEK_OF_YEAR) == week ;
+    boolean isCurrentMonth = currentCal.get(Calendar.MONTH) == month ;
+    boolean isCurrentYear = currentCal.get(Calendar.YEAR) == year ;
+    return (isCurrentWeek && isCurrentMonth && isCurrentYear ) ;
+  }
   protected boolean isCurrentMonth(int month, int year) {
     Calendar currentCal = Calendar.getInstance() ;
     boolean isCurrentMonth = currentCal.get(Calendar.MONTH) == month ;
     boolean isCurrentYear = currentCal.get(Calendar.YEAR) == year ;
     return (isCurrentMonth && isCurrentYear ) ;
   }
-
+  
+  protected boolean isSameDate(java.util.Calendar date1, java.util.Calendar date2) {
+    return ( date1.get(java.util.Calendar.DATE) == date2.get(java.util.Calendar.DATE) &&
+             date1.get(java.util.Calendar.MONTH) == date2.get(java.util.Calendar.MONTH) &&
+             date1.get(java.util.Calendar.YEAR) == date2.get(java.util.Calendar.YEAR)
+            ) ;
+  }
   protected Date getCurrentDate() {return calendar_.getTime() ;} 
   protected void setCurrentDate(Date value) {calendar_.setTime(value) ;} 
 

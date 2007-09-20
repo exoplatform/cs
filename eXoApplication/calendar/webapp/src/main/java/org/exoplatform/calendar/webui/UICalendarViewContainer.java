@@ -6,6 +6,7 @@ package org.exoplatform.calendar.webui;
 
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
+import org.exoplatform.webui.core.UIComponent;
 
 /**
  * Created by The eXo Platform SARL
@@ -39,4 +40,10 @@ public class UICalendarViewContainer extends UIContainer  {
 
     setRenderedChild(UIMonthView.class) ;
   }  
+  
+  public void refresh() throws Exception {
+   for(UIComponent comp : getChildren()) {
+     if(comp.isRendered()) ((UICalendarView)comp).refresh() ;
+   }
+  }
 }

@@ -4,9 +4,18 @@
  **************************************************************************/
 package org.exoplatform.calendar.webui;
 
+import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.exoplatform.calendar.service.CalendarEvent;
+import org.exoplatform.calendar.service.CalendarService;
+import org.exoplatform.calendar.service.EventQuery;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
@@ -35,45 +44,64 @@ import org.exoplatform.webui.event.EventListener;
 )
 public class UIDayView extends UICalendarView {
 
+  private Map<String, CalendarEvent> eventData_ = new HashMap<String, CalendarEvent>() ;
+  private Map<String, CalendarEvent> allDayEvent_ = new HashMap<String, CalendarEvent>() ;
   public UIDayView() throws Exception{
     super() ;
+    refresh() ;
   }
-
-  protected void dayNext(int days) {
-    if(calendar_.getActualMaximum(Calendar.DAY_OF_MONTH) == getCurrentDay()) {
-      if(calendar_.get(Calendar.MONTH) == Calendar.DECEMBER){
-        calendar_.roll(Calendar.YEAR, true) ;
-        calendar_.set(Calendar.MONTH, Calendar.JANUARY) ;
+  protected void moveDateTo(int days) {
+    calendar_.add(Calendar.DATE, days) ;
+  }
+  
+  @Override
+  public void refresh() throws Exception {
+    eventData_.clear() ;
+    allDayEvent_.clear() ;
+    Calendar begin = getCurrentDayBegin() ;
+    Calendar end = getCurrentDayEnd() ;
+    List<CalendarEvent> events = new ArrayList<CalendarEvent>() ;
+    CalendarService calendarService = getApplicationComponent(CalendarService.class) ;
+    String username = Util.getPortalRequestContext().getRemoteUser() ;
+    EventQuery eventQuery = new EventQuery() ;
+    eventQuery.setFromDate(begin) ;
+    eventQuery.setToDate(end) ;
+    events = calendarService.getUserEvents(username, eventQuery) ;
+    events.addAll(calendarService.getPublicEvents(eventQuery)) ;
+    System.out.println("\n\n events " + events.size());
+    for(CalendarEvent ce : events){
+      if(ce.getFromDateTime().before(begin.getTime()) && ce.getToDateTime().after(end.getTime())) {
+        allDayEvent_.put(ce.getId(),ce) ;
       } else {
-        calendar_.roll(Calendar.MONTH, true) ;
-      } 
-      calendar_.set(Calendar.DATE, calendar_.getActualMinimum(Calendar.DAY_OF_MONTH)) ;
-    } else {
-      calendar_.roll(Calendar.DATE, days) ;
-    }
-  }
-
-  protected void dayBack(int days) throws Exception {
-    if(calendar_.getActualMinimum(Calendar.DAY_OF_MONTH) == getCurrentDay()) {
-      if(calendar_.get(Calendar.MONTH) == Calendar.JANUARY){
-        calendar_.roll(Calendar.YEAR, false) ;
-        calendar_.set(Calendar.MONTH, Calendar.DECEMBER) ;
-      } else { 
-        calendar_.roll(Calendar.MONTH, false) ;
+        eventData_.put(ce.getId(), ce) ;
       }
-      calendar_.set(Calendar.DATE, calendar_.getActualMaximum(Calendar.DAY_OF_MONTH)) ;
-    } else {
-      calendar_.roll(Calendar.DATE, days) ;
     }
   }
-  private List getEventList() {
-    return null ;
+  protected Map<String, CalendarEvent> getEventData() {return eventData_ ;}
+  protected Map<String, CalendarEvent> getAllDayEvents() {return allDayEvent_ ;} ;
+  
+  protected Calendar getCurrentDayEnd()  {
+    Calendar toDate = new GregorianCalendar(getCurrentYear(), getCurrentMonth(), getCurrentDay()) ;
+    toDate.set(Calendar.HOUR, toDate.getActualMaximum(Calendar.HOUR)-1) ;
+    toDate.set(Calendar.MINUTE, toDate.getActualMaximum(Calendar.MINUTE)) ;
+    toDate.set(Calendar.SECOND, toDate.getActualMaximum(Calendar.SECOND)) ;
+    toDate.set(Calendar.MILLISECOND, toDate.getActualMaximum(Calendar.MILLISECOND)) ;
+    return toDate ;
   }
-
+  protected Calendar getCurrentDayBegin() {
+    Calendar fromDate = new GregorianCalendar(getCurrentYear(), getCurrentMonth(), getCurrentDay()) ;
+    fromDate.set(Calendar.HOUR, fromDate.getActualMinimum(Calendar.HOUR)) ;
+    fromDate.set(Calendar.MINUTE, fromDate.getActualMinimum(Calendar.MINUTE)) ;
+    fromDate.set(Calendar.SECOND, fromDate.getActualMinimum(Calendar.SECOND)) ;
+    fromDate.set(Calendar.MILLISECOND, fromDate.getActualMinimum(Calendar.MILLISECOND)) ;
+    return fromDate ;
+  }
+  
   static  public class MoveNextActionListener extends EventListener<UIDayView> {
     public void execute(Event<UIDayView> event) throws Exception {
       UIDayView calendarview = event.getSource() ;
-      calendarview.dayNext(1) ;
+      calendarview.moveDateTo(1) ;
+      calendarview.refresh() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
     }
   }
@@ -81,7 +109,8 @@ public class UIDayView extends UICalendarView {
   static  public class MovePreviousActionListener extends EventListener<UIDayView> {
     public void execute(Event<UIDayView> event) throws Exception {
       UIDayView calendarview = event.getSource() ;
-      calendarview.dayBack(-1) ;
+      calendarview.moveDateTo(-1) ;
+      calendarview.refresh() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
     }
   }

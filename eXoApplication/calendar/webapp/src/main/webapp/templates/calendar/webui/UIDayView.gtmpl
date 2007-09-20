@@ -1,4 +1,8 @@
 <% 
+	import java.text.DecimalFormat ;
+	import java.text.DateFormat;
+	import java.text.SimpleDateFormat;
+	
 	def rcontext = _ctx.getRequestContext() ;
   //rcontext.getJavascriptManager().importJavascript('eXo.calendar.UICalendarPortlet');
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.showEvent() ;');
@@ -27,9 +31,11 @@
 			</div>
 		</div>
 		<div class="EventAllDay">
+			<%for(ce in uicomponent.getAllDayEvents().values()) {%>
 			<div class="EventAllDayColor2">
-				<div class="EventAllDayDescription">Events happen all day go here</div>
+				<div class="EventAllDayDescription"><%=ce.getSummary()%></div>
 			</div>
+			<%}%>
 		</div>
 		<div class="EventDayContainer" style="position:relative ;">
 			<div class="EventDayContent">
@@ -65,26 +71,29 @@
 					<td>
 						<div class="EventBoard" style="position:relative ;">
 							<div class="EventBoardContainer">
-								<div class="EventContainerBorder" startTime="300" endTime="420">
-									<div class="EventContainerBar">5:00 AM - 7:00 AM</div>
-									<div class="EventContainer">Talk to my cousin on the phone, he will call from France</div>
+								<%
+								 def currentDateFrom = uicomponent.getCurrentDayBegin() ;
+								 def currentDateTo 	= uicomponent.getCurrentDayEnd() ;
+								 for(ce in	uicomponent.getEventData().values()) {
+								 	beginTime = ((ce.getFromDateTime().getHours() * 60) + ce.getFromDateTime().getMinutes());
+								 	if(ce.getFromDateTime().before(currentDateFrom.getTime())) {
+								 		beginTime = 0 ;
+								 	}
+								 	endTime = ((ce.getToDateTime().getHours() * 60) + ce.getFromDateTime().getMinutes());
+								 	if(ce.getToDateTime().after(currentDateTo.getTime())) {
+								 		endTime = (24*60) ;
+								 	}
+								 	String style = "MMM/dd/yyyy"
+								 	DateFormat df = new SimpleDateFormat(style) ;
+								 	actionLink =  uicomponent.event("SaveEvent",ce.getId()+"&startTime=beginTime&endTime=endTime") ;
+								%>
+								<div class="EventContainerBorder" actionLink="$actionLink" startTime="$beginTime" endTime="$endTime" >
+									<div class="EventContainerBar" title="<%=df.format(ce.getFromDateTime())%> -->  <%=df.format(ce.getToDateTime())%>">5:00 AM - 7:00 AM</div>
+									<div class="EventContainer"><%=ce.getSummary()%></div>
 									<div class="ResizeEventContainer"><span></span></div>
 								</div>
-								<div class="EventContainerBorder" startTime="360" endTime="540">
-									<div class="EventContainerBar">6:00 AM - 9:00 AM</div>
-									<div class="EventContainer">Talk to my cousin on the phone, he will call from France</div>
-									<div class="ResizeEventContainer"><span></span></div>
-								</div>
-								<div class="EventContainerBorder" startTime="420" endTime="600">
-									<div class="EventContainerBar">7:00 AM - 10:00 AM</div>
-									<div class="EventContainer">Talk to my cousin on the phone, he will call from France</div>
-									<div class="ResizeEventContainer"><span></span></div>
-								</div>
-								<div class="EventContainerBorder" startTime="420" endTime="660">
-									<div class="EventContainerBar">7:00 AM - 10:00 AM</div>
-									<div class="EventContainer">Talk to my cousin on the phone, he will call from France</div>
-									<div class="ResizeEventContainer"><span></span></div>
-								</div>
+								<%}%>
+								
 								<table  cellspacing="0" borderspacing="0" width="100%">
 									<tbody>
 										<tr>							

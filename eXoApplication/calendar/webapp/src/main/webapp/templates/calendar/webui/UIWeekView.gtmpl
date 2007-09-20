@@ -2,7 +2,7 @@
 	import java.util.Calendar;
 	uiform.begin()
  	_ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");
-  int currentDay = uicomponent.getCurrentDay() ;
+ 	int currentDay = uicomponent.getCurrentDay() ;
 	int currentMonth = uicomponent.getCurrentMonth() ;
  	int currentYear = uicomponent.getCurrentYear() ;
  	String linkDayNext = uicomponent.event(uicomponent.ACT_NEXT) ;
@@ -22,11 +22,13 @@
 			<div style="clear:right;"></div>
 		</div>
 	</div>
+	 
 	<table class="UIGrid" id="RowContainerDay" cellspacing="0" borderspacing="0">
 		<thead>
 			<tr>
 				<th style="width: 40px"></th>
 				<%
+					
 				  for(cl in uicomponent.getDaysOfWeek(weekNumber)) {
 					  String day = uicomponent.getDayName(cl.get(Calendar.DAY_OF_WEEK));
 					  String dayName = day.substring(0,3) ;
@@ -55,19 +57,30 @@
 			
 			<%
 				i = 0;
-				while (i++ < 24) {
+				t = 1 ;
+				boolean isHaftTime = false ;
+				while (i++ < 48) {
+				time = t + ":00" ;
+				if(isHaftTime) {time = " " ; t++ ;}
 			%>
 			<tr>
-				<td class="TdTime" style="border-top: 1px solid #c7c7c7;">$i :00</td>
+				<td class="TdTime" style="border-top: 1px solid #c7c7c7;">
+				$time
+				</td>
 			 	<%
-			 		for(dayName in uicomponent.getDaysName()) {
-			 		  if(dayName.equals(uicomponent.getDayName(uicomponent.getDayOfWeek(currentYear, currentMonth, currentDay)))){	
+			 		if (isHaftTime) {typeCss = "TdDotLine" ;}
+			 		else {typeCss = "TdLine" ;}
+			 		for(cl in uicomponent.getDaysOfWeek(weekNumber)) {
+			 			day = cl.get(Calendar.DATE) ;
+			 			month = cl.get(Calendar.MONTH) ;
+			 			year = cl.get(Calendar.YEAR) ;
+			 		  if(cl.get(Calendar.DAY_OF_WEEK) == uicomponent.getDayOfWeek(currentYear, currentMonth, currentDay)){	
 			 		  	cssClass = "Today" ;
 			 		  } else {
 			 				cssClass = "" ;
 			 		  }
 			 	%>
-				 		<td class="TdLine $cssClass">
+				 		<td class="$typeCss $cssClass">
 							<!--  <div class="EventContainerBoder"
 								<div class="EventContainerBar">5:35 AM - 7:00 AM</div>
 								<div class="EventContainer">Talk to my cousin on ...</div>
@@ -77,7 +90,10 @@
 						</td>
 			 	<%}%>
 			</tr>
-			<%}%>
+			<%
+				isHaftTime = !isHaftTime ;
+			}
+			%>
 		</tbody>
 	</table>
 </div> 
