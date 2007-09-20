@@ -38,7 +38,7 @@
 	  			<%
 	  				}
 	  			%>			
-  				<div style="clear: left"><span></span></div>
+  				<div style="clear: left;"><span></span></div>
   			</div>
 				<div class="RowContainerDay">
 			<table class="UIGrid" id="RowContainerDay" cellspacing="0" borderspacing="0">

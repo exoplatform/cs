@@ -1,5 +1,89 @@
+<%
+	int currentYear = uicomponent.getCurrentYear() ;
+	int currentMonth = uicomponent.getCurrentMonth() ;
+	int currentDay = uicomponent.getCurrentDay() ;
+	String linkDayNext = uicomponent.event(uicomponent.ACT_NEXT) ;
+ 	String linkDayPrevious = uicomponent.event(uicomponent.ACT_PREVIOUS) ;
+ 	monthName = uicomponent.getMonthName(currentMonth) ;
+ 	cssClass = "CalendarContentNomal" ;
+ 	if(uicomponent.isCurrentMonth(currentMonth, currentYear)) {
+		cssClass = "CalendarMatchedEventContent" ;
+	}
+	uiform.begin();
+%>
 <div class="UIMiniCalendar">
 	<div class="MiniCalendarContainer">
-	 
+	<table class="UIGrid" id="RowContainerDay" cellspacing="0" borderspacing="0">
+	        <tbody>
+	        <tr>
+	         <td class="$cssClass">
+								<div class="WeekSuburdbar">
+									<a href="$linkDayNext" class="RightControlButton">
+										<div class="NextIcon" title="Next month"><span></span></div>
+									</a>
+									<div class="Title RightControlButton">$monthName,  $currentYear</div>
+									<a href="$linkDayPrevious" class="RightControlButton">
+										<div class="BackIcon" title="Previous month"><span></span></div>
+									</a>
+									<div style="clear:right;"></div>
+								</div>
+								<div class="MonthList">
+									<div class="WeekList">
+									  <%for(day in uicomponent.getDaysName()) {
+										  	cssStyle = "DayTitle" ;
+												if(day.equals(uicomponent.SUNDAY)) cssStyle = "SundayTitle" ;
+										%>
+										<div class="$cssStyle"><%=day.substring(0,1)%></div>
+									  <%}%>
+		  							<div style="clear: both;"><span></span></div>
+		  						</div>
+		  						<div class="DayList">
+		  						<table class="UIGrid" id="" cellspacing="0" borderspacing="0">
+	  		<tbody>
+	  		<%
+					week = 0 ; 
+					dayOfMonth = 1 ;
+					validDay = 0 ;
+					daysInMonth = uicomponent.getDaysInMonth(currentMonth, currentYear) ;
+					while ( week++ < uicomponent.getWeeksOfTheMonth(currentYear, currentMonth, 1)  ) {
+				    println "<tr>";
+				    dayOfWeek = 0 ;
+				    while (dayOfWeek++ < 7) {
+				    	startDayOfWeek = uicomponent.getDayOfWeek(currentYear, currentMonth, dayOfMonth) ;
+				      if (week == 1 && startDayOfWeek == dayOfWeek) {
+				        validDay = 1;
+				      } else if (validDay == 1 && dayOfMonth > daysInMonth) {
+				        validDay = 0;
+				      }
+				      if (validDay) {
+					      if (uicomponent.isCurrentDay(dayOfMonth, currentMonth, currentYear )) {
+						       clazz = 'Today';
+						     } else  {
+						       clazz = 'DayBox';
+						     }
+						   actionLink =  uicomponent.event("GotoDate",String.valueOf(dayOfMonth)) ;
+				       println "<td class=\"$clazz\"><a href=\"$actionLink\"><div class=\"Actions\">$dayOfMonth</div></a></td>" ;
+				        dayOfMonth++ ;
+				      } else {
+				        println "<td>&nbsp;</td>" ;
+				      }
+				    }
+				    println "</tr>" ;
+	  			}	
+	  			 
+				%>
+	  		</tbody>
+  		</table>
+		  						
+	        </div>
+	        </div>
+	        
+	        </td>
+	        
+	        </tr>
+	        </tbody>
+	        </table>
+			
 	</div>
 </div>
+<%uiform.end()%>

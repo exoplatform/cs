@@ -211,11 +211,45 @@
 }
 
 .UIMiniCalendar .MiniCalendarContainer {
-	height: 140px;
 	border: 1px solid #ffffff;
 	background: #e9edf9 url('background/MiniCalendarBG1x17.gif') repeat-x bottom;
 }
+.UIMiniCalendar .WeekSuburdbar {
+	background: url('background/TitleBarBG1x23.gif') repeat-x ;
+	height: 23px;
+	text-align: center;
+	line-height: 23px;
+}
+.UIMiniCalendar  .DayList .UIGrid td{
+	border:solid 1px #c7c7c7;
+	text-align:center;
+	vertical-align:middle;
+	padding:0px;
+}
+.UIMiniCalendar  .DayList .UIGrid tr{
+	border:solid 1px #c7c7c7;
+	padding:0px;
+}
 
+.UIMiniCalendar .DayList .UIGrid .Today .Actions {
+	background: blue;
+	color: red;
+}
+.UIMiniCalendar .WeekList .SundayTitle {
+	float: left;
+	font-weight: bold; color: red;
+	line-height: 20px;
+	width: 14%;
+	text-align: center;
+}
+
+.UIMiniCalendar .WeekList .DayTitle {
+	float: left;
+	font-weight: bold; color: #0796d2;
+	line-height: 20px;
+	width: 14%;
+	text-align: center;
+}
 .UICalendars {
 	background-color: #ffffff;
 	border: 1px solid #c7c7c7;
