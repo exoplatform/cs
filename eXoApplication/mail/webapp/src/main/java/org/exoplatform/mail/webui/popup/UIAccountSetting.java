@@ -60,8 +60,8 @@ public class UIAccountSetting extends UIFormTabPane {
   public static final String FIELD_ISSSL = "isSSL";
   public static final String FIELD_CHECKMAIL_AUTO = "checkMailAutomatically";
   public static final String FIELD_EMPTY_TRASH = "emptyTrashWhenExit";
-  public static final String OPTION_HEAD = "Head of message";
-  public static final String OPTION_FOOT = "Foot of message";
+  public static final String OPTION_HEAD = "signOnHeadOfMessage";
+  public static final String OPTION_FOOT = "signOnFootOfMessage";
   private String accountId_ = null;
   
   public UIAccountSetting() throws Exception {
@@ -78,9 +78,10 @@ public class UIAccountSetting extends UIFormTabPane {
     identityInputSet.addUIFormInput(new UIFormStringInput(FIELD_REPLYTO_ADDRESS, null, null));
     identityInputSet.addUIFormInput(new UIFormTextAreaInput(FIELD_MAIL_SIGNATURE, null, null));
     List<SelectItemOption<String>> signPlaceOptions = new ArrayList<SelectItemOption<String>>();
-    signPlaceOptions.add(new SelectItemOption<String>(OPTION_HEAD, Utils.P_HEAD));
-    signPlaceOptions.add(new SelectItemOption<String>(OPTION_FOOT, Utils.P_FOOT));
+    signPlaceOptions.add(new SelectItemOption<String>(OPTION_HEAD));
+    signPlaceOptions.add(new SelectItemOption<String>(OPTION_FOOT));
     identityInputSet.addUIFormInput(new UIFormSelectBox(FIELD_PLACE_SIGNATURE, FIELD_PLACE_SIGNATURE, signPlaceOptions));
+    addUIFormInput(identityInputSet); 
     
     UIFormInputWithActions serverInputSet = new UIFormInputWithActions(TAB_SERVER_SETTINGS);
     serverInputSet.addUIFormInput(new UIFormInputInfo(FIELD_SERVER_TYPE, null, null));
