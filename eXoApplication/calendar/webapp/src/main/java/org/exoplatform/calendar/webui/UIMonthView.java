@@ -166,7 +166,6 @@ public class UIMonthView extends UICalendarView {
       String username = event.getRequestContext().getRemoteUser() ;
       CalendarService calendarService = calendarview.getApplicationComponent(CalendarService.class) ;
       CalendarEvent ce = calendarService.getUserEvent(username, calendarId, eventId) ;
-      
       calendarview.refresh() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
     }
