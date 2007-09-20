@@ -357,8 +357,8 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
   
   static  public class ChangeImageActionListener extends EventListener<UIContactForm> {
     public void execute(Event<UIContactForm> event) throws Exception {
-      UIContactForm uiForm = event.getSource() ;
-      UIPopupContainer popupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
+      UIContactForm uiContactForm = event.getSource() ;
+      UIPopupContainer popupContainer = uiContactForm.getAncestorOfType(UIPopupContainer.class) ;
       UIPopupAction popupAction = popupContainer.getChild(UIPopupAction.class) ;
       popupAction.activate(UIImageForm.class, 600) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;

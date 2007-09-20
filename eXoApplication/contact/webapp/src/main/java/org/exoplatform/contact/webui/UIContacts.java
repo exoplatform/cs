@@ -25,6 +25,7 @@ import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 
@@ -42,8 +43,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
         @EventConfig(listeners = UIContacts.SelectedContactActionListener.class),
         @EventConfig(listeners = UIContacts.AddTagActionListener.class),
         @EventConfig(listeners = UIContacts.EditContactActionListener.class),
-        @EventConfig(listeners = UIContacts.DeleteContactsActionListener.class,
-            confirm = "UIContacts.msg.confirm-delete"),
+        @EventConfig(listeners = UIContacts.DeleteContactsActionListener.class, phase = Phase.DECODE),
         @EventConfig(listeners = UIContacts.MoveContactsActionListener.class)
     }
 )
@@ -176,13 +176,18 @@ public class UIContacts extends UIForm  {
   static public class DeleteContactsActionListener extends EventListener<UIContacts> {
     public void execute(Event<UIContacts> event) throws Exception {
       UIContacts uiContacts = event.getSource();
-      String contactId = event.getRequestContext().getRequestParameter(OBJECTID);   
+      String contactId = event.getRequestContext().getRequestParameter(OBJECTID);
       List<String> contactIds = new ArrayList<String>();
+      UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
+      uiApp.addMessage(new ApplicationMessage("UIContacts.msg.confirm-delete", null, 
+          ApplicationMessage.WARNING)) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+         
+      
       if (contactId != null) contactIds.add(contactId) ;
       else {
         contactIds = uiContacts.getCheckedContacts() ;
         if (contactIds.size() == 0) {
-          UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
           uiApp.addMessage(new ApplicationMessage("UIContacts.msg.checkContact-required", null)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;

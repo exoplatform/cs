@@ -50,21 +50,21 @@ public class UIActionBar extends UIContainer  {
   static public class AddNewActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {
       UIActionBar uiActionBar = event.getSource() ;
-      UIContactPortlet contactPortlet = uiActionBar.getAncestorOfType(UIContactPortlet.class) ;
-      UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
+      UIContactPortlet uiContactPortlet = uiActionBar.getAncestorOfType(UIContactPortlet.class) ;
+      UIPopupAction uiPopupAction = uiContactPortlet.getChild(UIPopupAction.class) ;
       String addNewType = event.getRequestContext().getRequestParameter(OBJECTID) ;      
       if (addNewType.equals(CONTACT)) {
-        UIPopupContainer popupContainer = popupAction.createUIComponent(UIPopupContainer.class, null, "AddNewContact") ;
+        UIPopupContainer popupContainer = uiPopupAction.createUIComponent(UIPopupContainer.class, null, "AddNewContact") ;
         popupContainer.addChild(UICategorySelect.class, null, null) ;
         popupContainer.addChild(UIContactForm.class, null, null) ;
         UIContactForm.isNew_ = true ;
-        popupAction.activate(popupContainer, 800, 450, true) ;        
+        uiPopupAction.activate(popupContainer, 800, 450, true) ;        
       } else if (addNewType.equals(ADDRESSBOOK)) {
-        UICategoryForm uiCategoryForm = popupAction.createUIComponent(UICategoryForm.class, null, "UICategoryForm") ;
+        UICategoryForm uiCategoryForm = uiPopupAction.createUIComponent(UICategoryForm.class, null, "UICategoryForm") ;
         UICategoryForm.isNew_ = true ;
-        popupAction.activate(uiCategoryForm, 500, 0, true) ;
+        uiPopupAction.activate(uiCategoryForm, 500, 0, true) ;
       }
-      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }  
   }
   
