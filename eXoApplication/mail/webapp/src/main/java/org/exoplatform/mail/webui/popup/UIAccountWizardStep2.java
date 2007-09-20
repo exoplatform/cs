@@ -11,7 +11,9 @@ import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.WizardStep;
 import org.exoplatform.webui.form.UIFormInputSet;
+import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
+import org.exoplatform.webui.form.UIFormTextAreaInput;
 
 /**
  * Created by The eXo Platform SARL
@@ -35,7 +37,7 @@ public class UIAccountWizardStep2 extends UIFormInputSet implements WizardStep{
     addChild(new UIFormStringInput(FIELD_OUTGOINGNAME, null, null)) ;
     addChild(new UIFormStringInput(FIELD_EMAILADDRESS, null, null)) ;
     addChild(new UIFormStringInput(FIELD_EMAILREPLY, null, null)) ;
-    addChild(new UIFormStringInput(FIELD_SIGNATURE, null, null)) ;
+    addChild(new UIFormTextAreaInput(FIELD_SIGNATURE, null, null)) ;
     infoMessage_.clear() ;
     infoMessage_.add("UIAccountWizardStep2.info.label1") ;
   }
@@ -88,10 +90,10 @@ public class UIAccountWizardStep2 extends UIFormInputSet implements WizardStep{
   }
 
   protected void setSignature(String value) {
-    getUIStringInput(FIELD_SIGNATURE).setValue(value) ;
+    getUIFormTextAreaInput(FIELD_SIGNATURE).setValue(value) ;
   }
   protected String getSignature() {
-    return getUIStringInput(FIELD_SIGNATURE).getValue() ;
+    return getUIFormTextAreaInput(FIELD_SIGNATURE).getValue() ;
   }
   public void fillFields(Account acc) {
    fillFields(acc.getUserDisplayName(), acc.getEmailAddress(), acc.getEmailReplyAddress(), acc.getSignature()) ;

@@ -73,7 +73,6 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
   final static public String ACT_REMOVE = "remove" ;
   List<Attachment> attachments_ = new ArrayList<Attachment>() ;
   Message message_ = null;
-  String typeSend_ = "Send" ; // send a new, draft, reply, forward,
 
   public UIComposeForm() throws Exception {
     UIFormInputWithActions inputSet = new UIFormInputWithActions(FIELD_FROM_INPUT); 

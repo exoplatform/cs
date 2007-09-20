@@ -1,3 +1,6 @@
+<%
+  import org.exoplatform.mail.service.Account; 
+%>
 <div class="UIAccountSetting">
 	<div class="AccountSetting">
 	
@@ -9,10 +12,14 @@
 				<div style="clear: both;"><span></span></div>
 			</div>
 			<div class="AccountSettingList">
-				<div class="NormalItem">Default Account</div>
-				<div class="SelectedItem">eXo Account</div>
-				<div class="NormalItem">Home Account</div>
-				<div class="NormalItem">Company Account</div>
+			  <%
+			    for (account in uicomponent.getAccounts()) {
+			      String linkAction = uicomponent.event("SelectAccount", account.getId());
+			      String cssClass = "NormalItem";
+			      if (account.getId() == uicomponent.getSelectedAccountId()) { cssClass = "SelectedItem"; }
+			  %>
+				<div class="$cssClass"><a href="$linkAction"><%=account.getUserDisplayName()%></a></div>
+				<%}%>
 			</div>
 		</div>
 		

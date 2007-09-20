@@ -95,6 +95,9 @@ public class Utils {
   public static final String FD_SENT = "Sent".intern() ;
   public static final String FD_SPAM = "Spam".intern() ;
   public static final String FD_TRASH = "Trash".intern() ;
+  
+  public static final String P_HEAD = "Head".intern() ;
+  public static final String P_FOOT = "Foot".intern() ;
 
   public static boolean isEmptyField(String value) {
     return value == null || value.trim().length() == 0 ;

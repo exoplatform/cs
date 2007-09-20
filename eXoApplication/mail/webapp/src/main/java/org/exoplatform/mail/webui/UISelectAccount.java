@@ -17,6 +17,7 @@ import org.exoplatform.mail.webui.popup.UIPopupActionContainer;
 import org.exoplatform.mail.webui.popup.UIPopupAction;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.web.command.handler.GetApplicationHandler;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -88,7 +89,7 @@ public class UISelectAccount extends UIForm {
       UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class) ;
       UIPopupActionContainer uiAccContainer = uiPortlet.createUIComponent(UIPopupActionContainer.class, null, null) ;
       uiAccContainer.addChild(UIAccountCreation.class, null, null) ;
-      uiPopup.activate(uiAccContainer, 700, 385, true) ;
+      uiPopup.activate(uiAccContainer, 700, 0, true) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup) ;
     }
   }
@@ -100,8 +101,13 @@ public class UISelectAccount extends UIForm {
       UIMailPortlet uiPortlet = uiForm.getAncestorOfType(UIMailPortlet.class) ;
       UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class) ;
       UIPopupActionContainer uiAccContainer = uiPortlet.createUIComponent(UIPopupActionContainer.class, null, null) ;
-      uiAccContainer.addChild(UIAccountSetting.class, null, null) ;
-      uiPopup.activate(uiAccContainer, 750, 450, true) ;
+      UIAccountSetting uiAccountSetting = uiPortlet.createUIComponent(UIAccountSetting.class, null, null);
+      String username = uiPortlet.getCurrentUser(); 
+      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      uiAccountSetting.setSelectedAccountId(accountId);
+      uiAccountSetting.setAllField();
+      uiAccContainer.addChild(uiAccountSetting) ;
+      uiPopup.activate(uiAccContainer, 730, 0, true) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup) ;
     }
   }
