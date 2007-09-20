@@ -161,10 +161,10 @@ UICalendarPortlet.prototype.adjustHeight = function(evt) {
 } ;
 
 UICalendarPortlet.prototype.resizeCallBack = function() {
-	var resizeObject = eXo.calendar.UICalendarPortlet.resizeObject ;
-	var start =  parseInt(resizeObject.getAttribute("startTime")) ;
-	var end =  start + resizeObject.offsetHeight ;
-	eXo.calendar.UICalendarPortlet.adjustTime(start, end, eXo.calendar.UICalendarPortlet.eventBox) ;	
+	var eventBox = eXo.calendar.UICalendarPortlet.eventBox ;
+	var start =  parseInt(eventBox.getAttribute("startTime")) ;
+	var end =  start + eventBox.offsetHeight ;
+	eXo.calendar.UICalendarPortlet.adjustTime(start, end, eventBox) ;	
 } ;
 
 /* for drag and drop */
@@ -228,9 +228,26 @@ UICalendarPortlet.prototype.showContextMenu = function() {
 	} ;	
 	UIContextMenu.init(config) ;
 	UIContextMenu.attach(["CalendarContentNomal","CalendarContentDisable"],"UIMonthViewRightMenu") ;	
-	UIContextMenu.attach("EventOnDayLabel","UIMonthViewEventRightMenu") ;	
+	UIContextMenu.attach("EventOnDayContent","UIMonthViewEventRightMenu") ;	
 } ;
-
+UICalendarPortlet.prototype.monthViewCallback = function(evt){
+	var _e = window.event || evt ;
+	var src = _e.srcElement || _e.target ;
+	var UIContextMenu = eXo.webui.UIContextMenu ;
+	var DOMUtil = eXo.core.DOMUtil ;
+	var objectValue = "" ;
+	if (DOMUtil.hasClass(src, "DayBox") || DOMUtil.hasClass(src, "DayContent") || DOMUtil.hasClass(src, "EventOnDayBorder")) {
+		if (objectValue = DOMUtil.findAncestorByTagName(src,"td").getAttribute("currentDate")){			
+			UIContextMenu.changeAction(UIContextMenu.menuElement,objectValue) ;
+		}
+	} else if (objvalue = DOMUtil.findAncestorByClass(src, "EventOnDayContent")) {
+		objectValue = DOMUtil.findFirstDescendantByClass(objvalue, "input", "checkbox").name ;
+		UIContextMenu.changeAction(UIContextMenu.menuElement,objectValue) ;
+	} else {
+		return ;
+	}
+	
+}
 /* for selection creation */
 
 function UISelection() {

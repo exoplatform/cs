@@ -1,6 +1,5 @@
 	<%
 	def rcontext = _ctx.getRequestContext() ;
-  //rcontext.getJavascriptManager().importJavascript('eXo.webui.UIContextMenu');
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.showContextMenu() ;');
 	uiform.begin()
  	_ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");
@@ -132,7 +131,7 @@
 <%uiform.end()%>
 <% /*Begin Popup Menu*/ %>
   			
-  				<div class="UIRightClickPopupMenu" id="UIMonthViewRightMenu">
+  				<div class="UIRightClickPopupMenu" id="UIMonthViewRightMenu" eXoCallback="eXo.calendar.UICalendarPortlet.monthViewCallback">
 						  <div class="TopLeftRightClickPopupMenu">
           			<div class="TopRightRightClickPopupMenu">
             			<div class="TopCenterRightClickPopupMenu"><span></span></div>
@@ -162,7 +161,7 @@
   		<% /*End Popup Menu*/ %>
   		<% /*Begin Popup Menu*/ %>
   			
-  				<div class="UIRightClickPopupMenu" id="UIMonthViewEventRightMenu">
+  				<div class="UIRightClickPopupMenu" id="UIMonthViewEventRightMenu" eXoCallback="eXo.calendar.UICalendarPortlet.monthViewCallback">
 						  <div class="TopLeftRightClickPopupMenu">
           			<div class="TopRightRightClickPopupMenu">
             			<div class="TopCenterRightClickPopupMenu"><span></span></div>
