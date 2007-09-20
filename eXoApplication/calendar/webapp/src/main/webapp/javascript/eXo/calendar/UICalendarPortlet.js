@@ -51,18 +51,6 @@ UICalendarPortlet.prototype.showAction = function(obj, evt) {
 //	var uiPopupCategory = eXo.core.DOMUtil.findFirstDescendantByClass(obj, "div", "UIPopupCategory") ;
 } ;
 
-//UICalendarPortlet.prototype.changeAction = function(obj, id) {
-//	var actions = eXo.core.DOMUtil.findDescendantsByTagName(obj, "a") ;
-//	var len = actions.length ;
-//	var href = "" ;
-//	var pattern = /objectId\=.*id/ ;
-//	for(var i = 0 ; i < len ; i++) {
-//		href = String(actions[i].href) ;
-//		if (!pattern.test(href)) continue ;
-//		actions[i].href = href.replace(pattern,"objectId="+id) ;
-//	}
-//}
-
 /* for event */
 
 UICalendarPortlet.prototype.init = function() {
@@ -70,6 +58,7 @@ UICalendarPortlet.prototype.init = function() {
 	if (!rowContainerDay) return false ;
 	this.viewer = eXo.core.DOMUtil.findFirstDescendantByClass(rowContainerDay, "div", "EventBoardContainer") ;
 	this.step = 60 ;
+	this.interval = 20 ;
 	this.viewer.onmousedown = eXo.calendar.UISelection.init ;//eXo.calendar.UICalendarPortlet.addSelection ;
 	return true ;
 } ;
@@ -78,7 +67,6 @@ UICalendarPortlet.prototype.getElements = function() {
 	var elements = eXo.core.DOMUtil.findDescendantsByClass(this.viewer, "div", "EventContainerBorder") ;
 	var len = elements.length ;
 	var el = {
-		
 		children: elements,
 		count : len
 	}
@@ -196,26 +184,44 @@ UICalendarPortlet.prototype.initDND = function(evt) {
 	var _e = window.event || evt ;
 	_e.cancelBubble = true ;
 	var UICalendarPortlet = eXo.calendar.UICalendarPortlet ;
-	var dragBlock = this ;
-	var clickBlock =  eXo.core.DOMUtil.findFirstChildByClass(dragBlock, "div", "EventContainerBar") ;
-	var offsetLeft = dragBlock.offsetLeft ;
-	var offsetTop =  dragBlock.offsetTop ;
-	var startTime =  parseInt(dragBlock.getAttribute("startTime")) ;
-	var endTime =  parseInt(dragBlock.getAttribute("endTime")) ;
-	var height = Math.abs(startTime - endTime) ;
-	eXo.core.DragDrop.init(null, clickBlock, dragBlock, _e) ;
-	eXo.core.DragDrop.initCallback = null ;
-	eXo.core.DragDrop.dragCallback = function(dndEvent) {
-		dragBlock.style.left = offsetLeft + "px" ;
+	UICalendarPortlet.dragObject = this ;
+	var eventDayContainer = eXo.core.DOMUtil.findAncestorByClass(UICalendarPortlet.dragObject, "EventDayContainer") ;
+	try{
+//		var eventContainer = eXo.core.DOMUtil.findFirstDescendantByClass(UICalendarPortlet.dragObject, "div", "EventContainer") ;
+//		eventContainer.style.MozUserSelect = "none" ;
+//		eventContainer.onselectstart = function() {
+//			return false ;
+//		} ;
+	} catch(e) {}
+	UICalendarPortlet.eventY = _e.clientY ;
+	UICalendarPortlet.eventTop = UICalendarPortlet.dragObject.offsetTop ;
+	eventDayContainer.onmousemove = UICalendarPortlet.dragStart ;
+	eventDayContainer.onmouseup = UICalendarPortlet.dragEnd ;
+}
+UICalendarPortlet.prototype.dragStart = function(evt) {
+	var _e = window.event || evt ;
+	var UICalendarPortlet = eXo.calendar.UICalendarPortlet ;
+	var delta = _e.clientY - UICalendarPortlet.eventY ;
+	var top = UICalendarPortlet.eventTop + delta ;
+	if (delta%UICalendarPortlet.interval == 0) {
+		UICalendarPortlet.dragObject.style.top = top + "px" ;
 	}
-	eXo.core.DragDrop.dropCallback = function(dndEvent) {
-		var delta = offsetTop - dragBlock.offsetTop ;
-		var currentStartTime = startTime - delta ;
-		var currentEndTime = currentStartTime +  height ;
-		dragBlock.setAttribute('startTime', currentStartTime) ;
-		dragBlock.setAttribute('endTime', currentEndTime) ;
-		clickBlock.innerHTML = UICalendarPortlet.minutesToHour(currentStartTime) + " - " + UICalendarPortlet.minutesToHour(currentEndTime) ;
-	}
+} ;
+UICalendarPortlet.prototype.dragEnd = function() {
+	this.onmousemove = null ;
+	var dragObject = eXo.calendar.UICalendarPortlet.dragObject ;
+	var start = parseInt(dragObject.getAttribute("startTime")) ;
+	var end = parseInt(dragObject.getAttribute("endTime")) ;
+	var delta = end - start  ;
+	var currentStart = dragObject.offsetTop ;
+	var currentEnd = currentStart + delta ;
+	var actionLink = dragObject.getAttribute("actionLink") ;	
+	var pattern = /startTime.*endTime/g ;
+	var params = "startTime=" + currentStart + "&finishTime=" + currentEnd ;
+	actionLink = actionLink.replace(pattern, params).replace("javascript:","") ;	
+	eval(actionLink) ;
+	window.status = actionLink ;
+	dragObject = null ;
 } ;
 
 /* fo adjusting time */
