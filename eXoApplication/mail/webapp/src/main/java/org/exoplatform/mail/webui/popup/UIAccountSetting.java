@@ -10,9 +10,13 @@ import java.util.List;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Utils;
+import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.web.command.handler.GetApplicationHandler;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
@@ -35,7 +39,9 @@ import org.exoplatform.webui.form.UIFormTextAreaInput;
     lifecycle = UIFormLifecycle.class,
     template =  "app:/templates/mail/webui/UIAccountSetting.gtmpl",
     events = {
-        @EventConfig(listeners = UIAccountSetting.SelectAccountActionListener.class)
+        @EventConfig(listeners = UIAccountSetting.SelectAccountActionListener.class),
+        @EventConfig(listeners = UIAccountSetting.SaveActionListener.class),
+        @EventConfig(listeners = UIAccountSetting.CancelActionListener.class)
     }
 )
 
@@ -122,6 +128,12 @@ public class UIAccountSetting extends UIFormTabPane {
     return uiInput.getUIStringInput(FIELD_EMAIL_ADDRESS).getValue();
   }
   
+  public String getFieldMailPassword() {
+    UIFormInputWithActions uiInput = getChildById(TAB_IDENTITY_SETTINGS);
+    return uiInput.getUIStringInput(FIELD_EMAIL_PASSWORD).getValue();
+  }
+  
+  
   public String getFieldIncomingServer() {
     UIFormInputWithActions uiInput = getChildById(TAB_SERVER_SETTINGS);
     return uiInput.getUIStringInput(FIELD_INCOMING_SERVER).getValue();
@@ -137,10 +149,6 @@ public class UIAccountSetting extends UIFormTabPane {
     return uiInput.getUIFormSelectBox(FIELD_PLACE_SIGNATURE).getValue();
   }
   
-  public String getFieldApplySignature() {
-    UIFormInputWithActions uiInput = getChildById(TAB_IDENTITY_SETTINGS);
-    return uiInput.getUIFormSelectBox(FIELD_APPLY_SIGNATURE).getValue();
-  }
   
   public String getFieldReplyAddress() {
     UIFormInputWithActions uiInput = getChildById(TAB_IDENTITY_SETTINGS);
@@ -148,34 +156,38 @@ public class UIAccountSetting extends UIFormTabPane {
   }
   
   public String getFieldIncomingFolder() {
-    UIFormInputWithActions uiInput = getChildById(TAB_IDENTITY_SETTINGS);
+    UIFormInputWithActions uiInput = getChildById(TAB_SERVER_SETTINGS);
     return uiInput.getUIStringInput(FIELD_INCOMING_FOLDER).getValue();
   }
   
   public String getFieldPort() {
-    UIFormInputWithActions uiInput = getChildById(TAB_IDENTITY_SETTINGS);
+    UIFormInputWithActions uiInput = getChildById(TAB_SERVER_SETTINGS);
     return uiInput.getUIStringInput(FIELD_PORT).getValue();
   }
   
   public boolean getFieldIsSSL() {
-    UIFormInputWithActions uiInput = getChildById(TAB_IDENTITY_SETTINGS);
+    UIFormInputWithActions uiInput = getChildById(TAB_SERVER_SETTINGS);
     return uiInput.getUIFormCheckBoxInput(FIELD_ISSSL).isChecked();
   }
   
   public boolean getFieldCheckMailAuto() {
-    UIFormInputWithActions uiInput = getChildById(TAB_IDENTITY_SETTINGS);
+    UIFormInputWithActions uiInput = getChildById(TAB_SERVER_SETTINGS);
     return uiInput.getUIFormCheckBoxInput(FIELD_CHECKMAIL_AUTO).isChecked();
   }
   
   public boolean getFieldEmptyTrash() {
-    UIFormInputWithActions uiInput = getChildById(TAB_IDENTITY_SETTINGS);
+    UIFormInputWithActions uiInput = getChildById(TAB_SERVER_SETTINGS);
     return uiInput.getUIFormCheckBoxInput(FIELD_EMPTY_TRASH).isChecked();
   }
   
-  public void setAllField() throws Exception {
+  public void fillAllField() throws Exception {
     MailService mailSrv = getApplicationComponent(MailService.class);
     String username = Util.getPortalRequestContext().getRemoteUser();
     Account account = mailSrv.getAccountById(username, getSelectedAccountId());
+    fillAllField(account);
+  }
+  
+  public void fillAllField(Account account) throws Exception {
     UIFormInputWithActions uiAccountInput = getChildById(TAB_ACCOUNT);
     uiAccountInput.getUIStringInput(FIELD_ACCOUNT_NAME).setValue(account.getLabel());
     uiAccountInput.getUIStringInput(FIELD_ACCOUNT_DESCRIPTION).setValue(account.getDescription());
@@ -183,6 +195,7 @@ public class UIAccountSetting extends UIFormTabPane {
     UIFormInputWithActions uiIdentityInput = getChildById(TAB_IDENTITY_SETTINGS);
     uiIdentityInput.getUIStringInput(FIELD_OUTGOING_NAME).setValue(account.getUserDisplayName());
     uiIdentityInput.getUIStringInput(FIELD_EMAIL_ADDRESS).setValue(account.getEmailAddress());
+    uiIdentityInput.getUIStringInput(FIELD_EMAIL_PASSWORD).setValue(account.getPassword());
     uiIdentityInput.getUIStringInput(FIELD_REPLYTO_ADDRESS).setValue(account.getEmailReplyAddress());
     uiIdentityInput.getUIStringInput(FIELD_MAIL_SIGNATURE).setValue(account.getSignature());
     
@@ -210,8 +223,61 @@ public class UIAccountSetting extends UIFormTabPane {
       System.out.println(" ==========> SelectAccountActionListener") ;
       String accountId = event.getRequestContext().getRequestParameter(OBJECTID);
       uiAccountSetting.setSelectedAccountId(accountId);
-      uiAccountSetting.setAllField();
+      uiAccountSetting.fillAllField();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiAccountSetting.getParent());
+    }
+  }
+  
+  static  public class SaveActionListener extends EventListener<UIAccountSetting> {
+    public void execute(Event<UIAccountSetting> event) throws Exception {
+      UIAccountSetting uiAccountSetting = event.getSource() ;
+      System.out.println(" ==========> SaveActionListener") ;
+      MailService mailSrv = uiAccountSetting.getApplicationComponent(MailService.class);
+      String username = Util.getPortalRequestContext().getRemoteUser();
+      Account acc = mailSrv.getAccountById(username, uiAccountSetting.getSelectedAccountId());
+      String accName = uiAccountSetting.getFieldAccountNameValue();
+      String accDes = uiAccountSetting.getFieldAccountDescription();
+      String displayName = uiAccountSetting.getFieldOutgoingName();
+      String email = uiAccountSetting.getFieldMailAddress();
+      String replyMail = uiAccountSetting.getFieldReplyAddress();
+      String signature = uiAccountSetting.getFieldMailSignature();
+      String userName = uiAccountSetting.getFieldMailAddress();
+      String password = uiAccountSetting.getFieldMailPassword();
+      String popHost = uiAccountSetting.getFieldIncomingServer();
+      String popPort = uiAccountSetting.getFieldPort();
+      boolean isSSL = uiAccountSetting.getFieldIsSSL();
+      String storeFolder = uiAccountSetting.getFieldIncomingFolder();
+      
+      acc.setLabel(accName) ;
+      acc.setDescription(accDes) ;
+      acc.setUserDisplayName(displayName) ;
+      acc.setEmailAddress(email) ;
+      acc.setEmailReplyAddress(replyMail) ;
+      acc.setSignature(signature) ;
+      acc.setServerProperty(Utils.SVR_USERNAME, userName); 
+      acc.setServerProperty(Utils.SVR_PASSWORD, password);
+      acc.setServerProperty(Utils.SVR_POP_HOST, popHost);
+      acc.setServerProperty(Utils.SVR_POP_PORT, popPort);  
+      acc.setServerProperty(Utils.SVR_SSL, String.valueOf(isSSL));
+      acc.setServerProperty(Utils.SVR_FOLDER, storeFolder) ;
+      acc.setServerProperty(Utils.SVR_SMTP_USER, userName);
+      
+      UIApplication uiApp = uiAccountSetting.getAncestorOfType(UIApplication.class) ;
+      try {
+        mailSrv.updateAccount(username, acc);
+        uiApp.addMessage(new ApplicationMessage("UIAccountSetting.msg.edit-acc-successfully", null));
+      } catch(Exception e) {
+        uiApp.addMessage(new ApplicationMessage("UIAccountSetting.msg.edit-acc-unsuccessfully", null));
+        e.printStackTrace() ;
+        return ;
+      }
+    }
+  }
+  
+  static  public class CancelActionListener extends EventListener<UIAccountSetting> {
+    public void execute(Event<UIAccountSetting> event) throws Exception {
+      System.out.println(" ==========> CancelActionListener") ;
+      event.getSource().getAncestorOfType(UIMailPortlet.class).cancelAction();
     }
   }
 }

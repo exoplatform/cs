@@ -105,7 +105,7 @@ public class UISelectAccount extends UIForm {
       String username = uiPortlet.getCurrentUser(); 
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       uiAccountSetting.setSelectedAccountId(accountId);
-      uiAccountSetting.setAllField();
+      uiAccountSetting.fillAllField();
       uiAccContainer.addChild(uiAccountSetting) ;
       uiPopup.activate(uiAccContainer, 730, 0, true) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup) ;
