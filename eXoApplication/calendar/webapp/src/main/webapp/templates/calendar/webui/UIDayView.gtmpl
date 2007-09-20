@@ -75,6 +75,9 @@
 								 def currentDateFrom = uicomponent.getCurrentDayBegin() ;
 								 def currentDateTo 	= uicomponent.getCurrentDayEnd() ;
 								 for(ce in	uicomponent.getEventData().values()) {
+								  println ce.getFromDateTime() ;
+								  println ce.getToDateTime() ;
+								  println "</br>" ;
 								 	beginTime = ((ce.getFromDateTime().getHours() * 60) + ce.getFromDateTime().getMinutes());
 								 	if(ce.getFromDateTime().before(currentDateFrom.getTime())) {
 								 		beginTime = 0 ;
@@ -88,7 +91,10 @@
 								 	actionLink =  uicomponent.event("SaveEvent",ce.getId()+"&calendarId="+ce.getCalendarId()+"&startTime=beginTime&finishTime=endTime") ;
 								%>
 								<div class="EventContainerBorder" actionLink="$actionLink" startTime="$beginTime" endTime="$endTime" >
-									<div class="EventContainerBar" title="<%=df.format(ce.getFromDateTime())%> -->  <%=df.format(ce.getToDateTime())%>">5:00 AM - 7:00 AM</div>
+									<div class="EventContainerBar" title="<%=df.format(ce.getFromDateTime())%> -->  <%=df.format(ce.getToDateTime())%>">
+										<%=(ce.getFromDateTime().getHours())%>:<%=(ce.getFromDateTime().getMinutes())%>
+										<%=(ce.getToDateTime().getHours())%>:<%=(ce.getToDateTime().getMinutes())%>
+									</div>
 									<div class="EventContainer"><%=ce.getSummary()%></div>
 									<div class="ResizeEventContainer"><span></span></div>
 								</div>

@@ -38,6 +38,7 @@ import org.exoplatform.webui.event.EventListener;
       @EventConfig(listeners = UICalendarView.ChangeCategoryActionListener.class), 
       @EventConfig(listeners = UIDayView.MoveNextActionListener.class), 
       @EventConfig(listeners = UIDayView.MovePreviousActionListener.class), 
+      @EventConfig(listeners = UIDayView.SaveEventActionListener.class), 
       @EventConfig(listeners = UICalendarView.AddCategoryActionListener.class)
     }
 
@@ -114,5 +115,23 @@ public class UIDayView extends UICalendarView {
       event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
     }
   }
-
+  
+  static  public class SaveEventActionListener extends EventListener<UIMonthView> {
+    public void execute(Event<UIMonthView> event) throws Exception {
+      UIMonthView calendarview = event.getSource() ;
+      String eventId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      String calendarId = event.getRequestContext().getRequestParameter("calendarId") ;
+      String startTime = event.getRequestContext().getRequestParameter("startTime") ;
+      String endTime = event.getRequestContext().getRequestParameter("finishTime") ;
+      System.out.println("\n\n SaveEventActionListener");
+      System.out.println("\n\n event " + eventId);
+      System.out.println("\n\n begin " + startTime);
+      System.out.println("\n\n end " + endTime);
+      String username = event.getRequestContext().getRemoteUser() ;
+      CalendarService calendarService = calendarview.getApplicationComponent(CalendarService.class) ;
+      CalendarEvent ce = calendarService.getUserEvent(username, calendarId, eventId) ;
+      calendarview.refresh() ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
+    }
+  }
 }

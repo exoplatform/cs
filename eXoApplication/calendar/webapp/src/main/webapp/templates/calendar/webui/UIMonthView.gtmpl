@@ -105,9 +105,10 @@
 											}
 											if(size > 3) {
 												moreSize =  size - 3  ;
-												println "<div class=\"ViewMoreIcon\" title=\"View all event on day\"> + " ;
+												moreActionLink = uicomponent.event("ChangeView") ;
+												println "<a href=\"$moreActionLink\"><div class=\"ViewMoreIcon\" title=\"View all event on day\"> + " ;
 												println moreSize ;
-												println " More </div>" ;	
+												println " More </div></a>" ;	
 											}
 										}
 										println "</div>" ;
@@ -140,7 +141,12 @@
 			        <div class="MiddleLeftRightClickPopupMenu">
 			          <div class="MiddleRightRightClickPopupMenu">
               		<div class="UIRightPopupMenuContainer">
-              			&nbsp;&nbsp;&nbsp;Menu 1
+              			<%
+              				for(String act : uicomponent.getContextMenu()) {
+              				link = uicomponent.event(act) ;
+              			%>
+              			  <a href="$link">$act</a>
+              			<%}%>
 									</div>
 	          		</div>
 	        		</div>
@@ -159,11 +165,16 @@
           			<div class="TopRightRightClickPopupMenu">
             			<div class="TopCenterRightClickPopupMenu"><span></span></div>
           			</div>
-        			</div>
+        			</div> 
 			        <div class="MiddleLeftRightClickPopupMenu">
 			          <div class="MiddleRightRightClickPopupMenu">
               		<div class="UIRightPopupMenuContainer">
-              			&nbsp;&nbsp;&nbsp;Menu 2
+              			<%
+              				for(String act : uicomponent.getQuickEditMenu()) {
+              				link = uicomponent.event(act) ;
+              			%>
+              			  <a href="$link">$act</a>
+              			<%}%>
 									</div>
 	          		</div>
 	        		</div>

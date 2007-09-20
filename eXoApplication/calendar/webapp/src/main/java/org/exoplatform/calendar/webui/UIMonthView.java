@@ -40,7 +40,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
       @EventConfig(listeners = UICalendarView.ChangeCategoryActionListener.class), 
       @EventConfig(listeners = UIMonthView.MoveNextActionListener.class), 
       @EventConfig(listeners = UIMonthView.MovePreviousActionListener.class),
-      @EventConfig(listeners = UIMonthView.SaveEventActionListener.class), 
+      @EventConfig(listeners = UIMonthView.ChangeViewActionListener.class), 
       @EventConfig(listeners = UICalendarView.EventSelectActionListener.class), 
       @EventConfig(listeners = UICalendarView.AddCategoryActionListener.class)
     }
@@ -48,6 +48,13 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
 )
 public class UIMonthView extends UICalendarView {
 
+  
+  public final static String ACT_ADDNEW_EVENT = "AddNewEvent".intern() ;
+  public final static String ACT_ADDNEW_TASK = "AddNewTask".intern() ;
+  public final static String ACT_GOTO_DATE = "GotoDate".intern() ;
+  public final static String ACT_EDIT = "EditEvent".intern() ;
+  public final static String ACT_DELETE = "DeleteEvent".intern() ;
+  
   private Map<String, String> calendarIds_ = new HashMap<String, String>() ;
 
   private Map<String, List<CalendarEvent>> eventData_ = new HashMap<String, List<CalendarEvent>>() ;
@@ -60,7 +67,12 @@ public class UIMonthView extends UICalendarView {
   protected int getWeeksOfTheMonth(int year, int month, int day) {
     return new GregorianCalendar(year, month, day).getActualMaximum(java.util.Calendar.WEEK_OF_MONTH) ;
   }
-  
+  protected String[] getContextMenu() {
+    return  new String[]{ACT_ADDNEW_EVENT, ACT_ADDNEW_TASK, ACT_GOTO_DATE} ;
+  }
+  protected String[] getQuickEditMenu() {
+    return  new String[]{ACT_EDIT, ACT_DELETE} ;
+  }
   protected void refreshEvents() throws Exception {
     CalendarService calendarService = getApplicationComponent(CalendarService.class) ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
@@ -152,23 +164,13 @@ public class UIMonthView extends UICalendarView {
       event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
     }
   }
-  static  public class SaveEventActionListener extends EventListener<UIMonthView> {
+  static  public class ChangeViewActionListener extends EventListener<UIMonthView> {
     public void execute(Event<UIMonthView> event) throws Exception {
       UIMonthView calendarview = event.getSource() ;
-      String eventId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      String calendarId = event.getRequestContext().getRequestParameter("calendarId") ;
-      String startTime = event.getRequestContext().getRequestParameter("startTime") ;
-      String endTime = event.getRequestContext().getRequestParameter("finishTime") ;
-      System.out.println("\n\n SaveEventActionListener");
-      System.out.println("\n\n event " + eventId);
-      System.out.println("\n\n begin " + startTime);
-      System.out.println("\n\n end " + endTime);
-      String username = event.getRequestContext().getRemoteUser() ;
-      CalendarService calendarService = calendarview.getApplicationComponent(CalendarService.class) ;
-      CalendarEvent ce = calendarService.getUserEvent(username, calendarId, eventId) ;
-      calendarview.refresh() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
+      UICalendarViewContainer uiContainer = calendarview.getAncestorOfType(UICalendarViewContainer.class) ;
+      uiContainer.setRenderedChild(UIDayView.class) ;
+      uiContainer.refresh() ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;
     }
   }
-
 }
