@@ -31,11 +31,11 @@
 			</div>
 		</div>
 		<div class="EventAllDay">
-			<%for(ce in uicomponent.getAllDayEvents().values()) {%>
 			<div class="EventAllDayColor2">
-				<div class="EventAllDayDescription"><%=ce.getSummary()%></div>
+				<%for(ce in uicomponent.getAllDayEvents().values()) {%>
+					<div class="EventAllDayDescription"><%=ce.getSummary()%></div>
+				<%}%>
 			</div>
-			<%}%>
 		</div>
 		<div class="EventDayContainer" style="position:relative ;">
 			<div class="EventDayContent">

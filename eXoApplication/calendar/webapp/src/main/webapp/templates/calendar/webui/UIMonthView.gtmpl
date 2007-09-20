@@ -73,7 +73,7 @@
 					          clazz = 'DayBox';
 					        }
 						      month = currentMonth + 1 ;
-					        println "<td  class='CalendarContentNomal'> <div class='DayBox $clazz' >" ;
+					        println "<td  class='CalendarContentNomal' currentDate='$dayOfMonth' > <div class='DayBox $clazz' >" ;
 					        println dayOfMonth ;
 									println "/" ;
 									println month ;
