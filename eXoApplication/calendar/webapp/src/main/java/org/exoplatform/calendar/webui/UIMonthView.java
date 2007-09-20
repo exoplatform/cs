@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
@@ -38,11 +37,15 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
       @EventConfig(listeners = UICalendarView.AddEventActionListener.class),      
       @EventConfig(listeners = UICalendarView.DeleteEventActionListener.class),
       @EventConfig(listeners = UICalendarView.ChangeCategoryActionListener.class), 
+      @EventConfig(listeners = UICalendarView.EventSelectActionListener.class), 
+      @EventConfig(listeners = UICalendarView.AddCategoryActionListener.class),
       @EventConfig(listeners = UIMonthView.MoveNextActionListener.class), 
       @EventConfig(listeners = UIMonthView.MovePreviousActionListener.class),
-      @EventConfig(listeners = UIMonthView.ChangeViewActionListener.class), 
-      @EventConfig(listeners = UICalendarView.EventSelectActionListener.class), 
-      @EventConfig(listeners = UICalendarView.AddCategoryActionListener.class)
+      @EventConfig(listeners = UIMonthView.AddNewEventActionListener.class), 
+      @EventConfig(listeners = UIMonthView.AddNewTaskActionListener.class), 
+      @EventConfig(listeners = UIMonthView.GotoDateActionListener.class), 
+      @EventConfig(listeners = UIMonthView.EditEventActionListener.class), 
+      @EventConfig(listeners = UIMonthView.QuickDeleteEventActionListener.class)
     }
 
 )
@@ -53,7 +56,7 @@ public class UIMonthView extends UICalendarView {
   public final static String ACT_ADDNEW_TASK = "AddNewTask".intern() ;
   public final static String ACT_GOTO_DATE = "GotoDate".intern() ;
   public final static String ACT_EDIT = "EditEvent".intern() ;
-  public final static String ACT_DELETE = "DeleteEvent".intern() ;
+  public final static String ACT_DELETE = "QuickDeleteEvent".intern() ;
   
   private Map<String, String> calendarIds_ = new HashMap<String, String>() ;
 
@@ -171,6 +174,47 @@ public class UIMonthView extends UICalendarView {
       uiContainer.setRenderedChild(UIDayView.class) ;
       uiContainer.refresh() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;
+    }
+  }
+  
+  static  public class AddNewEventActionListener extends EventListener<UIMonthView> {
+    public void execute(Event<UIMonthView> event) throws Exception {
+      UIMonthView calendarview = event.getSource() ;
+      System.out.println("\n\n AddNewEventActionListener");
+      calendarview.refresh() ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
+    }
+  }
+  static  public class AddNewTaskActionListener extends EventListener<UIMonthView> {
+    public void execute(Event<UIMonthView> event) throws Exception {
+      UIMonthView calendarview = event.getSource() ;
+      System.out.println("\n\n AddNewTaskActionListener");
+      calendarview.refresh() ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
+    }
+  }
+  static  public class GotoDateActionListener extends EventListener<UIMonthView> {
+    public void execute(Event<UIMonthView> event) throws Exception {
+      UIMonthView calendarview = event.getSource() ;
+      System.out.println("\n\n GotoDateActionListener");
+      calendarview.refresh() ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
+    }
+  }
+  static  public class EditEventActionListener extends EventListener<UIMonthView> {
+    public void execute(Event<UIMonthView> event) throws Exception {
+      UIMonthView calendarview = event.getSource() ;
+      System.out.println("\n\n EditEventActionListener");
+      calendarview.refresh() ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
+    }
+  }
+  static  public class QuickDeleteEventActionListener extends EventListener<UIMonthView> {
+    public void execute(Event<UIMonthView> event) throws Exception {
+      UIMonthView calendarview = event.getSource() ;
+      System.out.println("\n\n QuickDeleteEventActionListener");
+      calendarview.refresh() ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
     }
   }
 }

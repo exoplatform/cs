@@ -116,20 +116,38 @@ public class UIDayView extends UICalendarView {
     }
   }
   
-  static  public class SaveEventActionListener extends EventListener<UIMonthView> {
-    public void execute(Event<UIMonthView> event) throws Exception {
-      UIMonthView calendarview = event.getSource() ;
+  static  public class SaveEventActionListener extends EventListener<UIDayView> {
+    public void execute(Event<UIDayView> event) throws Exception {
+      UIDayView calendarview = event.getSource() ;
       String eventId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       String calendarId = event.getRequestContext().getRequestParameter("calendarId") ;
       String startTime = event.getRequestContext().getRequestParameter("startTime") ;
       String endTime = event.getRequestContext().getRequestParameter("finishTime") ;
-      System.out.println("\n\n SaveEventActionListener");
-      System.out.println("\n\n event " + eventId);
-      System.out.println("\n\n begin " + startTime);
-      System.out.println("\n\n end " + endTime);
       String username = event.getRequestContext().getRemoteUser() ;
       CalendarService calendarService = calendarview.getApplicationComponent(CalendarService.class) ;
       CalendarEvent ce = calendarService.getUserEvent(username, calendarId, eventId) ;
+      if(ce != null) {
+        try {
+          int hoursBg = (Integer.parseInt(startTime)/60) ;
+          int minutesBg = (Integer.parseInt(startTime)%60) ;
+          
+          int hoursEnd = (Integer.parseInt(endTime)/60) ;
+          int minutesEnd = (Integer.parseInt(endTime)%60) ;
+          
+          Calendar fromDateTime = new GregorianCalendar(calendarview.getCurrentYear(), calendarview.getCurrentMonth(), calendarview.getCurrentDay()) ;
+          fromDateTime.set(Calendar.HOUR, hoursBg) ;
+          fromDateTime.set(Calendar.MINUTE, minutesBg) ;
+          Calendar toDateTime = new GregorianCalendar(calendarview.getCurrentYear(), calendarview.getCurrentMonth(), calendarview.getCurrentDay()) ;
+          toDateTime.set(Calendar.HOUR, hoursEnd) ;
+          toDateTime.set(Calendar.MINUTE, minutesEnd) ;
+          
+          ce.setFromDateTime(fromDateTime.getTime());
+          ce.setToDateTime(toDateTime.getTime()) ;
+          calendarService.saveUserEvent(username, calendarId, ce, false) ;
+        } catch (Exception e) {
+          e.printStackTrace() ;
+        }
+      }
       calendarview.refresh() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
     }

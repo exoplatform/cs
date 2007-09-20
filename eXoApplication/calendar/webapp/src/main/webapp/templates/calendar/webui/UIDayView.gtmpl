@@ -75,9 +75,6 @@
 								 def currentDateFrom = uicomponent.getCurrentDayBegin() ;
 								 def currentDateTo 	= uicomponent.getCurrentDayEnd() ;
 								 for(ce in	uicomponent.getEventData().values()) {
-								  println ce.getFromDateTime() ;
-								  println ce.getToDateTime() ;
-								  println "</br>" ;
 								 	beginTime = ((ce.getFromDateTime().getHours() * 60) + ce.getFromDateTime().getMinutes());
 								 	if(ce.getFromDateTime().before(currentDateFrom.getTime())) {
 								 		beginTime = 0 ;
