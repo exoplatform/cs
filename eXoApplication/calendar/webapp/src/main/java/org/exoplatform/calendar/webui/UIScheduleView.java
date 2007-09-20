@@ -20,5 +20,11 @@ import org.exoplatform.webui.core.UIComponent;
 public class UIScheduleView extends UICalendarView  {
   public UIScheduleView() throws Exception {
     
+  }
+
+  @Override
+  public void refresh() throws Exception {
+    // TODO Auto-generated method stub
+    
   }  
 }

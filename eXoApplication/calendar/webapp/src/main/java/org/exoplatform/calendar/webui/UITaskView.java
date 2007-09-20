@@ -28,5 +28,11 @@ public class UITaskView extends UICalendarView {
   private List getEventList() {
     return null ;
   }
+
+  @Override
+  public void refresh() throws Exception {
+    // TODO Auto-generated method stub
+    
+  }
   
 }

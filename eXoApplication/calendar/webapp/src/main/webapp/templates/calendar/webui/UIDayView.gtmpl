@@ -85,7 +85,7 @@
 								 	}
 								 	String style = "MMM/dd/yyyy"
 								 	DateFormat df = new SimpleDateFormat(style) ;
-								 	actionLink =  uicomponent.event("SaveEvent",ce.getId()+"&startTime=beginTime&endTime=endTime") ;
+								 	actionLink =  uicomponent.event("SaveEvent",ce.getId()+"&calendarId=calId&startTime=beginTime&finishTime=endTime") ;
 								%>
 								<div class="EventContainerBorder" actionLink="$actionLink" startTime="$beginTime" endTime="$endTime" >
 									<div class="EventContainerBar" title="<%=df.format(ce.getFromDateTime())%> -->  <%=df.format(ce.getToDateTime())%>">5:00 AM - 7:00 AM</div>

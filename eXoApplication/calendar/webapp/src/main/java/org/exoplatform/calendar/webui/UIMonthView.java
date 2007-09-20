@@ -40,6 +40,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
       @EventConfig(listeners = UICalendarView.ChangeCategoryActionListener.class), 
       @EventConfig(listeners = UIMonthView.MoveNextActionListener.class), 
       @EventConfig(listeners = UIMonthView.MovePreviousActionListener.class),
+      @EventConfig(listeners = UIMonthView.SaveEventActionListener.class), 
       @EventConfig(listeners = UICalendarView.EventSelectActionListener.class), 
       @EventConfig(listeners = UICalendarView.AddCategoryActionListener.class)
     }
@@ -147,6 +148,25 @@ public class UIMonthView extends UICalendarView {
     public void execute(Event<UIMonthView> event) throws Exception {
       UIMonthView calendarview = event.getSource() ;
       calendarview.monthBack(-1) ;
+      calendarview.refresh() ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
+    }
+  }
+  static  public class SaveEventActionListener extends EventListener<UIMonthView> {
+    public void execute(Event<UIMonthView> event) throws Exception {
+      UIMonthView calendarview = event.getSource() ;
+      String eventId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      String calendarId = event.getRequestContext().getRequestParameter("calendarId") ;
+      String startTime = event.getRequestContext().getRequestParameter("startTime") ;
+      String endTime = event.getRequestContext().getRequestParameter("finishTime") ;
+      System.out.println("\n\n SaveEventActionListener");
+      System.out.println("\n\n event " + eventId);
+      System.out.println("\n\n begin " + startTime);
+      System.out.println("\n\n end " + endTime);
+      String username = event.getRequestContext().getRemoteUser() ;
+      CalendarService calendarService = calendarview.getApplicationComponent(CalendarService.class) ;
+      CalendarEvent ce = calendarService.getUserEvent(username, calendarId, eventId) ;
+      
       calendarview.refresh() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
     }
