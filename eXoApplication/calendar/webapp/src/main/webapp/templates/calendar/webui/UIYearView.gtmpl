@@ -37,7 +37,7 @@
 		        		monthName = uicomponent.getMonthName(month) ;
 	        	 %>
 	        	 <td class="$cssClass">
-								<div class="WhiteWeekSuburdbar">$monthName</div>
+								<div class="WeekSuburdbar">$monthName</div>
 								<div class="MonthList">
 									<div class="WeekList">
 									  <%for(day in uicomponent.getDaysName()) {

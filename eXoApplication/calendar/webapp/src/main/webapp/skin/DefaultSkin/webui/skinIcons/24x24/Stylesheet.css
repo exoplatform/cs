@@ -41,15 +41,19 @@
 	background: url('icons/DeleteTask.gif') no-repeat;
 }
 
-.ScheduleIcon {
+.UIScheduleViewIcon {
 	background: url('icons/ScheduleIcon.gif') no-repeat;
+}
+
+.UIYearViewIcon {
+	background: url('icons/UIYearViewIcon.gif') no-repeat;
 }
 
 .EventIcon24 {
 	background: url('icons/EventIcon24.gif') no-repeat;
 }
 
-.MonthIcon {
+.UIMonthViewIcon {
 	background: url('icons/MonthIcon.gif') no-repeat;
 }
 
@@ -57,11 +61,11 @@
 	background: url('icons/WeekWorkIcon.gif') no-repeat;
 }
 
-.WeekIcon {
+.UIWeekViewIcon {
 	background: url('icons/WeekIcon.gif') no-repeat;
 }
 
-.DayIcon24 {
+.UIDayViewIcon {
 	background: url('icons/DayIcon24.gif') no-repeat;
 }
 
@@ -100,5 +104,7 @@
 .SendToFriend {
 	background: url('icons/SendToFriend.gif') no-repeat;
 }
+
+
 
 
