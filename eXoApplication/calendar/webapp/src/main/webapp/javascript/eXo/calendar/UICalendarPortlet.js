@@ -132,22 +132,19 @@ UICalendarPortlet.prototype.showEvent = function() {
 
 /* for resizing event box */
 UICalendarPortlet.prototype.initResize = function(evt) {	
-	eXo.calendar.UICalendarPortlet.resize(evt, this) ;
-} ;
-UICalendarPortlet.prototype.resize = function(evt, markerobj) {
 	var _e = window.event || evt ;
 	_e.cancelBubble = true ;
-	this.posY = _e.clientY ;
 	var UICalendarPortlet = eXo.calendar.UICalendarPortlet ;
-	var marker = (typeof(markerobj) == "string")? document.getElementById(markerobj):markerobj ;
-	this.eventBox = eXo.core.DOMUtil.findAncestorByClass(marker,'EventContainerBorder') ;
-	this.eventContainer = eXo.core.DOMUtil.findPreviousElementByTagName(marker, "div") ;
-	this.posY = _e.clientY ;
-	this.beforeHeight = this.eventBox.offsetHeight ;
-	this.eventContainerHeight = this.eventContainer.offsetHeight + 2 ;
-	document.onmousemove = UICalendarPortlet.adjustHeight ;
-	this.eventBox.onmouseup = UICalendarPortlet.resizeCallBack ;
-	document.onmouseup = null ;
+	UICalendarPortlet.resizeObject = this ;
+	UICalendarPortlet.posY = _e.clientY ;
+	var eventDayContainer = eXo.core.DOMUtil.findAncestorByClass(UICalendarPortlet.resizeObject, 'EventDayContainer') ;
+	UICalendarPortlet.eventBox = eXo.core.DOMUtil.findAncestorByClass(UICalendarPortlet.resizeObject,'EventContainerBorder') ;
+	UICalendarPortlet.eventContainer = eXo.core.DOMUtil.findPreviousElementByTagName(UICalendarPortlet.resizeObject, "div") ;
+	UICalendarPortlet.posY = _e.clientY ;
+	UICalendarPortlet.beforeHeight = UICalendarPortlet.eventBox.offsetHeight ;
+	UICalendarPortlet.eventContainerHeight = UICalendarPortlet.eventContainer.offsetHeight + 2 ;
+	eventDayContainer.onmousemove = UICalendarPortlet.adjustHeight ;
+	eventDayContainer.onmouseup = UICalendarPortlet.resizeCallBack ;
 } ;
 
 UICalendarPortlet.prototype.adjustHeight = function(evt) {
@@ -157,25 +154,17 @@ UICalendarPortlet.prototype.adjustHeight = function(evt) {
 	var height = UICalendarPortlet.beforeHeight + delta ;
 	var containerHeight = UICalendarPortlet.eventContainerHeight + delta ;
 	if (height <= (eXo.calendar.UICalendarPortlet.step/2)) return ;
+	if (delta%UICalendarPortlet.interval == 0){
 		UICalendarPortlet.eventBox.style.height = height + "px" ;
 		UICalendarPortlet.eventContainer.style.height = containerHeight + "px" ;
+	}	
 } ;
 
-UICalendarPortlet.prototype.resizeCallBack = function(evt) {
-	var _e = window.event || evt ;
-	_e.cancelBubble = true ;
-	var src = null ;
-	var UICalendarPortlet = eXo.calendar.UICalendarPortlet ;
-	if (document.all) src = _e.srcElement
-	else src = _e.target ;
-	var title =  eXo.core.DOMUtil.findPreviousElementByTagName(src, "div") ;
-	var delta =	src.offsetHeight - UICalendarPortlet.eventContainerHeight  ;
-	var startTime =  parseInt(src.parentNode.getAttribute("startTime")) ;
-	var endTime =  parseInt(src.parentNode.getAttribute("endTime")) ;
-	var currentEndTime = endTime + delta + 2 ;
-	src.parentNode.setAttribute("endTime", currentEndTime) ;
-	title.innerHTML = UICalendarPortlet.minutesToHour(startTime) + " - " +  UICalendarPortlet.minutesToHour(currentEndTime) ;
-	document.onmousemove = null ;
+UICalendarPortlet.prototype.resizeCallBack = function() {
+	var resizeObject = eXo.calendar.UICalendarPortlet.resizeObject ;
+	var start =  parseInt(resizeObject.getAttribute("startTime")) ;
+	var end =  start + resizeObject.offsetHeight ;
+	eXo.calendar.UICalendarPortlet.adjustTime(start, end, eXo.calendar.UICalendarPortlet.eventBox) ;	
 } ;
 
 /* for drag and drop */
@@ -215,30 +204,18 @@ UICalendarPortlet.prototype.dragEnd = function() {
 	var delta = end - start  ;
 	var currentStart = dragObject.offsetTop ;
 	var currentEnd = currentStart + delta ;
-	var actionLink = dragObject.getAttribute("actionLink") ;	
+	eXo.calendar.UICalendarPortlet.adjustTime(currentStart, currentEnd, dragObject) ;
+	dragObject = null ;
+} ;
+
+/* for adjusting time */
+
+UICalendarPortlet.prototype.adjustTime = function(currentStart, currentEnd, obj) {
+	var actionLink = obj.getAttribute("actionLink") ;	
 	var pattern = /startTime.*endTime/g ;
 	var params = "startTime=" + currentStart + "&finishTime=" + currentEnd ;
 	actionLink = actionLink.replace(pattern, params).replace("javascript:","") ;	
 	eval(actionLink) ;
-	window.status = actionLink ;
-	dragObject = null ;
-} ;
-
-/* fo adjusting time */
-
-UICalendarPortlet.prototype.minutesToHour = function(mins) {
-	var min = mins%60 ;
-	var hour = Math.floor(mins/60) ;
-	var str = "" ;
-	if (min < 10) min = "0" + min
-	if (hour < 12) {
-		if (hour == 0) hour = 12 ;
-		return str = hour + ":" + min + " AM" ;
-	} else {
-		hour = (hour - 12) ;
-		if (hour == 0) hour = 12 ;
-		return str = hour + ":" + min + " PM" ;
-	} 
 } ;
 
 /* for showing context menu */
