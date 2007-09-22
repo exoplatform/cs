@@ -304,8 +304,6 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
         contactService.saveSharedContact(contact, isNew_);
         if (isNew_) {
           if (uiAddressBook.getSelectedGroup().equals("")) {
-            uiAddressBook.setAddressBookSelected(true) ;
-            uiAddressBook.setPersonalAddressBookSelected(false) ;
             uiAddressBook.setSelectedGroup(categories[0]) ;
           }
           for (String category : categories) {
@@ -321,15 +319,13 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
             uiContactPreview.setContact(contact) ;
         }
       } else {
-        UIPopupContainer popupContainer = uiContactForm.getAncestorOfType(UIPopupContainer.class) ;
+        UIPopupContainer popupContainer = uiContactForm.getParent() ;
         UICategorySelect uiCategorySelect = popupContainer.getChild(UICategorySelect.class); 
         String category = uiCategorySelect.getSelectedCategory();
         contact.setCategories(new String[] { category });
         contactService.saveContact(username, contact, isNew_);
         if (isNew_) {
           if (uiAddressBook.getSelectedGroup().equals("")) {
-            uiAddressBook.setAddressBookSelected(true) ;
-            uiAddressBook.setPersonalAddressBookSelected(true) ;
             uiAddressBook.setSelectedGroup(category) ;
           }
           if (uiAddressBook.getSelectedGroup().equals(category)) uicontacts.updateContact(contact, isNew_) ;

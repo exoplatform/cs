@@ -40,16 +40,12 @@ import org.exoplatform.webui.form.UIForm;
     }
 )
 public class UIMoveContactForm extends UIForm implements UIPopupComponent {
-  private boolean personalAddressBookSelected = true ;
   private List<String> contactIds_ ;
   private String groupId_ ;
   
   public UIMoveContactForm() throws Exception { }
   public void activate() throws Exception { }
   public void deActivate() throws Exception { }
-  
-  public void setPersonalAddressBookSelected(boolean selected) { personalAddressBookSelected = selected ; }
-  public boolean getPersonalAddressBookSelected() { return personalAddressBookSelected ; }
   
   public void setGroupId(String groupId) { groupId_ = groupId ; }
   public String getGroupId() { return groupId_ ; }
@@ -59,10 +55,10 @@ public class UIMoveContactForm extends UIForm implements UIPopupComponent {
   
   public String[] getActions() { return new String[] {"Save", "Cancel"} ; }
   
-  public List<ContactGroup> getContactGroups() throws Exception { 
+  public ContactGroup[] getContactGroups() throws Exception { 
     UIContactPortlet uiContactPortlet = getAncestorOfType(UIContactPortlet.class) ;
     UIAddressBooks uiAddressBook = uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class) ;
-    return uiAddressBook.getGroups() ; 
+    return uiAddressBook.getGroups(); 
   }
   
   public List<String> getSharedContactGroups() throws Exception {
@@ -86,7 +82,11 @@ public class UIMoveContactForm extends UIForm implements UIPopupComponent {
         ContactService contactService = uiMoveContactForm.getApplicationComponent(ContactService.class);
         String username = Util.getPortalRequestContext().getRemoteUser() ;
         List<Contact> movedContacts = contactService.moveContacts(username, uiMoveContactForm.getContacts(), new String[] { groupId }) ;
-        if (movedContacts.size() > 0) uiContacts.removeContacts(movedContacts) ;
+        if (movedContacts.size() > 0) {
+          List<String> contactIds = new ArrayList<String>() ;
+          for (Contact contact : movedContacts) contactIds.add(contact.getId()) ;
+          uiContacts.removeContacts(contactIds) ;
+        }
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContactPortlet) ;
       uiContactPortlet.cancelAction() ;
@@ -95,11 +95,9 @@ public class UIMoveContactForm extends UIForm implements UIPopupComponent {
   
   static  public class SaveActionListener extends EventListener<UIMoveContactForm> {
     public void execute(Event<UIMoveContactForm> event) throws Exception {
-      UIMoveContactForm uiForm = event.getSource() ;
       
     }
   }
-  
   static  public class CancelActionListener extends EventListener<UIMoveContactForm> {
     public void execute(Event<UIMoveContactForm> event) throws Exception {
       UIMoveContactForm uiForm = event.getSource() ;

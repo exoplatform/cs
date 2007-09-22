@@ -25,7 +25,6 @@ import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
-import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 
@@ -43,7 +42,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
         @EventConfig(listeners = UIContacts.SelectedContactActionListener.class),
         @EventConfig(listeners = UIContacts.AddTagActionListener.class),
         @EventConfig(listeners = UIContacts.EditContactActionListener.class),
-        @EventConfig(listeners = UIContacts.DeleteContactsActionListener.class, phase = Phase.DECODE),
+        @EventConfig(listeners = UIContacts.DeleteContactsActionListener.class),
         @EventConfig(listeners = UIContacts.MoveContactsActionListener.class)
     }
 )
@@ -59,8 +58,7 @@ public class UIContacts extends UIForm  {
   final public static String DELETE_CONTACT = "Delete Contact".intern() ;
   final public static String PRINT_CONTACT = "Print this Contact".intern() ;
   final public static String[] SELECTIONS = { EDIT_CONTACT, SEND_EMAIL , INSTACE_MESSAGE, TAG, MOVE_CONTACT, DELETE_CONTACT, PRINT_CONTACT } ;
-  
-  
+
   public UIContacts() throws Exception { } 
   public String[] getSelections() { return SELECTIONS ; }
   
@@ -72,7 +70,6 @@ public class UIContacts extends UIForm  {
       contactMap.put(contact.getId(), contact) ;
     }
   }
-  
   public void setViewContactsList(boolean list) { viewContactsList = list ; }
   public boolean getViewContactsList() { return viewContactsList ; }
   
@@ -81,15 +78,12 @@ public class UIContacts extends UIForm  {
     contactMap.put(contact.getId(), contact) ; 
   }
   
-  public void removeContacts(List<Contact> contacts) throws Exception {
-    for (Contact contact : contacts)  contactMap.remove(contact.getId()) ;
+  public void removeContacts(List<String> contactIds) throws Exception {
+    for (String contactId : contactIds)  contactMap.remove(contactId) ;
     UIContactPreview uiContactPreview = getAncestorOfType(UIContactContainer.class).findFirstComponentOfType(UIContactPreview.class) ;
     uiContactPreview.updateContact() ;
   }
-  
-  public Contact[] getContacts() throws Exception {
-    return contactMap.values().toArray(new Contact[]{}) ;
-  }
+  public Contact[] getContacts() throws Exception { return contactMap.values().toArray(new Contact[]{}) ; }
   
   public List<String> getCheckedContacts() throws Exception {
     List<String> checkedContacts = new ArrayList<String>() ;
@@ -108,13 +102,12 @@ public class UIContacts extends UIForm  {
       String contactId = event.getRequestContext().getRequestParameter(OBJECTID);
       UIContactPortlet contactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class) ;
       UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
-      UIPopupContainer popupContainer = popupAction.createUIComponent(UIPopupContainer.class, null, "UITagForm") ;
+      UIPopupContainer popupContainer = popupAction.createUIComponent(UIPopupContainer.class, null, "AddNewContact") ;
       popupContainer.addChild(UICategorySelect.class, null, null) ;
       popupContainer.addChild(UIContactForm.class, null, null) ;
       UICategorySelect uiCategorySelect = popupContainer.findFirstComponentOfType(UICategorySelect.class);
-      uiCategorySelect.setValues(contactId);
-      ContactService contactService = uiContacts.getApplicationComponent(ContactService.class);
-      if (contactService.getSharedContact(contactId) != null) uiCategorySelect.disableSelect() ;
+      uiCategorySelect.setValue(contactId);
+      uiCategorySelect.disableSelect() ;
       UIContactForm uiContactForm = popupContainer.findFirstComponentOfType(UIContactForm.class);
       uiContactForm.setValues(contactId);
       UIContactForm.isNew_ = false ;
@@ -165,7 +158,6 @@ public class UIContacts extends UIForm  {
       UIPopupAction popupAction = uiContactPortlet.getChild(UIPopupAction.class) ;
       UIMoveContactForm uiMoveForm = popupAction.createUIComponent(UIMoveContactForm.class, null, null) ;
       UIAddressBooks uiAddressBook = uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class) ;
-      uiMoveForm.setPersonalAddressBookSelected(uiAddressBook.getPersonalAddressBookSelected()) ;
       uiMoveForm.setContacts(contactIds) ;
       uiMoveForm.setGroupId(uiAddressBook.getSelectedGroup()) ;
       popupAction.activate(uiMoveForm, 600, 0, true) ;
@@ -178,14 +170,9 @@ public class UIContacts extends UIForm  {
       UIContacts uiContacts = event.getSource();
       String contactId = event.getRequestContext().getRequestParameter(OBJECTID);
       List<String> contactIds = new ArrayList<String>();
-      UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
-      uiApp.addMessage(new ApplicationMessage("UIContacts.msg.confirm-delete", null, 
-          ApplicationMessage.WARNING)) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-         
-      
       if (contactId != null) contactIds.add(contactId) ;
       else {
+        UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
         contactIds = uiContacts.getCheckedContacts() ;
         if (contactIds.size() == 0) {
           uiApp.addMessage(new ApplicationMessage("UIContacts.msg.checkContact-required", null)) ;
@@ -195,17 +182,11 @@ public class UIContacts extends UIForm  {
       }
       ContactService contactService = uiContacts.getApplicationComponent(ContactService.class);
       String username = Util.getPortalRequestContext().getRemoteUser() ;
-      List<Contact> removedContacts = new ArrayList<Contact>();
-      for (String removedContactId : contactIds) {
-        if (contactService.getContact(username, removedContactId) != null) {
-          removedContacts.add(contactService.getContact(username, removedContactId)) ;
-        } else if (contactService.getSharedContact(removedContactId) != null)    
-          removedContacts.add(contactService.getSharedContact(removedContactId)) ;
-      }
       List<Contact> unremovedContacts = contactService.removeContacts(username, contactIds) ;
-      if (unremovedContacts.size() > 0) 
-        System.out.println("\n\n unremoved contact size :" + unremovedContacts.size() + "\n\n");
-      uiContacts.removeContacts(removedContacts) ;
+      if (unremovedContacts != null && unremovedContacts.size() > 0) 
+        System.out.println("\n\n unremoved contacts size :" + unremovedContacts.size() + "\n\n");
+      for (Contact contact : unremovedContacts) contactIds.remove(contact.getId()) ;
+      uiContacts.removeContacts(contactIds) ;
       UIWorkingContainer uiWorkingContainer = uiContacts.getAncestorOfType(UIWorkingContainer.class) ;
       UIContactPreview uiContactPreview = uiWorkingContainer.findFirstComponentOfType(UIContactPreview.class) ;
       uiContactPreview.updateContact() ;

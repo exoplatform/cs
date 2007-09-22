@@ -10,7 +10,7 @@
 			        <table class="UIFormGrid">
 			          <tbody>
 			            <%								
-			      			  for (field in uicomponent.getChidren()) {
+			      			  for (field in uicomponent.getChildren()) {
 			      			  String label = _ctx.appRes(uicomponent.getParent().id+ ".label." + field.getId()) ;
 							   	%>
 			            <tr>
@@ -31,11 +31,11 @@
 	</div>
 	<div class="AvatarContent">
 		<div class="Label">Picture:</div>
-		<img src="<%=(uicomponent.getImageSource()==null ? "/contact/skin/DefaultSkin/webui/background/Img2.gif": uicomponent.getImageSource())%>" class="Avatar"/>
+		<% String imageLink = uicomponent.getImageSource() ; %>
+		<img src="<%=(imageLink == null ? "/contact/skin/DefaultSkin/webui/background/Img2.gif": imageLink)%>" class="Avatar"/>
 		<div class="Action">	
 			<a href="<%=uicomponent.getParent().event("ChangeImage")%>">Change | </a>
-			<a href="#">Delete</a>
-			<% println uicomponent.getImageSource() %>
+			<a href="#">Delete</a>			
 		</div>
 	</div>
 	

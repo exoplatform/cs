@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.GroupContactData;
@@ -42,31 +41,31 @@ import org.exoplatform.webui.event.EventListener;
     }
 )
 public class UIAddressBooks extends UIComponent  {
-  private boolean addressBookSelected = true ;
-  private boolean personalAddressBookSelected = true ;
-  private Map<String, List<Contact>> sharedContactMap_  = new HashMap<String, List<Contact>>() ;
   private String selectedGroup_ = "";
+  private Map<String, ContactGroup> groupMap_ = new HashMap<String, ContactGroup> () ;
   
-  public UIAddressBooks() throws Exception { }
-  
-  public List<ContactGroup> getGroups()throws Exception {
+  public UIAddressBooks() throws Exception { 
     ContactService contactService = this.getApplicationComponent(ContactService.class);
     String username = Util.getPortalRequestContext().getRemoteUser() ;    
-    return contactService.getGroups(username);
+    setGroups(contactService.getGroups(username));
+    if (getGroups() != null && getGroups().length > 0) 
+      setSelectedGroup(getGroups()[0].getId()) ; 
   }
+  public void setGroups(List<ContactGroup> groups) {
+    groupMap_.clear() ;
+    for (ContactGroup group : groups) groupMap_.put(group.getId(), group) ;
+  }
+  public ContactGroup[] getGroups()throws Exception { 
+    return groupMap_.values().toArray(new ContactGroup[]{}) ; 
+  }
+  public void updateGroup(ContactGroup group) { groupMap_.put(group.getId(), group) ; }
+  public void removeGroup(ContactGroup group) throws Exception { groupMap_.remove(group.getId()) ; }  
   
+
   public void setSelectedGroup(String groupId) { selectedGroup_ = groupId ; }
   public String getSelectedGroup() { return selectedGroup_ ; }
-  
-  public void setAddressBookSelected(boolean selected) { addressBookSelected = selected ; }
-  public boolean getAddressBookSelected() { return addressBookSelected ; }
-  
-  public void setPersonalAddressBookSelected(boolean selected) { personalAddressBookSelected = selected ; }
-  public boolean getPersonalAddressBookSelected() { return personalAddressBookSelected ; }
-  
-  public List<Contact> getContactMapValue(String groupId) { return sharedContactMap_.get(groupId) ; }
+
   public List<GroupContactData> getSharedContactGroups() throws Exception {
-    sharedContactMap_.clear() ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     OrganizationService organizationService = getApplicationComponent(OrganizationService.class) ;
     ContactService contactService = getApplicationComponent(ContactService.class) ;
@@ -74,9 +73,6 @@ public class UIAddressBooks extends UIComponent  {
     String[] groupIds = new String[objGroupIds.length];
     for (int i = 0; i < groupIds.length; i++) {
       groupIds[i] = ((GroupImpl)objGroupIds[i]).getId() ;
-    }
-    for(GroupContactData GCD : contactService.getSharedContacts(groupIds)) {
-      sharedContactMap_.put(GCD.getName(), GCD.getContacts()) ;
     }
     return contactService.getSharedContacts(groupIds);
   }
@@ -86,7 +82,7 @@ public class UIAddressBooks extends UIComponent  {
       UIAddressBooks uiAddressBook = event.getSource() ;  
       UIContactPortlet contactPortlet = uiAddressBook.getAncestorOfType(UIContactPortlet.class) ;
       UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
-      UICategoryForm uiCategoryForm = popupAction.createUIComponent(UICategoryForm.class, null, "AddNewAddressBook") ;
+      UICategoryForm uiCategoryForm = popupAction.createUIComponent(UICategoryForm.class, null, "UICategoryForm") ;
       String groupId = event.getRequestContext().getRequestParameter(OBJECTID);
       uiCategoryForm.setValues(groupId) ;
       UICategoryForm.isNew_ = false ;
@@ -101,7 +97,8 @@ public class UIAddressBooks extends UIComponent  {
       String groupId = event.getRequestContext().getRequestParameter(OBJECTID);
       ContactService contactService = uiAddressBook.getApplicationComponent(ContactService.class);
       String username = Util.getPortalRequestContext().getRemoteUser() ;
-      contactService.removeGroup(username, groupId) ;
+      ContactGroup group = contactService.removeGroup(username, groupId) ;
+      uiAddressBook.removeGroup(group) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook) ;      
     }
   }
@@ -113,8 +110,6 @@ public class UIAddressBooks extends UIComponent  {
       String groupId = event.getRequestContext().getRequestParameter(OBJECTID) ;    
       ContactService contactService = uiAddressBook.getApplicationComponent(ContactService.class);
       uiAddressBook.setSelectedGroup(groupId) ;
-      uiAddressBook.setAddressBookSelected(true) ;
-      uiAddressBook.setPersonalAddressBookSelected(true) ;
       String username = Util.getPortalRequestContext().getRemoteUser() ;
       UIContacts uiContacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class) ;
       uiContacts.setContacts(contactService.getContactsByGroup(username, groupId)) ; 
@@ -131,8 +126,6 @@ public class UIAddressBooks extends UIComponent  {
       String groupId = event.getRequestContext().getRequestParameter(OBJECTID) ;    
       ContactService contactService = uiAddressBook.getApplicationComponent(ContactService.class);
       uiAddressBook.setSelectedGroup(groupId) ;
-      uiAddressBook.setAddressBookSelected(true) ;
-      uiAddressBook.setPersonalAddressBookSelected(false) ;
       UIContacts uiContacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class) ; 
       if (contactService.getSharedContacts(new String[] {groupId}) != null && contactService.getSharedContacts(new String[] {groupId}).size() > 0)
         uiContacts.setContacts(contactService.getSharedContacts(new String[] {groupId}).get(0).getContacts()) ;      
@@ -143,13 +136,9 @@ public class UIAddressBooks extends UIComponent  {
   }
   
   public static class AddressPopupActionListener extends EventListener<UIAddressBooks> {
-    public void execute(Event<UIAddressBooks> event) throws Exception {
-      UIAddressBooks uiAddressBook = event.getSource() ;
-      UIContactPortlet uiContactPortlet = uiAddressBook.getAncestorOfType(UIContactPortlet.class) ;       
+    public void execute(Event<UIAddressBooks> event) throws Exception {   
       String viewType = event.getRequestContext().getRequestParameter(OBJECTID) ;
       System.out.println("\n\n view type :" + viewType + "\n\n");
-  
-//      event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook.getParent()) ;
     }
   }
   

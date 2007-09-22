@@ -84,7 +84,9 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
       group.setDescription(uiCategoryForm.getUIFormTextAreaInput(FIELD_DESCRIPTION_INPUT).getValue()) ;
       if (isNew_) contactService.saveGroup(username, group, true) ; 
       else contactService.saveGroup(username, group, false) ;
-
+      UIContactPortlet uiContactPortlet = uiCategoryForm.getAncestorOfType(UIContactPortlet.class) ;
+      UIAddressBooks uiAddressBook = uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class) ;
+      uiAddressBook.updateGroup(group) ;
       UIPopupContainer popupContainer = uiCategoryForm.getAncestorOfType(UIPopupContainer.class) ;
       if (popupContainer != null) {
         UICategorySelect uiCategorySelect = popupContainer.findFirstComponentOfType(UICategorySelect.class);
@@ -93,11 +95,8 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
         WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
         context.addUIComponentToUpdateByAjax(uiCategorySelect) ;
         popupContainer.cancelAction() ;
-        UIContactPortlet uiContactPortlet = popupContainer.getAncestorOfType(UIContactPortlet.class) ;
         context.addUIComponentToUpdateByAjax(uiContactPortlet) ;
       } else {
-        UIContactPortlet uiContactPortlet = uiCategoryForm.getAncestorOfType(UIContactPortlet.class) ;
-        UIAddressBooks uiAddressBook = uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook) ;
         uiContactPortlet.cancelAction() ;
       }

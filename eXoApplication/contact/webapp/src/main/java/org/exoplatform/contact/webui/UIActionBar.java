@@ -78,7 +78,7 @@ public class UIActionBar extends UIContainer  {
       if (viewType.equals(CONTACTS_LIST)) {
         uiContactPreview.setRendered(true) ;
         uiContacts.setViewContactsList(true) ;  
-      } else if (viewType.equals(DETAILED_CARDS)){ 
+      } else if (viewType.equals(DETAILED_CARDS)){
         uiContactPreview.setRendered(false) ;
         uiContacts.setViewContactsList(false) ;
       }

@@ -4,11 +4,12 @@
  **************************************************************************/
 package org.exoplatform.contact.webui.popup;
 
+import java.io.ByteArrayInputStream;
+
 import org.exoplatform.contact.webui.UIContactPortlet;
-import org.exoplatform.container.PortalContainer;
-import org.exoplatform.services.jcr.util.IdGenerator;
+import org.exoplatform.download.DownloadService;
+import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.upload.UploadResource;
-import org.exoplatform.upload.UploadService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -44,19 +45,13 @@ public class UIImageForm extends UIForm implements UIPopupComponent{
   public void activate() throws Exception { }
   public void deActivate() throws Exception { }
   
-  static  public class SaveActionListene extends EventListener<UIImageForm> {
-    public void execute(Event<UIImageForm> event) throws Exception {
-      UIImageForm uiImageForm = event.getSource() ;
-      UIFormUploadInput input = uiImageForm.getUIInput(FIELD_UPLOAD) ;
-      UploadService uploadService = (UploadService)PortalContainer.getComponent(UploadService.class) ;
-      UploadResource resource = uploadService.getUploadResource(input.getUploadId()) ;
-      UIPopupContainer uiPopupContainer = uiImageForm.getAncestorOfType(UIPopupContainer.class) ;
-      UIProfileInputSet uiProfileInputSet = uiPopupContainer.findFirstComponentOfType(UIProfileInputSet.class) ; 
-      uiProfileInputSet.setImageSource(resource.getStoreLocation()) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupContainer) ;
-    }
+  public String getDonwloadLink(String fileName, ByteArrayInputStream inputStream) throws Exception {
+    DownloadService dservice = getApplicationComponent(DownloadService.class) ;
+    InputStreamDownloadResource dresource = new InputStreamDownloadResource(inputStream, "image") ;
+    dresource.setDownloadName(fileName) ;
+    return dservice.getDownloadLink(dservice.addDownloadResource(dresource)) ;
   }
-
+  
   static  public class SaveActionListener extends EventListener<UIImageForm> {
     public void execute(Event<UIImageForm> event) throws Exception {
       UIImageForm uiForm = event.getSource();
@@ -76,26 +71,12 @@ public class UIImageForm extends UIForm implements UIPopupComponent{
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
+      ByteArrayInputStream inputStream = new ByteArrayInputStream(input.getUploadData()) ;
       UIPopupContainer uiPopupActionContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
-//      try {
-//        UIProfileInputSet uiProfileInputSet = uiPopupActionContainer.getChild(UIProfileInputSet.class) ;
-//        BufferAttachment attachfile = new BufferAttachment() ;
-//         attachfile.setId("Attachment" + IdGenerator.generate());
-//         attachfile.setName(uploadResource.getFileName()) ;
-//         attachfile.setInputStream(input.getUploadDataAsStream()) ;
-//         attachfile.setMimeType(uploadResource.getMimeType()) ;
-//         attachfile.setSize((long)uploadResource.getUploadedSize());
-//         uiProfileInputSet.addToUploadFileList(attachfile) ;
-//         uiProfileInputSet.refreshUploadFileList() ;
-//         UploadService uploadService = uiForm.getApplicationComponent(UploadService.class) ;
-//         uploadService.removeUpload(input.getUploadId()) ;
-//      } catch(Exception e) {
-//        uiApp.addMessage(new ApplicationMessage("UIAttachFileForm.msg.upload-error", null, 
-//            ApplicationMessage.WARNING));
-//        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-//        e.printStackTrace() ;
-//        return ;
-//      }
+      UIContactForm uiContactForm =  uiPopupActionContainer.findFirstComponentOfType(UIContactForm.class) ;
+      UIProfileInputSet uiProfileInputSet = uiContactForm.getChild(UIProfileInputSet.class) ;
+      uiProfileInputSet.setImage(inputStream) ;
+      uiProfileInputSet.setFileName(fileName) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupActionContainer) ;
     }
   }

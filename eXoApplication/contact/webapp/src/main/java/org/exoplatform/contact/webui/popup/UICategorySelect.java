@@ -33,7 +33,8 @@ import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
     lifecycle = UIFormLifecycle.class,
     template = "app:/templates/contact/webui/popup/UICategorySelect.gtmpl", 
     events = {
-      @EventConfig(listeners = UICategorySelect.AddCategoryActionListener.class)    
+      @EventConfig(listeners = UICategorySelect.AddCategoryActionListener.class),
+      @EventConfig(listeners = UICategorySelect.OnchangeActionListener.class)    
     }
 )
 public class UICategorySelect extends UIForm {
@@ -65,9 +66,8 @@ public class UICategorySelect extends UIForm {
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     List<ContactGroup> contactGroups =  contactService.getGroups(username);
     List<SelectItemOption<String>> categories = new ArrayList<SelectItemOption<String>>() ; 
-    for(ContactGroup cg : contactGroups) {
-      categories.add(new SelectItemOption<String>(cg.getName(),cg.getId() )) ;
-    }
+    for(ContactGroup contactGroup : contactGroups)
+      categories.add(new SelectItemOption<String>(contactGroup.getName(),contactGroup.getId() )) ;
     return categories ;
   }
   
@@ -76,13 +76,20 @@ public class UICategorySelect extends UIForm {
      iput.getUIFormSelectBox(FIELD_CATEGORY).setOptions(options) ;
   }
   
-  public void setValues(String contactId) throws Exception {
+  public void setValue(String contactId) throws Exception {
     ContactService contactService = getApplicationComponent(ContactService.class);
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     Contact contact = contactService.getContact(username, contactId);
     if (contact != null) getUIFormSelectBox(FIELD_CATEGORY).setValue(contact.getCategories()[0]) ;
   }
   public void disableSelect() { getUIFormSelectBox(FIELD_CATEGORY).setEnable(false) ; }
+
+  static  public class OnchangeActionListener extends EventListener<UICategorySelect> {
+    public void execute(Event<UICategorySelect> event) throws Exception {
+      UICategorySelect uiCategorySelect = event.getSource() ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiCategorySelect) ;
+    }
+  }
   
   static  public class AddCategoryActionListener extends EventListener<UICategorySelect> {
     public void execute(Event<UICategorySelect> event) throws Exception {

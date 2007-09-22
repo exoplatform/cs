@@ -4,13 +4,15 @@
  **************************************************************************/
 package org.exoplatform.contact.webui.popup;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.download.DownloadService;
+import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
-import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.form.UIFormDateTimeInput;
 import org.exoplatform.webui.form.UIFormInputWithActions;
@@ -18,7 +20,6 @@ import org.exoplatform.webui.form.UIFormRadioBoxInput;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.validator.DateTimeValidator;
 import org.exoplatform.webui.form.validator.EmailAddressValidator;
-
 
 /**
  * Created by The eXo Platform SARL
@@ -41,7 +42,8 @@ public class UIProfileInputSet extends UIFormInputWithActions {
   public static final String FIELD_EMAIL_INPUT = "preferredEmail" ;
   public static final String MALE = "male" ;
   public static final String FEMALE = "female" ;
-  private String imageSource ;
+  private byte[] imageBytes = null;
+  private String fileName = null ;
   
   public UIProfileInputSet(String id) throws Exception {
     super(id) ;
@@ -51,20 +53,15 @@ public class UIProfileInputSet extends UIFormInputWithActions {
     addUIFormInput(new UIFormStringInput(FIELD_MIDDLENAME_INPUT, FIELD_MIDDLENAME_INPUT, null));
     addUIFormInput(new UIFormStringInput(FIELD_LASTNAME_INPUT, FIELD_LASTNAME_INPUT, null));
     addUIFormInput(new UIFormStringInput(FIELD_NICKNAME_INPUT, FIELD_NICKNAME_INPUT, null));
-    
     List<SelectItemOption<String>> genderOptions = new ArrayList<SelectItemOption<String>>() ;
     genderOptions.add(new SelectItemOption<String>(MALE, MALE));
     genderOptions.add(new SelectItemOption<String>(FEMALE, FEMALE));
     addUIFormInput(new UIFormRadioBoxInput(FIELD_GENDER_BOX, FIELD_GENDER_BOX, genderOptions).setValue(MALE));
-
     addUIFormInput(new UIFormDateTimeInput(FIELD_BIRTHDAY_DATETIME, FIELD_BIRTHDAY_DATETIME, new Date()).addValidator(DateTimeValidator.class));
     addUIFormInput(new UIFormStringInput(FIELD_JOBTITLE_INPUT, FIELD_JOBTITLE_INPUT, null));
     addUIFormInput(new UIFormStringInput(FIELD_EMAIL_INPUT, FIELD_EMAIL_INPUT, null)
     .addValidator(EmailAddressValidator.class));
-  }
-  public List<UIComponent> getChidren(){ return super.getChildren() ; }
-  public void processRender(WebuiRequestContext context) throws Exception { super.processRender(context) ; }
-  
+  }  
   protected String getFieldFullName() { return getUIStringInput(FIELD_FULLNAME_INPUT).getValue() ; }
   protected void setFieldFullName(String s) { getUIStringInput(FIELD_FULLNAME_INPUT).setValue(s); }
   
@@ -92,8 +89,20 @@ public class UIProfileInputSet extends UIFormInputWithActions {
   protected String getFieldEmail() { return getUIStringInput(FIELD_EMAIL_INPUT).getValue(); }
   protected void setFieldEmail(String s) { getUIStringInput(FIELD_EMAIL_INPUT).setValue(s); }
   
-  protected void setImageSource(String s) { imageSource = s ; }
-  protected String getImageSource() { return imageSource ; }
+  protected void setImage(InputStream input) throws Exception{
+    imageBytes = new byte[input.available()] ; 
+    input.read(imageBytes) ;
+  }
+  protected void setFileName(String name) { fileName = name ; }
+  
+  protected String getImageSource() throws Exception {    
+    if(imageBytes == null || imageBytes.length == 0) return null;
+    ByteArrayInputStream byteImage = new ByteArrayInputStream(imageBytes) ;
+    DownloadService dservice = getApplicationComponent(DownloadService.class) ;
+    InputStreamDownloadResource dresource = new InputStreamDownloadResource(byteImage, "image") ;
+    dresource.setDownloadName(fileName) ;
+    return  dservice.getDownloadLink(dservice.addDownloadResource(dresource)) ;
+  }
   
 }
 
