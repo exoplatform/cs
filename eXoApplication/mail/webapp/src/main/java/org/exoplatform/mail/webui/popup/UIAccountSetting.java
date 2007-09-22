@@ -84,8 +84,8 @@ public class UIAccountSetting extends UIFormTabPane {
     identityInputSet.addUIFormInput(new UIFormStringInput(FIELD_REPLYTO_ADDRESS, null, null));
     identityInputSet.addUIFormInput(new UIFormTextAreaInput(FIELD_MAIL_SIGNATURE, null, null));
     List<SelectItemOption<String>> signPlaceOptions = new ArrayList<SelectItemOption<String>>();
-    signPlaceOptions.add(new SelectItemOption<String>(OPTION_HEAD));
-    signPlaceOptions.add(new SelectItemOption<String>(OPTION_FOOT));
+    signPlaceOptions.add(new SelectItemOption<String>(OPTION_HEAD, Utils.P_HEAD));
+    signPlaceOptions.add(new SelectItemOption<String>(OPTION_FOOT, Utils.P_FOOT));
     identityInputSet.addUIFormInput(new UIFormSelectBox(FIELD_PLACE_SIGNATURE, FIELD_PLACE_SIGNATURE, signPlaceOptions));
     addUIFormInput(identityInputSet); 
     
@@ -144,6 +144,16 @@ public class UIAccountSetting extends UIFormTabPane {
     return uiInput.getUIStringInput(FIELD_MAIL_SIGNATURE).getValue();
   }
   
+  public String getSelectedPlaceSignature() {
+    UIFormInputWithActions uiInput = getChildById(TAB_IDENTITY_SETTINGS);
+    return uiInput.getUIFormSelectBox(FIELD_PLACE_SIGNATURE).getValue();
+  }
+  
+  public void setSelectedPlaceSignature(String value) {
+    UIFormInputWithActions uiInput = getChildById(TAB_IDENTITY_SETTINGS);
+    uiInput.getUIFormSelectBox(FIELD_PLACE_SIGNATURE).setValue(value);
+  }
+  
   public String getFieldPlaceSignature() {
     UIFormInputWithActions uiInput = getChildById(TAB_IDENTITY_SETTINGS);
     return uiInput.getUIFormSelectBox(FIELD_PLACE_SIGNATURE).getValue();
@@ -198,6 +208,7 @@ public class UIAccountSetting extends UIFormTabPane {
     uiIdentityInput.getUIStringInput(FIELD_EMAIL_PASSWORD).setValue(account.getPassword());
     uiIdentityInput.getUIStringInput(FIELD_REPLYTO_ADDRESS).setValue(account.getEmailReplyAddress());
     uiIdentityInput.getUIStringInput(FIELD_MAIL_SIGNATURE).setValue(account.getSignature());
+    setSelectedPlaceSignature(account.getPlaceSignature());
     
     UIFormInputWithActions uiServerInput = getChildById(TAB_SERVER_SETTINGS);
     uiServerInput.getUIStringInput(FIELD_PORT).setValue(account.getPort());
@@ -206,7 +217,8 @@ public class UIAccountSetting extends UIFormTabPane {
     uiServerInput.getUIFormInputInfo(FIELD_SERVER_TYPE).setValue(account.getProtocol());
     uiServerInput.getUIFormInputInfo(FIELD_SERVER_TYPE).setValue(account.getProtocol());
     uiServerInput.getUIFormCheckBoxInput(FIELD_ISSSL).setChecked(account.isSsl());
-    
+    uiServerInput.getUIFormCheckBoxInput(FIELD_CHECKMAIL_AUTO).setChecked(account.checkedAuto());
+    uiServerInput.getUIFormCheckBoxInput(FIELD_EMPTY_TRASH).setChecked(account.isEmptyTrashWhenExit());
   } 
   
   public String[] getActions() {return new String[]{"Save", "Cancel"};}
@@ -247,6 +259,9 @@ public class UIAccountSetting extends UIFormTabPane {
       String popPort = uiAccountSetting.getFieldPort();
       boolean isSSL = uiAccountSetting.getFieldIsSSL();
       String storeFolder = uiAccountSetting.getFieldIncomingFolder();
+      boolean checkMailAuto = uiAccountSetting.getFieldCheckMailAuto();
+      boolean isEmptyTrashWhenExit = uiAccountSetting.getFieldEmptyTrash();
+      String placeSignature = uiAccountSetting.getFieldPlaceSignature();
       
       acc.setLabel(accName) ;
       acc.setDescription(accDes) ;
@@ -254,6 +269,9 @@ public class UIAccountSetting extends UIFormTabPane {
       acc.setEmailAddress(email) ;
       acc.setEmailReplyAddress(replyMail) ;
       acc.setSignature(signature) ;
+      acc.setCheckedAuto(checkMailAuto);
+      acc.setPlaceSignature(placeSignature);
+      acc.setEmptyTrashWhenExit(isEmptyTrashWhenExit);
       acc.setServerProperty(Utils.SVR_USERNAME, userName); 
       acc.setServerProperty(Utils.SVR_PASSWORD, password);
       acc.setServerProperty(Utils.SVR_POP_HOST, popHost);
@@ -266,6 +284,7 @@ public class UIAccountSetting extends UIFormTabPane {
       try {
         mailSrv.updateAccount(username, acc);
         uiApp.addMessage(new ApplicationMessage("UIAccountSetting.msg.edit-acc-successfully", null));
+        event.getSource().getAncestorOfType(UIMailPortlet.class).cancelAction();
       } catch(Exception e) {
         uiApp.addMessage(new ApplicationMessage("UIAccountSetting.msg.edit-acc-unsuccessfully", null));
         e.printStackTrace() ;

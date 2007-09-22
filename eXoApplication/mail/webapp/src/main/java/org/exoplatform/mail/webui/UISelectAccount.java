@@ -88,6 +88,7 @@ public class UISelectAccount extends UIForm {
       UIMailPortlet uiPortlet = uiForm.getAncestorOfType(UIMailPortlet.class) ;
       UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class) ;
       UIPopupActionContainer uiAccContainer = uiPortlet.createUIComponent(UIPopupActionContainer.class, null, null) ;
+      uiAccContainer.setId("UIAccountPopupCreation");
       uiAccContainer.addChild(UIAccountCreation.class, null, null) ;
       uiPopup.activate(uiAccContainer, 700, 0, true) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup) ;
@@ -101,6 +102,7 @@ public class UISelectAccount extends UIForm {
       UIMailPortlet uiPortlet = uiForm.getAncestorOfType(UIMailPortlet.class) ;
       UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class) ;
       UIPopupActionContainer uiAccContainer = uiPortlet.createUIComponent(UIPopupActionContainer.class, null, null) ;
+      uiAccContainer.setId("UIAccountPopupSetting");
       UIAccountSetting uiAccountSetting = uiPortlet.createUIComponent(UIAccountSetting.class, null, null);
       String username = uiPortlet.getCurrentUser(); 
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
