@@ -4,13 +4,19 @@
  **************************************************************************/
 package org.exoplatform.mail.webui.popup;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
+import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
+import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 
 /**
@@ -28,10 +34,9 @@ import org.exoplatform.webui.form.UIFormStringInput;
     }
 )
 public class UIMailSettings extends UIForm implements UIPopupComponent {
-
   
   public UIMailSettings() {
-    
+    List<SelectItemOption<String>> numberConvesation = new ArrayList<SelectItemOption<String>>();
   }
   
   public String[] getActions() { return new String[]{"Save", "Cancel"}; }
