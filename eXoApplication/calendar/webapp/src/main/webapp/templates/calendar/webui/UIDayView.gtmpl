@@ -4,8 +4,8 @@
 	import java.text.SimpleDateFormat;
 	
 	def rcontext = _ctx.getRequestContext() ;
-  //rcontext.getJavascriptManager().importJavascript('eXo.calendar.UICalendarPortlet');
-  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.showEvent() ;');
+  rcontext.getJavascriptManager().importJavascript('eXo.calendar.UICalendarPortlet','/calendar/javascript/');
+  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.showEvent();');
 	int currentDay = uicomponent.getCurrentDay() ;
 	int currentMonth = uicomponent.getCurrentMonth() ;
 	String currentMonthName = uicomponent.getMonthName(currentMonth) ;

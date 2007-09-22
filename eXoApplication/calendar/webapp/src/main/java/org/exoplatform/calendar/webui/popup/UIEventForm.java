@@ -6,6 +6,7 @@ package org.exoplatform.calendar.webui.popup;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.exoplatform.calendar.CalendarUtils;
@@ -148,7 +149,14 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   }
 
   public void initForm(String calendarId) {
-
+    
+  }
+  public void initForm(java.util.Calendar date) {
+    setEventFromDate(date) ;
+    setEventToDate(date) ;
+  }
+  public void initForm(CalendarEvent event) {
+    
   }
   private List<SelectItemOption<String>> getCalendar() throws Exception {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;

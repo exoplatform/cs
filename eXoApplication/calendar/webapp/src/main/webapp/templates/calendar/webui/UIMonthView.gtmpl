@@ -172,7 +172,7 @@
               		<div class="UIRightPopupMenuContainer">
               			<%
               				for(String act : uicomponent.getQuickEditMenu()) {
-              				link = uicomponent.event(act,"id") ;
+              				link = uicomponent.event(act,"id&$uicomponent.CALENDARID=calId") ;
               			%>
               				<a href="$link">
 	              				<div style="border:solid 1px red;">$act</div>

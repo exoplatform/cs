@@ -15,9 +15,14 @@ import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.EventQuery;
+import org.exoplatform.calendar.webui.popup.UIEventForm;
+import org.exoplatform.calendar.webui.popup.UIPopupAction;
+import org.exoplatform.calendar.webui.popup.UIPopupContainer;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -51,13 +56,13 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
 )
 public class UIMonthView extends UICalendarView {
 
-  
+
   public final static String ACT_ADDNEW_EVENT = "AddNewEvent".intern() ;
   public final static String ACT_ADDNEW_TASK = "AddNewTask".intern() ;
   public final static String ACT_GOTO_DATE = "GotoDate".intern() ;
   public final static String ACT_EDIT = "EditEvent".intern() ;
   public final static String ACT_DELETE = "QuickDeleteEvent".intern() ;
-  
+  public final static String CALENDARID = "calendarId".intern() ;
   private Map<String, String> calendarIds_ = new HashMap<String, String>() ;
 
   private Map<String, List<CalendarEvent>> eventData_ = new HashMap<String, List<CalendarEvent>>() ;
@@ -66,7 +71,7 @@ public class UIMonthView extends UICalendarView {
     super() ;
     refresh() ;
   }
-  
+
   protected int getWeeksOfTheMonth(int year, int month, int day) {
     return new GregorianCalendar(year, month, day).getActualMaximum(java.util.Calendar.WEEK_OF_MONTH) ;
   }
@@ -86,7 +91,7 @@ public class UIMonthView extends UICalendarView {
     eventQuery.setToDate(tocalendar) ;
     List<CalendarEvent> allEvents = calendarService.getUserEvents(username, eventQuery);    
     allEvents.addAll(calendarService.getPublicEvents(eventQuery))  ;
-    
+
     removeChild(UIFormCheckBoxInput.class) ;
     for(int day =1 ;  day <= getDaysInMonth(); day++) {
       List<CalendarEvent> existEvents = new ArrayList<CalendarEvent>() ;
@@ -100,14 +105,16 @@ public class UIMonthView extends UICalendarView {
             (isSameDate(tempDate, fromDate)) || 
             (isSameDate(tempDate, endDate))) {
           existEvents.add(ce) ;
-          addChild(new UIFormCheckBoxInput<Boolean>(ce.getId(), ce.getId(), false)) ;
+          UIFormCheckBoxInput cbInput = (new UIFormCheckBoxInput<Boolean>(ce.getId(), ce.getId(), false)) ;
+          cbInput.setValue(ce.getCalendarId()) ;
+          addChild(cbInput) ;
         } 
       }
       String key = keyGen(day, getCurrentMonth(), getCurrentYear()) ;
       eventData_.put(key, existEvents) ;
     }
   }
-  
+
   protected void addCalendarId(String id) {calendarIds_.put(id,id) ;}
   protected Map<String, String> getCalendarIds() {return calendarIds_ ;}
 
@@ -145,8 +152,8 @@ public class UIMonthView extends UICalendarView {
     List<CalendarEvent> events = new ArrayList<CalendarEvent>() ;
     for(List<CalendarEvent> items : getEventsData().values()) {
       for(CalendarEvent ce : items) {
-       UIFormCheckBoxInput<Boolean>  checkbox = getChildById(ce.getId())  ;
-       if(checkbox != null && checkbox.isChecked()) events.add(ce) ;
+        UIFormCheckBoxInput<Boolean>  checkbox = getChildById(ce.getId())  ;
+        if(checkbox != null && checkbox.isChecked()) events.add(ce) ;
       }
     }
     return events ; 
@@ -176,13 +183,33 @@ public class UIMonthView extends UICalendarView {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;
     }
   }
-  
+
   static  public class AddNewEventActionListener extends EventListener<UIMonthView> {
     public void execute(Event<UIMonthView> event) throws Exception {
       UIMonthView calendarview = event.getSource() ;
-      System.out.println("\n\n AddNewEventActionListener");
-      calendarview.refresh() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
+      System.out.println(" ===========> AddEventActionListener") ;
+      String selectedDate = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      CalendarService calendarService = calendarview.getApplicationComponent(CalendarService.class) ;
+      String username = event.getRequestContext().getRemoteUser() ;
+      UIApplication uiApp = calendarview.getAncestorOfType(UIApplication.class) ;
+      if(calendarService.getUserCalendars(username).size() <= 0) {
+        uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.calendar-list-empty", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+      } else {
+        try {
+          UICalendarPortlet uiPortlet = calendarview.getAncestorOfType(UICalendarPortlet.class) ;
+          UIPopupAction uiParenPopup = uiPortlet.getChild(UIPopupAction.class) ;
+          UIPopupContainer uiPopupContainer = uiPortlet.createUIComponent(UIPopupContainer.class, null, null) ;
+          UIEventForm uiEventForm = uiPopupContainer.addChild(UIEventForm.class, null, null) ;
+          int day = Integer.parseInt(selectedDate) ;
+          java.util.Calendar date = new GregorianCalendar(calendarview.getCurrentYear(), calendarview.getCurrentMonth(), day) ;
+          uiEventForm.initForm(date) ;
+          uiParenPopup.activate(uiPopupContainer, 600, 0, true) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiParenPopup) ;
+        } catch (Exception e) {
+          e.printStackTrace() ;
+        }
+      }
     }
   }
   static  public class AddNewTaskActionListener extends EventListener<UIMonthView> {
@@ -196,17 +223,42 @@ public class UIMonthView extends UICalendarView {
   static  public class GotoDateActionListener extends EventListener<UIMonthView> {
     public void execute(Event<UIMonthView> event) throws Exception {
       UIMonthView calendarview = event.getSource() ;
+      String date = event.getRequestContext().getRequestParameter(OBJECTID) ;
       System.out.println("\n\n GotoDateActionListener");
-      calendarview.refresh() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
+      UICalendarViewContainer uiContainer = calendarview.getAncestorOfType(UICalendarViewContainer.class) ;
+      UIDayView uiDayView = uiContainer.getChild(UIDayView.class) ;
+      try {
+        uiDayView.setCurrentDate(new GregorianCalendar(calendarview.getCurrentYear(), calendarview.getCurrentMonth(),Integer.parseInt(date)).getTime()) ;
+        uiDayView.refresh() ;
+      } catch (Exception e) {
+        e.printStackTrace() ;
+      }
+      uiContainer.setRenderedChild(UIDayView.class) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;
     }
   }
   static  public class EditEventActionListener extends EventListener<UIMonthView> {
     public void execute(Event<UIMonthView> event) throws Exception {
       UIMonthView calendarview = event.getSource() ;
       System.out.println("\n\n EditEventActionListener");
-      calendarview.refresh() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
+      String eventId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      String calendarId = event.getRequestContext().getRequestParameter(CALENDARID) ;
+      String username = event.getRequestContext().getRemoteUser() ;
+      try {
+        CalendarService calendarService = calendarview.getApplicationComponent(CalendarService.class) ;
+        CalendarEvent calendarEvent = calendarService.getUserEvent(username, calendarId, eventId) ;
+        UICalendarPortlet uiPortlet = calendarview.getAncestorOfType(UICalendarPortlet.class) ;
+        UIPopupAction uiParenPopup = uiPortlet.getChild(UIPopupAction.class) ;
+        UIPopupContainer uiPopupContainer = uiPortlet.createUIComponent(UIPopupContainer.class, null, null) ;
+        UIEventForm uiEventForm = uiPopupContainer.addChild(UIEventForm.class, null, null) ;
+        uiEventForm.initForm(calendarEvent) ;
+        uiParenPopup.activate(uiPopupContainer, 600, 0, true) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiParenPopup) ;
+      } catch (Exception e) {
+        e.printStackTrace() ;
+      }
+      //calendarview.refresh() ;
+      //event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
     }
   }
   static  public class QuickDeleteEventActionListener extends EventListener<UIMonthView> {
