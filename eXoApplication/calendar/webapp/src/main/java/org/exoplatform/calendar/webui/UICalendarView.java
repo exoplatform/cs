@@ -72,7 +72,7 @@ public abstract class UICalendarView extends UIForm {
   final public static String ACT_NEXT = "MoveNext".intern() ;
 
   final public static String ACT_PREVIOUS  = "MovePrevious".intern() ;
-
+  final public static String CALENDARID = "calendarId".intern() ;
   protected Calendar calendar_ = GregorianCalendar.getInstance() ;
 
   protected boolean isShowEvent = true;
