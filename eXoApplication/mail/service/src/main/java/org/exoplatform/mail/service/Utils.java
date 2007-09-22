@@ -73,6 +73,9 @@ public class Utils {
   public static final String EXO_UNREADMESSAGES = "exo:unreadMessages".intern() ;
   public static final String EXO_NAME = "exo:name".intern() ;
   public static final String EXO_MAILTAG = "exo:mailtag".intern();
+  public static final String EXO_CHECKMAILAUTO = "exo:checkMailAuto".intern();
+  public static final String EXO_EMPTYTRASH = "exo:emptyTrash".intern();
+  public static final String EXO_PLACESIGNATURE = "exo:placeSignature".intern();
   
   public static final String NT_UNSTRUCTURED = "nt:unstructured".intern() ;
   public static final String NT_FILE = "nt:file".intern() ;
@@ -98,7 +101,7 @@ public class Utils {
   
   public static final String P_HEAD = "Head".intern() ;
   public static final String P_FOOT = "Foot".intern() ;
-
+  
   public static boolean isEmptyField(String value) {
     return value == null || value.trim().length() == 0 ;
   }

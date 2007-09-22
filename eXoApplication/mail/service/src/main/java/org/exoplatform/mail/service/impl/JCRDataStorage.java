@@ -95,6 +95,9 @@ public class JCRDataStorage implements DataStorage{
     if (accountNode.hasProperty(Utils.EXO_REPLYEMAIL)) account.setEmailReplyAddress(accountNode.getProperty(Utils.EXO_REPLYEMAIL).getString());
     if (accountNode.hasProperty(Utils.EXO_SIGNATURE)) account.setSignature(accountNode.getProperty(Utils.EXO_SIGNATURE).getString());
     if (accountNode.hasProperty(Utils.EXO_DESCRIPTION)) account.setDescription(accountNode.getProperty(Utils.EXO_DESCRIPTION).getString());
+    if (accountNode.hasProperty(Utils.EXO_CHECKMAILAUTO)) account.setCheckedAuto(accountNode.getProperty(Utils.EXO_CHECKMAILAUTO).getBoolean());
+    if (accountNode.hasProperty(Utils.EXO_EMPTYTRASH)) account.setEmptyTrashWhenExit(accountNode.getProperty(Utils.EXO_EMPTYTRASH).getBoolean());
+    if (accountNode.hasProperty(Utils.EXO_PLACESIGNATURE)) account.setPlaceSignature(accountNode.getProperty(Utils.EXO_PLACESIGNATURE).getString());
     if (accountNode.hasProperty(Utils.EXO_SERVERPROPERTIES)) {
       Value[] properties = accountNode.getProperty(Utils.EXO_SERVERPROPERTIES).getValues();
       for (int i=0; i<properties.length; i++) {
@@ -255,6 +258,9 @@ public class JCRDataStorage implements DataStorage{
       newAccount.setProperty(Utils.EXO_REPLYEMAIL, account.getEmailReplyAddress());
       newAccount.setProperty(Utils.EXO_SIGNATURE, account.getSignature());
       newAccount.setProperty(Utils.EXO_DESCRIPTION, account.getDescription());
+      newAccount.setProperty(Utils.EXO_CHECKMAILAUTO, account.checkedAuto());
+      newAccount.setProperty(Utils.EXO_EMPTYTRASH, account.isEmptyTrashWhenExit());
+      newAccount.setProperty(Utils.EXO_PLACESIGNATURE, account.getPlaceSignature());
       Iterator it = account.getServerProperties().keySet().iterator();
       ArrayList<String> values = new ArrayList<String>(account.getServerProperties().size());
       while (it.hasNext()) {

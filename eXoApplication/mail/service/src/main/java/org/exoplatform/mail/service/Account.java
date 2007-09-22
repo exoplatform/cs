@@ -25,6 +25,9 @@ public class Account {
   private String emailReplyAddress ;
   private String signature ;  
   private String description ;
+  private boolean checkedAuto_ ;
+  private boolean emptyTrashWhenExit ;
+  private String placeSignature;
   
   private Map<String, String> serverProperties ;  
   private List<Folder> defaultFolders ;
@@ -93,6 +96,24 @@ public class Account {
    */
   public String getUserDisplayName() { return userDisplayName ; }
   public void setUserDisplayName(String s) { userDisplayName = s ; }
+  
+  /**
+   * @return Return a boolean value that will set check mail automatically
+   */
+  public boolean checkedAuto() { return checkedAuto_; }
+  public void setCheckedAuto(boolean checkedAuto) { checkedAuto_ = checkedAuto; }
+  
+  /**
+   * @return Return a boolean value that will set to empty trash folder when exit
+   */
+  public boolean isEmptyTrashWhenExit() { return emptyTrashWhenExit; }
+  public void setEmptyTrashWhenExit(boolean bool) { emptyTrashWhenExit = bool; }
+  
+  /**
+   * @return Return a string display place to include email signature (head , foot ...)
+   */
+  public String getPlaceSignature() { return placeSignature; }
+  public void setPlaceSignature(String placeSig) { placeSignature = placeSig; }
   
   /**
    * @return Return a mail server configuration of account
