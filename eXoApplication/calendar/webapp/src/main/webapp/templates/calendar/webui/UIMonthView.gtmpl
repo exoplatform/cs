@@ -85,7 +85,8 @@
 										if(size > 0) {
 											println "<div class=\"EventOnDayBorder\">" ;
 											for(event in eventList) {
-												if(eventList.indexOf(event) > 2) {break ;}
+												styleCssHidden = "" ;
+												if(eventList.indexOf(event) > 2) {styleCssHidden = "display:none;";}
 												begin = event.getFromDateTime() ;
 												end = event.getToDateTime();
 												sumary = event.getSummary() ;
@@ -93,9 +94,16 @@
 												if(sumary.length() > 15) { 
 													sumary = sumary.substring(0,15) + "..."  ;
 												}
-												println "<div day=\"$dayOfMonth\" class=\"EventOnDayContent\">" ;
+												String eventId = event.getId() ;
+												String calId = event.getCalendarId() ;
+												String eventCal = event.getEventCategoryId() ;
+												println "<div day=\"$dayOfMonth\" eventId=$eventId calId=$calId eventCat=$eventCal class=\"EventOnDayContent\" style=\"$styleCssHidden\">" ;
 											 	println	"<div style=\"float:left;margin:3px 0px 0px 2px;\">" ;
-												uicomponent.renderField(uicomponent.getChildById(event.getId())) ;
+											  if(event.getFromDateTime().getDate() == dayOfMonth) {
+													uicomponent.renderField(uicomponent.getChildById(eventId)) ;
+												} else {
+													println "<<" ;
+												}
 												println "</div>" ;
 												println "<div class=\"EventOnDayLabel\" title=\"$title\">" ;
 												println sumary ;

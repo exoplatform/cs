@@ -105,7 +105,7 @@ public class UIMonthView extends UICalendarView {
             (isSameDate(tempDate, endDate))) {
           existEvents.add(ce) ;
           UIFormCheckBoxInput cbInput = (new UIFormCheckBoxInput<Boolean>(ce.getId(), ce.getId(), false)) ;
-          cbInput.setValue(ce.getCalendarId()) ;
+          cbInput.setBindingField(ce.getCalendarId()) ;
           addChild(cbInput) ;
         } 
       }

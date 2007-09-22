@@ -90,7 +90,7 @@ public abstract class UICalendarView extends UIForm {
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     List<EventCategory> eventCategories = calendarService.getEventCategories(Util.getPortalRequestContext().getRemoteUser()) ;
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-    options.add(new SelectItemOption<String>("all", "")) ;
+    //options.add(new SelectItemOption<String>("all", "0")) ;
     for(EventCategory category : eventCategories) {
       options.add(new SelectItemOption<String>(category.getName(), category.getName())) ;
     }
@@ -177,8 +177,8 @@ public abstract class UICalendarView extends UIForm {
 
   protected void gotoDate(int day, int month, int year) {
     setCurrentDay(day) ;
-    setCurrentDay(month) ;
-    setCurrentDay(year) ;
+    setCurrentMonth(month) ;
+    setCurrentYear(year) ;
   }
   protected boolean isCurrentDay(int day, int month, int year) {
     Calendar currentCal = Calendar.getInstance() ;
