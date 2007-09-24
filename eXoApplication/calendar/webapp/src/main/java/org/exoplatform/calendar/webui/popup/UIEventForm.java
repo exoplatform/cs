@@ -5,11 +5,11 @@
 package org.exoplatform.calendar.webui.popup;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import org.exoplatform.calendar.CalendarUtils;
-import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.EventCategory;
@@ -104,9 +104,12 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   }
 
   public void initForm(String calendarId) {
+    setSelectedCalendarId(calendarId) ;
   }
   public void initForm(java.util.Calendar date) {
+    reset() ;
     setEventFromDate(date) ;
+    date.add(java.util.Calendar.MINUTE, 5) ;
     setEventToDate(date) ;
   }
   public void initForm(CalendarEvent event) {
@@ -170,7 +173,9 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
         CalendarUtils.isEmpty(getEventCategory()) ||
         CalendarUtils.isEmpty(getCalendarId()) ||
         CalendarUtils.isEmpty(getEventFormDateValue()) ||
-        CalendarUtils.isEmpty(getEventToDateValue()));
+        CalendarUtils.isEmpty(getEventToDateValue()) ||
+        getEventFromDate().after(getEventToDate()) ||
+        getEventFromDate().equals(getEventToDate()));
 
   }
   protected String getEventSumary() {
@@ -418,12 +423,16 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
         calendarEvent.setReminders(uiForm.getEventReminder(calendarEvent.getId())) ;
         calendarEvent.setPriority(uiForm.getEventPriority()) ; 
         try {
-          calendarService.saveUserEvent(username, calendarId, calendarEvent, true) ;
+          calendarService.saveUserEvent(username, calendarId, calendarEvent, uiForm.isAddNew_) ;
           uiViewContainer.refresh() ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiViewContainer) ;
           uiForm.getAncestorOfType(UIPopupAction.class).deActivate() ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
+          if(uiForm.isAddNew_) {
           uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.add-event-successfully", null));
+          } else {
+            uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.update-event-successfully", null));
+          }
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         }catch (Exception e) {
           uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.add-event-error", null));

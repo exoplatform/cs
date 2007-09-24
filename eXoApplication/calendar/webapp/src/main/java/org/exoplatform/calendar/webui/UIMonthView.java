@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +24,7 @@ import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
+import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -63,7 +65,7 @@ public class UIMonthView extends UICalendarView {
   public final static String ACT_DELETE = "QuickDeleteEvent".intern() ;
   private Map<String, String> calendarIds_ = new HashMap<String, String>() ;
 
-  private Map<String, List<CalendarEvent>> eventData_ = new HashMap<String, List<CalendarEvent>>() ;
+  private Map<Integer, List<CalendarEvent>> eventData_ = new HashMap<Integer, List<CalendarEvent>>() ;
 
   public UIMonthView() throws Exception{
     super() ;
@@ -83,35 +85,45 @@ public class UIMonthView extends UICalendarView {
     CalendarService calendarService = getApplicationComponent(CalendarService.class) ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     EventQuery eventQuery = new EventQuery() ;
-    java.util.Calendar fromcalendar = new GregorianCalendar(getCurrentYear(), getCurrentMonth(), 1) ;
+    java.util.Calendar fromcalendar = new GregorianCalendar(getCurrentYear(), getCurrentMonth(), 1, 0,0,0) ;
     eventQuery.setFromDate(fromcalendar) ;
-    java.util.Calendar tocalendar = new GregorianCalendar(getCurrentYear(), getCurrentMonth(), getDaysInMonth()) ;
+    java.util.Calendar tocalendar = new GregorianCalendar(getCurrentYear(), getCurrentMonth(), getDaysInMonth(), 24,0,0) ;
     eventQuery.setToDate(tocalendar) ;
     List<CalendarEvent> allEvents = calendarService.getUserEvents(username, eventQuery);    
     allEvents.addAll(calendarService.getPublicEvents(eventQuery))  ;
-
-    removeChild(UIFormCheckBoxInput.class) ;
+    Iterator<UIComponent> iter = getChildren().iterator() ;
+    while (iter.hasNext()) {
+      if( iter.next() instanceof UIFormCheckBoxInput) iter.remove() ; 
+    }
+    eventData_.clear() ;
     for(int day =1 ;  day <= getDaysInMonth(); day++) {
-      List<CalendarEvent> existEvents = new ArrayList<CalendarEvent>() ;
-      for(CalendarEvent ce : allEvents) {
-        java.util.Calendar tempDate = new GregorianCalendar(getCurrentYear(), getCurrentMonth(), day) ;
-        java.util.Calendar fromDate = new GregorianCalendar() ;
-        fromDate.setTime(ce.getFromDateTime()) ;
-        java.util.Calendar endDate = new GregorianCalendar() ;
-        endDate.setTime(ce.getToDateTime()) ;
-        if((fromDate.before(tempDate) && endDate.after(tempDate))||
-            (isSameDate(tempDate, fromDate)) || 
-            (isSameDate(tempDate, endDate))) {
-          existEvents.add(ce) ;
-          if(isSameDate(tempDate, fromDate)) {
-            UIFormCheckBoxInput cbInput = (new UIFormCheckBoxInput<Boolean>(ce.getId(), ce.getId(), false)) ;
-            cbInput.setBindingField(ce.getCalendarId()) ;
-            addChild(cbInput) ;
-          }
-        } 
+      List<CalendarEvent> list =  new ArrayList<CalendarEvent>() ;
+      eventData_.put(day, list) ;
+    }
+    Iterator<CalendarEvent> eventIter = allEvents.iterator() ;
+    java.util.Calendar tempBegin = GregorianCalendar.getInstance()  ;
+    java.util.Calendar tempEnd = GregorianCalendar.getInstance()  ;
+    while (eventIter.hasNext()) {
+      CalendarEvent ce = eventIter.next() ;
+      tempBegin.setTime(ce.getFromDateTime()) ;
+      tempEnd.setTime(ce.getToDateTime()) ;
+      int fromDate = 1 ;
+      int toDate = getDaysInMonth();
+      if(tempBegin.after(fromcalendar)) {
+        fromDate = tempBegin.get(java.util.Calendar.DATE) ;
       }
-      String key = keyGen(day, getCurrentMonth(), getCurrentYear()) ;
-      eventData_.put(key, existEvents) ;
+      if(tempEnd.before(tocalendar)) {
+        toDate = tempEnd.get(java.util.Calendar.DATE) ;
+      }
+      for(int i = fromDate; i <= toDate; i ++) {
+        eventData_.get(i).add(ce) ;
+        if(tempBegin.get(java.util.Calendar.DATE) >= i){
+          UIFormCheckBoxInput<Boolean> input = new UIFormCheckBoxInput<Boolean>(ce.getId(), ce.getId(), false) ;
+          input.setBindingField(ce.getCalendarId()) ;
+          addChild(input) ;
+        }
+      }
+      eventIter.remove() ;
     }
   }
 
@@ -138,7 +150,7 @@ public class UIMonthView extends UICalendarView {
     GregorianCalendar gc = new GregorianCalendar(year, month, day) ;
     return gc.getTime() ;
   }
-  private Map<String, List<CalendarEvent>> getEventsData() {
+  private Map<Integer, List<CalendarEvent>> getEventsData() {
     return eventData_ ;
   }
 
@@ -205,6 +217,7 @@ public class UIMonthView extends UICalendarView {
           java.util.Calendar date = new GregorianCalendar(calendarview.getCurrentYear(), calendarview.getCurrentMonth(), day) ;
           uiEventForm.initForm(date) ;
           uiParenPopup.activate(uiPopupContainer, 600, 0, true) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiParenPopup) ;
         } catch (Exception e) {
           e.printStackTrace() ;
@@ -216,8 +229,6 @@ public class UIMonthView extends UICalendarView {
     public void execute(Event<UIMonthView> event) throws Exception {
       UIMonthView calendarview = event.getSource() ;
       System.out.println("\n\n AddNewTaskActionListener");
-      calendarview.refresh() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
     }
   }
   static  public class GotoDateActionListener extends EventListener<UIMonthView> {
@@ -225,16 +236,16 @@ public class UIMonthView extends UICalendarView {
       UIMonthView calendarview = event.getSource() ;
       String date = event.getRequestContext().getRequestParameter(OBJECTID) ;
       System.out.println("\n\n GotoDateActionListener");
-      UICalendarViewContainer uiContainer = calendarview.getAncestorOfType(UICalendarViewContainer.class) ;
-      UIDayView uiDayView = uiContainer.getChild(UIDayView.class) ;
       try {
-        uiDayView.setCurrentDate(new GregorianCalendar(calendarview.getCurrentYear(), calendarview.getCurrentMonth(),Integer.parseInt(date)).getTime()) ;
+        UICalendarViewContainer uiContainer = calendarview.getAncestorOfType(UICalendarViewContainer.class) ;
+        UIDayView uiDayView = uiContainer.getChild(UIDayView.class) ;
+        uiDayView.setCurrentCalendar(new GregorianCalendar(calendarview.getCurrentYear(), calendarview.getCurrentMonth(),Integer.parseInt(date))) ;
         uiDayView.refresh() ;
+        uiContainer.setRenderedChild(UIDayView.class) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;
       } catch (Exception e) {
         e.printStackTrace() ;
       }
-      uiContainer.setRenderedChild(UIDayView.class) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;
     }
   }
   static  public class EditEventActionListener extends EventListener<UIMonthView> {
@@ -265,8 +276,19 @@ public class UIMonthView extends UICalendarView {
     public void execute(Event<UIMonthView> event) throws Exception {
       UIMonthView calendarview = event.getSource() ;
       System.out.println("\n\n QuickDeleteEventActionListener");
-      calendarview.refresh() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
+      String eventId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      String calendarId = event.getRequestContext().getRequestParameter(CALENDARID) ;
+      try {
+        CalendarService calService = calendarview.getApplicationComponent(CalendarService.class) ;
+        List<CalendarEvent> events = new ArrayList<CalendarEvent>() ;
+        String username = event.getRequestContext().getRemoteUser() ;
+        events.add(calService.getUserEvent(username, calendarId, eventId)) ;
+        calendarview.removeEvents(events) ;
+        calendarview.refresh() ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
+      } catch (Exception e) {
+        e.printStackTrace() ;
+      }
     }
   }
 }

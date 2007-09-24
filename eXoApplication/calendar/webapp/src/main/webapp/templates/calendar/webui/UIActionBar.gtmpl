@@ -81,7 +81,7 @@
 							<div class="BackIcon" title="Back day"><span></span></div>
 						</a>
 						<div class="SeparatorLine RightLine"><span></span></div>
-						<a href="#" class="RightControlButton">
+						<a href="<%=uicomponent.event("Today")%>" class="RightControlButton">
 							<div class="IconHolder TodayIcon">Today</div>
 						</a>
 						<div class="SeparatorLine RightLine"><span></span></div>

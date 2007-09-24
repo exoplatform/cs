@@ -207,6 +207,7 @@ public abstract class UICalendarView extends UIForm {
              date1.get(java.util.Calendar.YEAR) == date2.get(java.util.Calendar.YEAR)
             ) ;
   }
+  protected void setCurrentCalendar(Calendar value) {calendar_ = value ;}
   protected Date getCurrentDate() {return calendar_.getTime() ;} 
   protected void setCurrentDate(Date value) {calendar_.setTime(value) ;} 
 
@@ -222,7 +223,7 @@ public abstract class UICalendarView extends UIForm {
   protected int getCurrentYear() {return calendar_.get(Calendar.YEAR) ;}
   protected void setCurrentYear(int year) {calendar_.set(Calendar.YEAR, year) ;}
 
-  private void removeEvents(List<CalendarEvent> events) throws Exception {
+  protected void removeEvents(List<CalendarEvent> events) throws Exception {
     CalendarService calService = getApplicationComponent(CalendarService.class) ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     System.out.println("\n\n checked list size "+ events.size());

@@ -69,8 +69,8 @@ public class UIEventDetailTab extends UIFormInputWithActions {
     List<ActionData> actions = new ArrayList<ActionData>() ;
     actions.add(addCategoryAction) ;
     setActionField(FIELD_CATEGORY,actions) ;
-    addUIFormInput(new UIFormDateTimeInput(FIELD_FROM, FIELD_FROM, null));
-    addUIFormInput(new UIFormDateTimeInput(FIELD_TO, FIELD_TO, null));
+    addUIFormInput(new UIFormDateTimeInput(FIELD_FROM, FIELD_FROM, new Date()));
+    addUIFormInput(new UIFormDateTimeInput(FIELD_TO, FIELD_TO, new Date()));
     addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_CHECKALL, FIELD_CHECKALL, null));
     addUIFormInput(new UIFormStringInput(FIELD_PLACE, FIELD_PLACE, null));
     addUIFormInput(new UIFormSelectBox(FIELD_REPEAT, FIELD_REPEAT, getRepeater())) ;

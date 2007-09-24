@@ -77,7 +77,7 @@
 									println "/" ;
 									println month ;
 									println "</div> <div class='DayContent'>" ;
-					        eventList = uicomponent.getEventsData().get(uicomponent.keyGen(dayOfMonth, currentMonth, currentYear)) ;
+					        eventList = uicomponent.getEventsData().get(dayOfMonth) ;
 						      if(eventList != null) {
 						        size = eventList.size() ;
 						        events = "" ;
@@ -112,7 +112,7 @@
 											}
 											if(size > 3) {
 												moreSize =  size - 3  ;
-												moreActionLink = uicomponent.event("ChangeView") ;
+												moreActionLink = uicomponent.event("GotoDate","dayOfMonth") ;
 												println "<a href=\"$moreActionLink\"><div class=\"ViewMoreIcon\" title=\"View all event on day\"> + " ;
 												println moreSize ;
 												println " More </div></a>" ;	
