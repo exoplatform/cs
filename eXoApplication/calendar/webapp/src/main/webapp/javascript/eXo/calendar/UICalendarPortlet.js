@@ -54,7 +54,7 @@ UICalendarPortlet.prototype.showAction = function(obj, evt) {
 
 /* for event */
 
-UICalendarPortlet.prototype.init = function() { alert('Dfasf asdfa') ;
+UICalendarPortlet.prototype.init = function() {
 	try{
 	var UICalendarPortlet = eXo.calendar.UICalendarPortlet ;
 	var rowContainerDay = document.getElementById("RowContainerDay") ;
