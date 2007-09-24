@@ -54,18 +54,24 @@ UICalendarPortlet.prototype.showAction = function(obj, evt) {
 
 /* for event */
 
-UICalendarPortlet.prototype.init = function() {
+UICalendarPortlet.prototype.init = function() { alert('Dfasf asdfa') ;
+	try{
+	var UICalendarPortlet = eXo.calendar.UICalendarPortlet ;
 	var rowContainerDay = document.getElementById("RowContainerDay") ;
 	if (!rowContainerDay) return false ;
-	this.viewer = eXo.core.DOMUtil.findFirstDescendantByClass(rowContainerDay, "div", "EventBoardContainer") ;
-	this.step = 60 ;
-	this.interval = 20 ;
-	this.viewer.onmousedown = eXo.calendar.UISelection.init ;//eXo.calendar.UICalendarPortlet.addSelection ;
+	UICalendarPortlet.viewer = eXo.core.DOMUtil.findFirstDescendantByClass(rowContainerDay, "div", "EventBoardContainer") ;
+	UICalendarPortlet.step = 60 ;
+	UICalendarPortlet.interval = 20 ;
+	UICalendarPortlet.viewer.onmousedown = eXo.calendar.UISelection.init ;
+	}catch(e) {
+		window.status = "Error : " + e.message ;
+		return false ;
+	}
 	return true ;
 } ;
 
 UICalendarPortlet.prototype.getElements = function() {
-	var elements = eXo.core.DOMUtil.findDescendantsByClass(this.viewer, "div", "EventContainerBorder") ;
+	var elements = eXo.core.DOMUtil.findDescendantsByClass(eXo.calendar.UICalendarPortlet.viewer, "div", "EventContainerBorder") ;
 	var len = elements.length ;
 	var el = {
 		children: elements,
@@ -235,13 +241,11 @@ UICalendarPortlet.prototype.monthViewCallback = function(evt){
 	if (DOMUtil.hasClass(src, "DayBox") || DOMUtil.hasClass(src, "DayContent") || DOMUtil.hasClass(src, "EventOnDayBorder")) {
 		if (objectValue = DOMUtil.findAncestorByTagName(src,"td").getAttribute("currentDate")){			
 			UIContextMenu.changeAction(UIContextMenu.menuElement,objectValue) ;
-		} else {
-			UIContextMenu.changeAction(UIContextMenu.menuElement,"id") ;
 		}
 	} else if (objvalue = DOMUtil.findAncestorByClass(src, "EventOnDayContent")) {
-		var inputName = DOMUtil.findFirstDescendantByClass(objvalue, "input", "checkbox").name ;
-		var inputValue = DOMUtil.findFirstDescendantByClass(objvalue, "input", "checkbox").value ;
-		UIContextMenu.changeAction(UIContextMenu.menuElement,inputName) ;
+		var eventId = objvalue.getAttribute("eventid") ;//DOMUtil.findFirstDescendantByClass(objvalue, "input", "checkbox").name ;
+		var calendarId = objvalue.getAttribute("calid") ;
+		UIContextMenu.changeAction(UIContextMenu.menuElement,eventId) ;
 		var pattern = /calendarId.*&|calendarId.*'/ ;
 		var href = "" ;
 		var character = "" ;
@@ -250,7 +254,7 @@ UICalendarPortlet.prototype.monthViewCallback = function(evt){
 				href = links[i].href ;
 				character = href.match(pattern).toString() ;
 				character = character.substring((character.length - 1), character.length) ;
-				links[i].href = href.replace(pattern,"calendarId="+inputValue+character) ;
+				links[i].href = href.replace(pattern,"calendarId="+calendarId+character) ;
 			} catch(e) {}
 		}		
 	} else {
