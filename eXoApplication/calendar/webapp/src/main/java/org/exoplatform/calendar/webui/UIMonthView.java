@@ -52,7 +52,6 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
       @EventConfig(listeners = UIMonthView.EditEventActionListener.class), 
       @EventConfig(listeners = UIMonthView.QuickDeleteEventActionListener.class)
     }
-
 )
 public class UIMonthView extends UICalendarView {
 
@@ -104,9 +103,11 @@ public class UIMonthView extends UICalendarView {
             (isSameDate(tempDate, fromDate)) || 
             (isSameDate(tempDate, endDate))) {
           existEvents.add(ce) ;
-          UIFormCheckBoxInput cbInput = (new UIFormCheckBoxInput<Boolean>(ce.getId(), ce.getId(), false)) ;
-          cbInput.setBindingField(ce.getCalendarId()) ;
-          addChild(cbInput) ;
+          if(isSameDate(tempDate, fromDate)) {
+            UIFormCheckBoxInput cbInput = (new UIFormCheckBoxInput<Boolean>(ce.getId(), ce.getId(), false)) ;
+            cbInput.setBindingField(ce.getCalendarId()) ;
+            addChild(cbInput) ;
+          }
         } 
       }
       String key = keyGen(day, getCurrentMonth(), getCurrentYear()) ;
