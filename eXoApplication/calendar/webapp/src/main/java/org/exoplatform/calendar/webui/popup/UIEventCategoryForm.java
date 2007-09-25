@@ -75,8 +75,8 @@ public class UIEventCategoryForm extends UIForm implements UIPopupComponent{
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupContainer.getChild(UIPopupAction.class)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupContainer) ;
       }
-      UICalendarView uiCalendarView = calendarPortlet.findFirstComponentOfType(UICalendarView.class) ;
       UICalendarViewContainer uiViewContainer = calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
+      UICalendarView uiCalendarView = (UICalendarView)uiViewContainer.getRenderedChild() ;
       uiCalendarView.update() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiViewContainer) ;
     }

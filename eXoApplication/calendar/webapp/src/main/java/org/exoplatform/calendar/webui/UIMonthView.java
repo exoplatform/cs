@@ -254,6 +254,7 @@ public class UIMonthView extends UICalendarView {
       System.out.println("\n\n EditEventActionListener");
       String eventId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       String calendarId = event.getRequestContext().getRequestParameter(CALENDARID) ;
+      System.out.println("\n\n calId " + calendarId);
       String username = event.getRequestContext().getRemoteUser() ;
       try {
         CalendarService calendarService = calendarview.getApplicationComponent(CalendarService.class) ;
@@ -265,6 +266,7 @@ public class UIMonthView extends UICalendarView {
         uiEventForm.initForm(calendarEvent) ;
         uiParenPopup.activate(uiPopupContainer, 600, 0, true) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiParenPopup) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
       } catch (Exception e) {
         e.printStackTrace() ;
       }

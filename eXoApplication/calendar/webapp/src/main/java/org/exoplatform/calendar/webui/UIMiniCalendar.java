@@ -31,7 +31,7 @@ public class UIMiniCalendar extends UIMonthView  {
   public UIMiniCalendar() throws Exception {
 
   }  
-
+  public void refresh() {}
   static  public class GotoDateActionListener extends EventListener<UIMiniCalendar> {
     public void execute(Event<UIMiniCalendar> event) throws Exception {
       UIMonthView calendarview = event.getSource() ;
@@ -58,7 +58,7 @@ public class UIMiniCalendar extends UIMonthView  {
       event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
     }
   }
-  
+
   static  public class MovePreviousActionListener extends EventListener<UIMiniCalendar> {
     public void execute(Event<UIMiniCalendar> event) throws Exception {
       UIMonthView calendarview = event.getSource() ;

@@ -90,12 +90,13 @@ public abstract class UICalendarView extends UIForm {
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     List<EventCategory> eventCategories = calendarService.getEventCategories(Util.getPortalRequestContext().getRemoteUser()) ;
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-    //options.add(new SelectItemOption<String>("all", "0")) ;
+    options.add(new SelectItemOption<String>("all", "")) ;
     for(EventCategory category : eventCategories) {
       options.add(new SelectItemOption<String>(category.getName(), category.getName())) ;
     }
     addUIFormInput(new UIFormSelectBox(EVENT_CATEGORIES, EVENT_CATEGORIES, options)) ;
     calendar_.setLenient(false) ;
+    System.out.println("\n\n locale " +  calendar_.getTimeZone().getDisplayName()); 
     int i = 0 ; 
     for(String month : MONTHS) {
       monthsMap_.put(i, month) ;

@@ -106,6 +106,7 @@ public class UICalendars extends UIForm  {
       uiForm.initForm(calendarId) ;
       popupAction.activate(uiPopupContainer, 700, 0, true) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent.getParent()) ;
     }
   }
   

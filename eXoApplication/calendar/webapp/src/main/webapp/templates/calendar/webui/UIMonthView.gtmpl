@@ -83,10 +83,10 @@
 						        events = "" ;
 						        viewMore = "" ;
 										if(size > 0) {
-											println "<div class=\"EventOnDayBorder\">" ;
+											println "<div class=\"EventOnDayBorder\"><div style=\"height:40px; overflow:hidden;\">" ;
 											for(event in eventList) {
 												styleCssHidden = "" ;
-												if(eventList.indexOf(event) > 2) {styleCssHidden = "display:none;";}
+												if(eventList.indexOf(event) > 2) {styleCssHidden = "display:block;";}
 												begin = event.getFromDateTime() ;
 												end = event.getToDateTime();
 												sumary = event.getSummary() ;
@@ -110,6 +110,7 @@
 												println "</div></div>" ;
 												println "<div style=\"clear:left;\"><span></span></div>" ;
 											}
+											println "</div>" ;
 											if(size > 3) {
 												moreSize =  size - 3  ;
 												moreActionLink = uicomponent.event("GotoDate","dayOfMonth") ;

@@ -75,6 +75,8 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   final public static String ITEM_UNREPEAT = "false".intern() ;
 
   private boolean isAddNew_ = true ;
+  private String eventId_ = null ;
+  
   private List<Attachment> attachments_ = new ArrayList<Attachment>() ;
 
   public UIEventForm() throws Exception {
@@ -104,7 +106,13 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   }
 
   public void initForm(String calendarId) {
+    reset() ;
     setSelectedCalendarId(calendarId) ;
+  }
+  public void reset() {
+    super.reset() ;
+    isAddNew_ = true ;
+    eventId_ = null ;
   }
   public void initForm(java.util.Calendar date) {
     reset() ;
@@ -113,15 +121,19 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     setEventToDate(date) ;
   }
   public void initForm(CalendarEvent event) {
+    reset() ;
     setEventSumary(event.getSummary()) ;
     java.util.Calendar cal = java.util.Calendar.getInstance() ;
     cal.setTime(event.getFromDateTime()) ;
     setEventFromDate(cal) ;
     cal.setTime(event.getToDateTime()) ;
     setEventToDate(cal) ;
+    setSelectedCalendarId(event.getCalendarId()) ;
+    setSelectedCategory(event.getEventCategoryId()) ;
     setEventPlace(event.getLocation()) ;
     setEventDescription(event.getDescription()) ;
     isAddNew_ = false ;
+    eventId_ = event.getId() ;
   }
   public static List<SelectItemOption<String>> getCategory() throws Exception {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
@@ -411,6 +423,10 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
         String username = event.getRequestContext().getRemoteUser() ;
         String calendarId = uiForm.getCalendarId() ;
         CalendarEvent calendarEvent = new CalendarEvent() ;
+        if(!uiForm.isAddNew_){
+          calendarEvent.setId(uiForm.eventId_) ;
+          System.out.println("\n\n evnet Id = "+ uiForm.eventId_);
+        }
         calendarEvent.setEventType(CalendarEvent.TYPE_EVENT) ;
         calendarEvent.setSummary(uiForm.getEventSumary()) ;
         calendarEvent.setDescription(uiForm.getEventDescription()) ;
@@ -433,6 +449,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
           } else {
             uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.update-event-successfully", null));
           }
+          uiForm.reset() ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         }catch (Exception e) {
           uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.add-event-error", null));
@@ -449,8 +466,9 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   static  public class CancelActionListener extends EventListener<UIEventForm> {
     public void execute(Event<UIEventForm> event) throws Exception {
       UIEventForm uiForm = event.getSource() ;
-      uiForm.getAncestorOfType(UIPopupAction.class).deActivate() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax( uiForm.getAncestorOfType(UIPopupAction.class)) ;
+      UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class);
+      uiPopupAction.deActivate() ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }
   }
 }
