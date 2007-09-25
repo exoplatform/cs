@@ -1,6 +1,6 @@
 	<%
 	def rcontext = _ctx.getRequestContext() ;
-  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.showContextMenu() ;');
+  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.showContextMenu() ;') ;
 	uiform.begin()
  	_ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");
  	int currentDay = uicomponent.getCurrentDay() ;
@@ -41,7 +41,7 @@
   				<div style="clear: left;"><span></span></div>
   			</div>
 				<div class="RowContainerDay">
-			<table class="UIGrid" id="RowContainerDay" cellspacing="0" borderspacing="0">
+			<table class="UIGrid" id="UIMonthViewGrid" cellspacing="0" borderspacing="0">
 				<col width="14%"><col width="14%"><col width="14%"><col width="14%"><col width="14%"><col width="14%"><col width="14%">
 				<tbody>
 				
@@ -83,7 +83,7 @@
 						        events = "" ;
 						        viewMore = "" ;
 										if(size > 0) {
-											println "<div class=\"EventOnDayBorder\"><div style=\"height:40px; overflow:hidden;\">" ;
+											println "<div style=\"height:75px; overflow:hidden ;\">" ;
 											for(event in eventList) {
 												styleCssHidden = "" ;
 												if(eventList.indexOf(event) > 2) {styleCssHidden = "display:block;";}
@@ -97,7 +97,8 @@
 												String eventId = event.getId() ;
 												String calId = event.getCalendarId() ;
 												String eventCal = event.getEventCategoryId() ;
-												println "<div day=\"$dayOfMonth\" eventId=$eventId calId=$calId eventCat=$eventCal class=\"EventOnDayContent\" style=\"$styleCssHidden\">" ;
+												println "<div class=\"EventOnDayBorder EventBoxes\" day=\"$dayOfMonth\" eventId=$eventId calId=$calId eventCat=$eventCal style=\"$styleCssHidden\">" ;
+												println "<div  class=\"EventOnDayContent\">" ;
 											 	println	"<div style=\"float:left;margin:3px 0px 0px 2px;\">" ;
 											 	if(event.getFromDateTime().getDate() == dayOfMonth) {
 													uicomponent.renderField(uicomponent.getChildById(eventId)) ;
@@ -109,6 +110,7 @@
 												println sumary ;
 												println "</div></div>" ;
 												println "<div style=\"clear:left;\"><span></span></div>" ;
+											println "</div>" ;
 											}
 											println "</div>" ;
 											if(size > 3) {

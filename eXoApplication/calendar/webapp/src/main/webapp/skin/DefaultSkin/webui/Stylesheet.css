@@ -462,6 +462,7 @@
 .UIDayView .EventDayContent .HourPoint {
 	height: 60px ;
 	border: 1px solid white ;
+	text-align: right ;
 }
 
 .UIDayView .EventDayContent .EventContainerBorder{
@@ -1011,7 +1012,7 @@
 
 .UIMonthView .EventMonthContent .EventOnDayBorder {
 	border: 1px solid #e4e4e4;
-	margin: 3px;
+	margin: 1px;
 }
 
 .UIMonthView .EventMonthContent .EventOnDayContent {
@@ -1337,4 +1338,13 @@
 	left: 7px ;
 }
 .UICalendars .TitleBar .UIPopupCategory {
+
+}
+
+/* Selection */
+.selection {
+	background-color: rgb(204, 204, 204);
+	position: absolute ;
+	opacity: 0.66 ;
+	width: 100% ;
 }

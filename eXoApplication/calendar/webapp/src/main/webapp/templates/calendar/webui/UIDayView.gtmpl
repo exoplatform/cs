@@ -4,7 +4,7 @@
 	import java.text.SimpleDateFormat;
 	
 	def rcontext = _ctx.getRequestContext() ;
-  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.showEvent();');
+  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.showEvent() ;');
 	int currentDay = uicomponent.getCurrentDay() ;
 	int currentMonth = uicomponent.getCurrentMonth() ;
 	String currentMonthName = uicomponent.getMonthName(currentMonth) ;
@@ -30,15 +30,15 @@
 			</div>
 		</div>
 		<div class="EventAllDay">
+			<%for(ce in uicomponent.getAllDayEvents().values()) {%>
 			<div class="EventAllDayColor2">
-				<%for(ce in uicomponent.getAllDayEvents().values()) {%>
-					<div class="EventAllDayDescription"><%=ce.getSummary()%></div>
-				<%}%>
+				<div class="EventAllDayDescription"><%=ce.getSummary()%></div>
 			</div>
+			<%}%>
 		</div>
 		<div class="EventDayContainer" style="position:relative ;">
 			<div class="EventDayContent">
-				<table class="UIGrid" id="RowContainerDay" cellspacing="0" borderspacing="0" cellpadding="0" style="table-layout:fixed ;"><tbody><tr>
+				<table class="UIGrid" id="UIDayViewGrid" cellspacing="0" borderspacing="0" cellpadding="0" style="table-layout:fixed ;"><tbody><tr>
 					<td style="width:40px ;">
 						<div>
 							<div class="HourPoint">12 AM</div>
@@ -84,7 +84,7 @@
 								 	}
 								 	String style = "MMM/dd/yyyy" ;
 								 	DateFormat df = new SimpleDateFormat(style) ;
-								 	actionLink =  uicomponent.event("SaveEvent",ce.getId()+"&$uicomponent.CALENDARID="+ce.getCalendarId()+"&startTime=beginTime&finishTime=endTime") ;
+								 	actionLink =  uicomponent.event("SaveEvent",ce.getId()+"&calendarId="+ce.getCalendarId()+"&startTime=beginTime&finishTime=endTime") ;
 								%>
 								<div class="EventContainerBorder" actionLink="$actionLink" startTime="$beginTime" endTime="$endTime" >
 									<div class="EventContainerBar" title="<%=df.format(ce.getFromDateTime())%> : <%=df.format(ce.getToDateTime())%>">

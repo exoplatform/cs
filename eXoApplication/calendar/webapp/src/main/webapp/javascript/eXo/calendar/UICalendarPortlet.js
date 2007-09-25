@@ -57,14 +57,15 @@ UICalendarPortlet.prototype.showAction = function(obj, evt) {
 UICalendarPortlet.prototype.init = function() {
 	try{
 	var UICalendarPortlet = eXo.calendar.UICalendarPortlet ;
-	var rowContainerDay = document.getElementById("RowContainerDay") ;
-	if (!rowContainerDay) return false ;
-	UICalendarPortlet.viewer = eXo.core.DOMUtil.findFirstDescendantByClass(rowContainerDay, "div", "EventBoardContainer") ;
+	var uiDayViewGrid = document.getElementById("UIDayViewGrid") ;
+	if (!uiDayViewGrid) return false ;
+	UICalendarPortlet.viewer = eXo.core.DOMUtil.findFirstDescendantByClass(uiDayViewGrid, "div", "EventBoardContainer") ;
 	UICalendarPortlet.step = 60 ;
 	UICalendarPortlet.interval = 20 ;
 	UICalendarPortlet.viewer.onmousedown = eXo.calendar.UISelection.init ;
+	window.status = "" ;
 	}catch(e) {
-		window.status = "Error : " + e.message ;
+		window.status = " !!! Error : " + e.message ;
 		return false ;
 	}
 	return true ;
@@ -228,7 +229,7 @@ UICalendarPortlet.prototype.showContextMenu = function() {
 		'preventForms':false
 	} ;	
 	UIContextMenu.init(config) ;
-	UIContextMenu.attach(["CalendarContentNomal","CalendarContentDisable"],"UIMonthViewRightMenu") ;
+	UIContextMenu.attach("CalendarContentNomal","UIMonthViewRightMenu") ;
 	UIContextMenu.attach("EventOnDayContent","UIMonthViewEventRightMenu") ;
 } ;
 UICalendarPortlet.prototype.monthViewCallback = function(evt){
@@ -242,8 +243,8 @@ UICalendarPortlet.prototype.monthViewCallback = function(evt){
 		if (objectValue = DOMUtil.findAncestorByTagName(src,"td").getAttribute("currentDate")){			
 			UIContextMenu.changeAction(UIContextMenu.menuElement,objectValue) ;
 		}
-	} else if (objvalue = DOMUtil.findAncestorByClass(src, "EventOnDayContent")) {
-		var eventId = objvalue.getAttribute("eventid") ;//DOMUtil.findFirstDescendantByClass(objvalue, "input", "checkbox").name ;
+	} else if (objvalue = DOMUtil.findAncestorByClass(src, "EventBoxes")) {
+		var eventId = objvalue.getAttribute("eventid") ;
 		var calendarId = objvalue.getAttribute("calid") ;
 		UIContextMenu.changeAction(UIContextMenu.menuElement,eventId) ;
 		var pattern = /calendarId.*&|calendarId.*'/ ;
@@ -261,6 +262,92 @@ UICalendarPortlet.prototype.monthViewCallback = function(evt){
 		return ;
 	}	
 }
+UICalendarPortlet.prototype.initFilter = function(obj, type){
+	if (type == 1) {
+		var checkbox = eXo.core.DOMUtil.findFirstChildByClass(obj, "input", "checkbox") ;
+		eXo.calendar.UICalendarPortlet.filterByCalendar(checkbox.name,checkbox.checked) ;
+	} else if (type == 2) {
+		
+	} else {
+		return ;
+	}
+} ;
+
+UICalendarPortlet.prototype.filterByGroup = function(obj) { 
+	var DOMUtil = eXo.core.DOMUtil ;
+	var uiVtab = DOMUtil.findAncestorByClass(obj, "CalendarSelectedFlatStyle") ;
+	var uiVTabContent = DOMUtil.findNextElementByTagName(uiVtab, "div") ;
+	var checkboxes = uiVTabContent.getElementsByTagName("input") ;
+	var checked = obj.checked ;
+	var len = checkboxes.length ;
+	for(var i = 0 ; i < len ; i ++) {
+		checkboxes[i].checked = checked ;
+		//eXo.calendar.UICalendarPortlet.filterByCalendar(checkboxes[i].name, checked) ;
+//	}
+//	for(var i = 0 ; i < len ; i ++) {
+		//checkboxes[i].checked = checked ;
+		eXo.calendar.UICalendarPortlet.filterByCalendar(checkboxes[i].name, checked) ;
+	}
+} ;
+
+UICalendarPortlet.prototype.checkSpaceAvailable = function() {
+	var uiMonthViewGrid = document.getElementById("UIMonthViewGrid") ;
+	if (!uiMonthViewGrid) return ;
+	var DOMUtil = eXo.core.DOMUtil ;
+	var tds = DOMUtil.findDescendantsByTagName(uiMonthViewGrid, "td") ;
+	var eventBoxes = null ;
+	for(var i = 0 ; i < tds.length ; i ++) {
+		eventBoxes = DOMUtil.findDescendantsByClass(tds[i], "div", "EventBoxes") ;
+		if (!eventBoxes || (eventBoxes.length <= 3)) continue ;
+		var n = 0 ;
+		var height = 0 ;
+		var len = eventBoxes.length ;
+		for(var j = 0 ; j < len ; j ++) {
+			if (eventBoxes[j].style.display != "none") {
+				n++ ;
+				height += eventBoxes[j].offsetHeight ;
+				if (height >= 50) break ;
+			}	
+		}
+		var newMore = len - n ;
+		var more = tds[i].getElementsByTagName("a")[0] ;
+		if ((n < 3) && (n > 0)) {
+			more.innerHTML = String(more.innerHTML).replace(/\+\s+\d*/,"+ " + newMore) ;
+			more.style.display = "block" ;
+		} else if (n == 0){
+			more.style.display = "none" ;
+		} else {
+			more.innerHTML = String(more.innerHTML).replace(/\+\s+\d*/,"+ " + newMore) ;
+			more.style.display = "block" ;
+		}
+		eventBoxes = null ;
+	}
+} ;
+
+UICalendarPortlet.prototype.filterByCalendar = function(calendarId, status) {
+	var uiCalendarViewContainer = document.getElementById("UICalendarViewContainer") ;
+	if (!uiCalendarViewContainer) return ;
+	var className = "EventBoxes" ;
+	var events = eXo.core.DOMUtil.findDescendantsByClass(uiCalendarViewContainer, "div", className) ;
+	if (!events) return ;
+	for(var i in events){
+		try{
+			if (events[i].getAttribute("calid") == calendarId) {
+				if (status) {					
+					events[i].style.display = "block" ;
+				}	
+				else events[i].style.display = "none" ;				
+			}
+		} catch(e) {
+			
+		}
+	}
+	eXo.calendar.UICalendarPortlet.checkSpaceAvailable() ;
+} ;
+
+UICalendarPortlet.prototype.filterByCategory = function(categoryId) {
+	
+} ;
 /* for selection creation */
 
 function UISelection() {
