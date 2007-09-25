@@ -190,18 +190,20 @@ public class MailServiceImpl implements MailService{
     multiPart.addBodyPart(mimeBodyPart1);
     
     List<Attachment> attachList = message.getAttachments();
-    for (Attachment att : attachList) {
-      BufferAttachment attach = (BufferAttachment) att;
-      InputStream is = attach.getInputStream();
-          
-      MimeBodyPart mimeBodyPart = new MimeBodyPart();
-      ByteArrayDataSource byteArrayDataSource = new ByteArrayDataSource(is, att.getMimeType());
-      mimeBodyPart.setDataHandler(new DataHandler(byteArrayDataSource));
-      
-      mimeBodyPart.setDisposition(Utils.ATTACHMENT);
-      mimeBodyPart.setFileName(attach.getName());
-      multiPart.addBodyPart(mimeBodyPart);
-    }        
+    if (attachList != null) {
+      for (Attachment att : attachList) {
+        BufferAttachment attach = (BufferAttachment) att;
+        InputStream is = attach.getInputStream();
+
+        MimeBodyPart mimeBodyPart = new MimeBodyPart();
+        ByteArrayDataSource byteArrayDataSource = new ByteArrayDataSource(is, att.getMimeType());
+        mimeBodyPart.setDataHandler(new DataHandler(byteArrayDataSource));
+
+        mimeBodyPart.setDisposition(Utils.ATTACHMENT);
+        mimeBodyPart.setFileName(attach.getName());
+        multiPart.addBodyPart(mimeBodyPart);
+      }        
+    }
     msg.setContent(multiPart);
     
     msg.saveChanges();
