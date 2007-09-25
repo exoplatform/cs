@@ -385,7 +385,11 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
   static  public class ToBCCActionListener extends EventListener<UIComposeForm> {
     public void execute(Event<UIComposeForm> event) throws Exception {
       UIComposeForm uiForm = event.getSource() ;
-      System.out.println(" ==========> ToBCCActionListener") ;
+      System.out.println(" ==========> ToInsertAddressActionListener") ;
+      UIPopupActionContainer uiActionContainer = uiForm.getAncestorOfType(UIPopupActionContainer.class) ;
+      UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class) ;
+      uiChildPopup.activate(UIAddressForm.class, 700) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiActionContainer) ;
     }
   }
   static  public class SaveSentFolderActionListener extends EventListener<UIComposeForm> {
