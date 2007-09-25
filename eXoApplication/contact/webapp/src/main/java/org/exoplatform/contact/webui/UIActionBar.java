@@ -58,7 +58,7 @@ public class UIActionBar extends UIContainer  {
         popupContainer.addChild(UICategorySelect.class, null, null) ;
         popupContainer.addChild(UIContactForm.class, null, null) ;
         UIContactForm.isNew_ = true ;
-        uiPopupAction.activate(popupContainer, 800, 450, true) ;        
+        uiPopupAction.activate(popupContainer, 800, 0, true) ;        
       } else if (addNewType.equals(ADDRESSBOOK)) {
         UICategoryForm uiCategoryForm = uiPopupAction.createUIComponent(UICategoryForm.class, null, "UICategoryForm") ;
         UICategoryForm.isNew_ = true ;

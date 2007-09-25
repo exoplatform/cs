@@ -200,9 +200,7 @@ public class JCRDataStorage implements DataStorage {
     QueryResult result = query.execute();
     NodeIterator it = result.getNodes();
     List<Contact> contacts = new ArrayList<Contact>();
-    while (it.hasNext()) {
-      contacts.add(getContact(it.nextNode()));
-    }
+    while (it.hasNext()) contacts.add(getContact(it.nextNode()));
     return contacts ;
   }
  
@@ -299,6 +297,21 @@ public class JCRDataStorage implements DataStorage {
     return contacts ;
   }
   
+  private List<String> getContactNodesByGroup(String username, String groupId) throws Exception {
+    Node contactHome = getContactHome(username);
+    QueryManager qm = contactHome.getSession().getWorkspace().getQueryManager();
+    StringBuffer queryString = new StringBuffer("/jcr:root" + contactHome.getPath() 
+                                                + "//element(*,exo:contact)[@exo:categories='").
+                                                append(groupId).
+                                                append("']");
+    Query query = qm.createQuery(queryString.toString(), Query.XPATH);
+    QueryResult result = query.execute();
+    NodeIterator it = result.getNodes();
+    List<String> contactIds = new ArrayList<String>();
+    while (it.hasNext()) contactIds.add(it.nextNode().getProperty("exo:id").getString());
+    return contactIds ;
+  }
+  
   public ContactGroup removeGroup(String username, String groupId) throws Exception {
     Node contactGroupHomeNode = getContactGroupHome(username);
     if (contactGroupHomeNode.hasNode(groupId)) {
@@ -306,20 +319,7 @@ public class JCRDataStorage implements DataStorage {
       contactGroupHomeNode.getNode(groupId).remove();
       contactGroupHomeNode.save();
       contactGroupHomeNode.getSession().save();
-      List<Contact> contacts = getContactsByGroup(username, groupId);
-      for (Contact contact : contacts) {
-        String[] oldGroups = contact.getCategories();
-        String[] newGroups = new String[oldGroups.length - 1] ;
-        int i = 0 ;
-        for (String oldGroup : oldGroups) {
-          if (!oldGroup.equalsIgnoreCase(contactGroup.getId())) {
-            newGroups[i] = oldGroup;
-            i ++ ;
-          }
-        } 
-        contact.setCategories(newGroups);
-        saveContact(username, contact, false);
-      }
+      removeContacts(username, getContactNodesByGroup(username, groupId)) ;
       return contactGroup;
     }
     return null;
@@ -379,6 +379,7 @@ public class JCRDataStorage implements DataStorage {
     contactNode.setProperty("exo:categories", contact.getCategories());
     contactNode.setProperty("exo:tags", contact.getTags());
     contactNode.setProperty("exo:editPermission", contact.getEditPermission());
+    // save image to contact
     
     contactHomeNode.getSession().save();
   }

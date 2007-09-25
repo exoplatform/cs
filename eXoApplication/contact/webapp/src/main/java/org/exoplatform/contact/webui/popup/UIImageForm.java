@@ -85,8 +85,8 @@ public class UIImageForm extends UIForm implements UIPopupComponent{
   static  public class CancelActionListener extends EventListener<UIImageForm> {
     public void execute(Event<UIImageForm> event) throws Exception {
       UIImageForm uiForm = event.getSource() ;
-      UIContactPortlet calendarPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
-      calendarPortlet.cancelAction() ;
+      UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
+      uiContactPortlet.cancelAction() ;
      }
   }  
 }

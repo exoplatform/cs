@@ -27,8 +27,7 @@ public class TestContactService extends BaseContactTestCase{
     assertNull(null) ;
   }
   
-  public void  testContact() throws Exception {
-/*    
+  public void  testContact() throws Exception {   
     Contact contact = createContact();
     contact.setCategories(new String[] { "friend", "work" });
     
@@ -55,10 +54,7 @@ public class TestContactService extends BaseContactTestCase{
     contact3.setCategories(new String[] {"friendd", "workk"});
     contactService_.saveContact(username, contact3, true);
     contacts = contactService_.getContactsByGroup(username,"work" );
-    assertEquals(contacts.size(), 2) ;    
-    
-    
-    */     
+    assertEquals(contacts.size(), 2) ;       
     
     // share contact
 //    Contact  = contactService_.getContact(username, "id1") ;
@@ -76,8 +72,10 @@ public class TestContactService extends BaseContactTestCase{
 //    System.out.println("sharedContact.get(0).getName() ==== " + sharedContact.get(0).getName()) ;
     
     // removeContact
-   /* assertNotNull(contactService_.removeContact(username, contact.getId()));
-    assertNull(contactService_.getContact(username, contact.getId())); */
+    List<String> contactIds = new ArrayList<String>() ;
+    contactIds.add(contact.getId()) ;
+    assertNotNull(contactService_.removeContacts(username, contactIds));
+    assertNull(contactService_.getContact(username, contact.getId())); 
   }
   
   private Contact createContact() {
@@ -135,9 +133,7 @@ public class TestContactService extends BaseContactTestCase{
     
     // test getGroup
     assertNotNull(contactService_.getGroup(username, contactGroup.getId()));
-    /*
-    
-    
+
     // test updateGroup
     contactGroup.setName("groupper");
     contactService_.saveGroup(username, contactGroup, false);
@@ -150,7 +146,6 @@ public class TestContactService extends BaseContactTestCase{
     // test removeGroup
     assertNotNull(contactService_.removeGroup(username, contactGroup.getId()));
     assertNull(contactService_.getGroup(username, contactGroup.getId()));
-    */
   } 
   
   public void testTag() throws Exception {  

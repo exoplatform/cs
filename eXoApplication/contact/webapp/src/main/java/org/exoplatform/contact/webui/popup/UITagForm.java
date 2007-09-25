@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.MissingResourceException;
 
+import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.Tag;
@@ -48,8 +49,8 @@ public class UITagForm extends UIForm implements UIPopupComponent {
   public UITagForm() throws Exception {
     setId("UITagForm") ;
     addUIFormInput(new UIFormStringInput(FIELD_TAGNAME_INPUT, FIELD_TAGNAME_INPUT, null));
-    ContactService contactService = getApplicationComponent(ContactService.class);
-    String username = Util.getPortalRequestContext().getRemoteUser() ;
+    ContactService contactService = ContactUtils.getContactService();
+    String username = ContactUtils.getCurrentUser() ;
     List<Tag> tags = contactService.getTags(username);
     FIELD_TAG_BOX = new String[tags.size()];
     for (int i = 0 ; i < tags.size(); i ++) {
@@ -105,8 +106,8 @@ public class UITagForm extends UIForm implements UIPopupComponent {
         return ;
       }
       
-      ContactService contactService = uiTagForm.getApplicationComponent(ContactService.class);
-      String username = Util.getPortalRequestContext().getRemoteUser() ;
+      ContactService contactService = ContactUtils.getContactService();
+      String username = ContactUtils.getCurrentUser() ;
       contactService.addTag(username, uiTagForm.getContacts(), tags);
       UIContactPortlet uiContactPortlet = uiTagForm.getAncestorOfType(UIContactPortlet.class);
       UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;

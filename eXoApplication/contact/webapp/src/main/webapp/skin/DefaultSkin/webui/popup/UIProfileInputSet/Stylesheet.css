@@ -18,6 +18,8 @@
 .Profile .AvatarContent .Avatar {
 	border: 1px solid #c2c2c2;
 	margin: 10px 0px;
+	padding: 10px 25px;
+	background: white;
 }
 
 .Profile .AvatarContent .Action {

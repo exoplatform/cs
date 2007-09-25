@@ -7,6 +7,7 @@ package org.exoplatform.contact.webui.popup;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
@@ -62,8 +63,8 @@ public class UICategorySelect extends UIForm {
   }
 
   public List<SelectItemOption<String>> getCategoryList() throws Exception {
-    ContactService contactService = getApplicationComponent(ContactService.class) ;
-    String username = Util.getPortalRequestContext().getRemoteUser() ;
+    ContactService contactService = ContactUtils.getContactService() ;
+    String username = ContactUtils.getCurrentUser();
     List<ContactGroup> contactGroups =  contactService.getGroups(username);
     List<SelectItemOption<String>> categories = new ArrayList<SelectItemOption<String>>() ; 
     for(ContactGroup contactGroup : contactGroups)
@@ -77,10 +78,10 @@ public class UICategorySelect extends UIForm {
   }
   
   public void setValue(String contactId) throws Exception {
-    ContactService contactService = getApplicationComponent(ContactService.class);
-    String username = Util.getPortalRequestContext().getRemoteUser() ;
+    ContactService contactService = ContactUtils.getContactService();
+    String username = ContactUtils.getCurrentUser() ;
     Contact contact = contactService.getContact(username, contactId);
-    if (contact != null) getUIFormSelectBox(FIELD_CATEGORY).setValue(contact.getCategories()[0]) ;
+    if (contact != null && contact.getCategories().length > 0) getUIFormSelectBox(FIELD_CATEGORY).setValue(contact.getCategories()[0]) ;
   }
   public void disableSelect() { getUIFormSelectBox(FIELD_CATEGORY).setEnable(false) ; }
 

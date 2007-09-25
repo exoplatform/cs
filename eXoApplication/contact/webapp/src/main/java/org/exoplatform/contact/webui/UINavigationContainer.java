@@ -18,8 +18,10 @@ import org.exoplatform.webui.core.UIContainer;
     template =  "app:/templates/contact/webui/UINavigationContainer.gtmpl"
 )
 public class UINavigationContainer extends UIContainer  {
+  
   public UINavigationContainer() throws Exception {
     addChild(UIAddressBooks.class, null, null) ;
     addChild(UITags.class, null, null) ;
   }  
+
 }

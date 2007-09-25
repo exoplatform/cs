@@ -7,6 +7,7 @@ package org.exoplatform.contact.webui.popup;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
@@ -47,6 +48,13 @@ public class UIMoveContactForm extends UIForm implements UIPopupComponent {
   public void activate() throws Exception { }
   public void deActivate() throws Exception { }
   
+  public boolean isPersonalAddressBookSelected() throws Exception {
+    for(ContactGroup contactGroup : getContactGroups()) {
+      if (getGroupId().equals(contactGroup.getId())) return true ;
+    }
+    return false ;
+  }
+  
   public void setGroupId(String groupId) { groupId_ = groupId ; }
   public String getGroupId() { return groupId_ ; }
   
@@ -79,8 +87,8 @@ public class UIMoveContactForm extends UIForm implements UIPopupComponent {
       UIContactPortlet uiContactPortlet = uiMoveContactForm.getAncestorOfType(UIContactPortlet.class);
       UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
       if (!uiMoveContactForm.getGroupId().equals(groupId)) {
-        ContactService contactService = uiMoveContactForm.getApplicationComponent(ContactService.class);
-        String username = Util.getPortalRequestContext().getRemoteUser() ;
+        ContactService contactService = ContactUtils.getContactService();
+        String username = ContactUtils.getCurrentUser() ;
         List<Contact> movedContacts = contactService.moveContacts(username, uiMoveContactForm.getContacts(), new String[] { groupId }) ;
         if (movedContacts.size() > 0) {
           List<String> contactIds = new ArrayList<String>() ;

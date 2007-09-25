@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.webui.popup.UIMoveContactForm;
@@ -17,7 +18,6 @@ import org.exoplatform.contact.webui.popup.UICategorySelect;
 import org.exoplatform.contact.webui.popup.UIContactForm;
 import org.exoplatform.contact.webui.popup.UIPopupAction;
 import org.exoplatform.contact.webui.popup.UIPopupContainer;
-import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -43,7 +43,8 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
         @EventConfig(listeners = UIContacts.AddTagActionListener.class),
         @EventConfig(listeners = UIContacts.EditContactActionListener.class),
         @EventConfig(listeners = UIContacts.DeleteContactsActionListener.class),
-        @EventConfig(listeners = UIContacts.MoveContactsActionListener.class)
+        @EventConfig(listeners = UIContacts.MoveContactsActionListener.class),
+        @EventConfig(listeners = UIContacts.ViewDetailsActionListener.class)
     }
 )
 
@@ -62,14 +63,18 @@ public class UIContacts extends UIForm  {
   public UIContacts() throws Exception { } 
   public String[] getSelections() { return SELECTIONS ; }
   
-  public void setContacts(List<Contact> contacts) {
+  public void setContacts(List<Contact> contacts) throws Exception {
     getChildren().clear() ;
     contactMap.clear();
     for(Contact contact : contacts) {
       addUIFormInput(new UIFormCheckBoxInput<Boolean>(contact.getId(),contact.getId(), false));
       contactMap.put(contact.getId(), contact) ;
     }
+    UIContactPreview uiContactPreview = getAncestorOfType(UIContactContainer.class).findFirstComponentOfType(UIContactPreview.class) ;
+    uiContactPreview.updateContact() ;
   }
+  public Contact[] getContacts() throws Exception { return contactMap.values().toArray(new Contact[]{}) ; }
+  
   public void setViewContactsList(boolean list) { viewContactsList = list ; }
   public boolean getViewContactsList() { return viewContactsList ; }
   
@@ -83,7 +88,6 @@ public class UIContacts extends UIForm  {
     UIContactPreview uiContactPreview = getAncestorOfType(UIContactContainer.class).findFirstComponentOfType(UIContactPreview.class) ;
     uiContactPreview.updateContact() ;
   }
-  public Contact[] getContacts() throws Exception { return contactMap.values().toArray(new Contact[]{}) ; }
   
   public List<String> getCheckedContacts() throws Exception {
     List<String> checkedContacts = new ArrayList<String>() ;
@@ -111,7 +115,26 @@ public class UIContacts extends UIForm  {
       UIContactForm uiContactForm = popupContainer.findFirstComponentOfType(UIContactForm.class);
       uiContactForm.setValues(contactId);
       UIContactForm.isNew_ = false ;
-      popupAction.activate(popupContainer, 800, 450, true) ;
+      popupAction.activate(popupContainer, 800, 0, true) ;
+    }
+  }
+  
+  static public class ViewDetailsActionListener extends EventListener<UIContacts> {
+    public void execute(Event<UIContacts> event) throws Exception {
+      UIContacts uiContacts = event.getSource();
+      String contactId = event.getRequestContext().getRequestParameter(OBJECTID);
+      UIContactPortlet contactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class) ;
+      UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
+      UIPopupContainer popupContainer = popupAction.createUIComponent(UIPopupContainer.class, null, "AddNewContact") ;
+      popupContainer.addChild(UICategorySelect.class, null, null) ;
+      popupContainer.addChild(UIContactForm.class, null, null) ;
+      UICategorySelect uiCategorySelect = popupContainer.findFirstComponentOfType(UICategorySelect.class);
+      uiCategorySelect.setValue(contactId);
+      uiCategorySelect.disableSelect() ;
+      UIContactForm uiContactForm = popupContainer.findFirstComponentOfType(UIContactForm.class);
+      uiContactForm.setValues(contactId);
+      UIContactForm.isNew_ = false ;
+      popupAction.activate(popupContainer, 800, 0, true) ;
     }
   }
   
@@ -144,11 +167,11 @@ public class UIContacts extends UIForm  {
       UIContacts uiContacts = event.getSource();
       String contactId = event.getRequestContext().getRequestParameter(OBJECTID);   
       List<String> contactIds = new ArrayList<String>();
+      UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
       if (contactId != null) contactIds.add(contactId) ;
       else {
         contactIds = uiContacts.getCheckedContacts() ;
-        if (contactIds.size() == 0) {
-          UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
+        if (contactIds.size() == 0) { 
           uiApp.addMessage(new ApplicationMessage("UIContacts.msg.checkContact-required", null)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;
@@ -180,8 +203,8 @@ public class UIContacts extends UIForm  {
           return ;
         }
       }
-      ContactService contactService = uiContacts.getApplicationComponent(ContactService.class);
-      String username = Util.getPortalRequestContext().getRemoteUser() ;
+      ContactService contactService = ContactUtils.getContactService();
+      String username =  ContactUtils.getCurrentUser();
       List<Contact> unremovedContacts = contactService.removeContacts(username, contactIds) ;
       if (unremovedContacts != null && unremovedContacts.size() > 0) 
         System.out.println("\n\n unremoved contacts size :" + unremovedContacts.size() + "\n\n");
@@ -203,6 +226,6 @@ public class UIContacts extends UIForm  {
       uiContactPreview.setContact(uiContacts.contactMap.get(contactId));
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContactContainer);
     }
-  }  
+  } 
   
 }

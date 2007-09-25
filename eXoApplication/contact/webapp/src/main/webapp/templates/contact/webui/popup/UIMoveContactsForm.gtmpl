@@ -9,7 +9,7 @@
 	
 	<div class="MoveContactsFormContainer">
 		<%  
-			if (uicomponent.getPersonalAddressBookSelected()) {
+			if (uicomponent.isPersonalAddressBookSelected()) {
 				ContactGroup[] contactGroups = uicomponent.getContactGroups();
 				for(contactGroup in contactGroups) {
 					String actionLink  = uicomponent.event("SelectGroup", contactGroup.getId()) ;

@@ -204,6 +204,9 @@
 			  		  		<span class="LabelContent">Website:</span>
 			  		  		<span class="LabelContent"><a href="#"><%=(contact.getWebPage()==null ? "" : contact.getWebPage())%></a></span>
 			  		  	</div>
+			  		  	<div class="InfoMember">
+			  		  		<span class="LabelContent"><a href="<%=uicomponent.event("ViewDetails", contact.getId())%>">View Details</a></span>			  		  	
+			  		  	</div>
 			  		  </div>
 			  		</div>
 			  		<div style="clear: left;"><span></span></div>

@@ -63,6 +63,9 @@ public class Contact {
   private String[] tags ;
   private String[] editPermission ;
   
+  private ContactAttachment attachment ;
+  
+  
   public Contact() {
     id = "Contact" + IdGenerator.generate() ;
   }
@@ -191,6 +194,13 @@ public class Contact {
   public void   setTags(String[] s) { tags = s ; }
 
   public String[] getEditPermission() { return editPermission ; }
-
   public void setEditPermission(String[] s) { editPermission = s ; }
+
+  public void setAttachment(ContactAttachment attachment) {
+    this.attachment = attachment;
+  }
+
+  public ContactAttachment getAttachment() {
+    return attachment;
+  }
 }

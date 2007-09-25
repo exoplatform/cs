@@ -5,6 +5,8 @@
 package org.exoplatform.contact.webui;
 
 import java.util.List;
+
+import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.Tag;
 import org.exoplatform.portal.webui.util.Util;
@@ -33,8 +35,8 @@ public class UITags extends UIComponent  {
   }
   
   public List<Tag> getTags() throws Exception {
-    ContactService contactService = this.getApplicationComponent(ContactService.class);
-    String username = Util.getPortalRequestContext().getRemoteUser() ;    
+    ContactService contactService = ContactUtils.getContactService();
+    String username = ContactUtils.getCurrentUser() ;    
     return contactService.getTags(username);
   }
   
@@ -43,8 +45,8 @@ public class UITags extends UIComponent  {
       UITags uiForm = event.getSource() ;
       String tagName = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UIWorkingContainer uiWorkingContainer = uiForm.getAncestorOfType(UIWorkingContainer.class) ;
-      ContactService contactService = uiForm.getApplicationComponent(ContactService.class);
-      String username = Util.getPortalRequestContext().getRemoteUser() ;
+      ContactService contactService = ContactUtils.getContactService();
+      String username = ContactUtils.getCurrentUser() ;
       UIContacts uiContacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class) ;
       uiContacts.setContacts(contactService.getContactsByTag(username, tagName)) ;
       

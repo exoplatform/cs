@@ -4,15 +4,17 @@
  **************************************************************************/
 package org.exoplatform.contact.webui;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
+import org.exoplatform.contact.ContactUtils;
+import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.GroupContactData;
 import org.exoplatform.contact.webui.popup.UICategoryForm;
 import org.exoplatform.contact.webui.popup.UIPopupAction;
+import org.exoplatform.contact.webui.popup.UISendEmail;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.impl.GroupImpl;
@@ -37,38 +39,28 @@ import org.exoplatform.webui.event.EventListener;
             confirm = "UIAddressBooks.msg.confirm-delete"),
         @EventConfig(listeners = UIAddressBooks.SelectGroupActionListener.class),
         @EventConfig(listeners = UIAddressBooks.SelectSharedGroupActionListener.class),
-        @EventConfig(listeners = UIAddressBooks.AddressPopupActionListener.class)
+        @EventConfig(listeners = UIAddressBooks.AddressPopupActionListener.class),
+        @EventConfig(listeners = UIAddressBooks.SendMailActionListener.class)
     }
 )
 public class UIAddressBooks extends UIComponent  {
-  private String selectedGroup_ = "";
-  private Map<String, ContactGroup> groupMap_ = new HashMap<String, ContactGroup> () ;
   
-  public UIAddressBooks() throws Exception { 
-    ContactService contactService = this.getApplicationComponent(ContactService.class);
-    String username = Util.getPortalRequestContext().getRemoteUser() ;    
-    setGroups(contactService.getGroups(username));
-    if (getGroups() != null && getGroups().length > 0) 
-      setSelectedGroup(getGroups()[0].getId()) ; 
-  }
-  public void setGroups(List<ContactGroup> groups) {
-    groupMap_.clear() ;
-    for (ContactGroup group : groups) groupMap_.put(group.getId(), group) ;
-  }
-  public ContactGroup[] getGroups()throws Exception { 
-    return groupMap_.values().toArray(new ContactGroup[]{}) ; 
-  }
-  public void updateGroup(ContactGroup group) { groupMap_.put(group.getId(), group) ; }
-  public void removeGroup(ContactGroup group) throws Exception { groupMap_.remove(group.getId()) ; }  
-  
+  public UIAddressBooks() throws Exception {}
 
-  public void setSelectedGroup(String groupId) { selectedGroup_ = groupId ; }
-  public String getSelectedGroup() { return selectedGroup_ ; }
+  public ContactGroup[] getGroups() throws Exception { 
+    UIWorkingContainer uiWorkingContainer = getAncestorOfType(UIWorkingContainer.class) ; 
+    return uiWorkingContainer.getContactGroups() ;
+  }
+
+  public String getSelectedGroup() throws Exception { 
+    UIWorkingContainer uiWorkingContainer = getAncestorOfType(UIWorkingContainer.class) ;
+    return uiWorkingContainer.getSelectedGroup() ;
+  }
 
   public List<GroupContactData> getSharedContactGroups() throws Exception {
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     OrganizationService organizationService = getApplicationComponent(OrganizationService.class) ;
-    ContactService contactService = getApplicationComponent(ContactService.class) ;
+    ContactService contactService = ContactUtils.getContactService() ;
     Object[] objGroupIds = organizationService.getGroupHandler().findGroupsOfUser(username).toArray() ;
     String[] groupIds = new String[objGroupIds.length];
     for (int i = 0; i < groupIds.length; i++) {
@@ -80,8 +72,8 @@ public class UIAddressBooks extends UIComponent  {
   static  public class EditGroupActionListener extends EventListener<UIAddressBooks> {
     public void execute(Event<UIAddressBooks> event) throws Exception {
       UIAddressBooks uiAddressBook = event.getSource() ;  
-      UIContactPortlet contactPortlet = uiAddressBook.getAncestorOfType(UIContactPortlet.class) ;
-      UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
+      UIContactPortlet uiContactPortlet = uiAddressBook.getAncestorOfType(UIContactPortlet.class) ;
+      UIPopupAction popupAction = uiContactPortlet.getChild(UIPopupAction.class) ;
       UICategoryForm uiCategoryForm = popupAction.createUIComponent(UICategoryForm.class, null, "UICategoryForm") ;
       String groupId = event.getRequestContext().getRequestParameter(OBJECTID);
       uiCategoryForm.setValues(groupId) ;
@@ -91,15 +83,37 @@ public class UIAddressBooks extends UIComponent  {
     }
   }
   
+  public static class SendMailActionListener extends EventListener<UIAddressBooks> {
+    public void execute(Event<UIAddressBooks> event) throws Exception {   
+      UIAddressBooks uiAddressBook = event.getSource() ;  
+      UIContactPortlet uiContactPortlet = uiAddressBook.getAncestorOfType(UIContactPortlet.class) ;
+      UIPopupAction uiPopupAction = uiContactPortlet.getChild(UIPopupAction.class) ;
+      UISendEmail uiSendEmail = uiPopupAction.createUIComponent(UISendEmail.class, null, "UISendEmail") ; 
+      String groupId = event.getRequestContext().getRequestParameter(OBJECTID);
+      String username = ContactUtils.getCurrentUser() ;
+      ContactService contactService = ContactUtils.getContactService() ;
+      List<Contact> contacts = contactService.getContactsByGroup(username, groupId) ;
+      List<String> emails = new ArrayList<String>() ;
+      for (Contact contact : contacts) emails.add(contact.getEmailAddress()) ;
+      uiSendEmail.setEmails(emails) ;
+      uiPopupAction.activate(uiSendEmail, 700, 0, true) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+    }
+  }
+  
   static  public class DeleteGroupActionListener extends EventListener<UIAddressBooks> {
     public void execute(Event<UIAddressBooks> event) throws Exception {
       UIAddressBooks uiAddressBook = event.getSource() ;  
       String groupId = event.getRequestContext().getRequestParameter(OBJECTID);
-      ContactService contactService = uiAddressBook.getApplicationComponent(ContactService.class);
-      String username = Util.getPortalRequestContext().getRemoteUser() ;
-      ContactGroup group = contactService.removeGroup(username, groupId) ;
-      uiAddressBook.removeGroup(group) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook) ;      
+      ContactService contactService = ContactUtils.getContactService() ;
+      String username = ContactUtils.getCurrentUser() ;
+      contactService.removeGroup(username, groupId) ;
+      UIWorkingContainer uiWorkingContainer = uiAddressBook.getAncestorOfType(UIWorkingContainer.class) ;
+      uiWorkingContainer.removeContactGroup(groupId) ;
+      
+      UIContacts uiContacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class) ;
+      uiContacts.setContacts(new ArrayList<Contact>()) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer) ;      
     }
   }
 
@@ -108,9 +122,9 @@ public class UIAddressBooks extends UIComponent  {
       UIAddressBooks uiAddressBook = event.getSource() ;  
       UIWorkingContainer uiWorkingContainer = uiAddressBook.getAncestorOfType(UIWorkingContainer.class) ;
       String groupId = event.getRequestContext().getRequestParameter(OBJECTID) ;    
-      ContactService contactService = uiAddressBook.getApplicationComponent(ContactService.class);
-      uiAddressBook.setSelectedGroup(groupId) ;
-      String username = Util.getPortalRequestContext().getRemoteUser() ;
+      uiWorkingContainer.setSelectedGroup(groupId) ;
+      String username = ContactUtils.getCurrentUser() ;
+      ContactService contactService = ContactUtils.getContactService();
       UIContacts uiContacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class) ;
       uiContacts.setContacts(contactService.getContactsByGroup(username, groupId)) ; 
       UIContactPreview uiContactPreview = uiWorkingContainer.findFirstComponentOfType(UIContactPreview.class);
@@ -124,8 +138,8 @@ public class UIAddressBooks extends UIComponent  {
       UIAddressBooks uiAddressBook = event.getSource() ;  
       UIWorkingContainer uiWorkingContainer = uiAddressBook.getAncestorOfType(UIWorkingContainer.class) ;
       String groupId = event.getRequestContext().getRequestParameter(OBJECTID) ;    
-      ContactService contactService = uiAddressBook.getApplicationComponent(ContactService.class);
-      uiAddressBook.setSelectedGroup(groupId) ;
+      ContactService contactService = ContactUtils.getContactService();
+      uiWorkingContainer.setSelectedGroup(groupId) ;
       UIContacts uiContacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class) ; 
       if (contactService.getSharedContacts(new String[] {groupId}) != null && contactService.getSharedContacts(new String[] {groupId}).size() > 0)
         uiContacts.setContacts(contactService.getSharedContacts(new String[] {groupId}).get(0).getContacts()) ;      
@@ -141,5 +155,7 @@ public class UIAddressBooks extends UIComponent  {
       System.out.println("\n\n view type :" + viewType + "\n\n");
     }
   }
+  
+  
   
 }

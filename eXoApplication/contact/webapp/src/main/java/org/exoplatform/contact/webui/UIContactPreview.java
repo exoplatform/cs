@@ -43,8 +43,8 @@ public class UIContactPreview extends UIComponent  {
   public boolean getIsMaximize() { return isMaximized_ ; }
   
   public void updateContact() throws Exception {
-    UIWorkingContainer uiWorkingContainer = getAncestorOfType(UIWorkingContainer.class) ; 
-    UIContacts uicontacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class) ;
+    UIContactContainer uiContactContainer = getParent() ; 
+    UIContacts uicontacts = uiContactContainer.getChild(UIContacts.class) ;
     if (uicontacts.getContacts().length > 0 ) setContact(uicontacts.getContacts()[0]) ;
     else setContact(null) ;
   }

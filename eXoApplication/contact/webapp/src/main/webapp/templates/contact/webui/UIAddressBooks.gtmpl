@@ -1,4 +1,6 @@
-
+<% 
+	import org.exoplatform.contact.service.ContactGroup;
+%>
 
 <div class="UIAddressBooks" id="<%=uicomponent.getId()%>">
 	<div class="TitleBar">
@@ -14,7 +16,7 @@
       <div style="clear: left"><span></span></div>
 		</div>
 		<%  
-			List contactGroups = uicomponent.getGroups();
+			ContactGroup[] contactGroups = uicomponent.getGroups();
 			for(contactGroup in contactGroups) {
 			cssClass = "Normal" ;
 			String actionLink1  = uicomponent.event("SelectGroup", contactGroup.getId()) ;	
@@ -72,7 +74,7 @@
 	              Edit
 	            </div>
 	        </a>
-	        <a class="MenuItem" href="<%=uicomponent.event("AddressPopup", "id")%>">   
+	        <a class="MenuItem" href="<%=uicomponent.event("SendMail", "id")%>">   
 	            <div class="ItemIcon EmailIcon">
 	              Send Emai
 	            </div>

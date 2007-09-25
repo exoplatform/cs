@@ -6,9 +6,9 @@ package org.exoplatform.contact.webui;
 
 import java.util.List;
 
-import org.exoplatform.contact.service.Contact;
+import org.exoplatform.contact.ContactUtils;
+import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
-import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIContainer;
 
@@ -27,16 +27,14 @@ public class UIContactContainer extends UIContainer  {
   public UIContactContainer() throws Exception {
     UIContacts uiContacts = addChild(UIContacts.class, null, null) ;
     UIContactPreview uiContactPreview = addChild(UIContactPreview.class, null, null) ;
-    String username = Util.getPortalRequestContext().getRemoteUser() ;
-    ContactService contactService = getApplicationComponent(ContactService.class) ;
-    if(contactService.getGroups(username) != null &&contactService.getGroups(username).size() > 0) {
-      String groupId = contactService.getGroups(username).get(0).getId() ;
-      List<Contact> contacts = contactService.getContactsByGroup(username, groupId) ;
-      if(contacts != null && contacts.size() > 0) {
-        uiContacts.setContacts(contacts) ;
-        uiContactPreview.setContact(contacts.get(0)) ;
-      }
-    }
+    String username = ContactUtils.getCurrentUser() ;
+    ContactService contactService = ContactUtils.getContactService() ;
+    List<ContactGroup> groups = contactService.getGroups(username) ;
+    String selectedGroup = null ;
+    if(groups != null && groups.size() > 0) selectedGroup = groups.get(0).getId() ;
+    uiContacts.setContacts(contactService.getContactsByGroup(username, selectedGroup)) ;
+    if(uiContacts.getContacts() != null && uiContacts.getContacts().length > 0) 
+      uiContactPreview.setContact(uiContacts.getContacts()[0]) ;
   }
-
+  
 }
