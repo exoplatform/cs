@@ -229,5 +229,18 @@ public interface MailService {
    * @throws Exception
    */
   public List<Message>  checkNewMessage(String username, Account account) throws Exception ;  
-
+  /**
+   * This method get mail settings
+   * @param username
+   * @return settings of mail
+   * @throws Exception
+   */
+  public MailSetting  getMailSetting(String username) throws Exception ;  
+  /**
+   * This method to update mail setting
+   * @param username
+   * @param newSetting
+   * @throws Exception
+   */
+  public void saveMailSetting(String username, MailSetting newSetting) throws Exception;
 }

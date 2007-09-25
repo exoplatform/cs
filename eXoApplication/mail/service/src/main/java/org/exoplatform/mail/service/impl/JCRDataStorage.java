@@ -27,6 +27,7 @@ import org.exoplatform.mail.service.Attachment;
 import org.exoplatform.mail.service.BufferAttachment;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.JCRMessageAttachment;
+import org.exoplatform.mail.service.MailSetting;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.MessageHeader;
@@ -118,6 +119,39 @@ public class JCRDataStorage implements DataStorage{
       return msg ;
     }
     return null ;
+  }
+  
+  public MailSetting getMailSetting(String username) throws Exception {
+    Node homeNode = getMailHomeNode(username);
+    NodeIterator it = homeNode.getNodes();
+    Node mailSettingNode = null;
+    while (it.hasNext()) {
+      Node node = it.nextNode();
+      if (node.isNodeType(Utils.EXO_MAIL_SETTING)) {
+        mailSettingNode = node;
+      }
+    }
+    MailSetting mailSetting = new MailSetting();
+    if (mailSettingNode.hasProperty(Utils.EXO_NUMBER_OF_CONVERSATION)) 
+      mailSetting.setShowNumberOfConversation((mailSettingNode.getProperty(Utils.EXO_NUMBER_OF_CONVERSATION).getLong()));
+    if (mailSettingNode.hasProperty(Utils.EXO_PERIOD_CHECKMAIL_AUTO)) 
+      mailSetting.setPeriodCheckMailAuto((mailSettingNode.getProperty(Utils.EXO_NUMBER_OF_CONVERSATION).getLong()));
+    if (mailSettingNode.hasProperty(Utils.EXO_DEFAULT_ACCOUNT)) 
+      mailSetting.setDefaultAccount((mailSettingNode.getProperty(Utils.EXO_DEFAULT_ACCOUNT).getString()));
+    if (mailSettingNode.hasProperty(Utils.EXO_EDITOR)) 
+      mailSetting.setTypeOfEditor((mailSettingNode.getProperty(Utils.EXO_EDITOR).getString()));
+    if (mailSettingNode.hasProperty(Utils.EXO_FORMAT_WHEN_REPLYFORWARD)) 
+      mailSetting.setFormatWhenReplyForward((mailSettingNode.getProperty(Utils.EXO_FORMAT_WHEN_REPLYFORWARD).getString()));
+    if (mailSettingNode.hasProperty(Utils.EXO_REPLY_MESSAGE_WITH)) 
+      mailSetting.setReplyMessageWith((mailSettingNode.getProperty(Utils.EXO_REPLY_MESSAGE_WITH).getString()));
+    if (mailSettingNode.hasProperty(Utils.EXO_FORWARD_MESSAGE_WITH)) 
+      mailSetting.setForwardMessageWith((mailSettingNode.getProperty(Utils.EXO_FORWARD_MESSAGE_WITH).getString()));
+    if (mailSettingNode.hasProperty(Utils.EXO_PREFIX_MESSAGE_WITH)) 
+      mailSetting.setPrefixMessageWith((mailSettingNode.getProperty(Utils.EXO_PREFIX_MESSAGE_WITH).getString()));
+    if (mailSettingNode.hasProperty(Utils.EXO_SAVE_SENT_MESSAGE)) 
+      mailSetting.setSaveMessageInSent((mailSettingNode.getProperty(Utils.EXO_SAVE_SENT_MESSAGE).getBoolean()));
+    
+    return mailSetting; 
   }
 
   public List<MessageHeader> getMessages(String username, MessageFilter filter) throws Exception {
@@ -271,6 +305,28 @@ public class JCRDataStorage implements DataStorage{
       // saves changes
       mailHome.getSession().save();
     }
+  }
+  
+  public void saveMailSetting(String username, MailSetting newSetting) throws Exception {
+    Node mailHome = getMailHomeNode(username) ;
+    Node mailSetting = null;
+    if (mailHome.hasNode(Utils.EXO_MAIL_SETTING)) {
+      mailSetting = mailHome.getNode(Utils.EXO_MAIL_SETTING);
+    } else {
+      mailSetting = mailHome.addNode(Utils.EXO_MAIL_SETTING, Utils.EXO_MAIL_SETTING);
+    }
+    
+    mailSetting.setProperty(Utils.EXO_NUMBER_OF_CONVERSATION, newSetting.getShowNumberOfConversation());
+    mailSetting.setProperty(Utils.EXO_PERIOD_CHECKMAIL_AUTO, newSetting.getPeriodCheckMailAuto());
+    mailSetting.setProperty(Utils.EXO_DEFAULT_ACCOUNT, newSetting.getDefaultAccount());
+    mailSetting.setProperty(Utils.EXO_FORMAT_WHEN_REPLYFORWARD, newSetting.getFormatWhenReplyForward());
+    mailSetting.setProperty(Utils.EXO_EDITOR, newSetting.getTypeOfEditor());
+    mailSetting.setProperty(Utils.EXO_REPLY_MESSAGE_WITH, newSetting.getReplyMessageWith());
+    mailSetting.setProperty(Utils.EXO_FORWARD_MESSAGE_WITH, newSetting.getForwardMessageWith());
+    mailSetting.setProperty(Utils.EXO_PREFIX_MESSAGE_WITH, newSetting.getPrefixMessageWith());
+    mailSetting.setProperty(Utils.EXO_SAVE_SENT_MESSAGE, newSetting.saveMessageInSent());
+    
+    mailHome.getSession().save();
   }
 
   public void saveMessage(String username, String accountId, Message message, boolean isNew) throws Exception {

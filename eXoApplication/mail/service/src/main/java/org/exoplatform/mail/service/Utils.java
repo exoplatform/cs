@@ -76,6 +76,17 @@ public class Utils {
   public static final String EXO_CHECKMAILAUTO = "exo:checkMailAuto".intern();
   public static final String EXO_EMPTYTRASH = "exo:emptyTrash".intern();
   public static final String EXO_PLACESIGNATURE = "exo:placeSignature".intern();
+
+  public static final String EXO_MAIL_SETTING = "exo:mailSetting".intern();
+  public static final String EXO_NUMBER_OF_CONVERSATION = "exo:showNumberOfConversation".intern();
+  public static final String EXO_FORMAT_WHEN_REPLYFORWARD = "exo:formatWhenReplyForward".intern();
+  public static final String EXO_REPLY_MESSAGE_WITH = "exo:replyMessageWith".intern();
+  public static final String EXO_FORWARD_MESSAGE_WITH = "exo:forwardMessageWith".intern();
+  public static final String EXO_PREFIX_MESSAGE_WITH = "exo:prefixMessageWith".intern();
+  public static final String EXO_PERIOD_CHECKMAIL_AUTO = "exo:periodCheckMailAuto".intern();
+  public static final String EXO_DEFAULT_ACCOUNT = "exo:defaultAccount".intern();
+  public static final String EXO_EDITOR = "exo:editor".intern();
+  public static final String EXO_SAVE_SENT_MESSAGE = "exo:saveMessageInSent".intern();
   
   public static final String NT_UNSTRUCTURED = "nt:unstructured".intern() ;
   public static final String NT_FILE = "nt:file".intern() ;

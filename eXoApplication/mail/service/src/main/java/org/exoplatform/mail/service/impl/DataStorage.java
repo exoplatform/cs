@@ -11,6 +11,7 @@ import javax.jcr.Session;
 
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Folder;
+import org.exoplatform.mail.service.MailSetting;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.MessageHeader;
@@ -40,6 +41,9 @@ public interface DataStorage {
   public List<MessageHeader> getMessages(String username, MessageFilter filter) throws Exception ;
 
   public Message getMessage(Node messageNode) throws Exception ;
+  
+  public MailSetting  getMailSetting(String username) throws Exception ;
+  public void saveMailSetting(String username, MailSetting newSetting) throws Exception;
 
   public void removeMessage(String username, String accountId, String messageId) throws Exception ;
 

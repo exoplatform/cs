@@ -5,7 +5,9 @@
 package org.exoplatform.mail.service;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by The eXo Platform SARL
@@ -29,6 +31,7 @@ public class Message extends MessageHeader {
   private String[] folders ;
   private String[] tags ;
   
+  private Map<String, String> properties = new HashMap<String, String>() ;
   private List<Attachment> attachments ;
   
   public Message() {super() ;}
@@ -75,4 +78,10 @@ public class Message extends MessageHeader {
   
   public long getSize() { return size; }
   public void setSize(long size) { this.size = size; }
+  
+  public void setProperties(String key, String value) {
+    if (properties == null) properties = new HashMap<String, String>();
+    properties.put(key, value) ;
+  }
+  public Map<String, String> getProperties() { return properties ; }
 }

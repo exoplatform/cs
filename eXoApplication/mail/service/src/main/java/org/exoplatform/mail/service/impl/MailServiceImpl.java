@@ -10,6 +10,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.activation.DataHandler;
@@ -31,6 +32,7 @@ import org.exoplatform.mail.service.Attachment;
 import org.exoplatform.mail.service.BufferAttachment;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
+import org.exoplatform.mail.service.MailSetting;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.MessageHeader;
@@ -129,6 +131,8 @@ public class MailServiceImpl implements MailService{
     String port  = acc.getServerProperties().get(Utils.SVR_SMTP_PORT) ;
     String isSSl =  acc.getServerProperties().get(Utils.SVR_SSL)  ;
     Properties props = new Properties();
+    props.put(Utils.SVR_USERNAME, acc.getUserName());
+    props.put(Utils.SVR_PASSWORD, acc.getPassword());
     props.put(Utils.SVR_SMTP_USER, smtpUser) ;
     props.put(Utils.SVR_SMTP_HOST, host) ;
     props.put(Utils.SVR_SMTP_PORT, port) ;
@@ -139,8 +143,31 @@ public class MailServiceImpl implements MailService{
     props.put(Utils.SVR_SMTP_SOCKETFACTORY_CLASS,  "javax.net.ssl.SSLSocketFactory");
     props.put(Utils.SVR_SMTP_SOCKETFACTORY_FALLBACK, "false");
     Session session = Session.getInstance(props, null);
+    sendMessage(session, message);
+  }
+  
+  public void sendMessage(Message message) throws Exception {
+    Map<String, String> messageProps = message.getProperties();
+    Properties props = new Properties();
+    props.put(Utils.SVR_USERNAME, messageProps.get(Utils.SVR_USERNAME));
+    props.put(Utils.SVR_PASSWORD, messageProps.get(Utils.SVR_PASSWORD));
+    props.put(Utils.SVR_SMTP_USER, messageProps.get(Utils.SVR_SMTP_USER)) ;
+    props.put(Utils.SVR_SMTP_HOST, messageProps.get(Utils.SVR_SMTP_HOST)) ;
+    props.put(Utils.SVR_SMTP_PORT, messageProps.get(Utils.SVR_SMTP_PORT)) ;
+    props.put(Utils.SVR_SSL, messageProps.get(Utils.SVR_SSL));
+    props.put(Utils.SVR_SMTP_STARTTLS_ENABLE, "true");
+    props.put(Utils.SVR_SMTP_AUTH, "true");
+    props.put(Utils.SVR_SMTP_SOCKETFACTORY_PORT, messageProps.get(Utils.SVR_SMTP_PORT));
+    props.put(Utils.SVR_SMTP_SOCKETFACTORY_CLASS,  "javax.net.ssl.SSLSocketFactory");
+    props.put(Utils.SVR_SMTP_SOCKETFACTORY_FALLBACK, "false");
+    Session session = Session.getInstance(props, null);
+    sendMessage(session, message);
+  }
+  
+  private void sendMessage(Session session, Message message) throws Exception {
     Transport transport = session.getTransport(Utils.SVR_SMTP);
-    transport.connect(host, acc.getUserName(), acc.getPassword()) ;
+    Properties props = session.getProperties();
+    transport.connect(props.getProperty(Utils.SVR_SMTP_HOST), props.getProperty(Utils.SVR_USERNAME), props.getProperty(Utils.SVR_PASSWORD)) ;
     javax.mail.Message msg = new MimeMessage(session);
     
     InternetAddress addressFrom = new InternetAddress(message.getFrom());
@@ -179,9 +206,6 @@ public class MailServiceImpl implements MailService{
     
     msg.saveChanges();
     transport.sendMessage(msg, msg.getAllRecipients());
-  }
-  
-  public void sendMessage(Message message) throws Exception {
   }
 
   public List<Message> checkNewMessage(String username, Account account) throws Exception {
@@ -392,5 +416,13 @@ public class MailServiceImpl implements MailService{
       messageList.add((Message)mh) ;
     }
     return messageList;
+  }
+  
+  public MailSetting getMailSetting(String username) throws Exception {
+    return storage_.getMailSetting(username);
+  }  
+  
+  public void saveMailSetting(String username, MailSetting newSetting) throws Exception {
+    storage_.saveMailSetting(username, newSetting);
   }
 }
