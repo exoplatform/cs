@@ -53,6 +53,7 @@ import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
       @EventConfig(listeners = UIComposeForm.RemoveAttachmentActionListener.class),
       @EventConfig(listeners = UIComposeForm.PriorityActionListener.class),
       @EventConfig(listeners = UIComposeForm.SelectContactActionListener.class),
+      @EventConfig(listeners = UIComposeForm.ToActionListener.class),
       @EventConfig(listeners = UIComposeForm.ToCCActionListener.class),
       @EventConfig(listeners = UIComposeForm.ToBCCActionListener.class),
       @EventConfig(listeners = UIComposeForm.SaveSentFolderActionListener.class)
@@ -374,6 +375,11 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
     public void execute(Event<UIComposeForm> event) throws Exception {
       UIComposeForm uiForm = event.getSource() ;
       System.out.println(" ==========> ToActionListener") ;
+      System.out.println(" ==========> ToInsertAddressActionListener") ;
+      UIPopupActionContainer uiActionContainer = uiForm.getAncestorOfType(UIPopupActionContainer.class) ;
+      UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class) ;
+      uiChildPopup.activate(UIAddressForm.class, 700) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiActionContainer) ;
     }
   }
   static  public class ToCCActionListener extends EventListener<UIComposeForm> {
