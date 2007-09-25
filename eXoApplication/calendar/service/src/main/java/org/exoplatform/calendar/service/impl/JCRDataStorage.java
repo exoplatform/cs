@@ -669,7 +669,13 @@ public class JCRDataStorage implements DataStorage{
       eventNode = calendarNode.addNode(event.getId(), "exo:calendarEvent") ;
       eventNode.setProperty("exo:id", event.getId()) ;
     }else {
-      eventNode = calendarNode.getNode(event.getId()) ;      
+      if(calendarNode.hasNode(event.getId())) {
+        eventNode = calendarNode.getNode(event.getId()) ;
+      }else {
+        CalendarEvent tempEvent = new CalendarEvent() ;
+        eventNode = calendarNode.addNode(tempEvent.getId(), "exo:calendarEvent") ;
+        eventNode.setProperty("exo:id", tempEvent.getId()) ;
+      }
     }
     eventNode.setProperty("exo:summary", event.getSummary()) ;
     eventNode.setProperty("exo:calendarId", event.getCalendarId()) ;
