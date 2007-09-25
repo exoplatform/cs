@@ -135,7 +135,7 @@ public class JCRDataStorage implements DataStorage{
     if (mailSettingNode.hasProperty(Utils.EXO_NUMBER_OF_CONVERSATION)) 
       mailSetting.setShowNumberOfConversation((mailSettingNode.getProperty(Utils.EXO_NUMBER_OF_CONVERSATION).getLong()));
     if (mailSettingNode.hasProperty(Utils.EXO_PERIOD_CHECKMAIL_AUTO)) 
-      mailSetting.setPeriodCheckMailAuto((mailSettingNode.getProperty(Utils.EXO_NUMBER_OF_CONVERSATION).getLong()));
+      mailSetting.setPeriodCheckMailAuto((mailSettingNode.getProperty(Utils.EXO_PERIOD_CHECKMAIL_AUTO).getLong()));
     if (mailSettingNode.hasProperty(Utils.EXO_DEFAULT_ACCOUNT)) 
       mailSetting.setDefaultAccount((mailSettingNode.getProperty(Utils.EXO_DEFAULT_ACCOUNT).getString()));
     if (mailSettingNode.hasProperty(Utils.EXO_EDITOR)) 
