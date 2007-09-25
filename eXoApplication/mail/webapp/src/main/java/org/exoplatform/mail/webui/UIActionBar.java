@@ -11,6 +11,7 @@ import javax.mail.AuthenticationFailedException;
 
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
+import org.exoplatform.mail.service.MailSetting;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.popup.UIAccountCreation;
@@ -18,6 +19,7 @@ import org.exoplatform.mail.webui.popup.UIPopupActionContainer;
 import org.exoplatform.mail.webui.popup.UIComposeForm;
 import org.exoplatform.mail.webui.popup.UIMailSettings;
 import org.exoplatform.mail.webui.popup.UIPopupAction;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -154,7 +156,18 @@ public class UIActionBar extends UIContainer {
       System.out.println(" =========== > Mail Settings Action");
       UIMailPortlet mailPortlet = uiActionBar.getParent() ;
       UIPopupAction uiPopupAction = mailPortlet.getChild(UIPopupAction.class) ;
-      uiPopupAction.activate(UIMailSettings.class, 600) ;
+      UIMailSettings uiMailSetting = uiPopupAction.activate(UIMailSettings.class, 600) ;
+      MailService mailSrv = uiActionBar.getApplicationComponent(MailService.class);
+      String username = Util.getPortalRequestContext().getRemoteUser();
+      MailSetting mailSetting = mailSrv.getMailSetting(username);
+      List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>();
+      for(Account acc : mailSrv.getAccounts(username)) {
+        SelectItemOption<String> itemOption = new SelectItemOption<String>(acc.getUserDisplayName() + " &lt;" + acc.getEmailAddress() + 
+            "&gt;", acc.getUserDisplayName() + "<" + acc.getEmailAddress() + ">");
+        options.add(itemOption) ;
+      }
+      uiMailSetting.fillFormAccount(options);
+      uiMailSetting.fillAllField(mailSetting);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }
   }

@@ -9,98 +9,34 @@
         		<div class="UIForm GeneralSettings">
         			<div class="HorizontalLayout">
 								<div class="FormContainer">
-  								<table class="UIFormGrid">
-  									<tr>
-											<td class="FieldLabel">Number of conversations to display per page:</td>
-											<td class="FieldComponent">
-												<select onchange="" name="" class="selectbox">
-													<option>20</option>
-													<option>30</option>
-													<option>40</option>
-													<option>50</option>
-												</select>
-											</td>
-										</tr>
-										<tr>
-											<td class="FieldLabel">Auto check mail in every:</td>
-											<td class="FieldComponent">
-												<select onchange="" name="" class="selectbox">
-													<option>10 mins</option>
-													<option>20 mins</option>
-													<option>30 mins</option>
-													<option>1 hour</option>
-												</select>
-											</td>
-										</tr>
-										<tr>
-											<td class="FieldLabel">Compose message in:</td>
-											<td class="FieldComponent">
-												<select onchange="" name="" class="selectbox">
-													<option>Rich text editor (HTML format)</option>
-													<option>Plain text</option>
-												</select>
-											</td>
-										</tr>
-										<tr>
-											<td class="FieldLabel">Reply/Forward messages as:</td>
-											<td class="FieldComponent">
-												<select  onchange="" name="" class="selectbox">
-													<option>Format of the orginal message</option>
-													<option>Text Only</option>
-												</select>
-											</td>
-										</tr>
-										<tr>
-											<td class="FieldLabel">Reply message with:</td>
-											<td class="FieldComponent">
-												<select onchange="" name="" class="selectbox">
-													<option>Original message</option>
-													<option>Original message included attach ment</option>
-												</select>
-											</td>
-										</tr>
-										<tr>
-											<td class="FieldLabel">Forward message with:</td>
-											<td class="FieldComponent">
-												<select onchange="" name="" class="selectbox">
-													<option>Original message included attach ment</option>
-												</select>
-											</td>
-										</tr>
-										<tr>
-											<td class="FieldLabel">Prifix messages with:</td>
-											<td class="FieldComponent">
-												<select onchange="" name="" class="selectbox">
-													<option>--------------------------------------------------------------------</option>
-													<option>***************************************************</option>
-													<option>==================================</option>
-													<option>"""""""""""""""""""""""""""""""""""""""""</option>
-												</select>
-											</td>
-										</tr>
-										<tr>
-											<td class="FieldLabel">Save sent messages in Sent Folder:</td>
-											<td class="FieldComponent">
-												<input class="checkbox" type="checkbox" value="" name=""/>
-											</td>
-										</tr>
-  								</table>
+    							 <% 
+                    for(field in uiform.getChildren()) { 
+                      if(field.isRendered()) {
+                   %>
+                      <div>
+                        <%uiform.renderField(field)%>
+                      </div>
+                    <%
+                        }
+                      }
+                    %>
   										
 	  							<div class="UIAction"> 
 							      <table class="ActionContainer" align="center">
 									 	  <tr>
 										  	<td align="center">
-	  											<a href="#" class="ActionButton LightBlueStyle">
+	  											<!--<a href="#" class="ActionButton LightBlueStyle">
 							          	  <div class="ButtonLeft">
 							            	  <div class="ButtonRight">
 							              	  <div class="ButtonMiddle"> Restore Default </div>
 							                </div>
 							              </div>
-							            </a>
+							            </a>-->
 	  										</td>
 											</tr>
 	 	                </table>
-							    </div>	
+							    </div>
+							    
 	  						</div>
 	  					</div>
         		</div>
