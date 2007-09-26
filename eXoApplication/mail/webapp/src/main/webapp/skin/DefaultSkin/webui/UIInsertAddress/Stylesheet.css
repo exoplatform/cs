@@ -1,7 +1,6 @@
 .UIInsertAddress {
-	width: 760px;
+	width: 640px;
 	background: #f3f3f3;
-	border: 1px solid red;
 }
 
 .UIInsertAddress .InsertAddressContainer {
@@ -39,16 +38,11 @@
 	border-right: 1px solid #e8e8e8;
 }
 
-.UIInsertAddress .UIAction {
-	width: 140px;
-	padding-left: 60px;
-}
-
 /*********************************************UISearch*****************************************/
 
 .UIInsertAddress .UISearchForm {
 	float: left;
-	width: 310px;
+	width: 300px;
 }
 
 .UIInsertAddress .UISearchForm .SearchIcon {
@@ -58,18 +52,18 @@
 }
 
 .UIInsertAddress .AddressesGroup {
-	margin: 0px 8px 0px 315px;
+	margin: 0px 8px 0px 305px;
 	text-align: right;
 }
 
 .UIInsertAddress .AddressesGroup .AddressLabel {
 	float: left;
-	width: 170px;
+	width: 120px;
 	padding: 0px 4px;
 }
 
 .UIInsertAddress .AddressesGroup select {
-	width: 220px;
+	width: 160px;
 	margin: 10px 0px 0px 0px;
 	font-size: 11px;
 }
@@ -77,9 +71,8 @@
 /*********************************************ListAddress*****************************************/
 
 .UIInsertAddress .ListAddress {
-	float: left;
 	background: white;
-	width: 355px;	height: 340px;
+	width: 616px;	height: 340px;
 	overflow-y: auto;
 	overflow-x: hidden;
 	border: 1px solid #b7b7b7;
