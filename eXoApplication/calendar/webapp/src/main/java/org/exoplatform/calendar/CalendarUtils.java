@@ -4,11 +4,19 @@
  **************************************************************************/
 package org.exoplatform.calendar;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.Locale;
+
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.webui.UIMonthView;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.impl.GroupImpl;
+import org.exoplatform.webui.core.model.SelectItemOption;
 
 
 /**
@@ -45,5 +53,19 @@ public class CalendarUtils {
   
   static public CalendarService getCalendarService() throws Exception {
     return (CalendarService)PortalContainer.getComponent(CalendarService.class) ;
+  }
+  
+  public static List<SelectItemOption<String>> getTimesSelectBoxOptions(String timeFormat, int timeInterval) {
+    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
+    GregorianCalendar cal = new GregorianCalendar(Locale.US) ;
+    cal.set(java.util.Calendar.HOUR, 0) ;
+    cal.set(java.util.Calendar.MINUTE, 0) ;
+    DateFormat df = new SimpleDateFormat(timeFormat) ;
+    int time = 0 ;
+    while (time ++ < 24*60/(timeInterval)) {
+      options.add(new SelectItemOption<String>(df.format(cal.getTime()), df.format(cal.getTime()))) ;
+      cal.add(java.util.Calendar.MINUTE, timeInterval) ;
+    }
+    return options ;
   }
 }

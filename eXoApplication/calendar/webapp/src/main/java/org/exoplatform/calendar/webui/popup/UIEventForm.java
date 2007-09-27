@@ -101,7 +101,14 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     setRenderedChild(TAB_EVENTDETAIL) ;
 
   }
-
+  public String getLabel(String id) {
+    String label = id ;
+    try {
+      label = super.getLabel(id) ;
+    } catch (Exception e) {
+    }
+    return label ;
+  }
   public void initForm(String calendarId) {
     reset() ;
     setSelectedCalendarId(calendarId) ;

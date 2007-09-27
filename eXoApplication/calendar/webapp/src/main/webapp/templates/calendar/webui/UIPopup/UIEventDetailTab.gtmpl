@@ -1,51 +1,110 @@
-
-						     			<table class="UIQuickAddEvent UIFormGrid">
+<%
+	uiForm = uicomponent.getParentFrom() ;
+	private void renderActions(String fieldKey) {
+		def actions = uicomponent.actionField_.get(fieldKey) ;
+	  if(actions != null) {
+	    for(action in actions) {
+	    	String actionLabel = uiForm.getLabel("action." + action.actionName)  ;
+	    	String actionLink ="#";
+	      if(action.actionParameter != null) {
+	        actionLink = (uiForm.event(action.actionListener, action.actionParameter)) ;
+	      }else {
+	        actionLink = (uiForm.event(action.actionListener)) ;
+	      }
+		    println "<a title=\"" + actionLabel + "\" href=\"" + actionLink +"\">";
+	      if(action.actionType == action.TYPE_ICON) {
+	        println "<img src=\"/eXoResources/skin/DefaultSkin/background/Blank.gif\" class=\"" + action.cssIconClass +"\"/>" ;
+	        if(action.isShowLabel) { println  actionLabel  ;}
+	      }else if(action.actionType == action.TYPE_LINK){
+	       println actionLabel ;
+	      }
+	      println  "</a>";
+	      println "&nbsp;"; 
+	      if(action.isBreakLine) { println "<br/>" ;} 
+	    }
+	  }
+	}
+%>
+<div class="UIAddNewEvent">
+						     			<table class="UIFormGrid">
 						            <tbody>
          									<tr>
-														<td class="FieldLabel">Event:</td>
-														<td class="FieldComponent"><textarea title="Textarea"></textarea></td>
-													</tr>
-													<tr>
-														<td class="FieldLabel">Date from:</td>
+														<td class="FieldLabel">
+															<%=uiForm.getLabel(uicomponent.FIELD_EVENT)%>
+														</td>
 														<td class="FieldComponent">
-															<div class="DateTime"><input type="text" id="name" name="name"/></div>
-															<div class="DateTime"> To: </div>
-															<div class="DateTime"><input type="text" id="name" name="name"/></div>
-															<div class="DateTime"><input style="width: 20px;" type="checkbox"/> All day</div>
-															<div style="clear: left;"><span></span></div>
+															<%uiForm.renderField(uicomponent.FIELD_EVENT)%>
 														</td>
 													</tr>
 													<tr>
-														<td class="FieldLabel">Reminder:</td>
+														<td class="FieldLabel">
+															<%=uiForm.getLabel(uicomponent.FIELD_DESCRIPTION)%>
+														</td>
 														<td class="FieldComponent">
-															<div class=""><input style="width: 15px;" type="checkbox"/> Popup</div>
-															<div class=""><input style="width: 15px;" type="checkbox"/> Email</div>
+														<%uiForm.renderField(uicomponent.FIELD_DESCRIPTION)%>
 														</td>
 													</tr>
 													<tr>
-														<td class="FieldLabel">Time reminder:</td>
+														<td class="FieldLabel">
+															<%=uiForm.getLabel(uicomponent.FIELD_PLACE)%>
+														</td>
 														<td class="FieldComponent">
-															<select name="user.gender" class="selectbox">
-																<option value="" selected="selected">20 min</option>
-															</select>
+															<%uiForm.renderField(uicomponent.FIELD_PLACE)%>
 														</td>
 													</tr>
 													<tr>
-						  	           	<td class="FieldLabel">Calendar: </td>
+														<td class="FieldLabel">
+															<%=uiForm.getLabel(uicomponent.FIELD_FROM)%>
+														</td>
+														<td class="FieldComponent">
+															<div class="Date">
+															<%uiForm.renderField(uicomponent.FIELD_FROM)%>
+															</div>
+															<div class="Time">
+															<%uiForm.renderField(uicomponent.FIELD_FROM_TIME)%>
+															</div>
+														</td>
+													</tr>
+													<tr>
+														<td class="FieldLabel">
+															<%=uiForm.getLabel(uicomponent.FIELD_TO)%>
+														</td>
+														<td class="FieldComponent">
+															<div class="Date">
+															<%uiForm.renderField(uicomponent.FIELD_TO)%>
+															</div>
+															<div class="Time">
+															<%uiForm.renderField(uicomponent.FIELD_TO_TIME)%>
+															</div>
+														</td>
+													</tr>
+													<tr>
+														<td class="FieldLabel">
+															<%=uiForm.getLabel(uicomponent.FIELD_CHECKALL)%>
+														</td>
+														<td class="FieldComponent">
+															<%uiForm.renderField(uicomponent.FIELD_CHECKALL)%>
+														</td>
+													</tr>
+													<tr>
+						  	           	<td class="FieldLabel">
+						  	           		<%=uiForm.getLabel(uicomponent.FIELD_CALENDAR)%>
+						  	           	</td>
 						  	           	<td class="FieldComponent">
-							  	           	<select name="user.gender" class="selectbox">
-																<option value="" selected="selected">Company</option>
-															</select>
+							  	            <%uiForm.renderField(uicomponent.FIELD_CALENDAR)%>
 														</td>
 							            </tr>
 							            <tr>
-						  	           	<td class="FieldLabel">Category: </td>
+						  	           	<td class="FieldLabel">
+						  	           		<%=uiForm.getLabel(uicomponent.FIELD_CATEGORY)%>
+						  	           	</td>
 						  	           	<td class="FieldComponent">
-							  	           	<select name="user.gender" class="selectbox">
-																<option value="" selected="selected">eXo</option>
-															</select>
+							  	           	<%
+							  	           		uiForm.renderField(uicomponent.FIELD_CATEGORY) 
+																renderActions(uicomponent.FIELD_CATEGORY) ;
+							  	           	 %>
 														</td>
 							            </tr>
 						      			</tbody>
 						      		</table>
-								    			
+</div>								    			

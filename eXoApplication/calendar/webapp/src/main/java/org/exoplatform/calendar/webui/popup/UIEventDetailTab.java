@@ -4,7 +4,6 @@
  **************************************************************************/
 package org.exoplatform.calendar.webui.popup;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -23,13 +22,10 @@ import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormDateTimeInput;
-import org.exoplatform.webui.form.UIFormInput;
-import org.exoplatform.webui.form.UIFormInputBase;
 import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
-import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
 import org.exoplatform.webui.form.validator.NumberFormatValidator;
 
 /**
@@ -38,6 +34,10 @@ import org.exoplatform.webui.form.validator.NumberFormatValidator;
  *          tuan.pham@exoplatform.com
  * Aug 29, 2007  
  */
+
+@ComponentConfig(
+    template = "app:/templates/calendar/webui/UIPopup/UIEventDetailTab.gtmpl"
+) 
 public class UIEventDetailTab extends UIFormInputWithActions {
 
   private Map<String, String> participance_ = new HashMap<String, String>() ;
@@ -47,6 +47,9 @@ public class UIEventDetailTab extends UIFormInputWithActions {
   final public static String FIELD_CATEGORY = "category".intern() ;
   final public static String FIELD_FROM = "from".intern() ;
   final public static String FIELD_TO = "to".intern() ;
+  final public static String FIELD_FROM_TIME = "fromTime".intern() ;
+  final public static String FIELD_TO_TIME = "toTime".intern() ;
+  
   final public static String FIELD_CHECKALL = "allDay".intern() ;
   final public static String FIELD_REPEAT = "repeat".intern() ;
   final public static String FIELD_PLACE = "place".intern() ;
@@ -55,9 +58,12 @@ public class UIEventDetailTab extends UIFormInputWithActions {
   final public static String FIELD_PRIORITY = "priority".intern() ; 
   final public static String FIELD_DESCRIPTION = "description".intern() ;
   
+  Map<String, List<ActionData>> actionField_ = new HashMap<String, List<ActionData>> () ;
+  
   public UIEventDetailTab(String arg0) throws Exception {
     super(arg0);
     setComponentConfig(getClass(), null) ;
+    
     addUIFormInput(new UIFormStringInput(FIELD_EVENT, FIELD_EVENT, null)) ;
     addUIFormInput(new UIFormTextAreaInput(FIELD_DESCRIPTION, FIELD_DESCRIPTION, null)) ;
     addUIFormInput(new UIFormSelectBox(FIELD_CALENDAR, FIELD_CALENDAR, getCalendar())) ;
@@ -69,8 +75,10 @@ public class UIEventDetailTab extends UIFormInputWithActions {
     List<ActionData> actions = new ArrayList<ActionData>() ;
     actions.add(addCategoryAction) ;
     setActionField(FIELD_CATEGORY,actions) ;
-    addUIFormInput(new UIFormDateTimeInput(FIELD_FROM, FIELD_FROM, new Date()));
-    addUIFormInput(new UIFormDateTimeInput(FIELD_TO, FIELD_TO, new Date()));
+    addUIFormInput(new UIFormDateTimeInput(FIELD_FROM, FIELD_FROM, new Date(), false));
+    addUIFormInput(new UIFormSelectBox(FIELD_FROM_TIME, FIELD_FROM_TIME, CalendarUtils.getTimesSelectBoxOptions("hh:mm a", 5)));
+    addUIFormInput(new UIFormDateTimeInput(FIELD_TO, FIELD_TO, new Date(), false));
+    addUIFormInput(new UIFormSelectBox(FIELD_TO_TIME, FIELD_TO_TIME,  CalendarUtils.getTimesSelectBoxOptions("hh:mm a", 5)));
     addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_CHECKALL, FIELD_CHECKALL, null));
     addUIFormInput(new UIFormStringInput(FIELD_PLACE, FIELD_PLACE, null));
     addUIFormInput(new UIFormSelectBox(FIELD_REPEAT, FIELD_REPEAT, getRepeater())) ;
@@ -78,7 +86,9 @@ public class UIEventDetailTab extends UIFormInputWithActions {
     addUIFormInput(new UIFormStringInput(FIELD_TIMEREMINDER, FIELD_TIMEREMINDER, null).addValidator(NumberFormatValidator.class));
     addUIFormInput(new UIFormSelectBox(FIELD_PRIORITY, FIELD_PRIORITY, getPriority())) ;
   }
-
+  protected UIForm getParentFrom() {
+    return (UIForm)getParent() ;
+  }
   private List<SelectItemOption<String>> getCalendar() throws Exception {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
@@ -109,8 +119,9 @@ public class UIEventDetailTab extends UIFormInputWithActions {
     }
     return options ;
   }
-  
-  
+  public void setActionField(String fieldName, List<ActionData> actions) throws Exception {
+    actionField_.put(fieldName, actions) ;
+  }
   @Override
   public void processRender(WebuiRequestContext arg0) throws Exception {
     super.processRender(arg0);
