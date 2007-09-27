@@ -58,6 +58,7 @@ public class UIImageForm extends UIForm implements UIPopupComponent{
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       UIFormUploadInput input = (UIFormUploadInput)uiForm.getUIInput(FIELD_UPLOAD);
       UploadResource uploadResource = input.getUploadResource() ;
+      String mimeType = uploadResource.getMimeType() ;
       if(uploadResource == null) {
         uiApp.addMessage(new ApplicationMessage("UIAttachFileForm.msg.fileName-error", null, 
             ApplicationMessage.WARNING)) ;
@@ -76,6 +77,7 @@ public class UIImageForm extends UIForm implements UIPopupComponent{
       UIContactForm uiContactForm =  uiPopupActionContainer.findFirstComponentOfType(UIContactForm.class) ;
       UIProfileInputSet uiProfileInputSet = uiContactForm.getChild(UIProfileInputSet.class) ;
       uiProfileInputSet.setImage(inputStream) ;
+      uiProfileInputSet.setMimeType(mimeType) ;
       uiProfileInputSet.setFileName(fileName) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupActionContainer) ;
     }

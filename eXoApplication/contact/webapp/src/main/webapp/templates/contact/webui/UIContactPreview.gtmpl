@@ -28,8 +28,9 @@
 							Contact contact = uicomponent.getContact();
 							if(contact != null) {
 						%>
-							<div class="ContactPreviewContainer"	>								
-								<img src="/contact/skin/DefaultSkin/webui/background/Img1.gif" class="Avatar"/>
+							<div class="ContactPreviewContainer"	>		
+								<% String imageLink = uicomponent.getImageSource() ; %>
+								<img src="<%=(imageLink == null ? "/contact/skin/DefaultSkin/webui/background/Img2.gif": imageLink)%>" class="Avatar"/>						
 								<div class="Member">
 									<div class="State"><%=(contact.getFullName()==null ? "" : contact.getFullName())%></div>
 									<div class="Job"><%=(contact.getJobTitle()==null ? "" : contact.getJobTitle())%></div>
@@ -57,7 +58,11 @@
 											</div>
 											<div class="InfoItem">
 												<div class="InfoLabel1">Email:</div>
-												<div class="Info1 Email"><a href="#"><%=(contact.getEmailAddress()==null ? "_" : contact.getEmailAddress())%></a></div>
+												<div class="Info1 Email">
+													<a href="<%=uicomponent.getParent().event("SendEmail", contact.getId())%>">
+														<%=(contact.getEmailAddress()==null ? "_" : contact.getEmailAddress())%>
+													</a>
+												</div>
 												<div style="clear: left;"><span></span></div>
 											</div>																									
 										</div>

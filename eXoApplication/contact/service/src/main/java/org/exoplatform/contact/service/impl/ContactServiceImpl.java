@@ -111,6 +111,8 @@ public class ContactServiceImpl implements ContactService {
     storage_.removeContactTag(username, contactIds, tags) ;
   }
   
-  
+  public List<Contact> getSharedContactsByGroup(String groupId) throws Exception {
+    return storage_.getSharedContactsByGroup(groupId) ;
+  }
   
 }

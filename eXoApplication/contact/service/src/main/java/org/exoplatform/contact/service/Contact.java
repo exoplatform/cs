@@ -196,11 +196,7 @@ public class Contact {
   public String[] getEditPermission() { return editPermission ; }
   public void setEditPermission(String[] s) { editPermission = s ; }
 
-  public void setAttachment(ContactAttachment attachment) {
-    this.attachment = attachment;
-  }
-
-  public ContactAttachment getAttachment() {
-    return attachment;
-  }
+  public void setAttachment(ContactAttachment attachment) { this.attachment = attachment; }
+  public ContactAttachment getAttachment() { return attachment; }
+  
 }

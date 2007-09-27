@@ -74,9 +74,9 @@
 	              Edit
 	            </div>
 	        </a>
-	        <a class="MenuItem" href="<%=uicomponent.event("SendMail", "id")%>">   
+	        <a class="MenuItem" href="<%=uicomponent.event("SendEmail", "id")%>">   
 	            <div class="ItemIcon EmailIcon">
-	              Send Emai
+	              Send Email
 	            </div>
 	        </a>
 	        <a class="MenuItem" href="<%=uicomponent.event("DeleteGroup", "id")%>">   

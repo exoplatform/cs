@@ -5,6 +5,7 @@
 package org.exoplatform.contact.webui;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.exoplatform.contact.ContactUtils;
@@ -40,7 +41,7 @@ import org.exoplatform.webui.event.EventListener;
         @EventConfig(listeners = UIAddressBooks.SelectGroupActionListener.class),
         @EventConfig(listeners = UIAddressBooks.SelectSharedGroupActionListener.class),
         @EventConfig(listeners = UIAddressBooks.AddressPopupActionListener.class),
-        @EventConfig(listeners = UIAddressBooks.SendMailActionListener.class)
+        @EventConfig(listeners = UIAddressBooks.SendEmailActionListener.class)
     }
 )
 public class UIAddressBooks extends UIComponent  {
@@ -83,7 +84,7 @@ public class UIAddressBooks extends UIComponent  {
     }
   }
   
-  public static class SendMailActionListener extends EventListener<UIAddressBooks> {
+  public static class SendEmailActionListener extends EventListener<UIAddressBooks> {
     public void execute(Event<UIAddressBooks> event) throws Exception {   
       UIAddressBooks uiAddressBook = event.getSource() ;  
       UIContactPortlet uiContactPortlet = uiAddressBook.getAncestorOfType(UIContactPortlet.class) ;
@@ -93,6 +94,7 @@ public class UIAddressBooks extends UIComponent  {
       String username = ContactUtils.getCurrentUser() ;
       ContactService contactService = ContactUtils.getContactService() ;
       List<Contact> contacts = contactService.getContactsByGroup(username, groupId) ;
+      if (contacts.size() == 0) contacts = contactService.getSharedContactsByGroup(groupId);
       List<String> emails = new ArrayList<String>() ;
       for (Contact contact : contacts) emails.add(contact.getEmailAddress()) ;
       uiSendEmail.setEmails(emails) ;

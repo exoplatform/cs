@@ -21,6 +21,7 @@ public interface ContactService {
   public List<Contact> removeContacts(String username, List<String> contactIds) throws Exception ;
   public List<Contact> moveContacts(String username, List<String> contactIds, String[] groupId) throws Exception ;
   
+  public List<Contact> getSharedContactsByGroup(String groupId) throws Exception ;
   public List<GroupContactData> getSharedContacts(String[] groupIds) throws Exception ;
   public Contact getSharedContact(String contactId) throws Exception ;
   public void saveSharedContact(Contact contact, boolean isNew) throws Exception ;

@@ -44,8 +44,7 @@ public class UISendEmail extends UIForm implements UIPopupComponent {
   
   static  public class SendActionListener extends EventListener<UISendEmail> {
     public void execute(Event<UISendEmail> event) throws Exception {
-      //UISendEmail uiSendEmail = event.getSource() ;
-  
+      
     }
   }
     

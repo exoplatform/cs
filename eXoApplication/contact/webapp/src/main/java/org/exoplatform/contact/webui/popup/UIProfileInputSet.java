@@ -44,6 +44,7 @@ public class UIProfileInputSet extends UIFormInputWithActions {
   public static final String FEMALE = "female" ;
   private byte[] imageBytes = null;
   private String fileName = null ;
+  private String imageMimeType = null ;
   
   public UIProfileInputSet(String id) throws Exception {
     super(id) ;
@@ -89,15 +90,23 @@ public class UIProfileInputSet extends UIFormInputWithActions {
   protected String getFieldEmail() { return getUIStringInput(FIELD_EMAIL_INPUT).getValue(); }
   protected void setFieldEmail(String s) { getUIStringInput(FIELD_EMAIL_INPUT).setValue(s); }
   
+  protected byte[] getImage() {return imageBytes ;}
   protected void setImage(InputStream input) throws Exception{
-    imageBytes = new byte[input.available()] ; 
-    input.read(imageBytes) ;
+    if (input != null) {
+      imageBytes = new byte[input.available()] ; 
+      input.read(imageBytes) ;
+    }
   }
+  
+  protected String getMimeType() { return imageMimeType ;} ;
+  protected void setMimeType(String mimeType) {imageMimeType = mimeType ;} 
+  
   protected void setFileName(String name) { fileName = name ; }
+  protected String getFileName() {return fileName ;} ;
   
   protected String getImageSource() throws Exception {    
     if(imageBytes == null || imageBytes.length == 0) return null;
-    ByteArrayInputStream byteImage = new ByteArrayInputStream(imageBytes) ;
+    ByteArrayInputStream byteImage = new ByteArrayInputStream(imageBytes) ;    
     DownloadService dservice = getApplicationComponent(DownloadService.class) ;
     InputStreamDownloadResource dresource = new InputStreamDownloadResource(byteImage, "image") ;
     dresource.setDownloadName(fileName) ;

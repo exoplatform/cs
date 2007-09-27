@@ -15,7 +15,6 @@ import org.exoplatform.contact.service.Tag;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContacts;
 import org.exoplatform.contact.webui.UITags;
-import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -104,8 +103,7 @@ public class UITagForm extends UIForm implements UIPopupComponent {
         uiApp.addMessage(new ApplicationMessage("UIAddNewTag.msg.tagName-required", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
-      }
-      
+      } 
       ContactService contactService = ContactUtils.getContactService();
       String username = ContactUtils.getCurrentUser() ;
       contactService.addTag(username, uiTagForm.getContacts(), tags);
@@ -114,7 +112,9 @@ public class UITagForm extends UIForm implements UIPopupComponent {
       Contact contact ;
       for (String contactId : uiTagForm.getContacts()) {
         contact = contactService.getContact(username, contactId) ;
-        if (contact == null) contact = contactService.getSharedContact(contactId) ;
+        if (contact == null)
+          contact = contactService.getSharedContact(contactId) ;
+        
         uiContacts.updateContact(contact, false) ;
       }
       UITags uiTags = uiContactPortlet.findFirstComponentOfType(UITags.class) ;

@@ -23,4 +23,8 @@ public class ContactUtils {
   static public ContactService getContactService() throws Exception {
     return (ContactService)PortalContainer.getComponent(ContactService.class) ;
   }
+  
+  public static boolean IsEmpty(String s) {
+    return (s == null) || s.equalsIgnoreCase("null") || s.equalsIgnoreCase("");     
+  }
 }

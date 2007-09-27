@@ -4,6 +4,8 @@
  **************************************************************************/
 package org.exoplatform.contact.service;
 
+import java.io.InputStream;
+
 /**
  * Created by The eXo Platform SARL
  * Author : Hung Nguyen
@@ -11,18 +13,20 @@ package org.exoplatform.contact.service;
  * July 2, 2007  
  * 
  */
-public class ContactAttachment {
+abstract public class ContactAttachment {
   private String id ;
   private String fileName ;
   private String mimeType ;
   
-  
   public String getId()  { return id ; }
   public void   setId(String s) { id = s ; }
-  
+
   public String getFileName()  { return fileName ; }
   public void   setFileName(String s) { fileName = s ; }
   
   public String getMimeType() { return mimeType ; }
   public void setMimeType(String s) { mimeType = s ;}
+
+  public abstract InputStream getInputStream() throws Exception ;
+  
 }

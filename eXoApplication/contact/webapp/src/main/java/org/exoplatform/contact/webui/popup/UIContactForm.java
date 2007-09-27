@@ -4,10 +4,14 @@
  **************************************************************************/
 package org.exoplatform.contact.webui.popup;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.Date;
 
 import org.exoplatform.contact.ContactUtils;
+import org.exoplatform.contact.service.BufferAttachment;
 import org.exoplatform.contact.service.Contact;
+import org.exoplatform.contact.service.ContactAttachment;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.webui.UIAddressBooks;
 import org.exoplatform.contact.webui.UIContactPortlet;
@@ -15,7 +19,7 @@ import org.exoplatform.contact.webui.UIContactPreview;
 import org.exoplatform.contact.webui.UIContacts;
 import org.exoplatform.contact.webui.UIWorkingContainer;
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.jcr.util.IdGenerator;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.impl.GroupImpl;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -161,6 +165,7 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
     Contact contact = contactService.getContact(username, contactId);
     if(contact == null) {
       contact = contactService.getSharedContact(contactId);
+      if (contact == null) return ;
       getUIFormCheckBoxInput(FIELD_ISPUBLIC_BOX).setChecked(true);
       String[] categories = contact.getCategories();
       for (String category : categories) getUIFormCheckBoxInput(category).setChecked(true) ;
@@ -185,8 +190,13 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
     profileTab.setFieldGender(contact.getGender());
     profileTab.setFieldBirthday(contact.getBirthday());
     profileTab.setFieldJobName(contact.getJobTitle());
-    profileTab.setFieldEmail(contact.getEmailAddress());
-    
+    profileTab.setFieldEmail(contact.getEmailAddress());   
+    ContactAttachment contactAttachment = contact.getAttachment();  
+    if (contactAttachment != null) {
+      InputStream is = contactAttachment.getInputStream();
+      if (is != null)
+        profileTab.setImage(is) ;
+    }    
     getUIStringInput(FIELD_WORKADDRESS_INPUT).setValue(contact.getWorkAddress());
     getUIStringInput(FIELD_WORKCITY_INPUT).setValue(contact.getWorkCity());
     getUIStringInput(FIELD_WORKSTATE_INPUT).setValue(contact.getWorkStateProvince());
@@ -247,6 +257,13 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
       contact.setBirthday(profileTab.getFieldBirthday()) ;
       contact.setJobTitle(profileTab.getFieldJobName());
       contact.setEmailAddress(profileTab.getFieldEmail());
+      BufferAttachment bufferAttachment = new BufferAttachment() ;
+      bufferAttachment.setId("Attachment" + IdGenerator.generate());
+      bufferAttachment.setFileName(profileTab.getFileName()) ;
+      bufferAttachment.setMimeType(profileTab.getMimeType()) ;
+      if (profileTab.getImage() != null)
+        bufferAttachment.setInputStream(new ByteArrayInputStream(profileTab.getImage())) ;
+      contact.setAttachment(bufferAttachment) ;
       
       contact.setWorkAddress(uiContactForm.getUIStringInput(FIELD_WORKADDRESS_INPUT).getValue());
       contact.setWorkCity(uiContactForm.getUIStringInput(FIELD_WORKCITY_INPUT).getValue());
@@ -328,9 +345,7 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
         contact.setCategories(new String[] { category });
         contactService.saveContact(username, contact, isNew_);
         if (isNew_) {
-          if (uiAddressBook.getSelectedGroup() == null) {
-            uiWorkingContainer.setSelectedGroup(category) ;
-          }
+          if (uiAddressBook.getSelectedGroup() == null) uiWorkingContainer.setSelectedGroup(category) ;
           if (uiAddressBook.getSelectedGroup().equals(category)) uicontacts.updateContact(contact, isNew_) ;
           uiContactPreview.updateContact() ;
         } else {          

@@ -108,10 +108,9 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
   static  public class CancelActionListener extends EventListener<UICategoryForm> {
     public void execute(Event<UICategoryForm> event) throws Exception {
       UICategoryForm uiCategoryForm = event.getSource() ;
-      UIPopupAction uiPopupAction = uiCategoryForm.getAncestorOfType(UIPopupAction.class) ;
-      UIPopupContainer popupContainer = uiCategoryForm.getAncestorOfType(UIPopupContainer.class) ;
-      uiPopupAction.deActivate() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(popupContainer.getAncestorOfType(UIContactPortlet.class)) ;
+      UIContactPortlet uiContactPortlet = uiCategoryForm.getAncestorOfType(UIContactPortlet.class) ;
+      uiContactPortlet.cancelAction() ; 
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContactPortlet) ;
     }
   }
   
