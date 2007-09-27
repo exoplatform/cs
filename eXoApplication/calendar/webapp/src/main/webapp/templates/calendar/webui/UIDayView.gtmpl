@@ -18,7 +18,7 @@
 %>
 	<div class="UIDayView">
 		<div class="TitleBar">		
-			<div  style="width: 300px;border:solid 1px red; margin:auto;">		
+			<div  style="width: 300px;margin:auto;">		
 				<a href="$linkDayNext" class="RightControlButton">
 					<div class="NextIcon" title="Next day"><span></span></div>
 				</a>

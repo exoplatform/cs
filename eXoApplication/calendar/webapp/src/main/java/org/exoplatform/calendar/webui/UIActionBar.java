@@ -12,6 +12,7 @@ import java.util.Map;
 import org.exoplatform.calendar.webui.popup.UICalendarSettingForm;
 import org.exoplatform.calendar.webui.popup.UIFeed;
 import org.exoplatform.calendar.webui.popup.UIPopupAction;
+import org.exoplatform.calendar.webui.popup.UIQuickAddEvent;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIComponent;
@@ -20,6 +21,7 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
 import sun.security.provider.SHA;
+import sun.swing.UIAction;
 
 /**
  * Created by The eXo Platform SARL
@@ -31,6 +33,7 @@ import sun.security.provider.SHA;
 @ComponentConfig(
     template =  "app:/templates/calendar/webui/UIActionBar.gtmpl", 
     events = {
+        @EventConfig(listeners = UIActionBar.QuickAddEventActionListener.class),
         @EventConfig(listeners = UIActionBar.ChangeViewActionListener.class),
         @EventConfig(listeners = UIActionBar.SettingActionListener.class),
         @EventConfig(listeners = UIActionBar.RSSActionListener.class),
@@ -40,7 +43,16 @@ import sun.security.provider.SHA;
 public class UIActionBar extends UIContainer  {
 
   private String[] getViewTypes() {return UICalendarViewContainer.TYPES ;} 
-  
+
+  static public class QuickAddEventActionListener extends EventListener<UIActionBar> {
+    public void execute(Event<UIActionBar> event) throws Exception {
+      UIActionBar uiActionBar = event.getSource() ;
+      UICalendarPortlet uiPortlet = uiActionBar.getAncestorOfType(UICalendarPortlet.class) ;
+      UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
+      UIQuickAddEvent uiQuickAddEvent = uiPopupAction.activate(UIQuickAddEvent.class, 600) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+    }
+  }
   static public class ChangeViewActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {
       UIActionBar uiActionBar = event.getSource() ;     
@@ -73,7 +85,7 @@ public class UIActionBar extends UIContainer  {
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   }
-  
+
   static public class RSSActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {
       UIActionBar uiActionBar = event.getSource() ;

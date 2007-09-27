@@ -5,7 +5,7 @@
 				<div class="RightBar">
 					<div class="CenterBar">
 						<div class="Title ControlButton">Quick add:</div>
-						<a href="#" class="ControlButton">
+						<a href="<%=uicomponent.event("QuickAddEvent")%>" class="ControlButton">
 							<div class="IconHolder AddEventIcon">Event</div>
 						</a>
 						<a href="#" class="ControlButton">

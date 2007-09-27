@@ -19,18 +19,26 @@ public class Reminder {
   final public static String TYPE_EMAIL = "email".intern() ;
   final public static String TYPE_POPUP = "popup".intern() ;
   final public static String TYPE_BOTH = "both".intern() ;
-  
   final public static String[] REMINDER_TYPES = {TYPE_EMAIL, TYPE_POPUP, TYPE_BOTH} ;
   
   private String id ;
   private String eventId ;
   private String repeat = "1";
-  private String reminder = "Via email";
-  private String alarmBefore = "5"; 
+  private String reminder = "";
+  private String alarmBefore = "0"; 
   
   public Reminder() {
-    id = "Reminder" + IdGenerator.generate() ;
+    id = ID() ;
   }
+  public Reminder(String type) {
+    id = ID() ;
+    reminder = type ;
+  }
+  public Reminder(String id, String type) {
+    this.id = id ;
+    reminder = type ;
+  }
+  public static String ID(){return "Reminder" + IdGenerator.generate() ; }
   public String getId() { return this.id ; }
   public void   setId(String id) { this.id = id ; }
   
