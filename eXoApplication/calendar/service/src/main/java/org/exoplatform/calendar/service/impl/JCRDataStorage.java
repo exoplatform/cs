@@ -700,8 +700,10 @@ public class JCRDataStorage implements DataStorage{
     eventNode.setProperty("exo:invitation", event.getInvitation()) ;
     // add reminder child node
     List<Reminder> reminders = event.getReminders() ;
-    for(Reminder rm : reminders) {
-      addReminder(eventNode, rm, isNew) ;
+    if(reminders != null) {
+      for(Reminder rm : reminders) {
+        addReminder(eventNode, rm, isNew) ;
+      }
     }
     calendarNode.save() ;
     calendarNode.getSession().save() ;
