@@ -52,7 +52,18 @@
 									</div>
 									<div class="FieldContainer">
 										<div class="Title">To:</div>
-										<div class="LinkAddress"> <%=msg.getMessageTo().split(";")[1]%> </span>  &lt; <%=msg.getMessageTo().split(";")[1]%> &gt;</div>
+										<div class="LinkAddress"> 
+  										<%
+  										   String[] addresses = msg.getMessageTo().split(",");
+  										   for (i in 0..addresses.length-1) {
+  										     String address = addresses[i].trim();
+  										     if (i > 0) {
+  										%>
+  										        ,
+  										      <%}%>
+  										        <%=address.split(";")[0]%> </span>  &lt; <%=address.split(";")[1]%> &gt;
+  										<%}%>
+										</div>
 										<div style="clear: left;"><span></span></div>
 									</div>
 									<div class="FieldContainer">
