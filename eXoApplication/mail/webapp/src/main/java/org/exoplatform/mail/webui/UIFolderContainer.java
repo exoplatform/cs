@@ -92,17 +92,17 @@ public class UIFolderContainer extends UIContainer {
   static public class ChangeFolderActionListener extends EventListener<UIFolderContainer> {
     public void execute(Event<UIFolderContainer> event) throws Exception {
       System.out.println("\n\n ChangeFolderActionListener");
-      String folderId = event.getRequestContext().getRequestParameter(OBJECTID) ;  
+      String folderName = event.getRequestContext().getRequestParameter(OBJECTID) ;  
       UIFolderContainer uiFolder = event.getSource() ;
       UIMailPortlet uiPortlet = uiFolder.getAncestorOfType(UIMailPortlet.class);
-      uiFolder.setSelectedFolder(folderId) ;
+      uiFolder.setSelectedFolder(folderName) ;
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
       UIMessageArea uiMessageArea = uiMessageList.getParent();
-      uiMessageList.setSelectedFolderId(folderId) ;
+      uiMessageList.setSelectedFolderId(folderName) ;
       MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-      uiMessageList.setMessageList(mailSrv.getMessageByFolder(username, accountId, folderId));
+      uiMessageList.setMessageList(mailSrv.getMessageByFolder(username, accountId, folderName));
       uiMessageList.setSelectedTagName(null) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiFolder) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageArea) ;

@@ -76,14 +76,16 @@
   <div style="clear: left"><span></span></div>
 </div>
 <div class="MyFolderContent">
-<%for(Folder f : uicomponent.getCustomizeFolders()) {
+<% for(Folder f : uicomponent.getCustomizeFolders()) {
   String name = f.getName() ;
-  long unreadMess = f.getNumberOfUnreadMessage();
-  String cssClass = "CloseFolder" ;
-  String actionLink = uicomponent.event('ChangeFolder',name);
-  if(name.equals(uicomponent.getSelectedFolder())) cssClass = "OpenFolder" ;
+  long pUnreadMess = uicomponent.getNumberOfUnreadMessage(f.getName());
+  String pCssClass = "CloseFolder" ;
+  String pActionLink = uicomponent.event('ChangeFolder', name);
+  if(name.equals(uicomponent.getSelectedFolder())) pCssClass = "OpenFolder" ;
 %>
-  <a href="$actionLink"  class="IconFolder Folder $cssClass">$name<span>($unreadMess)</span></a>
+  <a href="$pActionLink"  class="IconFolder Folder $pCssClass">$name
+  <% print "<span class=\"MailQuantity\">($pUnreadMess)</span>"%>
+  </a>
 <%}%>
 </div>
 </div>
