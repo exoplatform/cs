@@ -21,7 +21,14 @@
 									<a href="$linkDayNext" class="RightControlButton">
 										<div class="NextIcon" title="Next month"><span></span></div>
 									</a>
-									<div class="Title RightControlButton">$monthName,  $currentYear</div>
+									<div class="Title RightControlButton">
+										<a href="<%=uicomponent.event("GotoMonth")%>">
+											$monthName
+										</a>,  
+										<a href="<%=uicomponent.event("GotoYear")%>">
+											$currentYear
+										</a>
+									</div>
 									<a href="$linkDayPrevious" class="RightControlButton">
 										<div class="BackIcon" title="Previous month"><span></span></div>
 									</a>
