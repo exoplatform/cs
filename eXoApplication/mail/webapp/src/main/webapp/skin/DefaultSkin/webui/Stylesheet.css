@@ -734,11 +734,11 @@
 	font-weight: bold;
 }
 
-.UIMailPortlet .UIDefaultFolders .NormalLabel {
+.UIMailPortlet .UIFolderContainer .NormalLabel {
 	font-weight: normal ;
 }
 
-.UIMailPortlet .UIDefaultFolders .SelectedLabel {
+.UIMailPortlet .UIFolderContainer .SelectedLabel {
 	font-weight: bold ;
 }
 

@@ -79,9 +79,9 @@
 <% for(Folder f : uicomponent.getCustomizeFolders()) {
   String name = f.getName() ;
   long pUnreadMess = uicomponent.getNumberOfUnreadMessage(f.getName());
-  String pCssClass = "CloseFolder" ;
+  String pCssClass = "CloseFolder NormalLabel" ;
   String pActionLink = uicomponent.event('ChangeFolder', name);
-  if(name.equals(uicomponent.getSelectedFolder())) pCssClass = "OpenFolder" ;
+  if(name.equals(uicomponent.getSelectedFolder())) pCssClass = "OpenFolder SelectedLabel" ;
 %>
   <a href="$pActionLink"  class="IconFolder Folder $pCssClass">$name
   <% print "<span class=\"MailQuantity\">($pUnreadMess)</span>"%>
