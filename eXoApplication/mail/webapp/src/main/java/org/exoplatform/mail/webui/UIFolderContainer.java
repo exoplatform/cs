@@ -10,7 +10,6 @@ import java.util.List;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
-import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.popup.UIFolderForm;
 import org.exoplatform.mail.webui.popup.UIPopupAction;
@@ -70,17 +69,12 @@ public class UIFolderContainer extends UIContainer {
     return new String[] {"AddFolder"} ;
   }
   
-  public long getNumberOfUnreadMessage(String selectedFolderName) throws Exception {
-    long number = 0;
+  private long getNumberOfUnreadMessage(String selectedFolderName) throws Exception {
     MailService mailSrv = getApplicationComponent(MailService.class);
     UIMailPortlet uiPortlet = getAncestorOfType(UIMailPortlet.class);
     String username = uiPortlet.getCurrentUser();
     String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-    List<Message> messageList = mailSrv.getMessageByFolder(username, accountId, selectedFolderName);
-    for (Message message : messageList) {
-      if (message.isUnread()) { number++ ; }
-    }
-    return number;
+    return mailSrv.getFolder(username, accountId, selectedFolderName).getNumberOfUnreadMessage() ;    
   } 
   
   static public class AddFolderActionListener extends EventListener<UIFolderContainer> {
@@ -105,7 +99,7 @@ public class UIFolderContainer extends UIContainer {
       MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-      uiMessageList.setMessageList(mailSrv.getMessageByFolder(username, accountId, folderName));
+      uiMessageList.setMessagePageList(mailSrv.getMessageByFolder(username, accountId, folderName));
       uiMessageList.setSelectedTagName(null) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiFolder) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageArea) ;

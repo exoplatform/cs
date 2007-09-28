@@ -8,7 +8,6 @@ import java.util.List;
 
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
-import org.exoplatform.mail.service.Message;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIContainer;
@@ -33,9 +32,9 @@ public class UIMessageArea extends UIContainer  {
     List<Account> accountList = mailSrv.getAccounts(username);
     String selectedFolderId = uiMessageList.getSelectedFolderId();
     if (accountList != null && accountList.size() > 0 && selectedFolderId != null && selectedFolderId != "") {
+      //TODO: Need to check default account in mail setting
       String accountId = accountList.get(0).getId();
-      List<Message> messageList = mailSrv.getMessageByFolder(username, accountId, selectedFolderId);
-      uiMessageList.setMessageList(messageList);
+      uiMessageList.setMessagePageList(mailSrv.getMessageByFolder(username, accountId, selectedFolderId));
     }
   }
 }

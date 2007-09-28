@@ -14,7 +14,6 @@ import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MailSetting;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.Utils;
-import org.exoplatform.mail.webui.popup.UIAccountCreation;
 import org.exoplatform.mail.webui.popup.UIPopupActionContainer;
 import org.exoplatform.mail.webui.popup.UIComposeForm;
 import org.exoplatform.mail.webui.popup.UIMailSettings;
@@ -59,9 +58,9 @@ public class UIActionBar extends UIContainer {
       UIMailPortlet uiPortlet = uiActionBar.getAncestorOfType(UIMailPortlet.class) ;
       UINavigationContainer uiNavigation = uiPortlet.getChild(UINavigationContainer.class) ;
       UISelectAccount uiSelect = uiNavigation.getChild(UISelectAccount.class) ;
-      UIMessageArea uiMessageArea = uiPortlet.findFirstComponentOfType(UIMessageArea.class);
-      UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
-      UIFolderContainer uiFolderContainer = uiNavigation.getChild(UIFolderContainer.class) ;
+      //UIMessageArea uiMessageArea = uiPortlet.findFirstComponentOfType(UIMessageArea.class);
+      //UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
+      //UIFolderContainer uiFolderContainer = uiNavigation.getChild(UIFolderContainer.class) ;
       MailService mailSvr = uiActionBar.getApplicationComponent(MailService.class) ;
       UIApplication uiApp = uiActionBar.getAncestorOfType(UIApplication.class) ;
       String accId = uiSelect.getSelectedValue() ;
@@ -71,14 +70,14 @@ public class UIActionBar extends UIContainer {
         return ;
       }
       String username =  uiPortlet.getCurrentUser() ;
-      Account account = mailSvr.getAccountById(username, accId) ;
-      List<Message> messageList = new ArrayList<Message>();
+      /*Account account = mailSvr.getAccountById(username, accId) ;
+      List<Message> messageList = new ArrayList<Message>();*/
       try {
-        messageList = mailSvr.checkNewMessage(username, account) ;
-        uiMessageList.setSelectedFolderId(Utils.FD_INBOX);
-        uiMessageList.addMessageList(messageList) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageArea);
+        mailSvr.checkNewMessage(username, accId) ;
+        //uiMessageList.setSelectedFolderId(Utils.FD_INBOX);
+        //uiMessageList.addMessageList(messageList) ;
+        //event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer) ;
+        //event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageArea);
       } catch (AuthenticationFailedException afe) {
         afe.printStackTrace() ;
         uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.userName-password-incorrect", null)) ;

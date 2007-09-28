@@ -56,7 +56,7 @@ public class UITags extends UIComponent {
       MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-      uiMessageList.setMessageList(mailSrv.getMessageByTag(username, accountId, tagname));
+      uiMessageList.setMessagePageList(mailSrv.getMessagePagelistByTag(username, accountId, tagname));
       uiMessageList.setSelectedTagName(tagname);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiTags);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList);

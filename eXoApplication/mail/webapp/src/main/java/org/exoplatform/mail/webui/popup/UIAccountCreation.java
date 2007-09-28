@@ -149,8 +149,8 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
     MailService mailSvr = getApplicationComponent(MailService.class) ;
     UIMailPortlet uiPortlet = getAncestorOfType(UIMailPortlet.class) ;
     String username = uiPortlet.getCurrentUser() ;
-    Account account = mailSvr.getAccountById(username, accountId) ;
-    mailSvr.checkNewMessage(username, account) ;
+    //Account account = mailSvr.getAccountById(username, accountId) ;
+    mailSvr.checkNewMessage(username, accountId) ;
   }
 
   protected void resetForm() {

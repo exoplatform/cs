@@ -9,9 +9,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
+import org.exoplatform.mail.service.MessagePageList;
 import org.exoplatform.mail.service.Tag;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.popup.UIComposeForm;
@@ -60,6 +62,7 @@ public class UIMessageList extends UIForm {
   private String selectedMessageId_ = null ;
   private String selectedFolderId_ = Utils.FD_INBOX ;
   private String selectedTagName_ = null ;
+  private MessagePageList pageList_ = null ;
   private Map<String, Message> messageMap_ = new HashMap<String, Message>(); 
 
   public UIMessageList() throws Exception {}
@@ -77,6 +80,16 @@ public class UIMessageList extends UIForm {
     getChildren().clear();
     messageMap_.clear();
     for (Message message : messageList) {
+      addUIFormInput(new UIFormCheckBoxInput<Boolean>(message.getId(), message.getId(), false));
+      messageMap_.put(message.getId(), message);
+    }
+  }
+  
+  public void setMessagePageList(MessagePageList pageList) throws Exception {
+    pageList_ = pageList ;
+    getChildren().clear();
+    messageMap_.clear();
+    for (Message message : pageList.currentPage(MailUtils.getCurrentUser())) {
       addUIFormInput(new UIFormCheckBoxInput<Boolean>(message.getId(), message.getId(), false));
       messageMap_.put(message.getId(), message);
     }
@@ -100,7 +113,7 @@ public class UIMessageList extends UIForm {
     }
   }
   
-  public List<Message> getMessageList() throws Exception {
+  public List<Message> getMessageList() throws Exception {    
     return new ArrayList<Message>(messageMap_.values());
   }
   
