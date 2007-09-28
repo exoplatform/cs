@@ -13,6 +13,7 @@ import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.popup.UIFolderForm;
 import org.exoplatform.mail.webui.popup.UIPopupAction;
+import org.exoplatform.mail.webui.popup.UIRenameFolderForm;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIContainer;
@@ -111,6 +112,12 @@ public class UIFolderContainer extends UIContainer {
       String folderName = event.getRequestContext().getRequestParameter(OBJECTID) ; 
       
       System.out.println(">>>>>>>>>  RenameFolderActionListener : " + folderName );
+      
+      UIFolderContainer uiFolder = event.getSource() ;
+      UIPopupAction uiPopup = uiFolder.getAncestorOfType(UIMailPortlet.class).getChild(UIPopupAction.class) ;
+      UIRenameFolderForm uiRenameFolderForm = uiPopup.activate(UIRenameFolderForm.class, 450) ;
+      uiRenameFolderForm.setFolderName(folderName);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiFolder.getAncestorOfType(UIMailPortlet.class)) ;
     }
   }
 
@@ -129,7 +136,6 @@ public class UIFolderContainer extends UIContainer {
       
       Account account = mailService.getAccountById(username, accountId);
       Folder folder = mailService.getFolder(username, accountId, folderName);
-      
       
       mailService.removeUserFolder(username, account, folder);
       
