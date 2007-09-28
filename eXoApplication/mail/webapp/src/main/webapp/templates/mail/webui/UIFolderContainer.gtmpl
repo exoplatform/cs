@@ -1,5 +1,8 @@
 <%
 	import org.exoplatform.mail.service.Folder;
+  def rcontext = _ctx.getRequestContext() ;  
+  rcontext.getJavascriptManager().addJavascript("eXo.mail.UIMailPortlet.showContextMenu() ;") ;
+
 	String compId = uicomponent.getId() ;
 %>
 <div class="UIFolderContainer" id="<%=uicomponent.getId()%>">
@@ -70,6 +73,44 @@
 </div>
 
 <div class="MyFolder">
+<% /*Popup menu*/ %>
+<div class="UIRightClickPopupMenu" id="UIFolderListPopupMenu" eXoCallback="eXo.mail.UIMailPortlet.folderListPopupMenuCallback">
+<div class="TopLeftRightClickPopupMenu" id="test">
+  <div class="TopRightRightClickPopupMenu">
+    <div class="TopCenterRightClickPopupMenu"><span></span></div>
+  </div>
+</div>
+
+<div class="MiddleLeftRightClickPopupMenu">
+  <div class="MiddleRightRightClickPopupMenu">
+    <div class="UIRightPopupMenuContainer">
+      <a class="MenuItem" href="<%=uicomponent.event("RenameFolder", "id")%>">   
+        <div class="ItemIcon EditIcon">
+          Rename
+        </div>
+      </a>
+      <a class="MenuItem" href="<%=uicomponent.event("RemoveFolder", "id")%>">   
+        <div class="ItemIcon">
+          Remove
+        </div>
+      </a>
+      <a class="MenuItem" href="<%=uicomponent.event("EmptyFolder", "id")%>">   
+        <div class="ItemIcon">
+          Empty
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
+
+<div class="BottomLeftRightClickPopupMenu">
+  <div class="BottomRightRightClickPopupMenu">
+    <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+  </div>
+</div>
+            
+</div>              
+
 <div class="TitleBar">
   <div class="DownArrow3Icon" title="Collapse/Expand all"><span></span></div>
   <div class="Title">My Folders</div>
@@ -83,7 +124,7 @@
   String pActionLink = uicomponent.event('ChangeFolder', name);
   if(name.equals(uicomponent.getSelectedFolder())) pCssClass = "OpenFolder SelectedLabel" ;
 %>
-  <a href="$pActionLink"  class="IconFolder Folder $pCssClass">$name
+  <a href="$pActionLink" class="IconFolder Folder $pCssClass" folderName="$name">$name
   <% print "<span class=\"MailQuantity\">($pUnreadMess)</span>"%>
   </a>
 <%}%>

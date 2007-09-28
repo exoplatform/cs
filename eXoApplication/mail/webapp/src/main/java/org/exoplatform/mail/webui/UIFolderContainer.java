@@ -7,6 +7,7 @@ package org.exoplatform.mail.webui ;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
@@ -30,7 +31,9 @@ import org.exoplatform.webui.event.EventListener;
     events = {
         @EventConfig(listeners = UIFolderContainer.ChangeFolderActionListener.class),
         @EventConfig(listeners = UIFolderContainer.AddFolderActionListener.class),
-        @EventConfig(listeners = UIFolderContainer.RemoveAllMessagesActionListener.class)
+        @EventConfig(listeners = UIFolderContainer.RenameFolderActionListener.class),
+        @EventConfig(listeners = UIFolderContainer.RemoveFolderActionListener.class, confirm="UIFolderContainer.msg.confirm-remove-folder"),
+        @EventConfig(listeners = UIFolderContainer.EmptyFolderActionListener.class)
     }
 )
 public class UIFolderContainer extends UIContainer {
@@ -108,9 +111,44 @@ public class UIFolderContainer extends UIContainer {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageArea) ;
     }
   }
-  static public class RemoveAllMessagesActionListener extends EventListener<UIFolderContainer> {
+  
+  static public class RenameFolderActionListener extends EventListener<UIFolderContainer> {
     public void execute(Event<UIFolderContainer> event) throws Exception {
-      String path = event.getRequestContext().getRequestParameter(OBJECTID) ;      
+      String folderName = event.getRequestContext().getRequestParameter(OBJECTID) ; 
+      
+      System.out.println(">>>>>>>>>  RenameFolderActionListener : " + folderName );
+    }
+  }
+
+  static public class RemoveFolderActionListener extends EventListener<UIFolderContainer> {
+    public void execute(Event<UIFolderContainer> event) throws Exception {
+      String folderName = event.getRequestContext().getRequestParameter(OBJECTID) ;    
+      
+      System.out.println(">>>>>>>>>  RemoveFolderActionListener : " + folderName );
+      
+      UIFolderContainer uiFolderContainer   = event.getSource() ;
+      UIMailPortlet uiMailPortlet           = uiFolderContainer.getAncestorOfType(UIMailPortlet.class);
+      MailService mailService               = uiMailPortlet.getApplicationComponent(MailService.class);
+      String username                       = uiMailPortlet.getCurrentUser();
+      UINavigationContainer uiNavigationContainer = uiFolderContainer.getAncestorOfType(UINavigationContainer.class);
+      String accountId = uiNavigationContainer.getChild(UISelectAccount.class).getSelectedValue();
+      
+      Account account = mailService.getAccountById(username, accountId);
+      Folder folder = mailService.getFolder(username, accountId, folderName);
+      
+      
+      mailService.removeUserFolder(username, account, folder);
+      
+      System.out.println(">>>>>>>>>  RemoveFolderActionListener : DONE");
+    }
+  }
+  
+
+  static public class EmptyFolderActionListener extends EventListener<UIFolderContainer> {
+    public void execute(Event<UIFolderContainer> event) throws Exception {
+      String folderName = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      
+      System.out.println(">>>>>>>>>  EmptyFolderActionListener : " + folderName );
     }
   }
 }

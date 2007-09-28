@@ -1,5 +1,36 @@
+eXo.require('eXo.webui.UIContextMenu') ;
+
 function UIMailPortlet(){
 };
+
+UIMailPortlet.prototype.showContextMenu = function() {
+	
+	var UIContextMenu = eXo.webui.UIContextMenu ;//eXo.contact.ContextMenu ;
+	var config = {
+		'preventDefault':false, 
+		'preventForms':false
+	} ;	
+	UIContextMenu.init(config) ;
+	UIContextMenu.attach('IconFolder', 'UIFolderListPopupMenu') ;
+} ;
+
+UIMailPortlet.prototype.folderListPopupMenuCallback = function(evt) {
+	var UIContextMenu = eXo.webui.UIContextMenu ;
+	var _e = window.event || evt ;
+	//_e.cancelBubble = true ;
+	var src = null ;
+	if (UIContextMenu.IE) {
+		src = _e.srcElement;
+	} else {
+		src = _e.target;
+	}
+	if (src.nodeName != "A")
+		src = src.parentNode;
+		
+	folderName = src.getAttribute("folderName");
+	eXo.webui.UIContextMenu.changeAction(UIContextMenu.menuElement, folderName) ;
+} ;
+
 UIMailPortlet.prototype.selectItem = function(obj) {
 	var DOMUtil = eXo.core.DOMUtil ;
 	var tr = DOMUtil.findAncestorByTagName(obj, "tr") ;
