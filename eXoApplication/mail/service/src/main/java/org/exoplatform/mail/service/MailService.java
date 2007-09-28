@@ -114,8 +114,9 @@ public interface MailService {
   public void removeUserFolder(String username, Account account, Folder folder) throws Exception ;
   
   public List<Message> getMessageByTag(String username, String accountId, String tagName) throws Exception ;
+  public MessagePageList getMessagePagelistByTag(String username, String accountId, String tagName) throws Exception ;
   
-  public List<Message> getMessageByFolder(String username, String accountId, String folderName) throws Exception;
+  public MessagePageList getMessageByFolder(String username, String accountId, String folderName) throws Exception;
   
   public List<Tag> getTags(String username, String accountId) throws Exception ;
   /** This method should:
@@ -173,7 +174,7 @@ public interface MailService {
    * @return
    * @throws Exception
    */
-  public List<MessageHeader> getMessages(String username, MessageFilter filter) throws Exception ;
+  public MessagePageList getMessages(String username, MessageFilter filter) throws Exception ;
   
   public void saveMessage(String username, String accountId, Message message, boolean isNew) throws Exception;
   /**
@@ -228,7 +229,7 @@ public interface MailService {
    * @return the number of the new message
    * @throws Exception
    */
-  public List<Message>  checkNewMessage(String username, Account account) throws Exception ;  
+  public List<Message>  checkNewMessage(String username, String accountId) throws Exception ;  
   /**
    * This method get mail settings
    * @param username

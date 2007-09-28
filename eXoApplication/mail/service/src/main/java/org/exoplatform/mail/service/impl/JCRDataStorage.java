@@ -22,11 +22,13 @@ import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 import javax.mail.internet.InternetAddress;
 
+import org.apache.poi.util.SystemOutLogger;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Attachment;
 import org.exoplatform.mail.service.BufferAttachment;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.JCRMessageAttachment;
+import org.exoplatform.mail.service.MessagePageList;
 import org.exoplatform.mail.service.MailSetting;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.MessageFilter;
@@ -154,45 +156,15 @@ public class JCRDataStorage implements DataStorage{
     return mailSetting; 
   }
 
-  public List<MessageHeader> getMessages(String username, MessageFilter filter) throws Exception {
+  public MessagePageList getMessages(String username, MessageFilter filter) throws Exception {
     Node homeMsg = getMessageHome(username, filter.getAccountId());
-    List<MessageHeader> list = new ArrayList<MessageHeader>();
-    NodeIterator mit = homeMsg.getNodes();
-    while (mit.hasNext()) {
-      boolean addToList = false;
-      Message message = getMessage(mit.nextNode()) ; 
-      message.setAccountId(filter.getAccountId()) ;
-      if (filter.getSubject() != null) addToList |= message.getSubject().contains(filter.getSubject());
-      // condition !addToList : doesn't check the other filters if the message already corresponds
-      if (filter.getBody() != null && !addToList) addToList |= message.getMessageBody().contains(filter.getBody());
-      if (filter.getFolder() != null && !addToList) {
-        String[] folders = message.getFolders();
-        String[] filterFolders = filter.getFolder();
-        for (int i = 0; i < folders.length && !addToList; i++) { // !addToList : stop the loop if one folder matches
-          for (int j = 0; j < filterFolders.length; j++) {
-            if (folders[i].equalsIgnoreCase(filterFolders[j])) {
-              addToList |= true;
-              break ;
-            }
-          }
-        }
-      }
-      if (filter.getTag() != null && !addToList) {
-
-        String[] tags = message.getTags();
-        String[] filterTags = filter.getTag();
-        for (int i = 0; i < tags.length && !addToList; i++) { // !addToList : stop the loop if one tag matches
-          for (int j = 0; j < filterTags.length; j++) {
-            if (tags[i].equalsIgnoreCase(filterTags[j])) {
-              addToList |= true;
-              break ;
-            }
-          }
-        }
-      }
-      if (addToList) list.add(message);
-    }
-    return list ;
+    filter.setAccountPath(homeMsg.getPath()) ;
+    QueryManager qm = homeMsg.getSession().getWorkspace().getQueryManager();
+    System.out.println("\n====>"+filter.getStatement() + "\n") ;
+    Query query = qm.createQuery(filter.getStatement(), Query.XPATH);
+    QueryResult result = query.execute();
+    MessagePageList pageList = new MessagePageList(result.getNodes(), 10, filter.getStatement(), true) ;
+    return pageList ;
   }
 
   public Message getMessage(Node messageNode) throws Exception {
@@ -575,10 +547,8 @@ public class JCRDataStorage implements DataStorage{
           String[] tags = message.getTags();
           List<String> listTags = new ArrayList<String>(Arrays.asList(tags));         
           for (String tagName : tagNames) listTags.remove(tagName);
-          tags = (String[]) listTags.toArray(new String[listTags.size()]);
-
+          tags = listTags.toArray(new String[listTags.size()]);
           message.setTags(tags);
-
           saveMessage(username, message.getAccountId(), message, false);
         }
       }
@@ -623,4 +593,17 @@ public class JCRDataStorage implements DataStorage{
     }
     return messages;
   }
+  public MessagePageList getMessagePagelistByTag(String username, String accountId, String tagName)
+  throws Exception {
+    QueryManager qm = getMailHomeNode(username).getSession().getWorkspace().getQueryManager();
+    StringBuffer queryString = new StringBuffer("/jcr:root" + getMailHomeNode(username).getNode(accountId).getPath() + "//element(*,exo:message)[@exo:tags='").
+    append(tagName).
+    append("']");
+    Query query = qm.createQuery(queryString.toString(), Query.XPATH);
+    QueryResult result = query.execute();
+    NodeIterator it = result.getNodes();
+    MessagePageList pageList = new MessagePageList(it, 10, queryString.toString(), true) ;
+    return pageList ;
+  }
+  
 }

@@ -15,6 +15,7 @@ import org.exoplatform.mail.service.MailSetting;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.MessageHeader;
+import org.exoplatform.mail.service.MessagePageList;
 import org.exoplatform.mail.service.Tag;
 
 /**
@@ -38,7 +39,7 @@ public interface DataStorage {
   public Account getAccount(Node accountNode) throws Exception;
   public Message getMessageById(String username, String accountId, String id) throws Exception ;
 
-  public List<MessageHeader> getMessages(String username, MessageFilter filter) throws Exception ;
+  public MessagePageList getMessages(String username, MessageFilter filter) throws Exception ;
 
   public Message getMessage(Node messageNode) throws Exception ;
   

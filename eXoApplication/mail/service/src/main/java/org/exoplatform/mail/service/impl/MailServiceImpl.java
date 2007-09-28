@@ -31,11 +31,11 @@ import org.exoplatform.mail.service.AccountData;
 import org.exoplatform.mail.service.Attachment;
 import org.exoplatform.mail.service.BufferAttachment;
 import org.exoplatform.mail.service.Folder;
+import org.exoplatform.mail.service.MessagePageList;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MailSetting;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.MessageFilter;
-import org.exoplatform.mail.service.MessageHeader;
 import org.exoplatform.mail.service.Tag;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.registry.JCRRegistryService;
@@ -115,7 +115,7 @@ public class MailServiceImpl implements MailService{
     storage_.removeMessage(username, accountId, messageIds);
   } 
 
-  public List<MessageHeader> getMessages(String username, MessageFilter filter) throws Exception {
+  public MessagePageList getMessages(String username, MessageFilter filter) throws Exception {
     return storage_.getMessages(username, filter);
   }
 
@@ -210,7 +210,8 @@ public class MailServiceImpl implements MailService{
     transport.sendMessage(msg, msg.getAllRecipients());
   }
 
-  public List<Message> checkNewMessage(String username, Account account) throws Exception {
+  public List<Message> checkNewMessage(String username, String accountId) throws Exception {
+    Account account = getAccountById(username, accountId) ;
     System.out.println("\n ### Getting mail from " + account.getHost() + " ... !");
     List<Message> messageList = new ArrayList<Message>();
     int totalMess = -1;
@@ -404,20 +405,17 @@ public class MailServiceImpl implements MailService{
       throws Exception {
     return storage_.getMessageByTag(username, accountId, tagName);
   }
+  public MessagePageList getMessagePagelistByTag(String username, String accountId, String tagName) throws Exception {
+    return storage_.getMessagePagelistByTag(username, accountId, tagName) ;
+  }
   
-  public List<Message> getMessageByFolder(String username, String accountId, String folderName) 
+  public MessagePageList getMessageByFolder(String username, String accountId, String folderName) 
       throws Exception {
-    List<Message> messageList = new ArrayList<Message>();
     MessageFilter filter = new MessageFilter("Filter By Folder") ;
     Folder folder = getFolder(username, accountId, folderName) ;
     filter.setFolder(new String[]{folder.getName()} ) ;
     filter.setAccountId(accountId) ;
-    List<MessageHeader> messageHeaders = new ArrayList<MessageHeader>() ;
-    messageHeaders.addAll(getMessages(username, filter)) ;
-    for(MessageHeader mh : messageHeaders) {
-      messageList.add((Message)mh) ;
-    }
-    return messageList;
+    return getMessages(username, filter) ;    
   }
   
   public MailSetting getMailSetting(String username) throws Exception {

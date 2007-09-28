@@ -1,0 +1,157 @@
+/***************************************************************************
+ * Copyright 2001-2003 The eXo Platform SARL         All rights reserved.  *
+ * Please look at license.txt in info directory for more license detail.   *
+ **************************************************************************/
+package org.exoplatform.mail.service;
+
+import java.util.ArrayList;
+import java.util.GregorianCalendar;
+import java.util.List;
+
+import javax.jcr.Node;
+import javax.jcr.NodeIterator;
+import javax.jcr.Session;
+import javax.jcr.Value;
+import javax.jcr.query.Query;
+import javax.jcr.query.QueryManager;
+import javax.jcr.query.QueryResult;
+
+import org.exoplatform.container.PortalContainer;
+import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
+/**
+ * @author Hung Nguyen (hung.nguyen@exoplatform.com)
+ * @since July 25, 2007
+ */
+public class MessagePageList extends JCRPageList {
+  
+  private NodeIterator iter_ = null ;
+  private boolean isQuery_ = false ;
+  private String value_ ;
+  
+  public MessagePageList(NodeIterator iter, long pageSize, String value, boolean isQuery ) throws Exception{
+    super(pageSize) ;
+    iter_ = iter ;
+    value_ = value ;
+    isQuery_ = isQuery ;
+    setAvailablePage(iter.getSize()) ;    
+  }
+  
+  protected void populateCurrentPage(long page, String username) throws Exception  {
+    if(iter_ == null) {
+      Session session = getJCRSession(username) ;
+      if(isQuery_) {
+        QueryManager qm = session.getWorkspace().getQueryManager() ;
+        Query query = qm.createQuery(value_, Query.XPATH);
+        QueryResult result = query.execute();
+        iter_ = result.getNodes();
+      } else {
+        Node node = (Node)session.getItem(value_) ;
+        iter_ = node.getNodes() ;
+      }
+      session.logout() ;
+    }
+    setAvailablePage(iter_.getSize()) ;
+    Node currentNode ;
+    long pageSize = getPageSize() ;
+    long position = 0 ;
+    if(page == 1) position = 0;
+    else {
+      position = (page-1) * pageSize ;
+      iter_.skip(position) ;
+    }
+    currentListPage_ = new ArrayList<Message>() ;
+    for(int i = 0; i < pageSize; i ++) {
+      if(iter_.hasNext()){
+        currentNode = iter_.nextNode() ;
+        if(currentNode.isNodeType("exo:message")) {
+          currentListPage_.add(getMessage(currentNode)) ;        
+        }
+      }else {
+        break ;
+      }
+    }
+    iter_ = null ;    
+  }
+  
+  private Message getMessage(Node messageNode) throws Exception {
+    Message msg = new Message();
+    if (messageNode.hasProperty(Utils.EXO_ID)) msg.setId(messageNode.getProperty(Utils.EXO_ID).getString());
+    if (messageNode.hasProperty(Utils.EXO_ACCOUNT)) msg.setAccountId(messageNode.getProperty(Utils.EXO_ACCOUNT).getString()) ;
+    if (messageNode.hasProperty(Utils.EXO_FROM)) msg.setFrom(messageNode.getProperty(Utils.EXO_FROM).getString());
+    if (messageNode.hasProperty(Utils.EXO_TO)) msg.setMessageTo(messageNode.getProperty(Utils.EXO_TO).getString());
+    if (messageNode.hasProperty(Utils.EXO_SUBJECT)) msg.setSubject(messageNode.getProperty(Utils.EXO_SUBJECT).getString());
+    if (messageNode.hasProperty(Utils.EXO_CC)) msg.setMessageCc(messageNode.getProperty(Utils.EXO_CC).getString());
+    if (messageNode.hasProperty(Utils.EXO_BCC)) msg.setMessageBcc(messageNode.getProperty(Utils.EXO_BCC).getString());
+    if (messageNode.hasProperty(Utils.EXO_REPLYTO)) msg.setReplyTo(messageNode.getProperty(Utils.EXO_REPLYTO).getString());
+    if (messageNode.hasProperty(Utils.EXO_BODY)) msg.setMessageBody(messageNode.getProperty(Utils.EXO_BODY).getString());
+    if (messageNode.hasProperty(Utils.EXO_SIZE)) msg.setSize(messageNode.getProperty(Utils.EXO_SIZE).getLong());
+    if (messageNode.hasProperty(Utils.EXO_TAGS)) {
+      Value[] propTags = messageNode.getProperty(Utils.EXO_TAGS).getValues();
+      String[] tags = new String[propTags.length];
+      for (int i = 0; i < propTags.length; i++) {
+        tags[i] = propTags[i].getString();
+      }
+      msg.setTags(tags);
+    }
+    if (messageNode.hasProperty(Utils.EXO_FOLDERS)) {
+      Value[] propFolders = messageNode.getProperty(Utils.EXO_FOLDERS).getValues();
+      String[] folders = new String[propFolders.length];
+      for (int i = 0; i < propFolders.length; i++) {
+        folders[i] = propFolders[i].getString();
+      }
+      msg.setFolders(folders);
+    }
+    NodeIterator msgAttachmentIt = messageNode.getNodes();
+    List<Attachment> attachments = new ArrayList<Attachment>();
+    while (msgAttachmentIt.hasNext()) {
+      Node node = msgAttachmentIt.nextNode();
+      if (node.isNodeType(Utils.NT_FILE)) {
+        JCRMessageAttachment file = new JCRMessageAttachment();
+        file.setId(node.getPath());
+        file.setMimeType(node.getNode(Utils.JCR_CONTENT).getProperty(Utils.JCR_MIMETYPE).getString());
+        file.setName(node.getName());
+        file.setWorkspace(node.getSession().getWorkspace().getName()) ;
+        //file.setInputStream(node.getNode(Utils.JCR_CONTENT).getProperty(Utils.JCR_DATA).getStream());
+        attachments.add(file);
+      }
+    }
+    msg.setAttachements(attachments);
+    
+    GregorianCalendar cal = new GregorianCalendar();
+    if (messageNode.hasProperty(Utils.EXO_RECEIVEDDATE)) {
+      cal.setTimeInMillis(messageNode.getProperty(Utils.EXO_RECEIVEDDATE).getLong());
+      msg.setReceivedDate(cal.getTime());
+    }
+
+    if (messageNode.hasProperty(Utils.EXO_SENDDATE)) {
+      cal.setTimeInMillis(messageNode.getProperty(Utils.EXO_SENDDATE).getLong());
+      msg.setSendDate(cal.getTime());
+    }
+    return msg ;
+  }
+  
+  
+  
+  private String [] ValuesToStrings(Value[] Val) throws Exception {
+  	if(Val.length == 1)
+  		return new String[]{Val[0].getString()};
+		String[] Str = new String[Val.length];
+		for(int i = 0; i < Val.length; ++i) {
+		  Str[i] = Val[i].getString();
+		}
+		return Str;
+  }
+  
+	@Override
+	public List getAll() throws Exception { return null; }
+
+  private Session getJCRSession(String username) throws Exception {
+    RepositoryService  repositoryService = (RepositoryService)PortalContainer.getComponent(RepositoryService.class) ;
+    SessionProvider sessionProvider = SessionProvider.createSystemProvider() ;
+    String defaultWS = 
+      repositoryService.getDefaultRepository().getConfiguration().getDefaultWorkspaceName() ;
+    return sessionProvider.getSession(defaultWS, repositoryService.getCurrentRepository()) ;
+  }
+
+}
