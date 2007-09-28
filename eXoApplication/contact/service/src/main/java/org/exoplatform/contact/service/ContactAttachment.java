@@ -18,7 +18,7 @@ abstract public class ContactAttachment {
   private String fileName ;
   private String mimeType ;
   
-  public String getId()  { return id ; }
+  public String getId() { return id ; }
   public void   setId(String s) { id = s ; }
 
   public String getFileName()  { return fileName ; }

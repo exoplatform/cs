@@ -230,8 +230,9 @@ public class JCRDataStorage implements DataStorage {
 
   public ContactGroup getGroup(String username, String groupId) throws Exception {
     Node contactGroupHomeNode = getContactGroupHome(username);
-    if (contactGroupHomeNode.hasNode(groupId))
-      return getGroup(contactGroupHomeNode.getNode(groupId)) ;
+    String str = groupId.replaceAll("/", "") ;
+    if (contactGroupHomeNode.hasNode(str))
+      return getGroup(contactGroupHomeNode.getNode(str)) ;
     return null;
   }
 
@@ -397,19 +398,19 @@ public class JCRDataStorage implements DataStorage {
     ContactAttachment attachment = contact.getAttachment() ;
     if (attachment != null) {
       BufferAttachment file = (BufferAttachment)attachment ;
-      Node nodeFile = null ;
       if (file.getFileName() != null) {
-        if (!contactNode.hasNode(file.getFileName())) 
-          nodeFile = contactNode.addNode(file.getFileName(), "nt:file") ;
+        Node nodeFile = null ;
+        if (!contactNode.hasNode("image"))nodeFile = contactNode.addNode("image", "nt:file") ;
         else nodeFile = contactNode.getNode(file.getFileName()) ;
         Node nodeContent = null ;
-        if (!nodeFile.hasNode("jcr:content")) 
-          nodeContent = nodeFile.addNode("jcr:content", "nt:resource") ;
+        if (nodeFile.hasNode("jcr:content")) nodeContent = nodeFile.getNode("jcr:content") ;
+        else nodeContent = nodeFile.addNode("jcr:content", "nt:resource") ;
         nodeContent.setProperty("jcr:mimeType", file.getMimeType()) ;
         nodeContent.setProperty("jcr:data", file.getInputStream());
         nodeContent.setProperty("jcr:lastModified", Calendar.getInstance().getTimeInMillis());
-      }        
-       
+      }
+    }else {
+      if(contactNode.hasNode("image")) contactNode.getNode("image").remove() ;
     }   
     contactHomeNode.getSession().save();
   }

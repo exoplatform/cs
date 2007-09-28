@@ -62,7 +62,7 @@ public class Contact {
   private String[] categories ;
   private String[] tags ;
   private String[] editPermission ;
-  
+  private boolean isShared = false ;
   private ContactAttachment attachment ;
   
   
@@ -198,5 +198,13 @@ public class Contact {
 
   public void setAttachment(ContactAttachment attachment) { this.attachment = attachment; }
   public ContactAttachment getAttachment() { return attachment; }
+
+  public void setShared(boolean isShared) {
+    this.isShared = isShared;
+  }
+
+  public boolean isShared() {
+    return isShared;
+  }
   
 }

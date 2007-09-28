@@ -26,9 +26,9 @@ public class JCRContactAttachment extends ContactAttachment{
   @Override
   public InputStream getInputStream() throws Exception {
     Node attachment ;
-    try{
+    try {
       attachment = (Node)getSesison().getItem(getId()) ;      
-    }catch (ItemNotFoundException e) {
+    } catch (ItemNotFoundException e) {
       return null ;
     }
     return attachment.getNode("jcr:content").getProperty("jcr:data").getStream() ;
