@@ -217,6 +217,7 @@ public abstract class UICalendarView extends UIForm {
             ) ;
   }
   protected void setCurrentCalendar(Calendar value) {calendar_ = value ;}
+  protected Calendar getCurrentCalendar() {return calendar_ ;}
   protected Date getCurrentDate() {return calendar_.getTime() ;} 
   protected void setCurrentDate(Date value) {calendar_.setTime(value) ;} 
 

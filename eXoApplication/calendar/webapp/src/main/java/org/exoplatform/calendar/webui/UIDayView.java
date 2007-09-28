@@ -4,7 +4,8 @@
  **************************************************************************/
 package org.exoplatform.calendar.webui;
 
-import java.text.DecimalFormat;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -16,6 +17,8 @@ import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.EventQuery;
+import org.exoplatform.calendar.webui.popup.UIPopupAction;
+import org.exoplatform.calendar.webui.popup.UIQuickAddEvent;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -34,10 +37,11 @@ import org.exoplatform.webui.event.EventListener;
     template = "app:/templates/calendar/webui/UIDayView.gtmpl", 
     events = {
       @EventConfig(listeners = UICalendarView.RefreshActionListener.class),
-      @EventConfig(listeners = UICalendarView.AddEventActionListener.class),      
+      @EventConfig(listeners = UICalendarView.AddEventActionListener.class),  
       @EventConfig(listeners = UICalendarView.DeleteEventActionListener.class),
       @EventConfig(listeners = UICalendarView.ChangeCategoryActionListener.class), 
       @EventConfig(listeners = UIDayView.MoveNextActionListener.class), 
+      @EventConfig(listeners = UIDayView.QuickAddActionListener.class), 
       @EventConfig(listeners = UIDayView.MovePreviousActionListener.class), 
       @EventConfig(listeners = UIDayView.SaveEventActionListener.class), 
       @EventConfig(listeners = UICalendarView.AddCategoryActionListener.class)
@@ -52,7 +56,7 @@ public class UIDayView extends UICalendarView {
   private int startTime_ = 0 ;
   private int endTime_ = 24 ;
   private int timeInterval_ = 30 ;
-  
+
   public UIDayView() throws Exception{
     super() ;
     refresh() ;
@@ -111,7 +115,7 @@ public class UIDayView extends UICalendarView {
       return CalendarUtils.getDisplayTimes(timeFormat, timeInterval,0, 24*(60/timeInterval)) ;
     }
   }
-  
+
   static  public class MoveNextActionListener extends EventListener<UIDayView> {
     public void execute(Event<UIDayView> event) throws Exception {
       UIDayView calendarview = event.getSource() ;
@@ -120,7 +124,33 @@ public class UIDayView extends UICalendarView {
       event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
     }
   }
+  static  public class QuickAddActionListener extends EventListener<UIDayView> {
+    public void execute(Event<UIDayView> event) throws Exception {
+      UIDayView calendarview = event.getSource() ;
+      String type = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      String startTime = event.getRequestContext().getRequestParameter("startTime") ;
+      String finishTime = event.getRequestContext().getRequestParameter("finishTime") ;
+      UICalendarPortlet uiPortlet = calendarview.getAncestorOfType(UICalendarPortlet.class) ;
+      UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
+      if(CalendarEvent.TYPE_EVENT.equals(type)) {
+        UIQuickAddEvent uiQuickAddEvent = uiPopupAction.activate(UIQuickAddEvent.class, 600) ;
+        DateFormat df =new SimpleDateFormat("MM/dd/yyyy") ;
+        try {
+          String beginTime = df.format(calendarview.getCurrentDate())+ " " + startTime ;
+          String endTime = df.format(calendarview.getCurrentDate())+ " " + finishTime ;
+          System.out.println("\n\n begin " + beginTime);
+          System.out.println("\n\n end " + endTime);
+          uiQuickAddEvent.init(beginTime, endTime) ;
+        } catch (Exception e) {
+          e.printStackTrace() ;
+        }
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+      } else {
 
+      }
+      event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
+    }
+  }
   static  public class MovePreviousActionListener extends EventListener<UIDayView> {
     public void execute(Event<UIDayView> event) throws Exception {
       UIDayView calendarview = event.getSource() ;

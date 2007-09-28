@@ -109,7 +109,7 @@
                     <tbody>
                       <%
 			            		flag = true ;
-			            		List hoursSteps = uicomponent.getDisplayTimes("hh:mm", 30) ;
+			            		List hoursSteps = uicomponent.getDisplayTimes("HH:mm", 30) ;
 			            		for(h in hoursSteps) {
 			            			cssClass = "TdDotLine" ;
 			            			if(flag) {cssClass = "TdLine" ;} ;
@@ -146,11 +146,11 @@
     <div class="MiddleRightRightClickPopupMenu">
       <div class="UIRightPopupMenuContainer">
         <div>
-          <a href="<%=uicomponent.event("QuickAdd","Event&startTime=beginTime&finishTime=endTime")%>">
+          <a href="<%=uicomponent.event("QuickAdd","event&startTime=beginTime&finishTime=endTime")%>">
             Add new event</a>
         </div>
         <div>
-          <a href="<%=uicomponent.event("QuickAdd","Task&startTime=beginTime&finishTime=endTime")%>">
+          <a href="<%=uicomponent.event("QuickAdd","task&startTime=beginTime&finishTime=endTime")%>">
             Add new task</a>
         </div>
       </div>
