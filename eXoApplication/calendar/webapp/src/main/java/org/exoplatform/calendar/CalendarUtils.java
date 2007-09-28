@@ -50,11 +50,11 @@ public class CalendarUtils {
   public static boolean isEmpty(String value) {
     return (value == null || value.trim().length() == 0) ;
   }
-  
+
   static public CalendarService getCalendarService() throws Exception {
     return (CalendarService)PortalContainer.getComponent(CalendarService.class) ;
   }
-  
+
   public static List<SelectItemOption<String>> getTimesSelectBoxOptions(String timeFormat, int timeInterval) {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     GregorianCalendar cal = new GregorianCalendar(Locale.US) ;
@@ -67,5 +67,20 @@ public class CalendarUtils {
       cal.add(java.util.Calendar.MINUTE, timeInterval) ;
     }
     return options ;
+  }
+
+  public static List<String> getDisplayTimes(String timeFormat, int timeInterval, int workStart, int workEnd) {
+    List<String> times = new ArrayList<String>() ;
+    GregorianCalendar cal = new GregorianCalendar(Locale.US) ;
+    cal.set(java.util.Calendar.HOUR, 0) ;
+    cal.set(java.util.Calendar.MINUTE, 0) ;
+    DateFormat df = new SimpleDateFormat(timeFormat) ;
+    int time = workStart ;
+    while (time < workEnd) {
+      times.add(df.format(cal.getTime())) ;
+      cal.add(java.util.Calendar.MINUTE, timeInterval) ;
+      time ++ ;
+    }
+    return times ;
   }
 }

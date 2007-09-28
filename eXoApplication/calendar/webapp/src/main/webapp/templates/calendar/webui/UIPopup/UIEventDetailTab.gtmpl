@@ -26,85 +26,85 @@
 	}
 %>
 <div class="UIAddNewEvent">
-						     			<table class="UIFormGrid">
-						            <tbody>
-         									<tr>
-														<td class="FieldLabel">
-															<%=uiForm.getLabel(uicomponent.FIELD_EVENT)%>
-														</td>
-														<td class="FieldComponent">
-															<%uiForm.renderField(uicomponent.FIELD_EVENT)%>
-														</td>
-													</tr>
-													<tr>
-														<td class="FieldLabel">
-															<%=uiForm.getLabel(uicomponent.FIELD_DESCRIPTION)%>
-														</td>
-														<td class="FieldComponent">
-														<%uiForm.renderField(uicomponent.FIELD_DESCRIPTION)%>
-														</td>
-													</tr>
-													<tr>
-														<td class="FieldLabel">
-															<%=uiForm.getLabel(uicomponent.FIELD_PLACE)%>
-														</td>
-														<td class="FieldComponent">
-															<%uiForm.renderField(uicomponent.FIELD_PLACE)%>
-														</td>
-													</tr>
-													<tr>
-														<td class="FieldLabel">
-															<%=uiForm.getLabel(uicomponent.FIELD_FROM)%>
-														</td>
-														<td class="FieldComponent">
-															<div class="Date">
-															<%uiForm.renderField(uicomponent.FIELD_FROM)%>
-															</div>
-															<div class="Time">
-															<%uiForm.renderField(uicomponent.FIELD_FROM_TIME)%>
-															</div>
-														</td>
-													</tr>
-													<tr>
-														<td class="FieldLabel">
-															<%=uiForm.getLabel(uicomponent.FIELD_TO)%>
-														</td>
-														<td class="FieldComponent">
-															<div class="Date">
-															<%uiForm.renderField(uicomponent.FIELD_TO)%>
-															</div>
-															<div class="Time">
-															<%uiForm.renderField(uicomponent.FIELD_TO_TIME)%>
-															</div>
-														</td>
-													</tr>
-													<tr>
-														<td class="FieldLabel">
-															<%=uiForm.getLabel(uicomponent.FIELD_CHECKALL)%>
-														</td>
-														<td class="FieldComponent">
-															<%uiForm.renderField(uicomponent.FIELD_CHECKALL)%>
-														</td>
-													</tr>
-													<tr>
-						  	           	<td class="FieldLabel">
-						  	           		<%=uiForm.getLabel(uicomponent.FIELD_CALENDAR)%>
-						  	           	</td>
-						  	           	<td class="FieldComponent">
-							  	            <%uiForm.renderField(uicomponent.FIELD_CALENDAR)%>
-														</td>
-							            </tr>
-							            <tr>
-						  	           	<td class="FieldLabel">
-						  	           		<%=uiForm.getLabel(uicomponent.FIELD_CATEGORY)%>
-						  	           	</td>
-						  	           	<td class="FieldComponent">
-							  	           	<%
-							  	           		uiForm.renderField(uicomponent.FIELD_CATEGORY) 
-																renderActions(uicomponent.FIELD_CATEGORY) ;
-							  	           	 %>
-														</td>
-							            </tr>
-						      			</tbody>
-						      		</table>
-</div>								    			
+  <table class="UIFormGrid">
+    <tbody>
+      <tr>
+        <td class="FieldLabel">
+          <%=uiForm.getLabel(uicomponent.FIELD_EVENT)%>
+        </td>
+        <td class="FieldComponent">
+          <%uiForm.renderField(uicomponent.FIELD_EVENT)%>
+        </td>
+      </tr>
+      <tr>
+        <td class="FieldLabel">
+          <%=uiForm.getLabel(uicomponent.FIELD_DESCRIPTION)%>
+        </td>
+        <td class="FieldComponent">
+          <%uiForm.renderField(uicomponent.FIELD_DESCRIPTION)%>
+        </td>
+      </tr>
+      <tr>
+        <td class="FieldLabel">
+          <%=uiForm.getLabel(uicomponent.FIELD_PLACE)%>
+        </td>
+        <td class="FieldComponent">
+          <%uiForm.renderField(uicomponent.FIELD_PLACE)%>
+        </td>
+      </tr>
+      <tr>
+        <td class="FieldLabel">
+          <%=uiForm.getLabel(uicomponent.FIELD_FROM)%>
+        </td>
+        <td class="FieldComponent">
+          <div class="Date">
+            <%uiForm.renderField(uicomponent.FIELD_FROM)%>
+          </div>
+          <div class="Time">
+            <%uiForm.renderField(uicomponent.FIELD_FROM_TIME)%>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td class="FieldLabel">
+          <%=uiForm.getLabel(uicomponent.FIELD_TO)%>
+        </td>
+        <td class="FieldComponent">
+          <div class="Date">
+            <%uiForm.renderField(uicomponent.FIELD_TO)%>
+          </div>
+          <div class="Time">
+            <%uiForm.renderField(uicomponent.FIELD_TO_TIME)%>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td class="FieldLabel">
+          <%=uiForm.getLabel(uicomponent.FIELD_CHECKALL)%>
+        </td>
+        <td class="FieldComponent">
+          <%uiForm.renderField(uicomponent.FIELD_CHECKALL)%>
+        </td>
+      </tr>
+      <tr>
+        <td class="FieldLabel">
+          <%=uiForm.getLabel(uicomponent.FIELD_CALENDAR)%>
+        </td>
+        <td class="FieldComponent">
+          <%uiForm.renderField(uicomponent.FIELD_CALENDAR)%>
+        </td>
+      </tr>
+      <tr>
+        <td class="FieldLabel">
+          <%=uiForm.getLabel(uicomponent.FIELD_CATEGORY)%>
+        </td>
+        <td class="FieldComponent">
+          <%
+  	           		uiForm.renderField(uicomponent.FIELD_CATEGORY) 
+				    renderActions(uicomponent.FIELD_CATEGORY) ;
+          %>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

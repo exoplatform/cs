@@ -36,12 +36,23 @@ public class CalendarEvent {
   final public static String[] TASK_STATUS = {NEEDS_ACTION, COMPLETED, IN_PROCESS, CANCELLED} ;
   final public static String[] JOURNAL_STATUS = {DRAFT, FINAL, CANCELLED} ;
   
+  final public static String RP_NOREPEAT = "norepeat".intern() ;
+  final public static String RP_DAILY = "daily".intern() ;
+  final public static String RP_WEEKLY = "weekly".intern() ;
+  final public static String RP_MONTHY = "monthy".intern() ;
+  final public static String RP_YEARLY = "yearly".intern() ;
+  final public static String RP_WEEKEND = "weekend".intern() ;
+  final public static String RP_WORKINGDAYS = "workingdays".intern() ;
+  
+  final public static String[] REPEATTYPES = {RP_NOREPEAT, RP_DAILY, RP_WORKINGDAYS, RP_WEEKEND, RP_WEEKLY, RP_MONTHY, RP_YEARLY} ;
+  
   private String id ;
   private String summary ;
   private String location ;
   private String description ;
   private String eventCategoryId ;
   private String calendarId ;
+  private String repeatType ;
   private Date fromDateTime ;
   private Date toDateTime ;
   private Date completedDateTime ;
@@ -109,4 +120,12 @@ public class CalendarEvent {
     
   public List<Reminder> getReminders() { return reminders ; }
   public void           setReminders(List<Reminder> rm) { this.reminders = rm ; }
+
+  public void setRepeatType(String repeatType) {
+    this.repeatType = repeatType;
+  }
+
+  public String getRepeatType() {
+    return repeatType;
+  }
 }

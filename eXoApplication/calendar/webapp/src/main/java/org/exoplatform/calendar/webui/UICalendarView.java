@@ -70,8 +70,16 @@ public abstract class UICalendarView extends UIForm {
   final public static int TYPE_YEAR = 4 ;
 
   final public static String ACT_NEXT = "MoveNext".intern() ;
-
   final public static String ACT_PREVIOUS  = "MovePrevious".intern() ;
+  
+
+  public final static String ACT_ADDNEW_EVENT = "AddNewEvent".intern() ;
+  public final static String ACT_ADDNEW_TASK = "AddNewTask".intern() ;
+  public final static String ACT_GOTO_DATE = "GotoDate".intern() ;
+  public final static String ACT_EDIT = "EditEvent".intern() ;
+  public final static String ACT_DELETE = "QuickDeleteEvent".intern() ;
+  
+  
   final public static String CALENDARID = "calendarId".intern() ;
   protected Calendar calendar_ = GregorianCalendar.getInstance() ;
 
@@ -231,6 +239,16 @@ public abstract class UICalendarView extends UIForm {
     for (CalendarEvent ce : events) {
       calService.removeUserEvent(username, ce.getCalendarId(), ce.getId()) ;
     }
+  }
+  
+  protected String[] getContextMenu() {
+    return  new String[]{ACT_ADDNEW_EVENT, ACT_ADDNEW_TASK, ACT_GOTO_DATE} ;
+  }
+  protected String[] getQuickEditMenu() {
+    return  new String[]{ACT_EDIT, ACT_DELETE} ;
+  }
+  protected List<String> getDisplayTimes(String timeFormat, int timeInterval) {
+    return CalendarUtils.getDisplayTimes(timeFormat, timeInterval,0, 24*(60/timeInterval)) ;
   }
   static  public class RefreshActionListener extends EventListener<UICalendarView> {
     public void execute(Event<UICalendarView> event) throws Exception {

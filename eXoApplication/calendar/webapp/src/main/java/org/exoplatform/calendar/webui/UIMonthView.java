@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
@@ -56,13 +57,6 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
     }
 )
 public class UIMonthView extends UICalendarView {
-
-
-  public final static String ACT_ADDNEW_EVENT = "AddNewEvent".intern() ;
-  public final static String ACT_ADDNEW_TASK = "AddNewTask".intern() ;
-  public final static String ACT_GOTO_DATE = "GotoDate".intern() ;
-  public final static String ACT_EDIT = "EditEvent".intern() ;
-  public final static String ACT_DELETE = "QuickDeleteEvent".intern() ;
   private Map<String, String> calendarIds_ = new HashMap<String, String>() ;
 
   private Map<Integer, List<CalendarEvent>> eventData_ = new HashMap<Integer, List<CalendarEvent>>() ;
@@ -74,12 +68,6 @@ public class UIMonthView extends UICalendarView {
 
   protected int getWeeksOfTheMonth(int year, int month, int day) {
     return new GregorianCalendar(year, month, day).getActualMaximum(java.util.Calendar.WEEK_OF_MONTH) ;
-  }
-  protected String[] getContextMenu() {
-    return  new String[]{ACT_ADDNEW_EVENT, ACT_ADDNEW_TASK, ACT_GOTO_DATE} ;
-  }
-  protected String[] getQuickEditMenu() {
-    return  new String[]{ACT_EDIT, ACT_DELETE} ;
   }
   protected void refreshEvents() throws Exception {
     CalendarService calendarService = getApplicationComponent(CalendarService.class) ;
@@ -170,6 +158,7 @@ public class UIMonthView extends UICalendarView {
     }
     return events ; 
   }
+  
   static  public class MoveNextActionListener extends EventListener<UIMonthView> {
     public void execute(Event<UIMonthView> event) throws Exception {
       UIMonthView calendarview = event.getSource() ;

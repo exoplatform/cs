@@ -2,7 +2,6 @@
 	import java.text.DecimalFormat ;
 	import java.text.DateFormat;
 	import java.text.SimpleDateFormat;
-	
 	def rcontext = _ctx.getRequestContext() ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.showEvent() ;');
 	int currentDay = uicomponent.getCurrentDay() ;
@@ -15,63 +14,66 @@
  	_ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");
  	String linkDayNext = uicomponent.event(uicomponent.ACT_NEXT) ;
  	String linkDayPrevious = uicomponent.event(uicomponent.ACT_PREVIOUS) ;
- 	String actionLinks = "javascript:ajaxAsyncGetRequest('portal/private/site/', false)" ;
-%> 
-	<div class="UIDayView">
-		<div class="TitleBar">		
-			<div  style="width: 300px;margin:auto;">		
-				<a href="$linkDayNext" class="RightControlButton">
-					<div class="NextIcon" title="Next day"><span></span></div>
-				</a>
-				<div class="Title RightControlButton">$currentDayName, $currentMonthName, $currentDay,  $currentYear</div>
-				<a href="$linkDayPrevious" class="RightControlButton">
-					<div class="BackIcon" title="Previous day"><span></span></div>
-				</a>
-				<div style="clear:right;"></div>
-			</div>
-		</div>
-		<div class="EventAllDay">
-			<%for(ce in uicomponent.getAllDayEvents().values()) {%>
-			<div class="EventAllDayColor2">
-				<div class="EventAllDayDescription"><%=ce.getSummary()%></div>
-			</div>
-			<%}%>
-		</div>
-		<div class="EventDayContainer" style="position:relative ;">
-			<div class="EventDayContent">
-				<table class="UIGrid" id="UIDayViewGrid" cellspacing="0" borderspacing="0" cellpadding="0" style="table-layout:fixed ;"><tbody><tr>
-					<td style="width:40px ;">
-						<div>
-							<div class="HourPoint">12 AM</div>
-							<div class="HourPoint">1 AM</div>
-							<div class="HourPoint">2 AM</div>
-							<div class="HourPoint">3 AM</div>
-							<div class="HourPoint">4 AM</div>
-							<div class="HourPoint">5 AM</div>
-							<div class="HourPoint">6 AM</div>
-							<div class="HourPoint">7 AM</div>
-							<div class="HourPoint">8 AM</div>
-							<div class="HourPoint">9 AM</div>
-							<div class="HourPoint">10 AM</div>
-							<div class="HourPoint">11 AM</div>
-							<div class="HourPoint">12 PM</div>
-							<div class="HourPoint">1 PM</div>
-							<div class="HourPoint">2 PM</div>
-							<div class="HourPoint">3 PM</div>
-							<div class="HourPoint">4 PM</div>
-							<div class="HourPoint">5 PM</div>
-							<div class="HourPoint">6 PM</div>
-							<div class="HourPoint">7 PM</div>
-							<div class="HourPoint">8 PM</div>
-							<div class="HourPoint">9 PM</div>
-							<div class="HourPoint">10 PM</div>
-							<div class="HourPoint">11 PM</div>
-						</div>					
-					</td>
-					<td>
-						<div class="EventBoard" style="position:relative ;">
-							<div class="EventBoardContainer">
-								<%
+%>
+<div class="UIDayView">
+  <div class="TitleBar">
+    <div style="width: 300px; margin: auto;">
+      <a href="$linkDayNext" class="RightControlButton">
+        <div class="NextIcon" title="Next day">
+          <span></span>
+        </div>
+      </a>
+      <div class="Title RightControlButton">
+        $currentDayName, $currentMonthName, $currentDay, $currentYear</div>
+      <a href="$linkDayPrevious" class="RightControlButton">
+        <div class="BackIcon" title="Previous day">
+          <span></span>
+        </div>
+      </a>
+      <div style="clear: right;">
+      </div>
+    </div>
+  </div>
+  <div class="EventAllDay">
+  	 <div class="EventAllDayColor2" style="height:20px;">
+    <%for(ce in uicomponent.getAllDayEvents().values()) {%>
+      <div class="EventAllDayDescription">
+        <%=ce.getSummary()%>
+      </div>
+    <%}%>
+    </div>
+  </div>
+  <div class="EventDayContainer" style="position: relative;">
+    <div class="EventDayContent">
+      <table class="UIGrid" id="UIDayViewGrid" cellspacing="0" borderspacing="0" cellpadding="0"
+        style="table-layout: fixed;">
+        <tbody>
+          <tr>
+            <td style="width: 60px;">
+              <table>
+                <tbody>
+                  <%
+	            		flag = true ;
+	            		List hours = uicomponent.getDisplayTimes("hh:mm a", 30) ;
+	            		for(h in hours) {
+	            			cssClass = "TdDotLine" ;
+	            			if(flag) {cssClass = "TdLine" ;} ;
+                  %>
+                  <tr>
+                    <td class="$cssClass">
+                      <%if(flag){ println h;}%>
+                    </td>
+                  </tr>
+                  <%
+	            		flag = !flag ;
+	            		}%>
+                </tbody>
+              </table>
+            </td>
+            <td>
+              <div class="EventBoard" style="position: relative;">
+                <div class="EventBoardContainer">
+                  <%
 								 def currentDateFrom = uicomponent.getCurrentDayBegin() ;
 								 def currentDateTo 	= uicomponent.getCurrentDayEnd() ;
 								 for(ce in	uicomponent.getEventData().values()) {
@@ -86,223 +88,114 @@
 								 	String style = "MMM/dd/yyyy" ;
 								 	DateFormat df = new SimpleDateFormat(style) ;
 								 	actionLink =  uicomponent.event("SaveEvent",ce.getId()+"&calendarId="+ce.getCalendarId()+"&startTime=beginTime&finishTime=endTime") ;
-								%>
-								<div class="EventContainerBorder EventBoxes" calid="<%=ce.getCalendarId()%>" actionLink="$actionLink" startTime="$beginTime" endTime="$endTime" >
-									<div class="EventContainerBar" title="<%=df.format(ce.getFromDateTime())%> : <%=df.format(ce.getToDateTime())%>">
-										<%=(ce.getFromDateTime().getHours())%>:<%=(ce.getFromDateTime().getMinutes())%>
-										<%=(ce.getToDateTime().getHours())%>:<%=(ce.getToDateTime().getMinutes())%>
-									</div>
-									<div class="EventContainer"><%=ce.getSummary()%></div>
-									<div class="ResizeEventContainer"><span></span></div>
-								</div>
-								<%}%>
-								
-								<table  cellspacing="0" borderspacing="0" width="100%" class="TimeRule">
-									<tbody>
-										<tr>							
-											<td class="TdTop"><span></span></td>
-										</tr>
-										<tr>							
-											<td class="TdDotLine"><span></span></td>
-										</tr>
-										<tr>							
-											<td class="TdLine"><span></span></td>
-										</tr>
-										<tr>							
-											<td class="TdDotLine"><span></span></td>
-										</tr>
-										<tr>							
-											<td class="TdLine"><span></span></td>
-										</tr>
-										<tr>							
-											<td class="TdDotLine"><span></span></td>
-										</tr>
-										<tr>							
-											<td class="TdLine"><span></span></td>
-										</tr>
-										<tr>							
-											<td class="TdDotLine"><span></span></td>
-										</tr>
-										<tr>							
-											<td class="TdLine"><span></span></td>
-										</tr>
-										<tr>							
-											<td class="TdDotLine"><span></span></td>
-										</tr>
-										<tr>							
-											<td class="TdLine"><span></span></td>
-										</tr>
-										<tr>							
-											<td class="TdDotLine"><span></span></td>
-										</tr>
-										<tr>							
-											<td class="TdLine"><span></span></td>
-										</tr>
-										<tr>							
-											<td class="TdDotLine"><span></span></td>
-										</tr>
-										<tr>							
-											<td class="TdLine"><span></span></td>
-										</tr>
-										<tr>							
-											<td class="TdDotLine"><span></span></td>
-										</tr>
-										<tr>							
-											<td class="TdLine"><span></span></td>
-										</tr>
-										<tr>							
-											<td class="TdDotLine"><span></span></td>
-										</tr>
-										<tr>							
-											<td class="TdLine"><span></span></td>
-										</tr>
-										<tr>							
-											<td class="TdDotLine"><span></span></td>
-										</tr>
-										<tr>							
-											<td class="TdLine"><span></span></td>
-										</tr>
-										<tr>							
-											<td class="TdDotLine"><span></span></td>
-										</tr>
-										<tr>							
-											<td class="TdLine"><span></span></td>
-										</tr>
-										<tr>							
-											<td class="TdDotLine"><span></span></td>
-										</tr>
-										<tr>							
-											<td class="TdLine"><span></span></td>
-										</tr>
-										<tr>							
-											<td class="TdDotLine"><span></span></td>
-										</tr>
-										<tr>							
-											<td class="TdLine"><span></span></td>
-										</tr>
-										<tr>							
-											<td class="TdDotLine"><span></span></td>
-										</tr>
-										<tr>							
-											<td class="TdLine"><span></span></td>
-										</tr>
-										<tr>							
-											<td class="TdDotLine"><span></span></td>
-										</tr>
-										<tr>							
-											<td class="TdLine"><span></span></td>
-										</tr>
-										<tr>							
-											<td class="TdDotLine"><span></span></td>
-										</tr>
-										<tr>							
-											<td class="TdLine"><span></span></td>
-										</tr>
-										<tr>							
-											<td class="TdDotLine"><span></span></td>
-										</tr>
-										<tr>							
-											<td class="TdLine"><span></span></td>
-										</tr>
-										<tr>							
-											<td class="TdDotLine"><span></span></td>
-										</tr>
-										<tr>							
-											<td class="TdLine"><span></span></td>
-										</tr>
-										<tr>							
-											<td class="TdDotLine"><span></span></td>
-										</tr>
-										<tr>							
-											<td class="TdLine"><span></span></td>
-										</tr>
-										<tr>							
-											<td class="TdDotLine"><span></span></td>
-										</tr>
-										<tr>							
-											<td class="TdLine"><span></span></td>
-										</tr>
-										<tr>							
-											<td class="TdDotLine"><span></span></td>
-										</tr>
-										<tr>							
-											<td class="TdLine"><span></span></td>
-										</tr>
-										<tr>							
-											<td class="TdDotLine"><span></span></td>
-										</tr>
-										<tr>							
-											<td class="TdLine"><span></span></td>
-										</tr>
-										<tr>							
-											<td class="TdDotLine"><span></span></td>
-										</tr>
-										<tr>							
-											<td class="TdLine"><span></span></td>
-										</tr>
-										<tr>							
-											<td class="TdDotLine"><span></span></td>
-										</tr>
-										<tr>							
-											<td class="TdLine"><span></span></td>
-										</tr>
-										<tr>							
-											<td class="TdDotLine">&nbsp</td>
-										</tr>										
-									</tbody>
-								</table>	
-							</div>
-						</div>
-					</td>
-				</tr></tbody>
-				</table>
-			</div>
-		</div>
-	</div>
-	<% /*Begin Popup Menu*/ %>
-  			
-  				<div class="UIRightClickPopupMenu" id="UIDayViewRightMenu" eXoCallback="eXo.calendar.UICalendarPortlet.monthViewCallback">
-						  <div class="TopLeftRightClickPopupMenu">
-          			<div class="TopRightRightClickPopupMenu">
-            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
-          			</div>
-        			</div>
-			        <div class="MiddleLeftRightClickPopupMenu">
-			          <div class="MiddleRightRightClickPopupMenu">
-              		<div class="UIRightPopupMenuContainer">
-              			No Event Context Menu
-									</div>
-	          		</div>
-	        		</div>
-				      <div class="BottomLeftRightClickPopupMenu">
-				        <div class="BottomRightRightClickPopupMenu">
-				          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
-				        </div>
-				      </div>
-	      		</div>
-
-  		<% /*End Popup Menu*/ %>
-  		<% /*Begin Popup Menu*/ %>
-  			
-  				<div class="UIRightClickPopupMenu" id="UIDayViewEventRightMenu" eXoCallback="eXo.calendar.UICalendarPortlet.dayViewCallback">
-						  <div class="TopLeftRightClickPopupMenu">
-          			<div class="TopRightRightClickPopupMenu">
-            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
-          			</div>
-        			</div> 
-			        <div class="MiddleLeftRightClickPopupMenu">
-			          <div class="MiddleRightRightClickPopupMenu">
-              		<div class="UIRightPopupMenuContainer">
-              			Event Context Menu
-									</div>
-	          		</div>
-	        		</div>
-				      <div class="BottomLeftRightClickPopupMenu">
-				        <div class="BottomRightRightClickPopupMenu">
-				          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
-				        </div>
-				      </div>
-	      		</div>
-
-  		<% /*End Popup Menu*/ %>
-<%uiform.end()%>	 
+                  %>
+                  <div class="EventContainerBorder EventBoxes" calid="<%=ce.getCalendarId()%>" actionlink="$actionLink"
+                    starttime="$beginTime" endtime="$endTime">
+                    <div class="EventContainerBar" title="<%=df.format(ce.getFromDateTime())%> : <%=df.format(ce.getToDateTime())%>">
+                      <%=(ce.getFromDateTime().getHours())%>
+                      :<%=(ce.getFromDateTime().getMinutes())%>
+                      <%=(ce.getToDateTime().getHours())%>
+                      :<%=(ce.getToDateTime().getMinutes())%>
+                    </div>
+                    <div class="EventContainer">
+                      <%=ce.getSummary()%>
+                    </div>
+                    <div class="ResizeEventContainer">
+                      <span></span>
+                    </div>
+                  </div>
+                  <%}%>
+                  <table cellspacing="0" cellpadding="0"  borderspacing="0" width="100%" class="TimeRule">
+                    <tbody>
+                      <%
+			            		flag = true ;
+			            		List hoursSteps = uicomponent.getDisplayTimes("hh:mm", 30) ;
+			            		for(h in hoursSteps) {
+			            			cssClass = "TdDotLine" ;
+			            			if(flag) {cssClass = "TdLine" ;} ;
+                      %>
+                      <tr startTime=$h>
+                        <td class="$cssClass">
+                          <span></span>
+                        </td>
+                      </tr>
+                      <%
+			            		flag = !flag ;
+			            		}%>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<% /*Begin Popup Menu*/ %>
+<div class="UIRightClickPopupMenu" id="UIDayViewRightMenu" exocallback="eXo.calendar.UICalendarPortlet.monthViewCallback">
+  <div class="TopLeftRightClickPopupMenu">
+    <div class="TopRightRightClickPopupMenu">
+      <div class="TopCenterRightClickPopupMenu">
+        <span></span>
+      </div>
+    </div>
+  </div>
+  <div class="MiddleLeftRightClickPopupMenu">
+    <div class="MiddleRightRightClickPopupMenu">
+      <div class="UIRightPopupMenuContainer">
+        <div>
+          <a href="<%=uicomponent.event("QuickAdd","Event&startTime=beginTime&finishTime=endTime")%>">
+            Add new event</a>
+        </div>
+        <div>
+          <a href="<%=uicomponent.event("QuickAdd","Task&startTime=beginTime&finishTime=endTime")%>">
+            Add new task</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="BottomLeftRightClickPopupMenu">
+    <div class="BottomRightRightClickPopupMenu">
+      <div class="BottomCenterRightClickPopupMenu">
+        <span></span>
+      </div>
+    </div>
+  </div>
+</div>
+<% /*End Popup Menu*/ %>
+<% /*Begin Popup Menu*/ %>
+<div class="UIRightClickPopupMenu" id="UIDayViewEventRightMenu" exocallback="eXo.calendar.UICalendarPortlet.dayViewCallback">
+  <div class="TopLeftRightClickPopupMenu">
+    <div class="TopRightRightClickPopupMenu">
+      <div class="TopCenterRightClickPopupMenu">
+        <span></span>
+      </div>
+    </div>
+  </div>
+  <div class="MiddleLeftRightClickPopupMenu">
+    <div class="MiddleRightRightClickPopupMenu">
+      <div class="UIRightPopupMenuContainer">
+        <%
+  				for(String act : uicomponent.getQuickEditMenu()) {
+  				link = uicomponent.event(act,"id&$uicomponent.CALENDARID=calId") ;
+        %>
+        <a href="$link">
+          <div>
+            $act</div>
+        </a>
+        <%}%>
+      </div>
+    </div>
+  </div>
+  <div class="BottomLeftRightClickPopupMenu">
+    <div class="BottomRightRightClickPopupMenu">
+      <div class="BottomCenterRightClickPopupMenu">
+        <span></span>
+      </div>
+    </div>
+  </div>
+</div>
+<% /*End Popup Menu*/ %>
+<%uiform.end()%>

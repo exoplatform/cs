@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.EventQuery;
@@ -47,6 +48,11 @@ public class UIDayView extends UICalendarView {
 
   private Map<String, CalendarEvent> eventData_ = new HashMap<String, CalendarEvent>() ;
   private Map<String, CalendarEvent> allDayEvent_ = new HashMap<String, CalendarEvent>() ;
+  private boolean isShowWorkingTime_ = false ;
+  private int startTime_ = 0 ;
+  private int endTime_ = 24 ;
+  private int timeInterval_ = 30 ;
+  
   public UIDayView() throws Exception{
     super() ;
     refresh() ;
@@ -54,7 +60,7 @@ public class UIDayView extends UICalendarView {
   protected void moveDateTo(int days) {
     calendar_.add(Calendar.DATE, days) ;
   }
-  
+
   @Override
   public void refresh() throws Exception {
     eventData_.clear() ;
@@ -69,7 +75,6 @@ public class UIDayView extends UICalendarView {
     eventQuery.setToDate(end) ;
     events = calendarService.getUserEvents(username, eventQuery) ;
     events.addAll(calendarService.getPublicEvents(eventQuery)) ;
-    System.out.println("\n\n events " + events.size());
     for(CalendarEvent ce : events){
       if(ce.getFromDateTime().before(begin.getTime()) && ce.getToDateTime().after(end.getTime())) {
         allDayEvent_.put(ce.getId(),ce) ;
@@ -80,10 +85,10 @@ public class UIDayView extends UICalendarView {
   }
   protected Map<String, CalendarEvent> getEventData() {return eventData_ ;}
   protected Map<String, CalendarEvent> getAllDayEvents() {return allDayEvent_ ;} ;
-  
+
   protected Calendar getCurrentDayEnd()  {
     Calendar toDate = new GregorianCalendar(getCurrentYear(), getCurrentMonth(), getCurrentDay()) ;
-    toDate.set(Calendar.HOUR, toDate.getActualMaximum(Calendar.HOUR)-1) ;
+    toDate.set(Calendar.HOUR, toDate.getActualMaximum(Calendar.HOUR)) ;
     toDate.set(Calendar.MINUTE, toDate.getActualMaximum(Calendar.MINUTE)) ;
     toDate.set(Calendar.SECOND, toDate.getActualMaximum(Calendar.SECOND)) ;
     toDate.set(Calendar.MILLISECOND, toDate.getActualMaximum(Calendar.MILLISECOND)) ;
@@ -96,6 +101,15 @@ public class UIDayView extends UICalendarView {
     fromDate.set(Calendar.SECOND, fromDate.getActualMinimum(Calendar.SECOND)) ;
     fromDate.set(Calendar.MILLISECOND, fromDate.getActualMinimum(Calendar.MILLISECOND)) ;
     return fromDate ;
+  }
+
+  protected List<String> getDisplayTimes(String timeFormat, int timeInterval) {
+    if(isShowWorkingTime_) {
+      return CalendarUtils.getDisplayTimes(timeFormat, timeInterval,startTime_, endTime_*(60/timeInterval)) ;
+    } 
+    else {
+      return CalendarUtils.getDisplayTimes(timeFormat, timeInterval,0, 24*(60/timeInterval)) ;
+    }
   }
   
   static  public class MoveNextActionListener extends EventListener<UIDayView> {
@@ -115,7 +129,7 @@ public class UIDayView extends UICalendarView {
       event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
     }
   }
-  
+
   static  public class SaveEventActionListener extends EventListener<UIDayView> {
     public void execute(Event<UIDayView> event) throws Exception {
       UIDayView calendarview = event.getSource() ;
@@ -130,17 +144,17 @@ public class UIDayView extends UICalendarView {
         try {
           int hoursBg = (Integer.parseInt(startTime)/60) ;
           int minutesBg = (Integer.parseInt(startTime)%60) ;
-          
+
           int hoursEnd = (Integer.parseInt(endTime)/60) ;
           int minutesEnd = (Integer.parseInt(endTime)%60) ;
-          
+
           Calendar fromDateTime = new GregorianCalendar(calendarview.getCurrentYear(), calendarview.getCurrentMonth(), calendarview.getCurrentDay()) ;
           fromDateTime.set(Calendar.HOUR, hoursBg) ;
           fromDateTime.set(Calendar.MINUTE, minutesBg) ;
           Calendar toDateTime = new GregorianCalendar(calendarview.getCurrentYear(), calendarview.getCurrentMonth(), calendarview.getCurrentDay()) ;
           toDateTime.set(Calendar.HOUR, hoursEnd) ;
           toDateTime.set(Calendar.MINUTE, minutesEnd) ;
-          
+
           ce.setFromDateTime(fromDateTime.getTime());
           ce.setToDateTime(toDateTime.getTime()) ;
           calendarService.saveUserEvent(username, calendarId, ce, false) ;

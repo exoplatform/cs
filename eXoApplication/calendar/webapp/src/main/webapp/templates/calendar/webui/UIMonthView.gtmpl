@@ -10,6 +10,7 @@
  	String linkDayNext = uicomponent.event(uicomponent.ACT_NEXT) ;
  	String linkDayPrevious = uicomponent.event(uicomponent.ACT_PREVIOUS) ;
 	%>
+	
 	<div class="UIMonthView">
 		<div class="TitleBar">
 			<div  style="width: 300px;margin:auto;">		
@@ -186,7 +187,7 @@
               				link = uicomponent.event(act,"id&$uicomponent.CALENDARID=calId") ;
               			%>
               				<a href="$link">
-	              				<div style="border:solid 1px red;">$act</div>
+	              				<div>$act</div>
               			  </a>
               			<%}%>
 									</div>

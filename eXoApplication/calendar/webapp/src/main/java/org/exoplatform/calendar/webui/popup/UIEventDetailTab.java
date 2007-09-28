@@ -12,6 +12,7 @@ import java.util.Map;
 
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.Calendar;
+import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.Reminder;
 import org.exoplatform.portal.webui.util.Util;
@@ -108,8 +109,9 @@ public class UIEventDetailTab extends UIFormInputWithActions {
   }
   private List<SelectItemOption<String>> getRepeater() {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-    options.add(new SelectItemOption<String>(UIEventForm.ITEM_REPEAT, UIEventForm.ITEM_REPEAT)) ;
-    options.add(new SelectItemOption<String>(UIEventForm.ITEM_UNREPEAT, UIEventForm.ITEM_UNREPEAT)) ;
+    for(String s : CalendarEvent.REPEATTYPES) {
+      options.add(new SelectItemOption<String>(s,s)) ;
+    }
     return options ;
   }
   private List<SelectItemOption<String>> getReminder() {
