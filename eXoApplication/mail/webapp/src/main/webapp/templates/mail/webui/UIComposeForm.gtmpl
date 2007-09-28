@@ -43,19 +43,100 @@
 									
 									<div class="SeparatorLine"><span></span></div>
 									
-									<a href="#" class="ControlButton">
+									<div class="ControlButton" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);" style="position: relative;">
 										<div class="IconHolder PriorityIcon">
 											<div class="Label DownArrow1Icon">Message Priority</div>
 										</div>
-									</a>
+										<% /*Begin Popup Menu*/ %>
+					      			<div class="UIPopupCategory" style="display: none;">
+					      				<div class="UIRightClickPopupMenu" style="display: block;">
+												  <div class="TopLeftRightClickPopupMenu">
+						          			<div class="TopRightRightClickPopupMenu">
+						            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
+						          			</div>
+						        			</div>
+									        <div class="MiddleLeftRightClickPopupMenu">
+									          <div class="MiddleRightRightClickPopupMenu">
+						              		<div class="UIRightPopupMenuContainer">
+																<a class="MenuItem" href="#">   
+							                    <div class="ItemIcon CheckItem ">
+							                      No priority
+							                    </div>
+						                    </a>
+						                    <a class="MenuItem" href="#">   
+							                    <div class="ItemIcon">
+							                      No priority
+							                    </div>
+						                    </a>
+						                    <a class="MenuItem" href="#">   
+							                    <div class="ItemIcon">
+							                      Hight priority
+							                    </div>
+						                    </a>
+						                    <a class="MenuItem" href="#">   
+							                    <div class="ItemIcon">
+							                      Nomal priority
+							                    </div>
+						                    </a>
+						                    <a class="MenuItem" href="#">   
+							                    <div class="ItemIcon">
+							                      Low priority
+							                    </div>
+						                    </a>
+															</div>
+							          		</div>
+							        		</div>
+										      <div class="BottomLeftRightClickPopupMenu">
+										        <div class="BottomRightRightClickPopupMenu">
+										          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+										        </div>
+										      </div>
+							      			
+										    </div>
+					      			</div>
+					      		<% /*End Popup Menu*/ %>
+									</div>
 									
 									<div class="SeparatorLine"><span></span></div>
 									
-									<a href="#" class="ControlButton">
+									<div class="ControlButton" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);" style="position: relative;">
 										<div class="IconHolder EditorOptionsIcon">
 											<div class="Label DownArrow1Icon">Editor Options</div>
 										</div>
-									</a>
+										<% /*Begin Popup Menu*/ %>
+					      			<div class="UIPopupCategory" style="display: none;">
+					      				<div class="UIRightClickPopupMenu" style="display: block;">
+												  <div class="TopLeftRightClickPopupMenu">
+						          			<div class="TopRightRightClickPopupMenu">
+						            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
+						          			</div>
+						        			</div>
+									        <div class="MiddleLeftRightClickPopupMenu">
+									          <div class="MiddleRightRightClickPopupMenu">
+						              		<div class="UIRightPopupMenuContainer">
+																<a class="MenuItem" href="#">   
+							                    <div class="ItemIcon CheckItem ">
+							                      Rich text editor
+							                    </div>
+						                    </a>
+						                    <a class="MenuItem" href="#">   
+							                    <div class="ItemIcon">
+							                      Plain text
+							                    </div>
+						                    </a>
+															</div>
+							          		</div>
+							        		</div>
+										      <div class="BottomLeftRightClickPopupMenu">
+										        <div class="BottomRightRightClickPopupMenu">
+										          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+										        </div>
+										      </div>
+							      			
+										    </div>
+					      			</div>
+					      		<% /*End Popup Menu*/ %>
+									</div>
 									
 									<div style="clear:left;"><span></span></div>
 									

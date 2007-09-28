@@ -85,3 +85,7 @@
 .DeleteAccount {
 	background: url('icons/DeleteAccount.gif') no-repeat;
 }
+
+.CheckItem {
+	background: url('icons/CheckItem.gif') no-repeat left;
+}
