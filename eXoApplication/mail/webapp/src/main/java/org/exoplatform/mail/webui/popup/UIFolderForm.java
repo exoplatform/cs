@@ -6,7 +6,7 @@ package org.exoplatform.mail.webui.popup;
 
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
-import org.exoplatform.mail.webui.UICustomizeFolders;
+import org.exoplatform.mail.webui.UIFolderContainer;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.mail.service.Utils;
@@ -59,7 +59,7 @@ public class UIFolderForm extends UIForm implements UIPopupComponent {
       UIMailPortlet uiPortlet = uiForm.getAncestorOfType(UIMailPortlet.class) ;
       String username = uiPortlet.getCurrentUser() ;
       String accountId =  uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
-      UICustomizeFolders uiCustomizeFolders = uiPortlet.findFirstComponentOfType(UICustomizeFolders.class) ;
+      UIFolderContainer uiCustomizeFolders = uiPortlet.findFirstComponentOfType(UIFolderContainer.class) ;
       if(Utils.isEmptyField(folderName)) {
         uiApp.addMessage(new ApplicationMessage("UIFolderForm.msg.name-required", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
