@@ -9,7 +9,7 @@
 		<a href="<%=uicomponent.event("AddCategory")%>">
 			<div class="AddCategoryIcon"><span></span></div>
 		</a>
-		<div class="EventCategory">
+		<div class="EventCategory" onclick="eXo.calendar.UICalendarPortlet.initFilterByCategory(this) ;">
 			<% 
 				uiform.renderField("eventCategories") ;
 			%>			
