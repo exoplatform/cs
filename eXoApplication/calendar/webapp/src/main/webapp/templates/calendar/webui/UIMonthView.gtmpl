@@ -1,6 +1,6 @@
 	<%
-	def rcontext = _ctx.getRequestContext() ;
-  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.showContextMenu() ;') ;
+	//def rcontext = _ctx.getRequestContext() ;
+  //rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.showContextMenu() ;') ;
 	uiform.begin()
  	_ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");
  	int currentDay = uicomponent.getCurrentDay() ;

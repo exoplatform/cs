@@ -15,7 +15,8 @@
  	_ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");
  	String linkDayNext = uicomponent.event(uicomponent.ACT_NEXT) ;
  	String linkDayPrevious = uicomponent.event(uicomponent.ACT_PREVIOUS) ;
-%>
+ 	String actionLinks = "javascript:ajaxAsyncGetRequest('portal/private/site/', false)" ;
+%> 
 	<div class="UIDayView">
 		<div class="TitleBar">		
 			<div  style="width: 300px;margin:auto;">		
@@ -86,7 +87,7 @@
 								 	DateFormat df = new SimpleDateFormat(style) ;
 								 	actionLink =  uicomponent.event("SaveEvent",ce.getId()+"&calendarId="+ce.getCalendarId()+"&startTime=beginTime&finishTime=endTime") ;
 								%>
-								<div class="EventContainerBorder" actionLink="$actionLink" startTime="$beginTime" endTime="$endTime" >
+								<div class="EventContainerBorder EventBoxes" calid="<%=ce.getCalendarId()%>" actionLink="$actionLink" startTime="$beginTime" endTime="$endTime" >
 									<div class="EventContainerBar" title="<%=df.format(ce.getFromDateTime())%> : <%=df.format(ce.getToDateTime())%>">
 										<%=(ce.getFromDateTime().getHours())%>:<%=(ce.getFromDateTime().getMinutes())%>
 										<%=(ce.getToDateTime().getHours())%>:<%=(ce.getToDateTime().getMinutes())%>
@@ -96,7 +97,7 @@
 								</div>
 								<%}%>
 								
-								<table  cellspacing="0" borderspacing="0" width="100%">
+								<table  cellspacing="0" borderspacing="0" width="100%" class="TimeRule">
 									<tbody>
 										<tr>							
 											<td class="TdTop"><span></span></td>
@@ -257,5 +258,51 @@
 				</table>
 			</div>
 		</div>
-	</div>	
+	</div>
+	<% /*Begin Popup Menu*/ %>
+  			
+  				<div class="UIRightClickPopupMenu" id="UIDayViewRightMenu" eXoCallback="eXo.calendar.UICalendarPortlet.monthViewCallback">
+						  <div class="TopLeftRightClickPopupMenu">
+          			<div class="TopRightRightClickPopupMenu">
+            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
+          			</div>
+        			</div>
+			        <div class="MiddleLeftRightClickPopupMenu">
+			          <div class="MiddleRightRightClickPopupMenu">
+              		<div class="UIRightPopupMenuContainer">
+              			No Event Context Menu
+									</div>
+	          		</div>
+	        		</div>
+				      <div class="BottomLeftRightClickPopupMenu">
+				        <div class="BottomRightRightClickPopupMenu">
+				          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+				        </div>
+				      </div>
+	      		</div>
+
+  		<% /*End Popup Menu*/ %>
+  		<% /*Begin Popup Menu*/ %>
+  			
+  				<div class="UIRightClickPopupMenu" id="UIDayViewEventRightMenu" eXoCallback="eXo.calendar.UICalendarPortlet.dayViewCallback">
+						  <div class="TopLeftRightClickPopupMenu">
+          			<div class="TopRightRightClickPopupMenu">
+            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
+          			</div>
+        			</div> 
+			        <div class="MiddleLeftRightClickPopupMenu">
+			          <div class="MiddleRightRightClickPopupMenu">
+              		<div class="UIRightPopupMenuContainer">
+              			Event Context Menu
+									</div>
+	          		</div>
+	        		</div>
+				      <div class="BottomLeftRightClickPopupMenu">
+				        <div class="BottomRightRightClickPopupMenu">
+				          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+				        </div>
+				      </div>
+	      		</div>
+
+  		<% /*End Popup Menu*/ %>
 <%uiform.end()%>	 
