@@ -18,7 +18,7 @@ import org.exoplatform.webui.core.UIContainer;
     template =  "app:/templates/mail/webui/UIBannerContainer.gtmpl"
 )
 public class UIBannerContainer extends UIContainer  {
-    public UIBannerContainer() throws Exception {
+  public UIBannerContainer() throws Exception {
     addChild(UISearchForm.class, null, null) ;
   }
 

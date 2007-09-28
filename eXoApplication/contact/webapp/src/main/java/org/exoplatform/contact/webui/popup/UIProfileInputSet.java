@@ -58,7 +58,7 @@ public class UIProfileInputSet extends UIFormInputWithActions {
     genderOptions.add(new SelectItemOption<String>(MALE, MALE));
     genderOptions.add(new SelectItemOption<String>(FEMALE, FEMALE));
     addUIFormInput(new UIFormRadioBoxInput(FIELD_GENDER_BOX, FIELD_GENDER_BOX, genderOptions).setValue(MALE));
-    addUIFormInput(new UIFormDateTimeInput(FIELD_BIRTHDAY_DATETIME, FIELD_BIRTHDAY_DATETIME, new Date()).addValidator(DateTimeValidator.class));
+    addUIFormInput(new UIFormDateTimeInput(FIELD_BIRTHDAY_DATETIME, FIELD_BIRTHDAY_DATETIME, new Date(), false).addValidator(DateTimeValidator.class));
     addUIFormInput(new UIFormStringInput(FIELD_JOBTITLE_INPUT, FIELD_JOBTITLE_INPUT, null));
     addUIFormInput(new UIFormStringInput(FIELD_EMAIL_INPUT, FIELD_EMAIL_INPUT, null)
     .addValidator(EmailAddressValidator.class));

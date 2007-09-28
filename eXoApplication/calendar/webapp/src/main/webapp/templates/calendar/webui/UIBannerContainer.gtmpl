@@ -1,13 +1,9 @@
+<%
+	import org.exoplatform.calendar.webui.UISearchForm ;
+%>
 <div class="UIBannerContainer">
 	<div class="LeftHorizontalLine">
 		<div class="RepeatHorizontalLine">a Powerful, Open-source Calendar</div>					
 	</div>
-	<div class="SearchForm">
-		<div class="AdvancedSearch" title="Advance Search"><span></span></div>
-		<div class="SeparatorLine"><span></span></div>
-		<div class="Search" title="Search"><span></span></div>
-		<input class="Input" type="text" name=""/>
-		<div class="Label">Search:</div>
-		<div style="clear:right;"><span></span></div>
-	</div>
+	<%uicomponent.renderChild(UISearchForm.class)%>
 </div>

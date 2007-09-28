@@ -4,8 +4,10 @@
  **************************************************************************/
 package org.exoplatform.calendar.webui;
 
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -22,7 +24,8 @@ import org.exoplatform.webui.form.UIFormStringInput;
     lifecycle = UIFormLifecycle.class,
     template = "app:/templates/calendar/webui/UISearchForm.gtmpl",
     events = {
-      @EventConfig(listeners = UISearchForm.SearchActionListener.class)      
+      @EventConfig(listeners = UISearchForm.SearchActionListener.class),
+      @EventConfig(listeners = UISearchForm.AdvancedSearchActionListener.class)
     }
 )
 public class UISearchForm extends UIForm {
@@ -33,6 +36,18 @@ public class UISearchForm extends UIForm {
   }
   
   static  public class SearchActionListener extends EventListener<UISearchForm> {
+    public void execute(Event<UISearchForm> event) throws Exception {
+      UISearchForm uiForm = event.getSource() ;
+      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+      String text = uiForm.getUIStringInput(uiForm.FIELD_SEARCHVALUE).getValue() ;
+      if(text == null || text.length() == 0) {
+        uiApp.addMessage(new ApplicationMessage("UISearchForm.msg.no-text-to-search", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
+    }
+  }
+  static  public class AdvancedSearchActionListener extends EventListener<UISearchForm> {
     public void execute(Event<UISearchForm> event) throws Exception {
       UISearchForm uiForm = event.getSource() ;
     }

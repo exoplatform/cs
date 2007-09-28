@@ -1,5 +1,4 @@
-         <% import java.lang.Exception ;%>
-         
+
          		<div class="UIQuickAddEvent">
          		
          			<div class="QuickAddEventContainer">
@@ -103,4 +102,5 @@
           </tr>  
         </table>
       </div>
-         		</div>
+    </div>
+
