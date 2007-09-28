@@ -240,7 +240,27 @@ UICalendarPortlet.prototype.showContextMenu = function() {
 } ;
 
 UICalendarPortlet.prototype.dayViewCallback = function(evt){
-	window.status = "Call back"  ;
+	var _e = window.event || evt ;
+	var src = _e.srcElement || _e.target ;
+	var startTime = "" ;
+	var map = null ;
+	if (src.nodeName == "TD") {		
+		src = eXo.core.DOMUtil.findAncestorByTagName(src, "tr") ;
+		startTime = src.getAttribute("startTime") ;
+		map = {
+			"startTime\s*=\s*[A-Za-z0-9_]*(?=&|'|\")":"startTime="+startTime
+		} ;
+	}
+	else{		
+		src = eXo.core.DOMUtil.findAncestorByClass(src, "EventBoxes") ;
+		var eventId = src.getAttribute("eventid") ;
+		var calendarId = src.getAttribute("calid") ;
+		map = {
+			"objectId\s*=\s*[A-Za-z0-9_]*(?=&|'|\")":"objectId="+eventId,
+			"calendarId\s*=\s*[A-Za-z0-9_]*(?=&|'|\")":"calendarId="+calendarId
+		} ;
+	}
+	eXo.webui.UIContextMenu.changeAction(eXo.webui.UIContextMenu.menuElement, map) ;
 }
 UICalendarPortlet.prototype.monthViewCallback = function(evt){
 	var _e = window.event || evt ;
@@ -382,9 +402,9 @@ UISelection.prototype.init = function(evt) {
 	UISelection.selection = document.createElement("div") ;
 	UISelection.selection.className = "selection" ;
 	UISelection.selection.setAttribute("id", "selection") ;
-	UISelection.selectionY = eXo.core.Browser.findMouseRelativeY(Container, _e) ;
+	UISelection.selectionY = _e.clientY ; //eXo.core.Browser.findMouseRelativeY(Container, _e) ;
 	window.status = UISelection.selectionY ;
-	//UISelection.selection.innerHTML = "<span>adsfasdf</span>" ;
+	UISelection.selection.innerHTML = "<span></span>" ;
 	Container.appendChild(UISelection.selection) ;
 	Container.onmousemove = UISelection.resize ;
 	Container.onmouseup = UISelection.clear ;

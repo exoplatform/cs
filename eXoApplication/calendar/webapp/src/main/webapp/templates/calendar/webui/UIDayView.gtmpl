@@ -89,7 +89,7 @@
 								 	DateFormat df = new SimpleDateFormat(style) ;
 								 	actionLink =  uicomponent.event("SaveEvent",ce.getId()+"&calendarId="+ce.getCalendarId()+"&startTime=beginTime&finishTime=endTime") ;
                   %>
-                  <div class="EventContainerBorder EventBoxes" calid="<%=ce.getCalendarId()%>" actionlink="$actionLink"
+                  <div class="EventContainerBorder EventBoxes" eventid="<%=ce.getId()%>" calid="<%=ce.getCalendarId()%>" actionlink="$actionLink"
                     starttime="$beginTime" endtime="$endTime">
                     <div class="EventContainerBar" title="<%=df.format(ce.getFromDateTime())%> : <%=df.format(ce.getToDateTime())%>">
                       <%=(ce.getFromDateTime().getHours())%>
@@ -114,7 +114,7 @@
 			            			cssClass = "TdDotLine" ;
 			            			if(flag) {cssClass = "TdLine" ;} ;
                       %>
-                      <tr startTime=$h>
+                      <tr startTime="$h">
                         <td class="$cssClass">
                           <span></span>
                         </td>
@@ -134,7 +134,7 @@
   </div>
 </div>
 <% /*Begin Popup Menu*/ %>
-<div class="UIRightClickPopupMenu" id="UIDayViewRightMenu" exocallback="eXo.calendar.UICalendarPortlet.monthViewCallback">
+<div class="UIRightClickPopupMenu" id="UIDayViewRightMenu" exocallback="eXo.calendar.UICalendarPortlet.dayViewCallback">
   <div class="TopLeftRightClickPopupMenu">
     <div class="TopRightRightClickPopupMenu">
       <div class="TopCenterRightClickPopupMenu">
@@ -146,11 +146,12 @@
     <div class="MiddleRightRightClickPopupMenu">
       <div class="UIRightPopupMenuContainer">
         <div>
-          <a href="<%=uicomponent.event("QuickAdd","event&startTime=beginTime&finishTime=endTime")%>">
+
+          <a href="<%=uicomponent.event("QuickAdd","Event&startTime=beginTime")%>">
             Add new event</a>
         </div>
         <div>
-          <a href="<%=uicomponent.event("QuickAdd","task&startTime=beginTime&finishTime=endTime")%>">
+          <a href="<%=uicomponent.event("QuickAdd","Task&startTime=beginTime")%>">
             Add new task</a>
         </div>
       </div>
