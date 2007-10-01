@@ -165,14 +165,14 @@
 	                  <a href="<%=uicomponent.event("OpenForumLink", forum.getId())%>" class="ForumTitle">$forumTitle</a><span class="ForumQuantity">&nbsp;(5 viewing)</span>
 	                  <div class="ForumDescription">$forumDescription</div>
 	                </td>
-	                 <td >
              <% if(topicNewPost != null) { %>
+	                <td >
 								 		<div class="LastPostIcon $topicNewPostIcon" ><span></span></div><a href="$openLinkLastPost" title="Go to first Post in Therad '$topicNewPostTitle' " class="LastPostTitle">$topicNewPostTitle</a>
 										<div style="clear: left;"><span></span></div>
 										<div class="LastPostInfos">by&nbsp;<a style="color: #058EE6;" href="#">$lastPostBy</a><span class="DateTime">&nbsp;($dateTime)</span></div>
 							  <% } else { %>	
 									<td class="Tdbox" style="height: 40px;">
-											Not Topic !	
+											Not Theard !	
 							  <% } %>	
 									</td>
 								 	<td class="Tdbox">$topicCount</td>

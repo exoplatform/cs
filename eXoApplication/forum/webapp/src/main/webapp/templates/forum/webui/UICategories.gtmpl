@@ -117,7 +117,7 @@
 												<div class="LastPostInfos">by&nbsp;<a style="color: #058EE6;" href="#">$lastPostBy</a><span class="DateTime">&nbsp;($dateTime)</span></div>
 											<% } else { %>	
 											<td class="Tdbox" style="height: 40px;">
-													Not Topic !	
+													Not Theard !	
 											<% } %>
 											</td>
 										 	<td class="Tdbox">$topicCount</td>
