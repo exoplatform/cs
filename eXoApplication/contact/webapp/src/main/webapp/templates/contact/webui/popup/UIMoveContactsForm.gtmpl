@@ -1,10 +1,10 @@
 <%
 	import org.exoplatform.contact.service.ContactGroup;
 	import org.exoplatform.contact.service.GroupContactData;
+	uiform.begin()
 %>
 
-<%uiform.begin()%>
-<div class="UIMoveContactsForm" id="<%=uicomponent.getId()%>">
+<div class="UIMoveContactsForm">
 	<div class="TitleMoveContactsForm">Choose a Destination Address Book:</div>
 	
 	<div class="MoveContactsFormContainer">
@@ -49,7 +49,6 @@
 	            <%}%>
 	          </div>
  </div>
-	
-	
+
 </div>
 <%uiform.end()%>

@@ -4,8 +4,15 @@
  **************************************************************************/
 package org.exoplatform.contact;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+
+import org.exoplatform.contact.service.Contact;
+import org.exoplatform.contact.service.ContactAttachment;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.download.DownloadService;
+import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.portal.webui.util.Util;
 
 /**
@@ -25,6 +32,29 @@ public class ContactUtils {
   }
   
   public static boolean IsEmpty(String s) {
-    return (s == null) || s.equalsIgnoreCase("null") || s.equalsIgnoreCase("");     
+    String str ;
+    if (s == null) return true ; 
+    else {
+      str = s.trim() ;
+      return str.equalsIgnoreCase("null") || str.equalsIgnoreCase("") ;
+    }
   }
+  
+  public static String getImageSource(Contact contact, DownloadService dservice) throws Exception {    
+    ContactAttachment contactAttachment = contact.getAttachment();
+    if (contactAttachment != null) {
+      InputStream input = contactAttachment.getInputStream() ;
+      byte[] imageBytes = null ;
+      if (input != null) {
+        imageBytes = new byte[input.available()] ;
+        input.read(imageBytes) ;
+        ByteArrayInputStream byteImage = new ByteArrayInputStream(imageBytes) ;
+        InputStreamDownloadResource dresource = new InputStreamDownloadResource(byteImage, "image") ;
+        dresource.setDownloadName(contactAttachment.getFileName()) ;
+        return  dservice.getDownloadLink(dservice.addDownloadResource(dresource)) ;        
+      }
+    }
+    return null ;
+  }
+  
 }

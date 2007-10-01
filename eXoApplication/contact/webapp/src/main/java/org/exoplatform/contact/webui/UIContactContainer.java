@@ -42,8 +42,11 @@ public class UIContactContainer extends UIContainer  {
     ContactService contactService = ContactUtils.getContactService() ;
     List<ContactGroup> groups = contactService.getGroups(username) ;
     String selectedGroup = null ;
-    if(groups != null && groups.size() > 0) selectedGroup = groups.get(0).getId() ;
-    uiContacts.setContacts(contactService.getContactsByGroup(username, selectedGroup)) ;
+    if(groups != null && groups.size() > 0) {
+      selectedGroup = groups.get(0).getId() ;
+      uiContacts.setContacts(contactService.getContactsByGroup(username, selectedGroup)) ;
+    }
+    
     if(uiContacts.getContacts() != null && uiContacts.getContacts().length > 0) 
       uiContactPreview.setContact(uiContacts.getContacts()[0]) ;
   }
@@ -72,6 +75,7 @@ public class UIContactContainer extends UIContainer  {
       uiSendEmail.setEmails(emails) ;
       uiPopupAction.activate(uiSendEmail, 700, 0, true) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+      
     }
   }
   

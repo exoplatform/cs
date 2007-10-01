@@ -90,13 +90,14 @@ public class UIProfileInputSet extends UIFormInputWithActions {
   protected String getFieldEmail() { return getUIStringInput(FIELD_EMAIL_INPUT).getValue(); }
   protected void setFieldEmail(String s) { getUIStringInput(FIELD_EMAIL_INPUT).setValue(s); }
   
-  protected byte[] getImage() {return imageBytes ;}
   protected void setImage(InputStream input) throws Exception{
     if (input != null) {
       imageBytes = new byte[input.available()] ; 
       input.read(imageBytes) ;
     }
+    else imageBytes = null ;
   }
+  protected byte[] getImage() {return imageBytes ;}
   
   protected String getMimeType() { return imageMimeType ;} ;
   protected void setMimeType(String mimeType) {imageMimeType = mimeType ;} 

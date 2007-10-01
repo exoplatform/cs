@@ -4,14 +4,11 @@
  **************************************************************************/
 package org.exoplatform.contact.webui;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.util.Date;
 
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.download.DownloadService;
-import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIComponent;
@@ -55,20 +52,8 @@ public class UIContactPreview extends UIComponent  {
   }
   
   public String getImageSource() throws Exception {
-    if (contact_.getAttachment() != null) {
-      InputStream input = contact_.getAttachment().getInputStream() ;
-      byte[] imageBytes = null ;
-      if (input != null) {
-        imageBytes = new byte[input.available()] ;
-        input.read(imageBytes) ;
-        ByteArrayInputStream byteImage = new ByteArrayInputStream(imageBytes) ;    
-        DownloadService dservice = getApplicationComponent(DownloadService.class) ;
-        InputStreamDownloadResource dresource = new InputStreamDownloadResource(byteImage, "image") ;
-        dresource.setDownloadName(contact_.getAttachment().getFileName()) ;
-        return  dservice.getDownloadLink(dservice.addDownloadResource(dresource)) ;        
-      }
-    }
-    return null ;
+    DownloadService dservice = getApplicationComponent(DownloadService.class) ;
+    return ContactUtils.getImageSource(contact_, dservice) ; 
   }
   
   static public class MaximizeContactPaneActionListener extends EventListener<UIContactPreview> {

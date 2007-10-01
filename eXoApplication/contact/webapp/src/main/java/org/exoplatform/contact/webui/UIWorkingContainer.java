@@ -47,7 +47,10 @@ public class UIWorkingContainer extends UIContainer  {
   public ContactGroup[] getContactGroups() throws Exception {
     return groupMap_.values().toArray(new ContactGroup[]{}) ;
   }
-  public void removeContactGroup(String id) { groupMap_.remove(id) ; }
+  public void removeContactGroup(String id) { 
+    groupMap_.remove(id) ; 
+    setSelectedGroup(null) ;
+  }
   
   public void setSelectedGroup(String groupId) { selectedGroup_ = groupId ; }
   public String getSelectedGroup() { return selectedGroup_ ; }

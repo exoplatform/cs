@@ -5,7 +5,6 @@
 package org.exoplatform.contact.webui;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import org.exoplatform.contact.ContactUtils;
@@ -19,8 +18,10 @@ import org.exoplatform.contact.webui.popup.UISendEmail;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.impl.GroupImpl;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -109,13 +110,20 @@ public class UIAddressBooks extends UIComponent  {
       String groupId = event.getRequestContext().getRequestParameter(OBJECTID);
       ContactService contactService = ContactUtils.getContactService() ;
       String username = ContactUtils.getCurrentUser() ;
-      contactService.removeGroup(username, groupId) ;
-      UIWorkingContainer uiWorkingContainer = uiAddressBook.getAncestorOfType(UIWorkingContainer.class) ;
-      uiWorkingContainer.removeContactGroup(groupId) ;
-      
-      UIContacts uiContacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class) ;
-      uiContacts.setContacts(new ArrayList<Contact>()) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer) ;      
+      if (contactService.getGroup(username, groupId) != null) {
+        contactService.removeGroup(username, groupId) ;
+        UIWorkingContainer uiWorkingContainer = uiAddressBook.getAncestorOfType(UIWorkingContainer.class) ;
+        UIContacts uiContacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class) ;
+        String selectedGroup = uiWorkingContainer.getSelectedGroup() ;
+        if ((ContactUtils.IsEmpty(selectedGroup)) || selectedGroup.equals(groupId)) uiContacts.setContacts(new ArrayList<Contact>()) ;
+        uiWorkingContainer.removeContactGroup(groupId) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer) ;
+      } else {
+        UIApplication uiApp = uiAddressBook.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UIAddressBooks.msg.groupCannot-deleted", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ; 
+      }
     }
   }
 

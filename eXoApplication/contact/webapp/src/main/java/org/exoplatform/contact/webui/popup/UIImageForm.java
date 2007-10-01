@@ -6,6 +6,7 @@ package org.exoplatform.contact.webui.popup;
 
 import java.io.ByteArrayInputStream;
 
+import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
@@ -66,7 +67,7 @@ public class UIImageForm extends UIForm implements UIPopupComponent{
         return ;
       }
       String fileName = uploadResource.getFileName() ;
-      if(fileName == null || fileName.equals("")) {
+      if(ContactUtils.IsEmpty(fileName)) {
         uiApp.addMessage(new ApplicationMessage("UIAttachFileForm.msg.fileName-error", null, 
             ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -82,13 +83,12 @@ public class UIImageForm extends UIForm implements UIPopupComponent{
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupActionContainer) ;
     }
   }
-  
-  
+
   static  public class CancelActionListener extends EventListener<UIImageForm> {
     public void execute(Event<UIImageForm> event) throws Exception {
       UIImageForm uiForm = event.getSource() ;
-      UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
-      uiContactPortlet.cancelAction() ;
+      UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class) ;
+      uiPopupAction.deActivate() ;
      }
   }  
 }

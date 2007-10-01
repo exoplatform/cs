@@ -4,13 +4,17 @@
  **************************************************************************/
 package org.exoplatform.contact.webui.popup;
 
+import java.util.Date;
+
+import org.exoplatform.contact.ContactUtils;
+import org.exoplatform.contact.service.Contact;
+import org.exoplatform.download.DownloadService;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
-import org.exoplatform.webui.form.UIFormStringInput;
 
 /**
  * Created by The eXo Platform SARL
@@ -27,20 +31,30 @@ import org.exoplatform.webui.form.UIFormStringInput;
     }
 )
 public class UIContactPreviewForm extends UIForm {
+  private Contact contact_ ; 
+  private Date lastUpdated_ ;
+  public UIContactPreviewForm() { }
   
-  public UIContactPreviewForm() {
-    
+  public void setContact(Contact c) { contact_ = c; }
+  public Contact getContact() { return contact_; }
+  
+  public void setLastUpdated(Date s) { lastUpdated_ = s ; }
+  public Date getLastUpdated() { return lastUpdated_ ; }
+  
+  public String getImageSource() throws Exception {
+    DownloadService dservice = getApplicationComponent(DownloadService.class) ;
+    return ContactUtils.getImageSource(contact_, dservice) ; 
   }
   
   static  public class SaveActionListener extends EventListener<UIContactPreviewForm> {
     public void execute(Event<UIContactPreviewForm> event) throws Exception {
-      UIContactPreviewForm uiForm = event.getSource() ;
+      
     }
   }
   
   static  public class CancelActionListener extends EventListener<UIContactPreviewForm> {
     public void execute(Event<UIContactPreviewForm> event) throws Exception {
-      UIContactPreviewForm uiForm = event.getSource() ;
+
     }
   }
 }

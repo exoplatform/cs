@@ -1,8 +1,8 @@
 <% 
 	import org.exoplatform.contact.service.Contact;
-	String compId = uicomponent.getId() ;
+	uiform.begin()
 %>
-<div class="UIContactPreview" id="$compId">
+<div class="UIContactPreview" >
 	<div class="ContactPreviewBar">
 		<div class="Subject">Contact Details</div>
 		<a class="MaximizeContactPane" title="Maximize Reading Pane"  href="<%=uicomponent.event("MaximizeContactPane")%>">
@@ -258,3 +258,4 @@
 <!--  End DecoratorBox ViewBoxStyle -->
 	</div>
 </div>
+<% uiform.end() %>

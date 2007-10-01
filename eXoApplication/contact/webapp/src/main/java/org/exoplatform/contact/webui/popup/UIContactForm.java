@@ -47,11 +47,12 @@ import org.exoplatform.webui.form.UIFormTextAreaInput;
     events = {
       @EventConfig(listeners = UIContactForm.SaveActionListener.class),      
       @EventConfig(listeners = UIContactForm.CancelActionListener.class),
-      @EventConfig(listeners = UIContactForm.ChangeImageActionListener.class)
+      @EventConfig(listeners = UIContactForm.ChangeImageActionListener.class),
+      @EventConfig(listeners = UIContactForm.DeleteImageActionListener.class)
     }
 )
 public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
-  public static String contactId_ ;
+  public static Contact contact_ = null ;
   public static boolean isNew_ = true;
   public static final String FIELD_WORKADDRESS_INPUT = "workAddress";
   public static final String FIELD_WORKCITY_INPUT = "workCity";
@@ -139,7 +140,6 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
     ShareTab.addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_ISPUBLIC_BOX, FIELD_ISPUBLIC_BOX, false));
     OrganizationService organizationService = (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
     Object[] groups = organizationService.getGroupHandler().getAllGroups().toArray() ;
-    //getChildren().clear() ;
     FIELD_SHAREDCONTACT_BOX = new String[groups.length];
     for(int i = 0; i < groups.length; i ++) {
       FIELD_SHAREDCONTACT_BOX[i] = ((GroupImpl)groups[i]).getId() ;
@@ -158,14 +158,9 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
   public void activate() throws Exception {}
   public void deActivate() throws Exception {}
   
-  public void setValues(String contactId) throws Exception {
-    contactId_ = contactId ;
-    ContactService contactService = ContactUtils.getContactService();
-    String username = ContactUtils.getCurrentUser() ;
-    Contact contact = contactService.getContact(username, contactId);
-    if(contact == null) {
-      contact = contactService.getSharedContact(contactId);
-      if (contact == null) return ;
+  public void setValues(Contact contact) throws Exception {
+    contact_ = contact ;
+    if(contact.isShared()) {
       getUIFormCheckBoxInput(FIELD_ISPUBLIC_BOX).setChecked(true);
       String[] categories = contact.getCategories();
       for (String category : categories) getUIFormCheckBoxInput(category).setChecked(true) ;
@@ -191,12 +186,16 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
     profileTab.setFieldBirthday(contact.getBirthday());
     profileTab.setFieldJobName(contact.getJobTitle());
     profileTab.setFieldEmail(contact.getEmailAddress());   
+//  hhhhh
     ContactAttachment contactAttachment = contact.getAttachment();  
+    System.out.println("\n\n contact atttttment :" + contactAttachment + "\n\n");
     if (contactAttachment != null) {
       InputStream is = contactAttachment.getInputStream();
       if (is != null)
         profileTab.setImage(is) ;
-    }    
+    }
+    else profileTab.setImage(null) ;
+    
     getUIStringInput(FIELD_WORKADDRESS_INPUT).setValue(contact.getWorkAddress());
     getUIStringInput(FIELD_WORKCITY_INPUT).setValue(contact.getWorkCity());
     getUIStringInput(FIELD_WORKSTATE_INPUT).setValue(contact.getWorkStateProvince());
@@ -234,19 +233,21 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
       UIContactForm uiContactForm = event.getSource() ;
       UIApplication uiApp = uiContactForm.getAncestorOfType(UIApplication.class) ;
       UIProfileInputSet profileTab = uiContactForm.getChildById(INPUT_PROFILETAB) ;
-      if (profileTab.getFieldFullName() == null || profileTab.getFieldFullName().trim().length() == 0) {  
+      if (ContactUtils.IsEmpty(profileTab.getFieldFullName())) {  
         uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.fullname-required", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ; 
       }
+      /*if (ContactUtils.IsEmpty(profileTab.getFieldEmail())) {  
+        uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.emailAddress-required", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ; 
+      }*/
       ContactService contactService = ContactUtils.getContactService();  
       String username = ContactUtils.getCurrentUser() ;
       Contact contact ;
       if (isNew_) contact = new Contact() ;
-      else {
-        contact = contactService.getContact(username, contactId_);
-        if (contact == null) contact = contactService.getSharedContact(contactId_);
-      }
+      else contact = uiContactForm.contact_ ;
        
       contact.setFullName(profileTab.getFieldFullName());
       contact.setFirstName(profileTab.getFieldFirstName());
@@ -257,13 +258,28 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
       contact.setBirthday(profileTab.getFieldBirthday()) ;
       contact.setJobTitle(profileTab.getFieldJobName());
       contact.setEmailAddress(profileTab.getFieldEmail());
-      BufferAttachment bufferAttachment = new BufferAttachment() ;
-      bufferAttachment.setId("Attachment" + IdGenerator.generate());
+      BufferAttachment bufferAttachment = new BufferAttachment() ;;
+      if (isNew_) {
+        bufferAttachment.setId("Attachment" + IdGenerator.generate());
+      } else {
+        ContactAttachment contactAttachment = contact.getAttachment() ;
+        if (contactAttachment != null)
+          bufferAttachment.setId(contactAttachment.getId()) ;
+      }
       bufferAttachment.setFileName(profileTab.getFileName()) ;
       bufferAttachment.setMimeType(profileTab.getMimeType()) ;
-      if (profileTab.getImage() != null)
+      if (profileTab.getImage() != null) {
         bufferAttachment.setInputStream(new ByteArrayInputStream(profileTab.getImage())) ;
-      contact.setAttachment(bufferAttachment) ;
+        contact.setAttachment(bufferAttachment) ;
+      } else {
+        System.out.println("\n\n heheh\n\n");
+        bufferAttachment.setFileName(null) ;
+        bufferAttachment.setInputStream(null) ;
+        bufferAttachment.setMimeType(null) ;
+        bufferAttachment.setId(null) ;
+        contact.setAttachment(bufferAttachment) ;
+      }
+      
       
       contact.setWorkAddress(uiContactForm.getUIStringInput(FIELD_WORKADDRESS_INPUT).getValue());
       contact.setWorkCity(uiContactForm.getUIStringInput(FIELD_WORKCITY_INPUT).getValue());
@@ -307,7 +323,7 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
           if (uiContactForm.getUIFormCheckBoxInput(FIELD_SHAREDCONTACT_BOX[i]).isChecked())
             sharedGroups.append(FIELD_SHAREDCONTACT_BOX[i] + ",");
         }
-        if (sharedGroups.toString().equals("")) {
+        if (ContactUtils.IsEmpty(sharedGroups.toString())) {
           uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.selectSharedGroups-required", null)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ; 
@@ -337,7 +353,7 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
         UIPopupContainer popupContainer = uiContactForm.getParent() ;
         UICategorySelect uiCategorySelect = popupContainer.getChild(UICategorySelect.class); 
         String category = uiCategorySelect.getSelectedCategory();
-        if (category == null || category.trim().length() == 0) {  
+        if (ContactUtils.IsEmpty(category)) {  
           uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.selectGroup-required", null)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ; 
@@ -354,6 +370,7 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
             uiContactPreview.setContact(contact) ;
         }
       }
+      
       uiContactPreview.setLastUpdated(new Date()) ;
       uiContactPortlet.cancelAction() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContactPortlet) ;
@@ -376,6 +393,18 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
       UIPopupAction popupAction = popupContainer.getChild(UIPopupAction.class) ;
       popupAction.activate(UIImageForm.class, 600) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+    }
+  }
+  
+  static  public class DeleteImageActionListener extends EventListener<UIContactForm> {
+    public void execute(Event<UIContactForm> event) throws Exception {
+      UIContactForm uiContactForm = event.getSource() ;
+      UIProfileInputSet profileTab = uiContactForm.getChildById(INPUT_PROFILETAB) ;
+      profileTab.setImage(null) ;
+      profileTab.setFileName(null) ;
+      profileTab.setMimeType(null) ;
+      UIPopupAction uiPopupAction = uiContactForm.getAncestorOfType(UIPopupAction.class) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }
   }
   

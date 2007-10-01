@@ -114,8 +114,7 @@ public class UITagForm extends UIForm implements UIPopupComponent {
         contact = contactService.getContact(username, contactId) ;
         if (contact == null)
           contact = contactService.getSharedContact(contactId) ;
-        
-        uiContacts.updateContact(contact, false) ;
+        if (contact != null) uiContacts.updateContact(contact, false) ;
       }
       UITags uiTags = uiContactPortlet.findFirstComponentOfType(UITags.class) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiTags) ;

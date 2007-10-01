@@ -1,6 +1,8 @@
 
 <%
 	import org.exoplatform.contact.service.Contact;
+	import org.exoplatform.download.DownloadService;
+	import org.exoplatform.contact.ContactUtils;
 	def rcontext = _ctx.getRequestContext() ;  
 	rcontext.getJavascriptManager().importJavascript("eXo.contact.UIContactPortlet","/contact/javascript") ;
 	rcontext.getJavascriptManager().addJavascript("eXo.contact.UIContactPortlet.showContextMenu() ;") ;
@@ -173,18 +175,26 @@
 	</div>
 	<div class="UIVCardsContent">
 	  <div class="WorkVCardsContent">
-				<% 
+				<% 			
+				
 					for(contact in uicomponent.getContacts()){		 
-				%>		  
+						cssClass = "NormalVCard" ; 
+						if (contact.getId().equals(uicomponent.getSelectedContact())) cssClass = "SelectedVCard" ;
+				%>
+		  
 		  <div class="LeftVCardsContent">
-		  	<div class="VCardContent SelectedVCard">
+		  	<div class="VCardContent $cssClass">
 			  	<div class="TitleVCards">
 				  	<div class="StateIcon OnlineIcon"><%=(contact.getFullName()==null ? "" : contact.getFullName())%></div>
 			  		<div class="TagIcon RedTag"><span></span></div>
 			  		<div style="clear: both;"><span></span></div>
 			  	</div>
 			  	<div class="ContainerVCards">
-			  		<img src="/contact/skin/DefaultSkin/webui/background/Img1.gif" class="AvatasIcon"/>
+			  		<% 
+			  		DownloadService dservice = uicomponent.getDownloadService() ;
+			  		String imageLink = ContactUtils.getImageSource(contact, dservice) ;
+			  		%>
+						<img src="<%=(imageLink == null ? "/contact/skin/DefaultSkin/webui/background/Img2.gif": imageLink)%>" width=63 height=81 class="AvatasIcon"/>	
 			  		<div class="WorkContainerVCards">
 			  		  <div class="JobMember"><%=(contact.getJobTitle()==null ? "" : contact.getJobTitle())%></div>
 			  		  <div class="InformationsMember">
@@ -194,7 +204,7 @@
 			  		  			<a href="<%=uicomponent.getParent().event("SendEmail", contact.getId())%>">
 			  		  				<%=(contact.getEmailAddress()== null ? "" : contact.getEmailAddress())%>
 			  		  			</a>
-			  		  		</span>
+			  		  		</span> 
 			  		  	</div>
 			  		  	<div class="InfoMember">
 			  		  		<span class="LabelContent">Work phone:</span>
@@ -217,6 +227,8 @@
 			  	</div>
 			  </div>
 		  </div>
+			
+			
 			  <% } %>		
 		  
 		  <div style="clear: both;"><span></span></div>
