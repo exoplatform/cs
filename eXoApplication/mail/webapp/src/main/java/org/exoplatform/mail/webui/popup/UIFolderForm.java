@@ -41,15 +41,6 @@ public class UIFolderForm extends UIForm implements UIPopupComponent {
     addUIFormInput(new UIFormStringInput(FIELD_NAME, FIELD_NAME, null)) ;
   }
 
-  public void activate() throws Exception {
-    // TODO Auto-generated method stub
-
-  }
-  public void deActivate() throws Exception {
-    // TODO Auto-generated method stub
-
-  }
-
   static  public class SaveActionListener extends EventListener<UIFolderForm> {
     public void execute(Event<UIFolderForm> event) throws Exception {
       UIFolderForm uiForm = event.getSource() ;
@@ -72,7 +63,6 @@ public class UIFolderForm extends UIForm implements UIPopupComponent {
           folder.setLabel(folderName) ;
           folder.setName(folderName) ;
           mailSvr.saveUserFolder(username, accountId, folder) ;
-          uiApp.addMessage(new ApplicationMessage("UIFolderForm.msg.add-folder-successfuly", new Object[]{folderName})) ;
         } else {
           uiApp.addMessage(new ApplicationMessage("UIFolderForm.msg.folder-exist", new Object[]{folderName})) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -95,4 +85,8 @@ public class UIFolderForm extends UIForm implements UIPopupComponent {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
     }
   }
+
+  public void activate() throws Exception { }
+  public void deActivate() throws Exception { }
+
 }

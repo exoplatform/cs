@@ -126,17 +126,16 @@ public class UIFolderContainer extends UIContainer {
       String folderName = event.getRequestContext().getRequestParameter(OBJECTID) ;    
       
       System.out.println(">>>>>>>>>  RemoveFolderActionListener : " + folderName );
-      
-      UIFolderContainer uiFolderContainer   = event.getSource() ;
-      UIMailPortlet uiMailPortlet           = uiFolderContainer.getAncestorOfType(UIMailPortlet.class);
-      MailService mailService               = uiMailPortlet.getApplicationComponent(MailService.class);
-      String username                       = uiMailPortlet.getCurrentUser();
+  
+      UIFolderContainer uiFolderContainer = event.getSource() ;
+      UIMailPortlet uiMailPortlet = uiFolderContainer.getAncestorOfType(UIMailPortlet.class);
+      MailService mailService = uiMailPortlet.getApplicationComponent(MailService.class);
+      String username = uiMailPortlet.getCurrentUser();
       UINavigationContainer uiNavigationContainer = uiFolderContainer.getAncestorOfType(UINavigationContainer.class);
       String accountId = uiNavigationContainer.getChild(UISelectAccount.class).getSelectedValue();
       
       Account account = mailService.getAccountById(username, accountId);
-      Folder folder = mailService.getFolder(username, accountId, folderName);
-      
+      Folder folder = mailService.getFolder(username, accountId, folderName);  
       mailService.removeUserFolder(username, account, folder);
       
       System.out.println(">>>>>>>>>  RemoveFolderActionListener : DONE");

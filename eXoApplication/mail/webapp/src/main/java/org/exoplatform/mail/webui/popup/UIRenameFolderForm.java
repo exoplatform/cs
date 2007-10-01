@@ -58,14 +58,14 @@ public class UIRenameFolderForm extends UIForm implements UIPopupComponent {
     public void execute(Event<UIRenameFolderForm> event) throws Exception {
       UIRenameFolderForm uiForm = event.getSource() ;
       
-      String curFolderName  = uiForm.getFolderName();
-      String newFolderName  = uiForm.getUIStringInput(NEW_FOLDER_NAME).getValue() ;
+      String curFolderName = uiForm.getFolderName();
+      String newFolderName = uiForm.getUIStringInput(NEW_FOLDER_NAME).getValue() ;
       
       System.out.println(">>> RenameFolder : curFolderName = " + curFolderName);
       System.out.println(">>> RenameFolder : newFolderName = " + newFolderName);
 
-      MailService mailService       = uiForm.getApplicationComponent(MailService.class) ;
-      UIMailPortlet uiMailPortlet   = uiForm.getAncestorOfType(UIMailPortlet.class);
+      MailService mailService = uiForm.getApplicationComponent(MailService.class) ;
+      UIMailPortlet uiMailPortlet = uiForm.getAncestorOfType(UIMailPortlet.class);
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       String username = uiMailPortlet.getCurrentUser() ;
       String accountId =  uiMailPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
