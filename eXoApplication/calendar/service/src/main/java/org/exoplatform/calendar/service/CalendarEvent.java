@@ -4,6 +4,7 @@
  **************************************************************************/
 package org.exoplatform.calendar.service;
 
+import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -66,7 +67,9 @@ public class CalendarEvent {
   //       for journal: DRAFT, FINAL, CANCELLED
   private String status = ""; 
   private String[] invitation ;
+  private String[] participant ;
   private List<Reminder> reminders ;
+  private List<Attachment> attachment ;
   private Map<String, String> properties ;
   
   public CalendarEvent() {
@@ -127,5 +130,16 @@ public class CalendarEvent {
 
   public String getRepeatType() {
     return repeatType;
+  }
+  
+  public List<Attachment> getAttachment() {return attachment ;}
+  public void setAttachment(List<Attachment> list) {attachment = list ;}
+
+  public void setParticipant(String[] participant) {
+    this.participant = participant;
+  }
+
+  public String[] getParticipant() {
+    return participant;
   }
 }

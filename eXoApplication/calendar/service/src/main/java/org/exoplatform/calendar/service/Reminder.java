@@ -23,10 +23,10 @@ public class Reminder {
   
   private String id ;
   private String eventId ;
-  private String repeat = "1";
+  private long snooze = 0;
   private String reminder = "";
   private String alarmBefore = "0"; 
-  
+  private String emailAddress  ;
   public Reminder() {
     id = ID() ;
   }
@@ -45,13 +45,20 @@ public class Reminder {
   public String getEventId() { return this.eventId ; }
   public void   setEventId(String eventId) { this.eventId = eventId ; }
   
-  public String getRepeat() { return repeat; }
-  public void   setRepeat(String repeat) { this.repeat = repeat; }
+  public long getSnooze() { return snooze; }
+  public void   setSnooze(long minute) { snooze = minute; }
   
   public String getReminder() { return reminder; }
   public void   setReminder(String reminder) { this.reminder = reminder; }
   
   public String getAlarmBefore() { return alarmBefore; }
   public void   setAlarmBefore(String alarmBefore) { this.alarmBefore = alarmBefore; }
+  
+  public void setEmailAddress(String emailAddress) {
+    this.emailAddress = emailAddress;
+  }
+  public String getEmailAddress() {
+    return emailAddress;
+  }
   
 }

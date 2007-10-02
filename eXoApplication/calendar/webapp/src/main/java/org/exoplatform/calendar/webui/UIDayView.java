@@ -130,6 +130,7 @@ public class UIDayView extends UICalendarView {
       String type = event.getRequestContext().getRequestParameter(OBJECTID) ;
       String startTime = event.getRequestContext().getRequestParameter("startTime") ;
       String finishTime = event.getRequestContext().getRequestParameter("finishTime") ;
+      if(CalendarUtils.isEmpty(finishTime)) finishTime = startTime ; 
       UICalendarPortlet uiPortlet = calendarview.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
       if(CalendarEvent.TYPE_EVENT.equals(type)) {

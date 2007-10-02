@@ -13,7 +13,10 @@
 	  		<propertyDefinition name="exo:alarmBefore" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
   				<valueConstraints/>
 	  		</propertyDefinition>
-	  		<propertyDefinition name="exo:repeat" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+	  		<propertyDefinition name="exo:email" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  				<valueConstraints/>
+	  		</propertyDefinition>
+	  		<propertyDefinition name="exo:snooze" requiredType="Long" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
   				<valueConstraints/>
 	  		</propertyDefinition>	  		
 	  		<propertyDefinition name="exo:reminder" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
@@ -66,7 +69,13 @@
 	  		<propertyDefinition name="exo:invitation" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
   				<valueConstraints/>
 	  		</propertyDefinition>
+	  		<propertyDefinition name="exo:participant" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
+  				<valueConstraints/>
+	  		</propertyDefinition>
 	  		<propertyDefinition name="exo:properties" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  				<valueConstraints/>
+	  		</propertyDefinition>
+	  		<propertyDefinition name="exo:repeat" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
   				<valueConstraints/>
 	  		</propertyDefinition>
   		</propertyDefinitions>
@@ -75,6 +84,12 @@
 	        onParentVersion="COPY" protected="false" sameNameSiblings="false">
 	        <requiredPrimaryTypes>
 	          <requiredPrimaryType>exo:reminder</requiredPrimaryType>
+	        </requiredPrimaryTypes>
+	      </childNodeDefinition>
+	      <childNodeDefinition name="*" defaultPrimaryType="" autoCreated="false" mandatory="false"
+	        onParentVersion="COPY" protected="false" sameNameSiblings="true">
+	        <requiredPrimaryTypes>
+	          <requiredPrimaryType>nt:file</requiredPrimaryType>
 	        </requiredPrimaryTypes>
 	      </childNodeDefinition>
 	    </childNodeDefinitions>

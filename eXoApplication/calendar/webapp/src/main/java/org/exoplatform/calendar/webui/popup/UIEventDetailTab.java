@@ -11,10 +11,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.exoplatform.calendar.CalendarUtils;
+import org.exoplatform.calendar.service.Attachment;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
-import org.exoplatform.calendar.service.Reminder;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -23,6 +23,7 @@ import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormDateTimeInput;
+import org.exoplatform.webui.form.UIFormInputInfo;
 import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
@@ -41,8 +42,6 @@ import org.exoplatform.webui.form.validator.NumberFormatValidator;
 ) 
 public class UIEventDetailTab extends UIFormInputWithActions {
 
-  private Map<String, String> participance_ = new HashMap<String, String>() ;
-  private Map<String, UIComponent> participanceCheckBox_ = new HashMap<String, UIComponent>() ;
   final public static String FIELD_EVENT = "eventName".intern() ;
   final public static String FIELD_CALENDAR = "calendar".intern() ;
   final public static String FIELD_CATEGORY = "category".intern() ;
@@ -50,32 +49,47 @@ public class UIEventDetailTab extends UIFormInputWithActions {
   final public static String FIELD_TO = "to".intern() ;
   final public static String FIELD_FROM_TIME = "fromTime".intern() ;
   final public static String FIELD_TO_TIME = "toTime".intern() ;
-  
+
   final public static String FIELD_CHECKALL = "allDay".intern() ;
   final public static String FIELD_REPEAT = "repeat".intern() ;
   final public static String FIELD_PLACE = "place".intern() ;
   final public static String FIELD_REMINDER = "reminder".intern() ;
+  final public static String FIELD_EMAIL_REMINDER = "mailReminder".intern() ;
+  final public static String FIELD_EMAIL_TIME = "mailReminderTime".intern() ;
+  final public static String FIELD_EMAIL_ADDRESS = "mailReminderAddress".intern() ;
+
+  final public static String FIELD_POPUP_REMINDER = "popupReminder".intern() ;
+  final public static String FIELD_POPUP_TIME = "mailReminderTime".intern() ;
+  final public static String FIELD_SNOOZE_TIME = "snooze".intern() ;
   final public static String FIELD_TIMEREMINDER = "timeReminder".intern() ;
   final public static String FIELD_PRIORITY = "priority".intern() ; 
   final public static String FIELD_DESCRIPTION = "description".intern() ;
-  
-  Map<String, List<ActionData>> actionField_ = new HashMap<String, List<ActionData>> () ;
-  
+
+  final static public String FIELD_ATTACHMENTS = "attachments".intern() ;
+
+  protected List<Attachment> attachments_ = new ArrayList<Attachment>() ;
+  private Map<String, List<ActionData>> actionField_ ;
   public UIEventDetailTab(String arg0) throws Exception {
     super(arg0);
     setComponentConfig(getClass(), null) ;
+    actionField_ = new HashMap<String, List<ActionData>>() ;
     
     addUIFormInput(new UIFormStringInput(FIELD_EVENT, FIELD_EVENT, null)) ;
     addUIFormInput(new UIFormTextAreaInput(FIELD_DESCRIPTION, FIELD_DESCRIPTION, null)) ;
     addUIFormInput(new UIFormSelectBox(FIELD_CALENDAR, FIELD_CALENDAR, getCalendar())) ;
     addUIFormInput(new UIFormSelectBox(FIELD_CATEGORY, FIELD_CATEGORY, UIEventForm.getCategory())) ;
+    
     ActionData addCategoryAction = new ActionData() ;
     addCategoryAction.setActionType(ActionData.TYPE_ICON) ;
-    addCategoryAction.setActionName("AddCategory") ;
-    addCategoryAction.setActionListener("AddCategory") ;
-    List<ActionData> actions = new ArrayList<ActionData>() ;
-    actions.add(addCategoryAction) ;
-    setActionField(FIELD_CATEGORY,actions) ;
+    addCategoryAction.setActionName(UIEventForm.ACT_ADDCATEGORY) ;
+    addCategoryAction.setActionListener(UIEventForm.ACT_ADDCATEGORY) ;
+    List<ActionData> addCategoryActions = new ArrayList<ActionData>() ;
+    addCategoryActions.add(addCategoryAction) ;
+    setActionField(FIELD_CATEGORY, addCategoryActions) ;
+
+    addUIFormInput(new UIFormInputInfo(FIELD_ATTACHMENTS, FIELD_ATTACHMENTS, null)) ;
+    setActionField(FIELD_ATTACHMENTS, getUploadFileList()) ;
+
     addUIFormInput(new UIFormDateTimeInput(FIELD_FROM, FIELD_FROM, new Date(), false));
     addUIFormInput(new UIFormSelectBox(FIELD_FROM_TIME, FIELD_FROM_TIME, CalendarUtils.getTimesSelectBoxOptions("hh:mm a", 5)));
     addUIFormInput(new UIFormDateTimeInput(FIELD_TO, FIELD_TO, new Date(), false));
@@ -83,13 +97,76 @@ public class UIEventDetailTab extends UIFormInputWithActions {
     addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_CHECKALL, FIELD_CHECKALL, null));
     addUIFormInput(new UIFormStringInput(FIELD_PLACE, FIELD_PLACE, null));
     addUIFormInput(new UIFormSelectBox(FIELD_REPEAT, FIELD_REPEAT, getRepeater())) ;
-    addUIFormInput(new UIFormSelectBox(FIELD_REMINDER, FIELD_REMINDER, getReminder())) ;
     addUIFormInput(new UIFormStringInput(FIELD_TIMEREMINDER, FIELD_TIMEREMINDER, null).addValidator(NumberFormatValidator.class));
     addUIFormInput(new UIFormSelectBox(FIELD_PRIORITY, FIELD_PRIORITY, getPriority())) ;
+
+    addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_EMAIL_REMINDER, FIELD_EMAIL_REMINDER, false)) ;
+    addUIFormInput(new UIFormSelectBox(FIELD_EMAIL_TIME, FIELD_EMAIL_TIME, getReminderTimes(5,60)));
+    addUIFormInput(new UIFormTextAreaInput(FIELD_EMAIL_ADDRESS, FIELD_EMAIL_ADDRESS, null)) ;
+   
+    ActionData addEmailAddress = new ActionData() ;
+    addEmailAddress.setActionType(ActionData.TYPE_ICON) ;
+    addEmailAddress.setActionName(UIEventForm.ACT_ADDEMAIL) ;
+    addEmailAddress.setActionListener(UIEventForm.ACT_ADDEMAIL) ;
+    
+    List<ActionData> addMailActions = new ArrayList<ActionData>() ;
+    addMailActions.add(addEmailAddress) ;
+    setActionField(FIELD_EMAIL_ADDRESS, addMailActions) ;
+
+    addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_POPUP_REMINDER, FIELD_POPUP_REMINDER, false)) ;
+    addUIFormInput(new UIFormSelectBox(FIELD_POPUP_TIME, FIELD_POPUP_TIME, getReminderTimes(5,60)));
+    addUIFormInput(new UIFormSelectBox(FIELD_SNOOZE_TIME, FIELD_SNOOZE_TIME, getReminderTimes(5,60)));
+    
+    
+    
   }
   protected UIForm getParentFrom() {
     return (UIForm)getParent() ;
   }
+  
+  public List<ActionData> getUploadFileList() { 
+    List<ActionData> uploadedFiles = new ArrayList<ActionData>() ;
+    for(Attachment attachdata : attachments_) {
+      ActionData fileUpload = new ActionData() ;
+      fileUpload.setActionListener("") ;
+      fileUpload.setActionType(ActionData.TYPE_ICON) ;
+      fileUpload.setCssIconClass("AttachmentIcon ZipFileIcon") ;
+      fileUpload.setActionName(attachdata.getName() + " ("+attachdata.getSize()+" Kb)" ) ;
+      fileUpload.setShowLabel(true) ;
+      uploadedFiles.add(fileUpload) ;
+      ActionData removeAction = new ActionData() ;
+      removeAction.setActionListener(UIEventForm.ACT_REMOVE) ;
+      removeAction.setActionName(UIEventForm.ACT_REMOVE);
+      removeAction.setActionParameter(attachdata.getId());
+      removeAction.setActionType(ActionData.TYPE_LINK) ;
+      removeAction.setBreakLine(true) ;
+      uploadedFiles.add(removeAction) ;
+    }
+    return uploadedFiles ;
+  }
+  public List<SelectItemOption<String>> getReminderTimes(int steps, int maxValue) {
+    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
+    for(int i = 1; i <= maxValue/steps ; i++) {
+      options.add(new SelectItemOption<String>(String.valueOf(i*steps)+" minutes", String.valueOf(i*steps))) ;
+    }
+    return options ;
+  }
+  public void addToUploadFileList(Attachment attachfile) {
+    attachments_.add(attachfile) ;
+  }
+  public void removeFromUploadFileList(Attachment attachfile) {
+    attachments_.remove(attachfile);
+  }  
+  public void refreshUploadFileList() throws Exception {
+    setActionField(FIELD_ATTACHMENTS, getUploadFileList()) ;
+  }
+  protected List<Attachment> getAttachments() { 
+    return attachments_ ;
+  }
+  protected void setAttachments(List<Attachment> attachment) { 
+    attachments_ = attachment ;
+  }
+  
   private List<SelectItemOption<String>> getCalendar() throws Exception {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
@@ -114,16 +191,17 @@ public class UIEventDetailTab extends UIFormInputWithActions {
     }
     return options ;
   }
-  private List<SelectItemOption<String>> getReminder() {
+  /*private List<SelectItemOption<String>> getReminder() {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     for(String rmdType : Reminder.REMINDER_TYPES) {
       options.add(new SelectItemOption<String>(rmdType, rmdType)) ;
     }
     return options ;
-  }
+  }*/
   public void setActionField(String fieldName, List<ActionData> actions) throws Exception {
     actionField_.put(fieldName, actions) ;
   }
+  public List<ActionData> getActionField(String fieldName) {return actionField_.get(fieldName) ;}
   @Override
   public void processRender(WebuiRequestContext arg0) throws Exception {
     super.processRender(arg0);

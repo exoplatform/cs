@@ -64,7 +64,14 @@
 .UIAddNewEvent .UIFormGrid .FieldComponent .Time .selectbox{
 	width: 104px;
 }
-
+.UIAddNewEvent .UIFormGrid .FieldComponent .ReminderLabel{
+	float:left;
+}
+.UIAddNewEvent .UIFormGrid .FieldComponent .ReminderTime{
+}
+.UIAddNewEvent .UIFormGrid .FieldComponent .ReminderTime .selectbox{
+	width: 60px;
+}
 .UIAddNewEvent .HorizontalLayout .FieldComponent .UIAction {
 	float: left;
 	padding: 0px;

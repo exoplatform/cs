@@ -1,7 +1,7 @@
 <%
 	uiForm = uicomponent.getParentFrom() ;
 	private void renderActions(String fieldKey) {
-		def actions = uicomponent.actionField_.get(fieldKey) ;
+		def actions = uicomponent.getActionField(fieldKey) ;
 	  if(actions != null) {
 	    for(action in actions) {
 	    	String actionLabel = uiForm.getLabel("action." + action.actionName)  ;
@@ -88,6 +88,14 @@
       </tr>
       <tr>
         <td class="FieldLabel">
+          <%=uiForm.getLabel(uicomponent.FIELD_REPEAT)%>
+        </td>
+        <td class="FieldComponent">
+          <%uiForm.renderField(uicomponent.FIELD_REPEAT)%>
+        </td>
+      </tr>
+      <tr>
+        <td class="FieldLabel">
           <%=uiForm.getLabel(uicomponent.FIELD_CALENDAR)%>
         </td>
         <td class="FieldComponent">
@@ -100,8 +108,80 @@
         </td>
         <td class="FieldComponent">
           <%
-  	           		uiForm.renderField(uicomponent.FIELD_CATEGORY) 
+  	        uiForm.renderField(uicomponent.FIELD_CATEGORY) ;
 				    renderActions(uicomponent.FIELD_CATEGORY) ;
+          %>
+        </td>
+      </tr>
+      
+      <tr>
+        <td class="FieldLabel">
+          <%=uiForm.getLabel(uicomponent.FIELD_ATTACHMENTS)%>
+        </td>
+        <td class="FieldComponent">
+          <%
+          	uiForm.renderField(uicomponent.FIELD_ATTACHMENTS) ;
+          	renderActions(uicomponent.FIELD_ATTACHMENTS) ;
+          %>
+        </td>
+      </tr>
+      
+      <tr>
+        <td class="FieldLabel">
+          <%=uiForm.getLabel(uicomponent.FIELD_EMAIL_REMINDER)%>
+        </td>
+        <td class="FieldComponent">
+        	<div class="ReminderLabel">
+          <%
+          	uiForm.renderField(uicomponent.FIELD_EMAIL_REMINDER)  ;
+          %>
+          <%=uiForm.getLabel(uicomponent.FIELD_EMAIL_TIME)%>
+          </div>
+          <div class="ReminderTime">
+          <%
+          	uiForm.renderField(uicomponent.FIELD_EMAIL_TIME)  ;
+          %>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td class="FieldLabel">
+          <%=uiForm.getLabel(uicomponent.FIELD_EMAIL_ADDRESS)%>
+        </td>
+        <td class="FieldComponent">
+          <%
+          	uiForm.renderField(uicomponent.FIELD_EMAIL_ADDRESS) ;
+          	renderActions(uicomponent.FIELD_EMAIL_ADDRESS) ;
+          %>
+        </td>
+      </tr>
+      
+      <tr>
+        <td class="FieldLabel">
+          <%=uiForm.getLabel(uicomponent.FIELD_POPUP_REMINDER)%>
+        </td>
+        <td class="FieldComponent">
+        	<div class="ReminderLabel">
+          <%
+          	uiForm.renderField(uicomponent.FIELD_POPUP_REMINDER)
+          %>
+          <%=uiForm.getLabel(uicomponent.FIELD_POPUP_TIME)%>
+          </div>
+          <div class="ReminderTime">
+          <%
+          	uiForm.renderField(uicomponent.FIELD_POPUP_TIME)  ;
+          %>
+          </div>	
+        </td>
+        
+      </tr>
+       <tr>
+        <td class="FieldLabel">
+          <%=uiForm.getLabel(uicomponent.FIELD_SNOOZE_TIME)%>
+        </td>
+        <td class="FieldComponent">
+          <%
+          	uiForm.renderField(uicomponent.FIELD_SNOOZE_TIME)  ;
           %>
         </td>
       </tr>

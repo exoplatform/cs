@@ -20,6 +20,7 @@ import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 
 import org.apache.commons.lang.StringUtils;
+import org.exoplatform.calendar.service.Attachment;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarCategory;
 import org.exoplatform.calendar.service.CalendarImportExport;
@@ -31,6 +32,7 @@ import org.exoplatform.calendar.service.FeedData;
 import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.service.Reminder;
 import org.exoplatform.calendar.service.RssData;
+import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
@@ -635,10 +637,30 @@ public class JCRDataStorage implements DataStorage{
     }
     reminderNode.setProperty("exo:eventId", reminder.getEventId()) ;
     reminderNode.setProperty("exo:alarmBefore", reminder.getAlarmBefore()) ;
-    reminderNode.setProperty("exo:repeat", reminder.getRepeat()) ;
+    reminderNode.setProperty("exo:snooze", reminder.getSnooze()) ;
     reminderNode.setProperty("exo:reminder", reminder.getReminder()) ;
+    reminderNode.setProperty("exo:email", reminder.getEmailAddress()) ;
   }
-
+  private void addAttachment(Node eventNode, Attachment attachment, boolean isNew) throws Exception {
+    Node attachNode ;
+    if(isNew) {
+      attachNode = eventNode.addNode(attachment.getName(), Utils.NT_FILE) ;
+    }else {
+      if(eventNode.hasNode(attachment.getId())) {
+        attachNode = eventNode.getNode(attachment.getId()) ;
+      } else {
+       Attachment tempRm = new Attachment() ;
+        attachNode = eventNode.addNode(tempRm.getName(), Utils.NT_FILE) ;
+      }
+    }
+    Node nodeContent = null;
+    if (!attachNode.hasNode(Utils.JCR_CONTENT)) nodeContent = attachNode.addNode(Utils.JCR_CONTENT, Utils.NT_RESOURCE);
+    else nodeContent = attachNode.getNode(Utils.JCR_CONTENT);
+    nodeContent.setProperty(Utils.JCR_LASTMODIFIED, java.util.Calendar.getInstance().getTimeInMillis()) ;
+    nodeContent.setProperty(Utils.JCR_MIMETYPE, attachment.getMimeType());
+    nodeContent.setProperty(Utils.JCR_DATA, attachment.getInputStream());
+  }
+  
   private CalendarEvent getEvent(Node eventNode) throws Exception {
     CalendarEvent event = new CalendarEvent() ;
     if(eventNode.hasProperty("exo:id")) event.setId(eventNode.getProperty("exo:id").getString()) ;
@@ -654,6 +676,7 @@ public class JCRDataStorage implements DataStorage{
     if(eventNode.hasProperty("exo:isPrivate")) event.setPrivate(eventNode.getProperty("exo:isPrivate").getBoolean()) ;
     if(eventNode.hasProperty("exo:eventState")) event.setEventState(eventNode.getProperty("exo:eventState").getString()) ;
     event.setReminders(getReminders(eventNode)) ;
+    event.setAttachment(getAttachments(eventNode)) ;
     if(eventNode.hasProperty("exo:invitation")){
       Value[] values = eventNode.getProperty("exo:invitation").getValues() ;
       if(values.length == 1 ){      
@@ -665,7 +688,19 @@ public class JCRDataStorage implements DataStorage{
         }
         event.setInvitation(invites) ;
       }
-    }    
+    }
+    if(eventNode.hasProperty("exo:participant")){
+      Value[] values = eventNode.getProperty("exo:participant").getValues() ;
+      if(values.length == 1 ){      
+        event.setParticipant(new String[]{values[0].getString()}) ;
+      }else {
+        String[] participant = new String[values.length] ;
+        for(int i = 0; i < values.length; i ++) {
+          participant[i] = values[i].getString() ;
+        }
+        event.setInvitation(participant) ;
+      }
+    }
     return event ;
   }
 
@@ -698,11 +733,18 @@ public class JCRDataStorage implements DataStorage{
     eventNode.setProperty("exo:isPrivate", event.isPrivate()) ;
     eventNode.setProperty("exo:eventState", event.getEventState()) ;
     eventNode.setProperty("exo:invitation", event.getInvitation()) ;
+    eventNode.setProperty("exo:participant", event.getInvitation()) ;
     // add reminder child node
     List<Reminder> reminders = event.getReminders() ;
     if(reminders != null) {
       for(Reminder rm : reminders) {
         addReminder(eventNode, rm, isNew) ;
+      }
+    }
+    List<Attachment> attachments = event.getAttachment() ;
+    if(attachments != null) {
+      for(Attachment rm : attachments) {
+        addAttachment(eventNode, rm, isNew) ;
       }
     }
     calendarNode.save() ;
@@ -720,13 +762,29 @@ public class JCRDataStorage implements DataStorage{
         if(reminderNode.hasProperty("exo:eventId")) reminder.setEventId(reminderNode.getProperty("exo:eventId").getString()) ;
         if(reminderNode.hasProperty("exo:reminder")) reminder.setReminder(reminderNode.getProperty("exo:reminder").getString()) ;
         if(reminderNode.hasProperty("exo:alarmBefore"))reminder.setAlarmBefore(reminderNode.getProperty("exo:alarmBefore").getString()) ;
-        if(reminderNode.hasProperty("exo:repeat")) reminder.setRepeat(reminderNode.getProperty("exo:repeat").getString()) ;
+        if(reminderNode.hasProperty("exo:email")) reminder.setEmailAddress(reminderNode.getProperty("exo:email").getString()) ;
+        if(reminderNode.hasProperty("exo:snooze")) reminder.setSnooze(reminderNode.getProperty("exo:snooze").getLong()) ;
         reminders.add(reminder) ;
       }
     }
     return reminders ;
   }
-
+  
+  private List<Attachment> getAttachments(Node eventNode) throws Exception {
+    NodeIterator iter = eventNode.getNodes() ;
+    List<Attachment> attachments = new ArrayList<Attachment> () ;
+    while(iter.hasNext()) {
+      Node attchmentNode = iter.nextNode() ;
+      if(attchmentNode.isNodeType(Utils.JCR_CONTENT)) {
+        Attachment attachment = new Attachment() ;
+        attachment.setName(attchmentNode.getName()) ;
+        if(attchmentNode.hasProperty(Utils.JCR_MIMETYPE)) attachment.setMimeType(attchmentNode.getProperty(Utils.JCR_MIMETYPE).getString()) ;
+        if(attchmentNode.hasProperty(Utils.JCR_DATA)) attachment.setInputStream((attchmentNode.getProperty(Utils.JCR_DATA).getStream())) ;
+        attachments.add(attachment) ;
+      }
+    }
+    return attachments ;
+  }
   public void saveCalendarSetting(String username, CalendarSetting setting) throws Exception {
     Node calendarHome = getCalendarServiceHome(username) ;
     addCalendarSetting(calendarHome, setting) ;
