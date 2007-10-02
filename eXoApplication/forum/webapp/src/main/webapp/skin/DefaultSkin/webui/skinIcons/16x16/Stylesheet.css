@@ -109,3 +109,19 @@
 .ThreadsIcon {
 	background: url('icons/ThreadIcon.gif') no-repeat left center;
 }
+
+.WordIcon {
+	background: url('icons/WordIcon.gif') no-repeat left center;
+}
+
+.PPTIcon {
+	background: url('icons/PPTIcon.gif') no-repeat left center;
+}
+
+.PNGIcon {
+	background: url('icons/PNGIcon.gif') no-repeat left center;
+}
+
+.JPGIcon {
+	background: url('icons/JPGIcon.gif') no-repeat left center;
+}

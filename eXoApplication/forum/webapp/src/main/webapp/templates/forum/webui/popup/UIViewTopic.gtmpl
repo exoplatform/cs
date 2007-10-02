@@ -7,30 +7,56 @@
 		 String title = post.getSubject();	
 		 String messeger = post.getMessage();	
 	%>
-
-Nguyen "Ngoc" Thuy
-<div> Title: $title </div>
-<div> Messeger: $messeger </div>
+	<div class="ViewContainer">
+		<div class="PostViewTitle">
+	  	<div class="PostViewIcon NormalTopicIcon">$title</div>
+	  	<div class="PostTime">Posted: Tue Oct 02 04:23:24 GMT 2007</div>
+	  </div>
+	  		
+	  <div class="PostContent">
+	  	<br/><div>$messeger</div><br/>
+	  </div>
+	  		
+	  <div class="AttachmentContainer">
+	  	<div class="AttachmentTitle">Attachments:</div>
+	  	<div class="AttachmentContent">
+	  		<div class="AttachmentBox">
+					<div class="AttachmentIcon WordIcon"><span/></div>
+					<a class="AttachmentLabel" href="#">About the trip.doc</a>
+					<div style="clear: left;"><span/></div>
+					<div class="Size">Size: 49K</div>
+	  		</div>
+	  		<div class="AttachmentBox" style="float:right">
+					<div class="AttachmentIcon PPTIcon"><span/></div>
+					<a class="AttachmentLabel" href="#">Images presentation.ppt</a>
+					<div style="clear: left;"><span/></div>
+					<div class="Size">Size: 49K</div>
+	  		</div>
+	  		<div style="clear: left;"><span/></div>
+	  	</div>
+	  </div>
+	  		
+  <%uiform.end()%>
+	</div>
+</div>
 
 <div class="UIAction"> 
-	  <table class="ActionContainer" align="center">
-			<tr>
-				<td align="center">
-        <% for(action in uicomponent.getActions()) { 
-        	 String actionLabel = "Close";// _ctx.appRes(uicomponent.getName() + ".action." + action); 
-           String link = uicomponent.event(action) ;
-        %>
-        		<a href="$link" class="ActionButton LightBlueStyle">
-	      	  	<div class="ButtonLeft">
-	        	  	<div class="ButtonRight">
-	          	  	<div class="ButtonMiddle"> $actionLabel </div>
-	            	</div>
-	          	</div>
-	        	</a>
-          <%}%>
-          </td>
-				</tr>
-	 	  </table> 
-    </div>
-  <%uiform.end()%>
- </div>
+  <table class="ActionContainer" align="center">
+		<tr>
+			<td align="center">
+    <% for(action in uicomponent.getActions()) { 
+    	 String actionLabel = "Close";// _ctx.appRes(uicomponent.getName() + ".action." + action); 
+       String link = uicomponent.event(action) ;
+    %>
+		<a href="$link" class="ActionButton LightBlueStyle">
+  	  	<div class="ButtonLeft">
+    	  	<div class="ButtonRight">
+      	  	<div class="ButtonMiddle"> $actionLabel </div>
+        	</div>
+      	</div>
+    	</a>
+    <%}%>
+    </td>
+		</tr>
+ 	</table> 
+</div>

@@ -63,11 +63,3 @@
 .UIModeratorsManagementForm .ModeratorsGroup .AddAnyIcon {
 	background: url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/SmallMemberIcon.gif') no-repeat;
 }
-
-.UIModeratorsManagementForm .ModeratorsGroup .UIAction {
-	width: auto;
-}
-
-.UIModeratorsManagementForm .UIAction {
-	width: auto;
-}
