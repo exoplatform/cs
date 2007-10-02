@@ -54,7 +54,11 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
         @EventConfig(listeners = UIMessageList.AddTagActionListener.class),
         @EventConfig(listeners = UIMessageList.MoveMessagesActionListener.class),
         @EventConfig(listeners = UIMessageList.ImportActionListener.class),
-        @EventConfig(listeners = UIMessageList.ExportActionListener.class)
+        @EventConfig(listeners = UIMessageList.ExportActionListener.class),
+        @EventConfig(listeners = UIMessageList.FirstPageActionListener.class),
+        @EventConfig(listeners = UIMessageList.PreviousPageActionListener.class),
+        @EventConfig(listeners = UIMessageList.NextPageActionListener.class),
+        @EventConfig(listeners = UIMessageList.LastPageActionListener.class)
     }
 )
 
@@ -84,6 +88,8 @@ public class UIMessageList extends UIForm {
       messageMap_.put(message.getId(), message);
     }
   }
+  
+  public MessagePageList getMessagePageList() { return pageList_; } 
   
   public void setMessagePageList(MessagePageList pageList) throws Exception {
     pageList_ = pageList ;
@@ -344,6 +350,71 @@ public class UIMessageList extends UIForm {
   static public class ExportActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource() ;      
+    }
+  }
+  
+  static public class FirstPageActionListener extends EventListener<UIMessageList> {
+    public void execute(Event<UIMessageList> event) throws Exception {
+      UIMessageList uiMessageList = event.getSource() ; 
+      UIMessageArea uiMessageArea = uiMessageList.getAncestorOfType(UIMessageArea.class);
+      uiMessageList.getChildren().clear();
+      uiMessageList.messageMap_.clear();
+      MessagePageList messagePage = uiMessageList.pageList_;
+      for (Message message : uiMessageList.pageList_.getPage(1, MailUtils.getCurrentUser())) {
+        uiMessageList.addUIFormInput(new UIFormCheckBoxInput<Boolean>(message.getId(), message.getId(), false));
+        uiMessageList.messageMap_.put(message.getId(), message);
+      }
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageArea);
+    }
+  }
+  
+  static public class PreviousPageActionListener extends EventListener<UIMessageList> {
+    public void execute(Event<UIMessageList> event) throws Exception {
+      UIMessageList uiMessageList = event.getSource() ; 
+      UIMessageArea uiMessageArea = uiMessageList.getAncestorOfType(UIMessageArea.class);
+      uiMessageList.getChildren().clear();
+      uiMessageList.messageMap_.clear();
+      MessagePageList messagePage = uiMessageList.pageList_;
+      System.out.println("====>>>>>>>> " + messagePage.getCurrentPage());
+      if (messagePage.getCurrentPage() > 1){
+        for (Message message : uiMessageList.pageList_.getPage(messagePage.getCurrentPage() - 1, MailUtils.getCurrentUser())) {
+          uiMessageList.addUIFormInput(new UIFormCheckBoxInput<Boolean>(message.getId(), message.getId(), false));
+          uiMessageList.messageMap_.put(message.getId(), message);
+        }
+      }
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageArea);
+    }
+  }
+  
+  static public class NextPageActionListener extends EventListener<UIMessageList> {
+    public void execute(Event<UIMessageList> event) throws Exception {
+      UIMessageList uiMessageList = event.getSource() ; 
+      UIMessageArea uiMessageArea = uiMessageList.getAncestorOfType(UIMessageArea.class);
+      uiMessageList.getChildren().clear();
+      uiMessageList.messageMap_.clear();
+      MessagePageList messagePage = uiMessageList.pageList_;
+      if (messagePage.getCurrentPage() < messagePage.getAvailablePage()){
+        for (Message message : uiMessageList.pageList_.getPage(messagePage.getCurrentPage() + 1, MailUtils.getCurrentUser())) {
+          uiMessageList.addUIFormInput(new UIFormCheckBoxInput<Boolean>(message.getId(), message.getId(), false));
+          uiMessageList.messageMap_.put(message.getId(), message);
+        }
+      }
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageArea);
+    }
+  }
+  
+  static public class LastPageActionListener extends EventListener<UIMessageList> {
+    public void execute(Event<UIMessageList> event) throws Exception {
+      UIMessageList uiMessageList = event.getSource() ; 
+      UIMessageArea uiMessageArea = uiMessageList.getAncestorOfType(UIMessageArea.class);
+      uiMessageList.getChildren().clear();
+      uiMessageList.messageMap_.clear();
+      MessagePageList messagePage = uiMessageList.pageList_;
+        for (Message message : uiMessageList.pageList_.getPage(messagePage.getAvailablePage(), MailUtils.getCurrentUser())) {
+          uiMessageList.addUIFormInput(new UIFormCheckBoxInput<Boolean>(message.getId(), message.getId(), false));
+          uiMessageList.messageMap_.put(message.getId(), message);
+        }
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageArea);
     }
   }
 }

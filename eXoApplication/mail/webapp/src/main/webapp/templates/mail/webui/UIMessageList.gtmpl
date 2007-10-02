@@ -1,6 +1,7 @@
 <%
  import org.exoplatform.mail.service.Message;
  import org.exoplatform.mail.service.Utils; 
+ import org.exoplatform.mail.service.MessagePageList;
  String compId = uicomponent.getId() ;
  
 %>
@@ -129,18 +130,31 @@
       
     </div>
   </div>
+  
   <div class="UIMessagePageList">
     <div class="MailIteratorContainer">
       <div class="RightPageIteratorBlock">
-        <a title="First Page" class="FloatBlockHidden FirstPageArrow"/></a>        
-        <a title="Previous Page" class="FloatBlockHidden PreviousPageArrow"></a>
-        <div class="Number">1</div>
-        <a title="Next Page" class="FloatBlock NextPageArrow" href="#"/></a>
-        <a title="Last Page" class="FloatBlock LastPageArrow"><span/></a>
+        <%
+          MessagePageList pageList = uicomponent.getMessagePageList();
+          String cssFirstPage = "FloatBlock";
+          if (pageList.getCurrentPage() == 1) cssFirstPage = "FloatBlockHidden";
+          String cssLastPage = "FloatBlock";
+          if (pageList.getCurrentPage() == pageList.getAvailablePage()) cssLastPage = "FloatBlockHidden";
+        %>
+        <a title="First Page" class="$cssFirstPage FirstPageArrow" href="<%=uicomponent.event("FirstPage")%>"/></a>        
+        <a title="Previous Page" class="$cssFirstPage PreviousPageArrow" href="<%=uicomponent.event("PreviousPage")%>"></a>
+        <div class="Number"><%=uicomponent.getMessagePageList().getCurrentPage()%></div>
+        <a title="Next Page" class="$cssLastPage NextPageArrow" href="<%=uicomponent.event("NextPage")%>"/></a>
+        <a title="Last Page" class="$cssLastPage LastPageArrow" href="<%=uicomponent.event("LastPage")%>"><span/></a>
         <div style="clear: left;"><span/></div>
       </div>
       <div class="LeftPageIteratorBlock">
-        <div class="TotalPages">Message(s)<span class="MailQuantity">20 of 140</span></div>
+        <%
+          long fromIndex = (pageList.getCurrentPage()-1)* pageList.getPageSize();
+          long endIndex = fromIndex + pageList.getPageSize();
+          if (pageList.getCurrentPage() == pageList.getAvailablePage()) endIndex = pageList.getAvailable();
+        %>
+        <div class="TotalPages">Message(s) <span class="MailQuantity"> $fromIndex to $endIndex of <%=uicomponent.getMessagePageList().getAvailable()%></span></div>
       </div>
       <div style="clear: right;"><span></span></div>
     </div>
