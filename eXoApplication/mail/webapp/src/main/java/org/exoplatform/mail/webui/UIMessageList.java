@@ -51,14 +51,14 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
         @EventConfig(listeners = UIMessageList.MarkAsUnReadActionListener.class),
         @EventConfig(listeners = UIMessageList.AddStarActionListener.class),
         @EventConfig(listeners = UIMessageList.RemoveStarActionListener.class),
-        @EventConfig(listeners = UIMessageList.AddTagActionListener.class),
-        @EventConfig(listeners = UIMessageList.MoveMessagesActionListener.class),
-        @EventConfig(listeners = UIMessageList.ImportActionListener.class),
-        @EventConfig(listeners = UIMessageList.ExportActionListener.class),
         @EventConfig(listeners = UIMessageList.FirstPageActionListener.class),
         @EventConfig(listeners = UIMessageList.PreviousPageActionListener.class),
         @EventConfig(listeners = UIMessageList.NextPageActionListener.class),
-        @EventConfig(listeners = UIMessageList.LastPageActionListener.class)
+        @EventConfig(listeners = UIMessageList.LastPageActionListener.class),
+        @EventConfig(listeners = UIMessageList.AddTagActionListener.class),
+        @EventConfig(listeners = UIMessageList.MoveMessagesActionListener.class),
+        @EventConfig(listeners = UIMessageList.ImportActionListener.class),
+        @EventConfig(listeners = UIMessageList.ExportActionListener.class)
     }
 )
 
@@ -410,10 +410,10 @@ public class UIMessageList extends UIForm {
       uiMessageList.getChildren().clear();
       uiMessageList.messageMap_.clear();
       MessagePageList messagePage = uiMessageList.pageList_;
-        for (Message message : uiMessageList.pageList_.getPage(messagePage.getAvailablePage(), MailUtils.getCurrentUser())) {
-          uiMessageList.addUIFormInput(new UIFormCheckBoxInput<Boolean>(message.getId(), message.getId(), false));
-          uiMessageList.messageMap_.put(message.getId(), message);
-        }
+      for (Message message : uiMessageList.pageList_.getPage(messagePage.getAvailablePage(), MailUtils.getCurrentUser())) {
+        uiMessageList.addUIFormInput(new UIFormCheckBoxInput<Boolean>(message.getId(), message.getId(), false));
+        uiMessageList.messageMap_.put(message.getId(), message);
+      }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageArea);
     }
   }
