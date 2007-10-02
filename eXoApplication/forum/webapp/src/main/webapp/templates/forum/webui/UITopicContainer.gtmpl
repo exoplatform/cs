@@ -1,5 +1,6 @@
 <%
 	import org.exoplatform.forum.webui.UITopicContainer ;  
+	import org.exoplatform.forum.webui.UICategory ;
 	import org.exoplatform.forum.service.Forum ;
 	import org.exoplatform.forum.service.JCRPageList ;
 %>
@@ -166,7 +167,7 @@
 							        <div class="MiddleLeftRightClickPopupMenu">
 							          <div class="MiddleRightRightClickPopupMenu">
 				              		<div class="UIRightPopupMenuContainer">
-														<a class="MenuItem" href="#">   
+														<a class="MenuItem" href="<%=uicomponent.event("AddTopic")%>">   
 					                    <div class="ItemIcon PostnewThreadIcon">
 					                      Post new Thread
 					                    </div>
@@ -176,7 +177,7 @@
 					                      Display Options
 					                    </div>
 				                    </a>
-				                    <a class="MenuItem" href="#">   
+				                    <a class="MenuItem" href="<%//=uicomponent.event("EditForum")%>">   
 					                    <div class="ItemIcon EditthisForumIcon">
 					                     Edit this Forum
 					                    </div>

@@ -82,16 +82,13 @@ public class UICategoryForm extends UIForm implements UIPopupComponent{
       String categoryTitle = uiForm.getUIStringInput(FIELD_CATEGORYTITLE_INPUT).getValue();
       String categoryOrder = uiForm.getUIStringInput(FIELD_CATEGORYORDER_INPUT).getValue();
       String description = uiForm.getUIFormTextAreaInput(FIELD_DESCRIPTION_TEXTAREA).getValue();
-      
       String userName = Util.getPortalRequestContext().getRemoteUser() ;
-//      GregorianCalendar calendar = new GregorianCalendar() ;
-//  		String id = "category" + Long.toString(calendar.getTimeInMillis(), 22);
       Category cat = new Category();
       cat.setOwner(userName) ;
       cat.setCategoryName(categoryTitle.trim()) ;
       cat.setCategoryOrder(Long.parseLong(categoryOrder)) ;
       cat.setCreatedDate(new Date()) ;
-      cat.setDescription(description.trim()) ;
+      cat.setDescription(description) ;
       cat.setModifiedBy(userName) ;
       cat.setModifiedDate(new Date()) ;
       
@@ -106,7 +103,6 @@ public class UICategoryForm extends UIForm implements UIPopupComponent{
       	WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
       	context.addUIComponentToUpdateByAjax(uiCategory) ;
       } else {
-//      	cat.setId(id.toUpperCase()) ;
       	forumService.saveCategory(cat, true);
       	forumPortlet.cancelAction() ;
       	UICategories uiCategories = forumPortlet.getChild(UICategoryContainer.class).getChild(UICategories.class) ;

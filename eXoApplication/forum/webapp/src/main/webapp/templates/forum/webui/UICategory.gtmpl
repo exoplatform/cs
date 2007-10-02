@@ -120,17 +120,9 @@
 	 					for(forum in forums) {
 			        if(i%2 == 0) classRow = "whileRow";
 			        else classRow = "OddRow";
-			        String classIconForum = "ForumNormalIcon";
 			        ++i;
+			        String classIconForum = "ForumNormalIcon";
               String titleIconForum = "Forum Contains No New Post";
-              if(forum.getIsLock() == true){
-                classIconForum = "ForumLockedIcon";
-                titleIconForum = "Forum is Closed for Posting";
-              }
-              if(forum.getIsClosed() == true){
-                classIconForum = "ForumCloseIcon";
-                titleIconForum = "Forum is Closed for Posting";
-              }
 			        String forumTitle = forum.getForumName();
 			        String forumDescription = forum.getDescription();
 			        String topicNewPostIcon = "";
@@ -155,6 +147,15 @@
 				        }
 				        openLinkLastPost = uicomponent.event("OpenLastTopicLink", (forum.getId()+","+topicNewPost.getId()))
 			        }
+              if(forum.getIsLock() == true){
+                classIconForum = "ForumLockedIcon";
+                titleIconForum = "Forum is Closed for Posting";
+              }
+              if(forum.getIsClosed() == true){
+                classIconForum = "ForumLockedIcon";//TODO: Rename class ForumLockedIcon into ForumCloseIcon
+                titleIconForum = "Forum is Closed for Posting";
+              }
+
 			        String topicCount = (String)forum.getTopicCount();
 			        String postCount = (String)forum.getPostCount();
 			        String [] forumModerators = forum.getModerators();
