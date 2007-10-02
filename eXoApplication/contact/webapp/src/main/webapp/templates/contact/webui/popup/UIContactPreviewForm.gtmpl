@@ -3,15 +3,6 @@
 	uiform.begin()
 %>
 <div class="UIContactPreview" >
-	<div class="ContactPreviewBar">
-		<div class="Subject">Contact Details</div>
-		<a class="MaximizeContactPane" title="Maximize Reading Pane"  href="<%=uicomponent.event("MaximizeContactPane")%>">
-		</a>
-		<span class="LastUpdated">
-				Last updated: <%=(uicomponent.getLastUpdated()==null ? "" : uicomponent.getLastUpdated())%>
-		</span>
-		<div style="clear:both;"><span></span></div>
-	</div>
 	<div class="ContactPreviewDetails">
 <!--  Start DecoratorBox ViewBoxStyle -->
 		<div class="DecoratorBox">

@@ -117,7 +117,7 @@
 }
 
 .ContactIcon {
-	background: url('icons/ContactIcon.gif') no-repeat center;
+	background: url('icons/ContactIcon.gif') no-repeat left center;;
 }
 
 .ContactListIcon {

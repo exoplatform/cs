@@ -352,6 +352,15 @@
 	padding-right: 16px; 
 }
 
+.UIContactPortlet .UIContactContainer .Selected {
+	background: #e6e8f5;
+	margin: 0px 1px;
+}
+
+.UIContactPortlet .UIContactContainer .Selected a {
+	color: #058ee6;
+}
+
 /*=====================Page Iterator Container===================*/
 
 .UIContactPortlet .UIContactContainer .FloatBlock {

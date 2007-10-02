@@ -78,8 +78,10 @@
 								String actionLink2 = uicomponent.event("EditContact", contact.getId()) ;
 								iconTag = "Icon" ;
 								if (contact.getTags() != null && contact.getTags().length > 0) iconTag = "Icon BlueTag" ;
+								cssClass = "" ;
+								if (contact.getId().equals(uicomponent.getSelectedContact())) cssClass = "Selected" ;
 						%>
-  						<tr class="UIContactList">
+  						<tr class="UIContactList $cssClass">
   						  <td class="text" style="padding-left: 7px;">
   						  	<%
   						  		if(checkboxField != null) uicomponent.renderField(checkboxField) ;
@@ -175,24 +177,30 @@
 	</div>
 	<div class="UIVCardsContent">
 	  <div class="WorkVCardsContent">
-				<% 			
-				
-					for(contact in uicomponent.getContacts()){		 
+				<% 		
+					DownloadService dservice ;	
+					String imageLink ;					
+					i = 0 ;
+					Contact[] contacts = uicomponent.getContacts() ;
+					Contact contact ;
+					while (i < contacts.length) {
+						contact = contacts[i ++] ;
 						cssClass = "NormalVCard" ; 
 						if (contact.getId().equals(uicomponent.getSelectedContact())) cssClass = "SelectedVCard" ;
+						iconTag = "Icon" ;
+						if (contact.getTags() != null && contact.getTags().length > 0) iconTag = "Icon BlueTag" ;
 				%>
-		  
 		  <div class="LeftVCardsContent">
 		  	<div class="VCardContent $cssClass">
 			  	<div class="TitleVCards">
 				  	<div class="StateIcon OnlineIcon"><%=(contact.getFullName()==null ? "" : contact.getFullName())%></div>
-			  		<div class="TagIcon RedTag"><span></span></div>
+			  		<div class="TagIcon $iconTag"><span></span></div>
 			  		<div style="clear: both;"><span></span></div>
 			  	</div>
 			  	<div class="ContainerVCards">
 			  		<% 
-			  		DownloadService dservice = uicomponent.getDownloadService() ;
-			  		String imageLink = ContactUtils.getImageSource(contact, dservice) ;
+			  		dservice = uicomponent.getDownloadService() ;
+			  		imageLink = ContactUtils.getImageSource(contact, dservice) ;
 			  		%>
 						<img src="<%=(imageLink == null ? "/contact/skin/DefaultSkin/webui/background/Img2.gif": imageLink)%>" width=63 height=81 class="AvatasIcon"/>	
 			  		<div class="WorkContainerVCards">
@@ -227,9 +235,61 @@
 			  	</div>
 			  </div>
 		  </div>
+			<%
+			if (i < contacts.length) {
+				contact = contacts[i ++] ;
+				cssClass = "NormalVCard" ; 
+  			if (contact.getId().equals(uicomponent.getSelectedContact())) cssClass = "SelectedVCard" ;
+			%>
+			<div class="RightVCardsContent">
+		  	<div class="VCardContent $cssClass">
+			  	<div class="TitleVCards">
+				  	<div class="StateIcon OfflineIcon"><%=(contact.getFullName()==null ? "" : contact.getFullName())%></div>
+			  		<div class="TagIcon"><span></span></div>
+			  		<div style="clear: both;"><span></span></div>
+			  	</div>
+			  	<div class="ContainerVCards">
+			  		<% 
+			  		dservice = uicomponent.getDownloadService() ;
+			  		imageLink = ContactUtils.getImageSource(contact, dservice) ;
+			  		%>
+						<img src="<%=(imageLink == null ? "/contact/skin/DefaultSkin/webui/background/Img2.gif": imageLink)%>" width=63 height=81 class="AvatasIcon"/>
+			  		<div class="WorkContainerVCards">
+			  		  <div class="JobMember"><%=(contact.getJobTitle()==null ? "" : contact.getJobTitle())%></div>
+			  		  <div class="InformationsMember">
+			  		  	<div class="InfoMember">
+			  		  		<span class="LabelContent">Email:</span>
+			  		  		<span class="InfoContent MailIcon">
+			  		  			<a href="<%=uicomponent.getParent().event("SendEmail", contact.getId())%>">
+			  		  				<%=(contact.getEmailAddress()== null ? "" : contact.getEmailAddress())%>
+			  		  			</a>
+			  		  		</span>
+			  		  	</div>
+			  		  	<div class="InfoMember">
+			  		  		<span class="LabelContent">Work phone:</span>
+			  		  		<span class="LabelContent"><%=(contact.getWorkPhone1()==null ? "" : contact.getWorkPhone1())%></span>
+			  		  	</div>
+			  		  	<div class="InfoMember">
+			  		  		<span class="LabelContent">Mobile:</span>
+			  		  		<span class="LabelContent"><%=(contact.getMobilePhone()==null ? "" : contact.getMobilePhone())%></span>
+			  		  	</div>
+			  		  	<div class="InfoMember">
+			  		  		<span class="LabelContent">Website:</span>
+			  		  		<span class="LabelContent"><a href="#"><%=(contact.getWebPage()==null ? "" : contact.getWebPage())%></a></span>
+			  		  	</div>
+			  		  	<div class="InfoMember">
+			  		  		<span class="LabelContent"><a href="<%=uicomponent.event("ViewDetails", contact.getId())%>">View Details</a></span>			  		  	
+			  		  	</div>
+			  		  </div>
+			  		</div>
+			  		<div style="clear: left;"><span></span></div>
+			  	</div>
+			  </div>	
+		  	
+		  </div>
+
 			
-			
-			  <% } %>		
+			  <% } } %>		
 		  
 		  <div style="clear: both;"><span></span></div>
 		</div>

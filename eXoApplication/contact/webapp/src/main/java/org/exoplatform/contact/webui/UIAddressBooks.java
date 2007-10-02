@@ -13,7 +13,10 @@ import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.GroupContactData;
 import org.exoplatform.contact.webui.popup.UICategoryForm;
+import org.exoplatform.contact.webui.popup.UICategorySelect;
+import org.exoplatform.contact.webui.popup.UIContactForm;
 import org.exoplatform.contact.webui.popup.UIPopupAction;
+import org.exoplatform.contact.webui.popup.UIPopupContainer;
 import org.exoplatform.contact.webui.popup.UISendEmail;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.organization.OrganizationService;
@@ -36,6 +39,9 @@ import org.exoplatform.webui.event.EventListener;
 @ComponentConfig(
     template =  "app:/templates/contact/webui/UIAddressBooks.gtmpl", 
     events = {
+        
+        @EventConfig(listeners = UIAddressBooks.AddContactActionListener.class),
+        @EventConfig(listeners = UIAddressBooks.AddAddressActionListener.class),
         @EventConfig(listeners = UIAddressBooks.EditGroupActionListener.class),
         @EventConfig(listeners = UIAddressBooks.DeleteGroupActionListener.class,
             confirm = "UIAddressBooks.msg.confirm-delete"),
@@ -70,7 +76,35 @@ public class UIAddressBooks extends UIComponent  {
     }
     return contactService.getSharedContacts(groupIds);
   }
+
+  static  public class AddAddressActionListener extends EventListener<UIAddressBooks> {
+    public void execute(Event<UIAddressBooks> event) throws Exception {
+      UIAddressBooks uiAddressBook = event.getSource() ;  
+      UIContactPortlet uiContactPortlet = uiAddressBook.getAncestorOfType(UIContactPortlet.class) ;
+      UIPopupAction uiPopupAction = uiContactPortlet.getChild(UIPopupAction.class) ;
+      UICategoryForm uiCategoryForm = uiPopupAction.createUIComponent(UICategoryForm.class, null, "UICategoryForm") ;
+      UICategoryForm.isNew_ = true ;
+      uiPopupAction.activate(uiCategoryForm, 500, 0, true) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+    }
+  }
   
+  static  public class AddContactActionListener extends EventListener<UIAddressBooks> {
+    public void execute(Event<UIAddressBooks> event) throws Exception {
+      UIAddressBooks uiAddressBook = event.getSource() ;  
+      UIContactPortlet uiContactPortlet = uiAddressBook.getAncestorOfType(UIContactPortlet.class) ;
+      UIPopupAction uiPopupAction = uiContactPortlet.getChild(UIPopupAction.class) ; 
+      UIPopupContainer popupContainer = uiPopupAction.createUIComponent(UIPopupContainer.class, null, "AddNewContact") ;
+      UICategorySelect uiCategorySelect = popupContainer.addChild(UICategorySelect.class, null, null) ;
+      popupContainer.addChild(UIContactForm.class, null, null) ;
+      
+      String groupId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      uiCategorySelect.setValue(groupId) ; 
+      UIContactForm.isNew_ = true ;
+      uiPopupAction.activate(popupContainer, 800, 0, true) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+    }
+  }
   static  public class EditGroupActionListener extends EventListener<UIAddressBooks> {
     public void execute(Event<UIAddressBooks> event) throws Exception {
       UIAddressBooks uiAddressBook = event.getSource() ;  
@@ -161,8 +195,7 @@ public class UIAddressBooks extends UIComponent  {
   
   public static class AddressPopupActionListener extends EventListener<UIAddressBooks> {
     public void execute(Event<UIAddressBooks> event) throws Exception {   
-      String viewType = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      System.out.println("\n\n view type :" + viewType + "\n\n");
+   
     }
   }
   

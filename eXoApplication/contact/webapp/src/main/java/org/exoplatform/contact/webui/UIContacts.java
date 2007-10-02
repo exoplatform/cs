@@ -76,7 +76,8 @@ public class UIContacts extends UIForm {
       addUIFormInput(checkbox);
       contactMap.put(contact.getId(), contact) ;
     }
-    setSelectedContact(getContacts()[0].getId()) ;
+    if (contactMap.size() > 0)
+      setSelectedContact(getContacts()[0].getId()) ;
     UIContactPreview uiContactPreview = getAncestorOfType(UIContactContainer.class).findFirstComponentOfType(UIContactPreview.class) ;
     uiContactPreview.updateContact() ;
   }
@@ -128,8 +129,13 @@ public class UIContacts extends UIForm {
       popupContainer.addChild(UICategorySelect.class, null, null) ;
       popupContainer.addChild(UIContactForm.class, null, null) ;
       UICategorySelect uiCategorySelect = popupContainer.findFirstComponentOfType(UICategorySelect.class);
-      uiCategorySelect.setValue(contactId);
+      
+      ContactService contactService = ContactUtils.getContactService();
+      String username = ContactUtils.getCurrentUser() ;
+      Contact contact = contactService.getContact(username, contactId);
+      if (contact != null && contact.getCategories().length > 0) uiCategorySelect.setValue(contact.getCategories()[0]) ;
       uiCategorySelect.disableSelect() ;
+      
       UIContactForm uiContactForm = popupContainer.findFirstComponentOfType(UIContactForm.class);   
       uiContactForm.setValues(uiContacts.contactMap.get(contactId));
       UIContactForm.isNew_ = false ;
@@ -234,13 +240,9 @@ public class UIContacts extends UIForm {
       String contactId = event.getRequestContext().getRequestParameter(OBJECTID);
       UIContactPortlet contactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class) ;
       UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
-      System.out.println("\n\n 111111111 \n\n");
-      UIContactPreviewForm uiContactPreviewForm = popupAction.createUIComponent(UIContactPreviewForm.class, null, "UIContactPreview") ; 
-      System.out.println("\n\n 22222222222 \n\n");
+      UIContactPreviewForm uiContactPreviewForm = popupAction.createUIComponent(UIContactPreviewForm.class, null, "UIContactPreviewForm") ; 
       uiContactPreviewForm.setContact(uiContacts.contactMap.get(contactId)) ;
-      System.out.println("\n\n 3333333333333 \n\n");
-      popupAction.activate(uiContactPreviewForm, 1000, 0, true) ;
-      System.out.println("\n\n 444444444444444 \n\n");
+      popupAction.activate(uiContactPreviewForm, 700, 0, true) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;      
     }
   }

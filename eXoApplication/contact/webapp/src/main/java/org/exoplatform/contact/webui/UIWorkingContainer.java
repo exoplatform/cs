@@ -49,7 +49,7 @@ public class UIWorkingContainer extends UIContainer  {
   }
   public void removeContactGroup(String id) { 
     groupMap_.remove(id) ; 
-    setSelectedGroup(null) ;
+    if (id.equals(selectedGroup_)) setSelectedGroup(null) ;
   }
   
   public void setSelectedGroup(String groupId) { selectedGroup_ = groupId ; }

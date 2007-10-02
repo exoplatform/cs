@@ -76,11 +76,8 @@ public class UICategorySelect extends UIForm {
      iput.getUIFormSelectBox(FIELD_CATEGORY).setOptions(options) ;
   }
   
-  public void setValue(String contactId) throws Exception {
-    ContactService contactService = ContactUtils.getContactService();
-    String username = ContactUtils.getCurrentUser() ;
-    Contact contact = contactService.getContact(username, contactId);
-    if (contact != null && contact.getCategories().length > 0) getUIFormSelectBox(FIELD_CATEGORY).setValue(contact.getCategories()[0]) ;
+  public void setValue(String groupId) throws Exception {
+    getUIFormSelectBox(FIELD_CATEGORY).setValue(groupId) ;
   }
   public void disableSelect() { getUIFormSelectBox(FIELD_CATEGORY).setEnable(false) ; }
 

@@ -76,11 +76,6 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ; 
       }
-      if (groupName.contains("/")) {
-        
-      }
-      
-      
       ContactGroup group ; 
       String username = ContactUtils.getCurrentUser() ;
       ContactService contactService = ContactUtils.getContactService();
