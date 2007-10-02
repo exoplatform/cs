@@ -4,7 +4,6 @@
  **************************************************************************/
 package org.exoplatform.forum.webui;
 
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.exoplatform.container.PortalContainer;
@@ -12,14 +11,12 @@ import org.exoplatform.forum.service.Category;
 import org.exoplatform.forum.service.Forum;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.service.Topic;
-import org.exoplatform.forum.webui.popup.UIForumForm;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
-import org.exoplatform.webui.event.Event.Phase;
 
 /**
  * Created by The eXo Platform SARL

@@ -1,0 +1,36 @@
+<%  
+	import org.exoplatform.forum.service.Post ;
+%>
+<div class="UIViewTopic">
+  <% uiform.begin() %>  
+	<% Post post = uicomponent.getPostView(); 
+		 String title = post.getSubject();	
+		 String messeger = post.getMessage();	
+	%>
+
+Nguyen "Ngoc" Thuy
+<div> Title: $title </div>
+<div> Messeger: $messeger </div>
+
+<div class="UIAction"> 
+	  <table class="ActionContainer" align="center">
+			<tr>
+				<td align="center">
+        <% for(action in uicomponent.getActions()) { 
+        	 String actionLabel = "Close";// _ctx.appRes(uicomponent.getName() + ".action." + action); 
+           String link = uicomponent.event(action) ;
+        %>
+        		<a href="$link" class="ActionButton LightBlueStyle">
+	      	  	<div class="ButtonLeft">
+	        	  	<div class="ButtonRight">
+	          	  	<div class="ButtonMiddle"> $actionLabel </div>
+	            	</div>
+	          	</div>
+	        	</a>
+          <%}%>
+          </td>
+				</tr>
+	 	  </table> 
+    </div>
+  <%uiform.end()%>
+ </div>

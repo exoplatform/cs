@@ -11,8 +11,6 @@ import org.exoplatform.forum.service.Forum;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.service.JCRPageList;
 import org.exoplatform.forum.service.Topic;
-import org.exoplatform.forum.webui.popup.UICategoryForm;
-import org.exoplatform.forum.webui.popup.UIForumForm;
 import org.exoplatform.forum.webui.popup.UIPopupAction;
 import org.exoplatform.forum.webui.popup.UIPopupComponent;
 import org.exoplatform.forum.webui.popup.UITopicForm;

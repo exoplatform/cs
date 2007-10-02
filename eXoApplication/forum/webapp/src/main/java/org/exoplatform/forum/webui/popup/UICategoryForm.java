@@ -5,7 +5,6 @@
 package org.exoplatform.forum.webui.popup;
 
 import java.util.Date;
-import java.util.GregorianCalendar;
 
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.forum.service.Category;
@@ -15,7 +14,6 @@ import org.exoplatform.forum.webui.UICategories;
 import org.exoplatform.forum.webui.UICategory;
 import org.exoplatform.forum.webui.UICategoryContainer;
 import org.exoplatform.forum.webui.UIForumPortlet;
-import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;

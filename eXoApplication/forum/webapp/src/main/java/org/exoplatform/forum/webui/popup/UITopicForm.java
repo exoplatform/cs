@@ -5,14 +5,13 @@
 package org.exoplatform.forum.webui.popup;
 
 import java.util.Date;
-import java.util.GregorianCalendar;
 
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.forum.service.ForumService;
+import org.exoplatform.forum.service.Post;
 import org.exoplatform.forum.service.Topic;
 import org.exoplatform.forum.webui.EmptyNameValidator;
 import org.exoplatform.forum.webui.UIForumPortlet;
-import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -23,8 +22,6 @@ import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
-
-import sun.security.action.GetLongAction;
 
 /**
  * Created by The eXo Platform SARL
@@ -49,7 +46,7 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
   private String forumId ;
   public UITopicForm() throws Exception {
     UIFormStringInput topicTitle = new UIFormStringInput(FIELD_TOPICTITLE_INPUT, FIELD_TOPICTITLE_INPUT, null);
-    topicTitle.addValidator(EmptyNameValidator.class) ;
+    //topicTitle.addValidator(EmptyNameValidator.class) ;
     UIFormTextAreaInput messenger = new UIFormTextAreaInput(FIELD_MESSENGER_TEXTAREA, FIELD_MESSENGER_TEXTAREA, null);
     
     addUIFormInput(topicTitle);
@@ -67,7 +64,6 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
   }
   public void deActivate() throws Exception {
     // TODO Auto-generated method stub
-    //System.out.println("\n\n description: sfdsf\n\n");
   }
   
   public String[] getActionsTopic() throws Exception {
@@ -77,14 +73,36 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
   static  public class PreviewThread extends EventListener<UITopicForm> {
     public void execute(Event<UITopicForm> event) throws Exception {
       UITopicForm uiForm = event.getSource() ;
+      uiForm.getUIStringInput(FIELD_TOPICTITLE_INPUT).addValidator(EmptyNameValidator.class);
+      String topicTitle = uiForm.getUIStringInput(FIELD_TOPICTITLE_INPUT).getValue().trim();
+      String messenger = uiForm.getUIFormTextAreaInput(FIELD_MESSENGER_TEXTAREA).getValue() ;
+      
+      String userName = Util.getPortalRequestContext().getRemoteUser() ;
+      
+      Post postNew = new Post();
+      postNew.setOwner(userName);
+      postNew.setSubject(topicTitle);
+      postNew.setCreatedDate(new Date());
+      postNew.setModifiedBy(userName);
+      postNew.setModifiedDate(new Date());
+      postNew.setMessage(messenger);
+      
+      postNew.setIcon("");
+      postNew.setNumberOfAttachment(0) ;
+      
       UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
-      forumPortlet.cancelAction() ;
+      UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;
+      UIViewTopic viewTopic = popupAction.createUIComponent(UIViewTopic.class, null, null) ;
+      viewTopic.setPostView(postNew) ;
+      popupAction.activate(viewTopic, 670, 440) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   }
   
   static  public class SubmitThread extends EventListener<UITopicForm> {
     public void execute(Event<UITopicForm> event) throws Exception {
       UITopicForm uiForm = event.getSource() ;
+      uiForm.getUIStringInput(FIELD_TOPICTITLE_INPUT).addValidator(EmptyNameValidator.class);
       String topicTitle = uiForm.getUIStringInput(FIELD_TOPICTITLE_INPUT).getValue().trim();
       String messenger = uiForm.getUIFormTextAreaInput(FIELD_MESSENGER_TEXTAREA).getValue() ;
       

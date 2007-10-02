@@ -4,13 +4,9 @@
  **************************************************************************/
 package org.exoplatform.forum.webui;
 
-import java.util.List;
-
 import org.exoplatform.forum.webui.popup.UIPopupAction;
-import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
-import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIPopupMessages;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
