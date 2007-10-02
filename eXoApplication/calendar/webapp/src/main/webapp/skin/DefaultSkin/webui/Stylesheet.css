@@ -986,15 +986,15 @@
 
 /*====================View Event Month =====================*/
 
-.TitleBar .BackIcon {
+.UICalendarPortlet .TitleBar .BackIcon {
 	margin:3px 4px 0px 0px;
 }
 
-.TitleBar .NextIcon {
+.UICalendarPortlet .TitleBar .NextIcon {
 	margin:3px 0px 0px 4px;
 }
 
-.TitleBar table {
+.UICalendarPortlet .TitleBar table {
 	width: auto;
 	margin: auto;
 }
