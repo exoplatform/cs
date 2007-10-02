@@ -13,16 +13,25 @@
 	
 	<div class="UIMonthView">
 		<div class="TitleBar">
-			<div  style="width: 300px;margin:auto;">		
-				<a href="$linkDayNext" class="RightControlButton">
-					<div class="NextIcon" title="Next month"><span></span></div>
-				</a>
-				<div class="Title RightControlButton" style="width:250px; margin:auto;" >$currentMonthName,  $currentYear</div>
-				<a href="$linkDayPrevious" class="RightControlButton">
-					<div class="BackIcon" title="Previous month"><span></span></div>
-				</a>
-				<div style="clear:right;"></div>
-			</div>
+			<table>
+				<body>
+					<tr>
+						<td>
+							<a href="$linkDayPrevious">
+								<div class="BackIcon" title="Previous month"><span></span></div>
+							</a>
+						</td>
+						<td>
+							<div class="Title">$currentMonthName,  $currentYear</div>
+						</td>
+						<td>
+							<a href="$linkDayNext">
+								<div class="NextIcon" title="Next month"><span></span></div>
+							</a
+						</td>
+					</tr>
+				</body>
+			</table>
 		</div>
 		<div class="EventMonthContainer">
 			<div class="EventMonthContent">

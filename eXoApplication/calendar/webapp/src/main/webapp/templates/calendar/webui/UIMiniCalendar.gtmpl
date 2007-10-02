@@ -13,41 +13,50 @@
 %>
 <div class="UIMiniCalendar">
 	<div class="MiniCalendarContainer">
-	<table class="UIGrid" id="RowContainerDay" cellspacing="0" borderspacing="0">
-	        <tbody>
-	        <tr>
-	         <td class="$cssClass">
-								<div class="WeekSuburdbar">
-									<a href="$linkDayNext" class="RightControlButton">
-										<div class="NextIcon" title="Next month"><span></span></div>
-									</a>
-									<div class="Title RightControlButton">
-										<a href="<%=uicomponent.event("GotoMonth")%>">
-											$monthName
-										</a>,  
-										<a href="<%=uicomponent.event("GotoYear")%>">
-											$currentYear
-										</a>
-									</div>
-									<a href="$linkDayPrevious" class="RightControlButton">
-										<div class="BackIcon" title="Previous month"><span></span></div>
-									</a>
-									<div style="clear:right;"></div>
-								</div>
-								<div class="MonthList">
-									<div class="WeekList">
-									  <%for(day in uicomponent.getDaysName()) {
-										  	cssStyle = "DayTitle" ;
-												if(day.equals(uicomponent.SUNDAY)) cssStyle = "SundayTitle" ;
-										%>
-										<div class="$cssStyle"><%=day.substring(0,1)%></div>
-									  <%}%>
-		  							<div style="clear: both;"><span></span></div>
-		  						</div>
-		  						<div class="DayList">
-		  						<table class="UIGrid" id="" cellspacing="0" borderspacing="0">
-	  		<tbody>
-	  		<%
+		<div class="YearSelector">
+			<a href="#" class="RightControlButton">
+				<div class="NextYearSelector" title="Previous Year"><span></span></div>
+			</a>
+			<div class="MonthSelector RightControlButton">
+				<table>
+					<body>
+						<tr>
+							<td>
+								<a href="$linkDayPrevious">
+									<div class="PreviousMonthSelector" title="Previous month"><span></span></div>
+								</a>
+							</td>
+							<td>
+								<div class="Title">$monthName,  $currentYear</div>
+							</td>
+							<td>
+								<a href="$linkDayNext">
+									<div class="NextMonthSelector" title="Next month"><span></span></div>
+								</a>
+							</td>
+						</tr>
+					</body>
+				</table>
+			</div>
+			<a href="#" class="RightControlButton">
+				<div class="PreviousYearSelector" title="Previous Year"><span></span></div>
+			</a>
+			<div style="clear: right;"><span></span></div>
+		</div>
+		<div class="MonthList">
+			<div class="WeekList">
+			  <%for(day in uicomponent.getDaysName()) {
+				  	cssStyle = "DayTitle" ;
+						if(day.equals(uicomponent.SUNDAY)) cssStyle = "SundayTitle" ;
+				%>
+			<div class="$cssStyle"><%=day.substring(0,1)%></div>
+			  <%}%>
+  					<div style="clear: both;"><span></span></div>
+  				</div>
+  				<div class="DayList">
+  					<table class="UIGrid" id="" cellspacing="0" borderspacing="0">
+  						<tbody>
+  						<%
 					week = 0 ; 
 					dayOfMonth = 1 ;
 					validDay = 0 ;
@@ -79,18 +88,18 @@
 	  			}	
 	  			 
 				%>
-	  		</tbody>
-  		</table>
-		  						
-	        </div>
-	        </div>
-	        
-	        </td>
-	        
-	        </tr>
-	        </tbody>
-	        </table>
-			
+  				</tbody>
+  			</table>
+  						
+    	</div>
+  	</div>
+	  <div class="TimeSelector">
+			<div class="RightTimeSelector">
+				<div class="LeftTimeSelector">
+					<div class="CenterTimeSelector">11:20:10 AM</div>
+				</div>
+			</div>
+		</div>     
 	</div>
 </div>
 <%uiform.end()%>

@@ -69,6 +69,10 @@
 	background: url('icons/DayIcon24.gif') no-repeat;
 }
 
+.UIListViewIcon {
+	background: url('icons/UIListViewIcon.gif') no-repeat;
+}
+
 .DeleteGroupIcon {
 	background: url('icons/DeleteGroupIcon.gif') no-repeat;
 }

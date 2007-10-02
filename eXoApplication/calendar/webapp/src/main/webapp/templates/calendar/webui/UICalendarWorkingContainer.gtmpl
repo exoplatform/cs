@@ -1,4 +1,3 @@
 <div class="UICalendarWorkingContainer" id="$uicomponent.id">
  <%uicomponent.renderChildren()%>
- <div style="clear:left;"><span></span></div>
 </div>
