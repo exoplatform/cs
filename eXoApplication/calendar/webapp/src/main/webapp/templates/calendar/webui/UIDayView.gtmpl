@@ -17,31 +17,32 @@
 %>
 <div class="UIDayView">
   <div class="TitleBar">
-    <div style="width: 300px; margin: auto;">
-      <a href="$linkDayNext" class="RightControlButton">
-        <div class="NextIcon" title="Next day">
-          <span></span>
-        </div>
-      </a>
-      <div class="Title RightControlButton">
-        $currentDayName, $currentMonthName, $currentDay, $currentYear</div>
-      <a href="$linkDayPrevious" class="RightControlButton">
-        <div class="BackIcon" title="Previous day">
-          <span></span>
-        </div>
-      </a>
-      <div style="clear: right;">
-      </div>
-    </div>
+    <table>
+			<body>
+				<tr>
+					<td>
+						<a href="$linkDayPrevious">
+							<div class="BackIcon" title="Previous month"><span></span></div>
+						</a>
+					</td>
+					<td>
+						<div class="Title">$currentMonthName,  $currentYear</div>
+					</td>
+					<td>
+						<a href="$linkDayNext">
+							<div class="NextIcon" title="Next month"><span></span></div>
+						</a
+					</td>
+				</tr>
+			</body>
+		</table>
   </div>
   <div class="EventAllDay">
-  	 <div class="EventAllDayColor2" style="height:20px;">
     <%for(ce in uicomponent.getAllDayEvents().values()) {%>
       <div class="EventAllDayDescription">
         <%=ce.getSummary()%>
       </div>
     <%}%>
-    </div>
   </div>
   <div class="EventDayContainer" style="position: relative;">
     <div class="EventDayContent">

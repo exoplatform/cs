@@ -492,18 +492,13 @@
 /*======================== Day view ==========================*/
 
 .UIDayView  {
-	border-left: 1px solid #c7c7c7;
 	border-bottom: 1px solid #c7c7c7;
 }
 
 .UIDayView .EventAllDay {
-	border: 1px solid #ffffff;
-}
-
-.UIDayView .EventAllDay .EventAllDayColor2 {
-	border: 1px solid #c7c7c7;
+	border-left: 1px solid #c7c7c7;
 	background-color: #f6ffe5;
-	padding: 6px;
+	height: 25px;
 }
 
 .UIDayView .EventDayContainer {
@@ -514,6 +509,7 @@
 
 .UIDayView .EventDayContent {
 	background-color: #ffffff;
+	border-left: 1px solid #c7c7c7;
 }
 
 .UIDayView .EventDayContent .TdLine{
@@ -990,19 +986,15 @@
 
 /*====================View Event Month =====================*/
 
-.UIMonthView .TitleBar {
-	text-align: center;
+.TitleBar .BackIcon {
+	margin:3px 4px 0px 0px;
 }
 
-.UIMonthView .TitleBar .BackIcon {
-	margin:4px 4px 0px 0px;
+.TitleBar .NextIcon {
+	margin:3px 0px 0px 4px;
 }
 
-.UIMonthView .TitleBar .NextIcon {
-	margin:4px 0px 0px 4px;
-}
-
-.UIMonthView .TitleBar table {
+.TitleBar table {
 	width: auto;
 	margin: auto;
 }
