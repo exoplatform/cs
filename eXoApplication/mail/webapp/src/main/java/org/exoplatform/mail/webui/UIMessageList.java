@@ -67,7 +67,6 @@ public class UIMessageList extends UIForm {
   private String selectedFolderId_ = Utils.FD_INBOX ;
   private String selectedTagName_ = null ;
   private MessagePageList pageList_ = null ;
-  private Map<String, Message> messageMap_ = new HashMap<String, Message>(); 
 
   public UIMessageList() throws Exception {}
 
@@ -80,47 +79,22 @@ public class UIMessageList extends UIForm {
   protected String getSelectedTagName() {return selectedTagName_ ;}
   protected void setSelectedTagName(String tagName) {selectedTagName_ = tagName ;}
   
-  public void setMessageList(List<Message> messageList) throws Exception {
-    getChildren().clear();
-    messageMap_.clear();
-    for (Message message : messageList) {
-      addUIFormInput(new UIFormCheckBoxInput<Boolean>(message.getId(), message.getId(), false));
-      messageMap_.put(message.getId(), message);
-    }
-  }
-  
   public MessagePageList getMessagePageList() { return pageList_; } 
   
-  public void setMessagePageList(MessagePageList pageList) throws Exception {
-    pageList_ = pageList ;
-    getChildren().clear();
-    messageMap_.clear();
-    for (Message message : pageList.currentPage(MailUtils.getCurrentUser())) {
-      addUIFormInput(new UIFormCheckBoxInput<Boolean>(message.getId(), message.getId(), false));
-      messageMap_.put(message.getId(), message);
-    }
-  }
-  
-  public void updateMessage(Message message, boolean isNew) throws Exception {
-    if (isNew) addUIFormInput(new UIFormCheckBoxInput<Boolean>(message.getId(), message.getId(), false));
-    messageMap_.put(message.getId(), message);
-  }
-  
-  public void addMessageList(List<Message> messageList) throws Exception {
-    for (Message message : messageList) {
-      updateMessage(message, true);
-    }
-  }
-  
-  public void removeMessages(List<Message> messages) throws Exception {
-    for (Message message : messages) {
-      removeChildById(message.getId());
-      messageMap_.remove(message.getId());
-    }
-  }
-  
   public List<Message> getMessageList() throws Exception {    
-    return new ArrayList<Message>(messageMap_.values());
+    return pageList_.currentPage(MailUtils.getCurrentUser());
+  }
+  
+  public void setMessagePageList(MessagePageList pageList) throws Exception {
+    setMessagePageList(pageList, 1);
+  }
+  
+  public void setMessagePageList(MessagePageList pageList, long page) throws Exception {
+    getChildren().clear();
+    pageList_ = pageList ;
+    for (Message message : pageList.getPage(page, MailUtils.getCurrentUser())) {
+      addUIFormInput(new UIFormCheckBoxInput<Boolean>(message.getId(), message.getId(), false));
+    }
   }
   
   public List<Message> getCheckedMessage() throws Exception {
@@ -292,7 +266,7 @@ public class UIMessageList extends UIForm {
       }
       try {
         mailSrv.removeMessage(username, accountId, messageIdList);
-        uiMessageList.removeMessages(checkedMessageList);
+        uiMessageList.setMessagePageList(uiMessageList.getMessagePageList(), uiMessageList.getMessagePageList().getCurrentPage());
       } catch (Exception e) {
         System.err.println("Error : Exception occur while delete message");
       }
@@ -356,65 +330,40 @@ public class UIMessageList extends UIForm {
   static public class FirstPageActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource() ; 
-      UIMessageArea uiMessageArea = uiMessageList.getAncestorOfType(UIMessageArea.class);
-      uiMessageList.getChildren().clear();
-      uiMessageList.messageMap_.clear();
-      MessagePageList messagePage = uiMessageList.pageList_;
-      for (Message message : uiMessageList.pageList_.getPage(1, MailUtils.getCurrentUser())) {
-        uiMessageList.addUIFormInput(new UIFormCheckBoxInput<Boolean>(message.getId(), message.getId(), false));
-        uiMessageList.messageMap_.put(message.getId(), message);
-      }
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageArea);
+      MessagePageList pageList = uiMessageList.getMessagePageList(); 
+      uiMessageList.setMessagePageList(pageList, 1);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
   }
   
   static public class PreviousPageActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource() ; 
-      UIMessageArea uiMessageArea = uiMessageList.getAncestorOfType(UIMessageArea.class);
-      uiMessageList.getChildren().clear();
-      uiMessageList.messageMap_.clear();
-      MessagePageList messagePage = uiMessageList.pageList_;
-      System.out.println("====>>>>>>>> " + messagePage.getCurrentPage());
-      if (messagePage.getCurrentPage() > 1){
-        for (Message message : uiMessageList.pageList_.getPage(messagePage.getCurrentPage() - 1, MailUtils.getCurrentUser())) {
-          uiMessageList.addUIFormInput(new UIFormCheckBoxInput<Boolean>(message.getId(), message.getId(), false));
-          uiMessageList.messageMap_.put(message.getId(), message);
-        }
+      MessagePageList pageList = uiMessageList.getMessagePageList(); 
+      if (pageList.getCurrentPage() > 1){
+        uiMessageList.setMessagePageList(pageList, pageList.getCurrentPage() - 1);
       }
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageArea);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
   }
   
   static public class NextPageActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource() ; 
-      UIMessageArea uiMessageArea = uiMessageList.getAncestorOfType(UIMessageArea.class);
-      uiMessageList.getChildren().clear();
-      uiMessageList.messageMap_.clear();
-      MessagePageList messagePage = uiMessageList.pageList_;
-      if (messagePage.getCurrentPage() < messagePage.getAvailablePage()){
-        for (Message message : uiMessageList.pageList_.getPage(messagePage.getCurrentPage() + 1, MailUtils.getCurrentUser())) {
-          uiMessageList.addUIFormInput(new UIFormCheckBoxInput<Boolean>(message.getId(), message.getId(), false));
-          uiMessageList.messageMap_.put(message.getId(), message);
-        }
+      MessagePageList pageList = uiMessageList.getMessagePageList(); 
+      if (pageList.getCurrentPage() < pageList.getAvailablePage()){
+        uiMessageList.setMessagePageList(pageList, pageList.getCurrentPage() + 1);
       }
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageArea);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
   }
   
   static public class LastPageActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource() ; 
-      UIMessageArea uiMessageArea = uiMessageList.getAncestorOfType(UIMessageArea.class);
-      uiMessageList.getChildren().clear();
-      uiMessageList.messageMap_.clear();
-      MessagePageList messagePage = uiMessageList.pageList_;
-      for (Message message : uiMessageList.pageList_.getPage(messagePage.getAvailablePage(), MailUtils.getCurrentUser())) {
-        uiMessageList.addUIFormInput(new UIFormCheckBoxInput<Boolean>(message.getId(), message.getId(), false));
-        uiMessageList.messageMap_.put(message.getId(), message);
-      }
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageArea);
+      MessagePageList pageList = uiMessageList.getMessagePageList(); 
+      uiMessageList.setMessagePageList(pageList, pageList.getAvailablePage());
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
   }
 }
