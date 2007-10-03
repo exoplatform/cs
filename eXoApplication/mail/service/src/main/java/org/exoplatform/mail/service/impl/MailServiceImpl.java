@@ -270,9 +270,11 @@ public class MailServiceImpl implements MailService{
           messageList.add(newMsg);
           i ++ ;
           for(String f : folders) {
-            Folder fd = storage_.getFolder(username, account.getId(), f) ;
+            String folderId = Utils.createFolderId(account.getId(), f, false);
+            Folder fd = storage_.getFolder(username, account.getId(), folderId) ;
             if(fd == null) {
               fd = new Folder() ;
+              fd.setId(folderId);
               fd.setName(f) ;
               fd.setLabel(f) ;
               fd.setPersonalFolder(false) ;

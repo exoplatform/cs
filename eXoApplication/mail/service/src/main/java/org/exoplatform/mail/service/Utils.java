@@ -141,4 +141,10 @@ public class Utils {
     }
     return inetAddress;
   }
+  
+  public static String createFolderId(String accountId, String folderName, boolean isPersonal) {
+    String folderId = accountId + "DefaultFolder" + folderName;
+    if (isPersonal) folderId = accountId + "UserFolder" + folderName;
+    return folderId;
+  }
 }

@@ -147,7 +147,7 @@
             long fromIndex = (pageList.getCurrentPage()-1)* pageList.getPageSize();
             long endIndex = fromIndex + pageList.getPageSize();
             if (pageList.getCurrentPage() == pageList.getAvailablePage()) endIndex = pageList.getAvailable();
-            mailRange = fromIndex + "to" + endIndex + "of" + pageList.getAvailable();
+            mailRange = fromIndex + " to " + endIndex + " of " + pageList.getAvailable();
           } 
           
         %>
