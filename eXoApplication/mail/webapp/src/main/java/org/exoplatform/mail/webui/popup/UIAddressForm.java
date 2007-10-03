@@ -71,9 +71,9 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
     ContactService contactSrv = getApplicationComponent(ContactService.class);
     String username = Util.getPortalRequestContext().getRemoteUser();   
     if (groupId == null || groupId == "") {
-      contacts = contactSrv.getAllContact(username);
+      contacts = contactSrv.getAllContact(username).getAll();
     } else {
-      contacts = contactSrv.getContactsByGroup(username, groupId);
+      contacts = contactSrv.getContactsByGroup(username, groupId).get;
     }
     setContactList(contacts);
   }
