@@ -6,6 +6,10 @@
 	background: url('icons/16x16/AddNewThreadIcon.gif') left center;
 }
 
+.UIForumContainer .LockActionForum {
+	filter:alpha(opacity=50);-moz-opacity:.50;opacity:.50;
+}
+
 .UIForumContainer .ButtomAndPageListContainer .UIPageIterator {
 	width: 60%;
 	float: right;

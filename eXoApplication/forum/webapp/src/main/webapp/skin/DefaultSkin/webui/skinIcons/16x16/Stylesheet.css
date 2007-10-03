@@ -125,3 +125,7 @@
 .JPGIcon {
 	background: url('icons/JPGIcon.gif') no-repeat left center;
 }
+
+.LockIcon {
+	background: url('icons/Lock.gif') no-repeat left center;
+}
