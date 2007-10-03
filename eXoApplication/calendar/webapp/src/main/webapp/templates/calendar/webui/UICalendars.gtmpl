@@ -3,7 +3,7 @@
 	<div class="TitleBar">
 		<div class="Title">Calendars</div>
 		<div class="ActionsButton" title="Calendar actions" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
-			<% /*Begin Popup Menu*/ %>
+			<% /*Begin Popup Menu - Main */ %>
 	      <div style="position: relative;">
 		      <div class="UIPopupCategory" style="display: none;">
 		      	<div class="PopupCategoryDecorator">
@@ -150,7 +150,63 @@
 			</div>
 		</div>
 	</div>
-	<% /*Begin Popup Menu*/ %>
+	<% /*Begin Popup Menu - Calendar group*/ %>
+	      <div class="UIPopupCategory" style="display: none; z-index: 10000 ;">
+	      	<div class="PopupCategoryDecorator">
+	      
+		        <div class="UIRightClickPopupMenu" style="display: block;">
+						  <div class="TopLeftRightClickPopupMenu">
+	      			<div class="TopRightRightClickPopupMenu">
+	        			<div class="TopCenterRightClickPopupMenu"><span></span></div>
+	      			</div>
+	    			</div>
+			        <div class="MiddleLeftRightClickPopupMenu">
+			          <div class="MiddleRightRightClickPopupMenu">
+	          		<div class="UIRightPopupMenuContainer">
+	          				<a class="MenuItem" href="<%=uicomponent.event("AddEvent","id")%>">   
+	                    <div class="ItemIcon AddEventIcon">
+	                      Edit group
+	                    </div>
+	                   </a>	
+	                   <a class="MenuItem" href="<%=uicomponent.event("AddEvent","id")%>">   
+	                    <div class="ItemIcon AddEventIcon">
+	                      Delete group
+	                    </div>
+	                   </a>	
+	                   <a class="MenuItem" href="<%=uicomponent.event("AddEvent","id")%>">   
+	                    <div class="ItemIcon AddEventIcon">
+	                      Share group
+	                    </div>
+	                   </a>	
+	          				 <a class="MenuItem" href="<%=uicomponent.event("AddCalendar")%>">   
+	                    <div class="ItemIcon AddCalendarIcon">
+	                      Add calendar
+	                    </div>
+	                   </a>
+	                   <a class="MenuItem" href="<%=uicomponent.event("ImportCalendar")%>">   
+	                    <div class="ItemIcon ImportCalendarIcon">
+	                      Import calendar
+	                    </div>
+	                   </a>
+	                   <a class="MenuItem" href="<%=uicomponent.event("ExportCalendar","id")%>">   
+	                    <div class="ItemIcon ExportCalendarIcon">
+	                      Export Calendar
+	                    </div>
+	                   </a>
+	          		</div>
+	      			</div>
+	    			</div>
+			        <div class="BottomLeftRightClickPopupMenu">
+			          <div class="BottomRightRightClickPopupMenu">
+			            <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+			          </div>
+			        </div>
+	  			</div>
+	  			
+			    </div>
+			  </div>
+		<% /*End Popup Menu*/ %>
+	<% /*Begin Popup Menu - Calendar*/ %>
 <!--	  <div style="position: relative;">-->
 	      <div class="UIPopupCategory" style="display: none; z-index: 10000 ;">
 	      	<div class="PopupCategoryDecorator">
