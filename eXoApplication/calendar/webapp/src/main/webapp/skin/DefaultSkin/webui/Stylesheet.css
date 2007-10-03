@@ -173,6 +173,7 @@
 	background-position: right;
 	padding-right: 16px; 
 	cursor: pointer;
+	margin-top: -1px;
 }
 
 /*==================Calendar Working Container===================*/
