@@ -14,7 +14,7 @@
 				cssClass = "Normal" ;
 				if(tag.getName().equals(uicomponent.getSelectedTag())) cssClass = "Selected" ;
 		%>
-			<div  class="ItemList $cssClass">
+			<div  class="TagList ItemList $cssClass" tagName="<%=tag.getName()%>">
 				<a href="$actionLink" class="IconHolder BlueTag" ><%=tag.getName()%></a>
 			</div>
 		<% } %>
