@@ -20,13 +20,13 @@ import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 
-import org.exoplatform.contact.service.BufferAttachment;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactAttachment;
 import org.exoplatform.contact.service.ContactGroup;
+import org.exoplatform.contact.service.ContactPageList;
 import org.exoplatform.contact.service.GroupContactData;
-import org.exoplatform.contact.service.JCRContactAttachment;
 import org.exoplatform.contact.service.Tag;
+import org.exoplatform.contact.service.TagPageList;
 import org.exoplatform.registry.JCRRegistryService;
 import org.exoplatform.registry.ServiceRegistry;
 import org.exoplatform.services.jcr.RepositoryService;
@@ -163,20 +163,17 @@ public class JCRDataStorage implements DataStorage {
     if(contactNode.hasProperty("exo:tags")) contact.setTags(ValuesToStrings(contactNode.getProperty("exo:tags").getValues()));
     if(contactNode.hasProperty("exo:editPermission")) contact.setEditPermission(ValuesToStrings(contactNode.getProperty("exo:editPermission").getValues()));
     contact.setPath(contactNode.getPath()) ;
-    
-    NodeIterator contactAttachmentIt = contactNode.getNodes() ;
-    JCRContactAttachment file = null ;
-    while (contactAttachmentIt.hasNext()) {
-      Node childNode = contactAttachmentIt.nextNode();
-      if (childNode.isNodeType("nt:file")) {
-        file = new JCRContactAttachment() ;
-        file.setId(childNode.getPath()) ;
-        file.setMimeType(childNode.getNode("jcr:content").getProperty("jcr:mimeType").getString()) ;
-        file.setFileName(childNode.getName()) ;
-        file.setWorkspace(childNode.getSession().getWorkspace().getName()) ;
-      }  
+    if(contactNode.hasNode("image")){
+      Node image = contactNode.getNode("image");
+      if (image.isNodeType("nt:file")) {
+        ContactAttachment file = new ContactAttachment() ;
+        file.setId(image.getPath()) ;
+        file.setMimeType(image.getNode("jcr:content").getProperty("jcr:mimeType").getString()) ;
+        file.setFileName(image.getName()) ;
+        file.setWorkspace(image.getSession().getWorkspace().getName()) ;
+        contact.setAttachment(file) ;
+      }
     }
-    contact.setAttachment(file) ;
     return contact;
   }
 
@@ -202,7 +199,23 @@ public class JCRDataStorage implements DataStorage {
     return null;
   }
 
-  public List<Contact> getContactsByGroup(String username, String groupId) throws Exception {
+  public ContactPageList getContactPageListByGroup(String username, String groupId) throws Exception {
+    Node contactHome = getContactHome(username);
+    QueryManager qm = contactHome.getSession().getWorkspace().getQueryManager();
+    StringBuffer queryString = new StringBuffer("/jcr:root" + contactHome.getPath() 
+                                                + "//element(*,exo:contact)[@exo:categories='").
+                                                append(groupId).
+                                                append("']");
+    Query query = qm.createQuery(queryString.toString(), Query.XPATH);
+    QueryResult result = query.execute();
+    /*NodeIterator it = result.getNodes();
+    List<Contact> contacts = new ArrayList<Contact>();
+    while (it.hasNext()) contacts.add(getContact(it.nextNode()));*/
+    ContactPageList pageList = new ContactPageList(result.getNodes(), 10, queryString.toString(), true) ;
+    return pageList ;
+  }
+  
+  public List<String>  getAllEmailAddressByGroup(String username, String groupId) throws Exception {
     Node contactHome = getContactHome(username);
     QueryManager qm = contactHome.getSession().getWorkspace().getQueryManager();
     StringBuffer queryString = new StringBuffer("/jcr:root" + contactHome.getPath() 
@@ -212,11 +225,15 @@ public class JCRDataStorage implements DataStorage {
     Query query = qm.createQuery(queryString.toString(), Query.XPATH);
     QueryResult result = query.execute();
     NodeIterator it = result.getNodes();
-    List<Contact> contacts = new ArrayList<Contact>();
-    while (it.hasNext()) contacts.add(getContact(it.nextNode()));
-    return contacts ;
+    List<String> address = new ArrayList<String>();
+    Node contact = null ;
+    while (it.hasNext()){
+      contact = it.nextNode();
+      if(contact.hasProperty("exo:emailAddress"))
+        address.add(contact.getProperty("exo:emailAddress").getString());
+    }
+    return address ;
   }
- 
   private ContactGroup getGroup(Node contactGroupNode) throws Exception {
     ContactGroup contactGroup = new ContactGroup();
     if (contactGroupNode.hasProperty("exo:id")) 
@@ -397,16 +414,16 @@ public class JCRDataStorage implements DataStorage {
     // save image to contact
     ContactAttachment attachment = contact.getAttachment() ;
     if (attachment != null) {
-      BufferAttachment file = (BufferAttachment)attachment ;
-      if (file.getFileName() != null) {
+      //BufferAttachment file = (BufferAttachment)attachment ;
+      if (attachment.getFileName() != null) {
         Node nodeFile = null ;
-        if (!contactNode.hasNode("image"))nodeFile = contactNode.addNode("image", "nt:file") ;
-        else nodeFile = contactNode.getNode(file.getFileName()) ;
+        if (contactNode.hasNode("image"))nodeFile = contactNode.getNode("image") ;
+        else nodeFile = contactNode.addNode("image", "nt:file");
         Node nodeContent = null ;
         if (nodeFile.hasNode("jcr:content")) nodeContent = nodeFile.getNode("jcr:content") ;
         else nodeContent = nodeFile.addNode("jcr:content", "nt:resource") ;
-        nodeContent.setProperty("jcr:mimeType", file.getMimeType()) ;
-        nodeContent.setProperty("jcr:data", file.getInputStream());
+        nodeContent.setProperty("jcr:mimeType", attachment.getMimeType()) ;
+        nodeContent.setProperty("jcr:data", attachment.getInputStream());
         nodeContent.setProperty("jcr:lastModified", Calendar.getInstance().getTimeInMillis());
       }
     }else {
@@ -638,7 +655,7 @@ public class JCRDataStorage implements DataStorage {
     return tags;
   }
 
-  public List<Contact> getContactsByTag(String username, String tagName) throws Exception {
+  public TagPageList getContactPageListByTag(String username, String tagName) throws Exception {
     //query on private contacts
     Node contactHome = getContactHome(username);
     QueryManager qm = contactHome.getSession().getWorkspace().getQueryManager();
@@ -665,7 +682,8 @@ public class JCRDataStorage implements DataStorage {
     while (it.hasNext()) {
       contacts.add(getContact(it.nextNode()));
     }
-    return contacts ;
+    
+    return new TagPageList(contacts,10, null, false) ;
   }
   
   public void addTag(String username, List<String> contactIds, List<Tag> tags) throws Exception {
@@ -709,7 +727,7 @@ public class JCRDataStorage implements DataStorage {
       tagHomeNode.save();
       tagHomeNode.getSession().save();
       Node contactHome = getContactHome(username) ;
-      List<Contact> contacts = getContactsByTag(username, tagName);
+      List<Contact> contacts = getContactPageListByTag(username, tagName).getAll();
       for (Contact contact : contacts) {
         List<String> tags = new ArrayList<String>(Arrays.asList(contact.getTags()));
         tags.remove(tagName) ;

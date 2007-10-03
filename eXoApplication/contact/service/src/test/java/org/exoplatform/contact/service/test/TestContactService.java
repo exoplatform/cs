@@ -53,7 +53,7 @@ public class TestContactService extends BaseContactTestCase{
     Contact contact3 = createContact();
     contact3.setCategories(new String[] {"friendd", "workk"});
     contactService_.saveContact(username, contact3, true);
-    contacts = contactService_.getContactsByGroup(username,"work" );
+    //contacts = contactService_.getContactsByGroup(username,"work" );
     assertEquals(contacts.size(), 2) ;       
     
     // share contact

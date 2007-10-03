@@ -8,9 +8,11 @@ import java.util.List;
 
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactGroup;
+import org.exoplatform.contact.service.ContactPageList;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.GroupContactData;
 import org.exoplatform.contact.service.Tag;
+import org.exoplatform.contact.service.TagPageList;
 import org.exoplatform.registry.JCRRegistryService;
 import org.exoplatform.services.jcr.RepositoryService;
 
@@ -32,10 +34,12 @@ public class ContactServiceImpl implements ContactService {
     return storage_.getAllContact(username);
   }
   
-  public List<Contact> getContactsByGroup(String username, String groupId) throws Exception {
-    return storage_.getContactsByGroup(username, groupId);
+  public ContactPageList getContactPageListByGroup(String username, String groupId) throws Exception {
+    return storage_.getContactPageListByGroup(username, groupId);
   }
-  
+  public List<String> getAllEmailAddressByGroup(String username, String groupId) throws Exception {
+    return storage_.getAllEmailAddressByGroup(username, groupId);
+  }
   public Contact getContact(String username, String contactId) throws Exception {
     return storage_.getContact(username, contactId);
   }
@@ -95,8 +99,8 @@ public class ContactServiceImpl implements ContactService {
   public List<Tag> getTags(String username) throws Exception {
     return storage_.getTags(username);
   }
-  public List<Contact> getContactsByTag(String username, String tagName) throws Exception {
-    return storage_.getContactsByTag(username, tagName);
+  public TagPageList getContactPageListByTag(String username, String tagName) throws Exception {
+    return storage_.getContactPageListByTag(username, tagName);
   }
   
   public void addTag(String username, List<String> contactIds, List<Tag> tags) throws Exception {
