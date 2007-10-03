@@ -17,9 +17,13 @@
 		  		<div class="ButtonLeft">
 		  			<div class="ButtonRight">
 		  				<div class="ButtonMiddle">
+		  				<% if(forum.getIsLock()) { %>
 		  					<a href="<%=uicomponent.event("AddTopic")%>">
 		  						<div class="IconButton AddTheradIcon"><span class="LabelIcon"></span>New Thread</div>
 		  					</a>
+		  				<% } else { %>
+		  						<div class="IconButton AddTheradIcon"><span class="LabelIcon"></span>New Thread</div>
+		  				<% } %>
 		  				</div>
 		  			</div>
 		  		</div>

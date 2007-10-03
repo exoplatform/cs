@@ -28,7 +28,8 @@
 										<div class="ManageCategoryButton"><a>Manage Categoryss</a></div>
 								  </div>
 								</div>
-							</div></div>
+							</div>
+						</div>
 							<% /*Begin Popup Menu*/ %>
 				      <div style="position: relative;">
 					      <div class="UIPopupCategory" style="display: none;">
@@ -149,7 +150,7 @@
 			        }
               if(forum.getIsLock() == true){
                 classIconForum = "ForumLockedIcon";
-                titleIconForum = "Forum is Closed for Posting";
+                titleIconForum = "Forum is Locked for Posting";
               }
               if(forum.getIsClosed() == true){
                 classIconForum = "ForumLockedIcon";//TODO: Rename class ForumLockedIcon into ForumCloseIcon
