@@ -8,10 +8,49 @@
 	<div class="ListContent">
 		<%  
 			List tags = uicomponent.getTags();
+			String actionLink ;
 			for(tag in tags) {
-			String actionLink  = uicomponent.event("SelectTag", tag.getName()) ;			
+				actionLink  = uicomponent.event("SelectTag", tag.getName()) ;			
+				cssClass = "Normal" ;
+				if(tag.getName().equals(uicomponent.getSelectedTag())) cssClass = "Selected" ;
 		%>
-			<a href="$actionLink" class="IconHolder BlueTag"><%=tag.getName()%></a>
+			<div  class="ItemList $cssClass">
+				<a href="$actionLink" class="IconHolder BlueTag" ><%=tag.getName()%></a>
+			</div>
 		<% } %>
 	</div>
+	
+
+	<% /*Begin Popup Menu*/ %>
+				
+	  	<div class="UIRightClickPopupMenu" id="UITagPopupMenu" eXoCallback="eXo.contact.UIContactPortlet.tagCallback">
+			  <div class="TopLeftRightClickPopupMenu">
+	  			<div class="TopRightRightClickPopupMenu">
+						<div class="TopCenterRightClickPopupMenu"><span></span></div>
+	  			</div>
+				</div>
+	     	<div class="MiddleLeftRightClickPopupMenu">
+	          <div class="MiddleRightRightClickPopupMenu">
+	  					<div class="UIRightPopupMenuContainer">
+	        			<a class="MenuItem" href="<%=uicomponent.event("EditTag", "id")%>">   
+	            		<div class="ItemIcon EditActionIcon">
+	              		Edit
+	            		</div>
+	        			</a>
+	        			<a class="MenuItem" href="<%=uicomponent.event("DeleteTag", "id")%>">   
+	            		<div class="ItemIcon DeleteIcon">
+	              		Delete
+	            		</div> 
+	        			</a>
+							</div>
+	  				</div>
+				</div>
+		      <div class="BottomLeftRightClickPopupMenu">
+		        <div class="BottomRightRightClickPopupMenu">
+		          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+		        </div>
+		      </div>
+			</div>
+	  			
+	  		<% /*End Popup Menu*/ %>
 </div>

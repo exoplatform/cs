@@ -59,9 +59,10 @@
 		</div>
 		<%  
 			ContactGroup[] contactGroups = uicomponent.getGroups();
+			String actionLink1 ;
 			for(contactGroup in contactGroups) {
+			actionLink1  = uicomponent.event("SelectGroup", contactGroup.getId()) ;	
 			cssClass = "Normal" ;
-			String actionLink1  = uicomponent.event("SelectGroup", contactGroup.getId()) ;	
 			if(contactGroup.getId().equals(uicomponent.getSelectedGroup()))	cssClass = "Selected" ;		
 		%>
 		<div  class="ItemList $cssClass">
@@ -94,51 +95,50 @@
 				
 	  	<div class="UIRightClickPopupMenu" id="UIAddressBookPopupMenu" eXoCallback="eXo.contact.UIContactPortlet.addressBookCallback">
 			  <div class="TopLeftRightClickPopupMenu">
-	  		<div class="TopRightRightClickPopupMenu">
-				<div class="TopCenterRightClickPopupMenu"><span></span></div>
-	  	</div>
-			</div>
+	  			<div class="TopRightRightClickPopupMenu">
+						<div class="TopCenterRightClickPopupMenu"><span></span></div>
+	  			</div>
+				</div>
 	     <div class="MiddleLeftRightClickPopupMenu">
 	          <div class="MiddleRightRightClickPopupMenu">
-	  		<div class="UIRightPopupMenuContainer">
-	  		
-	  			<a class="MenuItem" href="<%=uicomponent.event("AddContact", "id")%>">   
-	            <div class="ItemIcon ContactIcon">
-	              Add Contact
-	            </div>
-	        </a>
-	  			
-	        <a class="MenuItem" href="<%=uicomponent.event("AddressPopup", "id")%>">   
-	            <div class="ItemIcon ShareIcon">
-	              Share
-	            </div>
-	        </a>
-	        <a class="MenuItem" href="<%=uicomponent.event("AddressPopup", "id")%>">   
-	            <div class="ItemIcon ExportAddressIcon">
-	              Export
-	            </div>
-	        </a>
-	        <a class="MenuItem" href="<%=uicomponent.event("EditGroup", "id")%>">   
-	            <div class="ItemIcon EditActionIcon">
-	              Edit
-	            </div>
-	        </a>
-	        <a class="MenuItem" href="<%=uicomponent.event("SendEmail", "id")%>">   
-	            <div class="ItemIcon EmailIcon">
-	              Send Email
-	            </div>
-	        </a>
-	        <a class="MenuItem" href="<%=uicomponent.event("DeleteGroup", "id")%>">   
-	            <div class="ItemIcon DeleteIcon">
-	              Delete
-	            </div> 
-	        </a>
-	        <a class="MenuItem" href="<%=uicomponent.event("AddressPopup", "id")%>">   
-	            <div class="ItemIcon PrintIcon">
-	              Print  
-	            </div>
-	        </a>
-							</div>
+	  						<div class="UIRightPopupMenuContainer">
+					  			<a class="MenuItem" href="<%=uicomponent.event("AddContact", "id")%>">   
+					            <div class="ItemIcon ContactIcon">
+					              Add Contact
+					            </div>
+					        </a>
+					  			
+					        <a class="MenuItem" href="<%=uicomponent.event("AddressPopup", "id")%>">   
+					            <div class="ItemIcon ShareIcon">
+					              Share
+					            </div>
+					        </a>
+					        <a class="MenuItem" href="<%=uicomponent.event("AddressPopup", "id")%>">   
+					            <div class="ItemIcon ExportAddressIcon">
+					              Export
+					            </div>
+					        </a>
+					        <a class="MenuItem" href="<%=uicomponent.event("EditGroup", "id")%>">   
+					            <div class="ItemIcon EditActionIcon">
+					              Edit
+					            </div>
+					        </a>
+					        <a class="MenuItem" href="<%=uicomponent.event("SendEmail", "id")%>">   
+					            <div class="ItemIcon EmailIcon">
+					              Send Email
+					            </div>
+					        </a>
+					        <a class="MenuItem" href="<%=uicomponent.event("DeleteGroup", "id")%>">   
+					            <div class="ItemIcon DeleteIcon">
+					              Delete
+					            </div> 
+					        </a>
+					        <a class="MenuItem" href="<%=uicomponent.event("AddressPopup", "id")%>">   
+					            <div class="ItemIcon PrintIcon">
+					              Print  
+					            </div>
+					        </a>
+								</div>
 	  		</div>
 			</div>
 		      <div class="BottomLeftRightClickPopupMenu">
@@ -146,9 +146,7 @@
 		          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
 		        </div>
 		      </div>
-		    </div>
+	</div>
 	  			
 	  		<% /*End Popup Menu*/ %>
-		
-	
 </div>

@@ -238,11 +238,11 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ; 
       }
-      if (ContactUtils.IsEmpty(profileTab.getFieldEmail())) {  
+     /* if (ContactUtils.IsEmpty(profileTab.getFieldEmail())) {  
         uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.emailAddress-required", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ; 
-      }
+      }*/
       ContactService contactService = ContactUtils.getContactService();  
       String username = ContactUtils.getCurrentUser() ;
       Contact contact ;
@@ -278,8 +278,6 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
         bufferAttachment.setId(null) ;
         contact.setAttachment(bufferAttachment) ;
       }
-      
-      
       contact.setWorkAddress(uiContactForm.getUIStringInput(FIELD_WORKADDRESS_INPUT).getValue());
       contact.setWorkCity(uiContactForm.getUIStringInput(FIELD_WORKCITY_INPUT).getValue());
       contact.setWorkStateProvince(uiContactForm.getUIStringInput(FIELD_WORKSTATE_INPUT).getValue());
