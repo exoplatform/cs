@@ -3,7 +3,7 @@
 	import org.exoplatform.contact.webui.UITags;
 %>
 
-<div class="UINavigationContainer">
+<div class="UINavigationContainer" id="<%=uicomponent.getId()%>">
 <!-- Start UIAddressBooks -->			
 	<% uicomponent.renderChild(UIAddressBooks.class) ;%>	
 <!-- End UIAddressBooks -->	

@@ -14,6 +14,7 @@ import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.webui.UIAddressBooks;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContacts;
+import org.exoplatform.contact.webui.UIWorkingContainer;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.impl.GroupImpl;
@@ -82,19 +83,12 @@ public class UIMoveContactForm extends UIForm implements UIPopupComponent {
       UIMoveContactForm uiMoveContactForm = event.getSource() ;
       String groupId = event.getRequestContext().getRequestParameter(OBJECTID);
       UIContactPortlet uiContactPortlet = uiMoveContactForm.getAncestorOfType(UIContactPortlet.class);
-      UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
-      if (!uiMoveContactForm.getGroupId().equals(groupId)) {
-        ContactService contactService = ContactUtils.getContactService();
-        String username = ContactUtils.getCurrentUser() ;
-        List<Contact> movedContacts = contactService.moveContacts(username, uiMoveContactForm.getContacts(), new String[] { groupId }) ;
-        if (movedContacts.size() > 0) {
-          List<String> contactIds = new ArrayList<String>() ;
-          for (Contact contact : movedContacts) contactIds.add(contact.getId()) ;
-          uiContacts.removeContacts(contactIds) ;
-        }
-      }
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiContactPortlet) ;
+      if (!uiMoveContactForm.getGroupId().equals(groupId))
+        ContactUtils.getContactService()
+        .moveContacts(ContactUtils.getCurrentUser(), uiMoveContactForm.getContacts(), new String[] { groupId }) ;
+        
       uiContactPortlet.cancelAction() ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContactPortlet.findFirstComponentOfType(UIWorkingContainer.class)) ;
     }
   }
   

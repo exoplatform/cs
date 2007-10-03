@@ -209,7 +209,7 @@ public class UIContacts extends UIForm {
       UIContactPreview uiContactPreview = uiWorkingContainer.findFirstComponentOfType(UIContactPreview.class) ;
       ContactUtils.getContactService().removeContacts(ContactUtils.getCurrentUser(), contactIds) ;
       if(contactIds.contains(uiContactPreview.getContact().getId())) 
-        uiContactPreview.updateContact(null) ;
+        uiContactPreview.setContact(null) ;
       uiContacts.updateList() ; //refresh current page
       event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer.getChild(UIContactContainer.class)) ;
     }

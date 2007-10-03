@@ -368,7 +368,7 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
       }
       uicontacts.updateList() ;
       if(uicontacts.getSelectedContact() != null && uicontacts.getSelectedContact().equals(contact.getId())){
-        uiContactPreview.updateContact(contact) ;
+        uiContactPreview.setContact(contact) ;
       }
       
       //uiContactPreview.setLastUpdated(new Date()) ;
