@@ -62,10 +62,8 @@ public class UIMoveContactForm extends UIForm implements UIPopupComponent {
   
   public String[] getActions() { return new String[] {"Save", "Cancel"} ; }
   
-  public ContactGroup[] getContactGroups() throws Exception { 
-    UIContactPortlet uiContactPortlet = getAncestorOfType(UIContactPortlet.class) ;
-    UIAddressBooks uiAddressBook = uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class) ;
-    return uiAddressBook.getGroups(); 
+  public List<ContactGroup> getContactGroups() throws Exception { 
+    return getApplicationComponent(ContactService.class).getGroups(ContactUtils.getCurrentUser()) ; 
   }
   
   public List<String> getSharedContactGroups() throws Exception {

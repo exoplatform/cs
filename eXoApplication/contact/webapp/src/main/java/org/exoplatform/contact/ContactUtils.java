@@ -14,6 +14,8 @@ import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.organization.OrganizationService;
+import org.exoplatform.services.organization.impl.GroupImpl;
 
 /**
  * Created by The eXo Platform SARL
@@ -32,12 +34,17 @@ public class ContactUtils {
   }
   
   public static boolean IsEmpty(String s) {
-    String str ;
-    if (s == null) return true ; 
-    else {
-      str = s.trim() ;
-      return str.equalsIgnoreCase("null") || str.equalsIgnoreCase("") ;
+    if (s == null || s.length() == 0) return true ;
+    return false ;    
+  }
+  public static String[] getUserGroups() throws Exception{
+    OrganizationService organizationService = (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
+    Object[] objGroupIds = organizationService.getGroupHandler().findGroupsOfUser(getCurrentUser()).toArray() ;
+    String[] groupIds = new String[objGroupIds.length];
+    for (int i = 0; i < groupIds.length; i++) {
+      groupIds[i] = ((GroupImpl)objGroupIds[i]).getId() ;
     }
+    return groupIds ;
   }
   
   public static String getImageSource(Contact contact, DownloadService dservice) throws Exception {    

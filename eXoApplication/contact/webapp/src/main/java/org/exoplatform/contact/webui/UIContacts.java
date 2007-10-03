@@ -11,7 +11,9 @@ import java.util.Map;
 
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
+import org.exoplatform.contact.service.ContactPageList;
 import org.exoplatform.contact.service.ContactService;
+import org.exoplatform.contact.service.JCRPageList;
 import org.exoplatform.contact.webui.popup.UIContactPreviewForm;
 import org.exoplatform.contact.webui.popup.UIMoveContactForm;
 import org.exoplatform.contact.webui.popup.UITagForm;
@@ -46,15 +48,16 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
         @EventConfig(listeners = UIContacts.MoveContactsActionListener.class),
         @EventConfig(listeners = UIContacts.DeleteContactsActionListener.class),
         @EventConfig(listeners = UIContacts.SelectedContactActionListener.class),
-        @EventConfig(listeners = UIContacts.ViewDetailsActionListener.class),
-        @EventConfig(listeners = UIContacts.OnchangeActionListener.class) 
+        @EventConfig(listeners = UIContacts.ViewDetailsActionListener.class)        
     }
 )
 
 public class UIContacts extends UIForm {
   public boolean viewContactsList = true ;
   private Map<String, Contact> contactMap = new HashMap<String, Contact> () ;
+  private String selectedGroup = null ;
   private String selectedContact = null ;
+  private JCRPageList pageList_ = null ;
   final public static String EDIT_CONTACT = "EditContact".intern() ;
   final public static String SEND_EMAIL = "Send Email".intern() ;
   final public static String INSTACE_MESSAGE = "Instant Message".intern() ;
@@ -67,42 +70,39 @@ public class UIContacts extends UIForm {
   public UIContacts() throws Exception { } 
   public String[] getSelections() { return SELECTIONS ; }
   
-  public void setContacts(List<Contact> contacts) throws Exception {
-    getChildren().clear() ;
-    contactMap.clear();
-    for(Contact contact : contacts) {
-      UIFormCheckBoxInput<Boolean> checkbox = new UIFormCheckBoxInput<Boolean>(contact.getId(),contact.getId(), false) ; 
-      checkbox.setOnChange("Onchange") ;
-      addUIFormInput(checkbox);
-      contactMap.put(contact.getId(), contact) ;
-    }
-    if (contactMap.size() > 0)
-      setSelectedContact(getContacts()[0].getId()) ;
-    UIContactPreview uiContactPreview = getAncestorOfType(UIContactContainer.class).findFirstComponentOfType(UIContactPreview.class) ;
-    uiContactPreview.updateContact() ;
+
+  public void setContacts(JCRPageList pageList) throws Exception {
+    pageList_ = pageList ;
+    updateList() ;
   }
   public Contact[] getContacts() throws Exception { return contactMap.values().toArray(new Contact[]{}) ; }
   
   public void setSelectedContact(String s) { selectedContact = s ; }
   public String getSelectedContact() { return selectedContact ; }
   
+  public void setSelectedGroup(String s) { selectedGroup = s ; }
+  public String getSelectedGroup() { return selectedGroup ; }
+  
   public void setViewContactsList(boolean list) { viewContactsList = list ; }
   public boolean getViewContactsList() { return viewContactsList ; }
   
-  public void updateContact(Contact contact, boolean isNew) { 
-    if (isNew) {
-      UIFormCheckBoxInput<Boolean> checkbox = new UIFormCheckBoxInput<Boolean>(contact.getId(),contact.getId(), false) ; 
-      checkbox.setOnChange("Onchange") ;
-      addUIFormInput(checkbox) ;
-      addUIFormInput(checkbox) ;
+  public void updateList() throws Exception{ 
+    getChildren().clear() ;
+    contactMap.clear();
+    if(pageList_ != null) {
+      for(Contact contact : pageList_.getPage(pageList_.getCurrentPage(),ContactUtils.getCurrentUser())) {
+        UIFormCheckBoxInput<Boolean> checkbox = new UIFormCheckBoxInput<Boolean>(contact.getId(),contact.getId(), false) ;
+        addUIFormInput(checkbox);
+        contactMap.put(contact.getId(), contact) ;
+      }
+      getAncestorOfType(UIContactContainer.class).getChild(UIContactPreview.class).setContact(contactMap.values().toArray(new Contact[]{})[0]) ;
     }
-    contactMap.put(contact.getId(), contact) ; 
   }
   
   public void removeContacts(List<String> contactIds) throws Exception {
     for (String contactId : contactIds)  contactMap.remove(contactId) ;
     UIContactPreview uiContactPreview = getAncestorOfType(UIContactContainer.class).findFirstComponentOfType(UIContactPreview.class) ;
-    uiContactPreview.updateContact() ;
+    uiContactPreview.updateContact(null) ;
   }
   
   public List<String> getCheckedContacts() throws Exception {
@@ -135,8 +135,7 @@ public class UIContacts extends UIForm {
       Contact contact = contactService.getContact(username, contactId);
       if (contact != null && contact.getCategories().length > 0) uiCategorySelect.setValue(contact.getCategories()[0]) ;
       uiCategorySelect.disableSelect() ;
-      
-      UIContactForm uiContactForm = popupContainer.findFirstComponentOfType(UIContactForm.class);   
+      UIContactForm uiContactForm = popupContainer.findFirstComponentOfType(UIContactForm.class);
       uiContactForm.setValues(uiContacts.contactMap.get(contactId));
       UIContactForm.isNew_ = false ;
       popupAction.activate(popupContainer, 800, 0, true) ;
@@ -217,7 +216,7 @@ public class UIContacts extends UIForm {
       uiContacts.removeContacts(contactIds) ;
       UIWorkingContainer uiWorkingContainer = uiContacts.getAncestorOfType(UIWorkingContainer.class) ;
       UIContactPreview uiContactPreview = uiWorkingContainer.findFirstComponentOfType(UIContactPreview.class) ;
-      uiContactPreview.updateContact() ;
+      uiContactPreview.updateContact(null) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer) ;
     }
   }
@@ -245,12 +244,5 @@ public class UIContacts extends UIForm {
       popupAction.activate(uiContactPreviewForm, 700, 0, true) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;      
     }
-  }
-  
-  static  public class OnchangeActionListener extends EventListener<UIContacts> {
-    public void execute(Event<UIContacts> event) throws Exception {
-      UIContacts uiContacts = event.getSource() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts) ;
-    }
-  }
+  } 
 }

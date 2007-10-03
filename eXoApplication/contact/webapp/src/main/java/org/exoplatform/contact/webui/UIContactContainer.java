@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.exoplatform.contact.ContactUtils;
-import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.webui.popup.UIPopupAction;
 import org.exoplatform.contact.webui.popup.UISendEmail;
@@ -36,21 +35,15 @@ import org.exoplatform.webui.event.EventListener;
 public class UIContactContainer extends UIContainer  {
   
   public UIContactContainer() throws Exception {
-    UIContacts uiContacts = addChild(UIContacts.class, null, null) ;
-    UIContactPreview uiContactPreview = addChild(UIContactPreview.class, null, null) ;
-    String username = ContactUtils.getCurrentUser() ;
-    ContactService contactService = ContactUtils.getContactService() ;
-    List<ContactGroup> groups = contactService.getGroups(username) ;
-    String selectedGroup = null ;
-    if(groups != null && groups.size() > 0) {
-      selectedGroup = groups.get(0).getId() ;
-      uiContacts.setContacts(contactService.getContactsByGroup(username, selectedGroup)) ;
-    }
-    
-    if(uiContacts.getContacts() != null && uiContacts.getContacts().length > 0) 
-      uiContactPreview.setContact(uiContacts.getContacts()[0]) ;
+    addChild(UIContacts.class, null, null) ;
+    addChild(UIContactPreview.class, null, null) ;    
   }
   
+  public void setSeletedGroup(String group) throws Exception{
+    ContactService contactService = ContactUtils.getContactService() ;
+    getChild(UIContacts.class)
+    .setContacts(contactService.getContactPageListByGroup(ContactUtils.getCurrentUser(), group)) ;
+  }
   public static class SendEmailActionListener extends EventListener<UIContactContainer> {
     public void execute(Event<UIContactContainer> event) throws Exception {
       UIContactContainer uiContactContainer = event.getSource() ;  

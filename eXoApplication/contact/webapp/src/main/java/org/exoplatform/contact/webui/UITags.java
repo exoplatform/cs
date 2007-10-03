@@ -47,17 +47,14 @@ public class UITags extends UIComponent  {
   static  public class SelectTagActionListener extends EventListener<UITags> {
     public void execute(Event<UITags> event) throws Exception {
       UITags uiForm = event.getSource() ;
+      System.out.println(" ===========>SelectTagActionListener ");
       String tagName = event.getRequestContext().getRequestParameter(OBJECTID) ;
       uiForm.setSelectedTag(tagName) ;
       UIWorkingContainer uiWorkingContainer = uiForm.getAncestorOfType(UIWorkingContainer.class) ;
-      uiWorkingContainer.setSelectedGroup(null) ;
-      ContactService contactService = ContactUtils.getContactService();
       String username = ContactUtils.getCurrentUser() ;
       UIContacts uiContacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class) ;
-      uiContacts.setContacts(contactService.getContactsByTag(username, tagName)) ;
-      UIContactPreview uiContactPreview = uiWorkingContainer.findFirstComponentOfType(UIContactPreview.class);
-      uiContactPreview.updateContact() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer) ;
+      uiContacts.setContacts(ContactUtils.getContactService().getContactPageListByTag(username, tagName)) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer.getChild(UIContactContainer.class)) ;
     }
   }
   

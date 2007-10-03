@@ -44,11 +44,8 @@ public class UIContactPreview extends UIComponent  {
   public void setIsMaximized(boolean isMaximize) { isMaximized_ = isMaximize ; }
   public boolean getIsMaximize() { return isMaximized_ ; }
   
-  public void updateContact() throws Exception {
-    UIContactContainer uiContactContainer = getParent() ; 
-    UIContacts uicontacts = uiContactContainer.getChild(UIContacts.class) ;
-    if (uicontacts.getContacts().length > 0 ) setContact(uicontacts.getContacts()[0]) ;
-    else setContact(null) ;
+  public void updateContact(Contact contact) throws Exception {
+    contact = contact_ ;    
   }
   
   public String getImageSource() throws Exception {
