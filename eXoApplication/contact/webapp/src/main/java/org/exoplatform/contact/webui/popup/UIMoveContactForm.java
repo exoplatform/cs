@@ -8,12 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.exoplatform.contact.ContactUtils;
-import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
-import org.exoplatform.contact.webui.UIAddressBooks;
 import org.exoplatform.contact.webui.UIContactPortlet;
-import org.exoplatform.contact.webui.UIContacts;
 import org.exoplatform.contact.webui.UIWorkingContainer;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.organization.OrganizationService;
@@ -85,8 +82,7 @@ public class UIMoveContactForm extends UIForm implements UIPopupComponent {
       UIContactPortlet uiContactPortlet = uiMoveContactForm.getAncestorOfType(UIContactPortlet.class);
       if (!uiMoveContactForm.getGroupId().equals(groupId))
         ContactUtils.getContactService()
-        .moveContacts(ContactUtils.getCurrentUser(), uiMoveContactForm.getContacts(), new String[] { groupId }) ;
-        
+        .moveContacts(ContactUtils.getCurrentUser(), uiMoveContactForm.getContacts(), new String[] { groupId }) ;        
       uiContactPortlet.cancelAction() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContactPortlet.findFirstComponentOfType(UIWorkingContainer.class)) ;
     }
