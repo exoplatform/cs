@@ -16,8 +16,6 @@ import java.util.Date;
  */
 public class Utils {
   
-   
-  
   public static final String SVR_SMTP_AUTH = "mail.smtp.auth".intern() ;
   public static final String SVR_SMTP_SOCKETFACTORY_FALLBACK = "mail.smtp.socketFactory.fallback".intern() ;
   public static final String SVR_SMTP_SOCKETFACTORY_PORT = "mail.smtp.socketFactory.port".intern() ;
@@ -61,6 +59,8 @@ public class Utils {
   public static final String EXO_BCC= "exo:bcc".intern() ;
   public static final String EXO_BODY = "exo:body".intern() ;
   public static final String EXO_SIZE = "exo:size".intern();
+  public static final String EXO_STAR = "exo:star".intern() ;
+  public static final String EXO_PRIORITY = "exo:priority".intern() ;
   public static final String EXO_TAGS = "exo:tags".intern() ;
   public static final String EXO_FOLDERS = "exo:folders".intern() ;
   public static final String EXO_PERSONAL = "exo:personal".intern() ;

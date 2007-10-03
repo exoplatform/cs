@@ -256,6 +256,7 @@ public class MailServiceImpl implements MailService{
           newMsg.setUnread(true);
           newMsg.setReceivedDate(receivedDate);
           newMsg.setSendDate(mes.getSentDate());
+          newMsg.setHasStar(true);
           newMsg.setSize(mes.getSize());
           newMsg.setAttachements(new ArrayList<Attachment>());
           String[] folders = {account.getFolder()};

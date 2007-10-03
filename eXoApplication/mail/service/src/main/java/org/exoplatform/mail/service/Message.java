@@ -27,6 +27,8 @@ public class Message extends MessageHeader {
   private Date receivedDate ;
   private boolean isUnread = true ;
   private long size ;
+  private boolean hasStar = false;
+  private String priority;
   
   private String[] folders ;
   private String[] tags ;
@@ -78,6 +80,12 @@ public class Message extends MessageHeader {
   
   public long getSize() { return size; }
   public void setSize(long size) { this.size = size; }
+  
+  public boolean hasStar() { return hasStar; }
+  public void setHasStar(boolean star) { hasStar = star; }
+  
+  public String getPriority() { return priority; }
+  public void setPriority(String priority) { this.priority = priority;}
   
   public void setProperties(String key, String value) {
     if (properties == null) properties = new HashMap<String, String>();
