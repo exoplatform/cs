@@ -103,3 +103,7 @@
 .IconFeed {
 	background: url('icons/FeedIcon.gif') no-repeat;
 }
+.EditIcon {
+	background: url('icons/EditTask.gif') no-repeat;
+	width: 16px;height: 16px;
+}

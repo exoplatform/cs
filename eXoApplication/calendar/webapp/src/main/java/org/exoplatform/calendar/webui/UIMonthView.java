@@ -4,6 +4,8 @@
  **************************************************************************/
 package org.exoplatform.calendar.webui;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -20,6 +22,7 @@ import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.webui.popup.UIEventForm;
 import org.exoplatform.calendar.webui.popup.UIPopupAction;
 import org.exoplatform.calendar.webui.popup.UIPopupContainer;
+import org.exoplatform.calendar.webui.popup.UIQuickAddEvent;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -49,7 +52,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
       @EventConfig(listeners = UICalendarView.AddCategoryActionListener.class),
       @EventConfig(listeners = UIMonthView.MoveNextActionListener.class), 
       @EventConfig(listeners = UIMonthView.MovePreviousActionListener.class),
-      @EventConfig(listeners = UIMonthView.AddNewEventActionListener.class), 
+      @EventConfig(listeners = UIMonthView.QuickAddNewEventActionListener.class), 
       @EventConfig(listeners = UIMonthView.AddNewTaskActionListener.class), 
       @EventConfig(listeners = UIMonthView.GotoDateActionListener.class), 
       @EventConfig(listeners = UIMonthView.EditEventActionListener.class), 
@@ -185,7 +188,7 @@ public class UIMonthView extends UICalendarView {
     }
   }
 
-  static  public class AddNewEventActionListener extends EventListener<UIMonthView> {
+  static  public class QuickAddNewEventActionListener extends EventListener<UIMonthView> {
     public void execute(Event<UIMonthView> event) throws Exception {
       UIMonthView calendarview = event.getSource() ;
       System.out.println(" ===========> AddEventActionListener") ;
@@ -201,10 +204,14 @@ public class UIMonthView extends UICalendarView {
           UICalendarPortlet uiPortlet = calendarview.getAncestorOfType(UICalendarPortlet.class) ;
           UIPopupAction uiParenPopup = uiPortlet.getChild(UIPopupAction.class) ;
           UIPopupContainer uiPopupContainer = uiPortlet.createUIComponent(UIPopupContainer.class, null, null) ;
-          UIEventForm uiEventForm = uiPopupContainer.addChild(UIEventForm.class, null, null) ;
+          UIQuickAddEvent uiEventForm = uiPopupContainer.addChild(UIQuickAddEvent.class, null, null) ;
           int day = Integer.parseInt(selectedDate) ;
           java.util.Calendar date = new GregorianCalendar(calendarview.getCurrentYear(), calendarview.getCurrentMonth(), day) ;
-          uiEventForm.initForm(date) ;
+          DateFormat df = SimpleDateFormat.getInstance() ;
+          String startTime = df.format(date) ;
+          date.add(java.util.Calendar.MINUTE, 30) ;
+          String endTime = df.format(date)  ;
+          uiEventForm.init(startTime, endTime) ;
           uiParenPopup.activate(uiPopupContainer, 600, 0, true) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiParenPopup) ;

@@ -33,30 +33,51 @@ import org.exoplatform.webui.form.validator.EmptyFieldValidator;
     template = "system:/groovy/webui/form/UIForm.gtmpl",
     events = {
       @EventConfig(listeners = UIEventCategoryForm.SaveActionListener.class),
+      @EventConfig(listeners = UIEventCategoryForm.ResetActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UIEventCategoryForm.CancelActionListener.class, phase = Phase.DECODE)
     }
 )
-public class UIEventCategoryForm extends UIForm implements UIPopupComponent{
+public class UIEventCategoryForm extends UIForm {
   final private static String EVENT_CATEGORY_NAME = "eventCategoryName" ; 
   final private static String DESCRIPTION = "description" ;
+
+  private boolean isAddNew_ = true ;
+  private EventCategory eventCategory_ = null ;
   public UIEventCategoryForm() throws Exception{
     addUIFormInput(new UIFormStringInput(EVENT_CATEGORY_NAME, EVENT_CATEGORY_NAME, null)
-                       .addValidator(EmptyFieldValidator.class)) ;
+    .addValidator(EmptyFieldValidator.class)) ;
     addUIFormInput(new UIFormTextAreaInput(DESCRIPTION, DESCRIPTION, null)) ;
   }
-  
-  public void activate() throws Exception {
-    // TODO Auto-generated method stub
-    
+  protected String getCategoryName() {return getUIStringInput(EVENT_CATEGORY_NAME).getValue() ;}
+  protected void setCategoryName(String value) {getUIStringInput(EVENT_CATEGORY_NAME).setValue(value) ;}
+
+  protected String getCategoryDescription() {return getUIStringInput(DESCRIPTION).getValue() ;}
+  protected void setCategoryDescription(String value) {getUIFormTextAreaInput(DESCRIPTION).setValue(value) ;}
+
+  public void reset() {
+    super.reset() ;
+    setAddNew(true);
+    setEventCategory(null);
   }
-  public void deActivate() throws Exception {
-    // TODO Auto-generated method stub
-    
+
+  protected void setAddNew(boolean isAddNew) {
+    this.isAddNew_ = isAddNew;
   }
-  
+  protected boolean isAddNew() {
+    return isAddNew_;
+  }
+
+  protected void setEventCategory(EventCategory eventCategory) {
+    this.eventCategory_ = eventCategory;
+  }
+  protected EventCategory getEventCategory() {
+    return eventCategory_;
+  }
+
   static  public class SaveActionListener extends EventListener<UIEventCategoryForm> {
     public void execute(Event<UIEventCategoryForm> event) throws Exception {
       UIEventCategoryForm uiForm = event.getSource() ;
+      UIEventCategoryManager uiManager = uiForm.getAncestorOfType(UIEventCategoryManager.class) ;
       CalendarService calendarService = CalendarUtils.getCalendarService();
       String name = uiForm.getUIStringInput(UIEventCategoryForm.EVENT_CATEGORY_NAME).getValue() ;
       String description = uiForm.getUIStringInput(UIEventCategoryForm.DESCRIPTION).getValue() ;
@@ -64,33 +85,56 @@ public class UIEventCategoryForm extends UIForm implements UIPopupComponent{
       EventCategory eventCat = new EventCategory() ;
       eventCat.setName(name) ;
       eventCat.setDescription(description) ;
-      calendarService.saveEventCategory(username, eventCat, true) ;
-      UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
-      UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
-      if(uiPopupContainer == null) calendarPortlet.cancelAction() ;
-      else {
-        uiPopupContainer.getChild(UIPopupAction.class).deActivate() ;
-        UIEventForm uiEventForm = uiPopupContainer.getChild(UIEventForm.class) ;
-        uiEventForm.refreshCategory() ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupContainer.getChild(UIPopupAction.class)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupContainer) ;
+      try {
+        if(uiForm.isAddNew_) calendarService.saveEventCategory(username, eventCat, null, true) ;
+        else { 
+          eventCat = uiForm.getEventCategory() ;
+          EventCategory newEventCategory = new EventCategory() ;
+          newEventCategory.setName(name) ;
+          newEventCategory.setDescription(uiForm.getCategoryDescription()) ;
+          calendarService.saveEventCategory(username, eventCat, newEventCategory, false) ; 
+        }
+        uiManager.updateGrid() ;
+        uiForm.reset() ;
+        UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
+        UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
+        if(uiPopupContainer != null) {
+          UIEventForm uiEventForm = uiPopupContainer.getChild(UIEventForm.class) ;
+          uiEventForm.refreshCategory() ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupContainer) ;
+        }
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiManager) ;
+        UICalendarViewContainer uiViewContainer = calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
+        UICalendarView uiCalendarView = (UICalendarView)uiViewContainer.getRenderedChild() ;
+        uiCalendarView.update() ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiViewContainer) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
+      } catch (Exception e) {
+        e.printStackTrace() ;
       }
-      UICalendarViewContainer uiViewContainer = calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
-      UICalendarView uiCalendarView = (UICalendarView)uiViewContainer.getRenderedChild() ;
-      uiCalendarView.update() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiViewContainer) ;
     }
   }
+  static  public class ResetActionListener extends EventListener<UIEventCategoryForm> {
+    public void execute(Event<UIEventCategoryForm> event) throws Exception {
+      UIEventCategoryForm uiForm = event.getSource() ;
+      uiForm.reset() ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class));
+    }
+  }
+
   static  public class CancelActionListener extends EventListener<UIEventCategoryForm> {
     public void execute(Event<UIEventCategoryForm> event) throws Exception {
       UIEventCategoryForm uiForm = event.getSource() ;
-      UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
+      UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class) ;
+      uiPopupAction.deActivate() ;
+      /* UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       if(uiPopupContainer == null) calendarPortlet.cancelAction() ;
       else {
         uiPopupContainer.getChild(UIPopupAction.class).deActivate() ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupContainer.getChild(UIPopupAction.class));
-      }
+
+      }*/
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
     }
   }
 }

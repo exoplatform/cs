@@ -14,7 +14,6 @@ import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.Session;
 import javax.jcr.Value;
-import javax.jcr.nodetype.NodeType;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
@@ -23,9 +22,9 @@ import org.apache.commons.lang.StringUtils;
 import org.exoplatform.calendar.service.Attachment;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarCategory;
+import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarImportExport;
 import org.exoplatform.calendar.service.CalendarSetting;
-import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.FeedData;
@@ -40,7 +39,7 @@ import org.exoplatform.container.xml.PortalContainerInfo;
 import org.exoplatform.registry.JCRRegistryService;
 import org.exoplatform.registry.ServiceRegistry;
 import org.exoplatform.services.jcr.RepositoryService;
-import org.exoplatform.services.jcr.ext.common.SessionProvider ;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 
 import com.sun.syndication.feed.synd.SyndContent;
 import com.sun.syndication.feed.synd.SyndContentImpl;
@@ -475,31 +474,54 @@ public class JCRDataStorage implements DataStorage{
     return categories ;
   }
 
-  public void saveEventCategory(String username, EventCategory eventCategory, boolean isNew) throws Exception {
+  public void saveEventCategory(String username, EventCategory eventCategory, EventCategory newEventCategory, boolean isNew) throws Exception {
     Node eventCategoryHome = getEventCategoryHome(username) ;
-    Node eventCategoryNode ;
+    Node eventCategoryNode = null ;
+    String name = null ;
+    String description = null ;
     if(isNew){
       if(eventCategoryHome.hasNode(eventCategory.getName())) throw new Exception("This event category is already exists!") ;
       eventCategoryNode = eventCategoryHome.addNode(eventCategory.getName(), "exo:eventCategory") ;
-      eventCategoryNode.setProperty("exo:name", eventCategory.getName()) ;
+      name = eventCategory.getName() ;
+      description = eventCategory.getDescription() ;
     }else {
       eventCategoryNode = eventCategoryHome.getNode(eventCategory.getName()) ;
+      if(eventCategory.getName().equals(newEventCategory.getName())) {
+        name = eventCategory.getName() ;
+        description = newEventCategory.getDescription() ;
+      } else {
+        if(eventCategoryHome.hasNode(newEventCategory.getName())){
+          throw new Exception("This event category is already exists!") ;
+        } else {
+          eventCategoryNode.remove() ;
+          eventCategoryHome.addNode(newEventCategory.getName()) ;
+          name = newEventCategory.getName() ;
+          description = newEventCategory.getDescription() ;
+          for(CalendarEvent ce : getUserEventByCategory(username, eventCategory.getName())) {
+            ce.setEventCategoryId(newEventCategory.getName()) ;
+            saveUserEvent(username,  ce.getCalendarId(), ce, false) ;
+          }
+        }
+      }
+      eventCategoryNode = eventCategoryHome.getNode(newEventCategory.getName()) ;
     }
-    eventCategoryNode.setProperty("exo:description", eventCategory.getDescription()) ;
+    eventCategoryNode.setProperty("exo:name", name) ;
+    eventCategoryNode.setProperty("exo:description", description) ;
     eventCategoryHome.getSession().save() ;
   } 
 
-  public EventCategory removeEventCategory(String username, String eventCategoryName) throws Exception {
+  public void removeEventCategory(String username, String eventCategoryName) throws Exception {
     Node eventCategoryHome = getEventCategoryHome(username) ;
     if(eventCategoryHome.hasNode(eventCategoryName)) {
+      for(CalendarEvent ce : getUserEventByCategory(username, eventCategoryName)) {
+        ce.setEventCategoryId(null) ;
+        saveUserEvent(username, ce.getCalendarId(), ce, false) ;
+      }
       Node eventCategoryNode = eventCategoryHome.getNode(eventCategoryName) ;
-      EventCategory eventCategory = getEventCategory(eventCategoryNode) ;
       eventCategoryNode.remove() ;
       eventCategoryHome.save() ;
       eventCategoryHome.getSession().save() ;
-      return eventCategory ;
     }
-    return null ;
   }
 
   private EventCategory getEventCategory(Node eventCatNode) throws Exception {
@@ -507,6 +529,11 @@ public class JCRDataStorage implements DataStorage{
     if(eventCatNode.hasProperty("exo:name")) eventCategory.setName(eventCatNode.getProperty("exo:name").getString()) ;
     if(eventCatNode.hasProperty("exo:description")) eventCategory.setDescription(eventCatNode.getProperty("exo:description").getString()) ;
     return eventCategory ;
+  }
+
+  public EventCategory getEventCategory(String username, String eventCategoryName) throws Exception {
+    Node eventCategoryHome = getEventCategoryHome(username) ;
+    return getEventCategory(eventCategoryHome.getNode(eventCategoryName)) ;
   }
 
   private List<EventCategory> getEventCategories(String username, String calendarId) throws Exception {
@@ -539,7 +566,27 @@ public class JCRDataStorage implements DataStorage{
     }
     return events ;
   }
-
+  public List<CalendarEvent> getUserEventByCategory(String username, String eventCategoryId) throws Exception {
+    Node calendarHome = getCalendarHome(username) ;
+    QueryManager qm = calendarHome.getSession().getWorkspace().getQueryManager();
+    List<CalendarEvent> calendares = new ArrayList<CalendarEvent> () ;
+    NodeIterator calIter = calendarHome.getNodes() ;
+    Query query ;
+    QueryResult result ;
+    while (calIter.hasNext()) {
+      StringBuffer queryString = new StringBuffer("/jcr:root" + calIter.nextNode().getPath() 
+          + "//element(*,exo:calendarEvent)[@exo:eventCategoryId='").
+          append(eventCategoryId).
+          append("']");
+      query = qm.createQuery(queryString.toString(), Query.XPATH);
+      result = query.execute();
+      NodeIterator it = result.getNodes();
+      while(it.hasNext()){
+        calendares.add(getEvent(it.nextNode())) ;
+      }
+    }
+    return calendares;
+  }
   public List<CalendarEvent> getUserEvents(String username, EventQuery eventQuery) throws Exception {
     Node calendarHome = getCalendarHome(username) ;
     eventQuery.setCalendarPath(calendarHome.getPath()) ;
@@ -649,7 +696,7 @@ public class JCRDataStorage implements DataStorage{
       if(eventNode.hasNode(attachment.getId())) {
         attachNode = eventNode.getNode(attachment.getId()) ;
       } else {
-       Attachment tempRm = new Attachment() ;
+        Attachment tempRm = new Attachment() ;
         attachNode = eventNode.addNode(tempRm.getName(), Utils.NT_FILE) ;
       }
     }
@@ -660,7 +707,7 @@ public class JCRDataStorage implements DataStorage{
     nodeContent.setProperty(Utils.JCR_MIMETYPE, attachment.getMimeType());
     nodeContent.setProperty(Utils.JCR_DATA, attachment.getInputStream());
   }
-  
+
   private CalendarEvent getEvent(Node eventNode) throws Exception {
     CalendarEvent event = new CalendarEvent() ;
     if(eventNode.hasProperty("exo:id")) event.setId(eventNode.getProperty("exo:id").getString()) ;
@@ -769,7 +816,7 @@ public class JCRDataStorage implements DataStorage{
     }
     return reminders ;
   }
-  
+
   private List<Attachment> getAttachments(Node eventNode) throws Exception {
     NodeIterator iter = eventNode.getNodes() ;
     List<Attachment> attachments = new ArrayList<Attachment> () ;

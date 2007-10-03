@@ -172,7 +172,7 @@ public interface CalendarService {
    * @param isNew
    * @throws Exception
    */
-  public void saveEventCategory(String username, EventCategory eventCategory, boolean isNew) throws Exception ;
+  public void saveEventCategory(String username, EventCategory eventCategory, EventCategory newEventCategory, boolean isNew) throws Exception ;
   /**
    * This method should:
    * 1. Get calendar service root node by current user
@@ -185,20 +185,7 @@ public interface CalendarService {
    * @return EventCategory
    * @throws Exception
    */
-  public EventCategory removeEventCategory(String username, String eventCategoryName) throws Exception ;  
-  /**
-   * This method should:
-   * 1. Get calendar service root node by current user
-   * 2. Check isNew parameter
-   * 3. Create new or update category
-   * 4. Invalidate cache 
-   * @param username
-   * @param calendarId
-   * @param category
-   * @param isNew
-   * @throws Exception
-   */
-  //public void saveGroupEventCategory(Calendar calendar, EventCategory eventCategory, boolean isNew) throws Exception ;
+  public void removeEventCategory(String username, String eventCategoryName) throws Exception ;  
   /**
    * This method should:
    * 1. Get calendar service root node by current user
@@ -211,7 +198,7 @@ public interface CalendarService {
    * @return EventCategory
    * @throws Exception
    */
-  //public EventCategory removeGroupEventCategory(String calendarId, String eventCategoryId) throws Exception ;
+  public EventCategory getEventCategory(String username, String eventCategoryId) throws Exception ;
   
   
   /**

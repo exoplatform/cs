@@ -178,7 +178,7 @@ public class ICalendarImportExport implements CalendarImportExport{
           evCate.setName(event.getProperty(Property.CATEGORIES).getValue()) ;
           evCate.setDescription(event.getProperty(Property.CATEGORIES).getValue()) ;
           try{
-            storage_.saveEventCategory(username, evCate, true) ;
+            storage_.saveEventCategory(username, evCate, null, true) ;
           }catch(Exception e){            
           }
           eventCategoryId = evCate.getName() ;

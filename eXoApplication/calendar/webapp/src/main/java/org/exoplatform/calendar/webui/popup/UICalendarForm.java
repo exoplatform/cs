@@ -182,7 +182,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
       uiForm.setRenderedChild(INPUT_CALENDAR) ;
       UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       UIPopupAction uiChildPopup = uiPopupContainer.getChild(UIPopupAction.class);
-      uiChildPopup.activate(UICalendarCategoryForm.class, 500) ;
+      uiChildPopup.activate(UICalendarCategoryManager.class, 500) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
     }
   }

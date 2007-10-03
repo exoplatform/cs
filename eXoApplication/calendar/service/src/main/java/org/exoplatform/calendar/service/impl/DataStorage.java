@@ -43,8 +43,8 @@ public interface DataStorage {
   public CalendarCategory removeCalendarCategory(String username, String calendarCategoryId) throws Exception ;
   
   public List<EventCategory> getEventCategories(String username) throws Exception ;
-  public void saveEventCategory(String username, EventCategory eventCategory, boolean isNew) throws Exception ;
-  public EventCategory removeEventCategory(String username, String eventCategoryId) throws Exception ;
+  public void saveEventCategory(String username, EventCategory eventCategory,EventCategory newEventCategory, boolean isNew) throws Exception ;
+  public void removeEventCategory(String username, String eventCategoryId) throws Exception ;
   
   public CalendarEvent getUserEvent(String username, String eventCategoryId, String eventId) throws Exception ;
   public List<CalendarEvent> getUserEventByCalendar(String username, List<String> calendarIds) throws Exception ;

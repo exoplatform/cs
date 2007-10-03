@@ -59,6 +59,7 @@ import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
 )
 public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISelector{
   final public static String TAB_EVENTDETAIL = "eventDetail".intern() ;
+  final public static String TAB_EVENTREMINDER = "eventReminder".intern() ;
   final public static String TAB_EVENTSHARE = "eventShare".intern() ;
   final public static String TAB_EVENTATTENDER = "eventAttender".intern() ;
 
@@ -88,10 +89,10 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   public UIEventForm() throws Exception {
     super("UIEventForm", false);
     UIFormInputWithActions eventDetailTab =  new UIEventDetailTab(TAB_EVENTDETAIL) ;
-    UIFormInputWithActions eventShareTab =  new UIFormInputWithActions(TAB_EVENTSHARE) ;
     addChild(eventDetailTab) ;
-
-    UIEventAttenderTab eventAttenderTab = new UIEventAttenderTab(TAB_EVENTATTENDER) ;
+    UIFormInputWithActions eventReminderTab =  new UIEventDetailTab(TAB_EVENTREMINDER) ;
+    
+    UIFormInputWithActions eventShareTab =  new UIFormInputWithActions(TAB_EVENTSHARE) ;
     List<ActionData> actions = new ArrayList<ActionData>() ;
     eventShareTab.addUIFormInput(new UIFormSelectBox(FIELD_SHARE, FIELD_SHARE, getShareValue()) ) ;
     eventShareTab.addUIFormInput(new UIFormSelectBox(FIELD_STATUS, FIELD_STATUS, getStatusValue()) ) ;
@@ -106,7 +107,9 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     eventShareTab.setActionField(FIELD_PARTICIPANT, actions) ;
     addChild(eventShareTab) ;
 
+    UIEventAttenderTab eventAttenderTab = new UIEventAttenderTab(TAB_EVENTATTENDER) ;
     addChild(eventAttenderTab) ;
+    
     setRenderedChild(TAB_EVENTDETAIL) ;
 
   }
@@ -554,7 +557,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       UIPopupAction uiParentPopup = uiForm.getAncestorOfType(UIPopupAction.class) ;
       UIPopupContainer uiContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       UIPopupAction uiChildPopup = uiContainer.getChild(UIPopupAction.class) ;
-      uiChildPopup.activate(UIEventCategoryForm.class, 500) ;
+      uiChildPopup.activate(UIEventCategoryManager.class, 500) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
     }
   }

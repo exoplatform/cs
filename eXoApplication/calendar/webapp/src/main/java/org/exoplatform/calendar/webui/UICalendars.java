@@ -11,6 +11,7 @@ import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.webui.popup.UICalendarCategoryForm;
+import org.exoplatform.calendar.webui.popup.UICalendarCategoryManager;
 import org.exoplatform.calendar.webui.popup.UICalendarForm;
 import org.exoplatform.calendar.webui.popup.UICalendarSettingForm;
 import org.exoplatform.calendar.webui.popup.UIEventForm;
@@ -115,7 +116,7 @@ public class UICalendars extends UIForm  {
       UICalendars uiComponent = event.getSource() ;
       UICalendarPortlet uiCalendarPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
-      popupAction.activate(UICalendarCategoryForm.class, 600) ;
+      popupAction.activate(UICalendarCategoryManager.class, 600) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   }

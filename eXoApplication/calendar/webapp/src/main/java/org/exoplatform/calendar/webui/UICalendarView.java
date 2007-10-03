@@ -18,6 +18,7 @@ import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.webui.popup.UIEventCategoryForm;
+import org.exoplatform.calendar.webui.popup.UIEventCategoryManager;
 import org.exoplatform.calendar.webui.popup.UIEventForm;
 import org.exoplatform.calendar.webui.popup.UIPopupAction;
 import org.exoplatform.calendar.webui.popup.UIPopupContainer;
@@ -312,7 +313,7 @@ public abstract class UICalendarView extends UIForm {
       UICalendarView listView = event.getSource() ;
       UICalendarPortlet calendarPortlet = listView.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction popupAction = calendarPortlet.getChild(UIPopupAction.class) ;
-      popupAction.activate(UIEventCategoryForm.class, 600) ;
+      popupAction.activate(UIEventCategoryManager.class, 600) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   }
