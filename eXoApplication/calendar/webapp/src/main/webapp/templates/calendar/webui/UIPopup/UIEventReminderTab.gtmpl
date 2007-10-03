@@ -1,0 +1,92 @@
+<%
+	uiForm = uicomponent.getParentFrom() ;
+	private void renderActions(String fieldKey) {
+		def actions = uicomponent.getActionField(fieldKey) ;
+	  if(actions != null) {
+	    for(action in actions) {
+	    	String actionLabel = uiForm.getLabel("action." + action.actionName)  ;
+	    	String actionLink ="#";
+	      if(action.actionParameter != null) {
+	        actionLink = (uiForm.event(action.actionListener, action.actionParameter)) ;
+	      }else {
+	        actionLink = (uiForm.event(action.actionListener)) ;
+	      }
+		    println "<a title=\"" + actionLabel + "\" href=\"" + actionLink +"\">";
+	      if(action.actionType == action.TYPE_ICON) {
+	        println "<img src=\"/eXoResources/skin/DefaultSkin/background/Blank.gif\" class=\"" + action.cssIconClass +"\"/>" ;
+	        if(action.isShowLabel) { println  actionLabel  ;}
+	      }else if(action.actionType == action.TYPE_LINK){
+	       println actionLabel ;
+	      }
+	      println  "</a>";
+	      println "&nbsp;"; 
+	      if(action.isBreakLine) { println "<br/>" ;} 
+	    }
+	  }
+	}
+%>
+<div class="UIAddNewEvent">
+  <table class="UIFormGrid">
+    <tbody>
+      <tr>
+        <td class="FieldLabel">
+          <%=uiForm.getLabel(uicomponent.FIELD_EMAIL_REMINDER)%>
+        </td>
+        <td class="FieldComponent">
+        	<div class="ReminderLabel">
+          <%
+          	uiForm.renderField(uicomponent.FIELD_EMAIL_REMINDER)  ;
+          %>
+          <%=uiForm.getLabel(uicomponent.FIELD_EMAIL_TIME)%>
+          </div>
+          <div class="ReminderTime">
+          <%
+          	uiForm.renderField(uicomponent.FIELD_EMAIL_TIME)  ;
+          %>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td class="FieldLabel">
+          <%=uiForm.getLabel(uicomponent.FIELD_EMAIL_ADDRESS)%>
+        </td>
+        <td class="FieldComponent">
+          <%
+          	uiForm.renderField(uicomponent.FIELD_EMAIL_ADDRESS) ;
+          	renderActions(uicomponent.FIELD_EMAIL_ADDRESS) ;
+          %>
+        </td>
+      </tr>
+      
+      <tr>
+        <td class="FieldLabel">
+          <%=uiForm.getLabel(uicomponent.FIELD_POPUP_REMINDER)%>
+        </td>
+        <td class="FieldComponent">
+        	<div class="ReminderLabel">
+          <%
+          	uiForm.renderField(uicomponent.FIELD_POPUP_REMINDER)
+          %>
+          <%=uiForm.getLabel(uicomponent.FIELD_POPUP_TIME)%>
+          </div>
+          <div class="ReminderTime">
+          <%
+          	uiForm.renderField(uicomponent.FIELD_POPUP_TIME)  ;
+          %>
+          </div>	
+        </td>
+        
+      </tr>
+       <tr>
+        <td class="FieldLabel">
+          <%=uiForm.getLabel(uicomponent.FIELD_SNOOZE_TIME)%>
+        </td>
+        <td class="FieldComponent">
+          <%
+          	uiForm.renderField(uicomponent.FIELD_SNOOZE_TIME)  ;
+          %>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

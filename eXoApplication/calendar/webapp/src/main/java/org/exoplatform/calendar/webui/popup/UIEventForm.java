@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.codehaus.groovy.runtime.StringBufferWriter;
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.Attachment;
 import org.exoplatform.calendar.service.CalendarEvent;
@@ -88,9 +87,10 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
 
   public UIEventForm() throws Exception {
     super("UIEventForm", false);
-    UIFormInputWithActions eventDetailTab =  new UIEventDetailTab(TAB_EVENTDETAIL) ;
+    UIEventDetailTab eventDetailTab =  new UIEventDetailTab(TAB_EVENTDETAIL) ;
     addChild(eventDetailTab) ;
-    UIFormInputWithActions eventReminderTab =  new UIEventDetailTab(TAB_EVENTREMINDER) ;
+    UIEventReminderTab eventReminderTab =  new UIEventReminderTab(TAB_EVENTREMINDER) ;
+    addChild(eventReminderTab) ;
     
     UIFormInputWithActions eventShareTab =  new UIFormInputWithActions(TAB_EVENTSHARE) ;
     List<ActionData> actions = new ArrayList<ActionData>() ;
@@ -376,53 +376,53 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   }
 
   protected boolean getEmailReminder() {
-    UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
-    return eventDetailTab.getUIFormCheckBoxInput(UIEventDetailTab.FIELD_EMAIL_REMINDER).isChecked() ;
+    UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTREMINDER) ;
+    return eventDetailTab.getUIFormCheckBoxInput(UIEventReminderTab.FIELD_EMAIL_REMINDER).isChecked() ;
   }
   protected void setEmailReminder(boolean isChecked) {
-    UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
-    eventDetailTab.getUIFormCheckBoxInput(UIEventDetailTab.FIELD_EMAIL_REMINDER).setChecked(isChecked) ;
+    UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTREMINDER) ;
+    eventDetailTab.getUIFormCheckBoxInput(UIEventReminderTab.FIELD_EMAIL_REMINDER).setChecked(isChecked) ;
   }
   protected String getEmailReminderTime() {
-    UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
-    return eventDetailTab.getUIStringInput(UIEventDetailTab.FIELD_EMAIL_TIME).getValue() ;
+    UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTREMINDER) ;
+    return eventDetailTab.getUIStringInput(UIEventReminderTab.FIELD_EMAIL_TIME).getValue() ;
   }
   protected void setEmailReminderTime(String value) {
-    UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
-    eventDetailTab.getUIStringInput(UIEventDetailTab.FIELD_EMAIL_TIME).setValue(value) ;
+    UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTREMINDER) ;
+    eventDetailTab.getUIStringInput(UIEventReminderTab.FIELD_EMAIL_TIME).setValue(value) ;
   }
 
   protected String getEmailAddress() {
-    UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
-    return eventDetailTab.getUIStringInput(UIEventDetailTab.FIELD_EMAIL_ADDRESS).getValue() ;
+    UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTREMINDER) ;
+    return eventDetailTab.getUIStringInput(UIEventReminderTab.FIELD_EMAIL_ADDRESS).getValue() ;
   }
 
   protected void setEmailAddress(String value) {
-    UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
-    eventDetailTab.getUIFormTextAreaInput(UIEventDetailTab.FIELD_EMAIL_ADDRESS).setValue(value) ;
+    UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTREMINDER) ;
+    eventDetailTab.getUIFormTextAreaInput(UIEventReminderTab.FIELD_EMAIL_ADDRESS).setValue(value) ;
   }
 
   protected boolean getPopupReminder() {
-    UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
-    return eventDetailTab.getUIFormCheckBoxInput(UIEventDetailTab.FIELD_POPUP_REMINDER).isChecked() ;
+    UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTREMINDER) ;
+    return eventDetailTab.getUIFormCheckBoxInput(UIEventReminderTab.FIELD_POPUP_REMINDER).isChecked() ;
   }
   protected void setPopupReminder(boolean isChecked) {
-    UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
-    eventDetailTab.getUIFormCheckBoxInput(UIEventDetailTab.FIELD_POPUP_REMINDER).setChecked(isChecked) ;
+    UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTREMINDER) ;
+    eventDetailTab.getUIFormCheckBoxInput(UIEventReminderTab.FIELD_POPUP_REMINDER).setChecked(isChecked) ;
   }
   protected String getPopupReminderTime() {
-    UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
-    return eventDetailTab.getUIStringInput(UIEventDetailTab.FIELD_POPUP_TIME).getValue() ;
+    UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTREMINDER) ;
+    return eventDetailTab.getUIStringInput(UIEventReminderTab.FIELD_POPUP_TIME).getValue() ;
   }
 
   protected void setPopupReminderTime(String value) {
-    UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
-    eventDetailTab.getUIStringInput(UIEventDetailTab.FIELD_POPUP_TIME).setValue(value) ;
+    UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTREMINDER) ;
+    eventDetailTab.getUIStringInput(UIEventReminderTab.FIELD_POPUP_TIME).setValue(value) ;
   }
   protected long getPopupReminderSnooze() {
-    UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
+    UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTREMINDER) ;
     try {
-      String time =  eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_SNOOZE_TIME).getValue() ;
+      String time =  eventDetailTab.getUIFormSelectBox(UIEventReminderTab.FIELD_SNOOZE_TIME).getValue() ;
       return Long.parseLong(time) ;
     } catch (Exception e){
       e.printStackTrace() ;
@@ -430,8 +430,8 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     return 0 ;
   }
   protected void setPopupReminderSnooze(long value) {
-    UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
-    eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_SNOOZE_TIME).setValue(String.valueOf(value)) ;
+    UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTREMINDER) ;
+    eventDetailTab.getUIFormSelectBox(UIEventReminderTab.FIELD_SNOOZE_TIME).setValue(String.valueOf(value)) ;
   }
   protected List<Attachment>  getAttachments(String eventId, boolean isAddNew) {
     UIEventDetailTab uiEventDetailTab = getChild(UIEventDetailTab.class) ;
@@ -472,23 +472,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     }
     return reminders ;
   }
-  protected String  getEventReminderType() {
-    UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
-    return eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_REMINDER).getValue() ;
-  }
-  protected void setSelectedReminder(String value) {
-    UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
-    eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_REMINDER).setValue(value) ;
-  }
-
-  protected String getEventReminderTime() {
-    UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
-    return eventDetailTab.getUIStringInput(UIEventDetailTab.FIELD_TIMEREMINDER).getValue();
-  }
-  protected void setEventReminderTime(String value) {
-    UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
-    eventDetailTab.getUIStringInput(UIEventDetailTab.FIELD_TIMEREMINDER).setValue(value) ;
-  }
+  
   protected String getEventPriority() {
     UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
     return eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_PRIORITY).getValue() ;

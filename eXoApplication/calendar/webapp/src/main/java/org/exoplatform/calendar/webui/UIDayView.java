@@ -42,6 +42,7 @@ import org.exoplatform.webui.event.EventListener;
       @EventConfig(listeners = UICalendarView.ChangeCategoryActionListener.class), 
       @EventConfig(listeners = UIDayView.MoveNextActionListener.class), 
       @EventConfig(listeners = UIDayView.QuickAddActionListener.class), 
+      @EventConfig(listeners = UIDayView.EditEventActionListener.class), 
       @EventConfig(listeners = UIDayView.MovePreviousActionListener.class), 
       @EventConfig(listeners = UIDayView.SaveEventActionListener.class), 
       @EventConfig(listeners = UICalendarView.AddCategoryActionListener.class)
@@ -126,6 +127,7 @@ public class UIDayView extends UICalendarView {
   }
   static  public class QuickAddActionListener extends EventListener<UIDayView> {
     public void execute(Event<UIDayView> event) throws Exception {
+      System.out.println("QuickAddActionListener");
       UIDayView calendarview = event.getSource() ;
       String type = event.getRequestContext().getRequestParameter(OBJECTID) ;
       String startTime = event.getRequestContext().getRequestParameter("startTime") ;
@@ -150,6 +152,11 @@ public class UIDayView extends UICalendarView {
 
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
+    }
+  }
+  static  public class EditEventActionListener extends EventListener<UIDayView> {
+    public void execute(Event<UIDayView> event) throws Exception {
+      System.out.println("EditEventActionListener");
     }
   }
   static  public class MovePreviousActionListener extends EventListener<UIDayView> {

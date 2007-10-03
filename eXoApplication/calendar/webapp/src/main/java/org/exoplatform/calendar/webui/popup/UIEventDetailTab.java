@@ -18,7 +18,6 @@ import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
-import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
@@ -28,7 +27,6 @@ import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
-import org.exoplatform.webui.form.validator.NumberFormatValidator;
 
 /**
  * Created by The eXo Platform SARL
@@ -53,15 +51,7 @@ public class UIEventDetailTab extends UIFormInputWithActions {
   final public static String FIELD_CHECKALL = "allDay".intern() ;
   final public static String FIELD_REPEAT = "repeat".intern() ;
   final public static String FIELD_PLACE = "place".intern() ;
-  final public static String FIELD_REMINDER = "reminder".intern() ;
-  final public static String FIELD_EMAIL_REMINDER = "mailReminder".intern() ;
-  final public static String FIELD_EMAIL_TIME = "mailReminderTime".intern() ;
-  final public static String FIELD_EMAIL_ADDRESS = "mailReminderAddress".intern() ;
-
-  final public static String FIELD_POPUP_REMINDER = "popupReminder".intern() ;
-  final public static String FIELD_POPUP_TIME = "mailReminderTime".intern() ;
-  final public static String FIELD_SNOOZE_TIME = "snooze".intern() ;
-  final public static String FIELD_TIMEREMINDER = "timeReminder".intern() ;
+  
   final public static String FIELD_PRIORITY = "priority".intern() ; 
   final public static String FIELD_DESCRIPTION = "description".intern() ;
 
@@ -97,12 +87,7 @@ public class UIEventDetailTab extends UIFormInputWithActions {
     addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_CHECKALL, FIELD_CHECKALL, null));
     addUIFormInput(new UIFormStringInput(FIELD_PLACE, FIELD_PLACE, null));
     addUIFormInput(new UIFormSelectBox(FIELD_REPEAT, FIELD_REPEAT, getRepeater())) ;
-    addUIFormInput(new UIFormStringInput(FIELD_TIMEREMINDER, FIELD_TIMEREMINDER, null).addValidator(NumberFormatValidator.class));
     addUIFormInput(new UIFormSelectBox(FIELD_PRIORITY, FIELD_PRIORITY, getPriority())) ;
-
-    addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_EMAIL_REMINDER, FIELD_EMAIL_REMINDER, false)) ;
-    addUIFormInput(new UIFormSelectBox(FIELD_EMAIL_TIME, FIELD_EMAIL_TIME, getReminderTimes(5,60)));
-    addUIFormInput(new UIFormTextAreaInput(FIELD_EMAIL_ADDRESS, FIELD_EMAIL_ADDRESS, null)) ;
    
     ActionData addEmailAddress = new ActionData() ;
     addEmailAddress.setActionType(ActionData.TYPE_ICON) ;
@@ -111,13 +96,6 @@ public class UIEventDetailTab extends UIFormInputWithActions {
     
     List<ActionData> addMailActions = new ArrayList<ActionData>() ;
     addMailActions.add(addEmailAddress) ;
-    setActionField(FIELD_EMAIL_ADDRESS, addMailActions) ;
-
-    addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_POPUP_REMINDER, FIELD_POPUP_REMINDER, false)) ;
-    addUIFormInput(new UIFormSelectBox(FIELD_POPUP_TIME, FIELD_POPUP_TIME, getReminderTimes(5,60)));
-    addUIFormInput(new UIFormSelectBox(FIELD_SNOOZE_TIME, FIELD_SNOOZE_TIME, getReminderTimes(5,60)));
-    
-    
     
   }
   protected UIForm getParentFrom() {
@@ -144,13 +122,7 @@ public class UIEventDetailTab extends UIFormInputWithActions {
     }
     return uploadedFiles ;
   }
-  public List<SelectItemOption<String>> getReminderTimes(int steps, int maxValue) {
-    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-    for(int i = 1; i <= maxValue/steps ; i++) {
-      options.add(new SelectItemOption<String>(String.valueOf(i*steps)+" minutes", String.valueOf(i*steps))) ;
-    }
-    return options ;
-  }
+  
   public void addToUploadFileList(Attachment attachfile) {
     attachments_.add(attachfile) ;
   }
