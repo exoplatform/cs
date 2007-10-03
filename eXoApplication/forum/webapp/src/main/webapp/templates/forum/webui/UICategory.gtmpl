@@ -148,11 +148,15 @@
 				        }
 				        openLinkLastPost = uicomponent.event("OpenLastTopicLink", (forum.getId()+","+topicNewPost.getId()))
 			        }
+			        String isLock = "false";
+			        String isClose = "false";
               if(forum.getIsLock() == true){
+              	isLock = "true";
                 classIconForum = "ForumLockedIcon";
                 titleIconForum = "Forum is Locked for Posting";
               }
               if(forum.getIsClosed() == true){
+              	isClose = "true" ;
                 classIconForum = "ForumLockedIcon";//TODO: Rename class ForumLockedIcon into ForumCloseIcon
                 titleIconForum = "Forum is Closed for Posting";
               }
@@ -189,7 +193,7 @@
 								<% } %>
 	                  <div style="clear: left;"><span></span></div>
 	                </td>
-	                <td class="Tdbox" onclick="eXo.forum.UIForumPortlet.selectItem(this.firstChild)"><% uicomponent.renderChild(forum.getId())%></td>
+	                <td isLock="$isLock" isClose="$isClose" class="Tdbox" onclick="eXo.forum.UIForumPortlet.selectItem(this.firstChild)"><% uicomponent.renderChild(forum.getId())%></td>
 	               </tr>
            <%	} 
             }

@@ -175,17 +175,19 @@
 							        <div class="MiddleLeftRightClickPopupMenu">
 							          <div class="MiddleRightRightClickPopupMenu">
 				              		<div class="UIRightPopupMenuContainer">
+				              		<% if(!forum.getIsLock()) { %>
 														<a class="MenuItem" href="<%=uicomponent.event("AddTopic")%>">   
 					                    <div class="ItemIcon PostnewThreadIcon">
 					                      Post new Thread
 					                    </div>
 				                    </a>
+				                   <% } %> 
 				                    <a class="MenuItem" href="#">   
 					                    <div class="ItemIcon DisplayOptionsIcon">
 					                      Display Options
 					                    </div>
 				                    </a>
-				                    <a class="MenuItem" href="<%//=uicomponent.event("EditForum")%>">   
+				                    <a class="MenuItem" href="<%=uicomponent.event("EditForum")%>">   
 					                    <div class="ItemIcon EditthisForumIcon">
 					                     Edit this Forum
 					                    </div>

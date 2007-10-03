@@ -11,6 +11,7 @@ import org.exoplatform.forum.service.Forum;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.service.JCRPageList;
 import org.exoplatform.forum.service.Topic;
+import org.exoplatform.forum.webui.popup.UIForumForm;
 import org.exoplatform.forum.webui.popup.UIPopupAction;
 import org.exoplatform.forum.webui.popup.UIPopupComponent;
 import org.exoplatform.forum.webui.popup.UITopicForm;
@@ -35,7 +36,14 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
     template =  "app:/templates/forum/webui/UITopicContainer.gtmpl", 
     events = {
       @EventConfig(listeners = UITopicContainer.AddTopicActionListener.class ),  
-      @EventConfig(listeners = UITopicContainer.OpenTopicActionListener.class )  
+      @EventConfig(listeners = UITopicContainer.EditForumActionListener.class ),  
+      @EventConfig(listeners = UITopicContainer.OpenTopicActionListener.class ),
+      @EventConfig(listeners = UITopicContainer.SetLockedActionListener.class),
+      @EventConfig(listeners = UITopicContainer.SetUnLockActionListener.class),
+      @EventConfig(listeners = UITopicContainer.SetOpenActionListener.class),
+      @EventConfig(listeners = UITopicContainer.SetCloseActionListener.class),
+      @EventConfig(listeners = UICategory.MoveForumActionListener.class),
+      @EventConfig(listeners = UICategory.RemoveForumActionListener.class)
     }
 )
 public class UITopicContainer extends UIForm implements UIPopupComponent {
@@ -109,8 +117,64 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
   	}
   }
 
+  static public class EditForumActionListener extends EventListener<UITopicContainer> {
+    public void execute(Event<UITopicContainer> event) throws Exception {
+      UITopicContainer uiTopicContainer = event.getSource();
+      Forum forum = uiTopicContainer.getForum() ;
+      UIForumPortlet forumPortlet = uiTopicContainer.getAncestorOfType(UIForumPortlet.class) ;
+      UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;
+      UIForumForm forumForm = popupAction.createUIComponent(UIForumForm.class, null, null) ;
+      forumForm.setCategoryValue(uiTopicContainer.categoryId, false) ;
+      forumForm.setForumValue(forum, true);
+      forumForm.setForumUpdate(true);
+      popupAction.activate(forumForm, 662, 466) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+    }
+  }  
   
-  
+  static public class SetLockedActionListener extends EventListener<UITopicContainer> {
+    public void execute(Event<UITopicContainer> event) throws Exception {
+      UITopicContainer uiTopicContainer = event.getSource();
+      Forum forum = uiTopicContainer.getForum() ;
+      forum.setIsLock(true);
+      uiTopicContainer.forumService.saveForum(uiTopicContainer.categoryId, forum, false) ;
+      UIForumPortlet forumPortlet = uiTopicContainer.getAncestorOfType(UIForumPortlet.class) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(forumPortlet) ;
+    }
+  }  
+
+  static public class SetUnLockActionListener extends EventListener<UITopicContainer> {
+    public void execute(Event<UITopicContainer> event) throws Exception {
+      UITopicContainer uiTopicContainer = event.getSource();
+      Forum forum = uiTopicContainer.getForum() ;
+      forum.setIsLock(false);
+      uiTopicContainer.forumService.saveForum(uiTopicContainer.categoryId, forum, false) ;
+      UIForumPortlet forumPortlet = uiTopicContainer.getAncestorOfType(UIForumPortlet.class) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(forumPortlet) ;
+    }
+  }  
+
+  static public class SetOpenActionListener extends EventListener<UITopicContainer> {
+    public void execute(Event<UITopicContainer> event) throws Exception {
+      UITopicContainer uiTopicContainer = event.getSource();
+      Forum forum = uiTopicContainer.getForum() ;
+      forum.setIsClosed(false);
+      uiTopicContainer.forumService.saveForum(uiTopicContainer.categoryId, forum, false) ;
+      UIForumPortlet forumPortlet = uiTopicContainer.getAncestorOfType(UIForumPortlet.class) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(forumPortlet) ;
+    }
+  }  
+
+  static public class SetCloseActionListener extends EventListener<UITopicContainer> {
+    public void execute(Event<UITopicContainer> event) throws Exception {
+      UITopicContainer uiTopicContainer = event.getSource();
+      Forum forum = uiTopicContainer.getForum() ;
+      forum.setIsClosed(true);
+      uiTopicContainer.forumService.saveForum(uiTopicContainer.categoryId, forum, false) ;
+      UIForumPortlet forumPortlet = uiTopicContainer.getAncestorOfType(UIForumPortlet.class) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(forumPortlet) ;
+    }
+  }  
   
   
   

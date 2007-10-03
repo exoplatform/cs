@@ -17,6 +17,7 @@ import org.exoplatform.forum.webui.UICategories;
 import org.exoplatform.forum.webui.UICategory;
 import org.exoplatform.forum.webui.UICategoryContainer;
 import org.exoplatform.forum.webui.UIForumPortlet;
+import org.exoplatform.forum.webui.UITopicContainer;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -50,6 +51,7 @@ import org.exoplatform.webui.form.validator.PositiveNumberFormatValidator;
 public class UIForumForm extends UIForm implements UIPopupComponent{
 	private ForumService forumService =  (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
 	private boolean isCategoriesUpdate = true;
+  private boolean isForumUpdate = false;
 	private String forumId = "";
 	public static final String FIELD_CATEGORY_SELECTBOX = "Category" ;
 	public static final String FIELD_FORUMTITLE_INPUT = "ForumTitle" ;
@@ -152,6 +154,10 @@ public class UIForumForm extends UIForm implements UIPopupComponent{
 		isCategoriesUpdate = isEditable;
 	}
 	
+  public void setForumUpdate(boolean isForumUpdate) {
+    this.isForumUpdate = isForumUpdate ;
+  }
+  
   static  public class SaveActionListener extends EventListener<UIForumForm> {
     public void execute(Event<UIForumForm> event) throws Exception {
       UIForumForm uiForm = event.getSource() ;
@@ -210,19 +216,22 @@ public class UIForumForm extends UIForm implements UIPopupComponent{
       	forumService.saveForum(categoryId, newForum, false);
       }
       else {
-//      	newForum.setId(id.toUpperCase());
       	forumService.saveForum(categoryId, newForum, true);
       }
       
       UIForumPortlet forumPortlet = event.getSource().getAncestorOfType(UIForumPortlet.class) ;
       forumPortlet.cancelAction() ;
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
-      if(uiForm.isCategoriesUpdate) {
-        UICategories uiCategories = forumPortlet.getChild(UICategoryContainer.class).getChild(UICategories.class) ;
-        context.addUIComponentToUpdateByAjax(uiCategories) ;
-      }else {
-      	UICategory uiCategory = forumPortlet.getChild(UICategoryContainer.class).getChild(UICategory.class) ;
-      	context.addUIComponentToUpdateByAjax(uiCategory) ;
+      if(!uiForm.isForumUpdate) {
+        if(uiForm.isCategoriesUpdate) {
+          UICategories uiCategories = forumPortlet.findFirstComponentOfType(UICategories.class) ;
+          context.addUIComponentToUpdateByAjax(uiCategories) ;
+        }else {
+        	UICategory uiCategory = forumPortlet.findFirstComponentOfType(UICategory.class) ;
+        	context.addUIComponentToUpdateByAjax(uiCategory) ;
+        }
+      } else {
+        context.addUIComponentToUpdateByAjax(forumPortlet) ;
       }
     }
   }
