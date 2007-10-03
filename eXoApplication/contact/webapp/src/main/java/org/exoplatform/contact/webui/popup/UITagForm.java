@@ -10,6 +10,7 @@ import java.util.MissingResourceException;
 
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
+import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.Tag;
 import org.exoplatform.contact.webui.UIContactPortlet;
@@ -44,18 +45,27 @@ public class UITagForm extends UIForm implements UIPopupComponent {
   public static final String FIELD_TAGNAME_INPUT = "tagName";
   public static String[] FIELD_TAG_BOX = null;
   private List<String> contactIds_ ;
+  public static boolean isNew = true ;
 
   public UITagForm() throws Exception {
     setId("UITagForm") ;
     addUIFormInput(new UIFormStringInput(FIELD_TAGNAME_INPUT, FIELD_TAGNAME_INPUT, null));
-    ContactService contactService = ContactUtils.getContactService();
-    String username = ContactUtils.getCurrentUser() ;
-    List<Tag> tags = contactService.getTags(username);
-    FIELD_TAG_BOX = new String[tags.size()];
-    for (int i = 0 ; i < tags.size(); i ++) {
-      FIELD_TAG_BOX[i] = tags.get(i).getName();
-      addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_TAG_BOX[i], FIELD_TAG_BOX[i], false));
+    if (isNew) {
+      System.out.println("\n\n is new  = true");
+      ContactService contactService = ContactUtils.getContactService();
+      String username = ContactUtils.getCurrentUser() ;
+      List<Tag> tags = contactService.getTags(username);
+      FIELD_TAG_BOX = new String[tags.size()];
+      for (int i = 0 ; i < tags.size(); i ++) {
+        FIELD_TAG_BOX[i] = tags.get(i).getName();
+        addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_TAG_BOX[i], FIELD_TAG_BOX[i], false));
+      }
     }
+    
+  }
+  
+  public void setValues(String tagName) throws Exception {
+    getUIStringInput(FIELD_TAGNAME_INPUT).setValue(tagName) ;   
   }
   
   public String[] getActions() { return new String[] {"Save", "Cancel"} ; }
@@ -88,7 +98,7 @@ public class UITagForm extends UIForm implements UIPopupComponent {
       List<Tag> tags = new ArrayList<Tag>();
       Tag tag;
       String inputTag = uiTagForm.getUIStringInput(FIELD_TAGNAME_INPUT).getValue(); 
-      if (inputTag != null && inputTag.trim().length() > 0) {
+      if (!ContactUtils.isEmpty(inputTag)) {
         tag = new Tag();
         tag.setName(inputTag);
         tags.add(tag);
@@ -106,16 +116,23 @@ public class UITagForm extends UIForm implements UIPopupComponent {
       } 
       ContactService contactService = ContactUtils.getContactService();
       String username = ContactUtils.getCurrentUser() ;
-      contactService.addTag(username, uiTagForm.getContacts(), tags);
+      if (isNew)
+        contactService.addTag(username, uiTagForm.getContacts(), tags);
+      else 
+        System.out.println("\n\n tagName : " + inputTag + "\n\n");
       UIContactPortlet uiContactPortlet = uiTagForm.getAncestorOfType(UIContactPortlet.class);
-      /*UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
+      
+      /*
+      UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
       Contact contact ;
       for (String contactId : uiTagForm.getContacts()) {
         contact = contactService.getContact(username, contactId) ;
         if (contact == null)
           contact = contactService.getSharedContact(contactId) ;
         if (contact != null) uiContacts.updateContact(contact, false) ;
-      }*/
+      }
+      */
+      
       UITags uiTags = uiContactPortlet.findFirstComponentOfType(UITags.class) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiTags) ;
       //event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts) ;

@@ -33,7 +33,7 @@ public class ContactUtils {
     return (ContactService)PortalContainer.getComponent(ContactService.class) ;
   }
   
-  public static boolean IsEmpty(String s) {
+  public static boolean isEmpty(String s) {
     if (s == null || s.length() == 0) return true ;
     return false ;    
   }

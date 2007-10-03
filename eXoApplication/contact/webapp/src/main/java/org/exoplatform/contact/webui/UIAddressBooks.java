@@ -49,11 +49,12 @@ public class UIAddressBooks extends UIComponent  {
 
   public List<ContactGroup> getGroups() throws Exception {
     List<ContactGroup> groupList = ContactUtils.getContactService().getGroups(ContactUtils.getCurrentUser()) ;
-    if(selectedGroup == null || selectedGroup.length() == 0)
+    if(ContactUtils.isEmpty(selectedGroup) && groupList.size() > 0)
       selectedGroup = groupList.get(0).getId() ;
     return groupList;    
   }
 
+  public void setSelectedGroup(String groupId) { selectedGroup = groupId ; }
   public String getSelectedGroup() { return selectedGroup ; }
 
   public List<String> getSharedContactGroups() throws Exception {
@@ -155,12 +156,13 @@ public class UIAddressBooks extends UIComponent  {
     public void execute(Event<UIAddressBooks> event) throws Exception {
       UIAddressBooks uiAddressBook = event.getSource() ;  
       UIWorkingContainer uiWorkingContainer = uiAddressBook.getAncestorOfType(UIWorkingContainer.class) ;
+      uiWorkingContainer.findFirstComponentOfType(UITags.class).setSelectedTag(null) ;
       String groupId = event.getRequestContext().getRequestParameter(OBJECTID) ;    
       uiAddressBook.selectedGroup = groupId;
       ContactService contactService = ContactUtils.getContactService();
       UIContacts uiContacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class) ;
       uiContacts.setContacts(contactService.getContactPageListByGroup(ContactUtils.getCurrentUser(), groupId)) ; 
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer.getChild(UIContactContainer.class)) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer) ;
     }
   }
   
@@ -169,6 +171,7 @@ public class UIAddressBooks extends UIComponent  {
       UIAddressBooks uiAddressBook = event.getSource() ;  
       System.out.println("=========>SelectSharedGroupActionListener") ;
       UIWorkingContainer uiWorkingContainer = uiAddressBook.getAncestorOfType(UIWorkingContainer.class) ;
+      uiWorkingContainer.findFirstComponentOfType(UITags.class).setSelectedTag(null) ;
       String groupId = event.getRequestContext().getRequestParameter(OBJECTID) ;    
       ContactService contactService = ContactUtils.getContactService();
       UIContacts uiContacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class) ; 

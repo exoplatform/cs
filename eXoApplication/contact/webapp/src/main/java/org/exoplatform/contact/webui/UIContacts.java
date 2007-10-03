@@ -145,7 +145,7 @@ public class UIContacts extends UIForm {
       UIContacts uiContacts = event.getSource() ;
       String contactId = event.getRequestContext().getRequestParameter(OBJECTID);
       List<String> contactIds = new ArrayList<String>();
-      if (!ContactUtils.IsEmpty(contactId)) contactIds.add(contactId) ;
+      if (!ContactUtils.isEmpty(contactId)) contactIds.add(contactId) ;
       else {
         contactIds = uiContacts.getCheckedContacts() ;
         if (contactIds.size() == 0) {
@@ -170,7 +170,7 @@ public class UIContacts extends UIForm {
       String contactId = event.getRequestContext().getRequestParameter(OBJECTID);   
       List<String> contactIds = new ArrayList<String>();
       UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
-      if (!ContactUtils.IsEmpty(contactId)) contactIds.add(contactId) ;
+      if (!ContactUtils.isEmpty(contactId)) contactIds.add(contactId) ;
       else {
         contactIds = uiContacts.getCheckedContacts() ;
         if (contactIds.size() == 0) { 
@@ -195,7 +195,7 @@ public class UIContacts extends UIForm {
       UIContacts uiContacts = event.getSource();
       String contactId = event.getRequestContext().getRequestParameter(OBJECTID);
       List<String> contactIds = new ArrayList<String>();
-      if (!ContactUtils.IsEmpty(contactId)) contactIds.add(contactId) ;
+      if (!ContactUtils.isEmpty(contactId)) contactIds.add(contactId) ;
       else {
         UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
         contactIds = uiContacts.getCheckedContacts() ;

@@ -225,12 +225,12 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
       UIContactForm uiContactForm = event.getSource() ;
       UIApplication uiApp = uiContactForm.getAncestorOfType(UIApplication.class) ;
       UIProfileInputSet profileTab = uiContactForm.getChildById(INPUT_PROFILETAB) ;
-      if (ContactUtils.IsEmpty(profileTab.getFieldFullName())) {  
+      if (ContactUtils.isEmpty(profileTab.getFieldFullName())) {  
         uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.fullname-required", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ; 
       }
-     /* if (ContactUtils.IsEmpty(profileTab.getFieldEmail())) {  
+     /* if (ContactUtils.isEmpty(profileTab.getFieldEmail())) {  
         uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.emailAddress-required", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ; 
@@ -319,7 +319,7 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
           if (uiContactForm.getUIFormCheckBoxInput(FIELD_SHAREDCONTACT_BOX[i]).isChecked())
             sharedGroups.append(FIELD_SHAREDCONTACT_BOX[i] + ",");
         }
-        if (ContactUtils.IsEmpty(sharedGroups.toString())) {
+        if (ContactUtils.isEmpty(sharedGroups.toString())) {
           uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.selectSharedGroups-required", null)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ; 
@@ -349,7 +349,7 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
         UIPopupContainer popupContainer = uiContactForm.getParent() ;
         UICategorySelect uiCategorySelect = popupContainer.getChild(UICategorySelect.class); 
         String category = uiCategorySelect.getSelectedCategory();
-        if (ContactUtils.IsEmpty(category)) {  
+        if (ContactUtils.isEmpty(category)) {  
           uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.selectGroup-required", null)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ; 

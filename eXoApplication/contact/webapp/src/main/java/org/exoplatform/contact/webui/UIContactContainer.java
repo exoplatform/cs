@@ -51,7 +51,7 @@ public class UIContactContainer extends UIContainer  {
       String contactId = event.getRequestContext().getRequestParameter(OBJECTID);
       String username = ContactUtils.getCurrentUser() ;
       ContactService contactService = ContactUtils.getContactService() ;
-      if (!ContactUtils.IsEmpty(contactId)) emails.add(contactService.getContact(username, contactId).getEmailAddress()) ;
+      if (!ContactUtils.isEmpty(contactId)) emails.add(contactService.getContact(username, contactId).getEmailAddress()) ;
       else {
         UIApplication uiApp = uiContactContainer.getAncestorOfType(UIApplication.class) ;
         List<String> contactIds = uiContactContainer.getChild(UIContacts.class).getCheckedContacts() ;

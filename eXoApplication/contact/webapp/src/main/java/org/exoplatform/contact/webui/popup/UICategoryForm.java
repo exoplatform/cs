@@ -71,7 +71,7 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
       UICategoryForm uiCategoryForm = event.getSource() ;
       String  groupName = uiCategoryForm.getUIStringInput(FIELD_CATEGORYNAME_INPUT).getValue(); 
       UIApplication uiApp = uiCategoryForm.getAncestorOfType(UIApplication.class) ;
-      if (ContactUtils.IsEmpty(groupName)) {
+      if (ContactUtils.isEmpty(groupName)) {
         uiApp.addMessage(new ApplicationMessage("UICategoryForm.msg.categoryName-required", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ; 
@@ -89,7 +89,7 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
       /*
       UIWorkingContainer uiWorkingContainer = uiContactPortlet.findFirstComponentOfType(UIWorkingContainer.class) ;
       uiWorkingContainer.updateContactGroup(group) ;
-      if (ContactUtils.IsEmpty(uiWorkingContainer.getSelectedGroup())) 
+      if (ContactUtils.isEmpty(uiWorkingContainer.getSelectedGroup())) 
         uiWorkingContainer.setSelectedGroup(group.getId()) ;*/
       UIPopupContainer popupContainer = uiCategoryForm.getAncestorOfType(UIPopupContainer.class) ;
       if (popupContainer != null) {

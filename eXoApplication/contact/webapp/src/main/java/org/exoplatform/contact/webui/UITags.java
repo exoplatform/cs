@@ -4,11 +4,16 @@
  **************************************************************************/
 package org.exoplatform.contact.webui;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.exoplatform.contact.ContactUtils;
+import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.Tag;
+import org.exoplatform.contact.webui.popup.UICategoryForm;
+import org.exoplatform.contact.webui.popup.UIPopupAction;
+import org.exoplatform.contact.webui.popup.UITagForm;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIComponent;
@@ -27,7 +32,8 @@ import org.exoplatform.webui.event.EventListener;
     events = {
         @EventConfig(listeners = UITags.SelectTagActionListener.class),
         @EventConfig(listeners = UITags.EditTagActionListener.class),
-        @EventConfig(listeners = UITags.DeleteTagActionListener.class)        
+        @EventConfig(listeners = UITags.DeleteTagActionListener.class,
+            confirm = "UITags.msg.confirm-delete")        
     }
 )
 public class UITags extends UIComponent  {
@@ -47,14 +53,14 @@ public class UITags extends UIComponent  {
   static  public class SelectTagActionListener extends EventListener<UITags> {
     public void execute(Event<UITags> event) throws Exception {
       UITags uiForm = event.getSource() ;
-      System.out.println(" ===========>SelectTagActionListener ");
       String tagName = event.getRequestContext().getRequestParameter(OBJECTID) ;
       uiForm.setSelectedTag(tagName) ;
       UIWorkingContainer uiWorkingContainer = uiForm.getAncestorOfType(UIWorkingContainer.class) ;
+      uiWorkingContainer.findFirstComponentOfType(UIAddressBooks.class).setSelectedGroup(null) ;
       String username = ContactUtils.getCurrentUser() ;
       UIContacts uiContacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class) ;
       uiContacts.setContacts(ContactUtils.getContactService().getContactPageListByTag(username, tagName)) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer.getChild(UIContactContainer.class)) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer) ;
     }
   }
   
@@ -62,8 +68,27 @@ public class UITags extends UIComponent  {
     public void execute(Event<UITags> event) throws Exception {
       UITags uiForm = event.getSource() ;
       String tagName = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      
-      
+      UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
+      UIPopupAction popupAction = uiContactPortlet.getChild(UIPopupAction.class) ;
+      UITagForm.isNew = false ;
+      UITagForm uiTagForm = popupAction.createUIComponent(UITagForm.class, null, "UITagForm") ;
+      uiTagForm.setValues(tagName) ;
+      popupAction.activate(uiTagForm, 500, 0, true) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+    }
+  }
+  
+  static  public class EditGroupActionListener extends EventListener<UIAddressBooks> {
+    public void execute(Event<UIAddressBooks> event) throws Exception {
+      UIAddressBooks uiAddressBook = event.getSource() ;  
+      UIContactPortlet uiContactPortlet = uiAddressBook.getAncestorOfType(UIContactPortlet.class) ;
+      UIPopupAction popupAction = uiContactPortlet.getChild(UIPopupAction.class) ;
+      UICategoryForm uiCategoryForm = popupAction.createUIComponent(UICategoryForm.class, null, "UICategoryForm") ;
+      String groupId = event.getRequestContext().getRequestParameter(OBJECTID);
+      uiCategoryForm.setValues(groupId) ;
+      UICategoryForm.isNew_ = false ;
+      popupAction.activate(uiCategoryForm, 500, 0, true) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   }
   
@@ -71,8 +96,17 @@ public class UITags extends UIComponent  {
     public void execute(Event<UITags> event) throws Exception {
       UITags uiForm = event.getSource() ;
       String tagName = event.getRequestContext().getRequestParameter(OBJECTID) ;
-    
-      
+      ContactService contactService = ContactUtils.getContactService() ;
+      String username = ContactUtils.getCurrentUser() ;
+      contactService.removeTag(username, tagName) ;
+      UIWorkingContainer uiWorkingContainer = uiForm.getAncestorOfType(UIWorkingContainer.class) ;
+      if (tagName.equals(uiForm.getSelectedTag())) {
+        uiForm.setSelectedTag(null) ;
+        //uiWorkingContainer.findFirstComponentOfType(UIContacts.class).setContacts(new ArrayList<Contact>()) ;
+        //uiWorkingContainer.findFirstComponentOfType(UIContactPreview.class).updateContact() ;
+      } else {
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer) ;
+      }  
     }
   }
   

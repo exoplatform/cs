@@ -67,7 +67,7 @@ public class UIImageForm extends UIForm implements UIPopupComponent{
         return ;
       }
       String fileName = uploadResource.getFileName() ;
-      if(ContactUtils.IsEmpty(fileName)) {
+      if(ContactUtils.isEmpty(fileName)) {
         uiApp.addMessage(new ApplicationMessage("UIAttachFileForm.msg.fileName-error", null, 
             ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
