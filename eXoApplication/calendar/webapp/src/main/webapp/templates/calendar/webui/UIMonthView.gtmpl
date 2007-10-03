@@ -166,7 +166,7 @@
               				link = uicomponent.event(act,"id") ;
               			%>
               			  <a href="$link">
-	              				<div style="border:solid 1px red;">$act</div>
+	              				<div class="ItemIcon $act">$act</div>
               			  </a>
               			<%}%>
 									</div>
@@ -196,7 +196,7 @@
               				link = uicomponent.event(act,"id&$uicomponent.CALENDARID=calId") ;
               			%>
               				<a href="$link">
-	              				<div>$act</div>
+	              				<div class="ItemIcon $act">$act</div>
               			  </a>
               			<%}%>
 									</div>

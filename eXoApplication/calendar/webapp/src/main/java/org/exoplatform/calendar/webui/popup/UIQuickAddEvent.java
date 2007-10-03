@@ -82,9 +82,13 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
   }
 
   public void init(String startTime, String endTime) throws Exception {
-    DateFormat df = SimpleDateFormat.getInstance() ;
+    DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm") ;
+    try {
     setEventFromDate(df.parse(startTime)) ;
     setEventToDate(df.parse(endTime)) ;
+    } catch (Exception e) {
+      e.printStackTrace() ;
+    }
   }
   
   private List<SelectItemOption<String>> getCalendar() throws Exception {

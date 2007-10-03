@@ -146,15 +146,15 @@
   <div class="MiddleLeftRightClickPopupMenu">
     <div class="MiddleRightRightClickPopupMenu">
       <div class="UIRightPopupMenuContainer">
-        <div>
 
-          <a href="<%=uicomponent.event("QuickAdd","Event&startTime=beginTime")%>">
-            Add new event</a>
-        </div>
-        <div>
-          <a href="<%=uicomponent.event("QuickAdd","Task&startTime=beginTime")%>">
-            Add new task</a>
-        </div>
+          <a href="<%=uicomponent.event("QuickAdd","event&startTime=beginTime")%>">
+           <div class="ItemIcon QuickAddEvent"> Add new event </div>
+           </a>
+        
+          <a href="<%=uicomponent.event("QuickAdd","task&startTime=beginTime")%>">
+            <div class="ItemIcon QuickAddTask">Add new task</div>
+          </a>
+        
       </div>
     </div>
   </div>
@@ -184,7 +184,7 @@
   				link = uicomponent.event(act,"id&$uicomponent.CALENDARID=calId") ;
         %>
         <a href="$link">
-          <div>
+          <div class="ItemIcon $act">
             $act</div>
         </a>
         <%}%>

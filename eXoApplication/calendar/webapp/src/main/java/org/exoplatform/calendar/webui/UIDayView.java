@@ -144,12 +144,13 @@ public class UIDayView extends UICalendarView {
           System.out.println("\n\n begin " + beginTime);
           System.out.println("\n\n end " + endTime);
           uiQuickAddEvent.init(beginTime, endTime) ;
+          uiPopupAction.activate(uiQuickAddEvent,600,0) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
         } catch (Exception e) {
           e.printStackTrace() ;
         }
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
       } else {
-
+        System.out.println("Add new task here");    
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
     }
