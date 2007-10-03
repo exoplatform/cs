@@ -31,7 +31,7 @@
 					<td>
 						<a href="$linkDayNext">
 							<div class="NextIcon" title="Next month"><span></span></div>
-						</a
+						</a>
 					</td>
 				</tr>
 			</body>

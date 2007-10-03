@@ -89,3 +89,19 @@
 .CheckItem {
 	background: url('icons/CheckItem.gif') no-repeat left;
 }
+
+.AddFolderIcon {
+	background: url('icons/AddNewFolderIcon.gif') no-repeat;
+}
+
+.RemoveFolderIcon {
+	background: url('icons/RemoveFolderIcon.gif') no-repeat;
+}
+
+.EmptyIcon {
+	background: url('icons/EmptyIcon.gif') no-repeat;
+}
+
+.RenameFolderIcon {
+	background: url('icons/RenameFolderIcon.gif') no-repeat left;
+}

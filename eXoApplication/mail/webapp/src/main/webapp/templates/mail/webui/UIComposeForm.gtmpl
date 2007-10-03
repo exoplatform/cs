@@ -48,7 +48,8 @@
 											<div class="Label DownArrow1Icon">Message Priority</div>
 										</div>
 										<% /*Begin Popup Menu*/ %>
-					      			<div class="UIPopupCategory" style="display: none;">
+										<div style="position: relative;">
+					      			<div class="UIPopupCategory" style="display: none; left: 10px;">
 					      				<div class="UIRightClickPopupMenu" style="display: block;">
 												  <div class="TopLeftRightClickPopupMenu">
 						          			<div class="TopRightRightClickPopupMenu">
@@ -60,11 +61,6 @@
 						              		<div class="UIRightPopupMenuContainer">
 																<a class="MenuItem" href="#">   
 							                    <div class="ItemIcon CheckItem ">
-							                      No priority
-							                    </div>
-						                    </a>
-						                    <a class="MenuItem" href="#">   
-							                    <div class="ItemIcon">
 							                      No priority
 							                    </div>
 						                    </a>
@@ -94,6 +90,7 @@
 							      			
 										    </div>
 					      			</div>
+					      		</div>
 					      		<% /*End Popup Menu*/ %>
 									</div>
 									
@@ -104,8 +101,9 @@
 											<div class="Label DownArrow1Icon">Editor Options</div>
 										</div>
 										<% /*Begin Popup Menu*/ %>
+										<div style="position: relative;">
 					      			<div class="UIPopupCategory" style="display: none;">
-					      				<div class="UIRightClickPopupMenu" style="display: block;">
+					      				<div class="UIRightClickPopupMenu" style="display: block; left: 80px;">
 												  <div class="TopLeftRightClickPopupMenu">
 						          			<div class="TopRightRightClickPopupMenu">
 						            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
@@ -135,6 +133,7 @@
 							      			
 										    </div>
 					      			</div>
+					      		</div>
 					      		<% /*End Popup Menu*/ %>
 									</div>
 									

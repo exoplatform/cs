@@ -1,6 +1,7 @@
 .UIMessageCompose .MailListActionsbar .ControlButton {
 	float: left;
 	line-height: 26px;
+	cursor: pointer;
 }
 
 .UIMessageCompose .MailListActionsbar a {
@@ -11,7 +12,19 @@
 
 .UIMessageCompose .MailListActionsbar a:hover {
 	background: url('background/ControlButtonBG1x26.gif') repeat-x ;
-	color: #126ca5; border: 1px solid #cbcbcb;
+	color: #058ee6; border: 1px solid #cbcbcb;
+	height: 24px;
+}
+
+.UIMessageCompose .MailListActionsbar .UIRightClickPopupMenu a {
+	color: #000000;
+	margin: 3px 0px 0px 0px;
+	line-height: 26px;
+}
+
+.UIMessageCompose .MailListActionsbar .UIRightClickPopupMenu a:hover {
+	background: none;
+	color: #058ee6; border: none;
 	height: 24px;
 }
 

@@ -51,7 +51,7 @@
 				%>
 			<div class="$cssStyle"><%=day.substring(0,1)%></div>
 			  <%}%>
-  					<div style="clear: both;"><span></span></div>
+  					<div style="clear: left;"><span></span></div>
   				</div>
   				<div class="DayList">
   					<table class="UIGrid" id="" cellspacing="0" borderspacing="0">

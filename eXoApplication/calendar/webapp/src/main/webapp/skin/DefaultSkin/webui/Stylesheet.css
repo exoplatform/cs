@@ -144,11 +144,11 @@
   margin: 3px 5px 2px 5px;
 }
 
-.UICalendarPortlet .CalendarWorkingWorkspace .NextIcon {
+.UICalendarPortlet .CalendarWorkingWorkspace .UIActionBar .NextIcon {
   margin-top: 6px;
 }
 
-.UICalendarPortlet .CalendarWorkingWorkspace .BackIcon {
+.UICalendarPortlet .CalendarWorkingWorkspace .UIActionBar .BackIcon {
   margin-top: 6px;
 }
 
@@ -318,6 +318,10 @@
 	line-height: 20px;
 	width: 14%;
 	text-align: center;
+}
+
+.UIMiniCalendar .WeekList {
+	height: 20px;
 }
 
 .UIMiniCalendar .WeekList .DayTitle {
@@ -987,11 +991,11 @@
 /*====================View Event Month =====================*/
 
 .UICalendarPortlet .TitleBar .BackIcon {
-	margin:3px 4px 0px 0px;
+	margin:4px 4px 0px 0px;
 }
 
 .UICalendarPortlet .TitleBar .NextIcon {
-	margin:3px 0px 0px 4px;
+	margin:4px 0px 0px 4px;
 }
 
 .UICalendarPortlet .TitleBar table {
