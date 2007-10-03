@@ -521,7 +521,7 @@ public class JCRDataStorage implements DataStorage {
     return null;
   }
 
-  public List<Contact> getSharedContactsByGroup(String groupId) throws Exception {
+  public ContactPageList getSharedContactsByGroup(String groupId) throws Exception {
     Node contactHome = getPublicContactHome();
     QueryManager qm = contactHome.getSession().getWorkspace().getQueryManager();
     StringBuffer queryString = new StringBuffer("/jcr:root" + contactHome.getPath() 
@@ -530,25 +530,40 @@ public class JCRDataStorage implements DataStorage {
                                                 append("']");
     Query query = qm.createQuery(queryString.toString(), Query.XPATH);
     QueryResult result = query.execute();
-    NodeIterator it = result.getNodes();
-    List<Contact> contacts = new ArrayList<Contact>();
-    while (it.hasNext()) {
-      contacts.add(getContact(it.nextNode()));
-    }
-    return contacts ;
+    return new ContactPageList(result.getNodes(), 10, queryString.toString(), true) ;
   }
   
   public List<GroupContactData> getSharedContacts(String[] groupIds) throws Exception {
     List<GroupContactData> contactByGroup = new ArrayList<GroupContactData>() ;
     List<Contact> contacts;
     for(String groupId : groupIds) { 
-      contacts = getSharedContactsByGroup(groupId);
+      contacts = getSharedContactsByGroup(groupId).getAll();
       if(contacts.size() > 0)
         contactByGroup.add(new GroupContactData(groupId, contacts));     
     }
     return contactByGroup;
   }
-
+  
+  public List<String> getSharedGroupContacts(String[] groupIds) throws Exception {
+    List<String> gorups = new ArrayList<String>();
+    for(String groupId : groupIds) { 
+      if(hasContacts(groupId))  gorups.add(groupId) ; 
+    }
+    return gorups;
+  }
+  
+  private boolean hasContacts(String groupId) throws Exception {
+    Node contactHome = getPublicContactHome();
+    QueryManager qm = contactHome.getSession().getWorkspace().getQueryManager();
+    StringBuffer queryString = new StringBuffer("/jcr:root" + contactHome.getPath() 
+                                                + "//element(*,exo:contact)[@exo:categories='").
+                                                append(groupId).
+                                                append("']");
+    Query query = qm.createQuery(queryString.toString(), Query.XPATH);
+    QueryResult result = query.execute();
+    if(result.getNodes().getSize() > 0) return true;
+    return false ;
+  } 
   public Contact removeSharedContact(String contactId) throws Exception {
     Node contactHomeNode = getPublicContactHome();
     if (contactHomeNode.hasNode(contactId)) {

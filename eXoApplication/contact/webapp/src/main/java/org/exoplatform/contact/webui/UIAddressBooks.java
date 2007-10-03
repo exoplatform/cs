@@ -9,7 +9,6 @@ import java.util.List;
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
-import org.exoplatform.contact.service.GroupContactData;
 import org.exoplatform.contact.webui.popup.UICategoryForm;
 import org.exoplatform.contact.webui.popup.UICategorySelect;
 import org.exoplatform.contact.webui.popup.UIContactForm;
@@ -57,8 +56,8 @@ public class UIAddressBooks extends UIComponent  {
 
   public String getSelectedGroup() { return selectedGroup ; }
 
-  public List<GroupContactData> getSharedContactGroups() throws Exception {
-    return ContactUtils.getContactService().getSharedContacts(ContactUtils.getUserGroups());
+  public List<String> getSharedContactGroups() throws Exception {
+    return ContactUtils.getContactService().getSharedGroupContacts(ContactUtils.getUserGroups());    
   }
 
   static  public class AddAddressActionListener extends EventListener<UIAddressBooks> {
@@ -161,8 +160,6 @@ public class UIAddressBooks extends UIComponent  {
       ContactService contactService = ContactUtils.getContactService();
       UIContacts uiContacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class) ;
       uiContacts.setContacts(contactService.getContactPageListByGroup(ContactUtils.getCurrentUser(), groupId)) ; 
-      //UIContactPreview uiContactPreview = uiWorkingContainer.findFirstComponentOfType(UIContactPreview.class);
-      //uiContactPreview.updateContact(null) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer.getChild(UIContactContainer.class)) ;
     }
   }
@@ -171,15 +168,12 @@ public class UIAddressBooks extends UIComponent  {
     public void execute(Event<UIAddressBooks> event) throws Exception {
       UIAddressBooks uiAddressBook = event.getSource() ;  
       System.out.println("=========>SelectSharedGroupActionListener") ;
-      /*UIWorkingContainer uiWorkingContainer = uiAddressBook.getAncestorOfType(UIWorkingContainer.class) ;
+      UIWorkingContainer uiWorkingContainer = uiAddressBook.getAncestorOfType(UIWorkingContainer.class) ;
       String groupId = event.getRequestContext().getRequestParameter(OBJECTID) ;    
       ContactService contactService = ContactUtils.getContactService();
       UIContacts uiContacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class) ; 
-      if (contactService.getSharedContacts(new String[] {groupId}) != null && contactService.getSharedContacts(new String[] {groupId}).size() > 0)
-        uiContacts.setContacts(contactService.getSharedContacts(new String[] {groupId}).get(0).getContacts()) ;      
-      UIContactPreview uiContactPreview = uiWorkingContainer.findFirstComponentOfType(UIContactPreview.class);
-      uiContactPreview.updateContact(null) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer) ;*/
+      uiContacts.setContacts(contactService.getSharedContactsByGroup(groupId)) ;      
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer.getChild(UIContactContainer.class)) ;
     }
   }
   

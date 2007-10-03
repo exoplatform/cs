@@ -11,7 +11,6 @@ import java.util.Map;
 
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
-import org.exoplatform.contact.service.ContactPageList;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.JCRPageList;
 import org.exoplatform.contact.webui.popup.UIContactPreviewForm;
@@ -95,14 +94,12 @@ public class UIContacts extends UIForm {
         addUIFormInput(checkbox);
         contactMap.put(contact.getId(), contact) ;
       }
-      getAncestorOfType(UIContactContainer.class).getChild(UIContactPreview.class).setContact(contactMap.values().toArray(new Contact[]{})[0]) ;
+      Contact[] array = contactMap.values().toArray(new Contact[]{}) ;
+      if (array.length > 0)
+        getAncestorOfType(UIContactContainer.class).getChild(UIContactPreview.class).setContact(array[0]) ;
+      else 
+        getAncestorOfType(UIContactContainer.class).getChild(UIContactPreview.class).setContact(null) ;
     }
-  }
-  
-  public void removeContacts(List<String> contactIds) throws Exception {
-    for (String contactId : contactIds)  contactMap.remove(contactId) ;
-    UIContactPreview uiContactPreview = getAncestorOfType(UIContactContainer.class).findFirstComponentOfType(UIContactPreview.class) ;
-    uiContactPreview.updateContact(null) ;
   }
   
   public List<String> getCheckedContacts() throws Exception {
@@ -115,6 +112,7 @@ public class UIContacts extends UIForm {
     }
     return checkedContacts ;
   }
+  
   public DownloadService getDownloadService() { 
     return getApplicationComponent(DownloadService.class) ; 
   }
@@ -207,17 +205,13 @@ public class UIContacts extends UIForm {
           return ;
         }
       }
-      ContactService contactService = ContactUtils.getContactService();
-      String username =  ContactUtils.getCurrentUser();
-      List<Contact> unremovedContacts = contactService.removeContacts(username, contactIds) ;
-      if (unremovedContacts != null && unremovedContacts.size() > 0) 
-        System.out.println("\n\n unremoved contacts size :" + unremovedContacts.size() + "\n\n");
-      for (Contact contact : unremovedContacts) contactIds.remove(contact.getId()) ;
-      uiContacts.removeContacts(contactIds) ;
       UIWorkingContainer uiWorkingContainer = uiContacts.getAncestorOfType(UIWorkingContainer.class) ;
       UIContactPreview uiContactPreview = uiWorkingContainer.findFirstComponentOfType(UIContactPreview.class) ;
-      uiContactPreview.updateContact(null) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer) ;
+      ContactUtils.getContactService().removeContacts(ContactUtils.getCurrentUser(), contactIds) ;
+      if(contactIds.contains(uiContactPreview.getContact().getId())) 
+        uiContactPreview.updateContact(null) ;
+      uiContacts.updateList() ; //refresh current page
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer.getChild(UIContactContainer.class)) ;
     }
   }
 

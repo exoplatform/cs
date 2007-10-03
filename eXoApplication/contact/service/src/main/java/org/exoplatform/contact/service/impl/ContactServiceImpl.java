@@ -87,7 +87,10 @@ public class ContactServiceImpl implements ContactService {
   public List<GroupContactData> getSharedContacts(String[] groupIds) throws Exception {
     return storage_.getSharedContacts(groupIds);
   }
-
+  
+  public List<String> getSharedGroupContacts(String[] groupIds) throws Exception{
+    return storage_.getSharedGroupContacts(groupIds);
+  }
   public Contact removeSharedContact(String contactId) throws Exception {
     return storage_.removeSharedContact(contactId);
   }
@@ -115,7 +118,7 @@ public class ContactServiceImpl implements ContactService {
     storage_.removeContactTag(username, contactIds, tags) ;
   }
   
-  public List<Contact> getSharedContactsByGroup(String groupId) throws Exception {
+  public ContactPageList getSharedContactsByGroup(String groupId) throws Exception {
     return storage_.getSharedContactsByGroup(groupId) ;
   }
   
