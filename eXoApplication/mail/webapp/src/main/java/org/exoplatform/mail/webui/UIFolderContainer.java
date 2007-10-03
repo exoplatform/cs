@@ -37,12 +37,12 @@ import org.exoplatform.webui.event.EventListener;
     }
 )
 public class UIFolderContainer extends UIContainer {
-  private String currentFolder_ = Utils.FD_INBOX ;
+  private String currentFolder_ = null ;
   
   public UIFolderContainer() throws Exception {}
 
   public String getSelectedFolder(){ return currentFolder_ ; }
-  protected void setSelectedFolder(String folderName) { currentFolder_ = folderName ;}
+  protected void setSelectedFolder(String folderId) { currentFolder_ = folderId ;}
   
   public List<Folder> getDefaultFolders() throws Exception{
     return getFolders(false);
@@ -70,14 +70,6 @@ public class UIFolderContainer extends UIContainer {
     return new String[] {"AddFolder"} ;
   }
   
-  private long getNumberOfUnreadMessage(String selectedFolderName) throws Exception {
-    MailService mailSrv = getApplicationComponent(MailService.class);
-    UIMailPortlet uiPortlet = getAncestorOfType(UIMailPortlet.class);
-    String username = uiPortlet.getCurrentUser();
-    String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-    return mailSrv.getFolder(username, accountId, selectedFolderName).getNumberOfUnreadMessage() ;    
-  } 
-  
   static public class AddFolderActionListener extends EventListener<UIFolderContainer> {
     public void execute(Event<UIFolderContainer> event) throws Exception {
       System.out.println("\n\n AddFolderActionListener");
@@ -90,17 +82,17 @@ public class UIFolderContainer extends UIContainer {
   static public class ChangeFolderActionListener extends EventListener<UIFolderContainer> {
     public void execute(Event<UIFolderContainer> event) throws Exception {
       System.out.println("\n\n ChangeFolderActionListener");
-      String folderName = event.getRequestContext().getRequestParameter(OBJECTID) ;  
+      String folderId = event.getRequestContext().getRequestParameter(OBJECTID) ;  
       UIFolderContainer uiFolder = event.getSource() ;
       UIMailPortlet uiPortlet = uiFolder.getAncestorOfType(UIMailPortlet.class);
-      uiFolder.setSelectedFolder(folderName) ;
+      uiFolder.setSelectedFolder(folderId) ;
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
       UIMessageArea uiMessageArea = uiMessageList.getParent();
-      uiMessageList.setSelectedFolderId(folderName) ;
+      uiMessageList.setSelectedFolderId(folderId) ;
       MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-      uiMessageList.setMessagePageList(mailSrv.getMessageByFolder(username, accountId, folderName));
+      uiMessageList.setMessagePageList(mailSrv.getMessageByFolder(username, accountId, folderId));
       uiMessageList.setSelectedTagName(null) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiFolder) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageArea) ;
@@ -109,23 +101,22 @@ public class UIFolderContainer extends UIContainer {
   
   static public class RenameFolderActionListener extends EventListener<UIFolderContainer> {
     public void execute(Event<UIFolderContainer> event) throws Exception {
-      String folderName = event.getRequestContext().getRequestParameter(OBJECTID) ; 
-      
-      System.out.println(">>>>>>>>>  RenameFolderActionListener : " + folderName );
+      String folderId = event.getRequestContext().getRequestParameter(OBJECTID) ;      
+      System.out.println(">>>>>>>>>  RenameFolderActionListener : " + folderId );
       
       UIFolderContainer uiFolder = event.getSource() ;
       UIPopupAction uiPopup = uiFolder.getAncestorOfType(UIMailPortlet.class).getChild(UIPopupAction.class) ;
       UIRenameFolderForm uiRenameFolderForm = uiPopup.activate(UIRenameFolderForm.class, 450) ;
-      uiRenameFolderForm.setFolderName(folderName);
+      uiRenameFolderForm.setFolderId(folderId);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiFolder.getAncestorOfType(UIMailPortlet.class)) ;
     }
   }
 
   static public class RemoveFolderActionListener extends EventListener<UIFolderContainer> {
     public void execute(Event<UIFolderContainer> event) throws Exception {
-      String folderName = event.getRequestContext().getRequestParameter(OBJECTID) ;    
+      String folderId = event.getRequestContext().getRequestParameter(OBJECTID) ;    
       
-      System.out.println(">>>>>>>>>  RemoveFolderActionListener : " + folderName );
+      System.out.println(">>>>>>>>>  RemoveFolderActionListener : " + folderId );
   
       UIFolderContainer uiFolderContainer = event.getSource() ;
       UIMailPortlet uiMailPortlet = uiFolderContainer.getAncestorOfType(UIMailPortlet.class);
@@ -135,7 +126,7 @@ public class UIFolderContainer extends UIContainer {
       String accountId = uiNavigationContainer.getChild(UISelectAccount.class).getSelectedValue();
       
       Account account = mailService.getAccountById(username, accountId);
-      Folder folder = mailService.getFolder(username, accountId, folderName);  
+      Folder folder = mailService.getFolder(username, accountId, folderId);  
       mailService.removeUserFolder(username, account, folder);
       
       System.out.println(">>>>>>>>>  RemoveFolderActionListener : DONE");
@@ -145,9 +136,9 @@ public class UIFolderContainer extends UIContainer {
 
   static public class EmptyFolderActionListener extends EventListener<UIFolderContainer> {
     public void execute(Event<UIFolderContainer> event) throws Exception {
-      String folderName = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      String folderId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       
-      System.out.println(">>>>>>>>>  EmptyFolderActionListener : " + folderName );
+      System.out.println(">>>>>>>>>  EmptyFolderActionListener : " + folderId );
     }
   }
 }

@@ -86,8 +86,8 @@ public class MailServiceImpl implements MailService{
     storage_.removeAccount(username, account);
   }
 
-  public Folder getFolder(String username, String accountId, String folderName) throws Exception {
-    return storage_.getFolder(username, accountId, folderName);
+  public Folder getFolder(String username, String accountId, String folderId) throws Exception {
+    return storage_.getFolder(username, accountId, folderId);
   }
 
   public void saveUserFolder(String username, String accountId, Folder folder) throws Exception {

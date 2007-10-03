@@ -11,6 +11,9 @@
   		<supertype>nt:base</supertype>
   	</supertypes>
   	<propertyDefinitions>
+  	  <propertyDefinition name="exo:id" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  			<valueConstraints/>
+  		</propertyDefinition>
   		<propertyDefinition name="exo:name" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
   			<valueConstraints/>
   		</propertyDefinition>
@@ -138,6 +141,14 @@
       </propertyDefinition>      
       <propertyDefinition name="exo:tags" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY"
         protected="false" multiple="true">
+        <valueConstraints/>        
+      </propertyDefinition>
+      <propertyDefinition name="exo:star" requiredType="Boolean" autoCreated="false" mandatory="false" onParentVersion="COPY"
+        protected="false" multiple="false">
+        <valueConstraints/>        
+      </propertyDefinition>
+      <propertyDefinition name="exo:priority" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY"
+        protected="false" multiple="false">
         <valueConstraints/>        
       </propertyDefinition>
     </propertyDefinitions>    

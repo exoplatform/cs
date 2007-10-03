@@ -54,7 +54,7 @@ public interface DataStorage {
 
   public void saveMessage(String username, String accountId, Message message, boolean isNew) throws Exception ;
 
-  public Folder getFolder(String username, String accountId, String folderName) throws Exception ;
+  public Folder getFolder(String username, String accountId, String folderId) throws Exception ;
   public List<Folder> getFolders(String username, String accountId) throws Exception ;
   public void saveUserFolder(String username, String accountId, Folder folder) throws Exception ;
 

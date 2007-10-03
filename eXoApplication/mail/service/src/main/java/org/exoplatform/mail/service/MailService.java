@@ -85,11 +85,11 @@ public interface MailService {
    * This method should: 
    * @param username
    * @param accountId
-   * @param folderName
+   * @param folderId
    * @return Folder
    * @throws Exception
    */
-  public Folder getFolder(String username, String accountId, String folderName) throws Exception ;  
+  public Folder getFolder(String username, String accountId, String folderId) throws Exception ;  
   /**
    * This method should:
    * 1. Get account

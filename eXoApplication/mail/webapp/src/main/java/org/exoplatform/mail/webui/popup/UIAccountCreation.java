@@ -134,12 +134,14 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
     mailSvr.createAccount(currentUser, account) ;
     UIMailPortlet uiPortlet = getAncestorOfType(UIMailPortlet.class) ;
     String username = uiPortlet.getCurrentUser() ;
-    for(String defaultFolerName : defaultFolders_) {
-      Folder folder = mailSvr.getFolder(username, account.getId(), defaultFolerName) ;
+    for(String folderName : defaultFolders_) {
+      String folderId = account.getId() + "DefaultFolder" + folderName;
+      Folder folder = mailSvr.getFolder(username, account.getId(), folderId) ;
       if(folder == null) {
         folder = new Folder() ;
-        folder.setName(defaultFolerName) ;
-        folder.setLabel(defaultFolerName) ;
+        folder.setId(folderId);
+        folder.setName(folderName) ;
+        folder.setLabel(folderName) ;
         folder.setPersonalFolder(false) ;
         mailSvr.saveUserFolder(username, account.getId(), folder) ;
       }

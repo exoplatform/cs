@@ -380,14 +380,15 @@ public class JCRDataStorage implements DataStorage{
     return str ;
   }
 
-  public Folder getFolder(String username, String accountId, String folderName) throws Exception {
+  public Folder getFolder(String username, String accountId, String folderId) throws Exception {
     Folder folder = null;
     Node folderHome = getFolderHome(username, accountId);
     Node node = null;
     // if this folder exists, creates the object and returns it
-    if (folderHome.hasNode(folderName)) {
-      node = folderHome.getNode(folderName);
+    if (folderHome.hasNode(folderId)) {
+      node = folderHome.getNode(folderId);
       folder = new Folder();
+      folder.setId(node.getProperty(Utils.EXO_ID).getString());
       folder.setLabel(node.getProperty(Utils.EXO_LABEL).getString());
       folder.setName(node.getProperty(Utils.EXO_NAME).getString());
       folder.setPersonalFolder(node.getProperty(Utils.EXO_PERSONAL).getBoolean()) ;
@@ -411,15 +412,16 @@ public class JCRDataStorage implements DataStorage{
     // gets folder home node of the specified account
     Node home = getFolderHome(username, accountId);
     Node myFolder = null;
-    if (home.hasNode(folder.getName())) { // if the folder exists, gets it
-      myFolder = home.getNode(folder.getName());
+    if (home.hasNode(folder.getId())) { // if the folder exists, gets it
+      myFolder = home.getNode(folder.getId());
     } else { // if it doesn't exist, creates it
-      myFolder = home.addNode(folder.getName(), Utils.EXO_FOLDER);
+      myFolder = home.addNode(folder.getId(), Utils.EXO_FOLDER);
     }
     // sets some properties
+    myFolder.setProperty(Utils.EXO_ID, folder.getId());
+    myFolder.setProperty(Utils.EXO_NAME, folder.getName());
     myFolder.setProperty(Utils.EXO_LABEL, folder.getLabel());
     myFolder.setProperty(Utils.EXO_UNREADMESSAGES, folder.getNumberOfUnreadMessage());
-    myFolder.setProperty(Utils.EXO_NAME, folder.getName());
     myFolder.setProperty(Utils.EXO_PERSONAL, folder.isPersonalFolder()) ;
     home.getSession().save();
   }

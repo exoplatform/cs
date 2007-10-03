@@ -57,11 +57,13 @@ public class UIFolderForm extends UIForm implements UIPopupComponent {
         return ;
       }
       try {
-        Folder folder = mailSvr.getFolder(username, accountId, folderName) ;
+        String folderId = accountId + "UserFolder" + folderName;
+        Folder folder = mailSvr.getFolder(username, accountId, folderId) ;
         if(folder == null) {
           folder = new Folder() ;
-          folder.setLabel(folderName) ;
+          folder.setId(folderId);
           folder.setName(folderName) ;
+          folder.setLabel(folderName) ;
           mailSvr.saveUserFolder(username, accountId, folder) ;
         } else {
           uiApp.addMessage(new ApplicationMessage("UIFolderForm.msg.folder-exist", new Object[]{folderName})) ;

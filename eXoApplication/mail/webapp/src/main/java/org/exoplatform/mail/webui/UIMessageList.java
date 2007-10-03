@@ -64,7 +64,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
 
 public class UIMessageList extends UIForm {
   private String selectedMessageId_ = null ;
-  private String selectedFolderId_ = Utils.FD_INBOX ;
+  private String selectedFolderId_ = null ;
   private String selectedTagName_ = null ;
   private MessagePageList pageList_ = null ;
 
@@ -81,8 +81,12 @@ public class UIMessageList extends UIForm {
   
   public MessagePageList getMessagePageList() { return pageList_; } 
   
-  public List<Message> getMessageList() throws Exception {    
-    return pageList_.currentPage(MailUtils.getCurrentUser());
+  public List<Message> getMessageList() throws Exception { 
+    List<Message> messageList = new ArrayList<Message>();
+    if (pageList_ != null) { 
+      messageList = pageList_.currentPage(MailUtils.getCurrentUser()); 
+    }       
+    return messageList;
   }
   
   public void setMessagePageList(MessagePageList pageList) throws Exception {

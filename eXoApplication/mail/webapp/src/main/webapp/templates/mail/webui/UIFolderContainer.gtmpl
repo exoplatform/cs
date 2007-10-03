@@ -57,12 +57,13 @@
 </div>
 <div class="MailFolderList">
   <%for(Folder f : uicomponent.getDefaultFolders()) {
-    String name = f.getName() ;
+    String id = f.getId() ;
+    String name = f.getName();
     String icon = name + "Icon" ;
-    long unreadMess = uicomponent.getNumberOfUnreadMessage(f.getName());
-    String actionLink = uicomponent.event('ChangeFolder', name);
+    long unreadMess = 0;
+    String actionLink = uicomponent.event('ChangeFolder', id);
     String cssClass = "NormalLabel" ;
-    if(name.equals(uicomponent.getSelectedFolder())) {
+    if(id.equals(uicomponent.getSelectedFolder())) {
       cssClass = "SelectedLabel" ;
     }
   %>
@@ -118,13 +119,14 @@
 </div>
 <div class="MyFolderContent">
 <% for(Folder f : uicomponent.getCustomizeFolders()) {
-  String name = f.getName() ;
-  long pUnreadMess = uicomponent.getNumberOfUnreadMessage(f.getName());
+  String pid = f.getId() ;
+  String name = f.getName();
+  long pUnreadMess = 0;
   String pCssClass = "CloseFolder NormalLabel" ;
-  String pActionLink = uicomponent.event('ChangeFolder', name);
-  if(name.equals(uicomponent.getSelectedFolder())) pCssClass = "OpenFolder SelectedLabel" ;
+  String pActionLink = uicomponent.event('ChangeFolder', pid);
+  if(pid.equals(uicomponent.getSelectedFolder())) pCssClass = "OpenFolder SelectedLabel" ;
 %>
-  <a href="$pActionLink" class="IconFolder Folder $pCssClass" folderName="$name">$name
+  <a href="$pActionLink" class="IconFolder Folder $pCssClass" folderName="$pid">$name
   <% print "<span class=\"MailQuantity\">($pUnreadMess)</span>"%>
   </a>
 <%}%>

@@ -136,25 +136,30 @@
       <div class="RightPageIteratorBlock">
         <%
           MessagePageList pageList = uicomponent.getMessagePageList();
-          String cssFirstPage = "FloatBlock";
-          if (pageList.getCurrentPage() == 1) cssFirstPage = "FloatBlockHidden";
-          String cssLastPage = "FloatBlock";
-          if (pageList.getCurrentPage() == pageList.getAvailablePage()) cssLastPage = "FloatBlockHidden";
+          String cssPreviousPage = "FloatBlockHidden";
+          String cssNextPage = "FloatBlockHidden";
+          long currentPage = 1;
+          String mailRange = "there is no message";
+          if (pageList != null && (uicomponent.getMessageList().size() != 0)) {
+            currentPage = pageList.getCurrentPage();
+            if (currentPage > 1) cssPreviousPage = "FloatBlock";
+            if (currentPage < pageList.getAvailablePage()) cssNextPage = "FloatBlock";
+            long fromIndex = (pageList.getCurrentPage()-1)* pageList.getPageSize();
+            long endIndex = fromIndex + pageList.getPageSize();
+            if (pageList.getCurrentPage() == pageList.getAvailablePage()) endIndex = pageList.getAvailable();
+            mailRange = fromIndex + "to" + endIndex + "of" + pageList.getAvailable();
+          } 
+          
         %>
-        <a title="First Page" class="$cssFirstPage FirstPageArrow" href="<%=uicomponent.event("FirstPage")%>"/></a>        
-        <a title="Previous Page" class="$cssFirstPage PreviousPageArrow" href="<%=uicomponent.event("PreviousPage")%>"></a>
-        <div class="Number"><%=uicomponent.getMessagePageList().getCurrentPage()%></div>
-        <a title="Next Page" class="$cssLastPage NextPageArrow" href="<%=uicomponent.event("NextPage")%>"/></a>
-        <a title="Last Page" class="$cssLastPage LastPageArrow" href="<%=uicomponent.event("LastPage")%>"><span/></a>
+        <a title="First Page" class="$cssPreviousPage FirstPageArrow" href="<%=uicomponent.event("FirstPage")%>"/></a>        
+        <a title="Previous Page" class="$cssPreviousPage PreviousPageArrow" href="<%=uicomponent.event("PreviousPage")%>"></a>
+        <div class="Number">$currentPage</div>
+        <a title="Next Page" class="$cssNextPage NextPageArrow" href="<%=uicomponent.event("NextPage")%>"/></a>
+        <a title="Last Page" class="$cssNextPage LastPageArrow" href="<%=uicomponent.event("LastPage")%>"><span/></a>
         <div style="clear: left;"><span/></div>
       </div>
       <div class="LeftPageIteratorBlock">
-        <%
-          long fromIndex = (pageList.getCurrentPage()-1)* pageList.getPageSize();
-          long endIndex = fromIndex + pageList.getPageSize();
-          if (pageList.getCurrentPage() == pageList.getAvailablePage()) endIndex = pageList.getAvailable();
-        %>
-        <div class="TotalPages">Message(s) <span class="MailQuantity"> $fromIndex to $endIndex of <%=uicomponent.getMessagePageList().getAvailable()%></span></div>
+        <div class="TotalPages">Message(s) <span class="MailQuantity"> $mailRange </span></div>
       </div>
       <div style="clear: right;"><span></span></div>
     </div>

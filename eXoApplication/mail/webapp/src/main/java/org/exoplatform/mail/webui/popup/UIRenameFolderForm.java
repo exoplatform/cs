@@ -4,6 +4,7 @@
  **************************************************************************/
 package org.exoplatform.mail.webui.popup;
 
+import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.webui.UIFolderContainer;
@@ -39,36 +40,33 @@ import org.exoplatform.webui.form.UIFormStringInput;
 public class UIRenameFolderForm extends UIForm implements UIPopupComponent {
   final public static String CUR_FOLDER_NAME = "curFolderName" ;
   final public static String NEW_FOLDER_NAME = "newFolderName" ;
-  private String folderName;
+  private String folderId;
   public UIRenameFolderForm() {    
     addUIFormInput(new UIFormInputInfo(CUR_FOLDER_NAME, CUR_FOLDER_NAME, null)) ;
     addUIFormInput(new UIFormStringInput(NEW_FOLDER_NAME, NEW_FOLDER_NAME, null)) ;
   }
 
-  public void activate() throws Exception {
-    // TODO Auto-generated method stub
-
-  }
-  public void deActivate() throws Exception {
-    // TODO Auto-generated method stub
-
+  public String getFolderId() throws Exception { return folderId; }
+  public void setFolderId(String folderId) throws Exception {
+    this.folderId = folderId;
+    MailService mailSrv = getApplicationComponent(MailService.class);
+    String username = MailUtils.getCurrentUser();
+    String accountId = getAncestorOfType(UIMailPortlet.class).findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+    Folder folder = mailSrv.getFolder(username, accountId, folderId);
+    getUIFormInputInfo(CUR_FOLDER_NAME).setValue(folder.getName());    
   }
 
   static  public class SaveActionListener extends EventListener<UIRenameFolderForm> {
     public void execute(Event<UIRenameFolderForm> event) throws Exception {
       UIRenameFolderForm uiForm = event.getSource() ;
-      
-      String curFolderName = uiForm.getFolderName();
-      String newFolderName = uiForm.getUIStringInput(NEW_FOLDER_NAME).getValue() ;
-      
-      System.out.println(">>> RenameFolder : curFolderName = " + curFolderName);
-      System.out.println(">>> RenameFolder : newFolderName = " + newFolderName);
-
       MailService mailService = uiForm.getApplicationComponent(MailService.class) ;
       UIMailPortlet uiMailPortlet = uiForm.getAncestorOfType(UIMailPortlet.class);
-      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       String username = uiMailPortlet.getCurrentUser() ;
       String accountId =  uiMailPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
+      String folderId = uiForm.getFolderId();
+      String newFolderName = uiForm.getUIStringInput(NEW_FOLDER_NAME).getValue() ;
+      
+      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       UIFolderContainer uiFolderContainer = uiMailPortlet.findFirstComponentOfType(UIFolderContainer.class) ;
 
       if(Utils.isEmptyField(newFolderName)) {
@@ -78,8 +76,9 @@ public class UIRenameFolderForm extends UIForm implements UIPopupComponent {
       }
       
       try {
-        if(mailService.getFolder(username, accountId, newFolderName) == null) {
-          Folder folder =  mailService.getFolder(username, accountId, curFolderName);
+        String newFolderId = accountId + "UserFolder" + newFolderName;
+        if (mailService.getFolder(username, accountId, newFolderId) == null) {
+          Folder folder =  mailService.getFolder(username, accountId, folderId);
           folder.setLabel(newFolderName) ;
           folder.setName(newFolderName) ;
           mailService.saveUserFolder(username, accountId, folder) ;
@@ -106,12 +105,7 @@ public class UIRenameFolderForm extends UIForm implements UIPopupComponent {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
     }
   }
-  public String getFolderName() {
-    return folderName;
-  }
-  public void setFolderName(String folderName) {
-    this.folderName = folderName;
-    getUIFormInputInfo(CUR_FOLDER_NAME).setValue(folderName);
-    
-  }
+  
+  public void activate() throws Exception { }
+  public void deActivate() throws Exception { }
 }
