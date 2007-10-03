@@ -432,6 +432,10 @@
 	color: #000000;
 }
 
+.UICalendarPortlet .UICalendars .TitleBar {
+	border-left: none;
+}
+
 .UICalendars a:hover {
 	color: #058ee6;
 }
@@ -578,12 +582,15 @@
 /*====================Week View============================*/
 
 .UIWeekView {
-	border-left: 1px solid #c7c7c7;
 	border-bottom: 1px solid #c7c7c7;
-	background-color: white;
+}
+
+.UIWeekView .EventWeekContener {
 	overflow:auto;
 	height: 480px;
+	border-left: 1px solid #c7c7c7;
 }
+
 
 .UIWeekView .UIGrid th {
 	background: url('background/TitleBarBG1x23.gif') repeat-x ;	
@@ -598,6 +605,8 @@
 .UIWeekView .UIGrid {
 	width: 98%;
 	border: 0px;
+	background-color: white;
+
 }
 
 .UIWeekView .TdLine{
@@ -723,11 +732,11 @@
 /*====================Year View=====================*/
 
 .UIYearView {
-	border-left: 1px solid #c7c7c7;
 	border-bottom: 1px solid #c7c7c7;
-	background-color: white;
-	overflow:auto;
-	height: 480px;
+}
+
+.UIYearView .UIGrid {
+	width: 98%;
 }
 
 .UIYearView .UIGrid td {
@@ -736,14 +745,18 @@
 
 .UIYearView .DayWorkingArea {
 	padding: 5px;
+	border-left: 1px solid #c7c7c7;
+	overflow:auto;
+	height: 480px;
+	background-color: #ffffff;
 }
 
-.UIYearView .RowContainerDay .CalendarContentNomal {
+.UIYearView .CalendarContentNomal {
 	background: #ffffff;
 	padding: 0px;
 }
 
-.UIYearView .RowContainerDay .CalendarMatchedEventContent {
+.UIYearView .CalendarMatchedEventContent {
 	background: #dae2f4;
 	padding: 0px;
 }
@@ -802,6 +815,7 @@
 
 .UIYearView .MonthList .UIGrid {
 	border: none;
+	width: 100%;
 }
 
 .UIYearView .MonthList .UIGrid td {
@@ -1419,9 +1433,6 @@
 .UIActionBar .SelectButton .UIPopupCategory {
 	top: 25px;
 	left: 7px ;
-}
-.UICalendars .TitleBar {
-	border-left: none;
 }
 
 /* Selection */

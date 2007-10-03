@@ -7,90 +7,97 @@
 %>
 <div class="UIYearView" style="display: block;">
 	<div class="TitleBar">		
-		<div  style="width: 300px;border:solid 1px red; margin:auto;">		
-			<a href="$linkDayNext" class="RightControlButton">
-				<div class="NextIcon" title="Next year"><span></span></div>
-			</a>
-			<div class="Title RightControlButton">$currentYear</div>
-			<a href="$linkDayPrevious" class="RightControlButton">
-				<div class="BackIcon" title="Previous year"><span></span></div>
-			</a>
-			<div style="clear:right;"></div>
-		</div>
+		<table>
+			<body>
+				<tr>
+					<td>
+						<a href="$linkDayPrevious">
+							<div class="BackIcon" title="Previous month"><span></span></div>
+						</a>
+					</td>
+					<td>
+						<div class="Title">October,  2007</div>
+					</td>
+					<td>
+						<a href="$linkDayNext">
+							<div class="NextIcon" title="Next month"><span></span></div>
+						</a>
+					</td>
+				</tr>
+			</body>
+		</table>
 	</div>
 	<div class="DayWorkingArea">
-		<div class="RowContainerDay">
-			<table class="UIGrid" id="RowContainerDay" cellspacing="0" borderspacing="0">
-				<col width="33%"><col width="33%"><col width="33%">
-	        <tbody>
-	        	<%
-	        		quarter = 0 ;
-	        		month = 0 ;
-	        		while(quarter++ < 4) {
-	        			println "<tr>" ;
-	        			i = 0 
-	        			while (i++ < 3) {
-	        				cssClass = "CalendarContentNomal" ;
-	        				if(uicomponent.isCurrentMonth(month, currentYear)) {
-		        				cssClass = "CalendarMatchedEventContent" ;
-		        			}
-		        		monthName = uicomponent.getMonthName(month) ;
-	        	 %>
-	        	 <td class="$cssClass">
-								<div class="WeekSuburdbar">$monthName</div>
-								<div class="MonthList">
-									<div class="WeekList">
-									  <%for(day in uicomponent.getDaysName()) {
-										  	cssClass = "DayTitle" ;
-												if(day.equals(uicomponent.SUNDAY)) cssClass = "SundayTitle" ;
-										%>
-										<div class="$cssClass"><%=day.substring(0,1)%></div>
-									  <%}%>
-		  							<div style="clear: both"><span></span></div>
-		  						</div>
-		  						<div class="DayList">
-	    							<table class="UIGrid" id="" cellspacing="0" borderspacing="0">
-				  						<tbody>
-				  							<%
-													week = 0 ; 
-													dayOfMonth = 1 ;
-													validDay = 0 ;
-													daysInMonth = uicomponent.getDaysInMonth(month, currentYear) ;
-													while ( week++ < 6   ) {
-												    println "<tr>";
-												    dayOfWeek = 0 ;
-												    while (dayOfWeek++ < 7) {
-												    	startDayOfWeek = uicomponent.getDayOfWeek(currentYear, month, dayOfMonth) ;
-												      if (week == 1 && startDayOfWeek == dayOfWeek) {
-												        validDay = 1;
-												      } else if (validDay == 1 && dayOfMonth > daysInMonth) {
-												        validDay = 0;
-												      }
-												      if (validDay) {
-												       println "<td>$dayOfMonth</td>" ;
-												        dayOfMonth++ ;
-												      } else {
-												        println "<td>&nbsp;</td>" ;
-												      }
-												    }
-												    println "</tr>" ;
-									  			}	
-									  			 
-												%>
-				  						</tbody>
-				  					</table>
-				  				</div>
-			  				</div>
-	        	 <%
-	        				month++ ; 
+		<table class="UIGrid" id="RowContainerDay" cellspacing="0" borderspacing="0">
+			<col width="33%"><col width="33%"><col width="33%">
+        <tbody>
+        	<%
+        		quarter = 0 ;
+        		month = 0 ;
+        		while(quarter++ < 4) {
+        			println "<tr>" ;
+        			i = 0 
+        			while (i++ < 3) {
+        				cssClass = "CalendarContentNomal" ;
+        				if(uicomponent.isCurrentMonth(month, currentYear)) {
+	        				cssClass = "CalendarMatchedEventContent" ;
 	        			}
-	        			println "</tr>" ;
-	        			if(month > 11) { break ;}
-	        		}
-	        	%>
-					</tbody>			        				
-				</table>
-			</div>
+	        		monthName = uicomponent.getMonthName(month) ;
+        	 %>
+        	 <td class="$cssClass">
+							<div class="WeekSuburdbar">$monthName</div>
+							<div class="MonthList">
+								<div class="WeekList">
+								  <%for(day in uicomponent.getDaysName()) {
+									  	cssClass = "DayTitle" ;
+											if(day.equals(uicomponent.SUNDAY)) cssClass = "SundayTitle" ;
+									%>
+									<div class="$cssClass"><%=day.substring(0,1)%></div>
+								  <%}%>
+	  							<div style="clear: both"><span></span></div>
+	  						</div>
+	  						<div class="DayList">
+    							<table class="UIGrid" id="" cellspacing="0" borderspacing="0">
+			  						<tbody>
+			  							<%
+												week = 0 ; 
+												dayOfMonth = 1 ;
+												validDay = 0 ;
+												daysInMonth = uicomponent.getDaysInMonth(month, currentYear) ;
+												while ( week++ < 6   ) {
+											    println "<tr>";
+											    dayOfWeek = 0 ;
+											    while (dayOfWeek++ < 7) {
+											    	startDayOfWeek = uicomponent.getDayOfWeek(currentYear, month, dayOfMonth) ;
+											      if (week == 1 && startDayOfWeek == dayOfWeek) {
+											        validDay = 1;
+											      } else if (validDay == 1 && dayOfMonth > daysInMonth) {
+											        validDay = 0;
+											      }
+											      if (validDay) {
+											       println "<td>$dayOfMonth</td>" ;
+											        dayOfMonth++ ;
+											      } else {
+											        println "<td>&nbsp;</td>" ;
+											      }
+											    }
+											    println "</tr>" ;
+								  			}	
+								  			 
+											%>
+			  						</tbody>
+			  					</table>
+			  				</div>
+		  				</div>
+        	 <%
+        				month++ ; 
+        			}
+        			println "</tr>" ;
+        			if(month > 11) { break ;}
+        		}
+        	%>
+				</tbody>			        				
+			</table>
 		</div>					        
 	</div>
 <%uiform.end()%>	
