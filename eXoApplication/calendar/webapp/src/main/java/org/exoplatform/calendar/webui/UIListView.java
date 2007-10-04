@@ -66,5 +66,6 @@ public class UIListView extends UICalendarView {
     } 
     return allEvents ;
   }
-  protected boolean isShowEvent() {return isShowEvent ;}
+  protected boolean isShowEvent() {
+  return isShowEvent_ ;}
 }
