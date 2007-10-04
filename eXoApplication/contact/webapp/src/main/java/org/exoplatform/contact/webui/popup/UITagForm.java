@@ -51,7 +51,6 @@ public class UITagForm extends UIForm implements UIPopupComponent {
     setId("UITagForm") ;
     addUIFormInput(new UIFormStringInput(FIELD_TAGNAME_INPUT, FIELD_TAGNAME_INPUT, null));
     if (isNew) {
-      System.out.println("\n\n is new  = true");
       ContactService contactService = ContactUtils.getContactService();
       String username = ContactUtils.getCurrentUser() ;
       List<Tag> tags = contactService.getTags(username);
@@ -103,14 +102,16 @@ public class UITagForm extends UIForm implements UIPopupComponent {
         tag.setName(inputTag);
         tags.add(tag);
       }
-      for (String tagName : uiTagForm.getCheckedTags()) {
-        tag = new Tag();
-        tag.setName(tagName) ;
-        tags.add(tag);
+      if (isNew) {
+        for (String tagName : uiTagForm.getCheckedTags()) {
+          tag = new Tag();
+          tag.setName(tagName) ;
+          tags.add(tag);
+        } 
       }
       if (tags.size() == 0) {
         UIApplication uiApp = uiTagForm.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIAddNewTag.msg.tagName-required", null)) ;
+        uiApp.addMessage(new ApplicationMessage("UITagForm.msg.tagName-required", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       } 
@@ -121,21 +122,11 @@ public class UITagForm extends UIForm implements UIPopupComponent {
       else 
         System.out.println("\n\n tagName : " + inputTag + "\n\n");
       UIContactPortlet uiContactPortlet = uiTagForm.getAncestorOfType(UIContactPortlet.class);
-      
-      /*
       UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
-      Contact contact ;
-      for (String contactId : uiTagForm.getContacts()) {
-        contact = contactService.getContact(username, contactId) ;
-        if (contact == null)
-          contact = contactService.getSharedContact(contactId) ;
-        if (contact != null) uiContacts.updateContact(contact, false) ;
-      }
-      */
-      
+      uiContacts.updateList() ;
       UITags uiTags = uiContactPortlet.findFirstComponentOfType(UITags.class) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiTags) ;
-      //event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts) ;
       uiContactPortlet.cancelAction() ;  
     }
   }

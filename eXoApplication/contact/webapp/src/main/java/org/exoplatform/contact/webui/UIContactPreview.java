@@ -64,5 +64,7 @@ public class UIContactPreview extends UIComponent  {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContactContainer) ;
     }
   }
+  
+  
 
 }

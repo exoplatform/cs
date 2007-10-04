@@ -68,7 +68,6 @@ public class UIContacts extends UIForm {
   
   public UIContacts() throws Exception { } 
   public String[] getSelections() { return SELECTIONS ; }
-  
 
   public void setContacts(JCRPageList pageList) throws Exception {
     pageList_ = pageList ;
@@ -89,16 +88,18 @@ public class UIContacts extends UIForm {
     getChildren().clear() ;
     contactMap.clear();
     if(pageList_ != null) {
+      //System.out.println("\n\n not null \n\n");
       for(Contact contact : pageList_.getPage(pageList_.getCurrentPage(),ContactUtils.getCurrentUser())) {
         UIFormCheckBoxInput<Boolean> checkbox = new UIFormCheckBoxInput<Boolean>(contact.getId(),contact.getId(), false) ;
         addUIFormInput(checkbox);
         contactMap.put(contact.getId(), contact) ;
       }
       Contact[] array = contactMap.values().toArray(new Contact[]{}) ;
-      if (array.length > 0)
-        getAncestorOfType(UIContactContainer.class).getChild(UIContactPreview.class).setContact(array[0]) ;
-      else 
-        getAncestorOfType(UIContactContainer.class).getChild(UIContactPreview.class).setContact(null) ;
+      if (array.length > 0) {
+        Contact firstContact = array[0] ;
+        getAncestorOfType(UIContactContainer.class).getChild(UIContactPreview.class).setContact(firstContact) ;
+        selectedContact = firstContact.getId() ;
+      } else getAncestorOfType(UIContactContainer.class).getChild(UIContactPreview.class).setContact(null) ;
     }
   }
   
@@ -157,6 +158,7 @@ public class UIContacts extends UIForm {
       }    
       UIContactPortlet contactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class) ;
       UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
+      UITagForm.isNew = true ;
       UITagForm uiTagForm = popupAction.createUIComponent(UITagForm.class, null, null) ;
       uiTagForm.setContacts(contactIds) ;
       popupAction.activate(uiTagForm, 600, 0, true) ;

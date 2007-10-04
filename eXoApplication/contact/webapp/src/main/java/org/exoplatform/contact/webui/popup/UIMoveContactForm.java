@@ -11,6 +11,7 @@ import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.webui.UIContactPortlet;
+import org.exoplatform.contact.webui.UIContacts;
 import org.exoplatform.contact.webui.UIWorkingContainer;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.organization.OrganizationService;
@@ -31,8 +32,7 @@ import org.exoplatform.webui.form.UIForm;
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
     template = "app:/templates/contact/webui/popup/UIMoveContactsForm.gtmpl",
-    events = {
-      @EventConfig(listeners = UIMoveContactForm.SaveActionListener.class),      
+    events = {     
       @EventConfig(listeners = UIMoveContactForm.CancelActionListener.class),
       @EventConfig(listeners = UIMoveContactForm.SelectGroupActionListener.class)
     }
@@ -44,6 +44,7 @@ public class UIMoveContactForm extends UIForm implements UIPopupComponent {
   public UIMoveContactForm() throws Exception { }
   public void activate() throws Exception { }
   public void deActivate() throws Exception { }
+  public String[] getActions() { return new String[] { "Cancel" } ; }
   
   public boolean isPersonalAddressBookSelected() throws Exception {
     for(ContactGroup contactGroup : getContactGroups()) {
@@ -57,9 +58,7 @@ public class UIMoveContactForm extends UIForm implements UIPopupComponent {
   
   public void setContacts(List<String> contactIds) { contactIds_ = contactIds ; }
   public List<String> getContacts() { return contactIds_ ; }
-  
-  public String[] getActions() { return new String[] {"Save", "Cancel"} ; }
-  
+
   public List<ContactGroup> getContactGroups() throws Exception { 
     return getApplicationComponent(ContactService.class).getGroups(ContactUtils.getCurrentUser()) ; 
   }
@@ -80,19 +79,16 @@ public class UIMoveContactForm extends UIForm implements UIPopupComponent {
       UIMoveContactForm uiMoveContactForm = event.getSource() ;
       String groupId = event.getRequestContext().getRequestParameter(OBJECTID);
       UIContactPortlet uiContactPortlet = uiMoveContactForm.getAncestorOfType(UIContactPortlet.class);
-      if (!uiMoveContactForm.getGroupId().equals(groupId))
+      if (!uiMoveContactForm.getGroupId().equals(groupId)) {  
         ContactUtils.getContactService()
-        .moveContacts(ContactUtils.getCurrentUser(), uiMoveContactForm.getContacts(), new String[] { groupId }) ;        
+          .moveContacts(ContactUtils.getCurrentUser(), uiMoveContactForm.getContacts(), new String[] { groupId }) ;
+        uiContactPortlet.findFirstComponentOfType(UIContacts.class).updateList() ;
+      }
       uiContactPortlet.cancelAction() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContactPortlet.findFirstComponentOfType(UIWorkingContainer.class)) ;
     }
   }
-  
-  static  public class SaveActionListener extends EventListener<UIMoveContactForm> {
-    public void execute(Event<UIMoveContactForm> event) throws Exception {
-      
-    }
-  }
+
   static  public class CancelActionListener extends EventListener<UIMoveContactForm> {
     public void execute(Event<UIMoveContactForm> event) throws Exception {
       UIMoveContactForm uiForm = event.getSource() ;

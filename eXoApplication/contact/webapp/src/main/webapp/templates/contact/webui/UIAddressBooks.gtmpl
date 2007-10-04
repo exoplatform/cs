@@ -63,6 +63,7 @@
 			for(contactGroup in contactGroups) {
 			actionLink1  = uicomponent.event("SelectGroup", contactGroup.getId()) ;	
 			cssClass = "Normal" ;
+			s = uicomponent.getSelectedGroup() ;
 			if(contactGroup.getId().equals(uicomponent.getSelectedGroup()))	cssClass = "Selected" ;		
 		%>
 		<div  class="ItemList $cssClass">

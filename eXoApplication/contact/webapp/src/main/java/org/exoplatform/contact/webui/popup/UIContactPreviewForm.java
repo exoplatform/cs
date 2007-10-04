@@ -10,7 +10,10 @@ import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
+import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
+import org.exoplatform.webui.event.Event;
+import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 
 /**
@@ -21,7 +24,10 @@ import org.exoplatform.webui.form.UIForm;
  */
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
-    template = "app:/templates/contact/webui/popup/UIContactPreviewForm.gtmpl"
+    template = "app:/templates/contact/webui/popup/UIContactPreviewForm.gtmpl",
+    events = {  
+      @EventConfig(listeners = UIContactPreviewForm.CancelActionListener.class)
+    }
 )
 public class UIContactPreviewForm extends UIForm implements UIPopupComponent {
   private Contact contact_ ; 
@@ -39,7 +45,15 @@ public class UIContactPreviewForm extends UIForm implements UIPopupComponent {
     return ContactUtils.getImageSource(contact_, dservice) ; 
   }
 
+  public String[] getActions() { return new String[] {"Cancel"} ; }
   public void activate() throws Exception { }
   public void deActivate() throws Exception { }
-
+  
+  static  public class CancelActionListener extends EventListener<UIContactPreviewForm> {
+    public void execute(Event<UIContactPreviewForm> event) throws Exception {
+      UIContactPreviewForm uiContactPreviewForm = event.getSource() ;
+      UIPopupAction uiPopupAction = uiContactPreviewForm.getAncestorOfType(UIPopupAction.class) ;
+      uiPopupAction.deActivate() ;
+    }
+  }
 }

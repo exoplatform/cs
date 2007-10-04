@@ -36,7 +36,7 @@ import org.exoplatform.webui.event.EventListener;
             confirm = "UITags.msg.confirm-delete")        
     }
 )
-public class UITags extends UIComponent  {
+public class UITags extends UIComponent {
   
   public UITags() throws Exception { }
   private String selectedTag_ = null ;
@@ -56,7 +56,8 @@ public class UITags extends UIComponent  {
       String tagName = event.getRequestContext().getRequestParameter(OBJECTID) ;
       uiForm.setSelectedTag(tagName) ;
       UIWorkingContainer uiWorkingContainer = uiForm.getAncestorOfType(UIWorkingContainer.class) ;
-      uiWorkingContainer.findFirstComponentOfType(UIAddressBooks.class).setSelectedGroup(null) ;
+      UIAddressBooks uiAddressBooks = uiWorkingContainer.findFirstComponentOfType(UIAddressBooks.class) ;
+      uiAddressBooks.setSelectedGroup(null) ;
       String username = ContactUtils.getCurrentUser() ;
       UIContacts uiContacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class) ;
       uiContacts.setContacts(ContactUtils.getContactService().getContactPageListByTag(username, tagName)) ;
@@ -78,20 +79,6 @@ public class UITags extends UIComponent  {
     }
   }
   
-  static  public class EditGroupActionListener extends EventListener<UIAddressBooks> {
-    public void execute(Event<UIAddressBooks> event) throws Exception {
-      UIAddressBooks uiAddressBook = event.getSource() ;  
-      UIContactPortlet uiContactPortlet = uiAddressBook.getAncestorOfType(UIContactPortlet.class) ;
-      UIPopupAction popupAction = uiContactPortlet.getChild(UIPopupAction.class) ;
-      UICategoryForm uiCategoryForm = popupAction.createUIComponent(UICategoryForm.class, null, "UICategoryForm") ;
-      String groupId = event.getRequestContext().getRequestParameter(OBJECTID);
-      uiCategoryForm.setValues(groupId) ;
-      UICategoryForm.isNew_ = false ;
-      popupAction.activate(uiCategoryForm, 500, 0, true) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
-    }
-  }
-  
   static  public class DeleteTagActionListener extends EventListener<UITags> {
     public void execute(Event<UITags> event) throws Exception {
       UITags uiForm = event.getSource() ;
@@ -102,8 +89,8 @@ public class UITags extends UIComponent  {
       UIWorkingContainer uiWorkingContainer = uiForm.getAncestorOfType(UIWorkingContainer.class) ;
       if (tagName.equals(uiForm.getSelectedTag())) {
         uiForm.setSelectedTag(null) ;
-        //uiWorkingContainer.findFirstComponentOfType(UIContacts.class).setContacts(new ArrayList<Contact>()) ;
-        //uiWorkingContainer.findFirstComponentOfType(UIContactPreview.class).updateContact() ;
+        uiWorkingContainer.findFirstComponentOfType(UIContacts.class).setContacts(null) ;
+        uiWorkingContainer.findFirstComponentOfType(UIContactPreview.class).setContact(null) ;
       } else {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer) ;
       }  
