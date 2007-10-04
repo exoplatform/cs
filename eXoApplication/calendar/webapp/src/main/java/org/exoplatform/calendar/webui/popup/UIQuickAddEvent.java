@@ -97,6 +97,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
       setEventFromDate(df.parse(startTime)) ;
       setEventToDate(df.parse(endTime)) ;
     } catch (Exception e) {
+      init() ;
       e.printStackTrace() ;
     }
   }

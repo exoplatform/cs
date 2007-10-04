@@ -14,7 +14,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
@@ -53,7 +52,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
       @EventConfig(listeners = UIMonthView.MoveNextActionListener.class), 
       @EventConfig(listeners = UIMonthView.MovePreviousActionListener.class),
       @EventConfig(listeners = UIMonthView.QuickAddNewEventActionListener.class), 
-      @EventConfig(listeners = UIMonthView.AddNewTaskActionListener.class), 
+      @EventConfig(listeners = UIMonthView.QuickAddNewTaskActionListener.class), 
       @EventConfig(listeners = UIMonthView.GotoDateActionListener.class), 
       @EventConfig(listeners = UIMonthView.EditEventActionListener.class), 
       @EventConfig(listeners = UIMonthView.QuickDeleteEventActionListener.class)
@@ -161,7 +160,7 @@ public class UIMonthView extends UICalendarView {
     }
     return events ; 
   }
-  
+
   static  public class MoveNextActionListener extends EventListener<UIMonthView> {
     public void execute(Event<UIMonthView> event) throws Exception {
       UIMonthView calendarview = event.getSource() ;
@@ -200,31 +199,59 @@ public class UIMonthView extends UICalendarView {
         uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.calendar-list-empty", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
       } else {
+        UICalendarPortlet uiPortlet = calendarview.getAncestorOfType(UICalendarPortlet.class) ;
+        UIPopupAction uiParenPopup = uiPortlet.getChild(UIPopupAction.class) ;
+        UIQuickAddEvent uiEventForm = uiParenPopup.activate(UIQuickAddEvent.class, 700) ;
+        uiEventForm.setEvent(true) ;
         try {
-          UICalendarPortlet uiPortlet = calendarview.getAncestorOfType(UICalendarPortlet.class) ;
-          UIPopupAction uiParenPopup = uiPortlet.getChild(UIPopupAction.class) ;
-          UIPopupContainer uiPopupContainer = uiPortlet.createUIComponent(UIPopupContainer.class, null, null) ;
-          UIQuickAddEvent uiEventForm = uiPopupContainer.addChild(UIQuickAddEvent.class, null, null) ;
           int day = Integer.parseInt(selectedDate) ;
           java.util.Calendar date = new GregorianCalendar(calendarview.getCurrentYear(), calendarview.getCurrentMonth(), day) ;
           DateFormat df = SimpleDateFormat.getInstance() ;
-          String startTime = df.format(date) ;
+          String startTime = df.format(date.getTime()) ;
           date.add(java.util.Calendar.MINUTE, 30) ;
-          String endTime = df.format(date)  ;
+          String endTime = df.format(date.getTime())  ;
           uiEventForm.init(startTime, endTime) ;
-          uiParenPopup.activate(uiPopupContainer, 600, 0, true) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiParenPopup) ;
         } catch (Exception e) {
           e.printStackTrace() ;
+          uiEventForm.init() ;
         }
+        event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiParenPopup) ;
       }
     }
   }
-  static  public class AddNewTaskActionListener extends EventListener<UIMonthView> {
+  static  public class QuickAddNewTaskActionListener extends EventListener<UIMonthView> {
     public void execute(Event<UIMonthView> event) throws Exception {
       UIMonthView calendarview = event.getSource() ;
       System.out.println("\n\n AddNewTaskActionListener");
+      String selectedDate = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      CalendarService calendarService = calendarview.getApplicationComponent(CalendarService.class) ;
+      String username = event.getRequestContext().getRemoteUser() ;
+      UIApplication uiApp = calendarview.getAncestorOfType(UIApplication.class) ;
+      if(calendarService.getUserCalendars(username).size() <= 0) {
+        uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.calendar-list-empty", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+      } else {
+        UICalendarPortlet uiPortlet = calendarview.getAncestorOfType(UICalendarPortlet.class) ;
+        UIPopupAction uiParenPopup = uiPortlet.getChild(UIPopupAction.class) ;
+        UIQuickAddEvent uiEventForm = uiParenPopup.activate(UIQuickAddEvent.class,700) ;
+        uiEventForm.setEvent(false) ;
+        uiEventForm.setId("UIQuickAddTask") ;
+        try {
+          int day = Integer.parseInt(selectedDate) ;
+          java.util.Calendar date = new GregorianCalendar(calendarview.getCurrentYear(), calendarview.getCurrentMonth(), day) ;
+          DateFormat df = SimpleDateFormat.getInstance() ;
+          String startTime = df.format(date.getTime()) ;
+          date.add(java.util.Calendar.MINUTE, 30) ;
+          String endTime = df.format(date.getTime())  ;
+          uiEventForm.init(startTime, endTime) ;
+        } catch (Exception e) {
+          e.printStackTrace() ;
+          uiEventForm.init() ;
+        }
+        event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiParenPopup) ;
+      }
     }
   }
   static  public class GotoDateActionListener extends EventListener<UIMonthView> {

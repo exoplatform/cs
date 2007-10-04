@@ -73,8 +73,8 @@ public abstract class UICalendarView extends UIForm {
   final public static String ACT_PREVIOUS  = "MovePrevious".intern() ;
   
 
-  public final static String ACT_ADDNEW_EVENT = "AddNewEvent".intern() ;
-  public final static String ACT_ADDNEW_TASK = "AddNewTask".intern() ;
+  public final static String ACT_ADDNEW_EVENT = "QuickAddNewEvent".intern() ;
+  public final static String ACT_ADDNEW_TASK = "QuickAddNewTask".intern() ;
   public final static String ACT_GOTO_DATE = "GotoDate".intern() ;
   public final static String ACT_EDIT = "EditEvent".intern() ;
   public final static String ACT_DELETE = "QuickDeleteEvent".intern() ;
