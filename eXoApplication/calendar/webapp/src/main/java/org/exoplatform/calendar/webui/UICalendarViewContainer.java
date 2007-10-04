@@ -46,6 +46,9 @@ public class UICalendarViewContainer extends UIContainer  {
       if(comp.isRendered()) ((UICalendarView)comp).refresh() ;
     }
   }
+  protected boolean isShowPane() {
+    return getAncestorOfType(UICalendarWorkingContainer.class).getChild(UICalendarContainer.class).isRendered() ;
+  }
   public UIComponent getRenderedChild() {
     for(UIComponent comp : getChildren()) {
       if(comp.isRendered()) return comp ;

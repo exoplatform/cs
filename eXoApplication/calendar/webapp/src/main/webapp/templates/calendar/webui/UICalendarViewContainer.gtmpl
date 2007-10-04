@@ -1,4 +1,11 @@
-<div class="UICalendarViewContainer" id="$uicomponent.id">
+<%
+ if(uicomponent.isShowPane()) {
+  style = "" ;
+ } else {
+ 	style = "width:100%;margin:auto;" ;
+ }
+%>
+<div class="UICalendarViewContainer" id="$uicomponent.id" style="$style">
 	<%
 		List children = uicomponent.getChildren() ;
 		for(child in children) {
