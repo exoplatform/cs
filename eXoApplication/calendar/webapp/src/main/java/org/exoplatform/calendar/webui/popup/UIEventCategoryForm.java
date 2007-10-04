@@ -98,17 +98,15 @@ public class UIEventCategoryForm extends UIForm {
         uiForm.reset() ;
         UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
         UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
-        if(uiPopupContainer != null) {
-          UIEventForm uiEventForm = uiPopupContainer.getChild(UIEventForm.class) ;
-          uiEventForm.refreshCategory() ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupContainer) ;
-        }
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiManager) ;
         UICalendarViewContainer uiViewContainer = calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
         UICalendarView uiCalendarView = (UICalendarView)uiViewContainer.getRenderedChild() ;
         uiCalendarView.update() ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiViewContainer) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
+        if(uiPopupContainer != null) {
+          UIEventForm uiEventForm = uiPopupContainer.getChild(UIEventForm.class) ;
+          uiEventForm.refreshCategory() ;
+        }
       } catch (Exception e) {
         e.printStackTrace() ;
       }
@@ -118,7 +116,7 @@ public class UIEventCategoryForm extends UIForm {
     public void execute(Event<UIEventCategoryForm> event) throws Exception {
       UIEventCategoryForm uiForm = event.getSource() ;
       uiForm.reset() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class));
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent());
     }
   }
 
@@ -127,14 +125,11 @@ public class UIEventCategoryForm extends UIForm {
       UIEventCategoryForm uiForm = event.getSource() ;
       UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class) ;
       uiPopupAction.deActivate() ;
-      /* UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
-      UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
-      if(uiPopupContainer == null) calendarPortlet.cancelAction() ;
-      else {
-        uiPopupContainer.getChild(UIPopupAction.class).deActivate() ;
-
-      }*/
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
+      if(uiPopupAction.getAncestorOfType(UIPopupAction.class) != null) {
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction.getAncestorOfType(UIPopupAction.class));
+      } else {
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+      }
     }
   }
 }

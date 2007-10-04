@@ -275,7 +275,8 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
       if(uiForm.isEvent()) {
         UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class) ;
         uiPopupAction.deActivate() ;
-        UIEventForm uiEventForm = uiPopupAction.activate(UIEventForm.class, 700) ;
+        UIPopupContainer uiPouContainer  = uiPopupAction.activate(UIPopupContainer.class, 700) ;
+        UIEventForm uiEventForm = uiPouContainer.addChild(UIEventForm.class, null, null) ;
         uiEventForm.setEventSumary(uiForm.getEventSummary()) ;
         uiEventForm.setEventDescription(uiForm.getEventDescription()) ;
         uiEventForm.setEventFromDate(uiForm.getEventFromDate()) ;
