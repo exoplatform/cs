@@ -85,8 +85,8 @@
 				String actionLink2  = uicomponent.event("SelectSharedGroup", group) ;
 				if(group.equals(uicomponent.getSelectedGroup()))	cssClass = "Selected" ;	
 			%>
-				<div class="ItemList $cssClass" isPublic="true">
-					<a id="$group" href="$actionLink2" class="IconHolder AddressIcon">$group</a>
+				<div class="ItemList $cssClass">
+					<a id="$group" href="$actionLink2" class="IconHolder AddressIcon"  isPublic="true">$group</a>
 				</div>
 			<%
 			} %>
