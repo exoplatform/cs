@@ -84,11 +84,11 @@ public class UIContacts extends UIForm {
   public void setViewContactsList(boolean list) { viewContactsList = list ; }
   public boolean getViewContactsList() { return viewContactsList ; }
   
-  public void updateList() throws Exception{ 
+  public void updateList() throws Exception { 
     getChildren().clear() ;
     contactMap.clear();
     if(pageList_ != null) {
-      //System.out.println("\n\n not null \n\n");
+      System.out.println("\n\n not null:" + pageList_ + "\n\n");
       for(Contact contact : pageList_.getPage(pageList_.getCurrentPage(),ContactUtils.getCurrentUser())) {
         UIFormCheckBoxInput<Boolean> checkbox = new UIFormCheckBoxInput<Boolean>(contact.getId(),contact.getId(), false) ;
         addUIFormInput(checkbox);
@@ -100,7 +100,7 @@ public class UIContacts extends UIForm {
         getAncestorOfType(UIContactContainer.class).getChild(UIContactPreview.class).setContact(firstContact) ;
         selectedContact = firstContact.getId() ;
       } else getAncestorOfType(UIContactContainer.class).getChild(UIContactPreview.class).setContact(null) ;
-    }
+    } else getAncestorOfType(UIContactContainer.class).getChild(UIContactPreview.class).setContact(null) ;
   }
   
   public List<String> getCheckedContacts() throws Exception {

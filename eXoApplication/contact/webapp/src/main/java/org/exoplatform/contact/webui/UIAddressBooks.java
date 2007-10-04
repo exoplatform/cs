@@ -48,6 +48,7 @@ public class UIAddressBooks extends UIComponent  {
   public UIAddressBooks() throws Exception {}
 
   public List<ContactGroup> getGroups() throws Exception {
+   
     List<ContactGroup> groupList = ContactUtils.getContactService().getGroups(ContactUtils.getCurrentUser()) ; 
     return groupList;    
   }
@@ -126,27 +127,11 @@ public class UIAddressBooks extends UIComponent  {
       contactService.removeGroup(username, groupId) ;
       if(groupId.equals(uiAddressBook.selectedGroup)) {
         uiAddressBook.selectedGroup = null ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook.getParent()) ;
         UIContactContainer contactContainer = uiAddressBook.getAncestorOfType(UIWorkingContainer.class).getChild(UIContactContainer.class) ;
+        contactContainer.getChild(UIContacts.class).setContacts(null) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(contactContainer) ;
-      }else {
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook.getParent()) ;
       }
-      //TODO: catch exception and show message
-      /*if (contactService.getGroup(username, groupId) != null) {
-        contactService.removeGroup(username, groupId) ;
-        UIWorkingContainer uiWorkingContainer = uiAddressBook.getAncestorOfType(UIWorkingContainer.class) ;
-        UIContacts uiContacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class) ;
-        String selectedGroup = uiWorkingContainer.getSelectedGroup() ;
-        if ((ContactUtils.IsEmpty(selectedGroup)) || selectedGroup.equals(groupId)) uiContacts.setContacts(null) ;
-        uiWorkingContainer.removeContactGroup(groupId) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer) ;
-      } else {
-        UIApplication uiApp = uiAddressBook.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIAddressBooks.msg.groupCannot-deleted", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ; 
-      }*/
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook) ;
     }
   }
 
