@@ -31,14 +31,14 @@ public class UICalendarViewContainer extends UIContainer  {
 
 
   public UICalendarViewContainer() throws Exception {
-    addChild(UIMonthView.class, null, null) ;
-    addChild(UIDayView.class, null, null) ;
-    addChild(UIWeekView.class, null, null) ;
-    addChild(UIYearView.class, null, null) ;
-    addChild(UIListView.class, null, null) ;
-    addChild(UIScheduleView.class, null, null) ;
+    addChild(UIMonthView.class, null, null).setRendered(false) ;
+    addChild(UIDayView.class, null, null).setRendered(true) ;
+    addChild(UIWeekView.class, null, null).setRendered(false) ;
+    addChild(UIYearView.class, null, null).setRendered(false) ;
+    addChild(UIListView.class, null, null).setRendered(false) ;
+    addChild(UIScheduleView.class, null, null).setRendered(false) ;
 
-    setRenderedChild(UIMonthView.class) ;
+    //setRenderedChild(UIMonthView.class) ;
   }  
 
   public void refresh() throws Exception {

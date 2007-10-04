@@ -120,7 +120,7 @@ public class CalendarEvent {
   
   public String[] getInvitation() { return invitation; }
   public void     setInvitation(String[] invitation) { this.invitation = invitation; }
-    
+  
   public List<Reminder> getReminders() { return reminders ; }
   public void           setReminders(List<Reminder> rm) { this.reminders = rm ; }
 

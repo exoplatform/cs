@@ -11,18 +11,17 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import java.util.SimpleTimeZone;
+import java.util.TimeZone;
 
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.EventCategory;
-import org.exoplatform.calendar.webui.popup.UIEventCategoryForm;
 import org.exoplatform.calendar.webui.popup.UIEventCategoryManager;
 import org.exoplatform.calendar.webui.popup.UIEventForm;
 import org.exoplatform.calendar.webui.popup.UIPopupAction;
 import org.exoplatform.calendar.webui.popup.UIPopupContainer;
-
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.core.UIApplication;
@@ -82,9 +81,9 @@ public abstract class UICalendarView extends UIForm {
   
   
   final public static String CALENDARID = "calendarId".intern() ;
-  protected Calendar calendar_ = GregorianCalendar.getInstance() ;
-
-  protected boolean isShowEvent = true;
+  protected Calendar calendar_ = null ;
+  protected int timeInterval_ = 15 ;
+  protected boolean isShowEvent_ = true;
 
   protected List<String> privateCalendarIds = new ArrayList<String>() ;
   protected List<String> publicCalendarIds = new ArrayList<String>() ;
@@ -104,8 +103,9 @@ public abstract class UICalendarView extends UIForm {
       options.add(new SelectItemOption<String>(category.getName(), category.getName())) ;
     }
     addUIFormInput(new UIFormSelectBox(EVENT_CATEGORIES, EVENT_CATEGORIES, options)) ;
+    
+    calendar_ = Calendar.getInstance() ;
     calendar_.setLenient(false) ;
-    System.out.println("\n\n locale " +  calendar_.getTimeZone().getDisplayName()); 
     int i = 0 ; 
     for(String month : MONTHS) {
       monthsMap_.put(i, month) ;
@@ -216,6 +216,13 @@ public abstract class UICalendarView extends UIForm {
              date1.get(java.util.Calendar.MONTH) == date2.get(java.util.Calendar.MONTH) &&
              date1.get(java.util.Calendar.YEAR) == date2.get(java.util.Calendar.YEAR)
             ) ;
+  }
+  protected boolean isSameDate(Date value1, Date value2) {
+    Calendar date1 = GregorianCalendar.getInstance() ;
+    date1.setTime(value1) ;
+    Calendar date2 = GregorianCalendar.getInstance() ;
+    date2.setTime(value2) ;
+    return isSameDate(date1, date2) ;
   }
   protected void setCurrentCalendar(Calendar value) {calendar_ = value ;}
   protected Calendar getCurrentCalendar() {return calendar_ ;}

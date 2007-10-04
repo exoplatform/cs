@@ -8,6 +8,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.exoplatform.calendar.CalendarUtils;
@@ -85,13 +86,15 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
 
   private String errorMsg_ = null ;
 
+  private int timeInterval_ = 15 ;
+
   public UIEventForm() throws Exception {
     super("UIEventForm", false);
     UIEventDetailTab eventDetailTab =  new UIEventDetailTab(TAB_EVENTDETAIL) ;
     addChild(eventDetailTab) ;
     UIEventReminderTab eventReminderTab =  new UIEventReminderTab(TAB_EVENTREMINDER) ;
     addChild(eventReminderTab) ;
-    
+
     UIFormInputWithActions eventShareTab =  new UIFormInputWithActions(TAB_EVENTSHARE) ;
     List<ActionData> actions = new ArrayList<ActionData>() ;
     eventShareTab.addUIFormInput(new UIFormSelectBox(FIELD_SHARE, FIELD_SHARE, getShareValue()) ) ;
@@ -109,9 +112,9 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
 
     UIEventAttenderTab eventAttenderTab = new UIEventAttenderTab(TAB_EVENTATTENDER) ;
     addChild(eventAttenderTab) ;
-    
-    setRenderedChild(TAB_EVENTDETAIL) ;
 
+    setRenderedChild(TAB_EVENTDETAIL) ;
+    initForm() ;
   }
   public String getLabel(String id) {
     String label = id ;
@@ -120,6 +123,14 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     } catch (Exception e) {
     }
     return label ;
+  }
+  public void initForm() {
+    java.util.Calendar cal = GregorianCalendar.getInstance() ;
+    int beginMinute = (cal.get(java.util.Calendar.MINUTE)/timeInterval_)* timeInterval_ ;
+    cal.set(java.util.Calendar.MINUTE, beginMinute) ;
+    setEventFromDate(cal.getTime()) ;
+    cal.add(java.util.Calendar.MINUTE, timeInterval_) ;
+    setEventToDate(cal.getTime()) ;
   }
   public void initForm(String calendarId, String categoryId) {
     reset() ;
@@ -142,33 +153,34 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   }
   public void initForm(CalendarEvent eventCalendar) throws Exception {
     reset() ;
-    isAddNew_ = false ;
-    setEventSumary(eventCalendar.getSummary()) ;
-    java.util.Calendar cal = java.util.Calendar.getInstance() ;
-    cal.setTime(eventCalendar.getFromDateTime()) ;
-    setEventFromDate(cal.getTime()) ;
-    cal.setTime(eventCalendar.getToDateTime()) ;
-    setEventToDate(eventCalendar.getToDateTime()) ;
-    setSelectedCalendarId(eventCalendar.getCalendarId()) ;
-    setSelectedCategory(eventCalendar.getEventCategoryId()) ;
-    setEventPlace(eventCalendar.getLocation()) ;
-    setEventDescription(eventCalendar.getDescription()) ;
-    setSelectedEventPriority(eventCalendar.getPriority()) ;
-    setAttachments(eventCalendar.getAttachment()) ;
-    for(Reminder r : eventCalendar.getReminders()) {
-      if(Reminder.TYPE_EMAIL.equals(r.getReminder())) {
-        setEmailReminder(true) ;
-        setEmailAddress(r.getEmailAddress()) ;
-        setEmailReminderTime(r.getAlarmBefore()) ; 
-      }else {
-        setPopupReminder(true) ;
-        setPopupReminderTime(r.getAlarmBefore()) ;
-        setPopupReminderSnooze(r.getSnooze()) ;
+    if(eventCalendar != null) {
+      isAddNew_ = false ;
+      calendarEvent_ = eventCalendar ;
+      setEventSumary(eventCalendar.getSummary()) ;
+      setEventDescription(eventCalendar.getDescription()) ;
+      java.util.Calendar cal = java.util.Calendar.getInstance() ;
+      cal.setTime(eventCalendar.getFromDateTime()) ;
+      setEventFromDate(cal.getTime()) ;
+      cal.setTime(eventCalendar.getToDateTime()) ;
+      setEventToDate(eventCalendar.getToDateTime()) ;
+      setSelectedCalendarId(eventCalendar.getCalendarId()) ;
+      setSelectedCategory(eventCalendar.getEventCategoryId()) ;
+      setEventPlace(eventCalendar.getLocation()) ;
+      setEventRepeat(eventCalendar.getRepeatType()) ;
+      setSelectedEventPriority(eventCalendar.getPriority()) ;
+      setAttachments(eventCalendar.getAttachment()) ;
+      setEventReminders(eventCalendar.getReminders()) ;
+      if(eventCalendar.isPrivate()) {
+        setSelectedShareType(UIEventForm.ITEM_PRIVATE) ;
+      } else {
+        setSelectedShareType(UIEventForm.ITEM_PUBLIC) ;
       }
+      setSelectedEventState(eventCalendar.getEventState()) ;
+      setMeetingInvitation(eventCalendar.getInvitation()) ;
+      setParticipant(eventCalendar.getParticipant()) ;
+    } else {
+      initForm() ;
     }
-    setEventRepeat(eventCalendar.getRepeatType()) ;
-    setMeetingInvitation(eventCalendar.getInvitation()) ;
-    setParticipant(eventCalendar.getParticipant()) ;
   }
   public static List<SelectItemOption<String>> getCategory() throws Exception {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
@@ -358,9 +370,9 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     eventDetailTab.getUIFormCheckBoxInput(UIEventDetailTab.FIELD_CHECKALL).setChecked(isCheckAll) ;
   }
 
-  protected boolean getEventRepeat() {
+  protected String getEventRepeat() {
     UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
-    return ITEM_REPEAT.equals(eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_REPEAT).getValue()) ;
+    return  eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_REPEAT).getValue() ;
   }
   protected void setEventRepeat(String type) {
     UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
@@ -442,37 +454,59 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     uiEventDetailTab.setAttachments(attachment) ;
     uiEventDetailTab.refreshUploadFileList() ;
   }
-  protected List<Reminder>  getEventReminders(String eventId, boolean isAddNew) {
-    List<Reminder> reminders = new ArrayList<Reminder>() ;
-    Reminder email = new Reminder() ;
-    email.setAlarmBefore(getEmailReminderTime()) ;
-    email.setEmailAddress(getEmailAddress()) ;
-    email.setEventId(eventId) ;
-    email.setReminder(Reminder.TYPE_EMAIL) ;
-    Reminder popup = new Reminder() ;
-    popup.setAlarmBefore(getEmailReminderTime()) ;
-    popup.setEventId(eventId) ;
-    popup.setReminder(Reminder.TYPE_POPUP) ;
-    popup.setSnooze(getPopupReminderSnooze()) ;
-    if(getEmailReminder()) {
-      if(!isAddNew_){
-        for(Reminder r : calendarEvent_.getReminders()) {
-          if(Reminder.TYPE_EMAIL.equals(r.getReminder())) email.setId(r.getId()) ;
-        }
+  protected void setEventReminders(List<Reminder> reminders){
+    for(Reminder r : reminders) {
+      if(Reminder.TYPE_EMAIL.equals(r.getReminder())) {
+        setEmailReminder(true) ;
+        setEmailAddress(r.getEmailAddress()) ;
+        setEmailReminderTime(r.getAlarmBefore()) ; 
+      }else {
+        setPopupReminder(true) ;
+        setPopupReminderTime(r.getAlarmBefore()) ;
+        setPopupReminderSnooze(r.getSnooze()) ;
       }
-      reminders.add(email) ;
     }
-    if(getPopupReminder()) {
-      if(!isAddNew_) {
+  }
+  protected List<Reminder>  getEventReminders() {
+    List<Reminder> reminders = new ArrayList<Reminder>() ;
+    if(isAddNew_) {
+      if(getEmailReminder()) { 
+        Reminder email = new Reminder(Reminder.TYPE_EMAIL) ;
+        email.setAlarmBefore(getEmailReminderTime()) ;
+        email.setEmailAddress(getEmailAddress()) ;
+        reminders.add(email) ;
+      }
+      if(getPopupReminder()) {
+        Reminder popup = new Reminder(Reminder.TYPE_POPUP) ;
+        popup.setAlarmBefore(getEmailReminderTime()) ;
+        popup.setSnooze(getPopupReminderSnooze()) ;
+        reminders.add(popup) ;
+      }
+    } else {
+      if(getEmailReminder()) {
         for(Reminder r : calendarEvent_.getReminders()) {
-          if(Reminder.TYPE_POPUP.equals(r.getReminder())) popup.setId(r.getId()) ;
+          if(Reminder.TYPE_EMAIL.equals(r.getReminder())) {
+            Reminder email = r ;
+            email.setAlarmBefore(getEmailReminderTime()) ;
+            email.setEmailAddress(getEmailAddress()) ;
+            reminders.add(email) ;
+          } 
         }
       }
-      reminders.add(popup) ;
+      if(getPopupReminder()) {
+        for(Reminder r : calendarEvent_.getReminders()) {
+          if(Reminder.TYPE_POPUP.equals(r.getReminder())) {
+            Reminder popup = r ;
+            popup.setAlarmBefore(getEmailReminderTime()) ;
+            popup.setSnooze(getPopupReminderSnooze()) ;
+            reminders.add(popup) ;
+          } 
+        }
+      }
     }
     return reminders ;
   }
-  
+
   protected String getEventPriority() {
     UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
     return eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_PRIORITY).getValue() ;
@@ -613,17 +647,19 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
         calendarEvent.setEventType(CalendarEvent.TYPE_EVENT) ;
         calendarEvent.setSummary(uiForm.getEventSumary()) ;
         calendarEvent.setDescription(uiForm.getEventDescription()) ;
+        calendarEvent.setFromDateTime(uiForm.getEventFromDate()) ;
+        calendarEvent.setToDateTime(uiForm.getEventToDate());
         calendarEvent.setCalendarId(calendarId) ;
         calendarEvent.setEventCategoryId(uiForm.getEventCategory()) ;
-        calendarEvent.setFromDateTime(uiForm.getEventFromDate()) ;
         calendarEvent.setLocation(uiForm.getEventPlace()) ;
-        calendarEvent.setToDateTime(uiForm.getEventToDate());
+        calendarEvent.setRepeatType(uiForm.getEventRepeat()) ;
+        calendarEvent.setPriority(uiForm.getEventPriority()) ; 
         calendarEvent.setPrivate(UIEventForm.ITEM_PRIVATE.equals(uiForm.getShareType())) ;
+        calendarEvent.setEventState(uiForm.getEventState()) ;
+        calendarEvent.setAttachment(uiForm.getAttachments(calendarEvent.getId(), uiForm.isAddNew_)) ;
+        calendarEvent.setReminders(uiForm.getEventReminders()) ;
         if(uiForm.getMeetingInvitation() != null) calendarEvent.setInvitation(uiForm.getMeetingInvitation()) ;
         if(uiForm.getParticipant() != null) calendarEvent.setParticipant(uiForm.getParticipant()) ;
-        calendarEvent.setReminders(uiForm.getEventReminders(calendarEvent.getId(), uiForm.isAddNew_)) ;
-        calendarEvent.setAttachment(uiForm.getAttachments(calendarEvent.getId(), uiForm.isAddNew_)) ;
-        calendarEvent.setPriority(uiForm.getEventPriority()) ; 
         try {
           calendarService.saveUserEvent(username, calendarId, calendarEvent, uiForm.isAddNew_) ;
           uiViewContainer.refresh() ;

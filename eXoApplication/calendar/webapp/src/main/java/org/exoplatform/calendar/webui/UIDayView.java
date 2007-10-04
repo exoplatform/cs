@@ -8,6 +8,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
@@ -17,7 +18,9 @@ import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.EventQuery;
+import org.exoplatform.calendar.webui.popup.UIEventForm;
 import org.exoplatform.calendar.webui.popup.UIPopupAction;
+import org.exoplatform.calendar.webui.popup.UIPopupContainer;
 import org.exoplatform.calendar.webui.popup.UIQuickAddEvent;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -39,13 +42,14 @@ import org.exoplatform.webui.event.EventListener;
       @EventConfig(listeners = UICalendarView.RefreshActionListener.class),
       @EventConfig(listeners = UICalendarView.AddEventActionListener.class),  
       @EventConfig(listeners = UICalendarView.DeleteEventActionListener.class),
+      @EventConfig(listeners = UICalendarView.AddCategoryActionListener.class),
       @EventConfig(listeners = UICalendarView.ChangeCategoryActionListener.class), 
       @EventConfig(listeners = UIDayView.MoveNextActionListener.class), 
-      @EventConfig(listeners = UIDayView.QuickAddActionListener.class), 
-      @EventConfig(listeners = UIDayView.EditEventActionListener.class), 
       @EventConfig(listeners = UIDayView.MovePreviousActionListener.class), 
-      @EventConfig(listeners = UIDayView.SaveEventActionListener.class), 
-      @EventConfig(listeners = UICalendarView.AddCategoryActionListener.class)
+      @EventConfig(listeners = UIDayView.QuickAddActionListener.class), 
+      @EventConfig(listeners = UIDayView.QuickDeleteEventActionListener.class),
+      @EventConfig(listeners = UIDayView.EditEventActionListener.class), 
+      @EventConfig(listeners = UIDayView.SaveEventActionListener.class)
     }
 
 )
@@ -56,7 +60,7 @@ public class UIDayView extends UICalendarView {
   private boolean isShowWorkingTime_ = false ;
   private int startTime_ = 0 ;
   private int endTime_ = 24 ;
-  private int timeInterval_ = 30 ;
+  //private int timeInterval_ = 30 ;
 
   public UIDayView() throws Exception{
     super() ;
@@ -76,15 +80,28 @@ public class UIDayView extends UICalendarView {
     CalendarService calendarService = getApplicationComponent(CalendarService.class) ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     EventQuery eventQuery = new EventQuery() ;
+    System.out.println("\n\n begin " + begin.getTime());
+    System.out.println("\n\n end " + end.getTime());
     eventQuery.setFromDate(begin) ;
     eventQuery.setToDate(end) ;
     events = calendarService.getUserEvents(username, eventQuery) ;
     events.addAll(calendarService.getPublicEvents(eventQuery)) ;
     for(CalendarEvent ce : events){
-      if(ce.getFromDateTime().before(begin.getTime()) && ce.getToDateTime().after(end.getTime())) {
-        allDayEvent_.put(ce.getId(),ce) ;
+      Date beginEvent = ce.getFromDateTime() ;
+      Date endEvent = ce.getToDateTime() ;
+
+      if(beginEvent.before(begin.getTime()) && endEvent.after(end.getTime())){
+        allDayEvent_.put(ce.getId(), ce) ;
       } else {
-        eventData_.put(ce.getId(), ce) ;
+        if(isSameDate(beginEvent, endEvent)) {
+          eventData_.put(ce.getId(), ce) ;
+        } else {
+          if(beginEvent.equals(begin.getTime()) && endEvent.equals(end.getTime())) {
+            allDayEvent_.put(ce.getId(), ce) ;
+          } else {
+            eventData_.put(ce.getId(), ce) ;
+          }
+        }
       }
     }
   }
@@ -93,18 +110,13 @@ public class UIDayView extends UICalendarView {
 
   protected Calendar getCurrentDayEnd()  {
     Calendar toDate = new GregorianCalendar(getCurrentYear(), getCurrentMonth(), getCurrentDay()) ;
-    toDate.set(Calendar.HOUR, toDate.getActualMaximum(Calendar.HOUR)) ;
-    toDate.set(Calendar.MINUTE, toDate.getActualMaximum(Calendar.MINUTE)) ;
-    toDate.set(Calendar.SECOND, toDate.getActualMaximum(Calendar.SECOND)) ;
-    toDate.set(Calendar.MILLISECOND, toDate.getActualMaximum(Calendar.MILLISECOND)) ;
+    toDate.set(Calendar.HOUR, 0) ;
+    toDate.add(Calendar.DATE, 1) ;
     return toDate ;
   }
   protected Calendar getCurrentDayBegin() {
     Calendar fromDate = new GregorianCalendar(getCurrentYear(), getCurrentMonth(), getCurrentDay()) ;
-    fromDate.set(Calendar.HOUR, fromDate.getActualMinimum(Calendar.HOUR)) ;
-    fromDate.set(Calendar.MINUTE, fromDate.getActualMinimum(Calendar.MINUTE)) ;
-    fromDate.set(Calendar.SECOND, fromDate.getActualMinimum(Calendar.SECOND)) ;
-    fromDate.set(Calendar.MILLISECOND, fromDate.getActualMinimum(Calendar.MILLISECOND)) ;
+    fromDate.set(Calendar.HOUR, 0) ;
     return fromDate ;
   }
 
@@ -141,8 +153,6 @@ public class UIDayView extends UICalendarView {
         try {
           String beginTime = df.format(calendarview.getCurrentDate())+ " " + startTime ;
           String endTime = df.format(calendarview.getCurrentDate())+ " " + finishTime ;
-          System.out.println("\n\n begin " + beginTime);
-          System.out.println("\n\n end " + endTime);
           uiQuickAddEvent.init(beginTime, endTime) ;
           uiPopupAction.activate(uiQuickAddEvent,600,0) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
@@ -158,6 +168,43 @@ public class UIDayView extends UICalendarView {
   static  public class EditEventActionListener extends EventListener<UIDayView> {
     public void execute(Event<UIDayView> event) throws Exception {
       System.out.println("EditEventActionListener");
+      UIDayView uiDayView = event.getSource() ;
+      UICalendarPortlet uiPortlet = uiDayView.getAncestorOfType(UICalendarPortlet.class) ;
+      UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
+      UIPopupContainer uiPopupContainer = uiPopupAction.activate(UIPopupContainer.class, 700) ;
+      UIEventForm uiEventForm = uiPopupContainer.createUIComponent(UIEventForm.class, null, null) ;
+      CalendarEvent eventCalendar = null ;
+      String username = event.getRequestContext().getRemoteUser() ;
+      String calendarId = event.getRequestContext().getRequestParameter(CALENDARID) ;
+      String eventId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      try {
+        CalendarService calService = uiDayView.getApplicationComponent(CalendarService.class) ;
+        eventCalendar = calService.getUserEvent(username, calendarId, eventId) ;
+      } catch (Exception e){
+        e.printStackTrace() ;
+      }
+      uiEventForm.initForm(eventCalendar) ;
+      uiPopupContainer.addChild(uiEventForm) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiDayView.getParent()) ;
+    }
+  }
+
+  static  public class QuickDeleteEventActionListener extends EventListener<UIDayView> {
+    public void execute(Event<UIDayView> event) throws Exception {
+      System.out.println("QuickDeleteEventActionListener");
+      UIDayView uiDayView = event.getSource() ;
+      CalendarService calService = uiDayView.getApplicationComponent(CalendarService.class) ;
+      String username = event.getRequestContext().getRemoteUser() ;
+      String eventId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      String calendarId = event.getRequestContext().getRequestParameter(CALENDARID) ;
+      try {
+        calService.removeUserEvent(username, calendarId, eventId) ;
+      } catch (Exception e) {
+        e.printStackTrace() ;
+      }
+      uiDayView.refresh() ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiDayView.getParent()) ;
     }
   }
   static  public class MovePreviousActionListener extends EventListener<UIDayView> {

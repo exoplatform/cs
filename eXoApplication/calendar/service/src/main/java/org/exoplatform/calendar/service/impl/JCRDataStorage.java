@@ -682,22 +682,22 @@ public class JCRDataStorage implements DataStorage{
         reminderNode.setProperty("exo:id", tempRm.getId()) ;
       }
     }
-    reminderNode.setProperty("exo:eventId", reminder.getEventId()) ;
+    reminderNode.setProperty("exo:eventId", eventNode.getName()) ;
     reminderNode.setProperty("exo:alarmBefore", reminder.getAlarmBefore()) ;
     reminderNode.setProperty("exo:snooze", reminder.getSnooze()) ;
     reminderNode.setProperty("exo:reminder", reminder.getReminder()) ;
     reminderNode.setProperty("exo:email", reminder.getEmailAddress()) ;
   }
+  
   private void addAttachment(Node eventNode, Attachment attachment, boolean isNew) throws Exception {
     Node attachNode ;
     if(isNew) {
       attachNode = eventNode.addNode(attachment.getName(), Utils.NT_FILE) ;
     }else {
-      if(eventNode.hasNode(attachment.getId())) {
-        attachNode = eventNode.getNode(attachment.getId()) ;
+      if(eventNode.hasNode(attachment.getName())) {
+        attachNode = eventNode.getNode(attachment.getName()) ;
       } else {
-        Attachment tempRm = new Attachment() ;
-        attachNode = eventNode.addNode(tempRm.getName(), Utils.NT_FILE) ;
+        attachNode = eventNode.addNode(attachment.getName(), Utils.NT_FILE) ;
       }
     }
     Node nodeContent = null;
@@ -715,6 +715,7 @@ public class JCRDataStorage implements DataStorage{
     if(eventNode.hasProperty("exo:summary")) event.setSummary(eventNode.getProperty("exo:summary").getString()) ;
     if(eventNode.hasProperty("exo:eventCategoryId")) event.setEventCategoryId(eventNode.getProperty("exo:eventCategoryId").getString()) ;
     if(eventNode.hasProperty("exo:location")) event.setLocation(eventNode.getProperty("exo:location").getString()) ;
+    if(eventNode.hasProperty("exo:repeat")) event.setRepeatType(eventNode.getProperty("exo:repeat").getString()) ;
     if(eventNode.hasProperty("exo:description")) event.setDescription(eventNode.getProperty("exo:description").getString()) ;
     if(eventNode.hasProperty("exo:fromDateTime")) event.setFromDateTime(eventNode.getProperty("exo:fromDateTime").getDate().getTime()) ;
     if(eventNode.hasProperty("exo:toDateTime")) event.setToDateTime(eventNode.getProperty("exo:toDateTime").getDate().getTime()) ;
@@ -722,6 +723,7 @@ public class JCRDataStorage implements DataStorage{
     if(eventNode.hasProperty("exo:priority")) event.setPriority(eventNode.getProperty("exo:priority").getString()) ;
     if(eventNode.hasProperty("exo:isPrivate")) event.setPrivate(eventNode.getProperty("exo:isPrivate").getBoolean()) ;
     if(eventNode.hasProperty("exo:eventState")) event.setEventState(eventNode.getProperty("exo:eventState").getString()) ;
+    
     event.setReminders(getReminders(eventNode)) ;
     event.setAttachment(getAttachments(eventNode)) ;
     if(eventNode.hasProperty("exo:invitation")){
@@ -745,7 +747,7 @@ public class JCRDataStorage implements DataStorage{
         for(int i = 0; i < values.length; i ++) {
           participant[i] = values[i].getString() ;
         }
-        event.setInvitation(participant) ;
+        event.setParticipant(participant) ;
       }
     }
     return event ;
@@ -768,26 +770,33 @@ public class JCRDataStorage implements DataStorage{
     eventNode.setProperty("exo:summary", event.getSummary()) ;
     eventNode.setProperty("exo:calendarId", event.getCalendarId()) ;
     eventNode.setProperty("exo:eventCategoryId", event.getEventCategoryId()) ;
-    eventNode.setProperty("exo:location", event.getLocation()) ;
     eventNode.setProperty("exo:description", event.getDescription()) ;
+    eventNode.setProperty("exo:location", event.getLocation()) ;
+    
     GregorianCalendar dateTime = new GregorianCalendar() ;
     dateTime.setTime(event.getFromDateTime()) ;
     eventNode.setProperty("exo:fromDateTime", dateTime) ;
     dateTime.setTime(event.getToDateTime()) ;
     eventNode.setProperty("exo:toDateTime", dateTime) ;
     eventNode.setProperty("exo:eventType", event.getEventType()) ;
+    eventNode.setProperty("exo:repeat", event.getRepeatType()) ;
     eventNode.setProperty("exo:priority", event.getPriority()) ;
     eventNode.setProperty("exo:isPrivate", event.isPrivate()) ;
     eventNode.setProperty("exo:eventState", event.getEventState()) ;
-    eventNode.setProperty("exo:invitation", event.getInvitation()) ;
-    eventNode.setProperty("exo:participant", event.getInvitation()) ;
+    eventNode.setProperty("exo:invitation",  event.getInvitation()) ;
+    eventNode.setProperty("exo:participant", event.getParticipant()) ;
     // add reminder child node
     List<Reminder> reminders = event.getReminders() ;
-    if(reminders != null) {
-      for(Reminder rm : reminders) {
-        addReminder(eventNode, rm, isNew) ;
-      }
+    NodeIterator nodeIter = eventNode.getNodes() ;
+    while(nodeIter.hasNext()) {
+      Node childNode = nodeIter.nextNode() ;
+      if(childNode.isNodeType("exo:reminder")) childNode.remove() ;
     }
+    if(reminders!= null) {
+      for(Reminder rm : reminders) {
+        addReminder(eventNode, rm, true) ;
+      }
+    } 
     List<Attachment> attachments = event.getAttachment() ;
     if(attachments != null) {
       for(Attachment rm : attachments) {

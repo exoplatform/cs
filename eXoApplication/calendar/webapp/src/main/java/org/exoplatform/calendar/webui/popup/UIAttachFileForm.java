@@ -36,7 +36,7 @@ import org.exoplatform.webui.form.UIFormUploadInput;
 public class UIAttachFileForm extends UIForm implements UIPopupComponent {
 
   final static public String FIELD_UPLOAD = "upload" ;  
-  
+
 
   public UIAttachFileForm() throws Exception {
     setMultiPart(true) ;
@@ -69,20 +69,21 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
         return ;
       }
       UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
+      UIEventForm uiEventForm = uiPopupContainer.getChild(UIEventForm.class) ;
+      UIPopupAction uiPopupAction = uiPopupContainer.getChild(UIPopupAction.class) ;
+      UIEventDetailTab uiEventDetailTab = uiEventForm.getChild(UIEventDetailTab.class) ;
       try {
-        UIEventForm uiEventForm = uiPopupContainer.getChild(UIEventForm.class) ;
-        UIEventDetailTab uiEventDetailTab = uiEventForm.getChild(UIEventDetailTab.class) ;
         Attachment attachfile = new Attachment() ;
-         attachfile.setName(uploadResource.getFileName()) ;
-         attachfile.setInputStream(input.getUploadDataAsStream()) ;
-         attachfile.setMimeType(uploadResource.getMimeType()) ;
-         attachfile.setSize((long)uploadResource.getUploadedSize());
-         uiEventDetailTab.addToUploadFileList(attachfile) ;
-         uiEventDetailTab.refreshUploadFileList() ;
-         UploadService uploadService = uiForm.getApplicationComponent(UploadService.class) ;
-         uploadService.removeUpload(input.getUploadId()) ;
-         uiForm.getAncestorOfType(UIPopupAction.class).deActivate() ;
-         event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
+        attachfile.setName(uploadResource.getFileName()) ;
+        attachfile.setInputStream(input.getUploadDataAsStream()) ;
+        attachfile.setMimeType(uploadResource.getMimeType()) ;
+        attachfile.setSize((long)uploadResource.getUploadedSize());
+        uiEventDetailTab.addToUploadFileList(attachfile) ;
+        uiEventDetailTab.refreshUploadFileList() ;
+        UploadService uploadService = uiForm.getApplicationComponent(UploadService.class) ;
+        uploadService.removeUpload(input.getUploadId()) ;
+        uiPopupAction.deActivate() ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupContainer) ;
       } catch(Exception e) {
         uiApp.addMessage(new ApplicationMessage("UIAttachFileForm.msg.upload-error", null, 
             ApplicationMessage.WARNING));

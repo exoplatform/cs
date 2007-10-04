@@ -22,15 +22,15 @@
 				<tr>
 					<td>
 						<a href="$linkDayPrevious">
-							<div class="BackIcon" title="Previous month"><span></span></div>
+							<div class="BackIcon" title="Previous day"><span></span></div>
 						</a>
 					</td>
 					<td>
-						<div class="Title">$currentMonthName,  $currentYear</div>
+						<div class="Title">$currentMonthName, $currentDay, $currentYear</div>
 					</td>
 					<td>
 						<a href="$linkDayNext">
-							<div class="NextIcon" title="Next month"><span></span></div>
+							<div class="NextIcon" title="Next day"><span></span></div>
 						</a>
 					</td>
 				</tr>
@@ -38,9 +38,13 @@
 		</table>
   </div>
   <div class="EventAllDay">
-    <%for(ce in uicomponent.getAllDayEvents().values()) {%>
-      <div class="EventAllDayDescription">
-        <%=ce.getSummary()%>
+    <%for(ce in uicomponent.getAllDayEvents().values()) {
+		 	actionLink =  uicomponent.event("SaveEvent",ce.getId()+"&calendarId="+ce.getCalendarId()+"&startTime=beginTime&finishTime=endTime") ;
+    %>
+    	<div class="EventContainerBorder EventBoxes" eventid="<%=ce.getId()%>" calid="<%=ce.getCalendarId()%>" actionlink="$actionLink"
+	      <div class="EventAllDayDescription">
+	        <%=ce.getSummary()%>
+	      </div>
       </div>
     <%}%>
   </div>
@@ -97,6 +101,9 @@
                       :<%=(ce.getFromDateTime().getMinutes())%>
                       <%=(ce.getToDateTime().getHours())%>
                       :<%=(ce.getToDateTime().getMinutes())%>
+                      <%
+                      	println ce.getReminders().size() ;
+                      %>
                     </div>
                     <div class="EventContainer">
                       <%=ce.getSummary()%>

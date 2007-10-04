@@ -12,6 +12,8 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
+import javax.faces.component.UIViewRoot;
+
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarEvent;
@@ -79,18 +81,27 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
     addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_ALLDAY, FIELD_ALLDAY, false));
     addUIFormInput(new UIFormSelectBox(FIELD_CALENDAR, FIELD_CALENDAR, getCalendar())) ;
     addUIFormInput(new UIFormSelectBox(FIELD_CATEGORY, FIELD_CATEGORY, UIEventForm.getCategory())) ;
+    init() ;
   }
 
+  public void init() {
+    java.util.Calendar cal = GregorianCalendar.getInstance() ;
+    int beginMinute = (cal.get(java.util.Calendar.MINUTE)/timeInterval_)* timeInterval_ ;
+    cal.set(java.util.Calendar.MINUTE, beginMinute) ;
+    setEventFromDate(cal.getTime()) ;
+    cal.add(java.util.Calendar.MINUTE, timeInterval_) ;
+    setEventToDate(cal.getTime()) ;
+  }
   public void init(String startTime, String endTime) throws Exception {
     DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm") ;
     try {
-    setEventFromDate(df.parse(startTime)) ;
-    setEventToDate(df.parse(endTime)) ;
+      setEventFromDate(df.parse(startTime)) ;
+      setEventToDate(df.parse(endTime)) ;
     } catch (Exception e) {
       e.printStackTrace() ;
     }
   }
-  
+
   private List<SelectItemOption<String>> getCalendar() throws Exception {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
@@ -142,9 +153,12 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
     }
   }
   private void setEventFromDate(Date value) {
-    DateFormat df = new SimpleDateFormat(timeFormat_) ;
-    getUIFormDateTimeInput(FIELD_FROM).getCalendar().setTime(value) ;
-    getUIFormSelectBox(FIELD_FROM_TIME).setValue(df.format(value)) ;
+    UIFormDateTimeInput fromField = getChildById(FIELD_FROM) ;
+    UIFormSelectBox timeFile = getChildById(FIELD_FROM_TIME) ;
+    DateFormat df = new SimpleDateFormat("MM/dd/yyyy") ;
+    fromField.setValue(df.format(value)) ;
+    df = new SimpleDateFormat(timeFormat_) ;
+    timeFile.setValue(df.format(value)) ;
   }
 
   private Date getEventToDate() {
@@ -157,9 +171,13 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
     }
   }
   private void setEventToDate(Date value) {
-    DateFormat df = new SimpleDateFormat(timeFormat_) ;
-    getUIFormDateTimeInput(FIELD_TO).getCalendar().setTime(value) ;
-    getUIFormSelectBox(FIELD_TO_TIME).setValue(df.format(value)) ;
+    UIFormDateTimeInput toField =  getChildById(FIELD_TO) ;
+    UIFormSelectBox timeField =  getChildById(FIELD_TO_TIME) ;
+    DateFormat df = new SimpleDateFormat("MM/dd/yyyy") ;
+    toField.setValue(df.format(value)) ;
+    df = new SimpleDateFormat(timeFormat_) ;
+    timeField.setValue(df.format(value)) ;
+
   }
 
   private boolean getIsAllDay() {
@@ -203,9 +221,12 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
         cal.set(java.util.Calendar.HOUR, cal.getActualMinimum(java.util.Calendar.HOUR_OF_DAY)) ;
         cal.set(java.util.Calendar.MINUTE, cal.getActualMinimum(java.util.Calendar.MINUTE)) ;
         fromDate = cal.getTime() ;
-        cal.set(java.util.Calendar.HOUR, cal.getActualMaximum(java.util.Calendar.HOUR_OF_DAY)) ;
-        cal.set(java.util.Calendar.MINUTE, cal.getActualMaximum(java.util.Calendar.MINUTE)) ;
+        cal.add(java.util.Calendar.DATE, 1) ;
+        /*cal.set(java.util.Calendar.HOUR, cal.getActualMaximum(java.util.Calendar.HOUR_OF_DAY)) ;
+        cal.set(java.util.Calendar.MINUTE, cal.getActualMaximum(java.util.Calendar.MINUTE)) ;*/
         toDate = cal.getTime() ;
+        System.out.println("\n\n form calendar all day  " + fromDate );
+        System.out.println("\n\n to calendar all day  " + toDate );
       }
       if(fromDate.equals(toDate) || fromDate.after(toDate)) {
         uiApp.addMessage(new ApplicationMessage("UIQuickAddEvent.msg.logic-required", null, ApplicationMessage.WARNING)) ;
@@ -225,12 +246,14 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
         calEvent.setFromDateTime(fromDate);
         calEvent.setToDateTime(toDate) ;
         calService.saveUserEvent(username, calendarId, calEvent, true) ;
+        
         UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class) ;
         uiPopupAction.deActivate() ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
         UICalendarPortlet uiPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
         UICalendarViewContainer uiContainer = uiPortlet.findFirstComponentOfType(UICalendarViewContainer.class);
         uiContainer.refresh() ;
+        System.out.println("\n\n getRenderedChild " + uiContainer.getRenderedChild().getId());
         event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;
         uiApp.addMessage(new ApplicationMessage("UIQuickAddEvent.msg.add-successfully", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -243,16 +266,16 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
   }
   static  public class MoreDetailActionListener extends EventListener<UIQuickAddEvent> {
     public void execute(Event<UIQuickAddEvent> event) throws Exception {
-     UIQuickAddEvent uiForm = event.getSource() ;
-     UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class) ;
-     uiPopupAction.deActivate() ;
-     UIEventForm uiEventForm = uiPopupAction.activate(UIEventForm.class, 700) ;
-     uiEventForm.setEventSumary(uiForm.getEventSummary()) ;
-     uiEventForm.setEventDescription(uiForm.getEventDescription()) ;
-     uiEventForm.setEventFromDate(uiForm.getEventFromDate()) ;
-     uiEventForm.setEventToDate(uiForm.getEventToDate()) ;
-     uiEventForm.setEventAllDate(uiForm.getIsAllDay()) ;
-     event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+      UIQuickAddEvent uiForm = event.getSource() ;
+      UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class) ;
+      uiPopupAction.deActivate() ;
+      UIEventForm uiEventForm = uiPopupAction.activate(UIEventForm.class, 700) ;
+      uiEventForm.setEventSumary(uiForm.getEventSummary()) ;
+      uiEventForm.setEventDescription(uiForm.getEventDescription()) ;
+      uiEventForm.setEventFromDate(uiForm.getEventFromDate()) ;
+      uiEventForm.setEventToDate(uiForm.getEventToDate()) ;
+      uiEventForm.setEventAllDate(uiForm.getIsAllDay()) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }
   }
   static  public class CancelActionListener extends EventListener<UIQuickAddEvent> {

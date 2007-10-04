@@ -5,9 +5,6 @@
 package org.exoplatform.calendar.webui;
 
 import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.exoplatform.calendar.webui.popup.UICalendarSettingForm;
 import org.exoplatform.calendar.webui.popup.UIFeed;
@@ -19,9 +16,6 @@ import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
-
-import sun.security.provider.SHA;
-import sun.swing.UIAction;
 
 /**
  * Created by The eXo Platform SARL
@@ -50,6 +44,7 @@ public class UIActionBar extends UIContainer  {
       UICalendarPortlet uiPortlet = uiActionBar.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
       UIQuickAddEvent uiQuickAddEvent = uiPopupAction.activate(UIQuickAddEvent.class, 600) ;
+      uiQuickAddEvent.init() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }
   }
@@ -59,6 +54,7 @@ public class UIActionBar extends UIContainer  {
       String viewType = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UICalendarPortlet uiPortlet = uiActionBar.getAncestorOfType(UICalendarPortlet.class) ;
       UICalendarViewContainer uiViewContainer = uiPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
+      uiViewContainer.refresh() ;
       uiViewContainer.setRenderedChild(viewType);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiViewContainer) ;
     }
