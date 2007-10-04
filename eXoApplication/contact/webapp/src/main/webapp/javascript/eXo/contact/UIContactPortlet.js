@@ -37,7 +37,8 @@ UIContactPortlet.prototype.addressBookCallback = function(evt) {
 	if (isPublic && (isPublic.toLowerCase() == "true")) {
 		for(var i = 0 ; i < itemLength ; i ++) {
 			if (DOMUtil.hasClass(menuItems[i],"ShareIcon") || DOMUtil.hasClass(menuItems[i],"EditActionIcon") || DOMUtil.hasClass(menuItems[i],"DeleteIcon")) {
-				if (!menuItems[i].parentNode.getAttribute("oldHref")) menuItems[i].parentNode.setAttribute("oldHref", menuItems[i].parentNode.href) ;
+				if (menuItems[i].parentNode.getAttribute("oldHref")) break ;
+				menuItems[i].parentNode.setAttribute("oldHref", menuItems[i].parentNode.href) ;
 				menuItems[i].parentNode.href = "javascript: void(0) ;" ;				
 			}
 		}
