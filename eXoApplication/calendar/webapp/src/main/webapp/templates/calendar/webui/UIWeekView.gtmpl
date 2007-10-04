@@ -20,7 +20,7 @@
 						</a>
 					</td>
 					<td>
-						<div class="Title">October,  2007</div>
+						<div class="Title">Week $weekNumber, $currentYear</div>
 					</td>
 					<td>
 						<a href="$linkDayNext">
