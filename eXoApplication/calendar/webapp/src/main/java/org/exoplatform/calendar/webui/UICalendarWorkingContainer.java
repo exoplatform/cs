@@ -25,5 +25,4 @@ public class UICalendarWorkingContainer extends UIContainer  {
     addChild(UICalendarContainer.class, null, null).setRendered(true) ;
     addChild(UICalendarViewContainer.class, null, null).setRendered(true) ;
   }
-  
 }
