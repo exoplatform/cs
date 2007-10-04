@@ -31,7 +31,7 @@
 			</body>
 		</table>	
 	</div>
-	<div class="EventWeekContener" >
+	<div class="EventWeekContainer" >
 		<div class="EventWeekBar">
 			<table class="UIGrid" id="RowContainerDay" cellspacing="0" borderspacing="0">
 				<thead>
