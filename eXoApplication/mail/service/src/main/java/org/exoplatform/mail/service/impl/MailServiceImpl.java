@@ -88,8 +88,8 @@ public class MailServiceImpl implements MailService{
 
   public Folder getFolder(String username, String accountId, String folderId) throws Exception {
     return storage_.getFolder(username, accountId, folderId);
-  }
-
+  } 
+  
   public void saveUserFolder(String username, String accountId, Folder folder) throws Exception {
     storage_.saveUserFolder(username, accountId, folder);
   }
@@ -154,11 +154,13 @@ public class MailServiceImpl implements MailService{
     props.put(Utils.SVR_SMTP_USER, messageProps.get(Utils.SVR_SMTP_USER)) ;
     props.put(Utils.SVR_SMTP_HOST, messageProps.get(Utils.SVR_SMTP_HOST)) ;
     props.put(Utils.SVR_SMTP_PORT, messageProps.get(Utils.SVR_SMTP_PORT)) ;
-    props.put(Utils.SVR_SSL, messageProps.get(Utils.SVR_SSL));
-    props.put(Utils.SVR_SMTP_STARTTLS_ENABLE, "true");
     props.put(Utils.SVR_SMTP_AUTH, "true");
     props.put(Utils.SVR_SMTP_SOCKETFACTORY_PORT, messageProps.get(Utils.SVR_SMTP_PORT));
-    props.put(Utils.SVR_SMTP_SOCKETFACTORY_CLASS,  "javax.net.ssl.SSLSocketFactory");
+    if (Boolean.valueOf(messageProps.get(Utils.SVR_SMTP_PORT))) {
+      props.put(Utils.SVR_SSL, messageProps.get(Utils.SVR_SSL));
+      props.put(Utils.SVR_SMTP_STARTTLS_ENABLE, "true");
+      props.put(Utils.SVR_SMTP_SOCKETFACTORY_CLASS,  "javax.net.ssl.SSLSocketFactory");
+    }
     props.put(Utils.SVR_SMTP_SOCKETFACTORY_FALLBACK, "false");
     Session session = Session.getInstance(props, null);
     sendMessage(session, message);
@@ -256,7 +258,8 @@ public class MailServiceImpl implements MailService{
           newMsg.setUnread(true);
           newMsg.setReceivedDate(receivedDate);
           newMsg.setSendDate(mes.getSentDate());
-          newMsg.setHasStar(true);
+//          newMsg.setHasStar(false);
+//          newMsg.setPriority(Utils.PRIORITY_NO);
           newMsg.setSize(mes.getSize());
           newMsg.setAttachements(new ArrayList<Attachment>());
           String[] folders = {account.getFolder()};
