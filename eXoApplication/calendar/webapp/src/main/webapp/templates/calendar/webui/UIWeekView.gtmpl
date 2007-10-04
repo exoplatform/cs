@@ -32,79 +32,91 @@
 		</table>	
 	</div>
 	<div class="EventWeekContener" >
-		<table class="UIGrid" id="RowContainerDay" cellspacing="0" borderspacing="0">
-			<thead>
-				<tr>
-					<th style="width: 40px"></th>
-					<%
-						
-					  for(cl in uicomponent.getDaysOfWeek(weekNumber)) {
-						  String day = uicomponent.getDayName(cl.get(Calendar.DAY_OF_WEEK));
-						  String dayName = day.substring(0,3) ;
-						  String date = cl.get(Calendar.DATE) ;
-						  String month = uicomponent.getMonthName(cl.get(Calendar.MONTH))  ;
-						  String monthName = month.substring(0,3) ;
-					%>
-						<th>$dayName, $date / $monthName</th>
-					<%
-					 }
-					%>
-				</tr>
-			</thead>
-			<tbody >
-				<tr>
-						<td style="width: 40px">&nbsp</td>
+		<div class="EventWeekBar">
+			<table class="UIGrid" id="RowContainerDay" cellspacing="0" borderspacing="0">
+				<thead>
+					<tr>
+						<th style="width: auto"></th>
 						<%
-					 		cssClass = "" ;
-					 		for(dayName in uicomponent.getDaysName()) {
-					 	%>
-						<td class="EventAllday">
-								<!-- <div class="EventContainer" style="height: 22px;">Talk to my cousin on ...</div> -->
-						</td>
-						<%}%>
+							
+						  for(cl in uicomponent.getDaysOfWeek(weekNumber)) {
+							  String day = uicomponent.getDayName(cl.get(Calendar.DAY_OF_WEEK));
+							  String dayName = day.substring(0,3) ;
+							  String date = cl.get(Calendar.DATE) ;
+							  String month = uicomponent.getMonthName(cl.get(Calendar.MONTH))  ;
+							  String monthName = month.substring(0,3) ;
+						%>
+							<th>$dayName, $date / $monthName</th>
+						<%
+						 }
+						%>
 					</tr>
-				
-				<%
-					i = 0;
-					t = 1 ;
-					boolean isHaftTime = false ;
-					while (i++ < 48) {
-					time = t + ":00" ;
-					if(isHaftTime) {time = " " ; t++ ;}
-				%>
-				<tr>
-					<td class="TdTime" style="border-top: 1px solid #c7c7c7;">
-					$time
-					</td>
-				 	<%
-				 		if (isHaftTime) {typeCss = "TdDotLine" ;}
-				 		else {typeCss = "TdLine" ;}
-				 		for(cl in uicomponent.getDaysOfWeek(weekNumber)) {
-				 			day = cl.get(Calendar.DATE) ;
-				 			month = cl.get(Calendar.MONTH) ;
-				 			year = cl.get(Calendar.YEAR) ;
-				 		  if(cl.get(Calendar.DAY_OF_WEEK) == uicomponent.getDayOfWeek(currentYear, currentMonth, currentDay)){	
-				 		  	cssClass = "Today" ;
-				 		  } else {
-				 				cssClass = "" ;
-				 		  }
-				 	%>
-					 		<td class="$typeCss $cssClass">
-								<!--  <div class="EventContainerBoder"
-									<div class="EventContainerBar">5:35 AM - 7:00 AM</div>
-									<div class="EventContainer">Talk to my cousin on ...</div>
-									<div class="ResizeEventContainer"><span></span></div>
-								</div>
-								-->
+				</thead>
+				<tbody >
+					<tr>
+							<td style="width: auto; border-left: 1px solid #c7c7c7;">&nbsp</td>
+							<%
+						 		cssClass = "" ;
+						 		for(dayName in uicomponent.getDaysName()) {
+						 	%>
+							<td class="EventAllday">
+									<!-- <div class="EventContainer" style="height: 22px;">Talk to my cousin on ...</div> -->
 							</td>
-				 	<%}%>
-				</tr>
-				<%
-					isHaftTime = !isHaftTime ;
-				}
-				%>
-			</tbody>
-		</table>
+							<%}%>
+					</tr>
+					
+				</tbody>
+			</table>
+		</div>
+		<div class="EventWeekContent">
+			<table class="UIGrid" id="RowContainerDay" cellspacing="0" borderspacing="0">
+				<tbody >
+					<%
+						i = 0;
+						t = 1 ;
+						boolean isHaftTime = false ;
+						while (i++ < 48) {
+						time = t + ":00" ;
+						if(isHaftTime) {time = " " ; t++ ;}
+					%>
+					<tr>
+						<%
+					 		if (isHaftTime) {typeCss = "TdDotLine" ;}
+					 		else {typeCss = "TdLine" ;}
+					 	%>
+						<td class="TdTime $typeCss" >
+						$time
+						</td>
+					 	<%
+					 		if (isHaftTime) {typeCss = "TdDotLine" ;}
+					 		else {typeCss = "TdLine" ;}
+					 		for(cl in uicomponent.getDaysOfWeek(weekNumber)) {
+					 			day = cl.get(Calendar.DATE) ;
+					 			month = cl.get(Calendar.MONTH) ;
+					 			year = cl.get(Calendar.YEAR) ;
+					 		  if(cl.get(Calendar.DAY_OF_WEEK) == uicomponent.getDayOfWeek(currentYear, currentMonth, currentDay)){	
+					 		  	cssClass = "Today" ;
+					 		  } else {
+					 				cssClass = "" ;
+					 		  }
+					 	%>
+						 		<td class="$typeCss $cssClass">
+									<!--  <div class="EventContainerBoder"
+										<div class="EventContainerBar">5:35 AM - 7:00 AM</div>
+										<div class="EventContainer">Talk to my cousin on ...</div>
+										<div class="ResizeEventContainer"><span></span></div>
+									</div>
+									-->
+								</td>
+					 	<%}%>
+					</tr>
+					<%
+						isHaftTime = !isHaftTime ;
+					}
+					%>
+				</tbody>
+			</table>
+		</div>
 	</div>
 </div> 
 <%uiform.end()%>	 

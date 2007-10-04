@@ -586,9 +586,10 @@
 	border-bottom: 1px solid #c7c7c7;
 }
 
-.UIWeekView .EventWeekContener {
+.UIWeekView .EventWeekContent {
 	overflow:auto;
-	height: 480px;
+	height: 420px;
+	padding-top: 1px;
 	border-left: 1px solid #c7c7c7;
 }
 
@@ -603,23 +604,43 @@
 	border-left: none;
 }
 
+.UIWeekView .EventWeekBar .UIGrid th {
+	border-left: 1px solid #c7c7c7;
+}
+
+
 .UIWeekView .UIGrid {
-	width: 98%;
 	border: 0px;
 	background-color: white;
+}
 
+.UIWeekView .EventWeekBar {
+	padding: 0px 16px 0px 1px;
+}
+
+*html .UIWeekView .EventWeekBar {
+	padding-right: 3px;
+	padding-left: 0px;
+}
+
+
+*html .UIWeekView .UIGrid {
+	width: 97%;
 }
 
 .UIWeekView .TdLine{
 	border-top:  1px solid #c7c7c7;
+	width: 13.4%;
 }
 
 .UIWeekView .TdDotLine{
 	border-top:  1px dotted #c7c7c7;
+	width: 13.4%;
 }
 
 .UIWeekView .TdTime{
 	text-align: right;
+	width: auto;
 }
 
 .UIWeekView .UIGrid td{
@@ -1026,9 +1047,12 @@
 }
 
 .UIMonthView .EventMonthContent .UIGrid{
-	width: 98%;
 	padding-left: 0px;
 	border: none;
+}
+
+*html .UIMonthView .EventMonthContent .UIGrid{
+	width: 97%;
 }
 
 .UIMonthView .EventMonthContent .DayBox {
