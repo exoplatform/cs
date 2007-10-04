@@ -40,7 +40,6 @@ import org.exoplatform.webui.form.validator.EmptyFieldValidator;
 public class UIEventCategoryForm extends UIForm {
   final private static String EVENT_CATEGORY_NAME = "eventCategoryName" ; 
   final private static String DESCRIPTION = "description" ;
-
   private boolean isAddNew_ = true ;
   private EventCategory eventCategory_ = null ;
   public UIEventCategoryForm() throws Exception{

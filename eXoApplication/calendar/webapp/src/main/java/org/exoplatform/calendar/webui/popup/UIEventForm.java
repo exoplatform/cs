@@ -572,7 +572,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     public void execute(Event<UIEventForm> event) throws Exception {
       UIEventForm uiForm = event.getSource() ;
       System.out.println("\n\n AddCategoryActionListener");
-      UIPopupAction uiParentPopup = uiForm.getAncestorOfType(UIPopupAction.class) ;
       UIPopupContainer uiContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       UIPopupAction uiChildPopup = uiContainer.getChild(UIPopupAction.class) ;
       uiChildPopup.activate(UIEventCategoryManager.class, 500) ;

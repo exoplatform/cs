@@ -85,7 +85,6 @@ public class UICalendarCategoryForm extends UIForm {
         event.getRequestContext().addUIComponentToUpdateByAjax(app.getUIPopupMessages()) ;
         return ;
       }
-      UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
       try {
         CalendarService calendarService = CalendarUtils.getCalendarService() ;
@@ -99,16 +98,10 @@ public class UICalendarCategoryForm extends UIForm {
         if(uiCalendarForm != null) uiCalendarForm.reloadCategory() ;
         uiManager.updateGrid() ;
         uiForm.reset() ;
-        /*UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class) ; 
-      //uiPopupAction.deActivate() ;
-         * */
         event.getRequestContext().addUIComponentToUpdateByAjax(uiManager) ;
       } catch (Exception e) {
         e.printStackTrace() ; 
       }
-      if(uiPopupContainer != null) {
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupContainer.getAncestorOfType(UIPopupAction.class)) ;
-      }  
       UICalendars uiCalendars = calendarPortlet.findFirstComponentOfType(UICalendars.class) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendars) ; 
     }
@@ -117,19 +110,18 @@ public class UICalendarCategoryForm extends UIForm {
     public void execute(Event<UICalendarCategoryForm> event) throws Exception {
       UICalendarCategoryForm uiForm = event.getSource() ;
       uiForm.reset() ;
-      UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class) ; 
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
     }
   }
   static  public class CancelActionListener extends EventListener<UICalendarCategoryForm> {
     public void execute(Event<UICalendarCategoryForm> event) throws Exception {
       UICalendarCategoryForm uiForm = event.getSource() ;
-      UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class) ; 
       uiPopupAction.deActivate() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
-      if(uiPopupContainer != null) {
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupContainer.getAncestorOfType(UIPopupAction.class)) ;
+      if(uiPopupAction.getAncestorOfType(UIPopupAction.class) != null) {
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction.getAncestorOfType(UIPopupAction.class));
+      } else {
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
       }
     }
   }
