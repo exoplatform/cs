@@ -1,21 +1,21 @@
-<div class="UIActionBar">
+<div id="$uicomponent.id" class="UIActionBar">
 	<div class="UIToolbar">
 		<div class="HeaderToolbar">
 			<div class="LeftBar">
 				<div class="RightBar">
 					<div class="CenterBar">
 						<div class="Title ControlButton">Quick add:</div>
-						<a href="<%=uicomponent.event("QuickAddEvent")%>" class="ControlButton">
+						<a href="<%=uicomponent.event("QuickAddEvent","event")%>" class="ControlButton">
 							<div class="IconHolder AddEventIcon">Event</div>
 						</a>
-						<a href="#" class="ControlButton">
+						<a href="<%=uicomponent.event("QuickAddEvent","task")%>" class="ControlButton">
 							<div class="IconHolder AddTaskIcon">Task</div>
 						</a>
 						<div class="SeparatorLine"><span></span></div>
 						<div class="Title ControlButton">Calendar View:</div>
 						<div class="SelectButton" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);" style="position: relative;">
-							<div class="IconHolder DayIcon">
-								<div class="DownArrow1Icon" >Day</div>
+							<div class="IconHolder <%=uicomponent.getCurrentView()%>Icon">
+								<div class="DownArrow1Icon" ><%=uicomponent.getCurrentView()%></div>
 							</div>
 							<% /*Begin Popup Menu*/ %>
 							<!--<div style="position: relative;">-->
@@ -30,6 +30,7 @@
 						          <div class="MiddleRightRightClickPopupMenu">
 			              		<div class="UIRightPopupMenuContainer">
 			              			<%for(viewType in uicomponent.getViewTypes()){
+			              				if(!viewType.equals(uicomponent.getCurrentView())) {
 			              				icon = viewType + "Icon" ;
 			              				actionLink = uicomponent.event("ChangeView", viewType) ;
 			              			%>
@@ -38,7 +39,7 @@
 					                      $viewType
 					                    </div>
 				                    </a>
-			                    <%}%>
+			                    <%}}%>
 												</div>
 				          		</div>
 				        		</div>

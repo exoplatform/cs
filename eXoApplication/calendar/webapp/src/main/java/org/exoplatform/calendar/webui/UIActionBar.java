@@ -6,6 +6,7 @@ package org.exoplatform.calendar.webui;
 
 import java.util.Calendar;
 
+import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.webui.popup.UICalendarSettingForm;
 import org.exoplatform.calendar.webui.popup.UIFeed;
 import org.exoplatform.calendar.webui.popup.UIPopupAction;
@@ -36,14 +37,24 @@ import org.exoplatform.webui.event.EventListener;
 )
 public class UIActionBar extends UIContainer  {
 
-  private String[] getViewTypes() {return UICalendarViewContainer.TYPES ;} 
-
+  private String currentView_ = "UIDayView" ;
+  
+  protected String[] getViewTypes() {return UICalendarViewContainer.TYPES ;} 
+  protected String getCurrentView() {return currentView_ ;}
+  protected void setCurrentView(String viewName) {currentView_ = viewName ;}
   static public class QuickAddEventActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {
       UIActionBar uiActionBar = event.getSource() ;
+      String type = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UICalendarPortlet uiPortlet = uiActionBar.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
       UIQuickAddEvent uiQuickAddEvent = uiPopupAction.activate(UIQuickAddEvent.class, 600) ;
+      if(CalendarEvent.TYPE_EVENT.equals(type)) {
+        uiQuickAddEvent.setEvent(true) ;
+      } else {
+        uiQuickAddEvent.setEvent(false) ;
+        uiQuickAddEvent.setId("UIQuickAddTask") ;
+      }
       uiQuickAddEvent.init() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }
@@ -56,6 +67,8 @@ public class UIActionBar extends UIContainer  {
       UICalendarViewContainer uiViewContainer = uiPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
       uiViewContainer.refresh() ;
       uiViewContainer.setRenderedChild(viewType);
+      uiActionBar.setCurrentView(viewType) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiActionBar) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiViewContainer) ;
     }
   }  

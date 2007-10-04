@@ -25,7 +25,9 @@ import org.exoplatform.webui.event.EventListener;
     events = {
       @EventConfig(listeners = UIMiniCalendar.MoveNextActionListener.class), 
       @EventConfig(listeners = UIMiniCalendar.MovePreviousActionListener.class),
-      @EventConfig(listeners = UIMiniCalendar.GotoDateActionListener.class)
+      @EventConfig(listeners = UIMiniCalendar.GotoDateActionListener.class),
+      @EventConfig(listeners = UIMiniCalendar.GotoMonthActionListener.class),
+      @EventConfig(listeners = UIMiniCalendar.GotoYearActionListener.class)
     }
 
 )
@@ -52,6 +54,9 @@ public class UIMiniCalendar extends UIMonthView  {
       uiDayView.setCurrentCalendar(calendarview.getCurrentCalendar()) ;
       uiDayView.refresh() ;
       calendarview.refresh() ;
+      UIActionBar uiActionBar = portlet.findFirstComponentOfType(UIActionBar.class) ;
+      uiActionBar.setCurrentView(uiContainer.getRenderedChild().getId()) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiActionBar) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;
     }
@@ -64,9 +69,14 @@ public class UIMiniCalendar extends UIMonthView  {
       UICalendarViewContainer uiContainer = portlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
       uiContainer.setRenderedChild(UIMonthView.class) ;
       UIMonthView uiMonthView = uiContainer.getChild(UIMonthView.class) ;
+      uiMonthView.setCurrentDay(1) ;
+      calendarview.setCurrentDay(1);
       uiMonthView.setCurrentMonth(Integer.parseInt(date)) ;
       uiMonthView.refresh() ;
-      //event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
+      UIActionBar uiActionBar = portlet.findFirstComponentOfType(UIActionBar.class) ;
+      uiActionBar.setCurrentView(uiContainer.getRenderedChild().getId()) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiActionBar) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;
     }
   }
@@ -78,9 +88,15 @@ public class UIMiniCalendar extends UIMonthView  {
       UICalendarViewContainer uiContainer = portlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
       uiContainer.setRenderedChild(UIYearView.class) ;
       UIYearView uiYearView = uiContainer.getChild(UIYearView.class) ;
+      uiYearView.setCurrentDay(1) ;
+      calendarview.setCurrentDay(1);
+      uiYearView.setCurrentMonth(Calendar.JANUARY) ;
       uiYearView.setCurrentYear(Integer.parseInt(date)) ;
       uiYearView.refresh() ;
-      //event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
+      UIActionBar uiActionBar = portlet.findFirstComponentOfType(UIActionBar.class) ;
+      uiActionBar.setCurrentView(uiContainer.getRenderedChild().getId()) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiActionBar) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;
     }
   }
@@ -94,6 +110,7 @@ public class UIMiniCalendar extends UIMonthView  {
       } else {
         calendarview.moveYear(1) ;
       }
+      calendarview.setCurrentDay(1);
       calendarview.refresh() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
     }
@@ -108,6 +125,7 @@ public class UIMiniCalendar extends UIMonthView  {
       } else {
         calendarview.moveYear(-1) ;
       }
+      calendarview.setCurrentDay(1);
       calendarview.refresh() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
     }
