@@ -4,6 +4,8 @@
  **************************************************************************/
 package org.exoplatform.calendar.webui;
 
+import java.util.Calendar;
+
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
@@ -28,41 +30,85 @@ import org.exoplatform.webui.event.EventListener;
 
 )
 public class UIMiniCalendar extends UIMonthView  {
+  final public static String TYPE_MONTH = "month".intern() ;
+  final public static String TYPE_YEAR = "year".intern() ;
+
   public UIMiniCalendar() throws Exception {
 
   }  
   public void refresh() {}
+  protected void moveYear(int yearStep) {
+    calendar_.add(Calendar.YEAR, yearStep) ;
+  }
   static  public class GotoDateActionListener extends EventListener<UIMiniCalendar> {
     public void execute(Event<UIMiniCalendar> event) throws Exception {
-      UIMonthView calendarview = event.getSource() ;
+      UIMiniCalendar calendarview = event.getSource() ;
       String date = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UICalendarPortlet portlet = calendarview.getAncestorOfType(UICalendarPortlet.class) ;
       UICalendarViewContainer uiContainer = portlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
+      uiContainer.setRenderedChild(UIDayView.class) ;
       UIDayView uiDayView = uiContainer.getChild(UIDayView.class) ;
-      if(uiDayView != null) {
-        int day = Integer.parseInt(date) ;
-        int month = calendarview.getCurrentMonth() ;
-        int year = calendarview.getCurrentYear() ;
-        uiDayView.gotoDate(day, month, year) ;
-        uiDayView.refresh() ;
-        uiContainer.setRenderedChild(uiDayView.getId()) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;
-      }
+      calendarview.gotoDate(Integer.parseInt(date), calendarview.getCurrentMonth(), calendarview.getCurrentYear()) ;
+      uiDayView.setCurrentCalendar(calendarview.getCurrentCalendar()) ;
+      uiDayView.refresh() ;
+      calendarview.refresh() ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;
+    }
+  }
+  static  public class GotoMonthActionListener extends EventListener<UIMiniCalendar> {
+    public void execute(Event<UIMiniCalendar> event) throws Exception {
+      UIMiniCalendar calendarview = event.getSource() ;
+      String date = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      UICalendarPortlet portlet = calendarview.getAncestorOfType(UICalendarPortlet.class) ;
+      UICalendarViewContainer uiContainer = portlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
+      uiContainer.setRenderedChild(UIMonthView.class) ;
+      UIMonthView uiMonthView = uiContainer.getChild(UIMonthView.class) ;
+      uiMonthView.setCurrentMonth(Integer.parseInt(date)) ;
+      uiMonthView.refresh() ;
+      //event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;
+    }
+  }
+  static  public class GotoYearActionListener extends EventListener<UIMiniCalendar> {
+    public void execute(Event<UIMiniCalendar> event) throws Exception {
+      UIMiniCalendar calendarview = event.getSource() ;
+      String date = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      UICalendarPortlet portlet = calendarview.getAncestorOfType(UICalendarPortlet.class) ;
+      UICalendarViewContainer uiContainer = portlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
+      uiContainer.setRenderedChild(UIYearView.class) ;
+      UIYearView uiYearView = uiContainer.getChild(UIYearView.class) ;
+      uiYearView.setCurrentYear(Integer.parseInt(date)) ;
+      uiYearView.refresh() ;
+      //event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;
     }
   }
 
   static  public class MoveNextActionListener extends EventListener<UIMiniCalendar> {
     public void execute(Event<UIMiniCalendar> event) throws Exception {
-      UIMonthView calendarview = event.getSource() ;
-      calendarview.monthNext(1) ;
+      UIMiniCalendar calendarview = event.getSource() ;
+      String type = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      if(TYPE_MONTH.equals(type)) {
+        calendarview.monthNext(1) ;
+      } else {
+        calendarview.moveYear(1) ;
+      }
+      calendarview.refresh() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
     }
   }
 
   static  public class MovePreviousActionListener extends EventListener<UIMiniCalendar> {
     public void execute(Event<UIMiniCalendar> event) throws Exception {
-      UIMonthView calendarview = event.getSource() ;
-      calendarview.monthBack(-1) ;
+      UIMiniCalendar calendarview = event.getSource() ;
+      String type = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      if(TYPE_MONTH.equals(type)) {
+        calendarview.monthNext(-1) ;
+      } else {
+        calendarview.moveYear(-1) ;
+      }
+      calendarview.refresh() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
     }
   }

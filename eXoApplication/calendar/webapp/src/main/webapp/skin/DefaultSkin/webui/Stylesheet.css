@@ -308,7 +308,9 @@
 .UIMiniCalendar .DayList .UIGrid .Today {
 	background: #ABC7FE;
 }
-
+.UIMiniCalendar .DayList .UIGrid .SelectedDay {
+	background: #FFF6A3;
+}
 .UIMiniCalendar .DayList .UIGrid .Today .Actions {
 	color: red;
 }
@@ -1060,7 +1062,6 @@
 	border-top: 1px solid #c7c7c7;
 	padding: 2px 6px;
 }
-
 .UIMonthView .EventMonthContent  .DisableDay {
 	text-align: right;
 	border-top: 1px solid #c7c7c7;

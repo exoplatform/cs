@@ -1,9 +1,15 @@
 <%
+	import java.text.DateFormat;
+	import java.text.SimpleDateFormat;
 	int currentYear = uicomponent.getCurrentYear() ;
 	int currentMonth = uicomponent.getCurrentMonth() ;
 	int currentDay = uicomponent.getCurrentDay() ;
-	String linkDayNext = uicomponent.event(uicomponent.ACT_NEXT) ;
- 	String linkDayPrevious = uicomponent.event(uicomponent.ACT_PREVIOUS) ;
+	String linkDayNext = uicomponent.event(uicomponent.ACT_NEXT,uicomponent.TYPE_MONTH) ;
+ 	String linkDayPrevious = uicomponent.event(uicomponent.ACT_PREVIOUS,uicomponent.TYPE_MONTH) ;
+ 	String linkYearNext = uicomponent.event(uicomponent.ACT_NEXT,uicomponent.TYPE_YEAR) ;
+ 	String linkYearPrevious = uicomponent.event(uicomponent.ACT_PREVIOUS,uicomponent.TYPE_YEAR) ;
+ 	
+ 	
  	monthName = uicomponent.getMonthName(currentMonth) ;
  	cssClass = "CalendarContentNomal" ;
  	if(uicomponent.isCurrentMonth(currentMonth, currentYear)) {
@@ -14,7 +20,7 @@
 <div class="UIMiniCalendar">
 	<div class="MiniCalendarContainer">
 		<div class="YearSelector">
-			<a href="#" class="RightControlButton">
+			<a href="$linkYearNext" class="RightControlButton">
 				<div class="NextYearSelector" title="Previous Year"><span></span></div>
 			</a>
 			<div class="MonthSelector RightControlButton">
@@ -27,7 +33,14 @@
 								</a>
 							</td>
 							<td>
-								<div class="Title">$monthName,  $currentYear</div>
+								<div class="Title">
+								<a href="<%=uicomponent.event("GotoMonth","$currentMonth")%>">
+									$monthName 
+								</a>,  
+								<a href="<%=uicomponent.event("GotoYear","$currentYear")%>">
+									$currentYear
+								</a>
+								</div>
 							</td>
 							<td>
 								<a href="$linkDayNext">
@@ -38,7 +51,7 @@
 					</body>
 				</table>
 			</div>
-			<a href="#" class="RightControlButton">
+			<a href="$linkYearPrevious" class="RightControlButton">
 				<div class="PreviousYearSelector" title="Previous Year"><span></span></div>
 			</a>
 			<div style="clear: right;"><span></span></div>
@@ -72,10 +85,13 @@
 				        validDay = 0;
 				      }
 				      if (validDay) {
+				       	clazz = "" ;
 					      if (uicomponent.isCurrentDay(dayOfMonth, currentMonth, currentYear )) {
-						       clazz = 'Today';
+						       clazz = "Today";
 						     } else  {
-						       clazz = 'DayBox';
+						       if(dayOfMonth == uicomponent.getCurrentDay()) {
+						       	clazz = "SelectedDay";
+						       }  
 						     }
 						   actionLink =  uicomponent.event("GotoDate",String.valueOf(dayOfMonth)) ;
 				       println "<td class=\"$clazz\"><a href=\"$actionLink\"><div class=\"Actions\">$dayOfMonth</div></a></td>" ;
@@ -96,7 +112,13 @@
 	  <div class="TimeSelector">
 			<div class="RightTimeSelector">
 				<div class="LeftTimeSelector">
-					<div class="CenterTimeSelector">11:20:10 AM</div>
+					<div class="CenterTimeSelector">
+						<%
+							String style = "hh:mm:ss a" ;
+							DateFormat df = new SimpleDateFormat(style) ;
+							println df.format(uicomponent.getCurrentDate()) ;
+						%>
+					</div>
 				</div>
 			</div>
 		</div>     

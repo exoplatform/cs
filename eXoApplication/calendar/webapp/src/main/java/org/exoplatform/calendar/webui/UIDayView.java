@@ -147,20 +147,22 @@ public class UIDayView extends UICalendarView {
       if(CalendarUtils.isEmpty(finishTime)) finishTime = startTime ; 
       UICalendarPortlet uiPortlet = calendarview.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
+      UIQuickAddEvent uiQuickAddEvent = uiPopupAction.activate(UIQuickAddEvent.class, 600) ;
       if(CalendarEvent.TYPE_EVENT.equals(type)) {
-        UIQuickAddEvent uiQuickAddEvent = uiPopupAction.activate(UIQuickAddEvent.class, 600) ;
-        DateFormat df =new SimpleDateFormat("MM/dd/yyyy") ;
-        try {
-          String beginTime = df.format(calendarview.getCurrentDate())+ " " + startTime ;
-          String endTime = df.format(calendarview.getCurrentDate())+ " " + finishTime ;
-          uiQuickAddEvent.init(beginTime, endTime) ;
-          uiPopupAction.activate(uiQuickAddEvent,600,0) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
-        } catch (Exception e) {
-          e.printStackTrace() ;
-        }
+        uiQuickAddEvent.setEvent(true) ;
       } else {
-        System.out.println("Add new task here");    
+        uiQuickAddEvent.setEvent(false) ;
+        uiQuickAddEvent.setId("UIQuickAddTask") ;
+      }
+      DateFormat df =new SimpleDateFormat("MM/dd/yyyy") ;
+      try {
+        String beginTime = df.format(calendarview.getCurrentDate())+ " " + startTime ;
+        String endTime = df.format(calendarview.getCurrentDate())+ " " + finishTime ;
+        uiQuickAddEvent.init(beginTime, endTime) ;
+        uiPopupAction.activate(uiQuickAddEvent,600,0) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+      } catch (Exception e) {
+        e.printStackTrace() ;
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
     }
