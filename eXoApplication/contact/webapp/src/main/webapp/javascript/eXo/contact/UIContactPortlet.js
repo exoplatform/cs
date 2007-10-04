@@ -39,7 +39,9 @@ UIContactPortlet.prototype.addressBookCallback = function(evt) {
 			if (DOMUtil.hasClass(menuItems[i],"ShareIcon") || DOMUtil.hasClass(menuItems[i],"EditActionIcon") || DOMUtil.hasClass(menuItems[i],"DeleteIcon")) {
 				if (menuItems[i].parentNode.getAttribute("oldHref")) break ;
 				menuItems[i].parentNode.setAttribute("oldHref", menuItems[i].parentNode.href) ;
-				menuItems[i].parentNode.href = "javascript: void(0) ;" ;				
+				menuItems[i].parentNode.href = "javascript: void(0) ;" ;
+				menuItems[i].parentNode.setAttribute("oldColor", DOMUtil.getStyle(menuItems[i].parentNode, "color")) ;
+				menuItems[i].parentNode.style.color = "#cccccc" ;
 			}
 		}
 	} else {
@@ -47,7 +49,9 @@ UIContactPortlet.prototype.addressBookCallback = function(evt) {
 			if (DOMUtil.hasClass(menuItems[i],"ShareIcon") || DOMUtil.hasClass(menuItems[i],"EditActionIcon") || DOMUtil.hasClass(menuItems[i],"DeleteIcon")) {
 				if (!menuItems[i].parentNode.getAttribute("oldHref")) break ;
 				menuItems[i].parentNode.href = menuItems[i].parentNode.getAttribute("oldHref") ;
-				menuItems[i].parentNode.removeAttribute("oldHref") ;				
+				menuItems[i].parentNode.style.color = menuItems[i].parentNode.getAttribute("oldColor") ;
+				menuItems[i].parentNode.removeAttribute("oldColor") ;
+				menuItems[i].parentNode.removeAttribute("oldHref") ;
 			}
 		}
 	}
