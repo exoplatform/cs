@@ -50,10 +50,14 @@ public class UIWeekView extends UICalendarView {
   public void refresh() throws Exception {
     int week = getCurrentWeek() ;
     eventData_.clear() ;
+    
     CalendarService calendarService = getApplicationComponent(CalendarService.class) ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     EventQuery eventQuery = new EventQuery() ;
-    java.util.Calendar fromcalendar = getDaysOfWeek(week).get(0) ;
+    
+    java.util.Calendar fromcalendar = getCurrentCalendar() ;
+    System.out.println("\n\n fromcalendar " + fromcalendar.get(Calendar.DATE));
+     
     eventQuery.setFromDate(fromcalendar) ;
     java.util.Calendar tocalendar = getDaysOfWeek(week).get(getDaysOfWeek(week).size()-1) ;
     eventQuery.setToDate(tocalendar) ;
