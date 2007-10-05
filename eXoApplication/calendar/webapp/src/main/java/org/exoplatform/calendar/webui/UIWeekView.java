@@ -6,6 +6,7 @@ package org.exoplatform.calendar.webui;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -40,7 +41,7 @@ import org.exoplatform.webui.event.EventListener;
 public class UIWeekView extends UICalendarView {
 
   protected Map<String, List<CalendarEvent>> eventData_ = new HashMap<String, List<CalendarEvent>>() ;
-  protected Map<String, List<CalendarEvent>> allWeekData_ = new HashMap<String, List<CalendarEvent>>() ;
+  protected Map<String, CalendarEvent> allWeekData_ = new HashMap<String,  CalendarEvent>() ;
   protected  List<CalendarEvent> daysData_  = new ArrayList<CalendarEvent>() ;
 
   public UIWeekView() throws Exception {
@@ -76,15 +77,18 @@ public class UIWeekView extends UICalendarView {
     Iterator iter = allEvents.iterator() ;
     while(iter.hasNext()) {
       CalendarEvent event = (CalendarEvent)iter.next() ;
+      Date beginEvent = event.getFromDateTime() ;
+      Date endEvent = event.getToDateTime() ;
       for(Calendar c : getDaysOfWeek(week)) {
         String key = keyGen(c.get(Calendar.DATE), c.get(Calendar.MONTH), c.get(Calendar.YEAR)) ;
-        if(isSameDate(c.getTime(), event.getFromDateTime()) && isSameDate(c.getTime(), event.getToDateTime())) {
+        if(isSameDate(c.getTime(), beginEvent) &&  isSameDate(c.getTime(), endEvent)) { 
           eventData_.get(key).add(event) ;
-        } else {
-          daysData_.add(event) ;
-        }
+          iter.remove() ;
+        } 
       }
-      iter.remove() ;
+    }
+    for( CalendarEvent ce : allEvents) {
+      allWeekData_.put(ce.getId(), ce) ;
     }
   }
   protected void moveTo(int weeks) {
@@ -111,10 +115,11 @@ public class UIWeekView extends UICalendarView {
   }
 
   protected Map<String, List<CalendarEvent>> getEventData() {return eventData_ ;}
- 
-  protected List<CalendarEvent> getEventList() {
-    return daysData_ ;
+
+  protected Map<String, CalendarEvent>  getEventList() {
+    return allWeekData_ ;
   }
+
   static  public class MoveNextActionListener extends EventListener<UIWeekView> {
     public void execute(Event<UIWeekView> event) throws Exception {
       UIWeekView calendarview = event.getSource() ;

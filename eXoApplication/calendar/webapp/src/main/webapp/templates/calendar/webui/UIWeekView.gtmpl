@@ -61,7 +61,11 @@
 					<tr>
 							<td style="width: auto;">&nbsp</td>
 							<td colspan="7" class="EventAllday">
-									<!-- <div class="EventContainer" style="height: 22px;">Talk to my cousin on ...</div> -->
+								<% for (event in uicomponent.getEventList().values()) {%>
+									 <div class="EventContainer" style="height: 22px;" title="$event.fromDateTime -- $event.toDateTime"  >
+									 	$event.summary
+									 </div> 
+								<%}%>
 							</td>
 					</tr>
 						<tr>
@@ -73,7 +77,6 @@
 									<% 
 									events = uicomponent.getEventData().get(key) ; 
 									if(events != null) {
-									println events.size() ;
 									for(event in events){ 
 										SimpleDateFormat df = new SimpleDateFormat("HH:mm") ;
 										begin =  df.format(event.fromDateTime) ;

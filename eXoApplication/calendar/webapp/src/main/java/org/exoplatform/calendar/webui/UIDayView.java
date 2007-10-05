@@ -82,6 +82,7 @@ public class UIDayView extends UICalendarView {
     eventQuery.setToDate(end) ;
     events = calendarService.getUserEvents(username, eventQuery) ;
     events.addAll(calendarService.getPublicEvents(eventQuery)) ;
+    
     for(CalendarEvent ce : events){
       Date beginEvent = ce.getFromDateTime() ;
       Date endEvent = ce.getToDateTime() ;
