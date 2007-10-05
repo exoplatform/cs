@@ -195,3 +195,9 @@
 	background: url('icons/AccountIcon.gif') no-repeat;
 	height: 16px; width: 17px;
 }
+
+.HighPriority {
+	background: url('icons/HighPriority.gif') no-repeat;
+	cursor: pointer;
+}
+

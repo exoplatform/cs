@@ -719,12 +719,6 @@
   height: 26px; width: 2px;
 }
 
-.HighPriority {
-	cursor: pointer;
-	text-align: center;
-	color: #585858;
-}
-
 .NormalItem {
 	background: #ffffff ;
 }
@@ -739,8 +733,4 @@
 
 .UIMailPortlet .UIFolderContainer .SelectedLabel {
 	font-weight: bold ;
-}
-
-.UIMailPortlet .UIFolderForm .UIAction {
- 	width: 200px;
 }
