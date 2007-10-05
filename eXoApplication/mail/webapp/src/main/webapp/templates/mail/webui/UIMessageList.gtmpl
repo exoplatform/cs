@@ -249,10 +249,10 @@
   				<%
   				  String priClass = "";
   				  if (msg.getPriority().equals(Utils.PRIORITY_LOW)) priClass = "LowPriority";
-  				  if (msg.getPriority().equals(Utils.PRIORITY_NORMAL)) priClass = "NormalPriority";
-  				  if (msg.getPriority().equals(Utils.PRIORITY_HIGH)) priClass = "HighPriority";
+  				  else if (msg.getPriority().equals(Utils.PRIORITY_NORMAL)) priClass = "NormalPriority";
+  				  else if (msg.getPriority().equals(Utils.PRIORITY_HIGH)) priClass = "HighPriority";
   				%>
-  				<td style="padding: 0px;" ><div class="text $priClass"><span></span></div></td>
+  				<td style="padding: 0px;" ><div class="text $priClass" title ><span></span></div></td>
      	 </tr>
   		<%}%>
     	</tbody>
