@@ -75,6 +75,8 @@
 							%>
 								<td>
 									<% for(event in uicomponent.getEventData().get(key)){ 
+										println event.getToDateTime().getTime() - event.getFromDateTime().getTime();
+										println 24*60*60*1000 ;
 										SimpleDateFormat df = new SimpleDateFormat("HH:mm") ;
 										begin =  df.format(event.fromDateTime) ;
 										end = df.format(event.toDateTime) ;
@@ -110,13 +112,16 @@
 					 			day = cl.get(Calendar.DATE) ;
 					 			month = cl.get(Calendar.MONTH) ;
 					 			year = cl.get(Calendar.YEAR) ;
+					 			DateFormat df = new SimpleDateFormat("mm/dd/yyyy") ;
+					 			startTime = df.format(cal.getTime()) ;
 					 		  if(cl.get(Calendar.DAY_OF_WEEK) == uicomponent.getDayOfWeek(currentYear, currentMonth, currentDay)){	
 					 		  	cssClass = "Today" ;
 					 		  } else {
 					 				cssClass = "" ;
 					 		  }
 					 	%>
-						 		<td class="$styleClass $cssClass">
+					 		$startTime;
+						 		<td start class="$styleClass $cssClass">
 									<!--  <div class="EventContainerBoder"
 										<div class="EventContainerBar">5:35 AM - 7:00 AM</div>
 										<div class="EventContainer">Talk to my cousin on ...</div>
@@ -136,63 +141,41 @@
 	</div>
 </div> 
 <%uiform.end()%>	 
-<% /*Begin Popup Menu*/ %>
-  			
-  				<div class="UIRightClickPopupMenu" id="UIMonthViewRightMenu" eXoCallback="eXo.calendar.UICalendarPortlet.monthViewCallback">
-						  <div class="TopLeftRightClickPopupMenu">
-          			<div class="TopRightRightClickPopupMenu">
-            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
-          			</div>
-        			</div>
-			        <div class="MiddleLeftRightClickPopupMenu">
-			          <div class="MiddleRightRightClickPopupMenu">
-              		<div class="UIRightPopupMenuContainer">
-              			<%
-              				for(String act : uicomponent.getContextMenu()) {
-              				link = uicomponent.event(act,"id") ;
-              			%>
-              			  <a href="$link">
-	              				<div class="ItemIcon $act">$act</div>
-              			  </a>
-              			<%}%>
-									</div>
-	          		</div>
-	        		</div>
-				      <div class="BottomLeftRightClickPopupMenu">
-				        <div class="BottomRightRightClickPopupMenu">
-				          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
-				        </div>
-				      </div>
-	      		</div>
-
-  		<% /*End Popup Menu*/ %>
   		<% /*Begin Popup Menu*/ %>
   			
   				<div class="UIRightClickPopupMenu" id="UIMonthViewEventRightMenu" eXoCallback="eXo.calendar.UICalendarPortlet.monthViewCallback">
-						  <div class="TopLeftRightClickPopupMenu">
-          			<div class="TopRightRightClickPopupMenu">
-            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
-          			</div>
-        			</div> 
-			        <div class="MiddleLeftRightClickPopupMenu">
-			          <div class="MiddleRightRightClickPopupMenu">
-              		<div class="UIRightPopupMenuContainer">
-              			<%
-              				for(String act : uicomponent.getQuickEditMenu()) {
-              				link = uicomponent.event(act,"id&$uicomponent.CALENDARID=calId") ;
-              			%>
-              				<a href="$link">
-	              				<div class="ItemIcon $act">$act</div>
-              			  </a>
-              			<%}%>
-									</div>
-	          		</div>
-	        		</div>
-				      <div class="BottomLeftRightClickPopupMenu">
-				        <div class="BottomRightRightClickPopupMenu">
-				          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
-				        </div>
-				      </div>
-	      		</div>
+				  <div class="TopLeftRightClickPopupMenu">
+  			<div class="TopRightRightClickPopupMenu">
+    			<div class="TopCenterRightClickPopupMenu"><span></span></div>
+  			</div>
+			</div> 
+	        <div class="MiddleLeftRightClickPopupMenu">
+	          <div class="MiddleRightRightClickPopupMenu">
+      		<div class="UIRightPopupMenuContainer">
+      			<%
+      				for(String act : uicomponent.getQuickEditMenu()) {
+      				link = uicomponent.event(act,"id&$uicomponent.CALENDARID=calId") ;
+      			%>
+      				<a href="$link">
+          				<div class="ItemIcon $act">$act</div>
+      			  </a>
+      			<%}%>
+      			<%
+      				for(String act : uicomponent.getContextMenu()) {
+      				link = uicomponent.event(act,"startTime") ;
+      			%>
+      			  <a href="$link">
+          				<div class="ItemIcon $act">$act</div>
+      			  </a>
+      			<%}%>
+							</div>
+      		</div>
+    		</div>
+		      <div class="BottomLeftRightClickPopupMenu">
+		        <div class="BottomRightRightClickPopupMenu">
+		          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+		        </div>
+		      </div>
+  		</div>
 
   		<% /*End Popup Menu*/ %>

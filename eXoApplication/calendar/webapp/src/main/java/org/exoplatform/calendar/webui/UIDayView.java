@@ -57,7 +57,6 @@ public class UIDayView extends UICalendarView {
 
   private Map<String, CalendarEvent> eventData_ = new HashMap<String, CalendarEvent>() ;
   private Map<String, CalendarEvent> allDayEvent_ = new HashMap<String, CalendarEvent>() ;
-  //private int timeInterval_ = 30 ;
 
   public UIDayView() throws Exception{
     super() ;
@@ -116,6 +115,7 @@ public class UIDayView extends UICalendarView {
     fromDate.set(Calendar.HOUR, 0) ;
     return fromDate ;
   }
+
 
   static  public class MoveNextActionListener extends EventListener<UIDayView> {
     public void execute(Event<UIDayView> event) throws Exception {

@@ -84,8 +84,8 @@ public abstract class UICalendarView extends UIForm {
   protected Calendar calendar_ = null ;
   protected boolean isShowEvent_ = true;
   private boolean isShowWorkingTime_ = false ;
-  private int startTime_ = 0 ;
-  private int endTime_ = 24 ;
+  protected int startTime_ = 0 ;
+  protected int endTime_ = 24 ;
   protected int timeInterval_ = 15 ;
   
   protected List<String> privateCalendarIds = new ArrayList<String>() ;
