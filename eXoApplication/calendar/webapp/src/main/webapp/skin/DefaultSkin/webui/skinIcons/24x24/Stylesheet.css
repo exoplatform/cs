@@ -109,6 +109,18 @@
 	background: url('icons/SendToFriend.gif') no-repeat;
 }
 
+.GotoDate {
+	background: url('icons/GotoDateIcon.gif') no-repeat;
+}
+
+.AddNewEvent {
+	background: url('icons/AddNewEvent.gif') no-repeat;
+}
+
+.AddNewTask {
+	background: url('icons/AddNewTask.gif') no-repeat;
+}
+
 
 
 

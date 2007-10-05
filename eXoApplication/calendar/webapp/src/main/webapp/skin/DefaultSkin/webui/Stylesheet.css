@@ -591,10 +591,7 @@
 .UIWeekView .EventWeekContent {
 	overflow:auto;
 	height: 420px;
-	padding-top: 1px;
-	border-left: 1px solid #c7c7c7;
 }
-
 
 .UIWeekView .UIGrid th {
 	background: url('background/TitleBarBG1x23.gif') repeat-x ;	
@@ -610,24 +607,20 @@
 	border-left: 1px solid #c7c7c7;
 }
 
-
 .UIWeekView .UIGrid {
 	border: 0px;
 	background-color: white;
+	*width: 97%;
+}
+
+.UIWeekView .EventWeekContent {
+	padding: 0px 0px 0px 1px;
+	*padding: 0px;
 }
 
 .UIWeekView .EventWeekBar {
 	padding: 0px 16px 0px 1px;
-}
-
-*html .UIWeekView .EventWeekBar {
-	padding-right: 3px;
-	padding-left: 0px;
-}
-
-
-*html .UIWeekView .UIGrid {
-	width: 97%;
+	*padding: 0px 3px 0px 0px;
 }
 
 .UIWeekView .TdLine{
@@ -645,14 +638,17 @@
 	width: auto;
 }
 
+.UIWeekView td {
+	border-top: none;
+}
+
 .UIWeekView .UIGrid td{
 	padding: 0px;
-	border-left: none;
 }
 
 .UIWeekView .EventAllday{
 	background: #DFE6F8;
-	border-top: none;
+	border-bottom: 1px solid #c7c7c7;;
 }
 
 .UIWeekView .Today{
@@ -677,13 +673,27 @@
 
 /*====================Schedule View============================*/
 
-.UIScheduleView {
-	border-left: 1px solid #c7c7c7;
-	border-bottom: 1px solid #c7c7c7;
-	background-color: white;
-	overflow:auto;
-	height: 480px;
+.UIScheduleView .ScheduleViewBar {
+	padding: 0px 16px 0px 1px;
+	*padding: 0px 3px 0px 0px;
 }
+
+.UIScheduleView td {
+	border-top: none;
+}
+
+
+.UIScheduleView .ScheduleViewContent {
+	overflow:auto;
+	height: 420px;
+	padding-left: 1px;
+	*padding-left: 0px;
+}
+
+.UIScheduleView .ScheduleViewBar .EventAllday {
+	border-bottom: 1px solid #c7c7c7;
+}
+
 
 .UIScheduleView .UIGrid th {
 	background: url('background/TitleBarBG1x23.gif') repeat-x ;	
@@ -696,12 +706,9 @@
 }
 
 .UIScheduleView .UIGrid {
-	width: 98%;
 	border: 0px;
-}
-
-.UIScheduleView .TdLine{
-	border-top:  1px solid #c7c7c7;
+	background-color: #ffffff;
+	*width: 97%;
 }
 
 .UIScheduleView .TimeBusy{
@@ -726,15 +733,27 @@
 
 .UIScheduleView .TdDotLine{
 	border-top:  1px dotted #c7c7c7;
+	width: 22%;
+}
+
+.UIScheduleView .TdLine{
+	border-top:  1px solid #c7c7c7;
+	width: 22%;
 }
 
 .UIScheduleView .TdTime{
 	text-align: right;
+	width: auto;
 }
+
+.UIScheduleView .TdAll{
+	width: 46px;
+	*width: 47px;
+}
+
 
 .UIScheduleView .UIGrid td{
 	padding: 0px;
-	border-left: none;
 }
 
 .UIScheduleView .EventContainerBoder{
@@ -759,8 +778,8 @@
 	border-bottom: 1px solid #c7c7c7;
 }
 
-.UIYearView .UIGrid {
-	width: 98%;
+*html .UIYearView .UIGrid {
+	width: 97%;
 }
 
 .UIYearView .UIGrid td {
@@ -1051,10 +1070,7 @@
 .UIMonthView .EventMonthContent .UIGrid{
 	padding-left: 0px;
 	border: none;
-}
-
-*html .UIMonthView .EventMonthContent .UIGrid{
-	width: 97%;
+	*width: 97%;
 }
 
 .UIMonthView .EventMonthContent .DayBox {
