@@ -141,7 +141,7 @@ public class UISelectAccount extends UIForm {
       String accId = uiSelectAcc.getSelectedValue() ;
       UIMailPortlet uiPortlet = uiSelectAcc.getAncestorOfType(UIMailPortlet.class) ;
       UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet) ;
     }
   }  
 

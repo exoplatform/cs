@@ -206,13 +206,7 @@
 	margin: auto;
 }
 
-.NormalPriority {
-	background: url('icons/NomalPriorityIcon.gif') no-repeat;
-	text-align: center;
-	cursor: pointer;
-	width: 16px; height: 16px;
-	margin: auto;
-}
+.NormalPriority { }
 
 .HighPriority {
 	background: url('icons/HighPriorityIcon.gif') no-repeat;

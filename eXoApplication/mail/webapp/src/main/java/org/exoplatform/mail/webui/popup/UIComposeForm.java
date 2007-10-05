@@ -74,6 +74,9 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
   final static public String ACT_CC = "ToCC" ;
   final static public String ACT_BCC = "ToBCC" ;
   final static public String ACT_REMOVE = "remove" ;
+  private List<Attachment> attachments_ = new ArrayList<Attachment>() ;
+  private Message message_ = null;
+  private long priority_ = Utils.PRIORITY_NORMAL; ;
 
   public List<Contact> ToContacts = new ArrayList<Contact>();
   public List<Contact> CcContacts = new ArrayList<Contact>();
@@ -86,10 +89,6 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
   public void setToContacts(List<Contact> contactList){ ToContacts = contactList; }
   public void setCcContacts(List<Contact> contactList){ CcContacts = contactList; }
   public void setBccContacts(List<Contact> contactList){ BccContacts = contactList; }
-  
-  List<Attachment> attachments_ = new ArrayList<Attachment>() ;
-    Message message_ = null;
-    private long priority_ = Utils.PRIORITY_NO ;  
     
   public UIComposeForm() throws Exception {
     UIFormInputWithActions inputSet = new UIFormInputWithActions(FIELD_FROM_INPUT); 

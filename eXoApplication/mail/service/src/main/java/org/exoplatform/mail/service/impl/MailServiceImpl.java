@@ -209,7 +209,16 @@ public class MailServiceImpl implements MailService{
       }        
     }
     msg.setHeader("X-Priority", String.valueOf(message.getPriority()));
-    msg.setHeader("Importance", "high");
+    String priority = "";
+    if (message.getPriority() == 1) {
+      priority = "hight";
+    } else if (message.getPriority() == 2) {
+      priority = "normal";
+    } else if (message.getPriority() == 3) {
+      priority = "low";
+    }     
+    if (message.getPriority() != 0 ) msg.setHeader("Importance", priority);
+    
     msg.setContent(multiPart);
     msg.saveChanges();
     transport.sendMessage(msg, msg.getAllRecipients());
@@ -262,7 +271,7 @@ public class MailServiceImpl implements MailService{
           newMsg.setReceivedDate(receivedDate);
           newMsg.setSendDate(mes.getSentDate());
           newMsg.setHasStar(false);       
-          newMsg.setPriority(Utils.PRIORITY_NO);
+          newMsg.setPriority(Utils.PRIORITY_NORMAL);
           for (int j = 0 ; j < mes.getHeader("X-Priority").length; j++) {
             newMsg.setPriority(Long.valueOf(mes.getHeader("X-Priority")[j]));
           }          

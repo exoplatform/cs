@@ -62,12 +62,6 @@
 									        <div class="MiddleLeftRightClickPopupMenu">
 									          <div class="MiddleRightRightClickPopupMenu">
 						              		<div class="UIRightPopupMenuContainer">
-						              		  <%  
-						              		    String noPriorityLink = uicomponent.event("ChangePriority", String.valueOf(Utils.PRIORITY_NO));
-						              		    String noCssClass = "";
-						              		    if (uicomponent.getPriority().equals(Utils.PRIORITY_NO)) noCssClass = "CheckItem";
-						              		  %>
-																<a class="MenuItem" href="$noPriorityLink"> <div class="ItemIcon $noCssClass "> No priority </div> </a>
 																<%
 																  String lowPriorityLink = uicomponent.event("ChangePriority", String.valueOf(Utils.PRIORITY_LOW));
 																  String lowCssClass = "";

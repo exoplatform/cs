@@ -42,6 +42,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
     events = {
         @EventConfig(listeners = UIMessageList.SelectMessageActionListener.class),
         @EventConfig(listeners = UIMessageList.AddStarActionListener.class),
+        @EventConfig(listeners = UIMessageList.CheckedMessageActionListener.class),
         @EventConfig(listeners = UIMessageList.RemoveStarActionListener.class),
         @EventConfig(listeners = UIMessageList.ReplyActionListener.class),
         @EventConfig(listeners = UIMessageList.ReplyAllActionListener.class),
@@ -100,7 +101,10 @@ public class UIMessageList extends UIForm {
     messageList_.clear();    
     if(pageList_ != null) {
       for (Message message : pageList_.getPage(page, MailUtils.getCurrentUser())) {
-        addUIFormInput(new UIFormCheckBoxInput<Boolean>(message.getId(), message.getId(), false));
+        UIFormCheckBoxInput<Boolean> uiCheckBox = new UIFormCheckBoxInput<Boolean>(message.getId(), message.getId(), false);
+        uiCheckBox.setOnChange("CheckedMessage");
+        addUIFormInput(uiCheckBox);
+        
         messageList_.put(message.getId(), message);
       }
     }
@@ -381,6 +385,15 @@ public class UIMessageList extends UIForm {
   }
   
   static public class LastPageActionListener extends EventListener<UIMessageList> {
+    public void execute(Event<UIMessageList> event) throws Exception {
+      UIMessageList uiMessageList = event.getSource() ; 
+      MessagePageList pageList = uiMessageList.getMessagePageList(); 
+      uiMessageList.updateList(pageList.getAvailablePage());
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
+    }
+  }
+  
+  static public class CheckedMessageActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource() ; 
       MessagePageList pageList = uiMessageList.getMessagePageList(); 

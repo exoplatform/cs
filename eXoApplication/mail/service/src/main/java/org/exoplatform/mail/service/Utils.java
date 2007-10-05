@@ -113,7 +113,6 @@ public class Utils {
   public static final String P_HEAD = "Head".intern() ;
   public static final String P_FOOT = "Foot".intern() ;
   
-  public static final long PRIORITY_NO = 0 ;
   public static final long PRIORITY_HIGH = 1 ;
   public static final long PRIORITY_NORMAL = 2 ;
   public static final long PRIORITY_LOW = 3 ;
