@@ -252,7 +252,7 @@
   				  if (msg.getPriority().equals(Utils.PRIORITY_NORMAL)) priClass = "NormalPriority";
   				  if (msg.getPriority().equals(Utils.PRIORITY_HIGH)) priClass = "HighPriority";
   				%>
-  				<td style="padding: 0px;" class="text $priClass"><span></span></td>
+  				<td style="padding: 0px;" ><div class="text $priClass"><span></span></div></td>
      	 </tr>
   		<%}%>
     	</tbody>

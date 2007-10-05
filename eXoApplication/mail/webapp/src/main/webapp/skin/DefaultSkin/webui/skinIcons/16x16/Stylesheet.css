@@ -13,7 +13,7 @@
 }
 
 .PriorityIcon {
-	background: url('icons/NomalPriorityIcon.gif') no-repeat;
+	background: url('icons/LowPriorityIcon.gif') no-repeat;
 	width: 16px; height: 16px;
 }
 
@@ -202,18 +202,23 @@
 	background: url('icons/LowPriorityIcon.gif') no-repeat;
 	text-align: center;
 	cursor: pointer;
+	width: 16px; height: 16px;
+	margin: auto;
 }
 
 .NormalPriority {
 	background: url('icons/NomalPriorityIcon.gif') no-repeat;
 	text-align: center;
 	cursor: pointer;
+	width: 16px; height: 16px;
+	margin: auto;
 }
 
 .HighPriority {
-	background: url('icons/PriorityHighLight.gif') no-repeat;
+	background: url('icons/HighPriorityIcon.gif') no-repeat;
 	text-align: center;
 	cursor: pointer;
+	width: 16px; height: 16px;
 	margin: auto;
 }
 
