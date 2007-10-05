@@ -196,8 +196,24 @@
 	height: 16px; width: 17px;
 }
 
-.HighPriority {
-	background: url('icons/HighPriority.gif') no-repeat;
+.NoPriority { }
+
+.LowPriority {
+	background: url('icons/LowPriorityIcon.gif') no-repeat;
+	text-align: center;
 	cursor: pointer;
+}
+
+.NormalPriority {
+	background: url('icons/NomalPriorityIcon.gif') no-repeat;
+	text-align: center;
+	cursor: pointer;
+}
+
+.HighPriority {
+	background: url('icons/PriorityHighLight.gif') no-repeat;
+	text-align: center;
+	cursor: pointer;
+	margin: auto;
 }
 

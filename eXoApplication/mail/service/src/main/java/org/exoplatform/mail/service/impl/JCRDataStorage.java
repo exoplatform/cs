@@ -180,7 +180,7 @@ public class JCRDataStorage implements DataStorage{
     if (messageNode.hasProperty(Utils.EXO_BODY)) msg.setMessageBody(messageNode.getProperty(Utils.EXO_BODY).getString());
     if (messageNode.hasProperty(Utils.EXO_SIZE)) msg.setSize(messageNode.getProperty(Utils.EXO_SIZE).getLong());
     if (messageNode.hasProperty(Utils.EXO_STAR)) msg.setHasStar(messageNode.getProperty(Utils.EXO_STAR).getBoolean());
-    if (messageNode.hasProperty(Utils.EXO_PRIORITY)) msg.setPriority(messageNode.getProperty(Utils.EXO_PRIORITY).getString());
+    if (messageNode.hasProperty(Utils.EXO_PRIORITY)) msg.setPriority(messageNode.getProperty(Utils.EXO_PRIORITY).getLong());
     if (messageNode.hasProperty(Utils.EXO_ISUNREAD)) msg.setUnread(messageNode.getProperty(Utils.EXO_ISUNREAD).getBoolean());
     
     if (messageNode.hasProperty(Utils.EXO_TAGS)) {
@@ -449,12 +449,12 @@ public class JCRDataStorage implements DataStorage{
   public void removeUserFolder(String username, Account account, Folder folder) throws Exception {
     //  gets the specified folder
     Node folderHome = getFolderHome(username, account.getId());
-    if (folderHome.hasNode(folder.getName())) {
-      folderHome.getNode(folder.getName()).remove();
+    if (folderHome.hasNode(folder.getId())) {
+      folderHome.getNode(folder.getId()).remove();
     }
     folderHome.getSession().save();
   }
-
+  
   private Node getMailHomeNode(String username) throws Exception {
     ServiceRegistry serviceRegistry = new ServiceRegistry("MailService") ;
     Session session = getJCRSession() ;

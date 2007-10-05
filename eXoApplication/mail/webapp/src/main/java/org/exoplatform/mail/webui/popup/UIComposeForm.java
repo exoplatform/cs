@@ -56,7 +56,8 @@ import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
       @EventConfig(listeners = UIComposeForm.ToActionListener.class),
       @EventConfig(listeners = UIComposeForm.ToCCActionListener.class),
       @EventConfig(listeners = UIComposeForm.ToBCCActionListener.class),
-      @EventConfig(listeners = UIComposeForm.SaveSentFolderActionListener.class)
+      @EventConfig(listeners = UIComposeForm.SaveSentFolderActionListener.class),
+      @EventConfig(listeners = UIComposeForm.ChangePriorityActionListener.class)
     }
 )
 public class UIComposeForm extends UIForm implements UIPopupComponent{
@@ -72,8 +73,9 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
   final static public String ACT_CC = "ToCC" ;
   final static public String ACT_BCC = "ToBCC" ;
   final static public String ACT_REMOVE = "remove" ;
-  List<Attachment> attachments_ = new ArrayList<Attachment>() ;
-  Message message_ = null;
+  private List<Attachment> attachments_ = new ArrayList<Attachment>() ;
+  private Message message_ = null;
+  private long priority_ = Utils.PRIORITY_NO ;
 
   public UIComposeForm() throws Exception {
     UIFormInputWithActions inputSet = new UIFormInputWithActions(FIELD_FROM_INPUT); 
@@ -158,6 +160,10 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
     this.message_ = message;
   }
   
+  public long getPriority() { return priority_; }
+  
+  public void setPriority(long priority) { priority_ = priority; }
+  
   public String getFieldFromValue() {
     UIFormInputWithActions inputSet = getChildById(FIELD_FROM_INPUT) ;
     return inputSet.getUIFormSelectBox(FIELD_FROM).getValue() ;
@@ -239,6 +245,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
     String cc = this.getFieldCcValue() ;
     String bcc = this.getFieldBccValue() ;
     String body = this.getFieldMessageContentValue() ;
+    Long priority = this.getPriority();
     message.setSendDate(new Date()) ;
     message.setAccountId(accountId) ;
     message.setFrom(from) ;
@@ -246,6 +253,8 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
     message.setMessageTo(to) ;
     message.setMessageCc(cc) ;
     message.setMessageBcc(bcc) ;
+    message.setHasStar(false);
+    message.setPriority(priority);
     message.setAttachements(this.getAttachFileList()) ;
     message.setMessageBody(body) ;
     message.setUnread(false);
@@ -398,6 +407,16 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
       event.getRequestContext().addUIComponentToUpdateByAjax(uiActionContainer) ;
     }
   }
+  
+  static  public class ChangePriorityActionListener extends EventListener<UIComposeForm> {
+    public void execute(Event<UIComposeForm> event) throws Exception {
+      UIComposeForm uiForm = event.getSource() ;
+      System.out.println(" ==========> Change Priority Action Listener") ;
+      String priority = event.getRequestContext().getRequestParameter(OBJECTID) ;  
+      uiForm.setPriority(Long.valueOf(priority));
+    }
+  }
+  
   static  public class SaveSentFolderActionListener extends EventListener<UIComposeForm> {
     public void execute(Event<UIComposeForm> event) throws Exception {
       UIComposeForm uiForm = event.getSource() ;

@@ -1,3 +1,6 @@
+<%
+  import org.exoplatform.mail.service.Utils;
+%>
 <% uiform.begin() %>
 <div class="$uicomponent.id UIApplication">
   <div class="ApplicationMinWidth">
@@ -59,26 +62,30 @@
 									        <div class="MiddleLeftRightClickPopupMenu">
 									          <div class="MiddleRightRightClickPopupMenu">
 						              		<div class="UIRightPopupMenuContainer">
-																<a class="MenuItem" href="#">   
-							                    <div class="ItemIcon CheckItem ">
-							                      No priority
-							                    </div>
-						                    </a>
-						                    <a class="MenuItem" href="#">   
-							                    <div class="ItemIcon">
-							                      Hight priority
-							                    </div>
-						                    </a>
-						                    <a class="MenuItem" href="#">   
-							                    <div class="ItemIcon">
-							                      Nomal priority
-							                    </div>
-						                    </a>
-						                    <a class="MenuItem" href="#">   
-							                    <div class="ItemIcon">
-							                      Low priority
-							                    </div>
-						                    </a>
+						              		  <%  
+						              		    String noPriorityLink = uicomponent.event("ChangePriority", String.valueOf(Utils.PRIORITY_NO));
+						              		    String noCssClass = "";
+						              		    if (uicomponent.getPriority().equals(Utils.PRIORITY_NO)) noCssClass = "CheckItem";
+						              		  %>
+																<a class="MenuItem" href="$noPriorityLink"> <div class="ItemIcon $noCssClass "> No priority </div> </a>
+																<%
+																  String lowPriorityLink = uicomponent.event("ChangePriority", String.valueOf(Utils.PRIORITY_LOW));
+																  String lowCssClass = "";
+                                  if (uicomponent.getPriority().equals(Utils.PRIORITY_LOW)) lowCssClass = "CheckItem";
+																%>
+						                    <a class="MenuItem" href="$lowPriorityLink"> <div class="ItemIcon $lowCssClass"> Low priority </div> </a>
+						                    <%  
+						                      String normalPriorityLink = uicomponent.event("ChangePriority", String.valueOf(Utils.PRIORITY_NORMAL));
+						                      String normalCssClass = "";
+						                      if (uicomponent.getPriority().equals(Utils.PRIORITY_NORMAL)) normalCssClass = "CheckItem";
+						                    %>
+						                    <a class="MenuItem" href="$normalPriorityLink"> <div class="ItemIcon $normalCssClass">Normal priority </div> </a>
+						                    <%  
+						                      String highPriorityLink = uicomponent.event("ChangePriority", String.valueOf(Utils.PRIORITY_HIGH)); 
+						                      String highCssClass = "";
+						                      if (uicomponent.getPriority().equals(Utils.PRIORITY_HIGH)) highCssClass = "CheckItem";
+						                    %>
+						                    <a class="MenuItem" href="$highPriorityLink"> <div class="ItemIcon $highCssClass"> High priority </div> </a>
 															</div>
 							          		</div>
 							        		</div>

@@ -15,6 +15,7 @@ import org.exoplatform.services.jcr.util.IdGenerator;
 public class MessageHeader {
   private String id ;
   private String accountId;
+  private long priority;
   
   public MessageHeader() {
     id = "MessageHeader" + IdGenerator.generate() ;
@@ -25,4 +26,6 @@ public class MessageHeader {
   public String getAccountId() { return accountId ; }
   public void setAccountId(String accountId) { this.accountId = accountId ; }
 
+  public long getPriority() { return priority; }
+  public void setPriority(long priority) { this.priority = priority; }
 }

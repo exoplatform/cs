@@ -147,7 +147,7 @@
         protected="false" multiple="false">
         <valueConstraints/>        
       </propertyDefinition>
-      <propertyDefinition name="exo:priority" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY"
+      <propertyDefinition name="exo:priority" requiredType="Long" autoCreated="false" mandatory="false" onParentVersion="COPY"
         protected="false" multiple="false">
         <valueConstraints/>        
       </propertyDefinition>

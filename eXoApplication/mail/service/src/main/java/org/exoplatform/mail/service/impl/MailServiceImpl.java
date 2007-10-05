@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import javax.activation.DataHandler;
+import javax.mail.Flags;
 import javax.mail.Multipart;
 import javax.mail.Part;
 import javax.mail.Session;
@@ -21,6 +22,7 @@ import javax.mail.Store;
 import javax.mail.Transport;
 import javax.mail.URLName;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.InternetHeaders;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
@@ -206,8 +208,8 @@ public class MailServiceImpl implements MailService{
         multiPart.addBodyPart(mimeBodyPart);
       }        
     }
+    msg.setHeader("X-Priority", String.valueOf(message.getPriority()));
     msg.setContent(multiPart);
-    
     msg.saveChanges();
     transport.sendMessage(msg, msg.getAllRecipients());
   }
@@ -258,8 +260,10 @@ public class MailServiceImpl implements MailService{
           newMsg.setUnread(true);
           newMsg.setReceivedDate(receivedDate);
           newMsg.setSendDate(mes.getSentDate());
-//          newMsg.setHasStar(false);
-//          newMsg.setPriority(Utils.PRIORITY_NO);
+          newMsg.setHasStar(false);          
+          for (int j = 0 ; j < mes.getHeader("X-Priority").length; j++) {
+            newMsg.setPriority(Long.valueOf(mes.getHeader("X-Priority")[j]));
+          }          
           newMsg.setSize(mes.getSize());
           newMsg.setAttachements(new ArrayList<Attachment>());
           String[] folders = {account.getFolder()};

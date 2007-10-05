@@ -64,13 +64,7 @@ UIMailPortlet.prototype.checkAll = function(obj) {
 		}
 	}
 } ;
-UIMailPortlet.prototype.setStars = function(obj) {
-	if(obj.className == "UnStarredIcon") {
-		obj.className = "StarredIcon"
-	} else {
-		obj.className = "UnStarredIcon"
-	}
-} ;
+
 UIMailPortlet.prototype.readMessage = function() {} ;
 
 eXo.mail.UIMailPortlet = new UIMailPortlet();

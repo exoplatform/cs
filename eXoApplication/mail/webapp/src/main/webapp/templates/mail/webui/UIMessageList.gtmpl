@@ -2,6 +2,7 @@
  import org.exoplatform.mail.service.Message;
  import org.exoplatform.mail.service.Utils; 
  import org.exoplatform.mail.service.MessagePageList;
+ import org.exoplatform.mail.MailUtils;
  String compId = uicomponent.getId() ;
  
 %>
@@ -148,8 +149,7 @@
             long endIndex = fromIndex + pageList.getPageSize();
             if (pageList.getCurrentPage() == pageList.getAvailablePage()) endIndex = pageList.getAvailable();
             mailRange = fromIndex + " to " + endIndex + " of " + pageList.getAvailable();
-          } 
-          
+          }         
         %>
         <a title="First Page" class="$cssPreviousPage FirstPageArrow" href="<%=uicomponent.event("FirstPage")%>"/></a>        
         <a title="Previous Page" class="$cssPreviousPage PreviousPageArrow" href="<%=uicomponent.event("PreviousPage")%>"></a>
@@ -246,7 +246,13 @@
   				     <%=msg.getSize()%> B
   				   <%}%>
   				</a></td>
-  				<td style="padding: 0px;" class="text"></td>
+  				<%
+  				  String priClass = "";
+  				  if (msg.getPriority().equals(Utils.PRIORITY_LOW)) priClass = "LowPriority";
+  				  if (msg.getPriority().equals(Utils.PRIORITY_NORMAL)) priClass = "NormalPriority";
+  				  if (msg.getPriority().equals(Utils.PRIORITY_HIGH)) priClass = "HighPriority";
+  				%>
+  				<td style="padding: 0px;" class="text $priClass"><span></span></td>
      	 </tr>
   		<%}%>
     	</tbody>
