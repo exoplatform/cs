@@ -1,5 +1,6 @@
 <%
 	import java.util.Calendar;
+	import java.util.GregorianCalendar;
 	import java.text.DateFormat;
 	import java.text.SimpleDateFormat;
 	
@@ -59,14 +60,9 @@
 				<tbody >
 					<tr>
 							<td style="width: auto;">&nbsp</td>
-							<%
-						 		cssClass = "" ;
-						 		for(dayName in uicomponent.getDaysName()) {
-						 	%>
-							<td class="EventAllday">
+							<td colspan="7" class="EventAllday">
 									<!-- <div class="EventContainer" style="height: 22px;">Talk to my cousin on ...</div> -->
 							</td>
-							<%}%>
 					</tr>
 						<tr>
 							<td style="width: auto; border-left: 1px solid #c7c7c7;">&nbsp</td>
@@ -74,9 +70,11 @@
 								 key = uicomponent.keyGen(cl.get(Calendar.DATE), cl.get(Calendar.MONTH), cl.get(Calendar.YEAR)) ;	
 							%>
 								<td>
-									<% for(event in uicomponent.getEventData().get(key)){ 
-										println event.getToDateTime().getTime() - event.getFromDateTime().getTime();
-										println 24*60*60*1000 ;
+									<% 
+									events = uicomponent.getEventData().get(key) ; 
+									if(events != null) {
+									println events.size() ;
+									for(event in events){ 
 										SimpleDateFormat df = new SimpleDateFormat("HH:mm") ;
 										begin =  df.format(event.fromDateTime) ;
 										end = df.format(event.toDateTime) ;
@@ -86,7 +84,9 @@
 											<div class="EventContainer">$event.summary</div>
 											<div class="ResizeEventContainer"><span></span></div>
 										</div>
-									<% } %>
+									<% }
+										}
+									 %>
 								</td>
 							<%}%>
 						</tr>
