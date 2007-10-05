@@ -40,6 +40,8 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
 public class UIWeekView extends UICalendarView {
 
   protected Map<String, List<CalendarEvent>> eventData_ = new HashMap<String, List<CalendarEvent>>() ;
+  protected Map<String, List<CalendarEvent>> allWeekData_ = new HashMap<String, List<CalendarEvent>>() ;
+  
   public UIWeekView() throws Exception {
     super() ;
     refresh() ;

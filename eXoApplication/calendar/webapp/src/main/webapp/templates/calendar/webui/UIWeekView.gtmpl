@@ -69,7 +69,10 @@
 							<%}%>
 					</tr>
 						<tr>
-							<%for(key in uicomponent.getEventData().keySet()){%>
+							<td style="width: auto; border-left: 1px solid #c7c7c7;">&nbsp</td>
+							<% for(cl in uicomponent.getDaysOfWeek(weekNumber)) {
+								 key = uicomponent.keyGen(cl.get(Calendar.DATE), cl.get(Calendar.MONTH), cl.get(Calendar.YEAR)) ;	
+							%>
 								<td>
 									<% for(event in uicomponent.getEventData().get(key)){ 
 										SimpleDateFormat df = new SimpleDateFormat("HH:mm") ;
@@ -98,7 +101,7 @@
 						else {styleClass = "TdLine"}
 					%>
 					<tr>
-						<td class="TdTime $styleClass">
+						<td class="TdTime">
 							<% if(!flag) {println time;} %>
 						</td>
 							<%
