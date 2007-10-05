@@ -269,13 +269,13 @@ UICalendarPortlet.prototype.monthViewCallback = function(evt){
 	var DOMUtil = eXo.core.DOMUtil ;
 	var objectValue = "" ;
 	var links = eXo.core.DOMUtil.findDescendantsByTagName(UIContextMenu.menuElement, "a") ;
-	if (!DOMUtil.hasClass(src, "EventBoxes")) {
+	if (!DOMUtil.findAncestorByClass(src, "EventBoxes")) {
 		if (objectValue = DOMUtil.findAncestorByTagName(src,"td").getAttribute("currentDate")){
 			UIContextMenu.changeAction(UIContextMenu.menuElement,objectValue) ;
 		}
 	} else if (objvalue = DOMUtil.findAncestorByClass(src, "EventBoxes")) {
-		var eventId = objvalue.getAttribute("eventid") ;
-		var calendarId = objvalue.getAttribute("calid") ;
+		var eventId = objvalue.getAttribute("eventId") ;
+		var calendarId = objvalue.getAttribute("calId") ;
 		var map = {
 			"objectId\s*=\s*[A-Za-z0-9_]*(?=&|'|\")":"objectId="+eventId,
 			"calendarId\s*=\s*[A-Za-z0-9_]*(?=&|'|\")":"calendarId="+calendarId
