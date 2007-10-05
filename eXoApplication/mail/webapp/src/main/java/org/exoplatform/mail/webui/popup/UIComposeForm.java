@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.exoplatform.contact.service.Contact;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Attachment;
 import org.exoplatform.mail.service.BufferAttachment;
@@ -73,10 +74,23 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
   final static public String ACT_CC = "ToCC" ;
   final static public String ACT_BCC = "ToBCC" ;
   final static public String ACT_REMOVE = "remove" ;
-  private List<Attachment> attachments_ = new ArrayList<Attachment>() ;
-  private Message message_ = null;
-  private long priority_ = Utils.PRIORITY_NO ;
 
+  public List<Contact> ToContacts = new ArrayList<Contact>();
+  public List<Contact> CcContacts = new ArrayList<Contact>();
+  public List<Contact> BccContacts = new ArrayList<Contact>();
+  
+  public List<Contact> getToContacts(){ return ToContacts; }
+  public List<Contact> getCcContacts(){ return CcContacts; }
+  public List<Contact> getBccContacts(){ return BccContacts; }
+  
+  public void setToContacts(List<Contact> contactList){ ToContacts = contactList; }
+  public void setCcContacts(List<Contact> contactList){ CcContacts = contactList; }
+  public void setBccContacts(List<Contact> contactList){ BccContacts = contactList; }
+  
+  List<Attachment> attachments_ = new ArrayList<Attachment>() ;
+    Message message_ = null;
+    private long priority_ = Utils.PRIORITY_NO ;  
+    
   public UIComposeForm() throws Exception {
     UIFormInputWithActions inputSet = new UIFormInputWithActions(FIELD_FROM_INPUT); 
     List<SelectItemOption<String>>  options = new ArrayList<SelectItemOption<String>>() ;
@@ -196,12 +210,20 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
     UIFormInputWithActions inputSet = getChildById(FIELD_FROM_INPUT) ;
     return inputSet.getUIStringInput(FIELD_CC).getValue() ;
   }
+  
+  public void setFieldCcValue(String value) {
+    UIFormInputWithActions inputSet = getChildById(FIELD_FROM_INPUT);
+    inputSet.getUIStringInput(FIELD_CC).setValue(value);
+  }
 
   public String getFieldBccValue() {
     UIFormInputWithActions inputSet = getChildById(FIELD_FROM_INPUT) ;
     return inputSet.getUIStringInput(FIELD_BCC).getValue() ;
   }
-
+  public void setFieldBccValue(String value) {
+    UIFormInputWithActions inputSet = getChildById(FIELD_FROM_INPUT);
+    inputSet.getUIStringInput(FIELD_BCC).setValue(value);
+  }
   public String getFieldAttachmentsValue() {
     UIFormInputWithActions inputSet = getChildById(FIELD_FROM_INPUT) ;
     return inputSet.getUIFormInputInfo(FIELD_ATTACHMENTS).getValue() ;
@@ -376,36 +398,64 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
   }
   static  public class SelectContactActionListener extends EventListener<UIComposeForm> {
     public void execute(Event<UIComposeForm> event) throws Exception {
-      UIComposeForm uiForm = event.getSource() ;
+      UIComposeForm uiComposeForm = event.getSource() ;
       System.out.println(" ==========> SelectContactActionListener") ;
     }
   }
   static  public class ToActionListener extends EventListener<UIComposeForm> {
     public void execute(Event<UIComposeForm> event) throws Exception {
-      UIComposeForm uiForm = event.getSource() ;
+      UIComposeForm uiComposeForm = event.getSource() ;
       System.out.println(" ==========> ToActionListener") ;
       System.out.println(" ==========> ToInsertAddressActionListener") ;
-      UIPopupActionContainer uiActionContainer = uiForm.getAncestorOfType(UIPopupActionContainer.class) ;
+      UIPopupActionContainer uiActionContainer = uiComposeForm.getAncestorOfType(UIPopupActionContainer.class) ;    
       UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class) ;
-      uiChildPopup.activate(UIAddressForm.class, 700) ;
+  
+       UIAddressForm uiAddressForm = uiChildPopup.activate(UIAddressForm.class, 700) ; 
+       uiAddressForm.setRecipientsType("To");
+ 
+      if (uiComposeForm.getToContacts() != null && uiComposeForm.getToContacts().size() > 0) {        
+        uiAddressForm.setAlreadyCheckedContact(uiComposeForm.getToContacts());      
+        uiAddressForm.setContactList();
+      }
+      
       event.getRequestContext().addUIComponentToUpdateByAjax(uiActionContainer) ;
     }
   }
   static  public class ToCCActionListener extends EventListener<UIComposeForm> {
     public void execute(Event<UIComposeForm> event) throws Exception {
-      UIComposeForm uiForm = event.getSource() ;
+      UIComposeForm uiComposeForm = event.getSource() ;
       System.out.println(" ==========> ToCCActionListener") ;
+      System.out.println(" ==========> ToInsertAddressActionListener") ;
+      UIPopupActionContainer uiActionContainer = uiComposeForm.getAncestorOfType(UIPopupActionContainer.class) ;    
+      UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class) ;
+      UIAddressForm uiAddressForm = uiChildPopup.activate(UIAddressForm.class,700) ; 
+      
+      uiAddressForm.setRecipientsType("Cc");
+      if (uiComposeForm.getCcContacts()!= null&& uiComposeForm.getCcContacts().size()>0) {        
+       uiAddressForm.setAlreadyCheckedContact(uiComposeForm.getCcContacts());      
+        uiAddressForm.setContactList();
+      }
+      
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiActionContainer) ;
     }
   }
   static  public class ToBCCActionListener extends EventListener<UIComposeForm> {
     public void execute(Event<UIComposeForm> event) throws Exception {
-      UIComposeForm uiForm = event.getSource() ;
+      UIComposeForm uiComposeForm = event.getSource() ;
+      System.out.println(" ==========> ToBccActionListener") ;
       System.out.println(" ==========> ToInsertAddressActionListener") ;
-      UIPopupActionContainer uiActionContainer = uiForm.getAncestorOfType(UIPopupActionContainer.class) ;
+      UIPopupActionContainer uiActionContainer = uiComposeForm.getAncestorOfType(UIPopupActionContainer.class) ;    
       UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class) ;
-      uiChildPopup.activate(UIAddressForm.class, 700) ;
+      UIAddressForm uiAddressForm = uiChildPopup.activate(UIAddressForm.class,700) ; 
+      
+      uiAddressForm.setRecipientsType("Bcc");
+      if (uiComposeForm.getCcContacts()!= null&& uiComposeForm.getBccContacts().size()>0) {        
+       uiAddressForm.setAlreadyCheckedContact(uiComposeForm.getBccContacts());      
+        uiAddressForm.setContactList();
+      }
+      
       event.getRequestContext().addUIComponentToUpdateByAjax(uiActionContainer) ;
-    }
+    }   
   }
   
   static  public class ChangePriorityActionListener extends EventListener<UIComposeForm> {

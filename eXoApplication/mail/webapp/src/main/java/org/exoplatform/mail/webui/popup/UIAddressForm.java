@@ -4,34 +4,23 @@
  **************************************************************************/
 package org.exoplatform.mail.webui.popup;
 
-
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.collections.map.HashedMap;
-import org.exoplatform.mail.service.Message;
+import org.exoplatform.contact.service.Contact;
+import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.contact.service.*;
-import org.exoplatform.services.jcr.util.IdGenerator;
-import org.exoplatform.upload.UploadResource;
-import org.exoplatform.upload.UploadService;
-import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
-import org.exoplatform.webui.form.UIFormUploadInput;
-
-import com.thoughtworks.xstream.core.ReferenceByIdMarshaller.IDGenerator;
 
 /**
  * Created by The eXo Platform SARL
@@ -49,14 +38,40 @@ import com.thoughtworks.xstream.core.ReferenceByIdMarshaller.IDGenerator;
 )
 
 public class UIAddressForm extends UIForm implements UIPopupComponent { 
-  public UIAddressForm() throws Exception {  
-    setContactList("");
+  private List<Contact> alreadyCheckedContact = new ArrayList<Contact>();
+
+  private String recipientsType = "";
+  
+  public void setRecipientsType(String type)  {
+    recipientsType=type;
+    System.out.println("setRecipientsType :"+recipientsType);
   }
+  public String getRecipientType(){
+    System.out.println("getRecipientType :"+recipientsType);
+    return recipientsType;
+  }
+  
+  
+  
+  public UIAddressForm() throws Exception {  
+    setContactList();
+  }
+  
+  public UIAddressForm(String recipientsType) throws Exception { 
+    System.out.println("UIAddressForm construtor :");
+    setRecipientsType("recipientsType");
+    setContactList();
+  }
+  
+  
+  
+  
+  public String[] getActions() { return new String[]{"Save", "Cancel"}; }
+
   private Map<String, Contact> contactMap_ = new HashMap<String, Contact>(); 
 
   public void activate() throws Exception {}
-  public void deActivate() throws Exception {}
-  
+  public void deActivate() throws Exception {} 
   public List<Contact> getContacts() throws Exception { 
     return new ArrayList<Contact>(contactMap_.values());
   }
@@ -78,26 +93,105 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
     setContactList(contacts);
   }
   
-  
-  public void setContactList(List<Contact> contactList) throws Exception {
+ public void setContactList(List<Contact> contactList) throws Exception {
+    System.out.println(" ==========> setContactList@List<Contact>") ;
     getChildren().clear();
     contactMap_.clear();
-    for (Contact contact : contactList) {
-      addUIFormInput(new UIFormCheckBoxInput<Boolean>(contact.getId(), contact.getId(), false));
-      contactMap_.put(contact.getId(), contact);
+    System.out.println(" recipientType: "+getRecipientType());       
+              
+    System.out.println(" getRecipientType().equals(To)") ;
+     for (Contact contact : contactList) {
+              UIFormCheckBoxInput<Boolean> uiCheckbox = new UIFormCheckBoxInput<Boolean>(contact.getId(), contact.getId(), false);
+              addUIFormInput(uiCheckbox);
+              for (Contact ct : getAlreadyCheckedContact()) {
+                if(ct.getId().equals(contact.getId()))
+                {
+                  uiCheckbox.setChecked(true);
+                  System.out.print("setCheckbox for "+contact.getEmailAddress());
+                }
+              }
+              
+              contactMap_.put(contact.getId(), contact);
+           }
+         
+  }
+  
+  public void setAlreadyCheckedContact(List<Contact> alreadyCheckedContact) throws Exception {
+    System.out.println(" ==========> setalreadyCheckedToContact") ;
+    if(alreadyCheckedContact!=null)
+    {    
+       
+        this.alreadyCheckedContact = alreadyCheckedContact;
+        for(Contact contact: alreadyCheckedContact) {
+          System.out.println("setalreadyCheckedToContact: Fullname "+ contact.getFullName());
+        }
     }
+  }
+  
+  public List<Contact> getAlreadyCheckedContact() {
+    System.out.println(" ==========> getAlreadyCheckedContact") ;
+    for(Contact contact: alreadyCheckedContact) {
+      System.out.println("getAlreadyCheckedContact:Fullname "+ contact.getFullName());
+    }
+    return alreadyCheckedContact;
+  }
+ 
+  
+  public List<Contact> getCheckedContact() throws Exception {
+    System.out.println(" ==========> getCheckedContact()") ;
+    
+    List<Contact> contactList = new ArrayList<Contact>();  
+    for (Contact contact : getContacts()) {
+      UIFormCheckBoxInput<Boolean> uiCheckbox = getChildById(contact.getId());
+      if (uiCheckbox!=null && uiCheckbox.isChecked()) {
+        contactList.add(contact);
+      }
+    }
+    return contactList;
   }
   
   static  public class SaveActionListener extends EventListener<UIAddressForm> {
-    public void execute(Event<UIAddressForm> event) throws Exception {
-    //  event.getSource().getAncestorOfType(UIMailPortlet.class). ;
-     
-    }
-  }
+    
+    public void execute(Event<UIAddressForm> event) throws Exception { 
+      UIAddressForm uiAddressForm = event.getSource();
+      System.out.println("======== >>> Save Action");
+      UIMailPortlet uiPortlet = uiAddressForm.getAncestorOfType(UIMailPortlet.class);
+      String toAddress = "";
+      for (Contact contact : uiAddressForm.getCheckedContact()) {
+        toAddress += contact.getFullName() + "<" + contact.getEmailAddress() + "> ," ;
+      }
+      
+      UIComposeForm uiComposeForm = uiPortlet.findFirstComponentOfType(UIComposeForm.class);
+      if(uiAddressForm.getRecipientType().equals("To")){
+        uiComposeForm.setFieldToValue(toAddress);       
+        uiComposeForm.setToContacts(uiAddressForm.getCheckedContact());
+       
+      }  
+      
+      if(uiAddressForm.getRecipientType().equals("Cc")){
+        uiComposeForm.setFieldCcValue(toAddress);       
+        uiComposeForm.setCcContacts(uiAddressForm.getCheckedContact());
+        
+      }
+      
+      
+      if(uiAddressForm.getRecipientType().equals("Bcc")){
+        uiComposeForm.setFieldBccValue(toAddress);       
+        uiComposeForm.setBccContacts(uiAddressForm.getCheckedContact());
+        
+      }
+      
+      
+    }  
+  } 
+  
+  
   
   static  public class CancelActionListener extends EventListener<UIAddressForm> {
     public void execute(Event<UIAddressForm> event) throws Exception {
-      event.getSource().getAncestorOfType(UIMailPortlet.class).cancelAction() ;
+      UIAddressForm uiAddressForm = event.getSource();  
+      uiAddressForm.deActivate();
+ 
     }
   }
 }

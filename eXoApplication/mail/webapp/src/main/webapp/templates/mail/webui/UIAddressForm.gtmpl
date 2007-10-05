@@ -81,7 +81,7 @@
       <tr>
         <td align="center"> 
       
-         <a href="<%=uicomponent.event("Ok")%>" class="ActionButton LightBlueStyle">
+         <a href="<%=uicomponent.event("Save")%>" class="ActionButton LightBlueStyle">
             <div class="ButtonLeft">
               <div class="ButtonRight">
                 <div class="ButtonMiddle"> Ok </div>
