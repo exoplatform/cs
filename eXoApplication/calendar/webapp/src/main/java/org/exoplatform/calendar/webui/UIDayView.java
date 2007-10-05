@@ -57,9 +57,6 @@ public class UIDayView extends UICalendarView {
 
   private Map<String, CalendarEvent> eventData_ = new HashMap<String, CalendarEvent>() ;
   private Map<String, CalendarEvent> allDayEvent_ = new HashMap<String, CalendarEvent>() ;
-  private boolean isShowWorkingTime_ = false ;
-  private int startTime_ = 0 ;
-  private int endTime_ = 24 ;
   //private int timeInterval_ = 30 ;
 
   public UIDayView() throws Exception{
@@ -118,15 +115,6 @@ public class UIDayView extends UICalendarView {
     Calendar fromDate = new GregorianCalendar(getCurrentYear(), getCurrentMonth(), getCurrentDay()) ;
     fromDate.set(Calendar.HOUR, 0) ;
     return fromDate ;
-  }
-
-  protected List<String> getDisplayTimes(String timeFormat, int timeInterval) {
-    if(isShowWorkingTime_) {
-      return CalendarUtils.getDisplayTimes(timeFormat, timeInterval,startTime_, endTime_*(60/timeInterval)) ;
-    } 
-    else {
-      return CalendarUtils.getDisplayTimes(timeFormat, timeInterval,0, 24*(60/timeInterval)) ;
-    }
   }
 
   static  public class MoveNextActionListener extends EventListener<UIDayView> {

@@ -1,5 +1,8 @@
 <%
 	import java.util.Calendar;
+	import java.text.DateFormat;
+	import java.text.SimpleDateFormat;
+	
 	uiform.begin()
  	_ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");
  	int currentDay = uicomponent.getCurrentDay() ;
@@ -36,11 +39,12 @@
 			<table class="UIGrid" id="RowContainerDay" cellspacing="0" borderspacing="0">
 				<thead>
 					<tr>
-						<th style="width: auto"></th>
+						<th style="width: auto;"></th>
 						<%
 							
 						  for(cl in uicomponent.getDaysOfWeek(weekNumber)) {
-							  String day = uicomponent.getDayName(cl.get(Calendar.DAY_OF_WEEK));
+						  	int dayOfWeek = cl.get(Calendar.DAY_OF_WEEK);
+							  String day = uicomponent.getDayName(dayOfWeek);
 							  String dayName = day.substring(0,3) ;
 							  String date = cl.get(Calendar.DATE) ;
 							  String month = uicomponent.getMonthName(cl.get(Calendar.MONTH))  ;
@@ -64,32 +68,41 @@
 							</td>
 							<%}%>
 					</tr>
-					
+						<tr>
+							<%for(key in uicomponent.getEventData().keySet()){%>
+								<td>
+									<% for(event in uicomponent.getEventData().get(key)){ 
+										SimpleDateFormat df = new SimpleDateFormat("HH:mm") ;
+										begin =  df.format(event.fromDateTime) ;
+										end = df.format(event.toDateTime) ;
+									%>
+										<div class="EventContainerBoder"
+											<div class="EventContainerBar" title="$event.fromDateTime -- $event.toDateTime" >$begin __  $end</div>
+											<div class="EventContainer">$event.summary</div>
+											<div class="ResizeEventContainer"><span></span></div>
+										</div>
+									<% } %>
+								</td>
+							<%}%>
+						</tr>
 				</tbody>
 			</table>
 		</div>
 		<div class="EventWeekContent">
 			<table class="UIGrid" id="RowContainerDay" cellspacing="0" borderspacing="0">
 				<tbody >
-					<%
-						i = 0;
-						t = 1 ;
-						boolean isHaftTime = false ;
-						while (i++ < 48) {
-						time = t + ":00" ;
-						if(isHaftTime) {time = " " ; t++ ;}
+					<% 
+					boolean flag = false 
+					for(time in uicomponent.getDisplayTimes("hh:mm a", 30)){ 
+						if(flag) {styleClass = "TdDotLine" ;}
+						else {styleClass = "TdLine"}
 					%>
 					<tr>
-						<%
-					 		if (isHaftTime) {typeCss = "TdDotLine" ;}
-					 		else {typeCss = "TdLine" ;}
-					 	%>
-						<td class="TdTime $typeCss" >
-						$time
+						<td class="TdTime $styleClass">
+							<% if(!flag) {println time;} %>
 						</td>
-					 	<%
-					 		if (isHaftTime) {typeCss = "TdDotLine" ;}
-					 		else {typeCss = "TdLine" ;}
+							<%
+					 	 
 					 		for(cl in uicomponent.getDaysOfWeek(weekNumber)) {
 					 			day = cl.get(Calendar.DATE) ;
 					 			month = cl.get(Calendar.MONTH) ;
@@ -100,7 +113,7 @@
 					 				cssClass = "" ;
 					 		  }
 					 	%>
-						 		<td class="$typeCss $cssClass">
+						 		<td class="$styleClass $cssClass">
 									<!--  <div class="EventContainerBoder"
 										<div class="EventContainerBar">5:35 AM - 7:00 AM</div>
 										<div class="EventContainer">Talk to my cousin on ...</div>
@@ -108,15 +121,75 @@
 									</div>
 									-->
 								</td>
-					 	<%}%>
-					</tr>
-					<%
-						isHaftTime = !isHaftTime ;
-					}
-					%>
+					 	<%
+					 	}
+					 	flag = ! flag ;
+					 }%>
+					</tr>	
+					 
 				</tbody>
 			</table>
 		</div>
 	</div>
 </div> 
 <%uiform.end()%>	 
+<% /*Begin Popup Menu*/ %>
+  			
+  				<div class="UIRightClickPopupMenu" id="UIMonthViewRightMenu" eXoCallback="eXo.calendar.UICalendarPortlet.monthViewCallback">
+						  <div class="TopLeftRightClickPopupMenu">
+          			<div class="TopRightRightClickPopupMenu">
+            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
+          			</div>
+        			</div>
+			        <div class="MiddleLeftRightClickPopupMenu">
+			          <div class="MiddleRightRightClickPopupMenu">
+              		<div class="UIRightPopupMenuContainer">
+              			<%
+              				for(String act : uicomponent.getContextMenu()) {
+              				link = uicomponent.event(act,"id") ;
+              			%>
+              			  <a href="$link">
+	              				<div class="ItemIcon $act">$act</div>
+              			  </a>
+              			<%}%>
+									</div>
+	          		</div>
+	        		</div>
+				      <div class="BottomLeftRightClickPopupMenu">
+				        <div class="BottomRightRightClickPopupMenu">
+				          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+				        </div>
+				      </div>
+	      		</div>
+
+  		<% /*End Popup Menu*/ %>
+  		<% /*Begin Popup Menu*/ %>
+  			
+  				<div class="UIRightClickPopupMenu" id="UIMonthViewEventRightMenu" eXoCallback="eXo.calendar.UICalendarPortlet.monthViewCallback">
+						  <div class="TopLeftRightClickPopupMenu">
+          			<div class="TopRightRightClickPopupMenu">
+            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
+          			</div>
+        			</div> 
+			        <div class="MiddleLeftRightClickPopupMenu">
+			          <div class="MiddleRightRightClickPopupMenu">
+              		<div class="UIRightPopupMenuContainer">
+              			<%
+              				for(String act : uicomponent.getQuickEditMenu()) {
+              				link = uicomponent.event(act,"id&$uicomponent.CALENDARID=calId") ;
+              			%>
+              				<a href="$link">
+	              				<div class="ItemIcon $act">$act</div>
+              			  </a>
+              			<%}%>
+									</div>
+	          		</div>
+	        		</div>
+				      <div class="BottomLeftRightClickPopupMenu">
+				        <div class="BottomRightRightClickPopupMenu">
+				          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+				        </div>
+				      </div>
+	      		</div>
+
+  		<% /*End Popup Menu*/ %>

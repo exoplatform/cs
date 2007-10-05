@@ -82,9 +82,12 @@ public abstract class UICalendarView extends UIForm {
   
   final public static String CALENDARID = "calendarId".intern() ;
   protected Calendar calendar_ = null ;
-  protected int timeInterval_ = 15 ;
   protected boolean isShowEvent_ = true;
-
+  private boolean isShowWorkingTime_ = false ;
+  private int startTime_ = 0 ;
+  private int endTime_ = 24 ;
+  protected int timeInterval_ = 15 ;
+  
   protected List<String> privateCalendarIds = new ArrayList<String>() ;
   protected List<String> publicCalendarIds = new ArrayList<String>() ;
 
@@ -257,7 +260,12 @@ public abstract class UICalendarView extends UIForm {
     return  new String[]{ACT_EDIT, ACT_DELETE} ;
   }
   protected List<String> getDisplayTimes(String timeFormat, int timeInterval) {
-    return CalendarUtils.getDisplayTimes(timeFormat, timeInterval,0, 24*(60/timeInterval)) ;
+    if(isShowWorkingTime_) {
+      return CalendarUtils.getDisplayTimes(timeFormat, timeInterval,startTime_, endTime_*(60/timeInterval)) ;
+    } 
+    else {
+      return CalendarUtils.getDisplayTimes(timeFormat, timeInterval,0, 24*(60/timeInterval)) ;
+    }
   }
   static  public class RefreshActionListener extends EventListener<UICalendarView> {
     public void execute(Event<UICalendarView> event) throws Exception {
