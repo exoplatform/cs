@@ -368,8 +368,7 @@ public class JCRDataStorage implements DataStorage {
 				  forumHomeNode.save() ;
 				  forumHomeNode.getSession().save() ;
 			    // createPost first
-			    GregorianCalendar calendar = new GregorianCalendar() ;
-          String id = "post" + Long.toString(calendar.getTimeInMillis(), 16);
+          String id = "POST" + topic.getId().replaceFirst("TOPIC", "") ;
 			    Post post = new Post() ;
 			    post.setId(id.toUpperCase()) ;
 					post.setOwner(topic.getOwner()) ;
@@ -385,6 +384,13 @@ public class JCRDataStorage implements DataStorage {
 					
 					savePost(categoryId, forumId, topic.getId(), post, true) ;
 		    } else {
+          String id = "POST" + topic.getId().replaceFirst("TOPIC", "") ;
+          Node fistPostNode = topicNode.getNode(id) ;
+          fistPostNode.setProperty("exo:modifiedBy", topic.getModifiedBy()) ;
+          fistPostNode.setProperty("exo:modifiedDate", GregorianCalendar.getInstance()) ;
+          fistPostNode.setProperty("exo:subject", topic.getTopicName()) ;
+          fistPostNode.setProperty("exo:message", topic.getDescription()) ;
+          fistPostNode.setProperty("exo:icon", topic.getIcon()) ;
 				  forumHomeNode.save() ;
 				  forumHomeNode.getSession().save() ;
 		    }

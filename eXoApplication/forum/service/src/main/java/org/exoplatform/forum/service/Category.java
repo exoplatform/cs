@@ -6,7 +6,6 @@ package org.exoplatform.forum.service ;
 
 import java.util.Date;
 
-import org.exoplatform.services.jcr.datamodel.Identifier;
 import org.exoplatform.services.jcr.util.IdGenerator;
 
 /**

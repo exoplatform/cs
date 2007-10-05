@@ -50,7 +50,9 @@ public class TestForumService extends BaseForumTestCase{
     
     GregorianCalendar calendar = new GregorianCalendar() ;
     long date = calendar.getTimeInMillis(); 
-    
+//    for(int i=0;i<147;i++){
+//      System.out.println("abc<a target='_blank' href='efd/cauca ("+i+").JPG'><img src='efd/cauca1 ("+i+").JPG' height='113px' width='150px'></a> </div>");
+//    }
 //    System.out.println("\n\n=====> New Day: " +date+  "Cate Day: " + cat.getCreatedDate().getTime() );
 //    Date postDate = new Date();
 //    String dateTime = postDate.getMonth() + "/" + postDate.getDate() + "/" + (1900 + postDate.getYear());

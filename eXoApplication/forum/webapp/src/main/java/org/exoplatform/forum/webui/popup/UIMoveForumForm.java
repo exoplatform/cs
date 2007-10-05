@@ -13,7 +13,11 @@ import org.exoplatform.forum.service.Forum;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.webui.UICategory;
 import org.exoplatform.forum.webui.UICategoryContainer;
+import org.exoplatform.forum.webui.UIForumContainer;
+import org.exoplatform.forum.webui.UIForumDescription;
 import org.exoplatform.forum.webui.UIForumPortlet;
+import org.exoplatform.forum.webui.UITopicContainer;
+import org.exoplatform.forum.webui.UITopicDetailContainer;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -43,6 +47,7 @@ public class UIMoveForumForm extends UIForm implements UIPopupComponent {
 	public static final String FIELD_CATEGORY_SELECTBOX = "SelectCategory" ;
   private List<Forum> forums_ ;
   private String categoryId_ ;
+  private boolean isForumUpdate = false;
 	
   public  void setListForum(List<Forum> forums, String categoryId) {
 		forums_ = forums ;
@@ -50,6 +55,10 @@ public class UIMoveForumForm extends UIForm implements UIPopupComponent {
 	}
 	
   public UIMoveForumForm() throws Exception {
+  }
+  
+  public void setForumUpdate(boolean isForumUpdate) {
+    this.isForumUpdate = isForumUpdate ;
   }
   
   public void activate() throws Exception {
@@ -62,7 +71,6 @@ public class UIMoveForumForm extends UIForm implements UIPopupComponent {
   		}
   	}
   	UIFormSelectBox categoryPath = new UIFormSelectBox(FIELD_CATEGORY_SELECTBOX, FIELD_CATEGORY_SELECTBOX, list) ;
-  	
   	addUIFormInput(categoryPath) ;
   }
   public void deActivate() throws Exception {
@@ -73,15 +81,31 @@ public class UIMoveForumForm extends UIForm implements UIPopupComponent {
       UIMoveForumForm uiForm = event.getSource() ;
       ForumService forumService =  (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
       String categoryPath = uiForm.getUIFormSelectBox(FIELD_CATEGORY_SELECTBOX).getValue() ;
+      List<Category> categorys = forumService.getCategories() ;
+      String newCategoryId = null;
+      for (Category category :categorys) {
+        if( category.getPath().equals(categoryPath) ) {
+          newCategoryId = category.getId() ;
+        }
+      }
       List<Forum> forums = uiForm.forums_ ;
       for (Forum forum : forums) {
 				forumService.moveForum(forum.getId(), forum.getPath(), categoryPath) ;
 			}
       UIForumPortlet forumPortlet = event.getSource().getAncestorOfType(UIForumPortlet.class) ;
       forumPortlet.cancelAction() ;
-      UICategory uiCategory = forumPortlet.getChild(UICategoryContainer.class).getChild(UICategory.class);
-      WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
-			context.addUIComponentToUpdateByAjax(uiCategory) ;
+      if(uiForm.isForumUpdate) {
+        forumPortlet.updateIsRendered(2);
+        UIForumContainer uiForumContainer = forumPortlet.getChild(UIForumContainer.class) ;
+        uiForumContainer.getChild(UITopicDetailContainer.class).setRendered(false) ;
+        uiForumContainer.getChild(UIForumDescription.class).setForumIds(newCategoryId, forums.get(0).getId());
+        UITopicContainer uiTopicContainer = uiForumContainer.getChild(UITopicContainer.class).setRendered(true) ;
+        uiTopicContainer.setForumIds(newCategoryId, forums.get(0).getId()) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(forumPortlet);
+      } else {
+        UICategory uiCategory = forumPortlet.getChild(UICategoryContainer.class).getChild(UICategory.class);
+  			event.getRequestContext().addUIComponentToUpdateByAjax(uiCategory) ;
+      }
     }
   }
  

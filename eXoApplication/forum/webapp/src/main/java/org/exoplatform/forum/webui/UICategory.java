@@ -297,6 +297,7 @@ public class UICategory extends UIForm  {
     		UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;
     		UIMoveForumForm moveForumForm = popupAction.createUIComponent(UIMoveForumForm.class, null, null) ;
     		moveForumForm.setListForum(forums, uiCategory.categoryId);
+        moveForumForm.setForumUpdate(false) ;
     		popupAction.activate(moveForumForm, 400, 165) ;
     		event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
   		} else {

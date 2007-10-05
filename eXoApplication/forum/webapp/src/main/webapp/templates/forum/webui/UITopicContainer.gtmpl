@@ -25,7 +25,9 @@
 		  						<div class="IconButton LockIcon" title="Forum is Closed for Posting"><span class="LockLabel"></span>New Thread</div>
 		  				<% } else { %>
 		  					<a href="<%=uicomponent.event("AddTopic")%>">
-		  						<div class="IconButton AddTheradIcon"><span class="LabelIcon"></span>New Thread</div>
+		  						<div class="IconButton AddTheradIcon"><span class="LabelIcon"></span>
+										<%=_ctx.appRes(uicomponent.getName() + ".action.NewTheard");%>
+									</div>
 		  					</a>
 		  				<% } %>
 		  				</div>
@@ -79,71 +81,20 @@
 							        <div class="MiddleLeftRightClickPopupMenu">
 							          <div class="MiddleRightRightClickPopupMenu">
 				              		<div class="UIRightPopupMenuContainer">
-														<a class="MenuItem" href="#">   
-					                    <div class="ItemIcon EditSelectedThreadIcon">
-					                      Edit Selected Thread
+													 <% 
+				                   		for(action in uicomponent.getActionMenuTopic()) {
+				                   		String link = uicomponent.event(action) ;
+				                   		String itemLabel = _ctx.appRes(uicomponent.getName() + ".action." + action);
+				                   		String classIcon = null;
+				                   		if(action.length() < 11) classIcon = action + "Icon";
+				                   		else classIcon = action.replaceFirst("Topic", "Icon");
+				                   %>
+				                    <a class="MenuItem" href="$link">   
+					                    <div class="ItemIcon $classIcon">
+					                      $itemLabel
 					                    </div>
 				                    </a>
-				                    <div class="MenuItem">   
-					                    <div class="ItemIcon OpenThreadsIcon DisableLabel">
-					                      Open Threads
-					                    </div>
-				                    </div>
-				                    <a class="MenuItem" href="#">   
-					                    <div class="ItemIcon CloseThreadsIcon">
-					                     Close Threads
-					                    </div>
-				                    </a>
-				                    <a class="MenuItem" href="#">   
-					                    <div class="ItemIcon SetLockedIcon">
-					                      Lock Threads
-					                    </div>
-				                    </a>
-				                    <div class="MenuItem">   
-					                    <div class="ItemIcon SetUnLockIcon DisableLabel">
-					                      UnLock Threads
-					                    </div>
-				                    </div>
-				                    <a class="MenuItem" href="#">   
-					                    <div class="ItemIcon MoveThreadsIcon">
-					                      Move Threads
-					                    </div>
-				                    </a>
-				                    <a class="MenuItem" href="#">   
-					                    <div class="ItemIcon ThreadsAuto-PruningIcon">
-					                      Threads Auto-Pruning
-					                    </div>
-				                    </a>
-				                    <a class="MenuItem" href="#">   
-					                    <div class="ItemIcon StickThreadsIcon">
-					                      Stick Threads
-					                    </div>
-				                    </a>
-				                    <div class="MenuItem">   
-					                    <div class="ItemIcon StickThreadsIcon DisableLabel">
-					                      Stick Threads
-					                    </div>
-				                    </div>
-				                    <div class="MenuItem">   
-					                    <div class="ItemIcon MergeThreadsIcon DisableLabel">
-					                      Merge Threads
-					                    </div>
-				                    </div>
-				                    <div class="MenuItem">   
-					                    <div class="ItemIcon ApproveThreadsIcon DisableLabel">
-					                      Approve Threads
-					                    </div>
-				                    </div>
-				                    <a class="MenuItem" href="#">   
-					                    <div class="ItemIcon UnapprovePostsIcon">
-					                     Unapprove Threads
-					                    </div>
-				                    </a>
-				                    <a class="MenuItem" href="#">   
-					                    <div class="ItemIcon DeleteThreadsIcon">
-					                      Delete Threads
-					                    </div>
-				                    </a>
+				                   <% } %>
 													</div>
 					          		</div>
 					        		</div>
@@ -178,50 +129,23 @@
 				              		<% if(!forum.getIsLock()) { %>
 														<a class="MenuItem" href="<%=uicomponent.event("AddTopic")%>">   
 					                    <div class="ItemIcon PostnewThreadIcon">
-					                      Post new Thread
+					                      <%=_ctx.appRes(uicomponent.getName() + ".action.AddTopic");%>
 					                    </div>
 				                    </a>
-				                   <% } %> 
-				                    <a class="MenuItem" href="#">   
-					                    <div class="ItemIcon DisplayOptionsIcon">
-					                      Display Options
+				                   <% } 
+				                   		for(action in uicomponent.getActionMenuForum()) {
+				                   		String link = uicomponent.event(action) ;
+				                   		String itemLabel = _ctx.appRes(uicomponent.getName() + ".action." + action);
+				                   		String classIcon = null;
+				                   		if(action.length() < 12) classIcon = action + "Icon" ;
+				                   		else classIcon = action.replaceFirst("Forum", "") + "Icon" ;
+				                   %>
+				                    <a class="MenuItem" href="$link">   
+					                    <div class="ItemIcon $classIcon">
+					                      $itemLabel
 					                    </div>
 				                    </a>
-				                    <a class="MenuItem" href="<%=uicomponent.event("EditForum")%>">   
-					                    <div class="ItemIcon EditthisForumIcon">
-					                     Edit this Forum
-					                    </div>
-				                    </a>
-				                    <a class="MenuItem" href="#">   
-					                    <div class="ItemIcon SetLockedIcon">
-					                      Lock this Forum
-					                    </div>
-				                    </a>
-				                    <div class="MenuItem">   
-					                    <div class="ItemIcon SetUnLockIcon DisableLabel">
-					                      UnLock this  Forum
-					                    </div>
-				                    </div>
-				                    <a class="MenuItem" href="#">   
-					                    <div class="ItemIcon SetCloseIcon">
-					                      Close this Forum
-					                    </div>
-				                    </a>
-				                    <div class="MenuItem">   
-					                    <div class="ItemIcon SetOpenIcon DisableLabel">
-					                      Open this Forum
-					                    </div>
-				                    </div>
-				                    <a class="MenuItem" href="#">   
-					                    <div class="ItemIcon MovethisForumIcon">
-					                      Move this Forum
-					                    </div>
-				                    </a>
-				                    <a class="MenuItem" href="#">   
-					                    <div class="ItemIcon DeleteThisForumIcon">
-					                      Delete this Forum
-					                    </div>
-				                    </a>
+				                   <% } %>
 													</div>
 					          		</div>
 					        		</div>
@@ -346,7 +270,9 @@
 		  					<div class="IconButton LockIcon" title="Forum is Closed for Posting"><span class="LockLabel"></span>New Thread</div>
 		  				<% } else { %>
 		  					<a href="<%=uicomponent.event("AddTopic")%>">
-		  						<div class="IconButton AddTheradIcon"><span class="LabelIcon"></span>New Thread</div>
+		  						<div class="IconButton AddTheradIcon"><span class="LabelIcon"></span>
+		  							<%=_ctx.appRes(uicomponent.getName() + ".action.NewTheard");%>
+		  						</div>
 		  					</a>
 		  				<% } %>
 		  				</div>

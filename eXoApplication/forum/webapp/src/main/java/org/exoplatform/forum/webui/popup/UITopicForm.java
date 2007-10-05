@@ -41,9 +41,9 @@ import org.exoplatform.webui.form.UIFormTextAreaInput;
 public class UITopicForm extends UIForm implements UIPopupComponent {
   public static final String FIELD_TOPICTITLE_INPUT = "ThreadTitle" ;
   public static final String FIELD_MESSENGER_TEXTAREA = "Messenger" ;
-  
   private String categoryId; 
   private String forumId ;
+  private String topicId ;
   public UITopicForm() throws Exception {
     UIFormStringInput topicTitle = new UIFormStringInput(FIELD_TOPICTITLE_INPUT, FIELD_TOPICTITLE_INPUT, null);
     //topicTitle.addValidator(EmptyNameValidator.class) ;
@@ -69,6 +69,15 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
   public String[] getActionsTopic() throws Exception {
     return (new String [] {"PreviewThread", "SubmitThread", "CancelAction"});
   }
+  
+  public void setUpdateTopic(Topic topic, boolean isUpdate) {
+    if(isUpdate) {
+      this.topicId = topic.getId() ;
+      getUIStringInput(FIELD_TOPICTITLE_INPUT).setValue(topic.getTopicName());
+      getUIFormTextAreaInput(FIELD_MESSENGER_TEXTAREA).setDefaultValue(topic.getDescription());
+    }
+  }
+  
   
   static  public class PreviewThread extends EventListener<UITopicForm> {
     public void execute(Event<UITopicForm> event) throws Exception {
@@ -118,7 +127,7 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
       topicNew.setLastPostDate(new Date());
       topicNew.setDescription(messenger);
       topicNew.setPostCount(0);
-      topicNew.setViewCount(1);
+      topicNew.setViewCount(0);
       
       topicNew.setIsNotifyWhenAddPost(false);
       topicNew.setIsModeratePost(false);
@@ -133,7 +142,12 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
       topicNew.setEditPermissions(new String[] {});
       
       ForumService forumService =  (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
-      forumService.saveTopic(uiForm.categoryId, uiForm.forumId, topicNew, true);
+      if(uiForm.topicId != null && uiForm.topicId.length() > 0) {
+        topicNew.setId(uiForm.topicId);
+        forumService.saveTopic(uiForm.categoryId, uiForm.forumId, topicNew, false);
+      } else {
+        forumService.saveTopic(uiForm.categoryId, uiForm.forumId, topicNew, true);
+      }
       UIForumPortlet forumPortlet = event.getSource().getAncestorOfType(UIForumPortlet.class) ;
       forumPortlet.cancelAction() ;
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;

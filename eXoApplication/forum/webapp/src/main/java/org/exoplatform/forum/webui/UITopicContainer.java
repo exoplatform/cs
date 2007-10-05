@@ -4,6 +4,7 @@
  **************************************************************************/
 package org.exoplatform.forum.webui;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.exoplatform.container.PortalContainer;
@@ -12,15 +13,19 @@ import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.service.JCRPageList;
 import org.exoplatform.forum.service.Topic;
 import org.exoplatform.forum.webui.popup.UIForumForm;
+import org.exoplatform.forum.webui.popup.UIMoveForumForm;
 import org.exoplatform.forum.webui.popup.UIPopupAction;
 import org.exoplatform.forum.webui.popup.UIPopupComponent;
 import org.exoplatform.forum.webui.popup.UITopicForm;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.exception.MessageException;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 
@@ -36,14 +41,20 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
     template =  "app:/templates/forum/webui/UITopicContainer.gtmpl", 
     events = {
       @EventConfig(listeners = UITopicContainer.AddTopicActionListener.class ),  
-      @EventConfig(listeners = UITopicContainer.EditForumActionListener.class ),  
       @EventConfig(listeners = UITopicContainer.OpenTopicActionListener.class ),
-      @EventConfig(listeners = UITopicContainer.SetLockedActionListener.class),
-      @EventConfig(listeners = UITopicContainer.SetUnLockActionListener.class),
-      @EventConfig(listeners = UITopicContainer.SetOpenActionListener.class),
-      @EventConfig(listeners = UITopicContainer.SetCloseActionListener.class),
-      @EventConfig(listeners = UICategory.MoveForumActionListener.class),
-      @EventConfig(listeners = UICategory.RemoveForumActionListener.class)
+      @EventConfig(listeners = UITopicContainer.DisplayOptionActionListener.class ),
+      @EventConfig(listeners = UITopicContainer.EditForumActionListener.class ),  
+      @EventConfig(listeners = UITopicContainer.SetLockedForumActionListener.class),
+      @EventConfig(listeners = UITopicContainer.SetUnLockForumActionListener.class),
+      @EventConfig(listeners = UITopicContainer.SetOpenForumActionListener.class),
+      @EventConfig(listeners = UITopicContainer.SetCloseForumActionListener.class),
+      @EventConfig(listeners = UITopicContainer.MoveForumActionListener.class),
+      @EventConfig(listeners = UITopicContainer.RemoveForumActionListener.class),
+      @EventConfig(listeners = UITopicContainer.EditTopicActionListener.class),
+      @EventConfig(listeners = UITopicContainer.SetOpenTopicActionListener.class),
+      @EventConfig(listeners = UITopicContainer.SetCloseTopicActionListener.class),
+      @EventConfig(listeners = UITopicContainer.SetLockedTopicActionListener.class),
+      @EventConfig(listeners = UITopicContainer.SetUnLockActionListener.class)
     }
 )
 public class UITopicContainer extends UIForm implements UIPopupComponent {
@@ -77,6 +88,17 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
     return forumService.getTopics(categoryId, forumId);
   }
 
+  private String[] getActionMenuForum() throws Exception {
+    String []actions = {"DisplayOptions", "EditForum", "SetLockedForum", "SetUnLockForum", "SetOpenForum", "SetCloseForum", "MoveForum", "RemoveForum"};
+    return actions;
+  }
+
+  private String[] getActionMenuTopic() throws Exception {
+    String []actions = {"EditTopic", "SetOpenTopic", "SetCloseTopic", "SetLockedTopic", "SetUnLockTopic"}; 
+    return actions;
+  }
+  
+  
   private List<Topic> getTopicPageLits(long page) throws Exception {
     JCRPageList pageList = getPageTopics();
     List<Topic> topicList = forumService.getPage(page, pageList);
@@ -132,7 +154,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
     }
   }  
   
-  static public class SetLockedActionListener extends EventListener<UITopicContainer> {
+  static public class SetLockedForumActionListener extends EventListener<UITopicContainer> {
     public void execute(Event<UITopicContainer> event) throws Exception {
       UITopicContainer uiTopicContainer = event.getSource();
       Forum forum = uiTopicContainer.getForum() ;
@@ -143,7 +165,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
     }
   }  
 
-  static public class SetUnLockActionListener extends EventListener<UITopicContainer> {
+  static public class SetUnLockForumActionListener extends EventListener<UITopicContainer> {
     public void execute(Event<UITopicContainer> event) throws Exception {
       UITopicContainer uiTopicContainer = event.getSource();
       Forum forum = uiTopicContainer.getForum() ;
@@ -154,7 +176,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
     }
   }  
 
-  static public class SetOpenActionListener extends EventListener<UITopicContainer> {
+  static public class SetOpenForumActionListener extends EventListener<UITopicContainer> {
     public void execute(Event<UITopicContainer> event) throws Exception {
       UITopicContainer uiTopicContainer = event.getSource();
       Forum forum = uiTopicContainer.getForum() ;
@@ -165,7 +187,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
     }
   }  
 
-  static public class SetCloseActionListener extends EventListener<UITopicContainer> {
+  static public class SetCloseForumActionListener extends EventListener<UITopicContainer> {
     public void execute(Event<UITopicContainer> event) throws Exception {
       UITopicContainer uiTopicContainer = event.getSource();
       Forum forum = uiTopicContainer.getForum() ;
@@ -174,11 +196,210 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
       UIForumPortlet forumPortlet = uiTopicContainer.getAncestorOfType(UIForumPortlet.class) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(forumPortlet) ;
     }
+  } 
+  
+  static public class DisplayOptionActionListener extends EventListener<UITopicContainer> {
+    public void execute(Event<UITopicContainer> event) throws Exception {
+      UITopicContainer uiTopicContainer = event.getSource();
+      
+    }
   }  
   
+  static public class MoveForumActionListener extends EventListener<UITopicContainer> {
+    public void execute(Event<UITopicContainer> event) throws Exception {
+      UITopicContainer uiTopicContainer = event.getSource();
+      Forum forum = uiTopicContainer.getForum() ;
+      List <Forum> forums = new ArrayList<Forum>();
+      forums.add(forum);
+      UIForumPortlet forumPortlet = uiTopicContainer.getAncestorOfType(UIForumPortlet.class) ;
+      UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;
+      UIMoveForumForm moveForumForm = popupAction.createUIComponent(UIMoveForumForm.class, null, null) ;
+      moveForumForm.setListForum(forums, uiTopicContainer.categoryId);
+      moveForumForm.setForumUpdate(true) ;
+      popupAction.activate(moveForumForm, 400, 165) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+    }
+  }  
   
+  static public class RemoveForumActionListener extends EventListener<UITopicContainer> {
+    public void execute(Event<UITopicContainer> event) throws Exception {
+      UITopicContainer uiTopicContainer = event.getSource();
+      Forum forum = uiTopicContainer.getForum() ;
+      UIForumPortlet forumPortlet = uiTopicContainer.getAncestorOfType(UIForumPortlet.class) ;
+      uiTopicContainer.forumService.removeForum(uiTopicContainer.categoryId, forum.getId()) ;
+      forumPortlet.updateIsRendered(1) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(forumPortlet) ;
+    }
+  }  
   
+  //----------------------------------MenuThread---------------------------------
   
+
+  static public class EditTopicActionListener extends EventListener<UITopicContainer> {
+    public void execute(Event<UITopicContainer> event) throws Exception {
+      UITopicContainer uiTopicContainer = event.getSource();
+      List<UIComponent> children = uiTopicContainer.getChildren() ;
+      Topic topic = null ;
+      boolean checked = false ;
+      for(UIComponent child : children) {
+        if(child instanceof UIFormCheckBoxInput) {
+          if(((UIFormCheckBoxInput)child).isChecked()) {
+            topic = uiTopicContainer.forumService.getTopic(uiTopicContainer.categoryId, uiTopicContainer.forumId, ((UIFormCheckBoxInput)child).getName());
+            checked = true ;
+            break ;
+          }
+        }
+      }
+      UIForumPortlet forumPortlet = uiTopicContainer.getAncestorOfType(UIForumPortlet.class) ;
+      if(checked) {
+        UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;
+        UITopicForm topicForm = popupAction.createUIComponent(UITopicForm.class, null, null) ;
+        topicForm.setTopicIds(uiTopicContainer.categoryId, uiTopicContainer.forumId) ;
+        topicForm.setUpdateTopic(topic, true) ;
+        popupAction.activate(topicForm, 662, 466) ;
+      } else {
+        Object[] args = { };
+        throw new MessageException(new ApplicationMessage("UICategory.msg.notCheck", args, ApplicationMessage.WARNING)) ;
+      }
+      event.getRequestContext().addUIComponentToUpdateByAjax(forumPortlet) ;
+    }
+  }  
+  
+  static public class SetOpenTopicActionListener extends EventListener<UITopicContainer> {
+    public void execute(Event<UITopicContainer> event) throws Exception {
+      UITopicContainer uiTopicContainer = event.getSource();
+      List<UIComponent> children = uiTopicContainer.getChildren() ;
+      List <Topic> topics = new ArrayList<Topic>();
+      String sms = "";
+      int i = 0 ;
+      for(UIComponent child : children) {
+        if(child instanceof UIFormCheckBoxInput) {
+          if(((UIFormCheckBoxInput)child).isChecked()) {
+            topics.add(uiTopicContainer.forumService.getTopic(uiTopicContainer.categoryId, uiTopicContainer.forumId, ((UIFormCheckBoxInput)child).getName()));
+            if(!topics.get(i).getIsClosed()){ sms = topics.get(i).getTopicName() ; break ;} 
+          }
+        }
+      }
+      UIForumPortlet forumPortlet = uiTopicContainer.getAncestorOfType(UIForumPortlet.class) ;
+      if(topics.size() > 0 && sms.length() == 0) {
+        for(Topic topic : topics) {
+          topic.setIsClosed(false) ;
+          uiTopicContainer.forumService.saveTopic(uiTopicContainer.categoryId, uiTopicContainer.forumId, topic, false) ;
+        }
+      } 
+      if(topics.size() == 0 && sms.length() == 0){
+        Object[] args = { };
+        throw new MessageException(new ApplicationMessage("UITopicContainer.sms.notCheck", args, ApplicationMessage.WARNING)) ;
+      }
+      if(sms.length() > 0){
+        Object[] args = { sms };
+        throw new MessageException(new ApplicationMessage("UITopicContainer.sms.Open", args, ApplicationMessage.WARNING)) ;
+      }
+      event.getRequestContext().addUIComponentToUpdateByAjax(forumPortlet) ;
+    }
+  }  
+
+  static public class SetCloseTopicActionListener extends EventListener<UITopicContainer> {
+    public void execute(Event<UITopicContainer> event) throws Exception {
+      UITopicContainer uiTopicContainer = event.getSource();
+      List<UIComponent> children = uiTopicContainer.getChildren() ;
+      List <Topic> topics = new ArrayList<Topic>();
+      String sms = "";
+      int i = 0 ;
+      for(UIComponent child : children) {
+        if(child instanceof UIFormCheckBoxInput) {
+          if(((UIFormCheckBoxInput)child).isChecked()) {
+            topics.add(uiTopicContainer.forumService.getTopic(uiTopicContainer.categoryId, uiTopicContainer.forumId, ((UIFormCheckBoxInput)child).getName()));
+            if(topics.get(i).getIsClosed()){ sms = topics.get(i).getTopicName() ; break ;} 
+          }
+        }
+      }
+      UIForumPortlet forumPortlet = uiTopicContainer.getAncestorOfType(UIForumPortlet.class) ;
+      if(topics.size() > 0 && sms.length() == 0) {
+        for(Topic topic : topics) {
+          topic.setIsClosed(true) ;
+          uiTopicContainer.forumService.saveTopic(uiTopicContainer.categoryId, uiTopicContainer.forumId, topic, false) ;
+        }
+      } 
+      if(topics.size() == 0 && sms.length() == 0){
+        Object[] args = { };
+        throw new MessageException(new ApplicationMessage("UITopicContainer.sms.notCheck", args, ApplicationMessage.WARNING)) ;
+      }
+      if(sms.length() > 0){
+        Object[] args = { sms };
+        throw new MessageException(new ApplicationMessage("UITopicContainer.sms.Close", args, ApplicationMessage.WARNING)) ;
+      }
+      event.getRequestContext().addUIComponentToUpdateByAjax(forumPortlet) ;
+    }
+  }  
+  
+  static public class SetLockedTopicActionListener extends EventListener<UITopicContainer> {
+    public void execute(Event<UITopicContainer> event) throws Exception {
+      UITopicContainer uiTopicContainer = event.getSource();
+      List<UIComponent> children = uiTopicContainer.getChildren() ;
+      List <Topic> topics = new ArrayList<Topic>();
+      String sms = "";
+      int i = 0 ;
+      for(UIComponent child : children) {
+        if(child instanceof UIFormCheckBoxInput) {
+          if(((UIFormCheckBoxInput)child).isChecked()) {
+            topics.add(uiTopicContainer.forumService.getTopic(uiTopicContainer.categoryId, uiTopicContainer.forumId, ((UIFormCheckBoxInput)child).getName()));
+            if(topics.get(i).getIsLock()){ sms = topics.get(i).getTopicName() ; break ;} 
+          }
+        }
+      }
+      UIForumPortlet forumPortlet = uiTopicContainer.getAncestorOfType(UIForumPortlet.class) ;
+      if(topics.size() > 0 && sms.length() == 0) {
+        for(Topic topic : topics) {
+          topic.setIsLock(true) ;
+          uiTopicContainer.forumService.saveTopic(uiTopicContainer.categoryId, uiTopicContainer.forumId, topic, false) ;
+        }
+      } 
+      if(topics.size() == 0 && sms.length() == 0){
+        Object[] args = { };
+        throw new MessageException(new ApplicationMessage("UITopicContainer.sms.notCheck", args, ApplicationMessage.WARNING)) ;
+      }
+      if(sms.length() > 0){
+        Object[] args = { sms };
+        throw new MessageException(new ApplicationMessage("UITopicContainer.sms.Locked", args, ApplicationMessage.WARNING)) ;
+      }
+      event.getRequestContext().addUIComponentToUpdateByAjax(forumPortlet) ;
+    }
+  }
+  
+  static public class SetUnLockActionListener extends EventListener<UITopicContainer> {
+    public void execute(Event<UITopicContainer> event) throws Exception {
+      UITopicContainer uiTopicContainer = event.getSource();
+      List<UIComponent> children = uiTopicContainer.getChildren() ;
+      List <Topic> topics = new ArrayList<Topic>();
+      String sms = "";
+      int i = 0 ;
+      for(UIComponent child : children) {
+        if(child instanceof UIFormCheckBoxInput) {
+          if(((UIFormCheckBoxInput)child).isChecked()) {
+            topics.add(uiTopicContainer.forumService.getTopic(uiTopicContainer.categoryId, uiTopicContainer.forumId, ((UIFormCheckBoxInput)child).getName()));
+            if(!topics.get(i).getIsLock()){ sms = topics.get(i).getTopicName() ; break ;} 
+          }
+        }
+      }
+      UIForumPortlet forumPortlet = uiTopicContainer.getAncestorOfType(UIForumPortlet.class) ;
+      if(topics.size() > 0 && sms.length() == 0) {
+        for(Topic topic : topics) {
+          topic.setIsLock(false) ;
+          uiTopicContainer.forumService.saveTopic(uiTopicContainer.categoryId, uiTopicContainer.forumId, topic, false) ;
+        }
+      } 
+      if(topics.size() == 0 && sms.length() == 0){
+        Object[] args = { };
+        throw new MessageException(new ApplicationMessage("UITopicContainer.sms.notCheck", args, ApplicationMessage.WARNING)) ;
+      }
+      if(sms.length() > 0){
+        Object[] args = { sms };
+        throw new MessageException(new ApplicationMessage("UITopicContainer.sms.Locked", args, ApplicationMessage.WARNING)) ;
+      }
+      event.getRequestContext().addUIComponentToUpdateByAjax(forumPortlet) ;
+    }
+  }  
   
   
   

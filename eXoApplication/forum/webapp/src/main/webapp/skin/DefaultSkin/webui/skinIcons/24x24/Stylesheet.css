@@ -82,10 +82,6 @@
 	background: url('icons/ApproveThreadsIcon.gif') no-repeat ;
 }
 
-.CloseThreadsIcon {
-	background: url('icons/CloseThreadsIcon.gif') no-repeat ;
-}
-
 .DeleteThisForumIcon {
 	background: url('icons/DeleteThisForumIcon.gif') no-repeat ;
 }
@@ -94,7 +90,7 @@
 	background: url('icons/DeleteThisForumIcon.gif') no-repeat ;
 }
 
-.DeleteThreadsIcon {
+.DeleteTopicIcon {
 	background: url('icons/DeleteThreadsIcon.gif') no-repeat ;
 }
 
@@ -102,11 +98,11 @@
 	background: url('icons/DisplayOptionsIcon.gif') no-repeat ;
 }
 
-.EditSelectedThreadIcon {
+.EditTopicIcon {
 	background: url('icons/EditSelectedThreadIcon.gif') no-repeat ;
 }
 
-.EditthisForumIcon {
+.EditForumIcon {
 	background: url('icons/EditthisForumIcon.gif') no-repeat ;
 }
 
@@ -118,12 +114,8 @@
 	background: url('icons/MovethisForumIcon.gif') no-repeat ;
 }
 
-.MoveThreadsIcon {
+.MoveTopicIcon {
 	background: url('icons/MoveThreadsIcon.gif') no-repeat ;
-}
-
-.OpenThreadsIcon {
-	background: url('icons/OpenThreadsIcon.gif') no-repeat ;
 }
 
 .PostnewThreadIcon {
