@@ -71,15 +71,15 @@ public abstract class UICalendarView extends UIForm {
 
   final public static String ACT_NEXT = "MoveNext".intern() ;
   final public static String ACT_PREVIOUS  = "MovePrevious".intern() ;
-  
+
 
   public final static String ACT_ADDNEW_EVENT = "QuickAddNewEvent".intern() ;
   public final static String ACT_ADDNEW_TASK = "QuickAddNewTask".intern() ;
   public final static String ACT_GOTO_DATE = "GotoDate".intern() ;
   public final static String ACT_EDIT = "EditEvent".intern() ;
   public final static String ACT_DELETE = "QuickDeleteEvent".intern() ;
-  
-  
+
+
   final public static String CALENDARID = "calendarId".intern() ;
   protected Calendar calendar_ = null ;
   protected boolean isShowEvent_ = true;
@@ -87,16 +87,16 @@ public abstract class UICalendarView extends UIForm {
   protected int startTime_ = 0 ;
   protected int endTime_ = 24 ;
   protected int timeInterval_ = 15 ;
-  
+
   protected List<String> privateCalendarIds = new ArrayList<String>() ;
   protected List<String> publicCalendarIds = new ArrayList<String>() ;
 
   final public static Map<Integer, String> monthsName_ = new HashMap<Integer, String>() ;
   private Map<Integer, String> daysMap_ = new HashMap<Integer, String>() ;
   private Map<Integer, String> monthsMap_ = new HashMap<Integer, String>() ;
-  
+
   public abstract void refresh()throws Exception  ;
-  
+
   public UICalendarView() throws Exception{
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     List<EventCategory> eventCategories = calendarService.getEventCategories(Util.getPortalRequestContext().getRemoteUser()) ;
@@ -106,7 +106,7 @@ public abstract class UICalendarView extends UIForm {
       options.add(new SelectItemOption<String>(category.getName(), category.getName())) ;
     }
     addUIFormInput(new UIFormSelectBox(EVENT_CATEGORIES, EVENT_CATEGORIES, options)) ;
-    
+
     calendar_ = Calendar.getInstance() ;
     calendar_.setLenient(false) ;
     int i = 0 ; 
@@ -153,7 +153,7 @@ public abstract class UICalendarView extends UIForm {
   }
   protected  String getMonthName(int month) {return monthsMap_.get(month).toString() ;} ;
   protected  String getDayName(int day) {return daysMap_.get(day).toString() ;} ;
-  
+
   protected String keyGen(int day, int month, int year) {
     return String.valueOf(day) + CalendarUtils.UNDERSCORE +  String.valueOf(month) +  CalendarUtils.UNDERSCORE + String.valueOf(year); 
   }
@@ -213,12 +213,12 @@ public abstract class UICalendarView extends UIForm {
     boolean isCurrentYear = currentCal.get(Calendar.YEAR) == year ;
     return (isCurrentMonth && isCurrentYear ) ;
   }
-  
+
   protected boolean isSameDate(java.util.Calendar date1, java.util.Calendar date2) {
     return ( date1.get(java.util.Calendar.DATE) == date2.get(java.util.Calendar.DATE) &&
-             date1.get(java.util.Calendar.MONTH) == date2.get(java.util.Calendar.MONTH) &&
-             date1.get(java.util.Calendar.YEAR) == date2.get(java.util.Calendar.YEAR)
-            ) ;
+        date1.get(java.util.Calendar.MONTH) == date2.get(java.util.Calendar.MONTH) &&
+        date1.get(java.util.Calendar.YEAR) == date2.get(java.util.Calendar.YEAR)
+    ) ;
   }
   protected boolean isSameDate(Date value1, Date value2) {
     Calendar date1 = GregorianCalendar.getInstance() ;
@@ -252,7 +252,7 @@ public abstract class UICalendarView extends UIForm {
       calService.removeUserEvent(username, ce.getCalendarId(), ce.getId()) ;
     }
   }
-  
+
   protected String[] getContextMenu() {
     return  new String[]{ACT_ADDNEW_EVENT, ACT_ADDNEW_TASK, ACT_GOTO_DATE} ;
   }
@@ -299,16 +299,25 @@ public abstract class UICalendarView extends UIForm {
       System.out.println(" ===========> DeleteEventActionListener") ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       if(uiForm instanceof UIMonthView ) {
-        try {
-          uiForm.removeEvents(((UIMonthView)uiForm).getSelectedEvents()) ;
-          ((UIMonthView)uiForm).refreshEvents() ;
-          uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.delete-event-successfully", null)) ;
+        List<CalendarEvent> list = ((UIMonthView)uiForm).getSelectedEvents() ;
+        if(list.isEmpty()) {
+          uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.check-box-required", null)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        } catch (Exception e) {
-          e.printStackTrace() ;
-          uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.delete-event-error", null, ApplicationMessage.WARNING)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        } else {
+          try {
+            uiForm.removeEvents(((UIMonthView)uiForm).getSelectedEvents()) ;
+            ((UIMonthView)uiForm).refreshEvents() ;
+            uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.delete-event-successfully", null)) ;
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          } catch (Exception e) {
+            e.printStackTrace() ;
+            uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.delete-event-error", null, ApplicationMessage.WARNING)) ;
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          }
         }
+      } else {
+        uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.function-not-supported", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
     }

@@ -34,6 +34,8 @@ import org.exoplatform.webui.event.EventListener;
     template = "app:/templates/calendar/webui/UIWeekView.gtmpl",
     events = {
       @EventConfig(listeners = UIWeekView.MoveNextActionListener.class), 
+      @EventConfig(listeners = UICalendarView.AddEventActionListener.class),  
+      @EventConfig(listeners = UICalendarView.DeleteEventActionListener.class),
       @EventConfig(listeners = UIWeekView.MovePreviousActionListener.class)
     }
 
