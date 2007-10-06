@@ -46,7 +46,6 @@ public class UIWeekView extends UICalendarView {
 
   public UIWeekView() throws Exception {
     super() ;
-    refresh() ;
   }
 
   public void refresh() throws Exception {

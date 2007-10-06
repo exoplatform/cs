@@ -8,9 +8,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -51,7 +51,6 @@ import org.exoplatform.webui.event.EventListener;
       @EventConfig(listeners = UIDayView.EditEventActionListener.class), 
       @EventConfig(listeners = UIDayView.SaveEventActionListener.class)
     }
-
 )
 public class UIDayView extends UICalendarView {
 
@@ -60,7 +59,6 @@ public class UIDayView extends UICalendarView {
 
   public UIDayView() throws Exception{
     super() ;
-    refresh() ;
   }
   protected void moveDateTo(int days) {
     calendar_.add(Calendar.DATE, days) ;
@@ -82,24 +80,16 @@ public class UIDayView extends UICalendarView {
     eventQuery.setToDate(end) ;
     events = calendarService.getUserEvents(username, eventQuery) ;
     events.addAll(calendarService.getPublicEvents(eventQuery)) ;
-    
+    Iterator<CalendarEvent> iter = events.iterator() ;
+    while (iter.hasNext()) {
+      CalendarEvent ce = iter.next() ;
+      if(ce.getFromDateTime().after(begin.getTime()) && ce.getToDateTime().before(end.getTime())) {
+        eventData_.put(ce.getId(), ce) ;
+        iter.remove() ;
+      } 
+    }
     for(CalendarEvent ce : events){
-      Date beginEvent = ce.getFromDateTime() ;
-      Date endEvent = ce.getToDateTime() ;
-
-      if(beginEvent.before(begin.getTime()) && endEvent.after(end.getTime())){
-        allDayEvent_.put(ce.getId(), ce) ;
-      } else {
-        if(isSameDate(beginEvent, endEvent)) {
-          eventData_.put(ce.getId(), ce) ;
-        } else {
-          if(beginEvent.equals(begin.getTime()) && endEvent.equals(end.getTime())) {
-            allDayEvent_.put(ce.getId(), ce) ;
-          } else {
-            eventData_.put(ce.getId(), ce) ;
-          }
-        }
-      }
+      allDayEvent_.put(ce.getId(), ce) ;
     }
   }
   protected Map<String, CalendarEvent> getEventData() {return eventData_ ;}

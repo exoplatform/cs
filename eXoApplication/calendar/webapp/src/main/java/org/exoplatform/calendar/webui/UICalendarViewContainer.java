@@ -39,6 +39,7 @@ public class UICalendarViewContainer extends UIContainer  {
     addChild(UIScheduleView.class, null, null).setRendered(false) ;
 
     //setRenderedChild(UIMonthView.class) ;
+    refresh() ;
   }  
 
   public void refresh() throws Exception {

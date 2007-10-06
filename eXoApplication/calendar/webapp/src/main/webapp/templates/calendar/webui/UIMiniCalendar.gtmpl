@@ -86,6 +86,10 @@
 				      }
 				      if (validDay) {
 				       	clazz = "" ;
+				       	highlight = "" ;
+						    if(uicomponent.getEventsData().get(dayOfMonth).size() > 0) {
+						    	highlight = "Highlight" ;
+						    } 
 					      if (uicomponent.isCurrentDay(dayOfMonth, currentMonth, currentYear )) {
 						       clazz = "Today";
 						     } else  {
@@ -94,7 +98,7 @@
 						       }  
 						     }
 						   actionLink =  uicomponent.event("GotoDate",String.valueOf(dayOfMonth)) ;
-				       println "<td class=\"$clazz\"><a href=\"$actionLink\"><div class=\"Actions\">$dayOfMonth</div></a></td>" ;
+				       println "<td class=\"$highlight $clazz\"><a href=\"$actionLink\"><div class=\"Actions\">$dayOfMonth</div></a></td>" ;
 				        dayOfMonth++ ;
 				      } else {
 				        println "<td>&nbsp;</td>" ;

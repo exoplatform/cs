@@ -62,7 +62,9 @@ public class UICalendars extends UIForm  {
       List<Calendar> calendars = group.getCalendars() ;
       for(Calendar calendar : calendars) {
         if(getUIFormCheckBoxInput(calendar.getId()) == null){
-          addUIFormInput(new UIFormCheckBoxInput<Boolean>(calendar.getId(), calendar.getId(), false)) ;
+          UIFormCheckBoxInput<Boolean> input = new UIFormCheckBoxInput<Boolean>(calendar.getId(), calendar.getId(), false) ;
+          input.setChecked(true) ;
+          addUIFormInput(input) ;
         }
       }
     }

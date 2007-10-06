@@ -7,6 +7,7 @@ package org.exoplatform.calendar.webui.popup;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -646,8 +647,19 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
         calendarEvent.setEventType(CalendarEvent.TYPE_EVENT) ;
         calendarEvent.setSummary(uiForm.getEventSumary()) ;
         calendarEvent.setDescription(uiForm.getEventDescription()) ;
-        calendarEvent.setFromDateTime(uiForm.getEventFromDate()) ;
-        calendarEvent.setToDateTime(uiForm.getEventToDate());
+        Date from = uiForm.getEventFromDate() ;
+        Date to = uiForm.getEventToDate() ;
+        if(uiForm.getEventAllDate()) {
+          Calendar cal = Calendar.getInstance() ;
+          cal.setTime(from) ;
+          cal.set(Calendar.HOUR, 0) ;
+          from = cal.getTime() ;
+          cal.add(Calendar.DATE, 1) ;
+          to = cal.getTime() ;
+        }
+        calendarEvent.setFromDateTime(from) ;
+        calendarEvent.setToDateTime(to);
+        
         calendarEvent.setCalendarId(calendarId) ;
         calendarEvent.setEventCategoryId(uiForm.getEventCategory()) ;
         calendarEvent.setLocation(uiForm.getEventPlace()) ;

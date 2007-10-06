@@ -5,6 +5,8 @@
 package org.exoplatform.calendar.webui;
 
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -34,11 +36,12 @@ import org.exoplatform.webui.event.EventListener;
 public class UIMiniCalendar extends UIMonthView  {
   final public static String TYPE_MONTH = "month".intern() ;
   final public static String TYPE_YEAR = "year".intern() ;
-
+  
   public UIMiniCalendar() throws Exception {
-
+   refresh() ;
   }  
-  public void refresh() {}
+  
+   
   protected void moveYear(int yearStep) {
     calendar_.add(Calendar.YEAR, yearStep) ;
   }

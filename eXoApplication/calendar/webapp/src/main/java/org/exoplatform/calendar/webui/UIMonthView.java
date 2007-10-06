@@ -65,7 +65,6 @@ public class UIMonthView extends UICalendarView {
 
   public UIMonthView() throws Exception{
     super() ;
-    refresh() ;
   }
 
   protected int getWeeksOfTheMonth(int year, int month, int day) {
