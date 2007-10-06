@@ -5,6 +5,7 @@ function UICalendarPortlet() {
 }
 
 /* for general calendar */
+
 UICalendarPortlet.prototype.hide = function() {
 	var ln = eXo.core.DOMUtil.hideElementList.length ;
 	if (ln > 0) {
@@ -219,7 +220,7 @@ UICalendarPortlet.prototype.adjustTime = function(currentStart, currentEnd, obj)
 	var actionLink = obj.getAttribute("actionLink") ;	
 	var pattern = /startTime.*endTime/g ;
 	var params = "startTime=" + currentStart + "&finishTime=" + currentEnd ;
-	actionLink = actionLink.replace(pattern, params).replace("javascript:","") ;	
+	actionLink = actionLink.replace(pattern, params).replace("javascript:","") ;
 	eval(actionLink) ;
 } ;
 
@@ -236,7 +237,8 @@ UICalendarPortlet.prototype.showContextMenu = function() {
 	UIContextMenu.attach("EventOnDayContent","UIMonthViewEventRightMenu") ;
 	UIContextMenu.attach("TimeRule","UIDayViewRightMenu") ;
 	UIContextMenu.attach("EventBoxes","UIDayViewEventRightMenu") ;
-	//UIContextMenu.attach(["TdLine","TdDotLine"],"UIWeekViewRightMenu") ;
+	UIContextMenu.attach(["EventWeekContent","EventAlldayContainer"],"UIWeekViewRightMenu") ;
+	//UIContextMenu.attach(["EventContainerBoder","EventContainerBar","EventContainer","ResizeEventContainer"],"UIWeekViewEventRightMenu") ;
 } ;
 
 UICalendarPortlet.prototype.dayViewCallback = function(evt){
@@ -261,6 +263,38 @@ UICalendarPortlet.prototype.dayViewCallback = function(evt){
 		} ;
 	}
 	eXo.webui.UIContextMenu.changeAction(eXo.webui.UIContextMenu.menuElement, map) ;
+}
+UICalendarPortlet.prototype.weekViewCallback = function(evt) {
+	var _e = window.event || evt ;
+	var src = _e.srcElement || _e.target ;
+	var DOMUtil = eXo.core.DOMUtil ;
+	var UIContextMenu = eXo.webui.UIContextMenu ;
+	var items = DOMUtil.findDescendantsByTagName(UIContextMenu.menuElement,"a") ;
+	if (DOMUtil.hasClass(src,"EventContainerBoder") || DOMUtil.hasClass(src,"EventContainerBar") || DOMUtil.hasClass(src,"EventContainer") || DOMUtil.hasClass(src,"ResizeEventContainer")) {
+		var obj = (DOMUtil.findAncestorByClass(src, "EventContainerBoder"))? DOMUtil.findAncestorByClass(src, "EventContainerBoder") : src ;
+		var eventId = obj.getAttribute("eventId") ;
+		var calendarId = obj.getAttribute("calId") ;
+		map = {
+			"objectId\s*=\s*[A-Za-z0-9_]*(?=&|'|\")":"objectId="+eventId,
+			"calendarId\s*=\s*[A-Za-z0-9_]*(?=&|'|\")":"calendarId="+calendarId
+		} ;
+		items[0].style.display = "block" ;
+		items[1].style.display = "block" ;
+		items[0].href = eXo.webui.UIContextMenu.replaceall(String(items[0].href),map) ;
+		items[1].href = eXo.webui.UIContextMenu.replaceall(String(items[1].href),map) ;
+		obj = DOMUtil.findAncestorByTagName(src, "td").getAttribute("startTime") ;		
+		for(var i = 2 ; i < items.length ; i ++ ) {
+			items[i].href = String(items[i].href).replace(/objectId\s*=\s*.*(?=&|'|\")/,"objectId="+obj) ;
+		}		
+	} else {
+		items[0].style.display = "none" ;
+		items[1].style.display = "none" ;
+		var obj = (DOMUtil.findAncestorByTagName(src, "td"))? DOMUtil.findAncestorByTagName(src, "td") : src ;
+		var map = obj.getAttribute("startTime") ;
+		for(var i = 2 ; i < items.length ; i ++ ) {
+			items[i].href = String(items[i].href).replace(/objectId\s*=\s*.*(?=&|'|\")/,"objectId="+map) ;
+		}
+	}
 }
 UICalendarPortlet.prototype.monthViewCallback = function(evt){
 	var _e = window.event || evt ;

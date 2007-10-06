@@ -145,7 +145,7 @@
 <%uiform.end()%>	 
   		<% /*Begin Popup Menu*/ %>
   			
-  				<div class="UIRightClickPopupMenu" id="UIMonthViewEventRightMenu" eXoCallback="eXo.calendar.UICalendarPortlet.monthViewCallback">
+  				<div class="UIRightClickPopupMenu" id="UIWeekViewRightMenu" eXoCallback="eXo.calendar.UICalendarPortlet.weekViewCallback">
 				  <div class="TopLeftRightClickPopupMenu">
   			<div class="TopRightRightClickPopupMenu">
     			<div class="TopCenterRightClickPopupMenu"><span></span></div>
@@ -158,7 +158,7 @@
       				for(String act : uicomponent.getQuickEditMenu()) {
       				link = uicomponent.event(act,"id&$uicomponent.CALENDARID=calId") ;
       			%>
-      				<a href="$link">
+      				<a href="$link" style="display:none;">
           				<div class="ItemIcon $act">$act</div>
       			  </a>
       			<%}%>
