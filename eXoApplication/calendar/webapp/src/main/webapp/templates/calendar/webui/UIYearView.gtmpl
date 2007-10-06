@@ -12,7 +12,7 @@
 				<tr>
 					<td>
 						<a href="$linkDayPrevious">
-							<div class="BackIcon" title="Previous month"><span></span></div>
+							<div class="BackIcon" title="Previous Year"><span></span></div>
 						</a>
 					</td>
 					<td>
@@ -20,7 +20,7 @@
 					</td>
 					<td>
 						<a href="$linkDayNext">
-							<div class="NextIcon" title="Next month"><span></span></div>
+							<div class="NextIcon" title="Next Year"><span></span></div>
 						</a>
 					</td>
 				</tr>
@@ -45,7 +45,11 @@
 	        		monthName = uicomponent.getMonthName(month) ;
         	 %>
         	 <td class="$cssClass">
-							<div class="WeekSuburdbar">$monthName</div>
+							<div class="WeekSuburdbar">
+								<a href="<%=uicomponent.event("GotoMonth","$month")%>">
+									$monthName 
+								</a>
+							</div>
 							<div class="MonthList">
 								<div class="WeekList">
 								  <%for(day in uicomponent.getDaysName()) {
