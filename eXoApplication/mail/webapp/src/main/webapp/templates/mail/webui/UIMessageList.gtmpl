@@ -203,7 +203,7 @@
           if (msg.hasStar()) starClass = "StarredIcon";
   		%>
   		<tr class="NormalItem $selectedClass">
-  	  		<td>
+  	  		<td onclick="eXo.mail.UIMailPortlet.selectItem(this);">
   	  		  <%
   	  		    if (checkboxField != null) uicomponent.renderField(checkboxField);
   	  		  %>
