@@ -24,7 +24,11 @@
 						</a>
 					</td>
 					<td>
-						<div class="Title">Week $weekNumber, $currentYear</div>
+						<div class="Title">Week $weekNumber,
+							<a href="<%=uicomponent.event("GotoYear","$currentYear")%>">
+									$currentYear
+							</a>
+						</div>
 					</td>
 					<td>
 						<a href="$linkDayNext">
@@ -50,8 +54,13 @@
 							  String date = cl.get(Calendar.DATE) ;
 							  String month = uicomponent.getMonthName(cl.get(Calendar.MONTH))  ;
 							  String monthName = month.substring(0,3) ;
+							  actionLink =  uicomponent.event("GotoDate",String.valueOf(date)) ;
 						%>
-							<th>$dayName, $date / $monthName</th>
+							<th>
+							<a href="$actionLink">
+								$dayName, $date / $monthName
+							</a>
+							</th>
 						<%
 						 }
 						%>

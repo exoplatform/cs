@@ -36,7 +36,9 @@ import org.exoplatform.webui.event.EventListener;
       @EventConfig(listeners = UIWeekView.MoveNextActionListener.class), 
       @EventConfig(listeners = UICalendarView.AddEventActionListener.class),  
       @EventConfig(listeners = UICalendarView.DeleteEventActionListener.class),
-      @EventConfig(listeners = UIWeekView.MovePreviousActionListener.class)
+      @EventConfig(listeners = UIWeekView.MovePreviousActionListener.class),
+      @EventConfig(listeners = UIWeekView.GotoYearActionListener.class),
+      @EventConfig(listeners = UIWeekView.GotoDateActionListener.class)
     }
 
 )
@@ -136,6 +138,45 @@ public class UIWeekView extends UICalendarView {
       calendarview.moveTo(-1) ;
       calendarview.refresh() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
+    }
+  }
+  static  public class GotoYearActionListener extends EventListener<UIWeekView> {
+    public void execute(Event<UIWeekView> event) throws Exception {
+      UIWeekView calendarview = event.getSource() ;
+      String date = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      UICalendarPortlet portlet = calendarview.getAncestorOfType(UICalendarPortlet.class) ;
+      UICalendarViewContainer uiContainer = portlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
+      uiContainer.setRenderedChild(UIYearView.class) ;
+      UIYearView uiYearView = uiContainer.getChild(UIYearView.class) ;
+      uiYearView.setCurrentDay(1) ;
+      //calendarview.setCurrentDay(1);
+      uiYearView.setCurrentMonth(java.util.Calendar.JANUARY) ;
+      uiYearView.setCurrentYear(Integer.parseInt(date)) ;
+      uiYearView.refresh() ;
+      UIActionBar uiActionBar = portlet.findFirstComponentOfType(UIActionBar.class) ;
+      uiActionBar.setCurrentView(uiContainer.getRenderedChild().getId()) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiActionBar) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;
+    }
+  }
+  static  public class GotoDateActionListener extends EventListener<UIWeekView> {
+    public void execute(Event<UIWeekView> event) throws Exception {
+      UIWeekView calendarview = event.getSource() ;
+      String date = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      UICalendarPortlet portlet = calendarview.getAncestorOfType(UICalendarPortlet.class) ;
+      UICalendarViewContainer uiContainer = portlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
+      uiContainer.setRenderedChild(UIDayView.class) ;
+      UIDayView uiDayView = uiContainer.getChild(UIDayView.class) ;
+      calendarview.gotoDate(Integer.parseInt(date), calendarview.getCurrentMonth(), calendarview.getCurrentYear()) ;
+      uiDayView.setCurrentCalendar(calendarview.getCurrentCalendar()) ;
+      uiDayView.refresh() ;
+      //calendarview.refresh() ;
+      UIActionBar uiActionBar = portlet.findFirstComponentOfType(UIActionBar.class) ;
+      uiActionBar.setCurrentView(uiContainer.getRenderedChild().getId()) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiActionBar) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;
     }
   }
 }

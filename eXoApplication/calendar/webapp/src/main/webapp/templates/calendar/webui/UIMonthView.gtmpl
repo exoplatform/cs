@@ -22,7 +22,11 @@
 							</a>
 						</td>
 						<td>
-							<div class="Title">$currentMonthName,  $currentYear</div>
+							<div class="Title">$currentMonthName, 
+								<a href="<%=uicomponent.event("GotoYear","$currentYear")%>">
+									$currentYear
+								</a>
+							</div>
 						</td>
 						<td>
 							<a href="$linkDayNext">

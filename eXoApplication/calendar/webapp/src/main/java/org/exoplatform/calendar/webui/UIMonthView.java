@@ -55,7 +55,8 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
       @EventConfig(listeners = UIMonthView.QuickAddNewTaskActionListener.class), 
       @EventConfig(listeners = UIMonthView.GotoDateActionListener.class), 
       @EventConfig(listeners = UIMonthView.EditEventActionListener.class), 
-      @EventConfig(listeners = UIMonthView.QuickDeleteEventActionListener.class)
+      @EventConfig(listeners = UIMonthView.QuickDeleteEventActionListener.class),
+      @EventConfig(listeners = UIMonthView.GotoYearActionListener.class)
     }
 )
 public class UIMonthView extends UICalendarView {
@@ -313,6 +314,26 @@ public class UIMonthView extends UICalendarView {
       } catch (Exception e) {
         e.printStackTrace() ;
       }
+    }
+  }
+  static  public class GotoYearActionListener extends EventListener<UIMonthView> {
+    public void execute(Event<UIMonthView> event) throws Exception {
+      UIMonthView calendarview = event.getSource() ;
+      String date = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      UICalendarPortlet portlet = calendarview.getAncestorOfType(UICalendarPortlet.class) ;
+      UICalendarViewContainer uiContainer = portlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
+      uiContainer.setRenderedChild(UIYearView.class) ;
+      UIYearView uiYearView = uiContainer.getChild(UIYearView.class) ;
+      uiYearView.setCurrentDay(1) ;
+      //calendarview.setCurrentDay(1);
+      uiYearView.setCurrentMonth(java.util.Calendar.JANUARY) ;
+      uiYearView.setCurrentYear(Integer.parseInt(date)) ;
+      uiYearView.refresh() ;
+      UIActionBar uiActionBar = portlet.findFirstComponentOfType(UIActionBar.class) ;
+      uiActionBar.setCurrentView(uiContainer.getRenderedChild().getId()) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiActionBar) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;
     }
   }
 }
