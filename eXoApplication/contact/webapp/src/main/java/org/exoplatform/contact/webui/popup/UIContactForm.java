@@ -26,6 +26,7 @@ import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
+import org.exoplatform.webui.form.UIFormInputInfo;
 import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTabPane;
@@ -83,6 +84,7 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
   
   public static String[] FIELD_SHAREDCONTACT_BOX = null;
   public static String FIELD_ISPUBLIC_BOX = "isPublic";
+  public static String FIELD_INPUT_INFO = "selectGroups";
   public static String FIELD_EDITPERMISSION_INPUT = "editPermission";  
   
   public static final String INPUT_PROFILETAB = "protileTab" ;
@@ -134,6 +136,7 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
     NoteTab.addUIFormInput(new UIFormTextAreaInput(FIELD_NOTE_INPUT, FIELD_NOTE_INPUT, null));
 
     ShareTab.addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_ISPUBLIC_BOX, FIELD_ISPUBLIC_BOX, false));
+    ShareTab.addUIFormInput(new UIFormInputInfo(FIELD_INPUT_INFO, FIELD_INPUT_INFO, null)) ;
     OrganizationService organizationService = (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
     Object[] groups = organizationService.getGroupHandler().getAllGroups().toArray() ;
     FIELD_SHAREDCONTACT_BOX = new String[groups.length];
@@ -182,9 +185,7 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
     profileTab.setFieldBirthday(contact.getBirthday());
     profileTab.setFieldJobName(contact.getJobTitle());
     profileTab.setFieldEmail(contact.getEmailAddress());   
-//  hhhhh
-    ContactAttachment contactAttachment = contact.getAttachment();  
-    System.out.println("\n\n contact atttttment :" + contactAttachment + "\n\n");
+    ContactAttachment contactAttachment = contact.getAttachment();
     if (contactAttachment != null) profileTab.setImage(contactAttachment.getInputStream()) ;
     else profileTab.setImage(null) ;
     
@@ -239,7 +240,7 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
       String username = ContactUtils.getCurrentUser() ;
       Contact contact ;
       if (isNew_) contact = new Contact() ;
-      else contact = uiContactForm.contact_ ;
+      else contact = UIContactForm.contact_ ;
        
       contact.setFullName(profileTab.getFieldFullName());
       contact.setFirstName(profileTab.getFieldFirstName());
@@ -250,7 +251,6 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
       contact.setBirthday(profileTab.getFieldBirthday()) ;
       contact.setJobTitle(profileTab.getFieldJobName());
       contact.setEmailAddress(profileTab.getFieldEmail());
-      System.out.println("profileTab.getImage()======> " + profileTab.getImage()) ;
       if(profileTab.getImage() != null) {
         ContactAttachment attachment = new ContactAttachment() ;
         attachment.setInputStream(new ByteArrayInputStream(profileTab.getImage())) ;
@@ -258,25 +258,6 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
         attachment.setMimeType(profileTab.getMimeType()) ;
         contact.setAttachment(attachment) ;
       }else {contact.setAttachment(null) ;}
-      /*if (isNew_) {
-        attachment.setId("Attachment" + IdGenerator.generate());
-      } else {
-        ContactAttachment contactAttachment = contact.getAttachment() ;
-        if (contactAttachment != null)
-          attachment.setId(contactAttachment.getId()) ;
-      }
-      attachment.setFileName(profileTab.getFileName()) ;
-      attachment.setMimeType(profileTab.getMimeType()) ;
-      if (profileTab.getImage() != null) {
-        attachment.setInputStream(new ByteArrayInputStream(profileTab.getImage())) ;
-        contact.setAttachment(attachment) ;
-      } else {
-        attachment.setFileName(null) ;
-        attachment.setInputStream(null) ;
-        attachment.setMimeType(null) ;
-        attachment.setId(null) ;
-        contact.setAttachment(attachment) ;
-      }*/
       contact.setWorkAddress(uiContactForm.getUIStringInput(FIELD_WORKADDRESS_INPUT).getValue());
       contact.setWorkCity(uiContactForm.getUIStringInput(FIELD_WORKCITY_INPUT).getValue());
       contact.setWorkStateProvince(uiContactForm.getUIStringInput(FIELD_WORKSTATE_INPUT).getValue());
@@ -310,9 +291,7 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
 
       UIContactPortlet uiContactPortlet = uiContactForm.getAncestorOfType(UIContactPortlet.class) ;
       UIContacts uicontacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
-      UIAddressBooks uiAddressBook = uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class) ;
-      UIContactPreview uiContactPreview = uiContactPortlet.findFirstComponentOfType(UIContactPreview.class) ;
-      UIWorkingContainer uiWorkingContainer = uiContactPortlet.findFirstComponentOfType(UIWorkingContainer.class) ; 
+      UIContactPreview uiContactPreview = uiContactPortlet.findFirstComponentOfType(UIContactPreview.class) ; 
       if (uiContactForm.getUIFormCheckBoxInput(FIELD_ISPUBLIC_BOX).isChecked()) {
         StringBuffer sharedGroups = new StringBuffer("");
         for (int i = 0; i < FIELD_SHAREDCONTACT_BOX.length; i ++) {
@@ -329,22 +308,6 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
         String[] categories = sharedGroups.toString().split(",") ;
         contact.setCategories(categories);
         contactService.saveSharedContact(contact, isNew_);
-        /*if (isNew_) {
-          if (uiWorkingContainer.getSelectedGroup() == null) {
-            uiWorkingContainer.setSelectedGroup(categories[0]) ;
-          }
-          for (String category : categories) {
-            if (category.equals(uiAddressBook.getSelectedGroup())) {
-              uicontacts.updateContact(contact, isNew_) ;
-              uiContactPreview.updateContact() ;
-              break ;
-            }
-          }
-        } else {
-          uicontacts.updateContact(contact, isNew_) ;
-          if (uiContactPreview.getContact() != null && contact.getId().equals(uiContactPreview.getContact().getId())) 
-            uiContactPreview.setContact(contact) ;
-        }*/
       } else {
         UIPopupContainer popupContainer = uiContactForm.getParent() ;
         UICategorySelect uiCategorySelect = popupContainer.getChild(UICategorySelect.class); 
@@ -356,24 +319,13 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
         }        
         contact.setCategories(new String[] { category });
         contactService.saveContact(username, contact, isNew_);
-        /*if (isNew_) {
-          if (uiAddressBook.getSelectedGroup() == null) uiWorkingContainer.setSelectedGroup(category) ;
-          if (uiAddressBook.getSelectedGroup().equals(category)) uicontacts.updateContact(contact, isNew_) ;
-          uiContactPreview.updateContact() ;
-        } else {          
-          uicontacts.updateContact(contact, isNew_) ;
-          if (uiContactPreview.getContact() != null && contact.getId().equals(uiContactPreview.getContact().getId())) 
-            uiContactPreview.setContact(contact) ;
-        }*/
       }
       uicontacts.updateList() ;
       if(uicontacts.getSelectedContact() != null && uicontacts.getSelectedContact().equals(contact.getId())){
         uiContactPreview.setContact(contact) ;
       }
-      
-      //uiContactPreview.setLastUpdated(new Date()) ;
       uiContactPortlet.cancelAction() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiContactPortlet) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContactPortlet.getChild(UIWorkingContainer.class)) ;
     }
   }
   
@@ -381,8 +333,7 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
     public void execute(Event<UIContactForm> event) throws Exception {
       UIContactForm uiForm = event.getSource() ;
       UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
-      uiContactPortlet.cancelAction() ; 
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiContactPortlet) ;
+      uiContactPortlet.cancelAction() ;
     }
   }
   

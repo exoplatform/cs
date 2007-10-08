@@ -85,7 +85,7 @@ public class UIMoveContactForm extends UIForm implements UIPopupComponent {
         uiContactPortlet.findFirstComponentOfType(UIContacts.class).updateList() ;
       }
       uiContactPortlet.cancelAction() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiContactPortlet.findFirstComponentOfType(UIWorkingContainer.class)) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContactPortlet.getChild(UIWorkingContainer.class)) ;
     }
   }
 

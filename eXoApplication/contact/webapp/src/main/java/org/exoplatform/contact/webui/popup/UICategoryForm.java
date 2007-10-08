@@ -84,13 +84,7 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
       group.setName(groupName) ;
       group.setDescription(uiCategoryForm.getUIFormTextAreaInput(FIELD_DESCRIPTION_INPUT).getValue()) ;
       contactService.saveGroup(username, group, isNew_) ; 
-      
       UIContactPortlet uiContactPortlet = uiCategoryForm.getAncestorOfType(UIContactPortlet.class) ;
-      /*
-      UIWorkingContainer uiWorkingContainer = uiContactPortlet.findFirstComponentOfType(UIWorkingContainer.class) ;
-      uiWorkingContainer.updateContactGroup(group) ;
-      if (ContactUtils.isEmpty(uiWorkingContainer.getSelectedGroup())) 
-        uiWorkingContainer.setSelectedGroup(group.getId()) ;*/
       UIPopupContainer popupContainer = uiCategoryForm.getAncestorOfType(UIPopupContainer.class) ;
       if (popupContainer != null) {
         UICategorySelect uiCategorySelect = popupContainer.findFirstComponentOfType(UICategorySelect.class);

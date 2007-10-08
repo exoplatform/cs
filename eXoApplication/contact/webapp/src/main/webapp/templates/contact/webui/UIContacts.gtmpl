@@ -3,6 +3,7 @@
 	import org.exoplatform.contact.service.Contact;
 	import org.exoplatform.download.DownloadService;
 	import org.exoplatform.contact.ContactUtils;
+	import org.exoplatform.contact.service.JCRPageList;
 	def rcontext = _ctx.getRequestContext() ;  
 	rcontext.getJavascriptManager().importJavascript("eXo.contact.UIContactPortlet","/contact/javascript") ;
 	rcontext.getJavascriptManager().addJavascript("eXo.contact.UIContactPortlet.showContextMenu() ;") ;
@@ -38,11 +39,30 @@
 					<div class="UIAddressPageList">
 						<div class="ContactIteratorContainer">
 	  					<div class="RightPageIteratorBlock">
-	  						<a title="First Page" class="FloatBlockHidden FirstPageArrow"/></a>        
-	  						<a title="Previous Page" class="FloatBlockHidden PreviousPageArrow"></a>
-								<div class="Number">Contacts 1 - 20 of 45</div>
-	  				 		<a title="Next Page" class="FloatBlock NextPageArrow" href="#"/></a>
-	 				  		<a title="Last Page" class="FloatBlock LastPageArrow"><span/></a>
+	  					
+	  					<%
+			          JCRPageList pageList = uicomponent.getContactPageList();
+			          String cssPreviousPage = "FloatBlockHidden";
+			          String cssNextPage = "FloatBlockHidden";
+			          long currentPage = 1;
+			          String contactRange = "";
+			          if (pageList != null && (uicomponent.getContacts().length != 0)) {
+			            currentPage = pageList.getCurrentPage();
+			            if (currentPage > 1) cssPreviousPage = "FloatBlock";
+			            if (currentPage < pageList.getAvailablePage()) cssNextPage = "FloatBlock";
+			            long fromIndex = (pageList.getCurrentPage()-1)* pageList.getPageSize() + 1;
+			            long endIndex = fromIndex-1 + pageList.getPageSize();
+			            if (pageList.getCurrentPage() == pageList.getAvailablePage()) endIndex = pageList.getAvailable();
+			            contactRange = "Contacts " + fromIndex + " - " + endIndex + " of " + pageList.getAvailable();
+			          } 
+			          
+			        %>
+
+	  						<a href="<%=uicomponent.event("FirstPage")%>" title="First Page" class="$cssPreviousPage FirstPageArrow"/></a>        
+	  						<a href="<%=uicomponent.event("PreviousPage")%>" title="Previous Page" class="$cssPreviousPage PreviousPageArrow"></a>
+								<div class="Number">$contactRange</div>
+	  				 		<a href="<%=uicomponent.event("NextPage")%>" title="Next Page" class="$cssNextPage NextPageArrow"/></a>
+	 				  		<a href="<%=uicomponent.event("LastPage")%>" title="Last Page" class="$cssNextPage LastPageArrow"><span/></a>
 						    <div style="clear: left;"><span/></div>
 						  </div>
 					  </div>
@@ -57,15 +77,24 @@
 	  			      <th style="width: 23px; padding-left: 7px;" class="text"><input type="checkbox" class="checkbox" title="Check all" value="4"/></th>
 	  						<th style="width: 24px;" class="text"><div class="Icon BlueTag"><span></span></div></th>
 	  		        <th style="width: 24%; padding-left: 7px;" class="text">
-	  		        	<div class="DownArrow1Icon" >Name</div>
+	  		        	<a href="<%=uicomponent.event("SortByName")%>">
+	  		        	<div class="DownArrow1Icon" >
+	  		        		Name  		        			
+	  		        	</div>
+	  		        	</a>
 	  		        </th>
 	 	      	    <th class="text" style="padding-left: 7px;">
+	 	      	    	<a href="<%=uicomponent.event("SortByEmail")%>">
 	  		        	<div class="DownArrow1Icon" title="Sort by subject">Email</div>
+	  		        	</a>
 	  		        </th>
 	 	      	    <th style="width: 120px; padding-left: 7px;" class="text">
+	  		        	<a href="<%=uicomponent.event("SortByOrganition")%>">
 	  		        	<div class="DownArrow1Icon" title="Sort by Date & time">Organition</div>
+	 	      	    	</a>
 	 	      	    </th>
-	 	      	    <th style="padding-left: 7px;">Work Phone</th>
+	 	      	    <th style="padding-left: 7px;">
+	 	      	    	<a href="<%=uicomponent.event("SortByPhone")%>">Work Phone</th>
 	 	      	    <th style="padding-left: 7px;">Action</th>
 	  	 	      </tr>
 	  	 	    </thead>
@@ -240,12 +269,14 @@
 				contact = contacts[i ++] ;
 				cssClass = "NormalVCard" ; 
   			if (contact.getId().equals(uicomponent.getSelectedContact())) cssClass = "SelectedVCard" ;
+  			iconTag = "Icon" ;
+				if (contact.getTags() != null && contact.getTags().length > 0) iconTag = "Icon BlueTag" ;
 			%>
 			<div class="RightVCardsContent">
 		  	<div class="VCardContent $cssClass">
 			  	<div class="TitleVCards">
 				  	<div class="StateIcon OfflineIcon"><%=(contact.getFullName()==null ? "" : contact.getFullName())%></div>
-			  		<div class="TagIcon"><span></span></div>
+			  		<div class="TagIcon $iconTag"><span></span></div>
 			  		<div style="clear: both;"><span></span></div>
 			  	</div>
 			  	<div class="ContainerVCards">

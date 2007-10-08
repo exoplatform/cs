@@ -80,7 +80,6 @@ public class UIAddressBooks extends UIComponent  {
       UIPopupContainer popupContainer = uiPopupAction.createUIComponent(UIPopupContainer.class, null, "AddNewContact") ;
       UICategorySelect uiCategorySelect = popupContainer.addChild(UICategorySelect.class, null, null) ;
       popupContainer.addChild(UIContactForm.class, null, null) ;
-      
       String groupId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       uiCategorySelect.setValue(groupId) ; 
       UIContactForm.isNew_ = true ;
@@ -137,7 +136,7 @@ public class UIAddressBooks extends UIComponent  {
 
   static  public class SelectGroupActionListener extends EventListener<UIAddressBooks> {
     public void execute(Event<UIAddressBooks> event) throws Exception {
-      UIAddressBooks uiAddressBook = event.getSource() ;  
+      UIAddressBooks uiAddressBook = event.getSource() ;
       UIWorkingContainer uiWorkingContainer = uiAddressBook.getAncestorOfType(UIWorkingContainer.class) ;
       uiWorkingContainer.findFirstComponentOfType(UITags.class).setSelectedTag(null) ;
       String groupId = event.getRequestContext().getRequestParameter(OBJECTID) ;    

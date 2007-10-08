@@ -5,7 +5,6 @@
 package org.exoplatform.contact.service;
 
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.jcr.Node;
