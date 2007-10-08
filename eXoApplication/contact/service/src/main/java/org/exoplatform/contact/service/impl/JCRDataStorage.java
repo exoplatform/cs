@@ -162,6 +162,7 @@ public class JCRDataStorage implements DataStorage {
     if(contactNode.hasProperty("exo:categories"))contact.setCategories(ValuesToStrings(contactNode.getProperty("exo:categories").getValues()));
     if(contactNode.hasProperty("exo:tags")) contact.setTags(ValuesToStrings(contactNode.getProperty("exo:tags").getValues()));
     if(contactNode.hasProperty("exo:editPermission")) contact.setEditPermission(ValuesToStrings(contactNode.getProperty("exo:editPermission").getValues()));
+    if(contactNode.hasProperty("exo:lastUpdated"))contact.setLastUpdated(contactNode.getProperty("exo:lastUpdated").getString());
     contact.setPath(contactNode.getPath()) ;
     if(contactNode.hasNode("image")){
       Node image = contactNode.getNode("image");
@@ -410,7 +411,7 @@ public class JCRDataStorage implements DataStorage {
     contactNode.setProperty("exo:categories", contact.getCategories());
     contactNode.setProperty("exo:tags", contact.getTags());
     contactNode.setProperty("exo:editPermission", contact.getEditPermission());
-
+    contactNode.setProperty("exo:lastUpdated", contact.getLastUpdated());
     // save image to contact
     ContactAttachment attachment = contact.getAttachment() ;
     if (attachment != null) {
@@ -627,6 +628,7 @@ public class JCRDataStorage implements DataStorage {
     contactNode.setProperty("exo:note", contact.getNote());
     contactNode.setProperty("exo:categories", contact.getCategories());
     contactNode.setProperty("exo:editPermission", contact.getEditPermission());
+    contactNode.setProperty("exo:lastUpdated", contact.getLastUpdated());
     
     contactHomeNode.getSession().save(); 
   }

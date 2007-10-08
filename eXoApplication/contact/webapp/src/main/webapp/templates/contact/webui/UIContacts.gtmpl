@@ -44,16 +44,18 @@
 			          JCRPageList pageList = uicomponent.getContactPageList();
 			          String cssPreviousPage = "FloatBlockHidden";
 			          String cssNextPage = "FloatBlockHidden";
-			          long currentPage = 1;
 			          String contactRange = "";
 			          if (pageList != null && (uicomponent.getContacts().length != 0)) {
 			            currentPage = pageList.getCurrentPage();
+			            availablePage = pageList.getAvailablePage() ;
+			            availableContact =  pageList.getAvailable() ;
+			            pageSize = pageList.getPageSize() ;
 			            if (currentPage > 1) cssPreviousPage = "FloatBlock";
-			            if (currentPage < pageList.getAvailablePage()) cssNextPage = "FloatBlock";
-			            long fromIndex = (pageList.getCurrentPage()-1)* pageList.getPageSize() + 1;
-			            long endIndex = fromIndex-1 + pageList.getPageSize();
-			            if (pageList.getCurrentPage() == pageList.getAvailablePage()) endIndex = pageList.getAvailable();
-			            contactRange = "Contacts " + fromIndex + " - " + endIndex + " of " + pageList.getAvailable();
+			            if (currentPage < availablePage) cssNextPage = "FloatBlock";
+			            long fromIndex = (currentPage - 1)* pageSize + 1;
+			            long endIndex = fromIndex-1 + pageSize;
+			            if (currentPage == availablePage) endIndex = availableContact;
+			            contactRange = "Contacts " + fromIndex + " - " + endIndex + " of " + availableContact ;
 			          } 
 			          
 			        %>
@@ -70,7 +72,7 @@
 					<div style="clear: left;"><span/></div>
 				</div>
 				
-				<div class="UIMessageList">
+				<div class="UIMessageList" is>
 					<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
 	  				<thead>
 	  					<tr>
@@ -110,7 +112,7 @@
 								cssClass = "" ;
 								if (contact.getId().equals(uicomponent.getSelectedContact())) cssClass = "Selected" ;
 						%>
-  						<tr class="UIContactList $cssClass">
+  						<tr class="UIContactList $cssClass" isTagList="<%=uicomponent.getTagSelected()%>">
   						  <td class="text" style="padding-left: 7px;">
   						  	<%
   						  		if(checkboxField != null) uicomponent.renderField(checkboxField) ;

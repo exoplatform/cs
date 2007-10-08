@@ -62,6 +62,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
 
 public class UIContacts extends UIForm {
   public boolean viewContactsList = true ;
+  public boolean isTagSelected = false ;
   private Map<String, Contact> contactMap = new HashMap<String, Contact> () ;
   private String selectedGroup = null ;
   private String selectedContact = null ;
@@ -75,19 +76,10 @@ public class UIContacts extends UIForm {
   final public static String PRINT_CONTACT = "Print this Contact".intern() ;
   final public static String[] SELECTIONS = { EDIT_CONTACT, SEND_EMAIL , INSTACE_MESSAGE, TAG, MOVE_CONTACT, DELETE_CONTACT, PRINT_CONTACT } ;
   private boolean nameAsc = true ;
-  private int firstPoint, lastPoint ;
   
-  public UIContacts() throws Exception {
-    int totalContacts = getTotalContacts();
-    if (totalContacts > 0)firstPoint = 1 ; {
-      if (totalContacts >= 10) lastPoint = 10 ;
-      else lastPoint = totalContacts ;
-    }    
-  } 
+  public UIContacts() throws Exception { } 
   public String[] getSelections() { return SELECTIONS ; }
-  
-  public int getTotalContacts() { return contactMap.size() ; }
-  
+
   public JCRPageList getContactPageList() { return pageList_ ; }
   
   public void setContacts(JCRPageList pageList) throws Exception {
@@ -138,8 +130,6 @@ public class UIContacts extends UIForm {
     return getApplicationComponent(DownloadService.class) ; 
   }
   
-  // TO DO
-
   public void setPageList(JCRPageList pageList, long page) throws Exception {
     getChildren().clear();
     pageList_ = pageList ;
@@ -147,6 +137,9 @@ public class UIContacts extends UIForm {
       addUIFormInput(new UIFormCheckBoxInput<Boolean>(contact.getId(),contact.getId(), false)) ;
     }
   }
+  
+  public void setTagSelected(boolean isTag) { isTagSelected = isTag ; }
+  public boolean getTagSelected() { return isTagSelected ; }
   
   static public class EditContactActionListener extends EventListener<UIContacts> {
     public void execute(Event<UIContacts> event) throws Exception {

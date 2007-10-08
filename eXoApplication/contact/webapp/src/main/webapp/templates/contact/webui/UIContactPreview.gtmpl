@@ -1,6 +1,8 @@
 <% 
 	import org.exoplatform.contact.service.Contact;
 	String compId = uicomponent.getId() ;
+	Contact contact = uicomponent.getContact();
+	if(contact != null) {		
 %>
 <div class="UIContactPreview" id="$compId">
 	<div class="ContactPreviewBar">
@@ -8,7 +10,7 @@
 		<a class="MaximizeContactPane" title="Maximize Reading Pane"  href="<%=uicomponent.event("MaximizeContactPane")%>">
 		</a>
 		<span class="LastUpdated">
-				Last updated: <%=(uicomponent.getLastUpdated()==null ? "" : uicomponent.getLastUpdated())%>
+				Last updated: <%=(contact.getLastUpdated()==null ? "" : contact.getLastUpdated())%>
 		</span>
 		<div style="clear:both;"><span></span></div>
 	</div>
@@ -24,10 +26,7 @@
 				<div class="MiddleLeftViewBoxStyle">
 					<div class="MiddleRightViewBoxStyle">
 						<div class="MiddleCenterViewBoxStyle">
-						<% 
-							Contact contact = uicomponent.getContact();
-							if(contact != null) {
-						%>
+						
 							<div class="ContactPreviewContainer"	>		
 								<% String imageLink = uicomponent.getImageSource() ; %>
 								<img src="<%=(imageLink == null ? "/contact/skin/DefaultSkin/webui/background/Img2.gif": imageLink)%>" width=63 height=81 class="Avatar"/>						
@@ -243,7 +242,7 @@
 								<div style="clear: left;"><span></span></div>
 								
 							</div>
-							<%}%>
+							
 						</div>	
 															
 					</div>
@@ -258,3 +257,4 @@
 <!--  End DecoratorBox ViewBoxStyle -->
 	</div>
 </div>
+<%}%>

@@ -64,7 +64,7 @@ public class Contact {
   private String[] editPermission ;
   private boolean isShared = false ;
   private ContactAttachment attachment ;
-  
+  private String lastUpdated ;
   
   public Contact() {
     id = "Contact" + IdGenerator.generate() ;
@@ -199,12 +199,10 @@ public class Contact {
   public void setAttachment(ContactAttachment attachment) { this.attachment = attachment; }
   public ContactAttachment getAttachment() { return attachment; }
 
-  public void setShared(boolean isShared) {
-    this.isShared = isShared;
-  }
-
-  public boolean isShared() {
-    return isShared;
-  }
+  public void setShared(boolean isShared) { this.isShared = isShared; }
+  public boolean isShared() { return isShared ; }
+  
+  public String getLastUpdated()  { return lastUpdated ; }
+  public void   setLastUpdated(String s) { lastUpdated = s ; }
   
 }

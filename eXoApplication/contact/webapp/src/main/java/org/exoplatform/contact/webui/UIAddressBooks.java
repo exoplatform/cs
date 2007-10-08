@@ -48,7 +48,6 @@ public class UIAddressBooks extends UIComponent  {
   public UIAddressBooks() throws Exception {}
 
   public List<ContactGroup> getGroups() throws Exception {
-   
     List<ContactGroup> groupList = ContactUtils.getContactService().getGroups(ContactUtils.getCurrentUser()) ; 
     return groupList;    
   }
@@ -143,6 +142,7 @@ public class UIAddressBooks extends UIComponent  {
       uiAddressBook.selectedGroup = groupId;
       ContactService contactService = ContactUtils.getContactService();
       UIContacts uiContacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class) ;
+      uiContacts.setTagSelected(false) ;
       uiContacts.setContacts(contactService.getContactPageListByGroup(ContactUtils.getCurrentUser(), groupId)) ; 
       event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer) ;
     }
@@ -157,6 +157,7 @@ public class UIAddressBooks extends UIComponent  {
       uiAddressBook.selectedGroup = groupId ; 
       ContactService contactService = ContactUtils.getContactService();
       UIContacts uiContacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class) ; 
+      uiContacts.setTagSelected(false) ;
       uiContacts.setContacts(contactService.getSharedContactsByGroup(groupId)) ;      
       event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer) ;
     }

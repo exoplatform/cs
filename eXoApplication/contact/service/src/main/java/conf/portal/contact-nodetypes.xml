@@ -129,7 +129,10 @@
   		</propertyDefinition>  		
   		<propertyDefinition name="exo:tags" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
   			<valueConstraints/>
-  		</propertyDefinition>  	  			
+  		</propertyDefinition>  
+  		<propertyDefinition name="exo:lastUpdated" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  			<valueConstraints/>
+  		</propertyDefinition>	  			
   	</propertyDefinitions>
   	<childNodeDefinitions>
       <childNodeDefinition name="*" defaultPrimaryType="nt:file" autoCreated="false" mandatory="false"

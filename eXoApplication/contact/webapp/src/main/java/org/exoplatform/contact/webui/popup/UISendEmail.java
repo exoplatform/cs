@@ -36,8 +36,8 @@ public class UISendEmail extends UIForm implements UIPopupComponent {
   public void deActivate() throws Exception { }
  
   public void setEmails(List<String> emails) { 
-    StringBuffer emailBuffer = null ;
-    if (emails.size() > 0) emailBuffer = new StringBuffer(emails.get(0)) ;
+    StringBuffer emailBuffer = new StringBuffer("") ;
+    if (emails.size() > 0) emailBuffer.append(emails.get(0)) ;
     for (int i = 1; i < emails.size(); i ++) emailBuffer.append(", " + emails.get(i)) ;
     getUIStringInput(FIELD_TO_INPUT).setValue(emailBuffer.toString()) ;
   }

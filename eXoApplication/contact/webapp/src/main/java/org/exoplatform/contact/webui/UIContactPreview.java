@@ -30,16 +30,12 @@ import org.exoplatform.webui.event.EventListener;
 )
 public class UIContactPreview extends UIComponent  {
   private Contact contact_ ; 
-  private Date lastUpdated_ ;
   private boolean isMaximized_ = false ;
   
   public UIContactPreview() throws Exception { }
   
   public void setContact(Contact c) { contact_ = c; }
   public Contact getContact() { return contact_; }
-  
-  public void setLastUpdated(Date s) { lastUpdated_ = s ; }
-  public Date getLastUpdated() { return lastUpdated_ ; }
   
   public void setIsMaximized(boolean isMaximize) { isMaximized_ = isMaximize ; }
   public boolean getIsMaximize() { return isMaximized_ ; }

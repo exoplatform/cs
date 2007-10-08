@@ -60,6 +60,7 @@ public class UITags extends UIComponent {
       uiAddressBooks.setSelectedGroup(null) ;
       String username = ContactUtils.getCurrentUser() ;
       UIContacts uiContacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class) ;
+      uiContacts.setTagSelected(true) ;
       uiContacts.setContacts(ContactUtils.getContactService().getContactPageListByTag(username, tagName)) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer) ;
     }
