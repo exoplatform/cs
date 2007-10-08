@@ -3,15 +3,25 @@
 	padding: 10px;
 }
 
-.UITopicForm .UIForm .HorizontalLayout .UIFormInputSet {
-	padding: 10px;
+.UITopicForm .UIForm .HorizontalLayout .ThreadContent .UIFormInputSet {
+	padding: 10px; border: 1px solid red;
 }
 
-.UITopicForm .UIForm .HorizontalLayout input {
+.UITopicForm .UIForm .HorizontalLayout .ThreadContent input {
 	width: 430px;
 }
 
-.UITopicForm .UIForm .HorizontalLayout textarea { 
+.UITopicForm .UIForm .HorizontalLayout .ThreadContent checkbox {
+	padding-left: 5px;
+}
+
+.UITopicForm .UIForm .HorizontalLayout .ThreadContent textarea { 
 	width: 430px; 
 	height: 265px;
 }
+
+.UITopicForm .UIForm .HorizontalLayout .ThreadOptions checkbox {
+	padding-left: 5px;
+}
+
+

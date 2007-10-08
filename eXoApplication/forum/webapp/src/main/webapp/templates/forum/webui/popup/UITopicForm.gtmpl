@@ -12,7 +12,7 @@
 					        <div class="TabsContainer">
 				            
 			              <div class="UITab NormalTabStyle">
-			                <div class="SelectedTab">
+			                <div class="NormalTab">
 			                  <div class="LeftTab">
 			                    <div class="RightTab">
 					                  <div onclick="" class="MiddleTab">Thread Content</div>
@@ -30,6 +30,16 @@
 			                  </div>
 			                </div>
 			              </div>
+			              
+			              <div class="UITab NormalTabStyle">
+			                <div class="SelectedTab">
+			                  <div class="LeftTab">
+			                    <div class="RightTab">
+					                  <div onclick="" class="MiddleTab">Thread Options</div>
+					                </div>
+			                  </div>
+			                </div>
+			              </div>
 				            
 					        </div>
 					      </div>
@@ -38,7 +48,7 @@
 		      </div>
 		    	<div class="HorizontalLayout">
 		        <div class="UITabContentContainer">
-	            <div style="display: block;" id="UITabContent" class="UITabContent">
+	            <div style="display: none;" id="UITabContent" class="UITabContent">
 	              <div class="UIFormInputSet ThreadContent">
 	              	<table class="UIFormGrid">
 	              		<tbody>
@@ -65,6 +75,73 @@
 	              	</table>
 	              </div>
 	            </div>
+	            
+	            
+	            <div style="display: block;" id="UITabContent" class="UITabContent">
+	              <div class="UIFormInputSet ThreadOptions">
+	              	<table class="UIFormGrid">
+	              		<tbody>
+	              			<tr>
+	                      <td class="FieldLabel">Lock:</td>
+	                      <td class="FieldComponent">
+	                        <select clas="selectbox" name="Lock">
+	                        	<option value="Lock">Lock</option>
+	                        	<option value="Lock">Un Lock</option>
+	                        </select>
+	                      </td>
+                      </tr>
+                      <tr>
+	                      <td class="FieldLabel">Closed: </td>
+	                      <td class="FieldComponent">
+	                        <select clas="selectbox" name="Lock">
+	                        	<option value="Lock">Close</option>
+	                        	<option value="Lock">Open</option>
+	                        </select>
+	                      </td>
+                      </tr>
+	              			<tr>
+	                      <td class="FieldLabel">Approved: </td>
+	                      <td class="FieldComponent">
+	                        <input type="checkbox" class="checkbox" />
+	                      </td>
+                      </tr>
+                      <tr>
+	                      <td class="FieldLabel">Moderate post: </td>
+	                      <td class="FieldComponent">
+	                        <input type="checkbox" class="checkbox" />
+	                      </td>
+                      </tr>
+                      <tr>
+	                      <td class="FieldLabel">Motify when add pos: </td>
+	                      <td class="FieldComponent">
+	                        <input type="checkbox" class="checkbox" />
+	                      </td>
+                      </tr>
+                      <tr>
+	                      <td class="FieldLabel">Sticky: </td>
+	                      <td class="FieldComponent">
+	                        <input type="checkbox" class="checkbox" />
+	                      </td>
+                      </tr>
+                      <tr>
+	                      <td class="FieldLabel">View pemission: </td>
+	                      <td class="FieldComponent">
+													<textarea rows="2" cols="10" name="View" class="textarea"></textarea>
+	                      </td>
+                      </tr>
+                      <tr>
+	                      <td class="FieldLabel">Edit pemission: </td>
+	                      <td class="FieldComponent">
+	                        <textarea rows="2" cols="10" name="View" class="textarea"></textarea>
+	                      </td>
+                      </tr>
+	     
+	              		</tbody>
+	              	</table>
+	              </div>
+	            </div>
+	            
+	            
 	          </div>
 			    </div>
 			  </div>
