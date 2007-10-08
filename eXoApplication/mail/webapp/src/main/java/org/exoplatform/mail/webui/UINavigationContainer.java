@@ -21,7 +21,7 @@ public class UINavigationContainer extends UIContainer  {
   public UINavigationContainer() throws Exception {
     addChild(UISelectAccount.class, null, null) ;
     addChild(UIFolderContainer.class, null, null) ;
-    addChild(UITags.class, null, null) ;
+    addChild(UITagContainer.class, null, null) ;
   }
 
   

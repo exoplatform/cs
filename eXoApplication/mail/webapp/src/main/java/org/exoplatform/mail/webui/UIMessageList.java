@@ -280,7 +280,7 @@ public class UIMessageList extends UIForm {
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
       UIMessageArea uiMessageArea = uiPortlet.findFirstComponentOfType(UIMessageArea.class);
-      UITags uiTags = uiPortlet.findFirstComponentOfType(UITags.class); 
+      UITagContainer uiTags = uiPortlet.findFirstComponentOfType(UITagContainer.class); 
       MailService mailSrv = uiMessageList.getApplicationComponent(MailService.class);
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();

@@ -22,7 +22,7 @@ import org.exoplatform.mail.webui.UIMessageArea;
 import org.exoplatform.mail.webui.UIMessageList;
 import org.exoplatform.mail.webui.UINavigationContainer;
 import org.exoplatform.mail.webui.UISelectAccount;
-import org.exoplatform.mail.webui.UITags;
+import org.exoplatform.mail.webui.UITagContainer;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -114,7 +114,7 @@ public class UITagForm extends UIForm implements UIPopupComponent{
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
       service.addTag(username, accountId, messageList, tagList);
       uiPortlet.cancelAction() ;
-      UITags uiTags = uiPortlet.findFirstComponentOfType(UITags.class) ;
+      UITagContainer uiTags = uiPortlet.findFirstComponentOfType(UITagContainer.class) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiTags) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageArea) ;
     }
