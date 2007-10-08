@@ -28,7 +28,10 @@ import org.exoplatform.webui.event.EventListener;
 @ComponentConfig(
     template =  "app:/templates/mail/webui/UITagContainer.gtmpl",
     events = {
-        @EventConfig(listeners = UITags.ChangeTagActionListener.class)
+        @EventConfig(listeners = UITags.ChangeTagActionListener.class),
+        @EventConfig(listeners = UITags.RenameTagActionListener.class),
+        @EventConfig(listeners = UITags.RemoveTagActionListener.class),
+        @EventConfig(listeners = UITags.EmptyTagActionListener.class)
     }
 )
 
@@ -60,6 +63,30 @@ public class UITags extends UIComponent {
       uiMessageList.setSelectedTagName(tagname);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiTags);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList);
+    }
+  }
+  
+  static public class RenameTagActionListener extends EventListener<UITags> {
+    public void execute(Event<UITags> event) throws Exception {
+      String tagName = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      UITags uiTags = event.getSource();  
+      System.out.println("============>>>> Rename Tag Action Listener");
+    }
+  }
+  
+  static public class RemoveTagActionListener extends EventListener<UITags> {
+    public void execute(Event<UITags> event) throws Exception {
+      String tagName = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      UITags uiTags = event.getSource();     
+      System.out.println("============>>>> Remove Tag Action Listener");
+    }
+  }
+  
+  static public class EmptyTagActionListener extends EventListener<UITags> {
+    public void execute(Event<UITags> event) throws Exception {
+      String tagName = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      UITags uiTags = event.getSource();     
+      System.out.println("============>>>> Empty Tag Action Listener");
     }
   }
 }
