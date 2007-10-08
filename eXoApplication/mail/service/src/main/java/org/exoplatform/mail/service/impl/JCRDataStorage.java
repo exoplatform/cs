@@ -588,6 +588,17 @@ public class JCRDataStorage implements DataStorage{
 
     tagHomeNode.getSession().save() ;
   } 
+  
+  public void updateTag(String username, String accountId, Tag tag) throws Exception {
+    Node tagHome = getTagHome(username, accountId) ;
+    if (tagHome.hasNode(tag.getId())) {
+      Node tagNode = tagHome.getNode(tag.getId());
+      tagNode.setProperty(Utils.EXO_NAME, tag.getName());
+      tagNode.setProperty(Utils.EXO_DESCRIPTION, tag.getDescription());
+      tagNode.setProperty(Utils.EXO_COLOR, tag.getColor());
+    }
+    tagHome.save();
+  }
 
   public List<Message> getMessageByTag(String username, String accountId, String tagId)
   throws Exception {

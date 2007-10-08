@@ -273,6 +273,7 @@ public class MailServiceImpl implements MailService{
           newMsg.setHasStar(false);       
           newMsg.setPriority(Utils.PRIORITY_NORMAL);
           String[] headers = mes.getHeader("X-Priority");
+          if (headers != null) System.out.println(headers.length  + "=====<><><><>==>>> " + headers[0]);
           if (headers != null && headers.length > 0) {
             for (int j = 0 ; j < headers.length; j++) {
               newMsg.setPriority(Long.valueOf(mes.getHeader("X-Priority")[j]));
@@ -425,6 +426,10 @@ public class MailServiceImpl implements MailService{
     storage_.removeTag(username, accountId, tag);
   }
 
+  public void updateTag(String username, String accountId, Tag tag) throws Exception {
+    storage_.updateTag(username, accountId, tag);
+  }
+  
   public List<Message> getMessageByTag(String username, String accountId, String tagName)
       throws Exception {
     return storage_.getMessageByTag(username, accountId, tagName);

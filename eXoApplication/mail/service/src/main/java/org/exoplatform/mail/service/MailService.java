@@ -152,7 +152,15 @@ public interface MailService {
    * @throws Exception
    */
   public void removeTag(String username, String accountId, String tag) throws Exception ;
-  
+  /**
+   * This method should:
+   * 1. Update a tag.
+   * @param username
+   * @param accountId
+   * @param tag
+   * @throws Exception
+   */
+  public void updateTag(String username, String accountId, Tag tag) throws Exception ;
   
   /**
    * This method should:
