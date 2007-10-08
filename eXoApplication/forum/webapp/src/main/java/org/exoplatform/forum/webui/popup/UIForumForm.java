@@ -128,9 +128,11 @@ public class UIForumForm extends UIForm implements UIPopupComponent{
       getUIStringInput(FIELD_FORUMORDER_INPUT).setValue(String.valueOf(forum.getForumOrder()));
       String stat = "open";
       if(forum.getIsClosed()) stat = "closed";
+      System.out.println("\n\n   " + stat + "\n\n");
       getUIFormSelectBox(FIELD_FORUMSTATE_SELECTBOX).setDefaultValue(stat);
       if(forum.getIsLock()) stat = "locked";
       else stat = "unlock";
+      System.out.println("\n\n   " + stat + "\n\n");
       getUIFormSelectBox(FIELD_FORUMSTATUS_SELECTBOX).setDefaultValue(stat);
       getUIFormTextAreaInput(FIELD_DESCRIPTION_TEXTAREA).setDefaultValue(forum.getDescription());
       String temp = "";

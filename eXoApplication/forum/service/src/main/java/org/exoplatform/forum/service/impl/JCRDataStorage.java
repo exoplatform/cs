@@ -130,7 +130,7 @@ public class JCRDataStorage implements DataStorage {
 		if(forumHomeNode.hasNode(categoryId)) {
 			Node catNode = forumHomeNode.getNode(categoryId) ;
 	    QueryManager qm = forumHomeNode.getSession().getWorkspace().getQueryManager() ;
-	    String queryString = "/jcr:root" + catNode.getPath() + "//element(*,exo:forum) order by @exo:forumOrder ascending,@exo:createdDate descending";
+	    String queryString = "/jcr:root" + catNode.getPath() + "//element(*,exo:forum) order by @exo:forumOrder ascending,@exo:createdDate ascending";
 	    Query query = qm.createQuery(queryString , Query.XPATH) ;
 	    QueryResult result = query.execute() ;
 	    NodeIterator iter = result.getNodes() ;

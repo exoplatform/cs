@@ -54,7 +54,9 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
       @EventConfig(listeners = UITopicContainer.SetOpenTopicActionListener.class),
       @EventConfig(listeners = UITopicContainer.SetCloseTopicActionListener.class),
       @EventConfig(listeners = UITopicContainer.SetLockedTopicActionListener.class),
-      @EventConfig(listeners = UITopicContainer.SetUnLockActionListener.class)
+      @EventConfig(listeners = UITopicContainer.SetUnLockTopicActionListener.class),
+      @EventConfig(listeners = UITopicContainer.SetStickTopicActionListener.class),
+      @EventConfig(listeners = UITopicContainer.SetUnStickTopicActionListener.class)
     }
 )
 public class UITopicContainer extends UIForm implements UIPopupComponent {
@@ -94,7 +96,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
   }
 
   private String[] getActionMenuTopic() throws Exception {
-    String []actions = {"EditTopic", "SetOpenTopic", "SetCloseTopic", "SetLockedTopic", "SetUnLockTopic"}; 
+    String []actions = {"EditTopic", "SetOpenTopic", "SetCloseTopic", "SetLockedTopic", "SetUnLockTopic", "SetStickTopic", "SetUnStickTopic"}; 
     return actions;
   }
   
@@ -277,6 +279,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
           if(((UIFormCheckBoxInput)child).isChecked()) {
             topics.add(uiTopicContainer.forumService.getTopic(uiTopicContainer.categoryId, uiTopicContainer.forumId, ((UIFormCheckBoxInput)child).getName()));
             if(!topics.get(i).getIsClosed()){ sms = topics.get(i).getTopicName() ; break ;} 
+            ++i ;
           }
         }
       }
@@ -311,6 +314,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
           if(((UIFormCheckBoxInput)child).isChecked()) {
             topics.add(uiTopicContainer.forumService.getTopic(uiTopicContainer.categoryId, uiTopicContainer.forumId, ((UIFormCheckBoxInput)child).getName()));
             if(topics.get(i).getIsClosed()){ sms = topics.get(i).getTopicName() ; break ;} 
+            ++i ;
           }
         }
       }
@@ -345,6 +349,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
           if(((UIFormCheckBoxInput)child).isChecked()) {
             topics.add(uiTopicContainer.forumService.getTopic(uiTopicContainer.categoryId, uiTopicContainer.forumId, ((UIFormCheckBoxInput)child).getName()));
             if(topics.get(i).getIsLock()){ sms = topics.get(i).getTopicName() ; break ;} 
+            ++i ;
           }
         }
       }
@@ -367,7 +372,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
     }
   }
   
-  static public class SetUnLockActionListener extends EventListener<UITopicContainer> {
+  static public class SetUnLockTopicActionListener extends EventListener<UITopicContainer> {
     public void execute(Event<UITopicContainer> event) throws Exception {
       UITopicContainer uiTopicContainer = event.getSource();
       List<UIComponent> children = uiTopicContainer.getChildren() ;
@@ -379,6 +384,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
           if(((UIFormCheckBoxInput)child).isChecked()) {
             topics.add(uiTopicContainer.forumService.getTopic(uiTopicContainer.categoryId, uiTopicContainer.forumId, ((UIFormCheckBoxInput)child).getName()));
             if(!topics.get(i).getIsLock()){ sms = topics.get(i).getTopicName() ; break ;} 
+            ++i ;
           }
         }
       }
@@ -395,12 +401,108 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
       }
       if(sms.length() > 0){
         Object[] args = { sms };
-        throw new MessageException(new ApplicationMessage("UITopicContainer.sms.Locked", args, ApplicationMessage.WARNING)) ;
+        throw new MessageException(new ApplicationMessage("UITopicContainer.sms.UnLock", args, ApplicationMessage.WARNING)) ;
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(forumPortlet) ;
     }
   }  
+
+  static public class SetUnStickTopicActionListener extends EventListener<UITopicContainer> {
+	  public void execute(Event<UITopicContainer> event) throws Exception {
+		  UITopicContainer uiTopicContainer = event.getSource();
+		  List<UIComponent> children = uiTopicContainer.getChildren() ;
+		  List <Topic> topics = new ArrayList<Topic>();
+		  String sms = "";
+		  int i = 0 ;
+		  for(UIComponent child : children) {
+			  if(child instanceof UIFormCheckBoxInput) {
+				  if(((UIFormCheckBoxInput)child).isChecked()) {
+					  topics.add(uiTopicContainer.forumService.getTopic(uiTopicContainer.categoryId, uiTopicContainer.forumId, ((UIFormCheckBoxInput)child).getName()));
+					  if(!topics.get(i).getIsSticky()){ sms = topics.get(i).getTopicName() ; break ;} 
+            ++i ;
+				  }
+			  }
+		  }
+		  UIForumPortlet forumPortlet = uiTopicContainer.getAncestorOfType(UIForumPortlet.class) ;
+		  if(topics.size() > 0 && sms.length() == 0) {
+			  for(Topic topic : topics) {
+				  topic.setIsSticky(false) ;
+				  uiTopicContainer.forumService.saveTopic(uiTopicContainer.categoryId, uiTopicContainer.forumId, topic, false) ;
+			  }
+		  } 
+		  if(topics.size() == 0 && sms.length() == 0){
+			  Object[] args = { };
+			  throw new MessageException(new ApplicationMessage("UITopicContainer.sms.notCheck", args, ApplicationMessage.WARNING)) ;
+		  }
+		  if(sms.length() > 0){
+			  Object[] args = { sms };
+			  throw new MessageException(new ApplicationMessage("UITopicContainer.sms.UnStick", args, ApplicationMessage.WARNING)) ;
+		  }
+		  event.getRequestContext().addUIComponentToUpdateByAjax(forumPortlet) ;
+	  }
+  }  
   
+  static public class SetStickTopicActionListener extends EventListener<UITopicContainer> {
+	  public void execute(Event<UITopicContainer> event) throws Exception {
+		  UITopicContainer uiTopicContainer = event.getSource();
+		  List<UIComponent> children = uiTopicContainer.getChildren() ;
+		  List <Topic> topics = new ArrayList<Topic>();
+		  String sms = "";
+		  int i = 0 ;
+		  for(UIComponent child : children) {
+			  if(child instanceof UIFormCheckBoxInput) {
+				  if(((UIFormCheckBoxInput)child).isChecked()) {
+					  topics.add(uiTopicContainer.forumService.getTopic(uiTopicContainer.categoryId, uiTopicContainer.forumId, ((UIFormCheckBoxInput)child).getName()));
+					  if(topics.get(i).getIsSticky()){ sms = topics.get(i).getTopicName() ; break ;} 
+            ++i ;
+				  }
+			  }
+		  }
+		  UIForumPortlet forumPortlet = uiTopicContainer.getAncestorOfType(UIForumPortlet.class) ;
+		  if(topics.size() > 0 && sms.length() == 0) {
+			  for(Topic topic : topics) {
+				  topic.setIsSticky(true) ;
+				  uiTopicContainer.forumService.saveTopic(uiTopicContainer.categoryId, uiTopicContainer.forumId, topic, false) ;
+			  }
+		  } 
+		  if(topics.size() == 0 && sms.length() == 0){
+			  Object[] args = { };
+			  throw new MessageException(new ApplicationMessage("UITopicContainer.sms.notCheck", args, ApplicationMessage.WARNING)) ;
+		  }
+		  if(sms.length() > 0){
+			  Object[] args = { sms };
+			  throw new MessageException(new ApplicationMessage("UITopicContainer.sms.Stick", args, ApplicationMessage.WARNING)) ;
+		  }
+		  event.getRequestContext().addUIComponentToUpdateByAjax(forumPortlet) ;
+	  }
+  }  
+  
+  
+  static public class SetMoveTopicActionListener extends EventListener<UITopicContainer> {
+    public void execute(Event<UITopicContainer> event) throws Exception {
+      UITopicContainer uiTopicContainer = event.getSource();
+      List<UIComponent> children = uiTopicContainer.getChildren() ;
+      List <Topic> topics = new ArrayList<Topic>();
+      for(UIComponent child : children) {
+        if(child instanceof UIFormCheckBoxInput) {
+          if(((UIFormCheckBoxInput)child).isChecked()) {
+            topics.add(uiTopicContainer.forumService.getTopic(uiTopicContainer.categoryId, uiTopicContainer.forumId, ((UIFormCheckBoxInput)child).getName()));
+          }
+        }
+      }
+      UIForumPortlet forumPortlet = uiTopicContainer.getAncestorOfType(UIForumPortlet.class) ;
+      if(topics.size() > 0) {
+        for(Topic topic : topics) {
+          uiTopicContainer.forumService.saveTopic(uiTopicContainer.categoryId, uiTopicContainer.forumId, topic, false) ;
+        }
+      } 
+      if(topics.size() == 0){
+        Object[] args = { };
+        throw new MessageException(new ApplicationMessage("UITopicContainer.sms.notCheck", args, ApplicationMessage.WARNING)) ;
+      }
+      event.getRequestContext().addUIComponentToUpdateByAjax(forumPortlet) ;
+    }
+  }  
   
   
   
