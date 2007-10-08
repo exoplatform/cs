@@ -212,7 +212,7 @@ public class MailServiceImpl implements MailService{
     String priority = "";
     if (message.getPriority() == 1) {
       priority = "high";
-    } else if (message.getPriority() == 2) {
+    } else if (message.getPriority() == 5) {
       priority = "normal";
     } else if (message.getPriority() == 3) {
       priority = "low";
