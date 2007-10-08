@@ -95,18 +95,18 @@ public class UIDayView extends UICalendarView {
   protected Map<String, CalendarEvent> getEventData() {return eventData_ ;}
   protected Map<String, CalendarEvent> getAllDayEvents() {return allDayEvent_ ;} ;
 
-  protected Calendar getCurrentDayEnd()  {
-    Calendar toDate = new GregorianCalendar(getCurrentYear(), getCurrentMonth(), getCurrentDay()) ;
-    toDate.set(Calendar.HOUR, 0) ;
-    toDate.add(Calendar.DATE, 1) ;
-    return toDate ;
-  }
   protected Calendar getCurrentDayBegin() {
     Calendar fromDate = new GregorianCalendar(getCurrentYear(), getCurrentMonth(), getCurrentDay()) ;
     fromDate.set(Calendar.HOUR, 0) ;
     return fromDate ;
   }
 
+  protected Calendar getCurrentDayEnd()  {
+    Calendar toDate = new GregorianCalendar(getCurrentYear(), getCurrentMonth(), getCurrentDay()) ;
+    toDate.set(Calendar.HOUR, 0) ;
+    toDate.add(Calendar.DATE, 1) ;
+    return toDate ;
+  }
 
   static  public class MoveNextActionListener extends EventListener<UIDayView> {
     public void execute(Event<UIDayView> event) throws Exception {

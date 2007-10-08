@@ -57,6 +57,7 @@ public class CalendarEvent {
   private Date fromDateTime ;
   private Date toDateTime ;
   private Date completedDateTime ;
+  private String taskDelegator  ;
   // value of eventType: event, task, journal(?)
   private String eventType ;
   private String priority ;
@@ -141,5 +142,13 @@ public class CalendarEvent {
 
   public String[] getParticipant() {
     return participant;
+  }
+
+  public void setTaskDelegator(String taskDelegator) {
+    this.taskDelegator = taskDelegator;
+  }
+
+  public String getTaskDelegator() {
+    return taskDelegator;
   }
 }

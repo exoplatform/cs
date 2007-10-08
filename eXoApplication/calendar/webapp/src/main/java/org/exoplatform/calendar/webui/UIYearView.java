@@ -56,10 +56,10 @@ public class UIYearView extends UICalendarView {
   public void refresh() throws Exception {
     
     Calendar cal = new GregorianCalendar(getCurrentYear(), 0, 1, 0, 0, 0) ;
+    Calendar cal2 = new GregorianCalendar(getCurrentYear(), 0, 1, 0, 0, 0) ;
     Calendar beginYear = cal ;
-    cal.add(Calendar.YEAR, 1) ;
-    Calendar endYear = new GregorianCalendar() ;
-    endYear.setTime(cal.getTime()) ;
+    cal2.add(Calendar.YEAR, 1) ;
+    Calendar endYear = cal2 ;
     CalendarService calendarService = getApplicationComponent(CalendarService.class) ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     EventQuery eventQuery = new EventQuery() ;

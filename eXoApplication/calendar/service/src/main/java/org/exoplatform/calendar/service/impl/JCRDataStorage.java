@@ -715,6 +715,7 @@ public class JCRDataStorage implements DataStorage{
     if(eventNode.hasProperty("exo:summary")) event.setSummary(eventNode.getProperty("exo:summary").getString()) ;
     if(eventNode.hasProperty("exo:eventCategoryId")) event.setEventCategoryId(eventNode.getProperty("exo:eventCategoryId").getString()) ;
     if(eventNode.hasProperty("exo:location")) event.setLocation(eventNode.getProperty("exo:location").getString()) ;
+    if(eventNode.hasProperty("exo:taskDelegator")) event.setTaskDelegator(eventNode.getProperty("exo:taskDelegator").getString()) ;
     if(eventNode.hasProperty("exo:repeat")) event.setRepeatType(eventNode.getProperty("exo:repeat").getString()) ;
     if(eventNode.hasProperty("exo:description")) event.setDescription(eventNode.getProperty("exo:description").getString()) ;
     if(eventNode.hasProperty("exo:fromDateTime")) event.setFromDateTime(eventNode.getProperty("exo:fromDateTime").getDate().getTime()) ;
@@ -772,6 +773,7 @@ public class JCRDataStorage implements DataStorage{
     eventNode.setProperty("exo:eventCategoryId", event.getEventCategoryId()) ;
     eventNode.setProperty("exo:description", event.getDescription()) ;
     eventNode.setProperty("exo:location", event.getLocation()) ;
+    eventNode.setProperty("exo:taskDelegator", event.getTaskDelegator()) ;
     
     GregorianCalendar dateTime = new GregorianCalendar() ;
     dateTime.setTime(event.getFromDateTime()) ;
