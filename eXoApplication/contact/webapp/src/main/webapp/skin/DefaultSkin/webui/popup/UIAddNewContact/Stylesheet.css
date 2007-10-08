@@ -1,128 +1,34 @@
-.UIAddNewContact {
-	width: 700px;
+
+.AddNewContact {
 	padding: 10px;
-	border: 1px solid red;
 	background: #f3f3f3;
 }
 
-.UIAddNewContact .AddContact .HorizontalLayout {
+.AddNewContact .AddContact .HorizontalLayout {
 	border: none;
 }
 
-.UIAddNewContact .AddContact .HorizontalLayout .UIFormGrid td.FieldLabel {
-	width: auto;
-	padding: 5px;
-}
-
-.UIAddNewContact .Profile {
-	padding: 5px;
-}
-
-.UIAddNewContact .Profile .FormContainer {
-	float: left;
-	width: 450px;
-}
-
-.UIAddNewContact .AvatarContent {
-	margin-left: 500px;
-	width: 120px;
-}
-
-.UIAddNewContact .AvatarContent .Label {
-	height: 20px; line-height: 20px;
-	text-align: center;
-}
-
-.UIAddNewContact .AvatarContent .Avatar {
-	border: 1px solid #c2c2c2;
-	margin: 10px 0px;
-}
-
-.UIAddNewContact .AvatarContent .Action {
-	text-align: right;
-}
-
-.UIAddNewContact .AvatarContent a {
-	color: #1e6ac2;
-}
-
-.UIAddNewContact .UIFormGrid td.FieldLabel {
-	width: 100px;
-}
-
-.UIAddNewContact .UIFormGrid .FieldComponent .Icon {
-	width: 16px; height: 20px;
-	margin: 0px 2px 0px 5px;
-}
-
-.UIAddNewContact .UIFormGrid .FieldComponent .textarea {
-	width: 300px;
-	height: 270px;
-}
-
-.UIAddNewContact .UIForm .HorizontalLayout .UIFormInputSet {
-	width: 400px;
-	padding: 10px 0px;
-}
-
-.UIAddNewContact .UIForm .HorizontalLayout .Home {
-	background: none;
-}
-.UIAddNewContact .UIAction {
-	width: 130px;
+.AddNewContact .AddContact .HorizontalLayout .UIFormInputSet {
+	width: 500px;
+	margin: auto;
+	height: auto;
 }
 
 /*============================= shareContactTab ===============================*/
 
-.UIForm .HorizontalLayout .shareContactTab {
-	width: 400px;
+.AddNewContact .UIForm .UIFormInputSet {
+	width: 500px;
 	margin: 10px auto;
+	height: 280px;
 }
 
-.shareContactTab .UIFormGrid td.FieldLabel {
+.AddNewContact .UIFormGrid td.FieldLabel {
 	width: 100px; 
 }
 
 /*============================= noteTab ===============================*/
 
-.UIForm .HorizontalLayout .noteTab {
-	width: 400px;
-	margin: 10px auto;
-}
-
-.noteTab .UIFormGrid td.FieldLabel {
-	width: 100px; 
-}
-
-/*============================= homeTab ===============================*/
-
-.UIForm .HorizontalLayout .homeTab {
-	width: 400px;
-	margin: 10px auto;
-}
-
-.homeTab .UIFormGrid td.FieldLabel {
-	width: 100px; 
-}
-
-/*============================= imContactTab ===============================*/
-
-.UIForm .HorizontalLayout .imContactTab {
-	width: 400px;
-	margin: 10px auto;
-}
-
-.imContactTab .UIFormGrid td.FieldLabel {
-	width: 100px; 
-}
-
-/*============================= workTab ===============================*/
-
-.UIForm .HorizontalLayout .workTab {
-	width: 400px;
-	margin: 10px auto;
-}
-
-.workTab .UIFormGrid td.FieldLabel {
-	width: 100px; 
+.AddNewContact .noteTab textarea {
+	width: 300px;
+	height: 250px;
 }

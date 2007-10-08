@@ -1,0 +1,8 @@
+.UIImageForm {
+	background: #f3f3f3;
+	padding: 20px;
+}
+
+.UIImageForm .UIForm .HorizontalLayout {
+	border: none;
+}

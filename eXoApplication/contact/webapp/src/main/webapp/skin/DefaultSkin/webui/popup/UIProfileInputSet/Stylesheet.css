@@ -1,4 +1,7 @@
-
+.Profile {
+	padding: 10px;
+	height: 290px;
+}
 
 .Profile .ProfileContainer {
 	float: left;
@@ -23,7 +26,7 @@
 }
 
 .Profile .AvatarContent .Action {
-	text-align: right;
+	text-align: center;
 	padding-right: 5px;
 }
 
@@ -52,7 +55,4 @@
 
 .Profile .UIForm .HorizontalLayout .Home {
 	background: none;
-}
-.Profile .UIAction {
-	width: 130px;
 }
