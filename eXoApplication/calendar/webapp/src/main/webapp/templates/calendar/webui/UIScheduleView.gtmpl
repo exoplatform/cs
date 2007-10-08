@@ -7,8 +7,8 @@
 		<table class="UIGrid" id="RowContainerDay" cellspacing="0" borderspacing="0">
 			<thead>
 				<tr>
-					<th style="width: 40px; border-left: 1px solid #c7c7c7;"></th>
-					<th style="width: 30px">All</th>
+					<th style="width: 55px; border-left: 1px solid #c7c7c7;"></th>
+					<th style="width: 46px">All</th>
 					<th >Work</th>
 					<th >Meeting</th>
 					<th >Family</th>
@@ -17,7 +17,7 @@
 			</thead>
 			<tbody >
 				<tr>
-					<td style="width: 40px">&nbsp</td>
+					<td ><div  style="width: 55px;"><span></span></div></td>
 					<td class="EventAllday">&nbsp</td>
 					<td class="EventAllday">&nbsp</td>
 					<td class="EventAllday">
@@ -35,7 +35,7 @@
 		<table class="UIGrid" id="RowContainerDay" cellspacing="0" borderspacing="0">
 			<tbody >
 				<tr>
-					<td class="TdTime TdLine">12AM</td>
+					<td ><div  class="TdTime">12AM</div></td>
 					<td class="TdLine TdAll" >&nbsp</td>
 					<td class="TdLine">&nbsp</td>
 					<td class="Today TdLine">&nbsp</td>
@@ -51,7 +51,7 @@
 					<td class="TdDotLine">&nbsp</td>
 				</tr>
 				<tr>
-					<td class="TdTime">1AM</td>
+					<td ><div  class="TdTime">1AM</div></td>
 					<td class="TdLine TdAll" >&nbsp</td>
 					<td class="TdLine">&nbsp</td>
 					<td class="TdLine Today">&nbsp</td>
@@ -67,7 +67,7 @@
 					<td class="TdDotLine">&nbsp</td>
 				</tr>
 				<tr>
-					<td class="TdTime">2AM</td>
+					<td ><div  class="TdTime">2AM</div></td>
 					<td class="TdLine TdAll" >&nbsp</td>
 					<td class="TdLine">&nbsp</td>
 					<td class="TdLine Today">&nbsp</td>
@@ -83,7 +83,7 @@
 					<td class="TdDotLine">&nbsp</td>
 				</tr>
 				<tr>
-					<td class="TdTime">3AM</td>
+					<td ><div  class="TdTime">3AM</div></td>
 					<td class="TdLine TdAll" >&nbsp</td>
 					<td class="TdLine">&nbsp</td>
 					<td class="TdLine Today">&nbsp</td>
@@ -99,7 +99,7 @@
 					<td class="TdDotLine">&nbsp</td>
 				</tr>
 				<tr>
-					<td class="TdTime">4AM</td>
+					<td ><div  class="TdTime">4AM</div></td>
 					<td class="TdLine TimeBusy TdAll" >&nbsp</td>
 					<td class="TdLine">&nbsp</td>
 					<td class="TdLine Today">&nbsp</td>
@@ -115,7 +115,7 @@
 					<td class="TdDotLine">&nbsp</td>
 				</tr>
 				<tr>
-					<td class="TdTime">5AM</td>
+					<td ><div  class="TdTime">5AM</div></td>
 					<td class="TdLine TdAll" ></td>
 					<td class="TdLine">&nbsp</td>
 					<td class="TdLine Today">&nbsp</td>

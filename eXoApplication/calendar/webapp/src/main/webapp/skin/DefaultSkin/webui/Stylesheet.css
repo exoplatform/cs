@@ -600,10 +600,11 @@
 	background: url('background/TitleBarBG1x23.gif') repeat-x ;	
   height: 23px;
 	border-right: 1px solid #c7c7c7;
-	width: 13.4%;
+	width: 13.2%;
 	border-top:none;
 	border-bottom:none;
 	border-left: none;
+	*width: 14%;
 }
 
 .UIWeekView .EventWeekBar .UIGrid th {
@@ -628,17 +629,19 @@
 
 .UIWeekView .TdLine{
 	border-top:  1px solid #c7c7c7;
-	width: 13.4%;
+	width: 13.2%;
+	*width: 14%;
 }
 
 .UIWeekView .TdDotLine{
 	border-top:  1px dotted #c7c7c7;
-	width: 13.4%;
+	width: 13.2%;
+	*width: 14%;
 }
 
 .UIWeekView .TdTime{
 	text-align: right;
-	width: auto;
+	width: 55px;
 }
 
 .UIWeekView td {
@@ -746,7 +749,7 @@
 
 .UIScheduleView .TdTime{
 	text-align: right;
-	width: auto;
+	width: 55px;
 }
 
 .UIScheduleView .TdAll{

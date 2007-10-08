@@ -7,7 +7,7 @@
 					</a>
 					<div class="SeparatorLine"><span></span></div>
 					<a href="#" class="ControlButton">
-						<div class="IconHolder StatusIcon">
+						<div class="IconHolder SelectIcon">
 						 	<div class="DownArrow1Icon">Status</div> 
 						</div>
 					</a>

@@ -44,7 +44,7 @@
 			<table class="UIGrid" id="RowContainerDay" cellspacing="0" borderspacing="0">
 				<thead>
 					<tr>
-						<th style="width: auto;"></th>
+						<th style="width: 55px;"></th>
 						<%
 							
 						  for(cl in uicomponent.getDaysOfWeek(weekNumber)) {
@@ -68,7 +68,7 @@
 				</thead>
 				<tbody >
 					<tr>
-							<td style="width: auto;">&nbsp</td>
+							<td ><div  style="width: 55px;"><span></span></div></td>
 							<td colspan="7" class="EventAllday">
 								<% for (event in uicomponent.getEventList().values()) {%>
 									 <div class="EventContainer" style="height: 22px;" title="$event.fromDateTime -- $event.toDateTime"  >
@@ -115,8 +115,8 @@
 						else {styleClass = "TdLine"}
 					%>
 					<tr>
-						<td class="TdTime">
-							<% if(!flag) {println time;} %>
+						<td class="TdTime"><div  class="TdTime">
+							<% if(!flag) {println time;} %></div>
 						</td>
 							<%
 					 	 
