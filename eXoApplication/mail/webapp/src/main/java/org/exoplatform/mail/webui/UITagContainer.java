@@ -51,7 +51,7 @@ public class UITagContainer extends UIComponent {
   
   static public class ChangeTagActionListener extends EventListener<UITagContainer> {
     public void execute(Event<UITagContainer> event) throws Exception {
-      String tagname = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      String tagId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UITagContainer uiTags = event.getSource();
       UIMailPortlet uiPortlet = uiTags.getAncestorOfType(UIMailPortlet.class);
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
@@ -59,8 +59,8 @@ public class UITagContainer extends UIComponent {
       MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-      uiMessageList.setMessagePageList(mailSrv.getMessagePagelistByTag(username, accountId, tagname));
-      uiMessageList.setSelectedTagName(tagname);
+      uiMessageList.setMessagePageList(mailSrv.getMessagePagelistByTag(username, accountId, tagId));
+      uiMessageList.setSelectedTagId(tagId);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiTags);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList);
     }
@@ -68,7 +68,7 @@ public class UITagContainer extends UIComponent {
   
   static public class RenameTagActionListener extends EventListener<UITagContainer> {
     public void execute(Event<UITagContainer> event) throws Exception {
-      String tagName = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      String tagId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UITagContainer uiTags = event.getSource();  
       System.out.println("============>>>> Rename Tag Action Listener");
     }
@@ -76,15 +76,21 @@ public class UITagContainer extends UIComponent {
   
   static public class RemoveTagActionListener extends EventListener<UITagContainer> {
     public void execute(Event<UITagContainer> event) throws Exception {
-      String tagName = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      UITagContainer uiTags = event.getSource();     
       System.out.println("============>>>> Remove Tag Action Listener");
+      String tagId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      UITagContainer uiTag = event.getSource();     
+      UIMailPortlet uiPortlet = uiTag.getAncestorOfType(UIMailPortlet.class);
+      MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
+      String username = uiPortlet.getCurrentUser();
+      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      mailSrv.removeTag(username, accountId, tagId);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiTag);
     }
   }
   
   static public class EmptyTagActionListener extends EventListener<UITagContainer> {
     public void execute(Event<UITagContainer> event) throws Exception {
-      String tagName = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      String tagId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UITagContainer uiTags = event.getSource();     
       System.out.println("============>>>> Empty Tag Action Listener");
     }

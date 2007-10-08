@@ -113,8 +113,8 @@ public interface MailService {
    */
   public void removeUserFolder(String username, Account account, Folder folder) throws Exception ;
   
-  public List<Message> getMessageByTag(String username, String accountId, String tagName) throws Exception ;
-  public MessagePageList getMessagePagelistByTag(String username, String accountId, String tagName) throws Exception ;
+  public List<Message> getMessageByTag(String username, String accountId, String tagId) throws Exception ;
+  public MessagePageList getMessagePagelistByTag(String username, String accountId, String tagId) throws Exception ;
   
   public MessagePageList getMessageByFolder(String username, String accountId, String folderName) throws Exception;
   

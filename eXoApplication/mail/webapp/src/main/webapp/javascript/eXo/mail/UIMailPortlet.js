@@ -45,7 +45,7 @@ UIMailPortlet.prototype.tagListPopupMenuCallback = function(evt) {
 	if (src.nodeName != "A")
 		src = src.parentNode;
 		
-	tagName = src.getAttribute("tagName");
+	tagName = src.getAttribute("tagId");
 	eXo.webui.UIContextMenu.changeAction(UIContextMenu.menuElement, tagName) ;
 } 
 

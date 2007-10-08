@@ -429,8 +429,9 @@ public class MailServiceImpl implements MailService{
       throws Exception {
     return storage_.getMessageByTag(username, accountId, tagName);
   }
-  public MessagePageList getMessagePagelistByTag(String username, String accountId, String tagName) throws Exception {
-    return storage_.getMessagePagelistByTag(username, accountId, tagName) ;
+  
+  public MessagePageList getMessagePagelistByTag(String username, String accountId, String tagId) throws Exception {
+    return storage_.getMessagePagelistByTag(username, accountId, tagId) ;
   }
   
   public MessagePageList getMessageByFolder(String username, String accountId, String folderName) 

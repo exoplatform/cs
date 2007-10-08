@@ -218,7 +218,7 @@
   				</td>
   				<td style="padding: 0px; border-right: 1px solid #ffffff;">
   				  <% 
-              if (msg.getTags()!= null) {
+              if (msg.getTags() != null && msg.getTags().length > 0) {
             %>
               <a href="$actionLink" class="IconHolder RedTag"><span></span></a>
             <%}%>

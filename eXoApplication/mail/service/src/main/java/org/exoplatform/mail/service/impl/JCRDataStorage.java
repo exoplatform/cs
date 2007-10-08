@@ -500,11 +500,14 @@ public class JCRDataStorage implements DataStorage{
     Map<String, String> tagMap = new HashMap<String, String> () ;
     Node tagHome = getTagHome(username, accountId) ;
     for(Tag tag : tagList) {
-      if(!tagHome.hasNode(tag.getName())) {
-        Node tagNode = tagHome.addNode(tag.getName(), Utils.EXO_MAILTAG) ;
+      if(!tagHome.hasNode(tag.getId())) {
+        Node tagNode = tagHome.addNode(tag.getId(), Utils.EXO_MAILTAG) ;
+        tagNode.setProperty(Utils.EXO_ID, tag.getId()) ;
         tagNode.setProperty(Utils.EXO_NAME, tag.getName()) ;
+        tagNode.setProperty(Utils.EXO_DESCRIPTION, tag.getDescription()) ;
+        tagNode.setProperty(Utils.EXO_COLOR, tag.getColor()) ;
       }
-      tagMap.put(tag.getName(), tag.getName()) ;      
+      tagMap.put(tag.getId(), tag.getId()) ;      
     }
     tagHome.getSession().save() ;
     
@@ -535,14 +538,17 @@ public class JCRDataStorage implements DataStorage{
     while (iter.hasNext()){
       Node tagNode = (Node)iter.next() ;
       Tag tag = new Tag();
-      tag.setName(tagNode.getProperty("exo:name").getString()) ;
+      tag.setId((tagNode.getProperty(Utils.EXO_ID).getString())) ;
+      tag.setName(tagNode.getProperty(Utils.EXO_NAME).getString()) ;
+      tag.setDescription(tagNode.getProperty(Utils.EXO_DESCRIPTION).getString()) ;
+      tag.setColor(tagNode.getProperty(Utils.EXO_COLOR).getString()) ;
       tags.add(tag);
     }
     return tags ;
   }
 
 
-  public void removeMessageTag(String username, String accountId, List<String> messageIds, List<String> tagNames) 
+  public void removeMessageTag(String username, String accountId, List<String> messageIds, List<String> tagIds) 
   throws Exception {
     Node messageHome = getMessageHome(username, accountId);
     for (String messageId : messageIds) {
@@ -552,7 +558,7 @@ public class JCRDataStorage implements DataStorage{
           Message message = getMessage(messageNode);
           String[] tags = message.getTags();
           List<String> listTags = new ArrayList<String>(Arrays.asList(tags));         
-          for (String tagName : tagNames) listTags.remove(tagName);
+          for (String tagId : tagIds) listTags.remove(tagId);
           tags = listTags.toArray(new String[listTags.size()]);
           message.setTags(tags);
           saveMessage(username, message.getAccountId(), message, false);
@@ -563,32 +569,32 @@ public class JCRDataStorage implements DataStorage{
   }
 
 
-  public void removeTag(String username, String accountId, String tagName) throws Exception {
+  public void removeTag(String username, String accountId, String tagId) throws Exception {
     // remove this tag in all messages
-    List<Message> listMessage = getMessageByTag(username, accountId, tagName);
+    List<Message> listMessage = getMessageByTag(username, accountId, tagId);
     List<String> listTag = new ArrayList<String>();
     List<String> listMessageId = new ArrayList<String>();
     for (Message mess : listMessage) {
       listMessageId.add(mess.getId());
     }
-    listTag.add(tagName);
+    listTag.add(tagId);
     removeMessageTag(username, accountId, listMessageId, listTag);
 
     // remove tag node
     Node tagHomeNode = getTagHome(username, accountId) ;
-    if (tagHomeNode.hasNode(tagName)) {
-      tagHomeNode.getNode(tagName).remove() ;
+    if (tagHomeNode.hasNode(tagId)) {
+      tagHomeNode.getNode(tagId).remove() ;
     }
 
     tagHomeNode.getSession().save() ;
   } 
 
-  public List<Message> getMessageByTag(String username, String accountId, String tagName)
+  public List<Message> getMessageByTag(String username, String accountId, String tagId)
   throws Exception {
     List<Message> messages = new ArrayList<Message>();
     QueryManager qm = getMailHomeNode(username).getSession().getWorkspace().getQueryManager();
     StringBuffer queryString = new StringBuffer("/jcr:root" + getMailHomeNode(username).getNode(accountId).getPath() + "//element(*,exo:message)[@exo:tags='").
-    append(tagName).
+    append(tagId).
     append("']");
     Query query = qm.createQuery(queryString.toString(), Query.XPATH);
     QueryResult result = query.execute();
@@ -599,11 +605,12 @@ public class JCRDataStorage implements DataStorage{
     }
     return messages;
   }
-  public MessagePageList getMessagePagelistByTag(String username, String accountId, String tagName)
+  
+  public MessagePageList getMessagePagelistByTag(String username, String accountId, String tagId)
   throws Exception {
     QueryManager qm = getMailHomeNode(username).getSession().getWorkspace().getQueryManager();
     StringBuffer queryString = new StringBuffer("/jcr:root" + getMailHomeNode(username).getNode(accountId).getPath() + "//element(*,exo:message)[@exo:tags='").
-    append(tagName).
+    append(tagId).
     append("']");
     Query query = qm.createQuery(queryString.toString(), Query.XPATH);
     QueryResult result = query.execute();

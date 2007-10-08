@@ -24,8 +24,10 @@ import org.exoplatform.mail.webui.UINavigationContainer;
 import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.mail.webui.UITagContainer;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
@@ -98,21 +100,32 @@ public class UITagForm extends UIForm implements UIPopupComponent{
       String newTagName = uiTagForm.getUIStringInput(SELECT_AVAIABLE_TAG).getValue();
       List<String> messageList = new ArrayList<String>();
       messageList = Arrays.asList(uiTagForm.messageMap.values().toArray(new String[]{}));
-      MailService service = uiTagForm.getApplicationComponent(MailService.class);
+      String username = uiPortlet.getCurrentUser() ;
+      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      MailService mailSrv = uiTagForm.getApplicationComponent(MailService.class);
       List<Tag> tagList = new ArrayList<Tag>();
 
       if (newTagName != null && newTagName != "") {
-        Tag newTag = new Tag();
-        newTag.setName(newTagName);
-        tagList.add(newTag);
+        boolean isExist = false;
+        for (Tag tag: mailSrv.getTags(username, accountId)) {
+          if (tag.getName().equals(newTagName)) { 
+            isExist = true;
+            tagList.add(tag);
+          }
+        }
+        if (!isExist) {
+          Tag newTag = new Tag();
+          newTag.setName(newTagName);
+          newTag.setDescription("TagDescription");
+          newTag.setColor("red");
+          tagList.add(newTag);
+        } 
       }
       for (Tag tag : uiTagForm.getCheckedTags()) {
         tagList.add(tag);
       }
       
-      String username = uiPortlet.getCurrentUser() ;
-      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
-      service.addTag(username, accountId, messageList, tagList);
+      mailSrv.addTag(username, accountId, messageList, tagList);
       uiPortlet.cancelAction() ;
       UITagContainer uiTags = uiPortlet.findFirstComponentOfType(UITagContainer.class) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiTags) ;

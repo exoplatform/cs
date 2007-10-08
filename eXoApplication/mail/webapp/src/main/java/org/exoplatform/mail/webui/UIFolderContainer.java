@@ -94,7 +94,6 @@ public class UIFolderContainer extends UIContainer {
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       uiMessageList.setMessagePageList(mailSrv.getMessageByFolder(username, accountId, folderId));
-      uiMessageList.setSelectedTagName(null) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiFolder) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageArea) ;
     }

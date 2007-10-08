@@ -65,7 +65,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
 public class UIMessageList extends UIForm {
   private String selectedMessageId_ = null ;
   private String selectedFolderId_ = null ;
-  private String selectedTagName_ = null ;
+  private String selectedTagId_ = null ;
   private MessagePageList pageList_ = null ;
   private Map<String, Message> messageList_ = new HashMap<String, Message>();
 
@@ -77,8 +77,8 @@ public class UIMessageList extends UIForm {
   protected String getSelectedFolderId() {return selectedFolderId_ ;}
   protected void setSelectedFolderId(String folderId) {selectedFolderId_ = folderId ;}
   
-  protected String getSelectedTagName() {return selectedTagName_ ;}
-  protected void setSelectedTagName(String tagName) {selectedTagName_ = tagName ;}
+  protected String getSelectedTagId() {return selectedTagId_ ;}
+  protected void setSelectedTagId(String tagId) {selectedTagId_ = tagId ;}
   
   public MessagePageList getMessagePageList() { return pageList_; } 
   
