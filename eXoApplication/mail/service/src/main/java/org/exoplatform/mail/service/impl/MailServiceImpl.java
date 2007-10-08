@@ -211,11 +211,11 @@ public class MailServiceImpl implements MailService{
     msg.setHeader("X-Priority", String.valueOf(message.getPriority()));
     String priority = "";
     if (message.getPriority() == 1) {
-      priority = "high";
+      priority = "High";
     } else if (message.getPriority() == 5) {
-      priority = "normal";
+      priority = "Normal";
     } else if (message.getPriority() == 3) {
-      priority = "low";
+      priority = "Low";
     }     
     if (message.getPriority() != 0 ) msg.setHeader("Importance", priority);
     
