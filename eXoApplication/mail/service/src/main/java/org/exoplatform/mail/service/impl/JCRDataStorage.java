@@ -500,12 +500,9 @@ public class JCRDataStorage implements DataStorage{
     Map<String, String> tagMap = new HashMap<String, String> () ;
     Node tagHome = getTagHome(username, accountId) ;
     for(Tag tag : tagList) {
-      if(!tagHome.hasNode(tag.getId())) {
-        Node tagNode = tagHome.addNode(tag.getId(), Utils.EXO_MAILTAG) ;
-        tagNode.setProperty(Utils.EXO_ID, tag.getId()) ;
+      if(!tagHome.hasNode(tag.getName())) {
+        Node tagNode = tagHome.addNode(tag.getName(), Utils.EXO_MAILTAG) ;
         tagNode.setProperty(Utils.EXO_NAME, tag.getName()) ;
-        tagNode.setProperty(Utils.EXO_DESCRIPTION, tag.getDescription()) ;
-        tagNode.setProperty(Utils.EXO_COLOR, tag.getColor()) ;
       }
       tagMap.put(tag.getName(), tag.getName()) ;      
     }
