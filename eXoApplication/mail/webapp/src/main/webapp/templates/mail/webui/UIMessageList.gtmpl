@@ -4,7 +4,6 @@
  import org.exoplatform.mail.service.MessagePageList;
  import org.exoplatform.mail.MailUtils;
  String compId = uicomponent.getId() ;
- 
 %>
 
 <% /*Start Message Action Bar*/ %>
@@ -209,7 +208,7 @@
   	  		  %>
   	  		</td>
   				<td style="padding: 0px auto;"><a href="$actionAddStar" ><div class="$starClass"><span></span></div></a></td>
-          <td class="text"><a href="$actionLink"><%=msg.getFrom().split(";")[0]%><a></td>
+          <td class="text"><a href="$actionLink"><%=Utils.getPersonal(Utils.getInternetAddress(msg.getFrom())[0])%><a></td>
   				<td style="padding: 0px auto;">
   				  <% 
   				    if (msg.getAttachments().size() > 0) {

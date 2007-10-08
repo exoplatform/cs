@@ -317,13 +317,13 @@ public class JCRDataStorage implements DataStorage{
       // add some properties
       nodeMsg.setProperty(Utils.EXO_ID, message.getId());
       nodeMsg.setProperty(Utils.EXO_ACCOUNT, accountId);
-      nodeMsg.setProperty(Utils.EXO_FROM, setAddress(message.getFrom()));
-      nodeMsg.setProperty(Utils.EXO_TO, setAddress(message.getMessageTo()));
+      nodeMsg.setProperty(Utils.EXO_FROM, message.getFrom());
+      nodeMsg.setProperty(Utils.EXO_TO, message.getMessageTo());
       nodeMsg.setProperty(Utils.EXO_SUBJECT, message.getSubject());
-      nodeMsg.setProperty(Utils.EXO_CC, setAddress(message.getMessageCc()));
-      nodeMsg.setProperty(Utils.EXO_BCC, setAddress(message.getMessageBcc()));
+      nodeMsg.setProperty(Utils.EXO_CC, message.getMessageCc());
+      nodeMsg.setProperty(Utils.EXO_BCC, message.getMessageBcc());
       nodeMsg.setProperty(Utils.EXO_BODY, message.getMessageBody());
-      nodeMsg.setProperty(Utils.EXO_REPLYTO, setAddress(message.getReplyTo()));
+      nodeMsg.setProperty(Utils.EXO_REPLYTO, message.getReplyTo());
       nodeMsg.setProperty(Utils.EXO_SIZE, message.getSize());
       nodeMsg.setProperty(Utils.EXO_STAR, message.hasStar());
       nodeMsg.setProperty(Utils.EXO_PRIORITY, message.getPriority());

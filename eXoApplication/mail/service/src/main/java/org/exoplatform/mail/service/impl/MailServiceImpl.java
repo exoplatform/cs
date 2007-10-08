@@ -251,7 +251,7 @@ public class MailServiceImpl implements MailService{
       // gets the new messages from the folder specified in the configuration object
       javax.mail.Message[] mess = folder.getMessages() ;
       totalMess = mess.length ;
-      System.out.println("\n ### Folder contains "+totalMess+" messages !");
+      System.out.println("\n ### Folder contains " + totalMess + " messages !");
       if(totalMess > 0) {
         int i = 0 ;
         while(i < totalMess){
@@ -261,20 +261,23 @@ public class MailServiceImpl implements MailService{
           Calendar gc = GregorianCalendar.getInstance();
           Date receivedDate = gc.getTime();
           newMsg.setAccountId(account.getId());
-          newMsg.setMessageBcc(getAddress(mes.getRecipients(javax.mail.Message.RecipientType.BCC)));
-          newMsg.setMessageCc(getAddress(mes.getRecipients(javax.mail.Message.RecipientType.CC)));
-          newMsg.setMessageTo(getAddress(mes.getRecipients(javax.mail.Message.RecipientType.TO)));
+          newMsg.setMessageBcc(InternetAddress.toString(mes.getRecipients(javax.mail.Message.RecipientType.BCC)));
+          newMsg.setMessageCc(InternetAddress.toString(mes.getRecipients(javax.mail.Message.RecipientType.CC)));
+          newMsg.setMessageTo(InternetAddress.toString(mes.getRecipients(javax.mail.Message.RecipientType.TO)));
           newMsg.setSubject(mes.getSubject());
-          newMsg.setFrom(getAddress(mes.getFrom()));
-          newMsg.setReplyTo(getAddress(mes.getReplyTo()));
+          newMsg.setFrom(InternetAddress.toString(mes.getFrom()));
+          newMsg.setReplyTo(InternetAddress.toString(mes.getReplyTo()));
           newMsg.setUnread(true);
           newMsg.setReceivedDate(receivedDate);
           newMsg.setSendDate(mes.getSentDate());
           newMsg.setHasStar(false);       
           newMsg.setPriority(Utils.PRIORITY_NORMAL);
-          for (int j = 0 ; j < mes.getHeader("X-Priority").length; j++) {
-            newMsg.setPriority(Long.valueOf(mes.getHeader("X-Priority")[j]));
-          }          
+          String[] headers = mes.getHeader("X-Priority");
+          if (headers != null && headers.length > 0) {
+            for (int j = 0 ; j < headers.length; j++) {
+              newMsg.setPriority(Long.valueOf(mes.getHeader("X-Priority")[j]));
+            }          
+          }
           newMsg.setSize(mes.getSize());
           newMsg.setAttachements(new ArrayList<Attachment>());
           String[] folders = {account.getFolder()};

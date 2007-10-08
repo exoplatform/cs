@@ -8,6 +8,8 @@ import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.mail.internet.InternetAddress;
+
 /**
  * Created by The eXo Platform SARL
  * Author : Pham Tuan
@@ -144,6 +146,22 @@ public class Utils {
       inetAddress += sender.split(";")[0].trim() + "<" + sender.split(";")[1] + ">";
     }
     return inetAddress;
+  }
+  
+  public static String getPersonal(InternetAddress address) throws Exception {
+    String personal = "";
+    if (address.getPersonal() != null && address.getPersonal() != "") {
+      personal = address.getPersonal();
+    } else { 
+      personal = address.getAddress(); 
+    }
+    return personal;
+  }
+  
+  public static InternetAddress[] getInternetAddress(String addressList) throws Exception {
+    if (addressList == null || addressList == "") 
+      return new InternetAddress[1];
+    return InternetAddress.parse(addressList);
   }
   
   public static String createFolderId(String accountId, String folderName, boolean isPersonal) {
