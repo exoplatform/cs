@@ -278,7 +278,8 @@ public class MailServiceImpl implements MailService{
             for (int j = 0 ; j < xPriority.length; j++) {
               newMsg.setPriority(Long.valueOf(mes.getHeader("X-Priority")[j]));
             }          
-          } else if (importance != null && importance.length > 0) {
+          }
+          if (importance != null && importance.length > 0) {
             for (int j = 0 ; j < importance.length; j++) {
               if (importance[j] == "low") {
                 newMsg.setPriority(5);
