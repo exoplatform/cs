@@ -28,15 +28,15 @@ import org.exoplatform.webui.event.EventListener;
 @ComponentConfig(
     template =  "app:/templates/mail/webui/UITagContainer.gtmpl",
     events = {
-        @EventConfig(listeners = UITags.ChangeTagActionListener.class),
-        @EventConfig(listeners = UITags.RenameTagActionListener.class),
-        @EventConfig(listeners = UITags.RemoveTagActionListener.class),
-        @EventConfig(listeners = UITags.EmptyTagActionListener.class)
+        @EventConfig(listeners = UITagContainer.ChangeTagActionListener.class),
+        @EventConfig(listeners = UITagContainer.RenameTagActionListener.class),
+        @EventConfig(listeners = UITagContainer.RemoveTagActionListener.class),
+        @EventConfig(listeners = UITagContainer.EmptyTagActionListener.class)
     }
 )
 
-public class UITags extends UIComponent {
-  public UITags() throws Exception {}
+public class UITagContainer extends UIComponent {
+  public UITagContainer() throws Exception {}
   
   public List<Tag> getTags() throws Exception {
     List<Tag> tagList = new ArrayList<Tag>();
@@ -49,10 +49,10 @@ public class UITags extends UIComponent {
     return tagList;
   }
   
-  static public class ChangeTagActionListener extends EventListener<UITags> {
-    public void execute(Event<UITags> event) throws Exception {
+  static public class ChangeTagActionListener extends EventListener<UITagContainer> {
+    public void execute(Event<UITagContainer> event) throws Exception {
       String tagname = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      UITags uiTags = event.getSource();
+      UITagContainer uiTags = event.getSource();
       UIMailPortlet uiPortlet = uiTags.getAncestorOfType(UIMailPortlet.class);
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
       uiMessageList.setSelectedFolderId(null);
@@ -66,26 +66,26 @@ public class UITags extends UIComponent {
     }
   }
   
-  static public class RenameTagActionListener extends EventListener<UITags> {
-    public void execute(Event<UITags> event) throws Exception {
+  static public class RenameTagActionListener extends EventListener<UITagContainer> {
+    public void execute(Event<UITagContainer> event) throws Exception {
       String tagName = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      UITags uiTags = event.getSource();  
+      UITagContainer uiTags = event.getSource();  
       System.out.println("============>>>> Rename Tag Action Listener");
     }
   }
   
-  static public class RemoveTagActionListener extends EventListener<UITags> {
-    public void execute(Event<UITags> event) throws Exception {
+  static public class RemoveTagActionListener extends EventListener<UITagContainer> {
+    public void execute(Event<UITagContainer> event) throws Exception {
       String tagName = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      UITags uiTags = event.getSource();     
+      UITagContainer uiTags = event.getSource();     
       System.out.println("============>>>> Remove Tag Action Listener");
     }
   }
   
-  static public class EmptyTagActionListener extends EventListener<UITags> {
-    public void execute(Event<UITags> event) throws Exception {
+  static public class EmptyTagActionListener extends EventListener<UITagContainer> {
+    public void execute(Event<UITagContainer> event) throws Exception {
       String tagName = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      UITags uiTags = event.getSource();     
+      UITagContainer uiTags = event.getSource();     
       System.out.println("============>>>> Empty Tag Action Listener");
     }
   }

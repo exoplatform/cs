@@ -75,6 +75,7 @@ public class Utils {
   public static final String EXO_UNREADMESSAGES = "exo:unreadMessages".intern() ;
   public static final String EXO_NAME = "exo:name".intern() ;
   public static final String EXO_MAILTAG = "exo:mailtag".intern();
+  public static final String EXO_COLOR = "exo:color".intern();
   public static final String EXO_CHECKMAILAUTO = "exo:checkMailAuto".intern();
   public static final String EXO_EMPTYTRASH = "exo:emptyTrash".intern();
   public static final String EXO_PLACESIGNATURE = "exo:placeSignature".intern();
