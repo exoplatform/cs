@@ -88,12 +88,12 @@ public class UITagContainer extends UIComponent {
       System.out.println("============>>>> Remove Tag Action Listener");
       String tagId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UITagContainer uiTag = event.getSource();     
-      UIMailPortlet uiPortlet = uiTag.getAncestorOfType(UIMailPortlet.class);
+      /*UIMailPortlet uiPortlet = uiTag.getAncestorOfType(UIMailPortlet.class);
       MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       mailSrv.removeTag(username, accountId, tagId);
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiTag);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiTag);*/
     }
   }
   

@@ -117,8 +117,8 @@ public class Utils {
   public static final String P_FOOT = "Foot".intern() ;
   
   public static final long PRIORITY_HIGH = 1 ;
-  public static final long PRIORITY_NORMAL = 2 ;
-  public static final long PRIORITY_LOW = 3 ;
+  public static final long PRIORITY_NORMAL = 3 ;
+  public static final long PRIORITY_LOW = 5 ;
   
   public static boolean isEmptyField(String value) {
     return value == null || value.trim().length() == 0 ;

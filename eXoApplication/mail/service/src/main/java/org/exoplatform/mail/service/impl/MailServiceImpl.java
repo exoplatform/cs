@@ -211,7 +211,7 @@ public class MailServiceImpl implements MailService{
     msg.setHeader("X-Priority", String.valueOf(message.getPriority()));
     String priority = "";
     if (message.getPriority() == 1) {
-      priority = "hight";
+      priority = "high";
     } else if (message.getPriority() == 2) {
       priority = "normal";
     } else if (message.getPriority() == 3) {
@@ -272,12 +272,22 @@ public class MailServiceImpl implements MailService{
           newMsg.setSendDate(mes.getSentDate());
           newMsg.setHasStar(false);       
           newMsg.setPriority(Utils.PRIORITY_NORMAL);
-          String[] headers = mes.getHeader("X-Priority");
-          if (headers != null) System.out.println(headers.length  + "=====<><><><>==>>> " + headers[0]);
-          if (headers != null && headers.length > 0) {
-            for (int j = 0 ; j < headers.length; j++) {
+          String[] xPriority = mes.getHeader("X-Priority");
+          String[] importance = mes.getHeader("Importance");
+          if (xPriority != null && xPriority.length > 0) {
+            for (int j = 0 ; j < xPriority.length; j++) {
               newMsg.setPriority(Long.valueOf(mes.getHeader("X-Priority")[j]));
             }          
+          } else if (importance != null && importance.length > 0) {
+            for (int j = 0 ; j < importance.length; j++) {
+              if (importance[j] == "low") {
+                newMsg.setPriority(5);
+              } else if (importance[j] == "high") {
+                newMsg.setPriority(1);
+              } else if (importance[j] == "normal") {
+                newMsg.setPriority(3);
+              }
+            }
           }
           newMsg.setSize(mes.getSize());
           newMsg.setAttachements(new ArrayList<Attachment>());
