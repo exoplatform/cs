@@ -44,11 +44,11 @@ import org.exoplatform.webui.event.EventListener;
       @EventConfig(listeners = UICalendarView.DeleteEventActionListener.class),
       @EventConfig(listeners = UICalendarView.AddCategoryActionListener.class),
       @EventConfig(listeners = UICalendarView.ChangeCategoryActionListener.class), 
+      @EventConfig(listeners = UICalendarView.EditEventActionListener.class), 
       @EventConfig(listeners = UIDayView.MoveNextActionListener.class), 
       @EventConfig(listeners = UIDayView.MovePreviousActionListener.class), 
       @EventConfig(listeners = UIDayView.QuickAddActionListener.class), 
       @EventConfig(listeners = UIDayView.QuickDeleteEventActionListener.class),
-      @EventConfig(listeners = UIDayView.EditEventActionListener.class), 
       @EventConfig(listeners = UIDayView.SaveEventActionListener.class)
     }
 )
@@ -144,30 +144,6 @@ public class UIDayView extends UICalendarView {
         e.printStackTrace() ;
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
-    }
-  }
-  static  public class EditEventActionListener extends EventListener<UIDayView> {
-    public void execute(Event<UIDayView> event) throws Exception {
-      System.out.println("EditEventActionListener");
-      UIDayView uiDayView = event.getSource() ;
-      UICalendarPortlet uiPortlet = uiDayView.getAncestorOfType(UICalendarPortlet.class) ;
-      UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
-      UIPopupContainer uiPopupContainer = uiPopupAction.activate(UIPopupContainer.class, 700) ;
-      UIEventForm uiEventForm = uiPopupContainer.createUIComponent(UIEventForm.class, null, null) ;
-      CalendarEvent eventCalendar = null ;
-      String username = event.getRequestContext().getRemoteUser() ;
-      String calendarId = event.getRequestContext().getRequestParameter(CALENDARID) ;
-      String eventId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      try {
-        CalendarService calService = uiDayView.getApplicationComponent(CalendarService.class) ;
-        eventCalendar = calService.getUserEvent(username, calendarId, eventId) ;
-      } catch (Exception e){
-        e.printStackTrace() ;
-      }
-      uiEventForm.initForm(eventCalendar) ;
-      uiPopupContainer.addChild(uiEventForm) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiDayView.getParent()) ;
     }
   }
 

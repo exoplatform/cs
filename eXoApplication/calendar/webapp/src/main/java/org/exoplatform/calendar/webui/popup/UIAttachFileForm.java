@@ -70,16 +70,23 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
       }
       UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       UIEventForm uiEventForm = uiPopupContainer.getChild(UIEventForm.class) ;
+      UITaskForm uiTaskForm = uiPopupContainer.getChild(UITaskForm.class) ;
       UIPopupAction uiPopupAction = uiPopupContainer.getChild(UIPopupAction.class) ;
-      UIEventDetailTab uiEventDetailTab = uiEventForm.getChild(UIEventDetailTab.class) ;
       try {
         Attachment attachfile = new Attachment() ;
         attachfile.setName(uploadResource.getFileName()) ;
         attachfile.setInputStream(input.getUploadDataAsStream()) ;
         attachfile.setMimeType(uploadResource.getMimeType()) ;
         attachfile.setSize((long)uploadResource.getUploadedSize());
-        uiEventDetailTab.addToUploadFileList(attachfile) ;
-        uiEventDetailTab.refreshUploadFileList() ;
+        if(uiEventForm != null) {
+          UIEventDetailTab uiEventDetailTab = uiEventForm.getChild(UIEventDetailTab.class) ;
+          uiEventDetailTab.addToUploadFileList(attachfile) ;
+          uiEventDetailTab.refreshUploadFileList() ;
+        } else if(uiTaskForm != null) {
+          UITaskDetailTab uiTaskDetailTab = uiTaskForm.getChild(UITaskDetailTab.class) ;
+          uiTaskDetailTab.addToUploadFileList(attachfile) ;
+          uiTaskDetailTab.refreshUploadFileList() ;
+        }
         UploadService uploadService = uiForm.getApplicationComponent(UploadService.class) ;
         uploadService.removeUpload(input.getUploadId()) ;
         uiPopupAction.deActivate() ;

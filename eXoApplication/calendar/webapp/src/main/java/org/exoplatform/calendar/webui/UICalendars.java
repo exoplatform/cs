@@ -105,7 +105,7 @@ public class UICalendars extends UIForm  {
       UICalendarPortlet uiCalendarPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
       UIPopupContainer uiPopupContainer = uiCalendarPortlet.createUIComponent(UIPopupContainer.class, null, null) ;
-      uiPopupContainer.setId("UIPopupAddEventContainer") ;
+      uiPopupContainer.setId(UIPopupContainer.UIEVENTPOPUP) ;
       UIEventForm uiForm = uiPopupContainer.addChild(UIEventForm.class, null, null) ;
       uiForm.initForm(calendarId) ;
       popupAction.activate(uiPopupContainer, 700, 0, true) ;

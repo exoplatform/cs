@@ -11,8 +11,6 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.SimpleTimeZone;
-import java.util.TimeZone;
 
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarEvent;
@@ -22,6 +20,7 @@ import org.exoplatform.calendar.webui.popup.UIEventCategoryManager;
 import org.exoplatform.calendar.webui.popup.UIEventForm;
 import org.exoplatform.calendar.webui.popup.UIPopupAction;
 import org.exoplatform.calendar.webui.popup.UIPopupContainer;
+import org.exoplatform.calendar.webui.popup.UITaskForm;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.core.UIApplication;
@@ -340,6 +339,43 @@ public abstract class UICalendarView extends UIForm {
       UIPopupAction popupAction = calendarPortlet.getChild(UIPopupAction.class) ;
       popupAction.activate(UIEventCategoryManager.class, 600) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+    }
+  }
+
+  static  public class EditEventActionListener extends EventListener<UICalendarView> {
+    public void execute(Event<UICalendarView> event) throws Exception {
+      System.out.println("EditEventActionListener");
+      UICalendarView uiCalendarView = event.getSource() ;
+      UICalendarPortlet uiPortlet = uiCalendarView.getAncestorOfType(UICalendarPortlet.class) ;
+      UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
+      UIPopupContainer uiPopupContainer = uiPopupAction.activate(UIPopupContainer.class, 700) ;
+      CalendarEvent eventCalendar = null ;
+      String username = event.getRequestContext().getRemoteUser() ;
+      String calendarId = event.getRequestContext().getRequestParameter(CALENDARID) ;
+      String eventId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      try {
+        CalendarService calService = uiCalendarView.getApplicationComponent(CalendarService.class) ;
+        eventCalendar = calService.getUserEvent(username, calendarId, eventId) ;
+      } catch (Exception e){
+        e.printStackTrace() ;
+      }
+      if(CalendarEvent.TYPE_EVENT.equals(eventCalendar.getEventType())) {
+        uiPopupContainer.setId(UIPopupContainer.UIEVENTPOPUP) ;
+        UIEventForm uiEventForm = uiPopupContainer.createUIComponent(UIEventForm.class, null, null) ;
+        uiEventForm.initForm(eventCalendar) ;
+        uiPopupContainer.addChild(uiEventForm) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarView.getParent()) ;
+      } else if(CalendarEvent.TYPE_TASK.equals(eventCalendar.getEventType())) {
+        uiPopupContainer.setId(UIPopupContainer.UITASKPOPUP) ;
+        UITaskForm uiTaskForm = uiPopupContainer.createUIComponent(UITaskForm.class, null, null) ;
+        uiTaskForm.initForm(eventCalendar) ;
+        uiPopupContainer.addChild(uiTaskForm) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarView.getParent()) ;
+      } else {
+        System.out.println("\n\n event type is not supported !");
+      }
     }
   }
 }

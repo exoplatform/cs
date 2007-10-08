@@ -164,8 +164,8 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
   }
 
   protected void refreshCategory()throws Exception {
-    UIFormInputWithActions eventDetailTab = getChildById(TAB_TASKDETAIL) ;
-    eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CATEGORY).setOptions(getCategory()) ;
+    UIFormInputWithActions taskDetailTab = getChildById(TAB_TASKDETAIL) ;
+    taskDetailTab.getUIFormSelectBox(UITaskDetailTab.FIELD_CATEGORY).setOptions(getCategory()) ;
   }
 
   private List<SelectItemOption<String>> getShareValue() {
@@ -346,7 +346,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
   }
   protected void setEventDelegation(String value) {
     UIFormInputWithActions taskDetailTab =  getChildById(TAB_TASKDETAIL) ;
-    taskDetailTab.getUIStringInput(UIEventDetailTab.FIELD_PLACE).setValue(value) ;
+    taskDetailTab.getUIStringInput(UITaskDetailTab.FIELD_DELEGATION).setValue(value) ;
   }
 
   protected boolean getEmailReminder() {

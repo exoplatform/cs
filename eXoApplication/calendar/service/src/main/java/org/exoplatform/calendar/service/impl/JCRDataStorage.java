@@ -40,6 +40,7 @@ import org.exoplatform.registry.JCRRegistryService;
 import org.exoplatform.registry.ServiceRegistry;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.jmock.core.constraint.IsAnything;
 
 import com.sun.syndication.feed.synd.SyndContent;
 import com.sun.syndication.feed.synd.SyndContentImpl;
@@ -668,19 +669,12 @@ public class JCRDataStorage implements DataStorage{
     return null ;
   }
 
-  private void addReminder(Node eventNode, Reminder reminder, boolean isNew) throws Exception {
+  private void addReminder(Node eventNode, Reminder reminder) throws Exception {
     Node reminderNode ;
-    if(isNew) {
-      reminderNode = eventNode.addNode(reminder.getId(), "exo:reminder") ;
-      reminderNode.setProperty("exo:id", reminder.getId()) ;
-    }else {
-      if(eventNode.hasNode(reminder.getId())) {
-        reminderNode = eventNode.getNode(reminder.getId()) ;
-      } else {
-        Reminder tempRm = new Reminder() ;
-        reminderNode = eventNode.addNode(tempRm.getId(), "exo:reminder") ;
-        reminderNode.setProperty("exo:id", tempRm.getId()) ;
-      }
+    if(eventNode.hasNode(reminder.getReminder())) {
+      reminderNode = eventNode.getNode(reminder.getReminder()) ;
+    } else {
+      reminderNode = eventNode.addNode(reminder.getReminder(), "exo:reminder") ;
     }
     reminderNode.setProperty("exo:eventId", eventNode.getName()) ;
     reminderNode.setProperty("exo:alarmBefore", reminder.getAlarmBefore()) ;
@@ -688,7 +682,7 @@ public class JCRDataStorage implements DataStorage{
     reminderNode.setProperty("exo:reminder", reminder.getReminder()) ;
     reminderNode.setProperty("exo:email", reminder.getEmailAddress()) ;
   }
-  
+
   private void addAttachment(Node eventNode, Attachment attachment, boolean isNew) throws Exception {
     Node attachNode ;
     if(isNew) {
@@ -724,9 +718,10 @@ public class JCRDataStorage implements DataStorage{
     if(eventNode.hasProperty("exo:priority")) event.setPriority(eventNode.getProperty("exo:priority").getString()) ;
     if(eventNode.hasProperty("exo:isPrivate")) event.setPrivate(eventNode.getProperty("exo:isPrivate").getBoolean()) ;
     if(eventNode.hasProperty("exo:eventState")) event.setEventState(eventNode.getProperty("exo:eventState").getString()) ;
-    
+
     event.setReminders(getReminders(eventNode)) ;
     event.setAttachment(getAttachments(eventNode)) ;
+    System.out.println("\n\n attach ment node " +getAttachments(eventNode).size());
     if(eventNode.hasProperty("exo:invitation")){
       Value[] values = eventNode.getProperty("exo:invitation").getValues() ;
       if(values.length == 1 ){      
@@ -774,7 +769,7 @@ public class JCRDataStorage implements DataStorage{
     eventNode.setProperty("exo:description", event.getDescription()) ;
     eventNode.setProperty("exo:location", event.getLocation()) ;
     eventNode.setProperty("exo:taskDelegator", event.getTaskDelegator()) ;
-    
+
     GregorianCalendar dateTime = new GregorianCalendar() ;
     dateTime.setTime(event.getFromDateTime()) ;
     eventNode.setProperty("exo:fromDateTime", dateTime) ;
@@ -790,19 +785,22 @@ public class JCRDataStorage implements DataStorage{
     // add reminder child node
     List<Reminder> reminders = event.getReminders() ;
     NodeIterator nodeIter = eventNode.getNodes() ;
-    while(nodeIter.hasNext()) {
-      Node childNode = nodeIter.nextNode() ;
-      if(childNode.isNodeType("exo:reminder")) childNode.remove() ;
+    if(!isNew) {
+      while(nodeIter.hasNext()) {
+        Node childNode = nodeIter.nextNode() ;
+        if(childNode.isNodeType("exo:reminder")) childNode.remove() ;
+      }
+      eventNode.save() ;
     }
     if(reminders!= null) {
       for(Reminder rm : reminders) {
-        addReminder(eventNode, rm, true) ;
+        addReminder(eventNode, rm) ;
       }
     } 
     List<Attachment> attachments = event.getAttachment() ;
     if(attachments != null) {
-      for(Attachment rm : attachments) {
-        addAttachment(eventNode, rm, isNew) ;
+      for(Attachment att : attachments) {
+        addAttachment(eventNode, att, isNew) ;
       }
     }
     calendarNode.save() ;

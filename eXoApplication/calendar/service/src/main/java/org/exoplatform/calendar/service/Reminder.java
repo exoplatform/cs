@@ -28,17 +28,17 @@ public class Reminder {
   private String alarmBefore = "0"; 
   private String emailAddress  ;
   public Reminder() {
-    id = ID() ;
+    //id = ID() ;
   }
   public Reminder(String type) {
-    id = ID() ;
+   // id = ID() ;
     reminder = type ;
   }
   public Reminder(String id, String type) {
     this.id = id ;
     reminder = type ;
   }
-  public static String ID(){return "Reminder" + IdGenerator.generate() ; }
+ // public static String ID(){return "Reminder" + IdGenerator.generate() ; }
   public String getId() { return this.id ; }
   public void   setId(String id) { this.id = id ; }
   

@@ -10,6 +10,7 @@ import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarView;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
+import org.exoplatform.calendar.webui.UITaskView;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -103,8 +104,11 @@ public class UIEventCategoryForm extends UIForm {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiViewContainer) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
         if(uiPopupContainer != null) {
+          System.out.println("\n\n uiPopupContainer " + uiPopupContainer.getId());
           UIEventForm uiEventForm = uiPopupContainer.getChild(UIEventForm.class) ;
-          uiEventForm.refreshCategory() ;
+          UITaskForm uiTaskForm = uiPopupContainer.getChild(UITaskForm.class) ;
+          if(uiEventForm != null) uiEventForm.refreshCategory() ;
+          if(uiTaskForm != null) uiTaskForm.refreshCategory() ;
         }
       } catch (Exception e) {
         e.printStackTrace() ;

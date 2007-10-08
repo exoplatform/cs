@@ -137,6 +137,7 @@ public class UIEventDetailTab extends UIFormInputWithActions {
   }
   protected void setAttachments(List<Attachment> attachment) { 
     attachments_ = attachment ;
+    System.out.println("\n\n save att ");
   }
   
   private List<SelectItemOption<String>> getCalendar() throws Exception {

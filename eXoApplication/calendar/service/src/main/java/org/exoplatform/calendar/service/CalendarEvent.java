@@ -123,7 +123,7 @@ public class CalendarEvent {
   public void     setInvitation(String[] invitation) { this.invitation = invitation; }
   
   public List<Reminder> getReminders() { return reminders ; }
-  public void           setReminders(List<Reminder> rm) { this.reminders = rm ; }
+  public void setReminders(List<Reminder> rm) { this.reminders = rm ; }
 
   public void setRepeatType(String repeatType) {
     this.repeatType = repeatType;
