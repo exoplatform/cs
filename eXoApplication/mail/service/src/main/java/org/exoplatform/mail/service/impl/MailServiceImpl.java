@@ -281,11 +281,11 @@ public class MailServiceImpl implements MailService{
           }
           if (importance != null && importance.length > 0) {
             for (int j = 0 ; j < importance.length; j++) {
-              if (importance[j] == "low") {
+              if (importance[j].equalsIgnoreCase("Low")) {
                 newMsg.setPriority(5);
-              } else if (importance[j] == "high") {
+              } else if (importance[j].equalsIgnoreCase("high")) {
                 newMsg.setPriority(1);
-              } else if (importance[j] == "normal") {
+              } else if (importance[j].equalsIgnoreCase("normal")) {
                 newMsg.setPriority(3);
               }
             }
