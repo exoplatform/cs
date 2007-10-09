@@ -170,10 +170,8 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       setEventPlace(eventCalendar.getLocation()) ;
       setEventRepeat(eventCalendar.getRepeatType()) ;
       setSelectedEventPriority(eventCalendar.getPriority()) ;
-      setAttachments(eventCalendar.getAttachment()) ;
-      System.out.println("\n\n  attachment size +" + eventCalendar.getAttachment().size());
       setEventReminders(eventCalendar.getReminders()) ;
-      System.out.println("\n\n reminders size " + eventCalendar.getReminders().size());
+      setAttachments(eventCalendar.getAttachment()) ;
       if(eventCalendar.isPrivate()) {
         setSelectedShareType(UIEventForm.ITEM_PRIVATE) ;
       } else {
@@ -476,13 +474,15 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   protected List<Reminder>  getEventReminders() {
     List<Reminder> reminders = new ArrayList<Reminder>() ;
     if(getEmailReminder()) { 
-      Reminder email = new Reminder(Reminder.TYPE_EMAIL) ;
+      Reminder email = new Reminder() ;
+      email.setReminder(Reminder.TYPE_EMAIL) ;
       email.setAlarmBefore(getEmailReminderTime()) ;
       email.setEmailAddress(getEmailAddress()) ;
       reminders.add(email) ;
     }
     if(getPopupReminder()) {
-      Reminder popup = new Reminder(Reminder.TYPE_POPUP) ;
+      Reminder popup = new Reminder() ;
+      popup.setReminder(Reminder.TYPE_POPUP) ;
       popup.setAlarmBefore(getPopupReminderTime()) ;
       popup.setSnooze(getPopupReminderSnooze()) ;
       reminders.add(popup) ;
@@ -650,7 +650,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
         calendarEvent.setPrivate(UIEventForm.ITEM_PRIVATE.equals(uiForm.getShareType())) ;
         calendarEvent.setEventState(uiForm.getEventState()) ;
         calendarEvent.setAttachment(uiForm.getAttachments(calendarEvent.getId(), uiForm.isAddNew_)) ;
-        System.out.println("\n\n att size " + uiForm.getAttachments(calendarEvent.getId(), uiForm.isAddNew_).size());
         calendarEvent.setReminders(uiForm.getEventReminders()) ;
         if(uiForm.getMeetingInvitation() != null) calendarEvent.setInvitation(uiForm.getMeetingInvitation()) ;
         if(uiForm.getParticipant() != null) calendarEvent.setParticipant(uiForm.getParticipant()) ;

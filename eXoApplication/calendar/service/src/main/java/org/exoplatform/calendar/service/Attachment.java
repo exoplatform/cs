@@ -5,6 +5,7 @@
 package org.exoplatform.calendar.service;
 
 import java.io.InputStream;
+import java.util.Calendar;
 
 import org.exoplatform.services.jcr.util.IdGenerator;
 
@@ -21,7 +22,7 @@ public class Attachment  {
   private String mimeType ;
   private long size ;
   private InputStream data ;
-  
+  private Calendar lastModified ;
   public Attachment() {
     id =  "Attachment" + IdGenerator.generate() ;
   }
@@ -39,4 +40,12 @@ public class Attachment  {
   public void setName(String name_) { this.name = name_ ; }
   public InputStream getInputStream() {return data ;}
   public void setInputStream(InputStream input) {data = input ;}
+
+  public void setLastModified(Calendar lastModified) {
+    this.lastModified = lastModified;
+  }
+
+  public Calendar getLastModified() {
+    return lastModified;
+  }
 }

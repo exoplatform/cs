@@ -86,15 +86,9 @@
 	      <childNodeDefinition name="*" defaultPrimaryType="" autoCreated="false" mandatory="false"
 	        onParentVersion="COPY" protected="false" sameNameSiblings="false">
 	        <requiredPrimaryTypes>
-	          <requiredPrimaryType>exo:reminder</requiredPrimaryType>
+	          <requiredPrimaryType>nt:unstructured</requiredPrimaryType>
 	        </requiredPrimaryTypes>
-	      </childNodeDefinition>
-	      <childNodeDefinition name="*" defaultPrimaryType="" autoCreated="false" mandatory="false"
-	        onParentVersion="COPY" protected="false" sameNameSiblings="true">
-	        <requiredPrimaryTypes>
-	          <requiredPrimaryType>nt:file</requiredPrimaryType>
-	        </requiredPrimaryTypes>
-	      </childNodeDefinition>
+	      </childNodeDefinition>	      
 	    </childNodeDefinitions>
  	 	</nodeType>
  	 	

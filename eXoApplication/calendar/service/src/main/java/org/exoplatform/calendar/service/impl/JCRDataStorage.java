@@ -5,6 +5,7 @@
 package org.exoplatform.calendar.service.impl;
 
 import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
@@ -41,7 +42,6 @@ import org.exoplatform.registry.JCRRegistryService;
 import org.exoplatform.registry.ServiceRegistry;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
-import org.jmock.core.constraint.IsAnything;
 
 import com.sun.syndication.feed.synd.SyndContent;
 import com.sun.syndication.feed.synd.SyndContentImpl;
@@ -670,38 +670,6 @@ public class JCRDataStorage implements DataStorage{
     return null ;
   }
 
-  private void addReminder(Node eventNode, Reminder reminder) throws Exception {
-    Node reminderNode ;
-    if(eventNode.hasNode(reminder.getReminder())) {
-      reminderNode = eventNode.getNode(reminder.getReminder()) ;
-    } else {
-      reminderNode = eventNode.addNode(reminder.getReminder(), "exo:reminder") ;
-    }
-    reminderNode.setProperty("exo:eventId", eventNode.getName()) ;
-    reminderNode.setProperty("exo:alarmBefore", reminder.getAlarmBefore()) ;
-    reminderNode.setProperty("exo:snooze", reminder.getSnooze()) ;
-    reminderNode.setProperty("exo:reminder", reminder.getReminder()) ;
-    reminderNode.setProperty("exo:email", reminder.getEmailAddress()) ;
-  }
-
-  private void addAttachment(Node eventNode, Attachment attachment, boolean isNew) throws Exception {
-    Node attachNode ;
-    if(isNew) {
-      attachNode = eventNode.addNode(attachment.getName(), Utils.NT_FILE) ;
-    }else {
-      if(eventNode.hasNode(attachment.getName())) {
-        attachNode = eventNode.getNode(attachment.getName()) ;
-      } else {
-        attachNode = eventNode.addNode(attachment.getName(), Utils.NT_FILE) ;
-      }
-    }
-    Node nodeContent = null;
-    if (!attachNode.hasNode(Utils.JCR_CONTENT)) nodeContent = attachNode.addNode(Utils.JCR_CONTENT, Utils.NT_RESOURCE);
-    else nodeContent = attachNode.getNode(Utils.JCR_CONTENT);
-    nodeContent.setProperty(Utils.JCR_LASTMODIFIED, java.util.Calendar.getInstance().getTimeInMillis()) ;
-    nodeContent.setProperty(Utils.JCR_MIMETYPE, attachment.getMimeType());
-    nodeContent.setProperty(Utils.JCR_DATA, attachment.getInputStream());
-  }
 
   private CalendarEvent getEvent(Node eventNode) throws Exception {
     CalendarEvent event = new CalendarEvent() ;
@@ -722,7 +690,6 @@ public class JCRDataStorage implements DataStorage{
 
     event.setReminders(getReminders(eventNode)) ;
     event.setAttachment(getAttachments(eventNode)) ;
-    System.out.println("\n\n attach ment node " +getAttachments(eventNode).size());
     if(eventNode.hasProperty("exo:invitation")){
       Value[] values = eventNode.getProperty("exo:invitation").getValues() ;
       if(values.length == 1 ){      
@@ -784,20 +751,23 @@ public class JCRDataStorage implements DataStorage{
     eventNode.setProperty("exo:invitation",  event.getInvitation()) ;
     eventNode.setProperty("exo:participant", event.getParticipant()) ;
     // add reminder child node
-    List<Reminder> reminders = event.getReminders() ;
-    NodeIterator nodeIter = eventNode.getNodes() ;
-    if(!isNew) {
-      while(nodeIter.hasNext()) {
-        Node childNode = nodeIter.nextNode() ;
-        if(childNode.isNodeType("exo:reminder")) childNode.remove() ;
+    if(eventNode.hasNode(Utils.REMINDERS_NODE)) {
+      while (eventNode.getNodes().hasNext()) {
+        eventNode.getNodes().nextNode().remove() ;
       }
-      eventNode.save() ;
     }
+    List<Reminder> reminders = event.getReminders() ;
     if(reminders!= null) {
       for(Reminder rm : reminders) {
         addReminder(eventNode, rm) ;
       }
-    } 
+    }
+    //  add attachment child node
+    if(eventNode.hasNode(Utils.ATTACHMENT_NODE)) {
+      while (eventNode.getNodes().hasNext()) {
+        eventNode.getNodes().nextNode().remove() ;
+      }
+    }
     List<Attachment> attachments = event.getAttachment() ;
     if(attachments != null) {
       for(Attachment att : attachments) {
@@ -805,39 +775,89 @@ public class JCRDataStorage implements DataStorage{
       }
     }
     calendarNode.save() ;
-    calendarNode.getSession().save() ;
+    calendarNode.getSession().save()  ;
+  }
+  private void addReminder(Node eventNode, Reminder reminder) throws Exception {
+    Node reminderNode ;
+    Node reminders ;
+    if(eventNode.hasNode(Utils.REMINDERS_NODE)) {
+      reminders = eventNode.getNode(Utils.REMINDERS_NODE) ;
+    } else {
+      reminders = eventNode.addNode(Utils.REMINDERS_NODE, Utils.NT_UNSTRUCTURED) ;
+    }
+    reminderNode = reminders.addNode(reminder.getReminder(), "exo:reminder") ;
+    reminderNode.setProperty("exo:eventId", eventNode.getName()) ;
+    reminderNode.setProperty("exo:alarmBefore", reminder.getAlarmBefore()) ;
+    reminderNode.setProperty("exo:snooze", reminder.getSnooze()) ;
+    reminderNode.setProperty("exo:reminder", reminder.getReminder()) ;
+    reminderNode.setProperty("exo:email", reminder.getEmailAddress()) ;
   }
 
   private List<Reminder> getReminders(Node eventNode) throws Exception {
-    NodeIterator iter = eventNode.getNodes() ;
     List<Reminder> reminders = new ArrayList<Reminder> () ;
-    while(iter.hasNext()) {
-      Node reminderNode = iter.nextNode() ;
-      if(reminderNode.isNodeType("exo:reminder")) {
-        Reminder reminder = new Reminder() ;
-        if(reminderNode.hasProperty("exo:id")) reminder.setId(reminderNode.getProperty("exo:id").getString()) ;
-        if(reminderNode.hasProperty("exo:eventId")) reminder.setEventId(reminderNode.getProperty("exo:eventId").getString()) ;
-        if(reminderNode.hasProperty("exo:reminder")) reminder.setReminder(reminderNode.getProperty("exo:reminder").getString()) ;
-        if(reminderNode.hasProperty("exo:alarmBefore"))reminder.setAlarmBefore(reminderNode.getProperty("exo:alarmBefore").getString()) ;
-        if(reminderNode.hasProperty("exo:email")) reminder.setEmailAddress(reminderNode.getProperty("exo:email").getString()) ;
-        if(reminderNode.hasProperty("exo:snooze")) reminder.setSnooze(reminderNode.getProperty("exo:snooze").getLong()) ;
-        reminders.add(reminder) ;
+    if(eventNode.hasNode(Utils.REMINDERS_NODE)) {
+      Node reminderHome = eventNode.getNode(Utils.REMINDERS_NODE) ;
+      NodeIterator iter = reminderHome.getNodes() ;
+      while(iter.hasNext()) {
+        Node reminderNode = iter.nextNode() ;
+        if(reminderNode.isNodeType("exo:reminder")) {
+          Reminder reminder = new Reminder() ;
+          if(reminderNode.hasProperty("exo:id")) reminder.setId(reminderNode.getProperty("exo:id").getString()) ;
+          if(reminderNode.hasProperty("exo:eventId")) reminder.setEventId(reminderNode.getProperty("exo:eventId").getString()) ;
+          if(reminderNode.hasProperty("exo:reminder")) reminder.setReminder(reminderNode.getProperty("exo:reminder").getString()) ;
+          if(reminderNode.hasProperty("exo:alarmBefore"))reminder.setAlarmBefore(reminderNode.getProperty("exo:alarmBefore").getString()) ;
+          if(reminderNode.hasProperty("exo:email")) reminder.setEmailAddress(reminderNode.getProperty("exo:email").getString()) ;
+          if(reminderNode.hasProperty("exo:snooze")) reminder.setSnooze(reminderNode.getProperty("exo:snooze").getLong()) ;
+          reminders.add(reminder) ;
+        }
       }
     }
     return reminders ;
   }
 
+  private void addAttachment(Node eventNode, Attachment attachment, boolean isNew) throws Exception {
+    Node attachHome ;
+    Node attachNode ;
+    if(eventNode.hasNode(Utils.ATTACHMENT_NODE)) {
+      attachHome = eventNode.getNode(Utils.ATTACHMENT_NODE) ;
+    } else {
+      attachHome = eventNode.addNode(Utils.ATTACHMENT_NODE, Utils.NT_UNSTRUCTURED) ;
+    }
+    if(attachHome.hasNode(attachment.getName())) {
+      attachNode = attachHome.getNode(attachment.getName()) ;
+    } else {
+      attachNode = attachHome.addNode(attachment.getName(), Utils.NT_FILE) ;
+    }
+    Node nodeContent = null;
+    if (!attachNode.hasNode(Utils.JCR_CONTENT)) nodeContent = attachNode.addNode(Utils.JCR_CONTENT, Utils.NT_RESOURCE);
+    else nodeContent = attachNode.getNode(Utils.JCR_CONTENT);
+    nodeContent.setProperty(Utils.JCR_LASTMODIFIED, java.util.Calendar.getInstance().getTimeInMillis()) ;
+    nodeContent.setProperty(Utils.JCR_MIMETYPE, attachment.getMimeType());
+    nodeContent.setProperty(Utils.JCR_DATA, attachment.getInputStream());
+  }
+
   private List<Attachment> getAttachments(Node eventNode) throws Exception {
-    NodeIterator iter = eventNode.getNodes() ;
     List<Attachment> attachments = new ArrayList<Attachment> () ;
-    while(iter.hasNext()) {
-      Node attchmentNode = iter.nextNode() ;
-      if(attchmentNode.isNodeType(Utils.JCR_CONTENT)) {
-        Attachment attachment = new Attachment() ;
-        attachment.setName(attchmentNode.getName()) ;
-        if(attchmentNode.hasProperty(Utils.JCR_MIMETYPE)) attachment.setMimeType(attchmentNode.getProperty(Utils.JCR_MIMETYPE).getString()) ;
-        if(attchmentNode.hasProperty(Utils.JCR_DATA)) attachment.setInputStream((attchmentNode.getProperty(Utils.JCR_DATA).getStream())) ;
-        attachments.add(attachment) ;
+    if(eventNode.hasNode(Utils.ATTACHMENT_NODE)) {
+      Node attachHome = eventNode.getNode(Utils.ATTACHMENT_NODE) ;
+      NodeIterator iter = attachHome.getNodes() ;
+      while(iter.hasNext()) {
+        Node attchmentNode = iter.nextNode() ;
+        if(attchmentNode.isNodeType(Utils.NT_FILE)) {
+          Attachment attachment = new Attachment() ;
+          attachment.setName(attchmentNode.getName()) ;
+          Node contentNode = attchmentNode.getNode(Utils.JCR_CONTENT) ; 
+          if(contentNode != null) {
+            if(contentNode.hasProperty(Utils.JCR_LASTMODIFIED)) attachment.setLastModified(contentNode.getProperty(Utils.JCR_LASTMODIFIED).getDate()) ;
+            if(contentNode.hasProperty(Utils.JCR_MIMETYPE)) attachment.setMimeType(contentNode.getProperty(Utils.JCR_MIMETYPE).getString()) ;
+            if(contentNode.hasProperty(Utils.JCR_DATA)) {
+              InputStream  inputStream = contentNode.getProperty(Utils.JCR_DATA).getStream() ;
+              attachment.setInputStream(inputStream) ;
+              attachment.setSize(inputStream.available()) ;
+            }
+          }
+          attachments.add(attachment) ;
+        }
       }
     }
     return attachments ;

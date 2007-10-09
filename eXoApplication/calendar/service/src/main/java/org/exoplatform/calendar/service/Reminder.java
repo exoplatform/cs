@@ -19,7 +19,7 @@ public class Reminder {
   final public static String TYPE_EMAIL = "email".intern() ;
   final public static String TYPE_POPUP = "popup".intern() ;
   final public static String TYPE_BOTH = "both".intern() ;
-  final public static String[] REMINDER_TYPES = {TYPE_EMAIL, TYPE_POPUP, TYPE_BOTH} ;
+  final public static String[] REMINDER_TYPES = {TYPE_EMAIL, TYPE_POPUP} ;
   
   private String id ;
   private String eventId ;

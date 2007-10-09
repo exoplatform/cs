@@ -6,6 +6,49 @@
 		<a href="<%=uicomponent.event("DeleteEvent")%>" class="ControlButton">
 			<div class="IconHolder DeleteEventIcon"> Delete event </div>
 		</a>
+		<div class="SeparatorLine"><span></span></div>
+		<div class="ViewTypeSelect" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
+			<div class="ControlButton">
+				<div class="IconHolder TaskIcon">View both</div>
+			</div>
+			<% /*Begin  ViewTypeSelect Popup Menu*/ %>
+							 <div style="position: relative;"> 
+		      			<div class="UIPopupCategory" style="display: none;">
+		      				<div class="UIRightClickPopupMenu" style="display: block;">
+									  <div class="TopLeftRightClickPopupMenu">
+			          			<div class="TopRightRightClickPopupMenu">
+			            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
+			          			</div>
+			        			</div>
+						        <div class="MiddleLeftRightClickPopupMenu">
+						          <div class="MiddleRightRightClickPopupMenu">
+			              		<div class="UIRightPopupMenuContainer">
+				                    <a class="MenuItem">   
+					                    <div class="ItemIcon">
+					                      Events
+					                    </div>
+				                    </a>
+				                    	<a class="MenuItem">   
+					                    <div class="ItemIcon">
+					                      Tasks
+					                    </div>
+				                    </a>
+												</div>
+				          		</div>
+				        		</div>
+							      <div class="BottomLeftRightClickPopupMenu">
+							        <div class="BottomRightRightClickPopupMenu">
+							          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+							        </div>
+							      </div>
+				      			
+							    </div>
+		      			</div>
+		      	 </div> 
+		      		<% /*End Popup Menu*/ %>
+		
+	
+		</div>
 		<a href="<%=uicomponent.event("AddCategory")%>">
 			<div class="AddCategoryIcon"><span></span></div>
 		</a>

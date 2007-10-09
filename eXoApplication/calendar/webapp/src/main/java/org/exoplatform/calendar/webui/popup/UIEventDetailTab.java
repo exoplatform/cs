@@ -109,7 +109,7 @@ public class UIEventDetailTab extends UIFormInputWithActions {
       fileUpload.setActionListener("") ;
       fileUpload.setActionType(ActionData.TYPE_ICON) ;
       fileUpload.setCssIconClass("AttachmentIcon ZipFileIcon") ;
-      fileUpload.setActionName(attachdata.getName() + " ("+attachdata.getSize()+" Kb)" ) ;
+      fileUpload.setActionName(attachdata.getName() + " (" + attachdata.getSize() + " Kb)" ) ;
       fileUpload.setShowLabel(true) ;
       uploadedFiles.add(fileUpload) ;
       ActionData removeAction = new ActionData() ;
@@ -137,7 +137,6 @@ public class UIEventDetailTab extends UIFormInputWithActions {
   }
   protected void setAttachments(List<Attachment> attachment) { 
     attachments_ = attachment ;
-    System.out.println("\n\n save att ");
   }
   
   private List<SelectItemOption<String>> getCalendar() throws Exception {

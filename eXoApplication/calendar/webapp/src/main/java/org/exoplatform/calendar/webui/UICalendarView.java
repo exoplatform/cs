@@ -16,6 +16,7 @@ import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.EventCategory;
+import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.webui.popup.UIEventCategoryManager;
 import org.exoplatform.calendar.webui.popup.UIEventForm;
 import org.exoplatform.calendar.webui.popup.UIPopupAction;
@@ -390,4 +391,36 @@ public abstract class UICalendarView extends UIForm {
       }
     }
   }
+  
+  static public class TaskViewActionListener extends EventListener<UICalendarView> {
+    public void execute(Event<UICalendarView> event) throws Exception {
+      UICalendarView uiCalendarView = event.getSource() ;     
+      String viewType = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      UICalendarPortlet uiPortlet = uiCalendarView.getAncestorOfType(UICalendarPortlet.class) ;
+      UICalendarViewContainer uiViewContainer = uiPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
+      UIListView uiListView = uiViewContainer.findFirstComponentOfType(UIListView.class) ;
+      CalendarService calendarService = uiCalendarView.getApplicationComponent(CalendarService.class) ;
+      String username = CalendarUtils.getCurrentUser() ;
+      EventQuery eventQuery = new EventQuery() ;
+      java.util.Calendar fromcalendar = new GregorianCalendar(uiListView.getCurrentYear(), uiListView.getCurrentMonth(), uiListView.getCurrentDay()) ;
+      fromcalendar.set(java.util.Calendar.HOUR, 0) ;
+      fromcalendar.set(java.util.Calendar.MINUTE, 0) ;
+      fromcalendar.set(java.util.Calendar.MILLISECOND, 0) ;
+      eventQuery.setFromDate(fromcalendar) ;
+      java.util.Calendar tocalendar = new GregorianCalendar(uiListView.getCurrentYear(), uiListView.getCurrentMonth(), uiListView.getCurrentDay()) ;
+      tocalendar.set(java.util.Calendar.HOUR, tocalendar.getActualMaximum(java.util.Calendar.HOUR)) ;
+      tocalendar.set(java.util.Calendar.MINUTE, tocalendar.getActualMaximum(java.util.Calendar.MINUTE)) ;
+      tocalendar.set(java.util.Calendar.MILLISECOND, tocalendar.getActualMaximum(java.util.Calendar.MILLISECOND)) ;
+      eventQuery.setToDate(tocalendar) ;
+      uiListView.update(calendarService.searchEvent(username, eventQuery)) ; 
+      uiListView.setShowEventAndTask(false) ;
+      uiListView.setDisplaySearchResult(false) ;
+      uiListView.isShowEvent_ = false ;
+      uiViewContainer.setRenderedChild(viewType);      
+      UIActionBar uiActionbar = uiPortlet.findFirstComponentOfType(UIActionBar.class) ;
+      uiActionbar.setCurrentView(viewType) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarView) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiViewContainer) ;
+    }
+  }  
 }

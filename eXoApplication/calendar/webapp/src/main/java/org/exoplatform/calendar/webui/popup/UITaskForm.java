@@ -57,22 +57,13 @@ import org.exoplatform.webui.form.UIFormTabPane;
 public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISelector{
   final public static String TAB_TASKDETAIL = "eventDetail".intern() ;
   final public static String TAB_EVENTREMINDER = "eventReminder".intern() ;
-  //final public static String TAB_EVENTSHARE = "eventShare".intern() ;
-  //final public static String TAB_EVENTATTENDER = "eventAttender".intern() ;
-
-  //final public static String FIELD_SHARE = "shareEvent".intern() ;
   final public static String FIELD_STATUS = "status".intern() ;
- //final public static String FIELD_MEETING = "meeting".intern() ;
-  //final public static String FIELD_PARTICIPANT = "participant".intern() ;
-
   final public static String ITEM_PUBLIC = "public".intern() ;
   final public static String ITEM_PRIVATE = "private".intern() ;
   final public static String ITEM_AVAILABLE = "available".intern() ;
   final public static String ITEM_BUSY = "busy".intern() ;
-
   final public static String ITEM_REPEAT = "true".intern() ;
   final public static String ITEM_UNREPEAT = "false".intern() ;
-
   final public static String ACT_REMOVE = "RemoveAttachment".intern() ;
   final public static String ACT_ADDEMAIL = "AddEmailAddress".intern() ;
   final public static String ACT_ADDCATEGORY = "AddCategory".intern() ;
@@ -422,49 +413,30 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
         setEmailReminder(true) ;
         setEmailAddress(r.getEmailAddress()) ;
         setEmailReminderTime(r.getAlarmBefore()) ; 
-      }else {
+      }else if(Reminder.TYPE_POPUP.equals(r.getReminder())) {
         setPopupReminder(true) ;
         setPopupReminderTime(r.getAlarmBefore()) ;
         setPopupReminderSnooze(r.getSnooze()) ;
+      } else {
+        System.out.println("\n\n reminder not supported");
       }
     }
   }
   protected List<Reminder>  getEventReminders() {
     List<Reminder> reminders = new ArrayList<Reminder>() ;
-    if(isAddNew_) {
-      if(getEmailReminder()) { 
-        Reminder email = new Reminder(Reminder.TYPE_EMAIL) ;
-        email.setAlarmBefore(getEmailReminderTime()) ;
-        email.setEmailAddress(getEmailAddress()) ;
-        reminders.add(email) ;
-      }
-      if(getPopupReminder()) {
-        Reminder popup = new Reminder(Reminder.TYPE_POPUP) ;
-        popup.setAlarmBefore(getEmailReminderTime()) ;
-        popup.setSnooze(getPopupReminderSnooze()) ;
-        reminders.add(popup) ;
-      }
-    } else {
-      if(getEmailReminder()) {
-        for(Reminder r : calendarEvent_.getReminders()) {
-          if(Reminder.TYPE_EMAIL.equals(r.getReminder())) {
-            Reminder email = r ;
-            email.setAlarmBefore(getEmailReminderTime()) ;
-            email.setEmailAddress(getEmailAddress()) ;
-            reminders.add(email) ;
-          } 
-        }
-      }
-      if(getPopupReminder()) {
-        for(Reminder r : calendarEvent_.getReminders()) {
-          if(Reminder.TYPE_POPUP.equals(r.getReminder())) {
-            Reminder popup = r ;
-            popup.setAlarmBefore(getEmailReminderTime()) ;
-            popup.setSnooze(getPopupReminderSnooze()) ;
-            reminders.add(popup) ;
-          } 
-        }
-      }
+    if(getEmailReminder()) { 
+      Reminder email = new Reminder() ;
+      email.setReminder(Reminder.TYPE_EMAIL) ;
+      email.setAlarmBefore(getEmailReminderTime()) ;
+      email.setEmailAddress(getEmailAddress()) ;
+      reminders.add(email) ;
+    }
+    if(getPopupReminder()) {
+      Reminder popup = new Reminder() ;
+      popup.setReminder(Reminder.TYPE_POPUP) ;
+      popup.setAlarmBefore(getPopupReminderTime()) ;
+      popup.setSnooze(getPopupReminderSnooze()) ;
+      reminders.add(popup) ;
     }
     return reminders ;
   }
@@ -512,16 +484,16 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
   static  public class RemoveAttachmentActionListener extends EventListener<UITaskForm> {
     public void execute(Event<UITaskForm> event) throws Exception {
       UITaskForm uiForm = event.getSource() ;
-      UIEventDetailTab uiEventDetailTab = uiForm.getChild(UIEventDetailTab.class) ;
+      UITaskDetailTab uiTaskDetailTab = uiForm.getChild(UITaskDetailTab.class) ;
       String attFileId = event.getRequestContext().getRequestParameter(OBJECTID);
       Attachment attachfile = new Attachment();
-      for (Attachment att : uiEventDetailTab.attachments_) {
+      for (Attachment att : uiTaskDetailTab.attachments_) {
         if (att.getId().equals(attFileId)) {
           attachfile = (Attachment) att;
         }
       }
-      uiEventDetailTab.removeFromUploadFileList(attachfile);
-      uiEventDetailTab.refreshUploadFileList() ;
+      uiTaskDetailTab.removeFromUploadFileList(attachfile);
+      uiTaskDetailTab.refreshUploadFileList() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
     }
   }
@@ -572,14 +544,9 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
         calendarEvent.setCalendarId(calendarId) ;
         calendarEvent.setEventCategoryId(uiForm.getEventCategory()) ;
         calendarEvent.setLocation(uiForm.getEventDelegation()) ;
-       // calendarEvent.setRepeatType(uiForm.getEventRepeat()) ;
         calendarEvent.setPriority(uiForm.getEventPriority()) ; 
-        //calendarEvent.setPrivate(UITaskForm.ITEM_PRIVATE.equals(uiForm.getShareType())) ;
-        //calendarEvent.setEventState(uiForm.getEventState()) ;
         calendarEvent.setAttachment(uiForm.getAttachments(calendarEvent.getId(), uiForm.isAddNew_)) ;
         calendarEvent.setReminders(uiForm.getEventReminders()) ;
-       // if(uiForm.getMeetingInvitation() != null) calendarEvent.setInvitation(uiForm.getMeetingInvitation()) ;
-        //if(uiForm.getParticipant() != null) calendarEvent.setParticipant(uiForm.getParticipant()) ;
         try {
           calendarService.saveUserEvent(username, calendarId, calendarEvent, uiForm.isAddNew_) ;
           uiViewContainer.refresh() ;

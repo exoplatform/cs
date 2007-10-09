@@ -36,7 +36,7 @@ public class UIEventReminderTab extends UIFormInputWithActions {
   final public static String FIELD_EMAIL_ADDRESS = "mailReminderAddress".intern() ;
 
   final public static String FIELD_POPUP_REMINDER = "popupReminder".intern() ;
-  final public static String FIELD_POPUP_TIME = "mailReminderTime".intern() ;
+  final public static String FIELD_POPUP_TIME = "popupReminderTime".intern() ;
   final public static String FIELD_SNOOZE_TIME = "snooze".intern() ;
 
   private Map<String, List<ActionData>> actionField_ ;
