@@ -1,9 +1,11 @@
 <%
-	uiform.begin() ;
-	if(uicomponent.isShowEvent()) {
-   _ctx.include("app:/templates/calendar/webui/UIEventView.gtmpl") ;
-  } else {
-     _ctx.include("app:/templates/calendar/webui/UITaskView.gtmpl") ;
-	}
-	uiform.end() ;
+	if(uicomponent.isShowEventAndTask()){
+		_ctx.include("app:/templates/calendar/webui/UIEvent&TaskView.gtmpl") ;
+	}else {
+		if(uicomponent.isShowEvent()) {
+			_ctx.include("app:/templates/calendar/webui/UIEventView.gtmpl") ;
+		}else {
+			_ctx.include("app:/templates/calendar/webui/UITaskView.gtmpl") ;
+		}
+	}	
 %>

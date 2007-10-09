@@ -1,0 +1,95 @@
+<%
+	import org.exoplatform.calendar.service.CalendarEvent;
+%>
+
+<div class="ResizeReadingPane"><span></span></div>
+	<div class="UIPreview" id="<%=uicomponent.getId()%>">
+		<div class="ViewBar">
+			<div class="Label">Task detail</div> 
+			<div class="MaximizeButton" title="View full - size task"><span></span></div>
+			<div style="clear: both"><span></span></div>
+		</div>
+		<div class="ViewContainer">
+			<div class="DecoratorBox">
+				<div class="ViewBoxStyle">
+					<div class="TopLeftViewBoxStyle">
+						<div class="TopRightViewBoxStyle">
+							<div class="TopCenterViewBoxStyle"><span></span></div>										
+						</div>
+					</div>
+					<div class="MiddleLeftViewBoxStyle">
+						<div class="MiddleRightViewBoxStyle">
+							<div class="MiddleCenterViewBoxStyle">
+								<table class="UIGrid" id="RowContainerDay" cellspacing="0" borderspacing="0">
+        					<tr>
+        						<td style="border-right: 1px solid #c7c7c7;width: 185px;">
+        							<div><a href="#" class="AttachmentIcon">Foto football group.png </a></div>
+        							<img src="/calendar/skin/DefaultSkin/webui/background/Image1.gif" class="Img" />
+        							<div class="Actions"> 435Kb <a href="#" class="IconHolder ViewAttachmentIcon"> View </a> <a href="#" class="IconHolder DownLoadAttachmentIcon"> Dowload </a></div>  
+										</td>
+										<%
+											CalendarEvent task = uicomponent.getEvent() ;		
+										%>
+        						<td >
+        							<div class="TaskDescription"><%=task.getSummary()%></div>
+        							<table class="UIGrid" id="RowContainerDay" cellspacing="0" borderspacing="0">
+			        					<tr>
+			        						<td class="Text">Status:              </td>
+			        						<td class="Text"><%=task.getEventState()%></td>
+			        					</tr>	
+			        					<tr>
+			        						<td class="Text">Priority:     </td>
+			        						<td class="Text"><%=task.getPriority()%></td>
+			        					</tr>	
+			        					<tr>
+			        						<td class="Text">Start Date:    </td>
+			        						<td class="Text"><%=task.getFromDateTime().toString()%></td>
+			        					</tr>	
+			        					<tr>
+			        						<td class="Text">Due Date:  </td>
+			        						<td class="Text"><%=task.getToDateTime().toString()%></td>
+			        					</tr>	
+			        					<tr>
+			        						<td class="Text">Reminder:  </td>
+			        						<%	               	 
+					               	 	 for(reminder in task.getReminders()) {
+					               	 	 	 String reminderLink = uicomponent.event("ViewReminder", reminder.getId()) ;
+					               			 %>
+					               			 	<td class="Text">
+					               			 		<a href="$actionLink" class="ControlButton"><%=reminder.getReminder()%></a>
+					               			 	</td>
+					               			 <%		 		 
+					               	 	 }	               	 
+					               %>
+			        					</tr>	
+			        					<tr>
+			        						<td class="Text">Note:  </td>
+			        						<td class="Text"><%=task.getDescription()%></td>
+			        					</tr>	
+				        			</table>
+				        			<div class="ActionsContainer">
+												<a href="#" class="ControlButton">
+													<div class="IconHolder EditTaskIcon"> Edit Task </div>
+												</a>
+												<div class="SeparatorDotLine"><span></span></div>
+												<a href="#" class="ControlButton">
+													<div class="IconHolder DeleteTaskIcon"> Delete Task </div>
+												</a>
+												<div style="clear:left;"><span></span></div>
+				        			</div>
+										</td>
+        					</tr>							        					
+	        			</table>
+							</div>										
+						</div>
+					</div>
+					<div class="BottomLeftViewBoxStyle">
+						<div class="BottomRightViewBoxStyle">
+							<div class="BottomCenterViewBoxStyle"><span></span></div>										
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>

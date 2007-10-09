@@ -4,6 +4,11 @@
  **************************************************************************/
 package org.exoplatform.calendar.webui;
 
+import org.exoplatform.calendar.CalendarUtils;
+import org.exoplatform.calendar.service.EventPageList;
+import org.exoplatform.calendar.service.EventQuery;
+import org.exoplatform.calendar.webui.popup.UIAdvancedSearchForm;
+import org.exoplatform.calendar.webui.popup.UIPopupAction;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -45,11 +50,28 @@ public class UISearchForm extends UIForm {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
+      EventQuery eventQuery = new EventQuery() ;
+      eventQuery.setText(text) ;
+      EventPageList resultPageList = 
+        CalendarUtils.getCalendarService().searchEvent(CalendarUtils.getCurrentUser(), eventQuery) ;
+      UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
+      UICalendarViewContainer calendarViewContainer = 
+        calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
+      calendarViewContainer.setRenderedChild("UIListContainer") ;
+      UIListView uiListView = calendarViewContainer.findFirstComponentOfType(UIListView.class) ;
+      uiListView.update(resultPageList) ;
+      uiListView.setDisplaySearchResult(true) ;
+      uiListView.setShowEventAndTask(true) ;            
+      event.getRequestContext().addUIComponentToUpdateByAjax(calendarViewContainer) ;
     }
   }
   static  public class AdvancedSearchActionListener extends EventListener<UISearchForm> {
     public void execute(Event<UISearchForm> event) throws Exception {
       UISearchForm uiForm = event.getSource() ;
+      UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
+      UIPopupAction popupAction = calendarPortlet.getChild(UIPopupAction.class) ;
+      popupAction.activate(UIAdvancedSearchForm.class, 600) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   }
 }

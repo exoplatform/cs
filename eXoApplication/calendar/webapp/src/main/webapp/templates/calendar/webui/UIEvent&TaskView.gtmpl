@@ -1,24 +1,14 @@
 <%
-	uiform.begin()
-	boolean isShow = false ;
-	if(uicomponent.isDisplaySearchResult()) {
-		%><div class="Result">Search result</div><%
-	}else {
-		isShow = true ;
-		_ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");
-	}
+	uiform.begin()	
 %>
+	<div class="Result">Search result</div>
 	<div class="UIListView">
 		<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
   		<thead>
   			<tr>
-  			  <% if(isShow) {
-						%>
-							<th style="width: 30px;"><input type="checkbox" class="checkbox" title="Check all" value="4"/></th>
-						<%  							
-  				}%>
   			  <th style="width: 24px;"><div class="AttachmentIcon" title="Attachment of event"><span></span></div></th>
-  		    <th >Event</th>
+  				<th style="width: 24px;"></th>
+  		    <th >Summary</th>
  	      	<th >Start</th>
  	      	<th >End</th>
   	 	  </tr>
@@ -26,19 +16,19 @@
   	 	  <tbody>
   				<%
   					for(event in uicomponent.getEvents()){
-  				%>
+  					%>
   						<tr>
-  							<%if(isShow) {
-									%>
-										<td><%=uicomponent.renderField(uicomponent.getChildById(event.getId()))%></td>
-									<%  							
-  							}%>
+		  					<%
+		  						String classIcon = event.getEventType() + "Icon" ;
+		  						String actionLink = uicomponent.event("ViewDetail", event.getId()) ;		  						
+		  					%>
 		  					<td style="padding: 0px;"><div class="AttachmentIcon" ><span></span></div></td>
-		  					<td class="text">
-									<a href="<%=uicomponent.event("ViewDetail", event.getId())%>" class="ControlButton">
+								<td style="padding: 0px;"><div class="$classIcon" ><span></span></div></td>
+								<td class="text">
+									<a href="$actionLink" class="ControlButton">
 										<%=event.getSummary()%>
 									</a>	
-								</td>								
+								</td>
 								<td class="text"><%=event.getFromDateTime()%></td>
 								<td class="text"><%=event.getToDateTime()%></td>
 		   			  </tr>
@@ -49,4 +39,5 @@
 		</table>
 	</div>
 <div class="ResizeReadingPane"><span></span></div>
+
 <%uiform.end()%>

@@ -4,7 +4,6 @@
  **************************************************************************/
 package org.exoplatform.calendar.service;
 
-import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -18,8 +17,8 @@ import org.exoplatform.services.jcr.util.IdGenerator;
  * Jul 11, 2007  
  */
 public class CalendarEvent {
-  final public static String TYPE_EVENT = "event".intern() ;
-  final public static String TYPE_TASK = "task".intern() ;
+  final public static String TYPE_EVENT = "Event".intern() ;
+  final public static String TYPE_TASK = "Task".intern() ;
   final public static String TYPE_JOURNAL = "journal".intern() ;
   
   final public static String TENTATIVE = "tentative".intern() ;
@@ -29,6 +28,10 @@ public class CalendarEvent {
   final public static String NEEDS_ACTION = "needs-action".intern() ;
   final public static String COMPLETED = "completed".intern() ;
   final public static String IN_PROCESS = "in-process".intern() ;
+  
+  final public static String PRIORITY_LOW = "low".intern() ;
+  final public static String PRIORITY_NORMAL = "normal".intern() ;
+  final public static String PRIORITY_HIGHT = "hight".intern() ;
   
   final public static String DRAFT = "draft".intern() ;
   final public static String FINAL = "final".intern() ;
@@ -61,6 +64,7 @@ public class CalendarEvent {
   // value of eventType: event, task, journal(?)
   private String eventType ;
   private String priority ;
+  //values: LOW, NORMAL, HIGHT
   private boolean isPrivate = true ;
   private String eventState ;
   //status for event: TENTATIVE, CONFIRMED, CANCELLED. 

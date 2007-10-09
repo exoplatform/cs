@@ -12,6 +12,7 @@ import org.exoplatform.calendar.service.CalendarImportExport;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.EventCategory;
+import org.exoplatform.calendar.service.EventPageList;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.FeedData;
 import org.exoplatform.calendar.service.GroupCalendarData;
@@ -63,4 +64,5 @@ public interface DataStorage {
   public CalendarSetting getCalendarSetting(String username) throws Exception ;
   public void generateRss(String username, List<String> calendarIds, RssData rssData, CalendarImportExport importExport) throws Exception ;
   public List<FeedData> getFeeds(String username) throws Exception  ;
+  public EventPageList searchEvent(String username, EventQuery query)throws Exception ; 
 }

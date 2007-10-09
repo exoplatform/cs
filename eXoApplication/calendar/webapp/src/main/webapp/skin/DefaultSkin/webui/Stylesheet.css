@@ -950,6 +950,28 @@
 	border-right: 1px solid #c7c7c7;
 }
 
+.UIListView  .EventIcon {
+	width: 16px;
+	height: 16px;
+	margin: 4px;
+}
+
+.UIListView  .TaskIcon {
+	width: 16px;
+	height: 16px;
+	margin: 4px;
+}
+
+.UIListContainer .Result {
+	line-height: 23px;
+	text-align: center;
+	font-weight: bold;
+	background: url('background/TitleBarBG1x23.gif') repeat-x ;
+	border-left: 1px solid #cccccc;
+	border-right: 1px solid #cccccc;
+	margin-right: 5px;
+}
+
 .UIPreview {
 	padding: 1px;
 	background-color: #ffffff ;
@@ -1172,7 +1194,6 @@
 /*====================View Task List =====================*/
 
 .UITaskView .TaskListContainer {
-	height: 490px;
 	padding-right: 3px;
 	overflow: auto;
 }

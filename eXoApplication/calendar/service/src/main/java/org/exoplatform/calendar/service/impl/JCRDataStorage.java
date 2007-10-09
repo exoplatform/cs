@@ -26,6 +26,7 @@ import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarImportExport;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.EventCategory;
+import org.exoplatform.calendar.service.EventPageList;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.FeedData;
 import org.exoplatform.calendar.service.GroupCalendarData;
@@ -982,6 +983,31 @@ public class JCRDataStorage implements DataStorage{
     .append("/").append(username)
     .append(path) ;
     return url.toString();
+  }
+  
+  public EventPageList searchEvent(String username, EventQuery eventQuery)throws Exception {
+    List<CalendarEvent> events = new ArrayList<CalendarEvent>() ;
+    Query query ;
+    QueryManager qm ;
+    if(username != null && username.length() > 0) {
+      Node calendarHome = getCalendarHome(username) ;
+      eventQuery.setCalendarPath(calendarHome.getPath()) ;
+      qm = calendarHome.getSession().getWorkspace().getQueryManager() ;
+      query = qm.createQuery(eventQuery.getQueryStatement(), Query.XPATH) ;
+      NodeIterator it = query.execute().getNodes();
+      while(it.hasNext()) {
+        events.add(getEvent(it.nextNode())) ;
+      }
+    }
+    Node publicCalHome = getCalendarHome() ;
+    eventQuery.setCalendarPath(publicCalHome.getPath()) ;
+    qm = publicCalHome.getSession().getWorkspace().getQueryManager() ;
+    query = qm.createQuery(eventQuery.getQueryStatement(), Query.XPATH) ;
+    NodeIterator it = query.execute().getNodes();
+    while(it.hasNext()) {
+      events.add(getEvent(it.nextNode())) ;
+    }    
+    return new EventPageList(events, 10) ;    
   }
 }
 

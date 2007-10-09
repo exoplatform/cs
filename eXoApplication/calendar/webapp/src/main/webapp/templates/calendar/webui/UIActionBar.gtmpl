@@ -5,17 +5,17 @@
 				<div class="RightBar">
 					<div class="CenterBar">
 						<div class="Title ControlButton">Quick add:</div>
-						<a href="<%=uicomponent.event("QuickAddEvent","event")%>" class="ControlButton">
+						<a href="<%=uicomponent.event("QuickAddEvent","Event")%>" class="ControlButton">
 							<div class="IconHolder AddEventIcon">Event</div>
 						</a>
-						<a href="<%=uicomponent.event("QuickAddEvent","task")%>" class="ControlButton">
+						<a href="<%=uicomponent.event("QuickAddEvent","Task")%>" class="ControlButton">
 							<div class="IconHolder AddTaskIcon">Task</div>
 						</a>
 						<div class="SeparatorLine"><span></span></div>
 						<div class="Title ControlButton">Calendar View:</div>
 						<div class="SelectButton" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);" style="position: relative;">
 							<div class="IconHolder <%=uicomponent.getCurrentView()%>Icon">
-								<div class="DownArrow1Icon" ><%=uicomponent.getCurrentView()%></div>
+								<div class="DownArrow1Icon" ><%=_ctx.appRes("UIActionBar.label." + uicomponent.getCurrentView())%></div>
 							</div>
 							<% /*Begin Popup Menu*/ %>
 							<!--<div style="position: relative;">-->
@@ -33,10 +33,11 @@
 			              				if(!viewType.equals(uicomponent.getCurrentView())) {
 			              				icon = viewType + "Icon" ;
 			              				actionLink = uicomponent.event("ChangeView", viewType) ;
+			              				String label = _ctx.appRes("UIActionBar.label." + viewType) ;
 			              			%>
 														<a class="MenuItem" href="$actionLink">   
 					                    <div class="ItemIcon $icon ">
-					                      $viewType
+					                      $label
 					                    </div>
 				                    </a>
 			                    <%}}%>
@@ -55,7 +56,7 @@
 		      		<% /*End Popup Menu*/ %>
 						</div>
 						<div class="SeparatorLine"><span></span></div>
-						<a href="<%=uicomponent.event("AddTasks")%>" class="ControlButton">
+						<a href="<%=uicomponent.event("TaskView", "UIListContainer")%>" class="ControlButton">
 							<div class="IconHolder TaskIcon"> Tasks </div>
 						</a>
 						<div class="SeparatorLine"><span></span></div>

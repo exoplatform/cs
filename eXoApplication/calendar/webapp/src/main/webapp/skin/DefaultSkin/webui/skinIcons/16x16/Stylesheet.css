@@ -22,6 +22,10 @@
 	background: url('icons/TaskIcon.gif') no-repeat;
 }
 
+.EventIcon {
+	background: url('icons/TodayIcon.gif') no-repeat;
+}
+
 .TodayIcon {
 	background: url('icons/TodayIcon.gif') no-repeat;
 }

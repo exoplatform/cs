@@ -251,6 +251,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
         } else {
           calEvent.setEventType(CalendarEvent.TYPE_TASK) ;
         }
+        
         calEvent.setEventCategoryId(uiForm.getEventCategory());
         calEvent.setFromDateTime(fromDate);
         calEvent.setToDateTime(toDate) ;

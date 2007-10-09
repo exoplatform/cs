@@ -1,0 +1,101 @@
+
+<div class="UIPreview" id="<%=uicomponent.getId()%>">
+	<div class="ViewBar">
+	  <div class="Label">Detail</div> 
+	  <div class="MaximizeButton" title="View full - size event"><span></span></div>
+	  <div style="clear: both"><span></span></div>
+	</div>
+	<div class="ViewContainer">
+	 <div class="DecoratorBox">
+	  <div class="ViewBoxStyle">
+	   <div class="TopLeftViewBoxStyle">
+	    <div class="TopRightViewBoxStyle">
+	     <div class="TopCenterViewBoxStyle"><span></span></div>          
+	    </div>
+	   </div>
+	   <div class="MiddleLeftViewBoxStyle">
+	    <div class="MiddleRightViewBoxStyle">
+	     <div class="MiddleCenterViewBoxStyle">
+	      <table class="UIGrid" id="RowContainerDay" cellspacing="0" borderspacing="0">
+	       <tr>
+	        <td style="border-right: 1px solid #c7c7c7;width: 185px;">
+	         <div class="Text">From: <span style="color: #1756d5;"></span> </div>
+	         <div class="Text">To:   <span style="color: #1756d5;"></span> </div>
+	         <div><a href="#" class="AttachmentIcon">Foto football group.png </a></div>
+	         <img src="/calendar/skin/DefaultSkin/webui/background/Image1.gif" class="Img" />
+	         <div class="Actions"> 435Kb <a href="#" class="IconHolder ViewAttachmentIcon"> View </a> <a href="#" class="IconHolder DownLoadAttachmentIcon"> Dowload </a></div> 
+	        </td>
+	            <td >
+	             <div class="EventDescription"></div>
+	             <table class="UIGrid" id="RowContainerDay" cellspacing="0" borderspacing="0">
+	              <tr>
+	               <td style="width: 26px;"></td>
+	               <td class="Text" style="width: 100px;">Place:</td>
+	               <td class="Text"></td>
+	              </tr> 
+	              <tr>
+	               <td ></td>
+	               <td class="Text">Repeat Event:         </td>
+	               <td class="Text"></td>
+	              </tr> 
+	              <tr>
+	               <td ></td>
+	               <td class="Text">Description:            </td>
+	               <td class="Text"></td>
+	              </tr> 
+	              <tr>
+	               <td ></td>
+	               <td class="Text">Event Reminder:      </td>
+	               <td class="Text"></td>
+	               
+	              </tr> 	              
+	              <tr>
+	               <td ></td>
+	               <td class="Text">Event Sharing:        </td>
+	               <td class="Text"></td>
+	              </tr> 
+	              <tr>
+	               <td ></td>
+	               <td class="Text">Show this event as:  </td>
+	               <td class="Text"></td>
+	              </tr> 
+	              <tr>
+	               <td ></td>
+	               <td class="Text">Invitation:   </td>
+	               <td class="Text"></td>
+	              </tr>                    
+	              <tr>
+	               <td ></td>
+	               <td class="Text">Participant:   </td>
+	               <td class="Text"></td>
+	              </tr>
+	             </table>
+	             <div class="ActionsContainer">
+	              <a href="#" class="ControlButton">
+	           <div class="IconHolder ViewOnCalendar"> View On Calendar </div>
+	          </a>
+	          <div class="SeparatorDotLine"><span></span></div>
+	          <a href="#" class="ControlButton">
+	           <div class="IconHolder EditEventIcon"> Edit event </div>
+	          </a>
+	          <div class="SeparatorDotLine"><span></span></div>
+	          <a href="#" class="ControlButton">
+	           <div class="IconHolder DeleteEventIcon"> Delete event </div>
+	          </a>
+	          <div style="clear:left;"><span></span></div>
+	             </div>
+	        </td>
+	       </tr>                    
+	      </table>
+	   	</div>          
+	    </div>
+	   </div>
+	   <div class="BottomLeftViewBoxStyle">
+	    <div class="BottomRightViewBoxStyle">
+	     <div class="BottomCenterViewBoxStyle"><span></span></div>          
+	    </div>
+	   </div>
+	  </div>
+	 </div>
+	</div>
+</div>

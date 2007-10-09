@@ -81,7 +81,7 @@ public abstract class UICalendarView extends UIForm {
 
   final public static String CALENDARID = "calendarId".intern() ;
   protected Calendar calendar_ = null ;
-  protected boolean isShowEvent_ = true;
+  public boolean isShowEvent_ = true;
   private boolean isShowWorkingTime_ = false ;
   protected int startTime_ = 0 ;
   protected int endTime_ = 24 ;
@@ -97,14 +97,15 @@ public abstract class UICalendarView extends UIForm {
   public abstract void refresh()throws Exception  ;
 
   public UICalendarView() throws Exception{
-    CalendarService calendarService = CalendarUtils.getCalendarService() ;
+    /*CalendarService calendarService = CalendarUtils.getCalendarService() ;
     List<EventCategory> eventCategories = calendarService.getEventCategories(Util.getPortalRequestContext().getRemoteUser()) ;
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     options.add(new SelectItemOption<String>("all", "")) ;
     for(EventCategory category : eventCategories) {
       options.add(new SelectItemOption<String>(category.getName(), category.getName())) ;
     }
-    addUIFormInput(new UIFormSelectBox(EVENT_CATEGORIES, EVENT_CATEGORIES, options)) ;
+    addUIFormInput(new UIFormSelectBox(EVENT_CATEGORIES, EVENT_CATEGORIES, options)) ;*/
+    initCategories() ;
 
     calendar_ = Calendar.getInstance() ;
     calendar_.setLenient(false) ;
@@ -119,6 +120,17 @@ public abstract class UICalendarView extends UIForm {
       j++ ;
     }
   }
+  public void initCategories() throws Exception {
+    CalendarService calendarService = CalendarUtils.getCalendarService() ;
+    List<EventCategory> eventCategories = calendarService.getEventCategories(Util.getPortalRequestContext().getRemoteUser()) ;
+    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
+    options.add(new SelectItemOption<String>("all", "")) ;
+    for(EventCategory category : eventCategories) {
+      options.add(new SelectItemOption<String>(category.getName(), category.getName())) ;
+    }
+    addUIFormInput(new UIFormSelectBox(EVENT_CATEGORIES, EVENT_CATEGORIES, options)) ;
+  }
+  
   protected String[] getMonthsName() { 
     return MONTHS ;
   }

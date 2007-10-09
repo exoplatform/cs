@@ -18,6 +18,7 @@ import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.EventCategory;
+import org.exoplatform.calendar.service.EventPageList;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.FeedData;
 import org.exoplatform.calendar.service.GroupCalendarData;
@@ -169,8 +170,13 @@ public class CalendarServiceImpl implements CalendarService{
   public Node getRssHome(String username) throws Exception {
     return storage_.getRssHome(username) ;
   }
+  
+  public EventPageList searchEvent(String username, EventQuery query)throws Exception {
+    return storage_.searchEvent(username, query) ;
+  }
 
   public EventCategory getEventCategory(String username, String eventCategoryId) throws Exception {
     return storage_.getEventCategory(username, eventCategoryId) ;
   }
+
 }

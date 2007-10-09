@@ -14,6 +14,7 @@ import java.util.Locale;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.webui.UIMonthView;
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.impl.GroupImpl;
 import org.exoplatform.webui.core.model.SelectItemOption;
@@ -82,5 +83,9 @@ public class CalendarUtils {
       time ++ ;
     }
     return times ;
+  }
+  
+  static public String getCurrentUser() throws Exception {
+    return Util.getPortalRequestContext().getRemoteUser() ; 
   }
 }
