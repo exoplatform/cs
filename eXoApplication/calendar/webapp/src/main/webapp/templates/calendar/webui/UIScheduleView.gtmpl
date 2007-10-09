@@ -7,7 +7,7 @@
 		<table class="UIGrid" id="RowContainerDay" cellspacing="0" borderspacing="0">
 			<thead>
 				<tr>
-					<th style="width: 55px; border-left: 1px solid #c7c7c7;"></th>
+					<th style="width: 54px; border-left: 1px solid #c7c7c7;"></th>
 					<th style="width: 46px">All</th>
 					<th >Work</th>
 					<th >Meeting</th>
@@ -17,7 +17,7 @@
 			</thead>
 			<tbody >
 				<tr>
-					<td ><div  style="width: 55px;"><span></span></div></td>
+					<td ><div  style="width: 54px;"><span></span></div></td>
 					<td class="EventAllday">&nbsp</td>
 					<td class="EventAllday">&nbsp</td>
 					<td class="EventAllday">

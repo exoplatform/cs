@@ -107,8 +107,7 @@
 
 .UICalendarPortlet .CalendarWorkingWorkspace .SelectButton {
 	float: left;
-	line-height: 18px;
-	margin-top: 3px;
+	line-height: 20px;
 }
 
 
@@ -169,11 +168,10 @@
 }
 
 .UICalendarPortlet .CalendarWorkingWorkspace .UIActionBar .DownArrow1Icon {
-	line-height: 18px;
-	background-position: right;
+	line-height: 23px;
 	padding-right: 16px; 
 	cursor: pointer;
-	margin-top: -1px;
+	*width: 50px;
 }
 
 /*==================Calendar Working Container===================*/

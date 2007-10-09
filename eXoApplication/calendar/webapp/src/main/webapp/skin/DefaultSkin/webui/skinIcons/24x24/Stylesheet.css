@@ -102,7 +102,7 @@
 }
 
 .AddNewEventIcon {
-	background: url('icons/AddNewEventIcon.gif') no-repeat;
+	background: url('icons/AddNewEvent.gif') no-repeat;
 }
 
 .SendToFriend {
@@ -120,6 +120,15 @@
 .AddNewTask {
 	background: url('icons/AddNewTask.gif') no-repeat;
 }
+
+.QuickAddEvent {
+	background: url('icons/AddNewEvent.gif') no-repeat;
+}
+
+.QuickAddTask {
+	background: url('icons/AddNewTask.gif') no-repeat;
+}
+
 
 
 
