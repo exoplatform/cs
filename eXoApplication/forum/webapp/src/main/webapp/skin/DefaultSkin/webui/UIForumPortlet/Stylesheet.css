@@ -230,6 +230,7 @@
 .UIForumPortlet .ContentContainer .ForumTitle {
 	font-weight: bold;
 	padding-bottom: 4px;
+	color: #204AA0;
 }
 
 .UIForumPortlet .ContentContainer .LastPostTitle {
