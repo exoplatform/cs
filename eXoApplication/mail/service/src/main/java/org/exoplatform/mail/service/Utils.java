@@ -120,6 +120,11 @@ public class Utils {
   public static final long PRIORITY_NORMAL = 3 ;
   public static final long PRIORITY_LOW = 5 ;
   
+  public static final String TAG_RED = "Red".intern() ;
+  public static final String TAG_BLUE = "Blue".intern() ;
+  public static final String TAG_GREEN = "Green".intern() ;
+  public static final String[] TAG_COLOR = {TAG_RED, TAG_BLUE, TAG_GREEN};
+  
   public static boolean isEmptyField(String value) {
     return value == null || value.trim().length() == 0 ;
   }
