@@ -518,11 +518,11 @@ public class JCRDataStorage implements DataStorage{
   public void removeEventCategory(String username, String eventCategoryName) throws Exception {
     Node eventCategoryHome = getEventCategoryHome(username) ;
     if(eventCategoryHome.hasNode(eventCategoryName)) {
-      for(CalendarEvent ce : getUserEventByCategory(username, eventCategoryName)) {
-        ce.setEventCategoryId(null) ;
-        saveUserEvent(username, ce.getCalendarId(), ce, false) ;
-      }
       Node eventCategoryNode = eventCategoryHome.getNode(eventCategoryName) ;
+      for(CalendarEvent ce : getUserEventByCategory(username, eventCategoryName)) {
+        System.out.println("\n\n remove me " +ce.getSummary());
+        removeUserEvent(username, ce.getCalendarId(), ce.getId()) ;
+      }
       eventCategoryNode.remove() ;
       eventCategoryHome.save() ;
       eventCategoryHome.getSession().save() ;
@@ -574,7 +574,7 @@ public class JCRDataStorage implements DataStorage{
   public List<CalendarEvent> getUserEventByCategory(String username, String eventCategoryId) throws Exception {
     Node calendarHome = getCalendarHome(username) ;
     QueryManager qm = calendarHome.getSession().getWorkspace().getQueryManager();
-    List<CalendarEvent> calendares = new ArrayList<CalendarEvent> () ;
+    List<CalendarEvent> events = new ArrayList<CalendarEvent> () ;
     NodeIterator calIter = calendarHome.getNodes() ;
     Query query ;
     QueryResult result ;
@@ -587,10 +587,10 @@ public class JCRDataStorage implements DataStorage{
       result = query.execute();
       NodeIterator it = result.getNodes();
       while(it.hasNext()){
-        calendares.add(getEvent(it.nextNode())) ;
+        events.add(getEvent(it.nextNode())) ;
       }
     }
-    return calendares;
+    return events;
   }
   public List<CalendarEvent> getUserEvents(String username, EventQuery eventQuery) throws Exception {
     Node calendarHome = getCalendarHome(username) ;
