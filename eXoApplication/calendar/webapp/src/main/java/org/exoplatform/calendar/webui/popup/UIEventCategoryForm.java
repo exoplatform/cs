@@ -99,8 +99,7 @@ public class UIEventCategoryForm extends UIForm {
         UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
         UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
         UICalendarViewContainer uiViewContainer = calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
-        UICalendarView uiCalendarView = (UICalendarView)uiViewContainer.getRenderedChild() ;
-        uiCalendarView.update() ;
+        uiViewContainer.refresh() ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiViewContainer) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
         if(uiPopupContainer != null) {

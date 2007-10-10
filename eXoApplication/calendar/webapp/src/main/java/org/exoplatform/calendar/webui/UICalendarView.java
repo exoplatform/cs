@@ -39,7 +39,7 @@ import org.exoplatform.webui.form.UIFormSelectBox;
  * Aus 01, 2007 2:48:18 PM 
  */
 
-public abstract class UICalendarView extends UIForm {
+public abstract class UICalendarView extends UIForm  implements CalendarView {
   final static protected String EVENT_CATEGORIES = "eventCategories".intern() ;
 
   final public static String JANUARY = "January".intern() ;
@@ -95,8 +95,6 @@ public abstract class UICalendarView extends UIForm {
   private Map<Integer, String> daysMap_ = new HashMap<Integer, String>() ;
   private Map<Integer, String> monthsMap_ = new HashMap<Integer, String>() ;
 
-  public abstract void refresh()throws Exception  ;
-
   public UICalendarView() throws Exception{
     /*CalendarService calendarService = CalendarUtils.getCalendarService() ;
     List<EventCategory> eventCategories = calendarService.getEventCategories(Util.getPortalRequestContext().getRemoteUser()) ;
@@ -121,6 +119,7 @@ public abstract class UICalendarView extends UIForm {
       j++ ;
     }
   }
+  public void refresh() throws Exception {} ;
   public void initCategories() throws Exception {
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     List<EventCategory> eventCategories = calendarService.getEventCategories(Util.getPortalRequestContext().getRemoteUser()) ;

@@ -45,9 +45,9 @@ public class UICalendarViewContainer extends UIContainer  {
 
   public void refresh() throws Exception {
     for(UIComponent comp : getChildren()) {
-      if(comp.isRendered() && comp instanceof UICalendarView){
-        ((UICalendarView)comp).update() ;
-        ((UICalendarView)comp).refresh() ;
+      if(comp.isRendered() && comp instanceof CalendarView){
+        ((CalendarView)comp).update() ;
+        ((CalendarView)comp).refresh() ;
       }
     }
   }

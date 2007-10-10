@@ -280,6 +280,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
         UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class) ;
         uiPopupAction.deActivate() ;
         UIPopupContainer uiPouContainer  = uiPopupAction.activate(UIPopupContainer.class, 700) ;
+        uiPouContainer.setId(UIPopupContainer.UIEVENTPOPUP) ;
         UIEventForm uiEventForm = uiPouContainer.addChild(UIEventForm.class, null, null) ;
         uiEventForm.setEventSumary(uiForm.getEventSummary()) ;
         uiEventForm.setEventDescription(uiForm.getEventDescription()) ;
@@ -288,7 +289,17 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
         uiEventForm.setEventAllDate(uiForm.getIsAllDay()) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
       } else {
-        System.out.println("\n\n add detail task here");
+        UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class) ;
+        uiPopupAction.deActivate() ;
+        UIPopupContainer uiPouContainer  = uiPopupAction.activate(UIPopupContainer.class, 700) ;
+        uiPouContainer.setId(UIPopupContainer.UITASKPOPUP) ;
+        UITaskForm uiTaskForm = uiPouContainer.addChild(UITaskForm.class, null, null) ;
+        uiTaskForm.setEventSumary(uiForm.getEventSummary()) ;
+        uiTaskForm.setEventDescription(uiForm.getEventDescription()) ;
+        uiTaskForm.setEventFromDate(uiForm.getEventFromDate()) ;
+        uiTaskForm.setEventToDate(uiForm.getEventToDate()) ;
+        uiTaskForm.setEventAllDate(uiForm.getIsAllDay()) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
       }
     }
   }

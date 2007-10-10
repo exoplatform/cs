@@ -4,12 +4,16 @@
  **************************************************************************/
 package org.exoplatform.calendar.webui;
 
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarEvent;
+import org.exoplatform.calendar.service.CalendarService;
+import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.JCRPageList;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
@@ -39,13 +43,31 @@ public class UIListView extends UICalendarView {
   private Map<String, CalendarEvent> eventMap_ = new HashMap<String, CalendarEvent>() ;
   private JCRPageList pageList_ = null ;
   private String selectedEvent_ = null ;
-  private boolean isShowEventAndTask = false ;
+  private boolean isShowEventAndTask = true ;
   private boolean isSearchResult = false ;
   public UIListView() throws Exception{
     super() ;
   } 
 
-  public void refresh() {}
+  public void refresh() throws Exception{
+    CalendarService calendarService = getApplicationComponent(CalendarService.class) ;
+    String username = Util.getPortalRequestContext().getRemoteUser() ;
+    EventQuery eventQuery = new EventQuery() ;
+    java.util.Calendar fromcalendar = new GregorianCalendar( getCurrentYear(),  getCurrentMonth(),  getCurrentDay()) ;
+    fromcalendar.set(java.util.Calendar.HOUR, 0) ;
+    fromcalendar.set(java.util.Calendar.MINUTE, 0) ;
+    fromcalendar.set(java.util.Calendar.MILLISECOND, 0) ;
+    eventQuery.setFromDate(fromcalendar) ;
+    java.util.Calendar tocalendar = new GregorianCalendar(getCurrentYear(), getCurrentMonth(), getCurrentDay()) ;
+    tocalendar.set(java.util.Calendar.HOUR, tocalendar.getActualMaximum(java.util.Calendar.HOUR)) ;
+    tocalendar.set(java.util.Calendar.MINUTE, tocalendar.getActualMaximum(java.util.Calendar.MINUTE)) ;
+    tocalendar.set(java.util.Calendar.MILLISECOND, tocalendar.getActualMaximum(java.util.Calendar.MILLISECOND)) ;
+    eventQuery.setToDate(tocalendar) ;
+     update(calendarService.searchEvent(username, eventQuery)) ; 
+    /*uiListView.setShowEventAndTask(false) ;
+    uiListView.setDisplaySearchResult(false) ;
+    uiListView.isShowEvent_ = false ;*/
+  }
   
   public void update(JCRPageList pageList) throws Exception {
     pageList_ = pageList ;
