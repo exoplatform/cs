@@ -65,4 +65,26 @@ UIContactPortlet.prototype.tagCallback = function(evt) {
 	var tagName = src.getAttribute("tagName") ;
 	eXo.webui.UIContextMenu.changeAction(UIContextMenu.menuElement, tagName) ;
 } ;
+UIContactPortlet.prototype.printpreview = function (obj){
+	var DOMUtil = eXo.core.DOMUtil ;
+	var UIPortalApplication = document.getElementById("UIPortalApplication") ;
+	var UIContactPreview = DOMUtil.findAncestorByClass(obj, "UIContactPreview") ;
+	var div = document.createElement("div") ;
+	
+	div.className = "UIContactPortlet" ;
+	div.appendChild(UIContactPreview.cloneNode(true)) ;
+	UIPortalApplication.style.display = "none" ;
+	var bg = document.body.style.background ;
+	document.body.style.background = "transparent" ;
+	document.body.appendChild(div) ;
+	var button = DOMUtil.findDescendantsByClass(div, "a", "ActionButton") ;
+	button[0].onclick = function(){
+		document.body.removeChild(div) ;
+		UIPortalApplication.style.display = "block" ;
+		document.body.style.background = bg ;
+	}
+	button[1].onclick = function(){
+		window.print() ;
+	}
+}
 eXo.contact.UIContactPortlet = new UIContactPortlet() ;

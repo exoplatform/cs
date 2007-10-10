@@ -1,8 +1,15 @@
 <% 
+	def rcontext = _ctx.getRequestContext() ;
+  rcontext.getJavascriptManager().importJavascript('eXo.contact.UIContactPortlet');
 	import org.exoplatform.contact.service.Contact;
 	uiform.begin()
 %>
-<div class="UIContactPreview" >
+<div class="UIContactPreview">
+<style type="text/css" media="print">
+.UIAction {
+	display: none ;
+}
+</style>
 	<div class="ContactPreviewDetails">
 <!--  Start DecoratorBox ViewBoxStyle -->
 		<div class="DecoratorBox">
@@ -266,7 +273,16 @@
                   </div>
                 </div>
            		</a>
-          		<%}%>        
+          		<%}%> 
+          		<a href="#" onclick="javascript:eXo.contact.UIContactPortlet.printpreview(this) ;" class="ActionButton LightBlueStyle">
+                <div class="ButtonLeft">
+                  <div class="ButtonRight">
+                    <div class="ButtonMiddle">
+                      Print
+                    </div>
+                  </div>
+                </div>
+           		</a>       
           	</td>
           </tr>  
         </table>
