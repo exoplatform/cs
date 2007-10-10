@@ -11,12 +11,16 @@ import org.exoplatform.container.PortalContainer;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Tag;
 import org.exoplatform.mail.webui.popup.UIMailSettings;
+import org.exoplatform.mail.webui.popup.UIPopupAction;
+import org.exoplatform.mail.webui.popup.UIRenameFolderForm;
 import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.mail.webui.popup.UIRenameTagForm;
+import org.hibernate.dialect.Sybase11Dialect;
 
 /**
  * Created by The eXo Platform SARL
@@ -30,7 +34,7 @@ import org.exoplatform.webui.event.EventListener;
     events = {
         @EventConfig(listeners = UITagContainer.ChangeTagActionListener.class),
         @EventConfig(listeners = UITagContainer.RenameTagActionListener.class),
-        @EventConfig(listeners = UITagContainer.RemoveTagActionListener.class),
+        @EventConfig(listeners = UITagContainer.RemoveTagActionListener.class,confirm="UITagContainer.msg.confirm-remove-tag"),
         @EventConfig(listeners = UITagContainer.EmptyTagActionListener.class)
     }
 )
@@ -68,18 +72,17 @@ public class UITagContainer extends UIComponent {
   
   static public class RenameTagActionListener extends EventListener<UITagContainer> {
     public void execute(Event<UITagContainer> event) throws Exception {
-      String tagId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      UITagContainer uiTag = event.getSource();  
-      System.out.println("============>>>> Rename Tag Action Listener");
-      UIMailPortlet uiPortlet = uiTag.getAncestorOfType(UIMailPortlet.class);
-      MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
-      String username = uiPortlet.getCurrentUser();
-      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-      List<Tag> tagList = mailSrv.getTags(username, accountId);
-      for (Tag tag : tagList) {
-        if (tag.getId().equals(tagId)) mailSrv.updateTag(username, accountId, tag);
-      }
+      String tagId = event.getRequestContext().getRequestParameter(OBJECTID) ;      
+      
+      UITagContainer uiTag = event.getSource() ;
+      UIPopupAction uiPopup = uiTag.getAncestorOfType(UIMailPortlet.class).getChild(UIPopupAction.class) ;
+      UIRenameTagForm uiRenameTagForm = uiPopup.activate(UIRenameTagForm.class, 450) ;
+      uiRenameTagForm.setTag(tagId);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiTag.getAncestorOfType(UIMailPortlet.class)) ;
+    
       event.getRequestContext().addUIComponentToUpdateByAjax(uiTag);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiTag.getAncestorOfType(UIMailPortlet.class)) ;
+      
     }
   }
   
