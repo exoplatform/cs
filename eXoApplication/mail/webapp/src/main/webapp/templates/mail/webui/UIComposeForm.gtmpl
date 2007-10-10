@@ -65,19 +65,19 @@
 																<%
 																  String lowPriorityLink = uicomponent.event("ChangePriority", String.valueOf(Utils.PRIORITY_LOW));
 																  String lowCssClass = "";
-                                  if (uicomponent.getPriority().equals(Utils.PRIORITY_LOW)) lowCssClass = "CheckItem";
+                                  if (uicomponent.getPriority() == Utils.PRIORITY_LOW) lowCssClass = "CheckItem";
 																%>
 						                    <a class="MenuItem" href="$lowPriorityLink"> <div class="ItemIcon $lowCssClass"> Low priority </div> </a>
 						                    <%  
 						                      String normalPriorityLink = uicomponent.event("ChangePriority", String.valueOf(Utils.PRIORITY_NORMAL));
 						                      String normalCssClass = "";
-						                      if (uicomponent.getPriority().equals(Utils.PRIORITY_NORMAL)) normalCssClass = "CheckItem";
+						                      if (uicomponent.getPriority() == Utils.PRIORITY_NORMAL) normalCssClass = "CheckItem";
 						                    %>
 						                    <a class="MenuItem" href="$normalPriorityLink"> <div class="ItemIcon $normalCssClass">Normal priority </div> </a>
 						                    <%  
 						                      String highPriorityLink = uicomponent.event("ChangePriority", String.valueOf(Utils.PRIORITY_HIGH)); 
 						                      String highCssClass = "";
-						                      if (uicomponent.getPriority().equals(Utils.PRIORITY_HIGH)) highCssClass = "CheckItem";
+						                      if (uicomponent.getPriority() == Utils.PRIORITY_HIGH) highCssClass = "CheckItem";
 						                    %>
 						                    <a class="MenuItem" href="$highPriorityLink"> <div class="ItemIcon $highCssClass"> High priority </div> </a>
 															</div>

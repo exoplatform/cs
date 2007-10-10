@@ -76,7 +76,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
   final static public String ACT_REMOVE = "remove" ;
   private List<Attachment> attachments_ = new ArrayList<Attachment>() ;
   private Message message_ = null;
-  private long priority_ = Utils.PRIORITY_NORMAL;
+  private long priority_ = 3;
 
   public List<Contact> ToContacts = new ArrayList<Contact>();
   public List<Contact> CcContacts = new ArrayList<Contact>();
@@ -128,6 +128,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
 
     addUIFormInput(inputSet) ;
     addUIFormInput(new UIFormTextAreaInput(FIELD_MESSAGECONTENT, null, null)) ;
+    setPriority(Utils.PRIORITY_NORMAL);
   }
 
   public List<ActionData> getUploadFileList() { 

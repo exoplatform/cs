@@ -37,26 +37,27 @@ import org.exoplatform.webui.form.UIFormTextAreaInput;
     lifecycle = UIFormLifecycle.class,
     template = "system:/groovy/webui/form/UIForm.gtmpl",
     events = {
-      @EventConfig(listeners = UIRenameTagForm.SaveActionListener.class), 
-      @EventConfig(listeners = UIRenameTagForm.CancelActionListener.class)
+      @EventConfig(listeners = UIEditTagForm.SaveActionListener.class), 
+      @EventConfig(listeners = UIEditTagForm.CancelActionListener.class)
     }
 )
-public class UIRenameTagForm extends UIForm implements UIPopupComponent {
+public class UIEditTagForm extends UIForm implements UIPopupComponent {
 
   final public static String NEW_TAG_NAME = "newTagName" ;
   final public static String DESCRIPTION = "description" ;
   final public static String COLOR = "color" ;
   
   private String tagId;
-  public UIRenameTagForm() {       
+  public UIEditTagForm() {       
     addUIFormInput(new UIFormStringInput(NEW_TAG_NAME, NEW_TAG_NAME, null)) ;
     List<SelectItemOption<String>> tagColors = new ArrayList<SelectItemOption<String>>();
     for (String color : Utils.TAG_COLOR) {
       tagColors.add(new SelectItemOption<String>(color, color));
     }
     UIFormSelectBox selectColor = new UIFormSelectBox(COLOR, COLOR, tagColors);
-    addUIFormInput(new UIFormTextAreaInput(DESCRIPTION,DESCRIPTION,null)) ;    
+    
     addUIFormInput(selectColor);
+    addUIFormInput(new UIFormTextAreaInput(DESCRIPTION,DESCRIPTION,null)) ;    
   }
   
   public String getTagId() throws Exception { return tagId; }
@@ -83,10 +84,10 @@ public class UIRenameTagForm extends UIForm implements UIPopupComponent {
   public void activate() throws Exception {}
   public void deActivate() throws Exception{}
  
-  static  public class SaveActionListener extends EventListener<UIRenameTagForm> {
-    public void execute(Event<UIRenameTagForm> event) throws Exception {
+  static  public class SaveActionListener extends EventListener<UIEditTagForm> {
+    public void execute(Event<UIEditTagForm> event) throws Exception {
       System.out.println("SaveActionListener() ");
-      UIRenameTagForm uiRenameTagForm  = event.getSource() ;
+      UIEditTagForm uiRenameTagForm  = event.getSource() ;
       UIMailPortlet uiMailPortlet = uiRenameTagForm.getAncestorOfType(UIMailPortlet.class);
       MailService mailService = uiRenameTagForm.getApplicationComponent(MailService.class) ;
 
@@ -134,9 +135,9 @@ public class UIRenameTagForm extends UIForm implements UIPopupComponent {
     }
   }
   
-  static  public class CancelActionListener extends EventListener<UIRenameTagForm> {
-    public void execute(Event<UIRenameTagForm> event) throws Exception {
-      UIRenameTagForm uiForm = event.getSource() ;
+  static  public class CancelActionListener extends EventListener<UIEditTagForm> {
+    public void execute(Event<UIEditTagForm> event) throws Exception {
+      UIEditTagForm uiForm = event.getSource() ;
       uiForm.getAncestorOfType(UIPopupAction.class).deActivate() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
     }
