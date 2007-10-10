@@ -70,13 +70,6 @@ public class Forum {
   public Date getModifiedDate(){return modifiedDate;}
   public void setModifiedDate(Date modifiedDate){this.modifiedDate = modifiedDate;}
   
-//  public String getLastPostBy(){return lastPostBy;}
-//  public void setLastPostBy(String lastPostBy){this.lastPostBy = lastPostBy;}
-//  
-//  public Date getLastPostDate(){return lastPostDate;}
-//  public void setLastPostDate(Date lastPostDate){this.lastPostDate = lastPostDate;}
-  
-  
   public String getLastTopicPath(){return lastTopicPath;}
   public void setLastTopicPath(String lastTopicPath){this.lastTopicPath = lastTopicPath;}
   

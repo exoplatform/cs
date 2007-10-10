@@ -294,7 +294,7 @@ public class JCRDataStorage implements DataStorage {
     Topic topicNew = new Topic() ;    
     if(topicNode.hasProperty("exo:id")) topicNew.setId(topicNode.getProperty("exo:id").getString()) ;
     if(topicNode.hasProperty("exo:owner")) topicNew.setOwner(topicNode.getProperty("exo:owner").getString()) ;
-    if(topicNode.hasProperty("exo:path")) topicNew.setPath(topicNode.getProperty("exo:path").getString()) ;
+    if(topicNode.hasProperty("exo:path")) topicNew.setPath(topicNode.getPath()) ;
     if(topicNode.hasProperty("exo:name")) topicNew.setTopicName(topicNode.getProperty("exo:name").getString()) ;
     if(topicNode.hasProperty("exo:createdDate")) topicNew.setCreatedDate(topicNode.getProperty("exo:createdDate").getDate().getTime()) ;
     if(topicNode.hasProperty("exo:modifiedBy")) topicNew.setModifiedBy(topicNode.getProperty("exo:modifiedBy").getString()) ;
@@ -425,6 +425,8 @@ public class JCRDataStorage implements DataStorage {
     String newTopicPath = destForumPath + "/" + topicId;
     forumHomeNode.getSession().getWorkspace().move(topicPath, newTopicPath) ;
     Node topicNode = (Node)getJCRSession().getItem(newTopicPath) ;
+    Node forumNode = (Node)getJCRSession().getItem(destForumPath) ;
+    forumNode.setProperty("exo:topicCount", Integer.valueOf(forumNode.getProperty("exo:topicCount").getString()) + 1) ;
     topicNode.setProperty("exo:path", newTopicPath) ;
     forumHomeNode.save() ;
   	forumHomeNode.getSession().save() ;

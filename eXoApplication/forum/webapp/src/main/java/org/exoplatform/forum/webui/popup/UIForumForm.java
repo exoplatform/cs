@@ -15,9 +15,7 @@ import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.webui.EmptyNameValidator;
 import org.exoplatform.forum.webui.UICategories;
 import org.exoplatform.forum.webui.UICategory;
-import org.exoplatform.forum.webui.UICategoryContainer;
 import org.exoplatform.forum.webui.UIForumPortlet;
-import org.exoplatform.forum.webui.UITopicContainer;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -48,7 +46,7 @@ import org.exoplatform.webui.form.validator.PositiveNumberFormatValidator;
       @EventConfig(listeners = UIForumForm.CancelActionListener.class, phase=Phase.DECODE)
     }
 )
-public class UIForumForm extends UIForm implements UIPopupComponent{
+public class UIForumForm extends UIForm implements UIPopupComponent {
 	private ForumService forumService =  (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
 	private boolean isCategoriesUpdate = true;
   private boolean isForumUpdate = false;

@@ -74,7 +74,7 @@ public class ForumPageList extends JCRPageList {
     Post postNew = new Post();
     if(postNode.hasProperty("exo:id")) postNew.setId(postNode.getProperty("exo:id").getString());
     if(postNode.hasProperty("exo:owner")) postNew.setOwner(postNode.getProperty("exo:owner").getString());
-    if(postNode.hasProperty("exo:path")) postNew.setPath(postNode.getProperty("exo:path").getString());
+    if(postNode.hasProperty("exo:path")) postNew.setPath(postNode.getPath());
     if(postNode.hasProperty("exo:createdDate")) postNew.setCreatedDate(postNode.getProperty("exo:createdDate").getDate().getTime());
     if(postNode.hasProperty("exo:modifiedBy")) postNew.setModifiedBy(postNode.getProperty("exo:modifiedBy").getString());
     if(postNode.hasProperty("exo:modifiedDate")) postNew.setModifiedDate(postNode.getProperty("exo:modifiedDate").getDate().getTime());
@@ -90,7 +90,7 @@ public class ForumPageList extends JCRPageList {
     Topic topicNew = new Topic();    
     if(topicNode.hasProperty("exo:id")) topicNew.setId(topicNode.getProperty("exo:id").getString());
     if(topicNode.hasProperty("exo:owner")) topicNew.setOwner(topicNode.getProperty("exo:owner").getString());
-    if(topicNode.hasProperty("exo:path")) topicNew.setPath(topicNode.getProperty("exo:path").getString());
+    if(topicNode.hasProperty("exo:path")) topicNew.setPath(topicNode.getPath());
     if(topicNode.hasProperty("exo:name")) topicNew.setTopicName(topicNode.getProperty("exo:name").getString());
     if(topicNode.hasProperty("exo:createdDate")) topicNew.setCreatedDate(topicNode.getProperty("exo:createdDate").getDate().getTime());
     if(topicNode.hasProperty("exo:modifiedBy")) topicNew.setModifiedBy(topicNode.getProperty("exo:modifiedBy").getString());
