@@ -497,7 +497,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
         UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;
         UIMoveTopicForm moveTopicForm = popupAction.createUIComponent(UIMoveTopicForm.class, null, null) ;
         moveTopicForm.updateTopic(uiTopicContainer.forumId, topics);
-        popupAction.activate(moveTopicForm, 662, 466) ;
+        popupAction.activate(moveTopicForm, 400, 420) ;
       } 
       if(topics.size() == 0){
         Object[] args = { };
