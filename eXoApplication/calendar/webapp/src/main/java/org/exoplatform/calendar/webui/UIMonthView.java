@@ -90,6 +90,7 @@ public class UIMonthView extends UICalendarView {
       List<CalendarEvent> list =  new ArrayList<CalendarEvent>() ;
       eventData_.put(day, list) ;
     }
+    System.out.println("\n\n event query size " +allEvents.size());
     Iterator<CalendarEvent> eventIter = allEvents.iterator() ;
     java.util.Calendar tempBegin = GregorianCalendar.getInstance()  ;
     java.util.Calendar tempEnd = GregorianCalendar.getInstance()  ;
@@ -133,8 +134,10 @@ public class UIMonthView extends UICalendarView {
   }
 
   public void refresh() throws Exception {
+    System.out.println("\n\n month view ");
     refreshSelectedCalendarIds() ;
     refreshEvents() ;
+    
   }
   private Date getDateOf(int year, int month, int day) {
     GregorianCalendar gc = new GregorianCalendar(year, month, day) ;

@@ -7,6 +7,7 @@ package org.exoplatform.calendar;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
@@ -59,6 +60,7 @@ public class CalendarUtils {
   public static List<SelectItemOption<String>> getTimesSelectBoxOptions(String timeFormat, int timeInterval) {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     GregorianCalendar cal = new GregorianCalendar(Locale.US) ;
+    cal.set(java.util.Calendar.AM_PM, java.util.Calendar.AM) ;
     cal.set(java.util.Calendar.HOUR, 0) ;
     cal.set(java.util.Calendar.MINUTE, 0) ;
     DateFormat df = new SimpleDateFormat(timeFormat) ;
@@ -73,6 +75,7 @@ public class CalendarUtils {
   public static List<String> getDisplayTimes(String timeFormat, int timeInterval, int workStart, int workEnd) {
     List<String> times = new ArrayList<String>() ;
     GregorianCalendar cal = new GregorianCalendar(Locale.US) ;
+    cal.set(Calendar.AM_PM, Calendar.AM) ;
     cal.set(java.util.Calendar.HOUR, 0) ;
     cal.set(java.util.Calendar.MINUTE, 0) ;
     DateFormat df = new SimpleDateFormat(timeFormat) ;

@@ -16,8 +16,10 @@ import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
+import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
+import org.exoplatform.calendar.webui.UIMiniCalendar;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -94,7 +96,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
     setEventToDate(cal.getTime()) ;
   }
   public void init(String startTime, String endTime) throws Exception {
-    DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm") ;
+    DateFormat df = SimpleDateFormat.getInstance() ;
     try {
       setEventFromDate(df.parse(startTime)) ;
       setEventToDate(df.parse(endTime)) ;
@@ -124,17 +126,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
     return label ;
   }
   private List<SelectItemOption<String>> getTimes() {
-    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-    GregorianCalendar cal = new GregorianCalendar(Locale.US) ;
-    cal.set(java.util.Calendar.HOUR, 0) ;
-    cal.set(java.util.Calendar.MINUTE, 0) ;
-    DateFormat df = new SimpleDateFormat(timeFormat_) ;
-    int time = 0 ;
-    while (time ++ < 24*60/(timeInterval_)) {
-      options.add(new SelectItemOption<String>(df.format(cal.getTime()), df.format(cal.getTime()))) ;
-      cal.add(java.util.Calendar.MINUTE, timeInterval_) ;
-    }
-    return options ;
+   return CalendarUtils.getTimesSelectBoxOptions(timeFormat_, timeInterval_) ;
   }
   private String getEventSummary() {
     return getUIStringInput(FIELD_EVENT).getValue() ;
@@ -251,17 +243,21 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
         } else {
           calEvent.setEventType(CalendarEvent.TYPE_TASK) ;
         }
-        
         calEvent.setEventCategoryId(uiForm.getEventCategory());
         calEvent.setFromDateTime(fromDate);
         calEvent.setToDateTime(toDate) ;
         calService.saveUserEvent(username, calendarId, calEvent, true) ;
+        System.out.println("\n\n from  from date "+fromDate);
+        System.out.println("\n\n from to date "+ toDate);
 
         UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class) ;
         uiPopupAction.deActivate() ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
         UICalendarPortlet uiPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
         UICalendarViewContainer uiContainer = uiPortlet.findFirstComponentOfType(UICalendarViewContainer.class);
+        UIMiniCalendar uiMiniCalendar = uiPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;
+        uiMiniCalendar.refresh() ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
         uiContainer.refresh() ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;
         uiApp.addMessage(new ApplicationMessage(uiForm.getId() + ".msg.add-successfully", null)) ;
