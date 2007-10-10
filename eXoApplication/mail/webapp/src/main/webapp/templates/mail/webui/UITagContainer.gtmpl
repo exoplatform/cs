@@ -48,8 +48,9 @@
           String tagId = tag.getId();
           String tagName = tag.getName();
           String actionLink = uicomponent.event("ChangeTag", tagId);
+          String colorClass = tag.getColor() + "Tag";
     %>
-		  <a href="$actionLink" class="IconHolder BlueTag" tagId="$tagId"><%=tag.getName()%></a>		
+		  <a href="$actionLink" class="IconHolder $colorClass" tagId="$tagId"><%=tag.getName()%></a>		
 		<%  
 		    }
 	    }  

@@ -325,11 +325,9 @@ public class UIMessageList extends UIForm {
       UISelectAccount uiSelect = uiNavigation.getChild(UISelectAccount.class) ;
       String accId = uiSelect.getSelectedValue() ;
       List<Tag> listTags = mailService.getTags(username, accId);
-      uiTagForm.createCheckBoxTagList(listTags) ;
-      for (Message msg : uiMessageList.getCheckedMessage()) {
-        uiTagForm.messageMap.put(msg.getId(), msg.getId()); 
-      }     
       uiPopupAction.activate(uiTagForm, 600, 0, true);
+      uiTagForm.setMessageList(uiMessageList.getCheckedMessage());
+      uiTagForm.setTagList(listTags) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
     }
   }

@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.mail.service.MailService;
+import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.Tag;
 import org.exoplatform.mail.webui.popup.UIMailSettings;
 import org.exoplatform.mail.webui.popup.UIPopupAction;
@@ -91,20 +92,36 @@ public class UITagContainer extends UIComponent {
       System.out.println("============>>>> Remove Tag Action Listener");
       String tagId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UITagContainer uiTag = event.getSource();     
-      /*UIMailPortlet uiPortlet = uiTag.getAncestorOfType(UIMailPortlet.class);
+      UIMailPortlet uiPortlet = uiTag.getAncestorOfType(UIMailPortlet.class);
       MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       mailSrv.removeTag(username, accountId, tagId);
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiTag);*/
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiTag);
     }
   }
   
   static public class EmptyTagActionListener extends EventListener<UITagContainer> {
     public void execute(Event<UITagContainer> event) throws Exception {
+      System.out.println("============>>>> Empty Tag Action Listener");
       String tagId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UITagContainer uiTag = event.getSource();     
-      System.out.println("============>>>> Empty Tag Action Listener");
+      UIMailPortlet uiPortlet = uiTag.getAncestorOfType(UIMailPortlet.class);
+      UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
+      MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
+      String username = uiPortlet.getCurrentUser();
+      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      
+      List<Message> listMessage = mailSrv.getMessageByTag(username, accountId, tagId);
+      List<String> listTag = new ArrayList<String>();
+      List<String> listMessageId = new ArrayList<String>();
+      for (Message mess : listMessage) {
+        listMessageId.add(mess.getId());
+      }
+      listTag.add(tagId);
+      mailSrv.removeMessageTag(username, accountId, listMessageId, listTag);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiTag);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList);
     }
   }
 }

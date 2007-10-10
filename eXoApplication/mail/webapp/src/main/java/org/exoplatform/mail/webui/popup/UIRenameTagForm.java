@@ -50,12 +50,12 @@ public class UIRenameTagForm extends UIForm implements UIPopupComponent {
   private String tagId;
   public UIRenameTagForm() {       
     addUIFormInput(new UIFormStringInput(NEW_TAG_NAME, NEW_TAG_NAME, null)) ;
-    addUIFormInput(new UIFormTextAreaInput(DESCRIPTION,DESCRIPTION,null)) ;
     List<SelectItemOption<String>> tagColors = new ArrayList<SelectItemOption<String>>();
     for (String color : Utils.TAG_COLOR) {
       tagColors.add(new SelectItemOption<String>(color, color));
     }
     UIFormSelectBox selectColor = new UIFormSelectBox(COLOR, COLOR, tagColors);
+    addUIFormInput(new UIFormTextAreaInput(DESCRIPTION,DESCRIPTION,null)) ;    
     addUIFormInput(selectColor);
   }
   

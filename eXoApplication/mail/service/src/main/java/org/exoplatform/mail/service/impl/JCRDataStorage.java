@@ -506,8 +506,8 @@ public class JCRDataStorage implements DataStorage{
         tagNode.setProperty(Utils.EXO_NAME, tag.getName()) ;
         tagNode.setProperty(Utils.EXO_DESCRIPTION, tag.getDescription()) ;
         tagNode.setProperty(Utils.EXO_COLOR, tag.getColor()) ;
-      }
-      tagMap.put(tag.getId(), tag.getId()) ;      
+      }      
+      tagMap.put(tag.getId(), tag.getId()) ;
     }
     tagHome.getSession().save() ;
     
@@ -557,7 +557,7 @@ public class JCRDataStorage implements DataStorage{
         if (messageNode.hasProperty(Utils.EXO_TAGS)) {
           Message message = getMessage(messageNode);
           String[] tags = message.getTags();
-          List<String> listTags = new ArrayList<String>(Arrays.asList(tags));         
+          List<String> listTags = new ArrayList<String>(Arrays.asList(tags)); 
           for (String tagId : tagIds) listTags.remove(tagId);
           tags = listTags.toArray(new String[listTags.size()]);
           message.setTags(tags);
