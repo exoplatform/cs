@@ -56,6 +56,9 @@ public class UIEventCategoryManager extends UIContainer implements UIPopupCompon
     // TODO Auto-generated method stub
 
   }
+  public void resetForm() {
+    getChild(UIEventCategoryForm.class).reset() ;
+  }
   public void processRender(WebuiRequestContext context) throws Exception {
     Writer w =  context.getWriter() ;
     w.write("<div id=\"UIEventCategoryManager\" class=\"UIEventCategoryManager\">");
@@ -96,6 +99,8 @@ public class UIEventCategoryManager extends UIContainer implements UIPopupCompon
       calService.removeEventCategory(username, eventCategoryName) ;
       UICalendars uiCalendars = calendarPortlet.findFirstComponentOfType(UICalendars.class) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendars) ; 
+      uiManager.updateGrid() ;
+      uiManager.resetForm() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiManager) ;
     }
   }

@@ -52,7 +52,7 @@ public class UICalendarCategoryManager extends UIContainer implements UIPopupCom
     // TODO Auto-generated method stub
 
   }
-
+  
   public void deActivate() throws Exception {
     // TODO Auto-generated method stub
 
@@ -71,19 +71,15 @@ public class UICalendarCategoryManager extends UIContainer implements UIPopupCom
     ObjectPageList objPageList = new ObjectPageList(categories, 10) ;
     uiGrid.getUIPageIterator().setPageList(objPageList) ;   
   }
-
+  public void resetForm() {
+    getChild(UICalendarCategoryForm.class).reset() ;
+  }
   static  public class EditActionListener extends EventListener<UICalendarCategoryManager> {
     public void execute(Event<UICalendarCategoryManager> event) throws Exception {
       UICalendarCategoryManager uiManager = event.getSource() ;
       UICalendarCategoryForm uiForm = uiManager.getChild(UICalendarCategoryForm.class) ;
-      uiForm.setAddNew(false) ;
       String categoryId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      CalendarService calService = uiManager.getApplicationComponent(CalendarService.class) ;
-      String username = event.getRequestContext().getRemoteUser() ;
-      CalendarCategory category = calService.getCalendarCategory(username, categoryId) ;
-      uiForm.setCategoryId(category.getId()) ;
-      uiForm.setCategoryName(category.getName()) ;
-      uiForm.setCategoryDescription(category.getDescription()) ;
+      uiForm.init(categoryId) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiManager) ;
     }
   }
@@ -98,6 +94,8 @@ public class UICalendarCategoryManager extends UIContainer implements UIPopupCom
       calService.removeCalendarCategory(username, calendarCategoryId) ;
       UICalendars uiCalendars = calendarPortlet.findFirstComponentOfType(UICalendars.class) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendars) ; 
+      uiManager.updateGrid() ;
+      uiManager.resetForm() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiManager) ;
     }
   }

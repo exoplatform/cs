@@ -439,6 +439,9 @@ public class JCRDataStorage implements DataStorage{
       }
     }*/
     calCategoryNode.remove() ;
+    for(Calendar cal : getUserCalendarsByCategory(username, calendarCategoryId)) {
+      removeUserCalendar(username, cal.getId()) ;
+    }
     calCategoryHome.save() ;
     calendarHome.save() ;
     calCategoryHome.getSession().save() ;
@@ -1004,7 +1007,7 @@ public class JCRDataStorage implements DataStorage{
     .append(path) ;
     return url.toString();
   }
-  
+
   public EventPageList searchEvent(String username, EventQuery eventQuery)throws Exception {
     List<CalendarEvent> events = new ArrayList<CalendarEvent>() ;
     Query query ;

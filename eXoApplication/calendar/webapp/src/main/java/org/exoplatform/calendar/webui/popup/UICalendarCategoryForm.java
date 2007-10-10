@@ -51,6 +51,15 @@ public class UICalendarCategoryForm extends UIForm {
     isAddNew = true ;
     categoryId = null ;
   }
+  public void init(String categoryId) throws Exception{
+    setAddNew(false) ;
+    CalendarService calService = getApplicationComponent(CalendarService.class) ;
+    String username = Util.getPortalRequestContext().getRemoteUser() ;
+    CalendarCategory category = calService.getCalendarCategory(username, categoryId) ;
+    setCategoryId(category.getId()) ;
+    setCategoryName(category.getName()) ;
+    setCategoryDescription(category.getDescription()) ;
+  }
   protected void setAddNew(boolean isAddNew) {
     this.isAddNew = isAddNew;
   }
