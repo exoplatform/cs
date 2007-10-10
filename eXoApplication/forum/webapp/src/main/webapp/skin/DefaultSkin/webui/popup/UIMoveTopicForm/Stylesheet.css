@@ -11,6 +11,8 @@
 .UIMoveTopicForm .UITree {
 	border: 1px solid #a5a5a5;
 	padding: 3px 1px;
+	overflow-y: auto;
+	height: 235px;
 }
 
 .UIMoveTopicForm .UITree .TreeContainer {
@@ -21,14 +23,10 @@
 	width: auto;
 }
 
-.UIMoveTopicForm .UITree .TreeContainer .Node .Icon {
-	height: 24px;
-}
-
 .UIMoveTopicForm .UITree .TreeContainer .Node .NodeLabel a {
 	font-weight: normal;
 	color: #272727;
-	line-height: 20px;
+	line-height: 24px;
 	margin: 0px;
 }
 
@@ -47,5 +45,5 @@
 }
 
 .UIMoveTopicForm .UITree .TreeContainer .ChildrenContainer .Node {
-	padding-left: 5px;
+	padding: 0px 0px 0px 9px;
 }
