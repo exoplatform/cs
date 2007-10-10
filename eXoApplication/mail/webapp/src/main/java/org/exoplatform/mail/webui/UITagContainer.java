@@ -11,17 +11,13 @@ import org.exoplatform.container.PortalContainer;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.Tag;
-import org.exoplatform.mail.webui.popup.UIMailSettings;
+import org.exoplatform.mail.webui.popup.UIEditTagForm;
 import org.exoplatform.mail.webui.popup.UIPopupAction;
-import org.exoplatform.mail.webui.popup.UIRenameFolderForm;
-import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
-import org.exoplatform.mail.webui.popup.UIRenameTagForm;
-import org.hibernate.dialect.Sybase11Dialect;
 
 /**
  * Created by The eXo Platform SARL
@@ -34,7 +30,7 @@ import org.hibernate.dialect.Sybase11Dialect;
     template =  "app:/templates/mail/webui/UITagContainer.gtmpl",
     events = {
         @EventConfig(listeners = UITagContainer.ChangeTagActionListener.class),
-        @EventConfig(listeners = UITagContainer.RenameTagActionListener.class),
+        @EventConfig(listeners = UITagContainer.EditTagActionListener.class),
         @EventConfig(listeners = UITagContainer.RemoveTagActionListener.class,confirm="UITagContainer.msg.confirm-remove-tag"),
         @EventConfig(listeners = UITagContainer.EmptyTagActionListener.class)
     }
@@ -71,19 +67,13 @@ public class UITagContainer extends UIComponent {
     }
   }
   
-  static public class RenameTagActionListener extends EventListener<UITagContainer> {
+  static public class EditTagActionListener extends EventListener<UITagContainer> {
     public void execute(Event<UITagContainer> event) throws Exception {
       String tagId = event.getRequestContext().getRequestParameter(OBJECTID) ;      
-      
       UITagContainer uiTag = event.getSource() ;
       UIPopupAction uiPopup = uiTag.getAncestorOfType(UIMailPortlet.class).getChild(UIPopupAction.class) ;
-      UIRenameTagForm uiRenameTagForm = uiPopup.activate(UIRenameTagForm.class, 450) ;
+      UIEditTagForm uiRenameTagForm = uiPopup.activate(UIEditTagForm.class, 450) ;
       uiRenameTagForm.setTag(tagId);
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiTag.getAncestorOfType(UIMailPortlet.class)) ;
-    
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiTag);
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiTag.getAncestorOfType(UIMailPortlet.class)) ;
-      
     }
   }
   
