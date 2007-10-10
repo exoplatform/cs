@@ -67,44 +67,78 @@
       cssClass = "SelectedLabel" ;
     }
   %>
-  <a href="$actionLink"  class="Icon Folder $icon $cssClass">$name
+  <a href="$actionLink"  class="Icon Folder $icon $cssClass" folder="$id">$name
     <% if(unreadMess > 0) { print "<span class=\"MailQuantity\">($unreadMess)</span>"}%>
   </a>
   <%}%>
 </div>
 
-<div class="MyFolder">
-<% /*Popup menu*/ %>
-<div class="UIRightClickPopupMenu" id="UIFolderListPopupMenu" eXoCallback="eXo.mail.UIMailPortlet.folderListPopupMenuCallback">
-<div class="TopLeftRightClickPopupMenu" id="test">
-  <div class="TopRightRightClickPopupMenu">
-    <div class="TopCenterRightClickPopupMenu"><span></span></div>
-  </div>
-</div>
-
-<div class="MiddleLeftRightClickPopupMenu">
-  <div class="MiddleRightRightClickPopupMenu">
-    <div class="UIRightPopupMenuContainer">
-      <a class="MenuItem" href="<%=uicomponent.event("RenameFolder", "id")%>">   
-        <div class="ItemIcon RenameFolderIcon"> Rename </div>
-      </a>
-      <a class="MenuItem" href="<%=uicomponent.event("RemoveFolder", "id")%>">   
-        <div class="ItemIcon RemoveFolderIcon"> Remove </div>
-      </a>
-      <a class="MenuItem" href="<%=uicomponent.event("EmptyFolder", "id")%>">   
-        <div class="ItemIcon EmptyIcon"> Empty </div>
-      </a>
+<% /*Popup menu for Drafts forder*/ %>
+<div class="UIRightClickPopupMenu" id="UIDraftsFolderPopupMenu" eXoCallback="eXo.mail.UIMailPortlet.draftsFolderPopupMenuCallback">
+  <div class="TopLeftRightClickPopupMenu" id="test">
+    <div class="TopRightRightClickPopupMenu">
+      <div class="TopCenterRightClickPopupMenu"><span></span></div>
     </div>
   </div>
-</div>
-
-<div class="BottomLeftRightClickPopupMenu">
-  <div class="BottomRightRightClickPopupMenu">
-    <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+  
+  <div class="MiddleLeftRightClickPopupMenu">
+    <div class="MiddleRightRightClickPopupMenu">
+      <div class="UIRightPopupMenuContainer">
+        <a class="MenuItem" href="<%=uicomponent.event("RenameFolder", "id")%>">   
+          <div class="ItemIcon RenameFolderIcon"> Rename </div>
+        </a>
+        <a class="MenuItem" href="<%=uicomponent.event("RemoveFolder", "id")%>">   
+          <div class="ItemIcon RemoveFolderIcon"> Remove </div>
+        </a>
+        <a class="MenuItem" href="<%=uicomponent.event("EmptyFolder", "id")%>">   
+          <div class="ItemIcon EmptyIcon"> Empty </div>
+        </a>
+      </div>
+    </div>
   </div>
-</div>
-            
-</div>              
+  
+  <div class="BottomLeftRightClickPopupMenu">
+    <div class="BottomRightRightClickPopupMenu">
+      <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+    </div>
+  </div>           
+</div>  
+<% /* End popup menu for Drafts forder*/ %>
+
+<div class="MyFolder">
+
+<% /*Popup menu for Customized forder*/ %>
+<div class="UIRightClickPopupMenu" id="UIFolderListPopupMenu" eXoCallback="eXo.mail.UIMailPortlet.folderListPopupMenuCallback">
+  <div class="TopLeftRightClickPopupMenu" id="test">
+    <div class="TopRightRightClickPopupMenu">
+      <div class="TopCenterRightClickPopupMenu"><span></span></div>
+    </div>
+  </div>
+  
+  <div class="MiddleLeftRightClickPopupMenu">
+    <div class="MiddleRightRightClickPopupMenu">
+      <div class="UIRightPopupMenuContainer">
+        <a class="MenuItem" href="<%=uicomponent.event("RenameFolder", "id")%>">   
+          <div class="ItemIcon RenameFolderIcon"> Rename </div>
+        </a>
+        <a class="MenuItem" href="<%=uicomponent.event("RemoveFolder", "id")%>">   
+          <div class="ItemIcon RemoveFolderIcon"> Remove </div>
+        </a>
+        <a class="MenuItem" href="<%=uicomponent.event("EmptyFolder", "id")%>">   
+          <div class="ItemIcon EmptyIcon"> Empty </div>
+        </a>
+      </div>
+    </div>
+  </div>
+  
+  <div class="BottomLeftRightClickPopupMenu">
+    <div class="BottomRightRightClickPopupMenu">
+      <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+    </div>
+  </div>           
+</div>  
+<% /* End popup menu for Customized forder*/ %>
+
 
 <div class="TitleBar">
   <div class="DownArrow3Icon" title="Collapse/Expand all"><span></span></div>

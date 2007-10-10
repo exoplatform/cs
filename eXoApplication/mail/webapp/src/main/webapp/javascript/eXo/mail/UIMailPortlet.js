@@ -12,7 +12,8 @@ UIMailPortlet.prototype.showContextMenu = function() {
 	} ;	
 	UIContextMenu.init(config) ;
 	UIContextMenu.attach('IconFolder', 'UIFolderListPopupMenu') ;
-	UIContextMenu.attach('IconHolder', 'UITagListPopupMenu') ;
+	UIContextMenu.attach('IconTagHolder', 'UITagListPopupMenu') ;
+	UIContextMenu.attach('DraftsIcon', 'UIDraftsFolderPopupMenu') ;
 } ;
 
 UIMailPortlet.prototype.folderListPopupMenuCallback = function(evt) {
@@ -30,6 +31,23 @@ UIMailPortlet.prototype.folderListPopupMenuCallback = function(evt) {
 		
 	folderName = src.getAttribute("folderName");
 	eXo.webui.UIContextMenu.changeAction(UIContextMenu.menuElement, folderName) ;
+} ;
+
+UIMailPortlet.prototype.draftsFolderPopupMenuCallback = function(evt) {
+	var UIContextMenu = eXo.webui.UIContextMenu ;
+	var _e = window.event || evt ;
+	//_e.cancelBubble = true ;
+	var src = null ;
+	if (UIContextMenu.IE) {
+		src = _e.srcElement;
+	} else {
+		src = _e.target;
+	}
+	if (src.nodeName != "A")
+		src = src.parentNode;
+		
+	folder = src.getAttribute("folder");
+	eXo.webui.UIContextMenu.changeAction(UIContextMenu.menuElement, folder) ;
 } ;
 
 UIMailPortlet.prototype.tagListPopupMenuCallback = function(evt) {
