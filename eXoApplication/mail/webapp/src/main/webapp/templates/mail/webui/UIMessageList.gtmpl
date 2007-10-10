@@ -220,7 +220,7 @@
   				  <% 
               if (msg.getTags() != null && msg.getTags().length > 0) {
             %>
-              <a href="$actionLink" class="IconHolder RedTag"><span></span></a>
+              <a href="$actionLink" ><div class="IconTag RedTag"><span></span></div></a>
             <%}%>
   				</td>
   				<td class="text"><a href="$actionLink"><%=msg.getSubject()%></a></td>
