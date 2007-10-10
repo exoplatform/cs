@@ -31,7 +31,7 @@ public class UICalendarViewContainer extends UIContainer  {
 
 
   public UICalendarViewContainer() throws Exception {
-    
+
     addChild(UIMonthView.class, null, null).setRendered(false) ;
     addChild(UIDayView.class, null, null).setRendered(true) ;
     addChild(UIWeekView.class, null, null).setRendered(false) ;
@@ -45,7 +45,10 @@ public class UICalendarViewContainer extends UIContainer  {
 
   public void refresh() throws Exception {
     for(UIComponent comp : getChildren()) {
-      if(comp.isRendered() && comp instanceof UICalendarView) ((UICalendarView)comp).refresh() ;
+      if(comp.isRendered() && comp instanceof UICalendarView){
+        ((UICalendarView)comp).update() ;
+        ((UICalendarView)comp).refresh() ;
+      }
     }
   }
   protected boolean isShowPane() {
