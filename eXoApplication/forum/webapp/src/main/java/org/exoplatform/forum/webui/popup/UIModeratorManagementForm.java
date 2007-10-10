@@ -45,14 +45,13 @@ public class UIModeratorManagementForm extends UIForm implements UIPopupComponen
   static  public class SaveActionListener extends EventListener<UIModeratorManagementForm> {
     public void execute(Event<UIModeratorManagementForm> event) throws Exception {
       UIModeratorManagementForm uiForm = event.getSource() ;
-      UIForumPortlet forumPortlet = event.getSource().getAncestorOfType(UIForumPortlet.class) ;
+      UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
       forumPortlet.cancelAction() ;
     }
   }
   
   static  public class CancelActionListener extends EventListener<UIModeratorManagementForm> {
     public void execute(Event<UIModeratorManagementForm> event) throws Exception {
-      UIModeratorManagementForm uiForm = event.getSource() ;
       UIForumPortlet forumPortlet = event.getSource().getAncestorOfType(UIForumPortlet.class) ;
       forumPortlet.cancelAction() ;
     }

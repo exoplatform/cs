@@ -427,6 +427,7 @@ public class JCRDataStorage implements DataStorage {
     Node topicNode = (Node)getJCRSession().getItem(newTopicPath) ;
     Node forumNode = (Node)getJCRSession().getItem(destForumPath) ;
     forumNode.setProperty("exo:topicCount", Integer.valueOf(forumNode.getProperty("exo:topicCount").getString()) + 1) ;
+    forumNode.setProperty("exo:postCount", Integer.valueOf(forumNode.getProperty("exo:postCount").getString()) + 1) ;
     topicNode.setProperty("exo:path", newTopicPath) ;
     forumHomeNode.save() ;
   	forumHomeNode.getSession().save() ;

@@ -148,7 +148,7 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
       } else {
         forumService.saveTopic(uiForm.categoryId, uiForm.forumId, topicNew, true);
       }
-      UIForumPortlet forumPortlet = event.getSource().getAncestorOfType(UIForumPortlet.class) ;
+      UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
       forumPortlet.cancelAction() ;
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
       context.addUIComponentToUpdateByAjax(forumPortlet) ;
@@ -157,8 +157,7 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
   
   static  public class CancelAction extends EventListener<UITopicForm> {
     public void execute(Event<UITopicForm> event) throws Exception {
-      UITopicForm uiForm = event.getSource() ;
-      UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
+      UIForumPortlet forumPortlet = event.getSource().getAncestorOfType(UIForumPortlet.class) ;
       forumPortlet.cancelAction() ;
     }
   }

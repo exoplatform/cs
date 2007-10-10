@@ -219,7 +219,7 @@ public class UIForumForm extends UIForm implements UIPopupComponent {
       	forumService.saveForum(categoryId, newForum, true);
       }
       
-      UIForumPortlet forumPortlet = event.getSource().getAncestorOfType(UIForumPortlet.class) ;
+      UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
       forumPortlet.cancelAction() ;
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
       if(!uiForm.isForumUpdate) {
@@ -238,7 +238,6 @@ public class UIForumForm extends UIForm implements UIPopupComponent {
   
   static  public class CancelActionListener extends EventListener<UIForumForm> {
     public void execute(Event<UIForumForm> event) throws Exception {
-      UIForumForm uiForm = event.getSource() ;
       UIForumPortlet forumPortlet = event.getSource().getAncestorOfType(UIForumPortlet.class) ;
       forumPortlet.cancelAction() ;
     }

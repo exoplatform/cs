@@ -1,0 +1,53 @@
+<%  
+	import org.exoplatform.forum.service.Category ;
+	import org.exoplatform.forum.service.Forum ;
+	import org.exoplatform.forum.webui.popup.UIMoveTopicForm ;
+%>
+
+<div class="UIMoveForumForm UIMoveTopicForm">
+  <% uiform.begin() %>
+	<div class="TitleMoveThreads">Choose a Destination Category:</div>
+	<div class="UITree">
+	  <div class="TreeContainer">
+		<% 
+			List categories = uicomponent.getCategories(); 
+			for(category in categories) {
+		  	String categoryName = category.getCategoryName() ;
+		  	String link = uicomponent.event("SetSelect", category.getId());
+		  	String selected = "normal" ;
+	      if(uicomponent.getSeclectedCategory(category.getId())) selected = "Selected" ;
+		%>
+	    <div class="Node $selected">
+	     	<div class="Icon ForumIcon"><span></span></div>  
+	     	<div class="NodeLabel">    
+	     		<div class="NodeSelected"><a href="$link">$categoryName</a></div> 
+	      </div> 		  
+	      <div style="clear: left;"><span></span></div>
+		  </div>
+		<% } %>	
+		 </div>  
+	</div>
+	
+  <div class="UIAction"> 
+    <table class="ActionContainer" align="center">
+		  <tr>
+			  <td align="center">
+    <% for(action in uicomponent.getActions()) {
+    	 if(action.indexOf("Select") > 0) continue ;
+    	 String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action); 
+       String link = uicomponent.event(action) ;
+    %>
+	    		<a href="$link" class="ActionButton LightBlueStyle">
+		  	  	<div class="ButtonLeft">
+		    	  	<div class="ButtonRight">
+		      	  	<div class="ButtonMiddle">$actionLabel</div>
+		        	</div>
+		      	</div>
+	    		</a>
+      <%}%>
+      	</td>
+			</tr>
+ 	  </table> 
+	</div>
+	<%uiform.end()%>
+</div>

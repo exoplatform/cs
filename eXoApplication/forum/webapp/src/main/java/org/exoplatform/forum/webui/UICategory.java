@@ -90,7 +90,7 @@ public class UICategory extends UIForm  {
 	static public class EditCategoryActionListener extends EventListener<UICategory> {
 		public void execute(Event<UICategory> event) throws Exception {
 			UICategory uiCategory = event.getSource() ;      
-			UIForumPortlet forumPortlet = event.getSource().getAncestorOfType(UIForumPortlet.class) ;
+			UIForumPortlet forumPortlet = uiCategory.getAncestorOfType(UIForumPortlet.class) ;
 			UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;
 			UICategoryForm categoryForm = popupAction.createUIComponent(UICategoryForm.class, null, null) ;
 			categoryForm.setCategoryValue(uiCategory.getCategory(), true) ;
@@ -103,7 +103,7 @@ public class UICategory extends UIForm  {
   static public class AddForumActionListener extends EventListener<UICategory> {
     public void execute(Event<UICategory> event) throws Exception {
       UICategory uiCategory = event.getSource() ;      
-      UIForumPortlet forumPortlet = event.getSource().getAncestorOfType(UIForumPortlet.class) ;
+      UIForumPortlet forumPortlet = uiCategory.getAncestorOfType(UIForumPortlet.class) ;
       UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;
       UIForumForm forumForm = popupAction.createUIComponent(UIForumForm.class, null, null) ;
       forumForm.setCategoryValue(uiCategory.categoryId, false) ;
@@ -126,7 +126,7 @@ public class UICategory extends UIForm  {
   			}
   		}
   		if(forum != null) {
-  			UIForumPortlet forumPortlet = event.getSource().getAncestorOfType(UIForumPortlet.class) ;
+  			UIForumPortlet forumPortlet = uiCategory.getAncestorOfType(UIForumPortlet.class) ;
     		UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;
     		UIForumForm forumForm = popupAction.createUIComponent(UIForumForm.class, null, null) ;
     		forumForm.setCategoryValue(uiCategory.categoryId, false) ;
@@ -293,12 +293,12 @@ public class UICategory extends UIForm  {
   			}
   		}
   		if((forums.size() > 0)) {
-  			UIForumPortlet forumPortlet = event.getSource().getAncestorOfType(UIForumPortlet.class) ;
+  			UIForumPortlet forumPortlet = uiCategory.getAncestorOfType(UIForumPortlet.class) ;
     		UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;
     		UIMoveForumForm moveForumForm = popupAction.createUIComponent(UIMoveForumForm.class, null, null) ;
     		moveForumForm.setListForum(forums, uiCategory.categoryId);
         moveForumForm.setForumUpdate(false) ;
-    		popupAction.activate(moveForumForm, 400, 165) ;
+    		popupAction.activate(moveForumForm, 340, 260) ;
     		event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
   		} else {
   			Object[] args = { };

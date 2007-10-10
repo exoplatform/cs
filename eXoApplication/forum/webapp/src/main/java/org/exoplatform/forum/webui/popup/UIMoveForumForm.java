@@ -18,6 +18,7 @@ import org.exoplatform.forum.webui.UIForumDescription;
 import org.exoplatform.forum.webui.UIForumPortlet;
 import org.exoplatform.forum.webui.UITopicContainer;
 import org.exoplatform.forum.webui.UITopicDetailContainer;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -26,6 +27,7 @@ import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.exception.MessageException;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormSelectBox;
 
@@ -37,19 +39,21 @@ import org.exoplatform.webui.form.UIFormSelectBox;
  */
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
-    template = "app:/templates/forum/webui/popup/UICategoryForm.gtmpl",
+    template = "app:/templates/forum/webui/popup/UIMoveForumForm.gtmpl",
     events = {
       @EventConfig(listeners = UIMoveForumForm.SaveActionListener.class), 
-      @EventConfig(listeners = UIMoveForumForm.CancelActionListener.class, phase=Phase.DECODE)
+      @EventConfig(listeners = UIMoveForumForm.CancelActionListener.class),
+      @EventConfig(listeners = UIMoveForumForm.SetSelectActionListener.class)
     }
 )
 public class UIMoveForumForm extends UIForm implements UIPopupComponent {
 	public static final String FIELD_CATEGORY_SELECTBOX = "SelectCategory" ;
   private List<Forum> forums_ ;
   private String categoryId_ ;
+  private String newCategoryId_ ;
   private boolean isForumUpdate = false;
 	
-  public  void setListForum(List<Forum> forums, String categoryId) {
+  public void setListForum(List<Forum> forums, String categoryId) {
 		forums_ = forums ;
 		categoryId_ = categoryId ;
 	}
@@ -61,57 +65,75 @@ public class UIMoveForumForm extends UIForm implements UIPopupComponent {
     this.isForumUpdate = isForumUpdate ;
   }
   
+  private List<Category> getCategories() throws Exception {
+    ForumService forumService =  (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
+    List<Category> categorys =  new ArrayList<Category>();
+    for (Category category :forumService.getCategories()) {
+      if( !category.getId().equals(categoryId_) ) {
+        categorys.add(category) ;
+      }
+    }
+    return categorys ;
+  }
+  
+  private boolean getSeclectedCategory(String cactegoryId) throws Exception {
+    if(cactegoryId.equalsIgnoreCase(this.newCategoryId_)) return true;
+    else return false ;
+  }
+  
   public void activate() throws Exception {
-  	ForumService forumService =  (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
-  	List<Category> categorys = forumService.getCategories() ;
-  	List<SelectItemOption<String>> list = new ArrayList<SelectItemOption<String>>() ;
-  	for (Category category :categorys) {
-  		if( !category.getId().equals(categoryId_) ) {
-  			list.add(new SelectItemOption<String>(category.getCategoryName(), category.getPath())) ;
-  		}
-  	}
-  	UIFormSelectBox categoryPath = new UIFormSelectBox(FIELD_CATEGORY_SELECTBOX, FIELD_CATEGORY_SELECTBOX, list) ;
-  	addUIFormInput(categoryPath) ;
   }
   public void deActivate() throws Exception {
   }
 
+  static  public class SetSelectActionListener extends EventListener<UIMoveForumForm> {
+    public void execute(Event<UIMoveForumForm> event) throws Exception {
+      UIMoveForumForm uiForm = event.getSource() ;
+      uiForm.newCategoryId_ = event.getRequestContext().getRequestParameter(OBJECTID)  ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
+    }
+  }
+  
   static  public class SaveActionListener extends EventListener<UIMoveForumForm> {
     public void execute(Event<UIMoveForumForm> event) throws Exception {
       UIMoveForumForm uiForm = event.getSource() ;
       ForumService forumService =  (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
-      String categoryPath = uiForm.getUIFormSelectBox(FIELD_CATEGORY_SELECTBOX).getValue() ;
-      List<Category> categorys = forumService.getCategories() ;
-      String newCategoryId = null;
+      String categoryPath = "";
+      List<Category> categorys = uiForm.getCategories() ;
+      String newCategoryId = uiForm.newCategoryId_;
       for (Category category :categorys) {
-        if( category.getPath().equals(categoryPath) ) {
-          newCategoryId = category.getId() ;
+        if( category.getId().equals(newCategoryId) ) {
+          categoryPath = category.getPath() ;
         }
       }
-      List<Forum> forums = uiForm.forums_ ;
-      for (Forum forum : forums) {
-				forumService.moveForum(forum.getId(), forum.getPath(), categoryPath) ;
-			}
-      UIForumPortlet forumPortlet = event.getSource().getAncestorOfType(UIForumPortlet.class) ;
-      forumPortlet.cancelAction() ;
-      if(uiForm.isForumUpdate) {
-        forumPortlet.updateIsRendered(2);
-        UIForumContainer uiForumContainer = forumPortlet.getChild(UIForumContainer.class) ;
-        uiForumContainer.getChild(UITopicDetailContainer.class).setRendered(false) ;
-        uiForumContainer.getChild(UIForumDescription.class).setForumIds(newCategoryId, forums.get(0).getId());
-        UITopicContainer uiTopicContainer = uiForumContainer.getChild(UITopicContainer.class).setRendered(true) ;
-        uiTopicContainer.setForumIds(newCategoryId, forums.get(0).getId()) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(forumPortlet);
+      if(newCategoryId != null && newCategoryId.length() > 0) {
+        List<Forum> forums = uiForm.forums_ ;
+        for (Forum forum : forums) {
+  				forumService.moveForum(forum.getId(), forum.getPath(), categoryPath) ;
+  			}
+        UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
+        forumPortlet.cancelAction() ;
+        if(uiForm.isForumUpdate) {
+          forumPortlet.updateIsRendered(2);
+          UIForumContainer uiForumContainer = forumPortlet.getChild(UIForumContainer.class) ;
+          uiForumContainer.getChild(UITopicDetailContainer.class).setRendered(false) ;
+          uiForumContainer.getChild(UIForumDescription.class).setForumIds(newCategoryId, forums.get(0).getId());
+          UITopicContainer uiTopicContainer = uiForumContainer.getChild(UITopicContainer.class).setRendered(true) ;
+          uiTopicContainer.setForumIds(newCategoryId, forums.get(0).getId()) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(forumPortlet);
+        } else {
+          UICategory uiCategory = forumPortlet.findFirstComponentOfType(UICategory.class);
+    			event.getRequestContext().addUIComponentToUpdateByAjax(uiCategory) ;
+        }
       } else {
-        UICategory uiCategory = forumPortlet.getChild(UICategoryContainer.class).getChild(UICategory.class);
-  			event.getRequestContext().addUIComponentToUpdateByAjax(uiCategory) ;
+        Object[] args = { };
+        throw new MessageException(new ApplicationMessage("UIMoveForumForm.msg.notSelect", args, ApplicationMessage.WARNING)) ;
       }
     }
   }
  
   static  public class CancelActionListener extends EventListener<UIMoveForumForm> {
     public void execute(Event<UIMoveForumForm> event) throws Exception {
-      UIMoveForumForm uiForm = event.getSource() ;
       UIForumPortlet forumPortlet = event.getSource().getAncestorOfType(UIForumPortlet.class) ;
       forumPortlet.cancelAction() ;
     }

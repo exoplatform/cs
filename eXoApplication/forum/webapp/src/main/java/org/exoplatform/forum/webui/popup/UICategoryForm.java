@@ -92,7 +92,7 @@ public class UICategoryForm extends UIForm implements UIPopupComponent{
       cat.setModifiedBy(userName) ;
       cat.setModifiedDate(new Date()) ;
       
-      UIForumPortlet forumPortlet = event.getSource().getAncestorOfType(UIForumPortlet.class) ;
+      UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
       ForumService forumService =  (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
       
       if(uiForm.categoryId.length() > 0) {

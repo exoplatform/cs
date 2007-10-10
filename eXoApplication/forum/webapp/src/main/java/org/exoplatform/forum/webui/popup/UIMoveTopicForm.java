@@ -14,11 +14,13 @@ import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.service.Topic;
 import org.exoplatform.forum.webui.UIForumPortlet;
 import org.exoplatform.forum.webui.UITopicContainer;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.exception.MessageException;
 import org.exoplatform.webui.form.UIForm;
 
 /**
@@ -80,14 +82,19 @@ public class UIMoveTopicForm extends UIForm implements UIPopupComponent {
   static  public class SaveActionListener extends EventListener<UIMoveTopicForm> {
     public void execute(Event<UIMoveTopicForm> event) throws Exception {
       UIMoveTopicForm uiForm = event.getSource() ;
-      List<Topic> topics = uiForm.topics ;
-      for (Topic topic : topics) {
-        uiForm.forumService.moveTopic(topic.getId(), topic.getPath(), uiForm.destForumPath) ;
+      if(uiForm.destForumPath != null && uiForm.destForumPath.length() > 0) {
+        List<Topic> topics = uiForm.topics ;
+        for (Topic topic : topics) {
+          uiForm.forumService.moveTopic(topic.getId(), topic.getPath(), uiForm.destForumPath) ;
+        }
+        UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
+        forumPortlet.cancelAction() ;
+        UITopicContainer topicContainer = forumPortlet.findFirstComponentOfType(UITopicContainer.class) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(topicContainer) ;
+      } else {
+        Object[] args = { };
+        throw new MessageException(new ApplicationMessage("UIMoveTopicForm.msg.notSelect", args, ApplicationMessage.WARNING)) ;
       }
-      UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
-      forumPortlet.cancelAction() ;
-      UITopicContainer topicContainer = forumPortlet.findFirstComponentOfType(UITopicContainer.class) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(topicContainer) ;
     }
   }
   
@@ -106,7 +113,7 @@ public class UIMoveTopicForm extends UIForm implements UIPopupComponent {
       String []Str = str.trim().split(",");
       uiForm.destForumPath = Str[0] ;
       uiForm.forumSelected = Str[1] ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
     }
   }
 
