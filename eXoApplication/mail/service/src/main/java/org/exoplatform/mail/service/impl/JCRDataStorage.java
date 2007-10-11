@@ -631,18 +631,4 @@ public class JCRDataStorage implements DataStorage{
     }
     return messages;
   }
-  
-  public MessagePageList getMessagePagelistByTag(String username, String accountId, String tagId)
-  throws Exception {
-    QueryManager qm = getMailHomeNode(username).getSession().getWorkspace().getQueryManager();
-    StringBuffer queryString = new StringBuffer("/jcr:root" + getMailHomeNode(username).getNode(accountId).getPath() + "//element(*,exo:message)[@exo:tags='").
-    append(tagId).
-    append("']");
-    Query query = qm.createQuery(queryString.toString(), Query.XPATH);
-    QueryResult result = query.execute();
-    NodeIterator it = result.getNodes();
-    MessagePageList pageList = new MessagePageList(it, 10, queryString.toString(), true) ;
-    return pageList ;
-  }
-  
 }

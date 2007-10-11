@@ -451,7 +451,11 @@ public class MailServiceImpl implements MailService{
   }
   
   public MessagePageList getMessagePagelistByTag(String username, String accountId, String tagId) throws Exception {
-    return storage_.getMessagePagelistByTag(username, accountId, tagId) ;
+    MessageFilter filter = new MessageFilter("Filter By Tag") ;
+    Tag tag = getTag(username, accountId, tagId) ;
+    filter.setTag(new String[]{tag.getId()} ) ;
+    filter.setAccountId(accountId) ;
+    return getMessages(username, filter) ;    
   }
   
   public MessagePageList getMessageByFolder(String username, String accountId, String folderName) 
