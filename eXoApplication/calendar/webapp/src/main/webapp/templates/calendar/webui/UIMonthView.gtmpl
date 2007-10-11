@@ -1,6 +1,7 @@
 	<%
-	//def rcontext = _ctx.getRequestContext() ;
-  //rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.showContextMenu() ;') ;
+	def rcontext = _ctx.getRequestContext() ;
+  rcontext.getJavascriptManager().importJavascript('eXo.calendar.UICalendarDragDrop','/calendar/javascript/') ;
+  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarDragDrop.init() ;') ;
 	uiform.begin()
  	_ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");
  	int currentDay = uicomponent.getCurrentDay() ;
@@ -97,7 +98,7 @@
 						        events = "" ;
 						        viewMore = "" ;
 										if(size > 0) {
-											println "<div style=\"height:75px; overflow:hidden ;\">" ;
+											println "<div class=\"DayContentContainer\" style=\"height:75px; overflow:hidden ;\">" ;
 											for(event in eventList) {
 												styleCssHidden = "" ;
 												if(eventList.indexOf(event) > 2) {styleCssHidden = "display:block;";}
@@ -111,8 +112,9 @@
 												String eventId = event.getId() ;
 												String calId = event.getCalendarId() ;
 												String eventCal = event.getEventCategoryId() ;
+												//
 												println "<div class=\"EventOnDayBorder EventBoxes\" day=\"$dayOfMonth\" eventId=$eventId calId=$calId eventCat=$eventCal style=\"$styleCssHidden\">" ;
-												println "<div  class=\"EventOnDayContent\">" ;
+												println "<div class=\"EventOnDayContent\">" ;
 											 	println	"<div style=\"float:left;margin:3px 0px 0px 2px;\">" ;
 											 	if(event.getFromDateTime().getDate() == dayOfMonth) {
 													uicomponent.renderField(uicomponent.getChildById(eventId)) ;
