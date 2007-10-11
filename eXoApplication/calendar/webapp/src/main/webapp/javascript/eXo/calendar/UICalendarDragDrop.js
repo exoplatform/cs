@@ -21,8 +21,7 @@ UICalendarDragDrop.prototype.init = function() {
 	for (var i = 0 ; i < len ; i ++) {
 		dragObjects[i].onmousedown = UICalendarDragDrop.dragStart ;		
 	}
-	UICalendarDragDrop.targetObjects = eXo.core.DOMUtil.findDescendantsByTagName(UICalendarDragDrop.container, "td") ;
-	UICalendarDragDrop.extraY = (UICalendarDragDrop.container.parentNode.scrollTop) ? UICalendarDragDrop.container.parentNode.scrollTop : 0 ;
+	UICalendarDragDrop.targetObjects = eXo.core.DOMUtil.findDescendantsByTagName(UICalendarDragDrop.container, "td") ;	
 } ;
 
 UICalendarDragDrop.prototype.dragStart = function(evt) {
@@ -31,6 +30,7 @@ UICalendarDragDrop.prototype.dragStart = function(evt) {
 	if (_e.button == 2) return ;
 	var UICalendarDragDrop = eXo.calendar.UICalendarDragDrop ;
 	var dragElement = this ;
+	UICalendarDragDrop.extraY = (UICalendarDragDrop.container.parentNode.scrollTop) ? (UICalendarDragDrop.container.parentNode.scrollTop + dragElement.offsetHeight): 0 ;
 	var newElement = dragElement.cloneNode(true) ;
 	var RowContainerDay = eXo.core.DOMUtil.findAncestorByClass(dragElement,"RowContainerDay") ;
 	var scrollTop = (RowContainerDay)? RowContainerDay.scrollTop : 0 ;	
@@ -44,8 +44,8 @@ UICalendarDragDrop.prototype.dragStart = function(evt) {
 	UICalendarDragDrop.blockElement = eXo.core.DOMUtil.findAncestorByTagName(dragElement, "td") ;
 	document.body.appendChild(newElement) ;
 	UICalendarDragDrop.offset = UICalendarDragDrop.getOffset(dragElement, _e) ;
-	document.onmousemove = UICalendarDragDrop.drag ;
-	document.onmouseup = UICalendarDragDrop.drop ;
+	UICalendarDragDrop.container.onmousemove = UICalendarDragDrop.drag ;
+	UICalendarDragDrop.container.onmouseup = UICalendarDragDrop.drop ;
 } ;
 UICalendarDragDrop.prototype.drag = function(evt) {
 	try{		
@@ -59,6 +59,7 @@ UICalendarDragDrop.prototype.drag = function(evt) {
 } ;
 UICalendarDragDrop.prototype.drop = function(evt) {
 	var UICalendarDragDrop = eXo.calendar.UICalendarDragDrop ;
+	if (!UICalendarDragDrop.tmpElement) return ;
 	UICalendarDragDrop.currentTarget.style.background = "#ffffff" ;
 	UICalendarDragDrop.tmpElement.removeAttribute("style") ;
 	UICalendarDragDrop.tmpElement.onmousedown = UICalendarDragDrop.dragStart ;
@@ -75,7 +76,20 @@ UICalendarDragDrop.prototype.drop = function(evt) {
 		dayContent.appendChild(div) ;
 	}
 	if (UICalendarDragDrop.orginalElement.parentNode) UICalendarDragDrop.orginalElement.parentNode.removeChild(UICalendarDragDrop.orginalElement) ;	
-	document.onmousemove = null ;
+	UICalendarDragDrop.tmpElement = null ;
+	UICalendarDragDrop.orginalElement = null ;
+	UICalendarDragDrop.extraY = null ;
+	UICalendarDragDrop.blockElement = null ;
+	UICalendarDragDrop.offset = null ;
+	UICalendarDragDrop.container.onmousemove = null ;
+	var actionlink = "" ;
+	if (actionlink = UICalendarDragDrop.currentTarget.getAttribute("actionLink")) {
+		var currentDate = UICalendarDragDrop.currentTarget.getAttribute("currentDate") ;
+		actionlink = actionlink.replace(/objectId\s*=\s*.*(?=&|'|\")/,"objectId="+currentDate).replace("javascript:","") ;
+		UICalendarDragDrop.currentTarget = null ;
+		eval(actionlink) ;
+	}
+	UICalendarDragDrop.currentTarget = null ;
 } ;
 
 UICalendarDragDrop.prototype.getOffset = function(object, evt) {
