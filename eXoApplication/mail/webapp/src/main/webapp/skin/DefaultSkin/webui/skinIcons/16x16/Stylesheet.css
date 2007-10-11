@@ -53,6 +53,27 @@
 	background: url('icons/VioletTag.gif') no-repeat left center;
 }
 
+.brownTag {
+	background: url('icons/brownTag.gif') no-repeat left center;
+}
+
+.OrangeTag {
+	background: url('icons/OrangeTag.gif') no-repeat left center;
+}
+
+.PingTag {
+	background: url('icons/PingTag.gif') no-repeat left center;
+}
+
+.PingVioletTag {
+	background: url('icons/PingVioletTag.gif') no-repeat left center;
+}
+
+.YellowTag {
+	background: url('icons/YellowTag.gif') no-repeat left center;
+}
+
+
 .MoreActionsIcon {
 	background: url('icons/MoreActions.gif') no-repeat left;
 }
