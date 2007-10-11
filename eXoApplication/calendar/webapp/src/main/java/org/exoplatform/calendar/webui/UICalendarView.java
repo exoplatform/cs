@@ -81,6 +81,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
 
 
   final public static String CALENDARID = "calendarId".intern() ;
+  final public static String EVENTID = "eventId".intern() ;
   protected Calendar calendar_ = null ;
   public boolean isShowEvent_ = true;
   private boolean isShowWorkingTime_ = false ;

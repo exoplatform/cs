@@ -18,9 +18,7 @@ import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.EventQuery;
-import org.exoplatform.calendar.webui.popup.UIEventForm;
 import org.exoplatform.calendar.webui.popup.UIPopupAction;
-import org.exoplatform.calendar.webui.popup.UIPopupContainer;
 import org.exoplatform.calendar.webui.popup.UIQuickAddEvent;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -49,12 +47,13 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
       @EventConfig(listeners = UICalendarView.ChangeCategoryActionListener.class), 
       @EventConfig(listeners = UICalendarView.EventSelectActionListener.class), 
       @EventConfig(listeners = UICalendarView.AddCategoryActionListener.class),
+      @EventConfig(listeners = UICalendarView.EditEventActionListener.class), 
+      @EventConfig(listeners = UICalendarView.QuickDeleteEventActionListener.class),
       @EventConfig(listeners = UIMonthView.MoveNextActionListener.class), 
       @EventConfig(listeners = UIMonthView.MovePreviousActionListener.class),
       @EventConfig(listeners = UIMonthView.QuickAddNewEventActionListener.class), 
       @EventConfig(listeners = UIMonthView.QuickAddNewTaskActionListener.class), 
-      @EventConfig(listeners = UICalendarView.EditEventActionListener.class), 
-      @EventConfig(listeners = UICalendarView.QuickDeleteEventActionListener.class),
+      @EventConfig(listeners = UIMonthView.UpdateEventActionListener.class), 
       @EventConfig(listeners = UIMonthView.GotoDateActionListener.class), 
       @EventConfig(listeners = UIMonthView.GotoYearActionListener.class)
     }
@@ -137,7 +136,7 @@ public class UIMonthView extends UICalendarView {
     System.out.println("\n\n month view ");
     refreshSelectedCalendarIds() ;
     refreshEvents() ;
-    
+
   }
   private Date getDateOf(int year, int month, int day) {
     GregorianCalendar gc = new GregorianCalendar(year, month, day) ;
@@ -257,6 +256,36 @@ public class UIMonthView extends UICalendarView {
       }
     }
   }
+  static  public class UpdateEventActionListener extends EventListener<UIMonthView> {
+    public void execute(Event<UIMonthView> event) throws Exception {
+      UIMonthView calendarview = event.getSource() ;
+      UICalendarPortlet uiPortlet = calendarview.getAncestorOfType(UICalendarPortlet.class) ;
+      String username = event.getRequestContext().getRemoteUser() ;
+      String value = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      String eventId = event.getRequestContext().getRequestParameter(EVENTID) ;
+      String calendarId = event.getRequestContext().getRequestParameter(CALENDARID) ;
+      try {
+        int day = Integer.parseInt(value) ;
+        CalendarService calService = calendarview.getApplicationComponent(CalendarService.class) ;
+        CalendarEvent calEvent = calService.getUserEvent(username, calendarId, eventId) ;
+        java.util.Calendar cal1 = GregorianCalendar.getInstance() ;
+        cal1.setTime(calEvent.getFromDateTime()) ;
+        int amount = cal1.get(java.util.Calendar.DATE) - day ;
+        cal1.add(java.util.Calendar.DATE, amount) ;
+        calEvent.setFromDateTime(cal1.getTime()) ;
+        cal1.setTime(calEvent.getToDateTime()) ;
+        cal1.add(java.util.Calendar.DATE, amount) ;
+        calEvent.setFromDateTime(cal1.getTime()) ;
+        calService.saveUserEvent(username, calendarId, calEvent, false) ;
+        UIMiniCalendar uiMiniCalendar = uiPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;
+        uiMiniCalendar.refresh() ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
+      } catch (Exception e) {
+        e.printStackTrace() ;
+      }
+    }
+  }
   static  public class GotoDateActionListener extends EventListener<UIMonthView> {
     public void execute(Event<UIMonthView> event) throws Exception {
       System.out.println("\n\n GotoDateActionListener");
@@ -278,32 +307,6 @@ public class UIMonthView extends UICalendarView {
       }
     }
   }
- /* static  public class EditEventActionListener extends EventListener<UIMonthView> {
-    public void execute(Event<UIMonthView> event) throws Exception {
-      UIMonthView calendarview = event.getSource() ;
-      System.out.println("\n\n EditEventActionListener");
-      String eventId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      String calendarId = event.getRequestContext().getRequestParameter(CALENDARID) ;
-      System.out.println("\n\n calId " + calendarId);
-      String username = event.getRequestContext().getRemoteUser() ;
-      try {
-        CalendarService calendarService = calendarview.getApplicationComponent(CalendarService.class) ;
-        CalendarEvent calendarEvent = calendarService.getUserEvent(username, calendarId, eventId) ;
-        UICalendarPortlet uiPortlet = calendarview.getAncestorOfType(UICalendarPortlet.class) ;
-        UIPopupAction uiParenPopup = uiPortlet.getChild(UIPopupAction.class) ;
-        UIPopupContainer uiPopupContainer = uiPortlet.createUIComponent(UIPopupContainer.class, null, null) ;
-        UIEventForm uiEventForm = uiPopupContainer.addChild(UIEventForm.class, null, null) ;
-        uiEventForm.initForm(calendarEvent) ;
-        uiParenPopup.activate(uiPopupContainer, 600, 0, true) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiParenPopup) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
-      } catch (Exception e) {
-        e.printStackTrace() ;
-      }
-      //calendarview.refresh() ;
-      //event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
-    }
-  }*/
   static  public class GotoYearActionListener extends EventListener<UIMonthView> {
     public void execute(Event<UIMonthView> event) throws Exception {
       UIMonthView calendarview = event.getSource() ;
