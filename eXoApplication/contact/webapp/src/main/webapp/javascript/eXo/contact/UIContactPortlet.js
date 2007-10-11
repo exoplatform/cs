@@ -78,13 +78,13 @@ UIContactPortlet.prototype.printpreview = function (obj){
 	document.body.style.background = "transparent" ;
 	document.body.appendChild(div) ;
 	var button = DOMUtil.findDescendantsByClass(div, "a", "ActionButton") ;
+	button[0].href = "#" ;
 	button[0].onclick = function(){
 		document.body.removeChild(div) ;
 		UIPortalApplication.style.display = "block" ;
 		document.body.style.background = bg ;
 	}
-	button[1].onclick = function(){
-		window.print() ;
-	}
+	DOMUtil.findFirstDescendantByClass(button[1], 'div','ButtonMiddle').style.display = "block" ;
+	button[2].style.display = "none" ;
 }
 eXo.contact.UIContactPortlet = new UIContactPortlet() ;

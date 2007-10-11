@@ -273,17 +273,18 @@
                   </div>
                 </div>
            		</a>
-          		<%}%> 
-          		<a href="#" onclick="javascript:eXo.contact.UIContactPortlet.printpreview(this) ;" class="ActionButton LightBlueStyle">
+          		<%}%>
+          		
+          		<a href="#" onclick="javascript:window.print() ;" class="ActionButton LightBlueStyle">
                 <div class="ButtonLeft">
                   <div class="ButtonRight">
-                    <div class="ButtonMiddle">
+                    <div class="ButtonMiddle" style="display:none ;">
                     <%=_ctx.appRes(uicomponent.getName() + ".action.print")%>
                     </div>
                   </div>
                 </div>
-           		</a>  
-           		 
+           		</a>           		 
+           		
            		<a href="#" onclick="javascript:eXo.contact.UIContactPortlet.printpreview(this) ;" class="ActionButton LightBlueStyle">
                 <div class="ButtonLeft">
                   <div class="ButtonRight">
@@ -292,8 +293,7 @@
                     </div>
                   </div>
                 </div>
-           		</a>
-           		    
+           		</a>           		    
           	</td>
           </tr>  
         </table>
