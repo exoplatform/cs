@@ -53,9 +53,9 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
       @EventConfig(listeners = UIMonthView.MovePreviousActionListener.class),
       @EventConfig(listeners = UIMonthView.QuickAddNewEventActionListener.class), 
       @EventConfig(listeners = UIMonthView.QuickAddNewTaskActionListener.class), 
-      @EventConfig(listeners = UIMonthView.GotoDateActionListener.class), 
       @EventConfig(listeners = UICalendarView.EditEventActionListener.class), 
       @EventConfig(listeners = UICalendarView.QuickDeleteEventActionListener.class),
+      @EventConfig(listeners = UIMonthView.GotoDateActionListener.class), 
       @EventConfig(listeners = UIMonthView.GotoYearActionListener.class)
     }
 )
@@ -259,15 +259,19 @@ public class UIMonthView extends UICalendarView {
   }
   static  public class GotoDateActionListener extends EventListener<UIMonthView> {
     public void execute(Event<UIMonthView> event) throws Exception {
+      System.out.println("\n\n GotoDateActionListener");
       UIMonthView calendarview = event.getSource() ;
       String date = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      System.out.println("\n\n GotoDateActionListener");
       try {
+        UICalendarPortlet uiPortlet = calendarview.getAncestorOfType(UICalendarPortlet.class) ;
+        UIActionBar uiActionBar = uiPortlet.findFirstComponentOfType(UIActionBar.class) ;
         UICalendarViewContainer uiContainer = calendarview.getAncestorOfType(UICalendarViewContainer.class) ;
         UIDayView uiDayView = uiContainer.getChild(UIDayView.class) ;
         uiDayView.setCurrentCalendar(new GregorianCalendar(calendarview.getCurrentYear(), calendarview.getCurrentMonth(),Integer.parseInt(date))) ;
         uiDayView.refresh() ;
         uiContainer.setRenderedChild(UIDayView.class) ;
+        uiActionBar.setCurrentView(uiDayView.getId()) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiActionBar) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;
       } catch (Exception e) {
         e.printStackTrace() ;

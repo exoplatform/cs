@@ -51,6 +51,7 @@ import org.exoplatform.webui.form.validator.EmptyFieldValidator;
       //(listeners = UICalendarForm.SelectPublicActionListener.class,  phase=Phase.DECODE),
       @EventConfig(listeners = UICalendarForm.AddCategoryActionListener.class,  phase=Phase.DECODE),
       @EventConfig(listeners = UICalendarForm.SelectPermissionActionListener.class, phase=Phase.DECODE),
+      @EventConfig(listeners = UICalendarForm.ResetActionListener.class),
       @EventConfig(listeners = UICalendarForm.SaveActionListener.class),
       @EventConfig(listeners = UICalendarForm.CancelActionListener.class, phase=Phase.DECODE)
     }
@@ -67,7 +68,8 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
   final public static String INPUT_SHARE = "public".intern() ;
 
   private Map<String, String> permission_ = new HashMap<String, String>() ;
-  
+  private boolean isAddNew_ = true ;
+  public String calendarId_ = null ;
   public UICalendarForm() throws Exception{
     super("UICalendarForm", false);
 
@@ -115,12 +117,12 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
     sharing.setActionField(EDIT_PERMISSION, actions) ;
     sharing.setRendered(false) ;
     addChild(sharing) ;
-    
+
     //lockCheckBoxFields(!uiCheckbox.isChecked());
   }
 
   public String[] getActions(){
-    return new String[]{"Save", "Cancel"} ;
+    return new String[]{"Reset","Save", "Cancel"} ;
   }
   private  List<SelectItemOption<String>> getCategory() throws Exception {
     String username = Util.getPortalRequestContext().getRemoteUser() ;
@@ -136,7 +138,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
     UIFormInputWithActions calendarDetail = getChildById(INPUT_CALENDAR) ;
     calendarDetail.getUIFormSelectBox(CATEGORY).setOptions(getCategory()) ;
   }
-  private void lockCheckBoxFields(boolean isLock) throws Exception {
+  protected void lockCheckBoxFields(boolean isLock) throws Exception {
     UIFormInputWithActions shareTab = getChildById(INPUT_SHARE) ;
     for(String group : CalendarUtils.getAllGroups()) {
       UIFormCheckBoxInput uiInput = shareTab.getUIFormCheckBoxInput(group) ;
@@ -150,7 +152,41 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
   }
   public void deActivate() throws Exception {
     // TODO Auto-generated method stub
-
+  }
+  public void reset() {
+    super.reset() ;
+    calendarId_ = null ;
+    isAddNew_ = true ;
+  }
+  public void init(String username, String calendarId) throws Exception {
+    reset() ;
+    isAddNew_ = false ;
+    calendarId_ = calendarId ;
+    CalendarService calService = getApplicationComponent(CalendarService.class) ;
+    Calendar calendar = calService.getUserCalendar(username, calendarId) ;
+    setDisplayName(calendar.getName()) ;
+    setDescription(calendar.getDescription()) ;
+    setSelectedGroup(calendar.getCategoryId()) ;
+  }
+  
+  protected String getDisplayName() {
+    return getUIStringInput(DISPLAY_NAME).getValue() ;
+  }
+  protected void setDisplayName(String value) {
+    getUIStringInput(DISPLAY_NAME).setValue(value) ;
+  }
+  
+  protected String getDescription() {
+    return getUIFormTextAreaInput(DESCRIPTION).getValue() ;
+  }
+  protected void setDescription(String value) {
+    getUIFormTextAreaInput(DESCRIPTION).setValue(value) ;
+  }
+  protected String getSelectedGroup() {
+    return getUIFormSelectBox(CATEGORY).getValue() ;
+  }
+  protected void setSelectedGroup(String value) {
+    getUIFormSelectBox(CATEGORY).setValue(value) ;
   }
   public void updateSelect(String selectField, String value) throws Exception {
     UIFormInputWithActions shareTab = getChildById(INPUT_SHARE) ;
@@ -206,13 +242,21 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
       event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
     }
   }
-
+  static  public class ResetActionListener extends EventListener<UICalendarForm> {
+    public void execute(Event<UICalendarForm> event) throws Exception {
+      System.out.println("\n\n ResetActionListener");
+      UICalendarForm uiForm = event.getSource() ;
+      uiForm.reset() ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
+    }
+  }
   static  public class SaveActionListener extends EventListener<UICalendarForm> {
     public void execute(Event<UICalendarForm> event) throws Exception {
       UICalendarForm uiForm = event.getSource() ;
       String username = Util.getPortalRequestContext().getRemoteUser() ;
       CalendarService calendarService = CalendarUtils.getCalendarService() ;
       Calendar calendar = new Calendar() ;
+      if(!uiForm.isAddNew_) calendar.setId(uiForm.calendarId_) ;
       calendar.setName(uiForm.getUIStringInput(DISPLAY_NAME).getValue()) ;
       calendar.setDescription(uiForm.getUIFormTextAreaInput(DESCRIPTION).getValue()) ;
       calendar.setCategoryId(uiForm.getUIFormSelectBox(CATEGORY).getValue()) ;
@@ -235,14 +279,14 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
         if(!CalendarUtils.isEmpty(editPermission)) {
           calendar.setEditPermission(editPermission.split(CalendarUtils.COLON)) ;
         }
-        calendarService.saveGroupCalendar(calendar, true) ;
+        calendarService.saveGroupCalendar(calendar, uiForm.isAddNew_) ;
       }else {
         if(CalendarUtils.isEmpty(uiForm.getUIFormSelectBox(CATEGORY).getValue())) {
           uiApp.addMessage(new ApplicationMessage("UICalendarForm.msg.category-empty", null, ApplicationMessage.WARNING) ) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;
         } 
-        calendarService.saveUserCalendar(username, calendar, true) ;        
+        calendarService.saveUserCalendar(username, calendar, uiForm.isAddNew_) ;        
       }
       UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
       calendarPortlet.cancelAction() ;
