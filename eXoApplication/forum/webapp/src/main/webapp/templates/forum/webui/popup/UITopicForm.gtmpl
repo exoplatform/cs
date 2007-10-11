@@ -15,7 +15,7 @@
 			                <div class="NormalTab">
 			                  <div class="LeftTab">
 			                    <div class="RightTab">
-					                  <div onclick="" class="MiddleTab">Thread Content</div>
+					                  <div onclick="eXo.webui.UIHorizontalTabs.displayTabContent(this)" class="MiddleTab">Thread Content</div>
 					                </div>
 			                  </div>
 			                </div>
@@ -25,7 +25,17 @@
 			                <div class="NormalTab">
 			                  <div class="LeftTab">
 			                    <div class="RightTab">
-					                  <div onclick="" class="MiddleTab">Icons and Smileys</div>
+					                  <div onclick="eXo.webui.UIHorizontalTabs.displayTabContent(this)" class="MiddleTab">Icons and Smileys</div>
+					                </div>
+			                  </div>
+			                </div>
+			              </div>
+			              
+			              <div class="UITab NormalTabStyle">
+			                <div class="NormalTab">
+			                  <div class="LeftTab">
+			                    <div class="RightTab">
+					                  <div onclick="eXo.webui.UIHorizontalTabs.displayTabContent(this)" class="MiddleTab">Thread Options</div>
 					                </div>
 			                  </div>
 			                </div>
@@ -35,7 +45,7 @@
 			                <div class="SelectedTab">
 			                  <div class="LeftTab">
 			                    <div class="RightTab">
-					                  <div onclick="" class="MiddleTab">Thread Options</div>
+					                  <div onclick="eXo.webui.UIHorizontalTabs.displayTabContent(this)" class="MiddleTab">Thread permission</div>
 					                </div>
 			                  </div>
 			                </div>
@@ -48,7 +58,7 @@
 		      </div>
 		    	<div class="HorizontalLayout">
 		        <div class="UITabContentContainer">
-	            <div style="display: none;" id="UITabContent" class="UITabContent">
+	            <div style="display: block;" id="UITabContent" class="UITabContent">
 	              <div class="UIFormInputSet ThreadContent">
 	              	<table class="UIFormGrid">
 	              		<tbody>
@@ -75,9 +85,8 @@
 	              	</table>
 	              </div>
 	            </div>
-	            
-	            
-	            <div style="display: block;" id="UITabContent" class="UITabContent">
+	            <div class="UITabContent" id="UITabContent" style="display: none;"><samp>dsfafgasdfasd</samp></div>
+	            <div style="display: none;" id="UITabContent" class="UITabContent">
 	              <div class="UIFormInputSet ThreadOptions">
 	              	<table class="UIFormGrid">
 	              		<tbody>
@@ -140,6 +149,180 @@
 	              	</table>
 	              </div>
 	            </div>
+	            
+	            <div class="UITabContent ThreadPermission"  id="UITabContent" style="display: none;">
+ 								<div class="ThreadPermission">
+ 									<div class="UIPermissionInfo">
+ 										<table class="UIGrid" cellspacing="0" borderspacing="0">
+ 											<thead>
+ 												<tr>
+ 													<th>User Or Group</th>
+ 													<th>Access Thread </th>
+ 													<th>Add Post </th>
+ 													<th>Modertor </th>
+ 													<th>Action</th>
+ 												</tr>
+ 											</thead>
+ 											<tbody>
+ 												<tr class="EvenRow">
+ 													<td class="text">any</td>
+ 													<td class="text">true</td>
+ 													<td class="true">true</td>
+ 													<td class="true">true</td>
+ 													<td>
+ 														<div class="ActionContainer" style="margin: 0px auto;">
+ 															<div class="OverflowContainer" style="margin: auto;">
+ 																<a class="EditIcon" title="Edit" href="#"><span></span></a>
+ 																<a class="DeleteIcon" title="Delete" href="#"><span></span></a>
+ 															</div>
+ 														</div>
+ 													</td>
+ 												</tr>
+ 												<tr class="OddRow">
+ 													<td class="text">user</td>
+ 													<td class="text">false</td>
+ 													<td class="true">false</td>
+ 													<td class="true">false</td>
+ 													<td>
+ 														<div class="ActionContainer" style="margin: 0px auto;">
+ 															<div class="OverflowContainer" style="margin: auto;">
+ 																<a class="EditIcon" title="Edit" href="#"><span></span></a>
+ 																<a class="DeleteIcon" title="Delete" href="#"><span></span></a>
+ 															</div>
+ 														</div>
+ 													</td>
+ 												</tr>
+ 											</tbody>
+ 										</table>
+										<div class="UIPageIterator">
+											<div class="PageIteratorContainer">
+											 	<div class="RightPageIteratorBlock">
+										    	<a href="#" class="Icon LastTopPageIcon" title=""></a>
+										      <a class="Icon DisableLastTopPageIcon" title=""></a>        
+										   	  <a href="#" class="Icon LastPageIcon" title=""></a>
+										   	  <a class="Icon DisableLastPageIcon" title=""><span></span></a>
+										    	<div class="Number">
+									          <a href="#" class="PageSelected">1</a>
+								            <a href="#">2</a>
+										    	</div>
+								    	    <a href="#" class="Icon NextPageIcon" title=""><span></span></a>
+								    	    <a class="Icon DisableNextPageIcon" title=""><span></span></a>
+								    	    <a href="#" class="Icon NextTopPageIcon" title=""></a>
+								    	    <a class="Icon DisableNextTopPageIcon" title=""><span></span></a>
+										    	<div style="clear: left"><span></span></div>
+											  </div>
+											  <div class="LeftPageIteratorBlock">
+											  <div class="TotalPages">Total pages</div>
+											  <div class="PagesTotalNumber">1</div>
+											  <div style="clear: left"><span></span></div>
+											</div>
+										</div>
+										<div style="clear: right"><span></span></div>
+									</div>        												
+ 							  </div>
+ 								<div class="UIFormWithTitle UIPermissionForm">
+ 									<div class="TitleBar">Add/Edit a permission to that Calendar</div>
+ 											<div class="HorizontalLayout">
+ 												<div class="FormContainer">
+ 													<div class="UIFormGrid">
+ 														<tbody>
+ 															<tr>
+ 																<td class="FieldComponent">
+ 																  <td>
+ 																		<td class="UIFormInputSet">
+ 																			<div>
+ 																				<div class="FormContainer">
+ 																					<table class="UIFormGrid">
+			   																		<tbody>
+         																			<tr>
+			         																	<td class="FieldLabel">User OR Group</td>
+			         																	<td class="FieldComponent">
+			         																		<input type="text" readonly="readonly" name="userOrGroup"/>
+			         																		<a title="SelectUser" href="#">
+			         																			<img src="/eXoResources/skin/DefaultSkin/background/Blank.gif" class="AddIcon16x16 SelectUserIcon"/>
+			        																		</a>
+			   																					<a title="SelectMember" href="#">
+			         																			<img src="/eXoResources/skin/DefaultSkin/background/Blank.gif" class="AddIcon16x16 SelectMemberIcon"/>
+			         																		</a>
+			         																		<a title="AddAny" href="#">
+			         																			<img src="/eXoResources/skin/DefaultSkin/background/Blank.gif" class="AddIcon16x16 AddAnyIcon"/>
+			         																		</a>
+			     																			</td>
+			    																		</tr>
+			         															</tbody>
+			         														</table>
+ 																				</div>
+ 																				<div class="FormContainer">
+			         														<table class="UIFormGrid">
+			     																	<tbody>
+	   																					<tr>
+			         																	<td class="FieldLabel">Can Access Forum</td>
+			         																	<td class="FieldComponent">
+			         																		<input type="checkbox" class="checkbox" value="" name="3"/>
+			       																		</td>
+			   																			</tr>
+        																		</tbody>
+			         														</table>
+			         													</div>
+			         													<div class="FormContainer">
+			         														<table class="UIFormGrid">
+			         															<tbody>
+			         																<tr>
+			         																	<td class="FieldLabel">
+Can Add Thread</td>	
+			         																	<td class="FieldComponent">
+			         																		<input type="checkbox" class="checkbox" value="" name="2"/>
+			         																	</td>
+			         																</tr>
+			         															</tbody>
+			         														</table>
+			         													</div>
+			         													<div class="FormContainer">
+			         														<table class="UIFormGrid">
+			         															<tbody>
+			   																			<tr>
+			         																	<td class="FieldLabel">Moderator</td>
+			         																	<td class="FieldComponent">
+			         																		<input type="checkbox" class="checkbox" value="" name="1"/>
+			         																	</td>
+			         																</tr>
+			         															</tbody>
+			         														</table>
+			         													</div>
+ 																			</div>
+ 																		</td>
+ 																	</td>
+ 																</td>
+ 															</tr>
+ 														</tbody>
+ 													</div>
+ 													<div class="UIAction"> 
+												  	<table class="ActionContainer" align="center">
+												 			<tr>
+														  	<td align="center">
+  																<a href="#" class="ActionButton LightBlueStyle">
+												        	  <div class="ButtonLeft">
+											            	  <div class="ButtonRight">
+											              	  <div class="ButtonMiddle"> Save </div>
+											                </div>
+											              </div>
+											            </a>
+											            <a href="#" class="ActionButton LightBlueStyle">
+											          	  <div class="ButtonLeft">
+											            	  <div class="ButtonRight">
+											              	  <div class="ButtonMiddle"> Cancel </div>
+											                </div>
+											              </div>
+											            </a>
+                         				</td>
+                    					</tr>
+ 	                          </table>
+												 	</div>
+ 												</div>
+ 											</div>
+ 									
+ 										</div>
+ 									</div>
 	            
 	            
 	          </div>
