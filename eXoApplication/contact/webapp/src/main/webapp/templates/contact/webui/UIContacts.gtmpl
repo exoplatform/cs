@@ -20,8 +20,8 @@
 					<a href="#" class="ControlButton">
 						<div class="Icon ChatIcon" title="chat"><span></span></div>
 					</a>
-					<a href="<%=uicomponent.event("AddTag")%>" class="ControlButton">
-						<div class="Icon SelectTagIcon"title="add tag"><span></span></div>
+					<a href="<%=uicomponent.event("Tag")%>" class="ControlButton">
+						<div class="Icon SelectTagIcon"title="tag"><span></span></div>
 					</a>
 					<a href="<%=uicomponent.getParent().event("SendEmail")%>" class="ControlButton">
 						<div class="Icon MessageIcon" title="send mail"><span></span></div>
@@ -148,42 +148,39 @@
 			        <div class="MiddleLeftRightClickPopupMenu">
 			          <div class="MiddleRightRightClickPopupMenu">
               		<div class="UIRightPopupMenuContainer">
-              		<% 
-              			String[] selections = uicomponent.getSelections() ;
-              		%>
 										<a class="MenuItem" href="<%=uicomponent.event("EditContact", "id")%>">   
 	                    <div class="ItemIcon EditIcon">
-	                      <%=selections[0]%>
+	                      Edit Contact
 	                    </div>
                     </a>
                     <a class="MenuItem" href="<%=uicomponent.getParent().event("SendEmail", "id")%>">   
 	                    <div class="ItemIcon EmailIcon">
-	                      <%=selections[1]%>
+	                      Send Email
 	                    </div>
                     </a>
                     <a class="MenuItem" href="<%=uicomponent.event("InstantMessage", "id")%>">   
 	                    <div class="ItemIcon InstantMessage">
-	                      <%=selections[2]%>
+	                      Instant Message
 	                    </div>
                     </a>
-                    <a class="MenuItem" href="<%=uicomponent.event("AddTag", "id")%>">   
+                    <a class="MenuItem" href="<%=uicomponent.event("Tag", "id")%>">   
 	                    <div class="ItemIcon BlueTag">
-	                      <%=selections[3]%>
+	                      Tag
 	                    </div>
                     </a>
                     <a class="MenuItem" href="<%=uicomponent.event("MoveContacts", "id")%>">   
 	                    <div class="ItemIcon MoveContactIcon">
-	                      <%=selections[4]%>
+	                      Move Contact
 	                    </div>
                     </a>
                     <a class="MenuItem" href="<%=uicomponent.event("DeleteContacts", "id")%>">   
 	                    <div class="ItemIcon DeleteContactIcon">
-	                      <%=selections[5]%>
+	                      Delete Contact
 	                    </div> 
                     </a>
                     <a class="MenuItem" href="<%=uicomponent.event("PrintContact", "id")%>">   
 	                    <div class="ItemIcon PrintIcon">
-	                      <%=selections[6]%>
+	                      Print Contact
 	                    </div>
                     </a>
 									</div>
@@ -286,7 +283,7 @@
 			  		dservice = uicomponent.getDownloadService() ;
 			  		imageLink = ContactUtils.getImageSource(contact, dservice) ;
 			  		%>
-						<img src="<%=(imageLink == null ? "/contact/skin/DefaultSkin/webui/background/Img2.gif": imageLink)%>" width=63 height=81 class="AvatasIcon"/>
+						<img src="<%=(ContactUtils.isEmpty(imageLink) ? "/contact/skin/DefaultSkin/webui/background/Img2.gif": imageLink)%>" width=63 height=81 class="AvatasIcon"/>
 			  		<div class="WorkContainerVCards">
 			  		  <div class="JobMember"><%=(contact.getJobTitle()==null ? "" : contact.getJobTitle())%></div>
 			  		  <div class="InformationsMember">

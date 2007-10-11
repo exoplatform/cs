@@ -53,7 +53,7 @@ abstract public class JCRPageList {
   
   abstract public List getAll() throws Exception  ;
   
-  protected void checkAndSetPage(long page) throws Exception  {
+  protected void checkAndSetPage(long page) throws Exception {
     if(page < 1 || page > availablePage_) {
       Object[] args = { Long.toString(page), Long.toString(availablePage_) } ;
       throw new ExoMessageException("PageList.page-out-of-range", args) ;

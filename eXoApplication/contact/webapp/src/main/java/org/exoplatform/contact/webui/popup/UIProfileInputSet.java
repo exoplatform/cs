@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.exoplatform.contact.service.ContactAttachment;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -46,8 +45,6 @@ public class UIProfileInputSet extends UIFormInputWithActions {
   private byte[] imageBytes = null;
   private String fileName = null ;
   private String imageMimeType = null ;
-  //private ContactAttachment attachment = null ;
-  //private boolean isEdit = false ;
   
   public UIProfileInputSet(String id) throws Exception {
     super(id) ;

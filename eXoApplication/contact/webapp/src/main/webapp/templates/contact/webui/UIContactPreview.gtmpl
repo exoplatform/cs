@@ -1,5 +1,7 @@
 <% 
 	import org.exoplatform.contact.service.Contact;
+	import org.exoplatform.download.DownloadService;
+	import org.exoplatform.contact.ContactUtils;
 	String compId = uicomponent.getId() ;
 	Contact contact = uicomponent.getContact();
 	if(contact != null) {		
@@ -28,8 +30,10 @@
 						<div class="MiddleCenterViewBoxStyle">
 						
 							<div class="ContactPreviewContainer"	>		
-								<% String imageLink = uicomponent.getImageSource() ; %>
-								<img src="<%=(imageLink == null ? "/contact/skin/DefaultSkin/webui/background/Img2.gif": imageLink)%>" width=63 height=81 class="Avatar"/>						
+								<% 
+			  					imageLink = uicomponent.getImageSource() ;
+			  				%>
+								<img src="<%=(ContactUtils.isEmpty(imageLink) ? "/contact/skin/DefaultSkin/webui/background/Img2.gif": imageLink)%>" width=63 height=81 class="Avatar"/>						
 								<div class="Member">
 									<div class="State"><%=(contact.getFullName()==null ? "" : contact.getFullName())%></div>
 									<div class="Job"><%=(contact.getJobTitle()==null ? "" : contact.getJobTitle())%></div>

@@ -7,7 +7,6 @@ package org.exoplatform.contact.webui.popup;
 import java.io.ByteArrayInputStream;
 
 import org.exoplatform.contact.ContactUtils;
-import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.upload.UploadResource;
@@ -37,7 +36,9 @@ import org.exoplatform.webui.form.UIFormUploadInput;
     }
 )
 public class UIImageForm extends UIForm implements UIPopupComponent{
-  final static public String FIELD_UPLOAD = "upload".intern() ;
+  public static final String FIELD_UPLOAD = "upload".intern() ;
+  public static final String[] imageTypes = { ".gif", ".jpg", ".jpeg", ".tiff", ".bmp", ".png" } ;
+   
   public UIImageForm() throws Exception {
     this.setMultiPart(true) ;
     addUIFormInput(new UIFormUploadInput(FIELD_UPLOAD, FIELD_UPLOAD)) ;
@@ -67,7 +68,10 @@ public class UIImageForm extends UIForm implements UIPopupComponent{
         return ;
       }
       String fileName = uploadResource.getFileName() ;
-      if(ContactUtils.isEmpty(fileName)) {
+      boolean isImage = false ;
+      for(String imageType : imageTypes)
+        if (fileName.toLowerCase().endsWith(imageType)) isImage = true ;
+      if(ContactUtils.isEmpty(fileName) || (!isImage)) {
         uiApp.addMessage(new ApplicationMessage("UIAttachFileForm.msg.fileName-error", null, 
             ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;

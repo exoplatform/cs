@@ -132,7 +132,10 @@
   		</propertyDefinition>  
   		<propertyDefinition name="exo:lastUpdated" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
   			<valueConstraints/>
-  		</propertyDefinition>	  			
+  		</propertyDefinition>	
+  		<propertyDefinition name="exo:isShared" requiredType="Boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  			<valueConstraints/>
+  		</propertyDefinition>  			
   	</propertyDefinitions>
   	<childNodeDefinitions>
       <childNodeDefinition name="*" defaultPrimaryType="nt:file" autoCreated="false" mandatory="false"

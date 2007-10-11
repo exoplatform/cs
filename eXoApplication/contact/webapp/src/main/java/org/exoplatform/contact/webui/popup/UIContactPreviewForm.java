@@ -32,6 +32,7 @@ import org.exoplatform.webui.form.UIForm;
 public class UIContactPreviewForm extends UIForm implements UIPopupComponent {
   private Contact contact_ ; 
   private Date lastUpdated_ ;
+  
   public UIContactPreviewForm() { }
   
   public void setContact(Contact c) { contact_ = c; }

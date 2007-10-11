@@ -13,16 +13,20 @@
 				ContactGroup[] contactGroups = uicomponent.getContactGroups();
 				for(contactGroup in contactGroups) {
 					String actionLink  = uicomponent.event("SelectGroup", contactGroup.getId()) ;
+					cssClass = "NormalItem" ;
+					if(contactGroup.getId().equals(uicomponent.getGroupId()))	cssClass = "SelectedItem" ;
 		%>
-		<div class="ItemList NormalItem">
+		<div class="ItemList $cssClass">
 			<div class="Icon AddressIcon"><a href="$actionLink"><%=contactGroup.getName()%></a></div>
 		</div>
 		<% } } else {
 				 List sharedContactGroups = uicomponent.getSharedContactGroups();
 				 for(sharedContactGroup in sharedContactGroups) {
-				   String actionLink  = uicomponent.event("SelectGroup", sharedContactGroup) ;		
+				   String actionLink  = uicomponent.event("SelectGroup", sharedContactGroup) ;
+				   cssClass = "NormalItem" ;
+					 if(sharedContactGroup.equals(uicomponent.getGroupId())) cssClass = "SelectedItem" ;		
 		%>
-		<div class="ItemList NormalItem">
+		<div class="ItemList $cssClass">
 			<div class="Icon AddressIcon"><a href="$actionLink"><%=sharedContactGroup%></a></div>
 		</div>
 		<% } } %>

@@ -4,8 +4,6 @@
  **************************************************************************/
 package org.exoplatform.contact.webui;
 
-import java.util.Date;
-
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.download.DownloadService;
@@ -42,7 +40,7 @@ public class UIContactPreview extends UIComponent  {
   
   public String getImageSource() throws Exception {
     DownloadService dservice = getApplicationComponent(DownloadService.class) ;
-    return ContactUtils.getImageSource(contact_, dservice) ; 
+    return ContactUtils.getImageSource(contact_, dservice) ;
   }
   
   static public class MaximizeContactPaneActionListener extends EventListener<UIContactPreview> {

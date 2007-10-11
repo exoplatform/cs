@@ -11,7 +11,6 @@ import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactAttachment;
 import org.exoplatform.contact.service.ContactService;
-import org.exoplatform.contact.webui.UIAddressBooks;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContactPreview;
 import org.exoplatform.contact.webui.UIContacts;
@@ -160,6 +159,7 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
   
   public void setValues(Contact contact) throws Exception {
     contact_ = contact ;
+    System.out.println("\n\n share : " + contact.isShared() + "\n\n");
     if(contact.isShared()) {
       getUIFormCheckBoxInput(FIELD_ISPUBLIC_BOX).setChecked(true);
       String[] categories = contact.getCategories();
@@ -309,7 +309,10 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
           contact.setEditPermission(uiContactForm.getUIStringInput(FIELD_EDITPERMISSION_INPUT).getValue().split(","));
         String[] categories = sharedGroups.toString().split(",") ;
         contact.setCategories(categories);
+        contact.setShared(true) ;
         contactService.saveSharedContact(contact, isNew_);
+         
+        
       } else {
         UIPopupContainer popupContainer = uiContactForm.getParent() ;
         UICategorySelect uiCategorySelect = popupContainer.getChild(UICategorySelect.class); 

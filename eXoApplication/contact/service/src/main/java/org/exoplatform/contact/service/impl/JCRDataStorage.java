@@ -163,6 +163,8 @@ public class JCRDataStorage implements DataStorage {
     if(contactNode.hasProperty("exo:tags")) contact.setTags(ValuesToStrings(contactNode.getProperty("exo:tags").getValues()));
     if(contactNode.hasProperty("exo:editPermission")) contact.setEditPermission(ValuesToStrings(contactNode.getProperty("exo:editPermission").getValues()));
     if(contactNode.hasProperty("exo:lastUpdated"))contact.setLastUpdated(contactNode.getProperty("exo:lastUpdated").getString());
+    if(contactNode.hasProperty("exo:isShared")) contact.setShared(contactNode.getProperty("exo:isShared").getBoolean());
+
     contact.setPath(contactNode.getPath()) ;
     if(contactNode.hasNode("image")){
       Node image = contactNode.getNode("image");
@@ -412,10 +414,11 @@ public class JCRDataStorage implements DataStorage {
     contactNode.setProperty("exo:tags", contact.getTags());
     contactNode.setProperty("exo:editPermission", contact.getEditPermission());
     contactNode.setProperty("exo:lastUpdated", contact.getLastUpdated());
+    contactNode.setProperty("exo:isShared", contact.isShared());
+    
     // save image to contact
     ContactAttachment attachment = contact.getAttachment() ;
     if (attachment != null) {
-      //BufferAttachment file = (BufferAttachment)attachment ;
       if (attachment.getFileName() != null) {
         Node nodeFile = null ;
         if (contactNode.hasNode("image"))nodeFile = contactNode.getNode("image") ;
@@ -629,7 +632,25 @@ public class JCRDataStorage implements DataStorage {
     contactNode.setProperty("exo:categories", contact.getCategories());
     contactNode.setProperty("exo:editPermission", contact.getEditPermission());
     contactNode.setProperty("exo:lastUpdated", contact.getLastUpdated());
+    contactNode.setProperty("exo:isShared", contact.isShared());
     
+//  save image to contact
+    ContactAttachment attachment = contact.getAttachment() ;
+    if (attachment != null) {
+      if (attachment.getFileName() != null) {
+        Node nodeFile = null ;
+        if (contactNode.hasNode("image"))nodeFile = contactNode.getNode("image") ;
+        else nodeFile = contactNode.addNode("image", "nt:file");
+        Node nodeContent = null ;
+        if (nodeFile.hasNode("jcr:content")) nodeContent = nodeFile.getNode("jcr:content") ;
+        else nodeContent = nodeFile.addNode("jcr:content", "nt:resource") ;
+        nodeContent.setProperty("jcr:mimeType", attachment.getMimeType()) ;
+        nodeContent.setProperty("jcr:data", attachment.getInputStream());
+        nodeContent.setProperty("jcr:lastModified", Calendar.getInstance().getTimeInMillis());
+      }
+    }else {
+      if(contactNode.hasNode("image")) contactNode.getNode("image").remove() ;
+    }    
     contactHomeNode.getSession().save(); 
   }
 
