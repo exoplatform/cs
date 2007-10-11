@@ -119,6 +119,8 @@ public interface MailService {
   public MessagePageList getMessageByFolder(String username, String accountId, String folderName) throws Exception;
   
   public List<Tag> getTags(String username, String accountId) throws Exception ;
+  
+  public Tag getTag(String username, String accountId, String tagId) throws Exception;
   /** This method should:
     * 1. Check the tag name to see if  the tag name is configured in the account
     * 2. Check to see if the tag is already set in the message

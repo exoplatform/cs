@@ -427,6 +427,10 @@ public class MailServiceImpl implements MailService{
   public List<Tag> getTags(String username, String accountId) throws Exception {
     return storage_.getTags(username, accountId);
   }
+  
+  public Tag getTag(String username, String accountId, String tagId) throws Exception {
+    return storage_.getTag(username, accountId, tagId);
+  }
 
   public void removeMessageTag(String username, String accountId, List<String> messageIds, List<String> tags)
       throws Exception {

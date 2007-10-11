@@ -546,7 +546,22 @@ public class JCRDataStorage implements DataStorage{
     }
     return tags ;
   }
-
+  
+  public Tag getTag(String username, String accountId, String tagId) throws Exception {
+    Node tagHomeNode = getTagHome(username, accountId) ;
+    Tag tag = new Tag();
+    NodeIterator iter = tagHomeNode.getNodes() ;
+    while (iter.hasNext()){
+      Node tagNode = (Node)iter.next() ;
+      if (tagNode.getProperty(Utils.EXO_ID).getString().equals(tagId)) {
+        tag.setId((tagNode.getProperty(Utils.EXO_ID).getString())) ;
+        tag.setName(tagNode.getProperty(Utils.EXO_NAME).getString()) ;
+        tag.setDescription(tagNode.getProperty(Utils.EXO_DESCRIPTION).getString()) ;
+        tag.setColor(tagNode.getProperty(Utils.EXO_COLOR).getString()) ;
+      }
+    }
+    return tag ;
+  }
 
   public void removeMessageTag(String username, String accountId, List<String> messageIds, List<String> tagIds) 
   throws Exception {

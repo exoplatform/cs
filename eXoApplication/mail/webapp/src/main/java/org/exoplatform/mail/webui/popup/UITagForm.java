@@ -104,10 +104,8 @@ public class UITagForm extends UIForm implements UIPopupComponent{
       if (msg.getTags() != null && msg.getTags().length > 0) {
         for (int i = 0; i < msg.getTags().length; i++) {
           if (i > 0) tags += ", ";
-          for (Tag tag : mailSrv.getTags(username, accountId)) {
-            if (tag.getId().equals(msg.getTags()[i]))
-              tags += "[" + tag.getName() + "]";
-          }
+          Tag tag = mailSrv.getTag(username, accountId, msg.getTags()[i]);
+          tags += "[" + tag.getName() + "]";
         }
       } else tags = "No tag";
       
