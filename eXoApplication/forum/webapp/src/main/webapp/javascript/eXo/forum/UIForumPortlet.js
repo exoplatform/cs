@@ -114,4 +114,19 @@ UIForumPortlet.prototype.expandCollapse = function(obj) {
 	}
 } ;
 
+UIForumPortlet.prototype.showTreeNode = function(obj) {
+	var treeContainer = eXo.core.DOMUtil.findAncestorByClass(obj, "TreeContainer") ;
+	var nodes = eXo.core.DOMUtil.findChildrenByClass(treeContainer, "div", "Node") ;
+	var selectedNode = eXo.core.DOMUtil.findAncestorByClass(obj, "Node") ;
+	var nodeSize = nodes.length ;
+	var childrenContainer = null ;
+	for(var i = 0 ; i < nodeSize ; i ++ ) {
+		childrenContainer = eXo.core.DOMUtil.findFirstDescendantByClass(nodes[i], "div", "ChildNodeContainer") ;
+		if (nodes[i] === selectedNode) {
+			childrenContainer.style.display = "block" ;
+		} else {		
+			childrenContainer.style.display = "none" ;			
+		}
+	}	
+}
 eXo.forum.UIForumPortlet = new UIForumPortlet() ;

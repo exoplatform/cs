@@ -16,10 +16,11 @@
 		%>
 	    <div class="Node">
 	     	<div class="Icon ForumIcon"><span></span></div>  
-	     	<div class="NodeLabel">    
-	     		<div class="NodeSelected" onclick=""><a>$categoryName</a></div> 
+	     	<div class="NodeLabel" onclick = "eXo.forum.UIForumPortlet.showTreeNode(this);">
+	     		<div class="NodeSelected"><a>$categoryName</a></div> 
 	      </div> 		  
 	      <div style="clear: left;"><span></span></div>
+	      <div class="ChildNodeContainer" style="display:none"> <!-- Java Developers have to control display attribute of this div tag in the first appearance.(pls, remove this comment when you complete your task) -->
 	      <% 
 	      	List forums =  uicomponent.getForums(category.getId());
 	      	for(forum in forums) {
@@ -29,7 +30,7 @@
 	      		String selected = "normal" ;
 	      		if(uicomponent.getSeclectedForum(forum.getId())) selected = "Selected" ;
 	      %>
-			  <div display="block" class="ChildrenContainer">
+			  <div class="ChildrenContainer">
 			    <div class="Node $selected">
 			      <div class="Icon ThreadsIcon"><span></span></div>
 			      <div class="NodeLabel"> 
@@ -39,6 +40,7 @@
 			    </div>
 		    </div>
 		    <% } %>		
+	      </div>
 		  </div>
 		<% } %>	
 		 </div>  
