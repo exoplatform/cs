@@ -27,15 +27,15 @@ import org.exoplatform.webui.event.EventListener;
     events = {
       @EventConfig(listeners = UIMiniCalendar.MoveNextActionListener.class), 
       @EventConfig(listeners = UIMiniCalendar.MovePreviousActionListener.class),
-      @EventConfig(listeners = UIMiniCalendar.GotoDateActionListener.class),
-      @EventConfig(listeners = UIMiniCalendar.GotoMonthActionListener.class),
-      @EventConfig(listeners = UIMiniCalendar.GotoYearActionListener.class)
+      @EventConfig(listeners = UICalendarView.GotoDateActionListener.class)
+      /*@EventConfig(listeners = UICalendarView.GotoMonthActionListener.class),
+      @EventConfig(listeners = UICalendarView.GotoYearActionListener.class)*/
     }
 
 )
 public class UIMiniCalendar extends UIMonthView  {
-  final public static String TYPE_MONTH = "month".intern() ;
-  final public static String TYPE_YEAR = "year".intern() ;
+  /*final public static String TYPE_MONTH = "month".intern() ;
+  final public static String TYPE_YEAR = "year".intern() ;*/
   
   public UIMiniCalendar() throws Exception {
    refresh() ;
@@ -45,7 +45,7 @@ public class UIMiniCalendar extends UIMonthView  {
   protected void moveYear(int yearStep) {
     calendar_.add(Calendar.YEAR, yearStep) ;
   }
-  static  public class GotoDateActionListener extends EventListener<UIMiniCalendar> {
+  /*static  public class GotoDateActionListener extends EventListener<UIMiniCalendar> {
     public void execute(Event<UIMiniCalendar> event) throws Exception {
       UIMiniCalendar calendarview = event.getSource() ;
       String date = event.getRequestContext().getRequestParameter(OBJECTID) ;
@@ -103,13 +103,13 @@ public class UIMiniCalendar extends UIMonthView  {
       event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;
     }
-  }
+  }*/
 
   static  public class MoveNextActionListener extends EventListener<UIMiniCalendar> {
     public void execute(Event<UIMiniCalendar> event) throws Exception {
       UIMiniCalendar calendarview = event.getSource() ;
       String type = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      if(TYPE_MONTH.equals(type)) {
+      if(TYPE_MONTH == Integer.parseInt(type)) {
         calendarview.monthNext(1) ;
       } else {
         calendarview.moveYear(1) ;
@@ -124,7 +124,7 @@ public class UIMiniCalendar extends UIMonthView  {
     public void execute(Event<UIMiniCalendar> event) throws Exception {
       UIMiniCalendar calendarview = event.getSource() ;
       String type = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      if(TYPE_MONTH.equals(type)) {
+      if(TYPE_MONTH == Integer.parseInt(type)) {
         calendarview.monthNext(-1) ;
       } else {
         calendarview.moveYear(-1) ;

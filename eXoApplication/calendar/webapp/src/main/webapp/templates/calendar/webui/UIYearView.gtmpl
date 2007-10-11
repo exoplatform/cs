@@ -79,7 +79,11 @@
 											        validDay = 0;
 											      }
 											      if (validDay) {
-											       println "<td>$dayOfMonth</td>" ;
+											       println "<td>" ;
+											       %>
+											       	<a href="<%=uicomponent.event('GotoDate',String.valueOf(month) + '&day=' + String.valueOf(dayOfMonth))%>">$dayOfMonth</a>
+											       <%
+											       println "</td>" ;
 											        dayOfMonth++ ;
 											      } else {
 											        println "<td>&nbsp;</td>" ;

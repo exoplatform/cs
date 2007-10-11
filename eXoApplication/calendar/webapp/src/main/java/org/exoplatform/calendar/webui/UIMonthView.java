@@ -49,13 +49,13 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
       @EventConfig(listeners = UICalendarView.AddCategoryActionListener.class),
       @EventConfig(listeners = UICalendarView.EditEventActionListener.class), 
       @EventConfig(listeners = UICalendarView.QuickDeleteEventActionListener.class),
+      @EventConfig(listeners = UICalendarView.GotoDateActionListener.class), 
+      //@EventConfig(listeners = UICalendarView.GotoYearActionListener.class),
       @EventConfig(listeners = UIMonthView.MoveNextActionListener.class), 
       @EventConfig(listeners = UIMonthView.MovePreviousActionListener.class),
       @EventConfig(listeners = UIMonthView.QuickAddNewEventActionListener.class), 
       @EventConfig(listeners = UIMonthView.QuickAddNewTaskActionListener.class), 
-      @EventConfig(listeners = UIMonthView.UpdateEventActionListener.class), 
-      @EventConfig(listeners = UIMonthView.GotoDateActionListener.class), 
-      @EventConfig(listeners = UIMonthView.GotoYearActionListener.class)
+      @EventConfig(listeners = UIMonthView.UpdateEventActionListener.class)
     }
 )
 public class UIMonthView extends UICalendarView {
@@ -284,47 +284,6 @@ public class UIMonthView extends UICalendarView {
       } catch (Exception e) {
         e.printStackTrace() ;
       }
-    }
-  }
-  static  public class GotoDateActionListener extends EventListener<UIMonthView> {
-    public void execute(Event<UIMonthView> event) throws Exception {
-      System.out.println("\n\n GotoDateActionListener");
-      UIMonthView calendarview = event.getSource() ;
-      String date = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      try {
-        UICalendarPortlet uiPortlet = calendarview.getAncestorOfType(UICalendarPortlet.class) ;
-        UIActionBar uiActionBar = uiPortlet.findFirstComponentOfType(UIActionBar.class) ;
-        UICalendarViewContainer uiContainer = calendarview.getAncestorOfType(UICalendarViewContainer.class) ;
-        UIDayView uiDayView = uiContainer.getChild(UIDayView.class) ;
-        uiDayView.setCurrentCalendar(new GregorianCalendar(calendarview.getCurrentYear(), calendarview.getCurrentMonth(),Integer.parseInt(date))) ;
-        uiDayView.refresh() ;
-        uiContainer.setRenderedChild(UIDayView.class) ;
-        uiActionBar.setCurrentView(uiDayView.getId()) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiActionBar) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;
-      } catch (Exception e) {
-        e.printStackTrace() ;
-      }
-    }
-  }
-  static  public class GotoYearActionListener extends EventListener<UIMonthView> {
-    public void execute(Event<UIMonthView> event) throws Exception {
-      UIMonthView calendarview = event.getSource() ;
-      String date = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      UICalendarPortlet portlet = calendarview.getAncestorOfType(UICalendarPortlet.class) ;
-      UICalendarViewContainer uiContainer = portlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
-      uiContainer.setRenderedChild(UIYearView.class) ;
-      UIYearView uiYearView = uiContainer.getChild(UIYearView.class) ;
-      uiYearView.setCurrentDay(1) ;
-      //calendarview.setCurrentDay(1);
-      uiYearView.setCurrentMonth(java.util.Calendar.JANUARY) ;
-      uiYearView.setCurrentYear(Integer.parseInt(date)) ;
-      uiYearView.refresh() ;
-      UIActionBar uiActionBar = portlet.findFirstComponentOfType(UIActionBar.class) ;
-      uiActionBar.setCurrentView(uiContainer.getRenderedChild().getId()) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiActionBar) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;
     }
   }
 }

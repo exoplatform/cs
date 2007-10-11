@@ -31,18 +31,21 @@ import org.exoplatform.webui.event.EventListener;
     template = "app:/templates/calendar/webui/UIYearView.gtmpl",
     events = {
       @EventConfig(listeners = UIYearView.MoveNextActionListener.class), 
-      @EventConfig(listeners = UIYearView.GotoMonthActionListener.class),
-      @EventConfig(listeners = UIYearView.MovePreviousActionListener.class)
+     /* @EventConfig(listeners = UIYearView.GotoMonthActionListener.class),
+      @EventConfig(listeners = UIYearView.GotoDateActionListener.class),*/
+      @EventConfig(listeners = UIYearView.MovePreviousActionListener.class),
+      @EventConfig(listeners = UICalendarView.AddEventActionListener.class), 
+      @EventConfig(listeners = UICalendarView.DeleteEventActionListener.class)
     }
 
 )
 public class UIYearView extends UICalendarView {
 
   private Map<Integer, Map<Integer, Boolean> > yearData_ = new HashMap<Integer, Map<Integer, Boolean>>() ;
-  
+
   private Map<Integer, Boolean> monthData_ = new HashMap<Integer, Boolean>() ;
-  
-  
+
+
   public UIYearView() throws Exception {
     super() ;
   }
@@ -54,7 +57,6 @@ public class UIYearView extends UICalendarView {
     calendar_.add(Calendar.YEAR, years) ;
   }
   public void refresh() throws Exception {
-    
     Calendar cal = new GregorianCalendar(getCurrentYear(), 0, 1, 0, 0, 0) ;
     Calendar cal2 = new GregorianCalendar(getCurrentYear(), 0, 1, 0, 0, 0) ;
     Calendar beginYear = cal ;
@@ -71,14 +73,14 @@ public class UIYearView extends UICalendarView {
     yearData_.clear() ;
     monthData_.clear() ;
     for(int month = 0 ; month <= 11; month++){
-     for(int i = 1 ; i < getDaysInMonth(getCurrentYear(), month); i++){
-       monthData_.put(i, false) ;
-     }
+      for(int i = 1 ; i < getDaysInMonth(getCurrentYear(), month); i++){
+        monthData_.put(i, false) ;
+      }
       yearData_.put(month, monthData_) ;
     }
-    
+
   }
-  
+
   private List getEventList() {
     return null ;
   }
@@ -103,22 +105,26 @@ public class UIYearView extends UICalendarView {
 
   static  public class GotoMonthActionListener extends EventListener<UIYearView> {
     public void execute(Event<UIYearView> event) throws Exception {
-      UIYearView calendarview = event.getSource() ;
-      String date = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      UICalendarPortlet portlet = calendarview.getAncestorOfType(UICalendarPortlet.class) ;
-      UICalendarViewContainer uiContainer = portlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
-      uiContainer.setRenderedChild(UIMonthView.class) ;
-      UIMonthView uiMonthView = uiContainer.getChild(UIMonthView.class) ;
-      uiMonthView.setCurrentDay(1) ;
-      //calendarview.setCurrentDay(1);
-      uiMonthView.setCurrentMonth(Integer.parseInt(date)) ;
-      uiMonthView.refresh() ;
-      UIActionBar uiActionBar = portlet.findFirstComponentOfType(UIActionBar.class) ;
-      uiActionBar.setCurrentView(uiContainer.getRenderedChild().getId()) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiActionBar) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;
+      try {
+        UIYearView calendarview = event.getSource() ;
+        String month = event.getRequestContext().getRequestParameter(OBJECTID) ;
+        UICalendarPortlet portlet = calendarview.getAncestorOfType(UICalendarPortlet.class) ;
+        UICalendarViewContainer uiContainer = portlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
+        uiContainer.setRenderedChild(UIMonthView.class) ;
+        UIMonthView uiMonthView = uiContainer.getChild(UIMonthView.class) ;
+        uiMonthView.setCurrentDay(1) ;
+        uiMonthView.setCurrentMonth(Integer.parseInt(month)) ;
+        uiMonthView.refresh() ;
+        UIActionBar uiActionBar = portlet.findFirstComponentOfType(UIActionBar.class) ;
+        uiActionBar.setCurrentView(uiContainer.getRenderedChild().getId()) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiActionBar) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;
+      } catch (Exception e) {
+        e.printStackTrace() ;
+      }
     }
   }
+
 
 }

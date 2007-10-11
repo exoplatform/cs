@@ -4,10 +4,10 @@
 	int currentYear = uicomponent.getCurrentYear() ;
 	int currentMonth = uicomponent.getCurrentMonth() ;
 	int currentDay = uicomponent.getCurrentDay() ;
-	String linkDayNext = uicomponent.event(uicomponent.ACT_NEXT,uicomponent.TYPE_MONTH) ;
- 	String linkDayPrevious = uicomponent.event(uicomponent.ACT_PREVIOUS,uicomponent.TYPE_MONTH) ;
- 	String linkYearNext = uicomponent.event(uicomponent.ACT_NEXT,uicomponent.TYPE_YEAR) ;
- 	String linkYearPrevious = uicomponent.event(uicomponent.ACT_PREVIOUS,uicomponent.TYPE_YEAR) ;
+	String linkDayNext = uicomponent.event(uicomponent.ACT_NEXT,String.valueOf(uicomponent.TYPE_MONTH)) ;
+ 	String linkDayPrevious = uicomponent.event(uicomponent.ACT_PREVIOUS,String.valueOf(uicomponent.TYPE_MONTH)) ;
+ 	String linkYearNext = uicomponent.event(uicomponent.ACT_NEXT, String.valueOf(uicomponent.TYPE_YEAR)) ;
+ 	String linkYearPrevious = uicomponent.event(uicomponent.ACT_PREVIOUS,String.valueOf(uicomponent.TYPE_YEAR)) ;
  	monthName = uicomponent.getMonthName(currentMonth) ;
  	cssClass = "CalendarContentNomal" ;
  	if(uicomponent.isCurrentMonth(currentMonth, currentYear)) {
@@ -32,10 +32,14 @@
 							</td>
 							<td>
 								<div class="Title">
-								<a href="<%=uicomponent.event("GotoMonth","$currentMonth")%>">
+								<%
+										monthViewAction = uicomponent.TYPE_MONTH +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"="+ currentMonth +"&"+ uicomponent.DAY + "=1" ;
+										yearViewAction = uicomponent.TYPE_YEAR +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"=0&"+ uicomponent.DAY + "=1" ;
+								%>
+								<a href="<%=uicomponent.event("GotoDate", monthViewAction)%>">
 									$monthName 
 								</a>,  
-								<a href="<%=uicomponent.event("GotoYear","$currentYear")%>">
+								<a href="<%=uicomponent.event("GotoDate", yearViewAction)%>">
 									$currentYear
 								</a>
 								</div>
@@ -95,7 +99,8 @@
 						       	clazz = "SelectedDay";
 						       }  
 						     }
-						   actionLink =  uicomponent.event("GotoDate",String.valueOf(dayOfMonth)) ;
+						   dayActionLink = uicomponent.TYPE_DATE +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"="+ currentMonth +"&"+ uicomponent.DAY + "=" + dayOfMonth ;
+				       actionLink = uicomponent.event("GotoDate", dayActionLink) ;
 				       println "<td class=\"$highlight $clazz\"><a href=\"$actionLink\"><div class=\"Actions\">$dayOfMonth</div></a></td>" ;
 				        dayOfMonth++ ;
 				      } else {
