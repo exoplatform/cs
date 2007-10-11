@@ -390,7 +390,31 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       }
     }
   }
-  
+  static  public class QuickDeleteEventActionListener extends EventListener<UICalendarView> {
+    public void execute(Event<UICalendarView> event) throws Exception {
+      UICalendarView calendarview = event.getSource() ;
+      System.out.println("\n\n QuickDeleteEventActionListener");
+      String eventId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      String calendarId = event.getRequestContext().getRequestParameter(CALENDARID) ;
+      UICalendarViewContainer uiContainer = calendarview.getAncestorOfType(UICalendarViewContainer.class) ;
+      UICalendarPortlet uiPortlet = calendarview.getAncestorOfType(UICalendarPortlet.class) ;
+      UIMiniCalendar uiMiniCalendar = uiPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;
+      try {
+        CalendarService calService = calendarview.getApplicationComponent(CalendarService.class) ;
+        String username = event.getRequestContext().getRemoteUser() ;
+        calService.removeUserEvent(username, calendarId, eventId) ;
+      /*  List<CalendarEvent> events = new ArrayList<CalendarEvent>() ;
+        events.add(calService.getUserEvent(username, calendarId, eventId)) ;
+        calendarview.removeEvents(events) ;*/
+        uiMiniCalendar.refresh() ;
+        uiContainer.refresh() ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;
+      } catch (Exception e) {
+        e.printStackTrace() ;
+      }
+    }
+  }
   static public class TaskViewActionListener extends EventListener<UICalendarView> {
     public void execute(Event<UICalendarView> event) throws Exception {
       UICalendarView uiCalendarView = event.getSource() ;     

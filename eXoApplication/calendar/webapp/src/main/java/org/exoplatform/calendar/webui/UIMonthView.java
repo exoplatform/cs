@@ -54,8 +54,8 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
       @EventConfig(listeners = UIMonthView.QuickAddNewEventActionListener.class), 
       @EventConfig(listeners = UIMonthView.QuickAddNewTaskActionListener.class), 
       @EventConfig(listeners = UIMonthView.GotoDateActionListener.class), 
-      @EventConfig(listeners = UIMonthView.EditEventActionListener.class), 
-      @EventConfig(listeners = UIMonthView.QuickDeleteEventActionListener.class),
+      @EventConfig(listeners = UICalendarView.EditEventActionListener.class), 
+      @EventConfig(listeners = UICalendarView.QuickDeleteEventActionListener.class),
       @EventConfig(listeners = UIMonthView.GotoYearActionListener.class)
     }
 )
@@ -274,7 +274,7 @@ public class UIMonthView extends UICalendarView {
       }
     }
   }
-  static  public class EditEventActionListener extends EventListener<UIMonthView> {
+ /* static  public class EditEventActionListener extends EventListener<UIMonthView> {
     public void execute(Event<UIMonthView> event) throws Exception {
       UIMonthView calendarview = event.getSource() ;
       System.out.println("\n\n EditEventActionListener");
@@ -299,26 +299,7 @@ public class UIMonthView extends UICalendarView {
       //calendarview.refresh() ;
       //event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
     }
-  }
-  static  public class QuickDeleteEventActionListener extends EventListener<UIMonthView> {
-    public void execute(Event<UIMonthView> event) throws Exception {
-      UIMonthView calendarview = event.getSource() ;
-      System.out.println("\n\n QuickDeleteEventActionListener");
-      String eventId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      String calendarId = event.getRequestContext().getRequestParameter(CALENDARID) ;
-      try {
-        CalendarService calService = calendarview.getApplicationComponent(CalendarService.class) ;
-        List<CalendarEvent> events = new ArrayList<CalendarEvent>() ;
-        String username = event.getRequestContext().getRemoteUser() ;
-        events.add(calService.getUserEvent(username, calendarId, eventId)) ;
-        calendarview.removeEvents(events) ;
-        calendarview.refresh() ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
-      } catch (Exception e) {
-        e.printStackTrace() ;
-      }
-    }
-  }
+  }*/
   static  public class GotoYearActionListener extends EventListener<UIMonthView> {
     public void execute(Event<UIMonthView> event) throws Exception {
       UIMonthView calendarview = event.getSource() ;
