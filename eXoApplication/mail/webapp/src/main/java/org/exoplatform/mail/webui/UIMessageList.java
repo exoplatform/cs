@@ -28,6 +28,7 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
+import org.exoplatform.webui.form.UIFormInputInfo;
 
 /**
  * Created by The eXo Platform SARL
@@ -117,6 +118,40 @@ public class UIMessageList extends UIForm {
       }
     }
     return messageList;
+  }
+  
+  public Tag getFirstTag(Message msg) throws Exception {
+    UIMailPortlet uiPortlet = getAncestorOfType(UIMailPortlet.class);
+    String username = uiPortlet.getCurrentUser();
+    String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+    MailService mailServ = uiPortlet.getApplicationComponent(MailService.class);
+    String[] tagIds = msg.getTags();
+    String tagId = "";
+    if (tagIds != null && tagIds.length > 0) tagId = tagIds[0];
+    List<Tag> tagList = mailServ.getTags(username, accountId);
+    for (Tag tag : tagList) {
+      if (tag.getId().equals(tagId)) return tag;
+    }
+    return null;
+  } 
+  
+  public String getAllTagName(Message msg) throws Exception {
+    UIMailPortlet uiPortlet = getAncestorOfType(UIMailPortlet.class);
+    String username = uiPortlet.getCurrentUser() ;
+    String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+    MailService mailSrv = getApplicationComponent(MailService.class);
+
+    String tags = "";
+    if (msg.getTags() != null && msg.getTags().length > 0) {
+      for (int i = 0; i < msg.getTags().length; i++) {
+        if (i > 0) tags += ", ";
+        for (Tag tag : mailSrv.getTags(username, accountId)) {
+          if (tag.getId().equals(msg.getTags()[i]))
+            tags += "[" + tag.getName() + "]";
+        }
+      }
+    }
+    return tags;
   }
   
   static public class SelectMessageActionListener extends EventListener<UIMessageList> {

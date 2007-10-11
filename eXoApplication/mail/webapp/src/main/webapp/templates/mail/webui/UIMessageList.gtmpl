@@ -219,8 +219,10 @@
   				<td style="padding: 0px; border-right: 1px solid #ffffff;">
   				  <% 
               if (msg.getTags() != null && msg.getTags().length > 0) {
+                String colorCss = uicomponent.getFirstTag(msg).getColor() + "Tag"; 
+                String title = uicomponent.getAllTagName(msg);
             %>
-              <a href="$actionLink" ><div class="IconTag RedTag"><span></span></div></a>
+              <a href="$actionLink" title="$title"><div class="IconTag $colorCss"><span></span></div></a>
             <%}%>
   				</td>
   				<td class="text"><a href="$actionLink"><%=msg.getSubject()%></a></td>

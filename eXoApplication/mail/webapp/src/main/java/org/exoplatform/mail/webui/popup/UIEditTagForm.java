@@ -12,6 +12,7 @@ import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Tag;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.UIMailPortlet;
+import org.exoplatform.mail.webui.UIMessageList;
 import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.mail.webui.UITagContainer;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -87,19 +88,20 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
   static  public class SaveActionListener extends EventListener<UIEditTagForm> {
     public void execute(Event<UIEditTagForm> event) throws Exception {
       System.out.println("SaveActionListener() ");
-      UIEditTagForm uiRenameTagForm  = event.getSource() ;
-      UIMailPortlet uiMailPortlet = uiRenameTagForm.getAncestorOfType(UIMailPortlet.class);
-      MailService mailService = uiRenameTagForm.getApplicationComponent(MailService.class) ;
+      UIEditTagForm uiEditTagForm  = event.getSource() ;
+      UIMailPortlet uiPortlet = uiEditTagForm.getAncestorOfType(UIMailPortlet.class);
+      UIMailPortlet uiMailPortlet = uiEditTagForm.getAncestorOfType(UIMailPortlet.class);
+      MailService mailService = uiEditTagForm.getApplicationComponent(MailService.class) ;
 
       String username = uiMailPortlet.getCurrentUser() ;
       String accountId =  uiMailPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
-      String tagId = uiRenameTagForm.getTagId();
-      String newTagName = uiRenameTagForm.getUIStringInput(NEW_TAG_NAME).getValue() ;
-      String description = uiRenameTagForm.getUIFormTextAreaInput(DESCRIPTION).getValue() ;
+      String tagId = uiEditTagForm.getTagId();
+      String newTagName = uiEditTagForm.getUIStringInput(NEW_TAG_NAME).getValue() ;
+      String description = uiEditTagForm.getUIFormTextAreaInput(DESCRIPTION).getValue() ;
       System.out.println("description :"+description);
-      String color = uiRenameTagForm.getUIFormSelectBox(COLOR).getValue(); 
+      String color = uiEditTagForm.getUIFormSelectBox(COLOR).getValue(); 
 
-      UIApplication uiApp = uiRenameTagForm.getAncestorOfType(UIApplication.class) ;
+      UIApplication uiApp = uiEditTagForm.getAncestorOfType(UIApplication.class) ;
       UITagContainer uiTagContainer = uiMailPortlet.findFirstComponentOfType(UITagContainer.class) ;
 
       if(Utils.isEmptyField(newTagName)) {
@@ -109,7 +111,7 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
       }
 
       try {      
-        uiRenameTagForm.setTag(tagId);        
+        uiEditTagForm.setTag(tagId);        
         List<Tag> tagList = mailService.getTags(username, accountId);
         for (Tag tag : tagList) {
           if(tag.getName().equals(newTagName)&&!tag.getId().equals(tagId)) {
@@ -128,10 +130,9 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
         uiApp.addMessage(new ApplicationMessage("UIRenameTagForm.msg.error-rename-tag", null)) ;
         e.printStackTrace() ;
       }
-      uiRenameTagForm.getAncestorOfType(UIPopupAction.class).deActivate() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiRenameTagForm.getAncestorOfType(UIPopupAction.class)) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiTagContainer) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+      UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
+      uiMessageList.updateList();
+      uiEditTagForm.getAncestorOfType(UIPopupAction.class).deActivate() ;
     }
   }
   

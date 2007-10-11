@@ -187,11 +187,10 @@ public class UITagForm extends UIForm implements UIPopupComponent{
         tagList.add(tag.getId());
       }
       mailSrv.removeMessageTag(username, accountId, uiTagForm.getMessageList(), tagList);
-      uiPortlet.cancelAction() ;
-      UITagContainer uiTagContainer = uiPortlet.findFirstComponentOfType(UITagContainer.class) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiTagContainer) ;
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
       uiMessageList.updateList();
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList) ;
+      uiPortlet.cancelAction() ;
     }
   }
   
