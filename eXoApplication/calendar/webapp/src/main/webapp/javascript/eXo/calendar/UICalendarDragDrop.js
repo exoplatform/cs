@@ -22,6 +22,7 @@ UICalendarDragDrop.prototype.init = function() {
 		dragObjects[i].onmousedown = UICalendarDragDrop.dragStart ;		
 	}
 	UICalendarDragDrop.targetObjects = eXo.core.DOMUtil.findDescendantsByTagName(UICalendarDragDrop.container, "td") ;
+	UICalendarDragDrop.extraY = (UICalendarDragDrop.container.parentNode.scrollTop) ? UICalendarDragDrop.container.parentNode.scrollTop : 0 ;
 } ;
 
 UICalendarDragDrop.prototype.dragStart = function(evt) {
@@ -106,7 +107,7 @@ UICalendarDragDrop.prototype.isTarget = function(target, object) {
 	object.x = eXo.core.Browser.findPosX(object) ;
 	object.y = eXo.core.Browser.findPosY(object) ;
 	target.x = eXo.core.Browser.findPosX(target) ;
-	target.y = eXo.core.Browser.findPosY(target) ;
+	target.y = eXo.core.Browser.findPosY(target) - eXo.calendar.UICalendarDragDrop.extraY ;
 	if ((object.x > target.x) && (object.x < (target.x + target.offsetWidth)) && (object.y > target.y) && (object.y < (target.y + target.offsetHeight))) {
 		return true ;
 	} else {
