@@ -87,7 +87,8 @@
 					          clazz = 'DayBox';
 					        }
 						      month = currentMonth + 1 ;
-					        println "<td  class='CalendarContentNomal' currentDate='$dayOfMonth' > <div class='DayBox $clazz' >" ;
+						      actionUpdate = uicomponent.event('UpdateEvent','id') ;
+					        println "<td actionLink=\"$actionUpdate\" class='CalendarContentNomal' currentDate='$dayOfMonth' > <div class='DayBox $clazz' >" ;
 					        println dayOfMonth ;
 									println "/" ;
 									println month ;

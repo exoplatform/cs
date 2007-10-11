@@ -75,6 +75,7 @@ public class UIMiniCalendar extends UIMonthView  {
       uiMonthView.setCurrentDay(1) ;
       calendarview.setCurrentDay(1);
       uiMonthView.setCurrentMonth(Integer.parseInt(date)) ;
+      uiMonthView.setCurrentYear(calendarview.getCurrentYear()) ;
       uiMonthView.refresh() ;
       UIActionBar uiActionBar = portlet.findFirstComponentOfType(UIActionBar.class) ;
       uiActionBar.setCurrentView(uiContainer.getRenderedChild().getId()) ;
