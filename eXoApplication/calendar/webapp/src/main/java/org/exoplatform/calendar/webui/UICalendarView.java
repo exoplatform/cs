@@ -75,7 +75,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
 
   public final static String ACT_ADDNEW_EVENT = "QuickAddNewEvent".intern() ;
   public final static String ACT_ADDNEW_TASK = "QuickAddNewTask".intern() ;
-  public final static String ACT_GOTO_DATE = "GotoDate".intern() ;
+  //public final static String ACT_GOTO_DATE = "GotoDate".intern() ;
   public final static String ACT_EDIT = "EditEvent".intern() ;
   public final static String ACT_DELETE = "QuickDeleteEvent".intern() ;
 
@@ -261,7 +261,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   }
 
   protected String[] getContextMenu() {
-    return  new String[]{ACT_ADDNEW_EVENT, ACT_ADDNEW_TASK, ACT_GOTO_DATE} ;
+    return  new String[]{ACT_ADDNEW_EVENT, ACT_ADDNEW_TASK} ;
   }
   protected String[] getQuickEditMenu() {
     return  new String[]{ACT_EDIT, ACT_DELETE} ;
