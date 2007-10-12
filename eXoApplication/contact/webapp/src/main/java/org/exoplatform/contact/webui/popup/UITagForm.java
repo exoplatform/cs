@@ -21,11 +21,13 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
+import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormInputInfo;
+import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 
 /**
@@ -46,6 +48,10 @@ import org.exoplatform.webui.form.UIFormStringInput;
 public class UITagForm extends UIForm implements UIPopupComponent {
   public static final String FIELD_TAGSOFCONTACT_INFO = "TagsOfContact";
   public static final String FIELD_TAGNAME_INPUT = "tagName";
+  public static final String FIELD_COLOR= "color";
+  public static final String RED = "Red".intern() ;
+  public static final String BLUE = "Blue".intern() ;
+  public static final String GREEN = "Green".intern() ;
   public static String[] FIELD_TAG_BOX = null;
   public static List<String> contactIds_ ;
   public static boolean isNew = true ;
@@ -75,6 +81,11 @@ public class UITagForm extends UIForm implements UIPopupComponent {
         }
       }
       addUIFormInput(new UIFormStringInput(FIELD_TAGNAME_INPUT, FIELD_TAGNAME_INPUT, null));
+      List<SelectItemOption<String>> colors = new ArrayList<SelectItemOption<String>>() ;
+      colors.add(new SelectItemOption<String>(RED,RED)) ;
+      colors.add(new SelectItemOption<String>(BLUE,BLUE)) ;
+      colors.add(new SelectItemOption<String>(GREEN,GREEN)) ;
+      addUIFormInput(new UIFormSelectBox(FIELD_COLOR, FIELD_COLOR, colors)) ;
       List<Tag> tags = contactService.getTags(username);
       FIELD_TAG_BOX = new String[tags.size()];
       for (int i = 0 ; i < tags.size(); i ++) {
@@ -118,6 +129,7 @@ public class UITagForm extends UIForm implements UIPopupComponent {
       if (!ContactUtils.isEmpty(inputTag)) {
         tag = new Tag();
         tag.setName(inputTag);
+        tag.setColor(uiTagForm.getUIFormSelectBox(FIELD_COLOR).getValue()) ;
         tags.add(tag);
       }
       if (isNew) {

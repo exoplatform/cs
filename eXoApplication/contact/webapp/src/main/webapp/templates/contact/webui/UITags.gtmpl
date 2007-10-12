@@ -13,9 +13,10 @@
 				actionLink  = uicomponent.event("SelectTag", tag.getName()) ;			
 				cssClass = "Normal" ;
 				if(tag.getName().equals(uicomponent.getSelectedTag())) cssClass = "Selected" ;
+				color = tag.getColor() + "Tag" ;
 		%>
 			<div  class="TagList ItemList $cssClass" tagName="<%=tag.getName()%>">
-				<a href="$actionLink" class="IconHolder BlueTag" ><%=tag.getName()%></a>
+				<a href="$actionLink" class="IconHolder $color" ><%=tag.getName()%></a>
 			</div>
 		<% } %>
 	</div>

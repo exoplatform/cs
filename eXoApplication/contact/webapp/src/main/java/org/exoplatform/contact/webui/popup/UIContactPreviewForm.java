@@ -4,8 +4,6 @@
  **************************************************************************/
 package org.exoplatform.contact.webui.popup;
 
-import java.util.Date;
-
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.download.DownloadService;
@@ -31,15 +29,11 @@ import org.exoplatform.webui.form.UIForm;
 )
 public class UIContactPreviewForm extends UIForm implements UIPopupComponent {
   private Contact contact_ ; 
-  private Date lastUpdated_ ;
   
   public UIContactPreviewForm() { }
   
   public void setContact(Contact c) { contact_ = c; }
   public Contact getContact() { return contact_; }
-  
-  public void setLastUpdated(Date s) { lastUpdated_ = s ; }
-  public Date getLastUpdated() { return lastUpdated_ ; }
   
   public String getImageSource() throws Exception {
     DownloadService dservice = getApplicationComponent(DownloadService.class) ;

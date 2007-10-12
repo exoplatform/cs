@@ -17,6 +17,7 @@ import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.JCRPageList;
 import org.exoplatform.contact.webui.popup.UIContactPreviewForm;
 import org.exoplatform.contact.webui.popup.UIMoveContactForm;
+import org.exoplatform.contact.webui.popup.UIPopupComponent;
 import org.exoplatform.contact.webui.popup.UITagForm;
 import org.exoplatform.contact.webui.popup.UICategorySelect;
 import org.exoplatform.contact.webui.popup.UIContactForm;
@@ -56,11 +57,12 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
         @EventConfig(listeners = UIContacts.FirstPageActionListener.class),
         @EventConfig(listeners = UIContacts.PreviousPageActionListener.class),
         @EventConfig(listeners = UIContacts.NextPageActionListener.class),
-        @EventConfig(listeners = UIContacts.LastPageActionListener.class)
+        @EventConfig(listeners = UIContacts.LastPageActionListener.class),
+        @EventConfig(listeners = UIContacts.CancelActionListener.class)
     }
 )
 
-public class UIContacts extends UIForm {
+public class UIContacts extends UIForm implements UIPopupComponent {
   public boolean viewContactsList = true ;
   public boolean isTagSelected = false ;
   private Map<String, Contact> contactMap = new HashMap<String, Contact> () ;
@@ -70,7 +72,10 @@ public class UIContacts extends UIForm {
   private boolean nameAsc = true ;
   
   public UIContacts() throws Exception { } 
-
+  public String[] getActions() { return new String[] {"Cancel"} ; }
+  public void activate() throws Exception { }
+  public void deActivate() throws Exception { }
+  
   public JCRPageList getContactPageList() { return pageList_ ; }
   
   public void setContacts(JCRPageList pageList) throws Exception {
@@ -347,6 +352,14 @@ public class UIContacts extends UIForm {
       uiContacts.setPageList(pageList, pageList.getAvailablePage());
       uiContacts.updateList() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts);
+    }
+  }
+  
+  static  public class CancelActionListener extends EventListener<UIContacts> {
+    public void execute(Event<UIContacts> event) throws Exception {
+      UIContacts uiContacts = event.getSource() ;
+      UIPopupAction uiPopupAction = uiContacts.getAncestorOfType(UIPopupAction.class) ;
+      uiPopupAction.deActivate() ;
     }
   }
   

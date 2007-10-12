@@ -16,6 +16,7 @@ public class Tag {
   
   private String name ;
   private String description ;
+  private String color ;
   
   public void setName(String name) { this.name = name ; }
   public String getName() { return name ; }
@@ -23,4 +24,6 @@ public class Tag {
   public void setDescription(String description) { this.description = description ; }
   public String getDescription() { return description ; }
     
+  public void setColor(String color) { this.color = color ; }
+  public String getColor() { return color ; }
 }

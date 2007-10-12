@@ -47,6 +47,7 @@ public interface DataStorage {
   public List<GroupContactData> getPublicContacts(String[] groupIds) throws Exception ;
   
   public List<Tag> getTags(String username) throws Exception ;
+  public Tag getTag(String username, String tagName) throws Exception ;
   public TagPageList getContactPageListByTag(String username, String tagName) throws Exception ;
   public void addTag(String username, List<String> contactIds, List<Tag> tags) throws Exception ;
   public Tag removeTag(String username, String tagName) throws Exception ;

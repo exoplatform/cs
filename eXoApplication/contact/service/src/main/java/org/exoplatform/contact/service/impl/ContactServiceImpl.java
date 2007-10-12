@@ -99,6 +99,10 @@ public class ContactServiceImpl implements ContactService {
     storage_.saveSharedContact(contact, isNew);
   } 
   
+  public Tag getTag(String username, String tagName) throws Exception {
+    return storage_.getTag(username, tagName) ;
+  }
+  
   public List<Tag> getTags(String username) throws Exception {
     return storage_.getTags(username);
   }

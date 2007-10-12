@@ -4,14 +4,11 @@
  **************************************************************************/
 package org.exoplatform.contact.webui;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.exoplatform.contact.ContactUtils;
-import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.Tag;
-import org.exoplatform.contact.webui.popup.UICategoryForm;
 import org.exoplatform.contact.webui.popup.UIPopupAction;
 import org.exoplatform.contact.webui.popup.UITagForm;
 import org.exoplatform.webui.config.annotation.ComponentConfig;

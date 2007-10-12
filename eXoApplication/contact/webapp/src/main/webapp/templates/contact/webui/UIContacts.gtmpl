@@ -1,5 +1,7 @@
 
 <%
+	import org.exoplatform.contact.service.Tag;
+	import org.exoplatform.contact.ContactUtils;
 	import org.exoplatform.contact.service.Contact;
 	import org.exoplatform.download.DownloadService;
 	import org.exoplatform.contact.ContactUtils;
@@ -108,7 +110,11 @@
 								checkboxField = uicomponent.getChildById(contact.getId()) ;
 								String actionLink2 = uicomponent.event("EditContact", contact.getId()) ;
 								iconTag = "Icon" ;
-								if (contact.getTags() != null && contact.getTags().length > 0) iconTag = "Icon BlueTag" ;
+								String[] tagNames = contact.getTags() ; 
+								if (tagNames != null && tagNames.length > 0) {
+									Tag tag = ContactUtils.getContactService().getTag(ContactUtils.getCurrentUser(), contact.getTags()[0]) ;
+									iconTag = "Icon " + tag.getColor() + "Tag" ; 
+								}
 								cssClass = "" ;
 								if (contact.getId().equals(uicomponent.getSelectedContact())) cssClass = "Selected" ;
 						%>
@@ -215,8 +221,13 @@
 						contact = contacts[i ++] ;
 						cssClass = "NormalVCard" ; 
 						if (contact.getId().equals(uicomponent.getSelectedContact())) cssClass = "SelectedVCard" ;
+						
 						iconTag = "Icon" ;
-						if (contact.getTags() != null && contact.getTags().length > 0) iconTag = "Icon BlueTag" ;
+						String[] tagNames = contact.getTags() ; 
+						if (tagNames != null && tagNames.length > 0) {
+							Tag tag = ContactUtils.getContactService().getTag(ContactUtils.getCurrentUser(), contact.getTags()[0]) ;
+							iconTag = "Icon " + tag.getColor() + "Tag" ; 
+						}
 				%>
 		  <div class="LeftVCardsContent">
 		  	<div class="VCardContent $cssClass">
@@ -325,6 +336,44 @@
 		</div>
 		
 	</div>
+	
+	
+	<div class="UIAction"> 
+        <table class="ActionContainer" align="center">
+        	<tr>
+        		<td align="center">
+		          <% for(action in uicomponent.getActions()) { 
+                	 String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action) ;
+                   String link = uicomponent.event(action) ;
+          		%>
+          		<a href="$link" class="ActionButton LightBlueStyle">
+                <div class="ButtonLeft">
+                  <div class="ButtonRight">
+                    <div class="ButtonMiddle">
+                      $actionLabel
+                    </div>
+                  </div>
+                </div>
+           		</a>
+          		<%}%> 
+          		<a href="#" onclick="javascript:eXo.contact.UIContactPortlet.printpreview(this) ;" class="ActionButton LightBlueStyle">
+                <div class="ButtonLeft">
+                  <div class="ButtonRight">
+                    <div class="ButtonMiddle">
+                    <%=_ctx.appRes(uicomponent.getName() + ".action.print")%>
+                    </div>
+                  </div>
+                </div>
+           		</a>  
+           		    
+          	</td>
+          </tr>  
+        </table>
+      </div>
+	
+	
+	
+	
 </div>
 <% } %>			
 			

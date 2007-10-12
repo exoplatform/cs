@@ -672,6 +672,10 @@ public class JCRDataStorage implements DataStorage {
     Tag tag = new Tag();
     if (tagNode.hasProperty("exo:name"))
       tag.setName(tagNode.getProperty("exo:name").getString());
+    if (tagNode.hasProperty("exo:description"))
+      tag.setDescription(tagNode.getProperty("exo:description").getString());
+    if (tagNode.hasProperty("exo:color"))
+      tag.setColor(tagNode.getProperty("exo:color").getString());
     return tag;
   }
   
@@ -732,6 +736,7 @@ public class JCRDataStorage implements DataStorage {
         Node tagNode = tagHomeNode.addNode(tag.getName(), "exo:contactTag") ;
         tagNode.setProperty("exo:name", tag.getName());
         tagNode.setProperty("exo:description", tag.getDescription());
+        tagNode.setProperty("exo:color", tag.getColor());
       }
       tagMap.put(tag.getName(), tag.getName()) ;
     }
