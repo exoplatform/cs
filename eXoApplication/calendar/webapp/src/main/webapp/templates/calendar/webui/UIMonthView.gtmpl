@@ -79,6 +79,7 @@
 					      } else if (validDay == 1 && dayOfMonth > daysInMonth) {
 					        validDay = 0;
 					      }
+					      display = "" ;
 					      if (validDay) {
 					        if (uicomponent.isCurrentDay(dayOfMonth, currentMonth, currentYear )) {
 					          clazz = 'Today';

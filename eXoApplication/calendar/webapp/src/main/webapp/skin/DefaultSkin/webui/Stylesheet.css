@@ -1129,6 +1129,12 @@
 	text-align: right;
 	border-top: 1px solid #c7c7c7;
 	padding: 2px 6px;
+	font-weight:bold;
+	background: #ABC7FE none repeat scroll 0%;
+	color : red;
+}
+
+.UIMonthView .EventMonthContent .Today a {
 	color : red;
 }
 
@@ -1169,7 +1175,6 @@
 	background: #ffffff;
 	padding: 0px;
 }
-
 .UIMonthView .EventMonthContent  .RowContainerDay .CalendarContentDisable {
 	background: #f3f3f3;
 	padding: 0px;

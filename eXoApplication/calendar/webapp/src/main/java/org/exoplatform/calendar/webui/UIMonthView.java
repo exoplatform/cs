@@ -260,6 +260,7 @@ public class UIMonthView extends UICalendarView {
   }
   static  public class UpdateEventActionListener extends EventListener<UIMonthView> {
     public void execute(Event<UIMonthView> event) throws Exception {
+      System.out.println("UpdateEventActionListener");
       UIMonthView calendarview = event.getSource() ;
       UICalendarPortlet uiPortlet = calendarview.getAncestorOfType(UICalendarPortlet.class) ;
       String username = event.getRequestContext().getRemoteUser() ;
@@ -272,15 +273,17 @@ public class UIMonthView extends UICalendarView {
         CalendarEvent calEvent = calService.getUserEvent(username, calendarId, eventId) ;
         java.util.Calendar cal1 = GregorianCalendar.getInstance() ;
         cal1.setTime(calEvent.getFromDateTime()) ;
-        int amount = cal1.get(java.util.Calendar.DATE) - day ;
+        int amount =  day - cal1.get(java.util.Calendar.DATE) ;
         cal1.add(java.util.Calendar.DATE, amount) ;
+        System.out.println("\n\n begin time " + cal1.getTime());
         calEvent.setFromDateTime(cal1.getTime()) ;
         cal1.setTime(calEvent.getToDateTime()) ;
         cal1.add(java.util.Calendar.DATE, amount) ;
-        calEvent.setFromDateTime(cal1.getTime()) ;
+        calEvent.setToDateTime(cal1.getTime()) ;
         calService.saveUserEvent(username, calendarId, calEvent, false) ;
         UIMiniCalendar uiMiniCalendar = uiPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;
         uiMiniCalendar.refresh() ;
+        calendarview.refresh() ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
       } catch (Exception e) {
