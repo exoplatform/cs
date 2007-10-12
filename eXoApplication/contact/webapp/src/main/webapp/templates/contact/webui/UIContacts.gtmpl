@@ -336,13 +336,21 @@
 		</div>
 		
 	</div>
-	
-	<style type="text/css" media="print">
-	.UIAction {
+	<style type="text/css">
+		.UIAction {
+			display: none ;
+		}
+		.Printable {
+			display: block ;
+		}
+	</style>
+	<style type="text/css" media="print">	
+	.Printable {
 		display: none ;
+		visibility : hidden ;
 	}
 	</style>
-	<div class="UIAction" style="display:none ;"> 
+	<div class="UIAction"> 
         <table class="ActionContainer" align="center">
         	<tr>
         		<td align="center">

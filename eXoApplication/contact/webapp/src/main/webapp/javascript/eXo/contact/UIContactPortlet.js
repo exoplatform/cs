@@ -95,7 +95,7 @@ UIContactPortlet.prototype.adddressPrint = function (){
 	div.className = "UIPrintContainer" ;
 	div.appendChild(UIContactContainer.cloneNode(true)) ;
 	var uiAction = DOMUtil.findFirstDescendantByClass(div, "div", "UIAction") ;
-	uiAction.style.display = "block" ;
+	DOMUtil.addClass(uiAction, "Printable") ;
 	UIPortalApplication.style.display = "none" ;
 	eXo.contact.UIContactPortlet.pageBackground = document.body.style.background ;
 	document.body.style.background = "transparent" ;
