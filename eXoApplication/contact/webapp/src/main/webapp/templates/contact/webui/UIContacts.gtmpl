@@ -338,15 +338,14 @@
 	</div>
 	
 	
-	<div class="UIAction"> 
+	<div class="UIAction" style="display:none ;"> 
         <table class="ActionContainer" align="center">
         	<tr>
         		<td align="center">
 		          <% for(action in uicomponent.getActions()) { 
-                	 String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action) ;
-                   String link = uicomponent.event(action) ;
+                	 String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action) ;                   
           		%>
-          		<a href="$link" class="ActionButton LightBlueStyle">
+          		<a href="#" onclick="eXo.contact.UIContactPortlet.cancelPrint(this)" class="ActionButton LightBlueStyle">
                 <div class="ButtonLeft">
                   <div class="ButtonRight">
                     <div class="ButtonMiddle">
@@ -356,7 +355,7 @@
                 </div>
            		</a>
           		<%}%> 
-          		<a href="#" onclick="javascript:eXo.contact.UIContactPortlet.printpreview(this) ;" class="ActionButton LightBlueStyle">
+          		<a href="#" onclick="javascript:window.print() ;" class="ActionButton LightBlueStyle">
                 <div class="ButtonLeft">
                   <div class="ButtonRight">
                     <div class="ButtonMiddle">

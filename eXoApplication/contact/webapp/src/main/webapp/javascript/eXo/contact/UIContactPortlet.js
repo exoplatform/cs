@@ -87,4 +87,26 @@ UIContactPortlet.prototype.printpreview = function (obj){
 	DOMUtil.findFirstDescendantByClass(button[1], 'div','ButtonMiddle').style.display = "block" ;
 	button[2].style.display = "none" ;
 }
+UIContactPortlet.prototype.adddressPrint = function (){
+	var DOMUtil = eXo.core.DOMUtil ;
+	var UIPortalApplication = document.getElementById("UIPortalApplication") ;
+	var UIContactContainer = document.getElementById("UIContactContainer") ;
+	var div = document.createElement("div") ;
+	div.className = "UIPrintContainer" ;
+	div.appendChild(UIContactContainer.cloneNode(true)) ;
+	var uiAction = DOMUtil.findFirstDescendantByClass(div, "div", "UIAction") ;
+	uiAction.style.display = "block" ;
+	UIPortalApplication.style.display = "none" ;
+	eXo.contact.UIContactPortlet.pageBackground = document.body.style.background ;
+	document.body.style.background = "transparent" ;
+	document.body.appendChild(div) ;
+}
+UIContactPortlet.prototype.cancelPrint = function (obj){
+	var UIPrintContainer = eXo.core.DOMUtil.findAncestorByClass(obj, "UIPrintContainer") ;
+	var UIPortalApplication = document.getElementById("UIPortalApplication") ;
+	UIPrintContainer.parentNode.removeChild(UIPrintContainer) ;
+	UIPortalApplication.style.display = "block" ;
+	document.body.style.background = eXo.contact.UIContactPortlet.pageBackground ;
+	eXo.contact.UIContactPortlet.pageBackground = null ;
+}
 eXo.contact.UIContactPortlet = new UIContactPortlet() ;
