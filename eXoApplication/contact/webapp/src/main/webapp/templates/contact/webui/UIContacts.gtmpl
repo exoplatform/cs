@@ -337,7 +337,11 @@
 		
 	</div>
 	
-	
+	<style type="text/css" media="print">
+	.UIAction {
+		display: none ;
+	}
+	</style>
 	<div class="UIAction" style="display:none ;"> 
         <table class="ActionContainer" align="center">
         	<tr>
