@@ -43,10 +43,11 @@
 	        				cssClass = "CalendarMatchedEventContent" ;
 	        			}
 	        		monthName = uicomponent.getMonthName(month) ;
+	        		monthViewAction = uicomponent.TYPE_MONTH +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"="+ month +"&"+ uicomponent.DAY + "=1" ;
         	 %>
         	 <td class="$cssClass">
 							<div class="WeekSuburdbar">
-								<a href="<%=uicomponent.event("GotoMonth","$month")%>">
+								<a href="<%=uicomponent.event("GotoDate",monthViewAction)%>">
 									$monthName 
 								</a>
 							</div>
@@ -80,8 +81,9 @@
 											      }
 											      if (validDay) {
 											       println "<td>" ;
+											       dayActionLink = uicomponent.TYPE_DATE +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"="+ month +"&"+ uicomponent.DAY + "=" + dayOfMonth ;
 											       %>
-											       	<a href="<%=uicomponent.event('GotoDate',String.valueOf(month) + '&day=' + String.valueOf(dayOfMonth))%>">$dayOfMonth</a>
+											       	<a href="<%=uicomponent.event('GotoDate',dayActionLink)%>">$dayOfMonth</a>
 											       <%
 											       println "</td>" ;
 											        dayOfMonth++ ;

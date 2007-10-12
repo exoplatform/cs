@@ -50,7 +50,6 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
       @EventConfig(listeners = UICalendarView.EditEventActionListener.class), 
       @EventConfig(listeners = UICalendarView.QuickDeleteEventActionListener.class),
       @EventConfig(listeners = UICalendarView.GotoDateActionListener.class), 
-      //@EventConfig(listeners = UICalendarView.GotoYearActionListener.class),
       @EventConfig(listeners = UIMonthView.MoveNextActionListener.class), 
       @EventConfig(listeners = UIMonthView.MovePreviousActionListener.class),
       @EventConfig(listeners = UIMonthView.QuickAddNewEventActionListener.class), 
@@ -89,7 +88,6 @@ public class UIMonthView extends UICalendarView {
       List<CalendarEvent> list =  new ArrayList<CalendarEvent>() ;
       eventData_.put(day, list) ;
     }
-    System.out.println("\n\n event query size " +allEvents.size());
     Iterator<CalendarEvent> eventIter = allEvents.iterator() ;
     java.util.Calendar tempBegin = GregorianCalendar.getInstance()  ;
     java.util.Calendar tempEnd = GregorianCalendar.getInstance()  ;
@@ -133,7 +131,6 @@ public class UIMonthView extends UICalendarView {
   }
 
   public void refresh() throws Exception {
-    System.out.println("\n\n month view ");
     refreshSelectedCalendarIds() ;
     refreshEvents() ;
 
@@ -162,7 +159,12 @@ public class UIMonthView extends UICalendarView {
     }
     return events ; 
   }
-
+  static  public class GotoDayActionListener extends EventListener<UIMonthView> {
+    public void execute(Event<UIMonthView> event) throws Exception {
+      UIMonthView calendarview = event.getSource() ;
+      
+    }
+  }
   static  public class MoveNextActionListener extends EventListener<UIMonthView> {
     public void execute(Event<UIMonthView> event) throws Exception {
       UIMonthView calendarview = event.getSource() ;

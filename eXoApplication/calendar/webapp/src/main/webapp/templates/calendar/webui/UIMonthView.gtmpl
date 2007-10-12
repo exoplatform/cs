@@ -10,6 +10,7 @@
 	int currentYear = uicomponent.getCurrentYear() ;
  	String linkDayNext = uicomponent.event(uicomponent.ACT_NEXT) ;
  	String linkDayPrevious = uicomponent.event(uicomponent.ACT_PREVIOUS) ;
+ 	yearViewAction = uicomponent.TYPE_YEAR +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"="+ currentMonth +"&"+ uicomponent.DAY + "=1" ;
 	%>
 	
 	<div class="UIMonthView">
@@ -24,7 +25,7 @@
 						</td>
 						<td>
 							<div class="Title">$currentMonthName, 
-								<a href="<%=uicomponent.event("GotoYear","$currentYear")%>">
+								<a href="<%=uicomponent.event("GotoDate",yearViewAction)%>">
 									$currentYear
 								</a>
 							</div>
@@ -89,9 +90,12 @@
 						      month = currentMonth + 1 ;
 						      actionUpdate = uicomponent.event('UpdateEvent','id&' + uicomponent.EVENTID + '=event&' + uicomponent.CALENDARID + '=cal') ;
 					        println "<td actionLink=\"$actionUpdate\" class='CalendarContentNomal' currentDate='$dayOfMonth' > <div class='DayBox $clazz' >" ;
-					        println dayOfMonth ;
-									println "/" ;
-									println month ;
+					        dayActionLink = uicomponent.TYPE_DATE +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"="+ currentMonth +"&"+ uicomponent.DAY + "=" + dayOfMonth ;
+					        %>
+						        <a href="<%=uicomponent.event("GotoDate",dayActionLink)%>">
+						         $dayOfMonth / $month
+										</a>
+									<%
 									println "</div> <div class='DayContent'>" ;
 					        eventList = uicomponent.getEventsData().get(dayOfMonth) ;
 						      if(eventList != null) {

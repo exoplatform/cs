@@ -101,16 +101,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   private Map<Integer, String> monthsMap_ = new HashMap<Integer, String>() ;
 
   public UICalendarView() throws Exception{
-    /*CalendarService calendarService = CalendarUtils.getCalendarService() ;
-    List<EventCategory> eventCategories = calendarService.getEventCategories(Util.getPortalRequestContext().getRemoteUser()) ;
-    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-    options.add(new SelectItemOption<String>("all", "")) ;
-    for(EventCategory category : eventCategories) {
-      options.add(new SelectItemOption<String>(category.getName(), category.getName())) ;
-    }
-    addUIFormInput(new UIFormSelectBox(EVENT_CATEGORIES, EVENT_CATEGORIES, options)) ;*/
     initCategories() ;
-
     calendar_ = Calendar.getInstance() ;
     calendar_.setLenient(false) ;
     int i = 0 ; 
@@ -472,7 +463,6 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
           uiContainer.setRenderedChild(UIDayView.class) ;
           if(calendarview instanceof UIMiniCalendar) {
             calendarview.setCurrentCalendar(cal) ;
-            event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
           }
         }break;
         case TYPE_WEEK : {
@@ -491,12 +481,13 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
           UIYearView uiView = uiContainer.getChild(UIYearView.class) ;
           uiView.setCurrentCalendar(cal) ;
           uiView.refresh() ;
-          uiView.setRenderedChild(UIYearView.class) ;
+          uiContainer.setRenderedChild(UIYearView.class) ;
         }break;
         default: System.out.println("Invalid type.");break;
         }
         UIActionBar uiActionBar = portlet.findFirstComponentOfType(UIActionBar.class) ;
         uiActionBar.setCurrentView(uiContainer.getRenderedChild().getId()) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiActionBar) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;
       } catch (Exception e) {

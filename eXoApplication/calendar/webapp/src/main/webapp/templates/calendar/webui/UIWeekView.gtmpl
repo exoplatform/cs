@@ -12,6 +12,7 @@
  	String linkDayNext = uicomponent.event(uicomponent.ACT_NEXT) ;
  	String linkDayPrevious = uicomponent.event(uicomponent.ACT_PREVIOUS) ;
  	int weekNumber = uicomponent.getCurrentWeek() ;
+ 	yearViewAction = uicomponent.TYPE_YEAR +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"="+ currentMonth +"&"+ uicomponent.DAY + "=1" ;
 %>
 <div class="UIWeekView">
 	<div class="TitleBar">	
@@ -25,7 +26,7 @@
 					</td>
 					<td>
 						<div class="Title">Week $weekNumber,
-							<a href="<%=uicomponent.event("GotoYear","$currentYear")%>">
+							<a href="<%=uicomponent.event("GotoDate",yearViewAction)%>">
 									$currentYear
 							</a>
 						</div>
@@ -54,7 +55,8 @@
 							  String date = cl.get(Calendar.DATE) ;
 							  String month = uicomponent.getMonthName(cl.get(Calendar.MONTH))  ;
 							  String monthName = month.substring(0,3) ;
-							  actionLink =  uicomponent.event("GotoDate",String.valueOf(date)) ;
+							  dayActionLink = uicomponent.TYPE_DATE +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"="+ cl.get(Calendar.MONTH)+"&"+ uicomponent.DAY + "=" +  cl.get(Calendar.DATE) ;
+							  actionLink =  uicomponent.event("GotoDate",dayActionLink) ;
 						%>
 							<th>
 							<a href="$actionLink">

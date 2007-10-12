@@ -43,6 +43,7 @@ import org.exoplatform.webui.event.EventListener;
       @EventConfig(listeners = UICalendarView.AddCategoryActionListener.class),
       @EventConfig(listeners = UICalendarView.ChangeCategoryActionListener.class), 
       @EventConfig(listeners = UICalendarView.EditEventActionListener.class), 
+      @EventConfig(listeners = UICalendarView.GotoDateActionListener.class),
       @EventConfig(listeners = UIDayView.MoveNextActionListener.class), 
       @EventConfig(listeners = UIDayView.MovePreviousActionListener.class), 
       @EventConfig(listeners = UIDayView.QuickAddActionListener.class), 
