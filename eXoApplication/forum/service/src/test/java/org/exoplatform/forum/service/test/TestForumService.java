@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Random;
 
 import org.exoplatform.forum.service.Category;
 import org.exoplatform.forum.service.Forum;
@@ -31,21 +30,21 @@ public class TestForumService extends BaseForumTestCase{
   }
   
   public void testCategory() throws Exception {  
-	 Category cat = createCategory("id") ;
+	 Category cat = createCategory() ;
     forumService_.saveCategory(cat, true) ;
     // add category
-    assertNotNull(forumService_.getCategory("id")) ;
+    assertNotNull(forumService_.getCategory(cat.getId())) ;
     // get categories
     List<Category> categories = forumService_.getCategories() ;
     assertEquals(categories.size(), 1) ;
     // update category
-    cat.setCategoryName("1234567890") ;
+    cat.setCategoryName("a1234567890") ;
     forumService_.saveCategory(cat, false) ;
-    Category updatedCat = forumService_.getCategory("id") ;
+    Category updatedCat = forumService_.getCategory(cat.getId()) ;
     assertNotNull(updatedCat) ;
-    assertEquals("1234567890", updatedCat.getCategoryName()) ;
+    assertEquals("a1234567890", updatedCat.getCategoryName()) ;
     // test removeCategory
-    assertNotNull(forumService_.removeCategory("id"));
+    assertNotNull(forumService_.removeCategory(cat.getId()));
     
     
     GregorianCalendar calendar = new GregorianCalendar() ;
@@ -63,12 +62,10 @@ public class TestForumService extends BaseForumTestCase{
   }
 
   public void testForum() throws Exception {
-  	Category cat = createCategory("idC0");
+  	Category cat = createCategory();
   	forumService_.saveCategory(cat, true);
   	
-  	GregorianCalendar calendar = new GregorianCalendar() ;
-		String id = "forum"+String.valueOf(calendar.getTimeInMillis());
-  	Forum forum = createdForum(id);
+  	Forum forum = createdForum();
   	//forum la forum khoi tao
   	// add forum
   	forumService_.saveForum(cat.getId(), forum, true);
@@ -83,7 +80,7 @@ public class TestForumService extends BaseForumTestCase{
 		// getList Forum
   	List<Forum> forums0 = new ArrayList<Forum>();
   	for (int i = 0; i < 15; i++) {
-  		forums0.add(createdForum("forum" + String.valueOf(11111 + i)));
+  		forums0.add(createdForum());
   		forumService_.saveForum(cat.getId(), forums0.get(i), true);
   	}
   	List<Forum> forums = forumService_.getForums(cat.getId());
@@ -96,67 +93,70 @@ public class TestForumService extends BaseForumTestCase{
   	forumService_.saveForum(cat.getId(), forumNew, false);
   	assertEquals("Forum update", forumService_.getForum(cat.getId(), forumNew.getId()).getForumName());
   	// test moveForum from cat to cate
-  	Category cate = createCategory("idC1");
+  	Category cate = createCategory();
   	forumService_.saveCategory(cate, true);
-  	Category cateNew = forumService_.getCategory("idC1");
-  	Category cat_ = forumService_.getCategory("idC0");
+  	Category cateNew = forumService_.getCategory(cate.getId());
+  	Category cat_ = forumService_.getCategory(cat.getId());
   	String oldPath = forumNew.getPath();
   	forumService_.moveForum(forumNew.getId(), oldPath, cateNew.getPath());
-  	assertNotNull(forumService_.getForum("idC1", forumNew.getId()));
-  	Forum test = forumService_.getForum("idC1", forumNew.getId());
+  	assertNotNull(forumService_.getForum(cate.getId(), forumNew.getId()));
+  	Forum test = forumService_.getForum(cate.getId(), forumNew.getId());
   	forumService_.moveForum(test.getId(), test.getPath(), cat_.getPath());
   	// remove Forum return Forum
   	//assertNotNull(forumService_.removeForum("idC1", forumNew.getId()));
   }
   
   public void testTopic() throws Exception {
-  	GregorianCalendar calendar = new GregorianCalendar() ;
-		String id = "cat" + String.valueOf(calendar.getTimeInMillis());
-    Category cat = createCategory("Cat");
+    Category cat = createCategory();
 		forumService_.saveCategory(cat, true);
-		Forum forum = createdForum(id);
+		Forum forum = createdForum();
 		forumService_.saveForum(cat.getId(), forum, true);
-		Topic topic = createdTopic("1111");
 		// add Topic
-		forumService_.saveTopic(cat.getId(), forum.getId(), topic, true);
+    List<Topic> list = new ArrayList<Topic>() ;
+    for (int i = 0; i < 20; i++) {
+      list.add(createdTopic());
+      forumService_.saveTopic(cat.getId(), forum.getId(), list.get(i), true);
+    }
+    Topic topic = list.get(19);
 		//get Topic
 		assertNotNull(forumService_.getTopic(cat.getId(), forum.getId(), topic.getId()));
 		//get PageList Topic
 		JCRPageList pagelist = forumService_.getTopics(cat.getId(), forum.getId());
-		assertEquals(pagelist.getAvailable(), 1);
-    List list = pagelist.getPage(1, session_) ;
-    assertEquals(list.size(), 1);
-    List page = pagelist.getPage(1, session_) ;
-    assertEquals(page.size(), 1);    
-    List<Topic> page9 = forumService_.getPage(1, pagelist);
-    System.out.println("\n\n\n =====  page9:  " + page9.get(0).getDescription() );
-		// update Topic
+//		assertEquals(pagelist.getAvailable(), 1);
+//    List page = pagelist.getPage(1, session_) ;
+//    assertEquals(page.size(), 1);    
+    List<Topic> listTopic = forumService_.getPage(2, pagelist);
+    for (Topic topic2 : listTopic) {
+      System.out.println("\n\n\n =====  topicId:  " + topic2.getId() );
+    }
+//		// update Topic
 		Topic newTopic = forumService_.getTopic(cat.getId(), forum.getId(), topic.getId());
-		newTopic.setTopicName("New Name topic");
-		forumService_.saveTopic(cat.getId(), forum.getId(), newTopic, false);
-		assertEquals("New Name topic", forumService_.getTopic(cat.getId(), forum.getId(), topic.getId()).getTopicName());
-		// move Topic
-		// move topic from forum to forum 1
-		Forum forum1 = createdForum("2222");
+//		newTopic.setTopicName("New Name topic");
+//		forumService_.saveTopic(cat.getId(), forum.getId(), newTopic, false);
+//		assertEquals("New Name topic", forumService_.getTopic(cat.getId(), forum.getId(), topic.getId()).getTopicName());
+//		// move Topic
+//		// move topic from forum to forum 1
+		Forum forum1 = createdForum();
 		forumService_.saveForum(cat.getId(), forum1, true);
 		forum1 = forumService_.getForum(cat.getId(), forum1.getId());
 		forumService_.moveTopic(newTopic.getId(), newTopic.getPath(), forum1.getPath());
+		System.out.println("\n\n\n =====  getLastTopicPath:  \n" + forumService_.getForum(cat.getId(), forum1.getId()).getLastTopicPath());
+		System.out.println("\n\n\n =====  getLastTopicPath:  \n" + forumService_.getForum(cat.getId(), forum.getId()).getLastTopicPath());
 		assertNotNull(forumService_.getTopic(cat.getId(), forum1.getId(), newTopic.getId()));
 		//test remove Topic return Topic
 		assertNotNull(forumService_.removeTopic(cat.getId(), forum1.getId(), newTopic.getId()));
   }
   
   public void testPost() throws Exception {
-  	Category cat = createCategory("cate");
+  	Category cat = createCategory();
 		forumService_.saveCategory(cat, true);
-		Forum forum = createdForum("111111");
+		Forum forum = createdForum();
 		forumService_.saveForum(cat.getId(), forum, true);
-		Topic topic = createdTopic("222222");
+		Topic topic = createdTopic();
 		forumService_.saveTopic(cat.getId(), forum.getId(), topic, true);
 		List<Post> posts = new ArrayList<Post>();
-		Random rand = new Random();
 		for (int i = 0; i < 25; ++i) {
-		  Post post = createdPost("topic" + String.valueOf(rand.nextInt(99999999)));
+		  Post post = createdPost();
 		  posts.add(post);
 		  forumService_.savePost(cat.getId(), forum.getId(), topic.getId(), post, true);
 		}
@@ -164,7 +164,6 @@ public class TestForumService extends BaseForumTestCase{
 		assertNotNull(forumService_.getPost(cat.getId(), forum.getId(), topic.getId(), posts.get(0).getId()));
 		// TopicView
 		TopicView topicView = forumService_.getTopicView(cat.getId(), forum.getId(), topic.getId());
-		Topic topi = forumService_.getTopic(cat.getId(), forum.getId(), topic.getId());
 		//get ListPost
 		JCRPageList pagePosts = topicView.getPageList();//forumService_.getPosts(cat.getId(), forum.getId(), topic.getId());
 		assertEquals(pagePosts.getAvailable(), posts.size() + 1);// size = 26 (first post and new postList)
@@ -193,7 +192,7 @@ public class TestForumService extends BaseForumTestCase{
 //      System.out.println("\n\n=========----->> PostId:   " + postt.getId());
 //    }
 		
-		Topic topicnew = createdTopic("333334");
+		Topic topicnew = createdTopic();
 		forumService_.saveTopic(cat.getId(), forum.getId(), topicnew, true);
 		topicnew = forumService_.getTopic(cat.getId(), forum.getId(), topicnew.getId());
 		forumService_.movePost(newPost.getId(), newPost.getPath(), topicnew.getPath());
@@ -206,10 +205,9 @@ public class TestForumService extends BaseForumTestCase{
   
   
   
-  private Post createdPost( String id) {
+  private Post createdPost() {
 		Post post = new Post();
 		
-		post.setId(id);
 		post.setOwner("duytu");
 		post.setCreatedDate(new Date());
 		post.setModifiedBy("duytu");
@@ -223,10 +221,9 @@ public class TestForumService extends BaseForumTestCase{
 		return post;
   }
   
-  private Topic createdTopic( String id) {
+  private Topic createdTopic() {
 		Topic topicNew = new Topic();
 			  
-		topicNew.setId(id);
 		topicNew.setOwner("duytu");
 		topicNew.setTopicName("TestTopic");
 		topicNew.setCreatedDate(new Date());
@@ -249,9 +246,8 @@ public class TestForumService extends BaseForumTestCase{
 		return topicNew;
   }
   
-  private Forum createdForum(String idf) {
+  private Forum createdForum() {
 		Forum forum = new Forum();
-		forum.setId(idf);
 		forum.setOwner("duytu");
 		forum.setForumName("TestForum");
 		forum.setForumOrder(1);
@@ -279,9 +275,8 @@ public class TestForumService extends BaseForumTestCase{
 		return forum;
   }
   
-  private Category createCategory(String id) {
+  private Category createCategory() {
     Category cat = new Category() ;
-    cat.setId(id) ;
     cat.setOwner("nqhung") ;
     cat.setCategoryName("testCategory") ;
     cat.setCategoryOrder(1) ;

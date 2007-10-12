@@ -156,10 +156,10 @@
 	  		<propertyDefinition name="exo:description" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
 	  			<valueConstraints/>
 	  		</propertyDefinition>
-	  		<propertyDefinition name="exo:postCount" requiredType="Integer" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+	  		<propertyDefinition name="exo:postCount" requiredType="Long" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
 	  			<valueConstraints/>
 	  		</propertyDefinition>
-	  		<propertyDefinition name="exo:topicCount" requiredType="Integer" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+	  		<propertyDefinition name="exo:topicCount" requiredType="Long" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
 	  			<valueConstraints/>
 	  		</propertyDefinition>
 	  		<propertyDefinition name="exo:notifyWhenAddTopic" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
@@ -232,7 +232,7 @@
 	  		<propertyDefinition name="exo:description" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">  			
 	  			<valueConstraints/>
 	  		</propertyDefinition>  		
-	  		<propertyDefinition name="exo:categoryOrder" requiredType="Integer" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">  			
+	  		<propertyDefinition name="exo:categoryOrder" requiredType="Long" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">  			
 	  			<valueConstraints/>
 	  		</propertyDefinition>  		
 	  	</propertyDefinitions>

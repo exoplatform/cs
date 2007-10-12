@@ -11,6 +11,7 @@ import java.util.List;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
+import javax.jcr.PathNotFoundException;
 import javax.jcr.Session;
 import javax.jcr.Value;
 import javax.jcr.query.Query;
@@ -208,10 +209,10 @@ public class JCRDataStorage implements DataStorage {
     if(forumNode.hasProperty("exo:createdDate")) forum.setCreatedDate(forumNode.getProperty("exo:createdDate").getDate().getTime()) ;
     if(forumNode.hasProperty("exo:modifiedBy")) forum.setModifiedBy(forumNode.getProperty("exo:modifiedBy").getString()) ;
     if(forumNode.hasProperty("exo:modifiedDate")) forum.setModifiedDate(forumNode.getProperty("exo:modifiedDate").getDate().getTime()) ;
-    if(forumNode.hasProperty("exo:lastTopicPath")) forum.setLastTopicPath(forumNode.getProperty("exo:lastTopicPath").getString()) ;
+    if(forumNode.hasProperty("exo:lastTopicPath"))forum.setLastTopicPath(forumNode.getProperty("exo:lastTopicPath").getString()) ; 
     if(forumNode.hasProperty("exo:description")) forum.setDescription(forumNode.getProperty("exo:description").getString()) ;
-    if(forumNode.hasProperty("exo:postCount")) forum.setPostCount(Integer.valueOf(forumNode.getProperty("exo:postCount").getString())) ;
-    if(forumNode.hasProperty("exo:topicCount")) forum.setTopicCount(Integer.valueOf(forumNode.getProperty("exo:topicCount").getString())) ;
+    if(forumNode.hasProperty("exo:postCount")) forum.setPostCount(forumNode.getProperty("exo:postCount").getLong()) ;
+    if(forumNode.hasProperty("exo:topicCount")) forum.setTopicCount(forumNode.getProperty("exo:topicCount").getLong()) ;
 
     if(forumNode.hasProperty("exo:isModerateTopic")) forum.setIsModerateTopic(forumNode.getProperty("exo:isModerateTopic").getBoolean()) ;
     if(forumNode.hasProperty("exo:isModeratePost")) forum.setIsModeratePost(forumNode.getProperty("exo:isModeratePost").getBoolean()) ;
@@ -245,7 +246,7 @@ public class JCRDataStorage implements DataStorage {
   	Node forumHomeNode = getForumHomeNode() ;
   	String newForumPath = destCategoryPath + "/" + forumId;
   	forumHomeNode.getSession().getWorkspace().move(forumPath, newForumPath) ;
-  	Node forumNode = (Node)getJCRSession().getItem(newForumPath) ;
+  	Node forumNode = (Node)forumHomeNode.getSession().getItem(newForumPath) ;
   	forumNode.setProperty("exo:path", newForumPath) ;
   	forumHomeNode.save() ;
   	forumHomeNode.getSession().save() ;
@@ -286,11 +287,27 @@ public class JCRDataStorage implements DataStorage {
     try {
       return getTopicNode((Node)getJCRSession().getItem(topicPath)) ;
     }catch(Exception e) {
-    	return null ;
+      if(topicPath != null && topicPath.length() > 0) {
+        String forumPath = topicPath.substring(0, topicPath.lastIndexOf("/")) ;
+        return getTopicNode(queryLastTopic(forumPath)) ;
+      } else {
+        return null ;
+      }
     }
   }
   
+  private Node queryLastTopic(String forumPath) throws Exception {
+    QueryManager qm = getJCRSession().getWorkspace().getQueryManager() ;
+    String queryString = "/jcr:root" + forumPath + "//element(*,exo:topic) order by @exo:lastPostDate descending";
+    Query query = qm.createQuery(queryString , Query.XPATH) ;
+    QueryResult result = query.execute() ;
+    NodeIterator iter = result.getNodes() ;
+    if(iter.getSize() < 1) return null ;
+    return iter.nextNode() ;
+  }
+  
   private Topic getTopicNode(Node topicNode) throws Exception {
+    if(topicNode == null ) return null ;
     Topic topicNew = new Topic() ;    
     if(topicNode.hasProperty("exo:id")) topicNew.setId(topicNode.getProperty("exo:id").getString()) ;
     if(topicNode.hasProperty("exo:owner")) topicNew.setOwner(topicNode.getProperty("exo:owner").getString()) ;
@@ -339,8 +356,8 @@ public class JCRDataStorage implements DataStorage {
 					topicNode.setProperty("exo:createdDate", GregorianCalendar.getInstance()) ;
 					topicNode.setProperty("exo:lastPostBy", topic.getLastPostBy()) ;
 					topicNode.setProperty("exo:lastPostDate", GregorianCalendar.getInstance()) ;
-					topicNode.setProperty("exo:postCount", 0) ;
-					topicNode.setProperty("exo:viewCount", 1) ;
+					topicNode.setProperty("exo:postCount", -1) ;
+					topicNode.setProperty("exo:viewCount", 0) ;
 				} else {
 					topicNode = forumNode.getNode(topic.getId()) ;
 				}
@@ -368,7 +385,7 @@ public class JCRDataStorage implements DataStorage {
 				  forumHomeNode.save() ;
 				  forumHomeNode.getSession().save() ;
 			    // createPost first
-          String id = "POST" + topic.getId().replaceFirst("TOPIC", "") ;
+          String id = topic.getId().replaceFirst("TOPIC", "POST") ;
 			    Post post = new Post() ;
 			    post.setId(id.toUpperCase()) ;
 					post.setOwner(topic.getOwner()) ;
@@ -384,7 +401,7 @@ public class JCRDataStorage implements DataStorage {
 					
 					savePost(categoryId, forumId, topic.getId(), post, true) ;
 		    } else {
-          String id = "POST" + topic.getId().replaceFirst("TOPIC", "") ;
+          String id = topic.getId().replaceFirst("TOPIC", "POST") ;
           Node fistPostNode = topicNode.getNode(id) ;
           fistPostNode.setProperty("exo:modifiedBy", topic.getModifiedBy()) ;
           fistPostNode.setProperty("exo:modifiedDate", GregorianCalendar.getInstance()) ;
@@ -409,7 +426,7 @@ public class JCRDataStorage implements DataStorage {
 		  long newTopicCount = forumNode.getProperty("exo:topicCount").getLong() - 1 ;
 		  forumNode.setProperty("exo:topicCount", newTopicCount ) ;
 		  // setPostCount for Forum
-		  long newPostCount = forumNode.getProperty("exo:postCount").getLong() - topic.getPostCount() ;
+		  long newPostCount = forumNode.getProperty("exo:postCount").getLong() - topic.getPostCount() - 1;
 		  forumNode.setProperty("exo:postCount", newPostCount ) ;
 		  
 		  forumNode.getNode(topicId).remove() ;
@@ -420,15 +437,31 @@ public class JCRDataStorage implements DataStorage {
     return null ;
   }
   
-  public void moveTopic(String topicId, String  topicPath, String destForumPath) throws Exception {
+  public void moveTopic(String topicId, String topicPath, String destForumPath) throws Exception {
   	Node forumHomeNode = getForumHomeNode() ;
     String newTopicPath = destForumPath + "/" + topicId;
+    //Forum remove Topic(OldForum)
+    Node oldForumNode = (Node)forumHomeNode.getSession().getItem(topicPath).getParent() ;
+    //Move Topic
     forumHomeNode.getSession().getWorkspace().move(topicPath, newTopicPath) ;
-    Node topicNode = (Node)getJCRSession().getItem(newTopicPath) ;
-    Node forumNode = (Node)getJCRSession().getItem(destForumPath) ;
-    forumNode.setProperty("exo:topicCount", Integer.valueOf(forumNode.getProperty("exo:topicCount").getString()) + 1) ;
-    forumNode.setProperty("exo:postCount", Integer.valueOf(forumNode.getProperty("exo:postCount").getString()) + 1) ;
+    //Set TopicCount OldForum
+    oldForumNode.setProperty("exo:topicCount", oldForumNode.getProperty("exo:topicCount").getLong() - 1) ;
+    //Set NewPath for Old Forum
+    Node lastTopicOldForum = queryLastTopic(oldForumNode.getPath()) ;
+    if(lastTopicOldForum != null) oldForumNode.setProperty("exo:lastTopicPath", lastTopicOldForum.getPath()) ;
+    //Topic Move
+    Node topicNode = (Node)forumHomeNode.getSession().getItem(newTopicPath) ;
     topicNode.setProperty("exo:path", newTopicPath) ;
+    long topicPostCount = topicNode.getProperty("exo:postCount").getLong() + 1 ;
+    //Forum add Topic (NewForum)
+    Node newForumNode = (Node)forumHomeNode.getSession().getItem(destForumPath) ;
+    newForumNode.setProperty("exo:topicCount", newForumNode.getProperty("exo:topicCount").getLong() + 1) ;
+    Node lastTopicNewForum = queryLastTopic(newForumNode.getPath()) ;
+    if(lastTopicNewForum != null) newForumNode.setProperty("exo:lastTopicPath", lastTopicNewForum.getPath()) ;
+    //Set PostCount
+    oldForumNode.setProperty("exo:postCount", oldForumNode.getProperty("exo:postCount").getLong() - topicPostCount) ;
+    newForumNode.setProperty("exo:postCount", newForumNode.getProperty("exo:postCount").getLong() + topicPostCount) ;
+    
     forumHomeNode.save() ;
   	forumHomeNode.getSession().save() ;
   }
@@ -509,10 +542,11 @@ public class JCRDataStorage implements DataStorage {
 				postNode.setProperty("exo:icon", post.getIcon()) ;
 				postNode.setProperty("exo:isApproved", post.getIsApproved()) ;
 				if(isNew) {
-			    // setPostCount for Topic
+			    // set InfoPost for Topic
 					long topicPostCount = topicNode.getProperty("exo:postCount").getLong() + 1 ;
 					topicNode.setProperty("exo:postCount", topicPostCount ) ;
-					// setPostCount for Forum
+					topicNode.setProperty("exo:lastPostDate", GregorianCalendar.getInstance()) ;
+					// set InfoPost for Forum
 					long forumPostCount = forumNode.getProperty("exo:postCount").getLong() + 1 ;
 					forumNode.setProperty("exo:postCount", forumPostCount ) ;
 					forumNode.setProperty("exo:lastTopicPath", topicNode.getPath()) ;
@@ -552,7 +586,7 @@ public class JCRDataStorage implements DataStorage {
   	Node forumHomeNode = getForumHomeNode() ;
     String newPostPath = destTopicPath + "/" + postId;
     forumHomeNode.getSession().getWorkspace().move(postPath, newPostPath) ;
-    Node postNode = (Node)getJCRSession().getItem(newPostPath) ;
+    Node postNode = (Node)forumHomeNode.getSession().getItem(newPostPath) ;
     postNode.setProperty("exo:path", newPostPath) ;
   	forumHomeNode.save() ;
   	forumHomeNode.getSession().save() ;

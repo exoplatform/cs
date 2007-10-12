@@ -126,8 +126,6 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
       topicNew.setLastPostBy(userName);
       topicNew.setLastPostDate(new Date());
       topicNew.setDescription(messenger);
-      topicNew.setPostCount(0);
-      topicNew.setViewCount(0);
       
       topicNew.setIsNotifyWhenAddPost(false);
       topicNew.setIsModeratePost(false);
@@ -136,7 +134,7 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
       topicNew.setIsSticky(false);
       
       topicNew.setIcon("");
-      topicNew.setAttachmentFirstPost(0) ;
+      //topicNew.setAttachmentFirstPost(0) ;
       topicNew.setIsApproved(false);  
       topicNew.setViewPermissions(new String[] {});
       topicNew.setEditPermissions(new String[] {});

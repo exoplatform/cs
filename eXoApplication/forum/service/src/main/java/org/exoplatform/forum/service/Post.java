@@ -26,7 +26,7 @@ public class Post {
   private String subject;
   private String message;
   private String remoteAddr;
-  private int    attachments ;
+  private long    attachments ;
   private String icon; 
   private boolean isApproved = false ;
   
@@ -72,8 +72,8 @@ public class Post {
   public String getRemoteAddr(){return remoteAddr;}
   public void setRemoteAddr(String remoteAddr){this.remoteAddr = remoteAddr;}
   
-  public int  getNumberOfAttachment() { return attachments ; }
-  public void setNumberOfAttachment(int number) { this.attachments = number ;}
+  public long  getNumberOfAttachment() { return attachments ; }
+  public void setNumberOfAttachment(long number) { this.attachments = number ;}
   
   public String getIcon() { return icon;}
   public void setIcon( String icon) { this.icon = icon;}

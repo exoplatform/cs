@@ -6,7 +6,6 @@
 %>
 <%  
 	Topic topic = uicomponent.getTopic() ;
-	System.out.println("\n\n\n   id:    "+topic.getId()+ "\n"+ topic.getDescription()+ "\n\n\n");
 %>
 
 <div class="UITopicDetail">
@@ -235,7 +234,6 @@
 
 		<%  
 			List posts = uicomponent.getPostPageList(1) ;
-			System.out.println("\n\n\n  :  " + topic.getId() + "   :  " + posts.get(0).getId());
 			for(post in posts) {
 				String owner = post.getOwner() ;
 				String classIconPost = post.getIcon() ;

@@ -21,8 +21,8 @@ public class Forum {
   private String lastTopicPath;
   private String name;
   private String description;
-  private int postCount;
-  private int topicCount;
+  private long postCount;
+  private long topicCount;
   
   private String[] notifyWhenAddTopic ;
   private String[] notifyWhenAddPost ;
@@ -79,11 +79,11 @@ public class Forum {
   public String getDescription(){return description;}
   public void setDescription(String description){this.description = description;}
   
-  public int getPostCount(){return postCount;}
-  public void setPostCount(int postCount){this.postCount = postCount;}
+  public long getPostCount(){return postCount;}
+  public void setPostCount(long postCount){this.postCount = postCount;}
   
-  public int getTopicCount(){return topicCount;}
-  public void setTopicCount(int topicCount){this.topicCount = topicCount;}
+  public long getTopicCount(){return topicCount;}
+  public void setTopicCount(long topicCount){this.topicCount = topicCount;}
   
   public String[] getNotifyWhenAddTopic() { return notifyWhenAddTopic;	}
   public void setNotifyWhenAddTopic(String[] notifyWhenAddTopic) {this.notifyWhenAddTopic = notifyWhenAddTopic;}

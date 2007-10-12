@@ -4,8 +4,14 @@
  **************************************************************************/
 package org.exoplatform.forum.webui.popup;
 
+import java.util.Date;
+
+import org.exoplatform.container.PortalContainer;
+import org.exoplatform.forum.service.ForumService;
+import org.exoplatform.forum.service.Post;
 import org.exoplatform.forum.webui.EmptyNameValidator;
 import org.exoplatform.forum.webui.UIForumPortlet;
+import org.exoplatform.forum.webui.UITopicDetail;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -37,6 +43,7 @@ public class UIPostForm extends UIForm implements UIPopupComponent {
   
   private String categoryId; 
   private String forumId ;
+  private String topicId ;
   public UIPostForm() throws Exception {
     UIFormStringInput postTitle = new UIFormStringInput(FIELD_POSTTITLE_INPUT, FIELD_POSTTITLE_INPUT, null);
     postTitle.addValidator(EmptyNameValidator.class) ;
@@ -46,9 +53,10 @@ public class UIPostForm extends UIForm implements UIPopupComponent {
     addUIFormInput(messenger);
   }
   
-  public void setTopicIds(String categoryId, String forumId) {
+  public void setPostIds(String categoryId, String forumId, String topicId) {
     this.categoryId = categoryId ;
     this.forumId = forumId ;
+    this.topicId = topicId ;
   }
   
   public void activate() throws Exception {
@@ -76,10 +84,27 @@ public class UIPostForm extends UIForm implements UIPopupComponent {
     public void execute(Event<UIPostForm> event) throws Exception {
       UIPostForm uiForm = event.getSource() ;
       String postTitle = uiForm.getUIStringInput(FIELD_POSTTITLE_INPUT).getValue().trim();
-      String messenger = uiForm.getUIFormTextAreaInput(FIELD_MESSENGER_TEXTAREA).getValue() ;
-      
+      String message = uiForm.getUIFormTextAreaInput(FIELD_MESSENGER_TEXTAREA).getValue() ;
       String userName = Util.getPortalRequestContext().getRemoteUser() ;
-  
+      if(message != null && message.length() > 0) message = message.trim() ;
+      Post post = new Post() ;
+      post.setSubject(postTitle.trim()) ;
+      post.setMessage(message) ;
+      post.setOwner(userName) ;
+      post.setCreatedDate(new Date()) ;
+      post.setModifiedBy(userName) ;
+      post.setModifiedDate(new Date()) ;
+      post.setRemoteAddr("") ;
+      post.setIcon("") ;
+      post.setNumberOfAttachment(0) ;
+      post.setIsApproved(false) ;
+      
+      ForumService forumService =  (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
+      forumService.savePost(uiForm.categoryId, uiForm.forumId, uiForm.topicId, post, true) ;
+      UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
+      forumPortlet.cancelAction() ;
+      UITopicDetail topicDetail = forumPortlet.findFirstComponentOfType(UITopicDetail.class) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(topicDetail);
     }
   }
   

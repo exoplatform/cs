@@ -13,6 +13,8 @@
 			List categories = uicomponent.getCategories(); 
 			for(category in categories) {
 		  	String categoryName = category.getCategoryName() ;
+		  	String display = "display:none;";
+		  	if(uicomponent.getSelectCate(category.getId())) display = "display:block;" ;
 		%>
 	    <div class="Node">
 	     	<div class="Icon ForumIcon"><span></span></div>  
@@ -20,7 +22,7 @@
 	     		<div class="NodeSelected"><a>$categoryName</a></div> 
 	      </div> 		  
 	      <div style="clear: left;"><span></span></div>
-	      <div class="ChildNodeContainer" style="display:none"> <!-- Java Developers have to control display attribute of this div tag in the first appearance.(pls, remove this comment when you complete your task) -->
+	      <div class="ChildNodeContainer" style="$display">
 	      <% 
 	      	List forums =  uicomponent.getForums(category.getId());
 	      	for(forum in forums) {

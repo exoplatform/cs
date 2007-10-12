@@ -26,7 +26,7 @@ public class Topic {
   private long postCount = 0;  
 	private long viewCount = 0;
 	private String icon ;
-  private int attachmentFirstPost ;
+  private long attachmentFirstPost = 0 ;
 	
   private boolean isModeratePost = false ;
   private boolean isNotifyWhenAddPost = false ;  
@@ -93,8 +93,8 @@ public class Topic {
   public String getIcon() { return icon;}
   public void setIcon( String icon) { this.icon = icon;}
 
-  public int getAttachmentFirstPost() { return attachmentFirstPost;}
-  public void setAttachmentFirstPost( int attachmentFirstPost) { this.attachmentFirstPost = attachmentFirstPost;}
+  public long getAttachmentFirstPost() { return attachmentFirstPost;}
+  public void setAttachmentFirstPost( long attachmentFirstPost) { this.attachmentFirstPost = attachmentFirstPost;}
   
   public boolean getIsApproved() { return isApproved;}
   public void setIsApproved(boolean isApproved) { this.isApproved = isApproved;}

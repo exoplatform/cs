@@ -12,7 +12,7 @@
 					        <div class="TabsContainer">
 				            
 			              <div class="UITab NormalTabStyle">
-			                <div class="NormalTab">
+			                <div class="SelectedTab">
 			                  <div class="LeftTab">
 			                    <div class="RightTab">
 					                  <div onclick="eXo.webui.UIHorizontalTabs.displayTabContent(this)" class="MiddleTab">Thread Content</div>
@@ -42,7 +42,7 @@
 			              </div>
 			              
 			              <div class="UITab NormalTabStyle">
-			                <div class="SelectedTab">
+			                <div class="NormalTab">
 			                  <div class="LeftTab">
 			                    <div class="RightTab">
 					                  <div onclick="eXo.webui.UIHorizontalTabs.displayTabContent(this)" class="MiddleTab">Thread permission</div>
@@ -132,19 +132,6 @@
 	                        <input type="checkbox" class="checkbox" />
 	                      </td>
                       </tr>
-                      <tr>
-	                      <td class="FieldLabel">View pemission: </td>
-	                      <td class="FieldComponent">
-													<textarea rows="2" cols="10" name="View" class="textarea"></textarea>
-	                      </td>
-                      </tr>
-                      <tr>
-	                      <td class="FieldLabel">Edit pemission: </td>
-	                      <td class="FieldComponent">
-	                        <textarea rows="2" cols="10" name="View" class="textarea"></textarea>
-	                      </td>
-                      </tr>
-	     
 	              		</tbody>
 	              	</table>
 	              </div>
@@ -222,109 +209,108 @@
  							  </div>
  								<div class="UIFormWithTitle UIPermissionForm">
  									<div class="TitleBar">Add/Edit a permission to that Calendar</div>
- 											<div class="HorizontalLayout">
- 												<div class="FormContainer">
- 													<div class="UIFormGrid">
- 														<tbody>
- 															<tr>
- 																<td class="FieldComponent">
- 																  <td>
- 																		<td class="UIFormInputSet">
- 																			<div>
- 																				<div class="FormContainer">
- 																					<table class="UIFormGrid">
-			   																		<tbody>
-         																			<tr>
-			         																	<td class="FieldLabel">User OR Group</td>
-			         																	<td class="FieldComponent">
-			         																		<input type="text" readonly="readonly" name="userOrGroup"/>
-			         																		<a title="SelectUser" href="#">
-			         																			<img src="/eXoResources/skin/DefaultSkin/background/Blank.gif" class="AddIcon16x16 SelectUserIcon"/>
-			        																		</a>
-			   																					<a title="SelectMember" href="#">
-			         																			<img src="/eXoResources/skin/DefaultSkin/background/Blank.gif" class="AddIcon16x16 SelectMemberIcon"/>
-			         																		</a>
-			         																		<a title="AddAny" href="#">
-			         																			<img src="/eXoResources/skin/DefaultSkin/background/Blank.gif" class="AddIcon16x16 AddAnyIcon"/>
-			         																		</a>
-			     																			</td>
-			    																		</tr>
-			         															</tbody>
-			         														</table>
- 																				</div>
- 																				<div class="FormContainer">
-			         														<table class="UIFormGrid">
-			     																	<tbody>
-	   																					<tr>
-			         																	<td class="FieldLabel">Can Access Forum</td>
-			         																	<td class="FieldComponent">
-			         																		<input type="checkbox" class="checkbox" value="" name="3"/>
-			       																		</td>
-			   																			</tr>
-        																		</tbody>
-			         														</table>
-			         													</div>
-			         													<div class="FormContainer">
-			         														<table class="UIFormGrid">
-			         															<tbody>
-			         																<tr>
-			         																	<td class="FieldLabel">
-Can Add Thread</td>	
-			         																	<td class="FieldComponent">
-			         																		<input type="checkbox" class="checkbox" value="" name="2"/>
-			         																	</td>
-			         																</tr>
-			         															</tbody>
-			         														</table>
-			         													</div>
-			         													<div class="FormContainer">
-			         														<table class="UIFormGrid">
-			         															<tbody>
-			   																			<tr>
-			         																	<td class="FieldLabel">Moderator</td>
-			         																	<td class="FieldComponent">
-			         																		<input type="checkbox" class="checkbox" value="" name="1"/>
-			         																	</td>
-			         																</tr>
-			         															</tbody>
-			         														</table>
-			         													</div>
+ 										<div class="HorizontalLayout">
+ 											<div class="FormContainer">
+ 												<div class="UIFormGrid">
+ 													<tbody>
+ 														<tr>
+ 															<td class="FieldComponent">
+ 															  <td>
+ 																	<td class="UIFormInputSet">
+ 																		<div>
+ 																			<div class="FormContainer">
+ 																				<table class="UIFormGrid">
+		   																		<tbody>
+		     																		<tr>
+			         																<td class="FieldLabel">User OR Group</td>
+			         																<td class="FieldComponent">
+			         																	<input type="text" readonly="readonly" name="userOrGroup"/>
+			         																	<a title="SelectUser" href="#">
+			         																		<img src="/eXoResources/skin/DefaultSkin/background/Blank.gif" class="AddIcon16x16 SelectUserIcon"/>
+			        																	</a>
+			   																				<a title="SelectMember" href="#">
+			         																		<img src="/eXoResources/skin/DefaultSkin/background/Blank.gif" class="AddIcon16x16 SelectMemberIcon"/>
+			         																	</a>
+			         																	<a title="AddAny" href="#">
+			         																		<img src="/eXoResources/skin/DefaultSkin/background/Blank.gif" class="AddIcon16x16 AddAnyIcon"/>
+					         															</a>
+					     																</td>
+					    															</tr>
+				         													</tbody>
+			         													</table>
  																			</div>
- 																		</td>
+ 																			<div class="FormContainer">
+		         														<table class="UIFormGrid">
+		     																	<tbody>
+   																					<tr>
+		         																	<td class="FieldLabel">Can Access Forum</td>
+		         																	<td class="FieldComponent">
+		         																		<input type="checkbox" class="checkbox" value="" name="3"/>
+		       																		</td>
+		   																			</tr>
+    																			</tbody>
+		         														</table>
+		         													</div>
+		         													<div class="FormContainer">
+		         														<table class="UIFormGrid">
+		         															<tbody>
+		         																<tr>
+		         																	<td class="FieldLabel">Can Add Thread</td>	
+		         																	<td class="FieldComponent">
+		         																		<input type="checkbox" class="checkbox" value="" name="2"/>
+		         																	</td>
+		         																</tr>
+		         															</tbody>
+		         														</table>
+		         													</div>
+		         													<div class="FormContainer">
+		         														<table class="UIFormGrid">
+		         															<tbody>
+		   																			<tr>
+		         																	<td class="FieldLabel">Moderator</td>
+		         																	<td class="FieldComponent">
+		         																		<input type="checkbox" class="checkbox" value="" name="1"/>
+		         																	</td>
+		         																</tr>
+		         															</tbody>
+		         														</table>
+		         													</div>
+ 																		</div>
  																	</td>
  																</td>
- 															</tr>
- 														</tbody>
- 													</div>
- 													<div class="UIAction"> 
-												  	<table class="ActionContainer" align="center">
-												 			<tr>
-														  	<td align="center">
-  																<a href="#" class="ActionButton LightBlueStyle">
-												        	  <div class="ButtonLeft">
-											            	  <div class="ButtonRight">
-											              	  <div class="ButtonMiddle"> Save </div>
-											                </div>
-											              </div>
-											            </a>
-											            <a href="#" class="ActionButton LightBlueStyle">
-											          	  <div class="ButtonLeft">
-											            	  <div class="ButtonRight">
-											              	  <div class="ButtonMiddle"> Cancel </div>
-											                </div>
-											              </div>
-											            </a>
-                         				</td>
-                    					</tr>
- 	                          </table>
-												 	</div>
+ 															</td>
+ 														</tr>
+ 													</tbody>
  												</div>
+ 												<div class="UIAction"> 
+											  	<table class="ActionContainer" align="center">
+											 			<tr>
+													  	<td align="center">
+  															<a href="#" class="ActionButton LightBlueStyle">
+											        	  <div class="ButtonLeft">
+										            	  <div class="ButtonRight">
+										              	  <div class="ButtonMiddle"> Save </div>
+										                </div>
+										              </div>
+										            </a>
+										            <a href="#" class="ActionButton LightBlueStyle">
+										          	  <div class="ButtonLeft">
+										            	  <div class="ButtonRight">
+										              	  <div class="ButtonMiddle"> Cancel </div>
+										                </div>
+										              </div>
+										            </a>
+                     					</td>
+                						</tr>
+ 	                        </table>
+											 	</div>
  											</div>
- 									
  										</div>
- 									</div>
+ 									
+									</div>
+								</div>
 	            
-	            
+	            </div>
 	          </div>
 			    </div>
 			  </div>
