@@ -23,6 +23,10 @@ UIContactPortlet.prototype.contactCallback = function(evt) {
 	var checkbox = eXo.core.DOMUtil.findFirstDescendantByClass(tr, "input", "checkbox") ;
 	var id = checkbox.name ;
 	eXo.webui.UIContextMenu.changeAction(UIContextMenu.menuElement, id) ;
+	if (tr.getAttribute("isTagList") && (tr.getAttribute("isTagList").toLowerCase()!="false")) {
+		var moveContactIcon =  eXo.core.DOMUtil.findFirstDescendantByClass(UIContextMenu.menuElement, "div", "MoveContactIcon") ;
+		moveContactIcon.style.display = "none" ;
+	}
 } ;
 UIContactPortlet.prototype.addressBookCallback = function(evt) {
 	var UIContextMenu = eXo.webui.UIContextMenu ;
