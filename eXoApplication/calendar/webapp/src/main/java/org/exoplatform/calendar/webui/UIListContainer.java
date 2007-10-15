@@ -3,6 +3,8 @@
  * Please look at license.txt in info directory for more license detail.   *
  **************************************************************************/
 package org.exoplatform.calendar.webui;
+import java.util.Calendar;
+
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
@@ -29,6 +31,11 @@ public class UIListContainer extends UIContainer implements CalendarView {
     getChild(UIPreview.class).refresh() ;
   }
   public void update() {
+    
+  }
+
+  public void setCurrentCalendar(Calendar cal) {
+    // TODO Auto-generated method stub
     
   }
   

@@ -5,6 +5,7 @@
 package org.exoplatform.calendar.webui;
 
 import org.exoplatform.calendar.service.CalendarEvent;
+import org.exoplatform.calendar.webui.popup.UIPopupComponent;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIComponent;
 
@@ -15,7 +16,7 @@ import org.exoplatform.webui.core.UIComponent;
  * Aus 01, 2007 2:48:18 PM 
  */
 @ComponentConfig()
-public class UIPreview extends UIComponent {
+public class UIPreview extends UIComponent implements UIPopupComponent {
   private CalendarEvent event_ = null ;
   public UIPreview() {}
   
@@ -30,5 +31,15 @@ public class UIPreview extends UIComponent {
   public void setEvent(CalendarEvent event) { event_ = event ; }
 
   public void refresh() {
+  }
+
+  public void activate() throws Exception {
+    // TODO Auto-generated method stub
+    
+  }
+
+  public void deActivate() throws Exception {
+    // TODO Auto-generated method stub
+    
   }
 }

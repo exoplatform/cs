@@ -760,7 +760,7 @@ public class JCRDataStorage implements DataStorage{
       }
     }
     List<Reminder> reminders = event.getReminders() ;
-    if(reminders!= null) {
+    if(reminders != null && !reminders.isEmpty()) {
       for(Reminder rm : reminders) {
         addReminder(eventNode, rm) ;
       }
