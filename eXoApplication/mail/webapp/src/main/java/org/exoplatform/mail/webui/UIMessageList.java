@@ -6,6 +6,7 @@ package org.exoplatform.mail.webui ;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -59,7 +60,8 @@ import org.exoplatform.webui.form.UIFormInputInfo;
         @EventConfig(listeners = UIMessageList.AddTagActionListener.class),
         @EventConfig(listeners = UIMessageList.MoveMessagesActionListener.class),
         @EventConfig(listeners = UIMessageList.ImportActionListener.class),
-        @EventConfig(listeners = UIMessageList.ExportActionListener.class)
+        @EventConfig(listeners = UIMessageList.ExportActionListener.class),
+        @EventConfig(listeners = UIMessageList.SortActionListener.class)
     }
 )
 
@@ -67,12 +69,23 @@ public class UIMessageList extends UIForm {
   private String selectedMessageId_ = null ;
   private String selectedFolderId_ = null ;
   private String selectedTagId_ = null ;
+  private String sortedBy_ = null;
+  private boolean isAscending_ = true;
   private MessagePageList pageList_ = null ;
-  private Map<String, Message> messageList_ = new HashMap<String, Message>();
+  private LinkedHashMap<String, Message> messageList_ = new LinkedHashMap<String, Message>();
 
-  public UIMessageList() throws Exception {}
+  public UIMessageList() throws Exception {
+    selectedFolderId_ = Utils.FD_INBOX ;
+    sortedBy_ = Utils.EXO_RECEIVEDDATE ;
+  }
 
-  protected String getSelectedMessageId() {return selectedMessageId_ ;}
+  protected String getSelectedMessageId() throws Exception {
+    if (getCheckedMessage() != null && getCheckedMessage().size() > 0) {
+      return getCheckedMessage().get(0).getId();
+    }
+    return selectedMessageId_ ;
+  }
+  
   protected void setSelectedMessageId(String messageId) {selectedMessageId_ = messageId ;}
   
   protected String getSelectedFolderId() {return selectedFolderId_ ;}
@@ -80,6 +93,12 @@ public class UIMessageList extends UIForm {
   
   protected String getSelectedTagId() {return selectedTagId_ ;}
   protected void setSelectedTagId(String tagId) {selectedTagId_ = tagId ;}
+  
+  public String getSortedBy() { return sortedBy_; }
+  public void setSortedBy(String sortedBy) { sortedBy_ = sortedBy; }
+  
+  public boolean isAscending() { return isAscending_; }
+  public void setAscending(boolean b) { isAscending_ = b; }
   
   public MessagePageList getMessagePageList() { return pageList_; } 
   
@@ -132,7 +151,7 @@ public class UIMessageList extends UIForm {
     for (Tag tag : tagList) {
       if (tag.getId().equals(tagId)) return tag;
     }
-    return null;
+    return new Tag();
   } 
   
   public String getAllTagName(Message msg) throws Exception {
@@ -170,6 +189,7 @@ public class UIMessageList extends UIForm {
       }
       uiMessageList.setSelectedMessageId(msgId);
       uiMessagePreview.setMessage(msg);
+      uiMessageList.updateList();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageArea);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer);
     }
@@ -217,7 +237,7 @@ public class UIMessageList extends UIForm {
         String messageId = uiMessageList.getSelectedMessageId();
         Message message = mailSvr.getMessageById(username, messageId, accId);
         uiComposeForm.setFieldSubjectValue("Re: " + message.getSubject());
-        uiComposeForm.setFieldToValue(Utils.formatAddress(message.getFrom()));
+        uiComposeForm.setFieldToValue(message.getFrom());
         uiComposeForm.setFieldMessageContentValue(message.getMessageBody());
       }
       for(Account acc : mailSvr.getAccounts(username)) {
@@ -251,8 +271,8 @@ public class UIMessageList extends UIForm {
         String messageId = uiMessageList.getSelectedMessageId();
         Message message = mailSvr.getMessageById(username, messageId, accId);
         uiComposeForm.setFieldSubjectValue("Re: " + message.getSubject());
-        uiComposeForm.setFieldToValue(Utils.formatAddress(message.getFrom() + "," + 
-            message.getMessageCc() + "," + message.getMessageBcc()));
+        uiComposeForm.setFieldToValue(message.getFrom() + "," + 
+            message.getMessageCc() + "," + message.getMessageBcc());
         uiComposeForm.setFieldMessageContentValue(message.getMessageBody());
       }
       for(Account acc : mailSvr.getAccounts(username)) {
@@ -288,8 +308,8 @@ public class UIMessageList extends UIForm {
         uiComposeForm.setFieldSubjectValue("Fwd: " + message.getSubject());
         String forwardedText = "\n\n\n-------- Original Message --------\n" +
             "Subject: " + message.getSubject() + "\nDate: " + message.getSendDate() + 
-            "\nFrom: " + Utils.formatAddress(message.getFrom()) + 
-            "\nTo: " + Utils.formatAddress(message.getMessageTo()) + 
+            "\nFrom: " + message.getFrom() + 
+            "\nTo: " + message.getMessageTo() + 
             "\n\n" + message.getMessageBody();         
         message.setMessageBody(forwardedText);
         uiComposeForm.setFieldMessageContentValue(message.getMessageBody());
@@ -418,6 +438,22 @@ public class UIMessageList extends UIForm {
       UIMessageList uiMessageList = event.getSource() ; 
       MessagePageList pageList = uiMessageList.getMessagePageList(); 
       uiMessageList.updateList(pageList.getAvailablePage());
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
+    }
+  }
+  
+  static public class SortActionListener extends EventListener<UIMessageList> {
+    public void execute(Event<UIMessageList> event) throws Exception {
+      UIMessageList uiMessageList = event.getSource() ;
+      String sortedBy = event.getRequestContext().getRequestParameter(OBJECTID) ;  
+      UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
+      MailService mailSrv = uiMessageList.getApplicationComponent(MailService.class);
+      String username = uiPortlet.getCurrentUser();
+      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      uiMessageList.setAscending(!uiMessageList.isAscending_);
+      uiMessageList.setSortedBy(sortedBy);
+      uiMessageList.setMessagePageList(mailSrv.getMessageByFolder(username, accountId, uiMessageList.getSelectedFolderId(), uiMessageList.getSortedBy(), uiMessageList.isAscending_));
+      uiMessageList.updateList();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
   }

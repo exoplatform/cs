@@ -49,6 +49,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
 public class UITagForm extends UIForm implements UIPopupComponent{
   public static final String SELECT_AVAIABLE_TAG = "Tag Name";
   public static final String TAG_COLOR = "Choose Color" ;
+  public static final String TAG_MESSAGE = "TagMessage";
   
   private Map<String, String> messageMap = new HashMap<String, String>() ;
   private Map<String, Tag> tagMap = new HashMap<String, Tag>();
@@ -86,7 +87,7 @@ public class UITagForm extends UIForm implements UIPopupComponent{
     MailService mailSrv = getApplicationComponent(MailService.class);
     for(Message msg : messageList) {
       String mesSub = "Sub : " + ((msg.getSubject().length() >= 30) ? (msg.getSubject().substring(0, 30) + "...") : msg.getSubject());
-      UIFormInputInfo uiTags = new UIFormInputInfo(mesSub, mesSub, null);
+      UIFormInputInfo uiTags = new UIFormInputInfo(TAG_MESSAGE, TAG_MESSAGE, null);
       String tags = "";
       if (msg.getTags() != null && msg.getTags().length > 0) {
         for (int i = 0; i < msg.getTags().length; i++) {
@@ -96,6 +97,7 @@ public class UITagForm extends UIForm implements UIPopupComponent{
         }
       } else tags = "No tag";
       
+      uiTags.setName(mesSub);
       uiTags.setValue(tags);
       addUIFormInput(uiTags) ;
       messageMap.put(msg.getId(), msg.getId());

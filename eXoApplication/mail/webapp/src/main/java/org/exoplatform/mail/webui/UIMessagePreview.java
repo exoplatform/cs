@@ -35,7 +35,7 @@ import org.exoplatform.webui.event.EventListener;
 )
 
 public class UIMessagePreview extends UIComponent {
-  private Message selectedMessage_ = null;
+  private Message selectedMessage_ ;
   
   public UIMessagePreview() throws Exception {}
   
@@ -47,7 +47,7 @@ public class UIMessagePreview extends UIComponent {
     public void execute(Event<UIMessagePreview> event) throws Exception {
       UIMessagePreview uiMessagePreview = event.getSource();
       String attId = event.getRequestContext().getRequestParameter(OBJECTID);
-      List<Attachment> attList = uiMessagePreview.selectedMessage_.getAttachments();
+      List<Attachment> attList = uiMessagePreview.getMessage().getAttachments();
       JCRMessageAttachment att = new JCRMessageAttachment();
       for (Attachment attach : attList) {
         if (attach.getId().equals(attId)) {

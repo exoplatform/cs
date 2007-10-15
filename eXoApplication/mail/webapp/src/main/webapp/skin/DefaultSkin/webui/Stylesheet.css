@@ -514,7 +514,16 @@
 }
 
 .UIMailPortlet .MailWorkingWorkspace .UIMessageList .DownArrow1Icon {
-	height: 16px; width: 60px;
+	height: 16px;
+	line-height: 16px;
+	margin: 3px 0px 0px 0px;
+	cursor: pointer;
+	background-position: right;
+	padding-right: 16px;
+}
+
+.UIMailPortlet .MailWorkingWorkspace .UIMessageList .UpArrow1Icon {
+	height: 16px; 
 	line-height: 16px;
 	margin: 3px 0px 0px 0px;
 	cursor: pointer;

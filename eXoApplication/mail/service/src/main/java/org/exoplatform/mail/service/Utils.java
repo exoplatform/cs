@@ -142,17 +142,6 @@ public class Utils {
     Format formatter = new SimpleDateFormat(format);
     return formatter.format(date);
   }
-    
-  public static String formatAddress(String strAdd) {
-    String inetAddress = "" ;
-    String[] senders = strAdd.split(",");
-    for (int i = 0; i < senders.length; i++) {
-      String sender = senders[i].trim();
-      if (i !=0) inetAddress += ",";
-      inetAddress += sender.split(";")[0].trim() + "<" + sender.split(";")[1] + ">";
-    }
-    return inetAddress;
-  }
   
   public static String getPersonal(InternetAddress address) throws Exception {
     String personal = "";

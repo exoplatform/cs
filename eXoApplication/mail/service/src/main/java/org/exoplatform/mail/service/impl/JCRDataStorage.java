@@ -160,9 +160,9 @@ public class JCRDataStorage implements DataStorage{
     Node homeMsg = getMessageHome(username, filter.getAccountId());
     filter.setAccountPath(homeMsg.getPath()) ;
     QueryManager qm = homeMsg.getSession().getWorkspace().getQueryManager();
-    System.out.println("\n====>"+filter.getStatement() + "\n") ;
+    System.out.println("\n QueryString >>" + filter.getStatement() + "\n") ;
     Query query = qm.createQuery(filter.getStatement(), Query.XPATH);
-    QueryResult result = query.execute();
+    QueryResult result = query.execute();    
     MessagePageList pageList = new MessagePageList(result.getNodes(), 10, filter.getStatement(), true) ;
     return pageList ;
   }

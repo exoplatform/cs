@@ -175,19 +175,60 @@
     			<th style="width: 20px; padding-left: 7px; " class="Border"><input type="checkbox" class="checkbox" title="Check all" value="4" onclick="eXo.mail.UIMailPortlet.checkAll(this);"/></th>
     			<th style="width: 24px;"><div class="StarredIcon" title="Add star for this message"><span></span></div></th>
     		  <th style="padding-left: 8px; width: 24%;">
-    		  	<div class="DownArrow1Icon" title="Sort by sender">Sender</div>
+    		    <%
+    		      String sortedBySender = uicomponent.event("Sort",Utils.EXO_FROM);
+              String classArrowFrom = "";
+              if (uicomponent.getSortedBy().equals(Utils.EXO_FROM)) {
+                if (uicomponent.isAscending()) classArrowFrom = "UpArrow1Icon";
+                else classArrowFrom = "DownArrow1Icon"
+              }
+    		    %>
+    		  	<a href = "$sortedBySender"><div class="$classArrowFrom" title="Sort by sender">Sender</div></a>
     		  </th>
-    		  <th style="width: 24px;"><div class="AttachmentIcon" title="Attchments"><span></span></div></th>
+    		  <th style="width: 24px;">
+    		    <a hreft = ""><div class="AttachmentIcon" title="Attchments"><span></span></div></a>
+    		  </th>
     		  <th style="width: 24px; border-right: 1px solid #f8f8f8;"></th>
    	      <th style="padding-left: 8px;">
-    		  	<div class="DownArrow1Icon" title="Sort by subject">Subject</div>
+       	   <%
+             String sortedBySubject = uicomponent.event("Sort",Utils.EXO_SUBJECT);
+           	   String classArrowSubject = "";
+               if (uicomponent.getSortedBy().equals(Utils.EXO_SUBJECT)) {
+                 if (uicomponent.isAscending()) classArrowSubject = "UpArrow1Icon";
+                 else classArrowSubject = "DownArrow1Icon"
+               }
+           %>
+    		  	<a href = "$sortedBySubject"><div class="$classArrowSubject" title="Sort by subject">Subject</div></a>
     		  </th>
    	      <th style="width: 24px;"><div class="TotalMessageIcon" title="Total message(s) in conversation"><span></span></div></th>
    	      <th style="width: 120px; padding-left: 8px;">
-    		    <div class="DownArrow1Icon" title="Sort by Date & time">Date & Time</div>
+         	  <%
+         	     String sortedByReceivedDate = uicomponent.event("Sort",Utils.EXO_RECEIVEDDATE);
+             	  String classArrowDate = "";
+                if (uicomponent.getSortedBy().equals(Utils.EXO_RECEIVEDDATE)) {
+                  if (uicomponent.isAscending()) classArrowDate = "UpArrow1Icon";
+                  else classArrowDate = "DownArrow1Icon"
+                }
+            %>
+    		    <a href = "$sortedByReceivedDate"><div class="$classArrowDate" title="Sort by Date & time">Date & Time</div></a>
    	      </th>
-   	      <th>Size</th>
-   	      <th style="width: 24px;"><div class="PriorityIcon"><span></span></div></th>
+   	      <th>
+       	    <%
+               String sortedBySize = uicomponent.event("Sort",Utils.EXO_SIZE);
+       	       String classArrowSize = "";
+       	       if (uicomponent.getSortedBy().equals(Utils.EXO_SIZE)) {
+       	         if (uicomponent.isAscending()) classArrowSize = "UpArrow1Icon";
+       	         else classArrowSize = "DownArrow1Icon"
+       	       }
+            %>
+   	        <a href = "$sortedBySize"><div class="$classArrowSize" title="Sort by Size">Size</div></a>
+   	      </th>
+   	      <th style="width: 24px;">
+       	    <%
+               String sortedByPriority = uicomponent.event("Sort",Utils.EXO_PRIORITY);
+            %>
+   	        <a href = "$sortedByPriority"><div class="PriorityIcon"><span></span></div></a>
+   	      </th>
     	 	</tr>
     	</thead>
     	<tbody>

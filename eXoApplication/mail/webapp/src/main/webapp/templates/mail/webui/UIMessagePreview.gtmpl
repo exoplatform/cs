@@ -3,10 +3,10 @@
   import org.exoplatform.mail.service.Utils; 
   import org.exoplatform.mail.service.Attachment;
   import javax.mail.internet.InternetAddress;
-  Message msg = uicomponent.getMessage();
 %>
 <div class="UIMessagePreview" id="<%=uicomponent.getId()%>">
 <%
+  Message msg = uicomponent.getMessage();
   if (msg != null) {
 %>
 	<div class="ReadingPaneBar">

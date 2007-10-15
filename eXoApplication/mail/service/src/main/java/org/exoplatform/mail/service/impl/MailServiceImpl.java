@@ -451,17 +451,30 @@ public class MailServiceImpl implements MailService{
   }
   
   public MessagePageList getMessagePagelistByTag(String username, String accountId, String tagId) throws Exception {
+    return getMessagePagelistByTag(username, accountId, tagId, null, true); 
+  }
+  
+  public MessagePageList getMessageByFolder(String username, String accountId, String folderName) throws Exception {
+    return getMessageByFolder(username, accountId, folderName, null, true);
+  }
+  
+  public MessagePageList getMessagePagelistByTag(String username, String accountId, String tagId, String orderBy, boolean isAscending) 
+      throws Exception {
     MessageFilter filter = new MessageFilter("Filter By Tag") ;
+    filter.setOrderBy(orderBy);
+    filter.setAscending(isAscending);
     Tag tag = getTag(username, accountId, tagId) ;
     filter.setTag(new String[]{tag.getId()} ) ;
     filter.setAccountId(accountId) ;
     return getMessages(username, filter) ;    
   }
   
-  public MessagePageList getMessageByFolder(String username, String accountId, String folderName) 
+  public MessagePageList getMessageByFolder(String username, String accountId, String folderName, String orderBy, boolean isAscending)
       throws Exception {
     MessageFilter filter = new MessageFilter("Filter By Folder") ;
-    Folder folder = getFolder(username, accountId, folderName) ;
+    filter.setOrderBy(orderBy);
+    filter.setAscending(isAscending);
+    Folder folder = getFolder(username, accountId, folderName);
     filter.setFolder(new String[]{folder.getName()} ) ;
     filter.setAccountId(accountId) ;
     return getMessages(username, filter) ;    

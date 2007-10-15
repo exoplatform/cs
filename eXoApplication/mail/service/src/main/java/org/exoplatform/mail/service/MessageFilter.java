@@ -18,9 +18,12 @@ public class MessageFilter {
   private String subject ;
   private String body ;
   private String accountPath ;
+  private String orderBy;
+  private boolean isAscending;
 
   public MessageFilter(String name) {
     this.name = name ;
+    isAscending = true;
   }
   
   public String getName() { return name ; }
@@ -42,6 +45,12 @@ public class MessageFilter {
   
   public String getAccountPath() { return accountPath ; }
   public void setAccountPath(String path) { this.accountPath = path ; }
+  
+  public String getOrderBy() { return orderBy; }
+  public void setOrderBy(String orderBy) { this.orderBy = orderBy; }
+  
+  public boolean isAscending() { return isAscending; }
+  public void setAscending(boolean b) { this.isAscending = b; } 
   
   public String getStatement() throws Exception{
     StringBuffer queryString = new StringBuffer("/jcr:root" + accountPath + "//element(*,exo:message)") ;
@@ -83,6 +92,13 @@ public class MessageFilter {
       hasConjuntion = true ;
     }
     stringBuffer.append("]") ;
+    
+    if (orderBy != null && orderBy.trim().length() >0) {
+      stringBuffer.append(" order by @" + orderBy + " ") ;
+      if (isAscending) stringBuffer.append("ascending") ;
+      else stringBuffer.append("descending");
+    }
+    
     if(hasConjuntion) queryString.append(stringBuffer.toString()) ;
     return queryString.toString() ;
   }
