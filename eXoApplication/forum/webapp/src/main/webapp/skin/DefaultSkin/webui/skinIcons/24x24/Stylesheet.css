@@ -90,7 +90,7 @@
 	background: url('icons/DeleteThisForumIcon.gif') no-repeat ;
 }
 
-.DeleteTopicIcon {
+.SetDeleteIcon {
 	background: url('icons/DeleteThreadsIcon.gif') no-repeat ;
 }
 
@@ -114,7 +114,7 @@
 	background: url('icons/MovethisForumIcon.gif') no-repeat ;
 }
 
-.MoveTopicIcon {
+.SetMoveIcon {
 	background: url('icons/MoveThreadsIcon.gif') no-repeat ;
 }
 
@@ -122,8 +122,13 @@
 	background: url('icons/PostnewThreadIcon.gif') no-repeat ;
 }
 
-.StickThreadsIcon {
+.SetStickIcon {
 	background: url('icons/StickThreadsIcon.gif') no-repeat ;
+}
+
+.SetUnStickIcon {
+	background: url('icons/StickThreadsIcon.gif') no-repeat ;
+	opacity: 0.3;
 }
 
 .ThreadsAuto-PruningIcon {
