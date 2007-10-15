@@ -62,9 +62,8 @@ public class UICategorySelect extends UIForm {
   }
 
   public List<SelectItemOption<String>> getCategoryList() throws Exception {
-    ContactService contactService = ContactUtils.getContactService() ;
     String username = ContactUtils.getCurrentUser();
-    List<ContactGroup> contactGroups =  contactService.getGroups(username);
+    List<ContactGroup> contactGroups =  ContactUtils.getContactService().getGroups(username);
     List<SelectItemOption<String>> categories = new ArrayList<SelectItemOption<String>>() ; 
     for(ContactGroup contactGroup : contactGroups)
       categories.add(new SelectItemOption<String>(contactGroup.getName(),contactGroup.getId() )) ;

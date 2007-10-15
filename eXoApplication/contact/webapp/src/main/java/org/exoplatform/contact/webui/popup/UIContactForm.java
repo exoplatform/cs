@@ -137,11 +137,11 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
 
     ShareTab.addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_ISPUBLIC_BOX, FIELD_ISPUBLIC_BOX, false));
     ShareTab.addUIFormInput(new UIFormInputInfo(FIELD_INPUT_INFO, FIELD_INPUT_INFO, null)) ;
-    OrganizationService organizationService = (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
-    Object[] groups = organizationService.getGroupHandler().getAllGroups().toArray() ;
+   
+    String[] groups = ContactUtils.getUserGroups() ;
     FIELD_SHAREDCONTACT_BOX = new String[groups.length];
     for(int i = 0; i < groups.length; i ++) {
-      FIELD_SHAREDCONTACT_BOX[i] = ((GroupImpl)groups[i]).getId() ;
+      FIELD_SHAREDCONTACT_BOX[i] = groups[i] ;
       ShareTab.addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_SHAREDCONTACT_BOX[i], FIELD_SHAREDCONTACT_BOX[i], false));
     }
     ShareTab.addUIFormInput(new UIFormStringInput(FIELD_EDITPERMISSION_INPUT, FIELD_EDITPERMISSION_INPUT, null));
@@ -159,7 +159,6 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
   
   public void setValues(Contact contact) throws Exception {
     contact_ = contact ;
-    System.out.println("\n\n share : " + contact.isShared() + "\n\n");
     if(contact.isShared()) {
       getUIFormCheckBoxInput(FIELD_ISPUBLIC_BOX).setChecked(true);
       String[] categories = contact.getCategories();
@@ -232,11 +231,12 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ; 
       }
-     /* if (ContactUtils.isEmpty(profileTab.getFieldEmail())) {  
+      /*
+      if (ContactUtils.isEmpty(profileTab.getFieldEmail())) {  
         uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.emailAddress-required", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ; 
-      }*/
+      } */
       ContactService contactService = ContactUtils.getContactService();  
       String username = ContactUtils.getCurrentUser() ;
       Contact contact ;

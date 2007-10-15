@@ -154,37 +154,37 @@
               		<div class="UIRightPopupMenuContainer">
 										<a class="MenuItem" href="<%=uicomponent.event("EditContact", "id")%>">   
 	                    <div class="ItemIcon EditIcon">
-	                      Edit Contact
+	                      <%=_ctx.appRes(uicomponent.getName() + ".label.edit")%>
 	                    </div>
                     </a>
                     <a class="MenuItem" href="<%=uicomponent.getParent().event("SendEmail", "id")%>">   
 	                    <div class="ItemIcon EmailIcon">
-	                      Send Email
+	                      <%=_ctx.appRes(uicomponent.getName() + ".label.sendEmail")%>
 	                    </div>
                     </a>
                     <a class="MenuItem" href="<%=uicomponent.event("InstantMessage", "id")%>">   
 	                    <div class="ItemIcon InstantMessage">
-	                      Instant Message
+	                      <%=_ctx.appRes(uicomponent.getName() + ".label.instantMessage")%>
 	                    </div>
                     </a>
                     <a class="MenuItem" href="<%=uicomponent.event("Tag", "id")%>">   
 	                    <div class="ItemIcon BlueTag">
-	                      Tag
+	                      <%=_ctx.appRes(uicomponent.getName() + ".label.tag")%>
 	                    </div>
                     </a>
                     <a class="MenuItem" href="<%=uicomponent.event("MoveContacts", "id")%>">   
 	                    <div class="ItemIcon MoveContactIcon">
-	                      Move Contact
+	                      <%=_ctx.appRes(uicomponent.getName() + ".label.move")%>
 	                    </div>
                     </a>
                     <a class="MenuItem" href="<%=uicomponent.event("DeleteContacts", "id")%>">   
 	                    <div class="ItemIcon DeleteContactIcon">
-	                      Delete Contact
+	                      <%=_ctx.appRes(uicomponent.getName() + ".label.delete")%>
 	                    </div> 
                     </a>
-                    <a class="MenuItem" href="<%=uicomponent.event("PrintContact", "id")%>">   
+                    <a class="MenuItem" href="<%=uicomponent.event("ViewDetails", "id")%>">   
 	                    <div class="ItemIcon PrintIcon">
-	                      Print Contact
+	                      <%=_ctx.appRes(uicomponent.getName() + ".label.print") %>
 	                    </div>
                     </a>
 									</div>
@@ -217,9 +217,6 @@
 					Contact contact ;
 					while (i < contacts.length) {
 						contact = contacts[i ++] ;
-						cssClass = "NormalVCard" ; 
-						if (contact.getId().equals(uicomponent.getSelectedContact())) cssClass = "SelectedVCard" ;
-						
 						iconTag = "Icon" ;
 						String[] tagNames = contact.getTags() ; 
 						if (tagNames != null && tagNames.length > 0) {
@@ -228,7 +225,7 @@
 						}
 				%>
 		  <div class="LeftVCardsContent">
-		  	<div class="VCardContent $cssClass">
+		  	<div class="VCardContent NormalVCard">
 			  	<div class="TitleVCards">
 				  	<div class="StateIcon OnlineIcon"><%=(contact.getFullName()==null ? "" : contact.getFullName())%></div>
 			  		<div class="TagIcon $iconTag"><span></span></div>
@@ -275,13 +272,11 @@
 			<%
 			if (i < contacts.length) {
 				contact = contacts[i ++] ;
-				cssClass = "NormalVCard" ; 
-  			if (contact.getId().equals(uicomponent.getSelectedContact())) cssClass = "SelectedVCard" ;
   			iconTag = "Icon" ;
 				if (contact.getTags() != null && contact.getTags().length > 0) iconTag = "Icon BlueTag" ;
 			%>
 			<div class="RightVCardsContent">
-		  	<div class="VCardContent $cssClass">
+		  	<div class="VCardContent NormalVCard">
 			  	<div class="TitleVCards">
 				  	<div class="StateIcon OfflineIcon"><%=(contact.getFullName()==null ? "" : contact.getFullName())%></div>
 			  		<div class="TagIcon $iconTag"><span></span></div>
@@ -294,27 +289,28 @@
 			  		%>
 						<img src="<%=(ContactUtils.isEmpty(imageLink) ? "/contact/skin/DefaultSkin/webui/background/Img2.gif": imageLink)%>" width=63 height=81 class="AvatasIcon"/>
 			  		<div class="WorkContainerVCards">
-			  		  <div class="JobMember"><%=(contact.getJobTitle()==null ? "" : contact.getJobTitle())%></div>
+			  		  <div class="JobMember"><%=(contact.getJobTitle()==null ? "_----" : contact.getJobTitle())%></div>
+			  		  
 			  		  <div class="InformationsMember">
 			  		  	<div class="InfoMember">
 			  		  		<span class="LabelContent">Email:</span>
 			  		  		<span class="InfoContent MailIcon">
 			  		  			<a href="<%=uicomponent.getParent().event("SendEmail", contact.getId())%>">
-			  		  				<%=(contact.getEmailAddress()== null ? "" : contact.getEmailAddress())%>
+			  		  				<%=(contact.getEmailAddress()== null ? "_" : contact.getEmailAddress())%>
 			  		  			</a>
 			  		  		</span>
 			  		  	</div>
 			  		  	<div class="InfoMember">
 			  		  		<span class="LabelContent">Work phone:</span>
-			  		  		<span class="LabelContent"><%=(contact.getWorkPhone1()==null ? "" : contact.getWorkPhone1())%></span>
+			  		  		<span class="LabelContent"><%=(contact.getWorkPhone1()==null ? "_-----" : contact.getWorkPhone1())%></span>
 			  		  	</div>
 			  		  	<div class="InfoMember">
 			  		  		<span class="LabelContent">Mobile:</span>
-			  		  		<span class="LabelContent"><%=(contact.getMobilePhone()==null ? "" : contact.getMobilePhone())%></span>
+			  		  		<span class="LabelContent"><%=(contact.getMobilePhone()==null ? "_" : contact.getMobilePhone())%></span>
 			  		  	</div>
 			  		  	<div class="InfoMember">
 			  		  		<span class="LabelContent">Website:</span>
-			  		  		<span class="LabelContent"><a href="#"><%=(contact.getWebPage()==null ? "" : contact.getWebPage())%></a></span>
+			  		  		<span class="LabelContent"><a href="#"><%=(contact.getWebPage()==null ? "_" : contact.getWebPage())%></a></span>
 			  		  	</div>
 			  		  	<div class="InfoMember">
 			  		  		<span class="LabelContent"><a href="<%=uicomponent.event("ViewDetails", contact.getId())%>">View Details</a></span>			  		  	

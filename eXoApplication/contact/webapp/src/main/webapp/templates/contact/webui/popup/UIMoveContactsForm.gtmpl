@@ -3,42 +3,33 @@
 	import org.exoplatform.contact.service.GroupContactData;
 	uiform.begin()
 %>
-
+<% if (uicomponent.isPersonalAddressBookSelected()) { %>
 <div class="UIMoveContactsForm">
 	<div class="TitleMoveContactsForm">Choose a Destination Address Book:</div>
 	
 	<div class="MoveContactsFormContainer">
 		<%  
-			if (uicomponent.isPersonalAddressBookSelected()) {
+			
 				ContactGroup[] contactGroups = uicomponent.getContactGroups();
 				for(contactGroup in contactGroups) {
 					String actionLink  = uicomponent.event("SelectGroup", contactGroup.getId()) ;
 					cssClass = "NormalItem" ;
-					if(contactGroup.getId().equals(uicomponent.getGroupId()))	cssClass = "SelectedItem" ;
+					if(contactGroup.getId().equals(uicomponent.groupId_))	cssClass = "SelectedItem" ;
 		%>
 		<div class="ItemList $cssClass">
 			<div class="Icon AddressIcon"><a href="$actionLink"><%=contactGroup.getName()%></a></div>
 		</div>
-		<% } } else {
-				 List sharedContactGroups = uicomponent.getSharedContactGroups();
-				 for(sharedContactGroup in sharedContactGroups) {
-				   String actionLink  = uicomponent.event("SelectGroup", sharedContactGroup) ;
-				   cssClass = "NormalItem" ;
-					 if(sharedContactGroup.equals(uicomponent.getGroupId())) cssClass = "SelectedItem" ;		
-		%>
-		<div class="ItemList $cssClass">
-			<div class="Icon AddressIcon"><a href="$actionLink"><%=sharedContactGroup%></a></div>
-		</div>
-		<% } } %>
+		<%  } %>
+		
 	</div>
 	
 	<div class="UIAction"> 
         <table class="ActionContainer" align="center">
         	<tr>
         		<td align="center">
-		          <% for(action in uicomponent.getActions()) { 
-                	 String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action) ;
-                   String link = uicomponent.event(action) ;
+		          <%  
+                	 String actionLabel = _ctx.appRes(uicomponent.getName() + ".action.Cancel") ;
+                   String link = uicomponent.event("Cancel") ;
           		%>
           		<a href="$link" class="ActionButton LightBlueStyle">
                 <div class="ButtonLeft">
@@ -48,12 +39,82 @@
                     </div>
                   </div>
                 </div>
-           		</a>
-          		<%}%>        
+           		</a>      
           	</td>
           </tr>  
         </table>
   </div>
 
 </div>
+
+<% } else { %>
+			
+			
+		<% String fieldName; %>
+		<div class="UIForm">
+		  <div class="HorizontalLayout">
+		    <div class="FormContainer">
+		      <table class="UIFormGrid">
+			      <% 
+			        for(field in uiform.getChildren()) { 
+			          if(field.isRendered()) {
+			      %>
+		              <tr>
+			              <%fieldName = uicomponent.getLabel(field.getName());%>
+			              <%//TODO: Tung.Pham modified
+			              	//if(!fieldName.equals(uicomponent.getId())) {
+			              	if(fieldName != null && fieldName.length() > 0 && !fieldName.equals(uicomponent.getId())) {
+			              %>                        
+		  	              <td class="FieldLabel">
+		                    <%/*if(fieldName != null && fieldName.length() > 0) {*/%> 
+		                      <%=uicomponent.getLabel(field.getName()) %>
+		                    <%/*}*/%>
+		                  </td>
+		  	              <td class="FieldComponent"><% uiform.renderField(field) %></td>
+			              <%} else {%>
+			                <td class="FieldComponent" colspan="2"><% uiform.renderField(field) %></td>
+			              <%}%>
+			            </tr>
+			      <%
+			          }
+			        }
+			      %>
+		      </table>
+		      <div class="UIAction"> 
+		        <table class="ActionContainer" align="center">
+		        	<tr>
+		        		<td align="center">
+				          <% for(action in uicomponent.getActions()) { 
+		                	 String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action) ;
+		                   String link = uicomponent.event(action) ;
+		          		%>
+		          		<a href="$link" class="ActionButton LightBlueStyle">
+		                <div class="ButtonLeft">
+		                  <div class="ButtonRight">
+		                    <div class="ButtonMiddle">
+		                      $actionLabel
+		                    </div>
+		                  </div>
+		                </div>
+		           		</a>
+		          		<%}%>        
+		          	</td>
+		          </tr>  
+		        </table>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+					
+			
+			
+			
+			
+			
+			
+		<% } %>
+
+
+
+
 <%uiform.end()%>

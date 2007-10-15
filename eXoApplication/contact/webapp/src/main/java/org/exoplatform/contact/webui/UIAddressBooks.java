@@ -142,6 +142,7 @@ public class UIAddressBooks extends UIComponent  {
       uiAddressBook.selectedGroup = groupId;
       ContactService contactService = ContactUtils.getContactService();
       UIContacts uiContacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class) ;
+      uiContacts.setSelectedGroup(groupId) ;
       uiContacts.setTagSelected(false) ;
       uiContacts.setContacts(contactService.getContactPageListByGroup(ContactUtils.getCurrentUser(), groupId)) ; 
       event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer) ;
@@ -157,6 +158,7 @@ public class UIAddressBooks extends UIComponent  {
       uiAddressBook.selectedGroup = groupId ; 
       ContactService contactService = ContactUtils.getContactService();
       UIContacts uiContacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class) ; 
+      uiContacts.setSelectedGroup(groupId) ;
       uiContacts.setTagSelected(false) ;
       uiContacts.setContacts(contactService.getSharedContactsByGroup(groupId)) ;      
       event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer) ;
