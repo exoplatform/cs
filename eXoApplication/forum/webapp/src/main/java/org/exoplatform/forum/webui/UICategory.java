@@ -41,6 +41,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
     template =  "app:/templates/forum/webui/UICategory.gtmpl",
     events = {
         @EventConfig(listeners = UICategory.EditCategoryActionListener.class),
+        @EventConfig(listeners = UICategory.DeleteCategoryActionListener.class),
         @EventConfig(listeners = UICategory.AddForumActionListener.class),
         @EventConfig(listeners = UICategory.EditForumActionListener.class),
         @EventConfig(listeners = UICategory.SetLockedActionListener.class),
@@ -97,6 +98,18 @@ public class UICategory extends UIForm  {
 			popupAction.activate(categoryForm, 580, 220) ;
 			event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
 		}
+	}
+
+  static public class DeleteCategoryActionListener extends EventListener<UICategory> {
+	  public void execute(Event<UICategory> event) throws Exception {
+	    UICategory uiCategory = event.getSource() ;      
+	    UIForumPortlet forumPortlet = uiCategory.getAncestorOfType(UIForumPortlet.class) ;
+	    forumPortlet.findFirstComponentOfType(UIForumActionBar.class).setRendered(true) ;
+      forumPortlet.findFirstComponentOfType(UICategories.class).setRendered(true) ;
+      uiCategory.setRendered(false) ;
+	    uiCategory.forumService.removeCategory(uiCategory.categoryId) ;
+	    event.getRequestContext().addUIComponentToUpdateByAjax(forumPortlet) ;
+	  }
 	}
 	
   

@@ -56,7 +56,7 @@
 	                                  <%=nameItem%>
 	                                </div>
 	                               </a>
-	                          <%  if(action.equals("EditCategory")) { %>
+	                          <%  if(action.equals("DeleteCategory")) { %>
                                <div class="LineMenu"><span></span></div>
                             <%  }
                             	} 

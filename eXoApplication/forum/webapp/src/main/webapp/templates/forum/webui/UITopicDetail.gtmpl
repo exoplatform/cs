@@ -18,7 +18,7 @@
 		  			<div class="ButtonRight">
 		  				<div class="ButtonMiddle">
 		  					<a href="<%=uicomponent.event("AddPost")%>">
-		  						<div class="IconButton PostReplyIcon"><span class="LabelIcon"></span>New Post</div>
+		  						<div class="IconButton PostReplyIcon"><span class="LabelIcon"></span><%=_ctx.appRes(uicomponent.getName() + ".action.AddPost");%></div>
 		  					</a>
 		  				</div>
 		  			</div>
@@ -274,13 +274,9 @@
 	<!-- Start PostViewContainer -->
 						<td class="PostViewContainer">
 					  	
-				  		<div class="PostViewHeader">
-				  			<div class="PostViewTitle" style="float: left;">
-					  			<div class="PostViewIcon $classIconPost">$subject</div>
-					  			<div class="PostTime">Posted: $createdDate</div>
-					  		</div>
-					  		<div class="CheckPost" style="float: right;"><input type="checkbox"/></div>
-					  		<div style="clear: both;"><span></span></div>
+				  		<div class="PostViewTitle">
+				  			<div class="PostViewIcon $classIconPost">$subject</div>
+				  			<div class="PostTime">Posted: $createdDate</div>
 				  		</div>
 				  		
 				  		<div class="PostContent">
@@ -313,46 +309,33 @@
 								</div>
 								<div class="ButtonContainer">
 									<div class="UIActionForum">
+									<%
+										String[] actions = ["Print", "Edit", "Delete", "Quote"] ; 
+										for(action in actions) {
+											String title = _ctx.appRes(uicomponent.getName() + ".title." + action);
+											String label = _ctx.appRes(uicomponent.getName() + ".action." + action);
+									%>
 									  <div class="ActionButton">
 									  	<div class="NormalStyle">
 									  		<div class="ButtonLeft">
 									  			<div class="ButtonRight">
 									  				<div class="ButtonMiddle">
-									  					<div class="IconButton EditPostIcon" title="Edit Message">Edit</div>
+									  					<a href="<%=uicomponent.event(action);%>">
+									  						<div class="IconButton ${action}PostIcon" title="$title"><span class="LabelIcon"></span>$label</div>
+									  					</a>
 									  				</div>
 									  			</div>
 									  		</div>
 									  	</div>
 									  </div>
-									  <div class="ActionButton">
-									  	<div class="NormalStyle">
-									  		<div class="ButtonLeft">
-									  			<div class="ButtonRight">
-									  				<div class="ButtonMiddle">
-									  					<div class="IconButton DeletePostIcon" title="Delete this Post">Delete</div>
-									  				</div>
-									  			</div>
-									  		</div>
-									  	</div>
-									  </div>
-									  <div class="ActionButton">
-									  	<div class="NormalStyle">
-									  		<div class="ButtonLeft">
-									  			<div class="ButtonRight">
-									  				<div class="ButtonMiddle">
-									  					<div class="IconButton PostReplyIcon" title="Reply With Quote">Quote</div>
-									  				</div>
-									  			</div>
-									  		</div>
-									  	</div>
-									  </div>
+									  <% } %>
 									</div>
 								</div>
 								<div style="clear: both"><span></span></div>
 				  		</div>
 					  		
 					  </td>
-	<!-- End PostViewContainer -->
+	<!-- End PostViewContainer-->
 					</tr>
 				</tbody>
       </table>
@@ -369,7 +352,9 @@
 		  		<div class="ButtonLeft">
 		  			<div class="ButtonRight">
 		  				<div class="ButtonMiddle">
-		  					<div class="IconButton PostReplyIcon"><span class="LabelIcon"></span>New Thread</div>
+		  					<a href="<%=uicomponent.event("AddPost")%>">
+		  						<div class="IconButton PostReplyIcon"><span class="LabelIcon"></span><%=_ctx.appRes(uicomponent.getName() + ".action.AddPost");%></div>
+		  					</a>
 		  				</div>
 		  			</div>
 		  		</div>

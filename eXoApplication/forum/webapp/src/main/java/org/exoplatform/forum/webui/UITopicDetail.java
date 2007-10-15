@@ -13,6 +13,7 @@ import org.exoplatform.forum.service.Post;
 import org.exoplatform.forum.service.Topic;
 import org.exoplatform.forum.webui.popup.UIPopupAction;
 import org.exoplatform.forum.webui.popup.UIPostForm;
+import org.exoplatform.forum.webui.popup.UITopicForm;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
@@ -31,7 +32,11 @@ import org.exoplatform.webui.form.UIForm;
     lifecycle = UIFormLifecycle.class,
     template =  "app:/templates/forum/webui/UITopicDetail.gtmpl", 
     events = {
-      @EventConfig(listeners = UITopicDetail.AddPostActionListener.class )  
+      @EventConfig(listeners = UITopicDetail.AddPostActionListener.class ),  
+      @EventConfig(listeners = UITopicDetail.PrintActionListener.class ),  
+      @EventConfig(listeners = UITopicDetail.EditActionListener.class ),  
+      @EventConfig(listeners = UITopicDetail.DeleteActionListener.class ),  
+      @EventConfig(listeners = UITopicDetail.QuoteActionListener.class )  
     }
 )
 public class UITopicDetail extends UIForm  {
@@ -72,12 +77,39 @@ public class UITopicDetail extends UIForm  {
       UITopicDetail topicDetail = event.getSource() ;
       UIForumPortlet forumPortlet = topicDetail.getAncestorOfType(UIForumPortlet.class) ;
       UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;
-      popupAction.activate(UIPostForm.class, 600) ;
+      UIPostForm postForm = popupAction.createUIComponent(UIPostForm.class, null, null) ;
+      postForm.setPostIds(topicDetail.categoryId, topicDetail.forumId, topicDetail.topicId) ;
+      popupAction.activate(postForm, 670, 440) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   }
 
-
+  static public class PrintActionListener extends EventListener<UITopicDetail> {
+    public void execute(Event<UITopicDetail> event) throws Exception {
+      UITopicDetail topicDetail = event.getSource() ;
+      
+    }
+  }
+  
+  static public class EditActionListener extends EventListener<UITopicDetail> {
+    public void execute(Event<UITopicDetail> event) throws Exception {
+      UITopicDetail topicDetail = event.getSource() ;
+  
+    }
+  }
+  
+  static public class DeleteActionListener extends EventListener<UITopicDetail> {
+    public void execute(Event<UITopicDetail> event) throws Exception {
+      UITopicDetail topicDetail = event.getSource() ;
+      
+    }
+  }
+  
+  static public class QuoteActionListener extends EventListener<UITopicDetail> {
+    public void execute(Event<UITopicDetail> event) throws Exception {
+      UITopicDetail topicDetail = event.getSource() ;
+    }
+  }
 
 
 

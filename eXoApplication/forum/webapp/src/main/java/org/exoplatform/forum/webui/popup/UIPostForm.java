@@ -48,7 +48,7 @@ public class UIPostForm extends UIForm implements UIPopupComponent {
     UIFormStringInput postTitle = new UIFormStringInput(FIELD_POSTTITLE_INPUT, FIELD_POSTTITLE_INPUT, null);
     postTitle.addValidator(EmptyNameValidator.class) ;
     UIFormTextAreaInput messenger = new UIFormTextAreaInput(FIELD_MESSENGER_TEXTAREA, FIELD_MESSENGER_TEXTAREA, null);
-    
+    messenger.addValidator(EmptyNameValidator.class) ;
     addUIFormInput(postTitle);
     addUIFormInput(messenger);
   }

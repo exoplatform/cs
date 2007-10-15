@@ -58,7 +58,7 @@
 		      </div>
 		    	<div class="HorizontalLayout">
 		        <div class="UITabContentContainer">
-	            <div style="display: block;" id="UITabContent" class="UITabContent">
+	            <div style="display: block;" class="UITabContent">
 	              <div class="UIFormInputSet ThreadContent">
 	              	<table class="UIFormGrid">
 	              		<tbody>
@@ -85,59 +85,29 @@
 	              	</table>
 	              </div>
 	            </div>
-	            <div class="UITabContent" id="UITabContent" style="display: none;"><samp>dsfafgasdfasd</samp></div>
-	            <div style="display: none;" id="UITabContent" class="UITabContent">
+	            <div class="UITabContent" style="display: none;"><samp>dsfafgasdfasd</samp></div>
+	            <div style="display: none;" class="UITabContent">
 	              <div class="UIFormInputSet ThreadOptions">
 	              	<table class="UIFormGrid">
 	              		<tbody>
+	              		<% 
+	              			String[] actions = ["TopicStatus", "TopicState", "Approved", "ModeratePost", "NotifyWhenAddPost", "Sticky"]; 
+	              			for(action in actions) {
+	              				String label = uicomponent.getLabel(action) ;
+	              		%>
 	              			<tr>
-	                      <td class="FieldLabel">Lock:</td>
-	                      <td class="FieldComponent">
-	                        <select clas="selectbox" name="Lock">
-	                        	<option value="Lock">Lock</option>
-	                        	<option value="Lock">Un Lock</option>
-	                        </select>
-	                      </td>
-                      </tr>
-                      <tr>
-	                      <td class="FieldLabel">Closed: </td>
-	                      <td class="FieldComponent">
-	                        <select clas="selectbox" name="Lock">
-	                        	<option value="Lock">Close</option>
-	                        	<option value="Lock">Open</option>
-	                        </select>
-	                      </td>
-                      </tr>
-	              			<tr>
-	                      <td class="FieldLabel">Approved: </td>
-	                      <td class="FieldComponent">
-	                        <input type="checkbox" class="checkbox" />
-	                      </td>
-                      </tr>
-                      <tr>
-	                      <td class="FieldLabel">Moderate post: </td>
-	                      <td class="FieldComponent">
-	                        <input type="checkbox" class="checkbox" />
-	                      </td>
-                      </tr>
-                      <tr>
-	                      <td class="FieldLabel">Motify when add pos: </td>
-	                      <td class="FieldComponent">
-	                        <input type="checkbox" class="checkbox" />
-	                      </td>
-                      </tr>
-                      <tr>
-	                      <td class="FieldLabel">Sticky: </td>
-	                      <td class="FieldComponent">
-	                        <input type="checkbox" class="checkbox" />
-	                      </td>
-                      </tr>
+                         <td class="FieldLabel">$label:</td>
+                         <td class="FieldComponent">
+                          <% uiform.renderChild(action) %>
+                         </td>
+                       </tr>
+                    <% } %>
 	              		</tbody>
 	              	</table>
 	              </div>
 	            </div>
 	            
-	            <div class="UITabContent ThreadPermission"  id="UITabContent" style="display: none;">
+	            <div class="UITabContent ThreadPermission" style="display: none;">
  								<div class="ThreadPermission">
  									<div class="UIPermissionInfo">
  										<table class="UIGrid" cellspacing="0" borderspacing="0">

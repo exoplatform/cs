@@ -208,9 +208,10 @@
 					        String attachment = String.valueOf(topic.getAttachmentFirstPost());
 					        String postCount = String.valueOf(topic.getPostCount());
 					        String postView = String.valueOf(topic.getViewCount());
+					        String iconTopicStatus = "HotThreadNewPost" ;
 					    %>
 				  			<tr class="$classRow">
-									<td class="Tdbox"><div class="ThreadStatusIcon HotThreadNewPost" title="Hot thread with new post"><span></span></div></td>
+									<td class="Tdbox"><div class="ThreadStatusIcon $iconTopicStatus" title="Hot thread with new post"><span></span></div></td>
 									<td class="Tdbox"><div class="StatusIcon $iconClassTopic" ><span></span></div></td>
 									<td >
 										<div >
@@ -245,7 +246,7 @@
 									</td>
 								 	<td class="Tdbox" align="center"><div>$postCount</div></td>
 									<td class="Tdbox" align="center">$postView</td>
-									<td class="Tdbox" align="center" onClick="eXo.forum.UIForumPortlet.selectItem(this.firstChild);"><% uicomponent.renderChild(topic.getId())%></td>
+									<td class="Tdbox" align="center" onClick="eXo.forum.UIForumPortlet.selectItem(this.firstChild);"><%uicomponent.renderChild(topic.getId())%></td>
 				   			</tr>
 					   	<% } %>
 				    </tbody>
