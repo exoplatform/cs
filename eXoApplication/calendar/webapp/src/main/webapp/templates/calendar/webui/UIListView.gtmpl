@@ -1,6 +1,54 @@
 <%
+	uiform.begin()	
+	_ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");
 	if(uicomponent.isShowEventAndTask()){
-		_ctx.include("app:/templates/calendar/webui/UIEvent&TaskView.gtmpl") ;
+%>
+	<div class="Result">Event and task list</div>
+	<div class="UIListView">
+		<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
+  		<thead>
+  			<tr>
+  			  <th style="width: 24px;"><div class="AttachmentIcon" title="Attachment of event"><span></span></div></th>
+  				<th style="width: 24px;"></th>
+  		    <th >Summary</th>
+ 	      	<th >Start</th>
+ 	      	<th >End</th>
+  	 	  </tr>
+  	 	</thead>
+  	 	  <tbody>
+  				<%
+  					for(event in uicomponent.getEvents()){
+  					attachIcon = "" ;
+  					if(!event.getAttachment().isEmpty()) {attachIcon = "" ;}
+  					%>
+  						<tr eventid="<%=event.getId()%>" calid="<%=event.getCalendarId()%>">
+		  					<%
+		  						String classIcon = event.getEventType() + "Icon" ;
+		  						String actionLink = uicomponent.event("ViewDetail", event.getId()) ;		  
+		  					%>
+		  					<td style="padding: 0px;"><div style="text-align:center;">
+		  					<%uicomponent.renderField(uicomponent.getChildById(event.getId())) ;%>		
+		  					</div></td>
+		  					<td style="padding: 0px;"><div class="AttachmentIcon $attachIcon" ><span></span></div></td>
+								<td style="padding: 0px;"><div class="$classIcon" ><span></span></div></td>
+								<td class="text">
+									<a href="$actionLink" class="ControlButton">
+										<%=event.getSummary()%>
+									</a>	
+								</td>
+								<td class="text"><%=event.getFromDateTime()%></td>
+								<td class="text"><%=event.getToDateTime()%></td>
+		   			  </tr>
+  					<%
+  					}
+  				%>
+  	   	</tbody>
+		</table>
+	</div>
+<div class="ResizeReadingPane"><span></span></div>
+
+		//_ctx.include("app:/templates/calendar/webui/UIEvent&TaskView.gtmpl") ;
+	<%
 	}else {
 		if(uicomponent.isShowEvent()) {
 			_ctx.include("app:/templates/calendar/webui/UIEventView.gtmpl") ;
@@ -9,3 +57,39 @@
 		}
 	}	
 %>
+
+<% /*Begin Popup Menu*/ %>
+<div class="UIRightClickPopupMenu" id="UIListViewEventRightMenu" exocallback="">
+  <div class="TopLeftRightClickPopupMenu">
+    <div class="TopRightRightClickPopupMenu">
+      <div class="TopCenterRightClickPopupMenu">
+        <span></span>
+      </div>
+    </div>
+  </div>
+  <div class="MiddleLeftRightClickPopupMenu">
+    <div class="MiddleRightRightClickPopupMenu">
+      <div class="UIRightPopupMenuContainer">
+        <%
+  				for(String act : uicomponent.getQuickEditMenu()) {
+  				link = uicomponent.event(act,"id&$uicomponent.CALENDARID=calId") ;
+        %>
+        <a href="$link">
+          <div class="ItemIcon $act">
+            $act</div>
+        </a>
+        <%}%>
+      </div>
+    </div>
+  </div>
+  <div class="BottomLeftRightClickPopupMenu">
+    <div class="BottomRightRightClickPopupMenu">
+      <div class="BottomCenterRightClickPopupMenu">
+        <span></span>
+      </div>
+    </div>
+  </div>
+</div>
+<% /*End Popup Menu*/ %>
+
+<%uiform.end()%>	

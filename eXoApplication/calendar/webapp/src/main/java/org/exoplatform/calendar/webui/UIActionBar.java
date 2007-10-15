@@ -138,7 +138,7 @@ public class UIActionBar extends UIContainer  {
       UIActionBar uiActionBar = event.getSource() ;     
       UICalendarPortlet uiPortlet = uiActionBar.getAncestorOfType(UICalendarPortlet.class) ;
       UICalendarViewContainer uiViewContainer = uiPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
-      UICalendarView renderedChild = (UICalendarView)uiViewContainer.getRenderedChild() ;
+      CalendarView renderedChild = (CalendarView)uiViewContainer.getRenderedChild() ;
       renderedChild.setCurrentCalendar(Calendar.getInstance()) ;
       renderedChild.refresh() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiViewContainer) ;

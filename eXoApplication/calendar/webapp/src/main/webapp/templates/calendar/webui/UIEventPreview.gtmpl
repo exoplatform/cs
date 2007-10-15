@@ -56,7 +56,7 @@
 	               	 	 	 String reminderLink = uicomponent.event("ViewReminder", reminder.getId()) ;
 	               			 %>
 	               			 	<td class="Text">
-	               			 		<a href="$actionLink" class="ControlButton"><%=reminder.getReminder()%></a>
+	               			 		<a href="$reminderLink" class="ControlButton"><%=reminder.getReminder()%></a>
 	               			 	</td>
 	               			 <%		 		 
 	               	 	 }	               	 

@@ -4,6 +4,8 @@
  **************************************************************************/
 package org.exoplatform.calendar.webui;
 
+import java.util.Calendar;
+
 /**
  * Created by The eXo Platform SARL
  * Author : Tuan Pham
@@ -13,4 +15,5 @@ package org.exoplatform.calendar.webui;
 public interface CalendarView {
   public void refresh()throws Exception ;
   public void update() throws Exception ;
+  public void setCurrentCalendar(Calendar cal) ;
 }

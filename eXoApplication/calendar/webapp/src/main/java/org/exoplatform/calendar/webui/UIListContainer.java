@@ -22,13 +22,15 @@ public class UIListContainer extends UIContainer implements CalendarView {
   public UIListContainer() throws Exception {
     addChild(UIListView.class, null, null).setRendered(true) ;
     addChild(UIPreview.class, null, null).setRendered(true) ;    
-    refresh() ;
   }
 
   public void refresh() throws Exception {
     getChild(UIListView.class).refresh() ;
+    getChild(UIPreview.class).refresh() ;
   }
   public void update() {
     
   }
+  
+  
 }

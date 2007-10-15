@@ -28,4 +28,7 @@ public class UIPreview extends UIComponent {
   
   public CalendarEvent getEvent(){ return event_ ; }
   public void setEvent(CalendarEvent event) { event_ = event ; }
+
+  public void refresh() {
+  }
 }

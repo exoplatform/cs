@@ -88,6 +88,14 @@
       </tr>
       <tr>
         <td class="FieldLabel">
+          <%=uiForm.getLabel(uicomponent.FIELD_PRIORITY)%>
+        </td>
+        <td class="FieldComponent">
+          <%uiForm.renderField(uicomponent.FIELD_PRIORITY)%>
+        </td>
+      </tr>
+      <tr>
+        <td class="FieldLabel">
           <%=uiForm.getLabel(uicomponent.FIELD_REPEAT)%>
         </td>
         <td class="FieldComponent">

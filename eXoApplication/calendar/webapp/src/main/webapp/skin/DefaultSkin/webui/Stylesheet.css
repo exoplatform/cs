@@ -573,6 +573,21 @@
 	background:#e5eaff;
 }
 
+.UIDayView .EventAllDay .EventContainerBorder{
+	border:1px solid #808080;
+	background:#e5eaff;
+	width: 100%; height: 24px;
+}
+
+.UIDayView .EventAllDay .EventContainerBorder .EventContainerBar{
+	background:#CDD7FF;
+	width: 100%;
+}
+
+.UIDayView .EventAllDay .EventContainerBorder .EventContainer {
+	width: 100%;
+}
+
 .UIDayView .EventDayContent .EventContainerBar{
 	border:1px solid #ffffff;
 	border-bottom: none;
