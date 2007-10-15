@@ -314,7 +314,7 @@
 									  		<div class="ButtonLeft">
 									  			<div class="ButtonRight">
 									  				<div class="ButtonMiddle">
-									  					<div class="IconButton PostReplyIcon" title="Edit Message"><span class="LabelIcon"></span>Edit</div>
+									  					<div class="IconButton EditPostIcon" title="Edit Message">Edit</div>
 									  				</div>
 									  			</div>
 									  		</div>
@@ -325,7 +325,7 @@
 									  		<div class="ButtonLeft">
 									  			<div class="ButtonRight">
 									  				<div class="ButtonMiddle">
-									  					<div class="IconButton PostReplyIcon" title="Delete this Post"><span class="LabelIcon"></span>Delete</div>
+									  					<div class="IconButton DeletePostIcon" title="Delete this Post">Delete</div>
 									  				</div>
 									  			</div>
 									  		</div>
@@ -336,7 +336,7 @@
 									  		<div class="ButtonLeft">
 									  			<div class="ButtonRight">
 									  				<div class="ButtonMiddle">
-									  					<div class="IconButton PostReplyIcon" title="Reply With Quote"><span class="LabelIcon"></span>Quote</div>
+									  					<div class="IconButton PostReplyIcon" title="Reply With Quote">Quote</div>
 									  				</div>
 									  			</div>
 									  		</div>

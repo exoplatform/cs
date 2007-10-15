@@ -129,3 +129,11 @@
 .LockIcon {
 	background: url('icons/Lock.gif') no-repeat left center;
 }
+
+.EditPostIcon {
+	background: url('icons/EditPost.gif') no-repeat left center;
+}
+
+.DeletePostIcon {
+	background: url('icons/DeletePost.gif') no-repeat left center;
+}
