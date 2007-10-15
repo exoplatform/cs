@@ -91,7 +91,7 @@ public class UISelectAccount extends UIForm {
       uiAccContainer.setId("UIAccountPopupCreation");
       uiAccContainer.addChild(UIAccountCreation.class, null, null) ;
       uiPopup.activate(uiAccContainer, 700, 0, true) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet) ;
     }
   }
   
@@ -130,7 +130,7 @@ public class UISelectAccount extends UIForm {
         uiAccContainer.setId("UIPopupDeleteAccountContainer") ;
         uiAccContainer.addChild(UIAccountList.class, null, null) ;
         uiPopup.activate(uiAccContainer, 700, 500, true) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet) ;
       }
     }
   }

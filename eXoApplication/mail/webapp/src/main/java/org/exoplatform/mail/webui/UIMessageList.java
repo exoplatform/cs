@@ -5,10 +5,8 @@
 package org.exoplatform.mail.webui ;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Account;
@@ -29,7 +27,6 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
-import org.exoplatform.webui.form.UIFormInputInfo;
 
 /**
  * Created by The eXo Platform SARL
