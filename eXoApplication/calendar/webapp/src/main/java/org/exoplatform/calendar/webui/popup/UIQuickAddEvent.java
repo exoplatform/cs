@@ -96,7 +96,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
     setEventToDate(cal.getTime()) ;
   }
   public void init(String startTime, String endTime) throws Exception {
-    DateFormat df = SimpleDateFormat.getInstance() ;
+    DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm");
     try {
       setEventFromDate(df.parse(startTime)) ;
       setEventToDate(df.parse(endTime)) ;

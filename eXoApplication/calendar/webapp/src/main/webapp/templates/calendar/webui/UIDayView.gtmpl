@@ -174,11 +174,11 @@
     <div class="MiddleRightRightClickPopupMenu">
       <div class="UIRightPopupMenuContainer">
 
-          <a href="<%=uicomponent.event("QuickAdd","event&startTime=beginTime")%>">
+          <a href="<%=uicomponent.event("QuickAdd","$uicomponent.TYPE_EVENT&startTime=beginTime")%>">
            <div class="ItemIcon QuickAddEvent"> Add new event </div>
            </a>
         
-          <a href="<%=uicomponent.event("QuickAdd","task&startTime=beginTime")%>">
+          <a href="<%=uicomponent.event("QuickAdd","$uicomponent.TYPE_TASK&startTime=beginTime")%>">
             <div class="ItemIcon QuickAddTask">Add new task</div>
           </a>
         
