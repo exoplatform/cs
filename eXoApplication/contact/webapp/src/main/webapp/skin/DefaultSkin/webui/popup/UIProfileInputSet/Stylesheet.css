@@ -25,6 +25,10 @@
 	background: white;
 }
 
+.Profile .AvatarContent .ImgAvatar {
+	border: 1px solid #c2c2c2;
+}
+
 .Profile .AvatarContent .Action {
 	text-align: center;
 	padding-right: 5px;

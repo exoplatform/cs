@@ -17,8 +17,6 @@
 						<div class="IconHolder MoveIcon">Move</div>
 					</a>
 					<div class="SeparatorLine"><span></span></div>
-		
-					<div class="SeparatorLine"><span></span></div>
 					<a href="#" class="ControlButton">
 						<div class="Icon ChatIcon" title="chat"><span></span></div>
 					</a>

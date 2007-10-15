@@ -32,7 +32,9 @@
 	<div class="AvatarContent">
 		<div class="Label">Picture:</div>
 		<% String imageLink = uicomponent.getImageSource() ; %>
-		<img src="<%=(imageLink == null ? "/contact/skin/DefaultSkin/webui/background/Img2.gif": imageLink)%>" width=63 height=81 class="Avatar"/>
+		<div class="Avatar">
+			<img src="<%=(imageLink == null ? "/contact/skin/DefaultSkin/webui/background/Img2.gif": imageLink)%>" width=63 height=81 class="ImgAvatar"/>
+		</div>
 		<div class="Action">	
 			<a href="<%=uicomponent.getParent().event("ChangeImage")%>">Change | </a>
 			<a href="<%=uicomponent.getParent().event("DeleteImage")%>">Delete</a>			
