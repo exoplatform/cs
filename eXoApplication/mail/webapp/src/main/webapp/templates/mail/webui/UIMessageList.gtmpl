@@ -237,12 +237,12 @@
   			  String actionLink = uicomponent.event("SelectMessage", msg.getId());
   			  checkboxField = uicomponent.getChildById(msg.getId());
   			  String actionAddStar = uicomponent.event("AddStar", msg.getId());
-  			  String selectedClass = "";
+  			  String selectedClass = "NormalItem";
   			  if (msg.getId().equals(uicomponent.getSelectedMessageId())) selectedClass = "SelectedItem" ;
           String starClass = "UnStarredIcon" ;
           if (msg.hasStar()) starClass = "StarredIcon";
   		%>
-  		<tr class="NormalItem $selectedClass">
+  		<tr class="$selectedClass">
   	  		<td onclick="eXo.mail.UIMailPortlet.selectItem(this);">
   	  		  <%
   	  		    if (checkboxField != null) uicomponent.renderField(checkboxField);

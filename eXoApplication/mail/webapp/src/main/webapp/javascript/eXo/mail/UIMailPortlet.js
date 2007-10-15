@@ -82,6 +82,16 @@ UIMailPortlet.prototype.selectItem = function(obj) {
 			tr.removeAttribute("tmpClass") ;
 		}
 	}
+	
+	var table = DOMUtil.findAncestorByTagName(tr, "table") ;
+  var trs = DOMUtil.findDescendantsByTagName(table, "tr");
+	for (var i = 1; i < trs.length; i++) {
+		var input = DOMUtil.findFirstDescendantByClass(trs[i], "input", "checkbox");
+		if (!input.checked) {
+			if (trs[i].className == "SelectedItem")
+				trs[i].className = "NormalItem";
+		}
+	}
 }
 UIMailPortlet.prototype.checkAll = function(obj) {
 	var DOMUtil = eXo.core.DOMUtil ;
