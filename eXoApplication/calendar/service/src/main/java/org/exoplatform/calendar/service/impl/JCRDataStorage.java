@@ -9,7 +9,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -69,6 +71,7 @@ public class JCRDataStorage implements DataStorage{
   final private static String CALENDAR_SETTING = "calendarSetting".intern() ;
   final private static String EVENT_CATEGORIES = "eventCategories".intern() ;
   static private String NT_UNSTRUCTURED = "nt:unstructured".intern() ;
+  private final static String VALUE = "value".intern() ; 
 
   private RepositoryService  repositoryService_ ; 
   private JCRRegistryService jcrRegistryService_ ;
@@ -1023,7 +1026,7 @@ public class JCRDataStorage implements DataStorage{
       query = qm.createQuery(eventQuery.getQueryStatement(), Query.XPATH) ;
       NodeIterator it = query.execute().getNodes();
       while(it.hasNext()) {
-        events.add(getEvent(it.nextNode())) ;
+        events.add(getEvent(it.nextNode())) ;        
       }
     }
     Node publicCalHome = getCalendarHome() ;
@@ -1035,6 +1038,71 @@ public class JCRDataStorage implements DataStorage{
       events.add(getEvent(it.nextNode())) ;
     }    
     return new EventPageList(events, 10) ;    
+  }
+  
+  public Map<Integer, String > searchYearEvent(String username, EventQuery eventQuery)throws Exception {
+    Map<Integer, String > mapData = new HashMap<Integer, String>() ;
+    Query query ;
+    QueryManager qm ;
+    if(username != null && username.length() > 0) {
+      Node calendarHome = getCalendarHome(username) ;
+      eventQuery.setCalendarPath(calendarHome.getPath()) ;
+      qm = calendarHome.getSession().getWorkspace().getQueryManager() ;
+      query = qm.createQuery(eventQuery.getQueryStatement(), Query.XPATH) ;
+      NodeIterator it = query.execute().getNodes();   
+      mapData = updateMap(mapData, it, eventQuery.getFromDate(), eventQuery.getToDate()) ;
+    }
+    Node publicCalHome = getCalendarHome() ;
+    eventQuery.setCalendarPath(publicCalHome.getPath()) ;
+    qm = publicCalHome.getSession().getWorkspace().getQueryManager() ;
+    query = qm.createQuery(eventQuery.getQueryStatement(), Query.XPATH) ;
+    NodeIterator it = query.execute().getNodes();
+    mapData = updateMap(mapData, it, eventQuery.getFromDate(), eventQuery.getToDate()) ;  
+    return mapData ;    
+  }
+  
+  private Map<Integer, String> updateMap(Map<Integer, String> data, NodeIterator it, java.util.Calendar fromDate, java.util.Calendar toDate) throws Exception {
+    Long start = new Long(1);
+    Long end ;
+    boolean isVictory = false ;
+    long milisOfDay = 24 * 60 * 60 * 1000 ;
+    long beginDay = fromDate.getTimeInMillis() / milisOfDay ;
+    long endDay = toDate.getTimeInMillis() / milisOfDay ;
+    while(it.hasNext()) {
+      Node eventNode = it.nextNode() ;
+      start = new Long(1) ;
+      long fromDay = eventNode.getProperty("exo:fromDateTime").getDate().getTimeInMillis() / milisOfDay ;
+      long toDay = eventNode.getProperty("exo:toDateTime").getDate().getTimeInMillis() / milisOfDay;
+      if(fromDay < beginDay) {
+        if(toDay < endDay ) {
+          end = toDay - beginDay ;          
+        }else {
+          end = endDay - beginDay ;
+          isVictory = true ;
+        }
+      }else {
+        if(fromDay == beginDay) {
+          if( toDay < endDay) {
+            end = toDay - beginDay ;            
+          }else {
+            end = endDay - beginDay ;
+            isVictory = true ;
+          }
+        }else {
+          start = fromDay - beginDay ;
+          if(toDay < endDay) {
+            end = start + (toDay - fromDay) ;            
+          }else {
+            end = start + (endDay - fromDay) ;
+          }
+        }
+      }
+      for (int i = start.intValue(); i <= end.intValue(); i ++) {
+        data.put(i, VALUE) ;            
+      }
+      if (isVictory) break ;
+    }
+    return data ;
   }
 }
 

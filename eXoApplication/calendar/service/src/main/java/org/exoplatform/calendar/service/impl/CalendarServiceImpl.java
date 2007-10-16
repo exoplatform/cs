@@ -178,5 +178,9 @@ public class CalendarServiceImpl implements CalendarService{
   public EventCategory getEventCategory(String username, String eventCategoryId) throws Exception {
     return storage_.getEventCategory(username, eventCategoryId) ;
   }
+  
+  public Map<Integer, String > searchYearEvent(String username, EventQuery eventQuery)throws Exception  {
+    return storage_.searchYearEvent(username, eventQuery) ;
+  }
 
 }

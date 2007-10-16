@@ -217,7 +217,6 @@ public class ICalendarImportExport implements CalendarImportExport{
         storage_.saveUserEvent(username, exoCalendar.getId(), exoEvent, true) ;
       }
     }
-
   }  
 
 }
