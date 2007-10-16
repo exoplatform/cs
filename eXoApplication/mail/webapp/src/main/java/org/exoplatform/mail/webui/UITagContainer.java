@@ -56,12 +56,12 @@ public class UITagContainer extends UIComponent {
       UITagContainer uiTags = event.getSource();
       UIMailPortlet uiPortlet = uiTags.getAncestorOfType(UIMailPortlet.class);
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
-      uiMessageList.setSelectedFolderId(null);
       MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       uiMessageList.setMessagePageList(mailSrv.getMessagePagelistByTag(username, accountId, tagId));
       uiMessageList.setSelectedTagId(tagId);
+      uiMessageList.setSelectedFolderId(null);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiTags);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList);
     }

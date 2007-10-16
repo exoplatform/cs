@@ -143,6 +143,10 @@
 	background: url('icons/AllMessagesIcon.gif') no-repeat;
 }
 
+.StaredMessagesIcon {
+	background: url('icons/AllMessagesIcon.gif') no-repeat;
+}
+
 .UnreadMessagesIcon {
 	background: url('icons/UnreadMessagesIcon.gif') no-repeat;
 }

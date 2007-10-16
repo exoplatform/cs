@@ -30,8 +30,8 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
 
 /**
  * Created by The eXo Platform SARL
- * Author : Hung Nguyen
- *          hung.nguyen@exoplatform.com
+ * Author : Nam Phung
+ *          phunghainam@gmail.com
  * Aus 01, 2007 2:48:18 PM 
  */
 
@@ -50,6 +50,12 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
         @EventConfig(listeners = UIMessageList.MarkAsUnReadActionListener.class),
         @EventConfig(listeners = UIMessageList.AddStarActionListener.class),
         @EventConfig(listeners = UIMessageList.RemoveStarActionListener.class),
+        @EventConfig(listeners = UIMessageList.ViewAllActionListener.class),
+        @EventConfig(listeners = UIMessageList.ViewStarredActionListener.class),
+        @EventConfig(listeners = UIMessageList.ViewUnstarredActionListener.class),
+        @EventConfig(listeners = UIMessageList.ViewUnreadActionListener.class),
+        @EventConfig(listeners = UIMessageList.ViewReadActionListener.class),
+        @EventConfig(listeners = UIMessageList.ViewAttachmentActionListener.class),
         @EventConfig(listeners = UIMessageList.FirstPageActionListener.class),
         @EventConfig(listeners = UIMessageList.PreviousPageActionListener.class),
         @EventConfig(listeners = UIMessageList.NextPageActionListener.class),
@@ -66,30 +72,34 @@ public class UIMessageList extends UIForm {
   private String selectedMessageId_ = null ;
   private String selectedFolderId_ = null ;
   private String selectedTagId_ = null ;
+  private String viewQuery_ = null;
   private String sortedBy_ = null;
   private boolean isAscending_ = true;
   private MessagePageList pageList_ = null ;
   private LinkedHashMap<String, Message> messageList_ = new LinkedHashMap<String, Message>();
 
   public UIMessageList() throws Exception {
-    selectedFolderId_ = Utils.FD_INBOX ;
     sortedBy_ = Utils.EXO_RECEIVEDDATE ;
   }
 
-  protected String getSelectedMessageId() throws Exception {
+  public String getSelectedMessageId() throws Exception {
     if (getCheckedMessage() != null && getCheckedMessage().size() > 0) {
       return getCheckedMessage().get(0).getId();
     }
     return selectedMessageId_ ;
   }
   
-  protected void setSelectedMessageId(String messageId) {selectedMessageId_ = messageId ;}
+  public void setSelectedMessageId(String messageId) {selectedMessageId_ = messageId ;}
   
-  protected String getSelectedFolderId() {return selectedFolderId_ ;}
-  protected void setSelectedFolderId(String folderId) {selectedFolderId_ = folderId ;}
+  public String getSelectedFolderId() {return selectedFolderId_ ;}
+  public void setSelectedFolderId(String folderId) {selectedFolderId_ = folderId ;}
   
-  protected String getSelectedTagId() {return selectedTagId_ ;}
-  protected void setSelectedTagId(String tagId) {selectedTagId_ = tagId ;}
+  public String getSelectedTagId() {return selectedTagId_ ;}
+  public void setSelectedTagId(String tagId) {selectedTagId_ = tagId ;}
+  
+  public String getViewQuery() {return viewQuery_ ;}
+  public void setViewQuery(String view) {viewQuery_ = view ;}
+  
   
   public String getSortedBy() { return sortedBy_; }
   public void setSortedBy(String sortedBy) { sortedBy_ = sortedBy; }
@@ -119,7 +129,6 @@ public class UIMessageList extends UIForm {
       for (Message message : pageList_.getPage(page, MailUtils.getCurrentUser())) {
         UIFormCheckBoxInput<Boolean> uiCheckBox = new UIFormCheckBoxInput<Boolean>(message.getId(), message.getId(), false);
         addUIFormInput(uiCheckBox);
-        
         messageList_.put(message.getId(), message);
       }
     }
@@ -235,6 +244,74 @@ public class UIMessageList extends UIForm {
       uiMessageList.updateList();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageArea);
     }
+  }
+  
+  static public class ViewAllActionListener extends EventListener<UIMessageList> {
+    public void execute(Event<UIMessageList> event) throws Exception {
+      UIMessageList uiMessageList = event.getSource();
+      System.out.println("======>>>>> ViewAllActionListener");
+      uiMessageList.filterMessage("");
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
+    }
+  }
+  
+  static public class ViewStarredActionListener extends EventListener<UIMessageList> {
+    public void execute(Event<UIMessageList> event) throws Exception {
+      UIMessageList uiMessageList = event.getSource();
+      System.out.println("======>>>>> ViewStaredActionListener");      
+      uiMessageList.filterMessage("@" + Utils.EXO_STAR + "='true'");
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
+    }
+  }
+  
+  static public class ViewUnstarredActionListener extends EventListener<UIMessageList> {
+    public void execute(Event<UIMessageList> event) throws Exception {
+      UIMessageList uiMessageList = event.getSource();
+      System.out.println("======>>>>> ViewUnstaredActionListener");
+      uiMessageList.filterMessage("@" + Utils.EXO_STAR + "='false'");
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
+    }
+  }
+  
+  static public class ViewUnreadActionListener extends EventListener<UIMessageList> {
+    public void execute(Event<UIMessageList> event) throws Exception {
+      UIMessageList uiMessageList = event.getSource();
+      System.out.println("======>>>>> ViewUnreadActionListener");
+      uiMessageList.filterMessage("@" + Utils.EXO_ISUNREAD + "='true'");
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
+    }
+  }
+  
+  static public class ViewReadActionListener extends EventListener<UIMessageList> {
+    public void execute(Event<UIMessageList> event) throws Exception {
+      UIMessageList uiMessageList = event.getSource();
+      System.out.println("======>>>>> ViewReadActionListener");
+      uiMessageList.filterMessage("@" + Utils.EXO_ISUNREAD + "='false'");
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
+    }
+  }
+    
+  static public class ViewAttachmentActionListener extends EventListener<UIMessageList> {
+    public void execute(Event<UIMessageList> event) throws Exception {
+      UIMessageList uiMessageList = event.getSource();
+      System.out.println("======>>>>> ViewAttachmentActionListener");
+      // Improve later
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
+    }
+  }
+  
+  public void filterMessage(String viewQuery) throws Exception {
+    UIMailPortlet uiPortlet = getAncestorOfType(UIMailPortlet.class);
+    MailService mailSrv = getApplicationComponent(MailService.class);
+    setViewQuery(viewQuery);
+    String username = uiPortlet.getCurrentUser();
+    String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+    if (getSelectedFolderId() != null) {
+      setMessagePageList(mailSrv.getMessageByFolder(username, accountId, getSelectedFolderId(), getViewQuery()));
+    } else if (getSelectedTagId() != null) {
+      setMessagePageList(mailSrv.getMessagePagelistByTag(username, accountId, getSelectedTagId(), getViewQuery()));
+    }
+    updateList();
   }
 
   static public class ReplyActionListener extends EventListener<UIMessageList> {
@@ -497,7 +574,11 @@ public class UIMessageList extends UIForm {
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       uiMessageList.setAscending(!uiMessageList.isAscending_);
       uiMessageList.setSortedBy(sortedBy);
-      uiMessageList.setMessagePageList(mailSrv.getMessageByFolder(username, accountId, uiMessageList.getSelectedFolderId(), uiMessageList.getSortedBy(), uiMessageList.isAscending_));
+      if (uiMessageList.getSelectedFolderId() != null) {
+        uiMessageList.setMessagePageList(mailSrv.getMessageByFolder(username, accountId, uiMessageList.getSelectedFolderId(), uiMessageList.getViewQuery(), uiMessageList.getSortedBy(), uiMessageList.isAscending_));
+      } else if (uiMessageList.getSelectedTagId() != null) {
+        uiMessageList.setMessagePageList(mailSrv.getMessagePagelistByTag(username, accountId, uiMessageList.getSelectedTagId(), uiMessageList.getViewQuery(), uiMessageList.getSortedBy(), uiMessageList.isAscending_));
+      }
       uiMessageList.updateList();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }

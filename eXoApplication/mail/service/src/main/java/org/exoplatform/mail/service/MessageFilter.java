@@ -17,6 +17,7 @@ public class MessageFilter {
   private String[] tag ;
   private String subject ;
   private String body ;
+  private String viewQuery ;
   private String accountPath ;
   private String orderBy;
   private boolean isAscending;
@@ -42,6 +43,9 @@ public class MessageFilter {
   
   public String getBody() { return body ; }
   public void setBody(String body) { this.body = body ; }
+  
+  public String getViewQuery() { return viewQuery ; }
+  public void setViewQuery(String query) { this.viewQuery = query ; }
   
   public String getAccountPath() { return accountPath ; }
   public void setAccountPath(String path) { this.accountPath = path ; }
@@ -88,6 +92,14 @@ public class MessageFilter {
       if(hasConjuntion) stringBuffer.append(" and (") ;
       else stringBuffer.append("(") ;
       stringBuffer.append("jcr:contains(@exo:body, '" + body + "')") ;
+      stringBuffer.append(")") ;
+      hasConjuntion = true ;
+    }
+    
+    if(viewQuery != null && viewQuery.trim().length() > 0) {
+      if(hasConjuntion) stringBuffer.append(" and (") ;
+      else stringBuffer.append("(") ;
+      stringBuffer.append(viewQuery) ;
       stringBuffer.append(")") ;
       hasConjuntion = true ;
     }
