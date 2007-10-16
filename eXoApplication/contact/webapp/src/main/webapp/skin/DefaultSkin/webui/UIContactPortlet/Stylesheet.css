@@ -62,7 +62,7 @@
 
 .UIContactPortlet .IconHolder {
 	line-height: 26px;
-	margin: 2px 7px 0px 7px;
+	margin: 2px 7px;
 	padding-left: 26px;
 	background-position: left center;
 	background-repeat: no-repeat;
@@ -225,6 +225,7 @@
 	background: url('background/LineTitle166x1.gif') no-repeat left bottom;
 	line-height: 20px;
 	margin: 0px 0px 5px 0px;
+	height: 20px;
 }
 
 .UIContactPortlet .UINavigationContainer .ActionIcon {
@@ -322,7 +323,7 @@
 }
 
 .UIContactPortlet .UIContactContainer .UIContactActionsBar .IconHolder {
-	line-height: 20px;
+	line-height: 18px;
 	height: auto;
 }
 

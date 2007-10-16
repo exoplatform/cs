@@ -1,0 +1,10 @@
+.UITagForm {
+	background: #f3f3f3;
+	padding: 20px 10px;
+}
+
+.UITagForm .HorizontalLayout {
+	border: none;
+	width: 400px;
+	margin: auto;
+}
