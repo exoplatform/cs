@@ -133,6 +133,7 @@ public class UIMonthView extends UICalendarView {
   }
 
   public void refresh() throws Exception {
+    System.out.println("\n\n>>>>>>>>>> MONTH VIEW") ;
     refreshSelectedCalendarIds() ;
     refreshEvents() ;
 

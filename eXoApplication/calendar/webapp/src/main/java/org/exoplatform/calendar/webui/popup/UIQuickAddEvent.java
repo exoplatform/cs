@@ -246,7 +246,27 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
         calEvent.setEventCategoryId(uiForm.getEventCategory());
         calEvent.setFromDateTime(fromDate);
         calEvent.setToDateTime(toDate) ;
+        
+        java.util.Calendar fromCal = java.util.Calendar.getInstance() ;
+        fromCal.setTime(calEvent.getFromDateTime()) ;
+        java.util.Calendar toCal = java.util.Calendar.getInstance() ;
+        toCal.setTime(calEvent.getToDateTime()) ;
         calService.saveUserEvent(username, calendarId, calEvent, true) ;
+        //for(int i = 1 ; i <= 12; i ++) {
+          /*for(int j = 1; j <= 365 ; j ++ ) {
+            System.out.println(" j ==== " + j) ;
+            
+            CalendarEvent newEvent = new CalendarEvent() ;
+            calEvent.setId(newEvent.getId()) ;
+            fromCal.add(java.util.Calendar.DATE, 1) ;
+            toCal.add(java.util.Calendar.DATE, 1) ;
+            calEvent.setFromDateTime(fromCal.getTime()) ;
+            calEvent.setToDateTime(toCal.getTime()) ;
+          }*/
+          //fromCal.add(java.util.Calendar.MONTH, 1) ;
+          //toCal.add(java.util.Calendar.MONTH, 1) ;
+        //}
+        
         System.out.println("\n\n from  from date "+fromDate);
         System.out.println("\n\n from to date "+ toDate);
 

@@ -245,38 +245,37 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     if(CalendarUtils.isEmpty(getEventFormDateValue())) {
       errorMsg_ = "UIEventForm.msg.event-fromdate-required" ;
       return false ;
-    } else {
-      try {
-        getEventFromDate() ;
-      } catch (Exception e) {
-        e.printStackTrace() ;
-        errorMsg_ = "UIEventForm.msg.event-fromdate-notvalid" ;
-        return false ;
-      }
     }
+    try {
+      getEventFromDate() ;
+    } catch (Exception e) {
+      e.printStackTrace() ;
+      errorMsg_ = "UIEventForm.msg.event-fromdate-notvalid" ;
+      return false ;
+    }
+    
     if(!getEventAllDate()) {
       if(CalendarUtils.isEmpty(getEventToDateValue())){
         errorMsg_ = "UIEventForm.msg.event-todate-required" ;
         return false ;
-      } else {
-        try {
-          getEventToDate() ;
-        } catch (Exception e) {
-          e.printStackTrace() ;
-          errorMsg_ =  "UIEventForm.msg.event-todate-notvalid" ;
-          return false ;
-        }
-        try {
-          if(getEventFromDate().after(getEventToDate()) || getEventFromDate().equals(getEventToDate())){
-            errorMsg_ = "UIEventForm.msg.event-date-time-logic" ;
-            return false ;
-          }
-        } catch (Exception e) {
-          e.printStackTrace() ;
-          errorMsg_ = "UIEventForm.msg.event-date-time-getvalue" ;
-          return false ;
-        }
+      } 
+      try {
+        getEventToDate() ;
+      } catch (Exception e) {
+        e.printStackTrace() ;
+        errorMsg_ =  "UIEventForm.msg.event-todate-notvalid" ;
+        return false ;
       }
+      try {
+        if(getEventFromDate().after(getEventToDate()) || getEventFromDate().equals(getEventToDate())){
+          errorMsg_ = "UIEventForm.msg.event-date-time-logic" ;
+          return false ;
+        }
+      } catch (Exception e) {
+        e.printStackTrace() ;
+        errorMsg_ = "UIEventForm.msg.event-date-time-getvalue" ;
+        return false ;
+      }      
     }
     if(getEmailReminder() && CalendarUtils.isEmpty(getEmailAddress())) {
       errorMsg_ = "UIEventForm.msg.event-email-required" ;
@@ -654,7 +653,25 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
         if(uiForm.getMeetingInvitation() != null) calendarEvent.setInvitation(uiForm.getMeetingInvitation()) ;
         if(uiForm.getParticipant() != null) calendarEvent.setParticipant(uiForm.getParticipant()) ;
         try {
-          calendarService.saveUserEvent(username, calendarId, calendarEvent, uiForm.isAddNew_) ;
+          Calendar fromCal = Calendar.getInstance() ;
+          fromCal.setTime(calendarEvent.getFromDateTime()) ;
+          Calendar toCal = Calendar.getInstance() ;
+          toCal.setTime(calendarEvent.getToDateTime()) ;
+          for(int i = 1 ; i <= 12; i ++) {
+            for(int j = 1; j < 28 ; j ++ ) {
+              System.out.println("i === " + i + " j ==== " + j) ;
+              calendarService.saveUserEvent(username, calendarId, calendarEvent, uiForm.isAddNew_) ;
+              CalendarEvent newEvent = new CalendarEvent() ;
+              calendarEvent.setId(newEvent.getId()) ;
+              fromCal.add(Calendar.DATE, 1) ;
+              toCal.add(Calendar.DATE, 1) ;
+              calendarEvent.setFromDateTime(fromCal.getTime()) ;
+              calendarEvent.setToDateTime(toCal.getTime()) ;
+            }
+            fromCal.add(Calendar.MONTH, 1) ;
+            toCal.add(Calendar.MONTH, 1) ;
+          }
+          
           uiViewContainer.refresh() ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiViewContainer) ;
           UIMiniCalendar uiMiniCalendar = calendarPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;

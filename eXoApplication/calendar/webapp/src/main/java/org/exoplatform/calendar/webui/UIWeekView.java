@@ -54,6 +54,7 @@ public class UIWeekView extends UICalendarView {
   }
 
   public void refresh() throws Exception {
+    System.out.println("\n\n>>>>>>>>>> WEEK VIEW") ;
     int week = getCurrentWeek() ;
     eventData_.clear() ;
     allWeekData_.clear() ;

@@ -24,6 +24,7 @@ public class UIScheduleView extends UICalendarView  {
 
   @Override
   public void refresh() throws Exception {
+    System.out.println("\n\n>>>>>>>>>> SCHEDULE VIEW") ;
     // TODO Auto-generated method stub
     
   }  

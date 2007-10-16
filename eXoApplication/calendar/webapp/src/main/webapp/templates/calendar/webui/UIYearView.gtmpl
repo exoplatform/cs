@@ -1,9 +1,13 @@
 <%
+	import java.util.Map;
+	
 	uiform.begin()
  	_ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");
 	int currentYear = uicomponent.getCurrentYear() ;
 	String linkDayNext = uicomponent.event(uicomponent.ACT_NEXT) ;
  	String linkDayPrevious = uicomponent.event(uicomponent.ACT_PREVIOUS) ;
+ 	Map value = uicomponent.getValueMap() ;
+ 	dayOfYear = 1 ;
 %>
 <div class="UIYearView" style="display: block;">
 	<div class="TitleBar">		
@@ -43,11 +47,10 @@
 	        				cssClass = "CalendarMatchedEventContent" ;
 	        			}
 	        		monthName = uicomponent.getMonthName(month) ;
-	        		monthViewAction = uicomponent.TYPE_MONTH +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"="+ month +"&"+ uicomponent.DAY + "=1" ;
         	 %>
         	 <td class="$cssClass">
 							<div class="WeekSuburdbar">
-								<a href="<%=uicomponent.event("GotoDate",monthViewAction)%>">
+								<a href="<%=uicomponent.event("GotoMonth","$month")%>">
 									$monthName 
 								</a>
 							</div>
@@ -80,20 +83,19 @@
 											        validDay = 0;
 											      }
 											      if (validDay) {
-											       println "<td>" ;
-											       dayActionLink = uicomponent.TYPE_DATE +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"="+ month +"&"+ uicomponent.DAY + "=" + dayOfMonth ;
-											       %>
-											       	<a href="<%=uicomponent.event('GotoDate',dayActionLink)%>">$dayOfMonth</a>
-											       <%
-											       println "</td>" ;
+											      	if(value.get(dayOfYear) != null) {
+											      		println "<td style='color:red; font-weight: bold'>$dayOfMonth</td>" ;
+											      	}else {
+											      		println "<td>$dayOfMonth</td>" ;
+											      	}
+											       	dayOfYear++ ;
 											        dayOfMonth++ ;
 											      } else {
 											        println "<td>&nbsp;</td>" ;
-											      }
+											      }											      
 											    }
 											    println "</tr>" ;
-								  			}	
-								  			 
+								  			}									  			 
 											%>
 			  						</tbody>
 			  					</table>

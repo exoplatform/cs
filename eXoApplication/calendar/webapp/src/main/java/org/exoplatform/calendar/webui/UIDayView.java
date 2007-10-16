@@ -67,6 +67,7 @@ public class UIDayView extends UICalendarView {
 
   @Override
   public void refresh() throws Exception {
+    System.out.println("\n\n>>>>>>>>>> DAY VIEW") ;
     eventData_.clear() ;
     allDayEvent_.clear() ;
     Calendar begin = getCurrentDayBegin() ;

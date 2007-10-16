@@ -5,7 +5,13 @@
 package org.exoplatform.calendar.webui;
 
 import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.Map;
 
+import org.exoplatform.calendar.CalendarUtils;
+import org.exoplatform.calendar.service.CalendarService;
+import org.exoplatform.calendar.service.EventQuery;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
@@ -30,42 +36,53 @@ import org.exoplatform.webui.event.EventListener;
 
 )
 public class UIMiniCalendar extends UIMonthView  {
+  private Map<Integer, String> dataMap ;
   public UIMiniCalendar() throws Exception {
-    refresh() ;
+    updateMiniCal() ;
   }  
 
-
+  private void updateMiniCal() throws Exception {
+    EventQuery eventQuery = new EventQuery() ;
+    java.util.Calendar fromcalendar = new GregorianCalendar(getCurrentYear(), getCurrentMonth(), 1, 0,0,0) ;
+    eventQuery.setFromDate(fromcalendar) ;
+    java.util.Calendar tocalendar = new GregorianCalendar(getCurrentYear(), getCurrentMonth(), getDaysInMonth(), 24,0,0) ;
+    eventQuery.setToDate(tocalendar) ;
+    CalendarService calendarService = getApplicationComponent(CalendarService.class) ;
+    dataMap = calendarService.searchHightLightEvent(CalendarUtils.getCurrentUser(), eventQuery);
+  }
+  
+  private Map<Integer, String> getDataMap(){ return dataMap ; }
   protected void moveYear(int yearStep) {
     calendar_.add(Calendar.YEAR, yearStep) ;
   }
 
   static  public class MoveNextActionListener extends EventListener<UIMiniCalendar> {
     public void execute(Event<UIMiniCalendar> event) throws Exception {
-      UIMiniCalendar calendarview = event.getSource() ;
+      UIMiniCalendar miniCal = event.getSource() ;
       String type = event.getRequestContext().getRequestParameter(OBJECTID) ;
       if(TYPE_MONTH == Integer.parseInt(type)) {
-        calendarview.monthNext(1) ;
+        miniCal.monthNext(1) ;
       } else {
-        calendarview.moveYear(1) ;
+        miniCal.moveYear(1) ;
       }
-      calendarview.setCurrentDay(1);
-      calendarview.refresh() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
+      miniCal.setCurrentDay(1);
+      miniCal.updateMiniCal() ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(miniCal.getParent()) ;
     }
   }
 
   static  public class MovePreviousActionListener extends EventListener<UIMiniCalendar> {
     public void execute(Event<UIMiniCalendar> event) throws Exception {
-      UIMiniCalendar calendarview = event.getSource() ;
+      UIMiniCalendar miniCal = event.getSource() ;
       String type = event.getRequestContext().getRequestParameter(OBJECTID) ;
       if(TYPE_MONTH == Integer.parseInt(type)) {
-        calendarview.monthNext(-1) ;
+        miniCal.monthNext(-1) ;
       } else {
-        calendarview.moveYear(-1) ;
+        miniCal.moveYear(-1) ;
       }
-      calendarview.setCurrentDay(1);
-      calendarview.refresh() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
+      miniCal.setCurrentDay(1);
+      miniCal.updateMiniCal() ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(miniCal.getParent()) ;
     }
   }
 }
