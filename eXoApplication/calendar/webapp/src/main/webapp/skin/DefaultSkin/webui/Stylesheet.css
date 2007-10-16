@@ -171,7 +171,8 @@
 	line-height: 23px;
 	padding-right: 16px; 
 	cursor: pointer;
-	*width: 50px;
+	*width: 60px;
+	*white-space: nowrap;
 }
 
 /*==================Calendar Working Container===================*/
@@ -312,7 +313,7 @@
 	background: #FFF6A3;
 }
 
-.UIMiniCalendar .DayList .UIGrid .Today .Actions {
+.UIMiniCalendar .DayList .UIGrid .Today .MiniCalendarActions {
 	color: red;
 }
 

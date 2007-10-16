@@ -101,7 +101,7 @@
 						     }
 						   dayActionLink = uicomponent.TYPE_DATE +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"="+ currentMonth +"&"+ uicomponent.DAY + "=" + dayOfMonth ;
 				       actionLink = uicomponent.event("GotoDate", dayActionLink) ;
-				       println "<td class=\"$highlight $clazz\"><a href=\"$actionLink\"><div class=\"Actions\">$dayOfMonth</div></a></td>" ;
+				       println "<td class=\"$highlight $clazz\"><a href=\"$actionLink\"><div class=\"MiniCalendarActions\">$dayOfMonth</div></a></td>" ;
 				        dayOfMonth++ ;
 				      } else {
 				        println "<td>&nbsp;</td>" ;

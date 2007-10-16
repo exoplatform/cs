@@ -1,22 +1,3 @@
-<div style="width: 560px; display: block; visibility: visible; z-index: 4; top: 131px; left: 309px;" id="SearchUser" exo:minheight="200" exo:minwidth="200" class="UIPopupWindow UIDragObject">
-  <div class="NormalStyle">
-   	<div class="TopLeftCornerDecorator">
-     	<div class="TopRightCornerDecorator">
-       	<div class="TopCenterDecorator">
-         	<div class="OverflowContainer">
-          	<div class="PopupTitleIcon"><span></span></div>
-          	<div onclick="" title="Close Window" class="CloseButton"><span></span></div>
-           	<div class="PopupTitle">User Title Manager</div>
-         	</div>
-       	</div>
-     	</div>
-    </div>
-    <div class="MiddleLeftSideDecorator">
-      <div class="MiddleRightSideDecorator">
-       	<div class="MiddleCenterDecorator">
-         	<div class="UIWindowContent">
-         	
-         	
 <div class="UIUserTitleManagerForm">
 	<div class="UserManagementContainer">
 		<div class="UIUserTitleList">
@@ -181,19 +162,4 @@
 			</tr>
  	  </table>
 	</div>
-</div>
-						
-						
-					</div>
-    		</div>
-   		</div>
-  	</div>
-   	<div class="BottomLeftCornerDecorator">
-    	<div class="BottomRightCornerDecorator">
-       	<div class="BottomCenterDecorator">
-     			<div class="ResizeButton"><span></span></div>
-    		</div>
-    	</div>
-   	</div>
- 	</div>
 </div>
