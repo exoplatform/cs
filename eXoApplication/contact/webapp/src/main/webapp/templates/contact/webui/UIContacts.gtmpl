@@ -331,7 +331,7 @@
 		
 	</div>
 	<style type="text/css">
-		.UIAction {
+		.UIAction1 {
 			display: none ;
 		}
 		.Printable {
@@ -344,7 +344,7 @@
 		visibility : hidden ;
 	}
 	</style>
-	<div class="UIAction"> 
+	<div class="UIAction UIAction1"> 
         <table class="ActionContainer" align="center">
         	<tr>
         		<td align="center">

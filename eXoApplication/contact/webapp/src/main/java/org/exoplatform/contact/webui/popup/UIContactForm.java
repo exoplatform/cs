@@ -347,7 +347,7 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
       UIContactForm uiContactForm = event.getSource() ;
       UIPopupContainer popupContainer = uiContactForm.getAncestorOfType(UIPopupContainer.class) ;
       UIPopupAction popupAction = popupContainer.getChild(UIPopupAction.class) ;
-      popupAction.activate(UIImageForm.class, 600) ;
+      popupAction.activate(UIImageForm.class, 400) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   }
