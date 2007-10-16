@@ -113,7 +113,6 @@ public class UIForumForm extends UIForm implements UIPopupComponent {
   
   public void activate() throws Exception {
 		// TODO Auto-generated method stub
-		
 	}
 	public void deActivate() throws Exception {
 		// TODO Auto-generated method stub
@@ -126,11 +125,10 @@ public class UIForumForm extends UIForm implements UIPopupComponent {
       getUIStringInput(FIELD_FORUMORDER_INPUT).setValue(String.valueOf(forum.getForumOrder()));
       String stat = "open";
       if(forum.getIsClosed()) stat = "closed";
-      System.out.println("\n\n   " + stat + "\n\n");
-      getUIFormSelectBox(FIELD_FORUMSTATE_SELECTBOX).setDefaultValue(stat);
+      getUIFormSelectBox(FIELD_FORUMSTATE_SELECTBOX).setValue(stat);
       if(forum.getIsLock()) stat = "locked";
       else stat = "unlock";
-      getUIFormSelectBox(FIELD_FORUMSTATUS_SELECTBOX).setDefaultValue(stat);
+      getUIFormSelectBox(FIELD_FORUMSTATUS_SELECTBOX).setValue(stat);
       getUIFormTextAreaInput(FIELD_DESCRIPTION_TEXTAREA).setDefaultValue(forum.getDescription());
       String temp = "";
       for (String Str : forum.getNotifyWhenAddPost()) {

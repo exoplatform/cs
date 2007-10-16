@@ -5,8 +5,8 @@
       <table class="UIFormGrid">
         <tbody>
           <tr>
-          <% String labelBox = uicomponent.getLabel("Category") %>
-            <td class="FieldLabel">$labelBox:</td>
+          <% String labelBox = uicomponent.getLabel("Category"); %>
+            <td class="FieldLabel"><%=uicomponent.getLabel("Category")%>:</td>
             <td class="FieldComponent">
               <% uiform.renderChild("Category") %>
             </td>
@@ -71,17 +71,16 @@
                   <div class="UIFormInputSet NewForum">
                     <table class="UIFormGrid">
                       <tbody>
-                      <% int i = 1; 
-                        while(i < 6) {%>
+                      <% 
+                      	String[] actions = ["ForumTitle", "ForumOrder", "ForumStatus", "ForumState", "Description"] ;
+                        for(action in actions) {%>
                         <tr>
-                          <% String label = uicomponent.getLabel(uiform.getChild(i).getName()) %>
-                          <td class="FieldLabel">$label</td>
+                          <td class="FieldLabel"><%=uicomponent.getLabel(action)%>:</td>
                           <td class="FieldComponent">
-                            <% uiform.renderChild(i) %>
+                            <% uiform.renderChild(action) %>
                           </td>
                         </tr>
-                      <% ++i;
-                        } %>
+                      <% } %>
                       </tbody>
                     </table>
                   </div>
@@ -93,17 +92,16 @@
                   <div class="UIFormInputSet ModerationOptions">
                     <table class="UIFormGrid">
                       <tbody>
-                        <%
-                        while(i < 10) {%>
+                      <% 
+                      	actions = ["NotifyWhenAddTopic", "NotifyWhenAddPost", "ModerateThread", "ModeratePost"] ;
+                        for(action in actions) {%>
                         <tr>
-                          <% String label = uicomponent.getLabel(uiform.getChild(i).getName()) %>
-                          <td class="FieldLabel">$label</td>
+                          <td class="FieldLabel"><%=uicomponent.getLabel(action)%>:</td>
                           <td class="FieldComponent">
-                            <% uiform.renderChild(i) %>
+                            <% uiform.renderChild(action) %>
                           </td>
                         </tr>
-                      <% ++i;
-                        } %>
+                      <% } %>
                       </tbody>
                     </table>
                   </div>

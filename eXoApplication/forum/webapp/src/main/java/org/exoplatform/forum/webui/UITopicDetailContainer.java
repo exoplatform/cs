@@ -25,7 +25,7 @@ import org.exoplatform.webui.event.EventListener;
 )
 public class UITopicDetailContainer extends UIContainer  {
   public UITopicDetailContainer() throws Exception {
-    addChild(UITopicPoll.class, null, null).setRendered(false) ;
+    addChild(UITopicPoll.class, null, null).setRendered(true) ;
     addChild(UITopicDetail.class, null, null) ;
   }
   

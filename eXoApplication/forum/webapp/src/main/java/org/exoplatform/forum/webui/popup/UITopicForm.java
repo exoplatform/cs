@@ -116,7 +116,6 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
       getUIFormSelectBox(FIELD_TOPICSTATE_SELECTBOX).setValue(stat);
       if(topic.getIsLock()) stat = "locked";
       else stat = "unlock";
-      System.out.println("\n\n   " + stat + "\n\n");
       getUIFormSelectBox(FIELD_TOPICSTATUS_SELECTBOX).setValue(stat);
       
       getUIFormCheckBoxInput(FIELD_APPROVED_CHECKBOX).setChecked(topic.getIsApproved());
