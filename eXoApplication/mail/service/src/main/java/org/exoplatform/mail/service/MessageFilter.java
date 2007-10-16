@@ -24,7 +24,7 @@ public class MessageFilter {
 
   public MessageFilter(String name) {
     this.name = name ;
-    isAscending = true;
+    isAscending = false;
   }
   
   public String getName() { return name ; }
