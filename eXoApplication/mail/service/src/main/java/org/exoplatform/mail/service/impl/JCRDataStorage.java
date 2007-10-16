@@ -328,6 +328,7 @@ public class JCRDataStorage implements DataStorage{
       nodeMsg.setProperty(Utils.EXO_STAR, message.hasStar());
       nodeMsg.setProperty(Utils.EXO_PRIORITY, message.getPriority());
       nodeMsg.setProperty(Utils.EXO_ISUNREAD, message.isUnread());
+      nodeMsg.setProperty(Utils.EXO_HASATTACH, false);
       if (message.getSendDate() != null)
         nodeMsg.setProperty(Utils.EXO_SENDDATE, message.getSendDate().getTime());
       if (message.getReceivedDate() != null)
@@ -350,6 +351,7 @@ public class JCRDataStorage implements DataStorage{
           nodeContent.setProperty(Utils.JCR_MIMETYPE, file.getMimeType());
           nodeContent.setProperty(Utils.JCR_DATA, file.getInputStream());
           nodeContent.setProperty(Utils.JCR_LASTMODIFIED, Calendar.getInstance().getTimeInMillis());
+          nodeMsg.setProperty(Utils.EXO_HASATTACH, true);
         }
       }
       homeMsg.getSession().save();

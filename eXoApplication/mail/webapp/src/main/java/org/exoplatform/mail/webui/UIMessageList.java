@@ -295,7 +295,7 @@ public class UIMessageList extends UIForm {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource();
       System.out.println("======>>>>> ViewAttachmentActionListener");
-      // Improve later
+      uiMessageList.filterMessage("@" + Utils.EXO_HASATTACH + "='true'");
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
   }
