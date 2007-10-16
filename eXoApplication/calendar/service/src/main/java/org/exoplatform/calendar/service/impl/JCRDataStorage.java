@@ -1040,7 +1040,7 @@ public class JCRDataStorage implements DataStorage{
     return new EventPageList(events, 10) ;    
   }
   
-  public Map<Integer, String > searchYearEvent(String username, EventQuery eventQuery)throws Exception {
+  public Map<Integer, String > searchHightLightEvent(String username, EventQuery eventQuery)throws Exception {
     Map<Integer, String > mapData = new HashMap<Integer, String>() ;
     Query query ;
     QueryManager qm ;

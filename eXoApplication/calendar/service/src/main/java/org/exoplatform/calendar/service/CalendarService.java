@@ -329,6 +329,6 @@ public interface CalendarService {
   public Node getRssHome(String username) throws Exception ;
   public EventPageList searchEvent(String username, EventQuery query)throws Exception ;
   
-  public Map<Integer, String > searchYearEvent(String username, EventQuery eventQuery)throws Exception ; 
+  public Map<Integer, String > searchHightLightEvent(String username, EventQuery eventQuery)throws Exception ; 
   
 }
