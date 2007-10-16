@@ -241,7 +241,7 @@
 			  		  <div class="JobMember"><%=(contact.getJobTitle()==null ? "" : contact.getJobTitle())%></div>
 			  		  <div class="InformationsMember">
 			  		  	<div class="InfoMember">
-			  		  		<span class="LabelContent">Email1:</span>
+			  		  		<span class="LabelContent">Email:</span>
 			  		  		<span class="InfoContent MailIcon">
 			  		  			<a href="<%=uicomponent.getParent().event("SendEmail", contact.getId())%>">
 			  		  				<%=(contact.getEmailAddress()== null ? "" : contact.getEmailAddress())%>
@@ -289,7 +289,7 @@
 			  		%>
 						<img src="<%=(ContactUtils.isEmpty(imageLink) ? "/contact/skin/DefaultSkin/webui/background/Img2.gif": imageLink)%>" width=63 height=81 class="AvatasIcon"/>
 			  		<div class="WorkContainerVCards">
-			  		  <div class="JobMember"><%=(contact.getJobTitle()==null ? "_----" : contact.getJobTitle())%></div>
+			  		  <div class="JobMember"><%=(contact.getJobTitle()==null ? "_" : contact.getJobTitle())%></div>
 			  		  
 			  		  <div class="InformationsMember">
 			  		  	<div class="InfoMember">
@@ -302,7 +302,7 @@
 			  		  	</div>
 			  		  	<div class="InfoMember">
 			  		  		<span class="LabelContent">Work phone:</span>
-			  		  		<span class="LabelContent"><%=(contact.getWorkPhone1()==null ? "_-----" : contact.getWorkPhone1())%></span>
+			  		  		<span class="LabelContent"><%=(contact.getWorkPhone1()==null ? "_" : contact.getWorkPhone1())%></span>
 			  		  	</div>
 			  		  	<div class="InfoMember">
 			  		  		<span class="LabelContent">Mobile:</span>
