@@ -59,7 +59,7 @@
                   <a class="MenuItem" href="<%=uicomponent.event("AddTag")%>">   
                     <div class="ItemIcon BlueTag">Tag message</div>
                   </a>
-                  <a class="MenuItem" href="#">   
+                  <a class="MenuItem" href="<%=uicomponent.event("MoveMessages")%>">   
                     <div class="ItemIcon MoveMessageIcon">Move message</div>
                   </a>
                   <a class="MenuItem" href="#">   

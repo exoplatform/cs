@@ -10,12 +10,14 @@ import java.util.List;
 
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Account;
+import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.MessagePageList;
 import org.exoplatform.mail.service.Tag;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.popup.UIComposeForm;
+import org.exoplatform.mail.webui.popup.UIMoveMessageForm;
 import org.exoplatform.mail.webui.popup.UIPopupAction;
 import org.exoplatform.mail.webui.popup.UIPopupActionContainer;
 import org.exoplatform.mail.webui.popup.UITagForm;
@@ -27,6 +29,7 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
+import org.exoplatform.webui.form.UIFormSelectBox;
 
 /**
  * Created by The eXo Platform SARL
@@ -77,11 +80,11 @@ public class UIMessageList extends UIForm {
   private boolean isAscending_ = true;
   private MessagePageList pageList_ = null ;
   private LinkedHashMap<String, Message> messageList_ = new LinkedHashMap<String, Message>();
-
+  
   public UIMessageList() throws Exception {
     sortedBy_ = Utils.EXO_RECEIVEDDATE ;
   }
-
+  
   public String getSelectedMessageId() throws Exception {
     if (getCheckedMessage() != null && getCheckedMessage().size() > 0) {
       return getCheckedMessage().get(0).getId();
@@ -509,9 +512,30 @@ public class UIMessageList extends UIForm {
   
   static public class MoveMessagesActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
-      UIMessageList uiMessageList = event.getSource() ;      
+      System.out.println("MoveMessagesActionListener");
+      UIMessageList uiMessageList = event.getSource() ; 
+      UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
+      UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class);    
+      String username = uiPortlet.getCurrentUser();
+      MailService mailService = uiMessageList.getApplicationComponent(MailService.class);
+      
+      UINavigationContainer uiNavigation = uiPortlet.getChild(UINavigationContainer.class) ;
+      UISelectAccount uiSelectAccount = uiNavigation.getChild(UISelectAccount.class) ;
+      String accountId = uiSelectAccount.getSelectedValue() ;      
+      UIMoveMessageForm uiMoveMessageForm = uiMessageList.createUIComponent(UIMoveMessageForm.class,null, null);
+      List<Folder> folderList = new ArrayList<Folder>();
+      
+      folderList.addAll(mailService.getFolders(username, accountId, false)); 
+      folderList.addAll(mailService.getFolders(username, accountId, true));  
+
+      uiMoveMessageForm.setMessageList(uiMessageList.getCheckedMessage());  
+      uiMoveMessageForm.setFolderList(folderList);
+      
+      uiPopupAction.activate(uiMoveMessageForm, 600, 0, true);             
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);        
     }
   }
+
   
   static public class ImportActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
