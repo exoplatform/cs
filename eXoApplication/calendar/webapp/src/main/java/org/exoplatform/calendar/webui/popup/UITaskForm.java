@@ -525,6 +525,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
         calendarEvent.setEventType(CalendarEvent.TYPE_TASK) ;
         calendarEvent.setSummary(uiForm.getEventSumary()) ;
         calendarEvent.setDescription(uiForm.getEventDescription()) ;
+        calendarEvent.setTaskDelegator(uiForm.getEventDelegation()) ;
         Date from = uiForm.getEventFromDate() ;
         Date to = uiForm.getEventToDate() ;
         if(uiForm.getEventAllDate()) {

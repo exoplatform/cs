@@ -914,9 +914,13 @@
 	background: #ffffff;
 	color: #0b18c8;
 	font-weight: bolder;
-	
 }
-
+.UIYearView .MonthList .Highlight {
+	font-weight: bolder;
+}
+.UIYearView .MonthList .Highlight a{
+	color: red;
+}
 /*====================Event List View=====================*/
 
 .UIListView {
