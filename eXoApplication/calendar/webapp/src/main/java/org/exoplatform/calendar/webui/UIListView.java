@@ -36,6 +36,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
       @EventConfig(listeners = UICalendarView.DeleteEventActionListener.class),
       @EventConfig(listeners = UICalendarView.ChangeCategoryActionListener.class), 
       @EventConfig(listeners = UICalendarView.AddCategoryActionListener.class), 
+      @EventConfig(listeners = UICalendarView.SwitchViewActionListener.class),
       @EventConfig(listeners = UIListView.ViewDetailActionListener.class)
     }
 )
@@ -46,6 +47,9 @@ public class UIListView extends UICalendarView {
   private boolean isShowEventAndTask = true ;
   private boolean isSearchResult = false ;
   public UIListView() throws Exception{
+    if(getEvents().length > 0 ) {
+      selectedEvent_ = getEvents()[0].getId() ;
+    }
   } 
 
   public void refresh() throws Exception{
@@ -61,11 +65,10 @@ public class UIListView extends UICalendarView {
     tocalendar.add(java.util.Calendar.DATE, 1) ;
     eventQuery.setToDate(tocalendar) ;
     update(calendarService.searchEvent(username, eventQuery)) ; 
-    setShowEventAndTask(true) ;
+    //setShowEventAndTask(true) ;
     /*uiListView.setDisplaySearchResult(false) ;
     uiListView.isShowEvent_ = false ;*/
   }
-
   public void update(JCRPageList pageList) throws Exception {
     pageList_ = pageList ;
     updateCurrentPage() ;
@@ -78,13 +81,16 @@ public class UIListView extends UICalendarView {
       for(CalendarEvent calendarEvent : pageList_.getPage(pageList_.getCurrentPage(),CalendarUtils.getCurrentUser())) {
         UIFormCheckBoxInput<Boolean> checkbox = new UIFormCheckBoxInput<Boolean>(calendarEvent.getId(),calendarEvent.getId(), false) ;
         addUIFormInput(checkbox);
-        eventMap_.put(calendarEvent.getId(), calendarEvent) ;
+        if(getViewType().equals(TYPE_BOTH)) eventMap_.put(calendarEvent.getId(), calendarEvent) ;
+        else if(getViewType().equals(calendarEvent.getEventType())) {
+          eventMap_.put(calendarEvent.getId(), calendarEvent) ;
+        }
       }
-      CalendarEvent[] array = eventMap_.values().toArray(new CalendarEvent[]{}) ;
+      /*CalendarEvent[] array = eventMap_.values().toArray(new CalendarEvent[]{}) ;
       if (array.length > 0)
         getAncestorOfType(UIListContainer.class).getChild(UIPreview.class).setEvent(array[0]) ;
       else 
-        getAncestorOfType(UIListContainer.class).getChild(UIPreview.class).setEvent(null) ;
+        getAncestorOfType(UIListContainer.class).getChild(UIPreview.class).setEvent(null) ;*/
     }
   }
 

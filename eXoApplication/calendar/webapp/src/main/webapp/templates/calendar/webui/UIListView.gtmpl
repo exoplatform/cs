@@ -1,7 +1,6 @@
 <%
 	uiform.begin()	
 	_ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");
-	if(uicomponent.isShowEventAndTask()){
 %>
 	<div class="Result">Event and task list</div>
 	<div class="UIListView">
@@ -46,17 +45,6 @@
 		</table>
 	</div>
 <div class="ResizeReadingPane"><span></span></div>
-
-		//_ctx.include("app:/templates/calendar/webui/UIEvent&TaskView.gtmpl") ;
-	<%
-	}else {
-		if(uicomponent.isShowEvent()) {
-			_ctx.include("app:/templates/calendar/webui/UIEventView.gtmpl") ;
-		}else {
-			_ctx.include("app:/templates/calendar/webui/UITaskView.gtmpl") ;
-		}
-	}	
-%>
 
 <% /*Begin Popup Menu*/ %>
 <div class="UIRightClickPopupMenu" id="UIListViewEventRightMenu" exocallback="">

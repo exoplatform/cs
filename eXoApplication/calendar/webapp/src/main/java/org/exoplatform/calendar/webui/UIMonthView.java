@@ -47,13 +47,15 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
       @EventConfig(listeners = UICalendarView.ChangeCategoryActionListener.class), 
       @EventConfig(listeners = UICalendarView.EventSelectActionListener.class), 
       @EventConfig(listeners = UICalendarView.AddCategoryActionListener.class),
-      @EventConfig(listeners = UICalendarView.EditEventActionListener.class), 
-      @EventConfig(listeners = UICalendarView.QuickDeleteEventActionListener.class),
+      @EventConfig(listeners = UICalendarView.ViewActionListener.class),
+      @EventConfig(listeners = UICalendarView.EditActionListener.class), 
+      @EventConfig(listeners = UICalendarView.DeleteActionListener.class),
       @EventConfig(listeners = UICalendarView.GotoDateActionListener.class), 
       @EventConfig(listeners = UIMonthView.MoveNextActionListener.class), 
       @EventConfig(listeners = UIMonthView.MovePreviousActionListener.class),
       @EventConfig(listeners = UIMonthView.QuickAddNewEventActionListener.class), 
       @EventConfig(listeners = UIMonthView.QuickAddNewTaskActionListener.class), 
+      @EventConfig(listeners = UICalendarView.SwitchViewActionListener.class),
       @EventConfig(listeners = UIMonthView.UpdateEventActionListener.class)
     }
 )

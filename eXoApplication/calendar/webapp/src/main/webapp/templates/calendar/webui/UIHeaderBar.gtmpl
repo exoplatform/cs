@@ -9,7 +9,9 @@
 		<div class="SeparatorLine"><span></span></div>
 		<div class="ViewTypeSelect" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
 			<div class="ControlButton">
-				<div class="IconHolder TaskIcon">View both</div>
+				<div class="IconHolder TaskIcon">
+					<%=uicomponent.getViewType()%>
+				</div>
 			</div>
 			<% /*Begin  ViewTypeSelect Popup Menu*/ %>
 							 <div style="position: relative;"> 
@@ -23,16 +25,13 @@
 						        <div class="MiddleLeftRightClickPopupMenu">
 						          <div class="MiddleRightRightClickPopupMenu">
 			              		<div class="UIRightPopupMenuContainer">
-				                    <a class="MenuItem">   
+			              			 <%for(type in uicomponent.getViews()){%>
+				                    <a href="<%=uicomponent.event("SwitchView",type)%>" class="MenuItem">   
 					                    <div class="ItemIcon">
-					                      Events
+					                   	 <%if(!type.equals(uicomponent.getViewType())){ println type ;} %>
 					                    </div>
 				                    </a>
-				                    	<a class="MenuItem">   
-					                    <div class="ItemIcon">
-					                      Tasks
-					                    </div>
-				                    </a>
+				                   <%}%> 
 												</div>
 				          		</div>
 				        		</div>

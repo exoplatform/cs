@@ -42,12 +42,14 @@ import org.exoplatform.webui.event.EventListener;
       @EventConfig(listeners = UICalendarView.DeleteEventActionListener.class),
       @EventConfig(listeners = UICalendarView.AddCategoryActionListener.class),
       @EventConfig(listeners = UICalendarView.ChangeCategoryActionListener.class), 
-      @EventConfig(listeners = UICalendarView.EditEventActionListener.class), 
+      @EventConfig(listeners = UICalendarView.ViewActionListener.class),
+      @EventConfig(listeners = UICalendarView.EditActionListener.class), 
+      @EventConfig(listeners = UICalendarView.DeleteActionListener.class),
       @EventConfig(listeners = UICalendarView.GotoDateActionListener.class),
+      @EventConfig(listeners = UICalendarView.SwitchViewActionListener.class),
       @EventConfig(listeners = UIDayView.MoveNextActionListener.class), 
       @EventConfig(listeners = UIDayView.MovePreviousActionListener.class), 
       @EventConfig(listeners = UIDayView.QuickAddActionListener.class), 
-      @EventConfig(listeners = UIDayView.QuickDeleteEventActionListener.class),
       @EventConfig(listeners = UIDayView.SaveEventActionListener.class)
     }
 )
@@ -146,7 +148,7 @@ public class UIDayView extends UICalendarView {
     }
   }
 
-  static  public class QuickDeleteEventActionListener extends EventListener<UIDayView> {
+  /*static  public class QuickDeleteEventActionListener extends EventListener<UIDayView> {
     public void execute(Event<UIDayView> event) throws Exception {
       System.out.println("QuickDeleteEventActionListener");
       UIDayView uiDayView = event.getSource() ;
@@ -162,7 +164,7 @@ public class UIDayView extends UICalendarView {
       uiDayView.refresh() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiDayView.getParent()) ;
     }
-  }
+  }*/
   static  public class MovePreviousActionListener extends EventListener<UIDayView> {
     public void execute(Event<UIDayView> event) throws Exception {
       UIDayView calendarview = event.getSource() ;

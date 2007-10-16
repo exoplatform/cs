@@ -788,7 +788,11 @@ public class JCRDataStorage implements DataStorage{
     } else {
       reminders = eventNode.addNode(Utils.REMINDERS_NODE, Utils.NT_UNSTRUCTURED) ;
     }
-    reminderNode = reminders.addNode(reminder.getReminder(), "exo:reminder") ;
+    if(reminders.hasNode(reminder.getReminder())){
+      reminderNode = reminders.getNode(reminder.getReminder()) ;
+    } else {
+      reminderNode = reminders.addNode(reminder.getReminder(), "exo:reminder") ;
+    }
     reminderNode.setProperty("exo:eventId", eventNode.getName()) ;
     reminderNode.setProperty("exo:alarmBefore", reminder.getAlarmBefore()) ;
     reminderNode.setProperty("exo:snooze", reminder.getSnooze()) ;

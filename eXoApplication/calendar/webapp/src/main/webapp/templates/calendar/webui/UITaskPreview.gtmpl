@@ -1,14 +1,17 @@
 <%
 	import org.exoplatform.calendar.service.CalendarEvent;
+	CalendarEvent task = uicomponent.getEvent() ;		
 %>
 
 <div class="ResizeReadingPane"><span></span></div>
 	<div class="UIPreview" id="<%=uicomponent.getId()%>">
+	<%if(!uicomponent.isShowPopup()){%>
 		<div class="ViewBar">
 			<div class="Label">Task detail</div> 
 			<div class="MaximizeButton" title="View full - size task"><span></span></div>
 			<div style="clear: both"><span></span></div>
 		</div>
+	<%}%>		
 		<div class="ViewContainer">
 			<div class="DecoratorBox">
 				<div class="ViewBoxStyle">
@@ -23,13 +26,20 @@
 								<table class="UIGrid" id="RowContainerDay" cellspacing="0" borderspacing="0">
         					<tr>
         						<td style="border-right: 1px solid #c7c7c7;width: 185px;">
-        							<div><a href="#" class="AttachmentIcon">Foto football group.png </a></div>
-        							<img src="/calendar/skin/DefaultSkin/webui/background/Image1.gif" class="Img" />
-        							<div class="Actions"> 435Kb <a href="#" class="IconHolder ViewAttachmentIcon"> View </a> <a href="#" class="IconHolder DownLoadAttachmentIcon"> Dowload </a></div>  
-										</td>
-										<%
-											CalendarEvent task = uicomponent.getEvent() ;		
-										%>
+				        		<%for(attachFile in task.getAttachment()){%>
+						         <div class="AttachmentIcon"  style="white-space: nowrap;">
+						          $attachFile.name  
+						         	 $attachFile.size Kb
+						         </div>
+						         <%if(uicomponent.getImage(attachFile) != null) {%>
+						         	<img src="<%=uicomponent.getImage(attachFile)%>" class="Img" />
+						         <%}%>
+						         <div class="Actions" style="white-space: nowrap;">
+							         <a href="#" class="IconHolder ViewAttachmentIcon" style="padding-left:15px;"> View </a> 
+							         <a href="<%=uicomponent.getDownloadLink(attachFile)%>" class="IconHolder DownLoadAttachmentIcon" style="padding-left:15px;"> Dowload </a>
+						         </div> 
+						         <div style="clear:left;"><span></span></div>
+						         <%}%> 
         						<td >
         							<div class="TaskDescription"><%=task.getSummary()%></div>
         							<table class="UIGrid" id="RowContainerDay" cellspacing="0" borderspacing="0">
@@ -67,6 +77,7 @@
 			        						<td class="Text"><%=task.getDescription()%></td>
 			        					</tr>	
 				        			</table>
+				        			<%if(!uicomponent.isShowPopup()){%>
 				        			<div class="ActionsContainer">
 												<a href="#" class="ControlButton">
 													<div class="IconHolder EditTaskIcon"> Edit Task </div>
@@ -77,6 +88,7 @@
 												</a>
 												<div style="clear:left;"><span></span></div>
 				        			</div>
+				        			<%}%>
 										</td>
         					</tr>							        					
 	        			</table>

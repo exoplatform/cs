@@ -76,8 +76,9 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   public final static String ACT_ADDNEW_EVENT = "QuickAddNewEvent".intern() ;
   public final static String ACT_ADDNEW_TASK = "QuickAddNewTask".intern() ;
   //public final static String ACT_GOTO_DATE = "GotoDate".intern() ;
-  public final static String ACT_EDIT = "EditEvent".intern() ;
-  public final static String ACT_DELETE = "QuickDeleteEvent".intern() ;
+  public final static String ACT_VIEW = "View".intern() ;
+  public final static String ACT_EDIT = "Edit".intern() ;
+  public final static String ACT_DELETE = "Delete".intern() ;
 
 
   final public static String CALENDARID = "calendarId".intern() ;
@@ -85,10 +86,14 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   final public static String DAY = "day".intern() ;
   final public static String MONTH = "month".intern() ;
   final public static String YEAR = "year".intern() ;
-  
+
   final public static String TYPE_EVENT = "Event".intern() ;
   final public static String TYPE_TASK = "Task".intern() ;
-  
+  final public static String TYPE_BOTH = "Both".intern() ;
+
+  private String viewType_ = TYPE_BOTH ;
+  private String [] views = {TYPE_BOTH, TYPE_EVENT, TYPE_TASK} ;
+
   protected Calendar calendar_ = null ;
   public boolean isShowEvent_ = true;
   private boolean isShowWorkingTime_ = false ;
@@ -118,6 +123,15 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       j++ ;
     }
   }
+  public void setViewType(String viewType) {
+    this.viewType_ = viewType;
+  }
+
+  public String getViewType() {
+    return viewType_;
+  }
+  protected String[] getViews() {return views;}
+
   public void refresh() throws Exception {} ;
   public void initCategories() throws Exception {
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
@@ -129,7 +143,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
     }
     addUIFormInput(new UIFormSelectBox(EVENT_CATEGORIES, EVENT_CATEGORIES, options)) ;
   }
-  
+
   protected String[] getMonthsName() { 
     return MONTHS ;
   }
@@ -267,7 +281,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
     return  new String[]{ACT_ADDNEW_EVENT, ACT_ADDNEW_TASK} ;
   }
   protected String[] getQuickEditMenu() {
-    return  new String[]{ACT_EDIT, ACT_DELETE} ;
+    return  new String[]{ACT_VIEW, ACT_EDIT, ACT_DELETE} ;
   }
   protected List<String> getDisplayTimes(String timeFormat, int timeInterval) {
     if(isShowWorkingTime_) {
@@ -309,6 +323,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       UICalendarView uiForm = event.getSource() ;
       System.out.println(" ===========> DeleteEventActionListener") ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+      System.out.println("\n\n uiForm" + uiForm.getId());
       if(uiForm instanceof UIMonthView ) {
         List<CalendarEvent> list = ((UIMonthView)uiForm).getSelectedEvents() ;
         if(list.isEmpty()) {
@@ -354,7 +369,53 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
     }
   }
 
-  static  public class EditEventActionListener extends EventListener<UICalendarView> {
+
+  static  public class ViewActionListener extends EventListener<UICalendarView> {
+    public void execute(Event<UICalendarView> event) throws Exception {
+      System.out.println("ViewActionListener");
+      UICalendarView uiCalendarView = event.getSource() ;
+      UICalendarPortlet uiPortlet = uiCalendarView.getAncestorOfType(UICalendarPortlet.class) ;
+      UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
+      UIPopupContainer uiPopupContainer = uiPopupAction.activate(UIPopupContainer.class, 700) ;
+      uiPopupContainer.setId("UIEventPreview");
+      CalendarEvent eventCalendar = null ;
+      String username = event.getRequestContext().getRemoteUser() ;
+      String calendarId = event.getRequestContext().getRequestParameter(CALENDARID) ;
+      String eventId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      try {
+        CalendarService calService = uiCalendarView.getApplicationComponent(CalendarService.class) ;
+        eventCalendar = calService.getUserEvent(username, calendarId, eventId) ;
+      } catch (Exception e){
+        e.printStackTrace() ;
+      }
+      if(eventCalendar != null) {
+        UIPreview uiPreview = uiPopupContainer.addChild(UIPreview.class, null, null) ;
+        uiPreview.setEvent(eventCalendar) ;
+        uiPreview.setShowPopup(true) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarView.getParent()) ;
+      }
+      /*if(CalendarEvent.TYPE_EVENT.equals(eventCalendar.getEventType())) {
+        uiPopupContainer.setId(UIPopupContainer.UIEVENTPOPUP) ;
+        UIEventForm uiEventForm = uiPopupContainer.createUIComponent(UIEventForm.class, null, null) ;
+        uiEventForm.initForm(eventCalendar) ;
+        uiPopupContainer.addChild(uiEventForm) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarView.getParent()) ;
+      } else if(CalendarEvent.TYPE_TASK.equals(eventCalendar.getEventType())) {
+        uiPopupContainer.setId(UIPopupContainer.UITASKPOPUP) ;
+        UITaskForm uiTaskForm = uiPopupContainer.createUIComponent(UITaskForm.class, null, null) ;
+        uiTaskForm.initForm(eventCalendar) ;
+        uiPopupContainer.addChild(uiTaskForm) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarView.getParent()) ;
+      } else {
+        System.out.println("\n\n event type is not supported !");
+      }*/
+    }
+  }
+
+  static  public class EditActionListener extends EventListener<UICalendarView> {
     public void execute(Event<UICalendarView> event) throws Exception {
       System.out.println("EditEventActionListener");
       UICalendarView uiCalendarView = event.getSource() ;
@@ -371,6 +432,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       } catch (Exception e){
         e.printStackTrace() ;
       }
+      System.out.println("eventCalendar " + eventCalendar.getEventType());
       if(CalendarEvent.TYPE_EVENT.equals(eventCalendar.getEventType())) {
         uiPopupContainer.setId(UIPopupContainer.UIEVENTPOPUP) ;
         UIEventForm uiEventForm = uiPopupContainer.createUIComponent(UIEventForm.class, null, null) ;
@@ -390,7 +452,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       }
     }
   }
-  static  public class QuickDeleteEventActionListener extends EventListener<UICalendarView> {
+  static  public class DeleteActionListener extends EventListener<UICalendarView> {
     public void execute(Event<UICalendarView> event) throws Exception {
       UICalendarView calendarview = event.getSource() ;
       System.out.println("\n\n QuickDeleteEventActionListener");
@@ -403,7 +465,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         CalendarService calService = calendarview.getApplicationComponent(CalendarService.class) ;
         String username = event.getRequestContext().getRemoteUser() ;
         calService.removeUserEvent(username, calendarId, eventId) ;
-      /*  List<CalendarEvent> events = new ArrayList<CalendarEvent>() ;
+        /*  List<CalendarEvent> events = new ArrayList<CalendarEvent>() ;
         events.add(calService.getUserEvent(username, calendarId, eventId)) ;
         calendarview.removeEvents(events) ;*/
         uiMiniCalendar.refresh() ;
@@ -446,7 +508,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiViewContainer) ;
     }
   }  
-  
+
   static  public class GotoDateActionListener extends EventListener<UICalendarView> {
     public void execute(Event<UICalendarView> event) throws Exception {
       try {
@@ -499,5 +561,13 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       }
     }
   }
-  
+  static public class SwitchViewActionListener extends EventListener<UICalendarView> {
+    public void execute(Event<UICalendarView> event) throws Exception {
+      UICalendarView uiView = event.getSource();
+      String viewType = event.getRequestContext().getRequestParameter(OBJECTID);
+      uiView.setViewType(viewType) ;
+      uiView.refresh() ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiView.getParent());
+    }
+  }
 }
