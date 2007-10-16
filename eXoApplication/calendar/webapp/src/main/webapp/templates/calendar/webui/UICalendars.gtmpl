@@ -1,4 +1,4 @@
-<div class="UICalendars" style="position:relative">
+<div class="UICalendars" >
 <%uiform.begin()%>
 	<div class="TitleBar">
 		<div class="Title">Calendars</div>
