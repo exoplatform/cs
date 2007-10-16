@@ -129,10 +129,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
       calendarEvent_ = eventCalendar ;
       setEventSumary(eventCalendar.getSummary()) ;
       setEventDescription(eventCalendar.getDescription()) ;
-      java.util.Calendar cal = java.util.Calendar.getInstance() ;
-      cal.setTime(eventCalendar.getFromDateTime()) ;
-      setEventFromDate(cal.getTime()) ;
-      cal.setTime(eventCalendar.getToDateTime()) ;
+      setEventFromDate(eventCalendar.getFromDateTime()) ;
       setEventToDate(eventCalendar.getToDateTime()) ;
       setSelectedCalendarId(eventCalendar.getCalendarId()) ;
       setSelectedCategory(eventCalendar.getEventCategoryId()) ;

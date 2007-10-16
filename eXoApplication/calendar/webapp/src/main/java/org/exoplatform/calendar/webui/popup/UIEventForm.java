@@ -160,10 +160,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       calendarEvent_ = eventCalendar ;
       setEventSumary(eventCalendar.getSummary()) ;
       setEventDescription(eventCalendar.getDescription()) ;
-      java.util.Calendar cal = java.util.Calendar.getInstance() ;
-      cal.setTime(eventCalendar.getFromDateTime()) ;
-      setEventFromDate(cal.getTime()) ;
-      cal.setTime(eventCalendar.getToDateTime()) ;
+      setEventFromDate(eventCalendar.getFromDateTime()) ;
       setEventToDate(eventCalendar.getToDateTime()) ;
       setSelectedCalendarId(eventCalendar.getCalendarId()) ;
       setSelectedCategory(eventCalendar.getEventCategoryId()) ;
@@ -653,25 +650,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
         if(uiForm.getMeetingInvitation() != null) calendarEvent.setInvitation(uiForm.getMeetingInvitation()) ;
         if(uiForm.getParticipant() != null) calendarEvent.setParticipant(uiForm.getParticipant()) ;
         try {
-          Calendar fromCal = Calendar.getInstance() ;
-          fromCal.setTime(calendarEvent.getFromDateTime()) ;
-          Calendar toCal = Calendar.getInstance() ;
-          toCal.setTime(calendarEvent.getToDateTime()) ;
-          for(int i = 1 ; i <= 12; i ++) {
-            for(int j = 1; j < 28 ; j ++ ) {
-              System.out.println("i === " + i + " j ==== " + j) ;
-              calendarService.saveUserEvent(username, calendarId, calendarEvent, uiForm.isAddNew_) ;
-              CalendarEvent newEvent = new CalendarEvent() ;
-              calendarEvent.setId(newEvent.getId()) ;
-              fromCal.add(Calendar.DATE, 1) ;
-              toCal.add(Calendar.DATE, 1) ;
-              calendarEvent.setFromDateTime(fromCal.getTime()) ;
-              calendarEvent.setToDateTime(toCal.getTime()) ;
-            }
-            fromCal.add(Calendar.MONTH, 1) ;
-            toCal.add(Calendar.MONTH, 1) ;
-          }
-          
+          calendarService.saveUserEvent(username, calendarId, calendarEvent, uiForm.isAddNew_) ;
           uiViewContainer.refresh() ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiViewContainer) ;
           UIMiniCalendar uiMiniCalendar = calendarPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;
