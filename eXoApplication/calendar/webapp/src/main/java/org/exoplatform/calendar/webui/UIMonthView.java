@@ -213,10 +213,9 @@ public class UIMonthView extends UICalendarView {
         try {
           int day = Integer.parseInt(selectedDate) ;
           java.util.Calendar date = new GregorianCalendar(calendarview.getCurrentYear(), calendarview.getCurrentMonth(), day) ;
-          DateFormat df = SimpleDateFormat.getInstance() ;
-          String startTime = df.format(date.getTime()) ;
-          date.add(java.util.Calendar.MINUTE, 30) ;
-          String endTime = df.format(date.getTime())  ;
+          Date startTime =  date.getTime()  ;
+          date.add(java.util.Calendar.MINUTE, calendarview.timeInterval_) ;
+          Date endTime = date.getTime()  ;
           uiEventForm.init(startTime, endTime) ;
         } catch (Exception e) {
           e.printStackTrace() ;
@@ -247,10 +246,9 @@ public class UIMonthView extends UICalendarView {
         try {
           int day = Integer.parseInt(selectedDate) ;
           java.util.Calendar date = new GregorianCalendar(calendarview.getCurrentYear(), calendarview.getCurrentMonth(), day) ;
-          DateFormat df = SimpleDateFormat.getInstance() ;
-          String startTime = df.format(date.getTime()) ;
-          date.add(java.util.Calendar.MINUTE, 30) ;
-          String endTime = df.format(date.getTime())  ;
+          Date startTime = date.getTime() ;
+          date.add(java.util.Calendar.MINUTE, calendarview.timeInterval_) ;
+          Date endTime = date.getTime()  ;
           uiEventForm.init(startTime, endTime) ;
         } catch (Exception e) {
           e.printStackTrace() ;

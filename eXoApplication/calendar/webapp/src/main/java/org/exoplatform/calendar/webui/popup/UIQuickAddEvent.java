@@ -10,13 +10,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Locale;
 
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
-import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
 import org.exoplatform.calendar.webui.UIMiniCalendar;
@@ -69,7 +67,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
   final public static String TIME_PATTERNS_24 ="HH:mm" ;
 
   final public static String UIQUICKADDTASK = "UIQuickAddTask".intern() ;
-  
+
   private int timeInterval_ = 15 ;
   private String timeFormat_ = TIME_PATTERNS_12 ;
   private boolean isEvent_ = true ;
@@ -97,15 +95,28 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
   }
   public void init(String startTime, String endTime) throws Exception {
     DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm");
+    java.util.Calendar cal = GregorianCalendar.getInstance() ;
+    cal.setTime(df.parse(startTime)) ;
     try {
-      setEventFromDate(df.parse(startTime)) ;
-      setEventToDate(df.parse(endTime)) ;
+      Date begin = cal.getTime() ;
+      cal.add(java.util.Calendar.MINUTE, timeInterval_) ;
+      Date end = cal.getTime() ;
+      setEventFromDate(begin) ;
+      setEventToDate(end) ;
     } catch (Exception e) {
       init() ;
       e.printStackTrace() ;
     }
   }
-
+  public void init(Date startTime, Date endTime) throws Exception {
+    try {
+      setEventFromDate(startTime) ;
+      setEventToDate(endTime) ;
+    } catch (Exception e) {
+      init() ;
+      e.printStackTrace() ;
+    }
+  }
   private List<SelectItemOption<String>> getCalendar() throws Exception {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
@@ -126,7 +137,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
     return label ;
   }
   private List<SelectItemOption<String>> getTimes() {
-   return CalendarUtils.getTimesSelectBoxOptions(timeFormat_, timeInterval_) ;
+    return CalendarUtils.getTimesSelectBoxOptions(timeFormat_, timeInterval_) ;
   }
   private String getEventSummary() {
     return getUIStringInput(FIELD_EVENT).getValue() ;

@@ -2,7 +2,7 @@
 	uiform.begin()	
 	_ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");
 %>
-	<div class="Result">Event and task list</div>
+	<div class="Result">List view</div>
 	<div class="UIListView">
 		<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
   		<thead>

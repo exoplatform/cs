@@ -127,7 +127,6 @@ public class UIDayView extends UICalendarView {
       UICalendarPortlet uiPortlet = calendarview.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
       UIQuickAddEvent uiQuickAddEvent = uiPopupAction.activate(UIQuickAddEvent.class, 600) ;
-      System.out.println("\n\n type " + type);
       if(CalendarEvent.TYPE_EVENT.equals(type)) {
         uiQuickAddEvent.setEvent(true) ;
         uiQuickAddEvent.setId("UIQuickAddEvent") ;
@@ -135,6 +134,7 @@ public class UIDayView extends UICalendarView {
         uiQuickAddEvent.setEvent(false) ;
         uiQuickAddEvent.setId("UIQuickAddTask") ;
       }
+      
       DateFormat df =new SimpleDateFormat("MM/dd/yyyy") ;
       try {
         String beginTime = df.format(calendarview.getCurrentDate())+ " " + startTime ;

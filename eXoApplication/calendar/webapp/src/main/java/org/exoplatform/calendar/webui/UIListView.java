@@ -47,6 +47,7 @@ public class UIListView extends UICalendarView {
   private boolean isShowEventAndTask = true ;
   private boolean isSearchResult = false ;
   public UIListView() throws Exception{
+    refresh() ;
     if(getEvents().length > 0 ) {
       selectedEvent_ = getEvents()[0].getId() ;
     }
