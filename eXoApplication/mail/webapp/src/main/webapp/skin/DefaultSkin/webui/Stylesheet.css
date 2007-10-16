@@ -742,6 +742,14 @@
 	background: #eceffc ;
 }
 
+.ReadItem { 
+	font-weight: normal ;
+}
+
+.UnreadItem { 
+	font-weight: bold ;
+}
+
 .UIMailPortlet .UIFolderContainer .NormalLabel {
 	font-weight: normal ;
 }

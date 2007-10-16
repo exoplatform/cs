@@ -201,17 +201,39 @@ public class UIMessageList extends UIForm {
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       MailService mailServ = uiPortlet.getApplicationComponent(MailService.class);
-      Message msg = mailServ.getMessageById(username, msgId, accountId);
-      msg.setHasStar(!msg.hasStar());
-      mailServ.saveMessage(username, accountId, msg, false);
-      uiMessageList.setSelectedMessageId(msgId);
+      try {
+        Message msg = mailServ.getMessageById(username, msgId, accountId);
+        msg.setHasStar(!msg.hasStar());
+        mailServ.saveMessage(username, accountId, msg, false);
+        uiMessageList.setSelectedMessageId(msgId);
+      } catch (Exception e) {
+        for (Message msg : uiMessageList.getCheckedMessage()) {
+          if (!msg.hasStar()) {
+            msg.setHasStar(true);
+            mailServ.saveMessage(username, accountId, msg, false);
+          }
+        }
+      }
       uiMessageList.updateList();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageArea);
     }
   }
   static public class RemoveStarActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
-      String path = event.getRequestContext().getRequestParameter(OBJECTID) ;      
+      UIMessageList uiMessageList = event.getSource();
+      UIMessageArea uiMessageArea = uiMessageList.getParent();
+      UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
+      String username = uiPortlet.getCurrentUser();
+      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      MailService mailServ = uiPortlet.getApplicationComponent(MailService.class);
+      for (Message msg : uiMessageList.getCheckedMessage()) {
+        if (msg.hasStar()) {
+          msg.setHasStar(false);
+          mailServ.saveMessage(username, accountId, msg, false);
+        }
+      }
+      uiMessageList.updateList();
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageArea);
     }
   }
 
@@ -353,13 +375,39 @@ public class UIMessageList extends UIForm {
   
   static public class MarkAsReadActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
-      UIMessageList uiMessageList = event.getSource() ;      
+      UIMessageList uiMessageList = event.getSource() ;  
+      UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class) ;
+      List<Message> checkedMessage = uiMessageList.getCheckedMessage();
+      MailService mailSrv = uiMessageList.getApplicationComponent(MailService.class);
+      String username = uiPortlet.getCurrentUser();
+      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      for (Message msg : checkedMessage) {
+        if (msg.isUnread()) {
+          msg.setUnread(false);
+          mailSrv.saveMessage(username, accountId, msg, false);
+        }
+      }
+      uiMessageList.updateList();
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList);
     }
   }
   
   static public class MarkAsUnReadActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
-      UIMessageList uiMessageList = event.getSource() ;      
+      UIMessageList uiMessageList = event.getSource() ;  
+      UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class) ;
+      List<Message> checkedMessage = uiMessageList.getCheckedMessage();
+      MailService mailSrv = uiMessageList.getApplicationComponent(MailService.class);
+      String username = uiPortlet.getCurrentUser();
+      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      for (Message msg : checkedMessage) {
+        if (!msg.isUnread()) {
+          msg.setUnread(true);
+          mailSrv.saveMessage(username, accountId, msg, false);
+        }
+      }
+      uiMessageList.updateList();
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList);
     }
   }
 

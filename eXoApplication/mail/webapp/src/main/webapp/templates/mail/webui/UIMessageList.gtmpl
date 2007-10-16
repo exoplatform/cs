@@ -44,16 +44,16 @@
             <div class="MiddleLeftRightClickPopupMenu">
               <div class="MiddleRightRightClickPopupMenu">
                 <div class="UIRightPopupMenuContainer">
-                  <a class="MenuItem" href="#">   
+                  <a class="MenuItem" href="<%=uicomponent.event("MarkAsRead")%>">   
                     <div class="ItemIcon MarkReadIcon">Mark as read</div>
                   </a>
-                  <a class="MenuItem ItemHidden" href="#">   
+                  <a class="MenuItem ItemHidden" href="<%=uicomponent.event("MarkAsUnRead")%>">   
                     <div class="ItemIcon MarkReadIcon">Mark as unread</div>
                   </a>
-                  <a class="MenuItem" href="#">   
+                  <a class="MenuItem" href="<%=uicomponent.event("AddStar")%>">   
                     <div class="ItemIcon StarredIcon">Add star</div>
                   </a>
-                  <a class="MenuItem ItemHidden" href="#">   
+                  <a class="MenuItem ItemHidden" href="<%=uicomponent.event("RemoveStar")%>">   
                     <div class="ItemIcon RemoveStarIcon">Remove star</div>
                   </a>
                   <a class="MenuItem" href="<%=uicomponent.event("AddTag")%>">   
@@ -237,7 +237,9 @@
   			  String actionLink = uicomponent.event("SelectMessage", msg.getId());
   			  checkboxField = uicomponent.getChildById(msg.getId());
   			  String actionAddStar = uicomponent.event("AddStar", msg.getId());
-  			  String selectedClass = "NormalItem";
+  			  String selectedClass = "NormalItem" ;
+          String readStatus = "ReadItem" ;
+          if (msg.isUnread()) readStatus = "UnreadItem" ;
   			  if (msg.getId().equals(uicomponent.getSelectedMessageId())) selectedClass = "SelectedItem" ;
           String starClass = "UnStarredIcon" ;
           if (msg.hasStar()) starClass = "StarredIcon";
@@ -249,7 +251,7 @@
   	  		  %>
   	  		</td>
   				<td style="padding: 0px auto;"><a href="$actionAddStar" ><div class="$starClass"><span></span></div></a></td>
-          <td class="text"><a href="$actionLink"><%=Utils.getPersonal(Utils.getInternetAddress(msg.getFrom())[0])%><a></td>
+          <td class="$readStatus"><a href="$actionLink"><%=Utils.getPersonal(Utils.getInternetAddress(msg.getFrom())[0])%><a></td>
   				<td style="padding: 0px auto;">
   				  <% 
   				    if (msg.getAttachments().size() > 0) {
@@ -266,9 +268,9 @@
               <a href="$actionLink" title="$title"><div class="IconTag $colorCss"><span></span></div></a>
             <%}%>
   				</td>
-  				<td class="text"><a href="$actionLink"><%=msg.getSubject()%></a></td>
+  				<td class="$readStatus"><a href="$actionLink"><%=msg.getSubject()%></a></td>
   				<td class="text">(5)</td>
-  				<td class="text">
+  				<td class="$readStatus">
   				  <a href="$actionLink">
   				    <%if (msg.getReceivedDate() != null) { %>
   				      <%=Utils.formatDate('MMM dd, yyyy HH:mm aaa', msg.getReceivedDate())%>
@@ -277,7 +279,7 @@
   				    <%}%>
   				  </a>
   				</td>
-  				<td><a href="$actionLink">
+  				<td class="$readStatus"><a href="$actionLink">
   				   <%
   				     if (msg.getSize() > 1024) {
   				   %> 
