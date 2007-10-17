@@ -545,6 +545,11 @@
 	border-left: none ;
 }
 
+.UIDayView .TdTime{
+	text-align: right;
+	width: 55px;
+}
+
 .UIDayView .EventDayContent .TdDotLine{
 	border-top:  1px dotted #c7c7c7;
 	border-left: none ;
@@ -559,7 +564,6 @@
 	padding: 0px;
 	height: 30px ;
 	*height: 29px ; /* fixed for IE */
-	border-right: none ;	
 }
 
 .UIDayView .EventDayContent .HourPoint {
@@ -610,8 +614,7 @@
 	cursor: n-resize;
 }
 .UIDayView .UIGrid {
-	width: 100% ;
-	*width: 98%;  /* fixed for IE */
+	*width: 97%;  /* fixed for IE */
 }
 /*====================Week View============================*/
 
@@ -648,6 +651,10 @@
 .UIWeekView .EventWeekContent {
 	padding: 0px 0px 0px 1px;
 	*padding: 0px;
+}
+
+.UIPageDesktop .UIWeekView .EventWeekBar {
+	*padding: 0px 19px 0px 0px;
 }
 
 .UIWeekView .EventWeekBar {
@@ -710,6 +717,10 @@
 .UIScheduleView .ScheduleViewBar {
 	padding: 0px 16px 0px 1px;
 	*padding: 0px 3px 0px 0px;
+}
+
+.UIPageDesktop .UIScheduleView .ScheduleViewBar {
+	*padding: 0px 19px 0px 0px;
 }
 
 .UIScheduleView td {

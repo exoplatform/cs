@@ -87,7 +87,7 @@
 	            			if(flag) {cssClass = "TdLine" ;} ;
                   %>
                   <tr>
-                    <td class="$cssClass">
+                    <td class="TdTime">
                       <%if(flag){ println h;}%>
                     </td>
                   </tr>
