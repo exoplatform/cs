@@ -2,13 +2,10 @@
 <%uiform.begin()%>
 	<div class="TitleBar">
 		<div class="Title">Calendars</div>
-		<div class="ActionsButton" title="Calendar actions" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
+		<div class="ActionsButton" title="Calendar actions" onclick="eXo.calendar.UICalendarPortlet.showMainMenu(this, event);">
 			<% /*Begin Popup Menu - Main */ %>
-	      <div >
-		      <div class="UIPopupCategory" style="display: none;">
-		      	<div class="PopupCategoryDecorator">
-		      
-			        <div class="UIRightClickPopupMenu" style="display: block; z-index:  10000 ;">
+	     
+			        <div class="UIRightClickPopupMenu" style="display: none ;">
 							  <div class="TopLeftRightClickPopupMenu">
 	          			<div class="TopRightRightClickPopupMenu">
 	            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
@@ -51,10 +48,7 @@
 				          </div>
 				        </div>
 	      			</div>
-	      			
-				    </div>
-				  </div>
-				</div>
+	      		
 			<% /*End Popup Menu*/ %>
 		</div>
 		<div style="clear: both"><span></span></div>

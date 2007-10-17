@@ -13,14 +13,14 @@
 						</a>
 						<div class="SeparatorLine"><span></span></div>
 						<div class="Title ControlButton">Calendar View:</div>
-						<div class="SelectButton" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);" style="position: relative;">
+						<div class="SelectButton" onclick="eXo.calendar.UICalendarPortlet.showView(this, event);">
 							<div class="IconHolder <%=uicomponent.getCurrentView()%>Icon">
 								<div class="DownArrow1Icon" ><%=_ctx.appRes("UIActionBar.label." + uicomponent.getCurrentView())%></div>
 							</div>
 							<% /*Begin Popup Menu*/ %>
-							<!--<div style="position: relative;">-->
-		      			<div class="UIPopupCategory" style="display: none;">
-		      				<div class="UIRightClickPopupMenu" style="display: block;">
+							<!--<div style="position: relative; top: -21px ;">
+		      			<div class="UIPopupCategory" style="display: none; z-index: 10000;">-->
+		      				<div class="UIRightClickPopupMenu" style="display: none;">
 									  <div class="TopLeftRightClickPopupMenu">
 			          			<div class="TopRightRightClickPopupMenu">
 			            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
@@ -51,8 +51,8 @@
 							      </div>
 				      			
 							    </div>
-		      			</div>
-		      		<!--</div>-->
+		      			<!--</div>
+		      		</div>-->
 		      		<% /*End Popup Menu*/ %>
 						</div>
 						<div class="SeparatorLine"><span></span></div>
