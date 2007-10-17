@@ -182,7 +182,9 @@ public class UICalendars extends UIForm  {
       UIPopupContainer uiPopupContainer = uiCalendarPortlet.createUIComponent(UIPopupContainer.class, null, null) ;
       uiPopupContainer.setId(UIPopupContainer.UICALENDARPOPUP) ;
       UICalendarForm uiCalendarForm = uiPopupContainer.addChild(UICalendarForm.class, null, null) ;
-      uiCalendarForm.init(username, calendarId) ;
+      CalendarService calService = uiCalendarForm.getApplicationComponent(CalendarService.class) ;
+      Calendar calendar = calService.getUserCalendar(username, calendarId) ;
+      uiCalendarForm.init(calendar) ;
       popupAction.activate(uiPopupContainer, 600, 0, true) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent.getParent()) ;

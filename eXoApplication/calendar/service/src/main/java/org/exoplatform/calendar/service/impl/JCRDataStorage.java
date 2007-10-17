@@ -193,7 +193,9 @@ public class JCRDataStorage implements DataStorage{
     calendarNode.setProperty("exo:viewPermissions", calendar.getViewPermission()) ;
     calendarNode.setProperty("exo:editPermissions", calendar.getEditPermission()) ;
     calendarNode.setProperty("exo:groups", calendar.getGroups()) ;
-
+    calendarNode.setProperty("exo:locale", calendar.getLocale()) ;
+    calendarNode.setProperty("exo:timeZone", calendar.getTimeZone()) ;
+    
     //Check to save category
     if(calendar.getCategoryId() != null && calendar.getCategoryId().length() > 0) {
       Node calendarCategory = getCalendarCategoryHome(username).getNode(calendar.getCategoryId()) ;
@@ -325,6 +327,8 @@ public class JCRDataStorage implements DataStorage{
     if(calNode.hasProperty("exo:name")) calendar.setName(calNode.getProperty("exo:name").getString()) ;
     if(calNode.hasProperty("exo:description")) calendar.setDescription(calNode.getProperty("exo:description").getString()) ;
     if(calNode.hasProperty("exo:categoryId")) calendar.setCategoryId(calNode.getProperty("exo:categoryId").getString()) ;
+    if(calNode.hasProperty("exo:locale")) calendar.setLocale(calNode.getProperty("exo:locale").getString()) ;
+    if(calNode.hasProperty("exo:timeZone")) calendar.setTimeZone(calNode.getProperty("exo:timeZone").getString()) ;
     if(!calendar.isPublic()) {
       if(calNode.hasProperty("exo:groups")){
         Value[] values = calNode.getProperty("exo:groups").getValues() ;

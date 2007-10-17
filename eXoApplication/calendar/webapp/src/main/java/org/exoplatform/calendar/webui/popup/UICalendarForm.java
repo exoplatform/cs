@@ -7,7 +7,9 @@ package org.exoplatform.calendar.webui.popup;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.Calendar;
@@ -17,7 +19,12 @@ import org.exoplatform.calendar.webui.UICalendarContainer;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarWorkingContainer;
 import org.exoplatform.calendar.webui.UICalendars;
+import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.organization.Group;
+import org.exoplatform.services.organization.OrganizationService;
+import org.exoplatform.services.organization.User;
+import org.exoplatform.services.organization.impl.GroupImpl;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -36,6 +43,7 @@ import org.exoplatform.webui.form.UIFormTabPane;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
 import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
 import org.exoplatform.webui.form.validator.EmptyFieldValidator;
+import org.hibernate.hql.classic.GroupByParser;
 
 /**
  * Created by The eXo Platform SARL
@@ -66,6 +74,8 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
   final public static String SELECT_GROUPS = "selectGroups" ;
   final public static String INPUT_CALENDAR = "calendarDetail".intern() ;
   final public static String INPUT_SHARE = "public".intern() ;
+  final public static String TIMEZONE = "timeZone" ;
+  final public static String LOCALE = "locale" ;
 
   private Map<String, String> permission_ = new HashMap<String, String>() ;
   private boolean isAddNew_ = true ;
@@ -77,6 +87,8 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
     calendarDetail.addUIFormInput(new UIFormStringInput(DISPLAY_NAME, DISPLAY_NAME, null).addValidator(EmptyFieldValidator.class)) ;
     calendarDetail.addUIFormInput(new UIFormTextAreaInput(DESCRIPTION, DESCRIPTION, null)) ;
     calendarDetail.addUIFormInput(new UIFormSelectBox(CATEGORY, CATEGORY, getCategory())) ;
+    calendarDetail.addUIFormInput(new UIFormSelectBox(LOCALE, LOCALE, getLocales())) ;
+    calendarDetail.addUIFormInput(new UIFormSelectBox(TIMEZONE, TIMEZONE, getTimeZones())) ;
     List<ActionData> actions = new ArrayList<ActionData>() ;
     ActionData addCategory = new ActionData() ;
     addCategory.setActionListener("AddCategory") ;
@@ -91,8 +103,8 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
     /*UIFormCheckBoxInput uiCheckbox = sharing.getUIFormCheckBoxInput(ISPUBLIC) ;
     uiCheckbox.setOnChange("SelectPublic") ;*/
     sharing.addUIFormInput(new UIFormInputInfo(SELECT_GROUPS, SELECT_GROUPS, null)) ;
-    String[] groups = CalendarUtils.getAllGroups() ;
-    for(String group : groups) {
+    for(Object groupObj : getPublicGroups()) {
+      String group = ((Group)groupObj).getId() ;
       if(sharing.getUIFormCheckBoxInput(group) != null)sharing.getUIFormCheckBoxInput(group).setChecked(false) ;
       else sharing.addUIFormInput(new UIFormCheckBoxInput<Boolean>(group, group, false)) ;
     }
@@ -110,9 +122,9 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
     sharing.addUIFormInput(new UIFormStringInput(EDIT_PERMISSION, null, null)) ;
     ActionData editPermissions = new ActionData() ;
     editPermissions.setActionListener("SelectPermission") ;
-    editPermissions.setActionName("EditPermission") ;
+    editPermissions.setActionName("SelectPermission") ;
     editPermissions.setActionType(ActionData.TYPE_ICON) ;
-    editPermissions.setCssIconClass("AddIcon16x16 SelectUserIcon") ;    
+    editPermissions.setCssIconClass("SelectPermission") ;    
     actions.add(editPermissions) ;
     sharing.setActionField(EDIT_PERMISSION, actions) ;
     sharing.setRendered(false) ;
@@ -158,24 +170,24 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
     calendarId_ = null ;
     isAddNew_ = true ;
   }
-  public void init(String username, String calendarId) throws Exception {
+  public void init(Calendar calendar) throws Exception {
     reset() ;
     isAddNew_ = false ;
-    calendarId_ = calendarId ;
-    CalendarService calService = getApplicationComponent(CalendarService.class) ;
-    Calendar calendar = calService.getUserCalendar(username, calendarId) ;
+    calendarId_ = calendar.getId() ;
     setDisplayName(calendar.getName()) ;
     setDescription(calendar.getDescription()) ;
     setSelectedGroup(calendar.getCategoryId()) ;
+    setLocale(calendar.getLocale()) ;
+    setTimeZone(calendar.getTimeZone()) ;
   }
-  
+
   protected String getDisplayName() {
     return getUIStringInput(DISPLAY_NAME).getValue() ;
   }
   protected void setDisplayName(String value) {
     getUIStringInput(DISPLAY_NAME).setValue(value) ;
   }
-  
+
   protected String getDescription() {
     return getUIFormTextAreaInput(DESCRIPTION).getValue() ;
   }
@@ -188,6 +200,23 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
   protected void setSelectedGroup(String value) {
     getUIFormSelectBox(CATEGORY).setValue(value) ;
   }
+  protected String getLocale() {
+    UIFormInputWithActions calendarDetail = getChildById(INPUT_CALENDAR) ;
+    return calendarDetail.getUIFormSelectBox(LOCALE).getValue() ;
+  }
+  protected void setLocale(String value) {
+    UIFormInputWithActions calendarDetail = getChildById(INPUT_CALENDAR) ;
+    calendarDetail.getUIFormSelectBox(LOCALE).setValue(value) ;
+  }
+  protected String getTimeZone() {
+    UIFormInputWithActions calendarDetail = getChildById(INPUT_CALENDAR) ;
+    return calendarDetail.getUIFormSelectBox(TIMEZONE).getValue() ;
+  }
+  
+  protected void setTimeZone(String value) {
+    UIFormInputWithActions calendarDetail = getChildById(INPUT_CALENDAR) ;
+    calendarDetail.getUIFormSelectBox(TIMEZONE).setValue(value) ;
+  }
   public void updateSelect(String selectField, String value) throws Exception {
     UIFormInputWithActions shareTab = getChildById(INPUT_SHARE) ;
     UIFormStringInput fieldInput = shareTab.getUIStringInput(selectField) ;
@@ -197,6 +226,32 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
       sb.append(s).append(CalendarUtils.COLON) ;
     }
     fieldInput.setValue(sb.toString()) ;
+  }
+
+  private Object[] getPublicGroups() throws Exception {
+    OrganizationService organization = getApplicationComponent(OrganizationService.class) ;
+    String currentUser = Util.getPortalRequestContext().getRemoteUser() ;
+    return organization.getGroupHandler().findGroupsOfUser(currentUser).toArray() ;
+  }
+
+  private List<SelectItemOption<String>> getTimeZones() {
+    List<SelectItemOption<String>> timeZones = new ArrayList<SelectItemOption<String>>() ;
+    for (String timeZone : TimeZone.getAvailableIDs()){
+      //java.util.Calendar.getAvailableLocales()
+      TimeZone tz = TimeZone.getTimeZone(timeZone) ;
+      String displayName = tz.getDisplayName() ;
+      timeZones.add(new SelectItemOption<String>( tz.getID() , tz.getID()));
+    }
+    return timeZones ;
+  } 
+
+  private List<SelectItemOption<String>> getLocales() {
+    List<SelectItemOption<String>> locales = new ArrayList<SelectItemOption<String>>() ;
+    for(Locale locale : java.util.Calendar.getAvailableLocales()) {
+      String country = locale.getCountry() ;
+      if( country != null && country.trim().length() > 0) locales.add(new SelectItemOption<String>(locale.getDisplayCountry() , country)) ;
+    }
+    return locales ;
   }
   /*static  public class SelectPublicActionListener extends EventListener<UICalendarForm> {
     public void execute(Event<UICalendarForm> event) throws Exception {
@@ -262,12 +317,17 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
       calendar.setCategoryId(uiForm.getUIFormSelectBox(CATEGORY).getValue()) ;
       boolean isPublic = uiForm.getUIFormCheckBoxInput(ISPUBLIC).isChecked() ;
       calendar.setPublic(isPublic) ;
+      calendar.setLocale(uiForm.getLocale()) ;
+      calendar.setTimeZone(uiForm.getTimeZone()) ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       if(isPublic) {
-        String[] groupList = CalendarUtils.getAllGroups() ;
+        Object[] groupList = uiForm.getPublicGroups() ;
         List<String> selected = new ArrayList<String>() ;
-        for(String groupId : groupList) {
-          if(uiForm.getUIFormCheckBoxInput(groupId).isChecked()) selected.add(groupId) ;
+        for(Object groupObj : groupList) {
+          String groupId = ((Group)groupObj).getId() ;
+          if(uiForm.getUIFormCheckBoxInput(groupId)!= null && uiForm.getUIFormCheckBoxInput(groupId).isChecked()) { 
+            selected.add(groupId) ;
+          }
         }
         if(selected.size() < 1){
           uiApp.addMessage(new ApplicationMessage("UICalendarForm.msg.group-empty", null, ApplicationMessage.WARNING) ) ;

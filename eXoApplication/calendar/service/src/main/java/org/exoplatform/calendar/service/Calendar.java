@@ -19,6 +19,8 @@ public class Calendar {
   private String name ;
   private String calendarPath ;
   private String description ;
+  private String timeZone ;
+  private String locale ;
   private String[] viewPermission ;
   private String[] editPermission ;
   private boolean isPublic = false ;
@@ -55,6 +57,18 @@ public class Calendar {
 
   public boolean isPublic() { return isPublic ; }
   public void setPublic(boolean isPublic) { this.isPublic = isPublic ; }
+  public void setTimeZone(String timeZone) {
+    this.timeZone = timeZone;
+  }
+  public String getTimeZone() {
+    return timeZone;
+  }
+  public void setLocale(String locale) {
+    this.locale = locale;
+  }
+  public String getLocale() {
+    return locale;
+  }
   
   //public List<EventCategory> getEventCategories() { return eventCategories ; }
   //public void setEventCategories(List<EventCategory> evCate) { eventCategories = evCate ; }
