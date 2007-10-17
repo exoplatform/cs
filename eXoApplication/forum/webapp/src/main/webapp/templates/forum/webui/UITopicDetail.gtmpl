@@ -274,9 +274,13 @@
 	<!-- Start PostViewContainer -->
 						<td class="PostViewContainer">
 					  	
-				  		<div class="PostViewTitle">
-				  			<div class="PostViewIcon $classIconPost">$subject</div>
-				  			<div class="PostTime">Posted: $createdDate</div>
+				  		<div class="PostViewHeader">
+				  			<div class="PostViewTitle" style="float: left;">
+					  			<div class="PostViewIcon $classIconPost">$subject</div>
+					  			<div class="PostTime">Posted: $createdDate</div>
+					  		</div>
+					  		<div class="CheckPost" style="float: right;"><input type="checkbox"/></div>
+					  		<div style="clear: both;"><span></span></div>
 				  		</div>
 				  		
 				  		<div class="PostContent">
