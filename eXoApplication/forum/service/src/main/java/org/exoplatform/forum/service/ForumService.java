@@ -135,7 +135,7 @@ public interface ForumService {
    * @return
    * @throws Exception
    */
-  public Topic getTopic(String categoryId, String forumId, String topicId) throws Exception;    
+  public Topic getTopic(String categoryId, String forumId, String topicId, boolean viewTopic) throws Exception;    
   /**
    * This method should:
    * 1. Load the topic from the database

@@ -71,8 +71,8 @@ public class ForumServiceImpl implements ForumService{
 	  storage_.saveTopic(categoryId, forumId, topic, isNew);
   }
   
-  public Topic getTopic(String categoryId, String forumId, String topicId) throws Exception {
-  	return storage_.getTopic(categoryId, forumId, topicId);
+  public Topic getTopic(String categoryId, String forumId, String topicId, boolean viewTopic) throws Exception {
+  	return storage_.getTopic(categoryId, forumId, topicId, viewTopic);
   }
   
   public Topic getTopicByPath(String topicPath) throws Exception{

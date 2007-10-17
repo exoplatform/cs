@@ -119,7 +119,7 @@ public class TestForumService extends BaseForumTestCase{
     }
     Topic topic = list.get(19);
 		//get Topic
-		assertNotNull(forumService_.getTopic(cat.getId(), forum.getId(), topic.getId()));
+		assertNotNull(forumService_.getTopic(cat.getId(), forum.getId(), topic.getId(), false));
 		//get PageList Topic
 		JCRPageList pagelist = forumService_.getTopics(cat.getId(), forum.getId());
 //		assertEquals(pagelist.getAvailable(), 1);
@@ -130,7 +130,7 @@ public class TestForumService extends BaseForumTestCase{
       System.out.println("\n\n\n =====  topicId:  " + topic2.getId() );
     }
 //		// update Topic
-		Topic newTopic = forumService_.getTopic(cat.getId(), forum.getId(), topic.getId());
+		Topic newTopic = forumService_.getTopic(cat.getId(), forum.getId(), topic.getId(), false);
 //		newTopic.setTopicName("New Name topic");
 //		forumService_.saveTopic(cat.getId(), forum.getId(), newTopic, false);
 //		assertEquals("New Name topic", forumService_.getTopic(cat.getId(), forum.getId(), topic.getId()).getTopicName());
@@ -142,7 +142,7 @@ public class TestForumService extends BaseForumTestCase{
 		forumService_.moveTopic(newTopic.getId(), newTopic.getPath(), forum1.getPath());
 		System.out.println("\n\n\n =====  getLastTopicPath:  \n" + forumService_.getForum(cat.getId(), forum1.getId()).getLastTopicPath());
 		System.out.println("\n\n\n =====  getLastTopicPath:  \n" + forumService_.getForum(cat.getId(), forum.getId()).getLastTopicPath());
-		assertNotNull(forumService_.getTopic(cat.getId(), forum1.getId(), newTopic.getId()));
+		assertNotNull(forumService_.getTopic(cat.getId(), forum1.getId(), newTopic.getId(), false));
 		//test remove Topic return Topic
 		assertNotNull(forumService_.removeTopic(cat.getId(), forum1.getId(), newTopic.getId()));
   }
@@ -194,7 +194,7 @@ public class TestForumService extends BaseForumTestCase{
 		
 		Topic topicnew = createdTopic();
 		forumService_.saveTopic(cat.getId(), forum.getId(), topicnew, true);
-		topicnew = forumService_.getTopic(cat.getId(), forum.getId(), topicnew.getId());
+		topicnew = forumService_.getTopic(cat.getId(), forum.getId(), topicnew.getId(), false);
 		forumService_.movePost(newPost.getId(), newPost.getPath(), topicnew.getPath());
 		assertNotNull(forumService_.getPost(cat.getId(), forum.getId(), topicnew.getId(), newPost.getId()));
 		//test remove Post return post

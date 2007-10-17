@@ -265,7 +265,7 @@ public class JCRDataStorage implements DataStorage {
 	  return null ;
   }
   
-	public Topic getTopic(String categoryId, String forumId, String topicId) throws Exception {
+	public Topic getTopic(String categoryId, String forumId, String topicId, boolean viewTopic) throws Exception {
     Node forumHomeNode = getForumHomeNode() ;
     if(forumHomeNode.hasNode(categoryId)) {
   	  Node CategoryNode = forumHomeNode.getNode(categoryId) ;
@@ -274,8 +274,10 @@ public class JCRDataStorage implements DataStorage {
 		  Topic topicNew = new Topic() ;
 		  topicNew = getTopicNode(topicNode) ;
 			// setViewCount for Topic
-			long newViewCount = topicNode.getProperty("exo:viewCount").getLong() + 1 ;
-			topicNode.setProperty("exo:viewCount", newViewCount) ;
+      if(viewTopic) {
+  			long newViewCount = topicNode.getProperty("exo:viewCount").getLong() + 1 ;
+  			topicNode.setProperty("exo:viewCount", newViewCount) ;
+      }
       forumHomeNode.save() ;
       forumHomeNode.getSession().save() ;
 		  return topicNew ;
@@ -336,7 +338,7 @@ public class JCRDataStorage implements DataStorage {
 
   public TopicView getTopicView(String categoryId, String forumId, String topicId) throws Exception {
 	  TopicView topicview = new TopicView() ;
-	  topicview.setTopicView(getTopic(categoryId, forumId, topicId)) ;
+	  topicview.setTopicView(getTopic(categoryId, forumId, topicId, true)) ;
 	  topicview.setPageList(getPosts(categoryId, forumId, topicId)) ;
   	return topicview;
   }
@@ -402,12 +404,14 @@ public class JCRDataStorage implements DataStorage {
 					savePost(categoryId, forumId, topic.getId(), post, true) ;
 		    } else {
           String id = topic.getId().replaceFirst("TOPIC", "POST") ;
-          Node fistPostNode = topicNode.getNode(id) ;
-          fistPostNode.setProperty("exo:modifiedBy", topic.getModifiedBy()) ;
-          fistPostNode.setProperty("exo:modifiedDate", GregorianCalendar.getInstance()) ;
-          fistPostNode.setProperty("exo:subject", topic.getTopicName()) ;
-          fistPostNode.setProperty("exo:message", topic.getDescription()) ;
-          fistPostNode.setProperty("exo:icon", topic.getIcon()) ;
+          if(topicNode.hasNode(id)) {
+            Node fistPostNode = topicNode.getNode(id) ;
+            fistPostNode.setProperty("exo:modifiedBy", topic.getModifiedBy()) ;
+            fistPostNode.setProperty("exo:modifiedDate", GregorianCalendar.getInstance()) ;
+            fistPostNode.setProperty("exo:subject", topic.getTopicName()) ;
+            fistPostNode.setProperty("exo:message", topic.getDescription()) ;
+            fistPostNode.setProperty("exo:icon", topic.getIcon()) ;
+          }
 				  forumHomeNode.save() ;
 				  forumHomeNode.getSession().save() ;
 		    }
@@ -421,7 +425,7 @@ public class JCRDataStorage implements DataStorage {
 	  if(forumHomeNode.hasNode(categoryId)) {
 	  	Node CategoryNode = forumHomeNode.getNode(categoryId) ;
 		  Node forumNode = CategoryNode.getNode(forumId) ;
-		  topic = getTopic(categoryId, forumId, topicId) ;
+		  topic = getTopic(categoryId, forumId, topicId, false) ;
 		  // setTopicCount for Forum
 		  long newTopicCount = forumNode.getProperty("exo:topicCount").getLong() - 1 ;
 		  forumNode.setProperty("exo:topicCount", newTopicCount ) ;
