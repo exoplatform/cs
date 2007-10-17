@@ -21,10 +21,6 @@
 
 /*=========================== MailBanner ==================================*/
 
-.UICalendarPortlet {
-	position: relative;	
-}
-
 .UICalendarPortlet .UIBannerContainer {
   background: #fbfbfb url('background/BgBanner457x62.gif') no-repeat left;
   height: 62px;
@@ -208,7 +204,6 @@
 	float: left;
 	width: 225px;
 	padding: 8px;
-	position: relative;
 }
 
 /*========================Minicalendar==================*/
