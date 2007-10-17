@@ -18,9 +18,9 @@
 			              <td class="FieldComponent">
 			              	 <% if (label.equalsIgnoreCase("gender")) { %>
 			              	 			<input class="radio" type="radio" value="male" name="gender"/>
-														<span><%=_ctx.appRes(uicomponent.getParent().id+ ".label.male") %></span>
+														<span style="padding: 0px 20px 0px 5px" class="Lable"><%=_ctx.appRes(uicomponent.getParent().id+ ".label.male") %></span>
 														<input class="radio" type="radio" value="female" name="gender"/>
-														<span><%=_ctx.appRes(uicomponent.getParent().id+ ".label.female") %></span> 		
+														<span style="padding-left: 3px;" class="Lable"><%=_ctx.appRes(uicomponent.getParent().id+ ".label.female") %></span> 		
 			              	 	<% 	} else {
 			              	 			uicomponent.renderUIComponent(field) 	
 			              	 		}

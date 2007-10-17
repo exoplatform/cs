@@ -467,9 +467,12 @@
 
 .UIContactPortlet .UIContactContainer .ResizeReadingPane {
 	margin: 1px auto 1px auto;
-	background: url('background/ResizeReadingPane38x3.gif') no-repeat;
-	width: 38px; height: 3px;
+	background: url('background/ResizeReadingPane38x3.gif') no-repeat center;
+	height: 5px;
 	cursor: n-resize;
+	border-top: 1px solid #b7b7b7;
+	border-bottom: 1px solid #b7b7b7;
+	margin-right: 7px;
 }
 
 .UIContactPortlet .UIContactContainer .UIMessageList .DownArrow1Icon {

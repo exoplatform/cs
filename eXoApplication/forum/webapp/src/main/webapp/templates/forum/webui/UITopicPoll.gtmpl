@@ -1,1 +1,188 @@
-UITopicPoll.gtmpl
+
+<div class="UITopicPoll">
+
+	<div class="ForumToolbar">
+	  <div class="LeftBar">
+	  	<div class="RightBar">
+	  		<div class="CenterBar">
+	  			<div class="Lable">
+	  				<span>Poll:</span>
+	  				<span> Who is the most beautiful Miss eXo in swimming suite? </span>
+	  			</div>
+	  			<div class="Icon DownArrow1Icon"><span></span></div>
+	  			<div class="SeparatorLine"><span></span></div>
+	  			<a class="Icon ClosePoll">Close Poll</a>
+	  			<div class="SeparatorLine"><span></span></div>
+	  			<a class="Icon EditPoll">Edit Poll</a>
+	  			<div style="clear: both"><span></span></div>
+	  		</div>
+	  	</div>
+	  </div>
+  </div>
+	
+	<div class="TopicPollContainer">
+		<div class="PollTime">This Poll will be closed on 08 - 18 - 2007 at 8:30 am</div>
+		<div class="UIFormTabPane">
+		  <div class="UITabPane">
+				<div class="TabPaneContent">
+		      
+			    <div class="WorkingArea">
+			     	<div class="UIHorizontalTabs">
+			     	  <div class="LeftHorizontalTabs">
+			     	    <div class="RightHorizontalTabs">
+			     	      <div class="CenterHorizontalTabs">
+						        <div class="TabsContainer">
+					            
+				              <div class="UITab NormalTabStyle">
+				                <div class="SelectedTab">
+				                  <div class="LeftTab">
+				                    <div class="RightTab">
+						                  <div onclick="eXo.webui.UIHorizontalTabs.changeTabForUIFormTabpane(this, 'UIAccountForm', 'AccountInputSet')" class="MiddleTab">Topic Poll</div>
+						                </div>
+				                  </div>
+				                </div>
+				              </div>
+			            
+				              <div class="UITab NormalTabStyle">
+				                <div class="NormalTab">
+				                  <div class="LeftTab">
+				                    <div class="RightTab">
+						                  <div onclick="eXo.webui.UIHorizontalTabs.changeTabForUIFormTabpane(this, 'UIAccountForm', 'UIUserProfileInputSet')" class="MiddleTab">View Poll</div>
+						                </div>
+				                  </div>
+				                </div>
+				              </div>
+					            
+						        </div>
+						      </div>
+						    </div>
+						  </div>
+			      </div>
+			    	<div class="HorizontalLayout">
+			        <div class="UITabContentContainer">
+		            
+		            <div style="display: block;" id="UITabContent" class="UITabContent">
+		              
+		              <div class="TopicPollContent">
+										<div class="PollQuestion">Who is the most beautiful Miss eXo in swimming suite?</div>
+										<div class="UIForm">
+										  <div class="HorizontalLayout">
+										    <div class="FormContainer">
+										      
+										      <table class="UIFormGrid">
+							              <tr>
+						  	              <td class="FieldComponent"><input type="radio" class="radio"></td>
+						  	              <td class="FieldLabel">Miss Anh Nguyet (Little Moon)</td>
+								            </tr>
+							              <tr>
+						  	              <td class="FieldComponent"><input type="radio" class="radio"></td>
+						  	              <td class="FieldLabel">Miss Ngoc Thuy (Meek Lion)</td>
+								            </tr>
+							              <tr>
+						  	              <td class="FieldComponent"><input type="radio" class="radio"></td>
+						  	              <td class="FieldLabel">Miss Doan Thu (Duck Mother)</td>
+								            </tr>
+							              <tr>
+						  	              <td class="FieldComponent"><input type="radio" class="radio"></td>
+						  	              <td class="FieldLabel">Miss Thanh Hoa (Hunted Flower)</td>
+								            </tr>
+										      </table>
+										      <div class="UIAction"> 
+										        <table class="ActionContainer" align="center">
+										          <tr>
+										          	<td align="center">
+																	<a href="#" class="ActionButton LightBlueStyle">
+										                <div class="ButtonLeft">
+										                  <div class="ButtonRight">
+										                    <div class="ButtonMiddle">
+										                    	Vote now
+										                    </div>
+										                  </div>
+										                </div>
+																	</a>
+										          	</td>
+										          </tr>          
+										        </table>
+										      </div>
+										      
+										    </div>
+										  </div>
+										</div>
+		              </div>
+		              
+		              
+		              
+		            </div>
+		            
+		            <div style="display: none;" id="UITabContent" class="UITabContent">
+		   								
+									<div class="ViewPollForm">
+										<form method="post" action="" class="UIForm">
+											<table cellspacing="0" borderspacing="0" id="UIGrid" class="UIGrid">
+									  		<thead>
+									  			<tr>
+									  				<th>Poll Options</th>
+									  				<th>Percentage</th>
+											      <th>Votes</th>
+											    </tr>
+									  		</thead>
+									  		<tbody>
+									 				<tr class="EvenRow">
+									  				<td class="text">Miss Anh Nguyet (Little Moon) </td>
+														<td >
+															<div class="Chart1"><span></span></div>
+															<div class="Percentage">24%</div>
+															<div style="clear: both;"><span></span></div>
+														</td>
+														<td class="Number">24</td>
+													</tr>
+									  			<tr class="OddRow">
+												  	<td class="text">Miss Ngoc Thuy (Meek Lion)</td>
+														<td >
+															<div class="Chart2"><span></span></div>
+															<div class="Percentage">26%</div>
+															<div style="clear: both;"><span></span></div>
+														</td>
+									  				<td class="Number">26</td>
+										    	</tr>
+									 				<tr class="EvenRow">
+												  	<td class="text">Miss Doan Thu (Duck Mother)</td>
+														<td >
+															<div class="Chart3"><span></span></div>
+															<div class="Percentage">27%</div>
+															<div style="clear: both;"><span></span></div>
+														</td>
+									  				<td class="Number">27</td>
+											  	</tr>
+									  			<tr class="OddRow">
+													  <td class="text">Miss Thanh Hoa (Hunted Flower)</td>
+														<td >
+															<div class="Chart4"><span></span></div>
+															<div class="Percentage">23%</div>
+															<div style="clear: both;"><span></span></div>
+														</td>
+									 					<td class="Number">23</td>
+											  	</tr>
+										  	</tbody>
+											</table>
+											<div class="TotalVotes">Total Voters: 100</div>
+										</form>
+									</div>
+		   
+		            </div>
+		            
+		          </div>
+					    
+				    </div>
+				    
+				  </div>
+				</div>  
+		  </div>  
+		  
+		</div>
+	
+	</div>
+
+
+
+</div>

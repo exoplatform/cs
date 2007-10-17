@@ -47,15 +47,15 @@
 			  </div>
 			    <a title="Next Page" class="Icon DisableNextPageIcon"><span/></a>
 			    <a title="Next 10 pages" class="Icon DisableNextTopPageIcon"><span/></a>
-			    <div style="clear: left;"><span/></div>
+			    <div style="clear: left;"><span></span></div>
 			  </div>
 			  <div class="LeftPageIteratorBlock">
 			  	<div class="TotalPages">Total pages:</div>
 			  	<div class="PagesTotalNumber">1</div>
-			  	<div style="clear: left;"><span/></div>
+			  	<div style="clear: left;"><span></span></div>
 			  </div>
 		  </div>
-		  <div style="clear: right;"><span/></div>
+		  <div style="clear: right;"><span></span></div>
 		</div>
 
 		<div style="clear: both;"><span></span></div>

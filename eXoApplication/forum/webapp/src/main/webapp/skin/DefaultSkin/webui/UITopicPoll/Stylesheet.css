@@ -1,12 +1,20 @@
 .UITopicPoll {
-	margin: 0px 0px 5px 0px;
+	margin: 10px 0px;
+}
+
+.UITopicPoll .ForumToolbar .Lable {
+	float: left;
+	font-weight: bold;
+	font-size: 12px;
+	line-height: 26px;
+	padding-left: 10px;
 }
 
 .UITopicPoll .ForumToolbar .Icon {
 	float: right;
-	padding-left: 25px;
+	padding-left: 23px;
 	line-height: 20px;
-	margin: 3px 10px 0px 0px;
+	margin: 3px 10px 0px 10px;
 }
 
 .UITopicPoll .ForumToolbar .SeparatorLine {
@@ -17,7 +25,6 @@
 .UITopicPoll .TopicPollContainer {
 	border: 1px solid #b7b7b7;
 	border-top: none;
-	padding: 0px 0px 5px 0px;
 }
 
 .UITopicPoll .TopicPollContainer .PollTime {
@@ -26,11 +33,21 @@
 	text-align: center;
 }
 
+.UITopicPoll .TopicPollContainer .UIFormTabPane {
+	margin: 5px 10px 10px 10px;
+}
+
+.UITopicPoll .TopicPollContainer .UITabPane .UITabContent {
+	height: 100%;
+	padding: 20px 0px;
+}
+
 .UITopicPoll .TopicPollContainer .TopicPollContent {
 	border: 1px solid #d2d2d2;
 	padding: 10px 15px;
 	width: 500px;
-	margin: 10px auto 0px auto;
+	margin: auto;
+	background: white;
 }
 
 .UITopicPoll .TopicPollContainer .TopicPollContent .PollQuestion {
@@ -49,6 +66,50 @@
 }
 
 .UITopicPoll .UIForm .HorizontalLayout .UIFormGrid td.FieldComponent {
-	width: 20px;
-	padding: 4px 0px 0px 10px;
+	width: 30px;
+	padding: 4px 0px 0px 15px;
+}
+
+/******************************** ViewPollForm *******************************/
+.ViewPollForm {
+	padding: 0px 15px;
+}
+
+.ViewPollForm .UIGrid .Number {
+	text-align: center;
+}
+
+.ViewPollForm .TotalVotes {
+	font-weight: bold;
+	text-align: right;
+	line-height: 22px;
+}
+
+.ViewPollForm .Chart1 {
+	float: left;
+	width: 24%; height: 14px;
+	background-color: #f60703;
+}
+
+.ViewPollForm .Chart2 {
+	float: left;
+	width: 26%; height: 14px;
+	background-color: #f6e303;
+}
+
+.ViewPollForm .Chart3 {
+	float: left;
+	width: 27%; height: 14px;
+	background-color: #356adf;
+}
+
+.ViewPollForm .Chart4 {
+	float: left;
+	width: 23%; height: 14px;
+	background-color: #35df79;
+}
+
+.ViewPollForm .Percentage {
+	float: right;
+	padding-right: 5px;
 }
