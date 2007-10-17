@@ -21,8 +21,10 @@ import org.exoplatform.mail.webui.popup.UIMoveMessageForm;
 import org.exoplatform.mail.webui.popup.UIPopupAction;
 import org.exoplatform.mail.webui.popup.UIPopupActionContainer;
 import org.exoplatform.mail.webui.popup.UITagForm;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
@@ -81,6 +83,7 @@ public class UIMessageList extends UIForm {
   private MessagePageList pageList_ = null ;
   private LinkedHashMap<String, Message> messageList_ = new LinkedHashMap<String, Message>();
   
+  final static public String INFO = "INFO" ;
   public UIMessageList() throws Exception {
     sortedBy_ = Utils.EXO_RECEIVEDDATE ;
   }
@@ -514,11 +517,20 @@ public class UIMessageList extends UIForm {
     public void execute(Event<UIMessageList> event) throws Exception {
       System.out.println("MoveMessagesActionListener");
       UIMessageList uiMessageList = event.getSource() ; 
+      
+      
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class);    
       String username = uiPortlet.getCurrentUser();
       MailService mailService = uiMessageList.getApplicationComponent(MailService.class);
       
+      if(uiMessageList.getCheckedMessage().isEmpty())
+      {
+        UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-no-messages", null, ApplicationMessage.INFO)) ;
+        return;
+      }
+            
       UINavigationContainer uiNavigation = uiPortlet.getChild(UINavigationContainer.class) ;
       UISelectAccount uiSelectAccount = uiNavigation.getChild(UISelectAccount.class) ;
       String accountId = uiSelectAccount.getSelectedValue() ;      
