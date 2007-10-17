@@ -5,14 +5,12 @@
 package org.exoplatform.contact.webui;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
+import org.exoplatform.contact.service.ContactPageList;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.JCRPageList;
 import org.exoplatform.contact.webui.popup.UIContactPreviewForm;
@@ -51,9 +49,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
         @EventConfig(listeners = UIContacts.DeleteContactsActionListener.class),
         @EventConfig(listeners = UIContacts.SelectedContactActionListener.class),
         @EventConfig(listeners = UIContacts.ViewDetailsActionListener.class),
-        @EventConfig(listeners = UIContacts.SortByNameActionListener.class),
-        @EventConfig(listeners = UIContacts.SortByEmailActionListener.class),
-        @EventConfig(listeners = UIContacts.SortByOrganitionActionListener.class),
+        @EventConfig(listeners = UIContacts.SortActionListener.class),
         @EventConfig(listeners = UIContacts.FirstPageActionListener.class),
         @EventConfig(listeners = UIContacts.PreviousPageActionListener.class),
         @EventConfig(listeners = UIContacts.NextPageActionListener.class),
@@ -64,16 +60,27 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
 
 public class UIContacts extends UIForm implements UIPopupComponent {
   public boolean viewContactsList = true ;
-  public boolean isTagSelected = false ;
-  private Map<String, Contact> contactMap = new HashMap<String, Contact> () ;
+  private String selectedTag_ = null ;
+  private LinkedHashMap<String, Contact> contactMap = new LinkedHashMap<String, Contact> () ;
   private String selectedGroup = null ;
   private String selectedContact = null ;
   private JCRPageList pageList_ = null ;
+  private String sortedBy_ = null;
+  private boolean isAscending_ = true;
+  private String viewQuery_ = null;
   
   public UIContacts() throws Exception { } 
   public String[] getActions() { return new String[] {"Cancel"} ; }
   public void activate() throws Exception { }
   public void deActivate() throws Exception { }
+  
+  public void setAscending(boolean isAsc) { isAscending_ = isAsc ; }
+  public boolean isAscending() {return isAscending_ ; }
+  public void setSortedBy(String s) { sortedBy_ = s ; }
+  public String getSortedBy() { return sortedBy_ ; }
+  public String getViewQuery() {return viewQuery_ ;}
+  public void setViewQuery(String view) {viewQuery_ = view ;}
+  
   
   public JCRPageList getContactPageList() { return pageList_ ; }
   
@@ -133,8 +140,8 @@ public class UIContacts extends UIForm implements UIPopupComponent {
     }
   }
   
-  public void setTagSelected(boolean isTag) { isTagSelected = isTag ; }
-  public boolean getTagSelected() { return isTagSelected ; }
+  public String getSelectedTag() {return selectedTag_ ;}
+  public void setSelectedTag(String tagId) {selectedTag_ = tagId ;}
   
   static public class EditContactActionListener extends EventListener<UIContacts> {
     public void execute(Event<UIContacts> event) throws Exception {
@@ -230,7 +237,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       ContactUtils.getContactService().removeContacts(ContactUtils.getCurrentUser(), contactIds) ;
       if(contactIds.contains(uiContactPreview.getContact().getId())) 
         uiContactPreview.setContact(null) ;
-      if (uiContacts.getTagSelected()) {
+      if (uiContacts.getSelectedTag() != null) {
         String tagName = uiWorkingContainer.findFirstComponentOfType(UITags.class).getSelectedTag() ;
         uiContacts.setContacts(ContactUtils.getContactService()
           .getContactPageListByTag(ContactUtils.getCurrentUser(), tagName)) ;
@@ -265,50 +272,6 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;      
     }
   } 
-  
-  static public class SortByNameActionListener extends EventListener<UIContacts> {
-    public void execute(Event<UIContacts> event) throws Exception {
-      UIContacts uiContacts = event.getSource() ;
-      List<Contact> listContacts = new ArrayList<Contact>() ;
-      Contact[] contacts = uiContacts.getContacts() ;
-      for (Contact contact : contacts) {
-        System.out.println("\n\n contact 1 :" +contact.getFullName() + "\n\n");
-        listContacts.add(contact) ;
-      }
-      if (true) {
-        Collections.sort(listContacts, new NameComparator()) ;
-      }
-      System.out.println("\n\n after sort: \n\n");
-      Map<String, Contact> mapContacts = new HashMap<String, Contact> () ;
-      for (Contact contact : listContacts) {
-        System.out.println("\n\n contact 2 :" + contact.getFullName() + "\n\n");
-        mapContacts.put(contact.getId(), contact) ;
-      }
-      uiContacts.contactMap.clear() ;
-      uiContacts.contactMap = mapContacts ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts) ;
-    }
-  } 
-  
-  static public class NameComparator implements Comparator {
-    public int compare(Object o1, Object o2) throws ClassCastException {
-      String name1 = ((Contact) o1).getFullName() ;
-      String name2 = ((Contact) o2).getFullName() ;
-      return name1.compareToIgnoreCase(name2) ;
-    }
-  }
-  
-  static public class SortByEmailActionListener extends EventListener<UIContacts> {
-    public void execute(Event<UIContacts> event) throws Exception {
-      System.out.println("\n\n email \n\n");      
-    }
-  }
-  
-  static public class SortByOrganitionActionListener extends EventListener<UIContacts> {
-    public void execute(Event<UIContacts> event) throws Exception {
-      System.out.println("\n\n organition \n\n");      
-    }
-  }
   
   static public class FirstPageActionListener extends EventListener<UIContacts> {
     public void execute(Event<UIContacts> event) throws Exception {
@@ -359,6 +322,29 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       UIContacts uiContacts = event.getSource() ;
       UIPopupAction uiPopupAction = uiContacts.getAncestorOfType(UIPopupAction.class) ;
       uiPopupAction.deActivate() ;
+    }
+  }
+  
+  static public class SortActionListener extends EventListener<UIContacts> {
+    public void execute(Event<UIContacts> event) throws Exception {
+      UIContacts uiContacts = event.getSource() ;
+      String sortedBy = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      ContactService contactService = ContactUtils.getContactService() ;
+      String username = ContactUtils.getCurrentUser() ;
+      uiContacts.setAscending(!uiContacts.isAscending_);
+      uiContacts.setSortedBy(sortedBy);
+      if (uiContacts.selectedGroup != null) {
+        ContactPageList list =  contactService.getContactPageListByGroup(username, uiContacts.selectedGroup
+            , uiContacts.getViewQuery(), uiContacts.getSortedBy(), uiContacts.isAscending_) ;
+        List<Contact> contacts = list.getPage(list.getCurrentPage(), username) ;
+        for (Contact contact : contacts) System.out.println("\n\n name:" + contact.getFullName() + "\n\n");
+
+        uiContacts.setContacts(contactService.getContactPageListByGroup(username, uiContacts.selectedGroup, uiContacts.getViewQuery(), uiContacts.getSortedBy(), uiContacts.isAscending_));
+      } else if (uiContacts.getSelectedTag() != null) {
+        uiContacts.setContacts(contactService.getContactPageListByTag(username, uiContacts.getSelectedTag(), uiContacts.getViewQuery(), uiContacts.getSortedBy(), uiContacts.isAscending_));
+      }
+      uiContacts.updateList();
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent());
     }
   }
   

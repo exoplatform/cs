@@ -353,6 +353,12 @@
 	padding-right: 16px; 
 }
 
+.UIContactPortlet .UIContactContainer .UIContactActionsBar .UpArrow1Icon {
+	line-height: 20px;
+	background-position: right;
+	padding-right: 16px; 
+}
+
 .UIContactPortlet .UIContactContainer .Selected {
 	background: #e6e8f5;
 	margin: 0px 1px;
@@ -476,6 +482,15 @@
 }
 
 .UIContactPortlet .UIContactContainer .UIMessageList .DownArrow1Icon {
+	height: 16px; width: 50px;
+	line-height: 16px;
+	margin: 3px 0px 0px 0px;
+	cursor: pointer;
+	background-position: right;
+	padding-right: 16px;
+}
+
+.UIContactPortlet .UIContactContainer .UIMessageList .UpArrow1Icon {
 	height: 16px; width: 50px;
 	line-height: 16px;
 	margin: 3px 0px 0px 0px;

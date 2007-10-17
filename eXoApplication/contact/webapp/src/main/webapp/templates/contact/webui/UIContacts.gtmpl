@@ -79,25 +79,50 @@
 	  			      <th style="width: 23px; padding-left: 7px;" class="text"><input type="checkbox" class="checkbox" title="Check all" value="4"/></th>
 	  						<th style="width: 24px;" class="text"><div class="Icon BlueTag"><span></span></div></th>
 	  		        <th style="width: 24%; padding-left: 7px;" class="text">
-	  		        	<a href="<%=uicomponent.event("SortByName")%>">
-	  		        	<div class="DownArrow1Icon" >
-	  		        		Name  		        			
-	  		        	</div>
+	  		        	
+	  		        	<%
+			    		      String sortedByName = uicomponent.event("Sort","fullName");
+			              String classArrowName = "";
+			              if (uicomponent.getSortedBy().equals("fullName")) {
+			                if (uicomponent.isAscending()) classArrowName = "UpArrow1Icon";
+			                else classArrowName = "DownArrow1Icon"
+			              }
+    		    			%>
+	  		        	<a href="$sortedByName">
+	  		        	<div class="$classArrowName" > Name </div>
 	  		        	</a>
 	  		        </th>
 	 	      	    <th class="text" style="padding-left: 7px;">
-	 	      	    	<a href="<%=uicomponent.event("SortByEmail")%>">
-	  		        	<div class="DownArrow1Icon" title="Sort by subject">Email</div>
+	 	      	    
+	 	      	    	<%
+			    		      String sortedByEmail = uicomponent.event("Sort","emailAddress");
+			              String classArrowEmail = "";
+			              if (uicomponent.getSortedBy().equals("emailAddress")) {
+			                if (uicomponent.isAscending()) classArrowEmail = "UpArrow1Icon";
+			                else classArrowEmail = "DownArrow1Icon"
+			              }
+    		    			%>
+	 	      	    
+	 	      	    	<a href="$sortedByEmail">
+	  		        	<div class="$classArrowEmail" title="Sort by Email">Email</div>
 	  		        	</a>
 	  		        </th>
 	 	      	    <th style="width: 120px; padding-left: 7px;" class="text">
-	  		        	<a href="<%=uicomponent.event("SortByOrganition")%>">
-	  		        	<div class="DownArrow1Icon" title="Sort by Date & time">Organition</div>
+	 	      	    
+	 	      	    	<%
+			    		      String sortedByOrganition = uicomponent.event("Sort","jobTitle");
+			              String classArrowOrganition = "";
+			              if (uicomponent.getSortedBy().equals("jobTitle")) {
+			                if (uicomponent.isAscending()) classArrowOrganition = "UpArrow1Icon";
+			                else classArrowOrganition = "DownArrow1Icon"
+			              }
+    		    			%>
+	 	      	    
+	  		        	<a href="$sortedByOrganition">
+	  		        	<div class="$classArrowOrganition" style="padding-right:26px;" >Organition</div>
 	 	      	    	</a>
 	 	      	    </th>
-	 	      	    <th style="padding-left: 7px;">
-	 	      	    	<a href="<%=uicomponent.event("SortByPhone")%>">Work Phone</th>
-	 	      	    <th style="padding-left: 7px;">Action</th>
+	 	      	    <th style="padding-left: 7px;"> Work Phone </th>
 	  	 	      </tr>
 	  	 	    </thead>
   	 	      <tbody>
@@ -106,7 +131,6 @@
 							for(contact in contacts) {
 								String actionLink  = uicomponent.event("SelectedContact", contact.getId()) ;
 								checkboxField = uicomponent.getChildById(contact.getId()) ;
-								String actionLink2 = uicomponent.event("EditContact", contact.getId()) ;
 								iconTag = "Icon" ;
 								String[] tagNames = contact.getTags() ; 
 								if (tagNames != null && tagNames.length > 0) {
@@ -116,7 +140,7 @@
 								cssClass = "" ;
 								if (contact.getId().equals(uicomponent.getSelectedContact())) cssClass = "Selected" ;
 						%>
-  						<tr class="UIContactList $cssClass" isTagList="<%=uicomponent.getTagSelected()%>">
+  						<tr class="UIContactList $cssClass" selectedTag="<%=uicomponent.getSelectedTag()%>">
   						  <td class="text" style="padding-left: 7px;">
   						  	<%
   						  		if(checkboxField != null) uicomponent.renderField(checkboxField) ;
@@ -133,9 +157,6 @@
 								<td class="text"><a href="$actionLink"><%=(contact.getEmailAddress()==null ? "" : contact.getEmailAddress())%></a></td>
 								<td class="text"><a href="$actionLink"><%=(contact.getJobTitle()==null ? "" : contact.getJobTitle())%></a></td>
 								<td><a href="$actionLink"><%=(contact.getWorkPhone1()==null ? "" : contact.getWorkPhone1())%></a></td>
-								<td>
-									<a href="$actionLink2" class="ControlButton"><div class="IconHolder EditIcon"><span></span></div></a>
-								</td>
 
    			     	</tr>
 			     	<% } %>  

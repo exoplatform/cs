@@ -7,6 +7,7 @@ package org.exoplatform.contact.service.impl;
 import java.util.List;
 
 import org.exoplatform.contact.service.Contact;
+import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactPageList;
 import org.exoplatform.contact.service.ContactService;
@@ -34,9 +35,36 @@ public class ContactServiceImpl implements ContactService {
     return storage_.getAllContact(username);
   }
   
+  public ContactPageList getContacts(String username, ContactFilter filter) throws Exception {
+    return storage_.getContacts(username, filter);
+  }
+  
   public ContactPageList getContactPageListByGroup(String username, String groupId) throws Exception {
     return storage_.getContactPageListByGroup(username, groupId);
   }
+  
+  public ContactPageList getContactPageListByGroup(String username, String groupId, String viewQuery, String orderBy, boolean isAscending)
+  throws Exception {
+    ContactFilter filter = new ContactFilter("Filter By Group") ;
+    filter.setViewQuery(viewQuery);
+    filter.setOrderBy(orderBy);
+    filter.setAscending(isAscending);
+    ContactGroup group = getGroup(username, groupId) ;
+    filter.setCategories(new String[]{ group.getId()} ) ;
+    return getContacts(username, filter) ;    
+  }
+  
+  public ContactPageList getContactPageListByTag(String username, String tagName, String viewQuery, String orderBy, boolean isAscending)
+  throws Exception {
+    ContactFilter filter = new ContactFilter("Filter By Tag") ;
+    filter.setViewQuery(viewQuery);
+    filter.setOrderBy(orderBy);
+    filter.setAscending(isAscending);
+    Tag tag = getTag(username, tagName) ;
+    filter.setTag(new String[]{tag.getName()} ) ;
+    return getContacts(username, filter) ;    
+  }
+  
   public List<String> getAllEmailAddressByGroup(String username, String groupId) throws Exception {
     return storage_.getAllEmailAddressByGroup(username, groupId);
   }

@@ -16,6 +16,7 @@ public interface ContactService {
   
   public List<Contact> getAllContact(String username) throws Exception ;
   public ContactPageList getContactPageListByGroup(String username, String groupId) throws Exception ;
+  public ContactPageList getContactPageListByGroup(String username, String groupId, String viewQuery, String orderBy, boolean isAscending) throws Exception;
   public List<String>  getAllEmailAddressByGroup(String username, String groupId) throws Exception ;
   public Contact getContact(String username, String contactId) throws Exception ;
   public void saveContact(String username, Contact contact, boolean isNew) throws Exception ;
@@ -40,6 +41,7 @@ public interface ContactService {
   public List<Tag> getTags(String username) throws Exception ;
   public Tag getTag(String username, String tagName) throws Exception ;
   public TagPageList getContactPageListByTag(String username, String tagName) throws Exception ;
+  public ContactPageList getContactPageListByTag(String username, String tagName, String viewQuery, String orderBy, boolean isAscending) throws Exception ;
   public void addTag(String username, List<String> contactIds, List<Tag> tags) throws Exception ;
   public Tag removeTag(String username, String tagName) throws Exception ;
   public void removeContactTag(String username, List<String>contactIds, List<String> tags) throws Exception ;

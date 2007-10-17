@@ -22,6 +22,7 @@ import javax.jcr.query.QueryResult;
 
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactAttachment;
+import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactPageList;
 import org.exoplatform.contact.service.GroupContactData;
@@ -192,6 +193,17 @@ public class JCRDataStorage implements DataStorage {
     }
     return contacts;
   }
+  
+  
+  public ContactPageList getContacts(String username, ContactFilter filter) throws Exception {
+    Node contactHomeNode = getContactHome(username);
+    filter.setAccountPath(contactHomeNode.getPath()) ;
+    QueryManager qm = contactHomeNode.getSession().getWorkspace().getQueryManager();
+    Query query = qm.createQuery(filter.getStatement(), Query.XPATH);
+    QueryResult result = query.execute();    
+    ContactPageList pageList = new ContactPageList(result.getNodes(), 10, filter.getStatement(), true) ;
+    return pageList ;
+  }
 
   public Contact getContact(String username, String contactId) throws Exception {
     Node contactHomeNode = getContactHome(username);
@@ -211,9 +223,6 @@ public class JCRDataStorage implements DataStorage {
                                                 append("']");
     Query query = qm.createQuery(queryString.toString(), Query.XPATH);
     QueryResult result = query.execute();
-    /*NodeIterator it = result.getNodes();
-    List<Contact> contacts = new ArrayList<Contact>();
-    while (it.hasNext()) contacts.add(getContact(it.nextNode()));*/
     ContactPageList pageList = new ContactPageList(result.getNodes(), 10, queryString.toString(), true) ;
     return pageList ;
   }

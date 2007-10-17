@@ -27,15 +27,11 @@
         <table class="ActionContainer" align="center">
         	<tr>
         		<td align="center">
-		          <%  
-                	 String actionLabel = _ctx.appRes(uicomponent.getName() + ".action.Cancel") ;
-                   String link = uicomponent.event("Cancel") ;
-          		%>
-          		<a href="$link" class="ActionButton LightBlueStyle">
+          		<a href="<%=uicomponent.event("Cancel")%>" class="ActionButton LightBlueStyle">
                 <div class="ButtonLeft">
                   <div class="ButtonRight">
                     <div class="ButtonMiddle">
-                      $actionLabel
+                      <%=_ctx.appRes(uicomponent.getName() + ".action.Cancel")%>
                     </div>
                   </div>
                 </div>
