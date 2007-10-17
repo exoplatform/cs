@@ -15,7 +15,7 @@
 			                <div class="SelectedTab">
 			                  <div class="LeftTab">
 			                    <div class="RightTab">
-					                  <div onclick="" class="MiddleTab">Thread Content</div>
+					                  <div onclick="eXo.webui.UIHorizontalTabs.displayTabContent(this)" class="MiddleTab">Thread Content</div>
 					                </div>
 			                  </div>
 			                </div>
@@ -25,7 +25,7 @@
 			                <div class="NormalTab">
 			                  <div class="LeftTab">
 			                    <div class="RightTab">
-					                  <div onclick="" class="MiddleTab">Icons and Smileys</div>
+					                  <div onclick="eXo.webui.UIHorizontalTabs.displayTabContent(this)" class="MiddleTab">Icons and Smileys</div>
 					                </div>
 			                  </div>
 			                </div>
@@ -65,6 +65,7 @@
 	              	</table>
 	              </div>
 	            </div>
+	          	<div style="display: none;" class="UITabContent">Icons and Smileys</div>
 	          </div>
 			    </div>
 			  </div>

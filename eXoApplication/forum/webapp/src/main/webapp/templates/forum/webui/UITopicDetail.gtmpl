@@ -320,7 +320,7 @@
 									  		<div class="ButtonLeft">
 									  			<div class="ButtonRight">
 									  				<div class="ButtonMiddle">
-									  					<a href="<%=uicomponent.event(action);%>">
+									  					<a href="<%=uicomponent.event(action, post.getId());%>">
 									  						<div class="IconButton ${action}PostIcon" title="$title"><span class="LabelIcon"></span>$label</div>
 									  					</a>
 									  				</div>

@@ -117,6 +117,11 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
     return topicList ;
   }
   
+  private Topic getTopic(String topicId) throws Exception {
+    return  forumService.getTopic(this.categoryId, this.forumId, topicId, false) ;
+  }
+  
+  
   static public class AddTopicActionListener extends EventListener<UITopicContainer> {
     public void execute(Event<UITopicContainer> event) throws Exception {
       UITopicContainer uiTopicContainer = event.getSource() ;
@@ -249,7 +254,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
       for(UIComponent child : children) {
         if(child instanceof UIFormCheckBoxInput) {
           if(((UIFormCheckBoxInput)child).isChecked()) {
-            topic = uiTopicContainer.forumService.getTopic(uiTopicContainer.categoryId, uiTopicContainer.forumId, ((UIFormCheckBoxInput)child).getName());
+            topic = uiTopicContainer.getTopic(child.getName());
             checked = true ;
             break ;
           }
@@ -280,7 +285,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
       for(UIComponent child : children) {
         if(child instanceof UIFormCheckBoxInput) {
           if(((UIFormCheckBoxInput)child).isChecked()) {
-            topics.add(uiTopicContainer.forumService.getTopic(uiTopicContainer.categoryId, uiTopicContainer.forumId, ((UIFormCheckBoxInput)child).getName()));
+            topics.add(uiTopicContainer.getTopic(child.getName()));
             if(!topics.get(i).getIsClosed()){ sms = topics.get(i).getTopicName() ; break ;} 
             ++i ;
           }
@@ -315,7 +320,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
       for(UIComponent child : children) {
         if(child instanceof UIFormCheckBoxInput) {
           if(((UIFormCheckBoxInput)child).isChecked()) {
-            topics.add(uiTopicContainer.forumService.getTopic(uiTopicContainer.categoryId, uiTopicContainer.forumId, ((UIFormCheckBoxInput)child).getName()));
+            topics.add(uiTopicContainer.getTopic(child.getName()));
             if(topics.get(i).getIsClosed()){ sms = topics.get(i).getTopicName() ; break ;} 
             ++i ;
           }
@@ -350,7 +355,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
       for(UIComponent child : children) {
         if(child instanceof UIFormCheckBoxInput) {
           if(((UIFormCheckBoxInput)child).isChecked()) {
-            topics.add(uiTopicContainer.forumService.getTopic(uiTopicContainer.categoryId, uiTopicContainer.forumId, ((UIFormCheckBoxInput)child).getName()));
+            topics.add(uiTopicContainer.getTopic(child.getName()));
             if(topics.get(i).getIsLock()){ sms = topics.get(i).getTopicName() ; break ;} 
             ++i ;
           }
@@ -385,7 +390,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
       for(UIComponent child : children) {
         if(child instanceof UIFormCheckBoxInput) {
           if(((UIFormCheckBoxInput)child).isChecked()) {
-            topics.add(uiTopicContainer.forumService.getTopic(uiTopicContainer.categoryId, uiTopicContainer.forumId, ((UIFormCheckBoxInput)child).getName()));
+            topics.add(uiTopicContainer.getTopic(child.getName()));
             if(!topics.get(i).getIsLock()){ sms = topics.get(i).getTopicName() ; break ;} 
             ++i ;
           }
@@ -420,7 +425,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
 		  for(UIComponent child : children) {
 			  if(child instanceof UIFormCheckBoxInput) {
 				  if(((UIFormCheckBoxInput)child).isChecked()) {
-					  topics.add(uiTopicContainer.forumService.getTopic(uiTopicContainer.categoryId, uiTopicContainer.forumId, ((UIFormCheckBoxInput)child).getName()));
+					  topics.add(uiTopicContainer.getTopic(child.getName()));
 					  if(!topics.get(i).getIsSticky()){ sms = topics.get(i).getTopicName() ; break ;} 
             ++i ;
 				  }
@@ -455,7 +460,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
 		  for(UIComponent child : children) {
 			  if(child instanceof UIFormCheckBoxInput) {
 				  if(((UIFormCheckBoxInput)child).isChecked()) {
-					  topics.add(uiTopicContainer.forumService.getTopic(uiTopicContainer.categoryId, uiTopicContainer.forumId, ((UIFormCheckBoxInput)child).getName()));
+					  topics.add(uiTopicContainer.getTopic(child.getName()));
 					  if(topics.get(i).getIsSticky()){ sms = topics.get(i).getTopicName() ; break ;} 
             ++i ;
 				  }
@@ -488,7 +493,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
       for(UIComponent child : children) {
         if(child instanceof UIFormCheckBoxInput) {
           if(((UIFormCheckBoxInput)child).isChecked()) {
-            topics.add(uiTopicContainer.forumService.getTopic(uiTopicContainer.categoryId, uiTopicContainer.forumId, ((UIFormCheckBoxInput)child).getName()));
+            topics.add(uiTopicContainer.getTopic(child.getName()));
           }
         }
       }
@@ -515,7 +520,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
       for(UIComponent child : children) {
         if(child instanceof UIFormCheckBoxInput) {
           if(((UIFormCheckBoxInput)child).isChecked()) {
-            topics.add(uiTopicContainer.forumService.getTopic(uiTopicContainer.categoryId, uiTopicContainer.forumId, ((UIFormCheckBoxInput)child).getName()));
+            topics.add(uiTopicContainer.getTopic(child.getName()));
           }
         }
       }

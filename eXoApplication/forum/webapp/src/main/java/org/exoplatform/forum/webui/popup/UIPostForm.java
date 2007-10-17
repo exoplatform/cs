@@ -11,7 +11,7 @@ import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.service.Post;
 import org.exoplatform.forum.webui.EmptyNameValidator;
 import org.exoplatform.forum.webui.UIForumPortlet;
-import org.exoplatform.forum.webui.UITopicDetail;
+import org.exoplatform.forum.webui.UITopicDetailContainer;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -38,12 +38,16 @@ import org.exoplatform.webui.form.UIFormTextAreaInput;
     }
 )
 public class UIPostForm extends UIForm implements UIPopupComponent {
+  private ForumService forumService =  (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
   public static final String FIELD_POSTTITLE_INPUT = "PostTitle" ;
   public static final String FIELD_MESSENGER_TEXTAREA = "Messenger" ;
+  public static final String FIELD_LABEL_QUOTE = "ReUser" ;
   
   private String categoryId; 
   private String forumId ;
   private String topicId ;
+  private String postId ;
+  private boolean quote = false ;
   public UIPostForm() throws Exception {
     UIFormStringInput postTitle = new UIFormStringInput(FIELD_POSTTITLE_INPUT, FIELD_POSTTITLE_INPUT, null);
     postTitle.addValidator(EmptyNameValidator.class) ;
@@ -59,10 +63,34 @@ public class UIPostForm extends UIForm implements UIPopupComponent {
     this.topicId = topicId ;
   }
   
+  public void updatePost(String postId, boolean quote) throws Exception {
+    this.postId = postId ;
+    this.quote = quote ;
+    if(this.postId != null && this.postId.length() > 0) {
+      Post post = this.forumService.getPost(this.categoryId, this.forumId, this.topicId, postId) ;
+      if(quote) {
+        String title = "" ;
+        if(post.getSubject().indexOf(": ") > 0) title = post.getSubject() ;
+        else title = getLabel(FIELD_LABEL_QUOTE) + ": " + post.getSubject() ;
+        getUIStringInput(FIELD_POSTTITLE_INPUT).setValue(title) ;
+        String quoteTag = "[quote=" + post.getOwner() + "]" ;
+        getUIFormTextAreaInput(FIELD_MESSENGER_TEXTAREA).setDefaultValue(quoteTag + post.getMessage() + "[/quote]") ;
+      } else {
+        getUIStringInput(FIELD_POSTTITLE_INPUT).setValue(post.getSubject()) ;
+        getUIFormTextAreaInput(FIELD_MESSENGER_TEXTAREA).setDefaultValue(post.getMessage()) ;
+      }
+    } else {
+      if(!quote) {
+        String title = this.forumService.getTopic(this.categoryId, this.forumId, this.topicId, false).getTopicName() ;
+        getUIStringInput(FIELD_POSTTITLE_INPUT).setValue(getLabel(FIELD_LABEL_QUOTE) + ": " + title) ;
+      }
+    }
+  }
+  
   public void activate() throws Exception {
-    // TODO Auto-generated method stub
     
   }
+  
   public void deActivate() throws Exception {
     // TODO Auto-generated method stub
     //System.out.println("\n\n description: sfdsf\n\n");
@@ -71,7 +99,7 @@ public class UIPostForm extends UIForm implements UIPopupComponent {
   public String[] getActionsTopic() throws Exception {
     return (new String [] {"PreviewPost", "SubmitPost", "CancelAction"});
   }
-  
+    
   static  public class PreviewPost extends EventListener<UIPostForm> {
     public void execute(Event<UIPostForm> event) throws Exception {
       UIPostForm uiForm = event.getSource() ;
@@ -99,12 +127,20 @@ public class UIPostForm extends UIForm implements UIPopupComponent {
       post.setNumberOfAttachment(0) ;
       post.setIsApproved(false) ;
       
-      ForumService forumService =  (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
-      forumService.savePost(uiForm.categoryId, uiForm.forumId, uiForm.topicId, post, true) ;
+      if(uiForm.postId != null && uiForm.postId.length() > 0) {
+        if(uiForm.quote) {
+          uiForm.forumService.savePost(uiForm.categoryId, uiForm.forumId, uiForm.topicId, post, true) ;
+        } else {
+          post.setId(uiForm.postId) ;
+          uiForm.forumService.savePost(uiForm.categoryId, uiForm.forumId, uiForm.topicId, post, false) ;
+        }
+      } else {
+        uiForm.forumService.savePost(uiForm.categoryId, uiForm.forumId, uiForm.topicId, post, true) ;
+      }
       UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
       forumPortlet.cancelAction() ;
-      UITopicDetail topicDetail = forumPortlet.findFirstComponentOfType(UITopicDetail.class) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(topicDetail);
+      UITopicDetailContainer topicDetailContainer = forumPortlet.findFirstComponentOfType(UITopicDetailContainer.class) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(topicDetailContainer);
     }
   }
   
@@ -113,10 +149,10 @@ public class UIPostForm extends UIForm implements UIPopupComponent {
       UIPostForm uiForm = event.getSource() ;
       UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
       forumPortlet.cancelAction() ;
+      UITopicDetailContainer topicDetailContainer = forumPortlet.findFirstComponentOfType(UITopicDetailContainer.class) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(topicDetailContainer);
     }
-  }
-
-  
+  }  
   
   
   

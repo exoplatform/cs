@@ -5,10 +5,7 @@
 package org.exoplatform.forum.webui;
 
 import org.exoplatform.webui.config.annotation.ComponentConfig;
-import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIContainer;
-import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 
 /**
  * Created by The eXo Platform SARL
@@ -18,10 +15,7 @@ import org.exoplatform.webui.event.EventListener;
  */
 
 @ComponentConfig(
-    template =  "app:/templates/forum/webui/UITopicDetailContainer.gtmpl", 
-    events = {
-      @EventConfig(listeners = UITopicDetailContainer.AddPostActionListener.class )  
-    }
+    template =  "app:/templates/forum/webui/UITopicDetailContainer.gtmpl" 
 )
 public class UITopicDetailContainer extends UIContainer  {
   public UITopicDetailContainer() throws Exception {
@@ -29,9 +23,4 @@ public class UITopicDetailContainer extends UIContainer  {
     addChild(UITopicDetail.class, null, null) ;
   }
   
-  static public class AddPostActionListener extends EventListener<UITopicDetailContainer> {
-    public void execute(Event<UITopicDetailContainer> event) throws Exception {
-      String path = event.getRequestContext().getRequestParameter(OBJECTID) ;      
-    }
-  }
 }

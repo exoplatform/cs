@@ -13,7 +13,6 @@ import org.exoplatform.forum.service.Post;
 import org.exoplatform.forum.service.Topic;
 import org.exoplatform.forum.webui.popup.UIPopupAction;
 import org.exoplatform.forum.webui.popup.UIPostForm;
-import org.exoplatform.forum.webui.popup.UITopicForm;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
@@ -59,7 +58,7 @@ public class UITopicDetail extends UIForm  {
   }
   
   private Topic getTopic() throws Exception {
-    return forumService.getTopic(categoryId, forumId, topicId) ;
+    return forumService.getTopic(categoryId, forumId, topicId, true) ;
   }
   
   private JCRPageList getPagePosts() throws Exception {
@@ -79,6 +78,7 @@ public class UITopicDetail extends UIForm  {
       UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;
       UIPostForm postForm = popupAction.createUIComponent(UIPostForm.class, null, null) ;
       postForm.setPostIds(topicDetail.categoryId, topicDetail.forumId, topicDetail.topicId) ;
+      postForm.updatePost("", false) ;
       popupAction.activate(postForm, 670, 440) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
@@ -87,27 +87,43 @@ public class UITopicDetail extends UIForm  {
   static public class PrintActionListener extends EventListener<UITopicDetail> {
     public void execute(Event<UITopicDetail> event) throws Exception {
       UITopicDetail topicDetail = event.getSource() ;
-      
     }
   }
   
   static public class EditActionListener extends EventListener<UITopicDetail> {
     public void execute(Event<UITopicDetail> event) throws Exception {
       UITopicDetail topicDetail = event.getSource() ;
-  
+      String postId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      UIForumPortlet forumPortlet = topicDetail.getAncestorOfType(UIForumPortlet.class) ;
+      UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;
+      UIPostForm postForm = popupAction.createUIComponent(UIPostForm.class, null, null) ;
+      postForm.setPostIds(topicDetail.categoryId, topicDetail.forumId, topicDetail.topicId) ;
+      postForm.updatePost(postId, false) ;
+      popupAction.activate(postForm, 670, 440) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   }
   
   static public class DeleteActionListener extends EventListener<UITopicDetail> {
     public void execute(Event<UITopicDetail> event) throws Exception {
       UITopicDetail topicDetail = event.getSource() ;
-      
+      String postId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      topicDetail.forumService.removePost(topicDetail.categoryId, topicDetail.forumId, topicDetail.topicId, postId) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(topicDetail.getParent()) ;
     }
   }
   
   static public class QuoteActionListener extends EventListener<UITopicDetail> {
     public void execute(Event<UITopicDetail> event) throws Exception {
       UITopicDetail topicDetail = event.getSource() ;
+      String postId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      UIForumPortlet forumPortlet = topicDetail.getAncestorOfType(UIForumPortlet.class) ;
+      UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;
+      UIPostForm postForm = popupAction.createUIComponent(UIPostForm.class, null, null) ;
+      postForm.setPostIds(topicDetail.categoryId, topicDetail.forumId, topicDetail.topicId) ;
+      postForm.updatePost(postId, true) ;
+      popupAction.activate(postForm, 670, 440) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   }
 
