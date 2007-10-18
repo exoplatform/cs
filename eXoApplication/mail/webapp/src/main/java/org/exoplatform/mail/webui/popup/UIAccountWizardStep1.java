@@ -16,8 +16,8 @@ import org.exoplatform.webui.form.UIFormTextAreaInput;
 
 /**
  * Created by The eXo Platform SARL
- * Author : Pham Tuan
- *          tuan.pham@exoplatform.com
+ * Author : Pham Tuan <tuan.pham@exoplatform.com>
+ *          Phung Nam <phunghainam@gmail.com>
  * Aug 16, 2007  
  */
 

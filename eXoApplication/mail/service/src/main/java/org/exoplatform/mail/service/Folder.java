@@ -6,8 +6,8 @@ package org.exoplatform.mail.service;
 
 /**
  * Created by The eXo Platform SARL
- * Author : Tuan Nguyen
- *          tuan.nguyen@exoplatform.com
+ * Author : Nam Phung
+ *          phunghainam@gmail.com
  * Jun 23, 2007  
  * 
  * Mail Folder is an object that keep track  of  the information of a set of messages
@@ -15,6 +15,7 @@ package org.exoplatform.mail.service;
  */
 public class Folder {
   private String id ;
+  private String parent;
   private String name ;
   private String label ;
   private long unreadMessage = 0 ;
@@ -26,6 +27,12 @@ public class Folder {
    */
   public String getId()  { return id ; }
   public void   setId(String s) { id = s ; }
+  
+  /**
+   * The parent of the folder
+   */
+  public String getParent() { return parent; }
+  public void setParent(String parent) { this.parent = parent; }
   
   /**
    * The name of the folder like Inbox, Sent, MyFolder

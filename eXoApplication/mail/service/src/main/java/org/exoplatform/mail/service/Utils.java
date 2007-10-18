@@ -32,12 +32,16 @@ public class Utils {
   public static final String SVR_SMTP_PORT = "mail.smtp.port".intern() ;  
   public static final String SVR_SMTP_USER = "mail.smtp.user".intern() ;
   public static final String SVR_SMTP_PASSWORD = "mail.smtp.user".intern() ;
-  public static final String SVR_POP_HOST = "host".intern() ;
-  public static final String SVR_POP_PORT = "port".intern() ;
-  public static final String SVR_FOLDER = "folder".intern() ;
-  public static final String SVR_USERNAME = "username".intern() ;
-  public static final String SVR_PASSWORD = "password".intern() ; 
-  public static final String SVR_SSL = "ssl".intern() ;
+  public static final String SVR_INCOMING_HOST = "incoming.host".intern() ;
+  public static final String SVR_INCOMING_PORT = "incoming.port".intern() ;
+  public static final String SVR_INCOMING_FOLDER = "folder".intern() ;
+  public static final String SVR_INCOMING_USERNAME = "incoming.username".intern() ;
+  public static final String SVR_INCOMING_PASSWORD = "incoming.password".intern() ;
+  
+  public static final String SVR_OUTGOING_HOST = "outgoing.host".intern() ;
+  public static final String SVR_OUTGOING_PORT = "outgoing.port".intern() ;
+   
+  public static final String SVR_INCOMING_SSL = "ssl".intern() ;
   
   public static final String KEY_FOLDERS = "Folders".intern() ;
   public static final String KEY_MESSAGE = "Messages".intern() ;

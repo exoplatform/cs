@@ -87,7 +87,7 @@ public class UIAccountWizardStep4 extends UIFormInputSet implements WizardStep {
   }
 
   public void fillFields(Account acc) {
-    fillFields(acc.getUserName(), acc.getPassword()) ;
+    fillFields(acc.getIncomingUser(), acc.getPassword()) ;
   }
 
 }

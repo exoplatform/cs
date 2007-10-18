@@ -94,33 +94,30 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
   }
   
  public void setContactList(List<Contact> contactList) throws Exception {
-    System.out.println(" ==========> setContactList@List<Contact>") ;
     getChildren().clear();
     contactMap_.clear();
     System.out.println(" recipientType: "+getRecipientType());       
               
     System.out.println(" getRecipientType().equals(To)") ;
      for (Contact contact : contactList) {
-              UIFormCheckBoxInput<Boolean> uiCheckbox = new UIFormCheckBoxInput<Boolean>(contact.getId(), contact.getId(), false);
-              addUIFormInput(uiCheckbox);
-              for (Contact ct : getAlreadyCheckedContact()) {
-                if(ct.getId().equals(contact.getId()))
-                {
-                  uiCheckbox.setChecked(true);
-                  System.out.print("setCheckbox for "+contact.getEmailAddress());
-                }
-              }
-              
-              contactMap_.put(contact.getId(), contact);
-           }
-         
+       UIFormCheckBoxInput<Boolean> uiCheckbox = new UIFormCheckBoxInput<Boolean>(contact.getId(), contact.getId(), false);
+       addUIFormInput(uiCheckbox);
+       for (Contact ct : getAlreadyCheckedContact()) {
+         if(ct.getId().equals(contact.getId()))
+         {
+           uiCheckbox.setChecked(true);
+           System.out.print("setCheckbox for "+contact.getEmailAddress());
+         }
+       }
+
+       contactMap_.put(contact.getId(), contact);
+     }
   }
   
   public void setAlreadyCheckedContact(List<Contact> alreadyCheckedContact) throws Exception {
     System.out.println(" ==========> setalreadyCheckedToContact") ;
     if(alreadyCheckedContact!=null)
     {    
-       
         this.alreadyCheckedContact = alreadyCheckedContact;
         for(Contact contact: alreadyCheckedContact) {
           System.out.println("setalreadyCheckedToContact: Fullname "+ contact.getFullName());
@@ -165,33 +162,24 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       if(uiAddressForm.getRecipientType().equals("To")){
         uiComposeForm.setFieldToValue(toAddress);       
         uiComposeForm.setToContacts(uiAddressForm.getCheckedContact());
-       
       }  
       
       if(uiAddressForm.getRecipientType().equals("Cc")){
         uiComposeForm.setFieldCcValue(toAddress);       
-        uiComposeForm.setCcContacts(uiAddressForm.getCheckedContact());
-        
+        uiComposeForm.setCcContacts(uiAddressForm.getCheckedContact());        
       }
-      
       
       if(uiAddressForm.getRecipientType().equals("Bcc")){
         uiComposeForm.setFieldBccValue(toAddress);       
         uiComposeForm.setBccContacts(uiAddressForm.getCheckedContact());
-        
-      }
-      
-      
+      }      
     }  
   } 
-  
-  
   
   static  public class CancelActionListener extends EventListener<UIAddressForm> {
     public void execute(Event<UIAddressForm> event) throws Exception {
       UIAddressForm uiAddressForm = event.getSource();  
       uiAddressForm.deActivate();
- 
     }
   }
 }

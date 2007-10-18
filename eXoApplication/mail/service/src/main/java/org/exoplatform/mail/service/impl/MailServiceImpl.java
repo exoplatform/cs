@@ -129,16 +129,16 @@ public class MailServiceImpl implements MailService{
     String accountId = message.getAccountId() ;
     Account acc = getAccountById(username, accountId) ;
     String smtpUser = acc.getServerProperties().get(Utils.SVR_SMTP_USER) ;
-    String host = acc.getServerProperties().get(Utils.SVR_SMTP_HOST) ;
-    String port  = acc.getServerProperties().get(Utils.SVR_SMTP_PORT) ;
-    String isSSl =  acc.getServerProperties().get(Utils.SVR_SSL)  ;
+    String host = acc.getOutgoingHost() ;
+    String port  = acc.getOutgoingPort() ;
+    String isSSl =  acc.getServerProperties().get(Utils.SVR_INCOMING_SSL)  ;
     Properties props = new Properties();
-    props.put(Utils.SVR_USERNAME, acc.getUserName());
-    props.put(Utils.SVR_PASSWORD, acc.getPassword());
+    props.put(Utils.SVR_INCOMING_USERNAME, acc.getIncomingUser());
+    props.put(Utils.SVR_INCOMING_PASSWORD, acc.getIncomingPassword());
     props.put(Utils.SVR_SMTP_USER, smtpUser) ;
     props.put(Utils.SVR_SMTP_HOST, host) ;
     props.put(Utils.SVR_SMTP_PORT, port) ;
-    props.put(Utils.SVR_SSL, isSSl);
+    props.put(Utils.SVR_INCOMING_SSL, isSSl);
     props.put(Utils.SVR_SMTP_STARTTLS_ENABLE,"true");
     props.put(Utils.SVR_SMTP_AUTH, "true");
     props.put(Utils.SVR_SMTP_SOCKETFACTORY_PORT, port);
@@ -151,15 +151,15 @@ public class MailServiceImpl implements MailService{
   public void sendMessage(Message message) throws Exception {
     Map<String, String> messageProps = message.getProperties();
     Properties props = new Properties();
-    props.put(Utils.SVR_USERNAME, messageProps.get(Utils.SVR_USERNAME));
-    props.put(Utils.SVR_PASSWORD, messageProps.get(Utils.SVR_PASSWORD));
+    props.put(Utils.SVR_INCOMING_USERNAME, messageProps.get(Utils.SVR_INCOMING_USERNAME));
+    props.put(Utils.SVR_INCOMING_PASSWORD, messageProps.get(Utils.SVR_INCOMING_PASSWORD));
     props.put(Utils.SVR_SMTP_USER, messageProps.get(Utils.SVR_SMTP_USER)) ;
     props.put(Utils.SVR_SMTP_HOST, messageProps.get(Utils.SVR_SMTP_HOST)) ;
     props.put(Utils.SVR_SMTP_PORT, messageProps.get(Utils.SVR_SMTP_PORT)) ;
     props.put(Utils.SVR_SMTP_AUTH, "true");
     props.put(Utils.SVR_SMTP_SOCKETFACTORY_PORT, messageProps.get(Utils.SVR_SMTP_PORT));
     if (Boolean.valueOf(messageProps.get(Utils.SVR_SMTP_PORT))) {
-      props.put(Utils.SVR_SSL, messageProps.get(Utils.SVR_SSL));
+      props.put(Utils.SVR_INCOMING_SSL, messageProps.get(Utils.SVR_INCOMING_SSL));
       props.put(Utils.SVR_SMTP_STARTTLS_ENABLE, "true");
       props.put(Utils.SVR_SMTP_SOCKETFACTORY_CLASS,  "javax.net.ssl.SSLSocketFactory");
     }
@@ -171,7 +171,7 @@ public class MailServiceImpl implements MailService{
   private void sendMessage(Session session, Message message) throws Exception {
     Transport transport = session.getTransport(Utils.SVR_SMTP);
     Properties props = session.getProperties();
-    transport.connect(props.getProperty(Utils.SVR_SMTP_HOST), props.getProperty(Utils.SVR_USERNAME), props.getProperty(Utils.SVR_PASSWORD)) ;
+    transport.connect(props.getProperty(Utils.SVR_SMTP_HOST), props.getProperty(Utils.SVR_INCOMING_USERNAME), props.getProperty(Utils.SVR_INCOMING_PASSWORD)) ;
     javax.mail.Message msg = new MimeMessage(session);
     
     InternetAddress addressFrom = new InternetAddress(message.getFrom());
@@ -226,13 +226,13 @@ public class MailServiceImpl implements MailService{
 
   public List<Message> checkNewMessage(String username, String accountId) throws Exception {
     Account account = getAccountById(username, accountId) ;
-    System.out.println("\n ### Getting mail from " + account.getHost() + " ... !");
+    System.out.println("\n ### Getting mail from " + account.getIncomingHost() + " ... !");
     List<Message> messageList = new ArrayList<Message>();
     int totalMess = -1;
     try {
       Properties props = System.getProperties();
       String socketFactoryClass = "javax.net.SocketFactory";
-      if (account.isSsl()) socketFactoryClass = "javax.net.ssl.SSLSocketFactory";
+      if (account.isIncomingSsl()) socketFactoryClass = "javax.net.ssl.SSLSocketFactory";
       if(account.getProtocol().equals("pop3")) {
         props.setProperty("mail.pop3.socketFactory.fallback", "false");
         props.setProperty( "mail.pop3.socketFactory.class", socketFactoryClass);
@@ -241,11 +241,11 @@ public class MailServiceImpl implements MailService{
         props.setProperty("mail.imap.socketFactory.class", socketFactoryClass);
       }
       javax.mail.Session session = javax.mail.Session.getDefaultInstance(props);
-      URLName url = new URLName(account.getProtocol(), account.getHost(), Integer.valueOf(account.getPort()), account.getFolder(), account.getUserName(), account.getPassword()) ;
+      URLName url = new URLName(account.getProtocol(), account.getIncomingHost(), Integer.valueOf(account.getIncomingPort()), account.getIncomingFolder(), account.getIncomingUser(), account.getIncomingPassword()) ;
       Store store = session.getStore(url) ;
       store.connect();
       System.out.println("\n ### Connected !");
-      javax.mail.Folder folder = store.getFolder(account.getFolder());
+      javax.mail.Folder folder = store.getFolder(account.getIncomingFolder());
       folder.open(javax.mail.Folder.READ_ONLY);
 
       // gets the new messages from the folder specified in the configuration object
@@ -292,7 +292,7 @@ public class MailServiceImpl implements MailService{
           }
           newMsg.setSize(mes.getSize());
           newMsg.setAttachements(new ArrayList<Attachment>());
-          String[] folders = {account.getFolder()};
+          String[] folders = {account.getIncomingFolder()};
           newMsg.setFolders(folders);
           Object obj = mes.getContent() ;
           if (obj instanceof Multipart) {

@@ -18,8 +18,8 @@ import org.exoplatform.webui.form.UIFormStringInput;
 
 /**
  * Created by The eXo Platform SARL
- * Author : Pham Tuan
- *          tuan.pham@exoplatform.com
+ * Author : Pham Tuan <tuan.pham@exoplatform.com>
+ *          Phung Nam <phunghainam@gmail.com>
  * Aug 16, 2007  
  */
 
@@ -72,7 +72,7 @@ public class UIAccountWizardStep3 extends UIFormInputSet  implements WizardStep{
     return infoMessage_ ;
   } 
   
-  protected void setDefaultValue(String serverType,boolean isSSL) {
+  protected void setDefaultValue(String serverType, boolean isSSL) {
     if(serverType.equals(Utils.POP3)) {
       if(isSSL) {
         getUIStringInput(FIELD_INCOMINGPORT).setValue(DEFAULT_POPSSL_PORT) ;
@@ -186,10 +186,10 @@ public class UIAccountWizardStep3 extends UIFormInputSet  implements WizardStep{
     String serverType, incomingServer, popPort, outgoingServer, smtpPort, storeFolder ;
     boolean isSSL = false ;
     serverType = acc.getProtocol() ;
-    storeFolder = acc.getFolder() ;
+    storeFolder = acc.getIncomingFolder() ;
     isSSL = Boolean.parseBoolean(acc.getServerProperties().get(Utils.SVR_SSL)) ;
-    incomingServer = acc.getServerProperties().get(Utils.SVR_POP_HOST) ;
-    popPort = acc.getServerProperties().get(Utils.SVR_POP_PORT) ;
+    incomingServer = acc.getServerProperties().get(Utils.SVR_INCOMING_HOST) ;
+    popPort = acc.getServerProperties().get(Utils.SVR_INCOMING_PORT) ;
     outgoingServer = acc.getServerProperties().get(Utils.SVR_SMTP_HOST) ;
     smtpPort = acc.getServerProperties().get(Utils.SVR_SMTP_PORT) ;
     fillFields(serverType, isSSL, incomingServer, popPort, outgoingServer, smtpPort, storeFolder) ;

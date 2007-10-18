@@ -12,8 +12,8 @@ import org.exoplatform.services.jcr.util.IdGenerator;
 
 /**
  * Created by The eXo Platform SARL
- * Author : Tuan Nguyen
- *          tuan.nguyen@exoplatform.com
+ * Author : Phung Nam <phunghainam@gmail.com>
+ *          Tuan Nguyen <tuan.nguyen@exoplatform.com>
  * Jun 23, 2007  
  * 
  */
@@ -32,10 +32,8 @@ public class Account {
   private Map<String, String> serverProperties ;  
   private List<Folder> defaultFolders ;
   private List<Folder> userFolders ;  
-  private List<String> tags ;
-  private List<MessageFilter> filters ;
-  //TODO: use AccountProperty
-//  private MailServerConfiguration mailServerConfiguration ;
+
+  //  private MailServerConfiguration mailServerConfiguration ;
   
   public Account() {
     id = Utils.KEY_ACCOUNT + IdGenerator.generate() ;
@@ -133,17 +131,48 @@ public class Account {
   
   public Map<String, String> getServerProperties() { return serverProperties ; }
   
-  public String getProtocol()  { return serverProperties.get("protocol") ; }
+  public String getProtocol()  { return serverProperties.get(Utils.SVR_PROTOCOL) ; }
+  public void setProtocol(String protocol) { 
+    setServerProperty(Utils.SVR_PROTOCOL, protocol) ; 
+  }
   
-  public String getHost()  { return serverProperties.get("host") ; }
+  public String getIncomingHost()  { return serverProperties.get(Utils.SVR_INCOMING_HOST) ; }
+  public void setIncomingHost(String host) { 
+    setServerProperty(Utils.SVR_INCOMING_HOST, host) ; 
+  }
   
-  public String getPort()  { return serverProperties.get("port") ; }
+  public String getIncomingPort()  { return serverProperties.get(Utils.SVR_INCOMING_PORT) ; }
+  public void setIncomingPort(String port) { 
+    setServerProperty(Utils.SVR_INCOMING_PORT, port) ; 
+  }
   
-  public String getFolder()  { return serverProperties.get("folder") ; }
+  public String getOutgoingHost() { return serverProperties.get(Utils.SVR_OUTGOING_HOST) ;}
+  public void setOutgoingHost(String host) { 
+    setServerProperty(Utils.SVR_OUTGOING_HOST, host) ;
+  }
   
-  public String getUserName()  { return serverProperties.get("username") ; }
+  public String getOutgoingPort() { return serverProperties.get(Utils.SVR_OUTGOING_PORT) ;}
+  public void setOutgoingPort(String port) { 
+    setServerProperty(Utils.SVR_OUTGOING_PORT, port) ;
+  }
   
-  public String getPassword()  { return serverProperties.get("password") ; }
+  public String getIncomingFolder() { return serverProperties.get(Utils.SVR_INCOMING_FOLDER) ; }
+  public void setIncomingFolder(String folder)  { 
+    setServerProperty(Utils.SVR_INCOMING_FOLDER, folder) ; 
+  }
   
-  public boolean isSsl()  { return serverProperties.get("ssl").equalsIgnoreCase("true");  }
+  public String getIncomingUser()  { return serverProperties.get(Utils.SVR_INCOMING_USERNAME) ; }
+  public void setIncomingUser(String user)  { 
+    setServerProperty(Utils.SVR_INCOMING_USERNAME, user) ; 
+  }
+  
+  public String getIncomingPassword()  { return serverProperties.get(Utils.SVR_INCOMING_PASSWORD) ; }
+  public void setIncomingPassword(String password)  { 
+    setServerProperty(Utils.SVR_INCOMING_PASSWORD, password) ; 
+  }
+  
+  public boolean isIncomingSsl()  { return serverProperties.get(Utils.SVR_INCOMING_SSL).equalsIgnoreCase("true");  }
+  public void setIncomingSsl(boolean b) { 
+    setServerProperty(Utils.SVR_INCOMING_SSL, String.valueOf(b)); 
+  }
 }

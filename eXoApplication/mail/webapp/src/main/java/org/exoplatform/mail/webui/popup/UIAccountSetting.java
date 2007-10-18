@@ -10,7 +10,11 @@ import java.util.List;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Utils;
+import org.exoplatform.mail.webui.UIFolderContainer;
 import org.exoplatform.mail.webui.UIMailPortlet;
+import org.exoplatform.mail.webui.UIMessageArea;
+import org.exoplatform.mail.webui.UIMessagePreview;
+import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.web.command.handler.GetApplicationHandler;
@@ -28,6 +32,7 @@ import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTabPane;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
+import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
 
 /**
  * Created by The eXo Platform SARL
@@ -40,6 +45,8 @@ import org.exoplatform.webui.form.UIFormTextAreaInput;
     template =  "app:/templates/mail/webui/UIAccountSetting.gtmpl",
     events = {
         @EventConfig(listeners = UIAccountSetting.SelectAccountActionListener.class),
+        @EventConfig(listeners = UIAccountSetting.AddNewAccountActionListener.class),
+        @EventConfig(listeners = UIAccountSetting.DeleteAccountActionListener.class),
         @EventConfig(listeners = UIAccountSetting.SaveActionListener.class),
         @EventConfig(listeners = UIAccountSetting.CancelActionListener.class)
     }
@@ -54,49 +61,57 @@ public class UIAccountSetting extends UIFormTabPane {
   public static final String FIELD_ACCOUNT_DESCRIPTION = "description";
   public static final String FIELD_OUTGOING_NAME = "yourOutgoingName";
   public static final String FIELD_EMAIL_ADDRESS = "yourEmailAddress";
-  public static final String FIELD_EMAIL_PASSWORD = "yourEmailPassword";
+  public static final String FIELD_INCOMING_ACCOUNT = "incomingAccount";
+  public static final String FIELD_INCOMING_PASSWORD = "incomingPassword";
   public static final String FIELD_REPLYTO_ADDRESS = "replyToAddress";
   public static final String FIELD_MAIL_SIGNATURE = "mailSignature" ;
   public static final String FIELD_PLACE_SIGNATURE = "placeSignature";
   public static final String FIELD_APPLY_SIGNATURE = "applySignatureBy";
   public static final String FIELD_SERVER_TYPE = "serverType";
   public static final String FIELD_INCOMING_SERVER = "incomingServer";
-  public static final String FIELD_INCOMING_FOLDER = "messageComeInServer";
-  public static final String FIELD_PORT = "port";
-  public static final String FIELD_ISSSL = "isSSL";
+  public static final String FIELD_INCOMING_PORT = "incomingPort";
+  public static final String FIELD_OUTGOING_SERVER = "outgoingServer";
+  public static final String FIELD_OUTGOING_PORT = "outgoingPort";
+  public static final String FIELD_INCOMING_FOLDER = "messageComeInFolder";
+  public static final String FIELD_IS_INCOMING_SSL = "isSSL";
   public static final String FIELD_CHECKMAIL_AUTO = "checkMailAutomatically";
   public static final String FIELD_EMPTY_TRASH = "emptyTrashWhenExit";
-  public static final String OPTION_HEAD = "signOnHeadOfMessage";
-  public static final String OPTION_FOOT = "signOnFootOfMessage";
+  public static final String SIGN_ON_HEAD = "Head of message";
+  public static final String SIGN_ON_FOOT = "Food of message";
   private String accountId_ = null;
   
   public UIAccountSetting() throws Exception {
     super("UIAccountSetting");
     UIFormInputWithActions  accountInputSet = new UIFormInputWithActions(TAB_ACCOUNT);
     accountInputSet.addUIFormInput(new UIFormStringInput(FIELD_ACCOUNT_NAME, null, null)) ;
+    accountInputSet.addUIFormInput(new UIFormStringInput(FIELD_EMAIL_ADDRESS, null, null));
+    accountInputSet.addUIFormInput(new UIFormStringInput(FIELD_REPLYTO_ADDRESS, null, null));
     accountInputSet.addUIFormInput(new UIFormTextAreaInput(FIELD_ACCOUNT_DESCRIPTION, null, null)) ;
     addUIFormInput(accountInputSet); 
     
     UIFormInputWithActions  identityInputSet = new UIFormInputWithActions(TAB_IDENTITY_SETTINGS);
-    identityInputSet.addUIFormInput(new UIFormStringInput(FIELD_OUTGOING_NAME, null, null));
-    identityInputSet.addUIFormInput(new UIFormStringInput(FIELD_EMAIL_ADDRESS, null, null));
-    identityInputSet.addUIFormInput(new UIFormStringInput(FIELD_EMAIL_PASSWORD, null, null).setType(UIFormStringInput.PASSWORD_TYPE));
-    identityInputSet.addUIFormInput(new UIFormStringInput(FIELD_REPLYTO_ADDRESS, null, null));
+    identityInputSet.addUIFormInput(new UIFormStringInput(FIELD_INCOMING_ACCOUNT, null, null));
+    identityInputSet.addUIFormInput(new UIFormStringInput(FIELD_INCOMING_PASSWORD, null, null).setType(UIFormStringInput.PASSWORD_TYPE));
+    
     identityInputSet.addUIFormInput(new UIFormTextAreaInput(FIELD_MAIL_SIGNATURE, null, null));
     List<SelectItemOption<String>> signPlaceOptions = new ArrayList<SelectItemOption<String>>();
-    signPlaceOptions.add(new SelectItemOption<String>(OPTION_HEAD, Utils.P_HEAD));
-    signPlaceOptions.add(new SelectItemOption<String>(OPTION_FOOT, Utils.P_FOOT));
+    signPlaceOptions.add(new SelectItemOption<String>(SIGN_ON_HEAD, Utils.P_HEAD));
+    signPlaceOptions.add(new SelectItemOption<String>(SIGN_ON_FOOT, Utils.P_FOOT));
     identityInputSet.addUIFormInput(new UIFormSelectBox(FIELD_PLACE_SIGNATURE, FIELD_PLACE_SIGNATURE, signPlaceOptions));
+    identityInputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_CHECKMAIL_AUTO, null, null));
+    identityInputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_EMPTY_TRASH, null, null));
     addUIFormInput(identityInputSet); 
     
     UIFormInputWithActions serverInputSet = new UIFormInputWithActions(TAB_SERVER_SETTINGS);
     serverInputSet.addUIFormInput(new UIFormInputInfo(FIELD_SERVER_TYPE, null, null));
     serverInputSet.addUIFormInput(new UIFormStringInput(FIELD_INCOMING_SERVER, null, null));
+    serverInputSet.addUIFormInput(new UIFormStringInput(FIELD_INCOMING_PORT, null, null));
+    serverInputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_IS_INCOMING_SSL, null, null));
+    
+    serverInputSet.addUIFormInput(new UIFormStringInput(FIELD_OUTGOING_SERVER, null, null));
+    serverInputSet.addUIFormInput(new UIFormStringInput(FIELD_OUTGOING_PORT, null, null));
+    
     serverInputSet.addUIFormInput(new UIFormStringInput(FIELD_INCOMING_FOLDER, null, null));
-    serverInputSet.addUIFormInput(new UIFormStringInput(FIELD_PORT, null, null));
-    serverInputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_ISSSL, null, null));
-    serverInputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_CHECKMAIL_AUTO, null, null));
-    serverInputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_EMPTY_TRASH, null, null));
     addUIFormInput(serverInputSet); 
     
     setRenderedChild(TAB_ACCOUNT);
@@ -118,25 +133,39 @@ public class UIAccountSetting extends UIFormTabPane {
     return uiInput.getUIStringInput(FIELD_ACCOUNT_DESCRIPTION).getValue();
   }
   
-  public String getFieldOutgoingName() {
-    UIFormInputWithActions uiInput = getChildById(TAB_IDENTITY_SETTINGS);
-    return uiInput.getUIStringInput(FIELD_OUTGOING_NAME).getValue();
-  }
-  
   public String getFieldMailAddress() {
-    UIFormInputWithActions uiInput = getChildById(TAB_IDENTITY_SETTINGS);
+    UIFormInputWithActions uiInput = getChildById(TAB_ACCOUNT);
     return uiInput.getUIStringInput(FIELD_EMAIL_ADDRESS).getValue();
   }
   
-  public String getFieldMailPassword() {
+  public String getFieldIncomingAccount() {
     UIFormInputWithActions uiInput = getChildById(TAB_IDENTITY_SETTINGS);
-    return uiInput.getUIStringInput(FIELD_EMAIL_PASSWORD).getValue();
+    return uiInput.getUIStringInput(FIELD_INCOMING_ACCOUNT).getValue();
   }
   
+  public String getFieldIncomingPassword() {
+    UIFormInputWithActions uiInput = getChildById(TAB_IDENTITY_SETTINGS);
+    return uiInput.getUIStringInput(FIELD_INCOMING_PASSWORD).getValue();
+  }  
   
   public String getFieldIncomingServer() {
     UIFormInputWithActions uiInput = getChildById(TAB_SERVER_SETTINGS);
     return uiInput.getUIStringInput(FIELD_INCOMING_SERVER).getValue();
+  }
+  
+  public String getFieldIncomingPort() {
+    UIFormInputWithActions uiInput = getChildById(TAB_SERVER_SETTINGS);
+    return uiInput.getUIStringInput(FIELD_INCOMING_PORT).getValue();
+  }
+  
+  public String getFieldOutgoingServer() {
+    UIFormInputWithActions uiInput = getChildById(TAB_SERVER_SETTINGS);
+    return uiInput.getUIStringInput(FIELD_OUTGOING_SERVER).getValue();
+  }
+  
+  public String getFieldOutgoingPort() {
+    UIFormInputWithActions uiInput = getChildById(TAB_SERVER_SETTINGS);
+    return uiInput.getUIStringInput(FIELD_OUTGOING_PORT).getValue();
   }
   
   public String getFieldMailSignature() {
@@ -161,7 +190,7 @@ public class UIAccountSetting extends UIFormTabPane {
   
   
   public String getFieldReplyAddress() {
-    UIFormInputWithActions uiInput = getChildById(TAB_IDENTITY_SETTINGS);
+    UIFormInputWithActions uiInput = getChildById(TAB_ACCOUNT);
     return uiInput.getUIStringInput(FIELD_REPLYTO_ADDRESS).getValue();
   }
   
@@ -170,23 +199,18 @@ public class UIAccountSetting extends UIFormTabPane {
     return uiInput.getUIStringInput(FIELD_INCOMING_FOLDER).getValue();
   }
   
-  public String getFieldPort() {
-    UIFormInputWithActions uiInput = getChildById(TAB_SERVER_SETTINGS);
-    return uiInput.getUIStringInput(FIELD_PORT).getValue();
-  }
-  
   public boolean getFieldIsSSL() {
     UIFormInputWithActions uiInput = getChildById(TAB_SERVER_SETTINGS);
-    return uiInput.getUIFormCheckBoxInput(FIELD_ISSSL).isChecked();
+    return uiInput.getUIFormCheckBoxInput(FIELD_IS_INCOMING_SSL).isChecked();
   }
   
   public boolean getFieldCheckMailAuto() {
-    UIFormInputWithActions uiInput = getChildById(TAB_SERVER_SETTINGS);
+    UIFormInputWithActions uiInput = getChildById(TAB_IDENTITY_SETTINGS);
     return uiInput.getUIFormCheckBoxInput(FIELD_CHECKMAIL_AUTO).isChecked();
   }
   
   public boolean getFieldEmptyTrash() {
-    UIFormInputWithActions uiInput = getChildById(TAB_SERVER_SETTINGS);
+    UIFormInputWithActions uiInput = getChildById(TAB_IDENTITY_SETTINGS);
     return uiInput.getUIFormCheckBoxInput(FIELD_EMPTY_TRASH).isChecked();
   }
   
@@ -200,25 +224,29 @@ public class UIAccountSetting extends UIFormTabPane {
   public void fillAllField(Account account) throws Exception {
     UIFormInputWithActions uiAccountInput = getChildById(TAB_ACCOUNT);
     uiAccountInput.getUIStringInput(FIELD_ACCOUNT_NAME).setValue(account.getLabel());
+    uiAccountInput.getUIStringInput(FIELD_EMAIL_ADDRESS).setValue(account.getEmailAddress());
+    uiAccountInput.getUIStringInput(FIELD_REPLYTO_ADDRESS).setValue(account.getEmailReplyAddress());
     uiAccountInput.getUIStringInput(FIELD_ACCOUNT_DESCRIPTION).setValue(account.getDescription());
     
     UIFormInputWithActions uiIdentityInput = getChildById(TAB_IDENTITY_SETTINGS);
-    uiIdentityInput.getUIStringInput(FIELD_OUTGOING_NAME).setValue(account.getUserDisplayName());
-    uiIdentityInput.getUIStringInput(FIELD_EMAIL_ADDRESS).setValue(account.getEmailAddress());
-    uiIdentityInput.getUIStringInput(FIELD_EMAIL_PASSWORD).setValue(account.getPassword());
-    uiIdentityInput.getUIStringInput(FIELD_REPLYTO_ADDRESS).setValue(account.getEmailReplyAddress());
+    uiIdentityInput.getUIStringInput(FIELD_INCOMING_ACCOUNT).setValue(account.getIncomingUser());
+    uiIdentityInput.getUIStringInput(FIELD_INCOMING_PASSWORD).setValue(account.getIncomingPassword());
     uiIdentityInput.getUIStringInput(FIELD_MAIL_SIGNATURE).setValue(account.getSignature());
+    uiIdentityInput.getUIFormCheckBoxInput(FIELD_CHECKMAIL_AUTO).setChecked(account.checkedAuto());
+    uiIdentityInput.getUIFormCheckBoxInput(FIELD_EMPTY_TRASH).setChecked(account.isEmptyTrashWhenExit());
     setSelectedPlaceSignature(account.getPlaceSignature());
     
     UIFormInputWithActions uiServerInput = getChildById(TAB_SERVER_SETTINGS);
-    uiServerInput.getUIStringInput(FIELD_PORT).setValue(account.getPort());
-    uiServerInput.getUIStringInput(FIELD_INCOMING_FOLDER).setValue(account.getFolder());
-    uiServerInput.getUIStringInput(FIELD_INCOMING_SERVER).setValue(account.getHost());
+    uiServerInput.getUIStringInput(FIELD_INCOMING_SERVER).setValue(account.getIncomingHost());
+    uiServerInput.getUIStringInput(FIELD_INCOMING_PORT).setValue(account.getIncomingPort());
+    
+    uiServerInput.getUIStringInput(FIELD_OUTGOING_SERVER).setValue(account.getOutgoingHost());
+    uiServerInput.getUIStringInput(FIELD_OUTGOING_PORT).setValue(account.getOutgoingPort());
+    
+    uiServerInput.getUIStringInput(FIELD_INCOMING_FOLDER).setValue(account.getIncomingFolder());
     uiServerInput.getUIFormInputInfo(FIELD_SERVER_TYPE).setValue(account.getProtocol());
     uiServerInput.getUIFormInputInfo(FIELD_SERVER_TYPE).setValue(account.getProtocol());
-    uiServerInput.getUIFormCheckBoxInput(FIELD_ISSSL).setChecked(account.isSsl());
-    uiServerInput.getUIFormCheckBoxInput(FIELD_CHECKMAIL_AUTO).setChecked(account.checkedAuto());
-    uiServerInput.getUIFormCheckBoxInput(FIELD_EMPTY_TRASH).setChecked(account.isEmptyTrashWhenExit());
+    uiServerInput.getUIFormCheckBoxInput(FIELD_IS_INCOMING_SSL).setChecked(account.isIncomingSsl());
   } 
   
   public String[] getActions() {return new String[]{"Save", "Cancel"};}
@@ -240,6 +268,38 @@ public class UIAccountSetting extends UIFormTabPane {
     }
   }
   
+  static  public class AddNewAccountActionListener extends EventListener<UIAccountSetting> {
+    public void execute(Event<UIAccountSetting> event) throws Exception {
+      UIAccountSetting uiAccountSetting = event.getSource() ;
+      System.out.println(" ==========> AddNewAccountActionListener") ;
+      
+      UIPopupActionContainer uiActionContainer = uiAccountSetting.getAncestorOfType(UIPopupActionContainer.class) ;
+      UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class) ;
+      UIAccountCreation uiAccountCreation = uiChildPopup.activate(UIAccountCreation.class, 700) ;
+      uiAccountCreation.setChildPopup(true);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiActionContainer) ;
+    }
+  }
+  
+  static  public class DeleteAccountActionListener extends EventListener<UIAccountSetting> {
+    public void execute(Event<UIAccountSetting> event) throws Exception {
+      UIAccountSetting uiAccountSetting = event.getSource() ;
+      System.out.println(" ==========> DeleteAccountActionListener") ;
+      UIMailPortlet uiPortlet = uiAccountSetting.getAncestorOfType(UIMailPortlet.class);
+      String username = uiPortlet.getCurrentUser();
+      MailService mailServ = uiPortlet.getApplicationComponent(MailService.class);
+      try {
+        Account account = mailServ.getAccountById(username, uiAccountSetting.getSelectedAccountId());
+        mailServ.removeAccount(username, account);
+        uiAccountSetting.setSelectedAccountId(uiAccountSetting.getAccounts().get(0).getId());
+        uiAccountSetting.fillAllField();
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiAccountSetting.getParent());
+      } catch(Exception e) {
+        System.err.println(" Error ==========> DeleteAccountActionListener");
+      } 
+    }
+  }
+  
   static  public class SaveActionListener extends EventListener<UIAccountSetting> {
     public void execute(Event<UIAccountSetting> event) throws Exception {
       UIAccountSetting uiAccountSetting = event.getSource() ;
@@ -249,14 +309,15 @@ public class UIAccountSetting extends UIFormTabPane {
       Account acc = mailSrv.getAccountById(username, uiAccountSetting.getSelectedAccountId());
       String accName = uiAccountSetting.getFieldAccountNameValue();
       String accDes = uiAccountSetting.getFieldAccountDescription();
-      String displayName = uiAccountSetting.getFieldOutgoingName();
       String email = uiAccountSetting.getFieldMailAddress();
       String replyMail = uiAccountSetting.getFieldReplyAddress();
       String signature = uiAccountSetting.getFieldMailSignature();
-      String userName = uiAccountSetting.getFieldMailAddress();
-      String password = uiAccountSetting.getFieldMailPassword();
+      String userName = uiAccountSetting.getFieldIncomingAccount();
+      String password = uiAccountSetting.getFieldIncomingPassword();
       String popHost = uiAccountSetting.getFieldIncomingServer();
-      String popPort = uiAccountSetting.getFieldPort();
+      String popPort = uiAccountSetting.getFieldIncomingPort();
+      String outgoingHost = uiAccountSetting.getFieldOutgoingServer();
+      String outgoingPort = uiAccountSetting.getFieldOutgoingPort();
       boolean isSSL = uiAccountSetting.getFieldIsSSL();
       String storeFolder = uiAccountSetting.getFieldIncomingFolder();
       boolean checkMailAuto = uiAccountSetting.getFieldCheckMailAuto();
@@ -265,19 +326,20 @@ public class UIAccountSetting extends UIFormTabPane {
       
       acc.setLabel(accName) ;
       acc.setDescription(accDes) ;
-      acc.setUserDisplayName(displayName) ;
       acc.setEmailAddress(email) ;
       acc.setEmailReplyAddress(replyMail) ;
       acc.setSignature(signature) ;
       acc.setCheckedAuto(checkMailAuto);
       acc.setPlaceSignature(placeSignature);
       acc.setEmptyTrashWhenExit(isEmptyTrashWhenExit);
-      acc.setServerProperty(Utils.SVR_USERNAME, userName); 
-      acc.setServerProperty(Utils.SVR_PASSWORD, password);
-      acc.setServerProperty(Utils.SVR_POP_HOST, popHost);
-      acc.setServerProperty(Utils.SVR_POP_PORT, popPort);  
-      acc.setServerProperty(Utils.SVR_SSL, String.valueOf(isSSL));
-      acc.setServerProperty(Utils.SVR_FOLDER, storeFolder) ;
+      acc.setIncomingUser(userName); 
+      acc.setIncomingPassword(password);
+      acc.setIncomingHost(popHost);
+      acc.setIncomingPort(popPort);  
+      acc.setIncomingSsl(isSSL);
+      acc.setIncomingFolder(storeFolder) ;
+      acc.setOutgoingHost(outgoingHost);
+      acc.setOutgoingPort(outgoingPort);
       acc.setServerProperty(Utils.SVR_SMTP_USER, userName);
       
       UIApplication uiApp = uiAccountSetting.getAncestorOfType(UIApplication.class) ;

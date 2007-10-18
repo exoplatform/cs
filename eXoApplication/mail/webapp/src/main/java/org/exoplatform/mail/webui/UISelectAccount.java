@@ -97,26 +97,27 @@ public class UISelectAccount extends UIForm {
   
   static  public class EditAccountActionListener extends EventListener<UISelectAccount> {
     public void execute(Event<UISelectAccount> event) throws Exception {
-      System.out.println("========> AddAccountActionListener") ;
+      System.out.println("========> Edit Account Action Listener") ;
       UISelectAccount uiForm = event.getSource() ;
       UIMailPortlet uiPortlet = uiForm.getAncestorOfType(UIMailPortlet.class) ;
-      UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class) ;
-      UIPopupActionContainer uiAccContainer = uiPortlet.createUIComponent(UIPopupActionContainer.class, null, null) ;
-      uiAccContainer.setId("UIAccountPopupSetting");
-      UIAccountSetting uiAccountSetting = uiPortlet.createUIComponent(UIAccountSetting.class, null, null);
-      String username = uiPortlet.getCurrentUser(); 
-      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-      uiAccountSetting.setSelectedAccountId(accountId);
+      
+      UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
+      UIPopupActionContainer uiPopupContainer = uiPopupAction.activate(UIPopupActionContainer.class, 730) ;
+      
+      uiPopupContainer.setId("UIAccountPopupSetting");
+      UIAccountSetting uiAccountSetting = uiPopupContainer.createUIComponent(UIAccountSetting.class, null, null);
+       
+      uiAccountSetting.setSelectedAccountId(uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue());
       uiAccountSetting.fillAllField();
-      uiAccContainer.addChild(uiAccountSetting) ;
-      uiPopup.activate(uiAccContainer, 730, 0, true) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup) ;
+      
+      uiPopupContainer.addChild(uiAccountSetting) ;      
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }
   }
   
   static  public class DeleteAccountActionListener extends EventListener<UISelectAccount> {
     public void execute(Event<UISelectAccount> event) throws Exception {
-      System.out.println("========> DeleteAccountActionListener") ;
+      System.out.println("========> Delete Account Action Listener") ;
       UISelectAccount uiForm = event.getSource() ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       if(Utils.isEmptyField(uiForm.getSelectedValue())) {

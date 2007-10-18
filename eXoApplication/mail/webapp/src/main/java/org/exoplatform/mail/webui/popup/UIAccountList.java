@@ -50,7 +50,7 @@ public class UIAccountList extends UIGrid  implements UIPopupComponent{
     MailService mailSvr = getApplicationComponent(MailService.class) ;
     for(Account acc : mailSvr.getAccounts(userId)) {
       accounts.add(new AccountData(acc.getId(), acc.getUserDisplayName(), acc.getEmailAddress(), 
-          acc.getServerProperties().get(Utils.SVR_POP_HOST), acc.getProtocol())) ;
+          acc.getServerProperties().get(Utils.SVR_INCOMING_HOST), acc.getProtocol())) ;
     }
 
     ObjectPageList objPageList = new ObjectPageList(accounts, 10) ;

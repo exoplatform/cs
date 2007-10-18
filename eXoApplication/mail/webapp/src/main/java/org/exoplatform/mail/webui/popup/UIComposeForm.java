@@ -39,8 +39,8 @@ import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
 
 /**
  * Created by The eXo Platform SARL
- * Author : Hung Nguyen
- *          hung.nguyen@exoplatform.com
+ * Author : Hung Nguyen <hung.nguyen@exoplatform.com>
+ *          Phung Nam <phunghainam@gmail.com>
  * Aus 01, 2007 2:48:18 PM 
  */
 @ComponentConfig(
