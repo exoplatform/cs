@@ -497,6 +497,7 @@
 	cursor: pointer;
 	background-position: right;
 	padding-right: 16px;
+	background: url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/BlueUpArrow.gif') no-repeat right;
 }
 
 /*=================================UIContactPreview==================================*/
