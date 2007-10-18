@@ -187,7 +187,7 @@ public class UIAccountWizardStep3 extends UIFormInputSet  implements WizardStep{
     boolean isSSL = false ;
     serverType = acc.getProtocol() ;
     storeFolder = acc.getIncomingFolder() ;
-    isSSL = Boolean.parseBoolean(acc.getServerProperties().get(Utils.SVR_SSL)) ;
+    isSSL = Boolean.parseBoolean(acc.getServerProperties().get(Utils.SVR_INCOMING_SSL)) ;
     incomingServer = acc.getServerProperties().get(Utils.SVR_INCOMING_HOST) ;
     popPort = acc.getServerProperties().get(Utils.SVR_INCOMING_PORT) ;
     outgoingServer = acc.getServerProperties().get(Utils.SVR_SMTP_HOST) ;
