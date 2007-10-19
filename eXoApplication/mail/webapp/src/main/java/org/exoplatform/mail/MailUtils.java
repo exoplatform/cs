@@ -17,6 +17,7 @@ import org.exoplatform.portal.webui.util.Util;
  */
 public class MailUtils {
  
+  private static String selectedAccountId_;
   
   static public MailService getMailService() throws Exception {
     return (MailService)PortalContainer.getComponent(MailService.class) ;
@@ -24,5 +25,13 @@ public class MailUtils {
   
   static public String getCurrentUser() throws Exception { 
     return Util.getPortalRequestContext().getRemoteUser() ; 
+  }
+  
+  static public String getAccountId() throws Exception { 
+    return selectedAccountId_ ;
+  }
+  
+  static public void setAccountId(String accId) throws Exception { 
+    selectedAccountId_ = accId ;
   }
 }

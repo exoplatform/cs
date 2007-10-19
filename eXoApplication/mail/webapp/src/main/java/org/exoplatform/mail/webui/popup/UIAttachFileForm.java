@@ -20,8 +20,6 @@ import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormUploadInput;
 
-import com.thoughtworks.xstream.core.ReferenceByIdMarshaller.IDGenerator;
-
 /**
  * Created by The eXo Platform SARL
  * Author : Pham Tuan

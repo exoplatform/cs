@@ -255,8 +255,8 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
       acc.setIncomingSsl(isSSL);
       acc.setIncomingFolder(storeFolder) ;
       acc.setServerProperty(Utils.SVR_SMTP_USER, incomingUserName);
-      acc.setServerProperty(Utils.SVR_SMTP_HOST, smtpHost);
-      acc.setServerProperty(Utils.SVR_SMTP_PORT, smtpPort);
+      acc.setOutgoingHost(smtpHost);
+      acc.setOutgoingPort(smtpPort);
 
       UIApplication uiApp = uiAccCreation.getAncestorOfType(UIApplication.class) ;
       UINavigationContainer uiNavigation = uiPortlet.getChild(UINavigationContainer.class) ;

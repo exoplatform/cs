@@ -10,14 +10,9 @@ import java.util.List;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Utils;
-import org.exoplatform.mail.webui.UIFolderContainer;
 import org.exoplatform.mail.webui.UIMailPortlet;
-import org.exoplatform.mail.webui.UIMessageArea;
-import org.exoplatform.mail.webui.UIMessagePreview;
-import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
-import org.exoplatform.web.command.handler.GetApplicationHandler;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -32,7 +27,6 @@ import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTabPane;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
-import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
 
 /**
  * Created by The eXo Platform SARL

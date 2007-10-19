@@ -7,6 +7,7 @@ package org.exoplatform.mail.webui;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Utils;
@@ -17,7 +18,6 @@ import org.exoplatform.mail.webui.popup.UIPopupActionContainer;
 import org.exoplatform.mail.webui.popup.UIPopupAction;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
-import org.exoplatform.web.command.handler.GetApplicationHandler;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -47,6 +47,7 @@ import org.exoplatform.webui.form.UIFormSelectBox;
 ) 
 public class UISelectAccount extends UIForm {
   final static public String FIELD_SELECT = "accSelect" ;
+  
   public UISelectAccount() throws Exception {
     UIFormSelectBox uiSelect = new UIFormSelectBox(FIELD_SELECT, FIELD_SELECT, getValues()) ;
     uiSelect.setOnChange("SelectAccount") ;
@@ -58,19 +59,25 @@ public class UISelectAccount extends UIForm {
     String currentUser = Util.getPortalRequestContext().getRemoteUser() ;
     return mailSvr.getAccounts(currentUser) ;
   }
+  
   private List<SelectItemOption<String>> getValues() throws Exception {
     List<SelectItemOption<String>>  options = new ArrayList<SelectItemOption<String>>() ;
     for(Account acc : getAccounts()) {
       options.add(new SelectItemOption<String>(acc.getUserDisplayName(), acc.getId())) ;
     }
+    //TODO : get default account
+    if (getAccounts().size() > 0) { MailUtils.setAccountId(getAccounts().get(0).getId()); }
     return options ;
   }
+  
   public String getSelectedValue() {
     return getChild(UIFormSelectBox.class).getValue() ;
   }
+  
   public void setSelectedValue(String value) {
     getChild(UIFormSelectBox.class).setValue(value) ;
   }
+  
   public void refreshItems() throws Exception {
     getChild(UIFormSelectBox.class).getOptions().clear() ;
     getChild(UIFormSelectBox.class).setOptions(getValues()) ;
@@ -135,15 +142,15 @@ public class UISelectAccount extends UIForm {
       }
     }
   }
+  
   static  public class SelectAccountActionListener extends EventListener<UISelectAccount> {
     public void execute(Event<UISelectAccount> event) throws Exception {
       UISelectAccount uiSelectAcc = event.getSource() ;
       System.out.println("\n\n SelectAccountActionListener");
       String accId = uiSelectAcc.getSelectedValue() ;
+      MailUtils.setAccountId(accId);
       UIMailPortlet uiPortlet = uiSelectAcc.getAncestorOfType(UIMailPortlet.class) ;
-      UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet) ;
     }
   }  
-
 }

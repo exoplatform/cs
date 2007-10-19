@@ -10,8 +10,6 @@ import java.util.List;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
-import org.exoplatform.mail.service.Message;
-import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.popup.UIFolderForm;
 import org.exoplatform.mail.webui.popup.UIPopupAction;
 import org.exoplatform.mail.webui.popup.UIRenameFolderForm;
@@ -92,7 +90,7 @@ public class UIFolderContainer extends UIContainer {
       MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-      uiMessageList.setMessagePageList(mailSrv.getMessageByFolder(username, accountId, folderId));
+      uiMessageList.setMessagePageList(mailSrv.getMessagePageListByFolder(username, accountId, folderId));
       uiMessageList.setSelectedFolderId(folderId);
       uiMessageList.setSelectedTagId(null);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiFolder) ;

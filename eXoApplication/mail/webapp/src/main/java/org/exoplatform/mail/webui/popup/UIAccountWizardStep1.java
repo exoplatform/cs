@@ -24,7 +24,7 @@ import org.exoplatform.webui.form.UIFormTextAreaInput;
 public class UIAccountWizardStep1 extends UIFormInputSet implements WizardStep {
   public static final String FIELD_ACCNAME = "accountName" ;
   public static final String FIELD_ACCDESCRIPTION = "description" ;
-  private boolean isValid_ = false ;
+  public boolean isValid_ = false ;
   private List<String> infoMessage_ = new ArrayList<String>() ;
   
   public UIAccountWizardStep1(String id) {

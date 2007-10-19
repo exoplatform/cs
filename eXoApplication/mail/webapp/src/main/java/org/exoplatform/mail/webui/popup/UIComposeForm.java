@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.exoplatform.contact.service.Contact;
+import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Attachment;
 import org.exoplatform.mail.service.BufferAttachment;
@@ -52,12 +53,9 @@ import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
       @EventConfig(phase = Phase.DECODE, listeners = UIComposeForm.DiscardChangeActionListener.class),
       @EventConfig(listeners = UIComposeForm.AttachmentActionListener.class),
       @EventConfig(listeners = UIComposeForm.RemoveAttachmentActionListener.class),
-      @EventConfig(listeners = UIComposeForm.PriorityActionListener.class),
-      @EventConfig(listeners = UIComposeForm.SelectContactActionListener.class),
       @EventConfig(listeners = UIComposeForm.ToActionListener.class),
       @EventConfig(listeners = UIComposeForm.ToCCActionListener.class),
       @EventConfig(listeners = UIComposeForm.ToBCCActionListener.class),
-      @EventConfig(listeners = UIComposeForm.SaveSentFolderActionListener.class),
       @EventConfig(listeners = UIComposeForm.ChangePriorityActionListener.class)
     }
 )
@@ -76,23 +74,30 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
   final static public String ACT_REMOVE = "remove" ;
   private List<Attachment> attachments_ = new ArrayList<Attachment>() ;
   private Message message_ = null;
-  private long priority_ = 3;
+  private long priority_ = Utils.PRIORITY_NORMAL;
 
-  public List<Contact> ToContacts = new ArrayList<Contact>();
-  public List<Contact> CcContacts = new ArrayList<Contact>();
-  public List<Contact> BccContacts = new ArrayList<Contact>();
+  public List<Contact> toContacts = new ArrayList<Contact>();
+  public List<Contact> ccContacts = new ArrayList<Contact>();
+  public List<Contact> bccContacts = new ArrayList<Contact>();
   
-  public List<Contact> getToContacts(){ return ToContacts; }
-  public List<Contact> getCcContacts(){ return CcContacts; }
-  public List<Contact> getBccContacts(){ return BccContacts; }
+  public List<Contact> getToContacts(){ return toContacts; }
+  public List<Contact> getCcContacts(){ return ccContacts; }
+  public List<Contact> getBccContacts(){ return bccContacts; }
   
-  public void setToContacts(List<Contact> contactList){ ToContacts = contactList; }
-  public void setCcContacts(List<Contact> contactList){ CcContacts = contactList; }
-  public void setBccContacts(List<Contact> contactList){ BccContacts = contactList; }
+  public void setToContacts(List<Contact> contactList){ toContacts = contactList; }
+  public void setCcContacts(List<Contact> contactList){ ccContacts = contactList; }
+  public void setBccContacts(List<Contact> contactList){ bccContacts = contactList; }
     
   public UIComposeForm() throws Exception {
     UIFormInputWithActions inputSet = new UIFormInputWithActions(FIELD_FROM_INPUT); 
     List<SelectItemOption<String>>  options = new ArrayList<SelectItemOption<String>>() ;
+    String username = MailUtils.getCurrentUser();
+    MailService mailSrv = getApplicationComponent(MailService.class);
+    for(Account acc : mailSrv.getAccounts(username)) {
+      SelectItemOption<String> itemOption = new SelectItemOption<String>(acc.getUserDisplayName() + " &lt;" + acc.getEmailAddress() + 
+          "&gt;", acc.getUserDisplayName() + "<" + acc.getEmailAddress() + ">");
+      options.add(itemOption) ;
+    }
     inputSet.addUIFormInput(new UIFormSelectBox(FIELD_FROM, FIELD_FROM, options)) ;
     List<ActionData> actions = new ArrayList<ActionData>() ;
     ActionData toAction = new ActionData() ;
@@ -167,15 +172,21 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
   public List<Attachment> getAttachFileList() {
     return attachments_ ;
   }
-  public Message getMessage() { 
-    return message_; 
-  }
-  public void setMessage(Message message) {
-    this.message_ = message;
+  public Message getMessage() { return message_; }
+  public void setMessage(Message message) { 
+    this.message_ = message; 
+    fillFields(message_);
   }
   
-  public long getPriority() { return priority_; }
+  public void fillFields(Message msg) {
+    if (msg != null) {
+      setFieldSubjectValue(msg.getSubject());
+      setFieldToValue(msg.getMessageTo());
+      setFieldMessageContentValue(msg.getMessageBody());
+    }
+  }
   
+  public long getPriority() { return priority_; }  
   public void setPriority(long priority) { priority_ = priority; }
   
   public String getFieldFromValue() {
@@ -228,9 +239,11 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
     UIFormInputWithActions inputSet = getChildById(FIELD_FROM_INPUT) ;
     return inputSet.getUIFormInputInfo(FIELD_ATTACHMENTS).getValue() ;
   }
+  
   public UIFormTextAreaInput getFieldMessageContent() {
     return getUIFormTextAreaInput(FIELD_MESSAGECONTENT) ;
   }
+  
   public String getFieldMessageContentValue() {
     return getFieldMessageContent().getValue() ;
   }
@@ -240,21 +253,14 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
     uiMessageContent.setValue(value);
   }
   
-  public void resetFields() {
-    reset() ;
-  }
-  public void activate() throws Exception {
-    // TODO Auto-generated method stub
-
-  }
-  public void deActivate() throws Exception {
-    // TODO Auto-generated method stub
-
-  }
+  public void resetFields() { reset() ; }
   
-  private Message getNewMessage(Message oldMessage) throws Exception {
-    Message message = new Message();
-    if (oldMessage != null) { message = oldMessage; }
+  public void activate() throws Exception { }
+  public void deActivate() throws Exception { }
+  
+  private Message getNewMessage() throws Exception {
+    Message message = getMessage();
+    if (getMessage() == null) { message = new Message(); }
     UIMailPortlet uiPortlet = getAncestorOfType(UIMailPortlet.class);
     UISelectAccount uiSelectAcc = uiPortlet.findFirstComponentOfType(UISelectAccount.class) ;
     String accountId = uiSelectAcc.getSelectedValue() ;
@@ -274,6 +280,9 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
     message.setSubject(subject) ;
     message.setMessageTo(to) ;
     message.setMessageCc(cc) ;
+    if (message.getReceivedDate() == null) {
+      message.setReceivedDate(new Date());
+    }
     message.setMessageBcc(bcc) ;
     message.setHasStar(false);
     message.setPriority(priority);
@@ -302,7 +311,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
       String usename = uiPortlet.getCurrentUser() ;
       MailService mailSvr = uiForm.getApplicationComponent(MailService.class) ;
       UIPopupAction uiChildPopup = uiForm.getAncestorOfType(UIPopupAction.class) ;
-      Message message = uiForm.getNewMessage(null) ;      
+      Message message = uiForm.getNewMessage() ;      
       try {
         mailSvr.sendMessage(usename, message) ;
         uiChildPopup.deActivate() ;
@@ -315,7 +324,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
       }
       try {
         message.setFolders(new String[]{Utils.FD_SENT}) ;
-        mailSvr.saveMessage(usename, accountId, message, true) ;
+        mailSvr.saveMessage(usename, accountId, message, (uiForm.getMessage() != null) ? false : true) ;
       }
       catch (Exception e) {
         uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.save-sent-error", null)) ;
@@ -340,11 +349,10 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
       String usename = uiPortlet.getCurrentUser() ;
       MailService mailSvr = uiForm.getApplicationComponent(MailService.class) ;
       UIPopupAction uiChildPopup = uiForm.getAncestorOfType(UIPopupAction.class) ;
-      Message message = uiForm.getNewMessage(null) ;   
-      message.setUnread(true);
+      Message message = uiForm.getNewMessage() ;   
       try {
         message.setFolders(new String[]{Utils.FD_DRAFTS}) ;
-        mailSvr.saveMessage(usename, accountId, message, true) ;
+        mailSvr.saveMessage(usename, accountId, message, (uiForm.getMessage() != null) ? false : true) ;
       }
       catch (Exception e) {
         uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.save-draft-error", null)) ;
@@ -390,18 +398,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
       uiComposeForm.refreshUploadFileList() ;
     }
   }
-  static  public class PriorityActionListener extends EventListener<UIComposeForm> {
-    public void execute(Event<UIComposeForm> event) throws Exception {
-      UIComposeForm uiForm = event.getSource() ;
-      System.out.println(" ==========> PriorityActionListener") ;
-    }
-  }
-  static  public class SelectContactActionListener extends EventListener<UIComposeForm> {
-    public void execute(Event<UIComposeForm> event) throws Exception {
-      UIComposeForm uiComposeForm = event.getSource() ;
-      System.out.println(" ==========> SelectContactActionListener") ;
-    }
-  }
+
   static  public class ToActionListener extends EventListener<UIComposeForm> {
     public void execute(Event<UIComposeForm> event) throws Exception {
       UIComposeForm uiComposeForm = event.getSource() ;
@@ -464,13 +461,6 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
       System.out.println(" ==========> Change Priority Action Listener") ;
       String priority = event.getRequestContext().getRequestParameter(OBJECTID) ;  
       uiForm.setPriority(Long.valueOf(priority));
-    }
-  }
-  
-  static  public class SaveSentFolderActionListener extends EventListener<UIComposeForm> {
-    public void execute(Event<UIComposeForm> event) throws Exception {
-      UIComposeForm uiForm = event.getSource() ;
-      System.out.println(" ==========> SaveSentFolderActionListener") ;
     }
   }
   

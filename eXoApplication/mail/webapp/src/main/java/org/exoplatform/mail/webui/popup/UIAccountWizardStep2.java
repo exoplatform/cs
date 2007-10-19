@@ -11,7 +11,6 @@ import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.WizardStep;
 import org.exoplatform.webui.form.UIFormInputSet;
-import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
 
@@ -28,7 +27,7 @@ public class UIAccountWizardStep2 extends UIFormInputSet implements WizardStep{
   public static final String FIELD_EMAILREPLY = "emailReply" ;
   public static final String FIELD_SIGNATURE = "signature" ;
   
-  private boolean isValid_ = false ;
+  public boolean isValid_ = false ;
   private List<String> infoMessage_ = new ArrayList<String>() ;
   
   public UIAccountWizardStep2(String id) {

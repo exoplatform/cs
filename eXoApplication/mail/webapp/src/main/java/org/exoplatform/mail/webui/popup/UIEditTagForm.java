@@ -14,7 +14,6 @@ import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UIMessageList;
 import org.exoplatform.mail.webui.UISelectAccount;
-import org.exoplatform.mail.webui.UITagContainer;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -102,7 +101,6 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
       String color = uiEditTagForm.getUIFormSelectBox(COLOR).getValue(); 
 
       UIApplication uiApp = uiEditTagForm.getAncestorOfType(UIApplication.class) ;
-      UITagContainer uiTagContainer = uiMailPortlet.findFirstComponentOfType(UITagContainer.class) ;
 
       if(Utils.isEmptyField(newTagName)) {
         uiApp.addMessage(new ApplicationMessage("UITagForm.msg.name-required", null)) ;

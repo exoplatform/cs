@@ -65,14 +65,14 @@ public class UIMoveMessageForm extends UIForm implements UIPopupComponent {
     System.out.println("currentFolderName" +currentFolderName);
     for (Folder folder : folderList) {   
       if(!folder.getName().equals("Sent") && !folder.getName().equals(currentFolderName) && !folder.isPersonalFolder())
-        optionList.add(new SelectItemOption<String>("------" + folder.getName(), folder.getName()));       
+        optionList.add(new SelectItemOption<String>("------" + folder.getName(), folder.getId()));       
     }    
    
     optionList.add(new SelectItemOption<String>("To My Folders","To My Folders"));
   
     for (Folder folder : folderList) {   
       if(!folder.getName().equals("Sent") && !folder.getName().equals(currentFolderName) && folder.isPersonalFolder())
-        optionList.add(new SelectItemOption<String>("------" + folder.getName(), folder.getName()));       
+        optionList.add(new SelectItemOption<String>("------" + folder.getName(), folder.getId()));       
     } 
 
     addUIFormInput(new UIFormSelectBox(SELECT_FOLDER, SELECT_FOLDER, optionList));

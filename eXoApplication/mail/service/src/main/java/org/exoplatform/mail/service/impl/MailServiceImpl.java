@@ -14,7 +14,6 @@ import java.util.Map;
 import java.util.Properties;
 
 import javax.activation.DataHandler;
-import javax.mail.Flags;
 import javax.mail.Multipart;
 import javax.mail.Part;
 import javax.mail.Session;
@@ -22,7 +21,6 @@ import javax.mail.Store;
 import javax.mail.Transport;
 import javax.mail.URLName;
 import javax.mail.internet.InternetAddress;
-import javax.mail.internet.InternetHeaders;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
@@ -33,11 +31,11 @@ import org.exoplatform.mail.service.AccountData;
 import org.exoplatform.mail.service.Attachment;
 import org.exoplatform.mail.service.BufferAttachment;
 import org.exoplatform.mail.service.Folder;
-import org.exoplatform.mail.service.MessagePageList;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MailSetting;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.MessageFilter;
+import org.exoplatform.mail.service.MessagePageList;
 import org.exoplatform.mail.service.Tag;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.registry.JCRRegistryService;
@@ -154,8 +152,6 @@ public class MailServiceImpl implements MailService{
     props.put(Utils.SVR_INCOMING_USERNAME, messageProps.get(Utils.SVR_INCOMING_USERNAME));
     props.put(Utils.SVR_INCOMING_PASSWORD, messageProps.get(Utils.SVR_INCOMING_PASSWORD));
     props.put(Utils.SVR_SMTP_USER, messageProps.get(Utils.SVR_SMTP_USER)) ;
-    props.put(Utils.SVR_SMTP_HOST, messageProps.get(Utils.SVR_SMTP_HOST)) ;
-    props.put(Utils.SVR_SMTP_PORT, messageProps.get(Utils.SVR_SMTP_PORT)) ;
     props.put(Utils.SVR_SMTP_AUTH, "true");
     props.put(Utils.SVR_SMTP_SOCKETFACTORY_PORT, messageProps.get(Utils.SVR_SMTP_PORT));
     if (Boolean.valueOf(messageProps.get(Utils.SVR_SMTP_PORT))) {
@@ -292,8 +288,8 @@ public class MailServiceImpl implements MailService{
           }
           newMsg.setSize(mes.getSize());
           newMsg.setAttachements(new ArrayList<Attachment>());
-          String[] folders = {account.getIncomingFolder()};
-          newMsg.setFolders(folders);
+          String[] folderIds = { Utils.createFolderId(accountId, account.getIncomingFolder(), false)};
+          newMsg.setFolders(folderIds);
           Object obj = mes.getContent() ;
           if (obj instanceof Multipart) {
             setMultiPart((Multipart)obj, newMsg, username);
@@ -303,14 +299,13 @@ public class MailServiceImpl implements MailService{
           storage_.saveMessage(username, account.getId(), newMsg, true);
           messageList.add(newMsg);
           i ++ ;
-          for(String f : folders) {
-            String folderId = Utils.createFolderId(account.getId(), f, false);
+          for(String folderId : folderIds) {
             Folder fd = storage_.getFolder(username, account.getId(), folderId) ;
             if(fd == null) {
               fd = new Folder() ;
               fd.setId(folderId);
-              fd.setName(f) ;
-              fd.setLabel(f) ;
+              fd.setName(account.getIncomingFolder()) ;
+              fd.setLabel(account.getIncomingFolder()) ;
               fd.setPersonalFolder(false) ;
             }  
             fd.setNumberOfUnreadMessage(fd.getNumberOfUnreadMessage()+1) ;
@@ -382,27 +377,6 @@ public class MailServiceImpl implements MailService{
       e.printStackTrace() ;
     }
   }
-  private String getAddress(javax.mail.Address[] addr) {
-    InternetAddress[] internetAddress = ((InternetAddress[]) addr);
-    String str = "" ;
-    int i = 0;
-    if(internetAddress != null && internetAddress.length > 0) {
-      while (i < internetAddress.length) {
-        String personal = internetAddress[i].getPersonal();
-        String address = internetAddress[i].getAddress();
-        String sender =  address + "<" + address + ">";
-        if (personal != null && personal != "") 
-          sender = personal + " <" + address + ">";
-        if(str.length() < 1)  {
-          str = sender ;              
-        }else {
-          str += "," + sender ;
-        }           
-        i++ ;
-      }
-    }   
-    return str;
-  }
 
   public void createAccount(String username, Account account) throws Exception {
     saveAccount(username, account, true);
@@ -451,43 +425,17 @@ public class MailServiceImpl implements MailService{
   }
   
   public MessagePageList getMessagePagelistByTag(String username, String accountId, String tagId) throws Exception {
-    return getMessagePagelistByTag(username, accountId, tagId, null, null, true); 
-  }
-  
-  public MessagePageList getMessageByFolder(String username, String accountId, String folderName) throws Exception {
-    return getMessageByFolder(username, accountId, folderName, null, null, true);
-  }
-  
-  public MessagePageList getMessagePagelistByTag(String username, String accountId, String tagId, String viewQuery) throws Exception {
-    return getMessagePagelistByTag(username, accountId, tagId, viewQuery, null, true); 
-  }
-  
-  public MessagePageList getMessageByFolder(String username, String accountId, String folderName, String viewQuery) throws Exception {
-    return getMessageByFolder(username, accountId, folderName, viewQuery, null, true);
-  }
-  
-  public MessagePageList getMessagePagelistByTag(String username, String accountId, String tagId, String viewQuery, String orderBy, boolean isAscending) 
-      throws Exception {
     MessageFilter filter = new MessageFilter("Filter By Tag") ;
-    filter.setViewQuery(viewQuery);
-    filter.setOrderBy(orderBy);
-    filter.setAscending(isAscending);
-    Tag tag = getTag(username, accountId, tagId) ;
-    filter.setTag(new String[]{tag.getId()} ) ;
     filter.setAccountId(accountId) ;
-    return getMessages(username, filter) ;    
+    filter.setTag(new String[]{tagId} ) ;
+    return getMessages(username, filter) ;   
   }
   
-  public MessagePageList getMessageByFolder(String username, String accountId, String folderName, String viewQuery, String orderBy, boolean isAscending)
-      throws Exception {
+  public MessagePageList getMessagePageListByFolder(String username, String accountId, String folderId) throws Exception {
     MessageFilter filter = new MessageFilter("Filter By Folder") ;
-    filter.setViewQuery(viewQuery);
-    filter.setOrderBy(orderBy);
-    filter.setAscending(isAscending);
-    Folder folder = getFolder(username, accountId, folderName);
-    filter.setFolder(new String[]{folder.getName()} ) ;
     filter.setAccountId(accountId) ;
-    return getMessages(username, filter) ;    
+    filter.setFolder(new String[]{folderId} ) ;
+    return getMessages(username, filter) ;   
   }
   
   public MailSetting getMailSetting(String username) throws Exception {

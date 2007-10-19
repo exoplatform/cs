@@ -26,9 +26,9 @@ import org.exoplatform.webui.form.UIFormStringInput;
 public class UIAccountWizardStep3 extends UIFormInputSet  implements WizardStep{
   
   public static final String FIELD_SERVERTYPE = "serverType" ;
-  public static final String FIELD_INCOMINGSERVER = "incomingServer" ;
-  public static final String FIELD_INCOMINGPORT = "incomeingPort" ;
-  public static final String FIELD_OUTGOINGSERVER = "outgoingServer" ;
+  public static final String FIELD_INCOMING_SERVER = "incomingServer" ;
+  public static final String FIELD_INCOMINGPORT = "incomingPort" ;
+  public static final String FIELD_OUTGOING_SERVER = "outgoingServer" ;
   public static final String FIELD_OUTGOINGPORT = "outgoingPort" ;
   public static final String FIELD_USESSL = "isSsl".intern() ;
   public static final String FIELD_STOREFOLDER = "storeFolder" ;
@@ -42,9 +42,8 @@ public class UIAccountWizardStep3 extends UIFormInputSet  implements WizardStep{
   public static final String DEFAULT_SERVER_FOLDER = "Inbox".intern() ;
   public static final String DEFAULT_IMAP_PORT = "143".intern() ;
   public static final String DEFAULT_IMAPSSL_PORT = "993".intern() ;
+  public boolean isValid_ = false ;
   
-  
-  private boolean isValid_ = false ;
   private List<String> infoMessage_ = new ArrayList<String>() ;
   
   public UIAccountWizardStep3(String id){
@@ -56,9 +55,9 @@ public class UIAccountWizardStep3 extends UIFormInputSet  implements WizardStep{
     addChild(new UIFormCheckBoxInput<Boolean>(FIELD_USESSL, null,null)) ;
     UIFormCheckBoxInput uiCheckBox = getUIFormCheckBoxInput(FIELD_USESSL) ;
     uiCheckBox.setOnChange(UIAccountCreation.ACT_CHANGE_SSL) ;
-    addChild(new UIFormStringInput(FIELD_INCOMINGSERVER, null, null)) ;
+    addChild(new UIFormStringInput(FIELD_INCOMING_SERVER, null, null)) ;
     addChild(new UIFormStringInput(FIELD_INCOMINGPORT, null, null)) ;
-    addChild(new UIFormStringInput(FIELD_OUTGOINGSERVER, null, null)) ;
+    addChild(new UIFormStringInput(FIELD_OUTGOING_SERVER, null, null)) ;
     addChild(new UIFormStringInput(FIELD_OUTGOINGPORT, null, null)) ;
     addChild(new UIFormStringInput(FIELD_STOREFOLDER, null,null)) ;
     setDefaultValue(uiSelect.getValue(), uiCheckBox.isChecked()) ;
@@ -108,8 +107,8 @@ public class UIAccountWizardStep3 extends UIFormInputSet  implements WizardStep{
   protected void lockFields(boolean isLock){
     boolean isEditable = !isLock ;
     getUIFormSelectBox(FIELD_SERVERTYPE).setEnable(isEditable) ;
-    getUIStringInput(FIELD_INCOMINGSERVER).setEditable(isEditable) ;
-    getUIStringInput(FIELD_OUTGOINGSERVER).setEditable(isEditable) ;
+    getUIStringInput(FIELD_INCOMING_SERVER).setEditable(isEditable) ;
+    getUIStringInput(FIELD_OUTGOING_SERVER).setEditable(isEditable) ;
     getUIStringInput(FIELD_STOREFOLDER).setEditable(isEditable) ;
   }
   
@@ -139,10 +138,10 @@ public class UIAccountWizardStep3 extends UIFormInputSet  implements WizardStep{
   }
 
   protected String getIncomingServer() {
-    return getUIStringInput(FIELD_INCOMINGSERVER).getValue() ;
+    return getUIStringInput(FIELD_INCOMING_SERVER).getValue() ;
   }
   protected void setIncomingServer(String value) {
-    getUIStringInput(FIELD_INCOMINGSERVER).setValue(value) ;
+    getUIStringInput(FIELD_INCOMING_SERVER).setValue(value) ;
   }
   protected String getIncomingPort() {
     return getUIStringInput(FIELD_INCOMINGPORT).getValue() ;
@@ -151,10 +150,10 @@ public class UIAccountWizardStep3 extends UIFormInputSet  implements WizardStep{
     getUIStringInput(FIELD_INCOMINGPORT).setValue(value) ;
   }
   protected String getOutgoingServer() {
-    return getUIStringInput(FIELD_OUTGOINGSERVER).getValue() ;
+    return getUIStringInput(FIELD_OUTGOING_SERVER).getValue() ;
   }
   protected void setOutgoingServer(String value) {
-    getUIStringInput(FIELD_OUTGOINGSERVER).setValue(value) ;
+    getUIStringInput(FIELD_OUTGOING_SERVER).setValue(value) ;
   }
   protected String getOutgoingPort() {
     return getUIStringInput(FIELD_OUTGOINGPORT).getValue() ;

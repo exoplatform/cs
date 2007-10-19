@@ -4,7 +4,7 @@
 %>
 
 <div class="MailWorkingDetails SpliterContainer" id="<%=uicomponent.getId()%>">
-	<div class="UIMessageArea SpliterResizableArea">		
+	<div class="UIMessageArea SpliterResizableListArea">		
 		<%uicomponent.renderChild(UIMessageList.class);%>
 	</div>
 	<div class="ResizeReadingPane" onmousedown="eXo.core.Spliter.exeRowSplit(event, this);"><span></span></div>

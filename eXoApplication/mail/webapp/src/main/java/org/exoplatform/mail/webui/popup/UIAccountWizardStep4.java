@@ -27,7 +27,7 @@ public class UIAccountWizardStep4 extends UIFormInputSet implements WizardStep {
   public static final String FIELD_SAVEPASSWORD = "savePassword" ;
 
   private List<String> infoMessage_ = new ArrayList<String>() ;
-  private boolean isValid_ = false ;
+  public boolean isValid_ = false ;
   public UIAccountWizardStep4(String id) throws Exception {
     setId(id) ;
     setComponentConfig(getClass(), null) ; 

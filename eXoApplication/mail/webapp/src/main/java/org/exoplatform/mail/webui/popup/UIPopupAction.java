@@ -4,9 +4,6 @@
  **************************************************************************/
 package org.exoplatform.mail.webui.popup;
 
-import java.io.StringWriter;
-
-import org.exoplatform.mail.webui.popup.UIPopupComponent;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIComponent;

@@ -28,7 +28,7 @@ public class UIAccountWizardStepIntro extends UIFormInputSet implements WizardSt
   public static final String ITEM_EDIT = "false" ;
   public static final String FIELD_SELECT = "selectActions" ;
   public static final String FIELD_ACCOUNTS = "acoounts" ;
-  private boolean isValid_ = false ;
+  public boolean isValid_ = false ;
   private List<String> infoMessage_ = new ArrayList<String>() ;
 
   public UIAccountWizardStepIntro(String id) throws Exception {

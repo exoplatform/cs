@@ -29,7 +29,7 @@ public class UIAccountWizardStep5 extends UIFormInputSet implements WizardStep {
     addChild(new UIFormInputInfo(UIAccountWizardStep1.FIELD_ACCNAME, null, null)) ;
     addChild(new UIFormInputInfo(UIAccountWizardStep2.FIELD_OUTGOINGNAME, null, null)) ;
     addChild(new UIFormInputInfo(UIAccountWizardStep2.FIELD_EMAILADDRESS, null, null)) ;
-    addChild(new UIFormInputInfo(UIAccountWizardStep3.FIELD_INCOMINGSERVER, null, null)) ;
+    addChild(new UIFormInputInfo(UIAccountWizardStep3.FIELD_INCOMING_SERVER, null, null)) ;
     addChild(new UIFormInputInfo(UIAccountWizardStep3.FIELD_SERVERTYPE, null, null)) ;
     addChild(new UIFormInputInfo(UIAccountWizardStep3.FIELD_STOREFOLDER, null, null)) ;
     addChild(new UIFormCheckBoxInput<Boolean>(FIELD_GETMAIL, null, null)) ;
@@ -71,7 +71,7 @@ public class UIAccountWizardStep5 extends UIFormInputSet implements WizardStep {
     getUIFormInputInfo(UIAccountWizardStep2.FIELD_EMAILADDRESS).setValue(value) ;
   }
   protected void setFieldAccPOP(String value) {
-    getUIFormInputInfo(UIAccountWizardStep3.FIELD_INCOMINGSERVER).setValue(value) ;
+    getUIFormInputInfo(UIAccountWizardStep3.FIELD_INCOMING_SERVER).setValue(value) ;
   }
   protected void setFieldAccServerType(String value) {
     getUIFormInputInfo(UIAccountWizardStep3.FIELD_SERVERTYPE).setValue(value) ;

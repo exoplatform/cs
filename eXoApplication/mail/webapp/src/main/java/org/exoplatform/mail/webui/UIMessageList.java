@@ -9,10 +9,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.exoplatform.mail.MailUtils;
-import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
+import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.MessagePageList;
 import org.exoplatform.mail.service.Tag;
 import org.exoplatform.mail.service.Utils;
@@ -26,7 +26,6 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
-import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
@@ -80,6 +79,7 @@ public class UIMessageList extends UIForm {
   private String sortedBy_ = null;
   private boolean isAscending_ = true;
   private MessagePageList pageList_ = null ;
+  private MessageFilter msgFilter_ = new MessageFilter("Filter Message");
   private LinkedHashMap<String, Message> messageList_ = new LinkedHashMap<String, Message>();
   
   final static public String INFO = "INFO" ;
@@ -105,6 +105,8 @@ public class UIMessageList extends UIForm {
   public String getViewQuery() {return viewQuery_ ;}
   public void setViewQuery(String view) {viewQuery_ = view ;}
   
+  public MessageFilter getMessageFilter() { return msgFilter_; }
+  public void setMessageFilter(MessageFilter msgFilter) { msgFilter_ = msgFilter; }
   
   public String getSortedBy() { return sortedBy_; }
   public void setSortedBy(String sortedBy) { sortedBy_ = sortedBy; }
@@ -194,15 +196,24 @@ public class UIMessageList extends UIForm {
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       MailService mailServ = uiPortlet.getApplicationComponent(MailService.class);
       Message msg = mailServ.getMessageById(username, msgId, accountId);
-      if (msg.isUnread()) {
-        msg.setUnread(false);
-        mailServ.saveMessage(username, accountId, msg, false);
+      if (uiMessageList.getSelectedFolderId().equalsIgnoreCase(Utils.createFolderId(accountId, Utils.FD_DRAFTS, false))) {
+        UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
+        UIPopupActionContainer uiPopupContainer = uiPopupAction.activate(UIPopupActionContainer.class, 1000) ;
+        UIComposeForm uiComposeForm = uiPopupContainer.createUIComponent(UIComposeForm.class, null, null);
+        uiComposeForm.setMessage(msg);
+        uiPopupContainer.addChild(uiComposeForm) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;  
+      } else {
+        if (msg.isUnread()) {
+          msg.setUnread(false);
+          mailServ.saveMessage(username, accountId, msg, false);
+        }
+        uiMessageList.setSelectedMessageId(msgId);
+        uiMessagePreview.setMessage(msg);
+        uiMessageList.updateList();
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageArea);
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer);        
       }
-      uiMessageList.setSelectedMessageId(msgId);
-      uiMessagePreview.setMessage(msg);
-      uiMessageList.updateList();
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageArea);
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer);
     }
   }
   
@@ -311,11 +322,15 @@ public class UIMessageList extends UIForm {
     setViewQuery(viewQuery);
     String username = uiPortlet.getCurrentUser();
     String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-    if (getSelectedFolderId() != null) {
-      setMessagePageList(mailSrv.getMessageByFolder(username, accountId, getSelectedFolderId(), getViewQuery()));
-    } else if (getSelectedTagId() != null) {
-      setMessagePageList(mailSrv.getMessagePagelistByTag(username, accountId, getSelectedTagId(), getViewQuery()));
-    }
+    
+    MessageFilter msgFilter = getMessageFilter();
+    msgFilter.setAccountId(accountId);
+    msgFilter.setOrderBy(getSortedBy());
+    msgFilter.setAscending(isAscending_);
+    msgFilter.setViewQuery(getViewQuery());
+    msgFilter.setFolder((getSelectedFolderId() == null) ? null : new String[] {getSelectedFolderId()});
+    msgFilter.setTag((getSelectedTagId() == null) ? null : new String[] {getSelectedTagId()});
+    setMessagePageList(mailSrv.getMessages(username, msgFilter));
     updateList();
   }
 
@@ -331,23 +346,15 @@ public class UIMessageList extends UIForm {
       UIPopupActionContainer uiPopupContainer = uiPopupAction.activate(UIPopupActionContainer.class, 1000) ;
       
       UIComposeForm uiComposeForm = uiPopupContainer.createUIComponent(UIComposeForm.class, null, null);
-      List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
       MailService mailSvr = uiMessageList.getApplicationComponent(MailService.class) ;
       String username = uiPortlet.getCurrentUser() ;
       if (uiMessageList.getSelectedMessageId() != null) {
         String messageId = uiMessageList.getSelectedMessageId();
         Message message = mailSvr.getMessageById(username, messageId, accId);
-        uiComposeForm.setFieldSubjectValue("Re: " + message.getSubject());
+        uiComposeForm.setMessage(message);
         uiComposeForm.setFieldToValue(message.getFrom());
-        uiComposeForm.setFieldMessageContentValue(message.getMessageBody());
+        uiComposeForm.setFieldSubjectValue("Re: " + message.getSubject());
       }
-      for(Account acc : mailSvr.getAccounts(username)) {
-        SelectItemOption<String> itemOption = new SelectItemOption<String>(acc.getUserDisplayName() + " &lt;" + acc.getEmailAddress() + 
-            "&gt;", acc.getUserDisplayName() + "<" + acc.getEmailAddress() + ">");
-        if (acc.getId() == accId) itemOption.setSelected(true);
-        options.add(itemOption) ;
-      }
-      uiComposeForm.setFieldFromValue(options) ;
       uiPopupContainer.addChild(uiComposeForm) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }
@@ -365,24 +372,19 @@ public class UIMessageList extends UIForm {
       UIPopupActionContainer uiPopupContainer = uiPopupAction.activate(UIPopupActionContainer.class, 1000) ;
       
       UIComposeForm uiComposeForm = uiPopupContainer.createUIComponent(UIComposeForm.class, null, null);
-      List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
       MailService mailSvr = uiMessageList.getApplicationComponent(MailService.class) ;
       String username = uiPortlet.getCurrentUser() ;
       if (uiMessageList.getSelectedMessageId() != null) {
         String messageId = uiMessageList.getSelectedMessageId();
         Message message = mailSvr.getMessageById(username, messageId, accId);
+        uiComposeForm.setMessage(message);
         uiComposeForm.setFieldSubjectValue("Re: " + message.getSubject());
-        uiComposeForm.setFieldToValue(message.getFrom() + "," + 
-            message.getMessageCc() + "," + message.getMessageBcc());
+        String replyAll = message.getFrom();
+        if (message.getMessageCc() != null) replyAll += "," + message.getMessageCc();
+        if (message.getMessageBcc() != null) replyAll += "," + message.getMessageBcc();
+        uiComposeForm.setFieldToValue(replyAll);
         uiComposeForm.setFieldMessageContentValue(message.getMessageBody());
       }
-      for(Account acc : mailSvr.getAccounts(username)) {
-        SelectItemOption<String> itemOption = new SelectItemOption<String>(acc.getUserDisplayName() + " &lt;" + acc.getEmailAddress() + 
-            "&gt;", acc.getUserDisplayName() + "<" + acc.getEmailAddress() + ">");
-        if (acc.getId() == accId) itemOption.setSelected(true);
-        options.add(itemOption) ;
-      }
-      uiComposeForm.setFieldFromValue(options) ;
       uiPopupContainer.addChild(uiComposeForm) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }
@@ -400,12 +402,13 @@ public class UIMessageList extends UIForm {
       UIPopupActionContainer uiPopupContainer = uiPopupAction.activate(UIPopupActionContainer.class, 1000) ;
       
       UIComposeForm uiComposeForm = uiPopupContainer.createUIComponent(UIComposeForm.class, null, null);
-      List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
+
       MailService mailSvr = uiMessageList.getApplicationComponent(MailService.class) ;
       String username = uiPortlet.getCurrentUser() ;
       if (uiMessageList.getSelectedMessageId() != null) {
         String messageId = uiMessageList.getSelectedMessageId();
         Message message = mailSvr.getMessageById(username, messageId, accId);
+        uiComposeForm.setMessage(message);
         uiComposeForm.setFieldSubjectValue("Fwd: " + message.getSubject());
         String forwardedText = "\n\n\n-------- Original Message --------\n" +
             "Subject: " + message.getSubject() + "\nDate: " + message.getSendDate() + 
@@ -415,13 +418,6 @@ public class UIMessageList extends UIForm {
         message.setMessageBody(forwardedText);
         uiComposeForm.setFieldMessageContentValue(message.getMessageBody());
       }
-      for(Account acc : mailSvr.getAccounts(username)) {
-        SelectItemOption<String> itemOption = new SelectItemOption<String>(acc.getUserDisplayName() + " &lt;" + acc.getEmailAddress() + 
-            "&gt;", acc.getUserDisplayName() + "<" + acc.getEmailAddress() + ">");
-        if (acc.getId() == accId) itemOption.setSelected(true);
-        options.add(itemOption) ;
-      }
-      uiComposeForm.setFieldFromValue(options) ;
       uiPopupContainer.addChild(uiComposeForm) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }
@@ -439,16 +435,11 @@ public class UIMessageList extends UIForm {
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       List<Message> checkedMessageList = uiMessageList.getCheckedMessage();
-      List<String> messageIdList = new ArrayList<String>();
       for (Message message : checkedMessageList) {
-        messageIdList.add(message.getId());
+        message.setFolders(new String[] { Utils.createFolderId(accountId, Utils.FD_TRASH, false) });
+        mailSrv.saveMessage(username, accountId, message, false);
       }
-      try {
-        mailSrv.removeMessage(username, accountId, messageIdList);
-        uiMessageList.updateList(uiMessageList.getMessagePageList().getCurrentPage());
-      } catch (Exception e) {
-        System.err.println("Error : Exception occur while delete message");
-      }
+      uiMessageList.updateList();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageArea);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiTags);
@@ -609,11 +600,14 @@ public class UIMessageList extends UIForm {
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       uiMessageList.setAscending(!uiMessageList.isAscending_);
       uiMessageList.setSortedBy(sortedBy);
-      if (uiMessageList.getSelectedFolderId() != null) {
-        uiMessageList.setMessagePageList(mailSrv.getMessageByFolder(username, accountId, uiMessageList.getSelectedFolderId(), uiMessageList.getViewQuery(), uiMessageList.getSortedBy(), uiMessageList.isAscending_));
-      } else if (uiMessageList.getSelectedTagId() != null) {
-        uiMessageList.setMessagePageList(mailSrv.getMessagePagelistByTag(username, accountId, uiMessageList.getSelectedTagId(), uiMessageList.getViewQuery(), uiMessageList.getSortedBy(), uiMessageList.isAscending_));
-      }
+      MessageFilter msgFilter = uiMessageList.getMessageFilter();
+      msgFilter.setAccountId(accountId);
+      msgFilter.setOrderBy(uiMessageList.getSortedBy());
+      msgFilter.setAscending(uiMessageList.isAscending_);
+      msgFilter.setViewQuery(uiMessageList.getViewQuery());
+      msgFilter.setFolder((uiMessageList.getSelectedFolderId() == null) ? null : new String[] {uiMessageList.getSelectedFolderId()});
+      msgFilter.setTag((uiMessageList.getSelectedTagId() == null) ? null : new String[] {uiMessageList.getSelectedTagId()});
+      uiMessageList.setMessagePageList(mailSrv.getMessages(username, msgFilter));
       uiMessageList.updateList();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
