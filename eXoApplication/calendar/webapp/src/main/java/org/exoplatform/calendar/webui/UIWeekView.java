@@ -16,6 +16,7 @@ import java.util.Map;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.EventQuery;
+import org.exoplatform.calendar.webui.popup.UIPopupAction;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -37,8 +38,10 @@ import org.exoplatform.webui.event.EventListener;
       @EventConfig(listeners = UICalendarView.DeleteEventActionListener.class),
       @EventConfig(listeners = UICalendarView.GotoDateActionListener.class),
       @EventConfig(listeners = UICalendarView.AddCategoryActionListener.class),
-      @EventConfig(listeners = UIWeekView.MoveNextActionListener.class), 
       @EventConfig(listeners = UICalendarView.SwitchViewActionListener.class),
+      @EventConfig(listeners = UIWeekView.QuickAddNewEventActionListener.class),  
+      @EventConfig(listeners = UIWeekView.QuickAddNewTaskActionListener.class),  
+      @EventConfig(listeners = UIWeekView.MoveNextActionListener.class), 
       @EventConfig(listeners = UIWeekView.MovePreviousActionListener.class)
     }
 
@@ -124,7 +127,27 @@ public class UIWeekView extends UICalendarView {
   protected Map<String, CalendarEvent>  getEventList() {
     return allWeekData_ ;
   }
-
+  static  public class QuickAddNewEventActionListener extends EventListener<UIWeekView> {
+    public void execute(Event<UIWeekView> event) throws Exception {
+      UIWeekView calendarview = event.getSource() ;
+      UICalendarPortlet uiPortlet = calendarview.getAncestorOfType(UICalendarPortlet.class) ;
+      UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
+      String time = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      
+      event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
+    }
+  }
+  static  public class QuickAddNewTaskActionListener extends EventListener<UIWeekView> {
+    public void execute(Event<UIWeekView> event) throws Exception {
+      UIWeekView calendarview = event.getSource() ;
+      UICalendarPortlet uiPortlet = calendarview.getAncestorOfType(UICalendarPortlet.class) ;
+      UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
+      String time = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      
+      event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
+    }
+  }
+  
   static  public class MoveNextActionListener extends EventListener<UIWeekView> {
     public void execute(Event<UIWeekView> event) throws Exception {
       UIWeekView calendarview = event.getSource() ;
