@@ -631,6 +631,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
           Calendar cal = Calendar.getInstance() ;
           cal.setTime(from) ;
           cal.set(Calendar.HOUR, 0) ;
+          cal.set(Calendar.MINUTE, 0) ;
           from = cal.getTime() ;
           cal.add(Calendar.DATE, 1) ;
           to = cal.getTime() ;

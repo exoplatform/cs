@@ -35,11 +35,11 @@ import org.exoplatform.webui.form.UIFormStringInput;
 )
 public class UISearchForm extends UIForm {
   final static  private String FIELD_SEARCHVALUE = "inputValue" ;
-  
+
   public UISearchForm() {
     addChild(new UIFormStringInput(FIELD_SEARCHVALUE, FIELD_SEARCHVALUE, null)) ;
   }
-  
+
   static  public class SearchActionListener extends EventListener<UISearchForm> {
     public void execute(Event<UISearchForm> event) throws Exception {
       UISearchForm uiForm = event.getSource() ;
@@ -60,8 +60,11 @@ public class UISearchForm extends UIForm {
       calendarViewContainer.setRenderedChild("UIListContainer") ;
       UIListView uiListView = calendarViewContainer.findFirstComponentOfType(UIListView.class) ;
       uiListView.update(resultPageList) ;
+      uiListView.setViewType(UIListView.TYPE_BOTH) ;
       uiListView.setDisplaySearchResult(true) ;
-      uiListView.setShowEventAndTask(true) ;            
+      uiListView.setSelectedEvent(null) ;
+      calendarViewContainer.findFirstComponentOfType(UIPreview.class).setEvent(null) ;
+      //uiListView.setShowEventAndTask(true) ;            
       event.getRequestContext().addUIComponentToUpdateByAjax(calendarViewContainer) ;
     }
   }

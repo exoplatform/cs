@@ -1,15 +1,8 @@
 <%
 	uiform.begin()
-	boolean isShow = false ;
-	if(uicomponent.isDisplaySearchResult()) {
-		isDisplayResult = true ;
-		%><div class="Result">Search result</div><%
-	}else {
-		isShow = true ;
-		_ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");
-	}
-	
+	_ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");
 %>
+<div class="Result">Tasks view</div>
 <div class="UITaskView">
 		<div class="TaskListContainer">
 			<div class="UIListView">
@@ -17,11 +10,7 @@
 					<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
   					<thead>
   						<tr>
-  							<% if(isShow) {
-									%>
-										<th style="width: 30px;"><input type="checkbox" class="checkbox" title="Check all" value="4"/></th>
-									<%  							
-  							}%>
+								<th style="width: 30px;"><input type="checkbox" class="checkbox" title="Check all" value="4"/></th>
   			       	<th style="width: 24px;"><div class="AttachmentIcon" title="Attachment of event"><span></span></div></th>
   		          <th >Task</th>
   		          <th >Priority</th>
@@ -33,14 +22,14 @@
   	 	      	<tbody>
 								<%
 			  					for(task in uicomponent.getEvents()){
+			  					attachCss = "" ;
+			  					if(!task.getAttachment().isEmpty()) {
+			  						attachCss = "AttachmentIcon" ;
+			  					}
 		  					%>
 			  					<tr>
-			  						<% if(isShow) {
-											%>
-												<td><%=uicomponent.renderField(uicomponent.getChildById(task.getId()))%></td>
-											<%  							
-		  							}%>
-	  					      <td style="padding: 0px;"><div class="AttachmentIcon" ><span></span></div></td>
+										<td><%uicomponent.renderField(uicomponent.getChildById(task.getId()))%></td>
+	  					      <td style="padding: 0px;"><div class="$attachCss" ><span></span></div></td>
 		  							<td class="text">
 		  								<a href="<%=uicomponent.event("ViewDetail", task.getId())%>" class="ControlButton">
 												<%=task.getSummary()%>
@@ -48,8 +37,14 @@
 		  							</td>
 										<td class="text"><%=task.getPriority()%></td>
 										<td class="text"><%=task.getEventState()%></td>
-										<td class="text"><%=task.getToDateTime().toString()%></td>
-										<td class="text">Admin group</td>
+										<td class="text">
+										<%
+										 def test = task.getToDateTime().getTime() - task.getFromDateTime().getTime();
+										 long days = (((test/1000)/60)/60)/24 ; 
+										%>
+										$days days
+										</td>
+										<td class="text"><%=task.getTaskDelegator()%></td>
 									</tr>		
 		  					<%
 			  					}
@@ -60,4 +55,6 @@
 			</div>			
 		</div>
 	</div>	
+	<%_ctx.include("app:/templates/calendar/webui/UIPageIterator.gtmpl");%>
+	<div class="ResizeReadingPane"><span></span></div>
 <%uiform.end()%>

@@ -291,12 +291,6 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       return CalendarUtils.getDisplayTimes(timeFormat, timeInterval,0, 24*(60/timeInterval)) ;
     }
   }
-  static  public class RefreshActionListener extends EventListener<UICalendarView> {
-    public void execute(Event<UICalendarView> event) throws Exception {
-      UICalendarView uiForm = event.getSource() ;
-      System.out.println(" ===========> RefreshActionListener") ;
-    }
-  }
   static  public class AddEventActionListener extends EventListener<UICalendarView> {
     public void execute(Event<UICalendarView> event) throws Exception {
       UICalendarView uiForm = event.getSource() ;
@@ -333,6 +327,23 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
           try {
             uiForm.removeEvents(((UIMonthView)uiForm).getSelectedEvents()) ;
             ((UIMonthView)uiForm).refreshEvents() ;
+            uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.delete-event-successfully", null)) ;
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          } catch (Exception e) {
+            e.printStackTrace() ;
+            uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.delete-event-error", null, ApplicationMessage.WARNING)) ;
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          }
+        }
+      } else if(uiForm instanceof UIListView) {
+        List<CalendarEvent> list = ((UIListView)uiForm).getSelectedEvents() ;
+        if(list.isEmpty()) {
+          uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.check-box-required", null)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        } else {
+          try {
+            uiForm.removeEvents(((UIListView)uiForm).getSelectedEvents()) ;
+            ((UIListView)uiForm).refresh() ;
             uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.delete-event-successfully", null)) ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           } catch (Exception e) {
@@ -567,6 +578,11 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       String viewType = event.getRequestContext().getRequestParameter(OBJECTID);
       uiView.setViewType(viewType) ;
       uiView.refresh() ;
+      UIListContainer uiListContainer = uiView.getAncestorOfType(UIListContainer.class) ;
+      if(uiListContainer != null) { 
+        uiListContainer.getChild(UIPreview.class).setEvent(null) ; 
+      }
+      System.out.println("\n\n uiview.getParent() " + uiView.getParent());
       event.getRequestContext().addUIComponentToUpdateByAjax(uiView.getParent());
     }
   }

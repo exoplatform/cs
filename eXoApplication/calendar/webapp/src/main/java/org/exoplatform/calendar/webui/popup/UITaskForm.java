@@ -57,7 +57,6 @@ import org.exoplatform.webui.form.UIFormTabPane;
 public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISelector{
   final public static String TAB_TASKDETAIL = "eventDetail".intern() ;
   final public static String TAB_EVENTREMINDER = "eventReminder".intern() ;
-  final public static String FIELD_STATUS = "status".intern() ;
   final public static String ITEM_PUBLIC = "public".intern() ;
   final public static String ITEM_PRIVATE = "private".intern() ;
   final public static String ITEM_AVAILABLE = "available".intern() ;
@@ -68,7 +67,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
   final public static String ACT_ADDEMAIL = "AddEmailAddress".intern() ;
   final public static String ACT_ADDCATEGORY = "AddCategory".intern() ;
   final public static String ACT_SELECTUSER = "SelectUser".intern() ;
-  
+
   private boolean isAddNew_ = true ;
   private CalendarEvent calendarEvent_ = null ;
   final public static String TIME_PATTERNS_12 ="hh:mm a" ;
@@ -162,13 +161,14 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
     options.add(new SelectItemOption<String>(ITEM_PRIVATE, ITEM_PRIVATE)) ;
     return options ;
   }
-  private List<SelectItemOption<String>> getStatusValue() {
-    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-    options.add(new SelectItemOption<String>(ITEM_AVAILABLE, ITEM_AVAILABLE)) ;
-    options.add(new SelectItemOption<String>(ITEM_BUSY, ITEM_BUSY)) ;
-    return options ;
+  protected String getStatus() {
+    UITaskDetailTab uiTaskDetailTab = getChildById(TAB_TASKDETAIL) ;
+    return uiTaskDetailTab.getUIFormSelectBox(UITaskDetailTab.FIELD_STATUS).getValue() ;
   }
-
+  protected void setStatus(String value) {
+    UITaskDetailTab uiTaskDetailTab = getChildById(TAB_TASKDETAIL) ;
+    uiTaskDetailTab.getUIFormSelectBox(UITaskDetailTab.FIELD_STATUS).setValue(value) ;
+  }
   public String[] getActions() {
     return new String[]{"AddAttachment","Save", "Cancel"} ;
   }
@@ -532,15 +532,17 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
           Calendar cal = Calendar.getInstance() ;
           cal.setTime(from) ;
           cal.set(Calendar.HOUR, 0) ;
+          cal.set(Calendar.MINUTE, 0) ;
           from = cal.getTime() ;
           cal.add(Calendar.DATE, 1) ;
           to = cal.getTime() ;
         }
         calendarEvent.setFromDateTime(from) ;
         calendarEvent.setToDateTime(to);
-        
+
         calendarEvent.setCalendarId(calendarId) ;
         calendarEvent.setEventCategoryId(uiForm.getEventCategory()) ;
+        calendarEvent.setEventState(uiForm.getStatus()) ;
         calendarEvent.setLocation(uiForm.getEventDelegation()) ;
         calendarEvent.setPriority(uiForm.getEventPriority()) ; 
         calendarEvent.setAttachment(uiForm.getAttachments(calendarEvent.getId(), uiForm.isAddNew_)) ;

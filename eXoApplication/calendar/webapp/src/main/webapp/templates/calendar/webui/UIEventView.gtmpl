@@ -1,22 +1,13 @@
 <%
 	uiform.begin()
-	boolean isShow = false ;
-	if(uicomponent.isDisplaySearchResult()) {
-		%><div class="Result">Search result</div><%
-	}else {
-		isShow = true ;
-		_ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");
-	}
+	_ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");
 %>
+	<div class="Result">Events view</div>
 	<div class="UIListView">
 		<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
   		<thead>
   			<tr>
-  			  <% if(isShow) {
-						%>
-							<th style="width: 30px;"><input type="checkbox" class="checkbox" title="Check all" value="4"/></th>
-						<%  							
-  				}%>
+					<th style="width: 30px;"><input type="checkbox" class="checkbox" title="Check all" value="4"/></th>
   			  <th style="width: 24px;"><div class="AttachmentIcon" title="Attachment of event"><span></span></div></th>
   		    <th >Event</th>
  	      	<th >Start</th>
@@ -28,11 +19,7 @@
   					for(event in uicomponent.getEvents()){
   				%>
   						<tr>
-  							<%if(isShow) {
-									%>
-										<td><%=uicomponent.renderField(uicomponent.getChildById(event.getId()))%></td>
-									<%  							
-  							}%>
+								<td><%uicomponent.renderField(uicomponent.getChildById(event.getId()))%></td>
 		  					<td style="padding: 0px;"><div class="AttachmentIcon" ><span></span></div></td>
 		  					<td class="text">
 									<a href="<%=uicomponent.event("ViewDetail", event.getId())%>" class="ControlButton">
@@ -48,5 +35,6 @@
   	   	</tbody>
 		</table>
 	</div>
-<div class="ResizeReadingPane"><span></span></div>
+	<%_ctx.include("app:/templates/calendar/webui/UIPageIterator.gtmpl");%>
+	<div class="ResizeReadingPane"><span></span></div>
 <%uiform.end()%>

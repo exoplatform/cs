@@ -19,6 +19,7 @@ import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
 import org.exoplatform.calendar.webui.UIListView;
+import org.exoplatform.calendar.webui.UIPreview;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -121,12 +122,15 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
       UIListView uiListView = calendarViewContainer.findFirstComponentOfType(UIListView.class) ;
       uiListView.update(resultPageList) ;
       uiListView.setDisplaySearchResult(true) ;
-      if(query.getEventType() == null || query.getEventType().equals("")) uiListView.setShowEventAndTask(true) ;
+      uiListView.setSelectedEvent(null) ;
+      calendarViewContainer.findFirstComponentOfType(UIPreview.class).setEvent(null) ;
+      /*if(query.getEventType() == null || query.getEventType().equals("")) 
+        uiListView.setShowEventAndTask(true) ;
       else{
         uiListView.setShowEventAndTask(false) ;
         if(query.getEventType().equals(CalendarEvent.TYPE_EVENT)) uiListView.isShowEvent_ = true ;
         else uiListView.isShowEvent_ = false ;
-      } 
+      }*/ 
       event.getRequestContext().addUIComponentToUpdateByAjax(calendarViewContainer) ;
     }
   }

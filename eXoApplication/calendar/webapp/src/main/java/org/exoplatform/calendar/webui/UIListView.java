@@ -4,8 +4,10 @@
  **************************************************************************/
 package org.exoplatform.calendar.webui;
 
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.exoplatform.calendar.CalendarUtils;
@@ -16,6 +18,8 @@ import org.exoplatform.calendar.service.JCRPageList;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIComponent;
+import org.exoplatform.webui.core.UIPageIterator;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -28,16 +32,17 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
  * Aus 01, 2007 2:48:18 PM 
  */
 @ComponentConfig(   
-    template = "app:/templates/calendar/webui/UIListView.gtmpl",
+    //template = "app:/templates/calendar/webui/UIListView.gtmpl",
     lifecycle = UIFormLifecycle.class,
     events = {
-      @EventConfig(listeners = UICalendarView.RefreshActionListener.class),
       @EventConfig(listeners = UICalendarView.AddEventActionListener.class),      
       @EventConfig(listeners = UICalendarView.DeleteEventActionListener.class),
       @EventConfig(listeners = UICalendarView.ChangeCategoryActionListener.class), 
       @EventConfig(listeners = UICalendarView.AddCategoryActionListener.class), 
       @EventConfig(listeners = UICalendarView.SwitchViewActionListener.class),
-      @EventConfig(listeners = UIListView.ViewDetailActionListener.class)
+      @EventConfig(listeners = UIListView.CloseSearchActionListener.class),
+      @EventConfig(listeners = UIListView.ViewDetailActionListener.class),
+      @EventConfig(listeners = UIListView.ShowPageActionListener.class )    
     }
 )
 public class UIListView extends UICalendarView {
@@ -46,6 +51,7 @@ public class UIListView extends UICalendarView {
   private String selectedEvent_ = null ;
   private boolean isShowEventAndTask = true ;
   private boolean isSearchResult = false ;
+  private long currentPage_ = 1 ;
   public UIListView() throws Exception{
     refresh() ;
     if(getEvents().length > 0 ) {
@@ -53,6 +59,15 @@ public class UIListView extends UICalendarView {
     }
   } 
 
+  public String getTemplate() {
+    if( getViewType().equals(TYPE_TASK)) {
+      return "app:/templates/calendar/webui/UITaskView.gtmpl" ;
+    } else if(getViewType().equals(TYPE_EVENT)) {
+      return "app:/templates/calendar/webui/UIEventView.gtmpl" ;
+    } else {
+      return "app:/templates/calendar/webui/UIListView.gtmpl" ;
+    }
+  }
   public void refresh() throws Exception{
     System.out.println("\n\n List View refresh");
     CalendarService calendarService = getApplicationComponent(CalendarService.class) ;
@@ -65,6 +80,9 @@ public class UIListView extends UICalendarView {
     tocalendar.set(java.util.Calendar.HOUR, 0) ;
     tocalendar.add(java.util.Calendar.DATE, 1) ;
     eventQuery.setToDate(tocalendar) ;
+    if(!getViewType().equals(TYPE_BOTH)) {
+      eventQuery.setEventType(getViewType()) ;
+    }
     update(calendarService.searchEvent(username, eventQuery)) ; 
     //setShowEventAndTask(true) ;
     /*uiListView.setDisplaySearchResult(false) ;
@@ -74,12 +92,12 @@ public class UIListView extends UICalendarView {
     pageList_ = pageList ;
     updateCurrentPage() ;
   }
-  private void updateCurrentPage() throws Exception{
+  protected void updateCurrentPage() throws Exception{
     getChildren().clear() ;
     initCategories() ;
     eventMap_.clear();
     if(pageList_ != null) {
-      for(CalendarEvent calendarEvent : pageList_.getPage(pageList_.getCurrentPage(),CalendarUtils.getCurrentUser())) {
+      for(CalendarEvent calendarEvent : pageList_.getPage(getCurrentPage() ,CalendarUtils.getCurrentUser())) {
         UIFormCheckBoxInput<Boolean> checkbox = new UIFormCheckBoxInput<Boolean>(calendarEvent.getId(),calendarEvent.getId(), false) ;
         addUIFormInput(checkbox);
         if(getViewType().equals(TYPE_BOTH)) eventMap_.put(calendarEvent.getId(), calendarEvent) ;
@@ -99,7 +117,11 @@ public class UIListView extends UICalendarView {
     if(eventMap_ == null || eventMap_.size() == 0) return new CalendarEvent[]{} ;
     return eventMap_.values().toArray(new CalendarEvent[]{}) ;    
   }
-
+  public long getAvailablePage(){
+    return pageList_.getAvailablePage() ; 
+  }
+  public long getCurrentPage() { return currentPage_;}
+  public void setCurrentPage(long page) { currentPage_ = page ;}
   protected boolean isShowEvent() {return isShowEvent_ ;}
 
   protected boolean isShowEventAndTask() {return isShowEventAndTask ;}
@@ -122,5 +144,33 @@ public class UIListView extends UICalendarView {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiListContainer);
     }
   }
+  static public class CloseSearchActionListener extends EventListener<UIListView> {
+    public void execute(Event<UIListView> event) throws Exception {
+      UIListView uiListView = event.getSource() ;
+      uiListView.setDisplaySearchResult(false) ;
+      uiListView.refresh() ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiListView.getParent()) ;
+    }
+  }
+  static  public class ShowPageActionListener extends EventListener<UIListView> {
+    public void execute(Event<UIListView> event) throws Exception {
+      UIListView uiListView = event.getSource() ;
+      int page = Integer.parseInt(event.getRequestContext().getRequestParameter(OBJECTID)) ;
+      uiListView.setCurrentPage(page) ;
+      uiListView.updateCurrentPage() ; 
+      /*UIComponent parent = uiPageIterator.getParent();
+      if(parent == null) return ;  */    
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiListView.getParent());           
+    }
+  }
+  public List<CalendarEvent> getSelectedEvents() {
+    List<CalendarEvent> events = new ArrayList<CalendarEvent>() ;
+    for(CalendarEvent ce : eventMap_.values()) {
+      UIFormCheckBoxInput<Boolean>  checkbox = getChildById(ce.getId())  ;
+      if(checkbox != null && checkbox.isChecked()) events.add(ce) ;
+    }
+    return events ; 
+  }
+
 }
 

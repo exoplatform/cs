@@ -49,12 +49,12 @@ public class UITaskDetailTab extends UIFormInputWithActions {
   final public static String FIELD_TO_TIME = "toTime".intern() ;
 
   final public static String FIELD_CHECKALL = "allDay".intern() ;
- // final public static String FIELD_REPEAT = "repeat".intern() ;
+  // final public static String FIELD_REPEAT = "repeat".intern() ;
   final public static String FIELD_DELEGATION = "delegation".intern() ;
-  
+
   final public static String FIELD_PRIORITY = "priority".intern() ; 
   final public static String FIELD_DESCRIPTION = "description".intern() ;
-
+  final public static String FIELD_STATUS = "status".intern() ;
   final static public String FIELD_ATTACHMENTS = "attachments".intern() ;
 
   protected List<Attachment> attachments_ = new ArrayList<Attachment>() ;
@@ -63,12 +63,13 @@ public class UITaskDetailTab extends UIFormInputWithActions {
     super(arg0);
     setComponentConfig(getClass(), null) ;
     actionField_ = new HashMap<String, List<ActionData>>() ;
-    
+
     addUIFormInput(new UIFormStringInput(FIELD_EVENT, FIELD_EVENT, null)) ;
     addUIFormInput(new UIFormTextAreaInput(FIELD_DESCRIPTION, FIELD_DESCRIPTION, null)) ;
     addUIFormInput(new UIFormSelectBox(FIELD_CALENDAR, FIELD_CALENDAR, getCalendar())) ;
     addUIFormInput(new UIFormSelectBox(FIELD_CATEGORY, FIELD_CATEGORY, UIEventForm.getCategory())) ;
-    
+    addUIFormInput(new UIFormSelectBox(FIELD_STATUS, FIELD_STATUS, getStatus())) ;
+
     ActionData addCategoryAction = new ActionData() ;
     addCategoryAction.setActionType(ActionData.TYPE_ICON) ;
     addCategoryAction.setActionName(UIEventForm.ACT_ADDCATEGORY) ;
@@ -86,18 +87,18 @@ public class UITaskDetailTab extends UIFormInputWithActions {
     addUIFormInput(new UIFormSelectBox(FIELD_TO_TIME, FIELD_TO_TIME,  CalendarUtils.getTimesSelectBoxOptions("hh:mm a", 15)));
     addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_CHECKALL, FIELD_CHECKALL, null));
     addUIFormInput(new UIFormStringInput(FIELD_DELEGATION, FIELD_DELEGATION, null));
-   // addUIFormInput(new UIFormSelectBox(FIELD_REPEAT, FIELD_REPEAT, getRepeater())) ;
+    // addUIFormInput(new UIFormSelectBox(FIELD_REPEAT, FIELD_REPEAT, getRepeater())) ;
     addUIFormInput(new UIFormSelectBox(FIELD_PRIORITY, FIELD_PRIORITY, getPriority())) ;
-   
+
     ActionData addEmailAddress = new ActionData() ;
     addEmailAddress.setActionType(ActionData.TYPE_ICON) ;
     addEmailAddress.setActionName(UITaskForm.ACT_ADDEMAIL) ;
     addEmailAddress.setActionListener(UITaskForm.ACT_ADDEMAIL) ;
-    
+
     List<ActionData> addMailActions = new ArrayList<ActionData>() ;
     addMailActions.add(addEmailAddress) ;
-    
-    
+
+
     ActionData selectUser = new ActionData() ;
     selectUser.setActionType(ActionData.TYPE_ICON) ;
     addEmailAddress.setActionName(UITaskForm.ACT_SELECTUSER) ;
@@ -106,12 +107,19 @@ public class UITaskDetailTab extends UIFormInputWithActions {
     List<ActionData> selectUsers = new ArrayList<ActionData>() ;
     selectUsers.add(selectUser) ;
     setActionField(FIELD_DELEGATION, selectUsers) ;
-    
+
+  }
+  private List<SelectItemOption<String>> getStatus() {
+    List<SelectItemOption<String>> status = new ArrayList<SelectItemOption<String>>() ;
+    for(String taskStatus : CalendarEvent.TASK_STATUS) {
+      status.add(new SelectItemOption<String>(taskStatus, taskStatus)) ;
+    }
+    return status ;
   }
   protected UIForm getParentFrom() {
     return (UIForm)getParent() ;
   }
-  
+
   public List<ActionData> getUploadFileList() { 
     List<ActionData> uploadedFiles = new ArrayList<ActionData>() ;
     for(Attachment attachdata : attachments_) {
@@ -132,7 +140,7 @@ public class UITaskDetailTab extends UIFormInputWithActions {
     }
     return uploadedFiles ;
   }
-  
+
   public void addToUploadFileList(Attachment attachfile) {
     attachments_.add(attachfile) ;
   }
@@ -148,7 +156,7 @@ public class UITaskDetailTab extends UIFormInputWithActions {
   protected void setAttachments(List<Attachment> attachment) { 
     attachments_ = attachment ;
   }
-  
+
   private List<SelectItemOption<String>> getCalendar() throws Exception {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
@@ -161,9 +169,9 @@ public class UITaskDetailTab extends UIFormInputWithActions {
   }
   private List<SelectItemOption<String>> getPriority() throws Exception {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-    options.add(new SelectItemOption<String>("hight", "1")) ;
-    options.add(new SelectItemOption<String>("normal", "2")) ;
-    options.add(new SelectItemOption<String>("low", "3")) ;
+    for(String priority : CalendarEvent.PRIORITY){
+      options.add(new SelectItemOption<String>(priority, priority)) ;
+    }
     return options ;
   }
   private List<SelectItemOption<String>> getRepeater() {

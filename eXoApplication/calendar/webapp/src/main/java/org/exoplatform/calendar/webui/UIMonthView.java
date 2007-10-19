@@ -41,7 +41,6 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
     lifecycle = UIFormLifecycle.class,
     template = "app:/templates/calendar/webui/UIMonthView.gtmpl", 
     events = {
-      @EventConfig(listeners = UICalendarView.RefreshActionListener.class),
       @EventConfig(listeners = UICalendarView.AddEventActionListener.class),      
       @EventConfig(listeners = UICalendarView.DeleteEventActionListener.class),
       @EventConfig(listeners = UICalendarView.ChangeCategoryActionListener.class), 

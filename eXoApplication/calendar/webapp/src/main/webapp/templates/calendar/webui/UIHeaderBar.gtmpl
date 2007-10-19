@@ -1,3 +1,6 @@
+<%
+import org.exoplatform.calendar.webui.UIListView;
+%>
 <div class="UIHeaderBar ListBar">
 		<a href="<%=uicomponent.event("AddEvent")%>" class="ControlButton">
 			<div class="IconHolder AddEventIcon"> Add event </div>
@@ -7,6 +10,7 @@
 			<div class="IconHolder DeleteEventIcon"> Delete event </div>
 		</a>
 		<div class="SeparatorLine"><span></span></div>
+		<%if(uicomponent instanceof UIListView){%>
 		<div class="ViewTypeSelect" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
 			<div class="ControlButton">
 				<div class="IconHolder TaskIcon">
@@ -14,40 +18,42 @@
 				</div>
 			</div>
 			<% /*Begin  ViewTypeSelect Popup Menu*/ %>
-							 <div style="position: relative;"> 
-		      			<div class="UIPopupCategory" style="display: none;">
-		      				<div class="UIRightClickPopupMenu" style="display: block;">
-									  <div class="TopLeftRightClickPopupMenu">
-			          			<div class="TopRightRightClickPopupMenu">
-			            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
-			          			</div>
-			        			</div>
-						        <div class="MiddleLeftRightClickPopupMenu">
-						          <div class="MiddleRightRightClickPopupMenu">
-			              		<div class="UIRightPopupMenuContainer">
-			              			 <%for(type in uicomponent.getViews()){%>
-				                    <a href="<%=uicomponent.event("SwitchView",type)%>" class="MenuItem">   
-					                    <div class="ItemIcon">
-					                   	 <%if(!type.equals(uicomponent.getViewType())){ println type ;} %>
-					                    </div>
-				                    </a>
-				                   <%}%> 
-												</div>
-				          		</div>
-				        		</div>
-							      <div class="BottomLeftRightClickPopupMenu">
-							        <div class="BottomRightRightClickPopupMenu">
-							          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
-							        </div>
-							      </div>
-				      			
-							    </div>
-		      			</div>
-		      	 </div> 
-		      		<% /*End Popup Menu*/ %>
-		
+				 <div style="position: relative;"> 
+	  			<div class="UIPopupCategory" style="display: none;">
+	  				<div class="UIRightClickPopupMenu" style="display: block;">
+							  <div class="TopLeftRightClickPopupMenu">
+	          			<div class="TopRightRightClickPopupMenu">
+	            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
+	          			</div>
+	        			</div>
+				        <div class="MiddleLeftRightClickPopupMenu">
+				          <div class="MiddleRightRightClickPopupMenu">
+	              		<div class="UIRightPopupMenuContainer">
+	              			 <%for(type in uicomponent.getViews()){
+			                   	if(!type.equals(uicomponent.getViewType())){
+			                  %>
+		                    <a href="<%=uicomponent.event("SwitchView",type)%>" class="MenuItem">   
+			                    <div class="ItemIcon">$type</div>
+		                    </a>
+			                 <%}
+			                   	 }
+			                 %> 
+										</div>
+		          		</div>
+		        		</div>
+					      <div class="BottomLeftRightClickPopupMenu">
+					        <div class="BottomRightRightClickPopupMenu">
+					          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+					        </div>
+					      </div>
+		      			
+					    </div>
+	  			</div>
+	  	 </div> 
+  	<% /*End Popup Menu*/ %>
 	
 		</div>
+		<%}%>
 		<a href="<%=uicomponent.event("AddCategory")%>">
 			<div class="AddCategoryIcon"><span></span></div>
 		</a>

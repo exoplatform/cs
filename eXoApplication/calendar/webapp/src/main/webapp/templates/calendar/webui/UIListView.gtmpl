@@ -1,8 +1,17 @@
 <%
-	uiform.begin()	
-	_ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");
+	uiform.begin() ;
+	boolean isDisplaySearchResult = uicomponent.isDisplaySearchResult() ;
+	if(isDisplaySearchResult) {
+%> 
+	<div class="Result">Search result</div>
+<%
+	}else {
+		_ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");
 %>
-	<div class="Result">List view</div>
+		<div class="Result">List view</div>
+<%	
+	}
+%>
 	<div class="UIListView">
 		<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
   		<thead>
@@ -25,9 +34,6 @@
 		  						String classIcon = event.getEventType() + "Icon" ;
 		  						String actionLink = uicomponent.event("ViewDetail", event.getId()) ;		  
 		  					%>
-		  					<td style="padding: 0px;"><div style="text-align:center;">
-		  					<%uicomponent.renderField(uicomponent.getChildById(event.getId())) ;%>		
-		  					</div></td>
 		  					<td style="padding: 0px;"><div class="AttachmentIcon $attachIcon" ><span></span></div></td>
 								<td style="padding: 0px;"><div class="$classIcon" ><span></span></div></td>
 								<td class="text">
@@ -44,40 +50,63 @@
   	   	</tbody>
 		</table>
 	</div>
-<div class="ResizeReadingPane"><span></span></div>
-
-<% /*Begin Popup Menu*/ %>
-<div class="UIRightClickPopupMenu" id="UIListViewEventRightMenu" exocallback="">
-  <div class="TopLeftRightClickPopupMenu">
-    <div class="TopRightRightClickPopupMenu">
-      <div class="TopCenterRightClickPopupMenu">
-        <span></span>
-      </div>
-    </div>
-  </div>
-  <div class="MiddleLeftRightClickPopupMenu">
-    <div class="MiddleRightRightClickPopupMenu">
-      <div class="UIRightPopupMenuContainer">
-        <%
-  				for(String act : uicomponent.getQuickEditMenu()) {
-  				link = uicomponent.event(act,"id&$uicomponent.CALENDARID=calId") ;
-        %>
-        <a href="$link">
-          <div class="ItemIcon $act">
-            $act</div>
-        </a>
-        <%}%>
-      </div>
-    </div>
-  </div>
-  <div class="BottomLeftRightClickPopupMenu">
-    <div class="BottomRightRightClickPopupMenu">
-      <div class="BottomCenterRightClickPopupMenu">
-        <span></span>
-      </div>
-    </div>
-  </div>
-</div>
-<% /*End Popup Menu*/ %>
+	<%_ctx.include("app:/templates/calendar/webui/UIPageIterator.gtmpl");%>
+	<div class="ResizeReadingPane"><span></span></div>
+	<%if(isDisplaySearchResult) {%>
+	<div class="UIAction"> 
+		<table class="ActionContainer" align="center">
+			<tr>
+				<td align="center">
+		      <% 
+		        	 String actionLabel = "CloseSearch" ; //_ctx.appRes(uicomponent.getName() + ".action." + action) ;
+		           String link = uicomponent.event("CloseSearch") ;
+		  		%>
+		  		<a href="$link" class="ActionButton LightBlueStyle">
+		        <div class="ButtonLeft">
+		          <div class="ButtonRight">
+		            <div class="ButtonMiddle">
+		              $actionLabel
+		            </div>
+		          </div>
+		        </div>
+		   		</a>
+		  	</td>
+		  </tr>  
+		</table>
+	</div>
+	<%}%>
+	<% /*Begin Popup Menu*/ %>
+	<div class="UIRightClickPopupMenu" id="UIListViewEventRightMenu" exocallback="">
+	  <div class="TopLeftRightClickPopupMenu">
+	    <div class="TopRightRightClickPopupMenu">
+	      <div class="TopCenterRightClickPopupMenu">
+	        <span></span>
+	      </div>
+	    </div>
+	  </div>
+	  <div class="MiddleLeftRightClickPopupMenu">
+	    <div class="MiddleRightRightClickPopupMenu">
+	      <div class="UIRightPopupMenuContainer">
+	        <%
+	  				for(String act : uicomponent.getQuickEditMenu()) {
+	  				link = uicomponent.event(act,"id&$uicomponent.CALENDARID=calId") ;
+	        %>
+	        <a href="$link">
+	          <div class="ItemIcon $act">
+	            $act</div>
+	        </a>
+	        <%}%>
+	      </div>
+	    </div>
+	  </div>
+	  <div class="BottomLeftRightClickPopupMenu">
+	    <div class="BottomRightRightClickPopupMenu">
+	      <div class="BottomCenterRightClickPopupMenu">
+	        <span></span>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	<% /*End Popup Menu*/ %>
 
 <%uiform.end()%>	

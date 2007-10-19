@@ -20,6 +20,7 @@ import org.exoplatform.calendar.webui.popup.UIImportForm;
 import org.exoplatform.calendar.webui.popup.UIPopupAction;
 import org.exoplatform.calendar.webui.popup.UIPopupContainer;
 import org.exoplatform.calendar.webui.popup.UIRssForm;
+import org.exoplatform.calendar.webui.popup.UISendCalendarForm;
 import org.exoplatform.calendar.webui.popup.UITaskForm;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -52,7 +53,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
       @EventConfig(listeners = UICalendars.AddTaskActionListener.class),
       @EventConfig(listeners = UICalendars.EditCalendarActionListener.class),
       @EventConfig(listeners = UICalendars.RemoveCalendarActionListener.class, confirm="UICalendars.msg.confirm-delete-calendar"),
-      @EventConfig(listeners = UICalendars.PasteCalendarActionListener.class),
+      @EventConfig(listeners = UICalendars.SendCalendarActionListener.class),
       @EventConfig(listeners = UICalendars.AddCalendarCategoryActionListener.class),
       @EventConfig(listeners = UICalendars.CalendarSettingActionListener.class)
     }
@@ -212,21 +213,17 @@ public class UICalendars extends UIForm  {
     }
   }
 
-  static  public class PasteCalendarActionListener extends EventListener<UICalendars> {
+  static  public class SendCalendarActionListener extends EventListener<UICalendars> {
     public void execute(Event<UICalendars> event) throws Exception {
+      System.out.println("\n\n SendCalendarActionListener");
       UICalendars uiComponent = event.getSource() ;
-      String username = event.getRequestContext().getRemoteUser() ;
-      String categoryId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      String calendarId = event.getRequestContext().getRequestParameter(CALENDARID) ;
-      try {
-        CalendarService calService = uiComponent.getApplicationComponent(CalendarService.class) ;
-        Calendar calendar = calService.getUserCalendar(username, calendarId) ;
-        calendar.setCategoryId(categoryId) ;
-        calService.saveUserCalendar(username, calendar, false) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent.getParent()) ;
-      } catch (Exception e) {
-        e.printStackTrace() ;
-      }
+      String calendarId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      UICalendarPortlet uiCalendarPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
+      UIPopupAction uiPopupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
+      UISendCalendarForm uiForm = uiPopupAction.activate(UISendCalendarForm.class, 600) ;
+      uiForm.init(calendarId) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent.getParent()) ;
     }
   }
 

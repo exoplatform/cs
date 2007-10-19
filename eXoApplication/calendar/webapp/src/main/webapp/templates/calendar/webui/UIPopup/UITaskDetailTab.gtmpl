@@ -107,7 +107,16 @@
           %>
         </td>
       </tr>
-      
+       <tr>
+        <td class="FieldLabel">
+          <%=uiForm.getLabel(uicomponent.FIELD_STATUS)%>
+        </td>
+        <td class="FieldComponent">
+          <%
+  	        uiForm.renderField(uicomponent.FIELD_STATUS) ;
+          %>
+        </td>
+      </tr>
       <tr>
         <td class="FieldLabel">
           <%=uiForm.getLabel(uicomponent.FIELD_ATTACHMENTS)%>

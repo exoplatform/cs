@@ -69,7 +69,7 @@
 	               	 	 	 String reminderLink = uicomponent.event("ViewReminder", reminder.getId()) ;
 	               			 %>
 	               			 	<td class="Text">
-	               			 		<a href="$reminderLink" class="ControlButton"><%=reminder.getReminder()%></a>
+	               			 		<a class="ControlButton" style="color:gray;"><%=reminder.getReminder()%></a>
 	               			 	</td>
 	               			 <%		 		 
 	               	 	 }	               	 
@@ -111,8 +111,8 @@
 	             </table>
 	             <%if(!uicomponent.isShowPopup()){%>
 	             <div class="ActionsContainer">
-	              <a href="#" class="ControlButton">
-			           <div class="IconHolder ViewOnCalendar"> View On Calendar </div>
+	              <a class="ControlButton"  style="color:gray;">
+			           <div class="IconHolder ViewOnCalendar" > View On Calendar </div>
 			          </a>
 			          <div class="SeparatorDotLine"><span></span></div>
 			          <a href="<%=uicomponent.event("Edit",event.getId()+"&"+uicomponent.CALENDARID+"="+event.getCalendarId())%>" class="ControlButton">

@@ -37,7 +37,6 @@ import org.exoplatform.webui.event.EventListener;
     lifecycle = UIFormLifecycle.class,
     template = "app:/templates/calendar/webui/UIDayView.gtmpl", 
     events = {
-      @EventConfig(listeners = UICalendarView.RefreshActionListener.class),
       @EventConfig(listeners = UICalendarView.AddEventActionListener.class),  
       @EventConfig(listeners = UICalendarView.DeleteEventActionListener.class),
       @EventConfig(listeners = UICalendarView.AddCategoryActionListener.class),

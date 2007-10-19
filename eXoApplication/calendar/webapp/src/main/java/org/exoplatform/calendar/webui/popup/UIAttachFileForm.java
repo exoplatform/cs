@@ -41,7 +41,6 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
   public UIAttachFileForm() throws Exception {
     setMultiPart(true) ;
     UIFormUploadInput uiInput = new UIFormUploadInput(FIELD_UPLOAD, FIELD_UPLOAD) ;
-    uiInput.setEditable(false);
     addUIFormInput(uiInput) ;
   }
 

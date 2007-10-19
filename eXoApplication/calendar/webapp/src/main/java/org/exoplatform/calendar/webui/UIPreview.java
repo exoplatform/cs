@@ -32,6 +32,7 @@ import org.exoplatform.webui.event.EventListener;
 @ComponentConfig(
     //lifecycle = UIContainerLifecycle.class,
     events = {
+        @EventConfig(listeners = UIPreview.ViewActionListener.class),  
         @EventConfig(listeners = UIPreview.EditActionListener.class),  
         @EventConfig(listeners = UIPreview.DeleteActionListener.class)
 
@@ -98,6 +99,23 @@ public class UIPreview extends UIComponent implements UIPopupComponent {
     return dservice.getDownloadLink(dservice.addDownloadResource(dresource)) ;
   }
 
+  static  public class ViewActionListener extends EventListener<UIPreview> {
+    public void execute(Event<UIPreview> event) throws Exception {
+      UIPreview uiView = event.getSource() ;
+      System.out.println("\n\n ViewActionListener");
+     /* CalendarEvent eventCalendar = null ;
+      String username = event.getRequestContext().getRemoteUser() ;
+      String calendarId = event.getRequestContext().getRequestParameter(CALENDARID) ;
+      String eventId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      try {
+        CalendarService calService = uiView.getApplicationComponent(CalendarService.class) ;
+        eventCalendar = calService.getUserEvent(username, calendarId, eventId) ;
+      } catch (Exception e){
+        e.printStackTrace() ;
+      }
+      */
+    }
+  }
   static  public class EditActionListener extends EventListener<UIPreview> {
     public void execute(Event<UIPreview> event) throws Exception {
       System.out.println("EditEventActionListener");
