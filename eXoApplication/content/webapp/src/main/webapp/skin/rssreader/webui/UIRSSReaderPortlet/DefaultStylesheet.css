@@ -195,9 +195,6 @@
 	color: orange ;
 }
 
-.UIRSSReaderPortlet .UIContentWorkingArea .ContentBreadcumbs {
-}
-
 .UIRSSReaderPortlet .UIContentWorkingArea .UIDescription{
  padding: 0px;
  margin: 0px;
@@ -261,9 +258,6 @@
   background: #f4f4f4;
 }
 
-.UIRSSReaderPortlet .UIContentWorkingArea .NewsDetailLayout {
-}
-
 .UIRSSReaderPortlet  .UIContentWorkingArea .NewsDetail {
   border: 1px solid #cdcdcd;
   background: white;
@@ -288,10 +282,6 @@
 .UIRSSReaderPortlet .UIContentWorkingArea .UIFormWithTitle {
 	width: 460px;
 	margin: 0px auto;
-}
-
-.UIRSSReaderPortlet .UIContentWorkingArea .UIFormWithTitle .UIAction{
-	width: 160px;
 }
 
 .UIRSSReaderPortlet .UIContentWorkingArea .DateTime {

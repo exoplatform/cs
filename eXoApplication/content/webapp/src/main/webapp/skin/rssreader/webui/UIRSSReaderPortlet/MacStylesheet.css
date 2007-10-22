@@ -294,10 +294,6 @@
 	margin: 0px auto;
 }
 
-.UIRSSReaderPortlet .UIContentWorkingArea .UIFormWithTitle .UIAction{
-	width: 160px;
-}
-
 .UIRSSReaderPortlet .UIContentWorkingArea .DateTime {
 	color: #5d5d5e;
 	padding: 10px 5px 3px 5px;
