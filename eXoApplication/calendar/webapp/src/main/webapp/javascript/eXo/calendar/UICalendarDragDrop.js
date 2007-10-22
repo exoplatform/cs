@@ -3,7 +3,7 @@ function UICalendarDragDrop () {
 	this.orginalElement = null ;
 	this.tmpElement = null ;
 }
-function mouseCoords(ev){
+UICalendarDragDrop.prototype.mouseCoords = function(ev){
 	if(ev.pageX || ev.pageY){
 		return {x:ev.pageX, y:ev.pageY};
 	}
@@ -55,8 +55,8 @@ UICalendarDragDrop.prototype.drag = function(evt) {
 		var tmpElement = UICalendarDragDrop.dragElement ;
 		var RowContainerDay = eXo.core.DOMUtil.findAncestorByClass(UICalendarDragDrop.dragElement,"RowContainerDay") ;
 		var scrollTop = (RowContainerDay)? RowContainerDay.scrollTop : 0 ;
-		tmpElement.style.left = (mouseCoords(_e).x - UICalendarDragDrop.offset.x) + "px" ;
-		tmpElement.style.top = (mouseCoords(_e).y - UICalendarDragDrop.offset.y) + scrollTop + "px" ;
+		tmpElement.style.left = (UICalendarDragDrop.mouseCoords(_e).x - UICalendarDragDrop.offset.x) + "px" ;
+		tmpElement.style.top = (UICalendarDragDrop.mouseCoords(_e).y - UICalendarDragDrop.offset.y) + scrollTop + "px" ;
 		window.status = scrollTop ;
 		UICalendarDragDrop.getTarget(_e, tmpElement) ;
 	}catch(e){window.status = "Message: " + e.message ;}
@@ -108,8 +108,8 @@ UICalendarDragDrop.prototype.getOffset = function(object, evt) {
 	var RowContainerDay = eXo.core.DOMUtil.findAncestorByClass(object,"RowContainerDay") ;
 	var scrollTop = (RowContainerDay)? RowContainerDay.scrollTop : 0 ;	
 	return {
-		"x": (mouseCoords(evt).x - eXo.core.Browser.findPosX(object)) ,
-		"y": (mouseCoords(evt).y - eXo.core.Browser.findPosY(object) + scrollTop)
+		"x": (eXo.calendar.UICalendarDragDrop.mouseCoords(evt).x - eXo.core.Browser.findPosX(object)) ,
+		"y": (eXo.calendar.UICalendarDragDrop.mouseCoords(evt).y - eXo.core.Browser.findPosY(object) + scrollTop)
 	} ;
 } ;
 
@@ -140,7 +140,5 @@ UICalendarDragDrop.prototype.isTarget = function(target, object) {
 		return false ;
 	}
 } ;
-UICalendarDragDrop.prototype.test = function(){
-	alert("Hello") ;
-}
+
 eXo.calendar.UICalendarDragDrop = new UICalendarDragDrop() ;
