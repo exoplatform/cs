@@ -40,10 +40,10 @@
 	height: 20px;
 }
 
-.UIMoveTopicForm .UITree .TreeContainer .Node .ChildrenContainer {
+.UIMoveTopicForm .UITree .TreeContainer .ChildrenContainer {
 	padding-left: 20px;
 }
 
 .UIMoveTopicForm .UITree .TreeContainer .ChildrenContainer .Node {
-	padding: 0px 0px 0px 9px;
+	padding: 0px 0px 0px 3px;
 }

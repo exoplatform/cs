@@ -109,7 +109,24 @@
                 </div>
                 
                 <div style="display: none;" id="UITabContent" class="UITabContent">
-                 Permission
+                 <div class="UIFormInputSet ForumPermission">
+                    <table class="UIFormGrid">
+                      <tbody>
+                      <% 
+                      	actions = ["Moderator", "Viewer", "Topicable", "Postable"] ;
+                        for(action in actions) {%>
+                        <tr>
+                          <td class="FieldLabel"><%=uicomponent.getLabel(action)%>:</td>
+                          <td class="FieldComponent">
+                            <% uiform.renderChild(action) %>
+                            <div class="Icon24x24 AddIcon16x16" title="Add $action"><span></span></div>
+                            <div style="clear: left" ><span></span></div>
+                          </td>
+                        </tr>
+                      <% } %>
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
                 
               </div>

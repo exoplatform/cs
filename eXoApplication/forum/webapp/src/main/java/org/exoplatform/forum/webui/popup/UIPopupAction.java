@@ -4,7 +4,6 @@
  **************************************************************************/
 package org.exoplatform.forum.webui.popup;
 
-import org.exoplatform.forum.webui.popup.UIPopupComponent;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIComponent;

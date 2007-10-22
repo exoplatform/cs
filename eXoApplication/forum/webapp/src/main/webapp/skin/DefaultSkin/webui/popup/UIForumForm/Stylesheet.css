@@ -31,36 +31,31 @@
 	padding: 5px;
 }
 
-.UIForumForm .ForumPermission .UIFormWithTitle {
-	margin: 10px auto 0px auto;
-}
-
-.UIForumForm .ForumPermission .HorizontalLayout .UIFormInputSet {
-	padding: 0px;
-}
-
-.UIForumForm .ForumPermission .UIFormInputSet .FormContainer {
-	border: none;
-	padding: 0px;
-}
-
-.UIForumForm .ForumPermission .UIGrid .OverflowContainer {
-	width: 50px;
-}
-
-.UIForumForm .ForumPermission .UIFormGrid td.FieldLabel {
-	width: 100px;
-}
-
-.UIForumForm .ForumPermission .UIFormGrid input.radio {
-	margin: 0px;	
-}
-
 .UIForumForm .ForumPermission .AddIcon16x16 {
 	width: 16px;
 	height: 16px;
-	margin: 0px 2px;
+	margin: 0px 0px 0px 250px;
+	background: url('../../skinIcons/16x16/icons/OnlineIcon.gif') ;
 }
+
+.UIForumForm .ForumPermission input {
+	float: left ;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 .UIForumForm .ForumPermission .SelectUserIcon {
 	background: url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/SmallUserIcon.gif') no-repeat;

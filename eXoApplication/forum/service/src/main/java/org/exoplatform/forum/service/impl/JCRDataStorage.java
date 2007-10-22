@@ -258,8 +258,12 @@ public class JCRDataStorage implements DataStorage {
     if(forumHomeNode.hasNode(categoryId)) {
   	  Node CategoryNode = forumHomeNode.getNode(categoryId) ;
 		  Node forumNode = CategoryNode.getNode(forumId) ;
-		  NodeIterator iter = forumNode.getNodes() ;
-		  JCRPageList pagelist = new ForumPageList(iter, 10, forumNode.getPath(), false) ;
+      QueryManager qm = forumHomeNode.getSession().getWorkspace().getQueryManager() ;
+		  String pathQuery = "/jcr:root" + forumNode.getPath() + "//element(*,exo:topic) order by @exo:isSticky descending,@exo:createdDate descending";
+      Query query = qm.createQuery(pathQuery , Query.XPATH) ;
+      QueryResult result = query.execute() ;
+		  NodeIterator iter = result.getNodes(); 
+      JCRPageList pagelist = new ForumPageList(iter, 10, forumNode.getPath(), false) ;
 		  return pagelist ;
     }
 	  return null ;
@@ -328,7 +332,10 @@ public class JCRDataStorage implements DataStorage {
     if(topicNode.hasProperty("exo:isNotifyWhenAddPost")) topicNew.setIsNotifyWhenAddPost(topicNode.getProperty("exo:isNotifyWhenAddPost").getBoolean()) ;
     if(topicNode.hasProperty("exo:isModeratePost")) topicNew.setIsModeratePost(topicNode.getProperty("exo:isModeratePost").getBoolean()) ;
     if(topicNode.hasProperty("exo:isClosed")) topicNew.setIsClosed(topicNode.getProperty("exo:isClosed").getBoolean()) ;
-    if(topicNode.hasProperty("exo:isLock")) topicNew.setIsLock(topicNode.getProperty("exo:isLock").getBoolean()) ;
+    if(topicNode.hasProperty("exo:isLock")) {
+      if(topicNode.getParent().getProperty("exo:isLock").getBoolean()) topicNew.setIsLock(true);
+      else topicNew.setIsLock(topicNode.getProperty("exo:isLock").getBoolean()) ;
+    }
     if(topicNode.hasProperty("exo:isApproved")) topicNew.setIsApproved(topicNode.getProperty("exo:isApproved").getBoolean()) ;
     if(topicNode.hasProperty("exo:isSticky")) topicNew.setIsSticky(topicNode.getProperty("exo:isSticky").getBoolean()) ;
     if(topicNode.hasProperty("exo:viewPermissions")) topicNew.setViewPermissions(ValuesToStrings(topicNode.getProperty("exo:viewPermissions").getValues())) ;

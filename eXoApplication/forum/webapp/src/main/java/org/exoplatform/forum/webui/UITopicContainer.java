@@ -80,7 +80,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
   	// TODO Auto-generated method stub
   }
   
-  public void setForumIds(String categoryId, String forumId) {
+  public void setUpdateForum(String categoryId, String forumId) {
     this.forumId = forumId ;
     this.categoryId = categoryId ;
   }
@@ -106,7 +106,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
   
   private List<Topic> getTopicPageLits(long page) throws Exception {
     JCRPageList pageList = getPageTopics();
-    List<Topic> topicList = forumService.getPage(page, pageList);
+    List<Topic> topicList = this.forumService.getPage(page, pageList);
     for(Topic topic : topicList) {
       if(getUIFormCheckBoxInput(topic.getId()) != null) {
         getUIFormCheckBoxInput(topic.getId()).setChecked(false) ;
@@ -118,7 +118,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
   }
   
   private Topic getTopic(String topicId) throws Exception {
-    return  forumService.getTopic(this.categoryId, this.forumId, topicId, false) ;
+    return  this.forumService.getTopic(this.categoryId, this.forumId, topicId, false) ;
   }
   
   
@@ -142,8 +142,8 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
       UITopicDetailContainer uiTopicDetailContainer = uiForumContainer.getChild(UITopicDetailContainer.class) ;
       uiTopicDetailContainer.setRendered(true) ;
       UITopicDetail uiTopicDetail = uiTopicDetailContainer.getChild(UITopicDetail.class) ;
-      uiTopicDetail.setPostIds(uiTopicContainer.categoryId, uiTopicContainer.forumId, topicId) ;
-  		uiForumContainer.getChild(UITopicContainer.class).setRendered(false) ;
+      uiTopicDetail.setUpdateTopic(uiTopicContainer.categoryId, uiTopicContainer.forumId, topicId, true) ;
+      uiTopicContainer.setRendered(false) ;
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
       context.addUIComponentToUpdateByAjax(uiForumContainer) ;
   	}
@@ -503,6 +503,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
         UIMoveTopicForm moveTopicForm = popupAction.createUIComponent(UIMoveTopicForm.class, null, null) ;
         moveTopicForm.updateTopic(uiTopicContainer.forumId, topics);
         popupAction.activate(moveTopicForm, 400, 420) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
       } 
       if(topics.size() == 0){
         Object[] args = { };

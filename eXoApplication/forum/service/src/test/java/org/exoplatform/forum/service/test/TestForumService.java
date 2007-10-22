@@ -116,18 +116,23 @@ public class TestForumService extends BaseForumTestCase{
     for (int i = 0; i < 20; i++) {
       list.add(createdTopic());
       forumService_.saveTopic(cat.getId(), forum.getId(), list.get(i), true);
+      
     }
-    Topic topic = list.get(19);
+    Topic topic = list.get(18);
 		//get Topic
 		assertNotNull(forumService_.getTopic(cat.getId(), forum.getId(), topic.getId(), false));
+    Topic topica = forumService_.getTopic(cat.getId(), forum.getId(), topic.getId(), false);
+    topica.setIsSticky(true) ;
+    topica.setTopicName("topic thu 18") ;
+    forumService_.saveTopic(cat.getId(), forum.getId(), topica, false) ;
 		//get PageList Topic
 		JCRPageList pagelist = forumService_.getTopics(cat.getId(), forum.getId());
 //		assertEquals(pagelist.getAvailable(), 1);
-//    List page = pagelist.getPage(1, session_) ;
+    List <Topic> listTopic = pagelist.getPage(1, session_) ;
 //    assertEquals(page.size(), 1);    
-    List<Topic> listTopic = forumService_.getPage(2, pagelist);
+//    List<Topic> listTopic = forumService_.getPage(1, pagelist);
     for (Topic topic2 : listTopic) {
-      System.out.println("\n\n\n =====  topicId:  " + topic2.getId() );
+      System.out.println("\n\n\n =====  topicId:  " + topic2.getTopicName() + "  \ttime: " + topic2.getCreatedDate().getTime() +"\t" + topic2.getIsSticky());
     }
 //		// update Topic
 		Topic newTopic = forumService_.getTopic(cat.getId(), forum.getId(), topic.getId(), false);

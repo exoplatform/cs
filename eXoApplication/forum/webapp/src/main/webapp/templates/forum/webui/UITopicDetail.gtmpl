@@ -11,14 +11,25 @@
 <div class="UITopicDetail">
 <% uiform.begin() %>
 	<div class="ButtomAndPageListContainer">
+	<% if(topic.getIsLock()) { %>
+		<div class="LockActionForum UIActionForum" style="float: left;">
+	<% } else { %>
 		<div class="UIActionForum" style="float: left;">
+	<% } %>
 		  <div class="ActionButton">
 		  	<div class="NormalStyle">
 		  		<div class="ButtonLeft">
 		  			<div class="ButtonRight">
 		  				<div class="ButtonMiddle">
+		  				<% if(topic.getIsLock()) { %>
+		  						<div class="IconButton LockIcon" title="You can not reply this thread."><span class="LockLabel"></span>Post Reply</div>
+		  				<% } else { %>
 		  					<a href="<%=uicomponent.event("AddPost")%>">
-		  						<div class="IconButton PostReplyIcon"><span class="LabelIcon"></span><%=_ctx.appRes(uicomponent.getName() + ".action.AddPost");%></div>
+		  						<div class="IconButton PostReplyIcon"><span class="LabelIcon"></span>
+		  							<%=_ctx.appRes(uicomponent.getName() + ".action.AddPost");%>
+									</div>
+		  					</a>
+		  				<% } %>
 		  					</a>
 		  				</div>
 		  			</div>
@@ -134,81 +145,23 @@
 							        <div class="MiddleLeftRightClickPopupMenu">
 							          <div class="MiddleRightRightClickPopupMenu">
 				              		<div class="UIRightPopupMenuContainer">
-														<a class="MenuItem" href="#">   
-					                    <div class="ItemIcon PrintThisPageIcon">
-					                      Print this Page
+														<% 
+														String[] menuTopicActions = ["EditTopic", "PrintPage", "AddPoll", "SetOpenTopic", "SetCloseTopic", 
+														"SetLockedTopic", "SetUnLockTopic", "SetStickTopic", "SetUnStickTopic", "SplitTopic", 
+														"SetApproveTopic", "SetUnApproveTopic", "SetMoveTopic", "SetDeleteTopic"] ;
+				                   		for(action in menuTopicActions) {
+				                   			String link = uicomponent.event(action) ;
+				                   		String itemLabel = _ctx.appRes(uicomponent.getName() + ".action." + action);
+				                   		String classIcon = null;
+				                   		if(action.length() < 11) classIcon = action + "Icon";
+				                   		else classIcon = action.replaceFirst("Topic", "Icon");
+				                   %>
+				                    <a class="MenuItem" href="$link">   
+					                    <div class="ItemIcon $classIcon">
+					                      $itemLabel
 					                    </div>
 				                    </a>
-				                    <a class="MenuItem" href="#">   
-					                    <div class="ItemIcon EmailThisPageIcon">
-					                      Email this Page
-					                    </div>
-				                    </a>
-				                    <a class="MenuItem" href="#">   
-					                    <div class="ItemIcon AddPollThreadIcon">
-					                      Add a Poll to this Thread
-					                    </div>
-				                    </a>
-				                    <a class="MenuItem" href="#">   
-					                    <div class="ItemIcon ManageModerators">
-					                      Manage User Titles
-					                    </div>
-				                    </a>
-				                    <div class="MenuItem">   
-					                    <div class="ItemIcon OpenThreadsIcon DisableLabel">
-					                      Open this Thread
-					                    </div>
-				                    </div>
-				                    <a class="MenuItem" href="#">   
-					                    <div class="ItemIcon CloseThreadsIcon">
-					                     Close this Thread
-					                    </div>
-				                    </a>
-				                    <a class="MenuItem" href="#">   
-					                    <div class="ItemIcon SetLockedIcon">
-					                      Lock this Thread
-					                    </div>
-				                    </a>
-				                    <div class="MenuItem">   
-					                    <div class="ItemIcon SetUnLockIcon DisableLabel">
-					                      UnLock this Thread
-					                    </div>
-				                    </div>
-				                    <a class="MenuItem" href="#">   
-					                    <div class="ItemIcon MoveThreadsIcon">
-					                      Move this Thread
-					                    </div>
-				                    </a>
-				                    <a class="MenuItem" href="#">   
-					                    <div class="ItemIcon StickThreadsIcon">
-					                      Stick this Thread
-					                    </div>
-				                    </a>
-				                    <div class="MenuItem">   
-					                    <div class="ItemIcon StickThreadsIcon DisableLabel">
-					                      Unstick this Thread
-					                    </div>
-				                    </div>
-				                    <a class="MenuItem">   
-					                    <div class="ItemIcon SplitThisThreadIcon">
-					                      Split this Thread
-					                    </div>
-				                    </a>
-				                    <div class="MenuItem">   
-					                    <div class="ItemIcon ApproveThreadsIcon DisableLabel">
-					                      Approve this Thread
-					                    </div>
-				                    </div>
-				                    <a class="MenuItem" href="#">   
-					                    <div class="ItemIcon UnapprovePostsIcon">
-					                     Unapprove this Thread
-					                    </div>
-				                    </a>
-				                    <a class="MenuItem" href="#">   
-					                    <div class="ItemIcon DeleteThreadsIcon">
-					                      Delete this Thread
-					                    </div>
-				                    </a>
+				                   <% } %>
 													</div>
 					          		</div>
 					        		</div>
@@ -318,6 +271,7 @@
 										for(action in actions) {
 											String title = _ctx.appRes(uicomponent.getName() + ".title." + action);
 											String label = _ctx.appRes(uicomponent.getName() + ".action." + action);
+											if(topic.getIsLock()&&(action.equals("Edit")||action.equals("Quote"))) continue ;
 									%>
 									  <div class="ActionButton">
 									  	<div class="NormalStyle">
@@ -350,14 +304,25 @@
 	</div>	
 <!-- End PostsInThreadContainer -->
 	<div class="ButtomAndPageListContainer">
+		<% if(topic.getIsLock()) { %>
+		<div class="LockActionForum UIActionForum" style="float: left;">
+	<% } else { %>
 		<div class="UIActionForum" style="float: left;">
+	<% } %>
 		  <div class="ActionButton">
 		  	<div class="NormalStyle">
 		  		<div class="ButtonLeft">
 		  			<div class="ButtonRight">
 		  				<div class="ButtonMiddle">
+		  				<% if(topic.getIsLock()) { %>
+		  						<div class="IconButton LockIcon" title="You can not reply this thread."><span class="LockLabel"></span>Post Reply</div>
+		  				<% } else { %>
 		  					<a href="<%=uicomponent.event("AddPost")%>">
-		  						<div class="IconButton PostReplyIcon"><span class="LabelIcon"></span><%=_ctx.appRes(uicomponent.getName() + ".action.AddPost");%></div>
+		  						<div class="IconButton PostReplyIcon"><span class="LabelIcon"></span>
+		  							<%=_ctx.appRes(uicomponent.getName() + ".action.AddPost");%>
+									</div>
+		  					</a>
+		  				<% } %>
 		  					</a>
 		  				</div>
 		  			</div>

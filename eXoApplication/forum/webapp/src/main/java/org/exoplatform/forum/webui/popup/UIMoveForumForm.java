@@ -12,24 +12,19 @@ import org.exoplatform.forum.service.Category;
 import org.exoplatform.forum.service.Forum;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.webui.UICategory;
-import org.exoplatform.forum.webui.UICategoryContainer;
 import org.exoplatform.forum.webui.UIForumContainer;
 import org.exoplatform.forum.webui.UIForumDescription;
 import org.exoplatform.forum.webui.UIForumPortlet;
 import org.exoplatform.forum.webui.UITopicContainer;
 import org.exoplatform.forum.webui.UITopicDetailContainer;
 import org.exoplatform.web.application.ApplicationMessage;
-import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
-import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
-import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.exception.MessageException;
 import org.exoplatform.webui.form.UIForm;
-import org.exoplatform.webui.form.UIFormSelectBox;
 
 /**
  * Created by The eXo Platform SARL
@@ -119,7 +114,7 @@ public class UIMoveForumForm extends UIForm implements UIPopupComponent {
           uiForumContainer.getChild(UITopicDetailContainer.class).setRendered(false) ;
           uiForumContainer.getChild(UIForumDescription.class).setForumIds(newCategoryId, forums.get(0).getId());
           UITopicContainer uiTopicContainer = uiForumContainer.getChild(UITopicContainer.class).setRendered(true) ;
-          uiTopicContainer.setForumIds(newCategoryId, forums.get(0).getId()) ;
+          uiTopicContainer.setUpdateForum(newCategoryId, forums.get(0).getId()) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(forumPortlet);
         } else {
           UICategory uiCategory = forumPortlet.findFirstComponentOfType(UICategory.class);

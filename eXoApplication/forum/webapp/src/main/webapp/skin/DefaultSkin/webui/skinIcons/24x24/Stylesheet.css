@@ -1,3 +1,8 @@
+.Icon24x24 {
+	width: 24px;
+	height: 24px;
+}
+
 .ForumNewPostIcon {
 	background: url('icons/ForumNewPostIcon.gif') no-repeat;
 }

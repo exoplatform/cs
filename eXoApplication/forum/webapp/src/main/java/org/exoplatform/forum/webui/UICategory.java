@@ -353,7 +353,7 @@ public class UICategory extends UIForm  {
   		uiForumContainer.getChild(UITopicDetailContainer.class).setRendered(false) ;
       uiForumContainer.getChild(UIForumDescription.class).setForumIds(uiCategory.categoryId, forumId);
   		UITopicContainer uiTopicContainer = uiForumContainer.getChild(UITopicContainer.class).setRendered(true) ;
-      uiTopicContainer.setForumIds(uiCategory.categoryId, forumId) ;
+      uiTopicContainer.setUpdateForum(uiCategory.categoryId, forumId) ;
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
       context.addUIComponentToUpdateByAjax(forumPortlet) ;
     }
@@ -372,7 +372,7 @@ public class UICategory extends UIForm  {
       uiTopicDetailContainer.setRendered(true) ;
       UITopicDetail uiTopicDetail = uiTopicDetailContainer.getChild(UITopicDetail.class) ;
       uiForumContainer.getChild(UIForumDescription.class).setForumIds(uiCategory.categoryId, id[0]);
-      uiTopicDetail.setPostIds(uiCategory.categoryId, id[0], id[1]) ;
+      uiTopicDetail.setUpdateTopic(uiCategory.categoryId, id[0], id[1], true) ;
       uiForumContainer.getChild(UITopicContainer.class).setRendered(false) ;
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
       context.addUIComponentToUpdateByAjax(uiForumPortlet) ;
