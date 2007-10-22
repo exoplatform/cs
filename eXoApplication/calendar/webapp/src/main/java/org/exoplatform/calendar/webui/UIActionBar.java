@@ -10,6 +10,7 @@ import java.util.GregorianCalendar;
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
+import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.webui.popup.UICalendarSettingForm;
 import org.exoplatform.calendar.webui.popup.UIFeed;
@@ -17,6 +18,7 @@ import org.exoplatform.calendar.webui.popup.UIPopupAction;
 import org.exoplatform.calendar.webui.popup.UIPopupContainer;
 import org.exoplatform.calendar.webui.popup.UIQuickAddEvent;
 import org.exoplatform.calendar.webui.popup.UITaskForm;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIContainer;
@@ -149,7 +151,11 @@ public class UIActionBar extends UIContainer  {
       UIActionBar uiActionBar = event.getSource() ;
       UICalendarPortlet calendarPortlet = uiActionBar.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction popupAction = calendarPortlet.getChild(UIPopupAction.class) ;
-      popupAction.activate(UICalendarSettingForm.class, 600) ;
+      UICalendarSettingForm uiCalendarSettingForm = popupAction.activate(UICalendarSettingForm.class, 600) ;
+      CalendarService cservice = CalendarUtils.getCalendarService() ;
+      String username = Util.getPortalRequestContext().getRemoteUser() ;
+      CalendarSetting calendarSetting = cservice.getCalendarSetting(username) ;
+      uiCalendarSettingForm.init(calendarSetting) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   }

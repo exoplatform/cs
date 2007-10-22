@@ -10,11 +10,13 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
+import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.GroupCalendarData;
@@ -30,7 +32,6 @@ import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
-import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
 
 
@@ -98,11 +99,15 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
 
   protected Calendar calendar_ = null ;
   public boolean isShowEvent_ = true;
-  private boolean isShowWorkingTime_ = false ;
-  protected int startTime_ = 0 ;
-  protected int endTime_ = 24 ;
-  protected int timeInterval_ = 15 ;
-
+  
+  protected boolean isShowWorkingTime_ = false ;
+  protected String startTime_ = null ;
+  protected String endTime_ = null ;
+  protected int timeInterval_ = 0 ;
+  protected String timeFormat_ =  null ;
+  private String dateFormat_ =  null ;
+  private String dateTimeFormat_ =  null ;
+  
   protected List<String> privateCalendarIds = new ArrayList<String>() ;
   protected List<String> publicCalendarIds = new ArrayList<String>() ;
 
@@ -124,6 +129,27 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       daysMap_.put(j, month) ;
       j++ ;
     }
+    applySeting() ;
+  }
+  protected void applySeting() throws Exception {
+    CalendarService cservice = CalendarUtils.getCalendarService() ;
+    String username = Util.getPortalRequestContext().getRemoteUser() ;
+    CalendarSetting calendarSetting = cservice.getCalendarSetting(username) ;
+    timeInterval_ = (int)calendarSetting.getTimeInterval() ;
+    dateFormat_ = calendarSetting.getDateFormat();
+    timeFormat_ = calendarSetting.getTimeFormat() ;
+    dateTimeFormat_ = dateFormat_ + " " + timeFormat_ ;
+    Locale locale_ = null ;
+    if(calendarSetting.isShowWorkingTime()) {
+      isShowWorkingTime_ = calendarSetting.isShowWorkingTime() ;
+      startTime_ = calendarSetting.getWorkingTimeEnd() ;
+      endTime_ = calendarSetting.getWorkingTimeEnd() ;
+    }
+    if(calendarSetting.getLocation() == null) {
+      locale_ = Util.getPortalRequestContext().getLocale() ;
+    } else {
+      locale_ = new Locale(calendarSetting.getLocation()) ;
+    }
   }
   public void setViewType(String viewType) { this.viewType_ = viewType ; }
   public String getViewType() { return viewType_ ; }
@@ -144,7 +170,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       return map.values().toArray(new String[]{}) ;
     }    
   }
-  
+
   public void refresh() throws Exception {} ;
   public void initCategories() throws Exception {
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
@@ -297,12 +323,19 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
     return  new String[]{ACT_VIEW, ACT_EDIT, ACT_DELETE} ;
   }
   protected List<String> getDisplayTimes(String timeFormat, int timeInterval) {
-    if(isShowWorkingTime_) {
-      return CalendarUtils.getDisplayTimes(timeFormat, timeInterval,startTime_, endTime_*(60/timeInterval)) ;
-    } 
-    else {
-      return CalendarUtils.getDisplayTimes(timeFormat, timeInterval,0, 24*(60/timeInterval)) ;
-    }
+    return CalendarUtils.getDisplayTimes(timeFormat, timeInterval,0, 24*(60/timeInterval)) ;
+  }
+  protected void setDateFormat(String dateFormat_) {
+    this.dateFormat_ = dateFormat_;
+  }
+  protected String getDateFormat() {
+    return dateFormat_;
+  }
+  protected void setDateTimeFormat(String dateTimeFormat_) {
+    this.dateTimeFormat_ = dateTimeFormat_;
+  }
+  protected String getDateTimeFormat() {
+    return dateTimeFormat_;
   }
   static  public class AddEventActionListener extends EventListener<UICalendarView> {
     public void execute(Event<UICalendarView> event) throws Exception {

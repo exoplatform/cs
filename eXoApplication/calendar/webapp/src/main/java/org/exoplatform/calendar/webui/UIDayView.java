@@ -4,8 +4,6 @@
  **************************************************************************/
 package org.exoplatform.calendar.webui;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -133,17 +131,10 @@ public class UIDayView extends UICalendarView {
         uiQuickAddEvent.setEvent(false) ;
         uiQuickAddEvent.setId("UIQuickAddTask") ;
       }
-      
-      DateFormat df =new SimpleDateFormat("MM/dd/yyyy") ;
-      try {
-        String beginTime = df.format(calendarview.getCurrentDate())+ " " + startTime ;
-        String endTime = df.format(calendarview.getCurrentDate())+ " " + finishTime ;
-        uiQuickAddEvent.init(beginTime, endTime) ;
-        uiPopupAction.activate(uiQuickAddEvent,600,0) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
-      } catch (Exception e) {
-        e.printStackTrace() ;
-      }
+
+      uiQuickAddEvent.init(startTime, finishTime) ;
+      uiPopupAction.activate(uiQuickAddEvent,600,0) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
     }
   }

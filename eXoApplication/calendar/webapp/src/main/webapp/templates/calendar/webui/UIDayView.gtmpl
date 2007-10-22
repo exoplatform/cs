@@ -136,7 +136,7 @@
                     <tbody>
                       <%
 			            		flag = true ;
-			            		List hoursSteps = uicomponent.getDisplayTimes("HH:mm", 30) ;
+			            		List hoursSteps = uicomponent.getDisplayTimes("MM/dd/yyyy HH:mm a", 30) ;
 			            		for(h in hoursSteps) {
 			            			cssClass = "TdDotLine" ;
 			            			if(flag) {cssClass = "TdLine" ;} ;

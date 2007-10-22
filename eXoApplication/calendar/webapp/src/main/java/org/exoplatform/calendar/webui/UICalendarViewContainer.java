@@ -4,9 +4,17 @@
  **************************************************************************/
 package org.exoplatform.calendar.webui;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.exoplatform.calendar.CalendarUtils;
+import org.exoplatform.calendar.service.CalendarService;
+import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.portal.webui.container.UIContainer;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIComponent;
+import org.hibernate.type.YesNoType;
 
 /**
  * Created by The eXo Platform SARL
@@ -26,20 +34,28 @@ public class UICalendarViewContainer extends UIContainer  {
   final public static String YEAR_VIEW = "UIYearView".intern() ;
   final public static String LIST_VIEW = "UIListContainer".intern() ;
   final public static String SCHEDULE_VIEW = "UIScheduleView".intern() ;
-
+  final public static Map<String, String> VIEWS = new HashMap<String, String>() ;
+  
   final public static String[] TYPES = {DAY_VIEW, WEEK_VIEW, MONTH_VIEW, YEAR_VIEW, LIST_VIEW, SCHEDULE_VIEW} ;
 
 
   public UICalendarViewContainer() throws Exception {
-
+    VIEWS.put(CalendarSetting.DAY_VIEW, DAY_VIEW) ;
+    VIEWS.put(CalendarSetting.WEEK_VIEW, WEEK_VIEW) ;
+    VIEWS.put(CalendarSetting.MONTH_VIEW, MONTH_VIEW) ;
+    VIEWS.put(CalendarSetting.YEAR_VIEW, YEAR_VIEW) ;
+    VIEWS.put(CalendarSetting.LIST_VIEW, LIST_VIEW) ;
+    VIEWS.put(CalendarSetting.SCHEDULE_VIEW, SCHEDULE_VIEW) ;
     addChild(UIMonthView.class, null, null).setRendered(false) ;
-    addChild(UIDayView.class, null, null).setRendered(true) ;
+    addChild(UIDayView.class, null, null).setRendered(false) ;
     addChild(UIWeekView.class, null, null).setRendered(false) ;
     addChild(UIYearView.class, null, null).setRendered(false) ;
-    //addChild(UIListView.class, null, null).setRendered(false) ;
     addChild(UIListContainer.class, null, null).setRendered(false) ;
     addChild(UIScheduleView.class, null, null).setRendered(false) ;
-    //setRenderedChild(UIMonthView.class) ;
+    CalendarService cservice = CalendarUtils.getCalendarService() ;
+    String username = Util.getPortalRequestContext().getRemoteUser() ;
+    CalendarSetting calendarSetting = cservice.getCalendarSetting(username) ;
+    setRenderedChild(VIEWS.get(calendarSetting.getViewType())) ;
     refresh() ;
   }  
 

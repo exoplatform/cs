@@ -206,7 +206,7 @@ public class JCRDataStorage implements DataStorage{
     calendarNode.setProperty("exo:groups", calendar.getGroups()) ;
     calendarNode.setProperty("exo:locale", calendar.getLocale()) ;
     calendarNode.setProperty("exo:timeZone", calendar.getTimeZone()) ;
-    
+
     //Check to save category
     if(calendar.getCategoryId() != null && calendar.getCategoryId().length() > 0) {
       Node calendarCategory = getCalendarCategoryHome(username).getNode(calendar.getCategoryId()) ;
@@ -903,6 +903,12 @@ public class JCRDataStorage implements DataStorage{
     settingNode.setProperty("exo:dateFormat", setting.getDateFormat()) ;
     settingNode.setProperty("exo:timeFormat", setting.getTimeFormat()) ;
     settingNode.setProperty("exo:location", setting.getLocation()) ;
+    settingNode.setProperty("exo:timeZone", setting.getTimeZone()) ;
+    settingNode.setProperty("exo:showWorkingTime", setting.isShowWorkingTime()) ;
+    if(setting.isShowWorkingTime()) {
+      settingNode.setProperty("exo:workingTimeBegin", setting.getWorkingTimeBegin()) ;
+      settingNode.setProperty("exo:workingTimeEnd", setting.getWorkingTimeEnd()) ;
+    }
     settingNode.setProperty("exo:baseURL", setting.getBaseURL()) ;
     settingNode.setProperty("exo:defaultPrivateCalendars", setting.getDefaultPrivateCalendars()) ;
     settingNode.setProperty("exo:defaultPublicCalendars", setting.getDefaultPublicCalendars()) ;
@@ -919,6 +925,16 @@ public class JCRDataStorage implements DataStorage{
       calendarSetting.setTimeFormat(settingNode.getProperty("exo:timeFormat").getString()) ;
       if(settingNode.hasProperty("exo:location"))
         calendarSetting.setLocation(settingNode.getProperty("exo:location").getString()) ;
+      if(settingNode.hasProperty("exo:timeZone")) calendarSetting.setTimeZone(settingNode.getProperty("exo:timeZone").getString())  ;
+      if(settingNode.hasProperty("exo:showWorkingTime")) {
+        calendarSetting.setShowWorkingTime(settingNode.getProperty("exo:showWorkingTime").getBoolean());
+      }
+      if(calendarSetting.isShowWorkingTime()) {
+        if(settingNode.hasProperty("exo:workingTimeBegin")) 
+          calendarSetting.setWorkingTimeBegin(settingNode.getProperty("exo:workingTimeBegin").getString()) ;
+        if(settingNode.hasProperty("exo:workingTimeEnd"))
+          calendarSetting.setWorkingTimeEnd(settingNode.getProperty("exo:workingTimeEnd").getString()) ;
+      }
       if(settingNode.hasProperty("exo:defaultCalendars")){
         Value[] values = settingNode.getProperty("exo:defaultCalendars").getValues() ;
         String[] calendars = new String[values.length] ;
@@ -1054,7 +1070,7 @@ public class JCRDataStorage implements DataStorage{
     }    
     return new EventPageList(events, 10) ;    
   }
-  
+
   public Map<Integer, String > searchHightLightEvent(String username, EventQuery eventQuery)throws Exception {
     Map<Integer, String > mapData = new HashMap<Integer, String>() ;
     Query query ;
@@ -1075,7 +1091,7 @@ public class JCRDataStorage implements DataStorage{
     mapData = updateMap(mapData, it, eventQuery.getFromDate(), eventQuery.getToDate()) ;  
     return mapData ;    
   }
-  
+
   private Map<Integer, String> updateMap(Map<Integer, String> data, NodeIterator it, java.util.Calendar fromDate, java.util.Calendar toDate) throws Exception {
     Long start = new Long(1);
     Long end ;
