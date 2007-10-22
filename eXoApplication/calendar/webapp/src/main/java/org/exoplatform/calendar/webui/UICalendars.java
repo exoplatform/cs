@@ -4,7 +4,10 @@
  **************************************************************************/
 package org.exoplatform.calendar.webui;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.Calendar;
@@ -21,6 +24,7 @@ import org.exoplatform.calendar.webui.popup.UIPopupAction;
 import org.exoplatform.calendar.webui.popup.UIPopupContainer;
 import org.exoplatform.calendar.webui.popup.UIRssForm;
 import org.exoplatform.calendar.webui.popup.UISendCalendarForm;
+import org.exoplatform.calendar.webui.popup.UISharedForm;
 import org.exoplatform.calendar.webui.popup.UITaskForm;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -55,17 +59,21 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
       @EventConfig(listeners = UICalendars.RemoveCalendarActionListener.class, confirm="UICalendars.msg.confirm-delete-calendar"),
       @EventConfig(listeners = UICalendars.SendCalendarActionListener.class),
       @EventConfig(listeners = UICalendars.AddCalendarCategoryActionListener.class),
+      @EventConfig(listeners = UICalendars.ShareCalendarActionListener.class),
       @EventConfig(listeners = UICalendars.CalendarSettingActionListener.class)
     }
 )
 
 public class UICalendars extends UIForm  {
   public static String CALENDARID = "calendarid".intern() ;
+  private String[] publicCalendarIds = {} ;
   public UICalendars() throws Exception {
 
   } 
-
-  protected List<GroupCalendarData> getPersonalCategories() throws Exception{
+  
+  public String[] getPublicCalendarIds(){ return publicCalendarIds ; }
+  
+  protected List<GroupCalendarData> getPrivateCalendars() throws Exception{
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     List<GroupCalendarData> groupCalendars = calendarService.getCalendarCategories(username) ;
@@ -82,22 +90,30 @@ public class UICalendars extends UIForm  {
     return groupCalendars;
   }
 
-  protected List<GroupCalendarData> getSharedGroups() throws Exception{
+  protected List<GroupCalendarData> getPublicCalendars() throws Exception{
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     String[] groups = CalendarUtils.getUserGroups(username) ;
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     List<GroupCalendarData> groupCalendars = calendarService.getGroupCalendars(groups) ;
+    Map<String, String> map = new HashMap<String, String> () ;    
     for(GroupCalendarData group : groupCalendars) {
       List<Calendar> calendars = group.getCalendars() ;
       for(Calendar calendar : calendars) {
+        map.put(calendar.getId(), calendar.getId()) ;
         if(getUIFormCheckBoxInput(calendar.getId()) == null){
           addUIFormInput(new UIFormCheckBoxInput<Boolean>(calendar.getId(), calendar.getId(), false)) ;
         }
       }
     }
+    publicCalendarIds = map.values().toArray(new String[]{}) ;
     return groupCalendars ;
   }
-
+  
+  protected GroupCalendarData getSharedCalendars() throws Exception{
+    CalendarService calendarService = CalendarUtils.getCalendarService() ;
+    return calendarService.getSharedCalendars(CalendarUtils.getCurrentUser()) ;
+  }
+  
   static  public class AddCalendarActionListener extends EventListener<UICalendars> {
     public void execute(Event<UICalendars> event) throws Exception {
       UICalendars uiComponent = event.getSource() ;
@@ -277,10 +293,24 @@ public class UICalendars extends UIForm  {
     }
   }
 
+  static  public class ShareCalendarActionListener extends EventListener<UICalendars> {
+    public void execute(Event<UICalendars> event) throws Exception {
+      UICalendars uiComponent = event.getSource() ;
+      String selectedCalendarId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      UICalendarPortlet uiCalendarPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
+      UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
+      UISharedForm uiSharedForm =popupAction.createUIComponent(UISharedForm.class, null, "UISharedForm") ;
+      uiSharedForm.setSelectedCalendarId(selectedCalendarId) ;
+      popupAction.activate(uiSharedForm, 600, 0) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarPortlet) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent.getParent()) ;
+    }
+  }
+  
   static  public class CalendarSettingActionListener extends EventListener<UICalendars> {
     public void execute(Event<UICalendars> event) throws Exception {
       UICalendars uiComponent = event.getSource() ;
-      System.out.println("=========>CalendarSettingActionListener") ;
       UICalendarPortlet uiCalendarPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
       popupAction.activate(UICalendarSettingForm.class, 600) ;

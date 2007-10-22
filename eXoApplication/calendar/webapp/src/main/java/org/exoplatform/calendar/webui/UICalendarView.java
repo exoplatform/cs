@@ -17,6 +17,7 @@ import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.EventQuery;
+import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.webui.popup.UIEventCategoryManager;
 import org.exoplatform.calendar.webui.popup.UIEventForm;
 import org.exoplatform.calendar.webui.popup.UIPopupAction;
@@ -29,6 +30,7 @@ import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
+import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
 
 
@@ -123,15 +125,26 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       j++ ;
     }
   }
-  public void setViewType(String viewType) {
-    this.viewType_ = viewType;
+  public void setViewType(String viewType) { this.viewType_ = viewType ; }
+  public String getViewType() { return viewType_ ; }
+  protected String[] getViews() {return views ; }
+  protected String[] getPublicCalendars() throws Exception{
+    try{
+      return getAncestorOfType(UICalendarWorkingContainer.class)
+      .findFirstComponentOfType(UICalendars.class).getPublicCalendarIds() ;
+    }catch(Exception e) {
+      String[] groups = CalendarUtils.getUserGroups(CalendarUtils.getCurrentUser()) ;
+      CalendarService calendarService = CalendarUtils.getCalendarService() ;
+      Map<String, String> map = new HashMap<String, String> () ;    
+      for(GroupCalendarData group : calendarService.getGroupCalendars(groups)) {
+        for(org.exoplatform.calendar.service.Calendar calendar : group.getCalendars()) {
+          map.put(calendar.getId(), calendar.getId()) ;          
+        }
+      }
+      return map.values().toArray(new String[]{}) ;
+    }    
   }
-
-  public String getViewType() {
-    return viewType_;
-  }
-  protected String[] getViews() {return views;}
-
+  
   public void refresh() throws Exception {} ;
   public void initCategories() throws Exception {
     CalendarService calendarService = CalendarUtils.getCalendarService() ;

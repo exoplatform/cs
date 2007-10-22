@@ -1,3 +1,6 @@
+<%
+	import org.exoplatform.calendar.service.GroupCalendarData;
+%>
 <div class="UICalendars" >
 <%uiform.begin()%>
 	<div class="TitleBar">
@@ -54,6 +57,7 @@
 		<div style="clear: both"><span></span></div>
 	</div>
 	<div class="ContentContainer">
+	<!-- start private calendars -->
 		<div class="MyCalendar">
 			<div class="CalendarTitle">
 				<div class="CollapserFlatStyle" title="Collapser my calendar"><span></span></div>
@@ -61,7 +65,7 @@
 			</div>
 			<div class="MyCalendarContainer">
 				<%
-					List groupCalendars = uicomponent.getPersonalCategories() ;
+					List groupCalendars = uicomponent.getPrivateCalendars() ;
 					for(groupData in groupCalendars) {
 				%>
 				<div class="UIVTab">  	
@@ -100,6 +104,8 @@
 				%>  				
 			</div>
 		</div>
+		<!-- end private calendars -->
+		<!-- shared calendars -->
 		<div class="MyCalendar">
 			<div class="CalendarTitle">
 				<div class="CollapserFlatStyle" title="Collapser my calendar"><span></span></div>
@@ -107,8 +113,43 @@
 			</div>
 			<div class="MyCalendarContainer">
 				<%
-					List sharedCalendars = uicomponent.getSharedGroups() ;
-					for(groupData in sharedCalendars) {
+					GroupCalendarData sharedCalendars = uicomponent.getSharedCalendars() ;
+					if(sharedCalendars != null) {
+				%>
+				<div class="UIVTab">  	
+  				<div class="UIVTabContent" >
+				<%	
+						List calendarList = sharedCalendars.getCalendars() ;
+						for(calendar in calendarList) {
+				%>
+  					<div class="CalendarItem">
+  						<div class="CalendarColor1">
+  							<div class="CheckBox"><%uiform.renderField(calendar.getId())%></div>
+  							<div class="CalendarIcon"><a href="#" ><%=calendar.getName()%></a></div>
+  							<div style="clear: both"><span></span></div>
+  						</div>
+  					</div>
+				<%
+						}
+				%>
+					</div>
+				</div>	
+				<%
+					}
+				%>  				
+			</div>
+		</div>
+		<!-- end shared calendars -->
+		<!-- start public calendars -->
+		<div class="MyCalendar">
+			<div class="CalendarTitle">
+				<div class="CollapserFlatStyle" title="Collapser my calendar"><span></span></div>
+				<div class="Label">Public calendars</div>
+			</div>
+			<div class="MyCalendarContainer">
+				<%
+					List publicCalendars = uicomponent.getPublicCalendars() ;
+					for(groupData in publicCalendars) {
 				%>
 				<div class="UIVTab">  	
   				<div class="CalendarSelectedFlatStyle">
@@ -143,6 +184,7 @@
 				%>  				
 			</div>
 		</div>
+		<!-- end public calendars -->
 	</div>
 	<% /*Begin Popup Menu - Calendar group*/ %>
 	      <div class="UIPopupCategory" style="display: none; z-index: 10000 ;">
@@ -234,9 +276,14 @@
 	                      Export Calendar
 	                    </div>
 	                   </a>
-	                   <a class="MenuItem" href="<%=uicomponent.event("SendCalendar","id")%>">   
+	                   <a class="MenuItem" style="color: gray">   
 	                    <div class="ItemIcon  SendMailCalendarIcon">
 	                      Send to friend
+	                    </div>
+	                   </a>
+	                   <a class="MenuItem" href="<%=uicomponent.event("ShareCalendar","id")%>">   
+	                    <div class="ItemIcon  SendMailCalendarIcon">
+	                      Share calendar
 	                    </div>
 	                   </a>								                   
 	          		</div>
