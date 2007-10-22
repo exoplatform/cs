@@ -22,14 +22,12 @@
   	 	      	<tbody>
 								<%
 			  					for(task in uicomponent.getEvents()){
-			  					attachCss = "" ;
-			  					if(!task.getAttachment().isEmpty()) {
-			  						attachCss = "AttachmentIcon" ;
-			  					}
+			  						attachIcon = "" ;
+  									if(!task.getAttachment().isEmpty()) {attachIcon = "AttachmentIcon" ;}
 		  					%>
 			  					<tr>
 										<td><%uicomponent.renderField(uicomponent.getChildById(task.getId()))%></td>
-	  					      <td style="padding: 0px;"><div class="$attachCss" ><span></span></div></td>
+	  					      <td style="padding: 0px;"><div class="$attachIcon" >&nbsp;</div></td>
 		  							<td class="text">
 		  								<a href="<%=uicomponent.event("ViewDetail", task.getId())%>" class="ControlButton">
 												<%=task.getSummary()%>

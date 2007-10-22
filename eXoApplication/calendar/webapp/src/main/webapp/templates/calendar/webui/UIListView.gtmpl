@@ -16,8 +16,8 @@
 		<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
   		<thead>
   			<tr>
-  			  <th style="width: 24px;"><div class="AttachmentIcon" title="Attachment of event"><span></span></div></th>
   				<th style="width: 24px;"></th>
+  			  <th style="width: 24px;"><div class="AttachmentIcon" title="Attachment of event">&nbsp;</div></th>
   		    <th >Summary</th>
  	      	<th >Start</th>
  	      	<th >End</th>
@@ -27,15 +27,15 @@
   				<%
   					for(event in uicomponent.getEvents()){
   					attachIcon = "" ;
-  					if(!event.getAttachment().isEmpty()) {attachIcon = "" ;}
+  					if(!event.getAttachment().isEmpty()) {attachIcon = "AttachmentIcon" ;}
   					%>
   						<tr eventid="<%=event.getId()%>" calid="<%=event.getCalendarId()%>">
 		  					<%
 		  						String classIcon = event.getEventType() + "Icon" ;
 		  						String actionLink = uicomponent.event("ViewDetail", event.getId()) ;		  
 		  					%>
-		  					<td style="padding: 0px;"><div class="AttachmentIcon $attachIcon" ><span></span></div></td>
-								<td style="padding: 0px;"><div class="$classIcon" ><span></span></div></td>
+								<td style="padding: 1px;"><div class="$classIcon"><span></span></div></td>
+		  					<td style="padding: 1px;"><div class="$attachIcon">&nbsp;</div></td>
 								<td class="text">
 									<a href="$actionLink" class="ControlButton">
 										<%=event.getSummary()%>
