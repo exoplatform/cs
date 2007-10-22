@@ -64,5 +64,9 @@ public interface DataStorage {
   public CalendarSetting getCalendarSetting(String username) throws Exception ;
   public void generateRss(String username, List<String> calendarIds, RssData rssData, CalendarImportExport importExport) throws Exception ;
   public List<FeedData> getFeeds(String username) throws Exception  ;
-  public EventPageList searchEvent(String username, EventQuery query)throws Exception ; 
+  public EventPageList searchEvent(String username, EventQuery query)throws Exception ;
+  
+  public void shareCalendar(String username, String calendarId, List<String> receiverUsers) throws Exception ;
+  public GroupCalendarData getSharedCalendars(String username) throws Exception  ;
+  public List<CalendarEvent> getEvent(String username, EventQuery eventQuery, String[] publicCalendarIds) throws Exception ;
 }

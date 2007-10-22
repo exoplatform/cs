@@ -182,5 +182,16 @@ public class CalendarServiceImpl implements CalendarService{
   public Map<Integer, String > searchHightLightEvent(String username, EventQuery eventQuery)throws Exception  {
     return storage_.searchHightLightEvent(username, eventQuery) ;
   }
-
+  
+  public void shareCalendar(String username, String calendarId, List<String> receiverUsers) throws Exception {
+    storage_.shareCalendar(username, calendarId, receiverUsers) ;
+  }
+  
+  public GroupCalendarData getSharedCalendars(String username) throws Exception {
+    return storage_.getSharedCalendars(username) ;
+  }
+  
+  public List<CalendarEvent> getEvent(String username, EventQuery eventQuery, String[] publicCalendarIds) throws Exception{
+    return storage_.getEvent(username, eventQuery, publicCalendarIds) ;
+  }
 }

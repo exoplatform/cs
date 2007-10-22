@@ -242,7 +242,15 @@
   				<valueConstraints/>
 	  		</propertyDefinition>	  					
   		</propertyDefinitions>
- 	 	</nodeType>  	 	
+ 	 	</nodeType>
+ 	 	<nodeType name="exo:calendarShared" isMixin="true" hasOrderableChildNodes="false" primaryItemName="">
+	    <propertyDefinitions>
+	      <propertyDefinition name="exo:sharedId" requiredType="Reference" autoCreated="false" mandatory="true"
+	        onParentVersion="COPY" protected="false" multiple="true">
+	        <valueConstraints/>
+	      </propertyDefinition>        
+	    </propertyDefinitions>
+	  </nodeType>  	 	
 </nodeTypes>  
   
    
