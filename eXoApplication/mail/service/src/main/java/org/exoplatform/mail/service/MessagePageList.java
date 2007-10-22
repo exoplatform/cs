@@ -136,7 +136,7 @@ public class MessagePageList extends JCRPageList {
   
   
   
-  private String [] ValuesToStrings(Value[] Val) throws Exception {
+/*  private String [] ValuesToStrings(Value[] Val) throws Exception {
   	if(Val.length == 1)
   		return new String[]{Val[0].getString()};
 		String[] Str = new String[Val.length];
@@ -144,7 +144,7 @@ public class MessagePageList extends JCRPageList {
 		  Str[i] = Val[i].getString();
 		}
 		return Str;
-  }
+  }*/
   
 	@Override
 	public List<Message> getAll() throws Exception { return null; }

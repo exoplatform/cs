@@ -4,14 +4,9 @@
  **************************************************************************/
 package org.exoplatform.mail.service;
 
-import java.util.* ;
-
-import javax.jcr.Session;
+import java.util.List;
 
 import org.exoplatform.commons.exception.ExoMessageException;
-import org.exoplatform.container.PortalContainer;
-import org.exoplatform.services.jcr.RepositoryService;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
 /**
  * @author Tuan Nguyen (tuan08@users.sourceforge.net)
  * @since Oct 21, 2004
