@@ -42,19 +42,29 @@ import org.exoplatform.container.PortalContainer;
  */
 public class VCardImportExport implements ContactImportExport {
 
-  private static String eXoGender   = "EXO-GENDER";
-  private static String eXoExoId    = "EXO-EXOID";
-  private static String eXoAolId    = "EXO-AOLID";
-  private static String eXoGoogleId = "EXO-GOOGLEID";
-  private static String eXoIcqId    = "EXO-ICQID";
-  private static String eXoIcrId    = "EXO-ICRID";
-  private static String eXoSkypeId  = "EXO-SKYPEID";
-  private static String eXoMsnId    = "EXO-MSNID";
-  private static String eXoYahooId  = "EXO-YAHOOID";
-  
-  public static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-  public static SimpleDateFormat sdf2 = new SimpleDateFormat("MM/dd/yyyy");
-  public static SimpleDateFormat sdfFull = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+  private static String          eXoGender   = "EXO-GENDER";
+
+  private static String          eXoExoId    = "EXO-EXOID";
+
+  private static String          eXoAolId    = "EXO-AOLID";
+
+  private static String          eXoGoogleId = "EXO-GOOGLEID";
+
+  private static String          eXoIcqId    = "EXO-ICQID";
+
+  private static String          eXoIcrId    = "EXO-ICRID";
+
+  private static String          eXoSkypeId  = "EXO-SKYPEID";
+
+  private static String          eXoMsnId    = "EXO-MSNID";
+
+  private static String          eXoYahooId  = "EXO-YAHOOID";
+
+  public static SimpleDateFormat sdf         = new SimpleDateFormat("yyyy-MM-dd");
+
+  public static SimpleDateFormat sdf2        = new SimpleDateFormat("MM/dd/yyyy");
+
+  public static SimpleDateFormat sdfFull     = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
   public OutputStream exportContact(String username, List<String> contactIds) throws Exception {
 
@@ -92,7 +102,6 @@ public class VCardImportExport implements ContactImportExport {
       while (tokens.hasMoreTokens())
         pid.addNickname(tokens.nextToken().trim());
 
-      
       // TODO :
       try {
         pid.setBirthDate(sdf.parse(contact.getBirthday()));
@@ -102,13 +111,17 @@ public class VCardImportExport implements ContactImportExport {
 
       Image photo = cmf.createImage();
       ContactAttachment attachment = contact.getAttachment();
-      InputStream is = attachment.getInputStream();
-      byte[] data = new byte[is.available()];
-      is.read(data);
-      photo.setContentType(attachment.getMimeType());
-      photo.setData(data);
+      if (attachment != null) {
+        InputStream is = attachment.getInputStream();
+        if (is != null) {
+          byte[] data = new byte[is.available()];
+          is.read(data);
+          photo.setContentType(attachment.getMimeType());
+          photo.setData(data);
 
-      pid.setPhoto(photo);
+          pid.setPhoto(photo);
+        }
+      }
 
       pimContacts[i].setPersonalIdentity(pid);
 
@@ -160,7 +173,7 @@ public class VCardImportExport implements ContactImportExport {
       orgid.setTitle(contact.getJobTitle());
       Organization org = cmf.createOrganization();
       org.setURL(contact.getWebPage());
-      
+
       orgid.setOrganization(org);
       pimContacts[i].setOrganizationalIdentity(orgid);
 
@@ -178,13 +191,13 @@ public class VCardImportExport implements ContactImportExport {
 
       // add the extension to the contact
       pimContacts[i].setExtensions(extensions);
-      
+
       pimContacts[i].setURL(contact.getPersonalSite());
-      
+
       pimContacts[i].setNote(contact.getNote());
-      
+
       // TODO :
-      //pimContacts[i].setCurrentRevisionDate(sdfFull.parse(contact.getLastUpdated()));
+      // pimContacts[i].setCurrentRevisionDate(sdfFull.parse(contact.getLastUpdated()));
 
     }
 
@@ -200,15 +213,7 @@ public class VCardImportExport implements ContactImportExport {
     ContactIOFactory ciof = Pim.getContactIOFactory();
     ContactUnmarshaller unmarshaller = ciof.createContactUnmarshaller();
     // unmarshall contact
-    
-    //  Add handler for the simple extension kids
-    SimpleExtension ext = new SimpleExtension("EXO-Gender");
-    //add the handler, so the marshalling will work
-    ItemHandlerManager.getReference().addExtensionHandler(
-        ext.getIdentifier(),
-        new GenericExtensionItemHandler(ext)
-    );
-    
+
     addExtensionHandler(eXoGender);
     addExtensionHandler(eXoExoId);
     addExtensionHandler(eXoAolId);
@@ -219,204 +224,207 @@ public class VCardImportExport implements ContactImportExport {
     addExtensionHandler(eXoMsnId);
     addExtensionHandler(eXoYahooId);
 
-    net.wimpi.pim.contact.model.Contact pimContact = unmarshaller.unmarshallContact(input);
+    net.wimpi.pim.contact.model.Contact[] pimContacts = unmarshaller.unmarshallContacts(input);
 
-    Contact contact = new Contact();
+    for (int index = 0; index < pimContacts.length; index++) {
 
-    PersonalIdentity identity = pimContact.getPersonalIdentity();
+      Contact contact = new Contact();
 
-    String fullName = identity.getFormattedName();
-    contact.setFullName(fullName);
-    String lastName = identity.getLastname();
-    contact.setLastName(lastName);
-    String firstName = identity.getFirstname();
-    contact.setFirstName(identity.getFirstname());
+      PersonalIdentity identity = pimContacts[index].getPersonalIdentity();
 
-    String middleName = "";
-    int size = identity.getAdditionalNameCount();
-    for (int i = 0; i < size; i++) {
-      if (i > 0)
-        middleName += ", ";
-      middleName = identity.getAdditionalName(i);
-    }
-    contact.setMiddleName(middleName);
+      String fullName = identity.getFormattedName();
+      contact.setFullName(fullName);
+      String lastName = identity.getLastname();
+      contact.setLastName(lastName);
+      String firstName = identity.getFirstname();
+      contact.setFirstName(identity.getFirstname());
 
-    String nickName = "";
-    size = identity.getNicknameCount();
-    for (int i = 0; i < size; i++) {
-      if (i > 0)
-        nickName += ", ";
-      nickName = identity.getNickname(i);
-    }
-    contact.setNickName(nickName);
-
-    contact.setBirthday(sdf2.format(identity.getBirthDate()));
-
-    ContactAttachment attachment = new ContactAttachment();
-    Image photo = identity.getPhoto();
-    if (photo != null) {
-      InputStream is = photo.getInputStream();
-      if (is != null) {
-        attachment.setInputStream(is);
-
-        String filename = lastName;
-        if ((filename == null) || filename.equals(""))
-          filename = firstName;
-        attachment.setFileName(filename + ".photo");
-        attachment.setMimeType(photo.getContentType());
-        contact.setAttachment(attachment);
+      String middleName = "";
+      int size = identity.getAdditionalNameCount();
+      for (int i = 0; i < size; i++) {
+        if (i > 0)
+          middleName += ", ";
+        middleName = identity.getAdditionalName(i);
       }
-    }
+      contact.setMiddleName(middleName);
 
-    contact.setJobTitle(pimContact.getOrganizationalIdentity().getTitle());
+      String nickName = "";
+      size = identity.getNicknameCount();
+      for (int i = 0; i < size; i++) {
+        if (i > 0)
+          nickName += ", ";
+        nickName = identity.getNickname(i);
+      }
+      contact.setNickName(nickName);
 
-    // addresses iterator
-    for (Iterator iters = pimContact.getAddresses(); iters.hasNext();) {
-      Address addr = (Address) iters.next();
+      contact.setBirthday(sdf2.format(identity.getBirthDate()));
 
-      if (addr.isHome()) {
-        contact.setHomeAddress(addr.getStreet());
-        contact.setHomeCity(addr.getCity());
-        contact.setHomeState_province(addr.getRegion());
-        contact.setHomePostalCode(addr.getPostalCode());
-        contact.setHomeCountry(addr.getCountry());
+      ContactAttachment attachment = new ContactAttachment();
+      Image photo = identity.getPhoto();
+      if (photo != null) {
+        InputStream is = photo.getInputStream();
+        if (is != null) {
+          attachment.setInputStream(is);
 
-      } else if (addr.isWork()) {
-        contact.setWorkAddress(addr.getStreet());
-        contact.setWorkCity(addr.getCity());
-        contact.setWorkStateProvince(addr.getRegion());
-        contact.setWorkPostalCode(addr.getPostalCode());
-        contact.setWorkCountry(addr.getCountry());
-
+          String filename = lastName;
+          if ((filename == null) || filename.equals(""))
+            filename = firstName;
+          attachment.setFileName(filename + ".photo");
+          attachment.setMimeType(photo.getContentType());
+          contact.setAttachment(attachment);
+        }
       }
 
-    } // end of addresses for
+      contact.setJobTitle(pimContacts[index].getOrganizationalIdentity().getTitle());
 
-    Communications communication = pimContact.getCommunications();
-    String emailAddress = "";
-    for (Iterator iters = communication.getEmailAddresses(); iters.hasNext();) {
-      EmailAddress email = (EmailAddress) iters.next();
-      if (!emailAddress.equals(""))
-        emailAddress += "; ";
-      emailAddress += email.getAddress();
-    }
+      // addresses iterator
+      for (Iterator iters = pimContacts[index].getAddresses(); iters.hasNext();) {
+        Address addr = (Address) iters.next();
 
-    contact.setEmailAddress(emailAddress);
+        if (addr.isHome()) {
+          contact.setHomeAddress(addr.getStreet());
+          contact.setHomeCity(addr.getCity());
+          contact.setHomeState_province(addr.getRegion());
+          contact.setHomePostalCode(addr.getPostalCode());
+          contact.setHomeCountry(addr.getCountry());
 
-    String mobilePhone = null;
+        } else if (addr.isWork()) {
+          contact.setWorkAddress(addr.getStreet());
+          contact.setWorkCity(addr.getCity());
+          contact.setWorkStateProvince(addr.getRegion());
+          contact.setWorkPostalCode(addr.getPostalCode());
+          contact.setWorkCountry(addr.getCountry());
 
-    String homePhone1 = null;
-    String homePhone2 = null;
-    String homeFax = null;
+        }
 
-    String workPhone1 = null;
-    String workPhone2 = null;
-    String workFax = null;
+      } // end of addresses for
 
-    for (Iterator iters = communication.getPhoneNumbers(); iters.hasNext();) {
-      PhoneNumber phone = (PhoneNumber) iters.next();
-
-      if (phone.isHome() && phone.isFax())
-        homeFax = phone.getNumber();
-      else if (phone.isHome() && phone.isVoice()) {
-        if (homePhone1 == null)
-          homePhone1 = phone.getNumber();
-        else if (homePhone2 == null)
-          homePhone2 = phone.getNumber();
-
-      } else if (phone.isWork() && phone.isFax()) {
-        workFax = phone.getNumber();
-      } else if (phone.isWork() && phone.isVoice()) {
-        if (workPhone1 == null)
-          workPhone1 = phone.getNumber();
-        else if (workPhone2 == null)
-          workPhone2 = phone.getNumber();
-
-      } else if (phone.isCellular()) {
-        mobilePhone = phone.getNumber();
+      Communications communication = pimContacts[index].getCommunications();
+      String emailAddress = "";
+      for (Iterator iters = communication.getEmailAddresses(); iters.hasNext();) {
+        EmailAddress email = (EmailAddress) iters.next();
+        if (!emailAddress.equals(""))
+          emailAddress += "; ";
+        emailAddress += email.getAddress();
       }
 
+      contact.setEmailAddress(emailAddress);
+
+      String mobilePhone = null;
+
+      String homePhone1 = null;
+      String homePhone2 = null;
+      String homeFax = null;
+
+      String workPhone1 = null;
+      String workPhone2 = null;
+      String workFax = null;
+
+      for (Iterator iters = communication.getPhoneNumbers(); iters.hasNext();) {
+        PhoneNumber phone = (PhoneNumber) iters.next();
+
+        if (phone.isHome() && phone.isFax())
+          homeFax = phone.getNumber();
+        else if (phone.isHome() && phone.isVoice()) {
+          if (homePhone1 == null)
+            homePhone1 = phone.getNumber();
+          else if (homePhone2 == null)
+            homePhone2 = phone.getNumber();
+
+        } else if (phone.isWork() && phone.isFax()) {
+          workFax = phone.getNumber();
+        } else if (phone.isWork() && phone.isVoice()) {
+          if (workPhone1 == null)
+            workPhone1 = phone.getNumber();
+          else if (workPhone2 == null)
+            workPhone2 = phone.getNumber();
+
+        } else if (phone.isCellular()) {
+          mobilePhone = phone.getNumber();
+        }
+
+      }
+      if (mobilePhone != null)
+        contact.setMobilePhone(mobilePhone);
+
+      if (homePhone1 != null) {
+        contact.setHomePhone1(homePhone1);
+        if (homePhone2 != null)
+          contact.setHomePhone2(homePhone2);
+      }
+
+      if (homeFax != null)
+        contact.setHomeFax(homeFax);
+
+      if (workPhone1 != null) {
+        contact.setWorkPhone1(workPhone1);
+        if (workPhone2 != null)
+          contact.setWorkPhone2(workPhone2);
+      }
+
+      if (workFax != null)
+        contact.setWorkFax(workFax);
+
+      contact.setPersonalSite(pimContacts[index].getURL());
+      if ((pimContacts[index].getOrganizationalIdentity() != null)
+          && (pimContacts[index].getOrganizationalIdentity().getOrganization() != null))
+        contact.setWebPage(pimContacts[index].getOrganizationalIdentity().getOrganization().getURL());
+
+      Extensions extensions = pimContacts[index].getExtensions();
+      if (extensions != null) {
+        SimpleExtension ext = (SimpleExtension) extensions.get(eXoGender);
+        if (ext != null)
+          contact.setGender(ext.getValue());
+
+        ext = (SimpleExtension) extensions.get(eXoExoId);
+        if (ext != null)
+          contact.setExoId(ext.getValue());
+
+        ext = (SimpleExtension) extensions.get(eXoAolId);
+        if (ext != null)
+          contact.setAolId(ext.getValue());
+
+        ext = (SimpleExtension) extensions.get(eXoGoogleId);
+        if (ext != null)
+          contact.setGoogleId(ext.getValue());
+
+        ext = (SimpleExtension) extensions.get(eXoIcqId);
+        if (ext != null)
+          contact.setIcqId(ext.getValue());
+
+        ext = (SimpleExtension) extensions.get(eXoIcrId);
+        if (ext != null)
+          contact.setIcrId(ext.getValue());
+
+        ext = (SimpleExtension) extensions.get(eXoSkypeId);
+        if (ext != null)
+          contact.setSkypeId(ext.getValue());
+
+        ext = (SimpleExtension) extensions.get(eXoMsnId);
+        if (ext != null)
+          contact.setMsnId(ext.getValue());
+
+        ext = (SimpleExtension) extensions.get(eXoYahooId);
+        if (ext != null)
+          contact.setYahooId(ext.getValue());
+
+      }
+
+      contact.setNote(pimContacts[index].getNote());
+
+      if (pimContacts[index].getCurrentRevisionDate() != null)
+        contact.setLastUpdated(pimContacts[index].getCurrentRevisionDate().toString());
+
+      // ////////////////////////////////
+      // Now we have the contact object
+      // Then store it to JCR storage
+      // ////////////////////////////////
+
+      contact.setCategories(new String[] { groupId });
+      ContactService contactService = (ContactService) PortalContainer
+          .getComponent(ContactService.class);
+      contactService.saveContact(username, contact, true);
     }
-    if (mobilePhone != null)
-      contact.setMobilePhone(mobilePhone);
-
-    if (homePhone1 != null) {
-      contact.setHomePhone1(homePhone1);
-      if (homePhone2 != null)
-        contact.setHomePhone2(homePhone2);
-    }
-
-    if (homeFax != null)
-      contact.setHomeFax(homeFax);
-
-    if (workPhone1 != null) {
-      contact.setWorkPhone1(workPhone1);
-      if (workPhone2 != null)
-        contact.setWorkPhone2(workPhone2);
-    }
-
-    if (workFax != null)
-      contact.setWorkFax(workFax);
-
-    contact.setPersonalSite(pimContact.getURL());
-    if ((pimContact.getOrganizationalIdentity() != null) &&
-        (pimContact.getOrganizationalIdentity().getOrganization() != null))
-      contact.setWebPage(pimContact.getOrganizationalIdentity().getOrganization().getURL());
-
-    Extensions extensions = pimContact.getExtensions();
-    if (extensions != null) {
-      ext = (SimpleExtension) extensions.get(eXoGender);
-      if (ext != null)
-        contact.setGender(ext.getValue());
-
-      ext = (SimpleExtension) extensions.get(eXoExoId);
-      if (ext != null)
-        contact.setExoId(ext.getValue());
-
-      ext = (SimpleExtension) extensions.get(eXoAolId);
-      if (ext != null)
-        contact.setAolId(ext.getValue());
-
-      ext = (SimpleExtension) extensions.get(eXoGoogleId);
-      if (ext != null)
-        contact.setGoogleId(ext.getValue());
-
-      ext = (SimpleExtension) extensions.get(eXoIcqId);
-      if (ext != null)
-        contact.setIcqId(ext.getValue());
-
-      ext = (SimpleExtension) extensions.get(eXoIcrId);
-      if (ext != null)
-        contact.setIcrId(ext.getValue());
-
-      ext = (SimpleExtension) extensions.get(eXoSkypeId);
-      if (ext != null)
-        contact.setSkypeId(ext.getValue());
-      
-      ext = (SimpleExtension) extensions.get(eXoMsnId);
-      if (ext != null)
-        contact.setMsnId(ext.getValue());
-
-      ext = (SimpleExtension) extensions.get(eXoYahooId);
-      if (ext != null)
-        contact.setYahooId(ext.getValue());
-
-    } 
-
-    contact.setNote(pimContact.getNote());
-
-    if (pimContact.getCurrentRevisionDate() != null)
-      contact.setLastUpdated(pimContact.getCurrentRevisionDate().toString());
-
-    // ////////////////////////////////
-    // Now we have the contact object
-    // Then store it to JCR storage
-    // ////////////////////////////////
-
-    contact.setCategories(new String[] { groupId });
-    ContactService contactService = (ContactService) PortalContainer
-        .getComponent(ContactService.class);
-    contactService.saveContact(username, contact, true);
   }
 
   private void addPhoneNumber(ContactModelFactory cmf, Communications comm, String number,
@@ -451,14 +459,14 @@ public class VCardImportExport implements ContactImportExport {
       ItemHandlerManager.getReference().addExtensionHandler(ext.getIdentifier(),
           new GenericExtensionItemHandler(ext));
   }
-  
+
   private void addExtensionHandler(String eXoKey) throws versitException {
     SimpleExtension ext = new SimpleExtension(eXoKey);
     // add the handler, so the marshalling will work
     if (!ItemHandlerManager.getReference().hasHandler(ext.getIdentifier())) {
       ItemHandlerManager.getReference().addExtensionHandler(ext.getIdentifier(),
           new GenericExtensionItemHandler(ext));
-      
+
     }
   }
 }
