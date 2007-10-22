@@ -5,12 +5,12 @@
 package org.exoplatform.mail.service.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Arrays;
 import java.util.Map;
 
 import javax.jcr.Node;
@@ -22,17 +22,15 @@ import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 import javax.mail.internet.InternetAddress;
 
-import org.apache.poi.util.SystemOutLogger;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Attachment;
 import org.exoplatform.mail.service.BufferAttachment;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.JCRMessageAttachment;
-import org.exoplatform.mail.service.MessagePageList;
 import org.exoplatform.mail.service.MailSetting;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.MessageFilter;
-import org.exoplatform.mail.service.MessageHeader;
+import org.exoplatform.mail.service.MessagePageList;
 import org.exoplatform.mail.service.Tag;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.registry.JCRRegistryService;
