@@ -81,7 +81,6 @@ UICalendarPortlet.prototype.init = function() {
 	UICalendarPortlet.step = 60 ;
 	UICalendarPortlet.interval = 20 ;
 	//UICalendarPortlet.viewer.onmousedown = eXo.calendar.UISelection.init ;
-	window.status = "" ;
 	}catch(e) {
 		window.status = " !!! Error : " + e.message ;
 		return false ;
