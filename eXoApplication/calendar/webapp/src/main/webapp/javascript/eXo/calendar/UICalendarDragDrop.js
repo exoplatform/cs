@@ -22,6 +22,7 @@ UICalendarDragDrop.prototype.init = function() {
 	for (var i = 0 ; i < len ; i ++) {
 		dragObjects[i].onmousedown = UICalendarDragDrop.dragStart ;
 		checkbox = eXo.core.DOMUtil.findFirstDescendantByClass(dragObjects[i], "input", "checkbox") ;
+		if (!checkbox) continue ;
 		checkbox.onmousedown = function (evt) {
 			var _e = window.event || evt ;
 			_e.cancelBubble = true ;
@@ -39,9 +40,6 @@ UICalendarDragDrop.prototype.dragStart = function(evt) {
 	var UICalendarDragDrop = eXo.calendar.UICalendarDragDrop ;
 	UICalendarDragDrop.dragElement = this ;
 	UICalendarDragDrop.extraY = (UICalendarDragDrop.container.parentNode.scrollTop) ? (UICalendarDragDrop.container.parentNode.scrollTop + UICalendarDragDrop.dragElement.offsetHeight): 0 ;
-//	var RowContainerDay = eXo.core.DOMUtil.findAncestorByClass(UICalendarDragDrop.dragElement,"RowContainerDay") ;
-//	var scrollTop = (RowContainerDay)? RowContainerDay.scrollTop : 0 ;
-	window.status = "TEST" ;
 	var width = 	UICalendarDragDrop.dragElement.offsetWidth
 	UICalendarDragDrop.dragElement.style.position = "absolute" ;
 	UICalendarDragDrop.dragElement.style.width = width + "px" ;
