@@ -59,7 +59,7 @@
 				  long precent = (100 / size) ;
 		    %>
    			<td width="$precent%">
-	    		<div class="EventContainerBorder EventBoxes" eventid="<%=ce.getId()%>" calid="<%=ce.getCalendarId()%>" actionlink="$actionLink">
+	    		<div unselectable="on" class="EventContainerBorder EventBoxes" eventid="<%=ce.getId()%>" calid="<%=ce.getCalendarId()%>" actionlink="$actionLink">
 	          <div class="EventContainer" title="<%=df.format(ce.getFromDateTime())%>:-><%=df.format(ce.getToDateTime())%>">
 	          	<%=ce.getSummary()%>
 	          </div>
@@ -70,13 +70,12 @@
     </tbody>
     </table>
   </div>
-  <div class="EventDayContainer" >
+  <div class="EventDayContainer">
     <div class="EventDayContent">
-      <table class="UIGrid" id="UIDayViewGrid" cellspacing="0" borderspacing="0" cellpadding="0"
-        style="table-layout: fixed;">
+      <table class="UIGrid" id="UIDayViewGrid" cellspacing="0" borderspacing="0" cellpadding="0" style="table-layout: fixed;">
         <tbody>
           <tr>
-            <td style="width: 60px;">
+            <td style="width: 60px ;">
               <table>
                 <tbody>
                   <%
@@ -98,7 +97,7 @@
               </table>
             </td>
             <td>
-              <div class="EventBoard" >
+              <div class="EventBoard" style="position : relative ;">
                 <div class="EventBoardContainer">
                   <%
 								 def currentDateFrom = uicomponent.getCurrentDayBegin() ;
@@ -154,6 +153,7 @@
                   </table>
                 </div>
               </div>
+            
             </td>
           </tr>
         </tbody>
