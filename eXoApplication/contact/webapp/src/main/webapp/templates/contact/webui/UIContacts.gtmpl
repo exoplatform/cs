@@ -8,7 +8,9 @@
 	import org.exoplatform.contact.service.JCRPageList;
 	def rcontext = _ctx.getRequestContext() ;  
 	rcontext.getJavascriptManager().importJavascript("eXo.contact.UIContactPortlet","/contact/javascript") ;
+	rcontext.getJavascriptManager().importJavascript("eXo.contact.UIContactDragDrop","/contact/javascript") ;
 	rcontext.getJavascriptManager().addJavascript("eXo.contact.UIContactPortlet.showContextMenu() ;") ;
+	rcontext.getJavascriptManager().addJavascript("eXo.contact.UIContactDragDrop.init() ;") ;
 	uiform.begin()
 	if(uicomponent.getViewContactsList()) {
 %>
@@ -165,7 +167,7 @@
 					<% /*Begin Popup Menu*/ %>						
 
   				<div class="UIRightClickPopupMenu" id="UIContactListPopuMenu" eXoCallback="eXo.contact.UIContactPortlet.contactCallback">
-						  <div class="TopLeftRightClickPopupMenu" id="test">
+						  <div class="TopLeftRightClickPopupMenu">
           			<div class="TopRightRightClickPopupMenu">
             			<div class="TopCenterRightClickPopupMenu"><span></span></div>
           			</div>
@@ -224,7 +226,7 @@
 <% 
 	} else { 
 %>
-	<div class="UIVCards">
+	<div class="UIVCards" id="UIVCards">
 	<div class="VCardsBar">
 		<div class="Subject">Vcards in eXo Platform</div>
 	</div>

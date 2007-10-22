@@ -23,7 +23,7 @@ UIContactPortlet.prototype.contactCallback = function(evt) {
 	var checkbox = eXo.core.DOMUtil.findFirstDescendantByClass(tr, "input", "checkbox") ;
 	var id = checkbox.name ;
 	eXo.webui.UIContextMenu.changeAction(UIContextMenu.menuElement, id) ;
-	if (tr.getAttribute("isTagList") && (tr.getAttribute("isTagList").toLowerCase()!="false")) {
+	if (tr.getAttribute("selectedTag") && (tr.getAttribute("selectedTag").toLowerCase()!="null")) {		
 		var moveContactIcon =  eXo.core.DOMUtil.findFirstDescendantByClass(UIContextMenu.menuElement, "div", "MoveContactIcon") ;
 		moveContactIcon.style.display = "none" ;
 	}
