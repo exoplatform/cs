@@ -766,3 +766,46 @@
 .UIMailPortlet .UIFolderContainer .SelectedLabel {
 	font-weight: bold ;
 }
+
+
+/*=======================SubjectMail========================*/
+.SubjectMail {
+	padding: 8px;
+}
+
+.SubjectMail .WelcomeMail .LabelWelcomeMail {
+	float: left;
+	color: #469ae2;
+	font-size: 14px;
+}
+
+.SubjectMail .WelcomeMail .LabelComment {
+	float: right;
+	color: #8a8a8a;
+	font-size: 10px;
+	padding:3px 0px;
+}
+
+.SubjectMail .LogoMail {
+	background: url('background/LogoMail346x49.gif') no-repeat left;
+	width: 346px; height: 49px; margin-left: 40px;
+}
+
+.SubjectMail .OverviewMail {
+	color: #f7941e;
+	font-size: 12px;
+	font-weight: bolder;
+	border-bottom: 1px solid #c7c7c7;
+}
+
+.SubjectMail .ContentMail {
+	padding: 4px 0px;
+}
+
+.SubjectMail .FeaturesMail {
+	color: #f7941e;
+	font-size: 12px;
+	font-weight: bolder;
+	border-bottom: 1px solid #c7c7c7;
+}
+

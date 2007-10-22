@@ -4,7 +4,8 @@
 	rcontext.getJavascriptManager().importJavascript('eXo.webui.UIHorizontalTabs') ;
 	String compName = uicomponent.getName() ;
 %>
-<div class="$compName UIAccountCreationWizard">
+
+<div class="$compName UIAccountCreationWizard"  style="display:$display;">
 	<div class="UIFormTabPane" >
 	  <div class="UITabPane">
 			<div class="TabPaneContent">

@@ -194,3 +194,27 @@
 .PrintThisPageIcon {
 	background: url('icons/PrintThisPageIcon.gif') no-repeat ;
 }
+
+.OpenThreadsIcon {
+	background: url('icons/OpenThreadsIcon.gif') no-repeat ;
+}
+
+.CloseThreadsIcon {
+	background: url('icons/CloseThreadsIcon.gif') no-repeat ;
+}
+
+.MoveThreadsIcon {
+	background: url('icons/MoveThreadsIcon.gif') no-repeat ;
+}
+
+.StickThreadsIcon {
+	background: url('icons/StickThreadsIcon.gif') no-repeat ;
+}
+
+.StickThreadsIcon {
+	background: url('icons/StickThreadsIcon.gif') no-repeat ;
+}
+
+.DeleteThreadsIcon {
+	background: url('icons/DeleteThreadsIcon.gif') no-repeat ;
+}
