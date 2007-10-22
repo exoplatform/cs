@@ -123,9 +123,31 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       UIFormCheckBoxInput uiCheckBox = getChildById(contact.getId()) ;
       if(uiCheckBox != null && uiCheckBox.isChecked()) {
         checkedContacts.add(contact.getId()) ;
-      }
+      } 
     }
     return checkedContacts ;
+  }
+  
+  // TODO : remove ....
+  public List<String> getAllContactIds() throws Exception {
+    List<String> contactIds = new ArrayList<String>() ;
+    System.out.println("\n\n\n>>>khd : UIContacts.getAllContactIds ...");
+    for (Contact contact : getContacts()) {
+      System.out.println(">>>khd : contactId = " + contact.getId());
+      UIFormCheckBoxInput uiCheckBox = getChildById(contact.getId()) ;
+      if(uiCheckBox != null) {
+        if (uiCheckBox.isChecked())
+          System.out.println(">>>khd : uiCheckBox is CHECKED");
+        else
+          System.out.println(">>>khd : uiCheckBox is NOT checked");
+
+      } else {
+        System.out.println(">>>khd : uiCheckBox is NULLLLLLLLLLLLLLLLLLLLLL");
+      }
+      contactIds.add(contact.getId()) ;
+    }
+    System.out.println(">>>khd : QUITTTTTTTTTTTTTTTTTTTTTTTTT");
+    return contactIds ;
   }
   
   public DownloadService getDownloadService() { 

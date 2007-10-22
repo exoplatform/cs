@@ -24,12 +24,12 @@
 						                      Add Address
 						                    </div>
 					                    </a>
-					                    <a class="MenuItem" href="<%=uicomponent.event("AddressPopup")%>">   
+					                    <a class="MenuItem" href="<%=uicomponent.event("ImportAddress")%>">   
 						                    <div class="ItemIcon ExportAddressIcon">
 						                      Import Address
 						                    </div>
 					                    </a>
-					                    <a class="MenuItem" href="<%=uicomponent.event("AddressPopup")%>">   
+					                    <a class="MenuItem" href="<%=uicomponent.event("ExportAddress")%>">   
 						                    <div class="ItemIcon ExportAddressIcon">
 						                      Export Address
 						                    </div>

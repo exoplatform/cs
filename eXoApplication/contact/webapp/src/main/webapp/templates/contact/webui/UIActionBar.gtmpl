@@ -47,12 +47,18 @@
 				      		<% /*End Popup Menu*/ %>
 							</div>
 							
+              <a href="<%=uicomponent.event("ImportAddress")%>" class="ControlButton">
 							<div class="ImportContact" title="Import Contacts">
 								<span></span>
 							</div>
+              </a>
+              
+              <a href="<%=uicomponent.event("ExportAddress")%>" class="ControlButton">
 							<div class="ExportContact" title="Export Contacts">
 								<span></span>
 							</div>
+              </a>
+              
 							<div class="SeparatorLine"><span></span></div>
 							<div class="SelectButton" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
 								<div class="IconHolder ViewIcon">

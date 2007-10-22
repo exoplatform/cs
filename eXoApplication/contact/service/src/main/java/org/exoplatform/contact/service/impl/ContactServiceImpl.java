@@ -4,11 +4,14 @@
  **************************************************************************/
 package org.exoplatform.contact.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.ContactGroup;
+import org.exoplatform.contact.service.ContactImportExport;
 import org.exoplatform.contact.service.ContactPageList;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.GroupContactData;
@@ -24,11 +27,17 @@ import org.exoplatform.services.jcr.RepositoryService;
  * Jul 11, 2007  
  */
 public class ContactServiceImpl implements ContactService {
+  
+  final private static String VCARD = "VCard(.vcf)".intern() ;
+  
   private JCRDataStorage storage_ ;
+  private Map<String, ContactImportExport> contactImportExport_ = new HashMap<String, ContactImportExport>() ;
   
   public ContactServiceImpl(RepositoryService  repositoryService, 
       JCRRegistryService jcrRegistryService) throws Exception {
       storage_ = new JCRDataStorage(repositoryService, jcrRegistryService) ;
+      
+      contactImportExport_.put(VCARD, new VCardImportExport()) ;
   }
   
   public List<Contact> getAllContact(String username) throws Exception {
@@ -154,4 +163,13 @@ public class ContactServiceImpl implements ContactService {
     return storage_.getSharedContactsByGroup(groupId) ;
   }
   
+  
+  public ContactImportExport getContactImportExports(String type) {
+    return contactImportExport_.get(type) ;
+  }
+  
+  public String[] getImportExportType() throws Exception {
+    return contactImportExport_.keySet().toArray(new String[]{}) ;
+  }
+
 }

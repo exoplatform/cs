@@ -46,5 +46,8 @@ public interface ContactService {
   public Tag removeTag(String username, String tagName) throws Exception ;
   public void removeContactTag(String username, List<String>contactIds, List<String> tags) throws Exception ;
   
+  
+  public ContactImportExport getContactImportExports(String type) ;
+  public String[] getImportExportType() throws Exception ;
 
 }

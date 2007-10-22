@@ -4,6 +4,7 @@
  **************************************************************************/
 package org.exoplatform.contact.webui;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.exoplatform.contact.ContactUtils;
@@ -12,11 +13,15 @@ import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.webui.popup.UICategoryForm;
 import org.exoplatform.contact.webui.popup.UICategorySelect;
 import org.exoplatform.contact.webui.popup.UIContactForm;
+import org.exoplatform.contact.webui.popup.UIExportForm;
+import org.exoplatform.contact.webui.popup.UIImportForm;
 import org.exoplatform.contact.webui.popup.UIPopupAction;
 import org.exoplatform.contact.webui.popup.UIPopupContainer;
 import org.exoplatform.contact.webui.popup.UISendEmail;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -34,6 +39,8 @@ import org.exoplatform.webui.event.EventListener;
         
         @EventConfig(listeners = UIAddressBooks.AddContactActionListener.class),
         @EventConfig(listeners = UIAddressBooks.AddAddressActionListener.class),
+        @EventConfig(listeners = UIAddressBooks.ImportAddressActionListener.class),
+        @EventConfig(listeners = UIAddressBooks.ExportAddressActionListener.class),
         @EventConfig(listeners = UIAddressBooks.EditGroupActionListener.class),
         @EventConfig(listeners = UIAddressBooks.DeleteGroupActionListener.class,
             confirm = "UIAddressBooks.msg.confirm-delete"),
@@ -70,6 +77,56 @@ public class UIAddressBooks extends UIComponent  {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }
   }
+  
+  static  public class ImportAddressActionListener extends EventListener<UIAddressBooks> {
+    public void execute(Event<UIAddressBooks> event) throws Exception {
+      UIAddressBooks uiAddressBook = event.getSource() ;  
+      UIContactPortlet uiContactPortlet = uiAddressBook.getAncestorOfType(UIContactPortlet.class) ;
+      UIPopupAction uiPopupAction = uiContactPortlet.getChild(UIPopupAction.class) ;
+      UIPopupContainer popupContainer = uiPopupAction.createUIComponent(UIPopupContainer.class, null, "ImportForm") ;
+      popupContainer.addChild(UICategorySelect.class, null, null) ;
+      popupContainer.addChild(UIImportForm.class, null, null) ;
+      uiPopupAction.activate(popupContainer, 600, 0, true) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+    }
+  }
+
+  static  public class ExportAddressActionListener extends EventListener<UIAddressBooks> {
+    public void execute(Event<UIAddressBooks> event) throws Exception {
+      System.out.println("\n\n\n>>>khd : ExportAddress from UIAddressBooks ...\n\n");
+      UIAddressBooks uiAddressBook = event.getSource() ;  
+      UIContactPortlet uiContactPortlet = uiAddressBook.getAncestorOfType(UIContactPortlet.class) ;
+      
+      String contactId = event.getRequestContext().getRequestParameter(OBJECTID);
+      List<String> contactIds = new ArrayList<String>();
+      if (!ContactUtils.isEmpty(contactId)) 
+        contactIds.add(contactId) ;
+      else {
+        UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class);
+        if (uiContacts == null)
+          System.out.println("\n\n\n>>>khd : UiContacts is NULLL");
+        else
+          System.out.println("\n\n\n>>>khd : UiContacts is OKKKK");
+        
+        contactIds = uiContacts.getAllContactIds();
+        //contactIds = uiContacts.getCheckedContacts() ;
+        
+        if (contactIds.size() == 0) {
+          UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
+          uiApp.addMessage(new ApplicationMessage("UIContacts.msg.checkContact-required", null)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        }
+      }
+      
+      UIPopupAction uiPopupAction = uiContactPortlet.getChild(UIPopupAction.class) ;
+      UIExportForm uiExportForm = uiPopupAction.createUIComponent(UIExportForm.class, null, "ExportForm") ;
+      uiPopupAction.activate(uiExportForm, 600, 0, true) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+      
+    }
+  }
+
   
   static  public class AddContactActionListener extends EventListener<UIAddressBooks> {
     public void execute(Event<UIAddressBooks> event) throws Exception {

@@ -4,13 +4,21 @@
  **************************************************************************/
 package org.exoplatform.contact.webui;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.webui.popup.UICategoryForm;
 import org.exoplatform.contact.webui.popup.UICategorySelect;
 import org.exoplatform.contact.webui.popup.UIContactForm;
+import org.exoplatform.contact.webui.popup.UIExportForm;
+import org.exoplatform.contact.webui.popup.UIImportForm;
 import org.exoplatform.contact.webui.popup.UIPopupAction;
 import org.exoplatform.contact.webui.popup.UIPopupContainer;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -31,7 +39,9 @@ import org.exoplatform.webui.event.EventListener;
         @EventConfig(listeners = UIActionBar.ListViewActionListener.class),
         @EventConfig(listeners = UIActionBar.VCardViewActionListener.class),
         @EventConfig(listeners = UIActionBar.CustomLayoutActionListener.class),
-        @EventConfig(listeners = UIActionBar.AddressBookActionListener.class)
+        @EventConfig(listeners = UIActionBar.AddressBookActionListener.class),
+        @EventConfig(listeners = UIActionBar.ImportAddressActionListener.class),
+        @EventConfig(listeners = UIActionBar.ExportAddressActionListener.class)
     }
 )
 public class UIActionBar extends UIContainer  {
@@ -103,5 +113,56 @@ public class UIActionBar extends UIContainer  {
     }  
   }
   
+  static public class ImportAddressActionListener extends EventListener<UIActionBar> {
+    public void execute(Event<UIActionBar> event) throws Exception {  
+      
+      System.out.println("\n\n\n>>>khd : ImportAddress from UIActionBar ...\n\n");
+      
+      UIActionBar uiForm = event.getSource() ;
+      UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
+      UIPopupAction uiPopupAction = uiContactPortlet.getChild(UIPopupAction.class) ;
+      UIPopupContainer popupContainer = uiPopupAction.createUIComponent(UIPopupContainer.class, null, "ImportContact") ;
+      popupContainer.addChild(UICategorySelect.class, null, null) ;
+      popupContainer.addChild(UIImportForm.class, null, null) ;
+      uiPopupAction.activate(popupContainer, 600, 0, true) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+    }  
+  }
+  
+  static public class ExportAddressActionListener extends EventListener<UIActionBar> {
+    public void execute(Event<UIActionBar> event) throws Exception {  
+      
+      System.out.println("\n\n\n>>>khd : ExportAddress from UIActionBar ...\n\n");
+      UIActionBar uiForm = event.getSource() ;  
+      UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
+      
+      String contactId = event.getRequestContext().getRequestParameter(OBJECTID);
+      List<String> contactIds = new ArrayList<String>();
+      if (!ContactUtils.isEmpty(contactId)) 
+        contactIds.add(contactId) ;
+      else {
+        UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class);
+        if (uiContacts == null)
+          System.out.println("\n\n\n>>>khd : UiContacts is NULLL");
+        else
+          System.out.println("\n\n\n>>>khd : UiContacts is OKKKK");
+        
+        contactIds = uiContacts.getAllContactIds();
+        //contactIds = uiContacts.getCheckedContacts() ;
+        
+        if (contactIds.size() == 0) {
+          UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
+          uiApp.addMessage(new ApplicationMessage("UIContacts.msg.checkContact-required", null)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        }
+      }
+      
+      UIPopupAction uiPopupAction = uiContactPortlet.getChild(UIPopupAction.class) ;
+      UIExportForm uiExportForm = uiPopupAction.createUIComponent(UIExportForm.class, null, "ExportForm") ;
+      uiPopupAction.activate(uiExportForm, 600, 0, true) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+    }  
+  }
   
 }

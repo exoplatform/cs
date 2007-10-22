@@ -53,7 +53,7 @@ public class UIActionBar extends UIContainer {
   static  public class CheckMailActionListener extends EventListener<UIActionBar> {    
     public void execute(Event<UIActionBar> event) throws Exception {
       UIActionBar uiActionBar = event.getSource() ;
-      System.out.println(" =========== > Check Mail");
+      System.out.println(" =========== > Check Mail xxx");
       UIMailPortlet uiPortlet = uiActionBar.getAncestorOfType(UIMailPortlet.class) ;
       UINavigationContainer uiNavigation = uiPortlet.getChild(UINavigationContainer.class) ;
       UISelectAccount uiSelect = uiNavigation.getChild(UISelectAccount.class) ;
