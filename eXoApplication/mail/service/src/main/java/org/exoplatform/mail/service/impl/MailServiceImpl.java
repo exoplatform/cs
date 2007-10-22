@@ -152,9 +152,11 @@ public class MailServiceImpl implements MailService{
     props.put(Utils.SVR_INCOMING_USERNAME, messageProps.get(Utils.SVR_INCOMING_USERNAME));
     props.put(Utils.SVR_INCOMING_PASSWORD, messageProps.get(Utils.SVR_INCOMING_PASSWORD));
     props.put(Utils.SVR_SMTP_USER, messageProps.get(Utils.SVR_SMTP_USER)) ;
+    props.put(Utils.SVR_SMTP_HOST, messageProps.get(Utils.SVR_SMTP_HOST)) ;
+    props.put(Utils.SVR_SMTP_PORT, messageProps.get(Utils.SVR_SMTP_PORT)) ;
     props.put(Utils.SVR_SMTP_AUTH, "true");
     props.put(Utils.SVR_SMTP_SOCKETFACTORY_PORT, messageProps.get(Utils.SVR_SMTP_PORT));
-    if (Boolean.valueOf(messageProps.get(Utils.SVR_SMTP_PORT))) {
+    if (Boolean.valueOf(messageProps.get(Utils.SVR_INCOMING_SSL))) {
       props.put(Utils.SVR_INCOMING_SSL, messageProps.get(Utils.SVR_INCOMING_SSL));
       props.put(Utils.SVR_SMTP_STARTTLS_ENABLE, "true");
       props.put(Utils.SVR_SMTP_SOCKETFACTORY_CLASS,  "javax.net.ssl.SSLSocketFactory");
