@@ -25,7 +25,8 @@ UIContactPortlet.prototype.contactCallback = function(evt) {
 	eXo.webui.UIContextMenu.changeAction(UIContextMenu.menuElement, id) ;
 	if (tr.getAttribute("selectedTag") && (tr.getAttribute("selectedTag").toLowerCase()!="null")) {		
 		var moveContactIcon =  eXo.core.DOMUtil.findFirstDescendantByClass(UIContextMenu.menuElement, "div", "MoveContactIcon") ;
-		moveContactIcon.style.display = "none" ;
+		moveContactIcon.parentNode.href = "javascript: void(0) ;" ;
+		moveContactIcon.parentNode.style.color = "#cccccc" ;
 	}
 } ;
 UIContactPortlet.prototype.addressBookCallback = function(evt) {
