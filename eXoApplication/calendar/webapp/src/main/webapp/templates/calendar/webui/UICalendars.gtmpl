@@ -90,7 +90,7 @@
   						<div class="CalendarColor1">
   							<div class="CheckBox" onclick="eXo.calendar.UICalendarPortlet.initFilter(this,1) ;"><%uiform.renderField(calId)%></div>
   							<div class="CalendarIcon"><a href="#" >$calendar.name</a></div>
-  							<div class="DownArrow1Icon" id="$calId" title="Calendar actions" onclick="eXo.calendar.UICalendarPortlet.show(this, event);"><span></span></div>
+  							<div class="DownArrow1Icon" id="$calId" calType="0" title="Calendar actions" onclick="eXo.calendar.UICalendarPortlet.show(this, event);"><span></span></div>
   							<div style="clear: both"><span></span></div>
   						</div>
   					</div>
@@ -121,11 +121,13 @@
 				<%	
 						List calendarList = sharedCalendars.getCalendars() ;
 						for(calendar in calendarList) {
+						calId = calendar.getId() ;
 				%>
   					<div class="CalendarItem">
   						<div class="CalendarColor1">
   							<div class="CheckBox"><%uiform.renderField(calendar.getId())%></div>
   							<div class="CalendarIcon"><a href="#" ><%=calendar.getName()%></a></div>
+  							<div class="DownArrow1Icon" id="$calId" calType="1" title="Calendar actions" onclick="eXo.calendar.UICalendarPortlet.show(this, event);"><span></span></div>
   							<div style="clear: both"><span></span></div>
   						</div>
   					</div>
@@ -166,11 +168,13 @@
 				<%	
 						List calendarList = groupData.getCalendars() ;
 						for(calendar in calendarList) {
+							calId = calendar.getId() ;
 				%>
   					<div class="CalendarItem">
   						<div class="CalendarColor1">
   							<div class="CheckBox"><%uiform.renderField(calendar.getId())%></div>
   							<div class="CalendarIcon"><a href="#" ><%=calendar.getName()%></a></div>
+  							<div class="DownArrow1Icon" id="$calId" calType="2" title="Calendar actions" onclick="eXo.calendar.UICalendarPortlet.show(this, event);"><span></span></div>
   							<div style="clear: both"><span></span></div>
   						</div>
   					</div>
@@ -262,7 +266,7 @@
 	                    </div>
 	                   </a>
 	                   <a class="MenuItem" href="<%=uicomponent.event("EditCalendar","id")%>">   
-	                    <div class="ItemIcon  CutCalendarIcon">
+	                    <div class="ItemIcon  EditCalendarIcon">
 	                      Edit Calendar
 	                    </div>
 	                   </a>
@@ -281,9 +285,14 @@
 	                      Send to friend
 	                    </div>
 	                   </a>
+	                   <a class="MenuItem" style="color: gray">   
+	                    <div class="ItemIcon  ChangeColorCalendarIcon">
+	                      Change color
+	                    </div>
+	                   </a>
 	                   <a class="MenuItem" href="<%=uicomponent.event("ShareCalendar","id")%>">   
-	                    <div class="ItemIcon  SendMailCalendarIcon">
-	                      Share calendar
+	                    <div class="ItemIcon  SharedCalendarIcon">
+	                      Shared calendar
 	                    </div>
 	                   </a>								                   
 	          		</div>
