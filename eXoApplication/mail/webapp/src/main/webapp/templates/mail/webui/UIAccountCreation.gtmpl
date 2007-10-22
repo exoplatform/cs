@@ -5,7 +5,7 @@
 	String compName = uicomponent.getName() ;
 %>
 
-<div class="$compName UIAccountCreationWizard"  style="display:$display;">
+<div class="$compName UIAccountCreationWizard" >
 	<div class="UIFormTabPane" >
 	  <div class="UITabPane">
 			<div class="TabPaneContent">
