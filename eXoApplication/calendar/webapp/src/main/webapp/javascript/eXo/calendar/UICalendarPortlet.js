@@ -44,18 +44,42 @@ UICalendarPortlet.prototype.showMainMenu = function(obj, evt) {
 }
 UICalendarPortlet.prototype.show = function(obj, evt) {
 	var _e = window.event || evt ;
-	_e.cancelBubble = true ;	
+	_e.cancelBubble = true ;
+	var DOMUtil = eXo.core.DOMUtil ;
 	var uiCalendarPortlet =	document.getElementById("UICalendarPortlet") ;
-	var contentContainer = eXo.core.DOMUtil.findFirstDescendantByClass(uiCalendarPortlet, "div", "ContentContainer") ;
-	var	uiPopupCategory = eXo.core.DOMUtil.findNextElementByTagName(contentContainer,  "div") ;
+	var contentContainer = DOMUtil.findFirstDescendantByClass(uiCalendarPortlet, "div", "ContentContainer") ;
+	var	uiPopupCategory = DOMUtil.findNextElementByTagName(contentContainer,  "div") ;
 	var newPos = {
 		"x" : eXo.core.Browser.findPosX(obj) ,
 		"y" : eXo.core.Browser.findPosY(obj) + obj.offsetHeight - contentContainer.scrollTop
 	}
-	if (eXo.core.DOMUtil.findAncestorByClass(obj, "CalendarItem")) uiPopupCategory = eXo.core.DOMUtil.findNextElementByTagName(uiPopupCategory,  "div") ;
+	if (DOMUtil.findAncestorByClass(obj, "CalendarItem")) uiPopupCategory = DOMUtil.findNextElementByTagName(uiPopupCategory,  "div") ;
 	if (!uiPopupCategory) return ;
-	eXo.webui.UIContextMenu.changeAction(uiPopupCategory, obj.id) ;
+	var value = "" ;
+	var calType = obj.getAttribute("calType") ;
+	if (calType) {		
+		value = "objectId=" + obj.id + "&calType=" + calType ;
+	} else {
+		value = "objectId=" + obj.id ;
+	}
+	var items = DOMUtil.findDescendantsByTagName(uiPopupCategory, "a") ;
+	for(var i = 0 ; i < items.length ; i ++) {
+		items[i].href = String(items[i].href).replace(/objectId\s*=.*(?='|")/, value) ;
+	}	
+	
 	eXo.calendar.UICalendarPortlet.swapMenu(uiPopupCategory, obj, newPos) ;
+	if (calType && (calType != "0") ) {
+		var actions = DOMUtil.findDescendantsByTagName(eXo.calendar.UICalendarPortlet.menuElement, "a") ;
+		for(var j = 0 ; j < actions.length ; j ++) {
+			if (
+				(actions[j].href.indexOf("EditCalendar") >= 0) ||
+				(actions[j].href.indexOf("RemoveCalendar") >= 0) ||
+				(actions[j].href.indexOf("ShareCalendar") >= 0) ||
+				(actions[j].href.indexOf("ChangeColorCalendar") >= 0)) {
+				actions[j].style.display = "none" ;
+			}
+		}
+	}
 } ;
 
 //UICalendarPortlet.prototype.showAction = function(obj, evt) {

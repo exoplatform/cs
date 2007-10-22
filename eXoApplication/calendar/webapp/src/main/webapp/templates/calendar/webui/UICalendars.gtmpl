@@ -285,7 +285,7 @@
 	                      Send to friend
 	                    </div>
 	                   </a>
-	                   <a class="MenuItem" style="color: gray">   
+	                   <a  class="MenuItem" style="color: gray" href="<%=uicomponent.event("ChangeColorCalendar","id")%>" >   
 	                    <div class="ItemIcon  ChangeColorCalendarIcon">
 	                      Change color
 	                    </div>
