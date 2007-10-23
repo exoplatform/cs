@@ -65,6 +65,7 @@ public class UICalendarViewContainer extends UIContainer  {
         ((CalendarView)comp).update() ;
         ((CalendarView)comp).refresh() ;
       }
+      ((CalendarView)comp).applySeting() ;
     }
   }
   protected boolean isShowPane() {

@@ -38,6 +38,10 @@ public class UIListContainer extends UIContainer implements CalendarView {
     // TODO Auto-generated method stub
     
   }
+
+  public void applySeting() throws Exception {
+    getChild(UIListView.class).applySeting() ;
+  }
   
   
 }

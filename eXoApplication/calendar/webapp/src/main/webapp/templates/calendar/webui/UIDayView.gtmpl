@@ -15,10 +15,14 @@
  	String linkDayPrevious = uicomponent.event(uicomponent.ACT_PREVIOUS) ;
  	monthViewAction = uicomponent.TYPE_MONTH +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"="+ currentMonth +"&"+ uicomponent.DAY + "=1" ;
 	yearViewAction = uicomponent.TYPE_YEAR +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"="+ currentMonth +"&"+ uicomponent.DAY + "=1" ;
-	
-	String style = "MM/dd/yyyy" ;
-	DateFormat df = new SimpleDateFormat(style) ;
+	dateFormat = uicomponent.getDateFormat() ;
+	timeFormat = uicomponent.getTimeFormat() ;
+	dateTimeFormat = uicomponent.getDateTimeFormat() ;
+	timeInterval = uicomponent.getTimeInterval() ;
+	DateFormat df = new SimpleDateFormat(dateFormat) ;
 %>
+$timeFormat
+$timeInterval
 <div class="UIDayView">
   <div class="TitleBar">
     <table>
@@ -80,7 +84,7 @@
                 <tbody>
                   <%
 	            		flag = true ;
-	            		List hours = uicomponent.getDisplayTimes("hh:mm a", 30) ;
+	            		List hours = uicomponent.getDisplayTimes(timeFormat, timeInterval) ;
 	            		for(h in hours) {
 	            			cssClass = "TdDotLine" ;
 	            			if(flag) {cssClass = "TdLine" ;} ;
@@ -136,7 +140,7 @@
                     <tbody>
                       <%
 			            		flag = true ;
-			            		List hoursSteps = uicomponent.getDisplayTimes("MM/dd/yyyy HH:mm a", 30) ;
+			            		List hoursSteps = uicomponent.getDisplayTimes(dateTimeFormat, timeInterval) ;
 			            		for(h in hoursSteps) {
 			            			cssClass = "TdDotLine" ;
 			            			if(flag) {cssClass = "TdLine" ;} ;

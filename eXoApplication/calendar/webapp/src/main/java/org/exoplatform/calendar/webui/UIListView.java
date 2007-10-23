@@ -18,8 +18,6 @@ import org.exoplatform.calendar.service.JCRPageList;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIComponent;
-import org.exoplatform.webui.core.UIPageIterator;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -53,7 +51,6 @@ public class UIListView extends UICalendarView {
   private boolean isSearchResult = false ;
   private long currentPage_ = 1 ;
   public UIListView() throws Exception{
-    refresh() ;
     if(getEvents().length > 0 ) {
       selectedEvent_ = getEvents()[0].getId() ;
     }

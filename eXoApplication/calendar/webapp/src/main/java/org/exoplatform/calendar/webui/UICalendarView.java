@@ -4,6 +4,8 @@
  **************************************************************************/
 package org.exoplatform.calendar.webui;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -99,15 +101,15 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
 
   protected Calendar calendar_ = null ;
   public boolean isShowEvent_ = true;
-  
+
   protected boolean isShowWorkingTime_ = false ;
   protected String startTime_ = null ;
   protected String endTime_ = null ;
-  protected int timeInterval_ = 0 ;
-  protected String timeFormat_ =  null ;
+  private int timeInterval_ = 0 ;
+  private String timeFormat_ =  null ;
   private String dateFormat_ =  null ;
   private String dateTimeFormat_ =  null ;
-  
+
   protected List<String> privateCalendarIds = new ArrayList<String>() ;
   protected List<String> publicCalendarIds = new ArrayList<String>() ;
 
@@ -131,11 +133,11 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
     }
     applySeting() ;
   }
-  protected void applySeting() throws Exception {
+  public void applySeting() throws Exception {
     CalendarService cservice = CalendarUtils.getCalendarService() ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     CalendarSetting calendarSetting = cservice.getCalendarSetting(username) ;
-    timeInterval_ = (int)calendarSetting.getTimeInterval() ;
+    timeInterval_ = (int)calendarSetting.getTimeInterval();
     dateFormat_ = calendarSetting.getDateFormat();
     timeFormat_ = calendarSetting.getTimeFormat() ;
     dateTimeFormat_ = dateFormat_ + " " + timeFormat_ ;
@@ -323,7 +325,17 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
     return  new String[]{ACT_VIEW, ACT_EDIT, ACT_DELETE} ;
   }
   protected List<String> getDisplayTimes(String timeFormat, int timeInterval) {
-    return CalendarUtils.getDisplayTimes(timeFormat, timeInterval,0, 24*(60/timeInterval)) ;
+    List<String> times = new ArrayList<String>() ;
+    Calendar cal = GregorianCalendar.getInstance() ;
+    cal.set(Calendar.HOUR, 0) ;
+    cal.set(Calendar.MINUTE, 0) ;
+    cal.set(Calendar.MILLISECOND, 0) ;
+    DateFormat df = new SimpleDateFormat(timeFormat) ;
+    for(int i = 0; i < 24*(60/timeInterval); i++) {
+      times.add(df.format(cal.getTime())) ;
+      cal.add(java.util.Calendar.MINUTE, timeInterval) ;
+    }
+    return times ;
   }
   protected void setDateFormat(String dateFormat_) {
     this.dateFormat_ = dateFormat_;
@@ -336,6 +348,18 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   }
   protected String getDateTimeFormat() {
     return dateTimeFormat_;
+  }
+  protected void setTimeInterval(int timeInterval_) {
+    this.timeInterval_ = timeInterval_;
+  }
+  protected int getTimeInterval() {
+    return timeInterval_;
+  }
+  protected void setTimeFormat(String timeFormat_) {
+    this.timeFormat_ = timeFormat_;
+  }
+  protected String getTimeFormat() {
+    return timeFormat_;
   }
   static  public class AddEventActionListener extends EventListener<UICalendarView> {
     public void execute(Event<UICalendarView> event) throws Exception {

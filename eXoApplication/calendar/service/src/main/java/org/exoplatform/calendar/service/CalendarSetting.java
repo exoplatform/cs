@@ -47,7 +47,7 @@ public class CalendarSetting {
     timeInterval = 15 ;
     weekStartOn = MONDAY ;
     dateFormat = "dd/MM/yyyy" ;
-    timeFormat = "HH:mm aaa" ;
+    timeFormat = "hh:mm a" ;
     isShowWorkingTime = false ;
     baseURL = "http://localhost:8080/calendar/iCalRss" ;
     defaultPrivateCalendars = new String[]{} ;

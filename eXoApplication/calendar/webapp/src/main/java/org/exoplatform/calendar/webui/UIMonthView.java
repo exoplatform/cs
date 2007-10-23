@@ -213,7 +213,7 @@ public class UIMonthView extends UICalendarView {
           int day = Integer.parseInt(selectedDate) ;
           java.util.Calendar date = new GregorianCalendar(calendarview.getCurrentYear(), calendarview.getCurrentMonth(), day) ;
           Date startTime =  date.getTime()  ;
-          date.add(java.util.Calendar.MINUTE, calendarview.timeInterval_) ;
+          date.add(java.util.Calendar.MINUTE, calendarview.getTimeInterval()) ;
           Date endTime = date.getTime()  ;
           uiEventForm.init(startTime, endTime) ;
         } catch (Exception e) {
@@ -246,7 +246,7 @@ public class UIMonthView extends UICalendarView {
           int day = Integer.parseInt(selectedDate) ;
           java.util.Calendar date = new GregorianCalendar(calendarview.getCurrentYear(), calendarview.getCurrentMonth(), day) ;
           Date startTime = date.getTime() ;
-          date.add(java.util.Calendar.MINUTE, calendarview.timeInterval_) ;
+          date.add(java.util.Calendar.MINUTE, calendarview.getTimeInterval()) ;
           Date endTime = date.getTime()  ;
           uiEventForm.init(startTime, endTime) ;
         } catch (Exception e) {

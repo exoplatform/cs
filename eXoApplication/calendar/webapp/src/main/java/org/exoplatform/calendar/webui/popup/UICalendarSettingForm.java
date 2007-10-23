@@ -15,6 +15,7 @@ import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
+import org.exoplatform.calendar.webui.UICalendarViewContainer;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -97,8 +98,8 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
     setting.addUIFormInput(new UIFormSelectBox(DATE_FORMAT, DATE_FORMAT, dateFormat)) ;
     
     List<SelectItemOption<String>> timeFormat = new ArrayList<SelectItemOption<String>>() ;
-    timeFormat.add(new SelectItemOption<String>("AM/PM", "  HH:mm aaa")) ;
-    timeFormat.add(new SelectItemOption<String>("24 Hours", " HH:mm:ss")) ;
+    timeFormat.add(new SelectItemOption<String>("AM/PM", "hh:mm a")) ;
+    timeFormat.add(new SelectItemOption<String>("24 Hours", "HH:mm")) ;
     
     setting.addUIFormInput(new UIFormSelectBox(TIME_FORMAT, TIME_FORMAT, timeFormat)) ;
     setting.addUIFormInput(new UIFormSelectBox(LOCATION, LOCATION, getLocales())) ;
@@ -273,7 +274,9 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
       CalendarService cservice = CalendarUtils.getCalendarService() ;
       cservice.saveCalendarSetting(Util.getPortalRequestContext().getRemoteUser(), calendarSetting) ;
       UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
+      calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class).refresh() ;
       calendarPortlet.cancelAction() ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class)) ;
     }
   }
   
