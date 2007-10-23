@@ -5,6 +5,9 @@
 	  if(actions != null) {
 	    for(action in actions) {
 	    	String actionLabel = uiForm.getLabel("action." + action.actionName)  ;
+	    	if(actionLabel.equals("action." + action.actionName)) {
+	    		actionLabel = action.actionName ;
+	    	}
 	    	String actionLink ="#";
 	      if(action.actionParameter != null) {
 	        actionLink = (uiForm.event(action.actionListener, action.actionParameter)) ;
