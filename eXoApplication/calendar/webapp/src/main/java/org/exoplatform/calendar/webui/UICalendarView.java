@@ -326,6 +326,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   protected List<String> getDisplayTimes(String timeFormat, int timeInterval) {
     List<String> times = new ArrayList<String>() ;
     Calendar cal = GregorianCalendar.getInstance() ;
+    cal.set(Calendar.AM_PM, Calendar.AM) ;
     cal.set(Calendar.HOUR, 0) ;
     cal.set(Calendar.MINUTE, 0) ;
     cal.set(Calendar.MILLISECOND, 0) ;
