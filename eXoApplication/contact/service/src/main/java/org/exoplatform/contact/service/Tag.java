@@ -4,6 +4,8 @@
  **************************************************************************/
 package org.exoplatform.contact.service;
 
+import org.exoplatform.services.jcr.util.IdGenerator;
+
 
 /**
  * Created by The eXo Platform SARL
@@ -13,10 +15,17 @@ package org.exoplatform.contact.service;
  * 
  */
 public class Tag {
-  
+  private String id ;
   private String name ;
   private String description ;
   private String color ;
+  
+  public Tag() {
+    id = "Tag" + IdGenerator.generate() ;
+  }
+  
+  public String getId()  { return id ; }
+  public void   setId(String s) { id = s ; }
   
   public void setName(String name) { this.name = name ; }
   public String getName() { return name ; }

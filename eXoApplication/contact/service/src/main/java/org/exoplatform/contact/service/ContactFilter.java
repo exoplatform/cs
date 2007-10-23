@@ -11,7 +11,6 @@ package org.exoplatform.contact.service;
  * Jun 23, 2007  
  */
 public class ContactFilter {
-  private String name ;
   private String[] categories ;
   private String[] tag ;
   private String subject ;
@@ -21,12 +20,9 @@ public class ContactFilter {
   private String orderBy;
   private boolean isAscending;
 
-  public ContactFilter(String name) {
-    this.name = name ;
+  public ContactFilter() {
     isAscending = true;
   }
-  
-  public String getName() { return name ; }
   
   public String[] getCategories() { return categories ; }
   public void setCategories(String[] s) { this.categories = s ; }

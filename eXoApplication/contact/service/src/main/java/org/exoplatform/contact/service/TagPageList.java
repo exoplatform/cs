@@ -5,20 +5,8 @@
 package org.exoplatform.contact.service;
 
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.List;
 
-import javax.jcr.Node;
-import javax.jcr.NodeIterator;
-import javax.jcr.Session;
-import javax.jcr.Value;
-import javax.jcr.query.Query;
-import javax.jcr.query.QueryManager;
-import javax.jcr.query.QueryResult;
-
-import org.exoplatform.container.PortalContainer;
-import org.exoplatform.services.jcr.RepositoryService;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
 /**
  * @author Hung Nguyen (hung.nguyen@exoplatform.com)
  * @since July 25, 2007
@@ -70,5 +58,5 @@ public class TagPageList extends JCRPageList {
   }
 	@Override
 	public List<Contact> getAll() throws Exception { return contactList_; }
-
+	public void setList(List<Contact> contacts) { contactList_ = contacts ; }
 }

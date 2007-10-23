@@ -149,10 +149,9 @@ public class ContactPageList extends JCRPageList {
   }
   
 	@Override
-	public List<Contact> getAll() throws Exception { 
-    return null; 
-  }
-
+	public List<Contact> getAll() throws Exception { return null ; }
+  public void setList(List<Contact> contacts) { }
+  
   private Session getJCRSession(String username) throws Exception {
     RepositoryService  repositoryService = (RepositoryService)PortalContainer.getComponent(RepositoryService.class) ;
     SessionProvider sessionProvider = SessionProvider.createSystemProvider() ;

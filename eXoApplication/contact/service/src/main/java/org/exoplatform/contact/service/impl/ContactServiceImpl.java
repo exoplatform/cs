@@ -44,34 +44,16 @@ public class ContactServiceImpl implements ContactService {
     return storage_.getAllContact(username);
   }
   
-  public ContactPageList getContacts(String username, ContactFilter filter) throws Exception {
-    return storage_.getContacts(username, filter);
+  public ContactPageList getContactPageListByTag(String username, ContactFilter filter) throws Exception {
+    return storage_.getContactPageListByTag(username, filter);
   }
   
   public ContactPageList getContactPageListByGroup(String username, String groupId) throws Exception {
     return storage_.getContactPageListByGroup(username, groupId);
   }
-  
-  public ContactPageList getContactPageListByGroup(String username, String groupId, String viewQuery, String orderBy, boolean isAscending)
-  throws Exception {
-    ContactFilter filter = new ContactFilter("Filter By Group") ;
-    filter.setViewQuery(viewQuery);
-    filter.setOrderBy(orderBy);
-    filter.setAscending(isAscending);
-    ContactGroup group = getGroup(username, groupId) ;
-    filter.setCategories(new String[]{ group.getId()} ) ;
-    return getContacts(username, filter) ;    
-  }
-  
-  public ContactPageList getContactPageListByTag(String username, String tagName, String viewQuery, String orderBy, boolean isAscending)
-  throws Exception {
-    ContactFilter filter = new ContactFilter("Filter By Tag") ;
-    filter.setViewQuery(viewQuery);
-    filter.setOrderBy(orderBy);
-    filter.setAscending(isAscending);
-    Tag tag = getTag(username, tagName) ;
-    filter.setTag(new String[]{tag.getName()} ) ;
-    return getContacts(username, filter) ;    
+
+  public ContactPageList getContactPageListByGroup(String username, ContactFilter filter, boolean isPublic) throws Exception {
+    return storage_.getContactPageListByGroup(username, filter, isPublic) ;
   }
   
   public List<String> getAllEmailAddressByGroup(String username, String groupId) throws Exception {
@@ -153,6 +135,10 @@ public class ContactServiceImpl implements ContactService {
   
   public Tag removeTag(String username, String tagName) throws Exception {
     return storage_.removeTag(username, tagName);
+  }
+  
+  public void updateTag(String username,Tag tag) throws Exception {
+    storage_.updateTag(username, tag) ;
   }
   
   public void removeContactTag(String username, List<String>contactIds, List<String> tags) throws Exception {
