@@ -323,7 +323,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
         return ;
       }
       try {
-        message.setFolders(new String[]{Utils.FD_SENT}) ;
+        message.setFolders(new String[]{Utils.createFolderId(accountId, Utils.FD_SENT, false)}) ;
         mailSvr.saveMessage(usename, accountId, message, (uiForm.getMessage() != null) ? false : true) ;
       }
       catch (Exception e) {
@@ -351,7 +351,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
       UIPopupAction uiChildPopup = uiForm.getAncestorOfType(UIPopupAction.class) ;
       Message message = uiForm.getNewMessage() ;   
       try {
-        message.setFolders(new String[]{Utils.FD_DRAFTS}) ;
+        message.setFolders(new String[]{Utils.createFolderId(accountId, Utils.FD_DRAFTS, false)}) ;
         mailSvr.saveMessage(usename, accountId, message, (uiForm.getMessage() != null) ? false : true) ;
       }
       catch (Exception e) {
