@@ -21,6 +21,7 @@ import org.exoplatform.calendar.webui.UIListView;
 				 <div style="position: relative;"> 
 	  			<div class="UIPopupCategory" style="display: none;">
 	  				<div class="UIRightClickPopupMenu" style="display: block;">
+	  					<div class="UIContextMenuContainer">
 							  <div class="TopLeftRightClickPopupMenu">
 	          			<div class="TopRightRightClickPopupMenu">
 	            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
@@ -46,8 +47,8 @@ import org.exoplatform.calendar.webui.UIListView;
 					          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
 					        </div>
 					      </div>
-		      			
-					    </div>
+		      		</div>		
+					  </div>
 	  			</div>
 	  	 </div> 
   	<% /*End Popup Menu*/ %>

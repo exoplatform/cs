@@ -43,43 +43,44 @@
 							<div style="position: relative;">
 		      			<div class="UIPopupCategory" style="display: none;">
 		      				<div class="UIRightClickPopupMenu" style="display: block;">
-									  <div class="TopLeftRightClickPopupMenu">
-			          			<div class="TopRightRightClickPopupMenu">
-			            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
-			          			</div>
-			        			</div>
-						        <div class="MiddleLeftRightClickPopupMenu">
-						          <div class="MiddleRightRightClickPopupMenu">
-			              		<div class="UIRightPopupMenuContainer">
-													<a class="MenuItem" href="<%=uicomponent.event("ChangeView","viewType")%>">   
-				                    <div class="ItemIcon DefaultLayoutIcon">
-				                      Default 
-				                    </div>
-			                    </a>
-			                    <a class="MenuItem" href="<%=uicomponent.event("ChangeView","viewType")%>">   
-				                    <div class="ItemIcon HideFolderListIcon">
-				                      Hide Folder List
-				                    </div>
-			                    </a>
-			                    <a class="MenuItem" href="<%=uicomponent.event("ChangeView","viewType")%>">   
-				                    <div class="ItemIcon HideMessagesPaneIcon">
-				                      Hide Messages Pane
-				                    </div>
-			                    </a>
-			                    <a class="MenuItem" href="<%=uicomponent.event("ChangeView","viewType")%>">   
-				                    <div class="ItemIcon HideReadingPaneIcon">
-				                      Hide Reading Pane
-				                    </div>
-			                    </a>
-												</div>
-				          		</div>
-				        		</div>
-							      <div class="BottomLeftRightClickPopupMenu">
-							        <div class="BottomRightRightClickPopupMenu">
-							          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
-							        </div>
-							      </div>
-				      			
+		      					<div class="UIContextMenuContainer">
+										  <div class="TopLeftRightClickPopupMenu">
+				          			<div class="TopRightRightClickPopupMenu">
+				            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
+				          			</div>
+				        			</div>
+							        <div class="MiddleLeftRightClickPopupMenu">
+							          <div class="MiddleRightRightClickPopupMenu">
+				              		<div class="UIRightPopupMenuContainer">
+														<a class="MenuItem" href="<%=uicomponent.event("ChangeView","viewType")%>">   
+					                    <div class="ItemIcon DefaultLayoutIcon">
+					                      Default 
+					                    </div>
+				                    </a>
+				                    <a class="MenuItem" href="<%=uicomponent.event("ChangeView","viewType")%>">   
+					                    <div class="ItemIcon HideFolderListIcon">
+					                      Hide Folder List
+					                    </div>
+				                    </a>
+				                    <a class="MenuItem" href="<%=uicomponent.event("ChangeView","viewType")%>">   
+					                    <div class="ItemIcon HideMessagesPaneIcon">
+					                      Hide Messages Pane
+					                    </div>
+				                    </a>
+				                    <a class="MenuItem" href="<%=uicomponent.event("ChangeView","viewType")%>">   
+					                    <div class="ItemIcon HideReadingPaneIcon">
+					                      Hide Reading Pane
+					                    </div>
+				                    </a>
+													</div>
+					          		</div>
+					        		</div>
+								      <div class="BottomLeftRightClickPopupMenu">
+								        <div class="BottomRightRightClickPopupMenu">
+								          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+								        </div>
+								      </div>
+					      		</div>	
 							    </div>
 		      			</div>
 		      		</div>

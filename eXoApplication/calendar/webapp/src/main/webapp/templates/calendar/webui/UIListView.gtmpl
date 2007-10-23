@@ -82,35 +82,37 @@
 	<%}%>
 	<% /*Begin Popup Menu*/ %>
 	<div class="UIRightClickPopupMenu" id="UIListViewEventRightMenu" exocallback="">
-	  <div class="TopLeftRightClickPopupMenu">
-	    <div class="TopRightRightClickPopupMenu">
-	      <div class="TopCenterRightClickPopupMenu">
-	        <span></span>
-	      </div>
-	    </div>
-	  </div>
-	  <div class="MiddleLeftRightClickPopupMenu">
-	    <div class="MiddleRightRightClickPopupMenu">
-	      <div class="UIRightPopupMenuContainer">
-	        <%
-	  				for(String act : uicomponent.getQuickEditMenu()) {
-	  				link = uicomponent.event(act,"id&$uicomponent.CALENDARID=calId") ;
-	        %>
-	        <a href="$link">
-	          <div class="ItemIcon $act">
-	            $act</div>
-	        </a>
-	        <%}%>
-	      </div>
-	    </div>
-	  </div>
-	  <div class="BottomLeftRightClickPopupMenu">
+		<div class="UIContextMenuContainer">
+		  <div class="TopLeftRightClickPopupMenu">
+		    <div class="TopRightRightClickPopupMenu">
+		      <div class="TopCenterRightClickPopupMenu">
+		        <span></span>
+		      </div>
+		    </div>
+		  </div>
+		  <div class="MiddleLeftRightClickPopupMenu">
+		    <div class="MiddleRightRightClickPopupMenu">
+		      <div class="UIRightPopupMenuContainer">
+		        <%
+		  				for(String act : uicomponent.getQuickEditMenu()) {
+		  				link = uicomponent.event(act,"id&$uicomponent.CALENDARID=calId") ;
+		        %>
+		        <a href="$link">
+		          <div class="ItemIcon $act">
+		            $act</div>
+		        </a>
+		        <%}%>
+		      </div>
+		    </div>
+		  </div>
+		  <div class="BottomLeftRightClickPopupMenu">
 	    <div class="BottomRightRightClickPopupMenu">
 	      <div class="BottomCenterRightClickPopupMenu">
 	        <span></span>
 	      </div>
 	    </div>
 	  </div>
+		</div>
 	</div>
 	<% /*End Popup Menu*/ %>
 

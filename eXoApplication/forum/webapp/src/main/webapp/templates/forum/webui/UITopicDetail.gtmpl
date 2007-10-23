@@ -57,68 +57,69 @@
 								<div style="position: relative;">
 			      			<div class="UIPopupCategory" style="display: none; ">
 			      				<div class="UIRightClickPopupMenu" style="display: block; left: -70px;">
-										  <div class="TopLeftRightClickPopupMenu">
-				          			<div class="TopRightRightClickPopupMenu">
-				            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
-				          			</div>
-				        			</div>
-							        <div class="MiddleLeftRightClickPopupMenu">
-							          <div class="MiddleRightRightClickPopupMenu">
-				              		<div class="UIRightPopupMenuContainer">
-														<div class="MenuItem" href="#">   
-					                    <div class="ItemIcon MergeSelectedPostsIcon DisableLabel">
-					                      Merge Selected Posts
+			      					<div class="UIContextMenuContainer">
+											  <div class="TopLeftRightClickPopupMenu">
+					          			<div class="TopRightRightClickPopupMenu">
+					            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
+					          			</div>
+					        			</div>
+								        <div class="MiddleLeftRightClickPopupMenu">
+								          <div class="MiddleRightRightClickPopupMenu">
+					              		<div class="UIRightPopupMenuContainer">
+															<div class="MenuItem" href="#">   
+						                    <div class="ItemIcon MergeSelectedPostsIcon DisableLabel">
+						                      Merge Selected Posts
+						                    </div>
 					                    </div>
-				                    </div>
-				                    <a class="MenuItem">   
-					                    <div class="ItemIcon MoveSelectedPostIcon">
-					                      Move Selected Post(s)
+					                    <a class="MenuItem">   
+						                    <div class="ItemIcon MoveSelectedPostIcon">
+						                      Move Selected Post(s)
+						                    </div>
+					                    </a>
+					                    <a class="MenuItem" href="#">   
+						                    <div class="ItemIcon CopySelectedPostIcon">
+						                     Copy Selected Post(s)
+						                    </div>
+					                    </a>
+					                    <div class="MenuItem" href="#">   
+						                    <div class="ItemIcon PastePostsIcon DisableLabel">
+						                      Paste Posts
+						                    </div>
 					                    </div>
-				                    </a>
-				                    <a class="MenuItem" href="#">   
-					                    <div class="ItemIcon CopySelectedPostIcon">
-					                     Copy Selected Post(s)
+					                    <div class="MenuItem">   
+						                    <div class="ItemIcon ApprovePostsIcon DisableLabel">
+						                      Approve Posts
+						                    </div>
 					                    </div>
-				                    </a>
-				                    <div class="MenuItem" href="#">   
-					                    <div class="ItemIcon PastePostsIcon DisableLabel">
-					                      Paste Posts
+					                    <a class="MenuItem" href="#">   
+						                    <div class="ItemIcon UnapprovePostsIcon">
+						                      Unapprove Posts
+						                    </div>
+					                    </a>
+					                    <div class="MenuItem" href="#">   
+						                    <div class="ItemIcon ApproveAttachmentsIcon DisableLabel">
+						                      Approve Attachments
+						                    </div>
 					                    </div>
-				                    </div>
-				                    <div class="MenuItem">   
-					                    <div class="ItemIcon ApprovePostsIcon DisableLabel">
-					                      Approve Posts
-					                    </div>
-				                    </div>
-				                    <a class="MenuItem" href="#">   
-					                    <div class="ItemIcon UnapprovePostsIcon">
-					                      Unapprove Posts
-					                    </div>
-				                    </a>
-				                    <div class="MenuItem" href="#">   
-					                    <div class="ItemIcon ApproveAttachmentsIcon DisableLabel">
-					                      Approve Attachments
-					                    </div>
-				                    </div>
-				                    <a class="MenuItem" href="#">   
-					                    <div class="ItemIcon UnapproveAttachmentsIcon">
-					                      Unapprove Attachments
-					                    </div>
-				                    </a>
-				                    <a class="MenuItem">   
-					                    <div class="ItemIcon DeleteSelectedPostIcon">
-					                      Delete Selected Post(s)
-					                    </div>
-				                    </a>
-													</div>
-					          		</div>
-					        		</div>
-								      <div class="BottomLeftRightClickPopupMenu">
+					                    <a class="MenuItem" href="#">   
+						                    <div class="ItemIcon UnapproveAttachmentsIcon">
+						                      Unapprove Attachments
+						                    </div>
+					                    </a>
+					                    <a class="MenuItem">   
+						                    <div class="ItemIcon DeleteSelectedPostIcon">
+						                      Delete Selected Post(s)
+						                    </div>
+					                    </a>
+														</div>
+						          		</div>
+						        		</div>
+									      <div class="BottomLeftRightClickPopupMenu">
 								        <div class="BottomRightRightClickPopupMenu">
 								          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
 								        </div>
 								      </div>
-					      			
+					      			</div>
 								    </div>
 			      			</div>
 			      		</div>
@@ -137,40 +138,41 @@
 								<div style="position: relative;">
 			      			<div class="UIPopupCategory" style="display: none; ">
 			      				<div class="UIRightClickPopupMenu" style="display: block;">
-										  <div class="TopLeftRightClickPopupMenu">
-				          			<div class="TopRightRightClickPopupMenu">
-				            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
-				          			</div>
-				        			</div>
-							        <div class="MiddleLeftRightClickPopupMenu">
-							          <div class="MiddleRightRightClickPopupMenu">
-				              		<div class="UIRightPopupMenuContainer">
-														<% 
-														String[] menuTopicActions = ["EditTopic", "PrintPage", "AddPoll", "SetOpenTopic", "SetCloseTopic", 
-														"SetLockedTopic", "SetUnLockTopic", "SetStickTopic", "SetUnStickTopic", "SplitTopic", 
-														"SetApproveTopic", "SetUnApproveTopic", "SetMoveTopic", "SetDeleteTopic"] ;
-				                   		for(action in menuTopicActions) {
-				                   			String link = uicomponent.event(action) ;
-				                   		String itemLabel = _ctx.appRes(uicomponent.getName() + ".action." + action);
-				                   		String classIcon = null;
-				                   		if(action.length() < 11) classIcon = action + "Icon";
-				                   		else classIcon = action.replaceFirst("Topic", "Icon");
-				                   %>
-				                    <a class="MenuItem" href="$link">   
-					                    <div class="ItemIcon $classIcon">
-					                      $itemLabel
-					                    </div>
-				                    </a>
-				                   <% } %>
-													</div>
-					          		</div>
-					        		</div>
-								      <div class="BottomLeftRightClickPopupMenu">
+			      					<div class="UIContextMenuContainer">
+											  <div class="TopLeftRightClickPopupMenu">
+					          			<div class="TopRightRightClickPopupMenu">
+					            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
+					          			</div>
+					        			</div>
+								        <div class="MiddleLeftRightClickPopupMenu">
+								          <div class="MiddleRightRightClickPopupMenu">
+					              		<div class="UIRightPopupMenuContainer">
+															<% 
+															String[] menuTopicActions = ["EditTopic", "PrintPage", "AddPoll", "SetOpenTopic", "SetCloseTopic", 
+															"SetLockedTopic", "SetUnLockTopic", "SetStickTopic", "SetUnStickTopic", "SplitTopic", 
+															"SetApproveTopic", "SetUnApproveTopic", "SetMoveTopic", "SetDeleteTopic"] ;
+					                   		for(action in menuTopicActions) {
+					                   			String link = uicomponent.event(action) ;
+					                   		String itemLabel = _ctx.appRes(uicomponent.getName() + ".action." + action);
+					                   		String classIcon = null;
+					                   		if(action.length() < 11) classIcon = action + "Icon";
+					                   		else classIcon = action.replaceFirst("Topic", "Icon");
+					                   %>
+					                    <a class="MenuItem" href="$link">   
+						                    <div class="ItemIcon $classIcon">
+						                      $itemLabel
+						                    </div>
+					                    </a>
+					                   <% } %>
+														</div>
+						          		</div>
+						        		</div>
+									      <div class="BottomLeftRightClickPopupMenu">
 								        <div class="BottomRightRightClickPopupMenu">
 								          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
 								        </div>
 								      </div>
-					      			
+					      			</div>
 								    </div>
 			      			</div>
 			      		</div>

@@ -170,6 +170,7 @@
 					<% /*Begin Popup Menu*/ %>						
 
   				<div class="UIRightClickPopupMenu" id="UIContactListPopuMenu" eXoCallback="eXo.contact.UIContactPortlet.contactCallback">
+  					<div class="UIContextMenuContainer">
 						  <div class="TopLeftRightClickPopupMenu">
           			<div class="TopRightRightClickPopupMenu">
             			<div class="TopCenterRightClickPopupMenu"><span></span></div>
@@ -221,8 +222,8 @@
 				          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
 				        </div>
 				      </div>
-	      			
 				    </div>		      		
+				  </div>
 
   		<% /*End Popup Menu*/ %>
 				</div>

@@ -13,34 +13,35 @@
 									<div style="position: relative;">
 				      			<div class="UIPopupCategory" style="display: none;">
 				      				<div class="UIRightClickPopupMenu" style="display: block;">
-											  <div class="TopLeftRightClickPopupMenu">
-					          			<div class="TopRightRightClickPopupMenu">
-					            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
-					          			</div>
-					        			</div>
-								        <div class="MiddleLeftRightClickPopupMenu">
-								          <div class="MiddleRightRightClickPopupMenu">
-					              		<div class="UIRightPopupMenuContainer">
-					                    <a class="MenuItem" href="<%=uicomponent.event("AddContact")%>">   
-						                    <div class="ItemIcon ContactIcon">
-						                      <%=_ctx.appRes(uicomponent.getName() + ".label.contact")%>
-						                    </div>
-					                    </a>
-					                    <a class="MenuItem" href="<%=uicomponent.event("AddAddressBook")%>">   
-						                    <div class="ItemIcon AddressIcon">
-						                      <%=_ctx.appRes(uicomponent.getName() + ".label.addressBook")%>
-						                    </div>
-					                    </a>
-					             
-														</div>
-						          		</div>
-						        		</div>
-									      <div class="BottomLeftRightClickPopupMenu">
+				      					<div class="UIContextMenuContainer">
+												  <div class="TopLeftRightClickPopupMenu">
+						          			<div class="TopRightRightClickPopupMenu">
+						            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
+						          			</div>
+						        			</div>
+									        <div class="MiddleLeftRightClickPopupMenu">
+									          <div class="MiddleRightRightClickPopupMenu">
+						              		<div class="UIRightPopupMenuContainer">
+						                    <a class="MenuItem" href="<%=uicomponent.event("AddContact")%>">   
+							                    <div class="ItemIcon ContactIcon">
+							                      <%=_ctx.appRes(uicomponent.getName() + ".label.contact")%>
+							                    </div>
+						                    </a>
+						                    <a class="MenuItem" href="<%=uicomponent.event("AddAddressBook")%>">   
+							                    <div class="ItemIcon AddressIcon">
+							                      <%=_ctx.appRes(uicomponent.getName() + ".label.addressBook")%>
+							                    </div>
+						                    </a>
+						             
+															</div>
+							          		</div>
+							        		</div>
+										      <div class="BottomLeftRightClickPopupMenu">
 									        <div class="BottomRightRightClickPopupMenu">
 									          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
 									        </div>
 									      </div>
-						      			
+						      			</div>
 									    </div>
 				      			</div>
 				      		</div>
@@ -68,35 +69,36 @@
 									<div style="position: relative;">
 				      			<div class="UIPopupCategory" style="display: none;">
 				      				<div class="UIRightClickPopupMenu" style="display: block;">
-											  <div class="TopLeftRightClickPopupMenu">
-					          			<div class="TopRightRightClickPopupMenu">
-					            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
-					          			</div>
-					        			</div>
-								        <div class="MiddleLeftRightClickPopupMenu">
-								          <div class="MiddleRightRightClickPopupMenu">
-					              		<div class="UIRightPopupMenuContainer">
-					            
-					                    <a class="MenuItem" href="<%=uicomponent.event("ListView")%>">   
-						                    <div class="ItemIcon ContactListIcon">
-						                      <%=_ctx.appRes(uicomponent.getName() + ".label.contactsList")%>
-						                    </div>
-					                    </a>
-					                    <a class="MenuItem" href="<%=uicomponent.event("VCardView")%>">   
-						                    <div class="ItemIcon ContactIcon">
-						                      <%=_ctx.appRes(uicomponent.getName() + ".label.vcard")%>
-						                    </div>
-					                    </a>
-					                
-														</div>
-						          		</div>
-						        		</div>
-									      <div class="BottomLeftRightClickPopupMenu">
+				      					<div class="UIContextMenuContainer">
+												  <div class="TopLeftRightClickPopupMenu">
+						          			<div class="TopRightRightClickPopupMenu">
+						            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
+						          			</div>
+						        			</div>
+									        <div class="MiddleLeftRightClickPopupMenu">
+									          <div class="MiddleRightRightClickPopupMenu">
+						              		<div class="UIRightPopupMenuContainer">
+						            
+						                    <a class="MenuItem" href="<%=uicomponent.event("ListView")%>">   
+							                    <div class="ItemIcon ContactListIcon">
+							                      <%=_ctx.appRes(uicomponent.getName() + ".label.contactsList")%>
+							                    </div>
+						                    </a>
+						                    <a class="MenuItem" href="<%=uicomponent.event("VCardView")%>">   
+							                    <div class="ItemIcon ContactIcon">
+							                      <%=_ctx.appRes(uicomponent.getName() + ".label.vcard")%>
+							                    </div>
+						                    </a>
+						                
+															</div>
+							          		</div>
+							        		</div>
+										      <div class="BottomLeftRightClickPopupMenu">
 									        <div class="BottomRightRightClickPopupMenu">
 									          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
 									        </div>
 									      </div>
-						      			
+						      			</div>
 									    </div>
 				      			</div>
 				      		</div>

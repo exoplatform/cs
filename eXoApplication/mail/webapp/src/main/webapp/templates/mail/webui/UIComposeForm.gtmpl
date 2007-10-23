@@ -54,40 +54,42 @@
 										<div style="position: relative;">
 					      			<div class="UIPopupCategory" style="display: none; left: 10px;">
 					      				<div class="UIRightClickPopupMenu" style="display: block;">
-												  <div class="TopLeftRightClickPopupMenu">
-						          			<div class="TopRightRightClickPopupMenu">
-						            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
-						          			</div>
-						        			</div>
-									        <div class="MiddleLeftRightClickPopupMenu">
-									          <div class="MiddleRightRightClickPopupMenu">
-						              		<div class="UIRightPopupMenuContainer">
-																<%
-																  String lowPriorityLink = uicomponent.event("ChangePriority", String.valueOf(Utils.PRIORITY_LOW));
-																  String lowCssClass = "";
-                                  if (uicomponent.getPriority() == Utils.PRIORITY_LOW) lowCssClass = "CheckItem";
-																%>
-						                    <a class="MenuItem" href="$lowPriorityLink"> <div class="ItemIcon $lowCssClass"> Low priority </div> </a>
-						                    <%  
-						                      String normalPriorityLink = uicomponent.event("ChangePriority", String.valueOf(Utils.PRIORITY_NORMAL));
-						                      String normalCssClass = "";
-						                      if (uicomponent.getPriority() == Utils.PRIORITY_NORMAL) normalCssClass = "CheckItem";
-						                    %>
-						                    <a class="MenuItem" href="$normalPriorityLink"> <div class="ItemIcon $normalCssClass">Normal priority </div> </a>
-						                    <%  
-						                      String highPriorityLink = uicomponent.event("ChangePriority", String.valueOf(Utils.PRIORITY_HIGH)); 
-						                      String highCssClass = "";
-						                      if (uicomponent.getPriority() == Utils.PRIORITY_HIGH) highCssClass = "CheckItem";
-						                    %>
-						                    <a class="MenuItem" href="$highPriorityLink"> <div class="ItemIcon $highCssClass"> High priority </div> </a>
-															</div>
-							          		</div>
-							        		</div>
-										      <div class="BottomLeftRightClickPopupMenu">
+					      					<div class="UIContextMenuContainer">
+													  <div class="TopLeftRightClickPopupMenu">
+							          			<div class="TopRightRightClickPopupMenu">
+							            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
+							          			</div>
+							        			</div>
+										        <div class="MiddleLeftRightClickPopupMenu">
+										          <div class="MiddleRightRightClickPopupMenu">
+							              		<div class="UIRightPopupMenuContainer">
+																	<%
+																	  String lowPriorityLink = uicomponent.event("ChangePriority", String.valueOf(Utils.PRIORITY_LOW));
+																	  String lowCssClass = "";
+	                                  if (uicomponent.getPriority() == Utils.PRIORITY_LOW) lowCssClass = "CheckItem";
+																	%>
+							                    <a class="MenuItem" href="$lowPriorityLink"> <div class="ItemIcon $lowCssClass"> Low priority </div> </a>
+							                    <%  
+							                      String normalPriorityLink = uicomponent.event("ChangePriority", String.valueOf(Utils.PRIORITY_NORMAL));
+							                      String normalCssClass = "";
+							                      if (uicomponent.getPriority() == Utils.PRIORITY_NORMAL) normalCssClass = "CheckItem";
+							                    %>
+							                    <a class="MenuItem" href="$normalPriorityLink"> <div class="ItemIcon $normalCssClass">Normal priority </div> </a>
+							                    <%  
+							                      String highPriorityLink = uicomponent.event("ChangePriority", String.valueOf(Utils.PRIORITY_HIGH)); 
+							                      String highCssClass = "";
+							                      if (uicomponent.getPriority() == Utils.PRIORITY_HIGH) highCssClass = "CheckItem";
+							                    %>
+							                    <a class="MenuItem" href="$highPriorityLink"> <div class="ItemIcon $highCssClass"> High priority </div> </a>
+																</div>
+								          		</div>
+								        		</div>
+											      <div class="BottomLeftRightClickPopupMenu">
 										        <div class="BottomRightRightClickPopupMenu">
 										          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
 										        </div>
 										      </div>
+							      			</div>
 							      			
 										    </div>
 					      			</div>
@@ -105,33 +107,34 @@
 										<div style="position: relative;">
 					      			<div class="UIPopupCategory" style="display: none;">
 					      				<div class="UIRightClickPopupMenu" style="display: block; left: 80px;">
-												  <div class="TopLeftRightClickPopupMenu">
-						          			<div class="TopRightRightClickPopupMenu">
-						            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
-						          			</div>
-						        			</div>
-									        <div class="MiddleLeftRightClickPopupMenu">
-									          <div class="MiddleRightRightClickPopupMenu">
-						              		<div class="UIRightPopupMenuContainer">
-																<a class="MenuItem" href="#">   
-							                    <div class="ItemIcon CheckItem ">
-							                      Rich text editor
-							                    </div>
-						                    </a>
-						                    <a class="MenuItem" href="#">   
-							                    <div class="ItemIcon">
-							                      Plain text
-							                    </div>
-						                    </a>
-															</div>
-							          		</div>
-							        		</div>
-										      <div class="BottomLeftRightClickPopupMenu">
+					      					<div class="UIContextMenuContainer">
+													  <div class="TopLeftRightClickPopupMenu">
+							          			<div class="TopRightRightClickPopupMenu">
+							            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
+							          			</div>
+							        			</div>
+										        <div class="MiddleLeftRightClickPopupMenu">
+										          <div class="MiddleRightRightClickPopupMenu">
+							              		<div class="UIRightPopupMenuContainer">
+																	<a class="MenuItem" href="#">   
+								                    <div class="ItemIcon CheckItem ">
+								                      Rich text editor
+								                    </div>
+							                    </a>
+							                    <a class="MenuItem" href="#">   
+								                    <div class="ItemIcon">
+								                      Plain text
+								                    </div>
+							                    </a>
+																</div>
+								          		</div>
+								        		</div>
+											      <div class="BottomLeftRightClickPopupMenu">
 										        <div class="BottomRightRightClickPopupMenu">
 										          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
 										        </div>
 										      </div>
-							      			
+							      			</div>
 										    </div>
 					      			</div>
 					      		</div>

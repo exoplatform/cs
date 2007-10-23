@@ -73,37 +73,38 @@
 								<div style="position: relative;">
 			      			<div class="UIPopupCategory" style="display: none; ">
 			      				<div class="UIRightClickPopupMenu" style="display: block; left: -70px;">
-										  <div class="TopLeftRightClickPopupMenu">
-				          			<div class="TopRightRightClickPopupMenu">
-				            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
-				          			</div>
-				        			</div>
-							        <div class="MiddleLeftRightClickPopupMenu">
-							          <div class="MiddleRightRightClickPopupMenu">
-				              		<div class="UIRightPopupMenuContainer">
-													 <% 
-				                   		for(action in uicomponent.getActionMenuTopic()) {
-				                   		String link = uicomponent.event(action) ;
-				                   		String itemLabel = _ctx.appRes(uicomponent.getName() + ".action." + action);
-				                   		String classIcon = null;
-				                   		if(action.length() < 11) classIcon = action + "Icon";
-				                   		else classIcon = action.replaceFirst("Topic", "Icon");
-				                   %>
-				                    <a class="MenuItem" href="$link">   
-					                    <div class="ItemIcon $classIcon">
-					                      $itemLabel
-					                    </div>
-				                    </a>
-				                   <% } %>
-													</div>
-					          		</div>
-					        		</div>
-								      <div class="BottomLeftRightClickPopupMenu">
-								        <div class="BottomRightRightClickPopupMenu">
-								          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
-								        </div>
-								      </div>
-					      			
+			      				  <div class="UIContextMenuContainer">
+											  <div class="TopLeftRightClickPopupMenu">
+					          			<div class="TopRightRightClickPopupMenu">
+					            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
+					          			</div>
+					        			</div>
+								        <div class="MiddleLeftRightClickPopupMenu">
+								          <div class="MiddleRightRightClickPopupMenu">
+					              		<div class="UIRightPopupMenuContainer">
+														 <% 
+					                   		for(action in uicomponent.getActionMenuTopic()) {
+					                   		String link = uicomponent.event(action) ;
+					                   		String itemLabel = _ctx.appRes(uicomponent.getName() + ".action." + action);
+					                   		String classIcon = null;
+					                   		if(action.length() < 11) classIcon = action + "Icon";
+					                   		else classIcon = action.replaceFirst("Topic", "Icon");
+					                   %>
+					                    <a class="MenuItem" href="$link">   
+						                    <div class="ItemIcon $classIcon">
+						                      $itemLabel
+						                    </div>
+					                    </a>
+					                   <% } %>
+														</div>
+						          		</div>
+						        		</div>
+									      <div class="BottomLeftRightClickPopupMenu">
+									        <div class="BottomRightRightClickPopupMenu">
+									          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+									        </div>
+									      </div>
+						      		</div>
 								    </div>
 			      			</div>
 			      		</div>
@@ -118,43 +119,44 @@
 								<div style="position: relative;">
 			      			<div class="UIPopupCategory" style="display: none; ">
 			      				<div class="UIRightClickPopupMenu" style="display: block;">
-										  <div class="TopLeftRightClickPopupMenu">
-				          			<div class="TopRightRightClickPopupMenu">
-				            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
-				          			</div>
-				        			</div>
-							        <div class="MiddleLeftRightClickPopupMenu">
-							          <div class="MiddleRightRightClickPopupMenu">
-				              		<div class="UIRightPopupMenuContainer">
-				              		<% if(!forum.getIsLock()) { %>
-														<a class="MenuItem" href="<%=uicomponent.event("AddTopic")%>">   
-					                    <div class="ItemIcon PostnewThreadIcon">
-					                      <%=_ctx.appRes(uicomponent.getName() + ".action.AddTopic");%>
-					                    </div>
-				                    </a>
-				                   <% } 
-				                   		for(action in uicomponent.getActionMenuForum()) {
-				                   		String link = uicomponent.event(action) ;
-				                   		String itemLabel = _ctx.appRes(uicomponent.getName() + ".action." + action);
-				                   		String classIcon = null;
-				                   		if(action.length() < 12) classIcon = action + "Icon" ;
-				                   		else classIcon = action.replaceFirst("Forum", "") + "Icon" ;
-				                   %>
-				                    <a class="MenuItem" href="$link">   
-					                    <div class="ItemIcon $classIcon">
-					                      $itemLabel
-					                    </div>
-				                    </a>
-				                   <% } %>
-													</div>
-					          		</div>
-					        		</div>
-								      <div class="BottomLeftRightClickPopupMenu">
+			      					<div class="UIContextMenuContainer">
+											  <div class="TopLeftRightClickPopupMenu">
+					          			<div class="TopRightRightClickPopupMenu">
+					            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
+					          			</div>
+					        			</div>
+								        <div class="MiddleLeftRightClickPopupMenu">
+								          <div class="MiddleRightRightClickPopupMenu">
+					              		<div class="UIRightPopupMenuContainer">
+					              		<% if(!forum.getIsLock()) { %>
+															<a class="MenuItem" href="<%=uicomponent.event("AddTopic")%>">   
+						                    <div class="ItemIcon PostnewThreadIcon">
+						                      <%=_ctx.appRes(uicomponent.getName() + ".action.AddTopic");%>
+						                    </div>
+					                    </a>
+					                   <% } 
+					                   		for(action in uicomponent.getActionMenuForum()) {
+					                   		String link = uicomponent.event(action) ;
+					                   		String itemLabel = _ctx.appRes(uicomponent.getName() + ".action." + action);
+					                   		String classIcon = null;
+					                   		if(action.length() < 12) classIcon = action + "Icon" ;
+					                   		else classIcon = action.replaceFirst("Forum", "") + "Icon" ;
+					                   %>
+					                    <a class="MenuItem" href="$link">   
+						                    <div class="ItemIcon $classIcon">
+						                      $itemLabel
+						                    </div>
+					                    </a>
+					                   <% } %>
+														</div>
+						          		</div>
+						        		</div>
+									      <div class="BottomLeftRightClickPopupMenu">
 								        <div class="BottomRightRightClickPopupMenu">
 								          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
 								        </div>
 								      </div>
-					      			
+					      			</div>
 								    </div>
 			      			</div>
 			      		</div>

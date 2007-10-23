@@ -11,33 +11,35 @@
 	
 	<% /*Popup menu*/ %>
 	<div class="UIRightClickPopupMenu" id="UITagListPopupMenu" eXoCallback="eXo.mail.UIMailPortlet.tagListPopupMenuCallback">
-  	<div class="TopLeftRightClickPopupMenu" id="test">
-  	  <div class="TopRightRightClickPopupMenu">
-  	    <div class="TopCenterRightClickPopupMenu"><span></span></div>
-  	  </div>
-  	</div>
-  
-  	<div class="MiddleLeftRightClickPopupMenu">
-  	  <div class="MiddleRightRightClickPopupMenu">
-  	    <div class="UIRightPopupMenuContainer">
-  	      <a class="MenuItem" href="<%=uicomponent.event("EditTag", "id")%>">   
-  	        <div class="ItemIcon RenameFolderIcon"> Edit </div>
-  	      </a>
-  	      <a class="MenuItem" href="<%=uicomponent.event("RemoveTag", "id")%>">   
-  	        <div class="ItemIcon RemoveFolderIcon"> Remove </div>
-  	      </a>
-  	      <a class="MenuItem" href="<%=uicomponent.event("EmptyTag", "id")%>">   
-  	        <div class="ItemIcon EmptyIcon"> Empty </div>
-  	      </a>
-  	    </div>
-  	  </div>
-  	</div>
-  
-  	<div class="BottomLeftRightClickPopupMenu">
+		<div class="UIContextMenuContainer">
+	  	<div class="TopLeftRightClickPopupMenu" id="test">
+	  	  <div class="TopRightRightClickPopupMenu">
+	  	    <div class="TopCenterRightClickPopupMenu"><span></span></div>
+	  	  </div>
+	  	</div>
+	  
+	  	<div class="MiddleLeftRightClickPopupMenu">
+	  	  <div class="MiddleRightRightClickPopupMenu">
+	  	    <div class="UIRightPopupMenuContainer">
+	  	      <a class="MenuItem" href="<%=uicomponent.event("EditTag", "id")%>">   
+	  	        <div class="ItemIcon RenameFolderIcon"> Edit </div>
+	  	      </a>
+	  	      <a class="MenuItem" href="<%=uicomponent.event("RemoveTag", "id")%>">   
+	  	        <div class="ItemIcon RemoveFolderIcon"> Remove </div>
+	  	      </a>
+	  	      <a class="MenuItem" href="<%=uicomponent.event("EmptyTag", "id")%>">   
+	  	        <div class="ItemIcon EmptyIcon"> Empty </div>
+	  	      </a>
+	  	    </div>
+	  	  </div>
+	  	</div>
+	  
+	  	<div class="BottomLeftRightClickPopupMenu">
   	  <div class="BottomRightRightClickPopupMenu">
   	    <div class="BottomCenterRightClickPopupMenu"><span></span></div>
   	  </div>
   	</div>
+		</div>
 	</div>
 	<% /*end popup menu*/ %>
 	

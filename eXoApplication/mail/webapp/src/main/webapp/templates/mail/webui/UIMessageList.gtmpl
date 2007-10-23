@@ -35,48 +35,48 @@
       <div style="position: relative;">
         <div class="UIPopupCategory" style="display: none;">
           <div class="UIRightClickPopupMenu" style="display: block;">
-          
-            <div class="TopLeftRightClickPopupMenu">
-              <div class="TopRightRightClickPopupMenu">
-                <div class="TopCenterRightClickPopupMenu"><span></span></div>
-              </div>
-            </div>
-            <div class="MiddleLeftRightClickPopupMenu">
-              <div class="MiddleRightRightClickPopupMenu">
-                <div class="UIRightPopupMenuContainer">
-                  <a class="MenuItem" href="<%=uicomponent.event("MarkAsRead")%>">   
-                    <div class="ItemIcon MarkReadIcon">Mark as read</div>
-                  </a>
-                  <a class="MenuItem ItemHidden" href="<%=uicomponent.event("MarkAsUnRead")%>">   
-                    <div class="ItemIcon MarkReadIcon">Mark as unread</div>
-                  </a>
-                  <a class="MenuItem" href="<%=uicomponent.event("AddStar")%>">   
-                    <div class="ItemIcon StarredIcon">Add star</div>
-                  </a>
-                  <a class="MenuItem ItemHidden" href="<%=uicomponent.event("RemoveStar")%>">   
-                    <div class="ItemIcon RemoveStarIcon">Remove star</div>
-                  </a>
-                  <a class="MenuItem" href="<%=uicomponent.event("AddTag")%>">   
-                    <div class="ItemIcon BlueTag">Tag message</div>
-                  </a>
-                  <a class="MenuItem" href="<%=uicomponent.event("MoveMessages")%>">   
-                    <div class="ItemIcon MoveMessageIcon">Move message</div>
-                  </a>
-                  <a class="MenuItem" href="#">   
-                    <div class="ItemIcon ImportMessageIcon">Import message</div>
-                  </a>
-                  <a class="MenuItem" href="#">   
-                    <div class="ItemIcon EmportMessageIcon">Emport message</div>
-                  </a>
-                </div>
-              </div>
-            </div>
-            <div class="BottomLeftRightClickPopupMenu">
+          	<div class="UIContextMenuContainer">
+	            <div class="TopLeftRightClickPopupMenu">
+	              <div class="TopRightRightClickPopupMenu">
+	                <div class="TopCenterRightClickPopupMenu"><span></span></div>
+	              </div>
+	            </div>
+	            <div class="MiddleLeftRightClickPopupMenu">
+	              <div class="MiddleRightRightClickPopupMenu">
+	                <div class="UIRightPopupMenuContainer">
+	                  <a class="MenuItem" href="<%=uicomponent.event("MarkAsRead")%>">   
+	                    <div class="ItemIcon MarkReadIcon">Mark as read</div>
+	                  </a>
+	                  <a class="MenuItem ItemHidden" href="<%=uicomponent.event("MarkAsUnRead")%>">   
+	                    <div class="ItemIcon MarkReadIcon">Mark as unread</div>
+	                  </a>
+	                  <a class="MenuItem" href="<%=uicomponent.event("AddStar")%>">   
+	                    <div class="ItemIcon StarredIcon">Add star</div>
+	                  </a>
+	                  <a class="MenuItem ItemHidden" href="<%=uicomponent.event("RemoveStar")%>">   
+	                    <div class="ItemIcon RemoveStarIcon">Remove star</div>
+	                  </a>
+	                  <a class="MenuItem" href="<%=uicomponent.event("AddTag")%>">   
+	                    <div class="ItemIcon BlueTag">Tag message</div>
+	                  </a>
+	                  <a class="MenuItem" href="<%=uicomponent.event("MoveMessages")%>">   
+	                    <div class="ItemIcon MoveMessageIcon">Move message</div>
+	                  </a>
+	                  <a class="MenuItem" href="#">   
+	                    <div class="ItemIcon ImportMessageIcon">Import message</div>
+	                  </a>
+	                  <a class="MenuItem" href="#">   
+	                    <div class="ItemIcon EmportMessageIcon">Emport message</div>
+	                  </a>
+	                </div>
+	              </div>
+	            </div>
+	            <div class="BottomLeftRightClickPopupMenu">
               <div class="BottomRightRightClickPopupMenu">
                 <div class="BottomCenterRightClickPopupMenu"><span></span></div>
               </div>
             </div>
-            
+            </div>
           </div>
         </div>
       </div>
@@ -93,42 +93,42 @@
       <div style="position: relative;">
         <div class="UIPopupCategory" style="display: none;">
           <div class="UIRightClickPopupMenu" style="display: block;">
-          
-            <div class="TopLeftRightClickPopupMenu">
-              <div class="TopRightRightClickPopupMenu">
-                <div class="TopCenterRightClickPopupMenu"><span></span></div>
-              </div>
-            </div>
-            <div class="MiddleLeftRightClickPopupMenu">
-              <div class="MiddleRightRightClickPopupMenu">
-                <div class="UIRightPopupMenuContainer">
-                  <a class="MenuItem" href="<%=uicomponent.event("ViewAll")%>">   
-                    <div class="ItemIcon AllMessagesIcon">All messages</div>
-                  </a>
-                  <a class="MenuItem" href="<%=uicomponent.event("ViewStarred")%>">   
-                    <div class="ItemIcon StaredMessagesIcon">Starred messages</div>
-                  </a>
-                  <a class="MenuItem" href="<%=uicomponent.event("ViewUnstarred")%>">   
-                    <div class="ItemIcon UnreadMessagesIcon">Unstarred messages</div>
-                  </a>
-                  <a class="MenuItem" href="<%=uicomponent.event("ViewUnread")%>">   
-                    <div class="ItemIcon UnreadMessagesIcon">Unread messages</div>
-                  </a>
-                  <a class="MenuItem" href="<%=uicomponent.event("ViewRead")%>">   
-                    <div class="ItemIcon ReadMessagesIcon">Read messages</div>
-                  </a>
-                  <a class="MenuItem" href="<%=uicomponent.event("ViewAttachment")%>">   
-                    <div class="ItemIcon MessagesAttachmentIcon">Messages with attachment</div>
-                  </a>
-                </div>
-              </div>
-            </div>
-            <div class="BottomLeftRightClickPopupMenu">
+          	<div class="UIContextMenuContainer">
+	            <div class="TopLeftRightClickPopupMenu">
+	              <div class="TopRightRightClickPopupMenu">
+	                <div class="TopCenterRightClickPopupMenu"><span></span></div>
+	              </div>
+	            </div>
+	            <div class="MiddleLeftRightClickPopupMenu">
+	              <div class="MiddleRightRightClickPopupMenu">
+	                <div class="UIRightPopupMenuContainer">
+	                  <a class="MenuItem" href="<%=uicomponent.event("ViewAll")%>">   
+	                    <div class="ItemIcon AllMessagesIcon">All messages</div>
+	                  </a>
+	                  <a class="MenuItem" href="<%=uicomponent.event("ViewStarred")%>">   
+	                    <div class="ItemIcon StaredMessagesIcon">Starred messages</div>
+	                  </a>
+	                  <a class="MenuItem" href="<%=uicomponent.event("ViewUnstarred")%>">   
+	                    <div class="ItemIcon UnreadMessagesIcon">Unstarred messages</div>
+	                  </a>
+	                  <a class="MenuItem" href="<%=uicomponent.event("ViewUnread")%>">   
+	                    <div class="ItemIcon UnreadMessagesIcon">Unread messages</div>
+	                  </a>
+	                  <a class="MenuItem" href="<%=uicomponent.event("ViewRead")%>">   
+	                    <div class="ItemIcon ReadMessagesIcon">Read messages</div>
+	                  </a>
+	                  <a class="MenuItem" href="<%=uicomponent.event("ViewAttachment")%>">   
+	                    <div class="ItemIcon MessagesAttachmentIcon">Messages with attachment</div>
+	                  </a>
+	                </div>
+	              </div>
+	            </div>
+	            <div class="BottomLeftRightClickPopupMenu">
               <div class="BottomRightRightClickPopupMenu">
                 <div class="BottomCenterRightClickPopupMenu"><span></span></div>
               </div>
             </div>
-            
+            </div>
           </div>
         </div>
       </div>

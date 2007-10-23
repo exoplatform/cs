@@ -165,6 +165,7 @@
 <% /*Begin Popup Menu*/ %>
   			
   				<div class="UIRightClickPopupMenu" id="UIMonthViewRightMenu" eXoCallback="eXo.calendar.UICalendarPortlet.monthViewCallback">
+  					<div class="UIContextMenuContainer">
 						  <div class="TopLeftRightClickPopupMenu">
           			<div class="TopRightRightClickPopupMenu">
             			<div class="TopCenterRightClickPopupMenu"><span></span></div>
@@ -190,16 +191,18 @@
 				        </div>
 				      </div>
 	      		</div>
+	      	</div>
 
   		<% /*End Popup Menu*/ %>
   		<% /*Begin Popup Menu*/ %>
   			
   				<div class="UIRightClickPopupMenu" id="UIMonthViewEventRightMenu" eXoCallback="eXo.calendar.UICalendarPortlet.monthViewCallback">
+  					<div class="UIContextMenuContainer">
 						  <div class="TopLeftRightClickPopupMenu">
           			<div class="TopRightRightClickPopupMenu">
             			<div class="TopCenterRightClickPopupMenu"><span></span></div>
           			</div>
-        			</div> 
+        			</div>
 			        <div class="MiddleLeftRightClickPopupMenu">
 			          <div class="MiddleRightRightClickPopupMenu">
               		<div class="UIRightPopupMenuContainer">
@@ -220,5 +223,6 @@
 				        </div>
 				      </div>
 	      		</div>
+	      	</div>
 
   		<% /*End Popup Menu*/ %>
