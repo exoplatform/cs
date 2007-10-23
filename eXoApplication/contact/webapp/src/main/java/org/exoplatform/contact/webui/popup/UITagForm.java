@@ -48,51 +48,55 @@ import org.exoplatform.webui.form.UIFormStringInput;
 public class UITagForm extends UIForm implements UIPopupComponent {
   public static final String FIELD_TAGSOFCONTACT_INFO = "TagsOfContact";
   public static final String FIELD_TAGNAME_INPUT = "tagName";
+  public static final String NO_TAG_INFO = "no Tag";
   public static final String FIELD_COLOR= "color";
-  public static final String RED = "Red".intern() ;
-  public static final String BLUE = "Blue".intern() ;
-  public static final String GREEN = "Green".intern() ;
-  public static String[] FIELD_TAG_BOX = null;
+  public static final String RED = "Red" ;
+  public static final String BLUE = "Blue" ;
+  public static final String GREEN = "Green" ;
+  public static String[] FIELD_TAG_BOX_KEY = null;
+  public static String[] FIELD_TAG_BOX_LABLE = null;
   public static List<String> contactIds_ ;
-  public static boolean isNew = true ;
 
   public UITagForm() throws Exception {
     setId("UITagForm") ;
-    if (isNew) {
-      addUIFormInput(new UIFormInputInfo(FIELD_TAGSOFCONTACT_INFO, FIELD_TAGSOFCONTACT_INFO, null)) ;
-      ContactService contactService = ContactUtils.getContactService();
-      String username = ContactUtils.getCurrentUser() ;
-      Contact contact ;
-      for (String contactId : contactIds_) {
-        contact = contactService.getContact(username, contactId) ;
-        if (contact == null) contact = contactService.getSharedContact(contactId) ;
-        String[] tags  = null ;
-        if (contact != null) { 
-          tags = contact.getTags() ;
-          StringBuffer buffer = new StringBuffer(contact.getFullName() + ": ") ;          
-          if (tags != null) {
-            if (tags.length > 0) {
-              buffer.append(tags[0]) ;
-              for (int i = 1; i < tags.length; i ++) buffer.append(", " + tags[i]) ;
-            }
-          }
-          String info = buffer.toString() ;
-          addUIFormInput(new UIFormInputInfo(info, info,  null)) ;
+    addUIFormInput(new UIFormInputInfo(FIELD_TAGSOFCONTACT_INFO, FIELD_TAGSOFCONTACT_INFO, null)) ;
+    ContactService contactService = ContactUtils.getContactService();
+    String username = ContactUtils.getCurrentUser() ;
+    Contact contact ;
+    for (String contactId : contactIds_) {
+      contact = contactService.getContact(username, contactId) ;
+      if (contact == null) contact = contactService.getSharedContact(contactId) ;
+      String[] tagIds  = null ;
+      if (contact != null) { 
+        tagIds = contact.getTags() ;
+        StringBuffer buffer = new StringBuffer(contact.getFullName() + ": ") ;          
+        if (tagIds != null) {
+          if (tagIds.length > 0) {
+            buffer.append(contactService.getTag(username, tagIds[0]).getName()) ;
+            for (int i = 1; i < tagIds.length; i ++) 
+              buffer.append(", " + contactService.getTag(username, tagIds[i]).getName()) ;
+          } else tagIds = null ;
         }
+        if (tagIds == null) buffer.append(NO_TAG_INFO) ;
+        String info = buffer.toString() ;
+        addUIFormInput(new UIFormInputInfo(info, info,  null)) ;
       }
-      addUIFormInput(new UIFormStringInput(FIELD_TAGNAME_INPUT, FIELD_TAGNAME_INPUT, null));
-      List<SelectItemOption<String>> colors = new ArrayList<SelectItemOption<String>>() ;
-      colors.add(new SelectItemOption<String>(RED,RED)) ;
-      colors.add(new SelectItemOption<String>(BLUE,BLUE)) ;
-      colors.add(new SelectItemOption<String>(GREEN,GREEN)) ;
-      addUIFormInput(new UIFormSelectBox(FIELD_COLOR, FIELD_COLOR, colors)) ;
-      List<Tag> tags = contactService.getTags(username);
-      FIELD_TAG_BOX = new String[tags.size()];
-      for (int i = 0 ; i < tags.size(); i ++) {
-        FIELD_TAG_BOX[i] = tags.get(i).getName();
-        addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_TAG_BOX[i], FIELD_TAG_BOX[i], false));
-      }
-    } 
+    }
+    addUIFormInput(new UIFormStringInput(FIELD_TAGNAME_INPUT, FIELD_TAGNAME_INPUT, null));
+    List<SelectItemOption<String>> colors = new ArrayList<SelectItemOption<String>>() ;
+    colors.add(new SelectItemOption<String>(RED,RED)) ;
+    colors.add(new SelectItemOption<String>(BLUE,BLUE)) ;
+    colors.add(new SelectItemOption<String>(GREEN,GREEN)) ;
+    addUIFormInput(new UIFormSelectBox(FIELD_COLOR, FIELD_COLOR, colors)) ;
+    List<Tag> tags = contactService.getTags(username);
+    FIELD_TAG_BOX_KEY = new String[tags.size()];
+    FIELD_TAG_BOX_LABLE = new String[tags.size()] ;
+    for (int i = 0 ; i < tags.size(); i ++) {
+      Tag tag = tags.get(i) ;
+      FIELD_TAG_BOX_KEY[i] = tag.getId();
+      FIELD_TAG_BOX_LABLE[i] = tag.getName() ;
+      addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_TAG_BOX_LABLE[i], FIELD_TAG_BOX_KEY[i], false));
+    }
   }
   
   public void setValues(String tagName) throws Exception {
@@ -112,9 +116,9 @@ public class UITagForm extends UIForm implements UIPopupComponent {
 
   public List<String> getCheckedTags() throws Exception {
     List<String> checkedTags = new ArrayList<String>();
-    for (int i = 0; i < FIELD_TAG_BOX.length; i ++) {
-      if (getUIFormCheckBoxInput(FIELD_TAG_BOX[i]).isChecked()) {
-        checkedTags.add(FIELD_TAG_BOX[i]);
+    for (int i = 0; i < FIELD_TAG_BOX_LABLE.length; i ++) {
+      if (getUIFormCheckBoxInput(FIELD_TAG_BOX_LABLE[i]).isChecked()) {
+        checkedTags.add(FIELD_TAG_BOX_KEY[i]);
       }
     }
     return checkedTags;
@@ -123,34 +127,34 @@ public class UITagForm extends UIForm implements UIPopupComponent {
   static  public class AddActionListener extends EventListener<UITagForm> {
     public void execute(Event<UITagForm> event) throws Exception {
       UITagForm uiTagForm = event.getSource() ;
+      ContactService contactService = ContactUtils.getContactService();
+      String username = ContactUtils.getCurrentUser() ;
+      UIApplication uiApp = uiTagForm.getAncestorOfType(UIApplication.class) ;
       List<Tag> tags = new ArrayList<Tag>();
       Tag tag;
-      String inputTag = uiTagForm.getUIStringInput(FIELD_TAGNAME_INPUT).getValue(); 
+      String inputTag = uiTagForm.getUIStringInput(FIELD_TAGNAME_INPUT).getValue();
       if (!ContactUtils.isEmpty(inputTag)) {
+        if (ContactUtils.isTagNameExisted(inputTag)) {
+          uiApp.addMessage(new ApplicationMessage("UITagForm.msg.tagName-existed", null)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        }
         tag = new Tag();
         tag.setName(inputTag);
         tag.setColor(uiTagForm.getUIFormSelectBox(FIELD_COLOR).getValue()) ;
         tags.add(tag);
       }
-      if (isNew) {
-        for (String tagName : uiTagForm.getCheckedTags()) {
-          tag = new Tag();
-          tag.setName(tagName) ;
-          tags.add(tag);
-        } 
-      }
+      for (String tagId : uiTagForm.getCheckedTags()) {
+        tag = contactService.getTag(username, tagId) ;
+        tags.add(tag);
+      } 
       if (tags.size() == 0) {
-        UIApplication uiApp = uiTagForm.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UITagForm.msg.tagName-required", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       } 
-      ContactService contactService = ContactUtils.getContactService();
-      String username = ContactUtils.getCurrentUser() ;
-      if (isNew)
-        contactService.addTag(username, contactIds_, tags);
-      else 
-        System.out.println("\n\n tagName : " + inputTag + "\n\n");
+      
+      contactService.addTag(username, contactIds_, tags);
       UIContactPortlet uiContactPortlet = uiTagForm.getAncestorOfType(UIContactPortlet.class);
       UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
       uiContacts.updateList() ;

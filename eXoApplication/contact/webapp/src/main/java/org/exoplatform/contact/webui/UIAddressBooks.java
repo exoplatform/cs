@@ -135,10 +135,15 @@ public class UIAddressBooks extends UIComponent  {
       UIPopupAction uiPopupAction = uiContactPortlet.getChild(UIPopupAction.class) ; 
       UIPopupContainer popupContainer = uiPopupAction.createUIComponent(UIPopupContainer.class, null, "AddNewContact") ;
       UICategorySelect uiCategorySelect = popupContainer.addChild(UICategorySelect.class, null, null) ;
-      popupContainer.addChild(UIContactForm.class, null, null) ;
-      String groupId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      uiCategorySelect.setValue(groupId) ; 
       UIContactForm.isNew_ = true ;
+      UIContactForm uiContactForm = popupContainer.addChild(UIContactForm.class, null, null) ;
+      String groupId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      if (ContactUtils.isPublicGroup(groupId)) {
+        uiContactForm.getUIFormCheckBoxInput(UIContactForm.FIELD_ISPUBLIC_BOX).setChecked(true);
+        uiContactForm.getUIFormCheckBoxInput(groupId).setChecked(true) ;   
+      } else {
+        uiCategorySelect.setValue(groupId) ; 
+      }
       uiPopupAction.activate(popupContainer, 800, 0, true) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }

@@ -5,12 +5,14 @@
 package org.exoplatform.contact.webui;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
-import org.exoplatform.contact.service.ContactPageList;
+import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.JCRPageList;
 import org.exoplatform.contact.webui.popup.UIContactPreviewForm;
@@ -68,6 +70,9 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   private String sortedBy_ = null;
   private boolean isAscending_ = true;
   private String viewQuery_ = null;
+  public static String fullName = "fullName".intern() ;
+  public static String emailAddress = "emailAddress".intern() ;
+  public static String jobTitle = "jobTitle".intern() ;
   
   public UIContacts() throws Exception { } 
   public String[] getActions() { return new String[] {"Cancel"} ; }
@@ -81,14 +86,15 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   public String getViewQuery() {return viewQuery_ ;}
   public void setViewQuery(String view) {viewQuery_ = view ;}
   
-  
-  public JCRPageList getContactPageList() { return pageList_ ; }
-  
   public void setContacts(JCRPageList pageList) throws Exception {
     pageList_ = pageList ;
     updateList() ;
   }
-  public Contact[] getContacts() throws Exception { return contactMap.values().toArray(new Contact[]{}) ; }
+  public JCRPageList getContactPageList() { return pageList_ ; }
+  
+  public Contact[] getContacts() throws Exception { 
+    return contactMap.values().toArray(new Contact[]{}) ;
+  }
   
   public void setSelectedContact(String s) { selectedContact = s ; }
   public String getSelectedContact() { return selectedContact ; }
@@ -205,7 +211,6 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       }    
       UIContactPortlet contactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class) ;
       UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
-      UITagForm.isNew = true ;
       UITagForm.contactIds_ = contactIds ;
       UITagForm uiTagForm = popupAction.createUIComponent(UITagForm.class, null, "UITagForm") ;
       popupAction.activate(uiTagForm, 600, 0, true) ;
@@ -348,6 +353,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   }
   
   static public class SortActionListener extends EventListener<UIContacts> {
+    @SuppressWarnings("unchecked")
     public void execute(Event<UIContacts> event) throws Exception {
       UIContacts uiContacts = event.getSource() ;
       String sortedBy = event.getRequestContext().getRequestParameter(OBJECTID) ;
@@ -355,18 +361,69 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       String username = ContactUtils.getCurrentUser() ;
       uiContacts.setAscending(!uiContacts.isAscending_);
       uiContacts.setSortedBy(sortedBy);
-      if (uiContacts.selectedGroup != null) {
-        ContactPageList list =  contactService.getContactPageListByGroup(username, uiContacts.selectedGroup
-            , uiContacts.getViewQuery(), uiContacts.getSortedBy(), uiContacts.isAscending_) ;
-        List<Contact> contacts = list.getPage(list.getCurrentPage(), username) ;
-        for (Contact contact : contacts) System.out.println("\n\n name:" + contact.getFullName() + "\n\n");
 
-        uiContacts.setContacts(contactService.getContactPageListByGroup(username, uiContacts.selectedGroup, uiContacts.getViewQuery(), uiContacts.getSortedBy(), uiContacts.isAscending_));
-      } else if (uiContacts.getSelectedTag() != null) {
-        uiContacts.setContacts(contactService.getContactPageListByTag(username, uiContacts.getSelectedTag(), uiContacts.getViewQuery(), uiContacts.getSortedBy(), uiContacts.isAscending_));
+      JCRPageList pageList = null ;
+      String group = uiContacts.selectedGroup ;
+      if (!ContactUtils.isEmpty(group)) {
+        ContactFilter filter = new ContactFilter() ;
+        filter.setViewQuery(uiContacts.getViewQuery());
+        filter.setAscending(uiContacts.isAscending_);
+        filter.setOrderBy(uiContacts.getSortedBy());
+        filter.setCategories(new String[] { group } ) ;
+        pageList = contactService.getContactPageListByGroup(username, filter, ContactUtils.isPublicGroup(group)) ;
+        
+      } else if (!ContactUtils.isEmpty(uiContacts.getSelectedTag())) {
+          pageList = uiContacts.pageList_ ;
+          List<Contact> contacts = new ArrayList<Contact>() ;
+          contacts = pageList.getAll() ;
+          if (uiContacts.getSortedBy().equals(UIContacts.fullName)) {
+            FullNameComparator.isAsc = (!FullNameComparator.isAsc) ;
+            Collections.sort(contacts, new FullNameComparator()) ;
+          } else if (uiContacts.getSortedBy().equals(UIContacts.emailAddress)) {
+            EmailComparator.isAsc = (!EmailComparator.isAsc) ;
+            Collections.sort(contacts, new EmailComparator()) ;
+          } else if (uiContacts.getSortedBy().equals(UIContacts.jobTitle)) {
+            JobTitleComparator.isAsc = (!JobTitleComparator.isAsc) ;
+            Collections.sort(contacts, new JobTitleComparator()) ;
+          }  
+         pageList.setList(contacts) ;
       }
-      uiContacts.updateList();
+      uiContacts.setContacts(pageList) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent());
+    }
+  }
+  
+  static public class FullNameComparator implements Comparator {
+    public static boolean isAsc ;
+    public int compare(Object o1, Object o2) throws ClassCastException {
+      String name1 = ((Contact) o1).getFullName() ;
+      String name2 = ((Contact) o2).getFullName() ;
+      if (ContactUtils.isEmpty(name1)) name1 = "" ;
+      if (ContactUtils.isEmpty(name2)) name2 = "" ;
+      if (isAsc == true) return name1.compareToIgnoreCase(name2) ;
+      else return name2.compareToIgnoreCase(name1) ;
+    }
+  }
+  static public class EmailComparator implements Comparator {
+    public static boolean isAsc ;
+    public int compare(Object o1, Object o2) throws ClassCastException {
+      String email1 = ((Contact) o1).getEmailAddress() ;
+      String email2 = ((Contact) o2).getEmailAddress() ;
+      if (ContactUtils.isEmpty(email1)) email1 = "" ;
+      if (ContactUtils.isEmpty(email2)) email2 = "" ;
+      if (isAsc == true) return email1.compareToIgnoreCase(email2) ;
+      else return email2.compareToIgnoreCase(email1) ;
+    }
+  }
+  static public class JobTitleComparator implements Comparator {
+    public static boolean isAsc ;
+    public int compare(Object o1, Object o2) throws ClassCastException {
+      String job1 = ((Contact) o1).getJobTitle() ;
+      String job2 = ((Contact) o2).getJobTitle() ;
+      if (ContactUtils.isEmpty(job1)) job1 = "" ;
+      if (ContactUtils.isEmpty(job2)) job2 = "" ;
+      if (isAsc == true) return job1.compareToIgnoreCase(job2) ;
+      else return job2.compareToIgnoreCase(job1) ;
     }
   }
   

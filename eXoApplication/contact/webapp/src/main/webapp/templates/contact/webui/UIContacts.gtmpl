@@ -8,9 +8,9 @@
 	import org.exoplatform.contact.service.JCRPageList;
 	def rcontext = _ctx.getRequestContext() ;  
 	rcontext.getJavascriptManager().importJavascript("eXo.contact.UIContactPortlet","/contact/javascript") ;
-	rcontext.getJavascriptManager().importJavascript("eXo.contact.UIContactDragDrop","/contact/javascript") ;
+	//rcontext.getJavascriptManager().importJavascript("eXo.contact.UIContactDragDrop","/contact/javascript") ;
 	rcontext.getJavascriptManager().addJavascript("eXo.contact.UIContactPortlet.showContextMenu() ;") ;
-	rcontext.getJavascriptManager().addJavascript("eXo.contact.UIContactDragDrop.init() ;") ;
+	//rcontext.getJavascriptManager().addJavascript("eXo.contact.UIContactDragDrop.init() ;") ;
 	uiform.begin()
 	if(uicomponent.getViewContactsList()) {
 %>
@@ -83,9 +83,10 @@
 	  		        <th style="width: 24%; padding-left: 7px;" class="text">
 	  		        	
 	  		        	<%
-			    		      String sortedByName = uicomponent.event("Sort","fullName");
+	  		        		String fullName = uicomponent.fullName ;
+			    		      String sortedByName = uicomponent.event("Sort",fullName);
 			              String classArrowName = "";
-			              if (uicomponent.getSortedBy().equals("fullName")) {
+			              if (uicomponent.getSortedBy().equals(fullName)) {
 			                if (uicomponent.isAscending()) classArrowName = "UpArrow1Icon";
 			                else classArrowName = "DownArrow1Icon"
 			              }
@@ -97,9 +98,10 @@
 	 	      	    <th class="text" style="padding-left: 7px;">
 	 	      	    
 	 	      	    	<%
-			    		      String sortedByEmail = uicomponent.event("Sort","emailAddress");
+	 	      	    		String emailAddress = uicomponent.emailAddress ;
+			    		      String sortedByEmail = uicomponent.event("Sort",emailAddress);
 			              String classArrowEmail = "";
-			              if (uicomponent.getSortedBy().equals("emailAddress")) {
+			              if (uicomponent.getSortedBy().equals(emailAddress)) {
 			                if (uicomponent.isAscending()) classArrowEmail = "UpArrow1Icon";
 			                else classArrowEmail = "DownArrow1Icon"
 			              }
@@ -112,9 +114,10 @@
 	 	      	    <th style="width: 120px; padding-left: 7px;" class="text">
 	 	      	    
 	 	      	    	<%
-			    		      String sortedByOrganition = uicomponent.event("Sort","jobTitle");
+	 	      	    		String jobTitle = uicomponent.jobTitle ;
+			    		      String sortedByOrganition = uicomponent.event("Sort",jobTitle);
 			              String classArrowOrganition = "";
-			              if (uicomponent.getSortedBy().equals("jobTitle")) {
+			              if (uicomponent.getSortedBy().equals(jobTitle)) {
 			                if (uicomponent.isAscending()) classArrowOrganition = "UpArrow1Icon";
 			                else classArrowOrganition = "DownArrow1Icon"
 			              }
@@ -134,9 +137,9 @@
 								String actionLink  = uicomponent.event("SelectedContact", contact.getId()) ;
 								checkboxField = uicomponent.getChildById(contact.getId()) ;
 								iconTag = "Icon" ;
-								String[] tagNames = contact.getTags() ; 
-								if (tagNames != null && tagNames.length > 0) {
-									Tag tag = ContactUtils.getContactService().getTag(ContactUtils.getCurrentUser(), contact.getTags()[0]) ;
+								String[] tagIds = contact.getTags() ; 
+								if (tagIds != null && tagIds.length > 0) {
+									Tag tag = ContactUtils.getContactService().getTag(ContactUtils.getCurrentUser(), tagIds[0]) ;
 									iconTag = "Icon " + tag.getColor() + "Tag" ; 
 								}
 								cssClass = "" ;
@@ -241,9 +244,9 @@
 					while (i < contacts.length) {
 						contact = contacts[i ++] ;
 						iconTag = "Icon" ;
-						String[] tagNames = contact.getTags() ; 
-						if (tagNames != null && tagNames.length > 0) {
-							Tag tag = ContactUtils.getContactService().getTag(ContactUtils.getCurrentUser(), contact.getTags()[0]) ;
+						String[] tagIds = contact.getTags() ; 
+						if (tagIds != null && tagIds.length > 0) {
+							Tag tag = ContactUtils.getContactService().getTag(ContactUtils.getCurrentUser(), tagIds[0]) ;
 							iconTag = "Icon " + tag.getColor() + "Tag" ; 
 						}
 				%>

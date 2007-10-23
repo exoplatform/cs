@@ -6,10 +6,12 @@ package org.exoplatform.contact;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.util.List;
 
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactAttachment;
 import org.exoplatform.contact.service.ContactService;
+import org.exoplatform.contact.service.Tag;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
@@ -62,6 +64,20 @@ public class ContactUtils {
       }
     }
     return null ;
+  }
+  
+  public static boolean isTagNameExisted(String tagName) throws Exception {
+    List<Tag> tags = getContactService().getTags(getCurrentUser()) ;
+    for (Tag tag : tags)
+      if (tag.getName().equalsIgnoreCase(tagName)) return true ;
+    return false ;
+  }
+  
+  public static boolean isPublicGroup(String groupId) throws Exception {
+    String[] sharedGroups = getUserGroups() ;
+    for (String group : sharedGroups)
+      if (group.equals(groupId)) return true ;
+    return false ;
   }
   
 }

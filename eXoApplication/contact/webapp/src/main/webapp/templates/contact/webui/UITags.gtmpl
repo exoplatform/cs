@@ -10,12 +10,12 @@
 			List tags = uicomponent.getTags();
 			String actionLink ;
 			for(tag in tags) {
-				actionLink  = uicomponent.event("SelectTag", tag.getName()) ;			
+				actionLink  = uicomponent.event("SelectTag", tag.getId()) ;			
 				cssClass = "Normal" ;
-				if(tag.getName().equals(uicomponent.getSelectedTag())) cssClass = "Selected" ;
+				if(tag.getId().equals(uicomponent.getSelectedTag())) cssClass = "Selected" ;
 				color = tag.getColor() + "Tag" ;
 		%>
-			<div  class="TagList ItemList $cssClass" tagName="<%=tag.getName()%>">
+			<div  class="TagList ItemList $cssClass" tagName="<%=tag.getId()%>">
 				<a href="$actionLink" class="IconHolder $color" ><%=tag.getName()%></a>
 			</div>
 		<% } %>
