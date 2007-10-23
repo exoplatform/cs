@@ -70,12 +70,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
 
   private boolean isAddNew_ = true ;
   private CalendarEvent calendarEvent_ = null ;
-  final public static String TIME_PATTERNS_12 ="hh:mm a" ;
-  final public static String TIME_PATTERNS_24 ="HH:mm" ;
-
   private String errorMsg_ = null ;
-
-  private int timeInterval_ = 15 ;
 
   public UITaskForm() throws Exception {
     super("UIEventForm", false);
@@ -96,10 +91,11 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
   }
   public void initForm() {
     java.util.Calendar cal = GregorianCalendar.getInstance() ;
-    int beginMinute = (cal.get(java.util.Calendar.MINUTE)/timeInterval_)* timeInterval_ ;
+    UITaskDetailTab uiTaskDetailTab = getChildById(TAB_TASKDETAIL) ;
+    int beginMinute = (cal.get(java.util.Calendar.MINUTE)/uiTaskDetailTab.getTimeInterval())* uiTaskDetailTab.getTimeInterval() ;
     cal.set(java.util.Calendar.MINUTE, beginMinute) ;
     setEventFromDate(cal.getTime()) ;
-    cal.add(java.util.Calendar.MINUTE, timeInterval_) ;
+    cal.add(java.util.Calendar.MINUTE, uiTaskDetailTab.getTimeInterval()) ;
     setEventToDate(cal.getTime()) ;
   }
   public void initForm(String calendarId, String categoryId) {
@@ -277,10 +273,10 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
   }
 
   protected Date getEventFromDate() throws Exception {
-    UIFormInputWithActions taskDetailTab =  getChildById(TAB_TASKDETAIL) ;
+    UITaskDetailTab taskDetailTab =  getChildById(TAB_TASKDETAIL) ;
     UIFormSelectBox timeField = taskDetailTab.getUIFormSelectBox(UITaskDetailTab.FIELD_FROM_TIME) ;
     UIFormDateTimeInput fromField = taskDetailTab.getChildById(UITaskDetailTab.FIELD_FROM) ;
-    DateFormat df = SimpleDateFormat.getInstance() ;
+    DateFormat df = new SimpleDateFormat("MM/dd/yyyy" + " " + taskDetailTab.getTimeFormat()) ;
     return df.parse(fromField.getValue() + " " + timeField.getValue()) ;
   }
   protected String getEventFormDateValue () {
@@ -289,20 +285,20 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
     return fromField.getValue() ;
   }
   protected void setEventFromDate(Date date) {
-    UIFormInputWithActions taskDetailTab =  getChildById(TAB_TASKDETAIL) ;
+    UITaskDetailTab taskDetailTab =  getChildById(TAB_TASKDETAIL) ;
     UIFormDateTimeInput fromField = taskDetailTab.getChildById(UITaskDetailTab.FIELD_FROM) ;
     UIFormSelectBox timeFile = taskDetailTab.getUIFormSelectBox(UITaskDetailTab.FIELD_FROM_TIME) ;
     DateFormat df = new SimpleDateFormat("MM/dd/yyyy") ;
     fromField.setValue(df.format(date)) ;
-    df = new SimpleDateFormat(TIME_PATTERNS_12) ;
+    df = new SimpleDateFormat(taskDetailTab.getTimeFormat()) ;
     timeFile.setValue(df.format(date)) ;
   }
 
   protected Date getEventToDate() throws Exception {
-    UIFormInputWithActions taskDetailTab =  getChildById(TAB_TASKDETAIL) ;
+    UITaskDetailTab taskDetailTab =  getChildById(TAB_TASKDETAIL) ;
     UIFormSelectBox timeField = taskDetailTab.getUIFormSelectBox(UITaskDetailTab.FIELD_TO_TIME) ;
     UIFormDateTimeInput toField = taskDetailTab.getChildById(UITaskDetailTab.FIELD_TO) ;
-    DateFormat df = SimpleDateFormat.getInstance() ;
+    DateFormat df = new SimpleDateFormat("MM/dd/yyyy" + " " + taskDetailTab.getTimeFormat()) ;
     return df.parse(toField.getValue() + " " + timeField.getValue()) ;
   }
   protected String getEventToDateValue () {
@@ -311,12 +307,12 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
     return toField.getValue() ;
   }
   protected void setEventToDate(Date date) {
-    UIFormInputWithActions taskDetailTab =  getChildById(TAB_TASKDETAIL) ;
+    UITaskDetailTab taskDetailTab =  getChildById(TAB_TASKDETAIL) ;
     UIFormDateTimeInput toField = taskDetailTab.getChildById(UITaskDetailTab.FIELD_TO) ;
     UIFormSelectBox timeField = taskDetailTab.getUIFormSelectBox(UITaskDetailTab.FIELD_TO_TIME) ;
     DateFormat df = new SimpleDateFormat("MM/dd/yyyy") ;
     toField.setValue(df.format(date)) ;
-    df = new SimpleDateFormat(TIME_PATTERNS_12) ;
+    df = new SimpleDateFormat(taskDetailTab.getTimeFormat()) ;
     timeField.setValue(df.format(date)) ;
   }
 

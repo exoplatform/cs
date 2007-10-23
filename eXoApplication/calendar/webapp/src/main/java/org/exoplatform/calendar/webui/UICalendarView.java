@@ -375,7 +375,8 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         UIPopupAction uiParenPopup = uiPortlet.getChild(UIPopupAction.class) ;
         UIPopupContainer uiPopupContainer = uiPortlet.createUIComponent(UIPopupContainer.class, null, null) ;
         uiPopupContainer.setId("UIPopupAddEventContainer") ;
-        uiPopupContainer.addChild(UIEventForm.class, null, null) ;
+        UIEventForm uiEventForm = uiPopupContainer.addChild(UIEventForm.class, null, null) ;
+        uiEventForm.initForm() ;
         uiParenPopup.activate(uiPopupContainer, 700, 700, true) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiParenPopup) ;
       }

@@ -15,6 +15,7 @@ import org.exoplatform.calendar.service.Attachment;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
+import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -59,11 +60,14 @@ public class UIEventDetailTab extends UIFormInputWithActions {
 
   protected List<Attachment> attachments_ = new ArrayList<Attachment>() ;
   private Map<String, List<ActionData>> actionField_ ;
+  private int timeInterval_  ;
+  private String timeFormat_ ;
+  
   public UIEventDetailTab(String arg0) throws Exception {
     super(arg0);
     setComponentConfig(getClass(), null) ;
+    applySetting() ;
     actionField_ = new HashMap<String, List<ActionData>>() ;
-    
     addUIFormInput(new UIFormStringInput(FIELD_EVENT, FIELD_EVENT, null)) ;
     addUIFormInput(new UIFormTextAreaInput(FIELD_DESCRIPTION, FIELD_DESCRIPTION, null)) ;
     addUIFormInput(new UIFormSelectBox(FIELD_CALENDAR, FIELD_CALENDAR, getCalendar())) ;
@@ -81,9 +85,9 @@ public class UIEventDetailTab extends UIFormInputWithActions {
     setActionField(FIELD_ATTACHMENTS, getUploadFileList()) ;
 
     addUIFormInput(new UIFormDateTimeInput(FIELD_FROM, FIELD_FROM, new Date(), false));
-    addUIFormInput(new UIFormSelectBox(FIELD_FROM_TIME, FIELD_FROM_TIME, CalendarUtils.getTimesSelectBoxOptions("hh:mm a", 15)));
+    addUIFormInput(new UIFormSelectBox(FIELD_FROM_TIME, FIELD_FROM_TIME, CalendarUtils.getTimesSelectBoxOptions(timeFormat_, timeInterval_)));
     addUIFormInput(new UIFormDateTimeInput(FIELD_TO, FIELD_TO, new Date(), false));
-    addUIFormInput(new UIFormSelectBox(FIELD_TO_TIME, FIELD_TO_TIME,  CalendarUtils.getTimesSelectBoxOptions("hh:mm a", 15)));
+    addUIFormInput(new UIFormSelectBox(FIELD_TO_TIME, FIELD_TO_TIME,  CalendarUtils.getTimesSelectBoxOptions(timeFormat_, timeInterval_)));
     addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_CHECKALL, FIELD_CHECKALL, null));
     addUIFormInput(new UIFormStringInput(FIELD_PLACE, FIELD_PLACE, null));
     addUIFormInput(new UIFormSelectBox(FIELD_REPEAT, FIELD_REPEAT, getRepeater())) ;
@@ -98,6 +102,14 @@ public class UIEventDetailTab extends UIFormInputWithActions {
     addMailActions.add(addEmailAddress) ;
     
   }
+  public void applySetting() throws Exception {
+    CalendarService calService = getApplicationComponent(CalendarService.class) ;
+    String username = Util.getPortalRequestContext().getRemoteUser() ;
+    CalendarSetting calSetting = calService.getCalendarSetting(username) ;
+    timeInterval_ = (int)calSetting.getTimeInterval() ;
+    timeFormat_ = calSetting.getTimeFormat() ;
+  }
+  
   protected UIForm getParentFrom() {
     return (UIForm)getParent() ;
   }
@@ -177,6 +189,18 @@ public class UIEventDetailTab extends UIFormInputWithActions {
   @Override
   public void processRender(WebuiRequestContext arg0) throws Exception {
     super.processRender(arg0);
+  }
+  protected void setTimeInterval(int timeInterval_) {
+    this.timeInterval_ = timeInterval_;
+  }
+  protected int getTimeInterval() {
+    return timeInterval_;
+  }
+  protected void setTimeFormat(String timeFormat_) {
+    this.timeFormat_ = timeFormat_;
+  }
+  protected String getTimeFormat() {
+    return timeFormat_;
   }
 
 

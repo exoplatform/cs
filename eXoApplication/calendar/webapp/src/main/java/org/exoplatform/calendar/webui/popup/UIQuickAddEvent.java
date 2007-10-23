@@ -69,8 +69,8 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
 
   final public static String UIQUICKADDTASK = "UIQuickAddTask".intern() ;
 
-  private int timeInterval_ = 15 ;
-  private String timeFormat_ = TIME_PATTERNS_12 ;
+  private int timeInterval_  ;
+  private String timeFormat_  ;
   
   private boolean isEvent_ = true ;
 

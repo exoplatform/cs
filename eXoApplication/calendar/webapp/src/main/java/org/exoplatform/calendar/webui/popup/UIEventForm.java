@@ -83,12 +83,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   final public static String ACT_ADDCATEGORY = "AddCategory".intern() ;
   private boolean isAddNew_ = true ;
   private CalendarEvent calendarEvent_ = null ;
-  final public static String TIME_PATTERNS_12 ="hh:mm a" ;
-  final public static String TIME_PATTERNS_24 ="HH:mm" ;
-
   private String errorMsg_ = null ;
-
-  private int timeInterval_ = 15 ;
 
   public UIEventForm() throws Exception {
     super("UIEventForm", false);
@@ -128,10 +123,11 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   }
   public void initForm() {
     java.util.Calendar cal = GregorianCalendar.getInstance() ;
-    int beginMinute = (cal.get(java.util.Calendar.MINUTE)/timeInterval_)* timeInterval_ ;
+    UIEventDetailTab uiEventDetailTab = getChildById(TAB_EVENTDETAIL) ;
+    int beginMinute = (cal.get(java.util.Calendar.MINUTE)/uiEventDetailTab.getTimeInterval())* uiEventDetailTab.getTimeInterval() ;
     cal.set(java.util.Calendar.MINUTE, beginMinute) ;
     setEventFromDate(cal.getTime()) ;
-    cal.add(java.util.Calendar.MINUTE, timeInterval_) ;
+    cal.add(java.util.Calendar.MINUTE, uiEventDetailTab.getTimeInterval()) ;
     setEventToDate(cal.getTime()) ;
   }
   public void initForm(String calendarId, String categoryId) {
@@ -316,10 +312,10 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   }
 
   protected Date getEventFromDate() throws Exception {
-    UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
+    UIEventDetailTab eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
     UIFormSelectBox timeField = eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_FROM_TIME) ;
     UIFormDateTimeInput fromField = eventDetailTab.getChildById(UIEventDetailTab.FIELD_FROM) ;
-    DateFormat df = SimpleDateFormat.getInstance() ;
+    DateFormat df = new SimpleDateFormat("MM/dd/yyyy" + " " + eventDetailTab.getTimeFormat()) ;
     return df.parse(fromField.getValue() + " " + timeField.getValue()) ;
   }
   protected String getEventFormDateValue () {
@@ -328,37 +324,37 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     return fromField.getValue() ;
   }
   protected void setEventFromDate(Date date) {
-    UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
+    UIEventDetailTab eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
     UIFormDateTimeInput fromField = eventDetailTab.getChildById(UIEventDetailTab.FIELD_FROM) ;
     UIFormSelectBox timeFile = eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_FROM_TIME) ;
     DateFormat df = new SimpleDateFormat("MM/dd/yyyy") ;
     fromField.setValue(df.format(date)) ;
-    df = new SimpleDateFormat(TIME_PATTERNS_12) ;
+    df = new SimpleDateFormat(eventDetailTab.getTimeFormat()) ;
     timeFile.setValue(df.format(date)) ;
   }
 
   protected Date getEventToDate() throws Exception {
-    UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
+    UIEventDetailTab eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
     UIFormSelectBox timeField = eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_TO_TIME) ;
     UIFormDateTimeInput toField = eventDetailTab.getChildById(UIEventDetailTab.FIELD_TO) ;
-    DateFormat df = SimpleDateFormat.getInstance() ;
+    DateFormat df = new SimpleDateFormat("MM/dd/yyyy" + " " + eventDetailTab.getTimeFormat()) ;
     return df.parse(toField.getValue() + " " + timeField.getValue()) ;
   }
+  protected void setEventToDate(Date date) {
+    UIEventDetailTab eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
+    UIFormDateTimeInput toField = eventDetailTab.getChildById(UIEventDetailTab.FIELD_TO) ;
+    UIFormSelectBox timeField = eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_TO_TIME) ;
+    DateFormat df = new SimpleDateFormat("MM/dd/yyyy") ;
+    toField.setValue(df.format(date)) ;
+    df = new SimpleDateFormat(eventDetailTab.getTimeFormat()) ;
+    timeField.setValue(df.format(date)) ;
+  }
+
   protected String getEventToDateValue () {
     UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
     UIFormDateTimeInput toField = eventDetailTab.getChildById(UIEventDetailTab.FIELD_TO) ;
     return toField.getValue() ;
   }
-  protected void setEventToDate(Date date) {
-    UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
-    UIFormDateTimeInput toField = eventDetailTab.getChildById(UIEventDetailTab.FIELD_TO) ;
-    UIFormSelectBox timeField = eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_TO_TIME) ;
-    DateFormat df = new SimpleDateFormat("MM/dd/yyyy") ;
-    toField.setValue(df.format(date)) ;
-    df = new SimpleDateFormat(TIME_PATTERNS_12) ;
-    timeField.setValue(df.format(date)) ;
-  }
-
   protected boolean getEventAllDate() {
     UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
     return eventDetailTab.getUIFormCheckBoxInput(UIEventDetailTab.FIELD_CHECKALL).isChecked() ;
