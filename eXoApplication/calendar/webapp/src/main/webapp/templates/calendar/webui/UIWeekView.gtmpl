@@ -15,8 +15,11 @@
  	def rcontext = _ctx.getRequestContext() ;
   rcontext.getJavascriptManager().importJavascript('eXo.calendar.UIWeekView','/calendar/javascript/') ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UIWeekView.init() ;') ;
-  
  	yearViewAction = uicomponent.TYPE_YEAR +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"="+ currentMonth +"&"+ uicomponent.DAY + "=1" ;
+ 	dateFormat = uicomponent.getDateFormat() ;
+	timeFormat = uicomponent.getTimeFormat() ;
+	dateTimeFormat = uicomponent.getDateTimeFormat() ;
+	timeInterval = uicomponent.getTimeInterval() ;
 %>
 <div class="UIWeekView">
 	<div class="TitleBar">	
@@ -99,7 +102,7 @@
 								events = uicomponent.getEventData().get(key) ; 
 								if(events != null) {
 								for(event in events){ 
-									SimpleDateFormat df = new SimpleDateFormat("HH:mm") ;
+									SimpleDateFormat df = new SimpleDateFormat(timeFormat) ;
 									begin =  df.format(event.fromDateTime) ;
 									beginTime =  event.fromDateTime.getHours() * 60 + event.fromDateTime.getMinutes() ;
 									end = df.format(event.toDateTime) ;
@@ -117,8 +120,8 @@
 						<%}%>
 					</tr>
 					<% 
-					boolean flag = false 
-					for(time in uicomponent.getDisplayTimes("hh:mm a", 30)){
+					boolean flag = false ;
+					for(time in uicomponent.getDisplayTimes(timeFormat, timeInterval)){
 						if(flag) {styleClass = "TdDotLine" ;}
 						else {styleClass = "TdLine"}
 					%>
@@ -132,7 +135,7 @@
 					 			day = cl.get(Calendar.DATE) ;
 					 			month = cl.get(Calendar.MONTH) ;
 					 			year = cl.get(Calendar.YEAR) ;
-					 			DateFormat df = new SimpleDateFormat("MM/dd/yyyy ") ;
+					 			DateFormat df = new SimpleDateFormat(dateFormat) ;
 					 			startTime = df.format(cl.getTime()) + time;
 					 		  if(cl.get(Calendar.DAY_OF_WEEK) == uicomponent.getDayOfWeek(currentYear, currentMonth, currentDay)){	
 					 		  	cssClass = "Today" ;

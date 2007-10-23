@@ -21,8 +21,6 @@
 	timeInterval = uicomponent.getTimeInterval() ;
 	DateFormat df = new SimpleDateFormat(dateFormat) ;
 %>
-$timeFormat
-$timeInterval
 <div class="UIDayView">
   <div class="TitleBar">
     <table>
