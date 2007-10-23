@@ -18,7 +18,7 @@ public class MessageHeader {
   private long priority;
   
   public MessageHeader() {
-    id = "MessageHeader" + IdGenerator.generate() ;
+    setId("MessageHeader" + IdGenerator.generate()) ;
   }
   public String getId() { return id ; }
   public void setId(String id) { this.id = id; }

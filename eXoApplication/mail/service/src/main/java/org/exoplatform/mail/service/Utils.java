@@ -18,20 +18,22 @@ import javax.mail.internet.InternetAddress;
  */
 public class Utils {
   
-  public static final String SVR_SMTP_AUTH = "mail.smtp.auth".intern() ;
-  public static final String SVR_SMTP_SOCKETFACTORY_FALLBACK = "mail.smtp.socketFactory.fallback".intern() ;
-  public static final String SVR_SMTP_SOCKETFACTORY_PORT = "mail.smtp.socketFactory.port".intern() ;
-  public static final String SVR_SMTP_SOCKETFACTORY_CLASS = "mail.smtp.socketFactory.class".intern() ;
-  public static final String SVR_SSL_CLASSNAME = "javax.net.ssl.SSLSocketFactory".intern() ;
-  public static final String SVR_MAIL_SMTP_DEBUG = "mail.smtp.debug".intern() ;
-  public static final String SVR_MAIL_DEBUG = "mail.debug".intern() ;
-  public static final String SVR_SMTP_STARTTLS_ENABLE = "mail.smtp.starttls.enable".intern() ;
   public static final String SVR_SMTP = "smtp" ;
-  public static final String SVR_PROTOCOL = "protocol".intern() ;
   public static final String SVR_SMTP_HOST = "mail.smtp.host".intern() ;
   public static final String SVR_SMTP_PORT = "mail.smtp.port".intern() ;  
   public static final String SVR_SMTP_USER = "mail.smtp.user".intern() ;
   public static final String SVR_SMTP_PASSWORD = "mail.smtp.user".intern() ;
+  public static final String SVR_SMTP_AUTH = "mail.smtp.auth".intern() ;
+  public static final String SVR_SMTP_SOCKET_FACTORY_FALLBACK = "mail.smtp.socketFactory.fallback".intern() ;
+  public static final String SVR_SMTP_SOCKET_FACTORY_PORT = "mail.smtp.socketFactory.port".intern() ;
+  public static final String SVR_SMTP_SOCKET_FACTORY_CLASS = "mail.smtp.socketFactory.class".intern() ;
+  public static final String SSL_FACTORY = "javax.net.ssl.SSLSocketFactory".intern();
+  
+  public static final String SVR_SSL_CLASSNAME = "javax.net.ssl.SSLSocketFactory".intern() ;
+  public static final String SVR_MAIL_SMTP_DEBUG = "mail.smtp.debug".intern() ;
+  public static final String SVR_MAIL_DEBUG = "mail.debug".intern() ;
+  public static final String SVR_SMTP_STARTTLS_ENABLE = "mail.smtp.starttls.enable".intern() ;
+  public static final String SVR_PROTOCOL = "protocol".intern() ;
   public static final String SVR_INCOMING_HOST = "incoming.host".intern() ;
   public static final String SVR_INCOMING_PORT = "incoming.port".intern() ;
   public static final String SVR_INCOMING_FOLDER = "folder".intern() ;
@@ -60,6 +62,7 @@ public class Utils {
   public static final String EXO_FROM = "exo:from".intern();
   public static final String EXO_TO = "exo:to".intern() ;
   public static final String EXO_SUBJECT = "exo:subject".intern() ;
+  public static final String EXO_CONTENT_TYPE = "exo:contentType".intern() ;
   public static final String EXO_REPLYTO = "exo:replyto".intern();
   public static final String EXO_CC = "exo:cc".intern() ;
   public static final String EXO_BCC= "exo:bcc".intern() ;

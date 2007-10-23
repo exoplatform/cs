@@ -25,6 +25,7 @@ public class Message extends MessageHeader {
   private String replyTo ;
   private Date sendDate ;
   private Date receivedDate ;
+  private String contentType;
   private boolean isUnread = true ;
   private long size ;
   private boolean hasStar = false;
@@ -59,6 +60,9 @@ public class Message extends MessageHeader {
   
   public Date getReceivedDate() { return receivedDate ; }
   public void setReceivedDate(Date d) { receivedDate = d ; }
+  
+  public String getContentType() { return contentType; }
+  public void setContentType(String contentType) { this.contentType = contentType; }
   
   public String[] getFolders() { return folders ; }
   public void setFolders(String[] folders) { this.folders = folders ; }

@@ -14,12 +14,15 @@ import java.util.Map;
 import java.util.Properties;
 
 import javax.activation.DataHandler;
+import javax.mail.AuthenticationFailedException;
+import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.Part;
 import javax.mail.Session;
 import javax.mail.Store;
 import javax.mail.Transport;
 import javax.mail.URLName;
+import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
@@ -41,6 +44,8 @@ import org.exoplatform.mail.service.Utils;
 import org.exoplatform.registry.JCRRegistryService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.util.IdGenerator;
+
+import com.sun.mail.smtp.SMTPSendFailedException;
 
 /**
  * Created by The eXo Platform SARL
@@ -126,22 +131,32 @@ public class MailServiceImpl implements MailService{
   public void sendMessage(String username, Message message) throws Exception {
     String accountId = message.getAccountId() ;
     Account acc = getAccountById(username, accountId) ;
-    String smtpUser = acc.getServerProperties().get(Utils.SVR_SMTP_USER) ;
-    String host = acc.getOutgoingHost() ;
-    String port  = acc.getOutgoingPort() ;
+    String smtpUser = acc.getIncomingUser() ;
+    String outgoingHost = acc.getOutgoingHost() ;
+    String outgoingPort  = acc.getOutgoingPort() ;
     String isSSl =  acc.getServerProperties().get(Utils.SVR_INCOMING_SSL)  ;
     Properties props = new Properties();
+    props.put(Utils.SVR_SMTP_HOST, outgoingHost) ;
+    props.put(Utils.SVR_SMTP_PORT, outgoingPort) ;
+    props.put(Utils.SVR_SMTP_AUTH, "true");
+    props.put(Utils.SVR_SMTP_SOCKET_FACTORY_FALLBACK, "false");
+    String socketFactoryClass = "javax.net.SocketFactory";
+    if (Boolean.valueOf(isSSl)) socketFactoryClass = Utils.SSL_FACTORY;
+    props.put(Utils.SVR_SMTP_SOCKET_FACTORY_CLASS,  socketFactoryClass);
+    props.put(Utils.SVR_SMTP_SOCKET_FACTORY_PORT, outgoingPort);
+    props.put(Utils.SVR_SMTP_USER, smtpUser) ;
+    props.put(Utils.SVR_SMTP_STARTTLS_ENABLE, "true");
+    props.put(Utils.SVR_INCOMING_SSL, isSSl);
+    
     props.put(Utils.SVR_INCOMING_USERNAME, acc.getIncomingUser());
     props.put(Utils.SVR_INCOMING_PASSWORD, acc.getIncomingPassword());
-    props.put(Utils.SVR_SMTP_USER, smtpUser) ;
-    props.put(Utils.SVR_SMTP_HOST, host) ;
-    props.put(Utils.SVR_SMTP_PORT, port) ;
-    props.put(Utils.SVR_INCOMING_SSL, isSSl);
-    props.put(Utils.SVR_SMTP_STARTTLS_ENABLE,"true");
-    props.put(Utils.SVR_SMTP_AUTH, "true");
-    props.put(Utils.SVR_SMTP_SOCKETFACTORY_PORT, port);
-    props.put(Utils.SVR_SMTP_SOCKETFACTORY_CLASS,  "javax.net.ssl.SSLSocketFactory");
-    props.put(Utils.SVR_SMTP_SOCKETFACTORY_FALLBACK, "false");
+        
+    //TODO : add authenticator 
+    /*Session session = Session.getInstance(props, new javax.mail.Authenticator(){     
+      protected javax.mail.PasswordAuthentication getPasswordAuthentication() {
+        return new javax.mail.PasswordAuthentication(acc.getOutgoingUser(), acc.getOutgoingPassword());
+      }});
+    */
     Session session = Session.getInstance(props, null);
     sendMessage(session, message);
   }
@@ -155,23 +170,24 @@ public class MailServiceImpl implements MailService{
     props.put(Utils.SVR_SMTP_HOST, messageProps.get(Utils.SVR_SMTP_HOST)) ;
     props.put(Utils.SVR_SMTP_PORT, messageProps.get(Utils.SVR_SMTP_PORT)) ;
     props.put(Utils.SVR_SMTP_AUTH, "true");
-    props.put(Utils.SVR_SMTP_SOCKETFACTORY_PORT, messageProps.get(Utils.SVR_SMTP_PORT));
+    props.put(Utils.SVR_SMTP_SOCKET_FACTORY_PORT, messageProps.get(Utils.SVR_SMTP_PORT));
     if (Boolean.valueOf(messageProps.get(Utils.SVR_INCOMING_SSL))) {
       props.put(Utils.SVR_INCOMING_SSL, messageProps.get(Utils.SVR_INCOMING_SSL));
       props.put(Utils.SVR_SMTP_STARTTLS_ENABLE, "true");
-      props.put(Utils.SVR_SMTP_SOCKETFACTORY_CLASS,  "javax.net.ssl.SSLSocketFactory");
+      props.put(Utils.SVR_SMTP_SOCKET_FACTORY_CLASS,  "javax.net.ssl.SSLSocketFactory");
     }
-    props.put(Utils.SVR_SMTP_SOCKETFACTORY_FALLBACK, "false");
+    props.put(Utils.SVR_SMTP_SOCKET_FACTORY_FALLBACK, "false");
     Session session = Session.getInstance(props, null);
     sendMessage(session, message);
   }
   
-  private void sendMessage(Session session, Message message) throws Exception {
+  public String sendMessage(Session session, Message message) throws Exception {
+    System.out.println(" #### Sending email ... ");
     Transport transport = session.getTransport(Utils.SVR_SMTP);
     Properties props = session.getProperties();
     transport.connect(props.getProperty(Utils.SVR_SMTP_HOST), props.getProperty(Utils.SVR_INCOMING_USERNAME), props.getProperty(Utils.SVR_INCOMING_PASSWORD)) ;
     javax.mail.Message msg = new MimeMessage(session);
-    
+    String status = "";
     InternetAddress addressFrom = new InternetAddress(message.getFrom());
     msg.setFrom(addressFrom);
     msg.setRecipients(javax.mail.Message.RecipientType.TO, InternetAddress.parse(message.getMessageTo()));
@@ -207,119 +223,142 @@ public class MailServiceImpl implements MailService{
       }        
     }
     msg.setHeader("X-Priority", String.valueOf(message.getPriority()));
-    String priority = "";
-    if (message.getPriority() == 1) {
+    String priority = "Normal";
+    if (message.getPriority() == Utils.PRIORITY_HIGH) {
       priority = "High";
-    } else if (message.getPriority() == 5) {
-      priority = "Normal";
-    } else if (message.getPriority() == 3) {
+    } else if (message.getPriority() == Utils.PRIORITY_LOW) {
       priority = "Low";
     }     
     if (message.getPriority() != 0 ) msg.setHeader("Importance", priority);
     
     msg.setContent(multiPart);
     msg.saveChanges();
-    transport.sendMessage(msg, msg.getAllRecipients());
+    try {
+      transport.sendMessage(msg, msg.getAllRecipients());
+      status = "Mail Delivered !";
+    } catch (AddressException e) {
+      status = "There was an error parsing the addresses. Sending Falied !" + e.getMessage(); 
+    } catch(AuthenticationFailedException e) {
+      status = "The Username or Password may be wrong. Sending Falied !" + e.getMessage(); 
+    } catch (SMTPSendFailedException e) {
+      status = "Sorry,There was an error sending the message. Sending Falied !" + e.getMessage();           
+    } catch (MessagingException e) {
+      status = "There was an unexpected error. Sending Failed ! " + e.getMessage();
+    } catch (Exception e) {
+      status = "There was an unexpected error. Sending Falied !" + e.getMessage();
+    } finally {
+      System.out.println(" #### Info : " + status);      
+    } 
+ 
+    return status ;
   }
 
   public List<Message> checkNewMessage(String username, String accountId) throws Exception {
     Account account = getAccountById(username, accountId) ;
-    System.out.println("\n ### Getting mail from " + account.getIncomingHost() + " ... !");
+    System.out.println(" #### Getting mail from " + account.getIncomingHost() + " ... !");
     List<Message> messageList = new ArrayList<Message>();
-    int totalMess = -1;
+    int totalNew = -1;
+    String protocol = account.getProtocol();
     try {
       Properties props = System.getProperties();
       String socketFactoryClass = "javax.net.SocketFactory";
-      if (account.isIncomingSsl()) socketFactoryClass = "javax.net.ssl.SSLSocketFactory";
-      if(account.getProtocol().equals("pop3")) {
+      if (account.isIncomingSsl()) socketFactoryClass = Utils.SSL_FACTORY;
+      
+      if(protocol.equals(Utils.POP3)) {
         props.setProperty("mail.pop3.socketFactory.fallback", "false");
         props.setProperty( "mail.pop3.socketFactory.class", socketFactoryClass);
-      } else if (account.getProtocol().equals("imap")) {
+      } else if (protocol.equals(Utils.IMAP)) {
         props.setProperty("mail.imap.socketFactory.fallback", "false");
         props.setProperty("mail.imap.socketFactory.class", socketFactoryClass);
       }
-      javax.mail.Session session = javax.mail.Session.getDefaultInstance(props);
-      URLName url = new URLName(account.getProtocol(), account.getIncomingHost(), Integer.valueOf(account.getIncomingPort()), account.getIncomingFolder(), account.getIncomingUser(), account.getIncomingPassword()) ;
-      Store store = session.getStore(url) ;
+      
+      Session session = Session.getDefaultInstance(props);
+      URLName storeURL = new URLName(account.getProtocol(), account.getIncomingHost(), Integer.valueOf(account.getIncomingPort()), account.getIncomingFolder(), account.getIncomingUser(), account.getIncomingPassword()) ;
+      Store store = session.getStore(storeURL) ;
       store.connect();
-      System.out.println("\n ### Connected !");
+      
       javax.mail.Folder folder = store.getFolder(account.getIncomingFolder());
       folder.open(javax.mail.Folder.READ_ONLY);
 
-      // gets the new messages from the folder specified in the configuration object
-      javax.mail.Message[] mess = folder.getMessages() ;
-      totalMess = mess.length ;
-      System.out.println("\n ### Folder contains " + totalMess + " messages !");
-      if(totalMess > 0) {
+      javax.mail.Message[] messages = folder.getMessages() ;
+      totalNew = messages.length ;
+      
+      System.out.println(" #### Folder contains " + totalNew + " messages !");
+      
+      if (totalNew > 0) {
         int i = 0 ;
-        while(i < totalMess){
-          // for each new email, creates a Message object and saves it in the repository
-          javax.mail.Message mes = mess[i] ;
+        while (i < totalNew) {
+          javax.mail.Message msg = messages[i] ;
           Message newMsg = new Message();
           Calendar gc = GregorianCalendar.getInstance();
           Date receivedDate = gc.getTime();
           newMsg.setAccountId(account.getId());
-          newMsg.setMessageBcc(InternetAddress.toString(mes.getRecipients(javax.mail.Message.RecipientType.BCC)));
-          newMsg.setMessageCc(InternetAddress.toString(mes.getRecipients(javax.mail.Message.RecipientType.CC)));
-          newMsg.setMessageTo(InternetAddress.toString(mes.getRecipients(javax.mail.Message.RecipientType.TO)));
-          newMsg.setSubject(mes.getSubject());
-          newMsg.setFrom(InternetAddress.toString(mes.getFrom()));
-          newMsg.setReplyTo(InternetAddress.toString(mes.getReplyTo()));
-          newMsg.setUnread(true);
+          newMsg.setMessageTo(InternetAddress.toString(msg.getRecipients(javax.mail.Message.RecipientType.TO)));
+          newMsg.setMessageCc(InternetAddress.toString(msg.getRecipients(javax.mail.Message.RecipientType.CC)));
+          newMsg.setMessageBcc(InternetAddress.toString(msg.getRecipients(javax.mail.Message.RecipientType.BCC)));
+          newMsg.setSubject(msg.getSubject());
+          newMsg.setContentType(msg.getContentType());
+          newMsg.setFrom(InternetAddress.toString(msg.getFrom()));
+          newMsg.setReplyTo(InternetAddress.toString(msg.getReplyTo()));
           newMsg.setReceivedDate(receivedDate);
-          newMsg.setSendDate(mes.getSentDate());
+          newMsg.setSendDate(msg.getSentDate());
+          newMsg.setSize(msg.getSize());
+          newMsg.setUnread(true);
           newMsg.setHasStar(false);       
           newMsg.setPriority(Utils.PRIORITY_NORMAL);
-          String[] xPriority = mes.getHeader("X-Priority");
-          String[] importance = mes.getHeader("Importance");
+          String[] xPriority = msg.getHeader("X-Priority");
+          String[] importance = msg.getHeader("Importance");
+          
           if (xPriority != null && xPriority.length > 0) {
             for (int j = 0 ; j < xPriority.length; j++) {
-              newMsg.setPriority(Long.valueOf(mes.getHeader("X-Priority")[j].substring(0,1)));
+              newMsg.setPriority(Long.valueOf(msg.getHeader("X-Priority")[j].substring(0,1)));
             }          
           }
+          
           if (importance != null && importance.length > 0) {
             for (int j = 0 ; j < importance.length; j++) {
               if (importance[j].equalsIgnoreCase("Low")) {
-                newMsg.setPriority(5);
+                newMsg.setPriority(Utils.PRIORITY_LOW);
               } else if (importance[j].equalsIgnoreCase("high")) {
-                newMsg.setPriority(1);
-              } else if (importance[j].equalsIgnoreCase("normal")) {
-                newMsg.setPriority(3);
-              }
+                newMsg.setPriority(Utils.PRIORITY_HIGH);
+              } 
             }
           }
-          newMsg.setSize(mes.getSize());
+          
           newMsg.setAttachements(new ArrayList<Attachment>());
+          
           String[] folderIds = { Utils.createFolderId(accountId, account.getIncomingFolder(), false)};
           newMsg.setFolders(folderIds);
-          Object obj = mes.getContent() ;
+          Object obj = msg.getContent() ;
           if (obj instanceof Multipart) {
             setMultiPart((Multipart)obj, newMsg, username);
           } else {
-            setPart(mes, newMsg, username);
+            setPart(msg, newMsg, username);
           }
           storage_.saveMessage(username, account.getId(), newMsg, true);
           messageList.add(newMsg);
-          i ++ ;
           for(String folderId : folderIds) {
-            Folder fd = storage_.getFolder(username, account.getId(), folderId) ;
-            if(fd == null) {
-              fd = new Folder() ;
-              fd.setId(folderId);
-              fd.setName(account.getIncomingFolder()) ;
-              fd.setLabel(account.getIncomingFolder()) ;
-              fd.setPersonalFolder(false) ;
+            Folder storeFolder = storage_.getFolder(username, account.getId(), folderId) ;
+            if(storeFolder == null) {
+              storeFolder = new Folder() ;
+              storeFolder.setId(folderId);
+              storeFolder.setName(account.getIncomingFolder()) ;
+              storeFolder.setLabel(account.getIncomingFolder()) ;
+              storeFolder.setPersonalFolder(false) ;
             }  
-            fd.setNumberOfUnreadMessage(fd.getNumberOfUnreadMessage()+1) ;
-            storage_.saveUserFolder(username, account.getId(), fd) ;
+            storeFolder.setNumberOfUnreadMessage(storeFolder.getNumberOfUnreadMessage() + 1) ;
+            storage_.saveUserFolder(username, account.getId(), storeFolder) ;
           }
+          
+          i ++ ;
         }
       }
       folder.close(false);
       store.close();
     }  catch (Exception e) { 
-      throw e ;
+      System.err.println("=== >>> Check mail false ! \n" + e.getMessage() );
     }
+    
     return messageList;
   }
 
@@ -353,15 +392,14 @@ public class MailServiceImpl implements MailService{
         }
       } else {
         if (disposition.equalsIgnoreCase(Part.INLINE)) {
-          // this must be presented INLINE, hence inside the body of the message
+          /* this must be presented INLINE, hence inside the body of the message */
           if (part.isMimeType("text/plain") || part.isMimeType("text/html")) {
             newMail.setMessageBody((String)part.getContent());
           }
         } else {
-          // this part must be presented as an attachment, hence we add it to the attached files
+          /* this part must be presented as an attachment, hence we add it to the attached files */
           BufferAttachment file = new BufferAttachment();
           file.setId("Attachment" + IdGenerator.generate());
-          //file.setId(storage_.getMessageHome(username, newMail.getAccountId()).getPath()+"/"+newMail.getId()+"/"+part.getFileName());
           file.setName(part.getFileName());
           InputStream is = part.getInputStream();
           file.setInputStream(is);
@@ -375,7 +413,7 @@ public class MailServiceImpl implements MailService{
           newMail.getAttachments().add(file);
         }
       }
-    }catch(Exception e) {
+    } catch(Exception e) {
       e.printStackTrace() ;
     }
   }
