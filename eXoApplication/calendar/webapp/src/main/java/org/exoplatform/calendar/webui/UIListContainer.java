@@ -41,6 +41,7 @@ public class UIListContainer extends UIContainer implements CalendarView {
 
   public void applySeting() throws Exception {
     getChild(UIListView.class).applySeting() ;
+    getChild(UIPreview.class).applySeting() ;
   }
   
   
