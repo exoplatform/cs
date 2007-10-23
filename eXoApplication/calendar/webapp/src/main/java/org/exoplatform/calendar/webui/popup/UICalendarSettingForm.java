@@ -93,8 +93,8 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
     List<SelectItemOption<String>> dateFormat = new ArrayList<SelectItemOption<String>>() ;
     dateFormat.add(new SelectItemOption<String>("dd/mm/yyyy", "dd/MM/yyyy")) ;
     dateFormat.add(new SelectItemOption<String>("dd-mm-yyyy", "dd-MM-yyyy")) ;
-    dateFormat.add(new SelectItemOption<String>("mm/dd/yyyy", "mm/dd/yyyy")) ;
-    dateFormat.add(new SelectItemOption<String>("mm-dd-yyyy", "mm-dd-yyyy")) ;
+    dateFormat.add(new SelectItemOption<String>("mm/dd/yyyy", "MM/dd/yyyy")) ;
+    dateFormat.add(new SelectItemOption<String>("mm-dd-yyyy", "MM-dd-yyyy")) ;
     setting.addUIFormInput(new UIFormSelectBox(DATE_FORMAT, DATE_FORMAT, dateFormat)) ;
     
     List<SelectItemOption<String>> timeFormat = new ArrayList<SelectItemOption<String>>() ;

@@ -1,5 +1,10 @@
 <%
+	import java.text.DateFormat;
+	import java.text.SimpleDateFormat;
+	
 	uiform.begin() ;
+	dateTimeFormat = uicomponent.getDateTimeFormat() ;
+	DateFormat df = new SimpleDateFormat(dateTimeFormat) ;
 	boolean isDisplaySearchResult = uicomponent.isDisplaySearchResult() ;
 	if(isDisplaySearchResult) {
 %> 
@@ -41,8 +46,8 @@
 										<%=event.getSummary()%>
 									</a>	
 								</td>
-								<td class="text"><%=event.getFromDateTime()%></td>
-								<td class="text"><%=event.getToDateTime()%></td>
+								<td class="text"><%=df.format(event.getFromDateTime())%></td>
+								<td class="text"><%=df.format(event.getToDateTime())%></td>
 		   			  </tr>
   					<%
   					}
