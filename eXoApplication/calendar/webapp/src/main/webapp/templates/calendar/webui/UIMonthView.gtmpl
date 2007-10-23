@@ -137,7 +137,7 @@
 											println "</div>" ;
 											if(size > 3) {
 												moreSize =  size - 3  ;
-												moreActionLink = uicomponent.event("GotoDate","$dayOfMonth") ;
+												moreActionLink = uicomponent.event("GotoDate","$dayActionLink") ;
 												println "<a href=\"$moreActionLink\"><div class=\"ViewMoreIcon\" title=\"View all event on day\"> + " ;
 												println moreSize ;
 												println " More </div></a>" ;	

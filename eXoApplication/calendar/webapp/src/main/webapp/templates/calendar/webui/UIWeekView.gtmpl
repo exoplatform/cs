@@ -134,8 +134,8 @@
 						else {styleClass = "TdLine"}
 					%>
 					<tr>
-						<td class="TdTime"><div  class="TdTime">
-							<% if(!flag) {println time;} %></div>
+						<td class="TdTime">
+							<div  class="TdTime"><%if(!flag) {println time;}%></div>
 						</td>
 							<%
 					 	 
@@ -143,20 +143,16 @@
 					 			day = cl.get(Calendar.DATE) ;
 					 			month = cl.get(Calendar.MONTH) ;
 					 			year = cl.get(Calendar.YEAR) ;
-					 			startTime = df.format(cl.getTime()) + time;
+					 			startTime = df.format(cl.getTime()) + " " + time;
 					 		  if(cl.get(Calendar.DAY_OF_WEEK) == uicomponent.getDayOfWeek(currentYear, currentMonth, currentDay)){	
 					 		  	cssClass = "Today" ;
 					 		  } else {
 					 				cssClass = "" ;
 					 		  }
-					 	%>
+					 	%>	
+					 			
 						 		<td startTime="$startTime" class="$styleClass $cssClass">
-									<!--  <div class="EventContainerBoder"
-										<div class="EventContainerBar">5:35 AM - 7:00 AM</div>
-										<div class="EventContainer">Talk to my cousin on ...</div>
-										<div class="ResizeEventContainer"><span></span></div>
-									</div>
-									-->
+									<span></span>
 								</td>
 					 	<%
 					 	}
