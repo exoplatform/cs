@@ -34,18 +34,11 @@ public class UICalendarViewContainer extends UIContainer  {
   final public static String YEAR_VIEW = "UIYearView".intern() ;
   final public static String LIST_VIEW = "UIListContainer".intern() ;
   final public static String SCHEDULE_VIEW = "UIScheduleView".intern() ;
-  final public static Map<String, String> VIEWS = new HashMap<String, String>() ;
   
   final public static String[] TYPES = {DAY_VIEW, WEEK_VIEW, MONTH_VIEW, YEAR_VIEW, LIST_VIEW, SCHEDULE_VIEW} ;
 
 
   public UICalendarViewContainer() throws Exception {
-    VIEWS.put(CalendarSetting.DAY_VIEW, DAY_VIEW) ;
-    VIEWS.put(CalendarSetting.WEEK_VIEW, WEEK_VIEW) ;
-    VIEWS.put(CalendarSetting.MONTH_VIEW, MONTH_VIEW) ;
-    VIEWS.put(CalendarSetting.YEAR_VIEW, YEAR_VIEW) ;
-    VIEWS.put(CalendarSetting.LIST_VIEW, LIST_VIEW) ;
-    VIEWS.put(CalendarSetting.SCHEDULE_VIEW, SCHEDULE_VIEW) ;
     addChild(UIMonthView.class, null, null).setRendered(false) ;
     addChild(UIDayView.class, null, null).setRendered(false) ;
     addChild(UIWeekView.class, null, null).setRendered(false) ;
@@ -55,7 +48,7 @@ public class UICalendarViewContainer extends UIContainer  {
     CalendarService cservice = CalendarUtils.getCalendarService() ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     CalendarSetting calendarSetting = cservice.getCalendarSetting(username) ;
-    setRenderedChild(VIEWS.get(calendarSetting.getViewType())) ;
+    setRenderedChild(TYPES[Integer.parseInt(calendarSetting.getViewType())]) ;
     refresh() ;
   }  
 

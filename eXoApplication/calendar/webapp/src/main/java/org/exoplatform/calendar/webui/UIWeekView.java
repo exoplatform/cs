@@ -128,7 +128,7 @@ public class UIWeekView extends UICalendarView {
   protected Map<String, CalendarEvent>  getEventList() {
     return allWeekData_ ;
   }
-  
+
   static  public class QuickAddActionListener extends EventListener<UIWeekView> {
     public void execute(Event<UIWeekView> event) throws Exception {
       UIWeekView calendarview = event.getSource() ;
@@ -147,13 +147,17 @@ public class UIWeekView extends UICalendarView {
         uiQuickAddEvent.setEvent(false) ;
         uiQuickAddEvent.setId("UIQuickAddTask") ;
       }
-      uiQuickAddEvent.init(startTime, finishTime) ;
-      //uiPopupAction.activate(uiQuickAddEvent,600,0) ;
+      try {
+        uiQuickAddEvent.init(startTime, finishTime) ;
+      } catch (Exception e) {
+        uiQuickAddEvent.init() ;
+        e.printStackTrace() ;
+      }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
     }
   }
-  
+
   static  public class MoveNextActionListener extends EventListener<UIWeekView> {
     public void execute(Event<UIWeekView> event) throws Exception {
       UIWeekView calendarview = event.getSource() ;

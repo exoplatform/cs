@@ -15,6 +15,7 @@ import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
+import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
 import org.exoplatform.calendar.webui.UIMiniCalendar;
@@ -70,9 +71,11 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
 
   private int timeInterval_ = 15 ;
   private String timeFormat_ = TIME_PATTERNS_12 ;
+  
   private boolean isEvent_ = true ;
 
   public UIQuickAddEvent() throws Exception {
+    applySetting() ;
     addUIFormInput(new UIFormStringInput(FIELD_EVENT, FIELD_EVENT, null).addValidator(EmptyFieldValidator.class)) ;
     addUIFormInput(new UIFormTextAreaInput(FIELD_DESCRIPTION, FIELD_DESCRIPTION, null)) ;
     addUIFormInput(new UIFormDateTimeInput(FIELD_FROM, FIELD_FROM, new Date(), false).addValidator(EmptyFieldValidator.class));
@@ -85,7 +88,14 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
     init() ;
   }
 
-  public void init() {
+  public void applySetting() throws Exception {
+    CalendarService calService = getApplicationComponent(CalendarService.class) ;
+    String username = Util.getPortalRequestContext().getRemoteUser() ;
+    CalendarSetting calSetting = calService.getCalendarSetting(username) ;
+    timeInterval_ = (int)calSetting.getTimeInterval() ;
+    timeFormat_ = calSetting.getTimeFormat() ;
+  }
+  public void init() throws Exception{
     java.util.Calendar cal = GregorianCalendar.getInstance() ;
     int beginMinute = (cal.get(java.util.Calendar.MINUTE)/timeInterval_)* timeInterval_ ;
     cal.set(java.util.Calendar.MINUTE, beginMinute) ;
@@ -94,28 +104,21 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
     setEventToDate(cal.getTime()) ;
   }
   public void init(String startTime, String endTime) throws Exception {
-    DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm");
+    CalendarService calService = getApplicationComponent(CalendarService.class) ;
+    String username = Util.getPortalRequestContext().getRemoteUser() ;
+    CalendarSetting calSetting = calService.getCalendarSetting(username) ;
+    DateFormat df = new SimpleDateFormat(calSetting.getDateFormat() + " " + calSetting.getTimeFormat());
     java.util.Calendar cal = GregorianCalendar.getInstance() ;
     cal.setTime(df.parse(startTime)) ;
-    try {
-      Date begin = cal.getTime() ;
-      cal.add(java.util.Calendar.MINUTE, timeInterval_) ;
-      Date end = cal.getTime() ;
-      setEventFromDate(begin) ;
-      setEventToDate(end) ;
-    } catch (Exception e) {
-      init() ;
-      e.printStackTrace() ;
-    }
+    Date begin = cal.getTime() ;
+    cal.add(java.util.Calendar.MINUTE, timeInterval_) ;
+    Date end = cal.getTime() ;
+    setEventFromDate(begin) ;
+    setEventToDate(end) ;
   }
   public void init(Date startTime, Date endTime) throws Exception {
-    try {
       setEventFromDate(startTime) ;
       setEventToDate(endTime) ;
-    } catch (Exception e) {
-      init() ;
-      e.printStackTrace() ;
-    }
   }
   private List<SelectItemOption<String>> getCalendar() throws Exception {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
@@ -149,11 +152,12 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
   private void setEventDescription(String value) { getUIFormTextAreaInput(FIELD_DESCRIPTION).setValue(value) ;}
 
   private Date getEventFromDate() {
-    DateFormat df = SimpleDateFormat.getInstance() ;
+    DateFormat df = new SimpleDateFormat("MM/dd/yyyy" + " " + timeFormat_) ;
     String dateString = getUIFormDateTimeInput(FIELD_FROM).getValue() + " " + getUIFormSelectBox(FIELD_FROM_TIME).getValue() ;
     try {
       return df.parse(dateString) ;
     } catch (Exception e) {
+      e.printStackTrace() ;
       return null ;
     }
   }
@@ -167,11 +171,12 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
   }
 
   private Date getEventToDate() {
-    DateFormat df = SimpleDateFormat.getInstance() ;
+    DateFormat df = new SimpleDateFormat("MM/dd/yyyy" + " " + timeFormat_) ;
     String dateString = getUIFormDateTimeInput(FIELD_TO).getValue() + " " + getUIFormSelectBox(FIELD_TO_TIME).getValue() ;
     try {
       return df.parse(dateString) ;
     } catch (Exception e) {
+      e.printStackTrace() ;
       return null ;
     }
   }
@@ -257,16 +262,16 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
         calEvent.setEventCategoryId(uiForm.getEventCategory());
         calEvent.setFromDateTime(fromDate);
         calEvent.setToDateTime(toDate) ;
-        
+
         java.util.Calendar fromCal = java.util.Calendar.getInstance() ;
         fromCal.setTime(calEvent.getFromDateTime()) ;
         java.util.Calendar toCal = java.util.Calendar.getInstance() ;
         toCal.setTime(calEvent.getToDateTime()) ;
         calService.saveUserEvent(username, calendarId, calEvent, true) ;
         //for(int i = 1 ; i <= 12; i ++) {
-          /*for(int j = 1; j <= 365 ; j ++ ) {
+        /*for(int j = 1; j <= 365 ; j ++ ) {
             System.out.println(" j ==== " + j) ;
-            
+
             CalendarEvent newEvent = new CalendarEvent() ;
             calEvent.setId(newEvent.getId()) ;
             fromCal.add(java.util.Calendar.DATE, 1) ;
@@ -274,10 +279,10 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
             calEvent.setFromDateTime(fromCal.getTime()) ;
             calEvent.setToDateTime(toCal.getTime()) ;
           }*/
-          //fromCal.add(java.util.Calendar.MONTH, 1) ;
-          //toCal.add(java.util.Calendar.MONTH, 1) ;
+        //fromCal.add(java.util.Calendar.MONTH, 1) ;
+        //toCal.add(java.util.Calendar.MONTH, 1) ;
         //}
-        
+
         System.out.println("\n\n from  from date "+fromDate);
         System.out.println("\n\n from to date "+ toDate);
 

@@ -20,6 +20,8 @@
 	dateTimeFormat = uicomponent.getDateTimeFormat() ;
 	timeInterval = uicomponent.getTimeInterval() ;
 	DateFormat df = new SimpleDateFormat(dateFormat) ;
+	DateFormat tf = new SimpleDateFormat(timeFormat) ;
+	DateFormat dtf = new SimpleDateFormat(dateTimeFormat) ;
 %>
 <div class="UIDayView">
   <div class="TitleBar">
@@ -62,7 +64,7 @@
 		    %>
    			<td width="$precent%">
 	    		<div unselectable="on" class="EventContainerBorder EventBoxes" eventid="<%=ce.getId()%>" calid="<%=ce.getCalendarId()%>" actionlink="$actionLink">
-	          <div class="EventContainer" title="<%=df.format(ce.getFromDateTime())%>:-><%=df.format(ce.getToDateTime())%>">
+	          <div class="EventContainer" title="<%=dtf.format(ce.getFromDateTime())%>:-><%=dtf.format(ce.getToDateTime())%>">
 	          	<%=ce.getSummary()%>
 	          </div>
           </div>
@@ -118,13 +120,8 @@
                   <div class="EventContainerBorder EventBoxes" eventid="<%=ce.getId()%>" calid="<%=ce.getCalendarId()%>" actionlink="$actionLink"
                     starttime="$beginTime" endtime="$endTime">
                     <div class="EventContainerBar" title="<%=df.format(ce.getFromDateTime())%> :-> <%=df.format(ce.getToDateTime())%>">
-                      <%=(ce.getFromDateTime().getHours())%>
-                      :<%=(ce.getFromDateTime().getMinutes())%>
-                      <%=(ce.getToDateTime().getHours())%>
-                      :<%=(ce.getToDateTime().getMinutes())%>
-                      <%
-                      	println ce.getReminders().size() ;
-                      %>
+                      <%=tf.format(ce.getFromDateTime())%>
+                      <%=tf.format(ce.getToDateTime())%>
                     </div>
                     <div class="EventContainer">
                       <%=ce.getSummary()%>

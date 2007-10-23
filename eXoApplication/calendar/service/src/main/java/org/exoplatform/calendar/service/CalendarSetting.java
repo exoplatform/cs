@@ -12,12 +12,12 @@ package org.exoplatform.calendar.service;
  */
 public class CalendarSetting {
   //view types
-  public static String DAY_VIEW = "1" ;
-  public static String WEEK_VIEW = "2" ;
-  public static String MONTH_VIEW = "3" ;
-  public static String YEAR_VIEW = "4" ;
-  public static String SCHEDULE_VIEW = "5" ;
-  public static String LIST_VIEW = "6" ;
+  public static String DAY_VIEW = "0" ;
+  public static String WEEK_VIEW = "1" ;
+  public static String MONTH_VIEW = "2" ;
+  public static String YEAR_VIEW = "3" ;
+  public static String SCHEDULE_VIEW = "4" ;
+  public static String LIST_VIEW = "5" ;
 
   // time weekStartOn types
   public static String MONDAY = "1" ;

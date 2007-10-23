@@ -47,14 +47,20 @@ import org.exoplatform.webui.event.EventListener;
 public class UIActionBar extends UIContainer  {
 
   private boolean isShowPane_ = true ;
-  private String currentView_ = "UIDayView" ;
-  
+  private String currentView_ = null ;
+  public UIActionBar() throws Exception {
+    CalendarService calService = getApplicationComponent(CalendarService.class) ;
+    String username = Util.getPortalRequestContext().getRemoteUser() ;
+    CalendarSetting calSetting = calService.getCalendarSetting(username) ;
+    currentView_ = UICalendarViewContainer.TYPES[Integer.parseInt(calSetting.getViewType())] ;
+  }
   protected String[] getViewTypes() {return UICalendarViewContainer.TYPES ;} 
   protected String getCurrentView() {return currentView_ ;}
   protected void setCurrentView(String viewName) {currentView_ = viewName ;}
   
   protected boolean isShowPane() {return isShowPane_ ;}
   protected void setShowPane(boolean isShow) {isShowPane_ = isShow ;}
+  
   
   static public class QuickAddEventActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {

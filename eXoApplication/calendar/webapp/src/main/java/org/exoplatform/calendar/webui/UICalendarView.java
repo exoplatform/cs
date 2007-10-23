@@ -105,7 +105,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   protected boolean isShowWorkingTime_ = false ;
   protected String startTime_ = null ;
   protected String endTime_ = null ;
-  private int timeInterval_ = 0 ;
+  private int timeInterval_ = 30 ;
   private String timeFormat_ =  null ;
   private String dateFormat_ =  null ;
   private String dateTimeFormat_ =  null ;
@@ -137,7 +137,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
     CalendarService cservice = CalendarUtils.getCalendarService() ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     CalendarSetting calendarSetting = cservice.getCalendarSetting(username) ;
-    timeInterval_ = (int)calendarSetting.getTimeInterval();
+    //timeInterval_ = (int)calendarSetting.getTimeInterval();
     dateFormat_ = calendarSetting.getDateFormat();
     timeFormat_ = calendarSetting.getTimeFormat() ;
     dateTimeFormat_ = dateFormat_ + " " + timeFormat_ ;
@@ -172,7 +172,6 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       return map.values().toArray(new String[]{}) ;
     }    
   }
-
   public void refresh() throws Exception {} ;
   public void initCategories() throws Exception {
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
