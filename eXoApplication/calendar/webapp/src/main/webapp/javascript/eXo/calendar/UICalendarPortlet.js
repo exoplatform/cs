@@ -324,7 +324,7 @@ UICalendarPortlet.prototype.weekViewCallback = function(evt) {
 		items[1].href = eXo.webui.UIContextMenu.replaceall(String(items[1].href),map) ;
 		obj = DOMUtil.findAncestorByTagName(src, "td").getAttribute("startTime") ;		
 		for(var i = 2 ; i < items.length ; i ++ ) {
-			items[i].href = String(items[i].href).replace(/objectId\s*=\s*.*(?=&|'|\")/,"objectId="+obj) ;
+			items[i].href = String(items[i].href).replace(/startTime\s*=\s*.*(?=&|'|\")/,"startTime="+obj) ;
 		}		
 	} else {
 		items[0].style.display = "none" ;
@@ -332,7 +332,7 @@ UICalendarPortlet.prototype.weekViewCallback = function(evt) {
 		var obj = (DOMUtil.findAncestorByTagName(src, "td"))? DOMUtil.findAncestorByTagName(src, "td") : src ;
 		var map = obj.getAttribute("startTime") ;
 		for(var i = 2 ; i < items.length ; i ++ ) {
-			items[i].href = String(items[i].href).replace(/objectId\s*=\s*.*(?=&|'|\")/,"objectId="+map) ;
+			items[i].href = String(items[i].href).replace(/startTime\s*=\s*.*(?=&|'|\")/,"startTime="+map) ;
 		}
 	}
 }
