@@ -35,13 +35,23 @@
 				              				icon = viewType + "Icon" ;
 				              				actionLink = uicomponent.event("ChangeView", viewType) ;
 				              				String label = _ctx.appRes("UIActionBar.label." + viewType) ;
+				              				if(!viewType.equals("UIScheduleView")) {
 				              			%>
 															<a class="MenuItem" href="$actionLink">   
 						                    <div class="ItemIcon $icon ">
 						                      $label
 						                    </div>
 					                    </a>
-				                    <%}}%>
+				                    <%}
+				                    else {
+				                    %>
+				                    <a class="MenuItem" style="color:gray;">   
+						                    <div class="ItemIcon $icon ">
+						                      $label
+						                    </div>
+					                    </a>
+				                    <%}
+				                    }}%>
 													</div>
 					          		</div>
 					        		</div>
@@ -69,18 +79,18 @@
 							<div class="IconHolder RssIcon">RSS</div>
 						</a>
 						<div class="SeparatorLine"><span></span></div>
-						<a href="#" class="ControlButton">
+						<a class="ControlButton" style="color:gray;">
 							<div class="IconHolder PrintCalendarIcon">Print </div>
 						</a>
 						<div class="SeparatorLine"><span></span></div>
 						<a href="<%=uicomponent.event("ShowHidden")%>" class="ControlButton">
 							<div class="IconHolder LayoutSwitcherIcon" title="Layout Switcher"><span></span></div>
 						</a>
-						<a href="#" class="RightControlButton">
+						<a class="RightControlButton">
 							<div class="NextIcon" title="Next day"><span></span></div>
 						</a>
-						<div class="Title RightControlButton">06/12</div>
-						<a href="#" class="RightControlButton">
+						<div class="Title RightControlButton" ><span></span></div>
+						<a class="RightControlButton">
 							<div class="BackIcon" title="Back day"><span></span></div>
 						</a>
 						<div class="SeparatorLine RightLine"><span></span></div>
