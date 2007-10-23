@@ -1,6 +1,12 @@
 <%
-	import org.exoplatform.calendar.service.CalendarEvent;
-	CalendarEvent task = uicomponent.getEvent() ;		
+import org.exoplatform.calendar.service.CalendarEvent;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+dateTimeFormat = uicomponent.getDateTimeFormat() ;
+DateFormat df = new SimpleDateFormat(dateTimeFormat) ;
+
+CalendarEvent task = uicomponent.getEvent() ;		
+uiform.begin() ;
 %>
 
 <div class="ResizeReadingPane"><span></span></div>
@@ -53,11 +59,15 @@
 			        					</tr>	
 			        					<tr>
 			        						<td class="Text">Start Date:    </td>
-			        						<td class="Text"><%=task.getFromDateTime().toString()%></td>
+			        						<td class="Text"><%=df.format(task.getFromDateTime())%></td>
 			        					</tr>	
 			        					<tr>
 			        						<td class="Text">Due Date:  </td>
-			        						<td class="Text"><%=task.getToDateTime().toString()%></td>
+			        						<td class="Text"><%=df.format(task.getToDateTime())%></td>
+			        					</tr>	
+			        					<tr>
+			        						<td class="Text">Task delegation:  </td>
+			        						<td class="Text"><%=task.getTaskDelegator()%></td>
 			        					</tr>	
 			        					<tr>
 			        						<td class="Text">Reminder:  </td>
@@ -103,5 +113,5 @@
 				</div>
 			</div>
 		</div>
-
 	</div>
+<%uiform.end();%>

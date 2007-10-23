@@ -19,7 +19,7 @@ import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIComponent;
+import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
@@ -30,19 +30,19 @@ import org.exoplatform.webui.event.EventListener;
  * Aus 01, 2007 2:48:18 PM 
  */
 @ComponentConfig(
-    //lifecycle = UIContainerLifecycle.class,
+    lifecycle = UIFormLifecycle.class,
     events = {
-        @EventConfig(listeners = UIPreview.ViewActionListener.class),  
-        @EventConfig(listeners = UIPreview.EditActionListener.class),  
-        @EventConfig(listeners = UIPreview.DeleteActionListener.class)
+      @EventConfig(listeners = UIPreview.ViewActionListener.class),  
+      @EventConfig(listeners = UIPreview.EditActionListener.class),  
+      @EventConfig(listeners = UIPreview.DeleteActionListener.class)
 
     }
 )
-public class UIPreview extends UIComponent implements UIPopupComponent {
+public class UIPreview extends UICalendarView implements UIPopupComponent {
   private CalendarEvent event_ = null ;
   private boolean isShowPopup_ = false ;
   public static final String CALENDARID = "calendarId".intern() ;
-  public UIPreview() {}
+  public UIPreview() throws Exception {}
 
   public String getTemplate(){
     if(event_ == null) return "app:/templates/calendar/webui/UIDefaultPreview.gtmpl" ;
@@ -103,7 +103,7 @@ public class UIPreview extends UIComponent implements UIPopupComponent {
     public void execute(Event<UIPreview> event) throws Exception {
       UIPreview uiView = event.getSource() ;
       System.out.println("\n\n ViewActionListener");
-     /* CalendarEvent eventCalendar = null ;
+      /* CalendarEvent eventCalendar = null ;
       String username = event.getRequestContext().getRemoteUser() ;
       String calendarId = event.getRequestContext().getRequestParameter(CALENDARID) ;
       String eventId = event.getRequestContext().getRequestParameter(OBJECTID) ;
@@ -113,7 +113,7 @@ public class UIPreview extends UIComponent implements UIPopupComponent {
       } catch (Exception e){
         e.printStackTrace() ;
       }
-      */
+       */
     }
   }
   static  public class EditActionListener extends EventListener<UIPreview> {

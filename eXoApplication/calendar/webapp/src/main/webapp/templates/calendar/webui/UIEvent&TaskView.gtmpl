@@ -40,4 +40,4 @@
 	</div>
 <div class="ResizeReadingPane"><span></span></div>
 
-<%uiform.end()%>
+<%uiform.end();%>

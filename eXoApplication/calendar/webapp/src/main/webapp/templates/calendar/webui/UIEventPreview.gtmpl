@@ -1,5 +1,10 @@
 <%
-	import org.exoplatform.calendar.service.CalendarEvent;
+import org.exoplatform.calendar.service.CalendarEvent;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+dateTimeFormat = uicomponent.getDateTimeFormat() ;
+DateFormat df = new SimpleDateFormat(dateTimeFormat) ;
+uiform.begin() ;
 %>
 <div class="UIPreview" id="<%=uicomponent.getId()%>">
 	<%if(!uicomponent.isShowPopup()){%>
@@ -26,8 +31,8 @@
 	      <table class="UIGrid" id="RowContainerDay" cellspacing="0" borderspacing="0">
 	       <tr>
 	        <td style="border-right: 1px solid #c7c7c7;width: 185px;">
-	         <div class="Text">From: <span style="color: #1756d5;"><%=event.getFromDateTime().toString()%></span> </div>
-	         <div class="Text">To:   <span style="color: #1756d5;"><%=event.getToDateTime().toString()%></span> </div>
+	         <div class="Text">From: <span style="color: #1756d5;"><%=df.format(event.getFromDateTime())%></span> </div>
+	         <div class="Text">To:   <span style="color: #1756d5;"><%=df.format(event.getToDateTime())%></span> </div>
 	         <%for(attachFile in  event.getAttachment()){%>
 		         <div class="AttachmentIcon"  style="white-space: nowrap;">
 		          $attachFile.name  
@@ -140,3 +145,4 @@
 	 </div>
 	</div>
 </div>
+<%uiform.end();%>

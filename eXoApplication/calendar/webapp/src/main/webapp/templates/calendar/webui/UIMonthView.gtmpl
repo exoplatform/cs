@@ -161,7 +161,7 @@
 			</div>
 		</div>
 	</div>
-<%uiform.end()%>
+<%uiform.end();%>
 <% /*Begin Popup Menu*/ %>
   			
   				<div class="UIRightClickPopupMenu" id="UIMonthViewRightMenu" eXoCallback="eXo.calendar.UICalendarPortlet.monthViewCallback">

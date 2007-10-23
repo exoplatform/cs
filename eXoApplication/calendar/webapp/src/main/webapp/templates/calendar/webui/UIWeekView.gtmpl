@@ -162,7 +162,7 @@
 		</div>
 	</div>
 </div> 
-<%uiform.end()%>	 
+<%uiform.end();%>	 
   		<% /*Begin Popup Menu*/ %>
   			
   				<div class="UIRightClickPopupMenu" id="UIWeekViewRightMenu" eXoCallback="eXo.calendar.UICalendarPortlet.weekViewCallback">
@@ -173,23 +173,22 @@
 			</div> 
 	        <div class="MiddleLeftRightClickPopupMenu">
 	          <div class="MiddleRightRightClickPopupMenu">
-      		<div class="UIRightPopupMenuContainer">
-      			<%
-      				for(String act : uicomponent.getQuickEditMenu()) {
-      				link = uicomponent.event(act,"id&$uicomponent.CALENDARID=calId") ;
-      			%>
-      				<a href="$link" style="display:none;">
-          				<div class="ItemIcon $act">$act</div>
-      			  </a>
-      			<%}%>
-      			<%
-      				for(String act : uicomponent.getContextMenu()) {
-      				link = uicomponent.event(act,"startTime") ;
-      			%>
-      			  <a href="$link">
-          				<div class="ItemIcon $act">$act</div>
-      			  </a>
-      			<%}%>
+	      			<div class="UIRightPopupMenuContainer">
+	      			<%
+	      				for(String act : uicomponent.getQuickEditMenu()) {
+	      				link = uicomponent.event(act,"id&$uicomponent.CALENDARID=calId") ;
+	      			%>
+	      				<a href="$link" style="display:none;">
+	          				<div class="ItemIcon $act">$act</div>
+	      			  </a>
+	      			<%}%>
+		      			 <a href="<%=uicomponent.event("QuickAdd","$uicomponent.TYPE_EVENT&startTime=beginTime")%>">
+			           <div class="ItemIcon QuickAddEvent"> Add new event </div>
+			           </a>
+			        
+			          <a href="<%=uicomponent.event("QuickAdd","$uicomponent.TYPE_TASK&startTime=beginTime")%>">
+			            <div class="ItemIcon QuickAddTask">Add new task</div>
+			          </a>
 							</div>
       		</div>
     		</div>

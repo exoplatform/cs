@@ -10,4 +10,4 @@
 	<div class="Label">$label</div>
 	<div style="clear:right;"><span></span></div>
 </div>
-<%uiform.end()%>
+<%uiform.end();%>

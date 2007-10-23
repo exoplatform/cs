@@ -55,4 +55,4 @@
 	</div>	
 	<%_ctx.include("app:/templates/calendar/webui/UIPageIterator.gtmpl");%>
 	<div class="ResizeReadingPane"><span></span></div>
-<%uiform.end()%>
+<%uiform.end();%>

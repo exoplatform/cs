@@ -13,10 +13,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.webui.popup.UIPopupAction;
+import org.exoplatform.calendar.webui.popup.UIQuickAddEvent;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -39,8 +41,7 @@ import org.exoplatform.webui.event.EventListener;
       @EventConfig(listeners = UICalendarView.GotoDateActionListener.class),
       @EventConfig(listeners = UICalendarView.AddCategoryActionListener.class),
       @EventConfig(listeners = UICalendarView.SwitchViewActionListener.class),
-      @EventConfig(listeners = UIWeekView.QuickAddNewEventActionListener.class),  
-      @EventConfig(listeners = UIWeekView.QuickAddNewTaskActionListener.class),  
+      @EventConfig(listeners = UIWeekView.QuickAddActionListener.class),  
       @EventConfig(listeners = UIWeekView.MoveNextActionListener.class), 
       @EventConfig(listeners = UIWeekView.MovePreviousActionListener.class)
     }
@@ -127,23 +128,28 @@ public class UIWeekView extends UICalendarView {
   protected Map<String, CalendarEvent>  getEventList() {
     return allWeekData_ ;
   }
-  static  public class QuickAddNewEventActionListener extends EventListener<UIWeekView> {
+  
+  static  public class QuickAddActionListener extends EventListener<UIWeekView> {
     public void execute(Event<UIWeekView> event) throws Exception {
       UIWeekView calendarview = event.getSource() ;
+      System.out.println("QuickAddActionListener");
+      String type = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      String startTime = event.getRequestContext().getRequestParameter("startTime") ;
+      String finishTime = event.getRequestContext().getRequestParameter("finishTime") ;
+      if(CalendarUtils.isEmpty(finishTime)) finishTime = startTime ; 
       UICalendarPortlet uiPortlet = calendarview.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
-      String time = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      
-      event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
-    }
-  }
-  static  public class QuickAddNewTaskActionListener extends EventListener<UIWeekView> {
-    public void execute(Event<UIWeekView> event) throws Exception {
-      UIWeekView calendarview = event.getSource() ;
-      UICalendarPortlet uiPortlet = calendarview.getAncestorOfType(UICalendarPortlet.class) ;
-      UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
-      String time = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      
+      UIQuickAddEvent uiQuickAddEvent = uiPopupAction.activate(UIQuickAddEvent.class, 600) ;
+      if(CalendarEvent.TYPE_EVENT.equals(type)) {
+        uiQuickAddEvent.setEvent(true) ;
+        uiQuickAddEvent.setId("UIQuickAddEvent") ;
+      } else {
+        uiQuickAddEvent.setEvent(false) ;
+        uiQuickAddEvent.setId("UIQuickAddTask") ;
+      }
+      uiQuickAddEvent.init(startTime, finishTime) ;
+      //uiPopupAction.activate(uiQuickAddEvent,600,0) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
     }
   }

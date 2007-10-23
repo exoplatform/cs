@@ -75,7 +75,7 @@
         </table>
       </div>
     </div>
-    <%uiform.end()%>
+    <%uiform.end();%>
   </div>
   <div class="UIAction">
     <table class="ActionContainer" align="center">
