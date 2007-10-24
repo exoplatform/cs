@@ -1,0 +1,83 @@
+<%
+  import org.exoplatform.contact.service.ContactGroup;
+  
+  import org.exoplatform.webui.core.model.SelectItemOption;
+  
+  import org.exoplatform.webui.form.UIFormSelectBox;
+  import org.exoplatform.webui.form.UIFormStringInput;
+  
+	uiform.begin()
+%>
+  
+  <div>
+  Tick address book(s) that you want to export ...
+  </div>
+  
+				<div class="UIMessageList" is>
+					<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
+	  				<thead>
+	  					<tr>
+	  			      <th style="width: 23px; padding-left: 7px;" class="text"><input type="checkbox" class="checkbox" title="Check all" value="4"/></th>
+	  		        <th style="width: 24%; padding-left: 7px;" class="text">
+	  		        	<div> Name </div>
+	  		        </th>
+	  	 	      </tr>
+	  	 	    </thead>
+  	 	      <tbody>
+  	 	      <%  
+							ContactGroup[] contactGroups = uicomponent.getContactGroups();
+							for(group in contactGroups) {
+								checkboxField = uicomponent.getChildById(group.getId()) ;
+						%>
+  						<tr class="UIContactList">
+  						  <td class="text" style="padding-left: 7px;">
+  						  	<%
+  						  		if(checkboxField != null) uicomponent.renderField(checkboxField) ;
+  						  	%>
+  						  </td>
+								<td class="text">
+										<%=group.getName()%>
+								</td>
+
+   			     	</tr>
+			     	<% } %>  
+  	   			</tbody>
+					</table>
+				</div>
+
+			<table class="UIFormGrid">
+      	<tr>
+  	      <td class="FieldLabel"><%= _ctx.appRes("UIExportAddressBookForm.label.name") %></td>
+  	      <td class="FieldComponent"><%uicomponent.renderField(uicomponent.getChildById(uicomponent.NAME))%></td>
+        </tr>
+        <tr>
+  	      <td class="FieldLabel"><%= _ctx.appRes("UIExportAddressBookForm.label.type") %></td>
+  	      <td class="FieldComponent"><%uicomponent.renderField(uicomponent.getChildById(uicomponent.TYPE))%></td>
+        </tr>
+ 			</table>
+        
+			<div class="UIAction"> 
+        <table class="ActionContainer" align="center">
+          <tr>
+            <td align="center"> 
+          
+             <a href="<%=uicomponent.event("Save")%>" class="ActionButton LightBlueStyle">
+                <div class="ButtonLeft">
+                  <div class="ButtonRight">
+                    <div class="ButtonMiddle"> Ok </div>
+                  </div>
+                </div>
+              </a>
+              <a href="<%=uicomponent.event("Cancel")%>" class="ActionButton LightBlueStyle">
+
+                <div class="ButtonLeft">
+                  <div class="ButtonRight">
+                    <div class="ButtonMiddle"> Cancel </div>
+                  </div>
+                </div>
+              </a>
+            </td>
+          </tr>
+        </table>
+      </div>        
+<%uiform.end()%>	
