@@ -198,7 +198,7 @@ public class UIMessageList extends UIForm {
       Message msg = mailServ.getMessageById(username, msgId, accountId);
       if (uiMessageList.getSelectedFolderId().equalsIgnoreCase(Utils.createFolderId(accountId, Utils.FD_DRAFTS, false))) {
         UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
-        UIPopupActionContainer uiPopupContainer = uiPopupAction.activate(UIPopupActionContainer.class, 1000) ;
+        UIPopupActionContainer uiPopupContainer = uiPopupAction.activate(UIPopupActionContainer.class, 850) ;
         UIComposeForm uiComposeForm = uiPopupContainer.createUIComponent(UIComposeForm.class, null, null);
         uiComposeForm.setMessage(msg);
         uiPopupContainer.addChild(uiComposeForm) ;
@@ -343,7 +343,7 @@ public class UIMessageList extends UIForm {
       UISelectAccount uiSelect = uiNavigation.getChild(UISelectAccount.class) ;
       String accId = uiSelect.getSelectedValue() ;
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
-      UIPopupActionContainer uiPopupContainer = uiPopupAction.activate(UIPopupActionContainer.class, 1000) ;
+      UIPopupActionContainer uiPopupContainer = uiPopupAction.activate(UIPopupActionContainer.class, 850) ;
       
       UIComposeForm uiComposeForm = uiPopupContainer.createUIComponent(UIComposeForm.class, null, null);
       MailService mailSvr = uiMessageList.getApplicationComponent(MailService.class) ;
@@ -369,7 +369,7 @@ public class UIMessageList extends UIForm {
       UISelectAccount uiSelect = uiNavigation.getChild(UISelectAccount.class) ;
       String accId = uiSelect.getSelectedValue() ;
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
-      UIPopupActionContainer uiPopupContainer = uiPopupAction.activate(UIPopupActionContainer.class, 1000) ;
+      UIPopupActionContainer uiPopupContainer = uiPopupAction.activate(UIPopupActionContainer.class, 850) ;
       
       UIComposeForm uiComposeForm = uiPopupContainer.createUIComponent(UIComposeForm.class, null, null);
       MailService mailSvr = uiMessageList.getApplicationComponent(MailService.class) ;
@@ -399,7 +399,7 @@ public class UIMessageList extends UIForm {
       UISelectAccount uiSelect = uiNavigation.getChild(UISelectAccount.class) ;
       String accId = uiSelect.getSelectedValue() ;
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
-      UIPopupActionContainer uiPopupContainer = uiPopupAction.activate(UIPopupActionContainer.class, 1000) ;
+      UIPopupActionContainer uiPopupContainer = uiPopupAction.activate(UIPopupActionContainer.class, 850) ;
       
       UIComposeForm uiComposeForm = uiPopupContainer.createUIComponent(UIComposeForm.class, null, null);
 
@@ -417,6 +417,7 @@ public class UIMessageList extends UIForm {
             "\n\n" + message.getMessageBody();         
         message.setMessageBody(forwardedText);
         uiComposeForm.setFieldMessageContentValue(message.getMessageBody());
+        uiComposeForm.setFieldToValue("");
       }
       uiPopupContainer.addChild(uiComposeForm) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;

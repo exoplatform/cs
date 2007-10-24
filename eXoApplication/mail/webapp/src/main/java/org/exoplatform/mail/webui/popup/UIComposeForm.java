@@ -56,7 +56,8 @@ import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
       @EventConfig(listeners = UIComposeForm.ToActionListener.class),
       @EventConfig(listeners = UIComposeForm.ToCCActionListener.class),
       @EventConfig(listeners = UIComposeForm.ToBCCActionListener.class),
-      @EventConfig(listeners = UIComposeForm.ChangePriorityActionListener.class)
+      @EventConfig(listeners = UIComposeForm.ChangePriorityActionListener.class),
+      @EventConfig(listeners = UIComposeForm.UseVisualEdiorActionListener.class)
     }
 )
 public class UIComposeForm extends UIForm implements UIPopupComponent{
@@ -75,6 +76,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
   private List<Attachment> attachments_ = new ArrayList<Attachment>() ;
   private Message message_ = null;
   private long priority_ = Utils.PRIORITY_NORMAL;
+  private Boolean isVisualEditor = true;
 
   public List<Contact> toContacts = new ArrayList<Contact>();
   public List<Contact> ccContacts = new ArrayList<Contact>();
@@ -87,7 +89,10 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
   public void setToContacts(List<Contact> contactList){ toContacts = contactList; }
   public void setCcContacts(List<Contact> contactList){ ccContacts = contactList; }
   public void setBccContacts(List<Contact> contactList){ bccContacts = contactList; }
-    
+  
+  public boolean isVisualEditor() { return isVisualEditor; }
+  public void setVisualEditor(boolean b) { isVisualEditor = b; }
+  
   public UIComposeForm() throws Exception {
     UIFormInputWithActions inputSet = new UIFormInputWithActions(FIELD_FROM_INPUT); 
     List<SelectItemOption<String>>  options = new ArrayList<SelectItemOption<String>>() ;
@@ -123,10 +128,10 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
     actions.add(bccAction);
     inputSet.setActionField(FIELD_BCC, actions) ;
 
-    inputSet.addUIFormInput(new UIFormStringInput(FIELD_SUBJECT, null, null)) ;
     inputSet.addUIFormInput(new UIFormStringInput(FIELD_TO, null, null)) ;
     inputSet.addUIFormInput(new UIFormStringInput(FIELD_CC, null, null)) ;
     inputSet.addUIFormInput(new UIFormStringInput(FIELD_BCC, null, null)) ;
+    inputSet.addUIFormInput(new UIFormStringInput(FIELD_SUBJECT, null, null)) ;
     inputSet.addUIFormInput(new UIFormInputInfo(FIELD_ATTACHMENTS, FIELD_ATTACHMENTS, null)) ;
 
     inputSet.setActionField(FIELD_ATTACHMENTS, getUploadFileList()) ;
@@ -277,6 +282,9 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
     message.setSendDate(new Date()) ;
     message.setAccountId(accountId) ;
     message.setFrom(from) ;
+    String contentType = Utils.MIMETYPE_TEXTHTML;
+    if (! isVisualEditor()) { contentType = Utils.MIMETYPE_TEXTPLAIN; }
+    message.setContentType(contentType);
     message.setSubject(subject) ;
     message.setMessageTo(to) ;
     message.setMessageCc(cc) ;
@@ -464,4 +472,12 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
     }
   }
   
+  static  public class UseVisualEdiorActionListener extends EventListener<UIComposeForm> {
+    public void execute(Event<UIComposeForm> event) throws Exception {
+      UIComposeForm uiForm = event.getSource() ;
+      System.out.println(" ==========> Change Editor Action Listener") ;
+      boolean isVisualEditor = Boolean.valueOf(event.getRequestContext().getRequestParameter(OBJECTID)) ;  
+      uiForm.setVisualEditor(isVisualEditor);
+    }
+  }
 }

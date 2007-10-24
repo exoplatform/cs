@@ -109,6 +109,7 @@ public class Utils {
   public static final String JCR_DATA = "jcr:data".intern() ;
   
   public static final String MIMETYPE_TEXTPLAIN = "text/plain".intern() ;
+  public static final String MIMETYPE_TEXTHTML = "text/html".intern() ;
   public static final String ATTACHMENT = "ATTACHMENT".intern();
   public static final String INLINE = "INLINE".intern();
   
@@ -131,7 +132,15 @@ public class Utils {
   public static final String TAG_RED = "Red".intern() ;
   public static final String TAG_BLUE = "Blue".intern() ;
   public static final String TAG_GREEN = "Green".intern() ;
-  public static final String[] TAG_COLOR = {TAG_RED, TAG_BLUE, TAG_GREEN};
+  public static final String TAG_BROWN = "Brown".intern() ;
+  public static final String TAG_ORANGE = "Orange".intern() ;
+  public static final String TAG_PING = "Ping".intern() ;
+  public static final String TAG_PING_VIOLET = "PingViolet".intern() ;
+  public static final String TAG_VIOLET = "Violet".intern() ;
+  public static final String TAG_YELLOW = "Yellow".intern() ;
+  public static final String[] TAG_COLOR = {TAG_RED, TAG_BLUE, TAG_GREEN, TAG_BROWN, TAG_ORANGE, TAG_PING, TAG_YELLOW, TAG_VIOLET};
+  
+  
   
   public static boolean isEmptyField(String value) {
     return value == null || value.trim().length() == 0 ;

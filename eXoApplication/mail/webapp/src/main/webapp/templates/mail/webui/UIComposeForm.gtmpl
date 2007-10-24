@@ -116,16 +116,26 @@
 										        <div class="MiddleLeftRightClickPopupMenu">
 										          <div class="MiddleRightRightClickPopupMenu">
 							              		<div class="UIRightPopupMenuContainer">
-																	<a class="MenuItem" href="#">   
-								                    <div class="ItemIcon CheckItem ">
-								                      Rich text editor
-								                    </div>
-							                    </a>
-							                    <a class="MenuItem" href="#">   
-								                    <div class="ItemIcon">
-								                      Plain text
-								                    </div>
-							                    </a>
+                                  <%
+                                    String checkVisualEditor = "";
+                                    if (uicomponent.isVisualEditor()) checkVisualEditor = "CheckItem";
+                                    String chooseEditor = uicomponent.event("UseVisualEdior", "true");
+                                  %>
+                                  <a class="MenuItem" href="$chooseEditor">   
+                                    <div class="ItemIcon $checkVisualEditor">
+                                      Rich text editor
+                                     </div>
+                                  </a>
+                                  <%
+                                    String checkPlainEditor = "";
+                                    if (!uicomponent.isVisualEditor()) checkPlainEditor = "CheckItem";
+                                    chooseEditor = uicomponent.event("UseVisualEdior", "false");
+                                  %>
+                                  <a class="MenuItem" href="$chooseEditor">   
+                                    <div class="ItemIcon $checkPlainEditor">
+                                      Plain text
+                                    </div>
+                                  </a>        
 																</div>
 								          		</div>
 								        		</div>

@@ -15,6 +15,7 @@ import java.util.Properties;
 
 import javax.activation.DataHandler;
 import javax.mail.AuthenticationFailedException;
+import javax.mail.BodyPart;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.Part;
@@ -200,8 +201,8 @@ public class MailServiceImpl implements MailService{
     msg.setSubject(message.getSubject());
     msg.setSentDate(message.getSendDate());
    
-    MimeBodyPart mimeBodyPart1 = new MimeBodyPart();
-    mimeBodyPart1.setText(message.getMessageBody(), "us-ascii");
+    BodyPart mimeBodyPart1 = new MimeBodyPart();
+    mimeBodyPart1.setContent(message.getMessageBody(), message.getContentType());
     mimeBodyPart1.setDisposition(Utils.INLINE);
     
     Multipart multiPart = new MimeMultipart();
