@@ -600,7 +600,10 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         String day = event.getRequestContext().getRequestParameter(DAY) ;
         UICalendarPortlet portlet = calendarview.getAncestorOfType(UICalendarPortlet.class) ;
         UICalendarViewContainer uiContainer = portlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
-        Calendar cal = new GregorianCalendar(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day)) ;
+        Calendar cal = GregorianCalendar.getInstance() ;
+        cal.set(Calendar.DATE, Integer.parseInt(day)) ;
+        cal.set(Calendar.MONTH, Integer.parseInt(month)) ;
+        cal.set(Calendar.YEAR, Integer.parseInt(year)) ;
         int type = Integer.parseInt(viewType) ; 
         switch (type){
         case TYPE_DATE : {
