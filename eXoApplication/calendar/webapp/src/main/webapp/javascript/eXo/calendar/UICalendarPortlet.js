@@ -322,7 +322,7 @@ UICalendarPortlet.prototype.weekViewCallback = function(evt) {
 		for(var i = 0 ; i < items.length ; i ++ ) {
 			if (items[i].style.display == "none") {
 				items[i].style.display = "block" ;
-				items[i].href = eXo.webui.UIContextMenu.replaceall(String(items[0].href),map) ;
+				items[i].href = eXo.webui.UIContextMenu.replaceall(String(items[i].href),map) ;
 			} else {				
 				items[i].href = String(items[i].href).replace(/startTime\s*=\s*.*(?=&|'|\")/,"startTime="+obj) ;
 			}

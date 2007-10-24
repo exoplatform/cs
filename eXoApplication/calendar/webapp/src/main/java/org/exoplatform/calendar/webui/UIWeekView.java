@@ -76,16 +76,13 @@ public class UIWeekView extends UICalendarView {
     List<Calendar> days =  getDaysOfWeek(week) ;
     java.util.Calendar fromcalendar = days.get(0) ;
     fromcalendar.set(Calendar.HOUR, 0) ;
-    System.out.println("\n\n from " + fromcalendar.getTime()); 
     eventQuery.setFromDate(fromcalendar) ;
     java.util.Calendar tocalendar = days.get(days.size() - 1) ;
     tocalendar.set(Calendar.HOUR, 0) ;
     tocalendar.add(Calendar.DATE, 1) ;
-    System.out.println("\n\n to " + tocalendar.getTime()); 
     eventQuery.setToDate(tocalendar) ;
     List<CalendarEvent> allEvents = calendarService.getUserEvents(username, eventQuery);    
     allEvents.addAll(calendarService.getPublicEvents(eventQuery))  ;
-    System.out.println("\n\n query result " + allEvents.size());
     Iterator iter = allEvents.iterator() ;
     while(iter.hasNext()) {
       CalendarEvent event = (CalendarEvent)iter.next() ;
@@ -143,7 +140,6 @@ public class UIWeekView extends UICalendarView {
       UICalendarPortlet uiPortlet = calendarview.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
       UIQuickAddEvent uiQuickAddEvent = uiPopupAction.activate(UIQuickAddEvent.class, 600) ;
-      System.out.println("\n\n startTime" + startTime);
       if(CalendarEvent.TYPE_EVENT.equals(type)) {
         uiQuickAddEvent.setEvent(true) ;
         uiQuickAddEvent.setId("UIQuickAddEvent") ;
