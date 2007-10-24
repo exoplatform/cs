@@ -318,21 +318,25 @@ UICalendarPortlet.prototype.weekViewCallback = function(evt) {
 			"objectId\s*=\s*[A-Za-z0-9_]*(?=&|'|\")":"objectId="+eventId,
 			"calendarId\s*=\s*[A-Za-z0-9_]*(?=&|'|\")":"calendarId="+calendarId
 		} ;
-		items[0].style.display = "block" ;
-		items[1].style.display = "block" ;
-		items[0].href = eXo.webui.UIContextMenu.replaceall(String(items[0].href),map) ;
-		items[1].href = eXo.webui.UIContextMenu.replaceall(String(items[1].href),map) ;
 		obj = DOMUtil.findAncestorByTagName(src, "td").getAttribute("startTime") ;		
-		for(var i = 2 ; i < items.length ; i ++ ) {
-			items[i].href = String(items[i].href).replace(/startTime\s*=\s*.*(?=&|'|\")/,"startTime="+obj) ;
+		for(var i = 0 ; i < items.length ; i ++ ) {
+			if (items[i].style.display == "none") {
+				items[i].style.display = "block" ;
+				items[i].href = eXo.webui.UIContextMenu.replaceall(String(items[0].href),map) ;
+			} else {				
+				items[i].href = String(items[i].href).replace(/startTime\s*=\s*.*(?=&|'|\")/,"startTime="+obj) ;
+			}
 		}		
 	} else {
-		items[0].style.display = "none" ;
-		items[1].style.display = "none" ;
 		var obj = (DOMUtil.findAncestorByTagName(src, "td"))? DOMUtil.findAncestorByTagName(src, "td") : src ;
 		var map = obj.getAttribute("startTime") ;
-		for(var i = 2 ; i < items.length ; i ++ ) {
-			items[i].href = String(items[i].href).replace(/startTime\s*=\s*.*(?=&|'|\")/,"startTime="+map) ;
+		for(var i = 0 ; i < items.length ; i ++ ) {
+			if (items[i].style.display == "block") {
+				items[i].style.display = "none" ;
+			} else {				
+				items[i].href = String(items[i].href).replace(/startTime\s*=\s*.*(?=&|'|\")/,"startTime="+map) ;
+			}
+			
 		}
 	}
 }
