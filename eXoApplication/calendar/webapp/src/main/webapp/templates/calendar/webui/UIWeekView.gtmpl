@@ -118,8 +118,9 @@
 									end = tf.format(event.toDateTime) ;
 									enddate = dtf.format(event.toDateTime) ;
 									endTime =  event.toDateTime.getHours() * 60 + event.toDateTime.getMinutes() ;
+									actionLink =  uicomponent.event("SaveEvent",event.getId()+"&calendarId="+event.getCalendarId()+"&startTime=beginTime&finishTime=endTime") ;
 								%>
-									<div class="EventContainerBoder" style="position:absolute ;"  eventid="$event.id" calid="$event.calendarId" unselectable="on" starttime="$beginTime" endtime="$endTime">
+									<div class="EventContainerBoder" style="position:absolute ;"  eventid="$event.id" calid="$event.calendarId" actionlink="$actionLink" unselectable="on" starttime="$beginTime" endtime="$endTime">
 										<div class="EventContainerBar" title="$begindate -> $enddate " >$begin -> $end</div>
 										<div class="EventContainer">$event.summary</div>
 										<div class="ResizeEventContainer"><span></span></div>
