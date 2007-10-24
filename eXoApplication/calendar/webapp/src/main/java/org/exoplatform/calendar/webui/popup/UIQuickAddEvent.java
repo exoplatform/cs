@@ -110,6 +110,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
     DateFormat df = new SimpleDateFormat(calSetting.getDateFormat() + " " + calSetting.getTimeFormat());
     java.util.Calendar cal = GregorianCalendar.getInstance() ;
     cal.setTime(df.parse(startTime)) ;
+    cal.set(java.util.Calendar.MINUTE, (cal.get(java.util.Calendar.MINUTE)/timeInterval_)*timeInterval_) ;
     Date begin = cal.getTime() ;
     cal.add(java.util.Calendar.MINUTE, timeInterval_) ;
     Date end = cal.getTime() ;

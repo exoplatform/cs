@@ -6,6 +6,7 @@
 	
 	uiform.begin()
  	_ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");
+ 	Calendar currentCalendar = uicomponent.getCurrentCalendar() ;
  	int currentDay = uicomponent.getCurrentDay() ;
 	int currentMonth = uicomponent.getCurrentMonth() ;
  	int currentYear = uicomponent.getCurrentYear() ;
@@ -101,10 +102,12 @@
 				<tbody >
 					<tr>
 						<td style="width: auto; border-left: 1px solid #c7c7c7;">&nbsp</td>
-						<% for(cl in uicomponent.getDaysOfWeek(weekNumber)) {
+						<% 
+						
+							for(cl in uicomponent.getDaysOfWeek(weekNumber)) {
 							 key = uicomponent.keyGen(cl.get(Calendar.DATE), cl.get(Calendar.MONTH), cl.get(Calendar.YEAR)) ;	
 						%>
-							<td class="cols">
+							<td class="cols" startTime="<%=df.format(cl.getTime())%> <%=tf.format(currentCalendar.getTime())%>">
 								<% 
 								events = uicomponent.getEventData().get(key) ; 
 								if(events != null) {
@@ -116,7 +119,7 @@
 									enddate = dtf.format(event.toDateTime) ;
 									endTime =  event.toDateTime.getHours() * 60 + event.toDateTime.getMinutes() ;
 								%>
-									<div class="EventContainerBoder" style="position:absolute ;" unselectable="on" starttime="$beginTime" endtime="$endTime">
+									<div class="EventContainerBoder" style="position:absolute ;"  eventid="$event.id" calid="$event.calendarId" unselectable="on" starttime="$beginTime" endtime="$endTime">
 										<div class="EventContainerBar" title="$begindate -> $enddate " >$begin -> $end</div>
 										<div class="EventContainer">$event.summary</div>
 										<div class="ResizeEventContainer"><span></span></div>

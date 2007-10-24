@@ -42,6 +42,9 @@ import org.exoplatform.webui.event.EventListener;
       @EventConfig(listeners = UICalendarView.AddCategoryActionListener.class),
       @EventConfig(listeners = UICalendarView.SwitchViewActionListener.class),
       @EventConfig(listeners = UIWeekView.QuickAddActionListener.class),  
+      @EventConfig(listeners = UICalendarView.ViewActionListener.class),
+      @EventConfig(listeners = UICalendarView.EditActionListener.class), 
+      @EventConfig(listeners = UICalendarView.DeleteActionListener.class),
       @EventConfig(listeners = UIWeekView.MoveNextActionListener.class), 
       @EventConfig(listeners = UIWeekView.MovePreviousActionListener.class)
     }
@@ -140,6 +143,7 @@ public class UIWeekView extends UICalendarView {
       UICalendarPortlet uiPortlet = calendarview.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
       UIQuickAddEvent uiQuickAddEvent = uiPopupAction.activate(UIQuickAddEvent.class, 600) ;
+      System.out.println("\n\n startTime" + startTime);
       if(CalendarEvent.TYPE_EVENT.equals(type)) {
         uiQuickAddEvent.setEvent(true) ;
         uiQuickAddEvent.setId("UIQuickAddEvent") ;
