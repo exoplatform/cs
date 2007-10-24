@@ -71,6 +71,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
   final public static String ISPUBLIC = "isPublic" ;
   final public static String SHARED_GROUPS = "sharedGroups" ;
   final public static String EDIT_PERMISSION = "editPermission" ;
+  final public static String SELECT_COLOR = "selectColor" ;
   final public static String SELECT_GROUPS = "selectGroups" ;
   final public static String INPUT_CALENDAR = "calendarDetail".intern() ;
   final public static String INPUT_SHARE = "public".intern() ;
@@ -89,6 +90,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
     calendarDetail.addUIFormInput(new UIFormSelectBox(CATEGORY, CATEGORY, getCategory())) ;
     calendarDetail.addUIFormInput(new UIFormSelectBox(LOCALE, LOCALE, getLocales())) ;
     calendarDetail.addUIFormInput(new UIFormSelectBox(TIMEZONE, TIMEZONE, getTimeZones())) ;
+    calendarDetail.addUIFormInput(new UIFormSelectBox(SELECT_COLOR, SELECT_COLOR, getColors())) ;
     List<ActionData> actions = new ArrayList<ActionData>() ;
     ActionData addCategory = new ActionData() ;
     addCategory.setActionListener("AddCategory") ;
@@ -131,6 +133,14 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
     addChild(sharing) ;
 
     //lockCheckBoxFields(!uiCheckbox.isChecked());
+  }
+
+  private List<SelectItemOption<String>> getColors() {
+    List<SelectItemOption<String>> colors = new ArrayList<SelectItemOption<String>>() ;
+    for(String color : Calendar.COLORS) {
+      colors.add(new SelectItemOption<String>(color, color)) ;
+    }
+    return colors;
   }
 
   public String[] getActions(){
@@ -179,6 +189,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
     setSelectedGroup(calendar.getCategoryId()) ;
     setLocale(calendar.getLocale()) ;
     setTimeZone(calendar.getTimeZone()) ;
+    setSelectedColor(calendar.getCalendarColor()) ;
   }
 
   protected String getDisplayName() {
@@ -200,6 +211,12 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
   protected void setSelectedGroup(String value) {
     getUIFormSelectBox(CATEGORY).setValue(value) ;
   }
+  protected String getSelectedColor() {
+   return getUIFormSelectBox(SELECT_COLOR).getValue() ;
+  }
+  protected void setSelectedColor(String value) {
+    getUIFormSelectBox(SELECT_COLOR).setValue(value) ;
+   }
   protected String getLocale() {
     UIFormInputWithActions calendarDetail = getChildById(INPUT_CALENDAR) ;
     return calendarDetail.getUIFormSelectBox(LOCALE).getValue() ;
@@ -319,6 +336,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
       calendar.setPublic(isPublic) ;
       calendar.setLocale(uiForm.getLocale()) ;
       calendar.setTimeZone(uiForm.getTimeZone()) ;
+      calendar.setCalendarColor(uiForm.getSelectedColor()) ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       if(isPublic) {
         Object[] groupList = uiForm.getPublicGroups() ;

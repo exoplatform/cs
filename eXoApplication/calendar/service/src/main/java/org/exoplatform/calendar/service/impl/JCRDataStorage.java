@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.jcr.AccessDeniedException;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.PropertyIterator;
@@ -65,6 +64,7 @@ import com.sun.syndication.io.SyndFeedOutput;
 public class JCRDataStorage implements DataStorage{
 
   final private static String CALENDARS = "calendars".intern() ;
+  
   final private static String SHARED_CALENDAR = "sharedCalendars".intern() ;
   final private static String EVENTS = "events".intern() ;
   final private static String TASKS = "tasks".intern() ;
@@ -128,7 +128,7 @@ public class JCRDataStorage implements DataStorage{
     if(calendarServiceHome.hasNode(CALENDARS)) return calendarServiceHome.getNode(CALENDARS) ;
     return calendarServiceHome.addNode(CALENDARS, NT_UNSTRUCTURED) ;
   }
-
+  
   public Node getRssHome(String username) throws Exception {
     Node calendarServiceHome = getCalendarServiceHome(username) ;
     if(calendarServiceHome.hasNode(FEED)) return calendarServiceHome.getNode(FEED) ;
@@ -206,7 +206,7 @@ public class JCRDataStorage implements DataStorage{
     calendarNode.setProperty("exo:groups", calendar.getGroups()) ;
     calendarNode.setProperty("exo:locale", calendar.getLocale()) ;
     calendarNode.setProperty("exo:timeZone", calendar.getTimeZone()) ;
-
+    calendarNode.setProperty("exo:calendarColor", calendar.getCalendarColor()) ;
     //Check to save category
     if(calendar.getCategoryId() != null && calendar.getCategoryId().length() > 0) {
       Node calendarCategory = getCalendarCategoryHome(username).getNode(calendar.getCategoryId()) ;
@@ -276,7 +276,7 @@ public class JCRDataStorage implements DataStorage{
     calendarNode.setProperty("exo:viewPermissions", calendar.getViewPermission()) ;
     calendarNode.setProperty("exo:editPermissions", calendar.getEditPermission()) ;
     calendarNode.setProperty("exo:groups", calendar.getGroups()) ;
-
+    calendarNode.setProperty("exo:calendarColor", calendar.getCalendarColor()) ;
     //  Check to save group
     /*Node calendarGroups = getCalendarGroupHome() ;
     Node groupNode ;
@@ -340,6 +340,7 @@ public class JCRDataStorage implements DataStorage{
     if(calNode.hasProperty("exo:categoryId")) calendar.setCategoryId(calNode.getProperty("exo:categoryId").getString()) ;
     if(calNode.hasProperty("exo:locale")) calendar.setLocale(calNode.getProperty("exo:locale").getString()) ;
     if(calNode.hasProperty("exo:timeZone")) calendar.setTimeZone(calNode.getProperty("exo:timeZone").getString()) ;
+    if(calNode.hasProperty("exo:calendarColor")) calendar.setCalendarColor(calNode.getProperty("exo:calendarColor").getString()) ;
     if(!calendar.isPublic()) {
       if(calNode.hasProperty("exo:groups")){
         Value[] values = calNode.getProperty("exo:groups").getValues() ;

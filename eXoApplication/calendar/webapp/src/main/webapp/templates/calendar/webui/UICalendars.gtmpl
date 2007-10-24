@@ -89,7 +89,7 @@
 						String calId = calendar.getId() ;
 				%>
   					<div class="CalendarItem">
-  						<div class="CalendarColor1">
+  						<div class="$calendar.calendarColor">
   							<div class="CheckBox" onclick="eXo.calendar.UICalendarPortlet.initFilter(this,1) ;"><%uiform.renderField(calId)%></div>
   							<div class="CalendarIcon"><a href="#" >$calendar.name</a></div>
   							<div class="DownArrow1Icon" id="$calId" calType="0" title="Calendar actions" onclick="eXo.calendar.UICalendarPortlet.show(this, event);"><span></span></div>
@@ -126,7 +126,7 @@
 						calId = calendar.getId() ;
 				%>
   					<div class="CalendarItem">
-  						<div class="CalendarColor1">
+  						<div class="$calendar.calendarColor">
   							<div class="CheckBox"><%uiform.renderField(calendar.getId())%></div>
   							<div class="CalendarIcon"><a href="#" ><%=calendar.getName()%></a></div>
   							<div class="DownArrow1Icon" id="$calId" calType="1" title="Calendar actions" onclick="eXo.calendar.UICalendarPortlet.show(this, event);"><span></span></div>
@@ -173,7 +173,7 @@
 							calId = calendar.getId() ;
 				%>
   					<div class="CalendarItem">
-  						<div class="CalendarColor1">
+  						<div class="$calendar.calendarColor">
   							<div class="CheckBox"><%uiform.renderField(calendar.getId())%></div>
   							<div class="CalendarIcon"><a href="#" ><%=calendar.getName()%></a></div>
   							<div class="DownArrow1Icon" id="$calId" calType="2" title="Calendar actions" onclick="eXo.calendar.UICalendarPortlet.show(this, event);"><span></span></div>

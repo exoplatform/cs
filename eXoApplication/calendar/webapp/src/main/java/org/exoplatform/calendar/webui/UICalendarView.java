@@ -514,7 +514,6 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       } catch (Exception e){
         e.printStackTrace() ;
       }
-      System.out.println("eventCalendar " + eventCalendar.getEventType());
       if(CalendarEvent.TYPE_EVENT.equals(eventCalendar.getEventType())) {
         uiPopupContainer.setId(UIPopupContainer.UIEVENTPOPUP) ;
         UIEventForm uiEventForm = uiPopupContainer.createUIComponent(UIEventForm.class, null, null) ;
@@ -653,7 +652,6 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       if(uiListContainer != null) { 
         uiListContainer.getChild(UIPreview.class).setEvent(null) ; 
       }
-      System.out.println("\n\n uiview.getParent() " + uiView.getParent());
       event.getRequestContext().addUIComponentToUpdateByAjax(uiView.getParent());
     }
   }

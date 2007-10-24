@@ -1559,3 +1559,21 @@
 	opacity: 0.66 ;
 	width: 100% ;
 }
+
+/* Colors*/
+.Black {background-color: #000000 ;}
+.Green {background-color: #008000 ;}
+.Silver {background-color: #C0C0C0 ;}
+.Gray {background-color: #808080 ;}
+.White {background-color: #FFFFFF ;} 		
+.Maroon {background-color: #800000 ;}	
+.Red {background-color: #FF0000; }	
+.Purple {background-color: #800080; }		
+.Fuchsia {background-color: #FF00FF; } 		
+.Lime {background-color: #00FF00; }
+.Olive {background-color: #808000; }
+.Yellow {background-color: #FFFF00; }
+.Navy {background-color: #000080; }
+.Blue {background-color: #0000FF; }
+.Teal {background-color: #008080; }
+.Aqua {background-color: #00FFFF; } 

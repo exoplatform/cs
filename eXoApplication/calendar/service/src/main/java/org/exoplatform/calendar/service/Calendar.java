@@ -4,8 +4,6 @@
  **************************************************************************/
 package org.exoplatform.calendar.service;
 
-import java.util.List;
-
 import org.exoplatform.services.jcr.util.IdGenerator;
 
 /**
@@ -15,9 +13,30 @@ import org.exoplatform.services.jcr.util.IdGenerator;
  * Jul 11, 2007  
  */
 public class Calendar {
+  
+  
+  public static final String BLACK = "Black".intern() ;
+  public static final String GREEN = "Green".intern() ;
+  public static final String SILVER = "Silver".intern() ;
+  public static final String GRAY = "Gray".intern() ;
+  public static final String WHITE = "White".intern() ;
+  public static final String RED = "Red".intern() ;
+  public static final String PURPLE = "Purple".intern() ;
+  public static final String FUCHSIA = "Fuchsia".intern() ;
+  public static final String LIME = "Lime".intern() ;
+  public static final String OLIVE = "Olive".intern() ;
+  public static final String YELLOW = "Yellow".intern() ;
+  public static final String NAVY = "Navy".intern() ;
+  public static final String BLUE = "Blue".intern() ;
+  public static final String TEAL = "Teal".intern() ;
+  public static final String AQUA = "Aqua".intern() ;
+  
+  public static final String[] COLORS = {BLACK,GREEN,SILVER,GRAY,WHITE,RED,PURPLE,FUCHSIA,LIME,OLIVE,YELLOW,NAVY,BLUE,TEAL,AQUA} ;
+  
   private String id ;
   private String name ;
   private String calendarPath ;
+  private String calendarColor ;
   private String description ;
   private String timeZone ;
   private String locale ;
@@ -68,6 +87,12 @@ public class Calendar {
   }
   public String getLocale() {
     return locale;
+  }
+  public void setCalendarColor(String calendarColor) {
+    this.calendarColor = calendarColor;
+  }
+  public String getCalendarColor() {
+    return calendarColor;
   }
   
   //public List<EventCategory> getEventCategories() { return eventCategories ; }
