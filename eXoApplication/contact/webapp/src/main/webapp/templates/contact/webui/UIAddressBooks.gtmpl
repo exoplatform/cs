@@ -117,7 +117,7 @@
 			            </div>
 				        </a>
 				     
-				        <a class="MenuItem" href="<%=uicomponent.event("AddressPopup", "id")%>">   
+				        <a class="MenuItem" href="<%=uicomponent.event("ExportAddress", "id")%>">   
 			            <div class="ItemIcon ExportAddressIcon">
 			              Export
 			            </div>

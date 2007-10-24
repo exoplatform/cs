@@ -7,13 +7,15 @@ package org.exoplatform.contact.webui.popup;
 import java.io.ByteArrayInputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.MissingResourceException;
 
 import org.exoplatform.contact.ContactUtils;
+import org.exoplatform.contact.service.Contact;
+import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.webui.UIContactPortlet;
-import org.exoplatform.contact.webui.UIContacts;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadResource;
 import org.exoplatform.download.DownloadService;
@@ -26,6 +28,7 @@ import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
+import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 
@@ -34,25 +37,28 @@ import org.exoplatform.webui.form.UIFormStringInput;
  */
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
-    template = "system:/groovy/webui/form/UIForm.gtmpl",
+    template = "app:/templates/contact/webui/popup/UIExportForm.gtmpl",
     events = {
       @EventConfig(listeners = UIExportForm.SaveActionListener.class),      
-      @EventConfig(listeners = UIExportForm.CancelActionListener.class)
+      @EventConfig(listeners = UIExportForm.CancelActionListener.class),
+      @EventConfig(listeners = UIExportForm.SortActionListener.class)
     }
 )
 public class UIExportForm extends UIForm implements UIPopupComponent{
   final static private String NAME = "name".intern() ;
   final static private String TYPE = "type".intern() ;
   
+  public boolean                         viewContactsList = true;
+  private String                         selectedTag_     = null;
+  private LinkedHashMap<String, Contact> contactMap       = new LinkedHashMap<String, Contact>();
+  private String                         selectedGroup    = null;
+  private String                         sortedBy_        = null;
+  private boolean                        isAscending_     = true;
+  private String                         viewQuery_       = null;
+  private Contact[]                      contacts_        = null;
+
+  
   public UIExportForm() throws Exception {
-    this.setMultiPart(true) ;
-    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-    ContactService contactService = ContactUtils.getContactService();
-    for(String type : contactService.getImportExportType()) {
-      options.add(new SelectItemOption<String>(type, type)) ;
-    }
-    addUIFormInput(new UIFormStringInput(NAME, NAME, null)) ;
-    addUIFormInput(new UIFormSelectBox(TYPE, TYPE, options)) ;
   }  
 
   public String getLabel(String id) throws Exception {
@@ -66,21 +72,132 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
   public void activate() throws Exception {}
   public void deActivate() throws Exception {}
   
+
+  public String getSelectedGroupName() throws Exception {
+    ContactService contactService = ContactUtils.getContactService();
+    String username = Util.getPortalRequestContext().getRemoteUser() ; 
+    return contactService.getGroup(username, selectedGroup).getName();
+    
+  }
+  
+  public void setAscending(boolean isAsc) {
+    isAscending_ = isAsc;
+  }
+
+  public boolean isAscending() {
+    return isAscending_;
+  }
+
+  public void setSortedBy(String s) {
+    sortedBy_ = s;
+  }
+
+  public String getSortedBy() {
+    return sortedBy_;
+  }
+
+  public String getViewQuery() {
+    return viewQuery_;
+  }
+
+  public void setViewQuery(String view) {
+    viewQuery_ = view;
+  }
+
+  public void setContacts(Contact[] contacts) throws Exception {
+    contacts_ = contacts;
+  }
+
+  public Contact[] getContacts() throws Exception {
+    return contactMap.values().toArray(new Contact[] {});
+  }
+
+  public void setSelectedGroup(String s) throws Exception {
+    selectedGroup = s;
+  }
+
+  public String getSelectedGroup() {
+    return selectedGroup;
+  }
+
+  public void setViewContactsList(boolean list) {
+    viewContactsList = list;
+  }
+
+  public boolean getViewContactsList() {
+    return viewContactsList;
+  }
+
+  public void updateList() throws Exception { 
+    getChildren().clear() ;
+    contactMap.clear();
+    
+    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
+    ContactService contactService = ContactUtils.getContactService();
+    
+    for(String type : contactService.getImportExportType()) {
+      options.add(new SelectItemOption<String>(type, type)) ;
+    }
+    
+    addUIFormInput(new UIFormStringInput(NAME, NAME, null)) ;
+    addUIFormInput(new UIFormSelectBox(TYPE, TYPE, options)) ;
+    
+    if ((contacts_ == null) || (contacts_.length == 0)) {
+      String username = ContactUtils.getCurrentUser();
+      
+      if (selectedGroup != null) {
+        ContactFilter filter = new ContactFilter();
+        filter.setAscending(isAscending_);
+        filter.setOrderBy(getSortedBy());
+        filter.setViewQuery(getViewQuery());
+        filter.setCategories(new String[] {selectedGroup});
+        contacts_ = contactService.getContactPageListByGroup(username, filter, false).getAll().toArray(new Contact[] {});
+        
+        System.out.println(">>> khd : get contacts from the selected GROUP !!!!!!!!!!");
+        
+      } else {
+        contacts_ = contactService.getContactPageListByTag(username, selectedTag_).getAll().toArray(new Contact[] {});
+        System.out.println(">>> khd : get contacts from the selected TAG !!!!!!!!!!");
+      }
+    }
+    
+    for (Contact contact : contacts_) {
+      UIFormCheckBoxInput<Boolean> checkbox = new UIFormCheckBoxInput<Boolean>(contact.getId(),
+          contact.getId(), false);
+      addUIFormInput(checkbox);
+      contactMap.put(contact.getId(), contact);
+    }
+  }
+
+  public List<String> getCheckedContacts() throws Exception {
+    List<String> checkedContacts = new ArrayList<String>();
+    for (Contact contact : getContacts()) {
+      UIFormCheckBoxInput uiCheckBox = getChildById(contact.getId());
+      if (uiCheckBox != null && uiCheckBox.isChecked()) {
+        checkedContacts.add(contact.getId());
+      }
+    }
+    return checkedContacts;
+  }
+
+  public String getSelectedTag() {
+    return selectedTag_;
+  }
+
+  public void setSelectedTag(String tagId) {
+    selectedTag_ = tagId;
+  }
+  
   static  public class SaveActionListener extends EventListener<UIExportForm> {
     public void execute(Event<UIExportForm> event) throws Exception {
+      
+      
+      System.out.println("\n\n\n>>>khd : SaveAddress from UIExportForm ...\n\n");
+      
       UIExportForm uiForm = event.getSource() ;
-      UIContactPortlet contactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
+      UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class);
       
-      UIContacts uiContacts = contactPortlet.findFirstComponentOfType(UIContacts.class);
-      if (uiContacts == null)
-        System.out.println("\n\n\n>>>khd : UiContacts is NULLL xx");
-      else
-        System.out.println("\n\n\n>>>khd : UiContacts is OKKKK xx");
-      
-      // TODO
-      // List<String> contactIds = uiContacts.getCheckedContacts() ;
-      List<String> contactIds = uiContacts.getAllContactIds() ;
-
+      List<String> contactIds = uiForm.getCheckedContacts() ;
       String username = Util.getPortalRequestContext().getRemoteUser() ;
       ContactService contactService = ContactUtils.getContactService() ;
       
@@ -110,7 +227,7 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
       
       event.getRequestContext().getJavascriptManager().addJavascript("ajaxRedirect('" + downloadLink + "');") ;
       
-      contactPortlet.cancelAction() ;
+      uiContactPortlet.cancelAction() ;
       
       System.out.println("\n\n\n>>>khd : DONE\n\n");
       
@@ -124,4 +241,34 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
       contactPortlet.cancelAction() ;
     }
   }  
+  
+  static public class SortActionListener extends EventListener<UIExportForm> {
+    public void execute(Event<UIExportForm> event) throws Exception {
+      UIExportForm uiForm = event.getSource();
+      String sortedBy = event.getRequestContext().getRequestParameter(OBJECTID);
+      ContactService contactService = ContactUtils.getContactService();
+      String username = ContactUtils.getCurrentUser();
+      uiForm.setAscending(!uiForm.isAscending_);
+      uiForm.setSortedBy(sortedBy);
+      if (uiForm.selectedGroup != null) {
+        ContactFilter filter = new ContactFilter();
+        filter.setAscending(uiForm.isAscending_);
+        filter.setOrderBy(uiForm.getSortedBy());
+        filter.setViewQuery(uiForm.getViewQuery());
+        filter.setCategories(new String[] {uiForm.getSelectedGroup()});
+
+        uiForm.setContacts(contactService.getContactPageListByGroup(username,filter, false).getAll().toArray(new Contact[] {}));
+      } else if (uiForm.getSelectedTag() != null) {
+        ContactFilter filter = new ContactFilter();
+        filter.setAscending(uiForm.isAscending_);
+        filter.setOrderBy(uiForm.getSortedBy());
+        filter.setViewQuery(uiForm.getViewQuery());
+        filter.setTag(new String[] {uiForm.getSelectedTag()});
+        uiForm.setContacts(contactService.getContactPageListByTag(username, filter).getAll().toArray(new Contact[] {}));
+      }
+      uiForm.updateList();
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent());
+    }
+  }
+
 }

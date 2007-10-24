@@ -207,7 +207,7 @@ public class JCRDataStorage implements DataStorage {
     }
     Query query = qm.createQuery(filter.getStatement(), Query.XPATH);    
     QueryResult result = query.execute();        
-    ContactPageList pageList = new ContactPageList(result.getNodes(), 10, filter.getStatement(), true) ;
+    ContactPageList pageList = new ContactPageList(username, result.getNodes(), 10, filter.getStatement(), true) ;
     return pageList ;
   }
 
@@ -233,7 +233,7 @@ public class JCRDataStorage implements DataStorage {
                                                 append("']");
     Query query = qm.createQuery(queryString.toString(), Query.XPATH);
     QueryResult result = query.execute();
-    ContactPageList pageList = new ContactPageList(result.getNodes(), 10, queryString.toString(), true) ;
+    ContactPageList pageList = new ContactPageList(username, result.getNodes(), 10, queryString.toString(), true) ;
     return pageList ;
   }
   
@@ -553,7 +553,7 @@ public class JCRDataStorage implements DataStorage {
                                                 append("']");
     Query query = qm.createQuery(queryString.toString(), Query.XPATH);
     QueryResult result = query.execute();
-    return new ContactPageList(result.getNodes(), 10, queryString.toString(), true) ;
+    return new ContactPageList(null, result.getNodes(), 10, queryString.toString(), true) ;
   }
   
   public List<GroupContactData> getSharedContacts(String[] groupIds) throws Exception {

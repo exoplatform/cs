@@ -9,6 +9,7 @@ import java.util.List;
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.Tag;
+import org.exoplatform.contact.webui.popup.UIExportForm;
 import org.exoplatform.contact.webui.popup.UIEditTagForm;
 import org.exoplatform.contact.webui.popup.UIPopupAction;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -29,6 +30,7 @@ import org.exoplatform.webui.event.EventListener;
     events = {
         @EventConfig(listeners = UITags.SelectTagActionListener.class),
         @EventConfig(listeners = UITags.EditTagActionListener.class),
+        @EventConfig(listeners = UITags.ExportAddressActionListener.class),
         @EventConfig(listeners = UITags.DeleteTagActionListener.class,
             confirm = "UITags.msg.confirm-delete")        
     }
@@ -76,6 +78,24 @@ public class UITags extends UIComponent {
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   }
+  
+  static  public class ExportAddressActionListener extends EventListener<UITags> {
+    public void execute(Event<UITags> event) throws Exception {
+      UITags uiForm = event.getSource() ;
+      String tagName = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
+      UIPopupAction popupAction = uiContactPortlet.getChild(UIPopupAction.class) ;
+      
+      UIExportForm uiExportForm = popupAction.createUIComponent(UIExportForm.class, null,
+          "ExportForm");
+      uiExportForm.setSelectedTag(tagName);
+      uiExportForm.updateList();
+
+      popupAction.activate(uiExportForm, 500, 0, true);
+      
+      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+    }
+  }  
   
   static  public class DeleteTagActionListener extends EventListener<UITags> {
     public void execute(Event<UITags> event) throws Exception {

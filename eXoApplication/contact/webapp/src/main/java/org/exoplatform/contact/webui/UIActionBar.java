@@ -4,21 +4,16 @@
  **************************************************************************/
 package org.exoplatform.contact.webui;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.webui.popup.UICategoryForm;
 import org.exoplatform.contact.webui.popup.UICategorySelect;
 import org.exoplatform.contact.webui.popup.UIContactForm;
+import org.exoplatform.contact.webui.popup.UIExportAddressBookForm;
 import org.exoplatform.contact.webui.popup.UIExportForm;
 import org.exoplatform.contact.webui.popup.UIImportForm;
 import org.exoplatform.contact.webui.popup.UIPopupAction;
 import org.exoplatform.contact.webui.popup.UIPopupContainer;
-import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -133,35 +128,32 @@ public class UIActionBar extends UIContainer  {
     public void execute(Event<UIActionBar> event) throws Exception {  
       
       System.out.println("\n\n\n>>>khd : ExportAddress from UIActionBar ...\n\n");
-      UIActionBar uiForm = event.getSource() ;  
-      UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
       
-      String contactId = event.getRequestContext().getRequestParameter(OBJECTID);
-      List<String> contactIds = new ArrayList<String>();
-      if (!ContactUtils.isEmpty(contactId)) 
-        contactIds.add(contactId) ;
-      else {
-        UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class);
-        if (uiContacts == null)
-          System.out.println("\n\n\n>>>khd : UiContacts is NULLL");
-        else
-          System.out.println("\n\n\n>>>khd : UiContacts is OKKKK");
+      UIActionBar uiActionBar = event.getSource();
+      UIContactPortlet uiContactPortlet = uiActionBar.getAncestorOfType(UIContactPortlet.class);
+      UIPopupAction uiPopupAction = uiContactPortlet.getChild(UIPopupAction.class);
+      String addressBookId = event.getRequestContext().getRequestParameter(OBJECTID);
+      
+      if (addressBookId != null) {
+        UIExportForm uiExportForm = uiPopupAction.createUIComponent(UIExportForm.class, null,
+            "ExportForm");
+        uiExportForm.setSelectedGroup(addressBookId);
+        uiExportForm.updateList();
         
-        contactIds = uiContacts.getAllContactIds();
-        //contactIds = uiContacts.getCheckedContacts() ;
+        uiPopupAction.activate(uiExportForm, 500, 0, true);
+      } else {
+        // There is no specific address book 
+        // so display the address books list
         
-        if (contactIds.size() == 0) {
-          UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
-          uiApp.addMessage(new ApplicationMessage("UIContacts.msg.checkContact-required", null)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-          return ;
-        }
+        UIExportAddressBookForm uiExportForm = uiPopupAction.createUIComponent(
+            UIExportAddressBookForm.class, null, "UIExportAddressBookForm");
+
+        uiExportForm.updateList();
+
+        uiPopupAction.activate(uiExportForm, 500, 0, true);
+        
       }
-      
-      UIPopupAction uiPopupAction = uiContactPortlet.getChild(UIPopupAction.class) ;
-      UIExportForm uiExportForm = uiPopupAction.createUIComponent(UIExportForm.class, null, "ExportForm") ;
-      uiPopupAction.activate(uiExportForm, 600, 0, true) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
     }  
   }
   

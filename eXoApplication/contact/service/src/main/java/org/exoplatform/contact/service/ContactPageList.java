@@ -23,13 +23,15 @@ import org.exoplatform.services.jcr.ext.common.SessionProvider;
  * @since July 25, 2007
  */
 public class ContactPageList extends JCRPageList {
-  
+
+  private String username_;
   private NodeIterator iter_ = null ;
   private boolean isQuery_ = false ;
   private String value_ ;
   
-  public ContactPageList(NodeIterator iter, long pageSize, String value, boolean isQuery ) throws Exception{
+  public ContactPageList(String username, NodeIterator iter, long pageSize, String value, boolean isQuery ) throws Exception{
     super(pageSize) ;
+    username_ = username;
     iter_ = iter ;
     value_ = value ;
     isQuery_ = isQuery ;
@@ -149,7 +151,33 @@ public class ContactPageList extends JCRPageList {
   }
   
 	@Override
-	public List<Contact> getAll() throws Exception { return null ; }
+	public List<Contact> getAll() throws Exception { 
+    
+    if(iter_ == null) {
+      Session session = getJCRSession(username_) ;
+      if(isQuery_) {
+        QueryManager qm = session.getWorkspace().getQueryManager() ;
+        Query query = qm.createQuery(value_, Query.XPATH);
+        QueryResult result = query.execute();
+        iter_ = result.getNodes();
+      } else {
+        Node node = (Node)session.getItem(value_) ;
+        iter_ = node.getNodes() ;
+      }
+      session.logout() ;
+    }
+    
+    
+    List<Contact> contacts = new ArrayList<Contact>();
+    Contact contact;
+    while (iter_.hasNext()) {
+      Node contactNode = iter_.nextNode();
+      contact = getContact(contactNode);
+      contacts.add(contact);
+    }
+    return contacts; 
+  }
+
   public void setList(List<Contact> contacts) { }
   
   private Session getJCRSession(String username) throws Exception {
