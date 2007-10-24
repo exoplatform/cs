@@ -66,51 +66,19 @@
 								        <div class="MiddleLeftRightClickPopupMenu">
 								          <div class="MiddleRightRightClickPopupMenu">
 					              		<div class="UIRightPopupMenuContainer">
-															<div class="MenuItem" href="#">   
-						                    <div class="ItemIcon MergeSelectedPostsIcon DisableLabel">
-						                      Merge Selected Posts
-						                    </div>
-					                    </div>
-					                    <a class="MenuItem">   
-						                    <div class="ItemIcon MoveSelectedPostIcon">
-						                      Move Selected Post(s)
-						                    </div>
-					                    </a>
-					                    <a class="MenuItem" href="#">   
-						                    <div class="ItemIcon CopySelectedPostIcon">
-						                     Copy Selected Post(s)
+														<%  
+															String[] actionMenuPost = ["MergePost", "MovePost", "SetApprovePost", "SetUnApprovePost", "SetApproveAttachment", "SetUnApproveAttachment", "DeletePost"];
+															for( action in actionMenuPost ) {
+																String link = uicomponent.event(action) ;
+																String classIcon = action + "Icon";
+					                   		String itemLabel = _ctx.appRes(uicomponent.getName() + ".action." + action);
+														%>
+															<a class="MenuItem" href="$link">   
+						                    <div class="ItemIcon $classIcon">
+						                      $itemLabel
 						                    </div>
 					                    </a>
-					                    <div class="MenuItem" href="#">   
-						                    <div class="ItemIcon PastePostsIcon DisableLabel">
-						                      Paste Posts
-						                    </div>
-					                    </div>
-					                    <div class="MenuItem">   
-						                    <div class="ItemIcon ApprovePostsIcon DisableLabel">
-						                      Approve Posts
-						                    </div>
-					                    </div>
-					                    <a class="MenuItem" href="#">   
-						                    <div class="ItemIcon UnapprovePostsIcon">
-						                      Unapprove Posts
-						                    </div>
-					                    </a>
-					                    <div class="MenuItem" href="#">   
-						                    <div class="ItemIcon ApproveAttachmentsIcon DisableLabel">
-						                      Approve Attachments
-						                    </div>
-					                    </div>
-					                    <a class="MenuItem" href="#">   
-						                    <div class="ItemIcon UnapproveAttachmentsIcon">
-						                      Unapprove Attachments
-						                    </div>
-					                    </a>
-					                    <a class="MenuItem">   
-						                    <div class="ItemIcon DeleteSelectedPostIcon">
-						                      Delete Selected Post(s)
-						                    </div>
-					                    </a>
+					                    <% } %>
 														</div>
 						          		</div>
 						        		</div>
@@ -234,7 +202,9 @@
 					  			<div class="PostViewIcon $classIconPost">$subject</div>
 					  			<div class="PostTime">Posted: $createdDate</div>
 					  		</div>
-					  		<div class="CheckPost" style="float: right;"><input type="checkbox"/></div>
+					  		<div class="CheckPost" style="float: right;">
+					  			<% uiform.renderChild(post.getId()) %>
+					  		</div>
 					  		<div style="clear: both;"><span></span></div>
 				  		</div>
 				  		

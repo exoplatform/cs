@@ -129,23 +129,23 @@ public class UIForumForm extends UIForm implements UIPopupComponent {
 		// TODO Auto-generated method stub
 	}
 	
-	private String[] splitForForum (String str) throws Exception {
-	  if(str != null && str.length() > 0) {
-	    if(str.contains(",")) return str.trim().split(",") ;
-	    else return str.trim().split(";") ;
-	  } else return new String[] {} ;
-	}
-	
-	private String unSplitForForum (String[] Str) throws Exception {
-	  String rtn = "" ;
-	  if(Str.length > 0) {
-	    for (String temp : Str) {
-	      rtn = rtn + temp + "," ; 
-	    }
-	  }
-	  return rtn ;
-	}
-	
+  private String[] splitForForum (String str) throws Exception {
+    if(str != null && str.length() > 0) {
+      if(str.contains(",")) return str.trim().split(",") ;
+      else return str.trim().split(";") ;
+    } else return new String[] {} ;
+  }
+  
+  private String unSplitForForum (String[] str) throws Exception {
+    StringBuilder rtn = new StringBuilder();
+    if(str != null && str.length > 0) {
+      for (String temp : str) {
+        rtn.append(temp).append(",") ; 
+      }
+    }
+    return rtn.toString() ;
+  }
+  
 	public void setForumValue(Forum forum, boolean isUpdate) throws Exception {
 		if(isUpdate) {
 			forumId = forum.getId();
@@ -158,9 +158,8 @@ public class UIForumForm extends UIForm implements UIPopupComponent {
       else stat = "unlock";
       getUIFormSelectBox(FIELD_FORUMSTATUS_SELECTBOX).setValue(stat);
       getUIFormTextAreaInput(FIELD_DESCRIPTION_TEXTAREA).setDefaultValue(forum.getDescription());
-      
-      getUIFormTextAreaInput(FIELD_NOTIFYWHENADDPOST_MULTIVALUE).setDefaultValue(unSplitForForum(forum.getNotifyWhenAddPost()));
-      getUIFormTextAreaInput(FIELD_NOTIFYWHENADDTOPIC_MULTIVALUE).setDefaultValue(unSplitForForum(forum.getNotifyWhenAddTopic()));
+      getUIFormTextAreaInput(FIELD_NOTIFYWHENADDPOST_MULTIVALUE).setDefaultValue(this.unSplitForForum(forum.getNotifyWhenAddPost()));
+      getUIFormTextAreaInput(FIELD_NOTIFYWHENADDTOPIC_MULTIVALUE).setDefaultValue(this.unSplitForForum(forum.getNotifyWhenAddTopic()));
       
       getUIFormCheckBoxInput(FIELD_MODERATETHREAD_CHECKBOX).setChecked(forum.getIsModerateTopic());
       getUIFormCheckBoxInput(FIELD_MODERATEPOST_CHECKBOX).setChecked(forum.getIsModeratePost());
@@ -185,6 +184,8 @@ public class UIForumForm extends UIForm implements UIPopupComponent {
   static  public class SaveActionListener extends EventListener<UIForumForm> {
     public void execute(Event<UIForumForm> event) throws Exception {
       UIForumForm uiForm = event.getSource() ;
+      UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
+      
       UIFormSelectBox categorySelectBox = uiForm.getUIFormSelectBox(FIELD_CATEGORY_SELECTBOX);
       String categoryId = categorySelectBox.getValue();
       String forumTitle = uiForm.getUIStringInput(FIELD_FORUMTITLE_INPUT).getValue().trim();
@@ -192,13 +193,8 @@ public class UIForumForm extends UIForm implements UIPopupComponent {
       String forumState = uiForm.getUIFormSelectBox(FIELD_FORUMSTATE_SELECTBOX).getValue();
       String forumStatus = uiForm.getUIFormSelectBox(FIELD_FORUMSTATUS_SELECTBOX).getValue();
       String description = uiForm.getUIFormTextAreaInput(FIELD_DESCRIPTION_TEXTAREA).getValue().trim();
-      String whenNewPost = uiForm.getUIFormTextAreaInput(FIELD_NOTIFYWHENADDPOST_MULTIVALUE).getValue();
-      String whenNewTopic = uiForm.getUIFormTextAreaInput(FIELD_NOTIFYWHENADDTOPIC_MULTIVALUE).getValue();
-      String[] notifyWhenAddTopic;
-      String[] notifyWhenAddPost;
-      
-      notifyWhenAddTopic = uiForm.splitForForum(whenNewTopic) ;
-      notifyWhenAddPost =  uiForm.splitForForum(whenNewPost) ;
+      String[] notifyWhenAddTopic = uiForm.splitForForum(uiForm.getUIFormTextAreaInput(FIELD_NOTIFYWHENADDTOPIC_MULTIVALUE).getValue()) ;
+      String[] notifyWhenAddPost = uiForm.splitForForum(uiForm.getUIFormTextAreaInput(FIELD_NOTIFYWHENADDPOST_MULTIVALUE).getValue()) ;
       
       String[] setModerator = uiForm.splitForForum(uiForm.getUIStringInput(FIELD_MODERATOR_INPUT).getValue()) ;
       String[] setViewer = uiForm.splitForForum(uiForm.getUIStringInput(FIELD_VIEWER_INPUT).getValue()) ; 
@@ -249,9 +245,8 @@ public class UIForumForm extends UIForm implements UIPopupComponent {
       	forumService.saveForum(categoryId, newForum, true);
       }
       
-      UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
       forumPortlet.cancelAction() ;
-      WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+      WebuiRequestContext context = event.getRequestContext() ;
       if(!uiForm.isForumUpdate) {
         if(uiForm.isCategoriesUpdate) {
           UICategories uiCategories = forumPortlet.findFirstComponentOfType(UICategories.class) ;

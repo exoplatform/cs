@@ -15,6 +15,10 @@
 	height: 235px;
 }
 
+.UIMovePostForm .UITree {
+	height: 300px;
+}
+
 .UIMoveTopicForm .UITree .TreeContainer {
 	background: none;
 }

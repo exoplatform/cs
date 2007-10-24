@@ -12,8 +12,11 @@ import org.exoplatform.forum.service.Category;
 import org.exoplatform.forum.service.Forum;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.service.Topic;
+import org.exoplatform.forum.webui.UIForumContainer;
 import org.exoplatform.forum.webui.UIForumPortlet;
 import org.exoplatform.forum.webui.UITopicContainer;
+import org.exoplatform.forum.webui.UITopicDetail;
+import org.exoplatform.forum.webui.UITopicDetailContainer;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -22,6 +25,7 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.exception.MessageException;
 import org.exoplatform.webui.form.UIForm;
+import org.objectweb.transaction.jta.TMService;
 
 /**
  * Created by The eXo Platform SARL
@@ -41,6 +45,7 @@ public class UIMoveTopicForm extends UIForm implements UIPopupComponent {
   private ForumService forumService = (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
   private String forumId ;
   private List<Topic> topics ;
+  private boolean isFormTopic = false ;
   
   public UIMoveTopicForm() throws Exception {
     
@@ -53,9 +58,10 @@ public class UIMoveTopicForm extends UIForm implements UIPopupComponent {
     // TODO Auto-generated method stub
   }
   
-  public void updateTopic(String forumId, List<Topic> topics) {
+  public void updateTopic(String forumId, List<Topic> topics, boolean isFormTopic) {
     this.forumId = forumId ;
     this.topics = topics ;
+    this.isFormTopic = isFormTopic ;
   }
   
   private List<Category> getCategories() throws Exception {
@@ -79,16 +85,24 @@ public class UIMoveTopicForm extends UIForm implements UIPopupComponent {
   static  public class SaveActionListener extends EventListener<UIMoveTopicForm> {
     public void execute(Event<UIMoveTopicForm> event) throws Exception {
       UIMoveTopicForm uiForm = event.getSource() ;
-      String str = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      if(str != null && str.length() > 0) {
+      String forumPath = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      if(forumPath != null && forumPath.length() > 0) {
         List<Topic> topics = uiForm.topics ;
         for (Topic topic : topics) {
-          uiForm.forumService.moveTopic(topic.getId(), topic.getPath(), str) ;
+          uiForm.forumService.moveTopic(topic.getId(), topic.getPath(), forumPath) ;
         }
         UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
         forumPortlet.cancelAction() ;
-        UITopicContainer topicContainer = forumPortlet.findFirstComponentOfType(UITopicContainer.class) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(topicContainer) ;
+        if(uiForm.isFormTopic) {
+          UITopicDetailContainer topicDetailContainer = forumPortlet.findFirstComponentOfType(UITopicDetailContainer.class) ;
+          topicDetailContainer.setRendered(true) ;
+          String[] temp = forumPath.split("/") ;
+          topicDetailContainer.getChild(UITopicDetail.class).setUpdateTopic(temp[temp.length - 2], temp[temp.length - 1], topics.get(0).getId(), false) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(topicDetailContainer) ;
+        } else {
+          UITopicContainer topicContainer = forumPortlet.findFirstComponentOfType(UITopicContainer.class) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(topicContainer) ;
+        }
       }
     }
   }

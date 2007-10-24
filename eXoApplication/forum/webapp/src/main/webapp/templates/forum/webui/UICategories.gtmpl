@@ -48,10 +48,10 @@
 					    %>
 					    	<tr>
 					    		<td></td>
-					    		<td>No Forum !</td>
-					    		<td>No Post !</td>
-					    		<td>0</td>
-					    		<td>0</td>
+					    		<td class="Tdbox">Not Forum !</td>
+					    		<td class="Tdbox">Not Theard !</td>
+					    		<td class="Tdbox">0</td>
+					    		<td class="Tdbox">0</td>
 					    		<td></td>
 					    	</tr>
 					    <% }else {%>

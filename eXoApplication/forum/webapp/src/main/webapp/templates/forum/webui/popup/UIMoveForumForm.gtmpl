@@ -13,11 +13,9 @@
 			List categories = uicomponent.getCategories(); 
 			for(category in categories) {
 		  	String categoryName = category.getCategoryName() ;
-		  	String link = uicomponent.event("SetSelect", category.getId());
-		  	String selected = "normal" ;
-	      if(uicomponent.getSeclectedCategory(category.getId())) selected = "Selected" ;
+		  	String link = uicomponent.event("Save", category.getId());
 		%>
-	    <div class="Node $selected">
+	    <div class="Node">
 	     	<div class="Icon ForumIcon"><span></span></div>  
 	     	<div class="NodeLabel">    
 	     		<div class="NodeSelected"><a href="$link">$categoryName</a></div> 
@@ -32,8 +30,7 @@
     <table class="ActionContainer" align="center">
 		  <tr>
 			  <td align="center">
-    <% for(action in uicomponent.getActions()) {
-    	 if(action.indexOf("Select") > 0) continue ;
+    <% String action = "Cancel";
     	 String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action); 
        String link = uicomponent.event(action) ;
     %>
@@ -44,7 +41,6 @@
 		        	</div>
 		      	</div>
 	    		</a>
-      <%}%>
       	</td>
 			</tr>
  	  </table> 

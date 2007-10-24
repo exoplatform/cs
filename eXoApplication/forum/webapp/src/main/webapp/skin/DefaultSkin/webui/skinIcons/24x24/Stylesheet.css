@@ -223,3 +223,7 @@
 .DeleteThreadsIcon {
 	background: url('icons/DeleteThreadsIcon.gif') no-repeat ;
 }
+
+.PostsIcon {
+	background: url('icons/PostsIcon.gif') no-repeat left center;
+}

@@ -17,7 +17,20 @@
                       <%=uicomponent.getLabel(field.getName()) %>
                     <%}%>
                   </td>
-  	              <td class="FieldComponent"><% uiform.renderField(field) %></td>
+  	              <td class="FieldComponent">
+  	              	<% 
+  	              		if(fieldName.indexOf("Private") > 0) {
+  	              			String title = _ctx.appRes("UICategoryForm.title.TextboxEmpty");
+  	              	%>
+  	              		<div style="float: left;" title="$title">
+		  	              <% uiform.renderField(field) %>
+		  	              </div>
+		  	              	<div class="Icon24x24 AddIcon16x16" title="Add $fieldName"><span></span></div>
+		                    <div style="clear: left" ><span></span></div>
+                    <% } else {%>
+  	              		<% uiform.renderField(field) %>
+  	              	<% } %>
+  	              </td>
 	              <%} else {%>
 	                <td class="FieldComponent" colspan="2"><% uiform.renderField(field) %></td>
 	              <%}%>

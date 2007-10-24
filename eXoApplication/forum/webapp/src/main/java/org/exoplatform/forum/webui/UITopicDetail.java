@@ -8,10 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.forum.service.Forum;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.service.JCRPageList;
 import org.exoplatform.forum.service.Post;
 import org.exoplatform.forum.service.Topic;
+import org.exoplatform.forum.webui.popup.UIMovePostForm;
 import org.exoplatform.forum.webui.popup.UIMoveTopicForm;
 import org.exoplatform.forum.webui.popup.UIPopupAction;
 import org.exoplatform.forum.webui.popup.UIPostForm;
@@ -19,11 +21,13 @@ import org.exoplatform.forum.webui.popup.UITopicForm;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.exception.MessageException;
 import org.exoplatform.webui.form.UIForm;
+import org.exoplatform.webui.form.UIFormCheckBoxInput;
 
 /**
  * Created by The eXo Platform SARL
@@ -48,7 +52,7 @@ import org.exoplatform.webui.form.UIForm;
       @EventConfig(listeners = UITopicDetail.SetCloseTopicActionListener.class ),  
       @EventConfig(listeners = UITopicDetail.SetLockedTopicActionListener.class ),  
       @EventConfig(listeners = UITopicDetail.SetUnLockTopicActionListener.class ),  
-      @EventConfig(listeners = UITopicDetail.MoveTopicActionListener.class ),  
+      @EventConfig(listeners = UITopicDetail.SetMoveTopicActionListener.class ),  
       @EventConfig(listeners = UITopicDetail.SetStickTopicActionListener.class ),  
       @EventConfig(listeners = UITopicDetail.SetUnStickTopicActionListener.class ),  
       @EventConfig(listeners = UITopicDetail.SplitTopicActionListener.class ),  
@@ -96,6 +100,13 @@ public class UITopicDetail extends UIForm  {
   private List<Post> getPostPageList( long page) throws Exception {
     JCRPageList pageList = getPagePosts() ;
     List<Post> postList = forumService.getPage(page, pageList) ;
+    for (Post post : postList) {
+      if(getUIFormCheckBoxInput(post.getId()) != null) {
+        getUIFormCheckBoxInput(post.getId()).setChecked(false) ;
+      }else {
+        addUIFormInput(new UIFormCheckBoxInput(post.getId(), post.getId(), false) );
+      }
+    }
     return postList ;
   }
   
@@ -246,7 +257,7 @@ public class UITopicDetail extends UIForm  {
     }
   }
 
-  static public class MoveTopicActionListener extends EventListener<UITopicDetail> {
+  static public class SetMoveTopicActionListener extends EventListener<UITopicDetail> {
     public void execute(Event<UITopicDetail> event) throws Exception {
       UITopicDetail topicDetail = event.getSource() ;
       UIForumPortlet forumPortlet = topicDetail.getAncestorOfType(UIForumPortlet.class) ;
@@ -254,7 +265,7 @@ public class UITopicDetail extends UIForm  {
       UIMoveTopicForm moveTopicForm = popupAction.createUIComponent(UIMoveTopicForm.class, null, null) ;
       List <Topic> topics = new ArrayList<Topic>();
       topics.add(topicDetail.getTopic()) ;
-      moveTopicForm.updateTopic(topicDetail.forumId, topics);
+      moveTopicForm.updateTopic(topicDetail.forumId, topics, true);
       popupAction.activate(moveTopicForm, 400, 420) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
@@ -334,6 +345,26 @@ public class UITopicDetail extends UIForm  {
   static public class MovePostActionListener extends EventListener<UITopicDetail> {
     public void execute(Event<UITopicDetail> event) throws Exception {
       UITopicDetail topicDetail = event.getSource() ;
+      UIForumPortlet forumPortlet = topicDetail.getAncestorOfType(UIForumPortlet.class) ;
+      List <Post> posts = new ArrayList<Post>();
+      List<UIComponent> children = topicDetail.getChildren() ;
+      for(UIComponent child : children) {
+        if(child instanceof UIFormCheckBoxInput) {
+          if(((UIFormCheckBoxInput)child).isChecked()) {
+            posts.add(topicDetail.forumService.getPost(topicDetail.categoryId, topicDetail.forumId, topicDetail.topicId, ((UIFormCheckBoxInput)child).getName()));
+          }
+        }
+      }
+      if(posts.size() > 0) {
+        UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;
+        UIMovePostForm movePostForm = popupAction.createUIComponent(UIMovePostForm.class, null, null) ;
+        movePostForm.updatePost(topicDetail.topicId, posts);
+        popupAction.activate(movePostForm, 400, 430) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+      } else {
+        Object[] args = { };
+        throw new MessageException(new ApplicationMessage("UITopicDetail.msg.notCheck", args, ApplicationMessage.WARNING)) ;
+      }
     }
   }
 
@@ -364,6 +395,24 @@ public class UITopicDetail extends UIForm  {
   static public class DeletePostActionListener extends EventListener<UITopicDetail> {
     public void execute(Event<UITopicDetail> event) throws Exception {
       UITopicDetail topicDetail = event.getSource() ;
+      List<UIComponent> children = topicDetail.getChildren() ;
+      List<Post> posts = new ArrayList<Post>() ;
+      for(UIComponent child : children) {
+        if(child instanceof UIFormCheckBoxInput) {
+          if(((UIFormCheckBoxInput)child).isChecked()) {
+            posts.add(topicDetail.forumService.getPost(topicDetail.categoryId, topicDetail.forumId, topicDetail.topicId, ((UIFormCheckBoxInput)child).getName()));
+          }
+        }
+      }
+      if(posts.size() > 0) {
+        for(Post post : posts) {
+          topicDetail.forumService.removePost(topicDetail.categoryId, topicDetail.forumId, topicDetail.topicId, post.getId()) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(topicDetail) ;
+        }
+      } else {
+        Object[] args = { };
+        throw new MessageException(new ApplicationMessage("UITopicDetail.msg.notCheck", args, ApplicationMessage.WARNING)) ;
+      }
     }
   }
 

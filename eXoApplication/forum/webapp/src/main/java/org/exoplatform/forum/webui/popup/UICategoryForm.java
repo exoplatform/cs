@@ -47,15 +47,21 @@ public class UICategoryForm extends UIForm implements UIPopupComponent{
 	public static final String FIELD_CATEGORYORDER_INPUT = "CategoryOrder" ;
 	public static final String FIELD_DESCRIPTION_TEXTAREA = "Description" ;
   
+	public static final String FIELD_USERPRIVATE_INPUT = "UserPrivate" ;
+  
   public UICategoryForm() throws Exception {
   	UIFormStringInput categoryTitle = new UIFormStringInput(FIELD_CATEGORYTITLE_INPUT, FIELD_CATEGORYTITLE_INPUT, null);
   	categoryTitle.addValidator(EmptyNameValidator.class);
     UIFormStringInput categoryOrder = new UIFormStringInput(FIELD_CATEGORYORDER_INPUT, FIELD_CATEGORYORDER_INPUT, "0");
   	categoryOrder.addValidator(PositiveNumberFormatValidator.class);
   	UIFormStringInput description = new UIFormTextAreaInput(FIELD_DESCRIPTION_TEXTAREA, FIELD_DESCRIPTION_TEXTAREA, null);
-  	 addUIFormInput(categoryTitle);
-  	 addUIFormInput(categoryOrder);
-  	 addUIFormInput(description);
+
+    UIFormStringInput userPrivate = new UIFormStringInput(FIELD_USERPRIVATE_INPUT, FIELD_USERPRIVATE_INPUT, null);
+  	
+    addUIFormInput(categoryTitle);
+  	addUIFormInput(categoryOrder);
+  	addUIFormInput(userPrivate);
+  	addUIFormInput(description);
   }
   
   public void activate() throws Exception {
@@ -73,6 +79,7 @@ public class UICategoryForm extends UIForm implements UIPopupComponent{
 			getUIStringInput(FIELD_CATEGORYTITLE_INPUT).setValue(category.getCategoryName()) ;
       getUIStringInput(FIELD_CATEGORYORDER_INPUT).setValue(Long.toString(category.getCategoryOrder())) ;
       getUIFormTextAreaInput(FIELD_DESCRIPTION_TEXTAREA).setDefaultValue(category.getDescription()) ;
+      getUIStringInput(FIELD_USERPRIVATE_INPUT).setValue(category.getUserPrivate()) ;
 		}
   }
 	
@@ -82,6 +89,7 @@ public class UICategoryForm extends UIForm implements UIPopupComponent{
       String categoryTitle = uiForm.getUIStringInput(FIELD_CATEGORYTITLE_INPUT).getValue();
       String categoryOrder = uiForm.getUIStringInput(FIELD_CATEGORYORDER_INPUT).getValue();
       String description = uiForm.getUIFormTextAreaInput(FIELD_DESCRIPTION_TEXTAREA).getValue();
+      String userPrivate = uiForm.getUIStringInput(FIELD_USERPRIVATE_INPUT).getValue();
       String userName = Util.getPortalRequestContext().getRemoteUser() ;
       Category cat = new Category();
       cat.setOwner(userName) ;
@@ -91,6 +99,7 @@ public class UICategoryForm extends UIForm implements UIPopupComponent{
       cat.setDescription(description) ;
       cat.setModifiedBy(userName) ;
       cat.setModifiedDate(new Date()) ;
+      cat.setUserPrivate(userPrivate) ;
       
       UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
       ForumService forumService =  (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;

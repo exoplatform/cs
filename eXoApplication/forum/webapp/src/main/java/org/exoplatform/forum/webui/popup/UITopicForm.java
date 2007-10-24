@@ -54,6 +54,9 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
   public static final String FIELD_NOTIFYWHENADDPOST_CHECKBOX = "NotifyWhenAddPost" ;
   public static final String FIELD_STICKY_CHECKBOX = "Sticky" ;
   
+  public static final String FIELD_CANVIEW_INPUT = "CanView" ;
+  public static final String FIELD_CANPOST_INPUT = "CanPost" ;
+
   private String categoryId; 
   private String forumId ;
   private String topicId ;
@@ -77,6 +80,8 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
     UIFormCheckBoxInput checkWhenAddPost = new UIFormCheckBoxInput<Boolean>(FIELD_NOTIFYWHENADDPOST_CHECKBOX, FIELD_NOTIFYWHENADDPOST_CHECKBOX, false);
     UIFormCheckBoxInput sticky = new UIFormCheckBoxInput<Boolean>(FIELD_STICKY_CHECKBOX, FIELD_STICKY_CHECKBOX, false);
     
+    UIFormStringInput canView = new UIFormStringInput(FIELD_CANVIEW_INPUT, FIELD_CANVIEW_INPUT, null);
+    UIFormStringInput canPost = new UIFormStringInput(FIELD_CANPOST_INPUT, FIELD_CANPOST_INPUT, null);
     
     addUIFormInput(topicTitle);
     addUIFormInput(messenger);
@@ -87,6 +92,9 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
     addUIFormInput(moderatePost);
     addUIFormInput(checkWhenAddPost);
     addUIFormInput(sticky);
+    
+    addUIFormInput(canView);
+    addUIFormInput(canPost);
   }
   
   public void setTopicIds(String categoryId, String forumId) {
@@ -106,7 +114,24 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
     return (new String [] {"PreviewThread", "SubmitThread", "CancelAction"});
   }
   
-  public void setUpdateTopic(Topic topic, boolean isUpdate) {
+  private String[] splitForForum (String str) throws Exception {
+    if(str != null && str.length() > 0) {
+      if(str.contains(",")) return str.trim().split(",") ;
+      else return str.trim().split(";") ;
+    } else return new String[] {} ;
+  }
+  
+  private String unSplitForForum (String[] str) throws Exception {
+    StringBuilder rtn = new StringBuilder();
+    if(str != null && str.length > 0) {
+      for (String temp : str) {
+        rtn.append(temp).append(",") ; 
+      }
+    }
+    return rtn.toString() ;
+  }
+  
+  public void setUpdateTopic(Topic topic, boolean isUpdate) throws Exception {
     if(isUpdate) {
       this.topicId = topic.getId() ;
       getUIStringInput(FIELD_TOPICTITLE_INPUT).setValue(topic.getTopicName());
@@ -117,14 +142,14 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
       if(topic.getIsLock()) stat = "locked";
       else stat = "unlock";
       getUIFormSelectBox(FIELD_TOPICSTATUS_SELECTBOX).setValue(stat);
-      
       getUIFormCheckBoxInput(FIELD_APPROVED_CHECKBOX).setChecked(topic.getIsApproved());
       getUIFormCheckBoxInput(FIELD_MODERATEPOST_CHECKBOX).setChecked(topic.getIsModeratePost());
       getUIFormCheckBoxInput(FIELD_NOTIFYWHENADDPOST_CHECKBOX).setChecked(topic.getIsNotifyWhenAddPost());
       getUIFormCheckBoxInput(FIELD_STICKY_CHECKBOX).setChecked(topic.getIsSticky());
+      getUIStringInput(FIELD_CANVIEW_INPUT).setValue(unSplitForForum(topic.getCanView()));
+      getUIStringInput(FIELD_CANPOST_INPUT).setValue(unSplitForForum(topic.getCanPost()));
     }
   }
-  
   
   static  public class PreviewThread extends EventListener<UITopicForm> {
     public void execute(Event<UITopicForm> event) throws Exception {
@@ -159,6 +184,8 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
   static  public class SubmitThread extends EventListener<UITopicForm> {
     public void execute(Event<UITopicForm> event) throws Exception {
       UITopicForm uiForm = event.getSource() ;
+      UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
+      
       UIFormStringInput stringInputTitle = uiForm.getUIStringInput(FIELD_TOPICTITLE_INPUT) ; 
       stringInputTitle.addValidator(EmptyNameValidator.class);
       String topicTitle = stringInputTitle.getValue().trim();
@@ -170,6 +197,9 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
       Boolean moderatePost = (Boolean)uiForm.getUIFormCheckBoxInput(FIELD_MODERATEPOST_CHECKBOX).getValue();
       Boolean whenNewPost = (Boolean)uiForm.getUIFormCheckBoxInput(FIELD_NOTIFYWHENADDPOST_CHECKBOX).getValue();
       Boolean sticky = (Boolean)uiForm.getUIFormCheckBoxInput(FIELD_STICKY_CHECKBOX).getValue();
+      
+      String[] canView = uiForm.splitForForum(uiForm.getUIStringInput(FIELD_CANVIEW_INPUT).getValue()) ;
+      String[] canPost = uiForm.splitForForum(uiForm.getUIStringInput(FIELD_CANPOST_INPUT).getValue()) ;
       
       String userName = Util.getPortalRequestContext().getRemoteUser() ;
       Topic topicNew = new Topic();
@@ -194,8 +224,8 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
       topicNew.setIsApproved(approved);  
       topicNew.setIcon("");
       //topicNew.setAttachmentFirstPost(0) ;
-      topicNew.setViewPermissions(new String[] {});
-      topicNew.setEditPermissions(new String[] {});
+      topicNew.setCanView(canView);
+      topicNew.setCanPost(canPost);
       
       ForumService forumService =  (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
       if(uiForm.topicId != null && uiForm.topicId.length() > 0) {
@@ -204,7 +234,6 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
       } else {
         forumService.saveTopic(uiForm.categoryId, uiForm.forumId, topicNew, true);
       }
-      UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
       forumPortlet.cancelAction() ;
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
       context.addUIComponentToUpdateByAjax(forumPortlet) ;

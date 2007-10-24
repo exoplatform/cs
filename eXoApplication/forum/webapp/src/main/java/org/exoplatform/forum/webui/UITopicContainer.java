@@ -90,7 +90,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
   }
   
   private JCRPageList getPageTopics() throws Exception {
-    return forumService.getTopics(categoryId, forumId);
+    return forumService.getPageTopic(categoryId, forumId);
   }
 
   private String[] getActionMenuForum() throws Exception {
@@ -501,7 +501,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
       if(topics.size() > 0) {
         UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;
         UIMoveTopicForm moveTopicForm = popupAction.createUIComponent(UIMoveTopicForm.class, null, null) ;
-        moveTopicForm.updateTopic(uiTopicContainer.forumId, topics);
+        moveTopicForm.updateTopic(uiTopicContainer.forumId, topics, false);
         popupAction.activate(moveTopicForm, 400, 420) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
       } 

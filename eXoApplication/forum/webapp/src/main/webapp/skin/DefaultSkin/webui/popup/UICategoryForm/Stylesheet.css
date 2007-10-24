@@ -7,3 +7,11 @@
 	padding: 8px 0px 0px 0px;
 	border: none;
 }
+
+.UICategoryForm .AddIcon16x16 {
+	float: left ;
+	width: 16px;
+	height: 16px;
+	margin: 0px 0px 0px 6px;
+	background: url('../../skinIcons/16x16/icons/OnlineIcon.gif') ;
+}

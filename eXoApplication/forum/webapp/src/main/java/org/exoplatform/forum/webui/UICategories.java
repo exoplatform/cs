@@ -37,8 +37,6 @@ public class UICategories extends UIContainer  {
 	protected ForumService forumService = (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
 	
   public UICategories() throws Exception {
-//  	UICategories uicomponent = this;
-//  	List category = uicomponent.getcategoryList();
   	
   }
 
@@ -51,12 +49,6 @@ public class UICategories extends UIContainer  {
 		List<Forum> forumList = forumService.getForums(categoryId);
 		return forumList;
 	}
-	
-//	private Post getLastPost(String categoryId, String forumId) throws Exception {
-//		Forum forum = forumService.getForum(categoryId, forumId);
-//		Post lastPost = (Post)forumService.getObjectByPath(forum.getLastPostPath());
-//		return lastPost;
-//	}
 	
 	private Topic getLastTopic(String topicPath) throws Exception {
 		return forumService.getTopicByPath(topicPath) ;
