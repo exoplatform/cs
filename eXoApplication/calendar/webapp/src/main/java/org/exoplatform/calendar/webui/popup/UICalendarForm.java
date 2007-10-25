@@ -4,7 +4,11 @@
  **************************************************************************/
 package org.exoplatform.calendar.webui.popup;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -256,7 +260,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
     for (String timeZone : TimeZone.getAvailableIDs()){
       //java.util.Calendar.getAvailableLocales()
       TimeZone tz = TimeZone.getTimeZone(timeZone) ;
-      String displayName = tz.getDisplayName() ;
+      
       timeZones.add(new SelectItemOption<String>( tz.getID() , tz.getID()));
     }
     return timeZones ;
