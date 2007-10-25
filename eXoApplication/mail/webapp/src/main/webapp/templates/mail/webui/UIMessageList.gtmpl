@@ -62,11 +62,11 @@
 	                  <a class="MenuItem" href="<%=uicomponent.event("MoveMessages")%>">   
 	                    <div class="ItemIcon MoveMessageIcon">Move message</div>
 	                  </a>
-	                  <a class="MenuItem" href="#">   
+	                  <a class="MenuItem" href="<%=uicomponent.event("Import")%>">   
 	                    <div class="ItemIcon ImportMessageIcon">Import message</div>
 	                  </a>
-	                  <a class="MenuItem" href="#">   
-	                    <div class="ItemIcon EmportMessageIcon">Emport message</div>
+	                  <a class="MenuItem" href="<%=uicomponent.event("Export")%>">   
+	                    <div class="ItemIcon EmportMessageIcon">Export message</div>
 	                  </a>
 	                </div>
 	              </div>

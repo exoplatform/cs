@@ -17,6 +17,8 @@ import org.exoplatform.mail.service.MessagePageList;
 import org.exoplatform.mail.service.Tag;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.popup.UIComposeForm;
+import org.exoplatform.mail.webui.popup.UIExportForm;
+import org.exoplatform.mail.webui.popup.UIImportForm;
 import org.exoplatform.mail.webui.popup.UIMoveMessageForm;
 import org.exoplatform.mail.webui.popup.UIPopupAction;
 import org.exoplatform.mail.webui.popup.UIPopupActionContainer;
@@ -506,17 +508,15 @@ public class UIMessageList extends UIForm {
   
   static public class MoveMessagesActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
-      System.out.println("MoveMessagesActionListener");
+      System.out.println(" === >>> Move Messages Action Listener");
       UIMessageList uiMessageList = event.getSource() ; 
-      
       
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class);    
       String username = uiPortlet.getCurrentUser();
       MailService mailService = uiMessageList.getApplicationComponent(MailService.class);
       
-      if(uiMessageList.getCheckedMessage().isEmpty())
-      {
+      if(uiMessageList.getCheckedMessage().isEmpty()) {
         UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-no-messages", null, ApplicationMessage.INFO)) ;
         return;
@@ -542,13 +542,25 @@ public class UIMessageList extends UIForm {
   
   static public class ImportActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
-      UIMessageList uiMessageList = event.getSource() ;      
+      UIMessageList uiMessageList = event.getSource() ;   
+      System.out.println("=== >>> Import Action Listener");
+      UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
+      UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
+      UIImportForm uiImportForm = uiPopup.createUIComponent(UIImportForm.class, null, null);
+      uiPopup.activate(uiImportForm, 600, 0, true);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup);    
     }
   }
   
   static public class ExportActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
-      UIMessageList uiMessageList = event.getSource() ;      
+      UIMessageList uiMessageList = event.getSource() ;   
+      System.out.println("=== >>> Export Action Listener");
+      UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
+      UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
+      UIExportForm uiExportForm = uiPopup.createUIComponent(UIExportForm.class, null, null);
+      uiPopup.activate(uiExportForm, 600, 0, true);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup);  
     }
   }
   
