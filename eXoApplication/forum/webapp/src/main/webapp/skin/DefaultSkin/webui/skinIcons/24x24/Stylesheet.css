@@ -83,7 +83,7 @@
 
 /*===========================thread bar menu icon===========================*/
 
-.ApproveThreadsIcon {
+.SetApproveIcon {
 	background: url('icons/ApproveThreadsIcon.gif') no-repeat ;
 }
 
@@ -160,7 +160,7 @@
 	background: url('icons/ApproveAttachmentsIcon.gif') no-repeat ;
 }
 
-.UnapprovePostsIcon {
+.SetUnApproveIcon {
 	background: url('icons/UnapprovePostsIcon.gif') no-repeat ;
 }
 
@@ -184,11 +184,11 @@
 	background: url('icons/MergeSelectedPostsIcon.gif') no-repeat ;
 }
 
-.SplitThisThreadIcon {
+.SplitTopicIcon {
 	background: url('icons/SplitThisThreadIcon.gif') no-repeat ;
 }
 
-.AddPollThreadIcon {
+.AddPollIcon {
 	background: url('icons/AddPollThreadIcon.gif') no-repeat ;
 }
 
@@ -196,7 +196,7 @@
 	background: url('icons/EmailThisPageIcon.gif') no-repeat ;
 }
 
-.PrintThisPageIcon {
+.PrintPageIcon {
 	background: url('icons/PrintThisPageIcon.gif') no-repeat ;
 }
 

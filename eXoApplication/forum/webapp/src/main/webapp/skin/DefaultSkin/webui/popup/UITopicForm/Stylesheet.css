@@ -31,6 +31,38 @@
 	background: url('../../skinIcons/16x16/icons/OnlineIcon.gif') ;
 }
 
+.UITopicForm .HorizontalLayout .ThreadPermission .SelectUserIcon {
+	background: url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/SmallUserIcon.gif') no-repeat;
+}
+
+.UITopicForm .HorizontalLayout .ThreadPermission .SelectMemberIcon {
+	background: url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/SmallGroupIcon.gif') no-repeat;
+}
+
+.UITopicForm .HorizontalLayout .ThreadPermission .AddAnyIcon {
+	background: url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/SmallMemberIcon.gif') no-repeat;
+}
+
+.UITopicForm .HorizontalLayout .ThreadPermission .FormContainer {
+	border: none;	
+	padding:0px 15px;
+}
+
+.UITopicForm .UIFormTabPane .ThreadPermission .HorizontalLayout {
+	border:1px solid #B7B7B7;
+	padding-top: 8px;
+}
+
+.UITopicForm .UIFormWithTitle {
+	margin: auto;
+	padding-top: 5px;
+	
+}
+
+.UITopicForm .HorizontalLayout .ThreadPermission td.FieldLabel {
+	width: 100px;
+}
+
 .UITopicForm .ThreadPermission input {
 	float: left ;
 }

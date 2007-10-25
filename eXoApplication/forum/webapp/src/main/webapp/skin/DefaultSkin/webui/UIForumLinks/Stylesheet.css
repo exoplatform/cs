@@ -4,7 +4,7 @@
 }
 
 .UIForumLinks .HorizontalLayout {
-	width: 345px;
+	width: 360px;
 	border: none;
 	float: right;
 }
@@ -15,7 +15,7 @@
 }
 
 .UIForumLinks .HorizontalLayout .UIFormGrid input.button {
-	width: 30px;
+	width: 40px;
 	float: left;
 }
 
