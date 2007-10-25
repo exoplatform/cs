@@ -575,17 +575,14 @@
 .UIDayView .EventDayContent .EventContainerBorder{
 	border:1px solid #808080;
 	position: absolute;
-	background:#e5eaff;
 }
 
 .UIDayView .EventAllDay .EventContainerBorder{
 	border:1px solid #808080;
-	background:#e5eaff;
 	width: 100%; height: 24px;
 }
 
 .UIDayView .EventAllDay .EventContainerBorder .EventContainerBar{
-	background:#CDD7FF;
 	width: 100%;
 }
 
@@ -596,7 +593,6 @@
 .UIDayView .EventDayContent .EventContainerBar{
 	border:1px solid #ffffff;
 	border-bottom: none;
-	background:#cdd7ff;
 	cursor: move;
 }
 
@@ -703,13 +699,11 @@
 .UIWeekView .EventContainerBar{
 	border:1px solid #ffffff;
 	border-bottom: none;
-	background:#cdd7ff;
 }
 
 .UIWeekView .EventContainer{
 	border:1px solid #ffffff;
 	border-top: none;
-	background:#e5eaff;
 }
 
 /*====================Schedule View============================*/
@@ -1232,7 +1226,6 @@
 
 .UIMonthView .EventMonthContent .EventOnDayContent {
 	width: auto; height: 20px;
-	background: #fff8c7;
 	border: 1px solid #ffffff;
 }
 
@@ -1596,4 +1589,13 @@
 .Wheat {background-color: #F5DEB3;}    
 .Yellow {background-color: #FFFF00;}    
 .YellowGreen { background-color: #9ACD32; }
-  
+
+.EventTitle{
+	background-color:black ;
+	opacity: 0.3 ;
+}
+.EventTitle p{
+	font-weight:bold;
+	color:white;
+	display:inline;
+}

@@ -55,6 +55,9 @@ public class UIWeekView extends UICalendarView {
   protected Map<String, List<CalendarEvent>> eventData_ = new HashMap<String, List<CalendarEvent>>() ;
   protected Map<String, CalendarEvent> allWeekData_ = new HashMap<String,  CalendarEvent>() ;
   protected  List<CalendarEvent> daysData_  = new ArrayList<CalendarEvent>() ;
+  protected boolean isShowCustomView_ = false ;
+  protected Date beginDate_ ;
+  protected Date endDate_ ;
 
   public UIWeekView() throws Exception {
     super() ;
@@ -107,18 +110,26 @@ public class UIWeekView extends UICalendarView {
   protected List<Calendar> getDaysOfWeek(int week) {
     List<Calendar> calendarData = new ArrayList<Calendar>() ;
     Calendar cl = GregorianCalendar.getInstance() ;
-    cl.set(Calendar.WEEK_OF_YEAR, week) ;
-    int day = cl.get(Calendar.DATE) ;
-    int month = cl.get(Calendar.MONTH) ;
-    int year = cl.get(Calendar.YEAR) ;
-    int amount = cl.getFirstDayOfWeek() - cl.get(Calendar.DAY_OF_WEEK) ;
-    cl = getDateByValue(year, month, day, UICalendarView.TYPE_DATE, amount) ;
-    calendarData.add(cl) ;
-    day = cl.get(Calendar.DATE) ;
-    month = cl.get(Calendar.MONTH) ;
-    year = cl.get(Calendar.YEAR) ;
-    for(int d = 1 ;  d < 7 ; d++) {
-      calendarData.add(getDateByValue(year, month, day, UICalendarView.TYPE_DATE, d)) ;
+    if(!isShowCustomView_) {
+      cl.set(Calendar.WEEK_OF_YEAR, week) ;
+      int day = cl.get(Calendar.DATE) ;
+      int month = cl.get(Calendar.MONTH) ;
+      int year = cl.get(Calendar.YEAR) ;
+      int amount = cl.getFirstDayOfWeek() - cl.get(Calendar.DAY_OF_WEEK) ;
+      cl = getDateByValue(year, month, day, UICalendarView.TYPE_DATE, amount) ;
+      calendarData.add(cl) ;
+      day = cl.get(Calendar.DATE) ;
+      month = cl.get(Calendar.MONTH) ;
+      year = cl.get(Calendar.YEAR) ;
+      for(int d = 1 ;  d < 7 ; d++) {
+        calendarData.add(getDateByValue(year, month, day, UICalendarView.TYPE_DATE, d)) ;
+      }
+    } else {
+      cl.setTime(beginDate_) ;
+      while(cl.before(endDate_)) {
+        calendarData.add(cl) ;
+        cl.add(Calendar.DATE, 1) ;
+      }
     }
     return calendarData ;
   }
@@ -147,12 +158,7 @@ public class UIWeekView extends UICalendarView {
         uiQuickAddEvent.setEvent(false) ;
         uiQuickAddEvent.setId("UIQuickAddTask") ;
       }
-      try {
-        uiQuickAddEvent.init(startTime, finishTime) ;
-      } catch (Exception e) {
-        uiQuickAddEvent.init() ;
-        e.printStackTrace() ;
-      }
+      uiQuickAddEvent.init(calendarview.getCalendarSetting(), startTime, finishTime) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
     }

@@ -102,14 +102,15 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   protected Calendar calendar_ = null ;
   public boolean isShowEvent_ = true;
 
-  protected boolean isShowWorkingTime_ = false ;
+ /* protected boolean isShowWorkingTime_ = false ;
   protected String startTime_ = null ;
-  protected String endTime_ = null ;
+  protected String endTime_ = null ;*/
   private int timeInterval_ = 30 ;
-  private String timeFormat_ =  null ;
+  private CalendarSetting calendarSetting_ ;
+/*  private String timeFormat_ =  null ;
   private String dateFormat_ =  null ;
-  private String dateTimeFormat_ =  null ;
-
+  */
+  private String dateTimeFormat_  ;
   protected List<String> privateCalendarIds = new ArrayList<String>() ;
   protected List<String> publicCalendarIds = new ArrayList<String>() ;
 
@@ -134,23 +135,15 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
     applySeting() ;
   }
   public void applySeting() throws Exception {
-    CalendarService cservice = CalendarUtils.getCalendarService() ;
+    CalendarService calService = getApplicationComponent(CalendarService.class) ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
-    CalendarSetting calendarSetting = cservice.getCalendarSetting(username) ;
-    //timeInterval_ = (int)calendarSetting.getTimeInterval();
-    dateFormat_ = calendarSetting.getDateFormat();
-    timeFormat_ = calendarSetting.getTimeFormat() ;
-    dateTimeFormat_ = dateFormat_ + " " + timeFormat_ ;
+    calendarSetting_ = calService.getCalendarSetting(username) ;
+    dateTimeFormat_ = getDateFormat() + " " + getTimeFormat() ;
     Locale locale_ = null ;
-    if(calendarSetting.isShowWorkingTime()) {
-      isShowWorkingTime_ = calendarSetting.isShowWorkingTime() ;
-      startTime_ = calendarSetting.getWorkingTimeEnd() ;
-      endTime_ = calendarSetting.getWorkingTimeEnd() ;
-    }
-    if(calendarSetting.getLocation() == null) {
+    if(calendarSetting_.getLocation() == null) {
       locale_ = Util.getPortalRequestContext().getLocale() ;
     } else {
-      locale_ = new Locale(calendarSetting.getLocation()) ;
+      locale_ = new Locale(calendarSetting_.getLocation()) ;
     }
   }
   public void setViewType(String viewType) { this.viewType_ = viewType ; }
@@ -170,6 +163,14 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         }
       }
       return map.values().toArray(new String[]{}) ;
+    }    
+  }
+  public Map<String, String> getColors() {
+    try{
+      return getAncestorOfType(UICalendarWorkingContainer.class)
+      .findFirstComponentOfType(UICalendars.class).getColorMap() ;
+    }catch(Exception e) {
+      return new HashMap<String, String>() ;
     }    
   }
   public void refresh() throws Exception {} ;
@@ -337,29 +338,27 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
     }
     return times ;
   }
-  protected void setDateFormat(String dateFormat_) {
-    this.dateFormat_ = dateFormat_;
-  }
+  
   protected String getDateFormat() {
-    return dateFormat_;
+    return calendarSetting_.getDateFormat();
   }
-  protected void setDateTimeFormat(String dateTimeFormat_) {
-    this.dateTimeFormat_ = dateTimeFormat_;
-  }
+   
   protected String getDateTimeFormat() {
     return dateTimeFormat_;
   }
-  protected void setTimeInterval(int timeInterval_) {
-    this.timeInterval_ = timeInterval_;
-  }
+   
   protected int getTimeInterval() {
     return timeInterval_;
   }
-  protected void setTimeFormat(String timeFormat_) {
-    this.timeFormat_ = timeFormat_;
-  }
+  
   protected String getTimeFormat() {
-    return timeFormat_;
+    return calendarSetting_.getTimeFormat();
+  }
+  public void setCalendarSetting(CalendarSetting calendarSetting_) {
+    this.calendarSetting_ = calendarSetting_;
+  }
+  public CalendarSetting getCalendarSetting() {
+    return calendarSetting_;
   }
   static  public class AddEventActionListener extends EventListener<UICalendarView> {
     public void execute(Event<UICalendarView> event) throws Exception {
@@ -477,23 +476,6 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarView.getParent()) ;
       }
-      /*if(CalendarEvent.TYPE_EVENT.equals(eventCalendar.getEventType())) {
-        uiPopupContainer.setId(UIPopupContainer.UIEVENTPOPUP) ;
-        UIEventForm uiEventForm = uiPopupContainer.createUIComponent(UIEventForm.class, null, null) ;
-        uiEventForm.initForm(eventCalendar) ;
-        uiPopupContainer.addChild(uiEventForm) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarView.getParent()) ;
-      } else if(CalendarEvent.TYPE_TASK.equals(eventCalendar.getEventType())) {
-        uiPopupContainer.setId(UIPopupContainer.UITASKPOPUP) ;
-        UITaskForm uiTaskForm = uiPopupContainer.createUIComponent(UITaskForm.class, null, null) ;
-        uiTaskForm.initForm(eventCalendar) ;
-        uiPopupContainer.addChild(uiTaskForm) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarView.getParent()) ;
-      } else {
-        System.out.println("\n\n event type is not supported !");
-      }*/
     }
   }
 

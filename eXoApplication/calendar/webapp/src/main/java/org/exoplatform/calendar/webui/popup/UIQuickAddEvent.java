@@ -64,63 +64,50 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
   final public static String FIELD_TO_TIME = "toTime".intern() ;
   final public static String FIELD_ALLDAY = "allDay".intern() ;
   final public static String FIELD_DESCRIPTION = "description".intern() ;
-  final public static String TIME_PATTERNS_12 ="hh:mm a" ;
-  final public static String TIME_PATTERNS_24 ="HH:mm" ;
-
   final public static String UIQUICKADDTASK = "UIQuickAddTask".intern() ;
 
-  private int timeInterval_  ;
-  private String timeFormat_  ;
-  
+  private CalendarSetting calendarSetting_ ;
   private boolean isEvent_ = true ;
 
   public UIQuickAddEvent() throws Exception {
-    applySetting() ;
+    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     addUIFormInput(new UIFormStringInput(FIELD_EVENT, FIELD_EVENT, null).addValidator(EmptyFieldValidator.class)) ;
     addUIFormInput(new UIFormTextAreaInput(FIELD_DESCRIPTION, FIELD_DESCRIPTION, null)) ;
     addUIFormInput(new UIFormDateTimeInput(FIELD_FROM, FIELD_FROM, new Date(), false).addValidator(EmptyFieldValidator.class));
     addUIFormInput(new UIFormDateTimeInput(FIELD_TO, FIELD_TO, new Date(), false).addValidator(EmptyFieldValidator.class));
-    addUIFormInput(new UIFormSelectBox(FIELD_FROM_TIME, FIELD_FROM_TIME, getTimes()));
-    addUIFormInput(new UIFormSelectBox(FIELD_TO_TIME, FIELD_TO_TIME, getTimes()));
+    addUIFormInput(new UIFormSelectBox(FIELD_FROM_TIME, FIELD_FROM_TIME, options));
+    addUIFormInput(new UIFormSelectBox(FIELD_TO_TIME, FIELD_TO_TIME, options));
     addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_ALLDAY, FIELD_ALLDAY, false));
     addUIFormInput(new UIFormSelectBox(FIELD_CALENDAR, FIELD_CALENDAR, getCalendar())) ;
     addUIFormInput(new UIFormSelectBox(FIELD_CATEGORY, FIELD_CATEGORY, UIEventForm.getCategory())) ;
-    init() ;
   }
 
-  public void applySetting() throws Exception {
-    CalendarService calService = getApplicationComponent(CalendarService.class) ;
-    String username = Util.getPortalRequestContext().getRemoteUser() ;
-    CalendarSetting calSetting = calService.getCalendarSetting(username) ;
-    timeInterval_ = (int)calSetting.getTimeInterval() ;
-    timeFormat_ = calSetting.getTimeFormat() ;
-  }
-  public void init() throws Exception{
+
+  public void init(CalendarSetting  calendarSetting, String startTime, String endTime) throws Exception {
+    calendarSetting_ = calendarSetting ;
+    DateFormat df = new SimpleDateFormat(calendarSetting_.getDateFormat() + " " + getTimeFormat());
+    getUIFormSelectBox(FIELD_FROM_TIME).setOptions(getTimes()) ;
+    getUIFormSelectBox(FIELD_TO_TIME).setOptions(getTimes()) ;
     java.util.Calendar cal = GregorianCalendar.getInstance() ;
-    int beginMinute = (cal.get(java.util.Calendar.MINUTE)/timeInterval_)* timeInterval_ ;
-    cal.set(java.util.Calendar.MINUTE, beginMinute) ;
-    setEventFromDate(cal.getTime()) ;
-    cal.add(java.util.Calendar.MINUTE, timeInterval_) ;
-    setEventToDate(cal.getTime()) ;
-  }
-  public void init(String startTime, String endTime) throws Exception {
-    CalendarService calService = getApplicationComponent(CalendarService.class) ;
-    String username = Util.getPortalRequestContext().getRemoteUser() ;
-    CalendarSetting calSetting = calService.getCalendarSetting(username) ;
-    DateFormat df = new SimpleDateFormat(calSetting.getDateFormat() + " " + calSetting.getTimeFormat());
-    java.util.Calendar cal = GregorianCalendar.getInstance() ;
-    cal.setTime(df.parse(startTime)) ;
-    cal.set(java.util.Calendar.MINUTE, (cal.get(java.util.Calendar.MINUTE)/timeInterval_)*timeInterval_) ;
+    try {
+      cal.setTime(df.parse(startTime)) ;
+    } catch (Exception e){
+      e.printStackTrace() ;
+    }
+    cal.set(java.util.Calendar.MINUTE, (cal.get(java.util.Calendar.MINUTE)/getTimeInterval())*getTimeInterval()) ;
     Date begin = cal.getTime() ;
-    cal.add(java.util.Calendar.MINUTE, timeInterval_) ;
+    try{
+      cal.setTime(df.parse(endTime)) ;
+    } catch (Exception e) {
+      cal.add(java.util.Calendar.MINUTE, getTimeInterval()) ;
+      e.printStackTrace() ;
+    }
+    cal.set(java.util.Calendar.MINUTE, (cal.get(java.util.Calendar.MINUTE)/getTimeInterval())*getTimeInterval()) ;
     Date end = cal.getTime() ;
     setEventFromDate(begin) ;
     setEventToDate(end) ;
   }
-  public void init(Date startTime, Date endTime) throws Exception {
-      setEventFromDate(startTime) ;
-      setEventToDate(endTime) ;
-  }
+
   private List<SelectItemOption<String>> getCalendar() throws Exception {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
@@ -141,8 +128,9 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
     return label ;
   }
   private List<SelectItemOption<String>> getTimes() {
-    return CalendarUtils.getTimesSelectBoxOptions(timeFormat_, timeInterval_) ;
+    return CalendarUtils.getTimesSelectBoxOptions(getTimeFormat(), getTimeInterval()) ;
   }
+  
   private String getEventSummary() {
     return getUIStringInput(FIELD_EVENT).getValue() ;
   }
@@ -153,7 +141,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
   private void setEventDescription(String value) { getUIFormTextAreaInput(FIELD_DESCRIPTION).setValue(value) ;}
 
   private Date getEventFromDate() {
-    DateFormat df = new SimpleDateFormat("MM/dd/yyyy" + " " + timeFormat_) ;
+    DateFormat df = new SimpleDateFormat("MM/dd/yyyy" + " " + getTimeFormat()) ;
     String dateString = getUIFormDateTimeInput(FIELD_FROM).getValue() + " " + getUIFormSelectBox(FIELD_FROM_TIME).getValue() ;
     try {
       return df.parse(dateString) ;
@@ -167,12 +155,12 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
     UIFormSelectBox timeFile = getChildById(FIELD_FROM_TIME) ;
     DateFormat df = new SimpleDateFormat("MM/dd/yyyy") ;
     fromField.setValue(df.format(value)) ;
-    df = new SimpleDateFormat(timeFormat_) ;
+    df = new SimpleDateFormat(getTimeFormat()) ;
     timeFile.setValue(df.format(value)) ;
   }
 
   private Date getEventToDate() {
-    DateFormat df = new SimpleDateFormat("MM/dd/yyyy" + " " + timeFormat_) ;
+    DateFormat df = new SimpleDateFormat("MM/dd/yyyy" + " " + getTimeFormat()) ;
     String dateString = getUIFormDateTimeInput(FIELD_TO).getValue() + " " + getUIFormSelectBox(FIELD_TO_TIME).getValue() ;
     try {
       return df.parse(dateString) ;
@@ -186,7 +174,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
     UIFormSelectBox timeField =  getChildById(FIELD_TO_TIME) ;
     DateFormat df = new SimpleDateFormat("MM/dd/yyyy") ;
     toField.setValue(df.format(value)) ;
-    df = new SimpleDateFormat(timeFormat_) ;
+    df = new SimpleDateFormat(getTimeFormat()) ;
     timeField.setValue(df.format(value)) ;
 
   }
@@ -215,6 +203,16 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
 
   public boolean isEvent() {
     return isEvent_;
+  }
+
+
+  public int getTimeInterval() {
+    return (int)calendarSetting_.getTimeInterval() ;
+  }
+
+
+  public String getTimeFormat() {
+    return calendarSetting_.getTimeFormat();
   }
   static  public class SaveActionListener extends EventListener<UIQuickAddEvent> {
     public void execute(Event<UIQuickAddEvent> event) throws Exception {

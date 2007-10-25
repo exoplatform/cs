@@ -372,8 +372,8 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
       }
       UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
       calendarPortlet.cancelAction() ;
-      UICalendars uiCalendars = calendarPortlet.getChild(UICalendarWorkingContainer.class).getChild(UICalendarContainer.class).getChild(UICalendars.class) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendars) ; ;
+      UICalendarWorkingContainer uiWorkingContainer = calendarPortlet.getChild(UICalendarWorkingContainer.class) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer) ; ;
     }
   }
   static  public class CancelActionListener extends EventListener<UICalendarForm> {

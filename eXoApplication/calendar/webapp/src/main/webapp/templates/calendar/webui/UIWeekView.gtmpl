@@ -86,8 +86,9 @@
 								<% for (event in uicomponent.getEventList().values()) {
 									begindate = dtf.format(event.fromDateTime) ;
 									enddate = dtf.format(event.toDateTime) ;
+									color = uicomponent.getColors().get(event.getCalendarId()) ;
 								%>
-									 <div class="EventContainer" style="height: 22px;" title="$begindate -> $enddate"  >
+									 <div class="EventContainer $color" style="height: 22px;" title="$begindate -> $enddate"  >
 									 	$event.summary
 									 </div> 
 								<%}%>
@@ -118,10 +119,11 @@
 									end = tf.format(event.toDateTime) ;
 									enddate = dtf.format(event.toDateTime) ;
 									endTime =  event.toDateTime.getHours() * 60 + event.toDateTime.getMinutes() ;
+									color = uicomponent.getColors().get(event.getCalendarId()) ;
 									actionLink =  uicomponent.event("SaveEvent",event.getId()+"&calendarId="+event.getCalendarId()+"&startTime=beginTime&finishTime=endTime") ;
 								%>
-									<div class="EventContainerBoder" style="position:absolute ;"  eventid="$event.id" calid="$event.calendarId" actionlink="$actionLink" unselectable="on" starttime="$beginTime" endtime="$endTime">
-										<div class="EventContainerBar" title="$begindate -> $enddate " >$begin -> $end</div>
+									<div class="EventContainerBoder  $color" style="position:absolute ;"  eventid="$event.id" calid="$event.calendarId" actionlink="$actionLink" unselectable="on" starttime="$beginTime" endtime="$endTime">
+										<div class="EventContainerBar EventTitle" title="$begindate -> $enddate " ><p>$begin -> $end</p></div>
 										<div class="EventContainer">$event.summary</div>
 										<div class="ResizeEventContainer"><span></span></div>
 									</div>

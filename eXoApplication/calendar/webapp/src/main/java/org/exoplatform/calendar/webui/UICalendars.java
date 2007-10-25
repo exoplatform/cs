@@ -69,6 +69,8 @@ public class UICalendars extends UIForm  {
   public static String CALENDARID = "calendarid".intern() ;
   public static String CALTYPE = "calType".intern() ;
   private String[] publicCalendarIds = {} ;
+  private Map<String, String> colorMap_ = new HashMap<String, String>() ;
+  
   public UICalendars() throws Exception {
 
   } 
@@ -82,6 +84,7 @@ public class UICalendars extends UIForm  {
     for(GroupCalendarData group : groupCalendars) {
       List<Calendar> calendars = group.getCalendars() ;
       for(Calendar calendar : calendars) {
+        colorMap_.put(calendar.getId(), calendar.getCalendarColor()) ;
         if(getUIFormCheckBoxInput(calendar.getId()) == null){
           UIFormCheckBoxInput<Boolean> input = new UIFormCheckBoxInput<Boolean>(calendar.getId(), calendar.getId(), false) ;
           input.setChecked(true) ;
@@ -102,6 +105,7 @@ public class UICalendars extends UIForm  {
       List<Calendar> calendars = group.getCalendars() ;
       for(Calendar calendar : calendars) {
         map.put(calendar.getId(), calendar.getId()) ;
+        colorMap_.put(calendar.getId(), calendar.getCalendarColor()) ;
         if(getUIFormCheckBoxInput(calendar.getId()) == null){
           addUIFormInput(new UIFormCheckBoxInput<Boolean>(calendar.getId(), calendar.getId(), false)) ;
         }
@@ -116,6 +120,10 @@ public class UICalendars extends UIForm  {
     return calendarService.getSharedCalendars(CalendarUtils.getCurrentUser()) ;
   }
   
+  public Map<String, String> getColorMap() {
+    return colorMap_;
+  }
+
   static  public class AddCalendarActionListener extends EventListener<UICalendars> {
     public void execute(Event<UICalendars> event) throws Exception {
       UICalendars uiComponent = event.getSource() ;

@@ -4,6 +4,8 @@
  **************************************************************************/
 package org.exoplatform.calendar.webui;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -23,7 +25,6 @@ import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
-import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -164,7 +165,7 @@ public class UIMonthView extends UICalendarView {
   static  public class GotoDayActionListener extends EventListener<UIMonthView> {
     public void execute(Event<UIMonthView> event) throws Exception {
       UIMonthView calendarview = event.getSource() ;
-      
+
     }
   }
   static  public class MoveNextActionListener extends EventListener<UIMonthView> {
@@ -212,13 +213,14 @@ public class UIMonthView extends UICalendarView {
         try {
           int day = Integer.parseInt(selectedDate) ;
           java.util.Calendar date = new GregorianCalendar(calendarview.getCurrentYear(), calendarview.getCurrentMonth(), day) ;
-          Date startTime =  date.getTime()  ;
+          DateFormat df = new SimpleDateFormat(calendarview.getDateTimeFormat()) ;
+          String startTime =  df.format(date.getTime())  ;
           date.add(java.util.Calendar.MINUTE, calendarview.getTimeInterval()) ;
-          Date endTime = date.getTime()  ;
-          uiEventForm.init(startTime, endTime) ;
+          String endTime =  df.format(date.getTime())  ;
+          uiEventForm.init(calendarview.getCalendarSetting(), startTime, endTime) ;
         } catch (Exception e) {
           e.printStackTrace() ;
-          uiEventForm.init() ;
+          uiEventForm.init(calendarview.getCalendarSetting(), null, null) ;
         }
         event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiParenPopup) ;
@@ -245,13 +247,14 @@ public class UIMonthView extends UICalendarView {
         try {
           int day = Integer.parseInt(selectedDate) ;
           java.util.Calendar date = new GregorianCalendar(calendarview.getCurrentYear(), calendarview.getCurrentMonth(), day) ;
-          Date startTime = date.getTime() ;
+          DateFormat df = new SimpleDateFormat(calendarview.getDateTimeFormat()) ;
+          String startTime =  df.format(date.getTime())  ;
           date.add(java.util.Calendar.MINUTE, calendarview.getTimeInterval()) ;
-          Date endTime = date.getTime()  ;
-          uiEventForm.init(startTime, endTime) ;
+          String endTime =  df.format(date.getTime())  ;
+          uiEventForm.init(calendarview.getCalendarSetting(), startTime, endTime) ;
         } catch (Exception e) {
           e.printStackTrace() ;
-          uiEventForm.init() ;
+          uiEventForm.init(calendarview.getCalendarSetting(), null, null) ;
         }
         event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiParenPopup) ;

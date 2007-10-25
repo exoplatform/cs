@@ -2,6 +2,7 @@
 	import java.text.DecimalFormat ;
 	import java.text.DateFormat;
 	import java.text.SimpleDateFormat;
+	import java.util.Calendar ;
 	def rcontext = _ctx.getRequestContext() ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.showEvent() ;');
 	int currentDay = uicomponent.getCurrentDay() ;
@@ -20,6 +21,7 @@
 	dateTimeFormat = uicomponent.getDateTimeFormat() ;
 	timeInterval = uicomponent.getTimeInterval() ;
 	DateFormat df = new SimpleDateFormat(dateFormat) ;
+	String currentDate = df.format(uicomponent.getCurrentCalendar().getTime()) ;
 	DateFormat tf = new SimpleDateFormat(timeFormat) ;
 	DateFormat dtf = new SimpleDateFormat(dateTimeFormat) ;
 %>
@@ -61,10 +63,11 @@
 		    	for(ce in uicomponent.getAllDayEvents().values()) {
 				 	actionLink =  uicomponent.event("SaveEvent",ce.getId()+"&calendarId="+ce.getCalendarId()+"&startTime=beginTime&finishTime=endTime") ;
 				  long precent = (100 / size) ;
+				  color = uicomponent.getColors().get(ce.getCalendarId()) ;
 		    %>
-   			<td width="$precent%">
+   			<td width="$precent%" class="$color">
 	    		<div unselectable="on" class="EventContainerBorder EventBoxes" eventid="<%=ce.getId()%>" calid="<%=ce.getCalendarId()%>" actionlink="$actionLink">
-	          <div class="EventContainer" title="<%=dtf.format(ce.getFromDateTime())%>:-><%=dtf.format(ce.getToDateTime())%>">
+	          <div class="EventContainer $color" style="height:25px;" title="<%=dtf.format(ce.getFromDateTime())%>:-><%=dtf.format(ce.getToDateTime())%>">
 	          	<%=ce.getSummary()%>
 	          </div>
           </div>
@@ -115,13 +118,15 @@
 								 	if(ce.getToDateTime().after(currentDateTo.getTime())) {
 								 		endTime = (24*60) ;
 								 	}
+								 	color = uicomponent.getColors().get(ce.getCalendarId()) ;
 								 	actionLink =  uicomponent.event("SaveEvent",ce.getId()+"&calendarId="+ce.getCalendarId()+"&startTime=beginTime&finishTime=endTime") ;
                   %>
-                  <div class="EventContainerBorder EventBoxes" eventid="<%=ce.getId()%>" calid="<%=ce.getCalendarId()%>" actionlink="$actionLink"
+                  <div class="EventContainerBorder EventBoxes $color" eventid="<%=ce.getId()%>" calid="<%=ce.getCalendarId()%>" actionlink="$actionLink"
                     starttime="$beginTime" endtime="$endTime">
-                    <div class="EventContainerBar" title="<%=df.format(ce.getFromDateTime())%> :-> <%=df.format(ce.getToDateTime())%>">
-                      <%=tf.format(ce.getFromDateTime())%>
-                      <%=tf.format(ce.getToDateTime())%>
+                    <div class="EventContainerBar EventTitle" title="<%=df.format(ce.getFromDateTime())%> :-> <%=df.format(ce.getToDateTime())%>">
+                    	<p>
+	                      <%=tf.format(ce.getFromDateTime())%> -> <%=tf.format(ce.getToDateTime())%>
+                      </p>
                     </div>
                     <div class="EventContainer">
                       <%=ce.getSummary()%>
@@ -135,12 +140,13 @@
                     <tbody>
                       <%
 			            		flag = true ;
-			            		List hoursSteps = uicomponent.getDisplayTimes(dateTimeFormat, timeInterval) ;
+			            		List hoursSteps = uicomponent.getDisplayTimes(timeFormat, timeInterval) ;
 			            		for(h in hoursSteps) {
 			            			cssClass = "TdDotLine" ;
 			            			if(flag) {cssClass = "TdLine" ;} ;
+			            			
                       %>
-                      <tr startTime="$h">
+                      <tr startTime="$currentDate $h">
                         <td class="$cssClass">
                           <span></span>
                         </td>

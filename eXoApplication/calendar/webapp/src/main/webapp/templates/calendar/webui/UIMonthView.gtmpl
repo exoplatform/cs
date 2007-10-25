@@ -119,7 +119,8 @@
 												String calId = event.getCalendarId() ;
 												String eventCal = event.getEventCategoryId() ;
 												//
-												println "<div class=\"EventOnDayBorder EventBoxes\" day=\"$dayOfMonth\" eventId=$eventId calId=$calId eventCat=$eventCal style=\"$styleCssHidden\">" ;
+												color = uicomponent.getColors().get(calId) ;
+												println "<div class=\"EventOnDayBorder EventBoxes $color\" day=\"$dayOfMonth\" eventId=$eventId calId=$calId eventCat=$eventCal style=\"$styleCssHidden\">" ;
 												println "<div class=\"EventOnDayContent\">" ;
 											 	println	"<div style=\"float:left;margin:3px 0px 0px 2px;\">" ;
 											 	if(event.getFromDateTime().getDate() == dayOfMonth) {
