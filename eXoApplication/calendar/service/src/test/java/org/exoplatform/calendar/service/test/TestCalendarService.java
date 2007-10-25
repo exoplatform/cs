@@ -226,7 +226,7 @@ public class TestCalendarService extends BaseCalendarTestCase{
     
     //export/import ical
     ICalendarImportExport importExport = (ICalendarImportExport)calendarService_.getCalendarImportExports("ICalendar");
-    OutputStream ical = importExport.exportCalendar("nqhung", calendarIds) ;
+    OutputStream ical = importExport.exportCalendar("nqhung", calendarIds, "0") ;
     System.out.println("\n\n\n" + ical.toString()) ;
     ByteArrayInputStream icalInputStream = new ByteArrayInputStream(ical.toString().getBytes()) ;
     importExport.importCalendar("nqhung", icalInputStream, "importClanedar") ;

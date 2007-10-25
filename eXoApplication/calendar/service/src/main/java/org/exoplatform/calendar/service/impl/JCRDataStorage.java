@@ -993,7 +993,7 @@ public class JCRDataStorage implements DataStorage{
       for(String calendarId : calendarIds) {        
         ids.clear() ;
         ids.add(calendarId) ;
-        OutputStream out = importExport.exportCalendar(username, ids) ;
+        OutputStream out = importExport.exportCalendar(username, ids, "0") ;
         ByteArrayInputStream is = new ByteArrayInputStream(out.toString().getBytes()) ;
 
         if(iCalHome.hasNode(calendarId + ".ics")){
@@ -1167,6 +1167,7 @@ public class JCRDataStorage implements DataStorage{
           isExist = true ; 
           break ;
         }
+        valueList.add(value) ;
       }
       if(!isExist) {
         Value value2add = calendarNode.getSession().getValueFactory().createValue(userNode);
@@ -1222,6 +1223,27 @@ public class JCRDataStorage implements DataStorage{
     return events ;
   }
   
+  public List<CalendarEvent> getSharedEventByCalendars(String username, List<String> calendarIds) throws Exception {
+    List<CalendarEvent> events = new ArrayList<CalendarEvent>() ;
+    if(getSharedCalendarHome().hasNode(username)) {
+      PropertyIterator iter = getSharedCalendarHome().getNode(username).getReferences() ;
+      while(iter.hasNext()) {
+        try{
+          Node calendar = iter.nextProperty().getParent() ;          
+          if(calendarIds.contains(calendar.getProperty("exo:id").getString())) {
+            NodeIterator it = calendar.getNodes();
+            while(it.hasNext()){
+              events.add(getEvent(it.nextNode())) ;
+            }
+          }
+        }catch (Exception e) {
+          e.printStackTrace() ;
+        }
+      }
+    }
+    return events ;
+  }
+  
   public List<CalendarEvent> getEvent(String username, EventQuery eventQuery, String[] publicCalendarIds) throws Exception {
     List<CalendarEvent> events = new ArrayList<CalendarEvent>() ;
     events.addAll(getUserEvents(username, eventQuery)) ;
@@ -1229,6 +1251,31 @@ public class JCRDataStorage implements DataStorage{
     eventQuery.setCalendarId(publicCalendarIds) ;
     events.addAll(getPublicEvents(eventQuery)) ;
     return events ;
+  }
+  
+  public void removeSharedCalendar(String username, String calendarId) throws Exception {
+    Node sharedCalendarHome = getSharedCalendarHome() ;
+    if(sharedCalendarHome.hasNode(username)) {
+      Node userNode = sharedCalendarHome.getNode(username) ;
+      String uuid = userNode.getProperty("jcr:uuid").getString() ;
+      PropertyIterator iter = userNode.getReferences() ;
+      Node calendar ;
+      List<Value> newValues = new ArrayList<Value>() ;
+      while(iter.hasNext()) {
+        calendar = iter.nextProperty().getParent() ;
+        if(calendar.getProperty("exo:id").getString().equals(calendarId)) {
+          Value[] values = calendar.getProperty(SHARED_PROP).getValues() ;
+          for(Value value : values){
+            if(!value.getString().equals(uuid)) {
+              newValues.add(value) ;
+            }
+          }
+          calendar.setProperty(SHARED_PROP, newValues.toArray(new Value[newValues.size()])) ;
+          calendar.save() ;
+          break ;
+        }
+      }      
+    }
   }
 }
 

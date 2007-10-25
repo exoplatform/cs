@@ -17,5 +17,5 @@ import java.util.List;
  */
 public interface CalendarImportExport {  
   public void importCalendar(String username, InputStream icalInputStream, String calendarName) throws Exception ;
-  public OutputStream exportCalendar(String username, List<String> calendarIds) throws Exception ;
+  public OutputStream exportCalendar(String username, List<String> calendarIds, String type) throws Exception ;
 }

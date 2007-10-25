@@ -55,8 +55,15 @@ public class ICalendarImportExport implements CalendarImportExport{
     storage_ = storage ;
   }
 
-  public OutputStream exportCalendar(String username, List<String> calendarIds) throws Exception {
+  public OutputStream exportCalendar(String username, List<String> calendarIds, String type) throws Exception {
     List<CalendarEvent> events ;
+    if(type.equals("0")) {
+      events = storage_.getUserEventByCalendar(username, calendarIds) ;
+    }else if(type.equals("1")) {
+      events = storage_.getSharedEventByCalendars(username, calendarIds) ;
+    }else if(type.equals("2")){
+      events = storage_.getGroupEventByCalendar(calendarIds) ;
+    }
     if(username != null) events = storage_.getUserEventByCalendar(username, calendarIds) ;
     else events = storage_.getGroupEventByCalendar(calendarIds) ;
 

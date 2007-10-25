@@ -335,4 +335,5 @@ public interface CalendarService {
   public void shareCalendar(String username, String calendarId, List<String> receiverUsers) throws Exception ;
   public GroupCalendarData getSharedCalendars(String username) throws Exception ;
   public List<CalendarEvent> getEvent(String username, EventQuery eventQuery, String[] publicCalendarIds) throws Exception ;
+  public void removeSharedCalendar(String username, String calendarId) throws Exception  ;
 }

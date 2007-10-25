@@ -194,4 +194,8 @@ public class CalendarServiceImpl implements CalendarService{
   public List<CalendarEvent> getEvent(String username, EventQuery eventQuery, String[] publicCalendarIds) throws Exception{
     return storage_.getEvent(username, eventQuery, publicCalendarIds) ;
   }
+  
+  public void removeSharedCalendar(String username, String calendarId) throws Exception {
+    storage_.removeSharedCalendar(username, calendarId) ;
+  }
 }
