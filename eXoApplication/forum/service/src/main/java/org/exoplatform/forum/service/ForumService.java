@@ -124,7 +124,19 @@ public interface ForumService {
    * @return
    * @throws Exception
    */
-  public JCRPageList getTopics(String categoryId, String forumId) throws Exception;
+  public JCRPageList getPageTopic(String categoryId, String forumId) throws Exception;
+  /**
+   * This method should:
+   * 
+   * 1. Load the topic from the database
+   * 
+   * @param username
+   * @param topicId
+   * @return
+   * @throws Exception
+   */
+
+  public List<Topic> getTopics(String categoryId, String forumId) throws Exception;
   /**
    * This method should:
    * 

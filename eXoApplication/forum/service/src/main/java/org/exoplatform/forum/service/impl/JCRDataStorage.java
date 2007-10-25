@@ -7,6 +7,7 @@ package org.exoplatform.forum.service.impl;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.jcr.Node;
@@ -57,12 +58,9 @@ public class JCRDataStorage implements DataStorage {
     QueryResult result = query.execute() ;
     NodeIterator iter = result.getNodes() ;
     List<Category> categories = new ArrayList<Category>() ;
-    Category cat ;
     while(iter.hasNext()) {
       Node cateNode = iter.nextNode() ;
-      cat = new Category() ;
-      cat = getCategory(cateNode) ;
-      categories.add(cat) ;
+      categories.add(getCategory(cateNode)) ;
     }
     return categories ;
   }
@@ -87,6 +85,7 @@ public class JCRDataStorage implements DataStorage {
     if(cateNode.hasProperty("exo:description"))cat.setDescription(cateNode.getProperty("exo:description").getString()) ;
     if(cateNode.hasProperty("exo:modifiedBy"))cat.setModifiedBy(cateNode.getProperty("exo:modifiedBy").getString()) ;
     if(cateNode.hasProperty("exo:modifiedDate"))cat.setModifiedDate(cateNode.getProperty("exo:modifiedDate").getDate().getTime()) ;
+    if(cateNode.hasProperty("exo:userPrivate"))cat.setUserPrivate(cateNode.getProperty("exo:userPrivate").getString()) ;
     return cat;
   }
   
@@ -107,6 +106,7 @@ public class JCRDataStorage implements DataStorage {
     catNode.setProperty("exo:description", category.getDescription()) ;
     catNode.setProperty("exo:modifiedBy", category.getModifiedBy()) ;
     catNode.setProperty("exo:modifiedDate", GregorianCalendar.getInstance()) ;
+    catNode.setProperty("exo:userPrivate", category.getUserPrivate()) ;
     
   	forumHomeNode.save() ;
   	forumHomeNode.getSession().save() ;    
@@ -135,14 +135,12 @@ public class JCRDataStorage implements DataStorage {
 	    Query query = qm.createQuery(queryString , Query.XPATH) ;
 	    QueryResult result = query.execute() ;
 	    NodeIterator iter = result.getNodes() ;
-		  List<Forum> Forums = new ArrayList<Forum>() ;
-		  Forum forum;
+		  List<Forum> forums = new ArrayList<Forum>() ;
 		  while (iter.hasNext()) {
 				Node forumNode = iter.nextNode() ;
-				forum = getForum(forumNode) ;
-		    Forums.add(forum) ;
+		    forums.add(getForum(forumNode)) ;
 		  }
-		  return Forums;
+		  return forums;
 		}
     return null; 
   }
@@ -253,7 +251,7 @@ public class JCRDataStorage implements DataStorage {
   }
   
   
-  public JCRPageList getTopics(String categoryId, String forumId) throws Exception {
+  public JCRPageList getPageTopic(String categoryId, String forumId) throws Exception {
     Node forumHomeNode = getForumHomeNode() ;
     if(forumHomeNode.hasNode(categoryId)) {
   	  Node CategoryNode = forumHomeNode.getNode(categoryId) ;
@@ -267,6 +265,22 @@ public class JCRDataStorage implements DataStorage {
 		  return pagelist ;
     }
 	  return null ;
+  }
+  
+  public List<Topic> getTopics(String categoryId, String forumId) throws Exception {
+    Node forumHomeNode = getForumHomeNode() ;
+    if(forumHomeNode.hasNode(categoryId)) {
+      Node CategoryNode = forumHomeNode.getNode(categoryId) ;
+      Node forumNode = CategoryNode.getNode(forumId) ;
+      NodeIterator iter = forumNode.getNodes() ;
+      List<Topic> topics = new ArrayList<Topic>() ;
+      while (iter.hasNext()) {
+        Node topicNode = iter.nextNode() ;
+        topics.add(getTopicNode(topicNode)) ;
+      }
+      return topics ;
+    }
+    return null ;
   }
   
 	public Topic getTopic(String categoryId, String forumId, String topicId, boolean viewTopic) throws Exception {
@@ -338,8 +352,8 @@ public class JCRDataStorage implements DataStorage {
     }
     if(topicNode.hasProperty("exo:isApproved")) topicNew.setIsApproved(topicNode.getProperty("exo:isApproved").getBoolean()) ;
     if(topicNode.hasProperty("exo:isSticky")) topicNew.setIsSticky(topicNode.getProperty("exo:isSticky").getBoolean()) ;
-    if(topicNode.hasProperty("exo:viewPermissions")) topicNew.setViewPermissions(ValuesToStrings(topicNode.getProperty("exo:viewPermissions").getValues())) ;
-    if(topicNode.hasProperty("exo:editPermissions")) topicNew.setEditPermissions(ValuesToStrings(topicNode.getProperty("exo:viewPermissions").getValues())) ;
+    if(topicNode.hasProperty("exo:canView")) topicNew.setCanView(ValuesToStrings(topicNode.getProperty("exo:canView").getValues())) ;
+    if(topicNode.hasProperty("exo:canPost")) topicNew.setCanPost(ValuesToStrings(topicNode.getProperty("exo:canPost").getValues())) ;
     return topicNew;
   }
 
@@ -383,8 +397,8 @@ public class JCRDataStorage implements DataStorage {
 		    topicNode.setProperty("exo:isLock", topic.getIsLock()) ;
 		    topicNode.setProperty("exo:isApproved", topic.getIsApproved()) ;
 		    topicNode.setProperty("exo:isSticky", topic.getIsSticky()) ;
-		    topicNode.setProperty("exo:viewPermissions", topic.getViewPermissions()) ;
-		    topicNode.setProperty("exo:editPermissions", topic.getEditPermissions()) ;
+		    topicNode.setProperty("exo:canView", topic.getCanView()) ;
+		    topicNode.setProperty("exo:canPost", topic.getCanPost()) ;
 
 		    if(isNew) {
 		    	// setTopicCount for Forum

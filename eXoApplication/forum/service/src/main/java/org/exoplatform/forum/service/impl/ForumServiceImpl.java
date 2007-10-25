@@ -83,8 +83,12 @@ public class ForumServiceImpl implements ForumService{
 	  return storage_.getTopicView(categoryId, forumId, topicId);
   }
   
-  public JCRPageList getTopics(String categoryId, String forumId) throws Exception {
-	  return storage_.getTopics(categoryId, forumId);
+  public JCRPageList getPageTopic(String categoryId, String forumId) throws Exception {
+	  return storage_.getPageTopic(categoryId, forumId);
+  }
+
+  public List<Topic> getTopics(String categoryId, String forumId) throws Exception {
+    return storage_.getTopics(categoryId, forumId);
   }
   
   public void moveTopic(String topicId, String  topicPath, String destForumPath) throws Exception {

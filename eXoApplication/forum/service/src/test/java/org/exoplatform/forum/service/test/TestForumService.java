@@ -85,7 +85,7 @@ public class TestForumService extends BaseForumTestCase{
   	}
   	List<Forum> forums = forumService_.getForums(cat.getId());
   	for (int i = 0; i < forums.size(); i++) {
-  		System.out.println("\n =============== > HHH:  " + forums.get(i).getId()) ;
+  		//System.out.println("\n =============== > HHH:  " + forums.get(i).getId()) ;
 		}
   	//assertEquals(forums.size(), 1);
   	// update Forum
@@ -126,13 +126,13 @@ public class TestForumService extends BaseForumTestCase{
     topica.setTopicName("topic thu 18") ;
     forumService_.saveTopic(cat.getId(), forum.getId(), topica, false) ;
 		//get PageList Topic
-		JCRPageList pagelist = forumService_.getTopics(cat.getId(), forum.getId());
+		JCRPageList pagelist = forumService_.getPageTopic(cat.getId(), forum.getId());
 //		assertEquals(pagelist.getAvailable(), 1);
     List <Topic> listTopic = pagelist.getPage(1, session_) ;
 //    assertEquals(page.size(), 1);    
 //    List<Topic> listTopic = forumService_.getPage(1, pagelist);
     for (Topic topic2 : listTopic) {
-      System.out.println("\n\n\n =====  topicId:  " + topic2.getTopicName() + "  \ttime: " + topic2.getCreatedDate().getTime() +"\t" + topic2.getIsSticky());
+     // System.out.println("\n\n\n =====  topicId:  " + topic2.getTopicName() + "  \ttime: " + topic2.getCreatedDate().getTime() +"\t" + topic2.getIsSticky());
     }
 //		// update Topic
 		Topic newTopic = forumService_.getTopic(cat.getId(), forum.getId(), topic.getId(), false);
@@ -145,9 +145,16 @@ public class TestForumService extends BaseForumTestCase{
 		forumService_.saveForum(cat.getId(), forum1, true);
 		forum1 = forumService_.getForum(cat.getId(), forum1.getId());
 		forumService_.moveTopic(newTopic.getId(), newTopic.getPath(), forum1.getPath());
-		System.out.println("\n\n\n =====  getLastTopicPath:  \n" + forumService_.getForum(cat.getId(), forum1.getId()).getLastTopicPath());
-		System.out.println("\n\n\n =====  getLastTopicPath:  \n" + forumService_.getForum(cat.getId(), forum.getId()).getLastTopicPath());
-		assertNotNull(forumService_.getTopic(cat.getId(), forum1.getId(), newTopic.getId(), false));
+//		System.out.println("\n\n\n =====  getLastTopicPath:  \n" + forumService_.getForum(cat.getId(), forum1.getId()).getLastTopicPath());
+//		System.out.println("\n\n\n =====  getLastTopicPath:  \n" + forumService_.getForum(cat.getId(), forum.getId()).getLastTopicPath());
+    String a = forumService_.getForum(cat.getId(), forum1.getId()).getLastTopicPath();
+    String[] b = a.split("/");
+    for (int i = 0; i < b.length; i++) {
+      String string = b[i];
+      System.out.println("\n\n:   " + string + "  :a:   " + b[b.length-1]+ "  :a:   " + b[b.length-2]);
+    }
+    
+    assertNotNull(forumService_.getTopic(cat.getId(), forum1.getId(), newTopic.getId(), false));
 		//test remove Topic return Topic
 		assertNotNull(forumService_.removeTopic(cat.getId(), forum1.getId(), newTopic.getId()));
   }
@@ -246,8 +253,8 @@ public class TestForumService extends BaseForumTestCase{
 		topicNew.setIcon("classNameIcon");
 		topicNew.setAttachmentFirstPost(0) ;
 		topicNew.setIsApproved(false);  
-		topicNew.setViewPermissions(new String[] {});
-		topicNew.setEditPermissions(new String[] {});
+		topicNew.setCanView(new String[] {});
+		topicNew.setCanPost(new String[] {});
 		return topicNew;
   }
   

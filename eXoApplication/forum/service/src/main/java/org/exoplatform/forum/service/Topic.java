@@ -35,8 +35,8 @@ public class Topic {
   private boolean isApproved = false ;
   private boolean isSticky = false ;
   
-  private String[] viewPermissions;
-  private String[] editPermissions;
+  private String[] canView;
+  private String[] canPost;
   
   public Topic(){ 
     id = ("topic" + IdGenerator.generate()).toUpperCase() ;
@@ -102,11 +102,11 @@ public class Topic {
   public boolean getIsSticky() { return isSticky;}
   public void setIsSticky(boolean isSticky) { this.isSticky = isSticky;}
 
-  public String[] getViewPermissions(){return viewPermissions;}
-  public void setViewPermissions(String[] viewPermissions){this.viewPermissions = viewPermissions;}
+  public String[] getCanView(){return canView;}
+  public void setCanView(String[] canView){this.canView = canView;}
   
-  public String[] getEditPermissions(){return editPermissions;}
-  public void setEditPermissions(String[] editPermissions){this.editPermissions = editPermissions;}
+  public String[] getCanPost(){return canPost;}
+  public void setCanPost(String[] canPost){this.canPost = canPost;}
   
   /**
    * This method should calculate the forum id base on the topic id

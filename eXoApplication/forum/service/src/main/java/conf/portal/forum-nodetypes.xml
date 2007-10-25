@@ -104,10 +104,10 @@
 	  		<propertyDefinition name="exo:isSticky" requiredType="boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
 	  			<valueConstraints/>
 	  		</propertyDefinition>
-	  		<propertyDefinition name="exo:viewPermissions" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
+	  		<propertyDefinition name="exo:canView" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
 	  			<valueConstraints/>
 	  		</propertyDefinition>
-	  		<propertyDefinition name="exo:editPermissions" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
+	  		<propertyDefinition name="exo:canPost" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
 	  			<valueConstraints/>
 	  		</propertyDefinition>
 	  	</propertyDefinitions>
@@ -233,6 +233,9 @@
 	  			<valueConstraints/>
 	  		</propertyDefinition>  		
 	  		<propertyDefinition name="exo:categoryOrder" requiredType="Long" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">  			
+	  			<valueConstraints/>
+	  		</propertyDefinition>  		
+	  		<propertyDefinition name="exo:userPrivate" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">  			
 	  			<valueConstraints/>
 	  		</propertyDefinition>  		
 	  	</propertyDefinitions>
