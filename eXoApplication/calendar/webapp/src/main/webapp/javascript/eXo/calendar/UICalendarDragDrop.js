@@ -1,7 +1,5 @@
 function UICalendarDragDrop () {
-	this.classes = new Array() ;
-	this.orginalElement = null ;
-	this.tmpElement = null ;
+
 }
 UICalendarDragDrop.prototype.mouseCoords = function(ev){
 	if(ev.pageX || ev.pageY){
@@ -51,14 +49,14 @@ UICalendarDragDrop.prototype.dragStart = function(evt) {
 UICalendarDragDrop.prototype.drag = function(evt) {
 	try{		
 		var _e = window.event || evt ;
-		var UICalendarDragDrop = eXo.calendar.UICalendarDragDrop ;	
-		var tmpElement = UICalendarDragDrop.dragElement ;
+		var UICalendarDragDrop = eXo.calendar.UICalendarDragDrop ;
+		var dragElement = UICalendarDragDrop.dragElement ;
 		var RowContainerDay = eXo.core.DOMUtil.findAncestorByClass(UICalendarDragDrop.dragElement,"RowContainerDay") ;
 		var scrollTop = (RowContainerDay)? RowContainerDay.scrollTop : 0 ;
-		tmpElement.style.left = (UICalendarDragDrop.mouseCoords(_e).x - UICalendarDragDrop.offset.x) + "px" ;
-		tmpElement.style.top = (UICalendarDragDrop.mouseCoords(_e).y - UICalendarDragDrop.offset.y) + scrollTop + "px" ;
+		dragElement.style.left = (UICalendarDragDrop.mouseCoords(_e).x - UICalendarDragDrop.offset.x) + "px" ;
+		dragElement.style.top = (UICalendarDragDrop.mouseCoords(_e).y - UICalendarDragDrop.offset.y) + scrollTop + "px" ;
 		window.status = scrollTop ;
-		UICalendarDragDrop.getTarget(_e, tmpElement) ;
+		UICalendarDragDrop.getTarget(_e, dragElement) ;
 	}catch(e){window.status = "Message: " + e.message ;}
 } ;
 UICalendarDragDrop.prototype.drop = function(evt) {

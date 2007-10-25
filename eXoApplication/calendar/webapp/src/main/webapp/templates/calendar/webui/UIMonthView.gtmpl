@@ -129,7 +129,7 @@
 													println "<<" ;
 											 	}
 												println "</div>" ;
-												println "<div class=\"EventOnDayLabel\" title=\"$title\">" ;
+												println "<div unselectable=\"on\" class=\"EventOnDayLabel\" title=\"$title\">" ;
 												println sumary ;
 												println "</div></div>" ;
 												println "<div style=\"clear:left;\"><span></span></div>" ;

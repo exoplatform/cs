@@ -122,6 +122,7 @@
 									color = uicomponent.getColors().get(event.getCalendarId()) ;
 									actionLink =  uicomponent.event("SaveEvent",event.getId()+"&calendarId="+event.getCalendarId()+"&startTime=beginTime&finishTime=endTime") ;
 								%>
+
 									<div class="EventContainerBoder  $color" style="position:absolute ;"  eventid="$event.id" calid="$event.calendarId" actionlink="$actionLink" unselectable="on" starttime="$beginTime" endtime="$endTime">
 										<div class="EventContainerBar EventTitle" title="$begindate -> $enddate " ><p>$begin -> $end</p></div>
 										<div class="EventContainer">$event.summary</div>

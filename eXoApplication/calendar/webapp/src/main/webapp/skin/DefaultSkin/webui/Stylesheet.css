@@ -584,6 +584,7 @@
 
 .UIDayView .EventAllDay .EventContainerBorder .EventContainerBar{
 	width: 100%;
+	-moz-user-select : none ;
 }
 
 .UIDayView .EventAllDay .EventContainerBorder .EventContainer {
@@ -681,6 +682,7 @@
 
 .UIWeekView .UIGrid td{
 	padding: 0px;
+	height: 29px ;
 }
 
 .UIWeekView .EventAllday{
@@ -699,6 +701,7 @@
 .UIWeekView .EventContainerBar{
 	border:1px solid #ffffff;
 	border-bottom: none;
+	-moz-user-select : none ;
 }
 
 .UIWeekView .EventContainer{
@@ -1232,6 +1235,7 @@
 .UIMonthView .EventMonthContent .EventOnDayLabel {
 	line-height: 20px;
 	text-align: center;
+	-moz-user-select : none ;
 }
 
 /*====================View Task List =====================*/

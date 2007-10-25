@@ -5,7 +5,11 @@ function UICalendarPortlet() {
 }
 
 /* for general calendar */
+UICalendarPortlet.prototype.setting = function() {
+	var UICalendarPortlet = eXo.calendar.UICalendarPortlet ;
+	UICalendarPortlet.interval = (arguments.length > 0) ? parseInt(arguments[0]) : 30 ;
 
+} ;
 UICalendarPortlet.prototype.hide = function() {
 	var ln = eXo.core.DOMUtil.hideElementList.length ;
 	if (ln > 0) {
@@ -57,8 +61,9 @@ UICalendarPortlet.prototype.show = function(obj, evt) {
 	if (!uiPopupCategory) return ;
 	var value = "" ;
 	var calType = obj.getAttribute("calType") ;
+	var calName = obj.getAttribute("calName") ;
 	if (calType) {		
-		value = "objectId=" + obj.id + "&calType=" + calType ;
+		value = "objectId=" + obj.id + "&calType=" + calType + "&calName=" + calName ;
 	} else {
 		value = "objectId=" + obj.id ;
 	}
@@ -73,7 +78,6 @@ UICalendarPortlet.prototype.show = function(obj, evt) {
 		for(var j = 0 ; j < actions.length ; j ++) {
 			if (
 				(actions[j].href.indexOf("EditCalendar") >= 0) ||
-				//(actions[j].href.indexOf("RemoveCalendar") >= 0) ||
 				(actions[j].href.indexOf("ShareCalendar") >= 0) ||
 				(actions[j].href.indexOf("ChangeColorCalendar") >= 0)) {
 				actions[j].style.display = "none" ;
@@ -103,7 +107,6 @@ UICalendarPortlet.prototype.init = function() {
 	if (!uiDayViewGrid) return false ;
 	UICalendarPortlet.viewer = eXo.core.DOMUtil.findFirstDescendantByClass(uiDayViewGrid, "div", "EventBoardContainer") ;
 	UICalendarPortlet.step = 60 ;
-	UICalendarPortlet.interval = 20 ;
 	//UICalendarPortlet.viewer.onmousedown = eXo.calendar.UISelection.init ;
 	}catch(e) {
 		window.status = " !!! Error : " + e.message ;
@@ -152,7 +155,9 @@ UICalendarPortlet.prototype.getInterval = function(el) {
 
 UICalendarPortlet.prototype.adjustWidth = function(el) {
 	var UICalendarPortlet = eXo.calendar.UICalendarPortlet ;
-	var inter = UICalendarPortlet.getInterval(el) ;	
+	var inter = UICalendarPortlet.getInterval(el) ;
+	var totalWidth = (arguments.length > 1) ? arguments[1] : 100 ;
+	var offsetLeft = (arguments.length > 2) ? arguments[2] : 0 ;
 	if (el.length <= 0) return ;
 	for(var i = 0 ; i < inter.length ; i ++) {
 		var width = "" ;
@@ -160,18 +165,20 @@ UICalendarPortlet.prototype.adjustWidth = function(el) {
 		if(isNaN(len)) continue ;
 		var n = 0 ;
 		for(var j = inter[i]; j < inter[i+1] ; j++) {			
-			width = Math.floor(100/len) ;
+			width = parseFloat(totalWidth/len) ;
 			UICalendarPortlet.setWidth(el[j], width) ;
-			if (el[j-1]&&(len > 1)) el[j].style.left = parseInt(el[j-1].style.width)*n +  "%" ;
+			if (el[j-1]&&(len > 1)) el[j].style.left = offsetLeft + parseFloat(el[j-1].style.width)*n +  "%" ;
 			n++ ;
 		}
 	}
 } ;
 
 UICalendarPortlet.prototype.showEvent = function() {
-	var UICalendarPortlet = eXo.calendar.UICalendarPortlet ;
+	var UICalendarPortlet = eXo.calendar.UICalendarPortlet ;	
 	if (!UICalendarPortlet.init()) return ;
+	
 	var el = UICalendarPortlet.getElements(UICalendarPortlet.viewer) ;
+	el = UICalendarPortlet.sortByAttribute(el, "startTime") ;
 	if (el.length <= 0) return ;
 	var marker = null ;
 	for(var i = 0 ; i < el.length ; i ++ ) {		
@@ -183,6 +190,24 @@ UICalendarPortlet.prototype.showEvent = function() {
 	UICalendarPortlet.adjustWidth(el) ;
 } ;
 
+UICalendarPortlet.prototype.sortByAttribute = function(obj, attribute) {
+	var len = obj.length ;
+	var tmp = null ;
+	var attribute1 = null ;
+	var attribute2 = null ;
+	for(var i = 0 ; i < len ; i ++){
+		for(var j = i + 1 ; j < len ; j ++){
+			attribute1 = parseInt(obj[i].getAttribute(attribute)) ;
+			attribute2 = parseInt(obj[j].getAttribute(attribute)) ;
+			if(attribute2 < attribute1) {
+				tmp = obj[i] ;
+				obj[i] = obj[j] ;
+				obj[j] = tmp ;
+			}
+		}
+	}
+	return obj ;
+}
 /* for resizing event box */
 UICalendarPortlet.prototype.initResize = function(evt) {	
 	var _e = window.event || evt ;
@@ -217,7 +242,10 @@ UICalendarPortlet.prototype.resizeCallBack = function() {
 	var eventBox = eXo.calendar.UICalendarPortlet.eventBox ;
 	var start =  parseInt(eventBox.getAttribute("startTime")) ;
 	var end =  start + eventBox.offsetHeight - 2 ;
-	if (eventBox.offsetHeight != eXo.calendar.UICalendarPortlet.beforeHeight) eXo.calendar.UICalendarPortlet.adjustTime(start, end, eventBox) ;	
+	if (eventBox.offsetHeight != eXo.calendar.UICalendarPortlet.beforeHeight) {
+		var actionLink = eXo.calendar.UICalendarPortlet.adjustTime(start, end, eventBox) ;	
+		eval(actionLink) ;
+	}	
 } ;
 
 /* for drag and drop */
@@ -250,7 +278,10 @@ UICalendarPortlet.prototype.dragEnd = function() {
 	var delta = end - start  ;
 	var currentStart = dragObject.offsetTop ;
 	var currentEnd = currentStart + delta ;
-	if(dragObject.offsetTop != eXo.calendar.UICalendarPortlet.eventTop) eXo.calendar.UICalendarPortlet.adjustTime(currentStart, currentEnd, dragObject) ;
+	if(dragObject.offsetTop != eXo.calendar.UICalendarPortlet.eventTop) {		
+		var actionLink =	eXo.calendar.UICalendarPortlet.adjustTime(currentStart, currentEnd, dragObject) ;
+		eval(actionLink) ;
+	}
 	dragObject = null ;
 } ;
 
@@ -261,7 +292,8 @@ UICalendarPortlet.prototype.adjustTime = function(currentStart, currentEnd, obj)
 	var pattern = /startTime.*endTime/g ;
 	var params = "startTime=" + currentStart + "&finishTime=" + currentEnd ;
 	actionLink = actionLink.replace(pattern, params).replace("javascript:","") ;
-	eval(actionLink) ;
+	return actionLink ;
+	//eval(actionLink) ;
 } ;
 
 /* for showing context menu */

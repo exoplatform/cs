@@ -2,9 +2,6 @@
 	import java.text.DecimalFormat ;
 	import java.text.DateFormat;
 	import java.text.SimpleDateFormat;
-	import java.util.Calendar ;
-	def rcontext = _ctx.getRequestContext() ;
-  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.showEvent() ;');
 	int currentDay = uicomponent.getCurrentDay() ;
 	int currentMonth = uicomponent.getCurrentMonth() ;
 	String currentMonthName = uicomponent.getMonthName(currentMonth) ;
@@ -24,6 +21,8 @@
 	String currentDate = df.format(uicomponent.getCurrentCalendar().getTime()) ;
 	DateFormat tf = new SimpleDateFormat(timeFormat) ;
 	DateFormat dtf = new SimpleDateFormat(dateTimeFormat) ;
+	def rcontext = _ctx.getRequestContext() ;	
+  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.showEvent() ;');
 %>
 <div class="UIDayView">
   <div class="TitleBar">
@@ -123,7 +122,8 @@
                   %>
                   <div class="EventContainerBorder EventBoxes $color" eventid="<%=ce.getId()%>" calid="<%=ce.getCalendarId()%>" actionlink="$actionLink"
                     starttime="$beginTime" endtime="$endTime">
-                    <div class="EventContainerBar EventTitle" title="<%=df.format(ce.getFromDateTime())%> :-> <%=df.format(ce.getToDateTime())%>">
+
+                    <div unselectable="on" class="EventContainerBar EventTitle" title="<%=df.format(ce.getFromDateTime())%> :-> <%=df.format(ce.getToDateTime())%>">
                     	<p>
 	                      <%=tf.format(ce.getFromDateTime())%> -> <%=tf.format(ce.getToDateTime())%>
                       </p>
