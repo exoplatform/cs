@@ -6,10 +6,12 @@ package org.exoplatform.contact.webui.popup;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -81,21 +83,22 @@ public class UIProfileInputSet extends UIFormInputWithActions {
   protected String getFieldGender() { return getChild(UIFormRadioBoxInput.class).getValue(); }
   protected void setFieldGender(String s) { getChild(UIFormRadioBoxInput.class).setValue(s); }
   
-  protected String getFieldBirthday() { return getChild(UIFormDateTimeInput.class).getValue(); }
-  protected void setFieldBirthday(String s) { getChild(UIFormDateTimeInput.class).setValue(s) ; }
+  protected Date getFieldBirthday() throws Exception {
+    String strDate = ContactUtils.formatDate("MM/dd/yyyy", getChild(UIFormDateTimeInput.class).getCalendar().getTime());
+    SimpleDateFormat date = new SimpleDateFormat("MM/dd/yyyy") ;
+    return date.parse(strDate) ; 
+  }
+  protected void setFieldBirthday(Date d) throws Exception {
+    String strDate = ContactUtils.formatDate("MM/dd/yyyy", d);
+    getChild(UIFormDateTimeInput.class).setValue(strDate) ;
+  }
   
   protected String getFieldJobName() { return getUIStringInput(FIELD_JOBTITLE_INPUT).getValue() ; }
   protected void setFieldJobName(String s) { getUIStringInput(FIELD_JOBTITLE_INPUT).setValue(s); }
   
   protected String getFieldEmail() { return getUIStringInput(FIELD_EMAIL_INPUT).getValue(); }
   protected void setFieldEmail(String s) { getUIStringInput(FIELD_EMAIL_INPUT).setValue(s); }
-  
-/*  protected ContactAttachment getAttachment() { return attachment ; }
-  protected void setAttachment(ContactAttachment att) { 
-    isEdit = true ;
-    attachment = att ; 
-  }
-  */
+ 
   protected void setImage(InputStream input) throws Exception{
     if (input != null) {
       imageBytes = new byte[input.available()] ; 

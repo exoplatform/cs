@@ -4,6 +4,8 @@
  **************************************************************************/
 package org.exoplatform.contact.service;
 
+import java.util.Date;
+
 import org.exoplatform.services.jcr.util.IdGenerator;
 
 /**
@@ -23,7 +25,7 @@ public class Contact {
   private String lastName ;
   private String nickName ;
   private String gender ;
-  private String birthday ;
+  private Date birthday ;
   private String jobTitle ;
   private String emailAddress ;
   
@@ -64,7 +66,7 @@ public class Contact {
   private String[] editPermission ;
   private boolean isShared = false ;
   private ContactAttachment attachment ;
-  private String lastUpdated ;
+  private Date lastUpdated ;
   
   public Contact() {
     id = "Contact" + IdGenerator.generate() ;
@@ -94,8 +96,8 @@ public class Contact {
   public String getGender() { return gender ; }
   public void setGender(String s) { gender = s ; }
 
-  public String getBirthday() { return birthday ; }
-  public void setBirthday(String s) { birthday = s ; }
+  public Date getBirthday() { return birthday ; }
+  public void setBirthday(Date s) { birthday = s ; }
   
   public String getJobTitle() { return jobTitle ; }
   public void   setJobTitle(String s) { jobTitle = s ; }
@@ -202,7 +204,7 @@ public class Contact {
   public void setShared(boolean isShared) { this.isShared = isShared; }
   public boolean isShared() { return isShared ; }
   
-  public String getLastUpdated()  { return lastUpdated ; }
-  public void   setLastUpdated(String s) { lastUpdated = s ; }
+  public Date getLastUpdated()  { return lastUpdated ; }
+  public void   setLastUpdated(Date s) { lastUpdated = s ; }
   
 }

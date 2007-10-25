@@ -21,6 +21,9 @@ public interface ContactService {
   public void saveContact(String username, Contact contact, boolean isNew) throws Exception ;
   public List<Contact> removeContacts(String username, List<String> contactIds) throws Exception ;
   public List<Contact> moveContacts(String username, List<String> contactIds, String[] groupId) throws Exception ;
+  public ContactPageList getContactPageListByTag(String username, ContactFilter filter) throws Exception ;
+  public ContactPageList getContactPageListByGroup(String username, ContactFilter filter, boolean isPublic) throws Exception;
+  public DataPageList searchContact(String username, ContactFilter filter) throws Exception ;
   
   public ContactPageList getSharedContactsByGroup(String groupId) throws Exception ;
   public List<GroupContactData> getSharedContacts(String[] groupIds) throws Exception ;
@@ -39,15 +42,13 @@ public interface ContactService {
   
   public List<Tag> getTags(String username) throws Exception ;
   public Tag getTag(String username, String tagId) throws Exception ;
-  public TagPageList getContactPageListByTag(String username, String tagId) throws Exception ;
+  public DataPageList getContactPageListByTag(String username, String tagId) throws Exception ;
   public void addTag(String username, List<String> contactIds, List<Tag> tags) throws Exception ;
   public Tag removeTag(String username, String tagName) throws Exception ;
   public void removeContactTag(String username, List<String>contactIds, List<String> tags) throws Exception ;
   public void updateTag(String username,Tag tag) throws Exception ;
-
-  public ContactPageList getContactPageListByTag(String username, ContactFilter filter) throws Exception ;
-  public ContactPageList getContactPageListByGroup(String username, ContactFilter filter, boolean isPublic) throws Exception;
   
   public ContactImportExport getContactImportExports(String type) ;
   public String[] getImportExportType() throws Exception ;
+  
 }

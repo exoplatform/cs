@@ -104,9 +104,9 @@ public class VCardImportExport implements ContactImportExport {
 
       // TODO :
       try {
-        pid.setBirthDate(sdf.parse(contact.getBirthday()));
+        pid.setBirthDate(sdf.parse(contact.getBirthday().toString()));
       } catch (Exception e) {
-        pid.setBirthDate(sdf2.parse(contact.getBirthday()));
+        pid.setBirthDate(sdf2.parse(contact.getBirthday().toString()));
       }
 
       Image photo = cmf.createImage();
@@ -257,7 +257,7 @@ public class VCardImportExport implements ContactImportExport {
       }
       contact.setNickName(nickName);
 
-      contact.setBirthday(sdf2.format(identity.getBirthDate()));
+      contact.setBirthday(identity.getBirthDate());
 
       ContactAttachment attachment = new ContactAttachment();
       Image photo = identity.getPhoto();
@@ -411,9 +411,9 @@ public class VCardImportExport implements ContactImportExport {
       }
 
       contact.setNote(pimContacts[index].getNote());
-
+      
       if (pimContacts[index].getCurrentRevisionDate() != null)
-        contact.setLastUpdated(pimContacts[index].getCurrentRevisionDate().toString());
+        contact.setLastUpdated(pimContacts[index].getCurrentRevisionDate());
 
       // ////////////////////////////////
       // Now we have the contact object

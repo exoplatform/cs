@@ -7,6 +7,7 @@ package org.exoplatform.contact.service.impl;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,9 +26,9 @@ import org.exoplatform.contact.service.ContactAttachment;
 import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactPageList;
+import org.exoplatform.contact.service.DataPageList;
 import org.exoplatform.contact.service.GroupContactData;
 import org.exoplatform.contact.service.Tag;
-import org.exoplatform.contact.service.TagPageList;
 import org.exoplatform.registry.JCRRegistryService;
 import org.exoplatform.registry.ServiceRegistry;
 import org.exoplatform.services.jcr.RepositoryService;
@@ -126,7 +127,7 @@ public class JCRDataStorage implements DataStorage {
     if(contactNode.hasProperty("exo:lastName"))contact.setLastName(contactNode.getProperty("exo:lastName").getString());
     if(contactNode.hasProperty("exo:nickName"))contact.setNickName(contactNode.getProperty("exo:nickName").getString());
     if(contactNode.hasProperty("exo:gender"))contact.setGender(contactNode.getProperty("exo:gender").getString());
-    if(contactNode.hasProperty("exo:birthday"))contact.setBirthday(contactNode.getProperty("exo:birthday").getString());
+    if(contactNode.hasProperty("exo:birthday"))contact.setBirthday(contactNode.getProperty("exo:birthday").getDate().getTime());
     if(contactNode.hasProperty("exo:jobTitle"))contact.setJobTitle(contactNode.getProperty("exo:jobTitle").getString());
     if(contactNode.hasProperty("exo:emailAddress"))contact.setEmailAddress(contactNode.getProperty("exo:emailAddress").getString());
     
@@ -163,7 +164,7 @@ public class JCRDataStorage implements DataStorage {
     if(contactNode.hasProperty("exo:categories"))contact.setCategories(ValuesToStrings(contactNode.getProperty("exo:categories").getValues()));
     if(contactNode.hasProperty("exo:tags")) contact.setTags(ValuesToStrings(contactNode.getProperty("exo:tags").getValues()));
     if(contactNode.hasProperty("exo:editPermission")) contact.setEditPermission(ValuesToStrings(contactNode.getProperty("exo:editPermission").getValues()));
-    if(contactNode.hasProperty("exo:lastUpdated"))contact.setLastUpdated(contactNode.getProperty("exo:lastUpdated").getString());
+    if(contactNode.hasProperty("exo:lastUpdated"))contact.setLastUpdated(contactNode.getProperty("exo:lastUpdated").getDate().getTime());
     if(contactNode.hasProperty("exo:isShared")) contact.setShared(contactNode.getProperty("exo:isShared").getBoolean());
 
     contact.setPath(contactNode.getPath()) ;
@@ -394,7 +395,10 @@ public class JCRDataStorage implements DataStorage {
     contactNode.setProperty("exo:lastName", contact.getLastName());
     contactNode.setProperty("exo:nickName", contact.getNickName());
     contactNode.setProperty("exo:gender", contact.getGender()) ;
-    contactNode.setProperty("exo:birthday", contact.getBirthday()) ;
+    
+    GregorianCalendar dateTime = new GregorianCalendar() ;
+    dateTime.setTime(contact.getBirthday()) ;    
+    contactNode.setProperty("exo:birthday", dateTime) ;
     contactNode.setProperty("exo:jobTitle", contact.getJobTitle());
     contactNode.setProperty("exo:emailAddress", contact.getEmailAddress());
     
@@ -432,7 +436,10 @@ public class JCRDataStorage implements DataStorage {
     contactNode.setProperty("exo:categories", contact.getCategories());
     contactNode.setProperty("exo:tags", contact.getTags());
     contactNode.setProperty("exo:editPermission", contact.getEditPermission());
-    contactNode.setProperty("exo:lastUpdated", contact.getLastUpdated());
+
+    dateTime.setTime(contact.getLastUpdated()) ;    
+    contactNode.setProperty("exo:birthday", dateTime) ;
+    contactNode.setProperty("exo:lastUpdated", dateTime);
     contactNode.setProperty("exo:isShared", contact.isShared());
     
     // save image to contact
@@ -613,7 +620,10 @@ public class JCRDataStorage implements DataStorage {
     contactNode.setProperty("exo:lastName", contact.getLastName());
     contactNode.setProperty("exo:nickName", contact.getNickName());
     contactNode.setProperty("exo:gender", contact.getGender()) ;
-    contactNode.setProperty("exo:birthday", contact.getBirthday());
+    
+    GregorianCalendar dateTime = new GregorianCalendar() ;
+    dateTime.setTime(contact.getBirthday()) ;    
+    contactNode.setProperty("exo:birthday", dateTime) ;
     contactNode.setProperty("exo:jobTitle", contact.getJobTitle());
     contactNode.setProperty("exo:emailAddress", contact.getEmailAddress());
     
@@ -650,7 +660,9 @@ public class JCRDataStorage implements DataStorage {
     contactNode.setProperty("exo:note", contact.getNote());
     contactNode.setProperty("exo:categories", contact.getCategories());
     contactNode.setProperty("exo:editPermission", contact.getEditPermission());
-    contactNode.setProperty("exo:lastUpdated", contact.getLastUpdated());
+
+    dateTime.setTime(contact.getLastUpdated()) ;
+    contactNode.setProperty("exo:lastUpdated", dateTime);
     contactNode.setProperty("exo:isShared", contact.isShared());
     
 //  save image to contact
@@ -730,7 +742,7 @@ public class JCRDataStorage implements DataStorage {
     return tags;
   }
 
-  public TagPageList getContactPageListByTag(String username, String tagName) throws Exception {
+  public DataPageList getContactPageListByTag(String username, String tagName) throws Exception {
     //query on private contacts
     Node contactHome = getContactHome(username);
     QueryManager qm = contactHome.getSession().getWorkspace().getQueryManager();
@@ -758,7 +770,7 @@ public class JCRDataStorage implements DataStorage {
       contacts.add(getContact(it.nextNode()));
     }
     
-    return new TagPageList(contacts, 10, null, false) ;
+    return new DataPageList(contacts, 10, null, false) ;
   }
   
   public void addTag(String username, List<String> contactIds, List<Tag> tags) throws Exception {
@@ -835,5 +847,30 @@ public class JCRDataStorage implements DataStorage {
       }
     }
     contactHome.getSession().save() ;
+  }
+  
+  public DataPageList searchContact(String username, ContactFilter filter)throws Exception {
+    List<Contact> contacts = new ArrayList<Contact>() ;
+    Query query ;
+    QueryManager qm ;
+    if(username != null && username.length() > 0) {
+      Node contactHome = getContactHome(username) ;
+      filter.setAccountPath(contactHome.getPath()) ;
+      qm = contactHome.getSession().getWorkspace().getQueryManager() ;
+      query = qm.createQuery(filter.getStatement(), Query.XPATH) ;
+      NodeIterator it = query.execute().getNodes() ;
+      while(it.hasNext()) {
+        contacts.add(getContact(it.nextNode())) ;        
+      }
+    }
+    Node publicContactHome = getPublicContactHome() ;
+    filter.setAccountPath(publicContactHome.getPath()) ;
+    qm = publicContactHome.getSession().getWorkspace().getQueryManager() ;
+    query = qm.createQuery(filter.getStatement(), Query.XPATH) ;
+    NodeIterator it = query.execute().getNodes();
+    while(it.hasNext()) {
+      contacts.add(getContact(it.nextNode())) ;
+    } 
+    return new DataPageList(contacts, 10, null, false) ;    
   }
 }

@@ -11,7 +11,7 @@ import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactPageList;
 import org.exoplatform.contact.service.GroupContactData;
 import org.exoplatform.contact.service.Tag;
-import org.exoplatform.contact.service.TagPageList;
+import org.exoplatform.contact.service.DataPageList;
 
 
 
@@ -48,7 +48,7 @@ public interface DataStorage {
   
   public List<Tag> getTags(String username) throws Exception ;
   public Tag getTag(String username, String tagName) throws Exception ;
-  public TagPageList getContactPageListByTag(String username, String tagName) throws Exception ;
+  public DataPageList getContactPageListByTag(String username, String tagName) throws Exception ;
   public void addTag(String username, List<String> contactIds, List<Tag> tags) throws Exception ;
   public Tag removeTag(String username, String tagName) throws Exception ;
   public void removeContactTag(String username, List<String>contactIds, List<String> tags) throws Exception ;

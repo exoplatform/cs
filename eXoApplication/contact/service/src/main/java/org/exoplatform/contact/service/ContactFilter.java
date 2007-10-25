@@ -19,10 +19,12 @@ public class ContactFilter {
   private String accountPath ;
   private String orderBy;
   private boolean isAscending;
-
-  public ContactFilter() {
-    isAscending = true;
-  }
+  private String text = null ;
+  
+  public ContactFilter() { isAscending = true ; }
+  
+  public void setText(String fullTextSearch) { this.text = fullTextSearch ; }
+  public String getText() { return text ; }
   
   public String[] getCategories() { return categories ; }
   public void setCategories(String[] s) { this.categories = s ; }
@@ -52,6 +54,13 @@ public class ContactFilter {
     StringBuffer queryString = new StringBuffer("/jcr:root" + accountPath + "//element(*,exo:contact)") ;
     boolean hasConjuntion = false ;
     StringBuffer stringBuffer = new StringBuffer("[") ;
+    
+    //  desclared full text query
+    if(text != null && text.length() > 0) {
+      stringBuffer.append("jcr:contains(., '").append(text).append("')") ;
+      hasConjuntion = true ;
+    }
+    
     if(categories != null && categories.length > 0) {      
       stringBuffer.append("(") ;    
       for(int i = 0; i < categories.length; i ++) {
@@ -71,26 +80,7 @@ public class ContactFilter {
       }
       stringBuffer.append(")") ;
       hasConjuntion = true ;
-    }
-    
-    /*
-    //jcr:contains(., 'JSR 170')
-    if(subject != null && subject.trim().length() > 0) {
-      if(hasConjuntion) stringBuffer.append(" and (") ;
-      else stringBuffer.append("(") ;
-      stringBuffer.append("jcr:contains(@exo:subject, '" + subject + "')") ;
-      stringBuffer.append(")") ;
-      hasConjuntion = true ;
-    }
-    if(body != null && body.trim().length() > 0) {
-      if(hasConjuntion) stringBuffer.append(" and (") ;
-      else stringBuffer.append("(") ;
-      stringBuffer.append("jcr:contains(@exo:body, '" + body + "')") ;
-      stringBuffer.append(")") ;
-      hasConjuntion = true ;
-    }
-    */
-    
+    }    
     
     if(viewQuery != null && viewQuery.trim().length() > 0) {
       if(hasConjuntion) stringBuffer.append(" and (") ;

@@ -5,6 +5,8 @@
 package org.exoplatform.contact.webui.popup;
 
 import java.io.ByteArrayInputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.exoplatform.contact.ContactUtils;
@@ -178,7 +180,8 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
     profileTab.setFieldMiddleName(contact.getMiddleName());
     profileTab.setFieldLastName(contact.getLastName());
     profileTab.setFieldNickName(contact.getNickName());
-    profileTab.setFieldGender(contact.getGender());
+    profileTab.setFieldGender(contact.getGender());    
+    
     profileTab.setFieldBirthday(contact.getBirthday());
     profileTab.setFieldJobName(contact.getJobTitle());
     profileTab.setFieldEmail(contact.getEmailAddress());   
@@ -219,6 +222,7 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
   }
   
   static  public class SaveActionListener extends EventListener<UIContactForm> {
+    @SuppressWarnings("deprecation")
     public void execute(Event<UIContactForm> event) throws Exception {
       UIContactForm uiContactForm = event.getSource() ;
       UIApplication uiApp = uiContactForm.getAncestorOfType(UIApplication.class) ;
@@ -286,7 +290,7 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
       contact.setHomeFax(uiContactForm.getUIStringInput(FIELD_HOMEFAX_INPUT).getValue());
       contact.setPersonalSite(uiContactForm.getUIStringInput(FIELD_PERSONALSITE_INPUT).getValue());
       contact.setNote(uiContactForm.getUIFormTextAreaInput(FIELD_NOTE_INPUT).getValue());
-      contact.setLastUpdated(new Date().toString()) ;
+      contact.setLastUpdated(new Date()) ;
       
       UIContactPortlet uiContactPortlet = uiContactForm.getAncestorOfType(UIContactPortlet.class) ;
       UIContacts uicontacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
@@ -307,9 +311,7 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
         String[] categories = sharedGroups.toString().split(",") ;
         contact.setCategories(categories);
         contact.setShared(true) ;
-        contactService.saveSharedContact(contact, isNew_);
-         
-        
+        contactService.saveSharedContact(contact, isNew_); 
       } else {
         UIPopupContainer popupContainer = uiContactForm.getParent() ;
         UICategorySelect uiCategorySelect = popupContainer.getChild(UICategorySelect.class); 
@@ -319,16 +321,10 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ; 
         }        
-        
-        System.out.println("\n\n\n>>>khd : category = " + category + "\n\n");
-        
         contact.setCategories(new String[] { category });
         contactService.saveContact(username, contact, isNew_);
       }
-      uicontacts.updateList() ;
-      
-      System.out.println("\n\n\n>>>khd : contactId = " + contact.getId() + "\n\n");
-      
+      uicontacts.updateList() ;      
       if(uicontacts.getSelectedContact() != null && uicontacts.getSelectedContact().equals(contact.getId())){
         uiContactPreview.setContact(contact) ;
       }

@@ -16,7 +16,7 @@ import org.exoplatform.contact.service.ContactPageList;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.GroupContactData;
 import org.exoplatform.contact.service.Tag;
-import org.exoplatform.contact.service.TagPageList;
+import org.exoplatform.contact.service.DataPageList;
 import org.exoplatform.registry.JCRRegistryService;
 import org.exoplatform.services.jcr.RepositoryService;
 
@@ -125,7 +125,7 @@ public class ContactServiceImpl implements ContactService {
   public List<Tag> getTags(String username) throws Exception {
     return storage_.getTags(username);
   }
-  public TagPageList getContactPageListByTag(String username, String tagName) throws Exception {
+  public DataPageList getContactPageListByTag(String username, String tagName) throws Exception {
     return storage_.getContactPageListByTag(username, tagName);
   }
   
@@ -158,4 +158,7 @@ public class ContactServiceImpl implements ContactService {
     return contactImportExport_.keySet().toArray(new String[]{}) ;
   }
 
+  public DataPageList searchContact(String username, ContactFilter filter) throws Exception {
+    return storage_.searchContact(username, filter) ;
+  }
 }

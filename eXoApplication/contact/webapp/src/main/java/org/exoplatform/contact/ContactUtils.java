@@ -6,6 +6,9 @@ package org.exoplatform.contact;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.text.Format;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.exoplatform.contact.service.Contact;
@@ -78,6 +81,11 @@ public class ContactUtils {
     for (String group : sharedGroups)
       if (group.equals(groupId)) return true ;
     return false ;
+  }
+  
+  public static String formatDate(String format, Date date) {
+    Format formatter = new SimpleDateFormat(format);
+    return formatter.format(date);
   }
   
 }

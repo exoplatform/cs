@@ -11,13 +11,13 @@ import java.util.List;
  * @author Hung Nguyen (hung.nguyen@exoplatform.com)
  * @since July 25, 2007
  */
-public class TagPageList extends JCRPageList {
+public class DataPageList extends JCRPageList {
   
   private List<Contact> contactList_ = null ;
   private boolean isQuery_ = false ;
   private String value_ ;
   
-  public TagPageList(List<Contact> contactList, long pageSize, String value, boolean isQuery ) throws Exception{
+  public DataPageList(List<Contact> contactList, long pageSize, String value, boolean isQuery ) throws Exception {
     super(pageSize) ;
     contactList_ = contactList ;
     value_ = value ;
