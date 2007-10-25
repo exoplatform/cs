@@ -17,6 +17,7 @@ import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarImportExport;
 import org.exoplatform.calendar.service.CalendarService;
+import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadResource;
@@ -54,18 +55,31 @@ import org.exoplatform.webui.form.UIFormStringInput;
 public class UIExportForm extends UIForm implements UIPopupComponent{
   final static private String NAME = "name".intern() ;
   final static private String TYPE = "type".intern() ;
+  private String calType = "0" ;
   public UIExportForm() {
     
   }
-  
-  public void update(List<Calendar> calendars, String selectedCalendarId, String[] types) throws Exception {
+  public void setCalType(String type) {calType = type ; }
+  public void update(String selectedCalendarId) throws Exception {
     getChildren().clear() ;
+    CalendarService calendarService = CalendarUtils.getCalendarService();
     addUIFormInput(new UIFormStringInput(NAME, NAME, null)) ;
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ; 
-    for(String type : types) {
+    for(String type : calendarService.getExportImportType()) {
       options.add(new SelectItemOption<String>(type, type)) ;
     }
     addUIFormInput(new UIFormSelectBox(TYPE, TYPE, options)) ;
+    List<Calendar> calendars = new ArrayList<Calendar>();
+    if(calType.equals("0")) {
+      calendars = calendarService.getUserCalendars(CalendarUtils.getCurrentUser()) ;
+    }else if(calType.equals("1")) {
+      calendars = calendarService.getSharedCalendars(CalendarUtils.getCurrentUser()).getCalendars() ;
+    }else if(calType.equals("2")){
+      List<GroupCalendarData> groups = calendarService.getGroupCalendars(CalendarUtils.getUserGroups(CalendarUtils.getCurrentUser())) ;
+      for(GroupCalendarData group : groups) {
+        calendars.addAll(group.getCalendars()) ;
+      }
+    }
     for(Calendar calendar : calendars) {
       UIFormCheckBoxInput checkBox = new UIFormCheckBoxInput<String>(calendar.getName(), calendar.getId(), null);
       if(calendar.getId().equals(selectedCalendarId)) checkBox.setChecked(true) ; 
@@ -104,7 +118,7 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
       CalendarImportExport importExport = calendarService.getCalendarImportExports(type) ;
       OutputStream out = null ;
       try {
-        out = importExport.exportCalendar(Util.getPortalRequestContext().getRemoteUser(), calendarIds) ;        
+        out = importExport.exportCalendar(CalendarUtils.getCurrentUser(), calendarIds, uiForm.calType) ;        
       }catch(ValidationException e) {
         uiApp.addMessage(new ApplicationMessage("UIExportForm.msg.event-does-not-existing", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;

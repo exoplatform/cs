@@ -11,7 +11,6 @@ import java.util.Map;
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.EventQuery;
-import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
@@ -35,13 +34,13 @@ import org.exoplatform.webui.event.EventListener;
     }
 
 )
-public class UIMiniCalendar extends UIMonthView  {
+public class UIMiniCalendar extends UICalendarView  {
   private Map<Integer, String> dataMap ;
   public UIMiniCalendar() throws Exception {
     updateMiniCal() ;
   }  
 
-  private void updateMiniCal() throws Exception {
+  public void updateMiniCal() throws Exception {
     EventQuery eventQuery = new EventQuery() ;
     java.util.Calendar fromcalendar = new GregorianCalendar(getCurrentYear(), getCurrentMonth(), 1, 0,0,0) ;
     eventQuery.setFromDate(fromcalendar) ;
@@ -50,20 +49,22 @@ public class UIMiniCalendar extends UIMonthView  {
     CalendarService calendarService = getApplicationComponent(CalendarService.class) ;
     dataMap = calendarService.searchHightLightEvent(CalendarUtils.getCurrentUser(), eventQuery);
   }
-  
-  private Map<Integer, String> getDataMap(){ return dataMap ; }
-  protected void moveYear(int yearStep) {
-    calendar_.add(Calendar.YEAR, yearStep) ;
+  protected int getWeeksOfTheMonth(int year, int month, int day) {
+    return new GregorianCalendar(year, month, day).getActualMaximum(java.util.Calendar.WEEK_OF_MONTH) ;
   }
+  private Map<Integer, String> getDataMap(){ return dataMap ; }
+ /* protected void moveYear(int yearStep) {
+    calendar_.add(Calendar.YEAR, yearStep) ;
+  }*/
 
   static  public class MoveNextActionListener extends EventListener<UIMiniCalendar> {
     public void execute(Event<UIMiniCalendar> event) throws Exception {
       UIMiniCalendar miniCal = event.getSource() ;
       String type = event.getRequestContext().getRequestParameter(OBJECTID) ;
       if(TYPE_MONTH == Integer.parseInt(type)) {
-        miniCal.monthNext(1) ;
+        miniCal.calendar_.add(java.util.Calendar.MONTH, 1) ;
       } else {
-        miniCal.moveYear(1) ;
+        miniCal.calendar_.add(Calendar.YEAR, 1) ;
       }
       miniCal.setCurrentDay(1);
       miniCal.updateMiniCal() ;
@@ -76,9 +77,9 @@ public class UIMiniCalendar extends UIMonthView  {
       UIMiniCalendar miniCal = event.getSource() ;
       String type = event.getRequestContext().getRequestParameter(OBJECTID) ;
       if(TYPE_MONTH == Integer.parseInt(type)) {
-        miniCal.monthNext(-1) ;
+        miniCal.calendar_.add(java.util.Calendar.MONTH, -1) ;
       } else {
-        miniCal.moveYear(-1) ;
+        miniCal.calendar_.add(Calendar.YEAR, -1) ;
       }
       miniCal.setCurrentDay(1);
       miniCal.updateMiniCal() ;

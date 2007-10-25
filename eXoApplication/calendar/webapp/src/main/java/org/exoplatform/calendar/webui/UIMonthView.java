@@ -4,8 +4,6 @@
  **************************************************************************/
 package org.exoplatform.calendar.webui;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -78,12 +76,14 @@ public class UIMonthView extends UICalendarView {
     eventQuery.setFromDate(fromcalendar) ;
     java.util.Calendar tocalendar = new GregorianCalendar(getCurrentYear(), getCurrentMonth(), getDaysInMonth(), 24,0,0) ;
     eventQuery.setToDate(tocalendar) ;
-    List<CalendarEvent> allEvents = calendarService.getUserEvents(username, eventQuery);    
-    allEvents.addAll(calendarService.getPublicEvents(eventQuery))  ;
-    Iterator<UIComponent> iter = getChildren().iterator() ;
+    List<CalendarEvent> allEvents = calendarService.getEvent(username, eventQuery, getPublicCalendars()) ;
+    getChildren().clear() ;
+    initCategories() ;
+    //allEvents.addAll(calendarService.getPublicEvents(eventQuery))  ;
+    /*Iterator<UIComponent> iter = getChildren().iterator() ;
     while (iter.hasNext()) {
       if( iter.next() instanceof UIFormCheckBoxInput) iter.remove() ; 
-    }
+    }*/
     eventData_.clear() ;
     for(int day =1 ;  day <= getDaysInMonth(); day++) {
       List<CalendarEvent> list =  new ArrayList<CalendarEvent>() ;
@@ -119,9 +119,9 @@ public class UIMonthView extends UICalendarView {
   protected void addCalendarId(String id) {calendarIds_.put(id,id) ;}
   protected Map<String, String> getCalendarIds() {return calendarIds_ ;}
 
-  private List getEventList()throws Exception {
+  /*private List getEventList()throws Exception {
     return getList() ;
-  }
+  }*/
 
   protected void refreshSelectedCalendarIds() throws Exception {
     CalendarService calendarService = getApplicationComponent(CalendarService.class) ;

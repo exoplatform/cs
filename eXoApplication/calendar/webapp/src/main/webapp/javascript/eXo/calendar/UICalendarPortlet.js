@@ -73,7 +73,7 @@ UICalendarPortlet.prototype.show = function(obj, evt) {
 		for(var j = 0 ; j < actions.length ; j ++) {
 			if (
 				(actions[j].href.indexOf("EditCalendar") >= 0) ||
-				(actions[j].href.indexOf("RemoveCalendar") >= 0) ||
+				//(actions[j].href.indexOf("RemoveCalendar") >= 0) ||
 				(actions[j].href.indexOf("ShareCalendar") >= 0) ||
 				(actions[j].href.indexOf("ChangeColorCalendar") >= 0)) {
 				actions[j].style.display = "none" ;
