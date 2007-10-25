@@ -132,25 +132,26 @@ public class JCRDataStorage implements DataStorage{
       }
     }
     MailSetting mailSetting = new MailSetting();
-    if (mailSettingNode.hasProperty(Utils.EXO_NUMBER_OF_CONVERSATION)) 
-      mailSetting.setShowNumberOfConversation((mailSettingNode.getProperty(Utils.EXO_NUMBER_OF_CONVERSATION).getLong()));
-    if (mailSettingNode.hasProperty(Utils.EXO_PERIOD_CHECKMAIL_AUTO)) 
-      mailSetting.setPeriodCheckMailAuto((mailSettingNode.getProperty(Utils.EXO_PERIOD_CHECKMAIL_AUTO).getLong()));
-    if (mailSettingNode.hasProperty(Utils.EXO_DEFAULT_ACCOUNT)) 
-      mailSetting.setDefaultAccount((mailSettingNode.getProperty(Utils.EXO_DEFAULT_ACCOUNT).getString()));
-    if (mailSettingNode.hasProperty(Utils.EXO_EDITOR)) 
-      mailSetting.setTypeOfEditor((mailSettingNode.getProperty(Utils.EXO_EDITOR).getString()));
-    if (mailSettingNode.hasProperty(Utils.EXO_FORMAT_WHEN_REPLYFORWARD)) 
-      mailSetting.setFormatWhenReplyForward((mailSettingNode.getProperty(Utils.EXO_FORMAT_WHEN_REPLYFORWARD).getString()));
-    if (mailSettingNode.hasProperty(Utils.EXO_REPLY_MESSAGE_WITH)) 
-      mailSetting.setReplyMessageWith((mailSettingNode.getProperty(Utils.EXO_REPLY_MESSAGE_WITH).getString()));
-    if (mailSettingNode.hasProperty(Utils.EXO_FORWARD_MESSAGE_WITH)) 
-      mailSetting.setForwardMessageWith((mailSettingNode.getProperty(Utils.EXO_FORWARD_MESSAGE_WITH).getString()));
-    if (mailSettingNode.hasProperty(Utils.EXO_PREFIX_MESSAGE_WITH)) 
-      mailSetting.setPrefixMessageWith((mailSettingNode.getProperty(Utils.EXO_PREFIX_MESSAGE_WITH).getString()));
-    if (mailSettingNode.hasProperty(Utils.EXO_SAVE_SENT_MESSAGE)) 
-      mailSetting.setSaveMessageInSent((mailSettingNode.getProperty(Utils.EXO_SAVE_SENT_MESSAGE).getBoolean()));
-    
+    if (mailSettingNode !=null ){
+      if (mailSettingNode.hasProperty(Utils.EXO_NUMBER_OF_CONVERSATION)) 
+        mailSetting.setShowNumberOfConversation((mailSettingNode.getProperty(Utils.EXO_NUMBER_OF_CONVERSATION).getLong()));
+      if (mailSettingNode.hasProperty(Utils.EXO_PERIOD_CHECKMAIL_AUTO)) 
+        mailSetting.setPeriodCheckMailAuto((mailSettingNode.getProperty(Utils.EXO_PERIOD_CHECKMAIL_AUTO).getLong()));
+      if (mailSettingNode.hasProperty(Utils.EXO_DEFAULT_ACCOUNT)) 
+        mailSetting.setDefaultAccount((mailSettingNode.getProperty(Utils.EXO_DEFAULT_ACCOUNT).getString()));
+      if (mailSettingNode.hasProperty(Utils.EXO_EDITOR)) 
+        mailSetting.setTypeOfEditor((mailSettingNode.getProperty(Utils.EXO_EDITOR).getString()));
+      if (mailSettingNode.hasProperty(Utils.EXO_FORMAT_WHEN_REPLYFORWARD)) 
+        mailSetting.setFormatWhenReplyForward((mailSettingNode.getProperty(Utils.EXO_FORMAT_WHEN_REPLYFORWARD).getString()));
+      if (mailSettingNode.hasProperty(Utils.EXO_REPLY_MESSAGE_WITH)) 
+        mailSetting.setReplyMessageWith((mailSettingNode.getProperty(Utils.EXO_REPLY_MESSAGE_WITH).getString()));
+      if (mailSettingNode.hasProperty(Utils.EXO_FORWARD_MESSAGE_WITH)) 
+        mailSetting.setForwardMessageWith((mailSettingNode.getProperty(Utils.EXO_FORWARD_MESSAGE_WITH).getString()));
+      if (mailSettingNode.hasProperty(Utils.EXO_PREFIX_MESSAGE_WITH)) 
+        mailSetting.setPrefixMessageWith((mailSettingNode.getProperty(Utils.EXO_PREFIX_MESSAGE_WITH).getString()));
+      if (mailSettingNode.hasProperty(Utils.EXO_SAVE_SENT_MESSAGE)) 
+        mailSetting.setSaveMessageInSent((mailSettingNode.getProperty(Utils.EXO_SAVE_SENT_MESSAGE).getBoolean()));
+    }
     return mailSetting; 
   }
 
