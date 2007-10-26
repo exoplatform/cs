@@ -558,8 +558,14 @@ public class UIMessageList extends UIForm {
       System.out.println("=== >>> Export Action Listener");
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
+      String msgId = uiMessageList.getSelectedMessageId();
       UIExportForm uiExportForm = uiPopup.createUIComponent(UIExportForm.class, null, null);
       uiPopup.activate(uiExportForm, 600, 0, true);
+      String username = uiPortlet.getCurrentUser();
+      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      MailService mailServ = uiPortlet.getApplicationComponent(MailService.class);
+      Message msg = mailServ.getMessageById(username, msgId, accountId);
+      uiExportForm.setExportFileName(msg.getSubject());
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup);  
     }
   }

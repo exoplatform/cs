@@ -57,6 +57,10 @@ public class UIExportForm extends UIForm implements UIPopupComponent {
     addUIFormInput(new UIFormSelectBox(EXPORT_FILE_TYPE, EXPORT_FILE_TYPE, options));
   }
   
+  public void setExportFileName(String name) throws Exception {
+    getUIStringInput(EXPORT_FILE_NAME).setValue(name);
+  }
+  
   public void activate() throws Exception { }
 
   public void deActivate() throws Exception { }

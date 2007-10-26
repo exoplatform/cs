@@ -154,7 +154,7 @@ public class Utils {
   public static final String TAG_VIOLET = "Violet".intern() ;
   public static final String TAG_YELLOW = "Yellow".intern() ;
   public static final String[] TAG_COLOR = {TAG_RED, TAG_BLUE, TAG_GREEN, TAG_BROWN, TAG_ORANGE, TAG_PING, TAG_YELLOW, TAG_VIOLET};
-  public static final String[] MIME_MAIL_TYPES = {"eml", "msg"};
+  public static final String[] MIME_MAIL_TYPES = {"eml"};
   public static boolean isEmptyField(String value) {
     return value == null || value.trim().length() == 0 ;
   }
@@ -197,7 +197,15 @@ public class Utils {
   
   public static javax.mail.internet.MimeMessage mergeToMimeMessage(Message message, javax.mail.internet.MimeMessage mimeMessage) throws Exception {
     InternetAddress addressFrom = new InternetAddress(message.getFrom());
-    mimeMessage.setHeader("Content-Type", "multipart/alternative");
+    mimeMessage.setHeader("X-Priority", String.valueOf(message.getPriority()));
+    String priority = "Normal";
+    if (message.getPriority() == Utils.PRIORITY_HIGH) {
+      priority = "High";
+    } else if (message.getPriority() == Utils.PRIORITY_LOW) {
+      priority = "Low";
+    }     
+    if (message.getPriority() != 0 ) mimeMessage.setHeader("Importance", priority);
+    
     mimeMessage.setFrom(addressFrom);
     mimeMessage.setRecipients(javax.mail.Message.RecipientType.TO, InternetAddress.parse(message.getMessageTo()));
     if(message.getMessageCc() != null) {
@@ -231,14 +239,6 @@ public class Utils {
         multiPart.addBodyPart(mimeBodyPart);
       }        
     }
-    mimeMessage.setHeader("X-Priority", String.valueOf(message.getPriority()));
-    String priority = "Normal";
-    if (message.getPriority() == Utils.PRIORITY_HIGH) {
-      priority = "High";
-    } else if (message.getPriority() == Utils.PRIORITY_LOW) {
-      priority = "Low";
-    }     
-    if (message.getPriority() != 0 ) mimeMessage.setHeader("Importance", priority);
     
     mimeMessage.setContent(multiPart);
     mimeMessage.saveChanges();
