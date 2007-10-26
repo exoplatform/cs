@@ -154,7 +154,7 @@ public class Utils {
   public static final String TAG_VIOLET = "Violet".intern() ;
   public static final String TAG_YELLOW = "Yellow".intern() ;
   public static final String[] TAG_COLOR = {TAG_RED, TAG_BLUE, TAG_GREEN, TAG_BROWN, TAG_ORANGE, TAG_PING, TAG_YELLOW, TAG_VIOLET};
-  
+  public static final String[] MIME_MAIL_TYPES = {"eml", "msg"};
   public static boolean isEmptyField(String value) {
     return value == null || value.trim().length() == 0 ;
   }
@@ -197,6 +197,7 @@ public class Utils {
   
   public static javax.mail.internet.MimeMessage mergeToMimeMessage(Message message, javax.mail.internet.MimeMessage mimeMessage) throws Exception {
     InternetAddress addressFrom = new InternetAddress(message.getFrom());
+    mimeMessage.setHeader("Content-Type", "multipart/alternative");
     mimeMessage.setFrom(addressFrom);
     mimeMessage.setRecipients(javax.mail.Message.RecipientType.TO, InternetAddress.parse(message.getMessageTo()));
     if(message.getMessageCc() != null) {

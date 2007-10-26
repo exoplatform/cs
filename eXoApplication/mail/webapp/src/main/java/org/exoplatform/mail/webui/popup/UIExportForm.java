@@ -4,24 +4,29 @@
  **************************************************************************/
 package org.exoplatform.mail.webui.popup;
 
-import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.OutputStream;
-import java.io.Writer;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.exoplatform.container.PortalContainer;
+import org.exoplatform.download.DownloadResource;
+import org.exoplatform.download.DownloadService;
+import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.MailService;
+import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UIMessageList;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
+import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
+import org.exoplatform.webui.form.UIFormSelectBox;
+import org.exoplatform.webui.form.UIFormStringInput;
 
 /**
  * Created by The eXo Platform SARL
@@ -39,8 +44,18 @@ import org.exoplatform.webui.form.UIForm;
     }
 )
 public class UIExportForm extends UIForm implements UIPopupComponent {
+  public static final String EXPORT_FILE_TYPE = "export-file-type";
+  public static final String EXPORT_FILE_NAME = "export-file-name";
 
-  public UIExportForm() { }
+  public UIExportForm() throws Exception { 
+    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>();
+    String[] mimeTypes = Utils.MIME_MAIL_TYPES;
+    for (int i=0; i < mimeTypes.length; i++) {
+      options.add(new SelectItemOption<String>("*." + mimeTypes[i], mimeTypes[i]));
+    }   
+    addUIFormInput(new UIFormStringInput(EXPORT_FILE_NAME, EXPORT_FILE_NAME, null));
+    addUIFormInput(new UIFormSelectBox(EXPORT_FILE_TYPE, EXPORT_FILE_TYPE, options));
+  }
   
   public void activate() throws Exception { }
 
@@ -57,9 +72,15 @@ public class UIExportForm extends UIForm implements UIPopupComponent {
       String accountId = MailUtils.getAccountId();
       MailService mailSrv = MailUtils.getMailService();      
       ByteArrayOutputStream outputStream = (ByteArrayOutputStream)mailSrv.exportMessage(username, accountId, msgExport);
-      FileOutputStream fos = new FileOutputStream("d://exomail.eml");
-      fos.write(outputStream.toString().getBytes());
-      fos.close();
+      ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
+      String fileName = uiExportForm.getUIStringInput(EXPORT_FILE_NAME).getValue();
+      String type = uiExportForm.getUIFormSelectBox(EXPORT_FILE_TYPE).getValue();
+      DownloadResource dresource = new InputStreamDownloadResource(inputStream, type);
+      DownloadService dservice = (DownloadService)PortalContainer.getInstance().getComponentInstanceOfType(DownloadService.class);
+      dresource.setDownloadName(fileName + "." + type);
+      String downloadLink = dservice.getDownloadLink(dservice.addDownloadResource(dresource));
+      event.getRequestContext().getJavascriptManager().addJavascript("ajaxRedirect('" + downloadLink + "');");
+      uiPortlet.cancelAction() ;
     }
   }
   
