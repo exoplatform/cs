@@ -291,16 +291,51 @@
 		                      Send to friend
 		                    </div>
 		                   </a>
-		                   <a  class="MenuItem" style="color: gray" href="<%=uicomponent.event("ChangeColorCalendar","id")%>" >   
-		                    <div class="ItemIcon  ChangeColorCalendarIcon">
-		                      Change color
-		                    </div>
-		                   </a>
 		                   <a class="MenuItem" href="<%=uicomponent.event("ShareCalendar","id")%>">   
 		                    <div class="ItemIcon  SharedCalendarIcon">
 		                      Shared calendar
 		                    </div>
-		                   </a>								                   
+		                   </a>		
+		                   
+
+												<div class="CalendarTableColor">
+													<div class="CalendarRowColor">
+														<a href="#" class="SelectColorSuburd LightCyan"><span></span></a>
+														<a href="#" class="NaryBlue ColorSuburd"><span></span></a>
+														<a href="#" class="DarkNaryBlue ColorSuburd"><span></span></a>
+														<a href="#" class="Violet ColorSuburd"><span></span></a>
+														<a href="#" class="PingViolet ColorSuburd"><span></span></a>
+														<a href="#" class="Ping ColorSuburd"><span></span></a>
+														<a href="#" class="Red ColorSuburd"><span></span></a>
+														<a href="#" class="Blue ColorSuburd"><span></span></a>
+														<div style="clear: left"><span></span></div>
+													</div>
+													<div class="CalendarRowColor">
+														<a href="#" class="DarkOrange ColorSuburd"><span></span></a>
+														<a href="#" class="LightOrange ColorSuburd"><span></span></a>
+														<a href="#" class="Cream ColorSuburd"><span></span></a>
+														<a href="#" class="Earth ColorSuburd"><span></span></a>
+														<a href="#" class="LightGreen ColorSuburd"><span></span></a>
+														<a href="#" class="Green ColorSuburd"><span></span></a>
+														<a href="#" class="BlueSky ColorSuburd"><span></span></a>
+														<a href="#" class="ColorSuburd c9a54a"><span></span></a>
+														<div style="clear: left"><span></span></div>
+													</div>
+													<div class="CalendarRowColor">
+														<a href="#" class="ColorSuburd ddc69c"><span></span></a>
+														<a href="#" class="ColorSuburd c5c493"><span></span></a>
+														<a href="#" class="ColorSuburd c97c6c3"><span></span></a>
+														<a href="#" class="ColorSuburd c1d3f3"><span></span></a>
+														<a href="#" class="ColorSuburd a2b4c3"><span></span></a>
+														<a href="#" class="ColorSuburd c8afc6"><span></span></a>
+														<a href="#" class="ColorSuburd dab2b1"><span></span></a>
+														<a href="#" class="ColorSuburd b2b1da"><span></span></a>
+														<div style="clear: left"><span></span></div>
+													</div>
+												</div>					
+
+
+					                   
 		          		</div>
 		      			</div>
 		    			</div>

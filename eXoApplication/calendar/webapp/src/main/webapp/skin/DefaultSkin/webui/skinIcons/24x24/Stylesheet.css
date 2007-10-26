@@ -97,7 +97,7 @@
 	background: url('icons/CutCalendarIcon.gif') no-repeat;
 }
 
-.DeleteCalendarIcon {
+.RemoveCalendarIcon {
 	background: url('icons/DeleteCalendarIcon.gif') no-repeat;
 }
 
@@ -105,7 +105,7 @@
 	background: url('icons/AddNewEvent.gif') no-repeat;
 }
 
-.SendToFriend {
+.SendMailCalendarIcon {
 	background: url('icons/SendToFriend.gif') no-repeat;
 }
 
@@ -127,6 +127,10 @@
 
 .QuickAddTask {
 	background: url('icons/AddNewTask.gif') no-repeat;
+}
+
+.ChangeColorCalendarIcon {
+	background: url('icons/ChangeColorCalendarIcon.gif') no-repeat;
 }
 
 

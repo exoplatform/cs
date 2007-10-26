@@ -1438,16 +1438,18 @@
 	width: 12px; height: 12px;
 	margin: 2px;
 	border: 1px solid #ffffff;
-	cursor:pointer;
 }
 
 .UIPopupCategory .CalendarTableColor .SelectColorSuburd {
 	float: left;
 	width: 12px; height: 12px;
 	margin: 2px;
-	border: 1px solid red;
+	border: 1px solid blue;
 }
 
+.UIPopupCategory .CalendarTableColor a:hover {
+	border: 1px solid red;
+}
 
 .UIPopupCategory .CalendarTableColor .LightCyan {
 	background: #49e3d2;
