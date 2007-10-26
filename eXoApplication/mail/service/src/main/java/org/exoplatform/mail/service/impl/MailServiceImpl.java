@@ -4,7 +4,9 @@
  **************************************************************************/
 package org.exoplatform.mail.service.impl;
 
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -493,12 +495,23 @@ public class MailServiceImpl implements MailService{
   
   public void importMessage(String username, String accountId, String folderId, InputStream inputStream, String type) throws Exception {
     Properties props = System.getProperties();
-    Session mailSession = Session.getDefaultInstance(props, null);
-    MimeMessage mimeMessage = new MimeMessage(mailSession, inputStream);
+    Session session = Session.getDefaultInstance(props, null);
+    MimeMessage mimeMessage = new MimeMessage(session, inputStream);
     Message message = new Message();
     message.setAccountId(accountId);
     message = Utils.mergeFromMimeMessage(message, mimeMessage);
     message.setFolders(new String[] {folderId});
     saveMessage(username, accountId, message, true);
+  }
+  
+  public OutputStream exportMessage(String username, String accountId, String messageId) throws Exception {
+    Properties props = System.getProperties();
+    Session session = Session.getDefaultInstance(props, null);
+    Message message = getMessageById(username, messageId, accountId);
+    MimeMessage mimeMessage = new MimeMessage(session);
+    mimeMessage = Utils.mergeToMimeMessage(message, mimeMessage);
+    OutputStream outputStream = new ByteArrayOutputStream();
+    mimeMessage.writeTo(outputStream);
+    return outputStream ; 
   }
 }

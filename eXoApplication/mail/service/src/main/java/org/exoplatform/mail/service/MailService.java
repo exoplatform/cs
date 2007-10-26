@@ -5,6 +5,7 @@
 package org.exoplatform.mail.service;
 
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
 
 
@@ -266,4 +267,5 @@ public interface MailService {
   public void saveMailSetting(String username, MailSetting newSetting) throws Exception;
   
   public void importMessage(String username, String accountId, String folderId, InputStream inputStream, String type) throws Exception;
+  public OutputStream exportMessage(String username,String accountId, String messageId) throws Exception;
 }

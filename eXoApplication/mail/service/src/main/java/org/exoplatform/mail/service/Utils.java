@@ -10,12 +10,18 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+
 import java.util.GregorianCalendar;
 
+import javax.activation.DataHandler;
+import javax.mail.BodyPart;
 import javax.mail.Multipart;
 import javax.mail.Part;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMultipart;
+import javax.mail.util.ByteArrayDataSource;
 
 import org.exoplatform.services.jcr.util.IdGenerator;
 
@@ -149,8 +155,6 @@ public class Utils {
   public static final String TAG_YELLOW = "Yellow".intern() ;
   public static final String[] TAG_COLOR = {TAG_RED, TAG_BLUE, TAG_GREEN, TAG_BROWN, TAG_ORANGE, TAG_PING, TAG_YELLOW, TAG_VIOLET};
   
-  
-  
   public static boolean isEmptyField(String value) {
     return value == null || value.trim().length() == 0 ;
   }
@@ -189,6 +193,56 @@ public class Utils {
     String folderId = accountId + "DefaultFolder" + folderName;
     if (isPersonal) folderId = accountId + "UserFolder" + folderName;
     return folderId;
+  }
+  
+  public static javax.mail.internet.MimeMessage mergeToMimeMessage(Message message, javax.mail.internet.MimeMessage mimeMessage) throws Exception {
+    InternetAddress addressFrom = new InternetAddress(message.getFrom());
+    mimeMessage.setFrom(addressFrom);
+    mimeMessage.setRecipients(javax.mail.Message.RecipientType.TO, InternetAddress.parse(message.getMessageTo()));
+    if(message.getMessageCc() != null) {
+      mimeMessage.setRecipients(javax.mail.Message.RecipientType.CC, InternetAddress.parse(message.getMessageCc(), true));
+    }
+    if(message.getMessageBcc() != null) {   
+      mimeMessage.setRecipients(javax.mail.Message.RecipientType.BCC, InternetAddress.parse(message.getMessageBcc(), false));
+    }
+    mimeMessage.setSubject(message.getSubject());
+    mimeMessage.setSentDate(message.getSendDate());
+   
+    BodyPart mimeBodyPart1 = new MimeBodyPart();
+    mimeBodyPart1.setContent(message.getMessageBody(), message.getContentType());
+    mimeBodyPart1.setDisposition(Utils.INLINE);
+    
+    Multipart multiPart = new MimeMultipart();
+    multiPart.addBodyPart(mimeBodyPart1);
+    
+    List<Attachment> attachList = message.getAttachments();
+    if (attachList != null) {
+      for (Attachment att : attachList) {
+        BufferAttachment attach = (BufferAttachment) att;
+        InputStream is = attach.getInputStream();
+
+        MimeBodyPart mimeBodyPart = new MimeBodyPart();
+        ByteArrayDataSource byteArrayDataSource = new ByteArrayDataSource(is, att.getMimeType());
+        mimeBodyPart.setDataHandler(new DataHandler(byteArrayDataSource));
+
+        mimeBodyPart.setDisposition(Utils.ATTACHMENT);
+        mimeBodyPart.setFileName(attach.getName());
+        multiPart.addBodyPart(mimeBodyPart);
+      }        
+    }
+    mimeMessage.setHeader("X-Priority", String.valueOf(message.getPriority()));
+    String priority = "Normal";
+    if (message.getPriority() == Utils.PRIORITY_HIGH) {
+      priority = "High";
+    } else if (message.getPriority() == Utils.PRIORITY_LOW) {
+      priority = "Low";
+    }     
+    if (message.getPriority() != 0 ) mimeMessage.setHeader("Importance", priority);
+    
+    mimeMessage.setContent(multiPart);
+    mimeMessage.saveChanges();
+    
+    return mimeMessage;
   }
   
   public static Message mergeFromMimeMessage(Message message, javax.mail.Message mimeMessage) throws Exception {
