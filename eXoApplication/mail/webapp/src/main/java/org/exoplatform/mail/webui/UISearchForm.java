@@ -4,6 +4,14 @@
  **************************************************************************/
 package org.exoplatform.mail.webui;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.exoplatform.mail.service.Folder;
+import org.exoplatform.mail.service.MailService;
+import org.exoplatform.mail.webui.popup.UIAdvancedSearchForm;
+import org.exoplatform.mail.webui.popup.UIPopupAction;
+import org.exoplatform.mail.webui.popup.UIPopupActionContainer;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
@@ -35,14 +43,37 @@ public class UISearchForm extends UIForm {
   
   static  public class SearchActionListener extends EventListener<UISearchForm> {
     public void execute(Event<UISearchForm> event) throws Exception {
-      UISearchForm uiForm = event.getSource() ;
+      //UISearchForm uiForm = event.getSource() ;
       System.out.println("========> SearchActionListener");
     }
   }
+ 
   static  public class AdvancedSearchActionListener extends EventListener<UISearchForm> {
     public void execute(Event<UISearchForm> event) throws Exception {
-      UISearchForm uiForm = event.getSource() ;
-      System.out.println("========> AdvancedSearchActionListener");
+      UISearchForm uiSearchForm = event.getSource() ;
+      System.out.println("========> AdvancedSearchActionListener");   
+      
+      UIMailPortlet uiPortlet = uiSearchForm.getAncestorOfType(UIMailPortlet.class) ;
+      UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
+      UIPopupActionContainer uiPopupContainer = uiPopupAction.activate(UIPopupActionContainer.class, 850) ;
+      uiPopupContainer.setId("AdvancedSearchActionListener");
+      
+      UIAdvancedSearchForm uiAdvancedSearchForm = uiPopupContainer.createUIComponent(UIAdvancedSearchForm.class, null, null);
+      
+      String username = uiPortlet.getCurrentUser();
+      MailService mailService = uiSearchForm.getApplicationComponent(MailService.class);
+      UINavigationContainer uiNavigation = uiPortlet.getChild(UINavigationContainer.class) ;
+      UISelectAccount uiSelectAccount = uiNavigation.getChild(UISelectAccount.class) ;
+      String accountId = uiSelectAccount.getSelectedValue() ; 
+   
+      List<Folder> folderList = new ArrayList<Folder>();
+      folderList.addAll(mailService.getFolders(username, accountId, false)); 
+      folderList.addAll(mailService.getFolders(username, accountId, true));            
+      uiAdvancedSearchForm.setFolderList(folderList);
+      uiPopupContainer.addChild(uiAdvancedSearchForm) ;      
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+      
+      
     }
-  }
+  } 
 }

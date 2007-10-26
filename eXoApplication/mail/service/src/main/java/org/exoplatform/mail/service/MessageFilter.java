@@ -3,6 +3,9 @@
  * Please look at license.txt in info directory for more license detail.   *
  **************************************************************************/
 package org.exoplatform.mail.service;
+import java.util.Date;
+
+import org.exoplatform.commons.utils.ISO8601;
 
 /**
  * Created by The eXo Platform SARL
@@ -21,6 +24,8 @@ public class MessageFilter {
   private String accountPath ;
   private String orderBy;
   private boolean isAscending;
+  private String emailTo;
+  private String emailFrom;
 
   public MessageFilter(String name) {
     this.name = name ;
@@ -43,6 +48,12 @@ public class MessageFilter {
   
   public String getBody() { return body ; }
   public void setBody(String body) { this.body = body ; }
+  
+  public String getEmailFrom(){return emailFrom;}
+  public void setEmailFrom(String emailFrom){this.emailFrom=emailFrom;}
+  public String getEmailTo(){return emailTo;}
+  public void setEmailTo(String emailTo){this.emailTo=emailTo;}
+  
   
   public String getViewQuery() { return viewQuery ; }
   public void setViewQuery(String query) { this.viewQuery = query ; }
@@ -88,6 +99,23 @@ public class MessageFilter {
       stringBuffer.append(")") ;
       hasConjuntion = true ;
     }
+    
+    if(emailFrom != null && emailFrom.trim().length() > 0) {
+      if(hasConjuntion) stringBuffer.append(" and (") ;
+      else stringBuffer.append("(") ;
+      stringBuffer.append("jcr:contains(@exo:from, '" + emailFrom + "')") ;
+      stringBuffer.append(")") ;
+      hasConjuntion = true ;     
+    }
+    
+    if(emailTo != null && emailTo.trim().length() > 0) {
+      if(hasConjuntion) stringBuffer.append(" and (") ;
+      else stringBuffer.append("(") ;
+      stringBuffer.append("jcr:contains(@exo:to, '" + emailTo + "')") ;
+      stringBuffer.append(")") ;
+      hasConjuntion = true ;
+    }
+      
     if(body != null && body.trim().length() > 0) {
       if(hasConjuntion) stringBuffer.append(" and (") ;
       else stringBuffer.append("(") ;
@@ -103,6 +131,7 @@ public class MessageFilter {
       stringBuffer.append(")") ;
       hasConjuntion = true ;
     }
+    
     stringBuffer.append("]") ;
     
     if (orderBy != null && orderBy.trim().length() >0) {
@@ -111,6 +140,7 @@ public class MessageFilter {
       else stringBuffer.append("descending");
     }
     
+    System.out.println("getStatement :"+stringBuffer.toString());
     if(hasConjuntion) queryString.append(stringBuffer.toString()) ;
     return queryString.toString() ;
   }
