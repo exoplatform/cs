@@ -72,6 +72,7 @@ public class CalendarEvent {
   //       for task:  NEEDS-ACTION, COMPLETED, IN-PROCESS, CANCELLED
   //       for journal: DRAFT, FINAL, CANCELLED
   private String status = ""; 
+  private String calType = "0";
   private String[] invitation ;
   private String[] participant ;
   private List<Reminder> reminders ;
@@ -155,5 +156,13 @@ public class CalendarEvent {
 
   public String getTaskDelegator() {
     return taskDelegator;
+  }
+
+  public void setCalType(String calType) {
+    this.calType = calType;
+  }
+
+  public String getCalType() {
+    return calType;
   }
 }

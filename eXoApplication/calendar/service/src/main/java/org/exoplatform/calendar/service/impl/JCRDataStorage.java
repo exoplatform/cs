@@ -619,8 +619,11 @@ public class JCRDataStorage implements DataStorage{
     Query query = qm.createQuery(eventQuery.getQueryStatement(), Query.XPATH) ;
     QueryResult result = query.execute();
     NodeIterator it = result.getNodes();
+    CalendarEvent calEvent ;
     while(it.hasNext()) {
-      events.add(getEvent(it.nextNode())) ;
+      calEvent = getEvent(it.nextNode()) ;
+      calEvent.setCalType("0") ;
+      events.add(calEvent) ;
     }
     return events ;
   }
@@ -668,8 +671,11 @@ public class JCRDataStorage implements DataStorage{
     Query query = qm.createQuery(eventQuery.getQueryStatement(), Query.XPATH) ;
     QueryResult result = query.execute();
     NodeIterator it = result.getNodes();
+    CalendarEvent calEvent ;
     while(it.hasNext()) {
-      events.add(getEvent(it.nextNode())) ;
+      calEvent = getEvent(it.nextNode()) ;
+      calEvent.setCalType("2") ;
+      events.add(calEvent) ;
     }
     return events ;
   }
@@ -1205,6 +1211,7 @@ public class JCRDataStorage implements DataStorage{
     List<CalendarEvent> events = new ArrayList<CalendarEvent>() ;
     if(getSharedCalendarHome().hasNode(username)) {
       PropertyIterator iter = getSharedCalendarHome().getNode(username).getReferences() ;
+      CalendarEvent calEvent ;
       while(iter.hasNext()) {
         try{
           Node calendar = iter.nextProperty().getParent() ;
@@ -1212,8 +1219,11 @@ public class JCRDataStorage implements DataStorage{
           QueryManager qm = calendar.getSession().getWorkspace().getQueryManager() ;
           Query query = qm.createQuery(eventQuery.getQueryStatement(), Query.XPATH) ;
           NodeIterator it = query.execute().getNodes();
+          
           while(it.hasNext()){
-            events.add(getEvent(it.nextNode())) ;
+            calEvent = getEvent(it.nextNode()) ;
+            calEvent.setCalType("1") ;
+            events.add(calEvent) ;
           }
         }catch (Exception e) {
           e.printStackTrace() ;
@@ -1271,6 +1281,24 @@ public class JCRDataStorage implements DataStorage{
             }
           }
           calendar.setProperty(SHARED_PROP, newValues.toArray(new Value[newValues.size()])) ;
+          calendar.save() ;
+          break ;
+        }
+      }      
+    }
+  }
+  
+  public void saveEventToSharedCalendar(String username, String calendarId, CalendarEvent event, boolean isNew) throws Exception  {
+    Node sharedCalendarHome = getSharedCalendarHome() ;
+    if(sharedCalendarHome.hasNode(username)) {
+      Node userNode = sharedCalendarHome.getNode(username) ;
+      String uuid = userNode.getProperty("jcr:uuid").getString() ;
+      PropertyIterator iter = userNode.getReferences() ;
+      Node calendar ;      
+      while(iter.hasNext()) {
+        calendar = iter.nextProperty().getParent() ;
+        if(calendar.getProperty("exo:id").getString().equals(calendarId)) {
+          saveEvent(calendar, event,isNew) ;
           calendar.save() ;
           break ;
         }

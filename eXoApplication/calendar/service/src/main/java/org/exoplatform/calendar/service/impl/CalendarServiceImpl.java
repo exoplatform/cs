@@ -198,4 +198,8 @@ public class CalendarServiceImpl implements CalendarService{
   public void removeSharedCalendar(String username, String calendarId) throws Exception {
     storage_.removeSharedCalendar(username, calendarId) ;
   }
+  
+  public void saveEventToSharedCalendar(String username, String calendarId, CalendarEvent event, boolean isNew) throws Exception  {
+    storage_.saveEventToSharedCalendar(username, calendarId, event, isNew) ;
+  }
 }

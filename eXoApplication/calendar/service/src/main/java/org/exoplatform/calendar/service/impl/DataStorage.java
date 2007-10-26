@@ -71,4 +71,5 @@ public interface DataStorage {
   public List<CalendarEvent> getEvent(String username, EventQuery eventQuery, String[] publicCalendarIds) throws Exception ;
   
   public void removeSharedCalendar(String username, String calendarId) throws Exception ;
+  public void saveEventToSharedCalendar(String username, String calendarId, CalendarEvent event, boolean isNew) throws Exception  ; 
 }
