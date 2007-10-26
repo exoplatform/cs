@@ -365,20 +365,26 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       UICalendarView uiForm = event.getSource() ;
       System.out.println(" ===========> AddEventActionListener") ;
       CalendarService calendarService = uiForm.getApplicationComponent(CalendarService.class) ;
-      String username = event.getRequestContext().getRemoteUser() ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-      if(calendarService.getUserCalendars(username).size() <= 0) {
-        uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.calendar-list-empty", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-      } else {
+      List<org.exoplatform.calendar.service.Calendar> privateCalendars = 
+        calendarService.getUserCalendars(CalendarUtils.getCurrentUser()) ;
+      if(privateCalendars.size() > 0) {
         UICalendarPortlet uiPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
         UIPopupAction uiParenPopup = uiPortlet.getChild(UIPopupAction.class) ;
         UIPopupContainer uiPopupContainer = uiPortlet.createUIComponent(UIPopupContainer.class, null, null) ;
         uiPopupContainer.setId("UIPopupAddEventContainer") ;
         UIEventForm uiEventForm = uiPopupContainer.addChild(UIEventForm.class, null, null) ;
         uiEventForm.initForm() ;
+        List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
+        for(org.exoplatform.calendar.service.Calendar cal : privateCalendars) {
+          options.add(new SelectItemOption<String>(cal.getName(), cal.getId())) ;
+        }
+        uiEventForm.update("0", options) ;
         uiParenPopup.activate(uiPopupContainer, 700, 700, true) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiParenPopup) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiParenPopup) ;        
+      } else {
+        uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.calendar-list-empty", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
       }
     }
   }

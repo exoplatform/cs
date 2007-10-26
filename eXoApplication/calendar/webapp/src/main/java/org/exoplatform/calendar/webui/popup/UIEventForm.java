@@ -83,6 +83,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   final public static String ACT_ADDCATEGORY = "AddCategory".intern() ;
   private boolean isAddNew_ = true ;
   private CalendarEvent calendarEvent_ = null ;
+  private String calType_ = "0" ;
   private String errorMsg_ = null ;
 
   public UIEventForm() throws Exception {
@@ -177,6 +178,28 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       initForm() ;
     }
   }
+  
+  public void update(String calType, List<SelectItemOption<String>> options) throws Exception{
+    UIEventDetailTab uiEventDetailTab = getChildById(TAB_EVENTDETAIL) ;
+    if(options != null) {
+      uiEventDetailTab.getUIFormSelectBox(uiEventDetailTab.FIELD_CALENDAR).setOptions(options) ;
+    }else {
+      uiEventDetailTab.getUIFormSelectBox(uiEventDetailTab.FIELD_CALENDAR).setOptions(getCalendar()) ;
+    }
+    calType_ = calType ;
+  }
+  
+  private List<SelectItemOption<String>> getCalendar() throws Exception {
+    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
+    CalendarService calendarService = CalendarUtils.getCalendarService() ;
+    List<org.exoplatform.calendar.service.Calendar> calendars = 
+      calendarService.getUserCalendars(CalendarUtils.getCurrentUser()) ;
+    for(org.exoplatform.calendar.service.Calendar c : calendars) {
+      options.add(new SelectItemOption<String>(c.getName(), c.getId())) ;
+    }
+    return options ;
+  }
+  
   public static List<SelectItemOption<String>> getCategory() throws Exception {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
@@ -208,20 +231,10 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   public String[] getActions() {
     return new String[]{"AddAttachment","Save", "Cancel"} ;
   }
-  public void activate() throws Exception {
-    // TODO Auto-generated method stub
-
-  }
-
-  public void deActivate() throws Exception {
-    // TODO Auto-generated method stub
-
-  }
-
-  public void updateSelect(String selectField, String value) throws Exception {
-    // TODO Auto-generated method stub
-
-  }
+  public void activate() throws Exception {}
+  public void deActivate() throws Exception {}
+  public void updateSelect(String selectField, String value) throws Exception {}
+  
   protected boolean isEventDetailValid(){
     if(CalendarUtils.isEmpty(getEventSumary())) {
       errorMsg_ = "UIEventForm.msg.event-summary-required" ;
@@ -611,7 +624,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
       UICalendarViewContainer uiViewContainer = calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
       if(uiForm.isEventDetailValid()) {
-        CalendarService calendarService = uiForm.getApplicationComponent(CalendarService.class) ;
         String username = event.getRequestContext().getRemoteUser() ;
         String calendarId = uiForm.getCalendarId() ;
         CalendarEvent calendarEvent = new CalendarEvent() ;
@@ -647,7 +659,13 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
         if(uiForm.getMeetingInvitation() != null) calendarEvent.setInvitation(uiForm.getMeetingInvitation()) ;
         if(uiForm.getParticipant() != null) calendarEvent.setParticipant(uiForm.getParticipant()) ;
         try {
-          calendarService.saveUserEvent(username, calendarId, calendarEvent, uiForm.isAddNew_) ;
+          if(uiForm.calType_.equals("0")) {
+            CalendarUtils.getCalendarService().saveUserEvent(username, calendarId, calendarEvent, uiForm.isAddNew_) ;
+          }else if(uiForm.calType_.equals("1")){
+            CalendarUtils.getCalendarService().saveEventToSharedCalendar(username, calendarId, calendarEvent, uiForm.isAddNew_) ;
+          }else if(uiForm.calType_.equals("2")){
+            CalendarUtils.getCalendarService().saveGroupEvent(calendarId, calendarEvent, uiForm.isAddNew_) ;          
+          }
           uiViewContainer.refresh() ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiViewContainer) ;
           UIMiniCalendar uiMiniCalendar = calendarPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;

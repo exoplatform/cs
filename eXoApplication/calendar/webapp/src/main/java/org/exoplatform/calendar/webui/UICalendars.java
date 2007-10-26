@@ -11,6 +11,7 @@ import java.util.Map;
 
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.Calendar;
+import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.GroupCalendarData;
@@ -23,6 +24,7 @@ import org.exoplatform.calendar.webui.popup.UIExportForm;
 import org.exoplatform.calendar.webui.popup.UIImportForm;
 import org.exoplatform.calendar.webui.popup.UIPopupAction;
 import org.exoplatform.calendar.webui.popup.UIPopupContainer;
+import org.exoplatform.calendar.webui.popup.UIQuickAddEvent;
 import org.exoplatform.calendar.webui.popup.UIRssForm;
 import org.exoplatform.calendar.webui.popup.UISendCalendarForm;
 import org.exoplatform.calendar.webui.popup.UISharedForm;
@@ -31,6 +33,7 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
+import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
@@ -68,6 +71,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
 public class UICalendars extends UIForm  {
   public static String CALENDARID = "calendarid".intern() ;
   public static String CALTYPE = "calType".intern() ;
+  public static String CALNAME = "calName".intern() ;
   private String[] publicCalendarIds = {} ;
   private Map<String, String> colorMap_ = new HashMap<String, String>() ;
   
@@ -171,13 +175,22 @@ public class UICalendars extends UIForm  {
     public void execute(Event<UICalendars> event) throws Exception {
       UICalendars uiComponent = event.getSource() ;
       String calendarId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      String calendarName = event.getRequestContext().getRequestParameter(CALNAME) ;
+      String calType = event.getRequestContext().getRequestParameter(CALTYPE) ;
       UICalendarPortlet uiCalendarPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
-      UIPopupContainer uiPopupContainer = uiCalendarPortlet.createUIComponent(UIPopupContainer.class, null, null) ;
-      uiPopupContainer.setId(UIPopupContainer.UIEVENTPOPUP) ;
-      UIEventForm uiForm = uiPopupContainer.addChild(UIEventForm.class, null, null) ;
-      uiForm.initForm(calendarId) ;
-      popupAction.activate(uiPopupContainer, 700, 0, true) ;
+      UIQuickAddEvent uiQuickAddEvent = popupAction.activate(UIQuickAddEvent.class, 600) ;
+      uiQuickAddEvent.setEvent(true) ;      
+      uiQuickAddEvent.init() ;
+      if(calType.equals("0")) {
+        uiQuickAddEvent.update(calType, null) ;
+        uiQuickAddEvent.setSelectedCalendar(calendarId) ;
+      } else {
+        List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
+        options.add(new SelectItemOption<String>(calendarName, calendarId)) ;
+        uiQuickAddEvent.update(calType, options) ;
+      }
+      
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent.getParent()) ;
     }

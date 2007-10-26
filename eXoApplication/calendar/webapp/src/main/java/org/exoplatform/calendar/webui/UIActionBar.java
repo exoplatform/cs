@@ -70,12 +70,13 @@ public class UIActionBar extends UIContainer  {
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
       UIQuickAddEvent uiQuickAddEvent = uiPopupAction.activate(UIQuickAddEvent.class, 600) ;
       if(CalendarEvent.TYPE_EVENT.equals(type)) {
-        uiQuickAddEvent.setEvent(true) ;
+        uiQuickAddEvent.setEvent(true) ;        
       } else {
         uiQuickAddEvent.setEvent(false) ;
         uiQuickAddEvent.setId(UIQuickAddEvent.UIQUICKADDTASK) ;
       }
       uiQuickAddEvent.init(uiPortlet.findFirstComponentOfType(UICalendarWorkingContainer.class).getCalendarSetting(), null, null) ;
+      uiQuickAddEvent.update("0", null) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }
   }

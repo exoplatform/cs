@@ -63,14 +63,14 @@ public class UIEventDetailTab extends UIFormInputWithActions {
   private int timeInterval_  ;
   private String timeFormat_ ;
   
-  public UIEventDetailTab(String arg0) throws Exception {
-    super(arg0);
+  public UIEventDetailTab(String id) throws Exception {
+    super(id);
     setComponentConfig(getClass(), null) ;
     applySetting() ;
     actionField_ = new HashMap<String, List<ActionData>>() ;
     addUIFormInput(new UIFormStringInput(FIELD_EVENT, FIELD_EVENT, null)) ;
     addUIFormInput(new UIFormTextAreaInput(FIELD_DESCRIPTION, FIELD_DESCRIPTION, null)) ;
-    addUIFormInput(new UIFormSelectBox(FIELD_CALENDAR, FIELD_CALENDAR, getCalendar())) ;
+    addUIFormInput(new UIFormSelectBox(FIELD_CALENDAR, FIELD_CALENDAR, null)) ;
     addUIFormInput(new UIFormSelectBox(FIELD_CATEGORY, FIELD_CATEGORY, UIEventForm.getCategory())) ;
     
     ActionData addCategoryAction = new ActionData() ;
@@ -151,16 +151,7 @@ public class UIEventDetailTab extends UIFormInputWithActions {
     attachments_ = attachment ;
   }
   
-  private List<SelectItemOption<String>> getCalendar() throws Exception {
-    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-    CalendarService calendarService = CalendarUtils.getCalendarService() ;
-    String username = Util.getPortalRequestContext().getRemoteUser() ;
-    List<Calendar> calendars = calendarService.getUserCalendars(username) ;
-    for(Calendar c : calendars) {
-      options.add(new SelectItemOption<String>(c.getName(), c.getId())) ;
-    }
-    return options ;
-  }
+  
   private List<SelectItemOption<String>> getPriority() throws Exception {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     options.add(new SelectItemOption<String>("high", "1")) ;

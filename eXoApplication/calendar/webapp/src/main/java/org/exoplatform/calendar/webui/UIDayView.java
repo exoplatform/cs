@@ -170,7 +170,8 @@ public class UIDayView extends UICalendarView {
       String endTime = event.getRequestContext().getRequestParameter("finishTime") ;
       String username = event.getRequestContext().getRemoteUser() ;
       CalendarService calendarService = calendarview.getApplicationComponent(CalendarService.class) ;
-      CalendarEvent ce = calendarService.getUserEvent(username, calendarId, eventId) ;
+      //CalendarEvent ce = calendarService.getUserEvent(username, calendarId, eventId) ;
+      CalendarEvent ce = calendarview.eventData_.get(eventId) ;
       if(ce != null) {
         try {
           int hoursBg = (Integer.parseInt(startTime)/60) ;
@@ -187,8 +188,15 @@ public class UIDayView extends UICalendarView {
           toDateTime.set(Calendar.MINUTE, minutesEnd) ;
 
           ce.setFromDateTime(fromDateTime.getTime());
-          ce.setToDateTime(toDateTime.getTime()) ;
-          calendarService.saveUserEvent(username, calendarId, ce, false) ;
+          ce.setToDateTime(toDateTime.getTime()) ;          
+          if(ce.getCalType().equals("0")) {
+            CalendarUtils.getCalendarService().saveUserEvent(username, calendarId, ce, false) ;
+          }else if(ce.getCalType().equals("1")){
+            CalendarUtils.getCalendarService().saveEventToSharedCalendar(username, calendarId, ce, false) ;
+          }else if(ce.getCalType().equals("2")){
+            CalendarUtils.getCalendarService().saveGroupEvent(calendarId, ce, false) ;          
+          }
+          
         } catch (Exception e) {
           e.printStackTrace() ;
         }
