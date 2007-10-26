@@ -60,7 +60,7 @@ public class MailServiceImpl implements MailService{
 
   public MailServiceImpl(RepositoryService  repositoryService, 
       JCRRegistryService jcrRegistryService) throws Exception {
-    storage_ = new JCRDataStorage(repositoryService, jcrRegistryService) ;      
+    storage_ = new JCRDataStorage(repositoryService, jcrRegistryService) ;  
   }
 
   public List<AccountData> getAccountDatas() throws Exception {
@@ -423,6 +423,10 @@ public class MailServiceImpl implements MailService{
     saveAccount(username, account, true);
   }
 
+  public List<Folder> getFolders(String username, String accountId) throws Exception {
+    return storage_.getFolders(username, accountId) ;  
+  }
+  
   public List<Folder> getFolders(String username, String accountId, boolean isPersonal) throws Exception {
     List<Folder> folders = new ArrayList<Folder>() ;
     for(Folder folder : storage_.getFolders(username, accountId))  
@@ -485,5 +489,16 @@ public class MailServiceImpl implements MailService{
   
   public void saveMailSetting(String username, MailSetting newSetting) throws Exception {
     storage_.saveMailSetting(username, newSetting);
+  }
+  
+  public void importMessage(String username, String accountId, String folderId, InputStream inputStream, String type) throws Exception {
+    Properties props = System.getProperties();
+    Session mailSession = Session.getDefaultInstance(props, null);
+    MimeMessage mimeMessage = new MimeMessage(mailSession, inputStream);
+    Message message = new Message();
+    message.setAccountId(accountId);
+    message = Utils.mergeFromMimeMessage(message, mimeMessage);
+    message.setFolders(new String[] {folderId});
+    saveMessage(username, accountId, message, true);
   }
 }

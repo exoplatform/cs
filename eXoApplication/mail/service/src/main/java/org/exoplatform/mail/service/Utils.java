@@ -4,11 +4,20 @@
  **************************************************************************/
 package org.exoplatform.mail.service;
 
+import java.io.InputStream;
 import java.text.Format;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
+import javax.mail.Multipart;
+import javax.mail.Part;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMultipart;
+
+import org.exoplatform.services.jcr.util.IdGenerator;
 
 /**
  * Created by The eXo Platform SARL
@@ -180,5 +189,106 @@ public class Utils {
     String folderId = accountId + "DefaultFolder" + folderName;
     if (isPersonal) folderId = accountId + "UserFolder" + folderName;
     return folderId;
+  }
+  
+  public static Message mergeFromMimeMessage(Message message, javax.mail.Message mimeMessage) throws Exception {
+    Calendar gc = GregorianCalendar.getInstance();
+    Date receivedDate = gc.getTime();
+    message.setMessageTo(InternetAddress.toString(mimeMessage.getRecipients(javax.mail.Message.RecipientType.TO)));
+    message.setMessageCc(InternetAddress.toString(mimeMessage.getRecipients(javax.mail.Message.RecipientType.CC)));
+    message.setMessageBcc(InternetAddress.toString(mimeMessage.getRecipients(javax.mail.Message.RecipientType.BCC)));
+    message.setSubject(mimeMessage.getSubject());
+    message.setContentType(mimeMessage.getContentType());
+    message.setFrom(InternetAddress.toString(mimeMessage.getFrom()));
+    message.setReplyTo(InternetAddress.toString(mimeMessage.getReplyTo()));
+    message.setReceivedDate(receivedDate);
+    message.setSendDate(mimeMessage.getSentDate());
+    message.setSize(mimeMessage.getSize());
+    message.setUnread(true);
+    message.setHasStar(false);       
+    message.setPriority(Utils.PRIORITY_NORMAL);
+    String[] xPriority = mimeMessage.getHeader("X-Priority");
+    String[] importance = mimeMessage.getHeader("Importance");
+    
+    if (xPriority != null && xPriority.length > 0) {
+      for (int j = 0 ; j < xPriority.length; j++) {
+        message.setPriority(Long.valueOf(mimeMessage.getHeader("X-Priority")[j].substring(0,1)));
+      }          
+    }
+    
+    if (importance != null && importance.length > 0) {
+      for (int j = 0 ; j < importance.length; j++) {
+        if (importance[j].equalsIgnoreCase("Low")) {
+          message.setPriority(Utils.PRIORITY_LOW);
+        } else if (importance[j].equalsIgnoreCase("high")) {
+          message.setPriority(Utils.PRIORITY_HIGH);
+        } 
+      }
+    }
+    
+    message.setAttachements(new ArrayList<Attachment>());
+    
+    Object obj = mimeMessage.getContent() ;
+    if (obj instanceof Multipart) {
+      setMultiPart((Multipart)obj, message);
+    } else {
+      setPart(mimeMessage, message);
+    }
+    return message;
+  }
+  
+  private static void setMultiPart(Multipart multipart, Message newMail) {
+    try {
+      int i = 0 ;
+      int n = multipart.getCount() ;
+      while( i < n) {
+        setPart(multipart.getBodyPart(i), newMail);
+        i++ ;
+      }     
+    }catch(Exception e) {
+      e.printStackTrace() ;
+    }   
+  }
+
+  private static void setPart(Part part, Message newMail){
+    try {
+      String disposition = part.getDisposition();
+      String contentType = part.getContentType();
+      if (disposition == null) {
+        if (part.isMimeType("text/plain") || part.isMimeType("text/html")) {
+          newMail.setMessageBody((String)part.getContent());
+        } else {
+          MimeMultipart mimeMultiPart = (MimeMultipart)part.getContent() ;
+          for (int i=0; i<mimeMultiPart.getCount();i++) {
+            // for each part, set the body content
+            setPart(mimeMultiPart.getBodyPart(i), newMail);
+          }
+        }
+      } else {
+        if (disposition.equalsIgnoreCase(Part.INLINE)) {
+          /* this must be presented INLINE, hence inside the body of the message */
+          if (part.isMimeType("text/plain") || part.isMimeType("text/html")) {
+            newMail.setMessageBody((String)part.getContent());
+          }
+        } else {
+          /* this part must be presented as an attachment, hence we add it to the attached files */
+          BufferAttachment file = new BufferAttachment();
+          file.setId("Attachment" + IdGenerator.generate());
+          file.setName(part.getFileName());
+          InputStream is = part.getInputStream();
+          file.setInputStream(is);
+          file.setSize(is.available());
+          if (contentType.indexOf(";") > 0) {
+            String[] type = contentType.split(";") ;
+            file.setMimeType(type[0]);
+          } else {
+            file.setMimeType(contentType) ;
+          }
+          newMail.getAttachments().add(file);
+        }
+      }
+    } catch(Exception e) {
+      e.printStackTrace() ;
+    }
   }
 }

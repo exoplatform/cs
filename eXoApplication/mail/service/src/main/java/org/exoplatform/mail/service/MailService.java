@@ -4,6 +4,7 @@
  **************************************************************************/
 package org.exoplatform.mail.service;
 
+import java.io.InputStream;
 import java.util.List;
 
 
@@ -72,6 +73,14 @@ public interface MailService {
    * @throws Exception
    */
   public void removeAccount(String username, Account account) throws Exception ;
+  /**
+   * This method should: 
+   * @param username
+   * @param accountId
+   * @return List folder
+   * @throws Exception
+   */
+  public List<Folder> getFolders(String username, String accountId) throws Exception ;
   /**
    * This method should: 
    * @param username
@@ -255,4 +264,6 @@ public interface MailService {
    * @throws Exception
    */
   public void saveMailSetting(String username, MailSetting newSetting) throws Exception;
+  
+  public void importMessage(String username, String accountId, String folderId, InputStream inputStream, String type) throws Exception;
 }
