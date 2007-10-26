@@ -133,6 +133,14 @@
 	background: url('icons/ChangeColorCalendarIcon.gif') no-repeat;
 }
 
+.EditCalendarIcon {
+	background: url('icons/EditCalendarIcon.gif') no-repeat;
+}
+
+.SharedCalendarIcon {
+	background: url('icons/SharedCalendarIcon.gif') no-repeat;
+}
+
 
 
 

@@ -87,13 +87,12 @@
 						List calendars = groupData.getCalendars() ;
 						for(calendar in calendars) {
 						String calId = calendar.getId() ;
-						
 				%>
   					<div class="CalendarItem">
   						<div class="$calendar.calendarColor">
   							<div class="CheckBox" onclick="eXo.calendar.UICalendarPortlet.initFilter(this,1) ;"><%uiform.renderField(calId)%></div>
   							<div class="CalendarIcon"><a href="#" >$calendar.name</a></div>
-  							<div class="DownArrow1Icon" id="$calId" calType="0" calName="<%=calendar.getName()%>" title="Calendar actions" onclick="eXo.calendar.UICalendarPortlet.show(this, event);"><span></span></div>
+  							<div class="DownArrow1Icon" id="$calId" calType="0" title="Calendar actions" onclick="eXo.calendar.UICalendarPortlet.show(this, event);"><span></span></div>
   							<div style="clear: both"><span></span></div>
   						</div>
   					</div>
@@ -130,7 +129,7 @@
   						<div class="$calendar.calendarColor">
   							<div class="CheckBox"><%uiform.renderField(calendar.getId())%></div>
   							<div class="CalendarIcon"><a href="#" ><%=calendar.getName()%></a></div>
-  							<div class="DownArrow1Icon" id="$calId" calType="1" calName="<%=calendar.getName()%>" title="Calendar actions" onclick="eXo.calendar.UICalendarPortlet.show(this, event);"><span></span></div>
+  							<div class="DownArrow1Icon" id="$calId" calType="1" title="Calendar actions" onclick="eXo.calendar.UICalendarPortlet.show(this, event);"><span></span></div>
   							<div style="clear: both"><span></span></div>
   						</div>
   					</div>
@@ -177,7 +176,7 @@
   						<div class="$calendar.calendarColor">
   							<div class="CheckBox"><%uiform.renderField(calendar.getId())%></div>
   							<div class="CalendarIcon"><a href="#" ><%=calendar.getName()%></a></div>
-  							<div class="DownArrow1Icon" id="$calId" calType="2" calName="<%=calendar.getName()%>" title="Calendar actions" onclick="eXo.calendar.UICalendarPortlet.show(this, event);"><span></span></div>
+  							<div class="DownArrow1Icon" id="$calId" calType="2" title="Calendar actions" onclick="eXo.calendar.UICalendarPortlet.show(this, event);"><span></span></div>
   							<div style="clear: both"><span></span></div>
   						</div>
   					</div>
@@ -300,10 +299,12 @@
 
 												<div class="CalendarTableColor">
 													<div class="CalendarRowColor">
-														<a href="#" class="SelectColorSuburd LightCyan"><span></span></a>
+														<a href="#" class="ColorSuburd LightCyan"><span></span></a>
 														<a href="#" class="NaryBlue ColorSuburd"><span></span></a>
 														<a href="#" class="DarkNaryBlue ColorSuburd"><span></span></a>
-														<a href="#" class="Violet ColorSuburd"><span></span></a>
+														<a href="#" class="Violet ColorSuburd">
+															<div class="SelectColorSuburd"><span></span></div>
+														</a>
 														<a href="#" class="PingViolet ColorSuburd"><span></span></a>
 														<a href="#" class="Ping ColorSuburd"><span></span></a>
 														<a href="#" class="Red ColorSuburd"><span></span></a>
