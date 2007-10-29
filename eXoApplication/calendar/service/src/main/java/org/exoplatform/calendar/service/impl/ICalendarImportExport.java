@@ -49,6 +49,9 @@ import org.exoplatform.calendar.service.Reminder;
  * Jul 2, 2007  
  */
 public class ICalendarImportExport implements CalendarImportExport{
+  private static final String PRIVATE_TYPE = "0".intern() ;
+  private static final String SHARED_TYPE = "1".intern() ;
+  private static final String PUBLIC_TYPE = "2".intern() ;
   private JCRDataStorage storage_ ;
 
   public ICalendarImportExport(JCRDataStorage storage) throws Exception {
@@ -57,11 +60,11 @@ public class ICalendarImportExport implements CalendarImportExport{
 
   public OutputStream exportCalendar(String username, List<String> calendarIds, String type) throws Exception {
     List<CalendarEvent> events = new ArrayList<CalendarEvent>();
-    if(type.equals("0")) {
+    if(type.equals(PRIVATE_TYPE)) {
       events = storage_.getUserEventByCalendar(username, calendarIds) ;
-    }else if(type.equals("1")) {
+    }else if(type.equals(SHARED_TYPE)) {
       events = storage_.getSharedEventByCalendars(username, calendarIds) ;
-    }else if(type.equals("2")){
+    }else if(type.equals(PUBLIC_TYPE)){
       events = storage_.getGroupEventByCalendar(calendarIds) ;
     }
     net.fortuna.ical4j.model.Calendar calendar = new net.fortuna.ical4j.model.Calendar();
@@ -224,3 +227,4 @@ public class ICalendarImportExport implements CalendarImportExport{
   }  
 
 }
+
