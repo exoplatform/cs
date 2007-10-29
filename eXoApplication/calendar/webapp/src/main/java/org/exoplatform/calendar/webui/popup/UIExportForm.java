@@ -5,7 +5,6 @@
 package org.exoplatform.calendar.webui.popup;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +22,6 @@ import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadResource;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
-import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -60,13 +58,14 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
     
   }
   public void setCalType(String type) {calType = type ; }
-  public void update(String selectedCalendarId) throws Exception {
+  public void update(String type, String selectedCalendarId) throws Exception {
+    calType = type ;
     getChildren().clear() ;
     CalendarService calendarService = CalendarUtils.getCalendarService();
     addUIFormInput(new UIFormStringInput(NAME, NAME, null)) ;
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ; 
-    for(String type : calendarService.getExportImportType()) {
-      options.add(new SelectItemOption<String>(type, type)) ;
+    for(String exportType : calendarService.getExportImportType()) {
+      options.add(new SelectItemOption<String>(exportType, exportType)) ;
     }
     addUIFormInput(new UIFormSelectBox(TYPE, TYPE, options)) ;
     List<Calendar> calendars = new ArrayList<Calendar>();
