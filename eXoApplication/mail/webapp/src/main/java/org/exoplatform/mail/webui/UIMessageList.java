@@ -99,7 +99,7 @@ public class UIMessageList extends UIForm {
   public void setSelectedMessageId(String messageId) {selectedMessageId_ = messageId ;}
   
   public String getSelectedFolderId() {return selectedFolderId_ ;}
-  public void setSelectedFolderId(String folderId) {selectedFolderId_ = folderId ;}
+  public void setSelectedFolderId(String folderId) { selectedFolderId_ = folderId ; }
   
   public String getSelectedTagId() {return selectedTagId_ ;}
   public void setSelectedTagId(String tagId) {selectedTagId_ = tagId ;}
@@ -547,6 +547,12 @@ public class UIMessageList extends UIForm {
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
       UIImportForm uiImportForm = uiPopup.createUIComponent(UIImportForm.class, null, null);
+      if (uiMessageList.getSelectedFolderId() != null) {
+        uiImportForm.setSelectedFolder(uiMessageList.getSelectedFolderId());
+      } else {
+        String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+        uiImportForm.setSelectedFolder(Utils.createFolderId(accountId, Utils.FD_INBOX, false));
+      }
       uiPopup.activate(uiImportForm, 600, 0, true);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup);    
     }

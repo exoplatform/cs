@@ -11,6 +11,7 @@ import java.util.List;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
+import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.upload.UploadResource;
@@ -53,15 +54,17 @@ public class UIImportForm extends UIForm implements UIPopupComponent {
     MailService mailSrv = MailUtils.getMailService(); 
 
     for (Folder folder : mailSrv.getFolders(username, accountId)) {   
-      SelectItemOption<String> option = new SelectItemOption<String>(folder.getName(), folder.getId());
-      options.add(option);
+      if (!folder.getName().equals(Utils.FD_SENT)) {
+        SelectItemOption<String> option = new SelectItemOption<String>(folder.getName(), folder.getId());
+        options.add(option);
+      }
     }    
    
     addUIFormInput(new UIFormSelectBox(IMPORT_TO_FOLDER, IMPORT_TO_FOLDER, options));
   }
   
-  public void setFolderOption(List<SelectItemOption<String>> options) throws Exception {
-    getUIFormSelectBox(IMPORT_TO_FOLDER).setOptions(options);
+  public void setSelectedFolder(String value) throws Exception {
+    getUIFormSelectBox(IMPORT_TO_FOLDER).setSelectedValues(new String[] {value});
   } 
   
   public void activate() throws Exception { }
