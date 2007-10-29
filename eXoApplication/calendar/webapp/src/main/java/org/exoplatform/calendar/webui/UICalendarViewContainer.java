@@ -37,7 +37,6 @@ public class UICalendarViewContainer extends UIContainer  {
   
   final public static String[] TYPES = {DAY_VIEW, WEEK_VIEW, MONTH_VIEW, YEAR_VIEW, LIST_VIEW, SCHEDULE_VIEW} ;
 
-
   public UICalendarViewContainer() throws Exception {
     addChild(UIMonthView.class, null, null).setRendered(false) ;
     addChild(UIDayView.class, null, null).setRendered(false) ;

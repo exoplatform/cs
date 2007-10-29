@@ -130,9 +130,9 @@ public class UIDayView extends UICalendarView {
         uiQuickAddEvent.setEvent(false) ;
         uiQuickAddEvent.setId("UIQuickAddTask") ;
       }
-      uiQuickAddEvent.init(calendarview.getCalendarSetting(), startTime, finishTime) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
+      uiQuickAddEvent.init(calendarview.getCalendarSetting(), null, null) ;
+      //event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+      //event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
     }
   }
 

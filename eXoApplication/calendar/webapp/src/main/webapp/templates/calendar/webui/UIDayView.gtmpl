@@ -86,7 +86,7 @@
                 <tbody>
                   <%
 	            		flag = true ;
-	            		List hours = uicomponent.getDisplayTimes(timeFormat, timeInterval) ;
+	            		def hours = uicomponent.getTimeSteps(timeFormat, timeInterval).values() ;
 	            		for(h in hours) {
 	            			cssClass = "TdDotLine" ;
 	            			if(flag) {cssClass = "TdLine" ;} ;
@@ -140,13 +140,13 @@
                     <tbody>
                       <%
 			            		flag = true ;
-			            		List hoursSteps = uicomponent.getDisplayTimes(timeFormat, timeInterval) ;
+			            		def hoursSteps = uicomponent.getTimeSteps(timeFormat, timeInterval).keySet() ;
 			            		for(h in hoursSteps) {
 			            			cssClass = "TdDotLine" ;
 			            			if(flag) {cssClass = "TdLine" ;} ;
 			            			
                       %>
-                      <tr startTime="$currentDate $h">
+                      <tr startTime="$h">
                         <td class="$cssClass">
                           <span></span>
                         </td>

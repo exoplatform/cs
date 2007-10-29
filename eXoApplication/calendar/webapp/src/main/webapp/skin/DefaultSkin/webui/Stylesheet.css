@@ -1082,9 +1082,10 @@
 }
 
 .UIPreview .ViewContainer .EventDescription {
-	background: url('background/Event33x12.gif') no-repeat ;
-	padding-left: 40px; line-height: 14px;
-	color: #3ca094;
+	width:30px;
+	height: 12px;
+	float:left;
+	margin-right: 10px;
 }
 
 .UIPreview .ViewContainer .SeparatorDotLine {
@@ -1559,7 +1560,6 @@
 }
 
 /* Colors*/
-
 .Olive {background-color: #808000; }
 .OliveDrab {background-color: #6B8E23;}   
 .Orange {background-color: #FFA500;}    
@@ -1593,7 +1593,6 @@
 .Violet {background-color: #EE82EE;}    
 .Wheat {background-color: #F5DEB3;}    
 .Yellow {background-color: #FFFF00;}    
-.YellowGreen { background-color: #9ACD32; }
 
 .EventTitle{
 	background-color:black ;

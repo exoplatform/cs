@@ -61,6 +61,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
       @EventConfig(listeners = UICalendars.SendCalendarActionListener.class),
       @EventConfig(listeners = UICalendars.AddCalendarCategoryActionListener.class),
       @EventConfig(listeners = UICalendars.ShareCalendarActionListener.class),
+      @EventConfig(listeners = UICalendars.ChangeColorActionListener.class),
       @EventConfig(listeners = UICalendars.CalendarSettingActionListener.class)
     }
 )
@@ -69,15 +70,16 @@ public class UICalendars extends UIForm  {
   public static String CALENDARID = "calendarid".intern() ;
   public static String CALTYPE = "calType".intern() ;
   public static String CALNAME = "calName".intern() ;
+  public static String CALCOLOR = "calColor".intern() ;
   private String[] publicCalendarIds = {} ;
   private Map<String, String> colorMap_ = new HashMap<String, String>() ;
-  
+
   public UICalendars() throws Exception {
 
   } 
-  
+
   public String[] getPublicCalendarIds(){ return publicCalendarIds ; }
-  
+
   protected List<GroupCalendarData> getPrivateCalendars() throws Exception{
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
@@ -115,16 +117,18 @@ public class UICalendars extends UIForm  {
     publicCalendarIds = map.values().toArray(new String[]{}) ;
     return groupCalendars ;
   }
-  
+
   protected GroupCalendarData getSharedCalendars() throws Exception{
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     return calendarService.getSharedCalendars(CalendarUtils.getCurrentUser()) ;
   }
-  
+
   public Map<String, String> getColorMap() {
     return colorMap_;
   }
-
+  public String[] getColors() {
+    return Calendar.COLORS ;
+  }
   static  public class AddCalendarActionListener extends EventListener<UICalendars> {
     public void execute(Event<UICalendars> event) throws Exception {
       UICalendars uiComponent = event.getSource() ;
@@ -350,7 +354,24 @@ public class UICalendars extends UIForm  {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent.getParent()) ;
     }
   }
-  
+  static  public class ChangeColorActionListener extends EventListener<UICalendars> {
+    public void execute(Event<UICalendars> event) throws Exception {
+      UICalendars uiComponent = event.getSource() ;
+      String calendarId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      String color = event.getRequestContext().getRequestParameter(CALCOLOR) ;
+      /*String calType = event.getRequestContext().getRequestParameter(CALTYPE) ;*/
+      CalendarService calService = CalendarUtils.getCalendarService() ;
+      String username = event.getRequestContext().getRemoteUser() ;
+      Calendar calendar = calService.getUserCalendar(username, calendarId) ;
+      calendar.setCalendarColor(color) ;
+      try{        
+        calService.saveUserCalendar(username, calendar, false) ;
+      } catch (Exception e) {
+        e.printStackTrace() ;
+      }
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent.getAncestorOfType(UICalendarWorkingContainer.class)) ;
+    }
+  }
   static  public class CalendarSettingActionListener extends EventListener<UICalendars> {
     public void execute(Event<UICalendars> event) throws Exception {
       UICalendars uiComponent = event.getSource() ;

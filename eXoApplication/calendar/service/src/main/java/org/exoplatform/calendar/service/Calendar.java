@@ -47,48 +47,13 @@ public class Calendar {
   public static final String VIOLET = "Violet".intern() ;
   public static final String WHEAT = "Wheat".intern() ;
   public static final String YELLOW = "Yellow".intern() ;
-  public static final String YELLOWGREEN = "YellowGreen".intern() ;
   
-  /*Olive   #808000    
-  OliveDrab   #6B8E23    
-  Orange    #FFA500    
-  OrangeRed   #FF4500    
-  Orchid    #DA70D6    
-  PaleGoldenRod   #EEE8AA    
-  PaleGreen   #98FB98    
-  PaleTurquoise   #AFEEEE    
-  PaleVioletRed   #D87093    
-  PapayaWhip    #FFEFD5    
-  PeachPuff   #FFDAB9    
-  Peru    #CD853F    
-  Pink    #FFC0CB    
-  Plum    #DDA0DD    
-  PowderBlue    #B0E0E6    
-  Purple    #800080    
-  Red   #FF0000    
-  RosyBrown   #BC8F8F    
-  RoyalBlue   #4169E1    
-  SaddleBrown   #8B4513    
-  Salmon    #FA8072    
-  SandyBrown    #F4A460    
-  SeaGreen    #2E8B57    
-  SeaShell    #FFF5EE    
-  Sienna    #A0522D    
-  Silver    #C0C0C0    
-  SkyBlue   #87CEEB
-  Thistle   #D8BFD8    
-  Tomato    #FF6347    
-  Turquoise   #40E0D0    
-  Violet    #EE82EE    
-  Wheat   #F5DEB3    
-  Yellow    #FFFF00    
-  YellowGreen   #9ACD32*/
   
   public static final String[] COLORS = {OLIVE,OLIVEDRAB,ORANGERED,ORCHID,
     PALEGOLDENROD,PALEGREEN,PALETURQUOISE,PALEVIOLETRED,PAPAYAWHIP,PEACHPUFF,
     PERU,PINK,PLUM,POWDERBLUE,PURPLE,RED,ROSYBROWN,ROYALBLUE,SADDLEBROWN,SALMON,
     SANDYBROWN,SEAGREEN,SEASHELL,SIANNA,SILVER,SKYBLUE,THISTLE,TOMATO,TURQUOISE,
-    VIOLET,WHEAT,YELLOW,YELLOWGREEN  } ;
+    VIOLET,WHEAT,YELLOW } ;
   
   private String id ;
   private String name ;

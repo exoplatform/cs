@@ -4,6 +4,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 dateTimeFormat = uicomponent.getDateTimeFormat() ;
 DateFormat df = new SimpleDateFormat(dateTimeFormat) ;
+CalendarEvent event = uicomponent.getEvent() ;		
+color = uicomponent.getColors().get(event.getCalendarId()) ;
 uiform.begin() ;
 %>
 <div class="UIPreview" id="<%=uicomponent.getId()%>">
@@ -14,9 +16,6 @@ uiform.begin() ;
 		  <div style="clear: both"><span></span></div>
 		</div>
 	<%}%>
-	<%
-		CalendarEvent event = uicomponent.getEvent() ;		
-	%>
 	<div class="ViewContainer">
 	 <div class="DecoratorBox">
 	  <div class="ViewBoxStyle">
@@ -49,7 +48,10 @@ uiform.begin() ;
 	         <%}%>
 	        </td>
 	            <td >
-	             <div class="EventDescription"><%=event.getSummary()%></div>
+	             <div class="EventDescription $color"><span></span></div>
+	             <div>$event.summary</div>
+	             <div style="clear:left;"><span></span></div>
+	             
 	             <table class="UIGrid" id="RowContainerDay" cellspacing="0" borderspacing="0">
 	              <tr>
 	               <td style="width: 26px;"></td>

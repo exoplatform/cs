@@ -77,7 +77,7 @@
   							<div title="Collapser calendar group" class="CollapserFlatStyle"><span></span></div>
   							<div class="CheckBox"><input type="checkbox" onclick="eXo.calendar.UICalendarPortlet.filterByGroup(this) ;"/></div>
   							<div class="CalendarGroupIcon" onclick=""><a href="#" >$groupData.name</a></div>
-  							<div class="DownArrow1Icon" id="$groupData.id" onclick="eXo.calendar.UICalendarPortlet.show(this, event);"><span></span></div>
+  							<div class="DownArrow1Icon"  id="$groupData.id" onclick="eXo.calendar.UICalendarPortlet.show(this, event);"><span></span></div>
   							<div style="clear: both"><span></span></div>
   						</div>
   					</div>
@@ -92,7 +92,7 @@
   						<div class="$calendar.calendarColor">
   							<div class="CheckBox" onclick="eXo.calendar.UICalendarPortlet.initFilter(this,1) ;"><%uiform.renderField(calId)%></div>
   							<div class="CalendarIcon"><a href="#" >$calendar.name</a></div>
-  							<div class="DownArrow1Icon" id="$calId" calType="0" title="Calendar actions" onclick="eXo.calendar.UICalendarPortlet.show(this, event);"><span></span></div>
+  							<div class="DownArrow1Icon"  calColor="$calendar.calendarColor" id="$calId" calType="0" title="Calendar actions" onclick="eXo.calendar.UICalendarPortlet.show(this, event);"><span></span></div>
   							<div style="clear: both"><span></span></div>
   						</div>
   					</div>
@@ -129,7 +129,7 @@
   						<div class="$calendar.calendarColor">
   							<div class="CheckBox"><%uiform.renderField(calendar.getId())%></div>
   							<div class="CalendarIcon"><a href="#" ><%=calendar.getName()%></a></div>
-  							<div class="DownArrow1Icon" id="$calId" calType="1" title="Calendar actions" onclick="eXo.calendar.UICalendarPortlet.show(this, event);"><span></span></div>
+  							<div class="DownArrow1Icon" calColor="$calendar.calendarColor" id="$calId" calType="1" title="Calendar actions" onclick="eXo.calendar.UICalendarPortlet.show(this, event);"><span></span></div>
   							<div style="clear: both"><span></span></div>
   						</div>
   					</div>
@@ -176,7 +176,7 @@
   						<div class="$calendar.calendarColor">
   							<div class="CheckBox"><%uiform.renderField(calendar.getId())%></div>
   							<div class="CalendarIcon"><a href="#" ><%=calendar.getName()%></a></div>
-  							<div class="DownArrow1Icon" id="$calId" calType="2" title="Calendar actions" onclick="eXo.calendar.UICalendarPortlet.show(this, event);"><span></span></div>
+  							<div class="DownArrow1Icon" calColor="$calendar.calendarColor" id="$calId" calType="2" title="Calendar actions" onclick="eXo.calendar.UICalendarPortlet.show(this, event);"><span></span></div>
   							<div style="clear: both"><span></span></div>
   						</div>
   					</div>
@@ -295,47 +295,23 @@
 		                      Shared calendar
 		                    </div>
 		                   </a>		
-		                   
-
-												<div class="CalendarTableColor">
-													<div class="CalendarRowColor">
-														<a href="#" class="ColorSuburd LightCyan"><span></span></a>
-														<a href="#" class="NaryBlue ColorSuburd"><span></span></a>
-														<a href="#" class="DarkNaryBlue ColorSuburd"><span></span></a>
-														<a href="#" class="Violet ColorSuburd">
-															<div class="SelectColorSuburd"><span></span></div>
-														</a>
-														<a href="#" class="PingViolet ColorSuburd"><span></span></a>
-														<a href="#" class="Ping ColorSuburd"><span></span></a>
-														<a href="#" class="Red ColorSuburd"><span></span></a>
-														<a href="#" class="Blue ColorSuburd"><span></span></a>
-														<div style="clear: left"><span></span></div>
+												<%
+													i=0 ;
+													long colors = uicomponent.getColors().size();
+													long rows = colors/8  ;
+													j=0 ;
+													while (i < rows) {
+												%>	
+													<div class="CalendarTableColor">
+														<%while (j < colors){
+															color = uicomponent.getColors()[j] ;
+															actionLink = uicomponent.event("ChangeColor","id&calColor="+color);
+														%>
+															<a href="$actionLink" class="$color ColorSuburd"><span></span></a>
+														<%j++ ;}%>
+													<div style="clear:left;"><span></span></div>
 													</div>
-													<div class="CalendarRowColor">
-														<a href="#" class="DarkOrange ColorSuburd"><span></span></a>
-														<a href="#" class="LightOrange ColorSuburd"><span></span></a>
-														<a href="#" class="Cream ColorSuburd"><span></span></a>
-														<a href="#" class="Earth ColorSuburd"><span></span></a>
-														<a href="#" class="LightGreen ColorSuburd"><span></span></a>
-														<a href="#" class="Green ColorSuburd"><span></span></a>
-														<a href="#" class="BlueSky ColorSuburd"><span></span></a>
-														<a href="#" class="ColorSuburd c9a54a"><span></span></a>
-														<div style="clear: left"><span></span></div>
-													</div>
-													<div class="CalendarRowColor">
-														<a href="#" class="ColorSuburd ddc69c"><span></span></a>
-														<a href="#" class="ColorSuburd c5c493"><span></span></a>
-														<a href="#" class="ColorSuburd c97c6c3"><span></span></a>
-														<a href="#" class="ColorSuburd c1d3f3"><span></span></a>
-														<a href="#" class="ColorSuburd a2b4c3"><span></span></a>
-														<a href="#" class="ColorSuburd c8afc6"><span></span></a>
-														<a href="#" class="ColorSuburd dab2b1"><span></span></a>
-														<a href="#" class="ColorSuburd b2b1da"><span></span></a>
-														<div style="clear: left"><span></span></div>
-													</div>
-												</div>					
-
-
+												<%i++ ;}%>
 					                   
 		          		</div>
 		      			</div>

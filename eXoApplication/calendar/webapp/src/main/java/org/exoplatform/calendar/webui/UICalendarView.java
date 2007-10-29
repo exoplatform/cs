@@ -11,8 +11,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedMap;
 
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarEvent;
@@ -337,7 +339,20 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
     }
     return times ;
   }
-  
+  protected Map<String, String> getTimeSteps(String timeFormat, int timeInterval) {
+    Map<String, String> times = new LinkedHashMap<String, String>() ;
+    Calendar cal = getCurrentCalendar() ;
+    cal.set(Calendar.AM_PM, Calendar.AM) ;
+    cal.set(Calendar.HOUR, 0) ;
+    cal.set(Calendar.MINUTE, 0) ;
+    cal.set(Calendar.MILLISECOND, 0) ;
+    DateFormat df = new SimpleDateFormat(timeFormat) ;
+    for(int i = 0; i < 24*(60/timeInterval); i++) {
+      times.put(String.valueOf(cal.getTimeInMillis()), df.format(cal.getTime())) ;
+      cal.add(java.util.Calendar.MINUTE, timeInterval) ;
+    }
+    return times ;
+  }
   protected String getDateFormat() {
     return calendarSetting_.getDateFormat();
   }
