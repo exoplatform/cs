@@ -7,7 +7,6 @@ package org.exoplatform.contact.service.impl;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.text.SimpleDateFormat;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -35,7 +34,6 @@ import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactAttachment;
 import org.exoplatform.contact.service.ContactImportExport;
 import org.exoplatform.contact.service.ContactService;
-import org.exoplatform.contact.service.Utils;
 import org.exoplatform.container.PortalContainer;
 
 /**
@@ -60,12 +58,6 @@ public class VCardImportExport implements ContactImportExport {
   private static String          eXoMsnId    = "EXO-MSNID";
 
   private static String          eXoYahooId  = "EXO-YAHOOID";
-
-  public static SimpleDateFormat sdf         = new SimpleDateFormat("yyyy-MM-dd");
-
-  public static SimpleDateFormat sdf2        = new SimpleDateFormat("MM/dd/yyyy");
-
-  public static SimpleDateFormat sdfFull     = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
   public OutputStream exportContact(String username, List<String> contactIds) throws Exception {
 
@@ -93,30 +85,27 @@ public class VCardImportExport implements ContactImportExport {
 
       // a personal identity
       PersonalIdentity pid = cmf.createPersonalIdentity();
-      pid.setFormattedName(contact.getFullName());
-      pid.setFirstname(contact.getFirstName());
-      pid.setLastname(contact.getLastName());
+      pid.setFormattedName(nullToEmptyString(contact.getFullName()));
+      pid.setFirstname(nullToEmptyString(contact.getFirstName()));
+      pid.setLastname(nullToEmptyString(contact.getLastName()));
       
-      StringTokenizer tokens ;
-      if (contact.getMiddleName() != null) {      
-        tokens = new StringTokenizer(contact.getMiddleName(), ",", false);
+      String middleName = contact.getMiddleName();
+      if ((middleName != null) && !middleName.equals("")) {
+        StringTokenizer tokens = new StringTokenizer(middleName, ",", false);
         while (tokens.hasMoreTokens())
           pid.addAdditionalName(tokens.nextToken().trim());
-      } else {
-        pid.addAdditionalName("") ;
-      }
-      
-      if (contact.getNickName() != null) {
-        tokens = new StringTokenizer(contact.getNickName(), ",", false);
+      } else
+        pid.addAdditionalName("");
+
+      String nickName = contact.getNickName();
+      if ((nickName != null) && !nickName.equals("")) {
+        StringTokenizer tokens = new StringTokenizer(nickName, ",", false);
         while (tokens.hasMoreTokens())
           pid.addNickname(tokens.nextToken().trim());
-      } else {
-        pid.addNickname("") ;
-      }
+      } else
+        pid.addNickname("");
 
-      String strDate = Utils.formatDate("MM/dd/yyyy", contact.getBirthday()) ;
-      pid.setBirthDate(sdf2.parse(strDate)) ;
-      
+      pid.setBirthDate(contact.getBirthday());
       
       Image photo = cmf.createImage();
       ContactAttachment attachment = contact.getAttachment();
@@ -160,7 +149,8 @@ public class VCardImportExport implements ContactImportExport {
 
       // email address
       EmailAddress email;
-      tokens = new StringTokenizer(contact.getEmailAddress(), ";", false);
+      
+      StringTokenizer tokens = new StringTokenizer(contact.getEmailAddress(), ";", false);
       while (tokens.hasMoreTokens()) {
         email = cmf.createEmailAddress();
         email.setAddress(tokens.nextToken().trim());
@@ -179,13 +169,7 @@ public class VCardImportExport implements ContactImportExport {
 
       // an organizational identity
       OrganizationalIdentity orgid = cmf.createOrganizationalIdentity();
-      String jobTitle = contact.getJobTitle() ;
-      if (jobTitle != null) {
-        orgid.setTitle(jobTitle);
-      } else {
-        orgid.setTitle("null") ;
-      }
-      
+      orgid.setTitle(nullToEmptyString(contact.getJobTitle()));
       Organization org = cmf.createOrganization();
       org.setURL(contact.getWebPage());
 
@@ -194,15 +178,18 @@ public class VCardImportExport implements ContactImportExport {
 
       // some simple extension
       Extensions extensions = cmf.createExtensions();
-      addExtension(extensions, eXoGender, contact.getGender());
-      addExtension(extensions, eXoExoId, contact.getExoId());
-      addExtension(extensions, eXoAolId, contact.getAolId());
-      addExtension(extensions, eXoGoogleId, contact.getGoogleId());
-      addExtension(extensions, eXoIcqId, contact.getIcqId());
-      addExtension(extensions, eXoIcrId, contact.getIcrId());
-      addExtension(extensions, eXoSkypeId, contact.getSkypeId());
-      addExtension(extensions, eXoMsnId, contact.getMsnId());
-      addExtension(extensions, eXoYahooId, contact.getYahooId());
+      String gender = contact.getGender();
+      if ((gender == null) || gender.equalsIgnoreCase("gender"))
+        gender = "";
+      addExtension(extensions, eXoGender, gender);
+      addExtension(extensions, eXoExoId, nullToEmptyString(contact.getExoId()));
+      addExtension(extensions, eXoAolId, nullToEmptyString(contact.getAolId()));
+      addExtension(extensions, eXoGoogleId, nullToEmptyString(contact.getGoogleId()));
+      addExtension(extensions, eXoIcqId, nullToEmptyString(contact.getIcqId()));
+      addExtension(extensions, eXoIcrId, nullToEmptyString(contact.getIcrId()));
+      addExtension(extensions, eXoSkypeId, nullToEmptyString(contact.getSkypeId()));
+      addExtension(extensions, eXoMsnId, nullToEmptyString(contact.getMsnId()));
+      addExtension(extensions, eXoYahooId, nullToEmptyString(contact.getYahooId()));
 
       // add the extension to the contact
       pimContacts[i].setExtensions(extensions);
@@ -211,8 +198,7 @@ public class VCardImportExport implements ContactImportExport {
 
       pimContacts[i].setNote(contact.getNote());
 
-      // TODO :
-      // pimContacts[i].setCurrentRevisionDate(sdfFull.parse(contact.getLastUpdated()));
+      pimContacts[i].setCurrentRevisionDate(contact.getLastUpdated());
 
     }
 
@@ -289,12 +275,13 @@ public class VCardImportExport implements ContactImportExport {
         }
       }
 
-      contact.setJobTitle(pimContacts[index].getOrganizationalIdentity().getTitle());
+      OrganizationalIdentity orgid = pimContacts[index].getOrganizationalIdentity();
+      if (orgid != null)
+        contact.setJobTitle(orgid.getTitle());
 
       // addresses iterator
       for (Iterator iters = pimContacts[index].getAddresses(); iters.hasNext();) {
         Address addr = (Address) iters.next();
-
         if (addr.isHome()) {
           contact.setHomeAddress(addr.getStreet());
           contact.setHomeCity(addr.getCity());
@@ -308,9 +295,7 @@ public class VCardImportExport implements ContactImportExport {
           contact.setWorkStateProvince(addr.getRegion());
           contact.setWorkPostalCode(addr.getPostalCode());
           contact.setWorkCountry(addr.getCountry());
-
         }
-
       } // end of addresses for
 
       Communications communication = pimContacts[index].getCommunications();
@@ -482,5 +467,10 @@ public class VCardImportExport implements ContactImportExport {
           new GenericExtensionItemHandler(ext));
 
     }
+  }
+  
+  private String nullToEmptyString(String s) {
+    if (s == null) s = "";
+    return s;
   }
 }
