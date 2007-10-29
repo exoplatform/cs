@@ -4,11 +4,11 @@
  **************************************************************************/
 package org.exoplatform.contact.webui;
 
+import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.webui.popup.UICategoryForm;
 import org.exoplatform.contact.webui.popup.UICategorySelect;
 import org.exoplatform.contact.webui.popup.UIContactForm;
 import org.exoplatform.contact.webui.popup.UIExportAddressBookForm;
-import org.exoplatform.contact.webui.popup.UIExportForm;
 import org.exoplatform.contact.webui.popup.UIImportForm;
 import org.exoplatform.contact.webui.popup.UIPopupAction;
 import org.exoplatform.contact.webui.popup.UIPopupContainer;
@@ -35,8 +35,8 @@ import org.exoplatform.webui.event.EventListener;
         @EventConfig(listeners = UIActionBar.VCardViewActionListener.class),
         @EventConfig(listeners = UIActionBar.CustomLayoutActionListener.class),
         @EventConfig(listeners = UIActionBar.AddressBookActionListener.class),
-        @EventConfig(listeners = UIActionBar.ImportAddressActionListener.class),
-        @EventConfig(listeners = UIActionBar.ExportAddressActionListener.class)
+        @EventConfig(listeners = UIActionBar.ImportContactActionListener.class),
+        @EventConfig(listeners = UIActionBar.ExportContactActionListener.class)
     }
 )
 public class UIActionBar extends UIContainer  {
@@ -108,11 +108,8 @@ public class UIActionBar extends UIContainer  {
     }  
   }
   
-  static public class ImportAddressActionListener extends EventListener<UIActionBar> {
-    public void execute(Event<UIActionBar> event) throws Exception {  
-      
-      System.out.println("\n\n\n>>>khd : ImportAddress from UIActionBar ...\n\n");
-      
+  static public class ImportContactActionListener extends EventListener<UIActionBar> {
+    public void execute(Event<UIActionBar> event) throws Exception {
       UIActionBar uiForm = event.getSource() ;
       UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
       UIPopupAction uiPopupAction = uiContactPortlet.getChild(UIPopupAction.class) ;
@@ -124,35 +121,32 @@ public class UIActionBar extends UIContainer  {
     }  
   }
   
-  static public class ExportAddressActionListener extends EventListener<UIActionBar> {
-    public void execute(Event<UIActionBar> event) throws Exception {  
-      
-      System.out.println("\n\n\n>>>khd : ExportAddress from UIActionBar ...\n\n");
-      
+  static public class ExportContactActionListener extends EventListener<UIActionBar> {
+    public void execute(Event<UIActionBar> event) throws Exception {        
       UIActionBar uiActionBar = event.getSource();
       UIContactPortlet uiContactPortlet = uiActionBar.getAncestorOfType(UIContactPortlet.class);
       UIPopupAction uiPopupAction = uiContactPortlet.getChild(UIPopupAction.class);
-      String addressBookId = event.getRequestContext().getRequestParameter(OBJECTID);
-      
+      //String addressBookId = event.getRequestContext().getRequestParameter(OBJECTID);
+      /*
       if (addressBookId != null) {
         UIExportForm uiExportForm = uiPopupAction.createUIComponent(UIExportForm.class, null,
             "ExportForm");
         uiExportForm.setSelectedGroup(addressBookId);
         uiExportForm.updateList();
-        
         uiPopupAction.activate(uiExportForm, 500, 0, true);
-      } else {
+      } 
+      */
         // There is no specific address book 
         // so display the address books list
         
         UIExportAddressBookForm uiExportForm = uiPopupAction.createUIComponent(
             UIExportAddressBookForm.class, null, "UIExportAddressBookForm");
-
+        UIAddressBooks uiAddressBooks = uiActionBar.getAncestorOfType(UIContactPortlet.class)
+          .findFirstComponentOfType(UIAddressBooks.class) ;
+        uiExportForm.setContactGroups(uiAddressBooks.getGroups().toArray(new ContactGroup[] {} )) ;
+        uiExportForm.setSharedContactGroup(uiAddressBooks.getSharedContactGroups()) ;
         uiExportForm.updateList();
-
         uiPopupAction.activate(uiExportForm, 500, 0, true);
-        
-      }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
     }  
   }

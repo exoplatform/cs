@@ -67,7 +67,9 @@
 			if(contactGroup.getId().equals(uicomponent.getSelectedGroup()))	cssClass = "Selected" ;		
 		%>
 		<div  class="ItemList $cssClass">
-			<a href="$actionLink1" id="<%= contactGroup.getId() %>" class="IconHolder AddressIcon"><%=contactGroup.getName()%></a>
+			<a href="$actionLink1" id="<%= contactGroup.getId() %>" class="IconHolder AddressIcon" isPublic="false">
+				<%=contactGroup.getName()%>
+			</a>
 		</div>
 		<% } %>		
 	</div>
@@ -111,7 +113,7 @@
 			            </div>
 				        </a>
 				  	
-				        <a class="MenuItem" href="<%=uicomponent.event("AddressPopup", "id")%>">   
+				        <a class="MenuItem" href="<%=uicomponent.event("ShareGroup", "id")%>">   
 			            <div class="ItemIcon ShareIcon">
 			              Share
 			            </div>

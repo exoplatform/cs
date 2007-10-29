@@ -5,8 +5,6 @@
 package org.exoplatform.contact.webui.popup;
 
 import java.io.ByteArrayInputStream;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.exoplatform.contact.ContactUtils;
@@ -232,12 +230,11 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ; 
       }
-      /*
       if (ContactUtils.isEmpty(profileTab.getFieldEmail())) {  
         uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.emailAddress-required", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ; 
-      } */
+      }
       ContactService contactService = ContactUtils.getContactService();  
       String username = ContactUtils.getCurrentUser() ;
       Contact contact ;

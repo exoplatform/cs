@@ -40,28 +40,24 @@ public class UISearchForm extends UIForm {
   static  public class SearchActionListener extends EventListener<UISearchForm> {
     public void execute(Event<UISearchForm> event) throws Exception {
       UISearchForm uiForm = event.getSource() ;
-      System.out.println("\n\n 111111111111111\n\n");
       String text = uiForm.getUIStringInput(UISearchForm.FIELD_SEARCH_INPUT).getValue() ;
-      System.out.println("\n\n text:" + text + "\n\n");
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       if(ContactUtils.isEmpty(text)) {
         uiApp.addMessage(new ApplicationMessage("UISearchForm.msg.no-text-to-search", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-      System.out.println("\n\n 2222222222\n\n");
       ContactFilter filter = new ContactFilter() ;
       filter.setText(text) ;
       DataPageList resultPageList = 
         ContactUtils.getContactService().searchContact(ContactUtils.getCurrentUser(), filter) ;
-      System.out.println("\n\n 3333333333\n\n");
       System.out.println("\n\n size contact:" + resultPageList.getAvailable() + "\n\n") ;
       UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
       uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class).setSelectedGroup(null) ;
       uiContactPortlet.findFirstComponentOfType(UITags.class).setSelectedTag(null) ;
       UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
       uiContacts.setContacts(resultPageList) ;      
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContactPortlet.getChild(UIWorkingContainer.class)) ;
     }
   }
   

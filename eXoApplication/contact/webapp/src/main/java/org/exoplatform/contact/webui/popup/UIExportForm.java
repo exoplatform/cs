@@ -14,6 +14,7 @@ import java.util.MissingResourceException;
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactFilter;
+import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.container.PortalContainer;
@@ -21,8 +22,10 @@ import org.exoplatform.download.DownloadResource;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
@@ -47,6 +50,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
 public class UIExportForm extends UIForm implements UIPopupComponent{
   final static private String NAME = "name".intern() ;
   final static private String TYPE = "type".intern() ;
+  public static String fullName = "fullName".intern() ;
   
   public boolean                         viewContactsList = true;
   private String                         selectedTag_     = null;
@@ -56,9 +60,10 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
   private boolean                        isAscending_     = true;
   private String                         viewQuery_       = null;
   private Contact[]                      contacts_        = null;
-
+  
   
   public UIExportForm() throws Exception {
+    sortedBy_ = fullName ;
   }  
 
   public String getLabel(String id) throws Exception {
@@ -75,9 +80,10 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
 
   public String getSelectedGroupName() throws Exception {
     ContactService contactService = ContactUtils.getContactService();
-    String username = Util.getPortalRequestContext().getRemoteUser() ; 
-    return contactService.getGroup(username, selectedGroup).getName();
-    
+    String username = ContactUtils.getCurrentUser() ; 
+    ContactGroup group = contactService.getGroup(username, selectedGroup);
+    if (group != null) return group.getName() ;
+    else return selectedGroup ;
   }
   
   public void setAscending(boolean isAsc) {
@@ -131,30 +137,26 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
   public void updateList() throws Exception { 
     getChildren().clear() ;
     contactMap.clear();
-    
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     ContactService contactService = ContactUtils.getContactService();
-    
     for(String type : contactService.getImportExportType()) {
       options.add(new SelectItemOption<String>(type, type)) ;
     }
-    
     addUIFormInput(new UIFormStringInput(NAME, NAME, null)) ;
     addUIFormInput(new UIFormSelectBox(TYPE, TYPE, options)) ;
     
     if ((contacts_ == null) || (contacts_.length == 0)) {
       String username = ContactUtils.getCurrentUser();
-      
       if (selectedGroup != null) {
         ContactFilter filter = new ContactFilter();
         filter.setAscending(isAscending_);
         filter.setOrderBy(getSortedBy());
         filter.setViewQuery(getViewQuery());
         filter.setCategories(new String[] {selectedGroup});
-        contacts_ = contactService.getContactPageListByGroup(username, filter, false).getAll().toArray(new Contact[] {});
-        
-        System.out.println(">>> khd : get contacts from the selected GROUP !!!!!!!!!!");
-        
+        if (ContactUtils.isPublicGroup(selectedGroup))
+          contacts_ = contactService.getContactPageListByGroup(username, filter, true).getAll().toArray(new Contact[] {});
+        else
+          contacts_ = contactService.getContactPageListByGroup(username, filter, false).getAll().toArray(new Contact[] {});
       } else {
         contacts_ = contactService.getContactPageListByTag(username, selectedTag_).getAll().toArray(new Contact[] {});
         System.out.println(">>> khd : get contacts from the selected TAG !!!!!!!!!!");
@@ -183,26 +185,37 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
   public String getSelectedTag() {
     return selectedTag_;
   }
-
+  public String getSelectedTagName() throws Exception {
+    return ContactUtils.getContactService()
+      .getTag(ContactUtils.getCurrentUser(), selectedTag_).getName() ;
+  }
+  
   public void setSelectedTag(String tagId) {
     selectedTag_ = tagId;
   }
   
   static  public class SaveActionListener extends EventListener<UIExportForm> {
     public void execute(Event<UIExportForm> event) throws Exception {
-      
-      
-      System.out.println("\n\n\n>>>khd : SaveAddress from UIExportForm ...\n\n");
-      
       UIExportForm uiForm = event.getSource() ;
       UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class);
-      
       List<String> contactIds = uiForm.getCheckedContacts() ;
-      String username = Util.getPortalRequestContext().getRemoteUser() ;
+      
+      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+      if (contactIds.size() == 0) {  
+        uiApp.addMessage(new ApplicationMessage("UIExportForm.msg.check-contact-required", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ; 
+      }
+      String username = ContactUtils.getCurrentUser() ;
       ContactService contactService = ContactUtils.getContactService() ;
       
-      String exportFormat = uiForm.getUIFormSelectBox(uiForm.TYPE).getValue() ;
-      String fileName = uiForm.getUIStringInput(uiForm.NAME).getValue() ;
+      String exportFormat = uiForm.getUIFormSelectBox(UIExportForm.TYPE).getValue() ;
+      String fileName = uiForm.getUIStringInput(UIExportForm.NAME).getValue() ;
+      if (ContactUtils.isEmpty(fileName)) {  
+        uiApp.addMessage(new ApplicationMessage("UIExportForm.msg.filename-required", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ; 
+      }
       OutputStream out = contactService.getContactImportExports(exportFormat).exportContact(username, contactIds) ;
       
       String contentType = null;

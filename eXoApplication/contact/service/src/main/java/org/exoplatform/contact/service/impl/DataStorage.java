@@ -7,6 +7,7 @@ package org.exoplatform.contact.service.impl;
 import java.util.List;
 
 import org.exoplatform.contact.service.Contact;
+import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactPageList;
 import org.exoplatform.contact.service.GroupContactData;
@@ -25,6 +26,8 @@ public interface DataStorage {
   
   public List<Contact> getAllContact(String username) throws Exception ;
   public ContactPageList getContactPageListByGroup(String username, String groupId) throws Exception ;
+  public ContactPageList getContactPageListByTag(String username, ContactFilter filter) throws Exception ;
+  public ContactPageList getContactPageListByGroup(String username, ContactFilter filter, boolean isPublic) throws Exception;
   public List<String>  getAllEmailAddressByGroup(String username, String groupId) throws Exception ;
   public Contact getContact(String username, String contactId) throws Exception ;
   public void saveContact(String username, Contact contact, boolean isNew) throws Exception ;

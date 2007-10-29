@@ -8,12 +8,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.exoplatform.contact.ContactUtils;
+import org.exoplatform.contact.service.ContactImportExport;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContacts;
 import org.exoplatform.contact.webui.UIWorkingContainer;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.upload.UploadResource;
 import org.exoplatform.upload.UploadService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -63,21 +65,21 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       UIPopupContainer popupContainer = uiForm.getParent() ;
       UICategorySelect uiCategorySelect = popupContainer.getChild(UICategorySelect.class); 
-      UploadService uploadService = (UploadService)PortalContainer.getComponent(UploadService.class) ;
-      
-      UIFormUploadInput input = uiForm.getUIInput(FIELD_UPLOAD) ;
-      String importFormat = uiForm.getUIFormSelectBox(uiForm.TYPE).getValue() ;
-      
       String category = uiCategorySelect.getSelectedCategory();
+      
+      UploadService uploadService = (UploadService)PortalContainer.getComponent(UploadService.class) ;
+      UIFormUploadInput input = uiForm.getUIInput(FIELD_UPLOAD) ;
+      String importFormat = uiForm.getUIFormSelectBox(UIImportForm.TYPE).getValue() ;
       if (ContactUtils.isEmpty(category)) {  
-        uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.selectGroup-required", null)) ;
+        uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.selectGroup-required", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ; 
       }        
-      
-      String username = Util.getPortalRequestContext().getRemoteUser() ;
+      String username = ContactUtils.getCurrentUser() ;
       ContactService contactService = ContactUtils.getContactService() ;
+      
       contactService.getContactImportExports(importFormat).importContact(username, input.getUploadDataAsStream(), category) ;
+      
       UIContactPortlet contactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
       UIContacts uiContacts = contactPortlet.findFirstComponentOfType(UIContacts.class) ;
       uploadService.removeUpload(input.getUploadId()) ;

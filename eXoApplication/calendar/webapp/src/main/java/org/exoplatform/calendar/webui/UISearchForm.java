@@ -54,6 +54,11 @@ public class UISearchForm extends UIForm {
       eventQuery.setText(text) ;
       EventPageList resultPageList = 
         CalendarUtils.getCalendarService().searchEvent(CalendarUtils.getCurrentUser(), eventQuery) ;
+      
+      
+      // hoang hung
+      System.out.println("\n\n cal sise:" + resultPageList.getAvailable() + "\n\n");
+      
       UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
       UICalendarViewContainer calendarViewContainer = 
         calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;

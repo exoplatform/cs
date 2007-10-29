@@ -155,3 +155,7 @@
 .DeleteIcon {
 	background: url('icons/DeleteIcon.gif') no-repeat left center;
 }
+
+.ExportContactIcon {
+	background: url('icons/ExportContactIcon.gif') no-repeat left center;
+}

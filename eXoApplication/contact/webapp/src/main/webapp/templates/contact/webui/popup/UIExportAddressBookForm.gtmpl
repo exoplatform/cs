@@ -17,8 +17,8 @@
 					<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
 	  				<thead>
 	  					<tr>
-	  			      <th style="width: 23px; padding-left: 7px;" class="text"><input type="checkbox" class="checkbox" title="Check all" value="4"/></th>
-	  		        <th style="width: 24%; padding-left: 7px;" class="text">
+	  			      <th style="padding-left: 7px;" class="text"><input type="checkbox" class="checkbox" title="Check all" value="4"/></th>
+	  		        <th style="width: 80%; padding-left: 7px;" class="text">
 	  		        	<div> Name </div>
 	  		        </th>
 	  	 	      </tr>
@@ -41,6 +41,27 @@
 
    			     	</tr>
 			     	<% } %>  
+			     	
+			     	<%  
+							List sharedGroups = uicomponent.getSharedContactGroup();
+							for(group in sharedGroups) {
+								checkboxField = uicomponent.getChildById(group) ;
+						%>
+  						<tr class="UIContactList">
+  						  <td class="text" style="padding-left: 7px;">
+  						  	<%
+  						  		if(checkboxField != null) uicomponent.renderField(checkboxField) ;
+  						  	%>
+  						  </td>
+								<td class="text">
+										<%=group%>
+								</td>
+
+   			     	</tr>
+			     	<% } %>
+			     	
+			     	
+			     	
   	   			</tbody>
 					</table>
 				</div>

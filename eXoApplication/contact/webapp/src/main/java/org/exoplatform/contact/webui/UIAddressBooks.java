@@ -12,14 +12,15 @@ import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.webui.popup.UICategoryForm;
 import org.exoplatform.contact.webui.popup.UICategorySelect;
 import org.exoplatform.contact.webui.popup.UIContactForm;
-import org.exoplatform.contact.webui.popup.UIExportAddressBookForm;
 import org.exoplatform.contact.webui.popup.UIExportForm;
 import org.exoplatform.contact.webui.popup.UIImportForm;
 import org.exoplatform.contact.webui.popup.UIPopupAction;
 import org.exoplatform.contact.webui.popup.UIPopupContainer;
 import org.exoplatform.contact.webui.popup.UISendEmail;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -33,9 +34,10 @@ import org.exoplatform.webui.event.EventListener;
 
     @EventConfig(listeners = UIAddressBooks.AddContactActionListener.class),
     @EventConfig(listeners = UIAddressBooks.AddAddressActionListener.class),
-    @EventConfig(listeners = UIAddressBooks.ImportAddressActionListener.class),
+    @EventConfig(listeners = UIAddressBooks.ImportAddressActionListener.class), 
     @EventConfig(listeners = UIAddressBooks.ExportAddressActionListener.class),
     @EventConfig(listeners = UIAddressBooks.EditGroupActionListener.class),
+    @EventConfig(listeners = UIAddressBooks.ShareGroupActionListener.class),
     @EventConfig(listeners = UIAddressBooks.DeleteGroupActionListener.class, confirm = "UIAddressBooks.msg.confirm-delete"),
     @EventConfig(listeners = UIAddressBooks.SelectGroupActionListener.class),
     @EventConfig(listeners = UIAddressBooks.SelectSharedGroupActionListener.class),
@@ -85,11 +87,12 @@ public class UIAddressBooks extends UIComponent {
       UIPopupAction uiPopupAction = uiContactPortlet.getChild(UIPopupAction.class);
       UIPopupContainer popupContainer = uiPopupAction.createUIComponent(UIPopupContainer.class,
           null, "ImportForm");
-      UICategorySelect uiCategorySelect = popupContainer.addChild(UICategorySelect.class, null,
-          null);
+      popupContainer.addChild(UICategorySelect.class, null, null);
       popupContainer.addChild(UIImportForm.class, null, null);
+      /*
       String groupId = event.getRequestContext().getRequestParameter(OBJECTID);
       uiCategorySelect.setValue(groupId);
+      */
       uiPopupAction.activate(popupContainer, 600, 0, true);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
     }
@@ -101,26 +104,24 @@ public class UIAddressBooks extends UIComponent {
       UIContactPortlet uiContactPortlet = uiAddressBook.getAncestorOfType(UIContactPortlet.class);
       UIPopupAction uiPopupAction = uiContactPortlet.getChild(UIPopupAction.class);
       String addressBookId = event.getRequestContext().getRequestParameter(OBJECTID);
-      
       if (addressBookId != null) {
         UIExportForm uiExportForm = uiPopupAction.createUIComponent(UIExportForm.class, null,
             "ExportForm");
         uiExportForm.setSelectedGroup(addressBookId);
         uiExportForm.updateList();
-        
         uiPopupAction.activate(uiExportForm, 500, 0, true);
-      } else {
+      } 
+      
+      /*
+      else {
         // There is no specific address book 
         // so display the address books list
-        
         UIExportAddressBookForm uiExportForm = uiPopupAction.createUIComponent(
             UIExportAddressBookForm.class, null, "UIExportAddressBookForm");
-
         uiExportForm.updateList();
-
         uiPopupAction.activate(uiExportForm, 500, 0, true);
-        
       }
+      */
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
     }
   }
@@ -158,6 +159,16 @@ public class UIAddressBooks extends UIComponent {
       UICategoryForm.isNew_ = false;
       popupAction.activate(uiCategoryForm, 500, 0, true);
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction);
+    }
+  }
+  
+  static public class ShareGroupActionListener extends EventListener<UIAddressBooks> {
+    public void execute(Event<UIAddressBooks> event) throws Exception {
+      UIAddressBooks uiAddressBook = event.getSource();
+      UIApplication uiApp = uiAddressBook.getAncestorOfType(UIApplication.class) ;
+      uiApp.addMessage(new ApplicationMessage("UIAddressBooks.msg.not-already", null)) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+      return ;
     }
   }
 

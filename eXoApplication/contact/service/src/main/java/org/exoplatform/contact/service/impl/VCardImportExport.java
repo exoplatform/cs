@@ -35,6 +35,7 @@ import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactAttachment;
 import org.exoplatform.contact.service.ContactImportExport;
 import org.exoplatform.contact.service.ContactService;
+import org.exoplatform.contact.service.Utils;
 import org.exoplatform.container.PortalContainer;
 
 /**
@@ -82,8 +83,10 @@ public class VCardImportExport implements ContactImportExport {
     net.wimpi.pim.contact.model.Contact[] pimContacts = new net.wimpi.pim.contact.model.Contact[numberOfContacts];
 
     Contact contact;
-    for (int i = 0; i < numberOfContacts; i++) {
-      contact = contactService.getContact(username, contactIds.get(i));
+    for (int i = 0; i < numberOfContacts; i++) {    
+      String contactId = contactIds.get(i) ;
+      contact = contactService.getContact(username, contactId);
+      if (contact == null) contact = contactService.getSharedContact(contactId) ;
       pimContacts[i] = cmf.createContact();
 
       // converting now from an eXo contact to PimContact
@@ -93,22 +96,28 @@ public class VCardImportExport implements ContactImportExport {
       pid.setFormattedName(contact.getFullName());
       pid.setFirstname(contact.getFirstName());
       pid.setLastname(contact.getLastName());
-
-      StringTokenizer tokens = new StringTokenizer(contact.getMiddleName(), ",", false);
-      while (tokens.hasMoreTokens())
-        pid.addAdditionalName(tokens.nextToken().trim());
-
-      tokens = new StringTokenizer(contact.getNickName(), ",", false);
-      while (tokens.hasMoreTokens())
-        pid.addNickname(tokens.nextToken().trim());
-
-      // TODO :
-      try {
-        pid.setBirthDate(sdf.parse(contact.getBirthday().toString()));
-      } catch (Exception e) {
-        pid.setBirthDate(sdf2.parse(contact.getBirthday().toString()));
+      
+      StringTokenizer tokens ;
+      if (contact.getMiddleName() != null) {      
+        tokens = new StringTokenizer(contact.getMiddleName(), ",", false);
+        while (tokens.hasMoreTokens())
+          pid.addAdditionalName(tokens.nextToken().trim());
+      } else {
+        pid.addAdditionalName("") ;
+      }
+      
+      if (contact.getNickName() != null) {
+        tokens = new StringTokenizer(contact.getNickName(), ",", false);
+        while (tokens.hasMoreTokens())
+          pid.addNickname(tokens.nextToken().trim());
+      } else {
+        pid.addNickname("") ;
       }
 
+      String strDate = Utils.formatDate("MM/dd/yyyy", contact.getBirthday()) ;
+      pid.setBirthDate(sdf2.parse(strDate)) ;
+      
+      
       Image photo = cmf.createImage();
       ContactAttachment attachment = contact.getAttachment();
       if (attachment != null) {
@@ -170,7 +179,13 @@ public class VCardImportExport implements ContactImportExport {
 
       // an organizational identity
       OrganizationalIdentity orgid = cmf.createOrganizationalIdentity();
-      orgid.setTitle(contact.getJobTitle());
+      String jobTitle = contact.getJobTitle() ;
+      if (jobTitle != null) {
+        orgid.setTitle(jobTitle);
+      } else {
+        orgid.setTitle("null") ;
+      }
+      
       Organization org = cmf.createOrganization();
       org.setURL(contact.getWebPage());
 
@@ -213,7 +228,6 @@ public class VCardImportExport implements ContactImportExport {
     ContactIOFactory ciof = Pim.getContactIOFactory();
     ContactUnmarshaller unmarshaller = ciof.createContactUnmarshaller();
     // unmarshall contact
-
     addExtensionHandler(eXoGender);
     addExtensionHandler(eXoExoId);
     addExtensionHandler(eXoAolId);
@@ -223,7 +237,7 @@ public class VCardImportExport implements ContactImportExport {
     addExtensionHandler(eXoSkypeId);
     addExtensionHandler(eXoMsnId);
     addExtensionHandler(eXoYahooId);
-
+    
     net.wimpi.pim.contact.model.Contact[] pimContacts = unmarshaller.unmarshallContacts(input);
 
     for (int index = 0; index < pimContacts.length; index++) {

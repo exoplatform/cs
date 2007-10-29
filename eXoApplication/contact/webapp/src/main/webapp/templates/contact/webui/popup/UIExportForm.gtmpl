@@ -12,7 +12,7 @@
   
 	uiform.begin()
 %>
-  
+  <div style="height: 17px;">
   <b>
   <% 
     String text = uicomponent.getSelectedGroup();
@@ -22,12 +22,12 @@
       Address Book : <%=text%>
   
   <%} else {
-      text = uicomponent.getSelectedTag();
+      text = uicomponent.getSelectedTagName();
   %>
       Tag : <%=text%>
   <%}%>
   </b>
-  
+  </div>
 				<div class="UIMessageList" is>
 					<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
 	  				<thead>
@@ -83,6 +83,8 @@
   						  		if(checkboxField != null) uicomponent.renderField(checkboxField) ;
   						  	%>
   						  </td>
+  						  
+  						  
 								<td class="text" style="padding: 0px;"><div class="$iconTag" ><span></span></div></td>
 								<td class="text">
 									<div class="State OnlineIcon" title="Available">

@@ -207,7 +207,7 @@ public class JCRDataStorage implements DataStorage {
       qm = contactHomeNode.getSession().getWorkspace().getQueryManager();
     }
     Query query = qm.createQuery(filter.getStatement(), Query.XPATH);    
-    QueryResult result = query.execute();        
+    QueryResult result = query.execute();    
     ContactPageList pageList = new ContactPageList(username, result.getNodes(), 10, filter.getStatement(), true) ;
     return pageList ;
   }
@@ -436,10 +436,11 @@ public class JCRDataStorage implements DataStorage {
     contactNode.setProperty("exo:categories", contact.getCategories());
     contactNode.setProperty("exo:tags", contact.getTags());
     contactNode.setProperty("exo:editPermission", contact.getEditPermission());
-
-    dateTime.setTime(contact.getLastUpdated()) ;    
-    contactNode.setProperty("exo:birthday", dateTime) ;
-    contactNode.setProperty("exo:lastUpdated", dateTime);
+    
+    if (contact.getLastUpdated() != null) {
+      dateTime.setTime(contact.getLastUpdated()) ;    
+      contactNode.setProperty("exo:lastUpdated", dateTime); 
+    }
     contactNode.setProperty("exo:isShared", contact.isShared());
     
     // save image to contact
@@ -858,7 +859,11 @@ public class JCRDataStorage implements DataStorage {
       filter.setAccountPath(contactHome.getPath()) ;
       qm = contactHome.getSession().getWorkspace().getQueryManager() ;
       query = qm.createQuery(filter.getStatement(), Query.XPATH) ;
+      
+      System.out.println("\n\n query search private: " + query.getStatement() + "\n\n");
+      
       NodeIterator it = query.execute().getNodes() ;
+      System.out.println("\n\n it 1: " + it.getSize() + "\n\n");
       while(it.hasNext()) {
         contacts.add(getContact(it.nextNode())) ;        
       }
@@ -867,10 +872,15 @@ public class JCRDataStorage implements DataStorage {
     filter.setAccountPath(publicContactHome.getPath()) ;
     qm = publicContactHome.getSession().getWorkspace().getQueryManager() ;
     query = qm.createQuery(filter.getStatement(), Query.XPATH) ;
-    NodeIterator it = query.execute().getNodes();
-    while(it.hasNext()) {
-      contacts.add(getContact(it.nextNode())) ;
-    } 
+    
+    System.out.println("\n\n query search public: " + query.getStatement() + "\n\n");
+    
+    QueryResult result = query.execute();
+    NodeIterator itpublic = result.getNodes();
+    System.out.println("\n\n it 2: " + itpublic.getSize() + "\n\n");
+    while(itpublic.hasNext()) {
+      contacts.add(getContact(itpublic.nextNode())) ;
+    }
     return new DataPageList(contacts, 10, null, false) ;    
   }
 }
