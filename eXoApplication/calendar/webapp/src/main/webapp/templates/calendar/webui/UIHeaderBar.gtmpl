@@ -34,7 +34,9 @@ import org.exoplatform.calendar.webui.UIListView;
 			                   	if(!type.equals(uicomponent.getViewType())){
 			                  %>
 		                    <a href="<%=uicomponent.event("SwitchView",type)%>" class="MenuItem">   
-			                    <div class="ItemIcon">$type</div>
+			                    <div class="ItemIcon">
+			                    	$type
+			                    </div>
 		                    </a>
 			                 <%}
 			                   	 }

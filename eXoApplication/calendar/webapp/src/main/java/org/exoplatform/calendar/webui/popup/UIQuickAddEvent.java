@@ -85,14 +85,20 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
 
 
   public void init(CalendarSetting  calendarSetting, String startTime, String endTime) throws Exception {
-    DateFormat df = new SimpleDateFormat(calendarSetting.getDateFormat() + " " + calendarSetting.getTimeFormat());
     List<SelectItemOption<String>> options = CalendarUtils.getTimesSelectBoxOptions(calendarSetting.getTimeFormat()) ;
     getUIFormSelectBox(FIELD_FROM_TIME).setOptions(options) ;
     getUIFormSelectBox(FIELD_TO_TIME).setOptions(options) ;
     java.util.Calendar cal = GregorianCalendar.getInstance() ;
-    if(startTime != null) cal.setTime(df.parse(startTime)) ;
+    if(startTime != null) cal.setTimeInMillis(Long.parseLong(startTime)) ;
+    else {
+      cal.set(java.util.Calendar.MINUTE, (cal.get(java.util.Calendar.MINUTE)/15)*15) ;
+    }
     setEventFromDate(cal.getTime(), calendarSetting.getTimeFormat()) ;
-    if(endTime != null )cal.setTime(df.parse(endTime)) ;
+    if(endTime != null )cal.setTimeInMillis(Long.parseLong(endTime)) ; 
+    else {
+      cal.add(java.util.Calendar.MINUTE, 15) ;
+      cal.set(java.util.Calendar.MINUTE, (cal.get(java.util.Calendar.MINUTE)/15)*15) ;
+    }
     setEventToDate(cal.getTime(), calendarSetting.getTimeFormat()) ;
   }
   

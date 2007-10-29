@@ -130,9 +130,10 @@ public class UIDayView extends UICalendarView {
         uiQuickAddEvent.setEvent(false) ;
         uiQuickAddEvent.setId("UIQuickAddTask") ;
       }
-      uiQuickAddEvent.init(calendarview.getCalendarSetting(), null, null) ;
-      //event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
-      //event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
+      uiQuickAddEvent.init(uiPortlet.getCalendarSetting(), startTime, finishTime) ;
+      uiQuickAddEvent.update("0", null) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
     }
   }
 
@@ -197,7 +198,7 @@ public class UIDayView extends UICalendarView {
           }else if(ce.getCalType().equals("2")){
             CalendarUtils.getCalendarService().saveGroupEvent(calendarId, ce, false) ;          
           }
-          
+
         } catch (Exception e) {
           e.printStackTrace() ;
         }

@@ -182,8 +182,7 @@ public class UICalendars extends UIForm  {
       UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
       UIQuickAddEvent uiQuickAddEvent = popupAction.activate(UIQuickAddEvent.class, 600) ;
       uiQuickAddEvent.setEvent(true) ;  
-      CalendarSetting calendarSetting  = uiCalendarPortlet.getCalendarSetting() ;
-      uiQuickAddEvent.init(calendarSetting, null, null) ;
+      uiQuickAddEvent.init(uiCalendarPortlet.getCalendarSetting(), null, null) ; 
       if(calType.equals("0")) {
         uiQuickAddEvent.update(calType, null) ;
         uiQuickAddEvent.setSelectedCalendar(calendarId) ;
@@ -207,8 +206,7 @@ public class UICalendars extends UIForm  {
       UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
       UIQuickAddEvent uiQuickAddEvent = popupAction.activate(UIQuickAddEvent.class, 600) ;
       uiQuickAddEvent.setEvent(false) ;  
-      CalendarSetting calendarSetting  = uiCalendarPortlet.getCalendarSetting() ;
-      uiQuickAddEvent.init(calendarSetting, null, null) ;
+      uiQuickAddEvent.init(uiCalendarPortlet.getCalendarSetting(), null, null) ;
       if(calType.equals("0")) {
         uiQuickAddEvent.update(calType, null) ;
         uiQuickAddEvent.setSelectedCalendar(calendarId) ;

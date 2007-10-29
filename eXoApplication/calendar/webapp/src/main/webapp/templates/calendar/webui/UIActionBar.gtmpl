@@ -83,9 +83,52 @@
 							<div class="IconHolder PrintCalendarIcon">Print </div>
 						</a>
 						<div class="SeparatorLine"><span></span></div>
-						<a href="<%=uicomponent.event("ShowHidden")%>" class="ControlButton">
+						<div class="ControlButton" onclick="eXo.calendar.UICalendarPortlet.showView(this, event);">
+						<a class="ControlButton">
 							<div class="IconHolder LayoutSwitcherIcon" title="Layout Switcher"><span></span></div>
 						</a>
+							<% /*Begin Popup Menu*/ %>
+							<!--<div style="position: relative; top: -21px ;">
+		      			<div class="UIPopupCategory" style="display: none; z-index: 10000;">-->
+		      				<div class="UIRightClickPopupMenu" style="display: none;">
+		      					<div class="UIContextMenuContainer">
+										  <div class="TopLeftRightClickPopupMenu">
+				          			<div class="TopRightRightClickPopupMenu">
+				            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
+				          			</div>
+				        			</div>
+							        <div class="MiddleLeftRightClickPopupMenu">
+							          <div class="MiddleRightRightClickPopupMenu">
+				              		<div class="UIRightPopupMenuContainer">
+														<a class="MenuItem"  >   
+					                    <div class="ItemIcon">
+					                       Show/Hide all
+					                    </div>
+				                    </a>
+				                    <a class="MenuItem"  >   
+					                    <div class="ItemIcon">
+					                       MiniCalendar
+					                    </div>
+				                    </a>
+				                    <a class="MenuItem"  >   
+					                    <div class="ItemIcon">
+					                      Calendar list
+					                    </div>
+				                    </a>
+													</div>
+					          		</div>
+					        		</div>
+								      <div class="BottomLeftRightClickPopupMenu">
+							        <div class="BottomRightRightClickPopupMenu">
+							          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+							        </div>
+							      </div>
+				      			</div>
+							    </div>
+		      			<!--</div>
+		      		</div>-->
+		      		<% /*End Popup Menu*/ %>
+		      		</div>
 						<a class="RightControlButton">
 							<div class="NextIcon" title="Next day"><span></span></div>
 						</a>

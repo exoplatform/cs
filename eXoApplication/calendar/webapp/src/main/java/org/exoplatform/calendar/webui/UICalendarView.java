@@ -14,7 +14,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.SortedMap;
 
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarEvent;
@@ -116,8 +115,8 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   protected List<String> publicCalendarIds = new ArrayList<String>() ;
 
   final public static Map<Integer, String> monthsName_ = new HashMap<Integer, String>() ;
-  private Map<Integer, String> daysMap_ = new HashMap<Integer, String>() ;
-  private Map<Integer, String> monthsMap_ = new HashMap<Integer, String>() ;
+  private Map<Integer, String> daysMap_ = new LinkedHashMap<Integer, String>() ;
+  private Map<Integer, String> monthsMap_ = new LinkedHashMap<Integer, String>() ;
 
   public UICalendarView() throws Exception{
     initCategories() ;
@@ -136,9 +135,13 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
     applySeting() ;
   }
   public void applySeting() throws Exception {
-    CalendarService calService = getApplicationComponent(CalendarService.class) ;
-    String username = Util.getPortalRequestContext().getRemoteUser() ;
-    calendarSetting_ = calService.getCalendarSetting(username) ;
+    try {
+      calendarSetting_ = getAncestorOfType(UICalendarPortlet.class).getCalendarSetting() ;
+    } catch (Exception e) {
+      CalendarService calService = getApplicationComponent(CalendarService.class) ;
+      String username = Util.getPortalRequestContext().getRemoteUser() ;
+      calendarSetting_ = calService.getCalendarSetting(username) ;
+    }
     dateTimeFormat_ = getDateFormat() + " " + getTimeFormat() ;
     /*Locale locale_ = null ;
     if(calendarSetting_.getLocation() == null) {
@@ -341,7 +344,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   }
   protected Map<String, String> getTimeSteps(String timeFormat, int timeInterval) {
     Map<String, String> times = new LinkedHashMap<String, String>() ;
-    Calendar cal = getCurrentCalendar() ;
+    Calendar cal = GregorianCalendar.getInstance() ;
     cal.set(Calendar.AM_PM, Calendar.AM) ;
     cal.set(Calendar.HOUR, 0) ;
     cal.set(Calendar.MINUTE, 0) ;
