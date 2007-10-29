@@ -56,7 +56,7 @@ public class ICalendarImportExport implements CalendarImportExport{
   }
 
   public OutputStream exportCalendar(String username, List<String> calendarIds, String type) throws Exception {
-    List<CalendarEvent> events ;
+    List<CalendarEvent> events = new ArrayList<CalendarEvent>();
     if(type.equals("0")) {
       events = storage_.getUserEventByCalendar(username, calendarIds) ;
     }else if(type.equals("1")) {
@@ -64,9 +64,6 @@ public class ICalendarImportExport implements CalendarImportExport{
     }else if(type.equals("2")){
       events = storage_.getGroupEventByCalendar(calendarIds) ;
     }
-    if(username != null) events = storage_.getUserEventByCalendar(username, calendarIds) ;
-    else events = storage_.getGroupEventByCalendar(calendarIds) ;
-
     net.fortuna.ical4j.model.Calendar calendar = new net.fortuna.ical4j.model.Calendar();
     calendar.getProperties().add(new ProdId("-//Ben Fortuna//iCal4j 1.0//EN"));
     calendar.getProperties().add(Version.VERSION_2_0);
