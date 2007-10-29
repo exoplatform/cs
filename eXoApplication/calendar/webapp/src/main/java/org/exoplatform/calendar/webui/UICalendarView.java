@@ -12,7 +12,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import org.exoplatform.calendar.CalendarUtils;
@@ -139,12 +138,12 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     calendarSetting_ = calService.getCalendarSetting(username) ;
     dateTimeFormat_ = getDateFormat() + " " + getTimeFormat() ;
-    Locale locale_ = null ;
+    /*Locale locale_ = null ;
     if(calendarSetting_.getLocation() == null) {
       locale_ = Util.getPortalRequestContext().getLocale() ;
     } else {
       locale_ = new Locale(calendarSetting_.getLocation()) ;
-    }
+    }*/
   }
   public void setViewType(String viewType) { this.viewType_ = viewType ; }
   public String getViewType() { return viewType_ ; }

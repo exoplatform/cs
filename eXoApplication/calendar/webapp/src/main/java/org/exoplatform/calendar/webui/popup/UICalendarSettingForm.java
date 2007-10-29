@@ -105,8 +105,9 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
     setting.addUIFormInput(new UIFormSelectBox(LOCATION, LOCATION, getLocales())) ;
     setting.addUIFormInput(new UIFormSelectBox(TIMEZONE, TIMEZONE, getTimeZones())) ;
     setting.addUIFormInput(new UIFormCheckBoxInput<Boolean>(ISSHOWWORKINGTIME, ISSHOWWORKINGTIME, false)) ;
-    setting.addUIFormInput(new UIFormSelectBox(WORKINGTIME_BEGIN, WORKINGTIME_BEGIN, getTimes())) ;
-    setting.addUIFormInput(new UIFormSelectBox(WORKINGTIME_END, WORKINGTIME_END, getTimes())) ;
+    List<SelectItemOption<String>> options = CalendarUtils.getTimesSelectBoxOptions("HH:mm") ;
+    setting.addUIFormInput(new UIFormSelectBox(WORKINGTIME_BEGIN, WORKINGTIME_BEGIN, options)) ;
+    setting.addUIFormInput(new UIFormSelectBox(WORKINGTIME_END, WORKINGTIME_END, options)) ;
     
     setting.addUIFormInput(new UIFormStringInput(BASE_URL, BASE_URL, null)) ;
     addUIFormInput(setting) ;
@@ -120,14 +121,10 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
     for (String timeZone : TimeZone.getAvailableIDs()){
       //java.util.Calendar.getAvailableLocales()
       TimeZone tz = TimeZone.getTimeZone(timeZone) ;
-      String displayName = tz.getDisplayName() ;
+      //String displayName = tz.getDisplayName() ;
       timeZones.add(new SelectItemOption<String>( tz.getID() , tz.getID()));
     }
     return timeZones;
-  }
-
-  private List<SelectItemOption<String>> getTimes() {
-    return CalendarUtils.getTimesSelectBoxOptions("HH:mm", 30) ;
   }
 
   public void activate() throws Exception {}

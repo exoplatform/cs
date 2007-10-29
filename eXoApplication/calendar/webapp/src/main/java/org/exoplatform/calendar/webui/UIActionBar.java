@@ -75,7 +75,7 @@ public class UIActionBar extends UIContainer  {
         uiQuickAddEvent.setEvent(false) ;
         uiQuickAddEvent.setId(UIQuickAddEvent.UIQUICKADDTASK) ;
       }
-      uiQuickAddEvent.init(uiPortlet.findFirstComponentOfType(UICalendarWorkingContainer.class).getCalendarSetting(), null, null) ;
+      uiQuickAddEvent.init(uiPortlet.getCalendarSetting(), null, null) ;
       uiQuickAddEvent.update("0", null) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }

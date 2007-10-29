@@ -11,7 +11,6 @@ import java.util.Map;
 
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.Calendar;
-import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.GroupCalendarData;
@@ -19,7 +18,6 @@ import org.exoplatform.calendar.webui.popup.UICalendarCategoryForm;
 import org.exoplatform.calendar.webui.popup.UICalendarCategoryManager;
 import org.exoplatform.calendar.webui.popup.UICalendarForm;
 import org.exoplatform.calendar.webui.popup.UICalendarSettingForm;
-import org.exoplatform.calendar.webui.popup.UIEventForm;
 import org.exoplatform.calendar.webui.popup.UIExportForm;
 import org.exoplatform.calendar.webui.popup.UIImportForm;
 import org.exoplatform.calendar.webui.popup.UIPopupAction;
@@ -28,7 +26,6 @@ import org.exoplatform.calendar.webui.popup.UIQuickAddEvent;
 import org.exoplatform.calendar.webui.popup.UIRssForm;
 import org.exoplatform.calendar.webui.popup.UISendCalendarForm;
 import org.exoplatform.calendar.webui.popup.UISharedForm;
-import org.exoplatform.calendar.webui.popup.UITaskForm;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -181,7 +178,7 @@ public class UICalendars extends UIForm  {
       UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
       UIQuickAddEvent uiQuickAddEvent = popupAction.activate(UIQuickAddEvent.class, 600) ;
       uiQuickAddEvent.setEvent(true) ;  
-      CalendarSetting calendarSetting  = uiCalendarPortlet.findFirstComponentOfType(UICalendarWorkingContainer.class).getCalendarSetting() ;
+      CalendarSetting calendarSetting  = uiCalendarPortlet.getCalendarSetting() ;
       uiQuickAddEvent.init(calendarSetting, null, null) ;
       if(calType.equals("0")) {
         uiQuickAddEvent.update(calType, null) ;
@@ -190,8 +187,7 @@ public class UICalendars extends UIForm  {
         List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
         options.add(new SelectItemOption<String>(calendarName, calendarId)) ;
         uiQuickAddEvent.update(calType, options) ;
-      }
-      
+      }      
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent.getParent()) ;
     }
@@ -201,13 +197,28 @@ public class UICalendars extends UIForm  {
     public void execute(Event<UICalendars> event) throws Exception {
       UICalendars uiComponent = event.getSource() ;
       String calendarId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      String calendarName = event.getRequestContext().getRequestParameter(CALNAME) ;
+      String calType = event.getRequestContext().getRequestParameter(CALTYPE) ;
       UICalendarPortlet uiCalendarPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
+      UIQuickAddEvent uiQuickAddEvent = popupAction.activate(UIQuickAddEvent.class, 600) ;
+      uiQuickAddEvent.setEvent(false) ;  
+      CalendarSetting calendarSetting  = uiCalendarPortlet.getCalendarSetting() ;
+      uiQuickAddEvent.init(calendarSetting, null, null) ;
+      if(calType.equals("0")) {
+        uiQuickAddEvent.update(calType, null) ;
+        uiQuickAddEvent.setSelectedCalendar(calendarId) ;
+      } else {
+        List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
+        options.add(new SelectItemOption<String>(calendarName, calendarId)) ;
+        uiQuickAddEvent.update(calType, options) ;
+      }     
+      /*UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
       UIPopupContainer uiPopupContainer = uiCalendarPortlet.createUIComponent(UIPopupContainer.class, null, null) ;
       uiPopupContainer.setId(UIPopupContainer.UITASKPOPUP ) ;
       UITaskForm uiForm = uiPopupContainer.addChild(UITaskForm.class, null, null) ;
       uiForm.initForm(calendarId) ;
-      popupAction.activate(uiPopupContainer, 700, 0, true) ;
+      popupAction.activate(uiPopupContainer, 700, 0, true) ;*/
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent.getParent()) ;
     }

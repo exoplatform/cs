@@ -8,12 +8,12 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
 import org.exoplatform.calendar.service.CalendarService;
-import org.exoplatform.calendar.webui.UIMonthView;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.organization.OrganizationService;
@@ -57,7 +57,7 @@ public class CalendarUtils {
     return (CalendarService)PortalContainer.getComponent(CalendarService.class) ;
   }
 
-  public static List<SelectItemOption<String>> getTimesSelectBoxOptions(String timeFormat, int timeInterval) {
+  public static List<SelectItemOption<String>> getTimesSelectBoxOptions(String timeFormat) {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     GregorianCalendar cal = new GregorianCalendar(Locale.US) ;
     cal.set(java.util.Calendar.AM_PM, java.util.Calendar.AM) ;
@@ -65,13 +65,17 @@ public class CalendarUtils {
     cal.set(java.util.Calendar.MINUTE, 0) ;
     DateFormat df = new SimpleDateFormat(timeFormat) ;
     int time = 0 ;
-    while (time ++ < 24*60/(timeInterval)) {
+    while (time ++ < 24*60/(15)) {
       options.add(new SelectItemOption<String>(df.format(cal.getTime()), df.format(cal.getTime()))) ;
-      cal.add(java.util.Calendar.MINUTE, timeInterval) ;
+      cal.add(java.util.Calendar.MINUTE, 15) ;
     }
     return options ;
   }
 
+  public static String parse(Date date, String timeFormat) throws Exception {
+    DateFormat df = new SimpleDateFormat(timeFormat) ;
+    return df.format(date) ;    
+  }
   public static List<String> getDisplayTimes(String timeFormat, int timeInterval, int workStart, int workEnd) {
     List<String> times = new ArrayList<String>() ;
     GregorianCalendar cal = new GregorianCalendar(Locale.US) ;
