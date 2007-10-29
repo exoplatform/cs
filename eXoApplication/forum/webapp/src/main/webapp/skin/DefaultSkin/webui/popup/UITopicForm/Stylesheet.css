@@ -28,7 +28,8 @@
 	width: 16px;
 	height: 16px;
 	margin: 0px 0px 0px 250px;
-	background: url('../../skinIcons/16x16/icons/OnlineIcon.gif') ;
+	background: url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/BlueCirclePlus.gif') ;
+	cursor: pointer;
 }
 
 .UITopicForm .HorizontalLayout .ThreadPermission .SelectUserIcon {

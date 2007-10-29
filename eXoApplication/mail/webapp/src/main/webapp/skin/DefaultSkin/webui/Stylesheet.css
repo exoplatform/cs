@@ -734,8 +734,8 @@
 	width: auto;
 }
 
-.UIMailPortlet .TitleBar .UIRightClickPopupMenu {
-	width:175px;
+.UIMailPortlet .UIRightClickPopupMenu .ItemIcon {
+	white-space: nowrap;
 }
 
 .SeparatorLine {
