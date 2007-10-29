@@ -48,6 +48,10 @@
 	padding:0px 15px;
 }
 
+.UITopicForm .UITabContent {
+	height: 340px;
+}
+
 .UITopicForm .UIFormTabPane .ThreadPermission .HorizontalLayout {
 	border:1px solid #B7B7B7;
 	padding-top: 8px;
@@ -56,7 +60,6 @@
 .UITopicForm .UIFormWithTitle {
 	margin: auto;
 	padding-top: 5px;
-	
 }
 
 .UITopicForm .HorizontalLayout .ThreadPermission td.FieldLabel {

@@ -10,6 +10,7 @@ import org.exoplatform.forum.service.Category;
 import org.exoplatform.forum.service.Forum;
 import org.exoplatform.forum.service.ForumLinkData;
 import org.exoplatform.forum.service.JCRPageList;
+import org.exoplatform.forum.service.Poll;
 import org.exoplatform.forum.service.Post;
 import org.exoplatform.forum.service.Topic;
 import org.exoplatform.forum.service.TopicView;
@@ -47,7 +48,11 @@ public interface DataStorage {
    public void savePost(String categoryId, String forumId, String topicId, Post post, boolean isNew)throws Exception;
    public Post removePost(String categoryId, String forumId, String topicId, String postId)throws Exception;
    public void movePost(String postId, String postPath, String destTopicPath) throws Exception ;
-   
+
+   public Poll getPoll(String categoryId, String forumId, String topicId)throws Exception;
+   public void savePoll(String categoryId, String forumId, String topicId, Poll poll, boolean isNew, boolean isVote)throws Exception;
+   public Poll removePoll(String categoryId, String forumId, String topicId, String pollId)throws Exception;
+
    //public Object getObjectByPath(String path) throws Exception ;
    public List getPage(long page, JCRPageList pageList) throws Exception ;
    public List<ForumLinkData> getAllLink() throws Exception ;

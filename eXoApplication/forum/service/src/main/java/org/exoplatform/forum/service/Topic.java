@@ -35,6 +35,8 @@ public class Topic {
   private boolean isApproved = false ;
   private boolean isSticky = false ;
   
+  private boolean isPoll = false ;
+  
   private String[] canView;
   private String[] canPost;
   
@@ -107,6 +109,9 @@ public class Topic {
   
   public String[] getCanPost(){return canPost;}
   public void setCanPost(String[] canPost){this.canPost = canPost;}
+
+  public boolean getIsPoll(){return isPoll;}
+  public void setIsPoll(boolean isPoll){this.isPoll = isPoll;}
   
   /**
    * This method should calculate the forum id base on the topic id

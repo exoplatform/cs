@@ -236,7 +236,7 @@ public class UIForumForm extends UIForm implements UIPopupComponent {
   		newForum.setViewForumRole(setViewer);
       newForum.setReplyTopicRole(setTopicable);
   		
-  		ForumService forumService =  (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
+  		ForumService forumService = (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
       if(uiForm.forumId.length() > 0)	{
       	newForum.setId(uiForm.forumId);
       	forumService.saveForum(categoryId, newForum, false);

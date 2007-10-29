@@ -18,9 +18,13 @@ import org.exoplatform.webui.core.UIContainer;
     template =  "app:/templates/forum/webui/UITopicDetailContainer.gtmpl" 
 )
 public class UITopicDetailContainer extends UIContainer  {
+  private boolean isRender = false ;
   public UITopicDetailContainer() throws Exception {
-    addChild(UITopicPoll.class, null, null).setRendered(true) ;
+    addChild(UITopicPoll.class, null, null).setRendered(isRender) ;
     addChild(UITopicDetail.class, null, null) ;
   }
   
+  public void setRederPoll(boolean isRender) throws Exception {
+   this.isRender = isRender ;
+  }
 }

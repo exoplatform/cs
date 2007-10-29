@@ -1,0 +1,70 @@
+	<div class="UIAddPollForm">
+		<% uiform.begin() %>
+			<div class="HorizontalLayout">
+				<div class="UIFormInputSet">
+					<table class="UIFormGrid">
+						<tbody>
+							<tr>
+		            <td class="FieldLabel"><%=uicomponent.getLabel("Question")%>:</td>
+		            <td class="FieldComponent" style="width: 438px;" >
+		              <% uiform.renderChild("Question") %>
+		            </td>
+							</tr>
+						</tbody>
+					</table>
+					<div class="Title">Poll Options (Minimum 2 Options and Maximum 10 Options):</div>
+					<div class="Line"><span></span></div>
+					<table class="UIFormGrid">
+						<tbody>
+							<tr>
+								<td class="FieldLabel"><%=uicomponent.getLabel("Option")%>:</td>
+		            <td class="FieldComponent" >
+		              <% uiform.renderChild("Option") %>
+		            </td>
+							</tr>
+						</tbody>
+					</table>
+					<div class="Line"><span></span></div>
+					<table class="UIFormGrid">
+						<tbody>
+							<tr>
+								<td class="FieldLabel"><%=uicomponent.getLabel("TimeOut")%>:</td>
+								<td class="FieldComponent" style="width: 60px;">
+		              <% uiform.renderChild("TimeOut") %>
+								</td>
+								<td class="Label">days from now</td>
+							</tr>
+							<tr>
+								<td class="FieldLabel"><%=uicomponent.getLabel("MultiVote")%>:</td>
+								<td class="FieldComponent">
+		              <% uiform.renderChild("MultiVote") %>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		
+		<div class="UIAction"> 
+		  <table class="ActionContainer" align="center">
+				<tr>
+					<td align="center">
+	        <% for(action in uicomponent.getActions()) { 
+	        	 String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action); 
+	           String link = uicomponent.event(action) ;
+	           actionLabel.trim();
+	        %>
+        		<a href="$link" class="ActionButton LightBlueStyle">
+	      	  	<div class="ButtonLeft">
+	        	  	<div class="ButtonRight">
+	          	  	<div class="ButtonMiddle">$actionLabel</div>
+	            	</div>
+	          	</div>
+	        	</a>
+          <%}%>
+          </td>
+				</tr>
+	 	  </table> 
+    </div>
+		<%uiform.end()%>
+	</div>

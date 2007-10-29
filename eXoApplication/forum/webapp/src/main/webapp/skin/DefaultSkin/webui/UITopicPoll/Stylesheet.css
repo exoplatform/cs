@@ -85,31 +85,36 @@
 	line-height: 22px;
 }
 
-.ViewPollForm .Chart1 {
+.ViewPollForm .Chart {
 	float: left;
-	width: 24%; height: 14px;
-	background-color: #f60703;
+	height: 14px;
 }
 
-.ViewPollForm .Chart2 {
-	float: left;
-	width: 26%; height: 14px;
-	background-color: #f6e303;
-}
-
-.ViewPollForm .Chart3 {
-	float: left;
-	width: 27%; height: 14px;
-	background-color: #356adf;
-}
-
-.ViewPollForm .Chart4 {
-	float: left;
-	width: 23%; height: 14px;
-	background-color: #35df79;
+.ViewPollForm .Percen {
+	padding: 0px;
+	margin: 0px;
+	border: none;
+	background: none;
+	height: auto;
+	width: 96% ;
 }
 
 .ViewPollForm .Percentage {
 	float: right;
-	padding-right: 5px;
+	width: 30px;
+	padding: 0px;
+	margin: 0px;
+	border: none;
+	background: none;
+	line-height: 20px;
+	height: auto;
+}
+
+.ViewPollForm .BackgroudColor {
+	padding: 2px 0px 0px 0px;
+	margin: 0px;
+	background: none;
+	border: none;
+	width: 100%;
+	height: auto ;
 }

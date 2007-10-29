@@ -1,3 +1,6 @@
+<%  
+	import org.exoplatform.webui.form.UIFormInputIconSelector ;
+%>
 <div class="UITopicForm">
 	<% uiform.begin() %>
 	<div class="UIFormTabPane">
@@ -10,9 +13,12 @@
 		     	    <div class="RightHorizontalTabs">
 		     	      <div class="CenterHorizontalTabs">
 					        <div class="TabsContainer">
-				            
+				            <% int i = 0;
+				            	 String classCss = "SelectedTab" ;
+				            		while(i<4) {
+				             %>
 			              <div class="UITab NormalTabStyle">
-			                <div class="SelectedTab">
+			                <div class="$classCss">
 			                  <div class="LeftTab">
 			                    <div class="RightTab">
 					                  <div onclick="eXo.webui.UIHorizontalTabs.displayTabContent(this)" class="MiddleTab">Thread Content</div>
@@ -20,37 +26,10 @@
 			                  </div>
 			                </div>
 			              </div>
-		            
-			              <div class="UITab NormalTabStyle">
-			                <div class="NormalTab">
-			                  <div class="LeftTab">
-			                    <div class="RightTab">
-					                  <div onclick="eXo.webui.UIHorizontalTabs.displayTabContent(this)" class="MiddleTab">Icons and Smileys</div>
-					                </div>
-			                  </div>
-			                </div>
-			              </div>
-			              
-			              <div class="UITab NormalTabStyle">
-			                <div class="NormalTab">
-			                  <div class="LeftTab">
-			                    <div class="RightTab">
-					                  <div onclick="eXo.webui.UIHorizontalTabs.displayTabContent(this)" class="MiddleTab">Thread Options</div>
-					                </div>
-			                  </div>
-			                </div>
-			              </div>
-			              
-			              <div class="UITab NormalTabStyle">
-			                <div class="NormalTab">
-			                  <div class="LeftTab">
-			                    <div class="RightTab">
-					                  <div onclick="eXo.webui.UIHorizontalTabs.displayTabContent(this)" class="MiddleTab">Thread permission</div>
-					                </div>
-			                  </div>
-			                </div>
-			              </div>
-				            
+		            		<% 	i = i + 1 ;
+		            				classCss = "NormalTab" ; 
+		            			}
+		            		%>
 					        </div>
 					      </div>
 					    </div>
@@ -62,20 +41,18 @@
 	              <div class="UIFormInputSet ThreadContent">
 	              	<table class="UIFormGrid">
 	              		<tbody>
-	              		
+	              			<% 
+	              			for(action in uiform.getIdChild(1)) {
+	              				String label = uicomponent.getLabel(action) ;
+	              				uicomponent.getChildById(action).setRendered(true);
+	              		%>
 	              			<tr>
-	                      <td class="FieldLabel"><%=_ctx.appRes("UITopicForm.label.ThreadTitle")%>:</td>
-	                      <td class="FieldComponent">
-	                        <%uiform.renderChild("ThreadTitle");%>
-	                      </td>
-                      </tr>
-	              			<tr>
-	                      <td class="FieldLabel"><%=_ctx.appRes("UITopicForm.label.Messenger")%>:</td>
-	                      <td class="FieldComponent">
-	                        <%uiform.renderChild("Messenger"); %>
-	                      </td>
-                      </tr>
-                      
+                         <td class="FieldLabel">$label:</td>
+                         <td class="FieldComponent">
+                          <% uiform.renderChild(action) %>
+                         </td>
+                       </tr>
+                    <% } %>
 	              			<tr>
 	              				<td class="FieldLabel">Attach File:</td>
 	              				<td class="FieldComponent">
@@ -86,16 +63,16 @@
 	              </div>
 	            </div>
 	            <div class="UITabContent" style="display: none;">
-	            	<samp>dsfafgasdfasd</samp>
+	            	<% uiform.renderChild(UIFormInputIconSelector.class) %>
 	            </div>
 	            <div style="display: none;" class="UITabContent">
 	              <div class="UIFormInputSet ThreadOptions">
 	              	<table class="UIFormGrid">
 	              		<tbody>
 	              		<% 
-	              			String[] actions = ["TopicStatus", "TopicState", "Approved", "ModeratePost", "NotifyWhenAddPost", "Sticky"]; 
-	              			for(action in actions) {
+	              			for(action in uiform.getIdChild(3)) {
 	              				String label = uicomponent.getLabel(action) ;
+	              				uicomponent.getChildById(action).setRendered(true);
 	              		%>
 	              			<tr>
                          <td class="FieldLabel">$label:</td>
@@ -114,9 +91,9 @@
 	              	<table class="UIFormGrid">
 	              		<tbody>
 	              		<% 
-	              			actions = ["CanView", "CanPost"]; 
-	              			for(action in actions) {
+	              			for(action in uiform.getIdChild(4)) {
 	              				String label = uicomponent.getLabel(action) ;
+	              				uicomponent.getChildById(action).setRendered(true);
 	              		%>
 	              			<tr>
                          <td class="FieldLabel">$label:</td>

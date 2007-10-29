@@ -95,7 +95,7 @@ public class UICategory extends UIForm  {
 			UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;
 			UICategoryForm categoryForm = popupAction.createUIComponent(UICategoryForm.class, null, null) ;
 			categoryForm.setCategoryValue(uiCategory.getCategory(), true) ;
-			popupAction.activate(categoryForm, 580, 220) ;
+			popupAction.activate(categoryForm, 600, 260) ;
 			event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
 		}
 	}
@@ -373,24 +373,10 @@ public class UICategory extends UIForm  {
       UITopicDetail uiTopicDetail = uiTopicDetailContainer.getChild(UITopicDetail.class) ;
       uiForumContainer.getChild(UIForumDescription.class).setForumIds(uiCategory.categoryId, id[0]);
       uiTopicDetail.setUpdateTopic(uiCategory.categoryId, id[0], id[1], true) ;
+      uiTopicDetailContainer.getChild(UITopicPoll.class).updatePoll(uiCategory.categoryId, id[0], id[1]) ;
       uiForumContainer.getChild(UITopicContainer.class).setRendered(false) ;
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
       context.addUIComponentToUpdateByAjax(uiForumPortlet) ;
     }
   }
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
 }

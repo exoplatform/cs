@@ -4,6 +4,7 @@
  **************************************************************************/
 package org.exoplatform.forum.service.impl;
 
+import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -12,18 +13,19 @@ import java.util.List;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
-import javax.jcr.PathNotFoundException;
 import javax.jcr.Session;
 import javax.jcr.Value;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 
+import org.apache.poi.hssf.record.formula.PowerPtg;
 import org.exoplatform.forum.service.Category;
 import org.exoplatform.forum.service.Forum;
 import org.exoplatform.forum.service.ForumLinkData;
 import org.exoplatform.forum.service.ForumPageList;
 import org.exoplatform.forum.service.JCRPageList;
+import org.exoplatform.forum.service.Poll;
 import org.exoplatform.forum.service.Post;
 import org.exoplatform.forum.service.Topic;
 import org.exoplatform.forum.service.TopicView;
@@ -354,6 +356,7 @@ public class JCRDataStorage implements DataStorage {
     if(topicNode.hasProperty("exo:isSticky")) topicNew.setIsSticky(topicNode.getProperty("exo:isSticky").getBoolean()) ;
     if(topicNode.hasProperty("exo:canView")) topicNew.setCanView(ValuesToStrings(topicNode.getProperty("exo:canView").getValues())) ;
     if(topicNode.hasProperty("exo:canPost")) topicNew.setCanPost(ValuesToStrings(topicNode.getProperty("exo:canPost").getValues())) ;
+    if(topicNode.hasProperty("exo:isPoll")) topicNew.setIsPoll(topicNode.getProperty("exo:isPoll").getBoolean()) ;
     return topicNew;
   }
 
@@ -465,27 +468,27 @@ public class JCRDataStorage implements DataStorage {
   public void moveTopic(String topicId, String topicPath, String destForumPath) throws Exception {
   	Node forumHomeNode = getForumHomeNode() ;
     String newTopicPath = destForumPath + "/" + topicId;
-    //Forum remove Topic(OldForum)
-    Node oldForumNode = (Node)forumHomeNode.getSession().getItem(topicPath).getParent() ;
+    //Forum remove Topic(srcForum)
+    Node srcForumNode = (Node)forumHomeNode.getSession().getItem(topicPath).getParent() ;
     //Move Topic
     forumHomeNode.getSession().getWorkspace().move(topicPath, newTopicPath) ;
-    //Set TopicCount OldForum
-    oldForumNode.setProperty("exo:topicCount", oldForumNode.getProperty("exo:topicCount").getLong() - 1) ;
-    //Set NewPath for Old Forum
-    Node lastTopicOldForum = queryLastTopic(oldForumNode.getPath()) ;
-    if(lastTopicOldForum != null) oldForumNode.setProperty("exo:lastTopicPath", lastTopicOldForum.getPath()) ;
+    //Set TopicCount srcForum
+    srcForumNode.setProperty("exo:topicCount", srcForumNode.getProperty("exo:topicCount").getLong() - 1) ;
+    //Set NewPath for srcForum
+    Node lastTopicSrcForum = queryLastTopic(srcForumNode.getPath()) ;
+    if(lastTopicSrcForum != null) srcForumNode.setProperty("exo:lastTopicPath", lastTopicSrcForum.getPath()) ;
     //Topic Move
     Node topicNode = (Node)forumHomeNode.getSession().getItem(newTopicPath) ;
     topicNode.setProperty("exo:path", newTopicPath) ;
     long topicPostCount = topicNode.getProperty("exo:postCount").getLong() + 1 ;
-    //Forum add Topic (NewForum)
-    Node newForumNode = (Node)forumHomeNode.getSession().getItem(destForumPath) ;
-    newForumNode.setProperty("exo:topicCount", newForumNode.getProperty("exo:topicCount").getLong() + 1) ;
-    Node lastTopicNewForum = queryLastTopic(newForumNode.getPath()) ;
-    if(lastTopicNewForum != null) newForumNode.setProperty("exo:lastTopicPath", lastTopicNewForum.getPath()) ;
+    //Forum add Topic (destForum)
+    Node destForumNode = (Node)forumHomeNode.getSession().getItem(destForumPath) ;
+    destForumNode.setProperty("exo:topicCount", destForumNode.getProperty("exo:topicCount").getLong() + 1) ;
+    Node lastTopicNewForum = queryLastTopic(destForumNode.getPath()) ;
+    if(lastTopicNewForum != null) destForumNode.setProperty("exo:lastTopicPath", lastTopicNewForum.getPath()) ;
     //Set PostCount
-    oldForumNode.setProperty("exo:postCount", oldForumNode.getProperty("exo:postCount").getLong() - topicPostCount) ;
-    newForumNode.setProperty("exo:postCount", newForumNode.getProperty("exo:postCount").getLong() + topicPostCount) ;
+    srcForumNode.setProperty("exo:postCount", srcForumNode.getProperty("exo:postCount").getLong() - topicPostCount) ;
+    destForumNode.setProperty("exo:postCount", destForumNode.getProperty("exo:postCount").getLong() + topicPostCount) ;
     
     forumHomeNode.save() ;
   	forumHomeNode.getSession().save() ;
@@ -610,11 +613,117 @@ public class JCRDataStorage implements DataStorage {
   public void movePost(String postId, String postPath, String destTopicPath) throws Exception {
   	Node forumHomeNode = getForumHomeNode() ;
     String newPostPath = destTopicPath + "/" + postId;
+    //Node Topic move Post
+    Node srcTopicNode = (Node)forumHomeNode.getSession().getItem(postPath).getParent() ;
+    Node srcForumNode = (Node)srcTopicNode.getParent() ;
+    srcForumNode.setProperty("exo:postCount", srcForumNode.getProperty("exo:postCount").getLong() - 1 ) ;
+    srcTopicNode.setProperty("exo:postCount", srcTopicNode.getProperty("exo:postCount").getLong() - 1 ) ;
     forumHomeNode.getSession().getWorkspace().move(postPath, newPostPath) ;
+    //Node Post move
     Node postNode = (Node)forumHomeNode.getSession().getItem(newPostPath) ;
     postNode.setProperty("exo:path", newPostPath) ;
+    //Node Topic add Post
+    Node destTopicNode = (Node)forumHomeNode.getSession().getItem(destTopicPath) ;
+    Node destForumNode = (Node)destTopicNode.getParent() ;
+    destTopicNode.setProperty("exo:postCount", destTopicNode.getProperty("exo:postCount").getLong() + 1 ) ;
+    destForumNode.setProperty("exo:postCount", destForumNode.getProperty("exo:postCount").getLong() + 1 ) ;
   	forumHomeNode.save() ;
   	forumHomeNode.getSession().save() ;
+  }
+  
+  public Poll getPoll(String categoryId, String forumId, String topicId) throws Exception {
+    Node forumHomeNode = getForumHomeNode() ;
+    if(forumHomeNode.hasNode(categoryId)) {
+      Node CategoryNode = forumHomeNode.getNode(categoryId) ;
+      if(CategoryNode.hasNode(forumId)) {
+        Node forumNode = CategoryNode.getNode(forumId) ;
+        NodeIterator iterator = forumNode.getNodes() ;
+        Node topicNode = forumNode.getNode(topicId) ;
+        if(topicNode.getProperty("exo:isPoll").getBoolean() == false) return null;
+        String pollId = topicId.replaceFirst("TOPIC", "POLL") ;
+        if(!topicNode.hasNode(pollId)) return null;
+        Node pollNode = topicNode.getNode(pollId) ;
+        Poll pollNew = new Poll() ;
+        pollNew.setId(pollId) ;
+        if(pollNode.hasProperty("exo:owner")) pollNew.setOwner(pollNode.getProperty("exo:owner").getString()) ;
+        if(pollNode.hasProperty("exo:createdDate")) pollNew.setCreatedDate(pollNode.getProperty("exo:createdDate").getDate().getTime()) ;
+        if(pollNode.hasProperty("exo:modifiedBy")) pollNew.setModifiedBy(pollNode.getProperty("exo:modifiedBy").getString()) ;
+        if(pollNode.hasProperty("exo:modifiedDate")) pollNew.setModifiedDate(pollNode.getProperty("exo:modifiedDate").getDate().getTime()) ;
+        if(pollNode.hasProperty("exo:timeOut")) pollNew.setTimeOut(pollNode.getProperty("exo:timeOut").getLong()) ;
+        if(pollNode.hasProperty("exo:question")) pollNew.setQuestion(pollNode.getProperty("exo:question").getString()) ;
+        
+        if(pollNode.hasProperty("exo:option")) pollNew.setOption(ValuesToStrings(pollNode.getProperty("exo:option").getValues())) ;
+        if(pollNode.hasProperty("exo:vote")) pollNew.setVote(ValuesToStrings(pollNode.getProperty("exo:vote").getValues())) ;
+        
+        if(pollNode.hasProperty("exo:userVote")) pollNew.setUserVote(pollNode.getProperty("exo:userVote").getString()) ;
+        if(pollNode.hasProperty("exo:isPublic")) pollNew.setIsPublic(pollNode.getProperty("exo:isPublic").getBoolean()) ;
+        return pollNew ;
+      }
+    }
+    return null ;
+  }
+  
+  public Poll removePoll(String categoryId, String forumId, String topicId, String pollId) throws Exception {
+    Node forumHomeNode = getForumHomeNode() ;
+    Poll poll = new Poll() ;
+    if(forumHomeNode.hasNode(categoryId)) {
+      Node CategoryNode = forumHomeNode.getNode(categoryId) ;
+      if(CategoryNode.hasNode(forumId)) {
+        poll = getPoll(categoryId, forumId, topicId) ;
+        Node forumNode = CategoryNode.getNode(forumId) ;
+        Node topicNode = forumNode.getNode(topicId) ;
+        topicNode.getNode(pollId).remove() ;
+        forumHomeNode.save() ;
+        forumHomeNode.getSession().save() ;
+        return poll;
+      }
+    }
+    return null;
+  }
+  
+  public void savePoll(String categoryId, String forumId, String topicId, Poll poll, boolean isNew, boolean isVote) throws Exception {
+    Node forumHomeNode = getForumHomeNode() ;
+    if(forumHomeNode.hasNode(categoryId)) {
+      Node CategoryNode = forumHomeNode.getNode(categoryId) ;
+      if(CategoryNode.hasNode(forumId)) {
+        Node forumNode = CategoryNode.getNode(forumId) ;
+        Node topicNode = forumNode.getNode(topicId) ;
+        Node pollNode;
+        if(isVote) {
+          pollNode = topicNode.getNode(poll.getId()) ;
+          pollNode.setProperty("exo:vote", poll.getVote()) ;
+          pollNode.setProperty("exo:option", poll.getOption()) ;
+          String userVote = pollNode.getProperty("exo:userVote").getString() ;
+          if(userVote != null && userVote.length() > 0) {
+            userVote = userVote + "," + poll.getUserVote();
+          } else {
+            userVote = poll.getUserVote();
+          }
+          pollNode.setProperty("exo:userVote", userVote) ;
+        } else {
+          if(isNew) {
+            String pollId = topicId.replaceFirst("TOPIC", "POLL") ;
+            pollNode = topicNode.addNode(pollId, "exo:poll") ;
+            pollNode.setProperty("exo:id", pollId) ;
+            pollNode.setProperty("exo:owner", poll.getOwner()) ;
+            pollNode.setProperty("exo:userVote", "") ;
+            pollNode.setProperty("exo:createdDate", GregorianCalendar.getInstance()) ;
+            pollNode.setProperty("exo:vote", poll.getVote()) ;
+            topicNode.setProperty("exo:isPoll", true);
+          } else {
+            pollNode = topicNode.getNode(poll.getId()) ;
+          }
+          pollNode.setProperty("exo:modifiedBy", poll.getModifiedBy()) ;
+          pollNode.setProperty("exo:modifiedDate", GregorianCalendar.getInstance()) ;
+          pollNode.setProperty("exo:timeOut", poll.getTimeOut()) ;
+          pollNode.setProperty("exo:question", poll.getQuestion()) ;
+          pollNode.setProperty("exo:option", poll.getOption()) ;
+          pollNode.setProperty("exo:isPublic", poll.getIsPublic()) ;
+        }
+        forumHomeNode.save() ;
+        forumHomeNode.getSession().save() ;
+      }
+    }
   }
   
   public List getPage(long page, JCRPageList pageList) throws Exception {

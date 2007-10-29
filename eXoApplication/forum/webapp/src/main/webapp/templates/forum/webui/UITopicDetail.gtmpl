@@ -5,7 +5,7 @@
 	import org.exoplatform.forum.service.Topic ;
 %>
 <%  
-	Topic topic = uicomponent.getTopic() ;
+	Topic topic = uicomponent.getTopicDetail() ;
 %>
 
 <div class="UITopicDetail">

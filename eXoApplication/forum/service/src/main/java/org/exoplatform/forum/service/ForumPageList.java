@@ -110,8 +110,9 @@ public class ForumPageList extends JCRPageList {
     }
     if(topicNode.hasProperty("exo:isApproved")) topicNew.setIsApproved(topicNode.getProperty("exo:isApproved").getBoolean());
     if(topicNode.hasProperty("exo:isSticky")) topicNew.setIsSticky(topicNode.getProperty("exo:isSticky").getBoolean()) ;
-    if(topicNode.hasProperty("exo:viewPermissions")) topicNew.setCanView(ValuesToStrings(topicNode.getProperty("exo:viewPermissions").getValues()));
-    if(topicNode.hasProperty("exo:editPermissions")) topicNew.setCanPost(ValuesToStrings(topicNode.getProperty("exo:editPermissions").getValues()));
+    if(topicNode.hasProperty("exo:canView")) topicNew.setCanView(ValuesToStrings(topicNode.getProperty("exo:canView").getValues()));
+    if(topicNode.hasProperty("exo:canPost")) topicNew.setCanPost(ValuesToStrings(topicNode.getProperty("exo:canPost").getValues()));
+    if(topicNode.hasProperty("exo:isPoll")) topicNew.setIsPoll(topicNode.getProperty("exo:isPoll").getBoolean()) ;
     return topicNew;
   }
   

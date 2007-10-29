@@ -8,13 +8,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.forum.service.Forum;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.service.JCRPageList;
 import org.exoplatform.forum.service.Post;
 import org.exoplatform.forum.service.Topic;
 import org.exoplatform.forum.webui.popup.UIMovePostForm;
 import org.exoplatform.forum.webui.popup.UIMoveTopicForm;
+import org.exoplatform.forum.webui.popup.UIPollForm;
 import org.exoplatform.forum.webui.popup.UIPopupAction;
 import org.exoplatform.forum.webui.popup.UIPostForm;
 import org.exoplatform.forum.webui.popup.UITopicForm;
@@ -74,6 +74,7 @@ public class UITopicDetail extends UIForm  {
   private String forumId ; 
   private String topicId;
   private boolean viewTopic = true ;
+  private Topic topic;
   public UITopicDetail() throws Exception {
     // render post page list
     // render actions bar
@@ -90,11 +91,16 @@ public class UITopicDetail extends UIForm  {
   }
   
   private Topic getTopic() throws Exception {
-    return forumService.getTopic(categoryId, forumId, topicId, viewTopic) ;
+    this.topic = forumService.getTopic(categoryId, forumId, topicId, viewTopic) ; 
+    return this.topic ;
   }
   
   private JCRPageList getPagePosts() throws Exception {
     return forumService.getPosts(categoryId, forumId, topicId) ;
+  }
+  
+  private Topic getTopicDetail() throws Exception {
+    return this.topic ;
   }
   
   private List<Post> getPostPageList( long page) throws Exception {
@@ -176,7 +182,7 @@ public class UITopicDetail extends UIForm  {
       UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;
       UITopicForm topicForm = popupAction.createUIComponent(UITopicForm.class, null, null) ;
       topicForm.setTopicIds(topicDetail.categoryId, topicDetail.forumId) ;
-      topicForm.setUpdateTopic(topicDetail.getTopic(), true) ;
+      topicForm.setUpdateTopic(topicDetail.topic, true) ;
       popupAction.activate(topicForm, 662, 466) ;
     }
   }
@@ -190,13 +196,19 @@ public class UITopicDetail extends UIForm  {
   static public class AddPollActionListener extends EventListener<UITopicDetail> {
     public void execute(Event<UITopicDetail> event) throws Exception {
       UITopicDetail topicDetail = event.getSource() ;
+      Topic topic = topicDetail.topic ;
+      UIForumPortlet forumPortlet = topicDetail.getAncestorOfType(UIForumPortlet.class) ;
+      UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;
+      UIPollForm  pollForm = popupAction.createUIComponent(UIPollForm.class, null, null) ;
+      pollForm.setTopicPath(topic.getPath()) ;
+      popupAction.activate(pollForm, 662, 466) ;
     }
   }
 
   static public class SetOpenTopicActionListener extends EventListener<UITopicDetail> {
     public void execute(Event<UITopicDetail> event) throws Exception {
       UITopicDetail topicDetail = event.getSource() ;
-      Topic topic = topicDetail.getTopic() ;
+      Topic topic = topicDetail.topic ;
       if(topic.getIsClosed()) {
         topic.setIsClosed(false) ;
         topicDetail.forumService.saveTopic(topicDetail.categoryId, topicDetail.forumId, topic, false) ;
@@ -212,7 +224,7 @@ public class UITopicDetail extends UIForm  {
   static public class SetCloseTopicActionListener extends EventListener<UITopicDetail> {
     public void execute(Event<UITopicDetail> event) throws Exception {
       UITopicDetail topicDetail = event.getSource() ;
-      Topic topic = topicDetail.getTopic() ;
+      Topic topic = topicDetail.topic ;
       if(!topic.getIsClosed()) {
         topic.setIsClosed(true) ;
         topicDetail.forumService.saveTopic(topicDetail.categoryId, topicDetail.forumId, topic, false) ;
@@ -228,7 +240,7 @@ public class UITopicDetail extends UIForm  {
   static public class SetLockedTopicActionListener extends EventListener<UITopicDetail> {
     public void execute(Event<UITopicDetail> event) throws Exception {
       UITopicDetail topicDetail = event.getSource() ;
-      Topic topic = topicDetail.getTopic() ;
+      Topic topic = topicDetail.topic ;
       if(!topic.getIsLock()) {
         topic.setIsLock(true) ;
         topicDetail.forumService.saveTopic(topicDetail.categoryId, topicDetail.forumId, topic, false) ;
@@ -244,7 +256,7 @@ public class UITopicDetail extends UIForm  {
   static public class SetUnLockTopicActionListener extends EventListener<UITopicDetail> {
     public void execute(Event<UITopicDetail> event) throws Exception {
       UITopicDetail topicDetail = event.getSource() ;
-      Topic topic = topicDetail.getTopic() ;
+      Topic topic = topicDetail.topic ;
       if(topic.getIsLock()) {
         topic.setIsLock(false) ;
         topicDetail.forumService.saveTopic(topicDetail.categoryId, topicDetail.forumId, topic, false) ;
@@ -264,7 +276,7 @@ public class UITopicDetail extends UIForm  {
       UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;
       UIMoveTopicForm moveTopicForm = popupAction.createUIComponent(UIMoveTopicForm.class, null, null) ;
       List <Topic> topics = new ArrayList<Topic>();
-      topics.add(topicDetail.getTopic()) ;
+      topics.add(topicDetail.topic) ;
       moveTopicForm.updateTopic(topicDetail.forumId, topics, true);
       popupAction.activate(moveTopicForm, 400, 420) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
@@ -274,7 +286,7 @@ public class UITopicDetail extends UIForm  {
   static public class SetStickTopicActionListener extends EventListener<UITopicDetail> {
     public void execute(Event<UITopicDetail> event) throws Exception {
       UITopicDetail topicDetail = event.getSource() ;
-      Topic topic = topicDetail.getTopic() ;
+      Topic topic = topicDetail.topic ;
       if(!topic.getIsSticky()) {
         topic.setIsSticky(true) ;
         topicDetail.forumService.saveTopic(topicDetail.categoryId, topicDetail.forumId, topic, false) ;
@@ -290,7 +302,7 @@ public class UITopicDetail extends UIForm  {
   static public class SetUnStickTopicActionListener extends EventListener<UITopicDetail> {
     public void execute(Event<UITopicDetail> event) throws Exception {
       UITopicDetail topicDetail = event.getSource() ;
-      Topic topic = topicDetail.getTopic() ;
+      Topic topic = topicDetail.topic ;
       if(topic.getIsSticky()) {
         topic.setIsSticky(false) ;
         topicDetail.forumService.saveTopic(topicDetail.categoryId, topicDetail.forumId, topic, false) ;
@@ -324,7 +336,7 @@ public class UITopicDetail extends UIForm  {
   static public class SetDeleteTopicActionListener extends EventListener<UITopicDetail> {
     public void execute(Event<UITopicDetail> event) throws Exception {
       UITopicDetail topicDetail = event.getSource() ;
-      Topic topic = topicDetail.getTopic() ;
+      Topic topic = topicDetail.getTopicDetail() ;
       Object[] args = { topic.getTopicName() };
       new MessageException(new ApplicationMessage("UITopicDetail.sms.Delete", args, ApplicationMessage.WARNING)) ;
       topicDetail.forumService.removeTopic(topicDetail.categoryId, topicDetail.forumId, topic.getId()) ;

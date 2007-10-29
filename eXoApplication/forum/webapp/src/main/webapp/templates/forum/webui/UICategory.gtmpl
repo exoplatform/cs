@@ -16,7 +16,7 @@
 	  			<div class="Title"><%=category.getCategoryName()%></div>
 	  			<div class="CollapseButton" title="Collapse" onclick="eXo.forum.UIForumPortlet.expandCollapse(this) ;"><span></span></div>
 	  			<% 
-	  				String showCategory = "eXo.forum.UIForumPortlet.checkAction(this, event, 2);" 
+	  				String showCategory = "eXo.forum.UIForumPortlet.checkAction(this, event, 3);" 
 	  				String styleSkin = uicomponent.id; //UICategory
 	  			%>
 	  			<div class="SeparatorLine"><span></span></div>
@@ -25,7 +25,7 @@
 		  				<div class="LeftOverButton">
 		  					<div class="RightOverButton">
 		  						<div class="CenterOverButton">
-										<div class="ManageCategoryButton"><a>Manage Categoryss</a></div>
+										<div class="ManageCategoryButton"><a>Manage Category</a></div>
 								  </div>
 								</div>
 							</div>

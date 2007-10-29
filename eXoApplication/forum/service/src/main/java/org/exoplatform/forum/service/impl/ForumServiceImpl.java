@@ -11,6 +11,7 @@ import org.exoplatform.forum.service.Forum;
 import org.exoplatform.forum.service.ForumLinkData;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.service.JCRPageList;
+import org.exoplatform.forum.service.Poll;
 import org.exoplatform.forum.service.Post;
 import org.exoplatform.forum.service.Topic;
 import org.exoplatform.forum.service.TopicView;
@@ -134,5 +135,16 @@ public class ForumServiceImpl implements ForumService{
   public String getForumHomePath() throws Exception {
   	return storage_.getForumHomeNode().getPath() ;
 	}
-  
+
+  public Poll getPoll(String categoryId, String forumId, String topicId) throws Exception {
+    return storage_.getPoll(categoryId, forumId, topicId) ;
+  }
+
+  public Poll removePoll(String categoryId, String forumId, String topicId, String pollId) throws Exception {
+    return storage_.removePoll(categoryId, forumId, topicId, pollId);
+  }
+
+  public void savePoll(String categoryId, String forumId, String topicId, Poll poll, boolean isNew, boolean isVote) throws Exception {
+    storage_.savePoll(categoryId, forumId, topicId, poll, isNew, isVote) ;
+  }
 }

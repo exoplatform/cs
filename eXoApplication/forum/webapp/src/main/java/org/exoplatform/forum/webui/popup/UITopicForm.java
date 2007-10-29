@@ -18,12 +18,14 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
+import org.exoplatform.webui.form.UIFormInputIconSelector;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
@@ -95,6 +97,10 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
     
     addUIFormInput(canView);
     addUIFormInput(canPost);
+    
+    UIFormInputIconSelector uiIconSelector = new UIFormInputIconSelector("Icon", "Icon") ;
+    //uiIconSelector.setRendered(false)  ;
+    addUIFormInput(uiIconSelector) ;
   }
   
   public void setTopicIds(String categoryId, String forumId) {
@@ -109,10 +115,20 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
   public void deActivate() throws Exception {
     // TODO Auto-generated method stub
   }
-  
-  public String[] getActionsTopic() throws Exception {
-    return (new String [] {"PreviewThread", "SubmitThread", "CancelAction"});
+
+  public  String[] getIdChild(int Tab) throws Exception {
+    String[] actions ;
+    switch (Tab) {
+      case 1:actions = new String[] {"ThreadTitle", "Messenger"} ;  break;
+      case 2:actions = new String[] {} ;  break;
+      case 3:actions = new String[] {"TopicStatus", "TopicState", "Approved", "ModeratePost", 
+                                     "NotifyWhenAddPost", "Sticky"} ;  break;
+      case 4:actions = new String[] {"CanView", "CanPost"} ;  break;
+     default:actions = new String[] {}; break;
+    }
+    return actions;
   }
+  
   
   private String[] splitForForum (String str) throws Exception {
     if(str != null && str.length() > 0) {
@@ -148,6 +164,8 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
       getUIFormCheckBoxInput(FIELD_STICKY_CHECKBOX).setChecked(topic.getIsSticky());
       getUIStringInput(FIELD_CANVIEW_INPUT).setValue(unSplitForForum(topic.getCanView()));
       getUIStringInput(FIELD_CANPOST_INPUT).setValue(unSplitForForum(topic.getCanPost()));
+      
+      getChild(UIFormInputIconSelector.class).setSelectedIcon(topic.getIcon());
     }
   }
   
@@ -169,7 +187,8 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
       postNew.setModifiedDate(new Date());
       postNew.setMessage(messenger);
       
-      postNew.setIcon("");
+      UIFormInputIconSelector uiIconSelector = uiForm.getChild(UIFormInputIconSelector.class);
+      postNew.setIcon(uiIconSelector.getSelectedIcon());
       postNew.setNumberOfAttachment(0) ;
       
       UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
@@ -222,7 +241,9 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
       }
       topicNew.setIsSticky(sticky);
       topicNew.setIsApproved(approved);  
-      topicNew.setIcon("");
+      
+      UIFormInputIconSelector uiIconSelector = uiForm.getChild(UIFormInputIconSelector.class);
+      topicNew.setIcon(uiIconSelector.getSelectedIcon());
       //topicNew.setAttachmentFirstPost(0) ;
       topicNew.setCanView(canView);
       topicNew.setCanPost(canPost);

@@ -98,6 +98,7 @@ public class UICategories extends UIContainer  {
       UITopicDetail uiTopicDetail = uiTopicDetailContainer.getChild(UITopicDetail.class) ;
       uiForumContainer.getChild(UIForumDescription.class).setForumIds(id[0], id[1]);
       uiTopicDetail.setUpdateTopic(id[0], id[1], id[2], true) ;
+      uiTopicDetailContainer.getChild(UITopicPoll.class).updatePoll(id[0], id[1], id[2]) ;
       uiForumContainer.getChild(UITopicContainer.class).setRendered(false) ;
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
       context.addUIComponentToUpdateByAjax(uiForumPortlet) ;

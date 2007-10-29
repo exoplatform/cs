@@ -4,7 +4,7 @@
  **************************************************************************/
 package org.exoplatform.forum.service;
 
-import java.util.* ;
+import java.util.List;
 
 import javax.jcr.Session;
 
