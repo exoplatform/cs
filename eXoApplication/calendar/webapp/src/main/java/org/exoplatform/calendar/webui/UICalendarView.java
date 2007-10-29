@@ -345,6 +345,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   protected Map<String, String> getTimeSteps(String timeFormat, int timeInterval) {
     Map<String, String> times = new LinkedHashMap<String, String>() ;
     Calendar cal = GregorianCalendar.getInstance() ;
+    cal.setTime(getCurrentDate()) ;
     cal.set(Calendar.AM_PM, Calendar.AM) ;
     cal.set(Calendar.HOUR, 0) ;
     cal.set(Calendar.MINUTE, 0) ;

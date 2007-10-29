@@ -151,6 +151,7 @@
 					 			month = cl.get(Calendar.MONTH) ;
 					 			year = cl.get(Calendar.YEAR) ;
 					 			startTime = df.format(cl.getTime()) + " " + time;
+					 			cl.setTime(dtf.parse(startTime)) ;
 					 		  if(cl.get(Calendar.DAY_OF_WEEK) == uicomponent.getDayOfWeek(currentYear, currentMonth, currentDay)){	
 					 		  	cssClass = "Today" ;
 					 		  } else {
@@ -158,7 +159,7 @@
 					 		  }
 					 	%>	
 					 			
-						 		<td startTime="$startTime" class="$styleClass $cssClass">
+						 		<td startTime="<%=cl.getTimeInMillis()%>" class="$styleClass $cssClass">
 									<span></span>
 								</td>
 					 	<%

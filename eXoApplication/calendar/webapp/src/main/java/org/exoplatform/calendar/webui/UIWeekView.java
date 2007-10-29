@@ -159,6 +159,7 @@ public class UIWeekView extends UICalendarView {
         uiQuickAddEvent.setId("UIQuickAddTask") ;
       }
       uiQuickAddEvent.init(calendarview.getCalendarSetting(), startTime, finishTime) ;
+      uiQuickAddEvent.update("0", null) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
     }
