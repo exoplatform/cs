@@ -100,17 +100,17 @@
 							        <div class="MiddleLeftRightClickPopupMenu">
 							          <div class="MiddleRightRightClickPopupMenu">
 				              		<div class="UIRightPopupMenuContainer">
-														<a class="MenuItem"  >   
+														<a class="MenuItem" href="javascript:eXo.calendar.UICalendarPortlet.switchLayout(0)" >   
 					                    <div class="ItemIcon HidenAllCalendar">
 					                       Show/Hide all
 					                    </div>
 				                    </a>
-				                    <a class="MenuItem"  >   
+				                    <a class="MenuItem" href="javascript:eXo.calendar.UICalendarPortlet.switchLayout(1)" >   
 					                    <div class="ItemIcon ShowMinicalendar">
 					                       MiniCalendar
 					                    </div>
 				                    </a>
-				                    <a class="MenuItem"  >   
+				                    <a class="MenuItem" href="javascript:eXo.calendar.UICalendarPortlet.switchLayout(2)" >
 					                    <div class="ItemIcon HidenMinicalendar">
 					                      Calendar list
 					                    </div>
