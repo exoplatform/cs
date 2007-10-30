@@ -110,7 +110,90 @@ UICalendarPortlet.prototype.show = function(obj, evt) {
 //	}
 ////	var uiPopupCategory = eXo.core.DOMUtil.findFirstDescendantByClass(obj, "div", "UIPopupCategory") ;
 //} ;
+UICalendarPortlet.prototype.setCookie = function(name,value,expiredays) {
+	var exdate = new Date() ;
+	exdate.setDate(exdate.getDate() + expiredays) ;
+	document.cookie = name + "=" + escape(value) + ((expiredays==null) ? "" : ";expires="+exdate.toGMTString()) ;
+}
 
+UICalendarPortlet.prototype.getCookie = function(name) {
+if (document.cookie.length > 0) {
+	var start = document.cookie.indexOf(name + "=")
+	if (start != -1) {
+		start = start + name.length + 1 ;
+    end = document.cookie.indexOf(";",start) ;
+    if (end == -1) end = document.cookie.length ;
+    	return unescape(document.cookie.substring(start,end)) ;
+  } 
+}
+return "" ;
+}
+UICalendarPortlet.prototype.checkLayout = function() {
+	try{
+		var	layout = this.getCookie("layoutmode") ;
+		var	display = this.getCookie("displaymode") ;
+		var	layout0 = document.getElementById("UIMiniCalendar") ;
+		var	layout1 = document.getElementById("UICalendars").parentNode ;
+	}catch(e) {
+		return ;
+	}
+	var	layout = this.getCookie("layoutmode") ;
+	var	display = this.getCookie("displaymode") ;
+	var	layout0 = document.getElementById("UIMiniCalendar") ;
+	var	layout1 = document.getElementById("UICalendars").parentNode ;
+	switch(layout) {
+		case 0 :			
+				layout0.style.display = display ;
+				layout1.style.display = display ;
+			break ;
+		case 1 : 			
+			layout0.style.display = display ;
+			break ;
+		case 2 :			
+			layout1.style.display = display ;
+			break ;
+	}
+}
+UICalendarPortlet.prototype.switchLayout = function(layout) {
+	var UICalendarPortlet =	eXo.calendar.UICalendarPortlet
+	layout = parseInt(layout) ;
+	var	layout0 = document.getElementById("UIMiniCalendar") ;
+	var	layout1 = document.getElementById("UICalendars").parentNode ;
+	UICalendarPortlet.setCookie("layoutmode",layout,7) ;
+	switch(layout) {
+		case 0 :
+			if ((layout0.style.display == "none") && (layout1.style.display == "none")) {				
+				layout0.style.display = "block" ;			
+				layout1.style.display = "block" ;
+				UICalendarPortlet.setCookie("displaymode","block",7) ;
+			} else {
+				layout0.style.display = "none" ;
+				layout1.style.display = "none" ;
+				eXo.calendar.UICalendarPortlet.setCookie("displaymode","none",7) ;
+			}
+			break ;
+		case 1 : 
+			if (layout0.style.display == "none") {
+				layout0.style.display = "block" ;
+				UICalendarPortlet.setCookie("displaymode","block",7) ;
+			}
+			else {
+				layout0.style.display = "none" ;
+				UICalendarPortlet.setCookie("displaymode","none",7) ;	
+			}
+			break ;
+		case 2 :
+			if (layout1.style.display == "none") {
+				layout1.style.display = "block" ;
+				UICalendarPortlet.setCookie("displaymode","block",7) ;	
+			}
+			else {				
+				layout1.style.display = "none" ;
+				UICalendarPortlet.setCookie("displaymode","none",7) ;	
+			}
+			break ;
+	}
+}	
 /* for event */
 
 UICalendarPortlet.prototype.init = function() {
@@ -289,9 +372,11 @@ UIResizeEvent.prototype.resizeCallback = function(evt) {
 	var UIResizeEvent = eXo.calendar.UIResizeEvent ;
 	var eventBox = UIResizeEvent.outerElement ;
 	var start =  parseInt(eventBox.getAttribute("startTime")) ;
+	var calType = eventBox.getAttribute("calType") ;
 	var end =  start + eventBox.offsetHeight - 2 ;
 	if (eventBox.offsetHeight != UIResizeEvent.outerElementHeight) {
 		var actionLink = eXo.calendar.UICalendarPortlet.adjustTime(start, end, eventBox) ;
+		if(calType) actionLink = actionLink.replace(/'\s*\)/,"&calType=" + calType + "')") ;		
 		eval(actionLink) ;
 	}	
 }
@@ -360,6 +445,7 @@ UICalendarPortlet.prototype.dragStart = function(evt) {
 UICalendarPortlet.prototype.dragEnd = function() {
 	this.onmousemove = null ;
 	var dragObject = eXo.calendar.UICalendarPortlet.dragObject ;
+	var calType = dragObject.getAttribute("calType") ;
 	var start = parseInt(dragObject.getAttribute("startTime")) ;
 	var end = parseInt(dragObject.getAttribute("endTime")) ;
 	var delta = end - start  ;
@@ -370,6 +456,7 @@ UICalendarPortlet.prototype.dragEnd = function() {
 	eventDayContainer.onmouseup = null ;
 	if(dragObject.offsetTop != eXo.calendar.UICalendarPortlet.eventTop) {		
 		var actionLink =	eXo.calendar.UICalendarPortlet.adjustTime(currentStart, currentEnd, dragObject) ;
+		if (calType) actionLink = actionLink.replace(/'\s*\)/, "&calType=" + calType + "')") ;
 		eval(actionLink) ;
 	}
 	dragObject = null ;
