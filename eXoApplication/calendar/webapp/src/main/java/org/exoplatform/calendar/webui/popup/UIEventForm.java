@@ -139,6 +139,9 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       calendarEvent_ = eventCalendar ;
       setEventSumary(eventCalendar.getSummary()) ;
       setEventDescription(eventCalendar.getDescription()) ;
+      System.out.println("eventCalendar.getFromDateTime() " + eventCalendar.getFromDateTime());
+      System.out.println("eventCalendar.getToDateTime() " + eventCalendar.getToDateTime());
+      
       setEventFromDate(eventCalendar.getFromDateTime()) ;
       setEventToDate(eventCalendar.getToDateTime()) ;
       setSelectedCalendarId(eventCalendar.getCalendarId()) ;

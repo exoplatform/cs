@@ -87,7 +87,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
 
   final public static String CALNAME = "calName".intern() ;
   final public static String CALENDARID = "calendarId".intern() ;
-
+  final public static String CALTYPE = "calType".intern() ;
   final public static String EVENTID = "eventId".intern() ;
   final public static String DAY = "day".intern() ;
   final public static String MONTH = "month".intern() ;
@@ -523,16 +523,15 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       String username = event.getRequestContext().getRemoteUser() ;
       String calendarId = event.getRequestContext().getRequestParameter(CALENDARID) ;
       String eventId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-
-      //String calendarName = event.getRequestContext().getRequestParameter(CALNAME) ;
-
+      String calType = event.getRequestContext().getRequestParameter(CALTYPE) ;
       CalendarService calendarService = CalendarUtils.getCalendarService() ;
-      try {
+      if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
         eventCalendar = calendarService.getUserEvent(username, calendarId, eventId) ;
-      } catch (Exception e){
-        e.printStackTrace() ;
+      } else if(calType.equals(CalendarUtils.SHARED_TYPE)) {
+        eventCalendar = calendarService.getUserEvent(username, calendarId, eventId) ;
+      } else if(calType.equals(CalendarUtils.PUBLIC_TYPE)) {
+        eventCalendar = calendarService.getGroupEvent(calendarId, eventId) ;
       }
-      String calType = eventCalendar.getCalType() ;
       if(CalendarEvent.TYPE_EVENT.equals(eventCalendar.getEventType())) {
         uiPopupContainer.setId(UIPopupContainer.UIEVENTPOPUP) ;
         UIEventForm uiEventForm = uiPopupContainer.createUIComponent(UIEventForm.class, null, null) ;
@@ -557,7 +556,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         uiPopupContainer.addChild(uiEventForm) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarView.getParent()) ;
-        
+
       } else if(CalendarEvent.TYPE_TASK.equals(eventCalendar.getEventType())) {
         uiPopupContainer.setId(UIPopupContainer.UITASKPOPUP) ;
         UITaskForm uiTaskForm = uiPopupContainer.createUIComponent(UITaskForm.class, null, null) ;
