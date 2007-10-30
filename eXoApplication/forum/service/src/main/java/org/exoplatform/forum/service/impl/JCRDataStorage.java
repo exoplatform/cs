@@ -637,9 +637,7 @@ public class JCRDataStorage implements DataStorage {
       Node CategoryNode = forumHomeNode.getNode(categoryId) ;
       if(CategoryNode.hasNode(forumId)) {
         Node forumNode = CategoryNode.getNode(forumId) ;
-        NodeIterator iterator = forumNode.getNodes() ;
         Node topicNode = forumNode.getNode(topicId) ;
-        if(topicNode.getProperty("exo:isPoll").getBoolean() == false) return null;
         String pollId = topicId.replaceFirst("TOPIC", "POLL") ;
         if(!topicNode.hasNode(pollId)) return null;
         Node pollNode = topicNode.getNode(pollId) ;

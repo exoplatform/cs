@@ -43,7 +43,7 @@
 			    <div class="WorkingArea">
 			     	<div class="HorizontalLayout">
 			        <div class="UITabContentContainer">
-		           <% if(displayVoted == false) { %> 
+		           <% //if(displayVoted == false) { %> 
 		            <div class="UITabContent">
 		              <div class="TopicPollContent">
 										<div class="PollQuestion">${question}?</div>
@@ -84,7 +84,7 @@
 										</div>
 		              </div>
 		            </div>
-		            <% } else { %>
+		            <% //} else { %>
 		            <div class="UITabContent">
 		   								
 									<div class="ViewPollForm">
@@ -146,7 +146,7 @@
 									</div>
 		   
 		            </div>
-		            <% } %>
+		            <%// } %>
 		          </div>
 					    
 				    </div>

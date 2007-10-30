@@ -12,10 +12,12 @@ import org.exoplatform.container.PortalContainer;
 import org.exoplatform.forum.service.Forum;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.service.Poll;
+import org.exoplatform.forum.service.Topic;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIComponent;
+import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
@@ -48,17 +50,20 @@ public class UITopicPoll extends UIForm  {
   private void init() throws Exception {
     System.out.println("\n\n==================>  Init");
     if(categoryId != null && categoryId.length() > 0) {
-      Poll poll = forumService.getPoll(categoryId, forumId, topicId) ; 
-      List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-      if(poll != null) {
-        for (String s : poll.getOption()) {
-          options.add( new SelectItemOption<String>(s, s) ) ;
+      Topic topic = forumService.getTopic(categoryId, forumId, topicId, false) ;
+      if(topic.getIsPoll()) {
+        Poll poll = forumService.getPoll(categoryId, forumId, topicId) ; 
+        List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
+        if(poll != null) {
+          for (String s : poll.getOption()) {
+            options.add( new SelectItemOption<String>(s, s) ) ;
+          }
         }
+        UIFormRadioBoxInput input = new UIFormRadioBoxInput("vote", "vote", options);
+        input.setAlign(1) ;
+        addUIFormInput(input);
+        poll_ = poll ;
       }
-      UIFormRadioBoxInput input = new UIFormRadioBoxInput("vote", "vote", options);
-      input.setAlign(1) ;
-      addUIFormInput(input);
-      poll_ = poll ;
     }
   }
   
