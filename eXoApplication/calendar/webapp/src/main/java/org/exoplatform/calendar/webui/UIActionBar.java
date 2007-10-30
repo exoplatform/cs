@@ -91,6 +91,7 @@ public class UIActionBar extends UIContainer  {
       uiContainer.setId(UIPopupContainer.UITASKPOPUP) ;
       UITaskForm uiTaskForm = uiContainer.createUIComponent(UITaskForm.class, null, null) ;
       uiTaskForm.initForm(uiPortlet.getCalendarSetting(), null) ;
+      uiTaskForm.update(CalendarUtils.PRIVATE_TYPE, null) ;
       uiContainer.addChild(uiTaskForm) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }

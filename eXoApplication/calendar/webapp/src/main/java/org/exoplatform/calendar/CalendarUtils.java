@@ -35,6 +35,10 @@ public class CalendarUtils {
   final public static String SEMICOLON = ";".intern() ;
   final public static String COLON = ",".intern() ;
   final public static String UNDERSCORE = "_".intern() ;
+  final public static String TIMEFORMAT  = "HH:mm".intern() ;
+  final public static String DATEFORMAT = "MM/dd/yyyy".intern() ;
+  final public static String DATETIMEFORMAT = DATEFORMAT + " " +TIMEFORMAT ;   
+  
   static public String[] getUserGroups(String username) throws Exception {
     OrganizationService organization = (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
     Object[] objs = organization.getGroupHandler().findGroupsOfUser(username).toArray() ;
@@ -68,9 +72,10 @@ public class CalendarUtils {
     cal.set(java.util.Calendar.HOUR, 0) ;
     cal.set(java.util.Calendar.MINUTE, 0) ;
     DateFormat df = new SimpleDateFormat(timeFormat) ;
+    DateFormat df2 = new SimpleDateFormat(TIMEFORMAT) ;
     int time = 0 ;
     while (time ++ < 24*60/(15)) {
-      options.add(new SelectItemOption<String>(df.format(cal.getTime()), df.format(cal.getTime()))) ;
+      options.add(new SelectItemOption<String>(df.format(cal.getTime()), df2.format(cal.getTime()))) ;
       cal.add(java.util.Calendar.MINUTE, 15) ;
     }
     return options ;

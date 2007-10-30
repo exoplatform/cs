@@ -57,7 +57,7 @@ import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
       @EventConfig(listeners = UIEventForm.AddAttachmentActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UIEventForm.RemoveAttachmentActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UIEventForm.AddParticipantActionListener.class, phase = Phase.DECODE),
-      @EventConfig(listeners = UIEventForm.CancelActionListener.class)
+      @EventConfig(listeners = UIEventForm.CancelActionListener.class, phase = Phase.DECODE)
     }
 )
 public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISelector{
@@ -86,15 +86,15 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   private CalendarEvent calendarEvent_ = null ;
   protected String calType_ = "0" ;
   private String errorMsg_ = null ;
-  protected String timeFormat_ ;
-  private String dateFormat_ = "MM/dd/yyyy".intern() ;
+  /*protected String timeFormat_ = CalendarUtils.TIMEFORMAT ;
+  private String dateFormat_ = "MM/dd/yyyy".intern() ;*/
+  
   public UIEventForm() throws Exception {
     super("UIEventForm", false);
     UIEventDetailTab eventDetailTab =  new UIEventDetailTab(TAB_EVENTDETAIL) ;
     addChild(eventDetailTab) ;
     UIEventReminderTab eventReminderTab =  new UIEventReminderTab(TAB_EVENTREMINDER) ;
     addChild(eventReminderTab) ;
-
     UIFormInputWithActions eventShareTab =  new UIFormInputWithActions(TAB_EVENTSHARE) ;
     List<ActionData> actions = new ArrayList<ActionData>() ;
     eventShareTab.addUIFormInput(new UIFormSelectBox(FIELD_SHARE, FIELD_SHARE, getShareValue()) ) ;
@@ -130,8 +130,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   public void initForm(CalendarSetting calSetting, CalendarEvent eventCalendar) throws Exception {
     reset() ;
     UIEventDetailTab eventDetailTab = getChildById(TAB_EVENTDETAIL) ;
-    timeFormat_ = calSetting.getTimeFormat() ;
-    List<SelectItemOption<String>> options = CalendarUtils.getTimesSelectBoxOptions(timeFormat_) ;
+    List<SelectItemOption<String>> options = CalendarUtils.getTimesSelectBoxOptions(calSetting.getTimeFormat()) ;
     eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_FROM_TIME).setOptions(options) ;
     eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_TO_TIME).setOptions(options) ;
     if(eventCalendar != null) {
@@ -139,9 +138,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       calendarEvent_ = eventCalendar ;
       setEventSumary(eventCalendar.getSummary()) ;
       setEventDescription(eventCalendar.getDescription()) ;
-      System.out.println("eventCalendar.getFromDateTime() " + eventCalendar.getFromDateTime());
-      System.out.println("eventCalendar.getToDateTime() " + eventCalendar.getToDateTime());
-      
       setEventFromDate(eventCalendar.getFromDateTime()) ;
       setEventToDate(eventCalendar.getToDateTime()) ;
       setSelectedCalendarId(eventCalendar.getCalendarId()) ;
@@ -318,7 +314,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     UIEventDetailTab eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
     UIFormSelectBox timeField = eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_FROM_TIME) ;
     UIFormDateTimeInput fromField = eventDetailTab.getChildById(UIEventDetailTab.FIELD_FROM) ;
-    DateFormat df = new SimpleDateFormat(dateFormat_ + " " + timeFormat_) ;
+    DateFormat df = new SimpleDateFormat(CalendarUtils.DATETIMEFORMAT) ;
     return df.parse(fromField.getValue() + " " + timeField.getValue()) ;
   }
   protected String getEventFormDateValue () {
@@ -329,27 +325,28 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   protected void setEventFromDate(Date date) {
     UIEventDetailTab eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
     UIFormDateTimeInput fromField = eventDetailTab.getChildById(UIEventDetailTab.FIELD_FROM) ;
-    UIFormSelectBox timeFile = eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_FROM_TIME) ;
-    DateFormat df = new SimpleDateFormat(dateFormat_) ;
+    UIFormSelectBox timeField = eventDetailTab.getChildById(UIEventDetailTab.FIELD_FROM_TIME) ;
+    DateFormat df = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
     fromField.setValue(df.format(date)) ;
-    df = new SimpleDateFormat(timeFormat_) ;
-    timeFile.setValue(df.format(date)) ;
+    df = new SimpleDateFormat(CalendarUtils.TIMEFORMAT) ;
+    System.out.println("\n\n " + df.format(date));
+    timeField.setValue(df.format(date)) ;
   }
 
   protected Date getEventToDate() throws Exception {
     UIEventDetailTab eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
-    UIFormSelectBox timeField = eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_TO_TIME) ;
     UIFormDateTimeInput toField = eventDetailTab.getChildById(UIEventDetailTab.FIELD_TO) ;
-    DateFormat df = new SimpleDateFormat(dateFormat_ + " " + timeFormat_) ;
+    UIFormSelectBox timeField = eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_TO_TIME) ;
+    DateFormat df = new SimpleDateFormat(CalendarUtils.DATETIMEFORMAT) ;
     return df.parse(toField.getValue() + " " + timeField.getValue()) ;
   }
   protected void setEventToDate(Date date) {
     UIEventDetailTab eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
     UIFormDateTimeInput toField = eventDetailTab.getChildById(UIEventDetailTab.FIELD_TO) ;
-    UIFormSelectBox timeField = eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_TO_TIME) ;
-    DateFormat df = new SimpleDateFormat(dateFormat_) ;
+    UIFormSelectBox timeField = eventDetailTab.getChildById(UIEventDetailTab.FIELD_TO_TIME) ;
+    DateFormat df = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
     toField.setValue(df.format(date)) ;
-    df = new SimpleDateFormat(timeFormat_) ;
+    df = new SimpleDateFormat(CalendarUtils.TIMEFORMAT) ;
     timeField.setValue(df.format(date)) ;
   }
 

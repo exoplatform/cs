@@ -65,7 +65,7 @@
 				  color = uicomponent.getColors().get(ce.getCalendarId()) ;
 		    %>
    			<td width="$precent%" class="$color">
-	    		<div unselectable="on" class="EventContainerBorder EventBoxes" eventid="<%=ce.getId()%>" calid="<%=ce.getCalendarId()%>" actionlink="$actionLink">
+	    		<div unselectable="on" class="EventContainerBorder EventBoxes"  calType="$ce.calType" eventid="<%=ce.getId()%>" calid="<%=ce.getCalendarId()%>" actionlink="$actionLink">
 	          <div class="EventContainer $color" style="height:25px;" title="<%=dtf.format(ce.getFromDateTime())%>:-><%=dtf.format(ce.getToDateTime())%>">
 	          	<%=ce.getSummary()%>
 	          </div>

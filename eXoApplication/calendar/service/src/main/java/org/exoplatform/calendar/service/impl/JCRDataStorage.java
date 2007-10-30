@@ -679,7 +679,6 @@ public class JCRDataStorage implements DataStorage{
     }
     return events ;
   }
-
   public void saveGroupEvent(String calendarId, CalendarEvent event, boolean isNew) throws Exception {
     Node calendarNode = getCalendarHome().getNode(calendarId) ;
     saveEvent(calendarNode, event, isNew) ;
