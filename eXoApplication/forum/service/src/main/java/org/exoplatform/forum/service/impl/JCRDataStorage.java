@@ -655,8 +655,8 @@ public class JCRDataStorage implements DataStorage {
         if(pollNode.hasProperty("exo:option")) pollNew.setOption(ValuesToStrings(pollNode.getProperty("exo:option").getValues())) ;
         if(pollNode.hasProperty("exo:vote")) pollNew.setVote(ValuesToStrings(pollNode.getProperty("exo:vote").getValues())) ;
         
-        if(pollNode.hasProperty("exo:userVote")) pollNew.setUserVote(pollNode.getProperty("exo:userVote").getString()) ;
-        if(pollNode.hasProperty("exo:isPublic")) pollNew.setIsPublic(pollNode.getProperty("exo:isPublic").getBoolean()) ;
+        if(pollNode.hasProperty("exo:userVote")) pollNew.setUserVote(ValuesToStrings(pollNode.getProperty("exo:userVote").getValues())) ;
+        if(pollNode.hasProperty("exo:isMultiCheck")) pollNew.setIsMultiCheck(pollNode.getProperty("exo:isMultiCheck").getBoolean()) ;
         return pollNew ;
       }
     }
@@ -692,21 +692,14 @@ public class JCRDataStorage implements DataStorage {
         if(isVote) {
           pollNode = topicNode.getNode(poll.getId()) ;
           pollNode.setProperty("exo:vote", poll.getVote()) ;
-          pollNode.setProperty("exo:option", poll.getOption()) ;
-          String userVote = pollNode.getProperty("exo:userVote").getString() ;
-          if(userVote != null && userVote.length() > 0) {
-            userVote = userVote + "," + poll.getUserVote();
-          } else {
-            userVote = poll.getUserVote();
-          }
-          pollNode.setProperty("exo:userVote", userVote) ;
+          pollNode.setProperty("exo:userVote", poll.getUserVote()) ;
         } else {
           if(isNew) {
             String pollId = topicId.replaceFirst("TOPIC", "POLL") ;
             pollNode = topicNode.addNode(pollId, "exo:poll") ;
             pollNode.setProperty("exo:id", pollId) ;
             pollNode.setProperty("exo:owner", poll.getOwner()) ;
-            pollNode.setProperty("exo:userVote", "") ;
+            pollNode.setProperty("exo:userVote", new String[] {}) ;
             pollNode.setProperty("exo:createdDate", GregorianCalendar.getInstance()) ;
             pollNode.setProperty("exo:vote", poll.getVote()) ;
             topicNode.setProperty("exo:isPoll", true);
@@ -718,7 +711,7 @@ public class JCRDataStorage implements DataStorage {
           pollNode.setProperty("exo:timeOut", poll.getTimeOut()) ;
           pollNode.setProperty("exo:question", poll.getQuestion()) ;
           pollNode.setProperty("exo:option", poll.getOption()) ;
-          pollNode.setProperty("exo:isPublic", poll.getIsPublic()) ;
+          pollNode.setProperty("exo:isMultiCheck", poll.getIsMultiCheck()) ;
         }
         forumHomeNode.save() ;
         forumHomeNode.getSession().save() ;

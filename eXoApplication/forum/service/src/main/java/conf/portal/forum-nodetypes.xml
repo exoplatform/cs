@@ -33,10 +33,10 @@
 	  		<propertyDefinition name="exo:vote" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
 	  			<valueConstraints/>
 	  		</propertyDefinition>
-	  		<propertyDefinition name="exo:userVote" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+	  		<propertyDefinition name="exo:userVote" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
 	  			<valueConstraints/>
 	  		</propertyDefinition>
-	  		<propertyDefinition name="exo:isPublic" requiredType="boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+	  		<propertyDefinition name="exo:isMultiCheck" requiredType="boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
 	  			<valueConstraints/>
   			</propertyDefinition>
   		</propertyDefinitions>

@@ -15,6 +15,7 @@ import org.exoplatform.forum.webui.EmptyNameValidator;
 import org.exoplatform.forum.webui.UIForumPortlet;
 import org.exoplatform.forum.webui.UITopicDetail;
 import org.exoplatform.forum.webui.UITopicDetailContainer;
+import org.exoplatform.forum.webui.UITopicPoll;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -92,11 +93,10 @@ public class UIPollForm extends UIForm implements UIPopupComponent {
     public void execute(Event<UIPollForm> event) throws Exception {
       UIPollForm uiForm = event.getSource() ;
       UIFormStringInput questionInput = uiForm.getUIStringInput(FIELD_QUESTION_INPUT) ;
-      //questionInput.addValidator(EmptyNameValidator.class) ;
       String question = questionInput.getValue() ;
       String timeOutStr = uiForm.getUIStringInput(FIELD_TIMEOUT_INPUT).getValue() ;
       long timeOut = 0;
-      if(timeOutStr != null && timeOutStr.length() > 0) timeOut = Long.getLong(timeOutStr) ; 
+      if(timeOutStr != null && timeOutStr.length() > 0) timeOut = Long.parseLong(timeOutStr) ; 
       boolean isMulti = uiForm.getUIFormCheckBoxInput(FIELD_MULTIVOTE_CHECKBOX).isChecked() ;
       String sms = "";
       int i = 0 ; 
@@ -131,11 +131,11 @@ public class UIPollForm extends UIForm implements UIPopupComponent {
         poll.setCreatedDate(new Date());
         poll.setModifiedBy(userName) ;
         poll.setModifiedDate(new Date()) ;
-        poll.setIsPublic(isMulti) ;
+        poll.setIsMultiCheck(isMulti) ;
         poll.setOption(options) ;
         poll.setVote(vote) ;
         poll.setTimeOut(timeOut) ;
-        poll.setUserVote("") ;
+        poll.setUserVote(new String[] {}) ;
         
         String[] id = uiForm.TopicPath.trim().split("/") ;
         ForumService forumService = (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
@@ -144,8 +144,8 @@ public class UIPollForm extends UIForm implements UIPopupComponent {
         forumPortlet.cancelAction() ;
         UITopicDetailContainer detailContainer = forumPortlet.findFirstComponentOfType(UITopicDetailContainer.class) ;
         detailContainer.setRederPoll(true) ;
+        detailContainer.getChild(UITopicPoll.class).updatePoll(id[id.length - 3], id[id.length - 2], id[id.length - 1]) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(detailContainer);
-        
       }
       if(sms != null && sms.length() > 0) {
         Object[] args = { };

@@ -42,8 +42,6 @@
 		</div>
 		<div style="clear: left;"><span></span></div>
 	</div>
-	
-	
 <!-- Start PostsInThreadContainer -->	
 	<div class="PostsInThreadContainer">
 	  <div class="ForumToolbar">
@@ -120,11 +118,14 @@
 															"SetLockedTopic", "SetUnLockTopic", "SetStickTopic", "SetUnStickTopic", "SplitTopic", 
 															"SetApproveTopic", "SetUnApproveTopic", "SetMoveTopic", "SetDeleteTopic"] ;
 					                   		for(action in menuTopicActions) {
+					                   			if(topic.getIsPoll()){
+					                   				if(action.equals("AddPoll")) continue ;
+					                   			}
 					                   			String link = uicomponent.event(action) ;
-					                   		String itemLabel = _ctx.appRes(uicomponent.getName() + ".action." + action);
-					                   		String classIcon = null;
-					                   		if(action.length() < 11) classIcon = action + "Icon";
-					                   		else classIcon = action.replaceFirst("Topic", "Icon");
+						                   		String itemLabel = _ctx.appRes(uicomponent.getName() + ".action." + action);
+						                   		String classIcon = null;
+						                   		if(action.length() < 11) classIcon = action + "Icon";
+						                   		else classIcon = action.replaceFirst("Topic", "Icon");
 					                   %>
 					                    <a class="MenuItem" href="$link">   
 						                    <div class="ItemIcon $classIcon">

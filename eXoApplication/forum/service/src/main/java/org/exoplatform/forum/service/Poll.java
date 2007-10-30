@@ -23,8 +23,8 @@ public class Poll {
   private String question;
   private String[] option;
   private String[] vote;
-  private String userVote = "";
-  private boolean isPublic = false ;
+  private String[] userVote = new String[] {};
+  private boolean isMultiCheck = false ;
   
   
   public Poll() {
@@ -69,9 +69,9 @@ public class Poll {
   public String[] getVote() { return vote; }
   public void setVote(String[] vote) { this.vote = vote; }
   
-  public String getUserVote() {return userVote; }
-  public void setUserVote( String userVote) { this.userVote = userVote;}
+  public String[] getUserVote() {return userVote; }
+  public void setUserVote( String[] userVote) { this.userVote = userVote;}
   
-  public boolean getIsPublic() { return isPublic;}
-  public void setIsPublic(boolean isPublic) { this.isPublic = isPublic;}
+  public boolean getIsMultiCheck() { return isMultiCheck;}
+  public void setIsMultiCheck(boolean isMultiCheck) { this.isMultiCheck = isMultiCheck;}
 }

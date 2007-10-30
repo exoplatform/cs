@@ -3,13 +3,14 @@
 	import org.exoplatform.forum.service.Poll ;
 	import java.util.GregorianCalendar;
 %>
-<div class="UITopicPoll" id="$uicomponent.id">
+<div class="UITopicPoll">
 	<%  
 		Poll poll = uicomponent.getPoll() ;
 		String question = poll.getQuestion() ;
 		int timeOut = (int)poll.getTimeOut() ;
-		
+		boolean displayVoted = uicomponent.getIsVoted();
 	%>
+	<% uiform.begin() %>
 	<div class="ForumToolbar">
 	  <div class="LeftBar">
 	  	<div class="RightBar">
@@ -34,18 +35,16 @@
 		if(timeOut > 0) {
 			String timeOutDate = "" +  (poll.getCreatedDate() + timeOut) ;
 		%>
-		<div class="PollTime" style="$displayTimeOut">This Poll will be closed on $timeOutDate</div>
+		<div class="PollTime">This Poll will be closed on $timeOutDate</div>
 		<% } %>
 		<div class="UIFormTabPane">
 		  <div class="UITabPane">
 				<div class="TabPaneContent">
-		      
 			    <div class="WorkingArea">
 			     	<div class="HorizontalLayout">
 			        <div class="UITabContentContainer">
-		            
-		            <div style="display: block;" id="UITabContent" class="UITabContent">
-		              
+		           <% if(displayVoted == false) { %> 
+		            <div class="UITabContent">
 		              <div class="TopicPollContent">
 										<div class="PollQuestion">${question}?</div>
 										<div class="UIForm">
@@ -53,22 +52,20 @@
 										    <div class="FormContainer">
 										      
 										      <table class="UIFormGrid">
-										      <%  
-										      	for(option in poll.getOption()) {
-										      	
-										      %>
 							              <tr>
-						  	              <td class="FieldComponent"><input type="radio" class="radio"></td>
-						  	              <td class="FieldLabel">$option</td>
+						  	              <td class="FieldComponent">
+						  	              <%
+						  	              	uicomponent.renderChildren() ;  
+						  	              %>
+						  	              </td>
 								            </tr>
-								           <% } %>
 										      </table>
 
 										      <div class="UIAction"> 
 										        <table class="ActionContainer" align="center">
 										          <tr>
 										          	<td align="center">
-																	<a href="#" class="ActionButton LightBlueStyle">
+																	<a href="<%=uicomponent.event("Vote")%>" class="ActionButton LightBlueStyle">
 										                <div class="ButtonLeft">
 										                  <div class="ButtonRight">
 										                    <div class="ButtonMiddle">
@@ -86,12 +83,9 @@
 										  </div>
 										</div>
 		              </div>
-		              
-		              
-		              
 		            </div>
-		            
-		            <div style="display: none;" id="UITabContent" class="UITabContent">
+		            <% } else { %>
+		            <div class="UITabContent">
 		   								
 									<div class="ViewPollForm">
 										<table cellspacing="0" borderspacing="0" id="UIGrid" class="UIGrid">
@@ -109,7 +103,6 @@
 								  			 long[] voteNumber = uicomponent.getVoteNumber();
 								  			 int number = 20 ;
 								  			 String vote, percent, color;
-								  			// String percent ;
 								  			 int sum_ = uicomponent.getSumVote();
 								  			 String sum = (String)sum_ ;
 								  			 float a = 0;
@@ -143,8 +136,8 @@
 													<td class="Number">$vote</td>
 												</tr>
 								  		<% 	i = i + 1;
-								  				 if(classCss.equalsIgnoreCase("EvenRow"))classCss = "OddRow" ;
-								  				 else classCss = "EvenRow" ;
+								  				 if(i%2 == 0)classCss = "EvenRow" ;
+								  				 else classCss = "OddRow" ;
 								  			 } 
 								  		%>
 									  	</tbody>
@@ -153,7 +146,7 @@
 									</div>
 		   
 		            </div>
-		            
+		            <% } %>
 		          </div>
 					    
 				    </div>
@@ -161,11 +154,8 @@
 				  </div>
 				</div>  
 		  </div>  
-		  
 		</div>
-	
+		
 	</div>
-
-
-
+  <%uiform.end()%>
 </div>
