@@ -261,8 +261,8 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
   public void deActivate() throws Exception { }
   
   private Message getNewMessage() throws Exception {
-    Message message = new Message();
-    if (fromDrafts()) { message = getMessage(); }
+    Message message = getMessage();
+    if (getMessage() == null) { message = new Message(); }
     UIMailPortlet uiPortlet = getAncestorOfType(UIMailPortlet.class);
     UISelectAccount uiSelectAcc = uiPortlet.findFirstComponentOfType(UISelectAccount.class) ;
     String accountId = uiSelectAcc.getSelectedValue() ;
