@@ -13,6 +13,7 @@ import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Attachment;
 import org.exoplatform.mail.service.BufferAttachment;
+import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.Utils;
@@ -260,8 +261,8 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
   public void deActivate() throws Exception { }
   
   private Message getNewMessage() throws Exception {
-    Message message = getMessage();
-    if (getMessage() == null) { message = new Message(); }
+    Message message = new Message();
+    if (fromDrafts()) { message = getMessage(); }
     UIMailPortlet uiPortlet = getAncestorOfType(UIMailPortlet.class);
     UISelectAccount uiSelectAcc = uiPortlet.findFirstComponentOfType(UISelectAccount.class) ;
     String accountId = uiSelectAcc.getSelectedValue() ;
@@ -296,6 +297,14 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
     message.setReplyTo(account.getUserDisplayName()+ "<" + account.getEmailReplyAddress() + ">");
     return message;
   }
+  
+  public boolean fromDrafts() {    
+    String accountId = getAncestorOfType(UIMailPortlet.class).findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
+    if (getMessage() != null && getMessage().getFolders()[0].equals(Utils.createFolderId(accountId, Utils.FD_DRAFTS, false)) ) { 
+      return true;
+    } 
+    return false;
+  }
 
   static public class SendActionListener extends EventListener<UIComposeForm> {
     public void execute(Event<UIComposeForm> event) throws Exception {
@@ -328,9 +337,18 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
       }
       try {
         message.setFolders(new String[]{Utils.createFolderId(accountId, Utils.FD_SENT, false)}) ;
-        mailSvr.saveMessage(usename, accountId, message, (uiForm.getMessage() != null) ? false : true) ;
-      }
-      catch (Exception e) {
+        Folder folder = mailSvr.getFolder(usename, accountId, Utils.createFolderId(accountId, Utils.FD_SENT, false));
+        folder.setTotalMessage(folder.getTotalMessage() + 1);
+        mailSvr.saveUserFolder(usename, accountId, folder);
+        if (!uiForm.fromDrafts()) {
+          mailSvr.saveMessage(usename, accountId, message, true) ;          
+          Folder drafts = mailSvr.getFolder(usename, accountId, Utils.createFolderId(accountId, Utils.FD_DRAFTS, false));
+          drafts.setTotalMessage(drafts.getTotalMessage() - 1);
+          mailSvr.saveUserFolder(usename, accountId, drafts);
+        } else {
+          mailSvr.saveMessage(usename, accountId, message, false) ;
+        }
+      } catch (Exception e) {
         uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.save-sent-error", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         e.printStackTrace() ;
@@ -356,7 +374,14 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
       Message message = uiForm.getNewMessage() ;   
       try {
         message.setFolders(new String[]{Utils.createFolderId(accountId, Utils.FD_DRAFTS, false)}) ;
-        mailSvr.saveMessage(usename, accountId, message, (uiForm.getMessage() != null) ? false : true) ;
+        if (! uiForm.fromDrafts()) {
+          mailSvr.saveMessage(usename, accountId, message, true) ;
+          Folder drafts = mailSvr.getFolder(usename, accountId, Utils.createFolderId(accountId, Utils.FD_DRAFTS, false));
+          drafts.setTotalMessage(drafts.getTotalMessage() + 1);
+          mailSvr.saveUserFolder(usename, accountId, drafts);
+        } else {
+          mailSvr.saveMessage(usename, accountId, message, false) ;
+        }
       }
       catch (Exception e) {
         uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.save-draft-error", null)) ;
