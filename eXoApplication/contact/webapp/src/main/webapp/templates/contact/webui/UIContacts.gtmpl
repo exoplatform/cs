@@ -74,7 +74,7 @@
 					<div style="clear: left;"><span/></div>
 				</div>
 				
-				<div class="UIMessageList" is>
+				<div class="UIMessageList" >
 					<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
 	  				<thead>
 	  					<tr>

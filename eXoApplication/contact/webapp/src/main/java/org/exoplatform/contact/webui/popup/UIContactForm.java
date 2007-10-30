@@ -226,7 +226,22 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
       UIApplication uiApp = uiContactForm.getAncestorOfType(UIApplication.class) ;
       UIProfileInputSet profileTab = uiContactForm.getChildById(INPUT_PROFILETAB) ;
       if (ContactUtils.isEmpty(profileTab.getFieldFullName())) {  
-        uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.fullname-required", null)) ;
+        uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.fullName-required", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ; 
+      }
+      if (ContactUtils.isEmpty(profileTab.getFieldFirstName())) {  
+        uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.firstName-required", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ; 
+      }
+      if (ContactUtils.isEmpty(profileTab.getFieldMiddleName())) {  
+        uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.middleName-required", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ; 
+      }
+      if (ContactUtils.isEmpty(profileTab.getFieldLastName())) {  
+        uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.lastName-required", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ; 
       }
@@ -245,7 +260,7 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
       contact.setFirstName(profileTab.getFieldFirstName());
       contact.setMiddleName(profileTab.getFieldMiddleName());
       contact.setLastName(profileTab.getFieldLastName());
-      contact.setNickName(profileTab.getFieldNickName());
+      contact.setNickName(profileTab.getFieldNickName());      
       contact.setGender(profileTab.getFieldGender()) ;
       contact.setBirthday(profileTab.getFieldBirthday()) ;
       contact.setJobTitle(profileTab.getFieldJobName());
@@ -321,8 +336,8 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
         contact.setCategories(new String[] { category });
         contactService.saveContact(username, contact, isNew_);
       }
-      uicontacts.updateList() ;      
-      if(uicontacts.getSelectedContact() != null && uicontacts.getSelectedContact().equals(contact.getId())){
+      uicontacts.updateList() ;
+      if (uicontacts.getSelectedContact().equals(contact.getId())){
         uiContactPreview.setContact(contact) ;
       }
       uiContactPortlet.cancelAction() ;
@@ -343,7 +358,7 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
       UIContactForm uiContactForm = event.getSource() ;
       UIPopupContainer popupContainer = uiContactForm.getAncestorOfType(UIPopupContainer.class) ;
       UIPopupAction popupAction = popupContainer.getChild(UIPopupAction.class) ;
-      popupAction.activate(UIImageForm.class, 400) ;
+      popupAction.activate(UIImageForm.class, 500) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   }

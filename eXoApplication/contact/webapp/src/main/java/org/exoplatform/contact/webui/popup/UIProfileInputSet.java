@@ -44,6 +44,7 @@ public class UIProfileInputSet extends UIFormInputWithActions {
   public static final String FIELD_EMAIL_INPUT = "preferredEmail" ;
   public static final String MALE = "male" ;
   public static final String FEMALE = "female" ;
+  public String gender = "male" ;
   private byte[] imageBytes = null;
   private String fileName = null ;
   private String imageMimeType = null ;
@@ -59,11 +60,12 @@ public class UIProfileInputSet extends UIFormInputWithActions {
     List<SelectItemOption<String>> genderOptions = new ArrayList<SelectItemOption<String>>() ;
     genderOptions.add(new SelectItemOption<String>(MALE, MALE));
     genderOptions.add(new SelectItemOption<String>(FEMALE, FEMALE));
-    addUIFormInput(new UIFormRadioBoxInput(FIELD_GENDER_BOX, FIELD_GENDER_BOX, genderOptions).setValue(MALE));
-    addUIFormInput(new UIFormDateTimeInput(FIELD_BIRTHDAY_DATETIME, FIELD_BIRTHDAY_DATETIME, new Date(), false).addValidator(DateTimeValidator.class));
+    addUIFormInput(new UIFormRadioBoxInput(FIELD_GENDER_BOX, FIELD_GENDER_BOX, genderOptions));
+    addUIFormInput(new UIFormDateTimeInput(FIELD_BIRTHDAY_DATETIME, FIELD_BIRTHDAY_DATETIME, new Date(), false)
+      .addValidator(DateTimeValidator.class));
     addUIFormInput(new UIFormStringInput(FIELD_JOBTITLE_INPUT, FIELD_JOBTITLE_INPUT, null));
     addUIFormInput(new UIFormStringInput(FIELD_EMAIL_INPUT, FIELD_EMAIL_INPUT, null)
-    .addValidator(EmailAddressValidator.class));
+      .addValidator(EmailAddressValidator.class));
   }  
   protected String getFieldFullName() { return getUIStringInput(FIELD_FULLNAME_INPUT).getValue() ; }
   protected void setFieldFullName(String s) { getUIStringInput(FIELD_FULLNAME_INPUT).setValue(s); }
@@ -80,8 +82,8 @@ public class UIProfileInputSet extends UIFormInputWithActions {
   protected String getFieldNickName() { return getUIStringInput(FIELD_NICKNAME_INPUT).getValue() ; }
   protected void setFieldNickName(String s) { getUIStringInput(FIELD_NICKNAME_INPUT).setValue(s); }
   
-  protected String getFieldGender() { return getChild(UIFormRadioBoxInput.class).getValue(); }
-  protected void setFieldGender(String s) { getChild(UIFormRadioBoxInput.class).setValue(s); }
+  protected String getFieldGender() { return getChild(UIFormRadioBoxInput.class).getValue() ; }
+  protected void setFieldGender(String s) { gender = s ; }
   
   protected Date getFieldBirthday() throws Exception {
     String strDate = ContactUtils.formatDate("MM/dd/yyyy", getChild(UIFormDateTimeInput.class).getCalendar().getTime());

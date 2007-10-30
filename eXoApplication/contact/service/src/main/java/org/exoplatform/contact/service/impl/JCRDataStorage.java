@@ -859,11 +859,7 @@ public class JCRDataStorage implements DataStorage {
       filter.setAccountPath(contactHome.getPath()) ;
       qm = contactHome.getSession().getWorkspace().getQueryManager() ;
       query = qm.createQuery(filter.getStatement(), Query.XPATH) ;
-      
-      System.out.println("\n\n query search private: " + query.getStatement() + "\n\n");
-      
       NodeIterator it = query.execute().getNodes() ;
-      System.out.println("\n\n it 1: " + it.getSize() + "\n\n");
       while(it.hasNext()) {
         contacts.add(getContact(it.nextNode())) ;        
       }
@@ -872,12 +868,8 @@ public class JCRDataStorage implements DataStorage {
     filter.setAccountPath(publicContactHome.getPath()) ;
     qm = publicContactHome.getSession().getWorkspace().getQueryManager() ;
     query = qm.createQuery(filter.getStatement(), Query.XPATH) ;
-    
-    System.out.println("\n\n query search public: " + query.getStatement() + "\n\n");
-    
     QueryResult result = query.execute();
     NodeIterator itpublic = result.getNodes();
-    System.out.println("\n\n it 2: " + itpublic.getSize() + "\n\n");
     while(itpublic.hasNext()) {
       contacts.add(getContact(itpublic.nextNode())) ;
     }
