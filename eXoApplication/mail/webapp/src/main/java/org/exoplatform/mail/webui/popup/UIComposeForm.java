@@ -86,9 +86,9 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
   public List<Contact> getCcContacts(){ return ccContacts; }
   public List<Contact> getBccContacts(){ return bccContacts; }
   
-  public void setToContacts(List<Contact> contactList){ toContacts = contactList; }
-  public void setCcContacts(List<Contact> contactList){ ccContacts = contactList; }
-  public void setBccContacts(List<Contact> contactList){ bccContacts = contactList; }
+  public void setToContacts(List<Contact> contactList) { toContacts = contactList; }
+  public void setCcContacts(List<Contact> contactList) { ccContacts = contactList; }
+  public void setBccContacts(List<Contact> contactList) { bccContacts = contactList; }
   
   public boolean isVisualEditor() { return isVisualEditor; }
   public void setVisualEditor(boolean b) { isVisualEditor = b; }
@@ -101,6 +101,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
     for(Account acc : mailSrv.getAccounts(username)) {
       SelectItemOption<String> itemOption = new SelectItemOption<String>(acc.getUserDisplayName() + " &lt;" + acc.getEmailAddress() + 
           "&gt;", acc.getUserDisplayName() + "<" + acc.getEmailAddress() + ">");
+      if (acc.getId().equals(MailUtils.getAccountId())) { itemOption.setSelected(true); }
       options.add(itemOption) ;
     }
     inputSet.addUIFormInput(new UIFormSelectBox(FIELD_FROM, FIELD_FROM, options)) ;
@@ -199,11 +200,6 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
     return inputSet.getUIFormSelectBox(FIELD_FROM).getValue() ;
   }
 
-  public void setFieldFromValue(List<SelectItemOption<String>> options) {
-    UIFormInputWithActions inputSet = getChildById(FIELD_FROM_INPUT) ;
-    inputSet.getUIFormSelectBox(FIELD_FROM).setOptions(options) ;
-  }
-
   public String getFieldSubjectValue() {
     UIFormInputWithActions inputSet = getChildById(FIELD_FROM_INPUT) ;
     return inputSet.getUIStringInput(FIELD_SUBJECT).getValue() ;
@@ -283,7 +279,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
     message.setAccountId(accountId) ;
     message.setFrom(from) ;
     String contentType = Utils.MIMETYPE_TEXTHTML;
-    if (! isVisualEditor()) { contentType = Utils.MIMETYPE_TEXTPLAIN; }
+    if (!isVisualEditor()) { contentType = Utils.MIMETYPE_TEXTPLAIN; }
     message.setContentType(contentType);
     message.setSubject(subject) ;
     message.setMessageTo(to) ;
@@ -301,10 +297,10 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
     return message;
   }
 
-  static  public class SendActionListener extends EventListener<UIComposeForm> {
+  static public class SendActionListener extends EventListener<UIComposeForm> {
     public void execute(Event<UIComposeForm> event) throws Exception {
       UIComposeForm uiForm = event.getSource() ;
-      System.out.println(" ==========> SendActionListener") ;
+      System.out.println(" === >>> Send Action Listener") ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       if(Utils.isEmptyField(uiForm.getFieldToValue())) {
         uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.to-field-required", null)) ;
@@ -345,7 +341,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
       event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
     }
   }
-  static  public class SaveDraftActionListener extends EventListener<UIComposeForm> {
+  static public class SaveDraftActionListener extends EventListener<UIComposeForm> {
     public void execute(Event<UIComposeForm> event) throws Exception {
       UIComposeForm uiForm = event.getSource() ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
@@ -374,7 +370,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
       uiPortlet.cancelAction();
     }
   }
-  static  public class DiscardChangeActionListener extends EventListener<UIComposeForm> {
+  static public class DiscardChangeActionListener extends EventListener<UIComposeForm> {
     public void execute(Event<UIComposeForm> event) throws Exception {
       UIComposeForm uiForm = event.getSource() ;
       uiForm.resetFields() ;
@@ -382,17 +378,17 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
       mailPortlet.cancelAction() ;
     }
   }
-  static  public class AttachmentActionListener extends EventListener<UIComposeForm> {
+  static public class AttachmentActionListener extends EventListener<UIComposeForm> {
     public void execute(Event<UIComposeForm> event) throws Exception {
       UIComposeForm uiForm = event.getSource() ;
-      System.out.println(" ==========> AttachmentActionListener") ;
+      System.out.println(" ==== >>> Attachment Action Listener") ;
       UIPopupActionContainer uiActionContainer = uiForm.getAncestorOfType(UIPopupActionContainer.class) ;
       UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class) ;
       uiChildPopup.activate(UIAttachFileForm.class, 500) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiActionContainer) ;
     }
   }
-  static  public class RemoveAttachmentActionListener extends EventListener<UIComposeForm> {
+  static public class RemoveAttachmentActionListener extends EventListener<UIComposeForm> {
     public void execute(Event<UIComposeForm> event) throws Exception {
       UIComposeForm uiComposeForm = event.getSource() ;
       String attFileId = event.getRequestContext().getRequestParameter(OBJECTID);
@@ -407,16 +403,16 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
     }
   }
 
-  static  public class ToActionListener extends EventListener<UIComposeForm> {
+  static public class ToActionListener extends EventListener<UIComposeForm> {
     public void execute(Event<UIComposeForm> event) throws Exception {
       UIComposeForm uiComposeForm = event.getSource() ;
-      System.out.println(" ==========> ToActionListener") ;
-      System.out.println(" ==========> ToInsertAddressActionListener") ;
+
+      System.out.println(" === >>> Insert Address Action Listener") ;
       UIPopupActionContainer uiActionContainer = uiComposeForm.getAncestorOfType(UIPopupActionContainer.class) ;    
       UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class) ;
   
        UIAddressForm uiAddressForm = uiChildPopup.activate(UIAddressForm.class, 700) ; 
-       uiAddressForm.setRecipientsType("To");
+       uiAddressForm.setRecipientsType(FIELD_TO);
  
       if (uiComposeForm.getToContacts() != null && uiComposeForm.getToContacts().size() > 0) {        
         uiAddressForm.setAlreadyCheckedContact(uiComposeForm.getToContacts());      
@@ -426,17 +422,16 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
       event.getRequestContext().addUIComponentToUpdateByAjax(uiActionContainer) ;
     }
   }
-  static  public class ToCCActionListener extends EventListener<UIComposeForm> {
+  static public class ToCCActionListener extends EventListener<UIComposeForm> {
     public void execute(Event<UIComposeForm> event) throws Exception {
       UIComposeForm uiComposeForm = event.getSource() ;
-      System.out.println(" ==========> ToCCActionListener") ;
-      System.out.println(" ==========> ToInsertAddressActionListener") ;
+      System.out.println(" === >>> ToCCActionListener") ;
       UIPopupActionContainer uiActionContainer = uiComposeForm.getAncestorOfType(UIPopupActionContainer.class) ;    
       UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class) ;
       UIAddressForm uiAddressForm = uiChildPopup.activate(UIAddressForm.class,700) ; 
       
-      uiAddressForm.setRecipientsType("Cc");
-      if (uiComposeForm.getCcContacts()!= null&& uiComposeForm.getCcContacts().size()>0) {        
+      uiAddressForm.setRecipientsType(FIELD_CC);
+      if (uiComposeForm.getCcContacts()!= null && uiComposeForm.getCcContacts().size()>0) {        
        uiAddressForm.setAlreadyCheckedContact(uiComposeForm.getCcContacts());      
         uiAddressForm.setContactList();
       }
@@ -444,17 +439,17 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
       event.getRequestContext().addUIComponentToUpdateByAjax(uiActionContainer) ;
     }
   }
-  static  public class ToBCCActionListener extends EventListener<UIComposeForm> {
+  static public class ToBCCActionListener extends EventListener<UIComposeForm> {
     public void execute(Event<UIComposeForm> event) throws Exception {
       UIComposeForm uiComposeForm = event.getSource() ;
-      System.out.println(" ==========> ToBccActionListener") ;
-      System.out.println(" ==========> ToInsertAddressActionListener") ;
+      System.out.println(" === >>> ToBccActionListener") ;
+      
       UIPopupActionContainer uiActionContainer = uiComposeForm.getAncestorOfType(UIPopupActionContainer.class) ;    
       UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class) ;
       UIAddressForm uiAddressForm = uiChildPopup.activate(UIAddressForm.class,700) ; 
       
-      uiAddressForm.setRecipientsType("Bcc");
-      if (uiComposeForm.getCcContacts()!= null&& uiComposeForm.getBccContacts().size()>0) {        
+      uiAddressForm.setRecipientsType(FIELD_BCC);
+      if (uiComposeForm.getCcContacts()!= null && uiComposeForm.getBccContacts().size()>0) {        
        uiAddressForm.setAlreadyCheckedContact(uiComposeForm.getBccContacts());      
         uiAddressForm.setContactList();
       }
@@ -463,19 +458,19 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
     }   
   }
   
-  static  public class ChangePriorityActionListener extends EventListener<UIComposeForm> {
+  static public class ChangePriorityActionListener extends EventListener<UIComposeForm> {
     public void execute(Event<UIComposeForm> event) throws Exception {
       UIComposeForm uiForm = event.getSource() ;
-      System.out.println(" ==========> Change Priority Action Listener") ;
+      System.out.println(" === >>> Change Priority Action Listener") ;
       String priority = event.getRequestContext().getRequestParameter(OBJECTID) ;  
       uiForm.setPriority(Long.valueOf(priority));
     }
   }
   
-  static  public class UseVisualEdiorActionListener extends EventListener<UIComposeForm> {
+  static public class UseVisualEdiorActionListener extends EventListener<UIComposeForm> {
     public void execute(Event<UIComposeForm> event) throws Exception {
       UIComposeForm uiForm = event.getSource() ;
-      System.out.println(" ==========> Change Editor Action Listener") ;
+      System.out.println(" === >>> Change Editor Action Listener") ;
       boolean isVisualEditor = Boolean.valueOf(event.getRequestContext().getRequestParameter(OBJECTID)) ;  
       uiForm.setVisualEditor(isVisualEditor);
     }
