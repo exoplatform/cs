@@ -82,7 +82,7 @@ public class UIMoveMessageForm extends UIForm implements UIPopupComponent {
     public void execute(Event<UIMoveMessageForm> event) throws Exception {
       System.out.println("=====>>>> Move Folder Action Listener");
       UIMoveMessageForm uiMoveMessageForm = event.getSource() ;
-      MailService mailService = uiMoveMessageForm.getApplicationComponent(MailService.class) ;
+      MailService mailSrv = uiMoveMessageForm.getApplicationComponent(MailService.class) ;
       UIMailPortlet uiPortlet = uiMoveMessageForm.getAncestorOfType(UIMailPortlet.class) ;
       String username = uiPortlet.getCurrentUser() ;
       String accountId =  uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;   
@@ -92,8 +92,16 @@ public class UIMoveMessageForm extends UIForm implements UIPopupComponent {
       String[] destFolders = { destFolder };  
 
       for(Message message: messageList) {
+         Folder oldFolder = mailSrv.getFolder(username, accountId, message.getFolders()[0]);
          message.setFolders(destFolders);         
-         mailService.saveMessage(username, accountId, message, false);
+         mailSrv.saveMessage(username, accountId, message, false);
+         if (message.isUnread()) {
+           Folder folder = mailSrv.getFolder(username, accountId, message.getFolders()[0]);
+           oldFolder.setNumberOfUnreadMessage(oldFolder.getNumberOfUnreadMessage() - 1);
+           mailSrv.saveUserFolder(username, accountId, oldFolder);
+           folder.setNumberOfUnreadMessage(folder.getNumberOfUnreadMessage() + 1);
+           mailSrv.saveUserFolder(username, accountId, folder);
+         }
       }       
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
       uiMessageList.updateList();

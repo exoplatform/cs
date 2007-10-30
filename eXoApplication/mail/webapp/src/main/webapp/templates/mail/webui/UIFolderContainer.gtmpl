@@ -62,7 +62,7 @@
     String id = f.getId() ;
     String name = f.getName();
     String icon = name + "Icon" ;
-    long unreadMess = 0;
+    long unreadMess = f.getNumberOfUnreadMessage();
     String actionLink = uicomponent.event('ChangeFolder', id);
     String cssClass = "NormalLabel" ;
     if(id.equals(uicomponent.getSelectedFolder())) {

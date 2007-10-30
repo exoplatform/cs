@@ -51,6 +51,14 @@ public class UIFolderContainer extends UIContainer {
     return getFolders(true);
   }
   
+  public Folder getCurrentFolder() throws Exception{
+    MailService mailSvr = getApplicationComponent(MailService.class) ;
+    String username = getAncestorOfType(UIMailPortlet.class).getCurrentUser() ;
+    String accountId = getAncestorOfType(UINavigationContainer.class).
+    getChild(UISelectAccount.class).getSelectedValue() ;
+    return mailSvr.getFolder(username, accountId, getSelectedFolder()) ;
+  }
+  
   public List<Folder> getFolders(boolean isPersonal) throws Exception{
     List<Folder> folders = new ArrayList<Folder>() ;
     MailService mailSvr = getApplicationComponent(MailService.class) ;
