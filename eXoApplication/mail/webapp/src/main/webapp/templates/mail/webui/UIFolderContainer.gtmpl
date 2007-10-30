@@ -1,5 +1,6 @@
 <%
 	import org.exoplatform.mail.service.Folder;
+ import org.exoplatform.mail.service.Utils;
   def rcontext = _ctx.getRequestContext() ;  
   rcontext.getJavascriptManager().addJavascript("eXo.mail.UIMailPortlet.showContextMenu() ;") ;
 
@@ -62,7 +63,9 @@
     String id = f.getId() ;
     String name = f.getName();
     String icon = name + "Icon" ;
-    long unreadMess = f.getNumberOfUnreadMessage();
+    long msgQuantity = f.getNumberOfUnreadMessage();
+    if (f.name == Utils.FD_SENT || f.name == Utils.FD_TRASH) msgQuantity = 0;
+    if (f.name == Utils.FD_SPAM || f.name == Utils.FD_DRAFTS) msgQuantity = f.getTotalMessage();
     String actionLink = uicomponent.event('ChangeFolder', id);
     String cssClass = "NormalLabel" ;
     if(id.equals(uicomponent.getSelectedFolder())) {
@@ -70,7 +73,7 @@
     }
   %>
   <a href="$actionLink"  class="Icon Folder $icon $cssClass" folder="$id">$name
-    <% if(unreadMess > 0) { print "<span class=\"MailQuantity\">($unreadMess)</span>"}%>
+    <% if(msgQuantity > 0) { print "<span class=\"MailQuantity\">($msgQuantity)</span>"}%>
   </a>
   <%}%>
 </div>

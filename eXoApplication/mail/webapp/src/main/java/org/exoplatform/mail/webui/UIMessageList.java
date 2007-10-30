@@ -445,13 +445,15 @@ public class UIMessageList extends UIForm {
         Folder oldFolder = mailSrv.getFolder(username, accountId, message.getFolders()[0]);
         message.setFolders(new String[] { Utils.createFolderId(accountId, Utils.FD_TRASH, false) });
         mailSrv.saveMessage(username, accountId, message, false);
-        if (message.isUnread()) {
-          Folder folder = mailSrv.getFolder(username, accountId, message.getFolders()[0]);
-          oldFolder.setNumberOfUnreadMessage(oldFolder.getNumberOfUnreadMessage() - 1);
-          mailSrv.saveUserFolder(username, accountId, oldFolder);
-          folder.setNumberOfUnreadMessage(folder.getNumberOfUnreadMessage() + 1);
-          mailSrv.saveUserFolder(username, accountId, folder);
+        Folder folder = mailSrv.getFolder(username, accountId, message.getFolders()[0]);
+        oldFolder.setTotalMessage(oldFolder.getTotalMessage() - 1);
+        folder.setTotalMessage(folder.getTotalMessage() + 1);
+        if (message.isUnread()) {           
+          oldFolder.setNumberOfUnreadMessage(oldFolder.getNumberOfUnreadMessage() - 1);         
+          folder.setNumberOfUnreadMessage(folder.getNumberOfUnreadMessage() + 1);                    
         }
+        mailSrv.saveUserFolder(username, accountId, oldFolder);
+        mailSrv.saveUserFolder(username, accountId, folder);
       }
       uiMessageList.updateList();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer);

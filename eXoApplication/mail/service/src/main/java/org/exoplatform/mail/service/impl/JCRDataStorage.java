@@ -399,7 +399,8 @@ public class JCRDataStorage implements DataStorage{
       folder.setLabel(node.getProperty(Utils.EXO_LABEL).getString());
       folder.setName(node.getProperty(Utils.EXO_NAME).getString());
       folder.setPersonalFolder(node.getProperty(Utils.EXO_PERSONAL).getBoolean()) ;
-      folder.setNumberOfUnreadMessage((long)node.getProperty(Utils.EXO_UNREADMESSAGES).getLong());
+      folder.setNumberOfUnreadMessage(node.getProperty(Utils.EXO_UNREADMESSAGES).getLong());
+      folder.setTotalMessage(node.getProperty(Utils.EXO_TOTALMESSAGE).getLong());
     }
     return folder ;
   }
@@ -429,6 +430,7 @@ public class JCRDataStorage implements DataStorage{
     myFolder.setProperty(Utils.EXO_NAME, folder.getName());
     myFolder.setProperty(Utils.EXO_LABEL, folder.getLabel());
     myFolder.setProperty(Utils.EXO_UNREADMESSAGES, folder.getNumberOfUnreadMessage());
+    myFolder.setProperty(Utils.EXO_TOTALMESSAGE, folder.getTotalMessage());
     myFolder.setProperty(Utils.EXO_PERSONAL, folder.isPersonalFolder()) ;
     home.getSession().save();
   }

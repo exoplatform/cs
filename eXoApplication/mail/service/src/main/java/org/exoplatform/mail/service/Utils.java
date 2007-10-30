@@ -94,6 +94,7 @@ public class Utils {
   public static final String EXO_SERVERPROPERTIES = "exo:serverProperties".intern() ;
   public static final String EXO_MESSAGE = "exo:message".intern() ;
   public static final String EXO_ISUNREAD = "exo:isUnread".intern() ;
+  public static final String EXO_TOTALMESSAGE = "exo:totalMessages".intern();
   public static final String EXO_FOLDER = "exo:folder".intern() ;
   public static final String EXO_UNREADMESSAGES = "exo:unreadMessages".intern() ;
   public static final String EXO_NAME = "exo:name".intern() ;

@@ -350,6 +350,7 @@ public class MailServiceImpl implements MailService{
               storeFolder.setPersonalFolder(false) ;
             }  
             storeFolder.setNumberOfUnreadMessage(storeFolder.getNumberOfUnreadMessage() + 1) ;
+            storeFolder.setTotalMessage(storeFolder.getTotalMessage() + 1) ;
             storage_.saveUserFolder(username, account.getId(), storeFolder) ;
           }
           

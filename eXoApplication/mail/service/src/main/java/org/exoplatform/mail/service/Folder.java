@@ -15,24 +15,18 @@ package org.exoplatform.mail.service;
  */
 public class Folder {
   private String id ;
-  private String parent;
   private String name ;
   private String label ;
   private long unreadMessage = 0 ;
+  private long allMessages = 0;
   private boolean isPersonalFolder = true ;
-  
+
   /**
    * The id folder should have the form AccountId/DefaultFolder/folderName or AccountId/UserFolder/folderName
    * @return the id of the folder
    */
   public String getId()  { return id ; }
   public void   setId(String s) { id = s ; }
-  
-  /**
-   * The parent of the folder
-   */
-  public String getParent() { return parent; }
-  public void setParent(String parent) { this.parent = parent; }
   
   /**
    * The name of the folder like Inbox, Sent, MyFolder
@@ -53,6 +47,12 @@ public class Folder {
    */
   public long  getNumberOfUnreadMessage() { return unreadMessage ; }
   public void setNumberOfUnreadMessage(long number) { unreadMessage = number ; }
+  
+  /**
+   * The total of the folder
+   */
+  public long getTotalMessage() { return allMessages; }
+  public void setTotalMessage(long number) { this.allMessages = number; }
   
   /**
    * @return Calculate and return the account id  of the folder base on the id of  the folder
