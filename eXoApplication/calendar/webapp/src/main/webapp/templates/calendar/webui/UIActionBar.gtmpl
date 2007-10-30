@@ -101,17 +101,17 @@
 							          <div class="MiddleRightRightClickPopupMenu">
 				              		<div class="UIRightPopupMenuContainer">
 														<a class="MenuItem"  >   
-					                    <div class="ItemIcon">
+					                    <div class="ItemIcon HidenAllCalendar">
 					                       Show/Hide all
 					                    </div>
 				                    </a>
 				                    <a class="MenuItem"  >   
-					                    <div class="ItemIcon">
+					                    <div class="ItemIcon ShowMinicalendar">
 					                       MiniCalendar
 					                    </div>
 				                    </a>
 				                    <a class="MenuItem"  >   
-					                    <div class="ItemIcon">
+					                    <div class="ItemIcon HidenMinicalendar">
 					                      Calendar list
 					                    </div>
 				                    </a>

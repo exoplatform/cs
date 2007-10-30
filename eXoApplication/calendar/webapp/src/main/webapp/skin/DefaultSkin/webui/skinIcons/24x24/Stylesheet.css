@@ -142,6 +142,19 @@
 }
 
 
+.ShowMinicalendar {
+	background: url('icons/ShowMinicalendar.gif') no-repeat;
+}
+
+.HidenMinicalendar {
+	background: url('icons/HidenMinicalendar.gif') no-repeat;
+}
+
+.HidenAllCalendar {
+	background: url('icons/HidenAllCalendar.gif') no-repeat;
+}
+
+
 
 
 
