@@ -1,6 +1,11 @@
 .UICategoryForm {
 	background: #f7f7f7;
-	padding: 8px;
+	margin: 8px;
+	border: 1px solid #c7c7c7;
+}
+
+.UICategoryForm .UIForm {
+	border: 1px solid white;
 }
 
 .UICategoryForm .UIForm .HorizontalLayout {

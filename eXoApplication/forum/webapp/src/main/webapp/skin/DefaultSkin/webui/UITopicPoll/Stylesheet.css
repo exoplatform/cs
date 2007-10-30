@@ -17,6 +17,13 @@
 	margin: 3px 10px 0px 10px;
 }
 
+.UITopicPoll .ForumToolbar .DownArrow1Icon {
+	width: 16px;
+	height: 26px;
+	margin: 0px 14px 0px 3px;
+	padding: 0px;
+}
+
 .UITopicPoll .ForumToolbar .SeparatorLine {
 	float: right;
 	margin: 4px 10px 0px 0px;
@@ -67,8 +74,8 @@
 }
 
 .UITopicPoll .UIForm .HorizontalLayout .UIFormGrid td.FieldComponent {
-	width: 30px;
 	padding: 4px 0px 0px 15px;
+	line-height: 20px;
 }
 
 /******************************** ViewPollForm *******************************/
