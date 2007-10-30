@@ -64,11 +64,11 @@ public class UITaskDetailTab extends UIFormInputWithActions {
     super(arg0);
     setComponentConfig(getClass(), null) ;
     actionField_ = new HashMap<String, List<ActionData>>() ;
-    CalendarSetting calendarSetting = getAncestorOfType(UICalendarPortlet.class).getCalendarSetting() ;
-    List<SelectItemOption<String>> options = CalendarUtils.getTimesSelectBoxOptions(calendarSetting.getTimeFormat()) ;
+    //CalendarSetting calendarSetting = getAncestorOfType(UICalendarPortlet.class).getCalendarSetting() ;
+    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     addUIFormInput(new UIFormStringInput(FIELD_EVENT, FIELD_EVENT, null)) ;
     addUIFormInput(new UIFormTextAreaInput(FIELD_DESCRIPTION, FIELD_DESCRIPTION, null)) ;
-    addUIFormInput(new UIFormSelectBox(FIELD_CALENDAR, FIELD_CALENDAR, getCalendar())) ;
+    addUIFormInput(new UIFormSelectBox(FIELD_CALENDAR, FIELD_CALENDAR, null)) ;
     addUIFormInput(new UIFormSelectBox(FIELD_CATEGORY, FIELD_CATEGORY, UIEventForm.getCategory())) ;
     addUIFormInput(new UIFormSelectBox(FIELD_STATUS, FIELD_STATUS, getStatus())) ;
 

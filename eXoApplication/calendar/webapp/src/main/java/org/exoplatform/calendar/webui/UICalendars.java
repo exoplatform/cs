@@ -6,6 +6,7 @@ package org.exoplatform.calendar.webui;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -72,7 +73,7 @@ public class UICalendars extends UIForm  {
   public static String CALNAME = "calName".intern() ;
   public static String CALCOLOR = "calColor".intern() ;
   private String[] publicCalendarIds = {} ;
-  private Map<String, String> colorMap_ = new HashMap<String, String>() ;
+  private LinkedHashMap<String, String> colorMap_ = new LinkedHashMap<String, String>() ;
 
   public UICalendars() throws Exception {
 
@@ -110,7 +111,7 @@ public class UICalendars extends UIForm  {
         map.put(calendar.getId(), calendar.getId()) ;
         colorMap_.put(calendar.getId(), calendar.getCalendarColor()) ;
         if(getUIFormCheckBoxInput(calendar.getId()) == null){
-          addUIFormInput(new UIFormCheckBoxInput<Boolean>(calendar.getId(), calendar.getId(), false)) ;
+          addUIFormInput(new UIFormCheckBoxInput<Boolean>(calendar.getId(), calendar.getId(), false).setChecked(true)) ;
         }
       }
     }
@@ -123,7 +124,7 @@ public class UICalendars extends UIForm  {
     return calendarService.getSharedCalendars(CalendarUtils.getCurrentUser()) ;
   }
 
-  public Map<String, String> getColorMap() {
+  public LinkedHashMap<String, String> getColorMap() {
     return colorMap_;
   }
   public String[] getColors() {
@@ -182,15 +183,25 @@ public class UICalendars extends UIForm  {
       UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
       UIQuickAddEvent uiQuickAddEvent = popupAction.activate(UIQuickAddEvent.class, 600) ;
       uiQuickAddEvent.setEvent(true) ;  
-      uiQuickAddEvent.init(uiCalendarPortlet.getCalendarSetting(), null, null) ; 
-      if(calType.equals("0")) {
-        uiQuickAddEvent.update(calType, null) ;
-        uiQuickAddEvent.setSelectedCalendar(calendarId) ;
-      } else {
-        List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-        options.add(new SelectItemOption<String>(calendarName, calendarId)) ;
-        uiQuickAddEvent.update(calType, options) ;
-      }      
+      uiQuickAddEvent.setId("UIQuickAddEvent") ;
+      uiQuickAddEvent.init(uiCalendarPortlet.getCalendarSetting(), null, null) ;
+      List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
+      if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
+        options = null ;
+      } else if(calType.equals(CalendarUtils.SHARED_TYPE)) {
+        GroupCalendarData calendarData = uiComponent.getSharedCalendars() ;
+        for(Calendar cal : calendarData.getCalendars()) {
+          options.add(new SelectItemOption<String>(cal.getName(), cal.getId())) ;
+        }
+      } else if(calType.equals(CalendarUtils.PUBLIC_TYPE)) {
+        for (GroupCalendarData calendarData : uiComponent.getPublicCalendars()) {
+          for(Calendar cal : calendarData.getCalendars()) {
+            options.add(new SelectItemOption<String>(cal.getName(), cal.getId())) ;
+          }
+        }
+      }    
+      uiQuickAddEvent.update(calType, options) ;
+      uiQuickAddEvent.setSelectedCalendar(calendarId) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent.getParent()) ;
     }
@@ -206,15 +217,26 @@ public class UICalendars extends UIForm  {
       UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
       UIQuickAddEvent uiQuickAddEvent = popupAction.activate(UIQuickAddEvent.class, 600) ;
       uiQuickAddEvent.setEvent(false) ;  
+      uiQuickAddEvent.setId("UIQuickAddTask") ;
       uiQuickAddEvent.init(uiCalendarPortlet.getCalendarSetting(), null, null) ;
-      if(calType.equals("0")) {
-        uiQuickAddEvent.update(calType, null) ;
-        uiQuickAddEvent.setSelectedCalendar(calendarId) ;
-      } else {
-        List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-        options.add(new SelectItemOption<String>(calendarName, calendarId)) ;
-        uiQuickAddEvent.update(calType, options) ;
-      }     
+      List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
+      if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
+        options = null ;
+      } else if(calType.equals(CalendarUtils.SHARED_TYPE)) {
+        GroupCalendarData calendarData = uiComponent.getSharedCalendars() ;
+        for(Calendar cal : calendarData.getCalendars()) {
+          options.add(new SelectItemOption<String>(cal.getName(), cal.getId())) ;
+        }
+      } else if(calType.equals(CalendarUtils.PUBLIC_TYPE)) {
+        for (GroupCalendarData calendarData : uiComponent.getPublicCalendars()) {
+          for(Calendar cal : calendarData.getCalendars()) {
+            options.add(new SelectItemOption<String>(cal.getName(), cal.getId())) ;
+          }
+        }
+      }    
+      uiQuickAddEvent.update(calType, options) ;
+      uiQuickAddEvent.setSelectedCalendar(calendarId) ;
+
       /*UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
       UIPopupContainer uiPopupContainer = uiCalendarPortlet.createUIComponent(UIPopupContainer.class, null, null) ;
       uiPopupContainer.setId(UIPopupContainer.UITASKPOPUP ) ;
@@ -254,11 +276,11 @@ public class UICalendars extends UIForm  {
       UIMiniCalendar uiMiniCalendar = uiPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;
       UICalendarViewContainer uiViewContainer = uiPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
       UICalendarWorkingContainer workingContainer = uiComponent.getAncestorOfType(UICalendarWorkingContainer.class) ;
-      if(calType.equals("0")) {
+      if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
         CalendarUtils.getCalendarService().removeUserCalendar(username, calendarId) ;
-      }else if(calType.equals("1")) {
+      }else if(calType.equals(CalendarUtils.SHARED_TYPE)) {
         CalendarUtils.getCalendarService().removeSharedCalendar(username, calendarId) ;
-      }else if(calType.equals("2")) {
+      }else if(calType.equals(CalendarUtils.PUBLIC_TYPE)) {
         CalendarUtils.getCalendarService().removeGroupCalendar(calendarId) ;
       }
       try{        
@@ -354,20 +376,34 @@ public class UICalendars extends UIForm  {
   }
   static  public class ChangeColorActionListener extends EventListener<UICalendars> {
     public void execute(Event<UICalendars> event) throws Exception {
+      System.out.println("\n\n ChangeColorActionListener");
       UICalendars uiComponent = event.getSource() ;
       String calendarId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       String color = event.getRequestContext().getRequestParameter(CALCOLOR) ;
-      /*String calType = event.getRequestContext().getRequestParameter(CALTYPE) ;*/
+      String calType = event.getRequestContext().getRequestParameter(CALTYPE) ;
       CalendarService calService = CalendarUtils.getCalendarService() ;
       String username = event.getRequestContext().getRemoteUser() ;
-      Calendar calendar = calService.getUserCalendar(username, calendarId) ;
-      calendar.setCalendarColor(color) ;
       try{        
-        calService.saveUserCalendar(username, calendar, false) ;
+        Calendar calendar = null ;
+        if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
+          calendar = calService.getUserCalendar(username, calendarId) ;
+          calendar.setCalendarColor(color) ;
+          calService.saveUserCalendar(username, calendar, false) ;
+        } else if(calType.equals(CalendarUtils.SHARED_TYPE)){
+          calendar = calService.getUserCalendar(username, calendarId) ;
+          calendar.setCalendarColor(color) ;
+          calService.saveUserCalendar(username, calendar, false) ;
+        } else if(calType.equals(CalendarUtils.PUBLIC_TYPE)){
+          calendar = calService.getGroupCalendar(calendarId) ;
+          calendar.setCalendarColor(color) ;
+          calService.saveGroupCalendar(calendar, false) ;
+        }
       } catch (Exception e) {
         e.printStackTrace() ;
       }
+      uiComponent.colorMap_.put(calendarId, color) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent.getAncestorOfType(UICalendarWorkingContainer.class)) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent.getParent()) ;
     }
   }
   static  public class CalendarSettingActionListener extends EventListener<UICalendars> {

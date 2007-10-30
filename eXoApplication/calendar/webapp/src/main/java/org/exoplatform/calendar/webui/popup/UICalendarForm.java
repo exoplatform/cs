@@ -138,7 +138,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
   }
 
   public String[] getActions(){
-    return new String[]{"Reset","Save", "Cancel"} ;
+    return new String[]{"Save", "Reset", "Cancel"} ;
   }
   private  List<SelectItemOption<String>> getCategory() throws Exception {
     String username = Util.getPortalRequestContext().getRemoteUser() ;

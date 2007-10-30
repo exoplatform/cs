@@ -5,6 +5,8 @@
 package org.exoplatform.calendar.webui;
 
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.exoplatform.calendar.service.Attachment;
 import org.exoplatform.calendar.service.CalendarEvent;
@@ -20,6 +22,7 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
+import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
@@ -33,8 +36,8 @@ import org.exoplatform.webui.event.EventListener;
     lifecycle = UIFormLifecycle.class,
     events = {
       @EventConfig(listeners = UIPreview.ViewActionListener.class),  
-      @EventConfig(listeners = UIPreview.EditActionListener.class),  
-      @EventConfig(listeners = UIPreview.DeleteActionListener.class)
+      @EventConfig(listeners = UICalendarView.EditActionListener.class),  
+      @EventConfig(listeners = UICalendarView.DeleteActionListener.class)
 
     }
 )
@@ -42,6 +45,8 @@ public class UIPreview extends UICalendarView implements UIPopupComponent {
   private CalendarEvent event_ = null ;
   private boolean isShowPopup_ = false ;
   public static final String CALENDARID = "calendarId".intern() ;
+  public static final String CALTYPE = "calType".intern() ;
+  
   public UIPreview() throws Exception {}
 
   public String getTemplate(){
@@ -116,7 +121,7 @@ public class UIPreview extends UICalendarView implements UIPopupComponent {
        */
     }
   }
-  static  public class EditActionListener extends EventListener<UIPreview> {
+ /* static  public class EditActionListener extends EventListener<UIPreview> {
     public void execute(Event<UIPreview> event) throws Exception {
       System.out.println("EditEventActionListener");
       UIPreview uiView = event.getSource() ;
@@ -126,6 +131,7 @@ public class UIPreview extends UICalendarView implements UIPopupComponent {
       CalendarEvent eventCalendar = null ;
       String username = event.getRequestContext().getRemoteUser() ;
       String calendarId = event.getRequestContext().getRequestParameter(CALENDARID) ;
+      String calType = event.getRequestContext().getRequestParameter(CALTYPE) ;
       String eventId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       try {
         CalendarService calService = uiView.getApplicationComponent(CalendarService.class) ;
@@ -136,7 +142,15 @@ public class UIPreview extends UICalendarView implements UIPopupComponent {
       if(CalendarEvent.TYPE_EVENT.equals(eventCalendar.getEventType())) {
         uiPopupContainer.setId(UIPopupContainer.UIEVENTPOPUP) ;
         UIEventForm uiEventForm = uiPopupContainer.createUIComponent(UIEventForm.class, null, null) ;
-        uiEventForm.initForm(eventCalendar) ;
+        uiEventForm.initForm(uiPortlet.getCalendarSetting(), eventCalendar) ;
+        if(calType.equals("0")) {
+          uiEventForm.update(calType, null) ;
+          uiEventForm.setSelectedCalendarId(calendarId) ;
+        } else {
+          List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
+          //options.add(new SelectItemOption<String>(calendarName, calendarId)) ;
+          uiEventForm.update(calType, options) ;
+        }    
         uiPopupContainer.addChild(uiEventForm) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiView.getParent()) ;
@@ -151,8 +165,8 @@ public class UIPreview extends UICalendarView implements UIPopupComponent {
         System.out.println("\n\n event type is not supported !");
       }
     }
-  }
-  static  public class DeleteActionListener extends EventListener<UIPreview> {
+  }*/
+  /*static  public class DeleteActionListener extends EventListener<UIPreview> {
     public void execute(Event<UIPreview> event) throws Exception {
       UIPreview uiView = event.getSource() ;
       System.out.println("\n\n QuickDeleteEventActionListener");
@@ -174,5 +188,5 @@ public class UIPreview extends UICalendarView implements UIPopupComponent {
         e.printStackTrace() ;
       }
     }
-  }
+  }*/
 }

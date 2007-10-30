@@ -58,14 +58,11 @@ public class UIEventDetailTab extends UIFormInputWithActions {
 
   protected List<Attachment> attachments_ = new ArrayList<Attachment>() ;
   private Map<String, List<ActionData>> actionField_ ;
-  private int timeInterval_  ;
-  private String timeFormat_ ;
   
   public UIEventDetailTab(String id) throws Exception {
     super(id);
     setComponentConfig(getClass(), null) ;
-    CalendarSetting calendarSetting = getAncestorOfType(UICalendarPortlet.class).getCalendarSetting() ;
-    List<SelectItemOption<String>> options = CalendarUtils.getTimesSelectBoxOptions(calendarSetting.getTimeFormat()) ;
+    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     actionField_ = new HashMap<String, List<ActionData>>() ;
     addUIFormInput(new UIFormStringInput(FIELD_EVENT, FIELD_EVENT, null)) ;
     addUIFormInput(new UIFormTextAreaInput(FIELD_DESCRIPTION, FIELD_DESCRIPTION, null)) ;
@@ -172,18 +169,5 @@ public class UIEventDetailTab extends UIFormInputWithActions {
   public void processRender(WebuiRequestContext arg0) throws Exception {
     super.processRender(arg0);
   }
-  protected void setTimeInterval(int timeInterval_) {
-    this.timeInterval_ = timeInterval_;
-  }
-  protected int getTimeInterval() {
-    return timeInterval_;
-  }
-  protected void setTimeFormat(String timeFormat_) {
-    this.timeFormat_ = timeFormat_;
-  }
-  protected String getTimeFormat() {
-    return timeFormat_;
-  }
-
 
 }

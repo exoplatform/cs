@@ -28,9 +28,10 @@ import org.exoplatform.webui.core.model.SelectItemOption;
  * Jul 11, 2007  
  */
 public class CalendarUtils {
-  private static final String PRIVATE_TYPE = "0".intern() ;
-  private static final String SHARED_TYPE = "1".intern() ;
-  private static final String PUBLIC_TYPE = "2".intern() ;
+  public static final String PRIVATE_TYPE = "0".intern() ;
+  public static final String SHARED_TYPE = "1".intern() ;
+  public static final String PUBLIC_TYPE = "2".intern() ;
+  
   final public static String SEMICOLON = ";".intern() ;
   final public static String COLON = ",".intern() ;
   final public static String UNDERSCORE = "_".intern() ;

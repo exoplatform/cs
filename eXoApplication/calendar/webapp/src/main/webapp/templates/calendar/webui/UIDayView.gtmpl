@@ -120,7 +120,7 @@
 								 	color = uicomponent.getColors().get(ce.getCalendarId()) ;
 								 	actionLink =  uicomponent.event("SaveEvent",ce.getId()+"&calendarId="+ce.getCalendarId()+"&startTime=beginTime&finishTime=endTime") ;
                   %>
-                  <div class="EventContainerBorder EventBoxes $color" eventid="<%=ce.getId()%>" calid="<%=ce.getCalendarId()%>" actionlink="$actionLink"
+                  <div class="EventContainerBorder EventBoxes $color" calType="$ce.calType" eventid="<%=ce.getId()%>" calid="<%=ce.getCalendarId()%>" actionlink="$actionLink"
                     starttime="$beginTime" endtime="$endTime">
 
                     <div unselectable="on" class="EventContainerBar EventTitle" title="<%=df.format(ce.getFromDateTime())%> :-> <%=df.format(ce.getToDateTime())%>">
@@ -216,7 +216,7 @@
 	      <div class="UIRightPopupMenuContainer">
 	        <%
 	  				for(String act : uicomponent.getQuickEditMenu()) {
-	  				link = uicomponent.event(act,"id&$uicomponent.CALENDARID=calId") ;
+	  				link = uicomponent.event(act,"id&$uicomponent.CALENDARID=calId&calType=caltype") ;
 	        %>
 	        <a href="$link">
 	          <div class="ItemIcon $act">

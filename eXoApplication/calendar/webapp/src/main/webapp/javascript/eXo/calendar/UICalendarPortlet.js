@@ -71,18 +71,20 @@ UICalendarPortlet.prototype.show = function(obj, evt) {
 	}
 	if (calColor) {		
 		value += "&calColor=" + calColor ;
-	}
-	
+	}	
 	var items = DOMUtil.findDescendantsByTagName(uiPopupCategory, "a") ;
 	for(var i = 0 ; i < items.length ; i ++) {
-		items[i].href = String(items[i].href).replace(/objectId\s*=.*(?='|")/, value) ;
 		if (DOMUtil.hasClass(items[i].firstChild, "SelectedColorCell")) {
 			items[i].firstChild.className = items[i].firstChild.className.toString().replace(/SelectedColorCell/,"") ;
-		}
-		if(calColor && DOMUtil.hasClass(items[i], calColor)) {
+		}		
+		if(DOMUtil.hasClass(items[i], calColor)) {				
 			var selectedCell = items[i].firstChild ;
 			DOMUtil.addClass(selectedCell, "SelectedColorCell") ;
 		}
+		if(items[i].href.indexOf("ChangeColor") != -1) {
+			value = value.replace(/calColor\s*=\s*\w*/,"calColor=" + items[i].className.split(" ")[0]) ;
+		}
+		items[i].href = String(items[i].href).replace(/objectId\s*=.*(?='|")/, value) ;
 	}	
 	
 	eXo.calendar.UICalendarPortlet.swapMenu(uiPopupCategory, obj, newPos) ;
@@ -506,10 +508,18 @@ UICalendarPortlet.prototype.dayViewCallback = function(evt){
 		src = eXo.core.DOMUtil.findAncestorByClass(src, "EventBoxes") ;
 		var eventId = src.getAttribute("eventid") ;
 		var calendarId = src.getAttribute("calid") ;
+		var calType = src.getAttribute("calType") ;
 		map = {
-			"objectId\s*=\s*[A-Za-z0-9_]*(?=&|'|\")":"objectId="+eventId,
+			"objectId\s*=\s*[A-Za-z0-9_]*(?=&|'|\")":"objectId="+eventId ,
 			"calendarId\s*=\s*[A-Za-z0-9_]*(?=&|'|\")":"calendarId="+calendarId
 		} ;
+		if (calType) {
+			map = {
+			"objectId\s*=\s*[A-Za-z0-9_]*(?=&|'|\")":"objectId=" + eventId ,
+			"calendarId\s*=\s*[A-Za-z0-9_]*(?=&|'|\")":"calendarId=" + calendarId,
+			"calType\s*=\s*[A-Za-z0-9_]*(?=&|'|\")":"calType=" + calType
+		} ;
+		}
 	}
 	eXo.webui.UIContextMenu.changeAction(eXo.webui.UIContextMenu.menuElement, map) ;
 }

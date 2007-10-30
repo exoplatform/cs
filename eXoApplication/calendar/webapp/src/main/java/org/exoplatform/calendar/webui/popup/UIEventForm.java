@@ -16,6 +16,7 @@ import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.Attachment;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
+import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.Reminder;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
@@ -83,9 +84,10 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   final public static String ACT_ADDCATEGORY = "AddCategory".intern() ;
   private boolean isAddNew_ = true ;
   private CalendarEvent calendarEvent_ = null ;
-  private String calType_ = "0" ;
+  protected String calType_ = "0" ;
   private String errorMsg_ = null ;
-
+  protected String timeFormat_ ;
+  private String dateFormat_ = "MM/dd/yyyy".intern() ;
   public UIEventForm() throws Exception {
     super("UIEventForm", false);
     UIEventDetailTab eventDetailTab =  new UIEventDetailTab(TAB_EVENTDETAIL) ;
@@ -112,7 +114,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     addChild(eventAttenderTab) ;
 
     setRenderedChild(TAB_EVENTDETAIL) ;
-    initForm() ;
   }
   public String getLabel(String id) {
     String label = id ;
@@ -122,36 +123,17 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     }
     return label ;
   }
-  public void initForm() {
-    java.util.Calendar cal = GregorianCalendar.getInstance() ;
-    UIEventDetailTab uiEventDetailTab = getChildById(TAB_EVENTDETAIL) ;
-    int beginMinute = (cal.get(java.util.Calendar.MINUTE)/uiEventDetailTab.getTimeInterval())* uiEventDetailTab.getTimeInterval() ;
-    cal.set(java.util.Calendar.MINUTE, beginMinute) ;
-    setEventFromDate(cal.getTime()) ;
-    cal.add(java.util.Calendar.MINUTE, uiEventDetailTab.getTimeInterval()) ;
-    setEventToDate(cal.getTime()) ;
-  }
-  public void initForm(String calendarId, String categoryId) {
-    reset() ;
-    setSelectedCalendarId(calendarId) ;
-    setSelectedCategory(categoryId) ;
-  }
-  public void initForm(String calendarId) {
-    reset() ;
-    setSelectedCalendarId(calendarId) ;
-  }
   public void reset() {
     super.reset() ;
     calendarEvent_ = null;
   }
-  public void initForm(java.util.Calendar date) {
+  public void initForm(CalendarSetting calSetting, CalendarEvent eventCalendar) throws Exception {
     reset() ;
-    setEventFromDate(date.getTime()) ;
-    date.add(java.util.Calendar.MINUTE, 5) ;
-    setEventToDate(date.getTime()) ;
-  }
-  public void initForm(CalendarEvent eventCalendar) throws Exception {
-    reset() ;
+    UIEventDetailTab eventDetailTab = getChildById(TAB_EVENTDETAIL) ;
+    timeFormat_ = calSetting.getTimeFormat() ;
+    List<SelectItemOption<String>> options = CalendarUtils.getTimesSelectBoxOptions(timeFormat_) ;
+    eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_FROM_TIME).setOptions(options) ;
+    eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_TO_TIME).setOptions(options) ;
     if(eventCalendar != null) {
       isAddNew_ = false ;
       calendarEvent_ = eventCalendar ;
@@ -175,20 +157,25 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       setMeetingInvitation(eventCalendar.getInvitation()) ;
       setParticipant(eventCalendar.getParticipant()) ;
     } else {
-      initForm() ;
+      java.util.Calendar cal = GregorianCalendar.getInstance() ;
+      int beginMinute = (cal.get(java.util.Calendar.MINUTE)/15)*15 ;
+      cal.set(java.util.Calendar.MINUTE, beginMinute) ;
+      setEventFromDate(cal.getTime()) ;
+      cal.add(java.util.Calendar.MINUTE,15) ;
+      setEventToDate(cal.getTime()) ;
     }
   }
-  
+
   public void update(String calType, List<SelectItemOption<String>> options) throws Exception{
     UIEventDetailTab uiEventDetailTab = getChildById(TAB_EVENTDETAIL) ;
     if(options != null) {
-      uiEventDetailTab.getUIFormSelectBox(uiEventDetailTab.FIELD_CALENDAR).setOptions(options) ;
+      uiEventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CALENDAR).setOptions(options) ;
     }else {
-      uiEventDetailTab.getUIFormSelectBox(uiEventDetailTab.FIELD_CALENDAR).setOptions(getCalendar()) ;
+      uiEventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CALENDAR).setOptions(getCalendar()) ;
     }
     calType_ = calType ;
   }
-  
+
   private List<SelectItemOption<String>> getCalendar() throws Exception {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
@@ -199,7 +186,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     }
     return options ;
   }
-  
+
   public static List<SelectItemOption<String>> getCategory() throws Exception {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
@@ -234,7 +221,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   public void activate() throws Exception {}
   public void deActivate() throws Exception {}
   public void updateSelect(String selectField, String value) throws Exception {}
-  
+
   protected boolean isEventDetailValid(){
     if(CalendarUtils.isEmpty(getEventSumary())) {
       errorMsg_ = "UIEventForm.msg.event-summary-required" ;
@@ -259,7 +246,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       errorMsg_ = "UIEventForm.msg.event-fromdate-notvalid" ;
       return false ;
     }
-    
+
     if(!getEventAllDate()) {
       if(CalendarUtils.isEmpty(getEventToDateValue())){
         errorMsg_ = "UIEventForm.msg.event-todate-required" ;
@@ -310,7 +297,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
     return eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CALENDAR).getValue() ;
   }
-  protected void setSelectedCalendarId(String value) {
+  public void setSelectedCalendarId(String value) {
     UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
     eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CALENDAR).setValue(value) ;
   }
@@ -328,7 +315,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     UIEventDetailTab eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
     UIFormSelectBox timeField = eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_FROM_TIME) ;
     UIFormDateTimeInput fromField = eventDetailTab.getChildById(UIEventDetailTab.FIELD_FROM) ;
-    DateFormat df = new SimpleDateFormat("MM/dd/yyyy" + " " + eventDetailTab.getTimeFormat()) ;
+    DateFormat df = new SimpleDateFormat(dateFormat_ + " " + timeFormat_) ;
     return df.parse(fromField.getValue() + " " + timeField.getValue()) ;
   }
   protected String getEventFormDateValue () {
@@ -340,9 +327,9 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     UIEventDetailTab eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
     UIFormDateTimeInput fromField = eventDetailTab.getChildById(UIEventDetailTab.FIELD_FROM) ;
     UIFormSelectBox timeFile = eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_FROM_TIME) ;
-    DateFormat df = new SimpleDateFormat("MM/dd/yyyy") ;
+    DateFormat df = new SimpleDateFormat(dateFormat_) ;
     fromField.setValue(df.format(date)) ;
-    df = new SimpleDateFormat(eventDetailTab.getTimeFormat()) ;
+    df = new SimpleDateFormat(timeFormat_) ;
     timeFile.setValue(df.format(date)) ;
   }
 
@@ -350,16 +337,16 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     UIEventDetailTab eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
     UIFormSelectBox timeField = eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_TO_TIME) ;
     UIFormDateTimeInput toField = eventDetailTab.getChildById(UIEventDetailTab.FIELD_TO) ;
-    DateFormat df = new SimpleDateFormat("MM/dd/yyyy" + " " + eventDetailTab.getTimeFormat()) ;
+    DateFormat df = new SimpleDateFormat(dateFormat_ + " " + timeFormat_) ;
     return df.parse(toField.getValue() + " " + timeField.getValue()) ;
   }
   protected void setEventToDate(Date date) {
     UIEventDetailTab eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
     UIFormDateTimeInput toField = eventDetailTab.getChildById(UIEventDetailTab.FIELD_TO) ;
     UIFormSelectBox timeField = eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_TO_TIME) ;
-    DateFormat df = new SimpleDateFormat("MM/dd/yyyy") ;
+    DateFormat df = new SimpleDateFormat(dateFormat_) ;
     toField.setValue(df.format(date)) ;
-    df = new SimpleDateFormat(eventDetailTab.getTimeFormat()) ;
+    df = new SimpleDateFormat(timeFormat_) ;
     timeField.setValue(df.format(date)) ;
   }
 
@@ -644,9 +631,9 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
           cal.add(Calendar.DATE, 1) ;
           to = cal.getTime() ;
         }
+        calendarEvent.setCalType(uiForm.calType_) ;
         calendarEvent.setFromDateTime(from) ;
         calendarEvent.setToDateTime(to);
-
         calendarEvent.setCalendarId(calendarId) ;
         calendarEvent.setEventCategoryId(uiForm.getEventCategory()) ;
         calendarEvent.setLocation(uiForm.getEventPlace()) ;
@@ -659,17 +646,17 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
         if(uiForm.getMeetingInvitation() != null) calendarEvent.setInvitation(uiForm.getMeetingInvitation()) ;
         if(uiForm.getParticipant() != null) calendarEvent.setParticipant(uiForm.getParticipant()) ;
         try {
-          if(uiForm.calType_.equals("0")) {
+          if(uiForm.calType_.equals(CalendarUtils.PRIVATE_TYPE)) {
             CalendarUtils.getCalendarService().saveUserEvent(username, calendarId, calendarEvent, uiForm.isAddNew_) ;
-          }else if(uiForm.calType_.equals("1")){
+          }else if(uiForm.calType_.equals(CalendarUtils.SHARED_TYPE)){
             CalendarUtils.getCalendarService().saveEventToSharedCalendar(username, calendarId, calendarEvent, uiForm.isAddNew_) ;
-          }else if(uiForm.calType_.equals("2")){
+          }else if(uiForm.calType_.equals(CalendarUtils.PUBLIC_TYPE)){
             CalendarUtils.getCalendarService().saveGroupEvent(calendarId, calendarEvent, uiForm.isAddNew_) ;          
           }
           uiViewContainer.refresh() ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiViewContainer) ;
           UIMiniCalendar uiMiniCalendar = calendarPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;
-          uiMiniCalendar.refresh() ;
+          uiMiniCalendar.updateMiniCal() ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
           uiForm.getAncestorOfType(UIPopupAction.class).deActivate() ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;

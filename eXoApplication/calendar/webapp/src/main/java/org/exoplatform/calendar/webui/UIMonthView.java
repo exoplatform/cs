@@ -14,6 +14,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
@@ -210,7 +211,6 @@ public class UIMonthView extends UICalendarView {
         UIPopupAction uiParenPopup = uiPortlet.getChild(UIPopupAction.class) ;
         UIQuickAddEvent uiEventForm = uiParenPopup.activate(UIQuickAddEvent.class, 700) ;
         uiEventForm.setEvent(true) ;
-        try {
           int day = Integer.parseInt(selectedDate) ;
           java.util.Calendar date = new GregorianCalendar(calendarview.getCurrentYear(), calendarview.getCurrentMonth(), day) ;
           DateFormat df = new SimpleDateFormat(calendarview.getDateTimeFormat()) ;
@@ -218,10 +218,7 @@ public class UIMonthView extends UICalendarView {
           date.add(java.util.Calendar.MINUTE, calendarview.getTimeInterval()) ;
           String endTime =  df.format(date.getTime())  ;
           uiEventForm.init(calendarview.getCalendarSetting(), startTime, endTime) ;
-        } catch (Exception e) {
-          e.printStackTrace() ;
-          uiEventForm.init(calendarview.getCalendarSetting(), null, null) ;
-        }
+          uiEventForm.update(CalendarUtils.PRIVATE_TYPE, null) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiParenPopup) ;
       }
@@ -244,18 +241,14 @@ public class UIMonthView extends UICalendarView {
         UIQuickAddEvent uiEventForm = uiParenPopup.activate(UIQuickAddEvent.class,700) ;
         uiEventForm.setEvent(false) ;
         uiEventForm.setId("UIQuickAddTask") ;
-        try {
-          int day = Integer.parseInt(selectedDate) ;
-          java.util.Calendar date = new GregorianCalendar(calendarview.getCurrentYear(), calendarview.getCurrentMonth(), day) ;
-          DateFormat df = new SimpleDateFormat(calendarview.getDateTimeFormat()) ;
-          String startTime =  df.format(date.getTime())  ;
-          date.add(java.util.Calendar.MINUTE, calendarview.getTimeInterval()) ;
-          String endTime =  df.format(date.getTime())  ;
-          uiEventForm.init(calendarview.getCalendarSetting(), startTime, endTime) ;
-        } catch (Exception e) {
-          e.printStackTrace() ;
-          uiEventForm.init(calendarview.getCalendarSetting(), null, null) ;
-        }
+        int day = Integer.parseInt(selectedDate) ;
+        java.util.Calendar date = new GregorianCalendar(calendarview.getCurrentYear(), calendarview.getCurrentMonth(), day) ;
+        DateFormat df = new SimpleDateFormat(calendarview.getDateTimeFormat()) ;
+        String startTime =  df.format(date.getTime())  ;
+        date.add(java.util.Calendar.MINUTE, calendarview.getTimeInterval()) ;
+        String endTime =  df.format(date.getTime())  ;
+        uiEventForm.init(calendarview.getCalendarSetting(), startTime, endTime) ;
+        uiEventForm.update(CalendarUtils.PRIVATE_TYPE, null) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiParenPopup) ;
       }
@@ -278,7 +271,6 @@ public class UIMonthView extends UICalendarView {
         cal1.setTime(calEvent.getFromDateTime()) ;
         int amount =  day - cal1.get(java.util.Calendar.DATE) ;
         cal1.add(java.util.Calendar.DATE, amount) ;
-        System.out.println("\n\n begin time " + cal1.getTime());
         calEvent.setFromDateTime(cal1.getTime()) ;
         cal1.setTime(calEvent.getToDateTime()) ;
         cal1.add(java.util.Calendar.DATE, amount) ;
@@ -286,8 +278,8 @@ public class UIMonthView extends UICalendarView {
         calService.saveUserEvent(username, calendarId, calEvent, false) ;
         UIMiniCalendar uiMiniCalendar = uiPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;
         uiMiniCalendar.refresh() ;
-        calendarview.refresh() ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
+        calendarview.refresh() ;
         event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
       } catch (Exception e) {
         e.printStackTrace() ;

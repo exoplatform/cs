@@ -127,7 +127,7 @@
 				%>
   					<div class="CalendarItem">
   						<div class="$calendar.calendarColor">
-  							<div class="CheckBox"><%uiform.renderField(calendar.getId())%></div>
+  							<div class="CheckBox" onclick="eXo.calendar.UICalendarPortlet.initFilter(this,1) ;"><%uiform.renderField(calendar.getId())%></div>
   							<div class="CalendarIcon"><a href="#" ><%=calendar.getName()%></a></div>
   							<div class="DownArrow1Icon" calColor="$calendar.calendarColor" id="$calId" calType="1" title="Calendar actions" onclick="eXo.calendar.UICalendarPortlet.show(this, event);"><span></span></div>
   							<div style="clear: both"><span></span></div>
@@ -160,7 +160,7 @@
   					<div class="GroupItem">
   						<div class="GroupColor1">
   							<div title="Collapser calendar group" class="CollapserFlatStyle"><span></span></div>
-  							<div class="CheckBox"><input type="checkbox"/></div>
+  							<div class="CheckBox" onclick="eXo.calendar.UICalendarPortlet.initFilter(this,1) ;"><input type="checkbox"/></div>
   							<div class="CalendarGroupIcon" onclick=""><a href="#" ><%=groupData.getName()%></a></div>
   							<div style="clear: both"><span></span></div>
   						</div>
