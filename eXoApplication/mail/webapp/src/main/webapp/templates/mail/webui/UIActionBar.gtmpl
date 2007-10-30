@@ -59,7 +59,7 @@
 				                    </a>
 				                    <a class="MenuItem" href="<%=uicomponent.event("ChangeView","viewType")%>">   
 					                    <div class="ItemIcon HideFolderListIcon">
-					                      Hide Folder List
+					                      Hide Navigator Pane
 					                    </div>
 				                    </a>
 				                    <a class="MenuItem" href="<%=uicomponent.event("ChangeView","viewType")%>">   
@@ -69,7 +69,7 @@
 				                    </a>
 				                    <a class="MenuItem" href="<%=uicomponent.event("ChangeView","viewType")%>">   
 					                    <div class="ItemIcon HideReadingPaneIcon">
-					                      Hide Reading Pane
+					                      Hide Preview Pane
 					                    </div>
 				                    </a>
 													</div>
