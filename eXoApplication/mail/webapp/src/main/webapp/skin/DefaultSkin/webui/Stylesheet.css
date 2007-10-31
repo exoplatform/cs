@@ -531,6 +531,16 @@
 	padding-right: 16px;
 }
 
+.UIMailPortlet .MailWorkingWorkspace .MessageNotice {
+	height: 26px; width: 200px;
+	line-height: 26px;
+	background-color: #ECEFFC;
+	text-align: center;
+	color: #d21717;
+	border: 1px solid #c7c7c7;
+	margin: 3px auto auto;
+}
+
 /*=================================Reading Pane=================*/
 
 .SpliterResizableListArea {

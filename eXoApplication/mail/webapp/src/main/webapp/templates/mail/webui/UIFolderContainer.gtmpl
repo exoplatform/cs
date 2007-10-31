@@ -91,13 +91,13 @@
 	    <div class="MiddleRightRightClickPopupMenu">
 	      <div class="UIRightPopupMenuContainer">
 	        <a class="MenuItem" href="<%=uicomponent.event("AddFolder", "id")%>">   
-	          <div class="ItemIcon RenameFolderIcon"> New Folder </div>
+	          <div class="ItemIcon AddFolderIcon"> New Folder </div>
 	        </a>
 	        <a class="MenuItem" href="<%=uicomponent.event("Search", "id")%>">   
-	          <div class="ItemIcon RemoveFolderIcon"> Search </div>
+	          <div class="ItemIcon Search"> Search </div>
 	        </a>
 	        <a class="MenuItem" href="<%=uicomponent.event("AddFolder", "id")%>">   
-	          <div class="ItemIcon EmptyIcon"> Mark All Read </div>
+	          <div class="ItemIcon MarkAll"> Mark All Read </div>
 	        </a>
 	      </div>
 	    </div>
@@ -125,13 +125,13 @@
       <div class="MiddleRightRightClickPopupMenu">
         <div class="UIRightPopupMenuContainer">
           <a class="MenuItem" href="<%=uicomponent.event("AddFolder", "id")%>">   
-            <div class="ItemIcon EmptyIcon"> New Folder </div>
+            <div class="ItemIcon AddFolderIcon"> New Folder </div>
           </a>
           <a class="MenuItem" href="<%=uicomponent.event("Search", "id")%>">   
-            <div class="ItemIcon RemoveFolderIcon"> Search </div>
+            <div class="ItemIcon Search"> Search </div>
           </a>
           <a class="MenuItem" href="<%=uicomponent.event("AddFolder", "id")%>">   
-            <div class="ItemIcon EmptyIcon"> Mark All Read </div>
+            <div class="ItemIcon MarkAll"> Mark All Read </div>
           </a>
           <a class="MenuItem" href="<%=uicomponent.event("EmptyFolder", "id")%>">   
           <div class="ItemIcon EmptyIcon"> Empty Trash </div>
@@ -171,7 +171,7 @@
 	          <div class="ItemIcon RemoveFolderIcon"> Remove </div>
 	        </a>
           <a class="MenuItem" href="<%=uicomponent.event("AddFolder", "id")%>">   
-            <div class="ItemIcon EmptyIcon"> New Subfoder </div>
+            <div class="ItemIcon AddFolderIcon"> New Subfoder </div>
           </a>  
 	        <a class="MenuItem" href="<%=uicomponent.event("EmptyFolder", "id")%>">   
 	          <div class="ItemIcon EmptyIcon"> Empty </div>

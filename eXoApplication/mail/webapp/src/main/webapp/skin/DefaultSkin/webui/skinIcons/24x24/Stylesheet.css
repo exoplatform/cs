@@ -105,3 +105,7 @@
 .RenameFolderIcon {
 	background: url('icons/RenameFolderIcon.gif') no-repeat left;
 }
+
+.MarkAll {
+	background: url('icons/MarkAll.gif') no-repeat left;
+}

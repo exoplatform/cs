@@ -174,7 +174,7 @@
   
   <% /*End Message Action Bar*/ %>
   
-  <div class="UIMessageList">
+  <div class="UIMessageList" >
   	<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
     	<thead>
     		<tr>
@@ -308,4 +308,5 @@
     	</tbody>
   	</table>
   </div>
+  <div class="MessageNotice" >This is no Mail in list</div>
 <%uiform.end()%>    
