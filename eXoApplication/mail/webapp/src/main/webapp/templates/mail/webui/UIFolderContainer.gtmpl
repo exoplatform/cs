@@ -133,7 +133,7 @@
           <a class="MenuItem" href="<%=uicomponent.event("AddFolder", "id")%>">   
             <div class="ItemIcon EmptyIcon"> Mark All Read </div>
           </a>
-          <a class="MenuItem" href="<%=uicomponent.event("AddFolder", "id")%>">   
+          <a class="MenuItem" href="<%=uicomponent.event("EmptyFolder", "id")%>">   
           <div class="ItemIcon EmptyIcon"> Empty Trash </div>
           </a>
         </div>

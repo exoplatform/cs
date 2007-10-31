@@ -148,7 +148,15 @@ public class MessagePageList extends JCRPageList {
   }*/
   
 	@Override
-	public List<Message> getAll() throws Exception { return null; }
+  public List<Message> getAll() throws Exception { return null; }
+	
+  public List<Message> getAll(String username) throws Exception { 
+    List<Message> messageList = new ArrayList<Message>();
+    for (int i = 1; i <= getAvailablePage(); i++) {
+      messageList.addAll(getPage(i, username));
+    }
+    return messageList;
+  }
 
   private Session getJCRSession(String username) throws Exception {
     RepositoryService  repositoryService = (RepositoryService)PortalContainer.getComponent(RepositoryService.class) ;

@@ -10,6 +10,8 @@ import java.util.List;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
+import org.exoplatform.mail.service.Message;
+import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.webui.popup.UIFolderForm;
 import org.exoplatform.mail.webui.popup.UIPopupAction;
 import org.exoplatform.mail.webui.popup.UIRenameFolderForm;
@@ -136,28 +138,18 @@ public class UIFolderContainer extends UIContainer {
     }
   }
   
-
   static public class EmptyFolderActionListener extends EventListener<UIFolderContainer> {
     public void execute(Event<UIFolderContainer> event) throws Exception {
-//      String folderId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-//      UIFolderContainer uiFolderContainer = event.getSource() ;
-      System.out.println("======= >>  Empty Folder Action Listener");
-//      UIMailPortlet uiMailPortlet = uiFolderContainer.getAncestorOfType(UIMailPortlet.class);
-//      MailService mailSrv = uiMailPortlet.getApplicationComponent(MailService.class);
-//      String username = uiMailPortlet.getCurrentUser();
-//      UINavigationContainer uiNavigationContainer = uiFolderContainer.getAncestorOfType(UINavigationContainer.class);
-//      String accountId = uiNavigationContainer.getChild(UISelectAccount.class).getSelectedValue();
-//      
-//      Account account = mailSrv.getAccountById(username, accountId);
-//      Folder folder = mailSrv.getFolder(username, accountId, folderId);
-//      
-//      List<Message> messageList = mailSrv.getMessageByFolder(username, accountId, folderId).getAll();
-//      for (Message message : messageList) {
-//        mailSrv.removeMessage(username, accountId, message.getId());
-//        System.out.println("====<><><><><><>><>===>>>>" + message.getId());
-//      }
-//      folder.setNumberOfUnreadMessage(0);
-//      mailSrv.saveUserFolder(username, accountId, folder);
+      String folderId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      UIFolderContainer uiFolderContainer = event.getSource() ;
+      UIMailPortlet uiPortlet = uiFolderContainer.getAncestorOfType(UIMailPortlet.class);
+      String username = uiPortlet.getCurrentUser();
+      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
+      List<Message> messageList = mailSrv.getMessagePageListByFolder(username, accountId, folderId).getAll(username);
+      for (Message message : messageList) {
+        mailSrv.removeMessage(username, accountId, message.getId());
+      }
     }
   }
 }
