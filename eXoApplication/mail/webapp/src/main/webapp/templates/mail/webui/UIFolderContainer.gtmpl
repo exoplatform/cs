@@ -78,8 +78,8 @@
   <%}%>
 </div>
 
-<% /*Popup menu for Drafts forder*/ %>
-<div class="UIRightClickPopupMenu" id="UIDraftsFolderPopupMenu" eXoCallback="eXo.mail.UIMailPortlet.draftsFolderPopupMenuCallback">
+<% /*Popup menu for Default (Inbox, Drafts, Sent, Spam) forder*/ %>
+<div class="UIRightClickPopupMenu" id="UIDefaultFolderPopupMenu" eXoCallback="eXo.mail.UIMailPortlet.defaultFolderPopupMenuCallback">
 	<div class="UIContextMenuContainer">
 	  <div class="TopLeftRightClickPopupMenu" id="test">
 	    <div class="TopRightRightClickPopupMenu">
@@ -90,14 +90,14 @@
 	  <div class="MiddleLeftRightClickPopupMenu">
 	    <div class="MiddleRightRightClickPopupMenu">
 	      <div class="UIRightPopupMenuContainer">
-	        <a class="MenuItem" href="<%=uicomponent.event("RenameFolder", "id")%>">   
-	          <div class="ItemIcon RenameFolderIcon"> Rename </div>
+	        <a class="MenuItem" href="<%=uicomponent.event("AddFolder", "id")%>">   
+	          <div class="ItemIcon RenameFolderIcon"> New Folder </div>
 	        </a>
-	        <a class="MenuItem" href="<%=uicomponent.event("RemoveFolder", "id")%>">   
-	          <div class="ItemIcon RemoveFolderIcon"> Remove </div>
+	        <a class="MenuItem" href="<%=uicomponent.event("Search", "id")%>">   
+	          <div class="ItemIcon RemoveFolderIcon"> Search </div>
 	        </a>
-	        <a class="MenuItem" href="<%=uicomponent.event("EmptyFolder", "id")%>">   
-	          <div class="ItemIcon EmptyIcon"> Empty </div>
+	        <a class="MenuItem" href="<%=uicomponent.event("AddFolder", "id")%>">   
+	          <div class="ItemIcon EmptyIcon"> Mark All Read </div>
 	        </a>
 	      </div>
 	    </div>
@@ -110,6 +110,44 @@
 	  </div>           
 	</div>
 </div>  
+<% /* End popup menu for Drafts forder*/ %>
+
+<% /*Popup menu for Trash forder*/ %>
+<div class="UIRightClickPopupMenu" id="UITrashFolderPopupMenu" eXoCallback="eXo.mail.UIMailPortlet.defaultFolderPopupMenuCallback">
+  <div class="UIContextMenuContainer">
+    <div class="TopLeftRightClickPopupMenu" id="test">
+      <div class="TopRightRightClickPopupMenu">
+        <div class="TopCenterRightClickPopupMenu"><span></span></div>
+      </div>
+    </div>
+    
+    <div class="MiddleLeftRightClickPopupMenu">
+      <div class="MiddleRightRightClickPopupMenu">
+        <div class="UIRightPopupMenuContainer">
+          <a class="MenuItem" href="<%=uicomponent.event("AddFolder", "id")%>">   
+            <div class="ItemIcon EmptyIcon"> New Folder </div>
+          </a>
+          <a class="MenuItem" href="<%=uicomponent.event("Search", "id")%>">   
+            <div class="ItemIcon RemoveFolderIcon"> Search </div>
+          </a>
+          <a class="MenuItem" href="<%=uicomponent.event("AddFolder", "id")%>">   
+            <div class="ItemIcon EmptyIcon"> Mark All Read </div>
+          </a>
+          <a class="MenuItem" href="<%=uicomponent.event("AddFolder", "id")%>">   
+          <div class="ItemIcon EmptyIcon"> Empty Trash </div>
+          </a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="BottomLeftRightClickPopupMenu">
+      <div class="BottomRightRightClickPopupMenu">
+        <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+      </div>
+    </div>           
+  </div>
+</div>  
+
 <% /* End popup menu for Drafts forder*/ %>
 
 <div class="MyFolder">
@@ -132,6 +170,9 @@
 	        <a class="MenuItem" href="<%=uicomponent.event("RemoveFolder", "id")%>">   
 	          <div class="ItemIcon RemoveFolderIcon"> Remove </div>
 	        </a>
+          <a class="MenuItem" href="<%=uicomponent.event("AddFolder", "id")%>">   
+            <div class="ItemIcon EmptyIcon"> New Subfoder </div>
+          </a>  
 	        <a class="MenuItem" href="<%=uicomponent.event("EmptyFolder", "id")%>">   
 	          <div class="ItemIcon EmptyIcon"> Empty </div>
 	        </a>
