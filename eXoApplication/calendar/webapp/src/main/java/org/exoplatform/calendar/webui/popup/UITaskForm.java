@@ -73,8 +73,6 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
   private CalendarEvent calendarEvent_ = null ;
   private String errorMsg_ = null ;
   private String calType_ = "0" ;
-  /*protected String timeFormat_ ;
-  private String dateFormat_ =  "MM/dd/yyyy".intern() ;*/
   public UITaskForm() throws Exception {
     super("UIEventForm", false);
     UITaskDetailTab uiTaskDetailTab =  new UITaskDetailTab(TAB_TASKDETAIL) ;
@@ -82,9 +80,6 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
     UIEventReminderTab eventReminderTab =  new UIEventReminderTab(TAB_EVENTREMINDER) ;
     addChild(eventReminderTab) ;
     setRenderedChild(TAB_TASKDETAIL) ;
-  }
-  private CalendarSetting getCalendarSetting() throws Exception{
-    return getAncestorOfType(UICalendarPortlet.class).getCalendarSetting() ;    
   }
   public String getLabel(String id) {
     String label = id ;
@@ -101,10 +96,10 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
   public void initForm(CalendarSetting calSetting, CalendarEvent eventCalendar) throws Exception {
     reset() ;
     UITaskDetailTab taskDetailTab = getChildById(TAB_TASKDETAIL) ;
-    //timeFormat_ = calSetting.getTimeFormat() ;
-    List<SelectItemOption<String>> options = CalendarUtils.getTimesSelectBoxOptions(calSetting.getTimeFormat()) ;
-    taskDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_FROM_TIME).setOptions(options) ;
-    taskDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_TO_TIME).setOptions(options) ;
+    List<SelectItemOption<String>> fromTimes = CalendarUtils.getTimesSelectBoxOptions(calSetting.getTimeFormat()) ;
+    List<SelectItemOption<String>> toTimes = CalendarUtils.getTimesSelectBoxOptions(calSetting.getTimeFormat()) ;
+    taskDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_FROM_TIME).setOptions(fromTimes) ;
+    taskDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_TO_TIME).setOptions(toTimes) ;
     if(eventCalendar != null) {
       isAddNew_ = false ;
       calendarEvent_ = eventCalendar ;
@@ -141,13 +136,6 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
   protected void refreshCategory()throws Exception {
     UIFormInputWithActions taskDetailTab = getChildById(TAB_TASKDETAIL) ;
     taskDetailTab.getUIFormSelectBox(UITaskDetailTab.FIELD_CATEGORY).setOptions(getCategory()) ;
-  }
-
-  private List<SelectItemOption<String>> getShareValue() {
-    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-    options.add(new SelectItemOption<String>(ITEM_PUBLIC, ITEM_PUBLIC)) ;
-    options.add(new SelectItemOption<String>(ITEM_PRIVATE, ITEM_PRIVATE)) ;
-    return options ;
   }
   protected String getStatus() {
     UITaskDetailTab uiTaskDetailTab = getChildById(TAB_TASKDETAIL) ;

@@ -37,7 +37,9 @@ public class UICalendarPortlet extends UIPortletApplication {
     calendarSetting_ = CalendarUtils.getCalendarService().getCalendarSetting(CalendarUtils.getCurrentUser()) ; 
     return calendarSetting_ ; 
   }
-  
+  public void setCalendarSetting(CalendarSetting setting) throws Exception{
+    calendarSetting_ = setting; 
+  }
   public void cancelAction() throws Exception {
     WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
     UIPopupAction popupAction = getChild(UIPopupAction.class) ;
@@ -45,7 +47,7 @@ public class UICalendarPortlet extends UIPortletApplication {
     context.addUIComponentToUpdateByAjax(popupAction) ;
   }
   
-  private void renderPopupMessages() throws Exception {
+  protected void renderPopupMessages() throws Exception {
     UIPopupMessages popupMess = getUIPopupMessages();
     if(popupMess == null)  return ;
     WebuiRequestContext  context =  WebuiRequestContext.getCurrentInstance() ;

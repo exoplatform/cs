@@ -86,8 +86,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   private CalendarEvent calendarEvent_ = null ;
   protected String calType_ = "0" ;
   private String errorMsg_ = null ;
-  /*protected String timeFormat_ = CalendarUtils.TIMEFORMAT ;
-  private String dateFormat_ = "MM/dd/yyyy".intern() ;*/
   
   public UIEventForm() throws Exception {
     super("UIEventForm", false);
@@ -130,9 +128,10 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   public void initForm(CalendarSetting calSetting, CalendarEvent eventCalendar) throws Exception {
     reset() ;
     UIEventDetailTab eventDetailTab = getChildById(TAB_EVENTDETAIL) ;
-    List<SelectItemOption<String>> options = CalendarUtils.getTimesSelectBoxOptions(calSetting.getTimeFormat()) ;
-    eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_FROM_TIME).setOptions(options) ;
-    eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_TO_TIME).setOptions(options) ;
+    List<SelectItemOption<String>> fromTimes = CalendarUtils.getTimesSelectBoxOptions(calSetting.getTimeFormat()) ;
+    List<SelectItemOption<String>> toTimes = CalendarUtils.getTimesSelectBoxOptions(calSetting.getTimeFormat()) ;
+    eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_FROM_TIME).setOptions(fromTimes) ;
+    eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_TO_TIME).setOptions(toTimes) ;
     if(eventCalendar != null) {
       isAddNew_ = false ;
       calendarEvent_ = eventCalendar ;
@@ -347,6 +346,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     DateFormat df = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
     toField.setValue(df.format(date)) ;
     df = new SimpleDateFormat(CalendarUtils.TIMEFORMAT) ;
+    System.out.println("\n\n " + df.format(date));
     timeField.setValue(df.format(date)) ;
   }
 

@@ -102,15 +102,9 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
 
   protected Calendar calendar_ = null ;
   public boolean isShowEvent_ = true;
-
-  /* protected boolean isShowWorkingTime_ = false ;
-  protected String startTime_ = null ;
-  protected String endTime_ = null ;*/
   private int timeInterval_ = 30 ;
   private CalendarSetting calendarSetting_ ;
-  /*  private String timeFormat_ =  null ;
-  private String dateFormat_ =  null ;
-   */
+  
   private String dateTimeFormat_  ;
   protected List<String> privateCalendarIds = new ArrayList<String>() ;
   protected List<String> publicCalendarIds = new ArrayList<String>() ;
@@ -144,12 +138,6 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       calendarSetting_ = calService.getCalendarSetting(username) ;
     }
     dateTimeFormat_ = getDateFormat() + " " + getTimeFormat() ;
-    /*Locale locale_ = null ;
-    if(calendarSetting_.getLocation() == null) {
-      locale_ = Util.getPortalRequestContext().getLocale() ;
-    } else {
-      locale_ = new Locale(calendarSetting_.getLocation()) ;
-    }*/
   }
   public void setViewType(String viewType) { this.viewType_ = viewType ; }
   public String getViewType() { return viewType_ ; }
@@ -386,6 +374,21 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   }
   public CalendarSetting getCalendarSetting() {
     return calendarSetting_;
+  }
+  public boolean isShowWorkingTime() {
+    return calendarSetting_.isShowWorkingTime() ;
+  }
+  public String getStartTime() {
+    if(calendarSetting_.isShowWorkingTime()) {
+      return calendarSetting_.getWorkingTimeBegin() ;
+    }
+    return "" ;
+  }
+  public String getEndTime() {
+    if(calendarSetting_.isShowWorkingTime()) {
+      return calendarSetting_.getWorkingTimeEnd() ;
+    }
+    return "" ;
   }
   static  public class AddEventActionListener extends EventListener<UICalendarView> {
     public void execute(Event<UICalendarView> event) throws Exception {

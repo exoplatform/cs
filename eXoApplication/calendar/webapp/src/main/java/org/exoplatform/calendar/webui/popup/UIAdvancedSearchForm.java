@@ -32,6 +32,7 @@ import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormDateTimeInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
+import org.exoplatform.webui.form.validator.EmptyFieldValidator;
 
 /**
  * Created by The eXo Platform SARL
@@ -85,10 +86,11 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
     options.add(new SelectItemOption<String>(CalendarEvent.PRIORITY_HIGHT, CalendarEvent.PRIORITY_HIGHT)) ;
     addChild(new UIFormSelectBox(PRIORITY, PRIORITY, options)) ;
     UIFormDateTimeInput fromDate = new UIFormDateTimeInput(FROMDATE, FROMDATE, new Date(), false) ;
+    fromDate.addValidator(EmptyFieldValidator.class) ;
     addChild(fromDate) ;
     java.util.Calendar calendar = GregorianCalendar.getInstance() ;
     calendar.add(java.util.Calendar.DATE, 1) ;
-    addChild(new UIFormDateTimeInput(TODATE, TODATE, calendar.getTime(), false)) ;
+    addChild(new UIFormDateTimeInput(TODATE, TODATE, calendar.getTime(), false).addValidator(EmptyFieldValidator.class)) ;
   }
   public void activate() throws Exception {}
   public void deActivate() throws Exception {

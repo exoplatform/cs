@@ -22,7 +22,14 @@
 	DateFormat tf = new SimpleDateFormat(timeFormat) ;
 	DateFormat dtf = new SimpleDateFormat(dateTimeFormat) ;
 	def rcontext = _ctx.getRequestContext() ;	
+	String startWorkingTime = uicomponent.getStartTime() ;
+	String endWorkingTime = uicomponent.getEndTime() ;
+	def hoursMap = uicomponent.getTimeSteps(timeFormat, timeInterval) ;
+	boolean isShowWorkingTime = uicomponent.isShowWorkingTime() ;
+	rowNumbleBegin = 0 ;
+	rowNumbleEnd = 0 ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.showEvent() ;');
+  
 %>
 <div class="UIDayView">
   <div class="TitleBar">
@@ -86,21 +93,30 @@
                 <tbody>
                   <%
 	            		flag = true ;
-	            		def hours = uicomponent.getTimeSteps(timeFormat, timeInterval).values() ;
+	            		style = "" ;
+									if(isShowWorkingTime) {style = "display:none;" ;}	
+	            		def hours = hoursMap.values() ;
+	            		count = 0 ;
 	            		for(h in hours) {
+	            			if(isShowWorkingTime) {
+		            			if(h.equals(startWorkingTime)) {style = "" ;rowNumbleBegin = count;}
+		            			if(h.equals(endWorkingTime)) {style = "display:none;" ;rowNumbleEnd = count;}
+		            		}
 	            			cssClass = "TdDotLine" ;
 	            			if(flag) {cssClass = "TdLine" ;} ;
                   %>
-                  <tr>
+                  <tr style="$style">
                     <td class="TdTime">
                       <%if(flag){ println h;}%>
                     </td>
                   </tr>
                   <%
+                  count ++ ;
 	            		flag = !flag ;
 	            		}%>
                 </tbody>
               </table>
+             $rowNumbleBegin ->>	$rowNumbleEnd
             </td>
             <td>
               <div class="EventBoard" style="position : relative ;">
@@ -140,13 +156,17 @@
                     <tbody>
                       <%
 			            		flag = true ;
-			            		def hoursSteps = uicomponent.getTimeSteps(timeFormat, timeInterval).keySet() ;
+			            		if(isShowWorkingTime) {style = "display:none;" ;}
+			            		def hoursSteps = hoursMap.keySet() ;
 			            		for(h in hoursSteps) {
+			            			if(isShowWorkingTime) {
+				            			if(hoursMap.get(h).equals(startWorkingTime)) {style=""}
+				            			if(hoursMap.get(h).equals(endWorkingTime)) {style="display:none;"}
+			            			}
 			            			cssClass = "TdDotLine" ;
 			            			if(flag) {cssClass = "TdLine" ;} ;
-			            			
                       %>
-                      <tr startTime="$h">
+                      <tr startTime="$h"  style="$style">
                         <td class="$cssClass">
                           <span></span>
                         </td>

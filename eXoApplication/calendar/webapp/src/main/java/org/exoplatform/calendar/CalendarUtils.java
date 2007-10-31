@@ -80,7 +80,21 @@ public class CalendarUtils {
     }
     return options ;
   }
-
+  public static List<SelectItemOption<String>> getTimesSelectBoxOptions(String timeFormat, int timeInteval) {
+    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
+    GregorianCalendar cal = new GregorianCalendar(Locale.US) ;
+    cal.set(java.util.Calendar.AM_PM, java.util.Calendar.AM) ;
+    cal.set(java.util.Calendar.HOUR, 0) ;
+    cal.set(java.util.Calendar.MINUTE, 0) ;
+    DateFormat df = new SimpleDateFormat(timeFormat) ;
+    DateFormat df2 = new SimpleDateFormat(TIMEFORMAT) ;
+    int time = 0 ;
+    while (time ++ < 24*60/(15)) {
+      options.add(new SelectItemOption<String>(df.format(cal.getTime()), df2.format(cal.getTime()))) ;
+      cal.add(java.util.Calendar.MINUTE, timeInteval) ;
+    }
+    return options ;
+  }
   public static String parse(Date date, String timeFormat) throws Exception {
     DateFormat df = new SimpleDateFormat(timeFormat) ;
     return df.format(date) ;    

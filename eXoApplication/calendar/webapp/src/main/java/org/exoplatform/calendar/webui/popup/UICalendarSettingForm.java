@@ -16,7 +16,6 @@ import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
-import org.exoplatform.calendar.webui.UICalendarWorkingContainer;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -106,9 +105,10 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
     setting.addUIFormInput(new UIFormSelectBox(LOCATION, LOCATION, getLocales())) ;
     setting.addUIFormInput(new UIFormSelectBox(TIMEZONE, TIMEZONE, getTimeZones())) ;
     setting.addUIFormInput(new UIFormCheckBoxInput<Boolean>(ISSHOWWORKINGTIME, ISSHOWWORKINGTIME, false)) ;
-    List<SelectItemOption<String>> options = CalendarUtils.getTimesSelectBoxOptions("HH:mm") ;
-    setting.addUIFormInput(new UIFormSelectBox(WORKINGTIME_BEGIN, WORKINGTIME_BEGIN, options)) ;
-    setting.addUIFormInput(new UIFormSelectBox(WORKINGTIME_END, WORKINGTIME_END, options)) ;
+    List<SelectItemOption<String>> startTimes = CalendarUtils.getTimesSelectBoxOptions("HH:mm", 30) ;
+    List<SelectItemOption<String>> endTimes = CalendarUtils.getTimesSelectBoxOptions("HH:mm", 30) ;
+    setting.addUIFormInput(new UIFormSelectBox(WORKINGTIME_BEGIN, WORKINGTIME_BEGIN, startTimes)) ;
+    setting.addUIFormInput(new UIFormSelectBox(WORKINGTIME_END, WORKINGTIME_END, endTimes)) ;
     
     setting.addUIFormInput(new UIFormStringInput(BASE_URL, BASE_URL, null)) ;
     addUIFormInput(setting) ;
@@ -120,9 +120,7 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
   private List<SelectItemOption<String>> getTimeZones() {
     List<SelectItemOption<String>> timeZones = new ArrayList<SelectItemOption<String>>() ;
     for (String timeZone : TimeZone.getAvailableIDs()){
-      //java.util.Calendar.getAvailableLocales()
       TimeZone tz = TimeZone.getTimeZone(timeZone) ;
-      //String displayName = tz.getDisplayName() ;
       timeZones.add(new SelectItemOption<String>( tz.getID() , tz.getID()));
     }
     return timeZones;
@@ -272,6 +270,7 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
       CalendarService cservice = CalendarUtils.getCalendarService() ;
       cservice.saveCalendarSetting(Util.getPortalRequestContext().getRemoteUser(), calendarSetting) ;
       UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
+      calendarPortlet.setCalendarSetting(calendarSetting) ;
       calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class).refresh() ;
       calendarPortlet.cancelAction() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class)) ;
