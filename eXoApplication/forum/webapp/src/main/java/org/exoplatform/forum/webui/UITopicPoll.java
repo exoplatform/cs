@@ -83,14 +83,16 @@ public class UITopicPoll extends UIForm  {
   }
   
   private boolean getIsVoted() throws Exception {
-    Poll poll = poll_ ;
+    Poll poll = forumService.getPoll(categoryId, forumId, topicId) ;
     String userVote = Util.getPortalRequestContext().getRemoteUser() ;
     String[] userVotes = poll.getUserVote() ;
     for (String string : userVotes) {
       if(string.equalsIgnoreCase(userVote)) return true ;
     }
+    if(poll_.getTimeOut() > 0) {
     Date today = new Date() ;
     if((today.getTime() - this.poll_.getCreatedDate().getTime()) >= poll_.getTimeOut()*86400000) return true ;
+    }
     return false ;
   }
   
@@ -177,6 +179,10 @@ public class UITopicPoll extends UIForm  {
   static public class RemovePollActionListener extends EventListener<UITopicPoll> {
     public void execute(Event<UITopicPoll> event) throws Exception {
       UITopicPoll topicPoll = event.getSource() ;
+//      UIApplication uiApp = topicPoll.getAncestorOfType(UIApplication.class) ;
+//      uiApp.addMessage(new ApplicationMessage("UITopicPoll.msg.notCheck", null, ApplicationMessage.WARNING)) ;
+      topicPoll.forumService.removePoll(topicPoll.categoryId, topicPoll.forumId, topicPoll.topicId) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(topicPoll.getParent()) ;
     }
   }
   

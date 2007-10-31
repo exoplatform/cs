@@ -140,8 +140,8 @@ public class ForumServiceImpl implements ForumService{
     return storage_.getPoll(categoryId, forumId, topicId) ;
   }
 
-  public Poll removePoll(String categoryId, String forumId, String topicId, String pollId) throws Exception {
-    return storage_.removePoll(categoryId, forumId, topicId, pollId);
+  public Poll removePoll(String categoryId, String forumId, String topicId) throws Exception {
+    return storage_.removePoll(categoryId, forumId, topicId);
   }
 
   public void savePoll(String categoryId, String forumId, String topicId, Poll poll, boolean isNew, boolean isVote) throws Exception {

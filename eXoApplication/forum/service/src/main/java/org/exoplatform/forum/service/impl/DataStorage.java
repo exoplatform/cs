@@ -51,7 +51,7 @@ public interface DataStorage {
 
    public Poll getPoll(String categoryId, String forumId, String topicId)throws Exception;
    public void savePoll(String categoryId, String forumId, String topicId, Poll poll, boolean isNew, boolean isVote)throws Exception;
-   public Poll removePoll(String categoryId, String forumId, String topicId, String pollId)throws Exception;
+   public Poll removePoll(String categoryId, String forumId, String topicId)throws Exception;
 
    //public Object getObjectByPath(String path) throws Exception ;
    public List getPage(long page, JCRPageList pageList) throws Exception ;

@@ -9,6 +9,7 @@
 		String question = poll.getQuestion() ;
 		int timeOut = (int)poll.getTimeOut() ;
 		boolean displayVoted = uicomponent.getIsVoted();
+		String confirmDelete =  _ctx.appRes("UITopicPoll.msg.confirmClose"); 
 	%>
 	<% uiform.begin() %>
 	<div class="ForumToolbar">
@@ -21,7 +22,7 @@
 	  			</div>
 	  			<div class="Icon DownArrow1Icon"><span></span></div>
 	  			<div class="SeparatorLine"><span></span></div>
-	  			<a class="Icon ClosePoll">Close Poll</a>
+	  			<a class="Icon ClosePoll" href="javascript:if(confirm('$confirmDelete')){<%=uicomponent.event("RemovePoll");}%>">Close Poll</a>
 	  			<div class="SeparatorLine"><span></span></div>
 	  			<a class="Icon EditPoll" href="<%=uicomponent.event("EditPoll")%>">Edit Poll</a>
 	  			<div style="clear: both"><span></span></div>

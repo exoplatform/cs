@@ -4,11 +4,9 @@
  **************************************************************************/
 package org.exoplatform.forum.service.impl;
 
-import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.jcr.Node;
@@ -19,7 +17,6 @@ import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 
-import org.apache.poi.hssf.record.formula.PowerPtg;
 import org.exoplatform.forum.service.Category;
 import org.exoplatform.forum.service.Forum;
 import org.exoplatform.forum.service.ForumLinkData;
@@ -661,7 +658,7 @@ public class JCRDataStorage implements DataStorage {
     return null ;
   }
   
-  public Poll removePoll(String categoryId, String forumId, String topicId, String pollId) throws Exception {
+  public Poll removePoll(String categoryId, String forumId, String topicId) throws Exception {
     Node forumHomeNode = getForumHomeNode() ;
     Poll poll = new Poll() ;
     if(forumHomeNode.hasNode(categoryId)) {
@@ -670,7 +667,9 @@ public class JCRDataStorage implements DataStorage {
         poll = getPoll(categoryId, forumId, topicId) ;
         Node forumNode = CategoryNode.getNode(forumId) ;
         Node topicNode = forumNode.getNode(topicId) ;
+        String pollId = topicId.replaceFirst("TOPIC", "POLL") ;
         topicNode.getNode(pollId).remove() ;
+        topicNode.setProperty("exo:isPoll", false) ;
         forumHomeNode.save() ;
         forumHomeNode.getSession().save() ;
         return poll;

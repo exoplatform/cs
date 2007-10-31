@@ -24,6 +24,7 @@ import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.exception.MessageException;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
+import org.exoplatform.webui.form.UIFormInput;
 import org.exoplatform.webui.form.UIFormMultiValueInputSet;
 import org.exoplatform.webui.form.UIFormStringInput;
 
@@ -138,8 +139,8 @@ public class UIPollForm extends UIForm implements UIPopupComponent {
       if(sizeOption >= 2 && sizeOption <= 10) {
         String userName = Util.getPortalRequestContext().getRemoteUser() ;
         String[] vote = new String[sizeOption]  ;
-        String[] oldVote = uiForm.poll.getVote() ;
         if(uiForm.isUpdate) {
+          String[] oldVote = uiForm.poll.getVote() ;
           for(int j = 0; j < sizeOption; j++) {
             if( j < oldVote.length) {
               vote[j] = oldVote[j];
@@ -194,6 +195,9 @@ public class UIPollForm extends UIForm implements UIPopupComponent {
       list.add("");
       list.add("");
       uiForm.initMultiValuesField(list);
+      uiForm.getUIStringInput(FIELD_QUESTION_INPUT).setValue("") ;
+      uiForm.getUIStringInput(FIELD_TIMEOUT_INPUT).setValue("0") ;
+      uiForm.getUIFormCheckBoxInput(FIELD_MULTIVOTE_CHECKBOX).setChecked(false) ;
     }
   }
   
