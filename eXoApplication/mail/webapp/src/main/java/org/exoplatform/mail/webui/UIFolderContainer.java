@@ -11,7 +11,6 @@ import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
-import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.webui.popup.UIFolderForm;
 import org.exoplatform.mail.webui.popup.UIPopupAction;
 import org.exoplatform.mail.webui.popup.UIRenameFolderForm;
@@ -34,6 +33,7 @@ import org.exoplatform.webui.event.EventListener;
         @EventConfig(listeners = UIFolderContainer.AddFolderActionListener.class),
         @EventConfig(listeners = UIFolderContainer.RenameFolderActionListener.class),
         @EventConfig(listeners = UIFolderContainer.RemoveFolderActionListener.class, confirm="UIFolderContainer.msg.confirm-remove-folder"),
+        @EventConfig(listeners = UIFolderContainer.MarkReadActionListener.class),
         @EventConfig(listeners = UIFolderContainer.EmptyFolderActionListener.class)
     }
 )
@@ -152,4 +152,26 @@ public class UIFolderContainer extends UIContainer {
       }
     }
   }
+  
+  static public class MarkReadActionListener extends EventListener<UIFolderContainer> {
+    public void execute(Event<UIFolderContainer> event) throws Exception {
+      String folderId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      UIFolderContainer uiFolderContainer = event.getSource() ;
+      UIMailPortlet uiPortlet = uiFolderContainer.getAncestorOfType(UIMailPortlet.class);
+      String username = uiPortlet.getCurrentUser();
+      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
+      List<Message> messageList = mailSrv.getMessagePageListByFolder(username, accountId, folderId).getAll(username);
+      Folder folder = mailSrv.getFolder(username, accountId, folderId);
+      for (Message message : messageList) {
+        if (message.isUnread()) {
+          message.setUnread(false);
+          mailSrv.saveMessage(username, accountId, message, false);
+          folder.setNumberOfUnreadMessage(folder.getNumberOfUnreadMessage() - 1);
+        }
+      }
+      mailSrv.saveUserFolder(username, accountId, folder);
+    }
+  }
+  
 }
