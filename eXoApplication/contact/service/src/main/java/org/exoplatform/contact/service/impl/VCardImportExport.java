@@ -7,6 +7,7 @@ package org.exoplatform.contact.service.impl;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -40,33 +41,26 @@ import org.exoplatform.container.PortalContainer;
  * Author : Huu-Dung Kieu huu-dung.kieu@bull.be 16 oct. 07
  */
 public class VCardImportExport implements ContactImportExport {
-
   private static String          eXoGender   = "EXO-GENDER";
-
   private static String          eXoExoId    = "EXO-EXOID";
-
   private static String          eXoAolId    = "EXO-AOLID";
-
   private static String          eXoGoogleId = "EXO-GOOGLEID";
-
   private static String          eXoIcqId    = "EXO-ICQID";
-
   private static String          eXoIcrId    = "EXO-ICRID";
-
   private static String          eXoSkypeId  = "EXO-SKYPEID";
-
   private static String          eXoMsnId    = "EXO-MSNID";
-
   private static String          eXoYahooId  = "EXO-YAHOOID";
+  
+  private static String ENCODING = "UTF-8";
 
   public OutputStream exportContact(String username, List<String> contactIds) throws Exception {
 
     ContactIOFactory ciof = Pim.getContactIOFactory();
     ContactModelFactory cmf = Pim.getContactModelFactory();
     ContactMarshaller marshaller = ciof.createContactMarshaller();
-
+    
     // if needed, we'll change or remove the encoding
-    marshaller.setEncoding("UTF-8");
+    marshaller.setEncoding(ENCODING);
 
     // converting eXo contacts to Pim contacts
     ContactService contactService = (ContactService) PortalContainer
@@ -116,7 +110,6 @@ public class VCardImportExport implements ContactImportExport {
           is.read(data);
           photo.setContentType(attachment.getMimeType());
           photo.setData(data);
-
           pid.setPhoto(photo);
         }
       }
@@ -158,7 +151,6 @@ public class VCardImportExport implements ContactImportExport {
       }
 
       // phone numbers
-
       addPhoneNumber(cmf, comm, contact.getMobilePhone(), false, false, true);
       addPhoneNumber(cmf, comm, contact.getHomePhone1(), true, false, false);
       addPhoneNumber(cmf, comm, contact.getHomePhone2(), true, false, false);
@@ -224,6 +216,10 @@ public class VCardImportExport implements ContactImportExport {
     addExtensionHandler(eXoMsnId);
     addExtensionHandler(eXoYahooId);
     
+    unmarshaller.setStrict(false);
+    
+    unmarshaller.setEncoding(ENCODING);
+    
     net.wimpi.pim.contact.model.Contact[] pimContacts = unmarshaller.unmarshallContacts(input);
 
     for (int index = 0; index < pimContacts.length; index++) {
@@ -258,7 +254,7 @@ public class VCardImportExport implements ContactImportExport {
       contact.setNickName(nickName);
 
       contact.setBirthday(identity.getBirthDate());
-
+      
       ContactAttachment attachment = new ContactAttachment();
       Image photo = identity.getPhoto();
       if (photo != null) {
@@ -411,8 +407,10 @@ public class VCardImportExport implements ContactImportExport {
 
       contact.setNote(pimContacts[index].getNote());
       
-      if (pimContacts[index].getCurrentRevisionDate() != null)
-        contact.setLastUpdated(pimContacts[index].getCurrentRevisionDate());
+      Date revisionDate = pimContacts[index].getCurrentRevisionDate();
+      
+      if (revisionDate != null)
+        contact.setLastUpdated(revisionDate);
 
       // ////////////////////////////////
       // Now we have the contact object
