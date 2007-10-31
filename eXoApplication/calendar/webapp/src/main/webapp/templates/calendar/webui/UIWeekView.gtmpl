@@ -88,9 +88,9 @@
 									enddate = dtf.format(event.toDateTime) ;
 									color = uicomponent.getColors().get(event.getCalendarId()) ;
 								%>
-									 <div class="EventContainer $color" style="height: 22px;" title="$begindate -> $enddate"  >
-									 	$event.summary
-									 </div> 
+										 <div class="EventContainer EventAlldayContainer $color" calType="$event.calType"  eventid="$event.id" calid="$event.calendarId" starttime="$begindate" endtime="$enddate"  style="height: 22px;" title="$begindate -> $enddate"  >
+										 	$event.summary
+										 </div> 
 								<%}%>
 							</td>
 					</tr>
@@ -123,7 +123,7 @@
 									actionLink =  uicomponent.event("SaveEvent",event.getId()+"&calendarId="+event.getCalendarId()+"&startTime=beginTime&finishTime=endTime") ;
 								%>
 
-									<div class="EventContainerBoder  $color" style="position:absolute ;"  eventid="$event.id" calid="$event.calendarId" actionlink="$actionLink" unselectable="on" starttime="$beginTime" endtime="$endTime">
+									<div class="EventContainerBoder  $color" style="position:absolute ;" calType="$event.calType"  eventid="$event.id" calid="$event.calendarId" actionlink="$actionLink" unselectable="on" starttime="$beginTime" endtime="$endTime">
 										<div class="EventContainerBar EventTitle" title="$begindate -> $enddate " ><p>$begin -> $end</p></div>
 										<div class="EventContainer">$event.summary</div>
 										<div class="ResizeEventContainer"><span></span></div>
@@ -188,7 +188,7 @@
 				      			<div class="UIRightPopupMenuContainer">
 				      			<%
 				      				for(String act : uicomponent.getQuickEditMenu()) {
-				      				link = uicomponent.event(act,"id&$uicomponent.CALENDARID=calId") ;
+				      				link = uicomponent.event(act,"id&$uicomponent.CALENDARID=calId&calType=caltype") ;
 				      			%>
 				      				<a href="$link" style="display:none;">
 				          				<div class="ItemIcon $act">$act</div>

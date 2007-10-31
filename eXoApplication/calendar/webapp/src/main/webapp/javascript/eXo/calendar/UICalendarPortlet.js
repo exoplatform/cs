@@ -534,10 +534,10 @@ UICalendarPortlet.prototype.dayViewCallback = function(evt){
 		} ;
 		if (calType) {
 			map = {
-			"objectId\s*=\s*[A-Za-z0-9_]*(?=&|'|\")":"objectId=" + eventId ,
-			"calendarId\s*=\s*[A-Za-z0-9_]*(?=&|'|\")":"calendarId=" + calendarId,
-			"calType\s*=\s*[A-Za-z0-9_]*(?=&|'|\")":"calType=" + calType
-		} ;
+				"objectId\s*=\s*[A-Za-z0-9_]*(?=&|'|\")":"objectId=" + eventId ,
+				"calendarId\s*=\s*[A-Za-z0-9_]*(?=&|'|\")":"calendarId=" + calendarId,
+				"calType\s*=\s*[A-Za-z0-9_]*(?=&|'|\")":"calType=" + calType
+			} ;
 		}
 	}
 	eXo.webui.UIContextMenu.changeAction(eXo.webui.UIContextMenu.menuElement, map) ;
@@ -552,10 +552,18 @@ UICalendarPortlet.prototype.weekViewCallback = function(evt) {
 		var obj = (DOMUtil.findAncestorByClass(src, "EventContainerBoder"))? DOMUtil.findAncestorByClass(src, "EventContainerBoder") : src ;
 		var eventId = obj.getAttribute("eventId") ;
 		var calendarId = obj.getAttribute("calId") ;
+		var calType = obj.getAttribute("calType") ;
 		map = {
-			"objectId\s*=\s*[A-Za-z0-9_]*(?=&|'|\")":"objectId="+eventId,
+			"objectId\s*=\s*[A-Za-z0-9_]*(?=&|'|\")":"objectId="+eventId ,
 			"calendarId\s*=\s*[A-Za-z0-9_]*(?=&|'|\")":"calendarId="+calendarId
 		} ;
+		if (calType) {
+			map = {
+				"objectId\s*=\s*[A-Za-z0-9_]*(?=&|'|\")":"objectId=" + eventId ,
+				"calendarId\s*=\s*[A-Za-z0-9_]*(?=&|'|\")":"calendarId=" + calendarId,
+				"calType\s*=\s*[A-Za-z0-9_]*(?=&|'|\")":"calType=" + calType
+			} ;
+		}
 		obj = DOMUtil.findAncestorByTagName(src, "td").getAttribute("startTime") ;		
 		for(var i = 0 ; i < items.length ; i ++ ) {
 			if (items[i].style.display == "none") {

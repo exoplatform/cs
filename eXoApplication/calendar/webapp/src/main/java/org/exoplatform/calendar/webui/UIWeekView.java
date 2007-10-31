@@ -142,12 +142,11 @@ public class UIWeekView extends UICalendarView {
 
   static  public class QuickAddActionListener extends EventListener<UIWeekView> {
     public void execute(Event<UIWeekView> event) throws Exception {
-      UIWeekView calendarview = event.getSource() ;
       System.out.println("QuickAddActionListener");
+      UIWeekView calendarview = event.getSource() ;
       String type = event.getRequestContext().getRequestParameter(OBJECTID) ;
       String startTime = event.getRequestContext().getRequestParameter("startTime") ;
       String finishTime = event.getRequestContext().getRequestParameter("finishTime") ;
-      if(CalendarUtils.isEmpty(finishTime)) finishTime = startTime ; 
       UICalendarPortlet uiPortlet = calendarview.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
       UIQuickAddEvent uiQuickAddEvent = uiPopupAction.activate(UIQuickAddEvent.class, 600) ;
@@ -158,8 +157,15 @@ public class UIWeekView extends UICalendarView {
         uiQuickAddEvent.setEvent(false) ;
         uiQuickAddEvent.setId("UIQuickAddTask") ;
       }
-      uiQuickAddEvent.init(calendarview.getCalendarSetting(), startTime, finishTime) ;
-      uiQuickAddEvent.update("0", null) ;
+      try {
+        Long.parseLong(startTime) ;
+        Long.parseLong(finishTime) ;
+      }catch (Exception e) {
+        startTime = null ;
+        finishTime = null ;
+      }
+      uiQuickAddEvent.init(uiPortlet.getCalendarSetting(), startTime, finishTime) ;
+      uiQuickAddEvent.update(CalendarUtils.PRIVATE_TYPE, null) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
     }
