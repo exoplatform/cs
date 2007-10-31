@@ -159,9 +159,12 @@ public class UIWeekView extends UICalendarView {
       }
       try {
         Long.parseLong(startTime) ;
-        Long.parseLong(finishTime) ;
       }catch (Exception e) {
         startTime = null ;
+      }
+      try {
+        Long.parseLong(finishTime) ;
+      }catch (Exception e) {
         finishTime = null ;
       }
       uiQuickAddEvent.init(uiPortlet.getCalendarSetting(), startTime, finishTime) ;
