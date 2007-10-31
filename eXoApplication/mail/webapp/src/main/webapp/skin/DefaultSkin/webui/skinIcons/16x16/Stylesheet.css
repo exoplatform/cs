@@ -119,8 +119,8 @@
 	background: url('icons/MarkReadIcon.gif') no-repeat;
 }
 
-.MarkReadIcon {
-	background: url('icons/MarkReadIcon.gif') no-repeat;
+.MarkUnreadIcon {
+	background: url('icons/MarkUnreadIcon.gif') no-repeat left;
 }
 
 .RemoveStarIcon {

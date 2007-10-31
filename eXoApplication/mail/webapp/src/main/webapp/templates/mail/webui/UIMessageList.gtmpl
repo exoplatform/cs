@@ -48,7 +48,7 @@
 	                    <div class="ItemIcon MarkReadIcon">Mark as read</div>
 	                  </a>
 	                  <a class="MenuItem ItemHidden" href="<%=uicomponent.event("MarkAsUnRead")%>">   
-	                    <div class="ItemIcon MarkReadIcon">Mark as unread</div>
+	                    <div class="ItemIcon MarkUnreadIcon">Mark as unread</div>
 	                  </a>
 	                  <a class="MenuItem" href="<%=uicomponent.event("AddStar")%>">   
 	                    <div class="ItemIcon StarredIcon">Add star</div>
@@ -106,10 +106,10 @@
 	                    <div class="ItemIcon AllMessagesIcon">All messages</div>
 	                  </a>
 	                  <a class="MenuItem" href="<%=uicomponent.event("ViewStarred")%>">   
-	                    <div class="ItemIcon StaredMessagesIcon">Starred messages</div>
+	                    <div class="ItemIcon StarredIcon">Starred messages</div>
 	                  </a>
 	                  <a class="MenuItem" href="<%=uicomponent.event("ViewUnstarred")%>">   
-	                    <div class="ItemIcon UnreadMessagesIcon">Unstarred messages</div>
+	                    <div class="ItemIcon UnStarredIcon">Unstarred messages</div>
 	                  </a>
 	                  <a class="MenuItem" href="<%=uicomponent.event("ViewUnread")%>">   
 	                    <div class="ItemIcon UnreadMessagesIcon">Unread messages</div>
@@ -174,7 +174,6 @@
   
   <% /*End Message Action Bar*/ %>
   
-  <%if (uicomponent.getMessageList().size() > 0) {%>
   <div class="UIMessageList" >
   	<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
     	<thead>

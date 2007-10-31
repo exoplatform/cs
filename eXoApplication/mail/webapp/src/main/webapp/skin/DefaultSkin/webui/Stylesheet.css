@@ -196,12 +196,7 @@
 }
 
 .UIMailPortlet .UINavigationContainer .UIFolderContainer a {
-	color: #1e1f21;
 	display: block;
-}
-
-.UIMailPortlet .UINavigationContainer .UIFolderContainer a:hover {
-	color: #126ca5;
 }
 
 .UIMailPortlet .UINavigationContainer .UIFolderContainer .Icon {
@@ -274,11 +269,6 @@
 	display: block;
 }
 
-.UIMailPortlet .UITagContainer .TagsList a:hover {
-	color: #126ca5;
-}
-
-
 /*********************************MailContentWorkingArea*************************************/
 
 
@@ -309,7 +299,7 @@
 
 .UIMailPortlet .MailWorkingWorkspace  .UIActionBar a:hover.ControlButton {
 	background: url('background/ControlButtonBG1x26.gif') repeat-x ;
-	color: #126ca5; border: 1px solid #cbcbcb;
+	color: #058ee6; border: 1px solid #cbcbcb;
 	height: 24px;
 }
 
@@ -395,7 +385,7 @@
 	margin: 0px;
 }
 
-.UIMailPortlet .MailWorkingWorkspace  .UIMessageActionsBar a {
+.UIMailPortlet .MailWorkingWorkspace  a {
 	color: #000000;
 }
 
@@ -406,8 +396,8 @@
 	background-position: center;
 }
 
-.UIMailPortlet .MailWorkingWorkspace  .UIMessageActionsBar a:hover {
-	color: #126ca5;
+.UIMailPortlet .MailWorkingWorkspace a:hover {
+	color: #058ee6;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .UIMessageActionsBar .MoreActionsIcon {
