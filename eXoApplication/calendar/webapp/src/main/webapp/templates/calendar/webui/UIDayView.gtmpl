@@ -26,10 +26,7 @@
 	String endWorkingTime = uicomponent.getEndTime() ;
 	def hoursMap = uicomponent.getTimeSteps(timeFormat, timeInterval) ;
 	boolean isShowWorkingTime = uicomponent.isShowWorkingTime() ;
-	rowNumbleBegin = 0 ;
-	rowNumbleEnd = 0 ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.showEvent() ;');
-  
 %>
 <div class="UIDayView">
   <div class="TitleBar">
@@ -96,11 +93,10 @@
 	            		style = "" ;
 									if(isShowWorkingTime) {style = "display:none;" ;}	
 	            		def hours = hoursMap.values() ;
-	            		count = 0 ;
 	            		for(h in hours) {
 	            			if(isShowWorkingTime) {
-		            			if(h.equals(startWorkingTime)) {style = "" ;rowNumbleBegin = count;}
-		            			if(h.equals(endWorkingTime)) {style = "display:none;" ;rowNumbleEnd = count;}
+		            			if(h.equals(startWorkingTime)) {style = "" ;}
+		            			if(h.equals(endWorkingTime)) {style = "display:none;" ;}
 		            		}
 	            			cssClass = "TdDotLine" ;
 	            			if(flag) {cssClass = "TdLine" ;} ;
@@ -111,12 +107,10 @@
                     </td>
                   </tr>
                   <%
-                  count ++ ;
 	            		flag = !flag ;
 	            		}%>
                 </tbody>
               </table>
-             $rowNumbleBegin ->>	$rowNumbleEnd
             </td>
             <td>
               <div class="EventBoard" style="position : relative ;">
@@ -156,6 +150,7 @@
                     <tbody>
                       <%
 			            		flag = true ;
+			            		style = "" ;
 			            		if(isShowWorkingTime) {style = "display:none;" ;}
 			            		def hoursSteps = hoursMap.keySet() ;
 			            		for(h in hoursSteps) {

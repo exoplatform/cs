@@ -21,7 +21,9 @@
 	timeFormat = uicomponent.getTimeFormat() ;
 	dateTimeFormat = uicomponent.getDateTimeFormat() ;
 	timeInterval = uicomponent.getTimeInterval() ;
-	
+	String startWorkingTime = uicomponent.getStartTime() ;
+	String endWorkingTime = uicomponent.getEndTime() ;
+	boolean isShowWorkingTime = uicomponent.isShowWorkingTime() ;
 	DateFormat df = new SimpleDateFormat(dateFormat) ;
 	DateFormat tf = new SimpleDateFormat(timeFormat) ;
 	DateFormat dtf = new SimpleDateFormat(dateTimeFormat) ;
@@ -136,16 +138,21 @@
 					</tr>
 					<% 
 					boolean flag = false ;
+					style = "" ;
+					if(isShowWorkingTime) {style = "display:none;" ;}	
 					for(time in uicomponent.getDisplayTimes(timeFormat, timeInterval)){
+						if(isShowWorkingTime) {
+        			if(time.equals(startWorkingTime)) {style = "" ;}
+        			if(time.equals(endWorkingTime)) {style = "display:none;" ;}
+        		}
 						if(flag) {styleClass = "TdDotLine" ;}
 						else {styleClass = "TdLine"}
 					%>
-					<tr>
+					<tr style="$style">
 						<td class="TdTime">
 							<div  class="TdTime"><%if(!flag) {println time;}%></div>
 						</td>
 							<%
-					 	 
 					 		for(cl in uicomponent.getDaysOfWeek(weekNumber)) {
 					 			day = cl.get(Calendar.DATE) ;
 					 			month = cl.get(Calendar.MONTH) ;
