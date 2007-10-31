@@ -12,8 +12,12 @@
 	rcontext.getJavascriptManager().addJavascript("eXo.contact.UIContactPortlet.showContextMenu() ;") ;
 	//rcontext.getJavascriptManager().addJavascript("eXo.contact.UIContactDragDrop.init() ;") ;
 	uiform.begin()
+	boolean isDisplaySearchResult = uicomponent.isDisplaySearchResult() ;
 	if(uicomponent.getViewContactsList()) {
+		if(isDisplaySearchResult) {
 %>
+			<div class="Result">Search result</div>
+	<% } else { %>
 				<div class="UIContactActionsBar">
 					<a href="<%=uicomponent.event("MoveContacts")%>" class="ControlButton">
 						<div class="IconHolder MoveIcon">Move</div>
@@ -46,7 +50,7 @@
 			          JCRPageList pageList = uicomponent.getContactPageList();
 			          String cssPreviousPage = "FloatBlockHidden";
 			          String cssNextPage = "FloatBlockHidden";
-			          String contactRange = "";
+			          String contactRange = "";			          
 			          if (pageList != null && (uicomponent.getContacts().length != 0)) {
 			            currentPage = pageList.getCurrentPage();
 			            availablePage = pageList.getAvailablePage() ;
@@ -73,7 +77,10 @@
 					</div>
 					<div style="clear: left;"><span/></div>
 				</div>
-				
+			<%	
+				}
+			%>	
+							
 				<div class="UIMessageList" >
 					<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
 	  				<thead>
@@ -167,6 +174,31 @@
 			     	<% } %>  
   	   			</tbody>
 					</table>
+					
+				<%if(isDisplaySearchResult) {%>
+				<div class="UIAction"> 
+					<table class="ActionContainer" align="center">
+						<tr>
+							<td align="center">
+					      <% 
+					        	 String actionLabel = "CloseSearch" ; //_ctx.appRes(uicomponent.getName() + ".action." + action) ;
+					           String link = uicomponent.event("CloseSearch") ;
+					  		%>
+					  		<a href="$link" class="ActionButton LightBlueStyle">
+					        <div class="ButtonLeft">
+					          <div class="ButtonRight">
+					            <div class="ButtonMiddle">
+					              $actionLabel
+					            </div>
+					          </div>
+					        </div>
+					   		</a>
+					  	</td>
+					  </tr>  
+					</table>
+				</div>	
+				<% } %>	
+					
 					<% /*Begin Popup Menu*/ %>						
 
   				<div class="UIRightClickPopupMenu" id="UIContactListPopuMenu" eXoCallback="eXo.contact.UIContactPortlet.contactCallback">
@@ -231,7 +263,7 @@
 				  </div>
 
   		<% /*End Popup Menu*/ %>
-				</div>
+	</div>
 <% 
 	} else { 
 %>

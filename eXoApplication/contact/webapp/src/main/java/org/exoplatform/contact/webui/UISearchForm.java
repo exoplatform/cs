@@ -51,12 +51,14 @@ public class UISearchForm extends UIForm {
       filter.setText(text) ;
       DataPageList resultPageList = 
         ContactUtils.getContactService().searchContact(ContactUtils.getCurrentUser(), filter) ;
-      System.out.println("\n\n size contact:" + resultPageList.getAvailable() + "\n\n") ;
       UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
       uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class).setSelectedGroup(null) ;
-      uiContactPortlet.findFirstComponentOfType(UITags.class).setSelectedTag(null) ;
+      uiContactPortlet.findFirstComponentOfType(UITags.class).setSelectedTag(null) ;      
       UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
-      uiContacts.setContacts(resultPageList) ;      
+      uiContacts.setContacts(resultPageList) ;    
+      uiContacts.setDisplaySearchResult(true) ;
+      uiContacts.setSelectedContact(null) ;
+      uiContactPortlet.findFirstComponentOfType(UIContactPreview.class).setContact(null) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContactPortlet.getChild(UIWorkingContainer.class)) ;
     }
   }

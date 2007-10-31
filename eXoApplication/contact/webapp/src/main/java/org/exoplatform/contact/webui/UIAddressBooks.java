@@ -217,10 +217,11 @@ public class UIAddressBooks extends UIComponent {
       uiAddressBook.selectedGroup = groupId;
       ContactService contactService = ContactUtils.getContactService();
       UIContacts uiContacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class);
-      uiContacts.setSelectedGroup(groupId);
-      uiContacts.setSelectedTag(null);
       uiContacts.setContacts(contactService.getContactPageListByGroup(
           ContactUtils.getCurrentUser(), groupId));
+      uiContacts.setSelectedGroup(groupId);
+      uiContacts.setSelectedTag(null);
+      uiContacts.setDisplaySearchResult(false) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer);
     }
   }
@@ -235,9 +236,10 @@ public class UIAddressBooks extends UIComponent {
       uiAddressBook.selectedGroup = groupId;
       ContactService contactService = ContactUtils.getContactService();
       UIContacts uiContacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class);
+      uiContacts.setContacts(contactService.getSharedContactsByGroup(groupId));
       uiContacts.setSelectedGroup(groupId);
       uiContacts.setSelectedTag(null);
-      uiContacts.setContacts(contactService.getSharedContactsByGroup(groupId));
+      uiContacts.setDisplaySearchResult(false) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer);
     }
   }

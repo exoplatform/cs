@@ -299,6 +299,18 @@
 	margin-left: 225px;
 }
 
+
+.UIContactPortlet .Result {
+	background: url('background/BgTitleBar1x24.gif') repeat-x;
+	border-left:1px solid #CCCCCC;
+	border-right:1px solid #CCCCCC;
+	font-weight:bold;
+	line-height:23px;
+	margin-right:5px;
+	text-align:center;
+}
+
+
 .UIContactPortlet .UIContactActionsBar {
 	background: url('background/BgTitleBar1x24.gif') repeat-x;
 	height: 24px;

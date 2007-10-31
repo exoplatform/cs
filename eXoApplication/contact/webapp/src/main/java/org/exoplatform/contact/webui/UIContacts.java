@@ -61,7 +61,8 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
         @EventConfig(listeners = UIContacts.NextPageActionListener.class),
         @EventConfig(listeners = UIContacts.LastPageActionListener.class),
         @EventConfig(listeners = UIContacts.ExportContactActionListener.class),
-        @EventConfig(listeners = UIContacts.CancelActionListener.class)
+        @EventConfig(listeners = UIContacts.CancelActionListener.class),
+        @EventConfig(listeners = UIContacts.CloseSearchActionListener.class)
     }
 )
 
@@ -78,17 +79,21 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   public static String fullName = "fullName".intern() ;
   public static String emailAddress = "emailAddress".intern() ;
   public static String jobTitle = "jobTitle".intern() ;
+  private boolean isSearchResult = false ;
   
   public UIContacts() throws Exception { } 
   public String[] getActions() { return new String[] {"Cancel"} ; }
   public void activate() throws Exception { }
   public void deActivate() throws Exception { }
   
+  protected boolean isDisplaySearchResult() {return isSearchResult ;}
+  public void setDisplaySearchResult(boolean search) {isSearchResult = search ;}
+  
   public void setAscending(boolean isAsc) { isAscending_ = isAsc ; }
   public boolean isAscending() {return isAscending_ ; }
   public void setSortedBy(String s) { sortedBy_ = s ; }
   public String getSortedBy() { return sortedBy_ ; }
-  public String getViewQuery() {return viewQuery_ ;}
+  public String getViewQuery() {return viewQuery_ ; }
   public void setViewQuery(String view) {viewQuery_ = view ;}
   
   public void setContacts(JCRPageList pageList) throws Exception {
@@ -432,6 +437,32 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       if (ContactUtils.isEmpty(job2)) job2 = "" ;
       if (isAsc == true) return job1.compareToIgnoreCase(job2) ;
       else return job2.compareToIgnoreCase(job1) ;
+    }
+  }
+  
+  static public class CloseSearchActionListener extends EventListener<UIContacts> {
+    public void execute(Event<UIContacts> event) throws Exception {
+      UIContacts uiContacts = event.getSource() ;
+      uiContacts.setDisplaySearchResult(false) ;
+      ContactService contactService = ContactUtils.getContactService();
+      String username = ContactUtils.getCurrentUser() ;
+      String group = uiContacts.selectedGroup ;  
+      UIWorkingContainer uiWorkingContainer = uiContacts.getAncestorOfType(UIWorkingContainer.class) ;
+      UIAddressBooks addressBooks = uiWorkingContainer.findFirstComponentOfType(UIAddressBooks.class) ;
+      UITags uiTags = uiWorkingContainer.findFirstComponentOfType(UITags.class) ;
+      if (!ContactUtils.isEmpty(group)) {        
+        addressBooks.setSelectedGroup(group) ;
+        if (ContactUtils.isPublicGroup(group)) {
+          uiContacts.setContacts(contactService.getSharedContactsByGroup(group)); 
+        } else {
+          uiContacts.setContacts(contactService.getContactPageListByGroup(username, group));
+        }
+      } else if (!ContactUtils.isEmpty(uiContacts.selectedTag_)) {
+        uiTags.setSelectedTag(uiContacts.selectedTag_) ;
+        uiContacts.setContacts(ContactUtils.getContactService()
+          .getContactPageListByTag(username, uiContacts.selectedTag_)) ;
+      }      
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer) ;
     }
   }
   

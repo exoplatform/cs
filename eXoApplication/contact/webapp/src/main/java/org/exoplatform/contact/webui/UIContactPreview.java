@@ -40,7 +40,7 @@ public class UIContactPreview extends UIComponent  {
   
   public String getImageSource() throws Exception {
     DownloadService dservice = getApplicationComponent(DownloadService.class) ;
-    return ContactUtils.getImageSource(contact_, dservice) ;
+    return ContactUtils.getImageSource(contact_, dservice) ; 
   }
   
   static public class MaximizeContactPaneActionListener extends EventListener<UIContactPreview> {

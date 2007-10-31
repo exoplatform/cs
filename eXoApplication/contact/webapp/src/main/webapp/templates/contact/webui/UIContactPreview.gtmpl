@@ -12,7 +12,7 @@
 		<a class="MaximizeContactPane" title="Maximize Reading Pane"  href="<%=uicomponent.event("MaximizeContactPane")%>">
 		</a>
 		<span class="LastUpdated">
-				Last updated: <%=(contact.getLastUpdated()==null ? "" : contact.getLastUpdated())%>
+				Last updated: <%=(ContactUtils.isEmpty(contact.getLastUpdated().toString()) ? "" : contact.getLastUpdated())%>
 		</span>
 		<div style="clear:both;"><span></span></div>
 	</div>
@@ -35,8 +35,8 @@
 			  				%>
 								<img src="<%=(ContactUtils.isEmpty(imageLink) ? "/contact/skin/DefaultSkin/webui/background/Img2.gif": imageLink)%>" width=63 height=81 class="Avatar"/>						
 								<div class="Member">
-									<div class="State"><%=(contact.getFullName()==null ? "" : contact.getFullName())%></div>
-									<div class="Job"><%=(contact.getJobTitle()==null ? "" : contact.getJobTitle())%></div>
+									<div class="State"><%=(ContactUtils.isEmpty(contact.getFullName()) ? "" : contact.getFullName())%></div>
+									<div class="Job"><%=(ContactUtils.isEmpty(contact.getJobTitle()) ? "" : contact.getJobTitle())%></div>
 								</div>
 								<div style="clear: left;"><span></span></div>
 								<div class="InfoContainer">
@@ -45,25 +45,25 @@
 										<div class="LeftContent">
 											<div class="InfoItem">
 												<div class="InfoLabel">Nick name:</div>
-												<div class="Info"><%=(contact.getNickName()==null ? "_" : contact.getNickName())%></div>
+												<div class="Info"><%=(ContactUtils.isEmpty(contact.getNickName()) ? "_" : contact.getNickName())%></div>
 												<div style="clear: left;"><span></span></div>
 											</div>
 											<div class="InfoItem">
 												<div class="InfoLabel">Gender:</div>
-												<div class="Info"><%=(contact.getGender()==null ? "_" : contact.getGender())%></div>
+												<div class="Info"><%=(ContactUtils.isEmpty(contact.getGender()) ? "_" : contact.getGender())%></div>
 											  <div style="clear: left;"><span></span></div>
 											</div>
 										</div>
 										<div class="RightContent">
 											<div class="InfoItem">
 												<div class="InfoLabel1">Birthday:</div>
-												<div class="Info1"><%=(contact.getBirthday()==null ? "_" : ContactUtils.formatDate("MM/dd/yyyy", contact.getBirthday()))%></div>
+												<div class="Info1"><%=(ContactUtils.isEmpty(contact.getBirthday().toString()) ? "_" : ContactUtils.formatDate("MM/dd/yyyy", contact.getBirthday()))%></div>
 											</div>
 											<div class="InfoItem">
 												<div class="InfoLabel1">Email:</div>
 												<div class="Info1 Email">
 													<a href="<%=uicomponent.getParent().event("SendEmail", contact.getId())%>">
-														<%=(contact.getEmailAddress()==null ? "_" : contact.getEmailAddress())%>
+														<%=(ContactUtils.isEmpty(contact.getEmailAddress()) ? "_" : contact.getEmailAddress())%>
 													</a>
 												</div>
 												<div style="clear: left;"><span></span></div>
@@ -79,50 +79,50 @@
 										<div class="LeftContent">
 											<div class="InfoItem">
 												<div class="InfoLabel">Address:</div>
-												<div class="Info"><%=(contact.getWorkAddress()==null ? "_" : contact.getWorkAddress())%></div>
+												<div class="Info"><%=(ContactUtils.isEmpty(contact.getWorkAddress()) ? "_" : contact.getWorkAddress())%></div>
 											  <div style="clear: left;"><span></span></div>
 											</div>
 											<div class="InfoItem">
 												<div class="InfoLabel">City:</div>
-												<div class="Info"><%=(contact.getWorkCity()==null ? "_" : contact.getWorkCity())%></div>
+												<div class="Info"><%=(ContactUtils.isEmpty(contact.getWorkCity()) ? "_" : contact.getWorkCity())%></div>
 											  <div style="clear: left;"><span></span></div>
 											</div>
 											<div class="InfoItem">
 												<div class="InfoLabel">State/Province:</div>
-												<div class="Info"><%=(contact.getWorkStateProvince()==null ? "_" : contact.getWorkStateProvince())%></div>
+												<div class="Info"><%=(ContactUtils.isEmpty(contact.getWorkStateProvince()) ? "_" : contact.getWorkStateProvince())%></div>
 											  <div style="clear: left;"><span></span></div>
 											</div>
 											<div class="InfoItem">
 												<div class="InfoLabel">Postal Code:</div>
-												<div class="Info"><%=(contact.getWorkPostalCode()==null ? "_" : contact.getWorkPostalCode())%></div>
+												<div class="Info"><%=(ContactUtils.isEmpty(contact.getWorkPostalCode()) ? "_" : contact.getWorkPostalCode())%></div>
 												<div style="clear: left;"><span></span></div>
 											</div>
 											<div class="InfoItem">
 												<div class="InfoLabel">Country:</div>
-												<div class="Info"><%=(contact.getWorkCountry()==null ? "_" : contact.getWorkCountry())%></div>
+												<div class="Info"><%=(ContactUtils.isEmpty(contact.getWorkCountry()) ? "_" : contact.getWorkCountry())%></div>
 												<div style="clear: left;"><span></span></div>
 											</div>
 										</div>
 										<div class="RightContent">
 											<div class="InfoItem">
 												<div class="InfoLabel">Work Phone 1:</div>
-												<div class="Info"><%=(contact.getWorkPhone1()==null ? "_" : contact.getWorkPhone1())%></div>
+												<div class="Info"><%=(ContactUtils.isEmpty(contact.getWorkPhone1()) ? "_" : contact.getWorkPhone1())%></div>
 											</div>													
 											<div class="InfoItem">
 												<div class="InfoLabel">Work Phone 2:</div>
-												<div class="Info"><%=(contact.getWorkPhone2()==null ? "_" : contact.getWorkPhone2())%></div>
+												<div class="Info"><%=(ContactUtils.isEmpty(contact.getWorkPhone2()) ? "_" : contact.getWorkPhone2())%></div>
 											</div>													
 											<div class="InfoItem">
 												<div class="InfoLabel">Work Fax:</div>
-												<div class="Info"><%=(contact.getWorkFax()==null ? "_" : contact.getWorkFax())%></div>
+												<div class="Info"><%=(ContactUtils.isEmpty(contact.getWorkFax()) ? "_" : contact.getWorkFax())%></div>
 											</div>													
 											<div class="InfoItem">
 												<div class="InfoLabel">Mobile Phone:</div>
-												<div class="Info"><%=(contact.getMobilePhone()==null ? "_" : contact.getMobilePhone())%></div>
+												<div class="Info"><%=(ContactUtils.isEmpty(contact.getMobilePhone()) ? "_" : contact.getMobilePhone())%></div>
 											</div>													
 											<div class="InfoItem">
 												<div class="InfoLabel">Web Page:</div>
-												<div class="Info"><%=(contact.getWebPage()==null ? "_" : contact.getWebPage())%></div>
+												<div class="Info"><%=(ContactUtils.isEmpty(contact.getWebPage()) ? "_" : contact.getWebPage())%></div>
 												<div style="clear: left;"><span></span></div>
 											</div>													
 										</div>
@@ -136,41 +136,41 @@
 										<div class="LeftContent">
 											<div class="InfoItem">
 												<div class="InfoLabel">eXo Chat:</div>
-												<div class="Info"><%=(contact.getExoId()==null ? "_" : contact.getExoId())%></div>
+												<div class="Info"><%=(ContactUtils.isEmpty(contact.getExoId()) ? "_" : contact.getExoId())%></div>
 												<div style="clear: left;"><span></span></div>
 											</div>
 											<div class="InfoItem">
 												<div class="InfoLabel">Google:</div>
-												<div class="Info"><%=(contact.getGoogleId()==null ? "_" : contact.getGoogleId())%></div>
+												<div class="Info"><%=(ContactUtils.isEmpty(contact.getGoogleId()) ? "_" : contact.getGoogleId())%></div>
 												<div style="clear: left;"><span></span></div>
 											</div>
 											<div class="InfoItem">
 												<div class="InfoLabel">MSN:</div>
-												<div class="Info"><%=(contact.getMsnId()==null ? "_" : contact.getMsnId())%></div>
+												<div class="Info"><%=(ContactUtils.isEmpty(contact.getMsnId()) ? "_" : contact.getMsnId())%></div>
 												<div style="clear: left;"><span></span></div>
 											</div>
 											<div class="InfoItem">
 												<div class="InfoLabel">AOL/AIM:</div>
-												<div class="Info"><%=(contact.getAolId()==null ? "_" : contact.getAolId())%></div>
+												<div class="Info"><%=(ContactUtils.isEmpty(contact.getAolId()) ? "_" : contact.getAolId())%></div>
 												<div style="clear: left;"><span></span></div>
 											</div>
 										</div>
 										<div class="RightContent">
 											<div class="InfoItem">
 												<div class="InfoLabel1">Yahoo!:</div>
-												<div class="Info1"><%=(contact.getYahooId()==null ? "_" : contact.getYahooId())%></div>
+												<div class="Info1"><%=(ContactUtils.isEmpty(contact.getYahooId()) ? "_" : contact.getYahooId())%></div>
 											</div>													
 											<div class="InfoItem">
 												<div class="InfoLabel1">ICR:</div>
-												<div class="Info1"><%=(contact.getIcrId()==null ? "_" : contact.getIcrId())%></div>
+												<div class="Info1"><%=(ContactUtils.isEmpty(contact.getIcrId()) ? "_" : contact.getIcrId())%></div>
 											</div>													
 											<div class="InfoItem">
 												<div class="InfoLabel1">Skype:</div>
-												<div class="Info1"><%=(contact.getSkypeId()==null ? "_" : contact.getSkypeId())%></div>
+												<div class="Info1"><%=(ContactUtils.isEmpty(contact.getSkypeId()) ? "_" : contact.getSkypeId())%></div>
 											</div>													
 											<div class="InfoItem">
 												<div class="InfoLabel1">ICQ:</div>
-												<div class="Info1"><%=(contact.getIcqId()==null ? "_" : contact.getIcqId())%></div>
+												<div class="Info1"><%=(ContactUtils.isEmpty(contact.getIcqId()) ? "_" : contact.getIcqId())%></div>
 												<div style="clear: left;"><span></span></div>
 											</div>													
 										</div>
@@ -183,50 +183,50 @@
 										<div class="LeftContent">
 											<div class="InfoItem">
 												<div class="InfoLabel">Street:</div>
-												<div class="Info"><%=(contact.getHomeAddress()==null ? "_" : contact.getHomeAddress())%></div>
+												<div class="Info"><%=(ContactUtils.isEmpty(contact.getHomeAddress()) ? "_" : contact.getHomeAddress())%></div>
 												<div style="clear: left;"><span></span></div>
 											</div>
 											<div class="InfoItem">
 												<div class="InfoLabel">City:</div>
-												<div class="Info"><%=(contact.getHomeCity()==null ? "_" : contact.getHomeCity())%></div>
+												<div class="Info"><%=(ContactUtils.isEmpty(contact.getHomeCity()) ? "_" : contact.getHomeCity())%></div>
 												<div style="clear: left;"><span></span></div>
 											</div>
 											<div class="InfoItem">
 												<div class="InfoLabel">State/Province:</div>
-												<div class="Info"><%=(contact.getHomeState_province()==null ? "_" : contact.getHomeState_province())%></div>
+												<div class="Info"><%=(ContactUtils.isEmpty(contact.getHomeState_province()) ? "_" : contact.getHomeState_province())%></div>
 												<div style="clear: left;"><span></span></div>
 											</div>
 											<div class="InfoItem">
 												<div class="InfoLabel">Postal Code:</div>
-												<div class="Info"><%=(contact.getHomePostalCode()==null ? "_" : contact.getHomePostalCode())%></div>
+												<div class="Info"><%=(ContactUtils.isEmpty(contact.getHomePostalCode()) ? "_" : contact.getHomePostalCode())%></div>
 												<div style="clear: left;"><span></span></div>
 											</div>
 											<div class="InfoItem">
 												<div class="InfoLabel">Country/Region:</div>
-												<div class="Info"><%=(contact.getHomeCountry()==null ? "_" : contact.getHomeCountry())%></div>
+												<div class="Info"><%=(ContactUtils.isEmpty(contact.getHomeCountry()) ? "_" : contact.getHomeCountry())%></div>
 												<div style="clear: left;"><span></span></div>
 											</div>
 										</div>
 										<div class="RightContent">
 											<div class="InfoItem">
 												<div class="InfoLabel">Home Phone 1:</div>
-												<div class="Info"><%=(contact.getHomePhone1()==null ? "_" : contact.getHomePhone1())%></div>
+												<div class="Info"><%=(ContactUtils.isEmpty(contact.getHomePhone1()) ? "_" : contact.getHomePhone1())%></div>
 											</div>													
 											<div class="InfoItem">
 												<div class="InfoLabel">Home Phone 2:</div>
-												<div class="Info"><%=(contact.getHomePhone2()==null ? "_" : contact.getHomePhone2())%></div>
+												<div class="Info"><%=(ContactUtils.isEmpty(contact.getHomePhone2()) ? "_" : contact.getHomePhone2())%></div>
 											</div>													
 											<div class="InfoItem">
 												<div class="InfoLabel">Home Fax:</div>
-												<div class="Info"><%=(contact.getHomeFax()==null ? "_" : contact.getHomeFax())%></div>
+												<div class="Info"><%=(ContactUtils.isEmpty(contact.getHomeFax()) ? "_" : contact.getHomeFax())%></div>
 											</div>													
 											<div class="InfoItem">
 												<div class="InfoLabel">Mobile Phone:</div>
-												<div class="Info"><%=(contact.getMobilePhone()==null ? "_" : contact.getMobilePhone())%></div>
+												<div class="Info"><%=(ContactUtils.isEmpty(contact.getMobilePhone()) ? "_" : contact.getMobilePhone())%></div>
 											</div>													
 											<div class="InfoItem">
 												<div class="InfoLabel">Web Page:</div>
-												<div class="Info"><%=(contact.getPersonalSite()==null ? "_" : contact.getPersonalSite())%></div>
+												<div class="Info"><%=(ContactUtils.isEmpty(contact.getPersonalSite()) ? "_" : contact.getPersonalSite())%></div>
 											</div>													
 										</div>
 										<div style="clear: left;"><span></span></div>
@@ -238,7 +238,7 @@
 									<div class="Content">
 										<div class="LeftContent">								
 											<div class="Member">
-												<div class="Job"><%=(contact.getNote()==null ? "_" : contact.getNote())%></div>
+												<div class="Job"><%=(ContactUtils.isEmpty(contact.getNote()) ? "_" : contact.getNote())%></div>
 											</div>	
 										</div>
 									</div>
