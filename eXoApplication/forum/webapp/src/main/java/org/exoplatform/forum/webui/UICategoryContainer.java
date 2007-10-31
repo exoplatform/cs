@@ -22,11 +22,8 @@ public class UICategoryContainer extends UIContainer  {
   public UICategoryContainer() throws Exception {
     
     addChild(UIForumActionBar.class, null, null);
-    addChild(UICategories.class, null, null) ;
-    addChild(UICategory.class, null, null).setRendered(false) ;
-    addChild(UICategoriesSummary.class, null, null) ;
+    addChild(UICategories.class, null, null).setRendered(isRenderCategories) ;
+    addChild(UICategory.class, null, null).setRendered(!isRenderCategories) ;
+    addChild(UICategoriesSummary.class, null, null);
   } 
-  private boolean isRenderCategories () {
-  	return isRenderCategories ;
-  }
 }

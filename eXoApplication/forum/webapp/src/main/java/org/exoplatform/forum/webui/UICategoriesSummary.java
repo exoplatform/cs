@@ -18,8 +18,11 @@ import org.exoplatform.webui.core.UIContainer;
     template =  "app:/templates/forum/webui/UICategoriesSummary.gtmpl"
 )
 public class UICategoriesSummary extends UIContainer  {
+  private boolean isRenderInfo = true ;
   public UICategoriesSummary() throws Exception {
-  	addChild(UICategoryInfo.class, null, null);
+  	addChild(UICategoryInfo.class, null, null).setRendered(isRenderInfo);
   	addChild(UIForumIconState.class, null, null);
+    isRenderInfo = true ;
+    getChild(UIForumIconState.class).updateInfor(true) ;
   }  
 }

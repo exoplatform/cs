@@ -1,8 +1,23 @@
-<div class="UIForumExplainationIcons">
+<%  
+	import org.exoplatform.forum.webui.UIForumIconState ;
+%>
+	<%  
+		boolean isIconForum = uicomponent.getIsIconForum() ;
+	%>
+<div class="UIForumExplainationIcons" id="$uicomponent.id">
 	<div class="ForumContains">
+	<% if(isIconForum) { %>
+		<span style="float:left">Cai nay cua ben Category:</span>
 		<div class="IconPost ForumNormalIcon">Forum Contains New Posts</div>
 		<div class="IconPost ForumNewPostIcon">Forum Contains No New Posts</div>
 		<div class="IconPost ForumLockedIcon">Forum is Closed for Posting</div>
 		<div style="clear: left;"><span></span></div>
+	<% } else { %>
+		<span style="float:left">Cai nay cua ben Forum:</span>
+		<div class="IconPost ForumNormalIcon">Forum Contains New Posts</div>
+		<div class="IconPost ForumNewPostIcon">Forum Contains No New Posts</div>
+		<div class="IconPost ForumLockedIcon">Forum is Closed for Posting</div>
+		<div style="clear: left;"><span></span></div>
+	<% } %>
   </div>
 </div>

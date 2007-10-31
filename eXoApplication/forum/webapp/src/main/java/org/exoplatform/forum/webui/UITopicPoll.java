@@ -179,8 +179,6 @@ public class UITopicPoll extends UIForm  {
   static public class RemovePollActionListener extends EventListener<UITopicPoll> {
     public void execute(Event<UITopicPoll> event) throws Exception {
       UITopicPoll topicPoll = event.getSource() ;
-//      UIApplication uiApp = topicPoll.getAncestorOfType(UIApplication.class) ;
-//      uiApp.addMessage(new ApplicationMessage("UITopicPoll.msg.notCheck", null, ApplicationMessage.WARNING)) ;
       topicPoll.forumService.removePoll(topicPoll.categoryId, topicPoll.forumId, topicPoll.topicId) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(topicPoll.getParent()) ;
     }

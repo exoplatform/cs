@@ -63,6 +63,7 @@ public class UICategories extends UIContainer  {
 			categoryContainer.isRenderCategories = false ;
 			categoryContainer.getChild(UICategories.class).setRendered(false) ;
 			UICategory uiCategory = categoryContainer.getChild(UICategory.class) ;
+			categoryContainer.findFirstComponentOfType(UICategoryInfo.class).setRendered(false) ;
 			uiCategory.update(categoryId) ;
 			uiCategory.setRendered(true) ;
 		}

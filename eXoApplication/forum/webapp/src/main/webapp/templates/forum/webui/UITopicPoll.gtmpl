@@ -20,7 +20,8 @@
 	  				<span>Poll:</span>
 	  				<span>${question}?</span>
 	  			</div>
-	  			<div class="Icon DownArrow1Icon"><span></span></div>
+	  			
+	  			<div class="CollapseButton" title="Collapse" onclick="eXo.forum.UIForumPortlet.expandCollapse(this) ;"><span></span></div>
 	  			<div class="SeparatorLine"><span></span></div>
 	  			<a class="Icon ClosePoll" href="javascript:if(confirm('$confirmDelete')){<%=uicomponent.event("RemovePoll");}%>">Close Poll</a>
 	  			<div class="SeparatorLine"><span></span></div>
@@ -36,7 +37,7 @@
 		if(timeOut > 0) {
 			String timeOutDate = "" +  (poll.getCreatedDate() + timeOut) ;
 		%>
-		<div class="PollTime">This Poll will be closed on $timeOutDate</div>
+		<div class="PollTime"><%=_ctx.appRes("UITopicPoll.label.timeOutPoll")%>$timeOutDate</div>
 		<% } %>
 		<div class="UIFormTabPane">
 		  <div class="UITabPane">

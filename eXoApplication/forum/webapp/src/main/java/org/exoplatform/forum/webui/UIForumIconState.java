@@ -18,6 +18,15 @@ import org.exoplatform.webui.core.UIContainer;
     template =  "app:/templates/forum/webui/UIForumIconState.gtmpl"
 )
 public class UIForumIconState extends UIContainer  {
+  private boolean isIconForum = true ;
   public UIForumIconState() throws Exception {    
-  }  
+  }
+  
+  public void updateInfor(boolean isIconForum) {
+    this.isIconForum = isIconForum ;
+  }
+  
+  public boolean getIsIconForum() {
+    return this.isIconForum ;
+  }
 }

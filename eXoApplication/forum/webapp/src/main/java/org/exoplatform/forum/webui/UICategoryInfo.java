@@ -18,6 +18,6 @@ import org.exoplatform.webui.core.UIContainer;
     template =  "app:/templates/forum/webui/UICategoryInfo.gtmpl"
 )
 public class UICategoryInfo extends UIContainer  {
-  public UICategoryInfo() throws Exception {    
-  }  
+  public UICategoryInfo() throws Exception { 
+  } 
 }
