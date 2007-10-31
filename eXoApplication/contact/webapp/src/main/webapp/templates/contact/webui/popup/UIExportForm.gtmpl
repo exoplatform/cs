@@ -12,61 +12,63 @@
   
 	uiform.begin()
 %>
-  <div style="height: 17px;">
-  <b>
-  <% 
-    String text = uicomponent.getSelectedGroup();
-    if ((text != null) && !text.equals("")) {
-      text = uicomponent.getSelectedGroupName();
-  %>
-      Address Book : <%=text%>
-  
-  <%} else {
-      text = uicomponent.getSelectedTagName();
-  %>
-      Tag : <%=text%>
-  <%}%>
-  </b>
-  </div>
-				<div class="UIMessageList" >
-					<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
-	  				<thead>
-	  					<tr>
-	  			      <th style="width: 23px; padding-left: 7px;" class="text"><input type="checkbox" class="checkbox" title="Check all" value="4"/></th>
-	  						<th style="width: 24px;" class="text"><div class="Icon BlueTag"><span></span></div></th>
-	  		        <th style="width: 24%; padding-left: 7px;" class="text">
-	  		        	
-	  		        	<%
-			    		      String sortedByName = uicomponent.event("Sort","fullName");
-			              String classArrowName = "";
-			              if (uicomponent.getSortedBy().equals("fullName")) {
-			                if (uicomponent.isAscending()) classArrowName = "UpArrow1Icon";
-			                else classArrowName = "DownArrow1Icon"
-			              }
-    		    			%>
-	  		        	<a href="$sortedByName">
-	  		        	<div class="$classArrowName" > Name </div>
-	  		        	</a>
-	  		        </th>
-	 	      	    <th class="text" style="padding-left: 7px;">
-	 	      	    
-	 	      	    	<%
-			    		      String sortedByEmail = uicomponent.event("Sort","emailAddress");
-			              String classArrowEmail = "";
-			              if (uicomponent.getSortedBy().equals("emailAddress")) {
-			                if (uicomponent.isAscending()) classArrowEmail = "UpArrow1Icon";
-			                else classArrowEmail = "DownArrow1Icon"
-			              }
-    		    			%>
-	 	      	    
-	 	      	    	<a href="$sortedByEmail">
-	  		        	<div class="$classArrowEmail" title="Sort by Email">Email</div>
-	  		        	</a>
-	  		        </th>
-	  	 	      </tr>
-	  	 	    </thead>
-  	 	      <tbody>
-  	 	      <%  
+
+<div class="UIExportContactForm">
+	<div class="ExportContact">
+		<div class="WorkingContainer">
+		  <div class="Title">
+		  <% 
+		    String text = uicomponent.getSelectedGroup();
+		    if ((text != null) && !text.equals("")) {
+		      text = uicomponent.getSelectedGroupName();
+		  %>
+		      Address Book : <%=text%>
+		  <%} else {
+		      text = uicomponent.getSelectedTagName();
+		  %>
+		      Tag : <%=text%>
+		  <%}%>
+		  </div>
+	  
+			<div class="UIMessageList">
+				<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
+		  		<thead>
+		  			<tr>
+		  		    <th style="width: 23px; padding-left: 3px;" class="text"><input type="checkbox" class="checkbox" title="Check all" value="4"/></th>
+		  				<th style="width: 24px;" class="text"><div class="Icon BlueTag"><span></span></div></th>
+		  		    <th style="width: 24%; padding-left: 2px;" class="text">
+		  		        	
+			  		   	<%
+						      String sortedByName = uicomponent.event("Sort","fullName");
+				          String classArrowName = "";
+				          if (uicomponent.getSortedBy().equals("fullName")) {
+				            if (uicomponent.isAscending()) classArrowName = "UpArrow1Icon";
+				            else classArrowName = "DownArrow1Icon"
+				          }
+			    			%>
+		  		      <a href="$sortedByName">
+		  		      	<div class="$classArrowName" > Name </div>
+		  		      </a>
+		  		    </th>
+		 	      	<th class="text" style="padding-left: 7px;">
+		 	      	    
+		 	      		<%
+		    		      String sortedByEmail = uicomponent.event("Sort","emailAddress");
+		              String classArrowEmail = "";
+		              if (uicomponent.getSortedBy().equals("emailAddress")) {
+		                if (uicomponent.isAscending()) classArrowEmail = "UpArrow1Icon";
+		                else classArrowEmail = "DownArrow1Icon"
+		              }
+		    				%>
+		 	      	    
+		 	      	 	<a href="$sortedByEmail">
+		  		    	 	<div class="$classArrowEmail" title="Sort by Email">Email</div>
+		  		     	</a>
+		  		    </th>
+		  	 	  </tr>
+		  	 	</thead>
+		  	 	<tbody>
+		  	 		<%  
 							Contact[] contacts = uicomponent.getContacts();
 							for(contact in contacts) {
 								checkboxField = uicomponent.getChildById(contact.getId()) ;
@@ -77,61 +79,64 @@
 									iconTag = "Icon " + tag.getColor() + "Tag" ; 
 								}
 						%>
-  						<tr class="UIContactList" selectedTag="<%=uicomponent.getSelectedTag()%>">
-  						  <td class="text" style="padding-left: 7px;">
-  						  	<%
-  						  		if(checkboxField != null) uicomponent.renderField(checkboxField) ;
-  						  	%>
-  						  </td>
-  						  
-  						  
-								<td class="text" style="padding: 0px;"><div class="$iconTag" ><span></span></div></td>
-								<td class="text">
-									<div class="State OnlineIcon" title="Available">
-										<%=(contact.getFullName()==null ? "" : contact.getFullName())%>
-									</div>
-								</td>
-								<td class="text"><%=(contact.getEmailAddress()==null ? "" : contact.getEmailAddress())%></td>
-
-   			     	</tr>
-			     	<% } %>  
-  	   			</tbody>
-					</table>
-				</div>
-
-      <table class="UIFormGrid">
-        <tr>
-          <td class="FieldLabel"><%= _ctx.appRes("UIExportForm.label.name") %></td>
-          <td class="FieldComponent"><%uicomponent.renderField(uicomponent.getChildById(uicomponent.NAME))%></td>
-        </tr>
-        <tr>
-          <td class="FieldLabel"><%= _ctx.appRes("UIExportForm.label.type") %></td>
-          <td class="FieldComponent"><%uicomponent.renderField(uicomponent.getChildById(uicomponent.TYPE))%></td>
-        </tr>
-      </table>
+		  			<tr class="UIContactList" selectedTag="<%=uicomponent.getSelectedTag()%>">
+		  			  <td class="text" style="padding-left: 7px;">
+		  			  	<%
+		  			  		if(checkboxField != null) uicomponent.renderField(checkboxField) ;
+		  			  	%>
+		  			  </td>
+		  						  
+							<td class="text" style="padding: 0px;"><div class="$iconTag" ><span></span></div></td>
+							<td class="text">
+								<div class="State OnlineIcon" title="Available">
+									<%=(contact.getFullName()==null ? "" : contact.getFullName())%>
+								</div>
+							</td>
+							<td class="text"><%=(contact.getEmailAddress()==null ? "" : contact.getEmailAddress())%></td>
+		
+		   			</tr>
+		     	<% } %>  
+		  	  </tbody>
+				</table>
+			</div>
+			
+			<div class="ExportForm">
+			  <table class="UIFormGrid">
+			    <tr>
+			      <td class="FieldLabel"><%= _ctx.appRes("UIExportForm.label.name") %></td>
+			      <td class="FieldComponent"><%uicomponent.renderField(uicomponent.getChildById(uicomponent.NAME))%></td>
+			    </tr>
+			    <tr>
+			      <td class="FieldLabel"><%= _ctx.appRes("UIExportForm.label.type") %></td>
+			      <td class="FieldComponent"><%uicomponent.renderField(uicomponent.getChildById(uicomponent.TYPE))%></td>
+			    </tr>
+			  </table>
+		  </div>
+		</div>
+	</div>  
         
-			<div class="UIAction"> 
-        <table class="ActionContainer" align="center">
-          <tr>
-            <td align="center"> 
-          
-             <a href="<%=uicomponent.event("Save")%>" class="ActionButton LightBlueStyle">
-                <div class="ButtonLeft">
-                  <div class="ButtonRight">
-                    <div class="ButtonMiddle"> Ok </div>
-                  </div>
-                </div>
-              </a>
-              <a href="<%=uicomponent.event("Cancel")%>" class="ActionButton LightBlueStyle">
-
-                <div class="ButtonLeft">
-                  <div class="ButtonRight">
-                    <div class="ButtonMiddle"> Cancel </div>
-                  </div>
-                </div>
-              </a>
-            </td>
-          </tr>
-        </table>
-      </div>        
+	<div class="UIAction"> 
+		<table class="ActionContainer" align="center">
+		  <tr>
+		    <td align="center"> 
+		  
+		      <a href="<%=uicomponent.event("Save")%>" class="ActionButton LightBlueStyle">
+		        <div class="ButtonLeft">
+		          <div class="ButtonRight">
+		            <div class="ButtonMiddle"> Ok </div>
+		          </div>
+		        </div>
+		      </a>
+		      <a href="<%=uicomponent.event("Cancel")%>" class="ActionButton LightBlueStyle">
+		        <div class="ButtonLeft">
+		          <div class="ButtonRight">
+		            <div class="ButtonMiddle"> Cancel </div>
+		          </div>
+		        </div>
+		      </a>
+		    </td>
+		  </tr>
+		</table>
+  </div>        
+</div>
 <%uiform.end()%>	

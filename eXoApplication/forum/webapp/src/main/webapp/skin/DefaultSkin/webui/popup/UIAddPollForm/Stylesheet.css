@@ -4,19 +4,23 @@
 }
 
 .UIAddPollForm .HorizontalLayout {
-	background-color: #f7f7f7;
-	padding-top: 8px;
+	background-color: #f7f7f7 ;
+	padding: 25px 50px ;
 }
 
 .UIAddPollForm .Line {
-	background: url('background/Line1x2.gif') repeat-x;
-	width: 90%; height: 2px;
-	margin: 4px auto 8px auto;
+	background: url('background/Line1x2.gif') repeat-x ;
+	height: 2px ;
+	margin: 4px auto 10px auto ;
 }
 
-.UIAddPollForm .HorizontalLayout .Title {
-	padding-left: 16px;
-	color: #000000;
+.UIAddPollForm .PollOptionConntent {
+	padding: 5px 0px;
+}
+ 
+.UIAddPollForm .HorizontalLayout .UIFormInputSet .Title {
+	color: black;
+	margin: 10px 0px 0px 3px;
 }
 
 .UIAddPollForm .Label {
@@ -31,6 +35,14 @@
 .UIAddPollForm .HorizontalLayout .UIFormGrid td.FieldIcon {
 	width: 110px;
 	padding: 4px 0px;
+}
+
+.UIAddPollForm .HorizontalLayout .UIFormGrid .QuestionInput input {
+	width: 400px;
+}
+
+.UIAddPollForm .HorizontalLayout .UIFormGrid .TimeOutInput input {
+	width: 60px;
 }
 
 .UIAddPollForm .Icon {

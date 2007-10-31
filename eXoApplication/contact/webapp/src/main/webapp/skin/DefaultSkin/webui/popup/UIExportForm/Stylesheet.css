@@ -1,0 +1,28 @@
+.UIExportContactForm {
+	padding: 10px ;
+}
+
+.UIExportContactForm .ExportContact {
+	border: 1px solid #aeaeae;
+	background: #f7f7f7;
+}
+
+.UIExportContactForm .WorkingContainer {
+	border: 1px solid white;
+	padding: 5px 15px 10px 15px;
+}
+
+.UIExportContactForm .Title {
+	line-height: 30px;
+	font-weight: bold;
+}
+
+.UIExportContactForm .State {
+	width: auto;
+	padding-left: 18px;
+	line-height: 12px;
+}
+
+.UIExportContactForm .ExportForm {
+	padding: 10px;
+}

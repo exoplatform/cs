@@ -6,31 +6,37 @@
 						<tbody>
 							<tr>
 		            <td class="FieldLabel"><%=uicomponent.getLabel("Question")%>:</td>
-		            <td class="FieldComponent" style="width: 438px;" >
+		            <td class="FieldComponent" style="width: 400px;" >
+		            	<div class="QuestionInput">
 		              <% uiform.renderChild("Question") %>
+		              </div>
 		            </td>
 							</tr>
 						</tbody>
 					</table>
 					<div class="Title">Poll Options (Minimum 2 Options and Maximum 10 Options):</div>
 					<div class="Line"><span></span></div>
-					<table class="UIFormGrid">
-						<tbody>
-							<tr>
-								<td class="FieldLabel"><%=uicomponent.getLabel("Option")%>:</td>
-		            <td class="FieldComponent" >
-		              <% uiform.renderChild("Option") %>
-		            </td>
-							</tr>
-						</tbody>
-					</table>
+						<div class="PollOptionConntent">
+							<table class="UIFormGrid">
+								<tbody>
+									<tr>
+										<td class="FieldLabel"><%=uicomponent.getLabel("Option")%>:</td>
+				            <td class="FieldComponent" >
+				              <% uiform.renderChild("Option") %>
+				            </td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
 					<div class="Line"><span></span></div>
 					<table class="UIFormGrid">
 						<tbody>
 							<tr>
 								<td class="FieldLabel"><%=uicomponent.getLabel("TimeOut")%>:</td>
 								<td class="FieldComponent" style="width: 60px;">
-		              <% uiform.renderChild("TimeOut") %>
+									<div class="TimeOutInput">
+		              	<% uiform.renderChild("TimeOut") %>
+		              </div>
 								</td>
 								<td class="Label">days from now</td>
 							</tr>

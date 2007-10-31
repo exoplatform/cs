@@ -131,8 +131,8 @@
 }
 
 .UIContactPortlet .UIActionBar .DownArrow1Icon {
-	background-position:right center;
-	padding-right:16px;
+	background-position: right center;
+	padding-right: 16px;
 }
 
 .UIContactPortlet .UIActionBar .ImportContact {
@@ -155,9 +155,6 @@
 	top: 0px;
 }
 
-.UIContactPortlet .UIActionBar .UIRightClickPopupMenu {
-	width: 140px;
-}
 /************************************** UIWorkingContainer *******************************/
 
 .UIContactPortlet .ContactContainer {
@@ -250,9 +247,10 @@
 }
 
 .UIContactPortlet .UINavigationContainer .UIRightClickPopupMenu {
-	width: 130px;
+	top: 17px;
+	left: 11px;
 }
-
+	
 .UIContactPortlet .UINavigationContainer .UIPopupCategory {
 	top: -5px;
 	left: 0px;
@@ -450,6 +448,7 @@
 .UIContactPortlet .UIContactContainer .UIGrid .State {
 	padding-left: 20px;
 	width: auto;
+	height: auto;
 }
 
 .UIContactPortlet .UIContactContainer .AttachmentIcon {
@@ -471,7 +470,6 @@
 
 .UIContactPortlet .UIContactContainer td {
 	border-top: none;
-	height: 20px;
 	padding-left: 10px;
 }
 
@@ -490,7 +488,7 @@
 	cursor: n-resize;
 	border-top: 1px solid #b7b7b7;
 	border-bottom: 1px solid #b7b7b7;
-	margin-right: 7px;
+	margin-right: 9px;
 }
 
 .UIContactPortlet .UIContactContainer .UIMessageList .DownArrow1Icon {
