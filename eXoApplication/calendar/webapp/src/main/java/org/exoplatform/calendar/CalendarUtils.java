@@ -89,7 +89,7 @@ public class CalendarUtils {
     DateFormat df = new SimpleDateFormat(timeFormat) ;
     DateFormat df2 = new SimpleDateFormat(TIMEFORMAT) ;
     int time = 0 ;
-    while (time ++ < 24*60/(15)) {
+    while (time ++ < 24*60/(timeInteval)) {
       options.add(new SelectItemOption<String>(df.format(cal.getTime()), df2.format(cal.getTime()))) ;
       cal.add(java.util.Calendar.MINUTE, timeInteval) ;
     }

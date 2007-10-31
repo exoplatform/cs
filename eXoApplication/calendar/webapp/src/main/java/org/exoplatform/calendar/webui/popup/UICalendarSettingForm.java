@@ -108,8 +108,8 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
     setting.addUIFormInput(new UIFormSelectBox(LOCATION, LOCATION, getLocales())) ;
     setting.addUIFormInput(new UIFormSelectBox(TIMEZONE, TIMEZONE, getTimeZones())) ;
     setting.addUIFormInput(new UIFormCheckBoxInput<Boolean>(ISSHOWWORKINGTIME, ISSHOWWORKINGTIME, false)) ;
-    List<SelectItemOption<String>> startTimes = CalendarUtils.getTimesSelectBoxOptions("HH:mm", 30) ;
-    List<SelectItemOption<String>> endTimes = CalendarUtils.getTimesSelectBoxOptions("HH:mm", 30) ;
+    List<SelectItemOption<String>> startTimes = CalendarUtils.getTimesSelectBoxOptions(CalendarUtils.TIMEFORMAT, 30) ;
+    List<SelectItemOption<String>> endTimes = CalendarUtils.getTimesSelectBoxOptions(CalendarUtils.TIMEFORMAT, 30) ;
     setting.addUIFormInput(new UIFormSelectBox(WORKINGTIME_BEGIN, WORKINGTIME_BEGIN, startTimes)) ;
     setting.addUIFormInput(new UIFormSelectBox(WORKINGTIME_END, WORKINGTIME_END, endTimes)) ;
 
