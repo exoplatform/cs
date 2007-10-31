@@ -23,7 +23,7 @@
 	  			<div class="SeparatorLine"><span></span></div>
 	  			<a class="Icon ClosePoll">Close Poll</a>
 	  			<div class="SeparatorLine"><span></span></div>
-	  			<a class="Icon EditPoll">Edit Poll</a>
+	  			<a class="Icon EditPoll" href="<%=uicomponent.event("EditPoll")%>">Edit Poll</a>
 	  			<div style="clear: both"><span></span></div>
 	  		</div>
 	  	</div>
@@ -43,7 +43,7 @@
 			    <div class="WorkingArea">
 			     	<div class="HorizontalLayout">
 			        <div class="UITabContentContainer">
-		           <% //if(displayVoted == false) { %> 
+		           <% if(displayVoted == false) { %> 
 		            <div class="UITabContent">
 		              <div class="TopicPollContent">
 										<div class="PollQuestion">${question}?</div>
@@ -84,7 +84,7 @@
 										</div>
 		              </div>
 		            </div>
-		            <% //} else { %>
+		            <% } else { %>
 		            <div class="UITabContent">
 		   								
 									<div class="ViewPollForm">
@@ -101,15 +101,15 @@
 								  			 String classCss = "EvenRow" ;
 								  			 String[] colors = uicomponent.getColor();
 								  			 long[] voteNumber = uicomponent.getVoteNumber();
-								  			 int number = 20 ;
+								  			 int number = 0 ;
 								  			 String vote, percent, color;
 								  			 int sum_ = uicomponent.getSumVote();
 								  			 String sum = (String)sum_ ;
 								  			 float a = 0;
 								  			 int i = 0;
 								  			 for(option in poll.getOption()) { 
-								  			 	number = voteNumber[i] ;
-								  			 	color = colors[i];
+								  			 	 number = voteNumber[i] ;
+								  			 	 color = colors[i];
 								  			 	 vote = (String)number;
 								  			 	 if(sum_ > 0) {
 									  			 	a  = (number*100)/sum_ ;
@@ -117,27 +117,27 @@
 								  			 	 percent = "" + a;
 								  			 	 if(percent.length() > 5) percent = percent.substring(0, 5) ;
 								  		%>
-								 				<tr class="EvenRow">
-								  				<td class="text">$option</td>
-													<td >
-														<table class="Percen">
-															<tbody>
-																<tr>
-																	<td class="BackgroudColor">
-																		<div class="Chart" style="background-color: $color; width: ${percent}%;"><span></span></div>
-																	</td>
-																	<td class="Percentage">
-																		<div>${percent}%</div>
-																	</td>
-																</tr>
-															</tbody>
-														</table>
-													</td>
-													<td class="Number">$vote</td>
-												</tr>
-								  		<% 	i = i + 1;
-								  				 if(i%2 == 0)classCss = "EvenRow" ;
-								  				 else classCss = "OddRow" ;
+									 				<tr class="$classCss">
+									  				<td class="text">$option</td>
+														<td >
+															<table class="Percen">
+																<tbody>
+																	<tr>
+																		<td class="BackgroudColor">
+																			<div class="Chart" style="background-color: $color; width: ${percent}%;"><span></span></div>
+																		</td>
+																		<td class="Percentage">
+																			<div>${percent}%</div>
+																		</td>
+																	</tr>
+																</tbody>
+															</table>
+														</td>
+														<td class="Number">$vote</td>
+													</tr>
+								  		<% 		i = i + 1;
+								  				 	if(i%2 == 0)classCss = "EvenRow" ;
+								  				 	else classCss = "OddRow" ;
 								  			 } 
 								  		%>
 									  	</tbody>
@@ -146,7 +146,7 @@
 									</div>
 		   
 		            </div>
-		            <% //} %>
+		            <% } %>
 		          </div>
 					    
 				    </div>

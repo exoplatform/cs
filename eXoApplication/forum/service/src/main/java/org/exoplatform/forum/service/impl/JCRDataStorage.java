@@ -687,23 +687,23 @@ public class JCRDataStorage implements DataStorage {
         Node forumNode = CategoryNode.getNode(forumId) ;
         Node topicNode = forumNode.getNode(topicId) ;
         Node pollNode;
+        String pollId = topicId.replaceFirst("TOPIC", "POLL") ;
         if(isVote) {
-          pollNode = topicNode.getNode(poll.getId()) ;
+          pollNode = topicNode.getNode(pollId) ;
           pollNode.setProperty("exo:vote", poll.getVote()) ;
           pollNode.setProperty("exo:userVote", poll.getUserVote()) ;
         } else {
           if(isNew) {
-            String pollId = topicId.replaceFirst("TOPIC", "POLL") ;
             pollNode = topicNode.addNode(pollId, "exo:poll") ;
             pollNode.setProperty("exo:id", pollId) ;
             pollNode.setProperty("exo:owner", poll.getOwner()) ;
             pollNode.setProperty("exo:userVote", new String[] {}) ;
             pollNode.setProperty("exo:createdDate", GregorianCalendar.getInstance()) ;
-            pollNode.setProperty("exo:vote", poll.getVote()) ;
             topicNode.setProperty("exo:isPoll", true);
           } else {
-            pollNode = topicNode.getNode(poll.getId()) ;
+            pollNode = topicNode.getNode(pollId) ;
           }
+          pollNode.setProperty("exo:vote", poll.getVote()) ;
           pollNode.setProperty("exo:modifiedBy", poll.getModifiedBy()) ;
           pollNode.setProperty("exo:modifiedDate", GregorianCalendar.getInstance()) ;
           pollNode.setProperty("exo:timeOut", poll.getTimeOut()) ;
