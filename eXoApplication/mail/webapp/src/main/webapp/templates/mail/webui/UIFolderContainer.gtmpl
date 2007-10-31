@@ -94,7 +94,7 @@
 	          <div class="ItemIcon AddFolderIcon"> New Folder </div>
 	        </a>
 	        <a class="MenuItem" href="<%=uicomponent.event("Search", "id")%>">   
-	          <div class="ItemIcon Search"> Search </div>
+	          <div class="ItemIcon SearchFolderIcon"> Search </div>
 	        </a>
 	        <a class="MenuItem" href="<%=uicomponent.event("MarkRead", "id")%>">   
 	          <div class="ItemIcon MarkAll"> Mark All Read </div>
@@ -128,7 +128,7 @@
             <div class="ItemIcon AddFolderIcon"> New Folder </div>
           </a>
           <a class="MenuItem" href="<%=uicomponent.event("Search", "id")%>">   
-            <div class="ItemIcon Search"> Search </div>
+            <div class="ItemIcon SearchFolderIcon"> Search </div>
           </a>
           <a class="MenuItem" href="<%=uicomponent.event("MarkRead", "id")%>">   
             <div class="ItemIcon MarkAll"> Mark All Read </div>

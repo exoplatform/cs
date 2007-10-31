@@ -109,3 +109,7 @@
 .MarkAll {
 	background: url('icons/MarkAll.gif') no-repeat left;
 }
+
+.SearchFolderIcon {
+	background: url('icons/SearchFolderIcon.gif') no-repeat left;
+}
