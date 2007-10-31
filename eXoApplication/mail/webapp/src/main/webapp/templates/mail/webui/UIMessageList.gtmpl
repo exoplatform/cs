@@ -310,6 +310,6 @@
   	</table>
   </div>
   <%} else {%>
-  <div class="MessageNotice" >There are no messages in your this folder.</div>
+    <div class="MessageNotice" >There are no messages in this folder !</div>
   <%}%>
 <%uiform.end()%>    
