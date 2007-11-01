@@ -79,13 +79,15 @@ UIWeekView.prototype.dropCallback = function() {
 	var dragElement = eXo.calendar.UIWeekView.dragElement ;
 	var start = parseInt(dragElement.getAttribute("startTime")) ;
 	var end = parseInt(dragElement.getAttribute("endTime")) ;
+	var calType = parseInt(dragElement.getAttribute("calType")) ;
 	var delta = end - start  ;
 	var currentStart = dragElement.offsetTop ;
 	var currentEnd = currentStart + delta ;	
 	var actionLink =	eXo.calendar.UICalendarPortlet.adjustTime(currentStart, currentEnd, dragElement) ;
 	var currentDate = eXo.calendar.UIWeekView.currentCol.getAttribute("starttime").toString() ;
 	currentDate = currentDate.substring(0,currentDate.indexOf(" ")) ;
-	actionLink = actionLink.toString().replace(/'\s*\)/,"&currentDate=" + currentDate + "')") ;
+	actionLink = actionLink.toString().replace(/'\s*\)/,"&currentDate=" + currentDate + "&calType=" + calType + "')") ;
+	//alert(actionLink) ; return ;
 	eval(actionLink) ;	
 }
 

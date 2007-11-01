@@ -16,8 +16,6 @@ import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.EventQuery;
-import org.exoplatform.calendar.webui.popup.UIPopupAction;
-import org.exoplatform.calendar.webui.popup.UIQuickAddEvent;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -147,11 +145,11 @@ public class UIDayView extends UICalendarView {
 
           ce.setFromDateTime(fromDateTime.getTime());
           ce.setToDateTime(toDateTime.getTime()) ;          
-          if(ce.getCalType().equals("0")) {
+          if(ce.getCalType().equals(CalendarUtils.PRIVATE_TYPE)) {
             CalendarUtils.getCalendarService().saveUserEvent(username, calendarId, ce, false) ;
-          }else if(ce.getCalType().equals("1")){
+          }else if(ce.getCalType().equals(CalendarUtils.SHARED_TYPE)){
             CalendarUtils.getCalendarService().saveEventToSharedCalendar(username, calendarId, ce, false) ;
-          }else if(ce.getCalType().equals("2")){
+          }else if(ce.getCalType().equals(CalendarUtils.PUBLIC_TYPE)){
             CalendarUtils.getCalendarService().saveGroupEvent(calendarId, ce, false) ;          
           }
 

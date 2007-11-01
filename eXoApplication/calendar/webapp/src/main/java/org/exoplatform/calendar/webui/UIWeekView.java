@@ -4,6 +4,8 @@
  **************************************************************************/
 package org.exoplatform.calendar.webui;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -12,6 +14,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import javax.faces.component.UIViewRoot;
 
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarEvent;
@@ -45,6 +49,7 @@ import org.exoplatform.webui.event.EventListener;
       @EventConfig(listeners = UICalendarView.ViewActionListener.class),
       @EventConfig(listeners = UICalendarView.EditActionListener.class), 
       @EventConfig(listeners = UICalendarView.DeleteActionListener.class),
+      @EventConfig(listeners = UIWeekView.UpdateEventActionListener.class),
       @EventConfig(listeners = UIWeekView.MoveNextActionListener.class), 
       @EventConfig(listeners = UIWeekView.MovePreviousActionListener.class)
     }
@@ -188,6 +193,58 @@ public class UIWeekView extends UICalendarView {
       UIWeekView calendarview = event.getSource() ;
       calendarview.moveTo(-1) ;
       calendarview.refresh() ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
+    }
+  }
+  static  public class UpdateEventActionListener extends EventListener<UIWeekView> {
+    public void execute(Event<UIWeekView> event) throws Exception {
+      UIWeekView calendarview = event.getSource() ;
+      String eventId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      String calendarId = event.getRequestContext().getRequestParameter(CALENDARID) ;
+      String calType = event.getRequestContext().getRequestParameter(CALTYPE) ;
+      String startTime = event.getRequestContext().getRequestParameter("startTime") ;
+      String finishTime = event.getRequestContext().getRequestParameter("finishTime") ;
+      String currentDate = event.getRequestContext().getRequestParameter("currentDate") ;
+      String username = event.getRequestContext().getRemoteUser() ;
+      CalendarEvent eventCalendar = null ;
+      CalendarService calendarService = CalendarUtils.getCalendarService() ;
+      if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
+        eventCalendar = calendarService.getUserEvent(username, calendarId, eventId) ;
+      } else if(calType.equals(CalendarUtils.SHARED_TYPE)) {
+        eventCalendar = calendarService.getUserEvent(username, calendarId, eventId) ;
+      } else if(calType.equals(CalendarUtils.PUBLIC_TYPE)) {
+        eventCalendar = calendarService.getGroupEvent(calendarId, eventId) ;
+      }
+      Calendar cal = GregorianCalendar.getInstance() ;
+      DateFormat df = new SimpleDateFormat(calendarview.getDateFormat()) ;
+      cal.setTime(df.parse(currentDate)) ;
+      
+      int hoursBg = (Integer.parseInt(startTime)/60) ;
+      int minutesBg = (Integer.parseInt(startTime)%60) ;
+      int hoursEnd = (Integer.parseInt(finishTime)/60) ;
+      int minutesEnd = (Integer.parseInt(finishTime)%60) ;
+      
+      cal.set(Calendar.HOUR, hoursBg) ;
+      cal.set(Calendar.MINUTE, minutesBg) ;
+      eventCalendar.setFromDateTime(cal.getTime()) ;
+      
+      cal.set(Calendar.HOUR, hoursEnd) ;
+      cal.set(Calendar.MINUTE, minutesEnd) ;
+      eventCalendar.setToDateTime(cal.getTime()) ;
+      
+      if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
+        calendarService.saveUserEvent(username, calendarId, eventCalendar, false) ;
+      }else if(calType.equals(CalendarUtils.SHARED_TYPE)){
+        calendarService.saveEventToSharedCalendar(username, calendarId, eventCalendar, false) ;
+      }else if(calType.equals(CalendarUtils.PUBLIC_TYPE)){
+        calendarService.saveGroupEvent(calendarId, eventCalendar, false) ;          
+      }
+      System.out.println("\n\n " + eventCalendar.getFromDateTime().toString()) ;
+      System.out.println("\n\n " + eventCalendar.getToDateTime().toString()) ;
+      calendarview.refresh() ;
+      UIMiniCalendar uiMiniCalendar = calendarview.getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UIMiniCalendar.class) ;
+      uiMiniCalendar.updateMiniCal() ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
     }
   }

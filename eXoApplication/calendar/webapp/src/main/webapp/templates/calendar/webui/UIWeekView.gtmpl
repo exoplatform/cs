@@ -122,7 +122,7 @@
 									enddate = dtf.format(event.toDateTime) ;
 									endTime =  event.toDateTime.getHours() * 60 + event.toDateTime.getMinutes() ;
 									color = uicomponent.getColors().get(event.getCalendarId()) ;
-									actionLink =  uicomponent.event("SaveEvent",event.getId()+"&calendarId="+event.getCalendarId()+"&startTime=beginTime&finishTime=endTime") ;
+									actionLink =  uicomponent.event("UpdateEvent",event.getId()+"&calendarId="+event.getCalendarId()+"&startTime=beginTime&finishTime=endTime") ;
 								%>
 
 									<div class="EventContainerBoder  $color" style="position:absolute ;" calType="$event.calType"  eventid="$event.id" calid="$event.calendarId" actionlink="$actionLink" unselectable="on" starttime="$beginTime" endtime="$endTime">
