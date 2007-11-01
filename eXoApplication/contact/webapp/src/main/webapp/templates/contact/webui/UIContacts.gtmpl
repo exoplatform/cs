@@ -16,7 +16,7 @@
 	if(uicomponent.getViewContactsList()) {
 		if(isDisplaySearchResult) {
 %>
-			<div class="Result">Search result</div>
+			<div class="Result">Search result
 	<% } else { %>
 				<div class="UIContactActionsBar">
 					<a href="<%=uicomponent.event("MoveContacts")%>" class="ControlButton">
@@ -42,11 +42,15 @@
 						</div>
 					</a>
 					
+					<% 
+						}
+					 %>
+					
 					<div class="UIAddressPageList">
 						<div class="ContactIteratorContainer">
 	  					<div class="RightPageIteratorBlock">
 	  					
-	  					<%
+	  					<% 
 			          JCRPageList pageList = uicomponent.getContactPageList();
 			          String cssPreviousPage = "FloatBlockHidden";
 			          String cssNextPage = "FloatBlockHidden";
@@ -77,9 +81,7 @@
 					</div>
 					<div style="clear: left;"><span/></div>
 				</div>
-			<%	
-				}
-			%>	
+				
 							
 				<div class="UIMessageList" >
 					<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">

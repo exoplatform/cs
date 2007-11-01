@@ -12,6 +12,7 @@ import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.webui.popup.UICategoryForm;
 import org.exoplatform.contact.webui.popup.UICategorySelect;
 import org.exoplatform.contact.webui.popup.UIContactForm;
+import org.exoplatform.contact.webui.popup.UIExportAddressBookForm;
 import org.exoplatform.contact.webui.popup.UIExportForm;
 import org.exoplatform.contact.webui.popup.UIImportForm;
 import org.exoplatform.contact.webui.popup.UIPopupAction;
@@ -103,6 +104,8 @@ public class UIAddressBooks extends UIComponent {
       UIAddressBooks uiAddressBook = event.getSource();
       UIContactPortlet uiContactPortlet = uiAddressBook.getAncestorOfType(UIContactPortlet.class);
       UIPopupAction uiPopupAction = uiContactPortlet.getChild(UIPopupAction.class);
+      
+      /*
       String addressBookId = event.getRequestContext().getRequestParameter(OBJECTID);
       if (addressBookId != null) {
         UIExportForm uiExportForm = uiPopupAction.createUIComponent(UIExportForm.class, null,
@@ -111,17 +114,16 @@ public class UIAddressBooks extends UIComponent {
         uiExportForm.updateList();
         uiPopupAction.activate(uiExportForm, 500, 0, true);
       } 
-      
-      /*
-      else {
-        // There is no specific address book 
-        // so display the address books list
-        UIExportAddressBookForm uiExportForm = uiPopupAction.createUIComponent(
-            UIExportAddressBookForm.class, null, "UIExportAddressBookForm");
-        uiExportForm.updateList();
-        uiPopupAction.activate(uiExportForm, 500, 0, true);
-      }
       */
+        // There is no specific address book 
+        // so display the address books list      
+      
+      UIExportAddressBookForm uiExportForm = uiPopupAction.createUIComponent(
+          UIExportAddressBookForm.class, null, "UIExportAddressBookForm");
+      uiExportForm.setContactGroups(uiAddressBook.getGroups().toArray(new ContactGroup[] {} )) ;
+      uiExportForm.setSharedContactGroup(uiAddressBook.getSharedContactGroups()) ;
+      uiExportForm.updateList();
+      uiPopupAction.activate(uiExportForm, 500, 0, true);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
     }
   }

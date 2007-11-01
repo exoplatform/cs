@@ -63,7 +63,7 @@
 			<tr>
 				<td align="center">
 		      <% 
-		        	 String actionLabel = "CloseSearch" ; //_ctx.appRes(uicomponent.getName() + ".action." + action) ;
+		        	 String actionLabel = "Close Search" ; //_ctx.appRes(uicomponent.getName() + ".action." + action) ;
 		           String link = uicomponent.event("CloseSearch") ;
 		  		%>
 		  		<a href="$link" class="ActionButton LightBlueStyle">
