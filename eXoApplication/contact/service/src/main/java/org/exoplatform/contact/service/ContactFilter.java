@@ -20,11 +20,15 @@ public class ContactFilter {
   private String orderBy;
   private boolean isAscending;
   private String text = null ;
+  private String gender ;
   
   public ContactFilter() { isAscending = true ; }
   
   public void setText(String fullTextSearch) { this.text = fullTextSearch ; }
   public String getText() { return text ; }
+  
+  public void setGender(String s) { gender = s ; }
+  public String getGender() { return gender ; }
   
   public String[] getCategories() { return categories ; }
   public void setCategories(String[] s) { this.categories = s ; }
@@ -89,6 +93,16 @@ public class ContactFilter {
       stringBuffer.append(")") ;
       hasConjuntion = true ;
     }
+    
+    if (gender != null && gender.trim().length() >0) {
+      if(hasConjuntion) stringBuffer.append(" and (") ;
+      else stringBuffer.append("(") ;
+      
+      stringBuffer.append("@exo:gender='" + gender + "'") ;
+      stringBuffer.append(")") ;
+      hasConjuntion = true ;
+    }
+    
     stringBuffer.append("]") ;
     
     if (orderBy != null && orderBy.trim().length() >0) {

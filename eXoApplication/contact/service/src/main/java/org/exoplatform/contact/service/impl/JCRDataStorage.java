@@ -858,6 +858,9 @@ public class JCRDataStorage implements DataStorage {
       Node contactHome = getContactHome(username) ;
       filter.setAccountPath(contactHome.getPath()) ;
       qm = contactHome.getSession().getWorkspace().getQueryManager() ;
+      
+      System.out.println("\n\n query:" + filter.getStatement() + "\n\n");
+      
       query = qm.createQuery(filter.getStatement(), Query.XPATH) ;
       NodeIterator it = query.execute().getNodes() ;
       while(it.hasNext()) {

@@ -105,7 +105,7 @@ public class UIAddressBooks extends UIComponent {
       UIContactPortlet uiContactPortlet = uiAddressBook.getAncestorOfType(UIContactPortlet.class);
       UIPopupAction uiPopupAction = uiContactPortlet.getChild(UIPopupAction.class);
       
-      /*
+      
       String addressBookId = event.getRequestContext().getRequestParameter(OBJECTID);
       if (addressBookId != null) {
         UIExportForm uiExportForm = uiPopupAction.createUIComponent(UIExportForm.class, null,
@@ -113,17 +113,17 @@ public class UIAddressBooks extends UIComponent {
         uiExportForm.setSelectedGroup(addressBookId);
         uiExportForm.updateList();
         uiPopupAction.activate(uiExportForm, 500, 0, true);
-      } 
-      */
+      } else {      
         // There is no specific address book 
         // so display the address books list      
-      
-      UIExportAddressBookForm uiExportForm = uiPopupAction.createUIComponent(
-          UIExportAddressBookForm.class, null, "UIExportAddressBookForm");
-      uiExportForm.setContactGroups(uiAddressBook.getGroups().toArray(new ContactGroup[] {} )) ;
-      uiExportForm.setSharedContactGroup(uiAddressBook.getSharedContactGroups()) ;
-      uiExportForm.updateList();
-      uiPopupAction.activate(uiExportForm, 500, 0, true);
+        
+        UIExportAddressBookForm uiExportForm = uiPopupAction.createUIComponent(
+            UIExportAddressBookForm.class, null, "UIExportAddressBookForm");
+        uiExportForm.setContactGroups(uiAddressBook.getGroups().toArray(new ContactGroup[] {} )) ;
+        uiExportForm.setSharedContactGroup(uiAddressBook.getSharedContactGroups()) ;
+        uiExportForm.updateList();
+        uiPopupAction.activate(uiExportForm, 500, 0, true);
+      }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
     }
   }

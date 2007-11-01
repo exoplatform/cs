@@ -4,14 +4,22 @@
  **************************************************************************/
 package org.exoplatform.contact.webui;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.exoplatform.contact.webui.popup.UIAdvancedSearchForm;
+import org.exoplatform.contact.webui.popup.UIEditTagForm;
+import org.exoplatform.contact.webui.popup.UIPopupAction;
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.ContactFilter;
+import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.DataPageList;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
+import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
@@ -27,7 +35,8 @@ import org.exoplatform.webui.form.UIFormStringInput;
     lifecycle = UIFormLifecycle.class,
     template = "app:/templates/contact/webui/UISearchForm.gtmpl",
     events = {
-      @EventConfig(listeners = UISearchForm.SearchActionListener.class)      
+      @EventConfig(listeners = UISearchForm.SearchActionListener.class),
+      @EventConfig(listeners = UISearchForm.AdvancedSearchActionListener.class)    
     }
 )
 public class UISearchForm extends UIForm {
@@ -59,8 +68,18 @@ public class UISearchForm extends UIForm {
       uiContacts.setDisplaySearchResult(true) ;
       uiContacts.setSelectedContact(null) ;
       uiContactPortlet.findFirstComponentOfType(UIContactPreview.class).setContact(null) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiContactPortlet.getChild(UIWorkingContainer.class)) ;
+      event.getRequestContext()
+        .addUIComponentToUpdateByAjax(uiContactPortlet.getChild(UIWorkingContainer.class)) ;
+    }
+  }  
+  
+  static  public class AdvancedSearchActionListener extends EventListener<UISearchForm> {
+    public void execute(Event<UISearchForm> event) throws Exception {
+      UISearchForm uiForm = event.getSource() ;
+      UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
+      UIPopupAction popupAction = uiContactPortlet.getChild(UIPopupAction.class) ;      
+      popupAction.activate(UIAdvancedSearchForm.class, 600) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   }
-  
 }
