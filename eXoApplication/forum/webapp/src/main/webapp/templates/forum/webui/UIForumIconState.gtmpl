@@ -4,19 +4,19 @@
 	<%  
 		boolean isIconForum = uicomponent.getIsIconForum() ;
 	%>
-<div class="UIForumExplainationIcons" id="$uicomponent.id">
+<div class="UIForumIconState" id="$uicomponent.id">
 	<div class="ForumContains">
 	<% if(isIconForum) { %>
-		<span style="float:left">Cai nay cua ben Category:</span>
-		<div class="IconPost ForumNormalIcon">Forum Contains New Posts</div>
-		<div class="IconPost ForumNewPostIcon">Forum Contains No New Posts</div>
-		<div class="IconPost ForumLockedIcon">Forum is Closed for Posting</div>
+		<div class="IconPost ForumNormalIcon"><%=_ctx.appRes("UIForumIconState.label.CategoryNewPosts")%></div>
+		<div class="IconPost ForumNewPostIcon"><%=_ctx.appRes("UIForumIconState.label.CategoryNoNewPosts")%></div>
+		<div class="IconPost ForumLockedIcon"><%=_ctx.appRes("UIForumIconState.label.CategoryClosedPosts")%></div>
 		<div style="clear: left;"><span></span></div>
 	<% } else { %>
-		<span style="float:left">Cai nay cua ben Forum:</span>
-		<div class="IconPost ForumNormalIcon">Forum Contains New Posts</div>
-		<div class="IconPost ForumNewPostIcon">Forum Contains No New Posts</div>
-		<div class="IconPost ForumLockedIcon">Forum is Closed for Posting</div>
+ 		<div class="IconForum HotThreadNoNewPost"><%=_ctx.appRes("UIForumIconState.label.ForumHotNoNewPost")%></div>
+		<div class="IconForum HotThreadNewPost"><%=_ctx.appRes("UIForumIconState.label.ForumHotNewPost")%></div>
+		<div class="IconForum ThreadNewPost"><%=_ctx.appRes("UIForumIconState.label.ForumNewPost")%></div>
+		<div class="IconForum ThreadNoNewPost"><%=_ctx.appRes("UIForumIconState.label.ForumNoNewPost")%></div>
+		<div class="IconForum ThreadIsClose"><%=_ctx.appRes("UIForumIconState.label.ForumClosePost")%></div>
 		<div style="clear: left;"><span></span></div>
 	<% } %>
   </div>

@@ -15,7 +15,7 @@
 			                <div class="SelectedTab">
 			                  <div class="LeftTab">
 			                    <div class="RightTab">
-					                  <div onclick="eXo.webui.UIHorizontalTabs.displayTabContent(this)" class="MiddleTab">Thread Content</div>
+					                  <div onclick="eXo.webui.UIHorizontalTabs.displayTabContent(this)" class="MiddleTab"><%=_ctx.appRes("UIPostForm.tittle.threadContent")%></div>
 					                </div>
 			                  </div>
 			                </div>
@@ -25,7 +25,7 @@
 			                <div class="NormalTab">
 			                  <div class="LeftTab">
 			                    <div class="RightTab">
-					                  <div onclick="eXo.webui.UIHorizontalTabs.displayTabContent(this)" class="MiddleTab">Icons and Smileys</div>
+					                  <div onclick="eXo.webui.UIHorizontalTabs.displayTabContent(this)" class="MiddleTab"><%=_ctx.appRes("UIPostForm.tittle.iconAndSmiley")%></div>
 					                </div>
 			                  </div>
 			                </div>

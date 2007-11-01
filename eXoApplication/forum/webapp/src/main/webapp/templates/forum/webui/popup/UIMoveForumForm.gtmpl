@@ -6,7 +6,7 @@
 
 <div class="UIMoveForumForm UIMoveTopicForm">
   <% uiform.begin() %>
-	<div class="TitleMoveThreads">Choose a Destination Category:</div>
+	<div class="TitleMoveThreads"><%= _ctx.appRes("UIMoveForumForm.title.chooseCategory"); %></div>
 	<div class="UITree">
 	  <div class="TreeContainer">
 		<% 

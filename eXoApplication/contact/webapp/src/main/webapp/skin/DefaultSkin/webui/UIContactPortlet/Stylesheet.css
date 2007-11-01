@@ -300,14 +300,19 @@
 
 .UIContactPortlet .Result {
 	background: url('background/BgTitleBar1x24.gif') repeat-x;
-	border-left:1px solid #CCCCCC;
-	border-right:1px solid #CCCCCC;
-	font-weight:bold;
-	line-height:23px;
-	margin-right:5px;
-	text-align:center;
+	border-left: 1px solid #CCCCCC;
+	border-right: 1px solid #CCCCCC;
+	font-weight: bold;
+	line-height: 23px;
+	height: 23px;
+	margin-right: 5px;
+	text-align: center;
 }
 
+.UIContactPortlet .Result .TitleSearch {
+	float: left;
+	width: 70%;
+}
 
 .UIContactPortlet .UIContactActionsBar {
 	background: url('background/BgTitleBar1x24.gif') repeat-x;
@@ -431,6 +436,8 @@
 
 .UIContactPortlet .UIContactContainer .UIGrid {
 	border-top: none;
+	width: 99%; 
+	background: #ffffff;
 }
 
 .UIContactPortlet .UIContactContainer .UIGrid th {
@@ -461,11 +468,6 @@
 
 .UIContactPortlet .UIContactContainer .PriorityIcon {
 	margin: 1px 0px 0px 4px;
-}
-
-.UIContactPortlet .UIContactContainer table {
-	width: 99%; 
-	background: #ffffff;
 }
 
 .UIContactPortlet .UIContactContainer td {

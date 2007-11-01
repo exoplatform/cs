@@ -181,6 +181,12 @@
 	background-position: left center;
 }
 
+.UIForumPortlet .ForumContains .IconForum {
+	float: left;
+	padding: 0px 30px;
+	background-position: left center;
+}
+
 /*=============================Content UICategoriesSummary====================*/
 
 .UIForumPortlet .UICategoriesSummary {

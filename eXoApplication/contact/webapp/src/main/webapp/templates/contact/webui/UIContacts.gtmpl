@@ -16,7 +16,8 @@
 	if(uicomponent.getViewContactsList()) {
 		if(isDisplaySearchResult) {
 %>
-			<div class="Result">Search result
+			<div class="Result">
+				<div class="TitleSearch">Search result</div>
 	<% } else { %>
 				<div class="UIContactActionsBar">
 					<a href="<%=uicomponent.event("MoveContacts")%>" class="ControlButton">
@@ -79,7 +80,7 @@
 						  </div>
 					  </div>
 					</div>
-					<div style="clear: left;"><span/></div>
+					<div style="clear: both;"><span/></div>
 				</div>
 				
 							

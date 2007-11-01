@@ -4,14 +4,14 @@
 			<div class="CenterForumActionBar">
 				<div class="ControlbarCotainer">
 					<a href="<%=uicomponent.event("AddCategory")%>" class="Icon AddCategory">
-						Add new Category
+						<%= _ctx.appRes("UIForumActionBar.label.addNewCategory"); %>
 					</a>
 					<div class="SeparatorLine"><span></span></div>
-					<a href="<%=uicomponent.event("AddForum")%>" class="Icon AddForumIcon">Add new Forum</a>
+					<a href="<%=uicomponent.event("AddForum")%>" class="Icon AddForumIcon"><%= _ctx.appRes("UIForumActionBar.label.addNewForum"); %></a>
 					<div class="SeparatorLine"><span></span></div>
-					<a href="<%=uicomponent.event("ManageModerator")%>" class="Icon ManageModerators">Manage Moderators</a>
+					<a href="<%=uicomponent.event("ManageModerator")%>" class="Icon ManageModerators"><%= _ctx.appRes("UIForumActionBar.label.manageModerators"); %></a>
 					<div class="SeparatorLine"><span></span></div>
-					<a href="<%=uicomponent.event("ForumOption")%>" class="Icon ForumOption">Forums Options</a>
+					<a href="<%=uicomponent.event("ForumOption")%>" class="Icon ForumOption"><%= _ctx.appRes("UIForumActionBar.label.forumsOptions"); %></a>
 					<div style="clear: left;"><span></span></div>
 				</div>
 			</div>

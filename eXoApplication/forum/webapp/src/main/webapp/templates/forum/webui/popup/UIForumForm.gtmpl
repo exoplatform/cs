@@ -30,7 +30,7 @@
                       <div class="SelectedTab">
                         <div class="LeftTab">
                           <div class="RightTab">
-                            <div onclick="eXo.webui.UIHorizontalTabs.displayTabContent(this)" class="MiddleTab">New Forum</div>
+                            <div onclick="eXo.webui.UIHorizontalTabs.displayTabContent(this)" class="MiddleTab"><%= _ctx.appRes("UIForumForm.title.newForum"); %></div>
                           </div>
                         </div>
                       </div>
@@ -40,7 +40,7 @@
                       <div class="NormalTab">
                         <div class="LeftTab">
                           <div class="RightTab">
-                            <div onclick="eXo.webui.UIHorizontalTabs.displayTabContent(this)" class="MiddleTab">Moderation Options</div>
+                            <div onclick="eXo.webui.UIHorizontalTabs.displayTabContent(this)" class="MiddleTab"><%= _ctx.appRes("UIForumForm.title.moderationOptions"); %></div>
                           </div>
                         </div>
                       </div>
@@ -50,7 +50,7 @@
                       <div class="NormalTab">
                         <div class="LeftTab">
                           <div class="RightTab">
-                            <div onclick="eXo.webui.UIHorizontalTabs.displayTabContent(this)" class="MiddleTab">Forum Permission</div>
+                            <div onclick="eXo.webui.UIHorizontalTabs.displayTabContent(this)" class="MiddleTab"><%= _ctx.appRes("UIForumForm.title.forumPermission"); %></div>
                           </div>
                         </div>
                       </div>
