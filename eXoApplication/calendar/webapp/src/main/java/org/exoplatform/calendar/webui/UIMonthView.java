@@ -4,8 +4,6 @@
  **************************************************************************/
 package org.exoplatform.calendar.webui;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -14,18 +12,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.EventQuery;
-import org.exoplatform.calendar.webui.popup.UIPopupAction;
-import org.exoplatform.calendar.webui.popup.UIQuickAddEvent;
 import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -50,10 +43,9 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
       @EventConfig(listeners = UICalendarView.EditActionListener.class), 
       @EventConfig(listeners = UICalendarView.DeleteActionListener.class),
       @EventConfig(listeners = UICalendarView.GotoDateActionListener.class), 
+      @EventConfig(listeners = UICalendarView.QuickAddActionListener.class), 
       @EventConfig(listeners = UIMonthView.MoveNextActionListener.class), 
       @EventConfig(listeners = UIMonthView.MovePreviousActionListener.class),
-      @EventConfig(listeners = UIMonthView.QuickAddNewEventActionListener.class), 
-      @EventConfig(listeners = UIMonthView.QuickAddNewTaskActionListener.class), 
       @EventConfig(listeners = UICalendarView.SwitchViewActionListener.class),
       @EventConfig(listeners = UIMonthView.UpdateEventActionListener.class)
     }
@@ -81,11 +73,6 @@ public class UIMonthView extends UICalendarView {
     List<CalendarEvent> allEvents = calendarService.getEvent(username, eventQuery, getPublicCalendars()) ;
     getChildren().clear() ;
     initCategories() ;
-    //allEvents.addAll(calendarService.getPublicEvents(eventQuery))  ;
-    /*Iterator<UIComponent> iter = getChildren().iterator() ;
-    while (iter.hasNext()) {
-      if( iter.next() instanceof UIFormCheckBoxInput) iter.remove() ; 
-    }*/
     eventData_.clear() ;
     for(int day =1 ;  day <= getDaysInMonth(); day++) {
       List<CalendarEvent> list =  new ArrayList<CalendarEvent>() ;
@@ -120,11 +107,6 @@ public class UIMonthView extends UICalendarView {
 
   protected void addCalendarId(String id) {calendarIds_.put(id,id) ;}
   protected Map<String, String> getCalendarIds() {return calendarIds_ ;}
-
-  /*private List getEventList()throws Exception {
-    return getList() ;
-  }*/
-
   protected void refreshSelectedCalendarIds() throws Exception {
     CalendarService calendarService = getApplicationComponent(CalendarService.class) ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
@@ -192,66 +174,6 @@ public class UIMonthView extends UICalendarView {
       uiContainer.setRenderedChild(UIDayView.class) ;
       uiContainer.refresh() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;
-    }
-  }
-
-  static  public class QuickAddNewEventActionListener extends EventListener<UIMonthView> {
-    public void execute(Event<UIMonthView> event) throws Exception {
-      UIMonthView calendarview = event.getSource() ;
-      System.out.println(" ===========> AddEventActionListener") ;
-      String selectedDate = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      CalendarService calendarService = calendarview.getApplicationComponent(CalendarService.class) ;
-      String username = event.getRequestContext().getRemoteUser() ;
-      UIApplication uiApp = calendarview.getAncestorOfType(UIApplication.class) ;
-      if(calendarService.getUserCalendars(username).size() <= 0) {
-        uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.calendar-list-empty", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-      } else {
-        UICalendarPortlet uiPortlet = calendarview.getAncestorOfType(UICalendarPortlet.class) ;
-        UIPopupAction uiParenPopup = uiPortlet.getChild(UIPopupAction.class) ;
-        UIQuickAddEvent uiEventForm = uiParenPopup.activate(UIQuickAddEvent.class, 700) ;
-        uiEventForm.setEvent(true) ;
-          int day = Integer.parseInt(selectedDate) ;
-          java.util.Calendar date = new GregorianCalendar(calendarview.getCurrentYear(), calendarview.getCurrentMonth(), day) ;
-          DateFormat df = new SimpleDateFormat(calendarview.getDateTimeFormat()) ;
-          String startTime =  df.format(date.getTime())  ;
-          date.add(java.util.Calendar.MINUTE, calendarview.getTimeInterval()) ;
-          String endTime =  df.format(date.getTime())  ;
-          uiEventForm.init(calendarview.getCalendarSetting(), startTime, endTime) ;
-          uiEventForm.update(CalendarUtils.PRIVATE_TYPE, null) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiParenPopup) ;
-      }
-    }
-  }
-  static  public class QuickAddNewTaskActionListener extends EventListener<UIMonthView> {
-    public void execute(Event<UIMonthView> event) throws Exception {
-      UIMonthView calendarview = event.getSource() ;
-      System.out.println("\n\n AddNewTaskActionListener");
-      String selectedDate = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      CalendarService calendarService = calendarview.getApplicationComponent(CalendarService.class) ;
-      String username = event.getRequestContext().getRemoteUser() ;
-      UIApplication uiApp = calendarview.getAncestorOfType(UIApplication.class) ;
-      if(calendarService.getUserCalendars(username).size() <= 0) {
-        uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.calendar-list-empty", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-      } else {
-        UICalendarPortlet uiPortlet = calendarview.getAncestorOfType(UICalendarPortlet.class) ;
-        UIPopupAction uiParenPopup = uiPortlet.getChild(UIPopupAction.class) ;
-        UIQuickAddEvent uiEventForm = uiParenPopup.activate(UIQuickAddEvent.class,700) ;
-        uiEventForm.setEvent(false) ;
-        uiEventForm.setId("UIQuickAddTask") ;
-        int day = Integer.parseInt(selectedDate) ;
-        java.util.Calendar date = new GregorianCalendar(calendarview.getCurrentYear(), calendarview.getCurrentMonth(), day) ;
-        DateFormat df = new SimpleDateFormat(calendarview.getDateTimeFormat()) ;
-        String startTime =  df.format(date.getTime())  ;
-        date.add(java.util.Calendar.MINUTE, calendarview.getTimeInterval()) ;
-        String endTime =  df.format(date.getTime())  ;
-        uiEventForm.init(calendarview.getCalendarSetting(), startTime, endTime) ;
-        uiEventForm.update(CalendarUtils.PRIVATE_TYPE, null) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiParenPopup) ;
-      }
     }
   }
   static  public class UpdateEventActionListener extends EventListener<UIMonthView> {

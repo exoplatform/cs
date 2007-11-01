@@ -6,7 +6,6 @@ package org.exoplatform.calendar.webui;
 
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIContainer;
-import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
 
 /**
  * Created by The eXo Platform SARL
@@ -16,7 +15,6 @@ import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
  */
 
 @ComponentConfig(
-    lifecycle = UIContainerLifecycle.class,  
     template =  "app:/templates/calendar/webui/UICalendarWorkingContainer.gtmpl"
 )
 public class UICalendarWorkingContainer extends UIContainer  {

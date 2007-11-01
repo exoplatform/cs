@@ -592,18 +592,30 @@ UICalendarPortlet.prototype.monthViewCallback = function(evt){
 	var UIContextMenu = eXo.webui.UIContextMenu ;
 	var DOMUtil = eXo.core.DOMUtil ;
 	var objectValue = "" ;
+	var map = {} ;
 	var links = eXo.core.DOMUtil.findDescendantsByTagName(UIContextMenu.menuElement, "a") ;
 	if (!DOMUtil.findAncestorByClass(src, "EventBoxes")) {
-		if (objectValue = DOMUtil.findAncestorByTagName(src,"td").getAttribute("currentDate")){
-			UIContextMenu.changeAction(UIContextMenu.menuElement,objectValue) ;
+		if (objectValue = DOMUtil.findAncestorByTagName(src,"td").getAttribute("startTime")){
+			map = {
+				"startTime\s*=\s*[A-Za-z0-9_]*(?=&|'|\")":"startTime="+objectValue ,
+			}
+			UIContextMenu.changeAction(UIContextMenu.menuElement,map) ;
 		}
 	} else if (objvalue = DOMUtil.findAncestorByClass(src, "EventBoxes")) {
 		var eventId = objvalue.getAttribute("eventId") ;
 		var calendarId = objvalue.getAttribute("calId") ;
-		var map = {
-			"objectId\s*=\s*[A-Za-z0-9_]*(?=&|'|\")":"objectId="+eventId,
-			"calendarId\s*=\s*[A-Za-z0-9_]*(?=&|'|\")":"calendarId="+calendarId
-		} ;
+		var calType = objvalue.getAttribute("calType") ;
+		map = {
+				"objectId\s*=\s*[A-Za-z0-9_]*(?=&|'|\")":"objectId="+eventId ,
+				"calendarId\s*=\s*[A-Za-z0-9_]*(?=&|'|\")":"calendarId="+calendarId
+				} ;
+		if (calType) {
+			map = {
+				"objectId\s*=\s*[A-Za-z0-9_]*(?=&|'|\")":"objectId=" + eventId ,
+				"calendarId\s*=\s*[A-Za-z0-9_]*(?=&|'|\")":"calendarId=" + calendarId,
+				"calType\s*=\s*[A-Za-z0-9_]*(?=&|'|\")":"calType=" + calType
+			} ;
+		}
 		UIContextMenu.changeAction(UIContextMenu.menuElement, map) ;
 	} else {
 		return ;

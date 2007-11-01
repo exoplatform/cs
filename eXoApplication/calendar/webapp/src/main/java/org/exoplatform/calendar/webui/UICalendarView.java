@@ -26,6 +26,7 @@ import org.exoplatform.calendar.webui.popup.UIEventCategoryManager;
 import org.exoplatform.calendar.webui.popup.UIEventForm;
 import org.exoplatform.calendar.webui.popup.UIPopupAction;
 import org.exoplatform.calendar.webui.popup.UIPopupContainer;
+import org.exoplatform.calendar.webui.popup.UIQuickAddEvent;
 import org.exoplatform.calendar.webui.popup.UITaskForm;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -104,7 +105,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   public boolean isShowEvent_ = true;
   private int timeInterval_ = 30 ;
   private CalendarSetting calendarSetting_ ;
-  
+
   private String dateTimeFormat_  ;
   protected List<String> privateCalendarIds = new ArrayList<String>() ;
   protected List<String> publicCalendarIds = new ArrayList<String>() ;
@@ -423,7 +424,6 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       UICalendarView uiForm = event.getSource() ;
       System.out.println(" ===========> DeleteEventActionListener") ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-      System.out.println("\n\n uiForm" + uiForm.getId());
       if(uiForm instanceof UIMonthView ) {
         List<CalendarEvent> list = ((UIMonthView)uiForm).getSelectedEvents() ;
         if(list.isEmpty()) {
@@ -595,17 +595,19 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       System.out.println("\n\n QuickDeleteEventActionListener");
       String eventId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       String calendarId = event.getRequestContext().getRequestParameter(CALENDARID) ;
+      String calType = event.getRequestContext().getRequestParameter(CALTYPE) ;
       UICalendarViewContainer uiContainer = calendarview.getAncestorOfType(UICalendarViewContainer.class) ;
       UICalendarPortlet uiPortlet = calendarview.getAncestorOfType(UICalendarPortlet.class) ;
       UIMiniCalendar uiMiniCalendar = uiPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;
       try {
         CalendarService calService = calendarview.getApplicationComponent(CalendarService.class) ;
         String username = event.getRequestContext().getRemoteUser() ;
-        calService.removeUserEvent(username, calendarId, eventId) ;
-        /*  List<CalendarEvent> events = new ArrayList<CalendarEvent>() ;
-        events.add(calService.getUserEvent(username, calendarId, eventId)) ;
-        calendarview.removeEvents(events) ;*/
-        uiMiniCalendar.refresh() ;
+        if(calType.equals(CalendarUtils.PUBLIC_TYPE)){
+          calService.removeGroupEvent(calendarId, eventId) ;
+        } else {
+          calService.removeUserEvent(username, calendarId, eventId) ;
+        }
+        uiMiniCalendar.updateMiniCal() ;
         uiContainer.refresh() ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;
@@ -712,6 +714,39 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         uiListContainer.getChild(UIPreview.class).setEvent(null) ; 
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiView.getParent());
+    }
+  }
+  static  public class QuickAddActionListener extends EventListener<UICalendarView> {
+    public void execute(Event<UICalendarView> event) throws Exception {
+      System.out.println("QuickAddActionListener");
+      UICalendarView calendarview = event.getSource() ;
+      String type = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      String startTime = event.getRequestContext().getRequestParameter("startTime") ;
+      String finishTime = event.getRequestContext().getRequestParameter("finishTime") ;
+      UICalendarPortlet uiPortlet = calendarview.getAncestorOfType(UICalendarPortlet.class) ;
+      UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
+      UIQuickAddEvent uiQuickAddEvent = uiPopupAction.activate(UIQuickAddEvent.class, 600) ;
+      if(CalendarEvent.TYPE_EVENT.equals(type)) {
+        uiQuickAddEvent.setEvent(true) ;
+        uiQuickAddEvent.setId("UIQuickAddEvent") ;
+      } else {
+        uiQuickAddEvent.setEvent(false) ;
+        uiQuickAddEvent.setId("UIQuickAddTask") ;
+      }
+      try {
+        Long.parseLong(startTime) ;
+      }catch (Exception e) {
+        startTime = null ;
+      }
+      try {
+        Long.parseLong(finishTime) ;
+      }catch (Exception e) {
+        finishTime = null ;
+      }
+      uiQuickAddEvent.init(uiPortlet.getCalendarSetting(), startTime, finishTime) ;
+      uiQuickAddEvent.update(CalendarUtils.PRIVATE_TYPE, null) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
     }
   }
 }

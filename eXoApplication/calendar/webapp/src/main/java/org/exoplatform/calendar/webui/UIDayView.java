@@ -44,9 +44,9 @@ import org.exoplatform.webui.event.EventListener;
       @EventConfig(listeners = UICalendarView.DeleteActionListener.class),
       @EventConfig(listeners = UICalendarView.GotoDateActionListener.class),
       @EventConfig(listeners = UICalendarView.SwitchViewActionListener.class),
+      @EventConfig(listeners = UICalendarView.QuickAddActionListener.class), 
       @EventConfig(listeners = UIDayView.MoveNextActionListener.class), 
       @EventConfig(listeners = UIDayView.MovePreviousActionListener.class), 
-      @EventConfig(listeners = UIDayView.QuickAddActionListener.class), 
       @EventConfig(listeners = UIDayView.SaveEventActionListener.class)
     }
 )
@@ -76,7 +76,6 @@ public class UIDayView extends UICalendarView {
     eventQuery.setFromDate(begin) ;
     eventQuery.setToDate(end) ;
     events = calendarService.getEvent(username, eventQuery, getPublicCalendars()) ;
-    //events.addAll(calendarService.getPublicEvents(eventQuery)) ;
     Iterator<CalendarEvent> iter = events.iterator() ;
     while (iter.hasNext()) {
       CalendarEvent ce = iter.next() ;
@@ -113,57 +112,6 @@ public class UIDayView extends UICalendarView {
       event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
     }
   }
-  static  public class QuickAddActionListener extends EventListener<UIDayView> {
-    public void execute(Event<UIDayView> event) throws Exception {
-      System.out.println("QuickAddActionListener");
-      UIDayView calendarview = event.getSource() ;
-      String type = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      String startTime = event.getRequestContext().getRequestParameter("startTime") ;
-      String finishTime = event.getRequestContext().getRequestParameter("finishTime") ;
-      UICalendarPortlet uiPortlet = calendarview.getAncestorOfType(UICalendarPortlet.class) ;
-      UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
-      UIQuickAddEvent uiQuickAddEvent = uiPopupAction.activate(UIQuickAddEvent.class, 600) ;
-      if(CalendarEvent.TYPE_EVENT.equals(type)) {
-        uiQuickAddEvent.setEvent(true) ;
-        uiQuickAddEvent.setId("UIQuickAddEvent") ;
-      } else {
-        uiQuickAddEvent.setEvent(false) ;
-        uiQuickAddEvent.setId("UIQuickAddTask") ;
-      }
-      try {
-        Long.parseLong(startTime) ;
-      }catch (Exception e) {
-        startTime = null ;
-      }
-      try {
-        Long.parseLong(finishTime) ;
-      }catch (Exception e) {
-        finishTime = null ;
-      }
-      uiQuickAddEvent.init(uiPortlet.getCalendarSetting(), startTime, finishTime) ;
-      uiQuickAddEvent.update(CalendarUtils.PRIVATE_TYPE, null) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
-    }
-  }
-
-  /*static  public class QuickDeleteEventActionListener extends EventListener<UIDayView> {
-    public void execute(Event<UIDayView> event) throws Exception {
-      System.out.println("QuickDeleteEventActionListener");
-      UIDayView uiDayView = event.getSource() ;
-      CalendarService calService = uiDayView.getApplicationComponent(CalendarService.class) ;
-      String username = event.getRequestContext().getRemoteUser() ;
-      String eventId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      String calendarId = event.getRequestContext().getRequestParameter(CALENDARID) ;
-      try {
-        calService.removeUserEvent(username, calendarId, eventId) ;
-      } catch (Exception e) {
-        e.printStackTrace() ;
-      }
-      uiDayView.refresh() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiDayView.getParent()) ;
-    }
-  }*/
   static  public class MovePreviousActionListener extends EventListener<UIDayView> {
     public void execute(Event<UIDayView> event) throws Exception {
       UIDayView calendarview = event.getSource() ;
@@ -181,8 +129,6 @@ public class UIDayView extends UICalendarView {
       String startTime = event.getRequestContext().getRequestParameter("startTime") ;
       String endTime = event.getRequestContext().getRequestParameter("finishTime") ;
       String username = event.getRequestContext().getRemoteUser() ;
-      CalendarService calendarService = calendarview.getApplicationComponent(CalendarService.class) ;
-      //CalendarEvent ce = calendarService.getUserEvent(username, calendarId, eventId) ;
       CalendarEvent ce = calendarview.eventData_.get(eventId) ;
       if(ce != null) {
         try {
