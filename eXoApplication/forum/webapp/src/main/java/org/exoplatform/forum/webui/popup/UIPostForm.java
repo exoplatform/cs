@@ -9,6 +9,7 @@ import java.util.Date;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.service.Post;
+import org.exoplatform.forum.service.Topic;
 import org.exoplatform.forum.webui.EmptyNameValidator;
 import org.exoplatform.forum.webui.UIForumPortlet;
 import org.exoplatform.forum.webui.UITopicDetailContainer;
@@ -19,6 +20,7 @@ import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
+import org.exoplatform.webui.form.UIFormInputIconSelector;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
 
@@ -55,6 +57,9 @@ public class UIPostForm extends UIForm implements UIPopupComponent {
     messenger.addValidator(EmptyNameValidator.class) ;
     addUIFormInput(postTitle);
     addUIFormInput(messenger);
+    
+    UIFormInputIconSelector uiIconSelector = new UIFormInputIconSelector("Icon", "Icon") ;
+    addUIFormInput(uiIconSelector) ;
   }
   
   public void setPostIds(String categoryId, String forumId, String topicId) {
@@ -78,11 +83,14 @@ public class UIPostForm extends UIForm implements UIPopupComponent {
       } else {
         getUIStringInput(FIELD_POSTTITLE_INPUT).setValue(post.getSubject()) ;
         getUIFormTextAreaInput(FIELD_MESSENGER_TEXTAREA).setDefaultValue(post.getMessage()) ;
+        getChild(UIFormInputIconSelector.class).setSelectedIcon(post.getIcon());
       }
     } else {
       if(!quote) {
-        String title = this.forumService.getTopic(this.categoryId, this.forumId, this.topicId, false).getTopicName() ;
+        Topic topic = this.forumService.getTopic(this.categoryId, this.forumId, this.topicId, false) ;
+        String title = topic.getTopicName() ;
         getUIStringInput(FIELD_POSTTITLE_INPUT).setValue(getLabel(FIELD_LABEL_QUOTE) + ": " + title) ;
+        getChild(UIFormInputIconSelector.class).setSelectedIcon(topic.getIcon());
       }
     }
   }
@@ -93,7 +101,6 @@ public class UIPostForm extends UIForm implements UIPopupComponent {
   
   public void deActivate() throws Exception {
     // TODO Auto-generated method stub
-    //System.out.println("\n\n description: sfdsf\n\n");
   }
   
   public String[] getActionsTopic() throws Exception {
@@ -123,7 +130,8 @@ public class UIPostForm extends UIForm implements UIPopupComponent {
       post.setModifiedBy(userName) ;
       post.setModifiedDate(new Date()) ;
       post.setRemoteAddr("") ;
-      post.setIcon("") ;
+      UIFormInputIconSelector uiIconSelector = uiForm.getChild(UIFormInputIconSelector.class);
+      post.setIcon(uiIconSelector.getSelectedIcon());
       post.setNumberOfAttachment(0) ;
       post.setIsApproved(false) ;
       

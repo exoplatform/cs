@@ -12,6 +12,8 @@ import org.exoplatform.forum.service.Category;
 import org.exoplatform.forum.service.Forum;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.service.Topic;
+import org.exoplatform.forum.webui.UIForumContainer;
+import org.exoplatform.forum.webui.UIForumInfos;
 import org.exoplatform.forum.webui.UIForumPortlet;
 import org.exoplatform.forum.webui.UITopicContainer;
 import org.exoplatform.forum.webui.UITopicDetail;
@@ -90,8 +92,9 @@ public class UIMoveTopicForm extends UIForm implements UIPopupComponent {
         UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
         forumPortlet.cancelAction() ;
         if(uiForm.isFormTopic) {
-          UITopicDetailContainer topicDetailContainer = forumPortlet.findFirstComponentOfType(UITopicDetailContainer.class) ;
-          topicDetailContainer.setRendered(true) ;
+          UIForumContainer forumContainer = forumPortlet.findFirstComponentOfType(UIForumContainer.class) ;
+          UITopicDetailContainer topicDetailContainer = forumContainer.getChild(UITopicDetailContainer.class) ;
+          forumContainer.setIsRenderChild(false) ;
           String[] temp = forumPath.split("/") ;
           topicDetailContainer.getChild(UITopicDetail.class).setUpdateTopic(temp[temp.length - 2], temp[temp.length - 1], topics.get(0).getId(), false) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(topicDetailContainer) ;

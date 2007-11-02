@@ -132,7 +132,8 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
       if(Integer.valueOf(string).intValue() == 5) l = l + 1;
     }
     if((i+j+k+t+l) > 0) {
-      star = (i*1+j*2+k*3+t*4+l*5) / (i+j+k+t+l) ;
+      float fl = (i*1+j*2+k*3+t*4+l*5) / (i+j+k+t+l) ;
+      star = Math.round(fl) ;
     }
     return star ;
   }
@@ -155,10 +156,9 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
   		String topicId = event.getRequestContext().getRequestParameter(OBJECTID) ; 
   		UIForumContainer uiForumContainer = uiTopicContainer.getAncestorOfType(UIForumContainer.class) ;
       UITopicDetailContainer uiTopicDetailContainer = uiForumContainer.getChild(UITopicDetailContainer.class) ;
-      uiTopicDetailContainer.setRendered(true) ;
+      uiForumContainer.setIsRenderChild(false) ;
       UITopicDetail uiTopicDetail = uiTopicDetailContainer.getChild(UITopicDetail.class) ;
       uiTopicDetail.setUpdateTopic(uiTopicContainer.categoryId, uiTopicContainer.forumId, topicId, true) ;
-      uiTopicContainer.setRendered(false) ;
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
       context.addUIComponentToUpdateByAjax(uiForumContainer) ;
   	}

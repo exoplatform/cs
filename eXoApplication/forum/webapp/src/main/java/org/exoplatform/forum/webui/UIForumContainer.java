@@ -20,9 +20,14 @@ import org.exoplatform.webui.core.UIContainer;
 public class UIForumContainer extends UIContainer  {
   public UIForumContainer() throws Exception {
     addChild(UIForumDescription.class, null, null) ;
-    
     addChild(UITopicContainer.class, null, null) ;
     addChild(UITopicDetailContainer.class, null, null).setRendered(false) ;
     addChild(UIForumSummary.class, null, null) ;
-  }  
+  } 
+  
+  public void setIsRenderChild(boolean isRender) {
+    getChild(UITopicContainer.class).setRendered(isRender) ;
+    getChild(UITopicDetailContainer.class).setRendered(!isRender) ;
+    getChild(UIForumSummary.class).setRendered(isRender) ;
+  }
 }

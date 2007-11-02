@@ -95,8 +95,12 @@ public class UITopicDetail extends UIForm  {
   }
   
   private Topic getTopic() throws Exception {
-    this.topic = forumService.getTopic(categoryId, forumId, topicId, viewTopic) ; 
-    return this.topic ;
+    try {
+      this.topic = forumService.getTopic(categoryId, forumId, topicId, viewTopic) ; 
+      return this.topic ;
+    } catch (Exception e) {
+      return null ;
+    }
   }
   
   private JCRPageList getPagePosts() throws Exception {
@@ -369,8 +373,7 @@ public class UITopicDetail extends UIForm  {
       new MessageException(new ApplicationMessage("UITopicDetail.sms.Delete", args, ApplicationMessage.WARNING)) ;
       topicDetail.forumService.removeTopic(topicDetail.categoryId, topicDetail.forumId, topic.getId()) ;
       UIForumContainer uiForumContainer = topicDetail.getAncestorOfType(UIForumContainer.class) ;
-      uiForumContainer.getChild(UITopicDetailContainer.class).setRendered(false) ;
-      uiForumContainer.getChild(UITopicContainer.class).setRendered(true) ;
+      uiForumContainer.setIsRenderChild(true) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiForumContainer) ;
     }
   }

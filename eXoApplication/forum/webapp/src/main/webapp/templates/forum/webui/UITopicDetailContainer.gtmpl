@@ -7,7 +7,9 @@
 	<% 
 		List children = uicomponent.getChildren() ;
 		Topic topic = uicomponent.getChild(UITopicDetail.class).getTopic() ;
-		uicomponent.getChild(UITopicPoll.class).setRendered(topic.getIsPoll()) ;
+		if(topic != null) {
+			uicomponent.getChild(UITopicPoll.class).setRendered(topic.getIsPoll()) ;
+		}
     for(component in children) {
       if(component.isRendered()){
 				uicomponent.renderChild(component.getClass()) ;      

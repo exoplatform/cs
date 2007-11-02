@@ -722,7 +722,11 @@ public class JCRDataStorage implements DataStorage {
   }
   
   public List getPage(long page, JCRPageList pageList) throws Exception {
-    return pageList.getPage(page, getForumHomeNode().getSession()) ;
+    try {
+      return pageList.getPage(page, getForumHomeNode().getSession()) ;
+    } catch (Exception e) {
+      return null ;
+    }
   }
 
   private String [] ValuesToStrings(Value[] Val) throws Exception {

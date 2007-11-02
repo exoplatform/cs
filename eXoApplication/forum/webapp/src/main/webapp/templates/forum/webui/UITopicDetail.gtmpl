@@ -10,6 +10,7 @@
 
 <div class="UITopicDetail">
 <% uiform.begin() %>
+	<% if(topic != null) {%>
 	<div class="ButtomAndPageListContainer">
 	<% if(topic.getIsLock()) { %>
 		<div class="LockActionForum UIActionForum" style="float: left;">
@@ -304,11 +305,16 @@
 		  </div>
 		</div>
 		<div class="UIPageIterator1" style="margin-left: 120px; width: auto;border: solid 1px red; line-height: 20px;">
-			UIPageIterator
+			UIPageIterator  g
 		</div>
 		<div style="clear: left;"><span></span></div>
 	</div>
+	<% } else { %>
+	
+		Topic da bi xoa hoac da bi chuyen di !
+	
+	<% } %>
 <%uiform.end()%>
-<% //uicomponent.renderChild(UIPostRules.class) %>
-<% //uicomponent.renderChild(UIForumLinks.class) %>
+<% uicomponent.renderChild(UIPostRules.class) %>
+<% uicomponent.renderChild(UIForumLinks.class) %>
 </div>

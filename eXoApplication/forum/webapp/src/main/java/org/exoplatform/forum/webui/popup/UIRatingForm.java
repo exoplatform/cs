@@ -43,7 +43,6 @@ public class UIRatingForm extends UIForm implements UIPopupComponent {
     this.topic = topic ;
     this.categoryId = categoryId ;
     this.forumId = forumId ;
-    System.out.println("\n  "  + topic.getDescription());
   }
   public void activate() throws Exception {
 		// TODO Auto-generated method stub
@@ -58,7 +57,6 @@ public class UIRatingForm extends UIForm implements UIPopupComponent {
       String vote = event.getRequestContext().getRequestParameter(OBJECTID)  ;
       Topic topic = uiForm.topic ;
       String []temp;
-      System.out.println("\n2:  "  + topic.getDescription());
       if(topic.getVoteRating().length > 0) {
         temp= topic.getVoteRating() ;
       } else temp = new String[] {} ;

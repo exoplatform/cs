@@ -1,3 +1,6 @@
+<%  
+	import org.exoplatform.webui.form.UIFormInputIconSelector ;
+%>
 <div class="UIPostForm">
 	<% uiform.begin() %>
 	<div class="UIFormTabPane">
@@ -46,13 +49,16 @@
 	              			<tr>
 	                      <td class="FieldLabel"><%=_ctx.appRes("UITopicForm.label.ThreadTitle")%>:</td>
 	                      <td class="FieldComponent">
-	                        <%uiform.renderChild("PostTitle");%>
+	                        <% uicomponent.getChildById("PostTitle").setRendered(true);
+	                           uiform.renderChild("PostTitle");
+	                        %>
 	                      </td>
                       </tr>
 	              			<tr>
 	                      <td class="FieldLabel"><%=_ctx.appRes("UITopicForm.label.Messenger")%>:</td>
 	                      <td class="FieldComponent">
-	                        <%uiform.renderChild("Messenger"); %>
+	                        <% uicomponent.getChildById("Messenger").setRendered(true);
+	                           uiform.renderChild("Messenger"); %>
 	                      </td>
                       </tr>
                       
@@ -65,7 +71,9 @@
 	              	</table>
 	              </div>
 	            </div>
-	          	<div style="display: none;" class="UITabContent">Icons and Smileys</div>
+	          	<div style="display: none;" class="UITabContent">
+	          	<% uiform.renderChild(UIFormInputIconSelector.class) %>
+	          	</div>
 	          </div>
 			    </div>
 			  </div>

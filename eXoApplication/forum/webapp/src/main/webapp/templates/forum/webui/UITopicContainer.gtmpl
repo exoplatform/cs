@@ -20,7 +20,7 @@
 		  	<div class="NormalStyle">
 		  		<div class="ButtonLeft">
 		  			<div class="ButtonRight">
-		  				<div class="ButtonMiddle" style="border: 1px solid red">
+		  				<div class="ButtonMiddle">
 		  				<% if(forum.getIsLock()) { %>
 		  						<div class="IconButton LockIcon" title="<%= _ctx.appRes("UITopicContainer.tooltip.forumClosePosting"); %>"><span class="LockLabel"></span>New Thread</div>
 		  				<% } else { %>
@@ -230,18 +230,20 @@
 									<td class="Tdbox">
 										<div class="RatingInfoContainer">
 										<% int starNumber = uicomponent.getStarNumber(topic) ; 
-											 String st = s.valueOf(starNumber) ;
+										System.out.println("\n\nchua biet the nao: " +  starNumber) ;
+											 String st = "" + starNumber ;
 										%>
 				   						<div class="AvgRatingImages" title="Thread Rating: $st votes, 5 average">
-				   						<%	
-									  	int i = 0; 
-											while(i < 5) {
-												if(i < starNumber) {
-										  %>
+				   					<%	
+									  	int star = 0; 
+											while(star < 5) {
+												if(star < starNumber) {
+										%>
 							   				<div class="VoteIcon Voted"><span/></div>
-							   			<% } else { %>
+							   		<% } else { %>
 												<div class="VoteIcon Unvoted"><span/></div>
-										 <%  }i = i + 1;
+										 <%  }
+										 		 star = star + 1;
 											 } %>
 							 					<div style="clear: left;"><span></span></div>
 				 							</div>
