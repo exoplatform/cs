@@ -86,15 +86,9 @@ public class UIAddressBooks extends UIComponent {
       UIAddressBooks uiAddressBook = event.getSource();
       UIContactPortlet uiContactPortlet = uiAddressBook.getAncestorOfType(UIContactPortlet.class);
       UIPopupAction uiPopupAction = uiContactPortlet.getChild(UIPopupAction.class);
-      UIPopupContainer popupContainer = uiPopupAction.createUIComponent(UIPopupContainer.class,
-          null, "ImportForm");
-      popupContainer.addChild(UICategorySelect.class, null, null);
-      popupContainer.addChild(UIImportForm.class, null, null);
-      /*
-      String groupId = event.getRequestContext().getRequestParameter(OBJECTID);
-      uiCategorySelect.setValue(groupId);
-      */
-      uiPopupAction.activate(popupContainer, 600, 0, true);
+      UIImportForm uiImportForm = uiPopupAction.createUIComponent(UIImportForm.class,
+          null, "UIImportForm");
+      uiPopupAction.activate(uiImportForm, 600, 0, true);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
     }
   }
@@ -104,7 +98,6 @@ public class UIAddressBooks extends UIComponent {
       UIAddressBooks uiAddressBook = event.getSource();
       UIContactPortlet uiContactPortlet = uiAddressBook.getAncestorOfType(UIContactPortlet.class);
       UIPopupAction uiPopupAction = uiContactPortlet.getChild(UIPopupAction.class);
-      
       
       String addressBookId = event.getRequestContext().getRequestParameter(OBJECTID);
       if (addressBookId != null) {

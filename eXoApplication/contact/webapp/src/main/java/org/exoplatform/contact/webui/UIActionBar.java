@@ -4,6 +4,7 @@
  **************************************************************************/
 package org.exoplatform.contact.webui;
 
+import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.webui.popup.UICategoryForm;
 import org.exoplatform.contact.webui.popup.UICategorySelect;
@@ -12,8 +13,11 @@ import org.exoplatform.contact.webui.popup.UIExportAddressBookForm;
 import org.exoplatform.contact.webui.popup.UIImportForm;
 import org.exoplatform.contact.webui.popup.UIPopupAction;
 import org.exoplatform.contact.webui.popup.UIPopupContainer;
+import org.exoplatform.contact.webui.popup.UIProfileInputSet;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -98,13 +102,19 @@ public class UIActionBar extends UIContainer  {
   
   static public class CustomLayoutActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {
-      System.out.println("\n\n\n CustomLayoutActionListener\n\n\n");
+      UIActionBar uiActionBar = event.getSource() ;
+      UIApplication uiApp = uiActionBar.getAncestorOfType(UIApplication.class) ;
+      uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.fullName-required", null)) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+      return ; 
     }  
   }
   
   static public class AddressBookActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {
-      System.out.println("\n\n\n AddressBookActionListener\n\n\n");
+      
+      
+      
     }  
   }
   
@@ -113,10 +123,8 @@ public class UIActionBar extends UIContainer  {
       UIActionBar uiForm = event.getSource() ;
       UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
       UIPopupAction uiPopupAction = uiContactPortlet.getChild(UIPopupAction.class) ;
-      UIPopupContainer popupContainer = uiPopupAction.createUIComponent(UIPopupContainer.class, null, "ImportContact") ;
-      popupContainer.addChild(UICategorySelect.class, null, null) ;
-      popupContainer.addChild(UIImportForm.class, null, null) ;
-      uiPopupAction.activate(popupContainer, 600, 0, true) ;
+      UIImportForm uiImportForm = uiPopupAction.createUIComponent(UIImportForm.class, null, "UIImportForm") ;
+      uiPopupAction.activate(uiImportForm, 600, 0, true) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }  
   }

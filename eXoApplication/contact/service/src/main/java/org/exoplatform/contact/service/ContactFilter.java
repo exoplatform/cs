@@ -20,15 +20,45 @@ public class ContactFilter {
   private String orderBy;
   private boolean isAscending;
   private String text = null ;
+  
+  private String fullName ;
+  private String firstName ;
+  private String middleName ;
+  private String lastName ;
+  private String nickName ;
   private String gender ;
+  private String jobTitle ;
+  private String emailAddress ;
+  
   
   public ContactFilter() { isAscending = true ; }
   
   public void setText(String fullTextSearch) { this.text = fullTextSearch ; }
   public String getText() { return text ; }
   
-  public void setGender(String s) { gender = s ; }
+  public String getFullName()  { return fullName ; }
+  public void   setFullName(String s) { fullName = s ; }
+  
+  public String getFirstName()  { return firstName ; }
+  public void   setFirstName(String s) { firstName = s ; }
+  
+  public String getMiddleName()  { return middleName ; }
+  public void   setMiddleName(String s) { middleName = s ; }
+  
+  public String getLastName()  { return lastName ; }
+  public void   setLastName(String s) { lastName = s ; }
+  
+  public String getNickName()  { return nickName ; }
+  public void   setNickName(String s) { nickName = s ; }
+  
   public String getGender() { return gender ; }
+  public void setGender(String s) { gender = s ; }
+  
+  public String getJobTitle() { return jobTitle ; }
+  public void   setJobTitle(String s) { jobTitle = s ; }
+  
+  public String getEmailAddress() { return emailAddress ; }
+  public void   setEmailAddress(String s) { emailAddress = s ; }
   
   public String[] getCategories() { return categories ; }
   public void setCategories(String[] s) { this.categories = s ; }
@@ -94,11 +124,59 @@ public class ContactFilter {
       hasConjuntion = true ;
     }
     
-    if (gender != null && gender.trim().length() >0) {
+    if (fullName != null && fullName.trim().length() > 0) {
       if(hasConjuntion) stringBuffer.append(" and (") ;
       else stringBuffer.append("(") ;
-      
+      stringBuffer.append("@exo:fullName='" + fullName + "'") ;
+      stringBuffer.append(")") ;
+      hasConjuntion = true ;
+    }
+    if (firstName != null && firstName.trim().length() > 0) {
+      if(hasConjuntion) stringBuffer.append(" and (") ;
+      else stringBuffer.append("(") ;
+      stringBuffer.append("@exo:firstName='" + firstName + "'") ;
+      stringBuffer.append(")") ;
+      hasConjuntion = true ;
+    }
+    if (middleName != null && middleName.trim().length() > 0) {
+      if(hasConjuntion) stringBuffer.append(" and (") ;
+      else stringBuffer.append("(") ;
+      stringBuffer.append("@exo:middleName='" + middleName + "'") ;
+      stringBuffer.append(")") ;
+      hasConjuntion = true ;
+    }
+    if (lastName != null && lastName.trim().length() > 0) {
+      if(hasConjuntion) stringBuffer.append(" and (") ;
+      else stringBuffer.append("(") ;
+      stringBuffer.append("@exo:lastName='" + lastName + "'") ;
+      stringBuffer.append(")") ;
+      hasConjuntion = true ;
+    }
+    if (nickName != null && nickName.trim().length() > 0) {
+      if(hasConjuntion) stringBuffer.append(" and (") ;
+      else stringBuffer.append("(") ;
+      stringBuffer.append("@exo:nickName='" + nickName + "'") ;
+      stringBuffer.append(")") ;
+      hasConjuntion = true ;
+    }
+    if (gender != null && gender.trim().length() > 0) {
+      if(hasConjuntion) stringBuffer.append(" and (") ;
+      else stringBuffer.append("(") ;
       stringBuffer.append("@exo:gender='" + gender + "'") ;
+      stringBuffer.append(")") ;
+      hasConjuntion = true ;
+    }
+    if (jobTitle != null && jobTitle.trim().length() > 0) {
+      if(hasConjuntion) stringBuffer.append(" and (") ;
+      else stringBuffer.append("(") ;
+      stringBuffer.append("@exo:jobTitle='" + jobTitle + "'") ;
+      stringBuffer.append(")") ;
+      hasConjuntion = true ;
+    }
+    if (emailAddress != null && emailAddress.trim().length() > 0) {
+      if(hasConjuntion) stringBuffer.append(" and (") ;
+      else stringBuffer.append("(") ;
+      stringBuffer.append("@exo:emailAddress='" + emailAddress + "'") ;
       stringBuffer.append(")") ;
       hasConjuntion = true ;
     }

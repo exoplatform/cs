@@ -21,6 +21,7 @@ import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
+import org.exoplatform.webui.form.validator.EmailAddressValidator;
 
 /**
  * Created by The eXo Platform SARL
@@ -39,12 +40,29 @@ import org.exoplatform.webui.form.UIFormStringInput;
 
 public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent {
   public final static String FIELD_TEXT_INPUT = "text" ;
+  public static final String FIELD_FULLNAME_INPUT = "fullName";
+  public static final String FIELD_FIRSTNAME_INPUT = "firstName";
+  public static final String FIELD_MIDDLENAME_INPUT = "middleName";
+  public static final String FIELD_LASTNAME_INPUT = "lastName";
+  public static final String FIELD_NICKNAME_INPUT = "nickName";
+  public static final String FIELD_BIRTHDAY_DATETIME = "birthday" ;
+  public static final String FIELD_JOBTITLE_INPUT = "jobTitle";
+  public static final String FIELD_EMAIL_INPUT = "preferredEmail" ;
+  
   public final static String FIELD_GENDER_BOX = "gender" ;
   public static final String MALE = "male" ;
   public static final String FEMALE = "female" ;
   
-  public UIAdvancedSearchForm() {
+  public UIAdvancedSearchForm() throws Exception {
     addUIFormInput(new UIFormStringInput(FIELD_TEXT_INPUT, FIELD_TEXT_INPUT, null));
+    addUIFormInput(new UIFormStringInput(FIELD_FULLNAME_INPUT, FIELD_FULLNAME_INPUT, null));
+    addUIFormInput(new UIFormStringInput(FIELD_FIRSTNAME_INPUT, FIELD_FIRSTNAME_INPUT, null));
+    addUIFormInput(new UIFormStringInput(FIELD_MIDDLENAME_INPUT, FIELD_MIDDLENAME_INPUT, null));
+    addUIFormInput(new UIFormStringInput(FIELD_LASTNAME_INPUT, FIELD_LASTNAME_INPUT, null));
+    addUIFormInput(new UIFormStringInput(FIELD_NICKNAME_INPUT, FIELD_NICKNAME_INPUT, null));
+    addUIFormInput(new UIFormStringInput(FIELD_JOBTITLE_INPUT, FIELD_JOBTITLE_INPUT, null));
+    addUIFormInput(new UIFormStringInput(FIELD_EMAIL_INPUT, FIELD_EMAIL_INPUT, null)
+      .addValidator(EmailAddressValidator.class));
     
     List<SelectItemOption<String>> genders = new ArrayList<SelectItemOption<String>>() ;
     genders.add(new SelectItemOption<String>("", "")) ;
@@ -60,7 +78,15 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent {
       UIAdvancedSearchForm uiAdvancedSearchForm = event.getSource() ;
       ContactFilter filter = new ContactFilter() ;
       filter.setText(uiAdvancedSearchForm.getUIStringInput(FIELD_TEXT_INPUT).getValue()) ;
+      filter.setFullName(uiAdvancedSearchForm.getUIStringInput(FIELD_FULLNAME_INPUT).getValue()) ;
+      filter.setFirstName(uiAdvancedSearchForm.getUIStringInput(FIELD_FIRSTNAME_INPUT).getValue()) ;
+      filter.setMiddleName(uiAdvancedSearchForm.getUIStringInput(FIELD_MIDDLENAME_INPUT).getValue()) ;
+      filter.setLastName(uiAdvancedSearchForm.getUIStringInput(FIELD_LASTNAME_INPUT).getValue()) ;
+      filter.setNickName(uiAdvancedSearchForm.getUIStringInput(FIELD_NICKNAME_INPUT).getValue()) ;
+      filter.setJobTitle(uiAdvancedSearchForm.getUIStringInput(FIELD_JOBTITLE_INPUT).getValue()) ;
+      filter.setEmailAddress(uiAdvancedSearchForm.getUIStringInput(FIELD_EMAIL_INPUT).getValue()) ;
       filter.setGender(uiAdvancedSearchForm.getUIFormSelectBox(FIELD_GENDER_BOX).getValue()) ;
+      
       DataPageList resultPageList = 
         ContactUtils.getContactService().searchContact(ContactUtils.getCurrentUser(), filter) ;
       UIContactPortlet uiContactPortlet = uiAdvancedSearchForm.getAncestorOfType(UIContactPortlet.class) ;
