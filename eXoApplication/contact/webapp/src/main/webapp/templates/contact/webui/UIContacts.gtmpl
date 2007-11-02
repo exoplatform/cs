@@ -153,7 +153,7 @@
 									iconTag = "Icon " + tag.getColor() + "Tag" ; 
 								}
 								cssClass = "" ;
-								if (contact.getId().equals(uicomponent.getSelectedContact())) cssClass = "Selected" ;
+								if (contact.getId().equals(uicomponent.getSelectedContact())) cssClass = "Selected" ;								
 						%>
   						<tr class="UIContactList $cssClass" selectedTag="<%=uicomponent.getSelectedTag()%>">
   						  <td class="text" style="padding-left: 7px;">

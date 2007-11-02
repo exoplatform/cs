@@ -337,9 +337,8 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
         contactService.saveContact(username, contact, isNew_);
       }
       uicontacts.updateList() ;
-      if (uicontacts.getSelectedContact().equals(contact.getId())){
-        uiContactPreview.setContact(contact) ;
-      }
+      if (!ContactUtils.isEmpty(uicontacts.getSelectedContact()) &&
+          uicontacts.getSelectedContact().equals(contact.getId())) uiContactPreview.setContact(contact) ;
       uiContactPortlet.cancelAction() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContactPortlet.getChild(UIWorkingContainer.class)) ;
     }
