@@ -17,7 +17,9 @@ import org.exoplatform.forum.webui.popup.UIMoveTopicForm;
 import org.exoplatform.forum.webui.popup.UIPollForm;
 import org.exoplatform.forum.webui.popup.UIPopupAction;
 import org.exoplatform.forum.webui.popup.UIPostForm;
+import org.exoplatform.forum.webui.popup.UIRatingForm;
 import org.exoplatform.forum.webui.popup.UITopicForm;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -40,7 +42,9 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
     lifecycle = UIFormLifecycle.class,
     template =  "app:/templates/forum/webui/UITopicDetail.gtmpl", 
     events = {
-      @EventConfig(listeners = UITopicDetail.AddPostActionListener.class ),  
+      @EventConfig(listeners = UITopicDetail.AddPostActionListener.class ),
+      @EventConfig(listeners = UITopicDetail.RatingTopicActionListener.class ),
+      
       @EventConfig(listeners = UITopicDetail.PrintActionListener.class ),  
       @EventConfig(listeners = UITopicDetail.EditActionListener.class ),  
       @EventConfig(listeners = UITopicDetail.DeleteActionListener.class ),  
@@ -130,12 +134,36 @@ public class UITopicDetail extends UIForm  {
     }
   }
 
+  static public class RatingTopicActionListener extends EventListener<UITopicDetail> {
+    public void execute(Event<UITopicDetail> event) throws Exception {
+      UITopicDetail topicDetail = event.getSource() ;
+      String userName = Util.getPortalRequestContext().getRemoteUser() ;
+      String[] userVoteRating = topicDetail.topic.getUserVoteRating() ;
+      boolean erro = false ;
+      for (String string : userVoteRating) {
+        if(string.equalsIgnoreCase(userName)) erro = true ; 
+      }
+      if(!erro) {
+        UIForumPortlet forumPortlet = topicDetail.getAncestorOfType(UIForumPortlet.class) ;
+        UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;
+        UIRatingForm ratingForm = popupAction.createUIComponent(UIRatingForm.class, null, null) ;
+        ratingForm.updateRating(topicDetail.topic, topicDetail.categoryId, topicDetail.forumId) ;
+        popupAction.activate(ratingForm, 300, 145) ;
+        topicDetail.viewTopic = false ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+      } else {
+        Object[] args = { userName };
+        throw new MessageException(new ApplicationMessage("UITopicDetail.sms.VotedRating", args, ApplicationMessage.WARNING)) ;
+      }
+    }
+  }
+  
   static public class PrintActionListener extends EventListener<UITopicDetail> {
     public void execute(Event<UITopicDetail> event) throws Exception {
       UITopicDetail topicDetail = event.getSource() ;
     }
   }
-  
+
   static public class EditActionListener extends EventListener<UITopicDetail> {
     public void execute(Event<UITopicDetail> event) throws Exception {
       UITopicDetail topicDetail = event.getSource() ;

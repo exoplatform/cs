@@ -354,6 +354,9 @@ public class JCRDataStorage implements DataStorage {
     if(topicNode.hasProperty("exo:canView")) topicNew.setCanView(ValuesToStrings(topicNode.getProperty("exo:canView").getValues())) ;
     if(topicNode.hasProperty("exo:canPost")) topicNew.setCanPost(ValuesToStrings(topicNode.getProperty("exo:canPost").getValues())) ;
     if(topicNode.hasProperty("exo:isPoll")) topicNew.setIsPoll(topicNode.getProperty("exo:isPoll").getBoolean()) ;
+
+    if(topicNode.hasProperty("exo:userVoteRating")) topicNew.setUserVoteRating(ValuesToStrings(topicNode.getProperty("exo:userVoteRating").getValues())) ;
+    if(topicNode.hasProperty("exo:voteRating")) topicNew.setVoteRating(ValuesToStrings(topicNode.getProperty("exo:voteRating").getValues())) ;
     return topicNew;
   }
 
@@ -399,6 +402,8 @@ public class JCRDataStorage implements DataStorage {
 		    topicNode.setProperty("exo:isSticky", topic.getIsSticky()) ;
 		    topicNode.setProperty("exo:canView", topic.getCanView()) ;
 		    topicNode.setProperty("exo:canPost", topic.getCanPost()) ;
+        topicNode.setProperty("exo:userVoteRating", topic.getUserVoteRating()) ;
+        topicNode.setProperty("exo:voteRating", topic.getVoteRating()) ;
 
 		    if(isNew) {
 		    	// setTopicCount for Forum

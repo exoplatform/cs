@@ -34,14 +34,20 @@ public class Topic {
   private boolean isLock = false ;
   private boolean isApproved = false ;
   private boolean isSticky = false ;
-  
   private boolean isPoll = false ;
   
   private String[] canView;
   private String[] canPost;
+  private String[] userVoteRating ;
+  private String[] voteRating ;
+  
   
   public Topic(){ 
     id = ("topic" + IdGenerator.generate()).toUpperCase() ;
+    canView = new String [] {} ;
+    canPost = new String [] {} ;
+    userVoteRating = new String [] {} ;
+    voteRating = new String [] {} ;
   }
   
   public String getOwner(){return owner;} 
@@ -113,10 +119,11 @@ public class Topic {
   public boolean getIsPoll(){return isPoll;}
   public void setIsPoll(boolean isPoll){this.isPoll = isPoll;}
   
-  /**
-   * This method should calculate the forum id base on the topic id
-   * @return
-   */
+  public String[] getUserVoteRating(){return userVoteRating;}
+  public void setUserVoteRating(String[] userVoteRating){this.userVoteRating = userVoteRating;}
+
+  public String[] getVoteRating(){return voteRating;}
+  public void setVoteRating(String[] voteRating){this.voteRating = voteRating;}
   public String getForumId() { return null ; }
 
 }

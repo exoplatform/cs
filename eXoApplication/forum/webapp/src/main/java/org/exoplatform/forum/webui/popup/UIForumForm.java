@@ -138,7 +138,7 @@ public class UIForumForm extends UIForm implements UIPopupComponent {
   
   private String unSplitForForum (String[] str) throws Exception {
     StringBuilder rtn = new StringBuilder();
-    if(str != null && str.length > 0) {
+    if(str.length > 0) {
       for (String temp : str) {
         rtn.append(temp).append(",") ; 
       }

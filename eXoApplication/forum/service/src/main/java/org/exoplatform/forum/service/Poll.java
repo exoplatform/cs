@@ -23,13 +23,16 @@ public class Poll {
   private String question;
   private String[] option;
   private String[] vote;
-  private String[] userVote = new String[] {};
+  private String[] userVote;
   private boolean isMultiCheck = false ;
   
   
   public Poll() {
     id = ("poll" + IdGenerator.generate()).toUpperCase() ;
     createdDate = new Date() ;
+    option = new String[] {};
+    vote = new String[] {};
+    userVote = new String[] {};
   }
   
   public String getId() { return id; }

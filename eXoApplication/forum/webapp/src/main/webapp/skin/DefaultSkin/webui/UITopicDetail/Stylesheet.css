@@ -244,3 +244,61 @@
 	padding: 10px 15px;
 	margin: 5px 0px;
 }
+
+.UIRatingForm {
+	padding: 8px 10px;
+}
+
+.UIRatingForm .VoteFormContainer {
+	border: solid 1px #e1e1e1 ;
+	background: #f4f4f4 ;
+	padding-top: 10px;
+}
+
+.UIRatingForm .VoteFormContainer .RatingInfoContainer {
+	border: solid 1px #e1e1e1 ;
+	width: 130px;
+	margin: auto;
+}
+
+.UIRatingForm .VoteFormContainer .OptionsContainer {
+	border: solid 1px #ffffff ;
+	padding-left: 7px;
+}
+
+.UIRatingForm .VoteFormContainer .RatedVote {
+	float: left ;
+	background: url('../skinIcons/16x16/icons/SmallGreyStar.gif') no-repeat center;
+	height: 22px;
+	width: 22px;
+	cursor: pointer;
+}
+
+.UIRatingForm .VoteFormContainer .OverVote {
+	float: left ;
+	background: url('../skinIcons/16x16/icons/SmallYellowStar.gif') no-repeat center;
+	height: 22px;
+	width: 22px;
+	cursor: pointer;
+}
+
+.UIRatingForm .VoteFormContainer .NormalVote {
+	float: left ;
+	background: url('../skinIcons/16x16/icons/SmallGreyStar.gif') no-repeat center;
+	height: 22px;
+	width: 22px;
+	cursor: pointer;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

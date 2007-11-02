@@ -121,6 +121,21 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
     return  this.forumService.getTopic(this.categoryId, this.forumId, topicId, false) ;
   }
   
+  private int getStarNumber(Topic topic) throws Exception {
+    String []temp = topic.getVoteRating() ;
+    int i = 0,j = 0, k = 0, t = 0, l = 0, star = 0;
+    for (String string : temp) {
+      if(Integer.valueOf(string).intValue() == 1) i = i + 1;
+      if(Integer.valueOf(string).intValue() == 2) j = j + 1;
+      if(Integer.valueOf(string).intValue() == 3) k = k + 1;
+      if(Integer.valueOf(string).intValue() == 4) t = t + 1;
+      if(Integer.valueOf(string).intValue() == 5) l = l + 1;
+    }
+    if((i+j+k+t+l) > 0) {
+      star = (i*1+j*2+k*3+t*4+l*5) / (i+j+k+t+l) ;
+    }
+    return star ;
+  }
   
   static public class AddTopicActionListener extends EventListener<UITopicContainer> {
     public void execute(Event<UITopicContainer> event) throws Exception {

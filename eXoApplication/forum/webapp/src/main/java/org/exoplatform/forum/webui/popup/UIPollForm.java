@@ -48,8 +48,7 @@ public class UIPollForm extends UIForm implements UIPopupComponent {
   final static public String FIELD_OPTIONS = "Option" ;
   public static final String FIELD_TIMEOUT_INPUT = "TimeOut" ;
   public static final String FIELD_MULTIVOTE_CHECKBOX = "MultiVote" ;
-  public UIFormMultiValueInputSet uiFormMultiValue = null ;
-  
+  private UIFormMultiValueInputSet uiFormMultiValue = new UIFormMultiValueInputSet(FIELD_OPTIONS,FIELD_OPTIONS) ;
   private String TopicPath ;
   private Poll poll ;
   private boolean isUpdate = false ;
@@ -117,12 +116,12 @@ public class UIPollForm extends UIForm implements UIPopupComponent {
       boolean isMulti = uiForm.getUIFormCheckBoxInput(FIELD_MULTIVOTE_CHECKBOX).isChecked() ;
       String sms = "";
       int i = 0 ; 
-      List values = uiForm.uiFormMultiValue.getValue();
+      List<String> values = (List<String>) uiForm.uiFormMultiValue.getValue();
       String temp = "" ;
       String[] options = new String[values.size()] ;  
-      if(values != null && values.size() > 0) {
-        for(Object value : values) {
-          temp = (String)value ;
+      if(values.size() > 0) {
+        for(String value : values) {
+          temp = value ;
           if(temp != null && temp.length() > 0){
             options[i] = temp;
           } 

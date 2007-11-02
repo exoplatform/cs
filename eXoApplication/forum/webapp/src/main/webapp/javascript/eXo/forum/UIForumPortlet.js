@@ -131,4 +131,63 @@ UIForumPortlet.prototype.showTreeNode = function(obj) {
 	}	
 };
 
+
+
+UIForumPortlet.prototype.initVote = function(voteId, rate) {
+	var vote = document.getElementById(voteId) ;
+	vote.rate = rate = parseInt(rate) ;
+	var optsContainer = eXo.core.DOMUtil.findFirstDescendantByClass(vote, "div", "OptionsContainer") ;
+	var options = eXo.core.DOMUtil.getChildrenByTagName(optsContainer, "div") ;
+	for(var i = 0; i < options.length-1; i++) {
+		options[i].onmouseover = this.overVote ;
+		if(i < rate) options[i].className = "RatedVote" ;
+	}
+
+	vote.onmouseover = function() {
+		var optsCon= eXo.core.DOMUtil.findFirstDescendantByClass(this, "div", "OptionsContainer") ;
+		var opts = eXo.core.DOMUtil.getChildrenByTagName(optsCon, "div") ;
+		for(var j = 0; j < opts.length-1; j++) {
+			if(j < this.rate) opts[j].className = "RatedVote" ;
+			else opts[j].className = "NormalVote" ;
+		}
+	}
+	optsContainer.onmouseover = function(e) {
+		if(!e) e = window.event ;
+		e.cancelBubble = true ;
+	}
+};
+
+UIForumPortlet.prototype.overVote = function(event) {
+	var optsCont = eXo.core.DOMUtil.findAncestorByClass(this, "OptionsContainer") ;
+	var opts = eXo.core.DOMUtil.getChildrenByTagName(optsCont, "div") ;
+	var i = opts.length-1;
+	for(--i; i >= 0; i--) {
+		if(opts[i] == this) break ;
+		opts[i].className = "NormalVote" ;
+	}
+	if(opts[i].className == "OverVote") return ;
+	for(; i >= 0; i--) {
+		opts[i].className = "OverVote" ;
+	}
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 eXo.forum.UIForumPortlet = new UIForumPortlet() ;

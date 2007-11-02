@@ -20,7 +20,6 @@
 	  				<span>Poll:</span>
 	  				<span>${question}?</span>
 	  			</div>
-	  			
 	  			<div class="CollapseButton" title="Collapse" onclick="eXo.forum.UIForumPortlet.expandCollapse(this) ;"><span></span></div>
 	  			<div class="SeparatorLine"><span></span></div>
 	  			<a class="Icon ClosePoll" href="javascript:if(confirm('$confirmDelete')){<%=uicomponent.event("RemovePoll");}%>">Close Poll</a>

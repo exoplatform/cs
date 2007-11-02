@@ -94,7 +94,7 @@
 		  				<div class="SeparatorLine"><span></span></div>
 							<a class="StatusIcon TagIcon">Tag</a>
 		  				<div class="SeparatorLine"><span></span></div>
-							<a class="StatusIcon VoteIcon">Vote Thread</a>
+							<a class="StatusIcon VoteIcon" href="<%=uicomponent.event("RatingTopic");%>">Vote Thread</a>
 		  				<div class="SeparatorLine"><span></span></div>
 							<a class="StatusIcon SearchIcon">Search Thread</a>
 		  				<div class="SeparatorLine"><span></span></div>

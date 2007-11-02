@@ -139,7 +139,7 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
   
   private String unSplitForForum (String[] str) throws Exception {
     StringBuilder rtn = new StringBuilder();
-    if(str != null && str.length > 0) {
+    if(str.length > 0) {
       for (String temp : str) {
         rtn.append(temp).append(",") ; 
       }
@@ -248,11 +248,13 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
       topicNew.setCanView(canView);
       topicNew.setCanPost(canPost);
       
-      ForumService forumService =  (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
+      ForumService forumService = (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
       if(uiForm.topicId != null && uiForm.topicId.length() > 0) {
         topicNew.setId(uiForm.topicId);
         forumService.saveTopic(uiForm.categoryId, uiForm.forumId, topicNew, false);
       } else {
+        topicNew.setVoteRating(new String[] {}) ;
+        topicNew.setUserVoteRating(new String[] {}) ;
         forumService.saveTopic(uiForm.categoryId, uiForm.forumId, topicNew, true);
       }
       forumPortlet.cancelAction() ;

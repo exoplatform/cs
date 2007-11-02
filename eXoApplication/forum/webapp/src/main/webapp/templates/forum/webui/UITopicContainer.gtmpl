@@ -229,12 +229,20 @@
 									<td class="Tdbox">$attachment</td>
 									<td class="Tdbox">
 										<div class="RatingInfoContainer">
-				   						<div class="AvgRatingImages" title="Thread Rating: 3 votes, 5 average">
+										<% int starNumber = uicomponent.getStarNumber(topic) ; 
+											 String st = s.valueOf(starNumber) ;
+										%>
+				   						<div class="AvgRatingImages" title="Thread Rating: $st votes, 5 average">
+				   						<%	
+									  	int i = 0; 
+											while(i < 5) {
+												if(i < starNumber) {
+										  %>
 							   				<div class="VoteIcon Voted"><span/></div>
-							   				<div class="VoteIcon Voted"><span/></div>
-							  				<div class="VoteIcon Voted"><span/></div>
+							   			<% } else { %>
 												<div class="VoteIcon Unvoted"><span/></div>
-							 					<div class="VoteIcon Unvoted"><span/></div>
+										 <%  }i = i + 1;
+											 } %>
 							 					<div style="clear: left;"><span></span></div>
 				 							</div>
 				   					</div>

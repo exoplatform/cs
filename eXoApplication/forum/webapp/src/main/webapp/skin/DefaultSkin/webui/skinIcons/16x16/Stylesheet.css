@@ -79,11 +79,11 @@
 }
 
 .Voted {
-	background: url('icons/SmallYellowStar.gif') no-repeat ;
+	background: url('icons/SmallYellowStar.gif') no-repeat center;
 }
 
 .Unvoted {
-	background: url('icons/SmallGreyStar.gif') no-repeat ;
+	background: url('icons/SmallGreyStar.gif') no-repeat center;
 }
 
 .NormalTopicIcon {
