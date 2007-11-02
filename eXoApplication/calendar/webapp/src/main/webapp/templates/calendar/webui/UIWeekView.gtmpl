@@ -1,5 +1,6 @@
 <%
 	import java.util.Calendar;
+	import java.lang.Math ;
 	import java.util.GregorianCalendar;
 	import java.text.DateFormat;
 	import java.text.SimpleDateFormat;
@@ -86,13 +87,27 @@
 							<td ><div  style="width: 55px;"><span></span></div></td>
 							<td colspan="7" class="EventAllday">
 								<% for (event in uicomponent.getEventList().values()) {
-									begindate = dtf.format(event.fromDateTime) ;
-									enddate = dtf.format(event.toDateTime) ;
+									int indexBeginDate = -1 ;
+									int indexEndDate = -1 ;
+									begindate = tf.format(event.fromDateTime) ;
+									enddate = tf.format(event.toDateTime) ;
+									for(cl in uicomponent.getDaysOfWeek(weekNumber)) { 
+						 			  if(uicomponent.isSameDate(event.fromDateTime, cl.time)){
+						 			  	indexBeginDate = uicomponent.getDaysOfWeek(weekNumber).indexOf(cl) ;
+						 			  }
+						 			  if(uicomponent.isSameDate(event.toDateTime, cl.time)){
+						 			  	indexEndDate = uicomponent.getDaysOfWeek(weekNumber).indexOf(cl) ;
+						 			  }
+							 		}
+									startTime = ((event.getFromDateTime().getHours() * 60) + event.getFromDateTime().getMinutes());
+								 	finishTime = ((event.getToDateTime().getHours() * 60) + event.getFromDateTime().getMinutes());
 									color = uicomponent.getColors().get(event.getCalendarId()) ;
 								%>
-										 <div class="EventContainer EventAlldayContainer $color" calType="$event.calType"  eventid="$event.id" calid="$event.calendarId" starttime="$begindate" endtime="$enddate"  style="height: 22px;" title="$begindate -> $enddate"  >
-										 	$event.summary
+										<div class=" $color" style="border: solid 1px gray;">
+										 <div class="EventContainer EventAlldayContainer" indexBeginDate='$indexBeginDate' indexEndDate='$indexEndDate' calType="$event.calType"  eventid="$event.id" calid="$event.calendarId" starttime="$begindate" endtime="$enddate"  style="height: 22px;" title="$begindate -> $enddate"  >
+										  $event.summary
 										 </div> 
+										</div>	
 								<%}%>
 							</td>
 					</tr>
@@ -110,7 +125,7 @@
 							for(cl in uicomponent.getDaysOfWeek(weekNumber)) {
 							 key = uicomponent.keyGen(cl.get(Calendar.DATE), cl.get(Calendar.MONTH), cl.get(Calendar.YEAR)) ;	
 						%>
-							<td class="cols" startTime="<%=df.format(cl.getTime())%> <%=tf.format(currentCalendar.getTime())%>">
+							<td class="cols" startTime="<%=cl.getTimeInMillis()%>">
 								<% 
 								events = uicomponent.getEventData().get(key) ; 
 								if(events != null) {

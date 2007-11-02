@@ -154,6 +154,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       setSelectedEventState(eventCalendar.getEventState()) ;
       setMeetingInvitation(eventCalendar.getInvitation()) ;
       setParticipant(eventCalendar.getParticipant()) ;
+      ((UIEventDetailTab)getChildById(TAB_EVENTDETAIL)).getUIFormSelectBox(UIEventDetailTab.FIELD_CALENDAR).setEnable(false) ;
     } else {
       java.util.Calendar cal = GregorianCalendar.getInstance() ;
       int beginMinute = (cal.get(java.util.Calendar.MINUTE)/15)*15 ;

@@ -29,6 +29,9 @@ import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.omg.PortableInterceptor.LOCATION_FORWARD;
+
+import com.sun.xml.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 
 /**
  * Created by The eXo Platform SARL
@@ -239,8 +242,6 @@ public class UIWeekView extends UICalendarView {
       }else if(calType.equals(CalendarUtils.PUBLIC_TYPE)){
         calendarService.saveGroupEvent(calendarId, eventCalendar, false) ;          
       }
-      System.out.println("\n\n " + eventCalendar.getFromDateTime().toString()) ;
-      System.out.println("\n\n " + eventCalendar.getToDateTime().toString()) ;
       calendarview.refresh() ;
       UIMiniCalendar uiMiniCalendar = calendarview.getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UIMiniCalendar.class) ;
       uiMiniCalendar.updateMiniCal() ;

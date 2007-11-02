@@ -113,6 +113,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
       setSelectedEventPriority(eventCalendar.getPriority()) ;
       setEventReminders(eventCalendar.getReminders()) ;
       setAttachments(eventCalendar.getAttachment()) ;
+      ((UITaskDetailTab)getChildById(TAB_TASKDETAIL)).getUIFormSelectBox(UITaskDetailTab.FIELD_CALENDAR).setEnable(false) ;
     } else {
       java.util.Calendar cal = GregorianCalendar.getInstance() ;
       int beginMinute = (cal.get(java.util.Calendar.MINUTE)/15)*15 ;

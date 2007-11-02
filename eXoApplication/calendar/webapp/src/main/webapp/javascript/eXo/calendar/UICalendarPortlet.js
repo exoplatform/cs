@@ -548,6 +548,7 @@ UICalendarPortlet.prototype.weekViewCallback = function(evt) {
 	var DOMUtil = eXo.core.DOMUtil ;
 	var UIContextMenu = eXo.webui.UIContextMenu ;
 	var items = DOMUtil.findDescendantsByTagName(UIContextMenu.menuElement,"a") ;
+	var map = null ;
 	if (DOMUtil.hasClass(src,"EventContainerBoder") || DOMUtil.hasClass(src,"EventContainerBar") || DOMUtil.hasClass(src,"EventContainer") || DOMUtil.hasClass(src,"ResizeEventContainer")) {
 		var obj = (DOMUtil.findAncestorByClass(src, "EventContainerBoder"))? DOMUtil.findAncestorByClass(src, "EventContainerBoder") : src ;
 		var eventId = obj.getAttribute("eventId") ;
@@ -564,13 +565,13 @@ UICalendarPortlet.prototype.weekViewCallback = function(evt) {
 				"calType\s*=\s*[A-Za-z0-9_]*(?=&|'|\")":"calType=" + calType
 			} ;
 		}
-		obj = DOMUtil.findAncestorByTagName(src, "td").getAttribute("startTime") ;		
+		var startTime = DOMUtil.findAncestorByTagName(src, "td").getAttribute("startTime") ;		
 		for(var i = 0 ; i < items.length ; i ++ ) {
 			if (items[i].style.display == "none") {
 				items[i].style.display = "block" ;
 				items[i].href = eXo.webui.UIContextMenu.replaceall(String(items[i].href),map) ;
 			} else {				
-				items[i].href = String(items[i].href).replace(/startTime\s*=\s*.*(?=&|'|\")/,"startTime="+obj) ;
+				items[i].href = String(items[i].href).replace(/startTime\s*=\s*.*(?=&|'|\")/,"startTime="+startTime) ;
 			}
 		}		
 	} else {

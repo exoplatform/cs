@@ -37,8 +37,8 @@
 										<td class="text"><%=task.getEventState()%></td>
 										<td class="text">
 										<%
-										 def test = task.getToDateTime().getTime() - task.getFromDateTime().getTime();
-										 long days = (((test/1000)/60)/60)/24 ; 
+										 def amount = task.getToDateTime().getTime() - task.getFromDateTime().getTime();
+										 long days = (((amount/1000)/60)/60)/24 ; 
 										%>
 										$days days
 										</td>
