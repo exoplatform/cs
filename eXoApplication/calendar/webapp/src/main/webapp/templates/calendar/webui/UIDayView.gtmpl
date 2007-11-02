@@ -28,6 +28,7 @@
 	boolean isShowWorkingTime = uicomponent.isShowWorkingTime() ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.showEvent() ;');
 %>
+fixed
 <div class="UIDayView">
   <div class="TitleBar">
     <table>
