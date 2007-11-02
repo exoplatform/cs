@@ -87,6 +87,13 @@ public class UIMessageList extends UIForm {
   final static public String INFO = "INFO" ;
   public UIMessageList() throws Exception {
     sortedBy_ = Utils.EXO_RECEIVEDDATE ;
+    String accountId = MailUtils.getAccountId();
+    String username = MailUtils.getCurrentUser();
+    MailService mailSrv = getApplicationComponent(MailService.class);
+    if (accountId != null){
+      selectedFolderId_ = Utils.createFolderId(accountId, Utils.FD_INBOX, false);
+      setMessagePageList(mailSrv.getMessagePageListByFolder(username, accountId, selectedFolderId_));
+    }
   }
   
   public String getSelectedMessageId() throws Exception {

@@ -4,10 +4,7 @@
 	<div class="SeparatorLine"><span></span></div>
 	<a href="<%=uicomponent.event("Search")%>"><div class="Search" title="Search"><span></span></div></a>
 	<span class="Input"><%uiform.renderChild("inputValue")%></span>
-	<%
-		String label = _ctx.appRes(uicomponent.getName() + ".label.inputValue") ;
-	%>
-	<div class="Label">$label</div>
+  <div class="Label">Search</div>
 	<div style="clear:right;"><span></span></div>
 </div>
 <%uiform.end()%>

@@ -9,7 +9,7 @@ import java.util.List;
 
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
-import org.exoplatform.mail.webui.popup.UIAdvancedSearchForm;
+import org.exoplatform.mail.webui.popup.UIAdvancedSearch;
 import org.exoplatform.mail.webui.popup.UIPopupAction;
 import org.exoplatform.mail.webui.popup.UIPopupActionContainer;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -22,9 +22,9 @@ import org.exoplatform.webui.form.UIFormStringInput;
 
 /**
  * Created by The eXo Platform SARL
- * Author : Hung Nguyen
- *          hung.nguyen@exoplatform.com
- * Aus 01, 2007 2:48:18 PM 
+ * Author : Phung Nam
+ *          phunghainam@gmail.com
+ * Nov 02, 2007 2:48:18 PM 
  */
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
@@ -35,7 +35,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
     }
 )
 public class UISearchForm extends UIForm {
-  final static  private String FIELD_SEARCHVALUE = "inputValue" ;
+  final static private String FIELD_SEARCHVALUE = "inputValue" ;
   
   public UISearchForm() {
     addChild(new UIFormStringInput(FIELD_SEARCHVALUE, FIELD_SEARCHVALUE, null)) ;
@@ -43,22 +43,18 @@ public class UISearchForm extends UIForm {
   
   static  public class SearchActionListener extends EventListener<UISearchForm> {
     public void execute(Event<UISearchForm> event) throws Exception {
-      //UISearchForm uiForm = event.getSource() ;
-      System.out.println("========> SearchActionListener");
     }
   }
  
   static  public class AdvancedSearchActionListener extends EventListener<UISearchForm> {
     public void execute(Event<UISearchForm> event) throws Exception {
       UISearchForm uiSearchForm = event.getSource() ;
-      System.out.println("========> AdvancedSearchActionListener");   
-      
       UIMailPortlet uiPortlet = uiSearchForm.getAncestorOfType(UIMailPortlet.class) ;
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
       UIPopupActionContainer uiPopupContainer = uiPopupAction.activate(UIPopupActionContainer.class, 850) ;
-      uiPopupContainer.setId("AdvancedSearchActionListener");
+      uiPopupContainer.setId("UIAdvancedSearch");
       
-      UIAdvancedSearchForm uiAdvancedSearchForm = uiPopupContainer.createUIComponent(UIAdvancedSearchForm.class, null, null);
+      UIAdvancedSearch uiAdvancedSearchForm = uiPopupContainer.createUIComponent(UIAdvancedSearch.class, null, null);
       
       String username = uiPortlet.getCurrentUser();
       MailService mailService = uiSearchForm.getApplicationComponent(MailService.class);
@@ -69,11 +65,8 @@ public class UISearchForm extends UIForm {
       List<Folder> folderList = new ArrayList<Folder>();
       folderList.addAll(mailService.getFolders(username, accountId, false)); 
       folderList.addAll(mailService.getFolders(username, accountId, true));            
-      uiAdvancedSearchForm.setFolderList(folderList);
       uiPopupContainer.addChild(uiAdvancedSearchForm) ;      
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
-      
-      
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;     
     }
   } 
 }

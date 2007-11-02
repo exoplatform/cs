@@ -3,9 +3,6 @@
  * Please look at license.txt in info directory for more license detail.   *
  **************************************************************************/
 package org.exoplatform.mail.service;
-import java.util.Date;
-
-import org.exoplatform.commons.utils.ISO8601;
 
 /**
  * Created by The eXo Platform SARL

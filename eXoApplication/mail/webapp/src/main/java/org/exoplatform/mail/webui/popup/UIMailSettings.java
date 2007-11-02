@@ -51,7 +51,7 @@ public class UIMailSettings extends UIForm implements UIPopupComponent {
     UIFormInputWithActions  setting = new UIFormInputWithActions("setting").setRendered(true);
     
     List<SelectItemOption<String>> numberConversation = new ArrayList<SelectItemOption<String>>();
-    for (int i = 2; i <= 10; i++) {
+    for (int i = 1; i <= 10; i++) {
       numberConversation.add(new SelectItemOption<String>(String.valueOf(10*i)));
     }
     setting.addUIFormInput(new UIFormSelectBox(NUMBER_OF_CONVERSATION, NUMBER_OF_CONVERSATION, numberConversation));
@@ -149,7 +149,7 @@ public class UIMailSettings extends UIForm implements UIPopupComponent {
   
   public void fillAllField(MailSetting mailSetting) throws Exception {
     UIFormInputWithActions inputSet = getChildById("setting");
-    inputSet.getUIFormSelectBox(NUMBER_OF_CONVERSATION).setValue(String.valueOf(mailSetting.getShowNumberOfConversation()));
+    inputSet.getUIFormSelectBox(NUMBER_OF_CONVERSATION).setValue(String.valueOf(mailSetting.getShowNumberMessage()));
     inputSet.getUIFormSelectBox(PERIOD_CHECK_MAIL).setValue(String.valueOf(mailSetting.getPeriodCheckMailAuto()));
     inputSet.getUIFormSelectBox(DEFAULT_ACCOUNT).setValue(mailSetting.getDefaultAccount());
     inputSet.getUIFormSelectBox(COMPOSE_MESSAGE_IN).setValue(mailSetting.getTypeOfEditor()); 
@@ -172,7 +172,7 @@ public class UIMailSettings extends UIForm implements UIPopupComponent {
       UIMailSettings uiMailSetting = event.getSource();
       String username = Util.getPortalRequestContext().getRemoteUser();
       MailSetting mailSetting = new MailSetting();
-      mailSetting.setShowNumberOfConversation(Long.parseLong(uiMailSetting.getShowNumberOfConversation()));
+      mailSetting.setShowNumberMessage(Long.parseLong(uiMailSetting.getShowNumberOfConversation()));
       mailSetting.setPeriodCheckMailAuto(Long.parseLong(uiMailSetting.getPeriodCheckMailAuto()));
       mailSetting.setDefaultAccount(uiMailSetting.getDefaultAccount());
       mailSetting.setTypeOfEditor(uiMailSetting.getTypeOfEditor());
@@ -183,6 +183,7 @@ public class UIMailSettings extends UIForm implements UIPopupComponent {
       mailSetting.setSaveMessageInSent(uiMailSetting.saveMessageInSent());
       MailService mailService = uiMailSetting.getApplicationComponent(MailService.class);
       mailService.saveMailSetting(username, mailSetting);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMailSetting.getAncestorOfType(UIMailPortlet.class));
       event.getSource().getAncestorOfType(UIMailPortlet.class).cancelAction();
     }
   }

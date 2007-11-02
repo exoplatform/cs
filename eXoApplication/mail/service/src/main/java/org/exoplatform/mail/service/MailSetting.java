@@ -54,8 +54,8 @@ public class MailSetting {
     prefixMessageWith = PREFIX_WITH_MINUS;
   }
   
-  public long getShowNumberOfConversation() { return showNumberOfConversation; }
-  public void setShowNumberOfConversation(long number) { showNumberOfConversation = number; }
+  public long getShowNumberMessage() { return showNumberOfConversation; }
+  public void setShowNumberMessage(long number) { showNumberOfConversation = number; }
   
   public long getPeriodCheckMailAuto() { return periodCheckMailAuto; }
   public void setPeriodCheckMailAuto(long period) { periodCheckMailAuto = period; }

@@ -118,7 +118,7 @@ public class UIAddressSearchForm extends UIForm implements UIPopupComponent {
       UIAdvancedSearchForm uiAdvancedSearchForm = uiPortlet.findFirstComponentOfType(UIAdvancedSearchForm.class);
       
       if(uiAddressSearchForm.getType().equals("To")){
-        uiAdvancedSearchForm.setFieldEmailTo(toAddress);       
+        //uiAdvancedSearchForm.setFieldEmailTo(toAddress);       
         uiAdvancedSearchForm.setToContacts(uiAddressSearchForm.getCheckedContact());
       }  
       

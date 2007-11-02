@@ -48,9 +48,9 @@
 }
 
 .UIMailPortlet .UIBannerContainer .Input {
-	width: 195px;
+	width: 149px;
 	float: right;
-	margin: 5px 8px;
+	margin: 1px 8px;
 }
 
 .UIMailPortlet .UIBannerContainer .Search {
@@ -539,7 +539,7 @@
 	background: white;
 	border: 1px solid #c0c0c0;
 	width: 99%;
-	height: 260px;
+	height: 220px;
 }
 
 .SpliterResizableArea {

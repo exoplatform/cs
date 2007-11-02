@@ -7,10 +7,12 @@ package org.exoplatform.mail.webui ;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
+import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.popup.UIFolderForm;
 import org.exoplatform.mail.webui.popup.UIPopupAction;
 import org.exoplatform.mail.webui.popup.UIRenameFolderForm;
@@ -40,7 +42,10 @@ import org.exoplatform.webui.event.EventListener;
 public class UIFolderContainer extends UIContainer {
   private String currentFolder_ = null ;
   
-  public UIFolderContainer() throws Exception {}
+  public UIFolderContainer() throws Exception {
+    String accountId = MailUtils.getAccountId();
+    currentFolder_ = Utils.createFolderId(accountId, Utils.FD_INBOX, false);
+  }
 
   public String getSelectedFolder(){ return currentFolder_ ; }
   protected void setSelectedFolder(String folderId) { currentFolder_ = folderId ;}

@@ -134,7 +134,7 @@ public class JCRDataStorage implements DataStorage{
     MailSetting mailSetting = new MailSetting();
     if (mailSettingNode !=null ){
       if (mailSettingNode.hasProperty(Utils.EXO_NUMBER_OF_CONVERSATION)) 
-        mailSetting.setShowNumberOfConversation((mailSettingNode.getProperty(Utils.EXO_NUMBER_OF_CONVERSATION).getLong()));
+        mailSetting.setShowNumberMessage((mailSettingNode.getProperty(Utils.EXO_NUMBER_OF_CONVERSATION).getLong()));
       if (mailSettingNode.hasProperty(Utils.EXO_PERIOD_CHECKMAIL_AUTO)) 
         mailSetting.setPeriodCheckMailAuto((mailSettingNode.getProperty(Utils.EXO_PERIOD_CHECKMAIL_AUTO).getLong()));
       if (mailSettingNode.hasProperty(Utils.EXO_DEFAULT_ACCOUNT)) 
@@ -162,7 +162,7 @@ public class JCRDataStorage implements DataStorage{
     System.out.println("\n QueryString >>" + filter.getStatement() + "\n") ;
     Query query = qm.createQuery(filter.getStatement(), Query.XPATH);
     QueryResult result = query.execute();    
-    MessagePageList pageList = new MessagePageList(result.getNodes(), 10, filter.getStatement(), true) ;
+    MessagePageList pageList = new MessagePageList(result.getNodes(), getMailSetting(username).getShowNumberMessage(), filter.getStatement(), true) ;
     return pageList ;
   }
 
@@ -292,7 +292,7 @@ public class JCRDataStorage implements DataStorage{
       mailSetting = mailHome.addNode(Utils.EXO_MAIL_SETTING, Utils.EXO_MAIL_SETTING);
     }
     
-    mailSetting.setProperty(Utils.EXO_NUMBER_OF_CONVERSATION, newSetting.getShowNumberOfConversation());
+    mailSetting.setProperty(Utils.EXO_NUMBER_OF_CONVERSATION, newSetting.getShowNumberMessage());
     mailSetting.setProperty(Utils.EXO_PERIOD_CHECKMAIL_AUTO, newSetting.getPeriodCheckMailAuto());
     mailSetting.setProperty(Utils.EXO_DEFAULT_ACCOUNT, newSetting.getDefaultAccount());
     mailSetting.setProperty(Utils.EXO_FORMAT_WHEN_REPLYFORWARD, newSetting.getFormatWhenReplyForward());
