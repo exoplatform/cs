@@ -1446,6 +1446,7 @@
 .UIPopupCategory .CalendarTableColor {
 	background: #e4eaf5;
 	padding: 5px;
+	margin: 1px;
 }
 
 .UIPopupCategory .CalendarTableColor .ColorCell {
@@ -1464,11 +1465,113 @@
 	border: 1px solid red; 
 }
 
+/*
+.UIPopupCategory .CalendarTableColor .LightCyan {
+	background: #49e3d2;
+}
+
+.UIPopupCategory .CalendarTableColor .NaryBlue {
+	background: #61a9e9;
+}
+
+.UIPopupCategory .CalendarTableColor .DarkNaryBlue {
+	background: #5fa7ce;
+}
+
+.UIPopupCategory .CalendarTableColor .Violet {
+	background: #ac6fe9;
+}
+
+.UIPopupCategory .CalendarTableColor .PingViolet {
+	background: #d385ce;
+}
+
+.UIPopupCategory .CalendarTableColor .Ping {
+	background: #f589b6;
+}
+
+.UIPopupCategory .CalendarTableColor .DeepPink {
+	background: #ee7166;
+}
+
+.UIPopupCategory .CalendarTableColor .PastelBlue {
+	background: #6f66ed;
+}
+
+.UIPopupCategory .CalendarTableColor .DarkOrange {
+	background: #f4992f;
+}
+
+.UIPopupCategory .CalendarTableColor .LightOrange {
+	background: #fbc62c;
+}
+
+.UIPopupCategory .CalendarTableColor .Cream {
+	background: #fce177;
+}
+
+.UIPopupCategory .CalendarTableColor .Earth {
+	background: #d9d840;
+}
+
+.UIPopupCategory .CalendarTableColor .LightGreen {
+	background: #f6fee6;
+}
+
+.UIPopupCategory .CalendarTableColor .Green {
+	background: #00cc44;
+}
+
+.UIPopupCategory .CalendarTableColor .BlueSky {
+	background: #bde7ee;
+}
+
+.UIPopupCategory .CalendarTableColor .Gold {
+	background: #c9a54a;
+}
+
+.UIPopupCategory .CalendarTableColor .FadedPink {
+	background: #ddc69c;
+}
+
+.UIPopupCategory .CalendarTableColor .BananaYellow {
+	background: #c5c493;
+}
+
+.UIPopupCategory .CalendarTableColor .RedBrown {
+	background: #97c6c3;
+}
+
+.UIPopupCategory .CalendarTableColor .GhostGreen {
+	background: #c1d3f3;
+}
+
+.UIPopupCategory .CalendarTableColor .LightBlueGreen {
+	background: #a2b4c3;
+}
+
+.UIPopupCategory .CalendarTableColor .PalePurple {
+	background: #c8afc6;
+}
+
+.UIPopupCategory .CalendarTableColor .EasterPurple {
+	background: #dab2b1;
+}
+
+.UIPopupCategory .CalendarTableColor .PowderBlue {
+	background: #b2b1da;
+}
+*/
 /* Popup Menu Positioning*/
 .UIActionBar .SelectButton .UIPopupCategory {
 	top: 25px;
 	left: 7px ;
 }
+
+.UICalendarPortlet .UIActionBar .RssIcon {
+	background:transparent url(skinIcons/16x16/icons/RssIcon.gif) no-repeat scroll 0%;
+}
+
 
 /* Selection */
 .selection {
