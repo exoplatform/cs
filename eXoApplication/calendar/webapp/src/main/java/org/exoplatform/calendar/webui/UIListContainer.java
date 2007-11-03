@@ -27,8 +27,18 @@ public class UIListContainer extends UIContainer implements CalendarView {
   }
 
   public void refresh() throws Exception {
-    getChild(UIListView.class).refresh() ;
-    getChild(UIPreview.class).refresh() ;
+    UIListView list = getChild(UIListView.class) ;
+    list.refresh() ;
+    UIPreview view = getChild(UIPreview.class) ;
+    if(list.getEvents().length > 0) { 
+      list.setSelectedEvent(list.getEvents()[0].getId()) ;  
+      view.setEvent(list.getEvents()[0]) ;
+    }
+    else {
+      list.setSelectedEvent(null) ;
+      view.setEvent(null) ;
+    }
+    view.refresh() ;
   }
   public void update() {
     

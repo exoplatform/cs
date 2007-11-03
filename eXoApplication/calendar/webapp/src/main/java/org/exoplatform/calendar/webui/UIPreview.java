@@ -5,24 +5,18 @@
 package org.exoplatform.calendar.webui;
 
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 
+import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.Attachment;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
-import org.exoplatform.calendar.webui.popup.UIEventForm;
-import org.exoplatform.calendar.webui.popup.UIPopupAction;
 import org.exoplatform.calendar.webui.popup.UIPopupComponent;
-import org.exoplatform.calendar.webui.popup.UIPopupContainer;
-import org.exoplatform.calendar.webui.popup.UITaskForm;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
-import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
@@ -46,7 +40,7 @@ public class UIPreview extends UICalendarView implements UIPopupComponent {
   private boolean isShowPopup_ = false ;
   public static final String CALENDARID = "calendarId".intern() ;
   public static final String CALTYPE = "calType".intern() ;
-  
+
   public UIPreview() throws Exception {}
 
   public String getTemplate(){
@@ -60,12 +54,17 @@ public class UIPreview extends UICalendarView implements UIPopupComponent {
   public void setEvent(CalendarEvent event) { event_ = event ; }
 
   public void refresh() throws Exception {
-    if(event_ != null) {
+    /*if(event_ != null) {
       CalendarService calService = getApplicationComponent(CalendarService.class) ;
       String username = Util.getPortalRequestContext().getRemoteUser() ;
-      CalendarEvent event = calService.getUserEvent(username, event_.getCalendarId(), event_.getId()) ;
+      CalendarEvent event = null ;
+      if(CalendarUtils.PUBLIC_TYPE.equals(event_.getCalType())) {
+        event = calService.getGroupEvent(event_.getCalendarId(), event_.getId()) ;
+      } else {
+        event = calService.getUserEvent(username, event_.getCalendarId(), event_.getId()) ;
+      }
       if( event != null) event_ = event ;
-    } 
+    } */
   }
 
   public void activate() throws Exception {
@@ -121,7 +120,7 @@ public class UIPreview extends UICalendarView implements UIPopupComponent {
        */
     }
   }
- /* static  public class EditActionListener extends EventListener<UIPreview> {
+  /* static  public class EditActionListener extends EventListener<UIPreview> {
     public void execute(Event<UIPreview> event) throws Exception {
       System.out.println("EditEventActionListener");
       UIPreview uiView = event.getSource() ;

@@ -366,9 +366,10 @@ public class UICalendars extends UIForm  {
       String selectedCalendarId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UICalendarPortlet uiCalendarPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
-      UISharedForm uiSharedForm =popupAction.createUIComponent(UISharedForm.class, null, "UISharedForm") ;
+      UIPopupContainer uiPopupContainer = popupAction.activate(UIPopupContainer.class, 600) ;
+      uiPopupContainer.setId("UIPermissionSelectPopup") ;
+      UISharedForm uiSharedForm = uiPopupContainer.addChild(UISharedForm.class, null, null) ;
       uiSharedForm.setSelectedCalendarId(selectedCalendarId) ;
-      popupAction.activate(uiSharedForm, 500, 0) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarPortlet) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent.getParent()) ;

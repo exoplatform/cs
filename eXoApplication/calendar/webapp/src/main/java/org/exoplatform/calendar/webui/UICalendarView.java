@@ -314,9 +314,12 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   protected void removeEvents(List<CalendarEvent> events) throws Exception {
     CalendarService calService = getApplicationComponent(CalendarService.class) ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
-    System.out.println("\n\n checked list size "+ events.size());
     for (CalendarEvent ce : events) {
-      calService.removeUserEvent(username, ce.getCalendarId(), ce.getId()) ;
+      if(CalendarUtils.PUBLIC_TYPE.equals(ce.getCalType())){
+        calService.removeGroupEvent(ce.getCalendarId(), ce.getId()) ;
+      } else {
+        calService.removeUserEvent(username, ce.getCalendarId(), ce.getId()) ;
+      }
     }
   }
 
@@ -499,11 +502,12 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       String username = event.getRequestContext().getRemoteUser() ;
       String calendarId = event.getRequestContext().getRequestParameter(CALENDARID) ;
       String eventId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      try {
-        CalendarService calService = uiCalendarView.getApplicationComponent(CalendarService.class) ;
+      String calType = event.getRequestContext().getRequestParameter(CALTYPE) ;
+      CalendarService calService = uiCalendarView.getApplicationComponent(CalendarService.class) ;
+      if(CalendarUtils.PUBLIC_TYPE.equals(calType)) {
+        eventCalendar = calService.getGroupEvent(calendarId, eventId) ;
+      } else {
         eventCalendar = calService.getUserEvent(username, calendarId, eventId) ;
-      } catch (Exception e){
-        e.printStackTrace() ;
       }
       if(eventCalendar != null) {
         UIPreview uiPreview = uiPopupContainer.addChild(UIPreview.class, null, null) ;

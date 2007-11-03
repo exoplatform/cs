@@ -24,12 +24,13 @@
 			  					for(task in uicomponent.getEvents()){
 			  						attachIcon = "" ;
   									if(!task.getAttachment().isEmpty()) {attachIcon = "AttachmentIcon" ;}
+  									String actionLink = uicomponent.event("ViewDetail", task.getId()+"&calendarId="+task.getCalendarId()+"&calType="+task.getCalType()) ;	
 		  					%>
 			  					<tr>
 										<td><%uicomponent.renderField(uicomponent.getChildById(task.getId()))%></td>
 	  					      <td style="padding: 0px;"><div class="$attachIcon" >&nbsp;</div></td>
 		  							<td class="text">
-		  								<a href="<%=uicomponent.event("ViewDetail", task.getId())%>" class="ControlButton">
+		  								<a href="$actionLink" class="ControlButton">
 												<%=task.getSummary()%>
 											</a>	
 		  							</td>

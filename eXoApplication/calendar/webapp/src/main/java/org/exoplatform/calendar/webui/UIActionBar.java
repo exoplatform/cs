@@ -40,7 +40,6 @@ import org.exoplatform.webui.event.EventListener;
         @EventConfig(listeners = UIActionBar.ChangeViewActionListener.class),
         @EventConfig(listeners = UIActionBar.SettingActionListener.class),
         @EventConfig(listeners = UIActionBar.RSSActionListener.class),
-        @EventConfig(listeners = UIActionBar.ShowHiddenActionListener.class),
         @EventConfig(listeners = UIActionBar.TodayActionListener.class)
     }
 )
@@ -132,7 +131,7 @@ public class UIActionBar extends UIContainer  {
     }
   }  
   
-  static public class ShowHiddenActionListener extends EventListener<UIActionBar> {
+ /* static public class ShowHiddenActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {
       UIActionBar uiActionBar = event.getSource() ;    
       uiActionBar.isShowPane_ = ! uiActionBar.isShowPane_ ;
@@ -142,7 +141,7 @@ public class UIActionBar extends UIContainer  {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiActionBar) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer) ;
     }
-  }  
+  }  */
   static public class TodayActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {
       UIActionBar uiActionBar = event.getSource() ;     

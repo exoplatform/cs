@@ -37,7 +37,7 @@
   						<tr eventid="<%=event.getId()%>" calid="<%=event.getCalendarId()%>">
 		  					<%
 		  						String classIcon = event.getEventType() + "Icon" ;
-		  						String actionLink = uicomponent.event("ViewDetail", event.getId()) ;		  
+		  						String actionLink = uicomponent.event("ViewDetail", event.getId()+"&calendarId="+event.getCalendarId()+"&calType="+event.getCalType()) ;		  
 		  					%>
 								<td style="padding: 1px;"><div class="$classIcon"><span></span></div></td>
 		  					<td style="padding: 1px;"><div class="$attachIcon">&nbsp;</div></td>

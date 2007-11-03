@@ -67,7 +67,7 @@ public class UIListView extends UICalendarView {
   }
   public void refresh() throws Exception{
     System.out.println("\n\n List View refresh");
-    CalendarService calendarService = getApplicationComponent(CalendarService.class) ;
+    CalendarService calendarService = CalendarUtils.getCalendarService() ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     EventQuery eventQuery = new EventQuery() ;
     java.util.Calendar fromcalendar = new GregorianCalendar(getCurrentYear(),  getCurrentMonth(),  getCurrentDay()) ;
@@ -134,10 +134,24 @@ public class UIListView extends UICalendarView {
     public void execute(Event<UIListView> event) throws Exception {
       UIListView uiListView = event.getSource();
       String eventId = event.getRequestContext().getRequestParameter(OBJECTID);
-      uiListView.setSelectedEvent(eventId) ;
+      String calendarId = event.getRequestContext().getRequestParameter(CALENDARID);
+      String calType = event.getRequestContext().getRequestParameter(CALTYPE);
+      String username = event.getRequestContext().getRemoteUser() ;
       UIListContainer uiListContainer = uiListView.getAncestorOfType(UIListContainer.class);
       UIPreview uiPreview = uiListContainer.getChild(UIPreview.class);
-      uiPreview.setEvent(uiListView.eventMap_.get(eventId));
+      CalendarEvent calendarEvent = null ;
+      if(CalendarUtils.PUBLIC_TYPE.equals(calType)) {
+        calendarEvent = CalendarUtils.getCalendarService().getGroupEvent(calendarId, eventId) ;
+      } else {
+        calendarEvent = CalendarUtils.getCalendarService().getUserEvent(username, calendarId, eventId) ;
+      }
+      if(calendarEvent != null) {
+        uiListView.setSelectedEvent(calendarEvent.getId()) ;
+        uiPreview.setEvent(calendarEvent);
+      } else {
+        uiListView.setSelectedEvent(null) ;
+        uiPreview.setEvent(null);
+      } 
       event.getRequestContext().addUIComponentToUpdateByAjax(uiListContainer);
     }
   }
