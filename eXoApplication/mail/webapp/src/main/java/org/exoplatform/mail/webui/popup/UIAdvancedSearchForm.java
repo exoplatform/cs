@@ -102,6 +102,10 @@ public class UIAdvancedSearchForm extends UIForm {
     return getUIFormSelectBox(SELECT_FOLDER_SEARCH).getValue() ;
   }
   
+  public void setSelectedFolder(String folderId){
+    getUIFormSelectBox(SELECT_FOLDER_SEARCH).setValue(folderId) ;
+  }
+  
   public String getSubject(){
     return getUIStringInput(FIELD_SUBJECT_SEARCH).getValue() ;
   }

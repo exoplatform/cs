@@ -84,7 +84,8 @@ public class UIMessageList extends UIForm {
   private MessageFilter msgFilter_ = new MessageFilter("Filter Message");
   private LinkedHashMap<String, Message> messageList_ = new LinkedHashMap<String, Message>();
   
-  final static public String INFO = "INFO" ;
+  final public String INFO = "INFO" ;
+  
   public UIMessageList() throws Exception {
     sortedBy_ = Utils.EXO_RECEIVEDDATE ;
     String accountId = MailUtils.getAccountId();
@@ -199,7 +200,6 @@ public class UIMessageList extends UIForm {
       UIMessageList uiMessageList = event.getSource();
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       UIMessagePreview uiMessagePreview = uiPortlet.findFirstComponentOfType(UIMessagePreview.class);
-      UIMessageArea uiMessageArea = uiPortlet.findFirstComponentOfType(UIMessageArea.class);
       UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
@@ -223,7 +223,7 @@ public class UIMessageList extends UIForm {
         uiMessageList.setSelectedMessageId(msgId);
         uiMessagePreview.setMessage(msg);
         uiMessageList.updateList();
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageArea);
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent());
         event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer);        
       }
     }
@@ -233,7 +233,6 @@ public class UIMessageList extends UIForm {
     public void execute(Event<UIMessageList> event) throws Exception {
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;  
       UIMessageList uiMessageList = event.getSource();
-      UIMessageArea uiMessageArea = uiMessageList.getParent();
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
@@ -252,13 +251,12 @@ public class UIMessageList extends UIForm {
         }
       }
       uiMessageList.updateList();
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageArea);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent());
     }
   }
   static public class RemoveStarActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource();
-      UIMessageArea uiMessageArea = uiMessageList.getParent();
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
@@ -270,7 +268,7 @@ public class UIMessageList extends UIForm {
         }
       }
       uiMessageList.updateList();
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageArea);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent());
     }
   }
   

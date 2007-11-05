@@ -48,9 +48,9 @@
 }
 
 .UIMailPortlet .UIBannerContainer .Input {
-	width: 149px;
+	width: 195px;
 	float: right;
-	margin: 1px 8px;
+  margin: 5px 8px;
 }
 
 .UIMailPortlet .UIBannerContainer .Search {
@@ -743,8 +743,12 @@
   height: 26px; width: 2px;
 }
 
-.NormalItem {
+.OddItem {
 	background: #ffffff ;
+}
+
+.EvenItem {
+	background: #f6f6f6 ;
 }
 
 .SelectedItem {

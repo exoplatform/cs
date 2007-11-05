@@ -38,6 +38,10 @@ public class UIAdvancedSearch extends UIContainer implements UIPopupComponent {
     getChild(UIAdvancedSearchForm.class).setRendered(false);
     getChild(UIMessageList.class).setRendered(true);
   }
+  
+  public void setSelectedFolder(String folderId)  throws Exception {
+    getChild(UIAdvancedSearchForm.class).setSelectedFolder(folderId);
+  }
 
   public void activate() throws Exception { }
 

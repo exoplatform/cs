@@ -13,8 +13,10 @@ import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.Utils;
+import org.exoplatform.mail.webui.popup.UIAdvancedSearch;
 import org.exoplatform.mail.webui.popup.UIFolderForm;
 import org.exoplatform.mail.webui.popup.UIPopupAction;
+import org.exoplatform.mail.webui.popup.UIPopupActionContainer;
 import org.exoplatform.mail.webui.popup.UIRenameFolderForm;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -33,6 +35,7 @@ import org.exoplatform.webui.event.EventListener;
     events = {
         @EventConfig(listeners = UIFolderContainer.ChangeFolderActionListener.class),
         @EventConfig(listeners = UIFolderContainer.AddFolderActionListener.class),
+        @EventConfig(listeners = UIFolderContainer.SearchActionListener.class),
         @EventConfig(listeners = UIFolderContainer.RenameFolderActionListener.class),
         @EventConfig(listeners = UIFolderContainer.RemoveFolderActionListener.class, confirm="UIFolderContainer.msg.confirm-remove-folder"),
         @EventConfig(listeners = UIFolderContainer.MarkReadActionListener.class),
@@ -155,6 +158,29 @@ public class UIFolderContainer extends UIContainer {
       for (Message message : messageList) {
         mailSrv.removeMessage(username, accountId, message.getId());
       }
+    }
+  }
+  
+  static public class SearchActionListener extends EventListener<UIFolderContainer> {
+    public void execute(Event<UIFolderContainer> event) throws Exception {
+      UIFolderContainer uiFolder = event.getSource();
+      String folderId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      UIMailPortlet uiPortlet = uiFolder.getAncestorOfType(UIMailPortlet.class) ;
+      UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
+      UIPopupActionContainer uiPopupContainer = uiPopupAction.activate(UIPopupActionContainer.class, 850) ;
+      
+      UIAdvancedSearch uiAdvancedSearch = uiPopupContainer.createUIComponent(UIAdvancedSearch.class, null, null);
+      uiPopupContainer.addChild(uiAdvancedSearch) ;
+      
+      UIMessageList uiMessageList = uiAdvancedSearch.findFirstComponentOfType(UIMessageList.class);      
+      String username = uiPortlet.getCurrentUser();
+      String accountId = MailUtils.getAccountId();
+      MailService mailService = uiPortlet.getApplicationComponent(MailService.class);
+      
+      uiMessageList.setMessagePageList(mailService.getMessagePageListByFolder(username, accountId, folderId));
+      uiMessageList.updateList();
+      uiAdvancedSearch.setSelectedFolder(folderId);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
     }
   }
   

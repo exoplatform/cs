@@ -4,11 +4,7 @@
  **************************************************************************/
 package org.exoplatform.mail.webui;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.exoplatform.mail.MailUtils;
-import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.Utils;
@@ -40,7 +36,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
     }
 )
 public class UISearchForm extends UIForm {
-  final static private String FIELD_SEARCHVALUE = "inputValue" ;
+  final static private String FIELD_SEARCHVALUE = "search" ;
   
   public UISearchForm() {
     addChild(new UIFormStringInput(FIELD_SEARCHVALUE, FIELD_SEARCHVALUE, null)) ;

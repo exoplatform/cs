@@ -240,20 +240,23 @@
     	</thead>
     	<tbody>
     	<%
+        int i = 0;
   			for(Message msg : uicomponent.getMessageList()) {
   			  String actionLink = uicomponent.event("SelectMessage", msg.getId());
   			  checkboxField = uicomponent.getChildById(msg.getId());
   			  String actionAddStar = uicomponent.event("AddStar", msg.getId());
-  			  String selectedClass = "NormalItem" ;
+  			  String selectedClass = "OddItem" ;
+          if ((i%2) == 1) selectedClass = "EvenItem";
           String readStatus = "ReadItem" ;
           if (msg.isUnread()) readStatus = "UnreadItem" ;
   			  if (msg.getId().equals(uicomponent.getSelectedMessageId())) selectedClass = "SelectedItem" ;
           String starClass = "UnStarredIcon" ;
           if (msg.hasStar()) starClass = "StarredIcon";
   		%>
+      
   		<tr class="$selectedClass">
   	  		<td onclick="eXo.mail.UIMailPortlet.selectItem(this);">
-  	  		  <%
+            <%
   	  		    if (checkboxField != null) uicomponent.renderField(checkboxField);
   	  		  %>
   	  		</td>
@@ -305,11 +308,11 @@
   				%>
   				<td style="padding: 0px;" ><div class="text $priClass" title ><span></span></div></td>
      	 </tr>
-  		<%}%>
+  		<% i++; }%>
     	</tbody>
   	</table>
   </div>
-  <%} else {%>
+  <% } else {%>
     <div class="MessageNotice" >There are no messages !</div>
   <%}%>
 <%uiform.end()%>    
