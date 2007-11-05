@@ -640,7 +640,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       tocalendar.set(java.util.Calendar.MINUTE, tocalendar.getActualMaximum(java.util.Calendar.MINUTE)) ;
       tocalendar.set(java.util.Calendar.MILLISECOND, tocalendar.getActualMaximum(java.util.Calendar.MILLISECOND)) ;
       eventQuery.setToDate(tocalendar) ;
-      uiListView.update(calendarService.searchEvent(username, eventQuery)) ; 
+      uiListView.update(calendarService.searchEvent(username, eventQuery, CalendarUtils.getUserGroups(username))) ; 
       uiListView.setShowEventAndTask(false) ;
       uiListView.setDisplaySearchResult(false) ;
       uiListView.isShowEvent_ = false ;

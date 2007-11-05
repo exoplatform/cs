@@ -80,7 +80,7 @@ public class UIListView extends UICalendarView {
     if(!getViewType().equals(TYPE_BOTH)) {
       eventQuery.setEventType(getViewType()) ;
     }
-    update(calendarService.searchEvent(username, eventQuery)) ; 
+    update(calendarService.searchEvent(username, eventQuery, CalendarUtils.getUserGroups(username))) ; 
     //setShowEventAndTask(true) ;
     /*uiListView.setDisplaySearchResult(false) ;
     uiListView.isShowEvent_ = false ;*/

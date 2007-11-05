@@ -114,8 +114,9 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
+      String username = CalendarUtils.getCurrentUser() ;
       EventPageList resultPageList =  
-        CalendarUtils.getCalendarService().searchEvent(CalendarUtils.getCurrentUser(), query) ;
+        CalendarUtils.getCalendarService().searchEvent(username, query, CalendarUtils.getUserGroups(username)) ;
       UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
       calendarPortlet.cancelAction() ;
       UICalendarViewContainer calendarViewContainer = 
