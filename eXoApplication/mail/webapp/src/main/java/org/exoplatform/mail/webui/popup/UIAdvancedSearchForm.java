@@ -135,7 +135,10 @@ public class UIAdvancedSearchForm extends UIForm {
       
       MessageFilter filter = new MessageFilter("Advance Search");
       filter.setAccountId(accountId);
-      filter.setFolder(new String[] {uiSearchForm.getSelectedFolder()});
+      String selectedFolderId = uiSearchForm.getSelectedFolder();
+      if (selectedFolderId != null && selectedFolderId != "") {
+        filter.setFolder(new String[] {uiSearchForm.getSelectedFolder()});
+      }
       filter.setEmailTo(uiSearchForm.getFieldEmailTo());
       filter.setEmailFrom(uiSearchForm.getFieldEmailFrom());
       filter.setSubject(uiSearchForm.getSubject());

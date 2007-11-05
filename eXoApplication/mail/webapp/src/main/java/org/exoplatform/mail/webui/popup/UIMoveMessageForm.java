@@ -7,6 +7,7 @@ package org.exoplatform.mail.webui.popup;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
@@ -14,7 +15,6 @@ import org.exoplatform.mail.webui.UIFolderContainer;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UIMessageArea;
 import org.exoplatform.mail.webui.UIMessageList;
-import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
@@ -45,7 +45,20 @@ public class UIMoveMessageForm extends UIForm implements UIPopupComponent {
   public static String folderId="";
   public List<Message> messageList=new ArrayList<Message>();  
   
-  public UIMoveMessageForm() { }
+  public UIMoveMessageForm() throws Exception { 
+    MailService mailSrv = MailUtils.getMailService();
+    String username = MailUtils.getCurrentUser();
+    String accountId = MailUtils.getAccountId();
+    
+    List<SelectItemOption<String>> optionList = new ArrayList<SelectItemOption<String>>();   
+
+    for (Folder folder : mailSrv.getFolders(username, accountId)) {   
+      if(!folder.getName().equals("Sent"))
+        optionList.add(new SelectItemOption<String>(folder.getName(), folder.getId()));       
+    }    
+
+    addUIFormInput(new UIFormSelectBox(SELECT_FOLDER, SELECT_FOLDER, optionList));
+  }
   
   public void setMessageList(List<Message> messageList){
     this.messageList= messageList; 
@@ -57,41 +70,20 @@ public class UIMoveMessageForm extends UIForm implements UIPopupComponent {
   
   public String getSelectedFolderId(){ return folderId; }
   
-  public void setFolderList(List<Folder> folderList) throws Exception {
-    //TODO: improve later
-    List<SelectItemOption<String>> optionList = new ArrayList<SelectItemOption<String>>();   
-    optionList.add(new SelectItemOption<String>("To Folders","To Folders"));  
-     String currentFolderName=getMessageList().get(0).getFolders()[0];
-    System.out.println("currentFolderName" +currentFolderName);
-    for (Folder folder : folderList) {   
-      if(!folder.getName().equals("Sent") && !folder.getName().equals(currentFolderName) && !folder.isPersonalFolder())
-        optionList.add(new SelectItemOption<String>("------" + folder.getName(), folder.getId()));       
-    }    
-   
-    optionList.add(new SelectItemOption<String>("To My Folders","To My Folders"));
-  
-    for (Folder folder : folderList) {   
-      if(!folder.getName().equals("Sent") && !folder.getName().equals(currentFolderName) && folder.isPersonalFolder())
-        optionList.add(new SelectItemOption<String>("------" + folder.getName(), folder.getId()));       
-    } 
-
-    addUIFormInput(new UIFormSelectBox(SELECT_FOLDER, SELECT_FOLDER, optionList));
-  }
- 
   static public class SaveActionListener extends EventListener<UIMoveMessageForm> {
     public void execute(Event<UIMoveMessageForm> event) throws Exception {
       System.out.println("=====>>>> Move Folder Action Listener");
       UIMoveMessageForm uiMoveMessageForm = event.getSource() ;
       MailService mailSrv = uiMoveMessageForm.getApplicationComponent(MailService.class) ;
       UIMailPortlet uiPortlet = uiMoveMessageForm.getAncestorOfType(UIMailPortlet.class) ;
+      UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType((UIMessageList.class));
       String username = uiPortlet.getCurrentUser() ;
-      String accountId =  uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;   
+      String accountId =  MailUtils.getAccountId();
       String destFolder = uiMoveMessageForm.getUIFormSelectBox(SELECT_FOLDER).getValue();     
-      
-      List<Message> messageList = uiMoveMessageForm.getMessageList();     
+          
       String[] destFolders = { destFolder };  
 
-      for(Message message: messageList) {
+      for(Message message: uiMessageList.getCheckedMessage()) {
          Folder oldFolder = mailSrv.getFolder(username, accountId, message.getFolders()[0]);
          message.setFolders(destFolders);         
          mailSrv.saveMessage(username, accountId, message, false);
@@ -105,7 +97,6 @@ public class UIMoveMessageForm extends UIForm implements UIPopupComponent {
          mailSrv.saveUserFolder(username, accountId, oldFolder);
          mailSrv.saveUserFolder(username, accountId, folder);
       }       
-      UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
       uiMessageList.updateList();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));   
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMoveMessageForm.getAncestorOfType(UIPopupAction.class)) ;     

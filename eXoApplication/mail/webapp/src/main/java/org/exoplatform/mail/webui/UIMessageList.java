@@ -532,30 +532,16 @@ public class UIMessageList extends UIForm {
   static public class MoveMessagesActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
       System.out.println(" === >>> Move Messages Action Listener");
-      UIMessageList uiMessageList = event.getSource() ; 
-      
+      UIMessageList uiMessageList = event.getSource() ;    
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class);    
-      String username = uiPortlet.getCurrentUser();
-      MailService mailService = uiMessageList.getApplicationComponent(MailService.class);
-      
       if(uiMessageList.getCheckedMessage().isEmpty()) {
         UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-no-messages", null, ApplicationMessage.INFO)) ;
         return;
       }
             
-      UINavigationContainer uiNavigation = uiPortlet.getChild(UINavigationContainer.class) ;
-      UISelectAccount uiSelectAccount = uiNavigation.getChild(UISelectAccount.class) ;
-      String accountId = uiSelectAccount.getSelectedValue() ;      
       UIMoveMessageForm uiMoveMessageForm = uiMessageList.createUIComponent(UIMoveMessageForm.class,null, null);
-      List<Folder> folderList = new ArrayList<Folder>();
-      
-      folderList.addAll(mailService.getFolders(username, accountId, false)); 
-      folderList.addAll(mailService.getFolders(username, accountId, true));  
-
-      uiMoveMessageForm.setMessageList(uiMessageList.getCheckedMessage());  
-      uiMoveMessageForm.setFolderList(folderList);
       
       uiPopupAction.activate(uiMoveMessageForm, 600, 0, true);             
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);        
