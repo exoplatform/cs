@@ -50,9 +50,9 @@ public class UITagForm extends UIForm implements UIPopupComponent {
   public static final String FIELD_TAGNAME_INPUT = "tagName";
   public static final String NO_TAG_INFO = "no Tag";
   public static final String FIELD_COLOR= "color";
-  public static final String RED = "Red" ;
-  public static final String BLUE = "Blue" ;
-  public static final String GREEN = "Green" ;
+  public static final String RED = "Red".intern() ;
+  public static final String BLUE = "Blue".intern() ;
+  public static final String GREEN = "Green".intern() ;
   public static String[] FIELD_TAG_BOX_KEY = null;
   public static String[] FIELD_TAG_BOX_LABLE = null;
   public static List<String> contactIds_ ;

@@ -22,12 +22,23 @@
 			              	 		String getGender = uicomponent.gender ;
 			              	 		if (getGender.equalsIgnoreCase("male")) maleChecked = "checked" ; 
 													else femaleChecked = "checked" ;
+													
+													//checked false for ie 6.0 if using <-%checked--%-->" ;
+													
+													if (maleChecked.equals("checked")) {
 			              	  %>
-			              	 			<input class="radio" type="radio" value="male" "$maleChecked" name="gender"/>
+			              	 			<input class="radio" type="radio" value="male" checked name="gender"/>
+			              	 		<% }else { %>		
+			              	 			<input class="radio" type="radio" value="male" name="gender"/>
+			              	 		<% } %>		
 														<span style="padding: 0px 20px 0px 5px" class="Lable"><%=_ctx.appRes(uicomponent.getParent().id+ ".label.male") %></span>
-														<input class="radio" type="radio" value="female" "$femaleChecked" name="gender"/>
+													<% if (femaleChecked.equals("checked")) { %>
+														<input class="radio" type="radio" value="female" checked name="gender"/>
+													<% } else { %>
+														<input class="radio" type="radio" value="female" name="gender"/>
+													<% } %>		
 														<span style="padding-left: 3px;" class="Lable"><%=_ctx.appRes(uicomponent.getParent().id+ ".label.female") %></span> 		
-			              	 	<% 	} else {
+			              	 	<% } else {
 			              	 			uicomponent.renderUIComponent(field) 	
 			              	 		}
 			              	 	%>

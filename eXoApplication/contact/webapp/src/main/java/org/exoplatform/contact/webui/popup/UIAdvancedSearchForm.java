@@ -50,8 +50,8 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent {
   public static final String FIELD_EMAIL_INPUT = "preferredEmail" ;
   
   public final static String FIELD_GENDER_BOX = "gender" ;
-  public static final String MALE = "male" ;
-  public static final String FEMALE = "female" ;
+  public static final String MALE = "Male".intern() ;
+  public static final String FEMALE = "Female".intern() ;
   
   public UIAdvancedSearchForm() throws Exception {
     addUIFormInput(new UIFormStringInput(FIELD_TEXT_INPUT, FIELD_TEXT_INPUT, null));
