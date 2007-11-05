@@ -128,7 +128,7 @@ UIContactPortlet.prototype.checkLayout = function() {
 		var	display0 = Browser.getCookie("contdisplaymode0") ;
 		var	display1 = Browser.getCookie("contdisplaymode1") ;
 		var	layout0 = document.getElementById("UIAddressBooks") ;
-		var	layout1 = document.getElementById("UITags").parentNode ;
+		var	layout1 = document.getElementById("UITags") ;
 		var	layout3 = document.getElementById("UINavigationContainer") ;
 		var workingarea = eXo.core.DOMUtil.findNextElementByTagName(layout3, "div") ;
 	}catch(e) {
@@ -144,7 +144,7 @@ UIContactPortlet.prototype.switchLayout = function(layout) {
 	var Browser = eXo.core.Browser ;
 	layout = parseInt(layout) ;
 	var	layout0 = document.getElementById("UIAddressBooks") ;
-	var	layout1 = document.getElementById("UITags").parentNode ;
+	var	layout1 = document.getElementById("UITags") ;
 	var	layout3 = document.getElementById("UINavigationContainer") ;
 	var workingarea = eXo.core.DOMUtil.findNextElementByTagName(layout3, "div") ;
 		
