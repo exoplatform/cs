@@ -44,6 +44,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
     }
 )
 public class UIAdvancedSearchForm extends UIForm {
+  final public static String ALL_FOLDER_SEARCH = "All folder" ;
   final public static String SELECT_FOLDER_SEARCH = "folder" ; 
   final static public String FIELD_FROM_SEARCH = "from-field" ;
   final static public String FIELD_TO_SEARCH = "to-field" ;
@@ -65,6 +66,7 @@ public class UIAdvancedSearchForm extends UIForm {
     MailService mailSrv = getApplicationComponent(MailService.class);
     List<SelectItemOption<String>> optionList = new ArrayList<SelectItemOption<String>>();    
     List<Folder> folderList = mailSrv.getFolders(username, accountId); 
+    optionList.add(new SelectItemOption<String>(ALL_FOLDER_SEARCH, ""));
     for (Folder folder : folderList) {   
       optionList.add(new SelectItemOption<String>(folder.getName(), folder.getId()));    
     }    
