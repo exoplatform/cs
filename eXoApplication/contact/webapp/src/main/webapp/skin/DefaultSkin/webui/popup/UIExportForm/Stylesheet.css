@@ -26,3 +26,7 @@
 .UIExportContactForm .ExportForm {
 	padding: 10px;
 }
+
+.UIExportContactForm .UIGrid .text {
+	white-space: nowrap;
+}

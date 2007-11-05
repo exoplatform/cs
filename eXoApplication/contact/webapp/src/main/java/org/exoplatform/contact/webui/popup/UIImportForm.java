@@ -14,6 +14,7 @@ import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContacts;
 import org.exoplatform.contact.webui.UIWorkingContainer;
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.upload.UploadResource;
 import org.exoplatform.upload.UploadService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -42,6 +43,7 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
   final static public String FIELD_UPLOAD = "upload".intern() ;
   final static public String TYPE = "type".intern() ;
   public final static String FIELD_CATEGORY_BOX = "category" ;
+  public static final String[] vCardTypes = { ".vcf" } ;
   
   public UIImportForm() throws Exception {
     this.setMultiPart(true) ;
@@ -70,10 +72,23 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
       
       UploadService uploadService = (UploadService)PortalContainer.getComponent(UploadService.class) ;
       UIFormUploadInput input = uiForm.getUIInput(FIELD_UPLOAD) ;
-      String importFormat = uiForm.getUIFormSelectBox(UIImportForm.TYPE).getValue() ;
       
+      // hoang quang hung
+      UploadResource uploadResource = input.getUploadResource() ;
+      String fileName = uploadResource.getFileName() ;
+      boolean isVCard = false ;
+      for(String vCardType : vCardTypes)
+        if (fileName.endsWith(vCardType)) isVCard = true ;
+      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+      if(ContactUtils.isEmpty(fileName) || (!isVCard)) {
+        uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.fileName-error", null, 
+            ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
+      
+      String importFormat = uiForm.getUIFormSelectBox(UIImportForm.TYPE).getValue() ;      
       if (ContactUtils.isEmpty(category)) {  
-        UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.selectGroup-required", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ; 

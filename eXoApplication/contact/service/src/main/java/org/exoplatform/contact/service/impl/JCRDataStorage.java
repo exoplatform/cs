@@ -812,18 +812,26 @@ public class JCRDataStorage implements DataStorage {
   public Tag removeTag(String username, String tagId) throws Exception {
     Node tagHomeNode = getTagHome(username);
     if (tagHomeNode.hasNode(tagId)) {
+      Node contactHome = getContactHome(username) ;
+      Node publicContactHome = getPublicContactHome() ;
+      List<Contact> contacts = getContactPageListByTag(username, tagId).getAll();
+      for (Contact contact : contacts) {
+        List<String> tags = new ArrayList<String>(Arrays.asList(contact.getTags()));
+        tags.remove(tagId) ;   
+        String contactId = contact.getId() ;
+        if (contactHome.hasNode(contactId)) {
+          contactHome.getNode(contactId).setProperty("exo:tags", tags.toArray(new String[]{})) ;
+        } else if(publicContactHome.hasNode(contactId)) {
+          publicContactHome.getNode(contactId).setProperty("exo:tags", tags.toArray(new String[]{})) ;
+        }
+      }
+      contactHome.getSession().save() ;
+      publicContactHome.getSession().save() ;
+      
       Tag tag = getTag(username, tagId);
       tagHomeNode.getNode(tagId).remove();
       tagHomeNode.save();
       tagHomeNode.getSession().save();
-      Node contactHome = getContactHome(username) ;
-      List<Contact> contacts = getContactPageListByTag(username, tagId).getAll();
-      for (Contact contact : contacts) {
-        List<String> tags = new ArrayList<String>(Arrays.asList(contact.getTags()));
-        tags.remove(tagId) ;
-        contactHome.getNode(contact.getId()).setProperty("exo:tags", tags.toArray(new String[]{})) ;        
-      }
-      contactHome.getSession().save() ;
       return tag;
     }
     return null;
@@ -858,9 +866,6 @@ public class JCRDataStorage implements DataStorage {
       Node contactHome = getContactHome(username) ;
       filter.setAccountPath(contactHome.getPath()) ;
       qm = contactHome.getSession().getWorkspace().getQueryManager() ;
-      
-      System.out.println("\n\n query:" + filter.getStatement() + "\n\n");
-      
       query = qm.createQuery(filter.getStatement(), Query.XPATH) ;
       NodeIterator it = query.execute().getNodes() ;
       while(it.hasNext()) {

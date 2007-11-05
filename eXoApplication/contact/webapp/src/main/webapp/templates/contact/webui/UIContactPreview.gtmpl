@@ -221,10 +221,6 @@
 												<div class="Info"><%=(ContactUtils.isEmpty(contact.getHomeFax()) ? "_" : contact.getHomeFax())%></div>
 											</div>													
 											<div class="InfoItem">
-												<div class="InfoLabel">Mobile Phone:</div>
-												<div class="Info"><%=(ContactUtils.isEmpty(contact.getMobilePhone()) ? "_" : contact.getMobilePhone())%></div>
-											</div>													
-											<div class="InfoItem">
 												<div class="InfoLabel">Web Page:</div>
 												<div class="Info"><%=(ContactUtils.isEmpty(contact.getPersonalSite()) ? "_" : contact.getPersonalSite())%></div>
 											</div>													

@@ -102,9 +102,7 @@ public class UITags extends UIComponent {
     public void execute(Event<UITags> event) throws Exception {
       UITags uiTags = event.getSource() ;
       String tagId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      ContactService contactService = ContactUtils.getContactService() ;
-      String username = ContactUtils.getCurrentUser() ;
-      contactService.removeTag(username, tagId) ;
+      ContactUtils.getContactService().removeTag(ContactUtils.getCurrentUser(), tagId) ;
       UIWorkingContainer uiWorkingContainer = uiTags.getAncestorOfType(UIWorkingContainer.class) ;
       if (tagId.equals(uiTags.getSelectedTag())) {
         uiTags.setSelectedTag(null) ;

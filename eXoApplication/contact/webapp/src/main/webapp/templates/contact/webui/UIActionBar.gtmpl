@@ -49,13 +49,13 @@
 							</div>
 							
               <a href="<%=uicomponent.event("ImportContact")%>" class="ControlButton">
-							<div class="ImportContact" title="Import Contacts">
+							<div class="ImportContact" title="Import Address">
 								<span></span>
 							</div>
               </a>
               
               <a href="<%=uicomponent.event("ExportContact")%>" class="ControlButton">
-							<div class="ExportContact" title="Export Contacts">
+							<div class="ExportContact" title="Export Address">
 								<span></span>
 							</div>
               </a>

@@ -49,7 +49,10 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
     events = {
         @EventConfig(listeners = UIContacts.EditContactActionListener.class),
         @EventConfig(listeners = UIContacts.InstantMessageActionListener.class),
-        @EventConfig(listeners = UIContacts.TagActionListener.class),
+        
+        @EventConfig(listeners = UIContacts.TagPopupActionListener.class),
+          
+        @EventConfig(listeners = UIContacts.TagCheckedActionListener.class),
         @EventConfig(listeners = UIContacts.MoveContactsActionListener.class),
         @EventConfig(phase=Phase.DECODE, listeners = UIContacts
           .DeleteContactsActionListener.class, confirm="UIContacts.msg.confirm-delete-contact"),
@@ -190,25 +193,42 @@ public class UIContacts extends UIForm implements UIPopupComponent {
     }
   }
 
-  static public class TagActionListener extends EventListener<UIContacts> {
+  static public class TagPopupActionListener extends EventListener<UIContacts> {
     public void execute(Event<UIContacts> event) throws Exception {
       UIContacts uiContacts = event.getSource() ;
-      String contactId = event.getRequestContext().getRequestParameter(OBJECTID);
+      String contactId = event.getRequestContext().getRequestParameter(OBJECTID);      
       List<String> contactIds = new ArrayList<String>();
-      if (!ContactUtils.isEmpty(contactId)) contactIds.add(contactId) ;
-      else {
-        contactIds = uiContacts.getCheckedContacts() ;
-        if (contactIds.size() == 0) {
-          UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
-          uiApp.addMessage(new ApplicationMessage("UIContacts.msg.checkContact-required", null)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-          return ;
-        }
-      }    
+      if (!ContactUtils.isEmpty(contactId)) {
+        contactIds.add(contactId) ;
+        UIContactPortlet contactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class) ;
+        UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
+        UITagForm.contactIds_ = contactIds ;
+        UITagForm uiTagForm = popupAction.createUIComponent(UITagForm.class, null, "UITagForm") ;
+        uiTagForm.update() ;
+        popupAction.activate(uiTagForm, 600, 0, true) ;
+        UIContactContainer uiContainer = uiContacts.getParent() ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+      }
+    }
+  }
+  
+  static public class TagCheckedActionListener extends EventListener<UIContacts> {
+    public void execute(Event<UIContacts> event) throws Exception {
+      UIContacts uiContacts = event.getSource() ;
+      List<String> contactIds = new ArrayList<String>();
+      contactIds = uiContacts.getCheckedContacts() ;
+      if (contactIds.size() == 0) {
+        UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UIContacts.msg.checkContact-required", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      } 
       UIContactPortlet contactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class) ;
       UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
       UITagForm.contactIds_ = contactIds ;
       UITagForm uiTagForm = popupAction.createUIComponent(UITagForm.class, null, "UITagForm") ;
+      uiTagForm.update() ;
       popupAction.activate(uiTagForm, 600, 0, true) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
@@ -267,7 +287,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       } else {
         uiContacts.updateList() ;
       }
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer.getChild(UIContactContainer.class)) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer) ;
     }
   } 
   

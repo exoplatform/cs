@@ -121,7 +121,12 @@
 				     
 				        <a class="MenuItem" href="<%=uicomponent.event("ExportAddress", "id")%>">   
 			            <div class="ItemIcon ExportAddressIcon">
-			              Export
+			              Export Contacts
+			            </div>
+				        </a>
+				        <a class="MenuItem" href="<%=uicomponent.event("#", "id")%>">   
+			            <div class="ItemIcon ExportAddressIcon">
+			              Import Contacts
 			            </div>
 				        </a>
 				        <a class="MenuItem" href="<%=uicomponent.event("EditGroup", "id")%>">   

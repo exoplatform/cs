@@ -57,8 +57,10 @@ public class UITagForm extends UIForm implements UIPopupComponent {
   public static String[] FIELD_TAG_BOX_LABLE = null;
   public static List<String> contactIds_ ;
 
-  public UITagForm() throws Exception {
-    setId("UITagForm") ;
+  public UITagForm() throws Exception { setId("UITagForm") ; }
+  
+  public void update() throws Exception {
+    getChildren().clear() ;
     addUIFormInput(new UIFormInputInfo(FIELD_TAGSOFCONTACT_INFO, FIELD_TAGSOFCONTACT_INFO, null)) ;
     ContactService contactService = ContactUtils.getContactService();
     String username = ContactUtils.getCurrentUser() ;
