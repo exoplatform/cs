@@ -2,6 +2,7 @@ eXo.require('eXo.webui.UIContextMenu') ;
 function UIContactPortlet() {
 	
 }
+
 UIContactPortlet.prototype.showContextMenu = function() {
 	var UIContextMenu = eXo.webui.UIContextMenu ;//eXo.contact.ContextMenu ;
 	var config = {
@@ -29,6 +30,7 @@ UIContactPortlet.prototype.contactCallback = function(evt) {
 		moveContactIcon.parentNode.style.color = "#cccccc" ;
 	}
 } ;
+
 UIContactPortlet.prototype.addressBookCallback = function(evt) {
 	var UIContextMenu = eXo.webui.UIContextMenu ;
 	var _e = window.event || evt ;	
@@ -61,6 +63,7 @@ UIContactPortlet.prototype.addressBookCallback = function(evt) {
 		}
 	}
 } ;
+
 UIContactPortlet.prototype.tagCallback = function(evt) {
 	var UIContextMenu = eXo.webui.UIContextMenu ;
 	var _e = window.event || evt ;
@@ -70,6 +73,7 @@ UIContactPortlet.prototype.tagCallback = function(evt) {
 	var tagName = src.getAttribute("tagName") ;
 	eXo.webui.UIContextMenu.changeAction(UIContextMenu.menuElement, tagName) ;
 } ;
+
 UIContactPortlet.prototype.printpreview = function (obj){
 	var DOMUtil = eXo.core.DOMUtil ;
 	var UIPortalApplication = document.getElementById("UIPortalApplication") ;
@@ -91,7 +95,8 @@ UIContactPortlet.prototype.printpreview = function (obj){
 	}
 	DOMUtil.findFirstDescendantByClass(button[1], 'div','ButtonMiddle').style.display = "block" ;
 	button[2].style.display = "none" ;
-}
+} ;
+
 UIContactPortlet.prototype.adddressPrint = function (){
 	var DOMUtil = eXo.core.DOMUtil ;
 	var UIPortalApplication = document.getElementById("UIPortalApplication") ;
@@ -105,7 +110,8 @@ UIContactPortlet.prototype.adddressPrint = function (){
 	eXo.contact.UIContactPortlet.pageBackground = document.body.style.background ;
 	document.body.style.background = "transparent" ;
 	document.body.appendChild(div) ;
-}
+} ;
+
 UIContactPortlet.prototype.cancelPrint = function (obj){
 	var UIPrintContainer = eXo.core.DOMUtil.findAncestorByClass(obj, "UIPrintContainer") ;
 	var UIPortalApplication = document.getElementById("UIPortalApplication") ;
@@ -113,5 +119,92 @@ UIContactPortlet.prototype.cancelPrint = function (obj){
 	UIPortalApplication.style.display = "block" ;
 	document.body.style.background = eXo.contact.UIContactPortlet.pageBackground ;
 	eXo.contact.UIContactPortlet.pageBackground = null ;
-}
+} ;
+
+UIContactPortlet.prototype.checkLayout = function() {
+	try{
+		var Browser = eXo.core.Browser ;
+		var	display = Browser.getCookie("contdisplaymode") ;
+		var	display0 = Browser.getCookie("contdisplaymode0") ;
+		var	display1 = Browser.getCookie("contdisplaymode1") ;
+		var	layout0 = document.getElementById("UIAddressBooks") ;
+		var	layout1 = document.getElementById("UITags").parentNode ;
+		var	layout3 = document.getElementById("UINavigationContainer") ;
+		var workingarea = eXo.core.DOMUtil.findNextElementByTagName(layout3, "div") ;
+	}catch(e) {
+		alert(e.message) ;
+	}
+	layout3.style.display = display ;
+	if (display == "none") workingarea.style.marginLeft = "0px"	;
+	layout0.style.display = display0 ;
+	layout1.style.display = display1 ;
+} ;
+
+UIContactPortlet.prototype.switchLayout = function(layout) {
+	var Browser = eXo.core.Browser ;
+	layout = parseInt(layout) ;
+	var	layout0 = document.getElementById("UIAddressBooks") ;
+	var	layout1 = document.getElementById("UITags").parentNode ;
+	var	layout3 = document.getElementById("UINavigationContainer") ;
+	var workingarea = eXo.core.DOMUtil.findNextElementByTagName(layout3, "div") ;
+		
+	switch(layout) {
+		case 0 :
+			if (layout3.style.display == "none") {
+				layout0.style.display = "block" ;				
+				layout1.style.display = "block" ;				
+				layout3.style.display = "block" ;												
+				workingarea.style.marginLeft = "243px"	;
+				Browser.setCookie("contdisplaymode","block",7) ;
+				Browser.setCookie("contdisplaymode0","block",7) ;
+				Browser.setCookie("contdisplaymode1","block",7) ;
+			} else {
+				layout0.style.display = "none" ;
+				layout1.style.display = "none" ;
+				layout3.style.display = "none" ;
+				workingarea.style.marginLeft = "0px"	;
+				Browser.setCookie("contdisplaymode","none",7) ;
+				Browser.setCookie("contdisplaymode0","none",7) ;
+				Browser.setCookie("contdisplaymode1","none",7) ;
+			}
+			break ;
+		case 1 :
+			if (layout0.style.display == "none") {
+				layout0.style.display = "block" ;
+				layout3.style.display = "block" ;
+				workingarea.style.marginLeft = "243px"	;			
+				Browser.setCookie("contdisplaymode","block",7) ;
+				Browser.setCookie("contdisplaymode0","block",7) ;
+			}
+			else {
+				layout0.style.display = "none" ;
+				if(layout1.style.display == "none") {
+					Browser.setCookie("contdisplaymode","none",7) ;
+					workingarea.style.marginLeft = "0px"	;
+					layout3.style.display = "none" ;
+				}
+				Browser.setCookie("contdisplaymode0","none",7) ;	
+			}
+			break ;
+		case 2 :
+			if (layout1.style.display == "none") {
+				layout1.style.display = "block" ;
+				layout3.style.display = "block" ;
+				workingarea.style.marginLeft = "243px"	;
+				Browser.setCookie("contdisplaymode","block",7) ;
+				Browser.setCookie("contdisplaymode1","block",7) ;
+
+			}
+			else {				
+				layout1.style.display = "none" ;
+				if(layout0.style.display == "none") {
+					Browser.setCookie("contdisplaymode","none",7) ;
+					workingarea.style.marginLeft = "0px"	;
+					layout3.style.display = "none" ;
+				}
+				Browser.setCookie("contdisplaymode1","none",7) ;	
+			}
+			break ;
+	}
+}	;
 eXo.contact.UIContactPortlet = new UIContactPortlet() ;

@@ -106,8 +106,49 @@
 							</div>
 							
 							<div class="SelectButton">
-								<div class="IconHolder CustomLayoutIcon">
+								<div class="IconHolder CustomLayoutIcon" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
 									<div class="DownArrow1Icon">Custom Layout View</div>
+									<% /*Begin Popup Menu*/ %>
+										<div style="position: relative;">
+				      			<div class="UIPopupCategory" style="display: none;">
+				      				<div class="UIRightClickPopupMenu" style="display: block;">
+					      					<div class="UIContextMenuContainer">
+													  <div class="TopLeftRightClickPopupMenu">
+							          			<div class="TopRightRightClickPopupMenu">
+							            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
+							          			</div>
+							        			</div>
+										        <div class="MiddleLeftRightClickPopupMenu">
+										          <div class="MiddleRightRightClickPopupMenu">
+							              		<div class="UIRightPopupMenuContainer">
+																	<a class="MenuItem" href="javascript:eXo.contact.UIContactPortlet.switchLayout(0)" >   
+								                    <div class="ItemIcon HidenAllCalendar">
+								                       Show/Hide all
+								                    </div>
+							                    </a>
+							                    <a class="MenuItem" href="javascript:eXo.contact.UIContactPortlet.switchLayout(1)" >   
+								                    <div class="ItemIcon ShowMinicalendar">
+								                       Addressbooks
+								                    </div>
+							                    </a>
+							                    <a class="MenuItem" href="javascript:eXo.contact.UIContactPortlet.switchLayout(2)" >
+								                    <div class="ItemIcon HidenMinicalendar">
+								                      Tag List
+								                    </div>
+							                    </a>
+																</div>
+								          		</div>
+								        		</div>
+											      <div class="BottomLeftRightClickPopupMenu">
+										        <div class="BottomRightRightClickPopupMenu">
+										          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+										        </div>
+										      </div>
+							      			</div>
+										    </div>
+					      			</div>
+					      		</div>
+					      		<% /*End Popup Menu*/ %>
 								</div>
 							</div>
 							

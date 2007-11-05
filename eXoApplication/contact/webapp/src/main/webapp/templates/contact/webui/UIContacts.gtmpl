@@ -6,10 +6,8 @@
 	import org.exoplatform.download.DownloadService;
 	import org.exoplatform.contact.ContactUtils;
 	import org.exoplatform.contact.service.JCRPageList;
-	def rcontext = _ctx.getRequestContext() ;  
-	rcontext.getJavascriptManager().importJavascript("eXo.contact.UIContactPortlet","/contact/javascript") ;
+	def rcontext = _ctx.getRequestContext() ; 
 	//rcontext.getJavascriptManager().importJavascript("eXo.contact.UIContactDragDrop","/contact/javascript") ;
-	rcontext.getJavascriptManager().addJavascript("eXo.contact.UIContactPortlet.showContextMenu() ;") ;
 	//rcontext.getJavascriptManager().addJavascript("eXo.contact.UIContactDragDrop.init() ;") ;
 	uiform.begin()
 	boolean isDisplaySearchResult = uicomponent.isDisplaySearchResult() ;
