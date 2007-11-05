@@ -135,7 +135,7 @@ public class UIActionBar extends UIContainer {
       System.out.println(" =========== > Mail Settings Action");
       UIMailPortlet mailPortlet = uiActionBar.getParent() ;
       UIPopupAction uiPopupAction = mailPortlet.getChild(UIPopupAction.class) ;
-      UIMailSettings uiMailSetting = uiPopupAction.activate(UIMailSettings.class, 600) ;
+      UIMailSettings uiMailSetting = uiPopupAction.activate(UIMailSettings.class, 750) ;
       MailService mailSrv = uiActionBar.getApplicationComponent(MailService.class);
       String username = Util.getPortalRequestContext().getRemoteUser();
       MailSetting mailSetting = mailSrv.getMailSetting(username);
@@ -153,7 +153,7 @@ public class UIActionBar extends UIContainer {
 
   static public class ContactActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {
-      UIActionBar uiActionBar = event.getSource() ;   
+      UIActionBar uiActionBar = event.getSource();   
     }
   }
 

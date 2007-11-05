@@ -11,6 +11,7 @@ UIMailPortlet.prototype.showContextMenu = function() {
 		'preventForms':false
 	} ;	
 	UIContextMenu.init(config) ;
+	UIContextMenu.attach('MessageItem', 'UIMessagePopupMenu') ;
 	UIContextMenu.attach('IconFolder', 'UIFolderListPopupMenu') ;
 	UIContextMenu.attach('IconTagHolder', 'UITagListPopupMenu') ;
 	UIContextMenu.attach('InboxIcon', 'UIDefaultFolderPopupMenu') ;
@@ -18,6 +19,23 @@ UIMailPortlet.prototype.showContextMenu = function() {
 	UIContextMenu.attach('SentIcon', 'UIDefaultFolderPopupMenu') ;
 	UIContextMenu.attach('SpamIcon', 'UIDefaultFolderPopupMenu') ;
 	UIContextMenu.attach('TrashIcon', 'UITrashFolderPopupMenu') ;
+} ;
+
+UIMailPortlet.prototype.msgPopupMenuCallback = function(evt) {
+	var UIContextMenu = eXo.webui.UIContextMenu ;
+	var _e = window.event || evt ;
+	//_e.cancelBubble = true ;
+	var src = null ;
+	if (UIContextMenu.IE) {
+		src = _e.srcElement;
+	} else {
+		src = _e.target;
+	}
+	if (src.nodeName != "tr")
+		src = src.parentNode;
+		
+	id = src.getAttribute("msgId");
+	eXo.webui.UIContextMenu.changeAction(UIContextMenu.menuElement, id) ;
 } ;
 
 UIMailPortlet.prototype.folderListPopupMenuCallback = function(evt) {

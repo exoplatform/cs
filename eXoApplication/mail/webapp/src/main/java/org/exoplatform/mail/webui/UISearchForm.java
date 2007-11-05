@@ -65,7 +65,6 @@ public class UISearchForm extends UIForm {
       UIMailPortlet uiPortlet = uiSearchForm.getAncestorOfType(UIMailPortlet.class) ;
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
       UIPopupActionContainer uiPopupContainer = uiPopupAction.activate(UIPopupActionContainer.class, 850) ;
-      
       UIAdvancedSearch uiAdvancedSearch = uiPopupContainer.createUIComponent(UIAdvancedSearch.class, null, null);
       uiPopupContainer.addChild(uiAdvancedSearch) ;
       
