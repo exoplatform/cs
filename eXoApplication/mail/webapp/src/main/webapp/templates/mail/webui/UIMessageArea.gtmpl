@@ -1,6 +1,10 @@
 <%
 	import org.exoplatform.mail.webui.UIMessageList ;
 	import org.exoplatform.mail.webui.UIMessagePreview ;
+  
+  def rcontext = _ctx.getRequestContext() ;
+  rcontext.getJavascriptManager().importJavascript('eXo.mail.UIMailDnD','/mail/javascript/');
+  rcontext.getJavascriptManager().addOnLoadJavascript('eXo.mail.UIMailDnD.onLoad');
 %>
 
 <div class="MailWorkingDetails SpliterContainer" id="<%=uicomponent.getId()%>">
