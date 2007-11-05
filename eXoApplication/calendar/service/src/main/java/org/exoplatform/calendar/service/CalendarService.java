@@ -329,7 +329,7 @@ public interface CalendarService {
   public List<FeedData> getFeeds(String username) throws Exception  ;
   public Node getRssHome(String username) throws Exception ;
   
-  public EventPageList searchEvent(String username, EventQuery query)throws Exception ;
+  public EventPageList searchEvent(String username, EventQuery query, String[] publicCalendarIds)throws Exception ;
   public Map<Integer, String > searchHightLightEvent(String username, EventQuery eventQuery)throws Exception ; 
   
   public void shareCalendar(String username, String calendarId, List<String> receiverUsers) throws Exception ;

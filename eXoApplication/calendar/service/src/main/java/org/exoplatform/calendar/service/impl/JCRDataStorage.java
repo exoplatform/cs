@@ -1052,9 +1052,9 @@ public class JCRDataStorage implements DataStorage{
     return url.toString();
   }
 
-  public EventPageList searchEvent(String username, EventQuery eventQuery)throws Exception {
-    List<CalendarEvent> events = new ArrayList<CalendarEvent>() ;
-    Query query ;
+  public EventPageList searchEvent(String username, EventQuery eventQuery, String[] publicCalendarIds)throws Exception {
+    List<CalendarEvent> events = getEvent(username, eventQuery, publicCalendarIds) ;
+    /*Query query ;
     QueryManager qm ;
     if(username != null && username.length() > 0) {
       Node calendarHome = getCalendarHome(username) ;
@@ -1073,7 +1073,7 @@ public class JCRDataStorage implements DataStorage{
     NodeIterator it = query.execute().getNodes();
     while(it.hasNext()) {
       events.add(getEvent(it.nextNode())) ;
-    }    
+    }    */
     return new EventPageList(events, 10) ;    
   }
 
@@ -1291,7 +1291,6 @@ public class JCRDataStorage implements DataStorage{
     Node sharedCalendarHome = getSharedCalendarHome() ;
     if(sharedCalendarHome.hasNode(username)) {
       Node userNode = sharedCalendarHome.getNode(username) ;
-      String uuid = userNode.getProperty("jcr:uuid").getString() ;
       PropertyIterator iter = userNode.getReferences() ;
       Node calendar ;      
       while(iter.hasNext()) {

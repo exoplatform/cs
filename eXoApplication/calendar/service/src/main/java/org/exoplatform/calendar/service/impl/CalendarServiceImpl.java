@@ -171,8 +171,8 @@ public class CalendarServiceImpl implements CalendarService{
     return storage_.getRssHome(username) ;
   }
   
-  public EventPageList searchEvent(String username, EventQuery query)throws Exception {
-    return storage_.searchEvent(username, query) ;
+  public EventPageList searchEvent(String username, EventQuery query, String[] publicCalendarIds)throws Exception {
+    return storage_.searchEvent(username, query, publicCalendarIds) ;
   }
 
   public EventCategory getEventCategory(String username, String eventCategoryId) throws Exception {
