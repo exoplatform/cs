@@ -561,7 +561,7 @@ public class UIMessageList extends UIForm {
         Folder oldFolder = mailSrv.getFolder(username, accountId, message.getFolders()[0]);
         message.setFolders(new String[]{ folderId });         
         mailSrv.saveMessage(username, accountId, message, false);
-        Folder folder = mailSrv.getFolder(username, accountId, message.getFolders()[0]);
+        Folder folder = mailSrv.getFolder(username, accountId, folderId);
         oldFolder.setTotalMessage(oldFolder.getTotalMessage() - 1);
         folder.setTotalMessage(folder.getTotalMessage() + 1);
         if (message.isUnread()) {           

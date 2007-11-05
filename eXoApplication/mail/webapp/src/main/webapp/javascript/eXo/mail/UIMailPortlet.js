@@ -38,23 +38,6 @@ UIMailPortlet.prototype.msgPopupMenuCallback = function(evt) {
 	eXo.webui.UIContextMenu.changeAction(UIContextMenu.menuElement, id) ;
 } ;
 
-UIMailPortlet.prototype.folderListPopupMenuCallback = function(evt) {
-	var UIContextMenu = eXo.webui.UIContextMenu ;
-	var _e = window.event || evt ;
-	//_e.cancelBubble = true ;
-	var src = null ;
-	if (UIContextMenu.IE) {
-		src = _e.srcElement;
-	} else {
-		src = _e.target;
-	}
-	if (src.nodeName != "A")
-		src = src.parentNode;
-		
-	folderName = src.getAttribute("folderName");
-	eXo.webui.UIContextMenu.changeAction(UIContextMenu.menuElement, folderName) ;
-} ;
-
 UIMailPortlet.prototype.defaultFolderPopupMenuCallback = function(evt) {
 	var UIContextMenu = eXo.webui.UIContextMenu ;
 	var _e = window.event || evt ;
