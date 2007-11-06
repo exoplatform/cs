@@ -33,7 +33,15 @@
       <artifactId>exo.cs.eXoApplication.calendar.service</artifactId>
       <version>${org.exoplatform.cs.version}</version>
       <scope>provided</scope>
+    </dependency>   
+     
+	  <dependency>
+      <groupId>org.exoplatform.cs</groupId>
+      <artifactId>exo.cs.eXoApplication.contact.service</artifactId>
+      <version>${org.exoplatform.cs.version}</version>
+      <scope>provided</scope>
     </dependency>    
+    
   </dependencies>
 
   <build>

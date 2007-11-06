@@ -1,0 +1,103 @@
+<%
+ import org.exoplatform.contact.service.Contact;
+%>
+  
+<% uiform.begin() %>
+<div class="UIInsertAddress">
+  <div class="InsertAddressContainer">
+    <div class="UISearch">
+      <div class="UIBarStyle">
+        <div class="NormalBarStyle">
+          <div class="LeftBar">
+            <div class="RightBar">
+              <div class="MiddleBar">
+                <div class="UISearchForm">
+                  <div class="QuickSet">
+                    <div class="SearchTitle">Search:</div>
+                    <%uiform.renderField(uiform.FIELD_KEYWORD)%>
+                    <a class="SearchIcon" href="<%=uicomponent.event('Search')%>" title="Quick Search"><span></span></a>
+                  </div>  
+                </div>
+                <div class="AddressesGroup">
+                  <div class="AddressLabel">Addresses from group:</div>
+                   <%uiform.renderField(uiform.FIELD_GROUP)%>
+                  <div style="clear: left"><span></span></div>
+                </div>
+                <div style="clear: left"><span></span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>        
+    </div>
+    
+    <div class="AddressContainer">
+      <div class="ListAddress">
+      
+        <table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
+            <thead>
+              <tr>
+                <th style="width: 20px;" class="BorderAddress"><input type="checkbox" class="checkbox" value="4" /></th>
+                <th class="BorderAddress">
+                  <div class="BlueDownArrowIcon">
+                    <div class="Label">Name</div>
+                  </div>
+                </th>
+                <th style="width: 48%;" >
+                  <div class="BlueDownArrowIcon">
+                    <div class="Label">Email</div>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <%
+                for (Contact contact : uicomponent.getContacts()) {
+                  checkboxField = uicomponent.getChildById(contact.getId());
+              %>
+                <tr>
+                  <td class="BorderAddress">
+                    <%
+                      if (checkboxField != null) { uicomponent.renderField(checkboxField); }
+                    %>
+                  </td>
+                  <td class="text BorderAddress"><%=contact.getFullName()%></td>
+                  <td class="text"><%=contact.getEmailAddress()%></td>
+                </tr>
+              <%}%>
+        </tbody>
+        </table>      
+            
+      </div>
+      
+    </div>
+
+  </div>
+  
+  <div class="UIAction"> 
+    <table class="ActionContainer" align="center">
+      <tr>
+        <td align="center"> 
+      
+         <a href="<%=uicomponent.event("Save")%>" class="ActionButton LightBlueStyle">
+            <div class="ButtonLeft">
+              <div class="ButtonRight">
+                <div class="ButtonMiddle"> Ok </div>
+              </div>
+            </div>
+          </a>
+          <a href="<%=uicomponent.event("Cancel")%>" class="ActionButton LightBlueStyle">
+
+            <div class="ButtonLeft">
+              <div class="ButtonRight">
+                <div class="ButtonMiddle"> Cancel </div>
+              </div>
+            </div>
+          </a>
+        </td>
+      </tr>
+    </table>
+  </div>  
+  
+</div>
+<% uiform.end() %>

@@ -80,7 +80,7 @@ public class UIListView extends UICalendarView {
     if(!getViewType().equals(TYPE_BOTH)) {
       eventQuery.setEventType(getViewType()) ;
     }
-    update(calendarService.searchEvent(username, eventQuery, CalendarUtils.getUserGroups(username))) ; 
+    update(calendarService.searchEvent(username, eventQuery, getPublicCalendars())) ; 
     //setShowEventAndTask(true) ;
     /*uiListView.setDisplaySearchResult(false) ;
     uiListView.isShowEvent_ = false ;*/
@@ -146,6 +146,7 @@ public class UIListView extends UICalendarView {
         calendarEvent = CalendarUtils.getCalendarService().getUserEvent(username, calendarId, eventId) ;
       }
       if(calendarEvent != null) {
+        System.out.println("\n\n calendarEvent " + calendarEvent.getCalType());
         uiListView.setSelectedEvent(calendarEvent.getId()) ;
         uiPreview.setEvent(calendarEvent);
       } else {

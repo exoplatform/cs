@@ -57,7 +57,7 @@ import org.exoplatform.webui.form.UIFormTabPane;
 )
 public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISelector{
   final public static String TAB_TASKDETAIL = "eventDetail".intern() ;
-  final public static String TAB_EVENTREMINDER = "eventReminder".intern() ;
+  final public static String TAB_TASKREMINDER = "eventReminder".intern() ;
   final public static String ITEM_PUBLIC = "public".intern() ;
   final public static String ITEM_PRIVATE = "private".intern() ;
   final public static String ITEM_AVAILABLE = "available".intern() ;
@@ -77,7 +77,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
     super("UIEventForm", false);
     UITaskDetailTab uiTaskDetailTab =  new UITaskDetailTab(TAB_TASKDETAIL) ;
     addChild(uiTaskDetailTab) ;
-    UIEventReminderTab eventReminderTab =  new UIEventReminderTab(TAB_EVENTREMINDER) ;
+    UIEventReminderTab eventReminderTab =  new UIEventReminderTab(TAB_TASKREMINDER) ;
     addChild(eventReminderTab) ;
     setRenderedChild(TAB_TASKDETAIL) ;
   }
@@ -153,9 +153,9 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
   public void deActivate() throws Exception {}
 
   public void updateSelect(String selectField, String value) throws Exception {
-    // TODO Auto-generated method stub
-
+    getUIStringInput(selectField).setValue(value) ;
   }
+
   protected boolean isEventDetailValid(){
     if(CalendarUtils.isEmpty(getEventSumary())) {
       errorMsg_ = getId() + ".msg.event-summary-required" ;
@@ -303,51 +303,51 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
   }
 
   protected boolean getEmailReminder() {
-    UIFormInputWithActions taskDetailTab =  getChildById(TAB_EVENTREMINDER) ;
-    return taskDetailTab.getUIFormCheckBoxInput(UIEventReminderTab.FIELD_EMAIL_REMINDER).isChecked() ;
+    UIEventReminderTab taskReminderTab =  getChildById(TAB_TASKREMINDER) ;
+    return taskReminderTab.getUIFormCheckBoxInput(UIEventReminderTab.FIELD_EMAIL_REMINDER).isChecked() ;
   }
   protected void setEmailReminder(boolean isChecked) {
-    UIFormInputWithActions taskDetailTab =  getChildById(TAB_EVENTREMINDER) ;
-    taskDetailTab.getUIFormCheckBoxInput(UIEventReminderTab.FIELD_EMAIL_REMINDER).setChecked(isChecked) ;
+    UIEventReminderTab taskReminderTab =  getChildById(TAB_TASKREMINDER) ;
+    taskReminderTab.getUIFormCheckBoxInput(UIEventReminderTab.FIELD_EMAIL_REMINDER).setChecked(isChecked) ;
   }
   protected String getEmailReminderTime() {
-    UIFormInputWithActions taskDetailTab =  getChildById(TAB_EVENTREMINDER) ;
-    return taskDetailTab.getUIStringInput(UIEventReminderTab.FIELD_EMAIL_TIME).getValue() ;
+    UIEventReminderTab taskReminderTab =  getChildById(TAB_TASKREMINDER) ;
+    return taskReminderTab.getUIStringInput(UIEventReminderTab.FIELD_EMAIL_TIME).getValue() ;
   }
   protected void setEmailReminderTime(String value) {
-    UIFormInputWithActions taskDetailTab =  getChildById(TAB_EVENTREMINDER) ;
+    UIEventReminderTab taskDetailTab =  getChildById(TAB_TASKREMINDER) ;
     taskDetailTab.getUIStringInput(UIEventReminderTab.FIELD_EMAIL_TIME).setValue(value) ;
   }
 
   protected String getEmailAddress() {
-    UIFormInputWithActions taskDetailTab =  getChildById(TAB_EVENTREMINDER) ;
+    UIEventReminderTab taskDetailTab =  getChildById(TAB_TASKREMINDER) ;
     return taskDetailTab.getUIStringInput(UIEventReminderTab.FIELD_EMAIL_ADDRESS).getValue() ;
   }
 
   protected void setEmailAddress(String value) {
-    UIFormInputWithActions taskDetailTab =  getChildById(TAB_EVENTREMINDER) ;
+    UIEventReminderTab taskDetailTab =  getChildById(TAB_TASKREMINDER) ;
     taskDetailTab.getUIFormTextAreaInput(UIEventReminderTab.FIELD_EMAIL_ADDRESS).setValue(value) ;
   }
 
   protected boolean getPopupReminder() {
-    UIFormInputWithActions taskDetailTab =  getChildById(TAB_EVENTREMINDER) ;
+    UIEventReminderTab taskDetailTab =  getChildById(TAB_TASKREMINDER) ;
     return taskDetailTab.getUIFormCheckBoxInput(UIEventReminderTab.FIELD_POPUP_REMINDER).isChecked() ;
   }
   protected void setPopupReminder(boolean isChecked) {
-    UIFormInputWithActions taskDetailTab =  getChildById(TAB_EVENTREMINDER) ;
+    UIFormInputWithActions taskDetailTab =  getChildById(TAB_TASKREMINDER) ;
     taskDetailTab.getUIFormCheckBoxInput(UIEventReminderTab.FIELD_POPUP_REMINDER).setChecked(isChecked) ;
   }
   protected String getPopupReminderTime() {
-    UIFormInputWithActions taskDetailTab =  getChildById(TAB_EVENTREMINDER) ;
+    UIFormInputWithActions taskDetailTab =  getChildById(TAB_TASKREMINDER) ;
     return taskDetailTab.getUIStringInput(UIEventReminderTab.FIELD_POPUP_TIME).getValue() ;
   }
 
   protected void setPopupReminderTime(String value) {
-    UIFormInputWithActions taskDetailTab =  getChildById(TAB_EVENTREMINDER) ;
+    UIFormInputWithActions taskDetailTab =  getChildById(TAB_TASKREMINDER) ;
     taskDetailTab.getUIStringInput(UIEventReminderTab.FIELD_POPUP_TIME).setValue(value) ;
   }
   protected long getPopupReminderSnooze() {
-    UIFormInputWithActions taskDetailTab =  getChildById(TAB_EVENTREMINDER) ;
+    UIFormInputWithActions taskDetailTab =  getChildById(TAB_TASKREMINDER) ;
     try {
       String time =  taskDetailTab.getUIFormSelectBox(UIEventReminderTab.FIELD_SNOOZE_TIME).getValue() ;
       return Long.parseLong(time) ;
@@ -357,7 +357,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
     return 0 ;
   }
   protected void setPopupReminderSnooze(long value) {
-    UIFormInputWithActions taskDetailTab =  getChildById(TAB_EVENTREMINDER) ;
+    UIFormInputWithActions taskDetailTab =  getChildById(TAB_TASKREMINDER) ;
     taskDetailTab.getUIFormSelectBox(UIEventReminderTab.FIELD_SNOOZE_TIME).setValue(String.valueOf(value)) ;
   }
   protected List<Attachment>  getAttachments(String eventId, boolean isAddNew) {
@@ -446,12 +446,17 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
   static  public class AddEmailAddressActionListener extends EventListener<UITaskForm> {
     public void execute(Event<UITaskForm> event) throws Exception {
       System.out.println("\n\n AddEmailAddressActionListener");
-      /*UIEventForm uiForm = event.getSource() ;
-      UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
-      UIPopupAction uiPopupAction  = uiPopupContainer.getChild(UIPopupAction.class) ;
-      UIAddEmailAddress uiEmailAddressFrom = uiPopupAction.activate(UIAddEmailAddress.class, 500) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupContainer) ;*/
+      UITaskForm uiForm = event.getSource() ;
+      if(!uiForm.getEmailReminder()) {
+        UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UITaskForm.msg.email-reminder-required", null));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+      } else {
+        UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
+        UIPopupAction uiPopupAction  = uiPopupContainer.getChild(UIPopupAction.class) ;
+        uiPopupAction.activate(UIAddressForm.class, 640) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+      }
     }
   }
   static  public class AddAttachmentActionListener extends EventListener<UITaskForm> {
@@ -489,8 +494,14 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
 
   static  public class SelectUserActionListener extends EventListener<UITaskForm> {
     public void execute(Event<UITaskForm> event) throws Exception {
-      UITaskForm uiForm = event.getSource() ;
       System.out.println( "\n\n ==========> AddParticipantActionListener");
+      UITaskForm uiForm = event.getSource() ;
+      UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
+      UIPopupAction uiPopupAction = uiPopupContainer.getChild(UIPopupAction.class) ;
+      UIGroupSelector uiGroupSelector = uiPopupAction.activate(UIGroupSelector.class,500) ;
+      uiGroupSelector.setSelectUser(true) ;
+      uiGroupSelector.setComponent(uiForm,new String[]{UITaskDetailTab.FIELD_DELEGATION}) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }
   }
 

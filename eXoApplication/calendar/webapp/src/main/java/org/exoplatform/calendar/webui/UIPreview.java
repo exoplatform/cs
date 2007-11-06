@@ -38,8 +38,6 @@ import org.exoplatform.webui.event.EventListener;
 public class UIPreview extends UICalendarView implements UIPopupComponent {
   private CalendarEvent event_ = null ;
   private boolean isShowPopup_ = false ;
-  public static final String CALENDARID = "calendarId".intern() ;
-  public static final String CALTYPE = "calType".intern() ;
 
   public UIPreview() throws Exception {}
 

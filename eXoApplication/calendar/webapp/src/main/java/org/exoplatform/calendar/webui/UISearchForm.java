@@ -53,13 +53,13 @@ public class UISearchForm extends UIForm {
       EventQuery eventQuery = new EventQuery() ;
       eventQuery.setText(text) ;
       String username = CalendarUtils.getCurrentUser() ;
-      EventPageList resultPageList = 
-        CalendarUtils.getCalendarService().searchEvent(username, eventQuery, CalendarUtils.getUserGroups(username)) ;
       UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
       UICalendarViewContainer calendarViewContainer = 
         calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
-      calendarViewContainer.setRenderedChild("UIListContainer") ;
       UIListView uiListView = calendarViewContainer.findFirstComponentOfType(UIListView.class) ;
+      EventPageList resultPageList = 
+        CalendarUtils.getCalendarService().searchEvent(username, eventQuery, uiListView.getPublicCalendars()) ;
+      calendarViewContainer.setRenderedChild("UIListContainer") ;
       uiListView.update(resultPageList) ;
       uiListView.setViewType(UIListView.TYPE_BOTH) ;
       uiListView.setDisplaySearchResult(true) ;

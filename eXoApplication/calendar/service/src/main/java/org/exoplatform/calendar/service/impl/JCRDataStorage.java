@@ -45,7 +45,6 @@ import org.exoplatform.registry.JCRRegistryService;
 import org.exoplatform.registry.ServiceRegistry;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
-
 import com.sun.syndication.feed.synd.SyndContent;
 import com.sun.syndication.feed.synd.SyndContentImpl;
 import com.sun.syndication.feed.synd.SyndEntry;
@@ -648,7 +647,9 @@ public class JCRDataStorage implements DataStorage{
 
   public CalendarEvent getGroupEvent(String calendarId, String eventId) throws Exception {
     Node calendarNode = getCalendarHome().getNode(calendarId) ;
-    return getEvent(calendarNode.getNode(eventId)) ;
+    CalendarEvent calEvent = getEvent(calendarNode.getNode(eventId)) ;
+    calEvent.setCalType("2") ;
+    return calEvent ;
   }
 
   public List<CalendarEvent> getGroupEventByCalendar(List<String> calendarIds) throws Exception {

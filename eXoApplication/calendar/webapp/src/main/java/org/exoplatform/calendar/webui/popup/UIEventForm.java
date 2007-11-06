@@ -219,7 +219,9 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   }
   public void activate() throws Exception {}
   public void deActivate() throws Exception {}
-  public void updateSelect(String selectField, String value) throws Exception {}
+  public void updateSelect(String selectField, String value) throws Exception {
+    
+  }
 
   protected boolean isEventDetailValid(){
     if(CalendarUtils.isEmpty(getEventSumary())) {
@@ -557,12 +559,17 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   static  public class AddEmailAddressActionListener extends EventListener<UIEventForm> {
     public void execute(Event<UIEventForm> event) throws Exception {
       System.out.println("\n\n AddEmailAddressActionListener");
-      /*UIEventForm uiForm = event.getSource() ;
-      UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
-      UIPopupAction uiPopupAction  = uiPopupContainer.getChild(UIPopupAction.class) ;
-      UIAddEmailAddress uiEmailAddressFrom = uiPopupAction.activate(UIAddEmailAddress.class, 500) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupContainer) ;*/
+      UIEventForm uiForm = event.getSource() ;
+      if(!uiForm.getEmailReminder()) {
+        UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.email-reminder-required", null));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+      } else {
+        UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
+        UIPopupAction uiPopupAction  = uiPopupContainer.getChild(UIPopupAction.class) ;
+        uiPopupAction.activate(UIAddressForm.class, 640) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+      }
     }
   }
   static  public class AddAttachmentActionListener extends EventListener<UIEventForm> {

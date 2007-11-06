@@ -143,7 +143,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   public void setViewType(String viewType) { this.viewType_ = viewType ; }
   public String getViewType() { return viewType_ ; }
   protected String[] getViews() {return views ; }
-  protected String[] getPublicCalendars() throws Exception{
+  public String[] getPublicCalendars() throws Exception{
     try{
       return getAncestorOfType(UICalendarWorkingContainer.class)
       .findFirstComponentOfType(UICalendars.class).getPublicCalendarIds() ;
@@ -640,7 +640,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       tocalendar.set(java.util.Calendar.MINUTE, tocalendar.getActualMaximum(java.util.Calendar.MINUTE)) ;
       tocalendar.set(java.util.Calendar.MILLISECOND, tocalendar.getActualMaximum(java.util.Calendar.MILLISECOND)) ;
       eventQuery.setToDate(tocalendar) ;
-      uiListView.update(calendarService.searchEvent(username, eventQuery, CalendarUtils.getUserGroups(username))) ; 
+      uiListView.update(calendarService.searchEvent(username, eventQuery, uiCalendarView.getPublicCalendars())) ; 
       uiListView.setShowEventAndTask(false) ;
       uiListView.setDisplaySearchResult(false) ;
       uiListView.isShowEvent_ = false ;
