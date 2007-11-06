@@ -70,6 +70,7 @@ UIMailDragDrop.prototype.initDnD = function(dropableObjs, clickObj, dragObj, e) 
     padding = '2px' ;
     border = 'solid 1px red' ;
     position = 'absolute' ;
+    display = 'none' ;
 //    width = '200px' ;
 //    height = '50px' ;
   }
@@ -116,6 +117,11 @@ UIMailDragDrop.prototype.initCallback = function(dndEvent) {
 } ;
 
 UIMailDragDrop.prototype.dragCallback = function(dndEvent) {
+  if (!dndEvent.dragObject.style.display ||
+      dndEvent.dragObject.style.display == 'none') {
+    dndEvent.dragObject.style.display = 'block' ;
+  }
+      
   var dragObject = dndEvent.dragObject ;
 
   eXo.mail.UIMailDragDrop.synDragObjectPos(dndEvent) ;
