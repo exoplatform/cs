@@ -42,8 +42,8 @@ public class UIProfileInputSet extends UIFormInputWithActions {
   public static final String FIELD_BIRTHDAY_DATETIME = "birthday" ;
   public static final String FIELD_JOBTITLE_INPUT = "jobTitle";
   public static final String FIELD_EMAIL_INPUT = "preferredEmail" ;
-  public static final String MALE = "male" ;
-  public static final String FEMALE = "female" ;
+  public static final String MALE = "Male" ;
+  public static final String FEMALE = "Female" ;
   public String gender = "male" ;
   private byte[] imageBytes = null;
   private String fileName = null ;

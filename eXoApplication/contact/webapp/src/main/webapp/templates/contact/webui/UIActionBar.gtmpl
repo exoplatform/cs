@@ -123,17 +123,17 @@
 							              		<div class="UIRightPopupMenuContainer">
 																	<a class="MenuItem" href="javascript:eXo.contact.UIContactPortlet.switchLayout(0)" >   
 								                    <div class="ItemIcon HidenAllCalendar">
-								                       Show/Hide all
+								                       Show/Hide Navigation
 								                    </div>
 							                    </a>
 							                    <a class="MenuItem" href="javascript:eXo.contact.UIContactPortlet.switchLayout(1)" >   
 								                    <div class="ItemIcon ShowMinicalendar">
-								                       Addressbooks
+								                       Show/Hide Addressbooks
 								                    </div>
 							                    </a>
 							                    <a class="MenuItem" href="javascript:eXo.contact.UIContactPortlet.switchLayout(2)" >
 								                    <div class="ItemIcon HidenMinicalendar">
-								                      Tag List
+								                      Show/Hide Tags
 								                    </div>
 							                    </a>
 																</div>

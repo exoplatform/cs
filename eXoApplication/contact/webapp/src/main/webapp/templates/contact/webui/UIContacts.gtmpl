@@ -53,8 +53,9 @@
 			          JCRPageList pageList = uicomponent.getContactPageList();
 			          String cssPreviousPage = "FloatBlockHidden";
 			          String cssNextPage = "FloatBlockHidden";
-			          String contactRange = "";			          
-			          if (pageList != null && (uicomponent.getContacts().length != 0)) {
+			          String contactRange = "";	
+			          Contact[] contacts = uicomponent.getContacts();		          
+			          if (pageList != null && (contacts.length != 0)) {
 			            currentPage = pageList.getCurrentPage();
 			            availablePage = pageList.getAvailablePage() ;
 			            availableContact =  pageList.getAvailable() ;
@@ -65,7 +66,7 @@
 			            long endIndex = fromIndex-1 + pageSize;
 			            if (currentPage == availablePage) endIndex = availableContact;
 			            contactRange = "Contacts " + fromIndex + " - " + endIndex + " of " + availableContact ;
-			          } 
+			          }
 			          
 			        %>
 
@@ -80,8 +81,7 @@
 					</div>
 					<div style="clear: both;"><span/></div>
 				</div>
-				
-							
+	
 				<div class="UIMessageList" >
 					<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
 	  				<thead>
@@ -132,23 +132,27 @@
     		    			%>
 	 	      	    
 	  		        	<a href="$sortedByOrganition">
-	  		        	<div class="$classArrowOrganition" style="padding-right:26px;" >Organition</div>
+	  		        	<div class="$classArrowOrganition" style="padding-right:26px;" >Job Title</div>
 	 	      	    	</a>
 	 	      	    </th>
 	 	      	    <th style="padding-left: 7px;"> Work Phone </th>
 	  	 	      </tr>
 	  	 	    </thead>
   	 	      <tbody>
+  	 	      
+  	 	
+  	 	      
+  	 	      
   	 	      <%  
-							Contact[] contacts = uicomponent.getContacts();
+							
 							for(contact in contacts) {
 								String actionLink  = uicomponent.event("SelectedContact", contact.getId()) ;
 								checkboxField = uicomponent.getChildById(contact.getId()) ;
-								iconTag = "Icon" ;
-								String[] tagIds = contact.getTags() ; 
+								iconTag = "Icon " ;
+								String[] tagIds = contact.getTags() ;
 								if (tagIds != null && tagIds.length > 0) {
 									Tag tag = ContactUtils.getContactService().getTag(ContactUtils.getCurrentUser(), tagIds[0]) ;
-									iconTag = "Icon " + tag.getColor() + "Tag" ; 
+									if (tag != null) iconTag += + tag.getColor() + "Tag" ; 
 								}
 								cssClass = "" ;
 								if (contact.getId().equals(uicomponent.getSelectedContact())) cssClass = "Selected" ;								
@@ -179,6 +183,11 @@
 			     	<% } %>  
   	   			</tbody>
 					</table>
+					<% 
+						if (contacts.length == 0) {
+					%>
+					There are no Contact to display
+					<% } %>
 					
 				<%if(isDisplaySearchResult) {%>
 				<div class="UIAction"> 
@@ -186,7 +195,7 @@
 						<tr>
 							<td align="center">
 					      <% 
-					        	 String actionLabel = "CloseSearch" ; //_ctx.appRes(uicomponent.getName() + ".action." + action) ;
+					        	 String actionLabel = "Close Search" ; //_ctx.appRes(uicomponent.getName() + ".action." + action) ;
 					           String link = uicomponent.event("CloseSearch") ;
 					  		%>
 					  		<a href="$link" class="ActionButton LightBlueStyle">

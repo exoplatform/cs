@@ -481,7 +481,9 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         uiTags.setSelectedTag(uiContacts.selectedTag_) ;
         uiContacts.setContacts(ContactUtils.getContactService()
           .getContactPageListByTag(username, uiContacts.selectedTag_)) ;
-      }      
+      } else {
+        uiContacts.setContacts(null) ;
+      }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer) ;
     }
   }

@@ -104,13 +104,15 @@ public class UITags extends UIComponent {
       String tagId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       ContactUtils.getContactService().removeTag(ContactUtils.getCurrentUser(), tagId) ;
       UIWorkingContainer uiWorkingContainer = uiTags.getAncestorOfType(UIWorkingContainer.class) ;
+      UIContacts uiContacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class) ;
       if (tagId.equals(uiTags.getSelectedTag())) {
         uiTags.setSelectedTag(null) ;
-        uiWorkingContainer.findFirstComponentOfType(UIContacts.class).setContacts(null) ;
+        uiContacts.setContacts(null) ;
         uiWorkingContainer.findFirstComponentOfType(UIContactPreview.class).setContact(null) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer) ;
       } else {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiTags) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts) ;
       }  
       
     }
