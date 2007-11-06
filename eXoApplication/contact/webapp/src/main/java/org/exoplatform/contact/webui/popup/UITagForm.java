@@ -137,7 +137,8 @@ public class UITagForm extends UIForm implements UIPopupComponent {
       String inputTag = uiTagForm.getUIStringInput(FIELD_TAGNAME_INPUT).getValue();
       if (!ContactUtils.isEmpty(inputTag)) {
         if (ContactUtils.isTagNameExisted(inputTag)) {
-          uiApp.addMessage(new ApplicationMessage("UITagForm.msg.tagName-existed", null)) ;
+          uiApp.addMessage(new ApplicationMessage("UITagForm.msg.tagName-existed", null, 
+              ApplicationMessage.WARNING)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;
         }
@@ -151,7 +152,8 @@ public class UITagForm extends UIForm implements UIPopupComponent {
         tags.add(tag);
       } 
       if (tags.size() == 0) {
-        uiApp.addMessage(new ApplicationMessage("UITagForm.msg.tagName-required", null)) ;
+        uiApp.addMessage(new ApplicationMessage("UITagForm.msg.tagName-required", null, 
+            ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       } 

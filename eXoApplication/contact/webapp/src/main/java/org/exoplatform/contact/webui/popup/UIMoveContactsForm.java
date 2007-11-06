@@ -108,7 +108,8 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
       }
       if (ContactUtils.isEmpty(sharedGroups.toString())) {
         UIApplication uiApp = uiMoveContactForm.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.selectSharedGroups-required", null)) ;
+        uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.selectSharedGroups-required", null, 
+            ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ; 
       }

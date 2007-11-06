@@ -226,27 +226,32 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
       UIApplication uiApp = uiContactForm.getAncestorOfType(UIApplication.class) ;
       UIProfileInputSet profileTab = uiContactForm.getChildById(INPUT_PROFILETAB) ;
       if (ContactUtils.isEmpty(profileTab.getFieldFullName())) {  
-        uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.fullName-required", null)) ;
+        uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.fullName-required", null, 
+            ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ; 
       }
       if (ContactUtils.isEmpty(profileTab.getFieldFirstName())) {  
-        uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.firstName-required", null)) ;
+        uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.firstName-required", null, 
+            ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ; 
       }
       if (ContactUtils.isEmpty(profileTab.getFieldMiddleName())) {  
-        uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.middleName-required", null)) ;
+        uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.middleName-required", null, 
+            ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ; 
       }
       if (ContactUtils.isEmpty(profileTab.getFieldLastName())) {  
-        uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.lastName-required", null)) ;
+        uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.lastName-required", null, 
+            ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ; 
       }
       if (ContactUtils.isEmpty(profileTab.getFieldEmail())) {  
-        uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.emailAddress-required", null)) ;
+        uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.emailAddress-required", null, 
+            ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ; 
       }

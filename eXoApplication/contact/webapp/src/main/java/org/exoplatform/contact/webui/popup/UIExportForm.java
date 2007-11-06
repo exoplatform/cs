@@ -202,7 +202,8 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
       
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       if (contactIds.size() == 0) {  
-        uiApp.addMessage(new ApplicationMessage("UIExportForm.msg.check-contact-required", null)) ;
+        uiApp.addMessage(new ApplicationMessage("UIExportForm.msg.check-contact-required", null, 
+            ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ; 
       }
@@ -212,7 +213,8 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
       String exportFormat = uiForm.getUIFormSelectBox(UIExportForm.TYPE).getValue() ;
       String fileName = uiForm.getUIStringInput(UIExportForm.NAME).getValue() ;
       if (ContactUtils.isEmpty(fileName)) {  
-        uiApp.addMessage(new ApplicationMessage("UIExportForm.msg.filename-required", null)) ;
+        uiApp.addMessage(new ApplicationMessage("UIExportForm.msg.filename-required", null, 
+            ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ; 
       }

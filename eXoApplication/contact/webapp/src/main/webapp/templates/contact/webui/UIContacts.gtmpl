@@ -135,28 +135,80 @@
 	  		        	<div class="$classArrowOrganition" style="padding-right:26px;" >Job Title</div>
 	 	      	    	</a>
 	 	      	    </th>
-	 	      	    <th style="padding-left: 7px;"> Work Phone </th>
+	 	      	    <th style="width: 120px; padding-left: 7px;"> Work Phone </th>
+	 	      	    <% 
+	 	      	    	if(isDisplaySearchResult) {	
+	 	      	    %>
+	 	      	    	<th> Address Book </th>
+	 	      	    <% } %>
+	 	      	    	
 	  	 	      </tr>
 	  	 	    </thead>
-  	 	      <tbody>
-  	 	      
-  	 	
-  	 	      
-  	 	      
-  	 	      <%  
-							
-							for(contact in contacts) {
-								String actionLink  = uicomponent.event("SelectedContact", contact.getId()) ;
-								checkboxField = uicomponent.getChildById(contact.getId()) ;
-								iconTag = "Icon " ;
-								String[] tagIds = contact.getTags() ;
-								if (tagIds != null && tagIds.length > 0) {
-									Tag tag = ContactUtils.getContactService().getTag(ContactUtils.getCurrentUser(), tagIds[0]) ;
-									if (tag != null) iconTag += + tag.getColor() + "Tag" ; 
-								}
-								cssClass = "" ;
-								if (contact.getId().equals(uicomponent.getSelectedContact())) cssClass = "Selected" ;								
+	  	 	    <% if(isDisplaySearchResult) { %>
+	  	 	    <tbody>
+	  	 	    <%
+	  	 	    		for(contact in contacts) {
+	  	 	    			String actionLink  = uicomponent.event("SelectedContact", contact.getId()) ;
+									checkboxField = uicomponent.getChildById(contact.getId()) ;
+									iconTag = "Icon " ;
+									String[] tagIds = contact.getTags() ;
+									if (tagIds != null && tagIds.length > 0) {
+										Tag tag = ContactUtils.getContactService().getTag(ContactUtils.getCurrentUser(), tagIds[0]) ;
+										if (tag != null) iconTag += + tag.getColor() + "Tag" ; 
+									}
+									cssClass = "" ;
+									if (contact.getId().equals(uicomponent.getSelectedContact())) cssClass = "Selected" ;	
+
+									// add
+	  	 	    			String[] categories = contact.getCategories() ;
+	  	 	    			for (category in categories) {
+	  	 	    %>
+								
+  						<tr class="UIContactList $cssClass" selectedTag="<%=uicomponent.getSelectedTag()%>" >
+  						  <td class="text" style="padding-left: 7px;">
+  						  	<%
+  						  		if(checkboxField != null) uicomponent.renderField(checkboxField) ;
+  						  	%>
+  						  </td>
+								<td class="text" style="padding: 0px;"><div class="$iconTag" ><span></span></div></td>
+								<td class="text">
+									<div class="State OnlineIcon" title="Availabel">
+										<a href="$actionLink">
+											<%=(ContactUtils.isEmpty(contact.getFullName()) ? "" : contact.getFullName())%>
+										</a>
+									</div>
+								</td>
+								<td class="text"><a href="$actionLink"><%=(ContactUtils.isEmpty(contact.getEmailAddress()) ? "" : contact.getEmailAddress())%></a></td>
+								<td class="text"><a href="$actionLink"><%=(ContactUtils.isEmpty(contact.getJobTitle()) ? "" : contact.getJobTitle())%></a></td>
+								<td>
+									<a href="$actionLink">
+										<%=(contact.getWorkPhone1()==null ? (ContactUtils.isEmpty(contact.getWorkPhone2()) ? "" : contact.getWorkPhone2()) : contact.getWorkPhone1())%>
+									</a>
+								</td>
+								
+								<td class="text"><%=category%></td>
+								
+   			     	</tr>
+   			     	<% } } %>  
+  	   			</tbody>
+
+						
+						<% } else {	%>
+						<tbody>
+						<%   
+									for(contact in contacts) {
+										String actionLink  = uicomponent.event("SelectedContact", contact.getId()) ;
+										checkboxField = uicomponent.getChildById(contact.getId()) ;
+										iconTag = "Icon " ;
+										String[] tagIds = contact.getTags() ;
+										if (tagIds != null && tagIds.length > 0) {
+											Tag tag = ContactUtils.getContactService().getTag(ContactUtils.getCurrentUser(), tagIds[0]) ;
+											if (tag != null) iconTag += + tag.getColor() + "Tag" ; 
+										}
+										cssClass = "" ;
+										if (contact.getId().equals(uicomponent.getSelectedContact())) cssClass = "Selected" ;								
 						%>
+							
   						<tr class="UIContactList $cssClass" selectedTag="<%=uicomponent.getSelectedTag()%>" isSearch="<%=uicomponent.isDisplaySearchResult()%>">
   						  <td class="text" style="padding-left: 7px;">
   						  	<%
@@ -178,18 +230,19 @@
 										<%=(contact.getWorkPhone1()==null ? (ContactUtils.isEmpty(contact.getWorkPhone2()) ? "" : contact.getWorkPhone2()) : contact.getWorkPhone1())%>
 									</a>
 								</td>
-
    			     	</tr>
-			     	<% } %>  
+   			     	<% } %>  
   	   			</tbody>
-					</table>
-					<% 
-						if (contacts.length == 0) {
-					%>
-					There are no Contact to display
-					<% } %>
-					
-				<%if(isDisplaySearchResult) {%>
+  	   			
+  	   			<% } %>
+					</table>				
+
+				<%if(isDisplaySearchResult) {
+						if (contacts.length == 0) {	
+				%>
+				<div style="text-align : center">Not result found</div>
+				<% } %>
+				
 				<div class="UIAction"> 
 					<table class="ActionContainer" align="center">
 						<tr>

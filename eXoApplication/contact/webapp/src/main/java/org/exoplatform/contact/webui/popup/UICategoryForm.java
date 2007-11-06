@@ -71,7 +71,8 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
       String  groupName = uiCategoryForm.getUIStringInput(FIELD_CATEGORYNAME_INPUT).getValue(); 
       UIApplication uiApp = uiCategoryForm.getAncestorOfType(UIApplication.class) ;
       if (ContactUtils.isEmpty(groupName)) {
-        uiApp.addMessage(new ApplicationMessage("UICategoryForm.msg.categoryName-required", null)) ;
+        uiApp.addMessage(new ApplicationMessage("UICategoryForm.msg.categoryName-required", null,
+          ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ; 
       }

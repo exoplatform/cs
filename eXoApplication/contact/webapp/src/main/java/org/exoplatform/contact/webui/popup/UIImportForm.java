@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.ContactGroup;
+import org.exoplatform.contact.service.ContactImportExport;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContacts;
@@ -89,10 +90,17 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
       
       String importFormat = uiForm.getUIFormSelectBox(UIImportForm.TYPE).getValue() ;      
       if (ContactUtils.isEmpty(category)) {  
-        uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.selectGroup-required", null)) ;
+        uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.selectGroup-required", null, 
+            ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ; 
-      }      
+      }   
+      System.out.println("\n\n importFormat:" + importFormat + "\n\n");
+      ContactImportExport ggg = ContactUtils.getContactService().getContactImportExports(importFormat) ;
+      System.out.println("\n\n input.getUploadDataAsStream():" + input.getUploadDataAsStream() + "\n\n");
+      
+     System.out.println("\n\n3333\n\n"); 
+     
       ContactUtils.getContactService().getContactImportExports(importFormat)
         .importContact(ContactUtils.getCurrentUser(), input.getUploadDataAsStream(), category) ;
       UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
