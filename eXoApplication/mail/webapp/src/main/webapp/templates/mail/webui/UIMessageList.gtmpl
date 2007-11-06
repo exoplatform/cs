@@ -205,6 +205,9 @@
               <div class="ItemIcon EmptyIcon"> Move to Folder </div>
             </a>
             <a class="MenuItem" href="<%=uicomponent.event("ViewRead", "id")%>">   
+              <div class="ItemIcon EmptyIcon"> Tag </div>
+            </a>          
+            <a class="MenuItem" href="<%=uicomponent.event("ViewRead", "id")%>">   
               <div class="ItemIcon EmptyIcon"> Delete </div>
             </a>
             <a class="MenuItem" href="<%=uicomponent.event("ViewRead", "id")%>">   
