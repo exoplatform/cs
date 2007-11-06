@@ -551,20 +551,16 @@ public class UIMessageList extends UIForm {
   
   static public class MoveDirectMessagesActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
-      System.out.println(" === >>> Move Messages Action Listener");
       UIMessageList uiMessageList = event.getSource() ;   
       String folderId = event.getRequestContext().getRequestParameter(OBJECTID) ; 
-      System.out.println("======folder======================================" + folderId);
       MailService mailSrv = MailUtils.getMailService();
       String username = MailUtils.getCurrentUser();
       String accountId = MailUtils.getAccountId();
       for(Message message : uiMessageList.getCheckedMessage()) {
         Folder oldFolder = mailSrv.getFolder(username, accountId, message.getFolders()[0]);
-        System.out.println("===message.getFolders()[0]==>>>" + message.getFolders()[0]);
         message.setFolders(new String[]{ folderId });         
         mailSrv.saveMessage(username, accountId, message, false);
         Folder folder = mailSrv.getFolder(username, accountId, folderId);
-        System.out.println("===message==>>>" + message.getSubject());
         oldFolder.setTotalMessage(oldFolder.getTotalMessage() - 1);
         folder.setTotalMessage(folder.getTotalMessage() + 1);
         if (message.isUnread()) {           
