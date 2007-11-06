@@ -79,7 +79,7 @@ UIMailPortlet.prototype.selectItem = function(obj) {
 	if(obj.checked) {
 		if (!tr.getAttribute("tmpClass")) {			
 			tr.setAttribute("tmpClass", tr.className) ;
-			tr.className = "SelectedItem" ;
+			tr.className = "MessageItem SelectedItem" ;
 		}
 	} else {
 		if (tr.getAttribute("tmpClass")) {			
@@ -93,8 +93,8 @@ UIMailPortlet.prototype.selectItem = function(obj) {
 	for (var i = 1; i < trs.length; i++) {
 		var input = DOMUtil.findFirstDescendantByClass(trs[i], "input", "checkbox");
 		if (!input.checked) {
-			if (trs[i].className == "SelectedItem")
-				trs[i].className = "NormalItem";
+			if (trs[i].className.indexOf("SelectedItem") == -1)
+				trs[i].className = trs[i].className.substring(trs[i].className.indexOf("SelectedItem"), trs[i].className.length);
 		}
 	}
 }
