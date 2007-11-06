@@ -450,11 +450,6 @@
 	padding: 0px 5px;
 }
 
-.UIMailPortlet .MailWorkingWorkspace .UIGrid tbody {
-  overflow: auto ;
-  height: 50% ;
-}
-
 .UIMailPortlet .MailWorkingWorkspace .UIGrid .IconTag {
 	width: 16px;
 	height: 20px;

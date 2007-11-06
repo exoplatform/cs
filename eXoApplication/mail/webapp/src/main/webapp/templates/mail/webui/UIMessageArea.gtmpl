@@ -4,14 +4,16 @@
   
   def rcontext = _ctx.getRequestContext() ;
   rcontext.getJavascriptManager().importJavascript('eXo.mail.UIMailDragDrop','/mail/javascript/');
+  rcontext.getJavascriptManager().importJavascript('eXo.cs.cs','/portal/javascript/');
+  rcontext.getJavascriptManager().importJavascript('eXo.cs.Spliter','/portal/javascript/');
   rcontext.getJavascriptManager().addOnLoadJavascript('eXo.mail.UIMailDragDrop.onLoad');
 %>
 
 <div class="MailWorkingDetails SpliterContainer" id="<%=uicomponent.getId()%>">
-	<div class="UIMessageArea SpliterResizableListArea" >		
+	<div class="UIMessageArea" >		
 		<%uicomponent.renderChild(UIMessageList.class);%>
 	</div>
-	<div class="ResizeReadingPane" onmousedown="eXo.core.Spliter.exeRowSplit(event, this);"><span></span></div>
+	<div class="ResizeReadingPane" onmousedown="eXo.cs.Spliter.exeRowSplit(event, this, 'uiMessageListResizableArea');"><span></span></div>
 	<div  class="SpliterResizableArea">
 		<%uicomponent.renderChild(UIMessagePreview.class);%>
 	</div>

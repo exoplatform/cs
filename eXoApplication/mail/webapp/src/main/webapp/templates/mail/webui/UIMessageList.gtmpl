@@ -290,7 +290,7 @@
    	      </th>
     	 	</tr>
     	</thead>
-    	<tbody>
+    	<tbody class="SpliterResizableListArea" id="uiMessageListResizableArea">
     	<%
         int i = 0;
   			for(Message msg : uicomponent.getMessageList()) {
@@ -365,6 +365,6 @@
   	</table>
   </div>
   <% } else {%>
-    <div class="MessageNotice" >There are no messages !</div>
+    <div class="MessageNotice" id="uiMessageListResizableArea">There are no messages !</div>
   <%}%>
 <%uiform.end()%>    
