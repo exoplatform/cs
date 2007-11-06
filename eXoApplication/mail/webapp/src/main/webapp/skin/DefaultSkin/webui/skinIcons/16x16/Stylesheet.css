@@ -82,8 +82,32 @@
 	background: url('icons/View.gif') no-repeat left;
 }
 
-.ReplyIcon {
-	background: url('icons/ReplyIcon.gif') no-repeat left 6px;
+.ReplyMailIcon {
+	background: url('icons/Replyicon16x14.gif') no-repeat left 6px;
+}
+
+.PrintMailIcon {
+	background: url('icons/Printmail16x16.gif') no-repeat left 6px;
+}
+
+.ReplyAllMailIcon {
+	background: url('icons/ReplyAllcon16x14.gif') no-repeat left 6px;
+}
+
+.ForwardMailIcon {
+	background: url('icons/Forward16x14.gif') no-repeat left 6px;
+}
+
+.MoveMailIcon {
+	background: url('icons/MoveMessageIcon.gif') no-repeat left 6px;
+}
+
+.TagMailIcon {
+	background: url('icons/VioletTag.gif') no-repeat left 6px;
+}
+
+.OpenMailIcon {
+	background: url('icons/ReadMessagesIcon.gif') no-repeat left 6px;
 }
 
 .ReplyAllIcon {

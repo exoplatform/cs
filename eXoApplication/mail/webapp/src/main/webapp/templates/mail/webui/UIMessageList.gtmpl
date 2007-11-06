@@ -187,31 +187,31 @@
         <div class="MiddleRightRightClickPopupMenu">
           <div class="UIRightPopupMenuContainer">
             <a class="MenuItem" href="<%=uicomponent.event("ViewRead", "id")%>">   
-              <div class="ItemIcon RenameFolderIcon"> Open </div>
+              <div class="ItemIcon OpenMailIcon"> Open </div>
             </a>
             <a class="MenuItem" href="<%=uicomponent.event("ViewRead", "id")%>">   
-              <div class="ItemIcon RemoveFolderIcon"> Print </div>
+              <div class="ItemIcon PrintMailIcon"> Print </div>
             </a>
             <a class="MenuItem" href="<%=uicomponent.event("ViewRead", "id")%>">   
-              <div class="ItemIcon AddFolderIcon"> Reply to Sender</div>
+              <div class="ItemIcon ReplyMailIcon"> Reply to Sender</div>
             </a>  
             <a class="MenuItem" href="<%=uicomponent.event("ViewRead", "id")%>">   
-              <div class="ItemIcon EmptyIcon"> Reply to All </div>
+              <div class="ItemIcon ReplyAllMailIcon"> Reply to All </div>
             </a>
             <a class="MenuItem" href="<%=uicomponent.event("ViewRead", "id")%>">   
-              <div class="ItemIcon EmptyIcon"> Forward </div>
+              <div class="ItemIcon ForwardMailIcon"> Forward </div>
             </a>
             <a class="MenuItem" href="<%=uicomponent.event("ViewRead", "id")%>">   
-              <div class="ItemIcon EmptyIcon"> Move to Folder </div>
+              <div class="ItemIcon MoveMailIcon"> Move to Folder </div>
             </a>
             <a class="MenuItem" href="<%=uicomponent.event("ViewRead", "id")%>">   
-              <div class="ItemIcon EmptyIcon"> Tag </div>
+              <div class="ItemIcon TagMailIcon"> Tag </div>
             </a>          
             <a class="MenuItem" href="<%=uicomponent.event("ViewRead", "id")%>">   
-              <div class="ItemIcon EmptyIcon"> Delete </div>
+              <div class="ItemIcon DeleteMailIcon"> Delete </div>
             </a>
             <a class="MenuItem" href="<%=uicomponent.event("ViewRead", "id")%>">   
-              <div class="ItemIcon EmptyIcon"> Add Sender to Contacts </div>
+              <div class="ItemIcon AddContactIcon"> Add Sender to Contacts </div>
             </a>
           </div>
         </div>
