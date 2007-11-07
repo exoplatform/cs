@@ -109,7 +109,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
     List<ActionData> actions = new ArrayList<ActionData>() ;
     ActionData toAction = new ActionData() ;
     toAction.setActionListener(ACT_TO) ;
-    toAction.setActionType(ActionData.TYPE_LINK) ;
+    toAction.setActionType(ActionData.TYPE_ICON) ;
     toAction.setActionName(ACT_TO);    
     actions.add(toAction);
     inputSet.setActionField(FIELD_TO, actions) ;
@@ -117,7 +117,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
     actions = new ArrayList<ActionData>() ;
     ActionData ccAction = new ActionData() ;
     ccAction.setActionListener(ACT_CC) ;
-    ccAction.setActionType(ActionData.TYPE_LINK) ;
+    ccAction.setActionType(ActionData.TYPE_ICON) ;
     ccAction.setActionName(ACT_CC);
     actions.add(ccAction);
     inputSet.setActionField(FIELD_CC, actions) ;
@@ -125,7 +125,8 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
     actions = new ArrayList<ActionData>() ;
     ActionData bccAction = new ActionData() ;
     bccAction.setActionListener(ACT_BCC) ;
-    bccAction.setActionType(ActionData.TYPE_LINK) ;
+    bccAction.setActionType(ActionData.TYPE_ICON) ;
+    
     bccAction.setActionName(ACT_BCC);    
     actions.add(bccAction);
     inputSet.setActionField(FIELD_BCC, actions) ;

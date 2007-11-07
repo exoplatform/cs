@@ -141,6 +141,17 @@
 	color: #126ca5;
 }
 
+.UIMessageCompose .MessageAddress .AddNewNodeIcon {
+}
+
+.UIMessageCompose .MessageAddress img {
+	border:medium none;
+	margin-left:5px;
+	padding:0px;
+	vertical-align:bottom;
+}
+
+
 /*=========================Text Actions Bar=============================*/
 
 .UIMessageCompose .MessageContent {
