@@ -116,12 +116,40 @@
 			</table>
 		</div>
 		<div class="EventWeekContent" style="position: relative ;">
+			<div>
+			<%for(cl in uicomponent.getDaysOfWeek(weekNumber)) { 
+					day = cl.get(Calendar.DATE) ;
+		 			month = cl.get(Calendar.MONTH) ;
+		 			year = cl.get(Calendar.YEAR) ;
+		 			key = uicomponent.keyGen(day, month, year) ;
+		 			dayOfWeek = cl.get(Calendar.DAY_OF_WEEK) ;
+					events = uicomponent.getEventData().get(key) ; 
+					if(events != null) {
+					for(event in events){ 
+						begin =  tf.format(event.fromDateTime) ;
+						begindate = dtf.format(event.fromDateTime) ;
+						beginTime =  event.fromDateTime.getHours() * 60 + event.fromDateTime.getMinutes() ;
+						end = tf.format(event.toDateTime) ;
+						enddate = dtf.format(event.toDateTime) ;
+						endTime =  event.toDateTime.getHours() * 60 + event.toDateTime.getMinutes() ;
+						color = uicomponent.getColors().get(event.getCalendarId()) ;
+						actionLink =  uicomponent.event("SaveEvent",event.getId()+"&calendarId="+event.getCalendarId()+"&startTime=beginTime&finishTime=endTime") ;
+				%>
+
+							<div class="EventContainerBorder  $color" eventIndex="$dayOfWeek" style="position:absolute ;" calType="$event.calType" eventid="$event.id" calid="$event.calendarId" actionlink="$actionLink" unselectable="on" starttime="$beginTime" endtime="$endTime">
+								<div class="EventContainerBar EventTitle" title="$begindate -> $enddate " ><p unselectable="on">$begin -> $end</p></div>
+								<div class="EventContainer">$event.summary</div>
+								<div class="ResizeEventContainer" unselectable="on"><span></span></div>
+							</div>
+						<% }
+							}
+							}
+						%>
+			</div>
 			<table class="UIGrid" id="UIWeekViewGrid" cellspacing="0" borderspacing="0">
 				<tbody >
 					<% 
 					boolean flag = false ;
-					int n = 0 ;
-
 					style = "" ;
 					if(isShowWorkingTime) {style = "display:none;" ;}	
 					for(time in uicomponent.getDisplayTimes(timeFormat, timeInterval)){
@@ -136,58 +164,23 @@
 						<td class="TdTime">
 							<div  class="TdTime"><%if(!flag) {println time;}%></div>
 						</td>
-							<%
-
+						<%
 					 		for(cl in uicomponent.getDaysOfWeek(weekNumber)) {
-					 			key = uicomponent.keyGen(cl.get(Calendar.DATE), cl.get(Calendar.MONTH), cl.get(Calendar.YEAR)) ;
-					 			day = cl.get(Calendar.DATE) ;
-					 			month = cl.get(Calendar.MONTH) ;
-					 			year = cl.get(Calendar.YEAR) ;
 					 			startTime = df.format(cl.getTime()) + " " + time;
 					 			cl.setTime(dtf.parse(startTime)) ;
-					 		  if(cl.get(Calendar.DAY_OF_WEEK) == uicomponent.getDayOfWeek(currentYear, currentMonth, currentDay)){	
+					 			dayOfWeek = cl.get(Calendar.DAY_OF_WEEK) ;
+					 		  if(dayOfWeek == uicomponent.getDayOfWeek(currentYear, currentMonth, currentDay)){	
 					 		  	cssClass = "Today" ;
 					 		  } else {
 					 				cssClass = "" ;
 					 		  }
-					 		  if(n == 0) {
-					 		 
-					 	%>	
-						 		<td startTime="<%=cl.getTimeInMillis()%>" class="$styleClass $cssClass cols">
-									<% 
-										events = uicomponent.getEventData().get(key) ; 
-										if(events != null) {
-										for(event in events){ 
-											begin =  tf.format(event.fromDateTime) ;
-											begindate = dtf.format(event.fromDateTime) ;
-											beginTime =  event.fromDateTime.getHours() * 60 + event.fromDateTime.getMinutes() ;
-											end = tf.format(event.toDateTime) ;
-											enddate = dtf.format(event.toDateTime) ;
-											endTime =  event.toDateTime.getHours() * 60 + event.toDateTime.getMinutes() ;
-											color = uicomponent.getColors().get(event.getCalendarId()) ;
-											actionLink =  uicomponent.event("SaveEvent",event.getId()+"&calendarId="+event.getCalendarId()+"&startTime=beginTime&finishTime=endTime") ;
-										%>
-		
-											<div class="EventContainerBorder  $color" style="position:absolute ;" calType="$event.calType" eventid="$event.id" calid="$event.calendarId" actionlink="$actionLink" unselectable="on" starttime="$beginTime" endtime="$endTime">
-												<div class="EventContainerBar EventTitle" title="$begindate -> $enddate " ><p unselectable="on">$begin -> $end</p></div>
-												<div class="EventContainer">$event.summary</div>
-												<div class="ResizeEventContainer" unselectable="on"><span></span></div>
-											</div>
-										<% }
-											}
-										%>
-								</td>
-					 	<%
-					 			} else {
 					 	%>
-					 	 		<td startTime="<%=cl.getTimeInMillis()%>" class="$styleClass $cssClass">
+					 	 		<td startTime="<%=cl.getTimeInMillis()%>" eventIndex="$dayOfWeek" class="$styleClass $cssClass">
 									<span></span>
 								</td>
 					 	<%		
-					 			}				 			
 					 	}
 					 	flag = ! flag ;
-					 	n ++ ;
 					 }
 					 %>
 					 
@@ -203,37 +196,37 @@
   			
   				<div class="UIRightClickPopupMenu" id="UIWeekViewRightMenu" eXoCallback="eXo.calendar.UICalendarPortlet.weekViewCallback">
   					<div class="UIContextMenuContainer">
-							  <div class="TopLeftRightClickPopupMenu">
-					  			<div class="TopRightRightClickPopupMenu">
-					    			<div class="TopCenterRightClickPopupMenu"><span></span></div>
-					  			</div>
-								</div> 
-				        <div class="MiddleLeftRightClickPopupMenu">
-				          <div class="MiddleRightRightClickPopupMenu">
-				      			<div class="UIRightPopupMenuContainer">
-				      			<%
-				      				for(String act : uicomponent.getQuickEditMenu()) {
-				      				link = uicomponent.event(act,"id&$uicomponent.CALENDARID=calId&calType=caltype") ;
-				      			%>
-				      				<a href="$link" style="display:none;" class="EventActionMenu">
-				          				<div class="ItemIcon $act">$act</div>
-				      			  </a>
-				      			<%}%>
-					      			 <a href="<%=uicomponent.event("QuickAdd","$uicomponent.TYPE_EVENT&startTime=beginTime")%>">
-						           <div class="ItemIcon QuickAddEvent"> Add new event </div>
-						           </a>
-						        
-						          <a href="<%=uicomponent.event("QuickAdd","$uicomponent.TYPE_TASK&startTime=beginTime")%>">
-						            <div class="ItemIcon QuickAddTask">Add new task</div>
-						          </a>
-										</div>
-			      		</div>
-			    		</div>
-				      <div class="BottomLeftRightClickPopupMenu">
-				        <div class="BottomRightRightClickPopupMenu">
-				          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
-				        </div>
-				      </div>
+						  <div class="TopLeftRightClickPopupMenu">
+				  			<div class="TopRightRightClickPopupMenu">
+				    			<div class="TopCenterRightClickPopupMenu"><span></span></div>
+				  			</div>
+							</div> 
+			        <div class="MiddleLeftRightClickPopupMenu">
+			          <div class="MiddleRightRightClickPopupMenu">
+			      			<div class="UIRightPopupMenuContainer">
+			      			<%
+			      				for(String act : uicomponent.getQuickEditMenu()) {
+			      				link = uicomponent.event(act,"id&$uicomponent.CALENDARID=calId&calType=caltype") ;
+			      			%>
+			      				<a href="$link" style="display:none;" class="EventActionMenu">
+			          				<div class="ItemIcon $act">$act</div>
+			      			  </a>
+			      			<%}%>
+				      			 <a href="<%=uicomponent.event("QuickAdd","$uicomponent.TYPE_EVENT&startTime=beginTime")%>">
+					           <div class="ItemIcon QuickAddEvent"> Add new event </div>
+					           </a>
+					        
+					          <a href="<%=uicomponent.event("QuickAdd","$uicomponent.TYPE_TASK&startTime=beginTime")%>">
+					            <div class="ItemIcon QuickAddTask">Add new task</div>
+					          </a>
+									</div>
+		      		</div>
+		    		</div>
+			      <div class="BottomLeftRightClickPopupMenu">
+			        <div class="BottomRightRightClickPopupMenu">
+			          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+			        </div>
+			      </div>
   					</div>
   				</div>
 
