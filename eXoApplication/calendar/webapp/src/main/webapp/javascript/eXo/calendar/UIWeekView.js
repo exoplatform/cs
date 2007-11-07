@@ -21,8 +21,9 @@ UIWeekView.prototype.init = function() {
 	}
 	var DOMUtil = eXo.core.DOMUtil  ;
 	var UIWeekView = eXo.calendar.UIWeekView ;
-	UIWeekView.container = document.getElementById("UICalendarViewContainer") ;
-	UIWeekView.items = DOMUtil.findDescendantsByClass(UIWeekView.container, "div", "EventContainerBorder") ;
+	var uiCalendarViewContainer = document.getElementById("UICalendarViewContainer") ;
+	UIWeekView.container = document.getElementById("UIWeekViewGrid") ;
+	UIWeekView.items = DOMUtil.findDescendantsByClass(uiCalendarViewContainer, "div", "EventContainerBorder") ;
 	var marker = null ;
 	for(var i = 0 ; i < UIWeekView.items.length ; i ++){		
 		var height = parseInt(UIWeekView.items[i].getAttribute("endtime")) - parseInt(UIWeekView.items[i].getAttribute("starttime")) ;
@@ -96,7 +97,7 @@ UIWeekView.prototype.drag = function(evt) {
 		var left = parseFloat(posX/UIWeekView.container.offsetWidth)*100 ;
 		UIWeekView.dragElement.style.left = left + "%" ;
 	}
-
+	window.status = "sdfa : " + UIWeekView.dragElement.offsetParent.className ;
 } ;
 
 UIWeekView.prototype.dropCallback = function() {
@@ -109,8 +110,9 @@ UIWeekView.prototype.dropCallback = function() {
 	var currentEnd = currentStart + delta ;	
 	var actionLink =	eXo.calendar.UICalendarPortlet.adjustTime(currentStart, currentEnd, dragElement) ;
 	var currentDate = eXo.calendar.UIWeekView.currentCol.getAttribute("starttime").toString() ;
-	currentDate = currentDate.substring(0,currentDate.indexOf(" ")) ;
+	//currentDate = currentDate.substring(0,currentDate.indexOf(" ")) ;
 	actionLink = actionLink.toString().replace(/'\s*\)/,"&currentDate=" + currentDate + "&calType=" + calType + "')") ;
+	//alert(actionLink) ; return ;
 	eval(actionLink) ;	
 } ;
 
