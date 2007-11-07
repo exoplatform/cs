@@ -24,7 +24,6 @@ import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.exception.MessageException;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
-import org.exoplatform.webui.form.UIFormInput;
 import org.exoplatform.webui.form.UIFormMultiValueInputSet;
 import org.exoplatform.webui.form.UIFormStringInput;
 
@@ -136,15 +135,40 @@ public class UIPollForm extends UIForm implements UIPopupComponent {
         sizeOption = 0;
       }
       if(sizeOption >= 2 && sizeOption <= 10) {
+        String[] newUser = new String[] {};
         String userName = Util.getPortalRequestContext().getRemoteUser() ;
         String[] vote = new String[sizeOption]  ;
         if(uiForm.isUpdate) {
           String[] oldVote = uiForm.poll.getVote() ;
-          for(int j = 0; j < sizeOption; j++) {
-            if( j < oldVote.length) {
-              vote[j] = oldVote[j];
-            } else {
-              vote[j] = "0";
+          if(sizeOption < (oldVote.length -1)) {
+            String[] oldUserVote = uiForm.poll.getUserVote() ; 
+            long temps = oldUserVote.length ;
+            int[] a = new int[sizeOption];
+            int sum = 0 ;
+            for(int k = 0; k < sizeOption; ++k) {
+              a[k] = (int)((Float.parseFloat(oldVote[k])*temps)/100) ;
+              sum = sum + a[k] ;
+            }
+            for(int k = 0; k < sizeOption; ++k) {
+              vote[k] = String.valueOf(((a[k]*100)/sum)) ;
+            }
+            newUser = new String[sum] ;
+            int l = 0 ;
+            for (String string : oldUserVote) {
+              boolean check = true ; 
+              for(int j = sizeOption; j < (oldVote.length -1); j++) {
+                String x = ":" + j ;
+                if(string.indexOf(x) > 0) check = false ;
+              }
+              if(check) newUser[l] = string ;
+            }
+          } else {
+            for(int j = 0; j < sizeOption; j++) {
+              if( j < oldVote.length) {
+                vote[j] = oldVote[j];
+              } else {
+                vote[j] = "0";
+              }
             }
           }
         } else {
@@ -168,6 +192,7 @@ public class UIPollForm extends UIForm implements UIPopupComponent {
         ForumService forumService = (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
         if(uiForm.isUpdate) {
           poll.setId(uiForm.getId()) ;
+          if(newUser.length > 0) poll.setUserVote(newUser) ;
           forumService.savePoll(id[id.length - 3], id[id.length - 2], id[id.length - 1], poll, false, false) ;
         } else {
           forumService.savePoll(id[id.length - 3], id[id.length - 2], id[id.length - 1], poll, true, false) ;

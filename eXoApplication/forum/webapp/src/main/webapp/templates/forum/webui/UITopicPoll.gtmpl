@@ -87,7 +87,6 @@
 		            </div>
 		            <% } else { %>
 		            <div class="UITabContent">
-		   								
 									<div class="ViewPollForm">
 										<table cellspacing="0" borderspacing="0" id="UIGrid" class="UIGrid">
 								  		<thead>
@@ -101,22 +100,17 @@
 								  		<% 
 								  			 String classCss = "EvenRow" ;
 								  			 String[] colors = uicomponent.getColor();
-								  			 long[] voteNumber = uicomponent.getVoteNumber();
-								  			 int number = 0 ;
-								  			 String vote, percent, color;
-								  			 int sum_ = uicomponent.getSumVote();
-								  			 String sum = (String)sum_ ;
-								  			 float a = 0;
+								  			 String[] infoVote = uicomponent.getInfoVote();
+								  			 String[] number;
+								  			 String vote, percent, color, sum;
 								  			 int i = 0;
 								  			 for(option in poll.getOption()) { 
-								  			 	 number = voteNumber[i] ;
-								  			 	 color = colors[i];
-								  			 	 vote = (String)number;
-								  			 	 if(sum_ > 0) {
-									  			 	a  = (number*100)/sum_ ;
-									  			 }
-								  			 	 percent = "" + a;
+								  			 	 number = infoVote[i].split(":") ;
+								  			 	 color = colors[i] ;
+								  			 	 vote = number[1] ;
+								  			 	 percent = number[0] ;
 								  			 	 if(percent.length() > 5) percent = percent.substring(0, 5) ;
+								  			 	 if(percent.indexOf("00.") > 0) percent = percent.substring(0, 3) ;
 								  		%>
 									 				<tr class="$classCss">
 									  				<td class="text">$option</td>
@@ -139,13 +133,32 @@
 								  		<% 		i = i + 1;
 								  				 	if(i%2 == 0)classCss = "EvenRow" ;
 								  				 	else classCss = "OddRow" ;
-								  			 } 
+								  			 }
+								  			 sum = infoVote[i] ;
 								  		%>
 									  	</tbody>
 										</table>
 										<div class="TotalVotes">Total Voters: $sum</div>
+									<% if(poll.getIsMultiCheck()) { %>
+			   						<div class="UIAction"> 
+							        <table class="ActionContainer" align="center">
+							          <tr>
+							          	<td align="center">
+														<a href="<%=uicomponent.event("VoteAgainPoll")%>" class="ActionButton LightBlueStyle">
+							                <div class="ButtonLeft">
+							                  <div class="ButtonRight">
+							                    <div class="ButtonMiddle">
+							                    	Vote Again
+							                    </div>
+							                  </div>
+							                </div>
+														</a>
+							          	</td>
+							          </tr>          
+							        </table>
+							      </div>
+							     <% } %>
 									</div>
-		   
 		            </div>
 		            <% } %>
 		          </div>

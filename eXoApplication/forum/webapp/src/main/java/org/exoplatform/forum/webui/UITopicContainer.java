@@ -121,21 +121,27 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
     return  this.forumService.getTopic(this.categoryId, this.forumId, topicId, false) ;
   }
   
-  private int getStarNumber(Topic topic) throws Exception {
-    String []temp = topic.getVoteRating() ;
-    int i = 0,j = 0, k = 0, t = 0, l = 0, star = 0;
-    for (String string : temp) {
-      if(Integer.valueOf(string).intValue() == 1) i = i + 1;
-      if(Integer.valueOf(string).intValue() == 2) j = j + 1;
-      if(Integer.valueOf(string).intValue() == 3) k = k + 1;
-      if(Integer.valueOf(string).intValue() == 4) t = t + 1;
-      if(Integer.valueOf(string).intValue() == 5) l = l + 1;
+  private String[] getStarNumber(Topic topic) throws Exception {
+    double voteRating = topic.getVoteRating() ;
+    int star = (int)voteRating ;
+    String[] className = new String[6] ;
+    float k = 0;
+    for (int i = 0; i < 5; i++) {
+      if(i < star) className[i] = "star" ;
+      else if(i == star) {
+        k = (float) (voteRating - i) ; 
+        if(k < 0.25) className[i] = "notStar" ;
+        if(k >= 0.25 && k < 0.75) className[i] = "halfStar" ;
+        if(k >= 0.75) className[i] = "star" ;
+      } else {
+        className[i] = "notStar" ;
+      }
+      
+      className[5] = ("" + voteRating) ;
+      if(className[5].length() >= 3) className[5] = className[5].substring(0, 3) ;
+      if(k == 0) className[5] = "" + star ; 
     }
-    if((i+j+k+t+l) > 0) {
-      float fl = (i*1+j*2+k*3+t*4+l*5) / (i+j+k+t+l) ;
-      star = Math.round(fl) ;
-    }
-    return star ;
+    return className ;
   }
   
   static public class AddTopicActionListener extends EventListener<UITopicContainer> {

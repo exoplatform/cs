@@ -56,23 +56,18 @@ public class UIRatingForm extends UIForm implements UIPopupComponent {
       UIRatingForm uiForm = event.getSource() ;
       String vote = event.getRequestContext().getRequestParameter(OBJECTID)  ;
       Topic topic = uiForm.topic ;
-      String []temp;
-      if(topic.getVoteRating().length > 0) {
-        temp= topic.getVoteRating() ;
-      } else temp = new String[] {} ;
-      String Vote[] = new String[temp.length + 1];
-      for (int i = 0; i < temp.length; i++) {
-        Vote[i] = temp[i] ;
-      }
-      Vote[temp.length] = vote ;
-      topic.setVoteRating(Vote);
+      
       String userName = Util.getPortalRequestContext().getRemoteUser() ;
-      Vote = topic.getUserVoteRating() ;
-      temp = new String[Vote.length + 1] ;
-      for (int i = 0; i < Vote.length; i++) {
+      String[] Vote = topic.getUserVoteRating() ;
+      int k = Vote.length ;
+      Double voteRating = topic.getVoteRating() ;
+      voteRating = (voteRating*k + Integer.parseInt(vote))/(k+1) ;
+      String[] temp = new String[k + 1] ;
+      for (int i = 0; i < k; i++) {
         temp[i] = Vote[i] ;
       }
-      temp[Vote.length ] = userName ;
+      temp[k] = userName ;
+      topic.setVoteRating(voteRating) ;
       topic.setUserVoteRating(temp) ;
       ForumService forumService = (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
       forumService.saveTopic(uiForm.categoryId, uiForm.forumId, topic, false) ;

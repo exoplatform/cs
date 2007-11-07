@@ -40,14 +40,15 @@ import org.exoplatform.webui.form.UIFormRadioBoxInput;
     events = {
       @EventConfig(listeners = UITopicPoll.VoteActionListener.class ),  
       @EventConfig(listeners = UITopicPoll.EditPollActionListener.class ) ,
-      @EventConfig(listeners = UITopicPoll.RemovePollActionListener.class )
+      @EventConfig(listeners = UITopicPoll.RemovePollActionListener.class ),
+      @EventConfig(listeners = UITopicPoll.VoteAgainPollActionListener.class )
     }
 )
 public class UITopicPoll extends UIForm  {
   private ForumService forumService = (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
   private Poll poll_ ;
-  private Topic topic_ ;
   private String categoryId, forumId, topicId ;
+  private boolean isMultiCheck = false ;
   public UITopicPoll() throws Exception {
   }
 
@@ -56,23 +57,32 @@ public class UITopicPoll extends UIForm  {
       Topic topic = forumService.getTopic(categoryId, forumId, topicId, false) ;
       if(topic.getIsPoll()) {
         Poll poll = forumService.getPoll(categoryId, forumId, topicId) ; 
-        List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-        if(poll != null) {
-          for (String s : poll.getOption()) {
-            options.add( new SelectItemOption<String>(s, s) ) ;
+        if(!this.isMultiCheck) {
+          List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
+          if(poll != null) {
+            for (String s : poll.getOption()) {
+              options.add( new SelectItemOption<String>(s, s) ) ;
+            }
           }
+          UIFormRadioBoxInput input = new UIFormRadioBoxInput("vote", "vote", options);
+          input.setAlign(1) ;
+          addUIFormInput(input);
         }
-        UIFormRadioBoxInput input = new UIFormRadioBoxInput("vote", "vote", options);
-        input.setAlign(1) ;
-        addUIFormInput(input);
         poll_ = poll ;
-        topic_ = topic ;
       }
     }
   }
   
   private Poll getPoll() throws Exception {
-    return poll_ ;
+    if(categoryId != null && categoryId.length() > 0) {
+      Topic topic = forumService.getTopic(categoryId, forumId, topicId, false) ;
+      if(topic.getIsPoll()) {
+        Poll poll = forumService.getPoll(categoryId, forumId, topicId) ; 
+        poll_ = poll ;
+        return poll ;
+      }
+    }
+    return null ;
   }
   
   public void updatePoll(String categoryId, String forumId, String topicId) throws Exception {
@@ -84,9 +94,13 @@ public class UITopicPoll extends UIForm  {
   
   private boolean getIsVoted() throws Exception {
     Poll poll = forumService.getPoll(categoryId, forumId, topicId) ;
+    if(this.isMultiCheck) {
+      return false ;
+    }
     String userVote = Util.getPortalRequestContext().getRemoteUser() ;
     String[] userVotes = poll.getUserVote() ;
     for (String string : userVotes) {
+      string = string.substring(0, string.length() - 2) ;
       if(string.equalsIgnoreCase(userVote)) return true ;
     }
     if(poll_.getTimeOut() > 0) {
@@ -96,23 +110,21 @@ public class UITopicPoll extends UIForm  {
     return false ;
   }
   
-  private long[] getVoteNumber() throws Exception {
+  private String[] getInfoVote() throws Exception {
     Poll poll = poll_ ;
-    String[] voteNumber = poll_.getVote() ;
-    long[] temp = new long[voteNumber.length] ;
-    for (int i = 0; i < voteNumber.length; i++) {
-      temp[i] = Long.parseLong(voteNumber[i]);
+    String[] voteNumber = poll.getVote() ;
+    long size = poll.getUserVote().length  ;
+    String[] infoVote = new String[(voteNumber.length + 1)] ;
+    int i = 0;
+    for (String string : voteNumber) {
+      double tmp = Double.parseDouble(string) ;
+      double k = (double)(tmp*size)/100 ;
+      int t = (int)Math.round(k) ;
+      infoVote[i] = string + ":" + t ;
+      i = i + 1 ;
     }
-    return temp ;
-  }
-  
-  private long getSumVote() throws Exception {
-    long[] sumVote = this.getVoteNumber();
-    long temp = 0;
-    for (int i = 0; i < sumVote.length; i++) {
-      temp = temp + sumVote[i] ;
-    }
-    return temp ;
+    infoVote[i] = "" + size ;
+    return infoVote ;
   }
   
   private String[] getColor() throws Exception {
@@ -122,16 +134,6 @@ public class UITopicPoll extends UIForm  {
   static public class VoteActionListener extends EventListener<UITopicPoll> {
     public void execute(Event<UITopicPoll> event) throws Exception {
       UITopicPoll topicPoll = event.getSource() ;
-      String[] temporary = topicPoll.poll_.getUserVote() ;
-      int size = 0 ;
-      if(temporary != null && temporary.length > 0) {
-        size = temporary.length ;
-      }
-      String[] setUserVote = new String[(size+1)] ;
-      for (int t = 0; t < size; t++) {
-        setUserVote[t] = temporary[t];
-      }
-      setUserVote[size] = Util.getPortalRequestContext().getRemoteUser() ;
       UIFormRadioBoxInput radioInput = null ;
       List<UIComponent> children = topicPoll.getChildren() ;
       for(UIComponent child : children) {
@@ -143,6 +145,7 @@ public class UITopicPoll extends UIForm  {
         UIApplication uiApp = topicPoll.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UITopicPoll.msg.notCheck", null, ApplicationMessage.WARNING)) ;
       } else {
+        // order number
         List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
         options = radioInput.getOptions() ;
         int i = 0, j = 0 ;
@@ -150,15 +153,57 @@ public class UITopicPoll extends UIForm  {
           if(option.getValue().equalsIgnoreCase(radioInput.getValue())){ j = i ; break ;}
           i = i + 1;
         }
+        //User vote and vote number
+        String[] temporary = topicPoll.poll_.getUserVote() ;
+        int size = 0 ;
+        if(temporary != null && temporary.length > 0) {
+          size = temporary.length ;
+        }
+        String[] setUserVote ; int index = 0 ;
+        String userVote = Util.getPortalRequestContext().getRemoteUser() ;
+        if(topicPoll.isMultiCheck) {
+          setUserVote = new String[size] ;
+          for (int t = 0; t < size; t++) {
+            String string = temporary[t].substring(0, temporary[t].length() - 2) ;
+            if(string.equalsIgnoreCase(userVote)) {
+              setUserVote[t] = userVote + ":" + j;
+              index = t;
+            } else {
+              setUserVote[t] = temporary[t];
+            }
+          }
+        } else {
+          setUserVote = new String[(size+1)] ;
+          for (int t = 0; t < size; t++) {
+            setUserVote[t] = temporary[t];
+          }
+          setUserVote[size] = userVote + ":" + j;
+          size = size + 1 ;
+        }
         String[] votes = topicPoll.poll_.getVote() ;
-        String temp = votes[j] ;
-        votes[j] = String.valueOf((Long.parseLong(temp) + 1)) ;
+        double onePercent = (double)100/size;
+        if(topicPoll.isMultiCheck) {
+          char tmp = temporary[index].charAt((temporary[index].length() - 1));
+          int k = (new Integer(tmp)).intValue() - 48;
+          if( k < votes.length) votes[k] = String.valueOf((Double.parseDouble(votes[k]) - onePercent)) ;
+          votes[j] = String.valueOf((Double.parseDouble(votes[j]) + onePercent)) ;
+        } else {
+          i = 0;
+          for(String vote : votes) {
+            double a  = Double.parseDouble(vote) ;
+            if(i == j) votes[i] = "" + ((a - a/size)+ onePercent) ;
+            else votes[i] = "" + (a - a/size) ;
+            i = i + 1;
+          }
+        }
+        //save Poll
         Poll poll = new Poll() ; 
         poll.setId(topicPoll.poll_.getId()) ;
         poll.setVote(votes) ;
         poll.setUserVote(setUserVote) ;
         topicPoll.forumService.savePoll(topicPoll.categoryId, topicPoll.forumId, topicPoll.topicId, poll, false, true) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(topicPoll) ;
+        topicPoll.isMultiCheck = false ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(topicPoll.getParent()) ;
       }
     }
   }
@@ -166,11 +211,11 @@ public class UITopicPoll extends UIForm  {
   static public class EditPollActionListener extends EventListener<UITopicPoll> {
     public void execute(Event<UITopicPoll> event) throws Exception {
       UITopicPoll topicPoll = event.getSource() ;
-      Topic topic = topicPoll.topic_ ;
       UIForumPortlet forumPortlet = topicPoll.getAncestorOfType(UIForumPortlet.class) ;
       UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;
       UIPollForm  pollForm = popupAction.createUIComponent(UIPollForm.class, null, null) ;
-      pollForm.setTopicPath(topic.getPath()) ;
+      String path = topicPoll.categoryId + "/" + topicPoll.forumId + "/" + topicPoll.topicId;
+      pollForm.setTopicPath(path) ;
       pollForm.setUpdatePoll(topicPoll.poll_, true) ;
       popupAction.activate(pollForm, 662, 466) ;
     }
@@ -180,7 +225,17 @@ public class UITopicPoll extends UIForm  {
     public void execute(Event<UITopicPoll> event) throws Exception {
       UITopicPoll topicPoll = event.getSource() ;
       topicPoll.forumService.removePoll(topicPoll.categoryId, topicPoll.forumId, topicPoll.topicId) ;
+      topicPoll.removeChild(UIFormRadioBoxInput.class) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(topicPoll.getParent()) ;
+    }
+  }
+
+  static public class VoteAgainPollActionListener extends EventListener<UITopicPoll> {
+    public void execute(Event<UITopicPoll> event) throws Exception {
+      UITopicPoll topicPoll = event.getSource() ;
+      topicPoll.isMultiCheck = true ;
+      topicPoll.init() ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(topicPoll) ;
     }
   }
   

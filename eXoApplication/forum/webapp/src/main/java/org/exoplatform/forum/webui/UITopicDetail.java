@@ -94,6 +94,7 @@ public class UITopicDetail extends UIForm  {
     this.viewTopic = viewTopic ;
   }
   
+  @SuppressWarnings("unused")
   private Topic getTopic() throws Exception {
     try {
       this.topic = forumService.getTopic(categoryId, forumId, topicId, viewTopic) ; 
@@ -113,7 +114,9 @@ public class UITopicDetail extends UIForm  {
   
   private List<Post> getPostPageList( long page) throws Exception {
     JCRPageList pageList = getPagePosts() ;
-    List<Post> postList = forumService.getPage(page, pageList) ;
+    if(pageList == null) return null ;
+    List<Post> postList = new ArrayList<Post>();
+    postList = forumService.getPage(page, pageList) ;
     for (Post post : postList) {
       if(getUIFormCheckBoxInput(post.getId()) != null) {
         getUIFormCheckBoxInput(post.getId()).setChecked(false) ;

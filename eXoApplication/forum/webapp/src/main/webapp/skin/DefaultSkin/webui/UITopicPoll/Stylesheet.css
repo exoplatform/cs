@@ -46,7 +46,7 @@
 
 .UITopicPoll .TopicPollContainer .UITabPane .UITabContent {
 	height: 100%;
-	padding: 20px 0px;
+	padding: 20px 0px 10px 0px;
 	border: 1px solid #d2d2d2;
 }
 
@@ -54,7 +54,7 @@
 	border: 1px solid #d2d2d2;
 	padding: 10px 15px;
 	width: 500px;
-	margin: auto;
+	margin: 0px auto 10px auto;
 	background: white;
 }
 
@@ -109,9 +109,9 @@
 
 .ViewPollForm .Percentage {
 	float: right;
-	width: 30px;
+	width: 28px;
 	padding: 0px;
-	margin: 0px;
+	margin: 0px 0px 0px 2px;
 	border: none;
 	background: none;
 	line-height: 20px;
@@ -125,4 +125,9 @@
 	border: none;
 	width: 100%;
 	height: auto ;
+}
+
+
+.ViewPollForm .UIAction {
+	padding: 0px;
 }

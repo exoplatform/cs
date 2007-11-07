@@ -18,7 +18,6 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
@@ -253,7 +252,7 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
         topicNew.setId(uiForm.topicId);
         forumService.saveTopic(uiForm.categoryId, uiForm.forumId, topicNew, false);
       } else {
-        topicNew.setVoteRating(new String[] {}) ;
+        topicNew.setVoteRating(0.0) ;
         topicNew.setUserVoteRating(new String[] {}) ;
         forumService.saveTopic(uiForm.categoryId, uiForm.forumId, topicNew, true);
       }

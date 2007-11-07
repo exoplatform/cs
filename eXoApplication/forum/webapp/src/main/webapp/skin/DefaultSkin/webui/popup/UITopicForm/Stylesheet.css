@@ -17,7 +17,7 @@
 
 .UITopicForm .UIForm .HorizontalLayout .ThreadContent textarea { 
 	width: 430px; 
-	height: 265px;
+	height: 205px;
 }
 
 .UITopicForm .UIForm .HorizontalLayout .ThreadOptions checkbox {
@@ -50,7 +50,7 @@
 }
 
 .UITopicForm .UITabContent {
-	height: 340px;
+	height: 280px;
 }
 
 .UITopicForm .UIFormTabPane .ThreadPermission .HorizontalLayout {

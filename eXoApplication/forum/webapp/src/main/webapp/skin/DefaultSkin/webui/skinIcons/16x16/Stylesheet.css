@@ -82,6 +82,10 @@
 	background: url('icons/SmallYellowStar.gif') no-repeat center;
 }
 
+.HalfVoted {
+	background: url('icons/SmallHalfStar.gif') no-repeat center;
+}
+
 .Unvoted {
 	background: url('icons/SmallGreyStar.gif') no-repeat center;
 }

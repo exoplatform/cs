@@ -39,7 +39,7 @@ public class Topic {
   private String[] canView;
   private String[] canPost;
   private String[] userVoteRating ;
-  private String[] voteRating ;
+  private Double voteRating = 0.0;
   
   
   public Topic(){ 
@@ -47,7 +47,6 @@ public class Topic {
     canView = new String [] {} ;
     canPost = new String [] {} ;
     userVoteRating = new String [] {} ;
-    voteRating = new String [] {} ;
   }
   
   public String getOwner(){return owner;} 
@@ -122,8 +121,8 @@ public class Topic {
   public String[] getUserVoteRating(){return userVoteRating;}
   public void setUserVoteRating(String[] userVoteRating){this.userVoteRating = userVoteRating;}
 
-  public String[] getVoteRating(){return voteRating;}
-  public void setVoteRating(String[] voteRating){this.voteRating = voteRating;}
+  public Double getVoteRating(){return voteRating;}
+  public void setVoteRating(Double voteRating){this.voteRating = voteRating;}
   public String getForumId() { return null ; }
 
 }

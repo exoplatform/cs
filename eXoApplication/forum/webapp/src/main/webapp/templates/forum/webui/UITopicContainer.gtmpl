@@ -229,22 +229,20 @@
 									<td class="Tdbox">$attachment</td>
 									<td class="Tdbox">
 										<div class="RatingInfoContainer">
-										<% int starNumber = uicomponent.getStarNumber(topic) ; 
-										System.out.println("\n\nchua biet the nao: " +  starNumber) ;
-											 String st = "" + starNumber ;
+										<% String[] classNames = uicomponent.getStarNumber(topic) ; 
+											 String SumVote = classNames[5] ;
 										%>
-				   						<div class="AvgRatingImages" title="Thread Rating: $st votes, 5 average">
+				   						<div class="AvgRatingImages" title="Thread Rating: $SumVote votes, 5 average">
 				   					<%	
-									  	int star = 0; 
-											while(star < 5) {
-												if(star < starNumber) {
+				   						System.out.println("\n\n :  " + classNames[5]) ;
+									  	for(className in classNames) {
+									  		if(className.equals("star")) className = "Voted" ;
+									  		if(className.equals("notStar")) className = "Unvoted" ;
+									  		if(className.equals("halfStar")) className = "HalfVoted" ;
+									  		if(className.equals(classNames[5])) break ;
 										%>
-							   				<div class="VoteIcon Voted"><span/></div>
-							   		<% } else { %>
-												<div class="VoteIcon Unvoted"><span/></div>
-										 <%  }
-										 		 star = star + 1;
-											 } %>
+							   				<div class="VoteIcon $className"><span/></div>
+										 <% } %>
 							 					<div style="clear: left;"><span></span></div>
 				 							</div>
 				   					</div>

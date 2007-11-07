@@ -118,14 +118,25 @@
 	line-height: 18px;
 }
 
-.UIForumContainer .ThreadsStartsList .ContentContainer {
+.UIForumContainer .UIForumInfos .ContentContainer {
 	border: 1px solid #b7b7b7;
 	border-top: none;
 	padding: 5px;
 	height: 75px;
 }
 
+.UIPostRules .ForumCategory .ContentContainer {
+	border: 1px solid #b7b7b7;
+	border-top: none;
+	padding: 5px;
+	height: 75px;
+	line-height: 18px;
+}
 
+.UIPostRules .ForumCategory .ContentContainer .BoldTitle {
+	font-weight: bold ;
+	line-height: 18px;
+}
 
 
 

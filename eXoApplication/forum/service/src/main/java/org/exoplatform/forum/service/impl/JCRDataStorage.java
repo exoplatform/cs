@@ -356,7 +356,7 @@ public class JCRDataStorage implements DataStorage {
     if(topicNode.hasProperty("exo:isPoll")) topicNew.setIsPoll(topicNode.getProperty("exo:isPoll").getBoolean()) ;
 
     if(topicNode.hasProperty("exo:userVoteRating")) topicNew.setUserVoteRating(ValuesToStrings(topicNode.getProperty("exo:userVoteRating").getValues())) ;
-    if(topicNode.hasProperty("exo:voteRating")) topicNew.setVoteRating(ValuesToStrings(topicNode.getProperty("exo:voteRating").getValues())) ;
+    if(topicNode.hasProperty("exo:voteRating")) topicNew.setVoteRating(topicNode.getProperty("exo:voteRating").getDouble()) ;
     return topicNew;
   }
 
@@ -706,6 +706,9 @@ public class JCRDataStorage implements DataStorage {
             topicNode.setProperty("exo:isPoll", true);
           } else {
             pollNode = topicNode.getNode(pollId) ;
+          }
+          if(poll.getUserVote().length > 0) {
+            pollNode.setProperty("exo:userVote", poll.getUserVote()) ;
           }
           pollNode.setProperty("exo:vote", poll.getVote()) ;
           pollNode.setProperty("exo:modifiedBy", poll.getModifiedBy()) ;
