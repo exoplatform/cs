@@ -365,6 +365,6 @@
   	</table>
   </div>
   <% } else {%>
-    <div class="MessageNotice" id="uiMessageListResizableArea">There are no messages !</div>
+    <div class="MessageNotice SpliterResizableListArea" id="uiMessageListResizableArea">There are no messages !</div>
   <%}%>
 <%uiform.end()%>    

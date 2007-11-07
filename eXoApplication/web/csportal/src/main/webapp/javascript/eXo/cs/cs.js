@@ -1,5 +1,0 @@
-/**
- * @author uocnb
- */
-
-eXo.cs = {} ;

@@ -29,13 +29,13 @@ Spliter.prototype.exeRowSplit = function(e , markerobj, beforeAreaObj, afterArea
   this.afterArea.style.height = this.afterArea.offsetHeight + "px" ;  
   this.beforeY = this.beforeArea.offsetHeight ;
   this.afterY = this.afterArea.offsetHeight ;
-  document.onmousemove = eXo.cs.Spliter.adjustHeight ;  
-  document.onmouseup = eXo.cs.Spliter.clear ;
+  document.onmousemove = eXo.mail.Spliter.adjustHeight ;  
+  document.onmouseup = eXo.mail.Spliter.clear ;
 } ;
 
 Spliter.prototype.adjustHeight = function(evt) {
   evt = (window.event) ? window.event : evt ;
-  var Spliter = eXo.cs.Spliter ;
+  var Spliter = eXo.mail.Spliter ;
   var delta = evt.clientY - Spliter.posY ;
   var afterHeight = (Spliter.afterY - delta) ;
   var beforeHeight = (Spliter.beforeY + delta) ;
@@ -48,4 +48,4 @@ Spliter.prototype.clear = function() {
   document.onmousemove = null ;
 } ;
 
-eXo.cs.Spliter = new Spliter() ;
+eXo.mail.Spliter = new Spliter() ;
