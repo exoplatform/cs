@@ -15,8 +15,9 @@
  	String linkDayPrevious = uicomponent.event(uicomponent.ACT_PREVIOUS) ;
  	int weekNumber = uicomponent.getCurrentWeek() ;
  	def rcontext = _ctx.getRequestContext() ;
+	workingStart = uicomponent.getCalendarSetting().getWorkingTimeBegin() ;
   rcontext.getJavascriptManager().importJavascript('eXo.calendar.UIWeekView','/calendar/javascript/') ;
-  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UIWeekView.init() ;') ;
+  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UIWeekView.init(null, "' + workingStart + '") ;') ;
  	yearViewAction = uicomponent.TYPE_YEAR +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"="+ currentMonth +"&"+ uicomponent.DAY + "=1" ;
  	dateFormat = uicomponent.getDateFormat() ;
 	timeFormat = uicomponent.getTimeFormat() ;
@@ -57,7 +58,7 @@
 	</div>
 	<div class="EventWeekContainer" >
 		<div class="EventWeekBar">
-			<table class="UIGrid" cellspacing="0" borderspacing="0">
+			<table class="UIGrid" id="UIWeekViewGridAllDay" cellspacing="0" borderspacing="0">
 				<thead>
 					<tr>
 						<th style="width: 55px;"></th>
@@ -103,11 +104,9 @@
 								 	finishTime = ((event.getToDateTime().getHours() * 60) + event.getFromDateTime().getMinutes());
 									color = uicomponent.getColors().get(event.getCalendarId()) ;
 								%>
-										<div class=" $color" style="border: solid 1px gray;">
-										 <div class="EventContainer EventAlldayContainer" indexBeginDate='$indexBeginDate' indexEndDate='$indexEndDate' calType="$event.calType"  eventid="$event.id" calid="$event.calendarId" starttime="$begindate" endtime="$enddate"  style="height: 22px;" title="$begindate -> $enddate"  >
+										 <div class="EventContainer EventAlldayContainer $color" style="border: solid 1px gray;margin: 1px 0px ;" indexBeginDate='$indexBeginDate' indexEndDate='$indexEndDate' calType="$event.calType"  eventid="$event.id" calid="$event.calendarId" starttime="$begindate" endtime="$enddate"  style="height: 22px;" title="$begindate -> $enddate"  >
 										  $event.summary
-										 </div> 
-										</div>	
+										 </div>
 								<%}%>
 							</td>
 					</tr>
@@ -133,7 +132,7 @@
 						enddate = dtf.format(event.toDateTime) ;
 						endTime =  event.toDateTime.getHours() * 60 + event.toDateTime.getMinutes() ;
 						color = uicomponent.getColors().get(event.getCalendarId()) ;
-						actionLink =  uicomponent.event("SaveEvent",event.getId()+"&calendarId="+event.getCalendarId()+"&startTime=beginTime&finishTime=endTime") ;
+						actionLink =  uicomponent.event("UpdateEvent",event.getId()+"&calendarId="+event.getCalendarId()+"&startTime=beginTime&finishTime=endTime") ;
 				%>
 
 							<div class="EventContainerBorder  $color" eventIndex="$dayOfWeek" style="position:absolute ;" calType="$event.calType" eventid="$event.id" calid="$event.calendarId" actionlink="$actionLink" unselectable="on" starttime="$beginTime" endtime="$endTime">
