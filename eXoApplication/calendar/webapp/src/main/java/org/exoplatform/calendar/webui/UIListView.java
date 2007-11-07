@@ -30,7 +30,6 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
  * Aus 01, 2007 2:48:18 PM 
  */
 @ComponentConfig(   
-    //template = "app:/templates/calendar/webui/UIListView.gtmpl",
     lifecycle = UIFormLifecycle.class,
     events = {
       @EventConfig(listeners = UICalendarView.AddEventActionListener.class),      
@@ -66,7 +65,6 @@ public class UIListView extends UICalendarView {
     }
   }
   public void refresh() throws Exception{
-    System.out.println("\n\n List View refresh");
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     EventQuery eventQuery = new EventQuery() ;
@@ -81,9 +79,6 @@ public class UIListView extends UICalendarView {
       eventQuery.setEventType(getViewType()) ;
     }
     update(calendarService.searchEvent(username, eventQuery, getPublicCalendars())) ; 
-    //setShowEventAndTask(true) ;
-    /*uiListView.setDisplaySearchResult(false) ;
-    uiListView.isShowEvent_ = false ;*/
   }
   public void update(JCRPageList pageList) throws Exception {
     pageList_ = pageList ;
@@ -102,11 +97,6 @@ public class UIListView extends UICalendarView {
           eventMap_.put(calendarEvent.getId(), calendarEvent) ;
         }
       }
-      /*CalendarEvent[] array = eventMap_.values().toArray(new CalendarEvent[]{}) ;
-      if (array.length > 0)
-        getAncestorOfType(UIListContainer.class).getChild(UIPreview.class).setEvent(array[0]) ;
-      else 
-        getAncestorOfType(UIListContainer.class).getChild(UIPreview.class).setEvent(null) ;*/
     }
   }
 
@@ -146,7 +136,6 @@ public class UIListView extends UICalendarView {
         calendarEvent = CalendarUtils.getCalendarService().getUserEvent(username, calendarId, eventId) ;
       }
       if(calendarEvent != null) {
-        System.out.println("\n\n calendarEvent " + calendarEvent.getCalType());
         uiListView.setSelectedEvent(calendarEvent.getId()) ;
         uiPreview.setEvent(calendarEvent);
       } else {
@@ -170,8 +159,6 @@ public class UIListView extends UICalendarView {
       int page = Integer.parseInt(event.getRequestContext().getRequestParameter(OBJECTID)) ;
       uiListView.setCurrentPage(page) ;
       uiListView.updateCurrentPage() ; 
-      /*UIComponent parent = uiPageIterator.getParent();
-      if(parent == null) return ;  */    
       event.getRequestContext().addUIComponentToUpdateByAjax(uiListView.getParent());           
     }
   }

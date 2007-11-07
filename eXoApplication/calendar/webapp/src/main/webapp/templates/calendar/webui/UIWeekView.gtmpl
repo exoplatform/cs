@@ -89,7 +89,7 @@
 							<td colspan="7" class="EventAllday">
 								<% for (event in uicomponent.getEventList().values()) {
 									int indexBeginDate = -1 ;
-									int indexEndDate = -1 ;
+									int indexEndDate = 7 ;
 									begindate = tf.format(event.fromDateTime) ;
 									enddate = tf.format(event.toDateTime) ;
 									for(cl in uicomponent.getDaysOfWeek(weekNumber)) { 
@@ -97,7 +97,10 @@
 						 			  	indexBeginDate = uicomponent.getDaysOfWeek(weekNumber).indexOf(cl) ;
 						 			  }
 						 			  if(uicomponent.isSameDate(event.toDateTime, cl.time)){
-						 			  	indexEndDate = uicomponent.getDaysOfWeek(weekNumber).indexOf(cl) ;
+						 			  	indexEndDate = indexBeginDate ;
+						 			  	if(cl.time.before(event.toDateTime)) {
+						 			  		indexEndDate = uicomponent.getDaysOfWeek(weekNumber).indexOf(cl) ;
+						 			  	}
 						 			  }
 							 		}
 									startTime = ((event.getFromDateTime().getHours() * 60) + event.getFromDateTime().getMinutes());

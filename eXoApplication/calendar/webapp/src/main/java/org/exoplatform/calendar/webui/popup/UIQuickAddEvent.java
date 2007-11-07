@@ -152,7 +152,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
     return getUIStringInput(FIELD_EVENT).getValue() ;
   }
   private String getEventDescription() {return getUIFormTextAreaInput(FIELD_DESCRIPTION).getValue() ;}
- 
+
 
   private boolean getIsAllDay() {
     return getUIFormCheckBoxInput(FIELD_ALLDAY).isChecked() ;
@@ -189,11 +189,6 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
       }
       Date fromDate = uiForm.getEventFromDate() ;
       Date toDate = uiForm.getEventToDate() ;
-      if(fromDate.equals(toDate) || fromDate.after(toDate)) {
-        uiApp.addMessage(new ApplicationMessage(uiForm.getId() + ".msg.logic-required", null, ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
-      }      
       if(uiForm.getIsAllDay()) {
         java.util.Calendar cal = GregorianCalendar.getInstance() ;
         cal.setTime(fromDate) ;
@@ -202,7 +197,13 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
         fromDate = cal.getTime() ;
         cal.add(java.util.Calendar.DATE, 1) ;
         toDate = cal.getTime() ;
-      }      
+      }else {      
+        if(fromDate.equals(toDate) || fromDate.after(toDate)) {
+          uiApp.addMessage(new ApplicationMessage(uiForm.getId() + ".msg.logic-required", null, ApplicationMessage.WARNING)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        }  
+      }
       try {
         CalendarEvent calEvent = new CalendarEvent() ;
         calEvent.setSummary(uiForm.getEventSummary()) ;

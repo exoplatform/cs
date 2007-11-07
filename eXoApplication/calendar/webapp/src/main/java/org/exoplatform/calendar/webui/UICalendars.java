@@ -121,7 +121,17 @@ public class UICalendars extends UIForm  {
 
   protected GroupCalendarData getSharedCalendars() throws Exception{
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
-    return calendarService.getSharedCalendars(CalendarUtils.getCurrentUser()) ;
+    GroupCalendarData groupCalendars = calendarService.getSharedCalendars(CalendarUtils.getCurrentUser()) ;
+    if(groupCalendars != null) {
+      List<Calendar> calendars = groupCalendars.getCalendars() ;
+      for(Calendar calendar : calendars) {
+        colorMap_.put(calendar.getId(), calendar.getCalendarColor()) ;
+        if(getUIFormCheckBoxInput(calendar.getId()) == null){
+          addUIFormInput(new UIFormCheckBoxInput<Boolean>(calendar.getId(), calendar.getId(), false).setChecked(true)) ;
+        }
+      }
+    }
+    return groupCalendars ;
   }
 
   public LinkedHashMap<String, String> getColorMap() {

@@ -12,11 +12,13 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.faces.component.UIViewRoot;
 
+import org.apache.commons.collections.map.LinkedMap;
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
@@ -61,7 +63,7 @@ import com.sun.xml.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 public class UIWeekView extends UICalendarView {
 
   protected Map<String, List<CalendarEvent>> eventData_ = new HashMap<String, List<CalendarEvent>>() ;
-  protected Map<String, CalendarEvent> allWeekData_ = new HashMap<String,  CalendarEvent>() ;
+  protected LinkedHashMap<String, CalendarEvent> allWeekData_ = new LinkedHashMap<String,  CalendarEvent>() ;
   protected  List<CalendarEvent> daysData_  = new ArrayList<CalendarEvent>() ;
   protected boolean isShowCustomView_ = false ;
   protected Date beginDate_ ;
@@ -144,7 +146,7 @@ public class UIWeekView extends UICalendarView {
 
   protected Map<String, List<CalendarEvent>> getEventData() {return eventData_ ;}
 
-  protected Map<String, CalendarEvent>  getEventList() {
+  protected LinkedHashMap<String, CalendarEvent>  getEventList() {
     return allWeekData_ ;
   }
 
