@@ -86,6 +86,23 @@
 	background: url('icons/Replyicon16x14.gif') no-repeat left 6px;
 }
 
+.ReplyIcon {
+	background: url('icons/ReplyIcon.gif') no-repeat left 6px;
+}
+
+.DeleteMailIcon {
+	background: url('icons/DeleteMail16x11.gif') no-repeat left 6px;
+}
+
+.ExportIcon {
+	background: url('icons/ExportMail.gif') no-repeat left 6px;
+}
+
+.AddContactIcon {
+	background: url('icons/AddContact16x13.gif') no-repeat left 6px;
+}
+
+
 .PrintMailIcon {
 	background: url('icons/Printmail16x16.gif') no-repeat left 6px;
 }
