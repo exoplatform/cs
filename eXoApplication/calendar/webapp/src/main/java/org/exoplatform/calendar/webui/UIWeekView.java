@@ -221,7 +221,6 @@ public class UIWeekView extends UICalendarView {
         eventCalendar = calendarService.getGroupEvent(calendarId, eventId) ;
       }
       Calendar cal = GregorianCalendar.getInstance() ;
-      DateFormat df = new SimpleDateFormat(calendarview.getDateFormat()) ;
       cal.setTimeInMillis(Long.parseLong(currentDate)) ;
       
       int hoursBg = (Integer.parseInt(startTime)/60) ;
