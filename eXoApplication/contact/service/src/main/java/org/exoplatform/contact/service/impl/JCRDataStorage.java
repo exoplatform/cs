@@ -817,7 +817,7 @@ public class JCRDataStorage implements DataStorage {
       List<Contact> contacts = getContactPageListByTag(username, tagId).getAll();
       for (Contact contact : contacts) {
         List<String> tags = new ArrayList<String>(Arrays.asList(contact.getTags()));
-        tags.remove(tagId) ;   
+        tags.remove(tagId) ;        
         String contactId = contact.getId() ;
         if (contactHome.hasNode(contactId)) {
           contactHome.getNode(contactId).setProperty("exo:tags", tags.toArray(new String[]{})) ;
@@ -839,10 +839,15 @@ public class JCRDataStorage implements DataStorage {
   
   public void removeContactTag(String username, List<String> contactIds, List<String> tags) throws Exception {
     Node contactHome = getContactHome(username) ;
-    Node contact ;
+    Node publicContactHome = getPublicContactHome() ;
+    Node contact = null ;
     for(String contactId : contactIds) {
       if(contactHome.hasNode(contactId)) {
         contact = contactHome.getNode(contactId) ;
+      } else if(publicContactHome.hasNode(contactId)) {
+          contact = publicContactHome.getNode(contactId) ;
+      }
+      if (contact != null) {
         if(contact.hasProperty("exo:tags")){
           Value[] values = contact.getProperty("exo:tags").getValues() ;
           List<String> tagList = new ArrayList<String>() ;
@@ -853,9 +858,10 @@ public class JCRDataStorage implements DataStorage {
           contact.setProperty("exo:tags", tagList.toArray(new String[]{})) ;
           contact.save() ;
         }
-      }
+      } 
     }
     contactHome.getSession().save() ;
+    publicContactHome.getSession().save() ;
   }
   
   public DataPageList searchContact(String username, ContactFilter filter)throws Exception {

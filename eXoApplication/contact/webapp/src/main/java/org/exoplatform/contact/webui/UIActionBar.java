@@ -4,6 +4,9 @@
  **************************************************************************/
 package org.exoplatform.contact.webui;
 
+import java.util.List;
+
+import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.webui.popup.UICategoryForm;
 import org.exoplatform.contact.webui.popup.UICategorySelect;
@@ -149,8 +152,17 @@ public class UIActionBar extends UIContainer  {
             UIExportAddressBookForm.class, null, "UIExportAddressBookForm");
         UIAddressBooks uiAddressBooks = uiActionBar.getAncestorOfType(UIContactPortlet.class)
           .findFirstComponentOfType(UIAddressBooks.class) ;
-        uiExportForm.setContactGroups(uiAddressBooks.getGroups().toArray(new ContactGroup[] {} )) ;
-        uiExportForm.setSharedContactGroup(uiAddressBooks.getSharedContactGroups()) ;
+        ContactGroup[] groups = uiAddressBooks.getGroups().toArray(new ContactGroup[] {}) ;
+        List<String> sharedGroups = uiAddressBooks.getSharedContactGroups() ;
+        if (sharedGroups == null || sharedGroups.size() == 0 || groups == null || groups.length == 0) {
+          UIApplication uiApp = uiActionBar.getAncestorOfType(UIApplication.class) ;
+          uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.no-addressbook", null,
+            ApplicationMessage.WARNING)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;   
+        }
+        uiExportForm.setContactGroups(groups) ;
+        uiExportForm.setSharedContactGroup(sharedGroups) ;
         uiExportForm.updateList();
         uiPopupAction.activate(uiExportForm, 500, 0, true);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);

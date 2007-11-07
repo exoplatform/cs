@@ -143,29 +143,10 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
       options.add(new SelectItemOption<String>(type, type)) ;
     }
     addUIFormInput(new UIFormStringInput(NAME, NAME, null)) ;
-    addUIFormInput(new UIFormSelectBox(TYPE, TYPE, options)) ;
-    
-    if ((contacts_ == null) || (contacts_.length == 0)) {
-      String username = ContactUtils.getCurrentUser();
-      if (selectedGroup != null) {
-        ContactFilter filter = new ContactFilter();
-        filter.setAscending(isAscending_);
-        filter.setOrderBy(getSortedBy());
-        filter.setViewQuery(getViewQuery());
-        filter.setCategories(new String[] {selectedGroup});
-        if (ContactUtils.isPublicGroup(selectedGroup))
-          contacts_ = contactService.getContactPageListByGroup(username, filter, true).getAll().toArray(new Contact[] {});
-        else
-          contacts_ = contactService.getContactPageListByGroup(username, filter, false).getAll().toArray(new Contact[] {});
-      } else {
-        contacts_ = contactService.getContactPageListByTag(username, selectedTag_).getAll().toArray(new Contact[] {});
-        System.out.println(">>> khd : get contacts from the selected TAG !!!!!!!!!!");
-      }
-    }
-    
+    addUIFormInput(new UIFormSelectBox(TYPE, TYPE, options)) ;    
     for (Contact contact : contacts_) {
-      UIFormCheckBoxInput<Boolean> checkbox = new UIFormCheckBoxInput<Boolean>(contact.getId(),
-          contact.getId(), false);
+      UIFormCheckBoxInput<Boolean> checkbox 
+        = new UIFormCheckBoxInput<Boolean>(contact.getId(), contact.getId(), false);
       addUIFormInput(checkbox);
       contactMap.put(contact.getId(), contact);
     }

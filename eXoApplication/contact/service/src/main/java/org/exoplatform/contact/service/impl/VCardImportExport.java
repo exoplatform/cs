@@ -219,9 +219,7 @@ public class VCardImportExport implements ContactImportExport {
     unmarshaller.setStrict(false);
     
     unmarshaller.setEncoding(ENCODING);
-    
     net.wimpi.pim.contact.model.Contact[] pimContacts = unmarshaller.unmarshallContacts(input);
-
     for (int index = 0; index < pimContacts.length; index++) {
 
       Contact contact = new Contact();

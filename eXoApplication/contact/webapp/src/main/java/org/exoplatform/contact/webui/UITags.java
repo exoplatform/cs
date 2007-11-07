@@ -7,13 +7,16 @@ package org.exoplatform.contact.webui;
 import java.util.List;
 
 import org.exoplatform.contact.ContactUtils;
+import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.Tag;
 import org.exoplatform.contact.webui.popup.UIExportForm;
 import org.exoplatform.contact.webui.popup.UIEditTagForm;
 import org.exoplatform.contact.webui.popup.UIPopupAction;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -89,11 +92,20 @@ public class UITags extends UIComponent {
       
       UIExportForm uiExportForm = popupAction.createUIComponent(UIExportForm.class, null,
           "ExportForm");
-      uiExportForm.setSelectedTag(tagName);
+      uiExportForm.setSelectedTag(tagName) ;
+      Contact[] contacts = null ;
+      contacts = ContactUtils.getContactService()
+        .getContactPageListByTag(ContactUtils.getCurrentUser(), tagName).getAll().toArray(new Contact[] {});
+      if (contacts == null || contacts.length == 0) {
+        UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UITag.msg.noContactToExport", null,
+          ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;  
+      }
+      uiExportForm.setContacts(contacts) ;
       uiExportForm.updateList();
-
       popupAction.activate(uiExportForm, 500, 0, true);
-      
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   }  

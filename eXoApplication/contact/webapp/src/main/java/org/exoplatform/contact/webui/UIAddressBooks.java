@@ -7,6 +7,8 @@ package org.exoplatform.contact.webui;
 import java.util.List;
 
 import org.exoplatform.contact.ContactUtils;
+import org.exoplatform.contact.service.Contact;
+import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.webui.popup.UICategoryForm;
@@ -47,8 +49,7 @@ import org.exoplatform.webui.event.EventListener;
 public class UIAddressBooks extends UIComponent {
   private String selectedGroup = null;
 
-  public UIAddressBooks() throws Exception {
-  }
+  public UIAddressBooks() throws Exception { }
 
   public List<ContactGroup> getGroups() throws Exception {
     List<ContactGroup> groupList = ContactUtils.getContactService().getGroups(
@@ -102,8 +103,29 @@ public class UIAddressBooks extends UIComponent {
       String addressBookId = event.getRequestContext().getRequestParameter(OBJECTID);
       if (addressBookId != null) {
         UIExportForm uiExportForm = uiPopupAction.createUIComponent(UIExportForm.class, null,
-            "ExportForm");
-        uiExportForm.setSelectedGroup(addressBookId);
+            "ExportForm");     
+        uiExportForm.setSelectedGroup(addressBookId) ;
+        ContactFilter filter = new ContactFilter();
+        filter.setAscending(true);
+        filter.setCategories(new String[] { addressBookId });
+        ContactService contactService = ContactUtils.getContactService() ;
+        String username = ContactUtils.getCurrentUser() ;
+        Contact[] contacts = null ;
+        if (ContactUtils.isPublicGroup(addressBookId))
+          contacts = contactService.getContactPageListByGroup(username, filter, true)
+            .getAll().toArray(new Contact[] {});
+        else
+          contacts = contactService.getContactPageListByGroup(username, filter, false)
+            .getAll().toArray(new Contact[] {});
+        if (contacts == null || contacts.length == 0) {
+          UIApplication uiApp = uiAddressBook.getAncestorOfType(UIApplication.class) ;
+          uiApp.addMessage(new ApplicationMessage("UIAddressBooks.msg.noContactToExport", null,
+            ApplicationMessage.WARNING)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;  
+        }
+        
+        uiExportForm.setContacts(contacts) ;         
         uiExportForm.updateList();
         uiPopupAction.activate(uiExportForm, 500, 0, true);
       } else {      
@@ -112,8 +134,17 @@ public class UIAddressBooks extends UIComponent {
         
         UIExportAddressBookForm uiExportForm = uiPopupAction.createUIComponent(
             UIExportAddressBookForm.class, null, "UIExportAddressBookForm");
-        uiExportForm.setContactGroups(uiAddressBook.getGroups().toArray(new ContactGroup[] {} )) ;
-        uiExportForm.setSharedContactGroup(uiAddressBook.getSharedContactGroups()) ;
+        ContactGroup[] groups = uiAddressBook.getGroups().toArray(new ContactGroup[] {}) ;
+        List<String> sharedGroups = uiAddressBook.getSharedContactGroups() ;
+        if (sharedGroups == null || sharedGroups.size() == 0 || groups == null || groups.length == 0) {
+          UIApplication uiApp = uiAddressBook.getAncestorOfType(UIApplication.class) ;
+          uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.no-addressbook", null,
+            ApplicationMessage.WARNING)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;   
+        }
+        uiExportForm.setContactGroups(groups) ;
+        uiExportForm.setSharedContactGroup(sharedGroups) ;
         uiExportForm.updateList();
         uiPopupAction.activate(uiExportForm, 500, 0, true);
       }

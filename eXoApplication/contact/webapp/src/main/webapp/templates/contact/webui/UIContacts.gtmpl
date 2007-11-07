@@ -1,5 +1,6 @@
 
 <%
+	import org.exoplatform.contact.service.ContactGroup;
 	import org.exoplatform.contact.service.Tag;
 	import org.exoplatform.contact.ContactUtils;
 	import org.exoplatform.contact.service.Contact;
@@ -156,12 +157,21 @@
 										Tag tag = ContactUtils.getContactService().getTag(ContactUtils.getCurrentUser(), tagIds[0]) ;
 										if (tag != null) iconTag += + tag.getColor() + "Tag" ; 
 									}
-									cssClass = "" ;
-									if (contact.getId().equals(uicomponent.getSelectedContact())) cssClass = "Selected" ;	
+										
 
 									// add
 	  	 	    			String[] categories = contact.getCategories() ;
 	  	 	    			for (category in categories) {
+	  	 	    				cssClass = "" ;
+										if (contact.getId().equals(uicomponent.getSelectedContact())) cssClass = "Selected" ;
+										
+	  	 	    				String groupName ;
+	  	 	    				if (ContactUtils.isPublicGroup(category)) groupName = category ;
+	  	 	    				else {
+		  	 	    				ContactGroup group = ContactUtils.getContactService()
+		  	 	    				  .getGroup(ContactUtils.getCurrentUser(), category) ;
+		  	 	    				groupName = group.getName() ;
+		  	 	    			}
 	  	 	    %>
 								
   						<tr class="UIContactList $cssClass" selectedTag="<%=uicomponent.getSelectedTag()%>" >
@@ -186,7 +196,7 @@
 									</a>
 								</td>
 								
-								<td class="text"><%=category%></td>
+								<td class="text"><%=groupName%></td>
 								
    			     	</tr>
    			     	<% } } %>  
@@ -240,7 +250,7 @@
 				<%if(isDisplaySearchResult) {
 						if (contacts.length == 0) {	
 				%>
-				<div style="text-align : center">Not result found</div>
+				<div style="text-align : center" class="text">Not result found</div>
 				<% } %>
 				
 				<div class="UIAction"> 

@@ -94,12 +94,7 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
             ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ; 
-      }   
-      System.out.println("\n\n importFormat:" + importFormat + "\n\n");
-      ContactImportExport ggg = ContactUtils.getContactService().getContactImportExports(importFormat) ;
-      System.out.println("\n\n input.getUploadDataAsStream():" + input.getUploadDataAsStream() + "\n\n");
-      
-     System.out.println("\n\n3333\n\n"); 
+      } 
      
       ContactUtils.getContactService().getContactImportExports(importFormat)
         .importContact(ContactUtils.getCurrentUser(), input.getUploadDataAsStream(), category) ;

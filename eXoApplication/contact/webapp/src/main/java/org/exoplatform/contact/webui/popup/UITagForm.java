@@ -174,7 +174,15 @@ public class UITagForm extends UIForm implements UIPopupComponent {
       UITagForm uiForm = event.getSource() ;
       ContactService contactService = ContactUtils.getContactService() ; 
       String username = ContactUtils.getCurrentUser() ;
-      contactService.removeContactTag(username, contactIds_, uiForm.getCheckedTags()) ;
+      List<String> checkedTags = uiForm.getCheckedTags() ;
+      if (checkedTags == null || checkedTags.size() ==0) {
+        UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UITagForm.msg.checkTag-required", null,
+            ApplicationMessage.WARNING)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;   
+      }
+      contactService.removeContactTag(username, contactIds_, checkedTags) ;
       UIContactPortlet contactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
       UITags uiTags = contactPortlet.findFirstComponentOfType(UITags.class) ;
       String selectedTag = uiTags.getSelectedTag() ;
