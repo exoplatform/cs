@@ -66,7 +66,10 @@
 			            long fromIndex = (currentPage - 1)* pageSize + 1;
 			            long endIndex = fromIndex-1 + pageSize;
 			            if (currentPage == availablePage) endIndex = availableContact;
-			            contactRange = "Contacts " + fromIndex + " - " + endIndex + " of " + availableContact ;
+			            if (fromIndex == endIndex)
+			            	contactRange = "Contacts " + fromIndex + " of " + availableContact ;
+			            else 
+			            	contactRange = "Contacts " + fromIndex + " - " + endIndex + " of " + availableContact ;
 			          }
 			          
 			        %>
@@ -182,7 +185,7 @@
   						  </td>
 								<td class="text" style="padding: 0px;"><div class="$iconTag" ><span></span></div></td>
 								<td class="text">
-									<div class="State OnlineIcon" title="Availabel">
+									<div class="State OnlineIcon" title="Available">
 										<a href="$actionLink">
 											<%=(ContactUtils.isEmpty(contact.getFullName()) ? "" : contact.getFullName())%>
 										</a>
@@ -227,7 +230,7 @@
   						  </td>
 								<td class="text" style="padding: 0px;"><div class="$iconTag" ><span></span></div></td>
 								<td class="text">
-									<div class="State OnlineIcon" title="Availabel">
+									<div class="State OnlineIcon" title="Available">
 										<a href="$actionLink">
 											<%=(ContactUtils.isEmpty(contact.getFullName()) ? "" : contact.getFullName())%>
 										</a>

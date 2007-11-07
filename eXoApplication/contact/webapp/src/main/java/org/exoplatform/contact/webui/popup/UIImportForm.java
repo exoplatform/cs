@@ -9,7 +9,6 @@ import java.util.List;
 
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.ContactGroup;
-import org.exoplatform.contact.service.ContactImportExport;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContacts;
@@ -57,12 +56,16 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
     List<SelectItemOption<String>> groupOptions = new ArrayList<SelectItemOption<String>>() ;
     for (ContactGroup group : groupList) {
       groupOptions.add(new SelectItemOption<String>(group.getName(), group.getId())) ;
-    }    
-    addUIFormInput(new UIFormSelectBox(FIELD_CATEGORY_BOX, FIELD_CATEGORY_BOX, groupOptions)) ;
+    }
+    addUIFormInput(new UIFormSelectBox(FIELD_CATEGORY_BOX, FIELD_CATEGORY_BOX, groupOptions)) ;    
     addUIFormInput(new UIFormSelectBox(TYPE, TYPE, options)) ;
     addUIFormInput(new UIFormUploadInput(FIELD_UPLOAD, FIELD_UPLOAD)) ;
   }
   
+  public void setValues(String group) {
+    getUIFormSelectBox(FIELD_CATEGORY_BOX).setValue(group) ;
+  }  
+
   public void activate() throws Exception {}
   public void deActivate() throws Exception {}
   
@@ -70,7 +73,6 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
     public void execute(Event<UIImportForm> event) throws Exception {
       UIImportForm uiForm = event.getSource() ;
       String category = uiForm.getUIFormSelectBox(FIELD_CATEGORY_BOX).getValue() ;
-      
       UploadService uploadService = (UploadService)PortalContainer.getComponent(UploadService.class) ;
       UIFormUploadInput input = uiForm.getUIInput(FIELD_UPLOAD) ;
       
@@ -86,8 +88,7 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
             ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
-      }
-      
+      }  
       String importFormat = uiForm.getUIFormSelectBox(UIImportForm.TYPE).getValue() ;      
       if (ContactUtils.isEmpty(category)) {  
         uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.selectGroup-required", null, 

@@ -124,7 +124,7 @@
 			              Export Contacts
 			            </div>
 				        </a>
-				        <a class="MenuItem" href="<%=uicomponent.event("#", "id")%>">   
+				        <a class="MenuItem" href="<%=uicomponent.event("ImportAddress", "id")%>">   
 			            <div class="ItemIcon ExportAddressIcon">
 			              Import Contacts
 			            </div>

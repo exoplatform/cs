@@ -49,9 +49,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
     events = {
         @EventConfig(listeners = UIContacts.EditContactActionListener.class),
         @EventConfig(listeners = UIContacts.InstantMessageActionListener.class),
-        
         @EventConfig(listeners = UIContacts.TagPopupActionListener.class),
-          
         @EventConfig(listeners = UIContacts.TagCheckedActionListener.class),
         @EventConfig(listeners = UIContacts.MoveContactsActionListener.class),
         @EventConfig(phase=Phase.DECODE, listeners = UIContacts
@@ -130,6 +128,9 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       Contact[] array = contactMap.values().toArray(new Contact[]{}) ;
       if (array.length > 0 && !isSearchResult) {
         Contact firstContact = array[0] ;
+        
+        System.out.println("\n\n first contact:" + firstContact.getFullName() + "\n\n");
+        
         getAncestorOfType(UIContactContainer.class).getChild(UIContactPreview.class).setContact(firstContact) ;
         selectedContact = firstContact.getId() ;
       } else getAncestorOfType(UIContactContainer.class).getChild(UIContactPreview.class).setContact(null) ;
@@ -340,7 +341,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       JCRPageList pageList = uiContacts.getContactPageList(); 
       uiContacts.setPageList(pageList, 1) ;
       uiContacts.updateList() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent());
     }
   }
   
@@ -352,7 +353,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         uiContacts.setPageList(pageList, pageList.getCurrentPage() - 1);
       }
       uiContacts.updateList() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent());
     }
   }
   
@@ -364,7 +365,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         uiContacts.setPageList(pageList, pageList.getCurrentPage() + 1);
       }
       uiContacts.updateList() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent());
     }
   }
   
@@ -374,7 +375,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       JCRPageList pageList = uiContacts.getContactPageList(); 
       uiContacts.setPageList(pageList, pageList.getAvailablePage());
       uiContacts.updateList() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent());
     }
   }
   

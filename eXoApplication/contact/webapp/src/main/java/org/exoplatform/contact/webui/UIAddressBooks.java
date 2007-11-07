@@ -89,6 +89,8 @@ public class UIAddressBooks extends UIComponent {
       UIPopupAction uiPopupAction = uiContactPortlet.getChild(UIPopupAction.class);
       UIImportForm uiImportForm = uiPopupAction.createUIComponent(UIImportForm.class,
           null, "UIImportForm");
+      String addressBookId = event.getRequestContext().getRequestParameter(OBJECTID);
+      if (!ContactUtils.isEmpty(addressBookId)) uiImportForm.setValues(addressBookId) ;
       uiPopupAction.activate(uiImportForm, 600, 0, true);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
     }
