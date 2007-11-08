@@ -6,7 +6,7 @@ package org.exoplatform.forum.service ;
 
 import java.util.Date;
 
-import org.exoplatform.services.jcr.util.UUIDGenerator;
+import org.exoplatform.services.jcr.util.IdGenerator;
 /**
  * Created by The eXo Platform SARL
  * Author : Vu Duy Tu
@@ -28,7 +28,7 @@ public class Poll {
   
   
   public Poll() {
-    id = "poll" + UUIDGenerator.generate() ;
+    id = "poll" + IdGenerator.generate() ;
     createdDate = new Date() ;
     option = new String[] {};
     vote = new String[] {};

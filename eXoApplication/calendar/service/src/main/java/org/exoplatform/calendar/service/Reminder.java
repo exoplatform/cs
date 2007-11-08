@@ -4,7 +4,7 @@
  **************************************************************************/
 package org.exoplatform.calendar.service;
 
-import org.exoplatform.services.jcr.util.UUIDGenerator;
+import org.exoplatform.services.jcr.util.IdGenerator;
 
 /**
  * Created by The eXo Platform SARL
@@ -38,7 +38,7 @@ public class Reminder {
     this.id = id ;
     reminder = type ;
   }
- // public static String ID(){return "Reminder" + UUIDGenerator.generate() ; }
+ // public static String ID(){return "Reminder" + IdGenerator.generate() ; }
   public String getId() { return this.id ; }
   public void   setId(String id) { this.id = id ; }
   

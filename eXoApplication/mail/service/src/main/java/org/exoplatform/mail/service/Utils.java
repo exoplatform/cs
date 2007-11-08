@@ -23,7 +23,7 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
 
-import org.exoplatform.services.jcr.util.UUIDGenerator;
+import org.exoplatform.services.jcr.util.IdGenerator;
 
 /**
  * Created by The eXo Platform SARL
@@ -329,7 +329,7 @@ public class Utils {
         } else {
           /* this part must be presented as an attachment, hence we add it to the attached files */
           BufferAttachment file = new BufferAttachment();
-          file.setId("Attachment" + UUIDGenerator.generate());
+          file.setId("Attachment" + IdGenerator.generate());
           file.setName(part.getFileName());
           InputStream is = part.getInputStream();
           file.setInputStream(is);

@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.exoplatform.services.jcr.util.UUIDGenerator;
+import org.exoplatform.services.jcr.util.IdGenerator;
 
 /**
  * Created by The eXo Platform SARL
@@ -36,7 +36,7 @@ public class Account {
   //  private MailServerConfiguration mailServerConfiguration ;
   
   public Account() {
-    id = Utils.KEY_ACCOUNT + UUIDGenerator.generate() ;
+    id = Utils.KEY_ACCOUNT + IdGenerator.generate() ;
   }
   
   /**

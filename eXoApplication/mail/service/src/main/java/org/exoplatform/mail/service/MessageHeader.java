@@ -4,7 +4,7 @@
  **************************************************************************/
 package org.exoplatform.mail.service;
 
-import org.exoplatform.services.jcr.util.UUIDGenerator;
+import org.exoplatform.services.jcr.util.IdGenerator;
 
 /**
  * Created by The eXo Platform SARL
@@ -18,7 +18,7 @@ public class MessageHeader {
   private long priority;
   
   public MessageHeader() {
-    setId("MessageHeader" + UUIDGenerator.generate()) ;
+    setId("MessageHeader" + IdGenerator.generate()) ;
   }
   public String getId() { return id ; }
   public void setId(String id) { this.id = id; }

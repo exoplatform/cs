@@ -4,7 +4,7 @@
  **************************************************************************/
 package org.exoplatform.calendar.service;
 
-import org.exoplatform.services.jcr.util.UUIDGenerator;
+import org.exoplatform.services.jcr.util.IdGenerator;
 
 /**
  * Created by The eXo Platform SARL
@@ -70,7 +70,7 @@ public class Calendar {
   //private List<EventCategory> eventCategories ;
   
   public Calendar() throws Exception{
-    id = "calendar" + UUIDGenerator.generate() ;
+    id = "calendar" + IdGenerator.generate() ;
   }
   public String getId() { return id ; }
   public void setId(String id) { this.id = id ; }

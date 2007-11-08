@@ -6,7 +6,7 @@ package org.exoplatform.mail.webui.popup;
 
 import org.exoplatform.mail.service.BufferAttachment;
 import org.exoplatform.mail.webui.UIMailPortlet;
-import org.exoplatform.services.jcr.util.UUIDGenerator;
+import org.exoplatform.services.jcr.util.IdGenerator;
 import org.exoplatform.upload.UploadResource;
 import org.exoplatform.upload.UploadService;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -74,7 +74,7 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
       try {
         UIComposeForm uiComposeForm = uiPopupActionContainer.getChild(UIComposeForm.class) ;
         BufferAttachment attachfile = new BufferAttachment() ;
-         attachfile.setId("Attachment" + UUIDGenerator.generate());
+         attachfile.setId("Attachment" + IdGenerator.generate());
          attachfile.setName(uploadResource.getFileName()) ;
          attachfile.setInputStream(input.getUploadDataAsStream()) ;
          attachfile.setMimeType(uploadResource.getMimeType()) ;

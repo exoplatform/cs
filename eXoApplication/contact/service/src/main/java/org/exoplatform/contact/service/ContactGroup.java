@@ -4,7 +4,7 @@
  **************************************************************************/
 package org.exoplatform.contact.service;
 
-import org.exoplatform.services.jcr.util.UUIDGenerator;
+import org.exoplatform.services.jcr.util.IdGenerator;
 
 /**
  * Created by The eXo Platform SARL
@@ -19,7 +19,7 @@ public class ContactGroup {
   private String description ;
   
   public ContactGroup() {
-    id = "ContactGroup" + UUIDGenerator.generate() ;
+    id = "ContactGroup" + IdGenerator.generate() ;
   }
   
   public String getId()  { return id ; }

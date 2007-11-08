@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.exoplatform.services.jcr.util.UUIDGenerator;
+import org.exoplatform.services.jcr.util.IdGenerator;
 
 /**
  * Created by The eXo Platform SARL
@@ -80,7 +80,7 @@ public class CalendarEvent {
   private Map<String, String> properties ;
   
   public CalendarEvent() {
-    id = "Event" + UUIDGenerator.generate() ;
+    id = "Event" + IdGenerator.generate() ;
   }
    
   public String getId() { return id; }
