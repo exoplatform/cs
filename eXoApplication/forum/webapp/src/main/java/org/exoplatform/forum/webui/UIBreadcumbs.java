@@ -16,7 +16,7 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.app.SessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
-import org.exoplatform.services.jcr.util.IdGenerator;
+import org.exoplatform.services.jcr.util.UUIDGenerator;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIContainer;
@@ -43,7 +43,7 @@ public class UIBreadcumbs extends UIContainer {
   	ForumService forumService = (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
   	forumHomePath_ = forumService.getForumHomePath() ;
     breadcumbs_.add(forumHomePath_) ;
-    IdGenerator.generate() ;
+    UUIDGenerator.generate() ;
   }
   
   public void setCurrentNode(Node selectedNode) throws Exception {

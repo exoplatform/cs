@@ -6,7 +6,7 @@ package org.exoplatform.forum.service ;
 
 import java.util.Date;
 
-import org.exoplatform.services.jcr.util.IdGenerator;
+import org.exoplatform.services.jcr.util.UUIDGenerator;
 /**
  * Created by The eXo Platform SARL
  * Author : Tuan Nguyen
@@ -32,7 +32,7 @@ public class Post {
   
   
   public Post() {
-    id = ("post" + IdGenerator.generate()).toUpperCase() ;
+    id = ("post" + UUIDGenerator.generate()).toUpperCase() ;
   }
   
   public String getId() { return id; }

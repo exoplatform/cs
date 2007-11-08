@@ -6,7 +6,7 @@ package org.exoplatform.forum.service ;
 
 import java.util.Date;
 
-import org.exoplatform.services.jcr.util.IdGenerator;
+import org.exoplatform.services.jcr.util.UUIDGenerator;
 
 /**
  * March 2, 2007  
@@ -24,7 +24,7 @@ public class Category {
    private String userPrivate = new String() ;
    
    public Category(){
-     id = ("category" + IdGenerator.generate()).toUpperCase() ;
+     id = ("category" + UUIDGenerator.generate()).toUpperCase() ;
    }
 
    public String getId(){return id;}

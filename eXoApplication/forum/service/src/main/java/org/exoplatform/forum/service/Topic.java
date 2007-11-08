@@ -6,7 +6,7 @@ package org.exoplatform.forum.service ;
 
 import java.util.Date;
 
-import org.exoplatform.services.jcr.util.IdGenerator;
+import org.exoplatform.services.jcr.util.UUIDGenerator;
 
 /**
  * Created by The eXo Platform SARL
@@ -43,7 +43,7 @@ public class Topic {
   
   
   public Topic(){ 
-    id = ("topic" + IdGenerator.generate()).toUpperCase() ;
+    id = ("topic" + UUIDGenerator.generate()).toUpperCase() ;
     canView = new String [] {} ;
     canPost = new String [] {} ;
     userVoteRating = new String [] {} ;

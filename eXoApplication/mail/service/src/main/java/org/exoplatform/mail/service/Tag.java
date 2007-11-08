@@ -4,7 +4,7 @@
  **************************************************************************/
 package org.exoplatform.mail.service;
 
-import org.exoplatform.services.jcr.util.IdGenerator;
+import org.exoplatform.services.jcr.util.UUIDGenerator;
 
 /**
  * Created by The eXo Platform SARL
@@ -20,7 +20,7 @@ public class Tag {
   private String color;
   
   public Tag() {
-    id = Utils.KEY_TAGS + IdGenerator.generate() ;
+    id = Utils.KEY_TAGS + UUIDGenerator.generate() ;
   } 
   
   public String getId() { return id; }

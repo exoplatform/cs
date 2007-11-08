@@ -38,7 +38,7 @@
       <version>${org.exoplatform.jcr.version}</version>            
     </dependency>
     
-	<dependency>
+    <dependency>
 	  <groupId>net.wimpi.pim</groupId>
 	  <artifactId>jpim-0.1</artifactId>
 	  <version>1.0</version>

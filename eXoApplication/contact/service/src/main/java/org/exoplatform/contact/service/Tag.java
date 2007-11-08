@@ -4,7 +4,7 @@
  **************************************************************************/
 package org.exoplatform.contact.service;
 
-import org.exoplatform.services.jcr.util.IdGenerator;
+import org.exoplatform.services.jcr.util.UUIDGenerator;
 
 
 /**
@@ -21,7 +21,7 @@ public class Tag {
   private String color ;
   
   public Tag() {
-    id = "Tag" + IdGenerator.generate() ;
+    id = "Tag" + UUIDGenerator.generate() ;
   }
   
   public String getId()  { return id ; }

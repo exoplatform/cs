@@ -46,7 +46,7 @@ import org.exoplatform.mail.service.Tag;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.registry.JCRRegistryService;
 import org.exoplatform.services.jcr.RepositoryService;
-import org.exoplatform.services.jcr.util.IdGenerator;
+import org.exoplatform.services.jcr.util.UUIDGenerator;
 
 import com.sun.mail.smtp.SMTPSendFailedException;
 
@@ -403,7 +403,7 @@ public class MailServiceImpl implements MailService{
         } else {
           /* this part must be presented as an attachment, hence we add it to the attached files */
           BufferAttachment file = new BufferAttachment();
-          file.setId("Attachment" + IdGenerator.generate());
+          file.setId("Attachment" + UUIDGenerator.generate());
           file.setName(part.getFileName());
           InputStream is = part.getInputStream();
           file.setInputStream(is);

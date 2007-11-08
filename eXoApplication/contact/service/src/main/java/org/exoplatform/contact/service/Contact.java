@@ -6,7 +6,7 @@ package org.exoplatform.contact.service;
 
 import java.util.Date;
 
-import org.exoplatform.services.jcr.util.IdGenerator;
+import org.exoplatform.services.jcr.util.UUIDGenerator;
 
 /**
  * Created by The eXo Platform SARL
@@ -69,7 +69,7 @@ public class Contact {
   private Date lastUpdated ;
   
   public Contact() {
-    id = "Contact" + IdGenerator.generate() ;
+    id = "Contact" + UUIDGenerator.generate() ;
   }
   
   public String getId()  { return id ; }
