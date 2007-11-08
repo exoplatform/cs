@@ -1,0 +1,79 @@
+<% uiform.begin() %>
+  <div class="UIAddToContact">
+    <div class="HorizontalLayout">
+      <table class="UIFormGrid">
+        <tr>
+          <td class="FieldLabel">Group:</td>
+          <td class="FieldComponent">
+            <select onchange="" name="" class="selectbox">
+              <option>Group 1</option>
+              <option>Group 2</option>
+              <option>Group 3</option>
+              <option>Group 4</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td class="FieldLabel">Name:</td>
+          <td class="FieldComponent">
+            <div class="FieldComponentShort" style="float: left">
+              <input type="input" class="input" />
+            </div>
+            <div class="FieldComponentShort" style="float: left">
+              <input type="input" class="input" />
+            </div>
+            <div style="clear: left;"><span></span></div>
+          </td>
+        </tr>
+        <tr>
+          <td class="FieldLabel">Email:</td>
+          <td class="FieldComponent">
+            <input type="input" class="input" />
+          </td>
+        </tr>
+        <tr>
+          <td class="FieldLabel">Chat ID:</td>
+          <td class="FieldComponent">
+            <div class="FieldComponentShort" style="float: left;">
+              <input type="input" class="input" />
+            </div>
+            <div class="FieldComponentShort" style="float: left;">
+              <select onchange="" name="" class="selectbox">
+                <option>@yahoo.com</option>
+                <option>@gmail.com</option>
+              </select>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="FieldLabel">Phone:</td>
+          <td class="FieldComponent">
+            <input type="input" class="input" />
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div class="UIAction">
+      <table class="ActionContainer" align="center">
+        <tr>
+          <td align="center">
+            <% for(action in uicomponent.getActions()) { 
+                     String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action) ;
+                     String link = uicomponent.event(action) ;
+            %>
+            <a href="$link" class="ActionButton LightBlueStyle">
+              <div class="ButtonLeft">
+                <div class="ButtonRight">
+                  <div class="ButtonMiddle">
+                    $actionLabel
+                  </div>
+                </div>
+              </div>
+            </a>
+            <%}%>
+          </td>
+        </tr>
+      </table>
+    </div> 
+  </div>
+<% uiform.end() %>  

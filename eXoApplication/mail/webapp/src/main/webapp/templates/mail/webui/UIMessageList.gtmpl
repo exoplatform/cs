@@ -210,7 +210,7 @@
             <a class="MenuItem" href="<%=uicomponent.event("ViewRead", "id")%>">   
               <div class="ItemIcon DeleteMailIcon"> Delete </div>
             </a>
-            <a class="MenuItem" href="<%=uicomponent.event("ViewRead", "id")%>">   
+            <a class="MenuItem" href="<%=uicomponent.event("AddContact", "id")%>">   
               <div class="ItemIcon AddContactIcon"> Add Sender to Contacts </div>
             </a>
             <a class="MenuItem" href="<%=uicomponent.event("ViewRead", "id")%>">   
@@ -236,7 +236,7 @@
     		<tr>
     			<th style="width: 20px; padding-left: 7px; " class="Border"><input type="checkbox" class="checkbox" title="Check all" value="4" onclick="eXo.mail.UIMailPortlet.checkAll(this);"/></th>
     			<th style="width: 24px;"><div class="StarredIcon" title="Add star for this message"><span></span></div></th>
-    		  <th style="padding-left: 8px; width: 24%;">
+    		  <th style="padding-left: 8px; width: 20%;">
     		    <%
     		      String sortedBySender = uicomponent.event("Sort",Utils.EXO_FROM);
               String classArrowFrom = "";

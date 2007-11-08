@@ -121,19 +121,28 @@ UIMailPortlet.prototype.checkAll = function(obj) {
 
 UIMailPortlet.prototype.readMessage = function() {} ;
 
-UIMailPortlet.prototype.initIframe = function(obj, obj2) {
+UIMailPortlet.prototype.showPrintPreview = function(obj1) {
 	document.getElementById("UIPortalApplication").style.display = "none";
-	//obj.contentDocument.body.innerHTML = obj2.innerHTML;
 	var root1 = document.createElement('div') ;
 	root1.className = 'UIMailPortlet' ;
 	var root2 = document.createElement('div') ;
 	root2.className = 'MailWorkingWorkspace' ;
 	var root3 = document.createElement('div') ;
 	root3.className = 'UIMessagePreview' ;
-	root3.appendChild(obj2.cloneNode(true)) ;
+	root3.appendChild(obj1.cloneNode(true)) ;
 	root2.appendChild(root3) ;
 	root1.appendChild(root2) ;
 	document.body.appendChild(root1) ;
 } ;
+
+UIMailPortlet.prototype.printMessage = function() {
+	window.print()
+} ;
+
+UIMailPortlet.prototype.closePrint = function() {
+	document.getElementById("UIPortalApplication").style.display = "block";
+	document.getElementById("printWrapper").style.display = "none";
+} ;
+
 
 eXo.mail.UIMailPortlet = new UIMailPortlet();

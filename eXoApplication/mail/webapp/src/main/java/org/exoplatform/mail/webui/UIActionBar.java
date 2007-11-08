@@ -9,6 +9,9 @@ import java.util.List;
 
 import javax.mail.AuthenticationFailedException;
 
+import org.exoplatform.calendar.service.CalendarService;
+import org.exoplatform.calendar.service.CalendarSetting;
+import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MailSetting;
@@ -17,6 +20,7 @@ import org.exoplatform.mail.webui.popup.UIComposeForm;
 import org.exoplatform.mail.webui.popup.UIMailSettings;
 import org.exoplatform.mail.webui.popup.UIPopupAction;
 import org.exoplatform.mail.webui.popup.UIPopupActionContainer;
+import org.exoplatform.mail.webui.popup.UIQuickAddEvent;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -109,21 +113,30 @@ public class UIActionBar extends UIContainer {
       System.out.println(" =========== > AddAddressActionListener");
     }
   }
+  
   static public class AddEventActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {
-      UIActionBar uiActionBar = event.getSource() ; 
       System.out.println(" =========== > AddEventActionListener");
+      UIActionBar uiActionBar = event.getSource() ; 
+      UIMailPortlet uiPortlet = uiActionBar.getParent() ;
+      CalendarService calenderSrv = uiPortlet.getApplicationComponent(CalendarService.class);
+      UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
+      UIQuickAddEvent uiQuickAddEvent = uiPopupAction.activate(UIQuickAddEvent.class, 600) ;
+      uiQuickAddEvent.setEvent(true) ;        
+      uiQuickAddEvent.init(calenderSrv.getCalendarSetting(MailUtils.getCurrentUser()), null, null) ;
+      uiQuickAddEvent.update("0", null) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }
   }
   static public class RssActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {
-      UIActionBar uiActionBar = event.getSource() ; 
+//      UIActionBar uiActionBar = event.getSource() ; 
       System.out.println(" =========== > RssActionListener");
     }
   }
   static public class ChangeViewActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {
-      UIActionBar uiActionBar = event.getSource() ; 
+//      UIActionBar uiActionBar = event.getSource() ; 
       System.out.println(" =========== > ChangeViewActionListener");
       String viewType = event.getRequestContext().getRequestParameter(OBJECTID) ;  
       System.out.println(" =========== > viewType " + viewType);

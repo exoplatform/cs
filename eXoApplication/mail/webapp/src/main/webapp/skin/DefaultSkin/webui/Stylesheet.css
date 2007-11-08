@@ -6,6 +6,7 @@
 @import url("UIInsertAddress/Stylesheet.css");
 @import url("skinIcons/16x16/Stylesheet.css");
 @import url("skinIcons/24x24/Stylesheet.css");
+@import url("UIQuickAddEvent/Stylesheet.css");
 /**
  * UIMailPortlet
 */
@@ -813,21 +814,23 @@
 }
 
 /*=======================Print Priview Mail========================*/
-.UIMailPortlet .PrintPriview {
+.UIMailPortlet .PrintPreview {
 	padding: 8px;
+	border-bottom:1px solid #BBBBBB; 
+	margin:15px;
 }
 
-.UIMailPortlet .PrintPriview .PrintHeader {
+.UIMailPortlet .PrintPreview .PrintHeader {
 	height: 49px; 
 }
 
-.UIMailPortlet .PrintPriview .PrintHeader .PrintLogoMail {
+.UIMailPortlet .PrintPreview .PrintHeader .PrintLogoMail {
 	background: url('background/LogoMail346x49.gif') no-repeat left;
 	float: left;
 	width: 346px; height: 49px;
 }
 
-.UIMailPortlet .PrintPriview .PrintHeader .PrintUser {
+.UIMailPortlet .PrintPreview .PrintHeader .PrintUser {
 	color: #272727;
 	padding:5px 0px;
 	margin-left: 350px;
@@ -836,38 +839,38 @@
 	text-align: right;
 }
 
-.UIMailPortlet .PrintPriview .PrintSubject {
+.UIMailPortlet .PrintPreview .PrintSubject {
 	font-size: 12px; font-weight: bolder;
 	border-bottom: 1px solid #bbbbbb;
 	margin: 8px;
 	padding:5px 0px;
 }
 
-.UIMailPortlet .PrintPriview .PrintAddress {
+.UIMailPortlet .PrintPreview .PrintAddress {
 	padding: 8px; 
 	height: 30px;
 }
 
-.UIMailPortlet .PrintPriview .PrintAddress .FromAndTo {
+.UIMailPortlet .PrintPreview .PrintAddress .FromAndTo {
 	float: left;
 }
 
-.UIMailPortlet .PrintPriview .PrintAddress .PrintFrom {
+.UIMailPortlet .PrintPreview .PrintAddress .PrintFrom {
 }
 
-.UIMailPortlet .PrintPriview .PrintAddress .PrintTo {
+.UIMailPortlet .PrintPreview .PrintAddress .PrintTo {
 }
 
-.UIMailPortlet .PrintPriview .PrintAddress .DateAndTime {
+.UIMailPortlet .PrintPreview .PrintAddress .DateAndTime {
 	float: right;
 	padding: 4px 0px;
 }
 
-.UIMailPortlet .PrintPriview .PrintContent {
+.UIMailPortlet .PrintPreview .PrintContent {
 	padding: 16px 8px;
 }
 
-.UIMailPortlet .PrintPriview .PrintAttachments .AttachmentTitle {
+.UIMailPortlet .PrintPreview .PrintAttachments .AttachmentTitle {
 	background: #e7e7e7 url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/AttachmentIcon.gif') no-repeat 3px center;
 	padding-left: 20px;
 	line-height: 25px;
@@ -875,7 +878,7 @@
 	white-space: nowrap;
 }
 
-.UIMailPortlet .PrintPriview .PrintAttachments .ImageAttachment {
+.UIMailPortlet .PrintPreview .PrintAttachments .ImageAttachment {
 	float: left;
 	background: url('background/ImageAttachment.gif') no-repeat;
 	height: 110px; 
@@ -883,12 +886,12 @@
 	margin: 5px;
 }
 
-.UIMailPortlet .PrintPriview .PrintAttachments .AttachmentLabel {
+.UIMailPortlet .PrintPreview .PrintAttachments .AttachmentLabel {
 	padding: 10px 4px 0px 0px;
 	float:left;
 }
 
-.UIMailPortlet .PrintPriview .PrintAttachments .NameImage {
+.UIMailPortlet .PrintPreview .PrintAttachments .NameImage {
 	font-weight: bolder;
 }
 

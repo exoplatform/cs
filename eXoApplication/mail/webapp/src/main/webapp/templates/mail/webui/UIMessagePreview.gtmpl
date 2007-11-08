@@ -138,7 +138,7 @@
 <!--  End DecoratorBox ViewBoxStyle -->
 	</div>
 <%} else {%>
-  <div class="SubjectMail" style="display: none;">
+  <div class="SubjectMail">
 	  <div class="WelcomeMail">
 	    <div class="LabelWelcomeMail">Welcome to</div>
 	    <div class="LabelComment">please do not reply to this message !</div>
@@ -160,41 +160,5 @@
 	    eXo Mail is an open-source mail that is built on foudation of eXo WebOS with variety of new features designed to make your e-mail experience more productive and convenience, as a new way to view your mails inbox and conversation and help to reduce risks and annoyances such as phishing and junk e-mail. Easy to approach the basics as writing, reading, finding and  much more...
 	  </div>
   </div>
-<!--  Start PrintPriview -->
-  <div class="PrintPriview">
-  	<div class="PrintHeader" >
-  		<div class="PrintLogoMail"><span></span></div>
-  		<div class="PrintUser">Phuong Pham Dang {phuong.pham@exoplatform.com}</div>
-  		<div style="clear: left;"><span></span></div>
-  	</div>
-  	<div class="PrintSubject"  >Melissa Theuriau background for M6 </div>
-  	<div class="PrintAddress"  >
-  		<div class="FromAndTo">
-				<div class="PrintFrom"><span style="font-weight:bold;">Brice Revenant</span> {brice.revenant@gmail.com}</div>
-				<div class="PrintTo">To: Phuong Pham Dang {phuong.pham@exoplatform.com}</div>
-			</div>
-  		<div class="DateAndTime">Tuesday, June 26, 2007, 12:40 am</div>
-  		<div style="clear: both;"><span></span></div>
-  	</div>
-  	<div class="PrintContent"  >
-	  	Hi Phuong,<br><br>
-			Benjamin would like a great image in the background of the desktop WebOS layout. This is to make the difference. Could you please specify the attached image as background ? This is the main newscaster of the TV... That should please the customer.<br><br>
-			Thanks a lot,<br><br>
-			Brice Revenant<br>
-			eXo Platform SAS
-  	</div>
-  	<div class="PrintAttachments"  >
-  		<div class="AttachmentTitle">Attachments:</div>
-  		<div class="AttachmentContent">
-				<div class="ImageAttachment"><span></span></div>
-				<div class="AttachmentLabel">
-					<div class="NameImage">Melissa Theuriau background for M6.jpg</div>
-					<div class="Size">Size: 49K</div>
-				</div>
-				<div style="clear: left;"><span></span></div>
-  		</div>
-  	</div>
-  </div>
-<!--  End PrintPriview -->
 <%}%>
 </div>

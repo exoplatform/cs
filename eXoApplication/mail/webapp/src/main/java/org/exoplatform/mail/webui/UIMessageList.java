@@ -16,6 +16,7 @@ import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.MessagePageList;
 import org.exoplatform.mail.service.Tag;
 import org.exoplatform.mail.service.Utils;
+import org.exoplatform.mail.webui.popup.UIAddContactForm;
 import org.exoplatform.mail.webui.popup.UIComposeForm;
 import org.exoplatform.mail.webui.popup.UIExportForm;
 import org.exoplatform.mail.webui.popup.UIImportForm;
@@ -70,7 +71,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
         @EventConfig(listeners = UIMessageList.AddTagActionListener.class),
         @EventConfig(listeners = UIMessageList.MoveMessagesActionListener.class),
         @EventConfig(listeners = UIMessageList.MoveDirectMessagesActionListener.class),
-        @EventConfig(listeners = UIMessageList.ImportActionListener.class),
+        @EventConfig(listeners = UIMessageList.AddContactActionListener.class),
         @EventConfig(listeners = UIMessageList.ImportActionListener.class),
         @EventConfig(listeners = UIMessageList.ExportActionListener.class),
         @EventConfig(listeners = UIMessageList.SortActionListener.class)
@@ -590,8 +591,19 @@ public class UIMessageList extends UIForm {
      uiMessageList.updateList();                   
     }
   }
-
   
+  static public class AddContactActionListener extends EventListener<UIMessageList> {
+    public void execute(Event<UIMessageList> event) throws Exception {
+      UIMessageList uiMessageList = event.getSource() ;   
+      System.out.println("=== >>> Import Action Listener");
+      UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
+      UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
+      UIAddContactForm uiAddContactForm = uiPopup.createUIComponent(UIAddContactForm.class, null, null);
+      uiPopup.activate(uiAddContactForm, 600, 0, true);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup);    
+    }
+  }
+
   static public class ImportActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource() ;   

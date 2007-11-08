@@ -4,6 +4,8 @@
  **************************************************************************/
 package org.exoplatform.mail.webui.popup;
 
+import org.exoplatform.mail.webui.UIMailPortlet;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
@@ -46,13 +48,17 @@ public class UIPrintPreview extends UIForm implements UIPopupComponent {
   
   static  public class PrintActionListener extends EventListener<UIPrintPreview> {
     public void execute(Event<UIPrintPreview> event) throws Exception {
-      System.out.println(" === >>> Print Message");
+      
     }
   }
   
   static  public class CancelActionListener extends EventListener<UIPrintPreview> {
     public void execute(Event<UIPrintPreview> event) throws Exception {
-      
+      UIPrintPreview uiPrintPreview = event.getSource();
+      WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+      context.getJavascriptManager().importJavascript("eXo.mail.UIMailPortlet","/mail/javascript/");
+      context.getJavascriptManager().addJavascript("eXo.mail.UIMailPortlet.closePrint()");
+      uiPrintPreview.getAncestorOfType(UIMailPortlet.class).cancelAction();
     }
   }
 }

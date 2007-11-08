@@ -3,124 +3,82 @@
   def rcontext = _ctx.getRequestContext() ;
   JavascriptManager jsmanager = rcontext.getJavascriptManager();
   jsmanager.importJavascript('eXo.mail.UIMailPortlet');
-  jsmanager.addOnLoadJavascript("eXo.mail.UIMailPortlet.initIframe(document.getElementById('printa'), document.getElementById('aaaa'))");
+  jsmanager.addOnLoadJavascript("eXo.mail.UIMailPortlet.showPrintPreview(document.getElementById('printWrapper'))");
 %>
 
-<iframe id="printa" name="printa" width="100%"></iframe>
-
-<div id="aaaa">
-<div class="UIMessagePreview" id="<%=uicomponent.getId()%>">
-  <div class="ReadingPaneBar">
-    <div class="Subject"><span>Subject: </span><span>
-    </span></div>
-    <div class="MaximizeReadingPane" title="Maximize Reading Pane"><span></span></div>
-    <div style="clear:both;"><span></span></div>
-  </div>
-  <div class="ReadingPaneDetails">
-<!--  Start DecoratorBox ViewBoxStyle -->
-    <div class="DecoratorBox">
-      <div class="ViewBoxStyle">
-        <div class="TopLeftViewBoxStyle">
-          <div class="TopRightViewBoxStyle">
-            <div class="TopCenterViewBoxStyle"><span></span></div>                    
-          </div>
+<div id="printWrapper">
+<% uiform.begin() %>
+<!--  Start PrintPriview -->
+  <div class="PrintPreview">
+    <div class="PrintHeader" >
+      <div class="PrintLogoMail"><span></span></div>
+      <div class="PrintUser">Phuong Pham Dang {phuong.pham@exoplatform.com}</div>
+      <div style="clear: left;"><span></span></div>
+    </div>
+    <div class="PrintSubject"  >Melissa Theuriau background for M6 </div>
+    <div class="PrintAddress"  >
+      <div class="FromAndTo">
+        <div class="PrintFrom"><span style="font-weight:bold;">Brice Revenant</span> {brice.revenant@gmail.com}</div>
+        <div class="PrintTo">To: Phuong Pham Dang {phuong.pham@exoplatform.com}</div>
+      </div>
+      <div class="DateAndTime">Tuesday, June 26, 2007, 12:40 am</div>
+      <div style="clear: both;"><span></span></div>
+    </div>
+    <div class="PrintContent"  >
+      Hi Phuong,<br><br>
+      Benjamin would like a great image in the background of the desktop WebOS layout. This is to make the difference. Could you please specify the attached image as background ? This is the main newscaster of the TV... That should please the customer.<br><br>
+      Thanks a lot,<br><br>
+      Brice Revenant<br>
+      eXo Platform SAS
+    </div>
+    <div class="PrintAttachments"  >
+      <div class="AttachmentTitle">Attachments:</div>
+      <div class="AttachmentContent">
+        <div class="ImageAttachment"><span></span></div>
+        <div class="AttachmentLabel">
+          <div class="NameImage">Melissa Theuriau background for M6.jpg</div>
+          <div class="Size">Size: 49K</div>
         </div>
-        <div class="MiddleLeftViewBoxStyle">
-          <div class="MiddleRightViewBoxStyle">
-            <div class="MiddleCenterViewBoxStyle">
-              <div class="MessageHeader">
-                <div class="MessageCheck">
-                  <div class="UnStarredIcon" title="Add star for this message"><span></span></div>
-                  <div style="clear: left;"><span></span></div>
-                </div>
-                <div class="MessageAddress">
-                  <div class="FieldContainer">
-                    <div class="Title">From:</div>
-                    <div class="LinkAddress">
-                   
-
-                    </div>  
-                    <div style="clear: left;"><span></span></div>
-                  </div>
-                  <div class="FieldContainer">
-                    <div class="Title">Reply-to:</div>
-                    <div class="LinkAddress"> 
-
-                    </div>
-                    <div style="clear: left;"><span></span></div>
-                  </div>
-                  <div class="FieldContainer">
-                    <div class="Title">To:</div>
-                    <div class="LinkAddress"> 
-                 
-                    </div>
-                    <div style="clear: left;"><span></span></div>
-                  </div>
-                  <div class="FieldContainer">
-                    <div class="Title">Date & time:</div>
-                    <div class="Address">
-                    
-                    </div>
-                    <div style="clear: left;"><span></span></div>
-                  </div>
-
-                  <div class="FieldContainer">
-                    <div class="Title">Attachment:</div>
-                    <div class="Address">
-                      
-                    </div>
-                    <div style="clear: left;"><span></span></div>
-                  </div>
-                  
-                </div>
-                <div class="MessageActions" >
-                  <div class="DownArrow1Icon"><span></span></div>
-                  <div class="ShowHideTitle">Hide deails</div>
-                  <div class="MonthDate">June 26</div>
-                  <div class="Actions" title="Actions on this message"><span></span></div>
-                  <div style="clear: both;"><span></span></div>
-                </div>
-                <div style="clear: both;"><span></span></div>
-              </div>
-              <div class="MessageDetails">
-                
-              </div>                      
-            </div>                    
-          </div>
-        </div>
-        <div class="BottomLeftViewBoxStyle">
-          <div class="BottomRightViewBoxStyle">
-            <div class="BottomCenterViewBoxStyle"><span></span></div>                   
-          </div>
-        </div>
+        <div style="clear: left;"><span></span></div>
       </div>
     </div>
-<!--  End DecoratorBox ViewBoxStyle -->
   </div>
-
-  <div class="SubjectMail">
-  <div class="WelcomeMail">
-    <div class="LabelWelcomeMail">Welcome to</div>
-    <div class="LabelComment">please do not reply to this message !</div>
-    <div style="clear: both;"><span></span></div>
+  <% uiform.end() %>
+  <!--  End PrintPriview -->
+  <style type="text/css" media="print">
+    .DisablePrint{display:none;}
+  </style>
+  <div class="UIAction DisablePrint">
+    <table class="ActionContainer" align="center">
+      <tr>
+        <td align="center">
+          <% 
+             String actionLabel = _ctx.appRes(uicomponent.getName() + ".action.Print") ;             
+          %>
+          <a href="" onclick="eXo.mail.UIMailPortlet.printMessage()" class="ActionButton LightBlueStyle">
+            <div class="ButtonLeft">
+              <div class="ButtonRight">
+                <div class="ButtonMiddle">
+                  $actionLabel
+                </div>
+              </div>
+            </div>
+          </a>
+          <% 
+            String actionLabel2 = _ctx.appRes(uicomponent.getName() + ".action.Cancel") ;   
+            String link = uicomponent.event("Cancel") ;
+          %>
+          <a href="$link" class="ActionButton LightBlueStyle">
+            <div class="ButtonLeft">
+              <div class="ButtonRight">
+                <div class="ButtonMiddle">
+                  $actionLabel2
+                </div>
+              </div>
+            </div>
+          </a>
+        </td>
+      </tr>
+    </table>
   </div>
-  <div class="LogoMail">
-    <span></span>
-  </div>
-  <div class="OverviewMail">
-    Overview
-  </div>
-  <div class="ContentMail">
-    eXo Mail is an open-source mail that is built on foudation of eXo WebOS with variety of new features designed to make your e-mail experience more productive and convenience, as a new way to view your mails inbox and conversation and help to reduce risks and annoyances such as phishing and junk e-mail. Easy to approach the basics as writing, reading, finding and  much more...
-  </div>
-  <div class="FeaturesMail">
-    Features
-  </div>
-  <div class="ContentMail">
-    eXo Mail is an open-source mail that is built on foudation of eXo WebOS with variety of new features designed to make your e-mail experience more productive and convenience, as a new way to view your mails inbox and conversation and help to reduce risks and annoyances such as phishing and junk e-mail. Easy to approach the basics as writing, reading, finding and  much more...
-  </div>
-  </div>
-
-</div>
-
 </div>
