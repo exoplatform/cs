@@ -1,0 +1,126 @@
+<%
+  import org.exoplatform.web.application.JavascriptManager;
+  def rcontext = _ctx.getRequestContext() ;
+  JavascriptManager jsmanager = rcontext.getJavascriptManager();
+  jsmanager.importJavascript('eXo.mail.UIMailPortlet');
+  jsmanager.addOnLoadJavascript("eXo.mail.UIMailPortlet.initIframe(document.getElementById('printa'), document.getElementById('aaaa'))");
+%>
+
+<iframe id="printa" name="printa" width="100%"></iframe>
+
+<div id="aaaa">
+<div class="UIMessagePreview" id="<%=uicomponent.getId()%>">
+  <div class="ReadingPaneBar">
+    <div class="Subject"><span>Subject: </span><span>
+    </span></div>
+    <div class="MaximizeReadingPane" title="Maximize Reading Pane"><span></span></div>
+    <div style="clear:both;"><span></span></div>
+  </div>
+  <div class="ReadingPaneDetails">
+<!--  Start DecoratorBox ViewBoxStyle -->
+    <div class="DecoratorBox">
+      <div class="ViewBoxStyle">
+        <div class="TopLeftViewBoxStyle">
+          <div class="TopRightViewBoxStyle">
+            <div class="TopCenterViewBoxStyle"><span></span></div>                    
+          </div>
+        </div>
+        <div class="MiddleLeftViewBoxStyle">
+          <div class="MiddleRightViewBoxStyle">
+            <div class="MiddleCenterViewBoxStyle">
+              <div class="MessageHeader">
+                <div class="MessageCheck">
+                  <div class="UnStarredIcon" title="Add star for this message"><span></span></div>
+                  <div style="clear: left;"><span></span></div>
+                </div>
+                <div class="MessageAddress">
+                  <div class="FieldContainer">
+                    <div class="Title">From:</div>
+                    <div class="LinkAddress">
+                   
+
+                    </div>  
+                    <div style="clear: left;"><span></span></div>
+                  </div>
+                  <div class="FieldContainer">
+                    <div class="Title">Reply-to:</div>
+                    <div class="LinkAddress"> 
+
+                    </div>
+                    <div style="clear: left;"><span></span></div>
+                  </div>
+                  <div class="FieldContainer">
+                    <div class="Title">To:</div>
+                    <div class="LinkAddress"> 
+                 
+                    </div>
+                    <div style="clear: left;"><span></span></div>
+                  </div>
+                  <div class="FieldContainer">
+                    <div class="Title">Date & time:</div>
+                    <div class="Address">
+                    
+                    </div>
+                    <div style="clear: left;"><span></span></div>
+                  </div>
+
+                  <div class="FieldContainer">
+                    <div class="Title">Attachment:</div>
+                    <div class="Address">
+                      
+                    </div>
+                    <div style="clear: left;"><span></span></div>
+                  </div>
+                  
+                </div>
+                <div class="MessageActions" >
+                  <div class="DownArrow1Icon"><span></span></div>
+                  <div class="ShowHideTitle">Hide deails</div>
+                  <div class="MonthDate">June 26</div>
+                  <div class="Actions" title="Actions on this message"><span></span></div>
+                  <div style="clear: both;"><span></span></div>
+                </div>
+                <div style="clear: both;"><span></span></div>
+              </div>
+              <div class="MessageDetails">
+                
+              </div>                      
+            </div>                    
+          </div>
+        </div>
+        <div class="BottomLeftViewBoxStyle">
+          <div class="BottomRightViewBoxStyle">
+            <div class="BottomCenterViewBoxStyle"><span></span></div>                   
+          </div>
+        </div>
+      </div>
+    </div>
+<!--  End DecoratorBox ViewBoxStyle -->
+  </div>
+
+  <div class="SubjectMail">
+  <div class="WelcomeMail">
+    <div class="LabelWelcomeMail">Welcome to</div>
+    <div class="LabelComment">please do not reply to this message !</div>
+    <div style="clear: both;"><span></span></div>
+  </div>
+  <div class="LogoMail">
+    <span></span>
+  </div>
+  <div class="OverviewMail">
+    Overview
+  </div>
+  <div class="ContentMail">
+    eXo Mail is an open-source mail that is built on foudation of eXo WebOS with variety of new features designed to make your e-mail experience more productive and convenience, as a new way to view your mails inbox and conversation and help to reduce risks and annoyances such as phishing and junk e-mail. Easy to approach the basics as writing, reading, finding and  much more...
+  </div>
+  <div class="FeaturesMail">
+    Features
+  </div>
+  <div class="ContentMail">
+    eXo Mail is an open-source mail that is built on foudation of eXo WebOS with variety of new features designed to make your e-mail experience more productive and convenience, as a new way to view your mails inbox and conversation and help to reduce risks and annoyances such as phishing and junk e-mail. Easy to approach the basics as writing, reading, finding and  much more...
+  </div>
+  </div>
+
+</div>
+
+</div>

@@ -285,11 +285,11 @@
             %>
    	        <a href = "$sortedBySize"><div class="$classArrowSize" title="Sort by Size">Size</div></a>
    	      </th>
-   	      <th style="width: 24px;">
+   	      <th style="width: 30px;">
        	    <%
                String sortedByPriority = uicomponent.event("Sort",Utils.EXO_PRIORITY);
             %>
-   	        <a href = "$sortedByPriority"><div class="PriorityIcon"><span></span></div></a>
+   	        <a href = "$sortedByPriority"><div class="PriorityIcon" title="Sort by Priority"><span></span></div></a>
    	      </th>
     	 	</tr>
     	</thead>
