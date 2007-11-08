@@ -15,7 +15,7 @@
                   <div class="QuickSet">
                     <div class="SearchTitle">Search:</div>
                     <% uiform.renderField(uiform.CONTACT_SEARCH) %>
-                    <a class="SearchIcon" href="#" title="Quick Search"><span></span></a>
+                    <a class="SearchIcon" href="<%=uicomponent.event("SearchContact")%>" title="Quick Search"><span></span></a>
                   </div>  
                 </div>
                 <div class="AddressesGroup">

@@ -22,6 +22,7 @@ import org.exoplatform.mail.webui.popup.UIImportForm;
 import org.exoplatform.mail.webui.popup.UIMoveMessageForm;
 import org.exoplatform.mail.webui.popup.UIPopupAction;
 import org.exoplatform.mail.webui.popup.UIPopupActionContainer;
+import org.exoplatform.mail.webui.popup.UIPrintPreview;
 import org.exoplatform.mail.webui.popup.UITagForm;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -51,6 +52,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
         @EventConfig(listeners = UIMessageList.ReplyAllActionListener.class),
         @EventConfig(listeners = UIMessageList.ForwardActionListener.class), 
         @EventConfig(listeners = UIMessageList.DeleteActionListener.class),
+        @EventConfig(listeners = UIMessageList.PrintActionListener.class),
         @EventConfig(listeners = UIMessageList.MarkAsReadActionListener.class),
         @EventConfig(listeners = UIMessageList.MarkAsUnReadActionListener.class),
         @EventConfig(listeners = UIMessageList.AddStarActionListener.class),
@@ -68,6 +70,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
         @EventConfig(listeners = UIMessageList.AddTagActionListener.class),
         @EventConfig(listeners = UIMessageList.MoveMessagesActionListener.class),
         @EventConfig(listeners = UIMessageList.MoveDirectMessagesActionListener.class),
+        @EventConfig(listeners = UIMessageList.ImportActionListener.class),
         @EventConfig(listeners = UIMessageList.ImportActionListener.class),
         @EventConfig(listeners = UIMessageList.ExportActionListener.class),
         @EventConfig(listeners = UIMessageList.SortActionListener.class)
@@ -462,6 +465,20 @@ public class UIMessageList extends UIForm {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageArea);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiTags);
+    }
+  }
+  
+  static public class PrintActionListener extends EventListener<UIMessageList> {
+    public void execute(Event<UIMessageList> event) throws Exception {
+      System.out.println(" === >>> Print Action");
+      UIMessageList uiMessageList = event.getSource();
+      String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      if (msgId == null) msgId = uiMessageList.getSelectedMessageId();
+      UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
+      UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
+      UIPrintPreview uiPrintPreview = uiPopup.activate(UIPrintPreview.class, 700) ;
+      uiPrintPreview.setPrintMessage(msgId) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup) ;
     }
   }
   

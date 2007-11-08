@@ -121,4 +121,19 @@ UIMailPortlet.prototype.checkAll = function(obj) {
 
 UIMailPortlet.prototype.readMessage = function() {} ;
 
+UIMailPortlet.prototype.initIframe = function(obj, obj2) {
+	document.getElementById("UIPortalApplication").style.display = "none";
+	//obj.contentDocument.body.innerHTML = obj2.innerHTML;
+	var root1 = document.createElement('div') ;
+	root1.className = 'UIMailPortlet' ;
+	var root2 = document.createElement('div') ;
+	root2.className = 'MailWorkingWorkspace' ;
+	var root3 = document.createElement('div') ;
+	root3.className = 'UIMessagePreview' ;
+	root3.appendChild(obj2.cloneNode(true)) ;
+	root2.appendChild(root3) ;
+	root1.appendChild(root2) ;
+	document.body.appendChild(root1) ;
+} ;
+
 eXo.mail.UIMailPortlet = new UIMailPortlet();

@@ -11,8 +11,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.exoplatform.contact.service.Contact;
+import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
+import org.exoplatform.contact.service.DataPageList;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.portal.webui.util.Util;
@@ -37,6 +39,8 @@ import org.exoplatform.webui.form.UIFormStringInput;
 @ComponentConfig(lifecycle = UIFormLifecycle.class, 
     template = "app:/templates/mail/webui/UIAddressForm.gtmpl", 
     events = {
+      @EventConfig(listeners = UIAddressForm.ChangeGroupActionListener.class),
+      @EventConfig(listeners = UIAddressForm.SearchContactActionListener.class),
       @EventConfig(listeners = UIAddressForm.SaveActionListener.class),
       @EventConfig(listeners = UIAddressForm.CancelActionListener.class, phase = Phase.DECODE)
     })
@@ -45,6 +49,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
   public static final String ALL_GROUP_ITEM = "All Group".intern();
   public static final String CONTACT_SEARCH = "contact-search".intern();
   public static final String CONTACT_GROUP = "contact-group".intern();
+  public static final String CHANGE_GROUP = "change-group".intern();
   
   private List<Contact> alreadyCheckedContact = new ArrayList<Contact>();
   
@@ -67,7 +72,9 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       options.add(new SelectItemOption<String>(group.getName(), group.getId()));
     }
     addUIFormInput(new UIFormStringInput(CONTACT_SEARCH, CONTACT_SEARCH, null));
-    addUIFormInput(new UIFormSelectBox(CONTACT_GROUP, CONTACT_GROUP, options));
+    UIFormSelectBox uiSelectGroup = new UIFormSelectBox(CONTACT_GROUP, CONTACT_GROUP, options);
+    uiSelectGroup.setOnChange("ChangeGroup");
+    addUIFormInput(uiSelectGroup);
     setContactList();
   }
 
@@ -145,6 +152,32 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
     }
     return contactList;
   }
+  
+  static public class ChangeGroupActionListener extends EventListener<UIAddressForm> {
+    public void execute(Event<UIAddressForm> event) throws Exception {
+      UIAddressForm uiAddressForm = event.getSource();
+      String groupId = uiAddressForm.getUIFormSelectBox(CONTACT_GROUP).getValue();
+      uiAddressForm.setContactList(groupId);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressForm);
+    }
+  }
+  
+  static public class SearchContactActionListener extends EventListener<UIAddressForm> {
+    public void execute(Event<UIAddressForm> event) throws Exception {
+      UIAddressForm uiAddressForm = event.getSource();
+      String groupId = uiAddressForm.getUIFormSelectBox(CONTACT_GROUP).getValue();
+      String text = uiAddressForm.getUIStringInput(CONTACT_SEARCH).getValue();
+      String username = MailUtils.getCurrentUser();
+      ContactService contactSrv = uiAddressForm.getApplicationComponent(ContactService.class);
+      ContactFilter filter = new ContactFilter();
+      if (groupId != null && !groupId.equals("")) 
+        filter.setCategories(new String[] {groupId});
+      filter.setText(text);
+      DataPageList pageList = contactSrv.searchContact(username, filter);
+      uiAddressForm.setContactList(pageList.getAll());
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressForm);
+    }
+  }
 
   static public class SaveActionListener extends EventListener<UIAddressForm> {
     public void execute(Event<UIAddressForm> event) throws Exception {
@@ -156,17 +189,17 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       }
 
       UIComposeForm uiComposeForm = uiPortlet.findFirstComponentOfType(UIComposeForm.class);
-      if (uiAddressForm.getRecipientType().equals("To")) {
+      if (uiAddressForm.getRecipientType().equals("to")) {
         uiComposeForm.setFieldToValue(toAddress);
         uiComposeForm.setToContacts(uiAddressForm.getCheckedContact());
       }
 
-      if (uiAddressForm.getRecipientType().equals("Cc")) {
+      if (uiAddressForm.getRecipientType().equals("cc")) {
         uiComposeForm.setFieldCcValue(toAddress);
         uiComposeForm.setCcContacts(uiAddressForm.getCheckedContact());
       }
 
-      if (uiAddressForm.getRecipientType().equals("Bcc")) {
+      if (uiAddressForm.getRecipientType().equals("bcc")) {
         uiComposeForm.setFieldBccValue(toAddress);
         uiComposeForm.setBccContacts(uiAddressForm.getCheckedContact());
       }
