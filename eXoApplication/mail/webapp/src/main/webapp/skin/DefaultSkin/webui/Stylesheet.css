@@ -812,3 +812,83 @@
 	border-bottom: 1px solid #c7c7c7;
 }
 
+/*=======================Print Priview Mail========================*/
+.UIMailPortlet .PrintPriview {
+	padding: 8px;
+}
+
+.UIMailPortlet .PrintPriview .PrintHeader {
+	height: 49px; 
+}
+
+.UIMailPortlet .PrintPriview .PrintHeader .PrintLogoMail {
+	background: url('background/LogoMail346x49.gif') no-repeat left;
+	float: left;
+	width: 346px; height: 49px;
+}
+
+.UIMailPortlet .PrintPriview .PrintHeader .PrintUser {
+	color: #272727;
+	padding:5px 0px;
+	margin-left: 350px;
+	font-weight: bolder;
+	border-bottom: 1px solid #bbbbbb;
+	text-align: right;
+}
+
+.UIMailPortlet .PrintPriview .PrintSubject {
+	font-size: 12px; font-weight: bolder;
+	border-bottom: 1px solid #bbbbbb;
+	margin: 8px;
+	padding:5px 0px;
+}
+
+.UIMailPortlet .PrintPriview .PrintAddress {
+	padding: 8px; 
+	height: 30px;
+}
+
+.UIMailPortlet .PrintPriview .PrintAddress .FromAndTo {
+	float: left;
+}
+
+.UIMailPortlet .PrintPriview .PrintAddress .PrintFrom {
+}
+
+.UIMailPortlet .PrintPriview .PrintAddress .PrintTo {
+}
+
+.UIMailPortlet .PrintPriview .PrintAddress .DateAndTime {
+	float: right;
+	padding: 4px 0px;
+}
+
+.UIMailPortlet .PrintPriview .PrintContent {
+	padding: 16px 8px;
+}
+
+.UIMailPortlet .PrintPriview .PrintAttachments .AttachmentTitle {
+	background: #e7e7e7 url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/AttachmentIcon.gif') no-repeat 3px center;
+	padding-left: 20px;
+	line-height: 25px;
+	font-weight: bold;
+	white-space: nowrap;
+}
+
+.UIMailPortlet .PrintPriview .PrintAttachments .ImageAttachment {
+	float: left;
+	background: url('background/ImageAttachment.gif') no-repeat;
+	height: 110px; 
+	width: 145px;
+	margin: 5px;
+}
+
+.UIMailPortlet .PrintPriview .PrintAttachments .AttachmentLabel {
+	padding: 10px 4px 0px 0px;
+	float:left;
+}
+
+.UIMailPortlet .PrintPriview .PrintAttachments .NameImage {
+	font-weight: bolder;
+}
+
