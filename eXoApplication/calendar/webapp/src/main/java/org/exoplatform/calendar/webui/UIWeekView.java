@@ -4,8 +4,6 @@
  **************************************************************************/
 package org.exoplatform.calendar.webui;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -16,12 +14,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.faces.component.UIViewRoot;
-
-import org.apache.commons.collections.map.LinkedMap;
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
+import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.webui.popup.UIPopupAction;
 import org.exoplatform.calendar.webui.popup.UIQuickAddEvent;
@@ -31,9 +27,6 @@ import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
-import org.omg.PortableInterceptor.LOCATION_FORWARD;
-
-import com.sun.xml.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 
 /**
  * Created by The eXo Platform SARL
@@ -117,10 +110,18 @@ public class UIWeekView extends UICalendarView {
     calendar_.add(Calendar.WEEK_OF_YEAR, weeks) ;
   }
 
-  protected List<Calendar> getDaysOfWeek(int week) {
+  protected List<Calendar> getDaysOfWeek(int week) throws Exception {
     List<Calendar> calendarData = new ArrayList<Calendar>() ;
     Calendar cl = GregorianCalendar.getInstance() ;
     if(!isShowCustomView_) {
+      CalendarSetting calSetting  = null ;
+      try{
+        calSetting = getAncestorOfType(UICalendarPortlet.class).getCalendarSetting() ;
+      } catch (Exception e) {
+        CalendarService calService = getApplicationComponent(CalendarService.class) ;
+        calSetting  = calService.getCalendarSetting(Util.getPortalRequestContext().getRemoteUser()) ;
+      }
+      cl.setFirstDayOfWeek(Integer.parseInt(calSetting.getWeekStartOn())) ;
       cl.set(Calendar.WEEK_OF_YEAR, week) ;
       int day = cl.get(Calendar.DATE) ;
       int month = cl.get(Calendar.MONTH) ;
@@ -131,6 +132,7 @@ public class UIWeekView extends UICalendarView {
       day = cl.get(Calendar.DATE) ;
       month = cl.get(Calendar.MONTH) ;
       year = cl.get(Calendar.YEAR) ;
+      
       for(int d = 1 ;  d < 7 ; d++) {
         calendarData.add(getDateByValue(year, month, day, UICalendarView.TYPE_DATE, d)) ;
       }

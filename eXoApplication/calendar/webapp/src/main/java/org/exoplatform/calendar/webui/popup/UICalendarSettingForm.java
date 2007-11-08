@@ -18,6 +18,7 @@ import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
+import org.exoplatform.calendar.webui.UICalendarView;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -84,13 +85,13 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
     setting.addUIFormInput(new UIFormSelectBox(TIME_INTERVAL, TIME_INTERVAL, timeInterval)) ;
 
     List<SelectItemOption<String>> weekStartOn = new ArrayList<SelectItemOption<String>>() ;
-    weekStartOn.add(new SelectItemOption<String>("Monday", CalendarSetting.MONDAY)) ;
-    weekStartOn.add(new SelectItemOption<String>("Tuesday", CalendarSetting.TUESDAY)) ;
+    weekStartOn.add(new SelectItemOption<String>(UICalendarView.MONDAY, String.valueOf(java.util.Calendar.MONDAY))) ;
+    /*weekStartOn.add(new SelectItemOption<String>("Tuesday", CalendarSetting.TUESDAY)) ;
     weekStartOn.add(new SelectItemOption<String>("Wendnesday", CalendarSetting.WENDNESDAY)) ;
     weekStartOn.add(new SelectItemOption<String>("Thursday", CalendarSetting.THURSDAY)) ;
     weekStartOn.add(new SelectItemOption<String>("Friday", CalendarSetting.FRIDAY)) ;
-    weekStartOn.add(new SelectItemOption<String>("Saturday", CalendarSetting.SATURDAY)) ;
-    weekStartOn.add(new SelectItemOption<String>("Sunday", CalendarSetting.SUNDAY)) ;    
+    weekStartOn.add(new SelectItemOption<String>("Saturday", CalendarSetting.SATURDAY)) ;*/
+    weekStartOn.add(new SelectItemOption<String>(UICalendarView.SUNDAY, String.valueOf(java.util.Calendar.SUNDAY))) ;    
     setting.addUIFormInput(new UIFormSelectBox(WEEK_START_ON, WEEK_START_ON, weekStartOn)) ;
 
     List<SelectItemOption<String>> dateFormat = new ArrayList<SelectItemOption<String>>() ;
@@ -286,7 +287,6 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
         calendarSetting.setShowWorkingTime(uiForm.getShowWorkingTimes()) ;
         calendarSetting.setWorkingTimeBegin(uiForm.getWorkingBegin()) ;
         calendarSetting.setWorkingTimeEnd(uiForm.getWorkingEnd()) ;
-
       }
       List<String> defaultCalendars = new ArrayList<String>() ;
       List<UIComponent> children = ((UIFormInputWithActions)uiForm.getChildById("defaultCalendars")).getChildren() ;//UIFormInputWithActions("defaultCalendars"
