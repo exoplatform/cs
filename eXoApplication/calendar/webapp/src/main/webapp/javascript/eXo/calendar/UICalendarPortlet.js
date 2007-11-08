@@ -7,8 +7,10 @@ function UICalendarPortlet() {
 /* for general calendar */
 UICalendarPortlet.prototype.timeToMin = function(timeFormat) {
 	var pm = false ;
+	var am = false ;
 	timeFormat = timeFormat.toString().trim() ;
 	if (timeFormat.indexOf("PM") != -1) pm = true ;
+	if (timeFormat.indexOf("AM") != -1) am = true ;
 	var format = /\d{2}\s*:\s*\d{2}\s*AM|PM/ ;
 	var hour = null ;
 	var min = null ;
@@ -18,7 +20,12 @@ UICalendarPortlet.prototype.timeToMin = function(timeFormat) {
 	timeFormat = timeFormat.split(":") ;
 	hour = Number(timeFormat[0].toString().trim()) ;
 	min = Number(timeFormat[1].toString().trim()) ;
-	hour = (pm) ? hour + 11 : hour ;
+	if(pm) {		
+		hour = (hour != 12) ? hour + 12 : hour ;
+	}
+	if(am) {		
+		hour = (hour != 12) ? hour : 0 ;
+	}
 	min += hour*60 ;
 	return min ;
 }	;
@@ -135,35 +142,18 @@ UICalendarPortlet.prototype.show = function(obj, evt) {
 //	}
 ////	var uiPopupCategory = eXo.core.DOMUtil.findFirstDescendantByClass(obj, "div", "UIPopupCategory") ;
 //} ;
-UICalendarPortlet.prototype.setCookie = function(name,value,expiredays) {
-	var exdate = new Date() ;
-	exdate.setDate(exdate.getDate() + expiredays) ;
-	document.cookie = name + "=" + escape(value) + ((expiredays==null) ? "" : ";expires="+exdate.toGMTString()) ;
-} ;
 
-UICalendarPortlet.prototype.getCookie = function(name) {
-	if (document.cookie.length > 0) {
-		var start = document.cookie.indexOf(name + "=")
-		if (start != -1) {
-			start = start + name.length + 1 ;
-	    end = document.cookie.indexOf(";",start) ;
-	    if (end == -1) end = document.cookie.length ;
-	    	return unescape(document.cookie.substring(start,end)) ;
-	  } 
-	}
-	return "" ;
-} ;
 
 UICalendarPortlet.prototype.checkLayout = function() {
 	try{
-		var	layout = parseInt(this.getCookie("layoutmode")) ;
-		var	display = this.getCookie("displaymode") ;
-		var	display0 = this.getCookie("displaymode0") ;
-		var	display1 = this.getCookie("displaymode1") ;
+		var Browser = eXo.core.Browser ;
+		var	display = Browser.getCookie("displaymode") ;
+		var	display0 = Browser.getCookie("displaymode0") ;
+		var	display1 = Browser.getCookie("displaymode1") ;
 		var	layout0 = document.getElementById("UIMiniCalendar") ;
 		var	layout1 = document.getElementById("UICalendars").parentNode ;
 		var	layout3 = document.getElementById("UICalendarContainer") ;
-		var workingarea = eXo.core.DOMUtil.findNextElementByTagName(layout3, "div") ;	
+		var workingarea = eXo.core.DOMUtil.findNextElementByTagName(layout3, "div") ;
 	}catch(e) {
 		return ;
 	}
@@ -173,9 +163,8 @@ UICalendarPortlet.prototype.checkLayout = function() {
 	layout1.style.display = display1 ;
 } ;
 
-UICalendarPortlet.prototype.switchLayout = function(layout) {
-	
-	var UICalendarPortlet =	eXo.calendar.UICalendarPortlet ;
+UICalendarPortlet.prototype.switchLayout = function(layout) {	
+	var Browser = eXo.core.Browser ;
 	layout = parseInt(layout) ;
 	var	layout0 = document.getElementById("UIMiniCalendar") ;
 	var	layout1 = document.getElementById("UICalendars").parentNode ;
@@ -189,17 +178,17 @@ UICalendarPortlet.prototype.switchLayout = function(layout) {
 				layout1.style.display = "block" ;				
 				layout3.style.display = "block" ;												
 				workingarea.style.marginLeft = "243px"	;
-				UICalendarPortlet.setCookie("displaymode","block",7) ;
-				UICalendarPortlet.setCookie("displaymode0","block",7) ;
-				UICalendarPortlet.setCookie("displaymode1","block",7) ;
+				Browser.setCookie("displaymode","block",7) ;
+				Browser.setCookie("displaymode0","block",7) ;
+				Browser.setCookie("displaymode1","block",7) ;
 			} else {
 				layout0.style.display = "none" ;
 				layout1.style.display = "none" ;
 				layout3.style.display = "none" ;
 				workingarea.style.marginLeft = "0px"	;
-				UICalendarPortlet.setCookie("displaymode","none",7) ;
-				UICalendarPortlet.setCookie("displaymode0","none",7) ;
-				UICalendarPortlet.setCookie("displaymode1","none",7) ;
+				Browser.setCookie("displaymode","none",7) ;
+				Browser.setCookie("displaymode0","none",7) ;
+				Browser.setCookie("displaymode1","none",7) ;
 			}
 			break ;
 		case 1 :
@@ -207,17 +196,17 @@ UICalendarPortlet.prototype.switchLayout = function(layout) {
 				layout0.style.display = "block" ;
 				layout3.style.display = "block" ;
 				workingarea.style.marginLeft = "243px"	;			
-				UICalendarPortlet.setCookie("displaymode","block",7) ;
-				UICalendarPortlet.setCookie("displaymode0","block",7) ;
+				Browser.setCookie("displaymode","block",7) ;
+				Browser.setCookie("displaymode0","block",7) ;
 			}
 			else {
 				layout0.style.display = "none" ;
 				if(layout1.style.display == "none") {
-					UICalendarPortlet.setCookie("displaymode","none",7) ;
+					Browser.setCookie("displaymode","none",7) ;
 					workingarea.style.marginLeft = "0px"	;
 					layout3.style.display = "none" ;
 				}
-				UICalendarPortlet.setCookie("displaymode0","none",7) ;	
+				Browser.setCookie("displaymode0","none",7) ;	
 			}
 			break ;
 		case 2 :
@@ -225,18 +214,18 @@ UICalendarPortlet.prototype.switchLayout = function(layout) {
 				layout1.style.display = "block" ;
 				layout3.style.display = "block" ;
 				workingarea.style.marginLeft = "243px"	;
-				UICalendarPortlet.setCookie("displaymode","block",7) ;
-				UICalendarPortlet.setCookie("displaymode1","block",7) ;
+				Browser.setCookie("displaymode","block",7) ;
+				Browser.setCookie("displaymode1","block",7) ;
 
 			}
 			else {				
 				layout1.style.display = "none" ;
 				if(layout0.style.display == "none") {
-					UICalendarPortlet.setCookie("displaymode","none",7) ;
+					Browser.setCookie("displaymode","none",7) ;
 					workingarea.style.marginLeft = "0px"	;
 					layout3.style.display = "none" ;
 				}
-				UICalendarPortlet.setCookie("displaymode1","none",7) ;	
+				Browser.setCookie("displaymode1","none",7) ;	
 			}
 			break ;
 	}
