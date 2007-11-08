@@ -252,7 +252,7 @@
 				<%if(isDisplaySearchResult) {
 						if (contacts.length == 0) {	
 				%>
-				<div style="text-align : center" class="text">Not result found</div>
+				<div style="text-align : center" class="MessageNotice">Not result found</div>
 				<% } %>
 				
 				<div class="UIAction"> 

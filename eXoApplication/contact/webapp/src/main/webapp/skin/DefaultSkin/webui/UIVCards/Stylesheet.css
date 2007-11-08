@@ -6,6 +6,7 @@
 .UIVCards .VCardsBar {
 	background: #e7e7e7;
 	line-height: 27px;
+	height: 27px;
 	padding: 0px 0px 0px 5px ;
 }
 
@@ -14,6 +15,7 @@
 	padding-left: 25px;
 	font-size: 14px;
 	font-weight: bold;
+	float: left;
 }
 
 .UIVCards .UIVCardsContent {
