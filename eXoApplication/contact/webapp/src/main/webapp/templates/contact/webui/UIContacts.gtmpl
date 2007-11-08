@@ -12,6 +12,32 @@
 	//rcontext.getJavascriptManager().addJavascript("eXo.contact.UIContactDragDrop.init() ;") ;
 	uiform.begin()
 	boolean isDisplaySearchResult = uicomponent.isDisplaySearchResult() ;
+	
+	
+	JCRPageList pageList = uicomponent.getContactPageList();
+  String cssPreviousPage = "FloatBlockHidden";
+  String cssNextPage = "FloatBlockHidden";
+  String contactRange = "";	
+  Contact[] contacts = uicomponent.getContacts();		          
+  if (pageList != null && (contacts.length != 0)) {
+    currentPage = pageList.getCurrentPage();
+    availablePage = pageList.getAvailablePage() ;
+    availableContact =  pageList.getAvailable() ;
+    pageSize = pageList.getPageSize() ;
+    if (currentPage > 1) cssPreviousPage = "FloatBlock";
+    if (currentPage < availablePage) cssNextPage = "FloatBlock";
+    long fromIndex = (currentPage - 1)* pageSize + 1;
+    long endIndex = fromIndex-1 + pageSize;
+    if (currentPage == availablePage) endIndex = availableContact;
+    if (fromIndex == endIndex)
+    	contactRange = "Contacts " + fromIndex + " of " + availableContact ;
+    else 
+    	contactRange = "Contacts " + fromIndex + " - " + endIndex + " of " + availableContact ;
+  }
+	
+	
+	
+	
 	if(uicomponent.getViewContactsList()) {
 		if(isDisplaySearchResult) {
 %>
@@ -29,7 +55,7 @@
 					<a href="<%=uicomponent.event("TagChecked")%>" class="ControlButton">
 						<div class="Icon SelectTagIcon"title="tag"><span></span></div>
 					</a>
-					<a href="<%=uicomponent.getParent().event("SendEmail")%>" class="ControlButton">
+					<a href="#" class="ControlButton">
 						<div class="Icon MessageIcon" title="send mail"><span></span></div>
 					</a>
 					<div class="SeparatorLine"><span></span></div>
@@ -49,31 +75,6 @@
 					<div class="UIAddressPageList">
 						<div class="ContactIteratorContainer">
 	  					<div class="RightPageIteratorBlock">
-	  					
-	  					<% 
-			          JCRPageList pageList = uicomponent.getContactPageList();
-			          String cssPreviousPage = "FloatBlockHidden";
-			          String cssNextPage = "FloatBlockHidden";
-			          String contactRange = "";	
-			          Contact[] contacts = uicomponent.getContacts();		          
-			          if (pageList != null && (contacts.length != 0)) {
-			            currentPage = pageList.getCurrentPage();
-			            availablePage = pageList.getAvailablePage() ;
-			            availableContact =  pageList.getAvailable() ;
-			            pageSize = pageList.getPageSize() ;
-			            if (currentPage > 1) cssPreviousPage = "FloatBlock";
-			            if (currentPage < availablePage) cssNextPage = "FloatBlock";
-			            long fromIndex = (currentPage - 1)* pageSize + 1;
-			            long endIndex = fromIndex-1 + pageSize;
-			            if (currentPage == availablePage) endIndex = availableContact;
-			            if (fromIndex == endIndex)
-			            	contactRange = "Contacts " + fromIndex + " of " + availableContact ;
-			            else 
-			            	contactRange = "Contacts " + fromIndex + " - " + endIndex + " of " + availableContact ;
-			          }
-			          
-			        %>
-
 	  						<a href="<%=uicomponent.event("FirstPage")%>" title="First Page" class="$cssPreviousPage FirstPageArrow"/></a>        
 	  						<a href="<%=uicomponent.event("PreviousPage")%>" title="Previous Page" class="$cssPreviousPage PreviousPageArrow"></a>
 								<div class="Number">$contactRange</div>
@@ -159,15 +160,13 @@
 									if (tagIds != null && tagIds.length > 0) {
 										Tag tag = ContactUtils.getContactService().getTag(ContactUtils.getCurrentUser(), tagIds[0]) ;
 										if (tag != null) iconTag += + tag.getColor() + "Tag" ; 
-									}
-										
+									}	
 
 									// add
 	  	 	    			String[] categories = contact.getCategories() ;
 	  	 	    			for (category in categories) {
 	  	 	    				cssClass = "" ;
 										if (contact.getId().equals(uicomponent.getSelectedContact())) cssClass = "Selected" ;
-										
 	  	 	    				String groupName ;
 	  	 	    				if (ContactUtils.isPublicGroup(category)) groupName = category ;
 	  	 	    				else {
@@ -187,15 +186,15 @@
 								<td class="text">
 									<div class="State OnlineIcon" title="Available">
 										<a href="$actionLink">
-											<%=(ContactUtils.isEmpty(contact.getFullName()) ? "" : contact.getFullName())%>
+											<%=(ContactUtils.isEmpty(contact.getFullName()) ? "_" : contact.getFullName())%>
 										</a>
 									</div>
 								</td>
-								<td class="text"><a href="$actionLink"><%=(ContactUtils.isEmpty(contact.getEmailAddress()) ? "" : contact.getEmailAddress())%></a></td>
-								<td class="text"><a href="$actionLink"><%=(ContactUtils.isEmpty(contact.getJobTitle()) ? "" : contact.getJobTitle())%></a></td>
+								<td class="text"><a href="$actionLink"><%=(ContactUtils.isEmpty(contact.getEmailAddress()) ? "_" : contact.getEmailAddress())%></a></td>
+								<td class="text"><a href="$actionLink"><%=(ContactUtils.isEmpty(contact.getJobTitle()) ? "_" : contact.getJobTitle())%></a></td>
 								<td>
 									<a href="$actionLink">
-										<%=(contact.getWorkPhone1()==null ? (ContactUtils.isEmpty(contact.getWorkPhone2()) ? "" : contact.getWorkPhone2()) : contact.getWorkPhone1())%>
+										<%=(contact.getWorkPhone1()==null ? (ContactUtils.isEmpty(contact.getWorkPhone2()) ? "_" : contact.getWorkPhone2()) : contact.getWorkPhone1())%>
 									</a>
 								</td>
 								
@@ -236,11 +235,11 @@
 										</a>
 									</div>
 								</td>
-								<td class="text"><a href="$actionLink"><%=(ContactUtils.isEmpty(contact.getEmailAddress()) ? "" : contact.getEmailAddress())%></a></td>
-								<td class="text"><a href="$actionLink"><%=(ContactUtils.isEmpty(contact.getJobTitle()) ? "" : contact.getJobTitle())%></a></td>
+								<td class="text"><a href="$actionLink"><%=(ContactUtils.isEmpty(contact.getEmailAddress()) ? "_" : contact.getEmailAddress())%></a></td>
+								<td class="text"><a href="$actionLink"><%=(ContactUtils.isEmpty(contact.getJobTitle()) ? "_" : contact.getJobTitle())%></a></td>
 								<td>
 									<a href="$actionLink">
-										<%=(contact.getWorkPhone1()==null ? (ContactUtils.isEmpty(contact.getWorkPhone2()) ? "" : contact.getWorkPhone2()) : contact.getWorkPhone1())%>
+										<%=(contact.getWorkPhone1()==null ? (ContactUtils.isEmpty(contact.getWorkPhone2()) ? "_" : contact.getWorkPhone2()) : contact.getWorkPhone1())%>
 									</a>
 								</td>
    			     	</tr>
@@ -296,16 +295,16 @@
 	                      <%=_ctx.appRes(uicomponent.getName() + ".label.edit")%>
 	                    </div>
                     </a>
-                    <a class="MenuItem" href="<%=uicomponent.getParent().event("SendEmail", "id")%>">   
-	                    <div class="ItemIcon EmailIcon">
+                     
+	                    <div style="color : gray ;" class="ItemIcon EmailIcon">
 	                      <%=_ctx.appRes(uicomponent.getName() + ".label.sendEmail")%>
 	                    </div>
-                    </a>
-                    <a class="MenuItem" href="<%=uicomponent.event("InstantMessage", "id")%>">   
-	                    <div class="ItemIcon InstantMessage">
+                    
+                      
+	                    <div style="color : gray ;" class="ItemIcon InstantMessage">
 	                      <%=_ctx.appRes(uicomponent.getName() + ".label.instantMessage")%>
 	                    </div>
-                    </a>
+                  
                     <a class="MenuItem" href="<%=uicomponent.event("TagPopup", "id")%>">   
 	                    <div class="ItemIcon BlueTag">
 	                      <%=_ctx.appRes(uicomponent.getName() + ".label.tag")%>
@@ -350,14 +349,37 @@
 	<div class="UIVCards" id="UIVCards">
 	<div class="VCardsBar">
 		<div class="Subject">Vcards in eXo Platform</div>
+		<div class="UIAddressPageList">
+						<div class="ContactIteratorContainer">
+	  					<div class="RightPageIteratorBlock">
+	  						<a href="<%=uicomponent.event("FirstPage")%>" title="First Page" class="$cssPreviousPage FirstPageArrow"/></a>        
+	  						<a href="<%=uicomponent.event("PreviousPage")%>" title="Previous Page" class="$cssPreviousPage PreviousPageArrow"></a>
+								<div class="Number">$contactRange</div>
+	  				 		<a href="<%=uicomponent.event("NextPage")%>" title="Next Page" class="$cssNextPage NextPageArrow"/></a>
+	 				  		<a href="<%=uicomponent.event("LastPage")%>" title="Last Page" class="$cssNextPage LastPageArrow"><span/></a>
+						    <div style="clear: left;"><span/></div>
+						  </div>
+					  </div>
+		</div>
+		<div style="clear: both;"><span/></div>
+		
+		
+		
+		
+		
+		
+		
+		
+		
 	</div>
+	
 	<div class="UIVCardsContent">
+	
 	  <div class="WorkVCardsContent">
 				<% 		
 					DownloadService dservice ;	
 					String imageLink ;					
 					i = 0 ;
-					Contact[] contacts = uicomponent.getContacts() ;
 					Contact contact ;
 					while (i < contacts.length) {
 						contact = contacts[i ++] ;
@@ -368,10 +390,13 @@
 							iconTag = "Icon " + tag.getColor() + "Tag" ; 
 						}
 				%>
+				
+				
+				
 		  <div class="LeftVCardsContent">
 		  	<div class="VCardContent NormalVCard">
 			  	<div class="TitleVCards">
-				  	<div class="StateIcon OnlineIcon"><%=(contact.getFullName()==null ? "" : contact.getFullName())%></div>
+				  	<div class="StateIcon OnlineIcon"><%=(contact.getFullName()==null ? "_" : contact.getFullName())%></div>
 			  		<div class="TagIcon $iconTag"><span></span></div>
 			  		<div style="clear: both;"><span></span></div>
 			  	</div>
@@ -382,27 +407,27 @@
 			  		%>
 						<img src="<%=(imageLink == null ? "/contact/skin/DefaultSkin/webui/background/Img2.gif": imageLink)%>" width=63 height=81 class="AvatasIcon"/>	
 			  		<div class="WorkContainerVCards">
-			  		  <div class="JobMember"><%=(contact.getJobTitle()==null ? "" : contact.getJobTitle())%></div>
+			  		  <div class="JobMember"><%=(contact.getJobTitle()==null ? "_" : contact.getJobTitle())%></div>
 			  		  <div class="InformationsMember">
 			  		  	<div class="InfoMember">
 			  		  		<span class="LabelContent">Email:</span>
 			  		  		<span class="InfoContent MailIcon">
-			  		  			<a href="<%=uicomponent.getParent().event("SendEmail", contact.getId())%>">
-			  		  				<%=(contact.getEmailAddress()== null ? "" : contact.getEmailAddress())%>
+			  		  			<a href="#">
+			  		  				<%=(contact.getEmailAddress()== null ? "_" : contact.getEmailAddress())%>
 			  		  			</a>
 			  		  		</span> 
 			  		  	</div>
 			  		  	<div class="InfoMember">
 			  		  		<span class="LabelContent">Work phone:</span>
-			  		  		<span class="LabelContent"><%=(contact.getWorkPhone1()==null ? "" : contact.getWorkPhone1())%></span>
+			  		  		<span class="LabelContent"><%=(contact.getWorkPhone1()==null ? "_" : contact.getWorkPhone1())%></span>
 			  		  	</div>
 			  		  	<div class="InfoMember">
 			  		  		<span class="LabelContent">Mobile:</span>
-			  		  		<span class="LabelContent"><%=(contact.getMobilePhone()==null ? "" : contact.getMobilePhone())%></span>
+			  		  		<span class="LabelContent"><%=(contact.getMobilePhone()==null ? "_" : contact.getMobilePhone())%></span>
 			  		  	</div>
 			  		  	<div class="InfoMember">
 			  		  		<span class="LabelContent">Website:</span>
-			  		  		<span class="LabelContent"><a href="#"><%=(contact.getWebPage()==null ? "" : contact.getWebPage())%></a></span>
+			  		  		<span class="LabelContent"><a href="#"><%=(contact.getWebPage()==null ? "_" : contact.getWebPage())%></a></span>
 			  		  	</div>
 			  		  	<div class="InfoMember">
 			  		  		<span class="LabelContent"><a href="<%=uicomponent.event("ViewDetails", contact.getId())%>">View Details</a></span>			  		  	
@@ -422,7 +447,7 @@
 			<div class="RightVCardsContent">
 		  	<div class="VCardContent NormalVCard">
 			  	<div class="TitleVCards">
-				  	<div class="StateIcon OfflineIcon"><%=(contact.getFullName()==null ? "" : contact.getFullName())%></div>
+				  	<div class="StateIcon OfflineIcon"><%=(contact.getFullName()==null ? "_" : contact.getFullName())%></div>
 			  		<div class="TagIcon $iconTag"><span></span></div>
 			  		<div style="clear: both;"><span></span></div>
 			  	</div>

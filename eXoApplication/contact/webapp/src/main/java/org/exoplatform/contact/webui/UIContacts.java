@@ -127,10 +127,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       }
       Contact[] array = contactMap.values().toArray(new Contact[]{}) ;
       if (array.length > 0 && !isSearchResult) {
-        Contact firstContact = array[0] ;
-        
-        System.out.println("\n\n first contact:" + firstContact.getFullName() + "\n\n");
-        
+        Contact firstContact = array[0] ;        
         getAncestorOfType(UIContactContainer.class).getChild(UIContactPreview.class).setContact(firstContact) ;
         selectedContact = firstContact.getId() ;
       } else getAncestorOfType(UIContactContainer.class).getChild(UIContactPreview.class).setContact(null) ;

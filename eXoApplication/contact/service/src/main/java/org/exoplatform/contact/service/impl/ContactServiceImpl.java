@@ -28,7 +28,7 @@ import org.exoplatform.services.jcr.RepositoryService;
  */
 public class ContactServiceImpl implements ContactService {
   
-  final private static String VCARD = "VCard(.vcf)".intern() ;
+  final private static String VCARD = "x-vcard".intern() ;
   
   private JCRDataStorage storage_ ;
   private Map<String, ContactImportExport> contactImportExport_ = new HashMap<String, ContactImportExport>() ;

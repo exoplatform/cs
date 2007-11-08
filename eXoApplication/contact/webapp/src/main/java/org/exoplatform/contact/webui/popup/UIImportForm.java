@@ -7,6 +7,8 @@ package org.exoplatform.contact.webui.popup;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.wimpi.pim.util.versitio.versitException;
+
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
@@ -43,13 +45,14 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
   final static public String FIELD_UPLOAD = "upload".intern() ;
   final static public String TYPE = "type".intern() ;
   public final static String FIELD_CATEGORY_BOX = "category" ;
-  public static final String[] vCardTypes = { ".vcf" } ;
+  public static String[] Types = null ;
   
   public UIImportForm() throws Exception {
     this.setMultiPart(true) ;
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     ContactService contactService = ContactUtils.getContactService();
-    for(String type : contactService.getImportExportType()) {
+    Types = contactService.getImportExportType() ;
+    for(String type : Types) {
       options.add(new SelectItemOption<String>(type, type)) ;
     }
     List<ContactGroup> groupList = contactService.getGroups(ContactUtils.getCurrentUser());
@@ -76,33 +79,41 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
       UploadService uploadService = (UploadService)PortalContainer.getComponent(UploadService.class) ;
       UIFormUploadInput input = uiForm.getUIInput(FIELD_UPLOAD) ;
       
-      // hoang quang hung
       UploadResource uploadResource = input.getUploadResource() ;
       String fileName = uploadResource.getFileName() ;
-      boolean isVCard = false ;
-      for(String vCardType : vCardTypes)
-        if (fileName.endsWith(vCardType)) isVCard = true ;
-      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-      if(ContactUtils.isEmpty(fileName) || (!isVCard)) {
+      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;  
+      if(ContactUtils.isEmpty(fileName)) {
+        uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.fileName-empty", null, 
+            ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      } 
+      boolean canImport = false ;
+      String[] array = uploadResource.getMimeType().split("/") ;
+      String extend = array[array.length - 1] ;
+      for(String type : Types) {
+        if (extend.equalsIgnoreCase(type)) canImport = true ;
+      }
+      if(!canImport) {
         uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.fileName-error", null, 
             ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }  
-      String importFormat = uiForm.getUIFormSelectBox(UIImportForm.TYPE).getValue() ;      
-      if (ContactUtils.isEmpty(category)) {  
-        uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.selectGroup-required", null, 
+      UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
+      String importFormat = uiForm.getUIFormSelectBox(UIImportForm.TYPE).getValue() ;
+      try {
+        ContactUtils.getContactService().getContactImportExports(importFormat)
+          .importContact(ContactUtils.getCurrentUser(), input.getUploadDataAsStream(), category) ;
+        UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
+        uploadService.removeUpload(input.getUploadId()) ;
+        uiContacts.updateList() ;
+      } catch (Exception ex) {
+        uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.invalid-format", null, 
             ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ; 
-      } 
-     
-      ContactUtils.getContactService().getContactImportExports(importFormat)
-        .importContact(ContactUtils.getCurrentUser(), input.getUploadDataAsStream(), category) ;
-      UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
-      UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
-      uploadService.removeUpload(input.getUploadId()) ;
-      uiContacts.updateList() ;
+        return ;        
+      }
       uiContactPortlet.cancelAction() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContactPortlet.getChild(UIWorkingContainer.class)) ;
     }
