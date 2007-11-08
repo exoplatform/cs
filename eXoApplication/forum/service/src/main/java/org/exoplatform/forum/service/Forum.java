@@ -39,7 +39,7 @@ public class Forum {
   
   
   public Forum() {
-    id = ("forum" + IdGenerator.generate()).toUpperCase() ;
+    id = "forum" + IdGenerator.generate() ;
   }
   
   public String getId(){return id;}

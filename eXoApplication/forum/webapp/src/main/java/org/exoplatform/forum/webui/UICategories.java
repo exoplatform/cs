@@ -40,17 +40,17 @@ public class UICategories extends UIContainer  {
   	
   }
 
-	private List<Category> getCategoryList() throws Exception {
+  private List<Category> getCategoryList() throws Exception {
 		List<Category> categoryList = forumService.getCategories();
   	return categoryList;
 	}  
 	
-	private List<Forum> getForumList(String categoryId) throws Exception {
+  private List<Forum> getForumList(String categoryId) throws Exception {
 		List<Forum> forumList = forumService.getForums(categoryId);
 		return forumList;
 	}
 	
-	private Topic getLastTopic(String topicPath) throws Exception {
+  private Topic getLastTopic(String topicPath) throws Exception {
 		return forumService.getTopicByPath(topicPath) ;
 	}
 	
@@ -107,10 +107,3 @@ public class UICategories extends UIContainer  {
 	
 	
 }
-
-
-
-
-
-
-

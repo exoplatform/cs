@@ -5,6 +5,7 @@
 package org.exoplatform.forum.service ;
 
 import java.util.Date;
+import java.util.List;
 
 import org.exoplatform.services.jcr.util.IdGenerator;
 
@@ -40,10 +41,10 @@ public class Topic {
   private String[] canPost;
   private String[] userVoteRating ;
   private Double voteRating = 0.0;
-  
+  private List<ForumAttachment> attachments ;
   
   public Topic(){ 
-    id = ("topic" + IdGenerator.generate()).toUpperCase() ;
+    id = "topic" + IdGenerator.generate();
     canView = new String [] {} ;
     canPost = new String [] {} ;
     userVoteRating = new String [] {} ;
@@ -123,6 +124,10 @@ public class Topic {
 
   public Double getVoteRating(){return voteRating;}
   public void setVoteRating(Double voteRating){this.voteRating = voteRating;}
+  
+  public void getAttachment( List<ForumAttachment> attachments) { this.attachments = attachments;}
+  public List<ForumAttachment> setAttachment() { return this.attachments;}
+  
   public String getForumId() { return null ; }
 
 }

@@ -17,14 +17,14 @@
 	  	<div class="RightBar">
 	  		<div class="CenterBar">
 	  			<div class="Lable Question">
-	  				<span>Poll:</span>
+	  				<span><%=_ctx.appRes("UITopicPoll.label.Poll"); %>:</span>
 	  				<span>${question}?</span>
 	  			</div>
 	  			<div class="CollapseButton" title="Collapse" onclick="eXo.forum.UIForumPortlet.expandCollapse(this) ;"><span></span></div>
 	  			<div class="SeparatorLine"><span></span></div>
-	  			<a class="Icon ClosePoll" href="javascript:if(confirm('$confirmDelete')){<%=uicomponent.event("RemovePoll");}%>">Close Poll</a>
+	  			<a class="Icon ClosePoll" href="javascript:if(confirm('$confirmDelete')){<%=uicomponent.event("RemovePoll");}%>"><%=_ctx.appRes("UITopicPoll.label.ClosePoll"); %></a>
 	  			<div class="SeparatorLine"><span></span></div>
-	  			<a class="Icon EditPoll" href="<%=uicomponent.event("EditPoll")%>">Edit Poll</a>
+	  			<a class="Icon EditPoll" href="<%=uicomponent.event("EditPoll")%>"><%=_ctx.appRes("UITopicPoll.label.EditPoll"); %></a>
 	  			<div style="clear: both"><span></span></div>
 	  		</div>
 	  	</div>
@@ -70,7 +70,7 @@
 										                <div class="ButtonLeft">
 										                  <div class="ButtonRight">
 										                    <div class="ButtonMiddle">
-										                    	Vote now
+										                    	<%=_ctx.appRes("UITopicPoll.label.Votenow"); %>
 										                    </div>
 										                  </div>
 										                </div>
@@ -91,9 +91,9 @@
 										<table cellspacing="0" borderspacing="0" id="UIGrid" class="UIGrid">
 								  		<thead>
 								  			<tr>
-								  				<th>Poll Options</th>
-								  				<th width="35%">Percentage</th>
-										      <th width="100px;">Votesv</th>
+								  				<th><%=_ctx.appRes("UITopicPoll.label.PollOptions"); %></th>
+								  				<th width="35%"><%=_ctx.appRes("UITopicPoll.label.Percentage"); %></th>
+										      <th width="100px;"><%=_ctx.appRes("UITopicPoll.label.Votes"); %></th>
 										    </tr>
 								  		</thead>
 								  		<tbody>
@@ -138,7 +138,7 @@
 								  		%>
 									  	</tbody>
 										</table>
-										<div class="TotalVotes">Total Voters: $sum</div>
+										<div class="TotalVotes"><%=_ctx.appRes("UITopicPoll.label.TotalVoters"); %>: $sum</div>
 									<% if(poll.getIsMultiCheck()) { %>
 			   						<div class="UIAction"> 
 							        <table class="ActionContainer" align="center">
@@ -148,7 +148,7 @@
 							                <div class="ButtonLeft">
 							                  <div class="ButtonRight">
 							                    <div class="ButtonMiddle">
-							                    	Vote Again
+							                    	<%=_ctx.appRes("UITopicPoll.label.VoteAgain"); %>
 							                    </div>
 							                  </div>
 							                </div>

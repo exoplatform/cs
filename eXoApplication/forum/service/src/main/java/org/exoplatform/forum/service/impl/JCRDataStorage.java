@@ -413,7 +413,7 @@ public class JCRDataStorage implements DataStorage {
 				  forumHomeNode.save() ;
 				  forumHomeNode.getSession().save() ;
 			    // createPost first
-          String id = topic.getId().replaceFirst("TOPIC", "POST") ;
+          String id = topic.getId().replaceFirst("topic", "post") ;
 			    Post post = new Post() ;
 			    post.setId(id.toUpperCase()) ;
 					post.setOwner(topic.getOwner()) ;
@@ -429,7 +429,7 @@ public class JCRDataStorage implements DataStorage {
 					
 					savePost(categoryId, forumId, topic.getId(), post, true) ;
 		    } else {
-          String id = topic.getId().replaceFirst("TOPIC", "POST") ;
+          String id = topic.getId().replaceFirst("topic", "post") ;
           if(topicNode.hasNode(id)) {
             Node fistPostNode = topicNode.getNode(id) ;
             fistPostNode.setProperty("exo:modifiedBy", topic.getModifiedBy()) ;
@@ -640,7 +640,7 @@ public class JCRDataStorage implements DataStorage {
       if(CategoryNode.hasNode(forumId)) {
         Node forumNode = CategoryNode.getNode(forumId) ;
         Node topicNode = forumNode.getNode(topicId) ;
-        String pollId = topicId.replaceFirst("TOPIC", "POLL") ;
+        String pollId = topicId.replaceFirst("topic", "poll") ;
         if(!topicNode.hasNode(pollId)) return null;
         Node pollNode = topicNode.getNode(pollId) ;
         Poll pollNew = new Poll() ;
@@ -672,7 +672,7 @@ public class JCRDataStorage implements DataStorage {
         poll = getPoll(categoryId, forumId, topicId) ;
         Node forumNode = CategoryNode.getNode(forumId) ;
         Node topicNode = forumNode.getNode(topicId) ;
-        String pollId = topicId.replaceFirst("TOPIC", "POLL") ;
+        String pollId = topicId.replaceFirst("topic", "poll") ;
         topicNode.getNode(pollId).remove() ;
         topicNode.setProperty("exo:isPoll", false) ;
         forumHomeNode.save() ;
@@ -691,7 +691,7 @@ public class JCRDataStorage implements DataStorage {
         Node forumNode = CategoryNode.getNode(forumId) ;
         Node topicNode = forumNode.getNode(topicId) ;
         Node pollNode;
-        String pollId = topicId.replaceFirst("TOPIC", "POLL") ;
+        String pollId = topicId.replaceFirst("topic", "poll") ;
         if(isVote) {
           pollNode = topicNode.getNode(pollId) ;
           pollNode.setProperty("exo:vote", poll.getVote()) ;

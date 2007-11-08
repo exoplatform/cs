@@ -53,32 +53,28 @@ public class UITopicPoll extends UIForm  {
   }
 
   private void init() throws Exception {
-    if(categoryId != null && categoryId.length() > 0) {
-      Topic topic = forumService.getTopic(categoryId, forumId, topicId, false) ;
-      if(topic.getIsPoll()) {
-        Poll poll = forumService.getPoll(categoryId, forumId, topicId) ; 
-        if(!this.isMultiCheck) {
-          List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-          if(poll != null) {
-            for (String s : poll.getOption()) {
-              options.add( new SelectItemOption<String>(s, s) ) ;
-            }
-          }
-          UIFormRadioBoxInput input = new UIFormRadioBoxInput("vote", "vote", options);
-          input.setAlign(1) ;
-          addUIFormInput(input);
-        }
-        poll_ = poll ;
+      if(this.hasChildren()) {
+        this.removeChild(UIFormRadioBoxInput.class) ;
       }
-    }
+      List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
+      if(poll_ != null) {
+        for (String s : poll_.getOption()) {
+          options.add( new SelectItemOption<String>(s, s) ) ;
+        }
+      }
+      UIFormRadioBoxInput input = new UIFormRadioBoxInput("vote", "vote", options);
+      input.setAlign(1) ;
+      addUIFormInput(input);
   }
   
+  @SuppressWarnings("unused")
   private Poll getPoll() throws Exception {
     if(categoryId != null && categoryId.length() > 0) {
       Topic topic = forumService.getTopic(categoryId, forumId, topicId, false) ;
       if(topic.getIsPoll()) {
         Poll poll = forumService.getPoll(categoryId, forumId, topicId) ; 
         poll_ = poll ;
+        this.init() ;
         return poll ;
       }
     }
@@ -89,9 +85,9 @@ public class UITopicPoll extends UIForm  {
     this.categoryId = categoryId; 
     this.forumId = forumId; 
     this.topicId = topicId;
-    this.init() ;
   }
   
+  @SuppressWarnings("unused")
   private boolean getIsVoted() throws Exception {
     Poll poll = forumService.getPoll(categoryId, forumId, topicId) ;
     if(this.isMultiCheck) {
@@ -110,6 +106,7 @@ public class UITopicPoll extends UIForm  {
     return false ;
   }
   
+  @SuppressWarnings("unused")
   private String[] getInfoVote() throws Exception {
     Poll poll = poll_ ;
     String[] voteNumber = poll.getVote() ;
@@ -120,6 +117,7 @@ public class UITopicPoll extends UIForm  {
       double tmp = Double.parseDouble(string) ;
       double k = (double)(tmp*size)/100 ;
       int t = (int)Math.round(k) ;
+      string = "" + (double) t*100/size ;
       infoVote[i] = string + ":" + t ;
       i = i + 1 ;
     }
@@ -127,6 +125,7 @@ public class UITopicPoll extends UIForm  {
     return infoVote ;
   }
   
+  @SuppressWarnings("unused")
   private String[] getColor() throws Exception {
     return new String[] {"blue", "DarkGoldenRod", "green", "yellow", "BlueViolet", "orange","darkBlue", "IndianRed","DarkCyan" ,"lawnGreen"} ; 
   }
@@ -234,6 +233,7 @@ public class UITopicPoll extends UIForm  {
     public void execute(Event<UITopicPoll> event) throws Exception {
       UITopicPoll topicPoll = event.getSource() ;
       topicPoll.isMultiCheck = true ;
+      topicPoll.removeChild(UIFormRadioBoxInput.class) ;
       topicPoll.init() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(topicPoll) ;
     }

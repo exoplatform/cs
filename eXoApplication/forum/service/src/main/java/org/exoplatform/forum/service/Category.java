@@ -24,7 +24,7 @@ public class Category {
    private String userPrivate = new String() ;
    
    public Category(){
-     id = ("category" + IdGenerator.generate()).toUpperCase() ;
+     id = "category" + IdGenerator.generate() ;
    }
 
    public String getId(){return id;}

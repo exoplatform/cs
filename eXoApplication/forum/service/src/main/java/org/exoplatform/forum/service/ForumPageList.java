@@ -32,6 +32,7 @@ public class ForumPageList extends JCRPageList {
     setAvailablePage(iter.getSize()) ;    
   }
   
+  @SuppressWarnings("unchecked")
   protected void populateCurrentPage(long page, Session session) throws Exception  {
     if(iter_ == null) {
       if(isQuery_) {

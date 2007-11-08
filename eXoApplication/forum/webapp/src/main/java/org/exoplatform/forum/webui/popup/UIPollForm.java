@@ -26,6 +26,7 @@ import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormMultiValueInputSet;
 import org.exoplatform.webui.form.UIFormStringInput;
+import org.exoplatform.webui.form.validator.PositiveNumberFormatValidator;
 
 /**
  * Created by The eXo Platform SARL
@@ -57,6 +58,7 @@ public class UIPollForm extends UIForm implements UIPopupComponent {
     UIFormStringInput question = new UIFormStringInput(FIELD_QUESTION_INPUT, FIELD_QUESTION_INPUT, null);
     UIFormStringInput timeOut = new UIFormStringInput(FIELD_TIMEOUT_INPUT, FIELD_TIMEOUT_INPUT, null);
     UIFormCheckBoxInput checkBox = new UIFormCheckBoxInput<Boolean>(FIELD_MULTIVOTE_CHECKBOX, FIELD_MULTIVOTE_CHECKBOX, false) ; 
+    timeOut.addValidator(PositiveNumberFormatValidator.class) ;
     addUIFormInput(question) ;
     addUIFormInput(timeOut) ;
     addUIFormInput(checkBox);
@@ -140,27 +142,29 @@ public class UIPollForm extends UIForm implements UIPopupComponent {
         String[] vote = new String[sizeOption]  ;
         if(uiForm.isUpdate) {
           String[] oldVote = uiForm.poll.getVote() ;
-          if(sizeOption < (oldVote.length -1)) {
+          if(sizeOption < oldVote.length) {
             String[] oldUserVote = uiForm.poll.getUserVote() ; 
             long temps = oldUserVote.length ;
-            int[] a = new int[sizeOption];
-            int sum = 0 ;
-            for(int k = 0; k < sizeOption; ++k) {
-              a[k] = (int)((Float.parseFloat(oldVote[k])*temps)/100) ;
-              sum = sum + a[k] ;
+            double rmPecent = 0;
+            for(int j = sizeOption; j < oldVote.length; j++) {
+              rmPecent = rmPecent + Double.parseDouble(oldVote[j]) ;
             }
+            rmPecent = 100 - rmPecent ;
             for(int k = 0; k < sizeOption; ++k) {
-              vote[k] = String.valueOf(((a[k]*100)/sum)) ;
+              double newVote = Double.parseDouble(oldVote[k]) ;
+              vote[k] = String.valueOf((double)(newVote*100)/rmPecent) ;
             }
-            newUser = new String[sum] ;
+            int newSize  = (int) Math.round((temps*rmPecent)/100) ;
+            newUser = new String[newSize] ;
             int l = 0 ;
             for (String string : oldUserVote) {
               boolean check = true ; 
-              for(int j = sizeOption; j < (oldVote.length -1); j++) {
+              for(int j = sizeOption; j < oldVote.length; j++) {
                 String x = ":" + j ;
                 if(string.indexOf(x) > 0) check = false ;
               }
-              if(check) newUser[l] = string ;
+              if(check) {newUser[l] = string ; 
+              ++l ;}
             }
           } else {
             for(int j = 0; j < sizeOption; j++) {

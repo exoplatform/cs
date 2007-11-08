@@ -5,6 +5,7 @@
 package org.exoplatform.forum.service ;
 
 import java.util.Date;
+import java.util.List;
 
 import org.exoplatform.services.jcr.util.IdGenerator;
 /**
@@ -26,13 +27,14 @@ public class Post {
   private String subject;
   private String message;
   private String remoteAddr;
-  private long    attachments ;
   private String icon; 
   private boolean isApproved = false ;
+  private long    attachment ;
+  private List<ForumAttachment> attachments ;
   
   
   public Post() {
-    id = ("post" + IdGenerator.generate()).toUpperCase() ;
+    id = "post" + IdGenerator.generate() ;
   }
   
   public String getId() { return id; }
@@ -72,12 +74,15 @@ public class Post {
   public String getRemoteAddr(){return remoteAddr;}
   public void setRemoteAddr(String remoteAddr){this.remoteAddr = remoteAddr;}
   
-  public long  getNumberOfAttachment() { return attachments ; }
-  public void setNumberOfAttachment(long number) { this.attachments = number ;}
+  public long  getNumberOfAttachment() { return attachment ; }
+  public void setNumberOfAttachment(long number) { this.attachment = number ;}
   
   public String getIcon() { return icon;}
   public void setIcon( String icon) { this.icon = icon;}
   
   public boolean getIsApproved() { return isApproved;}
   public void setIsApproved(boolean isApproved) { this.isApproved = isApproved;}
+
+  public void getAttachment( List<ForumAttachment> attachments) { this.attachments = attachments;}
+  public List<ForumAttachment> setAttachment() { return this.attachments;}
 }
