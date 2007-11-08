@@ -6,9 +6,11 @@ package org.exoplatform.calendar.webui;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.exoplatform.calendar.CalendarUtils;
+import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -47,16 +49,17 @@ public class UIMiniCalendar extends UICalendarView  {
     java.util.Calendar tocalendar = new GregorianCalendar(getCurrentYear(), getCurrentMonth(), getDaysInMonth(), 24,0,0) ;
     eventQuery.setToDate(tocalendar) ;
     CalendarService calendarService = getApplicationComponent(CalendarService.class) ;
-    dataMap = calendarService.searchHightLightEvent(CalendarUtils.getCurrentUser(), eventQuery);
+    dataMap = calendarService.searchHightLightEvent(CalendarUtils.getCurrentUser(), eventQuery, getPublicCalendars());
   }
   protected int getWeeksOfTheMonth(int year, int month, int day) {
     return new GregorianCalendar(year, month, day).getActualMaximum(java.util.Calendar.WEEK_OF_MONTH) ;
   }
-  private Map<Integer, String> getDataMap(){ return dataMap ; }
+  private Map<Integer, String> getData(){ return dataMap ; }
  /* protected void moveYear(int yearStep) {
     calendar_.add(Calendar.YEAR, yearStep) ;
   }*/
-
+  public LinkedHashMap<String, CalendarEvent> getDataMap(){ return null ; }
+  
   static  public class MoveNextActionListener extends EventListener<UIMiniCalendar> {
     public void execute(Event<UIMiniCalendar> event) throws Exception {
       UIMiniCalendar miniCal = event.getSource() ;

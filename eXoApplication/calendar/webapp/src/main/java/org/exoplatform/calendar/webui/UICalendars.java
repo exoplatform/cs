@@ -6,6 +6,7 @@ package org.exoplatform.calendar.webui;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -396,15 +397,23 @@ public class UICalendars extends UIForm  {
       String username = event.getRequestContext().getRemoteUser() ;
       try{        
         Calendar calendar = null ;
-        if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
+        if(CalendarUtils.PRIVATE_TYPE.equals(calType)) {
           calendar = calService.getUserCalendar(username, calendarId) ;
           calendar.setCalendarColor(color) ;
           calService.saveUserCalendar(username, calendar, false) ;
-        } else if(calType.equals(CalendarUtils.SHARED_TYPE)){
-          calendar = calService.getUserCalendar(username, calendarId) ;
+        } else if(CalendarUtils.SHARED_TYPE.equals(calType)){
+          //calendar = calService.getSharedCalendars(username)) getUserCalendar(username, calendarId) ;
+          Iterator iter = calService.getSharedCalendars(username).getCalendars().iterator() ;
+          while (iter.hasNext()) {
+            Calendar cal = ((Calendar)iter.next()) ;
+          if(cal.getId().equals(calendarId)) {
+            calendar = cal ;
+            break ;
+          }  
+          }
           calendar.setCalendarColor(color) ;
           calService.saveUserCalendar(username, calendar, false) ;
-        } else if(calType.equals(CalendarUtils.PUBLIC_TYPE)){
+        } else if(CalendarUtils.PUBLIC_TYPE.equals(calType)){
           calendar = calService.getGroupCalendar(calendarId) ;
           calendar.setCalendarColor(color) ;
           calService.saveGroupCalendar(calendar, false) ;

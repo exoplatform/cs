@@ -1,8 +1,46 @@
 <%
-	uiform.begin()
+	uiform.begin();
+	
+	int currentDay = uicomponent.getCurrentDay() ;
+	int currentMonth = uicomponent.getCurrentMonth() ;
+	String currentMonthName = uicomponent.getMonthName(currentMonth) ;
+	int currentYear = uicomponent.getCurrentYear() ;
+	String currentDayName = uicomponent.getDayName(uicomponent.getDayOfWeek(currentYear, currentMonth, currentDay)) ;
+	String linkDayNext = uicomponent.event(uicomponent.ACT_NEXT) ;
+ 	String linkDayPrevious = uicomponent.event(uicomponent.ACT_PREVIOUS) ;
+ 		monthViewAction = uicomponent.TYPE_MONTH +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"="+ currentMonth +"&"+ uicomponent.DAY + "=1" ;
+	yearViewAction = uicomponent.TYPE_YEAR +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"="+ currentMonth +"&"+ uicomponent.DAY + "=1" ;
+	
 	_ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");
 %>
-<div class="Result">Tasks view</div>
+<div class="TitleBar Result">
+	    <table>
+				<body>
+					<tr>
+						<td>
+							<a href="$linkDayPrevious">
+								<div class="BackIcon" title="Previous day"><span></span></div>
+							</a>
+						</td>
+						<td>
+							<div class="Title">
+							<a href="<%=uicomponent.event("GotoDate",monthViewAction)%>">
+								$currentMonthName
+							</a>, $currentDay, 
+							<a href="<%=uicomponent.event("GotoDate",yearViewAction)%>">
+								$currentYear
+							</a>
+							</div>
+						</td>
+						<td>
+							<a href="$linkDayNext">
+								<div class="NextIcon" title="Next day"><span></span></div>
+							</a>
+						</td>
+					</tr>
+				</body>
+			</table>
+		</div>
 <div class="UITaskView">
 		<div class="TaskListContainer">
 			<div class="UIListView">

@@ -5,15 +5,13 @@
 package org.exoplatform.calendar.webui;
 
 import java.io.InputStream;
+import java.util.LinkedHashMap;
 
-import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.Attachment;
 import org.exoplatform.calendar.service.CalendarEvent;
-import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.webui.popup.UIPopupComponent;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
-import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
@@ -100,7 +98,12 @@ public class UIPreview extends UICalendarView implements UIPopupComponent {
     dresource.setDownloadName(att.getName()) ;
     return dservice.getDownloadLink(dservice.addDownloadResource(dresource)) ;
   }
-
+  @Override
+  LinkedHashMap<String, CalendarEvent> getDataMap() {
+    LinkedHashMap<String, CalendarEvent> dataMap = new LinkedHashMap<String, CalendarEvent>() ;
+    dataMap.put(event_.getId(), event_) ;
+    return dataMap ;
+  }
   static  public class ViewActionListener extends EventListener<UIPreview> {
     public void execute(Event<UIPreview> event) throws Exception {
       UIPreview uiView = event.getSource() ;
@@ -118,72 +121,4 @@ public class UIPreview extends UICalendarView implements UIPopupComponent {
        */
     }
   }
-  /* static  public class EditActionListener extends EventListener<UIPreview> {
-    public void execute(Event<UIPreview> event) throws Exception {
-      System.out.println("EditEventActionListener");
-      UIPreview uiView = event.getSource() ;
-      UICalendarPortlet uiPortlet = uiView.getAncestorOfType(UICalendarPortlet.class) ;
-      UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
-      UIPopupContainer uiPopupContainer = uiPopupAction.activate(UIPopupContainer.class, 700) ;
-      CalendarEvent eventCalendar = null ;
-      String username = event.getRequestContext().getRemoteUser() ;
-      String calendarId = event.getRequestContext().getRequestParameter(CALENDARID) ;
-      String calType = event.getRequestContext().getRequestParameter(CALTYPE) ;
-      String eventId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      try {
-        CalendarService calService = uiView.getApplicationComponent(CalendarService.class) ;
-        eventCalendar = calService.getUserEvent(username, calendarId, eventId) ;
-      } catch (Exception e){
-        e.printStackTrace() ;
-      }
-      if(CalendarEvent.TYPE_EVENT.equals(eventCalendar.getEventType())) {
-        uiPopupContainer.setId(UIPopupContainer.UIEVENTPOPUP) ;
-        UIEventForm uiEventForm = uiPopupContainer.createUIComponent(UIEventForm.class, null, null) ;
-        uiEventForm.initForm(uiPortlet.getCalendarSetting(), eventCalendar) ;
-        if(calType.equals("0")) {
-          uiEventForm.update(calType, null) ;
-          uiEventForm.setSelectedCalendarId(calendarId) ;
-        } else {
-          List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-          //options.add(new SelectItemOption<String>(calendarName, calendarId)) ;
-          uiEventForm.update(calType, options) ;
-        }    
-        uiPopupContainer.addChild(uiEventForm) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiView.getParent()) ;
-      } else if(CalendarEvent.TYPE_TASK.equals(eventCalendar.getEventType())) {
-        uiPopupContainer.setId(UIPopupContainer.UITASKPOPUP) ;
-        UITaskForm uiTaskForm = uiPopupContainer.createUIComponent(UITaskForm.class, null, null) ;
-        uiTaskForm.initForm(eventCalendar) ;
-        uiPopupContainer.addChild(uiTaskForm) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiView.getParent()) ;
-      } else {
-        System.out.println("\n\n event type is not supported !");
-      }
-    }
-  }*/
-  /*static  public class DeleteActionListener extends EventListener<UIPreview> {
-    public void execute(Event<UIPreview> event) throws Exception {
-      UIPreview uiView = event.getSource() ;
-      System.out.println("\n\n QuickDeleteEventActionListener");
-      String eventId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      String calendarId = event.getRequestContext().getRequestParameter(CALENDARID) ;
-      UICalendarViewContainer uiContainer = uiView.getAncestorOfType(UICalendarViewContainer.class) ;
-      UICalendarPortlet uiPortlet = uiView.getAncestorOfType(UICalendarPortlet.class) ;
-      UIMiniCalendar uiMiniCalendar = uiPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;
-      try {
-        CalendarService calService = uiView.getApplicationComponent(CalendarService.class) ;
-        String username = event.getRequestContext().getRemoteUser() ;
-        calService.removeUserEvent(username, calendarId, eventId) ;
-        uiView.setEvent(null) ;
-        uiMiniCalendar.refresh() ;
-        uiContainer.refresh() ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;
-      } catch (Exception e) {
-        e.printStackTrace() ;
-      }
-    }
-  }*/
 }

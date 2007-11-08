@@ -44,9 +44,9 @@ public class UIListContainer extends UIContainer implements CalendarView {
     
   }
 
-  public void setCurrentCalendar(Calendar cal) {
-    // TODO Auto-generated method stub
-    
+  public void setCurrentCalendar(Calendar value) {
+    UIListView list = getChild(UIListView.class) ;
+    list.setCurrentCalendar(value) ;
   }
 
   public void applySeting() throws Exception {

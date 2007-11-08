@@ -7,9 +7,11 @@ package org.exoplatform.calendar.webui;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.portal.webui.util.Util;
@@ -62,11 +64,16 @@ public class UIYearView extends UICalendarView {
     EventQuery eventQuery = new EventQuery() ;
     eventQuery.setFromDate(beginYear) ;
     eventQuery.setToDate(endYear) ;
-    yearData_ = calendarService.searchHightLightEvent(username, eventQuery);
+    yearData_ = calendarService.searchHightLightEvent(username, eventQuery, getPublicCalendars());
   }
   
   private List getEventList() {
     return null ;
+  }
+  @Override
+  LinkedHashMap<String, CalendarEvent> getDataMap() {
+    // TODO Auto-generated method stub
+    return null;
   }
 
   static  public class MoveNextActionListener extends EventListener<UIYearView> {
@@ -86,5 +93,6 @@ public class UIYearView extends UICalendarView {
       event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
     }
   }
+
 
 }

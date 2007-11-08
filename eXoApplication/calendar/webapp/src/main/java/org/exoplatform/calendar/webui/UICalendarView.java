@@ -113,6 +113,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   final public static Map<Integer, String> monthsName_ = new HashMap<Integer, String>() ;
   private Map<Integer, String> daysMap_ = new LinkedHashMap<Integer, String>() ;
   private Map<Integer, String> monthsMap_ = new LinkedHashMap<Integer, String>() ;
+  abstract LinkedHashMap<String, CalendarEvent> getDataMap() ;
 
   public UICalendarView() throws Exception{
     initCategories() ;
@@ -504,11 +505,14 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       String eventId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       String calType = event.getRequestContext().getRequestParameter(CALTYPE) ;
       CalendarService calService = uiCalendarView.getApplicationComponent(CalendarService.class) ;
-      if(CalendarUtils.PUBLIC_TYPE.equals(calType)) {
+      if(uiCalendarView.getDataMap() != null) {
+        eventCalendar = uiCalendarView.getDataMap().get(eventId) ;
+      }
+      /* if(CalendarUtils.PUBLIC_TYPE.equals(calType)) {
         eventCalendar = calService.getGroupEvent(calendarId, eventId) ;
       } else {
         eventCalendar = calService.getUserEvent(username, calendarId, eventId) ;
-      }
+      }*/
       if(eventCalendar != null) {
         UIPreview uiPreview = uiPopupContainer.addChild(UIPreview.class, null, null) ;
         uiPreview.setEvent(eventCalendar) ;
@@ -532,64 +536,71 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       String eventId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       String calType = event.getRequestContext().getRequestParameter(CALTYPE) ;
       CalendarService calendarService = CalendarUtils.getCalendarService() ;
-      if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
+      if(uiCalendarView.getDataMap()  != null) {
+        eventCalendar = uiCalendarView.getDataMap().get(eventId) ;
+      }
+      /*if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
         eventCalendar = calendarService.getUserEvent(username, calendarId, eventId) ;
       } else if(calType.equals(CalendarUtils.SHARED_TYPE)) {
         eventCalendar = calendarService.getUserEvent(username, calendarId, eventId) ;
       } else if(calType.equals(CalendarUtils.PUBLIC_TYPE)) {
         eventCalendar = calendarService.getGroupEvent(calendarId, eventId) ;
-      }
-      if(CalendarEvent.TYPE_EVENT.equals(eventCalendar.getEventType())) {
-        uiPopupContainer.setId(UIPopupContainer.UIEVENTPOPUP) ;
-        UIEventForm uiEventForm = uiPopupContainer.createUIComponent(UIEventForm.class, null, null) ;
-        List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-        if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
-          options = null ;
-        } else if(calType.equals(CalendarUtils.SHARED_TYPE)) {
-          GroupCalendarData calendarData = calendarService.getSharedCalendars(CalendarUtils.getCurrentUser())  ;
-          for(org.exoplatform.calendar.service.Calendar cal : calendarData.getCalendars()) {
-            options.add(new SelectItemOption<String>(cal.getName(), cal.getId())) ;
-          }
-        } else if(calType.equals(CalendarUtils.PUBLIC_TYPE)) {
-          for (GroupCalendarData calendarData : uiCalendarView.getPublicCalendars(username)) {
+      }*/
+      if(eventCalendar != null) {
+        if(CalendarEvent.TYPE_EVENT.equals(eventCalendar.getEventType())) {
+          uiPopupContainer.setId(UIPopupContainer.UIEVENTPOPUP) ;
+          UIEventForm uiEventForm = uiPopupContainer.createUIComponent(UIEventForm.class, null, null) ;
+          List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
+          if(CalendarUtils.PRIVATE_TYPE.equals(calType)) {
+            options = null ;
+          } else if(CalendarUtils.SHARED_TYPE.equals(calType)) {
+            GroupCalendarData calendarData = calendarService.getSharedCalendars(CalendarUtils.getCurrentUser())  ;
             for(org.exoplatform.calendar.service.Calendar cal : calendarData.getCalendars()) {
               options.add(new SelectItemOption<String>(cal.getName(), cal.getId())) ;
             }
-          }
-        }    
-        uiEventForm.update(calType, options) ;
-        uiEventForm.initForm(uiPortlet.getCalendarSetting(), eventCalendar) ;
-        uiEventForm.setSelectedCalendarId(calendarId) ;
-        uiPopupContainer.addChild(uiEventForm) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarView.getParent()) ;
+          } else if(CalendarUtils.PUBLIC_TYPE.equals(calType)) {
+            for (GroupCalendarData calendarData : uiCalendarView.getPublicCalendars(username)) {
+              for(org.exoplatform.calendar.service.Calendar cal : calendarData.getCalendars()) {
+                options.add(new SelectItemOption<String>(cal.getName(), cal.getId())) ;
+              }
+            }
+          }    
+          uiEventForm.update(calType, options) ;
+          uiEventForm.initForm(uiPortlet.getCalendarSetting(), eventCalendar) ;
+          uiEventForm.setSelectedCalendarId(calendarId) ;
+          uiPopupContainer.addChild(uiEventForm) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarView.getParent()) ;
 
-      } else if(CalendarEvent.TYPE_TASK.equals(eventCalendar.getEventType())) {
-        uiPopupContainer.setId(UIPopupContainer.UITASKPOPUP) ;
-        UITaskForm uiTaskForm = uiPopupContainer.createUIComponent(UITaskForm.class, null, null) ;
-        List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-        if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
-          options = null ;
-        } else if(calType.equals(CalendarUtils.SHARED_TYPE)) {
-          GroupCalendarData calendarData = calendarService.getSharedCalendars(CalendarUtils.getCurrentUser())  ;
-          for(org.exoplatform.calendar.service.Calendar cal : calendarData.getCalendars()) {
-            options.add(new SelectItemOption<String>(cal.getName(), cal.getId())) ;
-          }
-        } else if(calType.equals(CalendarUtils.PUBLIC_TYPE)) {
-          for (GroupCalendarData calendarData : uiCalendarView.getPublicCalendars(username)) {
+        } else if(CalendarEvent.TYPE_TASK.equals(eventCalendar.getEventType())) {
+          uiPopupContainer.setId(UIPopupContainer.UITASKPOPUP) ;
+          UITaskForm uiTaskForm = uiPopupContainer.createUIComponent(UITaskForm.class, null, null) ;
+          List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
+          if(CalendarUtils.PRIVATE_TYPE.equals(calType)) {
+            options = null ;
+          } else if(CalendarUtils.SHARED_TYPE.equals(calType)) {
+            GroupCalendarData calendarData = calendarService.getSharedCalendars(CalendarUtils.getCurrentUser())  ;
             for(org.exoplatform.calendar.service.Calendar cal : calendarData.getCalendars()) {
               options.add(new SelectItemOption<String>(cal.getName(), cal.getId())) ;
             }
-          }
-        }    
-        uiTaskForm.update(calType, options) ;
-        uiTaskForm.initForm(uiPortlet.getCalendarSetting(),eventCalendar) ;
-        uiTaskForm.setSelectedCalendarId(calendarId) ;
-        uiPopupContainer.addChild(uiTaskForm) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarView.getParent()) ;
+          } else if(CalendarUtils.PUBLIC_TYPE.equals(calType)) {
+            for (GroupCalendarData calendarData : uiCalendarView.getPublicCalendars(username)) {
+              for(org.exoplatform.calendar.service.Calendar cal : calendarData.getCalendars()) {
+                options.add(new SelectItemOption<String>(cal.getName(), cal.getId())) ;
+              }
+            }
+          }    
+          uiTaskForm.update(calType, options) ;
+          uiTaskForm.initForm(uiPortlet.getCalendarSetting(),eventCalendar) ;
+          uiTaskForm.setSelectedCalendarId(calendarId) ;
+          uiPopupContainer.addChild(uiTaskForm) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarView.getParent()) ;
+        } else {
+          System.out.println("\n\n event type is not supported !");
+        }
       } else {
-        System.out.println("\n\n event type is not supported !");
+        System.out.println("\n\n event type not found !");
       }
     }
   }
@@ -606,10 +617,12 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       try {
         CalendarService calService = calendarview.getApplicationComponent(CalendarService.class) ;
         String username = event.getRequestContext().getRemoteUser() ;
-        if(calType.equals(CalendarUtils.PUBLIC_TYPE)){
+        if(CalendarUtils.PUBLIC_TYPE.equals(calType)){
           calService.removeGroupEvent(calendarId, eventId) ;
-        } else {
+        } else if(CalendarUtils.PRIVATE_TYPE.equals(calType)){
           calService.removeUserEvent(username, calendarId, eventId) ;
+        } else if(CalendarUtils.SHARED_TYPE.equals(calType)) {
+          //calService.remove
         }
         uiMiniCalendar.updateMiniCal() ;
         uiContainer.refresh() ;

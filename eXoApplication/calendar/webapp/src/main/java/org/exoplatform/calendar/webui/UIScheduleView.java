@@ -4,6 +4,9 @@
  **************************************************************************/
 package org.exoplatform.calendar.webui;
 
+import java.util.LinkedHashMap;
+
+import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIComponent;
 
@@ -26,6 +29,11 @@ public class UIScheduleView extends UICalendarView  {
   public void refresh() throws Exception {
     System.out.println("\n\n>>>>>>>>>> SCHEDULE VIEW") ;
     // TODO Auto-generated method stub
-    
+  }
+
+  @Override
+  LinkedHashMap<String, CalendarEvent> getDataMap() {
+    // TODO Auto-generated method stub
+    return null;
   }  
 }

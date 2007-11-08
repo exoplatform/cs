@@ -130,7 +130,7 @@
   							<div class="CheckBox" onclick="eXo.calendar.UICalendarPortlet.initFilter(this,1) ;"><%uiform.renderField(calendar.getId())%></div>
   							<div class="CalendarIcon"><a href="#" ><%=calendar.getName()%></a></div>
   							<div class="DownArrow1Icon" calColor="$calendar.calendarColor" id="$calId" calType="1" title="Calendar actions" onclick="eXo.calendar.UICalendarPortlet.show(this, event);"><span></span></div>
-  							<div style="clear: both"><span></span></div>
+  							<div style="clear:both;"><span></span></div>
   						</div>
   					</div>
 				<%
@@ -301,7 +301,7 @@
 												for(color in uicomponent.getColors()) {
 												actionLink = uicomponent.event("ChangeColor","id&calColor="+color);
 											%>
-												<a href="$actionLink" class="$color ColorCell"><span></span></a>
+												<a href="$actionLink" class="$color ColorCell"><div><span></span></div></a>
 											<%}%>
 										<div style="clear:left;"><span></span></div>
 									</div>

@@ -15,7 +15,7 @@
  	if(uicomponent.isCurrentMonth(currentMonth, currentYear)) {
 		cssClass = "CalendarMatchedEventContent" ;
 	}
-	Map data = uicomponent.getDataMap() ;
+	Map data = uicomponent.getData() ;
 	uiform.begin();
 %>
 <div class="UIMiniCalendar">

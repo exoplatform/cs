@@ -149,6 +149,7 @@ public class UIActionBar extends UIContainer  {
       UICalendarViewContainer uiViewContainer = uiPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
       CalendarView renderedChild = (CalendarView)uiViewContainer.getRenderedChild() ;
       renderedChild.setCurrentCalendar(Calendar.getInstance()) ;
+      System.out.println("\n\n renderedChild " + renderedChild);
       renderedChild.refresh() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiViewContainer) ;
     }

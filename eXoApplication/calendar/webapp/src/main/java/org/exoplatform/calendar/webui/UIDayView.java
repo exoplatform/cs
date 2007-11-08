@@ -9,6 +9,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -101,7 +102,14 @@ public class UIDayView extends UICalendarView {
     toDate.add(Calendar.DATE, 1) ;
     return toDate ;
   }
-
+  
+  public LinkedHashMap<String, CalendarEvent> getDataMap() {
+    LinkedHashMap<String, CalendarEvent> dataMap = new LinkedHashMap<String, CalendarEvent>() ;
+    dataMap.putAll(eventData_) ;
+    dataMap.putAll(allDayEvent_) ;
+    return dataMap ;
+  }
+  
   static  public class MoveNextActionListener extends EventListener<UIDayView> {
     public void execute(Event<UIDayView> event) throws Exception {
       UIDayView calendarview = event.getSource() ;

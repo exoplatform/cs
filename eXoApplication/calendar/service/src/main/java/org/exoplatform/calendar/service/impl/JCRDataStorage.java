@@ -1078,10 +1078,11 @@ public class JCRDataStorage implements DataStorage{
     return new EventPageList(events, 10) ;    
   }
 
-  public Map<Integer, String > searchHightLightEvent(String username, EventQuery eventQuery)throws Exception {
+  public Map<Integer, String > searchHightLightEvent(String username, EventQuery eventQuery, String[] publicCalendarIds)throws Exception {
     Map<Integer, String > mapData = new HashMap<Integer, String>() ;
     Query query ;
     QueryManager qm ;
+    // private events
     if(username != null && username.length() > 0) {
       Node calendarHome = getCalendarHome(username) ;
       eventQuery.setCalendarPath(calendarHome.getPath()) ;
@@ -1090,9 +1091,27 @@ public class JCRDataStorage implements DataStorage{
       NodeIterator it = query.execute().getNodes();   
       mapData = updateMap(mapData, it, eventQuery.getFromDate(), eventQuery.getToDate()) ;
     }
+    // shared event
+    if(getSharedCalendarHome().hasNode(username)) {
+      PropertyIterator iter = getSharedCalendarHome().getNode(username).getReferences() ;
+      while(iter.hasNext()) {
+        try{
+          Node calendar = iter.nextProperty().getParent() ;
+          eventQuery.setCalendarPath(calendar.getPath()) ;
+          qm = calendar.getSession().getWorkspace().getQueryManager() ;
+          query = qm.createQuery(eventQuery.getQueryStatement(), Query.XPATH) ;
+          NodeIterator it = query.execute().getNodes();
+          mapData = updateMap(mapData, it, eventQuery.getFromDate(), eventQuery.getToDate()) ;
+        }catch(Exception e){
+          e.printStackTrace() ;
+        }
+      }
+    }  
+    // public events
     Node publicCalHome = getCalendarHome() ;
     eventQuery.setCalendarPath(publicCalHome.getPath()) ;
     qm = publicCalHome.getSession().getWorkspace().getQueryManager() ;
+    eventQuery.setCalendarId(publicCalendarIds) ;
     query = qm.createQuery(eventQuery.getQueryStatement(), Query.XPATH) ;
     NodeIterator it = query.execute().getNodes();
     mapData = updateMap(mapData, it, eventQuery.getFromDate(), eventQuery.getToDate()) ;  

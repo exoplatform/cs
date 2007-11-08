@@ -87,8 +87,7 @@ public class UIWeekView extends UICalendarView {
     tocalendar.set(Calendar.HOUR, 0) ;
     tocalendar.add(Calendar.DATE, 1) ;
     eventQuery.setToDate(tocalendar) ;
-    List<CalendarEvent> allEvents = calendarService.getUserEvents(username, eventQuery);    
-    allEvents.addAll(calendarService.getPublicEvents(eventQuery))  ;
+    List<CalendarEvent> allEvents = calendarService.getEvent(username, eventQuery, getPublicCalendars())  ;
     Iterator iter = allEvents.iterator() ;
     while(iter.hasNext()) {
       CalendarEvent event = (CalendarEvent)iter.next() ;
@@ -101,9 +100,7 @@ public class UIWeekView extends UICalendarView {
           iter.remove() ;
         } 
       }
-    }
-    for( CalendarEvent ce : allEvents) {
-      allWeekData_.put(ce.getId(), ce) ;
+      allWeekData_.put(event.getId(), event) ;
     }
   }
   protected void moveTo(int weeks) {
@@ -151,7 +148,10 @@ public class UIWeekView extends UICalendarView {
   protected LinkedHashMap<String, CalendarEvent>  getEventList() {
     return allWeekData_ ;
   }
-
+  public LinkedHashMap<String, CalendarEvent> getDataMap() {
+    return allWeekData_ ;
+  }
+  
   static  public class QuickAddActionListener extends EventListener<UIWeekView> {
     public void execute(Event<UIWeekView> event) throws Exception {
       System.out.println("QuickAddActionListener");

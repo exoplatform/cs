@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -54,7 +55,8 @@ public class UIMonthView extends UICalendarView {
   private Map<String, String> calendarIds_ = new HashMap<String, String>() ;
 
   private Map<Integer, List<CalendarEvent>> eventData_ = new HashMap<Integer, List<CalendarEvent>>() ;
-
+  private LinkedHashMap<String, CalendarEvent> dataMap_ = new LinkedHashMap<String, CalendarEvent>() ;
+  
   public UIMonthView() throws Exception{
     super() ;
   }
@@ -101,6 +103,7 @@ public class UIMonthView extends UICalendarView {
           addChild(input) ;
         }
       }
+      dataMap_.put(ce.getId(), ce) ;
       eventIter.remove() ;
     }
   }
@@ -144,6 +147,9 @@ public class UIMonthView extends UICalendarView {
       }
     }
     return events ; 
+  }
+  public LinkedHashMap<String, CalendarEvent> getDataMap() {
+    return dataMap_ ;
   }
   static  public class GotoDayActionListener extends EventListener<UIMonthView> {
     public void execute(Event<UIMonthView> event) throws Exception {

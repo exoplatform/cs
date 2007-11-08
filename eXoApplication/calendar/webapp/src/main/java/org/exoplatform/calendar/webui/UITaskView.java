@@ -19,7 +19,7 @@ import org.exoplatform.webui.core.UIComponent;
     template = "app:/templates/calendar/webui/UITaskView.gtmpl"
     
 )
-public class UITaskView extends UICalendarView {
+public class UITaskView  {
   
   public UITaskView() throws Exception {
     super() ;
@@ -29,10 +29,5 @@ public class UITaskView extends UICalendarView {
     return null ;
   }
 
-  @Override
-  public void refresh() throws Exception {
-    // TODO Auto-generated method stub
-    
-  }
   
 }
