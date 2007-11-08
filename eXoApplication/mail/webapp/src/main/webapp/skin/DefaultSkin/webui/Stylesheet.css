@@ -892,3 +892,52 @@
 	font-weight: bolder;
 }
 
+/*=======================UIAddToContact========================*/
+
+.UIAddToContact{
+	padding: 8px;
+}
+
+.UIAddToContact .HorizontalLayout {
+	background-color: #f3f3f3;
+	padding: 8px;
+}
+
+.UIAddToContact .UIFormGrid {
+	width: 95%;
+}
+
+.UIAddToContact table {
+	background: none;
+}
+
+.UIAddToContact .HorizontalLayout td.FieldLabel {
+	font-weight: bold;
+	width: 120px;
+}
+
+.UIAddToContact .HorizontalLayout td {
+	border: none;
+}	
+	
+.UIAddToContact .HorizontalLayout {
+	padding: 10px 0px;
+	border: 1px solid #cccccc;
+}
+
+.UIAddToContact .HorizontalLayout input {
+	width: 235px;
+}
+
+.UIAddToContact .HorizontalLayout .FieldComponentShort {
+	margin-right: 5px;
+}
+
+.UIAddToContact .HorizontalLayout .FieldComponentShort input {
+	width: 113px;
+}
+
+.UIAddToContact .HorizontalLayout .FieldComponentShort select {
+	width: 117px;
+}
+
