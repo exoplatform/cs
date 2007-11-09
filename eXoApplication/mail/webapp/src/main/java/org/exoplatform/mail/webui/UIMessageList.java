@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import javax.mail.internet.InternetAddress;
+
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
@@ -596,10 +598,26 @@ public class UIMessageList extends UIForm {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource() ;   
       System.out.println("=== >>> Import Action Listener");
+      String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      String username = MailUtils.getCurrentUser();
+      String accountId = MailUtils.getAccountId() ;
+      MailService mailServ = MailUtils.getMailService() ;
+      Message msg = mailServ.getMessageById(username, msgId, accountId);
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
       UIAddContactForm uiAddContactForm = uiPopup.createUIComponent(UIAddContactForm.class, null, null);
-      uiPopup.activate(uiAddContactForm, 600, 0, true);
+      uiPopup.activate(uiAddContactForm, 560, 0, true);
+      InternetAddress[] addresses  = Utils.getInternetAddress(msg.getFrom());
+      String personal = Utils.getPersonal(addresses[0]);
+      String firstName = personal;
+      String lastName = "";
+      if (personal.indexOf(" ") > 0) {
+        firstName = personal.substring(0, personal.indexOf(" "));
+        lastName = personal.substring(personal.indexOf(" ") + 1, personal.length());
+      }
+      uiAddContactForm.setFirstNameField(firstName);
+      uiAddContactForm.setLastNameField(lastName);
+      uiAddContactForm.setEmailField(addresses[0].getAddress());
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup);    
     }
   }

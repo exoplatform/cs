@@ -65,4 +65,9 @@ public class MailUtils {
     }
     return options ;
   }
+  
+  public static boolean isFieldEmpty(String s) {
+    if (s == null || s.length() == 0) return true ;
+    return false ;    
+  }
 }

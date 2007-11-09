@@ -5,22 +5,17 @@
         <tr>
           <td class="FieldLabel">Group:</td>
           <td class="FieldComponent">
-            <select onchange="" name="" class="selectbox">
-              <option>Group 1</option>
-              <option>Group 2</option>
-              <option>Group 3</option>
-              <option>Group 4</option>
-            </select>
+            <%uicomponent.renderField(uicomponent.SELECT_GROUP)%>
           </td>
         </tr>
         <tr>
           <td class="FieldLabel">Name:</td>
           <td class="FieldComponent">
             <div class="FieldComponentShort" style="float: left">
-              <input type="input" class="input" />
+              <%uicomponent.renderField(uicomponent.FIRST_NAME)%>
             </div>
             <div class="FieldComponentShort" style="float: left">
-              <input type="input" class="input" />
+              <%uicomponent.renderField(uicomponent.LAST_NAME)%>
             </div>
             <div style="clear: left;"><span></span></div>
           </td>
@@ -28,20 +23,17 @@
         <tr>
           <td class="FieldLabel">Email:</td>
           <td class="FieldComponent">
-            <input type="input" class="input" />
+            <%uicomponent.renderField(uicomponent.EMAIL)%>
           </td>
         </tr>
         <tr>
           <td class="FieldLabel">Chat ID:</td>
           <td class="FieldComponent">
             <div class="FieldComponentShort" style="float: left;">
-              <input type="input" class="input" />
+              <%uicomponent.renderField(uicomponent.CHAT_ID)%>
             </div>
             <div class="FieldComponentShort" style="float: left;">
-              <select onchange="" name="" class="selectbox">
-                <option>@yahoo.com</option>
-                <option>@gmail.com</option>
-              </select>
+              <%uicomponent.renderField(uicomponent.SELECT_CHAT)%>
             </div>
           </td>
         </tr>

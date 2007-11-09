@@ -210,7 +210,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
     public void execute(Event<UIAddressForm> event) throws Exception {
       UIAddressForm uiAddressForm = event.getSource();
       uiAddressForm.deActivate();
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressForm.findFirstComponentOfType(UIPopupAction.class));
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressForm.getAncestorOfType(UIPopupActionContainer.class));
     }
   }
 }
