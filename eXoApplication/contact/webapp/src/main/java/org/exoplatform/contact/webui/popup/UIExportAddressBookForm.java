@@ -171,8 +171,6 @@ public class UIExportAddressBookForm extends UIForm implements UIPopupComponent{
       
       uiContactPortlet.cancelAction() ;
       
-      System.out.println("\n\n\n>>>khd : DONE\n\n");
-      
     }
   }
   

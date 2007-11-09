@@ -36,7 +36,7 @@
 		  			<tr>
 		  		    <th style="width: 23px; padding-left: 3px;" class="text"><input type="checkbox" class="checkbox" title="Check all" value="4"/></th>
 		  				<th style="width: 24px;" class="text"><div class="Icon BlueTag"><span></span></div></th>
-		  		    <th style="width: 24%; padding-left: 2px;" class="text">
+		  		    <th style="width: 40%; padding-left: 2px;" class="text">
 		  		        	
 			  		   	<%
 						      String sortedByName = uicomponent.event("Sort","fullName");

@@ -13,7 +13,6 @@
 	uiform.begin()
 	boolean isDisplaySearchResult = uicomponent.isDisplaySearchResult() ;
 	
-	
 	JCRPageList pageList = uicomponent.getContactPageList();
   String cssPreviousPage = "FloatBlockHidden";
   String cssNextPage = "FloatBlockHidden";
@@ -34,9 +33,7 @@
     else 
     	contactRange = "Contacts " + fromIndex + " - " + endIndex + " of " + availableContact ;
   }
-	
-	
-	
+
 	
 	if(uicomponent.getViewContactsList()) {
 		if(isDisplaySearchResult) {
@@ -164,14 +161,11 @@
 										String[] tagIds = contact.getTags() ;
 										if (tagIds != null && tagIds.length > 0) {
 											Tag tag = ContactUtils.getContactService().getTag(ContactUtils.getCurrentUser(), tagIds[0]) ;
-											if (tag != null) iconTag += + tag.getColor() + "Tag" ; 
-											
-											
-											
+											if (tag != null) iconTag += + tag.getColor() + "Tag" ;
 											
 										}		
 	  	 	    				cssClass = "" ;
-										if (contact.getId().equals(uicomponent.getSelectedContact())) cssClass = "Selected" ;
+										if (contact.getId().equals(uicomponent.getSelectedContact())) cssClass = "Selected" ;	
 	  	 	    				String groupName ;
 	  	 	    				if (ContactUtils.isPublicGroup(category)) groupName = category ;
 	  	 	    				else {
@@ -181,7 +175,7 @@
 		  	 	    			}
 	  	 	    %>
 								
-  						<tr class="UIContactList $cssClass" selectedTag="<%=uicomponent.getSelectedTag()%>" >
+  						<tr class="UIContactList $cssClass" selectedTag="<%=uicomponent.getSelectedTag()%>" 
   						  <td class="text" style="padding-left: 7px;">
   						  	<%
   						  		if(checkboxField != null) uicomponent.renderField(checkboxField) ;

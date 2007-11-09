@@ -78,16 +78,14 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
       String category = uiForm.getUIFormSelectBox(FIELD_CATEGORY_BOX).getValue() ;
       UploadService uploadService = (UploadService)PortalContainer.getComponent(UploadService.class) ;
       UIFormUploadInput input = uiForm.getUIInput(FIELD_UPLOAD) ;
-      
       UploadResource uploadResource = input.getUploadResource() ;
-      String fileName = uploadResource.getFileName() ;
-      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;  
-      if(ContactUtils.isEmpty(fileName)) {
-        uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.fileName-empty", null, 
+      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+      if (uploadResource == null) {
+        uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.uploadResource-empty", null, 
             ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
-      } 
+        return ;        
+      }       
       boolean canImport = false ;
       String[] array = uploadResource.getMimeType().split("/") ;
       String extend = array[array.length - 1] ;

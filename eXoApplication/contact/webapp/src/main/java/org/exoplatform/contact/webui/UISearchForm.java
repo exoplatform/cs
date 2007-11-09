@@ -43,7 +43,8 @@ public class UISearchForm extends UIForm {
   static  public class SearchActionListener extends EventListener<UISearchForm> {
     public void execute(Event<UISearchForm> event) throws Exception {
       UISearchForm uiForm = event.getSource() ;
-      String text = uiForm.getUIStringInput(UISearchForm.FIELD_SEARCH_INPUT).getValue() ;
+      UIFormStringInput stringInput = uiForm.getUIStringInput(UISearchForm.FIELD_SEARCH_INPUT) ;
+      String text = stringInput.getValue() ;
       String s1 = "\"" + text + "\"" ; 
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       if(ContactUtils.isEmpty(s1)) {
@@ -62,7 +63,6 @@ public class UISearchForm extends UIForm {
       uiContacts.setContacts(resultPageList) ; 
       uiContacts.setViewContactsList(true) ;
       uiContacts.setDisplaySearchResult(true) ;
-      uiContacts.setSelectedContact(null) ;
       event.getRequestContext()
         .addUIComponentToUpdateByAjax(uiContactPortlet.getChild(UIWorkingContainer.class)) ;
     }

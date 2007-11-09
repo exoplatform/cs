@@ -103,6 +103,27 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   }
   public JCRPageList getContactPageList() { return pageList_ ; }
   
+  public void updateList() throws Exception { 
+    getChildren().clear() ;
+    contactMap.clear();
+    if(pageList_ != null) {
+      List<Contact> contactList = pageList_.getPage(pageList_.getCurrentPage(),ContactUtils.getCurrentUser()) ;
+      if(contactList.size() == 0 && pageList_.getCurrentPage() > 1)
+        contactList = pageList_.getPage(pageList_.getCurrentPage() - 1,ContactUtils.getCurrentUser()) ;
+      for(Contact contact : contactList) {
+        UIFormCheckBoxInput<Boolean> checkbox = new UIFormCheckBoxInput<Boolean>(contact.getId(),contact.getId(), false) ;
+        addUIFormInput(checkbox);
+        contactMap.put(contact.getId(), contact) ; 
+      }
+      Contact[] array = contactMap.values().toArray(new Contact[]{}) ;
+      if (array.length > 0) {
+        Contact firstContact = array[0] ;        
+        getAncestorOfType(UIContactContainer.class).getChild(UIContactPreview.class).setContact(firstContact) ;
+        selectedContact = firstContact.getId() ;
+      } else getAncestorOfType(UIContactContainer.class).getChild(UIContactPreview.class).setContact(null) ;
+    } else getAncestorOfType(UIContactContainer.class).getChild(UIContactPreview.class).setContact(null) ;
+  }
+  
   public Contact[] getContacts() throws Exception { 
     return contactMap.values().toArray(new Contact[]{}) ;
   }
@@ -115,34 +136,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   
   public void setViewContactsList(boolean list) { viewContactsList = list ; }
   public boolean getViewContactsList() { return viewContactsList ; }
-  
-  public void updateList() throws Exception { 
-    getChildren().clear() ;
-    contactMap.clear();  
-    if(pageList_ != null) {
-      for(Contact contact : pageList_.getPage(pageList_.getCurrentPage(),ContactUtils.getCurrentUser())) {
-        UIFormCheckBoxInput<Boolean> checkbox = new UIFormCheckBoxInput<Boolean>(contact.getId(),contact.getId(), false) ;
-        addUIFormInput(checkbox);
-        contactMap.put(contact.getId(), contact) ;
-        if (contact.getTags() != null && contact.getTags().length > 0)
-          System.out.println("\n\n contact.java: " + contact.getTags()[0] + "\n\n");
-        else {
-          System.out.println("\n\n else null \n\n");
-        }
-        
-        
-        
-        
-      }
-      Contact[] array = contactMap.values().toArray(new Contact[]{}) ;
-      if (array.length > 0 && !isSearchResult) {
-        Contact firstContact = array[0] ;        
-        getAncestorOfType(UIContactContainer.class).getChild(UIContactPreview.class).setContact(firstContact) ;
-        selectedContact = firstContact.getId() ;
-      } else getAncestorOfType(UIContactContainer.class).getChild(UIContactPreview.class).setContact(null) ;
-    } else getAncestorOfType(UIContactContainer.class).getChild(UIContactPreview.class).setContact(null) ;
-  }
-  
+
   public List<String> getCheckedContacts() throws Exception {
     List<String> checkedContacts = new ArrayList<String>() ;
     for (Contact contact : getContacts()) {
@@ -284,14 +278,17 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       }
       UIWorkingContainer uiWorkingContainer = uiContacts.getAncestorOfType(UIWorkingContainer.class) ;
       UIContactPreview uiContactPreview = uiWorkingContainer.findFirstComponentOfType(UIContactPreview.class) ;
-      ContactUtils.getContactService().removeContacts(ContactUtils.getCurrentUser(), contactIds) ;
+      ContactService contactService = ContactUtils.getContactService() ;
+      String username = ContactUtils.getCurrentUser() ;
+      
+      contactService.removeContacts(username, contactIds) ;
       if(contactIds.contains(uiContactPreview.getContact().getId())) 
         uiContactPreview.setContact(null) ;
       if (uiContacts.getSelectedTag() != null) {
         String tagName = uiWorkingContainer.findFirstComponentOfType(UITags.class).getSelectedTag() ;
-        uiContacts.setContacts(ContactUtils.getContactService()
-          .getContactPageListByTag(ContactUtils.getCurrentUser(), tagName)) ;
+        uiContacts.setContacts(contactService.getContactPageListByTag(username, tagName)) ;
       } else {
+       // System.out.println("\n\n being updateList....\n\n");
         uiContacts.updateList() ;
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer) ;

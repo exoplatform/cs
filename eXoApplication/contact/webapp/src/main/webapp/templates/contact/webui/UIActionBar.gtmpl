@@ -152,7 +152,7 @@
 								</div>
 							</div>
 							
-							<a href="#">
+							<a class="ControlButton">
 								<div class="IconHolder AddressOptionIcon">Address Book Options</div>
 							</a>
 							<div style="clear:left;"><span></span></div>
