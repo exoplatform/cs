@@ -183,6 +183,11 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
     setLocale(calendar.getLocale()) ;
     setTimeZone(calendar.getTimeZone()) ;
     setSelectedColor(calendar.getCalendarColor()) ;
+    lockCheckBoxFields(true) ;
+    UIFormInputWithActions sharing = getChildById(INPUT_SHARE) ;
+    sharing.getUIFormCheckBoxInput(ISPUBLIC).setEnable(false) ;
+    sharing.getUIStringInput(EDIT_PERMISSION).setEnable(false) ;
+    sharing.setActionField(EDIT_PERMISSION, null) ;
   }
 
   protected String getDisplayName() {

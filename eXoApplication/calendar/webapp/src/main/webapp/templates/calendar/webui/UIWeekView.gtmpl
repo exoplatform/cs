@@ -91,8 +91,8 @@
 								<% for (event in uicomponent.getEventList().values()) {
 									int indexBeginDate = -1 ;
 									int indexEndDate = 7 ;
-									begindate = tf.format(event.fromDateTime) ;
-									enddate = tf.format(event.toDateTime) ;
+									begindate = df.format(event.fromDateTime) ;
+									enddate = df.format(event.toDateTime) ;
 									for(cl in uicomponent.getDaysOfWeek(weekNumber)) { 
 						 			  if(uicomponent.isSameDate(event.fromDateTime, cl.time)){
 						 			  	indexBeginDate = uicomponent.getDaysOfWeek(weekNumber).indexOf(cl) ;
@@ -107,9 +107,10 @@
 									startTime = ((event.getFromDateTime().getHours() * 60) + event.getFromDateTime().getMinutes());
 								 	finishTime = ((event.getToDateTime().getHours() * 60) + event.getFromDateTime().getMinutes());
 									color = uicomponent.getColors().get(event.getCalendarId()) ;
+									title = begindate + "->" + enddate + ":&#013; " + event.summary ;
 								%>
-										 <div class="EventContainer EventAlldayContainer $color" style="border: solid 1px gray;margin: 1px 0px ;" indexBeginDate='$indexBeginDate' indexEndDate='$indexEndDate' calType="$event.calType"  eventid="$event.id" calid="$event.calendarId" starttime="$begindate" endtime="$enddate"  style="height: 22px;" title="$begindate -> $enddate"  >
-										  $event.summary
+										 <div class="EventContainer EventAlldayContainer $color" style="border: solid 1px gray;margin: 1px 0px ;" indexBeginDate='$indexBeginDate' indexEndDate='$indexEndDate' calType="$event.calType"  eventid="$event.id" calid="$event.calendarId" starttime="$begindate" endtime="$enddate"  style="height: 22px;" title="$title"  >
+										 	<%=tf.format(event.fromDateTime)%>
 										 </div>
 								<%}%>
 							</td>
