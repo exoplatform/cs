@@ -152,7 +152,7 @@
 								</div>
 							</div>
 							
-							<a href="<%=uicomponent.event("AddressBook")%>" class="ControlButton">
+							<a href="#">
 								<div class="IconHolder AddressOptionIcon">Address Book Options</div>
 							</a>
 							<div style="clear:left;"><span></span></div>

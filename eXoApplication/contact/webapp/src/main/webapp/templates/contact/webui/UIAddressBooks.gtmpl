@@ -144,11 +144,19 @@
 			              Delete
 			            </div> 
 				        </a>					        
+				        <!--
 				        <a class="MenuItem" href="javascript:eXo.contact.UIContactPortlet.adddressPrint() ;">   
 			            <div class="ItemIcon PrintIcon">
 			              Print  
 			            </div>
+				        </a>-->
+				        
+				        <a class="MenuItem" href="<%=uicomponent.event("Print", "id")%>">   
+			            <div class="ItemIcon PrintIcon">
+			              Print  
+			            </div>
 				        </a>
+ 
 							</div>
 			  		</div>
 					</div>

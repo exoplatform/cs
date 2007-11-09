@@ -6,7 +6,6 @@ package org.exoplatform.contact.webui;
 
 import java.util.List;
 
-import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.webui.popup.UICategoryForm;
 import org.exoplatform.contact.webui.popup.UICategorySelect;
@@ -38,8 +37,6 @@ import org.exoplatform.webui.event.EventListener;
         @EventConfig(listeners = UIActionBar.ChangeViewActionListener.class),
         @EventConfig(listeners = UIActionBar.ListViewActionListener.class),
         @EventConfig(listeners = UIActionBar.VCardViewActionListener.class),
-        @EventConfig(listeners = UIActionBar.CustomLayoutActionListener.class),
-        @EventConfig(listeners = UIActionBar.AddressBookActionListener.class),
         @EventConfig(listeners = UIActionBar.ImportContactActionListener.class),
         @EventConfig(listeners = UIActionBar.ExportContactActionListener.class)
     }
@@ -98,24 +95,6 @@ public class UIActionBar extends UIContainer  {
       uiContactPreview.setRendered(false) ;
       uiContacts.setViewContactsList(false) ;  
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
-    }  
-  }
-  
-  static public class CustomLayoutActionListener extends EventListener<UIActionBar> {
-    public void execute(Event<UIActionBar> event) throws Exception {
-      UIActionBar uiActionBar = event.getSource() ;
-      UIApplication uiApp = uiActionBar.getAncestorOfType(UIApplication.class) ;
-      uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.fullName-required", null)) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-      return ; 
-    }  
-  }
-  
-  static public class AddressBookActionListener extends EventListener<UIActionBar> {
-    public void execute(Event<UIActionBar> event) throws Exception {
-      
-      
-      
     }  
   }
   

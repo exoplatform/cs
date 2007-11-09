@@ -44,7 +44,7 @@ import org.exoplatform.webui.event.EventListener;
     @EventConfig(listeners = UIAddressBooks.DeleteGroupActionListener.class, confirm = "UIAddressBooks.msg.confirm-delete"),
     @EventConfig(listeners = UIAddressBooks.SelectGroupActionListener.class),
     @EventConfig(listeners = UIAddressBooks.SelectSharedGroupActionListener.class),
-    @EventConfig(listeners = UIAddressBooks.AddressPopupActionListener.class),
+    @EventConfig(listeners = UIAddressBooks.PrintActionListener.class),
     @EventConfig(listeners = UIAddressBooks.SendEmailActionListener.class) })
 public class UIAddressBooks extends UIComponent {
   private String selectedGroup = null;
@@ -272,10 +272,16 @@ public class UIAddressBooks extends UIComponent {
     }
   }
 
-  public static class AddressPopupActionListener extends EventListener<UIAddressBooks> {
+  static public class PrintActionListener extends EventListener<UIAddressBooks> {
     public void execute(Event<UIAddressBooks> event) throws Exception {
-
+      UIAddressBooks uiAddressBook = event.getSource();
+      UIWorkingContainer workingContainer = uiAddressBook.getAncestorOfType(UIWorkingContainer.class) ;
+      UIContacts uiContacts = workingContainer.findFirstComponentOfType(UIContacts.class) ;      
+      UIContactPreview uiContactPreview = workingContainer.findFirstComponentOfType(UIContactPreview.class) ;
+      uiContactPreview.setRendered(false) ;
+      uiContacts.setViewContactsList(false) ;  
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
     }
   }
-
+    
 }
