@@ -157,10 +157,10 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       ((UIEventDetailTab)getChildById(TAB_EVENTDETAIL)).getUIFormSelectBox(UIEventDetailTab.FIELD_CALENDAR).setEnable(false) ;
     } else {
       java.util.Calendar cal = GregorianCalendar.getInstance() ;
-      int beginMinute = (cal.get(java.util.Calendar.MINUTE)/15)*15 ;
+      int beginMinute = (cal.get(java.util.Calendar.MINUTE)/CalendarUtils.DEFAULT_TIMEITERVAL)*CalendarUtils.DEFAULT_TIMEITERVAL ;
       cal.set(java.util.Calendar.MINUTE, beginMinute) ;
       setEventFromDate(cal.getTime()) ;
-      cal.add(java.util.Calendar.MINUTE,15) ;
+      cal.add(java.util.Calendar.MINUTE,CalendarUtils.DEFAULT_TIMEITERVAL) ;
       setEventToDate(cal.getTime()) ;
     }
   }
@@ -331,7 +331,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     DateFormat df = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
     fromField.setValue(df.format(date)) ;
     df = new SimpleDateFormat(CalendarUtils.TIMEFORMAT) ;
-    System.out.println("\n\n " + df.format(date));
     timeField.setValue(df.format(date)) ;
   }
 
@@ -349,7 +348,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     DateFormat df = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
     toField.setValue(df.format(date)) ;
     df = new SimpleDateFormat(CalendarUtils.TIMEFORMAT) ;
-    System.out.println("\n\n " + df.format(date));
     timeField.setValue(df.format(date)) ;
   }
 
@@ -552,7 +550,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       System.out.println("\n\n AddCategoryActionListener");
       UIPopupContainer uiContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       UIPopupAction uiChildPopup = uiContainer.getChild(UIPopupAction.class) ;
-      uiChildPopup.activate(UIEventCategoryManager.class, 500) ;
+      uiChildPopup.activate(UIEventCategoryManager.class, 470) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
     }
   }

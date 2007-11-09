@@ -18,7 +18,8 @@
  	def rcontext = _ctx.getRequestContext() ;
 	workingStart = uicomponent.getCalendarSetting().getWorkingTimeBegin() ;
   rcontext.getJavascriptManager().importJavascript('eXo.calendar.UIWeekView','/calendar/javascript/') ;
-  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UIWeekView.init(' + timeInterval/2 + ', "' + workingStart + '") ;') ;
+  int defaultTimeInterval = uicomponent.getDefaultTimeInterval() ;
+  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UIWeekView.init(' + defaultTimeInterval + ', "' + workingStart + '") ;') ;
  	yearViewAction = uicomponent.TYPE_YEAR +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"="+ currentMonth +"&"+ uicomponent.DAY + "=1" ;
  	dateFormat = uicomponent.getDateFormat() ;
 	timeFormat = uicomponent.getTimeFormat() ;

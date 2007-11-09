@@ -38,7 +38,7 @@ public class CalendarUtils {
   final public static String TIMEFORMAT  = "HH:mm".intern() ;
   final public static String DATEFORMAT = "MM/dd/yyyy".intern() ;
   final public static String DATETIMEFORMAT = DATEFORMAT + " " +TIMEFORMAT ;   
-  
+  final public static int DEFAULT_TIMEITERVAL = 15 ;
   static public String[] getUserGroups(String username) throws Exception {
     OrganizationService organization = (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
     Object[] objs = organization.getGroupHandler().findGroupsOfUser(username).toArray() ;

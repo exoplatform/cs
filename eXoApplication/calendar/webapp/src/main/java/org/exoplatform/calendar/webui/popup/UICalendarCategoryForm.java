@@ -111,8 +111,6 @@ public class UICalendarCategoryForm extends UIForm {
       } catch (Exception e) {
         e.printStackTrace() ; 
       }
-      UICalendars uiCalendars = calendarPortlet.findFirstComponentOfType(UICalendars.class) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendars) ; 
     }
   }
   static  public class ResetActionListener extends EventListener<UICalendarCategoryForm> {
@@ -132,6 +130,9 @@ public class UICalendarCategoryForm extends UIForm {
       } else {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
       }
+      UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
+      UICalendars uiCalendars = calendarPortlet.findFirstComponentOfType(UICalendars.class) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendars) ; 
     }
   }
 

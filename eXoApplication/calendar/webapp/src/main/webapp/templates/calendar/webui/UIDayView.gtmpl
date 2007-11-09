@@ -27,7 +27,8 @@
 	def hoursMap = uicomponent.getTimeSteps(timeFormat, timeInterval) ;
 	boolean isShowWorkingTime = uicomponent.isShowWorkingTime() ;
 	workingStart = uicomponent.getCalendarSetting().getWorkingTimeBegin() ;
-  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.showEvent('+timeInterval/2+',"'+workingStart+'") ;') ;
+	int defaultTimeInterval = uicomponent.getDefaultTimeInterval() ;
+  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.showEvent(' + defaultTimeInterval + ',"'+workingStart+'") ;') ;
 %>
 <div class="UIDayView">
   <div class="TitleBar">

@@ -162,7 +162,7 @@ public class UICalendars extends UIForm  {
       UICalendars uiComponent = event.getSource() ;
       UICalendarPortlet uiCalendarPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
-      UICalendarCategoryManager uiManager = popupAction.activate(UICalendarCategoryManager.class, 600) ;
+      UICalendarCategoryManager uiManager = popupAction.activate(UICalendarCategoryManager.class, 470) ;
       UICalendarCategoryForm uiForm = uiManager.getChild(UICalendarCategoryForm.class) ;
       String categoryId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       uiForm.init(categoryId) ;
@@ -327,7 +327,7 @@ public class UICalendars extends UIForm  {
       UICalendars uiComponent = event.getSource() ;
       UICalendarPortlet uiCalendarPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
-      popupAction.activate(UICalendarCategoryManager.class, 600) ;
+      popupAction.activate(UICalendarCategoryManager.class, 470) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent.getParent()) ;
     }
@@ -379,7 +379,7 @@ public class UICalendars extends UIForm  {
       String selectedCalendarId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UICalendarPortlet uiCalendarPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
-      UIPopupContainer uiPopupContainer = popupAction.activate(UIPopupContainer.class, 600) ;
+      UIPopupContainer uiPopupContainer = popupAction.activate(UIPopupContainer.class, 400) ;
       uiPopupContainer.setId("UIPermissionSelectPopup") ;
       UISharedForm uiSharedForm = uiPopupContainer.addChild(UISharedForm.class, null, null) ;
       uiSharedForm.setSelectedCalendarId(selectedCalendarId) ;

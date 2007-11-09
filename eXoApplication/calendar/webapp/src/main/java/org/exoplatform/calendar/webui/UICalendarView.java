@@ -370,7 +370,9 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   protected int getTimeInterval() {
     return timeInterval_;
   }
-
+  protected int getDefaultTimeInterval() {
+    return CalendarUtils.DEFAULT_TIMEITERVAL ;
+  }
   protected String getTimeFormat() {
     return calendarSetting_.getTimeFormat();
   }
@@ -485,7 +487,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       System.out.println("\n\n goto add event category");
       UICalendarPortlet calendarPortlet = listView.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction popupAction = calendarPortlet.getChild(UIPopupAction.class) ;
-      popupAction.activate(UIEventCategoryManager.class, 600) ;
+      popupAction.activate(UIEventCategoryManager.class, 470) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   }

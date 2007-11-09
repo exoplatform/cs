@@ -116,10 +116,10 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
       ((UITaskDetailTab)getChildById(TAB_TASKDETAIL)).getUIFormSelectBox(UITaskDetailTab.FIELD_CALENDAR).setEnable(false) ;
     } else {
       java.util.Calendar cal = GregorianCalendar.getInstance() ;
-      int beginMinute = (cal.get(java.util.Calendar.MINUTE)/15)*15 ;
+      int beginMinute = (cal.get(java.util.Calendar.MINUTE)/CalendarUtils.DEFAULT_TIMEITERVAL)*CalendarUtils.DEFAULT_TIMEITERVAL ;
       cal.set(java.util.Calendar.MINUTE, beginMinute) ;
       setEventFromDate(cal.getTime()) ;
-      cal.add(java.util.Calendar.MINUTE,15) ;
+      cal.add(java.util.Calendar.MINUTE,CalendarUtils.DEFAULT_TIMEITERVAL) ;
       setEventToDate(cal.getTime()) ;
     }
   }
@@ -173,35 +173,11 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
       errorMsg_ = getId() + ".msg.event-fromdate-required" ;
       return false ;
     } 
-    /*try {
-      getEventFromDate() ;
-    } catch (Exception e) {
-      e.printStackTrace() ;
-      errorMsg_ = getId() + ".msg.event-fromdate-notvalid" ;
-      return false ;
-    }*/
     if(!getEventAllDate()) {
       if(CalendarUtils.isEmpty(getEventToDateValue())){
         errorMsg_ = getId() + ".msg.event-todate-required" ;
         return false ;
       } 
-      /*try {
-        getEventToDate() ;
-      } catch (Exception e) {
-        e.printStackTrace() ;
-        errorMsg_ = getId() + ".msg.event-todate-notvalid" ;
-        return false ;
-      }*/
-      /*try {
-        if(getEventFromDate().after(getEventToDate()) || getEventFromDate().equals(getEventToDate())){
-          errorMsg_ = getId() +".msg.event-date-time-logic" ;
-          return false ;
-        }
-      } catch (Exception e) {
-        e.printStackTrace() ;
-        errorMsg_ = getId() + ".msg.event-date-time-getvalue" ;
-        return false ;
-      }  */    
     }
     if(getEmailReminder() && CalendarUtils.isEmpty(getEmailAddress())) {
       errorMsg_ = getId() + ".msg.event-email-required" ;
@@ -439,7 +415,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
       System.out.println("\n\n AddCategoryActionListener");
       UIPopupContainer uiContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       UIPopupAction uiChildPopup = uiContainer.getChild(UIPopupAction.class) ;
-      uiChildPopup.activate(UIEventCategoryManager.class, 500) ;
+      uiChildPopup.activate(UIEventCategoryManager.class, 470) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
     }
   }
