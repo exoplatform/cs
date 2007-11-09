@@ -100,7 +100,9 @@ public class UIWeekView extends UICalendarView {
           iter.remove() ;
         } 
       }
-      allWeekData_.put(event.getId(), event) ;
+    }
+    for( CalendarEvent ce : allEvents) {
+      allWeekData_.put(ce.getId(), ce) ;
     }
   }
   protected void moveTo(int weeks) {
@@ -129,7 +131,7 @@ public class UIWeekView extends UICalendarView {
       day = cl.get(Calendar.DATE) ;
       month = cl.get(Calendar.MONTH) ;
       year = cl.get(Calendar.YEAR) ;
-      
+
       for(int d = 1 ;  d < 7 ; d++) {
         calendarData.add(getDateByValue(year, month, day, UICalendarView.TYPE_DATE, d)) ;
       }
@@ -151,7 +153,7 @@ public class UIWeekView extends UICalendarView {
   public LinkedHashMap<String, CalendarEvent> getDataMap() {
     return allWeekData_ ;
   }
-  
+
   static  public class QuickAddActionListener extends EventListener<UIWeekView> {
     public void execute(Event<UIWeekView> event) throws Exception {
       System.out.println("QuickAddActionListener");
@@ -224,20 +226,20 @@ public class UIWeekView extends UICalendarView {
       }
       Calendar cal = GregorianCalendar.getInstance() ;
       cal.setTimeInMillis(Long.parseLong(currentDate)) ;
-      
+
       int hoursBg = (Integer.parseInt(startTime)/60) ;
       int minutesBg = (Integer.parseInt(startTime)%60) ;
       int hoursEnd = (Integer.parseInt(finishTime)/60) ;
       int minutesEnd = (Integer.parseInt(finishTime)%60) ;
-      
+
       cal.set(Calendar.HOUR, hoursBg) ;
       cal.set(Calendar.MINUTE, minutesBg) ;
       eventCalendar.setFromDateTime(cal.getTime()) ;
-      
+
       cal.set(Calendar.HOUR, hoursEnd) ;
       cal.set(Calendar.MINUTE, minutesEnd) ;
       eventCalendar.setToDateTime(cal.getTime()) ;
-      
+
       if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
         calendarService.saveUserEvent(username, calendarId, eventCalendar, false) ;
       }else if(calType.equals(CalendarUtils.SHARED_TYPE)){
