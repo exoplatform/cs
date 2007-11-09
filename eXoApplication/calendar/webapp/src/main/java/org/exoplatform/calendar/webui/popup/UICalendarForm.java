@@ -201,7 +201,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
   protected String getSelectedGroup() {
     return getUIFormSelectBox(CATEGORY).getValue() ;
   }
-  protected void setSelectedGroup(String value) {
+  public void setSelectedGroup(String value) {
     getUIFormSelectBox(CATEGORY).setValue(value) ;
   }
   protected String getSelectedColor() {

@@ -144,11 +144,13 @@ public class UICalendars extends UIForm  {
   static  public class AddCalendarActionListener extends EventListener<UICalendars> {
     public void execute(Event<UICalendars> event) throws Exception {
       UICalendars uiComponent = event.getSource() ;
+      String categoryId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UICalendarPortlet uiCalendarPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
       UIPopupContainer uiPopupContainer = uiCalendarPortlet.createUIComponent(UIPopupContainer.class, null, null) ;
       uiPopupContainer.setId(UIPopupContainer.UICALENDARPOPUP) ;
-      uiPopupContainer.addChild(UICalendarForm.class, null, null) ;
+      UICalendarForm calendarForm = uiPopupContainer.addChild(UICalendarForm.class, null, null) ;
+      calendarForm.setSelectedGroup(categoryId) ;
       popupAction.activate(uiPopupContainer, 600, 0, true) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent.getParent()) ;

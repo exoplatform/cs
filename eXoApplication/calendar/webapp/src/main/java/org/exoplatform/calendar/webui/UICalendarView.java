@@ -597,10 +597,10 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
           event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarView.getParent()) ;
         } else {
-          System.out.println("\n\n event type is not supported !");
+          System.out.println("\n\n event type is not supported ! ");
         }
       } else {
-        System.out.println("\n\n event type not found !");
+        System.out.println("\n\n event not found !");
       }
     }
   }

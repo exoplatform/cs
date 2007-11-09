@@ -255,7 +255,10 @@
 	  		</propertyDefinition>	  					
 	  		<propertyDefinition name="exo:defaultPublicCalendars" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
   				<valueConstraints/>
-	  		</propertyDefinition>	  					
+	  		</propertyDefinition>	 
+	  		<propertyDefinition name="exo:sharedCalendarsColors" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
+  				<valueConstraints/>
+	  		</propertyDefinition>	  	
   		</propertyDefinitions>
  	 	</nodeType>
  	 	<nodeType name="exo:calendarShared" isMixin="true" hasOrderableChildNodes="false" primaryItemName="">

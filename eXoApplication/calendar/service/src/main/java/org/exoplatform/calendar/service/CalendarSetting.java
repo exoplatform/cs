@@ -41,7 +41,7 @@ public class CalendarSetting {
   private boolean isShowWorkingTime = false ; 
   private String workingTimeBegin ;
   private String workingTimeEnd ;
-  private String[] sharedCalendarColor ;
+  private String[] sharedCalendarsColors ;
 
   public CalendarSetting() {
     viewType = DAY_VIEW ;
@@ -53,7 +53,7 @@ public class CalendarSetting {
     baseURL = "http://localhost:8080/calendar/iCalRss" ;
     defaultPrivateCalendars = new String[]{} ;
     defaultPublicCalendars = new String[]{} ;
-    sharedCalendarColor = new String[]{} ;
+    sharedCalendarsColors = new String[]{} ;
   }
 
   public void setViewType(String viewType) { this.viewType = viewType ; }
@@ -115,12 +115,12 @@ public class CalendarSetting {
     return timeZone;
   }
 
-  public void setSharedCalendarColor(String[] sharedCalendarColor) {
-    this.sharedCalendarColor = sharedCalendarColor;
+  public void setSharedCalendarsColors(String[] sharedCalendarColor) {
+    sharedCalendarsColors = sharedCalendarColor;
   }
 
-  public String[] getSharedCalendarColor() {
-    return sharedCalendarColor;
+  public String[] getSharedCalendarsColors() {
+    return sharedCalendarsColors;
   }
 }
 

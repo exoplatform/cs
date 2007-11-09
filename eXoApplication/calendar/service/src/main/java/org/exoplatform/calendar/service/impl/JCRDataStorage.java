@@ -919,6 +919,7 @@ public class JCRDataStorage implements DataStorage{
     settingNode.setProperty("exo:baseURL", setting.getBaseURL()) ;
     settingNode.setProperty("exo:defaultPrivateCalendars", setting.getDefaultPrivateCalendars()) ;
     settingNode.setProperty("exo:defaultPublicCalendars", setting.getDefaultPublicCalendars()) ;
+    settingNode.setProperty("exo:sharedCalendarsColors", setting.getSharedCalendarsColors()) ;
   }
   public CalendarSetting getCalendarSetting(String username) throws Exception{
     Node calendarHome = getCalendarServiceHome(username) ;
@@ -949,6 +950,14 @@ public class JCRDataStorage implements DataStorage{
           calendars[i] = values[i].getString() ;
         }
         calendarSetting.setDefaultPrivateCalendars(calendars) ;
+      }
+      if(settingNode.hasProperty("exo:sharedCalendarsColors")){
+        Value[] values = settingNode.getProperty("exo:sharedCalendarsColors").getValues() ;
+        String[] calendarsColors = new String[values.length] ;
+        for(int i = 0; i < values.length; i++) {
+          calendarsColors[i] = values[i].getString() ;
+        }
+        calendarSetting.setSharedCalendarsColors(calendarsColors) ;
       }
       return calendarSetting ;
     }

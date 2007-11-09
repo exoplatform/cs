@@ -4,9 +4,11 @@
  **************************************************************************/
 package org.exoplatform.calendar.webui.popup;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.exoplatform.calendar.service.Attachment;
 import org.exoplatform.upload.UploadResource;
-import org.exoplatform.upload.UploadService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -36,12 +38,15 @@ import org.exoplatform.webui.form.UIFormUploadInput;
 public class UIAttachFileForm extends UIForm implements UIPopupComponent {
 
   final static public String FIELD_UPLOAD = "upload" ;  
-
+  private int maxField = 5 ;
 
   public UIAttachFileForm() throws Exception {
     setMultiPart(true) ;
-    UIFormUploadInput uiInput = new UIFormUploadInput(FIELD_UPLOAD, FIELD_UPLOAD) ;
-    addUIFormInput(uiInput) ;
+    int i = 0 ;
+    while(i++ < maxField) {
+      UIFormUploadInput uiInput = new UIFormUploadInput(FIELD_UPLOAD + String.valueOf(i), FIELD_UPLOAD + String.valueOf(i)) ;
+      addUIFormInput(uiInput) ;
+    }
   }
 
 
@@ -52,9 +57,51 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
     public void execute(Event<UIAttachFileForm> event) throws Exception {
       UIAttachFileForm uiForm = event.getSource();
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-      UIFormUploadInput input = (UIFormUploadInput)uiForm.getUIInput(FIELD_UPLOAD);
-      UploadResource uploadResource = input.getUploadResource() ;
-      if(uploadResource == null) {
+      List<Attachment> files = new ArrayList<Attachment>() ;
+      int i = 0 ;
+      while(i++ < uiForm.maxField) {
+        UIFormUploadInput input = (UIFormUploadInput)uiForm.getUIInput(FIELD_UPLOAD + String.valueOf(i));
+        UploadResource uploadResource = input.getUploadResource() ;
+        if(uploadResource != null) {
+          Attachment attachfile = new Attachment() ;
+          attachfile.setName(uploadResource.getFileName()) ;
+          attachfile.setInputStream(input.getUploadDataAsStream()) ;
+          attachfile.setMimeType(uploadResource.getMimeType()) ;
+          attachfile.setSize((long)uploadResource.getUploadedSize());
+          files.add(attachfile) ;
+        }
+      }
+      if(files.isEmpty()){
+        uiApp.addMessage(new ApplicationMessage("UIAttachFileForm.msg.fileName-error", null, 
+            ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      } else {
+        UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
+        UIEventForm uiEventForm = uiPopupContainer.getChild(UIEventForm.class) ;
+        UITaskForm uiTaskForm = uiPopupContainer.getChild(UITaskForm.class) ;
+        if(uiEventForm != null) {
+          UIEventDetailTab uiEventDetailTab = uiEventForm.getChild(UIEventDetailTab.class) ;
+          for(Attachment file :  files){
+            uiEventDetailTab.addToUploadFileList(file) ;
+            //uiEventDetailTab.setAttachments(files) ;
+          }
+          uiEventDetailTab.refreshUploadFileList() ;
+        } else if(uiTaskForm != null) {
+          UITaskDetailTab uiTaskDetailTab = uiTaskForm.getChild(UITaskDetailTab.class) ;
+          for(Attachment file :  files){
+            uiTaskDetailTab.addToUploadFileList(file) ;  
+            //uiTaskDetailTab.setAttachments(files) ;
+          }
+          uiTaskDetailTab.refreshUploadFileList() ;
+        }
+        UIPopupAction uiPopupAction = uiPopupContainer.getChild(UIPopupAction.class) ;
+        /*UploadService uploadService = uiForm.getApplicationComponent(UploadService.class) ;
+        uploadService.removeUpload(input.getUploadId()) ;*/
+        uiPopupAction.deActivate() ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction.getAncestorOfType(UIPopupAction.class)) ;
+      }
+      /*if(uploadResource == null) {
         uiApp.addMessage(new ApplicationMessage("UIAttachFileForm.msg.fileName-error", null, 
             ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -66,8 +113,8 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
             ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
-      }
-      UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
+      }*/
+      /*UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       UIEventForm uiEventForm = uiPopupContainer.getChild(UIEventForm.class) ;
       UITaskForm uiTaskForm = uiPopupContainer.getChild(UITaskForm.class) ;
       UIPopupAction uiPopupAction = uiPopupContainer.getChild(UIPopupAction.class) ;
@@ -96,7 +143,7 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         e.printStackTrace() ;
         return ;
-      }
+      }*/
     }
   }
 

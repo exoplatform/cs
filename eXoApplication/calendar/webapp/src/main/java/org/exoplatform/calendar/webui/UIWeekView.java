@@ -57,6 +57,7 @@ public class UIWeekView extends UICalendarView {
 
   protected Map<String, List<CalendarEvent>> eventData_ = new HashMap<String, List<CalendarEvent>>() ;
   protected LinkedHashMap<String, CalendarEvent> allWeekData_ = new LinkedHashMap<String,  CalendarEvent>() ;
+  protected LinkedHashMap<String, CalendarEvent> dataMap_ = new LinkedHashMap<String,  CalendarEvent>() ;
   protected  List<CalendarEvent> daysData_  = new ArrayList<CalendarEvent>() ;
   protected boolean isShowCustomView_ = false ;
   protected Date beginDate_ ;
@@ -97,11 +98,13 @@ public class UIWeekView extends UICalendarView {
         String key = keyGen(c.get(Calendar.DATE), c.get(Calendar.MONTH), c.get(Calendar.YEAR)) ;
         if(isSameDate(c.getTime(), beginEvent) &&  isSameDate(c.getTime(), endEvent)) { 
           eventData_.get(key).add(event) ;
+          dataMap_.put(event.getId(), event) ;
           iter.remove() ;
         } 
       }
     }
     for( CalendarEvent ce : allEvents) {
+      allWeekData_.put(ce.getId(), ce) ;
       allWeekData_.put(ce.getId(), ce) ;
     }
   }
@@ -151,7 +154,7 @@ public class UIWeekView extends UICalendarView {
     return allWeekData_ ;
   }
   public LinkedHashMap<String, CalendarEvent> getDataMap() {
-    return allWeekData_ ;
+    return dataMap_ ;
   }
 
   static  public class QuickAddActionListener extends EventListener<UIWeekView> {
