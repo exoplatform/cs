@@ -4,11 +4,14 @@
  **************************************************************************/
 package org.exoplatform.mail.webui.popup;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.exoplatform.mail.service.Attachment;
 import org.exoplatform.mail.service.BufferAttachment;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.services.jcr.util.IdGenerator;
 import org.exoplatform.upload.UploadResource;
-import org.exoplatform.upload.UploadService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -28,8 +31,9 @@ import org.exoplatform.webui.form.UIFormUploadInput;
  */
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
-    template =  "system:/groovy/webui/form/UIForm.gtmpl",
+    template =  "app:/templates/mail/webui/UIAttachFileForm.gtmpl",
     events = {
+      @EventConfig(listeners = UIAttachFileForm.AddMoreActionListener.class), 
       @EventConfig(listeners = UIAttachFileForm.SaveActionListener.class), 
       @EventConfig(listeners = UIAttachFileForm.CancelActionListener.class, phase = Phase.DECODE)
     }
@@ -37,66 +41,88 @@ import org.exoplatform.webui.form.UIFormUploadInput;
 
 public class UIAttachFileForm extends UIForm implements UIPopupComponent {
 
-  final static public String FIELD_UPLOAD = "upload" ;  
-  
+  public static final String FIELD_UPLOAD = "upload" ;  
+  public int numberFile = 5 ;
 
   public UIAttachFileForm() throws Exception {
     setMultiPart(true) ;
-    UIFormUploadInput uiInput = new UIFormUploadInput(FIELD_UPLOAD, FIELD_UPLOAD) ;
-    uiInput.setEditable(false);
-    addUIFormInput(uiInput) ;
+    for (int i = 0; i < 5; i++ ) {
+      UIFormUploadInput uiInput = new UIFormUploadInput(FIELD_UPLOAD + String.valueOf(i+1), FIELD_UPLOAD + String.valueOf(i+1)) ;
+      addUIFormInput(uiInput) ;
+    }
   }
+  
+  public void setNumberFile(int nb) { numberFile = nb; }
+  
+  public int  getNumberFile() { return numberFile; }
 
-
+  public String[] getActions() { return new String[]{ "Save", "Cancel" } ;} 
+  
   public void activate() throws Exception {}
+  
   public void deActivate() throws Exception {}
 
   static  public class SaveActionListener extends EventListener<UIAttachFileForm> {
     public void execute(Event<UIAttachFileForm> event) throws Exception {
       UIAttachFileForm uiForm = event.getSource();
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-      UIFormUploadInput input = (UIFormUploadInput)uiForm.getUIInput(FIELD_UPLOAD);
-      UploadResource uploadResource = input.getUploadResource() ;
-      if(uploadResource == null) {
-        uiApp.addMessage(new ApplicationMessage("UIAttachFileForm.msg.fileName-error", null, 
-            ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
-      }
-      String fileName = uploadResource.getFileName() ;
-      if(fileName == null || fileName.equals("")) {
-        uiApp.addMessage(new ApplicationMessage("UIAttachFileForm.msg.fileName-error", null, 
-            ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
-      }
-      UIPopupActionContainer uiPopupActionContainer = uiForm.getAncestorOfType(UIPopupActionContainer.class) ;
+      List<BufferAttachment> fileAttachList = new ArrayList<BufferAttachment>();
       try {
-        UIComposeForm uiComposeForm = uiPopupActionContainer.getChild(UIComposeForm.class) ;
-        BufferAttachment attachfile = new BufferAttachment() ;
-         attachfile.setId("Attachment" + IdGenerator.generate());
-         attachfile.setName(uploadResource.getFileName()) ;
-         attachfile.setInputStream(input.getUploadDataAsStream()) ;
-         attachfile.setMimeType(uploadResource.getMimeType()) ;
-         attachfile.setSize((long)uploadResource.getUploadedSize());
-         uiComposeForm.addToUploadFileList(attachfile) ;
-         uiComposeForm.refreshUploadFileList() ;
-         UploadService uploadService = uiForm.getApplicationComponent(UploadService.class) ;
-         uploadService.removeUpload(input.getUploadId()) ;
+        for (int i = 1; i <= uiForm.getNumberFile(); i++) {        
+          UIFormUploadInput input = (UIFormUploadInput)uiForm.getUIInput(FIELD_UPLOAD + String.valueOf(i));
+          UploadResource uploadResource = input.getUploadResource() ;
+          if (uploadResource != null) {
+            BufferAttachment attachFile = new BufferAttachment() ;
+            attachFile.setId("Attachment" + IdGenerator.generate());
+            attachFile.setName(uploadResource.getFileName()) ;
+            attachFile.setInputStream(input.getUploadDataAsStream()) ;
+            attachFile.setMimeType(uploadResource.getMimeType()) ;
+            attachFile.setSize((long)uploadResource.getUploadedSize());
+            fileAttachList.add(attachFile);
+          }
+        }
       } catch(Exception e) {
         uiApp.addMessage(new ApplicationMessage("UIAttachFileForm.msg.upload-error", null, 
-            ApplicationMessage.WARNING));
+            ApplicationMessage.INFO));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         e.printStackTrace() ;
         return ;
-      }
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupActionContainer) ;
+      }     
+      
+      if (fileAttachList.isEmpty()) {
+        uiApp.addMessage(new ApplicationMessage("UIAttachFileForm.msg.file-empty-error", null, ApplicationMessage.INFO)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      } else {
+        UIMailPortlet uiPortlet = uiForm.getAncestorOfType(UIMailPortlet.class) ;
+        UIComposeForm uiComposeForm = uiPortlet.findFirstComponentOfType(UIComposeForm.class);
+        for (BufferAttachment att : fileAttachList) {
+          uiComposeForm.addToUploadFileList((Attachment)att) ;
+        }
+        uiComposeForm.refreshUploadFileList() ;
+      } 
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupActionContainer.class)) ;
     }
   }
 
+  static  public class AddMoreActionListener extends EventListener<UIAttachFileForm> {
+    public void execute(Event<UIAttachFileForm> event) throws Exception {
+      UIAttachFileForm uiAttach = event.getSource();
+      int numberAttachFile = uiAttach.getNumberFile() + 1;
+      if (numberAttachFile <= 10) { 
+        UIFormUploadInput uiInput = new UIFormUploadInput(FIELD_UPLOAD + String.valueOf(numberAttachFile), FIELD_UPLOAD + String.valueOf(numberAttachFile)) ;
+        uiAttach.addUIFormInput(uiInput) ;
+        uiAttach.setNumberFile(numberAttachFile);
+      }
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiAttach);
+    }
+  }
+  
   static  public class CancelActionListener extends EventListener<UIAttachFileForm> {
     public void execute(Event<UIAttachFileForm> event) throws Exception {
-      event.getSource().getAncestorOfType(UIMailPortlet.class).cancelAction() ;
+      UIAttachFileForm uiAttach = event.getSource();
+      uiAttach.deActivate();
+      event.getRequestContext().addUIComponentToUpdateByAjax((uiAttach.getAncestorOfType(UIPopupActionContainer.class))) ;
     }
   }
 }

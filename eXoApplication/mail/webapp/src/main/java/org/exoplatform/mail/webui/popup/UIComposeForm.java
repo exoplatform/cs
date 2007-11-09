@@ -410,7 +410,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
       System.out.println(" ==== >>> Attachment Action Listener") ;
       UIPopupActionContainer uiActionContainer = uiForm.getAncestorOfType(UIPopupActionContainer.class) ;
       UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class) ;
-      uiChildPopup.activate(UIAttachFileForm.class, 500) ;
+      uiChildPopup.activate(UIAttachFileForm.class, 600) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiActionContainer) ;
     }
   }
