@@ -153,18 +153,23 @@
 	  	 	    <tbody>
 	  	 	    <%
 	  	 	    		for(contact in contacts) {
-	  	 	    			String actionLink  = uicomponent.event("SelectedContact", contact.getId()) ;
-									checkboxField = uicomponent.getChildById(contact.getId()) ;
-									iconTag = "Icon " ;
-									String[] tagIds = contact.getTags() ;
-									if (tagIds != null && tagIds.length > 0) {
-										Tag tag = ContactUtils.getContactService().getTag(ContactUtils.getCurrentUser(), tagIds[0]) ;
-										if (tag != null) iconTag += + tag.getColor() + "Tag" ; 
-									}	
+	  	 	    				
 
 									// add
 	  	 	    			String[] categories = contact.getCategories() ;
 	  	 	    			for (category in categories) {
+	  	 	    				String actionLink  = uicomponent.event("SelectedContact", contact.getId()) ;
+										checkboxField = uicomponent.getChildById(contact.getId()) ;
+										iconTag = "Icon " ;
+										String[] tagIds = contact.getTags() ;
+										if (tagIds != null && tagIds.length > 0) {
+											Tag tag = ContactUtils.getContactService().getTag(ContactUtils.getCurrentUser(), tagIds[0]) ;
+											if (tag != null) iconTag += + tag.getColor() + "Tag" ; 
+											
+											
+											
+											
+										}		
 	  	 	    				cssClass = "" ;
 										if (contact.getId().equals(uicomponent.getSelectedContact())) cssClass = "Selected" ;
 	  	 	    				String groupName ;

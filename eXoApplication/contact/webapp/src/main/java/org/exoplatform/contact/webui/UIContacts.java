@@ -119,11 +119,27 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   public void updateList() throws Exception { 
     getChildren().clear() ;
     contactMap.clear();
+    
+    System.out.println("\n\n page list size:" + pageList_.getAvailable() + "\n\n");
+    
+    
     if(pageList_ != null) {
       for(Contact contact : pageList_.getPage(pageList_.getCurrentPage(),ContactUtils.getCurrentUser())) {
         UIFormCheckBoxInput<Boolean> checkbox = new UIFormCheckBoxInput<Boolean>(contact.getId(),contact.getId(), false) ;
         addUIFormInput(checkbox);
         contactMap.put(contact.getId(), contact) ;
+        
+        
+        
+        if (contact.getTags() != null && contact.getTags().length > 0)
+          System.out.println("\n\n contact.java: " + contact.getTags()[0] + "\n\n");
+        else {
+          System.out.println("\n\n else null \n\n");
+        }
+        
+        
+        
+        
       }
       Contact[] array = contactMap.values().toArray(new Contact[]{}) ;
       if (array.length > 0 && !isSearchResult) {

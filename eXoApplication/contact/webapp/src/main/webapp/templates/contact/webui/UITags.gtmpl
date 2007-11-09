@@ -2,7 +2,7 @@
 	<div class="TitleBar">
 		<div class="DownArrow3Icon" title="Collapse/Expand all"><span></span></div>
 		<div class="TitleIcon BlueTag">Tags</div>
-		<div class="ActionIcon"><span></span></div>
+		
   	<div style="clear: none"><span></span></div>
 	</div>
 	<div class="ListContent">

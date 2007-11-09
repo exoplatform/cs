@@ -804,7 +804,8 @@ public class JCRDataStorage implements DataStorage {
           for(Value value : values) tagMap.put(value.getString(), value.getString()) ;         
         }
         contactNode.setProperty("exo:tags", tagMap.values().toArray(new String[]{})) ;
-        for(Value value : values) tagMap.remove(value.getString()) ;
+        if (values != null)
+          for(Value value : values) tagMap.remove(value.getString()) ;
       }      
     }
     contactHomeNode.getSession().save() ;
