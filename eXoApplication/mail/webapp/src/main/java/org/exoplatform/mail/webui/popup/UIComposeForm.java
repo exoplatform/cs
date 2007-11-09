@@ -151,6 +151,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
       fileUpload.setActionListener("") ;
       fileUpload.setActionType(ActionData.TYPE_ICON) ;
       fileUpload.setCssIconClass("AttachmentIcon ZipFileIcon") ;
+      fileUpload.setBreakLine(true);
       fileUpload.setActionName(attachdata.getName() + " ("+attachdata.getSize()+" Kb)" ) ;
       fileUpload.setShowLabel(true) ;
       uploadedFiles.add(fileUpload) ;

@@ -58,7 +58,6 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
         @EventConfig(listeners = UIMessageList.PrintActionListener.class),
         @EventConfig(listeners = UIMessageList.MarkAsReadActionListener.class),
         @EventConfig(listeners = UIMessageList.MarkAsUnReadActionListener.class),
-        @EventConfig(listeners = UIMessageList.AddStarActionListener.class),
         @EventConfig(listeners = UIMessageList.RemoveStarActionListener.class),
         @EventConfig(listeners = UIMessageList.ViewAllActionListener.class),
         @EventConfig(listeners = UIMessageList.ViewStarredActionListener.class),
@@ -71,6 +70,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
         @EventConfig(listeners = UIMessageList.NextPageActionListener.class),
         @EventConfig(listeners = UIMessageList.LastPageActionListener.class),
         @EventConfig(listeners = UIMessageList.AddTagActionListener.class),
+        @EventConfig(listeners = UIMessageList.AddTagDnDActionListener.class),
         @EventConfig(listeners = UIMessageList.MoveMessagesActionListener.class),
         @EventConfig(listeners = UIMessageList.MoveDirectMessagesActionListener.class),
         @EventConfig(listeners = UIMessageList.AddContactActionListener.class),
@@ -556,6 +556,28 @@ public class UIMessageList extends UIForm {
       uiTagForm.setMessageList(uiMessageList.getCheckedMessage());
       uiTagForm.setTagList(listTags) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
+    }
+  }
+  
+  static public class AddTagDnDActionListener extends EventListener<UIMessageList> {
+    public void execute(Event<UIMessageList> event) throws Exception {
+      UIMessageList uiMessageList = event.getSource() ; 
+      UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class); 
+      String tagId = event.getRequestContext().getRequestParameter(OBJECTID) ; 
+      UITagContainer uiTagContainer = uiPortlet.findFirstComponentOfType(UITagContainer.class);
+      String username = uiPortlet.getCurrentUser() ;
+      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      MailService mailSrv = uiMessageList.getApplicationComponent(MailService.class);
+      List<Tag> tagList = new ArrayList<Tag>();      
+      tagList.add(mailSrv.getTag(username, accountId, tagId));
+      List<String> msgIdList = new ArrayList<String>();
+      for (Message message : uiMessageList.getCheckedMessage()) {
+        msgIdList.add(message.getId());
+      }
+      mailSrv.addTag(username, accountId, msgIdList, tagList);
+      
+      uiMessageList.updateList();
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiTagContainer) ;
     }
   }
   
