@@ -629,12 +629,14 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
         Date from = uiForm.getEventFromDate() ;
         Date to = uiForm.getEventToDate() ;
         if(uiForm.getEventAllDate()) {
-          Calendar cal = Calendar.getInstance() ;
+          java.util.Calendar cal = GregorianCalendar.getInstance() ;
           cal.setTime(from) ;
-          cal.set(Calendar.HOUR, 0) ;
-          cal.set(Calendar.MINUTE, 0) ;
+          cal.set(java.util.Calendar.HOUR, 0) ;
+          cal.set(java.util.Calendar.MINUTE, 0) ;
           from = cal.getTime() ;
-          cal.add(Calendar.DATE, 1) ;
+          cal.setTime(to) ;
+          cal.set(java.util.Calendar.HOUR, 0) ;
+          cal.set(java.util.Calendar.MINUTE, 0) ;
           to = cal.getTime() ;
         }
         calendarEvent.setCalType(uiForm.calType_) ;

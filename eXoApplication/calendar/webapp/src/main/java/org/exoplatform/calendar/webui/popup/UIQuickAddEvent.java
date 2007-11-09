@@ -195,7 +195,9 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
         cal.set(java.util.Calendar.HOUR, 0) ;
         cal.set(java.util.Calendar.MINUTE, 0) ;
         fromDate = cal.getTime() ;
-        cal.add(java.util.Calendar.DATE, 1) ;
+        cal.setTime(toDate) ;
+        cal.set(java.util.Calendar.HOUR, 0) ;
+        cal.set(java.util.Calendar.MINUTE, 0) ;
         toDate = cal.getTime() ;
       }else {      
         if(fromDate.equals(toDate) || fromDate.after(toDate)) {

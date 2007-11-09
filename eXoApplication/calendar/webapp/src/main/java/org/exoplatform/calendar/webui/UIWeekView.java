@@ -105,7 +105,7 @@ public class UIWeekView extends UICalendarView {
     }
     for( CalendarEvent ce : allEvents) {
       allWeekData_.put(ce.getId(), ce) ;
-      allWeekData_.put(ce.getId(), ce) ;
+      dataMap_.put(ce.getId(), ce) ;
     }
   }
   protected void moveTo(int weeks) {
