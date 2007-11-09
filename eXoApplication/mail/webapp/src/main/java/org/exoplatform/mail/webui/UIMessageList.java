@@ -355,6 +355,8 @@ public class UIMessageList extends UIForm {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource() ; 
       System.out.println(" =========== > Reply Action");
+      String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      if (msgId == null) msgId = uiMessageList.getSelectedMessageId();
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class) ;
       UINavigationContainer uiNavigation = uiPortlet.getChild(UINavigationContainer.class) ;
       UISelectAccount uiSelect = uiNavigation.getChild(UISelectAccount.class) ;
@@ -365,9 +367,8 @@ public class UIMessageList extends UIForm {
       UIComposeForm uiComposeForm = uiPopupContainer.createUIComponent(UIComposeForm.class, null, null);
       MailService mailSvr = uiMessageList.getApplicationComponent(MailService.class) ;
       String username = uiPortlet.getCurrentUser() ;
-      if (uiMessageList.getSelectedMessageId() != null) {
-        String messageId = uiMessageList.getSelectedMessageId();
-        Message message = mailSvr.getMessageById(username, messageId, accId);
+      if (msgId != null) {
+        Message message = mailSvr.getMessageById(username, msgId, accId);
         uiComposeForm.setFieldToValue(message.getFrom());
         uiComposeForm.setFieldSubjectValue("Re: " + message.getSubject());
       }
@@ -380,6 +381,8 @@ public class UIMessageList extends UIForm {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource() ; 
       System.out.println(" =========== > Reply All Action");
+      String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      if (msgId == null) msgId = uiMessageList.getSelectedMessageId();
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class) ;
       UINavigationContainer uiNavigation = uiPortlet.getChild(UINavigationContainer.class) ;
       UISelectAccount uiSelect = uiNavigation.getChild(UISelectAccount.class) ;
@@ -390,9 +393,8 @@ public class UIMessageList extends UIForm {
       UIComposeForm uiComposeForm = uiPopupContainer.createUIComponent(UIComposeForm.class, null, null);
       MailService mailSvr = uiMessageList.getApplicationComponent(MailService.class) ;
       String username = uiPortlet.getCurrentUser() ;
-      if (uiMessageList.getSelectedMessageId() != null) {
-        String messageId = uiMessageList.getSelectedMessageId();
-        Message message = mailSvr.getMessageById(username, messageId, accId);
+      if (msgId != null) {
+        Message message = mailSvr.getMessageById(username, msgId, accId);
         uiComposeForm.setFieldSubjectValue("Re: " + message.getSubject());
         String replyAll = message.getFrom();
         if (message.getMessageCc() != null) replyAll += "," + message.getMessageCc();
@@ -409,6 +411,8 @@ public class UIMessageList extends UIForm {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource() ; 
       System.out.println(" =========== > Forward Action");
+      String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      if (msgId == null) msgId = uiMessageList.getSelectedMessageId();
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class) ;
       UINavigationContainer uiNavigation = uiPortlet.getChild(UINavigationContainer.class) ;
       UISelectAccount uiSelect = uiNavigation.getChild(UISelectAccount.class) ;
@@ -420,9 +424,8 @@ public class UIMessageList extends UIForm {
 
       MailService mailSvr = uiMessageList.getApplicationComponent(MailService.class) ;
       String username = uiPortlet.getCurrentUser() ;
-      if (uiMessageList.getSelectedMessageId() != null) {
-        String messageId = uiMessageList.getSelectedMessageId();
-        Message message = mailSvr.getMessageById(username, messageId, accId);
+      if (msgId != null) {
+        Message message = mailSvr.getMessageById(username, msgId, accId);
         uiComposeForm.setFieldSubjectValue("Fwd: " + message.getSubject());
         String forwardedText = "\n\n\n-------- Original Message --------\n" +
             "Subject: " + message.getSubject() + "\nDate: " + message.getSendDate() + 
@@ -442,6 +445,7 @@ public class UIMessageList extends UIForm {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource();
       System.out.println("======== >>> DeleteActionListener");
+      String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
       UIMessageArea uiMessageArea = uiPortlet.findFirstComponentOfType(UIMessageArea.class);
@@ -449,7 +453,12 @@ public class UIMessageList extends UIForm {
       MailService mailSrv = uiMessageList.getApplicationComponent(MailService.class);
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-      List<Message> checkedMessageList = uiMessageList.getCheckedMessage();
+      List<Message> checkedMessageList = new ArrayList<Message>();
+      if (msgId != null) { 
+        checkedMessageList.add(mailSrv.getMessageById(username, msgId, accountId));
+      } else {
+        checkedMessageList = uiMessageList.getCheckedMessage();
+      }
       for (Message message : checkedMessageList) {
         Folder oldFolder = mailSrv.getFolder(username, accountId, message.getFolders()[0]);
         message.setFolders(new String[] { Utils.createFolderId(accountId, Utils.FD_TRASH, false) });
@@ -644,9 +653,10 @@ public class UIMessageList extends UIForm {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource() ;   
       System.out.println("=== >>> Export Action Listener");
+      String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      if (msgId == null) msgId = uiMessageList.getSelectedMessageId();
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
-      String msgId = uiMessageList.getSelectedMessageId();
       UIExportForm uiExportForm = uiPopup.createUIComponent(UIExportForm.class, null, null);
       uiPopup.activate(uiExportForm, 600, 0, true);
       String username = uiPortlet.getCurrentUser();
