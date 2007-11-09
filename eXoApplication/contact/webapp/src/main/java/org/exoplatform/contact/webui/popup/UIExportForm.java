@@ -200,14 +200,12 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
         return ; 
       }
       OutputStream out = contactService.getContactImportExports(exportFormat).exportContact(username, contactIds) ;
-      
       String contentType = null;
       String extension = null;
-      if (exportFormat.indexOf("vcf") > 0) {
-        contentType = "text/x-vcard";
+      if(exportFormat.equals("x-vcard")){
+    	contentType = "text/x-vcard";
         extension = ".vcf";
       }
-      
       ByteArrayInputStream is = new ByteArrayInputStream(out.toString().getBytes()) ;
       DownloadResource dresource = new InputStreamDownloadResource(is, contentType) ;
       DownloadService dservice = (DownloadService)PortalContainer.getInstance().getComponentInstanceOfType(DownloadService.class) ;
