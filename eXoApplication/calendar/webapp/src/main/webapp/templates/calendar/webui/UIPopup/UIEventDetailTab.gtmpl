@@ -27,6 +27,8 @@
 	    }
 	  }
 	}
+	def rcontext = _ctx.getRequestContext() ;	
+  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.isAllday("UIEventForm") ;') ;	
 %>
 <div class="UIAddNewEvent">
   <table class="UIFormGrid">
@@ -63,7 +65,7 @@
           <div class="Date">
             <%uiForm.renderField(uicomponent.FIELD_FROM)%>
           </div>
-          <div class="Time">
+          <div class="Time"><!-- start time -->
             <%uiForm.renderField(uicomponent.FIELD_FROM_TIME)%>
           </div>
         </td>
@@ -76,7 +78,7 @@
           <div class="Date">
             <%uiForm.renderField(uicomponent.FIELD_TO)%>
           </div>
-          <div class="Time">
+          <div class="Time"><!-- end time -->
             <%uiForm.renderField(uicomponent.FIELD_TO_TIME)%>
           </div>
         </td>
@@ -85,7 +87,7 @@
         <td class="FieldLabel">
           <%=uiForm.getLabel(uicomponent.FIELD_CHECKALL)%>
         </td>
-        <td class="FieldComponent">
+        <td class="FieldComponent" onclick="eXo.calendar.UICalendarPortlet.showHideTime(this) ;"><!-- check all -->
           <%uiForm.renderField(uicomponent.FIELD_CHECKALL)%>
         </td>
       </tr>

@@ -1,3 +1,7 @@
+<%
+def rcontext = _ctx.getRequestContext() ;	
+rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.isAllday("UIQuickAddEvent") ;') ;	
+%>
 <div class="UIQuickAddEvent">
   <div class="QuickAddEventContainer">
     <%uiform.begin()%>
@@ -51,7 +55,7 @@
               <td class="FieldLabel">
                 <%=uicomponent.getLabel(uicomponent.FIELD_ALLDAY)%>
               </td>
-              <td class="FieldComponent">
+              <td class="FieldComponent" onclick="eXo.calendar.UICalendarPortlet.showHideTime(this) ;">
                 <%uicomponent.renderField(uicomponent.FIELD_ALLDAY)%>
               </td>
             </tr>
