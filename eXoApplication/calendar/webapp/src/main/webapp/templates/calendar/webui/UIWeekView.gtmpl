@@ -91,8 +91,8 @@
 								<% for (event in uicomponent.getEventList().values()) {
 									int indexBeginDate = -1 ;
 									int indexEndDate = 7 ;
-									begindate = df.format(event.fromDateTime) ;
-									enddate = df.format(event.toDateTime) ;
+									begindate = tf.format(event.fromDateTime) ;
+									enddate = tf.format(event.toDateTime) ;
 									for(cl in uicomponent.getDaysOfWeek(weekNumber)) { 
 						 			  if(uicomponent.isSameDate(event.fromDateTime, cl.time)){
 						 			  	indexBeginDate = uicomponent.getDaysOfWeek(weekNumber).indexOf(cl) ;
