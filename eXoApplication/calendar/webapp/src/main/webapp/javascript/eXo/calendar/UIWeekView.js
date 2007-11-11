@@ -53,7 +53,11 @@ UIWeekView.prototype.init = function() {
 		if (!DOMUtil.findChildrenByClass(UIWeekView.cols[i], "div", "EventContainerBorder")) return ;
 		UIWeekView.showInCol(UIWeekView.cols[i]) ;
 	}
-	UIWeekView.initAllday() ;
+	try{		
+		UIWeekView.initAllday() ;
+	} catch(e) {
+		//alert(e.message) ;
+	}
 } ;
 
 UIWeekView.prototype.showInCol = function(obj) {
@@ -121,8 +125,8 @@ UIWeekView.prototype.drop = function(evt) {
 	var currentCol = UIWeekView.currentCol ;
 	var sourceCol = UIWeekView.dragElement.parentNode ;
 	UIWeekView.currentCol.appendChild(UIWeekView.dragElement) ;
-	UIWeekView.showInCol(currentCol) ;
 	UIWeekView.showInCol(sourceCol) ;	
+	UIWeekView.showInCol(currentCol) ;
 	if ((currentCol != sourceCol) || (UIWeekView.dragElement.offsetTop != UIWeekView.eventY)) UIWeekView.dropCallback() ;
 	UIWeekView.dragElement = null ;
 	document.onmousemove = null ;

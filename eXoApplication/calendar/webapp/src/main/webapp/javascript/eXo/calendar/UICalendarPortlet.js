@@ -6,34 +6,34 @@ function UICalendarPortlet() {
 
 /* for general calendar */
 UICalendarPortlet.prototype.timeToMin = function(timeFormat) {
-	var pm = false ;
-	var am = false ;
-	timeFormat = timeFormat.toString().trim() ;
-	if (timeFormat.indexOf("PM") != -1) pm = true ;
-	if (timeFormat.indexOf("AM") != -1) am = true ;
-	var format = /\d{2}\s*:\s*\d{2}\s*AM|PM/ ;
-	var hour = null ;
-	var min = null ;
-	if (format.test(timeFormat)){
-		timeFormat = timeFormat.replace(/[A-Z]+/,"") ;
-	}
-	timeFormat = timeFormat.split(":") ;
-	hour = Number(timeFormat[0].toString().trim()) ;
-	min = Number(timeFormat[1].toString().trim()) ;
-	if(pm) {		
-		hour = (hour != 12) ? hour + 12 : hour ;
-	}
-	if(am) {		
-		hour = (hour != 12) ? hour : 0 ;
-	}
-	min += hour*60 ;
+		var pm = false ;
+		var am = false ;
+		timeFormat = timeFormat.toString().trim() ;
+		if (timeFormat.indexOf("PM") != -1) pm = true ;
+		if (timeFormat.indexOf("AM") != -1) am = true ;
+		var format = /\d{2}\s*:\s*\d{2}\s*AM|PM/ ;
+		var hour = null ;
+		var min = null ;
+		if (format.test(timeFormat)){
+			timeFormat = timeFormat.replace(/[A-Z]+/,"") ;
+		}
+		timeFormat = timeFormat.split(":") ;
+		hour = Number(timeFormat[0].toString().trim()) ;
+		min = Number(timeFormat[1].toString().trim()) ;
+		if(pm) {		
+			hour = (hour != 12) ? hour + 12 : hour ;
+		}
+		if(am) {		
+			hour = (hour != 12) ? hour : 0 ;
+		}
+		min += hour*60 ;
 	return min ;
 }	;
 
 UICalendarPortlet.prototype.setting = function() {
 	var UICalendarPortlet = eXo.calendar.UICalendarPortlet ;
-	UICalendarPortlet.interval = ((arguments.length > 0) && (isNaN(parseInt(arguments[0])) == false )) ? parseInt(arguments[0]) : parseInt(5) ;
-	UICalendarPortlet.workingStart =  ((arguments.length > 1) && (isNaN(parseInt(arguments[1])) == false )) ? UICalendarPortlet.timeToMin(arguments[1]) : parseInt(0) ;
+	UICalendarPortlet.interval = ((arguments.length > 0) && (isNaN(parseInt(arguments[0])) == false )) ? parseInt(arguments[0]) : parseInt(15) ;
+	UICalendarPortlet.workingStart =  ((arguments.length > 1) && (isNaN(parseInt(arguments[1])) == false ) && (arguments[1] != "null")) ? UICalendarPortlet.timeToMin(arguments[1]) : parseInt(0) ;
 } ;
 
 UICalendarPortlet.prototype.hide = function() {
@@ -296,28 +296,30 @@ UICalendarPortlet.prototype.getInterval = function(el) {
 UICalendarPortlet.prototype.adjustWidth = function(el) {
 	var UICalendarPortlet = eXo.calendar.UICalendarPortlet ;
 	var inter = UICalendarPortlet.getInterval(el) ;
-	var totalWidth = (arguments.length > 1) ? arguments[1] : 100 ;
-	var offsetLeft = (arguments.length > 2) ? arguments[2] : 0 ;
+	var totalWidth = (arguments.length > 1) ? arguments[1] : parseFloat(100) ;
+	var offsetLeft = (arguments.length > 2) ? parseFloat(arguments[2]) : parseFloat(0) ;
 	if (el.length <= 0) return ;
+	var width = "" ;
 	for(var i = 0 ; i < inter.length ; i ++) {
-		var width = "" ;
 		var len = (inter[i+1] - inter[i]) ;
 		if(isNaN(len)) continue ;
 		var mark = null ;
-		var newLeft = 0 ;
 		if (i > 0){
-			for(var j = inter[i-1] ; j < inter[i] ; j ++) {
-				if((el[inter[i]].offsetTop > el[j].offsetTop) && (el[inter[i]].offsetTop < (el[j].offsetTop + el[j].offsetHeight))) {
-					mark = j ;
+			for(var l = 0 ; l < inter[i] ; l ++) {
+				if((el[inter[i]].offsetTop > el[l].offsetTop) && (el[inter[i]].offsetTop < (el[l].offsetTop + el[l].offsetHeight))) {
+					mark = l ;					
 				}
 			}			
-			if (mark) newLeft = parseFloat(el[mark].style.left) + parseFloat(el[mark].style.width) ;
+			if (mark != null) {
+				offsetLeft = parseFloat(el[mark].style.left) + parseFloat(el[mark].style.width) ;
+			}
 		}
 		var n = 0 ;
 		for(var j = inter[i]; j < inter[i+1] ; j++) {
-			width = (mark) ? parseFloat((totalWidth - parseFloat(el[mark].style.left) - parseFloat(el[j-1].style.width))/len) : parseFloat(totalWidth/len) ;
+			width = (mark != null) ? parseFloat((totalWidth - parseFloat(el[mark].style.left) - parseFloat(el[mark].style.width))/len) : parseFloat(totalWidth/len) ;
 			UICalendarPortlet.setWidth(el[j], width) ;
-			if (el[j-1]&&(len > 1)) el[j].style.left = offsetLeft + newLeft + parseFloat(el[j-1].style.width)*n +  "%" ;
+			if (el[j-1]&&(len > 1)) el[j].style.left = offsetLeft + parseFloat(el[j-1].style.width)*n +  "%" ;
+			else el[j].style.left = offsetLeft +  "%" ;
 			n++ ;
 		}
 	}
@@ -487,7 +489,7 @@ UICalendarPortlet.prototype.initDND = function(evt) {
 	var UICalendarPortlet = eXo.calendar.UICalendarPortlet ;
 	UICalendarPortlet.dragObject = this ;
 	var eventDayContainer = eXo.core.DOMUtil.findAncestorByClass(UICalendarPortlet.dragObject, "EventDayContainer") ;
-		UICalendarPortlet.dragObject.style.zIndex = 1000 ;
+	UICalendarPortlet.dragObject.style.zIndex = 1000 ;
 	UICalendarPortlet.eventY = _e.clientY ;
 	UICalendarPortlet.eventTop = UICalendarPortlet.dragObject.offsetTop ;
 	eventDayContainer.onmousemove = UICalendarPortlet.dragStart ;
@@ -787,14 +789,21 @@ UICalendarPortlet.prototype.swapMenu = function(oldmenu, clickobj) {
 	//UICalendarPortlet.menuElement = null ;
 } ;
 UICalendarPortlet.prototype.isAllday = function(form) {
-	if (typeof(form) == "string") form = document.getElementById(form) ;
-	for(var i = 0 ; i < form.elements.length ; i ++) {
-		if(form.elements[i].getAttribute("name") == "allDay") {
-			eXo.calendar.UICalendarPortlet.showHideTime(form.elements[i]) ;
-			break ;
+	try{
+		if (typeof(form) == "string") form = document.getElementById(form) ;		
+		if (form.tagName.toLowerCase() != "form") {
+			form = eXo.core.DOMUtil.findDescendantsByTagName(form, "form") ;
 		}
+		for(var i = 0 ; i < form.elements.length ; i ++) {
+			if(form.elements[i].getAttribute("name") == "allDay") {
+				eXo.calendar.UICalendarPortlet.showHideTime(form.elements[i]) ;
+				break ;
+			}
+		}
+	}catch(e){
+		
 	}
-} ;;
+} ;
 UICalendarPortlet.prototype.showHideTime = function(chk) {
 	var DOMUtil = eXo.core.DOMUtil ;
 	if(chk.tagName.toLowerCase() != "input") {

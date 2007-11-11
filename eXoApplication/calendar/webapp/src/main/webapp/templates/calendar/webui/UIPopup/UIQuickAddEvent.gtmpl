@@ -1,8 +1,8 @@
 <%
 def rcontext = _ctx.getRequestContext() ;	
-rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.isAllday("UIQuickAddEvent") ;') ;	
+rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.isAllday("QuickAddEventContainer") ;') ;	
 %>
-<div class="UIQuickAddEvent">
+<div class="UIQuickAddEvent" id="QuickAddEventContainer">
   <div class="QuickAddEventContainer">
     <%uiform.begin()%>
     <div class="HorizontalLayout">
