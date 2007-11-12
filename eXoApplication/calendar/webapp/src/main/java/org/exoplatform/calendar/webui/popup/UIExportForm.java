@@ -31,6 +31,7 @@ import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
@@ -47,20 +48,14 @@ import org.exoplatform.webui.form.UIFormStringInput;
     template = "system:/groovy/webui/form/UIForm.gtmpl",
     events = {
       @EventConfig(listeners = UIExportForm.SaveActionListener.class),      
-      @EventConfig(listeners = UIExportForm.CancelActionListener.class)
+      @EventConfig(listeners = UIExportForm.CancelActionListener.class, phase = Phase.DECODE)
     }
 )
 public class UIExportForm extends UIForm implements UIPopupComponent{
   final static private String NAME = "name".intern() ;
   final static private String TYPE = "type".intern() ;
   private String calType = "0" ;
-  public UIExportForm() {
-    
-  }
-  public void setCalType(String type) {calType = type ; }
-  public void update(String type, String selectedCalendarId) throws Exception {
-    calType = type ;
-    getChildren().clear() ;
+  public UIExportForm() throws Exception {
     CalendarService calendarService = CalendarUtils.getCalendarService();
     addUIFormInput(new UIFormStringInput(NAME, NAME, null)) ;
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ; 
@@ -68,6 +63,12 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
       options.add(new SelectItemOption<String>(exportType, exportType)) ;
     }
     addUIFormInput(new UIFormSelectBox(TYPE, TYPE, options)) ;
+  }
+  public void setCalType(String type) {calType = type ; }
+  public void update(String type, String selectedCalendarId) throws Exception {
+    calType = type ;
+    getChildren().clear() ;
+    CalendarService calendarService = CalendarUtils.getCalendarService();
     List<Calendar> calendars = new ArrayList<Calendar>();
     if(calType.equals("0")) {
       calendars = calendarService.getUserCalendars(CalendarUtils.getCurrentUser()) ;
@@ -79,6 +80,9 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
         calendars.addAll(group.getCalendars()) ;
       }
     }
+    initCheckBox(calendars, selectedCalendarId) ;
+  }
+  public void initCheckBox(List<Calendar> calendars, String selectedCalendarId) {
     for(Calendar calendar : calendars) {
       UIFormCheckBoxInput checkBox = new UIFormCheckBoxInput<String>(calendar.getName(), calendar.getId(), null);
       if(calendar.getId().equals(selectedCalendarId)) checkBox.setChecked(true) ; 
@@ -86,7 +90,6 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
       addUIFormInput(checkBox) ;
     }
   }
-  
   public String getLabel(String id) throws Exception {
     try {
       return  super.getLabel(id) ;
@@ -111,6 +114,11 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
             calendarIds.add(((UIFormCheckBoxInput)child).getBindingField()) ;
           }
         }
+      }
+      if(calendarIds.isEmpty()) {
+        uiApp.addMessage(new ApplicationMessage("UIExportForm.msg.calendar-does-not-existing", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
       }
       String type = uiForm.getUIFormSelectBox(uiForm.TYPE).getValue() ;
       String name = uiForm.getUIStringInput(uiForm.NAME).getValue() ;

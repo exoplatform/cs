@@ -64,6 +64,7 @@ public class Calendar {
   private String locale ;
   private String[] viewPermission ;
   private String[] editPermission ;
+  
   private boolean isPublic = false ;
   private String categoryId ;
   private String[] groups ;

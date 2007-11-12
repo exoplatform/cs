@@ -16,6 +16,7 @@ import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.GroupCalendarData;
+import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.calendar.webui.popup.UICalendarCategoryForm;
 import org.exoplatform.calendar.webui.popup.UICalendarCategoryManager;
 import org.exoplatform.calendar.webui.popup.UICalendarForm;
@@ -54,6 +55,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
       @EventConfig(listeners = UICalendars.EditGroupActionListener.class),
       @EventConfig(phase=Phase.DECODE, listeners = UICalendars.DeleteGroupActionListener.class, confirm="UICalendars.msg.confirm-delete-group"), 
       @EventConfig(listeners = UICalendars.ExportCalendarActionListener.class), 
+      @EventConfig(listeners = UICalendars.ExportCalendarsActionListener.class), 
       @EventConfig(listeners = UICalendars.ImportCalendarActionListener.class),
       @EventConfig(listeners = UICalendars.GenerateRssActionListener.class), 
       @EventConfig(listeners = UICalendars.AddEventActionListener.class),
@@ -249,13 +251,6 @@ public class UICalendars extends UIForm  {
       }    
       uiQuickAddEvent.update(calType, options) ;
       uiQuickAddEvent.setSelectedCalendar(calendarId) ;
-
-      /*UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
-      UIPopupContainer uiPopupContainer = uiCalendarPortlet.createUIComponent(UIPopupContainer.class, null, null) ;
-      uiPopupContainer.setId(UIPopupContainer.UITASKPOPUP ) ;
-      UITaskForm uiForm = uiPopupContainer.addChild(UITaskForm.class, null, null) ;
-      uiForm.initForm(calendarId) ;
-      popupAction.activate(uiPopupContainer, 700, 0, true) ;*/
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent.getParent()) ;
     }
@@ -300,8 +295,6 @@ public class UICalendars extends UIForm  {
         uiMiniCalendar.updateMiniCal() ;
         uiViewContainer.refresh() ;
         event.getRequestContext().addUIComponentToUpdateByAjax(workingContainer) ;
-        //event.getRequestContext().addUIComponentToUpdateByAjax(uiViewContainer) ;
-        //event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent.getParent()) ;
       } catch (Exception e) {
         e.printStackTrace() ;
       }
@@ -341,16 +334,27 @@ public class UICalendars extends UIForm  {
       UICalendarPortlet uiCalendarPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
       UIExportForm exportForm = popupAction.createUIComponent(UIExportForm.class, null, "UIExportForm") ;
-      //CalendarService calendarService = CalendarUtils.getCalendarService();
-      //List<Calendar> calendars = calendarService.getUserCalendars(Util.getPortalRequestContext().getRemoteUser()) ;
       exportForm.update(calType, selectedCalendarId) ;
       popupAction.activate(exportForm, 600, 0) ;
-      //event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarPortlet) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent.getParent()) ;
     }
   }
-
+  static  public class ExportCalendarsActionListener extends EventListener<UICalendars> {
+    public void execute(Event<UICalendars> event) throws Exception {
+      UICalendars uiComponent = event.getSource() ;
+      String groupId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      UICalendarPortlet uiCalendarPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
+      UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
+      UIExportForm exportForm = popupAction.activate(UIExportForm.class, 500) ;
+      String username = event.getRequestContext().getRemoteUser() ;
+      exportForm.initCheckBox(CalendarUtils.getCalendarService().getUserCalendarsByCategory(username, groupId), null) ;
+      //exportForm.addUIFormInput(arg0)
+      //exportForm.update("0", groupId) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent.getParent()) ;
+    }
+  }
   static  public class ImportCalendarActionListener extends EventListener<UICalendars> {
     public void execute(Event<UICalendars> event) throws Exception {
       UICalendars uiComponent = event.getSource() ;
@@ -382,7 +386,10 @@ public class UICalendars extends UIForm  {
       UIPopupContainer uiPopupContainer = popupAction.activate(UIPopupContainer.class, 400) ;
       uiPopupContainer.setId("UIPermissionSelectPopup") ;
       UISharedForm uiSharedForm = uiPopupContainer.addChild(UISharedForm.class, null, null) ;
-      uiSharedForm.setSelectedCalendarId(selectedCalendarId) ;
+      CalendarService calService = CalendarUtils.getCalendarService() ;
+      String username = event.getRequestContext().getRemoteUser() ;
+      Calendar cal = calService.getUserCalendar(username, selectedCalendarId) ;
+      uiSharedForm.init(null, cal, true) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarPortlet) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent.getParent()) ;
@@ -404,7 +411,6 @@ public class UICalendars extends UIForm  {
           calendar.setCalendarColor(color) ;
           calService.saveUserCalendar(username, calendar, false) ;
         } else if(CalendarUtils.SHARED_TYPE.equals(calType)){
-          //calendar = calService.getSharedCalendars(username)) getUserCalendar(username, calendarId) ;
           Iterator iter = calService.getSharedCalendars(username).getCalendars().iterator() ;
           while (iter.hasNext()) {
             Calendar cal = ((Calendar)iter.next()) ;
