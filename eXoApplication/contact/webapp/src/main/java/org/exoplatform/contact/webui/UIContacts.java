@@ -274,6 +274,10 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       ContactService contactService = ContactUtils.getContactService(); 
       contactService.moveContacts(ContactUtils.getCurrentUser(), contactIds, addressBooks) ;
       //UIContactPortlet uiContactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class) ;
+      //event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
+      
+      uiContacts.updateList() ;
+      
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
     }
   }

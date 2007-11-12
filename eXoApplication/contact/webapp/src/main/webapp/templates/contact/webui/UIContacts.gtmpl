@@ -8,8 +8,9 @@
 	import org.exoplatform.contact.ContactUtils;
 	import org.exoplatform.contact.service.JCRPageList;
 	def rcontext = _ctx.getRequestContext() ; 
-	//rcontext.getJavascriptManager().importJavascript("eXo.contact.UIContactDragDrop","/contact/javascript") ;
-	//rcontext.getJavascriptManager().addJavascript("eXo.contact.UIContactDragDrop.init() ;") ;
+  rcontext.getJavascriptManager().importJavascript("eXo.cs.FormHelper","/portal/javascript") ;
+	rcontext.getJavascriptManager().importJavascript("eXo.contact.UIContactDragDrop","/contact/javascript") ;
+	rcontext.getJavascriptManager().addJavascript("eXo.contact.UIContactDragDrop.init() ;") ;
 	uiform.begin()
 	boolean isDisplaySearchResult = uicomponent.isDisplaySearchResult() ;
 	
@@ -17,7 +18,7 @@
   String cssPreviousPage = "FloatBlockHidden";
   String cssNextPage = "FloatBlockHidden";
   String contactRange = "";	
-  Contact[] contacts = uicomponent.getContacts();		          
+  Contact[] contacts = uicomponent.getContacts();
   if (pageList != null && (contacts.length != 0)) {
     currentPage = pageList.getCurrentPage();
     availablePage = pageList.getAvailablePage() ;
