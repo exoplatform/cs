@@ -1,4 +1,5 @@
 eXo.require('eXo.webui.UIContextMenu') ;
+eXo.require('eXo.core.DOMUtil') ;
 
 function UIMailPortlet(){
 };
@@ -32,8 +33,7 @@ UIMailPortlet.prototype.msgPopupMenuCallback = function(evt) {
 		src = _e.target;
 	}
 	if (src.nodeName != "tr")
-		src = src.parentNode;
-		
+		src = eXo.core.DOMUtil.findAncestorByTagName(src, "tr");
 	id = src.getAttribute("msgId");
 	eXo.webui.UIContextMenu.changeAction(UIContextMenu.menuElement, id) ;
 } ;
