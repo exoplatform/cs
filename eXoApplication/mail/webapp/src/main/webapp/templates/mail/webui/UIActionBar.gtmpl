@@ -59,17 +59,17 @@
 				                    </a>
 				                    <a class="MenuItem" href="javascript:eXo.mail.UIMailPortlet.switchLayout(1)">   
 					                    <div class="ItemIcon HideFolderListIcon">
-					                      Show/Hide Navigator Pane
+					                      Hide Navigator Pane
 					                    </div>
 				                    </a>
 				                    <a class="MenuItem" href="javascript:eXo.mail.UIMailPortlet.switchLayout(2)">   
 					                    <div class="ItemIcon HideMessagesPaneIcon">
-					                      Show/Hide Messages Pane
+					                      Hide Messages Pane
 					                    </div>
 				                    </a>
 				                    <a class="MenuItem" href="javascript:eXo.mail.UIMailPortlet.switchLayout(3)">   
 					                    <div class="ItemIcon HideReadingPaneIcon">
-					                      Show/Hide Preview Pane
+					                      Hide Preview Pane
 					                    </div>
 				                    </a>
 													</div>
