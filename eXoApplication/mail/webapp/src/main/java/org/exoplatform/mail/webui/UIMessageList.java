@@ -371,6 +371,7 @@ public class UIMessageList extends UIForm {
         Message message = mailSvr.getMessageById(username, accId, msgId);
         uiComposeForm.setFieldToValue(message.getFrom());
         uiComposeForm.setFieldSubjectValue("Re: " + message.getSubject());
+        uiComposeForm.setFieldContentValue(message.getMessageBody());
       }
       uiPopupContainer.addChild(uiComposeForm) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
@@ -400,7 +401,7 @@ public class UIMessageList extends UIForm {
         if (message.getMessageCc() != null) replyAll += "," + message.getMessageCc();
         if (message.getMessageBcc() != null) replyAll += "," + message.getMessageBcc();
         uiComposeForm.setFieldToValue(replyAll);
-        uiComposeForm.setFieldMessageContentValue(message.getMessageBody());
+        uiComposeForm.setFieldContentValue(message.getMessageBody());
       }
       uiPopupContainer.addChild(uiComposeForm) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
@@ -433,7 +434,7 @@ public class UIMessageList extends UIForm {
             "\nTo: " + message.getMessageTo() + 
             "\n\n" + message.getMessageBody();         
         message.setMessageBody(forwardedText);
-        uiComposeForm.setFieldMessageContentValue(message.getMessageBody());
+        uiComposeForm.setFieldContentValue(message.getMessageBody());
         uiComposeForm.setFieldToValue("");
       }
       uiPopupContainer.addChild(uiComposeForm) ;

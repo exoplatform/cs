@@ -185,7 +185,7 @@
 <!-- Start Compose Message Detail -->
 			<div class="MessageContent">
 				<div class="PlainTextMessage">
-					<%uiform.renderField(uicomponent.getFieldMessageContent())%>
+					<%uiform.renderField(uicomponent.FIELD_MESSAGECONTENT)%>
 				</div>
 			</div>
 <!-- End Compose Message Detail -->

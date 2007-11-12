@@ -36,7 +36,7 @@ import org.exoplatform.webui.form.UIFormInputInfo;
 import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
-import org.exoplatform.webui.form.UIFormTextAreaInput;
+import org.exoplatform.webui.form.UIFormWYSIWYGInput;
 import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
 
 
@@ -141,7 +141,8 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
     inputSet.setActionField(FIELD_ATTACHMENTS, getUploadFileList()) ;
 
     addUIFormInput(inputSet) ;
-    addUIFormInput(new UIFormTextAreaInput(FIELD_MESSAGECONTENT, null, null)) ;
+    //addUIFormInput(new UIFormTextAreaInput(FIELD_MESSAGECONTENT, null, null)) ;
+    addUIFormInput(new UIFormWYSIWYGInput(FIELD_MESSAGECONTENT, null, null));
     setPriority(Utils.PRIORITY_NORMAL);
   }
 
@@ -190,7 +191,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
     if (msg != null) {
       setFieldSubjectValue(msg.getSubject());
       setFieldToValue(msg.getMessageTo());
-      setFieldMessageContentValue(msg.getMessageBody());
+      //setFieldMessageContentValue(msg.getMessageBody());
     }
   }
   
@@ -243,17 +244,12 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
     return inputSet.getUIFormInputInfo(FIELD_ATTACHMENTS).getValue() ;
   }
   
-  public UIFormTextAreaInput getFieldMessageContent() {
-    return getUIFormTextAreaInput(FIELD_MESSAGECONTENT) ;
+  public String getFieldContentValue() {
+    return getChild(UIFormWYSIWYGInput.class).getValue();
   }
   
-  public String getFieldMessageContentValue() {
-    return getFieldMessageContent().getValue() ;
-  }
-  
-  public void setFieldMessageContentValue(String value) {
-    UIFormTextAreaInput uiMessageContent = getChildById(FIELD_MESSAGECONTENT) ;
-    uiMessageContent.setValue(value);
+  public void setFieldContentValue(String value) {
+     getChild(UIFormWYSIWYGInput.class).setValue(value);
   }
   
   public void resetFields() { reset() ; }
@@ -275,7 +271,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
     String to = this.getFieldToValue() ;
     String cc = this.getFieldCcValue() ;
     String bcc = this.getFieldBccValue() ;
-    String body = this.getFieldMessageContentValue() ;
+    String body = this.getFieldContentValue() ;
     Long priority = this.getPriority();
     message.setSendDate(new Date()) ;
     message.setAccountId(accountId) ;
