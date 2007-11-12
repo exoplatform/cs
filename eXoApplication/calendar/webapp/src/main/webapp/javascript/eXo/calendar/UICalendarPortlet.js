@@ -296,11 +296,16 @@ UICalendarPortlet.prototype.getInterval = function(el) {
 UICalendarPortlet.prototype.adjustWidth = function(el) {
 	var UICalendarPortlet = eXo.calendar.UICalendarPortlet ;
 	var inter = UICalendarPortlet.getInterval(el) ;
-	var totalWidth = (arguments.length > 1) ? arguments[1] : parseFloat(100) ;
-	var offsetLeft = (arguments.length > 2) ? parseFloat(arguments[2]) : parseFloat(0) ;
 	if (el.length <= 0) return ;
 	var width = "" ;
 	for(var i = 0 ; i < inter.length ; i ++) {
+		var totalWidth = (arguments.length > 1) ? arguments[1] : parseFloat(100) ;
+		var offsetLeft = parseFloat(0) ;
+		var left = parseFloat(0) ;
+		if(arguments.length > 2) {
+			offsetLeft = parseFloat(arguments[2]) ;
+			left = arguments[2] ;
+		} 
 		var len = (inter[i+1] - inter[i]) ;
 		if(isNaN(len)) continue ;
 		var mark = null ;
@@ -316,10 +321,16 @@ UICalendarPortlet.prototype.adjustWidth = function(el) {
 		}
 		var n = 0 ;
 		for(var j = inter[i]; j < inter[i+1] ; j++) {
-			width = (mark != null) ? parseFloat((totalWidth - parseFloat(el[mark].style.left) - parseFloat(el[mark].style.width))/len) : parseFloat(totalWidth/len) ;
+			if(mark != null) {				
+				width = parseFloat((totalWidth + left - parseFloat(el[mark].style.left) - parseFloat(el[mark].style.width))/len) ;
+			} else {
+				width = parseFloat(totalWidth/len) ;
+			}
 			UICalendarPortlet.setWidth(el[j], width) ;
 			if (el[j-1]&&(len > 1)) el[j].style.left = offsetLeft + parseFloat(el[j-1].style.width)*n +  "%" ;
-			else el[j].style.left = offsetLeft +  "%" ;
+			else {
+				el[j].style.left = offsetLeft +  "%" ;
+			}
 			n++ ;
 		}
 	}
@@ -438,7 +449,7 @@ UIResizeEvent.prototype.resizeCallback = function(evt) {
 	var end =  start + eventBox.offsetHeight - 2 ;
 	if (eventBox.offsetHeight != UIResizeEvent.outerElementHeight) {
 		var actionLink = eXo.calendar.UICalendarPortlet.adjustTime(start, end, eventBox) ;
-		if(calType) actionLink = actionLink.replace(/'\s*\)/,"&calType=" + calType + "')") ;		
+		if(calType) actionLink = actionLink.replace(/'\s*\)/,"&calType=" + calType + "')") ;
 		eval(actionLink) ;
 	}	
 } ;
