@@ -151,8 +151,8 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
       if(calendarSetting.isShowWorkingTime()) {
         System.out.println("\n\n calendarSetting.getWorkingTimeBegin() " + calendarSetting.getWorkingTimeBegin() );
         System.out.println("\n\n calendarSetting.getWorkingTimeEnd() " + calendarSetting.getWorkingTimeEnd() );
-        setWorkingBegin(calendarSetting.getWorkingTimeBegin()) ;
-        setWorkingEnd(calendarSetting.getWorkingTimeEnd()) ;
+        setWorkingBegin(calendarSetting.getWorkingTimeBegin(), CalendarUtils.DATEFORMAT + " " + calendarSetting.getTimeFormat()) ;
+        setWorkingEnd(calendarSetting.getWorkingTimeEnd(), CalendarUtils.DATEFORMAT + " " + calendarSetting.getTimeFormat()) ;
       }
       setBaseUrl(calendarSetting.getBaseURL()) ;
     }
@@ -237,11 +237,11 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
     cal.setTime(dateTimeFormat.parse(date)); 
     return timeFormat.format(cal.getTime()) ;
   }
-  protected void setWorkingBegin(String value) throws Exception {
+  protected void setWorkingBegin(String value, String format) throws Exception {
     java.util.Calendar cal = GregorianCalendar.getInstance() ;
     DateFormat dateFormat = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
     DateFormat timeFormat = new SimpleDateFormat(CalendarUtils.TIMEFORMAT) ;
-    DateFormat dateTimeFormat = new SimpleDateFormat(CalendarUtils.DATETIMEFORMAT) ;
+    DateFormat dateTimeFormat = new SimpleDateFormat(format) ;
     String date = dateFormat.format(cal.getTime()) + " " + value ;
     cal.setTime(dateTimeFormat.parse(date)); 
     getUIFormSelectBox(WORKINGTIME_BEGIN).setValue(timeFormat.format(cal.getTime())) ;
@@ -256,11 +256,11 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
     cal.setTime(dateTimeFormat.parse(date)); 
     return timeFormat.format(cal.getTime()) ;
   }
-  protected void setWorkingEnd(String value) throws Exception {
+  protected void setWorkingEnd(String value, String format) throws Exception {
     java.util.Calendar cal = GregorianCalendar.getInstance() ;
     DateFormat dateFormat = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
     DateFormat timeFormat = new SimpleDateFormat(CalendarUtils.TIMEFORMAT) ;
-    DateFormat dateTimeFormat = new SimpleDateFormat(CalendarUtils.DATETIMEFORMAT) ;
+    DateFormat dateTimeFormat = new SimpleDateFormat(format) ;
     String date = dateFormat.format(cal.getTime()) + " " + value ;
     cal.setTime(dateTimeFormat.parse(date)); 
     getUIFormSelectBox(WORKINGTIME_END).setValue(timeFormat.format(cal.getTime())) ;
