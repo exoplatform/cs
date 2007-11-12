@@ -104,8 +104,11 @@
 						 			  	}
 						 			  }
 							 		}
-									startTime = ((event.getFromDateTime().getHours() * 60) + event.getFromDateTime().getMinutes());
-								 	finishTime = ((event.getToDateTime().getHours() * 60) + event.getFromDateTime().getMinutes());
+							 		cal = new GregorianCalendar() ;
+								 	cal.setTime(event.getFromDateTime()) ;
+								  long 	startTime = cal.get(Calendar.HOUR_OF_DAY)*60 + cal.get(Calendar.MINUTE) ;
+								  cal.setTime(event.getToDateTime()) ;
+								  long	finishTime = cal.get(Calendar.HOUR_OF_DAY)*60 + cal.get(Calendar.MINUTE) ;
 									color = uicomponent.getColors().get(event.getCalendarId()) ;
 									title = begindate + "->" + enddate + ":&#013; " + event.summary ;
 								%>

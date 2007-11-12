@@ -134,6 +134,8 @@ public class UIDayView extends UICalendarView {
       String calendarId = event.getRequestContext().getRequestParameter("calendarId") ;
       String startTime = event.getRequestContext().getRequestParameter("startTime") ;
       String endTime = event.getRequestContext().getRequestParameter("finishTime") ;
+      System.out.println("\n\n startTime" + startTime);
+      System.out.println("\n\n endTime" + endTime);
       String username = event.getRequestContext().getRemoteUser() ;
       CalendarEvent ce = calendarview.eventData_.get(eventId) ;
       if(ce != null) {
@@ -143,7 +145,7 @@ public class UIDayView extends UICalendarView {
 
           int hoursEnd = (Integer.parseInt(endTime)/60) ;
           int minutesEnd = (Integer.parseInt(endTime)%60) ;
-
+          
           Calendar fromDateTime = new GregorianCalendar(calendarview.getCurrentYear(), calendarview.getCurrentMonth(), calendarview.getCurrentDay()) ;
           fromDateTime.set(Calendar.HOUR, hoursBg) ;
           fromDateTime.set(Calendar.MINUTE, minutesBg) ;
@@ -160,7 +162,8 @@ public class UIDayView extends UICalendarView {
           }else if(ce.getCalType().equals(CalendarUtils.PUBLIC_TYPE)){
             CalendarUtils.getCalendarService().saveGroupEvent(calendarId, ce, false) ;          
           }
-
+          System.out.println("\n\n getFromDateTime"+ ce.getFromDateTime().getHours() * 60 + ce.getFromDateTime().getMinutes());
+          System.out.println("\n\n getToDateTime"+ ce.getToDateTime().getHours() * 60 + ce.getFromDateTime().getMinutes());
         } catch (Exception e) {
           e.printStackTrace() ;
         }
