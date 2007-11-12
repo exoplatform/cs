@@ -686,7 +686,7 @@
 
 .UIWeekView .UIGrid td{
 	padding: 0px;
-	height: 29px ;
+	height: 30px ;
 }
 
 .UIWeekView .EventAllday{
@@ -700,6 +700,7 @@
 
 .UIWeekView .EventContainerBorder{
 	border:1px solid #808080;
+	-moz-user-select : none ;
 }
 
 .UIWeekView .EventContainerBar{
