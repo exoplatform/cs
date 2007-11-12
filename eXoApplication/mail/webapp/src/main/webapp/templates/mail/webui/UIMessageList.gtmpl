@@ -293,7 +293,7 @@
    	      </th>
     	 	</tr>
     	</thead>
-    	<tbody class="SpliterResizableListArea" id="uiMessageListResizableArea">
+    	<tbody>
     	<%
         int i = 0;
   			for(Message msg : uicomponent.getMessageList()) {

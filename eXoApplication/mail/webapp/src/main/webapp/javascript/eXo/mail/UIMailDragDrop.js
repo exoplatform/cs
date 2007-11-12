@@ -1,11 +1,9 @@
 /**
  * @author uocnb
  */
-
-var scKey = 'border' ;
-var scValue = 'solid 1px red' ;
-
 function UIMailDragDrop() {
+  this.scKey = 'border' ;
+  this.scValue = 'solid 1px #A5A5A5' ;
   this.DOMUtil = eXo.core.DOMUtil ;
   this.DragDrop = eXo.core.DragDrop ;
   this.dropableSets = [] ;
@@ -19,16 +17,23 @@ UIMailDragDrop.prototype.onLoad = function() {
 UIMailDragDrop.prototype.init = function() {
   this.uiMailPortletNode = document.getElementById('UIMailPortlet') ;
   this.getAllDropableSets() ;
-  this.regMailItem() ;
+  this.regDnDItem() ;
 } ;
 
 UIMailDragDrop.prototype.getAllDropableSets = function() {
   var uiFolderContainerNode = document.getElementById('UIFolderContainer') ;
   var folderList = this.DOMUtil.findDescendantsByClass(uiFolderContainerNode, 'a', 'Folder') ;
-  this.dropableSets[0] = folderList ;
+  for (var i=0; i<folderList.length; i++) {
+    this.dropableSets[this.dropableSets.length] = folderList[i] ;
+  }
+  var uiTagContainerNode = document.getElementById('UITagContainer') ;
+  var tagLists = this.DOMUtil.findDescendantsByClass(uiTagContainerNode, 'a', 'IconTagHolder') ;
+  for (var i=0; i<tagLists.length; i++) {
+    this.dropableSets[this.dropableSets.length] = tagLists[i] ;
+  }
 } ;
 
-UIMailDragDrop.prototype.regMailItem = function() {
+UIMailDragDrop.prototype.regDnDItem = function() {
   var uiListUsersNode = document.getElementById('UIListUsers') ;
   var mailList = this.DOMUtil.findDescendantsByClass(uiListUsersNode, 'tr', this.msgItemClass) ;
   for (var i=0; i<mailList.length; i++) {
@@ -36,74 +41,57 @@ UIMailDragDrop.prototype.regMailItem = function() {
   }
 } ;
 
-UIMailDragDrop.prototype.getSelectedItems = function(triggerObj) {
-  var uiListUsersNode = document.getElementById('UIListUsers') ;
-  var mailList = this.DOMUtil.findDescendantsByClass(uiListUsersNode, 'input', 'checkbox') ;
-  var selectedItems = [] ;
-  var skipAddTriggerObj = false ;
-  for (var i=0; i<mailList.length; i++) {
-    if (mailList[i].checked) {
-      selectedItems[selectedItems.length] = this.DOMUtil.findAncestorByClass(mailList[i], this.msgItemClass) ;
-      if (triggerObj == selectedItems[selectedItems.length - 1]) {
-        skipAddTriggerObj = true ;
-      }
-    }
-  }
-  if (!skipAddTriggerObj) {
-    selectedItems[selectedItems.length] = triggerObj ;
-  }
-  return selectedItems ;
-} ;
-
 UIMailDragDrop.prototype.mailMDTrigger = function(e) {
   e = e ? e : window.event ;
-  return eXo.mail.UIMailDragDrop.initDnD(eXo.mail.UIMailDragDrop.dropableSets[0], this, this, e) ;
+  return eXo.mail.UIMailDragDrop.initDnD(eXo.mail.UIMailDragDrop.dropableSets, this, this, e) ;
 } ;
 
 UIMailDragDrop.prototype.initDnD = function(dropableObjs, clickObj, dragObj, e) {
   var clickBlock = (clickObj && clickObj.tagName) ? clickObj : document.getElementById(clickObj) ;
   var dragBlock = (dragObj && dragObj.tagName) ? dragObj : document.getElementById(dragObj) ;
   
+  var blockWidth = clickBlock.offsetWidth ;
+  var blockHeight = clickBlock.offsetHeight ;
+  
   var tmpNode = document.createElement('div') ;
-  tmpNode.className = 'UIGrid' ;
+  var uiGridNode = document.createElement('table') ;
+  uiGridNode.className = 'UIGrid' ;
   with(tmpNode.style) {
     padding = '2px' ;
-    border = 'solid 1px red' ;
+    border = 'solid 1px #A5A5A5' ;
     position = 'absolute' ;
+    width = blockWidth + 'px' ;
     display = 'none' ;
-//    width = '200px' ;
-//    height = '50px' ;
   }
-
-  var selectedItems = this.getSelectedItems(dragBlock) ;
   
+  var selectedItems = eXo.cs.FormHelper.getSelectedElementByClass(
+                        document.getElementById('UIListUsers'), this.msgItemClass, dragBlock) ;
   if (selectedItems.length > 0) {
     for (var i=0; i<selectedItems.length; i++) {
-//      var tmp = selectedItems[i].cloneNode(true) ;
-//      tmp.innerHTML = selectedItems[i].text ;
-      if (selectedItems[i]) {
-        tmpNode.appendChild(selectedItems[i].cloneNode(true)) ;
-      } else {
-//        window.alert(selectedItems[i] + ' index: ' + i) ;
+      if (selectedItems[i] && selectedItems[i].cloneNode) {
+        uiGridNode.appendChild(selectedItems[i].cloneNode(true)) ;
       }
     }
   } else {
-    tmpNode.appendChild(dragBlock.cloneNode(true)) ;
+    uiGridNode.appendChild(dragBlock.cloneNode(true)) ;
   }
   
+  tmpNode.appendChild(uiGridNode) ;
   document.body.appendChild(tmpNode) ;
   
   this.DragDrop.initCallback = this.initCallback ;
   this.DragDrop.dragCallback = this.dragCallback ;
   this.DragDrop.dropCallback = this.dropCallback ;
-  
   this.DragDrop.init(dropableObjs, clickBlock, tmpNode, e) ;
   return false ;
 } ;
 
 UIMailDragDrop.prototype.synDragObjectPos = function(dndEvent) {
   if (!dndEvent.backupMouseEvent) {
-    return ;
+    dndEvent.backupMouseEvent = window.event ;
+    if (!dndEvent.backupMouseEvent) {
+      return ;
+    }
   }
   var dragObject = dndEvent.dragObject ;
   var mouseX = eXo.core.Browser.findMouseXInPage(dndEvent.backupMouseEvent) ;
@@ -117,27 +105,25 @@ UIMailDragDrop.prototype.initCallback = function(dndEvent) {
 } ;
 
 UIMailDragDrop.prototype.dragCallback = function(dndEvent) {
-  if (!dndEvent.dragObject.style.display ||
-      dndEvent.dragObject.style.display == 'none') {
-    dndEvent.dragObject.style.display = 'block' ;
-  }
-      
   var dragObject = dndEvent.dragObject ;
-
+  if (!dragObject.style.display ||
+      dragObject.style.display == 'none') {
+    dragObject.style.display = 'block' ;
+  }
   eXo.mail.UIMailDragDrop.synDragObjectPos(dndEvent) ;
   
   if (dndEvent.foundTargetObject) {
     if (this.foundTargetObjectCatch != dndEvent.foundTargetObject) {
       if(this.foundTargetObjectCatch) {
-        this.foundTargetObjectCatch.style[scKey] = this.foundTargetObjectCatchStyle ;
+        this.foundTargetObjectCatch.style[eXo.mail.UIMailDragDrop.scKey] = this.foundTargetObjectCatchStyle ;
       }
       this.foundTargetObjectCatch = dndEvent.foundTargetObject ;
-      this.foundTargetObjectCatchStyle = this.foundTargetObjectCatch.style[scKey] ;
-      this.foundTargetObjectCatch.style[scKey] = scValue ;
+      this.foundTargetObjectCatchStyle = this.foundTargetObjectCatch.style[eXo.mail.UIMailDragDrop.scKey] ;
+      this.foundTargetObjectCatch.style[eXo.mail.UIMailDragDrop.scKey] = eXo.mail.UIMailDragDrop.scValue ;
     }
   } else {
     if (this.foundTargetObjectCatch) {
-      this.foundTargetObjectCatch.style[scKey] = this.foundTargetObjectCatchStyle ;
+      this.foundTargetObjectCatch.style[eXo.mail.UIMailDragDrop.scKey] = this.foundTargetObjectCatchStyle ;
     }
     this.foundTargetObjectCatch = null ;
   }
@@ -146,23 +132,24 @@ UIMailDragDrop.prototype.dragCallback = function(dndEvent) {
 UIMailDragDrop.prototype.dropCallback = function(dndEvent) {
   var dragObject = dndEvent.dragObject ;
   if (this.foundTargetObjectCatch) {
-    this.foundTargetObjectCatch.style[scKey] = this.foundTargetObjectCatchStyle ;
+    this.foundTargetObjectCatch.style[eXo.mail.UIMailDragDrop.scKey] = this.foundTargetObjectCatchStyle ;
   }
   this.foundTargetObjectCatch = dndEvent.foundTargetObject ;
   if (this.foundTargetObjectCatch) {
     eXo.core.DOMUtil.findDescendantsByClass(dndEvent.clickObject, 'input', 'checkbox')[0].checked = true ;
     // request service
-    var folder2MoveNode = document.createElement('input') ;
-    folder2MoveNode.type = 'hidden' ;
-    folder2MoveNode.name = 'folder' ;
-    folder2MoveNode.value = this.foundTargetObjectCatch.getAttribute('folder') ;
-    
+    var place2MoveId = false ;
+    var formOp = false ;
+    if (eXo.core.DOMUtil.findAncestorByClass(this.foundTargetObjectCatch, 'UITagContainer')) {
+      place2MoveId = this.foundTargetObjectCatch.getAttribute('tagid') ;
+      formOp = 'AddTagDnD' ;
+    } else {
+      place2MoveId = this.foundTargetObjectCatch.getAttribute('folder') ;
+      formOp = 'MoveDirectMessages' ;
+    }
     var uiMsgList = document.getElementById('UIMessageList') ;
-    uiMsgList.appendChild(folder2MoveNode) ;
-    
-    uiMsgList.action = uiMsgList.action + '&objectId=' + folder2MoveNode.value ;
-    
-    eXo.webui.UIForm.submitForm('UIMessageList','MoveDirectMessages', true)
+    uiMsgList.action = uiMsgList.action + '&objectId=' + place2MoveId ;
+    eXo.webui.UIForm.submitForm('UIMessageList', formOp, true) ;
   }
   document.body.removeChild(dndEvent.dragObject) ;
 } ;
