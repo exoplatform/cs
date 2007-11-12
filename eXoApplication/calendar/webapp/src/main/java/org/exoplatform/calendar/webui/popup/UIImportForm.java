@@ -15,8 +15,10 @@ import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.upload.UploadResource;
 import org.exoplatform.upload.UploadService;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
@@ -68,6 +70,12 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
       UploadService uploadService = (UploadService)PortalContainer.getComponent(UploadService.class) ;
       if(calendarName == null || calendarName.length() == 0) {
         UploadResource resource = uploadService.getUploadResource(input.getUploadId()) ;
+        if(resource == null) {
+          UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+          uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.file-name-error", null));
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        }
         calendarName = resource.getFileName() ;
       }
       String username = Util.getPortalRequestContext().getRemoteUser() ;
