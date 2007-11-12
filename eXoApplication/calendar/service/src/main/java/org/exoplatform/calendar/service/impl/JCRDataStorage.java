@@ -1137,8 +1137,8 @@ public class JCRDataStorage implements DataStorage{
     while(it.hasNext()) {
       Node eventNode = it.nextNode() ;
       start = new Long(1) ;
-      long fromDay = eventNode.getProperty("exo:fromDateTime").getDate().getTimeInMillis() / milisOfDay ;
-      long toDay = eventNode.getProperty("exo:toDateTime").getDate().getTimeInMillis() / milisOfDay;
+      long fromDay = eventNode.getProperty("exo:fromDateTime").getDate().getTimeInMillis() / milisOfDay  + 1;
+      long toDay = eventNode.getProperty("exo:toDateTime").getDate().getTimeInMillis() / milisOfDay + 1;
       if(fromDay < beginDay) {
         if(toDay < endDay ) {
           end = toDay - beginDay ;          
