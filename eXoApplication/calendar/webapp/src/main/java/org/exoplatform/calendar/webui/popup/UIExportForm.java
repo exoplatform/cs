@@ -7,6 +7,7 @@ package org.exoplatform.calendar.webui.popup;
 import java.io.ByteArrayInputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.MissingResourceException;
 
@@ -67,7 +68,13 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
   public void setCalType(String type) {calType = type ; }
   public void update(String type, String selectedCalendarId) throws Exception {
     calType = type ;
-    getChildren().clear() ;
+    Iterator iter = getChildren().iterator() ;
+    while(iter.hasNext()) {
+      if(iter instanceof UIFormCheckBoxInput) {
+        iter.remove() ;
+      }
+      iter.next() ;
+    }
     CalendarService calendarService = CalendarUtils.getCalendarService();
     List<Calendar> calendars = new ArrayList<Calendar>();
     if(calType.equals("0")) {

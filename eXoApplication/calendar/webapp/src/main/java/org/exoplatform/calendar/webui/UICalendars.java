@@ -333,9 +333,8 @@ public class UICalendars extends UIForm  {
       String calType = event.getRequestContext().getRequestParameter(CALTYPE) ;
       UICalendarPortlet uiCalendarPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
-      UIExportForm exportForm = popupAction.createUIComponent(UIExportForm.class, null, "UIExportForm") ;
+      UIExportForm exportForm = popupAction.activate(UIExportForm.class, 500) ;
       exportForm.update(calType, selectedCalendarId) ;
-      popupAction.activate(exportForm, 600, 0) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent.getParent()) ;
     }

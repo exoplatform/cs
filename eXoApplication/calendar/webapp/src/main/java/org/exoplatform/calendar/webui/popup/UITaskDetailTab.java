@@ -172,9 +172,9 @@ public class UITaskDetailTab extends UIFormInputWithActions {
   }
   private List<SelectItemOption<String>> getPriority() throws Exception {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-    for(String priority : CalendarEvent.PRIORITY){
-      options.add(new SelectItemOption<String>(priority, priority)) ;
-    }
+    options.add(new SelectItemOption<String>("high", "1")) ;
+    options.add(new SelectItemOption<String>("normal", "2")) ;
+    options.add(new SelectItemOption<String>("low", "3")) ;
     return options ;
   }
   private List<SelectItemOption<String>> getRepeater() {
