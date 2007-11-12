@@ -162,7 +162,7 @@
   					<div class="GroupItem">
   						<div class="GroupColor1">
   							<div title="Collapser calendar group" class="CollapserFlatStyle"><span></span></div>
-  							<div class="CheckBox" onclick="eXo.calendar.UICalendarPortlet.initFilter(this,1) ;"><input type="checkbox"/></div>
+  							<div class="CheckBox"><input type="checkbox" onclick="eXo.calendar.UICalendarPortlet.filterByGroup(this) ;"/></div>
   							<div class="CalendarGroupIcon" onclick=""><a href="#" ><%=groupData.getName()%></a></div>
   							<div style="clear: both"><span></span></div>
   						</div>
