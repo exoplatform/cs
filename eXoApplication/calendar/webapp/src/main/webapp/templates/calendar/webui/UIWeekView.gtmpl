@@ -146,11 +146,7 @@
 						actionLink =  uicomponent.event("UpdateEvent",event.getId()+"&calendarId="+event.getCalendarId()+"&startTime=beginTime&finishTime=endTime") ;
 				%>
 
-<<<<<<< .mine
-							<div class="EventContainerBorder WeekViewEventBoxes $color" eventIndex="$dayOfWeek" style="position:absolute ;" calType="$event.calType" eventid="$event.id" calid="$event.calendarId" actionlink="$actionLink" unselectable="on" starttime="$beginTime" endtime="$endTime">
-=======
-							<div class="EventContainerBorder  $color" eventIndex="$dayOfWeek" style="position:absolute ;" eventCat="$event.eventCategoryId" calType="$event.calType" eventid="$event.id" calid="$event.calendarId" actionlink="$actionLink" unselectable="on" starttime="$beginTime" endtime="$endTime">
->>>>>>> .r21643
+							<div class="EventContainerBorder WeekViewEventBoxes $color" eventIndex="$dayOfWeek" style="position:absolute ;" eventCat="$event.eventCategoryId" calType="$event.calType" eventid="$event.id" calid="$event.calendarId" actionlink="$actionLink" unselectable="on" starttime="$beginTime" endtime="$endTime">
 								<div class="EventContainerBar EventTitle" title="$begindate -> $enddate " ><p unselectable="on">$begin -> $end</p></div>
 								<div class="EventContainer">$event.summary</div>
 								<div class="ResizeEventContainer" unselectable="on"><span></span></div>
