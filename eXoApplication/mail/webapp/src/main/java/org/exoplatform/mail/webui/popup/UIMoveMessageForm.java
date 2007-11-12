@@ -33,7 +33,7 @@ import org.exoplatform.webui.form.UIFormSelectBox;
  */
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
-    template = "system:/groovy/webui/form/UIForm.gtmpl",
+    template = "app:/templates/mail/webui/UIMoveMessageForm.gtmpl",
     events = {
       @EventConfig(listeners = UIMoveMessageForm.SaveActionListener.class), 
       @EventConfig(listeners = UIMoveMessageForm.CancelActionListener.class)

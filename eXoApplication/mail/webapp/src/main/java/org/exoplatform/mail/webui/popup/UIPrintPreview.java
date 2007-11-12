@@ -4,6 +4,10 @@
  **************************************************************************/
 package org.exoplatform.mail.webui.popup;
 
+import org.exoplatform.mail.MailUtils;
+import org.exoplatform.mail.service.Account;
+import org.exoplatform.mail.service.MailService;
+import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -32,12 +36,35 @@ public class UIPrintPreview extends UIForm implements UIPopupComponent {
   
   public UIPrintPreview() { }
   
-  public String getPrintMessage() throws Exception {
+  public String getPrintMessageId() throws Exception {
     return printMessage_;
   }
   
-  public void setPrintMessage(String msgId) throws Exception {
+  public void setPrintMessageId(String msgId) throws Exception {
     printMessage_ = msgId ;
+  }
+  
+  public Message getPrintMessage() throws Exception {
+    String msgId = getPrintMessageId();
+    String username = MailUtils.getCurrentUser();
+    String accountId = MailUtils.getAccountId();
+    MailService mailSrv = MailUtils.getMailService();
+    try {
+      return mailSrv.getMessageById(username, msgId, accountId);
+    } catch(Exception e) {
+      return null ;
+    }
+  }
+  
+  public Account getAccount() throws Exception {
+    String username = MailUtils.getCurrentUser();
+    String accountId = MailUtils.getAccountId();
+    MailService mailSrv = MailUtils.getMailService();
+    try {
+      return mailSrv.getAccountById(username, accountId);
+    } catch(Exception e) {
+      return null ;
+    }
   }
   
   public String[] getAction() { return new String[] {"print", "cancel"}; }

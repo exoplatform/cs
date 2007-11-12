@@ -15,6 +15,7 @@ import org.exoplatform.mail.service.Attachment;
 import org.exoplatform.mail.service.BufferAttachment;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
+import org.exoplatform.mail.service.MailSetting;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.UIFolderContainer;
@@ -150,8 +151,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
       ActionData fileUpload = new ActionData() ;
       fileUpload.setActionListener("") ;
       fileUpload.setActionType(ActionData.TYPE_ICON) ;
-      fileUpload.setCssIconClass("AttachmentIcon ZipFileIcon") ;
-      fileUpload.setBreakLine(true);
+      fileUpload.setCssIconClass("AttachmentIcon") ; // "AttachmentIcon ZipFileIcon"
       fileUpload.setActionName(attachdata.getName() + " ("+attachdata.getSize()+" Kb)" ) ;
       fileUpload.setShowLabel(true) ;
       uploadedFiles.add(fileUpload) ;
@@ -160,7 +160,6 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
       removeAction.setActionName(ACT_REMOVE);
       removeAction.setActionParameter(attachdata.getId());
       removeAction.setActionType(ActionData.TYPE_LINK) ;
-      removeAction.setBreakLine(true) ;
       uploadedFiles.add(removeAction) ;
     }
     return uploadedFiles ;
@@ -338,10 +337,13 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
         return ;
       }
       try {
-        message.setFolders(new String[]{Utils.createFolderId(accountId, Utils.FD_SENT, false)}) ;
-        Folder folder = mailSvr.getFolder(usename, accountId, Utils.createFolderId(accountId, Utils.FD_SENT, false));
-        folder.setTotalMessage(folder.getTotalMessage() + 1);
-        mailSvr.saveUserFolder(usename, accountId, folder);
+        MailSetting mailSetting = mailSvr.getMailSetting(usename);
+        if (mailSetting.saveMessageInSent()) {
+          message.setFolders(new String[]{Utils.createFolderId(accountId, Utils.FD_SENT, false)}) ;
+          Folder folder = mailSvr.getFolder(usename, accountId, Utils.createFolderId(accountId, Utils.FD_SENT, false));
+          folder.setTotalMessage(folder.getTotalMessage() + 1);
+          mailSvr.saveUserFolder(usename, accountId, folder);
+        }
         if (!uiForm.fromDrafts()) {
           mailSvr.saveMessage(usename, accountId, message, true) ;          
           Folder drafts = mailSvr.getFolder(usename, accountId, Utils.createFolderId(accountId, Utils.FD_DRAFTS, false));

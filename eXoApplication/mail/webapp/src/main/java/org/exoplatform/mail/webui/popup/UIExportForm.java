@@ -37,7 +37,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
 
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
-    template = "system:/groovy/webui/form/UIForm.gtmpl",
+    template = "app:/templates/mail/webui/UIExportForm.gtmpl",
     events = {
       @EventConfig(listeners = UIExportForm.ExportActionListener.class), 
       @EventConfig(listeners = UIExportForm.CancelActionListener.class)

@@ -1,4 +1,9 @@
 <%
+  import org.exoplatform.mail.service.Message;
+  import org.exoplatform.mail.service.Account;
+  import org.exoplatform.mail.service.Utils; 
+  import org.exoplatform.mail.service.Attachment;
+  import javax.mail.internet.InternetAddress;
   import org.exoplatform.web.application.JavascriptManager;
   def rcontext = _ctx.getRequestContext() ;
   JavascriptManager jsmanager = rcontext.getJavascriptManager();
@@ -9,39 +14,60 @@
 <div id="printWrapper">
 <% uiform.begin() %>
 <!--  Start PrintPriview -->
+  <%
+    Message msg = uicomponent.getPrintMessage();
+    Account acc = uicomponent.getAccount();
+  %>
   <div class="PrintPreview">
     <div class="PrintHeader" >
       <div class="PrintLogoMail"><span></span></div>
-      <div class="PrintUser">Phuong Pham Dang {phuong.pham@exoplatform.com}</div>
+      <div class="PrintUser"><%=acc.getUserDisplayName()%> &lt; <%=acc.getEmailAddress()%> &gt;</div>
       <div style="clear: left;"><span></span></div>
     </div>
-    <div class="PrintSubject"  >Melissa Theuriau background for M6 </div>
+    <div class="PrintSubject"  ><%=msg.getSubject()%> </div>
     <div class="PrintAddress"  >
       <div class="FromAndTo">
-        <div class="PrintFrom"><span style="font-weight:bold;">Brice Revenant</span> {brice.revenant@gmail.com}</div>
-        <div class="PrintTo">To: Phuong Pham Dang {phuong.pham@exoplatform.com}</div>
+        <%
+          InternetAddress[] fromAddress = Utils.getInternetAddress(msg.getFrom());
+          InternetAddress from = fromAddress[0];
+        %>
+        <div class="PrintFrom">From: <span style="font-weight:bold;"><%=Utils.getPersonal(from)%></span> &lt; <%=from.getAddress()%> &gt;</div>
+        <div class="PrintTo">To:
+        <%
+          InternetAddress[] toAddress = InternetAddress.parse(msg.getMessageTo());
+          for (i in 0..(toAddress.length-1)) {
+            InternetAddress address = toAddress[i];
+            if (i > 0) print ",";
+        %>
+          <%=Utils.getPersonal(address)%> &lt; <%=address.getAddress()%> &gt;
+        <%}%>
+        </div>
       </div>
-      <div class="DateAndTime">Tuesday, June 26, 2007, 12:40 am</div>
+      <div class="DateAndTime"><%=Utils.formatDate('EEEE, MMMM dd, yyyy HH:mm aaa', msg.getReceivedDate())%></div>
       <div style="clear: both;"><span></span></div>
     </div>
     <div class="PrintContent"  >
-      Hi Phuong,<br><br>
-      Benjamin would like a great image in the background of the desktop WebOS layout. This is to make the difference. Could you please specify the attached image as background ? This is the main newscaster of the TV... That should please the customer.<br><br>
-      Thanks a lot,<br><br>
-      Brice Revenant<br>
-      eXo Platform SAS
+      <%=msg.getMessageBody()%>
     </div>
-    <div class="PrintAttachments"  >
-      <div class="AttachmentTitle">Attachments:</div>
-      <div class="AttachmentContent">
-        <div class="ImageAttachment"><span></span></div>
-        <div class="AttachmentLabel">
-          <div class="NameImage">Melissa Theuriau background for M6.jpg</div>
-          <div class="Size">Size: 49K</div>
+    <% 
+      if (msg.getAttachments().size() > 0) {
+    %>
+      <div class="PrintAttachments"  >
+        <div class="AttachmentTitle">Attachments:</div>
+        <div class="AttachmentContent">
+          <div class="ImageAttachment"><span></span></div>
+          <div class="AttachmentLabel">
+            <%
+              for (Attachment att : msg.getAttachments()) {  
+            %>
+              <div class="NameImage"><%=att.getName()%></div>
+              <div class="Size">Size: <%=att.getSize()%>K</div>
+            <% } %>
+          </div>
+          <div style="clear: left;"><span></span></div>
         </div>
-        <div style="clear: left;"><span></span></div>
       </div>
-    </div>
+    <%}%>
   </div>
   <% uiform.end() %>
   <!--  End PrintPriview -->

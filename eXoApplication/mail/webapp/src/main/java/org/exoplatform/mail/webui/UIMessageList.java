@@ -489,7 +489,7 @@ public class UIMessageList extends UIForm {
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
       UIPrintPreview uiPrintPreview = uiPopup.activate(UIPrintPreview.class, 700) ;
-      uiPrintPreview.setPrintMessage(msgId) ;
+      uiPrintPreview.setPrintMessageId(msgId) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup) ;
     }
   }

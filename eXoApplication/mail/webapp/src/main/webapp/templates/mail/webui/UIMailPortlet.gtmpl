@@ -11,17 +11,17 @@
 %>
 <div class="$uicomponent.id UIApplication" id="$uicomponent.id">
   <div class="ApplicationMinWidth">
-  	<div class="UIMailPortlet">
+  	<div class="UIMailPortlet" id="UIMailPortlet">
 <!-- Start Mail Banner -->
   	<%uicomponent.renderChild(UIBannerContainer.class);%>
 <!-- End Mail Banner -->
 <!-- Start Mail Working Workspace -->
-	    <div class="MailWorkingWorkspace">
+	    <div class="MailWorkingWorkspace" id="MailWorkingWorkspace">
 <!-- Start Mail ControlBar -->
 			<%uicomponent.renderChild(UIActionBar.class);%>
 <!-- End Mail ControlBar -->
 <!-- Start Mail Container -->
-				<div class="MailContainer">
+				<div class="MailContainer" id="MailContainer">
 					<%uicomponent.renderChild(UINavigationContainer.class);%>
 <!-- End Mail AccountManagement -->
 <!-- Start Mail Working Details -->

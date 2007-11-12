@@ -12,8 +12,8 @@
 	<div class="UIMessageArea" >		
 		<%uicomponent.renderChild(UIMessageList.class);%>
 	</div>
-	<div class="ResizeReadingPane" onmousedown="eXo.mail.Spliter.exeRowSplit(event, this, 'uiMessageListResizableArea');"><span></span></div>
-	<div  class="SpliterResizableArea">
+	<div class="ResizeReadingPane" id="ResizeReadingPane" onmousedown="eXo.mail.Spliter.exeRowSplit(event, this, 'uiMessageListResizableArea');"><span></span></div>
+	<div  class="SpliterResizableArea" id="SpliterResizableArea">
 		<%uicomponent.renderChild(UIMessagePreview.class);%>
 	</div>
 </div>
