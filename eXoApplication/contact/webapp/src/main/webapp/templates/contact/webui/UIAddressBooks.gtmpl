@@ -26,7 +26,7 @@
 							                    </div>
 						                    </a>
 						                    <a class="MenuItem" href="<%=uicomponent.event("ImportAddress")%>">   
-							                    <div class="ItemIcon ExportAddressIcon">
+							                    <div class="ItemIcon ImportAddressIcon">
 							                      Import Address
 							                    </div>
 						                    </a>
@@ -120,12 +120,12 @@
 				        <!--/a-->
 				     
 				        <a class="MenuItem" href="<%=uicomponent.event("ExportAddress", "id")%>">   
-			            <div class="ItemIcon ExportAddressIcon">
+			            <div class="ItemIcon ExportContactIcon">
 			              Export Contacts
 			            </div>
 				        </a>
 				        <a class="MenuItem" href="<%=uicomponent.event("ImportAddress", "id")%>">   
-			            <div class="ItemIcon ImportAddressIcon">
+			            <div class="ItemIcon ImportContactIcon">
 			              Import Contacts
 			            </div>
 				        </a>

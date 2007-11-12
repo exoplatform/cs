@@ -148,6 +148,10 @@
 	background: url('icons/ExportAddressIcon.gif') no-repeat left center;
 }
 
+.ImportAddressIcon {
+	background: url('icons/ImportAddressIcon.gif') no-repeat left center;
+}
+
 .EditActionIcon {
 	background: url('icons/EditActionIcon.gif') no-repeat left center;
 }
@@ -158,4 +162,8 @@
 
 .ExportContactIcon {
 	background: url('icons/ExportContactIcon.gif') no-repeat left center;
+}
+
+.ImportContactIcon {
+	background: url('icons/ImportContactIcon.gif') no-repeat left center;
 }

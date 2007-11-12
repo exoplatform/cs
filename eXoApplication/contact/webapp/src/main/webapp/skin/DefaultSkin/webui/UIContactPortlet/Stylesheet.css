@@ -110,7 +110,7 @@
 }
 
 .UIContactPortlet .UIActionBar .ControlButton {
-	margin: 3px 3px 0px 3px;
+	margin: 0px 3px 0px 3px;
 }
 
 .UIContactPortlet .UIActionBar .ControlButton a:hover {
@@ -135,15 +135,13 @@
 	padding-right: 16px;
 }
 
-.UIContactPortlet .UIActionBar .ImportContact {
-	background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/ImportalContactIcon.gif') no-repeat center ;
+.UIContactPortlet .UIActionBar .ImportAddressIcon {
 	height: 26px; width: 21px;
 	margin: 4px 10px 0px 40px;
 	float: left;
 	cursor: pointer;
 }
-.UIContactPortlet .UIActionBar .ExportContact {
-	background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/ExportContactIcon.gif') no-repeat center ;
+.UIContactPortlet .UIActionBar .ExportAddressIcon {
 	height: 26px; width: 21px;
 	margin: 4px 10px 0px 10px;
 	float: left;
