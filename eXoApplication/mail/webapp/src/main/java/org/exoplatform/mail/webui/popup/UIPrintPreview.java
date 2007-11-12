@@ -50,7 +50,7 @@ public class UIPrintPreview extends UIForm implements UIPopupComponent {
     String accountId = MailUtils.getAccountId();
     MailService mailSrv = MailUtils.getMailService();
     try {
-      return mailSrv.getMessageById(username, msgId, accountId);
+      return mailSrv.getMessageById(username, accountId, msgId);
     } catch(Exception e) {
       return null ;
     }

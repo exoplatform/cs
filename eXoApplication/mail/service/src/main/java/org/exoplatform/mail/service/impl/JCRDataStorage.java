@@ -109,12 +109,12 @@ public class JCRDataStorage implements DataStorage{
     }
     return account ;
   }
-  public Message getMessageById(String username, String accountId, String id) throws Exception {
+  public Message getMessageById(String username, String accountId, String msgId) throws Exception {
     //  gets a message (email) from its id and username
     Node messageHome = getMessageHome(username, accountId);
     //  if this message exists, creates the object and returns it
-    if (messageHome.hasNode(id)) {
-      Message msg = getMessage(messageHome.getNode(id));
+    if (messageHome.hasNode(msgId)) {
+      Message msg = getMessage(messageHome.getNode(msgId));
       msg.setAccountId(accountId);
       return msg ;
     }
@@ -338,21 +338,23 @@ public class JCRDataStorage implements DataStorage{
       nodeMsg.setProperty(Utils.EXO_TAGS, tags);
       String[] folders = message.getFolders();
       nodeMsg.setProperty(Utils.EXO_FOLDERS, folders);
-      List<Attachment> attachments = message.getAttachments();
-      if(attachments != null) { 
-        Iterator<Attachment> it = attachments.iterator();
-        while (it.hasNext()) {
-          BufferAttachment file = (BufferAttachment)it.next();
-          Node nodeFile = null;
-          if (!nodeMsg.hasNode(file.getName())) nodeFile = nodeMsg.addNode(file.getName(), Utils.NT_FILE);
-          else nodeFile = nodeMsg.getNode(file.getName());
-          Node nodeContent = null;
-          if (!nodeFile.hasNode(Utils.JCR_CONTENT)) nodeContent = nodeFile.addNode(Utils.JCR_CONTENT, Utils.NT_RESOURCE);
-          else nodeContent = nodeFile.getNode(Utils.JCR_CONTENT);
-          nodeContent.setProperty(Utils.JCR_MIMETYPE, file.getMimeType());
-          nodeContent.setProperty(Utils.JCR_DATA, file.getInputStream());
-          nodeContent.setProperty(Utils.JCR_LASTMODIFIED, Calendar.getInstance().getTimeInMillis());
-          nodeMsg.setProperty(Utils.EXO_HASATTACH, true);
+      if (isNew) {
+        List<Attachment> attachments = message.getAttachments();
+        if(attachments != null) { 
+          Iterator<Attachment> it = attachments.iterator();
+          while (it.hasNext()) {
+            BufferAttachment file = (BufferAttachment)it.next();
+            Node nodeFile = null;
+            if (!nodeMsg.hasNode(file.getName())) nodeFile = nodeMsg.addNode(file.getName(), Utils.NT_FILE);
+            else nodeFile = nodeMsg.getNode(file.getName());
+            Node nodeContent = null;
+            if (!nodeFile.hasNode(Utils.JCR_CONTENT)) nodeContent = nodeFile.addNode(Utils.JCR_CONTENT, Utils.NT_RESOURCE);
+            else nodeContent = nodeFile.getNode(Utils.JCR_CONTENT);
+            nodeContent.setProperty(Utils.JCR_MIMETYPE, file.getMimeType());
+            nodeContent.setProperty(Utils.JCR_DATA, file.getInputStream());
+            nodeContent.setProperty(Utils.JCR_LASTMODIFIED, Calendar.getInstance().getTimeInMillis());
+            nodeMsg.setProperty(Utils.EXO_HASATTACH, true);
+          }
         }
       }
       homeMsg.getSession().save();

@@ -17,7 +17,6 @@ import java.util.Properties;
 
 import javax.activation.DataHandler;
 import javax.mail.AuthenticationFailedException;
-import javax.mail.BodyPart;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.Part;
@@ -111,8 +110,8 @@ public class MailServiceImpl implements MailService{
     storage_.removeUserFolder(username, account, folder);
   }
 
-  public Message getMessageById(String username, String messageName, String accountId) throws Exception {
-    return storage_.getMessageById(username, accountId, messageName);
+  public Message getMessageById(String username, String accountId, String msgId) throws Exception {
+    return storage_.getMessageById(username, accountId, msgId);
   }
 
   public void removeMessage(String username, String accountId, String messageId) throws Exception {
@@ -189,26 +188,32 @@ public class MailServiceImpl implements MailService{
     Transport transport = session.getTransport(Utils.SVR_SMTP);
     Properties props = session.getProperties();
     transport.connect(props.getProperty(Utils.SVR_SMTP_HOST), props.getProperty(Utils.SVR_INCOMING_USERNAME), props.getProperty(Utils.SVR_INCOMING_PASSWORD)) ;
-    javax.mail.Message msg = new MimeMessage(session);
+    javax.mail.Message mimeMessage = new MimeMessage(session);
     String status = "";
     InternetAddress addressFrom = new InternetAddress(message.getFrom());
-    msg.setFrom(addressFrom);
-    msg.setRecipients(javax.mail.Message.RecipientType.TO, InternetAddress.parse(message.getMessageTo()));
+    mimeMessage.setFrom(addressFrom);
+    mimeMessage.setRecipients(javax.mail.Message.RecipientType.TO, InternetAddress.parse(message.getMessageTo()));
     if(message.getMessageCc() != null) {
-      msg.setRecipients(javax.mail.Message.RecipientType.CC, InternetAddress.parse(message.getMessageCc(), true));
+      mimeMessage.setRecipients(javax.mail.Message.RecipientType.CC, InternetAddress.parse(message.getMessageCc(), true));
     }
     if(message.getMessageBcc() != null) {   
-      msg.setRecipients(javax.mail.Message.RecipientType.BCC, InternetAddress.parse(message.getMessageBcc(), false));
+      mimeMessage.setRecipients(javax.mail.Message.RecipientType.BCC, InternetAddress.parse(message.getMessageBcc(), false));
     }
-    msg.setSubject(message.getSubject());
-    msg.setSentDate(message.getSendDate());
-   
-    BodyPart mimeBodyPart1 = new MimeBodyPart();
-    mimeBodyPart1.setContent(message.getMessageBody(), message.getContentType());
-    mimeBodyPart1.setDisposition(Utils.INLINE);
+    mimeMessage.setSubject(message.getSubject());
+    mimeMessage.setSentDate(message.getSendDate());
     
-    Multipart multiPart = new MimeMultipart();
-    multiPart.addBodyPart(mimeBodyPart1);
+    MimeMultipart  multipPartRoot = new MimeMultipart("mixed");
+    
+    MimeMultipart  multipPartContent = new MimeMultipart("alternative");
+    
+    MimeBodyPart contentPartRoot = new MimeBodyPart();
+    contentPartRoot.setContent(multipPartContent);
+
+    MimeBodyPart  mimeBodyPart1 = new MimeBodyPart();
+    mimeBodyPart1.setContent(message.getMessageBody(), "text/html");
+    multipPartContent.addBodyPart(mimeBodyPart1);
+    
+    multipPartRoot.addBodyPart(contentPartRoot);
     
     List<Attachment> attachList = message.getAttachments();
     if (attachList != null) {
@@ -220,24 +225,24 @@ public class MailServiceImpl implements MailService{
         ByteArrayDataSource byteArrayDataSource = new ByteArrayDataSource(is, att.getMimeType());
         mimeBodyPart.setDataHandler(new DataHandler(byteArrayDataSource));
 
-        mimeBodyPart.setDisposition(Utils.ATTACHMENT);
+        mimeBodyPart.setDisposition(Part.ATTACHMENT);
         mimeBodyPart.setFileName(attach.getName());
-        multiPart.addBodyPart(mimeBodyPart);
+        multipPartRoot.addBodyPart(mimeBodyPart);
       }        
     }
-    msg.setHeader("X-Priority", String.valueOf(message.getPriority()));
+    mimeMessage.setHeader("X-Priority", String.valueOf(message.getPriority()));
     String priority = "Normal";
     if (message.getPriority() == Utils.PRIORITY_HIGH) {
       priority = "High";
     } else if (message.getPriority() == Utils.PRIORITY_LOW) {
       priority = "Low";
     }     
-    if (message.getPriority() != 0 ) msg.setHeader("Importance", priority);
+    if (message.getPriority() != 0 ) mimeMessage.setHeader("Importance", priority);
     
-    msg.setContent(multiPart);
-    msg.saveChanges();
+    mimeMessage.setContent(multipPartRoot);
+    mimeMessage.saveChanges();
     try {
-      transport.sendMessage(msg, msg.getAllRecipients());
+      transport.sendMessage(mimeMessage, mimeMessage.getAllRecipients());
       status = "Mail Delivered !";
     } catch (AddressException e) {
       status = "There was an error parsing the addresses. Sending Falied !" + e.getMessage(); 
@@ -508,7 +513,7 @@ public class MailServiceImpl implements MailService{
   public OutputStream exportMessage(String username, String accountId, String messageId) throws Exception {
     Properties props = System.getProperties();
     Session session = Session.getDefaultInstance(props, null);
-    Message message = getMessageById(username, messageId, accountId);
+    Message message = getMessageById(username, accountId, messageId);
     MimeMessage mimeMessage = new MimeMessage(session);
     mimeMessage = Utils.mergeToMimeMessage(message, mimeMessage);
     OutputStream outputStream = new ByteArrayOutputStream();

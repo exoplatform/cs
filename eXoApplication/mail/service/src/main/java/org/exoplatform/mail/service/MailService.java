@@ -185,7 +185,7 @@ public interface MailService {
    * @return
    * @throws Exception
    */
-  public Message getMessageById(String username, String nodeName, String accountId) throws Exception ;
+  public Message getMessageById(String username, String accountId, String nodeName) throws Exception ;
   /**
    * This method should:
    * 1. Find all the message according the parameter that is specified in the filter object

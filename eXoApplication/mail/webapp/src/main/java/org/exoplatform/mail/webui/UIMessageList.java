@@ -211,7 +211,7 @@ public class UIMessageList extends UIForm {
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       MailService mailServ = uiPortlet.getApplicationComponent(MailService.class);
-      Message msg = mailServ.getMessageById(username, msgId, accountId);
+      Message msg = mailServ.getMessageById(username, accountId, msgId);
       Folder folder = mailServ.getFolder(username, accountId, msg.getFolders()[0]);
       if (uiMessageList.getSelectedFolderId().equalsIgnoreCase(Utils.createFolderId(accountId, Utils.FD_DRAFTS, false))) {
         UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
@@ -245,7 +245,7 @@ public class UIMessageList extends UIForm {
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       MailService mailServ = uiPortlet.getApplicationComponent(MailService.class);
       try {
-        Message msg = mailServ.getMessageById(username, msgId, accountId);
+        Message msg = mailServ.getMessageById(username, accountId, msgId);
         msg.setHasStar(!msg.hasStar());
         mailServ.saveMessage(username, accountId, msg, false);
         uiMessageList.setSelectedMessageId(msgId);
@@ -368,7 +368,7 @@ public class UIMessageList extends UIForm {
       MailService mailSvr = uiMessageList.getApplicationComponent(MailService.class) ;
       String username = uiPortlet.getCurrentUser() ;
       if (msgId != null) {
-        Message message = mailSvr.getMessageById(username, msgId, accId);
+        Message message = mailSvr.getMessageById(username, accId, msgId);
         uiComposeForm.setFieldToValue(message.getFrom());
         uiComposeForm.setFieldSubjectValue("Re: " + message.getSubject());
       }
@@ -394,7 +394,7 @@ public class UIMessageList extends UIForm {
       MailService mailSvr = uiMessageList.getApplicationComponent(MailService.class) ;
       String username = uiPortlet.getCurrentUser() ;
       if (msgId != null) {
-        Message message = mailSvr.getMessageById(username, msgId, accId);
+        Message message = mailSvr.getMessageById(username, accId, msgId);
         uiComposeForm.setFieldSubjectValue("Re: " + message.getSubject());
         String replyAll = message.getFrom();
         if (message.getMessageCc() != null) replyAll += "," + message.getMessageCc();
@@ -425,7 +425,7 @@ public class UIMessageList extends UIForm {
       MailService mailSvr = uiMessageList.getApplicationComponent(MailService.class) ;
       String username = uiPortlet.getCurrentUser() ;
       if (msgId != null) {
-        Message message = mailSvr.getMessageById(username, msgId, accId);
+        Message message = mailSvr.getMessageById(username, accId, msgId);
         uiComposeForm.setFieldSubjectValue("Fwd: " + message.getSubject());
         String forwardedText = "\n\n\n-------- Original Message --------\n" +
             "Subject: " + message.getSubject() + "\nDate: " + message.getSendDate() + 
@@ -455,7 +455,7 @@ public class UIMessageList extends UIForm {
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       List<Message> checkedMessageList = new ArrayList<Message>();
       if (msgId != null) { 
-        checkedMessageList.add(mailSrv.getMessageById(username, msgId, accountId));
+        checkedMessageList.add(mailSrv.getMessageById(username, accountId, msgId));
       } else {
         checkedMessageList = uiMessageList.getCheckedMessage();
       }
@@ -633,7 +633,7 @@ public class UIMessageList extends UIForm {
       String username = MailUtils.getCurrentUser();
       String accountId = MailUtils.getAccountId() ;
       MailService mailServ = MailUtils.getMailService() ;
-      Message msg = mailServ.getMessageById(username, msgId, accountId);
+      Message msg = mailServ.getMessageById(username, accountId, msgId);
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
       UIAddContactForm uiAddContactForm = uiPopup.createUIComponent(UIAddContactForm.class, null, null);
@@ -682,10 +682,14 @@ public class UIMessageList extends UIForm {
       UIExportForm uiExportForm = uiPopup.createUIComponent(UIExportForm.class, null, null);
       uiPopup.activate(uiExportForm, 600, 0, true);
       String username = uiPortlet.getCurrentUser();
-      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-      MailService mailServ = uiPortlet.getApplicationComponent(MailService.class);
-      Message msg = mailServ.getMessageById(username, msgId, accountId);
-      uiExportForm.setExportFileName(msg.getSubject());
+      String accountId = MailUtils.getAccountId();
+      MailService mailServ = MailUtils.getMailService();
+      try {
+      Message msg = mailServ.getMessageById(username, accountId, msgId);
+      uiExportForm.setExportMessage(msg);
+      } catch (Exception e) {
+        System.out.println("=====>>>> " + msgId + "\n" + e.getStackTrace()); 
+      }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup);  
     }
   }

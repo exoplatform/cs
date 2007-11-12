@@ -10,12 +10,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
-import java.util.GregorianCalendar;
-
 import javax.activation.DataHandler;
-import javax.mail.BodyPart;
 import javax.mail.Multipart;
 import javax.mail.Part;
 import javax.mail.internet.InternetAddress;
@@ -198,15 +196,6 @@ public class Utils {
   
   public static javax.mail.internet.MimeMessage mergeToMimeMessage(Message message, javax.mail.internet.MimeMessage mimeMessage) throws Exception {
     InternetAddress addressFrom = new InternetAddress(message.getFrom());
-    mimeMessage.setHeader("X-Priority", String.valueOf(message.getPriority()));
-    String priority = "Normal";
-    if (message.getPriority() == Utils.PRIORITY_HIGH) {
-      priority = "High";
-    } else if (message.getPriority() == Utils.PRIORITY_LOW) {
-      priority = "Low";
-    }     
-    if (message.getPriority() != 0 ) mimeMessage.setHeader("Importance", priority);
-    
     mimeMessage.setFrom(addressFrom);
     mimeMessage.setRecipients(javax.mail.Message.RecipientType.TO, InternetAddress.parse(message.getMessageTo()));
     if(message.getMessageCc() != null) {
@@ -217,32 +206,45 @@ public class Utils {
     }
     mimeMessage.setSubject(message.getSubject());
     mimeMessage.setSentDate(message.getSendDate());
-   
-    BodyPart mimeBodyPart1 = new MimeBodyPart();
-    mimeBodyPart1.setContent(message.getMessageBody(), message.getContentType());
-    mimeBodyPart1.setDisposition(Utils.INLINE);
     
-    Multipart multiPart = new MimeMultipart();
-    multiPart.addBodyPart(mimeBodyPart1);
+    MimeMultipart  multipPartRoot = new MimeMultipart("mixed");
+    
+    MimeMultipart  multipPartContent = new MimeMultipart("alternative");
+    
+    MimeBodyPart contentPartRoot = new MimeBodyPart();
+    contentPartRoot.setContent(multipPartContent);
+
+    MimeBodyPart  mimeBodyPart1 = new MimeBodyPart();
+    mimeBodyPart1.setContent(message.getMessageBody(), "text/html");
+    multipPartContent.addBodyPart(mimeBodyPart1);
+    
+    multipPartRoot.addBodyPart(contentPartRoot);
     
     List<Attachment> attachList = message.getAttachments();
     if (attachList != null) {
       for (Attachment att : attachList) {
-        BufferAttachment attach = (BufferAttachment) att;
+        JCRMessageAttachment attach = (JCRMessageAttachment) att;
         InputStream is = attach.getInputStream();
 
         MimeBodyPart mimeBodyPart = new MimeBodyPart();
         ByteArrayDataSource byteArrayDataSource = new ByteArrayDataSource(is, att.getMimeType());
         mimeBodyPart.setDataHandler(new DataHandler(byteArrayDataSource));
 
-        mimeBodyPart.setDisposition(Utils.ATTACHMENT);
+        mimeBodyPart.setDisposition(Part.ATTACHMENT);
         mimeBodyPart.setFileName(attach.getName());
-        multiPart.addBodyPart(mimeBodyPart);
+        multipPartRoot.addBodyPart(mimeBodyPart);
       }        
     }
+    mimeMessage.setHeader("X-Priority", String.valueOf(message.getPriority()));
+    String priority = "Normal";
+    if (message.getPriority() == Utils.PRIORITY_HIGH) {
+      priority = "High";
+    } else if (message.getPriority() == Utils.PRIORITY_LOW) {
+      priority = "Low";
+    }     
+    if (message.getPriority() != 0 ) mimeMessage.setHeader("Importance", priority);
     
-    mimeMessage.setContent(multiPart);
-    mimeMessage.saveChanges();
+    mimeMessage.setContent(multipPartRoot);
     
     return mimeMessage;
   }

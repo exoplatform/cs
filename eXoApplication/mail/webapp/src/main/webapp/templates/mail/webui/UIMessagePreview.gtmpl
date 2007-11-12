@@ -93,7 +93,7 @@
                             String downloadAction = uicomponent.event("DownloadAttachment", att.getId());
                       %>
                             <%if ((msg.getAttachments().size() > 1) && (i > 1)) {%>, <%}%>    
-                            <span><a href="$downloadAction"><%=att.getName()%> (
+                            <span><a class="AttackmentIcon" href="$downloadAction"><%=att.getName()%> (
                               <%
                                 if (att.getSize() > 1024) {
                               %> 
