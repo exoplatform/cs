@@ -98,10 +98,7 @@
 						 			  	indexBeginDate = uicomponent.getDaysOfWeek(weekNumber).indexOf(cl) ;
 						 			  }
 						 			  if(uicomponent.isSameDate(event.toDateTime, cl.time)){
-						 			  	indexEndDate = indexBeginDate ;
-						 			  	if(cl.time.before(event.toDateTime)) {
-						 			  		indexEndDate = uicomponent.getDaysOfWeek(weekNumber).indexOf(cl) ;
-						 			  	}
+						 			  	indexEndDate = uicomponent.getDaysOfWeek(weekNumber).indexOf(cl) ;
 						 			  }
 							 		}
 							 		cal = new GregorianCalendar() ;
@@ -112,9 +109,9 @@
 									color = uicomponent.getColors().get(event.getCalendarId()) ;
 									title = begindate + "->" + enddate + ":&#013; " + event.summary ;
 								%>
-										 <div class="EventContainer EventAlldayContainer $color" style="border: solid 1px gray;margin: 1px 0px ;" indexBeginDate='$indexBeginDate' indexEndDate='$indexEndDate' calType="$event.calType"  eventid="$event.id" calid="$event.calendarId" starttime="$begindate" endtime="$enddate"  style="height: 22px;" title="$title"  >
-										 	<%=tf.format(event.fromDateTime)%>
-										 </div>
+									 <div class="EventContainer EventAlldayContainer $color" style="border: solid 1px gray;margin: 1px 0px ;" indexBeginDate='$indexBeginDate' indexEndDate='$indexEndDate' calType="$event.calType"  eventid="$event.id" calid="$event.calendarId" starttime="$begindate" endtime="$enddate"  style="height: 22px;" title="$title"  >
+									 	<%=tf.format(event.fromDateTime)%>
+									 </div>
 								<%}%>
 							</td>
 					</tr>

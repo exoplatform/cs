@@ -6,6 +6,7 @@ package org.exoplatform.calendar.webui;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarEvent;
@@ -19,8 +20,10 @@ import org.exoplatform.calendar.webui.popup.UIPopupContainer;
 import org.exoplatform.calendar.webui.popup.UIQuickAddEvent;
 import org.exoplatform.calendar.webui.popup.UITaskForm;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -64,6 +67,15 @@ public class UIActionBar extends UIContainer  {
   static public class QuickAddEventActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {
       UIActionBar uiActionBar = event.getSource() ;
+      CalendarService calendarService = uiActionBar.getApplicationComponent(CalendarService.class) ;
+      UIApplication uiApp = uiActionBar.getAncestorOfType(UIApplication.class) ;
+      List<org.exoplatform.calendar.service.Calendar> privateCalendars = 
+        calendarService.getUserCalendars(CalendarUtils.getCurrentUser()) ;
+      if(privateCalendars.isEmpty()) {
+        uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.calendar-list-empty", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
       String type = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UICalendarPortlet uiPortlet = uiActionBar.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
@@ -84,6 +96,15 @@ public class UIActionBar extends UIContainer  {
   static public class AddTasksActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {
       UIActionBar uiActionBar = event.getSource() ;
+      CalendarService calendarService = uiActionBar.getApplicationComponent(CalendarService.class) ;
+      UIApplication uiApp = uiActionBar.getAncestorOfType(UIApplication.class) ;
+      List<org.exoplatform.calendar.service.Calendar> privateCalendars = 
+        calendarService.getUserCalendars(CalendarUtils.getCurrentUser()) ;
+      if(privateCalendars.isEmpty()) {
+        uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.calendar-list-empty", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
       UICalendarPortlet uiPortlet = uiActionBar.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
       UIPopupContainer uiContainer = uiPopupAction.activate(UIPopupContainer.class, 700) ;

@@ -401,7 +401,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
     public void execute(Event<UICalendarView> event) throws Exception {
       UICalendarView uiForm = event.getSource() ;
       System.out.println(" ===========> AddEventActionListener") ;
-      CalendarService calendarService = uiForm.getApplicationComponent(CalendarService.class) ;
+      CalendarService calendarService =  CalendarUtils.getCalendarService() ; 
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       List<org.exoplatform.calendar.service.Calendar> privateCalendars = 
         calendarService.getUserCalendars(CalendarUtils.getCurrentUser()) ;
@@ -642,7 +642,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       UICalendarPortlet uiPortlet = uiCalendarView.getAncestorOfType(UICalendarPortlet.class) ;
       UICalendarViewContainer uiViewContainer = uiPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
       UIListView uiListView = uiViewContainer.findFirstComponentOfType(UIListView.class) ;
-      CalendarService calendarService = uiCalendarView.getApplicationComponent(CalendarService.class) ;
+      CalendarService calendarService =  CalendarUtils.getCalendarService() ;
       String username = CalendarUtils.getCurrentUser() ;
       EventQuery eventQuery = new EventQuery() ;
       java.util.Calendar fromcalendar = new GregorianCalendar(uiListView.getCurrentYear(), uiListView.getCurrentMonth(), uiListView.getCurrentDay()) ;
@@ -739,6 +739,15 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
     public void execute(Event<UICalendarView> event) throws Exception {
       System.out.println("QuickAddActionListener");
       UICalendarView calendarview = event.getSource() ;
+      CalendarService calendarService = CalendarUtils.getCalendarService() ;
+      UIApplication uiApp = calendarview.getAncestorOfType(UIApplication.class) ;
+      List<org.exoplatform.calendar.service.Calendar> privateCalendars = 
+        calendarService.getUserCalendars(CalendarUtils.getCurrentUser()) ;
+      if(privateCalendars.isEmpty()) {
+        uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.calendar-list-empty", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
       String type = event.getRequestContext().getRequestParameter(OBJECTID) ;
       String startTime = event.getRequestContext().getRequestParameter("startTime") ;
       String finishTime = event.getRequestContext().getRequestParameter("finishTime") ;
