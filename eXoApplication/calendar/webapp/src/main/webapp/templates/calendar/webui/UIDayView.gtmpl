@@ -31,7 +31,8 @@
 	boolean isShowWorkingTime = uicomponent.isShowWorkingTime() ;
 	workingStart = uicomponent.getCalendarSetting().getWorkingTimeBegin() ;
 	int defaultTimeInterval = uicomponent.getDefaultTimeInterval() ;
-  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.showEvent(' + defaultTimeInterval + ',"'+workingStart+'") ;') ;
+  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.setting(' + defaultTimeInterval + ',"'+workingStart+'") ;') ;
+  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.showEvent() ;') ;
 %>
 <div class="UIDayView">
   <div class="TitleBar">

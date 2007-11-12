@@ -320,6 +320,7 @@ UICalendarPortlet.prototype.adjustWidth = function(el) {
 			}
 		}
 		var n = 0 ;
+		//alert(offsetLeft) ;
 		for(var j = inter[i]; j < inter[i+1] ; j++) {
 			if(mark != null) {				
 				width = parseFloat((totalWidth + left - parseFloat(el[mark].style.left) - parseFloat(el[mark].style.width))/len) ;
@@ -344,10 +345,11 @@ UICalendarPortlet.prototype.showEvent = function() {
 	var UICalendarPortlet = eXo.calendar.UICalendarPortlet ;	
 	if (!UICalendarPortlet.init()) return ;
 	var workingStart = 0 ;
-	if (arguments.length >= 2){
-		UICalendarPortlet.setting(arguments[0], arguments[1]) ;
-		workingStart = UICalendarPortlet.workingStart ;		
-	}
+//	if (arguments.length >= 2){
+//		UICalendarPortlet.setting(arguments[0], arguments[1]) ;
+	var workingStart = (UICalendarPortlet.workingStart) ? UICalendarPortlet.workingStart : 0 ;	
+//		workingStart = UICalendarPortlet.workingStart ;		
+	//}
 	var el = UICalendarPortlet.getElements(UICalendarPortlet.viewer) ;
 	el = UICalendarPortlet.sortByAttribute(el, "startTime") ;
 	if (el.length <= 0) return ;
@@ -729,8 +731,10 @@ UICalendarPortlet.prototype.checkSpaceAvailable = function() {
 
 UICalendarPortlet.prototype.filterByCalendar = function(calendarId, status) {
 	var uiCalendarViewContainer = document.getElementById("UICalendarViewContainer") ;
+	var UICalendarPortlet = eXo.calendar.UICalendarPortlet ;
 	if (!uiCalendarViewContainer) return ;
 	var className = "EventBoxes" ;
+	if (document.getElementById("UIWeekViewGrid")) className = "WeekViewEventBoxes" ; // TODO : review event box gettting
 	var events = eXo.core.DOMUtil.findDescendantsByClass(uiCalendarViewContainer, "div", className) ;
 	if (!events) return ;
 	var len = events.length ;
@@ -742,8 +746,9 @@ UICalendarPortlet.prototype.filterByCalendar = function(calendarId, status) {
 				events[i].style.display = "none" ;				
 		}
 	}
-	if (document.getElementById("UIMonthViewGrid")) eXo.calendar.UICalendarPortlet.checkSpaceAvailable() ;
-	if (document.getElementById("UIDayViewGrid")) eXo.calendar.UICalendarPortlet.showEvent() ;
+	if (document.getElementById("UIMonthViewGrid")) UICalendarPortlet.checkSpaceAvailable() ;
+	if (document.getElementById("UIDayViewGrid")) UICalendarPortlet.showEvent() ;
+	if (document.getElementById("UIWeekViewGrid")) eXo.calendar.UIWeekView.init() ;
 
 } ;
 
@@ -757,6 +762,7 @@ UICalendarPortlet.prototype.filterByCategory = function() {
 	if (!uiCalendarViewContainer) return ;
 	var category = this.options[this.selectedIndex].value ;
 	var className = "EventBoxes" ;
+	if (document.getElementById("UIWeekViewGrid")) className = "WeekViewEventBoxes" ; // TODO : review event box gettting
 	var events = eXo.core.DOMUtil.findDescendantsByClass(uiCalendarViewContainer, "div", className) ;
 	if (!events) return ;
 	var len = events.length ;

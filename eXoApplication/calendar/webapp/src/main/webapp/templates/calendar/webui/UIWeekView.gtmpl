@@ -19,7 +19,8 @@
 	workingStart = uicomponent.getCalendarSetting().getWorkingTimeBegin() ;
   rcontext.getJavascriptManager().importJavascript('eXo.calendar.UIWeekView','/calendar/javascript/') ;
   int defaultTimeInterval = uicomponent.getDefaultTimeInterval() ;
-  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UIWeekView.init(' + defaultTimeInterval + ', "' + workingStart + '") ;') ;
+  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.setting(' + defaultTimeInterval + ', "' + workingStart + '") ;') ;
+  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UIWeekView.init() ;') ;
  	yearViewAction = uicomponent.TYPE_YEAR +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"="+ currentMonth +"&"+ uicomponent.DAY + "=1" ;
  	dateFormat = uicomponent.getDateFormat() ;
 	timeFormat = uicomponent.getTimeFormat() ;
@@ -109,7 +110,8 @@
 									color = uicomponent.getColors().get(event.getCalendarId()) ;
 									title = begindate + "->" + enddate + ":&#013; " + event.summary ;
 								%>
-										 <div class="EventContainer EventAlldayContainer $color" eventCat="$event.eventCategoryId" style="border: solid 1px gray;margin: 1px 0px ;" indexBeginDate='$indexBeginDate' indexEndDate='$indexEndDate' calType="$event.calType"  eventid="$event.id" calid="$event.calendarId" starttime="$begindate" endtime="$enddate"  style="height: 22px;" title="$title"  >
+
+										 <div class="EventContainer EventAlldayContainer WeekViewEventBoxes $color" eventCat="$event.eventCategoryId" style="border: solid 1px gray;margin: 1px 0px ;" indexBeginDate='$indexBeginDate' indexEndDate='$indexEndDate' calType="$event.calType"  eventid="$event.id" calid="$event.calendarId" starttime="$begindate" endtime="$enddate"  style="height: 22px;" title="$title"  >
 										 	<%//$indexBeginDate - >> $indexEndDate%> 
 										 	<%=tf.format(event.fromDateTime)%>
 										 </div>
@@ -144,7 +146,11 @@
 						actionLink =  uicomponent.event("UpdateEvent",event.getId()+"&calendarId="+event.getCalendarId()+"&startTime=beginTime&finishTime=endTime") ;
 				%>
 
+<<<<<<< .mine
+							<div class="EventContainerBorder WeekViewEventBoxes $color" eventIndex="$dayOfWeek" style="position:absolute ;" calType="$event.calType" eventid="$event.id" calid="$event.calendarId" actionlink="$actionLink" unselectable="on" starttime="$beginTime" endtime="$endTime">
+=======
 							<div class="EventContainerBorder  $color" eventIndex="$dayOfWeek" style="position:absolute ;" eventCat="$event.eventCategoryId" calType="$event.calType" eventid="$event.id" calid="$event.calendarId" actionlink="$actionLink" unselectable="on" starttime="$beginTime" endtime="$endTime">
+>>>>>>> .r21643
 								<div class="EventContainerBar EventTitle" title="$begindate -> $enddate " ><p unselectable="on">$begin -> $end</p></div>
 								<div class="EventContainer">$event.summary</div>
 								<div class="ResizeEventContainer" unselectable="on"><span></span></div>

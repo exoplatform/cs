@@ -8,7 +8,10 @@
   rcontext.getJavascriptManager().importJavascript('eXo.calendar.UICalendarPortlet','/calendar/javascript/') ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.showContextMenu() ;') ;
   workingStart = uicomponent.getCalendarSetting().getWorkingTimeBegin() ;
-  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.showEvent('+timeStep+',"'+workingStart+'") ;') ;
+  //int defaultTimeInterval = uicomponent.getDefaultTimeInterval() ;
+  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.setting(' + timeStep + ', "' + workingStart + '") ;') ;
+  //rcontext.getJavascriptManager().addJavascript('eXo.calendar.UIWeekView.init(' + defaultTimeInterval + ', "' + workingStart + '") ;') ;
+  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.showEvent() ;') ;
 %>
 <div class="$uicomponent.id UIApplication" oncontextmenu="return false;" id="$uicomponent.id">
   <div class="ApplicationMinWidth">

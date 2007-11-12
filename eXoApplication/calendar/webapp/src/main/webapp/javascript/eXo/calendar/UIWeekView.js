@@ -14,11 +14,11 @@ UIWeekView.prototype.mousePos = function(ev){
 } ;
 
 UIWeekView.prototype.init = function() {
-	if (arguments.length >= 2){
+//	if (arguments.length >= 2){
 		var  UICalendarPortlet = eXo.calendar.UICalendarPortlet ;
-		UICalendarPortlet.setting(arguments[0], arguments[1]) ;
+//		UICalendarPortlet.setting(arguments[0], arguments[1]) ;
 		var workingStart = (UICalendarPortlet.workingStart) ? UICalendarPortlet.workingStart : 0 ;		
-	}
+	//}
 	var DOMUtil = eXo.core.DOMUtil  ;
 	var UIWeekView = eXo.calendar.UIWeekView ;
 	var uiCalendarViewContainer = document.getElementById("UICalendarViewContainer") ;
@@ -61,7 +61,7 @@ UIWeekView.prototype.init = function() {
 } ;
 
 UIWeekView.prototype.showInCol = function(obj) {
-	var items = eXo.core.DOMUtil.findDescendantsByClass(obj, "div", "EventContainerBorder") ;
+	var items = eXo.calendar.UICalendarPortlet.getElements(obj) ;//eXo.core.DOMUtil.findDescendantsByClass(obj, "div", "EventContainerBorder") ;
 	var len = items.length ;
 	if (len <= 0) return ;
 	var UIWeekView = eXo.calendar.UIWeekView ;
