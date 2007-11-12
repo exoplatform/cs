@@ -305,8 +305,13 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         String tagName = uiWorkingContainer.findFirstComponentOfType(UITags.class).getSelectedTag() ;
         uiContacts.setContacts(contactService.getContactPageListByTag(username, tagName)) ;
       } else {
-       // System.out.println("\n\n being updateList....\n\n");
         uiContacts.updateList() ;
+      }
+      
+      // add
+      if (uiContacts.isDisplaySearchResult()) {
+        for (String contact : contactIds)
+          uiContacts.pageList_.getAll().remove(contact) ;        
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer) ;
     }
@@ -316,6 +321,10 @@ public class UIContacts extends UIForm implements UIPopupComponent {
     public void execute(Event<UIContacts> event) throws Exception {
       UIContacts uiContacts = event.getSource();
       String contactId = event.getRequestContext().getRequestParameter(OBJECTID);
+      
+      System.out.println("\n\n contact id:" + contactId + "\n\n");
+      
+      
       UIContactPortlet uiContactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class);
       UIPopupAction uiPopupAction = uiContactPortlet.getChild(UIPopupAction.class);
       UIExportForm uiExportForm = uiPopupAction.createUIComponent(UIExportForm.class, null,"ExportForm");
@@ -338,6 +347,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       UIContactContainer uiContactContainer = uiContacts.getAncestorOfType(UIContactContainer.class);
       UIContactPreview uiContactPreview = uiContactContainer.findFirstComponentOfType(UIContactPreview.class);
       uiContactPreview.setContact(uiContacts.contactMap.get(contactId));
+      uiContactPreview.setRendered(true) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContactContainer);
     }
   }

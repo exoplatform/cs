@@ -60,9 +60,7 @@
 						<div class="Icon DustBin16x16Icon " title="delete"><span></span></div>
 					</a>
 					<a href="#" class="ControlButton">
-						
 							<div class="Icon PrintIcon" title="Print"><span></span></div>
-					
 					</a>
 					
 					<% 
@@ -360,15 +358,7 @@
 						  </div>
 					  </div>
 		</div>
-		<div style="clear: both;"><span/></div>
-		
-		
-		
-		
-		
-		
-		
-		
+		<div style="clear: both;"><span/></div>	
 		
 	</div>
 	
@@ -382,11 +372,11 @@
 					Contact contact ;
 					while (i < contacts.length) {
 						contact = contacts[i ++] ;
-						iconTag = "Icon" ;
+						iconTag = "Icon " ;
 						String[] tagIds = contact.getTags() ; 
 						if (tagIds != null && tagIds.length > 0) {
 							Tag tag = ContactUtils.getContactService().getTag(ContactUtils.getCurrentUser(), tagIds[0]) ;
-							iconTag = "Icon " + tag.getColor() + "Tag" ; 
+							iconTag += tag.getColor() + "Tag" ; 
 						}
 				%>
 				
@@ -440,8 +430,12 @@
 			<%
 			if (i < contacts.length) {
 				contact = contacts[i ++] ;
-  			iconTag = "Icon" ;
-				if (contact.getTags() != null && contact.getTags().length > 0) iconTag = "Icon BlueTag" ;
+  			iconTag = "Icon " ;
+  			tagIds = contact.getTags() ;
+				if (tagIds != null && tagIds.length > 0) {
+					Tag tag = ContactUtils.getContactService().getTag(ContactUtils.getCurrentUser(), tagIds[0]) ;
+					iconTag += tag.getColor() + "Tag" ;
+				}
 			%>
 			<div class="RightVCardsContent">
 		  	<div class="VCardContent NormalVCard">
