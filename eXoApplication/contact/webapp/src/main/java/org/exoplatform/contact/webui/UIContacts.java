@@ -52,6 +52,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
         @EventConfig(listeners = UIContacts.TagPopupActionListener.class),
         @EventConfig(listeners = UIContacts.TagCheckedActionListener.class),
         @EventConfig(listeners = UIContacts.MoveContactsActionListener.class),
+        @EventConfig(listeners = UIContacts.DNDContactsActionListener.class),
         @EventConfig(phase=Phase.DECODE, listeners = UIContacts
           .DeleteContactsActionListener.class, confirm="UIContacts.msg.confirm-delete-contact"),
         @EventConfig(listeners = UIContacts.SelectedContactActionListener.class), 
@@ -258,6 +259,22 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       if (contactIds.size() == 1)  uiMoveForm.setChecked() ;
       popupAction.activate(uiMoveForm, 410, 0, true) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+    }
+  }
+  
+  static public class DNDContactsActionListener extends EventListener<UIContacts> {
+    public void execute(Event<UIContacts> event) throws Exception {
+      UIContacts uiContacts = event.getSource();
+      String addressBookId = event.getRequestContext().getRequestParameter(OBJECTID);   
+      String type = event.getRequestContext().getRequestParameter("contactType");
+      String[] addressBooks = {addressBookId} ;
+      List<String> contactIds = new ArrayList<String>();
+      UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
+      contactIds = uiContacts.getCheckedContacts() ;
+      ContactService contactService = ContactUtils.getContactService(); 
+      contactService.moveContacts(ContactUtils.getCurrentUser(), contactIds, addressBooks) ;
+      //UIContactPortlet uiContactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
     }
   }
   

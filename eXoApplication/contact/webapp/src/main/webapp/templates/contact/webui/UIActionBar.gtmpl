@@ -152,9 +152,9 @@
 								</div>
 							</div>
 							
-							<a class="ControlButton">
+							<!--a href="#">
 								<div class="IconHolder AddressOptionIcon">Address Book Options</div>
-							</a>
+							</a-->
 							<div style="clear:left;"><span></span></div>
 						</div>
 					</div>
