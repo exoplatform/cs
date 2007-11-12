@@ -55,7 +55,7 @@ import org.exoplatform.webui.event.EventListener;
 )
 public class UIWeekView extends UICalendarView {
 
-  protected Map<String, List<CalendarEvent>> eventData_ = new HashMap<String, List<CalendarEvent>>() ;
+  protected Map<String, Map<String, CalendarEvent>> eventData_ = new HashMap<String, Map<String, CalendarEvent>>() ;
   protected LinkedHashMap<String, CalendarEvent> allWeekData_ = new LinkedHashMap<String,  CalendarEvent>() ;
   protected LinkedHashMap<String, CalendarEvent> dataMap_ = new LinkedHashMap<String,  CalendarEvent>() ;
   protected  List<CalendarEvent> daysData_  = new ArrayList<CalendarEvent>() ;
@@ -73,7 +73,8 @@ public class UIWeekView extends UICalendarView {
     eventData_.clear() ;
     allWeekData_.clear() ;
     for(Calendar c : getDaysOfWeek(week)) {
-      List<CalendarEvent> list = new ArrayList<CalendarEvent>() ;
+      //List<CalendarEvent> list = new ArrayList<CalendarEvent>() ;
+      Map<String, CalendarEvent> list = new HashMap<String, CalendarEvent>() ;
       String key = keyGen(c.get(Calendar.DATE), c.get(Calendar.MONTH), c.get(Calendar.YEAR)) ;
       eventData_.put(key, list) ;
     }
@@ -97,7 +98,7 @@ public class UIWeekView extends UICalendarView {
       for(Calendar c : getDaysOfWeek(week)) {
         String key = keyGen(c.get(Calendar.DATE), c.get(Calendar.MONTH), c.get(Calendar.YEAR)) ;
         if(isSameDate(c.getTime(), beginEvent) &&  isSameDate(c.getTime(), endEvent)) { 
-          eventData_.get(key).add(event) ;
+          eventData_.get(key).put(event.getId(), event) ;
           dataMap_.put(event.getId(), event) ;
           iter.remove() ;
         } 
@@ -148,7 +149,7 @@ public class UIWeekView extends UICalendarView {
     return calendarData ;
   }
 
-  protected Map<String, List<CalendarEvent>> getEventData() {return eventData_ ;}
+  protected Map<String, Map<String, CalendarEvent>> getEventData() {return eventData_ ;}
 
   protected LinkedHashMap<String, CalendarEvent>  getEventList() {
     return allWeekData_ ;

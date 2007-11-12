@@ -149,6 +149,8 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
       setTimeZone(calendarSetting.getTimeZone()) ;
       setShowWorkingTimes(calendarSetting.isShowWorkingTime()) ;
       if(calendarSetting.isShowWorkingTime()) {
+        System.out.println("\n\n calendarSetting.getWorkingTimeBegin() " + calendarSetting.getWorkingTimeBegin() );
+        System.out.println("\n\n calendarSetting.getWorkingTimeEnd() " + calendarSetting.getWorkingTimeEnd() );
         setWorkingBegin(calendarSetting.getWorkingTimeBegin()) ;
         setWorkingEnd(calendarSetting.getWorkingTimeEnd()) ;
       }
@@ -242,7 +244,6 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
     DateFormat dateTimeFormat = new SimpleDateFormat(CalendarUtils.DATETIMEFORMAT) ;
     String date = dateFormat.format(cal.getTime()) + " " + value ;
     cal.setTime(dateTimeFormat.parse(date)); 
-    
     getUIFormSelectBox(WORKINGTIME_BEGIN).setValue(timeFormat.format(cal.getTime())) ;
   }
   protected String getWorkingEnd() throws Exception{
@@ -286,7 +287,10 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
       if(uiForm.getShowWorkingTimes()) {
         calendarSetting.setShowWorkingTime(uiForm.getShowWorkingTimes()) ;
         calendarSetting.setWorkingTimeBegin(uiForm.getWorkingBegin()) ;
+        System.out.println("\n\n getWorkingBegin()" + uiForm.getWorkingBegin());
         calendarSetting.setWorkingTimeEnd(uiForm.getWorkingEnd()) ;
+        System.out.println("\n\n getWorkingEnd()" + uiForm.getWorkingEnd());
+
       }
       List<String> defaultCalendars = new ArrayList<String>() ;
       List<UIComponent> children = ((UIFormInputWithActions)uiForm.getChildById("defaultCalendars")).getChildren() ;//UIFormInputWithActions("defaultCalendars"

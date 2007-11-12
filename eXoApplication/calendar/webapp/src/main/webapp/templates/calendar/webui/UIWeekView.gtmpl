@@ -109,9 +109,10 @@
 									color = uicomponent.getColors().get(event.getCalendarId()) ;
 									title = begindate + "->" + enddate + ":&#013; " + event.summary ;
 								%>
-									 <div class="EventContainer EventAlldayContainer $color" style="border: solid 1px gray;margin: 1px 0px ;" indexBeginDate='$indexBeginDate' indexEndDate='$indexEndDate' calType="$event.calType"  eventid="$event.id" calid="$event.calendarId" starttime="$begindate" endtime="$enddate"  style="height: 22px;" title="$title"  >
-									 	<%=tf.format(event.fromDateTime)%>
-									 </div>
+										 <div class="EventContainer EventAlldayContainer $color" eventCat="$event.eventCategoryId" style="border: solid 1px gray;margin: 1px 0px ;" indexBeginDate='$indexBeginDate' indexEndDate='$indexEndDate' calType="$event.calType"  eventid="$event.id" calid="$event.calendarId" starttime="$begindate" endtime="$enddate"  style="height: 22px;" title="$title"  >
+										 	<%//$indexBeginDate - >> $indexEndDate%> 
+										 	<%=tf.format(event.fromDateTime)%>
+										 </div>
 								<%}%>
 							</td>
 					</tr>
@@ -129,18 +130,21 @@
 		 			dayOfWeek = cl.get(Calendar.DAY_OF_WEEK) ;
 					events = uicomponent.getEventData().get(key) ; 
 					if(events != null) {
-					for(event in events){ 
+					for(event in events.values()){ 
 						begin =  tf.format(event.fromDateTime) ;
 						begindate = dtf.format(event.fromDateTime) ;
-						beginTime =  event.fromDateTime.getHours() * 60 + event.fromDateTime.getMinutes() ;
 						end = tf.format(event.toDateTime) ;
 						enddate = dtf.format(event.toDateTime) ;
-						endTime =  event.toDateTime.getHours() * 60 + event.toDateTime.getMinutes() ;
+						cal = new GregorianCalendar() ;
+					 	cal.setTime(event.getFromDateTime()) ;
+					   beginTime = cal.get(Calendar.HOUR_OF_DAY)*60 + cal.get(Calendar.MINUTE) ;
+					  cal.setTime(event.getToDateTime()) ;
+					  endTime = cal.get(Calendar.HOUR_OF_DAY)*60 + cal.get(Calendar.MINUTE) ;
 						color = uicomponent.getColors().get(event.getCalendarId()) ;
 						actionLink =  uicomponent.event("UpdateEvent",event.getId()+"&calendarId="+event.getCalendarId()+"&startTime=beginTime&finishTime=endTime") ;
 				%>
 
-							<div class="EventContainerBorder  $color" eventIndex="$dayOfWeek" style="position:absolute ;" calType="$event.calType" eventid="$event.id" calid="$event.calendarId" actionlink="$actionLink" unselectable="on" starttime="$beginTime" endtime="$endTime">
+							<div class="EventContainerBorder  $color" eventIndex="$dayOfWeek" style="position:absolute ;" eventCat="$event.eventCategoryId" calType="$event.calType" eventid="$event.id" calid="$event.calendarId" actionlink="$actionLink" unselectable="on" starttime="$beginTime" endtime="$endTime">
 								<div class="EventContainerBar EventTitle" title="$begindate -> $enddate " ><p unselectable="on">$begin -> $end</p></div>
 								<div class="EventContainer">$event.summary</div>
 								<div class="ResizeEventContainer" unselectable="on"><span></span></div>

@@ -74,7 +74,7 @@
 				  color = uicomponent.getColors().get(ce.getCalendarId()) ;
 		    %>
    			<td width="$precent%" class="$color">
-	    		<div unselectable="on" class="EventContainerBorder EventBoxes"  calType="$ce.calType" eventid="<%=ce.getId()%>" calid="<%=ce.getCalendarId()%>" actionlink="$actionLink">
+	    		<div unselectable="on" class="EventContainerBorder EventBoxes"  calType="$ce.calType" eventCat="$ce.eventCategoryId" eventid="<%=ce.getId()%>" calid="<%=ce.getCalendarId()%>" actionlink="$actionLink">
 	          <div class="EventContainer $color" style="height:25px;" title="<%=dtf.format(ce.getFromDateTime())%>:-><%=dtf.format(ce.getToDateTime())%>">
 	          	<%=ce.getSummary()%>
 	          </div>
@@ -130,7 +130,7 @@
 								 	color = uicomponent.getColors().get(ce.getCalendarId()) ;
 								 	actionLink =  uicomponent.event("SaveEvent",ce.id+"&calendarId="+ce.calendarId+"&startTime=beginTime&finishTime=endTime") ;
                   %>
-                  <div class="EventContainerBorder EventBoxes $color" calType="$ce.calType" eventid="$ce.id" calid="$ce.calendarId" actionlink="$actionLink"  starttime="$beginTime" endtime="$endTime">
+                  <div class="EventContainerBorder EventBoxes $color" calType="$ce.calType" eventCat="$ce.eventCategoryId" eventid="$ce.id" calid="$ce.calendarId" actionlink="$actionLink"  starttime="$beginTime" endtime="$endTime">
                     <div unselectable="on" class="EventContainerBar EventTitle" title="<%=df.format(ce.getFromDateTime())%> :-> <%=df.format(ce.getToDateTime())%>">
                     	<p>
 	                      <%=tf.format(ce.getFromDateTime())%> -> <%=tf.format(ce.getToDateTime())%>

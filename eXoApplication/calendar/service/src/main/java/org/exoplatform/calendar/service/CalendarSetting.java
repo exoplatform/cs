@@ -47,7 +47,7 @@ public class CalendarSetting {
     viewType = DAY_VIEW ;
     timeInterval = 15 ;
     weekStartOn = MONDAY ;
-    dateFormat = "dd/MM/yyyy" ;
+    dateFormat = "MM/dd/yyyy" ;
     timeFormat = "hh:mm a" ;
     isShowWorkingTime = false ;
     baseURL = "http://localhost:8080/calendar/iCalRss" ;
