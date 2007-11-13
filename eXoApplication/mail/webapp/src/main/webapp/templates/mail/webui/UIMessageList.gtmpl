@@ -274,7 +274,7 @@
             %>
     		    <a href = "$sortedByReceivedDate"><div class="$classArrowDate" title="Sort by Date & time">Date & Time</div></a>
    	      </th>
-   	      <th>
+   	      <th style="width: 50px; padding-left: 8px;">
        	    <%
                String sortedBySize = uicomponent.event("Sort",Utils.EXO_SIZE);
        	       String classArrowSize = "";

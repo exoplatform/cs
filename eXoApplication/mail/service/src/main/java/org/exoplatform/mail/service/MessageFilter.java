@@ -27,6 +27,7 @@ public class MessageFilter {
   public MessageFilter(String name) {
     this.name = name ;
     isAscending = false;
+    orderBy = Utils.EXO_RECEIVEDDATE;
   }
   
   public String getName() { return name ; }
