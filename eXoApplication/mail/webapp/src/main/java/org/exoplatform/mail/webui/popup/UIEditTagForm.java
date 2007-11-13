@@ -12,6 +12,7 @@ import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Tag;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.UIMailPortlet;
+import org.exoplatform.mail.webui.UIMessageArea;
 import org.exoplatform.mail.webui.UIMessageList;
 import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -130,6 +131,7 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
       }
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
       uiMessageList.updateList();
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class)) ;
       uiEditTagForm.getAncestorOfType(UIPopupAction.class).deActivate() ;
     }
   }

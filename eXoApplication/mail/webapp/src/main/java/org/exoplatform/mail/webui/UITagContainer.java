@@ -63,7 +63,7 @@ public class UITagContainer extends UIComponent {
       uiMessageList.setSelectedTagId(tagId);
       uiMessageList.setSelectedFolderId(null);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiTags);
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
   }
   
@@ -87,6 +87,9 @@ public class UITagContainer extends UIComponent {
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       mailSrv.removeTag(username, accountId, tagId);
+      UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
+      uiMessageList.updateList();
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class)) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiTag);
     }
   }
@@ -110,8 +113,9 @@ public class UITagContainer extends UIComponent {
       }
       listTag.add(tagId);
       mailSrv.removeMessageTag(username, accountId, listMessageId, listTag);
+      uiMessageList.updateList();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiTag);
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
   }
 }

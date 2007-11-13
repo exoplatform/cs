@@ -578,6 +578,7 @@ public class UIMessageList extends UIForm {
       mailSrv.addTag(username, accountId, msgIdList, tagList);
       
       uiMessageList.updateList();
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class)) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiTagContainer) ;
     }
   }
