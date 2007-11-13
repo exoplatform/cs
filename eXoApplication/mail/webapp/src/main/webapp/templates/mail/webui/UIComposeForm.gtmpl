@@ -171,28 +171,28 @@
                 <td class="FieldComponent">
                   <%uicomponent.renderField(uicomponent.FIELD_FROM)%>
                 </td>
-              </tr>
-              <tr>
-                <td class="FieldLabel">To:</td>
-                <td class="FieldComponent">
-                  <%uicomponent.renderField(uicomponent.FIELD_TO)%> <a href="<%=uicomponent.event("To")%>">[TO]</a>
-                </td>
                 <td>
                   <a href="javascript:eXo.mail.UIMailPortlet.showHide('FIELD_CC')">Add CC</a> 
                   <a href="javascript:eXo.mail.UIMailPortlet.showHide('FIELD_BCC')">Add BCC</a>
                 </td>
               </tr>
+              <tr>
+                <td class="FieldLabel"><a href="<%=uicomponent.event("To")%>">[TO]</a></td>
+                <td class="FieldComponent"  colspan="2">
+                  <%uicomponent.renderField(uicomponent.FIELD_TO)%> 
+                </td>
+              </tr>
 
               <tr id="FIELD_CC" style="display: none">
-                <td class="FieldLabel">CC:</td>
+                <td class="FieldLabel"><a href="<%=uicomponent.event("ToCC")%>">[CC]</a></td>
                 <td class="FieldComponent" colspan="2">
-                  <%uicomponent.renderField(uicomponent.FIELD_CC)%> <a href="<%=uicomponent.event("ToCC")%>">[CC]</a>
+                  <%uicomponent.renderField(uicomponent.FIELD_CC)%> 
                 </td>
               </tr>
               <tr id="FIELD_BCC" style="display: none">
-                <td class="FieldLabel">BCC:</td>
+                <td class="FieldLabel"><a href="<%=uicomponent.event("ToBCC")%>">[BCC]</a></td>
                 <td class="FieldComponent" colspan="2">
-                  <%uicomponent.renderField(uicomponent.FIELD_BCC)%> <a href="<%=uicomponent.event("ToBCC")%>">[BCC]</a>
+                  <%uicomponent.renderField(uicomponent.FIELD_BCC)%> 
                 </td>
               </tr>
               <tr>
