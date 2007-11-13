@@ -11,6 +11,7 @@ import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactAttachment;
 import org.exoplatform.contact.service.ContactService;
+import org.exoplatform.contact.webui.UIAddressBooks;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContactPreview;
 import org.exoplatform.contact.webui.UIContacts;
@@ -310,7 +311,7 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
       contact.setLastUpdated(new Date()) ;
       
       UIContactPortlet uiContactPortlet = uiContactForm.getAncestorOfType(UIContactPortlet.class) ;
-      UIContacts uicontacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
+      UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
       UIContactPreview uiContactPreview = uiContactPortlet.findFirstComponentOfType(UIContactPreview.class) ; 
       if (uiContactForm.getUIFormCheckBoxInput(FIELD_ISPUBLIC_BOX).isChecked()) {
         StringBuffer sharedGroups = new StringBuffer("");
@@ -341,9 +342,11 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
         contact.setCategories(new String[] { category });
         contactService.saveContact(username, contact, isNew_);
       }
-      uicontacts.updateList() ;
-      if (!ContactUtils.isEmpty(uicontacts.getSelectedContact()) &&
-          uicontacts.getSelectedContact().equals(contact.getId())) uiContactPreview.setContact(contact) ;
+      if (!ContactUtils.isEmpty(uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class).getSelectedGroup()))
+        uiContacts.updateList() ;
+      String selectedContact = uiContacts.getSelectedContact() ;
+      if (!ContactUtils.isEmpty(selectedContact) && selectedContact.equals(contact.getId())) 
+        uiContactPreview.setContact(contact) ;
       uiContactPortlet.cancelAction() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContactPortlet.getChild(UIWorkingContainer.class)) ;
     }

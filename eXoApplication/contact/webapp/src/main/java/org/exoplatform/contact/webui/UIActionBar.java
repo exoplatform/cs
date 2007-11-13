@@ -133,7 +133,7 @@ public class UIActionBar extends UIContainer  {
           .findFirstComponentOfType(UIAddressBooks.class) ;
         ContactGroup[] groups = uiAddressBooks.getGroups().toArray(new ContactGroup[] {}) ;
         List<String> sharedGroups = uiAddressBooks.getSharedContactGroups() ;
-        if (sharedGroups == null || sharedGroups.size() == 0 || groups == null || groups.length == 0) {
+        if ((sharedGroups == null || sharedGroups.size() == 0) && (groups == null || groups.length == 0)) {
           UIApplication uiApp = uiActionBar.getAncestorOfType(UIApplication.class) ;
           uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.no-addressbook", null,
             ApplicationMessage.WARNING)) ;

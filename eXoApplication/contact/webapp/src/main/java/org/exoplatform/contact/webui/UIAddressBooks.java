@@ -223,14 +223,17 @@ public class UIAddressBooks extends UIComponent {
       String groupId = event.getRequestContext().getRequestParameter(OBJECTID);
       ContactService contactService = ContactUtils.getContactService();
       String username = ContactUtils.getCurrentUser();
-      contactService.removeGroup(username, groupId);
+      
+      
+      UIContactContainer contactContainer = uiAddressBook.getAncestorOfType(
+        UIWorkingContainer.class).getChild(UIContactContainer.class);
+      UIContacts uiContacts = contactContainer.getChild(UIContacts.class) ;
       if (groupId.equals(uiAddressBook.selectedGroup)) {
         uiAddressBook.selectedGroup = null;
-        UIContactContainer contactContainer = uiAddressBook.getAncestorOfType(
-            UIWorkingContainer.class).getChild(UIContactContainer.class);
-        contactContainer.getChild(UIContacts.class).setContacts(null);
+        uiContacts.setContacts(null);
         event.getRequestContext().addUIComponentToUpdateByAjax(contactContainer);
-      }
+      }  
+      contactService.removeGroup(username, groupId);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook);
     }
   }

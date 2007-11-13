@@ -13,7 +13,7 @@
 	uiform.begin()
 %>
 
-<div class="UIExportContactForm">
+<div class="UIExportContactForm $uicomponent.id">
 	<div class="ExportContact">
 		<div class="WorkingContainer">
 		  <div class="Title">

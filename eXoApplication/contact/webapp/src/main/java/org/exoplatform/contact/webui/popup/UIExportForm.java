@@ -63,6 +63,9 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
   
   
   public UIExportForm() throws Exception {
+    setId("UIExportForm") ;
+    
+    //getChildren().clear() ;
     sortedBy_ = fullName ;
   }  
 
