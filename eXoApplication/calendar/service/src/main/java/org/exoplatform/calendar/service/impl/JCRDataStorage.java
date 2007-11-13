@@ -443,7 +443,7 @@ public class JCRDataStorage implements DataStorage{
   public CalendarCategory removeCalendarCategory(String username, String calendarCategoryId) throws Exception {
     Node calCategoryHome = getCalendarCategoryHome(username) ;
     Node calCategoryNode = calCategoryHome.getNode(calendarCategoryId) ; 
-    Node calendarHome = getCalendarHome(username) ;
+    //Node calendarHome = getCalendarHome(username) ;
     CalendarCategory calCategory = getCalendarCategory(calCategoryNode) ;
     /*if(calCategory.getCalendars() != null){
       for(String calendarId : calCategory.getCalendars()) {
@@ -461,7 +461,7 @@ public class JCRDataStorage implements DataStorage{
       removeUserCalendar(username, cal.getId()) ;
     }
     calCategoryHome.save() ;
-    calendarHome.save() ;
+    //calendarHome.save() ;
     calCategoryHome.getSession().save() ;
     return calCategory ;
   }

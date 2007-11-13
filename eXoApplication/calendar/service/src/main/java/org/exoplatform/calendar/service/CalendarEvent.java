@@ -23,7 +23,7 @@ public class CalendarEvent {
   
   final public static String TENTATIVE = "tentative".intern() ;
   final public static String CONFIRMED = "confirmed".intern() ;
-  final public static String CANCELLED = "canceled".intern() ;
+  final public static String CANCELLED = "cancelled".intern() ;
   
   final public static String NEEDS_ACTION = "needs-action".intern() ;
   final public static String COMPLETED = "completed".intern() ;
