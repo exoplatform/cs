@@ -140,7 +140,6 @@ UIMailDragDrop.prototype.dropCallback = function(dndEvent) {
   this.foundTargetObjectCatch = dndEvent.foundTargetObject ;
   if (this.foundTargetObjectCatch) {
     eXo.core.DOMUtil.findDescendantsByClass(dndEvent.clickObject, 'input', 'checkbox')[0].checked = true ;
-    // request service
     var place2MoveId = false ;
     var formOp = false ;
     if (this.foundTargetObjectCatch.className == 'UITagContainer') {
