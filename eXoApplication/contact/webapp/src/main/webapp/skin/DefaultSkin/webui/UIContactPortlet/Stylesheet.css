@@ -137,13 +137,13 @@
 
 .UIContactPortlet .UIActionBar .ImportAddressIcon {
 	height: 26px; width: 21px;
-	margin: 4px 10px 0px 40px;
+	margin: 4px 5px 0px 53px;
 	float: left;
 	cursor: pointer;
 }
 .UIContactPortlet .UIActionBar .ExportAddressIcon {
 	height: 26px; width: 21px;
-	margin: 4px 10px 0px 10px;
+	margin: 4px 0px 0px 0px;
 	float: left;
 	cursor: pointer;
 }
@@ -268,7 +268,7 @@
 }
 
 .UIContactPortlet .UINavigationContainer .ListContent {
-	padding: 8px 0px 8px 12px;
+	padding: 8px 0px 8px 0px;
 }
 
 .UIContactPortlet .UINavigationContainer .ListContent a {
