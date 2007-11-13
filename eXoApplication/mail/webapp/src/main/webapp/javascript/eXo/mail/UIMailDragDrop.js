@@ -32,7 +32,8 @@ UIMailDragDrop.prototype.getAllDropableSets = function() {
     this.dropableSets[this.dropableSets.length] = tagLists[i] ;
   }
   var tagContainer = document.getElementById('UITagContainer') ;
-  if (tagContainer &&  tagLists.length <= 0) {
+//  if (tagContainer &&  tagLists.length <= 0) {
+  if (tagContainer) {
     this.dropableSets[this.dropableSets.length] = tagContainer ;
   }
 } ;

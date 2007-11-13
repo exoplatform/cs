@@ -29,7 +29,8 @@ UIContactDragDrop.prototype.getAllDropableSets = function() {
     this.dropableSets[this.dropableSets.length] = tagLists[i] ;
   }
   var tagContainer = document.getElementById('UITags') ;
-  if (tagContainer &&  tagLists.length <= 0) {
+//  if (tagContainer &&  tagLists.length <= 0) {
+  if (tagContainer) {
     this.dropableSets[this.dropableSets.length] = tagContainer ;
   }
 } ;
@@ -196,7 +197,6 @@ UIContactDragDrop.prototype.dropCallback = function(dndEvent) {
     // request service
     var uiMsgList = document.getElementById('UIContacts') ;
     uiMsgList.action = uiMsgList.action + '&objectId=' + contactTypeId + '&contactType=' + contactType ;
-    
     eXo.webui.UIForm.submitForm('UIContacts','DNDContacts', true)
   }
 } ;
