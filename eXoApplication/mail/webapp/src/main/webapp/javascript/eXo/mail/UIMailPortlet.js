@@ -148,111 +148,96 @@ UIMailPortlet.prototype.switchLayout = function(layout) {
 	var Browser = eXo.core.Browser ;
 	layout = parseInt(layout) ;
 	var	layout1 = document.getElementById("UINavigationContainer") ;
-	var	layout2 = document.getElementById("UIMessageList") ;
+	var	layout2 = document.getElementById("uiMessageListResizableArea") ;
 	var	layout3 = document.getElementById("SpliterResizableArea") ;
 	var resizePane = document.getElementById("ResizeReadingPane");
 	var workingarea = document.getElementById("UIMessageArea");
-	//var workingarea = eXo.core.DOMUtil.findNextElementByTagName(layout3, "div") ;
 		
 	switch(layout) {
 		case 0 :
 			if (layout1.style.display == "none") {
 				layout1.style.display = "block" ;
-				//layout3.style.display = "block" ;
-				 workingarea.style.marginLeft = "225px"	;			
-				//Browser.setCookie("displaymode","block",7) ;
-				//Browser.setCookie("displaymode0","block",7) ;
+				workingarea.style.marginLeft = "225px"	;			
 			}
 			
 			if (layout2.style.display == "none") {
 				layout2.style.display = "block" ;
-//				layout3.style.display = "block" ;
-//				workingarea.style.marginLeft = "243px"	;
-//				Browser.setCookie("displaymode","block",7) ;
-//				Browser.setCookie("displaymode1","block",7) ;
-
 			}
 			
 			if (layout3.style.display == "none") {
 				layout3.style.display = "block" ;
-//				layout3.style.display = "block" ;
-//				workingarea.style.marginLeft = "243px"	;
-//				Browser.setCookie("displaymode","block",7) ;
-//				Browser.setCookie("displaymode1","block",7) ;
-
 			}
 			
 			if (resizePane.style.display == "none") {
 				resizePane.style.display = "block";
-//				layout3.style.display = "block" ;
-//				workingarea.style.marginLeft = "243px"	;
-//				Browser.setCookie("displaymode","block",7) ;
-//				Browser.setCookie("displaymode1","block",7) ;
-
 			}
-				
+			Browser.setCookie("UINavigationContainer", "block", 30);
+			Browser.setCookie("SpliterResizableArea", "block", 30);
+			Browser.setCookie("ResizeReadingPane", "block", 30);
+			Browser.setCookie("uiMessageListResizableArea", "block", 30)	
 			break ;
 		case 1 :
 			if (layout1.style.display == "none") {
 				layout1.style.display = "block" ;
-				//layout3.style.display = "block" ;
+				Browser.setCookie("UINavigationContainer", "block", 30)
 				 workingarea.style.marginLeft = "225px"	;			
-				//Browser.setCookie("displaymode","block",7) ;
-				//Browser.setCookie("displaymode0","block",7) ;
 			} else {
 				layout1.style.display = "none" ;
+				Browser.setCookie("UINavigationContainer", "none", 30)
 				if(layout1.style.display == "none") {
-					//Browser.setCookie("displaymode","none",7) ;
 					workingarea.style.marginLeft = "0px"	;
-					//layout3.style.display = "none" ;
 				}
-				//Browser.setCookie("displaymode0","none",7) ;	
 			}
 			break ;
 		case 2 :
 			if (layout2.style.display == "none") {
 				layout2.style.display = "block" ;
+				Browser.setCookie("UIMessageList", "block", 30)
 				if (layout3.style.display != "none" && layout2.style.display != "none") {
 					resizePane.style.display = "block";
 				}
-//				layout3.style.display = "block" ;
-//				workingarea.style.marginLeft = "243px"	;
-//				Browser.setCookie("displaymode","block",7) ;
-//				Browser.setCookie("displaymode1","block",7) ;
-
 			} else {				
 				layout2.style.display = "none" ;
 				resizePane.style.display = "none";
-//				if(layout0.style.display == "none") {
-//					Browser.setCookie("displaymode","none",7) ;
-//					workingarea.style.marginLeft = "0px"	;
-//					layout3.style.display = "none" ;
-//				}
-//				Browser.setCookie("displaymode1","none",7) ;	
+				Browser.setCookie("uiMessageListResizableArea", "none", 30)
 			}
 			break ;
 		case 3 :
 			if (layout3.style.display == "none") {
 				layout3.style.display = "block" ;
+				Browser.setCookie("ResizeReadingPane", "block", 30)
 				if (layout3.style.display != "none" && layout2.style.display != "none") {
 					resizePane.style.display = "block";
+					Browser.setCookie("SpliterResizableArea", "block", 30)
 				}
-//				layout3.style.display = "block" ;
-//				workingarea.style.marginLeft = "243px"	;
-//				Browser.setCookie("displaymode","block",7) ;
-//				Browser.setCookie("displaymode1","block",7) ;
 
 			} else {				
 				layout3.style.display = "none" ;				
 			    resizePane.style.display = "none";
-//				if(layout0.style.display == "none") {
-//					Browser.setCookie("displaymode","none",7) ;
-//					workingarea.style.marginLeft = "0px"	;
-//					layout3.style.display = "none" ;
-//				}
-//				Browser.setCookie("displaymode1","none",7) ;	
+			    Browser.setCookie("ResizeReadingPane", "none", 30)
+			    Browser.setCookie("SpliterResizableArea", "none", 30)	
 			}
 			break ;
+	}
+} ;
+
+UIMailPortlet.prototype.checkLayout = function() {
+	var Browser = eXo.core.Browser ;
+	var	layout1 = document.getElementById("UINavigationContainer") ;
+	var	layout2 = document.getElementById("uiMessageListResizableArea") ;
+	var	layout3 = document.getElementById("SpliterResizableArea") ;
+	var resizePane = document.getElementById("ResizeReadingPane");
+	var workingarea = document.getElementById("UIMessageArea");
+	var	uiMessageList = Browser.getCookie("uiMessageListResizableArea") ;
+	var	uiNavigationContainer = Browser.getCookie("UINavigationContainer") ;
+	var	SpliterResizableArea = Browser.getCookie("SpliterResizableArea") ;
+	var	ResizeReadingPane = Browser.getCookie("ResizeReadingPane") ;
+	layout1.style.display = uiNavigationContainer;
+	layout2.style.display = uiMessageList;
+	layout3.style.display = SpliterResizableArea;
+	resizePane.style.display = ResizeReadingPane;
+	if(layout1.style.display == "none") {
+		workingarea.style.marginLeft = "0px"	;
 	}
 } ;
 

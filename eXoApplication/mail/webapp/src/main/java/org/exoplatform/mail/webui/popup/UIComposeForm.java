@@ -36,6 +36,7 @@ import org.exoplatform.webui.form.UIFormInputInfo;
 import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
+import org.exoplatform.webui.form.UIFormTextAreaInput;
 import org.exoplatform.webui.form.UIFormWYSIWYGInput;
 import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
 
@@ -108,8 +109,12 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
     addUIFormInput(new UIFormSelectBox(FIELD_FROM, FIELD_FROM, options)) ;
 
     addUIFormInput(new UIFormStringInput(FIELD_TO, null, null)) ;
-    addUIFormInput(new UIFormStringInput(FIELD_CC, null, null)) ;
-    addUIFormInput(new UIFormStringInput(FIELD_BCC, null, null)) ;
+    UIFormTextAreaInput textAreaCC= new UIFormTextAreaInput(FIELD_CC, null, null);
+    textAreaCC.setColumns(2);
+    addUIFormInput(textAreaCC) ;
+    UIFormTextAreaInput textAreaBCC = new UIFormTextAreaInput(FIELD_BCC, null, null);
+    textAreaBCC.setColumns(2);
+    addUIFormInput(textAreaBCC) ;
     addUIFormInput(new UIFormStringInput(FIELD_SUBJECT, null, null)) ;
     UIFormInputWithActions inputSet = new UIFormInputWithActions(FIELD_FROM_INPUT);   
     inputSet.addUIFormInput(new UIFormInputInfo(FIELD_ATTACHMENTS, FIELD_ATTACHMENTS, null)) ;
@@ -193,18 +198,18 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
   }
 
   public String getFieldCcValue() {
-    return getUIStringInput(FIELD_CC).getValue() ;
+    return getUIFormTextAreaInput(FIELD_CC).getValue() ;
   }
   
   public void setFieldCcValue(String value) {
-    getUIStringInput(FIELD_CC).setValue(value);
+    getUIFormTextAreaInput(FIELD_CC).setValue(value);
   }
 
   public String getFieldBccValue() {
-    return getUIStringInput(FIELD_BCC).getValue() ;
+    return getUIFormTextAreaInput(FIELD_BCC).getValue() ;
   }
   public void setFieldBccValue(String value) {
-    getUIStringInput(FIELD_BCC).setValue(value);
+    getUIFormTextAreaInput(FIELD_BCC).setValue(value);
   }
   public String getFieldAttachmentsValue() {
     UIFormInputWithActions inputSet = getChildById(FIELD_FROM_INPUT) ;
@@ -212,11 +217,21 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
   }
   
   public String getFieldContentValue() {
-    return getChild(UIFormWYSIWYGInput.class).getValue();
+    String content = "";
+    if (isVisualEditor) {
+      content = getChild(UIFormWYSIWYGInput.class).getValue();
+    } else {
+      content = getUIFormTextAreaInput(FIELD_MESSAGECONTENT).getValue();
+    }
+    return content;
   }
   
   public void setFieldContentValue(String value) {
-     getChild(UIFormWYSIWYGInput.class).setValue(value);
+    if (isVisualEditor) {
+      getChild(UIFormWYSIWYGInput.class).setValue(value);
+    } else {
+      getUIFormTextAreaInput(FIELD_MESSAGECONTENT).setValue(value);
+    }
   }
   
   public void resetFields() { reset() ; }
@@ -464,6 +479,20 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
       UIComposeForm uiForm = event.getSource() ;
       System.out.println(" === >>> Change Editor Action Listener") ;
       boolean isVisualEditor = Boolean.valueOf(event.getRequestContext().getRequestParameter(OBJECTID)) ;  
+      String content = "";
+      if (isVisualEditor) {
+        content = uiForm.getUIFormTextAreaInput(FIELD_MESSAGECONTENT).getValue();
+        uiForm.removeChildById(FIELD_MESSAGECONTENT);
+        UIFormWYSIWYGInput wysiwyg = new UIFormWYSIWYGInput(FIELD_MESSAGECONTENT, null, null, true) ;
+        uiForm.addUIFormInput(wysiwyg);
+        wysiwyg.setValue(content);
+      } else {
+        content = uiForm.getChild(UIFormWYSIWYGInput.class).getValue();
+        uiForm.removeChild(UIFormWYSIWYGInput.class) ;
+        UIFormTextAreaInput textArea = new UIFormTextAreaInput(FIELD_MESSAGECONTENT, null, null);
+        textArea.setValue(content);
+        uiForm.addUIFormInput(textArea) ;
+      }
       uiForm.setVisualEditor(isVisualEditor);
     }
   }

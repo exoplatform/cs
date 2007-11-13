@@ -8,6 +8,7 @@
 	def rcontext = _ctx.getRequestContext() ;
   rcontext.getJavascriptManager().importJavascript('eXo.core.Spliter');
   rcontext.getJavascriptManager().importJavascript('eXo.mail.UIMailPortlet','/mail/javascript/');
+  rcontext.getJavascriptManager().addJavascript('eXo.mail.UIMailPortlet.checkLayout() ;') ;
 %>
 <div class="$uicomponent.id UIApplication" id="$uicomponent.id">
   <div class="ApplicationMinWidth">
