@@ -21,6 +21,7 @@
   int defaultTimeInterval = uicomponent.getDefaultTimeInterval() ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.setting(' + defaultTimeInterval + ', "' + workingStart + '") ;') ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UIWeekView.init() ;') ;
+    rcontext.getJavascriptManager().addJavascript('eXo.calendar.UIWeekView.initSelection() ;') ;
  	yearViewAction = uicomponent.TYPE_YEAR +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"="+ currentMonth +"&"+ uicomponent.DAY + "=1" ;
  	dateFormat = uicomponent.getDateFormat() ;
 	timeFormat = uicomponent.getTimeFormat() ;
@@ -123,7 +124,7 @@
 			</table>
 		</div>
 		<div class="EventWeekContent" style="position: relative ;">
-			<div>
+			<div class="EventBoard">
 			<%for(cl in uicomponent.getDaysOfWeek(weekNumber)) { 
 					day = cl.get(Calendar.DATE) ;
 		 			month = cl.get(Calendar.MONTH) ;

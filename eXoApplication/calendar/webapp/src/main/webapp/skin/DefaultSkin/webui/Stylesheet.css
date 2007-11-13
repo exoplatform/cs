@@ -550,6 +550,7 @@
 .UIDayView .TdTime{
 	text-align: right;
 	width: 55px;
+	-moz-user-select: none ;
 }
 
 .UIDayView .EventDayContent .TdDotLine{
@@ -678,6 +679,7 @@
 .UIWeekView .TdTime{
 	text-align: right;
 	width: 55px;
+	-moz-user-select : none ;
 }
 
 .UIWeekView td {
@@ -1630,4 +1632,11 @@
 	padding: 0px ;
 	margin: 0px ;
 	white-space:nowrap ;
+}
+.UserSelectionBlock {
+	background: #cccccc ;
+	position: absolute ;
+	opacity: 0.5 ;
+	z-index: 1 ;
+	-moz-user-select : none ;
 }

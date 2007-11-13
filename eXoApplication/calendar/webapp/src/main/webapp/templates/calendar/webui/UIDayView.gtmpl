@@ -33,6 +33,7 @@
 	int defaultTimeInterval = uicomponent.getDefaultTimeInterval() ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.setting(' + defaultTimeInterval + ',"'+workingStart+'") ;') ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.showEvent() ;') ;
+  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.initSelection() ;') ;
 %>
 <div class="UIDayView">
   <div class="TitleBar">
@@ -86,7 +87,7 @@
     </tbody>
     </table>
   </div>
-  <div class="EventDayContainer">
+  <div class="EventDayContainer" style="position:relative ;">
     <div class="EventDayContent">
       <table class="UIGrid" id="UIDayViewGrid" cellspacing="0" borderspacing="0" cellpadding="0" style="table-layout: fixed;">
         <tbody>
@@ -161,7 +162,7 @@
 			            			if(flag) {cssClass = "TdLine" ;} ;
                       %>
                       <tr startTime="$h"  style="$style">
-                        <td class="$cssClass">
+                        <td class="$cssClass"  startTime="$h">
                           <span></span>
                         </td>
                       </tr>
