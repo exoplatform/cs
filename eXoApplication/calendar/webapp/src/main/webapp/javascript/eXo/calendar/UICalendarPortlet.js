@@ -940,8 +940,8 @@ UISelection.prototype.execute = function(evt) {
 
 UISelection.prototype.clear = function() {
 	var UISelection = eXo.calendar.UISelection ;
-	var endTime = UISelection.block.offsetHeight*60*1000 + UISelection.startTime ;
-	eXo.webui.UIForm.submitEvent(UISelection.viewType ,'QuickAdd','&objectId=Event&startTime=' + UISelection.startTime + '&finishTime=' + endTime) ;
+	var endTime = UISelection.block.offsetHeight*60*1000 + parseInt(UISelection.startTime) ;
+	eXo.webui.UIForm.submitEvent(UISelection.viewType ,'QuickAdd','&objectId=event&startTime=' + UISelection.startTime + '&finishTime=' + endTime) ;
 	eXo.core.DOMUtil.listHideElements(UISelection.block) ;
 	document.onmousemove = null ;
 	document.onmouseup = null ;
