@@ -1,0 +1,34 @@
+<% 
+  import  org.exoplatform.webui.core.UIBreadcumbs; 
+  import  org.exoplatform.webui.core.UITree; 
+%>
+<div class="UIGroupMembershipSelector" id="$uicomponent.id">
+  <div class="Container">
+		<div class="SelectedGroupPath"><% uicomponent.renderChild(UIBreadcumbs.class); %></div>
+		<div class="GroupSelector">
+		  <div class="MembershipTitle"><%=_ctx.appRes(uicomponent.id+".label.selectGroup")%></div>
+		  <%uicomponent.renderChild(UITree.class);%>
+		</div>
+	  <div class="MembershipSelector">
+	    <div class="MembershipTitle"><%=_ctx.appRes(uicomponent.id+".label.selectUser")%></div>
+      <div class="OverflowContainer">
+	      <%                
+	      boolean even = true ;
+	      if(uicomponent.getCurrentGroup() != null) {
+		      for(user in uicomponent.getUsers()){
+		        String rowCssClass = "OddRow" ;
+		        if(even) rowCssClass = "EvenRow" ;  
+		        even = !even ;
+	      %>
+			      <div class="$rowCssClass">
+			        <div class="ItemIcon"><span></span></div>
+			        <a href="<%=uicomponent.event('SelectMembership', user.getUserName())%>"><%=user.getUserName()%></a>	
+			        <div style="clear: left"><span></span></div>								           
+			      </div>
+	      <%}
+	      }%>
+      </div>
+	  </div>
+		<div style="clear: left"><span></span></div>
+	</div>
+</div> 		

@@ -4,9 +4,9 @@
 	import org.exoplatform.contact.ContactUtils;
 	String compId = uicomponent.getId() ;
 	Contact contact = uicomponent.getContact();
-	if(contact != null) {		
+	//print "Contacttttt:" + contact ":aa";
+	if(contact != null) {
 %>
-
 
 <div class="UIContactPreview" id="$compId" >
 	<div class="ContactPreviewBar" >
@@ -260,4 +260,55 @@
 		
 	</div>
 </div>
-<%}%>
+
+<%} else { %>
+
+<div class="DecoratorBox">
+	<div class="ViewBoxStyle">
+		<div class="TopLeftViewBoxStyle">
+			<div class="TopRightViewBoxStyle">
+				<div class="TopCenterViewBoxStyle"><span></span></div>										
+			</div>
+		</div>
+		<div class="MiddleLeftViewBoxStyle">
+			<div class="MiddleRightViewBoxStyle">
+				<div class="MiddleCenterViewBoxStyle">
+				
+					<div class="UIWelcomeContact" >
+					
+					  <div class="WelcomeContact">
+					    <div class="LabelWelcomeContact">Welcome to</div>
+					    <div class="LabelComment">please do not select to this Contact !</div>
+					    <div style="clear: both;"><span></span></div>
+					  </div>
+					  <div class="LogoContact">
+					    <span></span>
+					  </div>
+					  <div class="OverviewContact">
+					    Overview
+					  </div>
+					  <div class="ContentContact">
+							    The eXo Address Book shows all contacts you have either entered manually or imported from a file. And it automatically 
+shows all the contacts that work on the same projects like you ...
+							  </div>
+					  <div class="FeaturesContact">
+					    Features
+					  </div>
+					  <div class="ContentContact">
+					    eXo Contact is an open-source Contact that is built on foudation of eXo WebOS with variety of new features designed to make your e-Contact experience more productive and convenience, as a new way to view your Contacts inbox and conversation and help to reduce risks and annoyances such as phishing and junk Contact. Easy to approach the basics as writing, reading, finding and much more...
+					  </div>
+				  </div>
+					
+				</div>	
+													
+			</div>
+		</div>
+		<div class="BottomLeftViewBoxStyle">
+			<div class="BottomRightViewBoxStyle">
+				<div class="BottomCenterViewBoxStyle"><span></span></div>										
+			</div>
+		</div>
+	</div>
+</div>
+<% } %>
+
