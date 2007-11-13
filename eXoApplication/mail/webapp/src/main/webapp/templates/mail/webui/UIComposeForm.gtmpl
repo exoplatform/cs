@@ -1,5 +1,6 @@
 <%
   import org.exoplatform.mail.service.Utils;
+  import org.exoplatform.contact.service.Contact;
 %>
 <% uiform.begin() %>
 <div class="$uicomponent.id UIApplication">
@@ -225,4 +226,17 @@
   	</div>
   </div>
 </div>
+
+<!-- Begin Autocomplete -->
+<div id="Autocomplete" style="display: none; ">
+  <%
+    for (Contact contact : uicomponent.getContacts()) {
+  %>
+    <contact>
+      <name><%=contact.getFullName()%></name>
+      <email><%=contact.getEmailAddress()%></email>
+    </contact>
+  <% } %>
+</div>
+<!-- End Autocomplete -->
 <% uiform.end() %>

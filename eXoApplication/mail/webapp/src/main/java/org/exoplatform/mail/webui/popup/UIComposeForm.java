@@ -6,9 +6,12 @@ package org.exoplatform.mail.webui.popup;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.exoplatform.contact.service.Contact;
+import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Attachment;
@@ -22,6 +25,7 @@ import org.exoplatform.mail.webui.UIFolderContainer;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UINavigationContainer;
 import org.exoplatform.mail.webui.UISelectAccount;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -232,6 +236,12 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
     } else {
       getUIFormTextAreaInput(FIELD_MESSAGECONTENT).setValue(value);
     }
+  }
+  
+  public List<Contact> getContacts() throws Exception {
+    ContactService contactSrv = getApplicationComponent(ContactService.class);
+    String username = MailUtils.getCurrentUser();
+    return contactSrv.getAllContact(username);
   }
   
   public void resetFields() { reset() ; }
