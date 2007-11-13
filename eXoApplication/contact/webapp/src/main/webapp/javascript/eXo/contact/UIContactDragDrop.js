@@ -3,7 +3,7 @@
  */
 function UIContactDragDrop() {
   this.scKey = 'border' ;
-  this.scValue = 'solid 1px #A5A5A5' ;
+  this.scValue = 'solid 1px #000' ;
   this.DOMUtil = eXo.core.DOMUtil ;
   this.DragDrop = eXo.core.DragDrop ;
   this.dropableSets = [] ;
@@ -27,6 +27,10 @@ UIContactDragDrop.prototype.getAllDropableSets = function() {
   var tagLists = this.DOMUtil.findDescendantsByClass(uiTagsNode, 'div', 'ItemList') ;
   for (var i=0; i<tagLists.length; i++) {
     this.dropableSets[this.dropableSets.length] = tagLists[i] ;
+  }
+  var tagContainer = document.getElementById('UITags') ;
+  if (tagContainer &&  tagLists.length <= 0) {
+    this.dropableSets[this.dropableSets.length] = tagContainer ;
   }
 } ;
 
@@ -83,21 +87,24 @@ UIContactDragDrop.prototype.initDnD = function(dropableObjs, clickObj, dragObj, 
     contactListNode.className = 'UIGrid' ;
   }
   with(uiContactPortletNode.style) {
-    padding = '2px' ;
     border = 'solid 1px #A5A5A5' ;
     position = 'absolute' ;
     width = blockWidth + 'px' ;
     display = 'none' ;
   }
   
-  var selectedItems = eXo.cs.FormHelper.getSelectedElementByClass(
-                        document.getElementById('UIListUsers') , 'UIContactList', dragBlock) ;
-  if (selectedItems.length > 0) {
-    for (var i=0; i<selectedItems.length; i++) {
-      if (selectedItems[i] && selectedItems[i].cloneNode) {
-        contactListNode.appendChild(selectedItems[i].cloneNode(true)) ;
+  if (this.listView) {
+    var selectedItems = eXo.cs.FormHelper.getSelectedElementByClass(
+                          document.getElementById('UIListUsers') , 'UIContactList', dragBlock) ;
+    if (selectedItems.length > 0) {
+      for (var i=0; i<selectedItems.length; i++) {
+        if (selectedItems[i] && selectedItems[i].cloneNode) {
+          contactListNode.appendChild(selectedItems[i].cloneNode(true)) ;
+        }
       }
-    }
+    } else {
+      contactListNode.appendChild(dragBlock.cloneNode(true)) ;
+    }  
   } else {
     contactListNode.appendChild(dragBlock.cloneNode(true)) ;
   }
@@ -157,14 +164,19 @@ UIContactDragDrop.prototype.dragCallback = function(dndEvent) {
 } ;
 
 UIContactDragDrop.prototype.dropCallback = function(dndEvent) {
-  var dragObject = dndEvent.dragObject ;
+  document.body.removeChild(dndEvent.dragObject) ;
   if (this.foundTargetObjectCatch) {
     this.foundTargetObjectCatch.style[eXo.contact.UIContactDragDrop.scKey] = this.foundTargetObjectCatchStyle ;
   }
   this.foundTargetObjectCatch = dndEvent.foundTargetObject ;
   if (this.foundTargetObjectCatch) {
-    
-    eXo.core.DOMUtil.findDescendantsByClass(dndEvent.clickObject, 'input', 'checkbox')[0].checked = true ;
+    if (eXo.contact.UIContactDragDrop.listView) {
+      eXo.core.DOMUtil.findDescendantsByClass(dndEvent.clickObject, 'input', 'checkbox')[0].checked = true ;
+    }
+    if (this.foundTargetObjectCatch.className == 'UITags') {
+      eXo.webui.UIForm.submitForm('UIContacts','TagChecked', true) ;
+      return ;
+    }
     var contactTypeId = this.foundTargetObjectCatch.getAttribute('tagname') ;
     if (!contactTypeId) {
       var contactTypeNode = eXo.core.DOMUtil.findDescendantsByClass(this.foundTargetObjectCatch, 'a', 'IconHolder')[0] ;
@@ -187,7 +199,6 @@ UIContactDragDrop.prototype.dropCallback = function(dndEvent) {
     
     eXo.webui.UIForm.submitForm('UIContacts','DNDContacts', true)
   }
-  document.body.removeChild(dndEvent.dragObject) ;
 } ;
 
 eXo.contact.UIContactDragDrop = new UIContactDragDrop();
