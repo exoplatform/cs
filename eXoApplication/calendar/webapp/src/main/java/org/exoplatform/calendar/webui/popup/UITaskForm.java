@@ -514,6 +514,11 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
             uiApp.addMessage(new ApplicationMessage(uiForm.getId() + ".msg.event-date-time-logic", null, ApplicationMessage.WARNING)) ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
             return ;
+          } else {
+            cal.setTime(to) ;
+            cal.set(java.util.Calendar.HOUR, 0) ;
+            cal.set(java.util.Calendar.MINUTE, 0) ;
+            cal.add(java.util.Calendar.DATE,1) ;
           }
           to = cal.getTime() ;
         }
