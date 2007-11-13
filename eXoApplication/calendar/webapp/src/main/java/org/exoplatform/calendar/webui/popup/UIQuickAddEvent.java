@@ -198,6 +198,13 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
         cal.setTime(toDate) ;
         cal.set(java.util.Calendar.HOUR, 0) ;
         cal.set(java.util.Calendar.MINUTE, 0) ;
+        if(fromDate.equals(cal.getTime())) {
+          cal.add(java.util.Calendar.DATE,1) ;
+        } else if(fromDate.after(cal.getTime())) {
+          uiApp.addMessage(new ApplicationMessage(uiForm.getId() + ".msg.logic-required", null, ApplicationMessage.WARNING)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        }
         toDate = cal.getTime() ;
       }else {      
         if(fromDate.equals(toDate) || fromDate.after(toDate)) {

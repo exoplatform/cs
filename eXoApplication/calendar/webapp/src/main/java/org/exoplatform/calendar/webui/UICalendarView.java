@@ -94,8 +94,8 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   final public static String MONTH = "month".intern() ;
   final public static String YEAR = "year".intern() ;
 
-  final public static String TYPE_EVENT = "Event".intern() ;
-  final public static String TYPE_TASK = "Task".intern() ;
+  final public static String TYPE_EVENT = CalendarEvent.TYPE_EVENT ;
+  final public static String TYPE_TASK = CalendarEvent.TYPE_TASK ;
   final public static String TYPE_BOTH = "Both".intern() ;
 
   private String viewType_ = TYPE_BOTH ;

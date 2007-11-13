@@ -95,9 +95,10 @@ public class UIWeekView extends UICalendarView {
       CalendarEvent event = (CalendarEvent)iter.next() ;
       Date beginEvent = event.getFromDateTime() ;
       Date endEvent = event.getToDateTime() ;
+      long amount = endEvent.getTime() - beginEvent.getTime() ; 
       for(Calendar c : getDaysOfWeek(week)) {
         String key = keyGen(c.get(Calendar.DATE), c.get(Calendar.MONTH), c.get(Calendar.YEAR)) ;
-        if(isSameDate(c.getTime(), beginEvent) &&  isSameDate(c.getTime(), endEvent)) { 
+        if(isSameDate(c.getTime(), beginEvent) && isSameDate(c.getTime(), endEvent) &&  amount < 24*60*60*1000 ) { 
           eventData_.get(key).put(event.getId(), event) ;
           dataMap_.put(event.getId(), event) ;
           iter.remove() ;

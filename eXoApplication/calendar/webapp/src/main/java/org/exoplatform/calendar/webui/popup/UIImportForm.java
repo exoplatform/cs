@@ -10,6 +10,7 @@ import java.util.List;
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
+import org.exoplatform.calendar.webui.UICalendarViewContainer;
 import org.exoplatform.calendar.webui.UICalendars;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.webui.util.Util;
@@ -65,8 +66,8 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
     public void execute(Event<UIImportForm> event) throws Exception {
       UIImportForm uiForm = event.getSource() ;
       UIFormUploadInput input = uiForm.getUIInput(FIELD_UPLOAD) ;
-      String importFormat = uiForm.getUIFormSelectBox(uiForm.TYPE).getValue() ;
-      String calendarName = uiForm.getUIStringInput(uiForm.NAME).getValue() ;
+      String importFormat = uiForm.getUIFormSelectBox(UIImportForm.TYPE).getValue() ;
+      String calendarName = uiForm.getUIStringInput(UIImportForm.NAME).getValue() ;
       UploadService uploadService = (UploadService)PortalContainer.getComponent(UploadService.class) ;
       if(calendarName == null || calendarName.length() == 0) {
         UploadResource resource = uploadService.getUploadResource(input.getUploadId()) ;
@@ -83,8 +84,11 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
       calendarService.getCalendarImportExports(importFormat).importCalendar(username, input.getUploadDataAsStream(), calendarName) ;
       UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
       UICalendars uiCalendars = calendarPortlet.findFirstComponentOfType(UICalendars.class) ;
+      UICalendarViewContainer uiCalendarViewContainer = calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
+      uiCalendarViewContainer.refresh() ;
       uploadService.removeUpload(input.getUploadId()) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendars) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarViewContainer) ;
       calendarPortlet.cancelAction() ;
     }
   }

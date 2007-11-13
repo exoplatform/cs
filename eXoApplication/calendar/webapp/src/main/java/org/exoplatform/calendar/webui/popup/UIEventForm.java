@@ -637,6 +637,13 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
           cal.setTime(to) ;
           cal.set(java.util.Calendar.HOUR, 0) ;
           cal.set(java.util.Calendar.MINUTE, 0) ;
+          if(from.equals(cal.getTime())) {
+            cal.add(java.util.Calendar.DATE,1) ;
+          }else if(from.after(cal.getTime())) {
+            uiApp.addMessage(new ApplicationMessage(uiForm.getId() + ".msg.event-date-time-logic", null, ApplicationMessage.WARNING)) ;
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            return ;
+          }
           to = cal.getTime() ;
         }
         calendarEvent.setCalType(uiForm.calType_) ;

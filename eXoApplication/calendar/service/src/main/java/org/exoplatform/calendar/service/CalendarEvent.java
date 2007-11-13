@@ -17,8 +17,8 @@ import org.exoplatform.services.jcr.util.IdGenerator;
  * Jul 11, 2007  
  */
 public class CalendarEvent {
-  final public static String TYPE_EVENT = "Event".intern() ;
-  final public static String TYPE_TASK = "Task".intern() ;
+  final public static String TYPE_EVENT = "event".intern() ;
+  final public static String TYPE_TASK = "task".intern() ;
   final public static String TYPE_JOURNAL = "journal".intern() ;
   
   final public static String TENTATIVE = "tentative".intern() ;

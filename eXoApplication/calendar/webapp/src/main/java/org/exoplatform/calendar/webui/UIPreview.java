@@ -43,7 +43,9 @@ public class UIPreview extends UICalendarView implements UIPopupComponent {
     if(event_ == null) return "app:/templates/calendar/webui/UIDefaultPreview.gtmpl" ;
     if(event_.getEventType().equals(CalendarEvent.TYPE_EVENT))
       return "app:/templates/calendar/webui/UIEventPreview.gtmpl" ;
-    return "app:/templates/calendar/webui/UITaskPreview.gtmpl" ;    
+    if(event_.getEventType().equals(CalendarEvent.TYPE_TASK))
+      return "app:/templates/calendar/webui/UITaskPreview.gtmpl" ;
+    return "app:/templates/calendar/webui/UIDefaultPreview.gtmpl" ;
   }
 
   public CalendarEvent getEvent(){ return event_ ; }
