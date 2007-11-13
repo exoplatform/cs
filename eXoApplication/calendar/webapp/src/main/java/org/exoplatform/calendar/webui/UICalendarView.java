@@ -771,13 +771,6 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       }catch (Exception e) {
         finishTime = null ;
       }
-      System.out.println("\n\n startTime " + startTime);
-      System.out.println("\n\n finishTime " + finishTime);
-      Calendar cal  = new GregorianCalendar() ;
-      cal.setTimeInMillis(Long.parseLong(startTime)) ;
-      System.out.println("\n\n startTime " + cal.getTime());
-      cal.setTimeInMillis(Long.parseLong(finishTime)) ;
-      System.out.println("\n\n finishTime " + cal.getTime());
       uiQuickAddEvent.init(uiPortlet.getCalendarSetting(), startTime, finishTime) ;
       uiQuickAddEvent.update(CalendarUtils.PRIVATE_TYPE, null) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;

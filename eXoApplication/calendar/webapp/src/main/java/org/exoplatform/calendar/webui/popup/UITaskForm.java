@@ -120,7 +120,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
       int beginMinute = (cal.get(java.util.Calendar.MINUTE)/CalendarUtils.DEFAULT_TIMEITERVAL)*CalendarUtils.DEFAULT_TIMEITERVAL ;
       cal.set(java.util.Calendar.MINUTE, beginMinute) ;
       setEventFromDate(cal.getTime()) ;
-      cal.add(java.util.Calendar.MINUTE,CalendarUtils.DEFAULT_TIMEITERVAL) ;
+      cal.add(java.util.Calendar.MINUTE, CalendarUtils.DEFAULT_TIMEITERVAL*2) ;
       setEventToDate(cal.getTime()) ;
     }
   }
