@@ -7,6 +7,7 @@ package org.exoplatform.calendar.webui.popup;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -224,6 +225,15 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
     UITaskDetailTab taskDetailTab =  getChildById(TAB_TASKDETAIL) ;
     UIFormSelectBox timeField = taskDetailTab.getUIFormSelectBox(UITaskDetailTab.FIELD_FROM_TIME) ;
     UIFormDateTimeInput fromField = taskDetailTab.getChildById(UITaskDetailTab.FIELD_FROM) ;
+    if(getEventAllDate()) {
+      DateFormat df = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
+      Calendar cal = new GregorianCalendar() ;
+      cal.setTime(df.parse(fromField.getValue())) ;
+      cal.set(Calendar.HOUR, 0);
+      cal.set(Calendar.MINUTE, 0);
+      cal.set(Calendar.MILLISECOND, 0);
+      return cal.getTime() ;
+    } 
     DateFormat df = new SimpleDateFormat(CalendarUtils.DATETIMEFORMAT) ;
     return df.parse(fromField.getValue() + " " + timeField.getValue()) ;
   }
@@ -245,6 +255,15 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
     UITaskDetailTab taskDetailTab =  getChildById(TAB_TASKDETAIL) ;
     UIFormSelectBox timeField = taskDetailTab.getUIFormSelectBox(UITaskDetailTab.FIELD_TO_TIME) ;
     UIFormDateTimeInput toField = taskDetailTab.getChildById(UITaskDetailTab.FIELD_TO) ;
+    if(getEventAllDate()) {
+      DateFormat df = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
+      Calendar cal = new GregorianCalendar() ;
+      cal.setTime(df.parse(toField.getValue())) ;
+      cal.set(Calendar.HOUR, 0);
+      cal.set(Calendar.MINUTE, 0);
+      cal.set(Calendar.MILLISECOND, 0);
+      return cal.getTime() ;
+    } 
     DateFormat df = new SimpleDateFormat(CalendarUtils.DATETIMEFORMAT) ;
     return df.parse(toField.getValue() + " " + timeField.getValue()) ;
   }
@@ -501,29 +520,16 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
         calendarEvent.setTaskDelegator(uiForm.getEventDelegation()) ;
         Date from = uiForm.getEventFromDate() ;
         Date to = uiForm.getEventToDate() ;
-        if(uiForm.getEventAllDate()) {
-          java.util.Calendar cal = GregorianCalendar.getInstance() ;
+        if(from.after(to)) {
+          uiApp.addMessage(new ApplicationMessage(uiForm.getId() + ".msg.event-date-time-logic", null, ApplicationMessage.WARNING)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        } else if(from.equals(to)) {
+          Calendar cal = new GregorianCalendar() ;
           cal.setTime(from) ;
-          cal.set(java.util.Calendar.HOUR, 0) ;
-          cal.set(java.util.Calendar.MINUTE, 0) ;
-          from = cal.getTime() ;
-          cal.setTime(to) ;
-          cal.set(java.util.Calendar.HOUR, 0) ;
-          cal.set(java.util.Calendar.MINUTE, 0) ;
-          if(from.equals(cal.getTime())) {
-            cal.add(java.util.Calendar.DATE,1) ;
-          }else if(from.after(cal.getTime())) {
-            uiApp.addMessage(new ApplicationMessage(uiForm.getId() + ".msg.event-date-time-logic", null, ApplicationMessage.WARNING)) ;
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-            return ;
-          } else {
-            cal.setTime(to) ;
-            cal.set(java.util.Calendar.HOUR, 0) ;
-            cal.set(java.util.Calendar.MINUTE, 0) ;
-            cal.add(java.util.Calendar.DATE,1) ;
-          }
+          cal.set(Calendar.HOUR, 24) ;
           to = cal.getTime() ;
-        }
+        } 
         calendarEvent.setCalType(uiForm.calType_) ;
         calendarEvent.setFromDateTime(from) ;
         calendarEvent.setToDateTime(to);

@@ -93,12 +93,14 @@ public class UIDayView extends UICalendarView {
   protected Calendar getCurrentDayBegin() {
     Calendar fromDate = new GregorianCalendar(getCurrentYear(), getCurrentMonth(), getCurrentDay()) ;
     fromDate.set(Calendar.HOUR, 0) ;
+    fromDate.set(Calendar.MINUTE, 0) ;
     return fromDate ;
   }
 
   protected Calendar getCurrentDayEnd()  {
     Calendar toDate = new GregorianCalendar(getCurrentYear(), getCurrentMonth(), getCurrentDay()) ;
     toDate.set(Calendar.HOUR, 0) ;
+    toDate.set(Calendar.MINUTE, 0) ;
     toDate.add(Calendar.DATE, 1) ;
     return toDate ;
   }

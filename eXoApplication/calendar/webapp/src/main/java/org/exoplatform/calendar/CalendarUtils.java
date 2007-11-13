@@ -130,4 +130,18 @@ public class CalendarUtils {
             cal2.get(Calendar.HOUR) == 0 && 
             cal2.get(Calendar.MINUTE) == 0 );
   }
+  
+  public static boolean isSameDate(java.util.Calendar date1, java.util.Calendar date2) {
+    return ( date1.get(java.util.Calendar.DATE) == date2.get(java.util.Calendar.DATE) &&
+        date1.get(java.util.Calendar.MONTH) == date2.get(java.util.Calendar.MONTH) &&
+        date1.get(java.util.Calendar.YEAR) == date2.get(java.util.Calendar.YEAR)
+    ) ;
+  }
+  public static boolean isSameDate(Date value1, Date value2) {
+    Calendar date1 = GregorianCalendar.getInstance() ;
+    date1.setTime(value1) ;
+    Calendar date2 = GregorianCalendar.getInstance() ;
+    date2.setTime(value2) ;
+    return isSameDate(date1, date2) ;
+  }
 }
