@@ -173,6 +173,7 @@ UIMailPortlet.prototype.switchLayout = function(layout) {
 			}
 			Browser.setCookie("UINavigationContainer", "block", 30);
 			Browser.setCookie("SpliterResizableArea", "block", 30);
+			layout2.style.height = "220px" ;
 			Browser.setCookie("ResizeReadingPane", "block", 30);
 			Browser.setCookie("uiMessageListResizableArea", "block", 30)	
 			break ;
@@ -195,24 +196,28 @@ UIMailPortlet.prototype.switchLayout = function(layout) {
 				Browser.setCookie("UIMessageList", "block", 30)
 				if (layout3.style.display != "none" && layout2.style.display != "none") {
 					resizePane.style.display = "block";
+					Browser.setCookie("ResizeReadingPane", "block", 30)
 				}
 			} else {				
 				layout2.style.display = "none" ;
 				resizePane.style.display = "none";
+				Browser.setCookie("ResizeReadingPane", "none", 30)
 				Browser.setCookie("uiMessageListResizableArea", "none", 30)
 			}
 			break ;
 		case 3 :
 			if (layout3.style.display == "none") {
 				layout3.style.display = "block" ;
-				Browser.setCookie("ResizeReadingPane", "block", 30)
+				layout2.style.height = "220px" ;
+				Browser.setCookie("SpliterResizableArea", "block", 30)
 				if (layout3.style.display != "none" && layout2.style.display != "none") {
 					resizePane.style.display = "block";
-					Browser.setCookie("SpliterResizableArea", "block", 30)
+					Browser.setCookie("ResizeReadingPane", "block", 30)
 				}
 
 			} else {				
-				layout3.style.display = "none" ;				
+				layout3.style.display = "none" ;	
+				layout2.style.height = "100%" ;			
 			    resizePane.style.display = "none";
 			    Browser.setCookie("ResizeReadingPane", "none", 30)
 			    Browser.setCookie("SpliterResizableArea", "none", 30)	
@@ -238,6 +243,12 @@ UIMailPortlet.prototype.checkLayout = function() {
 	resizePane.style.display = ResizeReadingPane;
 	if(layout1.style.display == "none") {
 		workingarea.style.marginLeft = "0px"	;
+	}
+	
+	if(layout3.style.display == "block") {
+		layout2.style.height = "220px" ;
+	} else {
+		layout2.style.height = "100%" ;
 	}
 } ;
 
