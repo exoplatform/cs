@@ -170,7 +170,7 @@ UIWeekView.prototype.initResize = function(evt) {
 	var UIResizeEvent = eXo.calendar.UIResizeEvent ;
 	var outerElement = eXo.core.DOMUtil.findAncestorByClass(this,'EventContainerBorder') ;
 	var innerElement = eXo.core.DOMUtil.findPreviousElementByTagName(this, "div") ;
-	var container = document.getElementById("UIWeekViewGrid") ;
+	var container = eXo.core.DOMUtil.findAncestorByClass(document.getElementById("UIWeekViewGrid"), "EventWeekContent") ;
 	var minHeight = 30 ;
 	var interval = eXo.calendar.UICalendarPortlet.interval ;
 	UIResizeEvent.start(_e, innerElement, outerElement, container, minHeight, interval) ;
@@ -181,9 +181,9 @@ UIWeekView.prototype.resizeCallback = function(evt) {
 	var UIResizeEvent = eXo.calendar.UIResizeEvent ;
 	var eventBox = UIResizeEvent.outerElement ;
 	var start =  parseInt(eventBox.getAttribute("startTime")) ;
-	var end =  start + eventBox.offsetHeight - 2 ;
+	var end =  start + eventBox.offsetHeight ;
 	var calType = parseInt(eventBox.getAttribute("calType")) ;
-	if (eventBox.offsetHeight != UIResizeEvent.outerElementHeight) {
+	if (eventBox.offsetHeight != UIResizeEvent.beforeHeight) {
 		var actionLink = eXo.calendar.UICalendarPortlet.adjustTime(start, end, eventBox) ;
 		var currentDate = eventBox.parentNode.getAttribute("starttime").toString() ;
 		actionLink = actionLink.toString().replace(/'\s*\)/,"&currentDate=" + currentDate + "&calType=" + calType + "')") ;
