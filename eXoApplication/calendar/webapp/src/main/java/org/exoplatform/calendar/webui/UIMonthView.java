@@ -54,7 +54,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
 public class UIMonthView extends UICalendarView {
   private Map<String, String> calendarIds_ = new HashMap<String, String>() ;
 
-  private Map<Integer, List<CalendarEvent>> eventData_ = new HashMap<Integer, List<CalendarEvent>>() ;
+  private Map<Integer, Map<String, CalendarEvent>> eventData_ = new HashMap<Integer, Map<String, CalendarEvent>>() ;
   private LinkedHashMap<String, CalendarEvent> dataMap_ = new LinkedHashMap<String, CalendarEvent>() ;
   
   public UIMonthView() throws Exception{
@@ -77,7 +77,7 @@ public class UIMonthView extends UICalendarView {
     initCategories() ;
     eventData_.clear() ;
     for(int day =1 ;  day <= getDaysInMonth(); day++) {
-      List<CalendarEvent> list =  new ArrayList<CalendarEvent>() ;
+      Map<String, CalendarEvent> list =  new HashMap<String, CalendarEvent>() ;
       eventData_.put(day, list) ;
     }
     Iterator<CalendarEvent> eventIter = allEvents.iterator() ;
@@ -96,7 +96,7 @@ public class UIMonthView extends UICalendarView {
         toDate = tempEnd.get(java.util.Calendar.DATE) ;
       }
       for(int i = fromDate; i <= toDate; i ++) {
-        eventData_.get(i).add(ce) ;
+        eventData_.get(i).put(ce.getId(), ce) ;
         if(tempBegin.get(java.util.Calendar.DATE) >= i){
           UIFormCheckBoxInput<Boolean> input = new UIFormCheckBoxInput<Boolean>(ce.getId(), ce.getId(), false) ;
           input.setBindingField(ce.getCalendarId()) ;
@@ -128,7 +128,7 @@ public class UIMonthView extends UICalendarView {
     GregorianCalendar gc = new GregorianCalendar(year, month, day) ;
     return gc.getTime() ;
   }
-  private Map<Integer, List<CalendarEvent>> getEventsData() {
+  private Map<Integer, Map<String, CalendarEvent>> getEventsData() {
     return eventData_ ;
   }
 
@@ -140,10 +140,10 @@ public class UIMonthView extends UICalendarView {
   }
   protected List<CalendarEvent> getSelectedEvents() {
     List<CalendarEvent> events = new ArrayList<CalendarEvent>() ;
-    for(List<CalendarEvent> items : getEventsData().values()) {
-      for(CalendarEvent ce : items) {
-        UIFormCheckBoxInput<Boolean>  checkbox = getChildById(ce.getId())  ;
-        if(checkbox != null && checkbox.isChecked()) events.add(ce) ;
+    for(Map<String, CalendarEvent> items : getEventsData().values()) {
+      for(String id : items.keySet()) {
+        UIFormCheckBoxInput<Boolean>  checkbox = getChildById(id )  ;
+        if(checkbox != null && checkbox.isChecked()) events.add(items.get(id)) ;
       }
     }
     return events ; 

@@ -111,9 +111,9 @@
 						        viewMore = "" ;
 										if(size > 0) {
 											println "<div class=\"DayContentContainer\" style=\"height:75px; overflow:hidden ;\">" ;
-											for(event in eventList) {
+											for(event in eventList.values()) {
 												styleCssHidden = "" ;
-												if(eventList.indexOf(event) > 2) {styleCssHidden = "display:block;";}
+												//if(eventList.indexOf(event) > 2) {styleCssHidden = "display:block;";}
 												begin = event.getFromDateTime() ;
 												end = event.getToDateTime();
 												sumary = event.getSummary() ;

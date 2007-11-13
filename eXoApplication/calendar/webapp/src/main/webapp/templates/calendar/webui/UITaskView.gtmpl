@@ -52,7 +52,7 @@
   			       	<th style="width: 24px;"><div class="AttachmentIcon" title="Attachment of event"><span></span></div></th>
   		          <th >Task</th>
   		          <th >Priority</th>
-  		          <th >Statust</th>
+  		          <th >Status</th>
   		          <th >Duedate</th>
  	      	      <th >Task delegation</th>
   	 	        </tr>

@@ -13,6 +13,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
+import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.webui.util.Util;
@@ -117,5 +118,16 @@ public class CalendarUtils {
   
   static public String getCurrentUser() throws Exception {
     return Util.getPortalRequestContext().getRemoteUser() ; 
+  }
+  
+  public static boolean isAllDayEvent(CalendarEvent eventCalendar) {
+    Calendar cal1 = new GregorianCalendar() ;
+    Calendar cal2 = new GregorianCalendar() ;
+    cal1.setTime(eventCalendar.getFromDateTime()) ;
+    cal2.setTime(eventCalendar.getToDateTime()) ;
+    return (cal1.get(Calendar.HOUR) == 0  && 
+            cal1.get(Calendar.MINUTE) == 0 &&
+            cal2.get(Calendar.HOUR) == 0 && 
+            cal2.get(Calendar.MINUTE) == 0 );
   }
 }

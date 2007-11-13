@@ -7,7 +7,6 @@ package org.exoplatform.calendar.webui.popup;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -86,7 +85,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   private CalendarEvent calendarEvent_ = null ;
   protected String calType_ = "0" ;
   private String errorMsg_ = null ;
-  
+
   public UIEventForm() throws Exception {
     super("UIEventForm", false);
     UIEventDetailTab eventDetailTab =  new UIEventDetailTab(TAB_EVENTDETAIL) ;
@@ -137,6 +136,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       calendarEvent_ = eventCalendar ;
       setEventSumary(eventCalendar.getSummary()) ;
       setEventDescription(eventCalendar.getDescription()) ;
+      setEventAllDate(CalendarUtils.isAllDayEvent(eventCalendar)) ;
       setEventFromDate(eventCalendar.getFromDateTime()) ;
       setEventToDate(eventCalendar.getToDateTime()) ;
       setSelectedCalendarId(eventCalendar.getCalendarId()) ;
@@ -220,7 +220,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   public void activate() throws Exception {}
   public void deActivate() throws Exception {}
   public void updateSelect(String selectField, String value) throws Exception {
-    
+
   }
 
   protected boolean isEventDetailValid(){
@@ -629,27 +629,50 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
         Date from = uiForm.getEventFromDate() ;
         Date to = uiForm.getEventToDate() ;
         if(uiForm.getEventAllDate()) {
-          java.util.Calendar cal = GregorianCalendar.getInstance() ;
-          cal.setTime(from) ;
-          cal.set(java.util.Calendar.HOUR, 0) ;
-          cal.set(java.util.Calendar.MINUTE, 0) ;
-          from = cal.getTime() ;
-          cal.setTime(to) ;
-          cal.set(java.util.Calendar.HOUR, 0) ;
-          cal.set(java.util.Calendar.MINUTE, 0) ;
-          if(from.equals(cal.getTime())) {
-            cal.add(java.util.Calendar.DATE,1) ;
-          }else if(from.after(cal.getTime())) {
-            uiApp.addMessage(new ApplicationMessage(uiForm.getId() + ".msg.event-date-time-logic", null, ApplicationMessage.WARNING)) ;
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-            return ;
-          } else {
+          if(uiForm.isAddNew_) {
+            java.util.Calendar cal = GregorianCalendar.getInstance() ;
+            cal.setTime(from) ;
+            cal.set(java.util.Calendar.HOUR, 0) ;
+            cal.set(java.util.Calendar.MINUTE, 0) ;
+            from = cal.getTime() ;
             cal.setTime(to) ;
             cal.set(java.util.Calendar.HOUR, 0) ;
             cal.set(java.util.Calendar.MINUTE, 0) ;
-            cal.add(java.util.Calendar.DATE,1) ;
+            if(from.equals(cal.getTime())) {
+              cal.add(java.util.Calendar.DATE,1) ;
+            }else if(from.after(cal.getTime())) {
+              uiApp.addMessage(new ApplicationMessage(uiForm.getId() + ".msg.event-date-time-logic", null, ApplicationMessage.WARNING)) ;
+              event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+              return ;
+            } else {
+              cal.setTime(to) ;
+              cal.set(java.util.Calendar.HOUR, 0) ;
+              cal.set(java.util.Calendar.MINUTE, 0) ;
+              cal.add(java.util.Calendar.DATE,1) ;
+            }
+            to = cal.getTime() ;
+          } else {
+            if(from.after(to)) {
+              uiApp.addMessage(new ApplicationMessage(uiForm.getId() + ".msg.event-date-time-logic", null, ApplicationMessage.WARNING)) ;
+              event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+              return ;
+            } else {
+              java.util.Calendar cal = GregorianCalendar.getInstance() ;
+              cal.setTime(from) ;
+              cal.set(java.util.Calendar.HOUR, 0) ;
+              cal.set(java.util.Calendar.MINUTE, 0) ;
+              from = cal.getTime() ;
+              cal.setTime(to) ;
+              cal.set(java.util.Calendar.HOUR, 0) ;
+              cal.set(java.util.Calendar.MINUTE, 0) ;
+              if(from.equals(to)) {
+                cal.set(java.util.Calendar.HOUR, 0) ;
+                cal.set(java.util.Calendar.MINUTE, 0) ;
+                cal.add(java.util.Calendar.DATE,1) ;
+              }
+              to = cal.getTime() ;
+            }
           }
-          to = cal.getTime() ;
         }
         calendarEvent.setCalType(uiForm.calType_) ;
         calendarEvent.setFromDateTime(from) ;
