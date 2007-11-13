@@ -256,4 +256,11 @@ UIMailPortlet.prototype.switchLayout = function(layout) {
 	}
 } ;
 
+UIMailPortlet.prototype.showHide = function(add) {	
+	var elm = document.getElementById(add);
+	if (elm.style.display == "none") {
+		elm.style.display = "" ;
+	}
+} ;
+
 eXo.mail.UIMailPortlet = new UIMailPortlet();

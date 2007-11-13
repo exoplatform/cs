@@ -96,7 +96,6 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
   public void setVisualEditor(boolean b) { isVisualEditor = b; }
   
   public UIComposeForm() throws Exception {
-    UIFormInputWithActions inputSet = new UIFormInputWithActions(FIELD_FROM_INPUT); 
     List<SelectItemOption<String>>  options = new ArrayList<SelectItemOption<String>>() ;
     String username = MailUtils.getCurrentUser();
     MailService mailSrv = getApplicationComponent(MailService.class);
@@ -106,41 +105,17 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
       if (acc.getId().equals(MailUtils.getAccountId())) { itemOption.setSelected(true); }
       options.add(itemOption) ;
     }
-    inputSet.addUIFormInput(new UIFormSelectBox(FIELD_FROM, FIELD_FROM, options)) ;
-    List<ActionData> actions = new ArrayList<ActionData>() ;
-    ActionData toAction = new ActionData() ;
-    toAction.setActionListener(ACT_TO) ;
-    toAction.setActionType(ActionData.TYPE_ICON) ;
-    toAction.setActionName(ACT_TO);    
-    actions.add(toAction);
-    inputSet.setActionField(FIELD_TO, actions) ;
+    addUIFormInput(new UIFormSelectBox(FIELD_FROM, FIELD_FROM, options)) ;
 
-    actions = new ArrayList<ActionData>() ;
-    ActionData ccAction = new ActionData() ;
-    ccAction.setActionListener(ACT_CC) ;
-    ccAction.setActionType(ActionData.TYPE_ICON) ;
-    ccAction.setActionName(ACT_CC);
-    actions.add(ccAction);
-    inputSet.setActionField(FIELD_CC, actions) ;
-
-    actions = new ArrayList<ActionData>() ;
-    ActionData bccAction = new ActionData() ;
-    bccAction.setActionListener(ACT_BCC) ;
-    bccAction.setActionType(ActionData.TYPE_ICON) ;
-    
-    bccAction.setActionName(ACT_BCC);    
-    actions.add(bccAction);
-    inputSet.setActionField(FIELD_BCC, actions) ;
-
-    inputSet.addUIFormInput(new UIFormStringInput(FIELD_TO, null, null)) ;
-    inputSet.addUIFormInput(new UIFormStringInput(FIELD_CC, null, null)) ;
-    inputSet.addUIFormInput(new UIFormStringInput(FIELD_BCC, null, null)) ;
-    inputSet.addUIFormInput(new UIFormStringInput(FIELD_SUBJECT, null, null)) ;
+    addUIFormInput(new UIFormStringInput(FIELD_TO, null, null)) ;
+    addUIFormInput(new UIFormStringInput(FIELD_CC, null, null)) ;
+    addUIFormInput(new UIFormStringInput(FIELD_BCC, null, null)) ;
+    addUIFormInput(new UIFormStringInput(FIELD_SUBJECT, null, null)) ;
+    UIFormInputWithActions inputSet = new UIFormInputWithActions(FIELD_FROM_INPUT);   
     inputSet.addUIFormInput(new UIFormInputInfo(FIELD_ATTACHMENTS, FIELD_ATTACHMENTS, null)) ;
-
     inputSet.setActionField(FIELD_ATTACHMENTS, getUploadFileList()) ;
-
     addUIFormInput(inputSet) ;
+    
     //addUIFormInput(new UIFormTextAreaInput(FIELD_MESSAGECONTENT, null, null)) ;
     addUIFormInput(new UIFormWYSIWYGInput(FIELD_MESSAGECONTENT, null, null, true));
     setPriority(Utils.PRIORITY_NORMAL);
@@ -165,6 +140,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
     }
     return uploadedFiles ;
   }
+  
   public void refreshUploadFileList() throws Exception {
     UIFormInputWithActions inputSet = getChildById(FIELD_FROM_INPUT) ;
     inputSet.setActionField(FIELD_ATTACHMENTS, getUploadFileList()) ;
@@ -199,45 +175,36 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
   public void setPriority(long priority) { priority_ = priority; }
   
   public String getFieldFromValue() {
-    UIFormInputWithActions inputSet = getChildById(FIELD_FROM_INPUT) ;
-    return inputSet.getUIFormSelectBox(FIELD_FROM).getValue() ;
+    return getUIFormSelectBox(FIELD_FROM).getValue() ;
   }
 
   public String getFieldSubjectValue() {
-    UIFormInputWithActions inputSet = getChildById(FIELD_FROM_INPUT) ;
-    return inputSet.getUIStringInput(FIELD_SUBJECT).getValue() ;
+    return getUIStringInput(FIELD_SUBJECT).getValue() ;
   }
   public void setFieldSubjectValue(String value) {
-    UIFormInputWithActions inputSet = getChildById(FIELD_FROM_INPUT) ;
-    inputSet.getUIStringInput(FIELD_SUBJECT).setValue(value) ;
+    getUIStringInput(FIELD_SUBJECT).setValue(value) ;
   }
   public String getFieldToValue() {
-    UIFormInputWithActions inputSet = getChildById(FIELD_FROM_INPUT) ;
-    return inputSet.getUIStringInput(FIELD_TO).getValue() ;
+    return getUIStringInput(FIELD_TO).getValue() ;
   }
   
   public void setFieldToValue(String value) {
-    UIFormInputWithActions inputSet = getChildById(FIELD_FROM_INPUT);
-    inputSet.getUIStringInput(FIELD_TO).setValue(value);
+    getUIStringInput(FIELD_TO).setValue(value);
   }
 
   public String getFieldCcValue() {
-    UIFormInputWithActions inputSet = getChildById(FIELD_FROM_INPUT) ;
-    return inputSet.getUIStringInput(FIELD_CC).getValue() ;
+    return getUIStringInput(FIELD_CC).getValue() ;
   }
   
   public void setFieldCcValue(String value) {
-    UIFormInputWithActions inputSet = getChildById(FIELD_FROM_INPUT);
-    inputSet.getUIStringInput(FIELD_CC).setValue(value);
+    getUIStringInput(FIELD_CC).setValue(value);
   }
 
   public String getFieldBccValue() {
-    UIFormInputWithActions inputSet = getChildById(FIELD_FROM_INPUT) ;
-    return inputSet.getUIStringInput(FIELD_BCC).getValue() ;
+    return getUIStringInput(FIELD_BCC).getValue() ;
   }
   public void setFieldBccValue(String value) {
-    UIFormInputWithActions inputSet = getChildById(FIELD_FROM_INPUT);
-    inputSet.getUIStringInput(FIELD_BCC).setValue(value);
+    getUIStringInput(FIELD_BCC).setValue(value);
   }
   public String getFieldAttachmentsValue() {
     UIFormInputWithActions inputSet = getChildById(FIELD_FROM_INPUT) ;

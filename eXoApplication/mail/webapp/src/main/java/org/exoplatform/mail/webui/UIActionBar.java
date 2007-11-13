@@ -10,13 +10,13 @@ import java.util.List;
 import javax.mail.AuthenticationFailedException;
 
 import org.exoplatform.calendar.service.CalendarService;
-import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MailSetting;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.popup.UIComposeForm;
+import org.exoplatform.mail.webui.popup.UIFeed;
 import org.exoplatform.mail.webui.popup.UIMailSettings;
 import org.exoplatform.mail.webui.popup.UIPopupAction;
 import org.exoplatform.mail.webui.popup.UIPopupActionContainer;
@@ -109,7 +109,7 @@ public class UIActionBar extends UIContainer {
   
   static public class AddressActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {
-      UIActionBar uiActionBar = event.getSource() ; 
+      //UIActionBar uiActionBar = event.getSource() ; 
       System.out.println(" =========== > AddAddressActionListener");
     }
   }
@@ -130,8 +130,12 @@ public class UIActionBar extends UIContainer {
   }
   static public class RssActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {
-//      UIActionBar uiActionBar = event.getSource() ; 
+      UIActionBar uiActionBar = event.getSource() ; 
       System.out.println(" =========== > RssActionListener");
+      UIMailPortlet uiPortlet = uiActionBar.getAncestorOfType(UIMailPortlet.class);
+      UIPopupAction uiPopup = uiPortlet.findFirstComponentOfType(UIPopupAction.class);
+      uiPopup.activate(UIFeed.class, 600);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup);
     }
   }
   static public class ChangeViewActionListener extends EventListener<UIActionBar> {
@@ -166,7 +170,7 @@ public class UIActionBar extends UIContainer {
 
   static public class ContactActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {
-      UIActionBar uiActionBar = event.getSource();   
+      //UIActionBar uiActionBar = event.getSource();   
     }
   }
 

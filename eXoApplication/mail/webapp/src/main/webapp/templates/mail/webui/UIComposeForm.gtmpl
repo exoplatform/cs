@@ -164,21 +164,54 @@
 <!-- Start  Message Address -->
 			<div class="MessageAddress">
 				<div class="UIForm">
-				  <div class="HorizontalLayout">
-				    <div class="FormContainer">
-				        <% 
-					        for(field in uiform.getChildren()) { 
-					          if(field.isRendered() && !field.getId().equals(uicomponent.FIELD_MESSAGECONTENT) ) {
-						     %>
-						          <div>
-						          	<%uiform.renderField(field)%>
-						          </div>
-						    <%
-					          }
-					        }
-					      %>
-				    </div>
-				  </div>
+            <div class="HorizontalLayout">
+            <table class="UIFormGrid">
+              <tr>
+                <td class="FieldLabel">From:</td>
+                <td class="FieldComponent">
+                  <%uicomponent.renderField(uicomponent.FIELD_FROM)%>
+                </td>
+              </tr>
+              <tr>
+                <td class="FieldLabel">To:</td>
+                <td class="FieldComponent">
+                  <%uicomponent.renderField(uicomponent.FIELD_TO)%> <a href="<%=uicomponent.event("To")%>">[TO]</a>
+                </td>
+                <td>
+                  <a href="javascript:eXo.mail.UIMailPortlet.showHide('FIELD_CC')">Add CC</a> 
+                  <a href="javascript:eXo.mail.UIMailPortlet.showHide('FIELD_BCC')">Add BCC</a>
+                </td>
+              </tr>
+
+              <tr id="FIELD_CC" style="display: none">
+                <td class="FieldLabel">CC:</td>
+                <td class="FieldComponent" colspan="2">
+                  <%uicomponent.renderField(uicomponent.FIELD_CC)%> <a href="<%=uicomponent.event("ToCC")%>">[CC]</a>
+                </td>
+              </tr>
+              <tr id="FIELD_BCC" style="display: none">
+                <td class="FieldLabel">BCC:</td>
+                <td class="FieldComponent" colspan="2">
+                  <%uicomponent.renderField(uicomponent.FIELD_BCC)%> <a href="<%=uicomponent.event("ToBCC")%>">[BCC]</a>
+                </td>
+              </tr>
+              <tr>
+                <td class="FieldLabel">Subject:</td>
+                <td class="FieldComponent" colspan="2" style="padding:4px;">
+                  <%uicomponent.renderField(uicomponent.FIELD_SUBJECT)%>
+                </td>
+              </tr>
+              <%
+                if (uicomponent.getUploadFileList().size() > 0) {
+              %>
+                <tr>
+                  <td colspan="2" class="FieldComponent">
+                    <%uicomponent.renderField(uicomponent.FIELD_FROM_INPUT)%>
+                  </td>
+                </tr>
+              <% } %>
+            </table>
+          </div>
 				</div>
 			</div>
 <!-- End Compose Message Address -->
