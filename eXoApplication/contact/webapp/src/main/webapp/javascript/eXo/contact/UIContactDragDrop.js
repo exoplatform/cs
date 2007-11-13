@@ -191,7 +191,10 @@ UIContactDragDrop.prototype.dropCallback = function(dndEvent) {
     } else if (eXo.core.DOMUtil.findAncestorByClass(this.foundTargetObjectCatch, 'PublicAddress')) {
       contactType = 'public'
     } else if (eXo.core.DOMUtil.findAncestorByClass(this.foundTargetObjectCatch, 'UITags')) {
-      contactType = 'tag' ;
+      var uiMsgList = document.getElementById('UIContacts') ;
+	    uiMsgList.action = uiMsgList.action + '&objectId=' + contactTypeId ;
+	    eXo.webui.UIForm.submitForm('UIContacts','DNDContactsToTag', true) ;
+	    return ;
     }
     
     // request service

@@ -1,5 +1,10 @@
 .UIWelcomeContact {
 	padding: 8px;
+	background-color: #ffffff;
+}
+
+.UIWelcomeContact .WelcomeContact {
+	height: 25px;
 }
 
 .UIWelcomeContact .WelcomeContact .LabelWelcomeContact {
@@ -16,7 +21,7 @@
 }
 
 .UIWelcomeContact .LogoContact {
-	background: url('background/LogoContact225x59.gif') no-repeat left;
+	background: url('Background/LogoContact225x59.gif') no-repeat left;
 	width: 225px; height: 59px; margin-left: 40px;
 }
 
