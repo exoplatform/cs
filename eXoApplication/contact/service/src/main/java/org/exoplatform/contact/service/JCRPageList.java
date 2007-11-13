@@ -51,7 +51,7 @@ abstract public class JCRPageList {
     return currentListPage_ ;
   }
   
-  abstract public List getAll() throws Exception  ;
+  abstract public List<Contact> getAll() throws Exception  ;
   abstract public void setList(List<Contact> contacts) ;
   
   protected void checkAndSetPage(long page) throws Exception {

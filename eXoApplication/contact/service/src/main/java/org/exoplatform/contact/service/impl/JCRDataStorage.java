@@ -78,7 +78,7 @@ public class JCRDataStorage implements DataStorage {
     return contactServiceHome.addNode(CONTACTS, "nt:unstructured") ;
   }
   
-  private Node getContactGroupHome(String username) throws Exception {
+  protected Node getContactGroupHome(String username) throws Exception {
     Node contactServiceHome = getContactServiceHome(username) ;
     if(contactServiceHome.hasNode(CONTACT_GROUP)) return contactServiceHome.getNode(CONTACT_GROUP) ;
     return contactServiceHome.addNode(CONTACT_GROUP, "nt:unstructured") ;

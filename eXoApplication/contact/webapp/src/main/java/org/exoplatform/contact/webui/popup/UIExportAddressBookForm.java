@@ -107,6 +107,12 @@ public class UIExportAddressBookForm extends UIForm implements UIPopupComponent{
         checked.add(group.getId());
       }
     }
+    for (String groupId : getSharedContactGroup()) {
+      UIFormCheckBoxInput uiCheckBox = getChildById(groupId);
+      if (uiCheckBox != null && uiCheckBox.isChecked()) {
+        checked.add(groupId);
+      }
+    }
     return checked;
   }
 
@@ -119,25 +125,23 @@ public class UIExportAddressBookForm extends UIForm implements UIPopupComponent{
       ContactService contactService = ContactUtils.getContactService() ;
       
       List<String> groupIds = uiForm.getCheckedGroups() ;
-      int size = groupIds.size();
+      //int size = groupIds.size();
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-      if (size == 0) {
+      if (groupIds.size() < 1) {
         uiApp.addMessage(new ApplicationMessage("UIExportAddressBookForm.checkGroup-required", null,
           ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;          
       } 
-      LinkedHashMap<String, String> contactMap = new LinkedHashMap<String, String> () ;
+      /*LinkedHashMap<String, String> contactMap = new LinkedHashMap<String, String> () ;
       for (int i=0; i<size; i++) {
         List<Contact> contacts = contactService.getContactPageListByGroup(username, groupIds.get(i)).getAll();
         int count = contacts.size();
         for (int j=0; j<count; j++) {
           String contactId = contacts.get(j).getId();
           contactMap.put(contactId, contactId) ;
-        }
-          
+        }          
       }
-      
       List<String> sharedGroups = uiForm.sharedContactGroup_ ;
       for (String group : sharedGroups) {
         List<Contact> sharedContacts = contactService.getSharedContactsByGroup(group).getAll() ;
@@ -149,7 +153,7 @@ public class UIExportAddressBookForm extends UIForm implements UIPopupComponent{
      // String[] contactIds = contactMap.values().toArray(new String[] {}) ;
       List<String> listContactIds = new ArrayList<String>() ;
       listContactIds.addAll(contactMap.values()) ;
-      
+      */
       String exportFormat = uiForm.getUIFormSelectBox(UIExportAddressBookForm.TYPE).getValue() ;
       String fileName = uiForm.getUIStringInput(UIExportAddressBookForm.NAME).getValue() ;
       if (ContactUtils.isEmpty(fileName)) {
@@ -158,8 +162,13 @@ public class UIExportAddressBookForm extends UIForm implements UIPopupComponent{
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-      OutputStream out = contactService.getContactImportExports(exportFormat).exportContact(username, listContactIds) ;
-
+      OutputStream out = contactService.getContactImportExports(exportFormat).exportContact(username, groupIds.toArray(new String[]{})) ;
+      if(out == null) {
+      	 uiApp.addMessage(new ApplicationMessage("UIExportAddressBookForm.msg.there-is-not-contacts-exists", null,
+           ApplicationMessage.WARNING)) ;
+         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+         return ;   
+      }
       String contentType = null;
       String extension = null;
       if (exportFormat.equals("x-vcard")) {

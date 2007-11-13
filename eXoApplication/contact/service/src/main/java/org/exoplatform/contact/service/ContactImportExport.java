@@ -15,5 +15,6 @@ import java.util.List;
  */
 public interface ContactImportExport {
   public void importContact(String username, InputStream input, String groupId) throws Exception ;
-  public OutputStream exportContact(String username, List<String> contactIds) throws Exception ;
+  public OutputStream exportContact(String username, List<Contact> contacts) throws Exception ;
+  public OutputStream exportContact(String username, String[] addressBookIds) throws Exception ;
 }

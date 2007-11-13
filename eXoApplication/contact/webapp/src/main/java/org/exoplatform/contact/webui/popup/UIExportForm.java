@@ -202,7 +202,11 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ; 
       }
-      OutputStream out = contactService.getContactImportExports(exportFormat).exportContact(username, contactIds) ;
+      List<Contact> contacts = new ArrayList<Contact>() ;
+      for(String contactId : contactIds) {
+      	contacts.add(uiForm.contactMap.get(contactId)) ;
+      }
+      OutputStream out = contactService.getContactImportExports(exportFormat).exportContact(username, contacts) ;
       String contentType = null;
       String extension = null;
       if(exportFormat.equals("x-vcard")){

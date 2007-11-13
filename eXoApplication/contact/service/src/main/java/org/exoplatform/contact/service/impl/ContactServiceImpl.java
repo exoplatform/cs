@@ -37,7 +37,7 @@ public class ContactServiceImpl implements ContactService {
       JCRRegistryService jcrRegistryService) throws Exception {
       storage_ = new JCRDataStorage(repositoryService, jcrRegistryService) ;
       
-      contactImportExport_.put(VCARD, new VCardImportExport()) ;
+      contactImportExport_.put(VCARD, new VCardImportExport(storage_)) ;
   }
   
   public List<Contact> getAllContact(String username) throws Exception {

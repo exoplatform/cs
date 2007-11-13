@@ -7,10 +7,14 @@ package org.exoplatform.contact.service.impl;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
+
+import javax.jcr.Node;
+import javax.jcr.RepositoryException;
 
 import net.wimpi.pim.Pim;
 import net.wimpi.pim.contact.basicimpl.SimpleExtension;
@@ -33,6 +37,7 @@ import net.wimpi.pim.util.versitio.versitException;
 
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactAttachment;
+import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.ContactImportExport;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.container.PortalContainer;
@@ -52,8 +57,45 @@ public class VCardImportExport implements ContactImportExport {
   private static String          eXoYahooId  = "EXO-YAHOOID";
   
   private static String ENCODING = "UTF-8";
-
-  public OutputStream exportContact(String username, List<String> contactIds) throws Exception {
+  private JCRDataStorage storage_ ;
+  
+  public VCardImportExport (JCRDataStorage storage) throws Exception{
+  	storage_ = storage ;
+  }
+  
+  public OutputStream exportContact(String username, String[] addressBookIds) throws Exception {
+  	List<Contact> contactList = new ArrayList<Contact>() ;
+  	List<String> privateAddress = new ArrayList<String> () ;
+  	List<String> publicAddress = new ArrayList<String> () ;
+  	for(String address : addressBookIds){
+  		Node contactGroupHome = storage_.getContactGroupHome(username) ;
+  		try {
+  			if(contactGroupHome.hasNode(address)) {
+    			privateAddress.add(address) ;
+    		}else {
+    			publicAddress.add(address) ;
+    		}
+  		}catch(RepositoryException re) {
+  			publicAddress.add(address) ;
+  		}  		
+  	}
+  	if(privateAddress.size() > 0) {
+  		ContactFilter filter = new ContactFilter() ;
+  		filter.setCategories(privateAddress.toArray(new String[]{})) ;
+  		contactList.addAll(storage_.getContactPageListByGroup(username, filter, false).getAll()) ;
+  	}
+  	if(publicAddress.size() > 0) {
+  		ContactFilter filter = new ContactFilter() ;
+  		filter.setCategories(publicAddress.toArray(new String[]{})) ;
+  		contactList.addAll(storage_.getContactPageListByGroup(username, filter, true).getAll()) ;
+  	}
+  	if(contactList.size() > 0) {
+  		return exportContact(username, contactList) ;
+  	}
+  	return null; 
+  }
+  
+  public OutputStream exportContact(String username, List<Contact> contacts) throws Exception {
 
     ContactIOFactory ciof = Pim.getContactIOFactory();
     ContactModelFactory cmf = Pim.getContactModelFactory();
@@ -63,18 +105,10 @@ public class VCardImportExport implements ContactImportExport {
     marshaller.setEncoding(ENCODING);
 
     // converting eXo contacts to Pim contacts
-    ContactService contactService = (ContactService) PortalContainer
-        .getComponent(ContactService.class);
-    int numberOfContacts = contactIds.size();
-    net.wimpi.pim.contact.model.Contact[] pimContacts = new net.wimpi.pim.contact.model.Contact[numberOfContacts];
-
-    Contact contact;
-    for (int i = 0; i < numberOfContacts; i++) {    
-      String contactId = contactIds.get(i) ;
-      contact = contactService.getContact(username, contactId);
-      if (contact == null) contact = contactService.getSharedContact(contactId) ;
+    net.wimpi.pim.contact.model.Contact[] pimContacts = new net.wimpi.pim.contact.model.Contact[contacts.size()];
+    int i = 0 ;
+    for (Contact contact : contacts) {    
       pimContacts[i] = cmf.createContact();
-
       // converting now from an eXo contact to PimContact
 
       // a personal identity
@@ -191,7 +225,7 @@ public class VCardImportExport implements ContactImportExport {
       pimContacts[i].setNote(contact.getNote());
 
       pimContacts[i].setCurrentRevisionDate(contact.getLastUpdated());
-
+      i++ ;
     }
 
     // The OutputStream that will be returned
@@ -200,7 +234,10 @@ public class VCardImportExport implements ContactImportExport {
 
     return out;
   }
-
+  
+  private OutputStream getOutputStream() throws Exception{
+  	return null ;
+  }
   public void importContact(String username, InputStream input, String groupId) throws Exception {
 
     ContactIOFactory ciof = Pim.getContactIOFactory();
