@@ -138,7 +138,7 @@ public class UIAddressBooks extends UIComponent {
             UIExportAddressBookForm.class, null, "UIExportAddressBookForm");
         ContactGroup[] groups = uiAddressBook.getGroups().toArray(new ContactGroup[] {}) ;
         List<String> sharedGroups = uiAddressBook.getSharedContactGroups() ;
-        if (sharedGroups == null || sharedGroups.size() == 0 || groups == null || groups.length == 0) {
+        if ((sharedGroups == null || sharedGroups.size() == 0) && (groups == null || groups.length == 0)) {
           UIApplication uiApp = uiAddressBook.getAncestorOfType(UIApplication.class) ;
           uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.no-addressbook", null,
             ApplicationMessage.WARNING)) ;

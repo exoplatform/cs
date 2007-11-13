@@ -51,7 +51,7 @@ import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
       @EventConfig(listeners = UIContactForm.SelectPermissionActionListener.class, phase=Phase.DECODE)
     }
 )
-public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
+public class UIContactForm extends UIFormTabPane implements UIPopupComponent, UISelector {
   public static Contact contact_ = null ;
   public static boolean isNew_ = true;
   public static final String FIELD_WORKADDRESS_INPUT = "workAddress";
@@ -171,7 +171,9 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
   public String[] getActions() { return new String[] {"Save", "Cancel"} ; }
   public void activate() throws Exception {}
   public void deActivate() throws Exception {}
-  
+  public void updateSelect(String selectField, String value) throws Exception {
+    getUIStringInput(selectField).setValue(value) ;
+  }
   public void setValues(Contact contact) throws Exception {
     contact_ = contact ;
     if(contact.isShared()) {
@@ -419,5 +421,7 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
     }
   }
+
+ 
   
 }

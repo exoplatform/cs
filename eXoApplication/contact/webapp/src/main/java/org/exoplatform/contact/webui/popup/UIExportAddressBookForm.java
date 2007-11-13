@@ -20,8 +20,10 @@ import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadResource;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
@@ -118,7 +120,13 @@ public class UIExportAddressBookForm extends UIForm implements UIPopupComponent{
       
       List<String> groupIds = uiForm.getCheckedGroups() ;
       int size = groupIds.size();
-
+      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+      if (size == 0) {
+        uiApp.addMessage(new ApplicationMessage("UIExportAddressBookForm.checkGroup-required", null,
+          ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;          
+      } 
       LinkedHashMap<String, String> contactMap = new LinkedHashMap<String, String> () ;
       for (int i=0; i<size; i++) {
         List<Contact> contacts = contactService.getContactPageListByGroup(username, groupIds.get(i)).getAll();
@@ -144,12 +152,17 @@ public class UIExportAddressBookForm extends UIForm implements UIPopupComponent{
       
       String exportFormat = uiForm.getUIFormSelectBox(UIExportAddressBookForm.TYPE).getValue() ;
       String fileName = uiForm.getUIStringInput(UIExportAddressBookForm.NAME).getValue() ;
-
+      if (ContactUtils.isEmpty(fileName)) {
+        uiApp.addMessage(new ApplicationMessage("UIExportAddressBookForm.fileName-required", null,
+            ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
       OutputStream out = contactService.getContactImportExports(exportFormat).exportContact(username, listContactIds) ;
-      
+
       String contentType = null;
       String extension = null;
-      if (exportFormat.indexOf("vcf") > 0) {
+      if (exportFormat.equals("x-vcard")) {
         contentType = "text/x-vcard";
         extension = ".vcf";
       }

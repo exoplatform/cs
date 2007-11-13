@@ -206,7 +206,7 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
       String contentType = null;
       String extension = null;
       if(exportFormat.equals("x-vcard")){
-    	contentType = "text/x-vcard";
+        contentType = "text/x-vcard";
         extension = ".vcf";
       }
       ByteArrayInputStream is = new ByteArrayInputStream(out.toString().getBytes()) ;
