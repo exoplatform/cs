@@ -6,8 +6,10 @@
 	Contact contact = uicomponent.getContact();
 	if(contact != null) {		
 %>
-<div class="UIContactPreview" id="$compId">
-	<div class="ContactPreviewBar">
+
+
+<div class="UIContactPreview" id="$compId" >
+	<div class="ContactPreviewBar" >
 		<div class="Subject">Contact Details</div>
 		<a class="MaximizeContactPane" title="Maximize Reading Pane"  href="<%=uicomponent.event("MaximizeContactPane")%>">
 		</a>
@@ -255,6 +257,7 @@
 			</div>
 		</div>
 <!--  End DecoratorBox ViewBoxStyle -->
+		
 	</div>
 </div>
 <%}%>
