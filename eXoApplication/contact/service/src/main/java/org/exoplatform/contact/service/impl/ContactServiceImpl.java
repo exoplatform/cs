@@ -133,6 +133,10 @@ public class ContactServiceImpl implements ContactService {
     storage_.addTag(username, contactIds, tags);
   }
   
+  public void addTag(String username, List<String> contactIds, String tagId) throws Exception {
+	  storage_.addTag(username, contactIds, tagId);
+  }
+  
   public Tag removeTag(String username, String tagName) throws Exception {
     return storage_.removeTag(username, tagName);
   }

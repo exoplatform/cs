@@ -774,6 +774,33 @@ public class JCRDataStorage implements DataStorage {
     return new DataPageList(contacts, 10, null, false) ;
   }
   
+  public void addTag(String username, List<String> contactIds, String tagId) throws Exception {
+    Map<String, String> tagMap = new HashMap<String, String> () ;
+    tagMap.put(tagId, tagId) ;
+    Node contactHomeNode = getContactHome(username);
+    Node publicContactHomeNode = getPublicContactHome();
+    Node contactNode = null ;
+    for(String contactId : contactIds) {  
+      if(contactHomeNode.hasNode(contactId)) {
+        contactNode = contactHomeNode.getNode(contactId) ;
+      } else if (publicContactHomeNode.hasNode(contactId)) {
+        contactNode = publicContactHomeNode.getNode(contactId);       
+      } 
+      if (contactNode != null) {
+        Value[] values = null ;
+        if(contactNode.hasProperty("exo:tags")){
+          values = contactNode.getProperty("exo:tags").getValues() ;
+          for(Value value : values) tagMap.put(value.getString(), value.getString()) ;         
+        }
+        contactNode.setProperty("exo:tags", tagMap.values().toArray(new String[]{})) ;
+        if (values != null)
+          for(Value value : values) tagMap.remove(value.getString()) ;
+      }      
+    }
+    contactHomeNode.getSession().save() ;
+    publicContactHomeNode.getSession().save();
+  }
+  
   public void addTag(String username, List<String> contactIds, List<Tag> tags) throws Exception {
     Node tagHomeNode = getTagHome(username);
     Map<String, String> tagMap = new HashMap<String, String> () ;
@@ -791,7 +818,7 @@ public class JCRDataStorage implements DataStorage {
     Node contactHomeNode = getContactHome(username);
     Node publicContactHomeNode = getPublicContactHome();
     Node contactNode = null ;
-    for(String contactId : contactIds) {      
+    for(String contactId : contactIds) {
       if(contactHomeNode.hasNode(contactId)) {
         contactNode = contactHomeNode.getNode(contactId) ;
       } else if (publicContactHomeNode.hasNode(contactId)) {
