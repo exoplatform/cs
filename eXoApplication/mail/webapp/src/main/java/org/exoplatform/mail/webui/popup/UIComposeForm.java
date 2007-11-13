@@ -142,7 +142,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
 
     addUIFormInput(inputSet) ;
     //addUIFormInput(new UIFormTextAreaInput(FIELD_MESSAGECONTENT, null, null)) ;
-    addUIFormInput(new UIFormWYSIWYGInput(FIELD_MESSAGECONTENT, null, null));
+    addUIFormInput(new UIFormWYSIWYGInput(FIELD_MESSAGECONTENT, null, null, true));
     setPriority(Utils.PRIORITY_NORMAL);
   }
 
