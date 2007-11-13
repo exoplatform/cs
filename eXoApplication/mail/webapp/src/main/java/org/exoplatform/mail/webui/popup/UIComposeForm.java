@@ -144,6 +144,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
       removeAction.setActionListener("RemoveAttachment") ;
       removeAction.setActionName(ACT_REMOVE);
       removeAction.setActionParameter(attachdata.getId());
+      removeAction.setCssIconClass("LabelLink");
       removeAction.setActionType(ActionData.TYPE_LINK) ;
       uploadedFiles.add(removeAction) ;
     }

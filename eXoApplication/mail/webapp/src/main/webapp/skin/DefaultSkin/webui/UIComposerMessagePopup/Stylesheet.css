@@ -108,6 +108,24 @@
 .UIMessageCompose .UIForm .HorizontalLayout td {
 	border: none;
 }	
+
+.UIMessageCompose .UIForm .HorizontalLayout .FieldCCAndBCC {
+	padding: 6px 0px 2px 0px;
+	width: 165px;
+}
+
+.UIMessageCompose .UIForm .HorizontalLayout .FieldCCAndBCC .LabelLink {
+	color: #2A82C6;
+}
+
+.UIMessageCompose .UIForm .HorizontalLayout .FieldCCAndBCC a {
+	color: #2A82C6;
+}
+
+.UIMessageCompose .UIForm .HorizontalLayout .FieldCCAndBCC a:hover {
+	color: #058ee6;
+}
+	
 	
 .UIMessageCompose .UIForm .HorizontalLayout {
 	padding: 10px 0px;
@@ -119,11 +137,20 @@
 }
 
 .UIMessageCompose .UIForm .HorizontalLayout select {
-	width: 90%;
+	width: 98%;
+}
+
+.UIMessageCompose .UIForm .HorizontalLayout .FieldLabel .HoverButton {
+	line-height: 21px; width: 71px; height: 21px; float: right;
+}
+
+.UIMessageCompose .UIForm .HorizontalLayout .FieldLabel a:hover {
+	background: url('background/ButtonMail.gif') no-repeat;
+	width: 71px; height: 21px;
 }
 
 .UIMessageCompose .UIForm .HorizontalLayout textarea {
-	width: 95%; height: 40px; 
+	width: 90%; height: 40px; 
 	font-family: tahoma;
 }
 
