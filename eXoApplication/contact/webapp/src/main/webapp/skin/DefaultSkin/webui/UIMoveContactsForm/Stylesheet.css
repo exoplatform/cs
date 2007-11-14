@@ -30,3 +30,16 @@
 .UIMoveContactsForm .MoveContactsFormContainer .ItemList .Icon {
 	padding-left: 24px;
 }
+
+#UIMoveContactsForm .UIForm {
+	background: #f3f3f3;
+	padding: 10px 0px;
+}
+
+#UIMoveContactsForm .UIForm .HorizontalLayout {
+	border: none;
+}
+
+#UIMoveContactsForm .move .UIFormGrid td.FieldLabel {
+	width: 175px;
+}

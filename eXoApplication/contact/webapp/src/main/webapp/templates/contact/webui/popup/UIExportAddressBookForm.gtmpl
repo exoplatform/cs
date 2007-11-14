@@ -19,7 +19,7 @@
   				<thead>
   					<tr>
   			      <th style="text-align: left; padding-left: 7px;" class="text"><input type="checkbox" class="checkbox" title="Check all" value="4"/></th>
-  		        <th style="width: 80%; padding-left: 7px;" class="text">
+  		        <th style="width: 91%; padding-left: 7px;" class="text">
   		        	<div> Name </div>
   		        </th>
   	 	      </tr>

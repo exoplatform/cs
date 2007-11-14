@@ -24,21 +24,21 @@
 	</div>
 	
 	<div class="UIAction"> 
-        <table class="ActionContainer" align="center">
-        	<tr>
-        		<td align="center">
-          		<a href="<%=uicomponent.event("Cancel")%>" class="ActionButton LightBlueStyle">
-                <div class="ButtonLeft">
-                  <div class="ButtonRight">
-                    <div class="ButtonMiddle">
-                      <%=_ctx.appRes(uicomponent.getName() + ".action.Cancel")%>
-                    </div>
-                  </div>
-                </div>
-           		</a>      
-          	</td>
-          </tr>  
-        </table>
+		<table class="ActionContainer" align="center">
+			<tr>
+				<td align="center">
+		  		<a href="<%=uicomponent.event("Cancel")%>" class="ActionButton LightBlueStyle">
+		        <div class="ButtonLeft">
+		          <div class="ButtonRight">
+		            <div class="ButtonMiddle">
+		              <%=_ctx.appRes(uicomponent.getName() + ".action.Cancel")%>
+		            </div>
+		          </div>
+		        </div>
+		   		</a>      
+		  	</td>
+		  </tr>  
+		</table>
   </div>
 
 </div>
@@ -55,8 +55,12 @@
 			        for(field in uiform.getChildren()) { 
 			          if(field.isRendered()) {
 			      %>
+			      			<tr>
+			      				<td class="FieldLabel" style="font-weight:bold; line-height:25px; padding-left:25px; text-align:left;">
+			              	<%=uicomponent.getLabel(field.getName())%>
+			              </td>
+			            </tr>
 		              <tr>
-			              <%fieldName = uicomponent.getLabel(field.getName());%>
 			              <%//TODO: Tung.Pham modified
 			              	//if(!fieldName.equals(uicomponent.getId())) {
 			              	if(fieldName != null && fieldName.length() > 0 && !fieldName.equals(uicomponent.getId())) {
