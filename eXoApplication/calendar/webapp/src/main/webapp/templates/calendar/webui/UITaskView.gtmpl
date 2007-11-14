@@ -72,7 +72,7 @@
 												<%=task.getSummary()%>
 											</a>	
 		  							</td>
-										<td class="text"><%=task.getPriority()%></td>
+										<td class="text"><%=uicomponent.getPriority(task.getPriority())%></td>
 										<td class="text"><%=task.getEventState()%></td>
 										<td class="text">
 										<%

@@ -113,6 +113,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   final public static Map<Integer, String> monthsName_ = new HashMap<Integer, String>() ;
   private Map<Integer, String> daysMap_ = new LinkedHashMap<Integer, String>() ;
   private Map<Integer, String> monthsMap_ = new LinkedHashMap<Integer, String>() ;
+  private Map<String, String> priorityMap_ = new HashMap<String, String>() ;
   abstract LinkedHashMap<String, CalendarEvent> getDataMap() ;
 
   public UICalendarView() throws Exception{
@@ -130,6 +131,11 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       j++ ;
     }
     applySeting() ;
+    int p = 1 ;
+    for(String s : CalendarEvent.PRIORITY) {
+      priorityMap_.put(String.valueOf(p), s) ;
+      p ++ ;
+    }
   }
   public void applySeting() throws Exception {
     try {
@@ -408,6 +414,9 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
     }
     return "" ;
   }
+  public String getPriority(String key) {
+    return priorityMap_.get(key) ;
+  }
   static  public class AddEventActionListener extends EventListener<UICalendarView> {
     public void execute(Event<UICalendarView> event) throws Exception {
       UICalendarView uiForm = event.getSource() ;
@@ -559,6 +568,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       } else if(calType.equals(CalendarUtils.PUBLIC_TYPE)) {
         eventCalendar = calendarService.getGroupEvent(calendarId, eventId) ;
       }*/
+      System.out.println("\n\n " + eventCalendar.getEventType());
       if(eventCalendar != null) {
         if(CalendarEvent.TYPE_EVENT.equals(eventCalendar.getEventType())) {
           uiPopupContainer.setId(UIPopupContainer.UIEVENTPOPUP) ;

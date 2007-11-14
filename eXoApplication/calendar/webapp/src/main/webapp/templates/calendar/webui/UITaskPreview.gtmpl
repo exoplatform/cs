@@ -55,7 +55,7 @@ uiform.begin() ;
 			        					</tr>	
 			        					<tr>
 			        						<td class="Text">Priority:     </td>
-			        						<td class="Text"><%=task.getPriority()%></td>
+			        						<td class="Text"><%=uicomponent.getPriority(task.getPriority())%></td>
 			        					</tr>	
 			        					<tr>
 			        						<td class="Text">Start Date:    </td>
