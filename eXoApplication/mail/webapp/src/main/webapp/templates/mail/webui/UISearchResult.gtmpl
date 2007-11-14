@@ -1,0 +1,245 @@
+<%
+ import org.exoplatform.mail.service.Message;
+ import org.exoplatform.mail.service.Utils; 
+ import org.exoplatform.mail.service.MessagePageList;
+ import org.exoplatform.mail.MailUtils;
+ String compId = uicomponent.getId() ;
+%>
+
+<% /*Start Message Action Bar*/ %>
+<%uiform.begin()%>  
+  <div class="UIMessageActionsBar">
+  <div class="UIMessagePageList">
+    <div class="MailIteratorContainer">
+      <div class="RightPageIteratorBlock">
+        <%
+          MessagePageList pageList = uicomponent.getMessagePageList();
+          String cssPreviousPage = "FloatBlockHidden";
+          String cssNextPage = "FloatBlockHidden";
+          long currentPage = 1;
+          String mailRange = "there is no message";
+          if (pageList != null && (uicomponent.getMessageList().size() != 0)) {
+            currentPage = pageList.getCurrentPage();
+            if (currentPage > 1) cssPreviousPage = "FloatBlock";
+            if (currentPage < pageList.getAvailablePage()) cssNextPage = "FloatBlock";
+            long fromIndex = (pageList.getCurrentPage()-1)* pageList.getPageSize() + 1;
+            long endIndex = fromIndex + pageList.getPageSize();
+            if (pageList.getCurrentPage() == pageList.getAvailablePage()) endIndex = pageList.getAvailable();
+            mailRange = fromIndex + " to " + endIndex + " of " + pageList.getAvailable();
+          }         
+        %>
+        <a title="First Page" class="$cssPreviousPage FirstPageArrow" href="<%=uicomponent.event("FirstPage")%>"/></a>        
+        <a title="Previous Page" class="$cssPreviousPage PreviousPageArrow" href="<%=uicomponent.event("PreviousPage")%>"></a>
+        <div class="Number">$currentPage</div>
+        <a title="Next Page" class="$cssNextPage NextPageArrow" href="<%=uicomponent.event("NextPage")%>"/></a>
+        <a title="Last Page" class="$cssNextPage LastPageArrow" href="<%=uicomponent.event("LastPage")%>"><span/></a>
+        <div style="clear: left;"><span/></div>
+      </div>
+      <div class="LeftPageIteratorBlock">
+        <div class="TotalPages">Message(s) <span class="MailQuantity"> $mailRange </span></div>
+      </div>
+      <div style="clear: right;"><span></span></div>
+    </div>
+  </div>
+  <div style="clear: left;"><span/></div>
+  </div>
+  
+  <% /*End Message Action Bar*/ %>
+  
+  <% /*Popup menu for the message*/ %>
+  <div class="UIRightClickPopupMenu" id="UIMessagePopupMenu" eXoCallback="eXo.mail.UIMailPortlet.msgPopupMenuCallback">
+    <div class="UIContextMenuContainer">
+      <div class="TopLeftRightClickPopupMenu" id="test">
+        <div class="TopRightRightClickPopupMenu">
+          <div class="TopCenterRightClickPopupMenu"><span></span></div>
+        </div>
+      </div>
+      
+      <div class="MiddleLeftRightClickPopupMenu">
+        <div class="MiddleRightRightClickPopupMenu">
+          <div class="UIRightPopupMenuContainer">
+            <a class="MenuItem" href="<%=uicomponent.event("Open", "id")%>">   
+              <div class="ItemIcon OpenMailIcon"> Open </div>
+            </a>
+            <a class="MenuItem" href="<%=uicomponent.event("Print", "id")%>">   
+              <div class="ItemIcon PrintMailIcon"> Print </div>
+            </a>
+            <a class="MenuItem" href="<%=uicomponent.event("Reply", "id")%>">   
+              <div class="ItemIcon ReplyMailIcon"> Reply to Sender</div>
+            </a>  
+            <a class="MenuItem" href="<%=uicomponent.event("ReplyAll", "id")%>">   
+              <div class="ItemIcon ReplyAllMailIcon"> Reply to All </div>
+            </a>
+            <a class="MenuItem" href="<%=uicomponent.event("Forward", "id")%>">   
+              <div class="ItemIcon ForwardMailIcon"> Forward </div>
+            </a>
+            <a class="MenuItem" href="<%=uicomponent.event("MoveMessages", "id")%>">   
+              <div class="ItemIcon MoveMailIcon"> Move to Folder </div>
+            </a>
+            <a class="MenuItem" href="<%=uicomponent.event("AddTag", "id")%>">   
+              <div class="ItemIcon TagMailIcon"> Tag </div>
+            </a>          
+            <a class="MenuItem" href="<%=uicomponent.event("Delete", "id")%>">   
+              <div class="ItemIcon DeleteMailIcon"> Delete </div>
+            </a>
+            <a class="MenuItem" href="<%=uicomponent.event("AddContact", "id")%>">   
+              <div class="ItemIcon AddContactIcon"> Add Sender to Contacts </div>
+            </a>
+            <a class="MenuItem" href="<%=uicomponent.event("Export", "id")%>">   
+            <div class="ItemIcon ExportIcon"> Export (*.eml) </div>
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="BottomLeftRightClickPopupMenu">
+        <div class="BottomRightRightClickPopupMenu">
+          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+        </div>
+      </div>           
+    </div>
+  </div>  
+  <% /* End popup menu for the message*/ %>
+  
+  <%if (uicomponent.getMessageList().size() > 0) {%>
+  <div class="UIMessageList" >
+  	<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
+    	<thead>
+    		<tr>
+    			<th style="width: 20px; padding-left: 7px; " class="Border"><input type="checkbox" class="checkbox" title="Check all" value="4" onclick="eXo.mail.UIMailPortlet.checkAll(this);"/></th>
+    			<th style="width: 24px;"><div class="StarredIcon" title="Add star for this message"><span></span></div></th>
+    		  <th style="padding-left: 8px; width: 20%;">
+    		    <%
+    		      String sortedBySender = uicomponent.event("Sort",Utils.EXO_FROM);
+              String classArrowFrom = "";
+              if (uicomponent.getSortedBy().equals(Utils.EXO_FROM)) {
+                if (uicomponent.isAscending()) classArrowFrom = "UpArrow1Icon";
+                else classArrowFrom = "DownArrow1Icon"
+              }
+    		    %>
+    		  	<a href = "$sortedBySender"><div class="$classArrowFrom" title="Sort by sender">Sender</div></a>
+    		  </th>
+    		  <th style="width: 24px;">
+    		    <a hreft = ""><div class="AttachmentIcon" title="Attchments"><span></span></div></a>
+    		  </th>
+    		  <th style="width: 24px; border-right: 1px solid #f8f8f8;"></th>
+   	      <th style="padding-left: 8px;">
+       	   <%
+             String sortedBySubject = uicomponent.event("Sort",Utils.EXO_SUBJECT);
+           	   String classArrowSubject = "";
+               if (uicomponent.getSortedBy().equals(Utils.EXO_SUBJECT)) {
+                 if (uicomponent.isAscending()) classArrowSubject = "UpArrow1Icon";
+                 else classArrowSubject = "DownArrow1Icon"
+               }
+           %>
+    		  	<a href = "$sortedBySubject"><div class="$classArrowSubject" title="Sort by subject">Subject</div></a>
+    		  </th>
+   	      <th style="width: 24px;"><div class="TotalMessageIcon" title="Total message(s) in conversation"><span></span></div></th>
+   	      <th style="width: 120px; padding-left: 8px;">
+         	  <%
+         	     String sortedByReceivedDate = uicomponent.event("Sort",Utils.EXO_RECEIVEDDATE);
+             	  String classArrowDate = "";
+                if (uicomponent.getSortedBy().equals(Utils.EXO_RECEIVEDDATE)) {
+                  if (uicomponent.isAscending()) classArrowDate = "UpArrow1Icon";
+                  else classArrowDate = "DownArrow1Icon"
+                }
+            %>
+    		    <a href = "$sortedByReceivedDate"><div class="$classArrowDate" title="Sort by Date & time">Date & Time</div></a>
+   	      </th>
+   	      <th style="width: 50px; padding-left: 8px;">
+       	    <%
+               String sortedBySize = uicomponent.event("Sort",Utils.EXO_SIZE);
+       	       String classArrowSize = "";
+       	       if (uicomponent.getSortedBy().equals(Utils.EXO_SIZE)) {
+       	         if (uicomponent.isAscending()) classArrowSize = "UpArrow1Icon";
+       	         else classArrowSize = "DownArrow1Icon"
+       	       }
+            %>
+   	        <a href = "$sortedBySize"><div class="$classArrowSize" title="Sort by Size">Size</div></a>
+   	      </th>
+   	      <th style="width: 30px;">
+       	    <%
+               String sortedByPriority = uicomponent.event("Sort",Utils.EXO_PRIORITY);
+            %>
+   	        <a href = "$sortedByPriority"><div class="PriorityIcon" title="Sort by Priority"><span></span></div></a>
+   	      </th>
+    	 	</tr>
+    	</thead>
+    	<tbody>
+    	<%
+        int i = 0;
+  			for(Message msg : uicomponent.getMessageList()) {
+  			  String actionLink = uicomponent.event("SelectMessage", msg.getId());
+  			  checkboxField = uicomponent.getChildById(msg.getId());
+  			  String actionAddStar = uicomponent.event("AddStar", msg.getId());
+  			  String selectedClass = "OddItem" ;
+          if ((i%2) == 1) selectedClass = "EvenItem";
+          String readStatus = "ReadItem" ;
+          if (msg.isUnread()) readStatus = "UnreadItem" ;
+  			  if (msg.getId().equals(uicomponent.getSelectedMessageId())) selectedClass = "SelectedItem" ;
+          String starClass = "UnStarredIcon" ;
+          if (msg.hasStar()) starClass = "StarredIcon";
+  		%>
+      
+  		<tr class="MessageItem $selectedClass" msgId="<%=msg.getId()%>">
+  	  		<td onclick="eXo.mail.UIMailPortlet.selectItem(this);">
+            <%
+  	  		    if (checkboxField != null) uicomponent.renderField(checkboxField);
+  	  		  %>
+  	  		</td>
+  				<td style="padding: 0px auto;"><a href="$actionAddStar" ><div class="$starClass"><span></span></div></a></td>
+          <td class="$readStatus"><a href="$actionLink"><%=Utils.getPersonal(Utils.getInternetAddress(msg.getFrom())[0])%><a></td>
+  				<td style="padding: 0px auto;">
+  				  <% 
+  				    if (msg.getAttachments().size() > 0) {
+  				  %>
+  				  <a href="$actionLink"><div class="AttachmentIcon"><span></span></div></a>
+  				  <%}%>
+  				</td>
+  				<td style="padding: 0px; border-right: 1px solid #ffffff;">
+  				  <% 
+              if (msg.getTags() != null && msg.getTags().length > 0) {
+                String colorCss = uicomponent.getFirstTag(msg).getColor() + "Tag"; 
+                String title = uicomponent.getAllTagName(msg);
+            %>
+              <a href="$actionLink" title="$title"><div class="IconTag $colorCss"><span></span></div></a>
+            <%}%>
+  				</td>
+  				<td class="$readStatus"><a href="$actionLink"><%=msg.getSubject()%></a></td>
+  				<td class="text">(5)</td>
+  				<td class="$readStatus">
+  				  <a href="$actionLink">
+  				    <%if (msg.getReceivedDate() != null) { %>
+  				      <%=Utils.formatDate('MMM dd, yyyy HH:mm aaa', msg.getReceivedDate())%>
+  				    <%} else if (msg.getSendDate() != null){%>
+  				      <%=Utils.formatDate('MMM dd, yyyy HH:mm aaa', msg.getSendDate())%>
+  				    <%}%>
+  				  </a>
+  				</td>
+  				<td class="$readStatus"><a href="$actionLink">
+  				   <%
+  				     if (msg.getSize() > 1024) {
+  				   %> 
+  				       <%=(int)(msg.getSize()/1024)%> KB
+  				   <%
+  				     } else {   				   
+  				   %> 
+  				     <%=msg.getSize()%> B
+  				   <%}%>
+  				</a></td>
+  				<%
+  				  String priClass = "";
+  				  if (msg.getPriority().equals(Utils.PRIORITY_LOW)) priClass = "LowPriority";
+  				  else if (msg.getPriority().equals(Utils.PRIORITY_NORMAL)) priClass = "NormalPriority";
+  				  else if (msg.getPriority().equals(Utils.PRIORITY_HIGH)) priClass = "HighPriority";
+  				%>
+  				<td style="padding: 0px;" ><div class="text $priClass" title ><span></span></div></td>
+     	 </tr>
+  		<% i++; }%>
+    	</tbody>
+  	</table>
+  </div>
+  <% } else {%>
+    <div class="MessageNotice SpliterResizableListArea" id="uiMessageListResizableArea">There are no messages !</div>
+  <%}%>
+<%uiform.end()%>    

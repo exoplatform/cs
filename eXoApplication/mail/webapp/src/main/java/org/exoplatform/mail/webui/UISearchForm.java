@@ -10,7 +10,6 @@ import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.popup.UIAdvancedSearchForm;
 import org.exoplatform.mail.webui.popup.UIPopupAction;
-import org.exoplatform.mail.webui.popup.UIPopupActionContainer;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -85,11 +84,7 @@ public class UISearchForm extends UIForm {
       UISearchForm uiSearchForm = event.getSource() ;
       UIMailPortlet uiPortlet = uiSearchForm.getAncestorOfType(UIMailPortlet.class) ;
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
-      UIPopupActionContainer uiPopupContainer = uiPopupAction.activate(UIPopupActionContainer.class, 850) ;
-      uiPopupContainer.setId("UIAdvancedSearch");
-      
-      UIAdvancedSearchForm uiAdvancedSearchForm = uiPopupContainer.createUIComponent(UIAdvancedSearchForm.class, null, null);          
-      uiPopupContainer.addChild(uiAdvancedSearchForm) ;      
+      uiPopupAction.activate(UIAdvancedSearchForm.class, 600);    
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;     
     }
   } 

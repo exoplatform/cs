@@ -49,7 +49,7 @@ public class UIFolderContainer extends UIContainer {
   }
 
   public String getSelectedFolder(){ return currentFolder_ ; }
-  protected void setSelectedFolder(String folderId) { currentFolder_ = folderId ;}
+  public void setSelectedFolder(String folderId) { currentFolder_ = folderId ;}
   
   public List<Folder> getDefaultFolders() throws Exception{
     return getFolders(false);

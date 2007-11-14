@@ -12,6 +12,7 @@ import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MessageFilter;
+import org.exoplatform.mail.webui.UIFolderContainer;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UIMessageArea;
 import org.exoplatform.mail.webui.UIMessageList;
@@ -36,7 +37,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
  */
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
-    template =  "system:/groovy/webui/form/UIForm.gtmpl",
+    template =  "app:/templates/mail/webui/UIAdvancedSearchForm.gtmpl",
     events = {
       @EventConfig(listeners = UIAdvancedSearchForm.SearchActionListener.class), 
       @EventConfig(listeners = UIAdvancedSearchForm.CancelActionListener.class),
@@ -128,12 +129,11 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
       UIAdvancedSearchForm uiSearchForm = event.getSource() ;   
       UIMailPortlet uiPortlet = uiSearchForm.getAncestorOfType(UIMailPortlet.class);
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);      
-      UIPopupAction uiPopup = uiSearchForm.getAncestorOfType(UIPopupAction.class) ; 
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       MailService mailService = uiPortlet.getApplicationComponent(MailService.class);
       
-      MessageFilter filter = new MessageFilter("Advance Search");
+      MessageFilter filter = new MessageFilter("Search");
       filter.setAccountId(accountId);
       String selectedFolderId = uiSearchForm.getSelectedFolder();
       if (selectedFolderId != null && selectedFolderId != "") {
@@ -143,10 +143,16 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
       filter.setEmailFrom(uiSearchForm.getFieldEmailFrom());
       filter.setSubject(uiSearchForm.getSubject());
       filter.setBody(uiSearchForm.getMessageBody());     
+      uiMessageList.setSelectedFolderId(null);
+      uiMessageList.setSelectedTagId(null);
+      uiMessageList.setMessageFilter(filter);
 
       uiMessageList.setMessagePageList(mailService.getMessages(username, filter));
       uiMessageList.updateList();
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup);
+      UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
+      uiFolderContainer.setSelectedFolder(null);
+      uiPortlet.cancelAction();
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
   }
