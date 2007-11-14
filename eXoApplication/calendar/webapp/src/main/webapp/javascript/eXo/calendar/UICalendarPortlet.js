@@ -700,8 +700,11 @@ UICalendarPortlet.prototype.monthViewCallback = function(evt){
 	var objectValue = "" ;
 	var links = eXo.core.DOMUtil.findDescendantsByTagName(UIContextMenu.menuElement, "a") ;
 	if (!DOMUtil.findAncestorByClass(src, "EventBoxes")) {
-		if (objectValue = DOMUtil.findAncestorByTagName(src,"td").getAttribute("currentDate")){
-			UIContextMenu.changeAction(UIContextMenu.menuElement,objectValue) ;
+		if (objectValue = DOMUtil.findAncestorByTagName(src,"td").getAttribute("startTime")){
+			var map = {
+    "startTime\s*=\s*[A-Za-z0-9_]*(?=&|'|\")":"startTime=" + objectValue
+   } ;
+   UIContextMenu.changeAction(UIContextMenu.menuElement,map) ;
 		}
 	} else if (objvalue = DOMUtil.findAncestorByClass(src, "EventBoxes")) {
 		var eventId = objvalue.getAttribute("eventId") ;
