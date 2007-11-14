@@ -106,7 +106,6 @@ public class UIMonthView extends UICalendarView {
       dataMap_.put(ce.getId(), ce) ;
       eventIter.remove() ;
     }
-    System.out.println("\n\n weeks in getFirstDayOfWeek " + calendar_.getFirstDayOfWeek()) ;
   }
 
   protected void addCalendarId(String id) {calendarIds_.put(id,id) ;}
