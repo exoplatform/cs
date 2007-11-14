@@ -76,7 +76,7 @@
 							  dayActionLink = uicomponent.TYPE_DATE +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"="+ cl.get(Calendar.MONTH)+"&"+ uicomponent.DAY + "=" +  cl.get(Calendar.DATE) ;
 							  actionLink =  uicomponent.event("GotoDate",dayActionLink) ;
 						%>
-							<th>
+							<th startTime="<%=cl.getTimeInMillis()%>">
 							<a href="$actionLink">
 								$dayName, $date / $monthName
 							</a>
