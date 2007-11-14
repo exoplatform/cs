@@ -16,6 +16,7 @@
  	String linkDayNext = uicomponent.event(uicomponent.ACT_NEXT) ;
  	String linkDayPrevious = uicomponent.event(uicomponent.ACT_PREVIOUS) ;
  	yearViewAction = uicomponent.TYPE_YEAR +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"="+ currentMonth +"&"+ uicomponent.DAY + "=1" ;
+	Calendar calendar = uicomponent.getCurrentCalendar() ;
 	%>
 		
 	<div class="UIMonthView">

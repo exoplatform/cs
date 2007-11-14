@@ -66,8 +66,8 @@ public class UIDayView extends UICalendarView {
     System.out.println("\n\n>>>>>>>>>> DAY VIEW") ;
     eventData_.clear() ;
     allDayEvent_.clear() ;
-    Calendar begin = getCurrentDayBegin() ;
-    Calendar end = getCurrentDayEnd() ;
+    Calendar begin = getBeginDay(new GregorianCalendar(getCurrentYear(), getCurrentMonth(), getCurrentDay())) ;
+    Calendar end = getEndDay(new GregorianCalendar(getCurrentYear(), getCurrentMonth(), getCurrentDay())) ;
     List<CalendarEvent> events = new ArrayList<CalendarEvent>() ;
     CalendarService calendarService = getApplicationComponent(CalendarService.class) ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
@@ -83,35 +83,36 @@ public class UIDayView extends UICalendarView {
         iter.remove() ;
       } 
     }
+    iter = events.iterator() ;
+    while (iter.hasNext()) {
+      CalendarEvent ce = iter.next() ;
+      if(ce.getFromDateTime().equals(begin.getTime()) && ce.getToDateTime().before(end.getTime())) {
+        eventData_.put(ce.getId(), ce) ;
+        iter.remove() ;
+      } 
+    }
+    iter = events.iterator() ;
+    while (iter.hasNext()) {
+      CalendarEvent ce = iter.next() ;
+      if(ce.getFromDateTime().after(begin.getTime()) && ce.getToDateTime().equals(end.getTime())) {
+        eventData_.put(ce.getId(), ce) ;
+        iter.remove() ;
+      } 
+    }
     for(CalendarEvent ce : events){
       allDayEvent_.put(ce.getId(), ce) ;
-    }
+    } 
   }
   protected Map<String, CalendarEvent> getEventData() {return eventData_ ;}
   protected Map<String, CalendarEvent> getAllDayEvents() {return allDayEvent_ ;} ;
 
-  protected Calendar getCurrentDayBegin() {
-    Calendar fromDate = new GregorianCalendar(getCurrentYear(), getCurrentMonth(), getCurrentDay()) ;
-    fromDate.set(Calendar.HOUR, 0) ;
-    fromDate.set(Calendar.MINUTE, 0) ;
-    return fromDate ;
-  }
-
-  protected Calendar getCurrentDayEnd()  {
-    Calendar toDate = new GregorianCalendar(getCurrentYear(), getCurrentMonth(), getCurrentDay()) ;
-    toDate.set(Calendar.HOUR, 0) ;
-    toDate.set(Calendar.MINUTE, 0) ;
-    toDate.add(Calendar.DATE, 1) ;
-    return toDate ;
-  }
-  
   public LinkedHashMap<String, CalendarEvent> getDataMap() {
     LinkedHashMap<String, CalendarEvent> dataMap = new LinkedHashMap<String, CalendarEvent>() ;
     dataMap.putAll(eventData_) ;
     dataMap.putAll(allDayEvent_) ;
     return dataMap ;
   }
-  
+
   static  public class MoveNextActionListener extends EventListener<UIDayView> {
     public void execute(Event<UIDayView> event) throws Exception {
       UIDayView calendarview = event.getSource() ;
@@ -147,7 +148,7 @@ public class UIDayView extends UICalendarView {
 
           int hoursEnd = (Integer.parseInt(endTime)/60) ;
           int minutesEnd = (Integer.parseInt(endTime)%60) ;
-          
+
           Calendar fromDateTime = new GregorianCalendar(calendarview.getCurrentYear(), calendarview.getCurrentMonth(), calendarview.getCurrentDay()) ;
           fromDateTime.set(Calendar.HOUR, hoursBg) ;
           fromDateTime.set(Calendar.MINUTE, minutesBg) ;

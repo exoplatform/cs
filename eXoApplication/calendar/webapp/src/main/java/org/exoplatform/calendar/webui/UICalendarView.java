@@ -765,12 +765,12 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       UICalendarPortlet uiPortlet = calendarview.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
       UIQuickAddEvent uiQuickAddEvent = uiPopupAction.activate(UIQuickAddEvent.class, 600) ;
-      if(CalendarEvent.TYPE_EVENT.equals(type)) {
-        uiQuickAddEvent.setEvent(true) ;
-        uiQuickAddEvent.setId("UIQuickAddEvent") ;
-      } else {
+      if(CalendarEvent.TYPE_TASK.equals(type)) {
         uiQuickAddEvent.setEvent(false) ;
         uiQuickAddEvent.setId("UIQuickAddTask") ;
+      } else {
+        uiQuickAddEvent.setEvent(true) ;
+        uiQuickAddEvent.setId("UIQuickAddEvent") ;
       }
       try {
         Long.parseLong(startTime) ;

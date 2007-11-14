@@ -229,22 +229,29 @@ public class UIWeekView extends UICalendarView {
       } else if(calType.equals(CalendarUtils.PUBLIC_TYPE)) {
         eventCalendar = calendarService.getGroupEvent(calendarId, eventId) ;
       }
-      Calendar cal = GregorianCalendar.getInstance() ;
-      cal.setTimeInMillis(Long.parseLong(currentDate)) ;
-
+      Calendar calBegin = GregorianCalendar.getInstance() ;
+      Calendar calEnd = GregorianCalendar.getInstance() ;
+      calBegin.setTimeInMillis(Long.parseLong(currentDate)) ;
+      calEnd.setTimeInMillis(Long.parseLong(currentDate)) ;
+      
+      System.out.println("\n\n date " + calBegin.getTime());
       int hoursBg = (Integer.parseInt(startTime)/60) ;
       int minutesBg = (Integer.parseInt(startTime)%60) ;
+      
       int hoursEnd = (Integer.parseInt(finishTime)/60) ;
       int minutesEnd = (Integer.parseInt(finishTime)%60) ;
-
-      cal.set(Calendar.HOUR, hoursBg) ;
-      cal.set(Calendar.MINUTE, minutesBg) ;
-      eventCalendar.setFromDateTime(cal.getTime()) ;
-
-      cal.set(Calendar.HOUR, hoursEnd) ;
-      cal.set(Calendar.MINUTE, minutesEnd) ;
-      eventCalendar.setToDateTime(cal.getTime()) ;
-
+      calBegin.set(Calendar.AM_PM, Calendar.AM) ;
+      calBegin.set(Calendar.HOUR, hoursBg) ;
+      calBegin.set(Calendar.MINUTE, minutesBg) ;
+      eventCalendar.setFromDateTime(calBegin.getTime()) ;
+      
+      System.out.println("\n\n start time = " + calBegin.getTime());
+      calEnd.set(Calendar.AM_PM, Calendar.AM) ;
+      calEnd.set(Calendar.HOUR, hoursEnd) ;
+      calEnd.set(Calendar.MINUTE, minutesEnd) ;
+      eventCalendar.setToDateTime(calEnd.getTime()) ;
+      
+      System.out.println("\n\n end time = )" + calEnd.getTime());
       if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
         calendarService.saveUserEvent(username, calendarId, eventCalendar, false) ;
       }else if(calType.equals(CalendarUtils.SHARED_TYPE)){

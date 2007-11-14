@@ -983,7 +983,7 @@ UISelection.prototype.clear = function() {
 		startTime = parseInt(UISelection.startTime) - UISelection.block.offsetHeight*60*1000 +  UISelection.step*60*1000 ;
 		endTime = parseInt(UISelection.startTime) + UISelection.step*60*1000 ;
 	}
-	eXo.webui.UIForm.submitEvent(UISelection.viewType ,'QuickAdd','&objectId=event&startTime=' + startTime + '&finishTime=' + endTime) ;		
+	eXo.webui.UIForm.submitEvent(UISelection.viewType ,'QuickAdd','&objectId=Event&startTime=' + startTime + '&finishTime=' + endTime) ;		
 	eXo.core.DOMUtil.listHideElements(UISelection.block) ;
 	document.onmousemove = null ;
 	document.onmouseup = null ;
