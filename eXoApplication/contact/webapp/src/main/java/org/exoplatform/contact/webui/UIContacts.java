@@ -341,7 +341,6 @@ public class UIContacts extends UIForm implements UIPopupComponent {
     public void execute(Event<UIContacts> event) throws Exception {
       UIContacts uiContacts = event.getSource();
       String contactId = event.getRequestContext().getRequestParameter(OBJECTID);
-      System.out.println("\n\n contact id:" + contactId );
       UIContactPortlet uiContactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class);
       UIPopupAction uiPopupAction = uiContactPortlet.getChild(UIPopupAction.class);
       UIExportForm uiExportForm = uiPopupAction.createUIComponent(UIExportForm.class, null,"ExportForm");
@@ -363,17 +362,12 @@ public class UIContacts extends UIForm implements UIPopupComponent {
     public void execute(Event<UIContacts> event) throws Exception {
       UIContacts uiContacts = event.getSource();
       String contactId = event.getRequestContext().getRequestParameter(OBJECTID);
-      try {
-        uiContacts.setSelectedContact(contactId) ;
-        UIContactContainer uiContactContainer = uiContacts.getAncestorOfType(UIContactContainer.class);
-        UIContactPreview uiContactPreview = uiContactContainer.findFirstComponentOfType(UIContactPreview.class);
-        uiContactPreview.setContact(uiContacts.contactMap.get(contactId));
-        uiContactPreview.setRendered(true) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiContactContainer);
-      } catch (Exception ex) {
-        System.out.println("\n\n aaa \n\n");
-      }
-      
+      uiContacts.setSelectedContact(contactId) ;
+      UIContactContainer uiContactContainer = uiContacts.getAncestorOfType(UIContactContainer.class);
+      UIContactPreview uiContactPreview = uiContactContainer.findFirstComponentOfType(UIContactPreview.class);
+      uiContactPreview.setContact(uiContacts.contactMap.get(contactId));
+      uiContactPreview.setRendered(true) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContactContainer);   
     }
   }
   
@@ -386,7 +380,8 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       UIContactPreviewForm uiContactPreviewForm = popupAction.createUIComponent(UIContactPreviewForm.class, null, "UIContactPreviewForm") ; 
       uiContactPreviewForm.setContact(uiContacts.contactMap.get(contactId)) ;
       popupAction.activate(uiContactPreviewForm, 700, 0, true) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;      
+      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;  
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
     }
   } 
   

@@ -77,7 +77,8 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent {
     public void execute(Event<UIAdvancedSearchForm> event) throws Exception {
       UIAdvancedSearchForm uiAdvancedSearchForm = event.getSource() ;
       ContactFilter filter = new ContactFilter() ;
-      filter.setText(uiAdvancedSearchForm.getUIStringInput(FIELD_TEXT_INPUT).getValue()) ;
+      String text = "\"" + uiAdvancedSearchForm.getUIStringInput(FIELD_TEXT_INPUT).getValue() + "\"" ;
+      filter.setText(text) ;
       filter.setFullName(uiAdvancedSearchForm.getUIStringInput(FIELD_FULLNAME_INPUT).getValue()) ;
       filter.setFirstName(uiAdvancedSearchForm.getUIStringInput(FIELD_FIRSTNAME_INPUT).getValue()) ;
       filter.setMiddleName(uiAdvancedSearchForm.getUIStringInput(FIELD_MIDDLENAME_INPUT).getValue()) ;
@@ -96,8 +97,6 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent {
       uiContacts.setContacts(resultPageList) ; 
       uiContacts.setViewContactsList(true) ;
       uiContacts.setDisplaySearchResult(true) ;
-      //uiContacts.setSelectedContact(null) ;
-      uiContactPortlet.findFirstComponentOfType(UIContactPreview.class).setContact(null) ;
       event.getRequestContext()
         .addUIComponentToUpdateByAjax(uiContactPortlet.getChild(UIWorkingContainer.class)) ;
       uiContactPortlet.cancelAction() ;

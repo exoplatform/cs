@@ -80,6 +80,12 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
       UIFormUploadInput input = uiForm.getUIInput(FIELD_UPLOAD) ;
       UploadResource uploadResource = input.getUploadResource() ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+      if (ContactUtils.isEmpty(category)) {
+        uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.addGroup-required", null, 
+            ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;        
+      }
       if (uploadResource == null) {
         uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.uploadResource-empty", null, 
             ApplicationMessage.WARNING)) ;

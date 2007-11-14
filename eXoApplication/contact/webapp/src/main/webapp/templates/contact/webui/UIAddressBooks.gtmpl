@@ -151,11 +151,11 @@
 			            </div>
 				        </a>-->
 				        
-				        <a class="MenuItem" href="<%=uicomponent.event("Print", "id")%>">   
-			            <div class="ItemIcon PrintIcon">
+				        <!--<a class="MenuItem" href="<%=uicomponent.event("Print", "id")%>">-->   
+			            <div style="color:gray;"class="ItemIcon PrintIcon">
 			              Print  
 			            </div>
-				        </a>
+				        <!--</a>-->
  
 							</div>
 			  		</div>
