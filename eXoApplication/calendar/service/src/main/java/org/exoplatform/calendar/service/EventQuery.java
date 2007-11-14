@@ -130,7 +130,7 @@ public class EventQuery {
       stringBuffer.append("@exo:toDateTime > xs:dateTime('"+ISO8601.format(fromDate)+"') and ") ;
       stringBuffer.append("@exo:toDateTime < xs:dateTime('"+ISO8601.format(toDate)+"')") ;
       stringBuffer.append(") or (") ;
-      stringBuffer.append("@exo:fromDateTime > xs:dateTime('"+ISO8601.format(fromDate)+"') and ") ;
+      stringBuffer.append("@exo:fromDateTime >= xs:dateTime('"+ISO8601.format(fromDate)+"') and ") ;
       stringBuffer.append("@exo:fromDateTime < xs:dateTime('"+ISO8601.format(toDate)+"') and ") ;
       stringBuffer.append("@exo:toDateTime > xs:dateTime('"+ISO8601.format(toDate)+"')") ;
       stringBuffer.append(")") ;

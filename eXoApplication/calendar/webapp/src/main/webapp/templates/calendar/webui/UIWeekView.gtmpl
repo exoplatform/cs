@@ -32,6 +32,7 @@
 	DateFormat df = new SimpleDateFormat(dateFormat) ;
 	DateFormat tf = new SimpleDateFormat(timeFormat) ;
 	DateFormat dtf = new SimpleDateFormat(dateTimeFormat) ;
+	DateFormat wf = new  SimpleDateFormat("EEE, dd/MMM") ;
 %>
 <div class="UIWeekView">
 	<div class="TitleBar">	
@@ -77,9 +78,7 @@
 							  actionLink =  uicomponent.event("GotoDate",dayActionLink) ;
 						%>
 							<th startTime="<%=cl.getTimeInMillis()%>">
-							<a href="$actionLink">
-								$dayName, $date / $monthName
-							</a>
+							<a href="$actionLink"><%=wf.format(cl.getTime())%></a>
 							</th>
 						<%
 						 }

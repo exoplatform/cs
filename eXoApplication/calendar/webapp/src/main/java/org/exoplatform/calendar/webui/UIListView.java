@@ -71,12 +71,9 @@ public class UIListView extends UICalendarView {
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     EventQuery eventQuery = new EventQuery() ;
-    java.util.Calendar fromcalendar = new GregorianCalendar(getCurrentYear(),  getCurrentMonth(),  getCurrentDay()) ;
-    fromcalendar.set(java.util.Calendar.HOUR, 0) ;
+    java.util.Calendar fromcalendar = getBeginDay(new GregorianCalendar(getCurrentYear(),  getCurrentMonth(),  getCurrentDay())) ;
     eventQuery.setFromDate(fromcalendar) ;
-    java.util.Calendar tocalendar = new GregorianCalendar(getCurrentYear(), getCurrentMonth(), getCurrentDay()) ;
-    tocalendar.set(java.util.Calendar.HOUR, 0) ;
-    tocalendar.add(java.util.Calendar.DATE, 1) ;
+    java.util.Calendar tocalendar = getEndDay(new GregorianCalendar(getCurrentYear(), getCurrentMonth(), getCurrentDay())) ;
     eventQuery.setToDate(tocalendar) ;
     if(!getViewType().equals(TYPE_BOTH)) {
       eventQuery.setEventType(getViewType()) ;

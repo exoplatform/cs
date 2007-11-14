@@ -323,7 +323,18 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       }
     }
   }
-
+  protected Calendar getBeginDay(Calendar cal) {
+    cal.set(Calendar.HOUR, 0) ;
+    cal.set(Calendar.MINUTE, 0) ;
+    cal.set(Calendar.MILLISECOND, 0) ;
+    return cal ;
+  }
+  protected Calendar getEndDay(Calendar cal)  {
+    cal.set(Calendar.HOUR, 24) ;
+    cal.set(Calendar.MINUTE, 0) ;
+    cal.set(Calendar.MILLISECOND, 0) ;
+    return cal ;
+  }
   protected String[] getContextMenu() {
     return  new String[]{ACT_ADDNEW_EVENT, ACT_ADDNEW_TASK} ;
   }
