@@ -83,6 +83,6 @@ public class Post {
   public boolean getIsApproved() { return isApproved;}
   public void setIsApproved(boolean isApproved) { this.isApproved = isApproved;}
 
-  public void getAttachment( List<ForumAttachment> attachments) { this.attachments = attachments;}
-  public List<ForumAttachment> setAttachment() { return this.attachments;}
+  public List<ForumAttachment> getAttachments() { return this.attachments;}
+  public void setAttachments( List<ForumAttachment> attachments) { this.attachments = attachments;}
 }

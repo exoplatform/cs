@@ -6,7 +6,8 @@
 					<div class="OpenIcon"><span></span></div>
 					<% 
 						for(path in uicomponent.getBreadcumbs()) {
-							String link = uicomponent.event("ChangePath", path) ;
+							//String link = uicomponent.event("ChangePath", path) ;
+							String link = uicomponent.event("Rss") ;
 							String name = path.substring(path.lastIndexOf("/") + 1) ;
 					%>
 							<a href="$link" class="Selected">$name</a>
@@ -14,9 +15,11 @@
 				  <%} %>
 				</div>
 				<div class="RSSBar">
+					<a href="<%=uicomponent.event("Rss");%>" >
 					<div class="SeparatorLine">
-						<div class="RSSIcon">RSS</div>	
-					</div>							
+						<div class="RSSIcon" >RSS</div>	
+					</div>	
+					</a>						
 				</div>
 				<div style="clear: both"><span></span></div>
 			</div>

@@ -5,8 +5,10 @@
 package org.exoplatform.forum.service.impl;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.jcr.Node;
@@ -17,10 +19,13 @@ import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 
+import org.exoplatform.forum.service.BufferAttachment;
 import org.exoplatform.forum.service.Category;
 import org.exoplatform.forum.service.Forum;
+import org.exoplatform.forum.service.ForumAttachment;
 import org.exoplatform.forum.service.ForumLinkData;
 import org.exoplatform.forum.service.ForumPageList;
+import org.exoplatform.forum.service.JCRForumAttachment;
 import org.exoplatform.forum.service.JCRPageList;
 import org.exoplatform.forum.service.Poll;
 import org.exoplatform.forum.service.Post;
@@ -354,9 +359,30 @@ public class JCRDataStorage implements DataStorage {
     if(topicNode.hasProperty("exo:canView")) topicNew.setCanView(ValuesToStrings(topicNode.getProperty("exo:canView").getValues())) ;
     if(topicNode.hasProperty("exo:canPost")) topicNew.setCanPost(ValuesToStrings(topicNode.getProperty("exo:canPost").getValues())) ;
     if(topicNode.hasProperty("exo:isPoll")) topicNew.setIsPoll(topicNode.getProperty("exo:isPoll").getBoolean()) ;
-
     if(topicNode.hasProperty("exo:userVoteRating")) topicNew.setUserVoteRating(ValuesToStrings(topicNode.getProperty("exo:userVoteRating").getValues())) ;
     if(topicNode.hasProperty("exo:voteRating")) topicNew.setVoteRating(topicNode.getProperty("exo:voteRating").getDouble()) ;
+    String idFirstPost = topicNode.getName().replaceFirst("topic", "post") ;
+    if(topicNode.hasNode(idFirstPost)) {
+      Node FirstPostNode  = topicNode.getNode(idFirstPost) ;
+      if(FirstPostNode.hasProperty("exo:hasAttach")) {
+      	if(FirstPostNode.getProperty("exo:hasAttach").getBoolean()) {
+      		NodeIterator postAttachments = FirstPostNode.getNodes();
+      		List<ForumAttachment> attachments = new ArrayList<ForumAttachment>();
+          while (postAttachments.hasNext()) {
+            Node node = postAttachments.nextNode();
+            if (node.isNodeType("nt:file")) {
+            	JCRForumAttachment attachment = new JCRForumAttachment() ;
+              attachment.setId(node.getPath());
+              attachment.setMimeType(node.getNode("jcr:content").getProperty("jcr:mimeType").getString());
+              attachment.setName(node.getName());
+              attachment.setWorkspace(node.getSession().getWorkspace().getName()) ;
+              attachments.add(attachment);
+            }
+          }
+          topicNew.setAttachments(attachments);
+      	}
+      }
+    }
     return topicNew;
   }
 
@@ -384,6 +410,9 @@ public class JCRDataStorage implements DataStorage {
 					topicNode.setProperty("exo:lastPostDate", GregorianCalendar.getInstance()) ;
 					topicNode.setProperty("exo:postCount", -1) ;
 					topicNode.setProperty("exo:viewCount", 0) ;
+					// setTopicCount for Forum
+					long newTopicCount = forumNode.getProperty("exo:topicCount").getLong() + 1 ;
+					forumNode.setProperty("exo:topicCount", newTopicCount ) ;
 				} else {
 					topicNode = forumNode.getNode(topic.getId()) ;
 				}
@@ -405,13 +434,9 @@ public class JCRDataStorage implements DataStorage {
         topicNode.setProperty("exo:userVoteRating", topic.getUserVoteRating()) ;
         topicNode.setProperty("exo:voteRating", topic.getVoteRating()) ;
 
+        forumHomeNode.save() ;
+        forumHomeNode.getSession().save() ;
 		    if(isNew) {
-		    	// setTopicCount for Forum
-			    long newTopicCount = forumNode.getProperty("exo:topicCount").getLong() + 1 ;
-				  forumNode.setProperty("exo:topicCount", newTopicCount ) ;
-				  
-				  forumHomeNode.save() ;
-				  forumHomeNode.getSession().save() ;
 			    // createPost first
           String id = topic.getId().replaceFirst("topic", "post") ;
 			    Post post = new Post() ;
@@ -426,20 +451,23 @@ public class JCRDataStorage implements DataStorage {
 					post.setIcon(topic.getIcon()) ;
           post.setNumberOfAttachment(topic.getAttachmentFirstPost()) ;
 					post.setIsApproved(false) ;
+					post.setAttachments(topic.getAttachments()) ;
 					
 					savePost(categoryId, forumId, topic.getId(), post, true) ;
 		    } else {
           String id = topic.getId().replaceFirst("topic", "post") ;
           if(topicNode.hasNode(id)) {
             Node fistPostNode = topicNode.getNode(id) ;
-            fistPostNode.setProperty("exo:modifiedBy", topic.getModifiedBy()) ;
-            fistPostNode.setProperty("exo:modifiedDate", GregorianCalendar.getInstance()) ;
-            fistPostNode.setProperty("exo:subject", topic.getTopicName()) ;
-            fistPostNode.setProperty("exo:message", topic.getDescription()) ;
-            fistPostNode.setProperty("exo:icon", topic.getIcon()) ;
+            Post post = getPost(fistPostNode) ;
+            post.setModifiedBy(topic.getModifiedBy()) ;
+            post.setModifiedDate(new Date()) ;
+            post.setSubject(topic.getTopicName()) ;
+            post.setMessage(topic.getDescription()) ;
+            post.setIcon(topic.getIcon()) ;
+            post.setAttachments(topic.getAttachments()) ;
+
+            savePost(categoryId, forumId, topic.getId(), post, false) ;
           }
-				  forumHomeNode.save() ;
-				  forumHomeNode.getSession().save() ;
 		    }
 		  }
 		}
@@ -544,6 +572,24 @@ public class JCRDataStorage implements DataStorage {
     if(postNode.hasProperty("exo:remoteAddr")) postNew.setRemoteAddr(postNode.getProperty("exo:remoteAddr").getString()) ;
     if(postNode.hasProperty("exo:icon")) postNew.setIcon(postNode.getProperty("exo:icon").getString()) ;
     if(postNode.hasProperty("exo:isApproved")) postNew.setIsApproved(postNode.getProperty("exo:isApproved").getBoolean()) ;
+    if(postNode.hasProperty("exo:hasAttach")) {
+    	if(postNode.getProperty("exo:hasAttach").getBoolean()) {
+		    NodeIterator postAttachments = postNode.getNodes();
+		    List<ForumAttachment> attachments = new ArrayList<ForumAttachment>();
+		    while (postAttachments.hasNext()) {
+		      Node node = postAttachments.nextNode();
+		      if (node.isNodeType("nt:file")) {
+		      	JCRForumAttachment attachment = new JCRForumAttachment() ;
+		        attachment.setId(node.getPath());
+		        attachment.setMimeType(node.getNode("jcr:content").getProperty("jcr:mimeType").getString());
+		        attachment.setName(node.getName());
+		        attachment.setWorkspace(node.getSession().getWorkspace().getName()) ;
+		        attachments.add(attachment);
+		      }
+		    }
+		    postNew.setAttachments(attachments);
+    	}
+    }
     return postNew;
   }
   
@@ -571,6 +617,25 @@ public class JCRDataStorage implements DataStorage {
 				postNode.setProperty("exo:remoteAddr", post.getRemoteAddr()) ;
 				postNode.setProperty("exo:icon", post.getIcon()) ;
 				postNode.setProperty("exo:isApproved", post.getIsApproved()) ;
+				postNode.setProperty("exo:hasAttach", false) ;
+				List<ForumAttachment> attachments = post.getAttachments();
+	      if(attachments != null) { 
+	        Iterator<ForumAttachment> it = attachments.iterator();
+	        while (it.hasNext()) {
+	          BufferAttachment file = (BufferAttachment)it.next();
+	          Node nodeFile = null;
+	          if (!postNode.hasNode(file.getName())) nodeFile = postNode.addNode(file.getName(), "nt:file");
+	          else nodeFile = postNode.getNode(file.getName());
+	          Node nodeContent = null;
+	          if (!nodeFile.hasNode("jcr:content")) nodeContent = nodeFile.addNode("jcr:content", "nt:resource");
+	          else nodeContent = nodeFile.getNode("jcr:content");
+	          nodeContent.setProperty("jcr:mimeType", file.getMimeType());
+	          nodeContent.setProperty("jcr:data", file.getInputStream());
+	          nodeContent.setProperty("jcr:lastModified", Calendar.getInstance().getTimeInMillis());
+	          postNode.setProperty("exo:hasAttach", true ) ;
+	        }
+	      }				
+				
 				if(isNew) {
 			    // set InfoPost for Topic
 					long topicPostCount = topicNode.getProperty("exo:postCount").getLong() + 1 ;

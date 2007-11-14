@@ -6,11 +6,14 @@
 	<% Post post = uicomponent.getPostView(); 
 		 String title = post.getSubject();	
 		 String messeger = post.getMessage();	
+		 String classIcon = post.getIcon() ;
+		 String postCreatedDate = post.getCreatedDate() ;
+		 List attachments = post.getAttachments() ;
 	%>
 	<div class="ViewContainer">
 		<div class="PostViewTitle">
-	  	<div class="PostViewIcon NormalTopicIcon">$title</div>
-	  	<div class="PostTime">Posted: Tue Oct 02 04:23:24 GMT 2007</div>
+	  	<div class="PostViewIcon $classIcon">$title</div>
+	  	<div class="PostTime">$postCreatedDate</div>
 	  </div>
 	  		
 	  <div class="PostContent">
@@ -20,43 +23,43 @@
 	  <div class="AttachmentContainer">
 	  	<div class="AttachmentTitle">Attachments:</div>
 	  	<div class="AttachmentContent">
+	  	<% for(attachment in attachments) {
+	  	 	   String fileName = attachment.getName() ;
+	  	 	   long sizeNumber = attachment.getSize() ;
+	  	 	   String size = "" + sizeNumber ;
+	  	%>
 	  		<div class="AttachmentBox">
 					<div class="AttachmentIcon WordIcon"><span/></div>
-					<a class="AttachmentLabel" href="#">About the trip.doc</a>
+					<a class="AttachmentLabel" href="#">$fileName</a>
 					<div style="clear: left;"><span/></div>
-					<div class="Size">Size: 49K</div>
+					<div class="Size">Size: ${size}K</div>
 	  		</div>
-	  		<div class="AttachmentBox">
-					<div class="AttachmentIcon PPTIcon"><span/></div>
-					<a class="AttachmentLabel" href="#">Images presentation.ppt</a>
-					<div style="clear: left;"><span/></div>
-					<div class="Size">Size: 49K</div>
-	  		</div>
+	  	<% } %>
 	  		<div style="clear: left;"><span/></div>
 	  	</div>
 	  </div>
-	  		
-  <%uiform.end()%>
 	</div>
+	
+	<div class="UIAction"> 
+	  <table class="ActionContainer" align="center">
+			<tr>
+				<td align="center">
+	    <% for(action in uicomponent.getActions()) { 
+	    	 String actionLabel = "Close";// _ctx.appRes(uicomponent.getName() + ".action." + action); 
+	       String link = uicomponent.event(action) ;
+	    %>
+			<a href="$link" class="ActionButton LightBlueStyle">
+	  	  	<div class="ButtonLeft">
+	    	  	<div class="ButtonRight">
+	      	  	<div class="ButtonMiddle"> $actionLabel </div>
+	        	</div>
+	      	</div>
+	    	</a>
+	    <%}%>
+	    </td>
+			</tr>
+	 	</table> 
+	</div>
+  <%uiform.end()%>
 </div>
 
-<div class="UIAction"> 
-  <table class="ActionContainer" align="center">
-		<tr>
-			<td align="center">
-    <% for(action in uicomponent.getActions()) { 
-    	 String actionLabel = "Close";// _ctx.appRes(uicomponent.getName() + ".action." + action); 
-       String link = uicomponent.event(action) ;
-    %>
-		<a href="$link" class="ActionButton LightBlueStyle">
-  	  	<div class="ButtonLeft">
-    	  	<div class="ButtonRight">
-      	  	<div class="ButtonMiddle"> $actionLabel </div>
-        	</div>
-      	</div>
-    	</a>
-    <%}%>
-    </td>
-		</tr>
- 	</table> 
-</div>

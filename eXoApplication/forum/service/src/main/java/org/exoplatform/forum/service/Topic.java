@@ -125,8 +125,8 @@ public class Topic {
   public Double getVoteRating(){return voteRating;}
   public void setVoteRating(Double voteRating){this.voteRating = voteRating;}
   
-  public void getAttachment( List<ForumAttachment> attachments) { this.attachments = attachments;}
-  public List<ForumAttachment> setAttachment() { return this.attachments;}
+  public void setAttachments( List<ForumAttachment> attachments) { this.attachments = attachments;}
+  public List<ForumAttachment> getAttachments() { return this.attachments;}
   
   public String getForumId() { return null ; }
 

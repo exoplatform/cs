@@ -65,7 +65,7 @@
 	              			<tr>
 	              				<td class="FieldLabel">Attach File:</td>
 	              				<td class="FieldComponent">
-	              					<input type="file" value="" id="file" name="file"/>
+	              					<%uiform.renderChild("fromInput"); %>
 	              			</tr>
 	              		</tbody>
 	              	</table>

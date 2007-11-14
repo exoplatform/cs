@@ -26,4 +26,9 @@ public class UICategoryContainer extends UIContainer  {
     addChild(UICategory.class, null, null).setRendered(!isRenderCategories) ;
     addChild(UICategoriesSummary.class, null, null);
   } 
+  
+  public void updateIsRender() {
+	  getChild(UICategories.class).setRendered(isRenderCategories) ;
+	  getChild(UICategory.class).setRendered(!isRenderCategories) ;
+  }
 }

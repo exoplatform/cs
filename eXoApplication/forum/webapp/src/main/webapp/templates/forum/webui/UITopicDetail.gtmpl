@@ -169,6 +169,7 @@
 				String messager = post.getMessage() ;
 				String editBy = post.getModifiedBy() ;
 				String editDate = post.getModifiedDate().toString() ;
+				List attachments = post.getAttachments() ;
 		%>
 
 	  <div class="ContentContainer" style="margin: 2px 0px 0px 0px;">
@@ -215,23 +216,23 @@
 				  		</div>
 				  		
 				  		<div class="AttachmentContainer">
-				  			<div class="AttachmentTitle">Attachments:</div>
-				  			<div class="AttachmentContent">
-				  				<div class="AttachmentBox">
-										<div class="AttachmentIcon WordIcon"><span></span></div>
-										<a href="#" class="AttachmentLabel">About the trip.doc</a>
-										<div style="clear: left;"><span></span></div>
-										<div class="Size">Size: 49K</div>
-				  				</div>
-				  				<div class="AttachmentBox">
-										<div class="AttachmentIcon PPTIcon"><span></span></div>
-										<a href="#" class="AttachmentLabel" >Images presentation.ppt</a>
-										<div style="clear: left;"><span></span></div>
-										<div class="Size">Size: 49K</div>
-				  				</div>
-				  				<div style="clear: left;"><span></span></div>
-				  			</div>
-				  		</div>
+						  	<div class="AttachmentTitle">Attachments:</div>
+						  	<div class="AttachmentContent">
+						  	<% for(attachment in attachments) {
+						  	 	   String fileName = attachment.getName() ;
+						  	 	   long sizeNumber = attachment.getSize() ;
+						  	 	   String size = "" + sizeNumber ;
+						  	%>
+						  		<div class="AttachmentBox">
+										<div class="AttachmentIcon WordIcon"><span/></div>
+										<a class="AttachmentLabel" href="#">$fileName</a>
+										<div style="clear: left;"><span/></div>
+										<div class="Size">Size: ${size}Kb</div>
+						  		</div>
+						  	<% } %>
+						  		<div style="clear: left;"><span/></div>
+						  	</div>
+						  </div>
 				  		
 				  		<div class="FootPost">
 				  			<div class="PostInfo">

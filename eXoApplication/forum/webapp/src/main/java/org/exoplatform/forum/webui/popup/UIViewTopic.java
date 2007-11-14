@@ -11,6 +11,7 @@ import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 
 /**
@@ -23,7 +24,7 @@ import org.exoplatform.webui.form.UIForm;
     lifecycle = UIFormLifecycle.class,
     template = "app:/templates/forum/webui/popup/UIViewTopic.gtmpl",
     events = {
-      @EventConfig(listeners = UIViewTopic.CloseActionListener.class)
+      @EventConfig(listeners = UIViewTopic.CloseActionListener.class, phase = Phase.DECODE)
     }
 )
 public class UIViewTopic extends UIForm implements UIPopupComponent {
@@ -52,7 +53,9 @@ public class UIViewTopic extends UIForm implements UIPopupComponent {
     public void execute(Event<UIViewTopic> event) throws Exception {
       UIViewTopic uiForm = event.getSource() ;
       UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
-      forumPortlet.cancelAction() ;
+      UIPopupAction popupAction = forumPortlet.findComponentById("UIChildPopupAction") ;
+      popupAction.deActivate() ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   }
 }

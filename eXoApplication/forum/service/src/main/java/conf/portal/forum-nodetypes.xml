@@ -80,7 +80,17 @@
 	  		<propertyDefinition name="exo:isApproved" requiredType="boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
 	  			<valueConstraints/>
   			</propertyDefinition>
+  			<propertyDefinition name="exo:hasAttach" requiredType="boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+	  			<valueConstraints/>
+  			</propertyDefinition>
   		</propertyDefinitions>
+  		<childNodeDefinitions>
+	      <childNodeDefinition name="*" defaultPrimaryType="nt:file" autoCreated="false" mandatory="false" onParentVersion="VERSION" protected="false" sameNameSiblings="true">
+	        <requiredPrimaryTypes>
+	          <requiredPrimaryType>nt:file</requiredPrimaryType>
+	        </requiredPrimaryTypes>
+	      </childNodeDefinition>      
+    	</childNodeDefinitions>
  	 	</nodeType> 
  	 
 		<nodeType name="exo:topic" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">

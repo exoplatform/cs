@@ -6,56 +6,29 @@ package org.exoplatform.forum.service;
 
 import java.io.InputStream;
 
-import javax.jcr.ItemNotFoundException;
-import javax.jcr.Node;
-import javax.jcr.Session;
-
-import org.exoplatform.container.PortalContainer;
-import org.exoplatform.services.jcr.RepositoryService;
-
 /**
  * Created by The eXo Platform SARL
- * Author : Hung Nguyen
- *          hung.nguyen@exoplatform.com
- * July 2, 2007  
- * 
+ * Author : Duy Tu
+ *          tu.duy@exoplatform.com
+ * Nov 10, 2007  
  */
-public class ForumAttachment {
+abstract public class ForumAttachment {
   private String id ;
-  private String fileName ;
+  private String name ;
   private String mimeType ;
-  private String workspace ;
-  private InputStream inputStream ;
-  
+  private long size ;
+   
   public String getId() { return id ; }
-  public void   setId(String s) { id = s ; }
-  
-  public String getWorkspace() { return workspace ; }
-  public void setWorkspace(String ws) { workspace = ws ; }
-  
-  public String getFileName()  { return fileName ; }
-  public void   setFileName(String s) { fileName = s ; }
+  public void setId(String id) { this.id = id ; }
   
   public String getMimeType() { return mimeType ; }
-  public void setMimeType(String s) { mimeType = s ;}
+  public void setMimeType(String mimeType_) { this.mimeType = mimeType_ ; }
   
-  public void setInputStream(InputStream input) throws Exception {
-    inputStream = input ;
-  }
-  public InputStream getInputStream() throws Exception {
-    if(inputStream != null) return inputStream ;
-    Node attachment ;
-    try{
-      attachment = (Node)getSesison().getItem(getId()) ;      
-    }catch (ItemNotFoundException e) {
-      return null ;
-    }
-    return attachment.getNode("jcr:content").getProperty("jcr:data").getStream() ;
-  }
+  public long getSize() { return size ; }
+  public void setSize(long size_) { this.size = size_ ; }
   
-  private Session getSesison()throws Exception {
-    RepositoryService repoService = (RepositoryService)PortalContainer.getInstance().getComponentInstanceOfType(RepositoryService.class) ;
-    return repoService.getDefaultRepository().getSystemSession(workspace) ;
-  }
-  
+  public String getName() { return name ; }
+  public void setName(String name_) { this.name = name_ ; }
+  //TODO: should not have  Session in the api
+  public abstract InputStream getInputStream() throws Exception ;
 }

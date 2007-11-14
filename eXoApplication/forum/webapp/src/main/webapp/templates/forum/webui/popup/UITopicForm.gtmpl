@@ -13,21 +13,21 @@
 		     	    <div class="RightHorizontalTabs">
 		     	      <div class="CenterHorizontalTabs">
 					        <div class="TabsContainer">
-				            <% int i = 0;
+				            <%
 				            	 String classCss = "SelectedTab" ;
-				            		while(i<4) {
+				            	 String []labels = ["threadContent", "threadIcon", "threadOption", "threadPermisstion"] ;
+				            		for(label in labels) {
 				             %>
 			              <div class="UITab NormalTabStyle">
 			                <div class="$classCss">
 			                  <div class="LeftTab">
 			                    <div class="RightTab">
-					                  <div onclick="eXo.webui.UIHorizontalTabs.displayTabContent(this)" class="MiddleTab"><%= _ctx.appRes("UITopicForm.title.threadContent"); %></div>
+					                  <div onclick="eXo.webui.UIHorizontalTabs.displayTabContent(this)" class="MiddleTab"><%= _ctx.appRes("UITopicForm.label." + label); %></div>
 					                </div>
 			                  </div>
 			                </div>
 			              </div>
-		            		<% 	i = i + 1 ;
-		            				classCss = "NormalTab" ; 
+		            		<% classCss = "NormalTab" ; 
 		            			}
 		            		%>
 					        </div>
@@ -53,11 +53,6 @@
                          </td>
                        </tr>
                     <% } %>
-	              			<tr>
-	              				<td class="FieldLabel"><%= _ctx.appRes("UITopicForm.label.attachFile"); %></td>
-	              				<td class="FieldComponent">
-	              					<input type="file" value="" id="file" name="file"/>
-	              			</tr>
 	              		</tbody>
 	              	</table>
 	              </div>
@@ -116,7 +111,6 @@
 			</div>  
 	  </div>  
 	</div>
-
   <div class="UIAction"> 
     <table class="ActionContainer" align="center">
 		  <tr>

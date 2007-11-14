@@ -17,6 +17,7 @@ import org.exoplatform.forum.webui.popup.UIMoveForumForm;
 import org.exoplatform.forum.webui.popup.UIMoveTopicForm;
 import org.exoplatform.forum.webui.popup.UIPopupAction;
 import org.exoplatform.forum.webui.popup.UIPopupComponent;
+import org.exoplatform.forum.webui.popup.UIPopupContainer;
 import org.exoplatform.forum.webui.popup.UITopicForm;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -149,9 +150,11 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
       UITopicContainer uiTopicContainer = event.getSource() ;
       UIForumPortlet forumPortlet = event.getSource().getAncestorOfType(UIForumPortlet.class) ;
       UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;
-      UITopicForm topicForm = popupAction.createUIComponent(UITopicForm.class, null, null) ;
+      UIPopupContainer popupContainer = popupAction.createUIComponent(UIPopupContainer.class, null, null) ;
+      UITopicForm topicForm = popupContainer.addChild(UITopicForm.class, null, null) ;
       topicForm.setTopicIds(uiTopicContainer.categoryId, uiTopicContainer.forumId) ;
-      popupAction.activate(topicForm, 670, 440) ;
+      popupContainer.setId("UIAddTopicContainer") ;
+      popupAction.activate(popupContainer, 670, 440) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   }
@@ -283,11 +286,14 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
       }
       UIForumPortlet forumPortlet = uiTopicContainer.getAncestorOfType(UIForumPortlet.class) ;
       if(checked) {
-        UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;
-        UITopicForm topicForm = popupAction.createUIComponent(UITopicForm.class, null, null) ;
+      	UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;
+        UIPopupContainer popupContainer = popupAction.createUIComponent(UIPopupContainer.class, null, null) ;
+        UITopicForm topicForm = popupContainer.addChild(UITopicForm.class, null, null) ;
         topicForm.setTopicIds(uiTopicContainer.categoryId, uiTopicContainer.forumId) ;
         topicForm.setUpdateTopic(topic, true) ;
-        popupAction.activate(topicForm, 662, 466) ;
+        popupContainer.setId("UIEditTopicContainer") ;
+        popupAction.activate(popupContainer, 670, 440) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
       } else {
         Object[] args = { };
         throw new MessageException(new ApplicationMessage("UICategory.msg.notCheck", args, ApplicationMessage.WARNING)) ;
