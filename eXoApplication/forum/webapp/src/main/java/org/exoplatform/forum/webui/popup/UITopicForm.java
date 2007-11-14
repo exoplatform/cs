@@ -245,8 +245,7 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
       
       UIPopupContainer popupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       UIPopupAction popupAction = popupContainer.getChild(UIPopupAction.class) ;
-      UIPopupWindow popupWindow = popupAction.addChild(UIPopupWindow.class, null, null) ;
-      popupWindow.setRendered(true);
+      popupAction.getChild(UIPopupWindow.class).setRendered(true);
       UIViewTopic viewTopic = popupAction.activate(UIViewTopic.class, 670) ;
       viewTopic.setPostView(postNew) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
@@ -322,8 +321,7 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
       UITopicForm uiForm = event.getSource() ;
       UIPopupContainer popupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       UIPopupAction uiChildPopup = popupContainer.getChild(UIPopupAction.class) ;
-      UIPopupWindow popupWindow = uiChildPopup.addChild(UIPopupWindow.class, null, null) ;
-      popupWindow.setRendered(false);
+      uiChildPopup.getChild(UIPopupWindow.class).setRendered(true);
       UIAttachFileForm attachFileForm = uiChildPopup.activate(UIAttachFileForm.class, 500) ;
       attachFileForm.updateIsTopicForm(true) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupContainer) ;
