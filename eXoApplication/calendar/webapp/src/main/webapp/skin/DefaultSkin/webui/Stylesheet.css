@@ -726,6 +726,24 @@
 	margin:auto;
 	cursor: n-resize;
 }
+
+.UIWeekView .EventAlldayContainer .LeftResizeEvent{
+	background: url('background/LeftResizeEvent2x11.gif') no-repeat ;	
+	width: 2px;
+	height: 11px;
+	float: left;
+	cursor: w-resize;
+	margin: 1px 3px 0px 0px ;
+}
+
+.UIWeekView .EventAlldayContainer .RightResizeEvent{
+	background: url('background/RightResizeEvent2x11.gif') no-repeat ;	
+	width: 2px;
+	height: 11px;
+	float: right;
+	cursor: w-resize;
+	margin: 1px 0px 0px 0px ;
+}
 /*====================Schedule View============================*/
 
 .UIScheduleView .ScheduleViewBar {
@@ -1441,6 +1459,15 @@
 }
 
 /*===================UIForm=======================*/
+
+.UIEventCategoryManager {
+	padding: 8px;
+}
+
+.UIEventCategoryManager .UIGrid .ActionContainer {
+	width: 60px;
+}
+
 
 /*=====================Table Color===========================*/
 
