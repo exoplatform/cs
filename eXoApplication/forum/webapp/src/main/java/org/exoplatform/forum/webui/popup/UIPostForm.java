@@ -190,7 +190,6 @@ public class UIPostForm extends UIForm implements UIPopupComponent {
       
       UIPopupContainer popupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       UIPopupAction popupAction = popupContainer.getChild(UIPopupAction.class) ;
-      popupAction.getChild(UIPopupWindow.class).setRendered(true);
       UIViewTopic viewTopic = popupAction.activate(UIViewTopic.class, 670) ;
       viewTopic.setPostView(post) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
@@ -241,7 +240,6 @@ public class UIPostForm extends UIForm implements UIPopupComponent {
       UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
       UIPopupContainer popupContainer = forumPortlet.getChild(UIPopupContainer.class) ;
       UIPopupAction uiChildPopup = popupContainer.getChild(UIPopupAction.class) ;
-      uiChildPopup.getChild(UIPopupWindow.class).setRendered(true);
       UIAttachFileForm attachFileForm = uiChildPopup.activate(UIAttachFileForm.class, 500) ;
       attachFileForm.updateIsTopicForm(false) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupContainer) ;
