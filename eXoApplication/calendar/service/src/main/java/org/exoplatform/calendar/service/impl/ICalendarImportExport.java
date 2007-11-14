@@ -201,7 +201,7 @@ public class ICalendarImportExport implements CalendarImportExport{
         if(event.getSummary() != null) exoEvent.setSummary(event.getSummary().getValue()) ;
         if(event.getDescription() != null) exoEvent.setDescription(event.getDescription().getValue()) ;
         if(event.getStatus() != null) exoEvent.setStatus(event.getStatus().getValue()) ;
-        exoEvent.setEventType("event") ;
+        exoEvent.setEventType(CalendarEvent.TYPE_EVENT) ;
         if(event.getStartDate() != null) exoEvent.setFromDateTime(event.getStartDate().getDate()) ;
         if(event.getEndDate() != null) exoEvent.setToDateTime(event.getEndDate().getDate()) ;
         if(event.getLocation() != null) exoEvent.setLocation(event.getLocation().getValue()) ;
