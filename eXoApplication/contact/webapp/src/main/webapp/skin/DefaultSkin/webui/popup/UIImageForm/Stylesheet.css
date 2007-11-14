@@ -6,3 +6,11 @@
 .UIImageForm .UIForm .HorizontalLayout {
 	border: none;
 }
+
+.UIImageForm .UIFormGrid td.FieldLabel {
+	white-space: nowrap;
+}
+
+.UIImageForm .SelectFileFrame {
+	width: 300px;
+}

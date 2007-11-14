@@ -122,17 +122,17 @@
 										          <div class="MiddleRightRightClickPopupMenu">
 							              		<div class="UIRightPopupMenuContainer" id="customLayoutViewMenu">
 																	<a class="MenuItem" href="javascript:eXo.contact.UIContactPortlet.switchLayout(0)" >   
-								                    <div class="ItemIcon HidenAllCalendar">
+								                    <div class="ItemIcon MoveNavigationIcon">
 								                       Show/Hide Navigation
 								                    </div>
 							                    </a>
 							                    <a class="MenuItem" href="javascript:eXo.contact.UIContactPortlet.switchLayout(1)" >   
-								                    <div class="ItemIcon ShowMinicalendar">
+								                    <div class="ItemIcon MoveAddressIcon">
 								                       Show/Hide Addressbooks
 								                    </div>
 							                    </a>
 							                    <a class="MenuItem" href="javascript:eXo.contact.UIContactPortlet.switchLayout(2)" >
-								                    <div class="ItemIcon HidenMinicalendar">
+								                    <div class="ItemIcon MoveTagIcon">
 								                      Show/Hide Tags
 								                    </div>
 							                    </a>

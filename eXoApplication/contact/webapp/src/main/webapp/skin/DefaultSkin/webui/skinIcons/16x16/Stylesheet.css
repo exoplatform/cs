@@ -170,3 +170,15 @@
 .ImportContactIcon {
 	background: url('icons/ImportContactIcon.gif') no-repeat left center;
 }
+
+.MoveTagIcon {
+	background: url('icons/MoveTagIcon.gif') no-repeat left center;
+}
+
+.MoveAddressIcon {
+	background: url('icons/MoveAddressIcon.gif') no-repeat left center;
+}
+
+.MoveNavigationIcon {
+	background: url('icons/MoveNavigationIcon.gif') no-repeat left center;
+}
