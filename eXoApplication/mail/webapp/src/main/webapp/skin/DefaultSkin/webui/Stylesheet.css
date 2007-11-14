@@ -974,3 +974,64 @@
 	width: 117px;
 }
 
+
+/*=======================UIAddToContact========================*/
+
+.UIAdvanceSearchMail{
+	padding: 8px;
+}
+
+.UIAdvanceSearchMail .HorizontalLayout {
+	background-color: #f3f3f3;
+	padding: 8px;
+}
+
+.UIAdvanceSearchMail table {
+	background: none;
+}
+	
+.UIAdvanceSearchMail .HorizontalLayout {
+	padding: 10px 0px;
+	border: 1px solid #cccccc;
+}
+
+.UIAdvanceSearchMail .HorizontalLayout .FieldShort select {
+	width: 120px;
+}
+
+.UIAdvanceSearchMail .HorizontalLayout .SearchForDate {
+	padding-left: 97px;
+}
+
+.UIAdvanceSearchMail .HorizontalLayout .SearchForDate .FieldLabel {
+	width: 60px;
+}
+
+.UIAdvanceSearchMail .HorizontalLayout .SearchForDate .FieldComponent {
+	width: 80px;
+}
+	
+.UIAdvanceSearchMail .HorizontalLayout .SearchForDate input{
+	width: 77px;
+}
+
+.UIAdvanceSearchMail .HorizontalLayout .SearchForPriority {
+	padding-left: 168px;
+}
+
+.UIAdvanceSearchMail .HorizontalLayout .SearchForPriority .FieldShort select {
+	width: 75px;
+}
+
+.UIAdvanceSearchMail .HorizontalLayout .SearchForPriority .FieldLabel {
+	width: 60px;
+}
+
+.UIAdvanceSearchMail .HorizontalLayout .SearchForPriority .ShortComponent {
+	width: 25px;
+}
+
+.UIAdvanceSearchMail .HorizontalLayout .SearchForPriority .FieldComponent {
+	width: 80px;
+}
+
