@@ -120,7 +120,7 @@
 							        			</div>
 										        <div class="MiddleLeftRightClickPopupMenu">
 										          <div class="MiddleRightRightClickPopupMenu">
-							              		<div class="UIRightPopupMenuContainer">
+							              		<div class="UIRightPopupMenuContainer" id="customLayoutViewMenu">
 																	<a class="MenuItem" href="javascript:eXo.contact.UIContactPortlet.switchLayout(0)" >   
 								                    <div class="ItemIcon HidenAllCalendar">
 								                       Show/Hide Navigation
