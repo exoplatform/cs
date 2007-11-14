@@ -88,7 +88,7 @@ public class UIMessageList extends UIForm {
   private String sortedBy_ = null;
   private boolean isAscending_ = true;
   private MessagePageList pageList_ = null ;
-  private MessageFilter msgFilter_ = new MessageFilter("Filter Message");
+  private MessageFilter msgFilter_;
   private LinkedHashMap<String, Message> messageList_ = new LinkedHashMap<String, Message>();
   
   final public String INFO = "INFO" ;
@@ -213,7 +213,8 @@ public class UIMessageList extends UIForm {
       MailService mailServ = uiPortlet.getApplicationComponent(MailService.class);
       Message msg = mailServ.getMessageById(username, accountId, msgId);
       Folder folder = mailServ.getFolder(username, accountId, msg.getFolders()[0]);
-      if (uiMessageList.getSelectedFolderId().equalsIgnoreCase(Utils.createFolderId(accountId, Utils.FD_DRAFTS, false))) {
+      String selectedFolderId = uiMessageList.getSelectedFolderId();
+      if (selectedFolderId !=null && selectedFolderId.equalsIgnoreCase(Utils.createFolderId(accountId, Utils.FD_DRAFTS, false))) {
         UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
         UIPopupActionContainer uiPopupContainer = uiPopupAction.activate(UIPopupActionContainer.class, 850) ;
         UIComposeForm uiComposeForm = uiPopupContainer.createUIComponent(UIComposeForm.class, null, null);
@@ -750,9 +751,11 @@ public class UIMessageList extends UIForm {
       msgFilter.setAccountId(accountId);
       msgFilter.setOrderBy(uiMessageList.getSortedBy());
       msgFilter.setAscending(uiMessageList.isAscending_);
-      msgFilter.setViewQuery(uiMessageList.getViewQuery());
-      msgFilter.setFolder((uiMessageList.getSelectedFolderId() == null) ? null : new String[] {uiMessageList.getSelectedFolderId()});
-      msgFilter.setTag((uiMessageList.getSelectedTagId() == null) ? null : new String[] {uiMessageList.getSelectedTagId()});
+      if (!msgFilter.getName().equals("Search")) {
+        msgFilter.setViewQuery(uiMessageList.getViewQuery());
+        msgFilter.setFolder((uiMessageList.getSelectedFolderId() == null) ? null : new String[] {uiMessageList.getSelectedFolderId()});
+        msgFilter.setTag((uiMessageList.getSelectedTagId() == null) ? null : new String[] {uiMessageList.getSelectedTagId()});
+      }
       uiMessageList.setMessagePageList(mailSrv.getMessages(username, msgFilter));
       uiMessageList.updateList();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));

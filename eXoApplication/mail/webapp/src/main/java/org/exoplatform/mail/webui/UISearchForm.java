@@ -68,7 +68,13 @@ public class UISearchForm extends UIForm {
       MailService mailService = uiPortlet.getApplicationComponent(MailService.class);
       
       uiMessageList.setMessagePageList(mailService.getMessages(username, filter));
+      uiMessageList.setSelectedFolderId(null);
+      uiMessageList.setSelectedTagId(null);
+      uiMessageList.setMessageFilter(filter);
       uiMessageList.updateList();
+      UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
+      uiFolderContainer.setSelectedFolder(null);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
 
     }

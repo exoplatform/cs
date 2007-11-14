@@ -12,6 +12,7 @@ import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
+import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.popup.UIFolderForm;
 import org.exoplatform.mail.webui.popup.UIPopupAction;
@@ -106,6 +107,8 @@ public class UIFolderContainer extends UIContainer {
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       uiMessageList.setMessagePageList(mailSrv.getMessagePageListByFolder(username, accountId, folderId));
+      MessageFilter filter = new MessageFilter("Folder"); 
+      uiMessageList.setMessageFilter(filter);
       uiMessageList.setSelectedFolderId(folderId);
       uiMessageList.setSelectedTagId(null);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiFolder) ;

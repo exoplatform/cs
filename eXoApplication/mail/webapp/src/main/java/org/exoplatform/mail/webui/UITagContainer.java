@@ -10,6 +10,7 @@ import java.util.List;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
+import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.Tag;
 import org.exoplatform.mail.webui.popup.UIEditTagForm;
 import org.exoplatform.mail.webui.popup.UIPopupAction;
@@ -60,6 +61,8 @@ public class UITagContainer extends UIComponent {
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       uiMessageList.setMessagePageList(mailSrv.getMessagePagelistByTag(username, accountId, tagId));
+      MessageFilter filter = new MessageFilter("Folder"); 
+      uiMessageList.setMessageFilter(filter);
       uiMessageList.setSelectedTagId(tagId);
       uiMessageList.setSelectedFolderId(null);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiTags);
