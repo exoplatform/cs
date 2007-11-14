@@ -1,6 +1,10 @@
 <%
   import org.exoplatform.mail.service.Utils;
   import org.exoplatform.contact.service.Contact;
+  
+  def rcontext = _ctx.getRequestContext() ;
+  rcontext.getJavascriptManager().importJavascript('eXo.mail.AutoComplete','/mail/javascript/');
+  rcontext.getJavascriptManager().addOnLoadJavascript('eXo.mail.AutoComplete.ACMain.init("autoComplete", ["to", "cc", "bcc"])');
 %>
 <% uiform.begin() %>
 <div class="$uicomponent.id UIApplication">
@@ -228,7 +232,7 @@
 </div>
 
 <!-- Begin Autocomplete -->
-<div id="Autocomplete" style="display: none; ">
+<div id="autoComplete" style="display: none; ">
   <%
     for (Contact contact : uicomponent.getContacts()) {
   %>
