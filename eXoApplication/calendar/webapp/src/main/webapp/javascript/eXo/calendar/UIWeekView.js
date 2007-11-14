@@ -227,7 +227,6 @@ UIWeekView.prototype.initAllday = function() {
 UIWeekView.prototype.initSelection = function() {	
 	var UISelection = eXo.calendar.UISelection ;
 	var container = document.getElementById("UIWeekViewGrid") ;
-	UISelection.width = parseInt(100/7) ;
 	UISelection.step = 30 ;	
 	UISelection.block = document.createElement("div")
 	UISelection.block.className = "UserSelectionBlock" ;
@@ -236,6 +235,17 @@ UIWeekView.prototype.initSelection = function() {
 	UISelection.container.onmousedown = UISelection.start ;
 	UISelection.relativeObject = eXo.core.DOMUtil.findAncestorByClass(UISelection.container, "EventWeekContent") ;
 	UISelection.viewType = "UIWeekView" ;
+} ;
+
+UIWeekView.prototype.initSelectionX = function() {	
+	var UISelectionX = eXo.calendar.UISelectionX ;
+	var containers = eXo.core.DOMUtil.findDescendantsByTagName(document.getElementById("UIWeekViewGridAllDay"), "th") ;
+	var len = containers.length ;
+	for(var i = 1 ; i < len ; i ++) {
+		containers[i].onmousedown = UISelectionX.start ;		
+	}	
+	UISelectionX.extraLeft = 6 ;
+	UISelectionX.viewType = "UIWeekView" ;
 } ;
 
 eXo.calendar.UIWeekView = new UIWeekView() ;

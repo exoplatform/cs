@@ -638,6 +638,7 @@
 	border-bottom:none;
 	border-left: none;
 	*width: 14%;
+	-moz-user-select: none ;
 }
 
 .UIWeekView .EventWeekBar .UIGrid th {
