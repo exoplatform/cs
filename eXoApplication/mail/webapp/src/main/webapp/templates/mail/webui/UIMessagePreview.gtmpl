@@ -36,7 +36,11 @@
 						<div class="MiddleCenterViewBoxStyle">
 							<div class="MessageHeader">
 								<div class="MessageCheck">
-									<div><a href="<%=uicomponent.event("AddStar")%>"><span class="UnStarredIcon" title="Add star for this message"></span></a></div>
+                  <%
+                    String starClass = "UnStarredIcon" ;
+                    if (msg.hasStar()) starClass = "StarredIcon";
+                  %>
+									<div><a href="<%=uicomponent.event("AddStar")%>"><div  class="$starClass" title="Add star for this message"><span></span></div></a></div>
 									<div style="clear: left;"><span></span></div>
 								</div>
 								<div class="MessageAddress">
@@ -115,7 +119,7 @@
 								</div>
 								<div class="MessageActions" >
 									<div class="DownArrow1Icon"><span></span></div>
-									<div class="ShowHideTitle">Hide deails</div>
+									<div class="ShowHideTitle" onclick>Hide details</div>
 									<div class="MonthDate">June 26</div>
 									<div class="Actions" title="Actions on this message"><span></span></div>
 									<div style="clear: both;"><span></span></div>

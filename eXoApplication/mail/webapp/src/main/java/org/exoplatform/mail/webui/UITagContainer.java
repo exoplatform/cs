@@ -70,7 +70,7 @@ public class UITagContainer extends UIComponent {
   static public class EditTagActionListener extends EventListener<UITagContainer> {
     public void execute(Event<UITagContainer> event) throws Exception {
       String tagId = event.getRequestContext().getRequestParameter(OBJECTID) ;      
-      UITagContainer uiTag = event.getSource() ;
+      UITagContainer uiTag = event.getSource();
       UIPopupAction uiPopup = uiTag.getAncestorOfType(UIMailPortlet.class).getChild(UIPopupAction.class) ;
       UIEditTagForm uiRenameTagForm = uiPopup.activate(UIEditTagForm.class, 450) ;
       uiRenameTagForm.setTag(tagId);
