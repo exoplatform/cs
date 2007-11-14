@@ -71,6 +71,10 @@
 																String link = uicomponent.event(action) ;
 																String classIcon = action + "Icon";
 					                   		String itemLabel = _ctx.appRes(uicomponent.getName() + ".action." + action);
+																if(action.indexOf("eleteP") > 0) {
+																	String confirm = _ctx.appRes(uicomponent.getName() + ".confirm." + action);
+																	link = "javascript:if(confirm('" + confirm + "?')){"+uicomponent.event(action)+"}" ;
+																}
 														%>
 															<a class="MenuItem" href="$link">   
 						                    <div class="ItemIcon $classIcon">
@@ -127,6 +131,10 @@
 						                   		String classIcon = null;
 						                   		if(action.length() < 11) classIcon = action + "Icon";
 						                   		else classIcon = action.replaceFirst("Topic", "Icon");
+						                   		if(action.indexOf("Delete") > 0) {
+						                   			String confirm = _ctx.appRes(uicomponent.getName() + ".confirm." + action);
+						                   			link = "javascript:if(confirm('" + confirm + "?')){"+uicomponent.event(action)+"}";
+						                   		}
 					                   %>
 					                    <a class="MenuItem" href="$link">   
 						                    <div class="ItemIcon $classIcon">
@@ -159,6 +167,7 @@
 
 		<%  
 			List posts = uicomponent.getPostPageList(1) ;
+			int checked = 0 ;
 			for(post in posts) {
 				String owner = post.getOwner() ;
 				String classIconPost = post.getIcon() ;
@@ -196,11 +205,17 @@
 					  </td>
 	<!-- End MemberContainer -->
 	
-	
 	<!-- Start PostViewContainer -->
 						<td class="PostViewContainer">
 					  	
 				  		<div class="PostViewHeader">
+				  		<% if(checked == 0) {%>
+				  			<div class="PostViewTitle">
+					  			<div class="PostViewIcon $classIconPost">$subject</div>
+					  			<div class="PostTime">Posted: $createdDate</div>
+					  		</div>
+					  		<% checked = 1;
+					  		  } else { %>
 				  			<div class="PostViewTitle" style="float: left;">
 					  			<div class="PostViewIcon $classIconPost">$subject</div>
 					  			<div class="PostTime">Posted: $createdDate</div>
@@ -209,12 +224,14 @@
 					  			<% uiform.renderChild(post.getId()) %>
 					  		</div>
 					  		<div style="clear: both;"><span></span></div>
+					  		<% } %>
 				  		</div>
 				  		
+				  	<div class="PostContentContainer">	
 				  		<div class="PostContent">
 				  			<br><div>$messager</div><br>
 				  		</div>
-				  		
+				  		<% if(attachments != null && attachments.size() > 0) {%>
 				  		<div class="AttachmentContainer">
 						  	<div class="AttachmentTitle">Attachments:</div>
 						  	<div class="AttachmentContent">
@@ -233,7 +250,8 @@
 						  		<div style="clear: left;"><span/></div>
 						  	</div>
 						  </div>
-				  		
+				  		<% } %>
+				  	</div>
 				  		<div class="FootPost">
 				  			<div class="PostInfo">
 					  			<div>Last edited by <a href="#">$editBy</a> on $editDate</div>
@@ -247,13 +265,15 @@
 											String title = _ctx.appRes(uicomponent.getName() + ".title." + action);
 											String label = _ctx.appRes(uicomponent.getName() + ".action." + action);
 											if(topic.getIsLock()&&(action.equals("Edit")||action.equals("Quote"))) continue ;
+											String actionLink = uicomponent.event(action, post.getId());
+											if(action.equals("Delete")) actionLink = "javascript:if(confirm('Are you sure you want to Delete this Post?')){"+uicomponent.event(action, post.getId())+"}"
 									%>
 									  <div class="ActionButton">
 									  	<div class="NormalStyle">
 									  		<div class="ButtonLeft">
 									  			<div class="ButtonRight">
 									  				<div class="ButtonMiddle">
-									  					<a href="<%=uicomponent.event(action, post.getId());%>">
+									  					<a href="$actionLink">
 									  						<div class="IconButton ${action}PostIcon" title="$title"><span class="LabelIcon"></span>$label</div>
 									  					</a>
 									  				</div>

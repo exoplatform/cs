@@ -141,6 +141,19 @@
 	padding-left: 3px;
 }
 
+.UIForumPortlet .UICategory .LeftOverButton {
+	padding-left: 5px;
+}
+
+.UIForumPortlet .UICategory .RightOverButton {
+	padding-right: 5px;
+}
+
+.UIForumPortlet .UICategory .CenterOverButton {
+	height: 22px;
+	padding-left: 3px;
+}
+
 .UIRightClickPopupMenu .UIRightPopupMenuContainer .DisableMenuItem {
 	color:#cccccc ;	
 }

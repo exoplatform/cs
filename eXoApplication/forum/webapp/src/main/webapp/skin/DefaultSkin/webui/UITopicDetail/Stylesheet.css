@@ -44,6 +44,14 @@
 }
 
 /*************************************** ContentContainer ************************************/
+.UITopicDetail .PostContentContainer {
+	min-height: 130px ;
+}
+
+*html .UITopicDetail .PostContentContainer {
+	height: 130px ;
+}
+
 .UITopicDetail .TablePost {
 	border-collapse: separate;
 	border: 1px solid #c4c4c4;

@@ -29,8 +29,8 @@
 .UIForumCategory .ForumToolbar .ManageCategoryButton {
 	cursor: pointer;
 	padding-left: 22px;
-	line-height: 20px;
-	height: 20px;
+	line-height: 22px;
+	height: 22px;
 }
 
 .UIForumCategory .ForumToolbar .SeparatorLine {

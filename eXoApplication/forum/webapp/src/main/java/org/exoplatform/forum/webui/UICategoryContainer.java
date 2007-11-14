@@ -18,17 +18,16 @@ import org.exoplatform.webui.core.UIContainer;
     template =  "app:/templates/forum/webui/UICategoryContainer.gtmpl"
 )
 public class UICategoryContainer extends UIContainer  {
-	protected boolean isRenderCategories = true ; 
   public UICategoryContainer() throws Exception {
-    
-    addChild(UIForumActionBar.class, null, null);
-    addChild(UICategories.class, null, null).setRendered(isRenderCategories) ;
-    addChild(UICategory.class, null, null).setRendered(!isRenderCategories) ;
+    addChild(UIForumActionBar.class, null, null).setRendered(true);
+    addChild(UICategories.class, null, null).setRendered(true) ;
+    addChild(UICategory.class, null, null).setRendered(false) ;
     addChild(UICategoriesSummary.class, null, null);
   } 
-  
-  public void updateIsRender() {
-	  getChild(UICategories.class).setRendered(isRenderCategories) ;
-	  getChild(UICategory.class).setRendered(!isRenderCategories) ;
+  public void updateIsRender(boolean isRender) {
+  	getChild(UIForumActionBar.class).setRendered(isRender);
+	  getChild(UICategories.class).setRendered(isRender) ;
+	  getChild(UICategory.class).setRendered(!isRender) ;
+	  this.findFirstComponentOfType(UICategoryInfo.class).setRendered(isRender) ;
   }
 }

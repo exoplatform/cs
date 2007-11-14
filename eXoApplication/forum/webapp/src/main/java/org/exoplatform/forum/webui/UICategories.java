@@ -59,13 +59,9 @@ public class UICategories extends UIContainer  {
 			UICategories uiContainer = event.getSource();
 			String categoryId = event.getRequestContext().getRequestParameter(OBJECTID)  ;
       UICategoryContainer categoryContainer = uiContainer.getAncestorOfType(UICategoryContainer.class) ;
-      categoryContainer.getChild(UIForumActionBar.class).setRendered(false) ;
-			categoryContainer.isRenderCategories = false ;
-			categoryContainer.getChild(UICategories.class).setRendered(false) ;
+			categoryContainer.updateIsRender(false) ;
 			UICategory uiCategory = categoryContainer.getChild(UICategory.class) ;
-			categoryContainer.findFirstComponentOfType(UICategoryInfo.class).setRendered(false) ;
 			uiCategory.update(categoryId) ;
-			uiCategory.setRendered(true) ;
 		}
 	}
 	

@@ -85,6 +85,10 @@
 														 <% 
 					                   		for(action in uicomponent.getActionMenuTopic()) {
 					                   		String link = uicomponent.event(action) ;
+					                   		if(action.indexOf("Delete") > 0) {
+						                   		String confirm = _ctx.appRes(uicomponent.getName() + ".confirm." + action);
+					                   			link = "javascript:if(confirm('" + confirm + "?')){"+uicomponent.event(action)+"}" ;
+					                   		}
 					                   		String itemLabel = _ctx.appRes(uicomponent.getName() + ".action." + action);
 					                   		String classIcon = null;
 					                   		if(action.length() < 11) classIcon = action + "Icon";
@@ -137,6 +141,10 @@
 					                   <% } 
 					                   		for(action in uicomponent.getActionMenuForum()) {
 					                   		String link = uicomponent.event(action) ;
+					                   		if(action.indexOf("emove") > 0) {
+						                   		String confirm = _ctx.appRes(uicomponent.getName() + ".confirm." + action);
+					                   			link = "javascript:if(confirm('" + confirm + "?')){"+uicomponent.event(action)+"}" ;
+					                   		}
 					                   		String itemLabel = _ctx.appRes(uicomponent.getName() + ".action." + action);
 					                   		String classIcon = null;
 					                   		if(action.length() < 12) classIcon = action + "Icon" ;

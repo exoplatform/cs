@@ -8,15 +8,19 @@
   <% uiform.begin() %>
 	<div class="TitleMoveThreads">Choose a Destination Forum:</div>
 	<div class="UITree ScrollArea">
-	  <div class="TreeContainer">
+	  <div class="TreeContainer ParentNode">
 		<% 
 			List categories = uicomponent.getCategories(); 
 			for(category in categories) {
 		  	String categoryName = category.getCategoryName() ;
 		  	String display = "display:none;";
-		  	if(uicomponent.getSelectCate(category.getId())) display = "display:block;" ;
+		  	String iconClass = "SmallGrayMinus" ;
+		  	if(uicomponent.getSelectCate(category.getId())) {
+		  		display = "display:block;" ;
+		  		iconClass = "SmallGrayPlus" ;
+		  	}
 		%>
-	    <div class="Node">
+	    <div class="Node $iconClass">
 	     	<div class="Icon ForumIcon"><span></span></div>  
 	     	<div class="NodeLabel" onclick = "eXo.forum.UIForumPortlet.showTreeNode(this);">
 	     		<div class="NodeSelected"><a>$categoryName</a></div> 
@@ -30,7 +34,6 @@
 	      		String objectId = forum.getPath() ;
 	      		String link = uicomponent.event("Save",objectId ) ;
 	      %>
-			  <div class="ChildrenContainer">
 			    <div class="Node">
 			      <div class="Icon ThreadsIcon"><span></span></div>
 			      <div class="NodeLabel"> 
@@ -38,7 +41,6 @@
 				    </div>
 				    <div style="clear: left;"><span></span></div>
 			    </div>
-		    </div>
 		    <% } %>		
 	      </div>
 		  </div>

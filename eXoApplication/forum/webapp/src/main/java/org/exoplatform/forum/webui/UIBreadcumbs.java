@@ -106,8 +106,7 @@ public class UIBreadcumbs extends UIContainer {
       UIBreadcumbs uiActionBar = event.getSource() ; 
       UIForumPortlet forumPortlet = uiActionBar.getAncestorOfType(UIForumPortlet.class) ;
       UICategoryContainer categoryContainer = forumPortlet.getChild(UICategoryContainer.class) ;
-      categoryContainer.isRenderCategories = true ;
-      categoryContainer.updateIsRender() ;
+      categoryContainer.updateIsRender(true) ;
       forumPortlet.updateIsRendered(1);
       event.getRequestContext().addUIComponentToUpdateByAjax(forumPortlet) ;
     }

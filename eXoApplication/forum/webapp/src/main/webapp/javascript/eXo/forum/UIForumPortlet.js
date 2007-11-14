@@ -43,7 +43,9 @@ UIForumPortlet.prototype.checkAll = function(obj) {
 				this.selectItem(checkboxes[i]) ;				
 			}
 		}
-}
+};
+
+//Duytu
 UIForumPortlet.prototype.OverButton = function(oject) {
 	if(oject.className.indexOf("Style") > 0){
 		var Srt = "";
@@ -113,11 +115,11 @@ UIForumPortlet.prototype.expandCollapse = function(obj) {
 		obj.setAttribute("title","Collapse") ;
 	}
 } ;
-
+//Edit by Duy Tu 14-11-07
 UIForumPortlet.prototype.showTreeNode = function(obj) {
 	var DOMUtil = eXo.core.DOMUtil ;
-	var treeContainer = DOMUtil.findAncestorByClass(obj, "TreeContainer") ;
-	var nodes = DOMUtil.findChildrenByClass(treeContainer, "div", "Node") ;
+	var parentNode = DOMUtil.findAncestorByClass(obj, "ParentNode") ;
+	var nodes = DOMUtil.findChildrenByClass(parentNode, "div", "Node") ;
 	var selectedNode = DOMUtil.findAncestorByClass(obj, "Node") ;
 	var nodeSize = nodes.length ;
 	var childrenContainer = null ;
@@ -125,14 +127,16 @@ UIForumPortlet.prototype.showTreeNode = function(obj) {
 		childrenContainer = DOMUtil.findFirstDescendantByClass(nodes[i], "div", "ChildNodeContainer") ;
 		if (nodes[i] === selectedNode) {
 			childrenContainer.style.display = "block" ;
+			nodes[i].className = "Node SmallGrayPlus" ;
 		} else {		
 			childrenContainer.style.display = "none" ;			
+			nodes[i].className = "Node SmallGrayMinus" ;
 		}
 	}	
 };
 
 
-
+//Duy Tu
 UIForumPortlet.prototype.initVote = function(voteId, rate) {
 	var vote = document.getElementById(voteId) ;
 	vote.rate = rate = parseInt(rate) ;
