@@ -87,7 +87,7 @@
 					<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
 	  				<thead>
 	  					<tr>
-	  			      <th style="width: 23px; padding-left: 7px;" class="text"><input type="checkbox" class="checkbox" title="Check all" value="4"/></th>
+	  			      <th style="width: 23px; padding-left: 7px;" class="text"><input type="checkbox" class="checkbox" title="Check all" value="4" onclick="eXo.contact.UIContactPortlet.toggleSelectAll(this) ;"/></th>
 	  						<th style="width: 24px;" class="text"><div class="Icon BlueTag"><span></span></div></th>
 	  		        <th style="width: 24%; padding-left: 7px;" class="text">
 	  		        	
@@ -387,7 +387,7 @@
 				
 				
 		  <div class="LeftVCardsContent">
-		  	<div class="VCardContent NormalVCard" id="<%contact.getId()%>">
+		  	<div class="VCardContent NormalVCard" id="<%=contact.getId()%>">
 			  	<div class="TitleVCards" >
 				  	<div class="StateIcon OnlineIcon"><%=(contact.getFullName()==null ? "_" : contact.getFullName())%></div>
 			  		<div class="TagIcon $iconTag"><span></span></div>
@@ -442,7 +442,7 @@
 				}
 			%>
 			<div class="RightVCardsContent">
-		  	<div class="VCardContent NormalVCard" id="<%contact.getId()%>">
+		  	<div class="VCardContent NormalVCard" id="<%=contact.getId()%>">
 			  	<div class="TitleVCards" >
 				  	<div class="StateIcon OfflineIcon"><%=(contact.getFullName()==null ? "_" : contact.getFullName())%></div>
 			  		<div class="TagIcon $iconTag"><span></span></div>

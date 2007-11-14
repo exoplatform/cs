@@ -3,6 +3,21 @@ function UIContactPortlet() {
 	
 }
 
+UIContactPortlet.prototype.toggleSelectAll = function(handler) {
+  rootElement = eXo.core.DOMUtil.findAncestorByClass(handler, 'UIGrid') ;
+  if (rootElement) {
+    var eLst = eXo.core.DOMUtil.findDescendantsByClass(rootElement, 'input', 'checkbox') ;
+    var curState = handler.checked ;
+    for (var i=0; i<eLst.length; i++) {
+      if (curState) {
+        eLst[i].checked = true ;
+      } else {
+        eLst[i].checked = false ;
+      }
+    }
+  }
+} ;
+
 UIContactPortlet.prototype.showContextMenu = function() {
 	var UIContextMenu = eXo.webui.UIContextMenu ;//eXo.contact.ContextMenu ;
 	var config = {
