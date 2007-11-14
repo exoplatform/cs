@@ -8,7 +8,7 @@ import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.Utils;
-import org.exoplatform.mail.webui.popup.UIAdvancedSearch;
+import org.exoplatform.mail.webui.popup.UIAdvancedSearchForm;
 import org.exoplatform.mail.webui.popup.UIPopupAction;
 import org.exoplatform.mail.webui.popup.UIPopupActionContainer;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -59,23 +59,17 @@ public class UISearchForm extends UIForm {
         " or (jcr:contains(@" + Utils.EXO_BODY + ", '" + text + "'))";
         filter.setViewQuery(whereQuery);
       }
-      filter.setAccountId(MailUtils.getAccountId());
-      
+      filter.setAccountId(MailUtils.getAccountId());      
       
       UIMailPortlet uiPortlet = uiSearchForm.getAncestorOfType(UIMailPortlet.class) ;
-      UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
-      UIPopupActionContainer uiPopupContainer = uiPopupAction.activate(UIPopupActionContainer.class, 850) ;
-      UIAdvancedSearch uiAdvancedSearch = uiPopupContainer.createUIComponent(UIAdvancedSearch.class, null, null);
-      uiPopupContainer.addChild(uiAdvancedSearch) ;
       
-      UIMessageList uiMessageList = uiAdvancedSearch.findFirstComponentOfType(UIMessageList.class);      
+      UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);      
       String username = uiPortlet.getCurrentUser();
       MailService mailService = uiPortlet.getApplicationComponent(MailService.class);
       
       uiMessageList.setMessagePageList(mailService.getMessages(username, filter));
       uiMessageList.updateList();
-      uiAdvancedSearch.showResult();
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
 
     }
   }
@@ -88,7 +82,7 @@ public class UISearchForm extends UIForm {
       UIPopupActionContainer uiPopupContainer = uiPopupAction.activate(UIPopupActionContainer.class, 850) ;
       uiPopupContainer.setId("UIAdvancedSearch");
       
-      UIAdvancedSearch uiAdvancedSearchForm = uiPopupContainer.createUIComponent(UIAdvancedSearch.class, null, null);          
+      UIAdvancedSearchForm uiAdvancedSearchForm = uiPopupContainer.createUIComponent(UIAdvancedSearchForm.class, null, null);          
       uiPopupContainer.addChild(uiAdvancedSearchForm) ;      
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;     
     }

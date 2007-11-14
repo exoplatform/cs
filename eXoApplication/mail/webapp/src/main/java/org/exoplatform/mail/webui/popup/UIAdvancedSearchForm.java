@@ -13,6 +13,7 @@ import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.webui.UIMailPortlet;
+import org.exoplatform.mail.webui.UIMessageArea;
 import org.exoplatform.mail.webui.UIMessageList;
 import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -43,7 +44,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
       @EventConfig(listeners = UIAdvancedSearchForm.ToActionListener.class)
     }
 )
-public class UIAdvancedSearchForm extends UIForm {
+public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
   final public static String ALL_FOLDER_SEARCH = "All folder" ;
   final public static String SELECT_FOLDER_SEARCH = "folder" ; 
   final static public String FIELD_FROM_SEARCH = "from-field" ;
@@ -125,9 +126,8 @@ public class UIAdvancedSearchForm extends UIForm {
   static  public class SearchActionListener extends EventListener<UIAdvancedSearchForm> {
     public void execute(Event<UIAdvancedSearchForm> event) throws Exception {
       UIAdvancedSearchForm uiSearchForm = event.getSource() ;   
-      UIAdvancedSearch uiSearch = uiSearchForm.getAncestorOfType(UIAdvancedSearch.class);
-      UIMessageList uiMessageList = uiSearch.findFirstComponentOfType(UIMessageList.class);      
       UIMailPortlet uiPortlet = uiSearchForm.getAncestorOfType(UIMailPortlet.class);
+      UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);      
       UIPopupAction uiPopup = uiSearchForm.getAncestorOfType(UIPopupAction.class) ; 
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
@@ -146,8 +146,8 @@ public class UIAdvancedSearchForm extends UIForm {
 
       uiMessageList.setMessagePageList(mailService.getMessages(username, filter));
       uiMessageList.updateList();
-      uiSearch.showResult();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
   }
   
