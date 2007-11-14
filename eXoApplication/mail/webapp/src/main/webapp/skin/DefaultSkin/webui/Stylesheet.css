@@ -585,7 +585,7 @@
 
 .UIMailPortlet .MailWorkingWorkspace .MessageHeader {
 	font-size: 12px;
-	height: 120px;
+	height: auto;
 	border-bottom: 1px dotted #acacac;
 }
 
@@ -628,6 +628,36 @@
 }
 
 .UIMailPortlet .MailWorkingWorkspace .MessageAddress .LinkAddress span {
+	font-weight: bold;
+}
+
+.UIMailPortlet .MailWorkingWorkspace .CollapseMessageAddress {
+	float: left; 
+}
+
+.UIMailPortlet .MailWorkingWorkspace .CollapseMessageAddress .FieldContainer{
+	line-height: 18px;
+}
+
+.UIMailPortlet .MailWorkingWorkspace .CollapseMessageAddress .Title {
+	float: left;
+	text-align: center;
+	color: #6a6a6a;
+	width: 35px;
+}
+
+.UIMailPortlet .MailWorkingWorkspace .CollapseMessageAddress .Address {
+	float: left;
+	padding-left: 2px;
+}
+
+.UIMailPortlet .MailWorkingWorkspace .CollapseMessageAddress .LinkAddress {
+	float: left;
+	color: #2276ab;
+	cursor: pointer;
+}
+
+.UIMailPortlet .MailWorkingWorkspace .CollapseMessageAddress .LinkAddress span {
 	font-weight: bold;
 }
 

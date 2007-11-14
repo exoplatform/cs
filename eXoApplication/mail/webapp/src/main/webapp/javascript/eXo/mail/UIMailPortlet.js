@@ -277,4 +277,17 @@ UIMailPortlet.prototype.showHidePreviewPane = function(layout) {
 	}
 }
 
+UIMailPortlet.prototype.showHideMessageHeader = function(obj) {
+	var DOMUtil = eXo.core.DOMUtil ;
+	var colapse = document.getElementById("CollapseMessageAddressPreview");
+	var expand = document.getElementById("MessageAddressPreview");
+	if (colapse.style.display == "none") {
+		expand.style.display = "none";
+		colapse.style.display = "block"
+	} else {
+		colapse.style.display = "none"
+		expand.style.display = "block";
+	}
+} ;
+
 eXo.mail.UIMailPortlet = new UIMailPortlet();

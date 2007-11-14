@@ -43,83 +43,111 @@
 									<div><a href="<%=uicomponent.event("AddStar")%>"><div  class="$starClass" title="Add star for this message"><span></span></div></a></div>
 									<div style="clear: left;"><span></span></div>
 								</div>
-								<div class="MessageAddress">
+								<div id="CollapseMessageAddressPreview" class="CollapseMessageAddress">
 									<div class="FieldContainer">
-										<div class="Title">From:</div>
+										<div class="Title"></div>
 										<div class="LinkAddress">
 										  <%
-										    InternetAddress[] fromAddress = Utils.getInternetAddress(msg.getFrom());
-										    InternetAddress from = fromAddress[0];
+										    InternetAddress[] fromAddress1 = Utils.getInternetAddress(msg.getFrom());
+										    InternetAddress from1 = fromAddress1[0];
 										  %>
-										  <span><%=Utils.getPersonal(from)%> </span> &lt; <%=from.getAddress()%> &gt;
+										  <span><%=Utils.getPersonal(from1)%> &lt; <%=from1.getAddress()%> &gt; </span>
 										</div>  
-										<div style="clear: left;"><span></span></div>
-									</div>
-									<div class="FieldContainer">
-										<div class="Title">Reply-to:</div>
-										<div class="LinkAddress"> 
-										  <%
-										    InternetAddress[] replyAddress = Utils.getInternetAddress(msg.getReplyTo());
-										    InternetAddress reply = replyAddress[0];
-										  %>
-										  <span><%=Utils.getPersonal(reply)%> </span> &lt; <%=reply.getAddress()%> &gt;
-										</div>
-										<div style="clear: left;"><span></span></div>
-									</div>
-									<div class="FieldContainer">
-										<div class="Title">To:</div>
-										<div class="LinkAddress"> 
-										  <%
-										    InternetAddress[] toAddress = InternetAddress.parse(msg.getMessageTo());
-										    for (i in 0..(toAddress.length-1)) {
-										      InternetAddress address = toAddress[i];
-										      if (i > 0) print ",";
-										  %>
-										    <span><%=Utils.getPersonal(address)%> </span> &lt; <%=address.getAddress()%> &gt; 
-										  <%}%>										  
-										</div>
-										<div style="clear: left;"><span></span></div>
-									</div>
-									<div class="FieldContainer">
-										<div class="Title">Date & time:</div>
-										<div class="Address"><%=Utils.formatDate('EEEE, dd MMMM, yyyy HH:mm:ss aaa', msg.getReceivedDate())%></div>
-										<div style="clear: left;"><span></span></div>
-									</div>
-									<%
-									  if (msg.getAttachments().size() > 0) {
-									%>
-									<div class="FieldContainer">
-                    <div class="Title">Attachment:</div>
-                    <div class="Address">
+                    <div class="Title">To:</div>
+                    <div class="LinkAddress"> 
                       <%
-                          int i = 1;
-                          for (Attachment att : msg.getAttachments()) {  
-                            String downloadAction = uicomponent.event("DownloadAttachment", att.getId());
+                        InternetAddress[] toAddress1 = InternetAddress.parse(msg.getMessageTo());
+                        for (i in 0..(toAddress1.length-1)) {
+                          InternetAddress address1 = toAddress1[i];
+                          if (i > 0) print ",";
                       %>
-                            <%if ((msg.getAttachments().size() > 1) && (i > 1)) {%>, <%}%>    
-                            <span><a class="AttackmentIcon" href="$downloadAction"><%=att.getName()%> (
-                              <%
-                                if (att.getSize() > 1024) {
-                              %> 
-                                <%=(int)(att.getSize()/1024)%>KB
-                              <%
-                                } else {              
-                              %> 
-                                <%=att.getSize()%>B
-                              <%}%>
-                            )</a></span>
-                      <%
-                            i++;
-                          }
-                      %>
+                        <span><%=Utils.getPersonal(address1)%> </span> &lt; <%=address1.getAddress()%> &gt; 
+                      <%}%>                     
                     </div>
-                    <div style="clear: left;"><span></span></div>
-                  </div>
-                  <%}%>
+										<div style="clear: left;"><span></span></div>
+									</div>
 								</div>
+                
+                <!-- Begin Expand Message Header -->
+                <div id="MessageAddressPreview" class="MessageAddress" style="display : none;">
+                <div class="FieldContainer">
+                  <div class="Title">From:</div>
+                  <div class="LinkAddress">
+                    <%
+                      InternetAddress[] fromAddress = Utils.getInternetAddress(msg.getFrom());
+                      InternetAddress from = fromAddress[0];
+                    %>
+                    <span><%=Utils.getPersonal(from)%> </span> &lt; <%=from.getAddress()%> &gt;
+                  </div>  
+                  <div style="clear: left;"><span></span></div>
+                </div>
+                <div class="FieldContainer">
+                  <div class="Title">Reply-to:</div>
+                  <div class="LinkAddress"> 
+                    <%
+                      InternetAddress[] replyAddress = Utils.getInternetAddress(msg.getReplyTo());
+                      InternetAddress reply = replyAddress[0];
+                    %>
+                    <span><%=Utils.getPersonal(reply)%> </span> &lt; <%=reply.getAddress()%> &gt;
+                  </div>
+                  <div style="clear: left;"><span></span></div>
+                </div>
+                <div class="FieldContainer">
+                  <div class="Title">To:</div>
+                  <div class="LinkAddress"> 
+                    <%
+                      InternetAddress[] toAddress = InternetAddress.parse(msg.getMessageTo());
+                      for (i in 0..(toAddress.length-1)) {
+                        InternetAddress address = toAddress[i];
+                        if (i > 0) print ",";
+                    %>
+                      <span><%=Utils.getPersonal(address)%> </span> &lt; <%=address.getAddress()%> &gt; 
+                    <%}%>                     
+                  </div>
+                  <div style="clear: left;"><span></span></div>
+                </div>
+                <div class="FieldContainer">
+                  <div class="Title">Date & time:</div>
+                  <div class="Address"><%=Utils.formatDate('EEEE, dd MMMM, yyyy HH:mm:ss aaa', msg.getReceivedDate())%></div>
+                  <div style="clear: left;"><span></span></div>
+                </div>
+                <%
+                  if (msg.getAttachments().size() > 0) {
+                %>
+                <div class="FieldContainer">
+                  <div class="Title">Attachment:</div>
+                  <div class="Address">
+                    <%
+                        int i = 1;
+                        for (Attachment att : msg.getAttachments()) {  
+                          String downloadAction = uicomponent.event("DownloadAttachment", att.getId());
+                    %>
+                          <%if ((msg.getAttachments().size() > 1) && (i > 1)) {%>, <%}%>    
+                          <span><a class="AttackmentIcon" href="$downloadAction"><%=att.getName()%> (
+                            <%
+                              if (att.getSize() > 1024) {
+                            %> 
+                              <%=(int)(att.getSize()/1024)%>KB
+                            <%
+                              } else {              
+                            %> 
+                              <%=att.getSize()%>B
+                            <%}%>
+                          )</a></span>
+                    <%
+                          i++;
+                        }
+                    %>
+                  </div>
+                  <div style="clear: left;"><span></span></div>
+                </div>
+                <%}%>
+                </div>
+                <!-- End Expand Message Header-->
+                
 								<div class="MessageActions" >
 									<div class="DownArrow1Icon"><span></span></div>
-									<div class="ShowHideTitle" onclick>Hide details</div>
+									<div class="ShowHideTitle" onclick="javascript:eXo.mail.UIMailPortlet.showHideMessageHeader(this)">Show details</div>
 									<div class="MonthDate">June 26</div>
 									<div class="Actions" title="Actions on this message"><span></span></div>
 									<div style="clear: both;"><span></span></div>
