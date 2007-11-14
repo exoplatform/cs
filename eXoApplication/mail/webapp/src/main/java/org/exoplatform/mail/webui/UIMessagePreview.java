@@ -13,6 +13,7 @@ import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.mail.service.Attachment;
 import org.exoplatform.mail.service.JCRMessageAttachment;
+import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -30,7 +31,8 @@ import org.exoplatform.webui.event.EventListener;
 @ComponentConfig(
     template =  "app:/templates/mail/webui/UIMessagePreview.gtmpl",
     events = {
-        @EventConfig(listeners = UIMessagePreview.DownloadAttachmentActionListener.class)
+        @EventConfig(listeners = UIMessagePreview.DownloadAttachmentActionListener.class),
+        @EventConfig(listeners = UIMessagePreview.AddStarActionListener.class)
     }
 )
 
@@ -62,6 +64,24 @@ public class UIMessagePreview extends UIComponent {
       UIMailPortlet uiPortlet = uiMessagePreview.getAncestorOfType(UIMailPortlet.class);
       event.getRequestContext().getJavascriptManager().addJavascript("ajaxRedirect('" + downloadLink + "');");
       uiPortlet.cancelAction() ;
+    }
+  }
+  
+  static public class AddStarActionListener extends EventListener<UIMessagePreview> {
+    public void execute(Event<UIMessagePreview> event) throws Exception { 
+      UIMessagePreview uiMessagePreview = event.getSource();
+      UIMailPortlet uiPortlet = uiMessagePreview.getAncestorOfType(UIMailPortlet.class);
+      UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
+      String username = uiPortlet.getCurrentUser();
+      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      MailService mailServ = uiPortlet.getApplicationComponent(MailService.class);
+      try {
+        Message msg = uiMessagePreview.getMessage();
+        msg.setHasStar(!msg.hasStar());
+        mailServ.saveMessage(username, accountId, msg, false);
+      } catch (Exception e) { }
+      uiMessageList.updateList();
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
   }
 }

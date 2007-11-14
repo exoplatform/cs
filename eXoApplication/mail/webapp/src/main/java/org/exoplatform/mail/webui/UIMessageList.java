@@ -258,9 +258,10 @@ public class UIMessageList extends UIForm {
         }
       }
       uiMessageList.updateList();
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent());
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
   }
+  
   static public class RemoveStarActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource();

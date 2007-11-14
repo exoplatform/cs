@@ -114,10 +114,12 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
 
     addUIFormInput(new UIFormStringInput(FIELD_TO, null, null)) ;
     UIFormTextAreaInput textAreaCC= new UIFormTextAreaInput(FIELD_CC, null, null);
+    textAreaCC.setId(FIELD_CC);
     textAreaCC.setColumns(2);
     addUIFormInput(textAreaCC) ;
     UIFormTextAreaInput textAreaBCC = new UIFormTextAreaInput(FIELD_BCC, null, null);
     textAreaBCC.setColumns(2);
+    textAreaBCC.setId(FIELD_BCC);
     addUIFormInput(textAreaBCC) ;
     addUIFormInput(new UIFormStringInput(FIELD_SUBJECT, null, null)) ;
     UIFormInputWithActions inputSet = new UIFormInputWithActions(FIELD_FROM_INPUT);   

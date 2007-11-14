@@ -36,7 +36,7 @@
 						<div class="MiddleCenterViewBoxStyle">
 							<div class="MessageHeader">
 								<div class="MessageCheck">
-									<div class="UnStarredIcon" title="Add star for this message"><span></span></div>
+									<div><a href="<%=uicomponent.event("AddStar")%>"><span class="UnStarredIcon" title="Add star for this message"></span></a></div>
 									<div style="clear: left;"><span></span></div>
 								</div>
 								<div class="MessageAddress">
