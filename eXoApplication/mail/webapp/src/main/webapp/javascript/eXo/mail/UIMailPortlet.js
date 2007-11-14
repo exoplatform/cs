@@ -193,7 +193,7 @@ UIMailPortlet.prototype.switchLayout = function(layout) {
 		case 2 :
 			if (layout2.style.display == "none") {
 				layout2.style.display = "block" ;
-				Browser.setCookie("UIMessageList", "block", 30)
+				Browser.setCookie("uiMessageListResizableArea", "block", 30)
 				if (layout3.style.display != "none" && layout2.style.display != "none") {
 					resizePane.style.display = "block";
 					Browser.setCookie("ResizeReadingPane", "block", 30)
@@ -257,6 +257,24 @@ UIMailPortlet.prototype.showHide = function(add) {
 	if (elm.style.display == "none") {
 		elm.style.display = "" ;
 	}
-} ;
+} ; 
+
+UIMailPortlet.prototype.showHidePreviewPane = function(layout) {	
+	var Browser = eXo.core.Browser ;
+    var	uiMessageList = document.getElementById("uiMessageListResizableArea") ;
+	var	previewPane = document.getElementById("SpliterResizableArea") ;
+	var resizePane = document.getElementById("ResizeReadingPane");
+	if (uiMessageList.style.display == "block") {
+		uiMessageList.style.display = "none";
+		resizePane.style.display = "none";
+		Browser.setCookie("uiMessageListResizableArea", "none", 30)
+		Browser.setCookie("ResizeReadingPane", "none", 30)
+	} else {
+		uiMessageList.style.display = "block";
+		resizePane.style.display = "block";
+		Browser.setCookie("uiMessageListResizableArea", "block", 30)
+		Browser.setCookie("ResizeReadingPane", "block", 30)
+	}
+}
 
 eXo.mail.UIMailPortlet = new UIMailPortlet();

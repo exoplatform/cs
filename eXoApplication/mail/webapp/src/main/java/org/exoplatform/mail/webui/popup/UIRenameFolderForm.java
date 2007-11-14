@@ -9,6 +9,7 @@ import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.webui.UIFolderContainer;
 import org.exoplatform.mail.webui.UIMailPortlet;
+import org.exoplatform.mail.webui.UIMessageArea;
 import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -94,6 +95,7 @@ public class UIRenameFolderForm extends UIForm implements UIPopupComponent {
       uiForm.getAncestorOfType(UIPopupAction.class).deActivate() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMailPortlet.findFirstComponentOfType(UIMessageArea.class)) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
       
     }
