@@ -77,16 +77,24 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent {
     public void execute(Event<UIAdvancedSearchForm> event) throws Exception {
       UIAdvancedSearchForm uiAdvancedSearchForm = event.getSource() ;
       ContactFilter filter = new ContactFilter() ;
-      String text = "\"" + uiAdvancedSearchForm.getUIStringInput(FIELD_TEXT_INPUT).getValue() + "\"" ;
-      filter.setText(text) ;
-      filter.setFullName(uiAdvancedSearchForm.getUIStringInput(FIELD_FULLNAME_INPUT).getValue()) ;
-      filter.setFirstName(uiAdvancedSearchForm.getUIStringInput(FIELD_FIRSTNAME_INPUT).getValue()) ;
-      filter.setMiddleName(uiAdvancedSearchForm.getUIStringInput(FIELD_MIDDLENAME_INPUT).getValue()) ;
-      filter.setLastName(uiAdvancedSearchForm.getUIStringInput(FIELD_LASTNAME_INPUT).getValue()) ;
-      filter.setNickName(uiAdvancedSearchForm.getUIStringInput(FIELD_NICKNAME_INPUT).getValue()) ;
-      filter.setJobTitle(uiAdvancedSearchForm.getUIStringInput(FIELD_JOBTITLE_INPUT).getValue()) ;
-      filter.setEmailAddress(uiAdvancedSearchForm.getUIStringInput(FIELD_EMAIL_INPUT).getValue()) ;
-      filter.setGender(uiAdvancedSearchForm.getUIFormSelectBox(FIELD_GENDER_BOX).getValue()) ;
+      String text = uiAdvancedSearchForm.getUIStringInput(FIELD_TEXT_INPUT).getValue() ;
+      if(text != null && text.length() > 0) filter.setText(text) ;
+      String fullName = uiAdvancedSearchForm.getUIStringInput(FIELD_FULLNAME_INPUT).getValue() ;
+      if(fullName != null && fullName.length() > 0) filter.setFullName(fullName) ;
+      String firstName = uiAdvancedSearchForm.getUIStringInput(FIELD_FIRSTNAME_INPUT).getValue() ;
+      if(firstName != null && firstName.length() > 0 ) filter.setFirstName(firstName) ;
+      String middleName = uiAdvancedSearchForm.getUIStringInput(FIELD_MIDDLENAME_INPUT).getValue() ;
+      if(middleName != null && middleName.length() > 0) filter.setMiddleName(middleName) ;
+      String lastName = uiAdvancedSearchForm.getUIStringInput(FIELD_LASTNAME_INPUT).getValue() ;
+      if(lastName != null && lastName.length() > 0) filter.setLastName(lastName) ;
+      String nickName = uiAdvancedSearchForm.getUIStringInput(FIELD_NICKNAME_INPUT).getValue() ;
+      if(nickName != null && nickName.length() > 0) filter.setNickName(nickName) ;
+      String jobTitle = uiAdvancedSearchForm.getUIStringInput(FIELD_JOBTITLE_INPUT).getValue() ;
+      if(jobTitle != null && jobTitle.length() > 0) filter.setJobTitle(jobTitle) ;
+      String email = uiAdvancedSearchForm.getUIStringInput(FIELD_EMAIL_INPUT).getValue() ;
+      if(email != null && email.length() > 0) filter.setEmailAddress(email) ;
+      String gender = uiAdvancedSearchForm.getUIFormSelectBox(FIELD_GENDER_BOX).getValue() ;
+      if(gender != null && gender.length() > 0) filter.setGender(gender) ;
       
       DataPageList resultPageList = 
         ContactUtils.getContactService().searchContact(ContactUtils.getCurrentUser(), filter) ;
