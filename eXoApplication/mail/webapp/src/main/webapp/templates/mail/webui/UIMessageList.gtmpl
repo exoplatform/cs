@@ -151,7 +151,7 @@
             if (currentPage > 1) cssPreviousPage = "FloatBlock";
             if (currentPage < pageList.getAvailablePage()) cssNextPage = "FloatBlock";
             long fromIndex = (pageList.getCurrentPage()-1)* pageList.getPageSize() + 1;
-            long endIndex = fromIndex + pageList.getPageSize();
+            long endIndex = fromIndex + pageList.getPageSize() - 1;
             if (pageList.getCurrentPage() == pageList.getAvailablePage()) endIndex = pageList.getAvailable();
             mailRange = fromIndex + " to " + endIndex + " of " + pageList.getAvailable();
           }         

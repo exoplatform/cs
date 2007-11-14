@@ -53,11 +53,11 @@ public class UISearchForm extends UIForm {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       } else {
-        String whereQuery = "(jcr:contains(@" + Utils.EXO_TO + ", '" + text + "'))" +
+        String searchQuery = "(jcr:contains(@" + Utils.EXO_TO + ", '" + text + "'))" +
         " or (jcr:contains(@" + Utils.EXO_FROM + ", '" + text + "'))" +
         " or (jcr:contains(@" + Utils.EXO_SUBJECT + ", '" + text + "'))" +
         " or (jcr:contains(@" + Utils.EXO_BODY + ", '" + text + "'))";
-        filter.setViewQuery(whereQuery);
+        filter.setSearchQuery(searchQuery);
       }
       filter.setAccountId(MailUtils.getAccountId());      
       

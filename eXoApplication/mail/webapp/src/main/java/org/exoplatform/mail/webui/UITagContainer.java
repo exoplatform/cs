@@ -61,7 +61,8 @@ public class UITagContainer extends UIComponent {
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       uiMessageList.setMessagePageList(mailSrv.getMessagePagelistByTag(username, accountId, tagId));
-      MessageFilter filter = new MessageFilter("Folder"); 
+      MessageFilter filter = new MessageFilter("Tag"); 
+      filter.setTag(new String[] { tagId });
       uiMessageList.setMessageFilter(filter);
       uiMessageList.setSelectedTagId(tagId);
       uiMessageList.setSelectedFolderId(null);

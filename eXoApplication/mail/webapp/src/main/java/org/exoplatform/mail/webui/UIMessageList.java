@@ -98,10 +98,13 @@ public class UIMessageList extends UIForm {
     String accountId = MailUtils.getAccountId();
     String username = MailUtils.getCurrentUser();
     MailService mailSrv = getApplicationComponent(MailService.class);
+    MessageFilter filter = new MessageFilter("Folder"); 
+    filter.setFolder(new String[] { selectedFolderId_ });
     if (accountId != null){
       selectedFolderId_ = Utils.createFolderId(accountId, Utils.FD_INBOX, false);
       setMessagePageList(mailSrv.getMessagePageListByFolder(username, accountId, selectedFolderId_));
     }
+    setMessageFilter(filter);
   }
   
   public String getSelectedMessageId() throws Exception {
@@ -347,8 +350,11 @@ public class UIMessageList extends UIForm {
     msgFilter.setOrderBy(getSortedBy());
     msgFilter.setAscending(isAscending_);
     msgFilter.setViewQuery(getViewQuery());
-    msgFilter.setFolder((getSelectedFolderId() == null) ? null : new String[] {getSelectedFolderId()});
-    msgFilter.setTag((getSelectedTagId() == null) ? null : new String[] {getSelectedTagId()});
+    if (!msgFilter.getName().equals("Search")) {
+      msgFilter.setSearchQuery("");
+      msgFilter.setFolder((getSelectedFolderId() == null) ? null : new String[] {getSelectedFolderId()});
+      msgFilter.setTag((getSelectedTagId() == null) ? null : new String[] {getSelectedTagId()});
+    }
     setMessagePageList(mailSrv.getMessages(username, msgFilter));
     updateList();
   }
@@ -751,8 +757,9 @@ public class UIMessageList extends UIForm {
       msgFilter.setAccountId(accountId);
       msgFilter.setOrderBy(uiMessageList.getSortedBy());
       msgFilter.setAscending(uiMessageList.isAscending_);
+      msgFilter.setViewQuery(uiMessageList.getViewQuery());
       if (!msgFilter.getName().equals("Search")) {
-        msgFilter.setViewQuery(uiMessageList.getViewQuery());
+        msgFilter.setSearchQuery("");
         msgFilter.setFolder((uiMessageList.getSelectedFolderId() == null) ? null : new String[] {uiMessageList.getSelectedFolderId()});
         msgFilter.setTag((uiMessageList.getSelectedTagId() == null) ? null : new String[] {uiMessageList.getSelectedTagId()});
       }
