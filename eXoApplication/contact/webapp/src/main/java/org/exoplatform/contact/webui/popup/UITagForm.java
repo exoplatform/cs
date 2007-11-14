@@ -38,7 +38,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
  */
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
-    template = "system:/groovy/webui/form/UIForm.gtmpl", 
+    template = "app:/templates/contact/webui/popup/UITagForm.gtmpl", 
     events = {
       @EventConfig(listeners = UITagForm.AddActionListener.class),
       @EventConfig(listeners = UITagForm.RemoveActionListener.class),
@@ -46,7 +46,6 @@ import org.exoplatform.webui.form.UIFormStringInput;
     }
 )
 public class UITagForm extends UIForm implements UIPopupComponent {
-  public static final String FIELD_TAGSOFCONTACT_INFO = "TagsOfContact";
   public static final String FIELD_TAGNAME_INPUT = "tagName";
   public static final String NO_TAG_INFO = "no Tag";
   public static final String FIELD_COLOR= "color";
@@ -56,32 +55,35 @@ public class UITagForm extends UIForm implements UIPopupComponent {
   public static String[] FIELD_TAG_BOX_KEY = null;
   public static String[] FIELD_TAG_BOX_LABLE = null;
   public static List<String> contactIds_ ;
-
+  private String[] tagNames = null ;
+  private String[] contactNames = null ;
   public UITagForm() throws Exception { setId("UITagForm") ; }
   
   public void update() throws Exception {
     getChildren().clear() ;
-    addUIFormInput(new UIFormInputInfo(FIELD_TAGSOFCONTACT_INFO, FIELD_TAGSOFCONTACT_INFO, null)) ;
     ContactService contactService = ContactUtils.getContactService();
     String username = ContactUtils.getCurrentUser() ;
-    Contact contact ;
+    int i = 0 ;
+    contactNames = new String[contactIds_.size()] ;
+    tagNames = new String[contactIds_.size()] ;
     for (String contactId : contactIds_) {
-      contact = contactService.getContact(username, contactId) ;
+      Contact contact = contactService.getContact(username, contactId) ;
       if (contact == null) contact = contactService.getSharedContact(contactId) ;
       String[] tagIds  = null ;
       if (contact != null) { 
         tagIds = contact.getTags() ;
-        StringBuffer buffer = new StringBuffer(contact.getFullName() + ": ") ;          
+        StringBuffer buffer = new StringBuffer("") ;          
         if (tagIds != null) {
           if (tagIds.length > 0) {
             buffer.append(contactService.getTag(username, tagIds[0]).getName()) ;
-            for (int i = 1; i < tagIds.length; i ++) 
-              buffer.append(", " + contactService.getTag(username, tagIds[i]).getName()) ;
+            for (int j = 1; j < tagIds.length; j ++)
+              buffer.append(", " + contactService.getTag(username, tagIds[j]).getName()) ;
           } else tagIds = null ;
         }
         if (tagIds == null) buffer.append(NO_TAG_INFO) ;
-        String info = buffer.toString() ;
-        addUIFormInput(new UIFormInputInfo(info, info,  null)) ;
+        contactNames[i] = contact.getFullName() ;
+        tagNames[i] = buffer.toString() ;
+        i ++ ;
       }
     }
     addUIFormInput(new UIFormStringInput(FIELD_TAGNAME_INPUT, FIELD_TAGNAME_INPUT, null));
@@ -93,11 +95,11 @@ public class UITagForm extends UIForm implements UIPopupComponent {
     List<Tag> tags = contactService.getTags(username);
     FIELD_TAG_BOX_KEY = new String[tags.size()];
     FIELD_TAG_BOX_LABLE = new String[tags.size()] ;
-    for (int i = 0 ; i < tags.size(); i ++) {
-      Tag tag = tags.get(i) ;
-      FIELD_TAG_BOX_KEY[i] = tag.getId();
-      FIELD_TAG_BOX_LABLE[i] = tag.getName() ;
-      addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_TAG_BOX_LABLE[i], FIELD_TAG_BOX_KEY[i], false));
+    for (int k = 0 ; k < tags.size(); k ++) {
+      Tag tag = tags.get(k) ;
+      FIELD_TAG_BOX_KEY[k] = tag.getId();
+      FIELD_TAG_BOX_LABLE[k] = tag.getName() ;
+      addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_TAG_BOX_LABLE[k], FIELD_TAG_BOX_KEY[k], false));
     }
   }
   

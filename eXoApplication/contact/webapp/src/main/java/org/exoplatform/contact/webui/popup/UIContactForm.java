@@ -48,7 +48,8 @@ import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
       @EventConfig(listeners = UIContactForm.CancelActionListener.class),
       @EventConfig(listeners = UIContactForm.ChangeImageActionListener.class),
       @EventConfig(listeners = UIContactForm.DeleteImageActionListener.class),
-      @EventConfig(listeners = UIContactForm.SelectPermissionActionListener.class, phase=Phase.DECODE)
+      @EventConfig(listeners = UIContactForm.SelectPermissionActionListener.class, phase=Phase.DECODE),
+      @EventConfig(listeners = UIContactForm.OnChangeActionListener.class)
     }
 )
 public class UIContactForm extends UIFormTabPane implements UIPopupComponent, UISelector {
@@ -135,20 +136,21 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent, UI
     HomeTab.addUIFormInput(new UIFormStringInput(FIELD_HOMEPHONE2_INPUT, FIELD_HOMEPHONE2_INPUT, null));
     HomeTab.addUIFormInput(new UIFormStringInput(FIELD_HOMEFAX_INPUT, FIELD_HOMEFAX_INPUT, null));
     HomeTab.addUIFormInput(new UIFormStringInput(FIELD_PERSONALSITE_INPUT, FIELD_PERSONALSITE_INPUT, null));
-    
     NoteTab.addUIFormInput(new UIFormTextAreaInput(FIELD_NOTE_INPUT, FIELD_NOTE_INPUT, null));
 
-    ShareTab.addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_ISPUBLIC_BOX, FIELD_ISPUBLIC_BOX, false));
+    UIFormCheckBoxInput checkPublic = new UIFormCheckBoxInput<Boolean>(FIELD_ISPUBLIC_BOX, FIELD_ISPUBLIC_BOX, false) ;
+    checkPublic.setOnChange("OnChange") ;
+    ShareTab.addUIFormInput(checkPublic);
     ShareTab.addUIFormInput(new UIFormInputInfo(FIELD_INPUT_INFO, FIELD_INPUT_INFO, null)) ;
-   
     String[] groups = ContactUtils.getUserGroups() ;
     FIELD_SHAREDCONTACT_BOX = new String[groups.length];
     for(int i = 0; i < groups.length; i ++) {
       FIELD_SHAREDCONTACT_BOX[i] = groups[i] ;
-      ShareTab.addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_SHAREDCONTACT_BOX[i], FIELD_SHAREDCONTACT_BOX[i], false));
+      ShareTab.addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_SHAREDCONTACT_BOX[i], FIELD_SHAREDCONTACT_BOX[i], false).setEnable(false));
     }
-    ShareTab.addUIFormInput(new UIFormStringInput(FIELD_EDITPERMISSION_INPUT, null, null));
-    
+    UIFormStringInput inputPermission = new UIFormStringInput(FIELD_EDITPERMISSION_INPUT, null, null) ;
+    inputPermission.setEnable(false) ;
+    ShareTab.addUIFormInput(inputPermission);    
     
     List<ActionData> actions = new ArrayList<ActionData>() ;
     ActionData editPermissions = new ActionData() ;
@@ -422,6 +424,22 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent, UI
     }
   }
 
- 
+  static  public class OnChangeActionListener extends EventListener<UIContactForm> {
+    public void execute(Event<UIContactForm> event) throws Exception {
+      UIContactForm uiForm = event.getSource() ;
+      if (uiForm.getUIFormCheckBoxInput(FIELD_ISPUBLIC_BOX).isChecked()) {
+        for(String category : FIELD_SHAREDCONTACT_BOX) {
+          uiForm.getUIFormCheckBoxInput(category).setEnable(true) ;
+          uiForm.getUIStringInput(FIELD_EDITPERMISSION_INPUT).setEditable(true) ;
+        }
+      } else {
+        for(String category : FIELD_SHAREDCONTACT_BOX) {
+          uiForm.getUIFormCheckBoxInput(category).setEnable(false) ;
+          uiForm.getUIStringInput(FIELD_EDITPERMISSION_INPUT).setEditable(false) ;
+        }
+      }      
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm) ;
+    } 
+  }
   
 }

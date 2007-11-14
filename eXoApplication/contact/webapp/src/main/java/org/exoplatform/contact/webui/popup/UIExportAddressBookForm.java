@@ -7,12 +7,10 @@ package org.exoplatform.contact.webui.popup;
 import java.io.ByteArrayInputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.MissingResourceException;
 
 import org.exoplatform.contact.ContactUtils;
-import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.webui.UIContactPortlet;
@@ -125,7 +123,6 @@ public class UIExportAddressBookForm extends UIForm implements UIPopupComponent{
       ContactService contactService = ContactUtils.getContactService() ;
       
       List<String> groupIds = uiForm.getCheckedGroups() ;
-      //int size = groupIds.size();
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       if (groupIds.size() < 1) {
         uiApp.addMessage(new ApplicationMessage("UIExportAddressBookForm.checkGroup-required", null,
@@ -133,27 +130,6 @@ public class UIExportAddressBookForm extends UIForm implements UIPopupComponent{
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;          
       } 
-      /*LinkedHashMap<String, String> contactMap = new LinkedHashMap<String, String> () ;
-      for (int i=0; i<size; i++) {
-        List<Contact> contacts = contactService.getContactPageListByGroup(username, groupIds.get(i)).getAll();
-        int count = contacts.size();
-        for (int j=0; j<count; j++) {
-          String contactId = contacts.get(j).getId();
-          contactMap.put(contactId, contactId) ;
-        }          
-      }
-      List<String> sharedGroups = uiForm.sharedContactGroup_ ;
-      for (String group : sharedGroups) {
-        List<Contact> sharedContacts = contactService.getSharedContactsByGroup(group).getAll() ;
-        for (Contact contact : sharedContacts) {
-          String contactId = contact.getId() ;
-          contactMap.put(contactId, contactId) ;
-        }
-      }
-     // String[] contactIds = contactMap.values().toArray(new String[] {}) ;
-      List<String> listContactIds = new ArrayList<String>() ;
-      listContactIds.addAll(contactMap.values()) ;
-      */
       String exportFormat = uiForm.getUIFormSelectBox(UIExportAddressBookForm.TYPE).getValue() ;
       String fileName = uiForm.getUIStringInput(UIExportAddressBookForm.NAME).getValue() ;
       if (ContactUtils.isEmpty(fileName)) {
