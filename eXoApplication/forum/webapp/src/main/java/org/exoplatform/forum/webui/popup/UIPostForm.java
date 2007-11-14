@@ -20,6 +20,7 @@ import org.exoplatform.forum.webui.UITopicDetailContainer;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -189,6 +190,8 @@ public class UIPostForm extends UIForm implements UIPopupComponent {
       
       UIPopupContainer popupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       UIPopupAction popupAction = popupContainer.getChild(UIPopupAction.class) ;
+      UIPopupWindow popupWindow = popupAction.addChild(UIPopupWindow.class, null, null) ;
+      popupWindow.setRendered(true);
       UIViewTopic viewTopic = popupAction.activate(UIViewTopic.class, 670) ;
       viewTopic.setPostView(post) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;

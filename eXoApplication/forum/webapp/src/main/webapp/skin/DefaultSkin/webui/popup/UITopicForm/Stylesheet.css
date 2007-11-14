@@ -3,10 +3,9 @@
 	padding: 10px;
 }
 
-.UITopicForm .UIForm .HorizontalLayout .ThreadContent .UIFormInputSet {
-	padding: 10px; border: 1px solid red;
+.UITopicForm .UIForm .UIFormGrid td.FieldLabel {
+	text-align: left ;
 }
-
 .UITopicForm .UIForm .HorizontalLayout .ThreadContent input {
 	width: 430px;
 }

@@ -93,12 +93,21 @@
 					                   		String classIcon = null;
 					                   		if(action.length() < 11) classIcon = action + "Icon";
 					                   		else classIcon = action.replaceFirst("Topic", "Icon");
+					                   		
+					                   		if(action.indexOf("Close") > 0 || action.indexOf("Open") > 0) {
 					                   %>
+					                    <div class="MenuItem" style="opacity: 0.3; cursor: none;">   
+						                    <div class="ItemIcon $classIcon">
+						                      $itemLabel
+						                    </div>
+					                    </div>
+					                    <% } else { %>
 					                    <a class="MenuItem" href="$link">   
 						                    <div class="ItemIcon $classIcon">
 						                      $itemLabel
 						                    </div>
 					                    </a>
+					                    <% } %>
 					                   <% } %>
 														</div>
 						          		</div>
@@ -115,7 +124,7 @@
 			      		<% /*End Popup Menu*/ %>
 							</div>
 		  				<div class="SeparatorLine"><span></span></div>
-							<a class="StatusIcon SeachIcon">Search forum</a>
+							<div class="StatusIcon SeachIcon">Search forum</div>
 							<div class="SeparatorLine"><span></span></div>
 							<div class="StatusIcon ToolIcon" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
 								<a class="DownArrow1Icon">Forum tool</a>
@@ -149,12 +158,20 @@
 					                   		String classIcon = null;
 					                   		if(action.length() < 12) classIcon = action + "Icon" ;
 					                   		else classIcon = action.replaceFirst("Forum", "") + "Icon" ;
+					                   		if(action.indexOf("Close") > 0 || action.indexOf("Open") > 0 || action.indexOf("Option") > 0) {
 					                   %>
+					                    <div class="MenuItem" style="opacity: 0.3; cursor: none;">   
+						                    <div class="ItemIcon $classIcon">
+						                      $itemLabel
+						                    </div>
+					                    </div>
+					                    <% } else { %>
 					                    <a class="MenuItem" href="$link">   
 						                    <div class="ItemIcon $classIcon">
 						                      $itemLabel
 						                    </div>
 					                    </a>
+					                    <% } %>
 					                   <% } %>
 														</div>
 						          		</div>

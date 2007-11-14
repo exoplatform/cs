@@ -20,6 +20,7 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
@@ -244,6 +245,8 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
       
       UIPopupContainer popupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       UIPopupAction popupAction = popupContainer.getChild(UIPopupAction.class) ;
+      UIPopupWindow popupWindow = popupAction.addChild(UIPopupWindow.class, null, null) ;
+      popupWindow.setRendered(true);
       UIViewTopic viewTopic = popupAction.activate(UIViewTopic.class, 670) ;
       viewTopic.setPostView(postNew) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
@@ -319,6 +322,8 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
       UITopicForm uiForm = event.getSource() ;
       UIPopupContainer popupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       UIPopupAction uiChildPopup = popupContainer.getChild(UIPopupAction.class) ;
+      UIPopupWindow popupWindow = uiChildPopup.addChild(UIPopupWindow.class, null, null) ;
+      popupWindow.setRendered(false);
       UIAttachFileForm attachFileForm = uiChildPopup.activate(UIAttachFileForm.class, 500) ;
       attachFileForm.updateIsTopicForm(true) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupContainer) ;

@@ -8,6 +8,7 @@ import org.exoplatform.forum.service.Post;
 import org.exoplatform.forum.webui.UIForumPortlet;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -52,9 +53,9 @@ public class UIViewTopic extends UIForm implements UIPopupComponent {
   static  public class CloseActionListener extends EventListener<UIViewTopic> {
     public void execute(Event<UIViewTopic> event) throws Exception {
       UIViewTopic uiForm = event.getSource() ;
-      UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
-      UIPopupAction popupAction = forumPortlet.findComponentById("UIChildPopupAction") ;
-      popupAction.deActivate() ;
+      UIPopupAction popupAction = uiForm.getAncestorOfType(UIPopupAction.class) ;
+      UIPopupWindow popupWindow = popupAction.findFirstComponentOfType(UIPopupWindow.class) ;
+      popupWindow.setRendered(false);
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   }

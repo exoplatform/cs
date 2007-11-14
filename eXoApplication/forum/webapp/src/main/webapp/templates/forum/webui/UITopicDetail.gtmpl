@@ -66,7 +66,7 @@
 								          <div class="MiddleRightRightClickPopupMenu">
 					              		<div class="UIRightPopupMenuContainer">
 														<%  
-															String[] actionMenuPost = ["MergePost", "MovePost", "SetApprovePost", "SetUnApprovePost", "SetApproveAttachment", "SetUnApproveAttachment", "DeletePost"];
+															String[] actionMenuPost = ["MovePost", "SetApprovePost", "SetUnApprovePost", "SetApproveAttachment", "SetUnApproveAttachment", "DeletePost"];
 															for( action in actionMenuPost ) {
 																String link = uicomponent.event(action) ;
 																String classIcon = action + "Icon";
@@ -75,12 +75,22 @@
 																	String confirm = _ctx.appRes(uicomponent.getName() + ".confirm." + action);
 																	link = "javascript:if(confirm('" + confirm + "?')){"+uicomponent.event(action)+"}" ;
 																}
-														%>
+																
+																
+																if(action.indexOf("Approve") > 0) {
+					                   %>
+					                    <div class="MenuItem" style="opacity: 0.3; cursor: none;">   
+						                    <div class="ItemIcon $classIcon">
+						                      $itemLabel
+						                    </div>
+					                    </div>
+					                    <% } else { %>
 															<a class="MenuItem" href="$link">   
 						                    <div class="ItemIcon $classIcon">
 						                      $itemLabel
 						                    </div>
 					                    </a>
+					                    <% } %>
 					                    <% } %>
 														</div>
 						          		</div>
@@ -97,11 +107,11 @@
 			      		<% /*End Popup Menu*/ %>
 		  				</div>
 		  				<div class="SeparatorLine"><span></span></div>
-							<a class="StatusIcon TagIcon">Tag</a>
+							<div class="StatusIcon TagIcon">Tag</div>
 		  				<div class="SeparatorLine"><span></span></div>
 							<a class="StatusIcon VoteIcon" href="<%=uicomponent.event("RatingTopic");%>">Vote Thread</a>
 		  				<div class="SeparatorLine"><span></span></div>
-							<a class="StatusIcon SearchIcon">Search Thread</a>
+							<div class="StatusIcon SearchIcon">Search Thread</div>
 		  				<div class="SeparatorLine"><span></span></div>
 		  				<div class="StatusIcon ToolIcon" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
 								<a class="DownArrow1Icon">Thread Tools</a>
@@ -135,12 +145,23 @@
 						                   			String confirm = _ctx.appRes(uicomponent.getName() + ".confirm." + action);
 						                   			link = "javascript:if(confirm('" + confirm + "?')){"+uicomponent.event(action)+"}";
 						                   		}
+						                   		
+						                   		
+						                   		if(action.indexOf("Close") > 0 || action.indexOf("Open") > 0 || action.indexOf("intPa") > 0
+						                   			 || action.indexOf("plitTo") > 0 || action.indexOf("Approve") > 0) {
 					                   %>
+					                    <div class="MenuItem" style="opacity: 0.3; cursor: none;">   
+						                    <div class="ItemIcon $classIcon">
+						                      $itemLabel
+						                    </div>
+					                    </div>
+					                    <% } else { %>
 					                    <a class="MenuItem" href="$link">   
 						                    <div class="ItemIcon $classIcon">
 						                      $itemLabel
 						                    </div>
 					                    </a>
+					                    <% } %>
 					                   <% } %>
 														</div>
 						          		</div>
@@ -260,7 +281,7 @@
 								<div class="ButtonContainer">
 									<div class="UIActionForum">
 									<%
-										String[] actions = ["Print", "Edit", "Delete", "Quote"] ; 
+										String[] actions = ["Edit", "Delete", "Quote"] ; 
 										for(action in actions) {
 											String title = _ctx.appRes(uicomponent.getName() + ".title." + action);
 											String label = _ctx.appRes(uicomponent.getName() + ".action." + action);
