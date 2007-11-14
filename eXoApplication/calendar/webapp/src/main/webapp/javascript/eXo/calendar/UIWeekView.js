@@ -99,8 +99,18 @@ UIWeekView.prototype.drag = function(evt) {
 	var _e = window.event || evt ;
 	var src = _e.srcElement || _e.target ;
 	var UIWeekView = eXo.calendar.UIWeekView ;
-	var deltaY = _e.clientY - UIWeekView.mouseY ;
-	if(deltaY%eXo.calendar.UICalendarPortlet.interval == 0) UIWeekView.dragElement.style.top = UIWeekView.mousePos(_e).y - UIWeekView.offset.y - UIWeekView.containerOffset.y + "px" ;
+	var mouseY = eXo.core.Browser.findMouseRelativeY(UIWeekView.container,_e) - UIWeekView.container.scrollTop ;
+	var posY = UIWeekView.dragElement.offsetTop ;
+	var height =  UIWeekView.dragElement.offsetHeight ;
+	var deltaY = null ;
+//	if(mouseY <= posY) {
+//		 UIWeekView.dragElement.style.top = parseInt(UIWeekView.dragElement.style.top) - eXo.calendar.UICalendarPortlet.interval + "px" ;
+//	} else if(mouseY >= (posY + height) ) {
+//		UIWeekView.dragElement.style.top = parseInt(UIWeekView.dragElement.style.top) + eXo.calendar.UICalendarPortlet.interval + "px" ;
+//	} else {		
+		deltaY = _e.clientY - UIWeekView.mouseY ;
+		if(deltaY%eXo.calendar.UICalendarPortlet.interval == 0) UIWeekView.dragElement.style.top = UIWeekView.mousePos(_e).y - UIWeekView.offset.y - UIWeekView.containerOffset.y + "px" ;
+//	}
 	if (UIWeekView.isCol(_e)) {
 		var posX = eXo.core.Browser.findPosXInContainer(UIWeekView.currentCol, UIWeekView.container) ;
 		var left = parseFloat(posX/UIWeekView.container.offsetWidth)*100 ;
@@ -116,7 +126,7 @@ UIWeekView.prototype.dropCallback = function() {
 	var workingStart = (eXo.calendar.UICalendarPortlet.workingStart) ? eXo.calendar.UICalendarPortlet.workingStart : 0 ;
 	var delta = end - start  ;
 	var currentStart = dragElement.offsetTop + workingStart ;
-	var currentEnd = currentStart + delta ;	
+	var currentEnd = currentStart + delta ;
 	var actionLink =	eXo.calendar.UICalendarPortlet.adjustTime(currentStart, currentEnd, dragElement) ;
 	var currentDate = eXo.calendar.UIWeekView.currentCol.getAttribute("starttime").toString() ;
 	actionLink = actionLink.toString().replace(/'\s*\)/,"&currentDate=" + currentDate + "&calType=" + calType + "')") ;
@@ -213,7 +223,7 @@ UIWeekView.prototype.initAllday = function() {
 			indexBeginDate = 0 ;
 			startTime = 0 ;
 		}
-		if (indexEndDate < 0) {			
+		if ((indexEndDate < 0) || (indexEndDate > 6)) {			
 			indexEndDate = 6 ;
 			endTime = 24*60 ;
 		}

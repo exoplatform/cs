@@ -702,9 +702,9 @@ UICalendarPortlet.prototype.monthViewCallback = function(evt){
 	if (!DOMUtil.findAncestorByClass(src, "EventBoxes")) {
 		if (objectValue = DOMUtil.findAncestorByTagName(src,"td").getAttribute("startTime")){
 			var map = {
-    "startTime\s*=\s*[A-Za-z0-9_]*(?=&|'|\")":"startTime=" + objectValue
-   } ;
-   UIContextMenu.changeAction(UIContextMenu.menuElement,map) ;
+			   "startTime\s*=\s*[A-Za-z0-9_]*(?=&|'|\")":"startTime=" + objectValue
+			} ;
+   		UIContextMenu.changeAction(UIContextMenu.menuElement,map) ;
 		}
 	} else if (objvalue = DOMUtil.findAncestorByClass(src, "EventBoxes")) {
 		var eventId = objvalue.getAttribute("eventId") ;
@@ -1001,6 +1001,7 @@ UISelectionX.prototype.start = function(evt) {
 		var UISelectionX = eXo.calendar.UISelectionX ;
 		var _e = window.event || evt ;
 		var src = _e.srcElement || _e.target ;
+		if(src.tagName.toLowerCase() == "a") return ;
 		UISelectionX.container = this ;
 		UISelectionX.block = document.createElement("div") ;
 		UISelectionX.block.className = "UserSelectionBlock" ;
@@ -1062,7 +1063,7 @@ UISelectionX.prototype.clear = function(evt) {
 		startTime = parseInt(UISelectionX.startTime) - parseInt(UISelectionX.block.offsetWidth/UISelectionX.step)*24*60*60*1000 + 24*60*60*1000 ;
 		endTime = parseInt(UISelectionX.startTime) + 24*60*60*1000 ;
 	}
-	eXo.webui.UIForm.submitEvent(UISelectionX.viewType ,'QuickAdd','&objectId=event&startTime=' + startTime + '&finishTime=' + endTime) ;	
+	eXo.webui.UIForm.submitEvent(UISelectionX.viewType ,'QuickAdd','&objectId=Event&startTime=' + startTime + '&finishTime=' + endTime) ;	
 	eXo.core.DOMUtil.removeTemporaryElement(UISelectionX.block) ;
 	document.onmousemove = null ;
 	document.onmouseup = null ;
