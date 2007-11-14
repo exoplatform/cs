@@ -18,6 +18,7 @@ public class MessageFilter {
   private String subject ;
   private String body ;
   private String viewQuery ;
+  private String searchQuery ;
   private String accountPath ;
   private String orderBy;
   private boolean isAscending;
@@ -52,6 +53,8 @@ public class MessageFilter {
   public String getEmailTo(){return emailTo;}
   public void setEmailTo(String emailTo){this.emailTo=emailTo;}
   
+  public String getSearchQuery() { return searchQuery ; }
+  public void setSearchQuery(String query) { this.searchQuery = query ; }
   
   public String getViewQuery() { return viewQuery ; }
   public void setViewQuery(String query) { this.viewQuery = query ; }
@@ -118,6 +121,14 @@ public class MessageFilter {
       if(hasConjuntion) stringBuffer.append(" and (") ;
       else stringBuffer.append("(") ;
       stringBuffer.append("jcr:contains(@exo:body, '" + body + "')") ;
+      stringBuffer.append(")") ;
+      hasConjuntion = true ;
+    }
+    
+    if(searchQuery != null && searchQuery.trim().length() > 0) {
+      if(hasConjuntion) stringBuffer.append(" and (") ;
+      else stringBuffer.append("(") ;
+      stringBuffer.append(searchQuery) ;
       stringBuffer.append(")") ;
       hasConjuntion = true ;
     }
