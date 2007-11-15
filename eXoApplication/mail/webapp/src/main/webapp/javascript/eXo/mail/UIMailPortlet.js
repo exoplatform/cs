@@ -237,10 +237,17 @@ UIMailPortlet.prototype.checkLayout = function() {
 	var	uiNavigationContainer = Browser.getCookie("UINavigationContainer") ;
 	var	SpliterResizableArea = Browser.getCookie("SpliterResizableArea") ;
 	var	ResizeReadingPane = Browser.getCookie("ResizeReadingPane") ;
-	layout1.style.display = uiNavigationContainer;
-	layout2.style.display = uiMessageList;
-	layout3.style.display = SpliterResizableArea;
-	resizePane.style.display = ResizeReadingPane;
+	if (uiMessageList != null) {
+		layout1.style.display = uiNavigationContainer;
+		layout2.style.display = uiMessageList;
+		layout3.style.display = SpliterResizableArea;
+		resizePane.style.display = ResizeReadingPane;
+	} else {
+		layout1.style.display = "block";
+		layout2.style.display = "block";
+		layout3.style.display = "block";
+		resizePane.style.display = "block";
+	}
 	if(layout1.style.display == "none") {
 		workingarea.style.marginLeft = "0px"	;
 	}

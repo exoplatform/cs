@@ -1000,11 +1000,11 @@
 }
 
 .UIAdvanceSearchMail .HorizontalLayout .SearchForDate {
-	padding-left: 97px;
+	padding-left: 65px;
 }
 
 .UIAdvanceSearchMail .HorizontalLayout .SearchForDate .FieldLabel {
-	width: 60px;
+	width: 80px;
 }
 
 .UIAdvanceSearchMail .HorizontalLayout .SearchForDate .FieldComponent {
@@ -1016,7 +1016,7 @@
 }
 
 .UIAdvanceSearchMail .HorizontalLayout .SearchForPriority {
-	padding-left: 168px;
+	padding-left: 155px;
 }
 
 .UIAdvanceSearchMail .HorizontalLayout .SearchForPriority .FieldShort select {

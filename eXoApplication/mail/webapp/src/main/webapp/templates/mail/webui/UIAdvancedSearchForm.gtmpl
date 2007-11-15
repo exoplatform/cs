@@ -1,0 +1,128 @@
+<% uiform.begin() %>
+<div class="UIAdvanceSearchMail">
+<div class="UIForm">
+  <div class="HorizontalLayout">
+    <table class="UIFormGrid">
+      <tr>
+        <td class="FieldLabel">
+          <%=uicomponent.getLabel(uicomponent.SELECT_FOLDER_SEARCH);%> :
+        </td>
+        <td class="FieldComponent FieldShort">
+          <%
+            uicomponent.renderField(uicomponent.SELECT_FOLDER_SEARCH);
+          %>
+        </td>
+      </tr>
+      <tr>
+        <td class="FieldLabel">
+          <%=uicomponent.getLabel(uicomponent.FIELD_FROM_SEARCH);%> :
+        </td>
+        <td class="FieldComponent"  colspan="2">
+          <%
+            uicomponent.renderField(uicomponent.FIELD_FROM_SEARCH);
+          %>
+        </td>
+      </tr>
+      <tr>
+        <td class="FieldLabel">
+          <%=uicomponent.getLabel(uicomponent.FIELD_TO_SEARCH);%> :
+        </td>
+        <td class="FieldComponent"  colspan="2">
+        <%
+          uicomponent.renderField(uicomponent.FIELD_TO_SEARCH);
+        %>
+        </td>
+      </tr>
+      <tr>
+        <td class="FieldLabel">
+          <%=uicomponent.getLabel(uicomponent.FIELD_SUBJECT_SEARCH);%> :
+        </td>
+        <td class="FieldComponent"  colspan="2">
+        <%
+          uicomponent.renderField(uicomponent.FIELD_SUBJECT_SEARCH);
+        %>
+        </td>
+      </tr>
+      <tr>
+        <td class="FieldLabel">
+          <%=uicomponent.getLabel(uicomponent.FIELD_CONTENT_SEARCH);%> :
+        </td>
+        <td class="FieldComponent"  colspan="2">
+        <%
+          uicomponent.renderField(uicomponent.FIELD_CONTENT_SEARCH);
+        %>
+        </td>
+      </tr>
+    </table>
+    <div class="SearchForDate">
+      <table class="UIFormGrid">
+        <tr>
+          <td class="FieldLabel">
+            <%=uicomponent.getLabel(uicomponent.FIELD_FROM_DATE);%> :
+          </td>
+          <td class="FieldComponent"  colspan="2">
+          <%
+            uicomponent.renderField(uicomponent.FIELD_FROM_DATE);
+          %>
+          </td>
+          <td class="FieldLabel">
+            <%=uicomponent.getLabel(uicomponent.FIELD_TO_DATE);%> :
+          </td>
+          <td class="FieldComponent"  colspan="2">
+          <%
+            uicomponent.renderField(uicomponent.FIELD_TO_DATE);
+          %>
+          </td>
+          <td>&nbsp;</td>
+        </tr>
+      </table>
+    </div>
+    <div class="SearchForPriority">
+      <table class="UIFormGrid">
+        <tr>
+          <td class="ShortComponent" colspan="2">
+            <input class="checkbox" type="checkbox" value="" name=""/>
+          </td>
+          <td class="FieldLabel" style="text-align: left;">Has Star</td>
+          <td class="FieldLabel">Priority :</td>
+          <td class="FieldComponent FieldShort">
+            <select name="" class="selectbox">
+              <option value="" selected="selected"></option>
+            </select>
+          </td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td class="ShortComponent"  colspan="2">
+            <input class="checkbox" type="checkbox" value="" name=""/>
+          </td>
+          <td class="FieldLabel" style="text-align: left;">Has Attachment</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+<div class="UIAction">
+  <table class="ActionContainer" align="center">
+    <tr>
+      <td align="center">
+        <% for(action in uicomponent.getActions()) { 
+               String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action) ;
+               String link = uicomponent.event(action) ;
+        %>
+        <a href="$link" class="ActionButton LightBlueStyle">
+        <div class="ButtonLeft">
+          <div class="ButtonRight">
+            <div class="ButtonMiddle">
+              $actionLabel
+                </div>
+              </div>
+          </div>
+        </a>
+        <%}%>
+      </td>
+    </tr>
+  </table>
+</div>
+</div>
+<% uiform.end()%> 

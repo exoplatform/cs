@@ -176,7 +176,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
     if (msg != null) {
       setFieldSubjectValue(msg.getSubject());
       setFieldToValue(msg.getMessageTo());
-      //setFieldMessageContentValue(msg.getMessageBody());
+      setFieldContentValue(msg.getMessageBody());
     }
   }
   

@@ -40,9 +40,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
     template =  "app:/templates/mail/webui/UIAdvancedSearchForm.gtmpl",
     events = {
       @EventConfig(listeners = UIAdvancedSearchForm.SearchActionListener.class), 
-      @EventConfig(listeners = UIAdvancedSearchForm.CancelActionListener.class),
-      @EventConfig(listeners = UIAdvancedSearchForm.FromActionListener.class),
-      @EventConfig(listeners = UIAdvancedSearchForm.ToActionListener.class)
+      @EventConfig(listeners = UIAdvancedSearchForm.CancelActionListener.class)
     }
 )
 public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
@@ -154,28 +152,6 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
       uiPortlet.cancelAction();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
-    }
-  }
-  
-  static  public class FromActionListener extends EventListener<UIAdvancedSearchForm> {
-    public void execute(Event<UIAdvancedSearchForm> event) throws Exception {   
-      UIAdvancedSearchForm uiAdvancedSearchForm = event.getSource() ;           
-      UIPopupActionContainer uiActionContainer = uiAdvancedSearchForm.getAncestorOfType(UIPopupActionContainer.class) ;    
-      UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class) ;  
-      UIAddressSearchForm uiAddressSearchForm = uiChildPopup.activate(UIAddressSearchForm.class, 700) ; 
-      uiAddressSearchForm.setType("From"); 
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
-    }
-  }
-  
-  static  public class ToActionListener extends EventListener<UIAdvancedSearchForm> {
-    public void execute(Event<UIAdvancedSearchForm> event) throws Exception { 
-      UIAdvancedSearchForm uiAdvancedSearchForm = event.getSource() ;    
-      UIPopupActionContainer uiActionContainer = uiAdvancedSearchForm.getAncestorOfType(UIPopupActionContainer.class) ;    
-      UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class) ;  
-      UIAddressSearchForm uiAddressSearchForm = uiChildPopup.activate(UIAddressSearchForm.class, 700) ; 
-      uiAddressSearchForm.setType("To"); 
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
     }
   }
   

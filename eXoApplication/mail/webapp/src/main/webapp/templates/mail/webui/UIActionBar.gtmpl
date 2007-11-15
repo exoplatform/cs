@@ -16,17 +16,17 @@
 						</a>
 						<div class="SeparatorLine"><span></span></div>
 						
-						<a href="<%=uicomponent.event("Address")%>" class="ControlButton">
+						<a style="color:gray;" class="ControlButton">
 							<div class="IconHolder AddressIcon">
 								<div class="Label"> Address Book </div>
 							</div>
 						</a>
-						<a href="<%=uicomponent.event("AddEvent")%>" class="ControlButton">
+						<a style="color:gray;" class="ControlButton">
 							<div class="IconHolder AddEventIcon">
 								<div class="Label">Add event</div>
 							</div>
 						</a>
-						<a href="<%=uicomponent.event("Rss")%>" class="ControlButton">
+						<a style="color:gray;" class="ControlButton">
 							<div class="IconHolder RssIcon">
 								<div class="Label"> RSS </div>
 							</div>

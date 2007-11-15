@@ -377,6 +377,7 @@ public class UIMessageList extends UIForm {
       String username = uiPortlet.getCurrentUser() ;
       if (msgId != null) {
         Message message = mailSvr.getMessageById(username, accId, msgId);
+        uiComposeForm.setMessage(null);
         uiComposeForm.setFieldToValue(message.getFrom());
         uiComposeForm.setFieldSubjectValue("Re: " + message.getSubject());
         uiComposeForm.setFieldContentValue(message.getMessageBody());
@@ -404,6 +405,7 @@ public class UIMessageList extends UIForm {
       String username = uiPortlet.getCurrentUser() ;
       if (msgId != null) {
         Message message = mailSvr.getMessageById(username, accId, msgId);
+        uiComposeForm.setMessage(null);
         uiComposeForm.setFieldSubjectValue("Re: " + message.getSubject());
         String replyAll = message.getFrom();
         if (message.getMessageCc() != null) replyAll += "," + message.getMessageCc();
@@ -435,6 +437,7 @@ public class UIMessageList extends UIForm {
       String username = uiPortlet.getCurrentUser() ;
       if (msgId != null) {
         Message message = mailSvr.getMessageById(username, accId, msgId);
+        uiComposeForm.setMessage(null);
         uiComposeForm.setFieldSubjectValue("Fwd: " + message.getSubject());
         String forwardedText = "\n\n\n-------- Original Message --------\n" +
             "Subject: " + message.getSubject() + "\nDate: " + message.getSendDate() + 
