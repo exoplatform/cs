@@ -629,6 +629,16 @@
 .UIDayView .UIGrid {
 	*width: 97%;  /* fixed for IE */
 }
+.UIDayView .TitleBar .Day{
+	 
+}
+
+.UIDayView .TitleBar .Today{
+	 color:red ;
+}
+.UIDayView .TitleBar .Today a{
+	 color:red ;
+}
 /*====================Week View============================*/
 
 .UIWeekView {
@@ -675,7 +685,28 @@
 	padding: 0px 16px 0px 1px;
 	*padding: 0px 3px 0px 0px;
 }
-
+.UIWeekView .EventWeekBar .Day{
+	 
+}
+.UIWeekView .EventWeekBar .Day a{
+	 font-weight: none ;
+}
+.UIWeekView .EventWeekBar .Day a:hover {
+	color:blue;
+}
+.UIWeekView .EventWeekBar .Today{
+	 font-weight: bold ;
+}
+.UIWeekView .EventWeekBar .Weekday{
+}
+.UIWeekView .EventWeekBar .Weekend{
+}
+.UIWeekView .EventWeekBar .Weekend a{
+	color: red;
+}
+.UIWeekView .EventWeekBar .Today a{
+	 color:red;
+}
 .UIWeekView .TdLine{
 	border-top:  1px solid #c7c7c7;
 	width: 13.2%;
@@ -711,7 +742,12 @@
 .UIWeekView .Today{
 	background: #F4F6FC;
 }
-
+.UIWeekView .Weekday{
+	background: #FFFFFF;
+}
+.UIWeekView .Weekend{
+	background:#FCFCFC;
+}
 .UIWeekView .EventContainerBorder{
 	border:1px solid #808080;
 	-moz-user-select : none ;

@@ -69,6 +69,10 @@
 						<th style="width: 55px;"></th>
 						<%							
 						  for(cl in uicomponent.getDaysOfWeek(weekNumber)) {
+						  	cssClass = "Day" ;
+						  	if(uicomponent.isSameDate(cl.getTime(), uicomponent.getCurrentDate())) {
+						  		cssClass = "Today" ;
+						  	}
 						  	int dayOfWeek = cl.get(Calendar.DAY_OF_WEEK);
 							  String day = uicomponent.getDayName(dayOfWeek);
 							  String dayName = day.substring(0,3) ;
@@ -78,7 +82,7 @@
 							  dayActionLink = uicomponent.TYPE_DATE +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"="+ cl.get(Calendar.MONTH)+"&"+ uicomponent.DAY + "=" +  cl.get(Calendar.DATE) ;
 							  actionLink =  uicomponent.event("GotoDate",dayActionLink) ;
 						%>
-							<th startTime="<%=cl.getTimeInMillis()%>">
+							<th class="$cssClass" startTime="<%=cl.getTimeInMillis()%>">
 							<a href="$actionLink"><%=wf.format(cl.getTime())%></a>
 							</th>
 						<%
@@ -187,8 +191,10 @@
 					 			dayOfWeek = cl.get(Calendar.DAY_OF_WEEK) ;
 					 		  if(dayOfWeek == uicomponent.getDayOfWeek(currentYear, currentMonth, currentDay)){	
 					 		  	cssClass = "Today" ;
+					 		  } else if(dayOfWeek == 1 || dayOfWeek == 7){
+					 				cssClass = "Weekend" ;
 					 		  } else {
-					 				cssClass = "" ;
+					 		  	cssClass = "Weekday" ;
 					 		  }
 					 	%>
 					 	 		<td startTime="<%=cl.getTimeInMillis()%>" eventIndex="$dayOfWeek" class="$styleClass $cssClass">

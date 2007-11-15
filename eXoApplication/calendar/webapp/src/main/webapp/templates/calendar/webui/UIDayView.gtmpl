@@ -34,6 +34,8 @@
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.setting(' + defaultTimeInterval + ',"'+workingStart+'") ;') ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.showEvent() ;') ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.initSelection() ;') ;
+  cssClass = "Day" ;
+  if(uicomponent.isSameDate(uicomponent.getCurrentCalendar(), new GregorianCalendar())) {cssClass = "Today";}
 %>
 <div class="UIDayView">
   <div class="TitleBar">
@@ -46,7 +48,7 @@
 						</a>
 					</td>
 					<td>
-						<div class="Title">
+						<div class="Title $cssClass">
 						<a href="<%=uicomponent.event("GotoDate",monthViewAction)%>">
 							$currentMonthName
 						</a>, $currentDay, 
