@@ -59,6 +59,7 @@ public class UIActionBar extends UIContainer {
       UIActionBar uiActionBar = event.getSource() ;
       System.out.println(" =========== > Check Mail ...");
       UIMailPortlet uiPortlet = uiActionBar.getAncestorOfType(UIMailPortlet.class) ;
+      UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
       UINavigationContainer uiNavigation = uiPortlet.getChild(UINavigationContainer.class) ;
       UISelectAccount uiSelect = uiNavigation.getChild(UISelectAccount.class) ;
       MailService mailSvr = uiActionBar.getApplicationComponent(MailService.class) ;
@@ -72,6 +73,9 @@ public class UIActionBar extends UIContainer {
       String username =  uiPortlet.getCurrentUser() ;
       try {
         mailSvr.checkNewMessage(username, accId) ;
+        uiMessageList.updateList();
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UINavigationContainer.class)); 
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class)); 
       } catch (AuthenticationFailedException afe) {
         afe.printStackTrace() ;
         uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.userName-password-incorrect", null)) ;
