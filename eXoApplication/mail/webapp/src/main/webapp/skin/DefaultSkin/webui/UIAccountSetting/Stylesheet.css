@@ -67,6 +67,10 @@
 	margin-left: 223px;
 }
 
+.UIAccountSetting .UITabPane .TabPaneContent {
+	padding: 0px 8px 8px 8px;
+}
+
 .UIAccountSetting .UIHorizontalTabs {
 	background: url('background/HorizontalTabBackground.gif') repeat-x bottom;
 }

@@ -1326,6 +1326,7 @@
 	line-height: 20px;
 	text-align: center;
 	-moz-user-select : none ;
+	white-space: nowrap;
 }
 
 /*====================View Task List =====================*/
