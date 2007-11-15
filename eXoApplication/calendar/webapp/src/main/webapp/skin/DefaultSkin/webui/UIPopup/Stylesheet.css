@@ -33,3 +33,21 @@
 .UIEventCategoryManager .UIEventCategoryForm {
 	margin-top: 10px;
 }
+
+/********************* UIExportForm ***************************/
+.UIExportForm {
+	padding: 10px;
+}
+
+.UIExportForm .HorizontalLayout {
+	border: none;
+}
+
+/********************* UIImportForm ***************************/
+.UIImportForm {
+	padding: 10px;
+}
+
+.UIImportForm .HorizontalLayout {
+	border: none;
+}
