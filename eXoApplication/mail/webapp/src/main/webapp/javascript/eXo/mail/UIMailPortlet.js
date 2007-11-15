@@ -295,6 +295,15 @@ UIMailPortlet.prototype.showHideMessageHeader = function(obj) {
 		colapse.style.display = "none"
 		expand.style.display = "block";
 	}
+  var icons = eXo.core.DOMUtil.findDescendantsByClass(obj.parentNode, 'div', 'DownArrow1Icon') ;
+  if (icons.length > 0) {
+    icons[0].className = 'NextArrow1Icon' ;
+  } else {
+    icons = eXo.core.DOMUtil.findDescendantsByClass(obj.parentNode, 'div', 'NextArrow1Icon') ;
+    if (icons.length > 0) {
+      icons[0].className = 'DownArrow1Icon' ;
+    }
+  }
 } ;
 
 eXo.mail.UIMailPortlet = new UIMailPortlet();

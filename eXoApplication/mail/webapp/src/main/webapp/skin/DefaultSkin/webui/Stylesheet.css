@@ -674,6 +674,13 @@
 	cursor: pointer;
 }
 
+.UIMailPortlet .MailWorkingWorkspace .MessageActions .NextArrow1Icon {
+  float: left;
+  width: 12px; height: 16px;
+  margin-top: 2px;
+  cursor: pointer;
+}
+
 .UIMailPortlet .MailWorkingWorkspace .MessageActions .ShowHideTitle {
 	float: left;
 	font-size: 11px;
