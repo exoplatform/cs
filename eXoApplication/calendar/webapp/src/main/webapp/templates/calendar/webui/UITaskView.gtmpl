@@ -72,8 +72,8 @@
 												<%=task.getSummary()%>
 											</a>	
 		  							</td>
-										<td class="text"><%=uicomponent.getPriority(task.getPriority())%></td>
-										<td class="text"><%=task.getEventState()%></td>
+										<td class="text"><%=(uicomponent.getPriority(task.getPriority()) == null)? "" :  uicomponent.getPriority(task.getPriority())%></td>
+										<td class="text"><%=(task.getEventState() == null)? "" : task.getEventState()%></td>
 										<td class="text">
 										<%
 										 def amount = task.getToDateTime().getTime() - task.getFromDateTime().getTime();
@@ -81,7 +81,9 @@
 										%>
 										$days days
 										</td>
-										<td class="text"><%=task.getTaskDelegator()%></td>
+										<td class="text">
+											<%=(task.getTaskDelegator() == null)? "": task.getTaskDelegator()%>
+										</td>
 									</tr>		
 		  					<%
 			  					}

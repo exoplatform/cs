@@ -56,42 +56,44 @@ uiform.begin() ;
 	              <tr>
 	               <td style="width: 26px;"></td>
 	               <td class="Text" style="width: 100px;">Place:</td>
-	               <td class="Text"><%=event.getLocation()%></td>
+	               <td class="Text"><%=(event.getLocation() == null)? "" : event.getLocation()%></td>
 	              </tr> 
 	              <tr>
 	               <td ></td>
 	               <td class="Text">Repeat Event:         </td>
-	               <td class="Text"><%=event.getRepeatType()%></td>
+	               <td class="Text"><%=(event.getRepeatType() == null)? "" : event.getRepeatType()%></td>
 	              </tr> 
 	              <tr>
 	               <td ></td>
 	               <td class="Text">Description:            </td>
-	               <td class="Text"><%=event.getDescription()%></td>
+	               <td class="Text"><%=(event.getDescription() == null)? "" : event.getDescription()%></td>
 	              </tr> 
 	              <tr>
 	               <td ></td>
 	               <td class="Text">Event Reminder:      </td>
+	               <td class="Text">
 	               <%	               	 
 	               	 	 for(reminder in event.getReminders()) {
 	               	 	 	 String reminderLink = uicomponent.event("ViewReminder", reminder.getId()) ;
 	               			 %>
-	               			 	<td class="Text">
+	               			 	<div style="float:left;margin-right: 10px;">
 	               			 		<a class="ControlButton" style="color:gray;"><%=reminder.getReminder()%></a>
-	               			 	</td>
+	               			 	</div>
 	               			 <%		 		 
 	               	 	 }	               	 
 	               %>
 	               
+	               </td>
 	              </tr> 	              
 	              <tr>
 	               <td ></td>
 	               <td class="Text">Event Sharing:        </td>
-	               <td class="Text"><%=event.isPrivate()%></td>
+	               <td class="Text"><%=(event.isPrivate() == null)? "" : event.isPrivate()%></td>
 	              </tr> 
 	              <tr>
 	               <td ></td>
 	               <td class="Text">Show this event as:  </td>
-	               <td class="Text"><%=event.getStatus()%></td>
+	               <td class="Text"><%=(event.getStatus() == null)? "" : event.getStatus()%></td>
 	              </tr> 
 	              <tr>
 	               <td ></td>

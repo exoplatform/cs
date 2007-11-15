@@ -51,11 +51,11 @@ uiform.begin() ;
         							<table class="UIGrid" id="RowContainerDay" cellspacing="0" borderspacing="0">
 			        					<tr>
 			        						<td class="Text">Status:              </td>
-			        						<td class="Text"><%=task.getEventState()%></td>
+			        						<td class="Text"><%=(task.getEventState()==null)?"" : task.getEventState()%></td>
 			        					</tr>	
 			        					<tr>
 			        						<td class="Text">Priority:     </td>
-			        						<td class="Text"><%=uicomponent.getPriority(task.getPriority())%></td>
+			        						<td class="Text"><%=(uicomponent.getPriority(task.getPriority()) ==null)? "" : uicomponent.getPriority(task.getPriority())%></td>
 			        					</tr>	
 			        					<tr>
 			        						<td class="Text">Start Date:    </td>
@@ -67,24 +67,26 @@ uiform.begin() ;
 			        					</tr>	
 			        					<tr>
 			        						<td class="Text">Task delegation:  </td>
-			        						<td class="Text"><%=task.getTaskDelegator()%></td>
+			        						<td class="Text"><%=(task.getTaskDelegator() ==null)? "" : task.getTaskDelegator()%></td>
 			        					</tr>	
 			        					<tr>
 			        						<td class="Text">Reminder:  </td>
+					               	<td class="Text">
 			        						<%	               	 
 					               	 	 for(reminder in task.getReminders()) {
 					               	 	 	 String reminderLink = uicomponent.event("ViewReminder", reminder.getId()) ;
 					               			 %>
-					               			 	<td class="Text">
+					               			 	<div style="float:left;margin-right: 10px;">
 					               			 		<a href="$reminderLink" class="ControlButton"><%=reminder.getReminder()%></a>
-					               			 	</td>
+					               			 	</div>
 					               			 <%		 		 
 					               	 	 }	               	 
 					               %>
+					               	</td>
 			        					</tr>	
 			        					<tr>
 			        						<td class="Text">Note:  </td>
-			        						<td class="Text"><%=task.getDescription()%></td>
+			        						<td class="Text"><%=(task.getDescription()==null)?"" : task.getDescription()%></td>
 			        					</tr>	
 				        			</table>
 				        			<%if(!uicomponent.isShowPopup()){%>

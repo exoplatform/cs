@@ -75,7 +75,7 @@
 								</td>								
 								<td class="text"><%=df.format(event.getFromDateTime())%></td>
 								<td class="text"><%=df.format(event.getToDateTime())%></td>
-								<td class="text"><%=event.getDescription()%></td>
+								<td class="text"><%=(event.getDescription() == null)? "": event.getDescription()%></td>
 		   			  </tr>
   					<%
   					}
