@@ -380,7 +380,7 @@ public class MailServiceImpl implements MailService{
         i++ ;
       }     
     }catch(Exception e) {
-      e.printStackTrace() ;
+      //e.printStackTrace() ;
     }   
 
   }
@@ -423,7 +423,7 @@ public class MailServiceImpl implements MailService{
         }
       }
     } catch(Exception e) {
-      e.printStackTrace() ;
+      //e.printStackTrace() ;
     }
   }
 

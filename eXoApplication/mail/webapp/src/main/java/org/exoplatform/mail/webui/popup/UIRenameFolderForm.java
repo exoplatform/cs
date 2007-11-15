@@ -92,12 +92,10 @@ public class UIRenameFolderForm extends UIForm implements UIPopupComponent {
         uiApp.addMessage(new ApplicationMessage("UIRenameFolderForm.msg.error-rename-folder", null)) ;
         e.printStackTrace() ;
       }
-      uiForm.getAncestorOfType(UIPopupAction.class).deActivate() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
+      uiMailPortlet.cancelAction();
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMailPortlet.getChild(UIPopupAction.class)) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiMailPortlet.findFirstComponentOfType(UIMessageArea.class)) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-      
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMailPortlet.findFirstComponentOfType(UIMessageArea.class)) ;      
     }
   }
   static  public class CancelActionListener extends EventListener<UIRenameFolderForm> {

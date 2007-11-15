@@ -78,6 +78,7 @@ public class UITagContainer extends UIComponent {
       UIPopupAction uiPopup = uiTag.getAncestorOfType(UIMailPortlet.class).getChild(UIPopupAction.class) ;
       UIEditTagForm uiRenameTagForm = uiPopup.activate(UIEditTagForm.class, 450) ;
       uiRenameTagForm.setTag(tagId);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup) ;
     }
   }
   
