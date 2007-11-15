@@ -416,6 +416,12 @@
   font-weight: bold;
 }
 
+.UICalendars .CalendarGroupIcon a {
+	overflow: hidden;
+	width: 107px;
+	display: block;
+}
+
 .UICalendars .CalendarIcon {
   padding-left: 19px; height: 16px;
   margin: 1px 3px 0px 0px;
