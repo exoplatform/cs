@@ -21,6 +21,7 @@ import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.UIFolderContainer;
 import org.exoplatform.mail.webui.UIMailPortlet;
+import org.exoplatform.mail.webui.UIMessageArea;
 import org.exoplatform.mail.webui.UINavigationContainer;
 import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -387,12 +388,15 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
       uiPortlet.cancelAction();
     }
   }
+  
   static public class DiscardChangeActionListener extends EventListener<UIComposeForm> {
     public void execute(Event<UIComposeForm> event) throws Exception {
       UIComposeForm uiForm = event.getSource() ;
+      UIMailPortlet uiPortlet = uiForm.getAncestorOfType(UIMailPortlet.class);
       uiForm.resetFields() ;
-      UIMailPortlet mailPortlet = event.getSource().getAncestorOfType(UIMailPortlet.class) ;
-      mailPortlet.cancelAction() ;
+      uiForm.getAncestorOfType(UIPopupAction.class).deActivate() ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessageArea.class)) ;
     }
   }
   static public class AttachmentActionListener extends EventListener<UIComposeForm> {

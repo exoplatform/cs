@@ -423,6 +423,7 @@ public class UIMessageList extends UIForm {
       UIMessageList uiMessageList = event.getSource() ; 
       System.out.println(" =========== > Forward Action");
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      System.out.println("=======dd>> " + msgId);
       if (msgId == null) msgId = uiMessageList.getSelectedMessageId();
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class) ;
       UINavigationContainer uiNavigation = uiPortlet.getChild(UINavigationContainer.class) ;
@@ -444,8 +445,7 @@ public class UIMessageList extends UIForm {
             "\nFrom: " + message.getFrom() + 
             "\nTo: " + message.getMessageTo() + 
             "\n\n" + message.getMessageBody();         
-        message.setMessageBody(forwardedText);
-        uiComposeForm.setFieldContentValue(message.getMessageBody());
+        uiComposeForm.setFieldContentValue(forwardedText);
         uiComposeForm.setFieldToValue("");
       }
       uiPopupContainer.addChild(uiComposeForm) ;
