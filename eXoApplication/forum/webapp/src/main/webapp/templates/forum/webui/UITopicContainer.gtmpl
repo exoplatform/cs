@@ -236,6 +236,7 @@
 					        String postCount = String.valueOf(topic.getPostCount());
 					        String postView = String.valueOf(topic.getViewCount());
 					        String iconTopicStatus = "HotThreadNewPost" ;
+					        if(topic.getIsLock()) iconTopicStatus = "HotThreadNewLockPost" ;
 					    %>
 				  			<tr class="$classRow">
 									<td class="Tdbox"><div class="ThreadStatusIcon $iconTopicStatus" title="Hot thread with new post"><span></span></div></td>

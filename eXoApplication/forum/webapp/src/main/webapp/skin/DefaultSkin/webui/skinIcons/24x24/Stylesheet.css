@@ -40,6 +40,9 @@
 	background: url('icons/ThreadNoNewPost.gif') no-repeat ;
 }
 
+.HotThreadNewLockPost {
+	background: url('icons/HotThreadNewLockPost.gif') no-repeat ;
+}
 /*******************************  MenuCategoryIcon    **************************************/
 .EditCategoryIcon {
 	background: url('icons/EditCategory.gif') no-repeat ;
