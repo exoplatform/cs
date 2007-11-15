@@ -135,6 +135,8 @@
   height: 23px;
   border: 1px solid #c7c7c7;
   border-bottom: none;
+  overflow: hidden;/*fix tam*/
+  line-height: 10px;/*fix tam*/
 }
 
 .UIAddNewEvent .NewEventAttendee .BackIcon {

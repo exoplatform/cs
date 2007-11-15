@@ -721,15 +721,19 @@
 .UIWeekView .EventDayContent .EventContainer{
 	border:1px solid #ffffff;
 	border-top: none;
-
 	border: solid 1px red ;
 }
+
 .UIWeekView .EventContainerBorder .ResizeEventContainer{
 	background:gray;
 	width: 30%;
 	height: 2px;
 	margin:auto;
 	cursor: n-resize;
+}
+
+.UIWeekView .EventContainerBorder .EventContainer {
+	overflow: hidden;
 }
 
 .UIWeekView .EventAlldayContainer .LeftResizeEvent{
