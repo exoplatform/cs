@@ -11,6 +11,7 @@ import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.webui.UIAddressBooks;
 import org.exoplatform.contact.webui.UIContactPortlet;
+import org.exoplatform.contact.webui.UIContacts;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -100,6 +101,8 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
         //UIPopupAction childPopup = popupContainer.getChild(UIPopupAction.class) ;
         UIAddressBooks uiAddressBook = uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook) ;
+        UIContacts contacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;        
+        event.getRequestContext().addUIComponentToUpdateByAjax(contacts) ;
         uiContactPortlet.cancelAction() ;
       }
     }
