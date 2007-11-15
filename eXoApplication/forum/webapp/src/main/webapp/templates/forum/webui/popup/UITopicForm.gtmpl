@@ -38,7 +38,7 @@
 		    	<div class="HorizontalLayout">
 		        <div class="UITabContentContainer">
 	            <div style="display: block;" class="UITabContent">
-	              <div class="UIFormInputSet ThreadContent">
+	              <div class="ThreadContent">
 	              	<table class="UIFormGrid">
 	              		<tbody>
 	              			<% 
@@ -61,7 +61,7 @@
 	            	<% uiform.renderChild(UIFormInputIconSelector.class) %>
 	            </div>
 	            <div style="display: none;" class="UITabContent">
-	              <div class="UIFormInputSet ThreadOptions">
+	              <div class="ThreadOptions">
 	              	<table class="UIFormGrid">
 	              		<tbody>
 	              		<% 

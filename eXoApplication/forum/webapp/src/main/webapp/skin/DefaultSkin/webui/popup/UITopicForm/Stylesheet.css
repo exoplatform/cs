@@ -3,7 +3,7 @@
 	padding: 10px;
 }
 
-.UITopicForm .UIForm .UIFormGrid td.FieldLabel {
+.UITopicForm .UIFormInputSet .UIFormGrid td.FieldLabel {
 	text-align: left ;
 }
 .UITopicForm .UIForm .HorizontalLayout .ThreadContent input {
