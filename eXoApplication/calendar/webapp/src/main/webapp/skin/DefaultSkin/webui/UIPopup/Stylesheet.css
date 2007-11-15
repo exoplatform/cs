@@ -19,7 +19,17 @@
 	width: 300px;
 }
 
+/********************* UICalendarCategoryManager ***************************/
+.UICalendarCategoryManager {
+	padding: 10px;
+}
+
+.UICalendarCategoryManager .UICalendarCategoryForm {
+	margin-top: 10px;
+}
+
 /********************* UIEventCategoryManager ***************************/
+
 .UIEventCategoryManager .UIEventCategoryForm {
 	margin-top: 10px;
 }
