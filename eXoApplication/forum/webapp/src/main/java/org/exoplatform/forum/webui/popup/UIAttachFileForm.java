@@ -104,7 +104,7 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
         return ;
       }
       UIPopupAction popupAction = forumPortlet.findComponentById("UIChildPopupAction") ;
-      popupAction.deActivate() ;
+      popupAction.setRendered(false)  ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
       if(uiForm.isTopicForm) {
         event.getRequestContext().addUIComponentToUpdateByAjax(topicForm) ;
@@ -117,8 +117,8 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
   static  public class CancelActionListener extends EventListener<UIAttachFileForm> {
     public void execute(Event<UIAttachFileForm> event) throws Exception {
       UIForumPortlet forumPortlet = event.getSource().getAncestorOfType(UIForumPortlet.class) ;
-      UIPopupAction popupAction = forumPortlet.findComponentById("UIChildPopupAction") ;
-      popupAction.deActivate() ;
+      UIPopupAction popupAction = forumPortlet.findComponentById("UIChildPopupAction");
+      popupAction.setRendered(false)  ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   }

@@ -53,9 +53,8 @@ public class UIViewTopic extends UIForm implements UIPopupComponent {
   static  public class CloseActionListener extends EventListener<UIViewTopic> {
     public void execute(Event<UIViewTopic> event) throws Exception {
       UIViewTopic uiForm = event.getSource() ;
-      UIPopupAction popupAction = uiForm.getAncestorOfType(UIPopupAction.class) ;
-      UIPopupWindow popupWindow = popupAction.findFirstComponentOfType(UIPopupWindow.class) ;
-      popupWindow.setRendered(false);
+      UIPopupContainer popupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
+      UIPopupAction popupAction = popupContainer.getChild(UIPopupAction.class).setRendered(false) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   }

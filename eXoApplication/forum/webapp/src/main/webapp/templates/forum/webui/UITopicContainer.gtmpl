@@ -235,11 +235,15 @@
 					        String attachment = String.valueOf(topic.getAttachmentFirstPost());
 					        String postCount = String.valueOf(topic.getPostCount());
 					        String postView = String.valueOf(topic.getViewCount());
+					        String titleTopicStatus = "Hot thread with new post" ;
 					        String iconTopicStatus = "HotThreadNewPost" ;
-					        if(topic.getIsLock()) iconTopicStatus = "HotThreadNewLockPost" ;
+					        if(topic.getIsLock()) {
+					        	iconTopicStatus = "HotThreadNewLockPost" ;
+					        	titleTopicStatus = "Hot thread with new post lock" ;
+					        }
 					    %>
 				  			<tr class="$classRow">
-									<td class="Tdbox"><div class="ThreadStatusIcon $iconTopicStatus" title="Hot thread with new post"><span></span></div></td>
+									<td class="Tdbox"><div class="ThreadStatusIcon $iconTopicStatus" title="$titleTopicStatus"><span></span></div></td>
 									<td class="Tdbox"><div class="StatusIcon $iconClassTopic" ><span></span></div></td>
 									<td >
 										<div >

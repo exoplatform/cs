@@ -16,7 +16,7 @@ import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
 @ComponentConfig(lifecycle = UIContainerLifecycle.class)
 public class UIPopupContainer extends UIContainer implements UIPopupComponent {
   public UIPopupContainer() throws Exception {
-    addChild(UIPopupAction.class, null, "UIChildPopupAction") ;
+    addChild(UIPopupAction.class, null, "UIChildPopupAction").setRendered(true) ;
   }
   public void activate() throws Exception {
     // TODO Auto-generated method stub
