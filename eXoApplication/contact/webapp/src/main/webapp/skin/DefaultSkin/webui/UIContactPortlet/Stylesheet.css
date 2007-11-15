@@ -31,7 +31,7 @@
 	color: #595b6a; 
 }
 
-.UIContactPortlet .UIBannerContainer .Input {
+.UIContactPortlet .UIBannerContainer .SearchForm input {
 	width: 195px;
 	float: right;
 	margin: 5px 8px;
@@ -646,4 +646,8 @@
 	background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/EmailIcon.gif') no-repeat left center;
 	padding-left: 20px;
 	margin-left: 60px;
+}
+
+.UIContactPortlet .SelectFileFrame {
+	width: 300px;
 }

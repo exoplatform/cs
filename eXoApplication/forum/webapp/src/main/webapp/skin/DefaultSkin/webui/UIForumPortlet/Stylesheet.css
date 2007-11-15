@@ -291,3 +291,7 @@
 .UIForumPortlet .ContentContainer .UITopicList .PostBy {
 	color: #038ee6;
 }
+
+.UIForumPortlet .SelectFileFrame {
+	width: 300px;
+}
