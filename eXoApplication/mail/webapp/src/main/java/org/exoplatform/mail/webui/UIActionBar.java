@@ -77,9 +77,9 @@ public class UIActionBar extends UIContainer {
         uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.userName-password-incorrect", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
       } catch (Exception e) {
-        e.printStackTrace() ;
-        uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.check-mail-error", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        //e.printStackTrace() ;
+        //uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.check-mail-error", null)) ;
+        //event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
       }
     }
   }

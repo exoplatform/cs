@@ -255,7 +255,7 @@ public class MailServiceImpl implements MailService{
     } catch (Exception e) {
       status = "There was an unexpected error. Sending Falied !" + e.getMessage();
     } finally {
-      System.out.println(" #### Info : " + status);      
+      //System.out.println(" #### Info : " + status);      
     } 
  
     return status ;
@@ -365,7 +365,7 @@ public class MailServiceImpl implements MailService{
       folder.close(false);
       store.close();
     }  catch (Exception e) { 
-      System.err.println("=== >>> Check mail false ! \n" + e.getMessage() );
+     
     }
     
     return messageList;
