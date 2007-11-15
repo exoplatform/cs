@@ -33,14 +33,14 @@ uiform.begin() ;
         					<tr>
         						<td style="border-right: 1px solid #c7c7c7;width: 185px;">
 				        		<%for(attachFile in task.getAttachment()){%>
-						         <div class="AttachmentIcon"  style="white-space: nowrap;">
+						         <div class="AttachmentIcon"  style="">
 						          $attachFile.name  
 						         	 $attachFile.size Kb
 						         </div>
 						         <%if(uicomponent.getImage(attachFile) != null) {%>
 						         	<img src="<%=uicomponent.getImage(attachFile)%>" class="Img" />
 						         <%}%>
-						         <div class="Actions" style="white-space: nowrap;">
+						         <div class="Actions" style="">
 							         <a class="IconHolder ViewAttachmentIcon" style="padding-left:15px;"> View </a> 
 							         <a href="<%=uicomponent.getDownloadLink(attachFile)%>" class="IconHolder DownLoadAttachmentIcon" style="padding-left:15px;"> Dowload </a>
 						         </div> 

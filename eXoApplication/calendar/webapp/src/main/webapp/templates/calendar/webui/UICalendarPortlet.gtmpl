@@ -32,8 +32,9 @@
 
     </div>
   </div>
+	<%
+		uicomponent.renderChild(UIPopupAction.class) ;
+		uicomponent.renderPopupMessages() ;
+	%>  
 </div>
-<%
-	uicomponent.renderChild(UIPopupAction.class) ;
-	uicomponent.renderPopupMessages() ;
-%>
+

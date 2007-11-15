@@ -3,7 +3,7 @@
 	<a href="<%=uicomponent.event("AdvancedSearch")%>"><div class="AdvancedSearch" title="Advance Search"><span></span></div></a>
 	<div class="SeparatorLine"><span></span></div>
 	<a href="<%=uicomponent.event("Search")%>"><div class="Search" title="Search"><span></span></div></a>
-	<span class="Input"><%uiform.renderChild("inputValue")%></span>
+	<%uiform.renderChild("inputValue")%>
 	<%
 		String label = _ctx.appRes(uicomponent.getName() + ".label.inputValue") ;
 	%>

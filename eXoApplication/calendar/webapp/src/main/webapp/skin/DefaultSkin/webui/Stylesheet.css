@@ -19,6 +19,7 @@
 @import url("UIAddEventCategory/Stylesheet.css") ;
 @import url("UIFeed/Stylesheet.css") ;
 @import url("UIInsertAddress/Stylesheet.css");
+@import url("UIPopup/Stylesheet.css");
 
 /*=========================== MailBanner ==================================*/
 
@@ -54,7 +55,7 @@
 	color: #595b6a; 
 }
 
-.UICalendarPortlet .UIBannerContainer .Input {
+.UICalendarPortlet .UIBannerContainer .SearchForm input {
 	width: 195px;
 	float: right;
 	margin: 3px 8px;
@@ -419,6 +420,9 @@
   padding-left: 19px; height: 16px;
   margin: 1px 3px 0px 0px;
   float: left;
+  width: 87px;
+  overflow: hidden;
+  
   line-height: 16px;
 }
 
@@ -500,6 +504,7 @@
 /*====================View Calendar =====================*/
 
 .UICalendarViewContainer {
+
 	margin-left: 243px;
 	padding-bottom: 8px;
 }
@@ -1095,6 +1100,9 @@
 .UIPreview .ViewContainer .AttachmentIcon {
 	line-height: 16px;
 	padding-left: 18px;
+	height: auto;
+	width: 160px;
+	overflow: hidden;
 }
 
 .UIPreview .ViewContainer a {
@@ -1667,4 +1675,8 @@
 	opacity: 0.5 ;
 	z-index: 1 ;
 	-moz-user-select : none ;
+}
+
+.UICalendarPortlet .SelectFileFrame {
+	width: 300px;
 }
