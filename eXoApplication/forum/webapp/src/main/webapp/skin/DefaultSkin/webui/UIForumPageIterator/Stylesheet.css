@@ -1,0 +1,110 @@
+.UIForumPageIterator {    
+	float:right;
+	margin: 0px ;
+	width:60%;
+	padding: 3px 0px 0px 0px ;
+}
+
+.UIForumPageIterator .PageIteratorContainer {    
+  float: right ;
+  overflow: hidden; 
+}
+
+.UIForumPageIterator .PageIteratorContainer .LeftPageIteratorBlock{    
+  line-height: 18px ; 
+  float: right ;
+  margin-right: 15px;
+}
+
+.UIForumPageIterator .PageIteratorContainer .RightPageIteratorBlock{    
+  float: right ;
+}
+
+.UIForumPageIterator .Icon {
+  float: left ;
+  margin: 0px 3px 0px 0px ;
+  width: 18px ; height: 17px ;
+}
+
+.UIForumPageIterator .TotalPages {
+  float: left ;
+  line-height: 16px ; vertical-align: middle;
+}
+
+.UIForumPageIterator .PagesTotalNumber {
+  float: left ;
+  line-height: 17px ; vertical-align: middle;
+  color: #0183f1;
+  margin-left: 5px;
+}
+
+.UIForumPageIterator .LastTopPageIcon {
+  vertical-align: middle ;
+  background: url('background/ScrollDoubleBackArrows.gif') no-repeat ;
+  cursor: pointer ;
+}
+
+.UIForumPageIterator .NextTopPageIcon {
+  background: url('background/ScrollDoubleNextArrows.gif') no-repeat ;
+  cursor: pointer ;
+}
+
+ .UIForumPageIterator .LastPageIcon {
+  background: url('background/ScrollSingleBackArrow.gif') no-repeat ;
+  cursor: pointer ; 
+}
+
+.UIForumPageIterator .NextPageIcon {
+  background: url('background/ScrollSingleNextArrow.gif') no-repeat ;
+  cursor: pointer ;
+}
+
+.UIForumPageIterator .DisableLastTopPageIcon {
+  vertical-align: middle ;
+  background: url('background/DoubleBackArrows.gif') no-repeat ;
+}
+
+.UIForumPageIterator .DisableNextTopPageIcon {
+  background: url('background/DoubleNextArrows.gif') no-repeat ;
+}
+
+.UIForumPageIterator .DisableLastPageIcon {
+  background: url('background/SingleBackArrow.gif') no-repeat ;
+}
+
+.UIForumPageIterator .DisableNextPageIcon {
+  background: url('background/SingleNextArrow.gif') no-repeat ;
+}
+/* End */
+
+.UIForumPageIterator .Number {
+  float: left ;
+  text-align: center;
+  margin: 0px 3px 0px 0px;
+  line-height: 17px;
+}
+
+.UIForumPageIterator .PageSelected {
+  line-height: 15px;
+  height: 15px ;
+  border: 1px solid #dfdfdf;
+  color: #f16701;
+  font-weight: bold;
+  padding: 0px 6px;
+}
+
+.UIForumPageIterator .PageNormal {
+	margin: 0px 0px 0px 0px ;
+  padding: 1px 7px;
+  border: 1px solid #dfdfdf;
+  color: #333333 ;
+  background: white;
+}
+
+.UIForumPageIterator .Number a:hover {
+  padding: 1px 6px 1px 7px;
+  color: #058ee6 ;
+  border: 1px solid #b6b6b6;
+  font-weight: bold;
+}
+

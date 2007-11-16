@@ -8,6 +8,7 @@
 @import url('UIPrintView/Stylesheet.css') ;
 @import url('UITopicDetail/Stylesheet.css') ;
 @import url('UITopicPoll/Stylesheet.css') ;
+@import url('UIForumPageIterator/Stylesheet.css') ;
 
 /**************************** UIActionForum *********************************/
 .UIForumPortlet .UIActionForum .ActionButton {
@@ -168,4 +169,9 @@
 
 .DisableLabel {
 	opacity:0.3;
+}
+
+.UIForumPortlet .UIPageIterator .Number {
+	padding: 0px 2px;
+	margin: 0px;
 }

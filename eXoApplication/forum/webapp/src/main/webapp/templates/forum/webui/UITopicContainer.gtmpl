@@ -5,6 +5,7 @@
 	import org.exoplatform.forum.service.JCRPageList ;
 %>
 <%  
+	uicomponent.initPage() ;
 	Forum forum = uicomponent.getForum() ;
 	String forumName = forum.getForumName();
 %>
@@ -36,22 +37,50 @@
 		  	</div>
 		  </div>
 		</div>
-		
-		<div class="UIPageIterator">
+		<% 
+			List totals = uicomponent.getInfoPage() ; 
+			long pageSelected = uicomponent.getPageSelected() ;
+			long max_page = totals.get(3) ;
+			String selected = "" + pageSelected ;
+		%>
+		<div class="UIForumPageIterator">
 			<div class="PageIteratorContainer">
 			  <div class="RightPageIteratorBlock">
-			    <a title="Back 10 pages" class="Icon DisableLastTopPageIcon"/>        
-			    <a title="Previous Page" class="Icon DisableLastPageIcon"><span/></a>
-			  <div class="Number">
-			    <a class="PageSelected" href="#">1</a>
-			  </div>
-			    <a title="Next Page" class="Icon DisableNextPageIcon"><span/></a>
-			    <a title="Next 10 pages" class="Icon DisableNextTopPageIcon"><span/></a>
+			  <% if(pageSelected == 1) {%>
+			    <div class="Icon DisableLastTopPageIcon"></div>        
+			    <div class="Icon DisableLastPageIcon"><span></span></div>
+			  <% } else { %>
+			    <a title="Back first page" class="Icon LastTopPageIcon" href="<%=uicomponent.event("GoPage","first")%>"></a>        
+			    <a title="Previous Page" class="Icon LastPageIcon" href="<%=uicomponent.event("GoPage","previous")%>"><span></span></a>
+			  <% } %>
+			  <% 
+			  	for(number in uicomponent.getTotalpage()) {
+			  		if(number.equals(selected)) {
+			  %>
+					  <div class="Number">
+					    <div class="PageSelected">$number</div>
+					  </div>
+			  	<%} else {%>
+					  <div class="Number">
+					    <a class="PageNormal" href="<%=uicomponent.event("GoPage",number)%>">$number</a>
+					  </div>
+			  	<% } %>
+			  <%} %>
+			  <% if(pageSelected != max_page) {%>  
+			    <a title="Next Page" class="Icon NextPageIcon" href="<%=uicomponent.event("GoPage","next")%>"><span></span></a>
+			    <a title="Return the last page" class="Icon NextTopPageIcon" href="<%=uicomponent.event("GoPage","last")%>"><span></span></a>
+			  <% } else { %>  
+			    <div class="Icon DisableNextPageIcon"><span></span></div>
+			    <div class="Icon DisableNextTopPageIcon"><span></span></div>
+			  <% } %>
+			  	
+			  	<div class="Icon" title="Go to page Number "style="border: solid 1px red;"><span>nb</span></div>
+			  	
 			    <div style="clear: left;"><span></span></div>
 			  </div>
 			  <div class="LeftPageIteratorBlock">
 			  	<div class="TotalPages">Total pages:</div>
-			  	<div class="PagesTotalNumber">1</div>
+			  	<div class="PagesTotalNumber"><%=max_page%></div>
 			  	<div style="clear: left;"><span></span></div>
 			  </div>
 		  </div>
@@ -213,7 +242,7 @@
 				    </thead>
 				    <tbody>
 				    	<% 
-				    	List topics = uicomponent.getTopicPageLits(1) ;
+				    	List topics = uicomponent.getTopicPageLits() ;
 					    	String classRow = "whileRow";
 					    	int i = 0;
 					    	 for(topic in topics){
@@ -322,25 +351,46 @@
 		  </div>
 		</div>
 		
-		<div class="UIPageIterator">
+		
+		<div class="UIForumPageIterator">
 			<div class="PageIteratorContainer">
 			  <div class="RightPageIteratorBlock">
-			    <a title="Back 10 pages" class="Icon DisableLastTopPageIcon"/>        
-			    <a title="Previous Page" class="Icon DisableLastPageIcon"><span/></a>
-			  <div class="Number">
-			    <a class="PageSelected" href="#">1</a>
-			  </div>
-			    <a title="Next Page" class="Icon DisableNextPageIcon"><span/></a>
-			    <a title="Next 10 pages" class="Icon DisableNextTopPageIcon"><span/></a>
-			    <div style="clear: left;"><span/></div>
+			  <% if(pageSelected == 1) {%>
+			    <div class="Icon DisableLastTopPageIcon"></div>        
+			    <div class="Icon DisableLastPageIcon"><span></span></div>
+			  <% } else { %>
+			    <a title="Back first page" class="Icon LastTopPageIcon" href="<%=uicomponent.event("GoPage","first")%>"></a>        
+			    <a title="Previous Page" class="Icon LastPageIcon" href="<%=uicomponent.event("GoPage","previous")%>"><span></span></a>
+			  <% } %>
+			  <% 
+			  	for(number in uicomponent.getTotalpage()) {
+			  		if(number.equals(selected)) {
+			  %>
+					  <div class="Number">
+					    <div class="PageSelected">$number</div>
+					  </div>
+			  	<%} else {%>
+					  <div class="Number">
+					    <a class="PageNormal" href="<%=uicomponent.event("GoPage",number)%>">$number</a>
+					  </div>
+			  	<% } %>
+			  <%} %>
+			  <% if(pageSelected != max_page) {%>  
+			    <a title="Next Page" class="Icon NextPageIcon" href="<%=uicomponent.event("GoPage","next")%>"><span></span></a>
+			    <a title="Return the last page" class="Icon NextTopPageIcon" href="<%=uicomponent.event("GoPage","last")%>"><span></span></a>
+			  <% } else { %>  
+			    <div class="Icon DisableNextPageIcon"><span></span></div>
+			    <div class="Icon DisableNextTopPageIcon"><span></span></div>
+			  <% } %>
+			    <div style="clear: left;"><span></span></div>
 			  </div>
 			  <div class="LeftPageIteratorBlock">
 			  	<div class="TotalPages">Total pages:</div>
-			  	<div class="PagesTotalNumber">1</div>
-			  	<div style="clear: left;"><span/></div>
+			  	<div class="PagesTotalNumber"><%=max_page%></div>
+			  	<div style="clear: left;"><span></span></div>
 			  </div>
 		  </div>
-		  <div style="clear: right;"><span/></div>
+		  <div style="clear: right;"><span></span></div>
 		</div>
 
 		<div style="clear: both;"><span></span></div>

@@ -31,6 +31,8 @@ import org.exoplatform.webui.exception.MessageException;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 
+import com.sun.org.apache.regexp.internal.recompile;
+
 /**
  * Created by The eXo Platform SARL
  * Author : Hung Nguyen
@@ -42,6 +44,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
 		lifecycle = UIFormLifecycle.class,
     template =  "app:/templates/forum/webui/UITopicContainer.gtmpl", 
     events = {
+      @EventConfig(listeners = UITopicContainer.GoPageActionListener.class ),  
       @EventConfig(listeners = UITopicContainer.AddTopicActionListener.class ),  
       @EventConfig(listeners = UITopicContainer.OpenTopicActionListener.class ),
       @EventConfig(listeners = UITopicContainer.DisplayOptionActionListener.class ),
@@ -67,21 +70,21 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
   private ForumService forumService = (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
   private String forumId = "";
   private String categoryId = "";
+  private JCRPageList pageList ;
+  private List<Topic> topicList ;
+  private long page = 1 ;
   public UITopicContainer() throws Exception {
-    // render Topic page list
-    // render topic action bar
-    // render topic page list
   }
   
   public void activate() throws Exception {
-  	// TODO Auto-generated method stub
+  	System.out.println("\n\n init UITopicContainer khi nao ?\n\n");
   }
   
   public void deActivate() throws Exception {
   	// TODO Auto-generated method stub
   }
   
-  public void setUpdateForum(String categoryId, String forumId) {
+  public void setUpdateForum(String categoryId, String forumId) throws Exception {
     this.forumId = forumId ;
     this.categoryId = categoryId ;
   }
@@ -90,24 +93,56 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
     return forumService.getForum(categoryId, forumId);
   }
   
+  private void initPage() throws Exception {
+  	this.pageList = forumService.getPageTopic(categoryId, forumId);
+  }
+  @SuppressWarnings("unused")
   private JCRPageList getPageTopics() throws Exception {
-    return forumService.getPageTopic(categoryId, forumId);
+    return pageList ;
+  }
+  
+  @SuppressWarnings("unused")
+  private List<String> getTotalpage() throws  Exception {
+  	Long numberPage = pageList.getAvailablePage() ;
+	  List<String> temp = new ArrayList<String>() ;
+	  for (int i = 0; i < numberPage; i++) {
+	  	temp.add("" + (i+1)) ;
+    }
+	  return temp ;
   }
 
+  @SuppressWarnings("unused")
+  private List<Long> getInfoPage() throws  Exception {
+  	List<Long> temp = new ArrayList<Long>() ;
+  	temp.add(pageList.getPageSize()) ;//so item/trang
+  	temp.add(pageList.getCurrentPage()) ;//so trang
+  	temp.add(pageList.getAvailable()) ;//tong so item
+  	temp.add(pageList.getAvailablePage()) ;// so trang toi da
+  	return temp ;
+  } 
+  
+  @SuppressWarnings("unused")
+  private long getPageSelected() {
+  	return this.page ;
+  }
+  
+  @SuppressWarnings("unused")
   private String[] getActionMenuForum() throws Exception {
     String []actions = {"DisplayOptions", "EditForum", "SetLockedForum", "SetUnLockForum", "SetOpenForum", "SetCloseForum", "MoveForum", "RemoveForum"};
     return actions;
   }
 
+  @SuppressWarnings("unused")
   private String[] getActionMenuTopic() throws Exception {
     String []actions = {"EditTopic", "SetOpenTopic", "SetCloseTopic", "SetLockedTopic", "SetUnLockTopic", "SetStickTopic", "SetUnStickTopic", "SetMoveTopic", "SetDeleteTopic"}; 
     return actions;
   }
   
-  
-  private List<Topic> getTopicPageLits(long page) throws Exception {
-    JCRPageList pageList = getPageTopics();
-    List<Topic> topicList = this.forumService.getPage(page, pageList);
+  @SuppressWarnings({ "unchecked", "unused" })
+  private List<Topic> getTopicPageLits() throws Exception {
+    JCRPageList pageList = this.pageList;
+    List<Topic> topicList = this.forumService.getPage(this.page, pageList);
+    this.topicList = topicList ;
     for(Topic topic : topicList) {
       if(getUIFormCheckBoxInput(topic.getId()) != null) {
         getUIFormCheckBoxInput(topic.getId()).setChecked(false) ;
@@ -118,10 +153,18 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
     return topicList ;
   }
   
+  private int chay = 0 ;
   private Topic getTopic(String topicId) throws Exception {
-    return  this.forumService.getTopic(this.categoryId, this.forumId, topicId, false) ;
+  	List<Topic> listTopic = this.topicList ;
+  	this.chay = this.chay + 1 ;
+  	System.out.println("\n\n\t may chay cai nay chua ? :chay lan:  " + this.chay);
+  	for (Topic topic : listTopic) {
+	    if(topic.getId().equals(topicId)) return topic ;
+    }
+  	return null ;
   }
   
+  @SuppressWarnings("unused")
   private String[] getStarNumber(Topic topic) throws Exception {
     double voteRating = topic.getVoteRating() ;
     int star = (int)voteRating ;
@@ -143,6 +186,42 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
       if(k == 0) className[5] = "" + star ; 
     }
     return className ;
+  }
+  
+  static public class GoPageActionListener extends EventListener<UITopicContainer> {
+  	public void execute(Event<UITopicContainer> event) throws Exception {
+  		UITopicContainer uiTopicContainer = event.getSource() ;
+  		String stateClick = event.getRequestContext().getRequestParameter(OBJECTID).trim() ;
+  		long maxPage = uiTopicContainer.pageList.getAvailablePage() ;
+  		long presentPage  = uiTopicContainer.page ;
+  		if(stateClick.equalsIgnoreCase("next")) {
+  			if(presentPage < maxPage){
+  				uiTopicContainer.page = presentPage + 1 ;
+  				event.getRequestContext().addUIComponentToUpdateByAjax(uiTopicContainer.getParent()) ;
+  			}
+  		} else if(stateClick.equalsIgnoreCase("previous")){
+  			if(presentPage > 1){
+  				uiTopicContainer.page = presentPage - 1 ;
+  				event.getRequestContext().addUIComponentToUpdateByAjax(uiTopicContainer.getParent()) ;
+  			}
+  		} else if(stateClick.equalsIgnoreCase("last")) {
+  			if(presentPage != maxPage) {
+  				uiTopicContainer.page = maxPage ;
+  				event.getRequestContext().addUIComponentToUpdateByAjax(uiTopicContainer.getParent()) ;
+  			}
+  		} else if(stateClick.equalsIgnoreCase("first")) {
+  			if(presentPage != 1) {
+  				uiTopicContainer.page = 1 ;
+  				event.getRequestContext().addUIComponentToUpdateByAjax(uiTopicContainer.getParent()) ;
+  			}
+  		} else {
+  			long temp = Long.parseLong(stateClick) ;
+  			if(temp > 0 && temp <= maxPage && temp != presentPage) {
+  				uiTopicContainer.page = temp ;
+  				event.getRequestContext().addUIComponentToUpdateByAjax(uiTopicContainer.getParent()) ;
+  			}
+  		}
+  	}
   }
   
   static public class AddTopicActionListener extends EventListener<UITopicContainer> {
@@ -235,7 +314,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
   static public class DisplayOptionActionListener extends EventListener<UITopicContainer> {
     public void execute(Event<UITopicContainer> event) throws Exception {
       UITopicContainer uiTopicContainer = event.getSource();
-      
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiTopicContainer) ;
     }
   }  
   
