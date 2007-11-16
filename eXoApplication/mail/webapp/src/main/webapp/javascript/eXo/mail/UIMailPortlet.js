@@ -24,6 +24,7 @@ UIMailPortlet.prototype.showContextMenu = function() {
 
 UIMailPortlet.prototype.msgPopupMenuCallback = function(evt) {
 	var UIContextMenu = eXo.webui.UIContextMenu ;
+	var DOMUtil = eXo.core.DOMUtil ;
 	var _e = window.event || evt ;
 	//_e.cancelBubble = true ;
 	var src = null ;
@@ -34,6 +35,25 @@ UIMailPortlet.prototype.msgPopupMenuCallback = function(evt) {
 	}
 	if (src.nodeName != "tr")
 		src = eXo.core.DOMUtil.findAncestorByTagName(src, "tr");
+		
+	var check = DOMUtil.findDescendantsByClass(src, "input", "checkbox") ;
+	if (check[0].checked == false) {
+		var tbody = DOMUtil.findAncestorByTagName(src, "tbody") ;
+		var checkboxes = DOMUtil.findDescendantsByClass(tbody, "input", "checkbox") ;
+		var len = checkboxes.length ;
+		for(var i = 0 ; i < len ; i++) {
+			if (checkboxes[i].checked) {
+				var tr = DOMUtil.findAncestorByTagName(checkboxes[i] , "tr");
+				if (tr.className.indexOf("SelectedItem") > -1) {
+					tr.className  = tr.className.replace("SelectedItem", "");
+				}
+				checkboxes[i].checked = false;
+			}
+		}
+		check[0].checked = true ;
+		var str = DOMUtil.findAncestorByTagName(check[0] , "tr");
+		str.className += " SelectedItem";
+	}
 	id = src.getAttribute("msgId");
 	eXo.webui.UIContextMenu.changeAction(UIContextMenu.menuElement, id) ;
 } ;
@@ -93,8 +113,8 @@ UIMailPortlet.prototype.selectItem = function(obj) {
 	for (var i = 1; i < trs.length; i++) {
 		var input = DOMUtil.findFirstDescendantByClass(trs[i], "input", "checkbox");
 		if (!input.checked) {
-			if (trs[i].className.indexOf("SelectedItem") == -1)
-				trs[i].className = trs[i].className.substring(trs[i].className.indexOf("SelectedItem"), trs[i].className.length);
+			if (trs[i].className.indexOf("SelectedItem") > -1)
+				trs[i].className = trs[i].className.replace("SelectedItem", "");
 		}
 	}
 }

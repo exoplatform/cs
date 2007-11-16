@@ -84,7 +84,8 @@ public class UISearchForm extends UIForm {
       UISearchForm uiSearchForm = event.getSource() ;
       UIMailPortlet uiPortlet = uiSearchForm.getAncestorOfType(UIMailPortlet.class) ;
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
-      uiPopupAction.activate(UIAdvancedSearchForm.class, 600);    
+      UIAdvancedSearchForm uiAdvanceSearch = uiPopupAction.createUIComponent(UIAdvancedSearchForm.class, null, null);
+      uiPopupAction.activate(uiAdvanceSearch, 600, 0 , false);    
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;     
     }
   } 

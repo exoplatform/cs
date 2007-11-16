@@ -168,12 +168,12 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
     return attachments_ ;
   }
   public Message getMessage() { return message_; }
-  public void setMessage(Message message) { 
+  public void setMessage(Message message) throws Exception { 
     this.message_ = message; 
     fillFields(message_);
   }
   
-  public void fillFields(Message msg) {
+  public void fillFields(Message msg) throws Exception {
     if (msg != null) {
       setFieldSubjectValue(msg.getSubject());
       setFieldToValue(msg.getMessageTo());
@@ -231,10 +231,16 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
     return content;
   }
   
-  public void setFieldContentValue(String value) {
+  public void setFieldContentValue(String value) throws Exception {
+    String username = MailUtils.getCurrentUser();
+    String accountId = MailUtils.getAccountId();
+    MailService mailSrv = getApplicationComponent(MailService.class);
+    Account account = mailSrv.getAccountById(username, accountId);
     if (isVisualEditor) {
+      value += "</br> -- <br />" + account.getSignature() + "";
       getChild(UIFormWYSIWYGInput.class).setValue(value);
     } else {
+      value += account.getSignature() ;
       getUIFormTextAreaInput(FIELD_MESSAGECONTENT).setValue(value);
     }
   }

@@ -365,6 +365,14 @@ public class UIMessageList extends UIForm {
       System.out.println(" =========== > Reply Action");
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       if (msgId == null) msgId = uiMessageList.getSelectedMessageId();
+      UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
+      if(uiMessageList.getCheckedMessage().isEmpty()) {
+        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-no-messages", null, ApplicationMessage.INFO)) ;
+        return;
+      } else if (uiMessageList.getCheckedMessage().size() > 1){
+        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-many-messages", null, ApplicationMessage.INFO)) ;
+        return;
+      }
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class) ;
       UINavigationContainer uiNavigation = uiPortlet.getChild(UINavigationContainer.class) ;
       UISelectAccount uiSelect = uiNavigation.getChild(UISelectAccount.class) ;
@@ -393,6 +401,14 @@ public class UIMessageList extends UIForm {
       System.out.println(" =========== > Reply All Action");
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       if (msgId == null) msgId = uiMessageList.getSelectedMessageId();
+      UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
+      if(uiMessageList.getCheckedMessage().isEmpty()) {
+        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-no-messages", null, ApplicationMessage.INFO)) ;
+        return;
+      } else if (uiMessageList.getCheckedMessage().size() > 1){
+        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-many-messages", null, ApplicationMessage.INFO)) ;
+        return;
+      }
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class) ;
       UINavigationContainer uiNavigation = uiPortlet.getChild(UINavigationContainer.class) ;
       UISelectAccount uiSelect = uiNavigation.getChild(UISelectAccount.class) ;
@@ -423,8 +439,15 @@ public class UIMessageList extends UIForm {
       UIMessageList uiMessageList = event.getSource() ; 
       System.out.println(" =========== > Forward Action");
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      System.out.println("=======dd>> " + msgId);
       if (msgId == null) msgId = uiMessageList.getSelectedMessageId();
+      UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
+      if(uiMessageList.getCheckedMessage().isEmpty()) {
+        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-no-messages", null, ApplicationMessage.INFO)) ;
+        return;
+      } else if (uiMessageList.getCheckedMessage().size() > 1){
+        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-many-messages", null, ApplicationMessage.INFO)) ;
+        return;
+      }
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class) ;
       UINavigationContainer uiNavigation = uiPortlet.getChild(UINavigationContainer.class) ;
       UISelectAccount uiSelect = uiNavigation.getChild(UISelectAccount.class) ;
@@ -498,6 +521,14 @@ public class UIMessageList extends UIForm {
       UIMessageList uiMessageList = event.getSource();
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       if (msgId == null) msgId = uiMessageList.getSelectedMessageId();
+      UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
+      if(uiMessageList.getCheckedMessage().isEmpty()) {
+        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-no-messages", null, ApplicationMessage.INFO)) ;
+        return;
+      } else if (uiMessageList.getCheckedMessage().size() > 1){
+        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-many-messages", null, ApplicationMessage.INFO)) ;
+        return;
+      }
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
       UIPrintPreview uiPrintPreview = uiPopup.activate(UIPrintPreview.class, 700) ;
@@ -694,6 +725,14 @@ public class UIMessageList extends UIForm {
       if (msgId == null) msgId = uiMessageList.getSelectedMessageId();
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
+      UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
+      if(uiMessageList.getCheckedMessage().isEmpty()) {
+        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-no-messages", null, ApplicationMessage.INFO)) ;
+        return;
+      } else if (uiMessageList.getCheckedMessage().size() > 1){
+        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-many-messages", null, ApplicationMessage.INFO)) ;
+        return;
+      }
       UIExportForm uiExportForm = uiPopup.createUIComponent(UIExportForm.class, null, null);
       uiPopup.activate(uiExportForm, 600, 0, true);
       String username = uiPortlet.getCurrentUser();
