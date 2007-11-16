@@ -94,18 +94,12 @@ UIMailPortlet.prototype.tagListPopupMenuCallback = function(evt) {
 
 UIMailPortlet.prototype.selectItem = function(obj) {
 	var DOMUtil = eXo.core.DOMUtil ;
-  obj = DOMUtil.findFirstDescendantByClass(obj, "input", "checkbox");
+    obj = DOMUtil.findFirstDescendantByClass(obj, "input", "checkbox");
 	var tr = DOMUtil.findAncestorByTagName(obj, "tr") ;
 	if(obj.checked) {
-		if (!tr.getAttribute("tmpClass")) {			
-			tr.setAttribute("tmpClass", tr.className) ;
-			tr.className = "MessageItem SelectedItem" ;
-		}
+		tr.className = tr.className + " SelectedItem" ;
 	} else {
-		if (tr.getAttribute("tmpClass")) {			
-			tr.className = tr.getAttribute("tmpClass") ;
-			tr.removeAttribute("tmpClass") ;
-		}
+		tr.className = tr.className.replace("SelectedItem", "") ;
 	}
 	
 	var table = DOMUtil.findAncestorByTagName(tr, "table") ;
