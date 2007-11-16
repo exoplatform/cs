@@ -229,9 +229,10 @@
 			      			<%
 			      				for(String act : uicomponent.getQuickEditMenu()) {
 			      				link = uicomponent.event(act,"id&$uicomponent.CALENDARID=calId&calType=caltype") ;
+			      				icon = act + "EventIcon" ;
 			      			%>
 			      				<a href="$link" style="display:none;" class="EventActionMenu">
-			          				<div class="ItemIcon $act">$act</div>
+			          				<div class="ItemIcon $icon">$act</div>
 			      			  </a>
 			      			<%}%>
 				      			 <a href="<%=uicomponent.event("QuickAdd","$uicomponent.TYPE_EVENT&startTime=beginTime")%>">

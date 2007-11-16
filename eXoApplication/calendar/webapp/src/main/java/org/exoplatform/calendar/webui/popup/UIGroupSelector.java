@@ -5,6 +5,7 @@
 package org.exoplatform.calendar.webui.popup;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.exoplatform.commons.utils.PageList;
@@ -116,8 +117,12 @@ public class UIGroupSelector extends UIGroupMembershipSelector implements UIPopu
 
   public void deActivate() throws Exception {
     // TODO Auto-generated method stub
-    
   }
+  public void setGroups(Object[] publicGroups) {
+    // TODO Auto-generated method stub
+    getChild(UITree.class).setChildren(Arrays.asList(publicGroups)) ;
+  }
+  
   static  public class SelectMembershipActionListener extends EventListener<UIGroupSelector> {   
     public void execute(Event<UIGroupSelector> event) throws Exception {
       String user = event.getRequestContext().getRequestParameter(OBJECTID) ;
