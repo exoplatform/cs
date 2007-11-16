@@ -31,6 +31,11 @@
 								<div class="Label"> RSS </div>
 							</div>
 						</a>
+            <a href="<%=uicomponent.event("Filter")%>" class="ControlButton">
+              <div class="IconHolder FilterIcon">
+                <div class="Label"> Filter </div>
+              </div>
+            </a>
 						<div class="SeparatorLine"><span></span></div>
 						
 						<div class="SelectButton" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
