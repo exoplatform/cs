@@ -67,10 +67,6 @@
 		      		<% /*End Popup Menu*/ %>
 						</div>
 						<div class="SeparatorLine"><span></span></div>
-						<a href="<%=uicomponent.event("AddTasks")%>" class="ControlButton">
-							<div class="IconHolder AddTaskIcon"> Tasks </div>
-						</a>
-						<div class="SeparatorLine"><span></span></div>
 						<a href="<%=uicomponent.event("Setting")%>" class="ControlButton">
 							<div class="IconHolder CalendarSettingIcon"> Setting </div>
 						</a>

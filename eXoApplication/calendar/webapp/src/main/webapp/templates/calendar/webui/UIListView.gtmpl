@@ -72,7 +72,7 @@
   					attachIcon = "" ;
   					if(!event.getAttachment().isEmpty()) {attachIcon = "AttachmentIcon" ;}
   					%>
-  						<tr eventid="<%=event.getId()%>" calid="<%=event.getCalendarId()%>">
+  						<tr class="UIListViewRow" eventid="<%=event.getId()%>" calid="<%=event.getCalendarId()%>" calType=<%=event.getCalType()%>>
 		  					<%
 		  						String classIcon = event.getEventType() + "Icon" ;
 		  						String actionLink = uicomponent.event("ViewDetail", event.getId()+"&calendarId="+event.getCalendarId()+"&calType="+event.getCalType()) ;		  
@@ -133,7 +133,7 @@
 		      <div class="UIRightPopupMenuContainer">
 		        <%
 		  				for(String act : uicomponent.getQuickEditMenu()) {
-		  				link = uicomponent.event(act,"id&$uicomponent.CALENDARID=calId") ;
+		  				link = uicomponent.event(act,"id&$uicomponent.CALENDARID=calId&$uicomponent.CALTYPE=caltype") ;
 		        %>
 		        <a href="$link">
 		          <div class="ItemIcon $act">

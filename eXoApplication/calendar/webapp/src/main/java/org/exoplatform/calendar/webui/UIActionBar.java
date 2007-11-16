@@ -39,7 +39,7 @@ import org.exoplatform.webui.event.EventListener;
     template =  "app:/templates/calendar/webui/UIActionBar.gtmpl", 
     events = {
         @EventConfig(listeners = UIActionBar.QuickAddEventActionListener.class),
-        @EventConfig(listeners = UIActionBar.AddTasksActionListener.class),
+        //@EventConfig(listeners = UIActionBar.AddTasksActionListener.class),
         @EventConfig(listeners = UIActionBar.ChangeViewActionListener.class),
         @EventConfig(listeners = UIActionBar.SettingActionListener.class),
         @EventConfig(listeners = UIActionBar.RSSActionListener.class),
@@ -58,7 +58,7 @@ public class UIActionBar extends UIContainer  {
   }
   protected String[] getViewTypes() {return UICalendarViewContainer.TYPES ;} 
   protected String getCurrentView() {return currentView_ ;}
-  protected void setCurrentView(String viewName) {currentView_ = viewName ;}
+  public void setCurrentView(String viewName) {currentView_ = viewName ;}
   
   protected boolean isShowPane() {return isShowPane_ ;}
   protected void setShowPane(boolean isShow) {isShowPane_ = isShow ;}
@@ -93,7 +93,7 @@ public class UIActionBar extends UIContainer  {
   }
 
 
-  static public class AddTasksActionListener extends EventListener<UIActionBar> {
+  /*static public class AddTasksActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {
       UIActionBar uiActionBar = event.getSource() ;
       CalendarService calendarService = uiActionBar.getApplicationComponent(CalendarService.class) ;
@@ -115,7 +115,7 @@ public class UIActionBar extends UIContainer  {
       uiContainer.addChild(uiTaskForm) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }
-  }
+  }*/
   
   
   static public class ChangeViewActionListener extends EventListener<UIActionBar> {
@@ -145,8 +145,8 @@ public class UIActionBar extends UIContainer  {
         uiListView.isShowEvent_ = true ;
       }
       uiViewContainer.setRenderedChild(viewType);      
-      uiActionBar.setCurrentView(viewType) ;
       uiViewContainer.refresh() ;
+      uiActionBar.setCurrentView(viewType) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiActionBar) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiViewContainer) ;
     }

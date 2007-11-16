@@ -48,7 +48,7 @@ public class UIMiniCalendar extends UICalendarView  {
     eventQuery.setFromDate(fromcalendar) ;
     java.util.Calendar tocalendar = new GregorianCalendar(getCurrentYear(), getCurrentMonth(), getDaysInMonth(), 24,0,0) ;
     eventQuery.setToDate(tocalendar) ;
-    CalendarService calendarService = getApplicationComponent(CalendarService.class) ;
+    CalendarService calendarService = CalendarUtils.getCalendarService() ;
     dataMap = calendarService.searchHightLightEvent(CalendarUtils.getCurrentUser(), eventQuery, getPublicCalendars());
   }
   protected int getWeeksOfTheMonth(int year, int month, int day) {

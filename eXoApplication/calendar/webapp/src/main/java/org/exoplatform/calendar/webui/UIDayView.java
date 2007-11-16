@@ -137,8 +137,6 @@ public class UIDayView extends UICalendarView {
       String calendarId = event.getRequestContext().getRequestParameter("calendarId") ;
       String startTime = event.getRequestContext().getRequestParameter("startTime") ;
       String endTime = event.getRequestContext().getRequestParameter("finishTime") ;
-      System.out.println("\n\n startTime" + startTime);
-      System.out.println("\n\n endTime" + endTime);
       String username = event.getRequestContext().getRemoteUser() ;
       CalendarEvent ce = calendarview.eventData_.get(eventId) ;
       if(ce != null) {
@@ -150,10 +148,10 @@ public class UIDayView extends UICalendarView {
           int minutesEnd = (Integer.parseInt(endTime)%60) ;
 
           Calendar fromDateTime = new GregorianCalendar(calendarview.getCurrentYear(), calendarview.getCurrentMonth(), calendarview.getCurrentDay()) ;
-          fromDateTime.set(Calendar.HOUR, hoursBg) ;
+          fromDateTime.set(Calendar.HOUR_OF_DAY, hoursBg) ;
           fromDateTime.set(Calendar.MINUTE, minutesBg) ;
           Calendar toDateTime = new GregorianCalendar(calendarview.getCurrentYear(), calendarview.getCurrentMonth(), calendarview.getCurrentDay()) ;
-          toDateTime.set(Calendar.HOUR, hoursEnd) ;
+          toDateTime.set(Calendar.HOUR_OF_DAY, hoursEnd) ;
           toDateTime.set(Calendar.MINUTE, minutesEnd) ;
 
           ce.setFromDateTime(fromDateTime.getTime());

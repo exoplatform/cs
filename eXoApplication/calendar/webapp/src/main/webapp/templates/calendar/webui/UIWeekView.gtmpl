@@ -171,16 +171,16 @@
 					<% 
 					boolean flag = false ;
 					style = "" ;
-					if(isShowWorkingTime) {style = "display:none;" ;}	
+					if(isShowWorkingTime) {style = "WorkOffTime" ;}	
 					for(time in uicomponent.getDisplayTimes(timeFormat, timeInterval)){
 						if(isShowWorkingTime) {
         			if(time.equals(startWorkingTime)) {style = "" ;}
-        			if(time.equals(endWorkingTime)) {style = "display:none;" ;}
+        			if(time.equals(endWorkingTime)) {style = "WorkOffTime" ;}
         		}
 						if(flag) {styleClass = "TdDotLine" ;}
 						else {styleClass = "TdLine"}
 					%>
-					<tr style="$style">
+					<tr class="$style">
 						<td class="TdTime">
 							<div  class="TdTime"><%if(!flag) {println time;}%></div>
 						</td>
@@ -197,7 +197,7 @@
 					 		  	cssClass = "Weekday" ;
 					 		  }
 					 	%>
-					 	 		<td startTime="<%=cl.getTimeInMillis()%>" eventIndex="$dayOfWeek" class="$styleClass $cssClass">
+					 	 		<td startTime="<%=cl.getTimeInMillis()%>" eventIndex="$dayOfWeek" class="$styleClass $cssClass $style">
 									<span></span>
 								</td>
 					 	<%		

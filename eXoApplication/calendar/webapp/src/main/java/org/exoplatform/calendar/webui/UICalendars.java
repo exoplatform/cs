@@ -61,7 +61,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
       @EventConfig(listeners = UICalendars.AddEventActionListener.class),
       @EventConfig(listeners = UICalendars.AddTaskActionListener.class),
       @EventConfig(listeners = UICalendars.EditCalendarActionListener.class),
-      @EventConfig(listeners = UICalendars.RemoveCalendarActionListener.class, confirm="UICalendars.msg.confirm-delete-calendar"),
+      @EventConfig(phase=Phase.DECODE, listeners = UICalendars.RemoveCalendarActionListener.class, confirm="UICalendars.msg.confirm-delete-calendar"),
       @EventConfig(listeners = UICalendars.SendCalendarActionListener.class),
       @EventConfig(listeners = UICalendars.AddCalendarCategoryActionListener.class),
       @EventConfig(listeners = UICalendars.ShareCalendarActionListener.class),
@@ -181,10 +181,16 @@ public class UICalendars extends UIForm  {
       String username = event.getRequestContext().getRemoteUser() ;
       calService.removeCalendarCategory(username, calendarCategoryId) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent) ; 
-      UICalendarViewContainer uiContainer = uiPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
-      uiContainer.refresh() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ; 
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent.getParent()) ;
+      UICalendarWorkingContainer uiWorkingContainer = uiPortlet.findFirstComponentOfType(UICalendarWorkingContainer.class) ;
+      UICalendarViewContainer uiViewContainer = uiPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
+      uiViewContainer.refresh() ;
+      try{       
+        UIMiniCalendar uiMiniCalendar = uiPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;
+        uiMiniCalendar.updateMiniCal() ;
+      } catch (Exception e) {
+        e.printStackTrace() ;
+      }
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer) ;
     }
   }
 

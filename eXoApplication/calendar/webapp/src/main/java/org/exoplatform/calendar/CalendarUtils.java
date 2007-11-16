@@ -11,7 +11,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Locale;
 
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
@@ -68,10 +67,7 @@ public class CalendarUtils {
 
   public static List<SelectItemOption<String>> getTimesSelectBoxOptions(String timeFormat) {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-    GregorianCalendar cal = new GregorianCalendar(Locale.US) ;
-    cal.set(java.util.Calendar.AM_PM, java.util.Calendar.AM) ;
-    cal.set(java.util.Calendar.HOUR, 0) ;
-    cal.set(java.util.Calendar.MINUTE, 0) ;
+    Calendar cal = getBeginDay(GregorianCalendar.getInstance()) ;
     DateFormat df = new SimpleDateFormat(timeFormat) ;
     DateFormat df2 = new SimpleDateFormat(TIMEFORMAT) ;
     int time = 0 ;
@@ -83,10 +79,7 @@ public class CalendarUtils {
   }
   public static List<SelectItemOption<String>> getTimesSelectBoxOptions(String timeFormat, int timeInteval) {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-    GregorianCalendar cal = new GregorianCalendar(Locale.US) ;
-    cal.set(java.util.Calendar.AM_PM, java.util.Calendar.AM) ;
-    cal.set(java.util.Calendar.HOUR, 0) ;
-    cal.set(java.util.Calendar.MINUTE, 0) ;
+    Calendar cal = getBeginDay(GregorianCalendar.getInstance()) ;
     DateFormat df = new SimpleDateFormat(timeFormat) ;
     DateFormat df2 = new SimpleDateFormat(TIMEFORMAT) ;
     int time = 0 ;
@@ -100,12 +93,9 @@ public class CalendarUtils {
     DateFormat df = new SimpleDateFormat(timeFormat) ;
     return df.format(date) ;    
   }
-  public static List<String> getDisplayTimes(String timeFormat, int timeInterval, int workStart, int workEnd) {
+  /*public static List<String> getDisplayTimes(String timeFormat, int timeInterval, int workStart, int workEnd) {
     List<String> times = new ArrayList<String>() ;
-    GregorianCalendar cal = new GregorianCalendar(Locale.US) ;
-    cal.set(Calendar.AM_PM, Calendar.AM) ;
-    cal.set(java.util.Calendar.HOUR, 0) ;
-    cal.set(java.util.Calendar.MINUTE, 0) ;
+    Calendar cal = getBeginDay(GregorianCalendar.getInstance()) ;
     DateFormat df = new SimpleDateFormat(timeFormat) ;
     int time = workStart ;
     while (time < workEnd) {
@@ -114,7 +104,7 @@ public class CalendarUtils {
       time ++ ;
     }
     return times ;
-  }
+  }*/
   
   static public String getCurrentUser() throws Exception {
     return Util.getPortalRequestContext().getRemoteUser() ; 
@@ -125,9 +115,9 @@ public class CalendarUtils {
     Calendar cal2 = new GregorianCalendar() ;
     cal1.setTime(eventCalendar.getFromDateTime()) ;
     cal2.setTime(eventCalendar.getToDateTime()) ;
-    return (cal1.get(Calendar.HOUR) == 0  && 
+    return (cal1.get(Calendar.HOUR_OF_DAY) == 0  && 
             cal1.get(Calendar.MINUTE) == 0 &&
-            cal2.get(Calendar.HOUR) == 0 && 
+            cal2.get(Calendar.HOUR_OF_DAY) == 0 && 
             cal2.get(Calendar.MINUTE) == 0 );
   }
   
@@ -143,5 +133,30 @@ public class CalendarUtils {
     Calendar date2 = GregorianCalendar.getInstance() ;
     date2.setTime(value2) ;
     return isSameDate(date1, date2) ;
+  }
+  
+  public static Calendar getBeginDay(Calendar cal) {
+    cal.set(Calendar.HOUR_OF_DAY, 0) ;
+    cal.set(Calendar.MINUTE, 0) ;
+    cal.set(Calendar.MILLISECOND, 0) ;
+    return cal ;
+  }
+  public static Calendar getEndDay(Calendar cal)  {
+    cal.set(Calendar.HOUR_OF_DAY, 0) ;
+    cal.set(Calendar.MINUTE, 0) ;
+    cal.set(Calendar.MILLISECOND, 0) ;
+    cal.add(Calendar.HOUR_OF_DAY, 24) ;
+    return cal ;
+  }
+  
+  public static Calendar getBeginDay(Date date) {
+    Calendar cal = GregorianCalendar.getInstance() ;
+    cal.setTime(date) ;
+    return getBeginDay(cal) ;
+  }
+  public static Calendar getEndDay(Date date)  {
+    Calendar cal = GregorianCalendar.getInstance() ;
+    cal.setTime(date) ;
+    return getEndDay(cal) ;
   }
 }

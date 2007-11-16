@@ -28,6 +28,7 @@ import org.exoplatform.webui.event.EventListener;
 )
 public class UICalendarContainer extends UIContainer  {
   public UICalendarContainer() throws Exception {
+    addChild(UISearchForm.class, null, null) ;
     addChild(UIMiniCalendar.class, null, null) ;
     addChild(UICalendars.class, null, null) ;    
   } 

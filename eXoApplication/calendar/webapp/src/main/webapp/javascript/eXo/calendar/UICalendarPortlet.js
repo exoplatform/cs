@@ -264,7 +264,8 @@ UICalendarPortlet.prototype.setSize = function(obj) {
 	var start = parseInt(obj.getAttribute("startTime")) ;
 	var end = parseInt(obj.getAttribute("endTime")) ;	
 	height = Math.abs(start - end) ;
-	var workingStart = (eXo.calendar.UICalendarPortlet.workingStart) ? parseInt(eXo.calendar.UICalendarPortlet.workingStart) : 0 ;
+	//var workingStart = (eXo.calendar.UICalendarPortlet.workingStart) ? parseInt(eXo.calendar.UICalendarPortlet.workingStart) : 0 ;
+	var workingStart = 0 ;
 	var top = start - workingStart ;
 	obj.style.height = (height - 2) + "px" ;
 	obj.style.top = top + "px" ;
@@ -572,7 +573,8 @@ UICalendarPortlet.prototype.dragEnd = function() {
 	var start = parseInt(dragObject.getAttribute("startTime")) ;
 	var end = parseInt(dragObject.getAttribute("endTime")) ;
 	var delta = end - start  ;
-	var currentStart = (UICalendarPortlet.workingStart) ? dragObject.offsetTop + UICalendarPortlet.workingStart : dragObject.offsetTop ;
+//	var currentStart = (UICalendarPortlet.workingStart) ? dragObject.offsetTop + UICalendarPortlet.workingStart : dragObject.offsetTop ;
+	var currentStart = dragObject.offsetTop ;
 	var currentEnd = currentStart + delta ;
 	var eventDayContainer = eXo.core.DOMUtil.findAncestorByClass(dragObject, "EventDayContainer") ;
 	eventDayContainer.onmousemove = null ;
@@ -610,6 +612,8 @@ UICalendarPortlet.prototype.showContextMenu = function() {
 	UIContextMenu.attach("TimeRule","UIDayViewRightMenu") ;
 	UIContextMenu.attach("EventBoxes","UIDayViewEventRightMenu") ;
 	UIContextMenu.attach(["EventWeekContent","EventAlldayContainer"],"UIWeekViewRightMenu") ;
+	
+	UIContextMenu.attach("UIListViewRow","UIListViewEventRightMenu") ;
 	//UIContextMenu.attach(["EventContainerBoder","EventContainerBar","EventContainer","ResizeEventContainer"],"UIWeekViewEventRightMenu") ;
 } ;
 

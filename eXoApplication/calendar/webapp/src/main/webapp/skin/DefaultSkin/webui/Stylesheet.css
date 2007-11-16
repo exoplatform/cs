@@ -41,27 +41,27 @@
   background: url('background/RepeatHorizontalLine1x2.gif') repeat-x bottom;	
   height: 22px; padding-top: 12px;
 }
-
-.UICalendarPortlet .UIBannerContainer .SearchForm {
+/*==============================UISearchForm================================*/
+.UICalendarPortlet .UICalendarContainer .UISearchForm {
   background: url('background/RightBottomBanner440x28.gif') no-repeat right;	
   height: 28px; line-height: 28px;
 	padding-right: 13px;
 }
 
-.UICalendarPortlet .UIBannerContainer .Label {
+.UICalendarPortlet .UICalendarContainer .UISearchLabel {
 	float: right;
 	line-height: 20px;
 	margin: 5px 0px;
 	color: #595b6a; 
 }
 
-.UICalendarPortlet .UIBannerContainer .SearchForm input {
-	width: 195px;
+.UICalendarPortlet .UICalendarContainer .UISearchForm input {
+	width: 100px;
 	float: right;
 	margin: 3px 8px;
 }
 
-.UICalendarPortlet .UIBannerContainer .Search {
+.UICalendarPortlet .UICalendarContainer .Search {
   background: url('skinIcons/16x16/icons/SearchIcon.gif') no-repeat ;	
   height: 16px;
   width: 16px;
@@ -69,18 +69,12 @@
   margin: 8px 5px 0px 0px;  
 }
 
-.UICalendarPortlet .UIBannerContainer .AdvancedSearch {
+.UICalendarPortlet .UICalendarContainer .AdvancedSearch {
   background: url('skinIcons/16x16/icons/FindIcon.gif') no-repeat ;	
   height: 16px; 
   width: 16px;
   float: right; 
   margin: 8px 0px 0px 2px;
-}
-
-.UICalendarPortlet .UIBannerContainer .SeparatorLine {
-	background: url('background/SeparatorLineBaner2x26.gif') no-repeat ;
-  float: right; width: 2px; height: 26px;
-  margin: 0px 7px;
 }
 
 /*==============================Calendar Working Container================================*/
@@ -522,7 +516,7 @@
 
 }
 .UICalendarViewContainer .ViewTypeSelect .UIPopupCategory {
-	left: 215px;
+	left: 315px;
 	position:absolute;
 	top: 22px;
 	width: auto;
@@ -638,6 +632,9 @@
 }
 .UIDayView .TitleBar .Today a{
 	 color:red ;
+}
+.UIDayView .WorkOffTime {
+	background-color: #f3f3f3;
 }
 /*====================Week View============================*/
 
@@ -794,6 +791,9 @@
 	float: right;
 	cursor: w-resize;
 	margin: 1px 0px 0px 0px ;
+}
+.UIWeekView .WorkOffTime {
+	background-color: #f3f3f3;
 }
 /*====================Schedule View============================*/
 

@@ -44,7 +44,7 @@ public class UISearchForm extends UIForm {
     public void execute(Event<UISearchForm> event) throws Exception {
       UISearchForm uiForm = event.getSource() ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-      String text = uiForm.getUIStringInput(uiForm.FIELD_SEARCHVALUE).getValue() ;
+      String text = uiForm.getUIStringInput(UISearchForm.FIELD_SEARCHVALUE).getValue() ;
       if(text == null || text.length() == 0) {
         uiApp.addMessage(new ApplicationMessage("UISearchForm.msg.no-text-to-search", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -59,13 +59,16 @@ public class UISearchForm extends UIForm {
       UIListView uiListView = calendarViewContainer.findFirstComponentOfType(UIListView.class) ;
       EventPageList resultPageList = 
         CalendarUtils.getCalendarService().searchEvent(username, eventQuery, uiListView.getPublicCalendars()) ;
-      calendarViewContainer.setRenderedChild("UIListContainer") ;
+      calendarViewContainer.setRenderedChild(UICalendarViewContainer.LIST_VIEW) ;
       uiListView.update(resultPageList) ;
       uiListView.setViewType(UIListView.TYPE_BOTH) ;
       uiListView.setDisplaySearchResult(true) ;
       uiListView.setSelectedEvent(null) ;
       calendarViewContainer.findFirstComponentOfType(UIPreview.class).setEvent(null) ;
-      //uiListView.setShowEventAndTask(true) ;            
+      UIActionBar uiActionBar = calendarPortlet.findFirstComponentOfType(UIActionBar.class) ;
+      uiActionBar.setCurrentView(UICalendarViewContainer.LIST_VIEW) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiActionBar) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(calendarViewContainer) ;
     }
   }

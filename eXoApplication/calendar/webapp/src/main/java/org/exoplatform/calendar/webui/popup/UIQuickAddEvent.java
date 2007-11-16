@@ -113,14 +113,22 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
   private Date getEventFromDate() throws Exception {
     UIFormDateTimeInput fromField = getChildById(FIELD_FROM) ;
     UIFormSelectBox timeFile = getChildById(FIELD_FROM_TIME) ;
+    if(getIsAllDay()) {
+      DateFormat df = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
+      return CalendarUtils.getBeginDay(df.parse(fromField.getValue())).getTime();
+    } 
     DateFormat df = new SimpleDateFormat(CalendarUtils.DATETIMEFORMAT) ;
     return df.parse(fromField.getValue() + " " + timeFile.getValue() ) ;
   }
   private Date getEventToDate() throws Exception {
-    UIFormDateTimeInput fromField = getChildById(FIELD_TO) ;
+    UIFormDateTimeInput toField = getChildById(FIELD_TO) ;
     UIFormSelectBox timeFile = getChildById(FIELD_TO_TIME) ;
+    if(getIsAllDay()) {
+      DateFormat df = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
+      return CalendarUtils.getBeginDay(df.parse(toField.getValue())).getTime();
+    } 
     DateFormat df = new SimpleDateFormat(CalendarUtils.DATETIMEFORMAT) ;
-    return df.parse(fromField.getValue() + " " + timeFile.getValue() ) ;
+    return df.parse(toField.getValue() + " " + timeFile.getValue() ) ;
   }
   private void setEventToDate(Date value) {
     UIFormDateTimeInput toField =  getChildById(FIELD_TO) ;
@@ -189,37 +197,43 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-      Date fromDate = uiForm.getEventFromDate() ;
-      Date toDate = uiForm.getEventToDate() ;
-      if(uiForm.getIsAllDay()) {
+      Date from = uiForm.getEventFromDate() ;
+      Date to = uiForm.getEventToDate() ;
+      
+      if(from.after(to)) {
+        uiApp.addMessage(new ApplicationMessage(uiForm.getId() + ".msg.logic-required", null, ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      } else if(from.equals(to)) {
+        to = CalendarUtils.getEndDay(from).getTime() ;
+      } 
+      /*if(uiForm.getIsAllDay()) {
         java.util.Calendar cal = GregorianCalendar.getInstance() ;
-        cal.setTime(fromDate) ;
+        cal.setTime(from) ;
+        from = CalendarUtils.getBeginDay(cal).getTime() ;
+        cal.setTime(to) ;
         cal.set(java.util.Calendar.HOUR, 0) ;
         cal.set(java.util.Calendar.MINUTE, 0) ;
-        fromDate = cal.getTime() ;
-        cal.setTime(toDate) ;
-        cal.set(java.util.Calendar.HOUR, 0) ;
-        cal.set(java.util.Calendar.MINUTE, 0) ;
-        if(fromDate.equals(cal.getTime())) {
+        if(from.equals(cal.getTime())) {
           cal.add(java.util.Calendar.DATE,1) ;
-        } else if(fromDate.after(cal.getTime())) {
+        } else if(from.after(cal.getTime())) {
           uiApp.addMessage(new ApplicationMessage(uiForm.getId() + ".msg.logic-required", null, ApplicationMessage.WARNING)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;
         } else {
-          cal.setTime(toDate) ;
+          cal.setTime(to) ;
           cal.set(java.util.Calendar.HOUR, 0) ;
           cal.set(java.util.Calendar.MINUTE, 0) ;
           cal.add(java.util.Calendar.DATE,1) ;
         }
-        toDate = cal.getTime() ;
+        to = cal.getTime() ;
       }else {      
-        if(fromDate.equals(toDate) || fromDate.after(toDate)) {
+        if(from.equals(to) || from.after(to)) {
           uiApp.addMessage(new ApplicationMessage(uiForm.getId() + ".msg.logic-required", null, ApplicationMessage.WARNING)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;
         }  
-      }
+      }*/
       try {
         CalendarEvent calEvent = new CalendarEvent() ;
         calEvent.setSummary(uiForm.getEventSummary()) ;
@@ -231,8 +245,8 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
           calEvent.setEventType(CalendarEvent.TYPE_TASK) ;
         }
         calEvent.setEventCategoryId(uiForm.getEventCategory());
-        calEvent.setFromDateTime(fromDate);
-        calEvent.setToDateTime(toDate) ;
+        calEvent.setFromDateTime(from);
+        calEvent.setToDateTime(to) ;
         calEvent.setCalType(uiForm.calType_) ;
         String username = CalendarUtils.getCurrentUser() ;
         if(uiForm.calType_.equals(CalendarUtils.PRIVATE_TYPE)) {

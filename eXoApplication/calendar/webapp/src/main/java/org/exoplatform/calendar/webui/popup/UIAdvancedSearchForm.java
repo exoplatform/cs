@@ -16,6 +16,7 @@ import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.EventPageList;
 import org.exoplatform.calendar.service.EventQuery;
+import org.exoplatform.calendar.webui.UIActionBar;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
 import org.exoplatform.calendar.webui.UIListView;
@@ -61,8 +62,8 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
     addChild(new UIFormStringInput(TEXT, TEXT, null)) ;
     List<SelectItemOption<String>> types = new ArrayList<SelectItemOption<String>>() ;
     types.add(new SelectItemOption<String>("Event and Task", "")) ;
-    types.add(new SelectItemOption<String>("Event", "Event")) ;
-    types.add(new SelectItemOption<String>("Task", "Task")) ;
+    types.add(new SelectItemOption<String>(CalendarEvent.TYPE_EVENT, CalendarEvent.TYPE_EVENT)) ;
+    types.add(new SelectItemOption<String>(CalendarEvent.TYPE_TASK, CalendarEvent.TYPE_TASK)) ;
     addChild(new UIFormSelectBox(TYPE, TYPE, types)) ;
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     CalendarService cservice = CalendarUtils.getCalendarService() ;
@@ -118,12 +119,13 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
       UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
       UICalendarViewContainer calendarViewContainer = 
         calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
-      calendarViewContainer.setRenderedChild("UIListContainer") ;
+      calendarViewContainer.setRenderedChild(UICalendarViewContainer.LIST_VIEW) ;
       UIListView uiListView = calendarViewContainer.findFirstComponentOfType(UIListView.class) ;
       EventPageList resultPageList =  
         CalendarUtils.getCalendarService().searchEvent(username, query, uiListView.getPublicCalendars()) ;
       calendarPortlet.cancelAction() ;
       uiListView.update(resultPageList) ;
+      uiListView.setViewType(UIListView.TYPE_BOTH) ;
       uiListView.setDisplaySearchResult(true) ;
       uiListView.setSelectedEvent(null) ;
       calendarViewContainer.findFirstComponentOfType(UIPreview.class).setEvent(null) ;
@@ -134,6 +136,9 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
         if(query.getEventType().equals(CalendarEvent.TYPE_EVENT)) uiListView.isShowEvent_ = true ;
         else uiListView.isShowEvent_ = false ;
       }*/ 
+      UIActionBar uiActionBar = calendarPortlet.findFirstComponentOfType(UIActionBar.class) ;
+      uiActionBar.setCurrentView(UICalendarViewContainer.LIST_VIEW) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiActionBar) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(calendarViewContainer) ;
     }
   }

@@ -1,16 +1,23 @@
 <%
 import org.exoplatform.calendar.webui.UIListView;
+import org.exoplatform.calendar.webui.UIMonthView;
 %>
 <div class="UIHeaderBar ListBar">
-		<a href="<%=uicomponent.event("AddEvent")%>" class="ControlButton">
+		<a href="<%=uicomponent.event("AddEvent",uicomponent.TYPE_EVENT)%>" class="ControlButton">
 			<div class="IconHolder AddEventIcon"> Add event </div>
 		</a>
 		<div class="SeparatorLine"><span></span></div>
-		<a href="<%=uicomponent.event("DeleteEvent")%>" class="ControlButton">
-			<div class="IconHolder DeleteEventIcon"> Delete event </div>
+		<a href="<%=uicomponent.event("AddEvent", uicomponent.TYPE_TASK)%>" class="ControlButton">
+			<div class="IconHolder AddTaskIcon"> Add task </div>
 		</a>
-		<div class="SeparatorLine"><span></span></div>
+		<%if((uicomponent instanceof UIListView) || (uicomponent instanceof UIMonthView)){%>
+			<div class="SeparatorLine"><span></span></div>
+			<a href="<%=uicomponent.event("DeleteEvent")%>" class="ControlButton">
+				<div class="IconHolder DeleteEventIcon"> Delete event </div>
+			</a>
+		<%}%>
 		<%if(uicomponent instanceof UIListView){%>
+		<div class="SeparatorLine"><span></span></div>
 		<div class="ViewTypeSelect" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
 			<div class="ControlButton">
 				<div class="IconHolder TaskIcon">

@@ -65,7 +65,7 @@
   					if(!event.getAttachment().isEmpty()) {attachIcon = "AttachmentIcon" ;}
   					String actionLink = uicomponent.event("ViewDetail", event.getId()+"&calendarId="+event.getCalendarId()+"&calType="+event.getCalType()) ;		 
   				%>
-  						<tr>
+  						<tr class="UIListViewRow" eventid="<%=event.getId()%>" calid="<%=event.getCalendarId()%>" calType=<%=event.getCalType()%>>
 								<td><%uicomponent.renderField(uicomponent.getChildById(event.getId()))%></td>
 		  					<td style="padding: 0px;"><div class="$attachIcon" >&nbsp;</div></td>
 		  					<td class="text">
@@ -85,4 +85,39 @@
 	</div>
 	<%_ctx.include("app:/templates/calendar/webui/UIPageIterator.gtmpl");%>
 	<div class="ResizeReadingPane"><span></span></div>
+		<% /*Begin Popup Menu*/ %>
+	<div class="UIRightClickPopupMenu" id="UIListViewEventRightMenu" exocallback="">
+		<div class="UIContextMenuContainer">
+		  <div class="TopLeftRightClickPopupMenu">
+		    <div class="TopRightRightClickPopupMenu">
+		      <div class="TopCenterRightClickPopupMenu">
+		        <span></span>
+		      </div>
+		    </div>
+		  </div>
+		  <div class="MiddleLeftRightClickPopupMenu">
+		    <div class="MiddleRightRightClickPopupMenu">
+		      <div class="UIRightPopupMenuContainer">
+		        <%
+		  				for(String act : uicomponent.getQuickEditMenu()) {
+		  				link = uicomponent.event(act,"id&$uicomponent.CALENDARID=calId&$uicomponent.CALTYPE=caltype") ;
+		        %>
+		        <a href="$link">
+		          <div class="ItemIcon $act">
+		            $act</div>
+		        </a>
+		        <%}%>
+		      </div>
+		    </div>
+		  </div>
+		  <div class="BottomLeftRightClickPopupMenu">
+	    <div class="BottomRightRightClickPopupMenu">
+	      <div class="BottomCenterRightClickPopupMenu">
+	        <span></span>
+	      </div>
+	    </div>
+	  </div>
+		</div>
+	</div>
+	<% /*End Popup Menu*/ %>
 <%uiform.end();%>

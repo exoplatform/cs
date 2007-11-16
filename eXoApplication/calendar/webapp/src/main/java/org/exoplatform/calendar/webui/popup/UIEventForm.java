@@ -319,12 +319,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     UIFormSelectBox timeField = eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_FROM_TIME) ;
     if(getEventAllDate()) {
       DateFormat df = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
-      Calendar cal = new GregorianCalendar() ;
-      cal.setTime(df.parse(fromField.getValue())) ;
-      cal.set(Calendar.HOUR, 0);
-      cal.set(Calendar.MINUTE, 0);
-      cal.set(Calendar.MILLISECOND, 0);
-      return cal.getTime() ;
+      return CalendarUtils.getBeginDay(df.parse(fromField.getValue())).getTime();
     } 
     DateFormat df = new SimpleDateFormat(CalendarUtils.DATETIMEFORMAT) ;
     return df.parse(fromField.getValue() + " " + timeField.getValue()) ;
@@ -350,12 +345,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     UIFormSelectBox timeField = eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_TO_TIME) ;
     if(getEventAllDate()) {
       DateFormat df = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
-      Calendar cal = new GregorianCalendar() ;
-      cal.setTime(df.parse(toField.getValue())) ;
-      cal.set(Calendar.HOUR, 0);
-      cal.set(Calendar.MINUTE, 0);
-      cal.set(Calendar.MILLISECOND, 0);
-      return cal.getTime() ;
+      return CalendarUtils.getBeginDay(df.parse(toField.getValue())).getTime();
     } 
     DateFormat df = new SimpleDateFormat(CalendarUtils.DATETIMEFORMAT) ;
     return df.parse(toField.getValue() + " " + timeField.getValue()) ;
@@ -652,10 +642,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;
         } else if(from.equals(to)) {
-          Calendar cal = new GregorianCalendar() ;
-          cal.setTime(from) ;
-          cal.set(Calendar.HOUR, 24) ;
-          to = cal.getTime() ;
+          to = CalendarUtils.getEndDay(from).getTime() ;
         } 
         calendarEvent.setCalType(uiForm.calType_) ;
         calendarEvent.setFromDateTime(from) ;

@@ -39,10 +39,10 @@
 										monthViewAction = uicomponent.TYPE_MONTH +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"="+ currentMonth +"&"+ uicomponent.DAY + "=1" ;
 										yearViewAction = uicomponent.TYPE_YEAR +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"=0&"+ uicomponent.DAY + "=1" ;
 								%>
-								<a href="<%=uicomponent.event("GotoDate", monthViewAction)%>">
+								<a href="<%=uicomponent.event("GotoDate", monthViewAction)%>" style="color:blue;">
 									$monthName 
 								</a>,  
-								<a href="<%=uicomponent.event("GotoDate", yearViewAction)%>">
+								<a href="<%=uicomponent.event("GotoDate", yearViewAction)%>" style="color:orange">
 									$currentYear
 								</a>
 								</div>
@@ -119,19 +119,7 @@
   						
     	</div>
   	</div>
-	  <div class="TimeSelector">
-			<div class="RightTimeSelector">
-				<div class="LeftTimeSelector">
-					<div class="CenterTimeSelector">
-						<%
-							String style = "HH:mm:ss" ;
-							DateFormat df = new SimpleDateFormat(style) ;
-							println df.format(uicomponent.getCurrentDate()) ;
-						%>
-					</div>
-				</div>
-			</div>
-		</div>     
+	  
 	</div>
 </div>
 <%uiform.end();%>
