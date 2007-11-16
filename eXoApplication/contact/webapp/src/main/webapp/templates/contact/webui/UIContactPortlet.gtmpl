@@ -9,7 +9,7 @@
  	rcontext.getJavascriptManager().addJavascript("eXo.contact.UIContactPortlet.showContextMenu() ;") ;
 %>
 
-<div class="UIContactPortlet"id="$compId">
+<div class="UIContactPortlet" id="$compId">
 
 <!-- Start UIBannerContainer -->
 	<% uicomponent.renderChild(UIBannerContainer.class) ;%>
