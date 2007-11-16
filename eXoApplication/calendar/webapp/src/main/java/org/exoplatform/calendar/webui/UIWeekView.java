@@ -92,12 +92,10 @@ public class UIWeekView extends UICalendarView {
       Date beginEvent = event.getFromDateTime() ;
       Date endEvent = event.getToDateTime() ;
       long eventAmount = endEvent.getTime() - beginEvent.getTime() ;
-      System.out.println("\n\n eventAmount" + eventAmount);
-      System.out.println("\n\n eventAmount" + CalendarUtils.MILISECONS_OF_DAY);
       for(Calendar c : getDaysOfWeek(week)) {
         String key = keyGen(c.get(Calendar.DATE), c.get(Calendar.MONTH), c.get(Calendar.YEAR)) ;
-        if(isSameDate(c.getTime(), beginEvent) && isSameDate(c.getTime(), endEvent)) { 
-          if(eventAmount < CalendarUtils.MILISECONS_OF_DAY) {
+        if(isSameDate(c.getTime(), beginEvent) && (isSameDate(c.getTime(), endEvent) || endEvent.equals(getEndDay(c).getTime()))) { 
+          if(eventAmount > 0 && eventAmount < CalendarUtils.MILISECONS_OF_DAY) {
             eventData_.get(key).put(event.getId(), event) ;
             dataMap_.put(event.getId(), event) ;
             iter.remove() ;
@@ -221,6 +219,8 @@ public class UIWeekView extends UICalendarView {
       String currentDate = event.getRequestContext().getRequestParameter("currentDate") ;
       String username = event.getRequestContext().getRemoteUser() ;
       CalendarEvent eventCalendar = null ;
+      System.out.println("\n\n start " + startTime);
+      System.out.println("\n\n finish " + finishTime);
       CalendarService calendarService = CalendarUtils.getCalendarService() ;
       if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
         eventCalendar = calendarService.getUserEvent(username, calendarId, eventId) ;
@@ -239,16 +239,16 @@ public class UIWeekView extends UICalendarView {
 
       int hoursEnd = (Integer.parseInt(finishTime)/60) ;
       int minutesEnd = (Integer.parseInt(finishTime)%60) ;
-      calBegin.set(Calendar.AM_PM, Calendar.AM) ;
-      calBegin.set(Calendar.HOUR, hoursBg) ;
+      calBegin.set(Calendar.HOUR_OF_DAY, hoursBg) ;
       calBegin.set(Calendar.MINUTE, minutesBg) ;
       eventCalendar.setFromDateTime(calBegin.getTime()) ;
-
-      calEnd.set(Calendar.AM_PM, Calendar.AM) ;
-      calEnd.set(Calendar.HOUR, hoursEnd) ;
+      calEnd.set(Calendar.HOUR_OF_DAY, hoursEnd) ;
       calEnd.set(Calendar.MINUTE, minutesEnd) ;
       eventCalendar.setToDateTime(calEnd.getTime()) ;
-
+      if(eventCalendar.getToDateTime().before(eventCalendar.getFromDateTime())) {
+        System.out.println("\n\n UIWeekView updateEvent to date must after from date");
+        return ;
+      }
       if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
         calendarService.saveUserEvent(username, calendarId, eventCalendar, false) ;
       }else if(calType.equals(CalendarUtils.SHARED_TYPE)){

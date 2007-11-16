@@ -13,6 +13,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.faces.component.UIViewRoot;
+
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
@@ -23,6 +25,8 @@ import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+
+import sun.security.action.GetBooleanAction;
 
 /**
  * Created by The eXo Platform SARL
@@ -146,16 +150,17 @@ public class UIDayView extends UICalendarView {
 
           int hoursEnd = (Integer.parseInt(endTime)/60) ;
           int minutesEnd = (Integer.parseInt(endTime)%60) ;
-
-          Calendar fromDateTime = new GregorianCalendar(calendarview.getCurrentYear(), calendarview.getCurrentMonth(), calendarview.getCurrentDay()) ;
-          fromDateTime.set(Calendar.HOUR_OF_DAY, hoursBg) ;
-          fromDateTime.set(Calendar.MINUTE, minutesBg) ;
-          Calendar toDateTime = new GregorianCalendar(calendarview.getCurrentYear(), calendarview.getCurrentMonth(), calendarview.getCurrentDay()) ;
-          toDateTime.set(Calendar.HOUR_OF_DAY, hoursEnd) ;
-          toDateTime.set(Calendar.MINUTE, minutesEnd) ;
-
-          ce.setFromDateTime(fromDateTime.getTime());
-          ce.setToDateTime(toDateTime.getTime()) ;          
+          Calendar cal = calendarview.getBeginDay(new GregorianCalendar(calendarview.getCurrentYear(), calendarview.getCurrentMonth(), calendarview.getCurrentDay())) ;
+          cal.set(Calendar.HOUR_OF_DAY, hoursBg) ;
+          cal.set(Calendar.MINUTE, minutesBg) ;
+          ce.setFromDateTime(cal.getTime());
+          cal.set(Calendar.HOUR_OF_DAY, hoursEnd) ;
+          cal.set(Calendar.MINUTE, minutesEnd) ;
+          ce.setToDateTime(cal.getTime()) ;        
+          if(ce.getToDateTime().before(ce.getFromDateTime())) {
+            System.out.println("\n\n UIDayView updateEvent to date must after from date");
+            return ;
+          }
           if(ce.getCalType().equals(CalendarUtils.PRIVATE_TYPE)) {
             CalendarUtils.getCalendarService().saveUserEvent(username, calendarId, ce, false) ;
           }else if(ce.getCalType().equals(CalendarUtils.SHARED_TYPE)){

@@ -573,6 +573,7 @@ UICalendarPortlet.prototype.dragEnd = function() {
 	var calType = dragObject.getAttribute("calType") ;
 	var start = parseInt(dragObject.getAttribute("startTime")) ;
 	var end = parseInt(dragObject.getAttribute("endTime")) ;
+	if (end == 0) end = 1440 ;
 	var delta = end - start  ;
 //	var currentStart = (UICalendarPortlet.workingStart) ? dragObject.offsetTop + UICalendarPortlet.workingStart : dragObject.offsetTop ;
 	var currentStart = dragObject.offsetTop ;

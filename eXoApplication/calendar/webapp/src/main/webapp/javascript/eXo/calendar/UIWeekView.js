@@ -125,6 +125,7 @@ UIWeekView.prototype.dropCallback = function() {
 	var calType = parseInt(dragElement.getAttribute("calType")) ;
 	//var workingStart = (eXo.calendar.UICalendarPortlet.workingStart) ? eXo.calendar.UICalendarPortlet.workingStart : 0 ;
 	var workingStart = 0 ;
+	if (end == 0) end = 1440 ;
 	var delta = end - start  ;
 	var currentStart = dragElement.offsetTop + workingStart ;
 	var currentEnd = currentStart + delta ;
