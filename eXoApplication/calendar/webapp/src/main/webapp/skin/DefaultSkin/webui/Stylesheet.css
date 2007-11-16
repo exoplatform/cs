@@ -195,7 +195,6 @@
   background: url('background/SeparatorLine2x23.gif') no-repeat ;	
   height: 23px; width: 2px;
 }
-
 .UICalendarContainer {
 	float: left;
 	width: 225px;
@@ -1089,7 +1088,11 @@
 	height: 16px;
 	margin: 4px;
 }
-
+.UIListView  .BothIcon {
+	width: 16px;
+	height: 16px;
+	margin: 4px;
+}
 .UIListContainer .Result {
 	line-height: 23px;
 	text-align: center;

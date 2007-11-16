@@ -73,21 +73,17 @@ public class UIWeekView extends UICalendarView {
     eventData_.clear() ;
     allWeekData_.clear() ;
     for(Calendar c : getDaysOfWeek(week)) {
-      //List<CalendarEvent> list = new ArrayList<CalendarEvent>() ;
       Map<String, CalendarEvent> list = new HashMap<String, CalendarEvent>() ;
       String key = keyGen(c.get(Calendar.DATE), c.get(Calendar.MONTH), c.get(Calendar.YEAR)) ;
       eventData_.put(key, list) ;
     }
-    CalendarService calendarService = getApplicationComponent(CalendarService.class) ;
+    CalendarService calendarService = CalendarUtils.getCalendarService() ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     EventQuery eventQuery = new EventQuery() ;
     List<Calendar> days =  getDaysOfWeek(week) ;
-    java.util.Calendar fromcalendar = days.get(0) ;
-    fromcalendar.set(Calendar.HOUR, 0) ;
+    java.util.Calendar fromcalendar = CalendarUtils.getBeginDay(days.get(0)) ;
     eventQuery.setFromDate(fromcalendar) ;
-    java.util.Calendar tocalendar = days.get(days.size() - 1) ;
-    tocalendar.set(Calendar.HOUR, 0) ;
-    tocalendar.add(Calendar.DATE, 1) ;
+    java.util.Calendar tocalendar = CalendarUtils.getEndDay(days.get(days.size() - 1)) ;
     eventQuery.setToDate(tocalendar) ;
     List<CalendarEvent> allEvents = calendarService.getEvent(username, eventQuery, getPublicCalendars())  ;
     Iterator iter = allEvents.iterator() ;
@@ -95,13 +91,17 @@ public class UIWeekView extends UICalendarView {
       CalendarEvent event = (CalendarEvent)iter.next() ;
       Date beginEvent = event.getFromDateTime() ;
       Date endEvent = event.getToDateTime() ;
-      long amount = endEvent.getTime() - beginEvent.getTime() ; 
+      long eventAmount = endEvent.getTime() - beginEvent.getTime() ;
+      System.out.println("\n\n eventAmount" + eventAmount);
+      System.out.println("\n\n eventAmount" + CalendarUtils.MILISECONS_OF_DAY);
       for(Calendar c : getDaysOfWeek(week)) {
         String key = keyGen(c.get(Calendar.DATE), c.get(Calendar.MONTH), c.get(Calendar.YEAR)) ;
-        if(isSameDate(c.getTime(), beginEvent) && isSameDate(c.getTime(), endEvent) &&  amount < 24*60*60*1000 ) { 
-          eventData_.get(key).put(event.getId(), event) ;
-          dataMap_.put(event.getId(), event) ;
-          iter.remove() ;
+        if(isSameDate(c.getTime(), beginEvent) && isSameDate(c.getTime(), endEvent)) { 
+          if(eventAmount < CalendarUtils.MILISECONS_OF_DAY) {
+            eventData_.get(key).put(event.getId(), event) ;
+            dataMap_.put(event.getId(), event) ;
+            iter.remove() ;
+          }
         } 
       }
     }
@@ -233,22 +233,22 @@ public class UIWeekView extends UICalendarView {
       Calendar calEnd = GregorianCalendar.getInstance() ;
       calBegin.setTimeInMillis(Long.parseLong(currentDate)) ;
       calEnd.setTimeInMillis(Long.parseLong(currentDate)) ;
-      
+
       int hoursBg = (Integer.parseInt(startTime)/60) ;
       int minutesBg = (Integer.parseInt(startTime)%60) ;
-      
+
       int hoursEnd = (Integer.parseInt(finishTime)/60) ;
       int minutesEnd = (Integer.parseInt(finishTime)%60) ;
       calBegin.set(Calendar.AM_PM, Calendar.AM) ;
       calBegin.set(Calendar.HOUR, hoursBg) ;
       calBegin.set(Calendar.MINUTE, minutesBg) ;
       eventCalendar.setFromDateTime(calBegin.getTime()) ;
-      
+
       calEnd.set(Calendar.AM_PM, Calendar.AM) ;
       calEnd.set(Calendar.HOUR, hoursEnd) ;
       calEnd.set(Calendar.MINUTE, minutesEnd) ;
       eventCalendar.setToDateTime(calEnd.getTime()) ;
-      
+
       if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
         calendarService.saveUserEvent(username, calendarId, eventCalendar, false) ;
       }else if(calType.equals(CalendarUtils.SHARED_TYPE)){

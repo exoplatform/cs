@@ -163,8 +163,6 @@ public class UIDayView extends UICalendarView {
           }else if(ce.getCalType().equals(CalendarUtils.PUBLIC_TYPE)){
             CalendarUtils.getCalendarService().saveGroupEvent(calendarId, ce, false) ;          
           }
-          System.out.println("\n\n getFromDateTime"+ ce.getFromDateTime().getHours() * 60 + ce.getFromDateTime().getMinutes());
-          System.out.println("\n\n getToDateTime"+ ce.getToDateTime().getHours() * 60 + ce.getFromDateTime().getMinutes());
         } catch (Exception e) {
           e.printStackTrace() ;
         }

@@ -263,6 +263,7 @@ UICalendarPortlet.prototype.getElements = function(viewer) {
 UICalendarPortlet.prototype.setSize = function(obj) {
 	var start = parseInt(obj.getAttribute("startTime")) ;
 	var end = parseInt(obj.getAttribute("endTime")) ;	
+	end = (end !=0) ? end : 1440 ;
 	height = Math.abs(start - end) ;
 	//var workingStart = (eXo.calendar.UICalendarPortlet.workingStart) ? parseInt(eXo.calendar.UICalendarPortlet.workingStart) : 0 ;
 	var workingStart = 0 ;

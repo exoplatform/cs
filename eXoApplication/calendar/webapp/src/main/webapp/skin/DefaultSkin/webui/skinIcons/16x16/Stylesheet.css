@@ -20,9 +20,11 @@
 }
 
 .EventIcon {
-	background: url('icons/TodayIcon.gif') no-repeat;
+	background: url('icons/EventIcon.gif') no-repeat;
 }
-
+.BothIcon {
+	background: url('icons/BothIcon.gif') no-repeat;
+}
 .TodayIcon {
 	background: url('icons/TodayIcon.gif') no-repeat;
 }
@@ -62,10 +64,15 @@
 	background: url('icons/ViewOnCalendar.gif') no-repeat;
 }
 
+.ViewEventIcon {
+	background: url('icons/ViewEventIcon.gif') no-repeat;
+}
 .EditEventIcon {
+	background: url('icons/EditEventIcon.gif') no-repeat;
+}
+.DeleteEventIcon {
 	background: url('icons/EditEvent.gif') no-repeat;
 }
-
 .EditTaskIcon {
 	background: url('icons/EditTask.gif') no-repeat;
 }

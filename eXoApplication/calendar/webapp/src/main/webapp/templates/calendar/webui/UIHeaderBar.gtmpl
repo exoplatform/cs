@@ -20,7 +20,7 @@ import org.exoplatform.calendar.webui.UIMonthView;
 		<div class="SeparatorLine"><span></span></div>
 		<div class="ViewTypeSelect" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
 			<div class="ControlButton">
-				<div class="IconHolder TaskIcon">
+				<div class="IconHolder <%=uicomponent.getViewType()%>Icon">
 					<%=uicomponent.getViewType()%>
 				</div>
 			</div>
@@ -39,9 +39,10 @@ import org.exoplatform.calendar.webui.UIMonthView;
 	              		<div class="UIRightPopupMenuContainer">
 	              			 <%for(type in uicomponent.getViews()){
 			                   	if(!type.equals(uicomponent.getViewType())){
+			                   	icon = type + "Icon" ;	
 			                  %>
 		                    <a href="<%=uicomponent.event("SwitchView",type)%>" class="MenuItem">   
-			                    <div class="ItemIcon">
+			                    <div class="ItemIcon $icon">
 			                    	$type
 			                    </div>
 		                    </a>

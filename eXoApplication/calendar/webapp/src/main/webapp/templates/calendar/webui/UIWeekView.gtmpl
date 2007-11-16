@@ -70,7 +70,7 @@
 						<%							
 						  for(cl in uicomponent.getDaysOfWeek(weekNumber)) {
 						  	cssClass = "Day" ;
-						  	if(uicomponent.isSameDate(cl.getTime(), uicomponent.getCurrentDate())) {
+						  	if(uicomponent.isCurrentDay(cl.get(Calendar.DATE), cl.get(Calendar.MONTH), cl.get(Calendar.YEAR))) {
 						  		cssClass = "Today" ;
 						  	}
 						  	int dayOfWeek = cl.get(Calendar.DAY_OF_WEEK);
