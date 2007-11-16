@@ -13,7 +13,6 @@ import org.exoplatform.contact.webui.UIAddressBooks;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContacts;
 import org.exoplatform.web.application.ApplicationMessage;
-import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -41,7 +40,7 @@ import org.exoplatform.webui.form.UIFormTextAreaInput;
     }
 )
 public class UICategoryForm extends UIForm implements UIPopupComponent {
-  public static boolean isNew_ = true;
+  private boolean isNew_ = true ;
   public static String groupId_ ;
   public static final String FIELD_CATEGORYNAME_INPUT = "categoryName";
   public static final String FIELD_DESCRIPTION_INPUT = "description";
@@ -54,6 +53,9 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
   public String[] getActions() { return new String[] {"Save", "Cancel"} ; }
   public void activate() throws Exception { }
   public void deActivate() throws Exception { }
+  
+  public boolean isNew() { return isNew_ ; } 
+  public void setNew(boolean isNew) { isNew_ = isNew ;}
   
   public void setValues(String groupId) throws Exception {
     ContactService contactService = ContactUtils.getContactService();
@@ -80,23 +82,32 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
       ContactGroup group ; 
       String username = ContactUtils.getCurrentUser() ;
       ContactService contactService = ContactUtils.getContactService();
-      if (isNew_) group = new ContactGroup() ;
+      if (uiCategoryForm.isNew_) group = new ContactGroup() ;
       else group = contactService.getGroup(username, groupId_) ;
       group.setName(groupName) ;
       group.setDescription(uiCategoryForm.getUIFormTextAreaInput(FIELD_DESCRIPTION_INPUT).getValue()) ;
-      contactService.saveGroup(username, group, isNew_) ; 
+      contactService.saveGroup(username, group, uiCategoryForm.isNew_) ; 
       UIContactPortlet uiContactPortlet = uiCategoryForm.getAncestorOfType(UIContactPortlet.class) ;
       UIPopupContainer popupContainer = uiCategoryForm.getAncestorOfType(UIPopupContainer.class) ;
       
       if (popupContainer != null) {
-        // UIPopupAction parrentPopup = uiContactPortlet.getChild(UIPopupAction.class) ;
         UICategorySelect uiCategorySelect = popupContainer.findFirstComponentOfType(UICategorySelect.class);
         List<SelectItemOption<String>> ls = uiCategorySelect.getCategoryList();
         uiCategorySelect.setCategoryList(ls);
-        WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
-        context.addUIComponentToUpdateByAjax(uiCategorySelect) ;
-        popupContainer.cancelAction() ;
-        context.addUIComponentToUpdateByAjax(uiContactPortlet) ;
+        
+        UIPopupAction action = popupContainer.getChild(UIPopupAction.class) ;
+        if (action != null) {
+          //action.cancelPopupAction() ;
+          action.deActivate() ;
+          if(action.getAncestorOfType(UIPopupAction.class) != null) {
+            event.getRequestContext().addUIComponentToUpdateByAjax(action.getAncestorOfType(UIPopupAction.class));
+          }
+            
+                    
+          UIAddressBooks uiAddressBook = uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook) ;
+        }
+        
       } else {
         //UIPopupAction childPopup = popupContainer.getChild(UIPopupAction.class) ;
         UIAddressBooks uiAddressBook = uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class) ;

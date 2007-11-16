@@ -11,7 +11,8 @@
    				while (i < contacts.length) {   	
       	%>
       	<tr>
-      	<div>Contact <%=contacts[i]%> : <%=tags[i]%></div>
+      		<td class="FieldLabel">Contact <%=contacts[i]%> :</td>
+      		<td class="FieldComponent" colspan="2"><%=tags[i]%></td>
       	
 	      <% i ++ ; 
 	      	 }

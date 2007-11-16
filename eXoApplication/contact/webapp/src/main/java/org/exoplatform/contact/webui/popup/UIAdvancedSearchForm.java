@@ -12,8 +12,10 @@ import org.exoplatform.contact.webui.UIContactPreview;
 import org.exoplatform.contact.webui.UIContacts;
 import org.exoplatform.contact.webui.UITags;
 import org.exoplatform.contact.webui.UIWorkingContainer;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
@@ -76,25 +78,37 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent {
   static  public class SearchActionListener extends EventListener<UIAdvancedSearchForm> {
     public void execute(Event<UIAdvancedSearchForm> event) throws Exception {
       UIAdvancedSearchForm uiAdvancedSearchForm = event.getSource() ;
-      ContactFilter filter = new ContactFilter() ;
       String text = uiAdvancedSearchForm.getUIStringInput(FIELD_TEXT_INPUT).getValue() ;
-      if(text != null && text.length() > 0) filter.setText(text) ;
       String fullName = uiAdvancedSearchForm.getUIStringInput(FIELD_FULLNAME_INPUT).getValue() ;
-      if(fullName != null && fullName.length() > 0) filter.setFullName(fullName) ;
       String firstName = uiAdvancedSearchForm.getUIStringInput(FIELD_FIRSTNAME_INPUT).getValue() ;
-      if(firstName != null && firstName.length() > 0 ) filter.setFirstName(firstName) ;
       String middleName = uiAdvancedSearchForm.getUIStringInput(FIELD_MIDDLENAME_INPUT).getValue() ;
-      if(middleName != null && middleName.length() > 0) filter.setMiddleName(middleName) ;
       String lastName = uiAdvancedSearchForm.getUIStringInput(FIELD_LASTNAME_INPUT).getValue() ;
-      if(lastName != null && lastName.length() > 0) filter.setLastName(lastName) ;
       String nickName = uiAdvancedSearchForm.getUIStringInput(FIELD_NICKNAME_INPUT).getValue() ;
-      if(nickName != null && nickName.length() > 0) filter.setNickName(nickName) ;
       String jobTitle = uiAdvancedSearchForm.getUIStringInput(FIELD_JOBTITLE_INPUT).getValue() ;
-      if(jobTitle != null && jobTitle.length() > 0) filter.setJobTitle(jobTitle) ;
       String email = uiAdvancedSearchForm.getUIStringInput(FIELD_EMAIL_INPUT).getValue() ;
-      if(email != null && email.length() > 0) filter.setEmailAddress(email) ;
       String gender = uiAdvancedSearchForm.getUIFormSelectBox(FIELD_GENDER_BOX).getValue() ;
-      if(gender != null && gender.length() > 0) filter.setGender(gender) ;
+      
+      if (ContactUtils.isEmpty(text) && ContactUtils.isEmpty(fullName) && ContactUtils.isEmpty(firstName) &&
+          ContactUtils.isEmpty(middleName) && ContactUtils.isEmpty(lastName) && ContactUtils.isEmpty(nickName) &&
+          ContactUtils.isEmpty(jobTitle) && ContactUtils.isEmpty(email) && ContactUtils.isEmpty(gender)) {
+        UIApplication uiApp = uiAdvancedSearchForm.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.no-text-to-search", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;        
+      }
+      ContactFilter filter = new ContactFilter() ;
+      if(!ContactUtils.isEmpty(text)) {
+        String s1 = "\"" + text + "\"" ;
+        filter.setText(s1) ;
+      }
+      if(!ContactUtils.isEmpty(fullName)) filter.setFullName(fullName) ;   
+      if(!ContactUtils.isEmpty(firstName)) filter.setFirstName(firstName) ;  
+      if(!ContactUtils.isEmpty(middleName)) filter.setMiddleName(middleName) ;     
+      if(!ContactUtils.isEmpty(lastName)) filter.setLastName(lastName) ;
+      if(!ContactUtils.isEmpty(nickName)) filter.setNickName(nickName) ;      
+      if(!ContactUtils.isEmpty(jobTitle)) filter.setJobTitle(jobTitle) ;      
+      if(!ContactUtils.isEmpty(email)) filter.setEmailAddress(email) ;      
+      if(!ContactUtils.isEmpty(gender)) filter.setGender(gender) ;
       
       DataPageList resultPageList = 
         ContactUtils.getContactService().searchContact(ContactUtils.getCurrentUser(), filter) ;

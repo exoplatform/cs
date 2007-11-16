@@ -76,7 +76,6 @@ public class UIAddressBooks extends UIComponent {
       UIPopupAction uiPopupAction = uiContactPortlet.getChild(UIPopupAction.class);
       UICategoryForm uiCategoryForm = uiPopupAction.createUIComponent(UICategoryForm.class, null,
           "UICategoryForm");
-      UICategoryForm.isNew_ = true;
       uiPopupAction.activate(uiCategoryForm, 500, 0, true);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
     }
@@ -184,7 +183,7 @@ public class UIAddressBooks extends UIComponent {
           "UICategoryForm");
       String groupId = event.getRequestContext().getRequestParameter(OBJECTID);
       uiCategoryForm.setValues(groupId);
-      UICategoryForm.isNew_ = false;
+      uiCategoryForm.setNew(false) ;
       popupAction.activate(uiCategoryForm, 500, 0, true);
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction);
     }

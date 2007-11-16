@@ -33,6 +33,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTabPane;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
 import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
+import org.exoplatform.webui.form.validator.EmailAddressValidator;
 
 /**
  * Created by The eXo Platform SARL
@@ -45,7 +46,7 @@ import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
     template = "system:/groovy/webui/form/UIFormTabPane.gtmpl",
     events = {
       @EventConfig(listeners = UIContactForm.SaveActionListener.class),      
-      @EventConfig(listeners = UIContactForm.CancelActionListener.class),
+      @EventConfig(listeners = UIContactForm.CancelActionListener.class, phase=Phase.DECODE),
       @EventConfig(listeners = UIContactForm.ChangeImageActionListener.class),
       @EventConfig(listeners = UIContactForm.DeleteImageActionListener.class),
       @EventConfig(listeners = UIContactForm.SelectPermissionActionListener.class, phase=Phase.DECODE),
@@ -277,6 +278,7 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent, UI
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ; 
       }
+
       ContactService contactService = ContactUtils.getContactService();  
       String username = ContactUtils.getCurrentUser() ;
       Contact contact ;

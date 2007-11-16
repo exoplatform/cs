@@ -59,6 +59,7 @@ public class UIActionBar extends UIContainer  {
       popupContainer.addChild(UIContactForm.class, null, null) ;
       UIContactForm.isNew_ = true ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiActionBar.getParent()) ;
     }  
   }
   
@@ -68,7 +69,6 @@ public class UIActionBar extends UIContainer  {
       UIContactPortlet uiContactPortlet = uiActionBar.getAncestorOfType(UIContactPortlet.class) ;
       UIPopupAction uiPopupAction = uiContactPortlet.getChild(UIPopupAction.class) ;     
       UICategoryForm uiCategoryForm = uiPopupAction.createUIComponent(UICategoryForm.class, null, "UICategoryForm") ;
-      UICategoryForm.isNew_ = true ;
       uiPopupAction.activate(uiCategoryForm, 500, 0, true) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }  

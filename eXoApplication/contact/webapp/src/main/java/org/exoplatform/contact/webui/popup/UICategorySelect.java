@@ -90,9 +90,10 @@ public class UICategorySelect extends UIForm {
       UICategorySelect uiCategorySelect = event.getSource() ;
       UIPopupContainer popupContainer = uiCategorySelect.getAncestorOfType(UIPopupContainer.class) ;
       UIPopupAction popupAction = popupContainer.getChild(UIPopupAction.class) ;
-      UICategoryForm uiCategoryForm = popupAction.createUIComponent(UICategoryForm.class, null, "UICategoryForm") ;
-      UICategoryForm.isNew_ = true ;
-      popupAction.activate(uiCategoryForm, 425, 0 , true) ;
+      popupAction.activate(UICategoryForm.class, 425) ;
+   /*   UICategoryForm uiCategoryForm = 
+      uiCategoryForm.isNew_ = true ;*/
+      //popupAction.activate(uiCategoryForm, 425, 0 , true) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   }

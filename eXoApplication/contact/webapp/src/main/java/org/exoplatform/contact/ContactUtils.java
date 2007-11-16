@@ -39,7 +39,7 @@ public class ContactUtils {
   }
   
   public static boolean isEmpty(String s) {
-    if (s == null || s.length() == 0) return true ;
+    if (s == null || s.trim().length() == 0) return true ;
     return false ;    
   }
   public static String[] getUserGroups() throws Exception{

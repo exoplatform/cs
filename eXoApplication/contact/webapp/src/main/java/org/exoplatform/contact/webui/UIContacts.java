@@ -90,7 +90,10 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   public void deActivate() throws Exception { }
   
   protected boolean isDisplaySearchResult() {return isSearchResult ;}
-  public void setDisplaySearchResult(boolean search) {isSearchResult = search ;}
+  public void setDisplaySearchResult(boolean search) {
+    isSearchResult = search ;
+    getAncestorOfType(UIContactContainer.class).getChild(UIContactPreview.class).setRendered(true) ;
+  }
   
   public void setAscending(boolean isAsc) { isAscending_ = isAsc ; }
   public boolean isAscending() {return isAscending_ ; }
@@ -257,28 +260,30 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   static public class MoveContactsActionListener extends EventListener<UIContacts> {
     public void execute(Event<UIContacts> event) throws Exception {
       UIContacts uiContacts = event.getSource();
-      String contactId = event.getRequestContext().getRequestParameter(OBJECTID);   
-      List<String> contactIds = new ArrayList<String>();
-      UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
-      if (!ContactUtils.isEmpty(contactId)) contactIds.add(contactId) ;
-      else {
-        contactIds = uiContacts.getCheckedContacts() ;
-        if (contactIds.size() == 0) { 
-          uiApp.addMessage(new ApplicationMessage("UIContacts.msg.checkContact-required", null)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-          return ;
-        }
-      }    
-      UIContactPortlet uiContactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class) ;
-      UIPopupAction popupAction = uiContactPortlet.getChild(UIPopupAction.class) ;
-      UIMoveContactsForm.groupId_ = uiContacts.selectedGroup ;
-      UIMoveContactsForm.contactIds_ = contactIds ;
-      UIMoveContactsForm uiMoveForm = popupAction.createUIComponent(UIMoveContactsForm.class, null, null) ;
-      if (contactIds.size() == 1)  uiMoveForm.setChecked() ;
-      popupAction.activate(uiMoveForm, 410, 0, true) ;
-      event.getRequestContext()
-      .addUIComponentToUpdateByAjax(uiContactPortlet.findFirstComponentOfType(UIContactContainer.class));
-      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+      if (!ContactUtils.isEmpty(uiContacts.selectedGroup)) {
+        String contactId = event.getRequestContext().getRequestParameter(OBJECTID);   
+        List<String> contactIds = new ArrayList<String>();
+        UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
+        if (!ContactUtils.isEmpty(contactId)) contactIds.add(contactId) ;
+        else {
+          contactIds = uiContacts.getCheckedContacts() ;
+          if (contactIds.size() == 0) { 
+            uiApp.addMessage(new ApplicationMessage("UIContacts.msg.checkContact-required", null)) ;
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            return ;
+          }
+        }    
+        UIContactPortlet uiContactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class) ;
+        UIPopupAction popupAction = uiContactPortlet.getChild(UIPopupAction.class) ;
+        UIMoveContactsForm.groupId_ = uiContacts.selectedGroup ;
+        UIMoveContactsForm.contactIds_ = contactIds ;
+        UIMoveContactsForm uiMoveForm = popupAction.createUIComponent(UIMoveContactsForm.class, null, null) ;
+        if (contactIds.size() == 1)  uiMoveForm.setChecked() ;
+        popupAction.activate(uiMoveForm, 410, 0, true) ;
+        event.getRequestContext()
+        .addUIComponentToUpdateByAjax(uiContactPortlet.findFirstComponentOfType(UIContactContainer.class));
+        event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ; 
+      }
     }
   }
   
@@ -388,10 +393,12 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   static public class FirstPageActionListener extends EventListener<UIContacts> {
     public void execute(Event<UIContacts> event) throws Exception {
       UIContacts uiContacts = event.getSource() ; 
-      JCRPageList pageList = uiContacts.getContactPageList(); 
-      uiContacts.setPageList(pageList, 1) ;
-      uiContacts.updateList() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent());
+      JCRPageList pageList = uiContacts.getContactPageList();
+      if (pageList != null) {
+        uiContacts.setPageList(pageList, 1) ;
+        uiContacts.updateList() ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent());
+      }
     }
   }
   
@@ -399,11 +406,11 @@ public class UIContacts extends UIForm implements UIPopupComponent {
     public void execute(Event<UIContacts> event) throws Exception {
       UIContacts uiContacts = event.getSource() ; 
       JCRPageList pageList = uiContacts.getContactPageList(); 
-      if (pageList.getCurrentPage() > 1){
+      if (pageList != null && pageList.getCurrentPage() > 1){
         uiContacts.setPageList(pageList, pageList.getCurrentPage() - 1);
-      }
-      uiContacts.updateList() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent());
+        uiContacts.updateList() ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent());
+      }      
     }
   }
   
@@ -411,11 +418,11 @@ public class UIContacts extends UIForm implements UIPopupComponent {
     public void execute(Event<UIContacts> event) throws Exception {
       UIContacts uiContacts = event.getSource() ; 
       JCRPageList pageList = uiContacts.getContactPageList() ; 
-      if (pageList.getCurrentPage() < pageList.getAvailablePage()){
+      if (pageList != null && pageList.getCurrentPage() < pageList.getAvailablePage()){
         uiContacts.setPageList(pageList, pageList.getCurrentPage() + 1);
-      }
-      uiContacts.updateList() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent());
+        uiContacts.updateList() ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent());
+      }      
     }
   }
   
@@ -423,9 +430,11 @@ public class UIContacts extends UIForm implements UIPopupComponent {
     public void execute(Event<UIContacts> event) throws Exception {
       UIContacts uiContacts = event.getSource() ; 
       JCRPageList pageList = uiContacts.getContactPageList(); 
-      uiContacts.setPageList(pageList, pageList.getAvailablePage());
-      uiContacts.updateList() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent());
+      if (pageList != null) {
+        uiContacts.setPageList(pageList, pageList.getAvailablePage());
+        uiContacts.updateList() ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent());
+      }      
     }
   }
   

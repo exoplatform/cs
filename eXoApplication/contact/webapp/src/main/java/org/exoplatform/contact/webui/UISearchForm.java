@@ -45,13 +45,13 @@ public class UISearchForm extends UIForm {
       UISearchForm uiForm = event.getSource() ;
       UIFormStringInput stringInput = uiForm.getUIStringInput(UISearchForm.FIELD_SEARCH_INPUT) ;
       String text = stringInput.getValue() ;
-      String s1 = "\"" + text + "\"" ; 
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-      if(ContactUtils.isEmpty(s1)) {
+      if(ContactUtils.isEmpty(text)) {
         uiApp.addMessage(new ApplicationMessage("UISearchForm.msg.no-text-to-search", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
+      String s1 = "\"" + text + "\"" ; 
       ContactFilter filter = new ContactFilter() ;
       filter.setText(s1) ;
       DataPageList resultPageList = 

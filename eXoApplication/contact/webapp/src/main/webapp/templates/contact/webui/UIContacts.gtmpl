@@ -101,7 +101,7 @@
 			              }
     		    			%>
 	  		        	<a href="$sortedByName">
-	  		        	<div class="$classArrowName" > Name </div>
+	  		        	<div class="$classArrowName" title="Sort by Name"> Name </div>
 	  		        	</a>
 	  		        </th>
 	 	      	    <th class="text" style="padding-left: 7px;">
@@ -133,7 +133,7 @@
     		    			%>
 	 	      	    
 	  		        	<a href="$sortedByOrganition">
-	  		        	<div class="$classArrowOrganition" style="padding-right:26px;" >Job Title</div>
+	  		        	<div class="$classArrowOrganition" style="padding-right:26px;" title="Sort by Job Title">Job Title</div>
 	 	      	    	</a>
 	 	      	    </th>
 	 	      	    <th style="width: 120px; padding-left: 7px;"> Work Phone </th>
