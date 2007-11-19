@@ -83,3 +83,7 @@
 	width: 400px;
 	margin: auto;
 }
+
+.UIAccountCreationWizard .UITabPane .TabPaneContent {
+	padding: 0px;
+}

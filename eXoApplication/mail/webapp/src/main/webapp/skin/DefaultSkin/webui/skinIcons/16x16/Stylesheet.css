@@ -286,3 +286,10 @@
 	background: url('icons/BlueUpArrow.gif') no-repeat;
 }
 
+.ViewDownloadIcon {
+	background: url('icons/ViewIcon.gif') no-repeat;
+}
+
+.DownloadIcon {
+	background: url('icons/DownloadIcon.gif') no-repeat;
+}

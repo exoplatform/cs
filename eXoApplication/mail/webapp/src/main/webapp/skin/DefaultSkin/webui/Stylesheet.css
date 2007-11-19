@@ -579,6 +579,49 @@
 	margin: 4px 4px 0px 0px;
 }
 
+.UIMessagePreview .AttachmentContainer {
+	padding: 10px 0px;
+}
+
+.UIMessagePreview .AttachmentContainer .AttachmentTitle {
+	line-height: 20px;
+	font-weight: bold;
+	background: #e7e7e7;
+	padding-left: 5px;
+}
+
+.UIMessagePreview .AttachmentContainer .AttachmentContent {
+	padding: 10px;
+}
+
+.UIMessagePreview .AttachmentContainer .AttachmentFile {
+	float: left;
+	border: 1px solid #7e7e7e;
+	background: url('background/ImgMelissa.gif') no-repeat;
+	width: 143px;
+	height: 108px;
+}
+
+.UIMessagePreview .AttachmentContainer .AttachmentBox {
+	margin-left: 160px;
+	padding-top: 20px;
+}
+
+.UIMessagePreview .AttachmentContainer .AttachmentIcon {
+	width: auto;
+	padding-left: 20px;
+	font-weight: bold;
+}
+
+.UIMessagePreview .AttachmentContainer .AttachmentBox .Icon {
+	padding-left: 20px;
+	width: auto;
+	float: left;
+	height: 80px;
+	line-height: 80px;
+	margin-right: 5px;
+	background-position: left center;
+}
 /*=======================Message Header====================*/
 
 .UIMailPortlet .DecoratorBox .MiddleCenterViewBoxStyle {
