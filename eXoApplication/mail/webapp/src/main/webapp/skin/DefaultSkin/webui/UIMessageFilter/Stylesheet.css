@@ -1,0 +1,83 @@
+.UIMessageFilter {
+	background: #f3f3f3;
+}
+
+.UIMessageFilter .FilterSetting {
+	border: 1px solid #c0c0c0;
+	padding: 10px;
+}
+
+/*===========================FilterSettingCategory===========================*/
+
+.UIMessageFilter .FilterSettingCategory {
+	width: 212px; height: 355px;
+	float: left;
+	background: white;
+	border: 1px solid #a5a5a5;
+}
+
+.CategoryControlBar {
+	background: url('background/BgTitleTag1x20.gif') repeat-x ;
+	height: 20px; line-height: 20px;
+	padding: 0px 10px 0px 8px;
+	font-weight: bold;
+}
+
+.UIMessageFilter .FilterSettingCategory .CategoryControlBar .Title {
+	color: #3d3d3d;
+	font-weight: bold;
+	float: left;
+}
+
+.UIMessageFilter .FilterSettingCategory .CategoryControlBar .ControlBarIcon {
+	float: right;
+	height: 18px; width: 20px;
+	cursor: pointer;
+	margin: 0px 0px 0px 4px;
+	background-position: 9px center;
+	background-repeat: no-reteat;
+}
+
+.UIMessageFilter .FilterSettingCategory .CategoryControlBar .FilterDelete {
+	background: url('icons/FilterDeleteIcon.gif');
+}
+
+.UIMessageFilter .FilterSettingCategory .CategoryControlBar .FilterEdit {
+	background: url('icons/FilterEditIcon.gif');
+}
+
+.UIMessageFilter .FilterSettingCategory .CategoryControlBar .FilterAdd {
+	background: url('icons/FilterAddIcon.gif');
+}
+
+.UIMessageFilter .FilterSettingCategory .FilterSettingList {
+	padding: 10px 0px;
+	color: #3d3d3d;
+}
+
+.UIMessageFilter .FilterSettingCategory .NormalItem {
+	padding: 0px 27px;
+	line-height: 22px;
+	margin: 2px 0px;
+}
+
+.UIMessageFilter .FilterSettingCategory .SelectedItem {
+	padding: 0px 27px;
+	margin: 2px 0px;
+	line-height: 22px;
+	background: #cbdaf4 url('icons/SelectedIcon.gif') no-repeat 9px center ;
+}
+/************************************FilterSettingContainer*************************************/
+
+.UIMessageFilter .FilterSettingContainer {
+	margin-left: 223px;
+	background: white;
+	border: 1px solid #a5a5a5;
+	height: 355px;
+}
+
+.UIMessageFilter .FilterSettingContainer .FilterSettingList {
+	line-height: 20px;
+	padding: 5px 10px;
+	
+}
