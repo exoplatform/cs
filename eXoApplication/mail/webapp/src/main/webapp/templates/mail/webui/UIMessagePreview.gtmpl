@@ -156,7 +156,20 @@
 							</div>
 							<div class="MessageDetails">
 								<%=msg.getMessageBody()%>
-							</div>											
+							</div>
+							<div class="AttachmentContainer">
+						  	<div class="AttachmentTitle">Attachments:</div>
+						  	<div class="AttachmentContent">
+						  		<img class="AttachmentFile" src="eXoResources/src/main/webapp/skin/sharedImages/Blank.gif">
+						  		<div class="AttachmentBox">
+										<div class="AttachmentIcon">Melisa.jpg</div>
+										<div class="Size">Size: 63K</div>
+										<div class="Icon ViewDownloadIcon">View</div>
+										<div class="Icon DownloadIcon">View</div>
+						  		</div>
+						  		<div style="clear: left;"><span></span></div>
+						  	</div>	
+						  </div>										
 						</div>										
 					</div>
 				</div>
