@@ -14,7 +14,8 @@
 		<a class="MaximizeContactPane" title="Maximize Reading Pane"  href="<%=uicomponent.event("MaximizeContactPane")%>">
 		</a>
 		<span class="LastUpdated">
-				Last updated: <%=(ContactUtils.isEmpty(contact.getLastUpdated().toString()) ? "" : contact.getLastUpdated())%>
+				<%java.util.Date lastUpdated = contact.getLastUpdated() %>
+				Last updated: <%=(lastUpdated == null) ? "_" : lastUpdated%>
 		</span>
 		<div style="clear:both;"><span></span></div>
 	</div>
@@ -59,7 +60,7 @@
 										<div class="RightContent">
 											<div class="InfoItem">
 												<div class="InfoLabel1">Birthday:</div>
-												<div class="Info1"><%=(ContactUtils.isEmpty(contact.getBirthday().toString()) ? "_" : ContactUtils.formatDate("MM/dd/yyyy", contact.getBirthday()))%></div>
+												<div class="Info1"><%=(contact.getBirthday() == null ? "_" : ContactUtils.formatDate("MM/dd/yyyy", contact.getBirthday()))%></div>
 											</div>
 											<div class="InfoItem">
 												<div class="InfoLabel1">Email:</div>

@@ -53,6 +53,7 @@
 										<div class="RightContent">
 											<div class="InfoItem">
 												<div class="InfoLabel1">Birthday:</div>
+												<% //println "aa:" + contact.getBirthday()%>
 												<div class="Info1"><%=(contact.getBirthday() == null ? "_" : contact.getBirthday())%></div>
 											</div>
 											<div class="InfoItem">

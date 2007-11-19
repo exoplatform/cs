@@ -81,20 +81,6 @@ public class UIAddressBooks extends UIComponent {
     }
   }
 
-  static public class ImportAddressActionListener extends EventListener<UIAddressBooks> {
-    public void execute(Event<UIAddressBooks> event) throws Exception {
-      UIAddressBooks uiAddressBook = event.getSource();
-      UIContactPortlet uiContactPortlet = uiAddressBook.getAncestorOfType(UIContactPortlet.class);
-      UIPopupAction uiPopupAction = uiContactPortlet.getChild(UIPopupAction.class);
-      UIPopupContainer uiPopupContainer = uiContactPortlet.createUIComponent(UIPopupContainer.class, null, null) ;
-      UIImportForm uiImportForm = uiPopupContainer.addChild(UIImportForm.class, null, null) ; 
-      String addressBookId = event.getRequestContext().getRequestParameter(OBJECTID);
-      if (!ContactUtils.isEmpty(addressBookId)) uiImportForm.setValues(addressBookId) ;
-      uiPopupAction.activate(uiPopupContainer, 600, 0, true) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction); 
-    }
-  }
-
   static public class ExportAddressActionListener extends EventListener<UIAddressBooks> {
     public void execute(Event<UIAddressBooks> event) throws Exception {
       UIAddressBooks uiAddressBook = event.getSource();
@@ -150,6 +136,25 @@ public class UIAddressBooks extends UIComponent {
         uiPopupAction.activate(uiExportForm, 500, 0, true);
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
+    }
+  }
+  
+  static public class ImportAddressActionListener extends EventListener<UIAddressBooks> {
+    public void execute(Event<UIAddressBooks> event) throws Exception {
+      UIAddressBooks uiAddressBook = event.getSource();
+      UIContactPortlet uiContactPortlet = uiAddressBook.getAncestorOfType(UIContactPortlet.class);
+      UIPopupAction uiPopupAction = uiContactPortlet.getChild(UIPopupAction.class);
+      String addressBookId = event.getRequestContext().getRequestParameter(OBJECTID);
+      UIPopupContainer uiPopupContainer ;
+      if (!ContactUtils.isEmpty(addressBookId)) 
+        uiPopupContainer =  uiPopupAction.createUIComponent(UIPopupContainer.class, null, "ImportContacts") ;
+      else
+        uiPopupContainer =  uiPopupAction.createUIComponent(UIPopupContainer.class, null, "ImportAddress") ;
+      UIImportForm uiImportForm = uiPopupContainer.addChild(UIImportForm.class, null, null) ; 
+      
+      if (!ContactUtils.isEmpty(addressBookId)) uiImportForm.setValues(addressBookId) ;
+      uiPopupAction.activate(uiPopupContainer, 600, 0, true) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction); 
     }
   }
 

@@ -7,6 +7,7 @@ package org.exoplatform.contact.service.impl;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
@@ -397,8 +398,11 @@ public class JCRDataStorage implements DataStorage {
     contactNode.setProperty("exo:gender", contact.getGender()) ;
     
     GregorianCalendar dateTime = new GregorianCalendar() ;
-    dateTime.setTime(contact.getBirthday()) ;    
-    contactNode.setProperty("exo:birthday", dateTime) ;
+    Date birthday = contact.getBirthday() ;
+    if (birthday != null) {
+      dateTime.setTime(birthday) ;
+      contactNode.setProperty("exo:birthday", dateTime) ;
+    }
     contactNode.setProperty("exo:jobTitle", contact.getJobTitle());
     contactNode.setProperty("exo:emailAddress", contact.getEmailAddress());
     

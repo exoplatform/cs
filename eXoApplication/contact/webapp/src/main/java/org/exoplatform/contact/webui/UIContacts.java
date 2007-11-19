@@ -469,19 +469,21 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         pageList = contactService.getContactPageListByGroup(username, filter, ContactUtils.isPublicGroup(group)) ;
       } else if (!ContactUtils.isEmpty(uiContacts.getSelectedTag())) {
           pageList = uiContacts.pageList_ ;
-          List<Contact> contacts = new ArrayList<Contact>() ;
-          contacts = pageList.getAll() ;
-          if (uiContacts.getSortedBy().equals(UIContacts.fullName)) {
-            FullNameComparator.isAsc = (!FullNameComparator.isAsc) ;
-            Collections.sort(contacts, new FullNameComparator()) ;
-          } else if (uiContacts.getSortedBy().equals(UIContacts.emailAddress)) {
-            EmailComparator.isAsc = (!EmailComparator.isAsc) ;
-            Collections.sort(contacts, new EmailComparator()) ;
-          } else if (uiContacts.getSortedBy().equals(UIContacts.jobTitle)) {
-            JobTitleComparator.isAsc = (!JobTitleComparator.isAsc) ;
-            Collections.sort(contacts, new JobTitleComparator()) ;
-          }  
-         pageList.setList(contacts) ;
+          if (pageList != null) {
+            List<Contact> contacts = new ArrayList<Contact>() ;
+            contacts = pageList.getAll() ;
+            if (uiContacts.getSortedBy().equals(UIContacts.fullName)) {
+              FullNameComparator.isAsc = (!FullNameComparator.isAsc) ;
+              Collections.sort(contacts, new FullNameComparator()) ;
+            } else if (uiContacts.getSortedBy().equals(UIContacts.emailAddress)) {
+              EmailComparator.isAsc = (!EmailComparator.isAsc) ;
+              Collections.sort(contacts, new EmailComparator()) ;
+            } else if (uiContacts.getSortedBy().equals(UIContacts.jobTitle)) {
+              JobTitleComparator.isAsc = (!JobTitleComparator.isAsc) ;
+              Collections.sort(contacts, new JobTitleComparator()) ;
+            }  
+            pageList.setList(contacts) ;
+          }
       }
       uiContacts.setContacts(pageList) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent());

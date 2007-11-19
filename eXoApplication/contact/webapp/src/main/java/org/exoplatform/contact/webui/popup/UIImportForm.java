@@ -8,8 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.MissingResourceException;
 
-import net.wimpi.pim.util.versitio.versitException;
-
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
@@ -30,7 +28,6 @@ import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormSelectBox;
-import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormUploadInput;
 import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
 
@@ -54,6 +51,7 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
   public static String[] Types = null ;
   
   public UIImportForm() throws Exception {
+    setId("UIImportForm") ;
     this.setMultiPart(true) ;
     UIFormInputWithActions input = new UIFormInputWithActions(INPUT_CATEGORY) ;
     input.addUIFormInput(new UIFormSelectBox(FIELD_CATEGORY, FIELD_CATEGORY, getCategoryList())) ; 
@@ -161,6 +159,11 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
         uploadService.removeUpload(input.getUploadId()) ;
         uiContacts.updateList() ;
       } catch (Exception ex) {
+        System.out.println("\n\n exception................\n\n");
+        ex.printStackTrace() ;
+        
+        
+        
         uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.invalid-format", null, 
             ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;

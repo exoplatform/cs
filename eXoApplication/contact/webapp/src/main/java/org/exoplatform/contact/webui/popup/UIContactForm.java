@@ -8,6 +8,7 @@ import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.MissingResourceException;
 
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
@@ -179,6 +180,7 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent, UI
   public void updateSelect(String selectField, String value) throws Exception {
     getUIStringInput(selectField).setValue(value) ;
   }
+  
   public void setValues(Contact contact) throws Exception {
     contact_ = contact ;
     if(contact.isShared()) {

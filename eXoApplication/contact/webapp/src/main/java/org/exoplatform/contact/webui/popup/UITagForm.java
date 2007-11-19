@@ -73,14 +73,24 @@ public class UITagForm extends UIForm implements UIPopupComponent {
       if (contact != null) { 
         tagIds = contact.getTags() ;
         StringBuffer buffer = new StringBuffer("") ;          
-        if (tagIds != null) {
-          if (tagIds.length > 0) {
-            buffer.append(contactService.getTag(username, tagIds[0]).getName()) ;
-            for (int j = 1; j < tagIds.length; j ++)
-              buffer.append(", " + contactService.getTag(username, tagIds[j]).getName()) ;
-          } else tagIds = null ;
+        if (tagIds != null && tagIds.length > 0) {
+          boolean hascomma = false ;
+          Tag tag = contactService.getTag(username, tagIds[0]) ;
+          if (tag != null) {
+            buffer.append(tag.getName()) ;
+            hascomma = true ;
+          }          
+          for (int j = 1; j < tagIds.length; j ++) {
+            tag = contactService.getTag(username, tagIds[j]) ;  
+            if (tag != null && hascomma) buffer.append(", " + tag.getName()) ;
+            else if (tag != null){
+              hascomma = true ;
+              buffer.append(tag.getName()) ;  
+            }
+          }   
+          
         }
-        if (tagIds == null) buffer.append(NO_TAG_INFO) ;
+        if (ContactUtils.isEmpty(buffer.toString())) buffer.append(NO_TAG_INFO) ;
         contactNames[i] = contact.getFullName() ;
         tagNames[i] = buffer.toString() ;
         i ++ ;

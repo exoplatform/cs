@@ -53,8 +53,7 @@ public class UIActionBar extends UIContainer  {
       UIActionBar uiActionBar = event.getSource() ;
       UIContactPortlet uiContactPortlet = uiActionBar.getAncestorOfType(UIContactPortlet.class) ;
       UIPopupAction uiPopupAction = uiContactPortlet.getChild(UIPopupAction.class) ; 
-      UIPopupContainer uiPopupContainer = uiContactPortlet.createUIComponent(UIPopupContainer.class, null, null) ;
-      //UIPopupContainer popupContainer = uiPopupAction.activate(UIPopupContainer.class, 800) ;        
+      UIPopupContainer uiPopupContainer = uiContactPortlet.createUIComponent(UIPopupContainer.class, null, null) ;  
       uiPopupContainer.setId("AddNewContact") ; 
       uiPopupContainer.addChild(UICategorySelect.class, null, null) ;
       uiPopupContainer.addChild(UIContactForm.class, null, null) ;
@@ -64,6 +63,8 @@ public class UIActionBar extends UIContainer  {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiActionBar.getParent()) ;
     }  
   }
+  
+  
   
   static public class AddAddressBookActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {
@@ -107,6 +108,7 @@ public class UIActionBar extends UIContainer  {
       UIPopupAction uiPopupAction = uiContactPortlet.getChild(UIPopupAction.class) ;
       UIPopupContainer uiPopupContainer = uiContactPortlet.createUIComponent(UIPopupContainer.class, null, null) ;
       uiPopupContainer.addChild(UIImportForm.class, null, null) ; 
+      uiPopupContainer.setId("ImportAddress") ;
       uiPopupAction.activate(uiPopupContainer, 600, 0, true) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }  
@@ -117,18 +119,6 @@ public class UIActionBar extends UIContainer  {
       UIActionBar uiActionBar = event.getSource();
       UIContactPortlet uiContactPortlet = uiActionBar.getAncestorOfType(UIContactPortlet.class);
       UIPopupAction uiPopupAction = uiContactPortlet.getChild(UIPopupAction.class);
-      //String addressBookId = event.getRequestContext().getRequestParameter(OBJECTID);
-      /*
-      if (addressBookId != null) {
-        UIExportForm uiExportForm = uiPopupAction.createUIComponent(UIExportForm.class, null,
-            "ExportForm");
-        uiExportForm.setSelectedGroup(addressBookId);
-        uiExportForm.updateList();
-        uiPopupAction.activate(uiExportForm, 500, 0, true);
-      } 
-      */
-        // There is no specific address book 
-        // so display the address books list
         
         UIExportAddressBookForm uiExportForm = uiPopupAction.createUIComponent(
             UIExportAddressBookForm.class, null, "UIExportAddressBookForm");
