@@ -181,14 +181,16 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       UICategorySelect uiCategorySelect = popupContainer.findFirstComponentOfType(UICategorySelect.class);
       
       Contact contact = uiContacts.contactMap.get(contactId) ;
-      if (contact != null && contact.getCategories().length > 0) uiCategorySelect.setValue(contact.getCategories()[0]) ;
-      uiCategorySelect.disableSelect() ;
-      UIContactForm uiContactForm = popupContainer.findFirstComponentOfType(UIContactForm.class);
-      uiContactForm.setValues(contact);
-      UIContactForm.isNew_ = false ;
-      popupAction.activate(popupContainer, 800, 0, true) ;
+      if (contact != null && contact.getCategories().length > 0){
+        uiCategorySelect.setValue(contact.getCategories()[0]) ;
+        uiCategorySelect.disableSelect() ;
+        UIContactForm uiContactForm = popupContainer.findFirstComponentOfType(UIContactForm.class);
+        uiContactForm.setValues(contact);
+        UIContactForm.isNew_ = false ;
+        popupAction.activate(popupContainer, 800, 0, true) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+      }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   } 
   

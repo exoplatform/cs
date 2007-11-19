@@ -35,7 +35,6 @@
 		  		<thead>
 		  			<tr>
 		  		    <th style="width: 23px; padding-left: 3px;" class="text"><input type="checkbox" class="checkbox" title="Check all" value="4"/></th>
-		  				<th style="width: 24px;" class="text"><div class="Icon BlueTag"><span></span></div></th>
 		  		    <th style="width: 40%; padding-left: 2px;" class="text">
 		  		        	
 			  		   	<%
@@ -86,7 +85,7 @@
 		  			  	%>
 		  			  </td>
 		  						  
-							<td class="text" style="padding: 0px;"><div class="$iconTag" ><span></span></div></td>
+							
 							<td class="text">
 								<div class="State OnlineIcon" title="Available">
 									<%=(contact.getFullName()==null ? "" : contact.getFullName())%>

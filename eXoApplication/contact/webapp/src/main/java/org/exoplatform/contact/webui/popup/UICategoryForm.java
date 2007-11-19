@@ -89,12 +89,16 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
       contactService.saveGroup(username, group, uiCategoryForm.isNew_) ; 
       UIContactPortlet uiContactPortlet = uiCategoryForm.getAncestorOfType(UIContactPortlet.class) ;
       UIPopupContainer popupContainer = uiCategoryForm.getAncestorOfType(UIPopupContainer.class) ;
-      
       if (popupContainer != null) {
         UICategorySelect uiCategorySelect = popupContainer.findFirstComponentOfType(UICategorySelect.class);
-        List<SelectItemOption<String>> ls = uiCategorySelect.getCategoryList();
-        uiCategorySelect.setCategoryList(ls);
-        
+        if (uiCategorySelect != null) {
+          List<SelectItemOption<String>> ls = uiCategorySelect.getCategoryList();
+          uiCategorySelect.setCategoryList(ls);
+        } else {
+          UIImportForm importForm = popupContainer.findFirstComponentOfType(UIImportForm.class) ;
+          importForm.setCategoryList(importForm.getCategoryList()) ;
+        }        
+
         UIPopupAction action = popupContainer.getChild(UIPopupAction.class) ;
         if (action != null) {
           //action.cancelPopupAction() ;

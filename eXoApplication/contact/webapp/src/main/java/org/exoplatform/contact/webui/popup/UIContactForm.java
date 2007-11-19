@@ -149,6 +149,8 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent, UI
       FIELD_SHAREDCONTACT_BOX[i] = groups[i] ;
       ShareTab.addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_SHAREDCONTACT_BOX[i], FIELD_SHAREDCONTACT_BOX[i], false).setEnable(false));
     }
+    
+    
     UIFormStringInput inputPermission = new UIFormStringInput(FIELD_EDITPERMISSION_INPUT, null, null) ;
     inputPermission.setEnable(false) ;
     ShareTab.addUIFormInput(inputPermission);    
@@ -409,7 +411,6 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent, UI
   static  public class SelectPermissionActionListener extends EventListener<UIContactForm> {
     public void execute(Event<UIContactForm> event) throws Exception {
       UIContactForm uiForm = event.getSource() ;
-
       if(!uiForm.getUIFormCheckBoxInput(FIELD_ISPUBLIC_BOX).isChecked()) {
         UIApplication app = uiForm.getAncestorOfType(UIApplication.class) ;
         app.addMessage(new ApplicationMessage("UIContactForm.msg.checkbox-public-notchecked", null)) ;

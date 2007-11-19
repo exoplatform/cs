@@ -52,12 +52,14 @@ public class UIActionBar extends UIContainer  {
     public void execute(Event<UIActionBar> event) throws Exception {
       UIActionBar uiActionBar = event.getSource() ;
       UIContactPortlet uiContactPortlet = uiActionBar.getAncestorOfType(UIContactPortlet.class) ;
-      UIPopupAction uiPopupAction = uiContactPortlet.getChild(UIPopupAction.class) ;     
-      UIPopupContainer popupContainer = uiPopupAction.activate(UIPopupContainer.class, 800) ;        
-      popupContainer.setId("AddNewContact") ; 
-      popupContainer.addChild(UICategorySelect.class, null, null) ;
-      popupContainer.addChild(UIContactForm.class, null, null) ;
+      UIPopupAction uiPopupAction = uiContactPortlet.getChild(UIPopupAction.class) ; 
+      UIPopupContainer uiPopupContainer = uiContactPortlet.createUIComponent(UIPopupContainer.class, null, null) ;
+      //UIPopupContainer popupContainer = uiPopupAction.activate(UIPopupContainer.class, 800) ;        
+      uiPopupContainer.setId("AddNewContact") ; 
+      uiPopupContainer.addChild(UICategorySelect.class, null, null) ;
+      uiPopupContainer.addChild(UIContactForm.class, null, null) ;
       UIContactForm.isNew_ = true ;
+      uiPopupAction.activate(uiPopupContainer, 800, 0, true) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiActionBar.getParent()) ;
     }  
@@ -103,8 +105,9 @@ public class UIActionBar extends UIContainer  {
       UIActionBar uiForm = event.getSource() ;
       UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
       UIPopupAction uiPopupAction = uiContactPortlet.getChild(UIPopupAction.class) ;
-      UIImportForm uiImportForm = uiPopupAction.createUIComponent(UIImportForm.class, null, "UIImportForm") ;
-      uiPopupAction.activate(uiImportForm, 600, 0, true) ;
+      UIPopupContainer uiPopupContainer = uiContactPortlet.createUIComponent(UIPopupContainer.class, null, null) ;
+      uiPopupContainer.addChild(UIImportForm.class, null, null) ; 
+      uiPopupAction.activate(uiPopupContainer, 600, 0, true) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }  
   }

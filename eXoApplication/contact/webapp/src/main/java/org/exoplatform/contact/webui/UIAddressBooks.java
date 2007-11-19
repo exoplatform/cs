@@ -86,12 +86,12 @@ public class UIAddressBooks extends UIComponent {
       UIAddressBooks uiAddressBook = event.getSource();
       UIContactPortlet uiContactPortlet = uiAddressBook.getAncestorOfType(UIContactPortlet.class);
       UIPopupAction uiPopupAction = uiContactPortlet.getChild(UIPopupAction.class);
-      UIImportForm uiImportForm = uiPopupAction.createUIComponent(UIImportForm.class,
-          null, "UIImportForm");
+      UIPopupContainer uiPopupContainer = uiContactPortlet.createUIComponent(UIPopupContainer.class, null, null) ;
+      UIImportForm uiImportForm = uiPopupContainer.addChild(UIImportForm.class, null, null) ; 
       String addressBookId = event.getRequestContext().getRequestParameter(OBJECTID);
       if (!ContactUtils.isEmpty(addressBookId)) uiImportForm.setValues(addressBookId) ;
-      uiPopupAction.activate(uiImportForm, 600, 0, true);
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
+      uiPopupAction.activate(uiPopupContainer, 600, 0, true) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction); 
     }
   }
 

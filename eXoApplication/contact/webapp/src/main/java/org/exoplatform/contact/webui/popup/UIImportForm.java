@@ -6,6 +6,7 @@ package org.exoplatform.contact.webui.popup;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.MissingResourceException;
 
 import net.wimpi.pim.util.versitio.versitException;
 
@@ -27,8 +28,11 @@ import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
+import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormSelectBox;
+import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormUploadInput;
+import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
 
 /**
  * Author : Huu-Dung Kieu huu-dung.kieu@bull.be 16 oct. 07 
@@ -38,44 +42,88 @@ import org.exoplatform.webui.form.UIFormUploadInput;
     template = "system:/groovy/webui/form/UIForm.gtmpl",
     events = {
       @EventConfig(listeners = UIImportForm.SaveActionListener.class),      
-      @EventConfig(listeners = UIImportForm.CancelActionListener.class)
+      @EventConfig(listeners = UIImportForm.CancelActionListener.class),
+      @EventConfig(listeners = UIImportForm.AddCategoryActionListener.class)
     }
 )
 public class UIImportForm extends UIForm implements UIPopupComponent{
   final static public String FIELD_UPLOAD = "upload".intern() ;
   final static public String TYPE = "type".intern() ;
-  public final static String FIELD_CATEGORY_BOX = "category" ;
+  public static final String INPUT_CATEGORY = "categoryInput";
+  public static final String FIELD_CATEGORY = "category";
   public static String[] Types = null ;
   
   public UIImportForm() throws Exception {
     this.setMultiPart(true) ;
+    UIFormInputWithActions input = new UIFormInputWithActions(INPUT_CATEGORY) ;
+    input.addUIFormInput(new UIFormSelectBox(FIELD_CATEGORY, FIELD_CATEGORY, getCategoryList())) ; 
+    List<ActionData> actions = new ArrayList<ActionData>() ;
+    ActionData addAction = new ActionData() ;
+    addAction.setActionType(ActionData.TYPE_ICON) ;
+    addAction.setActionListener("AddCategory") ;
+    addAction.setActionName("AddCategory") ;
+    actions.add(addAction) ;
+    input.setActionField(FIELD_CATEGORY, actions) ;
+      
+    
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     ContactService contactService = ContactUtils.getContactService();
     Types = contactService.getImportExportType() ;
     for(String type : Types) {
       options.add(new SelectItemOption<String>(type, type)) ;
     }
-    List<ContactGroup> groupList = contactService.getGroups(ContactUtils.getCurrentUser());
-    List<SelectItemOption<String>> groupOptions = new ArrayList<SelectItemOption<String>>() ;
-    for (ContactGroup group : groupList) {
-      groupOptions.add(new SelectItemOption<String>(group.getName(), group.getId())) ;
-    }
-    addUIFormInput(new UIFormSelectBox(FIELD_CATEGORY_BOX, FIELD_CATEGORY_BOX, groupOptions)) ;    
-    addUIFormInput(new UIFormSelectBox(TYPE, TYPE, options)) ;
-    addUIFormInput(new UIFormUploadInput(FIELD_UPLOAD, FIELD_UPLOAD)) ;
+    input.addUIFormInput(new UIFormSelectBox(TYPE, TYPE, options)) ;
+    input.addUIFormInput(new UIFormUploadInput(FIELD_UPLOAD, FIELD_UPLOAD)) ;
+    addUIFormInput(input) ;
   }
   
+  public String getLabel(String id) throws Exception {
+    try {
+      return  super.getLabel(id) ;
+    } catch (MissingResourceException mre) {
+      return null ;
+    }
+  }
+  public String[] getActions() { return new String[] {"Save", "Cancel"} ; }
+  
+  public List<SelectItemOption<String>> getCategoryList() throws Exception {
+    String username = ContactUtils.getCurrentUser();
+    List<ContactGroup> contactGroups =  ContactUtils.getContactService().getGroups(username);
+    List<SelectItemOption<String>> categories = new ArrayList<SelectItemOption<String>>() ; 
+    for(ContactGroup contactGroup : contactGroups)
+      categories.add(new SelectItemOption<String>(contactGroup.getName(),contactGroup.getId() )) ;
+    return categories ;
+  }
+  
+  public void setCategoryList(List<SelectItemOption<String>> options ) {
+    UIFormInputWithActions iput = getChildById(INPUT_CATEGORY) ;
+     iput.getUIFormSelectBox(FIELD_CATEGORY).setOptions(options) ;
+  }
+  
+
+  
   public void setValues(String group) {
-    getUIFormSelectBox(FIELD_CATEGORY_BOX).setValue(group) ;
+    getUIFormSelectBox(FIELD_CATEGORY).setValue(group) ;
   }  
 
   public void activate() throws Exception {}
-  public void deActivate() throws Exception {}
+  public void deActivate() throws Exception {} 
+  
+  static  public class AddCategoryActionListener extends EventListener<UIImportForm> {
+    public void execute(Event<UIImportForm> event) throws Exception {
+      UIImportForm uiForm = event.getSource() ;
+      UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
+      UIPopupAction uiChildPopup = uiPopupContainer.getChild(UIPopupAction.class) ;
+      uiChildPopup.activate(UICategoryForm.class, 500) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
+    }
+  }
+  
   
   static  public class SaveActionListener extends EventListener<UIImportForm> {
     public void execute(Event<UIImportForm> event) throws Exception {
       UIImportForm uiForm = event.getSource() ;
-      String category = uiForm.getUIFormSelectBox(FIELD_CATEGORY_BOX).getValue() ;
+      String category = uiForm.getUIFormSelectBox(FIELD_CATEGORY).getValue() ;
       UploadService uploadService = (UploadService)PortalContainer.getComponent(UploadService.class) ;
       UIFormUploadInput input = uiForm.getUIInput(FIELD_UPLOAD) ;
       UploadResource uploadResource = input.getUploadResource() ;
