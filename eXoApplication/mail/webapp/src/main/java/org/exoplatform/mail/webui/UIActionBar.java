@@ -18,6 +18,7 @@ import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.popup.UIComposeForm;
 import org.exoplatform.mail.webui.popup.UIFeed;
 import org.exoplatform.mail.webui.popup.UIMailSettings;
+import org.exoplatform.mail.webui.popup.UIMessageFilter;
 import org.exoplatform.mail.webui.popup.UIPopupAction;
 import org.exoplatform.mail.webui.popup.UIPopupActionContainer;
 import org.exoplatform.mail.webui.popup.UIQuickAddEvent;
@@ -45,6 +46,7 @@ import org.exoplatform.webui.event.EventListener;
         @EventConfig(listeners = UIActionBar.AddressActionListener.class),
         @EventConfig(listeners = UIActionBar.AddEventActionListener.class),
         @EventConfig(listeners = UIActionBar.RssActionListener.class),
+        @EventConfig(listeners = UIActionBar.FilterActionListener.class),
         @EventConfig(listeners = UIActionBar.ContactActionListener.class),
         @EventConfig(listeners = UIActionBar.MailSettingsActionListener.class)
     }
@@ -142,14 +144,17 @@ public class UIActionBar extends UIContainer {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup);
     }
   }
-  static public class ChangeViewActionListener extends EventListener<UIActionBar> {
+  
+  static public class FilterActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {
-//      UIActionBar uiActionBar = event.getSource() ; 
-      System.out.println(" =========== > ChangeViewActionListener");
-      String viewType = event.getRequestContext().getRequestParameter(OBJECTID) ;  
-      System.out.println(" =========== > viewType " + viewType);
+      UIActionBar uiActionBar = event.getSource() ; 
+      UIMailPortlet uiPortlet = uiActionBar.getAncestorOfType(UIMailPortlet.class);
+      UIPopupAction uiPopup = uiPortlet.findFirstComponentOfType(UIPopupAction.class);
+      uiPopup.activate(UIMessageFilter.class, 600);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup);
     }
   }
+  
   static public class MailSettingsActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {
       UIActionBar uiActionBar = event.getSource() ; 

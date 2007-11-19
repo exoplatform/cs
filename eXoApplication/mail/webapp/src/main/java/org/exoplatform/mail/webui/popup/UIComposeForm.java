@@ -337,13 +337,13 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
           message.setFolders(new String[]{Utils.createFolderId(accountId, Utils.FD_SENT, false)}) ;
           Folder folder = mailSvr.getFolder(usename, accountId, Utils.createFolderId(accountId, Utils.FD_SENT, false));
           folder.setTotalMessage(folder.getTotalMessage() + 1);
-          mailSvr.saveUserFolder(usename, accountId, folder);
+          mailSvr.saveFolder(usename, accountId, folder);
         }
         if (!uiForm.fromDrafts()) {
           mailSvr.saveMessage(usename, accountId, message, true) ;          
           Folder drafts = mailSvr.getFolder(usename, accountId, Utils.createFolderId(accountId, Utils.FD_DRAFTS, false));
           drafts.setTotalMessage(drafts.getTotalMessage() - 1);
-          mailSvr.saveUserFolder(usename, accountId, drafts);
+          mailSvr.saveFolder(usename, accountId, drafts);
         } else {
           mailSvr.saveMessage(usename, accountId, message, false) ;
         }
@@ -377,7 +377,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
           mailSvr.saveMessage(usename, accountId, message, true) ;
           Folder drafts = mailSvr.getFolder(usename, accountId, Utils.createFolderId(accountId, Utils.FD_DRAFTS, false));
           drafts.setTotalMessage(drafts.getTotalMessage() + 1);
-          mailSvr.saveUserFolder(usename, accountId, drafts);
+          mailSvr.saveFolder(usename, accountId, drafts);
         } else {
           mailSvr.saveMessage(usename, accountId, message, false) ;
         }

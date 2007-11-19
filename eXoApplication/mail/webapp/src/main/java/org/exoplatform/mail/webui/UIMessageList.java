@@ -49,6 +49,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
     template =  "app:/templates/mail/webui/UIMessageList.gtmpl",
     events = {
         @EventConfig(listeners = UIMessageList.SelectMessageActionListener.class),
+        @EventConfig(listeners = UIMessageList.ReadActionListener.class),
         @EventConfig(listeners = UIMessageList.AddStarActionListener.class),
         @EventConfig(listeners = UIMessageList.RemoveStarActionListener.class),
         @EventConfig(listeners = UIMessageList.ReplyActionListener.class),
@@ -229,7 +230,7 @@ public class UIMessageList extends UIForm {
           msg.setUnread(false);
           mailServ.saveMessage(username, accountId, msg, false);
           folder.setNumberOfUnreadMessage(folder.getNumberOfUnreadMessage() - 1);
-          mailServ.saveUserFolder(username, accountId, folder);
+          mailServ.saveFolder(username, accountId, folder);
         }
         uiMessageList.setSelectedMessageId(msgId);
         uiMessagePreview.setMessage(msg);
@@ -237,6 +238,12 @@ public class UIMessageList extends UIForm {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent());
         event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer);        
       }
+    }
+  }
+  
+  static public class ReadActionListener extends EventListener<UIMessageList> {
+    public void execute(Event<UIMessageList> event) throws Exception {
+      
     }
   }
   
@@ -505,8 +512,8 @@ public class UIMessageList extends UIForm {
           oldFolder.setNumberOfUnreadMessage(oldFolder.getNumberOfUnreadMessage() - 1);         
           folder.setNumberOfUnreadMessage(folder.getNumberOfUnreadMessage() + 1);                    
         }
-        mailSrv.saveUserFolder(username, accountId, oldFolder);
-        mailSrv.saveUserFolder(username, accountId, folder);
+        mailSrv.saveFolder(username, accountId, oldFolder);
+        mailSrv.saveFolder(username, accountId, folder);
       }
       uiMessageList.updateList();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer);
@@ -551,7 +558,7 @@ public class UIMessageList extends UIForm {
           mailSrv.saveMessage(username, accountId, msg, false);
           Folder folder = mailSrv.getFolder(username, accountId, msg.getFolders()[0]);
           folder.setNumberOfUnreadMessage(folder.getNumberOfUnreadMessage() - 1);
-          mailSrv.saveUserFolder(username, accountId, folder);
+          mailSrv.saveFolder(username, accountId, folder);
         }
       }
       uiMessageList.updateList();
@@ -575,7 +582,7 @@ public class UIMessageList extends UIForm {
           mailSrv.saveMessage(username, accountId, msg, false);
           Folder folder = mailSrv.getFolder(username, accountId, msg.getFolders()[0]);
           folder.setNumberOfUnreadMessage(folder.getNumberOfUnreadMessage() + 1);
-          mailSrv.saveUserFolder(username, accountId, folder);
+          mailSrv.saveFolder(username, accountId, folder);
         }
       }
       uiMessageList.updateList();
@@ -664,8 +671,8 @@ public class UIMessageList extends UIForm {
           oldFolder.setNumberOfUnreadMessage(oldFolder.getNumberOfUnreadMessage() - 1);         
           folder.setNumberOfUnreadMessage(folder.getNumberOfUnreadMessage() + 1);                    
         }
-        mailSrv.saveUserFolder(username, accountId, oldFolder);
-        mailSrv.saveUserFolder(username, accountId, folder);
+        mailSrv.saveFolder(username, accountId, oldFolder);
+        mailSrv.saveFolder(username, accountId, folder);
      }       
      uiMessageList.updateList();                   
     }

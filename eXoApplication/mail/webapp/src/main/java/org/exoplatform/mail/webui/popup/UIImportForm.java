@@ -92,6 +92,9 @@ public class UIImportForm extends UIForm implements UIPopupComponent {
       String folderId = uiImportForm.getUIFormSelectBox(IMPORT_TO_FOLDER).getValue();
       MailService mailSrv = MailUtils.getMailService();
       mailSrv.importMessage(username, accountId, folderId, inputStream, type);
+      Folder folder = mailSrv.getFolder(username, accountId, folderId);
+      folder.setNumberOfUnreadMessage(folder.getNumberOfUnreadMessage() + 1);
+      mailSrv.saveFolder(username, accountId, folder);
       uiPortlet.cancelAction() ;
     }
   }

@@ -94,8 +94,8 @@ public class UIMoveMessageForm extends UIForm implements UIPopupComponent {
            oldFolder.setNumberOfUnreadMessage(oldFolder.getNumberOfUnreadMessage() - 1);         
            folder.setNumberOfUnreadMessage(folder.getNumberOfUnreadMessage() + 1);                    
          }
-         mailSrv.saveUserFolder(username, accountId, oldFolder);
-         mailSrv.saveUserFolder(username, accountId, folder);
+         mailSrv.saveFolder(username, accountId, oldFolder);
+         mailSrv.saveFolder(username, accountId, folder);
       }       
       uiMessageList.updateList();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));   

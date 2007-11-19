@@ -179,7 +179,7 @@ public class UIFolderContainer extends UIContainer {
           folder.setNumberOfUnreadMessage(folder.getNumberOfUnreadMessage() - 1);
         }
       }
-      mailSrv.saveUserFolder(username, accountId, folder);
+      mailSrv.saveFolder(username, accountId, folder);
     }
   }
   

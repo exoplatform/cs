@@ -65,7 +65,7 @@ public class UIFolderForm extends UIForm implements UIPopupComponent {
           folder.setId(folderId);
           folder.setName(folderName) ;
           folder.setLabel(folderName) ;
-          mailSvr.saveUserFolder(username, accountId, folder) ;
+          mailSvr.saveFolder(username, accountId, folder) ;
         } else {
           uiApp.addMessage(new ApplicationMessage("UIFolderForm.msg.folder-exist", new Object[]{folderName})) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;

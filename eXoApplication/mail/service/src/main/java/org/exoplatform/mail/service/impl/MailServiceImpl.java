@@ -97,8 +97,8 @@ public class MailServiceImpl implements MailService{
     return storage_.getFolder(username, accountId, folderId);
   } 
   
-  public void saveUserFolder(String username, String accountId, Folder folder) throws Exception {
-    storage_.saveUserFolder(username, accountId, folder);
+  public void saveFolder(String username, String accountId, Folder folder) throws Exception {
+    storage_.saveFolder(username, accountId, folder);
   }
 
 
@@ -356,7 +356,7 @@ public class MailServiceImpl implements MailService{
             }  
             storeFolder.setNumberOfUnreadMessage(storeFolder.getNumberOfUnreadMessage() + 1) ;
             storeFolder.setTotalMessage(storeFolder.getTotalMessage() + 1) ;
-            storage_.saveUserFolder(username, account.getId(), storeFolder) ;
+            storage_.saveFolder(username, account.getId(), storeFolder) ;
           }
           
           i ++ ;

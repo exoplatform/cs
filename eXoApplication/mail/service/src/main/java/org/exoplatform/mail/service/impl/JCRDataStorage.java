@@ -418,7 +418,7 @@ public class JCRDataStorage implements DataStorage{
     return folders ;
   }
 
-  public void saveUserFolder(String username, String accountId, Folder folder) throws Exception {
+  public void saveFolder(String username, String accountId, Folder folder) throws Exception {
     // gets folder home node of the specified account
     Node home = getFolderHome(username, accountId);
     Node myFolder = null;

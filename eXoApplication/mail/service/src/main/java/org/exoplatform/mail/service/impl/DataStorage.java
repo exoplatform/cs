@@ -7,14 +7,12 @@ package org.exoplatform.mail.service.impl;
 import java.util.List;
 
 import javax.jcr.Node;
-import javax.jcr.Session;
 
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailSetting;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.MessageFilter;
-import org.exoplatform.mail.service.MessageHeader;
 import org.exoplatform.mail.service.MessagePageList;
 import org.exoplatform.mail.service.Tag;
 
@@ -56,7 +54,7 @@ public interface DataStorage {
 
   public Folder getFolder(String username, String accountId, String folderId) throws Exception ;
   public List<Folder> getFolders(String username, String accountId) throws Exception ;
-  public void saveUserFolder(String username, String accountId, Folder folder) throws Exception ;
+  public void saveFolder(String username, String accountId, Folder folder) throws Exception ;
 
   public void removeUserFolder(String username, Folder folder) throws Exception ;
   public void removeUserFolder(String username, Account account, Folder folder) throws Exception ;

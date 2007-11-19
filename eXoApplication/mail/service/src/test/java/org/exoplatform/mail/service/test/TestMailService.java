@@ -65,13 +65,13 @@ public class TestMailService extends BaseMailTestCase{
     folder.setLabel("homefolder");
     folder.setName("INBOX");
     folder.setNumberOfUnreadMessage(0);
-    mailService_.saveUserFolder("hungnguyen", myaccount.getId(), folder);
+    mailService_.saveFolder("hungnguyen", myaccount.getId(), folder);
     // assert folder created
     assertNotNull(mailService_.getFolder("hungnguyen", myaccount.getId(), "INBOX"));
 
     // update folder
     folder.setLabel("Inbox folder");
-    mailService_.saveUserFolder("hungnguyen", myaccount.getId(), folder);
+    mailService_.saveFolder("hungnguyen", myaccount.getId(), folder);
     // assert folder modified
     assertEquals("Inbox folder", mailService_.getFolder("hungnguyen",myaccount.getId(), "INBOX").getLabel());
     

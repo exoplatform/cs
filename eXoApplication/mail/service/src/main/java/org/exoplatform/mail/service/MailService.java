@@ -109,7 +109,7 @@ public interface MailService {
    * @param folder
    * @throws Exception
    */
-  public void saveUserFolder(String username, String accountId, Folder folder) throws Exception ;  
+  public void saveFolder(String username, String accountId, Folder folder) throws Exception ;  
   /**
    * This method should:
    * 1. Move all the message in the  folder to the  default inbox folder

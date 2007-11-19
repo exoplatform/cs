@@ -151,7 +151,7 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
         folder.setName(folderName) ;
         folder.setLabel(folderName) ;
         folder.setPersonalFolder(false) ;
-        mailSvr.saveUserFolder(username, account.getId(), folder) ;
+        mailSvr.saveFolder(username, account.getId(), folder) ;
       }
     }
   }

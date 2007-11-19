@@ -82,7 +82,7 @@ public class UIRenameFolderForm extends UIForm implements UIPopupComponent {
           Folder folder =  mailService.getFolder(username, accountId, folderId);
           folder.setLabel(newFolderName) ;
           folder.setName(newFolderName) ;
-          mailService.saveUserFolder(username, accountId, folder) ;
+          mailService.saveFolder(username, accountId, folder) ;
         } else {
           uiApp.addMessage(new ApplicationMessage("UIFolderForm.msg.folder-exist", new Object[]{newFolderName})) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
