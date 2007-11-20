@@ -9,7 +9,9 @@ import java.util.List;
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.webui.UIAddressBooks;
+import org.exoplatform.contact.webui.UIContactContainer;
 import org.exoplatform.contact.webui.UIContactPortlet;
+import org.exoplatform.contact.webui.UIContactPreview;
 import org.exoplatform.contact.webui.UIContacts;
 import org.exoplatform.contact.webui.UIWorkingContainer;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -116,10 +118,10 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
       String[] categories = sharedGroups.toString().split(",") ;
       ContactUtils.getContactService()
         .moveContacts(ContactUtils.getCurrentUser(), contactIds_, categories) ;
-      UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
-      uiContacts.updateList() ;
+      UIContactContainer contactContainer = uiContactPortlet.findFirstComponentOfType(UIContactContainer.class) ;
+      contactContainer.getChild(UIContacts.class).updateList() ;
       uiContactPortlet.cancelAction() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts) ; 
+      event.getRequestContext().addUIComponentToUpdateByAjax(contactContainer) ; 
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class)) ;
     }
   }

@@ -404,9 +404,15 @@
 			  		  <div class="InformationsMember">
 			  		  	<div class="InfoMember">
 			  		  		<span class="LabelContent">Email:</span>
-			  		  		<span class="InfoContent MailIcon">
-			  		  			<a href="#">
-			  		  				<%=(contact.getEmailAddress()== null ? "_" : contact.getEmailAddress())%>
+			  		  			<% 
+			  		  					String email = contact.getEmailAddress() ;
+			  		  					String subEmail ;
+			  		  					if (email != null && email.length() > 20) subEmail = email.substring(0, 20) + "..." ;
+		  		  						else subEmail = email ;			  		  				
+			  		  			%>
+			  		  		<span class="InfoContent MailIcon" title="<%=(email == null ? "" : email) %>">
+			  		  			<a href="#">  		  				
+			  		  				<%=(email == null ? "_" : subEmail)%>
 			  		  			</a>
 			  		  		</span> 
 			  		  	</div>
@@ -460,11 +466,16 @@
 			  		  <div class="InformationsMember">
 			  		  	<div class="InfoMember">
 			  		  		<span class="LabelContent">Email:</span>
-			  		  		<span class="InfoContent MailIcon">
-			  		  			<a href="<%=uicomponent.getParent().event("SendEmail", contact.getId())%>">
-			  		  				<%=(contact.getEmailAddress()== null ? "_" : contact.getEmailAddress())%>
+			  		  			<% 
+			  		  					email = contact.getEmailAddress() ;
+			  		  					if (email != null && email.length() > 20) subEmail = email.substring(0, 20) + "..." ;
+		  		  						else subEmail = email ;			  		  				
+			  		  			%>
+			  		  		<span class="InfoContent MailIcon" title="<%=(email == null ? "" : email) %>">
+			  		  			<a href="#">  		  				
+			  		  				<%=(email == null ? "_" : subEmail)%>
 			  		  			</a>
-			  		  		</span>
+			  		  		</span> 
 			  		  	</div>
 			  		  	<div class="InfoMember">
 			  		  		<span class="LabelContent">Work phone:</span>

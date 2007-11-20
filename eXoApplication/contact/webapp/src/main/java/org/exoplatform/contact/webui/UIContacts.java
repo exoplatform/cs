@@ -92,7 +92,8 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   protected boolean isDisplaySearchResult() {return isSearchResult ;}
   public void setDisplaySearchResult(boolean search) {
     isSearchResult = search ;
-    getAncestorOfType(UIContactContainer.class).getChild(UIContactPreview.class).setRendered(true) ;
+    if (search == true)
+      getAncestorOfType(UIContactContainer.class).getChild(UIContactPreview.class).setRendered(true) ;
   }
   
   public void setAscending(boolean isAsc) { isAscending_ = isAsc ; }
@@ -104,13 +105,15 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   
   public void setContacts(JCRPageList pageList) throws Exception {
     pageList_ = pageList ;
-    updateList() ;    
+    updateList() ;
   }
   public JCRPageList getContactPageList() { return pageList_ ; }
   
   public void updateList() throws Exception {     
     getChildren().clear() ;
     contactMap.clear();
+    UIContactPreview contactPreview = 
+      getAncestorOfType(UIContactContainer.class).getChild(UIContactPreview.class) ;
     if(pageList_ != null) {
       List<Contact> contactList = pageList_.getPage(pageList_.getCurrentPage(),ContactUtils.getCurrentUser()) ;
       if(contactList.size() == 0 && pageList_.getCurrentPage() > 1)
@@ -123,10 +126,10 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       Contact[] array = contactMap.values().toArray(new Contact[]{}) ;
       if (array.length > 0) {
         Contact firstContact = array[0] ;        
-        getAncestorOfType(UIContactContainer.class).getChild(UIContactPreview.class).setContact(firstContact) ;
+        contactPreview.setContact(firstContact) ;
         selectedContact = firstContact.getId() ;
-      } else getAncestorOfType(UIContactContainer.class).getChild(UIContactPreview.class).setContact(null) ;
-    } else getAncestorOfType(UIContactContainer.class).getChild(UIContactPreview.class).setContact(null) ;
+      } else contactPreview.setContact(null) ;
+    } else contactPreview.setContact(null) ;
   }
   
   public Contact[] getContacts() throws Exception { 
