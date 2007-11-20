@@ -16,7 +16,7 @@
 						</a>
 						<div class="SeparatorLine"><span></span></div>
 						
-						<a style="color:gray;" class="ControlButton">
+						<a href="<%=uicomponent.event("Address")%>" class="ControlButton">
 							<div class="IconHolder AddressIcon">
 								<div class="Label"> Address Book </div>
 							</div>
