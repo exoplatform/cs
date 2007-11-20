@@ -8,8 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.exoplatform.mail.MailUtils;
+import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MessageFilter;
+import org.exoplatform.mail.service.Tag;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -47,6 +49,7 @@ public class UIAddMessageFilter extends UIForm implements UIPopupComponent{
   public static final String FILTER_BODY = "filter-body".intern();
   public static final String FILTER_BODY_CONDITION = "filter-body-condition".intern();
   public static final String FILTER_APPLY_FOLDER = "filter-aplly-folder".intern();
+  public static final String FILTER_APPLY_TAG = "filter-aplly-tag".intern();
   
   public UIAddMessageFilter() throws Exception {
     addUIFormInput(new UIFormStringInput(FILTER_NAME, FILTER_NAME , null));
@@ -65,6 +68,20 @@ public class UIAddMessageFilter extends UIForm implements UIPopupComponent{
     addUIFormInput(new UIFormSelectBox(FILTER_TO_CONDITION, FILTER_TO_CONDITION, options));
     addUIFormInput(new UIFormSelectBox(FILTER_FROM_CONDITION, FILTER_FROM_CONDITION, options));
     addUIFormInput(new UIFormSelectBox(FILTER_SUBJECT_CONDITION, FILTER_SUBJECT_CONDITION, options));
+    String username = MailUtils.getCurrentUser();
+    String accountId = MailUtils.getAccountId();
+    MailService mailSrv = MailUtils.getMailService();
+    List<SelectItemOption<String>> folderList = new ArrayList<SelectItemOption<String>>();   
+    for (Folder folder : mailSrv.getFolders(username, accountId)) {   
+      folderList.add(new SelectItemOption<String>(folder.getName(), folder.getId()));       
+    }    
+    addUIFormInput(new UIFormSelectBox(FILTER_APPLY_FOLDER, FILTER_APPLY_FOLDER, folderList));
+    List<SelectItemOption<String>> tagList = new ArrayList<SelectItemOption<String>>();   
+    tagList.add(new SelectItemOption<String>("-- Choose tag --", ""));       
+    for (Tag tag : mailSrv.getTags(username, accountId)) {   
+      tagList.add(new SelectItemOption<String>(tag.getName(), tag.getId()));       
+    }    
+    addUIFormInput(new UIFormSelectBox(FILTER_APPLY_TAG, FILTER_APPLY_TAG, tagList));
   }
   
   public String getFilterName() throws Exception {
