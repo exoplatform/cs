@@ -1,12 +1,10 @@
 <%
-	import org.exoplatform.contact.webui.UISearchForm;
+	//import org.exoplatform.contact.webui.UISearchForm;
 %>
 
 <div class="UIBannerContainer">
 		<div class="LeftHorizontalLine">
 			<div class="RepeatHorizontalLine">Your Powerful Contacts Manager</div>					
 		</div>
-		
-		<% uicomponent.renderChild(UISearchForm.class) ;%>
 		
 </div>

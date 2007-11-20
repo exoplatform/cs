@@ -34,16 +34,16 @@ import org.exoplatform.webui.form.UIFormStringInput;
     }
 )
 public class UISearchForm extends UIForm {
-  final static  private String FIELD_SEARCH_INPUT = "search" ;
+  final static  private String FIELD_SEARCHVALUE = "inputValue" ;
   
   public UISearchForm() {
-    addChild(new UIFormStringInput(FIELD_SEARCH_INPUT, FIELD_SEARCH_INPUT, null)) ;
+    addChild(new UIFormStringInput(FIELD_SEARCHVALUE, FIELD_SEARCHVALUE, null)) ;
   }
   
   static  public class SearchActionListener extends EventListener<UISearchForm> {
     public void execute(Event<UISearchForm> event) throws Exception {
       UISearchForm uiForm = event.getSource() ;
-      UIFormStringInput stringInput = uiForm.getUIStringInput(UISearchForm.FIELD_SEARCH_INPUT) ;
+      UIFormStringInput stringInput = uiForm.getUIStringInput(UISearchForm.FIELD_SEARCHVALUE) ;
       String text = stringInput.getValue() ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       if(ContactUtils.isEmpty(text)) {

@@ -19,6 +19,6 @@ import org.exoplatform.webui.core.UIContainer;
 )
 public class UIBannerContainer extends UIContainer  {
   public UIBannerContainer() throws Exception {
-    addChild(UISearchForm.class, null, null) ;
+    //addChild(UISearchForm.class, null, null) ;
   }  
 }
