@@ -31,8 +31,6 @@ import org.exoplatform.webui.exception.MessageException;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 
-import com.sun.org.apache.regexp.internal.recompile;
-
 /**
  * Created by The eXo Platform SARL
  * Author : Hung Nguyen
@@ -77,7 +75,6 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
   }
   
   public void activate() throws Exception {
-  	System.out.println("\n\n init UITopicContainer khi nao ?\n\n");
   }
   
   public void deActivate() throws Exception {
@@ -138,7 +135,6 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
     return actions;
   }
   
-  @SuppressWarnings({ "unchecked", "unused" })
   private List<Topic> getTopicPageLits() throws Exception {
     JCRPageList pageList = this.pageList;
     List<Topic> topicList = this.forumService.getPage(this.page, pageList);
@@ -153,18 +149,14 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
     return topicList ;
   }
   
-  private int chay = 0 ;
   private Topic getTopic(String topicId) throws Exception {
   	List<Topic> listTopic = this.topicList ;
-  	this.chay = this.chay + 1 ;
-  	System.out.println("\n\n\t may chay cai nay chua ? :chay lan:  " + this.chay);
   	for (Topic topic : listTopic) {
 	    if(topic.getId().equals(topicId)) return topic ;
     }
   	return null ;
   }
   
-  @SuppressWarnings("unused")
   private String[] getStarNumber(Topic topic) throws Exception {
     double voteRating = topic.getVoteRating() ;
     int star = (int)voteRating ;

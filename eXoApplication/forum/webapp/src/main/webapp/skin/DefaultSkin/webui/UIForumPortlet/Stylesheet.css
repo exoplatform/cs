@@ -295,3 +295,41 @@
 .UIForumPortlet .SelectFileFrame {
 	width: 300px;
 }
+
+.UIForumPortlet .GotoPageIcon {
+	background: url('icons/24x24/OpenPopup17x21.gif') no-repeat ;
+	margin-top: 3px;
+	float: right; 
+	width: 21px; height: 17px
+}
+
+.UIForumPortlet .GotoPageIcon .UIPopupCategory {
+	left:-30px;
+	position:absolute;
+	top: 2px;
+	width:120px;
+}
+
+.UIForumPortlet .GotoPageIcon .UIPopupCategory .InputPage {
+	padding-right: 6px;
+}
+
+.UIForumPortlet .GotoPageIcon .UIPopupCategory .InputPage input{
+	width:30px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

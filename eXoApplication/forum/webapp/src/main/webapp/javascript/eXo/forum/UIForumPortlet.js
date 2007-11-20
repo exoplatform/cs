@@ -139,17 +139,18 @@ UIForumPortlet.prototype.showTreeNode = function(obj) {
 //Duy Tu
 UIForumPortlet.prototype.initVote = function(voteId, rate) {
 	var vote = document.getElementById(voteId) ;
+	var DOMUtil = eXo.core.DOMUtil ;
 	vote.rate = rate = parseInt(rate) ;
-	var optsContainer = eXo.core.DOMUtil.findFirstDescendantByClass(vote, "div", "OptionsContainer") ;
-	var options = eXo.core.DOMUtil.getChildrenByTagName(optsContainer, "div") ;
+	var optsContainer = DOMUtil.findFirstDescendantByClass(vote, "div", "OptionsContainer") ;
+	var options = DOMUtil.getChildrenByTagName(optsContainer, "div") ;
 	for(var i = 0; i < options.length-1; i++) {
 		options[i].onmouseover = this.overVote ;
 		if(i < rate) options[i].className = "RatedVote" ;
 	}
 
 	vote.onmouseover = function() {
-		var optsCon= eXo.core.DOMUtil.findFirstDescendantByClass(this, "div", "OptionsContainer") ;
-		var opts = eXo.core.DOMUtil.getChildrenByTagName(optsCon, "div") ;
+		var optsCon= DOMUtil.findFirstDescendantByClass(this, "div", "OptionsContainer") ;
+		var opts = DOMUtil.getChildrenByTagName(optsCon, "div") ;
 		for(var j = 0; j < opts.length-1; j++) {
 			if(j < this.rate) opts[j].className = "RatedVote" ;
 			else opts[j].className = "NormalVote" ;
@@ -176,7 +177,25 @@ UIForumPortlet.prototype.overVote = function(event) {
 };
 
 
+UIForumPortlet.prototype.showPopup = function(elevent,e) {
+	document.getElementById("gopage1").onclick = eXo.forum.UIForumPortlet.cancel ;
+	document.getElementById("gopage2").onclick = eXo.forum.UIForumPortlet.cancel ;
+	if(!e) e = window.event ;
+		e.cancelBubble = true ;
+	var parend = eXo.core.DOMUtil.findAncestorByClass(elevent, "GotoPageIcon") ;
+	var popup = eXo.core.DOMUtil.findFirstDescendantByClass(parend, "div", "UIPopupCategory") ;
+	if(popup.style.display === "none") {
+		popup.style.display = "block" ;
+		eXo.core.DOMUtil.listHideElements(popup) ;	
+	} else {
+		popup.style.display = "none" ;
+	}
+};
 
+UIForumPortlet.prototype.cancel = function(evt) {
+	var _e = window.event || evt ;
+	_e.cancelBubble = true ;
+} ;
 
 
 

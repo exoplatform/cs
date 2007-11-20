@@ -7,6 +7,7 @@ package org.exoplatform.forum.webui;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.io.filefilter.IOFileFilter;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.service.JCRPageList;
@@ -31,6 +32,8 @@ import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.exception.MessageException;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
+import org.exoplatform.webui.form.UIFormStringInput;
+import org.exoplatform.webui.form.validator.PositiveNumberFormatValidator;
 
 /**
  * Created by The eXo Platform SARL
@@ -45,6 +48,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
     events = {
       @EventConfig(listeners = UITopicDetail.AddPostActionListener.class ),
       @EventConfig(listeners = UITopicDetail.RatingTopicActionListener.class ),
+      @EventConfig(listeners = UITopicDetail.GoNumberPageActionListener.class ),
       
       @EventConfig(listeners = UITopicDetail.PrintActionListener.class ),  
       @EventConfig(listeners = UITopicDetail.EditActionListener.class ),  
@@ -80,10 +84,12 @@ public class UITopicDetail extends UIForm  {
   private String topicId;
   private boolean viewTopic = true ;
   private Topic topic;
+  private JCRPageList pageList ;
+  private long pageSelect  = 1 ;
   public UITopicDetail() throws Exception {
-    // render post page list
-    // render actions bar
-    // render posts detail and post actions
+    addUIFormInput( new UIFormStringInput("gopage1", null)) ;
+    addUIFormInput( new UIFormStringInput("gopage2", null)) ;
+  	addChild(UIForumPageIterator.class, null, null) ;
     addChild(UIPostRules.class, null, null);
     addChild(UIForumLinks.class, null, null);
   }
@@ -105,15 +111,22 @@ public class UITopicDetail extends UIForm  {
     }
   }
   
+  private void initPage() throws Exception {
+  	this.pageList = forumService.getPosts(categoryId, forumId, topicId) ;
+  	this.getChild(UIForumPageIterator.class).updatePageList(this.pageList) ;
+  }
+  @SuppressWarnings("unused")
   private JCRPageList getPagePosts() throws Exception {
-    return forumService.getPosts(categoryId, forumId, topicId) ;
+    return pageList ;
   }
   
   private Topic getTopicDetail() throws Exception {
     return this.topic ;
   }
   
-  private List<Post> getPostPageList( long page) throws Exception {
+  private List<Post> getPostPageList() throws Exception {
+  	long page = this.getChild(UIForumPageIterator.class).getPageSelected() ;
+  	this.pageSelect = page ;
     JCRPageList pageList = getPagePosts() ;
     if(pageList == null) return null ;
     List<Post> postList = new ArrayList<Post>();
@@ -140,6 +153,7 @@ public class UITopicDetail extends UIForm  {
       topicDetail.viewTopic = false ;
       popupContainer.setId("UIAddPostContainer") ;
       popupAction.activate(popupContainer, 670, 440) ;
+      topicDetail.getChild(UIForumPageIterator.class).setSelectPage(topicDetail.pageList.getAvailablePage()) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   }
@@ -172,6 +186,34 @@ public class UITopicDetail extends UIForm  {
     public void execute(Event<UITopicDetail> event) throws Exception {
       UITopicDetail topicDetail = event.getSource() ;
     }
+  }
+
+  static public class GoNumberPageActionListener extends EventListener<UITopicDetail> {
+  	public void execute(Event<UITopicDetail> event) throws Exception {
+  		UITopicDetail topicDetail = event.getSource() ;
+  		UIFormStringInput stringInput1 = topicDetail.getUIStringInput("gopage1") ;
+  		UIFormStringInput stringInput2 = topicDetail.getUIStringInput("gopage2") ;
+  		stringInput1.addValidator(PositiveNumberFormatValidator.class) ;
+  		stringInput2.addValidator(PositiveNumberFormatValidator.class) ;
+  		String numberPage1 = stringInput1.getValue() ;
+  		String numberPage2 = stringInput2.getValue() ;
+  		String numberPage = "" ;
+  		if(numberPage1 != null && numberPage1.length() > 0) {
+  			numberPage = numberPage1 ;
+  		} else numberPage = numberPage2 ;
+  		if(numberPage != null && numberPage.length() > 0) {
+  			Long page = Long.parseLong(numberPage);
+  			if(page == 0) {
+  				page = (long)1;
+  			} else if(page > topicDetail.pageList.getAvailablePage()){
+  				page = topicDetail.pageList.getAvailablePage() ;
+  			}
+  			topicDetail.getChild(UIForumPageIterator.class).setSelectPage(page) ;
+				event.getRequestContext().addUIComponentToUpdateByAjax(topicDetail) ;
+  		}
+  		stringInput1.setValue("") ;
+  		stringInput2.setValue("") ;
+  	}
   }
 
   static public class EditActionListener extends EventListener<UITopicDetail> {
@@ -213,6 +255,7 @@ public class UITopicDetail extends UIForm  {
       topicDetail.viewTopic = false ;
       popupContainer.setId("UIQuoteContainer") ;
       popupAction.activate(popupContainer, 670, 440) ;
+      topicDetail.getChild(UIForumPageIterator.class).setSelectPage(topicDetail.pageList.getAvailablePage()) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   }

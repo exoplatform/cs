@@ -49,6 +49,26 @@
 }
 
 /**************************** UIForumPortlet ForumToolBar *********************************/
+.UIForumPortlet .UIActionForum .NormalButtom {
+	margin: 2px 0px 0px 0px;
+}
+ 
+.UIForumPortlet .UIActionForum .NormalButtom .ButtonLeft {
+  background: url('background/buttons/LeftButtom3x18.gif') no-repeat left top;
+  padding: 0px 0px 0px 3px;
+}
+
+.UIForumPortlet .UIActionForum .NormalButtom .ButtonRight {
+  background: url('background/buttons/RightButtom3x18.gif') no-repeat right top;
+  padding: 0px 3px 0px 0px ;
+}
+
+.UIForumPortlet .UIActionForum .NormalButtom .ButtonMiddle {
+  line-height: 18px;
+	background: url('background/buttons/MiddleButtom1x18.gif') repeat-x top;
+}
+
+/**************************** UIForumPortlet ForumToolBar *********************************/
 .UIForumPortlet .ForumToolbar {
 	height: 26px;
 }
