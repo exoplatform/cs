@@ -12,7 +12,9 @@ import java.util.Map;
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
+import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.EventQuery;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
@@ -59,6 +61,22 @@ public class UIMiniCalendar extends UICalendarView  {
     calendar_.add(Calendar.YEAR, yearStep) ;
   }*/
   public LinkedHashMap<String, CalendarEvent> getDataMap(){ return null ; }
+  
+  public java.util.Calendar getBeginDateOfMonth() throws Exception{
+    java.util.Calendar temCal = GregorianCalendar.getInstance() ;
+    temCal.setTime(calendar_.getTime()) ;
+    CalendarSetting calSetting  = null ;
+    try{
+      calSetting = getAncestorOfType(UICalendarPortlet.class).getCalendarSetting() ;
+    } catch (Exception e) {
+      CalendarService calService = getApplicationComponent(CalendarService.class) ;
+      calSetting  = calService.getCalendarSetting(Util.getPortalRequestContext().getRemoteUser()) ;
+    }
+    temCal.setFirstDayOfWeek(Integer.parseInt(calSetting.getWeekStartOn())) ;
+    temCal.set(java.util.Calendar.DATE, 1) ;
+    int amount1 = temCal.getFirstDayOfWeek() - temCal.get(java.util.Calendar.DAY_OF_WEEK) ;
+    return getBeginDay(getDateByValue(getCurrentYear(), getCurrentMonth(),1, UICalendarView.TYPE_DATE, amount1)) ;
+  }
   
   static  public class MoveNextActionListener extends EventListener<UIMiniCalendar> {
     public void execute(Event<UIMiniCalendar> event) throws Exception {

@@ -1290,6 +1290,7 @@
 
 .UIMonthView .EventMonthContent .DayContent {
 	height: 100px;
+	text-align: right;
 }
 
 .UIMonthView .EventMonthContent  .RowContainerDay .CalendarContentNomal {

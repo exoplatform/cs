@@ -5,21 +5,24 @@
 package org.exoplatform.calendar.webui;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
+import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -53,10 +56,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
 )
 public class UIMonthView extends UICalendarView {
   private Map<String, String> calendarIds_ = new HashMap<String, String>() ;
-
-  private Map<Integer, Map<String, CalendarEvent>> eventData_ = new HashMap<Integer, Map<String, CalendarEvent>>() ;
   private LinkedHashMap<String, CalendarEvent> dataMap_ = new LinkedHashMap<String, CalendarEvent>() ;
-  
   public UIMonthView() throws Exception{
     super() ;
   }
@@ -65,49 +65,30 @@ public class UIMonthView extends UICalendarView {
     return new GregorianCalendar(year, month, day).getActualMaximum(java.util.Calendar.WEEK_OF_MONTH) ;
   }
   protected void refreshEvents() throws Exception {
-    CalendarService calendarService = getApplicationComponent(CalendarService.class) ;
+    CalendarService calendarService = CalendarUtils.getCalendarService() ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     EventQuery eventQuery = new EventQuery() ;
-    java.util.Calendar fromcalendar = new GregorianCalendar(getCurrentYear(), getCurrentMonth(), 1, 0,0,0) ;
-    eventQuery.setFromDate(fromcalendar) ;
-    java.util.Calendar tocalendar = new GregorianCalendar(getCurrentYear(), getCurrentMonth(), getDaysInMonth(), 24,0,0) ;
-    eventQuery.setToDate(tocalendar) ;
+    eventQuery.setFromDate(getBeginDateOfMonth()) ;
+    eventQuery.setToDate(getEndDateOfMonth()) ;
     List<CalendarEvent> allEvents = calendarService.getEvent(username, eventQuery, getPublicCalendars()) ;
-    getChildren().clear() ;
-    initCategories() ;
-    eventData_.clear() ;
-    for(int day =1 ;  day <= getDaysInMonth(); day++) {
-      Map<String, CalendarEvent> list =  new HashMap<String, CalendarEvent>() ;
-      eventData_.put(day, list) ;
+    Iterator childIter = getChildren().iterator() ;
+    while(childIter.hasNext()) {
+      UIComponent comp = (UIComponent)childIter.next() ;
+       if (comp instanceof UIFormCheckBoxInput ) {
+         childIter.remove() ;
+      }
     }
+    dataMap_.clear() ;
     Iterator<CalendarEvent> eventIter = allEvents.iterator() ;
-    java.util.Calendar tempBegin = GregorianCalendar.getInstance()  ;
-    java.util.Calendar tempEnd = GregorianCalendar.getInstance()  ;
-    while (eventIter.hasNext()) {
-      CalendarEvent ce = eventIter.next() ;
-      tempBegin.setTime(ce.getFromDateTime()) ;
-      tempEnd.setTime(ce.getToDateTime()) ;
-      int fromDate = 1 ;
-      int toDate = getDaysInMonth();
-      if(tempBegin.after(fromcalendar)) {
-        fromDate = tempBegin.get(java.util.Calendar.DATE) ;
-      }
-      if(tempEnd.before(tocalendar)) {
-        toDate = tempEnd.get(java.util.Calendar.DATE) ;
-      }
-      for(int i = fromDate; i <= toDate; i ++) {
-        eventData_.get(i).put(ce.getId(), ce) ;
-        if(tempBegin.get(java.util.Calendar.DATE) >= i){
-          UIFormCheckBoxInput<Boolean> input = new UIFormCheckBoxInput<Boolean>(ce.getId(), ce.getId(), false) ;
-          input.setBindingField(ce.getCalendarId()) ;
-          addChild(input) ;
-        }
-      }
+    while(eventIter.hasNext()) {
+      CalendarEvent ce = (CalendarEvent)eventIter.next() ; 
       dataMap_.put(ce.getId(), ce) ;
+      UIFormCheckBoxInput<Boolean> input = new UIFormCheckBoxInput<Boolean>(ce.getId(), ce.getId(), false) ;
+      input.setBindingField(ce.getCalendarId()) ;
+      addChild(input) ;
       eventIter.remove() ;
     }
   }
-
   protected void addCalendarId(String id) {calendarIds_.put(id,id) ;}
   protected Map<String, String> getCalendarIds() {return calendarIds_ ;}
   protected void refreshSelectedCalendarIds() throws Exception {
@@ -124,14 +105,51 @@ public class UIMonthView extends UICalendarView {
     refreshEvents() ;
 
   }
-  private Date getDateOf(int year, int month, int day) {
-    GregorianCalendar gc = new GregorianCalendar(year, month, day) ;
-    return gc.getTime() ;
+  public java.util.Calendar getBeginDateOfMonthView() throws Exception{
+    java.util.Calendar temCal = GregorianCalendar.getInstance() ;
+    temCal.setTime(calendar_.getTime()) ;
+    CalendarSetting calSetting  = null ;
+    try{
+      calSetting = getAncestorOfType(UICalendarPortlet.class).getCalendarSetting() ;
+    } catch (Exception e) {
+      CalendarService calService = getApplicationComponent(CalendarService.class) ;
+      calSetting  = calService.getCalendarSetting(Util.getPortalRequestContext().getRemoteUser()) ;
+    }
+    temCal.setFirstDayOfWeek(Integer.parseInt(calSetting.getWeekStartOn())) ;
+    temCal.set(java.util.Calendar.DATE, 1) ;
+    int amount1 = temCal.getFirstDayOfWeek() - temCal.get(java.util.Calendar.DAY_OF_WEEK) ;
+    return getBeginDay(getDateByValue(getCurrentYear(), getCurrentMonth(),1, UICalendarView.TYPE_DATE, amount1)) ;
   }
-  private Map<Integer, Map<String, CalendarEvent>> getEventsData() {
-    return eventData_ ;
+  public java.util.Calendar getBeginDateOfMonth() throws Exception{
+    java.util.Calendar temCal = GregorianCalendar.getInstance() ;
+    temCal.setTime(calendar_.getTime()) ;
+    CalendarSetting calSetting  = null ;
+    try{
+      calSetting = getAncestorOfType(UICalendarPortlet.class).getCalendarSetting() ;
+    } catch (Exception e) {
+      CalendarService calService = getApplicationComponent(CalendarService.class) ;
+      calSetting  = calService.getCalendarSetting(Util.getPortalRequestContext().getRemoteUser()) ;
+    }
+    temCal.setFirstDayOfWeek(Integer.parseInt(calSetting.getWeekStartOn())) ;
+    temCal.set(java.util.Calendar.DATE, 1) ;
+    return getBeginDay(temCal) ;
   }
-
+  
+  public java.util.Calendar getEndDateOfMonth() throws Exception{
+    java.util.Calendar temCal = GregorianCalendar.getInstance() ;
+    temCal.setTime(calendar_.getTime()) ;
+    CalendarSetting calSetting  = null ;
+    try{
+      calSetting = getAncestorOfType(UICalendarPortlet.class).getCalendarSetting() ;
+    } catch (Exception e) {
+      CalendarService calService = getApplicationComponent(CalendarService.class) ;
+      calSetting  = calService.getCalendarSetting(Util.getPortalRequestContext().getRemoteUser()) ;
+    }
+    temCal.setFirstDayOfWeek(Integer.parseInt(calSetting.getWeekStartOn())) ;
+    temCal.set(java.util.Calendar.DATE, getDaysInMonth()) ;
+    return getEndDay(temCal) ;
+  }
+  
   protected void monthNext(int months) {
     calendar_.add(java.util.Calendar.MONTH, months) ;
   }
@@ -140,22 +158,14 @@ public class UIMonthView extends UICalendarView {
   }
   protected List<CalendarEvent> getSelectedEvents() {
     List<CalendarEvent> events = new ArrayList<CalendarEvent>() ;
-    for(Map<String, CalendarEvent> items : getEventsData().values()) {
-      for(String id : items.keySet()) {
+      for(String id : dataMap_.keySet()) {
         UIFormCheckBoxInput<Boolean>  checkbox = getChildById(id )  ;
-        if(checkbox != null && checkbox.isChecked()) events.add(items.get(id)) ;
+        if(checkbox != null && checkbox.isChecked()) events.add(dataMap_.get(id)) ;
       }
-    }
     return events ; 
   }
   public LinkedHashMap<String, CalendarEvent> getDataMap() {
     return dataMap_ ;
-  }
-  static  public class GotoDayActionListener extends EventListener<UIMonthView> {
-    public void execute(Event<UIMonthView> event) throws Exception {
-      UIMonthView calendarview = event.getSource() ;
-
-    }
   }
   static  public class MoveNextActionListener extends EventListener<UIMonthView> {
     public void execute(Event<UIMonthView> event) throws Exception {

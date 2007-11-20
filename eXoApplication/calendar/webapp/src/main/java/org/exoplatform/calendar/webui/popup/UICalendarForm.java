@@ -169,9 +169,11 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
     // TODO Auto-generated method stub
   }
   public void reset() {
-    if(isAddNew_) {}
+ /*   if(isAddNew_) {
+      
+    }
     calendarId_ = null ;
-    isAddNew_ = true ;
+    isAddNew_ = true ;*/
   }
   public void init(Calendar calendar) throws Exception {
     reset() ;

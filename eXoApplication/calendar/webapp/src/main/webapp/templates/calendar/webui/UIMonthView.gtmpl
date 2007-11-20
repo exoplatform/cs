@@ -17,6 +17,16 @@
  	String linkDayPrevious = uicomponent.event(uicomponent.ACT_PREVIOUS) ;
  	yearViewAction = uicomponent.TYPE_YEAR +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"="+ currentMonth +"&"+ uicomponent.DAY + "=1" ;
 	Calendar calendar = uicomponent.getCurrentCalendar() ;
+	dateFormat = uicomponent.getDateFormat() ;
+	timeFormat = uicomponent.getTimeFormat() ;
+	dateTimeFormat = uicomponent.getDateTimeFormat() ;
+	DateFormat df = new SimpleDateFormat(dateFormat) ;
+	DateFormat sdf = new  SimpleDateFormat("d") ;
+	DateFormat sdtf = new  SimpleDateFormat("MMM/dd") ;
+	DateFormat tf = new SimpleDateFormat(timeFormat) ;
+	DateFormat dtf = new SimpleDateFormat(dateTimeFormat) ;
+	DateFormat wf = new  SimpleDateFormat("EEE, dd/MMM") ;
+	
 	%>
 		
 	<div class="UIMonthView">
@@ -63,11 +73,42 @@
   				<div style="clear: left;"><span></span></div>
   			</div>
 				<div class="RowContainerDay">
+				<%
+					startMonh =  uicomponent.getBeginDateOfMonth() ;
+					endMonth =  uicomponent.getEndDateOfMonth() ;
+					
+					eventList = uicomponent.getDataMap().values() ;
+					for(event in eventList){
+					startTime = event.fromDateTime.getTime() ;
+					endTime = event.toDateTime.getTime() ;
+					startIndex = 0;
+					endIndex = uicomponent.getCurrentCalendar().getMaximum(Calendar.WEEK_OF_MONTH) ;
+					if(event.fromDateTime.after(startMonh.getTime()) || event.fromDateTime.equals(startMonh.getTime())) {
+						Calendar cal = new GregorianCalendar() ;
+						cal.setTime(event.fromDateTime) ;
+						startIndex = cal.get(Calendar.WEEK_OF_MONTH) ;
+					}
+					color = uicomponent.getColors().get(event.calendarId) ;
+					%>
+					<div class="DayContentContainer" title="<%=tf.format(event.fromDateTime)%> <%=df.format(event.fromDateTime)%> -> <%=tf.format(event.toDateTime)%> <%=df.format(event.toDateTime)%> ">
+						<div class="EventOnDayBorder EventBoxes $color" startIndex="$startIndex" calType="$event.calType" eventId="$event.id" calId="$event.calendarId" eventCat="$event.eventCategoryId" startTime="$startTime" endTime="$endTime" >
+							<div class="EventOnDayContent">
+								<div style="float:left;margin:3px 0px 0px 2px;">
+									<%uicomponent.renderField(uicomponent.getChildById(event.id))%>
+									$event.summary
+								</div>
+							</div>
+						</div>
+					</div>
+					<%
+					}%>
+						     
 			<table class="UIGrid" id="UIMonthViewGrid" cellspacing="0" borderspacing="0">
 				<col width="14%"><col width="14%"><col width="14%"><col width="14%"><col width="14%"><col width="14%"><col width="14%">
 				<tbody>
 				
 					<%
+					  calendar = uicomponent.getBeginDateOfMonthView() ;
 						week = 0 ; 
 						table = "" ;
 						clazz ="" ;
@@ -86,8 +127,8 @@
 					        validDay = 0;
 					      }
 					      display = "" ;
-					      if (validDay) {
-					      	dateTime = new GregorianCalendar(currentYear,currentMonth,dayOfMonth).getTimeInMillis() ;
+					      if (validDay) { 
+					      	dateTime = calendar.getTimeInMillis() ; // new GregorianCalendar(currentYear,currentMonth,dayOfMonth).getTimeInMillis() ;
 					        if (uicomponent.isCurrentDay(dayOfMonth, currentMonth, currentYear )) {
 					          clazz = 'Today';
 					        } else if (dayOfWeek == 1 || dayOfWeek == 7) {
@@ -97,67 +138,27 @@
 					        }
 						      month = currentMonth + 1 ;
 						      actionUpdate = uicomponent.event('UpdateEvent',dayOfMonth + '&' + uicomponent.EVENTID + '=event&' + uicomponent.CALENDARID + '=cal&' + uicomponent.CALTYPE + '=caltype') ;
-					        println "<td actionLink=\"$actionUpdate\" class='CalendarContentNomal' currentDate='$dayOfMonth' startTime='$dateTime' > <div class='DayBox $clazz' >" ;
 					        dayActionLink = uicomponent.TYPE_DATE +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"="+ currentMonth +"&"+ uicomponent.DAY + "=" + dayOfMonth ;
 					        %>
+					        <td actionLink="$actionUpdate" class='CalendarContentNomal' currentDate='$dayOfMonth' startTime='$dateTime' > 
+					        	<div class='DayBox $clazz' >
 						        <a href="<%=uicomponent.event("GotoDate",dayActionLink)%>">
-						         $dayOfMonth / $month
+						         <%=sdf.format(calendar.getTime())%> 
 										</a>
-									<%
-									println "</div> <div class='DayContent'>" ;
-					        eventList = uicomponent.getEventsData().get(dayOfMonth) ;
-						      if(eventList != null) {
-						        size = eventList.size() ;
-						        events = "" ;
-						        viewMore = "" ;
-										if(size > 0) {
-											println "<div class=\"DayContentContainer\" style=\"height:75px; overflow:hidden ;\">" ;
-											for(event in eventList.values()) {
-												styleCssHidden = "" ;
-												//if(eventList.indexOf(event) > 2) {styleCssHidden = "display:block;";}
-												begin = event.getFromDateTime() ;
-												end = event.getToDateTime();
-												sumary = event.getSummary() ;
-												title = sumary ;
-												if(sumary.length() > 15) { 
-													sumary = sumary.substring(0,15) + "..."  ;
-												}
-												String eventId = event.getId() ;
-												String calId = event.getCalendarId() ;
-												String eventCal = event.getEventCategoryId() ;
-												//
-												color = uicomponent.getColors().get(calId) ;
-												println "<div class=\"EventOnDayBorder EventBoxes $color\" day=\"$dayOfMonth\" calType=\"$event.calType\" eventId=$eventId calId=$calId eventCat=$eventCal style=\"$styleCssHidden\">" ;
-												println "<div class=\"EventOnDayContent\">" ;
-											 	println	"<div style=\"float:left;margin:3px 0px 0px 2px;\">" ;
-											 	if(event.getFromDateTime().getDate() == dayOfMonth) {
-													uicomponent.renderField(uicomponent.getChildById(eventId)) ;
-											 	} else {
-													println "<<" ;
-											 	}
-												println "</div>" ;
-												println "<div unselectable=\"on\" class=\"EventOnDayLabel\" title=\"$title\">" ;
-												println sumary ;
-												println "</div></div>" ;
-												println "<div style=\"clear:left;\"><span></span></div>" ;
-											println "</div>" ;
-											}
-											println "</div>" ;
-											if(size > 3) {
-												moreSize =  size - 3  ;
-												moreActionLink = uicomponent.event("GotoDate","$dayActionLink") ;
-												println "<a href=\"$moreActionLink\"><div class=\"ViewMoreIcon\" title=\"View all event on day\"> + " ;
-												println moreSize ;
-												println " More </div></a>" ;	
-											}
-										}
-										println "</div>" ;
-									}
-									println "</div></td>" ;
+									 </div><div class='DayContent'><span></span></div>
+									</td> 
+								<%	 
 					        dayOfMonth++ ;
 					      } else {
-					        println "<td class='CalendarContentDisable'> <div class='DisableDay'><span></span></div> <div class='DayContent'><span></span></div></td>" ;
+					      	%>
+					        <td class='CalendarContentDisable'> <div class='DisableDay'><span></span></div>
+					        	<div class='DayContent'> 
+								 		<%=sdtf.format(calendar.getTime())%>
+								 		</div>
+								 	</td>
+					     <%
 					      }
+					    calendar.add(Calendar.DATE, 1) ;
 					    }
 					    println "</tr>" ;
 		  			}	
