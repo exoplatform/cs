@@ -169,6 +169,7 @@
                     DownloadService dservice = uicomponent.getDownloadService() ;
                     String attLink ;
                     for (Attachment attach : msg.getAttachments()) {
+                      String downloadAction = uicomponent.event("DownloadAttachment", attach.getId());
                   %>
     						  	<div class="AttachmentContent">
                       <%
@@ -182,10 +183,10 @@
                         }
                       %>
                       <div class="AttachmentBox">
-    										<div class="AttachmentIcon">Melisa.jpg</div>
+    										<div class="AttachmentIcon"><%=attach.getName()%></div>
     										<div class="Size">Size: 63K</div>
     										<div class="Icon ViewDownloadIcon">View</div>
-    										<div class="Icon DownloadIcon">View</div>
+    										<div class="Icon DownloadIcon"><a href="$downloadAction">Download</a></div>
     						  		</div>
     						  		<div style="clear: left;"><span></span></div>
     						  	</div>

@@ -48,9 +48,13 @@
 			      <div class="Title">Then ...</div>
 			      <table class="UIFormGrid">
 			        <tr>
-			  	      <td class="FieldLabel">Move the message to:</td>
-			  	      <td class="FieldComponent" style="width: 270px;"><input type="text" value=""></td>
+			  	      <td class="FieldLabel"><%=uicomponent.getLabel(uicomponent.FILTER_APPLY_FOLDER)%>:</td>
+			  	      <td class="FieldComponent" style="width: 270px;"><%uicomponent.renderField(uicomponent.FILTER_APPLY_FOLDER)%></td>
 			        </tr>
+              <tr>
+              <td class="FieldLabel"><%=uicomponent.getLabel(uicomponent.FILTER_APPLY_TAG)%>:</td>
+              <td class="FieldComponent" style="width: 270px;"><%uicomponent.renderField(uicomponent.FILTER_APPLY_TAG)%></td>
+            </tr>
 			      </table>
 			    </div>
 			  </div>

@@ -1,7 +1,6 @@
 <%
   import org.exoplatform.mail.service.MessageFilter;
 %>
-
 <%uiform.begin()%>  
 <div class="UIMessageFilter">
   <div class="FilterSetting">
@@ -20,9 +19,6 @@
         %>
           <div class="NormalItem SelectedItem"><a href="#"><%=filter.getName()%></a></div>
         <% } %>
-          <div class="SelectedItem"><a href="#">Exo</a></div>
-          <div class="NormalItem"><a href="#">Home</a></div>
-          <div class="NormalItem"><a href="#">Company</a></div>
       </div>
     </div>
     

@@ -4,29 +4,18 @@
  **************************************************************************/
 package org.exoplatform.mail.webui.popup;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.exoplatform.contact.service.Contact;
 import org.exoplatform.mail.MailUtils;
-import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MessageFilter;
-import org.exoplatform.mail.webui.UIFolderContainer;
 import org.exoplatform.mail.webui.UIMailPortlet;
-import org.exoplatform.mail.webui.UIMessageArea;
-import org.exoplatform.mail.webui.UIMessageList;
-import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
-import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
-import org.exoplatform.webui.form.UIFormDateTimeInput;
-import org.exoplatform.webui.form.UIFormSelectBox;
-import org.exoplatform.webui.form.UIFormStringInput;
 
 
 /**
@@ -69,7 +58,7 @@ public class UIMessageFilter extends UIForm implements UIPopupComponent{
       UIMessageFilter uiMessageFilter = event.getSource() ;
       UIPopupActionContainer uiActionContainer = uiMessageFilter.getAncestorOfType(UIPopupActionContainer.class) ;
       UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class) ;
-      uiChildPopup.activate(UIAddMessageFilter.class, 600) ;
+      uiChildPopup.activate(UIAddMessageFilter.class, 650) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiActionContainer) ;
     }
   }
