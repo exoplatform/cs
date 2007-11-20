@@ -1030,12 +1030,24 @@
 /*=======================UIAddToContact========================*/
 
 .UIAdvanceSearchMail{
-	padding: 8px;
+	background-color: #f3f3f3;
 }
 
-.UIAdvanceSearchMail .HorizontalLayout {
-	background-color: #f3f3f3;
-	padding: 8px;
+.UIAdvanceSearchMail .SearchBox {
+	background: white;
+	height: 30px;
+	padding: 10px;
+}
+
+.UIAdvanceSearchMail .AdvanSearchForm {
+	border-top: 1px solid #cccccc;
+	border-bottom: 1px solid white;
+}
+
+.UIAdvanceSearchMail .SearchContent {
+	border-top: 1px solid white;
+	border-bottom: 1px solid #cccccc;
+	padding: 10px;
 }
 
 .UIAdvanceSearchMail table {
@@ -1043,8 +1055,11 @@
 }
 	
 .UIAdvanceSearchMail .HorizontalLayout {
-	padding: 10px 0px;
-	border: 1px solid #cccccc;
+	border: none;
+}
+
+.UIAdvanceSearchMail .UIFormGrid td.FieldLabel {
+	width: 150px;
 }
 
 .UIAdvanceSearchMail .HorizontalLayout .FieldShort select {
@@ -1052,7 +1067,7 @@
 }
 
 .UIAdvanceSearchMail .HorizontalLayout .SearchForDate {
-	padding-left: 65px;
+	padding-left: 70px;
 }
 
 .UIAdvanceSearchMail .HorizontalLayout .SearchForDate .FieldLabel {
@@ -1068,7 +1083,11 @@
 }
 
 .UIAdvanceSearchMail .HorizontalLayout .SearchForPriority {
-	padding-left: 155px;
+	padding-left: 160px;
+}
+
+.UIAdvanceSearchMail .HorizontalLayout .SearchForPriority input.checkbox {
+	margin-top: 4px;
 }
 
 .UIAdvanceSearchMail .HorizontalLayout .SearchForPriority .FieldShort select {
@@ -1076,7 +1095,7 @@
 }
 
 .UIAdvanceSearchMail .HorizontalLayout .SearchForPriority .FieldLabel {
-	width: 60px;
+	width: 80px;
 }
 
 .UIAdvanceSearchMail .HorizontalLayout .SearchForPriority .ShortComponent {
