@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<configuration>
+  <external-component-plugins>
+    <target-component>org.exoplatform.services.signer.DigitalSignatureService</target-component>
+    <component-plugin>
+      <name>nt.file.signer</name>
+      <set-method>addDigitalSigner</set-method>
+      <type>org.exoplatform.services.signer.impl.NTFileSigner</type>
+      <init-params>
+        <values-param>
+          <name>signer.supported.nodetypes</name>
+          <description>(comma separated) nodetypes handled by this digital signer plugin</description>
+          <value>nt:file</value>
+        </values-param>
+      </init-params>
+    </component-plugin>
+  </external-component-plugins>
+
+  <external-component-plugins>
+    <target-component>org.exoplatform.services.appletconfig.AppletConfigurationService</target-component>
+    <component-plugin>
+      <name>applet.config</name>
+      <set-method>addPlugin</set-method>
+      <type>org.exoplatform.services.appletconfig.impl.DistributionConfiguration</type>
+      <init-params>
+        <value-param>
+          <name>applet-config-name</name>
+          <value>signer</value>
+        </value-param>
+        <object-param>
+          <name>applet-parameters</name>
+          <description>Applet parameters configuration</description>
+          <object type="org.exoplatform.services.appletconfig.impl.ParameterConfiguration">
+            <field name="width"><string>222</string></field>
+            <field name="height"><string>155</string></field>
+
+            <field name="configSet">
+              <collection type="java.util.HashSet">
+                <value><string>type=application/x-java-applet;version=1.1</string></value>
+                <value><string>mayscript=true</string></value>
+                <value><string>scriptable=true</string></value>
+                <value><string>code=org.exoplatform.applet.launcher.ExoLauncherApplet</string></value>
+                <value><string>loggingLevel=All</string></value>
+              </collection>
+            </field>
+		  </object>
+		</object-param>
+
+        <object-param>
+          <name>launcher-configuration</name>
+          <description>Applet distribution configuration</description>
+          <object type="org.exoplatform.applet.deploy.LauncherConfiguration">
+          	<field name="appletClassName"><string>org.exoplatform.applications.signerclient.ExoSignerApplet</string></field>
+          	<field name="appletDependencyId"><string>exo-ecm.exo-ecm.applications.signer-client</string></field>
+          	<field name="appletName"><string>eXo Signer Client</string></field>
+          	<field name="appletInfo"><string>Copyright (c) 2001-2006 eXo Platform SARL</string></field>
+          	<field name="installBaseDirName"><string>signer</string></field>
+          	<field name="repoBaseUrl"><string>/applet/distro/</string></field>
+
+            <field name="components">
+              <collection type="java.util.ArrayList">
+                <value>
+                  <object type="org.exoplatform.applet.deploy.Component">
+                    <field name="groupId"><string>exo-ecm</string></field>
+                    <field name="artifactId"><string>exo-ecm.applications.signer-client</string></field>
+                    <field name="version"><string>1.1</string></field>
+                    <field name="type"><string>jar</string></field>
+                    <field name="scope"><string>applet</string></field>
+
+                    <field name="pluginClassNames">
+                      <collection type="java.util.ArrayList">
+                        <value><string>org.exoplatform.applications.signerclient.crypto.jce.JCECryptoPlugin</string></value>
+                      </collection>
+                    </field>
+                  </object>
+                </value>
+                <value>
+                  <object type="org.exoplatform.applet.deploy.Component">
+                    <field name="groupId"><string>bouncycastle</string></field>
+                    <field name="artifactId"><string>lcrypto-jdk14</string></field>
+                    <field name="version"><string>134</string></field>
+                    <field name="type"><string>jar</string></field>
+                    <field name="scope"><string>shared</string></field>
+                  </object>
+                </value>
+              </collection>
+            </field>
+          </object>
+        </object-param>
+      </init-params>
+    </component-plugin>
+  </external-component-plugins>
+
+</configuration>

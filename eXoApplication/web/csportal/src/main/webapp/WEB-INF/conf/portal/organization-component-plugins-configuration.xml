@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<configuration>
+	<external-component-plugins>
+  	<target-component>org.exoplatform.services.organization.OrganizationService</target-component>
+	  <component-plugin>
+	    <name>cms.new.user.event.listener</name>
+	    <set-method>addListenerPlugin</set-method>
+	    <type>org.exoplatform.services.cms.impl.NewUserListener</type>
+	    <description>description</description>
+	    <init-params>
+	      <value-param>
+	        <name>relativePath</name>
+	        <value>site</value>
+	      </value-param>
+	      <object-param>
+	        <name>configuration</name>
+	        <description>description</description>
+	        <object type="org.exoplatform.services.cms.impl.NewUserConfig">
+	          <field  name="repository"><string>repository</string></field>
+	          <field  name="template"><string>template</string></field>
+	          <field  name="users">
+	            <collection type="java.util.ArrayList">
+	              <value>
+	                <object type="org.exoplatform.services.cms.impl.NewUserConfig$User">
+	                  <field  name="userName"><string>template</string></field>
+	                  <field  name="referencedFiles">
+	                    <collection type="java.util.ArrayList">
+	                      <value><string>/default.html</string></value>
+	                    </collection>
+	                  </field>
+	                </object>
+	              </value>
+	              <value>
+	                <object type="org.exoplatform.services.cms.impl.NewUserConfig$User">
+	                  <field  name="userName"><string>admin</string></field>
+	                  <field  name="referencedFiles">
+	                    <collection type="java.util.ArrayList">
+	                      <value><string>/default.html</string></value>
+	                      <value><string>/summary.html</string></value>
+	                    </collection>
+	                  </field>
+	                </object>
+	              </value>
+	              <value>
+	                <object type="org.exoplatform.services.cms.impl.NewUserConfig$User">
+	                  <field  name="userName"><string>portal</string></field>
+	                  <field  name="referencedFiles">
+	                    <collection type="java.util.ArrayList">
+	                      <value><string>/default.html</string></value>
+	                      <value><string>/products/product.html</string></value>
+	                    </collection>
+	                  </field>
+	                </object>
+	              </value>
+	              <value>
+	                <object type="org.exoplatform.services.cms.impl.NewUserConfig$User">
+	                  <field  name="userName"><string>exo</string></field>
+	                  <field  name="referencedFiles">
+	                    <collection type="java.util.ArrayList">
+	                      <value><string>/default.html</string></value>
+	                      <value><string>/summary.html</string></value>
+	                      <value><string>/news.html</string></value>
+	                    </collection>
+	                  </field>
+	                </object>
+	              </value>
+	              <value>
+	                <object type="org.exoplatform.services.cms.impl.NewUserConfig$User">
+	                  <field  name="userName"><string>demo</string></field>
+	                  <field  name="referencedFiles">
+	                    <collection type="java.util.ArrayList">
+	                      <value><string>/default.html</string></value>
+	                      <value><string>/home-intro.html</string></value>
+	                    </collection>
+	                  </field>
+	                </object>
+	              </value>
+	            </collection>
+	          </field>
+	        </object>
+	      </object-param>
+	    </init-params>
+	  </component-plugin>
+	  <component-plugin>
+	    <name>queries.new.user.event.listener</name>
+	    <set-method>addListenerPlugin</set-method>
+	    <type>org.exoplatform.services.cms.queries.impl.NewUserListener</type>
+	    <description>description</description>
+	    <init-params>
+	      <value-param>
+	        <name>relativePath</name>
+	        <value>queries</value>
+	      </value-param>
+	      <object-param>
+	        <name>configuration</name>
+	        <description>description</description>
+	        <object type="org.exoplatform.services.cms.queries.impl.NewUserConfig">
+	        	<field  name="repository"><string>repository</string></field>
+	          <field  name="template"><string>template</string></field>
+	          <field  name="users">
+	            <collection type="java.util.ArrayList">
+	              <value>
+	                <object type="org.exoplatform.services.cms.queries.impl.NewUserConfig$User">
+	                  <field  name="userName"><string>template</string></field>
+	                  <field  name="queries">
+	                    <collection type="java.util.ArrayList">
+	                      <value>
+	                        <object type="org.exoplatform.services.cms.queries.impl.NewUserConfig$Query">
+	                          <field  name="queryName"><string>allArticles</string></field>
+	                          <field  name="language"><string>xpath</string></field>
+	                          <field  name="query"><string>//element(*, exo:article)</string></field>
+	                        </object>
+	                      </value>
+	                    </collection>
+	                  </field>
+	                </object>
+	              </value>
+	            </collection>
+	          </field>
+	        </object>
+	      </object-param>
+	    </init-params>
+	  </component-plugin>
+	</external-component-plugins>
+    
+</configuration>
