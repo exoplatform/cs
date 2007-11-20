@@ -81,7 +81,7 @@
     </childNodeDefinitions>
   </nodeType>  	
 	
-	<nodeType name="exo:message" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
+  <nodeType name="exo:message" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
     <supertypes>
       <supertype>nt:base</supertype>      
     </supertypes>
@@ -205,6 +205,50 @@
   			<valueConstraints/>
   		</propertyDefinition>
   		<propertyDefinition name="exo:color" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  			<valueConstraints/>
+  		</propertyDefinition>
+  	</propertyDefinitions>
+  </nodeType>
+  
+   <nodeType name="exo:filter" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
+  	<supertypes>
+  		<supertype>nt:base</supertype>
+  	</supertypes>
+  	<propertyDefinitions>
+  		<propertyDefinition name="exo:id" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  			<valueConstraints/>
+  		</propertyDefinition>
+  		<propertyDefinition name="exo:name" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  			<valueConstraints/>
+  		</propertyDefinition>
+  		<propertyDefinition name="exo:from" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  			<valueConstraints/>
+  		</propertyDefinition>
+  		<propertyDefinition name="exo:fromCondition" requiredType="long" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  			<valueConstraints/>
+  		</propertyDefinition>
+  		<propertyDefinition name="exo:to" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  			<valueConstraints/>
+  		</propertyDefinition>
+  		<propertyDefinition name="exo:toCondition" requiredType="long" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  			<valueConstraints/>
+  		</propertyDefinition>
+  		<propertyDefinition name="exo:subject" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  			<valueConstraints/>
+  		</propertyDefinition>
+  		<propertyDefinition name="exo:subjectCondition" requiredType="long" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  			<valueConstraints/>
+  		</propertyDefinition>
+  		<propertyDefinition name="exo:body" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  			<valueConstraints/>
+  		</propertyDefinition>
+  		<propertyDefinition name="exo:bodyCondition" requiredType="long" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  			<valueConstraints/>
+  		</propertyDefinition>
+  		<propertyDefinition name="exo:folders" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
+  			<valueConstraints/>
+  		</propertyDefinition>
+  		<propertyDefinition name="exo:tags" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
   			<valueConstraints/>
   		</propertyDefinition>
   	</propertyDefinitions>

@@ -149,9 +149,12 @@ public class UIActionBar extends UIContainer {
     public void execute(Event<UIActionBar> event) throws Exception {
       UIActionBar uiActionBar = event.getSource() ; 
       UIMailPortlet uiPortlet = uiActionBar.getAncestorOfType(UIMailPortlet.class);
-      UIPopupAction uiPopup = uiPortlet.findFirstComponentOfType(UIPopupAction.class);
-      uiPopup.activate(UIMessageFilter.class, 600);
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup);
+      UIPopupAction uiPopupAction = uiPortlet.findFirstComponentOfType(UIPopupAction.class);
+      UIPopupActionContainer uiPopupContainer = uiPopupAction.createUIComponent(UIPopupActionContainer.class, null, "UIPopupActionFilterContainer");
+      uiPopupAction.activate(uiPopupContainer, 700, 0, false) ;
+      UIMessageFilter uiMessageFilter = uiPopupContainer.createUIComponent(UIMessageFilter.class, null, null);
+      uiPopupContainer.addChild(uiMessageFilter) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }
   }
   

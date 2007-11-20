@@ -97,7 +97,7 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
         UIMailPortlet uiPortlet = uiForm.getAncestorOfType(UIMailPortlet.class) ;
         UIComposeForm uiComposeForm = uiPortlet.findFirstComponentOfType(UIComposeForm.class);
         for (BufferAttachment att : fileAttachList) {
-          uiComposeForm.addToUploadFileList((Attachment)att) ;
+          uiComposeForm.addToUploadFileList(att) ;
         }
         uiComposeForm.refreshUploadFileList() ;
       } 

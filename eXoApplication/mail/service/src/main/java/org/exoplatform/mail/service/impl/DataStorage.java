@@ -59,6 +59,12 @@ public interface DataStorage {
   public void removeUserFolder(String username, Folder folder) throws Exception ;
   public void removeUserFolder(String username, Account account, Folder folder) throws Exception ;
   
+  public List<MessageFilter> getFilters(String username, String accountId) throws Exception ;
+  
+  public MessageFilter getFilterById(String username, String accountId, String filterId) throws Exception ;
+  
+  public void saveFilter(String username, String accountId, MessageFilter filter) throws Exception ;
+  
   public List<Tag> getTags(String username, String accountId) throws Exception ;
   public Tag getTag(String username, String accountId, String tagId) throws Exception ;
   public void addTag(String username, String accountId, List<String> messagesId, List<Tag> listTag) throws Exception ;

@@ -4,6 +4,8 @@
  **************************************************************************/
 package org.exoplatform.mail;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -11,8 +13,14 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
+import org.exoplatform.contact.service.Contact;
+import org.exoplatform.contact.service.ContactAttachment;
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.download.DownloadService;
+import org.exoplatform.download.InputStreamDownloadResource;
+import org.exoplatform.mail.service.Attachment;
 import org.exoplatform.mail.service.MailService;
+import org.exoplatform.mail.service.Message;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.core.model.SelectItemOption;
 
@@ -48,6 +56,22 @@ public class MailUtils {
   
   static public void setAccountId(String accId) throws Exception { 
     selectedAccountId_ = accId ;
+  }
+  
+  public static String getImageSource(Attachment attach, DownloadService dservice) throws Exception {      
+    if (attach != null) {
+      InputStream input = attach.getInputStream() ;
+      byte[] imageBytes = null ;
+      if (input != null) {
+        imageBytes = new byte[input.available()] ;
+        input.read(imageBytes) ;
+        ByteArrayInputStream byteImage = new ByteArrayInputStream(imageBytes) ;
+        InputStreamDownloadResource dresource = new InputStreamDownloadResource(byteImage, "image") ;
+        dresource.setDownloadName(attach.getName()) ;
+        return  dservice.getDownloadLink(dservice.addDownloadResource(dresource)) ;        
+      }
+    }
+    return null ;
   }
   
   public static List<SelectItemOption<String>> getTimesSelectBoxOptions(String timeFormat) {

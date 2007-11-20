@@ -4,12 +4,17 @@
  **************************************************************************/
 package org.exoplatform.mail.webui.popup;
 
+import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactService;
+import org.exoplatform.container.PortalContainer;
+import org.exoplatform.download.DownloadResource;
+import org.exoplatform.download.DownloadService;
+import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Attachment;
@@ -21,7 +26,6 @@ import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.UIFolderContainer;
 import org.exoplatform.mail.webui.UIMailPortlet;
-import org.exoplatform.mail.webui.UIMessageArea;
 import org.exoplatform.mail.webui.UINavigationContainer;
 import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -57,6 +61,7 @@ import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
       @EventConfig(listeners = UIComposeForm.SaveDraftActionListener.class),
       @EventConfig(phase = Phase.DECODE, listeners = UIComposeForm.DiscardChangeActionListener.class),
       @EventConfig(listeners = UIComposeForm.AttachmentActionListener.class),
+      @EventConfig(listeners = UIComposeForm.DownloadActionListener.class),
       @EventConfig(listeners = UIComposeForm.RemoveAttachmentActionListener.class),
       @EventConfig(listeners = UIComposeForm.ToActionListener.class),
       @EventConfig(listeners = UIComposeForm.ToCCActionListener.class),
@@ -134,7 +139,8 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
     List<ActionData> uploadedFiles = new ArrayList<ActionData>() ;
     for(Attachment attachdata : attachments_) {
       ActionData fileUpload = new ActionData() ;
-      fileUpload.setActionListener("") ;
+      fileUpload.setActionListener("Download") ;
+      fileUpload.setActionParameter(attachdata.getId());
       fileUpload.setActionType(ActionData.TYPE_ICON) ;
       fileUpload.setCssIconClass("AttachmentIcon") ; // "AttachmentIcon ZipFileIcon"
       fileUpload.setActionName(attachdata.getName() + " ("+attachdata.getSize()+" Kb)" ) ;
@@ -400,9 +406,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
       UIComposeForm uiForm = event.getSource() ;
       UIMailPortlet uiPortlet = uiForm.getAncestorOfType(UIMailPortlet.class);
       uiForm.resetFields() ;
-      uiForm.getAncestorOfType(UIPopupAction.class).deActivate() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessageArea.class)) ;
+      uiPortlet.cancelAction();
     }
   }
   static public class AttachmentActionListener extends EventListener<UIComposeForm> {
@@ -415,6 +419,31 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
       event.getRequestContext().addUIComponentToUpdateByAjax(uiActionContainer) ;
     }
   }
+  
+  static public class DownloadActionListener extends EventListener<UIComposeForm> {
+    public void execute(Event<UIComposeForm> event) throws Exception {
+      UIComposeForm uiComposeForm = event.getSource();
+      String attId = event.getRequestContext().getRequestParameter(OBJECTID);
+      BufferAttachment att = new BufferAttachment();
+      for (Attachment attach : uiComposeForm.getAttachFileList()) {
+        if (attach.getId().equals(attId)) {
+          att = (BufferAttachment) attach ;
+        }
+      }
+      if (att.getInputStream() != null) {
+        System.out.println("===================================" + att.getInputStream().toString());
+      } else {
+        System.out.println("==== nulll" + att.getName());
+      }
+      ByteArrayInputStream bis = (ByteArrayInputStream) att.getInputStream();
+      DownloadResource dresource = new InputStreamDownloadResource(bis, att.getMimeType());
+      DownloadService dservice = (DownloadService)PortalContainer.getInstance().getComponentInstanceOfType(DownloadService.class);
+      dresource.setDownloadName(att.getName());
+      String downloadLink = dservice.getDownloadLink(dservice.addDownloadResource(dresource));
+      event.getRequestContext().getJavascriptManager().addJavascript("ajaxRedirect('" + downloadLink + "');");
+    }
+  }
+  
   static public class RemoveAttachmentActionListener extends EventListener<UIComposeForm> {
     public void execute(Event<UIComposeForm> event) throws Exception {
       UIComposeForm uiComposeForm = event.getSource() ;

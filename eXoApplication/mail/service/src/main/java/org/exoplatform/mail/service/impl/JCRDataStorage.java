@@ -470,6 +470,78 @@ public class JCRDataStorage implements DataStorage{
     jcrRegistryService_.createServiceRegistry(username, serviceRegistry, false) ;    
     return jcrRegistryService_.getServiceRegistryNode(session, username, serviceRegistry.getName()) ;
   }
+  
+  public Node getFilterHome(String username, String accountId) throws Exception {
+    Node accountHome = getMailHomeNode(username).getNode(accountId);
+    if(accountHome.hasNode(Utils.KEY_FILTER)) return accountHome.getNode(Utils.KEY_FILTER) ;
+    else return accountHome.addNode(Utils.KEY_FILTER, Utils.NT_UNSTRUCTURED) ;
+  }
+  
+  public List<MessageFilter> getFilters(String username, String accountId) throws Exception {
+    List<MessageFilter> filterList = new ArrayList<MessageFilter>();
+    Node filterHomeNode = getFilterHome(username, accountId) ;
+    NodeIterator iter = filterHomeNode.getNodes() ;
+    while (iter.hasNext()){
+      Node filterNode = (Node)iter.next() ;
+      MessageFilter filter = new MessageFilter("");
+      filter.setId((filterNode.getProperty(Utils.EXO_ID).getString())) ;
+      filter.setName(filterNode.getProperty(Utils.EXO_NAME).getString()) ;
+      filter.setFrom(filterNode.getProperty(Utils.EXO_FROM).getString());
+      filter.setFromCondition((int)(filterNode.getProperty(Utils.EXO_FROM_CONDITION).getLong()));
+      filter.setTo(filterNode.getProperty(Utils.EXO_TO).getString());
+      filter.setToCondition((int)(filterNode.getProperty(Utils.EXO_TO_CONDITION).getLong()));
+      filter.setSubject(filterNode.getProperty(Utils.EXO_SUBJECT).getString());
+      filter.setSubjectCondition((int)(filterNode.getProperty(Utils.EXO_SUBJECT_CONDITION).getLong()));
+      filter.setBody(filterNode.getProperty(Utils.EXO_BODY).getString());
+      filter.setBodyCondition((int)(filterNode.getProperty(Utils.EXO_BODY_CONDITION).getLong()));
+      filterList.add(filter);
+    }
+    return filterList ;
+  }
+  
+  public MessageFilter getFilterById(String username, String accountId, String filterId) throws Exception {
+    Node filterHomeNode = getTagHome(username, accountId) ;
+    MessageFilter filter = new MessageFilter("");
+    NodeIterator iter = filterHomeNode.getNodes() ;
+    while (iter.hasNext()){
+      Node filterNode = (Node)iter.next() ;
+      if (filterNode.getProperty(Utils.EXO_FILTER).getString().equals(filterId)) {
+        filter.setId((filterNode.getProperty(Utils.EXO_ID).getString())) ;
+        filter.setName(filterNode.getProperty(Utils.EXO_NAME).getString()) ;
+        filter.setFrom(filterNode.getProperty(Utils.EXO_FROM).getString());
+        filter.setFromCondition((int)(filterNode.getProperty(Utils.EXO_FROM_CONDITION).getLong()));
+        filter.setTo(filterNode.getProperty(Utils.EXO_TO).getString());
+        filter.setToCondition((int)(filterNode.getProperty(Utils.EXO_TO_CONDITION).getLong()));
+        filter.setSubject(filterNode.getProperty(Utils.EXO_SUBJECT).getString());
+        filter.setSubjectCondition((int)(filterNode.getProperty(Utils.EXO_SUBJECT_CONDITION).getLong()));
+        filter.setBody(filterNode.getProperty(Utils.EXO_BODY).getString());
+        filter.setBodyCondition((int)(filterNode.getProperty(Utils.EXO_BODY_CONDITION).getLong()));
+      }
+    }
+    return filter ;
+  }
+  
+  public void saveFilter(String username, String accountId, MessageFilter filter) throws Exception {
+    Node home = getFilterHome(username, accountId);
+    Node filterNode = null;
+    if (home.hasNode(filter.getId())) { // if the filter exists, gets it
+      filterNode = home.getNode(filter.getId());
+    } else { // if it doesn't exist, creates it
+      filterNode = home.addNode(filter.getId(), Utils.EXO_FILTER);
+    }
+    // sets some properties
+    filterNode.setProperty(Utils.EXO_ID, filter.getId());
+    filterNode.setProperty(Utils.EXO_NAME, filter.getName());
+    filterNode.setProperty(Utils.EXO_FROM, filter.getFrom());
+    filterNode.setProperty(Utils.EXO_FROM_CONDITION, (long)filter.getFromCondition());
+    filterNode.setProperty(Utils.EXO_TO, filter.getTo());
+    filterNode.setProperty(Utils.EXO_TO_CONDITION, (long)filter.getToCondition());
+    filterNode.setProperty(Utils.EXO_SUBJECT, filter.getSubject());
+    filterNode.setProperty(Utils.EXO_SUBJECT_CONDITION, (long)filter.getSubjectCondition());
+    filterNode.setProperty(Utils.EXO_BODY, filter.getBody());
+    filterNode.setProperty(Utils.EXO_BODY_CONDITION, (long)filter.getBodyCondition());
+    home.getSession().save();
+  }
 
   public Node getMessageHome(String username, String accountId) throws Exception {
     Node accountHome = getMailHomeNode(username).getNode(accountId);

@@ -1,3 +1,4 @@
+<%uiform.begin()%>  
 <div class="UIAddMessageFilter" >
 
 	<div class="UIForm">
@@ -6,8 +7,8 @@
 	    	<div class="FinterName">
 		      <table class="UIFormGrid">
 		        <tr>
-		  	      <td class="FieldLabel" style="width: 90px">Finter name:</td>
-		          <td class="FieldComponent" colspan="2"><input type="text" value=""></td>
+		  	      <td class="FieldLabel" style="width: 90px">Filter name:</td>
+		          <td class="FieldComponent" colspan="2"><%uicomponent.renderField(uicomponent.FILTER_NAME)%></td>
 		        </tr>
 		      </table>
 		    </div>
@@ -18,34 +19,30 @@
 			        <tr>
 			  	      <td class="FieldLabel">From header:</td>
 			  	      <td class="FieldComponent" style="width: 130px;">
-			  	     		<select name="" class="selectbox">
-									</select>
+                  <%uicomponent.renderField(uicomponent.FILTER_FROM_CONDITION)%>
 								</td>
-			          <td class="FieldComponent" style="width: 130px;"><input type="text" value=""></td>
+			          <td class="FieldComponent" style="width: 130px;"><%uicomponent.renderField(uicomponent.FILTER_FROM)%></td>
 			        </tr>
 			        <tr>
-			  	      <td class="FieldLabel">To/Cc header:</td>
+			  	      <td class="FieldLabel">To header:</td>
 			  	      <td class="FieldComponent" style="width: 130px;">
-			  	     		<select name="" class="selectbox">
-									</select>
+                  <%uicomponent.renderField(uicomponent.FILTER_TO_CONDITION)%>  
 								</td>
-			          <td class="FieldComponent" style="width: 130px;"><input type="text" value=""></td>
+			          <td class="FieldComponent" style="width: 130px;"><%uicomponent.renderField(uicomponent.FILTER_TO)%></td>
 			        </tr>
 			        <tr>
 			  	      <td class="FieldLabel">Subject:</td>
 			  	      <td class="FieldComponent" style="width: 130px;">
-			  	     		<select name="" class="selectbox">
-									</select>
+			  	        <%uicomponent.renderField(uicomponent.FILTER_SUBJECT_CONDITION)%>  
 								</td>
-			          <td class="FieldComponent" style="width: 130px;"><input type="text" value=""></td>
+			          <td class="FieldComponent" style="width: 130px;"><%uicomponent.renderField(uicomponent.FILTER_SUBJECT)%>  </td>
 			        </tr>
 			        <tr>
 			  	      <td class="FieldLabel">Body:</td>
 			  	      <td class="FieldComponent" style="width: 130px;">
-			  	     		<select name="" class="selectbox">
-									</select>
+                  <%uicomponent.renderField(uicomponent.FILTER_BODY_CONDITION)%>  
 								</td>
-			          <td class="FieldComponent" style="width: 130px;"><input type="text" value=""></td>
+			          <td class="FieldComponent" style="width: 130px;"><%uicomponent.renderField(uicomponent.FILTER_BODY)%></td>
 			        </tr>
 			      </table>
 			      <div class="Title">Then ...</div>
@@ -57,35 +54,34 @@
 			      </table>
 			    </div>
 			  </div>
-	      <div class="UIAction"> 
-	        <table class="ActionContainer" align="center">
-	        	<tr>
-	        		<td align="center">
-	          		<a href="#" class="ActionButton LightBlueStyle">
-	                <div class="ButtonLeft">
-	                  <div class="ButtonRight">
-	                    <div class="ButtonMiddle">
-												Save
-	                    </div>
-	                  </div>
-	                </div>
-	           		</a>
-	          		<a href="#" class="ActionButton LightBlueStyle">
-	                <div class="ButtonLeft">
-	                  <div class="ButtonRight">
-	                    <div class="ButtonMiddle">
-												Cancel
-	                    </div>
-	                  </div>
-	                </div>
-	           		</a>
-	          	</td>
-	          </tr>  
-	        </table>
-	      </div>
+        
+        <div class="UIAction">
+          <table class="ActionContainer" align="center">
+            <tr>
+              <td align="center">
+                <% for(action in uicomponent.getActions()) { 
+                         String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action) ;
+                         String link = uicomponent.event(action) ;
+                %>
+                <a href="$link" class="ActionButton LightBlueStyle">
+                  <div class="ButtonLeft">
+                    <div class="ButtonRight">
+                      <div class="ButtonMiddle">
+                        $actionLabel
+                      </div>
+                    </div>
+                  </div>
+                </a>
+                <%}%>
+              </td>
+            </tr>
+          </table>
+        </div>
+        
 	    </div>
 	  </div>
 	</div>
 
 </div>
+<%uiform.end()%>  
  

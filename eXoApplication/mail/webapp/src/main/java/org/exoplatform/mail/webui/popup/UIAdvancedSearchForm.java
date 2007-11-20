@@ -137,8 +137,8 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
       if (selectedFolderId != null && selectedFolderId != "") {
         filter.setFolder(new String[] {uiSearchForm.getSelectedFolder()});
       }
-      filter.setEmailTo(uiSearchForm.getFieldEmailTo());
-      filter.setEmailFrom(uiSearchForm.getFieldEmailFrom());
+      filter.setTo(uiSearchForm.getFieldEmailTo());
+      filter.setFrom(uiSearchForm.getFieldEmailFrom());
       filter.setSubject(uiSearchForm.getSubject());
       filter.setBody(uiSearchForm.getMessageBody());     
       uiMessageList.setSelectedFolderId(null);

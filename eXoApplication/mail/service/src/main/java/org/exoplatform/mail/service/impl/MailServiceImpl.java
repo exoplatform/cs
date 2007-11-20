@@ -109,6 +109,18 @@ public class MailServiceImpl implements MailService{
   public void removeUserFolder(String username, Account account, Folder folder) throws Exception {
     storage_.removeUserFolder(username, account, folder);
   }
+  
+  public List<MessageFilter> getFilters(String username, String accountId) throws Exception {
+    return storage_.getFilters(username, accountId);
+  }
+  
+  public MessageFilter getFilterById(String username, String accountId, String filterId) throws Exception {
+    return storage_.getFilterById(username, accountId, filterId);
+  }
+  
+  public void saveFilter(String username, String accountId, MessageFilter filter) throws Exception {
+    storage_.saveFilter(username, accountId, filter);
+  }
 
   public Message getMessageById(String username, String accountId, String msgId) throws Exception {
     return storage_.getMessageById(username, accountId, msgId);

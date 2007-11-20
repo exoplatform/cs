@@ -61,6 +61,7 @@ public class Utils {
   public static final String KEY_FOLDERS = "Folders".intern() ;
   public static final String KEY_MESSAGE = "Messages".intern() ;
   public static final String KEY_TAGS = "Tags".intern() ;
+  public static final String KEY_FILTER = "Filter".intern() ;
   public static final String KEY_ACCOUNT = "account".intern() ;
   public static final String KEY_HEADER = "mailHeader".intern() ;
   
@@ -112,6 +113,7 @@ public class Utils {
   public static final String EXO_DEFAULT_ACCOUNT = "exo:defaultAccount".intern();
   public static final String EXO_EDITOR = "exo:editor".intern();
   public static final String EXO_SAVE_SENT_MESSAGE = "exo:saveMessageInSent".intern();
+  public static final String EXO_FILTER = "exo:filter".intern() ;
   
   public static final String NT_UNSTRUCTURED = "nt:unstructured".intern() ;
   public static final String NT_FILE = "nt:file".intern() ;
@@ -126,6 +128,18 @@ public class Utils {
   public static final String MIMETYPE_TEXTHTML = "text/html".intern() ;
   public static final String ATTACHMENT = "ATTACHMENT".intern();
   public static final String INLINE = "INLINE".intern();
+  
+  public static final String EXO_FROM_CONDITION = "exo:fromCondition".intern();
+  public static final String EXO_TO_CONDITION = "exo:toCondition".intern();
+  public static final String EXO_SUBJECT_CONDITION = "exo:subjectCondition".intern();
+  public static final String EXO_BODY_CONDITION = "exo:bodyCondition".intern();
+  
+  public static final int CONDITION_CONTAIN = 0 ;
+  public static final int CONDITION_NOT_CONTAIN = 1 ;
+  public static final int CONDITION_IS = 2 ;
+  public static final int CONDITION_NOT_IS = 3 ;
+  public static final int CONDITION_STARTS_WITH = 4 ;
+  public static final int CONDITION_ENDS_WITH = 5 ;
   
   public static final String POP3 = "pop3".intern() ;
   public static final String IMAP = "imap".intern() ;

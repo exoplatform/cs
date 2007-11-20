@@ -597,7 +597,6 @@
 .UIMessagePreview .AttachmentContainer .AttachmentFile {
 	float: left;
 	border: 1px solid #7e7e7e;
-	background: url('background/ImgMelissa.gif') no-repeat;
 	width: 143px;
 	height: 108px;
 }

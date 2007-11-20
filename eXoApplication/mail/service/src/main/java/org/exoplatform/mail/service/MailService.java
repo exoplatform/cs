@@ -123,6 +123,35 @@ public interface MailService {
    */
   public void removeUserFolder(String username, Account account, Folder folder) throws Exception ;
   
+  /**
+   * This method should: 
+   * @param username
+   * @param accountId
+   * @return List all filter
+   * @throws Exception
+   */
+  public List<MessageFilter> getFilters(String username, String accountId) throws Exception ;
+  
+  /**
+   * This method should: 
+   * @param username
+   * @param accountId
+   * @param filterId
+   * @return MessageFilter
+   * @throws Exception
+   */
+  public MessageFilter getFilterById(String username, String accountId, String filterId) throws Exception ;
+  
+  /**
+   * This method should: 
+   * @param username
+   * @param accountId
+   * @param filter
+   * @return save filter to database
+   * @throws Exception
+   */
+  public void saveFilter(String username, String accountId, MessageFilter filter) throws Exception ;
+  
   public List<Message> getMessageByTag(String username, String accountId, String tagId) throws Exception ;
   
   public MessagePageList getMessagePagelistByTag(String username, String accountId, String tagId) throws Exception ;

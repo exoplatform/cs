@@ -45,6 +45,10 @@ public class UIMessagePreview extends UIComponent {
   
   public void setMessage(Message msg) throws Exception { selectedMessage_ = msg; }
   
+  public DownloadService getDownloadService() { 
+    return getApplicationComponent(DownloadService.class) ; 
+  }
+  
   public static class DownloadAttachmentActionListener extends EventListener<UIMessagePreview> {
     public void execute(Event<UIMessagePreview> event) throws Exception {
       UIMessagePreview uiMessagePreview = event.getSource();
