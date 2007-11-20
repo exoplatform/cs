@@ -50,7 +50,7 @@
 
 /**************************** UIForumPortlet ForumToolBar *********************************/
 .UIForumPortlet .UIActionForum .NormalButtom {
-	margin: 2px 0px 0px 0px;
+	margin: 0px;
 }
  
 .UIForumPortlet .UIActionForum .NormalButtom .ButtonLeft {

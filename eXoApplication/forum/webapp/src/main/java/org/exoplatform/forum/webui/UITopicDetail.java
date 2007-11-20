@@ -86,10 +86,11 @@ public class UITopicDetail extends UIForm  {
   private Topic topic;
   private JCRPageList pageList ;
   private long pageSelect  = 1 ;
+  private boolean isGopage = false ;
   public UITopicDetail() throws Exception {
     addUIFormInput( new UIFormStringInput("gopage1", null)) ;
     addUIFormInput( new UIFormStringInput("gopage2", null)) ;
-  	addChild(UIForumPageIterator.class, null, null) ;
+  	addChild(UIForumPageIterator.class, null, "TopicPageIterator") ;
     addChild(UIPostRules.class, null, null);
     addChild(UIForumLinks.class, null, null);
   }
@@ -113,6 +114,7 @@ public class UITopicDetail extends UIForm  {
   
   private void initPage() throws Exception {
   	this.pageList = forumService.getPosts(categoryId, forumId, topicId) ;
+  	pageList.setPageSize(4) ;
   	this.getChild(UIForumPageIterator.class).updatePageList(this.pageList) ;
   }
   @SuppressWarnings("unused")
@@ -124,13 +126,15 @@ public class UITopicDetail extends UIForm  {
     return this.topic ;
   }
   
+  @SuppressWarnings({ "unchecked", "unused" })
   private List<Post> getPostPageList() throws Exception {
-  	long page = this.getChild(UIForumPageIterator.class).getPageSelected() ;
-  	this.pageSelect = page ;
+  	if(!this.isGopage) {
+  		this.pageSelect = this.getChild(UIForumPageIterator.class).getPageSelected() ;
+  	}
     JCRPageList pageList = getPagePosts() ;
     if(pageList == null) return null ;
     List<Post> postList = new ArrayList<Post>();
-    postList = forumService.getPage(page, pageList) ;
+    postList = forumService.getPage(this.pageSelect, pageList) ;
     for (Post post : postList) {
       if(getUIFormCheckBoxInput(post.getId()) != null) {
         getUIFormCheckBoxInput(post.getId()).setChecked(false) ;
@@ -138,6 +142,7 @@ public class UITopicDetail extends UIForm  {
         addUIFormInput(new UIFormCheckBoxInput(post.getId(), post.getId(), false) );
       }
     }
+    this.isGopage = false ;
     return postList ;
   }
   
@@ -208,6 +213,8 @@ public class UITopicDetail extends UIForm  {
   			} else if(page > topicDetail.pageList.getAvailablePage()){
   				page = topicDetail.pageList.getAvailablePage() ;
   			}
+  			topicDetail.isGopage = true ;
+  			topicDetail.pageSelect = page ;
   			topicDetail.getChild(UIForumPageIterator.class).setSelectPage(page) ;
 				event.getRequestContext().addUIComponentToUpdateByAjax(topicDetail) ;
   		}

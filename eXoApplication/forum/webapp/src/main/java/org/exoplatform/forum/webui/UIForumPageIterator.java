@@ -10,10 +10,8 @@ import org.exoplatform.forum.service.JCRPageList;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIContainer;
-import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
-import org.exoplatform.webui.form.UIForm;
 
 /**
  * Created by The eXo Platform SARL
@@ -32,6 +30,8 @@ import org.exoplatform.webui.form.UIForm;
 public class UIForumPageIterator extends UIContainer {
 	private JCRPageList pageList ;
 	private long page = 1 ;
+	private int endTabPage = 0;
+	private int beginTabPage = 0;
 	public UIForumPageIterator () throws Exception {
 		
 	}
@@ -42,10 +42,25 @@ public class UIForumPageIterator extends UIContainer {
 	
 	@SuppressWarnings("unused")
   private List<String> getTotalpage() throws  Exception {
-  	Long numberPage = pageList.getAvailablePage() ;
+  	int max_Page = (int)pageList.getAvailablePage() ;
+  	if(this.page <= 3) {
+  		beginTabPage = 1 ;
+  		if(max_Page <= 7)
+  			endTabPage = max_Page ;
+  		else endTabPage = 7 ;
+  	} else {
+  		if(max_Page > (page + 3)) {
+	  		endTabPage = (int) (page + 3) ;
+	  		beginTabPage = (int) (page - 3) ;
+  		} else {
+  			endTabPage = max_Page ;
+  			if(max_Page > 7) beginTabPage = max_Page - 6 ;
+  			else beginTabPage = 1 ;
+  		}
+  	}
 	  List<String> temp = new ArrayList<String>() ;
-	  for (int i = 0; i < numberPage; i++) {
-	  	temp.add("" + (i+1)) ;
+	  for (int i = beginTabPage; i <= endTabPage; i++) {
+	  	temp.add("" + i) ;
     }
 	  return temp ;
   }

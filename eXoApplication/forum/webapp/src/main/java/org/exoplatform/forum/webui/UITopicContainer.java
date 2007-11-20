@@ -30,6 +30,8 @@ import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.exception.MessageException;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
+import org.exoplatform.webui.form.UIFormStringInput;
+import org.exoplatform.webui.form.validator.PositiveNumberFormatValidator;
 
 /**
  * Created by The eXo Platform SARL
@@ -42,7 +44,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
 		lifecycle = UIFormLifecycle.class,
     template =  "app:/templates/forum/webui/UITopicContainer.gtmpl", 
     events = {
-      @EventConfig(listeners = UITopicContainer.GoPageActionListener.class ),  
+      @EventConfig(listeners = UITopicContainer.GoNumberPageActionListener.class ),  
       @EventConfig(listeners = UITopicContainer.AddTopicActionListener.class ),  
       @EventConfig(listeners = UITopicContainer.OpenTopicActionListener.class ),
       @EventConfig(listeners = UITopicContainer.DisplayOptionActionListener.class ),
@@ -71,7 +73,11 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
   private JCRPageList pageList ;
   private List<Topic> topicList ;
   private long page = 1 ;
+  private boolean isGoPage = false;
   public UITopicContainer() throws Exception {
+  	addUIFormInput( new UIFormStringInput("gopage1", null)) ;
+    addUIFormInput( new UIFormStringInput("gopage2", null)) ;
+  	addChild(UIForumPageIterator.class, null, "ForumPageIterator") ;
   }
   
   public void activate() throws Exception {
@@ -90,37 +96,15 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
     return forumService.getForum(categoryId, forumId);
   }
   
+  @SuppressWarnings("unused")
   private void initPage() throws Exception {
   	this.pageList = forumService.getPageTopic(categoryId, forumId);
+  	this.getChild(UIForumPageIterator.class).updatePageList(this.pageList) ;
   }
+  
   @SuppressWarnings("unused")
   private JCRPageList getPageTopics() throws Exception {
     return pageList ;
-  }
-  
-  @SuppressWarnings("unused")
-  private List<String> getTotalpage() throws  Exception {
-  	Long numberPage = pageList.getAvailablePage() ;
-	  List<String> temp = new ArrayList<String>() ;
-	  for (int i = 0; i < numberPage; i++) {
-	  	temp.add("" + (i+1)) ;
-    }
-	  return temp ;
-  }
-
-  @SuppressWarnings("unused")
-  private List<Long> getInfoPage() throws  Exception {
-  	List<Long> temp = new ArrayList<Long>() ;
-  	temp.add(pageList.getPageSize()) ;//so item/trang
-  	temp.add(pageList.getCurrentPage()) ;//so trang
-  	temp.add(pageList.getAvailable()) ;//tong so item
-  	temp.add(pageList.getAvailablePage()) ;// so trang toi da
-  	return temp ;
-  } 
-  
-  @SuppressWarnings("unused")
-  private long getPageSelected() {
-  	return this.page ;
   }
   
   @SuppressWarnings("unused")
@@ -137,6 +121,9 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
   
   private List<Topic> getTopicPageLits() throws Exception {
     JCRPageList pageList = this.pageList;
+    if(!this.isGoPage) {
+    	this.page = this.getChild(UIForumPageIterator.class).getPageSelected() ;
+    }
     List<Topic> topicList = this.forumService.getPage(this.page, pageList);
     this.topicList = topicList ;
     for(Topic topic : topicList) {
@@ -146,6 +133,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
         addUIFormInput(new UIFormCheckBoxInput(topic.getId(), topic.getId(), false) );
       }
     }
+    this.isGoPage = false ;
     return topicList ;
   }
   
@@ -180,39 +168,33 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
     return className ;
   }
   
-  static public class GoPageActionListener extends EventListener<UITopicContainer> {
+  static public class GoNumberPageActionListener extends EventListener<UITopicContainer> {
   	public void execute(Event<UITopicContainer> event) throws Exception {
-  		UITopicContainer uiTopicContainer = event.getSource() ;
-  		String stateClick = event.getRequestContext().getRequestParameter(OBJECTID).trim() ;
-  		long maxPage = uiTopicContainer.pageList.getAvailablePage() ;
-  		long presentPage  = uiTopicContainer.page ;
-  		if(stateClick.equalsIgnoreCase("next")) {
-  			if(presentPage < maxPage){
-  				uiTopicContainer.page = presentPage + 1 ;
-  				event.getRequestContext().addUIComponentToUpdateByAjax(uiTopicContainer.getParent()) ;
+  		UITopicContainer topicContainer = event.getSource() ;
+  		UIFormStringInput stringInput1 = topicContainer.getUIStringInput("gopage1") ;
+  		UIFormStringInput stringInput2 = topicContainer.getUIStringInput("gopage2") ;
+  		stringInput1.addValidator(PositiveNumberFormatValidator.class) ;
+  		stringInput2.addValidator(PositiveNumberFormatValidator.class) ;
+  		String numberPage1 = stringInput1.getValue() ;
+  		String numberPage2 = stringInput2.getValue() ;
+  		String numberPage = "" ;
+  		if(numberPage1 != null && numberPage1.length() > 0) {
+  			numberPage = numberPage1 ;
+  		} else numberPage = numberPage2 ;
+  		if(numberPage != null && numberPage.length() > 0) {
+  			Long page = Long.parseLong(numberPage);
+  			if(page == 0) {
+  				page = (long)1;
+  			} else if(page > topicContainer.pageList.getAvailablePage()){
+  				page = topicContainer.pageList.getAvailablePage() ;
   			}
-  		} else if(stateClick.equalsIgnoreCase("previous")){
-  			if(presentPage > 1){
-  				uiTopicContainer.page = presentPage - 1 ;
-  				event.getRequestContext().addUIComponentToUpdateByAjax(uiTopicContainer.getParent()) ;
-  			}
-  		} else if(stateClick.equalsIgnoreCase("last")) {
-  			if(presentPage != maxPage) {
-  				uiTopicContainer.page = maxPage ;
-  				event.getRequestContext().addUIComponentToUpdateByAjax(uiTopicContainer.getParent()) ;
-  			}
-  		} else if(stateClick.equalsIgnoreCase("first")) {
-  			if(presentPage != 1) {
-  				uiTopicContainer.page = 1 ;
-  				event.getRequestContext().addUIComponentToUpdateByAjax(uiTopicContainer.getParent()) ;
-  			}
-  		} else {
-  			long temp = Long.parseLong(stateClick) ;
-  			if(temp > 0 && temp <= maxPage && temp != presentPage) {
-  				uiTopicContainer.page = temp ;
-  				event.getRequestContext().addUIComponentToUpdateByAjax(uiTopicContainer.getParent()) ;
-  			}
+  			topicContainer.page = page ;
+  			topicContainer.isGoPage = true ;
+  			topicContainer.getChild(UIForumPageIterator.class).setSelectPage(page) ;
+				event.getRequestContext().addUIComponentToUpdateByAjax(topicContainer) ;
   		}
+  		stringInput1.setValue("") ;
+  		stringInput2.setValue("") ;
   	}
   }
   

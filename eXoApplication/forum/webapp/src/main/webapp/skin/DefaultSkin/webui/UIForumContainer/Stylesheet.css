@@ -124,6 +124,10 @@
 	height: 75px;
 }
 
+.UIForumContainer .UIPostRules {
+	margin: 3px 0px 0px 0px;
+}
+
 .UIPostRules .ForumCategory .ContentContainer {
 	border: 1px solid #b7b7b7;
 	border-top: none;

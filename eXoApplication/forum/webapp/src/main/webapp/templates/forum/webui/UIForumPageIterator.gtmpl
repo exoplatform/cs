@@ -7,7 +7,7 @@
 	long max_page = totals.get(3) ;
 	String selected = "" + pageSelected ;
 %>
-<div class="UIForumPageIterator" id="UIForumPageIterator">
+<div class="UIForumPageIterator" id="$uicomponent.id">
 	<div class="PageIteratorContainer">
 	  <div class="RightPageIteratorBlock">
 	  <% if(pageSelected == 1) {%>
