@@ -1119,15 +1119,32 @@
 /********************* ContactsPopup************************/
 
 .UIContactsPopup {
-	border: 1px solid #c0c0c0;
-	background: #f3f3f3;
+}
+
+.UIContactsPopup .ContactPopup {
+	background:  #E7E7E7 url(skinIcons/24x24/icons/ContactPopup.gif) no-repeat scroll left center;
+}
+
+.UIContactsPopup .ContactContainer .IconHolder {
+	margin: 0px;
+	padding-left: 20px;
+}
+
+.UIContactsPopup .Input {
+	float: right;
+	margin-top: 5px;
+	height: 13px;
+}
+
+.UIContactsPopup .WorkContainer .BoxWorkContainer {
+	padding: 10px;
 }
 
 .UIContactsPopup .UISearch {
-	border: 1px solid #cccccc;
 	background: white;
 	height: auto;
-	margin: 10px;
+	margin: 10px 10px 0px 10px;
+	padding: 0px;
 }
 
 .UIContactsPopup .UIForm .HorizontalLayout {
@@ -1135,9 +1152,9 @@
 }
 
 .UIContactsPopup .WorkContainer {
-	padding: 0px 10px 0px 10px;
+	margin: 0px 10px;
 	background: #f3f3f3;
-	padding-bottom: 7px;
+	border: 1px solid #cccccc;
 }
 
 .UIContactsPopup .WorkContainer .LeftContacts {
@@ -1157,6 +1174,7 @@
 
 .UIContactsPopup .UISelectAccount .selectbox {
 	margin: 0px;
+	width: 215px;
 }
 
 .UIContactsPopup .UISelectAccount .AddAccountIcon {
@@ -1208,12 +1226,19 @@
 	width: 200px;
 }
 
-.UIContactsPopup .SearchContact {
+.UIContactsPopup .Search {
 	background: transparent url(skinIcons/16x16/icons/SearchIcon.png) no-repeat scroll 0%;
 	height: 25px;
-	margin: -2px 0px 0px 7px;
+	margin: 2px 0px 0px 7px;
 	padding-right: 20px;
-	float: left;
+	float: right;
+}
+
+.UIContactsPopup .LabelSearch {
+	color:#313030;
+	float:right;
+	line-height:20px;
+	margin:5px 5px;
 }
 
 
@@ -1303,6 +1328,3 @@
 .UIContactsPopup .SelectFileFrame {
 	width: 300px;
 }
-
-.UIContactsPopup .UIAction {
-	border-top: 1px solid #c0c0c0;

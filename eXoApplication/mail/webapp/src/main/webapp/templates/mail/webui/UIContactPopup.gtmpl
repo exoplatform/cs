@@ -1,354 +1,321 @@
-
-
 <div class="UIContactsPopup"> 
 	<div class="UISearch">
-	  <div class="UIForm">
-			<div class="HorizontalLayout">
-			  <table class="UIFormGrid">
-	        <tbody>
-	        	<tr>
-	  	      	<td style="width: 90px;" class="FieldLabel">Filter name:</td>
-	          	<td colspan="2" class="BoxSearch">
-	          		
-	          			<input class="InputContact" type="text" id="filter-name" name="filter-name"/>
-	          			<div class="SearchContact"><span></span></div>
-	          		
-	          	</td>
-	  	      	<td style="width: 90px;" class="FieldLabel">Filter name:</td>
-	          	<td colspan="2" class="FieldComponent"><select class="selectbox" name="" onchange="">
-				</select></td>
-	        	</tr>
-	      	</tbody>
-	      </table>
-	  	</div>
-	  </div>
-	</div>
-		
-	<div class="WorkContainer">
-	
-		<div class="LeftContacts">
-			<div class="UISelectAccount">
-				<select onchange="" name="" class="selectbox">
-				</select>
-				<div onclick="eXo.webui.UIPopupSelectCategory.show(this, event);" class="AddAccountIcon">
-		      <div style="position: relative;">
-			      <div style="display: none;" class="UIPopupCategory">
-			      	<div class="PopupCategoryDecorator">
-				        <div style="display: block;" class="UIRightClickPopupMenu">
-				        	<div class="UIContextMenuContainer">
-									  <div class="TopLeftRightClickPopupMenu">
-				              <div class="TopRightRightClickPopupMenu">
-				                <div class="TopCenterRightClickPopupMenu"><span/></div>
-				              </div>
-				            </div>
-				            <div class="MiddleLeftRightClickPopupMenu">
-				              <div class="MiddleRightRightClickPopupMenu">
-			            
-			                  <div class="UIRightPopupMenuContainer">
-			                    
-			                       <a href="#" class="MenuItem">   
-			                        <div class="ItemIcon AddGroup">
-			                          Add New Group
-			                        </div>
-			                       </a>
-			                       <a href="#" class="MenuItem">   
-			                        <div class="ItemIcon AddContact">
-			                          Add New Contact
-			                        </div>
-			                       </a>
-			                       <a href="#" class="MenuItem">   
-			                        <div class="ItemIcon EditContact">
-			                          Edit Contact
-			                        </div>
-			                       </a>
-			                       <a href="#" class="MenuItem">   
-			                        <div class="ItemIcon DeleteContact">
-			                          Delete
-			                        </div>
-			                       </a>
-			                    
-			                  </div>
-			            
-				              </div>
-				            </div>
-				            <div class="BottomLeftRightClickPopupMenu">
-				              <div class="BottomRightRightClickPopupMenu">
-				                <div class="BottomCenterRightClickPopupMenu"><span></span></div>
-				              </div>
-			            	</div>
-		          		</div>
-		          	</div>
-		        	</div>
-		      	</div>
-		    	</div>
-
-			  </div>
-			  <div style="clear: left;"><span/></div>
-			</div>
-		  
-	  	<div class="ContactContainer">
-		  	<div class="Title ContactIcon">
-			  	Contact
-		  	</div>
-		  	<div class="ListContact">
-          <div class="NormalItem CheckItem">Phuong, Pham</div>
-          <div class="NormalItem">Benjamin, Mestrallet </div>
-          <div class="NormalItem">Hieu, Luong</div>
-          <div class="NormalItem">Trang, Phung</div>
-          <div class="NormalItem">Thuy, Nguyen</div>
-		  	</div>
-		  </div>
-		 
-		</div>
-		
-		<div class="RightContacts">
-			<div class="ContactContainer">
-		  	<div class="Title ContactIcon">
-			  	Contact
-		  	</div>
-		  	
-		  	
-		  	
-		  	<div class="DecoratorBox">
-					<div class="ViewBoxStyle">
-						<div class="TopLeftViewBoxStyle">
-							<div class="TopRightViewBoxStyle">
-								<div class="TopCenterViewBoxStyle"><span></span></div>										
-							</div>
-						</div>
-						<div class="MiddleLeftViewBoxStyle">
-							<div class="MiddleRightViewBoxStyle">
-								<div class="MiddleCenterViewBoxStyle">
-								
-									<div class="ContactPreviewContainer">		
-								
-										<img width="63" height="81" class="Avatar" src="/contact/skin/DefaultSkin/webui/background/Img2.gif"/>						
-										<div class="Member">
-											<div class="State">asfd</div>
-											<div class="Job">sad</div>
-										</div>
-										<div style="clear: left;"><span/></div>
-										<div class="InfoContainer">
-											<div class="TitleInfo">Profile</div>
-											<div class="Content">
-												<div class="LeftContent">
-													<div class="InfoItem">
-														<div class="InfoLabel">Nick name:</div>
-														<div class="Info">sdf</div>
-														<div style="clear: left;"><span/></div>
-													</div>
-													<div class="InfoItem">
-														<div class="InfoLabel">Gender:</div>
-														<div class="Info">Male</div>
-													  <div style="clear: left;"><span/></div>
-													</div>
-												</div>
-												<div class="RightContent">
-													<div class="InfoItem">
-														<div class="InfoLabel1">Birthday:</div>
-														<div class="Info1">11/20/2007</div>
-													</div>
-													<div class="InfoItem">
-														<div class="InfoLabel1">Email:</div>
-														<div class="Info1 Email">
-															<a href="#">
-																dsg@dgh.fsg
-															</a>
-														</div>
-														<div style="clear: left;"><span/></div>
-													</div>																									
-												</div>
-												<div style="clear: left;"><span/></div>
-											</div>
-										</div>
-										
-										<div class="InfoContainer">
-											<div class="TitleInfo">Work</div>
-											<div class="Content">
-												<div class="LeftContent">
-													<div class="InfoItem">
-														<div class="InfoLabel">Address:</div>
-														<div class="Info">_</div>
-													  <div style="clear: left;"><span/></div>
-													</div>
-													<div class="InfoItem">
-														<div class="InfoLabel">City:</div>
-														<div class="Info">_</div>
-													  <div style="clear: left;"><span/></div>
-													</div>
-													<div class="InfoItem">
-														<div class="InfoLabel">State/Province:</div>
-														<div class="Info">_</div>
-													  <div style="clear: left;"><span/></div>
-													</div>
-													<div class="InfoItem">
-														<div class="InfoLabel">Postal Code:</div>
-														<div class="Info">_</div>
-														<div style="clear: left;"><span/></div>
-													</div>
-													<div class="InfoItem">
-														<div class="InfoLabel">Country:</div>
-														<div class="Info">_</div>
-														<div style="clear: left;"><span/></div>
-													</div>
-												</div>
-												<div class="RightContent">
-													<div class="InfoItem">
-														<div class="InfoLabel">Work Phone 1:</div>
-														<div class="Info">_</div>
-													</div>													
-													<div class="InfoItem">
-														<div class="InfoLabel">Work Phone 2:</div>
-														<div class="Info">_</div>
-													</div>													
-													<div class="InfoItem">
-														<div class="InfoLabel">Work Fax:</div>
-														<div class="Info">_</div>
-													</div>													
-													<div class="InfoItem">
-														<div class="InfoLabel">Mobile Phone:</div>
-														<div class="Info">_</div>
-													</div>													
-													<div class="InfoItem">
-														<div class="InfoLabel">Web Page:</div>
-														<div class="Info">_</div>
-														<div style="clear: left;"><span/></div>
-													</div>													
-												</div>
-												<div style="clear: left;"><span/></div>
-											</div>
-										</div>
-										
-										<div class="InfoContainer">
-											<div class="TitleInfo">Instant Messaging Contacts</div>
-											<div class="Content">
-												<div class="LeftContent">
-													<div class="InfoItem">
-														<div class="InfoLabel">eXo Chat:</div>
-														<div class="Info">_</div>
-														<div style="clear: left;"><span/></div>
-													</div>
-													<div class="InfoItem">
-														<div class="InfoLabel">Google:</div>
-														<div class="Info">_</div>
-														<div style="clear: left;"><span/></div>
-													</div>
-													<div class="InfoItem">
-														<div class="InfoLabel">MSN:</div>
-														<div class="Info">_</div>
-														<div style="clear: left;"><span/></div>
-													</div>
-													<div class="InfoItem">
-														<div class="InfoLabel">AOL/AIM:</div>
-														<div class="Info">_</div>
-														<div style="clear: left;"><span/></div>
-													</div>
-												</div>
-												<div class="RightContent">
-													<div class="InfoItem">
-														<div class="InfoLabel1">Yahoo!:</div>
-														<div class="Info1">_</div>
-													</div>													
-													<div class="InfoItem">
-														<div class="InfoLabel1">ICR:</div>
-														<div class="Info1">_</div>
-													</div>													
-													<div class="InfoItem">
-														<div class="InfoLabel1">Skype:</div>
-														<div class="Info1">_</div>
-													</div>													
-													<div class="InfoItem">
-														<div class="InfoLabel1">ICQ:</div>
-														<div class="Info1">_</div>
-														<div style="clear: left;"><span/></div>
-													</div>													
-												</div>
-												<div style="clear: left;"><span/></div>
-											</div>
-										</div>
-										<div class="InfoContainer">
-											<div class="TitleInfo">Home</div>
-											<div class="Content">
-												<div class="LeftContent">
-													<div class="InfoItem">
-														<div class="InfoLabel">Street:</div>
-														<div class="Info">_</div>
-														<div style="clear: left;"><span/></div>
-													</div>
-													<div class="InfoItem">
-														<div class="InfoLabel">City:</div>
-														<div class="Info">_</div>
-														<div style="clear: left;"><span/></div>
-													</div>
-													<div class="InfoItem">
-														<div class="InfoLabel">State/Province:</div>
-														<div class="Info">_</div>
-														<div style="clear: left;"><span/></div>
-													</div>
-													<div class="InfoItem">
-														<div class="InfoLabel">Postal Code:</div>
-														<div class="Info">_</div>
-														<div style="clear: left;"><span/></div>
-													</div>
-													<div class="InfoItem">
-														<div class="InfoLabel">Country/Region:</div>
-														<div class="Info">_</div>
-														<div style="clear: left;"><span/></div>
-													</div>
-												</div>
-												<div class="RightContent">
-													<div class="InfoItem">
-														<div class="InfoLabel">Home Phone 1:</div>
-														<div class="Info">_</div>
-													</div>													
-													<div class="InfoItem">
-														<div class="InfoLabel">Home Phone 2:</div>
-														<div class="Info">_</div>
-													</div>													
-													<div class="InfoItem">
-														<div class="InfoLabel">Home Fax:</div>
-														<div class="Info">_</div>
-													</div>													
-													<div class="InfoItem">
-														<div class="InfoLabel">Web Page:</div>
-														<div class="Info">_</div>
-													</div>													
-												</div>
-												<div style="clear: left;"><span/></div>
-											</div>
-										</div>
-										
-										<div class="InfoContainer">
-											<div class="TitleInfo">Note</div>
-											<div class="Content">
-												<div class="LeftContent">								
-													<div class="Member">
-														<div class="Job">_</div>
-													</div>	
-												</div>
-											</div>
-										</div>
-										<div style="clear: left;"><span/></div>
-										
+	  <div class="UIActionBar">
+			<div class="UIToolbar">
+				<div class="HeaderToolbar">
+					<div class="LeftBar">
+						<div class="RightBar">
+							<div class="CenterBar">
+								<a class="ControlButton" href="#">
+									<div class="IconHolder AddGroup">
+										<div class="Label">Add New Group</div>
 									</div>
-									
-								</div>	
-							</div>
-						</div>
-						<div class="BottomLeftViewBoxStyle">
-							<div class="BottomRightViewBoxStyle">
-								<div class="BottomCenterViewBoxStyle"><span></span></div>										
+								</a>
+								<a class="ControlButton" href="#">
+									<div class="IconHolder AddContact">
+										<div class="Label"> Add New Contact </div>
+									</div>
+								</a>
+								<a class="ControlButton" href="#">
+									<div class="IconHolder EditContact">
+										<div class="Label"> Edit Contact </div>
+									</div>
+								</a>
+								<a class="ControlButton" >
+									<div class="IconHolder DeleteContact">
+										<div class="Label">Delete</div>
+									</div>
+								</a>
+								<div class="SearchForm">
+									<a href="#"><div title="Search" class="Search"><span/></div></a>
+								  <input type="text" name="search" id="search" class="Input"/>
+								  <div class="LabelSearch">Search:</div>
+									<div style="clear: right;"><span/></div>
+								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-		  	
-		  	
-		  	
-		  </div>		
-		</div>
+			</div>
+		</div>	 
+	</div> 
 		
-		<div style="clear: left;"><span/></div>
+	<div class="WorkContainer">
+		<div class="BoxWorkContainer">
+			<div class="LeftContacts">
+				<div class="UISelectAccount">
+					<select onchange="" name="" class="selectbox">
+					</select>
+					
+				  <div style="clear: left;"><span/></div>
+				</div>
+			  
+		  	<div class="ContactContainer">
+			  	<div class="Title ContactIcon">
+				  	Contact
+			  	</div>
+			  	<div class="ListContact">
+	          <div class="NormalItem CheckItem">Phuong, Pham</div>
+	          <div class="NormalItem">Benjamin, Mestrallet </div>
+	          <div class="NormalItem">Hieu, Luong</div>
+	          <div class="NormalItem">Trang, Phung</div>
+	          <div class="NormalItem">Thuy, Nguyen</div>
+			  	</div>
+			  </div>
+			 
+			</div>
+			
+			<div class="RightContacts">
+				<div class="ContactContainer">
+				  <div class="IconHolder ContactPopup">
+				  	<div class="Title ContactIcon">
+					  	Contact
+				  	</div>
+				  </div>
+			  	
+			  	
+			  	
+			  	<div class="DecoratorBox">
+						<div class="ViewBoxStyle">
+							<div class="TopLeftViewBoxStyle">
+								<div class="TopRightViewBoxStyle">
+									<div class="TopCenterViewBoxStyle"><span></span></div>										
+								</div>
+							</div>
+							<div class="MiddleLeftViewBoxStyle">
+								<div class="MiddleRightViewBoxStyle">
+									<div class="MiddleCenterViewBoxStyle">
+									
+										<div class="ContactPreviewContainer">		
+									
+											<img width="63" height="81" class="Avatar" src="/contact/skin/DefaultSkin/webui/background/Img2.gif"/>						
+											<div class="Member">
+												<div class="State">asfd</div>
+												<div class="Job">sad</div>
+											</div>
+											<div style="clear: left;"><span/></div>
+											<div class="InfoContainer">
+												<div class="TitleInfo">Profile</div>
+												<div class="Content">
+													<div class="LeftContent">
+														<div class="InfoItem">
+															<div class="InfoLabel">Nick name:</div>
+															<div class="Info">sdf</div>
+															<div style="clear: left;"><span/></div>
+														</div>
+														<div class="InfoItem">
+															<div class="InfoLabel">Gender:</div>
+															<div class="Info">Male</div>
+														  <div style="clear: left;"><span/></div>
+														</div>
+													</div>
+													<div class="RightContent">
+														<div class="InfoItem">
+															<div class="InfoLabel1">Birthday:</div>
+															<div class="Info1">11/20/2007</div>
+														</div>
+														<div class="InfoItem">
+															<div class="InfoLabel1">Email:</div>
+															<div class="Info1 Email">
+																<a href="#">
+																	dsg@dgh.fsg
+																</a>
+															</div>
+															<div style="clear: left;"><span/></div>
+														</div>																									
+													</div>
+													<div style="clear: left;"><span/></div>
+												</div>
+											</div>
+											
+											<div class="InfoContainer">
+												<div class="TitleInfo">Work</div>
+												<div class="Content">
+													<div class="LeftContent">
+														<div class="InfoItem">
+															<div class="InfoLabel">Address:</div>
+															<div class="Info">_</div>
+														  <div style="clear: left;"><span/></div>
+														</div>
+														<div class="InfoItem">
+															<div class="InfoLabel">City:</div>
+															<div class="Info">_</div>
+														  <div style="clear: left;"><span/></div>
+														</div>
+														<div class="InfoItem">
+															<div class="InfoLabel">State/Province:</div>
+															<div class="Info">_</div>
+														  <div style="clear: left;"><span/></div>
+														</div>
+														<div class="InfoItem">
+															<div class="InfoLabel">Postal Code:</div>
+															<div class="Info">_</div>
+															<div style="clear: left;"><span/></div>
+														</div>
+														<div class="InfoItem">
+															<div class="InfoLabel">Country:</div>
+															<div class="Info">_</div>
+															<div style="clear: left;"><span/></div>
+														</div>
+													</div>
+													<div class="RightContent">
+														<div class="InfoItem">
+															<div class="InfoLabel">Work Phone 1:</div>
+															<div class="Info">_</div>
+														</div>													
+														<div class="InfoItem">
+															<div class="InfoLabel">Work Phone 2:</div>
+															<div class="Info">_</div>
+														</div>													
+														<div class="InfoItem">
+															<div class="InfoLabel">Work Fax:</div>
+															<div class="Info">_</div>
+														</div>													
+														<div class="InfoItem">
+															<div class="InfoLabel">Mobile Phone:</div>
+															<div class="Info">_</div>
+														</div>													
+														<div class="InfoItem">
+															<div class="InfoLabel">Web Page:</div>
+															<div class="Info">_</div>
+															<div style="clear: left;"><span/></div>
+														</div>													
+													</div>
+													<div style="clear: left;"><span/></div>
+												</div>
+											</div>
+											
+											<div class="InfoContainer">
+												<div class="TitleInfo">Instant Messaging Contacts</div>
+												<div class="Content">
+													<div class="LeftContent">
+														<div class="InfoItem">
+															<div class="InfoLabel">eXo Chat:</div>
+															<div class="Info">_</div>
+															<div style="clear: left;"><span/></div>
+														</div>
+														<div class="InfoItem">
+															<div class="InfoLabel">Google:</div>
+															<div class="Info">_</div>
+															<div style="clear: left;"><span/></div>
+														</div>
+														<div class="InfoItem">
+															<div class="InfoLabel">MSN:</div>
+															<div class="Info">_</div>
+															<div style="clear: left;"><span/></div>
+														</div>
+														<div class="InfoItem">
+															<div class="InfoLabel">AOL/AIM:</div>
+															<div class="Info">_</div>
+															<div style="clear: left;"><span/></div>
+														</div>
+													</div>
+													<div class="RightContent">
+														<div class="InfoItem">
+															<div class="InfoLabel1">Yahoo!:</div>
+															<div class="Info1">_</div>
+														</div>													
+														<div class="InfoItem">
+															<div class="InfoLabel1">ICR:</div>
+															<div class="Info1">_</div>
+														</div>													
+														<div class="InfoItem">
+															<div class="InfoLabel1">Skype:</div>
+															<div class="Info1">_</div>
+														</div>													
+														<div class="InfoItem">
+															<div class="InfoLabel1">ICQ:</div>
+															<div class="Info1">_</div>
+															<div style="clear: left;"><span/></div>
+														</div>													
+													</div>
+													<div style="clear: left;"><span/></div>
+												</div>
+											</div>
+											<div class="InfoContainer">
+												<div class="TitleInfo">Home</div>
+												<div class="Content">
+													<div class="LeftContent">
+														<div class="InfoItem">
+															<div class="InfoLabel">Street:</div>
+															<div class="Info">_</div>
+															<div style="clear: left;"><span/></div>
+														</div>
+														<div class="InfoItem">
+															<div class="InfoLabel">City:</div>
+															<div class="Info">_</div>
+															<div style="clear: left;"><span/></div>
+														</div>
+														<div class="InfoItem">
+															<div class="InfoLabel">State/Province:</div>
+															<div class="Info">_</div>
+															<div style="clear: left;"><span/></div>
+														</div>
+														<div class="InfoItem">
+															<div class="InfoLabel">Postal Code:</div>
+															<div class="Info">_</div>
+															<div style="clear: left;"><span/></div>
+														</div>
+														<div class="InfoItem">
+															<div class="InfoLabel">Country/Region:</div>
+															<div class="Info">_</div>
+															<div style="clear: left;"><span/></div>
+														</div>
+													</div>
+													<div class="RightContent">
+														<div class="InfoItem">
+															<div class="InfoLabel">Home Phone 1:</div>
+															<div class="Info">_</div>
+														</div>													
+														<div class="InfoItem">
+															<div class="InfoLabel">Home Phone 2:</div>
+															<div class="Info">_</div>
+														</div>													
+														<div class="InfoItem">
+															<div class="InfoLabel">Home Fax:</div>
+															<div class="Info">_</div>
+														</div>													
+														<div class="InfoItem">
+															<div class="InfoLabel">Web Page:</div>
+															<div class="Info">_</div>
+														</div>													
+													</div>
+													<div style="clear: left;"><span/></div>
+												</div>
+											</div>
+											
+											<div class="InfoContainer">
+												<div class="TitleInfo">Note</div>
+												<div class="Content">
+													<div class="LeftContent">								
+														<div class="Member">
+															<div class="Job">_</div>
+														</div>	
+													</div>
+												</div>
+											</div>
+											<div style="clear: left;"><span/></div>
+											
+										</div>
+										
+									</div>	
+								</div>
+							</div>
+							<div class="BottomLeftViewBoxStyle">
+								<div class="BottomRightViewBoxStyle">
+									<div class="BottomCenterViewBoxStyle"><span></span></div>										
+								</div>
+							</div>
+						</div>
+					</div>
+			  	
+			  	
+			  	
+			  </div>		
+			</div>
+			
+			<div style="clear: left;"><span/></div>
+		</div>
 	</div>
 	<div class="UIAction">
 	  <table align="center" class="ActionContainer">
