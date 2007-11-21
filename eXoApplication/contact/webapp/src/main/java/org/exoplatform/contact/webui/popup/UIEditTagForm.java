@@ -98,8 +98,8 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
       contactService.updateTag(username, tag) ;
       UIContactPortlet uiContactPortlet = uiEditTagForm.getAncestorOfType(UIContactPortlet.class) ;
       WebuiRequestContext context = event.getRequestContext() ;
-      context.addUIComponentToUpdateByAjax(uiContactPortlet.findFirstComponentOfType(UIContacts.class)) ;
       context.addUIComponentToUpdateByAjax(uiContactPortlet.findFirstComponentOfType(UITags.class)) ;
+      context.addUIComponentToUpdateByAjax(uiContactPortlet.findFirstComponentOfType(UIContacts.class)) ;
       uiContactPortlet.cancelAction() ;
     }
   }

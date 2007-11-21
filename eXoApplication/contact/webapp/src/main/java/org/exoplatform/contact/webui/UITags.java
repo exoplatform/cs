@@ -44,17 +44,16 @@ public class UITags extends UIComponent {
   
   public UITags() throws Exception { }
   private String selectedTag_ = null ;
-  private Map<String, String> tagMap_ = new HashMap<String, String>() ;
+  private Map<String, Tag> tagMap_ = new HashMap<String, Tag>() ;
   
   public List<Tag> getTags() throws Exception {
     ContactService contactService = ContactUtils.getContactService();
     String username = ContactUtils.getCurrentUser() ;
     List<Tag> tags = contactService.getTags(username) ;
-    for(Tag tag : tags) {
-    	tagMap_.put(tag.getId(), tag.getName()) ;
-    }
+    for(Tag tag : tags) { tagMap_.put(tag.getId(), tag) ; }
     return tags;
   }
+  public Map<String, Tag> getTagMap() { return tagMap_ ; }
   
   public void setSelectedTag(String id) { selectedTag_ = id ; }
   public String getSelectedTag() { return selectedTag_ ; }

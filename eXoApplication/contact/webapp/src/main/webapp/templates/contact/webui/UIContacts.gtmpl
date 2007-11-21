@@ -8,20 +8,20 @@
 	import org.exoplatform.download.DownloadService;
 	import org.exoplatform.contact.ContactUtils;
 	import org.exoplatform.contact.service.JCRPageList;
+	import java.util.HashMap;
+	import java.util.Map;
+	
 	def rcontext = _ctx.getRequestContext() ; 
   rcontext.getJavascriptManager().importJavascript("eXo.cs.FormHelper","/portal/javascript") ;
 	rcontext.getJavascriptManager().importJavascript("eXo.contact.UIContactDragDrop","/contact/javascript") ;
 	rcontext.getJavascriptManager().addJavascript("eXo.contact.UIContactDragDrop.init() ;") ;
 	uiform.begin()
 	boolean isDisplaySearchResult = uicomponent.isDisplaySearchResult() ;
-	
 	JCRPageList pageList = uicomponent.getContactPageList();
   String cssPreviousPage = "FloatBlockHidden";
   String cssNextPage = "FloatBlockHidden";
   String contactRange = "";	
   Contact[] contacts = uicomponent.getContacts();
-  ContactService contactService = ContactUtils.getContactService() ;
- 	String username = ContactUtils.getCurrentUser() ;
   if (pageList != null && (contacts.length != 0)) {
     currentPage = pageList.getCurrentPage();
     availablePage = pageList.getAvailablePage() ;
@@ -92,7 +92,9 @@
 					<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
 	  				<thead>
 	  					<tr>
-	  			      <th style="width: 23px; padding-left: 7px;" class="text"><input type="checkbox" class="checkbox" title="Check all" value="4" onclick="eXo.contact.UIContactPortlet.toggleSelectAll(this) ;"/></th>
+	  			      <th style="width: 23px; padding-left: 7px;" class="text">
+	  			      	<input type="checkbox" class="checkbox" title="Check all" value="4" onclick="eXo.contact.UIContactPortlet.toggleSelectAll(this) ;"/>
+	  			      </th>
 	  						<th style="width: 24px;" class="text"><div class="Icon BlueTag"><span></span></div></th>
 	  		        <th style="width: 24%; padding-left: 7px;" class="text">
 	  		        	
@@ -153,6 +155,7 @@
 	  	 	    <% if(isDisplaySearchResult) { %>
 	  	 	    <tbody>
 	  	 	    <%
+	  	 	    		Map tagMap = uicomponent.getTagMap() ;
 	  	 	    		for(contact in contacts) {
 	  	 	    			String groupName ;	  	 	    			
 	  	 	    			String[] categories = contact.getCategories() ;
@@ -165,27 +168,36 @@
 								    }
 								    groupName = buffer.toString() ;
 								  } else {
-								  	ContactGroup group = contactService.getGroup(username, categories[0]) ;
+								  	ContactGroup group = ContactUtils.getContactService().getGroup(ContactUtils.getCurrentUser(), categories[0]) ;
 		  	 	    			groupName = group.getName() ;
 								  }
   	 	    				String actionLink  = uicomponent.event("SelectedContact", contact.getId()) ;
 									checkboxField = uicomponent.getChildById(contact.getId()) ;
-									iconTag = "Icon " ;
+									iconTag = null ;
 									String[] tagIds = contact.getTags() ;
 									StringBuffer tagsName = new StringBuffer() ;
 									if (tagIds != null && tagIds.length > 0) {
-										Tag tag = contactService.getTag(username, tagIds[0]) ;
+										Tag tag = tagMap.get(tagIds[0]) ;
+										boolean hasComma = false ;
 										if (tag != null) {
-											iconTag += + tag.getColor() + "Tag" ;
 											tagsName.append(tag.getName()) ;
-											i = 1 ;
-											while (i < tagIds.length) {
-												tag = contactService.getTag(username, tagIds[i]) ;
-												if (tag != null) tagsName.append(", " + tag.getName()) ;
-												i ++ ;
-											}	
-										}
-										
+											hasComma = true ;
+											iconTag = "Icon " + tag.getColor() + "Tag" ;
+										} else { hasComma = false ; }
+										i = 1 ;
+										while (i < tagIds.length) {
+											tag = tagMap.get(tagIds[i]) ;
+											if (tag != null && hasComma) {
+												tagsName.append(", " + tag.getName()) ;
+												if (ContactUtils.isEmpty(iconTag)) iconTag = "Icon " + tag.getColor() + "Tag" ;
+											}
+											else if (tag != null) {
+													tagsName.append(tag.getName()) ;
+													hasComma = true ;
+													if (ContactUtils.isEmpty(iconTag)) iconTag = "Icon " + tag.getColor() + "Tag" ;
+											}
+											i ++ ;
+										}		
 									}		
   	 	    				cssClass = "" ;
   	 	    				String selectedContact = uicomponent.getSelectedContact() ;
@@ -233,7 +245,8 @@
 						
 						<% } else {	%>
 						<tbody>
-						<%   
+						<%   	
+									Map tagMap = uicomponent.getTagMap() ;
 									for(contact in contacts) {
 										String actionLink  = uicomponent.event("SelectedContact", contact.getId()) ;
 										checkboxField = uicomponent.getChildById(contact.getId()) ;
@@ -241,18 +254,28 @@
 										String[] tagIds = contact.getTags() ;
 										StringBuffer tagsName = new StringBuffer() ;
 										if (tagIds != null && tagIds.length > 0) {
-											Tag tag = contactService.getTag(username, tagIds[0]) ;
+											Tag tag = tagMap.get(tagIds[0]) ;
+											boolean hasComma = false ;
 											if (tag != null) {
-												iconTag += + tag.getColor() + "Tag" ; 
 												tagsName.append(tag.getName()) ;
-												i = 1 ;
-												while (i < tagIds.length) {
-													tag = contactService.getTag(username, tagIds[i]) ;
-													if (tag != null) tagsName.append(", " + tag.getName()) ;
-													i ++ ;
+												hasComma = true ;
+												iconTag = "Icon " + tag.getColor() + "Tag" ;
+											} else { hasComma = false ; }
+											i = 1 ;
+											while (i < tagIds.length) {
+												tag = tagMap.get(tagIds[i]) ;
+												if (tag != null && hasComma) {
+													tagsName.append(", " + tag.getName()) ;
+													if (ContactUtils.isEmpty(iconTag)) iconTag = "Icon " + tag.getColor() + "Tag" ;
 												}
-											}										
-										}
+												else if (tag != null) {
+														tagsName.append(tag.getName()) ;
+														hasComma = true ;
+														if (ContactUtils.isEmpty(iconTag)) iconTag = "Icon " + tag.getColor() + "Tag" ;
+												}
+												i ++ ;
+											}		
+										}	
 										cssClass = "" ;
 										if (contact.getId().equals(uicomponent.getSelectedContact())) cssClass = "Selected" ;								
 						%>
@@ -263,7 +286,9 @@
   						  		if(checkboxField != null) uicomponent.renderField(checkboxField) ;
   						  	%>
   						  </td>
-								<td class="text" style="padding: 0px;"><div class="$iconTag" title="<%=tagsName.toString()%>"><span></span></div></td>
+								<td class="text" style="padding: 0px;">
+									<div class="$iconTag" title="<%=tagsName.toString()%>"><span></span></div>
+								</td>
 								<td class="text">
 									<div class="State OnlineIcon" title="Available">
 										<a href="$actionLink">
@@ -271,8 +296,16 @@
 										</a>
 									</div>
 								</td>
-								<td class="text"><a href="$actionLink"><%=(ContactUtils.isEmpty(contact.getEmailAddress()) ? "_" : contact.getEmailAddress())%></a></td>
-								<td class="text"><a href="$actionLink"><%=(ContactUtils.isEmpty(contact.getJobTitle()) ? "_" : contact.getJobTitle())%></a></td>
+								<td class="text">
+									<a href="$actionLink">
+										<%=(ContactUtils.isEmpty(contact.getEmailAddress()) ? "_" : contact.getEmailAddress())%>
+									</a>
+								</td>
+								<td class="text">
+									<a href="$actionLink">
+										<%=(ContactUtils.isEmpty(contact.getJobTitle()) ? "_" : contact.getJobTitle())%>
+									</a>
+								</td>
 								<td>
 									<a href="$actionLink">
 										<%=(contact.getWorkPhone1()==null ? (ContactUtils.isEmpty(contact.getWorkPhone2()) ? "_" : contact.getWorkPhone2()) : contact.getWorkPhone1())%>
@@ -346,23 +379,34 @@
 					String imageLink ;					
 					i = 0 ;
 					Contact contact ;
+					Map tagMap = uicomponent.getTagMap() ;
 					while (i < contacts.length) {
 						contact = contacts[i ++] ;
 						iconTag = "Icon " ;
 						String[] tagIds = contact.getTags() ; 
 						StringBuffer tagsName = new StringBuffer() ;
 						if (tagIds != null && tagIds.length > 0) {
-							Tag tag = contactService.getTag(username, tagIds[0]) ;
+							Tag tag = tagMap.get(tagIds[0]) ;
+							boolean hasComma = false ;
 							if (tag != null) {
-								iconTag += tag.getColor() + "Tag" ; 
 								tagsName.append(tag.getName()) ;
-								i = 1 ;
-								while (i < tagIds.length) {
-									tag = contactService.getTag(username, tagIds[i]) ;
-									if (tag != null) tagsName.append(", " + tag.getName()) ;
-									i ++ ;
+								hasComma = true ;
+								iconTag = "Icon " + tag.getColor() + "Tag" ;
+							} else { hasComma = false ; }
+							i = 1 ;
+							while (i < tagIds.length) {
+								tag = tagMap.get(tagIds[i]) ;
+								if (tag != null && hasComma) {
+									tagsName.append(", " + tag.getName()) ;
+									if (ContactUtils.isEmpty(iconTag)) iconTag = "Icon " + tag.getColor() + "Tag" ;
 								}
-							}	
+								else if (tag != null) {
+										tagsName.append(tag.getName()) ;
+										hasComma = true ;
+										if (ContactUtils.isEmpty(iconTag)) iconTag = "Icon " + tag.getColor() + "Tag" ;
+								}
+								i ++ ;
+							}		
 						}
 				%>
 				
@@ -372,7 +416,7 @@
 		  	<div class="VCardContent NormalVCard" id="<%=contact.getId()%>" selectedTag="<%=uicomponent.getSelectedTag()%>" >
 			  	<div class="TitleVCards" >
 				  	<div class="StateIcon OnlineIcon"><%=(contact.getFullName()==null ? "_" : contact.getFullName())%></div>
-			  		<div class="TagIcon $iconTag" title="<%=tagsName.toString()%>"><span></span></div>
+			  		<div class="TagIcon $iconTag"><span><%=tagsName.toString()%></span></div>
 			  		<div style="clear: both;"><span></span></div>
 			  	</div>
 			  	<div class="ContainerVCards">
@@ -400,18 +444,26 @@
 			  		  	</div>
 			  		  	<div class="InfoMember">
 			  		  		<span class="LabelContent">Work phone:</span>
-			  		  		<span class="LabelContent"><%=(contact.getWorkPhone1()==null ? "_" : contact.getWorkPhone1())%></span>
+			  		  		<span class="LabelContent">
+			  		  			<%=(contact.getWorkPhone1()==null ? "_" : contact.getWorkPhone1())%>
+			  		  		</span>
 			  		  	</div>
 			  		  	<div class="InfoMember">
 			  		  		<span class="LabelContent">Mobile:</span>
-			  		  		<span class="LabelContent"><%=(contact.getMobilePhone()==null ? "_" : contact.getMobilePhone())%></span>
+			  		  		<span class="LabelContent">
+			  		  			<%=(contact.getMobilePhone()==null ? "_" : contact.getMobilePhone())%>
+			  		  		</span>
 			  		  	</div>
 			  		  	<div class="InfoMember">
 			  		  		<span class="LabelContent">Website:</span>
-			  		  		<span class="LabelContent"><a href="#"><%=(contact.getWebPage()==null ? "_" : contact.getWebPage())%></a></span>
+			  		  		<span class="LabelContent">
+			  		  			<a href="#"><%=(contact.getWebPage()==null ? "_" : contact.getWebPage())%></a>
+			  		  		</span>
 			  		  	</div>
 			  		  	<div class="InfoMember">
-			  		  		<span class="LabelContent"><a href="<%=uicomponent.event("ViewDetails", contact.getId())%>">View Details</a></span>			  		  	
+			  		  		<span class="LabelContent">
+			  		  			<a href="<%=uicomponent.event("ViewDetails", contact.getId())%>">View Details</a>
+			  		  		</span>			  		  	
 			  		  	</div>
 			  		  </div>
 			  		</div>
@@ -426,24 +478,34 @@
   			tagIds = contact.getTags() ;
 				tagsName = new StringBuffer() ;
 				if (tagIds != null && tagIds.length > 0) {
-					Tag tag = contactService.getTag(username, tagIds[0]) ;
+					Tag tag = tagMap.get(tagIds[0]) ;
+					boolean hasComma = false ;
 					if (tag != null) {
-						iconTag += tag.getColor() + "Tag" ; 
 						tagsName.append(tag.getName()) ;
-						i = 1 ;
-						while (i < tagIds.length) {
-							tag = contactService.getTag(username, tagIds[i]) ;
-							if (tag != null) tagsName.append(", " + tag.getName()) ;
-							i ++ ;
+						hasComma = true ;
+						iconTag = "Icon " + tag.getColor() + "Tag" ;
+					} else { hasComma = false ; }
+					i = 1 ;
+					while (i < tagIds.length) {
+						tag = tagMap.get(tagIds[i]) ;
+						if (tag != null && hasComma) {
+							tagsName.append(", " + tag.getName()) ;
+							if (ContactUtils.isEmpty(iconTag)) iconTag = "Icon " + tag.getColor() + "Tag" ;
 						}
-					}
+						else if (tag != null) {
+							tagsName.append(tag.getName()) ;
+							hasComma = true ;
+							if (ContactUtils.isEmpty(iconTag)) iconTag = "Icon " + tag.getColor() + "Tag" ;
+						}
+						i ++ ;
+					}		
 				}
 			%>
 			<div class="RightVCardsContent">
 		  	<div class="VCardContent NormalVCard" id="<%=contact.getId()%>" selectedTag="<%=uicomponent.getSelectedTag()%>" >
 			  	<div class="TitleVCards" >
 				  	<div class="StateIcon OfflineIcon"><%=(contact.getFullName()==null ? "_" : contact.getFullName())%></div>
-			  		<div class="TagIcon $iconTag" title="<%=tagsName.toString()%>"><span></span></div>
+			  		<div class="TagIcon $iconTag"><span><%=tagsName.toString()%></span></div>
 			  		<div style="clear: both;"><span></span></div>
 			  	</div>
 			  	<div class="ContainerVCards">
@@ -471,18 +533,26 @@
 			  		  	</div>
 			  		  	<div class="InfoMember">
 			  		  		<span class="LabelContent">Work phone:</span>
-			  		  		<span class="LabelContent"><%=(contact.getWorkPhone1()==null ? "_" : contact.getWorkPhone1())%></span>
+			  		  		<span class="LabelContent">
+			  		  			<%=(contact.getWorkPhone1()==null ? "_" : contact.getWorkPhone1())%>
+			  		  		</span>
 			  		  	</div>
 			  		  	<div class="InfoMember">
 			  		  		<span class="LabelContent">Mobile:</span>
-			  		  		<span class="LabelContent"><%=(contact.getMobilePhone()==null ? "_" : contact.getMobilePhone())%></span>
+			  		  		<span class="LabelContent">
+			  		  			<%=(contact.getMobilePhone()==null ? "_" : contact.getMobilePhone())%>
+			  		  		</span>
 			  		  	</div>
 			  		  	<div class="InfoMember">
 			  		  		<span class="LabelContent">Website:</span>
-			  		  		<span class="LabelContent"><a href="#"><%=(contact.getWebPage()==null ? "_" : contact.getWebPage())%></a></span>
+			  		  		<span class="LabelContent">
+			  		  			<a href="#"><%=(contact.getWebPage()==null ? "_" : contact.getWebPage())%></a>
+			  		  		</span>
 			  		  	</div>
 			  		  	<div class="InfoMember">
-			  		  		<span class="LabelContent"><a href="<%=uicomponent.event("ViewDetails", contact.getId())%>">View Details</a></span>			  		  	
+			  		  		<span class="LabelContent">
+			  		  			<a href="<%=uicomponent.event("ViewDetails", contact.getId())%>">View Details</a>
+			  		  		</span>			  		  	
 			  		  	</div>
 			  		  </div>
 			  		</div>

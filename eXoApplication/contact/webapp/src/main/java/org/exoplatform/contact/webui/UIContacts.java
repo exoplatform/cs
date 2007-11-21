@@ -9,12 +9,14 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.JCRPageList;
+import org.exoplatform.contact.service.Tag;
 import org.exoplatform.contact.webui.popup.UIContactPreviewForm;
 import org.exoplatform.contact.webui.popup.UIExportForm;
 import org.exoplatform.contact.webui.popup.UIMoveContactsForm;
@@ -171,6 +173,10 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   
   public String getSelectedTag() {return selectedTag_ ;}
   public void setSelectedTag(String tagId) {selectedTag_ = tagId ;}
+  
+  public Map<String, Tag> getTagMap() {
+    return getAncestorOfType(UIWorkingContainer.class).findFirstComponentOfType(UITags.class).getTagMap() ;
+  }
   
   static public class EditContactActionListener extends EventListener<UIContacts> {
     public void execute(Event<UIContacts> event) throws Exception {
