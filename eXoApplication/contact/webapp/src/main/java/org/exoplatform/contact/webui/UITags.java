@@ -4,7 +4,9 @@
  **************************************************************************/
 package org.exoplatform.contact.webui;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
@@ -42,11 +44,16 @@ public class UITags extends UIComponent {
   
   public UITags() throws Exception { }
   private String selectedTag_ = null ;
+  private Map<String, String> tagMap_ = new HashMap<String, String>() ;
   
   public List<Tag> getTags() throws Exception {
     ContactService contactService = ContactUtils.getContactService();
-    String username = ContactUtils.getCurrentUser() ;    
-    return contactService.getTags(username);
+    String username = ContactUtils.getCurrentUser() ;
+    List<Tag> tags = contactService.getTags(username) ;
+    for(Tag tag : tags) {
+    	tagMap_.put(tag.getId(), tag.getName()) ;
+    }
+    return tags;
   }
   
   public void setSelectedTag(String id) { selectedTag_ = id ; }
