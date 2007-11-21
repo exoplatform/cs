@@ -36,8 +36,8 @@
     	contactRange = "Contacts " + fromIndex + " of " + availableContact ;
     else 
     	contactRange = "Contacts " + fromIndex + " - " + endIndex + " of " + availableContact ;
-  
   	
+  	uicomponent.myPrint("head ") ;
   }
 
 	
@@ -350,7 +350,7 @@
 					
 	</div>
 <% 
-	} else { 
+	} else { uicomponent.myPrint(" begin Vcard ") ;
 %>
 	<div class="UIVCards" id="UIVCards">
 	<div class="VCardsBar">
@@ -380,7 +380,10 @@
 					i = 0 ;
 					Contact contact ;
 					Map tagMap = uicomponent.getTagMap() ;
+
 					while (i < contacts.length) {
+						uicomponent.myPrint("begin left vcard ") ;
+						
 						contact = contacts[i ++] ;
 						iconTag = "Icon " ;
 						String[] tagIds = contact.getTags() ; 
@@ -393,9 +396,9 @@
 								hasComma = true ;
 								iconTag = "Icon " + tag.getColor() + "Tag" ;
 							} else { hasComma = false ; }
-							i = 1 ;
-							while (i < tagIds.length) {
-								tag = tagMap.get(tagIds[i]) ;
+							j = 1 ;
+							while (j < tagIds.length) {
+								tag = tagMap.get(tagIds[j]) ;
 								if (tag != null && hasComma) {
 									tagsName.append(", " + tag.getName()) ;
 									if (ContactUtils.isEmpty(iconTag)) iconTag = "Icon " + tag.getColor() + "Tag" ;
@@ -405,7 +408,7 @@
 										hasComma = true ;
 										if (ContactUtils.isEmpty(iconTag)) iconTag = "Icon " + tag.getColor() + "Tag" ;
 								}
-								i ++ ;
+								j ++ ;
 							}		
 						}
 				%>
@@ -472,6 +475,7 @@
 			  </div>
 		  </div>
 			<%
+			uicomponent.myPrint("begin right vcard ") ;
 			if (i < contacts.length) {
 				contact = contacts[i ++] ;
   			iconTag = "Icon " ;
@@ -485,9 +489,9 @@
 						hasComma = true ;
 						iconTag = "Icon " + tag.getColor() + "Tag" ;
 					} else { hasComma = false ; }
-					i = 1 ;
-					while (i < tagIds.length) {
-						tag = tagMap.get(tagIds[i]) ;
+					k = 1 ;
+					while (k < tagIds.length) {
+						tag = tagMap.get(tagIds[k]) ;
 						if (tag != null && hasComma) {
 							tagsName.append(", " + tag.getName()) ;
 							if (ContactUtils.isEmpty(iconTag)) iconTag = "Icon " + tag.getColor() + "Tag" ;
@@ -497,7 +501,7 @@
 							hasComma = true ;
 							if (ContactUtils.isEmpty(iconTag)) iconTag = "Icon " + tag.getColor() + "Tag" ;
 						}
-						i ++ ;
+						k ++ ;
 					}		
 				}
 			%>

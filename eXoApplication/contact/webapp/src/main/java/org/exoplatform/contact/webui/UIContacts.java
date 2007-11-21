@@ -91,6 +91,16 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   public void activate() throws Exception { }
   public void deActivate() throws Exception { }
   
+  
+  public void myPrint(String s) { 
+    System.out.println("\n\n print :" + s + "\n\n");
+  }
+  
+  
+  
+  
+  
+  
   protected boolean isDisplaySearchResult() {return isSearchResult ;}
   public void setDisplaySearchResult(boolean search) {
     isSearchResult = search ;
@@ -175,7 +185,9 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   public void setSelectedTag(String tagId) {selectedTag_ = tagId ;}
   
   public Map<String, Tag> getTagMap() {
-    return getAncestorOfType(UIWorkingContainer.class).findFirstComponentOfType(UITags.class).getTagMap() ;
+    UIWorkingContainer workingContainer = getAncestorOfType(UIWorkingContainer.class) ;
+    UITags tags = workingContainer.findFirstComponentOfType(UITags.class) ;
+    return tags.getTagMap() ;
   }
   
   static public class EditContactActionListener extends EventListener<UIContacts> {
@@ -376,6 +388,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   
   static public class SelectedContactActionListener extends EventListener<UIContacts> {
     public void execute(Event<UIContacts> event) throws Exception {
+      System.out.println("\n\n select contact \n\n");
       UIContacts uiContacts = event.getSource();
       String contactId = event.getRequestContext().getRequestParameter(OBJECTID);
       uiContacts.setSelectedContact(contactId) ;
