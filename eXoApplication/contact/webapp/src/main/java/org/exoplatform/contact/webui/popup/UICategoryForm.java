@@ -128,6 +128,20 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
       UICategoryForm uiCategoryForm = event.getSource() ;
       UIPopupAction uiPopupAction = uiCategoryForm.getAncestorOfType(UIPopupAction.class) ;
       uiPopupAction.deActivate() ;
+      System.out.println("\n\n 111111111 \n\n");
+      if(uiPopupAction.getAncestorOfType(UIPopupAction.class) != null) {
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction.getAncestorOfType(UIPopupAction.class));
+        System.out.println("\n\n 222222222222222 \n\n");
+      } else {
+        System.out.println("\n\n 333333333333 \n\n");
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+      }
+      System.out.println("\n\n 4444444444444 \n\n");
+      UIAddressBooks addressBooks = uiCategoryForm
+        .getAncestorOfType(UIContactPortlet.class).findFirstComponentOfType(UIAddressBooks.class) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(addressBooks) ;
+      System.out.println("\n\n 55555555555555 \n\n");
+      
     }
   }
   

@@ -149,12 +149,13 @@ public class UIAddressBooks extends UIComponent {
       if (!ContactUtils.isEmpty(addressBookId)) 
         uiPopupContainer =  uiPopupAction.createUIComponent(UIPopupContainer.class, null, "ImportContacts") ;
       else
-        uiPopupContainer =  uiPopupAction.createUIComponent(UIPopupContainer.class, null, "ImportAddress") ;
+        uiPopupContainer =  uiContactPortlet.createUIComponent(UIPopupContainer.class, null, "ImportAddress") ;
       UIImportForm uiImportForm = uiPopupContainer.addChild(UIImportForm.class, null, null) ; 
       
       if (!ContactUtils.isEmpty(addressBookId)) uiImportForm.setValues(addressBookId) ;
       uiPopupAction.activate(uiPopupContainer, 600, 0, true) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction); 
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook.getParent());
     }
   }
 

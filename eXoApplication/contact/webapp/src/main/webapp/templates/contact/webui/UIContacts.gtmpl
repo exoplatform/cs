@@ -2,6 +2,7 @@
 <%
 	import org.exoplatform.contact.service.ContactGroup;
 	import org.exoplatform.contact.service.Tag;
+	import org.exoplatform.contact.service.ContactService;
 	import org.exoplatform.contact.ContactUtils;
 	import org.exoplatform.contact.service.Contact;
 	import org.exoplatform.download.DownloadService;
@@ -19,6 +20,8 @@
   String cssNextPage = "FloatBlockHidden";
   String contactRange = "";	
   Contact[] contacts = uicomponent.getContacts();
+  ContactService contactService = ContactUtils.getContactService() ;
+ 	String username = ContactUtils.getCurrentUser() ;
   if (pageList != null && (contacts.length != 0)) {
     currentPage = pageList.getCurrentPage();
     availablePage = pageList.getAvailablePage() ;
@@ -33,6 +36,8 @@
     	contactRange = "Contacts " + fromIndex + " of " + availableContact ;
     else 
     	contactRange = "Contacts " + fromIndex + " - " + endIndex + " of " + availableContact ;
+  
+  	
   }
 
 	
@@ -160,30 +165,42 @@
 								    }
 								    groupName = buffer.toString() ;
 								  } else {
-								  	ContactGroup group = ContactUtils.getContactService()
-	  	 	    				  .getGroup(ContactUtils.getCurrentUser(), categories[0]) ;
+								  	ContactGroup group = contactService.getGroup(username, categories[0]) ;
 		  	 	    			groupName = group.getName() ;
 								  }
   	 	    				String actionLink  = uicomponent.event("SelectedContact", contact.getId()) ;
 									checkboxField = uicomponent.getChildById(contact.getId()) ;
 									iconTag = "Icon " ;
 									String[] tagIds = contact.getTags() ;
+									StringBuffer tagsName = new StringBuffer() ;
 									if (tagIds != null && tagIds.length > 0) {
-										Tag tag = ContactUtils.getContactService().getTag(ContactUtils.getCurrentUser(), tagIds[0]) ;
-										if (tag != null) iconTag += + tag.getColor() + "Tag" ;
+										Tag tag = contactService.getTag(username, tagIds[0]) ;
+										if (tag != null) {
+											iconTag += + tag.getColor() + "Tag" ;
+											tagsName.append(tag.getName()) ;
+											i = 1 ;
+											while (i < tagIds.length) {
+												tag = contactService.getTag(username, tagIds[i]) ;
+												if (tag != null) tagsName.append(", " + tag.getName()) ;
+												i ++ ;
+											}	
+										}
+										
 									}		
   	 	    				cssClass = "" ;
   	 	    				String selectedContact = uicomponent.getSelectedContact() ;
 									if (selectedContact != null && contact.getId().equals(selectedContact)) cssClass = "Selected" ;
 	  	 	    %>
 								
-  						<tr class="UIContactList $cssClass" selectedTag="<%=uicomponent.getSelectedTag()%>" 
+  						<tr class="UIContactList $cssClass" selectedTag="null"> 
   						  <td class="text" style="padding-left: 7px;">
   						  	<%
   						  		if(checkboxField != null) uicomponent.renderField(checkboxField) ;
   						  	%>
   						  </td>
-								<td class="text" style="padding: 0px;"><div class="$iconTag" ><span></span></div></td>
+								<td class="text" style="padding: 0px;">
+									<div class="$iconTag" title="<%=tagsName.toString() %>"><span></span></div>
+								</td>
 								<td class="text">
 									<div class="State OnlineIcon" title="Available">
 										<a href="$actionLink">
@@ -191,8 +208,16 @@
 										</a>
 									</div>
 								</td>
-								<td class="text"><a href="$actionLink"><%=(ContactUtils.isEmpty(contact.getEmailAddress()) ? "_" : contact.getEmailAddress())%></a></td>
-								<td class="text"><a href="$actionLink"><%=(ContactUtils.isEmpty(contact.getJobTitle()) ? "_" : contact.getJobTitle())%></a></td>
+								<td class="text">
+									<a href="$actionLink">
+										<%=(ContactUtils.isEmpty(contact.getEmailAddress()) ? "_" : contact.getEmailAddress())%>
+									</a>
+								</td>
+								<td class="text">
+									<a href="$actionLink">
+										<%=(ContactUtils.isEmpty(contact.getJobTitle()) ? "_" : contact.getJobTitle())%>
+									</a>
+								</td>
 								<td>
 									<a href="$actionLink">
 										<%=(contact.getWorkPhone1()==null ? (ContactUtils.isEmpty(contact.getWorkPhone2()) ? "_" : contact.getWorkPhone2()) : contact.getWorkPhone1())%>
@@ -214,9 +239,19 @@
 										checkboxField = uicomponent.getChildById(contact.getId()) ;
 										iconTag = "Icon " ;
 										String[] tagIds = contact.getTags() ;
+										StringBuffer tagsName = new StringBuffer() ;
 										if (tagIds != null && tagIds.length > 0) {
-											Tag tag = ContactUtils.getContactService().getTag(ContactUtils.getCurrentUser(), tagIds[0]) ;
-											if (tag != null) iconTag += + tag.getColor() + "Tag" ; 
+											Tag tag = contactService.getTag(username, tagIds[0]) ;
+											if (tag != null) {
+												iconTag += + tag.getColor() + "Tag" ; 
+												tagsName.append(tag.getName()) ;
+												i = 1 ;
+												while (i < tagIds.length) {
+													tag = contactService.getTag(username, tagIds[i]) ;
+													if (tag != null) tagsName.append(", " + tag.getName()) ;
+													i ++ ;
+												}
+											}										
 										}
 										cssClass = "" ;
 										if (contact.getId().equals(uicomponent.getSelectedContact())) cssClass = "Selected" ;								
@@ -228,7 +263,7 @@
   						  		if(checkboxField != null) uicomponent.renderField(checkboxField) ;
   						  	%>
   						  </td>
-								<td class="text" style="padding: 0px;"><div class="$iconTag" ><span></span></div></td>
+								<td class="text" style="padding: 0px;"><div class="$iconTag" title="<%=tagsName.toString()%>"><span></span></div></td>
 								<td class="text">
 									<div class="State OnlineIcon" title="Available">
 										<a href="$actionLink">
@@ -279,70 +314,7 @@
 				</div>	
 				<% } %>	
 					
-					<% /*Begin Popup Menu*/ %>						
-
-  				<div class="UIRightClickPopupMenu" id="UIContactListPopuMenu" eXoCallback="eXo.contact.UIContactPortlet.contactCallback">
-  					<div class="UIContextMenuContainer">
-						  <div class="TopLeftRightClickPopupMenu">
-          			<div class="TopRightRightClickPopupMenu">
-            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
-          			</div>
-        			</div>
-			        <div class="MiddleLeftRightClickPopupMenu">
-			          <div class="MiddleRightRightClickPopupMenu">
-              		<div class="UIRightPopupMenuContainer">
-										<a class="MenuItem" href="<%=uicomponent.event("EditContact", "id")%>">   
-	                    <div class="ItemIcon EditIcon">
-	                      <%=_ctx.appRes(uicomponent.getName() + ".label.edit")%>
-	                    </div>
-                    </a>
-                     
-	                    <div style="color : gray ;" class="ItemIcon EmailIcon">
-	                      <%=_ctx.appRes(uicomponent.getName() + ".label.sendEmail")%>
-	                    </div>
-                    
-                      
-	                    <div style="color : gray ;" class="ItemIcon InstantMessage">
-	                      <%=_ctx.appRes(uicomponent.getName() + ".label.instantMessage")%>
-	                    </div>
-                  
-                    <a class="MenuItem" href="<%=uicomponent.event("TagPopup", "id")%>">   
-	                    <div class="ItemIcon BlueTag">
-	                      <%=_ctx.appRes(uicomponent.getName() + ".label.tag")%>
-	                    </div>
-                    </a>
-                    <a class="MenuItem" href="<%=uicomponent.event("MoveContacts", "id")%>">   
-	                    <div class="ItemIcon MoveContactIcon">
-	                      <%=_ctx.appRes(uicomponent.getName() + ".label.move")%>
-	                    </div>
-                    </a>
-                    <a class="MenuItem" href="<%=uicomponent.event("DeleteContacts", "id")%>">   
-	                    <div class="ItemIcon DeleteContactIcon">
-	                      <%=_ctx.appRes(uicomponent.getName() + ".label.delete")%>
-	                    </div> 
-                    </a>
-                    <a class="MenuItem" href="<%=uicomponent.event("ViewDetails", "id")%>">   
-	                    <div class="ItemIcon PrintIcon">
-	                      <%=_ctx.appRes(uicomponent.getName() + ".label.print") %>
-	                    </div>
-                    </a>
-                    <a class="MenuItem" href="<%=uicomponent.event("ExportContact", "id")%>">   
-	                    <div class="ItemIcon ExportContactIcon">
-	                      <%=_ctx.appRes(uicomponent.getName() + ".label.export")%>
-	                    </div>
-                    </a>
-									</div>
-	          		</div>
-	        		</div>
-				      <div class="BottomLeftRightClickPopupMenu">
-				        <div class="BottomRightRightClickPopupMenu">
-				          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
-				        </div>
-				      </div>
-				    </div>		      		
-				  </div>
-
-  		<% /*End Popup Menu*/ %>
+					
 	</div>
 <% 
 	} else { 
@@ -378,19 +350,29 @@
 						contact = contacts[i ++] ;
 						iconTag = "Icon " ;
 						String[] tagIds = contact.getTags() ; 
+						StringBuffer tagsName = new StringBuffer() ;
 						if (tagIds != null && tagIds.length > 0) {
-							Tag tag = ContactUtils.getContactService().getTag(ContactUtils.getCurrentUser(), tagIds[0]) ;
-							iconTag += tag.getColor() + "Tag" ; 
+							Tag tag = contactService.getTag(username, tagIds[0]) ;
+							if (tag != null) {
+								iconTag += tag.getColor() + "Tag" ; 
+								tagsName.append(tag.getName()) ;
+								i = 1 ;
+								while (i < tagIds.length) {
+									tag = contactService.getTag(username, tagIds[i]) ;
+									if (tag != null) tagsName.append(", " + tag.getName()) ;
+									i ++ ;
+								}
+							}	
 						}
 				%>
 				
 				
 				
 		  <div class="LeftVCardsContent">
-		  	<div class="VCardContent NormalVCard" id="<%=contact.getId()%>">
+		  	<div class="VCardContent NormalVCard" id="<%=contact.getId()%>" selectedTag="<%=uicomponent.getSelectedTag()%>" >
 			  	<div class="TitleVCards" >
 				  	<div class="StateIcon OnlineIcon"><%=(contact.getFullName()==null ? "_" : contact.getFullName())%></div>
-			  		<div class="TagIcon $iconTag"><span></span></div>
+			  		<div class="TagIcon $iconTag" title="<%=tagsName.toString()%>"><span></span></div>
 			  		<div style="clear: both;"><span></span></div>
 			  	</div>
 			  	<div class="ContainerVCards">
@@ -442,16 +424,26 @@
 				contact = contacts[i ++] ;
   			iconTag = "Icon " ;
   			tagIds = contact.getTags() ;
+				tagsName = new StringBuffer() ;
 				if (tagIds != null && tagIds.length > 0) {
-					Tag tag = ContactUtils.getContactService().getTag(ContactUtils.getCurrentUser(), tagIds[0]) ;
-					iconTag += tag.getColor() + "Tag" ;
+					Tag tag = contactService.getTag(username, tagIds[0]) ;
+					if (tag != null) {
+						iconTag += tag.getColor() + "Tag" ; 
+						tagsName.append(tag.getName()) ;
+						i = 1 ;
+						while (i < tagIds.length) {
+							tag = contactService.getTag(username, tagIds[i]) ;
+							if (tag != null) tagsName.append(", " + tag.getName()) ;
+							i ++ ;
+						}
+					}
 				}
 			%>
 			<div class="RightVCardsContent">
-		  	<div class="VCardContent NormalVCard" id="<%=contact.getId()%>">
+		  	<div class="VCardContent NormalVCard" id="<%=contact.getId()%>" selectedTag="<%=uicomponent.getSelectedTag()%>" >
 			  	<div class="TitleVCards" >
 				  	<div class="StateIcon OfflineIcon"><%=(contact.getFullName()==null ? "_" : contact.getFullName())%></div>
-			  		<div class="TagIcon $iconTag"><span></span></div>
+			  		<div class="TagIcon $iconTag" title="<%=tagsName.toString()%>"><span></span></div>
 			  		<div style="clear: both;"><span></span></div>
 			  	</div>
 			  	<div class="ContainerVCards">
@@ -558,5 +550,79 @@
 	
 </div>
 <% } %>			
+			
+			
+			<% /*Begin Popup Menu*/ %>						
+
+  				<div class="UIRightClickPopupMenu" id="UIContactListPopuMenu" eXoCallback="eXo.contact.UIContactPortlet.contactCallback">
+  					<div class="UIContextMenuContainer">
+						  <div class="TopLeftRightClickPopupMenu">
+          			<div class="TopRightRightClickPopupMenu">
+            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
+          			</div>
+        			</div>
+			        <div class="MiddleLeftRightClickPopupMenu">
+			          <div class="MiddleRightRightClickPopupMenu">
+              		<div class="UIRightPopupMenuContainer">
+										<a class="MenuItem" href="<%=uicomponent.event("EditContact", "id")%>">   
+	                    <div class="ItemIcon EditIcon">
+	                      <%=_ctx.appRes(uicomponent.getName() + ".label.edit")%>
+	                    </div>
+                    </a>
+                     
+	                    <div style="color : gray ;" class="ItemIcon EmailIcon">
+	                      <%=_ctx.appRes(uicomponent.getName() + ".label.sendEmail")%>
+	                    </div>
+                    
+                      
+	                    <div style="color : gray ;" class="ItemIcon InstantMessage">
+	                      <%=_ctx.appRes(uicomponent.getName() + ".label.instantMessage")%>
+	                    </div>
+                  
+                    <a class="MenuItem" href="<%=uicomponent.event("TagPopup", "id")%>">   
+	                    <div class="ItemIcon BlueTag">
+	                      <%=_ctx.appRes(uicomponent.getName() + ".label.tag")%>
+	                    </div>
+                    </a>
+                    <a class="MenuItem" href="<%=uicomponent.event("MoveContacts", "id")%>">   
+	                    <div class="ItemIcon MoveContactIcon">
+	                      <%=_ctx.appRes(uicomponent.getName() + ".label.move")%>
+	                    </div>
+                    </a>
+                    <a class="MenuItem" href="<%=uicomponent.event("DeleteContacts", "id")%>">   
+	                    <div class="ItemIcon DeleteContactIcon">
+	                      <%=_ctx.appRes(uicomponent.getName() + ".label.delete")%>
+	                    </div> 
+                    </a>
+                    <a class="MenuItem" href="<%=uicomponent.event("ViewDetails", "id")%>">   
+	                    <div class="ItemIcon PrintIcon">
+	                      <%=_ctx.appRes(uicomponent.getName() + ".label.print") %>
+	                    </div>
+                    </a>
+                    <a class="MenuItem" href="<%=uicomponent.event("ExportContact", "id")%>">   
+	                    <div class="ItemIcon ExportContactIcon">
+	                      <%=_ctx.appRes(uicomponent.getName() + ".label.export")%>
+	                    </div>
+                    </a>
+									</div>
+	          		</div>
+	        		</div>
+				      <div class="BottomLeftRightClickPopupMenu">
+				        <div class="BottomRightRightClickPopupMenu">
+				          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+				        </div>
+				      </div>
+				    </div>		      		
+				  </div>
+
+  		<% /*End Popup Menu*/ %>
+			
+			
+			
+			
+			
+			
+			
+			
 			
 <%uiform.end()%>	

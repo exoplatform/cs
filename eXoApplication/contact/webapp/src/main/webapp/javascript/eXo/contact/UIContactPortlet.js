@@ -25,7 +25,7 @@ UIContactPortlet.prototype.showContextMenu = function() {
 		'preventForms':false
 	} ;	
 	UIContextMenu.init(config) ;
-	UIContextMenu.attach('UIContactList', 'UIContactListPopuMenu') ;
+	UIContextMenu.attach(['UIContactList','VCardContent'], 'UIContactListPopuMenu') ;
 	UIContextMenu.attach('ItemList', 'UIAddressBookPopupMenu') ;	
 	UIContextMenu.attach('TagList', 'UITagPopupMenu') ;
 } ;
@@ -36,13 +36,25 @@ UIContactPortlet.prototype.contactCallback = function(evt) {
 	_e.cancelBubble = true ;
 	var src = _e.srcElement || _e.target ;
 	var tr = eXo.core.DOMUtil.findAncestorByTagName(src, "tr") ;
-	var checkbox = eXo.core.DOMUtil.findFirstDescendantByClass(tr, "input", "checkbox") ;
-	var id = checkbox.name ;
-	eXo.webui.UIContextMenu.changeAction(UIContextMenu.menuElement, id) ;
-	if (tr.getAttribute("selectedTag") && (tr.getAttribute("selectedTag").toLowerCase()!="null")) {		
-		var moveContactIcon =  eXo.core.DOMUtil.findFirstDescendantByClass(UIContextMenu.menuElement, "div", "MoveContactIcon") ;
-		moveContactIcon.parentNode.href = "javascript: void(0) ;" ;
-		moveContactIcon.parentNode.style.color = "#cccccc" ;
+	var id = null ;
+	if(tr != null) {
+		var checkbox = eXo.core.DOMUtil.findFirstDescendantByClass(tr, "input", "checkbox") ;		
+		id = checkbox.name ;
+		eXo.webui.UIContextMenu.changeAction(UIContextMenu.menuElement, id) ;
+		if (tr.getAttribute("selectedTag") && (tr.getAttribute("selectedTag").toLowerCase()!="null")) {		
+			var moveContactIcon =  eXo.core.DOMUtil.findFirstDescendantByClass(UIContextMenu.menuElement, "div", "MoveContactIcon") ;
+			moveContactIcon.parentNode.href = "javascript: void(0) ;" ;
+			moveContactIcon.parentNode.style.color = "#cccccc" ;
+		}
+	} else {
+		var VCardContent = eXo.core.DOMUtil.findAncestorByClass(src, "VCardContent") ;
+		id = VCardContent.getAttribute("id") ;
+		eXo.webui.UIContextMenu.changeAction(UIContextMenu.menuElement, id) ;
+		if (VCardContent.getAttribute("selectedTag") && (VCardContent.getAttribute("selectedTag").toLowerCase()!="null")) {		
+			var moveContactIcon =  eXo.core.DOMUtil.findFirstDescendantByClass(UIContextMenu.menuElement, "div", "MoveContactIcon") ;
+			moveContactIcon.parentNode.href = "javascript: void(0) ;" ;
+			moveContactIcon.parentNode.style.color = "#cccccc" ;
+		}
 	}
 } ;
 
