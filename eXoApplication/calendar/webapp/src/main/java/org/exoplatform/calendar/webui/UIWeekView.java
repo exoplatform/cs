@@ -69,22 +69,28 @@ public class UIWeekView extends UICalendarView {
 
   public void refresh() throws Exception {
     System.out.println("\n\n>>>>>>>>>> WEEK VIEW") ;
-    int week = getCurrentWeek() ;
     eventData_.clear() ;
     allWeekData_.clear() ;
-    for(Calendar c : getDaysOfWeek(week)) {
+    int i = 0 ;
+    Calendar c = getBeginDateOfWeek() ;
+    while(i++ <7) {
       Map<String, CalendarEvent> list = new HashMap<String, CalendarEvent>() ;
       String key = keyGen(c.get(Calendar.DATE), c.get(Calendar.MONTH), c.get(Calendar.YEAR)) ;
       eventData_.put(key, list) ;
+      c.add(Calendar.DATE, 1) ;
     }
+
+    /* for(Calendar c : getDaysOfWeek()) {
+      Map<String, CalendarEvent> list = new HashMap<String, CalendarEvent>() ;
+      String key = keyGen(c.get(Calendar.DATE), c.get(Calendar.MONTH), c.get(Calendar.YEAR)) ;
+      eventData_.put(key, list) ;
+    }*/
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     EventQuery eventQuery = new EventQuery() ;
-    List<Calendar> days =  getDaysOfWeek(week) ;
-    java.util.Calendar fromcalendar = CalendarUtils.getBeginDay(days.get(0)) ;
-    eventQuery.setFromDate(fromcalendar) ;
-    java.util.Calendar tocalendar = CalendarUtils.getEndDay(days.get(days.size() - 1)) ;
-    eventQuery.setToDate(tocalendar) ;
+    eventQuery.setFromDate(getBeginDateOfWeek()) ;
+    eventQuery.setToDate(getEndDateOfWeek()) ;
+    System.out.println("\n\n getEndDateOfWeek() " + getEndDateOfWeek().getTime());
     List<CalendarEvent> allEvents = calendarService.getEvent(username, eventQuery, getPublicCalendars())  ;
     Iterator iter = allEvents.iterator() ;
     while(iter.hasNext()) {
@@ -92,29 +98,34 @@ public class UIWeekView extends UICalendarView {
       Date beginEvent = event.getFromDateTime() ;
       Date endEvent = event.getToDateTime() ;
       long eventAmount = endEvent.getTime() - beginEvent.getTime() ;
-      for(Calendar c : getDaysOfWeek(week)) {
+      i = 0 ;
+      c = getBeginDateOfWeek();
+      while(i++ < 7) {
         String key = keyGen(c.get(Calendar.DATE), c.get(Calendar.MONTH), c.get(Calendar.YEAR)) ;
-        if(isSameDate(c.getTime(), beginEvent) && (isSameDate(c.getTime(), endEvent) || endEvent.equals(getEndDay(c).getTime()))) { 
+        System.out.println("\n\n key here " + key);
+        if(isSameDate(c.getTime(), beginEvent) && (isSameDate(c.getTime(), endEvent)) || c.getTime().equals(endEvent)) {
           if(eventAmount > 0 && eventAmount < CalendarUtils.MILISECONS_OF_DAY) {
             eventData_.get(key).put(event.getId(), event) ;
             dataMap_.put(event.getId(), event) ;
             iter.remove() ;
           }
         } 
+        c.add(Calendar.DATE, 1) ;
       }
     }
     for( CalendarEvent ce : allEvents) {
       allWeekData_.put(ce.getId(), ce) ;
       dataMap_.put(ce.getId(), ce) ;
     }
+    System.out.println("\n\n evnet size " + allEvents.size());
   }
   protected void moveTo(int weeks) {
     calendar_.add(Calendar.WEEK_OF_YEAR, weeks) ;
   }
 
-  protected List<Calendar> getDaysOfWeek(int week) throws Exception {
+  /* protected List<Calendar> getDaysOfWeek() throws Exception {
     List<Calendar> calendarData = new ArrayList<Calendar>() ;
-    Calendar cl = GregorianCalendar.getInstance() ;
+     Calendar cl = getBeginDay(GregorianCalendar.getInstance()) ;
     if(!isShowCustomView_) {
       CalendarSetting calSetting  = null ;
       try{
@@ -125,16 +136,20 @@ public class UIWeekView extends UICalendarView {
       }
       cl.setFirstDayOfWeek(Integer.parseInt(calSetting.getWeekStartOn())) ;
       cl.set(Calendar.WEEK_OF_YEAR, week) ;
-      int day = cl.get(Calendar.DATE) ;
-      int month = cl.get(Calendar.MONTH) ;
-      int year = cl.get(Calendar.YEAR) ;
       int amount = cl.getFirstDayOfWeek() - cl.get(Calendar.DAY_OF_WEEK) ;
-      cl = getDateByValue(year, month, day, UICalendarView.TYPE_DATE, amount) ;
-      calendarData.add(cl) ;
+      cl.add(Calendar.DATE, amount) ;
+      cl = getBeginDay(cl) ;
+      cl = getBeginDay(getDateByValue(year, month, day, UICalendarView.TYPE_DATE, amount)) ;
+      endDate = getEndDay(cl) ;
+      endDate.add(Calendar.WEEK_OF_MONTH, 1) ;
+      int count = 0 ;
+      while(count++ < 7) {
+        calendarData.add(cl) ;
+        cl.add(Calendar.DATE, 1) ;
+      }
       day = cl.get(Calendar.DATE) ;
       month = cl.get(Calendar.MONTH) ;
       year = cl.get(Calendar.YEAR) ;
-
       for(int d = 1 ;  d < 7 ; d++) {
         calendarData.add(getDateByValue(year, month, day, UICalendarView.TYPE_DATE, d)) ;
       }
@@ -145,7 +160,47 @@ public class UIWeekView extends UICalendarView {
         cl.add(Calendar.DATE, 1) ;
       }
     }
+    Calendar cal = getBeginDay(new GregorianCalendar()) ;
+    cal.setTime(getBeginDateOfWeek().getTime()) ;
+    while(cal.before(getEndDateOfWeek())) {
+      calendarData.add(cal) ;
+      cal.add(Calendar.DATE, 1) ;
+      System.out.println("\n\n cal " + cal.getTime() );
+    }
+    System.out.println("\n\n beginOfWeek " + getBeginDateOfWeek().getTime());
+    System.out.println("\n\n endOfWeek " + getEndDateOfWeek().getTime());
     return calendarData ;
+  }*/
+  public java.util.Calendar getBeginDateOfWeek() throws Exception{
+    java.util.Calendar temCal = GregorianCalendar.getInstance() ;
+    temCal.setTime(calendar_.getTime()) ;
+    CalendarSetting calSetting  = null ;
+    try{
+      calSetting = getAncestorOfType(UICalendarPortlet.class).getCalendarSetting() ;
+    } catch (Exception e) {
+      CalendarService calService = getApplicationComponent(CalendarService.class) ;
+      calSetting  = calService.getCalendarSetting(Util.getPortalRequestContext().getRemoteUser()) ;
+    }
+    temCal.setFirstDayOfWeek(Integer.parseInt(calSetting.getWeekStartOn())) ;
+    temCal.set(java.util.Calendar.WEEK_OF_YEAR, getCurrentWeek()) ;
+    int amout = temCal.getFirstDayOfWeek() - calendar_.get(Calendar.DAY_OF_WEEK) ;
+    temCal.add(Calendar.DATE, amout) ;
+    return getBeginDay(temCal) ;
+  }
+
+  public java.util.Calendar getEndDateOfWeek() throws Exception{
+    java.util.Calendar temCal = GregorianCalendar.getInstance() ;
+    CalendarSetting calSetting  = null ;
+    try{
+      calSetting = getAncestorOfType(UICalendarPortlet.class).getCalendarSetting() ;
+    } catch (Exception e) {
+      CalendarService calService = getApplicationComponent(CalendarService.class) ;
+      calSetting  = calService.getCalendarSetting(Util.getPortalRequestContext().getRemoteUser()) ;
+    }
+    temCal.setFirstDayOfWeek(Integer.parseInt(calSetting.getWeekStartOn())) ;
+    temCal.setTime(getBeginDateOfWeek().getTime()) ;
+    temCal.add(Calendar.DATE, 6) ;
+    return getEndDay(temCal) ;
   }
 
   protected Map<String, Map<String, CalendarEvent>> getEventData() {return eventData_ ;}

@@ -1093,6 +1093,21 @@
 	height: 16px;
 	margin: 4px;
 }
+
+
+.UIListView .highPriorityIcon {
+	width: 16px;
+	height: 16px;
+}
+.UIListView .normalPriorityIcon {
+	width: 16px;
+	height: 16px;
+}
+.UIListView .lowPriorityIcon{
+	width: 16px;
+	height: 16px;
+}
+
 .UIListContainer .Result {
 	line-height: 23px;
 	text-align: center;

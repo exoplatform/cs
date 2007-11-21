@@ -26,7 +26,7 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 public class UICalendarPortlet extends UIPortletApplication {
   private CalendarSetting calendarSetting_ ;
   public UICalendarPortlet() throws Exception {
-    addChild(UIBannerContainer.class, null, null) ;
+    //addChild(UIBannerContainer.class, null, null) ;
     addChild(UIActionBar.class, null, null) ;
     addChild(UICalendarWorkingContainer.class, null, null) ;
     addChild(UIPopupAction.class, null, null) ;

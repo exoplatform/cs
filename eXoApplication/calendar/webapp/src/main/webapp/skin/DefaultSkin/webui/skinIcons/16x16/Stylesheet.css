@@ -115,3 +115,12 @@
 	background: url('icons/EditTask.gif') no-repeat;
 	width: 16px;height: 16px;
 }
+.highPriorityIcon {
+	background: url('icons/HighPriorityIcon.gif') no-repeat;
+}
+.normalPriorityIcon {
+	background: url('icons/NomalPriorityIcon.gif') no-repeat;
+}
+.lowPriorityIcon{
+	background: url('icons/LowPriorityIcon.gif') no-repeat;
+}

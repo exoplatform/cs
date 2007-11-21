@@ -72,7 +72,7 @@
 												<%=task.getSummary()%>
 											</a>	
 		  							</td>
-										<td class="text"><%=(uicomponent.getPriority(task.getPriority()) == null)? "" :  uicomponent.getPriority(task.getPriority())%></td>
+										<td class="text"><div class="<%=(uicomponent.getPriority(task.getPriority()) == null)? "" :  uicomponent.getPriority(task.getPriority())%>PriorityIcon">&nbsp;</div></td>
 										<td class="text"><%=(task.getEventState() == null)? "" : task.getEventState()%></td>
 										<td class="text">
 										<%

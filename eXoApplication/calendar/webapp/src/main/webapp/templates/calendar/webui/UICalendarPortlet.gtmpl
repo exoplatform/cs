@@ -16,9 +16,6 @@
 <div class="$uicomponent.id UIApplication" oncontextmenu="return false;" id="$uicomponent.id">
   <div class="ApplicationMinWidth">
   	<div class="UICalendarPortlet">
-<!-- Start Mail Banner Container -->
-	    <%uicomponent.renderChild(UIBannerContainer.class)%>
-<!-- End Mail Banner Container -->
 <!-- Start Mail Working Workspace -->
 	    <div class="CalendarWorkingWorkspace">
 <!-- Start Mail Action Bar -->
