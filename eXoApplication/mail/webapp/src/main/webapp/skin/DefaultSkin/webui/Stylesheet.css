@@ -1096,6 +1096,14 @@
 	width: 75px;
 }
 
+.UIAdvanceSearchMail .HorizontalLayout .SearchContent .Short input {
+	width: 130px;
+}
+
+.UIAdvanceSearchMail .HorizontalLayout .SearchContent .Short select {
+	width: 130px;
+}
+
 .UIAdvanceSearchMail .HorizontalLayout .SearchForPriority .FieldLabel {
 	width: 80px;
 }

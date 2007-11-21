@@ -24,40 +24,60 @@
 		        <td class="FieldLabel">
 		          <%=uicomponent.getLabel(uicomponent.FIELD_FROM_SEARCH);%> :
 		        </td>
-		        <td class="FieldComponent"  colspan="2">
+		        <td class="FieldComponent Short"  colspan="2">
 		          <%
 		            uicomponent.renderField(uicomponent.FIELD_FROM_SEARCH);
 		          %>
+		        </td>
+		        <td class="FieldComponent Short"  colspan="2">
+		          <select class="selectbox" name="">
+              	<option selected="selected" value=""/>
+            	</select>
 		        </td>
 		      </tr>
 		      <tr>
 		        <td class="FieldLabel">
 		          <%=uicomponent.getLabel(uicomponent.FIELD_TO_SEARCH);%> :
 		        </td>
-		        <td class="FieldComponent"  colspan="2">
+		        <td class="FieldComponent Short"  colspan="2">
 		        <%
 		          uicomponent.renderField(uicomponent.FIELD_TO_SEARCH);
 		        %>
+		        </td>
+		        <td class="FieldComponent Short"  colspan="2">
+			        <select class="selectbox" name="">
+              	<option selected="selected" value=""/>
+            	</select>
 		        </td>
 		      </tr>
 		      <tr>
 		        <td class="FieldLabel">
 		          <%=uicomponent.getLabel(uicomponent.FIELD_SUBJECT_SEARCH);%> :
 		        </td>
-		        <td class="FieldComponent"  colspan="2">
+		        <td class="FieldComponent Short"  colspan="2">
 		        <%
 		          uicomponent.renderField(uicomponent.FIELD_SUBJECT_SEARCH);
 		        %>
+		        </td>
+		        <td class="FieldComponent Short"  colspan="2">
+			        <select class="selectbox" name="">
+             		<option selected="selected" value=""/>
+            	</select>
 		        </td>
 		      </tr>
 		      <tr>
 		        <td class="FieldLabel">
 		          <%=uicomponent.getLabel(uicomponent.FIELD_CONTENT_SEARCH);%> :
 		        </td>
-		        <td class="FieldComponent"  colspan="2">
+		        <td class="FieldComponent Short"  colspan="2">
 		        <%
 		          uicomponent.renderField(uicomponent.FIELD_CONTENT_SEARCH);
 		        %>
+		        </td>
+		        <td class="FieldComponent Short"  colspan="2">
+			        <select class="selectbox" name="">
+              	<option selected="selected" value=""/>
+           		</select>
 		        </td>
 		      </tr>
 		    </table>
