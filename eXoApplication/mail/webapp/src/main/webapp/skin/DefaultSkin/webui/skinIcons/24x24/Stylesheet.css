@@ -113,3 +113,19 @@
 .SearchFolderIcon {
 	background: url('icons/SearchFolderIcon.gif') no-repeat left;
 }
+
+.AddGroup {
+	background: url('icons/AddGroup.gif') no-repeat left;
+}
+
+.AddContact {
+	background: url('icons/AddContact.gif') no-repeat left;
+}
+
+.DeleteContact {
+	background: url('icons/DeleteContact.gif') no-repeat left;
+}
+
+.EditContact {
+	background: url('icons/EditContact.gif') no-repeat left;
+}
