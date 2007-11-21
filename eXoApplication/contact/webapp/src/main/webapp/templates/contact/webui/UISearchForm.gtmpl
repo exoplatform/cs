@@ -1,12 +1,12 @@
 <%uiform.begin()%>
 <div class="UISearchForm">
-	<a href="<%=uicomponent.event("AdvancedSearch")%>"><div class="AdvancedSearch" title="Advance Search"><span></span></div></a>
-	<a href="<%=uicomponent.event("Search")%>"><div class="Search" title="Search"><span></span></div></a>
+	<a href="<%=uicomponent.event("AdvancedSearch")%>" class="AdvancedSearch" title="Advance Search"><span></span></a>
+	<a href="<%=uicomponent.event("Search")%>" class="Search" title="Search"><span></span></a>
 	<%uiform.renderChild("inputValue")%>
 	<%
 		String label = _ctx.appRes(uicomponent.getName() + ".label.inputValue") ;
 	%>
-	<div class="UISearchLabel">$label</div>
+	<div class="SearchLabel">$label</div>
 	<div style="clear:right;"><span></span></div>
 </div>
 <%uiform.end();%>
