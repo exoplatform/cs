@@ -503,26 +503,23 @@ public class JCRDataStorage implements DataStorage{
   }
   
   public MessageFilter getFilterById(String username, String accountId, String filterId) throws Exception {
-    Node filterHomeNode = getTagHome(username, accountId) ;
+    Node filterHomeNode = getFilterHome(username, accountId) ;
     MessageFilter filter = new MessageFilter("");
-    NodeIterator iter = filterHomeNode.getNodes() ;
-    while (iter.hasNext()){
-      Node filterNode = (Node)iter.next() ;
-        if (filterNode.getProperty(Utils.EXO_FILTER).getString().equals(filterId)) {
-        if (filterNode.hasProperty(Utils.EXO_ID)) filter.setId((filterNode.getProperty(Utils.EXO_ID).getString())) ;
-        if (filterNode.hasProperty(Utils.EXO_NAME)) filter.setName(filterNode.getProperty(Utils.EXO_NAME).getString()) ;
-        if (filterNode.hasProperty(Utils.EXO_FROM)) filter.setFrom(filterNode.getProperty(Utils.EXO_FROM).getString());
-        if (filterNode.hasProperty(Utils.EXO_FROM_CONDITION)) filter.setFromCondition((int)(filterNode.getProperty(Utils.EXO_FROM_CONDITION).getLong()));
-        if (filterNode.hasProperty(Utils.EXO_TO)) filter.setTo(filterNode.getProperty(Utils.EXO_TO).getString());
-        if (filterNode.hasProperty(Utils.EXO_TO_CONDITION)) filter.setToCondition((int)(filterNode.getProperty(Utils.EXO_TO_CONDITION).getLong()));
-        if (filterNode.hasProperty(Utils.EXO_SUBJECT)) filter.setSubject(filterNode.getProperty(Utils.EXO_SUBJECT).getString());
-        if (filterNode.hasProperty(Utils.EXO_SUBJECT_CONDITION)) filter.setSubjectCondition((int)(filterNode.getProperty(Utils.EXO_SUBJECT_CONDITION).getLong()));
-        if (filterNode.hasProperty(Utils.EXO_BODY)) filter.setBody(filterNode.getProperty(Utils.EXO_BODY).getString());
-        if (filterNode.hasProperty(Utils.EXO_BODY_CONDITION)) filter.setBodyCondition((int)(filterNode.getProperty(Utils.EXO_BODY_CONDITION).getLong()));
-        if (filterNode.hasProperty(Utils.EXO_APPLY_FOLDER)) filter.setApplyFolder(filterNode.getProperty(Utils.EXO_APPLY_FOLDER).getString());
-        if (filterNode.hasProperty(Utils.EXO_APPLY_TAG)) filter.setApplyTag(filterNode.getProperty(Utils.EXO_APPLY_TAG).getString());
-        if (filterNode.hasProperty(Utils.EXO_KEEP_IN_INBOX)) filter.setKeepInInbox(filterNode.getProperty(Utils.EXO_KEEP_IN_INBOX).getBoolean());
-      }
+    if (filterHomeNode.hasNode(filterId)) {
+      Node filterNode = filterHomeNode.getNode(filterId);
+      if (filterNode.hasProperty(Utils.EXO_ID)) filter.setId((filterNode.getProperty(Utils.EXO_ID).getString())) ;
+      if (filterNode.hasProperty(Utils.EXO_NAME)) filter.setName(filterNode.getProperty(Utils.EXO_NAME).getString()) ;
+      if (filterNode.hasProperty(Utils.EXO_FROM)) filter.setFrom(filterNode.getProperty(Utils.EXO_FROM).getString());
+      if (filterNode.hasProperty(Utils.EXO_FROM_CONDITION)) filter.setFromCondition((int)(filterNode.getProperty(Utils.EXO_FROM_CONDITION).getLong()));
+      if (filterNode.hasProperty(Utils.EXO_TO)) filter.setTo(filterNode.getProperty(Utils.EXO_TO).getString());
+      if (filterNode.hasProperty(Utils.EXO_TO_CONDITION)) filter.setToCondition((int)(filterNode.getProperty(Utils.EXO_TO_CONDITION).getLong()));
+      if (filterNode.hasProperty(Utils.EXO_SUBJECT)) filter.setSubject(filterNode.getProperty(Utils.EXO_SUBJECT).getString());
+      if (filterNode.hasProperty(Utils.EXO_SUBJECT_CONDITION)) filter.setSubjectCondition((int)(filterNode.getProperty(Utils.EXO_SUBJECT_CONDITION).getLong()));
+      if (filterNode.hasProperty(Utils.EXO_BODY)) filter.setBody(filterNode.getProperty(Utils.EXO_BODY).getString());
+      if (filterNode.hasProperty(Utils.EXO_BODY_CONDITION)) filter.setBodyCondition((int)(filterNode.getProperty(Utils.EXO_BODY_CONDITION).getLong()));
+      if (filterNode.hasProperty(Utils.EXO_APPLY_FOLDER)) filter.setApplyFolder(filterNode.getProperty(Utils.EXO_APPLY_FOLDER).getString());
+      if (filterNode.hasProperty(Utils.EXO_APPLY_TAG)) filter.setApplyTag(filterNode.getProperty(Utils.EXO_APPLY_TAG).getString());
+      if (filterNode.hasProperty(Utils.EXO_KEEP_IN_INBOX)) filter.setKeepInInbox(filterNode.getProperty(Utils.EXO_KEEP_IN_INBOX).getBoolean());
     }
     return filter ;
   }

@@ -30,9 +30,9 @@ import org.exoplatform.webui.form.UIForm;
     events = {
       @EventConfig(listeners = UIMessageFilter.SelectFilterActionListener.class), 
       @EventConfig(listeners = UIMessageFilter.AddFilterActionListener.class), 
+      @EventConfig(listeners = UIMessageFilter.EditFilterActionListener.class),
       @EventConfig(listeners = UIMessageFilter.DeleteFilterActionListener.class), 
-      @EventConfig(listeners = UIMessageFilter.SaveActionListener.class), 
-      @EventConfig(listeners = UIMessageFilter.CancelActionListener.class)
+      @EventConfig(listeners = UIMessageFilter.CloseActionListener.class)
     }
 )
 public class UIMessageFilter extends UIForm implements UIPopupComponent{
@@ -53,7 +53,7 @@ public class UIMessageFilter extends UIForm implements UIPopupComponent{
     String accountId = MailUtils.getAccountId();
     MailService mailSrv = MailUtils.getMailService();
     if (getSelectedFilterId() != null) {
-      return null;//mailSrv.getFilterById(username, accountId, getSelectedFilterId());
+      return mailSrv.getFilterById(username, accountId, getSelectedFilterId());
     } else {
       return null;
     }
@@ -66,7 +66,7 @@ public class UIMessageFilter extends UIForm implements UIPopupComponent{
     return mailSrv.getFilters(username, accountId);
   }
   
-  public String[] getActions() { return new String[]{"Save", "Cancel"}; }
+  public String[] getActions() { return new String[]{"Close"}; }
   
   public void activate() throws Exception { }
 
@@ -92,6 +92,18 @@ public class UIMessageFilter extends UIForm implements UIPopupComponent{
     }
   }
   
+  static  public class EditFilterActionListener extends EventListener<UIMessageFilter> {
+    public void execute(Event<UIMessageFilter> event) throws Exception {
+      UIMessageFilter uiMessageFilter = event.getSource() ;
+      UIPopupActionContainer uiActionContainer = uiMessageFilter.getAncestorOfType(UIPopupActionContainer.class) ;
+      UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class) ;
+      UIAddMessageFilter uiEditMessageFilter = uiChildPopup.createUIComponent(UIAddMessageFilter.class, null, null);
+      uiChildPopup.activate(uiEditMessageFilter, 650, 0, false) ;
+      uiEditMessageFilter.setCurrentFilter(uiMessageFilter.getSelectedFilter());
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiActionContainer) ;
+    }
+  }
+  
   static  public class DeleteFilterActionListener extends EventListener<UIMessageFilter> {
     public void execute(Event<UIMessageFilter> event) throws Exception {
       UIMessageFilter uiMessageFilter = event.getSource() ;
@@ -108,14 +120,8 @@ public class UIMessageFilter extends UIForm implements UIPopupComponent{
       } 
     }
   }
-
-  static  public class SaveActionListener extends EventListener<UIMessageFilter> {
-    public void execute(Event<UIMessageFilter> event) throws Exception {
-      
-    }
-  }
   
-  static  public class CancelActionListener extends EventListener<UIMessageFilter> {
+  static  public class CloseActionListener extends EventListener<UIMessageFilter> {
     public void execute(Event<UIMessageFilter> event) throws Exception {
       event.getSource().getAncestorOfType(UIMailPortlet.class).cancelAction();
     }

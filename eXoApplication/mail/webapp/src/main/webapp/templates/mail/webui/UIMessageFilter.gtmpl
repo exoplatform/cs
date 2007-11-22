@@ -29,22 +29,22 @@
       MessageFilter filter = uicomponent.getSelectedFilter() ;
     %>
       <div class="FilterSettingContainer">
-      <%if (filter != null) {%>
-        <div class="CategoryControlBar">
-          <div class="Title">
-            <span>Filter name:</span>
-            <span><%=filter.getName()%></span>
+        <% if (filter != null) { %>
+          <div class="CategoryControlBar">
+            <div class="Title">
+              <span>Filter name:</span>
+              <span><%=filter.getName()%></span>
+            </div>
+            <div style="clear: left;"><span></span></div>
           </div>
-          <div style="clear: left;"><span></span></div>
-        </div>
-        <div class="FilterSettingList">
+          <div class="FilterSettingList">
             <div style="font-weight: bold;">If</div>
             <div>English placement test results for eXo Platform Employees   </div>
             <div style="font-weight: bold;">Then</div>
-            <div>Move the message to: Trash</div>
-        </div>
-    <% } %>
-    </div>
+            <div>Move the message to: Trash     <%=String.valueOf(filter.keepInInbox())%></div>
+          </div>
+        <% } %>
+      </div>
     <div style="clear: left;"><span></span></div>
   </div>  
   
