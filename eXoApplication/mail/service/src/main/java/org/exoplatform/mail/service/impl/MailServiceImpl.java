@@ -121,6 +121,10 @@ public class MailServiceImpl implements MailService{
   public void saveFilter(String username, String accountId, MessageFilter filter) throws Exception {
     storage_.saveFilter(username, accountId, filter);
   }
+  
+  public void removeFilter(String username, String accountId, String filterId) throws Exception {
+    storage_.removeFilter(username, accountId, filterId);
+  }
 
   public Message getMessageById(String username, String accountId, String msgId) throws Exception {
     return storage_.getMessageById(username, accountId, msgId);
@@ -347,8 +351,6 @@ public class MailServiceImpl implements MailService{
           
           newMsg.setAttachements(new ArrayList<Attachment>());
           
-          String[] folderIds = { Utils.createFolderId(accountId, account.getIncomingFolder(), false)};
-          newMsg.setFolders(folderIds);
           Object obj = msg.getContent() ;
           if (obj instanceof Multipart) {
             setMultiPart((Multipart)obj, newMsg, username);
@@ -357,6 +359,18 @@ public class MailServiceImpl implements MailService{
           }
           storage_.saveMessage(username, account.getId(), newMsg, true);
           messageList.add(newMsg);
+          
+          MessageFilter filter = getFilterContainMessage(username, accountId, newMsg.getId());
+          String[] folderIds = { Utils.createFolderId(accountId, account.getIncomingFolder(), false)};
+          Message filterMsg = getMessageById(username, accountId, newMsg.getId());
+          if (filter != null) {
+            folderIds = new String[] { filter.getApplyFolder() };
+            filterMsg.setTags(new String[] {filter.getApplyTag()});
+          } 
+          
+          filterMsg.setFolders(folderIds);
+          storage_.saveMessage(username, account.getId(), filterMsg, false);
+                    
           for(String folderId : folderIds) {
             Folder storeFolder = storage_.getFolder(username, account.getId(), folderId) ;
             if(storeFolder == null) {
@@ -377,7 +391,7 @@ public class MailServiceImpl implements MailService{
       folder.close(false);
       store.close();
     }  catch (Exception e) { 
-     
+      e.printStackTrace();
     }
     
     return messageList;
@@ -392,7 +406,7 @@ public class MailServiceImpl implements MailService{
         i++ ;
       }     
     }catch(Exception e) {
-      //e.printStackTrace() ;
+      e.printStackTrace() ;
     }   
 
   }
@@ -435,7 +449,7 @@ public class MailServiceImpl implements MailService{
         }
       }
     } catch(Exception e) {
-      //e.printStackTrace() ;
+      e.printStackTrace() ;
     }
   }
 
@@ -531,5 +545,9 @@ public class MailServiceImpl implements MailService{
     OutputStream outputStream = new ByteArrayOutputStream();
     mimeMessage.writeTo(outputStream);
     return outputStream ; 
+  }
+  
+  public MessageFilter getFilterContainMessage(String username, String accountId, String msgId) throws Exception {
+    return storage_.getFilterContainMessage(username, accountId, msgId);
   }
 }

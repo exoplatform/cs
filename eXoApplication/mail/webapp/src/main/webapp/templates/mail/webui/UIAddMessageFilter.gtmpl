@@ -52,9 +52,13 @@
 			  	      <td class="FieldComponent" style="width: 270px;"><%uicomponent.renderField(uicomponent.FILTER_APPLY_FOLDER)%></td>
 			        </tr>
               <tr>
-              <td class="FieldLabel"><%=uicomponent.getLabel(uicomponent.FILTER_APPLY_TAG)%>:</td>
-              <td class="FieldComponent" style="width: 270px;"><%uicomponent.renderField(uicomponent.FILTER_APPLY_TAG)%></td>
-            </tr>
+                <td class="FieldLabel"><%=uicomponent.getLabel(uicomponent.FILTER_KEEP_INBOX)%></td>
+                <td class="FieldComponent" style="align-left: 1px"><%uicomponent.renderField(uicomponent.FILTER_KEEP_INBOX)%></td>
+              </tr>
+              <tr>
+                <td class="FieldLabel"><%=uicomponent.getLabel(uicomponent.FILTER_APPLY_TAG)%>:</td>
+                <td class="FieldComponent" style="width: 270px;"><%uicomponent.renderField(uicomponent.FILTER_APPLY_TAG)%></td>
+              </tr>            
 			      </table>
 			    </div>
 			  </div>

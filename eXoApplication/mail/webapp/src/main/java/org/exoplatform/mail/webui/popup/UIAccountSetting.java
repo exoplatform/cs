@@ -289,7 +289,7 @@ public class UIAccountSetting extends UIFormTabPane {
         uiAccountSetting.fillAllField();
         event.getRequestContext().addUIComponentToUpdateByAjax(uiAccountSetting.getParent());
       } catch(Exception e) {
-        System.err.println(" Error ==========> DeleteAccountActionListener");
+        e.printStackTrace();
       } 
     }
   }

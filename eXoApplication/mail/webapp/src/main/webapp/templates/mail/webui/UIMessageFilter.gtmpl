@@ -1,6 +1,7 @@
 <%
   import org.exoplatform.mail.service.MessageFilter;
 %>
+
 <%uiform.begin()%>  
 <div class="UIMessageFilter">
   <div class="FilterSetting">
@@ -16,26 +17,33 @@
       <div class="FilterSettingList">
         <% 
           for (MessageFilter filter : uicomponent.getFilters()) {
+            String selectFilter = uicomponent.event("SelectFilter", filter.getId());
+            String cssClass = "NormalItem";
+            if (uicomponent.getSelectedFilterId().equals(filter.getId())) cssClass = "SelectedItem";
         %>
-          <div class="NormalItem SelectedItem"><a href="#"><%=filter.getName()%></a></div>
+          <a href="$selectFilter"><div class="$cssClass"><%=filter.getName()%></div></a>
         <% } %>
       </div>
     </div>
-    
-    <div class="FilterSettingContainer">
-      <div class="CategoryControlBar">
-        <div class="Title">
-          <span>Filter name:</span>
-          <span>eXo</span>
+    <%
+      MessageFilter filter = uicomponent.getSelectedFilter() ;
+    %>
+      <div class="FilterSettingContainer">
+      <%if (filter != null) {%>
+        <div class="CategoryControlBar">
+          <div class="Title">
+            <span>Filter name:</span>
+            <span><%=filter.getName()%></span>
+          </div>
+          <div style="clear: left;"><span></span></div>
         </div>
-        <div style="clear: left;"><span></span></div>
-      </div>
-      <div class="FilterSettingList">
-          <div style="font-weight: bold;">If</div>
-          <div>English placement test results for eXo Platform Employees   </div>
-          <div style="font-weight: bold;">Then</div>
-          <div>Move the message to: Trash</div>
-      </div>
+        <div class="FilterSettingList">
+            <div style="font-weight: bold;">If</div>
+            <div>English placement test results for eXo Platform Employees   </div>
+            <div style="font-weight: bold;">Then</div>
+            <div>Move the message to: Trash</div>
+        </div>
+    <% } %>
     </div>
     <div style="clear: left;"><span></span></div>
   </div>  

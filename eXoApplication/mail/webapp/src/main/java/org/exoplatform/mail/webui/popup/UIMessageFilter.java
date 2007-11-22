@@ -28,15 +28,35 @@ import org.exoplatform.webui.form.UIForm;
     lifecycle = UIFormLifecycle.class,
     template =  "app:/templates/mail/webui/UIMessageFilter.gtmpl",
     events = {
+      @EventConfig(listeners = UIMessageFilter.SelectFilterActionListener.class), 
       @EventConfig(listeners = UIMessageFilter.AddFilterActionListener.class), 
+      @EventConfig(listeners = UIMessageFilter.DeleteFilterActionListener.class), 
       @EventConfig(listeners = UIMessageFilter.SaveActionListener.class), 
       @EventConfig(listeners = UIMessageFilter.CancelActionListener.class)
     }
 )
 public class UIMessageFilter extends UIForm implements UIPopupComponent{
   
+  private String selectedFilterId ;
+  
   public UIMessageFilter() throws Exception {
-    
+    if (getFilters().size() > 0) {
+      setSelectedFilterId(getFilters().get(0).getId());
+    }
+  }
+  
+  public String getSelectedFilterId() {return this.selectedFilterId; }
+  public void setSelectedFilterId(String filterId) { this.selectedFilterId = filterId; }
+  
+  public MessageFilter getSelectedFilter() throws Exception {
+    String username = MailUtils.getCurrentUser();
+    String accountId = MailUtils.getAccountId();
+    MailService mailSrv = MailUtils.getMailService();
+    if (getSelectedFilterId() != null) {
+      return mailSrv.getFilterById(username, accountId, getSelectedFilterId());
+    } else {
+      return null;
+    }
   }
   
   public List<MessageFilter> getFilters() throws Exception {
@@ -52,6 +72,15 @@ public class UIMessageFilter extends UIForm implements UIPopupComponent{
 
   public void deActivate() throws Exception { }
   
+  static  public class SelectFilterActionListener extends EventListener<UIMessageFilter> {
+    public void execute(Event<UIMessageFilter> event) throws Exception {
+      UIMessageFilter uiMessageFilter = event.getSource() ;
+      String filterId = event.getRequestContext().getRequestParameter(OBJECTID);
+      UIMailPortlet mailPortlet = uiMessageFilter.getAncestorOfType(UIMailPortlet.class);
+      uiMessageFilter.setSelectedFilterId(filterId);
+      event.getRequestContext().addUIComponentToUpdateByAjax(mailPortlet.getChild(UIPopupAction.class)) ;
+    }
+  }
   
   static  public class AddFilterActionListener extends EventListener<UIMessageFilter> {
     public void execute(Event<UIMessageFilter> event) throws Exception {
@@ -60,6 +89,23 @@ public class UIMessageFilter extends UIForm implements UIPopupComponent{
       UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class) ;
       uiChildPopup.activate(UIAddMessageFilter.class, 650) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiActionContainer) ;
+    }
+  }
+  
+  static  public class DeleteFilterActionListener extends EventListener<UIMessageFilter> {
+    public void execute(Event<UIMessageFilter> event) throws Exception {
+      UIMessageFilter uiMessageFilter = event.getSource() ;
+      UIMailPortlet mailPortlet = uiMessageFilter.getAncestorOfType(UIMailPortlet.class);
+      String filterId = uiMessageFilter.getSelectedFilterId();
+      String username = MailUtils.getCurrentUser();
+      String accountId = MailUtils.getAccountId();
+      MailService mailServ = MailUtils.getMailService();
+      try {
+        mailServ.removeFilter(username, accountId, filterId);
+        event.getRequestContext().addUIComponentToUpdateByAjax(mailPortlet.getChild(UIPopupAction.class)) ;
+      } catch(Exception e) {
+        e.printStackTrace();
+      } 
     }
   }
 

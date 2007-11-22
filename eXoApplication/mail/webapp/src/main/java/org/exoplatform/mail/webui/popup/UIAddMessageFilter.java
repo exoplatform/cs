@@ -20,6 +20,7 @@ import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
+import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 
@@ -50,6 +51,7 @@ public class UIAddMessageFilter extends UIForm implements UIPopupComponent{
   public static final String FILTER_BODY_CONDITION = "filter-body-condition".intern();
   public static final String FILTER_APPLY_FOLDER = "filter-aplly-folder".intern();
   public static final String FILTER_APPLY_TAG = "filter-aplly-tag".intern();
+  public static final String FILTER_KEEP_INBOX = "filter-keep-in-inbox".intern();
   
   public UIAddMessageFilter() throws Exception {
     addUIFormInput(new UIFormStringInput(FILTER_NAME, FILTER_NAME , null));
@@ -82,6 +84,7 @@ public class UIAddMessageFilter extends UIForm implements UIPopupComponent{
       tagList.add(new SelectItemOption<String>(tag.getName(), tag.getId()));       
     }    
     addUIFormInput(new UIFormSelectBox(FILTER_APPLY_TAG, FILTER_APPLY_TAG, tagList));
+    addUIFormInput(new UIFormCheckBoxInput<Boolean>(FILTER_KEEP_INBOX, FILTER_KEEP_INBOX, true));
   }
   
   public String getFilterName() throws Exception {
@@ -156,6 +159,30 @@ public class UIAddMessageFilter extends UIForm implements UIPopupComponent{
     getUIStringInput(FILTER_BODY_CONDITION).setValue(s);
   }
   
+  public String getApplyFolder() throws Exception {
+    return getUIStringInput(FILTER_APPLY_FOLDER).getValue();
+  }
+  
+  public void setApplyFolder(String s) throws Exception {
+    getUIStringInput(FILTER_APPLY_FOLDER).setValue(s);
+  }
+  
+  public String getApplyTag() throws Exception {
+    return getUIStringInput(FILTER_APPLY_TAG).getValue();
+  }
+  
+  public void setApplyTag(String s) throws Exception {
+    getUIStringInput(FILTER_APPLY_TAG).setValue(s);
+  }
+  
+  public Boolean getKeepInInbox() throws Exception {
+    return getUIFormCheckBoxInput(FILTER_KEEP_INBOX).isChecked();
+  }
+  
+  public void setKeepInInbox(boolean s) throws Exception {
+    getUIFormCheckBoxInput(FILTER_KEEP_INBOX).setChecked(s);
+  }
+  
   public void activate() throws Exception { }
 
   public void deActivate() throws Exception { }
@@ -172,6 +199,9 @@ public class UIAddMessageFilter extends UIForm implements UIPopupComponent{
       String subjectCondition = uiFilter.getSubjectCondition();
       String body = uiFilter.getBody();
       String bodyCondition = uiFilter.getBodyCondition();
+      String applyFolder = uiFilter.getApplyFolder();
+      String applyTag = uiFilter.getApplyTag();
+      Boolean keepInbox = uiFilter.getKeepInInbox();
       MessageFilter filter = new MessageFilter(filterName);
       filter.setFrom(from);
       filter.setFromCondition(Integer.valueOf(fromCondition));
@@ -181,6 +211,9 @@ public class UIAddMessageFilter extends UIForm implements UIPopupComponent{
       filter.setSubjectCondition(Integer.valueOf(subjectCondition));
       filter.setBody(body);
       filter.setBodyCondition(Integer.valueOf(bodyCondition));
+      filter.setApplyFolder(applyFolder);
+      filter.setApplyTag(applyTag);
+      filter.setKeepInInbox(keepInbox);
       String username = MailUtils.getCurrentUser();
       String accountId = MailUtils.getAccountId();
       MailService mailSrv = MailUtils.getMailService();

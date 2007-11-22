@@ -15,6 +15,7 @@ import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MailSetting;
 import org.exoplatform.mail.service.Utils;
+import org.exoplatform.mail.webui.popup.UIAddressBookForm;
 import org.exoplatform.mail.webui.popup.UIComposeForm;
 import org.exoplatform.mail.webui.popup.UIFeed;
 import org.exoplatform.mail.webui.popup.UIMailSettings;
@@ -115,8 +116,15 @@ public class UIActionBar extends UIContainer {
   
   static public class AddressActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {
-      //UIActionBar uiActionBar = event.getSource() ; 
-      System.out.println(" =========== > AddAddressActionListener");
+      UIActionBar uiActionBar = event.getSource() ; 
+      System.out.println(" =========== > AddAddressActionListener"); 
+      UIMailPortlet uiPortlet = uiActionBar.getAncestorOfType(UIMailPortlet.class);
+      UIPopupAction uiPopupAction = uiPortlet.findFirstComponentOfType(UIPopupAction.class);
+      UIPopupActionContainer uiPopupContainer = uiPopupAction.createUIComponent(UIPopupActionContainer.class, null, "UIPopupActionAddressContainer");
+      uiPopupAction.activate(uiPopupContainer, 800, 0, false) ;
+      UIAddressBookForm uiAddressBookForm = uiPopupContainer.createUIComponent(UIAddressBookForm.class, null, null);
+      uiPopupContainer.addChild(uiAddressBookForm) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }
   }
   

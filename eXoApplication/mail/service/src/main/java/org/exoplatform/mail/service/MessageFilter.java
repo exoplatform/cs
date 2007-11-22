@@ -32,7 +32,10 @@ public class MessageFilter {
   private String searchQuery ;
   private String accountPath ;
   private String orderBy;
-  private boolean isAscending;
+  private boolean isAscending ;
+  private String applyFolder ;
+  private String applyTag ;
+  private Boolean keepInbox ;
 
   public MessageFilter(String name) {
     this.id = Utils.KEY_FILTER + IdGenerator.generate();
@@ -101,6 +104,15 @@ public class MessageFilter {
   public boolean isAscending() { return isAscending; }
   public void setAscending(boolean b) { this.isAscending = b; } 
   
+  public String getApplyFolder() { return applyFolder ; }
+  public void setApplyFolder(String folder) { this.applyFolder = folder ; }
+  
+  public String getApplyTag() { return applyTag ; }
+  public void setApplyTag(String tag) { this.applyTag = tag ; }
+  
+  public Boolean keepInInbox() { return keepInbox ; }
+  public void setKeepInInbox(boolean keepInbox) { this.keepInbox = keepInbox ; }
+  
   public String getStatement() throws Exception{
     StringBuffer queryString = new StringBuffer("/jcr:root" + accountPath + "//element(*,exo:message)") ;
     boolean hasConjuntion = false ;
@@ -149,7 +161,6 @@ public class MessageFilter {
           stringBuffer.append(" jcr:like(@exo:from, '%" + from + "')") ;
           break;
       }
-      stringBuffer.append("jcr:contains(@exo:from, '" + from + "')") ;
       stringBuffer.append(")") ;
       hasConjuntion = true ;     
     }
@@ -220,7 +231,6 @@ public class MessageFilter {
           stringBuffer.append(" fn:not(jcr:contains(@exo:body, '" + body + "'))") ;
           break;
       }
-      stringBuffer.append("jcr:contains(@exo:body, '" + body + "')") ;
       stringBuffer.append(")") ;
       hasConjuntion = true ;
     }

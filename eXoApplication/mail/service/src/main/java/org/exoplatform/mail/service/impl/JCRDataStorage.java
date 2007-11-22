@@ -484,16 +484,19 @@ public class JCRDataStorage implements DataStorage{
     while (iter.hasNext()){
       Node filterNode = (Node)iter.next() ;
       MessageFilter filter = new MessageFilter("");
-      filter.setId((filterNode.getProperty(Utils.EXO_ID).getString())) ;
-      filter.setName(filterNode.getProperty(Utils.EXO_NAME).getString()) ;
-      filter.setFrom(filterNode.getProperty(Utils.EXO_FROM).getString());
-      filter.setFromCondition((int)(filterNode.getProperty(Utils.EXO_FROM_CONDITION).getLong()));
-      filter.setTo(filterNode.getProperty(Utils.EXO_TO).getString());
-      filter.setToCondition((int)(filterNode.getProperty(Utils.EXO_TO_CONDITION).getLong()));
-      filter.setSubject(filterNode.getProperty(Utils.EXO_SUBJECT).getString());
-      filter.setSubjectCondition((int)(filterNode.getProperty(Utils.EXO_SUBJECT_CONDITION).getLong()));
-      filter.setBody(filterNode.getProperty(Utils.EXO_BODY).getString());
-      filter.setBodyCondition((int)(filterNode.getProperty(Utils.EXO_BODY_CONDITION).getLong()));
+      if (filterNode.hasProperty(Utils.EXO_ID)) filter.setId((filterNode.getProperty(Utils.EXO_ID).getString())) ;
+      if (filterNode.hasProperty(Utils.EXO_NAME)) filter.setName(filterNode.getProperty(Utils.EXO_NAME).getString()) ;
+      if (filterNode.hasProperty(Utils.EXO_FROM)) filter.setFrom(filterNode.getProperty(Utils.EXO_FROM).getString());
+      if (filterNode.hasProperty(Utils.EXO_FROM_CONDITION)) filter.setFromCondition((int)(filterNode.getProperty(Utils.EXO_FROM_CONDITION).getLong()));
+      if (filterNode.hasProperty(Utils.EXO_TO)) filter.setTo(filterNode.getProperty(Utils.EXO_TO).getString());
+      if (filterNode.hasProperty(Utils.EXO_TO_CONDITION)) filter.setToCondition((int)(filterNode.getProperty(Utils.EXO_TO_CONDITION).getLong()));
+      if (filterNode.hasProperty(Utils.EXO_SUBJECT)) filter.setSubject(filterNode.getProperty(Utils.EXO_SUBJECT).getString());
+      if (filterNode.hasProperty(Utils.EXO_SUBJECT_CONDITION)) filter.setSubjectCondition((int)(filterNode.getProperty(Utils.EXO_SUBJECT_CONDITION).getLong()));
+      if (filterNode.hasProperty(Utils.EXO_BODY)) filter.setBody(filterNode.getProperty(Utils.EXO_BODY).getString());
+      if (filterNode.hasProperty(Utils.EXO_BODY_CONDITION)) filter.setBodyCondition((int)(filterNode.getProperty(Utils.EXO_BODY_CONDITION).getLong()));
+      if (filterNode.hasProperty(Utils.EXO_APPLY_FOLDER)) filter.setApplyFolder(filterNode.getProperty(Utils.EXO_APPLY_FOLDER).getString());
+      if (filterNode.hasProperty(Utils.EXO_APPLY_TAG)) filter.setApplyTag(filterNode.getProperty(Utils.EXO_APPLY_TAG).getString());
+      if (filterNode.hasProperty(Utils.EXO_KEEP_IN_INBOX)) filter.setKeepInInbox(filterNode.getProperty(Utils.EXO_KEEP_IN_INBOX).getBoolean());
       filterList.add(filter);
     }
     return filterList ;
@@ -505,17 +508,20 @@ public class JCRDataStorage implements DataStorage{
     NodeIterator iter = filterHomeNode.getNodes() ;
     while (iter.hasNext()){
       Node filterNode = (Node)iter.next() ;
-      if (filterNode.getProperty(Utils.EXO_FILTER).getString().equals(filterId)) {
-        filter.setId((filterNode.getProperty(Utils.EXO_ID).getString())) ;
-        filter.setName(filterNode.getProperty(Utils.EXO_NAME).getString()) ;
-        filter.setFrom(filterNode.getProperty(Utils.EXO_FROM).getString());
-        filter.setFromCondition((int)(filterNode.getProperty(Utils.EXO_FROM_CONDITION).getLong()));
-        filter.setTo(filterNode.getProperty(Utils.EXO_TO).getString());
-        filter.setToCondition((int)(filterNode.getProperty(Utils.EXO_TO_CONDITION).getLong()));
-        filter.setSubject(filterNode.getProperty(Utils.EXO_SUBJECT).getString());
-        filter.setSubjectCondition((int)(filterNode.getProperty(Utils.EXO_SUBJECT_CONDITION).getLong()));
-        filter.setBody(filterNode.getProperty(Utils.EXO_BODY).getString());
-        filter.setBodyCondition((int)(filterNode.getProperty(Utils.EXO_BODY_CONDITION).getLong()));
+        if (filterNode.getProperty(Utils.EXO_FILTER).getString().equals(filterId)) {
+        if (filterNode.hasProperty(Utils.EXO_ID)) filter.setId((filterNode.getProperty(Utils.EXO_ID).getString())) ;
+        if (filterNode.hasProperty(Utils.EXO_NAME)) filter.setName(filterNode.getProperty(Utils.EXO_NAME).getString()) ;
+        if (filterNode.hasProperty(Utils.EXO_FROM)) filter.setFrom(filterNode.getProperty(Utils.EXO_FROM).getString());
+        if (filterNode.hasProperty(Utils.EXO_FROM_CONDITION)) filter.setFromCondition((int)(filterNode.getProperty(Utils.EXO_FROM_CONDITION).getLong()));
+        if (filterNode.hasProperty(Utils.EXO_TO)) filter.setTo(filterNode.getProperty(Utils.EXO_TO).getString());
+        if (filterNode.hasProperty(Utils.EXO_TO_CONDITION)) filter.setToCondition((int)(filterNode.getProperty(Utils.EXO_TO_CONDITION).getLong()));
+        if (filterNode.hasProperty(Utils.EXO_SUBJECT)) filter.setSubject(filterNode.getProperty(Utils.EXO_SUBJECT).getString());
+        if (filterNode.hasProperty(Utils.EXO_SUBJECT_CONDITION)) filter.setSubjectCondition((int)(filterNode.getProperty(Utils.EXO_SUBJECT_CONDITION).getLong()));
+        if (filterNode.hasProperty(Utils.EXO_BODY)) filter.setBody(filterNode.getProperty(Utils.EXO_BODY).getString());
+        if (filterNode.hasProperty(Utils.EXO_BODY_CONDITION)) filter.setBodyCondition((int)(filterNode.getProperty(Utils.EXO_BODY_CONDITION).getLong()));
+        if (filterNode.hasProperty(Utils.EXO_APPLY_FOLDER)) filter.setApplyFolder(filterNode.getProperty(Utils.EXO_APPLY_FOLDER).getString());
+        if (filterNode.hasProperty(Utils.EXO_APPLY_TAG)) filter.setApplyTag(filterNode.getProperty(Utils.EXO_APPLY_TAG).getString());
+        if (filterNode.hasProperty(Utils.EXO_KEEP_IN_INBOX)) filter.setKeepInInbox(filterNode.getProperty(Utils.EXO_KEEP_IN_INBOX).getBoolean());
       }
     }
     return filter ;
@@ -540,7 +546,18 @@ public class JCRDataStorage implements DataStorage{
     filterNode.setProperty(Utils.EXO_SUBJECT_CONDITION, (long)filter.getSubjectCondition());
     filterNode.setProperty(Utils.EXO_BODY, filter.getBody());
     filterNode.setProperty(Utils.EXO_BODY_CONDITION, (long)filter.getBodyCondition());
+    filterNode.setProperty(Utils.EXO_APPLY_FOLDER, filter.getApplyFolder());
+    filterNode.setProperty(Utils.EXO_APPLY_TAG, filter.getApplyTag());
+    filterNode.setProperty(Utils.EXO_KEEP_IN_INBOX, filter.keepInInbox());
     home.getSession().save();
+  }
+  
+  public void removeFilter(String username, String accountId, String filterId) throws Exception {
+    Node filterHome = getFilterHome(username, accountId);
+    if (filterHome.hasNode(filterId)) {
+      filterHome.getNode(filterId).remove();
+    }
+    filterHome.getSession().save();
   }
 
   public Node getMessageHome(String username, String accountId) throws Exception {
@@ -709,5 +726,25 @@ public class JCRDataStorage implements DataStorage{
       messages.add(message);
     }
     return messages;
+  }
+  
+  public MessageFilter getFilterContainMessage(String username, String accountId, String msgId) throws Exception {
+    List<MessageFilter> filterList = getFilters(username, accountId);
+    for (MessageFilter filter : filterList) {
+      Node homeMsg = getMessageHome(username, accountId);
+      filter.setAccountPath(homeMsg.getPath()) ;
+      QueryManager qm = homeMsg.getSession().getWorkspace().getQueryManager();
+      Query query = qm.createQuery(filter.getStatement(), Query.XPATH);
+      QueryResult result = query.execute(); 
+      NodeIterator iter = result.getNodes();
+      while (iter.hasNext()) {
+        Node i = iter.nextNode();
+        if (i.getProperty(Utils.EXO_ID).getString().equals(msgId)) {
+          return filter;
+        } 
+      }
+      
+    }
+    return null ;
   }
 }

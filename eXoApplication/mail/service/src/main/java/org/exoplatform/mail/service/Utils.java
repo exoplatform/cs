@@ -133,6 +133,9 @@ public class Utils {
   public static final String EXO_TO_CONDITION = "exo:toCondition".intern();
   public static final String EXO_SUBJECT_CONDITION = "exo:subjectCondition".intern();
   public static final String EXO_BODY_CONDITION = "exo:bodyCondition".intern();
+  public static final String EXO_APPLY_TAG = "exo:applyTag".intern();
+  public static final String EXO_APPLY_FOLDER = "exo:applyFolder".intern();
+  public static final String EXO_KEEP_IN_INBOX = "exo:keepInbox".intern();
   
   public static final int CONDITION_CONTAIN = 0 ;
   public static final int CONDITION_NOT_CONTAIN = 1 ;

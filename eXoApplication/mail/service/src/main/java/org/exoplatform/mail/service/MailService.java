@@ -152,6 +152,8 @@ public interface MailService {
    */
   public void saveFilter(String username, String accountId, MessageFilter filter) throws Exception ;
   
+  public void removeFilter(String username, String accountId, String filterId) throws Exception ;
+  
   public List<Message> getMessageByTag(String username, String accountId, String tagId) throws Exception ;
   
   public MessagePageList getMessagePagelistByTag(String username, String accountId, String tagId) throws Exception ;
@@ -297,4 +299,6 @@ public interface MailService {
   
   public void importMessage(String username, String accountId, String folderId, InputStream inputStream, String type) throws Exception;
   public OutputStream exportMessage(String username,String accountId, String messageId) throws Exception;
+  
+  public MessageFilter getFilterContainMessage(String username, String accountId, String msgId) throws Exception ;
 }
