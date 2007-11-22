@@ -103,8 +103,7 @@ public class UIBreadcumbs extends UIContainer {
   
   static public class RssActionListener extends EventListener<UIBreadcumbs> {
     public void execute(Event<UIBreadcumbs> event) throws Exception {
-      UIBreadcumbs uiActionBar = event.getSource() ; 
-      UIForumPortlet forumPortlet = uiActionBar.getAncestorOfType(UIForumPortlet.class) ;
+      UIForumPortlet forumPortlet = event.getSource().getAncestorOfType(UIForumPortlet.class) ;
       UICategoryContainer categoryContainer = forumPortlet.getChild(UICategoryContainer.class) ;
       categoryContainer.updateIsRender(true) ;
       forumPortlet.updateIsRendered(1);

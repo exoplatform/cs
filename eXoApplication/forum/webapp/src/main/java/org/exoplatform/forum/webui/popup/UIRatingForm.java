@@ -14,6 +14,7 @@ import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 
 /**
@@ -27,7 +28,7 @@ import org.exoplatform.webui.form.UIForm;
     template = "app:/templates/forum/webui/popup/UIRatingForm.gtmpl",
     events = {
       @EventConfig(listeners = UIRatingForm.VoteTopicActionListener.class), 
-      @EventConfig(listeners = UIRatingForm.CancelActionListener.class)
+      @EventConfig(listeners = UIRatingForm.CancelActionListener.class,phase = Phase.DECODE)
     }
 )
 public class UIRatingForm extends UIForm implements UIPopupComponent {

@@ -69,3 +69,11 @@
 .UITopicForm .ThreadPermission input {
 	float: left ;
 }
+
+.UITopicForm #messageContent___Frame {
+	height: 200px ;
+	width: 435px; 
+}
+
+
+

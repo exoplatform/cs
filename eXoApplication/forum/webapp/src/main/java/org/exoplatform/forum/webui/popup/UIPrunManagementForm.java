@@ -9,6 +9,7 @@ import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 
 /**
@@ -22,7 +23,7 @@ import org.exoplatform.webui.form.UIForm;
     template = "app:/templates/forum/webui/UIPrunManagementForm.gtmpl",
     events = {
       @EventConfig(listeners = UIPrunManagementForm.SaveActionListener.class), 
-      @EventConfig(listeners = UIPrunManagementForm.CancelActionListener.class)
+      @EventConfig(listeners = UIPrunManagementForm.CancelActionListener.class,phase = Phase.DECODE)
     }
 )
 public class UIPrunManagementForm extends UIForm {

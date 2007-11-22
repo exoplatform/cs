@@ -296,7 +296,7 @@ public class UITopicDetail extends UIForm  {
       UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;
       UIPollForm  pollForm = popupAction.createUIComponent(UIPollForm.class, null, null) ;
       pollForm.setTopicPath(topic.getPath()) ;
-      popupAction.activate(pollForm, 662, 466) ;
+      popupAction.activate(pollForm, 655, 455) ;
     }
   }
 

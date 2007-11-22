@@ -9,6 +9,7 @@ import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 
 /**
@@ -22,7 +23,7 @@ import org.exoplatform.webui.form.UIForm;
     template = "app:/templates/forum/webui/UIMergeForm.gtmpl",
     events = {
       @EventConfig(listeners = UIMergeTopicForm.SaveActionListener.class), 
-      @EventConfig(listeners = UIMergeTopicForm.CancelActionListener.class)
+      @EventConfig(listeners = UIMergeTopicForm.CancelActionListener.class,phase = Phase.DECODE)
     }
 )
 public class UIMergeTopicForm extends UIForm {

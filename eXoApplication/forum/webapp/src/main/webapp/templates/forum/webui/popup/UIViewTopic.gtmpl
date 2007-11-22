@@ -19,7 +19,7 @@
 	  <div class="PostContent">
 	  	<br/><div>$messeger</div><br/>
 	  </div>
-	  		
+	<% if(attachments != null && attachments.size() > 0) {%>  		
 	  <div class="AttachmentContainer">
 	  	<div class="AttachmentTitle">Attachments:</div>
 	  	<div class="AttachmentContent">
@@ -38,6 +38,7 @@
 	  		<div style="clear: left;"><span/></div>
 	  	</div>
 	  </div>
+	  <% } %>
 	</div>
 	
 	<div class="UIAction"> 

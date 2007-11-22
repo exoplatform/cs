@@ -5,10 +5,10 @@
 					<table class="UIFormGrid">
 						<tbody>
 							<tr>
-		            <td class="FieldLabel"><%=uicomponent.getLabel("Question")%>:</td>
+		            <td class="FieldLabel"><%=uicomponent.getLabel(uicomponent.FIELD_QUESTION_INPUT)%>:</td>
 		            <td class="FieldComponent" style="width: 400px;" >
 		            	<div class="QuestionInput">
-		              <% uiform.renderChild("Question") %>
+		              <% uiform.renderChild(uicomponent.FIELD_QUESTION_INPUT) %>
 		              </div>
 		            </td>
 							</tr>
@@ -20,9 +20,9 @@
 							<table class="UIFormGrid">
 								<tbody>
 									<tr>
-										<td class="FieldLabel"><%=uicomponent.getLabel("Option")%>:</td>
+										<td class="FieldLabel"><%=uicomponent.getLabel(uicomponent.FIELD_OPTIONS)%>:</td>
 				            <td class="FieldComponent" >
-				              <% uiform.renderChild("Option") %>
+				              <% uiform.renderChild(uicomponent.FIELD_OPTIONS) %>
 				            </td>
 									</tr>
 								</tbody>
@@ -32,18 +32,18 @@
 					<table class="UIFormGrid">
 						<tbody>
 							<tr>
-								<td class="FieldLabel"><%=uicomponent.getLabel("TimeOut")%>:</td>
+								<td class="FieldLabel"><%=uicomponent.getLabel(uicomponent.FIELD_TIMEOUT_INPUT)%>:</td>
 								<td class="FieldComponent" style="width: 60px;">
 									<div class="TimeOutInput">
-		              	<% uiform.renderChild("TimeOut") %>
+		              	<% uiform.renderChild(uicomponent.FIELD_TIMEOUT_INPUT) %>
 		              </div>
 								</td>
 								<td class="Label"><%=_ctx.appRes("UIPollForm.label.DayFromNow"); %></td>
 							</tr>
 							<tr>
-								<td class="FieldLabel"><%=uicomponent.getLabel("MultiVote")%>:</td>
+								<td class="FieldLabel"><%=uicomponent.getLabel(uicomponent.FIELD_MULTIVOTE_CHECKBOX)%>:</td>
 								<td class="FieldComponent">
-		              <% uiform.renderChild("MultiVote") %>
+		              <% uiform.renderChild(uicomponent.FIELD_MULTIVOTE_CHECKBOX) %>
 								</td>
 							</tr>
 						</tbody>

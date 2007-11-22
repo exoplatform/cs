@@ -5,7 +5,7 @@
 
 .UIAddPollForm .HorizontalLayout {
 	background-color: #f7f7f7 ;
-	padding: 25px 50px ;
+	padding: 25px 50px 15px 50px;
 }
 
 .UIAddPollForm .Line {
@@ -15,7 +15,12 @@
 }
 
 .UIAddPollForm .PollOptionConntent {
+	min-height: 152px ;
 	padding: 5px 0px;
+}
+
+*html .UIAddPollForm .PollOptionConntent {
+	height: 300px ;
 }
  
 .UIAddPollForm .HorizontalLayout .UIFormInputSet .Title {

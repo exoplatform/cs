@@ -20,7 +20,6 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
@@ -33,7 +32,7 @@ import org.exoplatform.webui.form.UIFormInputInfo;
 import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
-import org.exoplatform.webui.form.UIFormTextAreaInput;
+import org.exoplatform.webui.form.UIFormWYSIWYGInput;
 import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
 
 /**
@@ -50,12 +49,13 @@ import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
       @EventConfig(listeners = UITopicForm.SubmitThreadActionListener.class), 
       @EventConfig(listeners = UITopicForm.AttachmentActionListener.class), 
       @EventConfig(listeners = UITopicForm.RemoveAttachmentActionListener.class), 
-      @EventConfig(listeners = UITopicForm.CancelActionListener.class)
+      @EventConfig(listeners = UITopicForm.CancelActionListener.class,phase = Phase.DECODE)
     }
 )
 public class UITopicForm extends UIForm implements UIPopupComponent {
   public static final String FIELD_TOPICTITLE_INPUT = "ThreadTitle" ;
   public static final String FIELD_MESSENGER_TEXTAREA = "Messenger" ;
+  final static public String FIELD_MESSAGECONTENT = "messageContent" ;
   public static final String FIELD_TOPICSTATUS_SELECTBOX = "TopicStatus" ;
   public static final String FIELD_TOPICSTATE_SELECTBOX = "TopicState" ;
   
@@ -76,7 +76,7 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
   private String topicId ;
   public UITopicForm() throws Exception {
     UIFormStringInput topicTitle = new UIFormStringInput(FIELD_TOPICTITLE_INPUT, FIELD_TOPICTITLE_INPUT, null);
-    UIFormTextAreaInput messenger = new UIFormTextAreaInput(FIELD_MESSENGER_TEXTAREA, FIELD_MESSENGER_TEXTAREA, null);
+//    UIFormTextAreaInput messenger = new UIFormTextAreaInput(FIELD_MESSENGER_TEXTAREA, FIELD_MESSENGER_TEXTAREA, null);
     
     List<SelectItemOption<String>> ls = new ArrayList<SelectItemOption<String>>() ;
     ls.add(new SelectItemOption<String>("Open", "open")) ;
@@ -98,7 +98,7 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
     UIFormStringInput canPost = new UIFormStringInput(FIELD_CANPOST_INPUT, FIELD_CANPOST_INPUT, null);
     
     addUIFormInput(topicTitle);
-    addUIFormInput(messenger);
+   // addUIFormInput(messenger);
     
     addUIFormInput(topicState);
     addUIFormInput(topicStatus);
@@ -112,7 +112,7 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
     UIFormInputIconSelector uiIconSelector = new UIFormInputIconSelector("Icon", "Icon") ;
     //uiIconSelector.setRendered(false)  ;
     addUIFormInput(uiIconSelector) ;
-
+    addUIFormInput(new UIFormWYSIWYGInput(FIELD_MESSAGECONTENT, null, null, true));
     UIFormInputWithActions inputSet = new UIFormInputWithActions(FIELD_FROM_INPUT); 
     inputSet.addUIFormInput(new UIFormInputInfo(FIELD_ATTACHMENTS, FIELD_ATTACHMENTS, null)) ;
     inputSet.setActionField(FIELD_FROM_INPUT, getUploadFileList()) ;
@@ -173,11 +173,11 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
   public  String[] getIdChild(int Tab) throws Exception {
     String[] actions ;
     switch (Tab) {
-      case 1:actions = new String[] {"ThreadTitle", "Messenger", FIELD_FROM_INPUT} ;  break;
+      case 1:actions = new String[] {FIELD_TOPICTITLE_INPUT, FIELD_MESSAGECONTENT, FIELD_FROM_INPUT} ;  break;
       case 2:actions = new String[] {} ;  break;
-      case 3:actions = new String[] {"TopicStatus", "TopicState", "Approved", "ModeratePost", 
-                                     "NotifyWhenAddPost", "Sticky"} ;  break;
-      case 4:actions = new String[] {"CanView", "CanPost"} ;  break;
+      case 3:actions = new String[] {FIELD_TOPICSTATUS_SELECTBOX, FIELD_TOPICSTATE_SELECTBOX, FIELD_APPROVED_CHECKBOX, "ModeratePost", 
+                                     FIELD_NOTIFYWHENADDPOST_CHECKBOX, FIELD_STICKY_CHECKBOX} ;  break;
+      case 4:actions = new String[] {FIELD_CANVIEW_INPUT, FIELD_CANPOST_INPUT} ;  break;
      default:actions = new String[] {}; break;
     }
     return actions;
@@ -205,7 +205,8 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
     if(isUpdate) {
       this.topicId = topic.getId() ;
       getUIStringInput(FIELD_TOPICTITLE_INPUT).setValue(topic.getTopicName());
-      getUIFormTextAreaInput(FIELD_MESSENGER_TEXTAREA).setDefaultValue(topic.getDescription());
+      //getUIFormTextAreaInput(FIELD_MESSENGER_TEXTAREA).setDefaultValue(topic.getDescription());
+      getChild(UIFormWYSIWYGInput.class).setValue(topic.getDescription());
       String stat = "open";
       if(topic.getIsClosed()) stat = "closed";
       getUIFormSelectBox(FIELD_TOPICSTATE_SELECTBOX).setValue(stat);
@@ -229,7 +230,8 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
       UIFormStringInput stringInputTitle = uiForm.getUIStringInput(FIELD_TOPICTITLE_INPUT) ; 
       stringInputTitle.addValidator(EmptyNameValidator.class);
       String topicTitle = stringInputTitle.getValue().trim();
-      String messenger = uiForm.getUIFormTextAreaInput(FIELD_MESSENGER_TEXTAREA).getValue() ;
+      String messenger = uiForm.getChild(UIFormWYSIWYGInput.class).getValue();
+      	//uiForm.getUIFormTextAreaInput(FIELD_MESSENGER_TEXTAREA).getValue() ;
       String userName = Util.getPortalRequestContext().getRemoteUser() ;
       Post postNew = new Post();
       postNew.setOwner(userName);
@@ -259,7 +261,8 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
       UIFormStringInput stringInputTitle = uiForm.getUIStringInput(FIELD_TOPICTITLE_INPUT) ; 
       stringInputTitle.addValidator(EmptyNameValidator.class);
       String topicTitle = stringInputTitle.getValue().trim();
-      String messenger = uiForm.getUIFormTextAreaInput(FIELD_MESSENGER_TEXTAREA).getValue() ;
+      String messenger = uiForm.getChild(UIFormWYSIWYGInput.class).getValue();
+      	// uiForm.getUIFormTextAreaInput(FIELD_MESSENGER_TEXTAREA).getValue() ;
       String topicState = uiForm.getUIFormSelectBox(FIELD_TOPICSTATE_SELECTBOX).getValue();
       String topicStatus = uiForm.getUIFormSelectBox(FIELD_TOPICSTATUS_SELECTBOX).getValue();
       

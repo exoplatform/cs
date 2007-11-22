@@ -195,3 +195,9 @@
 	padding: 0px 2px;
 	margin: 0px;
 }
+
+.ClassQuote {
+	border: solid 1px #d8d8d8 ;
+	padding: 8px 5px;
+	background: #ededf7 ;
+}

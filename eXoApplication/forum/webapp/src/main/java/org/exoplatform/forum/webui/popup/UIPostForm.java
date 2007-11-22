@@ -20,16 +20,16 @@ import org.exoplatform.forum.webui.UITopicDetailContainer;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormInputIconSelector;
 import org.exoplatform.webui.form.UIFormInputInfo;
 import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormStringInput;
-import org.exoplatform.webui.form.UIFormTextAreaInput;
+import org.exoplatform.webui.form.UIFormWYSIWYGInput;
 import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
 
 /**
@@ -46,36 +46,41 @@ import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
       @EventConfig(listeners = UIPostForm.SubmitPostActionListener.class), 
       @EventConfig(listeners = UIPostForm.AttachmentActionListener.class), 
       @EventConfig(listeners = UIPostForm.RemoveAttachmentActionListener.class), 
-      @EventConfig(listeners = UIPostForm.CancelActionListener.class)
+      @EventConfig(listeners = UIPostForm.CancelActionListener.class,phase = Phase.DECODE)
     }
 )
 public class UIPostForm extends UIForm implements UIPopupComponent {
   private ForumService forumService =  (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
   public static final String FIELD_POSTTITLE_INPUT = "PostTitle" ;
-  public static final String FIELD_MESSENGER_TEXTAREA = "Messenger" ;
+  //public static final String FIELD_MESSENGER_TEXTAREA = "Messenger" ;
   public static final String FIELD_LABEL_QUOTE = "ReUser" ;
   
   final static public String ACT_REMOVE = "remove" ;
   final static public String FIELD_ATTACHMENTS = "attachments" ;
   final static public String FIELD_FROM_INPUT = "fromInput" ;
+  final static public String FIELD_MESSAGECONTENT = "messageContent" ;
+  final static public String FIELD_ORIGINALLY = "Originally" ;
   
   private List<ForumAttachment> attachments_ = new ArrayList<ForumAttachment>() ;
   private String categoryId; 
   private String forumId ;
   private String topicId ;
   private String postId ;
-  private boolean quote = false ;
+  private boolean isQuote = false ;
+  private String temp ;
+  private String style = "style=\"padding: 8px 5px;border: solid 1px #d8d8d8 ;background: #ededf7;\">" ;
   public UIPostForm() throws Exception {
     UIFormStringInput postTitle = new UIFormStringInput(FIELD_POSTTITLE_INPUT, FIELD_POSTTITLE_INPUT, null);
     postTitle.addValidator(EmptyNameValidator.class) ;
-    UIFormTextAreaInput messenger = new UIFormTextAreaInput(FIELD_MESSENGER_TEXTAREA, FIELD_MESSENGER_TEXTAREA, null);
-    messenger.addValidator(EmptyNameValidator.class) ;
+    //UIFormTextAreaInput messenger = new UIFormTextAreaInput(FIELD_MESSENGER_TEXTAREA, FIELD_MESSENGER_TEXTAREA, null);
+    //messenger.addValidator(EmptyNameValidator.class) ;
     addUIFormInput(postTitle);
-    addUIFormInput(messenger);
+    //addUIFormInput(messenger);
     
     UIFormInputIconSelector uiIconSelector = new UIFormInputIconSelector("Icon", "Icon") ;
     addUIFormInput(uiIconSelector) ;
     
+    addUIFormInput(new UIFormWYSIWYGInput(FIELD_MESSAGECONTENT, null, null, true));
     
     UIFormInputWithActions inputSet = new UIFormInputWithActions(FIELD_FROM_INPUT); 
     inputSet.addUIFormInput(new UIFormInputInfo(FIELD_ATTACHMENTS, FIELD_ATTACHMENTS, null)) ;
@@ -88,7 +93,6 @@ public class UIPostForm extends UIForm implements UIPopupComponent {
     this.forumId = forumId ;
     this.topicId = topicId ;
   }
-  
   
   public List<ActionData> getUploadFileList() { 
     List<ActionData> uploadedFiles = new ArrayList<ActionData>() ;
@@ -127,25 +131,36 @@ public class UIPostForm extends UIForm implements UIPopupComponent {
     return attachments_ ;
   }
    
-  public void updatePost(String postId, boolean quote) throws Exception {
+  public void updatePost(String postId, boolean isQuote) throws Exception {
     this.postId = postId ;
-    this.quote = quote ;
+    this.isQuote = isQuote ;
     if(this.postId != null && this.postId.length() > 0) {
+    	this.temp = "<div style=\"padding: 0px 10px 10px;\"><div style=\"height: 16px;\">" + getLabel("Quote") + ":</div><div class=\"ClassQuote\" " ;
       Post post = this.forumService.getPost(this.categoryId, this.forumId, this.topicId, postId) ;
-      if(quote) {
+      String messenger = post.getMessage() ;
+      if(isQuote) {
+      	int begin = messenger.indexOf("TheEndQuote") ;
+      	if(begin > 0) messenger = messenger.substring((begin + 15), messenger.length()) ;
         String title = "" ;
         if(post.getSubject().indexOf(": ") > 0) title = post.getSubject() ;
         else title = getLabel(FIELD_LABEL_QUOTE) + ": " + post.getSubject() ;
         getUIStringInput(FIELD_POSTTITLE_INPUT).setValue(title) ;
-        String quoteTag = "[quote=" + post.getOwner() + "]" ;
-        getUIFormTextAreaInput(FIELD_MESSENGER_TEXTAREA).setDefaultValue(quoteTag + post.getMessage() + "[/quote]") ;
+        String value = this.temp + this.style + "<div>" + this.getLabel(FIELD_ORIGINALLY) + "<b>" + post.getOwner() + "</b></div><div>" + messenger + "</div></div></div><!---TheEndQuote---> <br/>";
+        getChild(UIFormWYSIWYGInput.class).setValue(value);
+        //getUIFormTextAreaInput(FIELD_MESSENGER_TEXTAREA).setDefaultValue(value) ;
+        getChild(UIFormInputIconSelector.class).setSelectedIcon(post.getIcon());
       } else {
         getUIStringInput(FIELD_POSTTITLE_INPUT).setValue(post.getSubject()) ;
-        getUIFormTextAreaInput(FIELD_MESSENGER_TEXTAREA).setDefaultValue(post.getMessage()) ;
+        int index = messenger.indexOf(("<div>" + getLabel(FIELD_ORIGINALLY))) ;
+        if(index > 0) {
+        	messenger = this.temp + this.style + messenger.substring(index, messenger.length());
+        }
+        getChild(UIFormWYSIWYGInput.class).setValue(messenger);
+        //getUIFormTextAreaInput(FIELD_MESSENGER_TEXTAREA).setDefaultValue(messenger) ;
         getChild(UIFormInputIconSelector.class).setSelectedIcon(post.getIcon());
       }
     } else {
-      if(!quote) {
+      if(!isQuote) {
         Topic topic = this.forumService.getTopic(this.categoryId, this.forumId, this.topicId, false) ;
         String title = topic.getTopicName() ;
         getUIStringInput(FIELD_POSTTITLE_INPUT).setValue(getLabel(FIELD_LABEL_QUOTE) + ": " + title) ;
@@ -163,7 +178,7 @@ public class UIPostForm extends UIForm implements UIPopupComponent {
   }
   
   public String[] getActionsTopic() throws Exception {
-    return (new String [] {"PreviewPost", "SubmitPost", "CancelAction"});
+    return (new String [] {"PreviewPost", "SubmitPost", "Cancel"});
   }
     
   static  public class PreviewPostActionListener extends EventListener<UIPostForm> {
@@ -171,9 +186,14 @@ public class UIPostForm extends UIForm implements UIPopupComponent {
       UIPostForm uiForm = event.getSource() ;
       
       String postTitle = uiForm.getUIStringInput(FIELD_POSTTITLE_INPUT).getValue().trim();
-      String message = uiForm.getUIFormTextAreaInput(FIELD_MESSENGER_TEXTAREA).getValue() ;
+      String message = uiForm.getChild(UIFormWYSIWYGInput.class).getValue();
+      	//uiForm.getUIFormTextAreaInput(FIELD_MESSENGER_TEXTAREA).getValue() ;
       String userName = Util.getPortalRequestContext().getRemoteUser() ;
       if(message != null && message.length() > 0) message = message.trim() ;
+      int index = message.indexOf(("<div>" + uiForm.getLabel(FIELD_ORIGINALLY))) ;
+      if(index > 0) {
+      	message = uiForm.temp + ">" + message.substring(index, message.length());
+      }
       Post post = new Post() ;
       post.setSubject(postTitle.trim()) ;
       post.setMessage(message) ;
@@ -200,9 +220,14 @@ public class UIPostForm extends UIForm implements UIPopupComponent {
     public void execute(Event<UIPostForm> event) throws Exception {
       UIPostForm uiForm = event.getSource() ;
       String postTitle = uiForm.getUIStringInput(FIELD_POSTTITLE_INPUT).getValue().trim();
-      String message = uiForm.getUIFormTextAreaInput(FIELD_MESSENGER_TEXTAREA).getValue() ;
+      String message = uiForm.getChild(UIFormWYSIWYGInput.class).getValue();
+      	//uiForm.getUIFormTextAreaInput(FIELD_MESSENGER_TEXTAREA).getValue() ;
       String userName = Util.getPortalRequestContext().getRemoteUser() ;
       if(message != null && message.length() > 0) message = message.trim() ;
+      int index = message.indexOf(("<div>" + uiForm.getLabel(FIELD_ORIGINALLY))) ;
+      if(index > 0) {
+      	message = uiForm.temp + ">" + message.substring(index, message.length());
+      }
       Post post = new Post() ;
       post.setSubject(postTitle.trim()) ;
       post.setMessage(message) ;
@@ -218,7 +243,7 @@ public class UIPostForm extends UIForm implements UIPopupComponent {
       post.setAttachments(uiForm.attachments_) ;
       
       if(uiForm.postId != null && uiForm.postId.length() > 0) {
-        if(uiForm.quote) {
+        if(uiForm.isQuote) {
           uiForm.forumService.savePost(uiForm.categoryId, uiForm.forumId, uiForm.topicId, post, true) ;
         } else {
           post.setId(uiForm.postId) ;

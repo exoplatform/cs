@@ -10,6 +10,7 @@ import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.event.Event.Phase;
 
 /**
  * Created by The eXo Platform SARL
@@ -21,7 +22,7 @@ import org.exoplatform.webui.event.EventListener;
     lifecycle = UIFormLifecycle.class,
     template = "app:/templates/forum/webui/UIViewUserProfile.gtmpl",
     events = {
-      @EventConfig(listeners = UIViewUserProfile.CloseActionListener.class)
+      @EventConfig(listeners = UIViewUserProfile.CloseActionListener.class,phase = Phase.DECODE)
     }
 )
 public class UIViewUserProfile extends UIComponent {

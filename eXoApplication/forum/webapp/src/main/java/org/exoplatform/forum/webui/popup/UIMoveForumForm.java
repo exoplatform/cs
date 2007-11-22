@@ -21,6 +21,7 @@ import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 
 /**
@@ -34,7 +35,7 @@ import org.exoplatform.webui.form.UIForm;
     template = "app:/templates/forum/webui/popup/UIMoveForumForm.gtmpl",
     events = {
       @EventConfig(listeners = UIMoveForumForm.SaveActionListener.class), 
-      @EventConfig(listeners = UIMoveForumForm.CancelActionListener.class)
+      @EventConfig(listeners = UIMoveForumForm.CancelActionListener.class,phase = Phase.DECODE)
     }
 )
 public class UIMoveForumForm extends UIForm implements UIPopupComponent {

@@ -61,7 +61,6 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
       UIFormUploadInput input = (UIFormUploadInput)uiForm.getUIInput(FIELD_UPLOAD);
       UploadResource uploadResource = input.getUploadResource() ;
       if(uploadResource == null) {
-      	System.out.println("\n\n  error 1\n\n");
         uiApp.addMessage(new ApplicationMessage("UIAttachFileForm.msg.fileName-error", null, 
             ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -69,7 +68,6 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
       }
       String fileName = uploadResource.getFileName() ;
       if(fileName == null || fileName.equals("")) {
-      	System.out.println("\n\n  error 2\n\n");
         uiApp.addMessage(new ApplicationMessage("UIAttachFileForm.msg.fileName-error", null, 
             ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -96,7 +94,6 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
          UploadService uploadService = uiForm.getApplicationComponent(UploadService.class) ;
          uploadService.removeUpload(input.getUploadId()) ;
       } catch(Exception e) {
-      	System.out.println("\n\n  error 3\n\n");
         uiApp.addMessage(new ApplicationMessage("UIAttachFileForm.msg.upload-error", null, 
             ApplicationMessage.WARNING));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -104,13 +101,13 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
         return ;
       }
       UIPopupAction popupAction = forumPortlet.findComponentById("UIChildPopupAction") ;
-      popupAction.setRendered(false)  ;
+      popupAction.deActivate() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
       if(uiForm.isTopicForm) {
-        event.getRequestContext().addUIComponentToUpdateByAjax(topicForm) ;
-			} else {
-        event.getRequestContext().addUIComponentToUpdateByAjax(postForm) ;
-			}
+      	event.getRequestContext().addUIComponentToUpdateByAjax(topicForm) ;
+      } else {
+      	event.getRequestContext().addUIComponentToUpdateByAjax(postForm) ;
+      }
     }
   }
 

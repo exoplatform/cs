@@ -291,10 +291,9 @@
 					  		<div style="clear: both;"><span></span></div>
 					  		<% } %>
 				  		</div>
-				  		
 				  	<div class="PostContentContainer">	
 				  		<div class="PostContent">
-				  			<br><div>$messager</div><br>
+				  			<div style="padding-top: 8px">$messager</div>
 				  		</div>
 				  		<% if(attachments != null && attachments.size() > 0) {%>
 				  		<div class="AttachmentContainer">
