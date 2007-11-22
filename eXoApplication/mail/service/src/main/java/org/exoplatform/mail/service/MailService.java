@@ -300,5 +300,5 @@ public interface MailService {
   public void importMessage(String username, String accountId, String folderId, InputStream inputStream, String type) throws Exception;
   public OutputStream exportMessage(String username,String accountId, String messageId) throws Exception;
   
-  public MessageFilter getFilterContainMessage(String username, String accountId, String msgId) throws Exception ;
+  public void execFilters(String username, String accountId) throws Exception ;
 }

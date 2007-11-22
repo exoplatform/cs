@@ -728,7 +728,7 @@ public class JCRDataStorage implements DataStorage{
     return messages;
   }
   
-  public MessageFilter getFilterContainMessage(String username, String accountId, String msgId) throws Exception {
+  public void execFilters(String username, String accountId) throws Exception {
     List<MessageFilter> filterList = getFilters(username, accountId);
     for (MessageFilter filter : filterList) {
       Node homeMsg = getMessageHome(username, accountId);
@@ -737,14 +737,7 @@ public class JCRDataStorage implements DataStorage{
       Query query = qm.createQuery(filter.getStatement(), Query.XPATH);
       QueryResult result = query.execute(); 
       NodeIterator iter = result.getNodes();
-      while (iter.hasNext()) {
-        Node i = iter.nextNode();
-        if (i.getProperty(Utils.EXO_ID).getString().equals(msgId)) {
-          return filter;
-        } 
-      }
-      
+      filter.execActions(homeMsg.getSession(), iter);      
     }
-    return null ;
   }
 }

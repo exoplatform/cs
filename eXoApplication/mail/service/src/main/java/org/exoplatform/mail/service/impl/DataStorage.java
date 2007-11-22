@@ -74,6 +74,6 @@ public interface DataStorage {
   public void removeTag(String username, String accountId, String tagId) throws Exception ;
   public void updateTag(String username, String accountId, Tag tag) throws Exception ;
   
-  public MessageFilter getFilterContainMessage(String username, String accountId, String msgId) throws Exception ;
+  public void execFilters(String username, String accountId) throws Exception ;
   
 }

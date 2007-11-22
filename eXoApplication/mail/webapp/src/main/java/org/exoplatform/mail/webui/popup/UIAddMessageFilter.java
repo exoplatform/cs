@@ -203,6 +203,7 @@ public class UIAddMessageFilter extends UIForm implements UIPopupComponent{
       String applyTag = uiFilter.getApplyTag();
       Boolean keepInbox = uiFilter.getKeepInInbox();
       MessageFilter filter = new MessageFilter(filterName);
+      filter.setAccountId(MailUtils.getAccountId());
       filter.setFrom(from);
       filter.setFromCondition(Integer.valueOf(fromCondition));
       filter.setTo(to);

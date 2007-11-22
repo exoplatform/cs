@@ -383,7 +383,7 @@ public class MailServiceImpl implements MailService{
     }  catch (Exception e) { 
       e.printStackTrace();
     }
-    
+    execFilters(username, accountId);
     return messageList;
   }
 
@@ -537,7 +537,7 @@ public class MailServiceImpl implements MailService{
     return outputStream ; 
   }
   
-  public MessageFilter getFilterContainMessage(String username, String accountId, String msgId) throws Exception {
-    return storage_.getFilterContainMessage(username, accountId, msgId);
+  public void execFilters(String username, String accountId) throws Exception {
+    storage_.execFilters(username, accountId);
   }
 }

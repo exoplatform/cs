@@ -53,7 +53,7 @@ public class UIMessageFilter extends UIForm implements UIPopupComponent{
     String accountId = MailUtils.getAccountId();
     MailService mailSrv = MailUtils.getMailService();
     if (getSelectedFilterId() != null) {
-      return mailSrv.getFilterById(username, accountId, getSelectedFilterId());
+      return null;//mailSrv.getFilterById(username, accountId, getSelectedFilterId());
     } else {
       return null;
     }
