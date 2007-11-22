@@ -20,6 +20,7 @@ import net.fortuna.ical4j.model.ComponentList;
 import net.fortuna.ical4j.model.DateTime;
 import net.fortuna.ical4j.model.Property;
 import net.fortuna.ical4j.model.PropertyList;
+import net.fortuna.ical4j.model.ValidationException;
 import net.fortuna.ical4j.model.component.VEvent;
 import net.fortuna.ical4j.model.property.Attendee;
 import net.fortuna.ical4j.model.property.CalScale;
@@ -71,7 +72,6 @@ public class ICalendarImportExport implements CalendarImportExport{
     calendar.getProperties().add(new ProdId("-//Ben Fortuna//iCal4j 1.0//EN"));
     calendar.getProperties().add(Version.VERSION_2_0);
     calendar.getProperties().add(CalScale.GREGORIAN);
-
     for(CalendarEvent exoEvent : events) {
       if(exoEvent.getEventType().equals(CalendarEvent.TYPE_EVENT)){
 		  long start = exoEvent.getFromDateTime().getTime() ;
@@ -141,7 +141,11 @@ public class ICalendarImportExport implements CalendarImportExport{
 
     ByteArrayOutputStream bout = new ByteArrayOutputStream();
     CalendarOutputter output = new CalendarOutputter();
-    output.output(calendar, bout) ;
+    try {
+    	output.output(calendar, bout) ;
+    }catch(ValidationException e) {
+    	return null ;
+    }    
     return bout;
   }
 

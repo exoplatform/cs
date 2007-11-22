@@ -1009,28 +1009,29 @@ public class JCRDataStorage implements DataStorage{
         ids.clear() ;
         ids.add(calendarId) ;
         OutputStream out = importExport.exportCalendar(username, ids, "0") ;
-        ByteArrayInputStream is = new ByteArrayInputStream(out.toString().getBytes()) ;
-
-        if(iCalHome.hasNode(calendarId + ".ics")){
-          iCalHome.getNode(calendarId + ".ics").setProperty("exo:data", is) ;          
-        }else {
-          Node ical = iCalHome.addNode(calendarId + ".ics", "exo:iCalData") ;
-          ical.setProperty("exo:data", is) ;
-        }
-        StringBuffer path = new StringBuffer("/") ;
-        path.append(iCalHome.getName()).append("/").append(iCalHome.getNode(calendarId + ".ics").getName());        
-        String url = getEntryUrl(portalName, rssHomeNode.getSession().getWorkspace().getName(), 
-            username, path.toString(), rssData.getUrl()) ;
-        Calendar exoCal = getUserCalendar(username, calendarId) ;
-        entry = new SyndEntryImpl();
-        entry.setTitle(exoCal.getName());                
-        entry.setLink(url);        
-        description = new SyndContentImpl();
-        description.setType("text/plain");
-        description.setValue(exoCal.getDescription());
-        entry.setDescription(description);        
-        entries.add(entry);
-        entry.getEnclosures() ;                
+        if(out != null) {
+        	ByteArrayInputStream is = new ByteArrayInputStream(out.toString().getBytes()) ;
+          if(iCalHome.hasNode(calendarId + ".ics")){
+            iCalHome.getNode(calendarId + ".ics").setProperty("exo:data", is) ;          
+          }else {
+            Node ical = iCalHome.addNode(calendarId + ".ics", "exo:iCalData") ;
+            ical.setProperty("exo:data", is) ;
+          }
+          StringBuffer path = new StringBuffer("/") ;
+          path.append(iCalHome.getName()).append("/").append(iCalHome.getNode(calendarId + ".ics").getName());        
+          String url = getEntryUrl(portalName, rssHomeNode.getSession().getWorkspace().getName(), 
+              username, path.toString(), rssData.getUrl()) ;
+          Calendar exoCal = getUserCalendar(username, calendarId) ;
+          entry = new SyndEntryImpl();
+          entry.setTitle(exoCal.getName());                
+          entry.setLink(url);        
+          description = new SyndContentImpl();
+          description.setType("text/plain");
+          description.setValue(exoCal.getDescription());
+          entry.setDescription(description);        
+          entries.add(entry);
+          entry.getEnclosures() ;     
+        }                   
       }      
       feed.setEntries(entries);      
       feed.setEncoding("UTF-8") ;     
