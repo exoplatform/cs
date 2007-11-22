@@ -350,7 +350,8 @@ public class MailServiceImpl implements MailService{
           }
           
           newMsg.setAttachements(new ArrayList<Attachment>());
-          
+          String[] folderIds = { Utils.createFolderId(accountId, account.getIncomingFolder(), false)};
+          newMsg.setFolders(folderIds);
           Object obj = msg.getContent() ;
           if (obj instanceof Multipart) {
             setMultiPart((Multipart)obj, newMsg, username);
@@ -359,17 +360,6 @@ public class MailServiceImpl implements MailService{
           }
           storage_.saveMessage(username, account.getId(), newMsg, true);
           messageList.add(newMsg);
-          
-          MessageFilter filter = getFilterContainMessage(username, accountId, newMsg.getId());
-          String[] folderIds = { Utils.createFolderId(accountId, account.getIncomingFolder(), false)};
-          Message filterMsg = getMessageById(username, accountId, newMsg.getId());
-          if (filter != null) {
-            folderIds = new String[] { filter.getApplyFolder() };
-            filterMsg.setTags(new String[] {filter.getApplyTag()});
-          } 
-          
-          filterMsg.setFolders(folderIds);
-          storage_.saveMessage(username, account.getId(), filterMsg, false);
                     
           for(String folderId : folderIds) {
             Folder storeFolder = storage_.getFolder(username, account.getId(), folderId) ;
