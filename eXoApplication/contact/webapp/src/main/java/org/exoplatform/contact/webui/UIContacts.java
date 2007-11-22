@@ -89,18 +89,8 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   public UIContacts() throws Exception { } 
   public String[] getActions() { return new String[] {"Cancel"} ; }
   public void activate() throws Exception { }
-  public void deActivate() throws Exception { }
-  
-  
-  public void myPrint(String s) { 
-    System.out.println("\n\n print :" + s + "\n\n");
-  }
-  
-  
-  
-  
-  
-  
+  public void deActivate() throws Exception { } 
+
   protected boolean isDisplaySearchResult() {return isSearchResult ;}
   public void setDisplaySearchResult(boolean search) {
     isSearchResult = search ;
@@ -185,9 +175,17 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   public void setSelectedTag(String tagId) {selectedTag_ = tagId ;}
   
   public Map<String, Tag> getTagMap() {
-    UIWorkingContainer workingContainer = getAncestorOfType(UIWorkingContainer.class) ;
-    UITags tags = workingContainer.findFirstComponentOfType(UITags.class) ;
-    return tags.getTagMap() ;
+    return getAncestorOfType(UIWorkingContainer.class)
+      .findFirstComponentOfType(UITags.class).getTagMap() ;
+  }
+  
+  public Map<String, String> getPrivateGroupMap() {
+    return getAncestorOfType(UIWorkingContainer.class)
+      .findFirstComponentOfType(UIAddressBooks.class).getPrivateGroupMap() ;
+  }
+  public Map<String, String> getPublicGroupMap() {
+    return getAncestorOfType(UIWorkingContainer.class)
+      .findFirstComponentOfType(UIAddressBooks.class).getPublicGroupMap() ;
   }
   
   static public class EditContactActionListener extends EventListener<UIContacts> {

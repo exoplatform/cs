@@ -50,6 +50,7 @@ public class UITags extends UIComponent {
     ContactService contactService = ContactUtils.getContactService();
     String username = ContactUtils.getCurrentUser() ;
     List<Tag> tags = contactService.getTags(username) ;
+    tagMap_.clear() ;
     for(Tag tag : tags) { tagMap_.put(tag.getId(), tag) ; }
     return tags;
   }
@@ -129,7 +130,7 @@ public class UITags extends UIComponent {
         uiWorkingContainer.findFirstComponentOfType(UIContactPreview.class).setContact(null) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer) ;
       } else {
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiTags) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiTags) ;        
         event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts) ;
       }  
       

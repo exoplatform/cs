@@ -4,13 +4,16 @@
  **************************************************************************/
 package org.exoplatform.contact.webui;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
+import org.exoplatform.contact.service.Tag;
 import org.exoplatform.contact.webui.popup.UICategoryForm;
 import org.exoplatform.contact.webui.popup.UICategorySelect;
 import org.exoplatform.contact.webui.popup.UIContactForm;
@@ -48,26 +51,30 @@ import org.exoplatform.webui.event.EventListener;
     @EventConfig(listeners = UIAddressBooks.SendEmailActionListener.class) })
 public class UIAddressBooks extends UIComponent {
   private String selectedGroup = null;
-
+  private Map<String, String> privateGroupMap_ = new HashMap<String, String>() ;
+  private Map<String, String> publicGroupMap_ = new HashMap<String, String>() ;
+  
   public UIAddressBooks() throws Exception { }
 
   public List<ContactGroup> getGroups() throws Exception {
-    List<ContactGroup> groupList = ContactUtils.getContactService().getGroups(
-        ContactUtils.getCurrentUser());
+    List<ContactGroup> groupList = ContactUtils.getContactService()
+      .getGroups(ContactUtils.getCurrentUser());
+    privateGroupMap_.clear() ;
+    for (ContactGroup group : groupList) privateGroupMap_.put(group.getId(), group.getName()) ; 
     return groupList;
   }
-
-  public void setSelectedGroup(String groupId) {
-    selectedGroup = groupId;
-  }
-
-  public String getSelectedGroup() {
-    return selectedGroup;
-  }
-
   public List<String> getSharedContactGroups() throws Exception {
-    return ContactUtils.getContactService().getSharedGroupContacts(ContactUtils.getUserGroups());
+    List<String> sharedGroup = ContactUtils.getContactService()
+      .getSharedGroupContacts(ContactUtils.getUserGroups());
+    publicGroupMap_.clear() ;
+    for (String group : sharedGroup) publicGroupMap_.put(group, group) ; 
+    return sharedGroup ;
   }
+  public void setSelectedGroup(String groupId) { selectedGroup = groupId ; }
+  public String getSelectedGroup() { return selectedGroup ; }
+
+  public Map<String, String> getPrivateGroupMap() { return privateGroupMap_ ;}
+  public Map<String, String> getPublicGroupMap() { return publicGroupMap_ ; }
 
   static public class AddAddressActionListener extends EventListener<UIAddressBooks> {
     public void execute(Event<UIAddressBooks> event) throws Exception {
