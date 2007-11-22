@@ -22,7 +22,7 @@
 	  		if(number.equals(selected)) {
 	  %>
 			  <div class="Number">
-			    <div class="PageSelected">$number</div>
+			    <a href="#" class="PageSelected">$number</a>
 			  </div>
 	  	<%} else {%>
 			  <div class="Number">
