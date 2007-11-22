@@ -38,10 +38,14 @@
             <div style="clear: left;"><span></span></div>
           </div>
           <div class="FilterSettingList">
-            <div style="font-weight: bold;">If</div>
-            <div>English placement test results for eXo Platform Employees   </div>
-            <div style="font-weight: bold;">Then</div>
-            <div>Move the message to: Trash     <%=String.valueOf(filter.keepInInbox())%></div>
+            <div style="font-weight: bold;">This filter contains some condition follow :</div>
+            <div>From : <%=filter.getFrom()%></div>
+            <div>To : <%=filter.getTo()%></div>
+            <div>Subject : <%=filter.getSubject()%></div>
+            <div>Body : <%=filter.getBody()%></div>
+            <div style="font-weight: bold;">Apply :</div>
+            <div>Folder :</div>
+            <div>Tag :</div>
           </div>
         <% } %>
       </div>
