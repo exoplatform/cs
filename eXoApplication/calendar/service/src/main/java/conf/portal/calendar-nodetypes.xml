@@ -24,7 +24,7 @@
 	  		</propertyDefinition>
 	  	</propertyDefinitions>	
 	  </nodeType>	
-	  <nodeType	name="exo:attachment" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
+	  <nodeType	name="exo:eventAttachment" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
   		<supertypes>
   			<supertype>nt:file</supertype>
   		</supertypes>
