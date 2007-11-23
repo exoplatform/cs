@@ -1,1 +1,42 @@
-Tag info form
+<div class="UITagInfo">
+	<div class="">
+		<table class="UIFormGrid">
+			<thead>
+				<th class="Border">Tag</th>
+				<th>Tag name</th>
+			</thead>
+			<tbody>
+				<tr>
+					<td class="FieldLabel Border"><div class="TagIcon RedTag"><span></span></div></td>
+					<td class="FieldComponent">
+						Customers
+					</td>
+				</tr>
+				<tr>
+					<td class="FieldLabel Border"><div class="TagIcon BlueTag"><span></span></div></td>
+					<td class="FieldComponent">
+						Customers
+					</td>
+				</tr>
+				<tr>
+					<td class="FieldLabel Border"><div class="TagIcon GreenTag"><span></span></div></td>
+					<td class="FieldComponent">
+						Customers
+					</td>
+				</tr>
+				<tr>
+					<td class="FieldLabel Border"><div class="TagIcon RedTag"><span></span></div></td>
+					<td class="FieldComponent">
+						Customers
+					</td>
+				</tr>
+				<tr>
+					<td class="FieldLabel Border"><div class="TagIcon RedTag"><span></span></div></td>
+					<td class="FieldComponent">
+						Customers
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>

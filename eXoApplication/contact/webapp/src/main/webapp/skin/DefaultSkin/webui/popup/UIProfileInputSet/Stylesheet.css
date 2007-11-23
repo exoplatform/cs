@@ -60,3 +60,8 @@
 .Profile .UIForm .HorizontalLayout .Home {
 	background: none;
 }
+
+.UIForm .HorizontalLayout .Profile select.selectbox {
+	width: 61px;
+	text-align: center;
+}

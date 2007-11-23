@@ -20,6 +20,7 @@
 
 .UIVCards .UIVCardsContent {
 	padding: 5px;
+	background: white;
 }
 
 .UIVCards .UIVCardsContent .WorkVCardsContent{
@@ -68,7 +69,8 @@
 
 .UIVCards .TitleVCards .TagIcon {
 	float: right;
-	width: 16px;
+	padding-left: 20px;
+	line-height: 25px;
 	height: 25px;
 	cursor: pointer;
 }

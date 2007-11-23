@@ -14,3 +14,44 @@
 @import url("popup/UIExportAddressBookForm/Stylesheet.css") ;
 @import url("popup/UIImportForm/Stylesheet.css") ;
 @import url("UIWelcomeContact/Stylesheet.css") ;
+
+
+
+/***************************** PopUp ****************************/
+
+/*-----------------------UITagInfo-------------------*/
+
+.UITagInfo {
+	padding: 10px;
+	background: #f3f3f3;
+}
+
+.UITagInfo .UIFormGrid {
+	margin: auto;
+	border: 1px solid #a5a5a6;
+	background: white;
+}
+
+.UITagInfo .UIFormGrid th {
+	background: url('background/BGTitle1x21.gif') repeat-x ;
+	height: 21px;
+	line-height: 21px;
+	padding-left: 4px;
+	text-align: left;
+}
+
+.UITagInfo .UIFormGrid td {
+	padding: 0px 4px;
+	line-height: 20px;
+}
+
+.UITagInfo .UIFormGrid .TagIcon {
+	height: 23px;
+	width: 20px;
+	margin: auto;
+}
+
+.UITagInfo .UIFormGrid .Border {
+	border-right: 1px solid #EBE7EA;
+	width: 30px;
+}

@@ -96,13 +96,13 @@
 							   	%>
 			            <tr>
 		                <td class="FieldLabel"> $birthdayLabel </td>
-			              <td class="FieldComponent"><%uicomponent.renderUIComponent(dayField)%></td>
-			              
-			              <td class="FieldLabel"> - </td>
-			              <td class="FieldComponent"><%uicomponent.renderUIComponent(monthField)%></td>
-			              
-			              <td class="FieldLabel"> - </td>
-			              <td class="FieldComponent"><%uicomponent.renderUIComponent(yearField)%></td>
+			              <td class="FieldComponent">
+			              	<%uicomponent.renderUIComponent(dayField)%>
+			              	<span>-</span>	
+			              	<%uicomponent.renderUIComponent(monthField)%>
+			              	<span>-</span>
+			              	<%uicomponent.renderUIComponent(yearField)%>
+			              </td>
 			            </tr>
 			            <%								
 			      			  field = uicomponent.getChildById("jobTitle")
@@ -143,7 +143,4 @@
 	</div>
 	
 	<div style="clear: left;"><span></span></div>
-</div>
-
-
-				        
+</div>				        
