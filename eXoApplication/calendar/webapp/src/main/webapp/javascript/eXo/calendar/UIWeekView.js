@@ -28,8 +28,7 @@ UIWeekView.prototype.init = function() {
 		marker = DOMUtil.findFirstDescendantByClass(UIWeekView.items[i], "div", "ResizeEventContainer") ;
 		marker.onmousedown = UIWeekView.initResize ;
 	}
-	var uiWeekViewGrid = document.getElementById("UIWeekViewGrid") ;
-	var tr = DOMUtil.findDescendantsByTagName(uiWeekViewGrid, "tr") ;
+	var tr = DOMUtil.findDescendantsByTagName(UIWeekView.container, "tr") ;
 	var firstTr = null ;
 	for(var i = 0 ; i < tr.length ; i ++) {
 		if (tr[i].style.display != "none") {
@@ -50,19 +49,9 @@ UIWeekView.prototype.init = function() {
 		UIWeekView.showInCol(UIWeekView.cols[i]) ;
 	}
 	UIWeekView.initAllday() ;
+	var EventWeekContent = DOMUtil.findAncestorByClass(UIWeekView.container,"EventWeekContent") ;
+	EventWeekContent.scrollTop = (UICalendarPortlet.workingStart) ? UICalendarPortlet.workingStart : 0 ;
 } ;
-
-//UIWeekView.prototype.setSize = function(obj) {
-//	var start = parseInt(obj.getAttribute("startTime")) ;
-//	var end = parseInt(obj.getAttribute("endTime")) ;	
-//	height = Math.abs(start - end) ;
-//	var workingStart = (eXo.calendar.UICalendarPortlet.workingStart) ? parseInt(eXo.calendar.UICalendarPortlet.workingStart) : 0 ;
-//	var top = start - workingStart;
-//	obj.style.height = (height - 2) + "px" ;
-//	obj.style.top = top + "px" ;
-//	var eventContainer = eXo.core.DOMUtil.findFirstDescendantByClass(obj, "div", "EventContainer") ;
-//	eventContainer.style.height = (height - 19) + "px" ;
-//} ;
 
 UIWeekView.prototype.showInCol = function(obj) {
 	var items = eXo.calendar.UICalendarPortlet.getElements(obj) ;//eXo.core.DOMUtil.findDescendantsByClass(obj, "div", "EventContainerBorder") ;
@@ -102,15 +91,9 @@ UIWeekView.prototype.drag = function(evt) {
 	var mouseY = eXo.core.Browser.findMouseRelativeY(UIWeekView.container,_e) - UIWeekView.container.scrollTop ;
 	var posY = UIWeekView.dragElement.offsetTop ;
 	var height =  UIWeekView.dragElement.offsetHeight ;
-	var deltaY = null ;
-//	if(mouseY <= posY) {
-//		 UIWeekView.dragElement.style.top = parseInt(UIWeekView.dragElement.style.top) - eXo.calendar.UICalendarPortlet.interval + "px" ;
-//	} else if(mouseY >= (posY + height) ) {
-//		UIWeekView.dragElement.style.top = parseInt(UIWeekView.dragElement.style.top) + eXo.calendar.UICalendarPortlet.interval + "px" ;
-//	} else {		
-		deltaY = _e.clientY - UIWeekView.mouseY ;
-		if(deltaY%eXo.calendar.UICalendarPortlet.interval == 0) UIWeekView.dragElement.style.top = UIWeekView.mousePos(_e).y - UIWeekView.offset.y - UIWeekView.containerOffset.y + "px" ;
-//	}
+	var deltaY = null ;	
+	deltaY = _e.clientY - UIWeekView.mouseY ;
+	if(deltaY%eXo.calendar.UICalendarPortlet.interval == 0) UIWeekView.dragElement.style.top = UIWeekView.mousePos(_e).y - UIWeekView.offset.y - UIWeekView.containerOffset.y + "px" ;
 	if (UIWeekView.isCol(_e)) {
 		var posX = eXo.core.Browser.findPosXInContainer(UIWeekView.currentCol, UIWeekView.container) ;
 		var left = parseFloat(posX/UIWeekView.container.offsetWidth)*100 ;
@@ -123,7 +106,6 @@ UIWeekView.prototype.dropCallback = function() {
 	var start = parseInt(dragElement.getAttribute("startTime")) ;
 	var end = parseInt(dragElement.getAttribute("endTime")) ;
 	var calType = parseInt(dragElement.getAttribute("calType")) ;
-	//var workingStart = (eXo.calendar.UICalendarPortlet.workingStart) ? eXo.calendar.UICalendarPortlet.workingStart : 0 ;
 	var workingStart = 0 ;
 	if (end == 0) end = 1440 ;
 	var delta = end - start  ;
@@ -205,36 +187,187 @@ UIWeekView.prototype.resizeCallback = function(evt) {
 
 // For all day event
 
+UIWeekView.prototype.initAlldayDND = function(evt) {
+	var _e = window.event || evt ;
+	var UIWeekView = eXo.calendar.UIWeekView ;
+	var DragDrop = eXo.core.DragDrop ;
+	var EventAllday = eXo.core.DOMUtil.findAncestorByClass(this, "EventAllday") ;
+	dragObject = this ;
+	UIWeekView.totalWidth = EventAllday.offsetWidth ;
+	UIWeekView.elementTop = dragObject.offsetTop ;
+	//UIWeekView.elementLeft = (dragObject.offsetLeft/UIWeekView.totalWidth)* 100 ;
+	UIWeekView.elementLeft = dragObject.offsetLeft ;
+	DragDrop.initCallback = UIWeekView.allDayInitCallback ;
+  DragDrop.dragCallback = UIWeekView.allDayDragCallback ;
+  DragDrop.dropCallback = UIWeekView.allDayDropCallback ;
+	DragDrop.init(null, dragObject, dragObject, _e) ;
+} ;
+
+UIWeekView.prototype.allDayInitCallback = function(evt) {
+	var UIWeekView = eXo.calendar.UIWeekView ;
+	var dragObject = evt.dragObject ;
+	dragObject.style.left = UIWeekView.elementLeft + "px" ;
+	UIWeekView.beforeStart = dragObject.offsetLeft ;
+} ;
+
+UIWeekView.prototype.allDayDragCallback = function(evt) {
+	var dragObject = evt.dragObject ;
+	var UIWeekView = eXo.calendar.UIWeekView ;
+	dragObject.style.top = UIWeekView.elementTop + "px" ;
+} ;
+
+UIWeekView.prototype.allDayDropCallback = function(evt) {
+	var dragObject = evt.dragObject ;	
+	var UIWeekView = eXo.calendar.UIWeekView ;
+	dragObject.style.left = parseFloat(dragObject.offsetLeft/UIWeekView.totalWidth)*100 + "%" ;
+	UIWeekView.elementLeft = 0 ;
+	var delta = dragObject.offsetLeft - UIWeekView.beforeStart ;
+	
+//	if (dragObject.offsetLeft != UIWeekView.beforeStart) {
+//		var UICalendarPortlet = eXo.calendar.UICalendarPortlet
+//		var start =  UICalendarPortlet.timeToMin(parseInt(dragObject.getAttribute("startTime"))) ;
+//		var end = UICalendarPortlet.timeToMin(parseInt(dragObject.getAttribute("endTime"))) ;
+//		var actionLink = UICalendarPortlet.adjustTime(start, end, dragObject) ;
+//		var currentDate = dragObject.parentNode.getAttribute("starttime").toString() ;
+//		actionLink = actionLink.toString().replace(/'\s*\)/,"&currentDate=" + currentDate + "&calType=" + calType + "')") ;
+//		eval(actionLink) ;
+//	}	
+} ;
+
 UIWeekView.prototype.initAllday = function() {
 	var uiWeekViewGridAllDay = document.getElementById("UIWeekViewGridAllDay") ;
-	var eventAlldayContainers = eXo.core.DOMUtil.findDescendantsByClass(uiWeekViewGridAllDay, "div", "EventAlldayContainer") ;
+	var eventAllday = eXo.core.DOMUtil.findDescendantsByClass(uiWeekViewGridAllDay, "div", "EventAlldayContainer") ;
+	var len = eventAllday.length ;
+	if (len <= 0) return ;
+	var EventAlldayContainer = eXo.core.DOMUtil.findFirstDescendantByClass(uiWeekViewGridAllDay,"td","EventAllday") ;
+	EventAlldayContainer.style.height = eventAllday.length * eventAllday[0].offsetHeight + "px" ;
 	var th = eXo.core.DOMUtil.findDescendantsByTagName(uiWeekViewGridAllDay, "th") ;
-	var len = eventAlldayContainers.length ;
-	if(len <= 0) return ;
-	var indexBeginDate = 0 ;
-	var indexEndDate = 0 ;
-	var startTime = 0 ;
-	var endTime = 0 ;
-	var delta = 0 ;
-	for(var i = 0 ; i < len ; i ++) {
-		indexBeginDate = parseInt(eventAlldayContainers[i].getAttribute("indexBeginDate")) ;
-		indexEndDate = parseInt(eventAlldayContainers[i].getAttribute("indexEndDate")) ;
-		startTime = eXo.calendar.UICalendarPortlet.timeToMin(eventAlldayContainers[i].getAttribute("startTime")) ; 	
-		endTime = eXo.calendar.UICalendarPortlet.timeToMin(eventAlldayContainers[i].getAttribute("endTime")) ;		
-		if (indexBeginDate < 0) {			
-			indexBeginDate = 0 ;
-			startTime = 0 ;
-		}
-		if ((indexEndDate < 0) || (indexEndDate > 6)) {			
-			indexEndDate = 6 ;
-			endTime = 24*60 ;
-		}
-		delta = (Math.abs(indexBeginDate - indexEndDate) == 0) ? 1 : Math.abs(indexBeginDate - indexEndDate) ;
-		eventAlldayContainers[i].style.width = delta*(100/7) + parseInt((endTime - startTime)*(10/(24*7*6))) + "%" ;
-		eventAlldayContainers[i].style.marginLeft = parseFloat((indexBeginDate)*(100/7)) + (startTime)*(10/(24*7*6))  + "%" ;
+	eventAllday = this.sortEventsInCol(th, eventAllday) ;
+	this.setPosition(eventAllday) ;
+}
 
+UIWeekView.prototype.sortByWidth = function(obj) {
+	var len = obj.length ;
+	var tmp = null ;
+	var attribute1 = null ;
+	var attribute2 = null ;
+	var start1 = null ;
+	var start2 = null ;
+	for(var i = 0 ; i < len ; i ++){
+		attribute1 = obj[i].offsetWidth ;
+		start1 = parseInt(obj[i].getAttribute("startTime")) ;
+		for(var j = i + 1 ; j < len ; j ++){
+			attribute2 = obj[j].offsetWidth ;
+			start2 = parseInt(obj[i].getAttribute("startTime")) ;
+			if((attribute2 > attribute1) && (start1 == start2)) {
+				tmp = obj[i] ;
+				obj[i] = obj[j] ;
+				obj[j] = tmp ;
+			}
+		}
+	}
+	return obj ;
+} ;
+
+UIWeekView.prototype.getMinutes = function(millisecond) {
+	return eXo.calendar.UICalendarPortlet.timeToMin(millisecond) ;
+} ;
+
+UIWeekView.prototype.getEventsInCol = function(col, events) {
+	var colLeft = col.offsetLeft ;
+	var colWidth = col.offsetLeft + col.offsetWidth ;
+	var eventLeft = null ;
+	var len = events.length ;
+	var eventsInCol = new Array() ;
+	for(var i = 0 ; i < len ; i++) {
+		eventLeft = events[i].offsetLeft ;
+		if((eventLeft >= colLeft) && (eventLeft <= colWidth)) eventsInCol.push(events[i]) ;
+	}
+	if (eventsInCol.length <= 0) return false ;
+	eventsInCol = this.sortByWidth(eventsInCol) ;
+	return eventsInCol ;
+}
+
+UIWeekView.prototype.sortEventsInCol = function(cols,events) {
+	events = eXo.calendar.UICalendarPortlet.sortByAttribute(events, "startTime") ;
+	var len = cols.length ;
+	if(len <= 0) return ;
+	var newevents = new Array() ;
+	for(var i =0 ; i < len ; i ++) {		
+		if (this.getEventsInCol(cols[i], events) != false) {
+			newevents = newevents.concat(this.getEventsInCol(cols[i], events)) ;			
+		}
+	}
+	return newevents ;
+} ;
+
+UIWeekView.prototype.setPosition = function(events) {
+	events = this.setWidth(events) ;
+	events = this.setLeft(events) ;
+	//this.setTop(events) ;
+} ;
+
+
+UIWeekView.prototype.setTop = function(events) {
+	var beforeLeft = 0 ;
+	var afterLeft = 0 ;
+	for(var i = 0 ; i < events.length ; i ++) {
+		beforeLeft = parseFloat(events[i].style.width) + parseFloat(events[i].style.left) ;
+		afterLeft = 0 ;
+		for(var j = i + 1, beforeLeft = parseFloat(events[i].style.width) + parseFloat(events[i].style.left) ; j < events.length ; j++) {
+			afterLeft = parseFloat(events[j].style.left) ;
+			if (afterLeft >= beforeLeft) {
+				events[j].style.top = parseInt(events[i].style.top) + "px" ;
+				beforeLeft += parseInt(events[i].style.top) ;
+				events.splice(j) ;
+				break ;
+			}
+		}
 	}
 }
+UIWeekView.prototype.setLeft = function(events) {
+	var len = events.length ;
+	var uiWeekViewGridAllDay = document.getElementById("UIWeekViewGridAllDay") ;
+	var th = eXo.core.DOMUtil.findDescendantsByTagName(uiWeekViewGridAllDay, "th")[1] ;	
+	var start = 0 ;
+	var left = 0 ;
+	var startWeek = parseInt(th.getAttribute("startTime")) ;
+	var totalWidth = parseFloat(eXo.core.Browser.findPosXInContainer(events[0].parentNode, events[0].offsetParent)/events[0].offsetParent.offsetWidth)*100 ;
+	for(var i = 0 ; i < len ; i ++) {
+		start = parseInt(events[i].getAttribute("startTime")) ;
+		if (start < startWeek) start = startWeek ;
+		diff = start - startWeek ;
+		left = parseFloat((diff/(24*7*60*60*1000))*(100*events[0].parentNode.offsetWidth)/(events[0].offsetParent.offsetWidth)) ;
+		events[i].style.left = left + totalWidth + "%" ;
+		events[i].style.top = eXo.core.Browser.findPosYInContainer(events[i],events[i].offsetParent) +  i*events[i].offsetHeight + "px" ;
+	}
+	return events ;
+} ;
+
+UIWeekView.prototype.setWidth = function(events) {
+	var len = events.length ;
+	var start = 0 ;
+	var end = 0 ;
+	var diff = 0 ;
+	var uiWeekViewGridAllDay = document.getElementById("UIWeekViewGridAllDay") ;
+	var startWeek = eXo.core.DOMUtil.findDescendantsByTagName(uiWeekViewGridAllDay, "th")[1] ;	
+	var endWeek = eXo.core.DOMUtil.findDescendantsByTagName(uiWeekViewGridAllDay, "th")[7] ;
+	startWeek = parseInt(startWeek.getAttribute("startTime")) ;
+	endWeek = parseInt(endWeek.getAttribute("startTime")) ;
+	var totalWidth = parseFloat(events[0].parentNode.offsetWidth/events[0].offsetParent.offsetWidth) ;
+	for(var i = 0 ; i < len ; i ++) {
+		start = parseInt(events[i].getAttribute("startTime")) ;
+		end = parseInt(events[i].getAttribute("endTime")) ;
+		if (start < startWeek) start = startWeek ;
+		if (end > (endWeek + 24*60*60*1000)) end = endWeek + 24*60*60*1000 ;
+		diff = end - start ;
+		events[i].style.width = parseFloat(diff/(24*7*60*60*1000))*100*totalWidth - 0.2 + "%" ;
+		events[i].onmousedown = eXo.calendar.UIWeekView.initAlldayDND ;
+	}
+	return events ;
+} ;
+
+// For user selection 
 
 UIWeekView.prototype.initSelection = function() {	
 	var UISelection = eXo.calendar.UISelection ;

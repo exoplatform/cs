@@ -5,35 +5,32 @@ function UICalendarPortlet() {
 }
 
 /* for general calendar */
-UICalendarPortlet.prototype.timeToMin = function(timeFormat) {
-		var pm = false ;
-		var am = false ;
-		timeFormat = timeFormat.toString().trim() ;
-		if (timeFormat.indexOf("PM") != -1) pm = true ;
-		if (timeFormat.indexOf("AM") != -1) am = true ;
-		var format = /\d{2}\s*:\s*\d{2}\s*AM|PM/ ;
-		var hour = null ;
-		var min = null ;
-		if (format.test(timeFormat)){
-			timeFormat = timeFormat.replace(/[A-Z]+/,"") ;
-		}
-		timeFormat = timeFormat.split(":") ;
-		hour = Number(timeFormat[0].toString().trim()) ;
-		min = Number(timeFormat[1].toString().trim()) ;
-		if(pm) {		
-			hour = (hour != 12) ? hour + 12 : hour ;
-		}
-		if(am) {		
-			hour = (hour != 12) ? hour : 0 ;
-		}
-		min += hour*60 ;
+UICalendarPortlet.prototype.timeToMin = function(milliseconds) {
+	var d = new Date(milliseconds) ;
+	var hour = d.getHours();
+	var min = d.getMinutes();
+  var min = hour*60 + min ;
 	return min ;
 }	;
+UICalendarPortlet.prototype.dateDiff = function(start,end) {
+	start = (new Date(start)).getDate() ;
+	end = (new Date(end)).getDate() ;
+	return (end - start) ;
+} ;
+
+UICalendarPortlet.prototype.isMatchDate = function(start,end) {
+	start = (new Date(start)).getDate() ;
+	end = (new Date(end)).getDate() ;
+	if (end == start) return true ;
+	return false ;
+} ;
 
 UICalendarPortlet.prototype.setting = function() {
 	var UICalendarPortlet = eXo.calendar.UICalendarPortlet ;
 	UICalendarPortlet.interval = ((arguments.length > 0) && (isNaN(parseInt(arguments[0])) == false )) ? parseInt(arguments[0]) : parseInt(15) ;
-	UICalendarPortlet.workingStart =  ((arguments.length > 1) && (isNaN(parseInt(arguments[1])) == false ) && (arguments[1] != "null")) ? UICalendarPortlet.timeToMin(arguments[1]) : parseInt(0) ;
+	var workingStart =  ((arguments.length > 1) && (isNaN(parseInt(arguments[1])) == false ) && (arguments[1] != "null")) ? arguments[1] : "" ;
+	workingStart = "1/1/2007 " + workingStart ;
+	UICalendarPortlet.workingStart = UICalendarPortlet.timeToMin(workingStart) ;
 } ;
 
 UICalendarPortlet.prototype.hide = function() {
@@ -262,7 +259,8 @@ UICalendarPortlet.prototype.getElements = function(viewer) {
 
 UICalendarPortlet.prototype.setSize = function(obj) {
 	var start = parseInt(obj.getAttribute("startTime")) ;
-	var end = parseInt(obj.getAttribute("endTime")) ;	
+	var end = parseInt(obj.getAttribute("endTime")) ;
+	if (end == 0) end = 1440 ;
 	end = (end !=0) ? end : 1440 ;
 	height = Math.abs(start - end) ;
 	//var workingStart = (eXo.calendar.UICalendarPortlet.workingStart) ? parseInt(eXo.calendar.UICalendarPortlet.workingStart) : 0 ;
@@ -271,7 +269,7 @@ UICalendarPortlet.prototype.setSize = function(obj) {
 	obj.style.height = (height - 2) + "px" ;
 	obj.style.top = top + "px" ;
 	var eventContainer = eXo.core.DOMUtil.findFirstDescendantByClass(obj, "div", "EventContainer") ;
-	eventContainer.style.height = (height - 19) + "px" ;
+	eventContainer.style.height = (height - 22) + "px" ;
 } ;
 
 UICalendarPortlet.prototype.setWidth = function(element, width) {
@@ -282,7 +280,6 @@ UICalendarPortlet.prototype.getInterval = function(el) {
 	var bottom = new Array() ;
 	var interval = new Array() ;
 	if (el.length <= 0) return ;
-
 	for(var i = 0 ; i < el.length ; i ++ ) {
 		bottom.push(el[i].offsetTop + el[i].offsetHeight) ;
 		if (bottom[i-1] && (el[i].offsetTop > bottom[i-1])) {
@@ -338,19 +335,11 @@ UICalendarPortlet.prototype.adjustWidth = function(el) {
 	}
 } ;
 
-UICalendarPortlet.prototype.test = function() {
-	
-}
-
 UICalendarPortlet.prototype.showEvent = function() {
 	var UICalendarPortlet = eXo.calendar.UICalendarPortlet ;	
 	if (!UICalendarPortlet.init()) return ;
 	var workingStart = 0 ;
-//	if (arguments.length >= 2){
-//		UICalendarPortlet.setting(arguments[0], arguments[1]) ;
 	var workingStart = (UICalendarPortlet.workingStart) ? UICalendarPortlet.workingStart : 0 ;	
-//		workingStart = UICalendarPortlet.workingStart ;		
-	//}
 	var el = UICalendarPortlet.getElements(UICalendarPortlet.viewer) ;
 	el = UICalendarPortlet.sortByAttribute(el, "startTime") ;
 	if (el.length <= 0) return ;
@@ -362,6 +351,8 @@ UICalendarPortlet.prototype.showEvent = function() {
 		marker.onmousedown = eXo.calendar.UIResizeEvent.init ;
 	}
 	UICalendarPortlet.adjustWidth(el) ;
+	var EventDayContainer = eXo.core.DOMUtil.findAncestorByClass(UICalendarPortlet.viewer,"EventDayContainer") ;
+	EventDayContainer.scrollTop = workingStart ;
 } ;
 
 UICalendarPortlet.prototype.sortByAttribute = function(obj, attribute) {
@@ -476,44 +467,6 @@ UIResizeEvent.prototype.resizeCallback = function(evt) {
 		eval(actionLink) ;
 	}	
 } ;
-//UICalendarPortlet.prototype.initResize = function(evt) {	
-//	var _e = window.event || evt ;
-//	_e.cancelBubble = true ;
-//	var UICalendarPortlet = eXo.calendar.UICalendarPortlet ;
-//	UICalendarPortlet.resizeObject = this ;
-//	UICalendarPortlet.posY = _e.clientY ;
-//	var eventDayContainer = eXo.core.DOMUtil.findAncestorByClass(UICalendarPortlet.resizeObject, 'EventDayContainer') ;
-//	UICalendarPortlet.eventBox = eXo.core.DOMUtil.findAncestorByClass(UICalendarPortlet.resizeObject,'EventContainerBorder') ;
-//	UICalendarPortlet.eventContainer = eXo.core.DOMUtil.findPreviousElementByTagName(UICalendarPortlet.resizeObject, "div") ;
-//	UICalendarPortlet.posY = _e.clientY ;
-//	UICalendarPortlet.beforeHeight = UICalendarPortlet.eventBox.offsetHeight ;
-//	UICalendarPortlet.eventContainerHeight = UICalendarPortlet.eventContainer.offsetHeight + 2 ;
-//	eventDayContainer.onmousemove = UICalendarPortlet.adjustHeight ;
-//	eventDayContainer.onmouseup = UICalendarPortlet.resizeCallBack ;
-//} ;
-//
-//UICalendarPortlet.prototype.adjustHeight = function(evt) {
-//	var _e = window.event || evt ;
-//	var UICalendarPortlet = eXo.calendar.UICalendarPortlet ;
-//	var delta = _e.clientY - UICalendarPortlet.posY ;
-//	var height = UICalendarPortlet.beforeHeight + delta ;
-//	var containerHeight = UICalendarPortlet.eventContainerHeight + delta ;
-//	if (height <= (eXo.calendar.UICalendarPortlet.step/2)) return ;
-//	if (delta%UICalendarPortlet.interval == 0){
-//		UICalendarPortlet.eventBox.style.height = height + "px" ;
-//		UICalendarPortlet.eventContainer.style.height = containerHeight + "px" ;
-//	}	
-//} ;
-//
-//UICalendarPortlet.prototype.resizeCallBack = function() {
-//	var eventBox = eXo.calendar.UICalendarPortlet.eventBox ;
-//	var start =  parseInt(eventBox.getAttribute("startTime")) ;
-//	var end =  start + eventBox.offsetHeight - 2 ;
-//	if (eventBox.offsetHeight != eXo.calendar.UICalendarPortlet.beforeHeight) {
-//		var actionLink = eXo.calendar.UICalendarPortlet.adjustTime(start, end, eventBox) ;	
-//		eval(actionLink) ;
-//	}	
-//} ;
 
 /* for drag and drop */
 
@@ -523,6 +476,7 @@ UICalendarPortlet.prototype.resetZIndex = function(obj) {
 	var items = eXo.core.DOMUtil.getChildrenByTagName(obj.parentNode, "div") ;
 	var len = items.length ;
 	for(var i = 0 ; i < len ; i ++) {
+		if (!items[i].style.zIndex) items[i].style.zIndex = 1 ;
 		if(parseInt(items[i].style.zIndex) > maxZIndex) {
 			maxZIndex = parseInt(items[i].style.zIndex) ;
 		}
@@ -597,7 +551,6 @@ UICalendarPortlet.prototype.adjustTime = function(currentStart, currentEnd, obj)
 	var params = "startTime=" + currentStart + "&finishTime=" + currentEnd ;
 	actionLink = actionLink.replace(pattern, params).replace("javascript:","") ;
 	return actionLink ;
-	//eval(actionLink) ;
 } ;
 
 /* for showing context menu */
@@ -659,7 +612,7 @@ UICalendarPortlet.prototype.weekViewCallback = function(evt) {
 	var map = null ;
 	var obj = null ;
 	var items = DOMUtil.findDescendantsByTagName(UIContextMenu.menuElement,"a") ;
-	if (DOMUtil.hasClass(src,"EventContainerBorder") || DOMUtil.hasClass(src,"EventContainerBar") || DOMUtil.hasClass(src,"EventContainer") || DOMUtil.hasClass(src,"ResizeEventContainer")) {
+	if (DOMUtil.hasClass(src,"EventContainerBorder") || DOMUtil.hasClass(src,"EventContainerBar") || DOMUtil.hasClass(src,"EventContainer") || DOMUtil.hasClass(src,"ResizeEventContainer") || (src.tagName.toLowerCase() == "p")) {
 		var obj = (DOMUtil.findAncestorByClass(src, "EventContainerBorder"))? DOMUtil.findAncestorByClass(src, "EventContainerBorder") : src ;
 		var eventId = obj.getAttribute("eventid") ;
 		var calendarId = obj.getAttribute("calid") ;

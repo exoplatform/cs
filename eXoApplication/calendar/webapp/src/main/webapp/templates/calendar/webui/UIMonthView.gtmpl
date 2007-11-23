@@ -5,8 +5,8 @@
 	import java.util.Date;
 	import java.util.GregorianCalendar;
 	def rcontext = _ctx.getRequestContext() ;
-  rcontext.getJavascriptManager().importJavascript('eXo.calendar.UICalendarDragDrop','/calendar/javascript/') ;
-  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarDragDrop.init() ;') ;
+  rcontext.getJavascriptManager().importJavascript('eXo.calendar.UIMonthView','/calendar/javascript/') ;
+  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UIMonthView.init() ;') ;
 	uiform.begin()
  	_ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");
  	int currentDay = uicomponent.getCurrentDay() ;
@@ -26,7 +26,6 @@
 	DateFormat tf = new SimpleDateFormat(timeFormat) ;
 	DateFormat dtf = new SimpleDateFormat(dateTimeFormat) ;
 	DateFormat wf = new  SimpleDateFormat("EEE, dd/MMM") ;
-	
 	%>
 		
 	<div class="UIMonthView">
@@ -72,11 +71,10 @@
 	  			%>			
   				<div style="clear: left;"><span></span></div>
   			</div>
-				<div class="RowContainerDay">
+				<div class="RowContainerDay" style="position:relative ;">
 				<%
 					startMonh =  uicomponent.getBeginDateOfMonth() ;
-					endMonth =  uicomponent.getEndDateOfMonth() ;
-					
+					endMonth =  uicomponent.getEndDateOfMonth() ;					
 					eventList = uicomponent.getDataMap().values() ;
 					for(event in eventList){
 					startTime = event.fromDateTime.getTime() ;
@@ -90,8 +88,8 @@
 					}
 					color = uicomponent.getColors().get(event.calendarId) ;
 					%>
-					<div class="DayContentContainer" title="<%=tf.format(event.fromDateTime)%> <%=df.format(event.fromDateTime)%> -> <%=tf.format(event.toDateTime)%> <%=df.format(event.toDateTime)%> ">
-						<div class="EventOnDayBorder EventBoxes $color" startIndex="$startIndex" calType="$event.calType" eventId="$event.id" calId="$event.calendarId" eventCat="$event.eventCategoryId" startTime="$startTime" endTime="$endTime" >
+					<div class="DayContentContainer" style="position: absolute ;" startIndex="$startIndex" calType="$event.calType" eventId="$event.id" calId="$event.calendarId" eventCat="$event.eventCategoryId" startTime="$startTime" endTime="$endTime" >
+						<div class="EventOnDayBorder EventBoxes $color">
 							<div class="EventOnDayContent">
 								<div style="float:left;margin:3px 0px 0px 2px;">
 									<%uicomponent.renderField(uicomponent.getChildById(event.id))%>

@@ -596,6 +596,7 @@
 
 .UIDayView .EventAllDay .EventContainerBorder .EventContainer {
 	width: 100%;
+	-moz-user-select : none ;
 }
 
 .UIDayView .EventDayContent .EventContainerBar{
@@ -612,10 +613,12 @@
 }
 
 .UIDayView .EventDayContent .ResizeEventContainer{
-	background:gray;
+	background:transparent;
 	width: 10%;
 	height: 2px;
 	margin:auto;
+	border-top : solid 1px gray ;
+	border-bottom : solid 1px gray ;
 	cursor: n-resize;
 }
 
@@ -763,10 +766,12 @@
 }
 
 .UIWeekView .EventContainerBorder .ResizeEventContainer{
-	background:gray;
-	width: 30%;
+	background: transparent ;
+	width: 20%;
 	height: 2px;
 	margin:auto;
+	border-top: solid 1px gray ;
+	border-bottom: solid 1px gray ;
 	cursor: n-resize;
 }
 
