@@ -23,6 +23,12 @@ public class EmptyNameValidator implements Validator {
     if(s == null || s.length() == 0) {
       Object[] args = { uiInput.getName(), uiInput.getBindingField() };
       throw new MessageException(new ApplicationMessage("NameValidator.msg.empty-input", args)) ;
+    } else {
+    	s = s.trim() ;
+    	if(s == null || s.length() == 0) {
+        Object[] args = { uiInput.getName(), uiInput.getBindingField() };
+        throw new MessageException(new ApplicationMessage("NameValidator.msg.empty-input", args)) ;
+    	}
     }
   }
 }

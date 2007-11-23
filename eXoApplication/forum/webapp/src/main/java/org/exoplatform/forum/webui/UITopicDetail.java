@@ -7,7 +7,6 @@ package org.exoplatform.forum.webui;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.io.filefilter.IOFileFilter;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.service.JCRPageList;

@@ -59,19 +59,23 @@ public class UIMovePostForm extends UIForm implements UIPopupComponent {
     this.posts = posts ;
   }
   
+  @SuppressWarnings("unused")
   private List<Category> getCategories() throws Exception {
     return this.forumService.getCategories() ;
   }
   
+  @SuppressWarnings("unused")
   private boolean getSelectForum(String forumId) throws Exception {
     if(this.posts.get(0).getPath().contains(forumId)) return true ;
     else return false ;
   }
-  
+
+  @SuppressWarnings("unused")
   private List<Forum> getForums(String categoryId) throws Exception {
     return this.forumService.getForums(categoryId) ;
   }
 
+  @SuppressWarnings("unused")
   private List<Topic> getTopics(String categoryId, String forumId) throws Exception {
     List<Topic> topics = new ArrayList<Topic>() ;
     for(Topic topic : this.forumService.getTopics(categoryId, forumId)) {

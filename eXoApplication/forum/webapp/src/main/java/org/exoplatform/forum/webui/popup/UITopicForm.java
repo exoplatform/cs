@@ -17,6 +17,7 @@ import org.exoplatform.forum.service.Topic;
 import org.exoplatform.forum.webui.EmptyNameValidator;
 import org.exoplatform.forum.webui.UIForumPortlet;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -25,6 +26,7 @@ import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.exception.MessageException;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormInputIconSelector;
@@ -76,6 +78,7 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
   private String topicId ;
   public UITopicForm() throws Exception {
     UIFormStringInput topicTitle = new UIFormStringInput(FIELD_TOPICTITLE_INPUT, FIELD_TOPICTITLE_INPUT, null);
+    topicTitle.addValidator(EmptyNameValidator.class) ;
 //    UIFormTextAreaInput messenger = new UIFormTextAreaInput(FIELD_MESSENGER_TEXTAREA, FIELD_MESSENGER_TEXTAREA, null);
     
     List<SelectItemOption<String>> ls = new ArrayList<SelectItemOption<String>>() ;
@@ -257,64 +260,83 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
     public void execute(Event<UITopicForm> event) throws Exception {
       UITopicForm uiForm = event.getSource() ;
       UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
-      
+      int t = 0, k = 1 ;
       UIFormStringInput stringInputTitle = uiForm.getUIStringInput(FIELD_TOPICTITLE_INPUT) ; 
-      stringInputTitle.addValidator(EmptyNameValidator.class);
-      String topicTitle = stringInputTitle.getValue().trim();
-      String messenger = uiForm.getChild(UIFormWYSIWYGInput.class).getValue();
+      String topicTitle = "     " + stringInputTitle.getValue();
+      topicTitle = topicTitle.trim() ;
+      String messenger = "     " +  uiForm.getChild(UIFormWYSIWYGInput.class).getValue();
+      messenger = messenger.trim() ;
+      if(messenger != null && messenger.length() > 4 ) {
+      	for (int i = 0; i < messenger.length(); i++) {
+      		if(messenger.charAt(i) == ' ') t++ ;
+      		if(t == 3) break ;
+      	}
+      }
+      if(topicTitle.length() <= 3) {k = 0;}
+	    if(t >= 3 && k != 0) {  
       	// uiForm.getUIFormTextAreaInput(FIELD_MESSENGER_TEXTAREA).getValue() ;
-      String topicState = uiForm.getUIFormSelectBox(FIELD_TOPICSTATE_SELECTBOX).getValue();
-      String topicStatus = uiForm.getUIFormSelectBox(FIELD_TOPICSTATUS_SELECTBOX).getValue();
-      
-      Boolean approved = (Boolean)uiForm.getUIFormCheckBoxInput(FIELD_APPROVED_CHECKBOX).getValue();
-      Boolean moderatePost = (Boolean)uiForm.getUIFormCheckBoxInput(FIELD_MODERATEPOST_CHECKBOX).getValue();
-      Boolean whenNewPost = (Boolean)uiForm.getUIFormCheckBoxInput(FIELD_NOTIFYWHENADDPOST_CHECKBOX).getValue();
-      Boolean sticky = (Boolean)uiForm.getUIFormCheckBoxInput(FIELD_STICKY_CHECKBOX).getValue();
-      
-      String[] canView = uiForm.splitForForum(uiForm.getUIStringInput(FIELD_CANVIEW_INPUT).getValue()) ;
-      String[] canPost = uiForm.splitForForum(uiForm.getUIStringInput(FIELD_CANPOST_INPUT).getValue()) ;
-      
-      String userName = Util.getPortalRequestContext().getRemoteUser() ;
-      Topic topicNew = new Topic();
-      topicNew.setOwner(userName);
-      topicNew.setTopicName(topicTitle);
-      topicNew.setCreatedDate(new Date());
-      topicNew.setModifiedBy(userName);
-      topicNew.setModifiedDate(new Date());
-      topicNew.setLastPostBy(userName);
-      topicNew.setLastPostDate(new Date());
-      topicNew.setDescription(messenger);
-      
-      topicNew.setIsNotifyWhenAddPost(whenNewPost);
-      topicNew.setIsModeratePost(moderatePost);
-      topicNew.setAttachments(uiForm.attachments_) ;
-      if(topicState.equals("closed")) {
-        topicNew.setIsClosed(true);
-      }
-      if(topicStatus.equals("locked")) {
-        topicNew.setIsLock(true) ;
-      }
-      topicNew.setIsSticky(sticky);
-      topicNew.setIsApproved(approved);  
-      
-      UIFormInputIconSelector uiIconSelector = uiForm.getChild(UIFormInputIconSelector.class);
-      topicNew.setIcon(uiIconSelector.getSelectedIcon());
-      //topicNew.setAttachmentFirstPost(0) ;
-      topicNew.setCanView(canView);
-      topicNew.setCanPost(canPost);
-      
-      ForumService forumService = (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
-      if(uiForm.topicId != null && uiForm.topicId.length() > 0) {
-        topicNew.setId(uiForm.topicId);
-        forumService.saveTopic(uiForm.categoryId, uiForm.forumId, topicNew, false);
-      } else {
-        topicNew.setVoteRating(0.0) ;
-        topicNew.setUserVoteRating(new String[] {}) ;
-        forumService.saveTopic(uiForm.categoryId, uiForm.forumId, topicNew, true);
-      }
-      forumPortlet.cancelAction() ;
-      WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
-      context.addUIComponentToUpdateByAjax(forumPortlet) ;
+	      String topicState = uiForm.getUIFormSelectBox(FIELD_TOPICSTATE_SELECTBOX).getValue();
+	      String topicStatus = uiForm.getUIFormSelectBox(FIELD_TOPICSTATUS_SELECTBOX).getValue();
+	      
+	      Boolean approved = (Boolean)uiForm.getUIFormCheckBoxInput(FIELD_APPROVED_CHECKBOX).getValue();
+	      Boolean moderatePost = (Boolean)uiForm.getUIFormCheckBoxInput(FIELD_MODERATEPOST_CHECKBOX).getValue();
+	      Boolean whenNewPost = (Boolean)uiForm.getUIFormCheckBoxInput(FIELD_NOTIFYWHENADDPOST_CHECKBOX).getValue();
+	      Boolean sticky = (Boolean)uiForm.getUIFormCheckBoxInput(FIELD_STICKY_CHECKBOX).getValue();
+	      
+	      String[] canView = uiForm.splitForForum(uiForm.getUIStringInput(FIELD_CANVIEW_INPUT).getValue()) ;
+	      String[] canPost = uiForm.splitForForum(uiForm.getUIStringInput(FIELD_CANPOST_INPUT).getValue()) ;
+	      
+	      String userName = Util.getPortalRequestContext().getRemoteUser() ;
+	      Topic topicNew = new Topic();
+	      topicNew.setOwner(userName);
+	      topicNew.setTopicName(topicTitle);
+	      topicNew.setCreatedDate(new Date());
+	      topicNew.setModifiedBy(userName);
+	      topicNew.setModifiedDate(new Date());
+	      topicNew.setLastPostBy(userName);
+	      topicNew.setLastPostDate(new Date());
+	      topicNew.setDescription(messenger);
+	      
+	      topicNew.setIsNotifyWhenAddPost(whenNewPost);
+	      topicNew.setIsModeratePost(moderatePost);
+	      topicNew.setAttachments(uiForm.attachments_) ;
+	      if(topicState.equals("closed")) {
+	        topicNew.setIsClosed(true);
+	      }
+	      if(topicStatus.equals("locked")) {
+	        topicNew.setIsLock(true) ;
+	      }
+	      topicNew.setIsSticky(sticky);
+	      topicNew.setIsApproved(approved);  
+	      
+	      UIFormInputIconSelector uiIconSelector = uiForm.getChild(UIFormInputIconSelector.class);
+	      topicNew.setIcon(uiIconSelector.getSelectedIcon());
+	      //topicNew.setAttachmentFirstPost(0) ;
+	      topicNew.setCanView(canView);
+	      topicNew.setCanPost(canPost);
+	      
+	      ForumService forumService = (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
+	      if(uiForm.topicId != null && uiForm.topicId.length() > 0) {
+	        topicNew.setId(uiForm.topicId);
+	        forumService.saveTopic(uiForm.categoryId, uiForm.forumId, topicNew, false);
+	      } else {
+	        topicNew.setVoteRating(0.0) ;
+	        topicNew.setUserVoteRating(new String[] {}) ;
+	        forumService.saveTopic(uiForm.categoryId, uiForm.forumId, topicNew, true);
+	      }
+	      forumPortlet.cancelAction() ;
+	      WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+	      context.addUIComponentToUpdateByAjax(forumPortlet) ;
+	    } else {
+	    	String[] args = { ""} ;
+		    if(k == 0) {
+		    	args = new String[] { "Thread Title" } ;
+		    	if(t < 3) args = new String[] { "Thread Title and Messenger" } ;
+		    } else if(t < 3) {
+		    	args = new String[] { "Messenger" } ;
+		    }
+		    	throw new MessageException(new ApplicationMessage("NameValidator.msg.ShortText", args)) ;
+	    }
     }
   }
   

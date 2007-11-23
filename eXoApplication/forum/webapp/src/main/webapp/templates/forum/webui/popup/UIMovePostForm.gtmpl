@@ -12,22 +12,30 @@
 		<% 
 			List categories = uicomponent.getCategories(); 
 			for(category in categories) {
+				String display = "display:none;" ;
+				String iconClass = "SmallGrayMinus" ;
+				boolean selectForum = false ;
 		  	String categoryName = category.getCategoryName() ;
+		  	selectForum = uicomponent.getSelectForum(category.getId()) ;
+		  	if(selectForum){ 
+	  			display = "display:block;" ;
+	  			iconClass = "SmallGrayPlus" ;
+	  		}
 		%>
-	    <div class="Node SmallGrayMinus">
+	    <div class="Node $iconClass">
 	     	<div class="Icon ForumIcon"><span></span></div>  
 	     	<div class="NodeLabel" onclick = "eXo.forum.UIForumPortlet.showTreeNode(this);">
 	     		<div class="NodeSelected"><a>$categoryName</a></div> 
 	      </div> 		  
 	      <div style="clear: left;"><span></span></div>
-	      <div class="ChildNodeContainer ParentNode">
+	      <div class="ChildNodeContainer ParentNode" style="$display">
 	      <% 
 	      	List forums =  uicomponent.getForums(category.getId());
 	      	for(forum in forums) {
 	      		String forumName = forum.getForumName() ;
-	      		String display = "display:none;" ;
-	      		String iconClass = "SmallGrayMinus" ;
-	      		boolean selectForum = uicomponent.getSelectForum(forum.getId()) ;
+	      		iconClass = "SmallGrayMinus" ;
+	      		display = "display:none;" ;
+	      		selectForum = uicomponent.getSelectForum(forum.getId()) ;
 	      		if(selectForum){ 
 	      			display = "display:block;" ;
 	      			iconClass = "SmallGrayPlus" ;
@@ -43,8 +51,8 @@
 					    <%  
 					    	List topics = uicomponent.getTopics(category.getId(), forum.getId()) ;
 					    	for(topic in topics) {
-		      			String link = uicomponent.event("Save", topic.getPath()) ;
-					    	String topicName = topic.getTopicName();
+			      			String link = uicomponent.event("Save", topic.getPath()) ;
+						    	String topicName = topic.getTopicName();
 					    %>
 					    	<div class="Node">
 						      <div class="Icon PostsIcon"><span></span></div>

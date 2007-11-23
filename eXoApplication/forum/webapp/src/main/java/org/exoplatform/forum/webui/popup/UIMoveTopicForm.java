@@ -62,15 +62,18 @@ public class UIMoveTopicForm extends UIForm implements UIPopupComponent {
     this.isFormTopic = isFormTopic ;
   }
   
+  @SuppressWarnings("unused")
   private List<Category> getCategories() throws Exception {
     return this.forumService.getCategories() ;
   }
   
+  @SuppressWarnings("unused")
   private boolean getSelectCate(String cateId) throws Exception {
     if(this.topics.get(0).getPath().contains(cateId)) return true ;
     else return false ;
   }
   
+  @SuppressWarnings("unused")
   private List<Forum> getForums(String categoryId) throws Exception {
     List<Forum> forums = new ArrayList<Forum>() ;
     for(Forum forum : this.forumService.getForums(categoryId)) {
