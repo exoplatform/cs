@@ -7,7 +7,6 @@ package org.exoplatform.mail.webui.popup;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.exoplatform.mail.service.Attachment;
 import org.exoplatform.mail.service.BufferAttachment;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.services.jcr.util.IdGenerator;
