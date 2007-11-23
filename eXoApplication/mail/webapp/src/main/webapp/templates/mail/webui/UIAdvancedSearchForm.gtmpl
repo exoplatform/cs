@@ -85,7 +85,7 @@
 		      <table class="UIFormGrid">
 		        <tr>
 		          <td class="FieldLabel">
-		            <%=uicomponent.getLabel(uicomponent.FIELD_FROM_DATE);%> :
+		            From date
 		          </td>
 		          <td class="FieldComponent"  colspan="2">
 		          <%
@@ -93,7 +93,7 @@
 		          %>
 		          </td>
 		          <td class="FieldLabel" style="width: 105px">
-		            <%=uicomponent.getLabel(uicomponent.FIELD_TO_DATE);%> :
+		            To
 		          </td>
 		          <td class="FieldComponent"  colspan="2">
 		          <%

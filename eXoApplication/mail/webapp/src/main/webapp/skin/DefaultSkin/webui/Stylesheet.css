@@ -1077,11 +1077,11 @@
 }
 
 .UIAdvanceSearchMail .HorizontalLayout .SearchForDate .FieldComponent {
-	width: 80px;
+	width: 120px;
 }
 	
 .UIAdvanceSearchMail .HorizontalLayout .SearchForDate input{
-	width: 77px;
+	width: 120px;
 }
 
 .UIAdvanceSearchMail .HorizontalLayout .SearchForPriority {

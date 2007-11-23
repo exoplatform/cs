@@ -7,10 +7,12 @@ package org.exoplatform.mail.webui.popup;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MailSetting;
 import org.exoplatform.mail.webui.UIMailPortlet;
-import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.mail.webui.UIMessageArea;
+import org.exoplatform.mail.webui.UIMessageList;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
@@ -24,8 +26,8 @@ import org.exoplatform.webui.form.UIFormSelectBox;
 
 /**
  * Created by The eXo Platform SARL
- * Author : Philippe Aristote
- *          philippe.aristote@gmail.com
+ * Author : Phung Nam
+ *          phunghainam@gmail.com
  * Aug 10, 2007  
  */
 @ComponentConfig(
@@ -168,9 +170,9 @@ public class UIMailSettings extends UIForm implements UIPopupComponent {
   
   static  public class SaveActionListener extends EventListener<UIMailSettings> {
     public void execute(Event<UIMailSettings> event) throws Exception {
-      System.out.println(" ==========> SaveActionListener") ;
       UIMailSettings uiMailSetting = event.getSource();
-      String username = Util.getPortalRequestContext().getRemoteUser();
+      UIMailPortlet uiPortlet = uiMailSetting.getAncestorOfType(UIMailPortlet.class);
+      String username = MailUtils.getCurrentUser() ;
       MailSetting mailSetting = new MailSetting();
       mailSetting.setShowNumberMessage(Long.parseLong(uiMailSetting.getShowNumberOfConversation()));
       mailSetting.setPeriodCheckMailAuto(Long.parseLong(uiMailSetting.getPeriodCheckMailAuto()));
@@ -183,14 +185,15 @@ public class UIMailSettings extends UIForm implements UIPopupComponent {
       mailSetting.setSaveMessageInSent(uiMailSetting.saveMessageInSent());
       MailService mailService = uiMailSetting.getApplicationComponent(MailService.class);
       mailService.saveMailSetting(username, mailSetting);
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiMailSetting.getAncestorOfType(UIMailPortlet.class));
-      event.getSource().getAncestorOfType(UIMailPortlet.class).cancelAction();
+      UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
+      uiMessageList.updateList();
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
+      uiPortlet.cancelAction();
     }
   }
  
   static  public class CancelActionListener extends EventListener<UIMailSettings> {
     public void execute(Event<UIMailSettings> event) throws Exception {
-      System.out.println(" ==========> CancelActionListener") ;
       event.getSource().getAncestorOfType(UIMailPortlet.class).cancelAction();
     }
   }
