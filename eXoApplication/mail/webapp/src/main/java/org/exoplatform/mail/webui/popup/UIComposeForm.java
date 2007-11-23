@@ -462,14 +462,11 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
   static public class ToActionListener extends EventListener<UIComposeForm> {
     public void execute(Event<UIComposeForm> event) throws Exception {
       UIComposeForm uiComposeForm = event.getSource() ;
-
-      System.out.println(" === >>> Insert Address Action Listener") ;
       UIPopupActionContainer uiActionContainer = uiComposeForm.getAncestorOfType(UIPopupActionContainer.class) ;    
       UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class) ;
-  
-       UIAddressForm uiAddressForm = uiChildPopup.activate(UIAddressForm.class, 700) ; 
-       uiAddressForm.setRecipientsType(FIELD_TO);
- 
+
+      UIAddressForm uiAddressForm = uiChildPopup.activate(UIAddressForm.class, 700) ; 
+      uiAddressForm.setRecipientsType(FIELD_TO);
       if (uiComposeForm.getToContacts() != null && uiComposeForm.getToContacts().size() > 0) {        
         uiAddressForm.setAlreadyCheckedContact(uiComposeForm.getToContacts());      
         uiAddressForm.setContactList();
@@ -481,11 +478,9 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
   static public class ToCCActionListener extends EventListener<UIComposeForm> {
     public void execute(Event<UIComposeForm> event) throws Exception {
       UIComposeForm uiComposeForm = event.getSource() ;
-      System.out.println(" === >>> ToCCActionListener") ;
       UIPopupActionContainer uiActionContainer = uiComposeForm.getAncestorOfType(UIPopupActionContainer.class) ;    
       UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class) ;
       UIAddressForm uiAddressForm = uiChildPopup.activate(UIAddressForm.class,700) ; 
-      
       uiAddressForm.setRecipientsType(FIELD_CC);
       if (uiComposeForm.getCcContacts()!= null && uiComposeForm.getCcContacts().size()>0) {        
        uiAddressForm.setAlreadyCheckedContact(uiComposeForm.getCcContacts());      
@@ -495,6 +490,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
       event.getRequestContext().addUIComponentToUpdateByAjax(uiActionContainer) ;
     }
   }
+  
   static public class ToBCCActionListener extends EventListener<UIComposeForm> {
     public void execute(Event<UIComposeForm> event) throws Exception {
       UIComposeForm uiComposeForm = event.getSource() ;

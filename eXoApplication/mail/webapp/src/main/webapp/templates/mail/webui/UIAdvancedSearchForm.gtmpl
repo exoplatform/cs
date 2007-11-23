@@ -108,20 +108,24 @@
       <table class="UIFormGrid">
         <tr>
           <td class="ShortComponent" colspan="2">
-            <input class="checkbox" type="checkbox" value="" name=""/>
+            <%
+              uicomponent.renderField(uicomponent.SEARCH_HAS_STAR);
+            %>
           </td>
           <td class="FieldLabel" style="text-align: left;">Has Star</td>
           <td class="FieldLabel">Priority :</td>
           <td class="FieldComponent FieldShort">
-            <select name="" class="selectbox">
-              <option value="" selected="selected"></option>
-            </select>
+            <%
+              uicomponent.renderField(uicomponent.SEARCH_PRIORITY);
+            %>
           </td>
           <td>&nbsp;</td>
         </tr>
         <tr>
           <td class="ShortComponent"  colspan="2">
-            <input class="checkbox" type="checkbox" value="" name=""/>
+          <%
+            uicomponent.renderField(uicomponent.SEARCH_HAS_ATTACH);
+          %>
           </td>
           <td class="FieldLabel" style="text-align: left;">Has Attachment</td>
         </tr>

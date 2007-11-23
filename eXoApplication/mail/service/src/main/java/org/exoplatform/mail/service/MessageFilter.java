@@ -4,11 +4,14 @@
  **************************************************************************/
 package org.exoplatform.mail.service;
 
+import java.util.Calendar;
+
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.Session;
 import javax.jcr.Value;
 
+import org.exoplatform.commons.utils.ISO8601;
 import org.exoplatform.services.jcr.util.IdGenerator;
 
 /**
@@ -38,6 +41,12 @@ public class MessageFilter {
   private String accountPath ;
   private String orderBy;
   private boolean isAscending ;
+  private Calendar fromDate;
+  private Calendar toDate;
+  private boolean hasAttach;
+  private boolean hasStar;
+  private long priority;
+  
   private String applyFolder ;
   private String applyTag ;
   private Boolean keepInbox ;
@@ -49,6 +58,9 @@ public class MessageFilter {
     this.fromCondition = Utils.CONDITION_CONTAIN ;
     this.subjectCondition = Utils.CONDITION_CONTAIN ;
     this.bodyCondition = Utils.CONDITION_CONTAIN ;
+    this.hasAttach = false;
+    this.hasStar = false;
+    this.priority = 0;
     isAscending = false;
     orderBy = Utils.EXO_RECEIVEDDATE;
   }
@@ -109,6 +121,21 @@ public class MessageFilter {
   public boolean isAscending() { return isAscending; }
   public void setAscending(boolean b) { this.isAscending = b; } 
   
+  public Calendar getFromDate() { return fromDate; }
+  public void setFromDate(Calendar date) { this.fromDate = date ;}
+  
+  public Calendar getToDate() { return toDate; }
+  public void setToDate(Calendar date) { this.toDate = date ;} 
+  
+  public boolean hasStar() { return this.hasStar ;}
+  public void setHasStar(boolean b) { this.hasStar = b ;}
+  
+  public boolean hasAttach() { return this.hasAttach; }
+  public void setHasAttach(boolean b) { this.hasAttach = b; }
+  
+  public long getPriority() { return this.priority; }
+  public void setPriority(long l) { this.priority = l; }
+  
   public String getApplyFolder() { return applyFolder ; }
   public void setApplyFolder(String folder) { this.applyFolder = folder ; }
   
@@ -154,10 +181,10 @@ public class MessageFilter {
           stringBuffer.append(" fn:not(jcr:contains(@exo:from, '" + from + "'))") ;
           break;
         case Utils.CONDITION_IS :
-          stringBuffer.append(" @exo:from = '" + from + "')") ;
+          stringBuffer.append(" @exo:from = '" + from + "'") ;
           break ;
         case Utils.CONDITION_NOT_IS :
-          stringBuffer.append(" @exo:from != '" + from + "')") ;
+          stringBuffer.append(" @exo:from != '" + from + "'") ;
           break;
         case Utils.CONDITION_STARTS_WITH :
           stringBuffer.append(" jcr:like(@exo:from, '" + from + "%')") ;
@@ -181,10 +208,10 @@ public class MessageFilter {
           stringBuffer.append(" fn:not(jcr:contains(@exo:to, '" + to + "'))") ;
           break;
         case Utils.CONDITION_IS :
-          stringBuffer.append(" @exo:to = '" + to + "')") ;
+          stringBuffer.append(" @exo:to = '" + to + "'") ;
           break ;
         case Utils.CONDITION_NOT_IS :
-          stringBuffer.append(" @exo:to != '" + to + "')") ;
+          stringBuffer.append(" @exo:to != '" + to + "'") ;
           break;
         case Utils.CONDITION_STARTS_WITH :
           stringBuffer.append(" jcr:like(@exo:to, '" + to + "%')") ;
@@ -209,10 +236,10 @@ public class MessageFilter {
           stringBuffer.append(" fn:not(jcr:contains(@exo:subject, '" + subject + "'))") ;
           break;
         case Utils.CONDITION_IS :
-          stringBuffer.append(" @exo:subject = '" + subject + "')") ;
+          stringBuffer.append(" @exo:subject = '" + subject + "'") ;
           break ;
         case Utils.CONDITION_NOT_IS :
-          stringBuffer.append(" @exo:subject != '" + subject + "')") ;
+          stringBuffer.append(" @exo:subject != '" + subject + "'") ;
           break;
         case Utils.CONDITION_STARTS_WITH :
           stringBuffer.append(" jcr:like(@exo:subject, '" + subject + "%')") ;
@@ -225,7 +252,7 @@ public class MessageFilter {
       hasConjuntion = true ;
     }
       
-    if(body != null && body.trim().length() > 0) {
+    if (body != null && body.trim().length() > 0) {
       if(hasConjuntion) stringBuffer.append(" and (") ;
       else stringBuffer.append("(") ;
       switch (getBodyCondition()) {
@@ -236,6 +263,46 @@ public class MessageFilter {
           stringBuffer.append(" fn:not(jcr:contains(@exo:body, '" + body + "'))") ;
           break;
       }
+      stringBuffer.append(")") ;
+      hasConjuntion = true ;
+    }
+    
+    if (fromDate != null) {
+      if(hasConjuntion) stringBuffer.append(" and (") ;
+      else stringBuffer.append("(") ;
+      stringBuffer.append(" @exo:receivedDate >= xs:dateTime('" + ISO8601.format(fromDate)+"')") ;
+      stringBuffer.append(")") ;
+      hasConjuntion = true ;
+    }
+    
+    if (toDate != null) {
+      if(hasConjuntion) stringBuffer.append(" and (") ;
+      else stringBuffer.append("(") ;
+      stringBuffer.append(" @exo:receivedDate <= xs:dateTime('" + ISO8601.format(toDate)+"')") ;
+      stringBuffer.append(")") ;
+      hasConjuntion = true ;
+    }
+    
+    if (priority > 0) {
+      if(hasConjuntion) stringBuffer.append(" and (") ;
+      else stringBuffer.append("(") ;
+      stringBuffer.append(" @exo:priority = " + priority + "") ;
+      stringBuffer.append(")") ;
+      hasConjuntion = true ;
+    }
+    
+    if (hasAttach) {
+      if(hasConjuntion) stringBuffer.append(" and (") ;
+      else stringBuffer.append("(") ;
+      stringBuffer.append(" @exo:hasAttach = 'true'") ;
+      stringBuffer.append(")") ;
+      hasConjuntion = true ;
+    }
+    
+    if (hasStar) {
+      if(hasConjuntion) stringBuffer.append(" and (") ;
+      else stringBuffer.append("(") ;
+      stringBuffer.append(" @exo:star = 'true'") ;
       stringBuffer.append(")") ;
       hasConjuntion = true ;
     }

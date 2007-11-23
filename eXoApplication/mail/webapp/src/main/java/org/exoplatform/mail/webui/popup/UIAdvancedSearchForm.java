@@ -5,6 +5,7 @@
 package org.exoplatform.mail.webui.popup;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import org.exoplatform.contact.service.Contact;
@@ -25,6 +26,7 @@ import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
+import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormDateTimeInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
@@ -55,8 +57,9 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
   public static final String SEARCH_TO_CONDITION = "filter-to-condition".intern();
   public static final String SEARCH_FROM_CONDITION = "filter-from-condition".intern();
   public static final String SEARCH_BODY_CONDITION = "filter-body-condition".intern();
-  final static public String ACT_TO_SEARCH = "To" ;  
-  final static public String ACT_FROM_SEARCH = "From" ;
+  public static final String SEARCH_PRIORITY = "search-priority".intern();
+  public static final String SEARCH_HAS_STAR = "search-has-star".intern();
+  public static final String SEARCH_HAS_ATTACH = "search-has-attachment".intern();
   
   final static public String FIELD_FROM_DATE = "from-date" ;
   final static public String FIELD_TO_DATE = "to-date" ;  
@@ -114,6 +117,14 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
     options4.add(new SelectItemOption<String>("starts with", String.valueOf(Utils.CONDITION_STARTS_WITH)));
     options4.add(new SelectItemOption<String>("ends with", String.valueOf(Utils.CONDITION_ENDS_WITH)));
     addUIFormInput(new UIFormSelectBox(SEARCH_SUBJECT_CONDITION, SEARCH_SUBJECT_CONDITION, options4));
+    List<SelectItemOption<String>>  priorities = new ArrayList<SelectItemOption<String>>() ;
+    priorities.add(new SelectItemOption<String>(" -- Choose Priority -- ", "0"));
+    priorities.add(new SelectItemOption<String>("High", String.valueOf(Utils.PRIORITY_HIGH)));
+    priorities.add(new SelectItemOption<String>("Normal", String.valueOf(Utils.PRIORITY_NORMAL)));
+    priorities.add(new SelectItemOption<String>("Low", String.valueOf(Utils.PRIORITY_LOW)));
+    addUIFormInput(new UIFormSelectBox(SEARCH_PRIORITY, SEARCH_PRIORITY, priorities));
+    addUIFormInput(new UIFormCheckBoxInput<Boolean>(SEARCH_HAS_STAR, SEARCH_HAS_STAR, false));
+    addUIFormInput(new UIFormCheckBoxInput<Boolean>(SEARCH_HAS_ATTACH, SEARCH_HAS_ATTACH, false));
   }
   
   public void setFieldEmailFrom(String value) {
@@ -124,12 +135,20 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
     return getUIStringInput(FIELD_FROM_SEARCH).getValue() ;
   }
   
+  public String getFromCondition() throws Exception {
+    return getUIFormSelectBox(SEARCH_FROM_CONDITION).getValue();
+  }
+  
   public void setFieldEmailTo(List<SelectItemOption<String>> options) {
     getUIFormSelectBox(FIELD_TO_SEARCH).setOptions(options) ;
   }
 
   public String getFieldEmailTo() {
     return getUIStringInput(FIELD_TO_SEARCH).getValue() ;
+  }
+  
+  public String getToCondition() throws Exception {
+    return getUIFormSelectBox(SEARCH_TO_CONDITION).getValue();
   }
   
   public String getSelectedFolder(){
@@ -144,8 +163,36 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
     return getUIStringInput(FIELD_SUBJECT_SEARCH).getValue() ;
   }
   
+  public String getSubjectCondition() throws Exception {
+    return getUIFormSelectBox(SEARCH_SUBJECT_CONDITION).getValue();
+  }
+  
   public String getMessageBody(){
     return getUIStringInput(FIELD_CONTENT_SEARCH).getValue() ;
+  }
+  
+  public String getBodyCondition() throws Exception {
+    return getUIFormSelectBox(SEARCH_BODY_CONDITION).getValue();
+  }
+  
+  public Calendar getFromDate() {
+    return getUIFormDateTimeInput(FIELD_FROM_DATE).getCalendar();
+  } 
+  
+  public Calendar getToDate() {
+    return getUIFormDateTimeInput(FIELD_TO_DATE).getCalendar();
+  } 
+  
+  public boolean hasStar() {
+    return getUIFormCheckBoxInput(SEARCH_HAS_STAR).isChecked() ;
+  }
+  
+  public boolean hasAttachment() {
+    return getUIFormCheckBoxInput(SEARCH_HAS_ATTACH).isChecked() ;
+  }
+  
+  public long getPriority() {
+    return Long.valueOf(getUIFormSelectBox(SEARCH_PRIORITY).getValue()) ;
   }
 
   public void resetFields() { reset() ; }
@@ -172,9 +219,18 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
         filter.setFolder(new String[] {uiSearchForm.getSelectedFolder()});
       }
       filter.setTo(uiSearchForm.getFieldEmailTo());
+      filter.setToCondition(Integer.valueOf(uiSearchForm.getToCondition()));
       filter.setFrom(uiSearchForm.getFieldEmailFrom());
+      filter.setFromCondition(Integer.valueOf(uiSearchForm.getFromCondition()));
       filter.setSubject(uiSearchForm.getSubject());
-      filter.setBody(uiSearchForm.getMessageBody());     
+      filter.setSubjectCondition(Integer.valueOf(uiSearchForm.getSubjectCondition()));
+      filter.setBody(uiSearchForm.getMessageBody());
+      filter.setBodyCondition(Integer.valueOf(uiSearchForm.getBodyCondition()));
+      filter.setFromDate(uiSearchForm.getFromDate());
+      filter.setToDate(uiSearchForm.getToDate());
+      filter.setHasStar(uiSearchForm.hasStar());
+      filter.setHasAttach(uiSearchForm.hasAttachment());
+      filter.setPriority(uiSearchForm.getPriority());
       uiMessageList.setSelectedFolderId(null);
       uiMessageList.setSelectedTagId(null);
       uiMessageList.setMessageFilter(filter);
