@@ -23,7 +23,7 @@
 	<import>war:/conf/portal/ecm-records-configuration.xml</import>
 	<import>war:/conf/portal/ecm-queries-configuration.xml</import>
 	<import>war:/conf/portal/organization-component-plugins-configuration.xml</import>
-  
+  <import>war:/conf/security-configuration.xml</import>
   <!-- eXo CS Application import -->
   
   <import>war:/conf/portal/cs-templates-configuration.xml</import>

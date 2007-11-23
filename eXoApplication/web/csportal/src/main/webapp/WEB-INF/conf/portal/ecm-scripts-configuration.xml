@@ -88,16 +88,6 @@
 		              </value> 
 		              <value>
 		                <object type="org.exoplatform.services.cms.impl.ResourceConfig$Resource">
-		                  <field  name="name"><string>ecm-explorer/widget/SetJCRBrowserForProductionWorkspaceAndRulesPath.groovy</string></field>
-		                </object>  
-		              </value> 
-		              <value>
-		                <object type="org.exoplatform.services.cms.impl.ResourceConfig$Resource">
-		                  <field  name="name"><string>ecm-explorer/widget/SetJCRBrowserForProductionWorkspaceAndScriptsPath.groovy</string></field>
-		                </object>  
-		              </value> 
-		              <value>
-		                <object type="org.exoplatform.services.cms.impl.ResourceConfig$Resource">
 		                  <field  name="name"><string>ecm-explorer/widget/FillSelectBoxWithNodeChildren.groovy</string></field>
 		                </object>  
 		              </value> 
