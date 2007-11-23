@@ -1,3 +1,4 @@
+<% uiform.begin()%> 
 <div class="UIContactsPopup"> 
   <div class="UISearch">
     <div class="UIActionBar">
@@ -318,31 +319,26 @@
     </div>
   </div>
   <div class="UIAction">
-    <table align="center" class="ActionContainer">
-      <tbody>
-        <tr>
-          <td align="center">
-            <a class="ActionButton LightBlueStyle" href="#">
-              <div class="ButtonLeft">
-                  <div class="ButtonRight">
-                    <div class="ButtonMiddle">
-                      Search
-                    </div>
-                  </div>
-              </div>
-            </a>
-            <a class="ActionButton LightBlueStyle" href="#">
-              <div class="ButtonLeft">
-                <div class="ButtonRight">
-                  <div class="ButtonMiddle">
-                    Cancel
+    <table class="ActionContainer" align="center">
+      <tr>
+        <td align="center">
+          <% for(action in uicomponent.getActions()) { 
+                 String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action) ;
+                 String link = uicomponent.event(action) ;
+          %>
+          <a href="$link" class="ActionButton LightBlueStyle">
+          <div class="ButtonLeft">
+            <div class="ButtonRight">
+              <div class="ButtonMiddle">
+                $actionLabel
                   </div>
                 </div>
-              </div>
-            </a>
-          </td>
-        </tr>
-      </tbody>
+            </div>
+          </a>
+          <%}%>
+        </td>
+      </tr>
     </table>
   </div>
 </div>
+<% uiform.end()%> 
