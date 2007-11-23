@@ -21,6 +21,7 @@ import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormDateTimeInput;
+import org.exoplatform.webui.form.UIFormHiddenInput;
 import org.exoplatform.webui.form.UIFormInputInfo;
 import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormSelectBox;
@@ -50,15 +51,13 @@ public class UIEventDetailTab extends UIFormInputWithActions {
   final public static String FIELD_CHECKALL = "allDay".intern() ;
   final public static String FIELD_REPEAT = "repeat".intern() ;
   final public static String FIELD_PLACE = "place".intern() ;
-  
   final public static String FIELD_PRIORITY = "priority".intern() ; 
   final public static String FIELD_DESCRIPTION = "description".intern() ;
-
   final static public String FIELD_ATTACHMENTS = "attachments".intern() ;
 
   protected List<Attachment> attachments_ = new ArrayList<Attachment>() ;
   private Map<String, List<ActionData>> actionField_ ;
-  
+
   public UIEventDetailTab(String id) throws Exception {
     super(id);
     setComponentConfig(getClass(), null) ;
@@ -68,7 +67,7 @@ public class UIEventDetailTab extends UIFormInputWithActions {
     addUIFormInput(new UIFormTextAreaInput(FIELD_DESCRIPTION, FIELD_DESCRIPTION, null)) ;
     addUIFormInput(new UIFormSelectBox(FIELD_CALENDAR, FIELD_CALENDAR, null)) ;
     addUIFormInput(new UIFormSelectBox(FIELD_CATEGORY, FIELD_CATEGORY, UIEventForm.getCategory())) ;
-    
+
     ActionData addCategoryAction = new ActionData() ;
     addCategoryAction.setActionType(ActionData.TYPE_ICON) ;
     addCategoryAction.setActionName(UIEventForm.ACT_ADDCATEGORY) ;
@@ -88,20 +87,19 @@ public class UIEventDetailTab extends UIFormInputWithActions {
     addUIFormInput(new UIFormStringInput(FIELD_PLACE, FIELD_PLACE, null));
     addUIFormInput(new UIFormSelectBox(FIELD_REPEAT, FIELD_REPEAT, getRepeater())) ;
     addUIFormInput(new UIFormSelectBox(FIELD_PRIORITY, FIELD_PRIORITY, getPriority())) ;
-   
     ActionData addEmailAddress = new ActionData() ;
     addEmailAddress.setActionType(ActionData.TYPE_ICON) ;
     addEmailAddress.setActionName(UIEventForm.ACT_ADDEMAIL) ;
     addEmailAddress.setActionListener(UIEventForm.ACT_ADDEMAIL) ;
-    
+
     List<ActionData> addMailActions = new ArrayList<ActionData>() ;
     addMailActions.add(addEmailAddress) ;
-    
+
   }
   protected UIForm getParentFrom() {
     return (UIForm)getParent() ;
   }
-  
+
   public List<ActionData> getUploadFileList() { 
     List<ActionData> uploadedFiles = new ArrayList<ActionData>() ;
     for(Attachment attachdata : attachments_) {
@@ -122,7 +120,7 @@ public class UIEventDetailTab extends UIFormInputWithActions {
     }
     return uploadedFiles ;
   }
-  
+
   public void addToUploadFileList(Attachment attachfile) {
     attachments_.add(attachfile) ;
   }
@@ -138,8 +136,8 @@ public class UIEventDetailTab extends UIFormInputWithActions {
   protected void setAttachments(List<Attachment> attachment) { 
     attachments_ = attachment ;
   }
-  
-  
+
+
   private List<SelectItemOption<String>> getPriority() throws Exception {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     options.add(new SelectItemOption<String>("high", "1")) ;

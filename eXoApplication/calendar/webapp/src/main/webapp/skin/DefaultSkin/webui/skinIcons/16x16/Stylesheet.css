@@ -116,10 +116,10 @@
 	width: 16px;height: 16px;
 }
 .highPriorityIcon {
-	background: url('icons/HighPriorityIcon.gif') no-repeat;
+	background: url('icons/HeighPriorityIcon.gif') no-repeat;
 }
 .normalPriorityIcon {
-	background: url('icons/NomalPriorityIcon.gif') no-repeat;
+	background: url('icons/NormalPriorityIcon.gif') no-repeat;
 }
 .lowPriorityIcon{
 	background: url('icons/LowPriorityIcon.gif') no-repeat;

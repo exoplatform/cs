@@ -56,8 +56,12 @@ public class Utils {
   public static final String EXO_EDITOR = "exo:editor".intern();
   public static final String EXO_SAVE_SENT_MESSAGE = "exo:saveMessageInSent".intern();
   
-  public static final String ATTACHMENT_NODE = "attachment" ;
-  public static final String REMINDERS_NODE = "reminders" ;
+  public static final String EXO_EVEN_TATTACHMENT = "exo:eventAttachment".intern() ;
+  public static final String EXO_FILE_NAME = "exo:fileName".intern() ;
+  
+  //public static final String ATTACHMENT_ID = "exo:attachmentId".intern() ; ;
+  public static final String ATTACHMENT_NODE = "attachment".intern() ; ;
+  public static final String REMINDERS_NODE = "reminders".intern() ; ;
   
   public static final String NT_UNSTRUCTURED = "nt:unstructured".intern() ;
   public static final String NT_FILE = "nt:file".intern() ;

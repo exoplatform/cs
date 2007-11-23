@@ -181,7 +181,9 @@ public class UIListView extends UICalendarView {
       UIListView calendarview = event.getSource() ;
       calendarview.calendar_.add(Calendar.DATE, 1) ;
       calendarview.refresh() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
+      UIListContainer uiListContainer =  calendarview.getParent() ;
+      uiListContainer.refresh() ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiListContainer) ;
     }
   }
   static  public class MovePreviousActionListener extends EventListener<UIListView> {
@@ -189,7 +191,9 @@ public class UIListView extends UICalendarView {
       UIListView calendarview = event.getSource() ;
       calendarview.calendar_.add(Calendar.DATE, -1) ;
       calendarview.refresh() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
+      UIListContainer uiListContainer =  calendarview.getParent() ;
+      uiListContainer.refresh() ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiListContainer) ;
     }
   }
 }

@@ -161,6 +161,7 @@ public class ICalendarImportExport implements CalendarImportExport{
       cat = iter.nextNode() ;
       if(cat.getProperty("exo:name").getString().equals("Imported")) {
         isExists = true ;
+        break ;
       }
     }
     if(!isExists) {

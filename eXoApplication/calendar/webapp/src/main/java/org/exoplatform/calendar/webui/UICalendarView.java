@@ -522,14 +522,16 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       String eventId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       String calType = event.getRequestContext().getRequestParameter(CALTYPE) ;
       CalendarService calService = uiCalendarView.getApplicationComponent(CalendarService.class) ;
-      if(uiCalendarView.getDataMap() != null) {
+      /*if(uiCalendarView.getDataMap() != null) {
         eventCalendar = uiCalendarView.getDataMap().get(eventId) ;
-      }
-      /* if(CalendarUtils.PUBLIC_TYPE.equals(calType)) {
-        eventCalendar = calService.getGroupEvent(calendarId, eventId) ;
-      } else {
-        eventCalendar = calService.getUserEvent(username, calendarId, eventId) ;
       }*/
+      if(CalendarUtils.PUBLIC_TYPE.equals(calType)) {
+        eventCalendar = calService.getGroupEvent(calendarId, eventId) ;
+      } else if(CalendarUtils.PRIVATE_TYPE.equals(calType)) {
+        eventCalendar = calService.getUserEvent(username, calendarId, eventId) ;
+      } else if(CalendarUtils.SHARED_TYPE.equals(calType)) {
+        System.out.println("\n\n shared event not edit");
+      }
       if(eventCalendar != null) {
         UIPreview uiPreview = uiPopupContainer.addChild(UIPreview.class, null, null) ;
         uiPreview.setEvent(eventCalendar) ;

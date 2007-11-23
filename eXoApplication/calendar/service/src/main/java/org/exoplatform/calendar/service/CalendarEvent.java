@@ -31,8 +31,8 @@ public class CalendarEvent {
   
   final public static String PRIORITY_LOW = "low".intern() ;
   final public static String PRIORITY_NORMAL = "normal".intern() ;
-  final public static String PRIORITY_HIGHT = "hight".intern() ;
-  final public static String[] PRIORITY = {PRIORITY_HIGHT, PRIORITY_NORMAL, PRIORITY_LOW} ;
+  final public static String PRIORITY_HIGH = "high".intern() ;
+  final public static String[] PRIORITY = {PRIORITY_HIGH, PRIORITY_NORMAL, PRIORITY_LOW} ;
   
   final public static String DRAFT = "draft".intern() ;
   final public static String FINAL = "final".intern() ;

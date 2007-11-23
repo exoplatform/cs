@@ -24,6 +24,7 @@ import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
@@ -40,7 +41,7 @@ import org.exoplatform.webui.form.UIFormUploadInput;
     template = "system:/groovy/webui/form/UIForm.gtmpl",
     events = {
       @EventConfig(listeners = UIImportForm.SaveActionListener.class),      
-      @EventConfig(listeners = UIImportForm.CancelActionListener.class)
+      @EventConfig(listeners = UIImportForm.CancelActionListener.class, phase = Phase.DECODE)
     }
 )
 public class UIImportForm extends UIForm implements UIPopupComponent{
@@ -58,10 +59,10 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
     addUIFormInput(new UIFormSelectBox(TYPE, TYPE, options)) ;
     addUIFormInput(new UIFormUploadInput(FIELD_UPLOAD, FIELD_UPLOAD)) ;
   }
-  
+
   public void activate() throws Exception {}
   public void deActivate() throws Exception {}
-  
+
   static  public class SaveActionListener extends EventListener<UIImportForm> {
     public void execute(Event<UIImportForm> event) throws Exception {
       UIImportForm uiForm = event.getSource() ;
@@ -69,35 +70,42 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
       String importFormat = uiForm.getUIFormSelectBox(UIImportForm.TYPE).getValue() ;
       String calendarName = uiForm.getUIStringInput(UIImportForm.NAME).getValue() ;
       UploadService uploadService = (UploadService)PortalContainer.getComponent(UploadService.class) ;
+      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       if(calendarName == null || calendarName.length() == 0) {
         UploadResource resource = uploadService.getUploadResource(input.getUploadId()) ;
         if(resource == null) {
-          UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
           uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.file-name-error", null));
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;
         }
         calendarName = resource.getFileName() ;
       }
-      String username = Util.getPortalRequestContext().getRemoteUser() ;
-      CalendarService calendarService = CalendarUtils.getCalendarService() ;
-      calendarService.getCalendarImportExports(importFormat).importCalendar(username, input.getUploadDataAsStream(), calendarName) ;
-      UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
-      UICalendars uiCalendars = calendarPortlet.findFirstComponentOfType(UICalendars.class) ;
-      UICalendarViewContainer uiCalendarViewContainer = calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
-      uiCalendarViewContainer.refresh() ;
-      uploadService.removeUpload(input.getUploadId()) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendars) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarViewContainer) ;
-      calendarPortlet.cancelAction() ;
+      try {
+        String username = Util.getPortalRequestContext().getRemoteUser() ;
+        CalendarService calendarService = CalendarUtils.getCalendarService() ;
+        calendarService.getCalendarImportExports(importFormat).importCalendar(username, input.getUploadDataAsStream(), calendarName) ;
+        UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
+        UICalendars uiCalendars = calendarPortlet.findFirstComponentOfType(UICalendars.class) ;
+        UICalendarViewContainer uiCalendarViewContainer = calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
+        uiCalendarViewContainer.refresh() ;
+        uploadService.removeUpload(input.getUploadId()) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendars) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarViewContainer) ;
+        calendarPortlet.cancelAction() ;
+      } catch (Exception e) {
+        uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.file-type-error", null));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        e.printStackTrace() ;
+        return ; 
+      }
     }
   }
-  
+
   static  public class CancelActionListener extends EventListener<UIImportForm> {
     public void execute(Event<UIImportForm> event) throws Exception {
       UIImportForm uiForm = event.getSource() ;
       UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
       calendarPortlet.cancelAction() ;
-     }
+    }
   }  
 }

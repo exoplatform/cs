@@ -84,7 +84,7 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
     options.add(new SelectItemOption<String>("", "")) ;
     options.add(new SelectItemOption<String>(CalendarEvent.PRIORITY_LOW, CalendarEvent.PRIORITY_LOW)) ;
     options.add(new SelectItemOption<String>(CalendarEvent.PRIORITY_NORMAL, CalendarEvent.PRIORITY_NORMAL)) ;
-    options.add(new SelectItemOption<String>(CalendarEvent.PRIORITY_HIGHT, CalendarEvent.PRIORITY_HIGHT)) ;
+    options.add(new SelectItemOption<String>(CalendarEvent.PRIORITY_HIGH, CalendarEvent.PRIORITY_HIGH)) ;
     addChild(new UIFormSelectBox(PRIORITY, PRIORITY, options)) ;
     UIFormDateTimeInput fromDate = new UIFormDateTimeInput(FROMDATE, FROMDATE, new Date(), false) ;
     fromDate.addValidator(EmptyFieldValidator.class) ;

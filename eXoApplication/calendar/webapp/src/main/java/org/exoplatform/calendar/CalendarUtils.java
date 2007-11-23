@@ -4,17 +4,27 @@
  **************************************************************************/
 package org.exoplatform.calendar;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.exoplatform.calendar.service.Attachment;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
+import org.exoplatform.contact.service.Contact;
+import org.exoplatform.contact.service.ContactAttachment;
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.download.DownloadResource;
+import org.exoplatform.download.DownloadService;
+import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.impl.GroupImpl;
@@ -31,7 +41,7 @@ public class CalendarUtils {
   public static final String PRIVATE_TYPE = "0".intern() ;
   public static final String SHARED_TYPE = "1".intern() ;
   public static final String PUBLIC_TYPE = "2".intern() ;
-  
+
   final public static String SEMICOLON = ";".intern() ;
   final public static String COLON = ",".intern() ;
   final public static String UNDERSCORE = "_".intern() ;
@@ -106,22 +116,22 @@ public class CalendarUtils {
     }
     return times ;
   }*/
-  
+
   static public String getCurrentUser() throws Exception {
     return Util.getPortalRequestContext().getRemoteUser() ; 
   }
-  
+
   public static boolean isAllDayEvent(CalendarEvent eventCalendar) {
     Calendar cal1 = new GregorianCalendar() ;
     Calendar cal2 = new GregorianCalendar() ;
     cal1.setTime(eventCalendar.getFromDateTime()) ;
     cal2.setTime(eventCalendar.getToDateTime()) ;
     return (cal1.get(Calendar.HOUR_OF_DAY) == 0  && 
-            cal1.get(Calendar.MINUTE) == 0 &&
-            cal2.get(Calendar.HOUR_OF_DAY) == 0 && 
-            cal2.get(Calendar.MINUTE) == 0 );
+        cal1.get(Calendar.MINUTE) == 0 &&
+        cal2.get(Calendar.HOUR_OF_DAY) == 0 && 
+        cal2.get(Calendar.MINUTE) == 0 );
   }
-  
+
   public static boolean isSameDate(java.util.Calendar date1, java.util.Calendar date2) {
     return ( date1.get(java.util.Calendar.DATE) == date2.get(java.util.Calendar.DATE) &&
         date1.get(java.util.Calendar.MONTH) == date2.get(java.util.Calendar.MONTH) &&
@@ -135,7 +145,7 @@ public class CalendarUtils {
     date2.setTime(value2) ;
     return isSameDate(date1, date2) ;
   }
-  
+
   public static Calendar getBeginDay(Calendar cal) {
     cal.set(Calendar.HOUR_OF_DAY, 0) ;
     cal.set(Calendar.MINUTE, 0) ;
@@ -151,7 +161,7 @@ public class CalendarUtils {
     cal.add(Calendar.HOUR_OF_DAY, 24) ;
     return cal ;
   }
-  
+
   public static Calendar getBeginDay(Date date) {
     Calendar cal = GregorianCalendar.getInstance() ;
     cal.setTime(date) ;
@@ -161,5 +171,20 @@ public class CalendarUtils {
     Calendar cal = GregorianCalendar.getInstance() ;
     cal.setTime(date) ;
     return getEndDay(cal) ;
+  }
+  public static String getImageSource(Attachment attach, DownloadService dservice) throws Exception {      
+    if (attach != null) {
+      InputStream input = attach.getInputStream() ;
+      byte[] imageBytes = null ;
+      if (input != null) {
+        imageBytes = new byte[input.available()] ;
+        input.read(imageBytes) ;
+        ByteArrayInputStream byteImage = new ByteArrayInputStream(imageBytes) ;
+        InputStreamDownloadResource dresource = new InputStreamDownloadResource(byteImage, "image") ;
+        dresource.setDownloadName(attach.getName()) ;
+        return  dservice.getDownloadLink(dservice.addDownloadResource(dresource)) ;        
+      }
+    }
+    return null ;
   }
 }

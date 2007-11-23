@@ -855,11 +855,12 @@ public class JCRDataStorage implements DataStorage{
     } else {
       attachHome = eventNode.addNode(Utils.ATTACHMENT_NODE, Utils.NT_UNSTRUCTURED) ;
     }
-    if(attachHome.hasNode(attachment.getName())) {
-      attachNode = attachHome.getNode(attachment.getName()) ;
+    if(attachHome.hasNode(attachment.getId())) {
+      attachNode = attachHome.getNode(attachment.getId()) ;
     } else {
-      attachNode = attachHome.addNode(attachment.getName(), Utils.NT_FILE) ;
+      attachNode = attachHome.addNode(attachment.getId(), Utils.EXO_EVEN_TATTACHMENT) ;
     }
+    attachNode.setProperty(Utils.EXO_FILE_NAME, attachment.getName()) ;
     Node nodeContent = null;
     if (!attachNode.hasNode(Utils.JCR_CONTENT)) nodeContent = attachNode.addNode(Utils.JCR_CONTENT, Utils.NT_RESOURCE);
     else nodeContent = attachNode.getNode(Utils.JCR_CONTENT);
@@ -875,9 +876,11 @@ public class JCRDataStorage implements DataStorage{
       NodeIterator iter = attachHome.getNodes() ;
       while(iter.hasNext()) {
         Node attchmentNode = iter.nextNode() ;
-        if(attchmentNode.isNodeType(Utils.NT_FILE)) {
+        if(attchmentNode.isNodeType(Utils.EXO_EVEN_TATTACHMENT)) {
           Attachment attachment = new Attachment() ;
-          attachment.setName(attchmentNode.getName()) ;
+          attachment.setId(attchmentNode.getName()) ;
+          if(attchmentNode.hasProperty(Utils.EXO_FILE_NAME)) attachment.setName(attchmentNode.getProperty(Utils.EXO_FILE_NAME).getString()) ;
+          //attachment.setName(attchmentNode.getName()) ;
           Node contentNode = attchmentNode.getNode(Utils.JCR_CONTENT) ; 
           if(contentNode != null) {
             if(contentNode.hasProperty(Utils.JCR_LASTMODIFIED)) attachment.setLastModified(contentNode.getProperty(Utils.JCR_LASTMODIFIED).getDate()) ;
