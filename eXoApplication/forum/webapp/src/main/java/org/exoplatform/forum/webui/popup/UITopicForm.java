@@ -332,10 +332,11 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
 		    if(k == 0) {
 		    	args = new String[] { "Thread Title" } ;
 		    	if(t < 3) args = new String[] { "Thread Title and Messenger" } ;
+		    	throw new MessageException(new ApplicationMessage("NameValidator.msg.ShortText", args)) ;
 		    } else if(t < 3) {
 		    	args = new String[] { "Messenger" } ;
+		    	throw new MessageException(new ApplicationMessage("NameValidator.msg.ShortMessenger", args)) ;
 		    }
-		    	throw new MessageException(new ApplicationMessage("NameValidator.msg.ShortText", args)) ;
 	    }
     }
   }
