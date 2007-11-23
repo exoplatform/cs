@@ -108,6 +108,7 @@ public class UIFolderContainer extends UIContainer {
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       uiMessageList.setMessagePageList(mailSrv.getMessagePageListByFolder(username, accountId, folderId));
       MessageFilter filter = new MessageFilter("Folder"); 
+      filter.setAccountId(accountId);
       filter.setFolder(new String[] {folderId});
       uiMessageList.setMessageFilter(filter);
       uiMessageList.setSelectedFolderId(folderId);

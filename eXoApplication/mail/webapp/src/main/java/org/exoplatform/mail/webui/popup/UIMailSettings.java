@@ -173,6 +173,7 @@ public class UIMailSettings extends UIForm implements UIPopupComponent {
       UIMailSettings uiMailSetting = event.getSource();
       UIMailPortlet uiPortlet = uiMailSetting.getAncestorOfType(UIMailPortlet.class);
       String username = MailUtils.getCurrentUser() ;
+      MailService mailSrv = MailUtils.getMailService();
       MailSetting mailSetting = new MailSetting();
       mailSetting.setShowNumberMessage(Long.parseLong(uiMailSetting.getShowNumberOfConversation()));
       mailSetting.setPeriodCheckMailAuto(Long.parseLong(uiMailSetting.getPeriodCheckMailAuto()));
@@ -186,6 +187,7 @@ public class UIMailSettings extends UIForm implements UIPopupComponent {
       MailService mailService = uiMailSetting.getApplicationComponent(MailService.class);
       mailService.saveMailSetting(username, mailSetting);
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
+      uiMessageList.setMessagePageList(mailSrv.getMessages(username, uiMessageList.getMessageFilter()));
       uiMessageList.updateList();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
       uiPortlet.cancelAction();

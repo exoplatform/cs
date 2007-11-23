@@ -100,9 +100,10 @@ public class UIMessageList extends UIForm {
     String username = MailUtils.getCurrentUser();
     MailService mailSrv = getApplicationComponent(MailService.class);
     MessageFilter filter = new MessageFilter("Folder"); 
-    filter.setFolder(new String[] { selectedFolderId_ });
+    filter.setAccountId(accountId);
     if (accountId != null){
       selectedFolderId_ = Utils.createFolderId(accountId, Utils.FD_INBOX, false);
+      filter.setFolder(new String[] { selectedFolderId_ });
       setMessagePageList(mailSrv.getMessagePageListByFolder(username, accountId, selectedFolderId_));
     }
     setMessageFilter(filter);
@@ -815,6 +816,7 @@ public class UIMessageList extends UIForm {
         msgFilter.setTag((uiMessageList.getSelectedTagId() == null) ? null : new String[] {uiMessageList.getSelectedTagId()});
       }
       uiMessageList.setMessagePageList(mailSrv.getMessages(username, msgFilter));
+      uiMessageList.setMessageFilter(msgFilter);
       uiMessageList.updateList();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
