@@ -39,13 +39,13 @@
           </div>
           <div class="FilterSettingList">
             <div style="font-weight: bold;">This filter contains some condition follow :</div>
-            <div>From : <%=filter.getFrom()%></div>
-            <div>To : <%=filter.getTo()%></div>
-            <div>Subject : <%=filter.getSubject()%></div>
-            <div>Body : <%=filter.getBody()%></div>
+            <% if (filter.getFrom() != null) { %> <div>From : <%=filter.getFrom()%></div> <% } %>
+            <% if (filter.getTo() != null) { %><div>To : <%=filter.getTo()%></div><% } %>
+            <% if (filter.getSubject() != null) { %><div>Subject : <%=filter.getSubject()%></div><% } %>
+            <% if (filter.getBody() != null) { %><div>Body : <%=filter.getBody()%></div><% } %>
             <div style="font-weight: bold;">Apply :</div>
-            <div>Folder :</div>
-            <div>Tag :</div>
+            <% if (filter.getApplyFolder() != null) { %><div>Folder :</div><% } %>
+            <% if (filter.getApplyTag() != null) { %><div>Tag :</div><% } %>
           </div>
         <% } %>
       </div>

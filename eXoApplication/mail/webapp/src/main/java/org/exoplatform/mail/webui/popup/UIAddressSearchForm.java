@@ -24,8 +24,8 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
 
 /**
  * Created by The eXo Platform SARL
- * Author : Nguyen Hai
- *          haiexo1002@gmail.com
+ * Author : Phung Nam 
+ *          phunghainam@gmail.com
  * Sep 25, 2007  
  */
 @ComponentConfig(
@@ -81,21 +81,17 @@ public class UIAddressSearchForm extends UIForm implements UIPopupComponent {
     setContactList(contacts);
   }
   
- public void setContactList(List<Contact> contactList) throws Exception {
-    System.out.println(" ==========> setContactList@List<Contact>") ;
+  public void setContactList(List<Contact> contactList) throws Exception {
     getChildren().clear();
     contactMap_.clear();
     for (Contact contact : contactList) {
       UIFormCheckBoxInput<Boolean> uiCheckbox = new UIFormCheckBoxInput<Boolean>(contact.getId(), contact.getId(), false);
       addUIFormInput(uiCheckbox);   
       contactMap_.put(contact.getId(), contact);
-    }
-         
+    }        
   }
   
   public List<Contact> getCheckedContact() throws Exception {
-    System.out.println(" ==========> getCheckedContact()") ;
-    
     List<Contact> contactList = new ArrayList<Contact>();  
     for (Contact contact : getContacts()) {
       UIFormCheckBoxInput<Boolean> uiCheckbox = getChildById(contact.getId());
@@ -109,7 +105,6 @@ public class UIAddressSearchForm extends UIForm implements UIPopupComponent {
   static  public class SaveActionListener extends EventListener<UIAddressSearchForm> { 
     public void execute(Event<UIAddressSearchForm> event) throws Exception { 
       UIAddressSearchForm uiAddressSearchForm = event.getSource();
-      System.out.println("======== >>> Save Action");
       UIMailPortlet uiPortlet = uiAddressSearchForm.getAncestorOfType(UIMailPortlet.class);
       String toAddress = "";
       for (Contact contact : uiAddressSearchForm.getCheckedContact()) {   
@@ -117,8 +112,7 @@ public class UIAddressSearchForm extends UIForm implements UIPopupComponent {
       }
       UIAdvancedSearchForm uiAdvancedSearchForm = uiPortlet.findFirstComponentOfType(UIAdvancedSearchForm.class);
       
-      if(uiAddressSearchForm.getType().equals("To")){
-        //uiAdvancedSearchForm.setFieldEmailTo(toAddress);       
+      if(uiAddressSearchForm.getType().equals("To")){      
         uiAdvancedSearchForm.setToContacts(uiAddressSearchForm.getCheckedContact());
       }  
       

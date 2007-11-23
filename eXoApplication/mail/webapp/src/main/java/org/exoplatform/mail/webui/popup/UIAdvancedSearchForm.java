@@ -12,6 +12,7 @@ import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MessageFilter;
+import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.UIFolderContainer;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UIMessageArea;
@@ -50,6 +51,10 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
   final static public String FIELD_TO_SEARCH = "to-field" ;
   final static public String FIELD_SUBJECT_SEARCH = "subject-field" ;
   final static public String FIELD_CONTENT_SEARCH = "message-content" ;  
+  public static final String SEARCH_SUBJECT_CONDITION = "filter-subject-condition".intern();
+  public static final String SEARCH_TO_CONDITION = "filter-to-condition".intern();
+  public static final String SEARCH_FROM_CONDITION = "filter-from-condition".intern();
+  public static final String SEARCH_BODY_CONDITION = "filter-body-condition".intern();
   final static public String ACT_TO_SEARCH = "To" ;  
   final static public String ACT_FROM_SEARCH = "From" ;
   
@@ -80,6 +85,35 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
     UIFormDateTimeInput uiFormDateTimeInputAfterDate = new UIFormDateTimeInput(FIELD_TO_DATE, FIELD_TO_DATE, null, false) ;
     addUIFormInput(uiFormDateTimeInputBeforeDate) ;   
     addUIFormInput(uiFormDateTimeInputAfterDate) ;  
+    
+    List<SelectItemOption<String>>  options1 = new ArrayList<SelectItemOption<String>>() ;
+    options1.add(new SelectItemOption<String>("contains", String.valueOf(Utils.CONDITION_CONTAIN)));
+    options1.add(new SelectItemOption<String>("doesn't contains", String.valueOf(Utils.CONDITION_NOT_CONTAIN)));
+    addUIFormInput(new UIFormSelectBox(SEARCH_BODY_CONDITION, SEARCH_BODY_CONDITION, options1));
+    List<SelectItemOption<String>>  options2 = new ArrayList<SelectItemOption<String>>() ;
+    options2.add(new SelectItemOption<String>("contains", String.valueOf(Utils.CONDITION_CONTAIN)));
+    options2.add(new SelectItemOption<String>("doesn't contains", String.valueOf(Utils.CONDITION_NOT_CONTAIN)));
+    options2.add(new SelectItemOption<String>("is", String.valueOf(Utils.CONDITION_IS)));
+    options2.add(new SelectItemOption<String>("is not", String.valueOf(Utils.CONDITION_NOT_IS)));
+    options2.add(new SelectItemOption<String>("starts with", String.valueOf(Utils.CONDITION_STARTS_WITH)));
+    options2.add(new SelectItemOption<String>("ends with", String.valueOf(Utils.CONDITION_ENDS_WITH)));
+    addUIFormInput(new UIFormSelectBox(SEARCH_TO_CONDITION, SEARCH_TO_CONDITION, options2));
+    List<SelectItemOption<String>>  options3 = new ArrayList<SelectItemOption<String>>() ;
+    options3.add(new SelectItemOption<String>("contains", String.valueOf(Utils.CONDITION_CONTAIN)));
+    options3.add(new SelectItemOption<String>("doesn't contains", String.valueOf(Utils.CONDITION_NOT_CONTAIN)));
+    options3.add(new SelectItemOption<String>("is", String.valueOf(Utils.CONDITION_IS)));
+    options3.add(new SelectItemOption<String>("is not", String.valueOf(Utils.CONDITION_NOT_IS)));
+    options3.add(new SelectItemOption<String>("starts with", String.valueOf(Utils.CONDITION_STARTS_WITH)));
+    options3.add(new SelectItemOption<String>("ends with", String.valueOf(Utils.CONDITION_ENDS_WITH)));
+    addUIFormInput(new UIFormSelectBox(SEARCH_FROM_CONDITION, SEARCH_FROM_CONDITION, options3));
+    List<SelectItemOption<String>>  options4 = new ArrayList<SelectItemOption<String>>() ;
+    options4.add(new SelectItemOption<String>("contains", String.valueOf(Utils.CONDITION_CONTAIN)));
+    options4.add(new SelectItemOption<String>("doesn't contains", String.valueOf(Utils.CONDITION_NOT_CONTAIN)));
+    options4.add(new SelectItemOption<String>("is", String.valueOf(Utils.CONDITION_IS)));
+    options4.add(new SelectItemOption<String>("is not", String.valueOf(Utils.CONDITION_NOT_IS)));
+    options4.add(new SelectItemOption<String>("starts with", String.valueOf(Utils.CONDITION_STARTS_WITH)));
+    options4.add(new SelectItemOption<String>("ends with", String.valueOf(Utils.CONDITION_ENDS_WITH)));
+    addUIFormInput(new UIFormSelectBox(SEARCH_SUBJECT_CONDITION, SEARCH_SUBJECT_CONDITION, options4));
   }
   
   public void setFieldEmailFrom(String value) {
