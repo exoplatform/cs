@@ -24,21 +24,13 @@ public class Reminder {
   private String id ;
   private String eventId ;
   private long snooze = 0;
-  private String reminder = "";
+  private String type = TYPE_EMAIL;
   private String alarmBefore = "0"; 
   private String emailAddress  ;
   public Reminder() {
-    //id = ID() ;
+    id = "Reminder" + IdGenerator.generate() ;
   }
-  public Reminder(String type) {
-   // id = ID() ;
-    reminder = type ;
-  }
-  public Reminder(String id, String type) {
-    this.id = id ;
-    reminder = type ;
-  }
- // public static String ID(){return "Reminder" + IdGenerator.generate() ; }
+  
   public String getId() { return this.id ; }
   public void   setId(String id) { this.id = id ; }
   
@@ -48,8 +40,8 @@ public class Reminder {
   public long getSnooze() { return snooze; }
   public void   setSnooze(long minute) { snooze = minute; }
   
-  public String getReminder() { return reminder; }
-  public void   setReminder(String reminder) { this.reminder = reminder; }
+  public String getType() { return type; }
+  public void   setType(String reminderType) { this.type = reminderType; }
   
   public String getAlarmBefore() { return alarmBefore; }
   public void   setAlarmBefore(String alarmBefore) { this.alarmBefore = alarmBefore; }

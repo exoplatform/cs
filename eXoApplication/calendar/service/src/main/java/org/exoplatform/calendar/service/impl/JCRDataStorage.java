@@ -8,6 +8,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
@@ -70,6 +71,7 @@ public class JCRDataStorage implements DataStorage{
   final private static String CALENDAR_CATEGORIES = "categories".intern() ;
   final private static String FEED = "eXoCalendarFeed".intern() ;
   final private static String CALENDAR_GROUPS = "groups".intern() ;
+  final private static String CALENDAR_REMINDER = "reminders".intern() ;
   final private static String CALENDAR_SETTING = "calendarSetting".intern() ;
   final private static String EVENT_CATEGORIES = "eventCategories".intern() ;
   static private String NT_UNSTRUCTURED = "nt:unstructured".intern() ;
@@ -629,7 +631,13 @@ public class JCRDataStorage implements DataStorage{
 
   public void saveUserEvent(String username, String calendarId, CalendarEvent event, boolean isNew) throws Exception {
     Node calendarNode = getCalendarHome(username).getNode(calendarId);
-    saveEvent(calendarNode, event, isNew) ;
+    if(event.getReminders() != null && event.getReminders().size() > 0) {
+    	Node reminderFolder = getReminderFolder(event.getFromDateTime(), calendarNode) ;
+    	saveEvent(calendarNode, event, reminderFolder, isNew) ;
+    }else {
+    	saveEvent(calendarNode, event, null, isNew) ;
+    }
+    
   }
 
   public CalendarEvent removeUserEvent(String username, String calendarId, String eventId) throws Exception {
@@ -682,7 +690,8 @@ public class JCRDataStorage implements DataStorage{
   }
   public void saveGroupEvent(String calendarId, CalendarEvent event, boolean isNew) throws Exception {
     Node calendarNode = getCalendarHome().getNode(calendarId) ;
-    saveEvent(calendarNode, event, isNew) ;
+    Node reminderFolder = getReminderFolder(event.getFromDateTime(), calendarNode) ;
+    saveEvent(calendarNode, event, reminderFolder, isNew) ;
   }
 
   public CalendarEvent removeGroupEvent(String calendarId, String eventId) throws Exception {
@@ -745,7 +754,7 @@ public class JCRDataStorage implements DataStorage{
     return event ;
   }
 
-  private void saveEvent(Node calendarNode, CalendarEvent event, boolean isNew) throws Exception {
+  private void saveEvent(Node calendarNode, CalendarEvent event, Node reminderFolder, boolean isNew) throws Exception {
     Node eventNode ;
     if(isNew) {
       eventNode = calendarNode.addNode(event.getId(), "exo:calendarEvent") ;
@@ -779,15 +788,15 @@ public class JCRDataStorage implements DataStorage{
     eventNode.setProperty("exo:invitation",  event.getInvitation()) ;
     eventNode.setProperty("exo:participant", event.getParticipant()) ;
     // add reminder child node
-    if(eventNode.hasNode(Utils.REMINDERS_NODE)) {
+    /*if(eventNode.hasNode(Utils.REMINDERS_NODE)) {
       while (eventNode.getNodes().hasNext()) {
         eventNode.getNodes().nextNode().remove() ;
       }
-    }
+    }*/
     List<Reminder> reminders = event.getReminders() ;
     if(reminders != null && !reminders.isEmpty()) {
       for(Reminder rm : reminders) {
-        addReminder(eventNode, rm) ;
+        addReminder(eventNode, reminderFolder, rm) ;
       }
     }
     //  add attachment child node
@@ -805,38 +814,67 @@ public class JCRDataStorage implements DataStorage{
     calendarNode.save() ;
     calendarNode.getSession().save()  ;
   }
-  private void addReminder(Node eventNode, Reminder reminder) throws Exception {
+  private void addReminder(Node eventNode, Node reminderFolder, Reminder reminder) throws Exception {
     Node reminderNode ;
-    Node reminders ;
-    if(eventNode.hasNode(Utils.REMINDERS_NODE)) {
+    Node catNode ;
+    /*if(eventNode.hasNode(Utils.REMINDERS_NODE)) {
       reminders = eventNode.getNode(Utils.REMINDERS_NODE) ;
     } else {
       reminders = eventNode.addNode(Utils.REMINDERS_NODE, Utils.NT_UNSTRUCTURED) ;
+    }*/
+    if(reminderFolder.hasNode(eventNode.getName())) {
+    	catNode = reminderFolder.getNode(eventNode.getName()) ;
+    }else {
+    	catNode = reminderFolder.addNode(eventNode.getName(), Utils.NT_UNSTRUCTURED) ;
     }
-    if(reminders.hasNode(reminder.getReminder())){
-      reminderNode = reminders.getNode(reminder.getReminder()) ;
+    if(catNode.hasNode(reminder.getId())){
+      reminderNode = catNode.getNode(reminder.getId()) ;
     } else {
-      reminderNode = reminders.addNode(reminder.getReminder(), "exo:reminder") ;
+      reminderNode = catNode.addNode(reminder.getId(), "exo:reminder") ;
     }
     reminderNode.setProperty("exo:eventId", eventNode.getName()) ;
     reminderNode.setProperty("exo:alarmBefore", reminder.getAlarmBefore()) ;
     reminderNode.setProperty("exo:snooze", reminder.getSnooze()) ;
-    reminderNode.setProperty("exo:reminder", reminder.getReminder()) ;
+    reminderNode.setProperty("exo:reminder", reminder.getType()) ;
     reminderNode.setProperty("exo:email", reminder.getEmailAddress()) ;
   }
-
+  
+  private Node getReminderFolder(Date fromDate, Node calendarNode)throws Exception {
+  	java.util.Calendar fromCalendar = new GregorianCalendar() ;
+  	fromCalendar.setTime(fromDate) ;
+  	Node reminderHome = getReminderHome(calendarNode) ;
+  	Node yearNode;
+  	Node monthNode;
+  	String year = String.valueOf(fromCalendar.get(java.util.Calendar.YEAR)) ;
+  	String month = String.valueOf(fromCalendar.get(java.util.Calendar.MONTH) + 1) ;
+  	String day = String.valueOf(fromCalendar.get(java.util.Calendar.DATE)) ;
+  	if(reminderHome.hasNode(year)) yearNode = reminderHome.getNode(year) ;
+  	else yearNode = reminderHome.addNode(year, NT_UNSTRUCTURED) ;
+  	if(yearNode.hasNode(month)) monthNode = yearNode.getNode(month) ;
+  	else monthNode = yearNode.addNode(month, NT_UNSTRUCTURED) ;
+  	if(monthNode.hasNode(day)) return monthNode.getNode(day) ;
+  	else return monthNode.addNode(day, NT_UNSTRUCTURED) ;  	
+  }
+  
+  private Node getReminderHome(Node calendarNode) throws Exception {
+    Node calendarServiceHome  = calendarNode.getParent().getParent() ;
+    if(calendarServiceHome.hasNode(CALENDAR_REMINDER)) return calendarServiceHome.getNode(CALENDAR_REMINDER) ;
+    return calendarServiceHome.addNode(CALENDAR_REMINDER, NT_UNSTRUCTURED) ;
+  }
+  
   private List<Reminder> getReminders(Node eventNode) throws Exception {
     List<Reminder> reminders = new ArrayList<Reminder> () ;
-    if(eventNode.hasNode(Utils.REMINDERS_NODE)) {
-      Node reminderHome = eventNode.getNode(Utils.REMINDERS_NODE) ;
-      NodeIterator iter = reminderHome.getNodes() ;
+    Date fromDate = eventNode.getProperty("exo:fromDateTime").getDate().getTime() ;
+    Node reminderFolder = getReminderFolder(fromDate, eventNode.getParent()) ;
+    if(reminderFolder.hasNode(eventNode.getName())) {
+    	NodeIterator iter = reminderFolder.getNode(eventNode.getName()).getNodes() ;
       while(iter.hasNext()) {
         Node reminderNode = iter.nextNode() ;
         if(reminderNode.isNodeType("exo:reminder")) {
           Reminder reminder = new Reminder() ;
           if(reminderNode.hasProperty("exo:id")) reminder.setId(reminderNode.getProperty("exo:id").getString()) ;
           if(reminderNode.hasProperty("exo:eventId")) reminder.setEventId(reminderNode.getProperty("exo:eventId").getString()) ;
-          if(reminderNode.hasProperty("exo:reminder")) reminder.setReminder(reminderNode.getProperty("exo:reminder").getString()) ;
+          if(reminderNode.hasProperty("exo:reminder")) reminder.setType(reminderNode.getProperty("exo:reminder").getString()) ;
           if(reminderNode.hasProperty("exo:alarmBefore"))reminder.setAlarmBefore(reminderNode.getProperty("exo:alarmBefore").getString()) ;
           if(reminderNode.hasProperty("exo:email")) reminder.setEmailAddress(reminderNode.getProperty("exo:email").getString()) ;
           if(reminderNode.hasProperty("exo:snooze")) reminder.setSnooze(reminderNode.getProperty("exo:snooze").getLong()) ;
@@ -1329,7 +1367,8 @@ public class JCRDataStorage implements DataStorage{
       while(iter.hasNext()) {
         calendar = iter.nextProperty().getParent() ;
         if(calendar.getProperty("exo:id").getString().equals(calendarId)) {
-          saveEvent(calendar, event,isNew) ;
+        	Node reminderFolder = getReminderFolder(event.getFromDateTime(), calendar) ;
+          saveEvent(calendar, event, reminderFolder, isNew) ;
           calendar.save() ;
           break ;
         }
