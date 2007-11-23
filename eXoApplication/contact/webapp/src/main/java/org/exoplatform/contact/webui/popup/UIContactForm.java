@@ -296,7 +296,7 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent, UI
       contact.setGender(profileTab.getFieldGender()) ;
       try {
         contact.setBirthday(profileTab.getFieldBirthday()) ;
-      } catch(IllegalArgumentException e) {
+      } catch(Exception e) {
         uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.invalid-birthday", null, 
             ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;

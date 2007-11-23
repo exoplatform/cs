@@ -6,7 +6,6 @@ package org.exoplatform.contact.webui.popup;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -18,16 +17,12 @@ import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.model.SelectItemOption;
-import org.exoplatform.webui.form.UIFormDateTimeInput;
 import org.exoplatform.webui.form.UIFormInputInfo;
 import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormRadioBoxInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
-import org.exoplatform.webui.form.validator.DateTimeValidator;
 import org.exoplatform.webui.form.validator.EmailAddressValidator;
-
-import sun.util.calendar.CalendarDate;
 
 /**
  * Created by The eXo Platform SARL
@@ -46,13 +41,13 @@ public class UIProfileInputSet extends UIFormInputWithActions {
   private static final String FIELD_NICKNAME_INPUT = "nickName";
   private static final String FIELD_GENDER_BOX = "gender" ;
   private static final String INFO_BIRTHDAY= "birthday" ;
-  private static final String FIELD_MONTH = "month" ;
   private static final String FIELD_DAY = "day" ;
+  private static final String FIELD_MONTH = "month" ;
   private static final String FIELD_YEAR = "year" ; 
 //public static final String[] months = { "January", "February", "March", "April", "May", "June",
 //"July", "August", "September", "October", "November", "December" } ;
   private static final String FIELD_JOBTITLE_INPUT = "jobTitle";
-  private static final String FIELD_EMAIL_INPUT = "preferredEmail" ;
+  private static final String FIELD_EMAIL_INPUT = "email" ;
   private static final String MALE = "male" ;
   private static final String FEMALE = "female" ;
   private String gender = "male" ;
@@ -61,7 +56,7 @@ public class UIProfileInputSet extends UIFormInputWithActions {
   private String imageMimeType = null ;
 
   public UIProfileInputSet(String id) throws Exception {
-    super(id) ;
+    super(id) ;  
     setComponentConfig(getClass(), null) ;  
     addUIFormInput(new UIFormStringInput(FIELD_FULLNAME_INPUT, FIELD_FULLNAME_INPUT, null));
     addUIFormInput(new UIFormStringInput(FIELD_FIRSTNAME_INPUT, FIELD_FIRSTNAME_INPUT, null));
@@ -72,32 +67,34 @@ public class UIProfileInputSet extends UIFormInputWithActions {
     genderOptions.add(new SelectItemOption<String>(MALE, MALE));
     genderOptions.add(new SelectItemOption<String>(FEMALE, FEMALE));
     addUIFormInput(new UIFormRadioBoxInput(FIELD_GENDER_BOX, FIELD_GENDER_BOX, genderOptions));    
-
     addUIFormInput(new UIFormInputInfo(INFO_BIRTHDAY, INFO_BIRTHDAY, null)) ;
-    List<SelectItemOption<String>> monthOptions = new ArrayList<SelectItemOption<String>>() ;
-    for (int i = 1; i < 13; i ++) {
-      String month = i + "" ;
-      monthOptions.add(new SelectItemOption<String>(month, month)) ;
-    }
-    addUIFormInput(new UIFormSelectBox(FIELD_MONTH, FIELD_MONTH, monthOptions).setValue("7")) ;
-
+    
     List<SelectItemOption<String>> datesOptions = new ArrayList<SelectItemOption<String>>() ;
+    datesOptions.add(new SelectItemOption<String>(FIELD_DAY, FIELD_DAY)) ;
     for (int i = 1; i < 32; i ++) {
       String date = i + "" ;
       datesOptions.add(new SelectItemOption<String>(date, date)) ;
     }
-    addUIFormInput(new UIFormSelectBox(FIELD_DAY, FIELD_DAY, datesOptions).setValue("15")) ;
+    addUIFormInput(new UIFormSelectBox(FIELD_DAY, FIELD_DAY, datesOptions)) ;
+    
+    List<SelectItemOption<String>> monthOptions = new ArrayList<SelectItemOption<String>>() ;
+    monthOptions.add(new SelectItemOption<String>(FIELD_MONTH, FIELD_MONTH)) ;
+    for (int i = 1; i < 13; i ++) {
+      String month = i + "" ;
+      monthOptions.add(new SelectItemOption<String>(month, month)) ;
+    }
+    addUIFormInput(new UIFormSelectBox(FIELD_MONTH, FIELD_MONTH, monthOptions)) ;
 
     String date = ContactUtils.formatDate("dd/MM/yyyy", new Date()) ;
     String strDate = date.substring(date.lastIndexOf("/") + 1, date.length()) ; 
     int thisYear = Integer.parseInt(strDate) ;
-
     List<SelectItemOption<String>> yearOptions = new ArrayList<SelectItemOption<String>>() ;
+    yearOptions.add(new SelectItemOption<String>(FIELD_YEAR, FIELD_YEAR)) ;
     for (int i = 1900; i <= thisYear; i ++) {
       String year = i + "" ;
       yearOptions.add(new SelectItemOption<String>(year, year)) ;
     }
-    addUIFormInput(new UIFormSelectBox(FIELD_YEAR, FIELD_YEAR, yearOptions).setValue("1980")) ;
+    addUIFormInput(new UIFormSelectBox(FIELD_YEAR, FIELD_YEAR, yearOptions)) ;
 
 //  addUIFormInput(new UIFormDateTimeInput(FIELD_BIRTHDAY_DATETIME, FIELD_BIRTHDAY_DATETIME, new Date(), false)
 //  .addValidator(DateTimeValidator.class));

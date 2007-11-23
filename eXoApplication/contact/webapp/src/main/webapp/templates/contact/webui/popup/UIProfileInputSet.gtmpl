@@ -9,47 +9,118 @@
 			      <div class="FormContainer">
 			        <table class="UIFormGrid">
 			          <tbody>
+			          
 			            <%								
-			      			  for (field in uicomponent.getChildren()) {
+			      			  field = uicomponent.getChildById("fullName")
 			      			  String label = _ctx.appRes(uicomponent.getParent().id+ ".label." + field.getId()) ;
 							   	%>
 			            <tr>
 		                <td class="FieldLabel"> $label </td>
-			              <td class="FieldComponent">
-			              	 <% if (label.equalsIgnoreCase("gender")) {
-				              	 		String maleChecked = "" ;
-				              	 		String femaleChecked = "" ;
-				              	 		String getGender = uicomponent.gender ;
-				              	 		if (getGender.equalsIgnoreCase("male")) maleChecked = "checked" ; 
-														else femaleChecked = "checked" ;
-													
-														//checked false for ie 6.0 if using <-%checked--%-->" ;
-													
-														if (maleChecked.equals("checked")) {
-			              	  %>
-			              	 			<input class="radio" type="radio" value="Male" checked name="gender"/>
-			              	 		<% }else { %>		
-			              	 			<input class="radio" type="radio" value="Male" name="gender"/>
-			              	 		<% } %>		
-														<span style="padding: 0px 20px 0px 5px" class="Lable"><%=_ctx.appRes(uicomponent.getParent().id+ ".label.male") %></span>
-													<% if (femaleChecked.equals("checked")) { %>
-														<input class="radio" type="radio" value="Female" checked name="gender"/>
-													<% } else { %>
-														<input class="radio" type="radio" value="Female" name="gender"/>
-													<% } %>		
-														<span style="padding-left: 3px;" class="Lable"><%=_ctx.appRes(uicomponent.getParent().id+ ".label.female") %></span> 		
-			              	 <% } else if (label.equalsIgnoreCase("birthday")) { %>
-			              	 			<div> <%uicomponent.renderUIComponent(field) %></div>
-			              	 <%		} else if (label.equalsIgnoreCase("month")) { %> 
-			              	 				<div><%uicomponent.renderUIComponent(field) %></div>
-			              	 <%     } else if (label.equalsIgnoreCase("day")) { %> 
-			              	 					<div><%uicomponent.renderUIComponent(field) %></div>
-			              	 <%				} else if (label.equalsIgnoreCase("year")) { %>
-																	<div><%uicomponent.renderUIComponent(field) %></div>
-											 <%         } else uicomponent.renderUIComponent(field)	%>
-			              </td>
+			              <td class="FieldComponent"><%uicomponent.renderUIComponent(field)%></td>
 			            </tr>
-			            <%} %>
+			            <%								
+			      			  field = uicomponent.getChildById("firstName")
+			      			  label = _ctx.appRes(uicomponent.getParent().id+ ".label." + field.getId()) ;
+							   	%>
+			            <tr>
+		                <td class="FieldLabel"> $label </td>
+			              <td class="FieldComponent"><%uicomponent.renderUIComponent(field)%></td>
+			            </tr>
+			            <%								
+			      			  field = uicomponent.getChildById("middleName")
+			      			  label = _ctx.appRes(uicomponent.getParent().id+ ".label." + field.getId()) ;
+							   	%>
+			            <tr>
+		                <td class="FieldLabel"> $label </td>
+			              <td class="FieldComponent"><%uicomponent.renderUIComponent(field)%></td>
+			            </tr>
+			            <%								
+			      			  field = uicomponent.getChildById("lastName")
+			      			  label = _ctx.appRes(uicomponent.getParent().id+ ".label." + field.getId()) ;
+							   	%>
+			            <tr>
+		                <td class="FieldLabel"> $label </td>
+			              <td class="FieldComponent"><%uicomponent.renderUIComponent(field)%></td>
+			            </tr>
+			            <%								
+			      			  field = uicomponent.getChildById("nickName")
+			      			  label = _ctx.appRes(uicomponent.getParent().id+ ".label." + field.getId()) ;
+							   	%>
+			            <tr>
+		                <td class="FieldLabel"> $label </td>
+			              <td class="FieldComponent"><%uicomponent.renderUIComponent(field)%></td>
+			            </tr>
+			            <%								
+			      			  field = uicomponent.getChildById("gender")
+			      			  label = _ctx.appRes(uicomponent.getParent().id+ ".label." + field.getId()) ;
+			      			%> 
+			      				<tr>
+			      					<td class="FieldLabel"> $label </td>
+			      					<td class="FieldComponent">
+			      			<%  
+              	 		String maleChecked = "" ;
+              	 		String femaleChecked = "" ;
+              	 		String getGender = uicomponent.gender ;
+              	 		if (getGender.equalsIgnoreCase("male")) maleChecked = "checked" ; 
+										else femaleChecked = "checked" ;
+													
+										//checked false for ie 6.0 if using <-%checked--%-->" ;
+													
+										if (maleChecked.equals("checked")) { 
+									%>
+          	 					<input class="radio" type="radio" value="Male" checked name="gender"/>
+          	 			<%} else { %>		
+          	 					<input class="radio" type="radio" value="Male" name="gender"/>
+          	 			<%  } %>		
+											<span style="padding: 0px 20px 0px 5px" class="Lable">
+												<%=_ctx.appRes(uicomponent.getParent().id+ ".label.male") %>
+											</span>
+									<% if (femaleChecked.equals("checked")) { %>
+												<input class="radio" type="radio" value="Female" checked name="gender"/>
+									<% } else { %>
+											 <input class="radio" type="radio" value="Female" name="gender"/>
+									<% } %>		
+											 <span style="padding-left: 3px;" class="Lable">
+											 	 <%=_ctx.appRes(uicomponent.getParent().id+ ".label.female") %>
+											 </span> 		
+			         			</td>
+			         		</tr>
+			         		
+			            <%								
+			      			  birthdayField = uicomponent.getChildById("birthday")
+			      			  String birthdayLabel = _ctx.appRes(uicomponent.getParent().id+ ".label." + birthdayField.getId()) ;
+							   		
+							   		dayField = uicomponent.getChildById("day")
+			      			  monthField = uicomponent.getChildById("month")
+			      			  yearField = uicomponent.getChildById("year")
+							   	%>
+			            <tr>
+		                <td class="FieldLabel"> $birthdayLabel </td>
+			              <td class="FieldComponent"><%uicomponent.renderUIComponent(dayField)%></td>
+			              
+			              <td class="FieldLabel"> - </td>
+			              <td class="FieldComponent"><%uicomponent.renderUIComponent(monthField)%></td>
+			              
+			              <td class="FieldLabel"> - </td>
+			              <td class="FieldComponent"><%uicomponent.renderUIComponent(yearField)%></td>
+			            </tr>
+			            <%								
+			      			  field = uicomponent.getChildById("jobTitle")
+			      			  label = _ctx.appRes(uicomponent.getParent().id+ ".label." + field.getId()) ;
+							   	%>
+			            <tr>
+		                <td class="FieldLabel"> $label </td>
+			              <td class="FieldComponent"><%uicomponent.renderUIComponent(field)%></td>
+			            </tr>
+			            <%								
+			      			  field = uicomponent.getChildById("email")
+			      			  label = _ctx.appRes(uicomponent.getParent().id+ ".label." + field.getId()) ;
+							   	%>
+			            <tr>
+		                <td class="FieldLabel"> $label </td>
+			              <td class="FieldComponent"><%uicomponent.renderUIComponent(field)%></td>
+			            </tr>
+			            
 			          </tbody>
 			        </table>
 			        
