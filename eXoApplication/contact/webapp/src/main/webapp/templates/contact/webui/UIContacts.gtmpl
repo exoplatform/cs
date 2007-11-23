@@ -427,7 +427,9 @@
 		  	<div class="VCardContent NormalVCard" id="<%=contact.getId()%>" selectedTag="<%=uicomponent.getSelectedTag()%>" >
 			  	<div class="TitleVCards" >
 				  	<div class="StateIcon OnlineIcon"><%=(contact.getFullName()==null ? "_" : contact.getFullName())%></div>
-			  		<div class="TagIcon $iconTag"><span><%=tagsName.toString()%></span></div>
+			  		<a href="<%=uicomponent.event("TagInfo", contact.getId())%>">
+			  			<div class="TagIcon $iconTag"><span><%=tagsName.toString()%></span></div>
+			  		</a>
 			  		<div style="clear: both;"><span></span></div>
 			  	</div>
 			  	<div class="ContainerVCards">
@@ -516,7 +518,9 @@
 		  	<div class="VCardContent NormalVCard" id="<%=contact.getId()%>" selectedTag="<%=uicomponent.getSelectedTag()%>" >
 			  	<div class="TitleVCards" >
 				  	<div class="StateIcon OfflineIcon"><%=(contact.getFullName()==null ? "_" : contact.getFullName())%></div>
-			  		<div class="TagIcon $iconTag"><span><%=tagsName.toString()%></span></div>
+			  		<a href="<%=uicomponent.event("TagInfo", contact.getId())%>">
+				  		<div class="TagIcon $iconTag"><span><%=tagsName.toString()%></span></div>
+						</a>
 			  		<div style="clear: both;"><span></span></div>
 			  	</div>
 			  	<div class="ContainerVCards">

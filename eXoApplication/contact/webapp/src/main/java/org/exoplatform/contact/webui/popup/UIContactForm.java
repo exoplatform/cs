@@ -50,8 +50,7 @@ import org.exoplatform.webui.form.validator.EmailAddressValidator;
       @EventConfig(listeners = UIContactForm.CancelActionListener.class, phase=Phase.DECODE),
       @EventConfig(listeners = UIContactForm.ChangeImageActionListener.class),
       @EventConfig(listeners = UIContactForm.DeleteImageActionListener.class),
-      @EventConfig(listeners = UIContactForm.SelectPermissionActionListener.class, phase=Phase.DECODE),
-      @EventConfig(listeners = UIContactForm.OnChangeActionListener.class)
+      @EventConfig(listeners = UIContactForm.SelectPermissionActionListener.class, phase=Phase.DECODE)
     }
 )
 public class UIContactForm extends UIFormTabPane implements UIPopupComponent, UISelector {
@@ -89,7 +88,6 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent, UI
   public static final String FIELD_NOTE_INPUT = "note";
   
   public static String[] FIELD_SHAREDCONTACT_BOX = null;
-  public static String FIELD_ISPUBLIC_BOX = "isPublic";
   public static String FIELD_INPUT_INFO = "selectGroups";
   public static String FIELD_EDITPERMISSION_INPUT = "editPermission";  
   
@@ -140,15 +138,13 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent, UI
     HomeTab.addUIFormInput(new UIFormStringInput(FIELD_PERSONALSITE_INPUT, FIELD_PERSONALSITE_INPUT, null));
     NoteTab.addUIFormInput(new UIFormTextAreaInput(FIELD_NOTE_INPUT, FIELD_NOTE_INPUT, null));
 
-    UIFormCheckBoxInput checkPublic = new UIFormCheckBoxInput<Boolean>(FIELD_ISPUBLIC_BOX, FIELD_ISPUBLIC_BOX, false) ;
-    checkPublic.setOnChange("OnChange") ;
-    ShareTab.addUIFormInput(checkPublic);
     ShareTab.addUIFormInput(new UIFormInputInfo(FIELD_INPUT_INFO, FIELD_INPUT_INFO, null)) ;
     String[] groups = ContactUtils.getUserGroups() ;
     FIELD_SHAREDCONTACT_BOX = new String[groups.length];
     for(int i = 0; i < groups.length; i ++) {
       FIELD_SHAREDCONTACT_BOX[i] = groups[i] ;
-      ShareTab.addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_SHAREDCONTACT_BOX[i], FIELD_SHAREDCONTACT_BOX[i], false).setEnable(false));
+      ShareTab.addUIFormInput(
+          new UIFormCheckBoxInput<Boolean>(FIELD_SHAREDCONTACT_BOX[i], FIELD_SHAREDCONTACT_BOX[i], false));
     }
     
     
@@ -184,7 +180,6 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent, UI
   public void setValues(Contact contact) throws Exception {
     contact_ = contact ;
     if(contact.isShared()) {
-      getUIFormCheckBoxInput(FIELD_ISPUBLIC_BOX).setChecked(true);
       String[] categories = contact.getCategories();
       for (String category : categories) {
         UIFormCheckBoxInput checkBoxInput = getUIFormCheckBoxInput(category) ;
@@ -194,16 +189,15 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent, UI
       StringBuffer editPermissionBuffer = new StringBuffer("");
       if (editPermission != null) {
         editPermissionBuffer.append(editPermission[0]);
-        for (int i = 1; i < editPermission.length; i ++) editPermissionBuffer.append("," + editPermission[i]);
+        for (int i = 1; i < editPermission.length; i ++) 
+          editPermissionBuffer.append("," + editPermission[i]);
       }   
       getUIStringInput(FIELD_EDITPERMISSION_INPUT).setValue(editPermissionBuffer.toString());
-    }    
-    getUIFormCheckBoxInput(FIELD_ISPUBLIC_BOX).setEnable(false) ;
+    }
     for (String group : FIELD_SHAREDCONTACT_BOX) {
       getUIFormCheckBoxInput(group).setEnable(false) ;
     }
     getUIStringInput(FIELD_EDITPERMISSION_INPUT).setEditable(false) ;
-    
     UIProfileInputSet profileTab = getChildById(INPUT_PROFILETAB) ;
     profileTab.setFieldFullName(contact.getFullName());
     profileTab.setFieldFirstName(contact.getFirstName());
@@ -300,7 +294,15 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent, UI
       contact.setLastName(profileTab.getFieldLastName());
       contact.setNickName(profileTab.getFieldNickName());      
       contact.setGender(profileTab.getFieldGender()) ;
-      contact.setBirthday(profileTab.getFieldBirthday()) ;
+      try {
+        contact.setBirthday(profileTab.getFieldBirthday()) ;
+      } catch(IllegalArgumentException e) {
+        uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.invalid-birthday", null, 
+            ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
+      
       contact.setJobTitle(profileTab.getFieldJobName());
       contact.setEmailAddress(profileTab.getFieldEmail());
       if(profileTab.getImage() != null) {
@@ -341,28 +343,55 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent, UI
       contact.setPersonalSite(uiContactForm.getUIStringInput(FIELD_PERSONALSITE_INPUT).getValue());
       contact.setNote(uiContactForm.getUIFormTextAreaInput(FIELD_NOTE_INPUT).getValue());
       contact.setLastUpdated(new Date()) ;
-      
-      UIContactPortlet uiContactPortlet = uiContactForm.getAncestorOfType(UIContactPortlet.class) ;
-      UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
-      UIContactPreview uiContactPreview = uiContactPortlet.findFirstComponentOfType(UIContactPreview.class) ; 
-      if (uiContactForm.getUIFormCheckBoxInput(FIELD_ISPUBLIC_BOX).isChecked()) {
-        if (isNew_) {
-          StringBuffer sharedGroups = new StringBuffer("");
-          for (int i = 0; i < FIELD_SHAREDCONTACT_BOX.length; i ++) {
-            if (uiContactForm.getUIFormCheckBoxInput(FIELD_SHAREDCONTACT_BOX[i]).isChecked())
-              sharedGroups.append(FIELD_SHAREDCONTACT_BOX[i] + ",");
-          }
-          if (ContactUtils.isEmpty(sharedGroups.toString())) {
-            uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.selectSharedGroups-required", null)) ;
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-            return ; 
-          }  
+
+      if (isNew_) {
+        StringBuffer sharedGroups = new StringBuffer("");
+        for (int i = 0; i < FIELD_SHAREDCONTACT_BOX.length; i ++) {
+          if (uiContactForm.getUIFormCheckBoxInput(FIELD_SHAREDCONTACT_BOX[i]).isChecked())
+            sharedGroups.append(FIELD_SHAREDCONTACT_BOX[i] + ",");
+        }
+        if (!ContactUtils.isEmpty(sharedGroups.toString())) {
           String editPermission = uiContactForm.getUIStringInput(FIELD_EDITPERMISSION_INPUT).getValue() ;
           if (!ContactUtils.isEmpty(editPermission))
             contact.setEditPermission(editPermission.split(","));
           String[] categories = sharedGroups.toString().split(",") ;
           contact.setCategories(categories);
           contact.setShared(true) ;
+          contactService.saveSharedContact(contact, isNew_);
+        } else {       
+          UIPopupContainer popupContainer = uiContactForm.getParent() ;
+          UICategorySelect uiCategorySelect = popupContainer.getChild(UICategorySelect.class); 
+          String category = uiCategorySelect.getSelectedCategory();
+          if (ContactUtils.isEmpty(category)) {  
+            uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.selectGroup-required", null)) ;
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            return ; 
+          }
+          contact.setCategories(new String[] { category });
+          contactService.saveContact(username, contact, isNew_);
+        }
+      } else {
+        if (contact.isShared()) contactService.saveSharedContact(contact, isNew_) ;
+        else contactService.saveContact(username, contact, isNew_) ;
+      }
+      
+      /*if (isNew_) {
+        StringBuffer sharedGroups = new StringBuffer("");
+        for (int i = 0; i < FIELD_SHAREDCONTACT_BOX.length; i ++) {
+          if (uiContactForm.getUIFormCheckBoxInput(FIELD_SHAREDCONTACT_BOX[i]).isChecked())
+            sharedGroups.append(FIELD_SHAREDCONTACT_BOX[i] + ",");
+        }
+        if (ContactUtils.isEmpty(sharedGroups.toString())) {
+          uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.selectSharedGroups-required", null)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ; 
+        }  
+        String editPermission = uiContactForm.getUIStringInput(FIELD_EDITPERMISSION_INPUT).getValue() ;
+        if (!ContactUtils.isEmpty(editPermission))
+          contact.setEditPermission(editPermission.split(","));
+        String[] categories = sharedGroups.toString().split(",") ;
+        contact.setCategories(categories);
+        contact.setShared(true) ;
         }        
         contactService.saveSharedContact(contact, isNew_); 
       } else {
@@ -378,7 +407,13 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent, UI
           contact.setCategories(new String[] { category });
         }
         contactService.saveContact(username, contact, isNew_);
-      }
+      }*/
+      
+      
+      UIContactPortlet uiContactPortlet = uiContactForm.getAncestorOfType(UIContactPortlet.class) ;
+      UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
+      UIContactPreview uiContactPreview = uiContactPortlet.findFirstComponentOfType(UIContactPreview.class) ;
+      
       if (!ContactUtils.isEmpty(uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class).getSelectedGroup()))
         uiContacts.updateList() ;
       String selectedContact = uiContacts.getSelectedContact() ;
@@ -422,12 +457,6 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent, UI
   static  public class SelectPermissionActionListener extends EventListener<UIContactForm> {
     public void execute(Event<UIContactForm> event) throws Exception {
       UIContactForm uiForm = event.getSource() ;
-      if(!uiForm.getUIFormCheckBoxInput(FIELD_ISPUBLIC_BOX).isChecked()) {
-        UIApplication app = uiForm.getAncestorOfType(UIApplication.class) ;
-        app.addMessage(new ApplicationMessage("UIContactForm.msg.checkbox-public-notchecked", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(app.getUIPopupMessages()) ;
-        return ;
-      }
       UIGroupSelector uiGroupSelector = uiForm.createUIComponent(UIGroupSelector.class, null, null);
       uiGroupSelector.setSelectUser(true);
       uiGroupSelector.setComponent(uiForm, new String[] {FIELD_EDITPERMISSION_INPUT});
@@ -436,24 +465,6 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent, UI
       uiChildPopup.activate(uiGroupSelector, 500, 0, true) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
     }
-  }
-
-  static  public class OnChangeActionListener extends EventListener<UIContactForm> {
-    public void execute(Event<UIContactForm> event) throws Exception {
-      UIContactForm uiForm = event.getSource() ;
-      if (uiForm.getUIFormCheckBoxInput(FIELD_ISPUBLIC_BOX).isChecked()) {
-        for(String category : FIELD_SHAREDCONTACT_BOX) {
-          uiForm.getUIFormCheckBoxInput(category).setEnable(true) ;
-          uiForm.getUIStringInput(FIELD_EDITPERMISSION_INPUT).setEditable(true) ;
-        }
-      } else {
-        for(String category : FIELD_SHAREDCONTACT_BOX) {
-          uiForm.getUIFormCheckBoxInput(category).setEnable(false) ;
-          uiForm.getUIStringInput(FIELD_EDITPERMISSION_INPUT).setEditable(false) ;
-        }
-      }      
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm) ;
-    } 
   }
   
 }

@@ -26,6 +26,7 @@ import org.exoplatform.contact.webui.popup.UICategorySelect;
 import org.exoplatform.contact.webui.popup.UIContactForm;
 import org.exoplatform.contact.webui.popup.UIPopupAction;
 import org.exoplatform.contact.webui.popup.UIPopupContainer;
+import org.exoplatform.contact.webui.popup.UITagInfo;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -67,6 +68,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
         @EventConfig(listeners = UIContacts.LastPageActionListener.class),
         @EventConfig(listeners = UIContacts.ExportContactActionListener.class),
         @EventConfig(listeners = UIContacts.CancelActionListener.class),
+        @EventConfig(listeners = UIContacts.TagInfoActionListener.class),
         @EventConfig(listeners = UIContacts.CloseSearchActionListener.class)
     }
 )
@@ -85,6 +87,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   public static String emailAddress = "emailAddress".intern() ;
   public static String jobTitle = "jobTitle".intern() ;
   private boolean isSearchResult = false ;
+  private boolean viewContactThubnail = false ;
   
   public UIContacts() throws Exception { } 
   public String[] getActions() { return new String[] {"Cancel"} ; }
@@ -146,8 +149,22 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   public String getSelectedGroup() { return selectedGroup ; }
   
   public void setViewContactsList(boolean list) { viewContactsList = list ; }
-  public boolean getViewContactsList() { return viewContactsList ; }
-
+  public boolean getViewContactsList() { 
+    if (viewContactThubnail == true && !isSearchResult) {
+      getAncestorOfType(UIContactContainer.class).getChild(UIContactPreview.class).setRendered(false) ;
+      return false ;
+    }
+    return viewContactsList ; 
+  }
+  
+  public void setViewContactThubnail(boolean isThumb) { 
+    viewContactThubnail = isThumb ;  
+  }
+  public boolean getViewContactThubnail() { 
+    return viewContactThubnail ; 
+    
+  }
+  
   public List<String> getCheckedContacts() throws Exception {
     List<String> checkedContacts = new ArrayList<String>() ;
     for (Contact contact : getContacts()) {
@@ -567,9 +584,24 @@ public class UIContacts extends UIForm implements UIPopupComponent {
           .getContactPageListByTag(username, uiContacts.selectedTag_)) ;
       } else {
         uiContacts.setContacts(null) ;
+      } 
+      if (uiContacts.getViewContactThubnail()) {
+        uiContacts.setViewContactsList(false) ;
+        uiContacts.getAncestorOfType(UIContactContainer.class).getChild(UIContactPreview.class).setRendered(false) ;
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer) ;
     }
   }
   
+  static public class TagInfoActionListener extends EventListener<UIContacts> {
+    public void execute(Event<UIContacts> event) throws Exception {
+      UIContacts uiContacts = event.getSource() ;
+      UIContactPortlet contactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class) ;
+      UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
+      UITagInfo uiTagInfo = popupAction.createUIComponent(UITagInfo.class, null, "UITagInfo") ; 
+      popupAction.activate(uiTagInfo, 400, 0, true) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;  
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
+    }
+  }
 }

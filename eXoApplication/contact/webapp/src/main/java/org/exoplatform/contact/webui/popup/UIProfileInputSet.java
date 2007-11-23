@@ -27,6 +27,8 @@ import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.validator.DateTimeValidator;
 import org.exoplatform.webui.form.validator.EmailAddressValidator;
 
+import sun.util.calendar.CalendarDate;
+
 /**
  * Created by The eXo Platform SARL
  * Author : Tuan Nguyen
@@ -47,8 +49,8 @@ public class UIProfileInputSet extends UIFormInputWithActions {
   private static final String FIELD_MONTH = "month" ;
   private static final String FIELD_DAY = "day" ;
   private static final String FIELD_YEAR = "year" ; 
-//  public static final String[] months = { "January", "February", "March", "April", "May", "June",
-//    "July", "August", "September", "October", "November", "December" } ;
+//public static final String[] months = { "January", "February", "March", "April", "May", "June",
+//"July", "August", "September", "October", "November", "December" } ;
   private static final String FIELD_JOBTITLE_INPUT = "jobTitle";
   private static final String FIELD_EMAIL_INPUT = "preferredEmail" ;
   private static final String MALE = "male" ;
@@ -57,7 +59,7 @@ public class UIProfileInputSet extends UIFormInputWithActions {
   private byte[] imageBytes = null;
   private String fileName = null ;
   private String imageMimeType = null ;
-  
+
   public UIProfileInputSet(String id) throws Exception {
     super(id) ;
     setComponentConfig(getClass(), null) ;  
@@ -70,7 +72,7 @@ public class UIProfileInputSet extends UIFormInputWithActions {
     genderOptions.add(new SelectItemOption<String>(MALE, MALE));
     genderOptions.add(new SelectItemOption<String>(FEMALE, FEMALE));
     addUIFormInput(new UIFormRadioBoxInput(FIELD_GENDER_BOX, FIELD_GENDER_BOX, genderOptions));    
-    
+
     addUIFormInput(new UIFormInputInfo(INFO_BIRTHDAY, INFO_BIRTHDAY, null)) ;
     List<SelectItemOption<String>> monthOptions = new ArrayList<SelectItemOption<String>>() ;
     for (int i = 1; i < 13; i ++) {
@@ -78,77 +80,76 @@ public class UIProfileInputSet extends UIFormInputWithActions {
       monthOptions.add(new SelectItemOption<String>(month, month)) ;
     }
     addUIFormInput(new UIFormSelectBox(FIELD_MONTH, FIELD_MONTH, monthOptions).setValue("7")) ;
-    
+
     List<SelectItemOption<String>> datesOptions = new ArrayList<SelectItemOption<String>>() ;
     for (int i = 1; i < 32; i ++) {
       String date = i + "" ;
       datesOptions.add(new SelectItemOption<String>(date, date)) ;
     }
     addUIFormInput(new UIFormSelectBox(FIELD_DAY, FIELD_DAY, datesOptions).setValue("15")) ;
-  
+
     String date = ContactUtils.formatDate("dd/MM/yyyy", new Date()) ;
     String strDate = date.substring(date.lastIndexOf("/") + 1, date.length()) ; 
     int thisYear = Integer.parseInt(strDate) ;
-    
+
     List<SelectItemOption<String>> yearOptions = new ArrayList<SelectItemOption<String>>() ;
     for (int i = 1900; i <= thisYear; i ++) {
       String year = i + "" ;
       yearOptions.add(new SelectItemOption<String>(year, year)) ;
     }
     addUIFormInput(new UIFormSelectBox(FIELD_YEAR, FIELD_YEAR, yearOptions).setValue("1980")) ;
-    
-//    addUIFormInput(new UIFormDateTimeInput(FIELD_BIRTHDAY_DATETIME, FIELD_BIRTHDAY_DATETIME, new Date(), false)
-//      .addValidator(DateTimeValidator.class));
-    
+
+//  addUIFormInput(new UIFormDateTimeInput(FIELD_BIRTHDAY_DATETIME, FIELD_BIRTHDAY_DATETIME, new Date(), false)
+//  .addValidator(DateTimeValidator.class));
+
     addUIFormInput(new UIFormStringInput(FIELD_JOBTITLE_INPUT, FIELD_JOBTITLE_INPUT, null));
     addUIFormInput(new UIFormStringInput(FIELD_EMAIL_INPUT, FIELD_EMAIL_INPUT, null)
-      .addValidator(EmailAddressValidator.class));
+    .addValidator(EmailAddressValidator.class));
   }  
   protected String getFieldFullName() { return getUIStringInput(FIELD_FULLNAME_INPUT).getValue() ; }
   protected void setFieldFullName(String s) { getUIStringInput(FIELD_FULLNAME_INPUT).setValue(s); }
-  
+
   protected String getFieldFirstName() { return getUIStringInput(FIELD_FIRSTNAME_INPUT).getValue() ; }
   protected void setFieldFirstName(String s) { getUIStringInput(FIELD_FIRSTNAME_INPUT).setValue(s); }
-  
+
   protected String getFieldMiddleName() { return getUIStringInput(FIELD_MIDDLENAME_INPUT).getValue() ; }
   protected void setFieldMiddleName(String s) { getUIStringInput(FIELD_MIDDLENAME_INPUT).setValue(s); }
-  
+
   protected String getFieldLastName() { return getUIStringInput(FIELD_LASTNAME_INPUT).getValue() ; }
   protected void setFieldLastName(String s) { getUIStringInput(FIELD_LASTNAME_INPUT).setValue(s); }
-  
+
   protected String getFieldNickName() { return getUIStringInput(FIELD_NICKNAME_INPUT).getValue() ; }
   protected void setFieldNickName(String s) { getUIStringInput(FIELD_NICKNAME_INPUT).setValue(s); }
-  
+
   protected String getFieldGender() { return getChild(UIFormRadioBoxInput.class).getValue() ; }
   protected void setFieldGender(String s) { gender = s ; }
-  
-  protected Date getFieldBirthday() throws Exception {
+
+  protected Date getFieldBirthday(){
     int day = Integer.parseInt(getUIFormSelectBox(FIELD_DAY).getValue()) ;
     int month = Integer.parseInt(getUIFormSelectBox(FIELD_MONTH).getValue()) ;
     int year = Integer.parseInt(getUIFormSelectBox(FIELD_YEAR).getValue()) ;
-    GregorianCalendar cal = new GregorianCalendar(year, month - 1, day) ;
-    String strDate = ContactUtils.formatDate("MM/dd/yyyy", cal.getTime());
-    SimpleDateFormat date = new SimpleDateFormat("MM/dd/yyyy") ;
-    return date.parse(strDate) ; 
+    Calendar cal = GregorianCalendar.getInstance() ;
+    cal.setLenient(false) ;
+    cal.set(Calendar.DATE, day) ;
+    cal.set(Calendar.MONTH, month - 1) ;
+    cal.set(Calendar.YEAR, year) ;
+    return cal.getTime() ;
   }
   protected void setFieldBirthday(Date d) throws Exception {
-    String strDate = ContactUtils.formatDate("MM/dd/yyyy", d);    
-    int month = Integer.parseInt(strDate.substring(0, strDate.indexOf("/"))) ;
-    System.out.println("\n\n month:" + month + "\n\n");
-    
-    int day = Integer.parseInt(strDate.substring(strDate.indexOf("/") + 1, strDate.lastIndexOf("/"))) ;
-    String year = strDate.substring(strDate.lastIndexOf("/") + 1, strDate.length()) ;
-    getUIFormSelectBox(FIELD_MONTH).setValue(month + "") ;
-    getUIFormSelectBox(FIELD_DAY).setValue(day + "") ;
-    getUIFormSelectBox(FIELD_YEAR).setValue(year) ;
+    Calendar cal = GregorianCalendar.getInstance() ;
+    cal.setLenient(false) ;
+    cal.setTime(d) ;
+    getUIFormSelectBox(FIELD_MONTH).setValue(String.valueOf(cal.get(Calendar.MONTH) + 1)) ;
+    getUIFormSelectBox(FIELD_DAY).setValue(String.valueOf(cal.get(Calendar.DATE))) ;
+    getUIFormSelectBox(FIELD_YEAR).setValue(String.valueOf(cal.get(Calendar.YEAR))) ;
   }
-  
+
   protected String getFieldJobName() { return getUIStringInput(FIELD_JOBTITLE_INPUT).getValue() ; }
   protected void setFieldJobName(String s) { getUIStringInput(FIELD_JOBTITLE_INPUT).setValue(s); }
-  
+
   protected String getFieldEmail() { return getUIStringInput(FIELD_EMAIL_INPUT).getValue(); }
   protected void setFieldEmail(String s) { getUIStringInput(FIELD_EMAIL_INPUT).setValue(s); }
- 
+
   protected void setImage(InputStream input) throws Exception{
     if (input != null) {
       imageBytes = new byte[input.available()] ; 
@@ -157,13 +158,13 @@ public class UIProfileInputSet extends UIFormInputWithActions {
     else imageBytes = null ;
   }
   protected byte[] getImage() {return imageBytes ;}
-  
+
   protected String getMimeType() { return imageMimeType ;} ;
   protected void setMimeType(String mimeType) {imageMimeType = mimeType ;} 
-  
+
   protected void setFileName(String name) { fileName = name ; }
   protected String getFileName() {return fileName ;} ;
-  
+
   protected String getImageSource() throws Exception {    
     if(imageBytes == null || imageBytes.length == 0) return null;
     ByteArrayInputStream byteImage = new ByteArrayInputStream(imageBytes) ;    
@@ -172,6 +173,6 @@ public class UIProfileInputSet extends UIFormInputWithActions {
     dresource.setDownloadName(fileName) ;
     return  dservice.getDownloadLink(dservice.addDownloadResource(dresource)) ;
   }
-  
+
 }
 

@@ -177,7 +177,6 @@ public class UIAddressBooks extends UIComponent {
       UIContactForm uiContactForm = popupContainer.addChild(UIContactForm.class, null, null) ;
       String groupId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       if (ContactUtils.isPublicGroup(groupId)) {
-        uiContactForm.getUIFormCheckBoxInput(UIContactForm.FIELD_ISPUBLIC_BOX).setChecked(true);
         uiContactForm.getUIFormCheckBoxInput(groupId).setChecked(true) ;   
       } else {
         uiCategorySelect.setValue(groupId) ; 
