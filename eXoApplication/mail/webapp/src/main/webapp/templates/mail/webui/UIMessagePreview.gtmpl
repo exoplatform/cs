@@ -189,9 +189,7 @@
                       %>
                       <div class="AttachmentBox">
     										<div class="AttachmentIcon"><%=attach.getName()%></div>
-    										<div class="Size">Size: 63K</div>
-    										<div class="Icon ViewDownloadIcon">View</div>
-    										<div class="Icon DownloadIcon"><a href="$downloadAction">Download</a></div>
+    										<div class="Size">Size: 63K &nbsp;&nbsp;&nbsp;<span class="Icon ViewDownloadIcon"><a href="#">View</a></span><span class="Icon DownloadIcon"> <a href="$downloadAction">Download</a></span></div>
     						  		</div>
     						  		<div style="clear: left;"><span></span></div>
     						  	</div>
