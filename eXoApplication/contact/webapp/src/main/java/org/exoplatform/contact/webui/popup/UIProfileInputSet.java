@@ -70,7 +70,7 @@ public class UIProfileInputSet extends UIFormInputWithActions {
     addUIFormInput(new UIFormInputInfo(INFO_BIRTHDAY, INFO_BIRTHDAY, null)) ;
     
     List<SelectItemOption<String>> datesOptions = new ArrayList<SelectItemOption<String>>() ;
-    datesOptions.add(new SelectItemOption<String>(FIELD_DAY, FIELD_DAY)) ;
+    datesOptions.add(new SelectItemOption<String>("-- "+FIELD_DAY+" --", FIELD_DAY)) ;
     for (int i = 1; i < 32; i ++) {
       String date = i + "" ;
       datesOptions.add(new SelectItemOption<String>(date, date)) ;
@@ -78,7 +78,7 @@ public class UIProfileInputSet extends UIFormInputWithActions {
     addUIFormInput(new UIFormSelectBox(FIELD_DAY, FIELD_DAY, datesOptions)) ;
     
     List<SelectItemOption<String>> monthOptions = new ArrayList<SelectItemOption<String>>() ;
-    monthOptions.add(new SelectItemOption<String>(FIELD_MONTH, FIELD_MONTH)) ;
+    monthOptions.add(new SelectItemOption<String>("-- "+FIELD_MONTH+" --", FIELD_MONTH)) ;
     for (int i = 1; i < 13; i ++) {
       String month = i + "" ;
       monthOptions.add(new SelectItemOption<String>(month, month)) ;
@@ -89,7 +89,7 @@ public class UIProfileInputSet extends UIFormInputWithActions {
     String strDate = date.substring(date.lastIndexOf("/") + 1, date.length()) ; 
     int thisYear = Integer.parseInt(strDate) ;
     List<SelectItemOption<String>> yearOptions = new ArrayList<SelectItemOption<String>>() ;
-    yearOptions.add(new SelectItemOption<String>(FIELD_YEAR, FIELD_YEAR)) ;
+    yearOptions.add(new SelectItemOption<String>("-- "+FIELD_YEAR+" --", FIELD_YEAR)) ;
     for (int i = 1900; i <= thisYear; i ++) {
       String year = i + "" ;
       yearOptions.add(new SelectItemOption<String>(year, year)) ;
