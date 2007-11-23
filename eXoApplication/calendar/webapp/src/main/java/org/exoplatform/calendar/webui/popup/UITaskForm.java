@@ -356,11 +356,11 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
   }
   protected void setEventReminders(List<Reminder> reminders){
     for(Reminder r : reminders) {
-      if(Reminder.TYPE_EMAIL.equals(r.getReminder())) {
+      if(Reminder.TYPE_EMAIL.equals(r.getType())) {
         setEmailReminder(true) ;
         setEmailAddress(r.getEmailAddress()) ;
         setEmailReminderTime(r.getAlarmBefore()) ; 
-      }else if(Reminder.TYPE_POPUP.equals(r.getReminder())) {
+      }else if(Reminder.TYPE_POPUP.equals(r.getType())) {
         setPopupReminder(true) ;
         setPopupReminderTime(r.getAlarmBefore()) ;
         setPopupReminderSnooze(r.getSnooze()) ;
@@ -373,14 +373,14 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
     List<Reminder> reminders = new ArrayList<Reminder>() ;
     if(getEmailReminder()) { 
       Reminder email = new Reminder() ;
-      email.setReminder(Reminder.TYPE_EMAIL) ;
+      email.setType(Reminder.TYPE_EMAIL) ;
       email.setAlarmBefore(getEmailReminderTime()) ;
       email.setEmailAddress(getEmailAddress()) ;
       reminders.add(email) ;
     }
     if(getPopupReminder()) {
       Reminder popup = new Reminder() ;
-      popup.setReminder(Reminder.TYPE_POPUP) ;
+      popup.setType(Reminder.TYPE_POPUP) ;
       popup.setAlarmBefore(getPopupReminderTime()) ;
       popup.setSnooze(getPopupReminderSnooze()) ;
       reminders.add(popup) ;
