@@ -102,8 +102,8 @@ public class UIMessageList extends UIForm {
     MessageFilter filter = new MessageFilter("Folder"); 
     filter.setAccountId(accountId);
     if (accountId != null){
-      selectedFolderId_ = Utils.createFolderId(accountId, Utils.FD_INBOX, false);
       filter.setFolder(new String[] { selectedFolderId_ });
+      selectedFolderId_ = Utils.createFolderId(accountId, Utils.FD_INBOX, false);
       setMessagePageList(mailSrv.getMessagePageListByFolder(username, accountId, selectedFolderId_));
     }
     setMessageFilter(filter);
