@@ -12,7 +12,7 @@
           <div class="LeftBar">
             <div class="RightBar">
               <div class="CenterBar">
-                <a class="ControlButton" href="#">
+                <a class="ControlButton" href="<%=uicomponent.event("AddGroup")%>">
                   <div class="IconHolder AddGroup">
                     <div class="Label">Add New Group</div>
                   </div>
@@ -27,7 +27,7 @@
                     <div class="Label"> Edit Contact </div>
                   </div>
                 </a>
-                <a class="ControlButton" >
+                <a class="ControlButton" href="<%=uicomponent.event("DeleteContact")%>">
                   <div class="IconHolder DeleteContact">
                     <div class="Label">Delete</div>
                   </div>
@@ -63,8 +63,9 @@
               for (Contact contact : uicomponent.getContacts()) { 
                 String classCss = "NormalItem";
                 if (contact.getId().equals(uicomponent.getSelectedContact().getId())) classCss += " CheckItem";
+                String selectContact = uicomponent.event("SelectContact", contact.getId());
             %>
-              <div class="$classCss"><%=contact.getFirstName()%>&nbsp;<%=contact.getLastName()%> </div>
+              <a href="$selectContact"><div class="$classCss"><%=contact.getFirstName()%>&nbsp;<%=contact.getLastName()%> </div></a>
             <% } %>
           </div>
         </div>
@@ -257,7 +258,7 @@
                             </div>
                             <div class="InfoItem">
                               <div class="InfoLabel">City:</div>
-                              <div class="Info"><%= (selectedContact.getHomeCity() != null) ? selectedContact.getHomeCity() : "_"%>></div>
+                              <div class="Info"><%= (selectedContact.getHomeCity() != null) ? selectedContact.getHomeCity() : "_"%></div>
                               <div style="clear: left;"><span/></div>
                             </div>
                             <div class="InfoItem">
