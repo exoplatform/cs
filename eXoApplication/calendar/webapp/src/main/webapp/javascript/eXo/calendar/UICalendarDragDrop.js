@@ -13,7 +13,7 @@ UICalendarDragDrop.prototype.mouseCoords = function(ev){
 UICalendarDragDrop.prototype.init = function() {
 	var UICalendarDragDrop = eXo.calendar.UICalendarDragDrop ;
 	UICalendarDragDrop.container = document.getElementById("UIMonthViewGrid") ;
-	var dragObjects = eXo.core.DOMUtil.findDescendantsByClass(UICalendarDragDrop.container, "div", "EventBoxes") ;
+	var dragObjects = eXo.core.DOMUtil.findDescendantsByClass(UICalendarDragDrop.container.parentNode.parentNode, "div", "EventBoxes") ;
 	var len = dragObjects.length ;
 	if (!dragObjects || (len < 1)) return ;
 	var checkbox = null ;

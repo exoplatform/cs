@@ -29,11 +29,36 @@ UICalendarPortlet.prototype.dateDiff = function(start,end) {
 	return (end - start) ;
 } ;
 
-UICalendarPortlet.prototype.isMatchDate = function(start,end) {
-	start = (new Date(start)).getDate() ;
-	end = (new Date(end)).getDate() ;
-	if (end == start) return true ;
-	return false ;
+//UICalendarPortlet.prototype.isMatchDate = function(start,end) {
+//	start = (new Date(start)).getDate() ;
+//	end = (new Date(end)).getDate() ;
+//	if (end == start) return true ;
+//	return false ;
+//} ;
+
+UICalendarPortlet.prototype.getYear = function(date) {
+	x = date.getYear();
+	var y = x % 100;
+	y += (y < 38) ? 2000 : 1900;
+	return y;
+}
+
+UICalendarPortlet.prototype.getWeekNumber = function(now) {
+	var today = new Date(now) ;
+	var Year = this.getYear(today) ;
+	var Month = today.getMonth() ;
+	var Day = today.getDate() ;
+	var now = Date.UTC(Year,Month,Day+1,0,0,0);
+	var Firstday = new Date() ;
+	Firstday.setYear(Year) ;
+	Firstday.setMonth(0) ;
+	Firstday.setDate(1) ;
+	var then = Date.UTC(Year,0,1,0,0,0) ;
+	var Compensation = Firstday.getDay() ;
+	if (Compensation > 3) Compensation -= 4;
+	else Compensation += 3 ;
+	var NumberOfWeek =  Math.round((((now-then)/86400000) + Compensation)/7) ;
+	return NumberOfWeek ;
 } ;
 
 UICalendarPortlet.prototype.setting = function() {
@@ -349,8 +374,6 @@ UICalendarPortlet.prototype.adjustWidth = function(el) {
 UICalendarPortlet.prototype.showEvent = function() {
 	var UICalendarPortlet = eXo.calendar.UICalendarPortlet ;	
 	if (!UICalendarPortlet.init()) return ;
-	var workingStart = 0 ;
-	var workingStart = (UICalendarPortlet.workingStart) ? UICalendarPortlet.workingStart : 0 ;	
 	var el = UICalendarPortlet.getElements(UICalendarPortlet.viewer) ;
 	el = UICalendarPortlet.sortByAttribute(el, "startTime") ;
 	if (el.length <= 0) return ;
@@ -363,7 +386,7 @@ UICalendarPortlet.prototype.showEvent = function() {
 	}
 	UICalendarPortlet.adjustWidth(el) ;
 	var EventDayContainer = eXo.core.DOMUtil.findAncestorByClass(UICalendarPortlet.viewer,"EventDayContainer") ;
-	EventDayContainer.scrollTop = workingStart ;
+	EventDayContainer.scrollTop = (UICalendarPortlet.workingStart) ? UICalendarPortlet.workingStart : 0 ;
 } ;
 
 UICalendarPortlet.prototype.sortByAttribute = function(obj, attribute) {

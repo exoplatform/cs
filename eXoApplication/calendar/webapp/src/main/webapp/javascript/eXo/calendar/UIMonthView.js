@@ -1,0 +1,119 @@
+eXo.require('eXo.calendar.UICalendarPortlet', '/javascript/calendar/') ;
+function UIMonthView() {
+	
+}
+
+UIMonthView.prototype.init = function() {
+	var UIMonthView = document.getElementById("UIMonthView") ;
+	var UIMonthViewGrid = document.getElementById("UIMonthViewGrid") ;
+	this.eventContainer = eXo.core.DOMUtil.findFirstDescendantByClass(UIMonthView, "div","RowContainerDay") ;
+	this.items = eXo.core.DOMUtil.findDescendantsByClass(UIMonthView, "div", "DayContentContainer") ;	
+	var len = this.items.length ;
+	if (len <=0 ) return ;
+	this.cells = eXo.core.DOMUtil.findDescendantsByTagName(UIMonthViewGrid, "td") ;
+	this.unitX = this.cells[0].offsetWidth ;
+	this.unitY = this.cells[0].offsetHeight ;
+	for(var i = 0 ; i < len ; i++) {
+		this.createBars(this.items[i]) ;
+	}
+	this.items = eXo.core.DOMUtil.findDescendantsByClass(UIMonthView, "div", "DayContentContainer") ;	
+	var row = this.cells.length/7 ;
+	var eventInRows = null ;
+	for(var i = 0 ; i < row ; i++) {
+		eventInRows = this.getEventsInRow(i, this.items) ;
+		this.arrangeEventInRows(eventInRows) ;
+	}
+} ;
+
+UIMonthView.prototype.createBars = function(event) {
+	var UICalendarPortlet = eXo.calendar.UICalendarPortlet ;
+	var start = parseInt(event.getAttribute("startTime")) ;
+	var end = parseInt(event.getAttribute("endTime")) ;
+	var top = parseInt(event.getAttribute("startIndex")) ;
+	var startWeek = UICalendarPortlet.getWeekNumber(start) ;
+	var endWeek = UICalendarPortlet.getWeekNumber(end) ;
+	var delta = endWeek - startWeek ;	
+	if (delta == 0) {
+		event.style.top = (top - 1) * this.unitY + 16 + "px" ;
+		event.style.left = (new Date(start)).getDay() * this.unitX - 2 + "px" ;
+		event.style.width = ((new Date(end)).getDay() - (new Date(start)).getDay()) * this.unitX - 2 + "px" ;		
+	}	else if (delta == 1) {
+		event.style.top = (top - 1) * this.unitY + 16 + "px" ;
+		event.style.left = (new Date(start)).getDay() * this.unitX - 2 + "px" ;
+		event.style.width = (7 - (new Date(start)).getDay()) * this.unitX - (7 - (new Date(start)).getDay()) + "px" ;		
+		var event1 = event.cloneNode(true) ;
+		event1.style.top = parseInt(event.style.top) + this.unitY + "px" ;
+		event1.style.left = "0px" ;
+		event1.style.width = (new Date(end)).getDay() * this.unitX - 2 + "px" ;
+		this.eventContainer.appendChild(event1) ;
+	}else {
+		var fullDayEvent = new Array() ;
+		fullDayEvent.push(event) ;
+		for(var i = 0 ; i < delta ; i ++) {
+			fullDayEvent.push(event.cloneNode(true)) ;			
+		}
+		var len = fullDayEvent.length ;
+		fullDayEvent[0].style.top =  (top - 1) * this.unitY + 16 + "px" ;
+		fullDayEvent[0].style.left = (new Date(start)).getDay() * this.unitX - 2  + "px" ;
+		fullDayEvent[0].style.width = (7 - (new Date(start)).getDay()) * this.unitX - (7 - (new Date(start)).getDay()) + "px" ;
+		this.eventContainer.appendChild(fullDayEvent[0]) ;
+		for(var i = 1 ; i < len - 1 ; i ++) {
+			fullDayEvent[i].style.top = parseInt(fullDayEvent[i-1].style.top) + this.unitY + "px" ;
+			fullDayEvent[i].style.left = "0px" ;
+			fullDayEvent[i].style.width = 7*this.unitX - 7 + "px" ;
+			this.eventContainer.appendChild(fullDayEvent[i]) ;
+		}
+		fullDayEvent[len - 1].style.top = parseInt(fullDayEvent[len - 2].style.top) + this.unitY + "px" ;
+		fullDayEvent[len - 1].style.left = "0px" ;
+		fullDayEvent[len - 1].style.width = (new Date(end)).getDay() * this.unitX - 2 + "px" ;
+		this.eventContainer.appendChild(fullDayEvent[len-1]) ;
+	}
+}
+
+UIMonthView.prototype.getEventsInRow = function(row, events) {
+	var minY = row*this.unitY ;
+	var maxY = minY + this.unitY ;
+	var len = events.length ;
+	var eventInRows = new Array() ;
+	var top = null ;
+	for(var i = 0 ; i < len ; i ++) {
+		top = events[i].offsetTop ;
+		if ((top > minY) && (top < maxY)) {
+			eventInRows.push(events[i])
+		}
+	}
+	eventInRows = this.sortEventsInRow(eventInRows) ;
+	return eventInRows ;
+} ;
+
+UIMonthView.prototype.arrangeEventInRows = function(eventInRows) {
+	var len = eventInRows.length ;
+	for(var i = 0 ; i < len ; i ++) {
+		if (i > 0) eventInRows[i].style.top = parseInt(eventInRows[i-1].style.top) + eventInRows[i-1].offsetHeight + "px" ;
+	}
+} ;
+
+UIMonthView.prototype.sortEventsInRow = function(obj, type) {
+	var len = obj.length ;
+	var tmp = null ;
+	var attribute1 = null ;
+	var attribute2 = null ;
+	var attribute3 = null ;
+	var attribute4 = null ;
+	for(var i = 0 ; i < len ; i ++){
+		for(var j = i + 1 ; j < len ; j ++) {		
+				attribute1 = obj[i].offsetLeft ;
+				attribute2 = obj[j].offsetLeft ;
+				attribute3 = obj[i].offsetWidth ;
+				attribute4 = obj[j].offsetWidth ;
+			if((attribute2 < attribute1) && (attribute4 > attribute3)) {
+				tmp = obj[i] ;
+				obj[i] = obj[j] ;
+				obj[j] = tmp ;
+			}
+		}
+	}
+	return obj ;
+};
+
+eXo.calendar.UIMonthView = new UIMonthView() ;
