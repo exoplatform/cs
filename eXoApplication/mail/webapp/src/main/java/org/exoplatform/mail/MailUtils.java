@@ -58,6 +58,23 @@ public class MailUtils {
     selectedAccountId_ = accId ;
   }
   
+  public static String getImageSource(Contact contact, DownloadService dservice) throws Exception {    
+    ContactAttachment contactAttachment = contact.getAttachment();
+    if (contactAttachment != null) {
+      InputStream input = contactAttachment.getInputStream() ;
+      byte[] imageBytes = null ;
+      if (input != null) {
+        imageBytes = new byte[input.available()] ;
+        input.read(imageBytes) ;
+        ByteArrayInputStream byteImage = new ByteArrayInputStream(imageBytes) ;
+        InputStreamDownloadResource dresource = new InputStreamDownloadResource(byteImage, "image") ;
+        dresource.setDownloadName(contactAttachment.getFileName()) ;
+        return  dservice.getDownloadLink(dservice.addDownloadResource(dresource)) ;        
+      }
+    }
+    return null ;
+  }
+  
   public static String getImageSource(Attachment attach, DownloadService dservice) throws Exception {      
     if (attach != null) {
       InputStream input = attach.getInputStream() ;

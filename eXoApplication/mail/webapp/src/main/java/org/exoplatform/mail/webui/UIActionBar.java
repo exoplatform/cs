@@ -121,7 +121,7 @@ public class UIActionBar extends UIContainer {
       UIMailPortlet uiPortlet = uiActionBar.getAncestorOfType(UIMailPortlet.class);
       UIPopupAction uiPopupAction = uiPortlet.findFirstComponentOfType(UIPopupAction.class);
       UIPopupActionContainer uiPopupContainer = uiPopupAction.createUIComponent(UIPopupActionContainer.class, null, "UIPopupActionAddressContainer");
-      uiPopupAction.activate(uiPopupContainer, 800, 0, false) ;
+      uiPopupAction.activate(uiPopupContainer, 800, 0, true) ;
       UIAddressBookForm uiAddressBookForm = uiPopupContainer.createUIComponent(UIAddressBookForm.class, null, null);
       uiPopupContainer.addChild(uiAddressBookForm) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
