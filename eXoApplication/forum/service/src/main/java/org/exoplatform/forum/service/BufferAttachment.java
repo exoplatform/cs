@@ -5,9 +5,6 @@
 package org.exoplatform.forum.service;
 
 import java.io.InputStream;
-//import org.exoplatform.download.DownloadResource;
-//import org.exoplatform.download.DownloadService;
-//import org.exoplatform.container.PortalContainer;
 
 /**
  * Created by The eXo Platform SARL

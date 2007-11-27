@@ -11,7 +11,6 @@ import org.exoplatform.forum.service.Category;
 import org.exoplatform.forum.service.Forum;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.service.Topic;
-import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIContainer;
@@ -37,7 +36,6 @@ public class UICategories extends UIContainer  {
 	protected ForumService forumService = (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
 	
   public UICategories() throws Exception {
-  	
   }
 
   private List<Category> getCategoryList() throws Exception {
@@ -51,10 +49,18 @@ public class UICategories extends UIContainer  {
 		return forumList;
 	}
 	
+  @SuppressWarnings("unused")
   private Topic getLastTopic(String topicPath) throws Exception {
 		return forumService.getTopicByPath(topicPath) ;
 	}
 	
+  private Category getCategory(String categoryId) throws Exception {
+  	for(Category category : this.getCategoryList()) {
+  		if(category.getId().equals(categoryId)) return category ;
+  	}
+  	return null ;
+  }
+  
 	static public class OpenCategory extends EventListener<UICategories> {
 		public void execute(Event<UICategories> event) throws Exception {
 			UICategories uiContainer = event.getSource();
@@ -62,7 +68,7 @@ public class UICategories extends UIContainer  {
       UICategoryContainer categoryContainer = uiContainer.getAncestorOfType(UICategoryContainer.class) ;
 			categoryContainer.updateIsRender(false) ;
 			UICategory uiCategory = categoryContainer.getChild(UICategory.class) ;
-			uiCategory.update(categoryId) ;
+			uiCategory.update(uiContainer.getCategory(categoryId), uiContainer.getForumList(categoryId)) ;
 		}
 	}
 	
@@ -77,7 +83,7 @@ public class UICategories extends UIContainer  {
       uiForumContainer.setIsRenderChild(true) ;
       UITopicContainer uiTopicContainer = uiForumContainer.getChild(UITopicContainer.class) ;
       uiForumContainer.getChild(UIForumDescription.class).setForumIds(id[0], id[1]);
-      uiTopicContainer.setUpdateForum(id[0], id[1]) ;
+      uiTopicContainer.updateByBreadcumbs(id[0], id[1], false) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(forumPortlet) ;
     }
   }
@@ -95,10 +101,8 @@ public class UICategories extends UIContainer  {
       UITopicDetail uiTopicDetail = uiTopicDetailContainer.getChild(UITopicDetail.class) ;
       uiForumContainer.getChild(UIForumDescription.class).setForumIds(id[0], id[1]);
       uiTopicDetail.setUpdateTopic(id[0], id[1], id[2], true) ;
-      uiTopicDetailContainer.getChild(UITopicPoll.class).updatePoll(id[0], id[1], id[2]) ;
+      uiTopicDetailContainer.getChild(UITopicPoll.class).updateFormPoll(id[0], id[1], id[2]) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(forumPortlet) ;
     }
   }
-	
-	
 }

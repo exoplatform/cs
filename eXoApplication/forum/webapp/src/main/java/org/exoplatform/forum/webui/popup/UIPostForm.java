@@ -18,12 +18,14 @@ import org.exoplatform.forum.webui.EmptyNameValidator;
 import org.exoplatform.forum.webui.UIForumPortlet;
 import org.exoplatform.forum.webui.UITopicDetailContainer;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.exception.MessageException;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormInputIconSelector;
 import org.exoplatform.webui.form.UIFormInputInfo;
@@ -184,78 +186,105 @@ public class UIPostForm extends UIForm implements UIPopupComponent {
   static  public class PreviewPostActionListener extends EventListener<UIPostForm> {
     public void execute(Event<UIPostForm> event) throws Exception {
       UIPostForm uiForm = event.getSource() ;
-      
+      int t = 0, k = 1 ;
       String postTitle = uiForm.getUIStringInput(FIELD_POSTTITLE_INPUT).getValue().trim();
       String message = uiForm.getChild(UIFormWYSIWYGInput.class).getValue();
-      	//uiForm.getUIFormTextAreaInput(FIELD_MESSENGER_TEXTAREA).getValue() ;
       String userName = Util.getPortalRequestContext().getRemoteUser() ;
       if(message != null && message.length() > 0) message = message.trim() ;
-      int index = message.indexOf(("<div>" + uiForm.getLabel(FIELD_ORIGINALLY))) ;
-      if(index > 0) {
-      	message = uiForm.temp + ">" + message.substring(index, message.length());
-      }
-      Post post = new Post() ;
-      post.setSubject(postTitle.trim()) ;
-      post.setMessage(message) ;
-      post.setOwner(userName) ;
-      post.setCreatedDate(new Date()) ;
-      post.setModifiedBy(userName) ;
-      post.setModifiedDate(new Date()) ;
-      post.setRemoteAddr("") ;
-      UIFormInputIconSelector uiIconSelector = uiForm.getChild(UIFormInputIconSelector.class);
-      post.setIcon(uiIconSelector.getSelectedIcon());
-      post.setNumberOfAttachment(0) ;
-      post.setIsApproved(false) ;
-      post.setAttachments(uiForm.attachments_) ;
-      
-      UIPopupContainer popupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
-      UIPopupAction popupAction = popupContainer.getChild(UIPopupAction.class).setRendered(true)  ;
-      UIViewTopic viewTopic = popupAction.activate(UIViewTopic.class, 670) ;
-      viewTopic.setPostView(post) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+      t = message.length() ;
+      if(postTitle.length() <= 3) {k = 0;}
+	    if(t >= 20 && k != 0) {  
+	      int index = message.indexOf(("<div>" + uiForm.getLabel(FIELD_ORIGINALLY))) ;
+	      if(index > 0) {
+	      	message = uiForm.temp + ">" + message.substring(index, message.length());
+	      }
+	      Post post = new Post() ;
+	      post.setSubject(postTitle.trim()) ;
+	      post.setMessage(message) ;
+	      post.setOwner(userName) ;
+	      post.setCreatedDate(new Date()) ;
+	      post.setModifiedBy(userName) ;
+	      post.setModifiedDate(new Date()) ;
+	      post.setRemoteAddr("") ;
+	      UIFormInputIconSelector uiIconSelector = uiForm.getChild(UIFormInputIconSelector.class);
+	      post.setIcon(uiIconSelector.getSelectedIcon());
+	      post.setNumberOfAttachment(0) ;
+	      post.setIsApproved(false) ;
+	      post.setAttachments(uiForm.attachments_) ;
+	      
+	      UIPopupContainer popupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
+	      UIPopupAction popupAction = popupContainer.getChild(UIPopupAction.class).setRendered(true)  ;
+	      UIViewTopic viewTopic = popupAction.activate(UIViewTopic.class, 670) ;
+	      viewTopic.setPostView(post) ;
+	      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+	    }else {
+	    	String[] args = { ""} ;
+		    if(k == 0) {
+		    	args = new String[] { "Thread Title" } ;
+		    	if(t < 20) args = new String[] { "Thread Title and Messenger" } ;
+		    	throw new MessageException(new ApplicationMessage("NameValidator.msg.ShortText", args)) ;
+		    } else if(t < 20) {
+		    	args = new String[] { "Messenger" } ;
+		    	throw new MessageException(new ApplicationMessage("NameValidator.msg.ShortMessenger", args)) ;
+		    }
+	    }
     }
   }
   
   static  public class SubmitPostActionListener extends EventListener<UIPostForm> {
     public void execute(Event<UIPostForm> event) throws Exception {
       UIPostForm uiForm = event.getSource() ;
+      int t = 0, k = 1 ;
       String postTitle = uiForm.getUIStringInput(FIELD_POSTTITLE_INPUT).getValue().trim();
       String message = uiForm.getChild(UIFormWYSIWYGInput.class).getValue();
       	//uiForm.getUIFormTextAreaInput(FIELD_MESSENGER_TEXTAREA).getValue() ;
       String userName = Util.getPortalRequestContext().getRemoteUser() ;
       if(message != null && message.length() > 0) message = message.trim() ;
-      int index = message.indexOf(("<div>" + uiForm.getLabel(FIELD_ORIGINALLY))) ;
-      if(index > 0) {
-      	message = uiForm.temp + ">" + message.substring(index, message.length());
-      }
-      Post post = new Post() ;
-      post.setSubject(postTitle.trim()) ;
-      post.setMessage(message) ;
-      post.setOwner(userName) ;
-      post.setCreatedDate(new Date()) ;
-      post.setModifiedBy(userName) ;
-      post.setModifiedDate(new Date()) ;
-      post.setRemoteAddr("") ;
-      UIFormInputIconSelector uiIconSelector = uiForm.getChild(UIFormInputIconSelector.class);
-      post.setIcon(uiIconSelector.getSelectedIcon());
-      post.setNumberOfAttachment(0) ;
-      post.setIsApproved(false) ;
-      post.setAttachments(uiForm.attachments_) ;
-      
-      if(uiForm.postId != null && uiForm.postId.length() > 0) {
-        if(uiForm.isQuote) {
-          uiForm.forumService.savePost(uiForm.categoryId, uiForm.forumId, uiForm.topicId, post, true) ;
-        } else {
-          post.setId(uiForm.postId) ;
-          uiForm.forumService.savePost(uiForm.categoryId, uiForm.forumId, uiForm.topicId, post, false) ;
-        }
-      } else {
-        uiForm.forumService.savePost(uiForm.categoryId, uiForm.forumId, uiForm.topicId, post, true) ;
-      }
-      UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
-      forumPortlet.cancelAction() ;
-      UITopicDetailContainer topicDetailContainer = forumPortlet.findFirstComponentOfType(UITopicDetailContainer.class) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(topicDetailContainer);
+      t = message.length() ;
+      if(postTitle.length() <= 3) {k = 0;}
+	    if(t >= 20 && k != 0) {  
+	      int index = message.indexOf(("<div>" + uiForm.getLabel(FIELD_ORIGINALLY))) ;
+	      if(index > 0) {
+	      	message = uiForm.temp + ">" + message.substring(index, message.length());
+	      }
+	      Post post = new Post() ;
+	      post.setSubject(postTitle.trim()) ;
+	      post.setMessage(message) ;
+	      post.setOwner(userName) ;
+	      post.setCreatedDate(new Date()) ;
+	      post.setModifiedBy(userName) ;
+	      post.setModifiedDate(new Date()) ;
+	      post.setRemoteAddr("") ;
+	      UIFormInputIconSelector uiIconSelector = uiForm.getChild(UIFormInputIconSelector.class);
+	      post.setIcon(uiIconSelector.getSelectedIcon());
+	      post.setNumberOfAttachment(0) ;
+	      post.setIsApproved(false) ;
+	      post.setAttachments(uiForm.attachments_) ;
+	      if(uiForm.postId != null && uiForm.postId.length() > 0) {
+	        if(uiForm.isQuote) {
+	          uiForm.forumService.savePost(uiForm.categoryId, uiForm.forumId, uiForm.topicId, post, true) ;
+	        } else {
+	          post.setId(uiForm.postId) ;
+	          uiForm.forumService.savePost(uiForm.categoryId, uiForm.forumId, uiForm.topicId, post, false) ;
+	        }
+	      } else {
+	        uiForm.forumService.savePost(uiForm.categoryId, uiForm.forumId, uiForm.topicId, post, true) ;
+	      }
+	      UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
+	      forumPortlet.cancelAction() ;
+	      UITopicDetailContainer topicDetailContainer = forumPortlet.findFirstComponentOfType(UITopicDetailContainer.class) ;
+	      event.getRequestContext().addUIComponentToUpdateByAjax(topicDetailContainer);
+	    }else {
+	    	String[] args = { ""} ;
+		    if(k == 0) {
+		    	args = new String[] { "Thread Title" } ;
+		    	if(t < 20) args = new String[] { "Thread Title and Messenger" } ;
+		    	throw new MessageException(new ApplicationMessage("NameValidator.msg.ShortText", args)) ;
+		    } else if(t < 20) {
+		    	args = new String[] { "Messenger" } ;
+		    	throw new MessageException(new ApplicationMessage("NameValidator.msg.ShortMessenger", args)) ;
+		    }
+	    }
     }
   }
   

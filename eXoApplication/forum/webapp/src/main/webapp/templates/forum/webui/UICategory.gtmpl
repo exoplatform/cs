@@ -107,7 +107,7 @@
         </thead>
         <tbody>
         <% 
-          List forums = uicomponent.getForumList(category.getId());
+          List forums = uicomponent.getForumList();
           if(forums.size() == 0) {
         %>
           <tr>

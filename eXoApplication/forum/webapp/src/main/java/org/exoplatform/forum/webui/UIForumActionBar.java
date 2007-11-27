@@ -52,6 +52,7 @@ public class UIForumActionBar extends UIContainer  {
   }  
   
   static public class AddForumActionListener extends EventListener<UIForumActionBar> {
+    @SuppressWarnings("unchecked")
     public void execute(Event<UIForumActionBar> event) throws Exception {
       UIForumActionBar uiActionBar = event.getSource() ;      
       ForumService forumService =  (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;

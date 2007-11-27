@@ -70,10 +70,12 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
   private ForumService forumService = (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
   private String forumId = "";
   private String categoryId = "";
+  private Forum forum;
   private JCRPageList pageList ;
   private List<Topic> topicList ;
   private long page = 1 ;
   private boolean isGoPage = false;
+  private boolean isUpdate = false;
   public UITopicContainer() throws Exception {
   	addUIFormInput( new UIFormStringInput("gopage1", null)) ;
     addUIFormInput( new UIFormStringInput("gopage2", null)) ;
@@ -87,15 +89,28 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
   	// TODO Auto-generated method stub
   }
   
-  public void setUpdateForum(String categoryId, String forumId) throws Exception {
-    this.forumId = forumId ;
+  public void setUpdateForum(String categoryId, Forum forum) throws Exception {
+  	this.forum = forum ;
+    this.forumId = forum.getId() ;
     this.categoryId = categoryId ;
     this.getAncestorOfType(UIForumPortlet.class).getChild(UIBreadcumbs.class).setUpdataPath((categoryId + "/" + forumId)) ;
   }
   
+  public void updateByBreadcumbs(String categoryId, String forumId, boolean isBreadcumbs) throws Exception {
+  	this.forumId = forumId ;
+  	this.categoryId = categoryId ;
+  	this.isUpdate = true ;
+  	if(!isBreadcumbs) {
+  		this.getAncestorOfType(UIForumPortlet.class).getChild(UIBreadcumbs.class).setUpdataPath((categoryId + "/" + forumId)) ;
+  	}
+  }
+  
   private Forum getForum() throws Exception {
-  	Forum forum = forumService.getForum(categoryId, forumId);
-    return forum ;
+  	if(this.isUpdate) {
+  		this.forum = forumService.getForum(categoryId, forumId);
+  		this.isUpdate = false ;
+  	}
+    return this.forum ;
   }
   
   @SuppressWarnings("unused")
@@ -121,6 +136,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
     return actions;
   }
   
+  @SuppressWarnings({ "unused", "unchecked" })
   private List<Topic> getTopicPageLits() throws Exception {
     JCRPageList pageList = this.pageList;
     if(!this.isGoPage) {
@@ -147,6 +163,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
   	return null ;
   }
   
+  @SuppressWarnings("unused")
   private String[] getStarNumber(Topic topic) throws Exception {
     double voteRating = topic.getVoteRating() ;
     int star = (int)voteRating ;
@@ -218,14 +235,16 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
   	public void execute(Event<UITopicContainer> event) throws Exception {
   		UITopicContainer uiTopicContainer = event.getSource();
   		String topicId = event.getRequestContext().getRequestParameter(OBJECTID) ; 
-  		UIForumContainer uiForumContainer = uiTopicContainer.getAncestorOfType(UIForumContainer.class) ;
+  		UIForumPortlet forumPortlet = uiTopicContainer.getAncestorOfType(UIForumPortlet.class) ;
+  		UIForumContainer uiForumContainer = forumPortlet.getChild(UIForumContainer.class) ;
       UITopicDetailContainer uiTopicDetailContainer = uiForumContainer.getChild(UITopicDetailContainer.class) ;
       uiForumContainer.setIsRenderChild(false) ;
       UITopicDetail uiTopicDetail = uiTopicDetailContainer.getChild(UITopicDetail.class) ;
       uiTopicDetail.setUpdateTopic(uiTopicContainer.categoryId, uiTopicContainer.forumId, topicId, true) ;
-      WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+      uiTopicDetailContainer.getChild(UITopicPoll.class).updatePoll(uiTopicContainer.categoryId, uiTopicContainer.forumId, uiTopicContainer.getTopic(topicId) ) ;
+      WebuiRequestContext context = event.getRequestContext() ;
       context.addUIComponentToUpdateByAjax(uiForumContainer) ;
-      context.addUIComponentToUpdateByAjax(uiTopicContainer.getAncestorOfType(UIForumPortlet.class).getChild(UIBreadcumbs.class)) ;
+      context.addUIComponentToUpdateByAjax(forumPortlet.getChild(UIBreadcumbs.class)) ;
   	}
   }
 
@@ -241,6 +260,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
       forumForm.setForumUpdate(true);
       popupAction.activate(forumForm, 662, 466) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+      uiTopicContainer.isUpdate = true ;
     }
   }  
   
@@ -249,6 +269,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
       UITopicContainer uiTopicContainer = event.getSource();
       Forum forum = uiTopicContainer.getForum() ;
       forum.setIsLock(true);
+      uiTopicContainer.isUpdate = true ;
       uiTopicContainer.forumService.saveForum(uiTopicContainer.categoryId, forum, false) ;
       UIForumPortlet forumPortlet = uiTopicContainer.getAncestorOfType(UIForumPortlet.class) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(forumPortlet) ;
@@ -260,6 +281,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
       UITopicContainer uiTopicContainer = event.getSource();
       Forum forum = uiTopicContainer.getForum() ;
       forum.setIsLock(false);
+      uiTopicContainer.isUpdate = true ;
       uiTopicContainer.forumService.saveForum(uiTopicContainer.categoryId, forum, false) ;
       UIForumPortlet forumPortlet = uiTopicContainer.getAncestorOfType(UIForumPortlet.class) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(forumPortlet) ;
@@ -271,6 +293,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
       UITopicContainer uiTopicContainer = event.getSource();
       Forum forum = uiTopicContainer.getForum() ;
       forum.setIsClosed(false);
+      uiTopicContainer.isUpdate = true ;
       uiTopicContainer.forumService.saveForum(uiTopicContainer.categoryId, forum, false) ;
       UIForumPortlet forumPortlet = uiTopicContainer.getAncestorOfType(UIForumPortlet.class) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(forumPortlet) ;
@@ -282,6 +305,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
       UITopicContainer uiTopicContainer = event.getSource();
       Forum forum = uiTopicContainer.getForum() ;
       forum.setIsClosed(true);
+      uiTopicContainer.isUpdate = true ;
       uiTopicContainer.forumService.saveForum(uiTopicContainer.categoryId, forum, false) ;
       UIForumPortlet forumPortlet = uiTopicContainer.getAncestorOfType(UIForumPortlet.class) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(forumPortlet) ;
@@ -301,6 +325,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
       Forum forum = uiTopicContainer.getForum() ;
       List <Forum> forums = new ArrayList<Forum>();
       forums.add(forum);
+      uiTopicContainer.isUpdate = true ;
       UIForumPortlet forumPortlet = uiTopicContainer.getAncestorOfType(UIForumPortlet.class) ;
       UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;
       UIMoveForumForm moveForumForm = popupAction.createUIComponent(UIMoveForumForm.class, null, null) ;
@@ -317,7 +342,10 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
       Forum forum = uiTopicContainer.getForum() ;
       UIForumPortlet forumPortlet = uiTopicContainer.getAncestorOfType(UIForumPortlet.class) ;
       uiTopicContainer.forumService.removeForum(uiTopicContainer.categoryId, forum.getId()) ;
+      UICategoryContainer categoryContainer = forumPortlet.getChild(UICategoryContainer.class) ;
       forumPortlet.updateIsRendered(1) ;
+      categoryContainer.updateIsRender(false) ;
+      forumPortlet.getChild(UIBreadcumbs.class).setUpdataPath(uiTopicContainer.categoryId) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(forumPortlet) ;
     }
   }  

@@ -208,7 +208,6 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
     if(isUpdate) {
       this.topicId = topic.getId() ;
       getUIStringInput(FIELD_TOPICTITLE_INPUT).setValue(topic.getTopicName());
-      //getUIFormTextAreaInput(FIELD_MESSENGER_TEXTAREA).setDefaultValue(topic.getDescription());
       getChild(UIFormWYSIWYGInput.class).setValue(topic.getDescription());
       String stat = "open";
       if(topic.getIsClosed()) stat = "closed";
@@ -230,29 +229,44 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
   static  public class PreviewThreadActionListener extends EventListener<UITopicForm> {
     public void execute(Event<UITopicForm> event) throws Exception {
       UITopicForm uiForm = event.getSource() ;
+      int t = 0, k = 1 ;
       UIFormStringInput stringInputTitle = uiForm.getUIStringInput(FIELD_TOPICTITLE_INPUT) ; 
-      stringInputTitle.addValidator(EmptyNameValidator.class);
-      String topicTitle = stringInputTitle.getValue().trim();
-      String messenger = uiForm.getChild(UIFormWYSIWYGInput.class).getValue();
-      	//uiForm.getUIFormTextAreaInput(FIELD_MESSENGER_TEXTAREA).getValue() ;
-      String userName = Util.getPortalRequestContext().getRemoteUser() ;
-      Post postNew = new Post();
-      postNew.setOwner(userName);
-      postNew.setSubject(topicTitle);
-      postNew.setCreatedDate(new Date());
-      postNew.setModifiedBy(userName);
-      postNew.setModifiedDate(new Date());
-      postNew.setMessage(messenger);
-      postNew.setAttachments(uiForm.attachments_) ;
-      UIFormInputIconSelector uiIconSelector = uiForm.getChild(UIFormInputIconSelector.class);
-      postNew.setIcon(uiIconSelector.getSelectedIcon());
-      postNew.setNumberOfAttachment(0) ;
-      
-      UIPopupContainer popupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
-      UIPopupAction popupAction = popupContainer.getChild(UIPopupAction.class).setRendered(true) ;
-      UIViewTopic viewTopic = popupAction.activate(UIViewTopic.class, 670) ;
-      viewTopic.setPostView(postNew) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(popupContainer) ;
+      String topicTitle = "     " + stringInputTitle.getValue();
+      topicTitle = topicTitle.trim() ;
+      String messenger = "     " +  uiForm.getChild(UIFormWYSIWYGInput.class).getValue();
+      messenger = messenger.trim() ;
+      t = messenger.length() ;
+      if(topicTitle.length() <= 3) {k = 0;}
+	    if(t >= 20 && k != 0) {
+	      String userName = Util.getPortalRequestContext().getRemoteUser() ;
+	      Post postNew = new Post();
+	      postNew.setOwner(userName);
+	      postNew.setSubject(topicTitle);
+	      postNew.setCreatedDate(new Date());
+	      postNew.setModifiedBy(userName);
+	      postNew.setModifiedDate(new Date());
+	      postNew.setMessage(messenger);
+	      postNew.setAttachments(uiForm.attachments_) ;
+	      UIFormInputIconSelector uiIconSelector = uiForm.getChild(UIFormInputIconSelector.class);
+	      postNew.setIcon(uiIconSelector.getSelectedIcon());
+	      postNew.setNumberOfAttachment(0) ;
+	      
+	      UIPopupContainer popupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
+	      UIPopupAction popupAction = popupContainer.getChild(UIPopupAction.class).setRendered(true) ;
+	      UIViewTopic viewTopic = popupAction.activate(UIViewTopic.class, 670) ;
+	      viewTopic.setPostView(postNew) ;
+	      event.getRequestContext().addUIComponentToUpdateByAjax(popupContainer) ;
+	    }else {
+	    	String[] args = { ""} ;
+		    if(k == 0) {
+		    	args = new String[] { "Thread Title" } ;
+		    	if(t < 20) args = new String[] { "Thread Title and Messenger" } ;
+		    	throw new MessageException(new ApplicationMessage("NameValidator.msg.ShortText", args)) ;
+		    } else if(t < 20) {
+		    	args = new String[] { "Messenger" } ;
+		    	throw new MessageException(new ApplicationMessage("NameValidator.msg.ShortMessenger", args)) ;
+		    }
+	    }
     }
   }
   

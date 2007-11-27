@@ -17,7 +17,6 @@ import org.exoplatform.forum.webui.popup.UIForumForm;
 import org.exoplatform.forum.webui.popup.UIMoveForumForm;
 import org.exoplatform.forum.webui.popup.UIPopupAction;
 import org.exoplatform.web.application.ApplicationMessage;
-import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -36,6 +35,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
  * Aus 01, 2007 2:48:18 PM 
  */
 
+@SuppressWarnings({ "unused", "unchecked" })
 @ComponentConfig(
 		lifecycle = UIFormLifecycle.class ,
     template =  "app:/templates/forum/webui/UICategory.gtmpl",
@@ -56,39 +56,65 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
 )
 public class UICategory extends UIForm  {
 	private String categoryId ;
+	private Category category ;
+	private boolean  isEdit = false ;
 	private	ForumService forumService = (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
-  
+  private List<Forum> forums = new ArrayList<Forum>() ;
 	public UICategory() throws Exception {
 	  
   }
   
-  public void update(String id) throws Exception {
-  	categoryId = id ;
+  public void update(Category category, List<Forum> forums) throws Exception {
+  	this.category = category ;
+  	this.forums = forums ;
+  	categoryId = category.getId() ;
   	this.getAncestorOfType(UIForumPortlet.class).getChild(UIBreadcumbs.class).setUpdataPath((categoryId)) ;
   }
   
+  public void updateByBreadcumbs(String categoryId) {
+	  this.categoryId = categoryId ;
+	  this.isEdit = true ;
+  }
+  
   private Category getCategory() throws Exception{
-		Category category = forumService.getCategory(categoryId);
-  	return category ;
+  	if(this.isEdit) {
+  		this.category = forumService.getCategory(this.categoryId);
+  	}
+  	return this.category ;
 	}
   
-	private List<Forum> getForumList(String categoryId) throws Exception {
-		List<Forum> forumList = forumService.getForums(categoryId);
-		for(Forum forum : forumList) {
+	@SuppressWarnings("unchecked")
+  private List<Forum> getForumList() throws Exception {
+		if(this.isEdit) {
+			this.forums = forumService.getForums(this.categoryId);
+			this.isEdit = false ;
+		}
+		for(Forum forum : this.forums) {
 			if(getUIFormCheckBoxInput(forum.getId()) != null) {
 				getUIFormCheckBoxInput(forum.getId()).setChecked(false) ;
 			}else {
 				addUIFormInput(new UIFormCheckBoxInput(forum.getId(), forum.getId(), false) );
 			}
-			
 		}
-		return forumList;
+		return this.forums;
 	}
 	
-	private Topic getLastTopic(String topicPath) throws Exception {
+	public void setIsEditCategory(boolean isEdit) {
+	  this.isEdit = isEdit ;
+  }
+	
+	@SuppressWarnings("unused")
+	private Forum getForum(String forumId) throws Exception {
+		for(Forum forum : this.forums) {
+			if(forum.getId().equals(forumId)) return forum;
+		}
+		return null ;
+	}
+	
+	@SuppressWarnings("unused")
+  private Topic getLastTopic(String topicPath) throws Exception {
 		return forumService.getTopicByPath(topicPath) ;
 	}
-	
 	
 	static public class EditCategoryActionListener extends EventListener<UICategory> {
 		public void execute(Event<UICategory> event) throws Exception {
@@ -99,6 +125,7 @@ public class UICategory extends UIForm  {
 			categoryForm.setCategoryValue(uiCategory.getCategory(), true) ;
 			popupAction.activate(categoryForm, 600, 300) ;
 			event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+			uiCategory.isEdit = true ;
 		}
 	}
 
@@ -124,6 +151,7 @@ public class UICategory extends UIForm  {
       forumForm.setCategoryValue(uiCategory.categoryId, false) ;
       popupAction.activate(forumForm, 662, 466) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+      uiCategory.isEdit = true ;
     }
   }
   
@@ -135,7 +163,7 @@ public class UICategory extends UIForm  {
   		for(UIComponent child : children) {
   			if(child instanceof UIFormCheckBoxInput) {
   				if(((UIFormCheckBoxInput)child).isChecked()) {
-  					forum = uiCategory.forumService.getForum(uiCategory.categoryId, ((UIFormCheckBoxInput)child).getName());
+  					forum = uiCategory.getForum(((UIFormCheckBoxInput)child).getName());
   					break ;
   				}
   			}
@@ -168,7 +196,7 @@ public class UICategory extends UIForm  {
   		for(UIComponent child : children) {
   			if(child instanceof UIFormCheckBoxInput) {
   				if(((UIFormCheckBoxInput)child).isChecked()) {
-  					forums.add(uiCategory.forumService.getForum(uiCategory.categoryId, ((UIFormCheckBoxInput)child).getName()));
+  					forums.add(uiCategory.getForum(((UIFormCheckBoxInput)child).getName()));
   					if(forums.get(i).getIsLock()){sms = forums.get(i).getForumName(); break;}
   					i++;
   				}
@@ -179,8 +207,6 @@ public class UICategory extends UIForm  {
   				forum.setIsLock(true) ;
   				uiCategory.forumService.saveForum(uiCategory.categoryId, forum, false);
 				}
-//  			WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
-//  			context.addUIComponentToUpdateByAjax(uiCategory) ;
   		}  
   		UIApplication uiApp = uiCategory.getAncestorOfType(UIApplication.class) ;
   		if((forums.size() == 0) && (sms.length() == 0)) {
@@ -206,7 +232,7 @@ public class UICategory extends UIForm  {
   		for(UIComponent child : children) {
   			if(child instanceof UIFormCheckBoxInput) {
   				if(((UIFormCheckBoxInput)child).isChecked()) {
-  					forums.add(uiCategory.forumService.getForum(uiCategory.categoryId, ((UIFormCheckBoxInput)child).getName()));
+  					forums.add(uiCategory.getForum(((UIFormCheckBoxInput)child).getName()));
   					if(!forums.get(i).getIsLock()){sms = forums.get(i).getForumName(); break;}
   					i++;
   				}
@@ -239,7 +265,7 @@ public class UICategory extends UIForm  {
   		for(UIComponent child : children) {
   			if(child instanceof UIFormCheckBoxInput) {
   				if(((UIFormCheckBoxInput)child).isChecked()) {
-  					forums.add(uiCategory.forumService.getForum(uiCategory.categoryId, ((UIFormCheckBoxInput)child).getName()));
+  					forums.add(uiCategory.getForum(((UIFormCheckBoxInput)child).getName()));
   					if(!forums.get(i).getIsClosed()){sms = forums.get(i).getForumName(); break;}
   					i++;
   				}
@@ -272,7 +298,7 @@ public class UICategory extends UIForm  {
   		for(UIComponent child : children) {
   			if(child instanceof UIFormCheckBoxInput) {
   				if(((UIFormCheckBoxInput)child).isChecked()) {
-  					forums.add(uiCategory.forumService.getForum(uiCategory.categoryId, ((UIFormCheckBoxInput)child).getName()));
+  					forums.add(uiCategory.getForum(((UIFormCheckBoxInput)child).getName()));
   					if(forums.get(i).getIsClosed()){sms = forums.get(i).getForumName(); break;}
   					i++;
   				}
@@ -303,7 +329,7 @@ public class UICategory extends UIForm  {
   		for(UIComponent child : children) {
   			if(child instanceof UIFormCheckBoxInput) {
   				if(((UIFormCheckBoxInput)child).isChecked()) {
-  					forums.add(uiCategory.forumService.getForum(uiCategory.categoryId, ((UIFormCheckBoxInput)child).getName()));
+  					forums.add(uiCategory.getForum(((UIFormCheckBoxInput)child).getName()) );
   				}
   			}
   		}
@@ -330,13 +356,14 @@ public class UICategory extends UIForm  {
   		for(UIComponent child : children) {
   			if(child instanceof UIFormCheckBoxInput) {
   				if(((UIFormCheckBoxInput)child).isChecked()) {
-  					forums.add(uiCategory.forumService.getForum(uiCategory.categoryId, ((UIFormCheckBoxInput)child).getName()));
+  					forums.add(uiCategory.getForum(((UIFormCheckBoxInput)child).getName()));
   				}
   			}
   		}
   		if((forums.size() > 0)) {
   			for (Forum forum : forums) {
   				uiCategory.forumService.removeForum(uiCategory.categoryId, forum.getId()) ;
+  				uiCategory.isEdit = true ;
   			}
   		} else {
   			Object[] args = { };
@@ -355,7 +382,7 @@ public class UICategory extends UIForm  {
   		uiForumContainer.setIsRenderChild(true) ;
       uiForumContainer.getChild(UIForumDescription.class).setForumIds(uiCategory.categoryId, forumId);
   		UITopicContainer uiTopicContainer = uiForumContainer.getChild(UITopicContainer.class) ;
-      uiTopicContainer.setUpdateForum(uiCategory.categoryId, forumId) ;
+      uiTopicContainer.setUpdateForum(uiCategory.categoryId, uiCategory.getForum(forumId)) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(forumPortlet) ;
     }
   }
@@ -374,7 +401,7 @@ public class UICategory extends UIForm  {
       UITopicDetail uiTopicDetail = uiTopicDetailContainer.getChild(UITopicDetail.class) ;
       uiForumContainer.getChild(UIForumDescription.class).setForumIds(uiCategory.categoryId, id[0]);
       uiTopicDetail.setUpdateTopic(uiCategory.categoryId, id[0], id[1], true) ;
-      uiTopicDetailContainer.getChild(UITopicPoll.class).updatePoll(uiCategory.categoryId, id[0], id[1]) ;
+      uiTopicDetailContainer.getChild(UITopicPoll.class).updateFormPoll(uiCategory.categoryId, id[0], id[1]) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(forumPortlet) ;
     }
   }

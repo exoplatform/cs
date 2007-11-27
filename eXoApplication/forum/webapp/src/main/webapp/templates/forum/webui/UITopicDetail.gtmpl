@@ -7,7 +7,7 @@
 %>
 <%
 	uicomponent.initPage() ;  
-	Topic topic = uicomponent.getTopicDetail() ;
+	Topic topic = uicomponent.getTopic() ;
 %>
 
 <div class="UITopicDetail">

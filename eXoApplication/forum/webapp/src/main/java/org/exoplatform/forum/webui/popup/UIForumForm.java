@@ -78,7 +78,7 @@ public class UIForumForm extends UIForm implements UIPopupComponent {
   	UIFormSelectBox categoryId = new UIFormSelectBox(FIELD_CATEGORY_SELECTBOX, FIELD_CATEGORY_SELECTBOX, list) ;
   	categoryId.setDefaultValue(categorys.get(0).getId());
   	UIFormStringInput forumTitle = new UIFormStringInput(FIELD_FORUMTITLE_INPUT, FIELD_FORUMTITLE_INPUT, null);
-  	forumTitle.addValidator(NameValidator.class) ;
+  	forumTitle.addValidator(EmptyNameValidator.class) ;
     UIFormStringInput forumOrder = new UIFormStringInput(FIELD_FORUMORDER_INPUT, FIELD_FORUMORDER_INPUT, "0");
   	forumOrder.addValidator(PositiveNumberFormatValidator.class) ;
   	List<SelectItemOption<String>> ls = new ArrayList<SelectItemOption<String>>() ;

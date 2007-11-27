@@ -207,7 +207,7 @@ public class UIPollForm extends UIForm implements UIPopupComponent {
         uiForm.isUpdate = false ;
         UITopicDetailContainer detailContainer = forumPortlet.findFirstComponentOfType(UITopicDetailContainer.class) ;
         detailContainer.setRederPoll(true) ;
-        detailContainer.getChild(UITopicPoll.class).updatePoll(id[id.length - 3], id[id.length - 2], id[id.length - 1]) ;
+        detailContainer.getChild(UITopicPoll.class).updateFormPoll(id[id.length - 3], id[id.length - 2], id[id.length - 1]) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(detailContainer);
       }
       if(sms != null && sms.length() > 0) {

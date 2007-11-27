@@ -31,6 +31,7 @@ public class UIForumDescription extends UIContainer  {
     this.categoryId = categoryId ;
   }
   
+  @SuppressWarnings("unused")
   private Forum getForum() throws Exception {
     ForumService forumService = (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
     return forumService.getForum(categoryId, forumId);

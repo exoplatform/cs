@@ -49,7 +49,23 @@ public class UITopicPoll extends UIForm  {
   private Poll poll_ ;
   private String categoryId, forumId, topicId ;
   private boolean isMultiCheck = false ;
+  private boolean isEditPoll = false ;
+  private Topic topic ;
   public UITopicPoll() throws Exception {
+  }
+  
+  public void updatePoll(String categoryId, String forumId, Topic topic) throws Exception {
+  	this.categoryId = categoryId; 
+  	this.forumId = forumId; 
+  	this.topicId = topic.getId();
+  	this.topic = topic ;
+  }
+
+  public void updateFormPoll(String categoryId, String forumId, String topicId) throws Exception {
+  	this.categoryId = categoryId; 
+  	this.forumId = forumId; 
+  	this.topicId = topicId;
+  	this.isEditPoll = true ;
   }
 
   private void init() throws Exception {
@@ -70,8 +86,11 @@ public class UITopicPoll extends UIForm  {
   @SuppressWarnings("unused")
   private Poll getPoll() throws Exception {
     if(categoryId != null && categoryId.length() > 0) {
-      Topic topic = forumService.getTopic(categoryId, forumId, topicId, false) ;
-      if(topic.getIsPoll()) {
+    	if(this.isEditPoll) {
+    		this.topic = forumService.getTopic(categoryId, forumId, topicId, false) ;
+    		this.isEditPoll = false ;
+    	}
+      if(this.topic.getIsPoll()) {
         Poll poll = forumService.getPoll(categoryId, forumId, topicId) ; 
         poll_ = poll ;
         this.init() ;
@@ -79,12 +98,6 @@ public class UITopicPoll extends UIForm  {
       }
     }
     return null ;
-  }
-  
-  public void updatePoll(String categoryId, String forumId, String topicId) throws Exception {
-    this.categoryId = categoryId; 
-    this.forumId = forumId; 
-    this.topicId = topicId;
   }
   
   @SuppressWarnings("unused")
@@ -217,6 +230,7 @@ public class UITopicPoll extends UIForm  {
       pollForm.setTopicPath(path) ;
       pollForm.setUpdatePoll(topicPoll.poll_, true) ;
       popupAction.activate(pollForm, 662, 466) ;
+      topicPoll.isEditPoll = true ;
     }
   }
 
@@ -226,6 +240,7 @@ public class UITopicPoll extends UIForm  {
       topicPoll.forumService.removePoll(topicPoll.categoryId, topicPoll.forumId, topicPoll.topicId) ;
       topicPoll.removeChild(UIFormRadioBoxInput.class) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(topicPoll.getParent()) ;
+      topicPoll.isEditPoll = false ;
     }
   }
 

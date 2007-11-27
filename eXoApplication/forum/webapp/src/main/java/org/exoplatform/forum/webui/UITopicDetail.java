@@ -86,6 +86,8 @@ public class UITopicDetail extends UIForm  {
   private JCRPageList pageList ;
   private long pageSelect  = 1 ;
   private boolean isGopage = false ;
+  private boolean isEditTopic = false ;
+  private List<Post> posts ;
   public UITopicDetail() throws Exception {
     addUIFormInput( new UIFormStringInput("gopage1", null)) ;
     addUIFormInput( new UIFormStringInput("gopage2", null)) ;
@@ -100,12 +102,25 @@ public class UITopicDetail extends UIForm  {
     this.topicId = topicId ;
     this.viewTopic = viewTopic ;
     this.getAncestorOfType(UIForumPortlet.class).getChild(UIBreadcumbs.class).setUpdataPath((categoryId + "/" + forumId + "/" + topicId)) ;
+    this.topic = forumService.getTopic(categoryId, forumId, topicId, viewTopic) ;
+  }
+  
+  public void setUpdateContainer(String categoryId, String forumId, Topic topic, boolean viewTopic) throws Exception {
+  	this.categoryId = categoryId ;
+  	this.forumId = forumId ;
+  	this.topicId = topic.getId() ;
+  	this.viewTopic = viewTopic ;
+  	this.getAncestorOfType(UIForumPortlet.class).getChild(UIBreadcumbs.class).setUpdataPath((categoryId + "/" + forumId + "/" + topicId)) ;
+  	this.topic = topic ;
   }
   
   @SuppressWarnings("unused")
   private Topic getTopic() throws Exception {
     try {
-      this.topic = forumService.getTopic(categoryId, forumId, topicId, viewTopic) ;
+    	if(this.isEditTopic) {
+    		this.topic = forumService.getTopic(categoryId, forumId, topicId, viewTopic) ;
+    		this.isEditTopic = false ;
+    	}
       return this.topic ;
     } catch (Exception e) {
       return null ;
@@ -117,24 +132,15 @@ public class UITopicDetail extends UIForm  {
   	pageList.setPageSize(4) ;
   	this.getChild(UIForumPageIterator.class).updatePageList(this.pageList) ;
   }
-  @SuppressWarnings("unused")
-  private JCRPageList getPagePosts() throws Exception {
-    return pageList ;
-  }
-  
-  private Topic getTopicDetail() throws Exception {
-    return this.topic ;
-  }
   
   @SuppressWarnings({ "unchecked", "unused" })
   private List<Post> getPostPageList() throws Exception {
   	if(!this.isGopage) {
   		this.pageSelect = this.getChild(UIForumPageIterator.class).getPageSelected() ;
   	}
-    JCRPageList pageList = getPagePosts() ;
-    if(pageList == null) return null ;
+    if(this.pageList == null || this.pageSelect < 1) return null ;
     List<Post> postList = new ArrayList<Post>();
-    postList = forumService.getPage(this.pageSelect, pageList) ;
+    postList = forumService.getPage(this.pageSelect, this.pageList) ;
     for (Post post : postList) {
       if(getUIFormCheckBoxInput(post.getId()) != null) {
         getUIFormCheckBoxInput(post.getId()).setChecked(false) ;
@@ -143,7 +149,15 @@ public class UITopicDetail extends UIForm  {
       }
     }
     this.isGopage = false ;
+    this.posts = postList ;
     return postList ;
+  }
+  
+  private Post getPost(String postId) throws Exception {
+  	for(Post post : this.posts) {
+  		if(post.getId().equals(postId)) return post;
+  	}
+  	return null ;
   }
   
   static public class AddPostActionListener extends EventListener<UITopicDetail> {
@@ -180,6 +194,7 @@ public class UITopicDetail extends UIForm  {
         popupAction.activate(ratingForm, 300, 145) ;
         topicDetail.viewTopic = false ;
         event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+        topicDetail.isEditTopic = true ;
       } else {
         Object[] args = { userName };
         throw new MessageException(new ApplicationMessage("UITopicDetail.sms.VotedRating", args, ApplicationMessage.WARNING)) ;
@@ -279,6 +294,7 @@ public class UITopicDetail extends UIForm  {
       popupContainer.setId("UIEditTopicContainer") ;
       popupAction.activate(popupContainer, 662, 466) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+      topicDetail.isEditTopic = true ;
     }
   }
   
@@ -297,6 +313,7 @@ public class UITopicDetail extends UIForm  {
       UIPollForm  pollForm = popupAction.createUIComponent(UIPollForm.class, null, null) ;
       pollForm.setTopicPath(topic.getPath()) ;
       popupAction.activate(pollForm, 655, 455) ;
+      topicDetail.isEditTopic = true ;
     }
   }
 
@@ -308,6 +325,7 @@ public class UITopicDetail extends UIForm  {
         topic.setIsClosed(false) ;
         topicDetail.forumService.saveTopic(topicDetail.categoryId, topicDetail.forumId, topic, false) ;
         topicDetail.viewTopic = false ;
+        topicDetail.isEditTopic = true ;
         event.getRequestContext().addUIComponentToUpdateByAjax(topicDetail) ;
       } else {
         Object[] args = { topic.getTopicName() };
@@ -324,6 +342,7 @@ public class UITopicDetail extends UIForm  {
         topic.setIsClosed(true) ;
         topicDetail.forumService.saveTopic(topicDetail.categoryId, topicDetail.forumId, topic, false) ;
         topicDetail.viewTopic = false ;
+        topicDetail.isEditTopic = true ;
         event.getRequestContext().addUIComponentToUpdateByAjax(topicDetail) ;
       } else {
         Object[] args = { topic.getTopicName() };
@@ -340,6 +359,7 @@ public class UITopicDetail extends UIForm  {
         topic.setIsLock(true) ;
         topicDetail.forumService.saveTopic(topicDetail.categoryId, topicDetail.forumId, topic, false) ;
         topicDetail.viewTopic = false ;
+        topicDetail.isEditTopic = true ;
         event.getRequestContext().addUIComponentToUpdateByAjax(topicDetail) ;
       } else {
         Object[] args = { topic.getTopicName() };
@@ -356,6 +376,7 @@ public class UITopicDetail extends UIForm  {
         topic.setIsLock(false) ;
         topicDetail.forumService.saveTopic(topicDetail.categoryId, topicDetail.forumId, topic, false) ;
         topicDetail.viewTopic = false ;
+        topicDetail.isEditTopic = true ;
         event.getRequestContext().addUIComponentToUpdateByAjax(topicDetail) ;
       } else {
         Object[] args = { topic.getTopicName() };
@@ -372,6 +393,7 @@ public class UITopicDetail extends UIForm  {
       UIMoveTopicForm moveTopicForm = popupAction.createUIComponent(UIMoveTopicForm.class, null, null) ;
       List <Topic> topics = new ArrayList<Topic>();
       topics.add(topicDetail.topic) ;
+      topicDetail.isEditTopic = true ;
       moveTopicForm.updateTopic(topicDetail.forumId, topics, true);
       popupAction.activate(moveTopicForm, 400, 420) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
@@ -386,6 +408,7 @@ public class UITopicDetail extends UIForm  {
         topic.setIsSticky(true) ;
         topicDetail.forumService.saveTopic(topicDetail.categoryId, topicDetail.forumId, topic, false) ;
         topicDetail.viewTopic = false ;
+        topicDetail.isEditTopic = true ;
         event.getRequestContext().addUIComponentToUpdateByAjax(topicDetail) ;
       } else {
         Object[] args = { topic.getTopicName() };
@@ -402,6 +425,7 @@ public class UITopicDetail extends UIForm  {
         topic.setIsSticky(false) ;
         topicDetail.forumService.saveTopic(topicDetail.categoryId, topicDetail.forumId, topic, false) ;
         topicDetail.viewTopic = false ;
+        topicDetail.isEditTopic = true ;
         event.getRequestContext().addUIComponentToUpdateByAjax(topicDetail) ;
       } else {
         Object[] args = { topic.getTopicName() };
@@ -431,24 +455,27 @@ public class UITopicDetail extends UIForm  {
   static public class SetDeleteTopicActionListener extends EventListener<UITopicDetail> {
     public void execute(Event<UITopicDetail> event) throws Exception {
       UITopicDetail topicDetail = event.getSource() ;
-      Topic topic = topicDetail.getTopicDetail() ;
-      Object[] args = { topic.getTopicName() };
-      new MessageException(new ApplicationMessage("UITopicDetail.sms.Delete", args, ApplicationMessage.WARNING)) ;
+      Topic topic = topicDetail.topic ;
       topicDetail.forumService.removeTopic(topicDetail.categoryId, topicDetail.forumId, topic.getId()) ;
-      UIForumContainer uiForumContainer = topicDetail.getAncestorOfType(UIForumContainer.class) ;
+      UIForumPortlet forumPortlet = topicDetail.getAncestorOfType(UIForumPortlet.class) ;
+      UIForumContainer uiForumContainer = forumPortlet.getChild(UIForumContainer.class) ;
       uiForumContainer.setIsRenderChild(true) ;
+      UIBreadcumbs breadcumbs = forumPortlet.getChild(UIBreadcumbs.class) ;
+      breadcumbs.setUpdataPath((topicDetail.categoryId + "/" + topicDetail.forumId)) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiForumContainer) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(breadcumbs) ;
     }
   }
 
   //---------------------------------  Post Menu   --------------------------------------//
   static public class MergePostActionListener extends EventListener<UITopicDetail> {
     public void execute(Event<UITopicDetail> event) throws Exception {
-      UITopicDetail topicDetail = event.getSource() ;
+      //UITopicDetail topicDetail = event.getSource() ;
     }
   }
 
   static public class MovePostActionListener extends EventListener<UITopicDetail> {
+    @SuppressWarnings("unchecked")
     public void execute(Event<UITopicDetail> event) throws Exception {
       UITopicDetail topicDetail = event.getSource() ;
       UIForumPortlet forumPortlet = topicDetail.getAncestorOfType(UIForumPortlet.class) ;
@@ -457,7 +484,7 @@ public class UITopicDetail extends UIForm  {
       for(UIComponent child : children) {
         if(child instanceof UIFormCheckBoxInput) {
           if(((UIFormCheckBoxInput)child).isChecked()) {
-            posts.add(topicDetail.forumService.getPost(topicDetail.categoryId, topicDetail.forumId, topicDetail.topicId, ((UIFormCheckBoxInput)child).getName()));
+            posts.add(topicDetail.getPost(((UIFormCheckBoxInput)child).getName()));
           }
         }
       }
@@ -499,6 +526,7 @@ public class UITopicDetail extends UIForm  {
   }
   
   static public class DeletePostActionListener extends EventListener<UITopicDetail> {
+    @SuppressWarnings("unchecked")
     public void execute(Event<UITopicDetail> event) throws Exception {
       UITopicDetail topicDetail = event.getSource() ;
       List<UIComponent> children = topicDetail.getChildren() ;
@@ -506,7 +534,7 @@ public class UITopicDetail extends UIForm  {
       for(UIComponent child : children) {
         if(child instanceof UIFormCheckBoxInput) {
           if(((UIFormCheckBoxInput)child).isChecked()) {
-            posts.add(topicDetail.forumService.getPost(topicDetail.categoryId, topicDetail.forumId, topicDetail.topicId, ((UIFormCheckBoxInput)child).getName()));
+            posts.add(topicDetail.getPost(((UIFormCheckBoxInput)child).getName()));
           }
         }
       }

@@ -78,14 +78,17 @@ public class UIBreadcumbs extends UIContainer {
   	}
   }
   
+  @SuppressWarnings("unused")
   private String getPath(int index) {
 	  return this.path_.get(index) ;
   }
   
+  @SuppressWarnings("unused")
   private int getMaxPath() {
   	return breadcumbs_.size() ;
   }
   
+  @SuppressWarnings("unused")
   private List<String> getBreadcumbs() throws Exception {
     return breadcumbs_ ;
   }
@@ -106,10 +109,10 @@ public class UIBreadcumbs extends UIContainer {
       	UIForumContainer forumContainer = forumPortlet.findFirstComponentOfType(UIForumContainer.class);
       	forumContainer.setIsRenderChild(true) ;
       	forumContainer.getChild(UIForumDescription.class).setForumIds(id[0], id[1]);
-      	forumContainer.getChild(UITopicContainer.class).setUpdateForum(id[0], id[1]) ;
+      	forumContainer.getChild(UITopicContainer.class).updateByBreadcumbs(id[0], id[1], true) ;
       }else {
       	UICategoryContainer categoryContainer = forumPortlet.getChild(UICategoryContainer.class) ;
-      	categoryContainer.getChild(UICategory.class).update(path) ;
+      	categoryContainer.getChild(UICategory.class).updateByBreadcumbs(path) ;
         categoryContainer.updateIsRender(false) ;
         forumPortlet.updateIsRendered(1);
       }
