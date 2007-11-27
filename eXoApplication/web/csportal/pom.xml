@@ -21,6 +21,7 @@
             <resource>
               <directory>${exo.projects.directory.src}/ecm/trunk/web/ecmportal/src/main/webapp</directory>
               <excludes>
+              	<exclude>WEB-INF/index.jsp</exclude>
               	<exclude>WEB-INF/web.xml</exclude>
                 <exclude>WEB-INF/conf/*.xml</exclude>
                 <exclude>WEB-INF/conf/portal/*.xml</exclude>
@@ -31,6 +32,7 @@
             <resource>
               <directory>${exo.projects.directory.src}/portal/trunk/web/portal/src/main/webapp</directory>
               <excludes>              	
+              	<exclude>WEB-INF/index.jsp</exclude>
                 <exclude>WEB-INF/web.xml</exclude>                     
                 <exclude>WEB-INF/conf/*.xml</exclude>                     
                 <exclude>WEB-INF/conf/jcr/*.xml</exclude>                     
