@@ -21,7 +21,7 @@
 								<div class="Label"> Address Book </div>
 							</div>
 						</a>
-						<a style="color:gray;" class="ControlButton">
+						<a href="<%=uicomponent.event("AddEvent")%>" class="ControlButton">
 							<div class="IconHolder AddEventIcon">
 								<div class="Label">Add event</div>
 							</div>

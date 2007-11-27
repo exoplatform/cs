@@ -7,7 +7,6 @@ package org.exoplatform.mail.webui.popup;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.mail.MailUtils;
-import org.exoplatform.mail.service.Group;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;

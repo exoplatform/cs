@@ -17,12 +17,12 @@ import org.exoplatform.mail.service.MailSetting;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.popup.UIAddressBookForm;
 import org.exoplatform.mail.webui.popup.UIComposeForm;
+import org.exoplatform.mail.webui.popup.UIEventForm;
 import org.exoplatform.mail.webui.popup.UIFeed;
 import org.exoplatform.mail.webui.popup.UIMailSettings;
 import org.exoplatform.mail.webui.popup.UIMessageFilter;
 import org.exoplatform.mail.webui.popup.UIPopupAction;
 import org.exoplatform.mail.webui.popup.UIPopupActionContainer;
-import org.exoplatform.mail.webui.popup.UIQuickAddEvent;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -48,7 +48,6 @@ import org.exoplatform.webui.event.EventListener;
         @EventConfig(listeners = UIActionBar.AddEventActionListener.class),
         @EventConfig(listeners = UIActionBar.RssActionListener.class),
         @EventConfig(listeners = UIActionBar.FilterActionListener.class),
-        @EventConfig(listeners = UIActionBar.ContactActionListener.class),
         @EventConfig(listeners = UIActionBar.MailSettingsActionListener.class)
     }
 )
@@ -132,13 +131,15 @@ public class UIActionBar extends UIContainer {
     public void execute(Event<UIActionBar> event) throws Exception {
       System.out.println(" =========== > AddEventActionListener");
       UIActionBar uiActionBar = event.getSource() ; 
+      CalendarService calendarService = uiActionBar.getApplicationComponent(CalendarService.class);
       UIMailPortlet uiPortlet = uiActionBar.getParent() ;
-      CalendarService calenderSrv = uiPortlet.getApplicationComponent(CalendarService.class);
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
-      UIQuickAddEvent uiQuickAddEvent = uiPopupAction.activate(UIQuickAddEvent.class, 600) ;
-      uiQuickAddEvent.setEvent(true) ;        
-      uiQuickAddEvent.init(calenderSrv.getCalendarSetting(MailUtils.getCurrentUser()), null, null) ;
-      uiQuickAddEvent.update("0", null) ;
+      UIPopupActionContainer uiPopupContainer = uiPopupAction.createUIComponent(UIPopupActionContainer.class, null, "UIPopupActionEventContainer");
+      uiPopupAction.activate(uiPopupContainer, 600, 0, true) ;
+      UIEventForm uiEventForm = uiPopupContainer.createUIComponent(UIEventForm.class, null, null);
+      uiPopupContainer.addChild(uiEventForm) ;
+      uiEventForm.initForm(calendarService.getCalendarSetting(MailUtils.getCurrentUser()), null) ;
+      uiEventForm.update(CalendarUtils.PRIVATE_TYPE, null) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }
   }
@@ -159,7 +160,7 @@ public class UIActionBar extends UIContainer {
       UIMailPortlet uiPortlet = uiActionBar.getAncestorOfType(UIMailPortlet.class);
       UIPopupAction uiPopupAction = uiPortlet.findFirstComponentOfType(UIPopupAction.class);
       UIPopupActionContainer uiPopupContainer = uiPopupAction.createUIComponent(UIPopupActionContainer.class, null, "UIPopupActionFilterContainer");
-      uiPopupAction.activate(uiPopupContainer, 700, 0, false) ;
+      uiPopupAction.activate(uiPopupContainer, 600, 0, false) ;
       UIMessageFilter uiMessageFilter = uiPopupContainer.createUIComponent(UIMessageFilter.class, null, null);
       uiPopupContainer.addChild(uiMessageFilter) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
@@ -185,12 +186,6 @@ public class UIActionBar extends UIContainer {
       uiMailSetting.fillFormAccount(options);
       uiMailSetting.fillAllField(mailSetting);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
-    }
-  }
-
-  static public class ContactActionListener extends EventListener<UIActionBar> {
-    public void execute(Event<UIActionBar> event) throws Exception {
-      //UIActionBar uiActionBar = event.getSource();   
     }
   }
 

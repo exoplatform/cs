@@ -320,4 +320,46 @@ UIMailPortlet.prototype.showHideMessageHeader = function(obj) {
   }
 } ;
 
+UIMailPortlet.prototype.isAllday = function(form) {
+	try{
+		if (typeof(form) == "string") form = document.getElementById(form) ;		
+		if (form.tagName.toLowerCase() != "form") {
+			form = eXo.core.DOMUtil.findDescendantsByTagName(form, "form") ;
+		}
+		for(var i = 0 ; i < form.elements.length ; i ++) {
+			if(form.elements[i].getAttribute("name") == "allDay") {
+				eXo.mail.UIMailPortlet.showHideTime(form.elements[i]) ;
+				break ;
+			}
+		}
+	}catch(e){
+		
+	}
+} ;
+UIMailPortlet.prototype.showHideTime = function(chk) {
+	var DOMUtil = eXo.core.DOMUtil ;
+	if(chk.tagName.toLowerCase() != "input") {
+		chk = DOMUtil.findFirstDescendantByClass(chk, "input", "checkbox") ;
+	}
+	var selectboxes = DOMUtil.findDescendantsByTagName(chk.form, "select") ;
+	var fields = new Array() ;
+	var len = selectboxes.length ;
+	for(var i = 0 ; i < len ; i ++) {
+		if((selectboxes[i].getAttribute("name") == "toTime") || (selectboxes[i].getAttribute("name") == "fromTime")) {
+			fields.push(selectboxes[i]) ;
+		}
+	}
+	eXo.mail.UIMailPortlet.showHideField(chk, fields) ;
+} ;
+
+UIMailPortlet.prototype.showHideField = function(chk,fields) {
+	var display = "" ;
+	if (typeof(chk) == "string") chk = document.getElementById(chk) ;
+	display = (chk.checked) ? "hidden" : "visible" ;
+	var len = fields.length ;
+	for(var i = 0 ; i < len ; i ++) {
+		fields[i].style.visibility = display ;i
+	}
+} ;
+
 eXo.mail.UIMailPortlet = new UIMailPortlet();
