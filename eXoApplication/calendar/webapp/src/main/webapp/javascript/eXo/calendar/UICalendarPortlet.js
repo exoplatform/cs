@@ -1105,7 +1105,7 @@ UISelectionX.prototype.clear = function(evt) {
 	}
 	eXo.webui.UIForm.submitEvent(UISelectionX.viewType ,'QuickAdd','&objectId=Event&startTime=' + startTime + '&finishTime=' + endTime) ;	
 	try{		
-		eXo.core.DOMUtil.removeTemporaryElement(UISelectionX.block) ;
+		eXo.core.DOMUtil.removeElement(UISelectionX.block) ;
 	}catch(e) {alert(e.message) ;}
 	document.onmousemove = null ;
 	document.onmouseup = null ;
