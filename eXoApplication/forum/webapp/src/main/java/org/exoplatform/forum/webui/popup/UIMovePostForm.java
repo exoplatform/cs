@@ -99,7 +99,7 @@ public class UIMovePostForm extends UIForm implements UIPopupComponent {
         String[] temp = topicPath.split("/") ;
         UITopicDetailContainer topicDetailContainer = forumPortlet.findFirstComponentOfType(UITopicDetailContainer.class) ;
         topicDetailContainer.getChild(UITopicDetail.class).setUpdateTopic(temp[temp.length - 3], temp[temp.length - 2], temp[temp.length - 1], false) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(topicDetailContainer) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(forumPortlet) ;
       }
     }
   }

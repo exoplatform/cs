@@ -94,17 +94,18 @@ public class UITopicDetail extends UIForm  {
     addChild(UIForumLinks.class, null, null);
   }
   
-  public void setUpdateTopic(String categoryId, String forumId, String topicId, boolean viewTopic) {
+  public void setUpdateTopic(String categoryId, String forumId, String topicId, boolean viewTopic) throws Exception {
     this.categoryId = categoryId ;
     this.forumId = forumId ;
     this.topicId = topicId ;
     this.viewTopic = viewTopic ;
+    this.getAncestorOfType(UIForumPortlet.class).getChild(UIBreadcumbs.class).setUpdataPath((categoryId + "/" + forumId + "/" + topicId)) ;
   }
   
   @SuppressWarnings("unused")
   private Topic getTopic() throws Exception {
     try {
-      this.topic = forumService.getTopic(categoryId, forumId, topicId, viewTopic) ; 
+      this.topic = forumService.getTopic(categoryId, forumId, topicId, viewTopic) ;
       return this.topic ;
     } catch (Exception e) {
       return null ;

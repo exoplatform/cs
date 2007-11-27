@@ -85,6 +85,13 @@
 	line-height: 25px;
 }
 
+.UIForumPortlet .UIBreadcumbs .BreadcumbsInfoBar .Selected {
+	float: left;
+	color: #1e1f21;	font-weight: bold;
+	padding: 0px 5px;
+	line-height: 25px;
+}
+
 .UIForumPortlet .UIBreadcumbs .BreadcumbsInfoBar .RightArrowIcon {
 	float: left;
 	background: url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/BlueNextArrow.gif') no-repeat ;

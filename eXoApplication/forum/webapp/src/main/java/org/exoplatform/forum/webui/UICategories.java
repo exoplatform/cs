@@ -41,6 +41,7 @@ public class UICategories extends UIContainer  {
   }
 
   private List<Category> getCategoryList() throws Exception {
+  	this.getAncestorOfType(UIForumPortlet.class).getChild(UIBreadcumbs.class).setUpdataPath("ForumService") ;
 		List<Category> categoryList = forumService.getCategories();
   	return categoryList;
 	}  
@@ -77,8 +78,7 @@ public class UICategories extends UIContainer  {
       UITopicContainer uiTopicContainer = uiForumContainer.getChild(UITopicContainer.class) ;
       uiForumContainer.getChild(UIForumDescription.class).setForumIds(id[0], id[1]);
       uiTopicContainer.setUpdateForum(id[0], id[1]) ;
-      WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
-      context.addUIComponentToUpdateByAjax(forumPortlet) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(forumPortlet) ;
     }
   }
 	
@@ -87,17 +87,16 @@ public class UICategories extends UIContainer  {
       UICategories uiContainer = event.getSource();
       String Id = event.getRequestContext().getRequestParameter(OBJECTID)  ;
       String []id = Id.trim().split(",");
-      UIForumPortlet uiForumPortlet = uiContainer.getAncestorOfType(UIForumPortlet.class) ;
-      uiForumPortlet.updateIsRendered(2);
-      UIForumContainer uiForumContainer = uiForumPortlet.getChild(UIForumContainer.class) ;
+      UIForumPortlet forumPortlet = uiContainer.getAncestorOfType(UIForumPortlet.class) ;
+      forumPortlet.updateIsRendered(2);
+      UIForumContainer uiForumContainer = forumPortlet.getChild(UIForumContainer.class) ;
       UITopicDetailContainer uiTopicDetailContainer = uiForumContainer.getChild(UITopicDetailContainer.class) ;
       uiForumContainer.setIsRenderChild(false) ;
       UITopicDetail uiTopicDetail = uiTopicDetailContainer.getChild(UITopicDetail.class) ;
       uiForumContainer.getChild(UIForumDescription.class).setForumIds(id[0], id[1]);
       uiTopicDetail.setUpdateTopic(id[0], id[1], id[2], true) ;
       uiTopicDetailContainer.getChild(UITopicPoll.class).updatePoll(id[0], id[1], id[2]) ;
-      WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
-      context.addUIComponentToUpdateByAjax(uiForumPortlet) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(forumPortlet) ;
     }
   }
 	

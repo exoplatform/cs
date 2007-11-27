@@ -819,18 +819,20 @@ public class JCRDataStorage implements DataStorage {
     return repositoryService_.getDefaultRepository().getSystemSession(defaultWS) ;
   }
   
-//  public Object getObjectByPath(String path) throws Exception {
-//    Object object = new Object() ;
-//    Node myNode = (Node)getJCRSession().getItem(path) ;
-//    if(myNode.getPrimaryNodeType().getName() == "exo:post") {
-//      object = (Object)getPost(myNode) ;
-//    }else if(myNode.getPrimaryNodeType().getName() == "exo:topic") {
-//      object = (Object)getTopicNode(myNode) ;
-//    }else if(myNode.getPrimaryNodeType().getName() == "exo:forum") {
-//      object = (Object)getForum(myNode) ;
-//    } else return null;
-//    return object;
-//  }
+  public Object getObjectByPath(String path) throws Exception {
+    Object object = new Object() ;
+    Node myNode = (Node)getJCRSession().getItem(path) ;
+    if(myNode.getName().indexOf("ost") > 0) {
+      object = (Object)getPost(myNode) ;
+    }else if(myNode.getName().indexOf("opic") > 0) {
+      object = (Object)getTopicNode(myNode) ;
+    }else if(myNode.getName().indexOf("orum") > 0) {
+      object = (Object)getForum(myNode) ;
+    }else if(myNode.getName().indexOf("ategory") > 0) {
+    	object = (Object)getCategory(myNode) ;
+    } else return null;
+    return object;
+  }
   
   public List<ForumLinkData> getAllLink() throws Exception {
     return null ;

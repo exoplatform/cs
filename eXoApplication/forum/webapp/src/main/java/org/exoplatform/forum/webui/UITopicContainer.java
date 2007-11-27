@@ -90,10 +90,12 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
   public void setUpdateForum(String categoryId, String forumId) throws Exception {
     this.forumId = forumId ;
     this.categoryId = categoryId ;
+    this.getAncestorOfType(UIForumPortlet.class).getChild(UIBreadcumbs.class).setUpdataPath((categoryId + "/" + forumId)) ;
   }
   
   private Forum getForum() throws Exception {
-    return forumService.getForum(categoryId, forumId);
+  	Forum forum = forumService.getForum(categoryId, forumId);
+    return forum ;
   }
   
   @SuppressWarnings("unused")
@@ -223,6 +225,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
       uiTopicDetail.setUpdateTopic(uiTopicContainer.categoryId, uiTopicContainer.forumId, topicId, true) ;
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
       context.addUIComponentToUpdateByAjax(uiForumContainer) ;
+      context.addUIComponentToUpdateByAjax(uiTopicContainer.getAncestorOfType(UIForumPortlet.class).getChild(UIBreadcumbs.class)) ;
   	}
   }
 

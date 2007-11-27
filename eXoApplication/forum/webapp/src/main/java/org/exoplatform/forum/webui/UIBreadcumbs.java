@@ -7,16 +7,11 @@ package org.exoplatform.forum.webui;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.jcr.Node;
-import javax.jcr.Session;
-
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.forum.service.Category;
+import org.exoplatform.forum.service.Forum;
 import org.exoplatform.forum.service.ForumService;
-import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.services.jcr.RepositoryService;
-import org.exoplatform.services.jcr.ext.app.SessionProviderService;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
-import org.exoplatform.services.jcr.util.IdGenerator;
+import org.exoplatform.forum.service.Topic;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIContainer;
@@ -37,67 +32,89 @@ import org.exoplatform.webui.event.EventListener;
     }
 )
 public class UIBreadcumbs extends UIContainer {
+	private ForumService forumService = (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
 	private List<String> breadcumbs_ = new ArrayList<String>();
+	private List<String> path_ = new ArrayList<String>();
 	private String forumHomePath_ ;
   public UIBreadcumbs()throws Exception {
-  	ForumService forumService = (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
   	forumHomePath_ = forumService.getForumHomePath() ;
-    breadcumbs_.add(forumHomePath_) ;
-    IdGenerator.generate() ;
+  	breadcumbs_.add("eXo Forum") ;
+  	path_.add("ForumService") ;
   }
   
-  public void setCurrentNode(Node selectedNode) throws Exception {
-  	//currentNode_ = selectedNode ;
-    breadcumbs_ = new ArrayList<String> () ;
-    if(selectedNode.getPath().length() > forumHomePath_.length()) {
-      Node parentNode = selectedNode.getParent() ;
-      while(!forumHomePath_.equals(parentNode.getPath())) {
-        breadcumbs_.add(parentNode.getPath()) ;
-        parentNode = parentNode.getParent() ;
+  public void setUpdataPath(String path) throws Exception {
+  	if(path != null && path.length() > 0 && !path.equals("ForumService")) {
+  		String temp[] = path.split("/") ;
+  		int t = 0;
+  		String pathNode = forumHomePath_;
+  		path_.clear() ;
+  		breadcumbs_.clear() ;
+  		path_.add("ForumService") ;
+  		breadcumbs_.add("eXo Forum") ;
+  		String tempPath = "";
+  		for (String string : temp) {
+  			pathNode = pathNode + "/" + string;
+  			if(t == 0) {
+  				tempPath = string;
+  				Category category = (Category)forumService.getObjectByPath(pathNode);
+  				breadcumbs_.add(category.getCategoryName()) ;
+  			}else if(t == 1) {
+  				tempPath = tempPath + "/" + string ;
+  				Forum forum = (Forum)forumService.getObjectByPath(pathNode);
+  				breadcumbs_.add(forum.getForumName()) ;
+  			}else if(t == 2) {
+  				tempPath = tempPath + "/" + string ;
+  				Topic topic = (Topic)forumService.getObjectByPath(pathNode);
+  				breadcumbs_.add(topic.getTopicName()) ;
+  			}
+  			path_.add(tempPath) ;
+  			++t;
       }
-    }
-    breadcumbs_.add(forumHomePath_) ;
+  	} else {
+  		path_.clear() ;
+  		breadcumbs_.clear() ;
+  		path_.add("ForumService") ;
+  		breadcumbs_.add("eXo Forum") ;
+  	}
+  }
+  
+  private String getPath(int index) {
+	  return this.path_.get(index) ;
+  }
+  
+  private int getMaxPath() {
+  	return breadcumbs_.size() ;
   }
   
   private List<String> getBreadcumbs() throws Exception {
     return breadcumbs_ ;
   }
   
+  
   static public class ChangePathActionListener extends EventListener<UIBreadcumbs> {
     public void execute(Event<UIBreadcumbs> event) throws Exception {
       UIBreadcumbs uiBreadcums = event.getSource() ;      
       String path = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      SessionProviderService service = 
-        (SessionProviderService)PortalContainer.getComponent(SessionProviderService.class) ;
-      String userId = Util.getPortalRequestContext().getRemoteUser() ;
-      SessionProvider sessionProvider = service.getSessionProvider(userId) ;
-      if(sessionProvider == null) {
-        sessionProvider = new SessionProvider(null) ;
-        service.setSessionProvider(userId, sessionProvider) ;
+      UIForumPortlet forumPortlet = uiBreadcums.getAncestorOfType(UIForumPortlet.class) ;
+      if(path.equals("ForumService")) {
+      	UICategoryContainer categoryContainer = forumPortlet.getChild(UICategoryContainer.class) ;
+      	categoryContainer.updateIsRender(true) ;
+      	forumPortlet.updateIsRendered(1);
+      }else if(path.indexOf("forum") > 0) {
+      	String id[] = path.split("/");
+      	forumPortlet.updateIsRendered(2);
+      	UIForumContainer forumContainer = forumPortlet.findFirstComponentOfType(UIForumContainer.class);
+      	forumContainer.setIsRenderChild(true) ;
+      	forumContainer.getChild(UIForumDescription.class).setForumIds(id[0], id[1]);
+      	forumContainer.getChild(UITopicContainer.class).setUpdateForum(id[0], id[1]) ;
+      }else {
+      	UICategoryContainer categoryContainer = forumPortlet.getChild(UICategoryContainer.class) ;
+      	categoryContainer.getChild(UICategory.class).update(path) ;
+        categoryContainer.updateIsRender(false) ;
+        forumPortlet.updateIsRendered(1);
       }
-      RepositoryService repositoryService = (RepositoryService)PortalContainer.getComponent(RepositoryService.class) ;
-      String defaultWS = repositoryService.getCurrentRepository().getConfiguration().getDefaultWorkspaceName() ;
-      Session session = sessionProvider.getSession(defaultWS, repositoryService.getCurrentRepository()) ;
-      Node selectNode = (Node)session.getItem(path) ;
-      String type = selectNode.getPrimaryNodeType().getName() ;
-      uiBreadcums.setCurrentNode(selectNode) ;
-      UIForumPortlet forumPortelt = uiBreadcums.getAncestorOfType(UIForumPortlet.class) ;
-      if(type.equals("exo:forum") || type.equals("exo:topic")) {
-        forumPortelt.getChild(UICategoryContainer.class).setRendered(false) ;
-        forumPortelt.getChild(UIForumContainer.class).setRendered(true) ;
-      }else if(type.equals("exo:forumCategory")) {
-        forumPortelt.getChild(UICategoryContainer.class).getChild(UIForumActionBar.class).setRendered(false) ;
-        forumPortelt.getChild(UICategoryContainer.class).setRendered(false) ;
-        forumPortelt.getChild(UICategoryContainer.class).getChild(UICategories.class).setRendered(false) ;
-        forumPortelt.getChild(UICategoryContainer.class).getChild(UICategory.class).setRendered(true) ;
-        forumPortelt.getChild(UIForumContainer.class).setRendered(true) ;        
-      }else { //forum home        
-        forumPortelt.getChild(UICategoryContainer.class).getChild(UIForumActionBar.class).setRendered(true) ;
-        forumPortelt.getChild(UICategoryContainer.class).setRendered(true) ;
-        forumPortelt.getChild(UICategoryContainer.class).getChild(UICategories.class).setRendered(true) ;
-        forumPortelt.getChild(UICategoryContainer.class).getChild(UICategory.class).setRendered(false) ;
-        forumPortelt.getChild(UIForumContainer.class).setRendered(false) ;        
-      }
+      uiBreadcums.setUpdataPath(path);
+      event.getRequestContext().addUIComponentToUpdateByAjax(forumPortlet) ;
     }
   }  
   
@@ -107,10 +124,9 @@ public class UIBreadcumbs extends UIContainer {
       UICategoryContainer categoryContainer = forumPortlet.getChild(UICategoryContainer.class) ;
       categoryContainer.updateIsRender(true) ;
       forumPortlet.updateIsRendered(1);
+      event.getSource().setUpdataPath("ForumService");
       event.getRequestContext().addUIComponentToUpdateByAjax(forumPortlet) ;
     }
   }  
-
-  
   
 }

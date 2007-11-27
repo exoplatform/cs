@@ -266,14 +266,9 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
       topicTitle = topicTitle.trim() ;
       String messenger = "     " +  uiForm.getChild(UIFormWYSIWYGInput.class).getValue();
       messenger = messenger.trim() ;
-      if(messenger != null && messenger.length() > 4 ) {
-      	for (int i = 0; i < messenger.length(); i++) {
-      		if(messenger.charAt(i) == ' ') t++ ;
-      		if(t == 3) break ;
-      	}
-      }
+      t = messenger.length() ;
       if(topicTitle.length() <= 3) {k = 0;}
-	    if(t >= 3 && k != 0) {  
+	    if(t >= 20 && k != 0) {  
       	// uiForm.getUIFormTextAreaInput(FIELD_MESSENGER_TEXTAREA).getValue() ;
 	      String topicState = uiForm.getUIFormSelectBox(FIELD_TOPICSTATE_SELECTBOX).getValue();
 	      String topicStatus = uiForm.getUIFormSelectBox(FIELD_TOPICSTATUS_SELECTBOX).getValue();
@@ -331,9 +326,9 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
 	    	String[] args = { ""} ;
 		    if(k == 0) {
 		    	args = new String[] { "Thread Title" } ;
-		    	if(t < 3) args = new String[] { "Thread Title and Messenger" } ;
+		    	if(t < 20) args = new String[] { "Thread Title and Messenger" } ;
 		    	throw new MessageException(new ApplicationMessage("NameValidator.msg.ShortText", args)) ;
-		    } else if(t < 3) {
+		    } else if(t < 20) {
 		    	args = new String[] { "Messenger" } ;
 		    	throw new MessageException(new ApplicationMessage("NameValidator.msg.ShortMessenger", args)) ;
 		    }
