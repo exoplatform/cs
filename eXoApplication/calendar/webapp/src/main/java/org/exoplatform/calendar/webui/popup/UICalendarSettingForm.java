@@ -8,7 +8,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -21,8 +23,10 @@ import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarView;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
@@ -30,6 +34,7 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
+import org.exoplatform.webui.form.UIFormInputInfo;
 import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
@@ -86,11 +91,11 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
 
     List<SelectItemOption<String>> weekStartOn = new ArrayList<SelectItemOption<String>>() ;
     weekStartOn.add(new SelectItemOption<String>(UICalendarView.MONDAY, String.valueOf(java.util.Calendar.MONDAY))) ;
-    /*weekStartOn.add(new SelectItemOption<String>("Tuesday", CalendarSetting.TUESDAY)) ;
-    weekStartOn.add(new SelectItemOption<String>("Wendnesday", CalendarSetting.WENDNESDAY)) ;
-    weekStartOn.add(new SelectItemOption<String>("Thursday", CalendarSetting.THURSDAY)) ;
-    weekStartOn.add(new SelectItemOption<String>("Friday", CalendarSetting.FRIDAY)) ;
-    weekStartOn.add(new SelectItemOption<String>("Saturday", CalendarSetting.SATURDAY)) ;*/
+    weekStartOn.add(new SelectItemOption<String>(UICalendarView.TUESDAY, String.valueOf(java.util.Calendar.TUESDAY))) ;
+    weekStartOn.add(new SelectItemOption<String>(UICalendarView.WEDNESDAY, String.valueOf(java.util.Calendar.WEDNESDAY))) ;
+    weekStartOn.add(new SelectItemOption<String>(UICalendarView.THURSDAY, String.valueOf(java.util.Calendar.THURSDAY))) ;
+    weekStartOn.add(new SelectItemOption<String>(UICalendarView.FRIDAY, String.valueOf(java.util.Calendar.FRIDAY))) ;
+    weekStartOn.add(new SelectItemOption<String>(UICalendarView.SATURDAY, String.valueOf(java.util.Calendar.SATURDAY))) ;
     weekStartOn.add(new SelectItemOption<String>(UICalendarView.SUNDAY, String.valueOf(java.util.Calendar.SUNDAY))) ;    
     setting.addUIFormInput(new UIFormSelectBox(WEEK_START_ON, WEEK_START_ON, weekStartOn)) ;
 
@@ -109,7 +114,7 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
     setting.addUIFormInput(new UIFormSelectBox(LOCATION, LOCATION, getLocales())) ;
     setting.addUIFormInput(new UIFormSelectBox(TIMEZONE, TIMEZONE, getTimeZones())) ;
     setting.addUIFormInput(new UIFormCheckBoxInput<Boolean>(ISSHOWWORKINGTIME, ISSHOWWORKINGTIME, false)) ;
-    List<SelectItemOption<String>> startTimes = CalendarUtils.getTimesSelectBoxOptions(CalendarUtils.TIMEFORMAT, 30) ;
+    List<SelectItemOption<String>> startTimes = new ArrayList<SelectItemOption<String>>() ;
     List<SelectItemOption<String>> endTimes = CalendarUtils.getTimesSelectBoxOptions(CalendarUtils.TIMEFORMAT, 30) ;
     setting.addUIFormInput(new UIFormSelectBox(WORKINGTIME_BEGIN, WORKINGTIME_BEGIN, startTimes)) ;
     setting.addUIFormInput(new UIFormSelectBox(WORKINGTIME_END, WORKINGTIME_END, endTimes)) ;
@@ -122,12 +127,7 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
   }
 
   private List<SelectItemOption<String>> getTimeZones() {
-    List<SelectItemOption<String>> timeZones = new ArrayList<SelectItemOption<String>>() ;
-    for (String timeZone : TimeZone.getAvailableIDs()){
-      TimeZone tz = TimeZone.getTimeZone(timeZone) ;
-      timeZones.add(new SelectItemOption<String>( tz.getID() , tz.getID()));
-    }
-    return timeZones;
+    return CalendarUtils.getTimeZoneSelectBoxOptions(TimeZone.getAvailableIDs()) ;
   }
 
   public void activate() throws Exception {}
@@ -137,11 +137,14 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
     CalendarService cservice = CalendarUtils.getCalendarService() ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     if(calendarSetting != null) {
+
       setViewType(calendarSetting.getViewType()) ;
       setTimeInterval(String.valueOf(calendarSetting.getTimeInterval())) ;
       setWeekStartOn(calendarSetting.getWeekStartOn()) ;
       setDateFormat(calendarSetting.getDateFormat()) ;
       setTimeFormat(calendarSetting.getTimeFormat()) ;
+      getUIFormSelectBox(WORKINGTIME_BEGIN).setOptions(CalendarUtils.getTimesSelectBoxOptions(calendarSetting.getTimeFormat(), 30)) ;
+      getUIFormSelectBox(WORKINGTIME_END).setOptions(CalendarUtils.getTimesSelectBoxOptions(calendarSetting.getTimeFormat(), 30)) ;
       if(calendarSetting.getLocation() == null) {
         calendarSetting.setLocation(Util.getPortalRequestContext().getLocale().getISO3Country()) ;
       }
@@ -160,6 +163,7 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
       settedCalendars = new ArrayList<String>(Arrays.asList(calendarSetting.getDefaultPrivateCalendars())) ;
     }
     UIFormInputWithActions defaultCalendars = getChildById("defaultCalendars") ;    
+    defaultCalendars.addChild(new UIFormInputInfo(DEFAULT_CALENDARS, DEFAULT_CALENDARS, DEFAULT_CALENDARS)) ;
     for(Calendar calendar : calendars_) {
       UIFormCheckBoxInput checkBox = new UIFormCheckBoxInput<Boolean>(calendar.getName(), calendar.getId(), false) ;
       for(String calendarId : settedCalendars) {
@@ -169,12 +173,7 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
     }
   }
   private List<SelectItemOption<String>> getLocales() {
-    List<SelectItemOption<String>> locales = new ArrayList<SelectItemOption<String>>() ;
-    for(Locale locale : java.util.Calendar.getAvailableLocales()) {
-      String country = locale.getISO3Country() ;
-      if( country != null && country.trim().length() > 0) locales.add(new SelectItemOption<String>(locale.getDisplayCountry() , country)) ;
-    }
-    return locales ;
+   return CalendarUtils.getLocaleSelectBoxOptions(java.util.Calendar.getAvailableLocales()) ;
   }
 
   protected String getViewType() {
@@ -235,6 +234,16 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
     cal.setTime(dateTimeFormat.parse(date)); 
     return timeFormat.format(cal.getTime()) ;
   }
+
+  protected Date getWorkingBeginTime() throws Exception {
+    java.util.Calendar cal = CalendarUtils.getBeginDay(GregorianCalendar.getInstance()) ;
+    DateFormat dateFormat = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
+    DateFormat dateTimeFormat = new SimpleDateFormat(CalendarUtils.DATETIMEFORMAT) ;
+    String value = getUIFormSelectBox(WORKINGTIME_BEGIN).getValue() ;
+    String date = dateFormat.format(cal.getTime()) + " " + value ;
+    cal.setTime(dateTimeFormat.parse(date)); 
+    return  cal.getTime()  ;
+  }
   protected void setWorkingBegin(String value, String format) throws Exception {
     java.util.Calendar cal = GregorianCalendar.getInstance() ;
     DateFormat dateFormat = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
@@ -253,6 +262,16 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
     String date = dateFormat.format(cal.getTime()) + " " + value ;
     cal.setTime(dateTimeFormat.parse(date)); 
     return timeFormat.format(cal.getTime()) ;
+  }
+
+  protected Date getWorkingEndTime() throws Exception{
+    java.util.Calendar cal = CalendarUtils.getBeginDay(GregorianCalendar.getInstance()) ;
+    DateFormat dateFormat = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
+    DateFormat dateTimeFormat = new SimpleDateFormat(CalendarUtils.DATETIMEFORMAT) ;
+    String value = getUIFormSelectBox(WORKINGTIME_END).getValue() ;
+    String date = dateFormat.format(cal.getTime()) + " " + value ;
+    cal.setTime(dateTimeFormat.parse(date)); 
+    return  cal.getTime();
   }
   protected void setWorkingEnd(String value, String format) throws Exception {
     java.util.Calendar cal = GregorianCalendar.getInstance() ;
@@ -282,7 +301,13 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
       calendarSetting.setTimeFormat(uiForm.getTimeFormat()) ;
       calendarSetting.setLocation(uiForm.getLocale()) ;
       calendarSetting.setTimeZone(uiForm.getTimeZone()) ;
+      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       if(uiForm.getShowWorkingTimes()) {
+        if(uiForm.getWorkingBeginTime().after(uiForm.getWorkingEndTime())) {
+          uiApp.addMessage(new ApplicationMessage("UICalendarSettingForm.msg.working-time-logic", null, ApplicationMessage.WARNING)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        }
         calendarSetting.setShowWorkingTime(uiForm.getShowWorkingTimes()) ;
         calendarSetting.setWorkingTimeBegin(uiForm.getWorkingBegin()) ;
         calendarSetting.setWorkingTimeEnd(uiForm.getWorkingEnd()) ;

@@ -29,6 +29,8 @@ import org.exoplatform.calendar.webui.popup.UIQuickAddEvent;
 import org.exoplatform.calendar.webui.popup.UIRssForm;
 import org.exoplatform.calendar.webui.popup.UISendCalendarForm;
 import org.exoplatform.calendar.webui.popup.UISharedForm;
+import org.exoplatform.mail.service.Account;
+import org.exoplatform.mail.service.MailService;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -62,7 +64,6 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
       @EventConfig(listeners = UICalendars.AddTaskActionListener.class),
       @EventConfig(listeners = UICalendars.EditCalendarActionListener.class),
       @EventConfig(phase=Phase.DECODE, listeners = UICalendars.RemoveCalendarActionListener.class, confirm="UICalendars.msg.confirm-delete-calendar"),
-      @EventConfig(listeners = UICalendars.SendCalendarActionListener.class),
       @EventConfig(listeners = UICalendars.AddCalendarCategoryActionListener.class),
       @EventConfig(listeners = UICalendars.ShareCalendarActionListener.class),
       @EventConfig(listeners = UICalendars.ChangeColorActionListener.class),
@@ -307,20 +308,6 @@ public class UICalendars extends UIForm  {
     }
   }
 
-  static  public class SendCalendarActionListener extends EventListener<UICalendars> {
-    public void execute(Event<UICalendars> event) throws Exception {
-      System.out.println("\n\n SendCalendarActionListener");
-      UICalendars uiComponent = event.getSource() ;
-      String calendarId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      UICalendarPortlet uiCalendarPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
-      UIPopupAction uiPopupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
-      UISendCalendarForm uiForm = uiPopupAction.activate(UISendCalendarForm.class, 600) ;
-      uiForm.init(calendarId) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent.getParent()) ;
-    }
-  }
-
   static  public class AddCalendarCategoryActionListener extends EventListener<UICalendars> {
     public void execute(Event<UICalendars> event) throws Exception {
       UICalendars uiComponent = event.getSource() ;
@@ -419,10 +406,10 @@ public class UICalendars extends UIForm  {
           Iterator iter = calService.getSharedCalendars(username).getCalendars().iterator() ;
           while (iter.hasNext()) {
             Calendar cal = ((Calendar)iter.next()) ;
-          if(cal.getId().equals(calendarId)) {
-            calendar = cal ;
-            break ;
-          }  
+            if(cal.getId().equals(calendarId)) {
+              calendar = cal ;
+              break ;
+            }  
           }
           calendar.setCalendarColor(color) ;
           calService.saveUserCalendar(username, calendar, false) ;

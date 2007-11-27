@@ -13,7 +13,9 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarEvent;
@@ -104,6 +106,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
 
   protected Calendar calendar_ = null ;
   public boolean isShowEvent_ = true;
+  private String editedEventId_ = null ;
   private int timeInterval_ = 30 ;
   private CalendarSetting calendarSetting_ ;
 
@@ -119,7 +122,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
 
   public UICalendarView() throws Exception{
     initCategories() ;
-    calendar_ = Calendar.getInstance() ;
+    calendar_ = GregorianCalendar.getInstance() ;
     calendar_.setLenient(false) ;
     int i = 0 ; 
     for(String month : MONTHS) {
@@ -151,6 +154,9 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   public void setViewType(String viewType) { this.viewType_ = viewType ; }
   public String getViewType() { return viewType_ ; }
   protected String[] getViews() {return views ; }
+  public void setLastUpdatedEventId(String eventId) {editedEventId_ = eventId;}
+  protected String getLastUpdatedEventId() {return editedEventId_;}
+  
   public String[] getPublicCalendars() throws Exception{
     try{
       return getAncestorOfType(UICalendarWorkingContainer.class)
@@ -485,6 +491,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.function-not-supported", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
       }
+      uiCalendarView.setLastUpdatedEventId(null) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarView.getParent()) ;
     }
   }
@@ -639,6 +646,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
           //calService.remove
         }
         uiMiniCalendar.updateMiniCal() ;
+        calendarview.setLastUpdatedEventId(null) ;
         uiContainer.refresh() ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;

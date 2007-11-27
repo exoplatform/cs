@@ -287,7 +287,7 @@
 		                      Export Calendar
 		                    </div>
 		                   </a>
-		                   <a class="MenuItem" style="color: gray">   
+		                   <a class="MenuItem" style="color: gray;">   
 		                    <div class="ItemIcon  SendMailCalendarIcon">
 		                      Send to friend
 		                    </div>

@@ -265,38 +265,13 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
   }
 
   private List<SelectItemOption<String>> getTimeZones() {
-    List<SelectItemOption<String>> timeZones = new ArrayList<SelectItemOption<String>>() ;
-    for (String timeZone : TimeZone.getAvailableIDs()){
-      //java.util.Calendar.getAvailableLocales()
-      TimeZone tz = TimeZone.getTimeZone(timeZone) ;
-
-      timeZones.add(new SelectItemOption<String>( tz.getID() , tz.getID()));
-    }
-    return timeZones ;
+   return CalendarUtils.getTimeZoneSelectBoxOptions(TimeZone.getAvailableIDs()) ;
   } 
 
   private List<SelectItemOption<String>> getLocales() {
-    List<SelectItemOption<String>> locales = new ArrayList<SelectItemOption<String>>() ;
-    for(Locale locale : java.util.Calendar.getAvailableLocales()) {
-      String country = locale.getCountry() ;
-      if( country != null && country.trim().length() > 0) locales.add(new SelectItemOption<String>(locale.getDisplayCountry() , country)) ;
-    }
-    return locales ;
+   return CalendarUtils.getLocaleSelectBoxOptions(java.util.Calendar.getAvailableLocales()) ;
   }
-  /*static  public class SelectPublicActionListener extends EventListener<UICalendarForm> {
-    public void execute(Event<UICalendarForm> event) throws Exception {
-      UICalendarForm uiForm = event.getSource() ;
-      System.out.println(" ============= > SelectPublicActionListener");
-      UIFormInputWithActions shareTab = uiForm.getChildById(INPUT_SHARE) ;
-      uiForm.setRenderedChild(INPUT_SHARE) ;
-      if(shareTab.getUIFormCheckBoxInput(ISPUBLIC).isChecked()) {
-        uiForm.lockCheckBoxFields(false) ;
-      } else { 
-        uiForm.lockCheckBoxFields(true) ;
-      }
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
-    }
-  }*/
+  
   static  public class AddCategoryActionListener extends EventListener<UICalendarForm> {
     public void execute(Event<UICalendarForm> event) throws Exception {
       UICalendarForm uiForm = event.getSource() ;

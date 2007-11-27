@@ -112,7 +112,7 @@
                   %>
                   <tr class="$style">
                     <td class="TdTime">
-                      <%if(flag){ println h;}%>
+                      <%if(flag){print h;} else { print "&nbsp;";}%>
                     </td>
                   </tr>
                   <%
@@ -123,7 +123,7 @@
             </td>
             <td>
               <div class="EventBoard" style="position : relative ;">
-                <div class="EventBoardContainer">
+                <div class="EventBoardContainer" lastUpdatedId="<%=uicomponent.getLastUpdatedEventId()%>">
                   <%
 								 for(ce in	uicomponent.getEventData().values()) {
 								 	cal = new GregorianCalendar() ;
@@ -144,7 +144,7 @@
                       <%=ce.getSummary()%>
                     </div>
                     <div class="ResizeEventContainer">
-                      <span></span>
+                     <span></span>
                     </div>
                   </div>
                   <%}%>
@@ -165,7 +165,7 @@
                       %>
                       <tr startTime="$h"  class="$style">
                         <td class="$cssClass"  startTime="$h">
-                          <span></span>
+                          &nbsp;
                         </td>
                       </tr>
                       <%

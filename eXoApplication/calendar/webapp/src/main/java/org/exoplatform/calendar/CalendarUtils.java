@@ -12,17 +12,14 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import org.exoplatform.calendar.service.Attachment;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
-import org.exoplatform.contact.service.Contact;
-import org.exoplatform.contact.service.ContactAttachment;
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.download.DownloadResource;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.portal.webui.util.Util;
@@ -100,22 +97,42 @@ public class CalendarUtils {
     }
     return options ;
   }
+  
+  public static List<SelectItemOption<String>> getTimeZoneSelectBoxOptions(String[] timeZoneIds) {
+    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
+    for (String tz : timeZoneIds){
+      TimeZone timeZone = TimeZone.getTimeZone(tz) ;
+      int rawOffset = timeZone.getRawOffset() / 60000;
+      int hours = rawOffset / 60;
+      int minutes = Math.abs(rawOffset) % 60;
+      String hrStr = "";
+      if (Math.abs(hours) < 10) {
+        if (hours < 0) {
+          hrStr = "-0" + Math.abs(hours);
+        } else {
+          hrStr = "0" + Math.abs(hours);
+        }
+      } else {
+        hrStr = Integer.toString(hours);
+      }
+      String minStr = (minutes < 10) ? ("0" + Integer.toString(minutes)) : Integer.toString(minutes);
+      String str = "(GMT " + ((timeZone.getRawOffset() >= 0) ? "+" : "") + hrStr + ":" + minStr + ") " + timeZone.getID();
+      options.add(new SelectItemOption<String>( str , tz)); 
+    }
+    return options ;
+  }
+  public static List<SelectItemOption<String>> getLocaleSelectBoxOptions(Locale[] locale) {
+    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
+    for(Locale local : locale) {
+      String country = local.getISO3Country() ;
+      if( country != null && country.trim().length() > 0) options.add(new SelectItemOption<String>(local.getDisplayCountry() , country)) ;
+    }
+    return options ;
+  }
   public static String parse(Date date, String timeFormat) throws Exception {
     DateFormat df = new SimpleDateFormat(timeFormat) ;
     return df.format(date) ;    
   }
-  /*public static List<String> getDisplayTimes(String timeFormat, int timeInterval, int workStart, int workEnd) {
-    List<String> times = new ArrayList<String>() ;
-    Calendar cal = getBeginDay(GregorianCalendar.getInstance()) ;
-    DateFormat df = new SimpleDateFormat(timeFormat) ;
-    int time = workStart ;
-    while (time < workEnd) {
-      times.add(df.format(cal.getTime())) ;
-      cal.add(java.util.Calendar.MINUTE, timeInterval) ;
-      time ++ ;
-    }
-    return times ;
-  }*/
 
   static public String getCurrentUser() throws Exception {
     return Util.getPortalRequestContext().getRemoteUser() ; 

@@ -373,20 +373,21 @@ UICalendarPortlet.prototype.adjustWidth = function(el) {
 
 UICalendarPortlet.prototype.showEvent = function() {
 	var UICalendarPortlet = eXo.calendar.UICalendarPortlet ;	
+	UICalendarPortlet.init() ;
+	var EventDayContainer = eXo.core.DOMUtil.findAncestorByClass(UICalendarPortlet.viewer,"EventDayContainer") ;
+	EventDayContainer.scrollTop = (UICalendarPortlet.workingStart) ? UICalendarPortlet.workingStart : 0 ;
 	if (!UICalendarPortlet.init()) return ;
 	var el = UICalendarPortlet.getElements(UICalendarPortlet.viewer) ;
 	el = UICalendarPortlet.sortByAttribute(el, "startTime") ;
 	if (el.length <= 0) return ;
 	var marker = null ;
 	for(var i = 0 ; i < el.length ; i ++ ) {		
-		UICalendarPortlet.setSize(el[i], workingStart) ;
+		UICalendarPortlet.setSize(el[i]) ;
 		el[i].onmousedown = UICalendarPortlet.initDND ;
 		marker = eXo.core.DOMUtil.findFirstChildByClass(el[i], "div", "ResizeEventContainer") ;
 		marker.onmousedown = eXo.calendar.UIResizeEvent.init ;
 	}
 	UICalendarPortlet.adjustWidth(el) ;
-	var EventDayContainer = eXo.core.DOMUtil.findAncestorByClass(UICalendarPortlet.viewer,"EventDayContainer") ;
-	EventDayContainer.scrollTop = (UICalendarPortlet.workingStart) ? UICalendarPortlet.workingStart : 0 ;
 } ;
 
 UICalendarPortlet.prototype.sortByAttribute = function(obj, attribute) {

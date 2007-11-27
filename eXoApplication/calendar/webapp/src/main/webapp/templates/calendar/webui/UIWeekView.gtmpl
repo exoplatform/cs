@@ -170,7 +170,7 @@
 					}
 						%>
 			</div>
-			<table class="UIGrid" id="UIWeekViewGrid" cellspacing="0" borderspacing="0">
+			<table class="UIGrid" id="UIWeekViewGrid" lastUpdatedId="<%=uicomponent.getLastUpdatedEventId()%>" cellspacing="0" borderspacing="0">
 				<tbody >
 					<% 
 					boolean flag = false ;
