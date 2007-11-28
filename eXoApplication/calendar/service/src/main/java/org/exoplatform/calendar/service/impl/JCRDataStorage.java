@@ -839,8 +839,10 @@ public class JCRDataStorage implements DataStorage{
     reminderNode.setProperty("exo:email", reminder.getEmailAddress()) ;
     reminderNode.setProperty("exo:isRepeat", reminder.isRepeat()) ;
     java.util.Calendar from = new GregorianCalendar() ;
-    from.setTime(reminder.getFromDateTime()) ;
-    reminderNode.setProperty("exo:fromDateTime", from) ;
+    if(reminder.getFromDateTime() != null) {
+    	from.setTime(reminder.getFromDateTime()) ;
+      reminderNode.setProperty("exo:fromDateTime", from) ;
+    }
     reminderFolder.getSession().save() ;
   }
   
@@ -883,7 +885,7 @@ public class JCRDataStorage implements DataStorage{
           if(reminderNode.hasProperty("exo:alarmBefore"))reminder.setAlarmBefore(reminderNode.getProperty("exo:alarmBefore").getLong()) ;
           if(reminderNode.hasProperty("exo:email")) reminder.setEmailAddress(reminderNode.getProperty("exo:email").getString()) ;
           if(reminderNode.hasProperty("exo:repeatInterval")) reminder.setRepeatInterval(reminderNode.getProperty("exo:repeatInterval").getLong()) ;
-          if(reminderNode.hasProperty("exo:fromDateTime")) reminder.setRepeatInterval(reminderNode.getProperty("exo:fromDateTime").getLong()) ;
+          reminder.setFromDateTime(fromDate) ;
           reminders.add(reminder) ;
         }
       }

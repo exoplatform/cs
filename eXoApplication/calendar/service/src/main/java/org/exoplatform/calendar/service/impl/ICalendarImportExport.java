@@ -212,11 +212,11 @@ public class ICalendarImportExport implements CalendarImportExport{
         if(event.getLocation() != null) exoEvent.setLocation(event.getLocation().getValue()) ;
         if(event.getPriority() != null) exoEvent.setPriority(event.getPriority().getValue()) ;
         exoEvent.setPrivate(true) ;
-        Reminder reminder = new Reminder() ;
+        //Reminder reminder = new Reminder() ;
         currentDateTime = new GregorianCalendar() ;
-        reminder.setEventId(exoEvent.getId()) ;
+        //reminder.setEventId(exoEvent.getId()) ;
         List<Reminder> reminders = new ArrayList<Reminder>() ;
-        reminders.add(reminder) ;
+        //reminders.add(reminder) ;
         exoEvent.setReminders(reminders) ;
         PropertyList attendees = event.getProperties(Property.ATTENDEE) ;
         if(attendees.size() < 1) {

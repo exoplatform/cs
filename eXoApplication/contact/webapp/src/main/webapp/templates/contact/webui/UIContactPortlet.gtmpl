@@ -11,9 +11,6 @@
 
 <div class="UIContactPortlet" id="$compId">
 
-<!-- Start UIBannerContainer -->
-	<% uicomponent.renderChild(UIBannerContainer.class) ;%>
-<!-- End UIBannerContainer -->
 
 <div class="ContactContainer">	
 	<!-- Start Action Bar -->
