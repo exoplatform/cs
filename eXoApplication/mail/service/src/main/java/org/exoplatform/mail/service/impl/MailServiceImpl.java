@@ -4,8 +4,10 @@
  **************************************************************************/
 package org.exoplatform.mail.service.impl;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -29,6 +31,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+import javax.mail.internet.MimeUtility;
 import javax.mail.util.ByteArrayDataSource;
 
 import org.exoplatform.mail.service.Account;
@@ -407,7 +410,7 @@ public class MailServiceImpl implements MailService{
       String contentType = part.getContentType();
       if (disposition == null) {
         if (part.isMimeType("text/plain") || part.isMimeType("text/html")) {
-          newMail.setMessageBody((String)part.getContent());
+          setMessageBody(part, newMail);
         } else {
           MimeMultipart mimeMultiPart = (MimeMultipart)part.getContent() ;
           for (int i=0; i<mimeMultiPart.getCount();i++) {
@@ -419,13 +422,13 @@ public class MailServiceImpl implements MailService{
         if (disposition.equalsIgnoreCase(Part.INLINE)) {
           /* this must be presented INLINE, hence inside the body of the message */
           if (part.isMimeType("text/plain") || part.isMimeType("text/html")) {
-            newMail.setMessageBody((String)part.getContent());
+            setMessageBody(part, newMail);
           }
-        } else {
+        } else if (disposition.equalsIgnoreCase(Part.ATTACHMENT)) {
           /* this part must be presented as an attachment, hence we add it to the attached files */
           BufferAttachment file = new BufferAttachment();
           file.setId("Attachment" + IdGenerator.generate());
-          file.setName(part.getFileName());
+          file.setName(MimeUtility.decodeText(part.getFileName()));
           InputStream is = part.getInputStream();
           file.setInputStream(is);
           file.setSize(is.available());
@@ -443,6 +446,18 @@ public class MailServiceImpl implements MailService{
     }
   }
 
+  public void setMessageBody(Part part, Message newMail) throws Exception {
+    StringBuffer messageBody =new StringBuffer();
+    InputStream is = part.getInputStream();
+    BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+    String inputLine;
+    
+    while ((inputLine = reader.readLine()) != null) {
+      messageBody.append(inputLine + "\n");
+    }
+    newMail.setMessageBody(messageBody.toString());
+  }
+  
   public void createAccount(String username, Account account) throws Exception {
     saveAccount(username, account, true);
   }
