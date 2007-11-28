@@ -5,7 +5,9 @@
 package org.exoplatform.calendar.webui.popup;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.Calendar;
@@ -47,6 +49,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
   final static public String FIELD_USER = "username".intern() ;
   final static public String FIELD_EDIT = "canEdit".intern() ;
   //final static public String USER_NAME = "username".intern() ;
+  private Map<String, String> permission_ = new HashMap<String, String>() ;
   private String calendarId_ ;
   private boolean isAddNew_ = true ;
   public UISharedForm() throws Exception{
@@ -68,13 +71,13 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
     selectUserAction.setActionParameter(UISelectComponent.TYPE_USER) ;
     actions.add(selectUserAction) ;
     
-    ActionData selectMemberAction = new ActionData() ;
+    /*ActionData selectMemberAction = new ActionData() ;
     selectMemberAction.setActionListener("SelectPermission") ;
     selectMemberAction.setActionName("SelectMemberShip") ;
     selectMemberAction.setActionType(ActionData.TYPE_ICON) ;
     selectMemberAction.setCssIconClass("SelectMemberIcon") ;
     selectMemberAction.setActionParameter(UISelectComponent.TYPE_MEMBERSHIP) ;
-    actions.add(selectMemberAction) ;
+    actions.add(selectMemberAction) ;*/
     inputset.setActionField(FIELD_USER, actions) ;
     inputset.addChild(new UIFormCheckBoxInput<Boolean>(FIELD_EDIT, FIELD_EDIT, null)) ;
     addChild(inputset) ;
@@ -113,9 +116,15 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
   }
   public void activate() throws Exception {}
   public void deActivate() throws Exception {}
+  
   public void updateSelect(String selectField, String value) throws Exception {
-    getUIStringInput(selectField).setValue(value) ;
-
+    UIFormStringInput fieldInput = getUIStringInput(selectField) ;
+    permission_.put(value, value) ;
+    StringBuilder sb = new StringBuilder() ;
+    for(String s : permission_.values()) {
+      sb.append(s).append(CalendarUtils.COLON) ;
+    }
+    fieldInput.setValue(sb.toString()) ;
   }  
   static  public class SaveActionListener extends EventListener<UISharedForm> {
     public void execute(Event<UISharedForm> event) throws Exception {
