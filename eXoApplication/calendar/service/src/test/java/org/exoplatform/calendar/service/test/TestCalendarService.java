@@ -199,9 +199,9 @@ public class TestCalendarService extends BaseCalendarTestCase{
     Reminder reminder = new Reminder() ;
     //reminder.setId("reminderId") ;
     reminder.setEventId("eventId") ;
-    reminder.setAlarmBefore("5") ;
-    reminder.setType("via mail") ;
-    reminder.setSnooze(2) ;
+    reminder.setAlarmBefore(5) ;
+    reminder.setReminderType("via mail") ;
+    reminder.setRepeatInterval(2) ;
     List<Reminder> reminders = new ArrayList<Reminder>() ;
     reminders.add(reminder) ;
     

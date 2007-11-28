@@ -4,6 +4,8 @@
  **************************************************************************/
 package org.exoplatform.calendar.service;
 
+import java.util.Date;
+
 import org.exoplatform.services.jcr.util.IdGenerator;
 
 /**
@@ -23,10 +25,13 @@ public class Reminder {
   
   private String id ;
   private String eventId ;
-  private long snooze = 0;
-  private String type = TYPE_EMAIL;
-  private String alarmBefore = "0"; 
-  private String emailAddress  ;
+  private String reminderType = TYPE_EMAIL;
+  private long alarmBefore = 0; 
+  private String emailAddress ;
+  private Date fromDateTime  ;
+  private boolean isRepeat = false ;
+  private long repeatInterval = 0 ;
+  
   public Reminder() {
     id = "Reminder" + IdGenerator.generate() ;
   }
@@ -37,20 +42,21 @@ public class Reminder {
   public String getEventId() { return this.eventId ; }
   public void   setEventId(String eventId) { this.eventId = eventId ; }
   
-  public long getSnooze() { return snooze; }
-  public void   setSnooze(long minute) { snooze = minute; }
+  public long getRepeatInterval() { return repeatInterval ; }
+  public void   setRepeatInterval(long interval) { repeatInterval = interval; }
   
-  public String getType() { return type; }
-  public void   setType(String reminderType) { this.type = reminderType; }
+  public String getReminderType() { return reminderType; }
+  public void   setReminderType(String reminderType) { this.reminderType = reminderType; }
   
-  public String getAlarmBefore() { return alarmBefore; }
-  public void   setAlarmBefore(String alarmBefore) { this.alarmBefore = alarmBefore; }
+  public long getAlarmBefore() { return alarmBefore; }
+  public void setAlarmBefore(long alarmBefore) { this.alarmBefore = alarmBefore; }
   
-  public void setEmailAddress(String emailAddress) {
-    this.emailAddress = emailAddress;
-  }
-  public String getEmailAddress() {
-    return emailAddress;
-  }
+  public void setEmailAddress(String emailAddress) { this.emailAddress = emailAddress ; }
+  public String getEmailAddress() { return emailAddress; }
   
+  public Date getFromDateTime() {return fromDateTime ; }
+  public void setFromDateTime(Date d) { fromDateTime = d ; }
+  
+  public boolean isRepeat() { return isRepeat ; }
+  public void setRepeate(boolean b) { isRepeat = b ; }
 }

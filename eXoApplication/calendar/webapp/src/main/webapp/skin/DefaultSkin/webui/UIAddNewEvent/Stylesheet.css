@@ -7,6 +7,14 @@
 	padding: 4px;
 }
 
+.UIAddNewEvent .ReminderByEmail input.checkbox{
+	float: left;
+}
+
+.UIAddNewEvent .ReminderByPopup input.checkbox{
+	float: left;
+}
+
 .UIAddNewEvent .ReminderByEmail .selectbox{
 	width: 80px;
 }

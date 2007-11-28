@@ -31,24 +31,31 @@ import org.exoplatform.webui.form.UIFormTextAreaInput;
 public class UIEventReminderTab extends UIFormInputWithActions {
 
   
-  final public static String FIELD_EMAIL_REMINDER = "mailReminder".intern() ;
-  final public static String FIELD_EMAIL_TIME = "mailReminderTime".intern() ;
+  final public static String REMIND_BY_EMAIL = "mailReminder".intern() ;
+  final public static String EMAIL_REMIND_BEFORE = "mailReminderTime".intern() ;
   final public static String FIELD_EMAIL_ADDRESS = "mailReminderAddress".intern() ;
-
-  final public static String FIELD_POPUP_REMINDER = "popupReminder".intern() ;
-  final public static String FIELD_POPUP_TIME = "popupReminderTime".intern() ;
-  final public static String FIELD_SNOOZE_TIME = "snooze".intern() ;
+  final public static String EMAIL_REPEAT_INTERVAL = "emailRepeatInterval".intern() ;
+  final public static String EMAIL_IS_REPEAT = "emailIsRepeat".intern() ;
+  
+  final public static String REMIND_BY_POPUP = "popupReminder".intern() ;
+  final public static String POPUP_REMIND_BEFORE = "popupReminderTime".intern() ;
+  final public static String POPUP_REPEAT_INTERVAL = "popupRepeatInterval".intern() ;
+  final public static String POPUP_IS_REPEAT = "popupIsRepeat".intern() ;
 
   private Map<String, List<ActionData>> actionField_ ;
   public UIEventReminderTab(String arg0) throws Exception {
     super(arg0);
     setComponentConfig(getClass(), null) ;
     actionField_ = new HashMap<String, List<ActionData>>() ;
-
-    addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_EMAIL_REMINDER, FIELD_EMAIL_REMINDER, false)) ;
-    addUIFormInput(new UIFormSelectBox(FIELD_EMAIL_TIME, FIELD_EMAIL_TIME, getReminderTimes(5,60)));
+    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
+    options.add(new SelectItemOption<String>("no repeat", "false")) ;
+    options.add(new SelectItemOption<String>("repeat", "true")) ;
+    List<SelectItemOption<String>> remindOptions = getReminderTimes(5,60) ;
+    addUIFormInput(new UIFormCheckBoxInput<Boolean>(REMIND_BY_EMAIL, REMIND_BY_EMAIL, false)) ;
+    addUIFormInput(new UIFormSelectBox(EMAIL_REMIND_BEFORE, EMAIL_REMIND_BEFORE, remindOptions));
     addUIFormInput(new UIFormTextAreaInput(FIELD_EMAIL_ADDRESS, FIELD_EMAIL_ADDRESS, null)) ;
-   
+    addUIFormInput(new UIFormSelectBox(EMAIL_IS_REPEAT, EMAIL_IS_REPEAT, options));
+    addUIFormInput(new UIFormSelectBox(EMAIL_REPEAT_INTERVAL, EMAIL_REPEAT_INTERVAL, remindOptions));
     ActionData addEmailAddress = new ActionData() ;
     addEmailAddress.setActionType(ActionData.TYPE_ICON) ;
     addEmailAddress.setActionName(UIEventForm.ACT_ADDEMAIL) ;
@@ -58,10 +65,10 @@ public class UIEventReminderTab extends UIFormInputWithActions {
     addMailActions.add(addEmailAddress) ;
     setActionField(FIELD_EMAIL_ADDRESS, addMailActions) ;
 
-    addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_POPUP_REMINDER, FIELD_POPUP_REMINDER, false)) ;
-    addUIFormInput(new UIFormSelectBox(FIELD_POPUP_TIME, FIELD_POPUP_TIME, getReminderTimes(5,60)));
-    addUIFormInput(new UIFormSelectBox(FIELD_SNOOZE_TIME, FIELD_SNOOZE_TIME, getReminderTimes(5,60)));
-    
+    addUIFormInput(new UIFormCheckBoxInput<Boolean>(REMIND_BY_POPUP, REMIND_BY_POPUP, false)) ;
+    addUIFormInput(new UIFormSelectBox(POPUP_REMIND_BEFORE, POPUP_REMIND_BEFORE, remindOptions));
+    addUIFormInput(new UIFormSelectBox(POPUP_IS_REPEAT, POPUP_IS_REPEAT, options));
+    addUIFormInput(new UIFormSelectBox(POPUP_REPEAT_INTERVAL, POPUP_REPEAT_INTERVAL, remindOptions));
     
     
   }
@@ -72,7 +79,7 @@ public class UIEventReminderTab extends UIFormInputWithActions {
   public List<SelectItemOption<String>> getReminderTimes(int steps, int maxValue) {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     for(int i = 1; i <= maxValue/steps ; i++) {
-      options.add(new SelectItemOption<String>(String.valueOf(i*steps)+" minutes", String.valueOf(i*steps))) ;
+      options.add(new SelectItemOption<String>(String.valueOf(i*steps)+" minutes", String.valueOf(i*steps))) ;      
     }
     return options ;
   }

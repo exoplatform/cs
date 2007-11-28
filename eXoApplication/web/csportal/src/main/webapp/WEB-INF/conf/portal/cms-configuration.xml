@@ -445,4 +445,27 @@
       </init-params>            
     </component-plugin>        
   </external-component-plugins> 
+  
+  <!--external-component-plugins>
+    <target-component>org.exoplatform.services.scheduler.JobSchedulerService</target-component>
+    <component-plugin>
+      <name>ReminderJob</name>
+      <set-method>addPeriodJob</set-method>
+      <type>org.exoplatform.services.scheduler.PeriodJob</type>
+      <description>add a job to the JobSchedulerService</description>
+      <init-params>
+        <properties-param>
+          <name>job.info</name>
+          <description>save the monitor data  periodically</description>
+          <property name="jobName" value="ReminderJob"/>
+          <property name="groupName" value="CollaborationSuite"/>
+          <property name="job" value="org.exoplatform.calendar.service.ReminderJob"/>
+          <property name="repeatCount" value="0"/>
+          <property name="period" value="120000"/>     
+          <property name="startTime" value="+0"/>
+          <property name="endTime" value=""/>               
+        </properties-param>
+      </init-params>
+    </component-plugin>
+  </external-component-plugins-->
 </configuration>

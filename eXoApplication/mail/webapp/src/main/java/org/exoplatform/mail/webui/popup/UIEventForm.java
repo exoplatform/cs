@@ -400,14 +400,14 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
   }
   protected void setEventReminders(List<Reminder> reminders){
     for(Reminder r : reminders) {
-      if(Reminder.TYPE_EMAIL.equals(r.getType())) {
+      if(Reminder.TYPE_EMAIL.equals(r.getReminderType())) {
         setEmailReminder(true) ;
         setEmailAddress(r.getEmailAddress()) ;
-        setEmailReminderTime(r.getAlarmBefore()) ; 
-      }else if(Reminder.TYPE_POPUP.equals(r.getType())) {
+        setEmailReminderTime(String.valueOf(r.getAlarmBefore())) ; 
+      }else if(Reminder.TYPE_POPUP.equals(r.getReminderType())) {
         setPopupReminder(true) ;
-        setPopupReminderTime(r.getAlarmBefore()) ;
-        setPopupReminderSnooze(r.getSnooze()) ;
+        setPopupReminderTime(String.valueOf(r.getAlarmBefore())) ;
+        //setPopupReminderSnooze(r.getSnooze()) ;
       } else {
         System.out.println("\n\n reminder not supported");
       }
@@ -417,16 +417,16 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
     List<Reminder> reminders = new ArrayList<Reminder>() ;
     if(getEmailReminder()) { 
       Reminder email = new Reminder() ;
-      email.setType(Reminder.TYPE_EMAIL) ;
-      email.setAlarmBefore(getEmailReminderTime()) ;
+      email.setReminderType(Reminder.TYPE_EMAIL) ;
+      email.setAlarmBefore(Long.parseLong(getEmailReminderTime())) ;
       email.setEmailAddress(getEmailAddress()) ;
       reminders.add(email) ;
     }
     if(getPopupReminder()) {
       Reminder popup = new Reminder() ;
-      popup.setType(Reminder.TYPE_POPUP) ;
-      popup.setAlarmBefore(getPopupReminderTime()) ;
-      popup.setSnooze(getPopupReminderSnooze()) ;
+      popup.setReminderType(Reminder.TYPE_POPUP) ;
+      popup.setAlarmBefore(Long.parseLong(getPopupReminderTime())) ;
+      //popup.setSnooze(getPopupReminderSnooze()) ;
       reminders.add(popup) ;
     }
     return reminders ;
