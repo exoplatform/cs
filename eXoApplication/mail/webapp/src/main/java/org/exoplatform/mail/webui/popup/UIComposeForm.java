@@ -129,9 +129,13 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
     inputSet.addUIFormInput(new UIFormInputInfo(FIELD_ATTACHMENTS, FIELD_ATTACHMENTS, null)) ;
     inputSet.setActionField(FIELD_ATTACHMENTS, getUploadFileList()) ;
     addUIFormInput(inputSet) ;
-    
-    //addUIFormInput(new UIFormTextAreaInput(FIELD_MESSAGECONTENT, null, null)) ;
-    addUIFormInput(new UIFormWYSIWYGInput(FIELD_MESSAGECONTENT, null, null, true));
+    MailSetting mailSetting = mailSrv.getMailSetting(username);
+    isVisualEditor = ((mailSetting.getTypeOfEditor().equals(MailSetting.WYSIWYG)) ? true : false );
+    if (isVisualEditor) {
+      addUIFormInput(new UIFormWYSIWYGInput(FIELD_MESSAGECONTENT, null, null, true));    
+    } else {
+      addUIFormInput(new UIFormTextAreaInput(FIELD_MESSAGECONTENT, null, null)) ;
+    }  
     setPriority(Utils.PRIORITY_NORMAL);
   }
 
