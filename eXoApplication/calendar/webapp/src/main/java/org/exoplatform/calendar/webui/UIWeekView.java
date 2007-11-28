@@ -48,6 +48,7 @@ import org.exoplatform.webui.event.EventListener;
       @EventConfig(listeners = UICalendarView.EditActionListener.class), 
       @EventConfig(listeners = UICalendarView.DeleteActionListener.class),
       @EventConfig(listeners = UIWeekView.UpdateEventActionListener.class),
+      @EventConfig(listeners = UIWeekView.SaveEventActionListener.class),
       @EventConfig(listeners = UIWeekView.MoveNextActionListener.class), 
       @EventConfig(listeners = UIWeekView.MovePreviousActionListener.class)
     }

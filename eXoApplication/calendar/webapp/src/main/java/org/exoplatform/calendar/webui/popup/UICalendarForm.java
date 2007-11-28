@@ -104,16 +104,15 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
     editPermission.setActionName("SelectUser") ;
     editPermission.setActionParameter(UISelectComponent.TYPE_USER) ;
     editPermission.setActionType(ActionData.TYPE_ICON) ;
-    //editPermission.setCssIconClass("") ;
+    editPermission.setCssIconClass("SelectUserIcon") ;
     actions.add(editPermission) ;
     ActionData membershipPerm = new ActionData() ;
     membershipPerm.setActionListener("SelectPermission") ;
     membershipPerm.setActionName("SelectMemberShip") ;
     membershipPerm.setActionParameter(UISelectComponent.TYPE_MEMBERSHIP) ;
     membershipPerm.setActionType(ActionData.TYPE_ICON) ;
-    //editPermission.setCssIconClass("") ;
+    membershipPerm.setCssIconClass("SelectMemberIcon") ;
     actions.add(membershipPerm) ;
-
     sharing.setActionField(EDIT_PERMISSION, actions) ;
     sharing.setRendered(false) ;
     addChild(sharing) ;

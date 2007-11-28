@@ -63,6 +63,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
     ActionData selectUserAction = new ActionData() ;
     selectUserAction.setActionListener("SelectPermission") ;
     selectUserAction.setActionName("SelectUser") ;
+    selectUserAction.setCssIconClass("SelectUserIcon") ;
     selectUserAction.setActionType(ActionData.TYPE_ICON) ;
     selectUserAction.setActionParameter(UISelectComponent.TYPE_USER) ;
     actions.add(selectUserAction) ;
@@ -71,6 +72,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
     selectMemberAction.setActionListener("SelectPermission") ;
     selectMemberAction.setActionName("SelectMemberShip") ;
     selectMemberAction.setActionType(ActionData.TYPE_ICON) ;
+    selectMemberAction.setCssIconClass("SelectMemberIcon") ;
     selectMemberAction.setActionParameter(UISelectComponent.TYPE_MEMBERSHIP) ;
     actions.add(selectMemberAction) ;
     inputset.setActionField(FIELD_USER, actions) ;

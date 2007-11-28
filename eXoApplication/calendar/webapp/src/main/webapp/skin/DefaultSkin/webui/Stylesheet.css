@@ -1753,3 +1753,11 @@
 .UICalendarPortlet .SelectFileFrame {
 	width: 300px;
 }
+
+.UICalendarPortlet .SelectMemberIcon {
+	width: 16px ; height: 16px;
+}
+
+.UICalendarPortlet .SelectUserIcon {
+	width: 16px ; height: 16px;
+}
