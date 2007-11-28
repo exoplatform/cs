@@ -38,10 +38,7 @@ import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
     template = "system:/groovy/webui/form/UIForm.gtmpl",
     events = {
       @EventConfig(listeners = UISharedForm.SaveActionListener.class),    
-      @EventConfig(listeners = UISharedForm.SelectUserActionListener.class, phase = Phase.DECODE),  
-      @EventConfig(listeners = UISharedForm.SelectGroupActionListener.class, phase = Phase.DECODE),      
-      @EventConfig(listeners = UISharedForm.SelectMemberShipActionListener.class, phase = Phase.DECODE),      
-      
+      @EventConfig(listeners = UISharedForm.SelectPermissionActionListener.class, phase = Phase.DECODE),  
       @EventConfig(listeners = UISharedForm.CancelActionListener.class, phase = Phase.DECODE)
     }
 )
@@ -57,23 +54,25 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
     inputset.addChild(new UIFormInputInfo(FIELD_NAME, FIELD_NAME, null)) ;
     inputset.addUIFormInput(new UIFormStringInput(FIELD_USER, FIELD_USER, null)) ;
     List<ActionData> actions = new ArrayList<ActionData>() ;
-    ActionData selectUserAction = new ActionData() ;
-    selectUserAction.setActionListener("SelectUser") ;
-    selectUserAction.setActionName("SelectUser") ;
-    selectUserAction.setActionType(ActionData.TYPE_ICON) ;
-    actions.add(selectUserAction) ;
-    ActionData selectGroupAction = new ActionData() ;
-    selectGroupAction.setActionListener("SelectGroup") ;
+   /* ActionData selectGroupAction = new ActionData() ;
+    selectGroupAction.setActionListener("SelectPermission") ;
     selectGroupAction.setActionName("SelectGroup") ;
     selectGroupAction.setActionType(ActionData.TYPE_ICON) ;
-    actions.add(selectGroupAction) ;
+    selectGroupAction.setActionParameter(UISelectComponent.TYPE_GROUP) ;
+    actions.add(selectGroupAction) ;*/
+    ActionData selectUserAction = new ActionData() ;
+    selectUserAction.setActionListener("SelectPermission") ;
+    selectUserAction.setActionName("SelectUser") ;
+    selectUserAction.setActionType(ActionData.TYPE_ICON) ;
+    selectUserAction.setActionParameter(UISelectComponent.TYPE_USER) ;
+    actions.add(selectUserAction) ;
     
     ActionData selectMemberAction = new ActionData() ;
-    selectMemberAction.setActionListener("SelectMemberShip") ;
+    selectMemberAction.setActionListener("SelectPermission") ;
     selectMemberAction.setActionName("SelectMemberShip") ;
     selectMemberAction.setActionType(ActionData.TYPE_ICON) ;
+    selectMemberAction.setActionParameter(UISelectComponent.TYPE_MEMBERSHIP) ;
     actions.add(selectMemberAction) ;
-    
     inputset.setActionField(FIELD_USER, actions) ;
     inputset.addChild(new UIFormCheckBoxInput<Boolean>(FIELD_EDIT, FIELD_EDIT, null)) ;
     addChild(inputset) ;
@@ -150,39 +149,14 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
       calendarPortlet.cancelAction() ;       
     }
   }
-  static  public class SelectUserActionListener extends EventListener<UISharedForm> {
+  static  public class SelectPermissionActionListener extends EventListener<UISharedForm> {
     public void execute(Event<UISharedForm> event) throws Exception {
       UISharedForm uiForm = event.getSource() ;
+      String permType = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UIPopupAction childPopup = uiForm.getAncestorOfType(UIPopupContainer.class).getChild(UIPopupAction.class) ;
       UIGroupSelector uiGroupSelector = childPopup.activate(UIGroupSelector.class, 500) ;
-      uiGroupSelector.setSelectUser(true) ;
-      uiGroupSelector.setSelectGroup(false) ;
-      uiGroupSelector.setSelectMember(false) ;
-      uiGroupSelector.setComponent(uiForm, new String[]{UISharedForm.FIELD_USER}) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(childPopup) ;
-    }
-  }
-  static  public class SelectGroupActionListener extends EventListener<UISharedForm> {
-    public void execute(Event<UISharedForm> event) throws Exception {
-      UISharedForm uiForm = event.getSource() ;
-      UIPopupAction childPopup = uiForm.getAncestorOfType(UIPopupContainer.class).getChild(UIPopupAction.class) ;
-      UIGroupSelector uiGroupSelector = childPopup.activate(UIGroupSelector.class, 500) ;
-      uiGroupSelector.setSelectUser(false) ;
-      uiGroupSelector.setSelectGroup(true) ;
-      uiGroupSelector.setSelectMember(false) ;
-      uiGroupSelector.setComponent(uiForm, new String[]{UISharedForm.FIELD_USER}) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(childPopup) ;
-    }
-  }
-  static  public class SelectMemberShipActionListener extends EventListener<UISharedForm> {
-    public void execute(Event<UISharedForm> event) throws Exception {
-      UISharedForm uiForm = event.getSource() ;
-      UIPopupAction childPopup = uiForm.getAncestorOfType(UIPopupContainer.class).getChild(UIPopupAction.class) ;
-      UIGroupSelector uiGroupSelector = childPopup.activate(UIGroupSelector.class, 500) ;
-      uiGroupSelector.setSelectUser(false) ;
-      uiGroupSelector.setSelectGroup(false) ;
-      uiGroupSelector.setSelectMember(true) ;
-      
+      uiGroupSelector.setType(permType) ;
+      uiGroupSelector.setSelectedGroups(null) ;
       uiGroupSelector.setComponent(uiForm, new String[]{UISharedForm.FIELD_USER}) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(childPopup) ;
     }

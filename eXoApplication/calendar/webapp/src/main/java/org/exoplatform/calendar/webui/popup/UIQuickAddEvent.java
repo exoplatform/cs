@@ -67,7 +67,6 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
   final public static String FIELD_DESCRIPTION = "description".intern() ;
   final public static String UIQUICKADDTASK = "UIQuickAddTask".intern() ;
 
-
   private String calType_ = "0" ;
   private boolean isEvent_ = true ;
   public UIQuickAddEvent() throws Exception {

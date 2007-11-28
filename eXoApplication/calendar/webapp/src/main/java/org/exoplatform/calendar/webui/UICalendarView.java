@@ -13,9 +13,7 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.TimeZone;
 
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarEvent;
@@ -419,8 +417,9 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       System.out.println(" ===========> AddEventActionListener") ;
       CalendarService calendarService =  CalendarUtils.getCalendarService() ; 
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+      String username = event.getRequestContext().getRemoteUser() ;
       List<org.exoplatform.calendar.service.Calendar> privateCalendars = 
-        calendarService.getUserCalendars(CalendarUtils.getCurrentUser()) ;
+        calendarService.getUserCalendars(username) ;
       if(privateCalendars.isEmpty()) {
         uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.calendar-list-empty", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -497,7 +496,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   }
   static  public class ChangeCategoryActionListener extends EventListener<UICalendarView> {
     public void execute(Event<UICalendarView> event) throws Exception {
-      UICalendarView uiForm = event.getSource() ;
+      //UICalendarView uiForm = event.getSource() ;
       System.out.println(" ===========> ChangeCategoryActionListener") ;
     }
   }

@@ -7,7 +7,6 @@ package org.exoplatform.calendar.webui.popup;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -473,7 +472,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
   }
   static  public class AddCalendarActionListener extends EventListener<UITaskForm> {
     public void execute(Event<UITaskForm> event) throws Exception {
-      UITaskForm uiForm = event.getSource() ;
+      //UITaskForm uiForm = event.getSource() ;
       System.out.println( "\n\n ==========> AddCalendarActionListener");
     }
   }
@@ -485,7 +484,8 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
       UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       UIPopupAction uiPopupAction = uiPopupContainer.getChild(UIPopupAction.class) ;
       UIGroupSelector uiGroupSelector = uiPopupAction.activate(UIGroupSelector.class,500) ;
-      uiGroupSelector.setSelectUser(true) ;
+      uiGroupSelector.setType(UISelectComponent.TYPE_USER) ;
+      uiGroupSelector.setSelectedGroups(null) ;
       uiGroupSelector.setComponent(uiForm,new String[]{UITaskDetailTab.FIELD_DELEGATION}) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }

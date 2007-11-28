@@ -13,5 +13,8 @@ import org.exoplatform.webui.core.UIComponent;
  * Aug 29, 2007  
  */
 public interface UISelectComponent {
+  final public static String TYPE_USER = "0".intern() ;
+  final public static String TYPE_MEMBERSHIP = "1".intern() ;
+  final public static String TYPE_GROUP = "2".intern() ;
   public void setComponent(UIComponent uicomponent, String[] initParams) ;
 }

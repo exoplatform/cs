@@ -7,7 +7,6 @@ package org.exoplatform.calendar.webui.popup;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
@@ -47,10 +46,8 @@ import org.exoplatform.webui.form.validator.EmptyFieldValidator;
  */
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
-    //template = "app:/templates/calendar/webui/UICalendarForm.gtmpl",
     template = "system:/groovy/webui/form/UIFormTabPane.gtmpl", 
     events = {
-      //(listeners = UICalendarForm.SelectPublicActionListener.class,  phase=Phase.DECODE),
       @EventConfig(listeners = UICalendarForm.SaveActionListener.class),
       @EventConfig(listeners = UICalendarForm.AddCategoryActionListener.class,  phase=Phase.DECODE),
       @EventConfig(listeners = UICalendarForm.SelectPermissionActionListener.class, phase=Phase.DECODE),
@@ -62,7 +59,6 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
   final public static String DISPLAY_NAME = "displayName" ;
   final public static String DESCRIPTION = "description" ;
   final public static String CATEGORY = "category" ;
-  //final public static String ISPUBLIC = "isPublic" ;
   final public static String SHARED_GROUPS = "sharedGroups" ;
   final public static String EDIT_PERMISSION = "editPermission" ;
   final public static String SELECT_COLOR = "selectColor" ;
@@ -95,37 +91,32 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
     addChild(calendarDetail) ;
 
     UIFormInputWithActions sharing = new UIFormInputWithActions(INPUT_SHARE) ;
-    //sharing.addUIFormInput(new UIFormCheckBoxInput<Boolean>(ISPUBLIC, ISPUBLIC, null)) ;
-    /*UIFormCheckBoxInput uiCheckbox = sharing.getUIFormCheckBoxInput(ISPUBLIC) ;
-    uiCheckbox.setOnChange("SelectPublic") ;*/
     sharing.addUIFormInput(new UIFormInputInfo(SELECT_GROUPS, SELECT_GROUPS, null)) ;
     for(Object groupObj : getPublicGroups()) {
       String group = ((Group)groupObj).getId() ;
       if(sharing.getUIFormCheckBoxInput(group) != null)sharing.getUIFormCheckBoxInput(group).setChecked(false) ;
       else sharing.addUIFormInput(new UIFormCheckBoxInput<Boolean>(group, group, false)) ;
     }
-    /*sharing.addUIFormInput(new UIFormTextAreaInput(SHARED_GROUPS, SHARED_GROUPS, null)) ;
-
-    ActionData sharedGroups = new ActionData() ;
-    sharedGroups.setActionListener("SelectGroup") ;
-    sharedGroups.setActionName("SharedGroups") ;
-    sharedGroups.setActionType(ActionData.TYPE_ICON) ;
-    sharedGroups.setCssIconClass("AddIcon16x16 SelectMemberIcon") ;    
-    actions.add(sharedGroups) ;
-    sharing.setActionField(SHARED_GROUPS, actions) ;
-     */
     actions = new ArrayList<ActionData> () ;
     sharing.addUIFormInput(new UIFormStringInput(EDIT_PERMISSION, null, null)) ;
-    ActionData editPermissions = new ActionData() ;
-    editPermissions.setActionListener("SelectPermission") ;
-    editPermissions.setActionName("SelectPermission") ;
-    editPermissions.setActionType(ActionData.TYPE_ICON) ;
-    actions.add(editPermissions) ;
+    ActionData editPermission = new ActionData() ;
+    editPermission.setActionListener("SelectPermission") ;
+    editPermission.setActionName("SelectUser") ;
+    editPermission.setActionParameter(UISelectComponent.TYPE_USER) ;
+    editPermission.setActionType(ActionData.TYPE_ICON) ;
+    //editPermission.setCssIconClass("") ;
+    actions.add(editPermission) ;
+    ActionData membershipPerm = new ActionData() ;
+    membershipPerm.setActionListener("SelectPermission") ;
+    membershipPerm.setActionName("SelectMemberShip") ;
+    membershipPerm.setActionParameter(UISelectComponent.TYPE_MEMBERSHIP) ;
+    membershipPerm.setActionType(ActionData.TYPE_ICON) ;
+    //editPermission.setCssIconClass("") ;
+    actions.add(membershipPerm) ;
+
     sharing.setActionField(EDIT_PERMISSION, actions) ;
     sharing.setRendered(false) ;
     addChild(sharing) ;
-
-    //lockCheckBoxFields(!uiCheckbox.isChecked());
   }
 
   private List<SelectItemOption<String>> getColors() {
@@ -169,8 +160,8 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
     // TODO Auto-generated method stub
   }
   public void reset() {
- /*   if(isAddNew_) {
-      
+    /*   if(isAddNew_) {
+
     }
     calendarId_ = null ;
     isAddNew_ = true ;*/
@@ -187,7 +178,6 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
     setSelectedColor(calendar.getCalendarColor()) ;
     lockCheckBoxFields(true) ;
     UIFormInputWithActions sharing = getChildById(INPUT_SHARE) ;
-    //sharing.getUIFormCheckBoxInput(ISPUBLIC).setEnable(false) ;
     sharing.getUIStringInput(EDIT_PERMISSION).setEnable(false) ;
     sharing.setActionField(EDIT_PERMISSION, null) ;
   }
@@ -246,7 +236,6 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
   }
   protected boolean isPublic() throws Exception{
     UIFormInputWithActions sharing = getChildById(INPUT_SHARE) ;
-    //sharing.addUIFormInput(new UIFormInputInfo(SELECT_GROUPS, SELECT_GROUPS, null)) ;
     for(Object groupObj : getPublicGroups()) {
       String group = ((Group)groupObj).getId() ;
       UIFormCheckBoxInput checkBox = sharing.getUIFormCheckBoxInput(group) ;
@@ -264,14 +253,27 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
     return organization.getGroupHandler().findGroupsOfUser(currentUser).toArray() ;
   }
 
+  @SuppressWarnings("unchecked")
+  private List getSelectedGroups() throws Exception {
+    UIFormInputWithActions sharing = getChildById(INPUT_SHARE) ;
+    List groups = new ArrayList() ;
+    for(Object o : getPublicGroups()) {
+      String groupId = ((Group)o).getId() ;
+      UIFormCheckBoxInput<Boolean> input =  sharing.getUIFormCheckBoxInput(groupId) ;
+      if(input != null && input.isChecked()) {
+        groups.add(o) ;
+      } 
+    }
+    return groups  ;
+  }
   private List<SelectItemOption<String>> getTimeZones() {
-   return CalendarUtils.getTimeZoneSelectBoxOptions(TimeZone.getAvailableIDs()) ;
+    return CalendarUtils.getTimeZoneSelectBoxOptions(TimeZone.getAvailableIDs()) ;
   } 
 
   private List<SelectItemOption<String>> getLocales() {
-   return CalendarUtils.getLocaleSelectBoxOptions(java.util.Calendar.getAvailableLocales()) ;
+    return CalendarUtils.getLocaleSelectBoxOptions(java.util.Calendar.getAvailableLocales()) ;
   }
-  
+
   static  public class AddCategoryActionListener extends EventListener<UICalendarForm> {
     public void execute(Event<UICalendarForm> event) throws Exception {
       UICalendarForm uiForm = event.getSource() ;
@@ -286,6 +288,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
   static  public class SelectPermissionActionListener extends EventListener<UICalendarForm> {
     public void execute(Event<UICalendarForm> event) throws Exception {
       UICalendarForm uiForm = event.getSource() ;
+      String permType = event.getRequestContext().getRequestParameter(OBJECTID) ;
       uiForm.setRenderedChild(INPUT_SHARE) ;
       if(!uiForm.isPublic()) {
         UIApplication app = uiForm.getAncestorOfType(UIApplication.class) ;
@@ -294,8 +297,8 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
         return ;
       }
       UIGroupSelector uiGroupSelector = uiForm.createUIComponent(UIGroupSelector.class, null, null);
-      uiGroupSelector.setSelectUser(true);
-      uiGroupSelector.setGroups(uiForm.getPublicGroups()) ;
+      uiGroupSelector.setType(permType) ;
+      uiGroupSelector.setSelectedGroups(uiForm.getSelectedGroups()) ;
       uiGroupSelector.setComponent(uiForm, new String[] {EDIT_PERMISSION});
       UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       UIPopupAction uiChildPopup = uiPopupContainer.getChild(UIPopupAction.class) ;
@@ -321,7 +324,6 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
       calendar.setName(uiForm.getUIStringInput(DISPLAY_NAME).getValue()) ;
       calendar.setDescription(uiForm.getUIFormTextAreaInput(DESCRIPTION).getValue()) ;
       calendar.setCategoryId(uiForm.getUIFormSelectBox(CATEGORY).getValue()) ;
-      //boolean isPublic = uiForm.getUIFormCheckBoxInput(ISPUBLIC).isChecked() ;
       boolean isPublic = uiForm.isPublic() ;
       calendar.setPublic(isPublic) ;
       calendar.setLocale(uiForm.getLocale()) ;
