@@ -159,11 +159,8 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
         uploadService.removeUpload(input.getUploadId()) ;
         uiContacts.updateList() ;
       } catch (Exception ex) {
-        System.out.println("\n\n exception................\n\n");
         ex.printStackTrace() ;
-        
-        
-        
+
         uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.invalid-format", null, 
             ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;

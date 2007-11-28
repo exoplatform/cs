@@ -44,7 +44,6 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent {
   public final static String FIELD_TEXT_INPUT = "text" ;
   public static final String FIELD_FULLNAME_INPUT = "fullName";
   public static final String FIELD_FIRSTNAME_INPUT = "firstName";
-  public static final String FIELD_MIDDLENAME_INPUT = "middleName";
   public static final String FIELD_LASTNAME_INPUT = "lastName";
   public static final String FIELD_NICKNAME_INPUT = "nickName";
   public static final String FIELD_BIRTHDAY_DATETIME = "birthday" ;
@@ -59,7 +58,6 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent {
     addUIFormInput(new UIFormStringInput(FIELD_TEXT_INPUT, FIELD_TEXT_INPUT, null));
     addUIFormInput(new UIFormStringInput(FIELD_FULLNAME_INPUT, FIELD_FULLNAME_INPUT, null));
     addUIFormInput(new UIFormStringInput(FIELD_FIRSTNAME_INPUT, FIELD_FIRSTNAME_INPUT, null));
-    addUIFormInput(new UIFormStringInput(FIELD_MIDDLENAME_INPUT, FIELD_MIDDLENAME_INPUT, null));
     addUIFormInput(new UIFormStringInput(FIELD_LASTNAME_INPUT, FIELD_LASTNAME_INPUT, null));
     addUIFormInput(new UIFormStringInput(FIELD_NICKNAME_INPUT, FIELD_NICKNAME_INPUT, null));
     addUIFormInput(new UIFormStringInput(FIELD_JOBTITLE_INPUT, FIELD_JOBTITLE_INPUT, null));
@@ -81,7 +79,6 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent {
       String text = uiAdvancedSearchForm.getUIStringInput(FIELD_TEXT_INPUT).getValue() ;
       String fullName = uiAdvancedSearchForm.getUIStringInput(FIELD_FULLNAME_INPUT).getValue() ;
       String firstName = uiAdvancedSearchForm.getUIStringInput(FIELD_FIRSTNAME_INPUT).getValue() ;
-      String middleName = uiAdvancedSearchForm.getUIStringInput(FIELD_MIDDLENAME_INPUT).getValue() ;
       String lastName = uiAdvancedSearchForm.getUIStringInput(FIELD_LASTNAME_INPUT).getValue() ;
       String nickName = uiAdvancedSearchForm.getUIStringInput(FIELD_NICKNAME_INPUT).getValue() ;
       String jobTitle = uiAdvancedSearchForm.getUIStringInput(FIELD_JOBTITLE_INPUT).getValue() ;
@@ -89,7 +86,7 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent {
       String gender = uiAdvancedSearchForm.getUIFormSelectBox(FIELD_GENDER_BOX).getValue() ;
       
       if (ContactUtils.isEmpty(text) && ContactUtils.isEmpty(fullName) && ContactUtils.isEmpty(firstName) &&
-          ContactUtils.isEmpty(middleName) && ContactUtils.isEmpty(lastName) && ContactUtils.isEmpty(nickName) &&
+          ContactUtils.isEmpty(lastName) && ContactUtils.isEmpty(nickName) &&
           ContactUtils.isEmpty(jobTitle) && ContactUtils.isEmpty(email) && ContactUtils.isEmpty(gender)) {
         UIApplication uiApp = uiAdvancedSearchForm.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.no-text-to-search", null)) ;
@@ -102,8 +99,7 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent {
         filter.setText(s1) ;
       }
       if(!ContactUtils.isEmpty(fullName)) filter.setFullName(fullName) ;   
-      if(!ContactUtils.isEmpty(firstName)) filter.setFirstName(firstName) ;  
-      if(!ContactUtils.isEmpty(middleName)) filter.setMiddleName(middleName) ;     
+      if(!ContactUtils.isEmpty(firstName)) filter.setFirstName(firstName) ;       
       if(!ContactUtils.isEmpty(lastName)) filter.setLastName(lastName) ;
       if(!ContactUtils.isEmpty(nickName)) filter.setNickName(nickName) ;      
       if(!ContactUtils.isEmpty(jobTitle)) filter.setJobTitle(jobTitle) ;      

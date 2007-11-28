@@ -34,9 +34,7 @@ import org.exoplatform.webui.form.validator.EmailAddressValidator;
     template = "app:/templates/contact/webui/popup/UIProfileInputSet.gtmpl"
 )
 public class UIProfileInputSet extends UIFormInputWithActions {
-  private static final String FIELD_FULLNAME_INPUT = "fullName";
   private static final String FIELD_FIRSTNAME_INPUT = "firstName";
-  private static final String FIELD_MIDDLENAME_INPUT = "middleName";
   private static final String FIELD_LASTNAME_INPUT = "lastName";
   private static final String FIELD_NICKNAME_INPUT = "nickName";
   private static final String FIELD_GENDER_BOX = "gender" ;
@@ -58,9 +56,7 @@ public class UIProfileInputSet extends UIFormInputWithActions {
   public UIProfileInputSet(String id) throws Exception {
     super(id) ;  
     setComponentConfig(getClass(), null) ;  
-    addUIFormInput(new UIFormStringInput(FIELD_FULLNAME_INPUT, FIELD_FULLNAME_INPUT, null));
     addUIFormInput(new UIFormStringInput(FIELD_FIRSTNAME_INPUT, FIELD_FIRSTNAME_INPUT, null));
-    addUIFormInput(new UIFormStringInput(FIELD_MIDDLENAME_INPUT, FIELD_MIDDLENAME_INPUT, null));
     addUIFormInput(new UIFormStringInput(FIELD_LASTNAME_INPUT, FIELD_LASTNAME_INPUT, null));
     addUIFormInput(new UIFormStringInput(FIELD_NICKNAME_INPUT, FIELD_NICKNAME_INPUT, null));
     List<SelectItemOption<String>> genderOptions = new ArrayList<SelectItemOption<String>>() ;
@@ -70,7 +66,7 @@ public class UIProfileInputSet extends UIFormInputWithActions {
     addUIFormInput(new UIFormInputInfo(INFO_BIRTHDAY, INFO_BIRTHDAY, null)) ;
     
     List<SelectItemOption<String>> datesOptions = new ArrayList<SelectItemOption<String>>() ;
-    datesOptions.add(new SelectItemOption<String>("-- "+FIELD_DAY+" --", FIELD_DAY)) ;
+    datesOptions.add(new SelectItemOption<String>("- "+FIELD_DAY+" -", FIELD_DAY)) ;
     for (int i = 1; i < 32; i ++) {
       String date = i + "" ;
       datesOptions.add(new SelectItemOption<String>(date, date)) ;
@@ -78,7 +74,7 @@ public class UIProfileInputSet extends UIFormInputWithActions {
     addUIFormInput(new UIFormSelectBox(FIELD_DAY, FIELD_DAY, datesOptions)) ;
     
     List<SelectItemOption<String>> monthOptions = new ArrayList<SelectItemOption<String>>() ;
-    monthOptions.add(new SelectItemOption<String>("-- "+FIELD_MONTH+" --", FIELD_MONTH)) ;
+    monthOptions.add(new SelectItemOption<String>("-"+FIELD_MONTH+"-", FIELD_MONTH)) ;
     for (int i = 1; i < 13; i ++) {
       String month = i + "" ;
       monthOptions.add(new SelectItemOption<String>(month, month)) ;
@@ -89,28 +85,20 @@ public class UIProfileInputSet extends UIFormInputWithActions {
     String strDate = date.substring(date.lastIndexOf("/") + 1, date.length()) ; 
     int thisYear = Integer.parseInt(strDate) ;
     List<SelectItemOption<String>> yearOptions = new ArrayList<SelectItemOption<String>>() ;
-    yearOptions.add(new SelectItemOption<String>("-- "+FIELD_YEAR+" --", FIELD_YEAR)) ;
+    yearOptions.add(new SelectItemOption<String>("- "+FIELD_YEAR+" -", FIELD_YEAR)) ;
     for (int i = 1900; i <= thisYear; i ++) {
       String year = i + "" ;
       yearOptions.add(new SelectItemOption<String>(year, year)) ;
     }
     addUIFormInput(new UIFormSelectBox(FIELD_YEAR, FIELD_YEAR, yearOptions)) ;
 
-//  addUIFormInput(new UIFormDateTimeInput(FIELD_BIRTHDAY_DATETIME, FIELD_BIRTHDAY_DATETIME, new Date(), false)
-//  .addValidator(DateTimeValidator.class));
-
     addUIFormInput(new UIFormStringInput(FIELD_JOBTITLE_INPUT, FIELD_JOBTITLE_INPUT, null));
     addUIFormInput(new UIFormStringInput(FIELD_EMAIL_INPUT, FIELD_EMAIL_INPUT, null)
     .addValidator(EmailAddressValidator.class));
-  }  
-  protected String getFieldFullName() { return getUIStringInput(FIELD_FULLNAME_INPUT).getValue() ; }
-  protected void setFieldFullName(String s) { getUIStringInput(FIELD_FULLNAME_INPUT).setValue(s); }
+  }
 
   protected String getFieldFirstName() { return getUIStringInput(FIELD_FIRSTNAME_INPUT).getValue() ; }
   protected void setFieldFirstName(String s) { getUIStringInput(FIELD_FIRSTNAME_INPUT).setValue(s); }
-
-  protected String getFieldMiddleName() { return getUIStringInput(FIELD_MIDDLENAME_INPUT).getValue() ; }
-  protected void setFieldMiddleName(String s) { getUIStringInput(FIELD_MIDDLENAME_INPUT).setValue(s); }
 
   protected String getFieldLastName() { return getUIStringInput(FIELD_LASTNAME_INPUT).getValue() ; }
   protected void setFieldLastName(String s) { getUIStringInput(FIELD_LASTNAME_INPUT).setValue(s); }
@@ -122,23 +110,44 @@ public class UIProfileInputSet extends UIFormInputWithActions {
   protected void setFieldGender(String s) { gender = s ; }
 
   protected Date getFieldBirthday(){
-    int day = Integer.parseInt(getUIFormSelectBox(FIELD_DAY).getValue()) ;
-    int month = Integer.parseInt(getUIFormSelectBox(FIELD_MONTH).getValue()) ;
-    int year = Integer.parseInt(getUIFormSelectBox(FIELD_YEAR).getValue()) ;
-    Calendar cal = GregorianCalendar.getInstance() ;
-    cal.setLenient(false) ;
-    cal.set(Calendar.DATE, day) ;
-    cal.set(Calendar.MONTH, month - 1) ;
-    cal.set(Calendar.YEAR, year) ;
-    return cal.getTime() ;
+    int day, month, year ;
+    day = month = year = 0 ;
+    boolean emptyDay, emptyMonth, emptyYear ;
+    emptyDay = emptyMonth = emptyYear = false ;
+    try {
+      day = Integer.parseInt(getUIFormSelectBox(FIELD_DAY).getValue()) ;
+    } catch (NumberFormatException e) {
+      emptyDay = true ;
+    }
+    try {
+      month = Integer.parseInt(getUIFormSelectBox(FIELD_MONTH).getValue()) ;
+    } catch (NumberFormatException e) {
+      emptyMonth = true ;
+    }
+    try {
+      year = Integer.parseInt(getUIFormSelectBox(FIELD_YEAR).getValue()) ;
+    } catch (NumberFormatException e) {
+      emptyYear = true ;
+    }
+    if (emptyDay && emptyMonth && emptyYear) return null ;
+    else {
+      Calendar cal = GregorianCalendar.getInstance() ;
+      cal.setLenient(false) ;
+      cal.set(Calendar.DATE, day) ;
+      cal.set(Calendar.MONTH, month - 1) ;
+      cal.set(Calendar.YEAR, year) ;
+      return cal.getTime() ;
+    }    
   }
-  protected void setFieldBirthday(Date d) throws Exception {
-    Calendar cal = GregorianCalendar.getInstance() ;
-    cal.setLenient(false) ;
-    cal.setTime(d) ;
-    getUIFormSelectBox(FIELD_MONTH).setValue(String.valueOf(cal.get(Calendar.MONTH) + 1)) ;
-    getUIFormSelectBox(FIELD_DAY).setValue(String.valueOf(cal.get(Calendar.DATE))) ;
-    getUIFormSelectBox(FIELD_YEAR).setValue(String.valueOf(cal.get(Calendar.YEAR))) ;
+  protected void setFieldBirthday(Date date) throws Exception {
+    if (date != null) {
+      Calendar cal = GregorianCalendar.getInstance() ;
+      //cal.setLenient(false) ;
+      cal.setTime(date) ;
+      getUIFormSelectBox(FIELD_MONTH).setValue(String.valueOf(cal.get(Calendar.MONTH) + 1)) ;
+      getUIFormSelectBox(FIELD_DAY).setValue(String.valueOf(cal.get(Calendar.DATE))) ;
+      getUIFormSelectBox(FIELD_YEAR).setValue(String.valueOf(cal.get(Calendar.YEAR))) ;
+    }
   }
 
   protected String getFieldJobName() { return getUIStringInput(FIELD_JOBTITLE_INPUT).getValue() ; }

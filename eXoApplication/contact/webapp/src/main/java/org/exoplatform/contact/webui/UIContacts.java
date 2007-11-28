@@ -403,7 +403,6 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   
   static public class SelectedContactActionListener extends EventListener<UIContacts> {
     public void execute(Event<UIContacts> event) throws Exception {
-      System.out.println("\n\n select contact \n\n");
       UIContacts uiContacts = event.getSource();
       String contactId = event.getRequestContext().getRequestParameter(OBJECTID);
       uiContacts.setSelectedContact(contactId) ;
@@ -598,7 +597,8 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       UIContacts uiContacts = event.getSource() ;
       UIContactPortlet contactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class) ;
       UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
-      UITagInfo uiTagInfo = popupAction.createUIComponent(UITagInfo.class, null, "UITagInfo") ; 
+      UITagInfo uiTagInfo = popupAction.createUIComponent(UITagInfo.class, null, "UITagInfo") ;
+      uiTagInfo.setTagMap(uiContacts.getTagMap()) ;
       popupAction.activate(uiTagInfo, 400, 0, true) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;  
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;

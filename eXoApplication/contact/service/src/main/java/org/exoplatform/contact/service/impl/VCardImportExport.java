@@ -117,9 +117,9 @@ public class VCardImportExport implements ContactImportExport {
       pid.setFirstname(nullToEmptyString(contact.getFirstName()));
       pid.setLastname(nullToEmptyString(contact.getLastName()));
       
-      String middleName = contact.getMiddleName();
-      if ((middleName != null) && !middleName.equals("")) {
-        StringTokenizer tokens = new StringTokenizer(middleName, ",", false);
+      String firstName = contact.getFirstName();
+      if ((firstName != null) && !firstName.equals("")) {
+        StringTokenizer tokens = new StringTokenizer(firstName, ",", false);
         while (tokens.hasMoreTokens())
           pid.addAdditionalName(tokens.nextToken().trim());
       } else
@@ -175,14 +175,18 @@ public class VCardImportExport implements ContactImportExport {
       pimContacts[i].setCommunications(comm);
 
       // email address
-      EmailAddress email;
       
-      StringTokenizer tokens = new StringTokenizer(contact.getEmailAddress(), ";", false);
-      while (tokens.hasMoreTokens()) {
-        email = cmf.createEmailAddress();
-        email.setAddress(tokens.nextToken().trim());
-        comm.addEmailAddress(email);
+      String strEmail = contact.getEmailAddress() ;
+      if (strEmail != null) {
+        EmailAddress email ;
+        StringTokenizer tokens = new StringTokenizer(strEmail, ";", false);
+        while (tokens.hasMoreTokens()) {
+          email = cmf.createEmailAddress();
+          email.setAddress(tokens.nextToken().trim());
+          comm.addEmailAddress(email);
+        }
       }
+      
 
       // phone numbers
       addPhoneNumber(cmf, comm, contact.getMobilePhone(), false, false, true);
@@ -269,16 +273,9 @@ public class VCardImportExport implements ContactImportExport {
       contact.setLastName(lastName);
       String firstName = identity.getFirstname();
       contact.setFirstName(identity.getFirstname());
-
-      String middleName = "";
+      
       int size = identity.getAdditionalNameCount();
-      for (int i = 0; i < size; i++) {
-        if (i > 0)
-          middleName += ", ";
-        middleName = identity.getAdditionalName(i);
-      }
-      contact.setMiddleName(middleName);
-
+      
       String nickName = "";
       size = identity.getNicknameCount();
       for (int i = 0; i < size; i++) {
@@ -309,7 +306,7 @@ public class VCardImportExport implements ContactImportExport {
       OrganizationalIdentity orgid = pimContacts[index].getOrganizationalIdentity();
       if (orgid != null)
         contact.setJobTitle(orgid.getTitle());
-
+        
       // addresses iterator
       for (Iterator iters = pimContacts[index].getAddresses(); iters.hasNext();) {
         Address addr = (Address) iters.next();
@@ -329,17 +326,6 @@ public class VCardImportExport implements ContactImportExport {
         }
       } // end of addresses for
 
-      Communications communication = pimContacts[index].getCommunications();
-      String emailAddress = "";
-      for (Iterator iters = communication.getEmailAddresses(); iters.hasNext();) {
-        EmailAddress email = (EmailAddress) iters.next();
-        if (!emailAddress.equals(""))
-          emailAddress += "; ";
-        emailAddress += email.getAddress();
-      }
-
-      contact.setEmailAddress(emailAddress);
-
       String mobilePhone = null;
 
       String homePhone1 = null;
@@ -349,31 +335,46 @@ public class VCardImportExport implements ContactImportExport {
       String workPhone1 = null;
       String workPhone2 = null;
       String workFax = null;
+      
+      Communications communication = pimContacts[index].getCommunications();
+      if (communication != null) {
+        for (Iterator iters = communication.getPhoneNumbers(); iters.hasNext();) {
+          PhoneNumber phone = (PhoneNumber) iters.next();
 
-      for (Iterator iters = communication.getPhoneNumbers(); iters.hasNext();) {
-        PhoneNumber phone = (PhoneNumber) iters.next();
+          if (phone.isHome() && phone.isFax())
+            homeFax = phone.getNumber();
+          else if (phone.isHome() && phone.isVoice()) {
+            if (homePhone1 == null)
+              homePhone1 = phone.getNumber();
+            else if (homePhone2 == null)
+              homePhone2 = phone.getNumber();
 
-        if (phone.isHome() && phone.isFax())
-          homeFax = phone.getNumber();
-        else if (phone.isHome() && phone.isVoice()) {
-          if (homePhone1 == null)
-            homePhone1 = phone.getNumber();
-          else if (homePhone2 == null)
-            homePhone2 = phone.getNumber();
+          } else if (phone.isWork() && phone.isFax()) {
+            workFax = phone.getNumber();
+          } else if (phone.isWork() && phone.isVoice()) {
+            if (workPhone1 == null)
+              workPhone1 = phone.getNumber();
+            else if (workPhone2 == null)
+              workPhone2 = phone.getNumber();
 
-        } else if (phone.isWork() && phone.isFax()) {
-          workFax = phone.getNumber();
-        } else if (phone.isWork() && phone.isVoice()) {
-          if (workPhone1 == null)
-            workPhone1 = phone.getNumber();
-          else if (workPhone2 == null)
-            workPhone2 = phone.getNumber();
+          } else if (phone.isCellular()) {
+            mobilePhone = phone.getNumber();
+          }
 
-        } else if (phone.isCellular()) {
-          mobilePhone = phone.getNumber();
         }
-
+        String emailAddress = "";
+        for (Iterator iters = communication.getEmailAddresses() ; iters.hasNext();) {
+          EmailAddress email = (EmailAddress) iters.next();
+          if (!emailAddress.equals(""))
+            emailAddress += "; ";
+          emailAddress += email.getAddress();
+        }
+        contact.setEmailAddress(emailAddress);
       }
+
+      
+
+      
       if (mobilePhone != null)
         contact.setMobilePhone(mobilePhone);
 

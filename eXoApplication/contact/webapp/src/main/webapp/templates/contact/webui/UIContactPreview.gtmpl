@@ -235,7 +235,7 @@
 								<div class="InfoContainer">
 									<div class="TitleInfo">Note</div>
 									<div class="Content">
-										<div class="LeftContent">								
+										<div class="LeftContent">					
 											<div class="Member">
 												<div class="Job"><%=(ContactUtils.isEmpty(contact.getNote()) ? "_" : contact.getNote())%></div>
 											</div>	

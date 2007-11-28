@@ -14,6 +14,13 @@
 	height: auto;
 }
 
+/*============================= noteTab ===============================*/
+
+.AddNewContact .noteTab textarea {
+	width: 300px;
+	height: 250px;
+}
+
 /*============================= shareContactTab ===============================*/
 
 .AddNewContact .UIForm .UIFormInputSet {
@@ -23,12 +30,12 @@
 }
 
 .AddNewContact .UIFormGrid td.FieldLabel {
-	width: 100px; 
+	width: 150px; 
 }
 
-/*============================= noteTab ===============================*/
-
-.AddNewContact .noteTab textarea {
-	width: 300px;
-	height: 250px;
+.AddNewContact .shareContactTab .AddIcon16x16 {
+	background-position: center;
+	width: 16px;
+	height: 16px;
+	cursor: pointer;
 }

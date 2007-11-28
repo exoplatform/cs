@@ -23,7 +23,6 @@ public class ContactFilter {
   
   private String fullName ;
   private String firstName ;
-  private String middleName ;
   private String lastName ;
   private String nickName ;
   private String gender ;
@@ -41,9 +40,6 @@ public class ContactFilter {
   
   public String getFirstName()  { return firstName ; }
   public void   setFirstName(String s) { firstName = s ; }
-  
-  public String getMiddleName()  { return middleName ; }
-  public void   setMiddleName(String s) { middleName = s ; }
   
   public String getLastName()  { return lastName ; }
   public void   setLastName(String s) { lastName = s ; }
@@ -135,13 +131,6 @@ public class ContactFilter {
       if(hasConjuntion) stringBuffer.append(" and (") ;
       else stringBuffer.append("(") ;
       stringBuffer.append("@exo:firstName='" + firstName + "'") ;
-      stringBuffer.append(")") ;
-      hasConjuntion = true ;
-    }
-    if (middleName != null && middleName.trim().length() > 0) {
-      if(hasConjuntion) stringBuffer.append(" and (") ;
-      else stringBuffer.append("(") ;
-      stringBuffer.append("@exo:middleName='" + middleName + "'") ;
       stringBuffer.append(")") ;
       hasConjuntion = true ;
     }

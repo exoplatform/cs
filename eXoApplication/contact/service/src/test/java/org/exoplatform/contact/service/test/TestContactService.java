@@ -83,7 +83,6 @@ public class TestContactService extends BaseContactTestCase{
     
     contact.setFullName("fullName");
     contact.setFirstName("firstName");
-    contact.setMiddleName("middleName");
     contact.setLastName("lastName");
     contact.setNickName("nickName");
     contact.setJobTitle("jobTitle");

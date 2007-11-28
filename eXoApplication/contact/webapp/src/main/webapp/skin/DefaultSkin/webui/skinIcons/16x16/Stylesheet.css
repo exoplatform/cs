@@ -182,3 +182,11 @@
 .MoveNavigationIcon {
 	background: url('icons/MoveNavigationIcon.gif') no-repeat left center;
 }
+
+.SelectUserIcon {
+	background:transparent url(icons/SmallUserIcon.gif) no-repeat;
+}
+
+.SelectMemberIcon {
+	background:transparent url(icons/SmallMemberIcon.gif) no-repeat;
+}

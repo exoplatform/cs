@@ -1,8 +1,8 @@
-package org.exoplatform.contact.webui.popup;
 /***************************************************************************
  * Copyright 2001-2006 The eXo Platform SARL         All rights reserved.  *
  * Please look at license.txt in info directory for more license detail.   *
  **************************************************************************/
+package org.exoplatform.contact.webui.popup;
 
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
@@ -41,22 +41,24 @@ import org.exoplatform.webui.organization.UIGroupMembershipSelector;
       events = @EventConfig(listeners = UIBreadcumbs.SelectPathActionListener.class)
   )
 })
-public class UIContactPermissionBrowser extends UIGroupMembershipSelector 
-  implements UIPopupComponent,ComponentSelector {
+public class UIContactPermissionBrowser extends UIGroupMembershipSelector implements UIPopupComponent, ComponentSelector {
 
   final static public String defaultValue = "/admin" ;
   private UIComponent uiComponent ;
   private String returnFieldName = null ;
   public boolean isUsePopup_ = true ;
-  public UIContactPermissionBrowser() throws Exception { changeGroup(defaultValue) ; }
-  public void activate() throws Exception { }
-  public void deActivate() throws Exception { }
-  
+  public UIContactPermissionBrowser() throws Exception {
+    changeGroup(defaultValue) ;
+  }
+
   public void setCurrentPermission(String per) throws Exception { changeGroup(per) ; }
 
   public UIComponent getReturnComponent() { return uiComponent ; }
   public String getReturnField() { return returnFieldName ; }
-
+  
+  public void activate() throws Exception { }
+  public void deActivate() throws Exception { }
+  
   public void setComponent(UIComponent uicomponent, String[] initParams) {
     uiComponent = uicomponent ;
     if(initParams == null || initParams.length == 0) return ;
@@ -70,7 +72,7 @@ public class UIContactPermissionBrowser extends UIGroupMembershipSelector
     }
   }
 
-  static  public class SelectMembershipActionListener extends EventListener<UIContactPermissionBrowser> { 
+  static  public class SelectMembershipActionListener extends EventListener<UIContactPermissionBrowser> {   
     public void execute(Event<UIContactPermissionBrowser> event) throws Exception {
       UIContactPermissionBrowser uiPermissionSelector = event.getSource();
       if(uiPermissionSelector.getCurrentGroup() == null) return ;
@@ -82,16 +84,19 @@ public class UIContactPermissionBrowser extends UIGroupMembershipSelector
       if(uiPermissionSelector.isUsePopup_) {
         UIPopupContainer uiPopupContainer = uiPermissionSelector.getAncestorOfType(UIPopupContainer.class) ;
         UIPopupAction uiPopup = uiPopupContainer.getChild(UIPopupAction.class) ;
-        uiPopup.deActivate() ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupContainer.getAncestorOfType(UIPopupAction.class)) ;
+        
         /*
-        UIPopupWindow uiPopup = uiPermissionSelector.getParent() ;
         uiPopup.setShow(false) ;
         UIComponent uicomp = uiPermissionSelector.getReturnComponent().getParent() ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uicomp) ;
         if(!uiPopup.getId().equals("PopupComponent"))event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup) ;
         */
+        uiPopup.deActivate() ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(
+            uiPopupContainer.getAncestorOfType(UIPopupAction.class)) ;
+      
+      
       } else {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPermissionSelector.getReturnComponent()) ;
       }

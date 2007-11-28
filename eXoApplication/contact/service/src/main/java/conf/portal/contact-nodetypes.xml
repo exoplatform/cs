@@ -15,10 +15,7 @@
   		</propertyDefinition>
   		<propertyDefinition name="exo:firstName" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
   			<valueConstraints/>
-  		</propertyDefinition>  		
-  		<propertyDefinition name="exo:middleName" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-  			<valueConstraints/>
-  		</propertyDefinition>  		
+  		</propertyDefinition>		
   		<propertyDefinition name="exo:lastName" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
   			<valueConstraints/>
   		</propertyDefinition>  		

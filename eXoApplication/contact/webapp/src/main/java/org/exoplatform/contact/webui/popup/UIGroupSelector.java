@@ -5,10 +5,12 @@
 package org.exoplatform.contact.webui.popup;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.services.organization.Group;
+import org.exoplatform.services.organization.Membership;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -55,7 +57,6 @@ public class UIGroupSelector extends UIGroupMembershipSelector implements UIPopu
   private boolean isSelectGroup_ = false ;
   private boolean isSelectMember_ = false ;
   private boolean isSelectUSer_ = false ;
-
   public UIGroupSelector() throws Exception {}
 
   public UIComponent getReturnComponent() { return uiComponent ; }
@@ -73,7 +74,6 @@ public class UIGroupSelector extends UIGroupMembershipSelector implements UIPopu
       returnFieldName = initParams[0] ;
     }
   }
-
   public void setSelectGroup(boolean isSelect) { isSelectGroup_ = isSelect ;}
   public void setSelectMember(boolean isSelect) { isSelectMember_ = isSelect ;}
   public void setSelectUser(boolean isSelect) { isSelectUSer_ = isSelect ;}
@@ -99,25 +99,30 @@ public class UIGroupSelector extends UIGroupMembershipSelector implements UIPopu
   }
 
   @SuppressWarnings({ "unchecked", "cast" })
-  public List getUsers() throws Exception {
+  public List getUsername() throws Exception {
     List children = new ArrayList() ; 
     OrganizationService service = getApplicationComponent(OrganizationService.class) ;
     PageList userPageList = service.getUserHandler().findUsersByGroup(this.getCurrentGroup().getId()) ;    
+    
+    
+    //service.getMembershipHandler().findMembership(this.getCurrentGroup().getId()) ;
+    
+    /*
+    Collection<Membership> membership = service.getMembershipHandler().findMembershipsByGroup(this.getCurrentGroup()) ;
+    System.out.println( "\n\n membership size:" + membership.size() + "::\n\n") ;
+    if (membership.size() > 0)
+      System.out.println( "\n\n membership 0:" + membership.toArray()[0].toString() + "::\n\n") ;
+    */
     for(Object child : userPageList.getAll()){
-      children.add((User)child) ;
+      User user = (User)child ;
+      children.add(user.getUserName()) ;
     }
     return children ;
   }
 
-  public void activate() throws Exception {
-    // TODO Auto-generated method stub
-    
-  }
-
-  public void deActivate() throws Exception {
-    // TODO Auto-generated method stub
-    
-  }
+  public void activate() throws Exception { }
+  public void deActivate() throws Exception { }
+  
   static  public class SelectMembershipActionListener extends EventListener<UIGroupSelector> {   
     public void execute(Event<UIGroupSelector> event) throws Exception {
       String user = event.getRequestContext().getRequestParameter(OBJECTID) ;

@@ -15,14 +15,14 @@
 	      <%                
 	      boolean even = true ;
 	      if(uicomponent.getCurrentGroup() != null) {
-		      for(user in uicomponent.getUsers()){
+		      for(username in uicomponent.getUsername()){
 		        String rowCssClass = "OddRow" ;
 		        if(even) rowCssClass = "EvenRow" ;  
 		        even = !even ;
 	      %>
 			      <div class="$rowCssClass">
 			        <div class="ItemIcon"><span></span></div>
-			        <a href="<%=uicomponent.event('SelectMembership', user.getUserName())%>"><%=user.getUserName()%></a>	
+			        <a href="<%=uicomponent.event('SelectMembership', username)%>"><%=username%></a>	
 			        <div style="clear: left"><span></span></div>								           
 			      </div>
 	      <%}

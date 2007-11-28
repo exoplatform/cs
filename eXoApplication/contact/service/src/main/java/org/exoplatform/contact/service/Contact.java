@@ -21,7 +21,6 @@ public class Contact {
   
   private String fullName ;
   private String firstName ;
-  private String middleName ;
   private String lastName ;
   private String nickName ;
   private String gender ;
@@ -83,9 +82,6 @@ public class Contact {
   
   public String getFirstName()  { return firstName ; }
   public void   setFirstName(String s) { firstName = s ; }
-  
-  public String getMiddleName()  { return middleName ; }
-  public void   setMiddleName(String s) { middleName = s ; }
   
   public String getLastName()  { return lastName ; }
   public void   setLastName(String s) { lastName = s ; }

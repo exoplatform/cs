@@ -124,7 +124,6 @@ public class JCRDataStorage implements DataStorage {
     if(contactNode.hasProperty("exo:id")) contact.setId(contactNode.getProperty("exo:id").getString()) ;
     if(contactNode.hasProperty("exo:fullName"))contact.setFullName(contactNode.getProperty("exo:fullName").getString());
     if(contactNode.hasProperty("exo:firstName"))contact.setFirstName(contactNode.getProperty("exo:firstName").getString());
-    if(contactNode.hasProperty("exo:middleName"))contact.setMiddleName(contactNode.getProperty("exo:middleName").getString());
     if(contactNode.hasProperty("exo:lastName"))contact.setLastName(contactNode.getProperty("exo:lastName").getString());
     if(contactNode.hasProperty("exo:nickName"))contact.setNickName(contactNode.getProperty("exo:nickName").getString());
     if(contactNode.hasProperty("exo:gender"))contact.setGender(contactNode.getProperty("exo:gender").getString());
@@ -392,7 +391,6 @@ public class JCRDataStorage implements DataStorage {
     
     contactNode.setProperty("exo:fullName", contact.getFullName());
     contactNode.setProperty("exo:firstName", contact.getFirstName());
-    contactNode.setProperty("exo:middleName", contact.getMiddleName());
     contactNode.setProperty("exo:lastName", contact.getLastName());
     contactNode.setProperty("exo:nickName", contact.getNickName());
     contactNode.setProperty("exo:gender", contact.getGender()) ;
@@ -621,14 +619,16 @@ public class JCRDataStorage implements DataStorage {
     }
     contactNode.setProperty("exo:fullName", contact.getFullName());
     contactNode.setProperty("exo:firstName", contact.getFirstName());
-    contactNode.setProperty("exo:middleName", contact.getMiddleName());
     contactNode.setProperty("exo:lastName", contact.getLastName());
     contactNode.setProperty("exo:nickName", contact.getNickName());
     contactNode.setProperty("exo:gender", contact.getGender()) ;
     
     GregorianCalendar dateTime = new GregorianCalendar() ;
-    dateTime.setTime(contact.getBirthday()) ;    
-    contactNode.setProperty("exo:birthday", dateTime) ;
+    Date birthday = contact.getBirthday() ;
+    if (birthday != null) {
+      dateTime.setTime(birthday) ;    
+      contactNode.setProperty("exo:birthday", dateTime) ;
+    }
     contactNode.setProperty("exo:jobTitle", contact.getJobTitle());
     contactNode.setProperty("exo:emailAddress", contact.getEmailAddress());
     

@@ -33,7 +33,14 @@ public class UIContactPreviewForm extends UIForm implements UIPopupComponent {
   public UIContactPreviewForm() { }
   
   public void setContact(Contact c) { contact_ = c; }
-  public Contact getContact() { return contact_; }
+  public Contact getContact() { 
+    
+
+    
+    return contact_; 
+    
+  
+  }
   
   public String getImageSource() throws Exception {
     DownloadService dservice = getApplicationComponent(DownloadService.class) ;
