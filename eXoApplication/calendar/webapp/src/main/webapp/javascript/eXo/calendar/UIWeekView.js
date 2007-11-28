@@ -227,28 +227,44 @@ UIWeekView.prototype.leftDragResizeCallback = function() {
 } ;
 
 UIWeekView.prototype.rightResizeCallback = function() {
+	var UIWeekView = eXo.calendar.UIWeekView ;
+	var UIHorizontalResize = eXo.calendar.UIHorizontalResize ;	
+	var outer = UIHorizontalResize.outerElement ;
+	var totalWidth = eXo.core.DOMUtil.findAncestorByClass(outer, "EventAllday") ;
+	totalWidth = totalWidth.offsetWidth ;
+	outer.style.left = parseFloat(outer.offsetLeft/totalWidth)*100 + "%" ;
+	var delta = (outer.offsetLeft + outer.offsetWidth) - UIHorizontalResize.beforeEnd ;
+	if (delta != 0) {
+		var UICalendarPortlet = eXo.calendar.UICalendarPortlet
+		var delta = Math.round(delta*(24*7*60*60*1000)/totalWidth) ;
+		var start =  parseInt(outer.getAttribute("startTime")) ;
+		var end = parseInt(outer.getAttribute("endTime")) + delta;
+		var calType = parseInt(outer.getAttribute("calType")) ;
+		var actionLink = UICalendarPortlet.adjustTime(start, end, outer) ;
+		actionLink = actionLink.toString().replace(/'\s*\)/,"&calType=" + calType + "')") ;
+		alert(actionLink) ; return ;
+		eval(actionLink) ;
+	}	
 } ;
 
 UIWeekView.prototype.leftResizeCallback = function() {
-//	var UIWeekView = eXo.calendar.UIWeekView ;
-//	var outer = eXo.calendar.UIHorizontalResize ;	
-//	var outer = UIHorizontalResize.outerElement ;
-//	var totalWidth = eXo.core.DOMUtil.findAncestorByClass(outer, "EventAllday") ;
-//	alert(totalWidth) ;
-//	totalWidth = totalWidth.offsetWidth ;
-//	outer.style.left = parseFloat(outer.offsetLeft/totalWidth)*100 + "%" ;
-//	var delta = outer.offsetLeft - UIHorizontalResize.beforeStart ;
-//	if (delta != 0) {
-//		var UICalendarPortlet = eXo.calendar.UICalendarPortlet
-//		var delta = Math.round(delta*(24*7*60*60*1000)/totalWidth) ;
-//		var start =  parseInt(outer.getAttribute("startTime")) + delta ;
-//		var end = parseInt(outer.getAttribute("endTime")) ;
-//		var calType = parseInt(outer.getAttribute("calType")) ;
-//		var actionLink = UICalendarPortlet.adjustTime(start, end, outer) ;
-//		actionLink = actionLink.toString().replace(/'\s*\)/,"&calType=" + calType + "')") ;
-//		alert(actionLink) ; return ;
-//		eval(actionLink) ;
-//	}	
+	var UIWeekView = eXo.calendar.UIWeekView ;
+	var UIHorizontalResize = eXo.calendar.UIHorizontalResize ;	
+	var outer = UIHorizontalResize.outerElement ;
+	var totalWidth = eXo.core.DOMUtil.findAncestorByClass(outer, "EventAllday") ;
+	totalWidth = totalWidth.offsetWidth ;
+	outer.style.left = parseFloat(outer.offsetLeft/totalWidth)*100 + "%" ;
+	var delta = outer.offsetLeft - UIHorizontalResize.beforeStart ;
+	if (delta != 0) {
+		var UICalendarPortlet = eXo.calendar.UICalendarPortlet
+		var delta = Math.round(delta*(24*7*60*60*1000)/totalWidth) ;
+		var start =  parseInt(outer.getAttribute("startTime")) + delta ;
+		var end = parseInt(outer.getAttribute("endTime")) ;
+		var calType = parseInt(outer.getAttribute("calType")) ;
+		var actionLink = UICalendarPortlet.adjustTime(start, end, outer) ;
+		actionLink = actionLink.toString().replace(/'\s*\)/,"&calType=" + calType + "')") ;
+		eval(actionLink) ;
+	}	
 } ;
 
 // For all day event
@@ -503,6 +519,7 @@ UIHorizontalResize.prototype.start = function(evt, outer, inner) {
 	this.outerBeforeWidth = this.outerElement.offsetWidth - 2 ;
 	this.innerBeforeWidth = this.innerElement.offsetWidth - 2 ;
 	this.beforeStart = this.outerElement.offsetLeft ;
+	this.beforeEnd = this.beforeStart + this.outerBeforeWidth ;
 	document.onmousemove = eXo.calendar.UIHorizontalResize.execute ;
 	document.onmouseup = eXo.calendar.UIHorizontalResize.end ;
 } ;
@@ -528,11 +545,11 @@ UIHorizontalResize.prototype.execute = function(evt) {
 
 UIHorizontalResize.prototype.end = function(evt) {
 	var	UIHorizontalResize = eXo.calendar.UIHorizontalResize ;
+	if (typeof(UIHorizontalResize.callback) == "function") UIHorizontalResize.callback() ;
 	UIHorizontalResize.outerElement = null ;
 	UIHorizontalResize.innerElement = null ;
 	document.onmousemove = null ;
 	document.onmouseup = null ;
-	if (typeof(UIHorizontalResize.callback) == "function") UIHorizontalResize.callback() ;
 } ;
 
 // For user selection 
@@ -561,5 +578,5 @@ UIWeekView.prototype.initSelectionX = function() {
 	UISelectionX.viewType = "UIWeekView" ;
 } ;
 
-eXo.calendar.UIWeekView = new UIWeekView() ;
 eXo.calendar.UIHorizontalResize = new UIHorizontalResize() ;
+eXo.calendar.UIWeekView = new UIWeekView() ;

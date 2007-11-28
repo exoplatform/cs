@@ -59,7 +59,7 @@ UICalendarDragDrop.prototype.dropCallback = function(evt) {
 	var dragObject = evt.dragObject ;
 	eXo.core.DOMUtil.removeElement(dragObject) ;
 	eXo.core.DOMUtil.removeElement(UICalendarDragDrop.tmp) ;
-	//if (UICalendarDragDrop.blockElement != UICalendarDragDrop.currentTarget) {		
+	if (UICalendarDragDrop.currentTarget) {		
 	var actionlink = "" ;
 	if (actionlink = UICalendarDragDrop.currentTarget.getAttribute("actionLink")) {
 		var currentDate = UICalendarDragDrop.currentTarget.getAttribute("currentDate") ;
@@ -73,7 +73,7 @@ UICalendarDragDrop.prototype.dropCallback = function(evt) {
 		UICalendarDragDrop.currentTarget = null ;
 		eval(actionlink) ;
 	}
-	//}
+	}
 } ;
 //UICalendarDragDrop.prototype.mouseCoords = function(ev){
 //	if(ev.pageX || ev.pageY){
