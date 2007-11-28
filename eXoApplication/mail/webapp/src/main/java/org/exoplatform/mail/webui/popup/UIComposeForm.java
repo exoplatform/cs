@@ -243,10 +243,10 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
     MailService mailSrv = getApplicationComponent(MailService.class);
     Account account = mailSrv.getAccountById(username, accountId);
     if (isVisualEditor) {
-      value += "</br> -- <br />" + account.getSignature() + "";
+      if (!MailUtils.isFieldEmpty(account.getSignature())) {value += "</br> -- <br />" + account.getSignature() + "";}
       getChild(UIFormWYSIWYGInput.class).setValue(value);
     } else {
-      value += account.getSignature() ;
+      if (!MailUtils.isFieldEmpty(account.getSignature())) { value += account.getSignature() ; }
       getUIFormTextAreaInput(FIELD_MESSAGECONTENT).setValue(value);
     }
   }
