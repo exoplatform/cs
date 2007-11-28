@@ -106,7 +106,7 @@
                     <img src="<%=(imageLink == null ?  "/contact/skin/DefaultSkin/webui/background/Img2.gif": imageLink)%>" width=63 height=81  class="Avatar"/>         
                       <div class="Member">
                         <div class="State"><%=selectedContact.getFullName()%></div>
-                        <div class="Job"><%=selectedContact.getJobTitle()%></div>
+                        <div class="Job"><%= (selectedContact.getJobTitle() != null) ? selectedContact.getJobTitle() : "_"%></div>
                       </div>
                       <div style="clear: left;"><span/></div>
                       <div class="InfoContainer">
@@ -115,25 +115,25 @@
                           <div class="LeftContent">
                             <div class="InfoItem">
                               <div class="InfoLabel">Nick name:</div>
-                              <div class="Info"><%=selectedContact.getNickName()%></div>
+                              <div class="Info"><%= (selectedContact.getNickName() != null) ? selectedContact.getNickName() : "_"%></div>
                               <div style="clear: left;"><span/></div>
                             </div>
                             <div class="InfoItem">
                               <div class="InfoLabel">Gender:</div>
-                              <div class="Info"><%=selectedContact.getGender()%></div>
+                              <div class="Info"><%= (selectedContact.getGender() != null) ? selectedContact.getGender() : "_"%></div>
                               <div style="clear: left;"><span/></div>
                             </div>
                           </div>
                           <div class="RightContent">
                             <div class="InfoItem">
                               <div class="InfoLabel1">Birthday:</div>
-                              <div class="Info1"><%=selectedContact.getBirthday()%></div>
+                              <div class="Info1"><%= (selectedContact.getBirthday() != null) ? selectedContact.getBirthday() : "_"%></div>
                             </div>
                             <div class="InfoItem">
                               <div class="InfoLabel1">Email:</div>
                               <div class="Info1 Email">
                                 <a href="#">
-                                <%=selectedContact.getEmailAddress()%>
+                                <%= (selectedContact.getEmailAddress() != null) ? selectedContact.getEmailAddress() : "_"%>
                                 </a>
                               </div>
                               <div style="clear: left;"><span/></div>
