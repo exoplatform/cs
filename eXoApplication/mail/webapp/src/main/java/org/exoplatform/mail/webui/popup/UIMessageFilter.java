@@ -7,8 +7,11 @@ package org.exoplatform.mail.webui.popup;
 import java.util.List;
 
 import org.exoplatform.mail.MailUtils;
+import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MessageFilter;
+import org.exoplatform.mail.service.Tag;
+import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -36,6 +39,12 @@ import org.exoplatform.webui.form.UIForm;
     }
 )
 public class UIMessageFilter extends UIForm implements UIPopupComponent{
+  public static final String CONDITION_CONTAIN = "contains".intern();
+  public static final String CONDITION_NOT_CONTAIN = "doesn't contain".intern();
+  public static final String CONDITION_IS = "is".intern();
+  public static final String CONDITION_NOT_IS = "isn't".intern();
+  public static final String CONDITION_END_WITH = "ends with".intern();
+  public static final String CONDITION_START_WITH = "starts with".intern();
   
   private String selectedFilterId ;
   
@@ -64,6 +73,39 @@ public class UIMessageFilter extends UIForm implements UIPopupComponent{
     String accountId = MailUtils.getAccountId();
     MailService mailSrv = MailUtils.getMailService();
     return mailSrv.getFilters(username, accountId);
+  }
+  
+  public Folder getFolder() throws Exception {
+    String username = MailUtils.getCurrentUser();
+    String accountId = MailUtils.getAccountId();
+    MailService mailSrv = MailUtils.getMailService();
+    return mailSrv.getFolder(username, accountId, getSelectedFilter().getApplyFolder());
+  }
+  
+  public Tag getTag() throws Exception {
+    String username = MailUtils.getCurrentUser();
+    String accountId = MailUtils.getAccountId();
+    MailService mailSrv = MailUtils.getMailService();
+    return mailSrv.getTag(username, accountId, getSelectedFilter().getApplyTag());
+  }
+  
+  public String getCondition(int i) throws Exception {
+    switch(i) {
+      case Utils.CONDITION_CONTAIN :
+        return CONDITION_CONTAIN;
+      case Utils.CONDITION_NOT_CONTAIN :
+        return CONDITION_NOT_CONTAIN ;
+      case Utils.CONDITION_IS :
+        return CONDITION_IS;
+      case Utils.CONDITION_NOT_IS:
+        return CONDITION_NOT_CONTAIN;
+      case Utils.CONDITION_STARTS_WITH:
+        return CONDITION_START_WITH;
+      case Utils.CONDITION_ENDS_WITH:
+        return CONDITION_END_WITH;
+      default :
+        return CONDITION_CONTAIN;
+    }
   }
   
   public String[] getActions() { return new String[]{"Close"}; }
