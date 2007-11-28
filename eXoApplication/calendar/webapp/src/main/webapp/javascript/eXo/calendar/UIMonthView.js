@@ -103,7 +103,15 @@ UIMonthView.prototype.getEventsInRow = function(row, events) {
 
 UIMonthView.prototype.arrangeEventInRows = function(eventInRows) {
 	var len = eventInRows.length ;
+	var checkbox = null ;
 	for(var i = 0 ; i < len ; i ++) {
+		checkbox = eXo.core.DOMUtil.findFirstDescendantByClass(eventInRows[i], "input", "checkbox") ;
+		if (checkbox) {
+			checkbox.onmousedown = function (evt) {
+				var _e = window.event || evt ;
+				_e.cancelBubble = true ;
+			}		
+		}
 		eventInRows[i].onmousedown = eXo.calendar.UICalendarDragDrop.init ;
 		if (i > 0) eventInRows[i].style.top = parseInt(eventInRows[i-1].style.top) + eventInRows[i-1].offsetHeight + "px" ;
 	}

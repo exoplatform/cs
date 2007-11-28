@@ -12,13 +12,6 @@ UICalendarDragDrop.prototype.init = function(evt) {
   var dragObject = this.cloneNode(true) ;
   this.parentNode.appendChild(dragObject) ;
 	DragDrop.init(null, dragObject, dragObject, _e) ;
-	var checkbox = eXo.core.DOMUtil.findFirstDescendantByClass(this, "input", "checkbox") ;
-	if (checkbox) {
-		checkbox.onmousedown = function (evt) {
-			var _e = window.event || evt ;
-			_e.cancelBubble = true ;
-		}		
-	}
 	UICalendarDragDrop.targets = eXo.calendar.UIMonthView.cells ;
 } ;
 
