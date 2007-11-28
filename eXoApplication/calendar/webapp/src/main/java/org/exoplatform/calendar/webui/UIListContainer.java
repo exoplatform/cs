@@ -53,4 +53,14 @@ public class UIListContainer extends UIContainer implements CalendarView {
     getChild(UIListView.class).applySeting() ;
     getChild(UIPreview.class).applySeting() ;
   }
+
+  public String getLastUpdatedEventId() {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public void setLastUpdatedEventId(String eventId) {
+    // TODO Auto-generated method stub
+    
+  }
 }

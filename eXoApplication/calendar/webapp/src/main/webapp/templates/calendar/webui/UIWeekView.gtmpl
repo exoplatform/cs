@@ -117,7 +117,7 @@
 								  //cal.setTime(event.getToDateTime()) ;
 								  long	finishTime = event.getToDateTime().getTime() ; // cal.get(Calendar.HOUR_OF_DAY)*60 + cal.get(Calendar.MINUTE) ;
 									color = uicomponent.getColors().get(event.getCalendarId()) ;
-									title = begindate + "->" + enddate + ":&#013; " + event.summary ;
+									title = tf.format(event.getFromDateTime()) + "->" + tf.format(event.getToDateTime())+ ":&#013; " + event.summary ;
 									actionLink =  uicomponent.event("SaveEvent",event.getId()+"&calendarId="+event.getCalendarId()+"&startTime=beginTime&finishTime=endTime") ;
 								%>	
 										 <div class="EventContainer EventAlldayContainer WeekViewEventBoxes $color" eventCat="$event.eventCategoryId" style="position: absolute ; border: solid 1px grey ;" indexBeginDate='$indexBeginDate' indexEndDate='$indexEndDate' calType="$event.calType"  eventid="$event.id" calid="$event.calendarId" starttime="$begindate" endtime="$enddate"  style="height: 22px;" title="$title" actionlink="$actionLink">

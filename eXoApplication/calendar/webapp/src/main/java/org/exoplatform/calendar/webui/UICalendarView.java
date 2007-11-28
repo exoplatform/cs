@@ -153,7 +153,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   public String getViewType() { return viewType_ ; }
   protected String[] getViews() {return views ; }
   public void setLastUpdatedEventId(String eventId) {editedEventId_ = eventId;}
-  protected String getLastUpdatedEventId() {return editedEventId_;}
+  public String getLastUpdatedEventId() {return editedEventId_;}
 
   public String[] getPublicCalendars() throws Exception{
     try{

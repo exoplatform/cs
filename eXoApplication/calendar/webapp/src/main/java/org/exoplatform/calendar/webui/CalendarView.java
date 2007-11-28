@@ -17,4 +17,6 @@ public interface CalendarView {
   public void update() throws Exception ;
   public void applySeting() throws Exception ;
   public void setCurrentCalendar(Calendar cal) ;
+  public void setLastUpdatedEventId(String eventId) ;
+  public String getLastUpdatedEventId() ;
 }

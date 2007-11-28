@@ -16,6 +16,7 @@ import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
+import org.exoplatform.calendar.webui.CalendarView;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarView;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
@@ -263,7 +264,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
         UIMiniCalendar uiMiniCalendar = uiPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;
         uiMiniCalendar.updateMiniCal() ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
-        UICalendarView calendarView = (UICalendarView)uiContainer.getRenderedChild() ;
+        CalendarView calendarView = (CalendarView)uiContainer.getRenderedChild() ;
         calendarView.setLastUpdatedEventId(calEvent.getId()) ;
         uiContainer.refresh() ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;

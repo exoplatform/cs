@@ -316,11 +316,18 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
   static  public class SaveActionListener extends EventListener<UICalendarForm> {
     public void execute(Event<UICalendarForm> event) throws Exception {
       UICalendarForm uiForm = event.getSource() ;
+      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+      String displayName = uiForm.getUIStringInput(DISPLAY_NAME).getValue() ;
+      if(!CalendarUtils.isNameValid(displayName, CalendarUtils.SPECIALCHARACTER)){
+        uiApp.addMessage(new ApplicationMessage("UICalendarForm.msg.name-invalid", null, ApplicationMessage.WARNING) ) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
       String username = Util.getPortalRequestContext().getRemoteUser() ;
       CalendarService calendarService = CalendarUtils.getCalendarService() ;
       Calendar calendar = new Calendar() ;
       if(!uiForm.isAddNew_) calendar.setId(uiForm.calendarId_) ;
-      calendar.setName(uiForm.getUIStringInput(DISPLAY_NAME).getValue()) ;
+      calendar.setName(displayName) ;
       calendar.setDescription(uiForm.getUIFormTextAreaInput(DESCRIPTION).getValue()) ;
       calendar.setCategoryId(uiForm.getUIFormSelectBox(CATEGORY).getValue()) ;
       boolean isPublic = uiForm.isPublic() ;
@@ -328,7 +335,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
       calendar.setLocale(uiForm.getLocale()) ;
       calendar.setTimeZone(uiForm.getTimeZone()) ;
       calendar.setCalendarColor(uiForm.getSelectedColor()) ;
-      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+     
       if(isPublic) {
         Object[] groupList = uiForm.getPublicGroups() ;
         List<String> selected = new ArrayList<String>() ;

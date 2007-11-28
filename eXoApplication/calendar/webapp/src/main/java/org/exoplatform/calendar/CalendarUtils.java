@@ -41,12 +41,19 @@ public class CalendarUtils {
 
   final public static String SEMICOLON = ";".intern() ;
   final public static String COLON = ",".intern() ;
+  final public static String SLASH = "/".intern() ;
+  final public static String BACKSLASH = "\\".intern() ;
+  
   final public static String UNDERSCORE = "_".intern() ;
   final public static String TIMEFORMAT  = "HH:mm".intern() ;
   final public static String DATEFORMAT = "MM/dd/yyyy".intern() ;
   final public static String DATETIMEFORMAT = DATEFORMAT + " " +TIMEFORMAT ;   
   final public static int DEFAULT_TIMEITERVAL = 15 ;
   final public static long MILISECONS_OF_DAY = 24*60*60*1000 ;
+  
+  
+  final public static String SPECIALCHARACTER[] = {SEMICOLON,COLON,SLASH,BACKSLASH,"'","|",">","<","\"", "?", "!", "@", "#", "$", "%","^","&","*"} ;
+  
   static public String[] getUserGroups(String username) throws Exception {
     OrganizationService organization = (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
     Object[] objs = organization.getGroupHandler().findGroupsOfUser(username).toArray() ;
@@ -203,5 +210,14 @@ public class CalendarUtils {
       }
     }
     return null ;
+  }
+  
+  public static boolean isNameValid(String name, String[] regexpression) {
+    for(String c : regexpression){ if(name.contains(c)) return false ;}
+    return true ;
+  }
+
+  public static boolean isNameEmpty(String name) {
+    return (name == null || name.trim().length() == 0) ;
   }
 }
