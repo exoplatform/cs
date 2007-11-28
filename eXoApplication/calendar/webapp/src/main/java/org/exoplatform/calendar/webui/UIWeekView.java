@@ -326,7 +326,6 @@ public class UIWeekView extends UICalendarView {
       String calType = event.getRequestContext().getRequestParameter(CALTYPE) ;
       String startTime = event.getRequestContext().getRequestParameter("startTime") ;
       String finishTime = event.getRequestContext().getRequestParameter("finishTime") ;
-      //String currentDate = event.getRequestContext().getRequestParameter("currentDate") ;
       try {
         String username = event.getRequestContext().getRemoteUser() ;
         CalendarEvent eventCalendar = null ;
@@ -340,25 +339,11 @@ public class UIWeekView extends UICalendarView {
         }
         Calendar calBegin = GregorianCalendar.getInstance() ;
         Calendar calEnd = GregorianCalendar.getInstance() ;
-        calBegin.setTimeInMillis(Long.parseLong(startTime)) ;
+        long unit = 15*60*1000 ;
+        calBegin.setTimeInMillis((Long.parseLong(startTime)/unit)*unit) ;
         eventCalendar.setFromDateTime(calBegin.getTime()) ;
-        calEnd.setTimeInMillis(Long.parseLong(finishTime)) ;
+        calEnd.setTimeInMillis((Long.parseLong(finishTime)/unit)*unit) ;
         eventCalendar.setToDateTime(calEnd.getTime()) ;
-
-        /*calBegin.setTimeInMillis(Long.parseLong(currentDate)) ;
-      calEnd.setTimeInMillis(Long.parseLong(currentDate)) ;
-
-      int hoursBg = (Integer.parseInt(startTime)/60) ;
-      int minutesBg = (Integer.parseInt(startTime)%60) ;
-
-      int hoursEnd = (Integer.parseInt(finishTime)/60) ;
-      int minutesEnd = (Integer.parseInt(finishTime)%60) ;*/
-        /*calBegin.set(Calendar.HOUR_OF_DAY, hoursBg) ;
-      calBegin.set(Calendar.MINUTE, minutesBg) ;
-      eventCalendar.setFromDateTime(calBegin.getTime()) ;
-      calEnd.set(Calendar.HOUR_OF_DAY, hoursEnd) ;
-      calEnd.set(Calendar.MINUTE, minutesEnd) ;
-      eventCalendar.setToDateTime(calEnd.getTime()) ;*/
         if(eventCalendar.getToDateTime().before(eventCalendar.getFromDateTime())) {
           System.out.println("\n\n UIWeekView updateEvent to date must after from date");
           return ;
