@@ -390,35 +390,21 @@
 					i = 0 ;
 					Contact contact ;
 					Map tagMap = uicomponent.getTagMap() ;
-
 					while (i < contacts.length) {						
 						contact = contacts[i ++] ;
 						iconTag = null ;
 						String[] tagIds = contact.getTags() ; 
-						StringBuffer tagsName = new StringBuffer() ;
 						if (tagIds != null && tagIds.length > 0) {
-							Tag tag = tagMap.get(tagIds[0]) ;
-							boolean hasComma = false ;
-							if (tag != null) {
-								tagsName.append(tag.getName()) ;
-								hasComma = true ;
-								iconTag = "Icon " + tag.getColor() + "Tag" ;
-							} else { hasComma = false ; }
-							j = 1 ;
-							while (j < tagIds.length) {
-								tag = tagMap.get(tagIds[j]) ;
-								if (tag != null && hasComma) {
-									tagsName.append(", " + tag.getName()) ;
-									if (ContactUtils.isEmpty(iconTag)) iconTag = "Icon " + tag.getColor() + "Tag" ;
+							for (String tagId : tagIds) { 
+								Tag tag = tagMap.get(tagIds[0]) ;
+								if (tag != null) {
+									iconTag = "Icon " + tag.getColor() + "Tag" ;
+									break ;
 								}
-								else if (tag != null) {
-										tagsName.append(tag.getName()) ;
-										hasComma = true ;
-										if (ContactUtils.isEmpty(iconTag)) iconTag = "Icon " + tag.getColor() + "Tag" ;
-								}
-								j ++ ;
-							}		
-						}
+								print "aa" ;		
+							}
+						}		
+		
 				%>
 				
 				
@@ -428,7 +414,7 @@
 			  	<div class="TitleVCards" >
 				  	<div class="StateIcon OnlineIcon"><%=(contact.getFullName()==null ? "_" : contact.getFullName())%></div>
 			  		<a href="<%=uicomponent.event("TagInfo", contact.getId())%>">
-			  			<div class="TagIcon $iconTag"><span><%=tagsName.toString()%></span></div>
+			  			<div class="TagIcon $iconTag" title="Show tag info"><span></span></div>
 			  		</a>
 			  		<div style="clear: both;"><span></span></div>
 			  	</div>
@@ -489,29 +475,15 @@
 				contact = contacts[i ++] ;
   			iconTag = null ;
   			tagIds = contact.getTags() ;
-				tagsName = new StringBuffer() ;
 				if (tagIds != null && tagIds.length > 0) {
-					Tag tag = tagMap.get(tagIds[0]) ;
-					boolean hasComma = false ;
-					if (tag != null) {
-						tagsName.append(tag.getName()) ;
-						hasComma = true ;
-						iconTag = "Icon " + tag.getColor() + "Tag" ;
-					} else { hasComma = false ; }
-					k = 1 ;
-					while (k < tagIds.length) {
-						tag = tagMap.get(tagIds[k]) ;
-						if (tag != null && hasComma) {
-							tagsName.append(", " + tag.getName()) ;
-							if (ContactUtils.isEmpty(iconTag)) iconTag = "Icon " + tag.getColor() + "Tag" ;
+					for (String tagId : tagIds) { 
+						Tag tag = tagMap.get(tagIds[0]) ;
+						if (tag != null) {
+							iconTag = "Icon " + tag.getColor() + "Tag" ;
+							break ;
 						}
-						else if (tag != null) {
-							tagsName.append(tag.getName()) ;
-							hasComma = true ;
-							if (ContactUtils.isEmpty(iconTag)) iconTag = "Icon " + tag.getColor() + "Tag" ;
-						}
-						k ++ ;
-					}		
+						print "aa" ;		
+					}
 				}
 			%>
 			<div class="RightVCardsContent">
@@ -519,7 +491,7 @@
 			  	<div class="TitleVCards" >
 				  	<div class="StateIcon OfflineIcon"><%=(contact.getFullName()==null ? "_" : contact.getFullName())%></div>
 			  		<a href="<%=uicomponent.event("TagInfo", contact.getId())%>">
-				  		<div class="TagIcon $iconTag"><span><%=tagsName.toString()%></span></div>
+				  		<div class="TagIcon $iconTag" title="Show tag info"><span></span></div>
 						</a>
 			  		<div style="clear: both;"><span></span></div>
 			  	</div>

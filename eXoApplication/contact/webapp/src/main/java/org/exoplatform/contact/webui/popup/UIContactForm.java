@@ -295,7 +295,7 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent, UI
       contact.setHomeFax(uiContactForm.getUIStringInput(FIELD_HOMEFAX_INPUT).getValue());
       contact.setPersonalSite(uiContactForm.getUIStringInput(FIELD_PERSONALSITE_INPUT).getValue());
       
-    
+      System.out.println("\n\n save note :" + uiContactForm.getUIFormTextAreaInput(FIELD_NOTE_INPUT).getValue());
       
       
       contact.setNote(uiContactForm.getUIFormTextAreaInput(FIELD_NOTE_INPUT).getValue());

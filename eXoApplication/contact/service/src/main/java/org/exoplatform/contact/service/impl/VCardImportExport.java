@@ -441,6 +441,10 @@ public class VCardImportExport implements ContactImportExport {
 
       }
 
+      System.out.println("\n\n note import :" + pimContacts[index].getNote() + "\n\n");
+      
+      
+      
       contact.setNote(pimContacts[index].getNote());
       
       Date revisionDate = pimContacts[index].getCurrentRevisionDate();

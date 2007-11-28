@@ -4,7 +4,9 @@
  **************************************************************************/
 package org.exoplatform.contact.webui.popup;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.exoplatform.contact.service.Tag;
@@ -30,15 +32,15 @@ import org.exoplatform.webui.form.UIForm;
     }
 )
 public class UITagInfo extends UIForm implements UIPopupComponent {
-  private Map<String, Tag> tagMap = new HashMap<String, Tag>() ;
+  private List<Tag> tags_ = new ArrayList<Tag>() ;
   
   public UITagInfo() { }
   public String[] getActions() { return new String[] { "Cancel" } ; }
   public void activate() throws Exception { }
   public void deActivate() throws Exception { }
   
-  public void setTagMap(Map<String, Tag> map) { tagMap = map ; }
-  public Tag[] getTags() { return tagMap.values().toArray(new Tag[] {}) ; }
+  public void setTags(List<Tag> tags) { tags_ = tags ; }
+  public List<Tag> getTags() { return tags_ ; }
   
   static  public class CancelActionListener extends EventListener<UITagInfo> {
     public void execute(Event<UITagInfo> event) throws Exception {

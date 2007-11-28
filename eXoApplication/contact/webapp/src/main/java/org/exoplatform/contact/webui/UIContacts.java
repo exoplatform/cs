@@ -595,10 +595,16 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   static public class TagInfoActionListener extends EventListener<UIContacts> {
     public void execute(Event<UIContacts> event) throws Exception {
       UIContacts uiContacts = event.getSource() ;
+      String contactId = event.getRequestContext().getRequestParameter(OBJECTID);
+      Contact contact = uiContacts.contactMap.get(contactId) ;
+      String[] tagIds = contact.getTags() ;
+      List<Tag> tags = new ArrayList<Tag>() ;
+      Map<String, Tag> tagMap = uiContacts.getTagMap() ;
+      for (String tagId : tagIds) tags.add(tagMap.get(tagId)) ;
       UIContactPortlet contactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class) ;
       UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
       UITagInfo uiTagInfo = popupAction.createUIComponent(UITagInfo.class, null, "UITagInfo") ;
-      uiTagInfo.setTagMap(uiContacts.getTagMap()) ;
+      uiTagInfo.setTags(tags) ;
       popupAction.activate(uiTagInfo, 400, 0, true) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;  
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;

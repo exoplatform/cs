@@ -12,9 +12,8 @@
 			</thead>
 			<tbody>
 			<% 
-				Tag[] tags = uicomponent.getTags() ;
+				List tags = uicomponent.getTags() ;
 				for (Tag tag : tags) {	
-			
 			 %>
 			
 				<tr>
