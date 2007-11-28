@@ -13,6 +13,7 @@ import org.exoplatform.forum.service.Category;
 import org.exoplatform.forum.service.Forum;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.webui.EmptyNameValidator;
+import org.exoplatform.forum.webui.UIBreadcumbs;
 import org.exoplatform.forum.webui.UICategories;
 import org.exoplatform.forum.webui.UICategory;
 import org.exoplatform.forum.webui.UIForumPortlet;
@@ -257,6 +258,8 @@ public class UIForumForm extends UIForm implements UIPopupComponent {
         	context.addUIComponentToUpdateByAjax(uiCategory) ;
         }
       } else {
+      	UIBreadcumbs breadcumbs = forumPortlet.getChild(UIBreadcumbs.class);
+      	breadcumbs.setUpdataPath(categoryId + "/" + uiForm.forumId);
         context.addUIComponentToUpdateByAjax(forumPortlet) ;
       }
     }

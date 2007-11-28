@@ -15,6 +15,7 @@ import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.service.Post;
 import org.exoplatform.forum.service.Topic;
 import org.exoplatform.forum.webui.EmptyNameValidator;
+import org.exoplatform.forum.webui.UIBreadcumbs;
 import org.exoplatform.forum.webui.UIForumPortlet;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -328,6 +329,7 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
 	      if(uiForm.topicId != null && uiForm.topicId.length() > 0) {
 	        topicNew.setId(uiForm.topicId);
 	        forumService.saveTopic(uiForm.categoryId, uiForm.forumId, topicNew, false);
+	        forumPortlet.getChild(UIBreadcumbs.class).setUpdataPath((uiForm.categoryId + "/" + uiForm.forumId + "/" + uiForm.topicId)) ;
 	      } else {
 	        topicNew.setVoteRating(0.0) ;
 	        topicNew.setUserVoteRating(new String[] {}) ;

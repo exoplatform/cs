@@ -232,6 +232,7 @@
 
 		<%  
 			List posts = uicomponent.getPostPageList() ;
+			//System.out.println("\n\n\n Size:  " + posts.size()) ;
 			int checked = 0 ;
 			for(post in posts) {
 				String owner = post.getOwner() ;

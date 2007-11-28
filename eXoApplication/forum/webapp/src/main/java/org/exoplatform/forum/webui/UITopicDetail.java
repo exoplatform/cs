@@ -87,6 +87,7 @@ public class UITopicDetail extends UIForm  {
   private long pageSelect  = 1 ;
   private boolean isGopage = false ;
   private boolean isEditTopic = false ;
+  private boolean isUpdatePageList = false ;
   private List<Post> posts ;
   public UITopicDetail() throws Exception {
     addUIFormInput( new UIFormStringInput("gopage1", null)) ;
@@ -105,15 +106,22 @@ public class UITopicDetail extends UIForm  {
     this.topic = forumService.getTopic(categoryId, forumId, topicId, viewTopic) ;
   }
   
-  public void setUpdateContainer(String categoryId, String forumId, Topic topic, boolean viewTopic) throws Exception {
+  public void setUpdateContainer(String categoryId, String forumId, Topic topic, boolean viewTopic , long numberPage) throws Exception {
   	this.categoryId = categoryId ;
   	this.forumId = forumId ;
   	this.topicId = topic.getId() ;
   	this.viewTopic = viewTopic ;
+  	this.pageSelect = numberPage ;
+	  this.isGopage = true ;
+	  this.topic = topic ;
+	  this.getChild(UIForumPageIterator.class).setSelectPage(numberPage) ;
   	this.getAncestorOfType(UIForumPortlet.class).getChild(UIBreadcumbs.class).setUpdataPath((categoryId + "/" + forumId + "/" + topicId)) ;
-  	this.topic = topic ;
   }
   
+  public void setUpdatePageList(JCRPageList pageList) throws Exception {
+	  this.pageList = pageList ;
+	  this.isUpdatePageList = true ;
+  }
   @SuppressWarnings("unused")
   private Topic getTopic() throws Exception {
     try {
@@ -127,8 +135,13 @@ public class UITopicDetail extends UIForm  {
     }
   }
   
+  @SuppressWarnings("unused")
   private void initPage() throws Exception {
-  	this.pageList = forumService.getPosts(categoryId, forumId, topicId) ;
+  	if(this.isUpdatePageList) {
+	  	this.isUpdatePageList = false ;
+  	} else {
+  		this.pageList = forumService.getPosts(categoryId, forumId, topicId) ;
+  	}
   	pageList.setPageSize(4) ;
   	this.getChild(UIForumPageIterator.class).updatePageList(this.pageList) ;
   }
@@ -139,9 +152,8 @@ public class UITopicDetail extends UIForm  {
   		this.pageSelect = this.getChild(UIForumPageIterator.class).getPageSelected() ;
   	}
     if(this.pageList == null || this.pageSelect < 1) return null ;
-    List<Post> postList = new ArrayList<Post>();
-    postList = forumService.getPage(this.pageSelect, this.pageList) ;
-    for (Post post : postList) {
+    this.posts = forumService.getPage(this.pageSelect, this.pageList) ;
+    for (Post post : this.posts) {
       if(getUIFormCheckBoxInput(post.getId()) != null) {
         getUIFormCheckBoxInput(post.getId()).setChecked(false) ;
       }else {
@@ -149,8 +161,7 @@ public class UITopicDetail extends UIForm  {
       }
     }
     this.isGopage = false ;
-    this.posts = postList ;
-    return postList ;
+    return this.posts ;
   }
   
   private Post getPost(String postId) throws Exception {
@@ -470,7 +481,6 @@ public class UITopicDetail extends UIForm  {
   //---------------------------------  Post Menu   --------------------------------------//
   static public class MergePostActionListener extends EventListener<UITopicDetail> {
     public void execute(Event<UITopicDetail> event) throws Exception {
-      //UITopicDetail topicDetail = event.getSource() ;
     }
   }
 
@@ -503,25 +513,21 @@ public class UITopicDetail extends UIForm  {
 
   static public class SetApprovePostActionListener extends EventListener<UITopicDetail> {
     public void execute(Event<UITopicDetail> event) throws Exception {
-      UITopicDetail topicDetail = event.getSource() ;
     }
   }
   
   static public class SetUnApprovePostActionListener extends EventListener<UITopicDetail> {
     public void execute(Event<UITopicDetail> event) throws Exception {
-      UITopicDetail topicDetail = event.getSource() ;
     }
   }
 
   static public class SetApproveAttachmentActionListener extends EventListener<UITopicDetail> {
     public void execute(Event<UITopicDetail> event) throws Exception {
-      UITopicDetail topicDetail = event.getSource() ;
     }
   }
   
   static public class SetUnApproveAttachmentActionListener extends EventListener<UITopicDetail> {
     public void execute(Event<UITopicDetail> event) throws Exception {
-      UITopicDetail topicDetail = event.getSource() ;
     }
   }
   

@@ -72,10 +72,11 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
   private String categoryId = "";
   private Forum forum;
   private JCRPageList pageList ;
-  private List<Topic> topicList ;
+  private List <Topic> topicList ;
   private long page = 1 ;
   private boolean isGoPage = false;
   private boolean isUpdate = false;
+  private List <JCRPageList> listPageListPost = new ArrayList<JCRPageList>() ;
   public UITopicContainer() throws Exception {
   	addUIFormInput( new UIFormStringInput("gopage1", null)) ;
     addUIFormInput( new UIFormStringInput("gopage2", null)) ;
@@ -142,9 +143,8 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
     if(!this.isGoPage) {
     	this.page = this.getChild(UIForumPageIterator.class).getPageSelected() ;
     }
-    List<Topic> topicList = this.forumService.getPage(this.page, pageList);
-    this.topicList = topicList ;
-    for(Topic topic : topicList) {
+    this.topicList = this.forumService.getPage(this.page, pageList);
+    for(Topic topic : this.topicList) {
       if(getUIFormCheckBoxInput(topic.getId()) != null) {
         getUIFormCheckBoxInput(topic.getId()).setChecked(false) ;
       }else {
@@ -152,7 +152,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
       }
     }
     this.isGoPage = false ;
-    return topicList ;
+    return this.topicList ;
   }
   
   private Topic getTopic(String topicId) throws Exception {
@@ -186,6 +186,13 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
     }
     return className ;
   }
+  
+  private JCRPageList getPageListPost(String topicId) throws Exception {
+  	JCRPageList pageListPost = this.forumService.getPosts(this.categoryId, this.forumId, topicId)  ; 
+  	pageListPost.setPageSize(4) ;
+  	return pageListPost;
+  }
+  
   
   static public class GoNumberPageActionListener extends EventListener<UITopicContainer> {
   	public void execute(Event<UITopicContainer> event) throws Exception {
@@ -234,14 +241,17 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
   static public class OpenTopicActionListener extends EventListener<UITopicContainer> {
   	public void execute(Event<UITopicContainer> event) throws Exception {
   		UITopicContainer uiTopicContainer = event.getSource();
-  		String topicId = event.getRequestContext().getRequestParameter(OBJECTID) ; 
+  		String idAndNumber = event.getRequestContext().getRequestParameter(OBJECTID) ;
+  		String []temp = idAndNumber.split(",") ;
+  		Topic topic = uiTopicContainer.getTopic(temp[0]) ;
   		UIForumPortlet forumPortlet = uiTopicContainer.getAncestorOfType(UIForumPortlet.class) ;
   		UIForumContainer uiForumContainer = forumPortlet.getChild(UIForumContainer.class) ;
       UITopicDetailContainer uiTopicDetailContainer = uiForumContainer.getChild(UITopicDetailContainer.class) ;
       uiForumContainer.setIsRenderChild(false) ;
       UITopicDetail uiTopicDetail = uiTopicDetailContainer.getChild(UITopicDetail.class) ;
-      uiTopicDetail.setUpdateTopic(uiTopicContainer.categoryId, uiTopicContainer.forumId, topicId, true) ;
-      uiTopicDetailContainer.getChild(UITopicPoll.class).updatePoll(uiTopicContainer.categoryId, uiTopicContainer.forumId, uiTopicContainer.getTopic(topicId) ) ;
+      uiTopicDetail.setUpdateContainer(uiTopicContainer.categoryId, uiTopicContainer.forumId, topic, true, Long.parseLong(temp[1])) ;
+      uiTopicDetail.setUpdatePageList(uiTopicContainer.getPageListPost(temp[0])) ;
+      uiTopicDetailContainer.getChild(UITopicPoll.class).updatePoll(uiTopicContainer.categoryId, uiTopicContainer.forumId, topic ) ;
       WebuiRequestContext context = event.getRequestContext() ;
       context.addUIComponentToUpdateByAjax(uiForumContainer) ;
       context.addUIComponentToUpdateByAjax(forumPortlet.getChild(UIBreadcumbs.class)) ;
@@ -345,6 +355,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
       UICategoryContainer categoryContainer = forumPortlet.getChild(UICategoryContainer.class) ;
       forumPortlet.updateIsRendered(1) ;
       categoryContainer.updateIsRender(false) ;
+      categoryContainer.getChild(UICategory.class).updateByBreadcumbs(uiTopicContainer.categoryId) ;
       forumPortlet.getChild(UIBreadcumbs.class).setUpdataPath(uiTopicContainer.categoryId) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(forumPortlet) ;
     }

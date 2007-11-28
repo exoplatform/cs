@@ -341,6 +341,7 @@ public class UICategory extends UIForm  {
         moveForumForm.setForumUpdate(false) ;
     		popupAction.activate(moveForumForm, 315, 360) ;
     		event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+    		uiCategory.isEdit = true ;
   		} else {
   			Object[] args = { };
   			throw new MessageException(new ApplicationMessage("UICategory.msg.notCheck", args, ApplicationMessage.WARNING)) ;
