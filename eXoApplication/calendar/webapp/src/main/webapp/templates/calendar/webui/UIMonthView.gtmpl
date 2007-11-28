@@ -125,8 +125,10 @@
 					        validDay = 0;
 					      }
 					      display = "" ;
+					     	dateTime = calendar.getTimeInMillis() ; // new GregorianCalendar(currentYear,currentMonth,dayOfMonth).getTimeInMillis() ;
+						    actionUpdate = uicomponent.event('UpdateEvent',dayOfMonth + '&' + uicomponent.EVENTID + '=event&' + uicomponent.CALENDARID + '=cal&' + uicomponent.CALTYPE + '=caltype') ;
+					      dayActionLink = uicomponent.TYPE_DATE +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"="+ currentMonth +"&"+ uicomponent.DAY + "=" + dayOfMonth ;
 					      if (validDay) { 
-					      	dateTime = calendar.getTimeInMillis() ; // new GregorianCalendar(currentYear,currentMonth,dayOfMonth).getTimeInMillis() ;
 					        if (uicomponent.isCurrentDay(dayOfMonth, currentMonth, currentYear )) {
 					          clazz = 'Today';
 					        } else if (dayOfWeek == 1 || dayOfWeek == 7) {
@@ -135,8 +137,6 @@
 					          clazz = 'DayBox';
 					        }
 						      month = currentMonth + 1 ;
-						      actionUpdate = uicomponent.event('UpdateEvent',dayOfMonth + '&' + uicomponent.EVENTID + '=event&' + uicomponent.CALENDARID + '=cal&' + uicomponent.CALTYPE + '=caltype') ;
-					        dayActionLink = uicomponent.TYPE_DATE +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"="+ currentMonth +"&"+ uicomponent.DAY + "=" + dayOfMonth ;
 					        %>
 					        <td actionLink="$actionUpdate" class='CalendarContentNomal' currentDate='$dayOfMonth' startTime='$dateTime' > 
 					        	<div class='DayBox $clazz' >
@@ -149,7 +149,7 @@
 					        dayOfMonth++ ;
 					      } else {
 					      	%>
-					        <td class='CalendarContentDisable'> <div class='DisableDay'><span></span></div>
+					        <td  actionLink="$actionUpdate" startTime='$dateTime' class='CalendarContentDisable'> <div class='DisableDay'><span></span></div>
 					        	<div class='DayContent'> 
 								 		<%=sdtf.format(calendar.getTime())%>
 								 		</div>
