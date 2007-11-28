@@ -52,7 +52,8 @@ UICalendarDragDrop.prototype.dropCallback = function(evt) {
 	var dragObject = evt.dragObject ;
 	eXo.core.DOMUtil.removeElement(dragObject) ;
 	eXo.core.DOMUtil.removeElement(UICalendarDragDrop.tmp) ;
-	if (UICalendarDragDrop.currentTarget) {		
+	if (UICalendarDragDrop.currentTarget) {
+		if (UICalendarDragDrop.currentTarget.className == "CalendarContentDisable") return ;
 	var actionlink = "" ;
 	if (actionlink = UICalendarDragDrop.currentTarget.getAttribute("actionLink")) {
 		var currentDate = UICalendarDragDrop.currentTarget.getAttribute("currentDate") ;
