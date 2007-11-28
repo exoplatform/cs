@@ -56,7 +56,7 @@ UIMonthView.prototype.createBars = function(event) {
 		var event1 = event.cloneNode(true) ;
 		event1.style.top = parseInt(event.style.top) + this.unitY + "px" ;
 		event1.style.left = "0px" ;
-		event1.style.width = (new Date(end)).getDay() * this.unitX + "px" ;
+		event1.style.width = (new Date(end)).getDay() * this.unitX + this.unitX + "px" ;
 		checkbox = DOMUtil.findFirstDescendantByClass(event1, "input", "checkbox") ;
 		if (checkbox) DOMUtil.removeElement(checkbox) ;
 		this.eventContainer.appendChild(event1) ;
