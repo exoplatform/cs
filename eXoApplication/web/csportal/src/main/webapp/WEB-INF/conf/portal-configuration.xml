@@ -40,7 +40,7 @@
       <value-param>
         <name>guests.group</name>
         <description>guests group</description>
-        <value>guest</value>	    
+        <value>/guest</value>	    
       </value-param>    
 	  </init-params>   
   </component>
