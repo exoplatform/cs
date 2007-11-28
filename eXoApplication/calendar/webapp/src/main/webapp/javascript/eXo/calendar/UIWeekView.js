@@ -242,7 +242,6 @@ UIWeekView.prototype.rightResizeCallback = function() {
 		var calType = parseInt(outer.getAttribute("calType")) ;
 		var actionLink = UICalendarPortlet.adjustTime(start, end, outer) ;
 		actionLink = actionLink.toString().replace(/'\s*\)/,"&calType=" + calType + "')") ;
-		alert(actionLink) ; return ;
 		eval(actionLink) ;
 	}	
 } ;
