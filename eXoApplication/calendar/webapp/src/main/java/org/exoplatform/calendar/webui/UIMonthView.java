@@ -107,14 +107,7 @@ public class UIMonthView extends UICalendarView {
   public java.util.Calendar getBeginDateOfMonthView() throws Exception{
     java.util.Calendar temCal = GregorianCalendar.getInstance() ;
     temCal.setTime(calendar_.getTime()) ;
-    CalendarSetting calSetting  = null ;
-    try{
-      calSetting = getAncestorOfType(UICalendarPortlet.class).getCalendarSetting() ;
-    } catch (Exception e) {
-      CalendarService calService = getApplicationComponent(CalendarService.class) ;
-      calSetting  = calService.getCalendarSetting(Util.getPortalRequestContext().getRemoteUser()) ;
-    }
-    temCal.setFirstDayOfWeek(Integer.parseInt(calSetting.getWeekStartOn())) ;
+    temCal.setFirstDayOfWeek(java.util.Calendar.SUNDAY) ;
     temCal.set(java.util.Calendar.DATE, 1) ;
     int amount1 = temCal.getFirstDayOfWeek() - temCal.get(java.util.Calendar.DAY_OF_WEEK) ;
     return getBeginDay(getDateByValue(getCurrentYear(), getCurrentMonth(),1, UICalendarView.TYPE_DATE, amount1)) ;
@@ -122,14 +115,7 @@ public class UIMonthView extends UICalendarView {
   public java.util.Calendar getBeginDateOfMonth() throws Exception{
     java.util.Calendar temCal = GregorianCalendar.getInstance() ;
     temCal.setTime(calendar_.getTime()) ;
-    CalendarSetting calSetting  = null ;
-    try{
-      calSetting = getAncestorOfType(UICalendarPortlet.class).getCalendarSetting() ;
-    } catch (Exception e) {
-      CalendarService calService = getApplicationComponent(CalendarService.class) ;
-      calSetting  = calService.getCalendarSetting(Util.getPortalRequestContext().getRemoteUser()) ;
-    }
-    temCal.setFirstDayOfWeek(Integer.parseInt(calSetting.getWeekStartOn())) ;
+    temCal.setFirstDayOfWeek(java.util.Calendar.SUNDAY) ;
     temCal.set(java.util.Calendar.DATE, 1) ;
     return getBeginDay(temCal) ;
   }
@@ -137,14 +123,7 @@ public class UIMonthView extends UICalendarView {
   public java.util.Calendar getEndDateOfMonth() throws Exception{
     java.util.Calendar temCal = GregorianCalendar.getInstance() ;
     temCal.setTime(calendar_.getTime()) ;
-    CalendarSetting calSetting  = null ;
-    try{
-      calSetting = getAncestorOfType(UICalendarPortlet.class).getCalendarSetting() ;
-    } catch (Exception e) {
-      CalendarService calService = getApplicationComponent(CalendarService.class) ;
-      calSetting  = calService.getCalendarSetting(Util.getPortalRequestContext().getRemoteUser()) ;
-    }
-    temCal.setFirstDayOfWeek(Integer.parseInt(calSetting.getWeekStartOn())) ;
+    temCal.setFirstDayOfWeek(java.util.Calendar.SUNDAY) ;
     temCal.set(java.util.Calendar.DATE, getDaysInMonth()) ;
     return getEndDay(temCal) ;
   }

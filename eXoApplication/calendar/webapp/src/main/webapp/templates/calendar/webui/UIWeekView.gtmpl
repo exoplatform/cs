@@ -77,9 +77,13 @@
 						  	}
 							  dayActionLink = uicomponent.TYPE_DATE +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"="+ cl.get(Calendar.MONTH)+"&"+ uicomponent.DAY + "=" +  cl.get(Calendar.DATE) ;
 							  actionLink =  uicomponent.event("GotoDate",dayActionLink) ;
+							  styleCss = "" ;
+							  if(cl.get(Calendar.DAY_OF_WEEK) == 1){
+							   styleCss = "color:red;" ;
+							  }
 						%>
 							<th class="$cssClass" startTime="<%=cl.getTimeInMillis()%>">
-							<a href="$actionLink"><%=wf.format(cl.getTime())%></a>
+								<a href="$actionLink" style="$styleCss"><%=wf.format(cl.getTime())%></a>
 							</th>
 						<%
 							cl.add(Calendar.DATE,1) ;
