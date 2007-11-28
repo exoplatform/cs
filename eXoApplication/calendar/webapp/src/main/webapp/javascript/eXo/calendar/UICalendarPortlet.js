@@ -847,14 +847,16 @@ UICalendarPortlet.prototype.filterByCalendar = function(calendarId, status) {
 	if (!events) return ;
 	var len = events.length ;
 	for(var i = 0 ; i < len ; i ++){
-		if (events[i].getAttribute("calid") == calendarId) {
-			if (status) 					
-				events[i].style.display = "block" ;			
-			else 
-				events[i].style.display = "none" ;				
+		if (events[i].getAttribute("calId") == calendarId) {
+			if (status) {
+				events[i].style.display = "block" ;
+			}
+			else {
+				events[i].style.display = "none" ;
+			}
 		}
 	}
-	if (document.getElementById("UIMonthViewGrid")) UICalendarPortlet.checkSpaceAvailable() ;
+	//if (document.getElementById("UIMonthViewGrid")) eXo.calendar.UIMonthView.init() ;
 	if (document.getElementById("UIDayViewGrid")) UICalendarPortlet.showEvent() ;
 	if (document.getElementById("UIWeekViewGrid")) eXo.calendar.UIWeekView.init() ;
 

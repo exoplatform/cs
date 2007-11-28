@@ -89,8 +89,8 @@
 					}
 					color = uicomponent.getColors().get(event.calendarId) ;
 					%>
-					<div class="DayContentContainer" style="position: absolute ;" startIndex="$startIndex" calType="$event.calType" eventId="$event.id" calId="$event.calendarId" eventCat="$event.eventCategoryId" startTime="$startTime" endTime="$endTime" >
-						<div class="EventOnDayBorder EventBoxes $color">
+					<div class="DayContentContainer EventBoxes" style="position: absolute ;" startIndex="$startIndex" calType="$event.calType" eventId="$event.id" calId="$event.calendarId" eventCat="$event.eventCategoryId" startTime="$startTime" endTime="$endTime" >
+						<div class="EventOnDayBorder $color">
 							<div class="EventOnDayContent">
 								<div style="float:left;margin:3px 0px 0px 2px;">
 									<%uicomponent.renderField(uicomponent.getChildById(event.id))%>

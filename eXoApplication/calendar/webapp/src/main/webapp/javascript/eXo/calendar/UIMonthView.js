@@ -7,7 +7,11 @@ UIMonthView.prototype.init = function() {
 	var UIMonthView = document.getElementById("UIMonthView") ;
 	var UIMonthViewGrid = document.getElementById("UIMonthViewGrid") ;
 	this.eventContainer = eXo.core.DOMUtil.findFirstDescendantByClass(UIMonthView, "div","RowContainerDay") ;
-	this.items = eXo.core.DOMUtil.findDescendantsByClass(UIMonthView, "div", "DayContentContainer") ;	
+	var allEvents = eXo.core.DOMUtil.findDescendantsByClass(UIMonthView, "div", "DayContentContainer") ;
+	this.items = new Array() ;//eXo.core.DOMUtil.findDescendantsByClass(UIMonthView, "div", "DayContentContainer") ;	
+	for(var i = 0 ; i < allEvents.length ; i ++) {
+		if (allEvents[i].style.display != "none") this.items.push(allEvents[i]) ;
+	}
 	var len = this.items.length ;
 	if (len <=0 ) return ;
 	this.cells = eXo.core.DOMUtil.findDescendantsByTagName(UIMonthViewGrid, "td") ;
@@ -54,7 +58,7 @@ UIMonthView.prototype.createBars = function(event) {
 		event1.style.left = "0px" ;
 		event1.style.width = (new Date(end)).getDay() * this.unitX + "px" ;
 		checkbox = DOMUtil.findFirstDescendantByClass(event1, "input", "checkbox") ;
-		DOMUtil.removeElement(checkbox) ;
+		if (checkbox) DOMUtil.removeElement(checkbox) ;
 		this.eventContainer.appendChild(event1) ;
 	}else {
 		var fullDayEvent = new Array() ;
@@ -73,14 +77,14 @@ UIMonthView.prototype.createBars = function(event) {
 			fullDayEvent[i].style.left = "0px" ;
 			fullDayEvent[i].style.width = 7*this.unitX + "px" ;
 			this.eventContainer.appendChild(fullDayEvent[i]) ;
-			checkbox = DOMUtil.findFirstDescendantByClass(fullDayEvent[i], "input", "checkbox") ;
+			if (checkbox) checkbox = DOMUtil.findFirstDescendantByClass(fullDayEvent[i], "input", "checkbox") ;
 			DOMUtil.removeElement(checkbox) ;
 		}
 		if (len >= 3) {
 			fullDayEvent[len - 1].style.top = parseInt(fullDayEvent[len - 2].style.top) + this.unitY + "px" ;
 			fullDayEvent[len - 1].style.left = "0px" ;
 			fullDayEvent[len - 1].style.width = (new Date(end)).getDay() * this.unitX + this.unitX + "px" ;
-			checkbox = DOMUtil.findFirstDescendantByClass(fullDayEvent[len-1], "input", "checkbox") ;
+			if (checkbox) checkbox = DOMUtil.findFirstDescendantByClass(fullDayEvent[len-1], "input", "checkbox") ;
 			DOMUtil.removeElement(checkbox) ;
 			this.eventContainer.appendChild(fullDayEvent[len-1]) ;
 		}
