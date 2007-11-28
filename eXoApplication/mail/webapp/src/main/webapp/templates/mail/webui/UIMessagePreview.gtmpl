@@ -113,37 +113,6 @@
                   <div class="Address"><%=Utils.formatDate('EEEE, dd MMMM, yyyy HH:mm:ss aaa', msg.getReceivedDate())%></div>
                   <div style="clear: left;"><span></span></div>
                 </div>
-                <%
-                  if (msg.getAttachments().size() > 0) {
-                %>
-                <div class="FieldContainer">
-                  <div class="Title">Attachment:</div>
-                  <div class="Address">
-                    <%
-                        int i = 1;
-                        for (Attachment att : msg.getAttachments()) {  
-                          String downloadAction = uicomponent.event("DownloadAttachment", att.getId());
-                    %>
-                          <%if ((msg.getAttachments().size() > 1) && (i > 1)) {%>, <%}%>    
-                          <span><a class="AttackmentIcon" href="$downloadAction"><%=att.getName()%> (
-                            <%
-                              if (att.getSize() > 1024) {
-                            %> 
-                              <%=(int)(att.getSize()/1024)%>KB
-                            <%
-                              } else {              
-                            %> 
-                              <%=att.getSize()%>B
-                            <%}%>
-                          )</a></span>
-                    <%
-                          i++;
-                        }
-                    %>
-                  </div>
-                  <div style="clear: left;"><span></span></div>
-                </div>
-                <%}%>
                 </div>
                 <!-- End Expand Message Header-->
                 

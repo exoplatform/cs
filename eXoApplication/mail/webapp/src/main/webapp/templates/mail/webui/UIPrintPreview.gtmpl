@@ -2,8 +2,10 @@
   import org.exoplatform.mail.service.Message;
   import org.exoplatform.mail.service.Account;
   import org.exoplatform.mail.service.Utils; 
+  import org.exoplatform.mail.MailUtils;  
   import org.exoplatform.mail.service.Attachment;
   import javax.mail.internet.InternetAddress;
+  import org.exoplatform.download.DownloadService;
   import org.exoplatform.web.application.JavascriptManager;
   def rcontext = _ctx.getRequestContext() ;
   JavascriptManager jsmanager = rcontext.getJavascriptManager();
@@ -54,18 +56,30 @@
     %>
       <div class="PrintAttachments"  >
         <div class="AttachmentTitle">Attachments:</div>
-        <div class="AttachmentContent">
-          <div class="ImageAttachment"><span></span></div>
-          <div class="AttachmentLabel">
-            <%
-              for (Attachment att : msg.getAttachments()) {  
-            %>
-              <div class="NameImage"><%=att.getName()%></div>
-              <div class="Size">Size: <%=att.getSize()%>K</div>
-            <% } %>
+        <%
+          DownloadService dservice = uicomponent.getDownloadService() ;
+          String attLink ;
+          for (Attachment attach : msg.getAttachments()) {
+            attLink = MailUtils.getImageSource(attach, dservice) ;
+            if (attLink != null ) {
+              if (attach.getMimeType().indexOf("image") > -1) {
+                
+              } else if (attach.getMimeType().indexOf("msword") > -1) {
+                attLink = "/mail/skin/DefaultSkin/webui/skinIcons/24x24/icons/WordIcon.gif";
+              } else if (attach.getMimeType().indexOf("pdf") > -1) {
+                attLink = "/mail/skin/DefaultSkin/webui/skinIcons/24x24/icons/PDFIcon.gif";
+              }
+            }
+        %>
+          <div class="AttachmentContent">
+            <div><img class="ImageAttachment" src="$attLink"></div>
+            <div class="AttachmentLabel">
+            <div class="NameImage"><%=attach.getName()%></div>
+            <div class="Size">Size: <%=attach.getSize()%>K</div>
+            </div>
+            <div style="clear: left;"><span></span></div>
           </div>
-          <div style="clear: left;"><span></span></div>
-        </div>
+        <% } %>
       </div>
     <%}%>
   </div>

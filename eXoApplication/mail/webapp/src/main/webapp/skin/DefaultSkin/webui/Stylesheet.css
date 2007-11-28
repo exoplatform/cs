@@ -976,9 +976,8 @@
 
 .UIMailPortlet .PrintPreview .PrintAttachments .ImageAttachment {
 	float: left;
-	background: url('background/ImageAttachment.gif') no-repeat;
-	height: 110px; 
-	width: 145px;
+	height: 24px; 
+	width: 24px;
 	margin: 5px;
 }
 

@@ -4,6 +4,7 @@
  **************************************************************************/
 package org.exoplatform.mail.webui.popup;
 
+import org.exoplatform.download.DownloadService;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
@@ -55,6 +56,10 @@ public class UIPrintPreview extends UIForm implements UIPopupComponent {
     } catch(Exception e) {
       return null ;
     }
+  }
+  
+  public DownloadService getDownloadService() { 
+    return getApplicationComponent(DownloadService.class) ; 
   }
   
   public Account getAccount() throws Exception {
