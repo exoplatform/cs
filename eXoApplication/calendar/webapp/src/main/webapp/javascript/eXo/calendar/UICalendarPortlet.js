@@ -69,6 +69,23 @@ UICalendarPortlet.prototype.setting = function() {
 	UICalendarPortlet.workingStart = UICalendarPortlet.timeToMin(workingStart) ;
 } ;
 
+UICalendarPortlet.prototype.setFocus = function(obj, events, container) {
+	var lastUpdatedId = obj.getAttribute("lastUpdatedId") ;
+	var len = events.length ;
+	var scrollTop = null ;
+	if(lastUpdatedId) {
+		for(var i = 0 ; i < len ; i ++) {
+			if (events[i].getAttribute("eventId") == lastUpdatedId) {
+				scrollTop = events[i].offsetTop ;
+				break ;
+			}
+		}
+	} else {
+		scrollTop = (this.workingStart)? this.workingStart : 0 ;
+	}
+	container.scrollTop = scrollTop ;
+} ;
+
 UICalendarPortlet.prototype.hide = function() {
 	var ln = eXo.core.DOMUtil.hideElementList.length ;
 	if (ln > 0) {
@@ -372,22 +389,23 @@ UICalendarPortlet.prototype.adjustWidth = function(el) {
 } ;
 
 UICalendarPortlet.prototype.showEvent = function() {
-	var UICalendarPortlet = eXo.calendar.UICalendarPortlet ;	
-	UICalendarPortlet.init() ;
-	var EventDayContainer = eXo.core.DOMUtil.findAncestorByClass(UICalendarPortlet.viewer,"EventDayContainer") ;
-	EventDayContainer.scrollTop = (UICalendarPortlet.workingStart) ? UICalendarPortlet.workingStart : 0 ;
-	if (!UICalendarPortlet.init()) return ;
-	var el = UICalendarPortlet.getElements(UICalendarPortlet.viewer) ;
-	el = UICalendarPortlet.sortByAttribute(el, "startTime") ;
+//	var UICalendarPortlet = eXo.calendar.UICalendarPortlet ;	
+	this.init() ;
+	var EventDayContainer = eXo.core.DOMUtil.findAncestorByClass(this.viewer,"EventDayContainer") ;
+	EventDayContainer.scrollTop = (this.workingStart) ? this.workingStart : 0 ;
+	if (!this.init()) return ;
+	var el = this.getElements(this.viewer) ;
+	el = this.sortByAttribute(el, "startTime") ;
 	if (el.length <= 0) return ;
 	var marker = null ;
 	for(var i = 0 ; i < el.length ; i ++ ) {		
-		UICalendarPortlet.setSize(el[i]) ;
-		el[i].onmousedown = UICalendarPortlet.initDND ;
+		this.setSize(el[i]) ;
+		el[i].onmousedown = eXo.calendar.UICalendarPortlet.initDND ;
 		marker = eXo.core.DOMUtil.findFirstChildByClass(el[i], "div", "ResizeEventContainer") ;
 		marker.onmousedown = eXo.calendar.UIResizeEvent.init ;
 	}
-	UICalendarPortlet.adjustWidth(el) ;
+	this.adjustWidth(el) ;
+	this.setFocus(this.viewer, el, EventDayContainer)
 } ;
 
 UICalendarPortlet.prototype.sortByAttribute = function(obj, attribute) {
@@ -746,7 +764,7 @@ UICalendarPortlet.prototype.monthViewCallback = function(evt){
 			} ;
    		UIContextMenu.changeAction(UIContextMenu.menuElement,map) ;
 		}
-	} else if (objvalue = DOMUtil.findAncestorByClass(src, "EventBoxes")) {
+	} else if (objvalue = DOMUtil.findAncestorByClass(src, "DayContentContainer")) {
 		var eventId = objvalue.getAttribute("eventId") ;
 		var calendarId = objvalue.getAttribute("calId") ;
 		var calType = objvalue.getAttribute("calType") ;
