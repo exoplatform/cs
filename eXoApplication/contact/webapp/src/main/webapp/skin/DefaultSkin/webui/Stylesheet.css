@@ -55,3 +55,11 @@
 	border-right: 1px solid #EBE7EA;
 	width: 30px;
 }
+
+.UIContactPortlet .UIWorkingContainer .UISearchForm {
+  background: url('background/SearchForm1x34.gif') repeat-x;	
+  line-height: 34px;
+	padding:4px 13px 0px 0px;
+	border: 1px solid #c7c7c7;
+	margin-bottom: 4px;
+}

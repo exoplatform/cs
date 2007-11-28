@@ -27,14 +27,14 @@
 .UIContactPortlet .UISearchForm .SearchLabel {
 	float: right;
 	line-height: 20px;
-	margin: 5px 0px;
+	margin: 4px 0px 5px 0px;
 	color: #595b6a; 
 }
 
 .UIContactPortlet .UISearchForm input {
-	width: 110px;
+	width: 90px;
 	float: right;
-	margin: 5px 8px;
+	margin: 3px 8px;
 }
 
 .UIContactPortlet .UISearchForm .Search {
@@ -297,6 +297,14 @@
 	margin-left: 225px;
 }
 
+.UIContactPortlet .UIContactContainer .DecoratorBox {
+	*padding-left:3px;
+}
+
+.UIContactPortlet .UIContactContainer .ViewBoxStyle {
+	border: 1px solid #c7c7c7;
+}
+
 .UIContactPortlet .UIContactContainer .MessageNotice {
 	background-color: #ECEFFC;
 	border: 1px solid #C7C7C7;
@@ -326,7 +334,6 @@
 .UIContactPortlet .UIContactActionsBar {
 	background: url('background/BgTitleBar1x24.gif') repeat-x;
 	height: 24px;
-	width: 98.7%;
 	border-left: 1px solid #c0c0c0;
 	border-right: 1px solid #c0c0c0;
 }
@@ -441,11 +448,12 @@
 
 .UIContactPortlet .UIContactContainer .UIMessageList {
 	padding-left: 1px;
+	*padding-left: 0px;
 }
 
 .UIContactPortlet .UIContactContainer .UIGrid {
 	border-top: none;
-	width: 99%; 
+	*width: 99.7%; 
 	background: #ffffff;
 }
 
@@ -497,8 +505,6 @@
 	background: url('background/ResizeReadingPane38x3.gif') no-repeat center;
 	height: 5px;
 	cursor: n-resize;
-	border-top: 1px solid #b7b7b7;
-	border-bottom: 1px solid #b7b7b7;
 	margin-right: 9px;
 }
 

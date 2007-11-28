@@ -2,6 +2,28 @@
 	padding: 8px; 
 }
 
+.UIAddNewEvent .ReminderByEmail {
+	background: url('background/ReminderTabHeader1x24.gif') repeat-x top ;
+	padding: 4px;
+}
+
+.UIAddNewEvent .ReminderByEmail .selectbox{
+	width: 80px;
+}
+
+.UIAddNewEvent .ReminderByPopup .selectbox{
+	width: 80px;
+}
+
+.UIAddNewEvent .ReminderByPopup {
+	background: url('background/ReminderTabHeader1x24.gif') repeat-x top ;
+	padding: 4px;
+}
+
+.UIAddNewEvent .UIFormGrid{
+	margin-top: 10px;
+}
+
 .UIAddNewEvent .HorizontalLayout {
 	border: none;
 }
