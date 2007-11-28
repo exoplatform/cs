@@ -13,12 +13,13 @@ UIMonthView.prototype.init = function() {
 	this.cells = eXo.core.DOMUtil.findDescendantsByTagName(UIMonthViewGrid, "td") ;
 	this.startMonth = parseInt(this.cells[0].getAttribute("startTime")) ;
 	this.endMonth = parseInt(this.cells[this.cells.length-1].getAttribute("startTime")) ;
-	this.unitX = this.cells[0].offsetWidth ;
-	this.unitY = this.cells[0].offsetHeight ;
+	this.unitX = this.cells[0].offsetWidth - 1;
+	this.unitY = this.cells[0].offsetHeight - 1 ;
 	for(var i = 0 ; i < len ; i++) {
 		this.createBars(this.items[i]) ;
 	}
-	this.items = eXo.core.DOMUtil.findDescendantsByClass(UIMonthView, "div", "DayContentContainer") ;	
+	this.items = eXo.core.DOMUtil.findDescendantsByClass(UIMonthView, "div", "DayContentContainer") ;
+	this.resetSize(this.items) ;
 	var row = this.cells.length/7 ;
 	var eventInRows = null ;
 	for(var i = 0 ; i < row ; i++) {
@@ -41,16 +42,17 @@ UIMonthView.prototype.createBars = function(event) {
 	var checkbox = null ;
 	if (delta == 0) {
 		event.style.top = (top - 1) * this.unitY + 16 + "px" ;
-		event.style.left = (new Date(start)).getDay() * this.unitX - 2 + "px" ;
-		event.style.width = ((new Date(end)).getDay() - (new Date(start)).getDay()) * this.unitX + this.unitX - 2 + "px" ;		
+		event.style.left = (new Date(start)).getDay() * this.unitX + "px" ;
+		event.style.width = ((new Date(end)).getDay() - (new Date(start)).getDay()) * this.unitX + this.unitX + "px" ;
 	}	else if (delta == 1) {
 		event.style.top = (top - 1) * this.unitY + 16 + "px" ;
-		event.style.left = (new Date(start)).getDay() * this.unitX - 2 + "px" ;
-		event.style.width = (7 - (new Date(start)).getDay()) * this.unitX - (7 - (new Date(start)).getDay()) + "px" ;		
+		event.style.left = (new Date(start)).getDay() * this.unitX + "px" ;
+		event.style.width = (7 - (new Date(start)).getDay()) * this.unitX + "px" ;
+//		event.style.width = (7 - (new Date(start)).getDay()) * this.unitX - (7 - (new Date(start)).getDay()) + "px" ;
 		var event1 = event.cloneNode(true) ;
 		event1.style.top = parseInt(event.style.top) + this.unitY + "px" ;
 		event1.style.left = "0px" ;
-		event1.style.width = (new Date(end)).getDay() * this.unitX - 2 + "px" ;
+		event1.style.width = (new Date(end)).getDay() * this.unitX + "px" ;
 		checkbox = DOMUtil.findFirstDescendantByClass(event1, "input", "checkbox") ;
 		DOMUtil.removeElement(checkbox) ;
 		this.eventContainer.appendChild(event1) ;
@@ -62,28 +64,42 @@ UIMonthView.prototype.createBars = function(event) {
 		}
 		var len = fullDayEvent.length ;
 		fullDayEvent[0].style.top =  (top - 1) * this.unitY + 16 + "px" ;
-		fullDayEvent[0].style.left = (new Date(start)).getDay() * this.unitX - 2  + "px" ;
-		fullDayEvent[0].style.width = (7 - (new Date(start)).getDay()) * this.unitX - (7 - (new Date(start)).getDay()) + "px" ;
+		fullDayEvent[0].style.left = (new Date(start)).getDay() * this.unitX  + "px" ;
+		fullDayEvent[0].style.width = (7 - (new Date(start)).getDay()) * this.unitX + "px" ;
+//		fullDayEvent[0].style.width = (7 - (new Date(start)).getDay()) * this.unitX - (7 - (new Date(start)).getDay()) + "px" ;
 		this.eventContainer.appendChild(fullDayEvent[0]) ;
 		for(var i = 1 ; i < len - 1 ; i ++) {
 			fullDayEvent[i].style.top = parseInt(fullDayEvent[i-1].style.top) + this.unitY + "px" ;
 			fullDayEvent[i].style.left = "0px" ;
-			fullDayEvent[i].style.width = 7*this.unitX - 7 + "px" ;
+			fullDayEvent[i].style.width = 7*this.unitX + "px" ;
 			this.eventContainer.appendChild(fullDayEvent[i]) ;
 			checkbox = DOMUtil.findFirstDescendantByClass(fullDayEvent[i], "input", "checkbox") ;
 			DOMUtil.removeElement(checkbox) ;
 		}
 		if (len >= 3) {
-		fullDayEvent[len - 1].style.top = parseInt(fullDayEvent[len - 2].style.top) + this.unitY + "px" ;
-		fullDayEvent[len - 1].style.left = "0px" ;
-		fullDayEvent[len - 1].style.width = (new Date(end)).getDay() * this.unitX + this.unitX - 2 + "px" ;
-		checkbox = DOMUtil.findFirstDescendantByClass(fullDayEvent[len-1], "input", "checkbox") ;
-		DOMUtil.removeElement(checkbox) ;
-		this.eventContainer.appendChild(fullDayEvent[len-1]) ;
-			
+			fullDayEvent[len - 1].style.top = parseInt(fullDayEvent[len - 2].style.top) + this.unitY + "px" ;
+			fullDayEvent[len - 1].style.left = "0px" ;
+			fullDayEvent[len - 1].style.width = (new Date(end)).getDay() * this.unitX + this.unitX + "px" ;
+			checkbox = DOMUtil.findFirstDescendantByClass(fullDayEvent[len-1], "input", "checkbox") ;
+			DOMUtil.removeElement(checkbox) ;
+			this.eventContainer.appendChild(fullDayEvent[len-1]) ;
 		}
 	}
 }
+
+UIMonthView.prototype.resetSize = function(bars) {
+	var len = bars.length ;
+	var totalWidth = this.unitX*7 ;
+	if (len) {
+		for(var i = 0 ; i < len ; i ++) {
+			bars[i].style.width = parseFloat(parseInt(bars[i].style.width)/totalWidth)*100 + "%";
+			bars[i].style.left = parseFloat(parseInt(bars[i].style.left)/totalWidth)*100 + "%";
+		}		
+	} else {
+		bars[i].style.width = parseFloat(parseInt(bars[i].style.width)/totalWidth)*100 + "%";
+		bars[i].style.left = parseFloat(parseInt(bars[i].style.left)/totalWidth)*100 + "%";
+	}
+} ;
 
 UIMonthView.prototype.getEventsInRow = function(row, events) {
 	var minY = row*this.unitY ;
