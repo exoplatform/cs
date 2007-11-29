@@ -20,20 +20,20 @@
           <webResources>
             <resource>
               <directory>${exo.projects.directory.src}/ecm/trunk/web/ecmportal/src/main/webapp</directory>
-              <excludes>
-              	<exclude>WEB-INF/index.jsp</exclude>
+              <excludes>              	
               	<exclude>WEB-INF/web.xml</exclude>
                 <exclude>WEB-INF/conf/*.xml</exclude>
                 <exclude>WEB-INF/conf/portal/*.xml</exclude>
                 <exclude>WEB-INF/conf/portal/**/**/*.xml</exclude>
                 <exclude>WEB-INF/conf/users/**/*.xml</exclude>
                 <exclude>WEB-INF/conf/jcr/*.xml</exclude>
+                <exclude>index.jsp</exclude>
               </excludes>
             </resource>
             <resource>
               <directory>${exo.projects.directory.src}/portal/trunk/web/portal/src/main/webapp</directory>
               <excludes>              	
-              	<exclude>WEB-INF/index.jsp</exclude>
+              	<exclude>index.jsp</exclude>
                 <exclude>WEB-INF/web.xml</exclude>                     
                 <exclude>WEB-INF/conf/*.xml</exclude>                     
                 <exclude>WEB-INF/conf/jcr/*.xml</exclude>                     
