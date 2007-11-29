@@ -77,7 +77,7 @@ uiform.begin() ;
 	               	 	 	 String reminderLink = uicomponent.event("ViewReminder", reminder.getId()) ;
 	               			 %>
 	               			 	<div style="float:left;margin-right: 10px;">
-	               			 		<a class="ControlButton" style="color:gray;"><%=reminder.getReminder()%></a>
+	               			 		<a class="ControlButton" style="color:gray;"><%=reminder.getReminderType()%></a>
 	               			 	</div>
 	               			 <%		 		 
 	               	 	 }	               	 
