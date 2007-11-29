@@ -43,6 +43,14 @@ UICalendarPortlet.prototype.getYear = function(date) {
 	return y;
 }
 
+UICalendarPortlet.prototype.isBeginDate = function(milliseconds) {
+	var d = new Date(milliseconds) ;
+	var hour = d.getHours() ;
+	var min = d.getHours() ;
+	if( (hour == 0) && (hour == min)) return true ;
+	return false ;
+} ;
+
 UICalendarPortlet.prototype.getWeekNumber = function(now) {
 	var today = new Date(now) ;
 	var Year = this.getYear(today) ;
