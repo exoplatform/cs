@@ -46,28 +46,28 @@ import org.exoplatform.webui.form.UIFormTextAreaInput;
     }
 )
 public class UIRssForm extends UIFormTabPane implements UIPopupComponent{
-  final static private String NAME = "name".intern() ;
+  //final static private String NAME = "name".intern() ;
   final static private String URL = "url".intern() ;
   final static private String DESCRIPTION = "description".intern() ;
   final static private String LINK = "link".intern() ;
   final static private String COPYRIGHT = "copyright".intern() ;
   final static private String TITLE = "title".intern() ;
-  final static private String VERSION = "version".intern() ;
+  //final static private String VERSION = "version".intern() ;
   final static private String PUBLIC_DATE = "pubDate".intern() ;
-  final static private String[] version = 
-    new String[]{"rss_2.0","rss_1.0","rss_0.94","rss_0.93","rss_0.92","rss_0.91","rss_0.90"} ;
+  /*final static private String[] version = 
+    new String[]{"rss_2.0","rss_1.0","rss_0.94","rss_0.93","rss_0.92","rss_0.91","rss_0.90"} ;*/
   public UIRssForm() throws Exception{
     super("UIRssForm", false);
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     UIFormInputWithActions rssInfo = new UIFormInputWithActions("rssInfo") ;
-    rssInfo.addUIFormInput(new UIFormStringInput(NAME, NAME, "eXoCalendar.rss")) ;
-    rssInfo.addUIFormInput(new UIFormStringInput(TITLE, TITLE, null)) ;
-    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-    for(String vs : version) {
+    //rssInfo.addUIFormInput(new UIFormStringInput(NAME, NAME, "eXoCalendar.rss")) ;
+    rssInfo.addUIFormInput(new UIFormStringInput(TITLE, TITLE, "eXoCalendar")) ;
+    //List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
+    /*for(String vs : version) {
       options.add(new SelectItemOption<String>(vs, vs)) ;
-    }
-    rssInfo.addUIFormInput(new UIFormSelectBox(VERSION, VERSION, options)) ;
+    }*/
+    //rssInfo.addUIFormInput(new UIFormSelectBox(VERSION, VERSION, options)) ;
     rssInfo.addUIFormInput(new UIFormStringInput(URL, URL, calendarService.getCalendarSetting(username).getBaseURL())) ;
     rssInfo.addUIFormInput(new UIFormTextAreaInput(DESCRIPTION, DESCRIPTION, "This RSS provided by eXo Platform opensource company")) ;
     rssInfo.addUIFormInput(new UIFormStringInput(COPYRIGHT, COPYRIGHT, "Copyright by 2000-2005 eXo Platform SARL")) ;
@@ -109,7 +109,7 @@ public class UIRssForm extends UIFormTabPane implements UIPopupComponent{
         return ;
       }
       RssData rssData = new RssData() ;
-      String tempName = uiForm.getUIStringInput(uiForm.NAME).getValue() ;
+      String tempName = uiForm.getUIStringInput(uiForm.TITLE).getValue() ;
       if(tempName != null && tempName.length() > 0) {
         if(tempName.length() > 4 && tempName.substring(tempName.length() - 4).equals(".rss")) rssData.setName(tempName);
         else rssData.setName(tempName + ".rss") ;
@@ -122,7 +122,7 @@ public class UIRssForm extends UIFormTabPane implements UIPopupComponent{
       rssData.setLink(uiForm.getUIStringInput(uiForm.LINK).getValue()) ;
       String title = uiForm.getUIStringInput(uiForm.TITLE).getValue() ;
       rssData.setTitle(title) ;
-      rssData.setVersion(uiForm.getUIFormSelectBox(uiForm.VERSION).getValue()) ;
+      rssData.setVersion("rss_2.0") ;
       rssData.setPubDate(uiForm.getUIFormDateTimeInput(uiForm.PUBLIC_DATE).getCalendar().getTime()) ;
       calendarService.generateRss(Util.getPortalRequestContext().getRemoteUser(), calendarIds, rssData) ;
       UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
