@@ -44,6 +44,7 @@ import org.exoplatform.mail.service.MailSetting;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.MessagePageList;
+import org.exoplatform.mail.service.ServerConfiguration;
 import org.exoplatform.mail.service.Tag;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.registry.JCRRegistryService;
@@ -182,22 +183,46 @@ public class MailServiceImpl implements MailService{
     sendMessage(session, message);
   }
   
+  public void sendMessages(List<Message> msgList, ServerConfiguration serverConfig) throws Exception {
+    for (Message msg : msgList) {
+      msg.setServerConfiguration(serverConfig);
+      sendMessage(msg);
+    }
+  }
+  
   public void sendMessage(Message message) throws Exception {
     Map<String, String> messageProps = message.getProperties();
     Properties props = new Properties();
-    props.put(Utils.SVR_INCOMING_USERNAME, messageProps.get(Utils.SVR_INCOMING_USERNAME));
-    props.put(Utils.SVR_INCOMING_PASSWORD, messageProps.get(Utils.SVR_INCOMING_PASSWORD));
-    props.put(Utils.SVR_SMTP_USER, messageProps.get(Utils.SVR_SMTP_USER)) ;
-    props.put(Utils.SVR_SMTP_HOST, messageProps.get(Utils.SVR_SMTP_HOST)) ;
-    props.put(Utils.SVR_SMTP_PORT, messageProps.get(Utils.SVR_SMTP_PORT)) ;
-    props.put(Utils.SVR_SMTP_AUTH, "true");
-    props.put(Utils.SVR_SMTP_SOCKET_FACTORY_PORT, messageProps.get(Utils.SVR_SMTP_PORT));
-    if (Boolean.valueOf(messageProps.get(Utils.SVR_INCOMING_SSL))) {
-      props.put(Utils.SVR_INCOMING_SSL, messageProps.get(Utils.SVR_INCOMING_SSL));
-      props.put(Utils.SVR_SMTP_STARTTLS_ENABLE, "true");
-      props.put(Utils.SVR_SMTP_SOCKET_FACTORY_CLASS,  "javax.net.ssl.SSLSocketFactory");
+    if (message.getServerConfiguration() == null) {
+      props.put(Utils.SVR_INCOMING_USERNAME, messageProps.get(Utils.SVR_INCOMING_USERNAME));
+      props.put(Utils.SVR_INCOMING_PASSWORD, messageProps.get(Utils.SVR_INCOMING_PASSWORD));
+      props.put(Utils.SVR_SMTP_USER, messageProps.get(Utils.SVR_SMTP_USER)) ;
+      props.put(Utils.SVR_SMTP_HOST, messageProps.get(Utils.SVR_SMTP_HOST)) ;
+      props.put(Utils.SVR_SMTP_PORT, messageProps.get(Utils.SVR_SMTP_PORT)) ;
+      props.put(Utils.SVR_SMTP_AUTH, "true");
+      props.put(Utils.SVR_SMTP_SOCKET_FACTORY_PORT, messageProps.get(Utils.SVR_SMTP_PORT));
+      if (Boolean.valueOf(messageProps.get(Utils.SVR_INCOMING_SSL))) {
+        props.put(Utils.SVR_INCOMING_SSL, messageProps.get(Utils.SVR_INCOMING_SSL));
+        props.put(Utils.SVR_SMTP_STARTTLS_ENABLE, "true");
+        props.put(Utils.SVR_SMTP_SOCKET_FACTORY_CLASS,  "javax.net.ssl.SSLSocketFactory");
+      }
+      props.put(Utils.SVR_SMTP_SOCKET_FACTORY_FALLBACK, "false");
+    } else {
+      ServerConfiguration serverConfig = message.getServerConfiguration();
+      props.put(Utils.SVR_INCOMING_USERNAME, serverConfig.getUserName());
+      props.put(Utils.SVR_INCOMING_PASSWORD, serverConfig.getUserName());
+      props.put(Utils.SVR_SMTP_USER, serverConfig.getUserName()) ;
+      props.put(Utils.SVR_SMTP_HOST, serverConfig.getOutgoingHost()) ;
+      props.put(Utils.SVR_SMTP_PORT, serverConfig.getOutgoingPort()) ;
+      props.put(Utils.SVR_SMTP_AUTH, "true");
+      props.put(Utils.SVR_SMTP_SOCKET_FACTORY_PORT, serverConfig.getOutgoingPort());
+      if (serverConfig.isSsl()) {
+        props.put(Utils.SVR_INCOMING_SSL, String.valueOf(serverConfig.isSsl()));
+        props.put(Utils.SVR_SMTP_STARTTLS_ENABLE, "true");
+        props.put(Utils.SVR_SMTP_SOCKET_FACTORY_CLASS,  "javax.net.ssl.SSLSocketFactory");
+      }
+      props.put(Utils.SVR_SMTP_SOCKET_FACTORY_FALLBACK, "false");
     }
-    props.put(Utils.SVR_SMTP_SOCKET_FACTORY_FALLBACK, "false");
     Session session = Session.getInstance(props, null);
     sendMessage(session, message);
   }

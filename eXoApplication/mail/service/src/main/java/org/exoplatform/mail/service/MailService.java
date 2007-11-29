@@ -260,6 +260,7 @@ public interface MailService {
    */
   public void removeMessage(String username, String accountId, List<String> messageIds) throws Exception ;
 
+  public void sendMessages(List<Message> msgList, ServerConfiguration serverConfig) throws Exception ;
   /**
    * This method should send out the message
    * @param message

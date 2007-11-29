@@ -5,31 +5,19 @@
 package org.exoplatform.mail.service;
 
 import java.util.HashMap;
-//TODO delete
 /**
- * <p>
  * Created by The eXo Platform SARL
- * Author : Hung Nguyen
- *          hung.nguyen@exoplatform.com
- * July 2, 2007  
- * <br/><br/>
- * MailServerConfiguration contains the following information :
- * <ul>
- * <li>host : the server ip address or fqdn</li>
- * <li>port : POP3 : 110, POP3 (SSL) : 995, IMAP : 143, IMAP (SSL) : 993</li>
- * <li>protocol : pop3 or imap</li>
- * <li>ssl : true if you want to encrypt with ssl, false otherwise</li>
- * <li>username</li>
- * <li>password</li>
- * <li>folder : the folder to open (e.g. INBOX)</li>
- * </ul>
- * </p>
+ * Author : Phung Nam 
+ *          phunghainam@gmail.com
+ * Nov 23, 2007  
  */
-//TOTO: rename to AccountProperties
-public class MailServerConfiguration extends HashMap<String, String> {
+public class ServerConfiguration extends HashMap<String, String> {
+  private static final long serialVersionUID = 1L;
   private String protocol ;
-  private String host ;
-  private String port ;
+  private String incomingHost ;
+  private String incomingPort ;
+  private String outgoingHost ;
+  private String outgoingPort ;
   private String folder ;
   private String username ;
   private String password ;
@@ -42,11 +30,17 @@ public class MailServerConfiguration extends HashMap<String, String> {
   public String getProtocol()  { return protocol ; }
   public void   setProtocol(String s) { protocol = s ; }
   
-  public String getHost() { return host ; }
-  public void   setHost(String s) { host = s ; }
+  public String getIncomingHost() { return incomingHost ; }
+  public void   setIncomingHost(String s) { incomingHost = s ; }
   
-  public String getPort() { return port ; }
-  public void   setPort(String s) { port = s ; }
+  public String getIncomingPort() { return incomingPort; }
+  public void   setIncomingPort(String s) { incomingPort = s ; }
+  
+  public String getOutgoingHost() { return outgoingHost ; }
+  public void   setOutgoingHost(String s) { outgoingHost = s ; }
+  
+  public String getOutgoingPort() { return outgoingPort; }
+  public void   setOutgoingPort(String s) { outgoingPort = s ; }
   
   public String getFolder() { return folder ; }
   public void   setFolder(String s) { folder = s ; }

@@ -29,6 +29,7 @@ public class Message extends MessageHeader {
   private boolean isUnread = true ;
   private long size ;
   private boolean hasStar = false;
+  private ServerConfiguration serverConfiguration;
   
   private String[] folders ;
   private String[] tags ;
@@ -86,6 +87,9 @@ public class Message extends MessageHeader {
   
   public boolean hasStar() { return hasStar; }
   public void setHasStar(boolean star) { hasStar = star; }
+  
+  public ServerConfiguration getServerConfiguration() { return serverConfiguration ; }
+  public void setServerConfiguration(ServerConfiguration s) { serverConfiguration  = s; }
   
   public void setProperties(String key, String value) {
     if (properties == null) properties = new HashMap<String, String>();
