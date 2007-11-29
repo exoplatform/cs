@@ -214,12 +214,12 @@
 		                    </div>
 		                   </a>
 		          				<a class="MenuItem" href="<%=uicomponent.event("EditGroup","id")%>">   
-		                    <div class="ItemIcon AddEventIcon">
+		                    <div class="ItemIcon EditGroupIcon">
 		                      Edit group
 		                    </div>
 		                   </a>	
 		                   <a class="MenuItem" href="<%=uicomponent.event("DeleteGroup","id")%>">   
-		                    <div class="ItemIcon AddEventIcon">
+		                    <div class="ItemIcon DeleteGroupIcon">
 		                      Delete group
 		                    </div>
 		                   </a>	

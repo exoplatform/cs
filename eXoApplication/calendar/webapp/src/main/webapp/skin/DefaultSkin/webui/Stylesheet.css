@@ -45,9 +45,10 @@
 .UICalendarPortlet .UICalendarContainer .UISearchForm {
   background: url('background/SearchForm1x34.gif') repeat-x;	
   line-height: 34px;
-	padding:4px 13px 0px 0px;
+	padding:0px 13px 0px 0px;
 	border: 1px solid #c7c7c7;
 	margin-bottom: 4px;
+	width: 210px;
 }
 
 .UICalendarPortlet .UICalendarContainer .UISearchLabel {
@@ -60,7 +61,7 @@
 .UICalendarPortlet .UICalendarContainer .UISearchForm input {
 	width: 100px;
 	float: right;
-	margin: 3px 8px;
+	margin: 6px 8px;
 }
 
 .UICalendarPortlet .UICalendarContainer .Search {

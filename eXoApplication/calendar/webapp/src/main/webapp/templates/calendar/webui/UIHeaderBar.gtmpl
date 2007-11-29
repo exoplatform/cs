@@ -4,11 +4,11 @@ import org.exoplatform.calendar.webui.UIMonthView;
 %>
 <div class="UIHeaderBar ListBar">
 		<a href="<%=uicomponent.event("AddEvent",uicomponent.TYPE_EVENT)%>" class="ControlButton">
-			<div class="IconHolder AddEventIcon"> Add event </div>
+			<div class="IconHolder AddNewEvent"> Add event </div>
 		</a>
 		<div class="SeparatorLine"><span></span></div>
 		<a href="<%=uicomponent.event("AddEvent", uicomponent.TYPE_TASK)%>" class="ControlButton">
-			<div class="IconHolder AddTaskIcon"> Add task </div>
+			<div class="IconHolder AddNewTask"> Add task </div>
 		</a>
 		<%if((uicomponent instanceof UIListView) || (uicomponent instanceof UIMonthView)){%>
 			<div class="SeparatorLine"><span></span></div>

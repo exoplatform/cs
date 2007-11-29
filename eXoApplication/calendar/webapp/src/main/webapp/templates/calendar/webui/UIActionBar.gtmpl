@@ -6,10 +6,10 @@
 					<div class="CenterBar">
 						<div class="Title ControlButton">Quick add:</div>
 						<a href="<%=uicomponent.event("QuickAddEvent","Event")%>" class="ControlButton">
-							<div class="IconHolder AddEventIcon">Event</div>
+							<div class="IconHolder QuickAddEvent">Event</div>
 						</a>
 						<a href="<%=uicomponent.event("QuickAddEvent","Task")%>" class="ControlButton">
-							<div class="IconHolder AddTaskIcon">Task</div>
+							<div class="IconHolder AddNewTask">Task</div>
 						</a>
 						<div class="SeparatorLine"><span></span></div>
 						<div class="Title ControlButton">Calendar View:</div>
@@ -68,7 +68,7 @@
 						</div>
 						<div class="SeparatorLine"><span></span></div>
 						<a href="<%=uicomponent.event("Setting")%>" class="ControlButton">
-							<div class="IconHolder CalendarSettingIcon"> Setting </div>
+							<div class="IconHolder SettingCalendarIcon"> Setting </div>
 						</a>
 						<div class="SeparatorLine"><span></span></div>
 						<a href="<%=uicomponent.event("RSS")%>" class="ControlButton">

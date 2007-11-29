@@ -29,10 +29,6 @@
 	background: url('icons/TodayIcon.gif') no-repeat;
 }
 
-.CalendarSettingIcon {
-	background: url('icons/CalendarSettingIcon.gif') no-repeat;
-}
-
 .NextIcon {
 	background: url('icons/NextIcon.gif') no-repeat;
 	width: 16px;height: 16px;
@@ -65,14 +61,17 @@
 }
 
 .ViewEventIcon {
-	background: url('icons/ViewEventIcon.gif') no-repeat;
+	background: url('icons/ViewEventIcon.gif') no-repeat left center;
 }
+
 .EditEventIcon {
-	background: url('icons/EditEventIcon.gif') no-repeat;
+	background: url('icons/EditEventIcon.gif') no-repeat left center;
 }
+
 .DeleteEventIcon {
-	background: url('icons/EditEvent.gif') no-repeat;
+	background: url('icons/EditEvent.gif') no-repeat left center;
 }
+
 .EditTaskIcon {
 	background: url('icons/EditTask.gif') no-repeat;
 }
@@ -110,16 +109,172 @@
 .IconFeed {
 	background: url('icons/FeedIcon.gif') no-repeat;
 }
+
 .EditIcon {
 	background: url('icons/EditTask.gif') no-repeat;
 	width: 16px;height: 16px;
 }
+
 .highPriorityIcon {
 	background: url('icons/HeighPriorityIcon.gif') no-repeat;
 }
+
 .normalPriorityIcon {
 	background: url('icons/NormalPriorityIcon.gif') no-repeat;
 }
+
 .lowPriorityIcon{
 	background: url('icons/LowPriorityIcon.gif') no-repeat;
 }
+
+
+.LayoutSwitcherIcon {
+	background: url('icons/LayoutSwitcherIcon.gif') no-repeat;
+}
+
+.DeleteEventIcon {
+	background: url('icons/DeleteEvent.gif') no-repeat left center;
+}
+
+.SettingCalendarIcon {
+	background: url('icons/SettingCalendarIcon.gif') no-repeat left center;
+}
+
+.ImportCalendarIcon {
+	background: url('icons/ImportCalendarIcon.gif') no-repeat left center;
+}
+
+.GenerateRssIcon {
+	background: url('icons/GenerateRssIcon.gif') no-repeat left center;
+}
+
+.AddpuplicCalendarIcon {
+	background: url('icons/AddpuplicCalendarIcon.gif') no-repeat left center;
+}
+
+.AddCalendarIcon {
+	background: url('icons/AddCalendarIcon.gif') no-repeat left center;
+}
+
+.AddGroupIcon {
+	background: url('icons/AddGroupIcon.gif') no-repeat left center;
+}
+
+.DeleteTaskIcon {
+	background: url('icons/DeleteTask.gif') no-repeat left center;
+}
+
+.UIScheduleViewIcon {
+	background: url('icons/ScheduleIcon.gif') no-repeat left center;
+}
+
+.UIYearViewIcon {
+	background: url('icons/UIYearViewIcon.gif') no-repeat left center;
+}
+
+.EventIcon {
+	background: url('icons/EventIcon.gif') no-repeat left center;
+}
+
+.UIMonthViewIcon {
+	background: url('icons/MonthIcon.gif') no-repeat left center;
+}
+
+.WeekWorkIcon {
+	background: url('icons/WeekWorkIcon.gif') no-repeat left center;
+}
+
+.UIWeekViewIcon {
+	background: url('icons/WeekIcon.gif') no-repeat left center;
+}
+
+.UIDayViewIcon {
+	background: url('icons/DayIcon.gif') no-repeat left center;
+}
+
+.UIListContainerIcon {
+	background: url('icons/UIListViewIcon.gif') no-repeat center left;
+}
+
+.DeleteGroupIcon {
+	background: url('icons/DeleteGroupIcon.gif') no-repeat left center;
+}
+
+.EditGroupIcon {
+	background: url('icons/EditGroupIcon.gif') no-repeat left center;
+}
+
+.PasteGroupIcon {
+	background: url('icons/PasteGroupIcon.gif') no-repeat left center;
+}
+
+.ExportCalendarIcon {
+	background: url('icons/ExportCalendarIcon.gif') no-repeat left center;
+}
+
+.CopyCalendarIcon {
+	background: url('icons/CopyCalendarIcon.gif') no-repeat left center;
+}
+
+.CutCalendarIcon {
+	background: url('icons/CutCalendarIcon.gif') no-repeat left center;
+}
+
+.RemoveCalendarIcon {
+	background: url('icons/DeleteCalendarIcon.gif') no-repeat left center;
+}
+
+.SendMailCalendarIcon {
+	background: url('icons/SendToFriend.gif') no-repeat left center;
+}
+
+.GotoDate {
+	background: url('icons/GotoDateIcon.gif') no-repeat left center;
+}
+
+.AddNewEvent {
+	background: url('icons/AddNewEvent.gif') no-repeat left center;
+}
+
+.AddNewTask {
+	background: url('icons/AddTaskIcon.gif') no-repeat left center;
+}
+
+.QuickAddEvent {
+	background: url('icons/AddNewEvent.gif') no-repeat left center;
+}
+
+.QuickAddTask {
+	background: url('icons/AddTaskIcon.gif') no-repeat left center;
+}
+
+.ChangeColorCalendarIcon {
+	background: url('icons/ChangeColorCalendarIcon.gif') no-repeat;
+}
+
+.EditCalendarIcon {
+	background: url('icons/EditCalendarIcon.gif') no-repeat left center;
+}
+
+.SharedCalendarIcon {
+	background: url('icons/SharedCalendarIcon.gif') no-repeat left center;
+}
+
+
+.ShowMinicalendar {
+	background: url('icons/ShowMinicalendar.gif') no-repeat;
+}
+
+.HidenMinicalendar {
+	background: url('icons/HidenMinicalendar.gif') no-repeat left center;
+}
+
+.HidenAllCalendar {
+	background: url('icons/HidenAllCalendar.gif') no-repeat left center;
+}
+
+
+
+
+
+
