@@ -181,6 +181,12 @@ public class UIFolderContainer extends UIContainer {
         }
       }
       mailSrv.saveFolder(username, accountId, folder);
+      UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
+      UIFolderContainer uiFolder = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
+      uiMessageList.updateList();
+      UIMessageArea uiMessageArea = uiMessageList.getParent();
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiFolder) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageArea) ;
     }
   }
   
