@@ -265,8 +265,6 @@ public class UIAccountSetting extends UIFormTabPane {
   static  public class AddNewAccountActionListener extends EventListener<UIAccountSetting> {
     public void execute(Event<UIAccountSetting> event) throws Exception {
       UIAccountSetting uiAccountSetting = event.getSource() ;
-      System.out.println(" ==========> AddNewAccountActionListener") ;
-      
       UIPopupActionContainer uiActionContainer = uiAccountSetting.getAncestorOfType(UIPopupActionContainer.class) ;
       UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class) ;
       UIAccountCreation uiAccountCreation = uiChildPopup.activate(UIAccountCreation.class, 700) ;
@@ -278,7 +276,6 @@ public class UIAccountSetting extends UIFormTabPane {
   static  public class DeleteAccountActionListener extends EventListener<UIAccountSetting> {
     public void execute(Event<UIAccountSetting> event) throws Exception {
       UIAccountSetting uiAccountSetting = event.getSource() ;
-      System.out.println(" ==========> DeleteAccountActionListener") ;
       UIMailPortlet uiPortlet = uiAccountSetting.getAncestorOfType(UIMailPortlet.class);
       String username = uiPortlet.getCurrentUser();
       MailService mailServ = uiPortlet.getApplicationComponent(MailService.class);
@@ -287,7 +284,7 @@ public class UIAccountSetting extends UIFormTabPane {
         mailServ.removeAccount(username, account);
         uiAccountSetting.setSelectedAccountId(uiAccountSetting.getAccounts().get(0).getId());
         uiAccountSetting.fillAllField();
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiAccountSetting.getParent());
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiAccountSetting.getAncestorOfType(UIPopupActionContainer.class)) ;
       } catch(Exception e) {
         e.printStackTrace();
       } 

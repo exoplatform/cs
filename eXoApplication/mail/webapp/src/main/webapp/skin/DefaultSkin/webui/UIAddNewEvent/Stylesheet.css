@@ -2,6 +2,36 @@
 	padding: 8px; 
 }
 
+.UIAddNewEvent .ReminderByEmail {
+	background: url('background/ReminderTabHeader1x24.gif') repeat-x top ;
+	padding: 4px;
+}
+
+.UIAddNewEvent .ReminderByEmail input.checkbox{
+	float: left;
+}
+
+.UIAddNewEvent .ReminderByPopup input.checkbox{
+	float: left;
+}
+
+.UIAddNewEvent .ReminderByEmail .selectbox{
+	width: 80px;
+}
+
+.UIAddNewEvent .ReminderByPopup .selectbox{
+	width: 80px;
+}
+
+.UIAddNewEvent .ReminderByPopup {
+	background: url('background/ReminderTabHeader1x24.gif') repeat-x top ;
+	padding: 4px;
+}
+
+.UIAddNewEvent .UIFormGrid{
+	margin-top: 10px;
+}
+
 .UIAddNewEvent .HorizontalLayout {
 	border: none;
 }
@@ -70,7 +100,7 @@
 .UIAddNewEvent .UIFormGrid .FieldComponent .ReminderTime{
 }
 .UIAddNewEvent .UIFormGrid .FieldComponent .ReminderTime .selectbox{
-	width: 80px;
+	width: 60px;
 }
 .UIAddNewEvent .HorizontalLayout .FieldComponent .UIAction {
 	float: left;

@@ -8,7 +8,6 @@
 			<div class="CategoryControlBar">
 				<div class="Title">Accounts</div>
         <a href="<%=uicomponent.event("DeleteAccount")%>"><div class="DeleteIcon"><span></span></div></a>
-        <a href="<%=uicomponent.event("AddNewAccount")%>"><div class="AddIcon"><span></span></div></a>
 				<div style="clear: both;"><span></span></div>
 			</div>
 			<div class="AccountSettingList">
