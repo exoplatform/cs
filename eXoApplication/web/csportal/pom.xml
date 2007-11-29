@@ -27,6 +27,7 @@
                 <exclude>WEB-INF/conf/portal/*.xml</exclude>
                 <exclude>WEB-INF/conf/portal/**/**/*.xml</exclude>
                 <exclude>WEB-INF/conf/users/**/*.xml</exclude>
+                <exclude>WEB-INF/conf/jcr/*.xml</exclude>
               </excludes>
             </resource>
             <resource>
