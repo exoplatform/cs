@@ -264,7 +264,6 @@ public class UIAccountSetting extends UIFormTabPane {
   static  public class SelectAccountActionListener extends EventListener<UIAccountSetting> {
     public void execute(Event<UIAccountSetting> event) throws Exception {
       UIAccountSetting uiAccountSetting = event.getSource() ;
-      System.out.println(" ==========> SelectAccountActionListener") ;
       String accountId = event.getRequestContext().getRequestParameter(OBJECTID);
       uiAccountSetting.setSelectedAccountId(accountId);
       uiAccountSetting.fillAllField();
@@ -364,7 +363,6 @@ public class UIAccountSetting extends UIFormTabPane {
   
   static  public class CancelActionListener extends EventListener<UIAccountSetting> {
     public void execute(Event<UIAccountSetting> event) throws Exception {
-      System.out.println(" ==========> CancelActionListener") ;
       event.getSource().getAncestorOfType(UIMailPortlet.class).cancelAction();
     }
   }
