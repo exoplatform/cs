@@ -60,13 +60,17 @@
           </div>
           <div class="ListContact">
             <% 
-              for (Contact contact : uicomponent.getContacts()) { 
-                String classCss = "NormalItem";
-                if (contact.getId().equals(uicomponent.getSelectedContact().getId())) classCss += " CheckItem";
-                String selectContact = uicomponent.event("SelectContact", contact.getId());
+              if (uicomponent.getContacts().size() > 0) {
+                for (Contact contact : uicomponent.getContacts()) { 
+                  String classCss = "NormalItem";
+                  if (contact.getId().equals(uicomponent.getSelectedContact().getId())) classCss += " CheckItem";
+                  String selectContact = uicomponent.event("SelectContact", contact.getId());
             %>
-              <a href="$selectContact"><div class="$classCss"><%=contact.getFirstName()%>&nbsp;<%=contact.getLastName()%> </div></a>
-            <% } %>
+                  <a href="$selectContact"><div class="$classCss"><%=contact.getFirstName()%>&nbsp;<%=contact.getLastName()%> </div></a>
+            <% 
+                } 
+              }
+            %>
           </div>
         </div>
        
@@ -95,7 +99,7 @@
               <div class="MiddleLeftViewBoxStyle">
                 <div class="MiddleRightViewBoxStyle">
                   <div class="MiddleCenterViewBoxStyle">
-                  
+                    <%  if (selectedContact != null) {%>
                     <div class="ContactPreviewContainer">   
                     <% 
                       DownloadService dservice ;  
@@ -312,7 +316,7 @@
                       <div style="clear: left;"><span/></div>
                       
                     </div>
-                    
+                    <% } %>
                   </div>  
                 </div>
               </div>
