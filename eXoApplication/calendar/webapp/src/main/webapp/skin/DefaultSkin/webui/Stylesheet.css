@@ -545,6 +545,7 @@
 .UIDayView .EventDayContent {
 	background-color: #ffffff;
 	border-left: 1px solid #c7c7c7;
+	*border-left: none;
 }
 
 .UIDayView .EventDayContent .TdLine{
@@ -572,6 +573,7 @@
 .UIDayView .EventDayContent .UIGrid td{
 	padding: 0px;
 	height: 30px ;
+	border-left: none ;
 	*height: 29px ; /* fixed for IE */
 }
 
@@ -626,6 +628,7 @@
 
 .UIDayView .UIGrid {
 	*width: 97%;  /* fixed for IE */
+	border-top: none;
 }
 .UIDayView .TitleBar .Day{
 	 

@@ -94,7 +94,7 @@
       <table class="UIGrid" id="UIDayViewGrid" cellspacing="0" borderspacing="0" cellpadding="0" style="table-layout: fixed;">
         <tbody>
           <tr>
-            <td style="width: 60px ;">
+            <td style="width: 60px ;border-right: none;">
               <table>
                 <tbody>
                   <%
@@ -121,7 +121,7 @@
                 </tbody>
               </table>
             </td>
-            <td>
+            <td >
               <div class="EventBoard" style="position : relative ;">
                 <div class="EventBoardContainer" lastUpdatedId="<%=uicomponent.getLastUpdatedEventId()%>">
                   <%
