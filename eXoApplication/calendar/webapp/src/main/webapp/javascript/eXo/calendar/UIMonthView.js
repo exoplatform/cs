@@ -47,7 +47,7 @@ UIMonthView.prototype.createBars = function(event) {
 	if (delta == 0) {
 		event.style.top = (top - 1) * this.unitY + 16 + "px" ;
 		event.style.left = (new Date(start)).getDay() * this.unitX + "px" ;
-		if (((new Date(end)).getDay() - (new Date(start)).getDay()) <= 1) 
+		if (((new Date(end)).getDay() - (new Date(start)).getDay()) < 1) 
 			event.style.width = ((new Date(end)).getDay() - (new Date(start)).getDay()) * this.unitX + this.unitX + "px" ;
 		else 	event.style.width = ((new Date(end)).getDay() - (new Date(start)).getDay()) * this.unitX + "px" ;
 	}	else if (delta == 1) {
