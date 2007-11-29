@@ -7,7 +7,7 @@
       <value-param>
         <name>conf-path</name>
         <description>JCR configuration file</description>
-        <value>war:/conf/jcr/exo-jcr-config.xml</value>
+        <value>war:/conf/jcr/repository-configuration.xml</value>
       </value-param>
       <properties-param>
         <name>working-conf</name>
