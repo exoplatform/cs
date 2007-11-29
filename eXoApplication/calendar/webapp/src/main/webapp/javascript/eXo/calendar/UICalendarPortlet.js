@@ -43,10 +43,16 @@ UICalendarPortlet.prototype.getYear = function(date) {
 	return y;
 }
 
+UICalendarPortlet.prototype.getDay = function(milliseconds) {
+	var d = new Date(milliseconds) ;
+	var day = d.getDay() ;
+	return day ;
+} ;
+
 UICalendarPortlet.prototype.isBeginDate = function(milliseconds) {
 	var d = new Date(milliseconds) ;
 	var hour = d.getHours() ;
-	var min = d.getHours() ;
+	var min = d.getMinutes() ;
 	if( (hour == 0) && (hour == min)) return true ;
 	return false ;
 } ;

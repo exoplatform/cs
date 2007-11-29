@@ -8,7 +8,7 @@ UIMonthView.prototype.init = function() {
 	var UIMonthViewGrid = document.getElementById("UIMonthViewGrid") ;
 	this.eventContainer = eXo.core.DOMUtil.findFirstDescendantByClass(UIMonthView, "div","RowContainerDay") ;
 	var allEvents = eXo.core.DOMUtil.findDescendantsByClass(UIMonthView, "div", "DayContentContainer") ;
-	this.items = new Array() ;//eXo.core.DOMUtil.findDescendantsByClass(UIMonthView, "div", "DayContentContainer") ;	
+	this.items = new Array() ;
 	for(var i = 0 ; i < allEvents.length ; i ++) {
 		if (allEvents[i].style.display != "none") this.items.push(allEvents[i]) ;
 	}
@@ -43,25 +43,30 @@ UIMonthView.prototype.createBars = function(event) {
 	var startWeek = UICalendarPortlet.getWeekNumber(start) ;
 	var endWeek = UICalendarPortlet.getWeekNumber(end) ;
 	var delta = endWeek - startWeek ;
+	var startDay = UICalendarPortlet.getDay(start) ;
+	var endDay = UICalendarPortlet.getDay(end) ;
 	var checkbox = null ;
 	if (delta == 0) {
 		event.style.top = (top - 1) * this.unitY + 16 + "px" ;
-		event.style.left = (new Date(start)).getDay() * this.unitX + "px" ;
-		if (UICalendarPortlet.isBeginDate(end)) 
-			event.style.width = ((new Date(end)).getDay() - (new Date(start)).getDay()) * this.unitX + "px" ;
-		else 	event.style.width = ((new Date(end)).getDay() - (new Date(start)).getDay()) * this.unitX + this.unitX  + "px" ;
+		event.style.left = startDay * this.unitX + "px" ;
+		if (UICalendarPortlet.isBeginDate(end))
+			event.style.width = (endDay - startDay) * this.unitX + "px" ;		
+		else
+			event.style.width = (endDay - startDay) * this.unitX + this.unitX  + "px" ;
 	}	else if (delta == 1) {
 		event.style.top = (top - 1) * this.unitY + 16 + "px" ;
-		event.style.left = (new Date(start)).getDay() * this.unitX + "px" ;
-		event.style.width = (7 - (new Date(start)).getDay()) * this.unitX + "px" ;
-		var event1 = event.cloneNode(true) ;
-		event1.style.top = parseInt(event.style.top) + this.unitY + "px" ;
-		event1.style.left = "0px" ;
-		if(UICalendarPortlet.isBeginDate(end)) event1.style.width = (new Date(end)).getDay() * this.unitX + "px" ;
-		else event1.style.width = (new Date(end)).getDay() * this.unitX + this.unitX + "px" ;
-		checkbox = DOMUtil.findFirstDescendantByClass(event1, "input", "checkbox") ;
-		if (checkbox) DOMUtil.removeElement(checkbox) ;
-		this.eventContainer.appendChild(event1) ;
+		event.style.left = startDay * this.unitX + "px" ;
+		event.style.width = (7 - startDay) * this.unitX + "px" ;
+		if (!UICalendarPortlet.isBeginDate(end)) {			
+			var event1 = event.cloneNode(true) ;
+			event1.style.top = parseInt(event.style.top) + this.unitY + "px" ;
+			event1.style.left = "0px" ;
+			if(UICalendarPortlet.isBeginDate(end)) event1.style.width = endDay * this.unitX + "px" ;
+			else event1.style.width = endDay * this.unitX + this.unitX + "px" ;
+			checkbox = DOMUtil.findFirstDescendantByClass(event1, "input", "checkbox") ;
+			if (checkbox) DOMUtil.removeElement(checkbox) ;
+			this.eventContainer.appendChild(event1) ;
+		}
 	}else {
 		var fullDayEvent = new Array() ;
 		fullDayEvent.push(event) ;
@@ -70,8 +75,8 @@ UIMonthView.prototype.createBars = function(event) {
 		}
 		var len = fullDayEvent.length ;
 		fullDayEvent[0].style.top =  (top - 1) * this.unitY + 16 + "px" ;
-		fullDayEvent[0].style.left = (new Date(start)).getDay() * this.unitX  + "px" ;
-		fullDayEvent[0].style.width = (7 - (new Date(start)).getDay()) * this.unitX + "px" ;
+		fullDayEvent[0].style.left = startDay * this.unitX  + "px" ;
+		fullDayEvent[0].style.width = (7 - startDay) * this.unitX + "px" ;
 		this.eventContainer.appendChild(fullDayEvent[0]) ;
 		for(var i = 1 ; i < len - 1 ; i ++) {
 			fullDayEvent[i].style.top = parseInt(fullDayEvent[i-1].style.top) + this.unitY + "px" ;
@@ -81,14 +86,17 @@ UIMonthView.prototype.createBars = function(event) {
 			checkbox = DOMUtil.findFirstDescendantByClass(fullDayEvent[i], "input", "checkbox") ;
 			if (checkbox) DOMUtil.removeElement(checkbox) ;
 		}
-		if (len >= 3) {
+		if((endDay == 0) && UICalendarPortlet.isBeginDate(end)) fullDayEvent.pop() ;
+		else {
+		//if (len >= 3) {
 			fullDayEvent[len - 1].style.top = parseInt(fullDayEvent[len - 2].style.top) + this.unitY + "px" ;
 			fullDayEvent[len - 1].style.left = "0px" ;
-			if (UICalendarPortlet.isBeginDate(end)) fullDayEvent[len - 1].style.width = (new Date(end)).getDay() * this.unitX + "px" ;
-			else fullDayEvent[len - 1].style.width = (new Date(end)).getDay() * this.unitX + this.unitX + "px" ;
+			if (UICalendarPortlet.isBeginDate(end)) fullDayEvent[len - 1].style.width = endDay * this.unitX + "px" ;
+			else fullDayEvent[len - 1].style.width = endDay * this.unitX + this.unitX + "px" ;
 			checkbox = DOMUtil.findFirstDescendantByClass(fullDayEvent[len-1], "input", "checkbox") ;
 			if (checkbox) DOMUtil.removeElement(checkbox) ;
 			this.eventContainer.appendChild(fullDayEvent[len-1]) ;
+		//}			
 		}
 	}
 }

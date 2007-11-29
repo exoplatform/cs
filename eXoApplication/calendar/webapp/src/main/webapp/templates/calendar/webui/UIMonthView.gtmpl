@@ -142,6 +142,7 @@
 					        <td actionLink="$actionUpdate" class='CalendarContentNomal' currentDate='$dayOfMonth' startTime='$dateTime' > 
 					        	<div class='DayBox $clazz' >
 						        <a href="<%=uicomponent.event("GotoDate",dayActionLink)%>">
+						         
 						         <%=sdf.format(calendar.getTime())%> 
 										</a>
 									 </div><div class='DayContent'><span></span></div>
