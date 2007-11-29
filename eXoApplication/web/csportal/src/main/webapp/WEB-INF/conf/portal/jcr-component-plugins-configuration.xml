@@ -21,6 +21,7 @@
   
   <component>
       <type>org.exoplatform.services.jcr.impl.ext.action.SessionActionCatalog</type>
+      <!--
       <component-plugins>
         <component-plugin>
           <name>addActions</name>
@@ -36,11 +37,11 @@
                     <value>
                       <object type="org.exoplatform.services.jcr.impl.ext.action.ActionConfiguration">
                         <field  name="eventTypes"><string>addProperty,changeProperty</string></field>
-                        <!--<field  name="path"><string>/test</string></field>-->
-                        <!--<field  name="isDeep"><boolean>true</boolean></field>-->
-                        <!--<field  name="nodeType"><string>nt:base</string></field>-->
+                        <field  name="path"><string>/test</string></field>
+                        <field  name="isDeep"><boolean>true</boolean></field>
+                        <field  name="nodeType"><string>nt:base</string></field>
                         <field  name="parentNodeType"><string>nt:resource</string></field>
-                        <!-- field  name="workspace"><string>production</string></field -->
+                        <field  name="workspace"><string>production</string></field>
                         <field  name="actionClassName"><string>org.exoplatform.services.jcr.ext.metadata.AddMetadataAction</string></field>
                       </object>
                     </value>
@@ -51,9 +52,10 @@
           </init-params>
         </component-plugin>        
       </component-plugins>
+      -->
   </component>
   
-  <external-component-plugins>
+  <!-- external-component-plugins>
     <target-component>org.exoplatform.services.jcr.impl.ext.action.SessionActionCatalog</target-component>
     <component-plugin>
 	    <name>addActions</name>
@@ -90,7 +92,7 @@
 	      </object-param>
 	    </init-params>
 	  </component-plugin>
-	</external-component-plugins>
+	</external-component-plugins -->
   <external-component-plugins>
   	<target-component>org.exoplatform.services.jcr.RepositoryService</target-component>
 		<component-plugin>
