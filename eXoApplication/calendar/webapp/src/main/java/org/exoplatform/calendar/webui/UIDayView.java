@@ -68,6 +68,7 @@ public class UIDayView extends UICalendarView {
     allDayEvent_.clear() ;
     Calendar begin = getBeginDay(new GregorianCalendar(getCurrentYear(), getCurrentMonth(), getCurrentDay())) ;
     Calendar end = getEndDay(new GregorianCalendar(getCurrentYear(), getCurrentMonth(), getCurrentDay())) ;
+   
     List<CalendarEvent> events = new ArrayList<CalendarEvent>() ;
     CalendarService calendarService = getApplicationComponent(CalendarService.class) ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;

@@ -93,6 +93,7 @@
 						<div class="EventOnDayBorder $color">
 							<div class="EventOnDayContent">
 								<div style="float:left;margin:3px 0px 0px 2px;">
+									<%=event.getToDateTime().getTime()%>
 									<%uicomponent.renderField(uicomponent.getChildById(event.id))%>
 									$event.summary
 								</div>

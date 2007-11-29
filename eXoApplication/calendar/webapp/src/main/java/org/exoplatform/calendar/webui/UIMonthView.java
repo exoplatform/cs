@@ -193,7 +193,7 @@ public class UIMonthView extends UICalendarView {
         calEvent.setToDateTime(cal1.getTime()) ;
         calService.saveUserEvent(username, calendarId, calEvent, false) ;
         UIMiniCalendar uiMiniCalendar = uiPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;
-        uiMiniCalendar.refresh() ;
+        uiMiniCalendar.updateMiniCal() ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
         calendarview.refresh() ;
         event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
