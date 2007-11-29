@@ -63,11 +63,15 @@ public class UISelectAccount extends UIForm {
   private List<SelectItemOption<String>> getValues() throws Exception {
     List<SelectItemOption<String>>  options = new ArrayList<SelectItemOption<String>>() ;
     for(Account acc : getAccounts()) {
-      options.add(new SelectItemOption<String>(acc.getUserDisplayName(), acc.getId())) ;
+      options.add(new SelectItemOption<String>(acc.getLabel(), acc.getId())) ;
     }
     //TODO : get default account
     if (getAccounts().size() > 0) { MailUtils.setAccountId(getAccounts().get(0).getId()); }
     return options ;
+  }
+  
+  public void updateAccount() throws Exception {
+    getUIFormSelectBox(FIELD_SELECT).setOptions(getValues());
   }
   
   public String getSelectedValue() {
