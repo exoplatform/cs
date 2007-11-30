@@ -51,8 +51,8 @@ public class UIActionBar extends UIContainer  {
       UIPopupContainer uiPopupContainer = uiContactPortlet.createUIComponent(UIPopupContainer.class, null, null) ;  
       uiPopupContainer.setId("AddNewContact") ; 
       uiPopupContainer.addChild(UICategorySelect.class, null, null) ;
-      uiPopupContainer.addChild(UIContactForm.class, null, null) ;
-      UIContactForm.isNew_ = true ;
+      UIContactForm contactForm = uiPopupContainer.addChild(UIContactForm.class, null, null) ;
+      contactForm.setNew(true) ;
       uiPopupAction.activate(uiPopupContainer, 800, 0, true) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiActionBar.getParent()) ;

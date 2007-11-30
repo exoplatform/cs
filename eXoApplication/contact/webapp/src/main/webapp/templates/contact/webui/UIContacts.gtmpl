@@ -100,9 +100,16 @@
 	  		        		String fullName = uicomponent.fullName ;
 			    		      String sortedByName = uicomponent.event("Sort",fullName);
 			              String classArrowName = "";
+			              group = uicomponent.getSelectedGroup() ;
 			              if (uicomponent.getSortedBy().equals(fullName)) {
-			                if (uicomponent.isAscending()) classArrowName = "UpArrow1Icon";
-			                else classArrowName = "DownArrow1Icon"
+			              	if (!ContactUtils.isEmpty(group)) {
+			                	if (uicomponent.isAscending()) classArrowName = "UpArrow1Icon";
+			                	else classArrowName = "DownArrow1Icon"
+			              	} else {
+			              		if (uicomponent.isAscName()) classArrowName = "UpArrow1Icon";
+			                	else classArrowName = "DownArrow1Icon"
+			              	}
+			              
 			              }
     		    			%>
 	  		        	<a href="$sortedByName">
@@ -116,8 +123,13 @@
 			    		      String sortedByEmail = uicomponent.event("Sort",emailAddress);
 			              String classArrowEmail = "";
 			              if (uicomponent.getSortedBy().equals(emailAddress)) {
-			                if (uicomponent.isAscending()) classArrowEmail = "UpArrow1Icon";
-			                else classArrowEmail = "DownArrow1Icon"
+			                if (!ContactUtils.isEmpty(group)) {
+			                	if (uicomponent.isAscending()) classArrowEmail = "UpArrow1Icon";
+			                	else classArrowEmail = "DownArrow1Icon"
+			              	} else {
+			              		if (uicomponent.isAscEmail()) classArrowEmail = "UpArrow1Icon";
+			                	else classArrowEmail = "DownArrow1Icon"
+			              	}
 			              }
     		    			%>
 	 	      	    
@@ -131,9 +143,14 @@
 	 	      	    		String jobTitle = uicomponent.jobTitle ;
 			    		      String sortedByOrganition = uicomponent.event("Sort",jobTitle);
 			              String classArrowOrganition = "";
-			              if (uicomponent.getSortedBy().equals(jobTitle)) {
-			                if (uicomponent.isAscending()) classArrowOrganition = "UpArrow1Icon";
-			                else classArrowOrganition = "DownArrow1Icon"
+			              if (uicomponent.getSortedBy().equals(jobTitle)) {  
+			                if (!ContactUtils.isEmpty(group)) {
+			                	if (uicomponent.isAscending()) classArrowOrganition = "UpArrow1Icon";
+			                	else classArrowOrganition = "DownArrow1Icon"
+			              	} else {
+			              		if (uicomponent.isAscJob()) classArrowOrganition = "UpArrow1Icon";
+			                	else classArrowOrganition = "DownArrow1Icon"
+			              	}
 			              }
     		    			%>
 	 	      	    
