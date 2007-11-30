@@ -20,7 +20,7 @@ UIWeekView.prototype.init = function() {
 	var uiCalendarViewContainer = document.getElementById("UICalendarViewContainer") ;
 	var allEvents = DOMUtil.findDescendantsByClass(uiCalendarViewContainer, "div", "EventContainerBorder") ;
 	this.container = document.getElementById("UIWeekViewGrid") ;
-	this.items = new Array() ; //DOMUtil.findDescendantsByClass(uiCalendarViewContainer, "div", "EventContainerBorder") ;
+	this.items = new Array() ; 
 	for(var i = 0 ; i < allEvents.length ; i ++) {
 		if(allEvents[i].style.display != "none") this.items.push(allEvents[i]) ;
 	}
@@ -60,12 +60,12 @@ UIWeekView.prototype.init = function() {
 } ;
 
 UIWeekView.prototype.showInCol = function(obj) {
-	var items = eXo.calendar.UICalendarPortlet.getElements(obj) ;//eXo.core.DOMUtil.findDescendantsByClass(obj, "div", "EventContainerBorder") ;
+	var items = eXo.calendar.UICalendarPortlet.getElements(obj) ;
 	var len = items.length ;
 	if (len <= 0) return ;
 	var UIWeekView = eXo.calendar.UIWeekView ;
 	var posX = eXo.core.Browser.findPosXInContainer(obj, UIWeekView.container) ;
-	var left = parseFloat(posX/UIWeekView.container.offsetWidth)*100 ;
+	var left = parseFloat((posX)/UIWeekView.container.offsetWidth)*100 ;
 	var width = parseFloat((obj.offsetWidth - 2)/UIWeekView.container.offsetWidth)*100 ;
 	items = eXo.calendar.UICalendarPortlet.sortByAttribute(items, "starttime") ;
 	eXo.calendar.UICalendarPortlet.adjustWidth(items, width, left) ;
@@ -570,7 +570,7 @@ UIWeekView.prototype.initSelection = function() {
 	UISelection.block = document.createElement("div")
 	UISelection.block.className = "UserSelectionBlock" ;
 	UISelection.container = container ;
-	eXo.core.DOMUtil.findPreviousElementByTagName(document.getElementById("UIWeekViewGrid"), "div").appendChild(UISelection.block) ;
+	eXo.core.DOMUtil.findPreviousElementByTagName(container, "div").appendChild(UISelection.block) ;
 	UISelection.container.onmousedown = UISelection.start ;
 	UISelection.relativeObject = eXo.core.DOMUtil.findAncestorByClass(UISelection.container, "EventWeekContent") ;
 	UISelection.viewType = "UIWeekView" ;
@@ -581,9 +581,9 @@ UIWeekView.prototype.initSelectionX = function() {
 	var containers = eXo.core.DOMUtil.findDescendantsByTagName(document.getElementById("UIWeekViewGridAllDay"), "th") ;
 	var len = containers.length ;
 	for(var i = 1 ; i < len ; i ++) {
-		containers[i].onmousedown = UISelectionX.start ;		
+		containers[i].onmousedown = UISelectionX.start ;
 	}	
-	UISelectionX.extraLeft = 6 ;
+	UISelectionX.supObject = containers[1] ;
 	UISelectionX.viewType = "UIWeekView" ;
 } ;
 

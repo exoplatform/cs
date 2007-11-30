@@ -993,9 +993,6 @@ UICalendarPortlet.prototype.initSelection = function() {
 	UISelection.viewType = "UIDayView" ;
 } ;
 
-UICalendarPortlet.prototype.initSelectionX = function() {	
-	
-} ;
 /* for selection creation */
 
 function UISelection() {
@@ -1088,14 +1085,15 @@ UISelectionX.prototype.start = function(evt) {
 		UISelectionX.block.className = "UserSelectionBlock" ;
 		UISelectionX.container.appendChild(UISelectionX.block) ;
 		UISelectionX.step = UISelectionX.container.offsetWidth ;
+		UISelectionX.minX = eXo.core.Browser.findPosXInContainer(UISelectionX.supObject, UISelectionX.block.offsetParent) ;
+		UISelectionX.maxX = UISelectionX.minX + UISelectionX.supObject.offsetWidth*7 ;
 		UISelectionX.startTime = UISelectionX.container.getAttribute("startTime") ;
-		UISelectionX.startX = eXo.core.Browser.findPosX(UISelectionX.container) - UISelectionX.extraLeft ;
+		UISelectionX.startX = eXo.core.Browser.findPosXInContainer(UISelectionX.container, UISelectionX.block.offsetParent) ;
 		UISelectionX.startY = (UISelectionX.relativeObject) ? (eXo.core.Browser.findPosY(UISelectionX.container) - UISelectionX.relativeObject.scrollTop) :eXo.core.Browser.findPosY(UISelectionX.container) ;
 		UISelectionX.block.style.height = UISelectionX.container.offsetHeight  + "px" ;
 		UISelectionX.block.style.left = UISelectionX.startX  + "px" ;
 		UISelectionX.block.style.top = UISelectionX.startY  + "px" ;
-		UISelectionX.block.style.width = UISelectionX.step + "px" ;
-				
+		UISelectionX.block.style.width = UISelectionX.step + "px" ;				
 		eXo.calendar.UICalendarPortlet.resetZIndex(UISelectionX.block) ;
 		document.onmousemove = UISelectionX.execute ;
 		document.onmouseup = UISelectionX.clear ;		
@@ -1111,25 +1109,29 @@ UISelectionX.prototype.execute = function(evt) {
 	var mouseX = eXo.core.Browser.findMouseXInPage(_e) ;
 	var posX = UISelectionX.block.offsetLeft ;
 	var width = UISelectionX.block.offsetWidth ;
-	if((UISelectionX.startX - mouseX) < 0) {
-		UISelectionX.block.style.left = UISelectionX.startX + "px" ;
-		delta = posX + width - mouseX ;
-		if (delta >= UISelectionX.step) {
-			UISelectionX.block.style.width = parseInt(UISelectionX.block.style.width) - UISelectionX.step + "px" ;
-		}
-		if (mouseX >= (posX + width)) {		
-			UISelectionX.block.style.width = parseInt(UISelectionX.block.style.width) + UISelectionX.step + "px" ;
-		}
-	} else {
-		delta = mouseX - posX ;
-		UISelectionX.block.style.right = UISelectionX.startX - UISelectionX.step + "px" ;
-		if (mouseX <= posX) {
-			UISelectionX.block.style.left = parseInt(UISelectionX.block.style.left) - UISelectionX.step + "px" ;	
-			UISelectionX.block.style.width = parseInt(UISelectionX.block.style.width) + UISelectionX.step + "px" ;		
-		}
-		if(delta >= UISelectionX.step) {
-			UISelectionX.block.style.left = parseInt(UISelectionX.block.style.left) + UISelectionX.step + "px" ;	
-			UISelectionX.block.style.width = parseInt(UISelectionX.block.style.width) - UISelectionX.step + "px" ;					
+	if (mouseX <= UISelectionX.minX) UISelectionX.block.style.left = UISelectionX.minX + "px" ;
+	else if (mouseX >=  UISelectionX.maxX) UISelectionX.block.style.width = (UISelectionX.maxX - posX) + "px" ;
+	else {		
+		if((UISelectionX.startX - mouseX) < 0) {
+			UISelectionX.block.style.left = UISelectionX.startX + "px" ;
+			delta = posX + width - mouseX ;
+			if (delta >= UISelectionX.step) {
+				UISelectionX.block.style.width = parseInt(UISelectionX.block.style.width) - UISelectionX.step + "px" ;
+			}
+			if (mouseX >= (posX + width)) {		
+				UISelectionX.block.style.width = parseInt(UISelectionX.block.style.width) + UISelectionX.step + "px" ;
+			}
+		} else {
+			delta = mouseX - posX ;
+			UISelectionX.block.style.right = UISelectionX.startX - UISelectionX.step + "px" ;
+			if (mouseX <= posX) {
+				UISelectionX.block.style.left = parseInt(UISelectionX.block.style.left) - UISelectionX.step + "px" ;
+				UISelectionX.block.style.width = parseInt(UISelectionX.block.style.width) + UISelectionX.step + "px" ;
+			}
+			if(delta >= UISelectionX.step) {
+				UISelectionX.block.style.left = parseInt(UISelectionX.block.style.left) + UISelectionX.step + "px" ;
+				UISelectionX.block.style.width = parseInt(UISelectionX.block.style.width) - UISelectionX.step + "px" ;
+			}
 		}
 	}
 } ;
@@ -1152,16 +1154,6 @@ UISelectionX.prototype.clear = function(evt) {
 	document.onmouseup = null ;
 } ;
 
-UICalendarPortlet.prototype.initMonthSelection = function() {	
-	var UISelectionX = eXo.calendar.UISelectionX ;
-	var containers = eXo.core.DOMUtil.findDescendantsByTagName(document.getElementById("UIMonthViewGrid"), "td") ;
-	var len = containers.length ;
-	for(var i = 0 ; i < len ; i ++) {
-		containers[i].onmousedown = UISelectionX.start ;		
-	}	
-	UISelectionX.relativeObject = eXo.core.DOMUtil.findAncestorByClass(document.getElementById("UIMonthViewGrid"), "RowContainerDay") ;
-	UISelectionX.extraLeft = 5 ;
-} ;
 
 eXo.calendar.UICalendarPortlet = new UICalendarPortlet() ;
 eXo.calendar.UIResizeEvent = new UIResizeEvent() ;
