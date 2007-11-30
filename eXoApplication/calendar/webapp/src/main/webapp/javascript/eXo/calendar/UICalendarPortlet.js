@@ -35,6 +35,11 @@ UICalendarPortlet.prototype.dateDiff = function(start,end) {
 //	if (end == start) return true ;
 //	return false ;
 //} ;
+UICalendarPortlet.prototype.toSettingTime = function(time, settingTimeZone, severTimeZone) {
+	var GMT = time - (3600000*serverTimeZone) ;
+	var settingTime = GMT + (3600000*settingTimeZone) ;
+	return settingTime ;
+}
 
 UICalendarPortlet.prototype.getYear = function(date) {
 	x = date.getYear();
@@ -76,6 +81,7 @@ UICalendarPortlet.prototype.getWeekNumber = function(now) {
 } ;
 
 UICalendarPortlet.prototype.setting = function() {
+	// paras 1: time interval, paras 2: working time, paras 3: time zone 
 	var UICalendarPortlet = eXo.calendar.UICalendarPortlet ;
 	UICalendarPortlet.interval = ((arguments.length > 0) && (isNaN(parseInt(arguments[0])) == false )) ? parseInt(arguments[0]) : parseInt(15) ;
 	var workingStart =  ((arguments.length > 1) && (isNaN(parseInt(arguments[1])) == false ) && (arguments[1] != "null")) ? arguments[1] : "" ;
@@ -725,8 +731,9 @@ UICalendarPortlet.prototype.weekViewCallback = function(evt) {
 	var map = null ;
 	var obj = null ;
 	var items = DOMUtil.findDescendantsByTagName(UIContextMenu.menuElement,"a") ;
-	if (DOMUtil.hasClass(src,"EventContainerBorder") || DOMUtil.hasClass(src,"EventContainerBar") || DOMUtil.hasClass(src,"EventContainer") || DOMUtil.hasClass(src,"ResizeEventContainer") || (src.tagName.toLowerCase() == "p")) {
-		var obj = (DOMUtil.findAncestorByClass(src, "EventContainerBorder"))? DOMUtil.findAncestorByClass(src, "EventContainerBorder") : src ;
+	//if (DOMUtil.hasClass(src,"EventContainerBorder") || DOMUtil.hasClass(src,"EventContainerBar") || DOMUtil.hasClass(src,"EventContainer") || DOMUtil.hasClass(src,"ResizeEventContainer") || (src.tagName.toLowerCase() == "p")) {
+	if (DOMUtil.findAncestorByClass(src, "WeekViewEventBoxes") || DOMUtil.hasClass(src, "WeekViewEventBoxes")) {
+		var obj = (DOMUtil.findAncestorByClass(src, "WeekViewEventBoxes"))? DOMUtil.findAncestorByClass(src, "WeekViewEventBoxes") : src ;
 		var eventId = obj.getAttribute("eventid") ;
 		var calendarId = obj.getAttribute("calid") ;
 		var calType = obj.getAttribute("calType") ;
@@ -817,39 +824,39 @@ UICalendarPortlet.prototype.filterByGroup = function(obj) {
 	}
 } ;
 
-UICalendarPortlet.prototype.checkSpaceAvailable = function() {
-	var uiMonthViewGrid = document.getElementById("UIMonthViewGrid") ;
-	if (!uiMonthViewGrid) return ;
-	var DOMUtil = eXo.core.DOMUtil ;
-	var tds = DOMUtil.findDescendantsByTagName(uiMonthViewGrid, "td") ;
-	var eventBoxes = null ;
-	for(var i = 0 ; i < tds.length ; i ++) {
-		eventBoxes = DOMUtil.findDescendantsByClass(tds[i], "div", "EventBoxes") ;
-		if (!eventBoxes || (eventBoxes.length <= 3)) continue ;
-		var n = 0 ;
-		var height = 0 ;
-		var len = eventBoxes.length ;
-		for(var j = 0 ; j < len ; j ++) {
-			if (eventBoxes[j].style.display != "none") {
-				n++ ;
-				height += eventBoxes[j].offsetHeight ;
-				if (height >= 50) break ;
-			}	
-		}
-		var newMore = len - n ;
-		var more = tds[i].getElementsByTagName("a")[0] ;
-		if ((n < 3) && (n > 0)) {
-			more.innerHTML = String(more.innerHTML).replace(/\+\s+\d*/,"+ " + newMore) ;
-			more.style.display = "block" ;
-		} else if (n == 0){
-			more.style.display = "none" ;
-		} else {
-			more.innerHTML = String(more.innerHTML).replace(/\+\s+\d*/,"+ " + newMore) ;
-			more.style.display = "block" ;
-		}
-		eventBoxes = null ;
-	}
-} ;
+//UICalendarPortlet.prototype.checkSpaceAvailable = function() {
+//	var uiMonthViewGrid = document.getElementById("UIMonthViewGrid") ;
+//	if (!uiMonthViewGrid) return ;
+//	var DOMUtil = eXo.core.DOMUtil ;
+//	var tds = DOMUtil.findDescendantsByTagName(uiMonthViewGrid, "td") ;
+//	var eventBoxes = null ;
+//	for(var i = 0 ; i < tds.length ; i ++) {
+//		eventBoxes = DOMUtil.findDescendantsByClass(tds[i], "div", "EventBoxes") ;
+//		if (!eventBoxes || (eventBoxes.length <= 3)) continue ;
+//		var n = 0 ;
+//		var height = 0 ;
+//		var len = eventBoxes.length ;
+//		for(var j = 0 ; j < len ; j ++) {
+//			if (eventBoxes[j].style.display != "none") {
+//				n++ ;
+//				height += eventBoxes[j].offsetHeight ;
+//				if (height >= 50) break ;
+//			}	
+//		}
+//		var newMore = len - n ;
+//		var more = tds[i].getElementsByTagName("a")[0] ;
+//		if ((n < 3) && (n > 0)) {
+//			more.innerHTML = String(more.innerHTML).replace(/\+\s+\d*/,"+ " + newMore) ;
+//			more.style.display = "block" ;
+//		} else if (n == 0){
+//			more.style.display = "none" ;
+//		} else {
+//			more.innerHTML = String(more.innerHTML).replace(/\+\s+\d*/,"+ " + newMore) ;
+//			more.style.display = "block" ;
+//		}
+//		eventBoxes = null ;
+//	}
+//} ;
 
 UICalendarPortlet.prototype.filterByCalendar = function(calendarId, status) {
 	var uiCalendarViewContainer = document.getElementById("UICalendarViewContainer") ;
@@ -899,7 +906,7 @@ UICalendarPortlet.prototype.filterByCategory = function() {
 		}
 		else events[i].style.display = "none" ;
 	}
-	if (document.getElementById("UIMonthViewGrid")) eXo.calendar.UICalendarPortlet.checkSpaceAvailable() ;
+	//if (document.getElementById("UIMonthViewGrid")) eXo.calendar.UICalendarPortlet.checkSpaceAvailable() ;
 	if (document.getElementById("UIDayViewGrid")) eXo.calendar.UICalendarPortlet.showEvent() ;
 	if (document.getElementById("UIWeekViewGrid")) eXo.calendar.UIWeekView.init() ;
 	//eXo.calendar.UICalendarPortlet.checkSpaceAvailable() ;	

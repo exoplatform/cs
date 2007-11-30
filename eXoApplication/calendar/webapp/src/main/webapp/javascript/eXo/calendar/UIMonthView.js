@@ -88,7 +88,6 @@ UIMonthView.prototype.createBars = function(event) {
 		}
 		if((endDay == 0) && UICalendarPortlet.isBeginDate(end)) fullDayEvent.pop() ;
 		else {
-		//if (len >= 3) {
 			fullDayEvent[len - 1].style.top = parseInt(fullDayEvent[len - 2].style.top) + this.unitY + "px" ;
 			fullDayEvent[len - 1].style.left = "0px" ;
 			if (UICalendarPortlet.isBeginDate(end)) fullDayEvent[len - 1].style.width = endDay * this.unitX + "px" ;
@@ -96,7 +95,6 @@ UIMonthView.prototype.createBars = function(event) {
 			checkbox = DOMUtil.findFirstDescendantByClass(fullDayEvent[len-1], "input", "checkbox") ;
 			if (checkbox) DOMUtil.removeElement(checkbox) ;
 			this.eventContainer.appendChild(fullDayEvent[len-1]) ;
-		//}			
 		}
 	}
 }

@@ -167,6 +167,7 @@ UIWeekView.prototype.isCol = function(evt) {
 UIWeekView.prototype.initResize = function(evt) {
 	var _e = window.event || evt ;
 	_e.cancelBubble = true ;
+	if(_e.button == 2) return ;
 	var UIResizeEvent = eXo.calendar.UIResizeEvent ;
 	var outerElement = eXo.core.DOMUtil.findAncestorByClass(this,'EventContainerBorder') ;
 	var innerElement = eXo.core.DOMUtil.findPreviousElementByTagName(this, "div") ;
@@ -194,6 +195,7 @@ UIWeekView.prototype.resizeCallback = function(evt) {
 UIWeekView.prototype.initAllDayRightResize = function(evt) {
 	var _e = window.event || evt ;
 	_e.cancelBubble = true ;
+	if (_e.button == 2) return ;
 	var UIHorizontalResize = eXo.calendar.UIHorizontalResize ;
 	var outerElement = eXo.core.DOMUtil.findAncestorByClass(this,'WeekViewEventBoxes') ;
 	var innerElement = eXo.core.DOMUtil.findFirstDescendantByClass(outerElement, "div", "EventAlldayContent") ;
@@ -205,6 +207,7 @@ UIWeekView.prototype.initAllDayRightResize = function(evt) {
 UIWeekView.prototype.initAllDayLeftResize = function(evt) {
 	var _e = window.event || evt ;
 	_e.cancelBubble = true ;
+	if (_e.button == 2) return ;	
 	var UIHorizontalResize = eXo.calendar.UIHorizontalResize ;
 	var outerElement = eXo.core.DOMUtil.findAncestorByClass(this,'WeekViewEventBoxes') ;
 	var innerElement = eXo.core.DOMUtil.findFirstDescendantByClass(outerElement, "div", "EventAlldayContent") ;
@@ -275,6 +278,7 @@ UIWeekView.prototype.leftResizeCallback = function() {
 
 UIWeekView.prototype.initAlldayDND = function(evt) {
 	var _e = window.event || evt ;
+	if (_e.button == 2) return ;
 	var UIWeekView = eXo.calendar.UIWeekView ;
 	var DragDrop = eXo.core.DragDrop ;
 	var EventAllday = eXo.core.DOMUtil.findAncestorByClass(this, "EventAllday") ;
