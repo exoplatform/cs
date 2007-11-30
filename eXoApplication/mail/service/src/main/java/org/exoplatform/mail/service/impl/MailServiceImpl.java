@@ -14,7 +14,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 
 import javax.activation.DataHandler;
@@ -180,61 +179,53 @@ public class MailServiceImpl implements MailService{
       }});
     */
     Session session = Session.getInstance(props, null);
-    sendMessage(session, message);
-  }
-  
-  public void sendMessages(List<Message> msgList, ServerConfiguration serverConfig) throws Exception {
-    for (Message msg : msgList) {
-      msg.setServerConfiguration(serverConfig);
-      sendMessage(msg);
-    }
+    Transport transport = session.getTransport(Utils.SVR_SMTP);
+    transport.connect(outgoingHost, smtpUser, acc.getIncomingPassword()) ;
+    send(session, transport, message);
+    transport.close();
   }
   
   public void sendMessage(Message message) throws Exception {
-    Map<String, String> messageProps = message.getProperties();
-    Properties props = new Properties();
-    if (message.getServerConfiguration() == null) {
-      props.put(Utils.SVR_INCOMING_USERNAME, messageProps.get(Utils.SVR_INCOMING_USERNAME));
-      props.put(Utils.SVR_INCOMING_PASSWORD, messageProps.get(Utils.SVR_INCOMING_PASSWORD));
-      props.put(Utils.SVR_SMTP_USER, messageProps.get(Utils.SVR_SMTP_USER)) ;
-      props.put(Utils.SVR_SMTP_HOST, messageProps.get(Utils.SVR_SMTP_HOST)) ;
-      props.put(Utils.SVR_SMTP_PORT, messageProps.get(Utils.SVR_SMTP_PORT)) ;
-      props.put(Utils.SVR_SMTP_AUTH, "true");
-      props.put(Utils.SVR_SMTP_SOCKET_FACTORY_PORT, messageProps.get(Utils.SVR_SMTP_PORT));
-      if (Boolean.valueOf(messageProps.get(Utils.SVR_INCOMING_SSL))) {
-        props.put(Utils.SVR_INCOMING_SSL, messageProps.get(Utils.SVR_INCOMING_SSL));
-        props.put(Utils.SVR_SMTP_STARTTLS_ENABLE, "true");
-        props.put(Utils.SVR_SMTP_SOCKET_FACTORY_CLASS,  "javax.net.ssl.SSLSocketFactory");
-      }
-      props.put(Utils.SVR_SMTP_SOCKET_FACTORY_FALLBACK, "false");
-    } else {
-      ServerConfiguration serverConfig = message.getServerConfiguration();
-      props.put(Utils.SVR_INCOMING_USERNAME, serverConfig.getUserName());
-      props.put(Utils.SVR_INCOMING_PASSWORD, serverConfig.getPassword());
-      props.put(Utils.SVR_SMTP_USER, serverConfig.getUserName()) ;
-      props.put(Utils.SVR_SMTP_HOST, serverConfig.getOutgoingHost()) ;
-      props.put(Utils.SVR_SMTP_PORT, serverConfig.getOutgoingPort()) ;
-      props.put(Utils.SVR_SMTP_AUTH, "true");
-      props.put(Utils.SVR_SMTP_SOCKET_FACTORY_PORT, serverConfig.getOutgoingPort());
-      if (serverConfig.isSsl()) {
-        props.put(Utils.SVR_INCOMING_SSL, String.valueOf(serverConfig.isSsl()));
-        props.put(Utils.SVR_SMTP_STARTTLS_ENABLE, "true");
-        props.put(Utils.SVR_SMTP_SOCKET_FACTORY_CLASS,  "javax.net.ssl.SSLSocketFactory");
-      }
-      props.put(Utils.SVR_SMTP_SOCKET_FACTORY_FALLBACK, "false");
-    }
-    Session session = Session.getInstance(props, null);
-    sendMessage(session, message);
+    List<Message> msgList = new ArrayList<Message>();
+    msgList.add(message);
+    sendMessages(msgList, message.getServerConfiguration());
   }
   
-  public String sendMessage(Session session, Message message) throws Exception {
-    System.out.println(" #### Sending email ... ");
+  public void sendMessages(List<Message> msgList, ServerConfiguration serverConfig) throws Exception {
+    Properties props = new Properties();
+    props.put(Utils.SVR_INCOMING_USERNAME, serverConfig.getUserName());
+    props.put(Utils.SVR_INCOMING_PASSWORD, serverConfig.getPassword());
+    props.put(Utils.SVR_SMTP_USER, serverConfig.getUserName()) ;
+    props.put(Utils.SVR_SMTP_HOST, serverConfig.getOutgoingHost()) ;
+    props.put(Utils.SVR_SMTP_PORT, serverConfig.getOutgoingPort()) ;
+    props.put(Utils.SVR_SMTP_AUTH, "true");
+    props.put(Utils.SVR_SMTP_SOCKET_FACTORY_PORT, serverConfig.getOutgoingPort());
+    if (serverConfig.isSsl()) {
+      props.put(Utils.SVR_INCOMING_SSL, String.valueOf(serverConfig.isSsl()));
+      props.put(Utils.SVR_SMTP_STARTTLS_ENABLE, "true");
+      props.put(Utils.SVR_SMTP_SOCKET_FACTORY_CLASS,  "javax.net.ssl.SSLSocketFactory");
+    }
+    props.put(Utils.SVR_SMTP_SOCKET_FACTORY_FALLBACK, "false");
+    Session session = Session.getInstance(props, null);
     Transport transport = session.getTransport(Utils.SVR_SMTP);
-    Properties props = session.getProperties();
-    transport.connect(props.getProperty(Utils.SVR_SMTP_HOST), props.getProperty(Utils.SVR_INCOMING_USERNAME), props.getProperty(Utils.SVR_INCOMING_PASSWORD)) ;
+    transport.connect(serverConfig.getOutgoingHost(), serverConfig.getUserName(), serverConfig.getPassword()) ;
+    for (Message msg : msgList) {
+      msg.setServerConfiguration(serverConfig);
+      send(session, transport, msg);
+    }
+    transport.close();
+  }
+  
+  public String send(Session session, Transport transport, Message message) throws Exception {
+    System.out.println(" #### Sending email ... ");
     javax.mail.Message mimeMessage = new MimeMessage(session);
     String status = "";
-    InternetAddress addressFrom = new InternetAddress(message.getFrom());
+    InternetAddress addressFrom ;
+    if (message.getFrom() != null) {
+      addressFrom = new InternetAddress(message.getFrom());
+    } else {
+      addressFrom = new InternetAddress(session.getProperties().getProperty(Utils.SVR_SMTP_USER));
+    }
     mimeMessage.setFrom(addressFrom);
     if(message.getMessageTo() != null) {
       mimeMessage.setRecipients(javax.mail.Message.RecipientType.TO, InternetAddress.parse(message.getMessageTo()));
@@ -301,9 +292,8 @@ public class MailServiceImpl implements MailService{
     } catch (Exception e) {
       status = "There was an unexpected error. Sending Falied !" + e.getMessage();
     } finally {
-      //System.out.println(" #### Info : " + status);      
+      System.out.println(" #### Info : " + status);      
     } 
- 
     return status ;
   }
 
