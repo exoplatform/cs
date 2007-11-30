@@ -183,7 +183,7 @@ public class MailServiceImpl implements MailService{
     Transport transport = session.getTransport(Utils.SVR_SMTP);
     transport.connect(outgoingHost, smtpUser, acc.getIncomingPassword()) ;
     String status = send(session, transport, message);
-    System.out.println("### Infor : " + status);
+    System.out.println(" ### Infor : " + status);
     transport.close();
   }
   
