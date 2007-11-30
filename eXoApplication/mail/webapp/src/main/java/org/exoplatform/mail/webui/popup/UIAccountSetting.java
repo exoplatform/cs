@@ -83,7 +83,7 @@ public class UIAccountSetting extends UIFormTabPane {
     accountInputSet.addUIFormInput(new UIFormStringInput(FIELD_ACCOUNT_NAME, null, null)) ;
     accountInputSet.addUIFormInput(new UIFormTextAreaInput(FIELD_ACCOUNT_DESCRIPTION, null, null)) ;
     addUIFormInput(accountInputSet); 
-    
+    setSelectedTab(accountInputSet.getId()) ;
     UIFormInputWithActions  identityInputSet = new UIFormInputWithActions(TAB_IDENTITY_SETTINGS);
     
     identityInputSet.addUIFormInput(new UIFormStringInput(FIELD_DISPLAY_NAME, null, null)) ;

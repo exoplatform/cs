@@ -79,6 +79,8 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
 
   public UIAccountCreation() throws Exception {
     super("UIAccountCreation") ;
+    UIAccountWizardStep1 uiAccountWizardStep1 =  new UIAccountWizardStep1(INPUT_STEP1) ;
+    setSelectedTab(uiAccountWizardStep1.getId()) ;
     addUIComponentInput(new UIAccountWizardStep1(INPUT_STEP1)) ;
     addUIComponentInput(new UIAccountWizardStep2(INPUT_STEP2)) ;
     addUIComponentInput(new UIAccountWizardStep3(INPUT_STEP3)) ;
