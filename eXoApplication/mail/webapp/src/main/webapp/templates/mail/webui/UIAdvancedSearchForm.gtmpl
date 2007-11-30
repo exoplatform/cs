@@ -92,7 +92,7 @@
 		            uicomponent.renderField(uicomponent.FIELD_FROM_DATE);
 		          %>
 		          </td>
-		          <td class="FieldLabel" style="width: 105px">
+		          <td class="FieldLabel" style="width: 57px">
 		            To
 		          </td>
 		          <td class="FieldComponent"  colspan="2">

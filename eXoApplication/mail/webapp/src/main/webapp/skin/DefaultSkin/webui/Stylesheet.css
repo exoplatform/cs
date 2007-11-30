@@ -1076,7 +1076,7 @@
 }
 
 .UIAdvanceSearchMail .HorizontalLayout .FieldShort select {
-	width: 120px;
+	width: 135px;
 }
 
 .UIAdvanceSearchMail .HorizontalLayout .SearchForDate {
@@ -1084,15 +1084,15 @@
 }
 
 .UIAdvanceSearchMail .HorizontalLayout .SearchForDate .FieldLabel {
-	width: 80px;
+	width: 81px;
 }
 
 .UIAdvanceSearchMail .HorizontalLayout .SearchForDate .FieldComponent {
 	width: 120px;
 }
 	
-.UIAdvanceSearchMail .HorizontalLayout .SearchForDate input{
-	width: 120px;
+.UIAdvanceSearchMail .HorizontalLayout .SearchForDate input {
+	width: 130px;
 }
 
 .UIAdvanceSearchMail .HorizontalLayout .SearchForPriority {
@@ -1100,10 +1100,7 @@
 }
 
 .UIAdvanceSearchMail .HorizontalLayout .SearchForPriority input.checkbox {
-	margin-top: 4px;
-}
-
-.UIAdvanceSearchMail .HorizontalLayout .SearchForPriority .FieldShort select {
+	margin: 5px 0px 0px 8px;
 }
 
 .UIAdvanceSearchMail .HorizontalLayout .SearchContent .Short input {
@@ -1111,11 +1108,11 @@
 }
 
 .UIAdvanceSearchMail .HorizontalLayout .SearchContent .Short select {
-	width: 130px;
+	width: 135px;
 }
 
 .UIAdvanceSearchMail .HorizontalLayout .SearchForPriority .FieldLabel {
-	width: 80px;
+	width: 83px;
 }
 
 .UIAdvanceSearchMail .HorizontalLayout .SearchForPriority .ShortComponent {
