@@ -28,12 +28,12 @@
 
 .UIForumPageIterator .TotalPages {
   float: left ;
-  line-height: 16px ; vertical-align: middle;
+  line-height: 16px ; 
 }
 
 .UIForumPageIterator .PagesTotalNumber {
   float: left ;
-  line-height: 17px ; vertical-align: middle;
+  line-height: 17px ; 
   color: #0183f1;
   margin-left: 5px;
 }
