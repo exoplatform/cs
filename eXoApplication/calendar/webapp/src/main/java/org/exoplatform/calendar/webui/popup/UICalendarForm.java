@@ -88,6 +88,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
     addCategory.setActionName("AddCategory") ;
     actions.add(addCategory) ;
     calendarDetail.setActionField(CATEGORY, actions) ;
+    setSelectedTab(calendarDetail.getId()) ;
     addChild(calendarDetail) ;
 
     UIFormInputWithActions sharing = new UIFormInputWithActions(INPUT_SHARE) ;
@@ -114,7 +115,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
     membershipPerm.setCssIconClass("SelectMemberIcon") ;
     actions.add(membershipPerm) ;
     sharing.setActionField(EDIT_PERMISSION, actions) ;
-    sharing.setRendered(false) ;
+    //sharing.setRendered(false) ;
     addChild(sharing) ;
   }
 

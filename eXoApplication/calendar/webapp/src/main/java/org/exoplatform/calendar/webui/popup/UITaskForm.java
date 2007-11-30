@@ -78,6 +78,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
     super("UIEventForm", false);
     UITaskDetailTab uiTaskDetailTab =  new UITaskDetailTab(TAB_TASKDETAIL) ;
     addChild(uiTaskDetailTab) ;
+    setSelectedTab(uiTaskDetailTab.getId()) ;
     UIEventReminderTab eventReminderTab =  new UIEventReminderTab(TAB_TASKREMINDER) ;
     addChild(eventReminderTab) ;
     setRenderedChild(TAB_TASKDETAIL) ;

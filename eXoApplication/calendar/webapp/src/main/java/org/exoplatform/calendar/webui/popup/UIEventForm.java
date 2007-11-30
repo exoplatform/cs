@@ -93,6 +93,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     super("UIEventForm", false);
     UIEventDetailTab eventDetailTab =  new UIEventDetailTab(TAB_EVENTDETAIL) ;
     addChild(eventDetailTab) ;
+    setSelectedTab(eventDetailTab.getId()) ;
     UIEventReminderTab eventReminderTab =  new UIEventReminderTab(TAB_EVENTREMINDER) ;
     addChild(eventReminderTab) ;
     UIFormInputWithActions eventShareTab =  new UIFormInputWithActions(TAB_EVENTSHARE) ;

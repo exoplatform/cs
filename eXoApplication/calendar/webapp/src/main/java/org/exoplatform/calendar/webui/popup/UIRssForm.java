@@ -73,7 +73,8 @@ public class UIRssForm extends UIFormTabPane implements UIPopupComponent{
     rssInfo.addUIFormInput(new UIFormStringInput(COPYRIGHT, COPYRIGHT, "Copyright by 2000-2005 eXo Platform SARL")) ;
     rssInfo.addUIFormInput(new UIFormStringInput(LINK, LINK, "www.exoplatform.org")) ;    
     rssInfo.addUIFormInput(new UIFormDateTimeInput(PUBLIC_DATE, PUBLIC_DATE, new Date())) ;
-    rssInfo.setRendered(true) ;
+    setSelectedTab(rssInfo.getId()) ;
+    //rssInfo.setRendered(true) ;
     addUIFormInput(rssInfo) ;
     UIFormInputWithActions rssCalendars = new UIFormInputWithActions("rssCalendars") ;
     
@@ -81,7 +82,7 @@ public class UIRssForm extends UIFormTabPane implements UIPopupComponent{
     for(Calendar calendar : calendars) {
       rssCalendars.addUIFormInput(new UIFormCheckBoxInput<Boolean>(calendar.getName(), calendar.getId(), true)) ;
     }
-    rssCalendars.setRendered(false) ;
+    //rssCalendars.setRendered(false) ;
     addUIFormInput(rssCalendars) ;
   }
   

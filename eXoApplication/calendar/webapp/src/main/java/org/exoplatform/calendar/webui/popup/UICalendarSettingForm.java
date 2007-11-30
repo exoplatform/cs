@@ -71,7 +71,8 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
   private List<Calendar> calendars_ ;
   public UICalendarSettingForm() throws Exception{
     super("UICalendarSettingForm", false) ;
-    UIFormInputWithActions setting = new UIFormInputWithActions("setting").setRendered(true) ;
+    UIFormInputWithActions setting = new UIFormInputWithActions("setting") ;//.setRendered(true) ;
+    setSelectedTab(setting.getId()) ;
     List<SelectItemOption<String>> viewTypes = new ArrayList<SelectItemOption<String>>() ;
     viewTypes.add(new SelectItemOption<String>("Day view", CalendarSetting.DAY_VIEW)) ;
     viewTypes.add(new SelectItemOption<String>("Week view", CalendarSetting.WEEK_VIEW)) ;
@@ -122,7 +123,7 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
     setting.addUIFormInput(new UIFormStringInput(BASE_URL, BASE_URL, null)) ;
     addUIFormInput(setting) ;
     UIFormInputWithActions defaultCalendars = new UIFormInputWithActions("defaultCalendars") ;    
-    defaultCalendars.setRendered(false) ;
+    //defaultCalendars.setRendered(false) ;
     addUIFormInput(defaultCalendars) ;
   }
 
