@@ -137,8 +137,7 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent, UI
     HomeTab.addUIFormInput(new UIFormStringInput(FIELD_HOMEFAX_INPUT, FIELD_HOMEFAX_INPUT, null));
     HomeTab.addUIFormInput(new UIFormStringInput(FIELD_PERSONALSITE_INPUT, FIELD_PERSONALSITE_INPUT, null));
     NoteTab.addUIFormInput(new UIFormTextAreaInput(FIELD_NOTE_INPUT, FIELD_NOTE_INPUT, null));
-    setRenderTabId(ProfileTab.getId());
-    
+    this.setSelectedTab(ProfileTab.getId());
     UIFormInputWithActions sharing = new UIFormInputWithActions(INPUT_SHARETAB) ;
     sharing.addUIFormInput(new UIFormInputInfo(FIELD_INPUT_INFO, FIELD_INPUT_INFO, null)) ;
     
