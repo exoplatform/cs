@@ -35,8 +35,6 @@ public class UIContactPreviewForm extends UIForm implements UIPopupComponent {
   public void setContact(Contact c) { contact_ = c; }
   public Contact getContact() { 
     
-    System.out.println("\n\n get note :" + contact_.getNote() + "\n\n");
-    
     return contact_; 
     
   

@@ -804,7 +804,7 @@ public class JCRDataStorage implements DataStorage {
     contactHomeNode.getSession().save() ;
     publicContactHomeNode.getSession().save();
   }
-  
+
   public void addTag(String username, List<String> contactIds, List<Tag> tags) throws Exception {
     Node tagHomeNode = getTagHome(username);
     Map<String, String> tagMap = new HashMap<String, String> () ;
@@ -829,14 +829,15 @@ public class JCRDataStorage implements DataStorage {
         contactNode = publicContactHomeNode.getNode(contactId);       
       } 
       if (contactNode != null) {
+        Map<String, String> thisTagMap = new HashMap<String, String> () ;
+        thisTagMap = tagMap ;
         Value[] values = null ;
         if(contactNode.hasProperty("exo:tags")){
           values = contactNode.getProperty("exo:tags").getValues() ;
-          for(Value value : values) tagMap.put(value.getString(), value.getString()) ;         
+          for(Value value : values) thisTagMap.put(value.getString(), value.getString()) ;         
         }
-        contactNode.setProperty("exo:tags", tagMap.values().toArray(new String[]{})) ;
-        if (values != null)
-          for(Value value : values) tagMap.remove(value.getString()) ;
+        contactNode.setProperty("exo:tags", thisTagMap.values().toArray(new String[]{})) ;
+        
       }      
     }
     contactHomeNode.getSession().save() ;

@@ -10,20 +10,43 @@
 		  <%uicomponent.renderChild(UITree.class);%>
 		</div>
 	  <div class="MembershipSelector">
-	    <div class="MembershipTitle"><%=_ctx.appRes(uicomponent.id+".label.selectUser")%></div>
+	    <div class="MembershipTitle">
+	    	<%if(uicomponent.isSelectUser()){%>
+	    		<%=_ctx.appRes(uicomponent.id+".label.selectUser")%>
+	    	<%}%>
+	    	<%if(uicomponent.isSelectMemberShip()){%>
+	    	 	<%=_ctx.appRes(uicomponent.id+".label.selectMemberShip")%>
+			  <%}%>
+			  <%if(uicomponent.isSelectGroup()){%>
+			  	<%=_ctx.appRes(uicomponent.id+".label.selectGroup")%>
+			  <%}%>
+	    </div>
       <div class="OverflowContainer">
 	      <%                
 	      boolean even = true ;
 	      if(uicomponent.getCurrentGroup() != null) {
-		      for(username in uicomponent.getUsername()){
+		      for(user in uicomponent.getList()){
 		        String rowCssClass = "OddRow" ;
 		        if(even) rowCssClass = "EvenRow" ;  
 		        even = !even ;
+		        	key = "" ;
+			        if(uicomponent.isSelectMemberShip()){ 
+			        	if(uicomponent.getCurrentGroup().getParentId() != null) {
+			        		 key = user + ":"+  uicomponent.getCurrentGroup().getParentId();
+			        	} else {
+			        		 key = user + ":/"+  uicomponent.getCurrentGroup().getGroupName() ;
+			        	}
+			        } else if(uicomponent.isSelectUser()){ 
+			        	key = user ;
+			        } else if(uicomponent.isSelectGroup()){ 
+			        	key = user ;
+			        }
+			          
 	      %>
 			      <div class="$rowCssClass">
 			        <div class="ItemIcon"><span></span></div>
-			        <a href="<%=uicomponent.event('SelectMembership', username)%>"><%=username%></a>	
-			        <div style="clear: left"><span></span></div>								           
+			        	<a href="<%=uicomponent.event('SelectMembership',key)%>">$user</a>	
+			        	<div style="clear: left"><span></span></div>								           
 			      </div>
 	      <%}
 	      }%>

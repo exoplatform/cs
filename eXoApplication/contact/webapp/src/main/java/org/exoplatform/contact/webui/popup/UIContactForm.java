@@ -5,7 +5,9 @@
 package org.exoplatform.contact.webui.popup;
 
 import java.io.ByteArrayInputStream;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
@@ -16,7 +18,13 @@ import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContactPreview;
 import org.exoplatform.contact.webui.UIContacts;
 import org.exoplatform.contact.webui.UIWorkingContainer;
+import org.exoplatform.container.PortalContainer;
+import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.organization.Group;
+import org.exoplatform.services.organization.OrganizationService;
+import org.exoplatform.services.organization.impl.GroupImpl;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.webui.config.Application;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -25,10 +33,12 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
+import org.exoplatform.webui.form.UIFormInputInfo;
 import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTabPane;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
+import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
 
 /**
  * Created by The eXo Platform SARL
@@ -44,8 +54,7 @@ import org.exoplatform.webui.form.UIFormTextAreaInput;
       @EventConfig(listeners = UIContactForm.CancelActionListener.class, phase=Phase.DECODE),
       @EventConfig(listeners = UIContactForm.ChangeImageActionListener.class),
       @EventConfig(listeners = UIContactForm.DeleteImageActionListener.class),
-      @EventConfig(phase = Phase.DECODE, listeners = UIContactForm.SelectUserActionListener.class),
-      @EventConfig(phase = Phase.DECODE, listeners = UIContactForm.SelectMemberActionListener.class)
+      @EventConfig(phase = Phase.DECODE, listeners = UIContactForm.SelectPermissionActionListener.class)
     }
 )
 public class UIContactForm extends UIFormTabPane implements UIPopupComponent, UISelector {
@@ -88,7 +97,12 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent, UI
   public static final String INPUT_WORKTAB = "workTab" ;
   public static final String INPUT_NODETAB = "noteTab" ;
   public static final String INPUT_SHARETAB =  "shareContactTab" ;
-
+  
+  final static public String FIELD_EDITPERMISSION = "editPermission" ;
+  public static String[] FIELD_SHAREDCONTACT_BOX = null ;
+  public static String FIELD_INPUT_INFO = "selectGroups";
+  
+  
   public UIContactForm() throws Exception {
     super("UIContactForm", false);
     UIProfileInputSet ProfileTab = new UIProfileInputSet(INPUT_PROFILETAB) ;
@@ -96,7 +110,6 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent, UI
     UIFormInputWithActions HomeTab = new UIFormInputWithActions(INPUT_HOMETAB) ;
     UIFormInputWithActions WorkTab = new UIFormInputWithActions(INPUT_WORKTAB) ;
     UIFormInputWithActions NoteTab = new UIFormInputWithActions(INPUT_NODETAB) ;
-    UIPermissionInputSet ShareTab = new UIPermissionInputSet(INPUT_SHARETAB) ;
 
     WorkTab.addUIFormInput(new UIFormStringInput(FIELD_WORKADDRESS_INPUT, FIELD_WORKADDRESS_INPUT, null));
     WorkTab.addUIFormInput(new UIFormStringInput(FIELD_WORKCITY_INPUT, FIELD_WORKCITY_INPUT, null));
@@ -129,15 +142,75 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent, UI
     HomeTab.addUIFormInput(new UIFormStringInput(FIELD_PERSONALSITE_INPUT, FIELD_PERSONALSITE_INPUT, null));
     NoteTab.addUIFormInput(new UIFormTextAreaInput(FIELD_NOTE_INPUT, FIELD_NOTE_INPUT, null));
 
+    
+    UIFormInputWithActions sharing = new UIFormInputWithActions(INPUT_SHARETAB) ;
+    sharing.addUIFormInput(new UIFormInputInfo(FIELD_INPUT_INFO, FIELD_INPUT_INFO, null)) ;
+    
+    String[] groups = ContactUtils.getUserGroups() ;
+    FIELD_SHAREDCONTACT_BOX = new String[groups.length];
+    for(int i = 0; i < groups.length; i ++) {
+      FIELD_SHAREDCONTACT_BOX[i] = groups[i] ;
+      sharing.addUIFormInput(
+          new UIFormCheckBoxInput<Boolean>(FIELD_SHAREDCONTACT_BOX[i], FIELD_SHAREDCONTACT_BOX[i], false));
+    } 
+    List<ActionData> actions = new ArrayList<ActionData>() ;
+    actions = new ArrayList<ActionData> () ;
+    sharing.addUIFormInput(new UIFormStringInput(FIELD_EDITPERMISSION, null, null)) ;
+    ActionData editPermission = new ActionData() ;
+    editPermission.setActionListener("SelectPermission") ;
+    editPermission.setActionName("SelectUser") ;
+    editPermission.setActionParameter(UISelectComponent.TYPE_USER) ;
+    editPermission.setActionType(ActionData.TYPE_ICON) ;
+    editPermission.setCssIconClass("SelectUserIcon") ;
+    
+    actions.add(editPermission) ;
+    ActionData membershipPerm = new ActionData() ;
+    membershipPerm.setActionListener("SelectPermission") ;
+    membershipPerm.setActionName("SelectMemberShip") ;
+    membershipPerm.setActionParameter(UISelectComponent.TYPE_MEMBERSHIP) ;
+    membershipPerm.setActionType(ActionData.TYPE_ICON) ;
+    membershipPerm.setCssIconClass("SelectMemberIcon") ;
+    actions.add(membershipPerm) ;
+    sharing.setActionField(FIELD_EDITPERMISSION, actions) ;
+    sharing.setRendered(false) ;   
+    
     addUIFormInput(ProfileTab) ;
     addUIFormInput(WorkTab) ;
     addUIFormInput(IMContactTab) ;    
     addUIFormInput(HomeTab) ;
     addUIFormInput(NoteTab) ;
-    //addUIFormInput(ShareTab) ;
-    addUIComponentInput(ShareTab) ;
+    addChild(sharing) ;
     setRenderedChild(UIProfileInputSet.class) ;  
   } 
+  
+  public List<String> getCheckedSharedGroup() {
+    List<String> groups = new ArrayList<String>() ;
+    for (int i = 0; i < FIELD_SHAREDCONTACT_BOX.length; i ++) {
+      if (getUIFormCheckBoxInput(FIELD_SHAREDCONTACT_BOX[i]).isChecked())
+        groups.add(FIELD_SHAREDCONTACT_BOX[i]);
+    }
+    return groups ;
+  }
+  
+  private Object[] getPublicGroups() throws Exception {
+    OrganizationService organization = getApplicationComponent(OrganizationService.class) ;
+    String currentUser = Util.getPortalRequestContext().getRemoteUser() ;
+    return organization.getGroupHandler().findGroupsOfUser(currentUser).toArray() ;
+  }
+  
+  @SuppressWarnings("unchecked")
+  private List getCheckedObjectSharedGroup() throws Exception {
+    List groups = new ArrayList() ;
+    for(Object o : getPublicGroups()) {
+      String groupId = ((Group)o).getId() ;
+      UIFormCheckBoxInput<Boolean> input =  getUIFormCheckBoxInput(groupId) ;
+      if(input != null && input.isChecked()) {
+        groups.add(o) ;
+      } 
+    }
+    return groups  ;
+  }
+  
   public String[] getActions() { return new String[] {"Save", "Cancel"} ; }
   public void activate() throws Exception {}
   public void deActivate() throws Exception {}
@@ -161,13 +234,13 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent, UI
         for (int i = 1; i < editPermission.length; i ++) 
           editPermissionBuffer.append("," + editPermission[i]);
       }   
-      getUIStringInput(UIPermissionInputSet.FIELD_EDITPERMISSION).setValue(editPermissionBuffer.toString());
+      getUIStringInput(FIELD_EDITPERMISSION).setValue(editPermissionBuffer.toString());
     }
-    String[] sharedBox = UIPermissionInputSet.FIELD_SHAREDCONTACT_BOX ;
+    String[] sharedBox = FIELD_SHAREDCONTACT_BOX ;
     for (String group : sharedBox) {
       getUIFormCheckBoxInput(group).setEnable(false) ;
     }
-    getUIStringInput(UIPermissionInputSet.FIELD_EDITPERMISSION).setEditable(false) ;
+    getUIStringInput(FIELD_EDITPERMISSION).setEditable(false) ;
     UIProfileInputSet profileTab = getChildById(INPUT_PROFILETAB) ;
     profileTab.setFieldFirstName(contact.getFirstName());
     profileTab.setFieldLastName(contact.getLastName());
@@ -214,7 +287,7 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent, UI
   }
   
   static  public class SaveActionListener extends EventListener<UIContactForm> {
-    @SuppressWarnings("deprecation")
+    //@SuppressWarnings("deprecation")
     public void execute(Event<UIContactForm> event) throws Exception {
       UIContactForm uiContactForm = event.getSource() ;
       UIApplication uiApp = uiContactForm.getAncestorOfType(UIApplication.class) ;
@@ -294,23 +367,16 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent, UI
       contact.setHomePhone2(uiContactForm.getUIStringInput(FIELD_HOMEPHONE2_INPUT).getValue());
       contact.setHomeFax(uiContactForm.getUIStringInput(FIELD_HOMEFAX_INPUT).getValue());
       contact.setPersonalSite(uiContactForm.getUIStringInput(FIELD_PERSONALSITE_INPUT).getValue());
-      
-      System.out.println("\n\n save note :" + uiContactForm.getUIFormTextAreaInput(FIELD_NOTE_INPUT).getValue());
-      
-      
       contact.setNote(uiContactForm.getUIFormTextAreaInput(FIELD_NOTE_INPUT).getValue());
       contact.setLastUpdated(new Date()) ;
 
       if (isNew_) {
-        UIPermissionInputSet permissionInputSet = uiContactForm.getChildById(INPUT_SHARETAB) ;
-        
-        String sharedGroups = permissionInputSet.getCheckedSharedGroup() ;
-        if (!ContactUtils.isEmpty(sharedGroups)) {
-          String editPermission = uiContactForm.getUIStringInput(UIPermissionInputSet.FIELD_EDITPERMISSION).getValue() ;
+        List<String> sharedGroups = uiContactForm.getCheckedSharedGroup() ;
+        if (sharedGroups.size() > 0) {
+          contact.setCategories(sharedGroups.toArray(new String[] {})) ;
+          String editPermission = uiContactForm.getUIStringInput(FIELD_EDITPERMISSION).getValue() ;
           if (!ContactUtils.isEmpty(editPermission))
             contact.setEditPermission(editPermission.split(","));
-          String[] categories = sharedGroups.toString().split(",") ;
-          contact.setCategories(categories);
           contact.setShared(true) ;
           contactService.saveSharedContact(contact, isNew_);
         } else {       
@@ -321,7 +387,7 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent, UI
             uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.selectGroup-required", null, 
                 ApplicationMessage.WARNING)) ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-            return ; 
+            return ;
           }
           contact.setCategories(new String[] { category });
           contactService.saveContact(username, contact, isNew_);
@@ -402,7 +468,7 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent, UI
   }
   */
   
-  static public class SelectUserActionListener extends EventListener<UIContactForm> {
+  /*static public class SelectUserActionListener extends EventListener<UIContactForm> {
     public void execute(Event<UIContactForm> event) throws Exception {      
       UIContactForm uiForm = event.getSource();
       UIGroupSelector uiGroupSelector = uiForm.createUIComponent(UIGroupSelector.class, null, null);
@@ -426,6 +492,34 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent, UI
       popupAction.activate(uiMemberSelect, 500, 0, true) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
+  }*/
+ 
+  static  public class SelectPermissionActionListener extends EventListener<UIContactForm> {
+    public void execute(Event<UIContactForm> event) throws Exception {
+      UIContactForm uiForm = event.getSource() ;
+      String permType = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      
+      uiForm.setRenderedChild(INPUT_SHARETAB) ;
+      List<String> checkedGroups = uiForm.getCheckedSharedGroup() ;
+      if(checkedGroups.size() == 0) {
+        UIApplication app = uiForm.getAncestorOfType(UIApplication.class) ;
+        app.addMessage(new ApplicationMessage("UIContactForm.msg.checkbox-public-notchecked", null,
+            ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(app.getUIPopupMessages()) ;
+        return ;
+      }
+      UIGroupSelector uiGroupSelector = uiForm.createUIComponent(UIGroupSelector.class, null, null);
+      uiGroupSelector.setType(permType) ;
+      
+      uiGroupSelector.setSelectedGroups(uiForm.getCheckedObjectSharedGroup()) ;
+      uiGroupSelector.setComponent(uiForm, new String[] { FIELD_EDITPERMISSION });
+      UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
+      UIPopupAction uiChildPopup = uiPopupContainer.getChild(UIPopupAction.class) ;
+      uiChildPopup.activate(uiGroupSelector, 500, 0, true) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
+      
+    }
   }
+  
   
 }

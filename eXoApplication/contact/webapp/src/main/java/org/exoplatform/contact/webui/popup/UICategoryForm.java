@@ -124,6 +124,8 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
   static  public class CancelActionListener extends EventListener<UICategoryForm> {
     public void execute(Event<UICategoryForm> event) throws Exception {
       UICategoryForm uiCategoryForm = event.getSource() ;
+      
+      /*
       UIPopupAction uiPopupAction = uiCategoryForm.getAncestorOfType(UIPopupAction.class) ;
       uiPopupAction.deActivate() ;
       if(uiPopupAction.getAncestorOfType(UIPopupAction.class) != null) {
@@ -134,6 +136,11 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
       UIAddressBooks addressBooks = uiCategoryForm
         .getAncestorOfType(UIContactPortlet.class).findFirstComponentOfType(UIAddressBooks.class) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(addressBooks) ;      
+      */
+
+      UIPopupAction uiPopupAction = uiCategoryForm.getAncestorOfType(UIPopupAction.class) ;
+      uiPopupAction.deActivate() ;
+    
     }
   }
   

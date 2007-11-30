@@ -51,7 +51,7 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
   public static String[] Types = null ;
   
   public UIImportForm() throws Exception {
-    setId("UIImportForm") ;
+    //setId("UIImportForm") ;
     this.setMultiPart(true) ;
     UIFormInputWithActions input = new UIFormInputWithActions(INPUT_CATEGORY) ;
     input.addUIFormInput(new UIFormSelectBox(FIELD_CATEGORY, FIELD_CATEGORY, getCategoryList())) ; 

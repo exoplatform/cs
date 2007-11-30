@@ -63,3 +63,12 @@
 	border: 1px solid #c7c7c7;
 	margin-bottom: 4px;
 }
+.SelectUserIcon {
+	width : 16px ;
+	height : 16px ;
+}
+
+.SelectMemberIcon {
+	width : 16px ;
+	height : 16px ;
+}

@@ -62,7 +62,11 @@ public class UISearchForm extends UIForm {
       UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
       uiContacts.setContacts(resultPageList) ;
       uiContacts.setDisplaySearchResult(true) ;
-      uiContacts.setViewContactThubnail(!uiContacts.getViewContactsList()) ;
+      
+      
+      uiContacts.setListBeforeSearch(uiContacts.getViewContactsList()) ;
+      
+      
       uiContacts.setViewContactsList(true) ;      
       event.getRequestContext()
         .addUIComponentToUpdateByAjax(uiContactPortlet.getChild(UIWorkingContainer.class)) ;

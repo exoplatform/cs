@@ -42,6 +42,7 @@ public class ContactUtils {
     if (s == null || s.trim().length() == 0) return true ;
     return false ;    
   }
+  
   public static String[] getUserGroups() throws Exception{
     OrganizationService organizationService = (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
     Object[] objGroupIds = organizationService.getGroupHandler().findGroupsOfUser(getCurrentUser()).toArray() ;

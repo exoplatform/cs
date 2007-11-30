@@ -400,22 +400,20 @@
 								if (tag != null) {
 									iconTag = "Icon " + tag.getColor() + "Tag" ;
 									break ;
-								}
-								print "aa" ;		
+								}	
 							}
 						}		
 		
-				%>
-				
-				
-				
+				%>	
 		  <div class="LeftVCardsContent">
 		  	<div class="VCardContent NormalVCard" id="<%=contact.getId()%>" selectedTag="<%=uicomponent.getSelectedTag()%>" >
 			  	<div class="TitleVCards" >
 				  	<div class="StateIcon OnlineIcon"><%=(contact.getFullName()==null ? "_" : contact.getFullName())%></div>
-			  		<a href="<%=uicomponent.event("TagInfo", contact.getId())%>">
-			  			<div class="TagIcon $iconTag" title="Show tag info"><span></span></div>
-			  		</a>
+			  		<% if (tagIds != null && tagIds.length > 0) { %>
+					  		<a href="<%=uicomponent.event("TagInfo", contact.getId())%>">
+					  			<div class="TagIcon $iconTag" title="Show tag info"><span></span></div>
+					  		</a>
+			  		<% } %>
 			  		<div style="clear: both;"><span></span></div>
 			  	</div>
 			  	<div class="ContainerVCards">
@@ -481,8 +479,7 @@
 						if (tag != null) {
 							iconTag = "Icon " + tag.getColor() + "Tag" ;
 							break ;
-						}
-						print "aa" ;		
+						}	
 					}
 				}
 			%>
@@ -490,9 +487,11 @@
 		  	<div class="VCardContent NormalVCard" id="<%=contact.getId()%>" selectedTag="<%=uicomponent.getSelectedTag()%>" >
 			  	<div class="TitleVCards" >
 				  	<div class="StateIcon OfflineIcon"><%=(contact.getFullName()==null ? "_" : contact.getFullName())%></div>
-			  		<a href="<%=uicomponent.event("TagInfo", contact.getId())%>">
-				  		<div class="TagIcon $iconTag" title="Show tag info"><span></span></div>
-						</a>
+			  		<% if (tagIds != null && tagIds.length > 0) { %>
+						     <a href="<%=uicomponent.event("TagInfo", contact.getId())%>">
+							   	 <div class="TagIcon $iconTag" title="Show tag info"><span></span></div>
+								 </a>
+			  		<% } %>	
 			  		<div style="clear: both;"><span></span></div>
 			  	</div>
 			  	<div class="ContainerVCards">

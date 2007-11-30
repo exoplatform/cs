@@ -10,7 +10,6 @@ import java.util.List;
 
 import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.services.organization.Group;
-import org.exoplatform.services.organization.Membership;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -53,10 +52,10 @@ import org.exoplatform.webui.organization.UIGroupMembershipSelector;
 public class UIGroupSelector extends UIGroupMembershipSelector implements UIPopupComponent, UISelectComponent {
 
   private UIComponent uiComponent ;
+  private String type_ = null ;
+  private List selectedGroup_ ;
   private String returnFieldName = null ;
-  private boolean isSelectGroup_ = false ;
-  private boolean isSelectMember_ = false ;
-  private boolean isSelectUSer_ = false ;
+
   public UIGroupSelector() throws Exception {}
 
   public UIComponent getReturnComponent() { return uiComponent ; }
@@ -74,19 +73,6 @@ public class UIGroupSelector extends UIGroupMembershipSelector implements UIPopu
       returnFieldName = initParams[0] ;
     }
   }
-  public void setSelectGroup(boolean isSelect) { isSelectGroup_ = isSelect ;}
-  public void setSelectMember(boolean isSelect) { isSelectMember_ = isSelect ;}
-  public void setSelectUser(boolean isSelect) { isSelectUSer_ = isSelect ;}
-
-  public boolean isSelectGroup() {return isSelectGroup_ ;}
-  public boolean isSelectMember() {return isSelectMember_ ;}
-  public boolean isSelectUser() {return isSelectUSer_ ;}
-
-  private void setDefaultValue() {
-    isSelectGroup_ = false ;
-    isSelectMember_ = false ;
-    isSelectUSer_ = false ;
-  }
 
   @SuppressWarnings({ "unchecked", "cast" })
   public List getChildGroup() throws Exception {
@@ -97,32 +83,61 @@ public class UIGroupSelector extends UIGroupMembershipSelector implements UIPopu
     }
     return children ;
   }
-
+  public boolean isSelectGroup() {return TYPE_GROUP.equals(type_);}
+  public boolean isSelectUser() {return TYPE_USER.equals(type_);}
+  public boolean isSelectMemberShip() {return TYPE_MEMBERSHIP.equals(type_);}
   @SuppressWarnings({ "unchecked", "cast" })
-  public List getUsername() throws Exception {
-    List children = new ArrayList() ; 
+  public List<String> getList() throws Exception {
+    List<String> children = new ArrayList<String>() ; 
     OrganizationService service = getApplicationComponent(OrganizationService.class) ;
-    PageList userPageList = service.getUserHandler().findUsersByGroup(this.getCurrentGroup().getId()) ;    
-    
-    
-    //service.getMembershipHandler().findMembership(this.getCurrentGroup().getId()) ;
-    
-    /*
-    Collection<Membership> membership = service.getMembershipHandler().findMembershipsByGroup(this.getCurrentGroup()) ;
-    System.out.println( "\n\n membership size:" + membership.size() + "::\n\n") ;
-    if (membership.size() > 0)
-      System.out.println( "\n\n membership 0:" + membership.toArray()[0].toString() + "::\n\n") ;
-    */
-    for(Object child : userPageList.getAll()){
-      User user = (User)child ;
-      children.add(user.getUserName()) ;
+    if(TYPE_USER.equals(type_)){
+      PageList userPageList = service.getUserHandler().findUsersByGroup(this.getCurrentGroup().getId()) ;    
+      for(Object child : userPageList.getAll()){
+        children.add(((User)child).getUserName()) ;
+      }
+    } else if(TYPE_MEMBERSHIP.equals(type_)) {
+      for(String child :  getListMemberhip()){
+        children.add(child) ;
+      } 
+    } else if(TYPE_GROUP.equals(type_)) {
+      Collection  groups = service.getGroupHandler().findGroups(this.getCurrentGroup()) ;    
+      for(Object child : groups){
+        children.add(((Group)child).getGroupName()) ;
+      }
     }
     return children ;
   }
+  public void setSelectedGroups(List groups){
+    if(groups != null) {
+      selectedGroup_ = groups ;
+      getChild(UITree.class).setSibbling(selectedGroup_) ;
+    }
+  }
+  public void changeGroup(String groupId) throws Exception {    
+    super.changeGroup(groupId) ;  
+    if(selectedGroup_ != null) {
+      UITree tree = getChild(UITree.class);
+      tree.setSibbling(selectedGroup_);
+      tree.setChildren(null);
+    }
+  }
 
-  public void activate() throws Exception { }
-  public void deActivate() throws Exception { }
-  
+  public void activate() throws Exception {
+    // TODO Auto-generated method stub
+
+  }
+
+  public void deActivate() throws Exception {
+    // TODO Auto-generated method stub
+  }
+  public void setType(String type) {
+    this.type_ = type;
+  }
+
+  public String getType() {
+    return type_;
+  }
+
   static  public class SelectMembershipActionListener extends EventListener<UIGroupSelector> {   
     public void execute(Event<UIGroupSelector> event) throws Exception {
       String user = event.getRequestContext().getRequestParameter(OBJECTID) ;
@@ -131,7 +146,6 @@ public class UIGroupSelector extends UIGroupMembershipSelector implements UIPopu
       UIPopupAction uiPopup = uiPopupContainer.getChild(UIPopupAction.class) ;
       String returnField = uiGroupSelector.getReturnField() ;
       ((UISelector)uiGroupSelector.getReturnComponent()).updateSelect(returnField, user) ;
-      uiGroupSelector.setDefaultValue() ;
       uiPopup.deActivate() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupContainer.getAncestorOfType(UIPopupAction.class)) ;

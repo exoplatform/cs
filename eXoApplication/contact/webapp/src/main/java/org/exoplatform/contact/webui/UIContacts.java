@@ -87,13 +87,16 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   public static String emailAddress = "emailAddress".intern() ;
   public static String jobTitle = "jobTitle".intern() ;
   private boolean isSearchResult = false ;
-  private boolean viewContactThubnail = false ;
+  private boolean isListBeforeSearch ;
   
   public UIContacts() throws Exception { } 
   public String[] getActions() { return new String[] {"Cancel"} ; }
   public void activate() throws Exception { }
   public void deActivate() throws Exception { } 
 
+  public void setListBeforeSearch(boolean list) { isListBeforeSearch = list ;}
+  public boolean getListBeforeSearch() { return isListBeforeSearch ; }
+  
   protected boolean isDisplaySearchResult() {return isSearchResult ;}
   public void setDisplaySearchResult(boolean search) {
     isSearchResult = search ;
@@ -149,20 +152,13 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   public String getSelectedGroup() { return selectedGroup ; }
   
   public void setViewContactsList(boolean list) { viewContactsList = list ; }
-  public boolean getViewContactsList() { 
-    if (viewContactThubnail == true && !isSearchResult) {
+  public boolean getViewContactsList() {
+    if (viewContactsList) {
+      getAncestorOfType(UIContactContainer.class).getChild(UIContactPreview.class).setRendered(true) ;
+    } else {
       getAncestorOfType(UIContactContainer.class).getChild(UIContactPreview.class).setRendered(false) ;
-      return false ;
     }
     return viewContactsList ; 
-  }
-  
-  public void setViewContactThubnail(boolean isThumb) { 
-    viewContactThubnail = isThumb ;  
-  }
-  public boolean getViewContactThubnail() { 
-    return viewContactThubnail ; 
-    
   }
   
   public List<String> getCheckedContacts() throws Exception {
@@ -249,8 +245,10 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         contactIds.add(contactId) ;
         UIContactPortlet contactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class) ;
         UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
-        UITagForm.contactIds_ = contactIds ;
-        UITagForm uiTagForm = popupAction.createUIComponent(UITagForm.class, null, "UITagForm") ;
+        
+        UITagForm uiTagForm = uiContacts.createUIComponent(UITagForm.class, null, "UITagForm") ;
+        uiTagForm.setContactIds(contactIds) ;
+        
         uiTagForm.update() ;
         popupAction.activate(uiTagForm, 600, 0, true) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
@@ -272,8 +270,11 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       } 
       UIContactPortlet contactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class) ;
       UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
-      UITagForm.contactIds_ = contactIds ;
-      UITagForm uiTagForm = popupAction.createUIComponent(UITagForm.class, null, "UITagForm") ;
+      
+      UITagForm uiTagForm = uiContacts.createUIComponent(UITagForm.class, null, "UITagForm") ;
+      uiTagForm.setContactIds(contactIds) ;
+        //popupAction.createUIComponent() ;
+      
       uiTagForm.update() ;
       popupAction.activate(uiTagForm, 600, 0, true) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
@@ -584,10 +585,9 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       } else {
         uiContacts.setContacts(null) ;
       } 
-      if (uiContacts.getViewContactThubnail()) {
-        uiContacts.setViewContactsList(false) ;
-        uiContacts.getAncestorOfType(UIContactContainer.class).getChild(UIContactPreview.class).setRendered(false) ;
-      }
+      
+      uiContacts.setViewContactsList(uiContacts.getListBeforeSearch()) ;
+      
       event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer) ;
     }
   }

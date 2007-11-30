@@ -54,10 +54,13 @@ public class UITagForm extends UIForm implements UIPopupComponent {
   public static final String GREEN = "Green".intern() ;
   public static String[] FIELD_TAG_BOX_KEY = null;
   public static String[] FIELD_TAG_BOX_LABLE = null;
-  public static List<String> contactIds_ ;
+  private List<String> contactIds_ ;
   private String[] tagNames = null ;
   private String[] contactNames = null ;
   public UITagForm() throws Exception { setId("UITagForm") ; }
+  
+  public List<String> getContactIds() { return contactIds_ ;}
+  public void setContactIds(List<String> contactIds) { contactIds_ = contactIds ; }
   
   public void update() throws Exception {
     getChildren().clear() ;
@@ -169,8 +172,7 @@ public class UITagForm extends UIForm implements UIPopupComponent {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       } 
-      
-      contactService.addTag(username, contactIds_, tags);
+      contactService.addTag(username, uiTagForm.getContactIds(), tags);
       UIContactPortlet uiContactPortlet = uiTagForm.getAncestorOfType(UIContactPortlet.class);
       UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
       uiContacts.updateList() ;
@@ -194,7 +196,7 @@ public class UITagForm extends UIForm implements UIPopupComponent {
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;   
       }
-      contactService.removeContactTag(username, contactIds_, checkedTags) ;
+      contactService.removeContactTag(username, uiForm.getContactIds(), checkedTags) ;
       UIContactPortlet contactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
       UITags uiTags = contactPortlet.findFirstComponentOfType(UITags.class) ;
       String selectedTag = uiTags.getSelectedTag() ;

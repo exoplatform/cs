@@ -34,7 +34,6 @@ import org.exoplatform.webui.event.EventListener;
     events = {
         @EventConfig(listeners = UIActionBar.AddContactActionListener.class),
         @EventConfig(listeners = UIActionBar.AddAddressBookActionListener.class),
-        @EventConfig(listeners = UIActionBar.ChangeViewActionListener.class),
         @EventConfig(listeners = UIActionBar.ListViewActionListener.class),
         @EventConfig(listeners = UIActionBar.VCardViewActionListener.class),
         @EventConfig(listeners = UIActionBar.ImportContactActionListener.class),
@@ -43,10 +42,6 @@ import org.exoplatform.webui.event.EventListener;
 )
 public class UIActionBar extends UIContainer  {
   public UIActionBar() throws Exception { } 
-  
-  static public class ChangeViewActionListener extends EventListener<UIActionBar> {
-    public void execute(Event<UIActionBar> event) throws Exception { }
-  } 
   
   static public class AddContactActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {
@@ -64,8 +59,21 @@ public class UIActionBar extends UIContainer  {
     }  
   }
   
-  
-  
+  static public class ImportContactActionListener extends EventListener<UIActionBar> {
+    public void execute(Event<UIActionBar> event) throws Exception {
+      UIActionBar uiForm = event.getSource() ;
+      UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
+      UIPopupAction uiPopupAction = uiContactPortlet.getChild(UIPopupAction.class) ;
+      UIPopupContainer uiPopupContainer = uiContactPortlet.createUIComponent(UIPopupContainer.class, null, null) ;
+      uiPopupContainer.setId("ImportAddress") ;
+      uiPopupContainer.addChild(UIImportForm.class, null, null) ; 
+      
+      uiPopupAction.activate(uiPopupContainer, 600, 0, true) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
+    }  
+  }
+
   static public class AddAddressBookActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {
       UIActionBar uiActionBar = event.getSource() ;
@@ -81,9 +89,7 @@ public class UIActionBar extends UIContainer  {
     public void execute(Event<UIActionBar> event) throws Exception {      
       UIActionBar uiActionBar = event.getSource() ;
       UIContactPortlet uiContactPortlet = uiActionBar.getParent() ; 
-      UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;      
-      UIContactPreview uiContactPreview = uiContactPortlet.findFirstComponentOfType(UIContactPreview.class) ;
-      uiContactPreview.setRendered(true) ;
+      UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
       uiContacts.setViewContactsList(true) ;  
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
     }  
@@ -93,26 +99,14 @@ public class UIActionBar extends UIContainer  {
     public void execute(Event<UIActionBar> event) throws Exception {      
       UIActionBar uiActionBar = event.getSource() ;
       UIContactPortlet uiContactPortlet = uiActionBar.getParent() ; 
-      UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;      
-      UIContactPreview uiContactPreview = uiContactPortlet.findFirstComponentOfType(UIContactPreview.class) ;
-      uiContactPreview.setRendered(false) ;
+      UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
+      uiContacts.setRendered(true) ;
       uiContacts.setViewContactsList(false) ;  
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
     }  
   }
   
-  static public class ImportContactActionListener extends EventListener<UIActionBar> {
-    public void execute(Event<UIActionBar> event) throws Exception {
-      UIActionBar uiForm = event.getSource() ;
-      UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
-      UIPopupAction uiPopupAction = uiContactPortlet.getChild(UIPopupAction.class) ;
-      UIPopupContainer uiPopupContainer = uiContactPortlet.createUIComponent(UIPopupContainer.class, null, null) ;
-      uiPopupContainer.addChild(UIImportForm.class, null, null) ; 
-      uiPopupContainer.setId("ImportAddress") ;
-      uiPopupAction.activate(uiPopupContainer, 600, 0, true) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
-    }  
-  }
+  
   
   static public class ExportContactActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {        
