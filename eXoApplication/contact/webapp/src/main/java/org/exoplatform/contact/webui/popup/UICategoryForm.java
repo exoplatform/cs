@@ -41,7 +41,7 @@ import org.exoplatform.webui.form.UIFormTextAreaInput;
 )
 public class UICategoryForm extends UIForm implements UIPopupComponent {
   private boolean isNew_ = true ;
-  public static String groupId_ ;
+  private String groupId_ ;
   public static final String FIELD_CATEGORYNAME_INPUT = "categoryName";
   public static final String FIELD_DESCRIPTION_INPUT = "description";
   
@@ -49,6 +49,9 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
     addUIFormInput(new UIFormStringInput(FIELD_CATEGORYNAME_INPUT, FIELD_CATEGORYNAME_INPUT, null));    
     addUIFormInput(new UIFormTextAreaInput(FIELD_DESCRIPTION_INPUT, FIELD_DESCRIPTION_INPUT, null)) ;    
   }
+  
+  public String getGroupId() { return groupId_ ; }
+  public void setGroupId(String group) { groupId_ = group ; }
   
   public String[] getActions() { return new String[] {"Save", "Cancel"} ; }
   public void activate() throws Exception { }
@@ -83,7 +86,7 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
       String username = ContactUtils.getCurrentUser() ;
       ContactService contactService = ContactUtils.getContactService();
       if (uiCategoryForm.isNew_) group = new ContactGroup() ;
-      else group = contactService.getGroup(username, groupId_) ;
+      else group = contactService.getGroup(username, uiCategoryForm.groupId_) ;
       group.setName(groupName) ;
       group.setDescription(uiCategoryForm.getUIFormTextAreaInput(FIELD_DESCRIPTION_INPUT).getValue()) ;
       contactService.saveGroup(username, group, uiCategoryForm.isNew_) ; 

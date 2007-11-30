@@ -42,7 +42,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
     }
 )
 public class UIEditTagForm extends UIForm implements UIPopupComponent {
-  public String tagId_ = null ;
+  private String tagId_ = null ;
   public static final String FIELD_TAGNAME_INPUT = "tagName";
   public static final String FIELD_COLOR = "color";
   public static final String RED = "Red".intern() ;
