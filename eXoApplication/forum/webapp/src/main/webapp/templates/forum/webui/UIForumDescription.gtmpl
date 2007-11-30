@@ -11,7 +11,7 @@
 	<div class="LeftDescription">
 		<div class="RightDescription">
 			<div class="CenterDescription">
-				<span class="Forum">Forum:</span> 
+				<span class="ForumLabel">Forum:</span> 
 				<span class="NameForum"><%=forum.getForumName()%></span>
 				<span class="Description"><%=forum.getDescription()%></span>
 			</div>

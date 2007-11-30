@@ -4,12 +4,14 @@
  **************************************************************************/
 package org.exoplatform.forum.service.test;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.exoplatform.forum.service.Category;
 import org.exoplatform.forum.service.Forum;
+import org.exoplatform.forum.service.ForumLinkData;
 import org.exoplatform.forum.service.Post;
 import org.exoplatform.forum.service.Topic;
 
@@ -43,19 +45,19 @@ public class TestForumService extends BaseForumTestCase{
     // test removeCategory
     assertNotNull(forumService_.removeCategory(cat.getId()));
     
-    String temporary = "123456789";
-    char tmp = temporary.charAt((temporary.length() - 1));
-    int t = (new Integer(tmp)).intValue() - 48;
-    int k = tmp ;
-    double a = 3.381273921321 ;
-    int ss = 100, b =6 ;
-    String sss = "" + ((float)ss/b) ;
-    double aaa = (double)ss/b ;
-    System.out.println("\n\n=======>>>>>tmp: " + tmp + "    aaa:  " + aaa+ "    :  " +a);
-    
-    GregorianCalendar calendar = new GregorianCalendar() ;
-    
-    long date = calendar.getTimeInMillis(); 
+//    String temporary = "123456789";
+//    char tmp = temporary.charAt((temporary.length() - 1));
+//    int t = (new Integer(tmp)).intValue() - 48;
+//    int k = tmp ;
+//    double a = 3.381273921321 ;
+//    int ss = 100, b =6 ;
+//    String sss = "" + ((float)ss/b) ;
+//    double aaa = (double)ss/b ;
+//    System.out.println("\n\n=======>>>>>tmp: " + tmp + "    aaa:  " + aaa+ "    :  " +a);
+//    
+//    GregorianCalendar calendar = new GregorianCalendar() ;
+//    
+//    long date = calendar.getTimeInMillis(); 
 //    for(int i=0;i<147;i++){
 //      System.out.println("abc<a target='_blank' href='efd/cauca ("+i+").JPG'><img src='efd/cauca1 ("+i+").JPG' height='113px' width='150px'></a> </div>");
 //    }
@@ -67,52 +69,58 @@ public class TestForumService extends BaseForumTestCase{
 //    a = a.substring(0, 30);
 //    a.length()
   }
-//
-//  public void testForum() throws Exception {
-//  	Category cat = createCategory();
-//  	forumService_.saveCategory(cat, true);
-//  	
-//  	Forum forum = createdForum();
-//  	//forum la forum khoi tao
-//  	// add forum
-//  	forumService_.saveForum(cat.getId(), forum, true);
-//  	// getForum
-//  	assertNotNull(forumService_.getForum(cat.getId(), forum.getId()));
-//  	Forum forumNew  = forumService_.getForum(cat.getId(), forum.getId());
-////  	Date a = new Date();
-////  	System.out.println(forumNew.getCreatedDate().toString());
-//		// getForumByPath
-////  	Forum forumN = (Forum)forumService_.getObjectByPath(forumNew.getPath());
-////  	assertEquals(forumN.getDescription(),forumNew.getDescription());
-//		// getList Forum
-//  	List<Forum> forums0 = new ArrayList<Forum>();
-//  	for (int i = 0; i < 15; i++) {
-//  		forums0.add(createdForum());
-//  		forumService_.saveForum(cat.getId(), forums0.get(i), true);
-//  	}
-//  	List<Forum> forums = forumService_.getForums(cat.getId());
+
+  public void testForum() throws Exception {
+  	Category cat = createCategory();
+  	forumService_.saveCategory(cat, true);
+  	
+  	Forum forum = createdForum();
+  	//forum la forum khoi tao
+  	// add forum
+  	forumService_.saveForum(cat.getId(), forum, true);
+  	// getForum
+  	assertNotNull(forumService_.getForum(cat.getId(), forum.getId()));
+  	Forum forumNew  = forumService_.getForum(cat.getId(), forum.getId());
+//  	Date a = new Date();
+//  	System.out.println(forumNew.getCreatedDate().toString());
+		// getForumByPath
+//  	Forum forumN = (Forum)forumService_.getObjectByPath(forumNew.getPath());
+//  	assertEquals(forumN.getDescription(),forumNew.getDescription());
+		// getList Forum
+  	List<Forum> forums0 = new ArrayList<Forum>();
+  	for (int i = 0; i < 15; i++) {
+  		forums0.add(createdForum());
+  		forumService_.saveForum(cat.getId(), forums0.get(i), true);
+  	}
+  	List<Forum> forums = forumService_.getForums(cat.getId());
 //  	for (int i = 0; i < forums.size(); i++) {
-//  		//System.out.println("\n =============== > HHH:  " + forums.get(i).getId()) ;
+//  		System.out.println("\n =============== > HHH:  " + forums.get(i).getId()) ;
 //		}
-//  	//assertEquals(forums.size(), 1);
-//  	// update Forum
-//  	forumNew.setForumName("Forum update");
-//  	forumService_.saveForum(cat.getId(), forumNew, false);
-//  	assertEquals("Forum update", forumService_.getForum(cat.getId(), forumNew.getId()).getForumName());
-//  	// test moveForum from cat to cate
-//  	Category cate = createCategory();
-//  	forumService_.saveCategory(cate, true);
-//  	Category cateNew = forumService_.getCategory(cate.getId());
-//  	Category cat_ = forumService_.getCategory(cat.getId());
-//  	String oldPath = forumNew.getPath();
-//  	forumService_.moveForum(forumNew.getId(), oldPath, cateNew.getPath());
-//  	assertNotNull(forumService_.getForum(cate.getId(), forumNew.getId()));
-//  	Forum test = forumService_.getForum(cate.getId(), forumNew.getId());
-//  	forumService_.moveForum(test.getId(), test.getPath(), cat_.getPath());
-//  	// remove Forum return Forum
-//  	//assertNotNull(forumService_.removeForum("idC1", forumNew.getId()));
-//  }
-//  
+  	
+  	List<ForumLinkData> listLink = forumService_.getAllLink() ;
+  	
+  	for (ForumLinkData forumLinkData : listLink) {
+  		System.out.println("\n =============== >   ID:  " + forumLinkData.getId() + "\n =============== > Name:  " + forumLinkData.getName()) ;
+    }
+  	//assertEquals(forums.size(), 1);
+  	// update Forum
+  	forumNew.setForumName("Forum update");
+  	forumService_.saveForum(cat.getId(), forumNew, false);
+  	assertEquals("Forum update", forumService_.getForum(cat.getId(), forumNew.getId()).getForumName());
+  	// test moveForum from cat to cate
+  	Category cate = createCategory();
+  	forumService_.saveCategory(cate, true);
+  	Category cateNew = forumService_.getCategory(cate.getId());
+  	Category cat_ = forumService_.getCategory(cat.getId());
+  	String oldPath = forumNew.getPath();
+  	forumService_.moveForum(forumNew.getId(), oldPath, cateNew.getPath());
+  	assertNotNull(forumService_.getForum(cate.getId(), forumNew.getId()));
+  	Forum test = forumService_.getForum(cate.getId(), forumNew.getId());
+  	forumService_.moveForum(test.getId(), test.getPath(), cat_.getPath());
+  	// remove Forum return Forum
+  	//assertNotNull(forumService_.removeForum("idC1", forumNew.getId()));
+  }
+  
 //  public void testTopic() throws Exception {
 //    Category cat = createCategory();
 //		forumService_.saveCategory(cat, true);

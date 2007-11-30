@@ -29,5 +29,6 @@ public class UICategoryContainer extends UIContainer  {
 	  getChild(UICategories.class).setRendered(isRender) ;
 	  getChild(UICategory.class).setRendered(!isRender) ;
 	  this.findFirstComponentOfType(UICategoryInfo.class).setRendered(isRender) ;
+	  this.getAncestorOfType(UIForumPortlet.class).getChild(UIForumLinks.class).setRendered(!isRender) ;
   }
 }

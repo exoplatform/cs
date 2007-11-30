@@ -212,5 +212,4 @@ UIForumPortlet.prototype.cancel = function(evt) {
 
 
 
-
 eXo.forum.UIForumPortlet = new UIForumPortlet() ;

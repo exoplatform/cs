@@ -21,7 +21,6 @@ public class UIForumSummary extends UIContainer  {
   public UIForumSummary() throws Exception {
   	addChild(UIForumInfos.class, null, null).setRendered(true);
   	addChild(UIForumIconState.class, null, null);
-    addChild(UIForumLinks.class, null, null) ;
     getChild(UIForumIconState.class).updateInfor(false) ;
   }  
 }

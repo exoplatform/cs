@@ -94,7 +94,7 @@ public class UITopicDetail extends UIForm  {
     addUIFormInput( new UIFormStringInput("gopage2", null)) ;
   	addChild(UIForumPageIterator.class, null, "TopicPageIterator") ;
     addChild(UIPostRules.class, null, null);
-    addChild(UIForumLinks.class, null, null);
+    //addChild(UIForumLinks.class, null, null);
   }
   
   public void setUpdateTopic(String categoryId, String forumId, String topicId, boolean viewTopic) throws Exception {

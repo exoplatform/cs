@@ -819,22 +819,70 @@ public class JCRDataStorage implements DataStorage {
     return repositoryService_.getDefaultRepository().getSystemSession(defaultWS) ;
   }
   
-  public Object getObjectByPath(String path) throws Exception {
+  public Object getObjectNameByPath(String path) throws Exception {
     Object object = new Object() ;
     Node myNode = (Node)getJCRSession().getItem(path) ;
-    if(myNode.getName().indexOf("ost") > 0) {
-      object = (Object)getPost(myNode) ;
-    }else if(myNode.getName().indexOf("opic") > 0) {
-      object = (Object)getTopicNode(myNode) ;
-    }else if(myNode.getName().indexOf("orum") > 0) {
-      object = (Object)getForum(myNode) ;
-    }else if(myNode.getName().indexOf("ategory") > 0) {
-    	object = (Object)getCategory(myNode) ;
+    if(path.indexOf("post") > 0) {
+    	Post post = new Post() ;
+    	post.setId(myNode.getName()) ;
+    	post.setPath(path);
+    	post.setSubject(myNode.getProperty("exo:subject").getString()) ;
+    	object = (Object)post ;
+    }else if(path.indexOf("topic") > 0) {
+    	Topic topic = new Topic() ;
+    	topic.setId(myNode.getName()) ;
+    	topic.setPath(path);
+    	topic.setTopicName(myNode.getProperty("exo:name").getString()) ;
+      object = (Object)topic;
+    }else if(path.indexOf("forum") > 0) {
+    	Forum forum = new Forum() ;
+    	forum.setId(myNode.getName()) ;
+    	forum.setPath(path);
+    	forum.setForumName(myNode.getProperty("exo:name").getString());
+      object = (Object)forum ;
+    }else if(path.indexOf("category") > 0) {
+    	Category category = new Category() ;
+    	category.setId(myNode.getName()) ;
+    	category.setPath(path);
+    	if(myNode.hasProperty("exo:name"))category.setCategoryName(myNode.getProperty("exo:name").getString()) ;
+    	object = (Object)category ;
     } else return null;
     return object;
   }
   
   public List<ForumLinkData> getAllLink() throws Exception {
-    return null ;
+  	List<ForumLinkData> forumLinks = new ArrayList<ForumLinkData>() ;
+    Node forumHomeNode = getForumHomeNode() ;
+    QueryManager qm = forumHomeNode.getSession().getWorkspace().getQueryManager() ;
+    StringBuffer queryString = new StringBuffer("/jcr:root" + forumHomeNode.getPath() +"//element(*,exo:forumCategory) order by @exo:categoryOrder ascending") ;
+    Query query = qm.createQuery(queryString.toString(), Query.XPATH) ;
+    QueryResult result = query.execute() ;
+    NodeIterator iter = result.getNodes() ;
+    ForumLinkData linkData = new ForumLinkData() ;
+    while(iter.hasNext()) {
+    	linkData = new ForumLinkData() ;
+      Node cateNode = iter.nextNode() ;
+      linkData.setId(cateNode.getName());
+      linkData.setName("&nbsp; &nbsp; " + cateNode.getProperty("exo:name").getString() + "/categoryLink");
+      linkData.setType("category");
+      linkData.setPath(cateNode.getName());
+      forumLinks.add(linkData) ;
+      {
+      	queryString = new StringBuffer("/jcr:root" + cateNode.getPath() + "//element(*,exo:forum) order by @exo:forumOrder ascending,@exo:createdDate ascending");
+      	query = qm.createQuery(queryString.toString(), Query.XPATH) ;
+      	result = query.execute() ;
+      	NodeIterator iterForum = result.getNodes() ;
+      	while (iterForum.hasNext()) {
+      		linkData = new ForumLinkData() ;
+	        Node forumNode = (Node) iterForum.nextNode();
+	        linkData.setId(forumNode.getName());
+	        linkData.setName("&nbsp; &nbsp; &nbsp; &nbsp; " + forumNode.getProperty("exo:name").getString() + "/forumLink");
+	        linkData.setType("forum");
+	        linkData.setPath(cateNode.getName() + "/" + forumNode.getName());
+	        forumLinks.add(linkData) ;
+        }
+      }
+    }
+    return forumLinks ;
   }
 }

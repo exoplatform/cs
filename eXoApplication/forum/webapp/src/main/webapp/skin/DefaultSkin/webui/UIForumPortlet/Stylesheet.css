@@ -1,4 +1,9 @@
 .UIForumPortlet {
+	min-height: 470px;
+}
+
+*html .UIForumPortlet {
+	height: 470px;
 }
  
 /******************************************** ForumBanner ****************************************/
@@ -156,7 +161,7 @@
 	margin: 0px 0px 10px 0px;
 }
 
-.UIForumPortlet .UIForumDescription .Forum {
+.UIForumPortlet .UIForumDescription .ForumLabel {
 	color: #373737;
 	font-size: 12px;
 }

@@ -444,5 +444,5 @@
 	<% } %>
 <%uiform.end()%>
 <% uicomponent.renderChild(UIPostRules.class) %>
-<% uicomponent.renderChild(UIForumLinks.class) %>
+<%// uicomponent.renderChild(UIForumLinks.class) %>
 </div>

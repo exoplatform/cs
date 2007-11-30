@@ -357,6 +357,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
       categoryContainer.updateIsRender(false) ;
       categoryContainer.getChild(UICategory.class).updateByBreadcumbs(uiTopicContainer.categoryId) ;
       forumPortlet.getChild(UIBreadcumbs.class).setUpdataPath(uiTopicContainer.categoryId) ;
+      forumPortlet.getChild(UIForumLinks.class).setUpdateForumLinks() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(forumPortlet) ;
     }
   }  

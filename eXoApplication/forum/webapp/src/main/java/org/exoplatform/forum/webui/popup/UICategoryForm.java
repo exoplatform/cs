@@ -10,9 +10,11 @@ import org.exoplatform.container.PortalContainer;
 import org.exoplatform.forum.service.Category;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.webui.EmptyNameValidator;
+import org.exoplatform.forum.webui.UIBreadcumbs;
 import org.exoplatform.forum.webui.UICategories;
 import org.exoplatform.forum.webui.UICategory;
 import org.exoplatform.forum.webui.UICategoryContainer;
+import org.exoplatform.forum.webui.UIForumLinks;
 import org.exoplatform.forum.webui.UIForumPortlet;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -109,15 +111,16 @@ public class UICategoryForm extends UIForm implements UIPopupComponent{
       	forumService.saveCategory(cat, false);
       	forumPortlet.cancelAction() ;
       	UICategory uiCategory = forumPortlet.getChild(UICategoryContainer.class).getChild(UICategory.class) ;
-      	WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+      	WebuiRequestContext context = event.getRequestContext() ;
+      	context.addUIComponentToUpdateByAjax(forumPortlet.getChild(UIBreadcumbs.class)) ;
       	context.addUIComponentToUpdateByAjax(uiCategory) ;
       } else {
       	forumService.saveCategory(cat, true);
       	forumPortlet.cancelAction() ;
-      	UICategories uiCategories = forumPortlet.getChild(UICategoryContainer.class).getChild(UICategories.class) ;
-      	WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
-      	context.addUIComponentToUpdateByAjax(uiCategories) ;
+      	UICategories uiCategories = forumPortlet.findFirstComponentOfType(UICategories.class) ;
+      	event.getRequestContext().addUIComponentToUpdateByAjax(uiCategories) ;
       }
+      forumPortlet.getChild(UIForumLinks.class).setUpdateForumLinks() ;
     }
   }
   

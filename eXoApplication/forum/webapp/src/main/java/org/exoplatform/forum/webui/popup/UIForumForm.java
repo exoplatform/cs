@@ -16,6 +16,7 @@ import org.exoplatform.forum.webui.EmptyNameValidator;
 import org.exoplatform.forum.webui.UIBreadcumbs;
 import org.exoplatform.forum.webui.UICategories;
 import org.exoplatform.forum.webui.UICategory;
+import org.exoplatform.forum.webui.UIForumLinks;
 import org.exoplatform.forum.webui.UIForumPortlet;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -246,7 +247,7 @@ public class UIForumForm extends UIForm implements UIPopupComponent {
       else {
       	forumService.saveForum(categoryId, newForum, true);
       }
-      
+      forumPortlet.getChild(UIForumLinks.class).setUpdateForumLinks() ;
       forumPortlet.cancelAction() ;
       WebuiRequestContext context = event.getRequestContext() ;
       if(!uiForm.isForumUpdate) {

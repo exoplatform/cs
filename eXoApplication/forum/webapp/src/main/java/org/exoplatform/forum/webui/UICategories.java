@@ -27,9 +27,9 @@ import org.exoplatform.webui.event.EventListener;
 @ComponentConfig(
     template =  "app:/templates/forum/webui/UICategories.gtmpl",
     events = {
-    	@EventConfig(listeners = UICategories.OpenCategory.class),
-    	@EventConfig(listeners = UICategories.OpenForumLink.class),
-    	@EventConfig(listeners = UICategories.OpenLastTopicLink.class)
+    	@EventConfig(listeners = UICategories.OpenCategoryActionListener.class),
+    	@EventConfig(listeners = UICategories.OpenForumLinkActionListener.class),
+    	@EventConfig(listeners = UICategories.OpenLastTopicLinkActionListener.class)
     }
 )
 public class UICategories extends UIContainer  {
@@ -61,7 +61,7 @@ public class UICategories extends UIContainer  {
   	return null ;
   }
   
-	static public class OpenCategory extends EventListener<UICategories> {
+	static public class OpenCategoryActionListener extends EventListener<UICategories> {
 		public void execute(Event<UICategories> event) throws Exception {
 			UICategories uiContainer = event.getSource();
 			String categoryId = event.getRequestContext().getRequestParameter(OBJECTID)  ;
@@ -69,10 +69,11 @@ public class UICategories extends UIContainer  {
 			categoryContainer.updateIsRender(false) ;
 			UICategory uiCategory = categoryContainer.getChild(UICategory.class) ;
 			uiCategory.update(uiContainer.getCategory(categoryId), uiContainer.getForumList(categoryId)) ;
+			((UIForumPortlet)categoryContainer.getParent()).getChild(UIForumLinks.class).setValueOption(categoryId);
 		}
 	}
 	
-	static public class OpenForumLink extends EventListener<UICategories> {
+	static public class OpenForumLinkActionListener extends EventListener<UICategories> {
     public void execute(Event<UICategories> event) throws Exception {
     	UICategories uiContainer = event.getSource();
       String forumId = event.getRequestContext().getRequestParameter(OBJECTID)  ;
@@ -84,11 +85,12 @@ public class UICategories extends UIContainer  {
       UITopicContainer uiTopicContainer = uiForumContainer.getChild(UITopicContainer.class) ;
       uiForumContainer.getChild(UIForumDescription.class).setForumIds(id[0], id[1]);
       uiTopicContainer.updateByBreadcumbs(id[0], id[1], false) ;
+      forumPortlet.getChild(UIForumLinks.class).setValueOption((id[0]+"/"+id[1]));
       event.getRequestContext().addUIComponentToUpdateByAjax(forumPortlet) ;
     }
   }
 	
-  static public class OpenLastTopicLink extends EventListener<UICategories> {
+  static public class OpenLastTopicLinkActionListener extends EventListener<UICategories> {
     public void execute(Event<UICategories> event) throws Exception {
       UICategories uiContainer = event.getSource();
       String Id = event.getRequestContext().getRequestParameter(OBJECTID)  ;
@@ -102,6 +104,7 @@ public class UICategories extends UIContainer  {
       uiForumContainer.getChild(UIForumDescription.class).setForumIds(id[0], id[1]);
       uiTopicDetail.setUpdateTopic(id[0], id[1], id[2], true) ;
       uiTopicDetailContainer.getChild(UITopicPoll.class).updateFormPoll(id[0], id[1], id[2]) ;
+      forumPortlet.getChild(UIForumLinks.class).setValueOption((id[0]+"/"+id[1]));
       event.getRequestContext().addUIComponentToUpdateByAjax(forumPortlet) ;
     }
   }

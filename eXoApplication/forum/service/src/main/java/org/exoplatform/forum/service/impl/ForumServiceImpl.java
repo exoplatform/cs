@@ -120,8 +120,8 @@ public class ForumServiceImpl implements ForumService{
     return storage_.removePost(categoryId, forumId, topicId, postId);
   }
 
-	public Object getObjectByPath(String path) throws Exception {
-		return storage_.getObjectByPath(path);
+	public Object getObjectNameByPath(String path) throws Exception {
+		return storage_.getObjectNameByPath(path);
 	}
   
   public List getPage(long page, JCRPageList pageList) throws Exception {

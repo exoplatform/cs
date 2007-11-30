@@ -19,7 +19,7 @@ public class ForumLinkData {
    public void setId(String id){ this.id = id;}
    
    public String getName(){return name;}
-   public void setName(String categoryName){this.name = categoryName;}
+   public void setName(String Name){this.name = Name;}
    
    public String getPath(){return path;}
    public void setPath(String path){this.path = path ; }

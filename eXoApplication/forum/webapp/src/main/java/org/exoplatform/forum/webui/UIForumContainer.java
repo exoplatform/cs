@@ -29,5 +29,6 @@ public class UIForumContainer extends UIContainer  {
     getChild(UITopicContainer.class).setRendered(isRender) ;
     getChild(UITopicDetailContainer.class).setRendered(!isRender) ;
     getChild(UIForumSummary.class).setRendered(isRender) ;
+    this.getAncestorOfType(UIForumPortlet.class).getChild(UIForumLinks.class).setRendered(true) ;
   }
 }

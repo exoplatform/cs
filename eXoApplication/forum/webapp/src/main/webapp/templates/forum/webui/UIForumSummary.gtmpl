@@ -6,5 +6,4 @@
 <div class="UIForumSummary" id="$uicomponent.id">	
 	<% uicomponent.renderChild(UIForumInfos.class)%>
 	<% uicomponent.renderChild(UIForumIconState.class)%>
-	<% uicomponent.renderChild(UIForumLinks.class)%>
 </div>

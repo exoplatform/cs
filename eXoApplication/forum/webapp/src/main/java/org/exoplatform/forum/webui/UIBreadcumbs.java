@@ -36,6 +36,7 @@ public class UIBreadcumbs extends UIContainer {
 	private List<String> breadcumbs_ = new ArrayList<String>();
 	private List<String> path_ = new ArrayList<String>();
 	private String forumHomePath_ ;
+	public static final String FIELD_FORUMHOME_BREADCUMBS = "forumHome" ;
   public UIBreadcumbs()throws Exception {
   	forumHomePath_ = forumService.getForumHomePath() ;
   	breadcumbs_.add("eXo Forum") ;
@@ -56,15 +57,15 @@ public class UIBreadcumbs extends UIContainer {
   			pathNode = pathNode + "/" + string;
   			if(t == 0) {
   				tempPath = string;
-  				Category category = (Category)forumService.getObjectByPath(pathNode);
+  				Category category = (Category)forumService.getObjectNameByPath(pathNode);
   				breadcumbs_.add(category.getCategoryName()) ;
   			}else if(t == 1) {
   				tempPath = tempPath + "/" + string ;
-  				Forum forum = (Forum)forumService.getObjectByPath(pathNode);
+  				Forum forum = (Forum)forumService.getObjectNameByPath(pathNode);
   				breadcumbs_.add(forum.getForumName()) ;
   			}else if(t == 2) {
   				tempPath = tempPath + "/" + string ;
-  				Topic topic = (Topic)forumService.getObjectByPath(pathNode);
+  				Topic topic = (Topic)forumService.getObjectNameByPath(pathNode);
   				breadcumbs_.add(topic.getTopicName()) ;
   			}
   			path_.add(tempPath) ;
@@ -117,6 +118,7 @@ public class UIBreadcumbs extends UIContainer {
         forumPortlet.updateIsRendered(1);
       }
       uiBreadcums.setUpdataPath(path);
+      forumPortlet.getChild(UIForumLinks.class).setValueOption(path);
       event.getRequestContext().addUIComponentToUpdateByAjax(forumPortlet) ;
     }
   }  

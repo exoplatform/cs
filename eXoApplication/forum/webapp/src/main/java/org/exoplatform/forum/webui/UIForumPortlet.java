@@ -29,6 +29,7 @@ public class UIForumPortlet extends UIPortletApplication {
     addChild(UIBreadcumbs.class, null, null) ;
     addChild(UICategoryContainer.class, null, null).setRendered(isCategoryRendered) ;
     addChild(UIForumContainer.class, null, null).setRendered(isForumRendered) ;
+    addChild(UIForumLinks.class, null, null).setRendered(isForumRendered) ;
     addChild(UIPostPreview.class, null, null).setRendered(isPostRendered) ;
     addChild(UIPopupAction.class, null, null) ;
   }

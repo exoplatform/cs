@@ -19,7 +19,7 @@
                   </td>
   	              <td class="FieldComponent">
   	              	<% 
-  	              		if(fieldName.indexOf("Private") > 0) {
+  	              		if(fieldName.indexOf("rivate") > 0) {
   	              			String title = _ctx.appRes("UICategoryForm.title.TextboxEmpty");
   	              	%>
   	              		<div style="float: left;" title="$title">
