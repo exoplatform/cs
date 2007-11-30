@@ -317,11 +317,6 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
       UIComposeForm uiForm = event.getSource() ;
       System.out.println(" === >>> Send Action Listener") ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-      if(Utils.isEmptyField(uiForm.getFieldToValue())) {
-        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.to-field-required", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
-      }
       UIMailPortlet uiPortlet = uiForm.getAncestorOfType(UIMailPortlet.class) ;
       UISelectAccount uiSelectAcc = uiPortlet.findFirstComponentOfType(UISelectAccount.class) ;
       UINavigationContainer uiNavigationContainer = uiPortlet.findFirstComponentOfType(UINavigationContainer.class) ;
