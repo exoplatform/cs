@@ -210,7 +210,7 @@ public class MailServiceImpl implements MailService{
     } else {
       ServerConfiguration serverConfig = message.getServerConfiguration();
       props.put(Utils.SVR_INCOMING_USERNAME, serverConfig.getUserName());
-      props.put(Utils.SVR_INCOMING_PASSWORD, serverConfig.getUserName());
+      props.put(Utils.SVR_INCOMING_PASSWORD, serverConfig.getPassword());
       props.put(Utils.SVR_SMTP_USER, serverConfig.getUserName()) ;
       props.put(Utils.SVR_SMTP_HOST, serverConfig.getOutgoingHost()) ;
       props.put(Utils.SVR_SMTP_PORT, serverConfig.getOutgoingPort()) ;
