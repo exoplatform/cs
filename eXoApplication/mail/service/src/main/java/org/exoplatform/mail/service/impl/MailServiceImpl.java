@@ -179,9 +179,11 @@ public class MailServiceImpl implements MailService{
       }});
     */
     Session session = Session.getInstance(props, null);
+    System.out.println(" #### Sending email ... ");
     Transport transport = session.getTransport(Utils.SVR_SMTP);
     transport.connect(outgoingHost, smtpUser, acc.getIncomingPassword()) ;
-    send(session, transport, message);
+    String status = send(session, transport, message);
+    System.out.println("### Infor : " + status);
     transport.close();
   }
   
@@ -209,15 +211,23 @@ public class MailServiceImpl implements MailService{
     Session session = Session.getInstance(props, null);
     Transport transport = session.getTransport(Utils.SVR_SMTP);
     transport.connect(serverConfig.getOutgoingHost(), serverConfig.getUserName(), serverConfig.getPassword()) ;
+    System.out.println(" #### Sending email ... ");
+    int i = 0;
     for (Message msg : msgList) {
       msg.setServerConfiguration(serverConfig);
-      send(session, transport, msg);
+      String status = "";
+      try {
+        status = send(session , transport, msg);
+        i++;
+      } catch(Exception e) {
+        System.out.println(" #### Info : send fail at message " + i + " \n" + status);
+      }
     }
+    System.out.println(" #### Info : Sent " + i + " email(s)");
     transport.close();
   }
   
-  public String send(Session session, Transport transport, Message message) throws Exception {
-    System.out.println(" #### Sending email ... ");
+  public String send(Session session,Transport transport, Message message) throws Exception {
     javax.mail.Message mimeMessage = new MimeMessage(session);
     String status = "";
     InternetAddress addressFrom ;
@@ -292,7 +302,7 @@ public class MailServiceImpl implements MailService{
     } catch (Exception e) {
       status = "There was an unexpected error. Sending Falied !" + e.getMessage();
     } finally {
-      System.out.println(" #### Info : " + status);      
+      //System.out.println(" #### Info : " + status);      
     } 
     return status ;
   }
