@@ -118,6 +118,10 @@ public class UITopicDetail extends UIForm  {
   	this.getAncestorOfType(UIForumPortlet.class).getChild(UIBreadcumbs.class).setUpdataPath((categoryId + "/" + forumId + "/" + topicId)) ;
   }
   
+  public void setIsEditTopic( boolean isEditTopic) {
+	  this.isEditTopic = isEditTopic ;
+  }
+  
   public void setUpdatePageList(JCRPageList pageList) throws Exception {
 	  this.pageList = pageList ;
 	  this.isUpdatePageList = true ;

@@ -12,6 +12,7 @@ import org.exoplatform.container.PortalContainer;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.service.Poll;
 import org.exoplatform.forum.webui.UIForumPortlet;
+import org.exoplatform.forum.webui.UITopicDetail;
 import org.exoplatform.forum.webui.UITopicDetailContainer;
 import org.exoplatform.forum.webui.UITopicPoll;
 import org.exoplatform.portal.webui.util.Util;
@@ -208,6 +209,7 @@ public class UIPollForm extends UIForm implements UIPopupComponent {
         UITopicDetailContainer detailContainer = forumPortlet.findFirstComponentOfType(UITopicDetailContainer.class) ;
         detailContainer.setRederPoll(true) ;
         detailContainer.getChild(UITopicPoll.class).updateFormPoll(id[id.length - 3], id[id.length - 2], id[id.length - 1]) ;
+        detailContainer.getChild(UITopicDetail.class).setIsEditTopic(true) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(detailContainer);
       }
       if(sms != null && sms.length() > 0) {

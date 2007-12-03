@@ -17,7 +17,6 @@ import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
-import org.exoplatform.webui.form.UIFormSelectBox;
 
 /**
  * Created by The eXo Platform SARL
@@ -63,6 +62,7 @@ public class UIForumLinks extends UIForm {
   }
   
   public void setValueOption( String path) throws Exception {
+  	this.path = path ;
 	  this.getChild(UIFormSelectBoxForum.class).setValue(path.trim()) ;
   }
   
@@ -70,11 +70,13 @@ public class UIForumLinks extends UIForm {
     public void execute(Event<UIForumLinks> event) throws Exception {
       UIForumLinks uiForm = event.getSource() ;
       UIFormSelectBoxForum selectBoxForum = uiForm.getUIFormSelectBoxForum(FIELD_FORUMLINK_SELECTBOX) ;
-      String path = selectBoxForum.getValue();
+      String path = selectBoxForum.getValue().trim();
+      System.out.println("\n\n1" + path + "\n\n");
       if(!path.equals(uiForm.path)) {
       	uiForm.path = path ;
 	      UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
-	      if(path.equals("ForumService")) {
+	      if(path.indexOf("orumServic") > 0) {
+	      	System.out.println("\n\n2" + path + "\n\n");
 	      	UICategoryContainer categoryContainer = forumPortlet.getChild(UICategoryContainer.class) ;
 	      	categoryContainer.updateIsRender(true) ;
 	      	forumPortlet.updateIsRendered(1);

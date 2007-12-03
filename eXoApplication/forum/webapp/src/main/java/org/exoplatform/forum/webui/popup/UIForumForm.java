@@ -32,7 +32,6 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
-import org.exoplatform.webui.form.validator.NameValidator;
 import org.exoplatform.webui.form.validator.PositiveNumberFormatValidator;
 
 /**
