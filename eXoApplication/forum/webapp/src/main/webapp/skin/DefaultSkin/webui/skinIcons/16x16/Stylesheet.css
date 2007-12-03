@@ -154,11 +154,11 @@
 	background: url('icons/AddPollThreadIcon.gif') no-repeat left center;
 }
 
-.ApproveAttachmentsIcon {
+.SetApproveAttachmentIcon {
 	background: url('icons/ApproveAttachmentsIcon.gif') no-repeat left center;
 }
 
-.ApprovePostsIcon {
+.SetApprovePostIcon {
 	background: url('icons/ApprovePostsIcon.gif') no-repeat left center;
 }
 
@@ -241,7 +241,7 @@
 	background: url('icons/MoveSelectedForum.gif') no-repeat left center;
 }
 
-.MoveSelectedPostIcon {
+.MovePostIcon {
 	background: url('icons/MoveSelectedPostIcon.gif') no-repeat left center;
 }
 
@@ -289,14 +289,22 @@
 	background: url('icons/ThreadsAuto-PruningIcon.gif') no-repeat left center;
 }
 
-.UnapproveAttachmentsIcon {
+.SetUnApproveAttachmentIcon {
 	background: url('icons/UnapproveAttachmentsIcon.gif') no-repeat left center;
 }
 
-.SetUnApproveIcon {
+.SetUnApprovePostIcon {
 	background: url('icons/UnapprovePostsIcon.gif') no-repeat left center;
 }
 
 .SetUnLockIcon {
 	background: url('icons/UnLock.gif') no-repeat left center;
+}
+
+.SetStickIcon {
+	background: url('icons/StickThreadsIcon.gif') no-repeat left center;
+}
+
+.SetUnStickIcon {
+	background: url('icons/StickThreadsIcon.gif') no-repeat left center;
 }

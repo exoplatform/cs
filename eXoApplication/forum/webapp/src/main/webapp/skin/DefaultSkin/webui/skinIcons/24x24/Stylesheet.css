@@ -59,14 +59,6 @@
 	background: url('icons/DeleteThisForumIcon.gif') no-repeat ;
 }
 
-.SetStickIcon {
-	background: url('icons/StickThreadsIcon.gif') no-repeat ;
-}
-
-.SetUnStickIcon {
-	background: url('icons/StickThreadsIcon.gif') no-repeat ;
-}
-
 .MoveThreadsIcon {
 	background: url('icons/MoveThreadsIcon.gif') no-repeat ;
 }
