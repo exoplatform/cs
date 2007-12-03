@@ -44,40 +44,9 @@
 	background: url('icons/HotThreadNewLockPost.gif') no-repeat ;
 }
 /*******************************  MenuCategoryIcon    **************************************/
-.EditCategoryIcon {
-	background: url('icons/EditCategory.gif') no-repeat ;
-}
 
 .AddForumIcon {
 	background: url('icons/AddNewForum.gif') no-repeat ;
-}
-
-.EditForumIcon {
-	background: url('icons/EditForum.gif') no-repeat ;
-}
-
-.SetLockedIcon {
-	background: url('icons/Lock.gif') no-repeat ;
-}
-
-.SetUnLockIcon {
-	background: url('icons/UnLock.gif') no-repeat ;
-}
-
-.SetCloseIcon {
-	background: url('icons/CloseSelectedForum.gif') no-repeat ;
-}
-
-.SetOpenIcon {
-	background: url('icons/OpenSelectedForum.gif') no-repeat ;
-}
-
-.MoveForumIcon {
-	background: url('icons/MoveSelectedForum.gif') no-repeat ;
-}
-
-.ManageModerators {
-	background: url('icons/Manage.gif') no-repeat ;
 }
 
 .ForumOption {
@@ -86,48 +55,8 @@
 
 /*===========================thread bar menu icon===========================*/
 
-.SetApproveIcon {
-	background: url('icons/ApproveThreadsIcon.gif') no-repeat ;
-}
-
 .DeleteThisForumIcon {
 	background: url('icons/DeleteThisForumIcon.gif') no-repeat ;
-}
-
-.RemoveForumIcon {
-	background: url('icons/DeleteThisForumIcon.gif') no-repeat ;
-}
-
-.SetDeleteIcon {
-	background: url('icons/DeleteThreadsIcon.gif') no-repeat ;
-}
-
-.DisplayOptionsIcon {
-	background: url('icons/DisplayOptionsIcon.gif') no-repeat ;
-}
-
-.EditTopicIcon {
-	background: url('icons/EditSelectedThreadIcon.gif') no-repeat ;
-}
-
-.EditForumIcon {
-	background: url('icons/EditthisForumIcon.gif') no-repeat ;
-}
-
-.MergeThreadsIcon {
-	background: url('icons/MergeThreadsIcon.gif') no-repeat ;
-}
-
-.MovethisForumIcon {
-	background: url('icons/MovethisForumIcon.gif') no-repeat ;
-}
-
-.SetMoveIcon {
-	background: url('icons/MoveThreadsIcon.gif') no-repeat ;
-}
-
-.PostnewThreadIcon {
-	background: url('icons/PostnewThreadIcon.gif') no-repeat ;
 }
 
 .SetStickIcon {
@@ -138,94 +67,10 @@
 	background: url('icons/StickThreadsIcon.gif') no-repeat ;
 }
 
-.ThreadsAuto-PruningIcon {
-	background: url('icons/ThreadsAuto-PruningIcon.gif') no-repeat ;
-}
-
-.DeleteCategoryIcon {
-	background: url('icons/DeleteCategoryIcon.gif') no-repeat ;
-}
-
-.ModerationPostIcon {
-	background: url('icons/ModerationPostIcon.gif') no-repeat ;
-}
-
-.DeleteSelectedPostIcon {
-	background: url('icons/DeleteSelectedPostIcon.gif') no-repeat ;
-}
-
-.UnapproveAttachmentsIcon {
-	background: url('icons/UnapproveAttachmentsIcon.gif') no-repeat ;
-}
-
-.ApproveAttachmentsIcon {
-	background: url('icons/ApproveAttachmentsIcon.gif') no-repeat ;
-}
-
-.SetUnApproveIcon {
-	background: url('icons/UnapprovePostsIcon.gif') no-repeat ;
-}
-
-.ApprovePostsIcon {
-	background: url('icons/ApprovePostsIcon.gif') no-repeat ;
-}
-
-.PastePostsIcon {
-	background: url('icons/PastePostsIcon.gif') no-repeat ;
-}
-
-.CopySelectedPostIcon {
-	background: url('icons/CopySelectedPostIcon.gif') no-repeat ;
-}
-
-.MoveSelectedPostIcon {
-	background: url('icons/MoveSelectedPostIcon.gif') no-repeat ;
-}
-
-.MergeSelectedPostsIcon {
-	background: url('icons/MergeSelectedPostsIcon.gif') no-repeat ;
-}
-
-.SplitTopicIcon {
-	background: url('icons/SplitThisThreadIcon.gif') no-repeat ;
-}
-
-.AddPollIcon {
-	background: url('icons/AddPollThreadIcon.gif') no-repeat ;
-}
-
-.EmailThisPageIcon {
-	background: url('icons/EmailThisPageIcon.gif') no-repeat ;
-}
-
-.PrintPageIcon {
-	background: url('icons/PrintThisPageIcon.gif') no-repeat ;
-}
-
-.OpenThreadsIcon {
-	background: url('icons/OpenThreadsIcon.gif') no-repeat ;
-}
-
-.CloseThreadsIcon {
-	background: url('icons/CloseThreadsIcon.gif') no-repeat ;
-}
-
 .MoveThreadsIcon {
 	background: url('icons/MoveThreadsIcon.gif') no-repeat ;
 }
 
-.StickThreadsIcon {
-	background: url('icons/StickThreadsIcon.gif') no-repeat ;
-}
-
-.StickThreadsIcon {
-	background: url('icons/StickThreadsIcon.gif') no-repeat ;
-}
-
 .DeleteThreadsIcon {
 	background: url('icons/DeleteThreadsIcon.gif') no-repeat ;
-}
-
-.PostsIcon {
-	background: url('icons/PostsIcon.gif') no-repeat left center;
 }

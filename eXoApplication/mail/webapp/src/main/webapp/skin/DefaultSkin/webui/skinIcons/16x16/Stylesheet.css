@@ -294,6 +294,50 @@
 	background: url('icons/DownloadIcon.gif') no-repeat;
 }
 
-.FilterIcon {
-	background: url('icons/FilterIcon.gif') no-repeat;
+.AddAccount {
+	background: url('icons/AddAccount.gif') no-repeat left center;
+}
+
+.AddFolderIcon {
+	background: url('icons/AddNewFolderIcon.gif') no-repeat left center;
+}
+
+.CheckItem {
+	background: url('icons/CheckItem.gif') no-repeat left center;
+}
+
+.CloseFolder {
+	background: url('icons/DefaultIcon.gif') no-repeat left center;
+}
+
+.Folder {
+	background: url('icons/DefaultIcon.gif') no-repeat left center;
+}
+
+.DeleteAccount {
+	background: url('icons/DeleteAccount.gif') no-repeat left center;
+}
+
+.EditAccount {
+	background: url('icons/EditAccount.gif') no-repeat left center;
+}
+
+.EmptyIcon {
+	background: url('icons/EmptyIcon.gif') no-repeat left center;
+}
+
+.MarkAll {
+	background: url('icons/MarkAll.gif') no-repeat left left center;
+}
+
+.RemoveFolderIcon {
+	background: url('icons/RemoveFolderIcon.gif') no-repeat left center;
+}
+
+.RenameFolderIcon {
+	background: url('icons/RenameFolderIcon.gif') no-repeat left center;
+}
+
+.SearchFolderIcon {
+	background: url('icons/SearchFolderIcon.gif') no-repeat left center;
 }

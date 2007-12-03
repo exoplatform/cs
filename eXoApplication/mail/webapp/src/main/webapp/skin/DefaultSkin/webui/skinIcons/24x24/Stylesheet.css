@@ -1,6 +1,4 @@
-.Folder {
-	background: url('icons/DefaultIcon.gif') no-repeat left center;
-}
+
 .Actions {
 	background: url(icons/ThisMessageAction.gif) no-repeat bottom;
 	cursor: pointer;
@@ -33,10 +31,6 @@
 
 .TrashIcon {
 	background: url('icons/TrashIcon.gif') no-repeat left center ;
-}
-
-.CloseFolder {
-	background: url('icons/DefaultIcon.gif') no-repeat left center;
 }
 
 .OpenFolder {
@@ -74,46 +68,6 @@
 	cursor: pointer;
 }
 
-.AddAccount {
-	background: url('icons/AddAccount.gif') no-repeat;
-}
-
-.EditAccount {
-	background: url('icons/EditAccount.gif') no-repeat;
-}
-
-.DeleteAccount {
-	background: url('icons/DeleteAccount.gif') no-repeat;
-}
-
-.CheckItem {
-	background: url('icons/CheckItem.gif') no-repeat left;
-}
-
-.AddFolderIcon {
-	background: url('icons/AddNewFolderIcon.gif') no-repeat;
-}
-
-.RemoveFolderIcon {
-	background: url('icons/RemoveFolderIcon.gif') no-repeat;
-}
-
-.EmptyIcon {
-	background: url('icons/EmptyIcon.gif') no-repeat;
-}
-
-.RenameFolderIcon {
-	background: url('icons/RenameFolderIcon.gif') no-repeat left;
-}
-
-.MarkAll {
-	background: url('icons/MarkAll.gif') no-repeat left;
-}
-
-.SearchFolderIcon {
-	background: url('icons/SearchFolderIcon.gif') no-repeat left;
-}
-
 .AddGroup {
 	background: url('icons/AddGroup.gif') no-repeat left;
 }
@@ -128,4 +82,8 @@
 
 .EditContact {
 	background: url('icons/EditContact.gif') no-repeat left;
+}
+
+.FilterIcon {
+	background: url('icons/FilterIcon.gif') no-repeat;
 }
