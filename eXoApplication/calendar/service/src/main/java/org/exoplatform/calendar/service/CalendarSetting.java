@@ -4,6 +4,10 @@
  **************************************************************************/
 package org.exoplatform.calendar.service;
 
+import java.util.Calendar;
+import java.util.Locale;
+import java.util.TimeZone;
+
 /**
  * Created by The eXo Platform SARL
  * Author : Hung Nguyen
@@ -46,10 +50,12 @@ public class CalendarSetting {
   public CalendarSetting() {
     viewType = DAY_VIEW ;
     timeInterval = 15 ;
-    weekStartOn = MONDAY ;
+    weekStartOn = String.valueOf(Calendar.SUNDAY) ;
     dateFormat = "MM/dd/yyyy" ;
     timeFormat = "hh:mm a" ;
     isShowWorkingTime = false ;
+    timeZone = TimeZone.getDefault().getID() ;
+    location = Locale.getDefault().getISO3Country() ;
     baseURL = "http://localhost:8080/calendar/iCalRss" ;
     defaultPrivateCalendars = new String[]{} ;
     defaultPublicCalendars = new String[]{} ;

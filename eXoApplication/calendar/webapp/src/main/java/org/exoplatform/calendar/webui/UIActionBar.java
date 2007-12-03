@@ -129,15 +129,9 @@ public class UIActionBar extends UIContainer  {
         CalendarService calendarService = uiActionBar.getApplicationComponent(CalendarService.class) ;
         String username = CalendarUtils.getCurrentUser() ;
         EventQuery eventQuery = new EventQuery() ;
-        java.util.Calendar fromcalendar = new GregorianCalendar(uiListView.getCurrentYear(), uiListView.getCurrentMonth(), uiListView.getCurrentDay()) ;
-        fromcalendar.set(java.util.Calendar.HOUR, 0) ;
-        fromcalendar.set(java.util.Calendar.MINUTE, 0) ;
-        fromcalendar.set(java.util.Calendar.MILLISECOND, 0) ;
+        java.util.Calendar fromcalendar =  uiListView.getBeginDay(new GregorianCalendar(uiListView.getCurrentYear(), uiListView.getCurrentMonth(), uiListView.getCurrentDay())) ;
         eventQuery.setFromDate(fromcalendar) ;
-        java.util.Calendar tocalendar = new GregorianCalendar(uiListView.getCurrentYear(), uiListView.getCurrentMonth(), uiListView.getCurrentDay()) ;
-        tocalendar.set(java.util.Calendar.HOUR, tocalendar.getActualMaximum(java.util.Calendar.HOUR)) ;
-        tocalendar.set(java.util.Calendar.MINUTE, tocalendar.getActualMaximum(java.util.Calendar.MINUTE)) ;
-        tocalendar.set(java.util.Calendar.MILLISECOND, tocalendar.getActualMaximum(java.util.Calendar.MILLISECOND)) ;
+        java.util.Calendar tocalendar =  uiListView.getEndDay(new GregorianCalendar(uiListView.getCurrentYear(), uiListView.getCurrentMonth(), uiListView.getCurrentDay())) ;
         eventQuery.setToDate(tocalendar) ;
         uiListView.update(calendarService.searchEvent(username, eventQuery, uiListView.getPublicCalendars())) ; 
         uiListView.setShowEventAndTask(false) ;
@@ -169,7 +163,7 @@ public class UIActionBar extends UIContainer  {
       UICalendarPortlet uiPortlet = uiActionBar.getAncestorOfType(UICalendarPortlet.class) ;
       UICalendarViewContainer uiViewContainer = uiPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
       CalendarView renderedChild = (CalendarView)uiViewContainer.getRenderedChild() ;
-      renderedChild.setCurrentCalendar(Calendar.getInstance()) ;
+      renderedChild.setCurrentCalendar(CalendarUtils.getInstanceTempCalendar()) ;
       System.out.println("\n\n renderedChild " + renderedChild);
       renderedChild.refresh() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiViewContainer) ;

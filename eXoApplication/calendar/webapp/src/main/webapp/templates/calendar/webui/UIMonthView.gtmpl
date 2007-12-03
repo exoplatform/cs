@@ -4,6 +4,7 @@
 	import java.util.Calendar;
 	import java.util.Date;
 	import java.util.GregorianCalendar;
+	import org.exoplatform.calendar.CalendarUtils;
 	def rcontext = _ctx.getRequestContext() ;
   rcontext.getJavascriptManager().importJavascript('eXo.calendar.UICalendarDragDrop','/calendar/javascript/') ;
 	rcontext.getJavascriptManager().importJavascript('eXo.calendar.UIMonthView','/calendar/javascript/') ;
@@ -83,7 +84,7 @@
 					startIndex = 0;
 					endIndex = uicomponent.getCurrentCalendar().getMaximum(Calendar.WEEK_OF_MONTH) ;
 					if(event.fromDateTime.after(startMonh.getTime()) || event.fromDateTime.equals(startMonh.getTime())) {
-						Calendar cal = new GregorianCalendar() ;
+						Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
 						cal.setTime(event.fromDateTime) ;
 						startIndex = cal.get(Calendar.WEEK_OF_MONTH) ;
 					}
@@ -142,7 +143,6 @@
 					        <td actionLink="$actionUpdate" class='CalendarContentNomal' currentDate='$dayOfMonth' startTime='$dateTime' > 
 					        	<div class='DayBox $clazz' >
 						        <a href="<%=uicomponent.event("GotoDate",dayActionLink)%>">
-						         
 						         <%=sdf.format(calendar.getTime())%> 
 										</a>
 									 </div><div class='DayContent'><span></span></div>

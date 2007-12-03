@@ -72,7 +72,7 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
   public UICalendarSettingForm() throws Exception{
     super("UICalendarSettingForm", false) ;
     UIFormInputWithActions setting = new UIFormInputWithActions("setting") ;//.setRendered(true) ;
-    setSelectedTab(setting.getId()) ;
+    
     List<SelectItemOption<String>> viewTypes = new ArrayList<SelectItemOption<String>>() ;
     viewTypes.add(new SelectItemOption<String>("Day view", CalendarSetting.DAY_VIEW)) ;
     viewTypes.add(new SelectItemOption<String>("Week view", CalendarSetting.WEEK_VIEW)) ;
@@ -122,6 +122,7 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
 
     setting.addUIFormInput(new UIFormStringInput(BASE_URL, BASE_URL, null)) ;
     addUIFormInput(setting) ;
+    setSelectedTab(setting.getId()) ;
     UIFormInputWithActions defaultCalendars = new UIFormInputWithActions("defaultCalendars") ;    
     //defaultCalendars.setRendered(false) ;
     addUIFormInput(defaultCalendars) ;
@@ -237,7 +238,7 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
   }
 
   protected Date getWorkingBeginTime() throws Exception {
-    java.util.Calendar cal = CalendarUtils.getBeginDay(GregorianCalendar.getInstance()) ;
+    java.util.Calendar cal = CalendarUtils.getBeginDay(CalendarUtils.getInstanceTempCalendar()) ;
     DateFormat dateFormat = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
     DateFormat dateTimeFormat = new SimpleDateFormat(CalendarUtils.DATETIMEFORMAT) ;
     String value = getUIFormSelectBox(WORKINGTIME_BEGIN).getValue() ;
@@ -246,7 +247,7 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
     return  cal.getTime()  ;
   }
   protected void setWorkingBegin(String value, String format) throws Exception {
-    java.util.Calendar cal = GregorianCalendar.getInstance() ;
+    java.util.Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
     DateFormat dateFormat = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
     DateFormat timeFormat = new SimpleDateFormat(CalendarUtils.TIMEFORMAT) ;
     DateFormat dateTimeFormat = new SimpleDateFormat(format) ;
@@ -255,7 +256,7 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
     getUIFormSelectBox(WORKINGTIME_BEGIN).setValue(timeFormat.format(cal.getTime())) ;
   }
   protected String getWorkingEnd() throws Exception{
-    java.util.Calendar cal = GregorianCalendar.getInstance() ;
+    java.util.Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
     DateFormat dateFormat = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
     DateFormat timeFormat = new SimpleDateFormat(getTimeFormat()) ;
     DateFormat dateTimeFormat = new SimpleDateFormat(CalendarUtils.DATETIMEFORMAT) ;
@@ -266,7 +267,7 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
   }
 
   protected Date getWorkingEndTime() throws Exception{
-    java.util.Calendar cal = CalendarUtils.getBeginDay(GregorianCalendar.getInstance()) ;
+    java.util.Calendar cal = CalendarUtils.getBeginDay(CalendarUtils.getInstanceTempCalendar()) ;
     DateFormat dateFormat = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
     DateFormat dateTimeFormat = new SimpleDateFormat(CalendarUtils.DATETIMEFORMAT) ;
     String value = getUIFormSelectBox(WORKINGTIME_END).getValue() ;
@@ -275,7 +276,7 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
     return  cal.getTime();
   }
   protected void setWorkingEnd(String value, String format) throws Exception {
-    java.util.Calendar cal = GregorianCalendar.getInstance() ;
+    java.util.Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
     DateFormat dateFormat = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
     DateFormat timeFormat = new SimpleDateFormat(CalendarUtils.TIMEFORMAT) ;
     DateFormat dateTimeFormat = new SimpleDateFormat(format) ;

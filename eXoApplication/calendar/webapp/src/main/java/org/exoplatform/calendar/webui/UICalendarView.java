@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarEvent;
@@ -120,7 +121,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
 
   public UICalendarView() throws Exception{
     initCategories() ;
-    calendar_ = GregorianCalendar.getInstance() ;
+    calendar_ = GregorianCalendar.getInstance(TimeZone.getDefault()) ;
     calendar_.setLenient(false) ;
     int i = 0 ; 
     for(String month : MONTHS) {
@@ -132,12 +133,12 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       daysMap_.put(j, month) ;
       j++ ;
     }
-    applySeting() ;
     int p = 1 ;
     for(String s : CalendarEvent.PRIORITY) {
       priorityMap_.put(String.valueOf(p), s) ;
       p ++ ;
     }
+    applySeting() ;
   }
   public void applySeting() throws Exception {
     try {
@@ -148,6 +149,10 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       calendarSetting_ = calService.getCalendarSetting(username) ;
     }
     dateTimeFormat_ = getDateFormat() + " " + getTimeFormat() ;
+    TimeZone settingTimeZone = TimeZone.getTimeZone(calendarSetting_.getTimeZone()) ;
+    calendar_.setTimeZone(settingTimeZone) ;
+    //calendar_.add(Calendar.MILLISECOND,  -settingTimeZone.getRawOffset()) ;
+    System.out.println("\n\n Server Time " + calendar_.getTime());
   }
   public void setViewType(String viewType) { this.viewType_ = viewType ; }
   public String getViewType() { return viewType_ ; }
@@ -273,38 +278,31 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
     setCurrentYear(year) ;
   }
   protected boolean isCurrentDay(int day, int month, int year) {
-    Calendar currentCal = Calendar.getInstance() ;
+    Calendar currentCal = CalendarUtils.getInstanceTempCalendar() ;
     boolean isCurrentDay = currentCal.get(Calendar.DATE) == day ;
     boolean isCurrentMonth = currentCal.get(Calendar.MONTH) == month ;
     boolean isCurrentYear = currentCal.get(Calendar.YEAR) == year ;
     return (isCurrentDay && isCurrentMonth && isCurrentYear ) ;
   }
   protected boolean isCurrentWeek(int week, int month, int year) {
-    Calendar currentCal = Calendar.getInstance() ;
+    Calendar currentCal = CalendarUtils.getInstanceTempCalendar() ;
     boolean isCurrentWeek = currentCal.get(Calendar.WEEK_OF_YEAR) == week ;
     boolean isCurrentMonth = currentCal.get(Calendar.MONTH) == month ;
     boolean isCurrentYear = currentCal.get(Calendar.YEAR) == year ;
     return (isCurrentWeek && isCurrentMonth && isCurrentYear ) ;
   }
   protected boolean isCurrentMonth(int month, int year) {
-    Calendar currentCal = Calendar.getInstance() ;
+    Calendar currentCal = CalendarUtils.getInstanceTempCalendar() ;
     boolean isCurrentMonth = currentCal.get(Calendar.MONTH) == month ;
     boolean isCurrentYear = currentCal.get(Calendar.YEAR) == year ;
     return (isCurrentMonth && isCurrentYear ) ;
   }
 
   protected boolean isSameDate(java.util.Calendar date1, java.util.Calendar date2) {
-    return ( date1.get(java.util.Calendar.DATE) == date2.get(java.util.Calendar.DATE) &&
-        date1.get(java.util.Calendar.MONTH) == date2.get(java.util.Calendar.MONTH) &&
-        date1.get(java.util.Calendar.YEAR) == date2.get(java.util.Calendar.YEAR)
-    ) ;
+    return CalendarUtils.isSameDate(date1, date2) ;
   }
   protected boolean isSameDate(Date value1, Date value2) {
-    Calendar date1 = GregorianCalendar.getInstance() ;
-    date1.setTime(value1) ;
-    Calendar date2 = GregorianCalendar.getInstance() ;
-    date2.setTime(value2) ;
-    return isSameDate(date1, date2) ;
+    return CalendarUtils.isSameDate(value1, value2) ;
   }
   public void setCurrentCalendar(Calendar value) {calendar_ = value ;}
   protected Calendar getCurrentCalendar() {return calendar_ ;}
@@ -667,15 +665,9 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       CalendarService calendarService =  CalendarUtils.getCalendarService() ;
       String username = CalendarUtils.getCurrentUser() ;
       EventQuery eventQuery = new EventQuery() ;
-      java.util.Calendar fromcalendar = new GregorianCalendar(uiListView.getCurrentYear(), uiListView.getCurrentMonth(), uiListView.getCurrentDay()) ;
-      fromcalendar.set(java.util.Calendar.HOUR, 0) ;
-      fromcalendar.set(java.util.Calendar.MINUTE, 0) ;
-      fromcalendar.set(java.util.Calendar.MILLISECOND, 0) ;
+      java.util.Calendar fromcalendar  = uiListView.getBeginDay(new GregorianCalendar(uiListView.getCurrentYear(), uiListView.getCurrentMonth(), uiListView.getCurrentDay())) ;
       eventQuery.setFromDate(fromcalendar) ;
-      java.util.Calendar tocalendar = new GregorianCalendar(uiListView.getCurrentYear(), uiListView.getCurrentMonth(), uiListView.getCurrentDay()) ;
-      tocalendar.set(java.util.Calendar.HOUR, tocalendar.getActualMaximum(java.util.Calendar.HOUR)) ;
-      tocalendar.set(java.util.Calendar.MINUTE, tocalendar.getActualMaximum(java.util.Calendar.MINUTE)) ;
-      tocalendar.set(java.util.Calendar.MILLISECOND, tocalendar.getActualMaximum(java.util.Calendar.MILLISECOND)) ;
+      java.util.Calendar tocalendar = uiListView.getEndDay(new GregorianCalendar(uiListView.getCurrentYear(), uiListView.getCurrentMonth(), uiListView.getCurrentDay())) ;
       eventQuery.setToDate(tocalendar) ;
       uiListView.update(calendarService.searchEvent(username, eventQuery, uiCalendarView.getPublicCalendars())) ; 
       uiListView.setShowEventAndTask(false) ;
@@ -699,7 +691,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         String day = event.getRequestContext().getRequestParameter(DAY) ;
         UICalendarPortlet portlet = calendarview.getAncestorOfType(UICalendarPortlet.class) ;
         UICalendarViewContainer uiContainer = portlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
-        Calendar cal = GregorianCalendar.getInstance() ;
+        Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
         cal.set(Calendar.DATE, Integer.parseInt(day)) ;
         cal.set(Calendar.MONTH, Integer.parseInt(month)) ;
         cal.set(Calendar.YEAR, Integer.parseInt(year)) ;

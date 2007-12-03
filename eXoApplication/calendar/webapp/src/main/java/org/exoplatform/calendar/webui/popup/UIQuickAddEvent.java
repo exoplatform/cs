@@ -8,7 +8,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.exoplatform.calendar.CalendarUtils;
@@ -18,7 +17,6 @@ import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.webui.CalendarView;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
-import org.exoplatform.calendar.webui.UICalendarView;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
 import org.exoplatform.calendar.webui.UIMiniCalendar;
 import org.exoplatform.portal.webui.util.Util;
@@ -89,7 +87,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
     List<SelectItemOption<String>> toOptions = CalendarUtils.getTimesSelectBoxOptions(calendarSetting.getTimeFormat()) ;
     getUIFormSelectBox(FIELD_FROM_TIME).setOptions(fromOptions) ;
     getUIFormSelectBox(FIELD_TO_TIME).setOptions(toOptions) ;
-    java.util.Calendar cal = GregorianCalendar.getInstance() ;
+    java.util.Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
     if(startTime != null) cal.setTimeInMillis(Long.parseLong(startTime)) ;
     else {
       cal.set(java.util.Calendar.MINUTE, (cal.get(java.util.Calendar.MINUTE)/CalendarUtils.DEFAULT_TIMEITERVAL)*CalendarUtils.DEFAULT_TIMEITERVAL) ;

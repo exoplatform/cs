@@ -170,7 +170,7 @@ public class UIWeekView extends UICalendarView {
     return calendarData ;
   }*/
   public java.util.Calendar getBeginDateOfWeek() throws Exception{
-    java.util.Calendar temCal = GregorianCalendar.getInstance() ;
+    java.util.Calendar temCal = CalendarUtils.getInstanceTempCalendar() ;
     temCal.setTime(calendar_.getTime()) ;
     CalendarSetting calSetting  = null ;
     try{
@@ -187,7 +187,7 @@ public class UIWeekView extends UICalendarView {
   }
 
   public java.util.Calendar getEndDateOfWeek() throws Exception{
-    java.util.Calendar temCal = GregorianCalendar.getInstance() ;
+    java.util.Calendar temCal = CalendarUtils.getInstanceTempCalendar() ;
     CalendarSetting calSetting  = null ;
     try{
       calSetting = getAncestorOfType(UICalendarPortlet.class).getCalendarSetting() ;
@@ -271,78 +271,31 @@ public class UIWeekView extends UICalendarView {
       String finishTime = event.getRequestContext().getRequestParameter("finishTime") ;
       String currentDate = event.getRequestContext().getRequestParameter("currentDate") ;
       String username = event.getRequestContext().getRemoteUser() ;
-      CalendarEvent eventCalendar = null ;
-      System.out.println("\n\n start " + startTime);
-      System.out.println("\n\n finish " + finishTime);
+      CalendarEvent eventCalendar = calendarview.getDataMap().get(eventId) ;
       CalendarService calendarService = CalendarUtils.getCalendarService() ;
-      if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
+      /*if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
         eventCalendar = calendarService.getUserEvent(username, calendarId, eventId) ;
       } else if(calType.equals(CalendarUtils.SHARED_TYPE)) {
         eventCalendar = calendarService.getUserEvent(username, calendarId, eventId) ;
       } else if(calType.equals(CalendarUtils.PUBLIC_TYPE)) {
         eventCalendar = calendarService.getGroupEvent(calendarId, eventId) ;
-      }
-      Calendar calBegin = GregorianCalendar.getInstance() ;
-      Calendar calEnd = GregorianCalendar.getInstance() ;
-      calBegin.setTimeInMillis(Long.parseLong(currentDate)) ;
-      calEnd.setTimeInMillis(Long.parseLong(currentDate)) ;
+      }*/
+      if(eventCalendar != null) {
+        Calendar calBegin = CalendarUtils.getInstanceTempCalendar() ;
+        Calendar calEnd = CalendarUtils.getInstanceTempCalendar() ;
+        calBegin.setTimeInMillis(Long.parseLong(currentDate)) ;
+        calEnd.setTimeInMillis(Long.parseLong(currentDate)) ;
 
-      int hoursBg = (Integer.parseInt(startTime)/60) ;
-      int minutesBg = (Integer.parseInt(startTime)%60) ;
+        int hoursBg = (Integer.parseInt(startTime)/60) ;
+        int minutesBg = (Integer.parseInt(startTime)%60) ;
 
-      int hoursEnd = (Integer.parseInt(finishTime)/60) ;
-      int minutesEnd = (Integer.parseInt(finishTime)%60) ;
-      calBegin.set(Calendar.HOUR_OF_DAY, hoursBg) ;
-      calBegin.set(Calendar.MINUTE, minutesBg) ;
-      eventCalendar.setFromDateTime(calBegin.getTime()) ;
-      calEnd.set(Calendar.HOUR_OF_DAY, hoursEnd) ;
-      calEnd.set(Calendar.MINUTE, minutesEnd) ;
-      eventCalendar.setToDateTime(calEnd.getTime()) ;
-      if(eventCalendar.getToDateTime().before(eventCalendar.getFromDateTime())) {
-        System.out.println("\n\n UIWeekView updateEvent to date must after from date");
-        return ;
-      }
-      if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
-        calendarService.saveUserEvent(username, calendarId, eventCalendar, false) ;
-      }else if(calType.equals(CalendarUtils.SHARED_TYPE)){
-        calendarService.saveEventToSharedCalendar(username, calendarId, eventCalendar, false) ;
-      }else if(calType.equals(CalendarUtils.PUBLIC_TYPE)){
-        calendarService.saveGroupEvent(calendarId, eventCalendar, false) ;          
-      }
-      calendarview.setLastUpdatedEventId(eventId) ;
-      calendarview.refresh() ;
-      UIMiniCalendar uiMiniCalendar = calendarview.getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UIMiniCalendar.class) ;
-      uiMiniCalendar.updateMiniCal() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
-    }
-  }
-
-  static  public class SaveEventActionListener extends EventListener<UIWeekView> {
-    public void execute(Event<UIWeekView> event) throws Exception {
-      UIWeekView calendarview = event.getSource() ;
-      String eventId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      String calendarId = event.getRequestContext().getRequestParameter(CALENDARID) ;
-      String calType = event.getRequestContext().getRequestParameter(CALTYPE) ;
-      String startTime = event.getRequestContext().getRequestParameter("startTime") ;
-      String finishTime = event.getRequestContext().getRequestParameter("finishTime") ;
-      try {
-        String username = event.getRequestContext().getRemoteUser() ;
-        CalendarEvent eventCalendar = null ;
-        CalendarService calendarService = CalendarUtils.getCalendarService() ;
-        if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
-          eventCalendar = calendarService.getUserEvent(username, calendarId, eventId) ;
-        } else if(calType.equals(CalendarUtils.SHARED_TYPE)) {
-          eventCalendar = calendarService.getUserEvent(username, calendarId, eventId) ;
-        } else if(calType.equals(CalendarUtils.PUBLIC_TYPE)) {
-          eventCalendar = calendarService.getGroupEvent(calendarId, eventId) ;
-        }
-        Calendar calBegin = GregorianCalendar.getInstance() ;
-        Calendar calEnd = GregorianCalendar.getInstance() ;
-        long unit = 15*60*1000 ;
-        calBegin.setTimeInMillis((Long.parseLong(startTime)/unit)*unit) ;
+        int hoursEnd = (Integer.parseInt(finishTime)/60) ;
+        int minutesEnd = (Integer.parseInt(finishTime)%60) ;
+        calBegin.set(Calendar.HOUR_OF_DAY, hoursBg) ;
+        calBegin.set(Calendar.MINUTE, minutesBg) ;
         eventCalendar.setFromDateTime(calBegin.getTime()) ;
-        calEnd.setTimeInMillis((Long.parseLong(finishTime)/unit)*unit) ;
+        calEnd.set(Calendar.HOUR_OF_DAY, hoursEnd) ;
+        calEnd.set(Calendar.MINUTE, minutesEnd) ;
         eventCalendar.setToDateTime(calEnd.getTime()) ;
         if(eventCalendar.getToDateTime().before(eventCalendar.getFromDateTime())) {
           System.out.println("\n\n UIWeekView updateEvent to date must after from date");
@@ -361,6 +314,55 @@ public class UIWeekView extends UICalendarView {
         uiMiniCalendar.updateMiniCal() ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
+      }
+    }
+  }
+
+  static  public class SaveEventActionListener extends EventListener<UIWeekView> {
+    public void execute(Event<UIWeekView> event) throws Exception {
+      UIWeekView calendarview = event.getSource() ;
+      String eventId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      String calendarId = event.getRequestContext().getRequestParameter(CALENDARID) ;
+      String calType = event.getRequestContext().getRequestParameter(CALTYPE) ;
+      String startTime = event.getRequestContext().getRequestParameter("startTime") ;
+      String finishTime = event.getRequestContext().getRequestParameter("finishTime") ;
+      try {
+        String username = event.getRequestContext().getRemoteUser() ;
+        CalendarEvent eventCalendar = calendarview.getDataMap().get(eventId) ;
+        if(eventCalendar != null) {
+          CalendarService calendarService = CalendarUtils.getCalendarService() ;
+          /*if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
+          eventCalendar = calendarService.getUserEvent(username, calendarId, eventId) ;
+        } else if(calType.equals(CalendarUtils.SHARED_TYPE)) {
+          eventCalendar = calendarService.getUserEvent(username, calendarId, eventId) ;
+        } else if(calType.equals(CalendarUtils.PUBLIC_TYPE)) {
+          eventCalendar = calendarService.getGroupEvent(calendarId, eventId) ;
+        }*/
+          Calendar calBegin = CalendarUtils.getInstanceTempCalendar() ;
+          Calendar calEnd = CalendarUtils.getInstanceTempCalendar() ;
+          long unit = 15*60*1000 ;
+          calBegin.setTimeInMillis((Long.parseLong(startTime)/unit)*unit) ;
+          eventCalendar.setFromDateTime(calBegin.getTime()) ;
+          calEnd.setTimeInMillis((Long.parseLong(finishTime)/unit)*unit) ;
+          eventCalendar.setToDateTime(calEnd.getTime()) ;
+          if(eventCalendar.getToDateTime().before(eventCalendar.getFromDateTime())) {
+            System.out.println("\n\n UIWeekView updateEvent to date must after from date");
+            return ;
+          }
+          if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
+            calendarService.saveUserEvent(username, calendarId, eventCalendar, false) ;
+          }else if(calType.equals(CalendarUtils.SHARED_TYPE)){
+            calendarService.saveEventToSharedCalendar(username, calendarId, eventCalendar, false) ;
+          }else if(calType.equals(CalendarUtils.PUBLIC_TYPE)){
+            calendarService.saveGroupEvent(calendarId, eventCalendar, false) ;          
+          }
+          calendarview.setLastUpdatedEventId(eventId) ;
+          calendarview.refresh() ;
+          UIMiniCalendar uiMiniCalendar = calendarview.getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UIMiniCalendar.class) ;
+          uiMiniCalendar.updateMiniCal() ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
+        }
       } catch (Exception e) {
         e.printStackTrace() ;
       }

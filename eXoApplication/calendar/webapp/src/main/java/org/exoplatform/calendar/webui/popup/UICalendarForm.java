@@ -233,6 +233,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
       sb.append(s).append(CalendarUtils.COLON) ;
     }
     fieldInput.setValue(sb.toString()) ;
+    setSelectedTab(shareTab.getId()) ;
   }
   protected boolean isPublic() throws Exception{
     UIFormInputWithActions sharing = getChildById(INPUT_SHARE) ;
@@ -277,7 +278,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
   static  public class AddCategoryActionListener extends EventListener<UICalendarForm> {
     public void execute(Event<UICalendarForm> event) throws Exception {
       UICalendarForm uiForm = event.getSource() ;
-      uiForm.setRenderedChild(INPUT_CALENDAR) ;
+      uiForm.setSelectedTab(INPUT_CALENDAR) ;
       UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       UIPopupAction uiChildPopup = uiPopupContainer.getChild(UIPopupAction.class);
       uiChildPopup.activate(UICalendarCategoryManager.class, 500) ;
@@ -288,8 +289,8 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
   static  public class SelectPermissionActionListener extends EventListener<UICalendarForm> {
     public void execute(Event<UICalendarForm> event) throws Exception {
       UICalendarForm uiForm = event.getSource() ;
+      uiForm.setSelectedTab(INPUT_SHARE) ;
       String permType = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      uiForm.setRenderedChild(INPUT_SHARE) ;
       if(!uiForm.isPublic()) {
         UIApplication app = uiForm.getAncestorOfType(UIApplication.class) ;
         app.addMessage(new ApplicationMessage("UICalendarForm.msg.checkbox-public-notchecked", null)) ;
@@ -336,7 +337,6 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
       calendar.setLocale(uiForm.getLocale()) ;
       calendar.setTimeZone(uiForm.getTimeZone()) ;
       calendar.setCalendarColor(uiForm.getSelectedColor()) ;
-     
       if(isPublic) {
         Object[] groupList = uiForm.getPublicGroups() ;
         List<String> selected = new ArrayList<String>() ;

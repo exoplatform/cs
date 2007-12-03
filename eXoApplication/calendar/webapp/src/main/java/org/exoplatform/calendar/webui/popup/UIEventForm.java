@@ -7,13 +7,12 @@ package org.exoplatform.calendar.webui.popup;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.Attachment;
+import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
@@ -93,7 +92,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     super("UIEventForm", false);
     UIEventDetailTab eventDetailTab =  new UIEventDetailTab(TAB_EVENTDETAIL) ;
     addChild(eventDetailTab) ;
-    setSelectedTab(eventDetailTab.getId()) ;
     UIEventReminderTab eventReminderTab =  new UIEventReminderTab(TAB_EVENTREMINDER) ;
     addChild(eventReminderTab) ;
     UIFormInputWithActions eventShareTab =  new UIFormInputWithActions(TAB_EVENTSHARE) ;
@@ -110,11 +108,9 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     actions.add(addParticipant) ;
     eventShareTab.setActionField(FIELD_PARTICIPANT, actions) ;
     addChild(eventShareTab) ;
-
     UIEventAttenderTab eventAttenderTab = new UIEventAttenderTab(TAB_EVENTATTENDER) ;
     addChild(eventAttenderTab) ;
-
-    setRenderedChild(TAB_EVENTDETAIL) ;
+    setSelectedTab(eventDetailTab.getId()) ;
   }
   public String getLabel(String id) {
     String label = id ;
@@ -158,9 +154,12 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       setSelectedEventState(eventCalendar.getEventState()) ;
       setMeetingInvitation(eventCalendar.getInvitation()) ;
       setParticipant(eventCalendar.getParticipant()) ;
-      ((UIEventDetailTab)getChildById(TAB_EVENTDETAIL)).getUIFormSelectBox(UIEventDetailTab.FIELD_CALENDAR).setEnable(false) ;
+      eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CALENDAR).setEnable(false) ;
+      if(CalendarUtils.SHARED_TYPE.equals(calType_)) {
+        eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CATEGORY).setRendered(false) ;
+      }
     } else {
-      java.util.Calendar cal = GregorianCalendar.getInstance() ;
+      java.util.Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
       int beginMinute = (cal.get(java.util.Calendar.MINUTE)/CalendarUtils.DEFAULT_TIMEITERVAL)*CalendarUtils.DEFAULT_TIMEITERVAL ;
       cal.set(java.util.Calendar.MINUTE, beginMinute) ;
       setEventFromDate(cal.getTime()) ;
@@ -422,7 +421,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTREMINDER) ;
     return eventDetailTab.getUIStringInput(UIEventReminderTab.POPUP_REPEAT_INTERVAL).getValue() ;
   }
-  
+
   protected void setEmailRemindBefore(String value) {
     UIEventReminderTab eventRemindTab =  getChildById(TAB_EVENTREMINDER) ;
     eventRemindTab.getUIFormSelectBox(UIEventReminderTab.EMAIL_REMIND_BEFORE).setValue(value) ;
@@ -582,6 +581,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       UIPopupContainer uiContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       UIPopupAction uiChildPopup = uiContainer.getChild(UIPopupAction.class) ;
       uiChildPopup.activate(UIEventCategoryManager.class, 470) ;
+      uiForm.setSelectedTab(TAB_EVENTDETAIL) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
     }
   }
@@ -589,6 +589,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     public void execute(Event<UIEventForm> event) throws Exception {
       System.out.println("\n\n AddEmailAddressActionListener");
       UIEventForm uiForm = event.getSource() ;
+      uiForm.setSelectedTab(TAB_EVENTREMINDER) ;
       if(!uiForm.getEmailReminder()) {
         UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.email-reminder-required", null));
@@ -608,6 +609,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       UIPopupContainer uiContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       UIPopupAction uiChildPopup = uiContainer.getChild(UIPopupAction.class) ;
       uiChildPopup.activate(UIAttachFileForm.class, 500) ;
+      uiForm.setSelectedTab(TAB_EVENTDETAIL) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
     }
   }
@@ -624,6 +626,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       }
       uiEventDetailTab.removeFromUploadFileList(attachfile);
       uiEventDetailTab.refreshUploadFileList() ;
+      uiForm.setSelectedTab(TAB_EVENTDETAIL) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
     }
   }
@@ -697,7 +700,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
           event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
           uiForm.getAncestorOfType(UIPopupAction.class).deActivate() ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
-         /* if(uiForm.isAddNew_) {
+          /* if(uiForm.isAddNew_) {
             uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.add-event-successfully", null));
           } else {
             uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.update-event-successfully", null));
@@ -712,7 +715,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       } else {
         uiApp.addMessage(new ApplicationMessage(uiForm.errorMsg_, null));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        uiForm.setRenderedChild(TAB_EVENTDETAIL) ;
+        uiForm.setSelectedTab(TAB_EVENTDETAIL) ;
       }
     }
   }

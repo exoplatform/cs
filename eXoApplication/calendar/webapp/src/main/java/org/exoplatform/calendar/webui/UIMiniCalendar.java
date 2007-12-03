@@ -61,7 +61,7 @@ public class UIMiniCalendar extends UICalendarView  {
   public LinkedHashMap<String, CalendarEvent> getDataMap(){ return null ; }
   
   public java.util.Calendar getBeginDateOfMonth() throws Exception{
-    java.util.Calendar temCal = GregorianCalendar.getInstance() ;
+    java.util.Calendar temCal = CalendarUtils.getInstanceTempCalendar() ;
     temCal.setTime(calendar_.getTime()) ;
     temCal.setFirstDayOfWeek(Calendar.SUNDAY) ;
     temCal.set(java.util.Calendar.DATE, 1) ;

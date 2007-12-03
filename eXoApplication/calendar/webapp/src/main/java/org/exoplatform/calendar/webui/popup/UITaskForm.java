@@ -8,7 +8,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.exoplatform.calendar.CalendarUtils;
@@ -20,7 +19,6 @@ import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.Reminder;
 import org.exoplatform.calendar.webui.CalendarView;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
-import org.exoplatform.calendar.webui.UICalendarView;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
 import org.exoplatform.calendar.webui.UIMiniCalendar;
 import org.exoplatform.portal.webui.util.Util;
@@ -78,10 +76,9 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
     super("UIEventForm", false);
     UITaskDetailTab uiTaskDetailTab =  new UITaskDetailTab(TAB_TASKDETAIL) ;
     addChild(uiTaskDetailTab) ;
-    setSelectedTab(uiTaskDetailTab.getId()) ;
     UIEventReminderTab eventReminderTab =  new UIEventReminderTab(TAB_TASKREMINDER) ;
     addChild(eventReminderTab) ;
-    setRenderedChild(TAB_TASKDETAIL) ;
+    setSelectedTab(uiTaskDetailTab.getId()) ;
   }
   public String getLabel(String id) {
     String label = id ;
@@ -116,9 +113,12 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
       setSelectedEventPriority(eventCalendar.getPriority()) ;
       setEventReminders(eventCalendar.getReminders()) ;
       setAttachments(eventCalendar.getAttachment()) ;
-      ((UITaskDetailTab)getChildById(TAB_TASKDETAIL)).getUIFormSelectBox(UITaskDetailTab.FIELD_CALENDAR).setEnable(false) ;
+      taskDetailTab.getUIFormSelectBox(UITaskDetailTab.FIELD_CALENDAR).setEnable(false) ;
+      if(CalendarUtils.SHARED_TYPE.equals(calType_)) {
+        taskDetailTab.getUIFormSelectBox(UITaskDetailTab.FIELD_CATEGORY).setRendered(false) ;
+      }
     } else {
-      java.util.Calendar cal = GregorianCalendar.getInstance() ;
+      java.util.Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
       int beginMinute = (cal.get(java.util.Calendar.MINUTE)/CalendarUtils.DEFAULT_TIMEITERVAL)*CalendarUtils.DEFAULT_TIMEITERVAL ;
       cal.set(java.util.Calendar.MINUTE, beginMinute) ;
       setEventFromDate(cal.getTime()) ;
@@ -452,6 +452,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
       UIPopupContainer uiContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       UIPopupAction uiChildPopup = uiContainer.getChild(UIPopupAction.class) ;
       uiChildPopup.activate(UIEventCategoryManager.class, 470) ;
+      uiForm.setSelectedTab(TAB_TASKDETAIL) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
     }
   }
@@ -459,6 +460,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
     public void execute(Event<UITaskForm> event) throws Exception {
       System.out.println("\n\n AddEmailAddressActionListener");
       UITaskForm uiForm = event.getSource() ;
+      uiForm.setSelectedTab(TAB_TASKREMINDER) ;
       if(!uiForm.getEmailReminder()) {
         UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UITaskForm.msg.email-reminder-required", null));
@@ -478,6 +480,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
       UIPopupContainer uiContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       UIPopupAction uiChildPopup = uiContainer.getChild(UIPopupAction.class) ;
       uiChildPopup.activate(UIAttachFileForm.class, 500) ;
+      uiForm.setSelectedTab(TAB_TASKDETAIL) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
     }
   }
@@ -494,6 +497,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
       }
       uiTaskDetailTab.removeFromUploadFileList(attachfile);
       uiTaskDetailTab.refreshUploadFileList() ;
+      uiForm.setSelectedTab(TAB_TASKDETAIL) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
     }
   }
@@ -514,6 +518,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
       uiGroupSelector.setType(UISelectComponent.TYPE_USER) ;
       uiGroupSelector.setSelectedGroups(null) ;
       uiGroupSelector.setComponent(uiForm,new String[]{UITaskDetailTab.FIELD_DELEGATION}) ;
+      uiForm.setSelectedTab(TAB_TASKDETAIL) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }
   }
@@ -586,7 +591,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
       } else {
         uiApp.addMessage(new ApplicationMessage(uiForm.errorMsg_, null));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        uiForm.setRenderedChild(TAB_TASKDETAIL) ;
+        uiForm.setSelectedTab(TAB_TASKDETAIL) ;
       }
     }
   }

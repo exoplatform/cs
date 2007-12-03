@@ -4,6 +4,9 @@
  **************************************************************************/
 package org.exoplatform.calendar.service;
 
+import java.util.Locale;
+import java.util.TimeZone;
+
 import org.exoplatform.services.jcr.util.IdGenerator;
 
 /**
@@ -72,6 +75,8 @@ public class Calendar {
   
   public Calendar() throws Exception{
     id = "calendar" + IdGenerator.generate() ;
+    timeZone = TimeZone.getDefault().getID() ;
+    locale = Locale.getDefault().getISO3Country() ;
   }
   public String getId() { return id ; }
   public void setId(String id) { this.id = id ; }

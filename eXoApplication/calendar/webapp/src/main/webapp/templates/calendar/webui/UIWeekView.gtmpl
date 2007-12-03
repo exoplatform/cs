@@ -4,6 +4,7 @@
 	import java.util.GregorianCalendar;
 	import java.text.DateFormat;
 	import java.text.SimpleDateFormat;
+	import org.exoplatform.calendar.CalendarUtils;
 	
 	uiform.begin()
  	_ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");
@@ -154,7 +155,7 @@
 						begindate = dtf.format(event.fromDateTime) ;
 						end = tf.format(event.toDateTime) ;
 						enddate = dtf.format(event.toDateTime) ;
-						cal = new GregorianCalendar() ;
+						cal = CalendarUtils.getInstanceTempCalendar() ;
 					 	cal.setTime(event.getFromDateTime()) ;
 					   beginTime = cal.get(Calendar.HOUR_OF_DAY)*60 + cal.get(Calendar.MINUTE) ;
 					  cal.setTime(event.getToDateTime()) ;

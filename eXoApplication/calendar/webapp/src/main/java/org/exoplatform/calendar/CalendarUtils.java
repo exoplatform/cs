@@ -79,7 +79,7 @@ public class CalendarUtils {
   static public CalendarService getCalendarService() throws Exception {
     return (CalendarService)PortalContainer.getComponent(CalendarService.class) ;
   }
-
+  public static Calendar getInstanceTempCalendar() { return  GregorianCalendar.getInstance(TimeZone.getTimeZone("GMT"));}
   public static List<SelectItemOption<String>> getTimesSelectBoxOptions(String timeFormat) {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     Calendar cal = getBeginDay(GregorianCalendar.getInstance()) ;
@@ -146,8 +146,8 @@ public class CalendarUtils {
   }
 
   public static boolean isAllDayEvent(CalendarEvent eventCalendar) {
-    Calendar cal1 = new GregorianCalendar() ;
-    Calendar cal2 = new GregorianCalendar() ;
+    Calendar cal1 = GregorianCalendar.getInstance(TimeZone.getTimeZone("GMT")) ;
+    Calendar cal2 = GregorianCalendar.getInstance(TimeZone.getTimeZone("GMT")) ;
     cal1.setTime(eventCalendar.getFromDateTime()) ;
     cal2.setTime(eventCalendar.getToDateTime()) ;
     return (cal1.get(Calendar.HOUR_OF_DAY) == 0  && 
@@ -163,9 +163,9 @@ public class CalendarUtils {
     ) ;
   }
   public static boolean isSameDate(Date value1, Date value2) {
-    Calendar date1 = GregorianCalendar.getInstance() ;
+    Calendar date1 = GregorianCalendar.getInstance(TimeZone.getTimeZone("GMT")) ;
     date1.setTime(value1) ;
-    Calendar date2 = GregorianCalendar.getInstance() ;
+    Calendar date2 = GregorianCalendar.getInstance(TimeZone.getTimeZone("GMT")) ;
     date2.setTime(value2) ;
     return isSameDate(date1, date2) ;
   }
@@ -187,12 +187,12 @@ public class CalendarUtils {
   }
 
   public static Calendar getBeginDay(Date date) {
-    Calendar cal = GregorianCalendar.getInstance() ;
+    Calendar cal = GregorianCalendar.getInstance(TimeZone.getTimeZone("GMT")) ;
     cal.setTime(date) ;
     return getBeginDay(cal) ;
   }
   public static Calendar getEndDay(Date date)  {
-    Calendar cal = GregorianCalendar.getInstance() ;
+    Calendar cal = GregorianCalendar.getInstance(TimeZone.getTimeZone("GMT")) ;
     cal.setTime(date) ;
     return getEndDay(cal) ;
   }

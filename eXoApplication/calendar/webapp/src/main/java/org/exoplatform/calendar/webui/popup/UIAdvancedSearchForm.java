@@ -89,7 +89,7 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
     UIFormDateTimeInput fromDate = new UIFormDateTimeInput(FROMDATE, FROMDATE, new Date(), false) ;
     fromDate.addValidator(EmptyFieldValidator.class) ;
     addChild(fromDate) ;
-    java.util.Calendar calendar = GregorianCalendar.getInstance() ;
+    java.util.Calendar calendar = CalendarUtils.getInstanceTempCalendar() ;
     calendar.add(java.util.Calendar.DATE, 1) ;
     addChild(new UIFormDateTimeInput(TODATE, TODATE, calendar.getTime(), false).addValidator(EmptyFieldValidator.class)) ;
   }

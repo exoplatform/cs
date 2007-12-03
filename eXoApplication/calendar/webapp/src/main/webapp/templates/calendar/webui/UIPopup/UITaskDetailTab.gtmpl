@@ -101,17 +101,19 @@
           <%uiForm.renderField(uicomponent.FIELD_CALENDAR)%>
         </td>
       </tr>
-      <tr>
-        <td class="FieldLabel">
-          <%=uiForm.getLabel(uicomponent.FIELD_CATEGORY)%>
-        </td>
-        <td class="FieldComponent">
-          <%
-  	        uiForm.renderField(uicomponent.FIELD_CATEGORY) ;
-				    renderActions(uicomponent.FIELD_CATEGORY) ;
-          %>
-        </td>
-      </tr>
+      <%if(uicomponent.getChildById(uicomponent.FIELD_CATEGORY) != null && uicomponent.getChildById(uicomponent.FIELD_CATEGORY).isRendered()){%>
+	      <tr>
+	        <td class="FieldLabel">
+	          <%=uiForm.getLabel(uicomponent.FIELD_CATEGORY)%>
+	        </td>
+	        <td class="FieldComponent">
+	          <%
+	  	        uiForm.renderField(uicomponent.FIELD_CATEGORY) ;
+					    renderActions(uicomponent.FIELD_CATEGORY) ;
+	          %>
+	        </td>
+	      </tr>
+      <%}%>
        <tr>
         <td class="FieldLabel">
           <%=uiForm.getLabel(uicomponent.FIELD_STATUS)%>

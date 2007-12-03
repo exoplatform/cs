@@ -115,6 +115,7 @@
           <%uiForm.renderField(uicomponent.FIELD_CALENDAR)%>
         </td>
       </tr>
+      <%if(uicomponent.getChildById(uicomponent.FIELD_CATEGORY) != null && uicomponent.getChildById(uicomponent.FIELD_CATEGORY).isRendered()){%>
       <tr>
         <td class="FieldLabel">
           <%=uiForm.getLabel(uicomponent.FIELD_CATEGORY)%>
@@ -126,7 +127,7 @@
           %>
         </td>
       </tr>
-      
+      <%}%>
       <tr>
         <td class="FieldLabel">
           <%=uiForm.getLabel(uicomponent.FIELD_ATTACHMENTS)%>
