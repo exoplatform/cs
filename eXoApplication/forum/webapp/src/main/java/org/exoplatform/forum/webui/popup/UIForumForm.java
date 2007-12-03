@@ -70,6 +70,7 @@ public class UIForumForm extends UIForm implements UIPopupComponent {
 	public static final String FIELD_POSTABLE_INPUT = "Postable" ;
 	public static final String FIELD_TOPICABLE_INPUT = "Topicable" ;
   
+  @SuppressWarnings("unchecked")
   public UIForumForm() throws Exception {
   	List<Category> categorys = forumService.getCategories();
   	List<SelectItemOption<String>> list = new ArrayList<SelectItemOption<String>>() ;

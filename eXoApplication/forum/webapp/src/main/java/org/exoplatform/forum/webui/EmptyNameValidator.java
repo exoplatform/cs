@@ -17,7 +17,7 @@ import org.exoplatform.webui.form.UIFormInput;
 import org.exoplatform.webui.form.validator.Validator;
 
 public class EmptyNameValidator implements Validator {
-    
+  @SuppressWarnings("unchecked")
   public void validate(UIFormInput uiInput) throws Exception {
     String s = (String)uiInput.getValue();
     if(s == null || s.length() == 0) {

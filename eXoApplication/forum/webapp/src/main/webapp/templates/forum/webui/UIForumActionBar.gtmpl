@@ -9,9 +9,9 @@
 					<div class="SeparatorLine"><span></span></div>
 					<a href="<%=uicomponent.event("AddForum")%>" class="Icon AddForumIcon"><%= _ctx.appRes("UIForumActionBar.label.addNewForum"); %></a>
 					<div class="SeparatorLine"><span></span></div>
-					<div href="<%=uicomponent.event("ManageModerator")%>" class="Icon ManageModerators"><%= _ctx.appRes("UIForumActionBar.label.manageModerators"); %></div>
+					<a href="<%=uicomponent.event("ManageModerator")%>" class="Icon ManageModerators"><%= _ctx.appRes("UIForumActionBar.label.manageModerators"); %></a>
 					<div class="SeparatorLine"><span></span></div>
-					<div href="<%=uicomponent.event("ForumOption")%>" class="Icon ForumOption"><%= _ctx.appRes("UIForumActionBar.label.forumsOptions"); %></div>
+					<a href="<%=uicomponent.event("ForumOption")%>" class="Icon ForumOption"><%= _ctx.appRes("UIForumActionBar.label.forumsOptions"); %></a>
 					<div style="clear: left;"><span></span></div>
 				</div>
 			</div>

@@ -6,7 +6,6 @@ package org.exoplatform.forum.service.test;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.exoplatform.forum.service.Category;

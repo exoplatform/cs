@@ -37,6 +37,7 @@ public class UIViewTopic extends UIForm implements UIPopupComponent {
     this.post = post ;
   }
 
+  @SuppressWarnings("unused")
   private Post getPostView() throws Exception {
     return post ;
   }

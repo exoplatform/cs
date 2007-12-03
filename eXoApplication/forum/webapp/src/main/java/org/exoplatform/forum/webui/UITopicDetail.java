@@ -12,6 +12,7 @@ import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.service.JCRPageList;
 import org.exoplatform.forum.service.Post;
 import org.exoplatform.forum.service.Topic;
+import org.exoplatform.forum.webui.popup.UIForumOptionForm;
 import org.exoplatform.forum.webui.popup.UIMovePostForm;
 import org.exoplatform.forum.webui.popup.UIMoveTopicForm;
 import org.exoplatform.forum.webui.popup.UIPollForm;
@@ -89,6 +90,7 @@ public class UITopicDetail extends UIForm  {
   private boolean isEditTopic = false ;
   private boolean isUpdatePageList = false ;
   private List<Post> posts ;
+  private long maxPost = 10 ;
   public UITopicDetail() throws Exception {
     addUIFormInput( new UIFormStringInput("gopage1", null)) ;
     addUIFormInput( new UIFormStringInput("gopage2", null)) ;
@@ -139,6 +141,10 @@ public class UITopicDetail extends UIForm  {
     }
   }
   
+  public void setMaxPostInPage(long maxPost) {
+  	this.maxPost = maxPost ;
+  }
+  
   @SuppressWarnings("unused")
   private void initPage() throws Exception {
   	if(this.isUpdatePageList) {
@@ -146,7 +152,7 @@ public class UITopicDetail extends UIForm  {
   	} else {
   		this.pageList = forumService.getPosts(categoryId, forumId, topicId) ;
   	}
-  	pageList.setPageSize(4) ;
+  	pageList.setPageSize(this.maxPost) ;
   	this.getChild(UIForumPageIterator.class).updatePageList(this.pageList) ;
   }
   

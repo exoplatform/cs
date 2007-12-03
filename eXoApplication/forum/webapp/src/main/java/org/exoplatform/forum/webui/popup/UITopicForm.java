@@ -77,6 +77,7 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
   private String categoryId; 
   private String forumId ;
   private String topicId ;
+  @SuppressWarnings("unchecked")
   public UITopicForm() throws Exception {
     UIFormStringInput topicTitle = new UIFormStringInput(FIELD_TOPICTITLE_INPUT, FIELD_TOPICTITLE_INPUT, null);
     topicTitle.addValidator(EmptyNameValidator.class) ;

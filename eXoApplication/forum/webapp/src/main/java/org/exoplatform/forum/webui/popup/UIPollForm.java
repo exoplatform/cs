@@ -109,6 +109,7 @@ public class UIPollForm extends UIForm implements UIPopupComponent {
   }
   
   static  public class SaveActionListener extends EventListener<UIPollForm> {
+    @SuppressWarnings("unchecked")
     public void execute(Event<UIPollForm> event) throws Exception {
       UIPollForm uiForm = event.getSource() ;
       UIFormStringInput questionInput = uiForm.getUIStringInput(FIELD_QUESTION_INPUT) ;

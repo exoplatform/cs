@@ -13,6 +13,7 @@ import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.service.JCRPageList;
 import org.exoplatform.forum.service.Topic;
 import org.exoplatform.forum.webui.popup.UIForumForm;
+import org.exoplatform.forum.webui.popup.UIForumOptionForm;
 import org.exoplatform.forum.webui.popup.UIMoveForumForm;
 import org.exoplatform.forum.webui.popup.UIMoveTopicForm;
 import org.exoplatform.forum.webui.popup.UIPopupAction;
@@ -76,6 +77,8 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
   private long page = 1 ;
   private boolean isGoPage = false;
   private boolean isUpdate = false;
+  private long maxTopic = 10 ;
+  private long maxPost = 10 ;
   private List <JCRPageList> listPageListPost = new ArrayList<JCRPageList>() ;
   public UITopicContainer() throws Exception {
   	addUIFormInput( new UIFormStringInput("gopage1", null)) ;
@@ -117,7 +120,12 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
   @SuppressWarnings("unused")
   private void initPage() throws Exception {
   	this.pageList = forumService.getPageTopic(categoryId, forumId);
+  	this.pageList.setPageSize(this.maxTopic);
   	this.getChild(UIForumPageIterator.class).updatePageList(this.pageList) ;
+  }
+  
+  public void setMaxTopicInPage(long maxTopic) {
+  	this.maxTopic = maxTopic ;
   }
   
   @SuppressWarnings("unused")
@@ -139,11 +147,10 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
   
   @SuppressWarnings({ "unused", "unchecked" })
   private List<Topic> getTopicPageLits() throws Exception {
-    JCRPageList pageList = this.pageList;
     if(!this.isGoPage) {
     	this.page = this.getChild(UIForumPageIterator.class).getPageSelected() ;
     }
-    this.topicList = this.forumService.getPage(this.page, pageList);
+    this.topicList = this.forumService.getPage(this.page, this.pageList);
     for(Topic topic : this.topicList) {
       if(getUIFormCheckBoxInput(topic.getId()) != null) {
         getUIFormCheckBoxInput(topic.getId()).setChecked(false) ;
@@ -187,9 +194,13 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
     return className ;
   }
   
+  public void setMaxPostInPage(long maxPost) {
+  	this.maxPost = maxPost ;
+  }
+  
   private JCRPageList getPageListPost(String topicId) throws Exception {
   	JCRPageList pageListPost = this.forumService.getPosts(this.categoryId, this.forumId, topicId)  ; 
-  	pageListPost.setPageSize(4) ;
+  	pageListPost.setPageSize(this.maxPost) ;
   	return pageListPost;
   }
   
