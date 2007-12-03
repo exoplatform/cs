@@ -242,8 +242,13 @@ public class UIAddressBooks extends UIComponent {
         uiAddressBook.selectedGroup = null;
         uiContacts.setContacts(null);
         event.getRequestContext().addUIComponentToUpdateByAjax(contactContainer);
-      }  
+      }
       contactService.removeGroup(username, groupId);
+      String selectedTag = uiContacts.getSelectedTag() ;
+      if (!ContactUtils.isEmpty(selectedTag)) {
+        uiContacts.setContacts(contactService.getContactPageListByTag(username, selectedTag)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(contactContainer);
+      }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook);
     }
   }

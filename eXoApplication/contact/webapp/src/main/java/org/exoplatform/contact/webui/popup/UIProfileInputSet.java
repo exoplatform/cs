@@ -48,6 +48,7 @@ public class UIProfileInputSet extends UIFormInputWithActions {
   private static final String FIELD_EMAIL_INPUT = "email" ;
   private static final String MALE = "male" ;
   private static final String FEMALE = "female" ;
+  @SuppressWarnings("unused")
   private String gender = "male" ;
   private byte[] imageBytes = null;
   private String fileName = null ;

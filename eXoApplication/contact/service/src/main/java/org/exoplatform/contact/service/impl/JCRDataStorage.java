@@ -2,6 +2,7 @@
  * Copyright 2001-2007 The eXo Platform SARL         All rights reserved.  *
  * Please look at license.txt in info directory for more license detail.   *
  **************************************************************************/
+
 package org.exoplatform.contact.service.impl;
 
 import java.util.ArrayList;
@@ -908,6 +909,9 @@ public class JCRDataStorage implements DataStorage {
       filter.setAccountPath(contactHome.getPath()) ;
       qm = contactHome.getSession().getWorkspace().getQueryManager() ;      
       query = qm.createQuery(filter.getStatement(), Query.XPATH) ;
+      
+      //System.out.println("\n\n private query :" + query.getStatement() + "\n\n");
+      
       NodeIterator it = query.execute().getNodes() ;
       while(it.hasNext()) {
         contacts.add(getContact(it.nextNode())) ;        
@@ -917,6 +921,9 @@ public class JCRDataStorage implements DataStorage {
     filter.setAccountPath(publicContactHome.getPath()) ;
     qm = publicContactHome.getSession().getWorkspace().getQueryManager() ;
     query = qm.createQuery(filter.getStatement(), Query.XPATH) ;
+    
+    //System.out.println("\n\n public query :" + query.getStatement() + "\n\n");
+    
     QueryResult result = query.execute();
     NodeIterator itpublic = result.getNodes();
     while(itpublic.hasNext()) {

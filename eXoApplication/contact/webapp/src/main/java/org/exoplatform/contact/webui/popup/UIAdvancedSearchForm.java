@@ -8,7 +8,6 @@ import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.DataPageList;
 import org.exoplatform.contact.webui.UIAddressBooks;
 import org.exoplatform.contact.webui.UIContactPortlet;
-import org.exoplatform.contact.webui.UIContactPreview;
 import org.exoplatform.contact.webui.UIContacts;
 import org.exoplatform.contact.webui.UITags;
 import org.exoplatform.contact.webui.UIWorkingContainer;

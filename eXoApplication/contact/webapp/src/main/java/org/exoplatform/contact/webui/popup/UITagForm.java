@@ -11,6 +11,7 @@ import java.util.MissingResourceException;
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactService;
+import org.exoplatform.contact.service.JCRPageList;
 import org.exoplatform.contact.service.Tag;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContacts;
@@ -26,7 +27,6 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
-import org.exoplatform.webui.form.UIFormInputInfo;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 
@@ -142,7 +142,7 @@ public class UITagForm extends UIForm implements UIPopupComponent {
   }
   
   static  public class AddActionListener extends EventListener<UITagForm> {
-    public void execute(Event<UITagForm> event) throws Exception {
+    public void execute(Event<UITagForm> event) throws Exception { 
       UITagForm uiTagForm = event.getSource() ;
       ContactService contactService = ContactUtils.getContactService();
       String username = ContactUtils.getCurrentUser() ;

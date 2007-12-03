@@ -13,7 +13,6 @@ import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactAttachment;
 import org.exoplatform.contact.service.ContactService;
-import org.exoplatform.contact.webui.UIAddressBooks;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContactPreview;
 import org.exoplatform.contact.webui.UIContacts;
@@ -137,7 +136,7 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent, UI
     HomeTab.addUIFormInput(new UIFormStringInput(FIELD_HOMEFAX_INPUT, FIELD_HOMEFAX_INPUT, null));
     HomeTab.addUIFormInput(new UIFormStringInput(FIELD_PERSONALSITE_INPUT, FIELD_PERSONALSITE_INPUT, null));
     NoteTab.addUIFormInput(new UIFormTextAreaInput(FIELD_NOTE_INPUT, FIELD_NOTE_INPUT, null));
-    //this.setSelectedTab(ProfileTab.getId());
+    this.setSelectedTab(ProfileTab.getId());
     UIFormInputWithActions sharing = new UIFormInputWithActions(INPUT_SHARETAB) ;
     sharing.addUIFormInput(new UIFormInputInfo(FIELD_INPUT_INFO, FIELD_INPUT_INFO, null)) ;
     
@@ -397,7 +396,7 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent, UI
       UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
       UIContactPreview uiContactPreview = uiContactPortlet.findFirstComponentOfType(UIContactPreview.class) ;
       
-      if (!ContactUtils.isEmpty(uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class).getSelectedGroup()))
+      //if (!ContactUtils.isEmpty(uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class).getSelectedGroup()))
         uiContacts.updateList() ;
       String selectedContact = uiContacts.getSelectedContact() ;
       if (!ContactUtils.isEmpty(selectedContact) && selectedContact.equals(contact.getId())) 

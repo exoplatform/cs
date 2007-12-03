@@ -117,7 +117,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   public boolean isAscEmail() { return EmailComparator.isAsc ; }
   public boolean isAscJob() { return JobTitleComparator.isAsc ; }
   
-  public void updateList() throws Exception {     
+  public void updateList() throws Exception {
     getChildren().clear() ;
     contactMap.clear();
     UIContactPreview contactPreview = 
@@ -215,7 +215,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       Contact contact = uiContacts.contactMap.get(contactId) ;
       if (contact != null && contact.getCategories().length > 0){
         uiCategorySelect.setValue(contact.getCategories()[0]) ;
-        uiCategorySelect.disableSelect() ;
+        uiCategorySelect.disableSelect() ;        
         UIContactForm uiContactForm = popupContainer.findFirstComponentOfType(UIContactForm.class);
         uiContactForm.setValues(contact);
         uiContactForm.setNew(false) ;
@@ -314,10 +314,15 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         }    
         UIContactPortlet uiContactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class) ;
         UIPopupAction popupAction = uiContactPortlet.getChild(UIPopupAction.class) ;
-        UIMoveContactsForm.groupId_ = uiContacts.selectedGroup ;
-        UIMoveContactsForm.contactIds_ = contactIds ;
         UIMoveContactsForm uiMoveForm = popupAction.createUIComponent(UIMoveContactsForm.class, null, null) ;
-        if (contactIds.size() == 1)  uiMoveForm.setChecked() ;
+        uiMoveForm.setContacts(contactIds) ;
+        List<String> sharedGroup = uiContactPortlet
+          .findFirstComponentOfType(UIAddressBooks.class).getSharedContactGroups() ;
+        if (sharedGroup.contains(uiContacts.selectedGroup)) {
+          uiMoveForm.addComponent() ;
+          uiMoveForm.setPersonal(false) ;
+        } else uiMoveForm.setPersonal(true) ;
+        uiMoveForm.setGroup(uiContacts.selectedGroup) ;
         popupAction.activate(uiMoveForm, 410, 0, true) ;
         event.getRequestContext()
         .addUIComponentToUpdateByAjax(uiContactPortlet.findFirstComponentOfType(UIContactContainer.class));

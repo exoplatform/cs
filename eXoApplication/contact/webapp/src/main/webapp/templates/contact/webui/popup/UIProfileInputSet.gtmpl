@@ -45,15 +45,10 @@
               	 		String maleChecked = "" ;
               	 		String femaleChecked = "" ;
               	 		String getGender = uicomponent.gender ;
-              	 		
-              	 		
-              	 		
-              	 		
               	 		if (getGender != null && getGender.equalsIgnoreCase("male")) maleChecked = "checked" ; 
-										else if (getGender != null && getGender.equalsIgnoreCase("male"))femaleChecked = "checked" ;
+										else if (getGender != null && getGender.equalsIgnoreCase("female"))femaleChecked = "checked" ;
 													
-										//checked false for ie 6.0 if using <-%checked--%-->" ;
-													
+										//checked false for ie 6.0 if using <-%checked--%-->" ;			
 										if (maleChecked.equals("checked")) { 
 									%>
           	 					<input class="radio" type="radio" value="Male" checked name="gender"/>
