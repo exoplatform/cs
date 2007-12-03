@@ -5,12 +5,14 @@
 package org.exoplatform.mail.webui ;
 
 import java.io.ByteArrayInputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadResource;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
+import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Attachment;
 import org.exoplatform.mail.service.JCRMessageAttachment;
 import org.exoplatform.mail.service.MailService;
@@ -44,6 +46,20 @@ public class UIMessagePreview extends UIComponent {
   public Message getMessage() throws Exception { return selectedMessage_; }
   
   public void setMessage(Message msg) throws Exception { selectedMessage_ = msg; }
+  
+  public List<Message> getConversations() throws Exception {
+    List<Message> msgList = new ArrayList<Message>();
+    msgList.add(selectedMessage_);
+    String username = MailUtils.getCurrentUser();
+    String accountId = MailUtils.getAccountId();
+    MailService mailSrv = MailUtils.getMailService();
+    if (selectedMessage_.isRootConversation() && (selectedMessage_.getMessageIds() != null && selectedMessage_.getMessageIds().length > 0)) {
+      for (int i=0; i < selectedMessage_.getMessageIds().length; i++) {
+        msgList.add(mailSrv.getMessageById(username, accountId, selectedMessage_.getMessageIds()[i]));
+      }
+    }
+    return msgList ;
+  }
   
   public DownloadService getDownloadService() { 
     return getApplicationComponent(DownloadService.class) ; 

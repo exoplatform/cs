@@ -102,6 +102,11 @@ public class Utils {
   public static final String EXO_CHECKMAILAUTO = "exo:checkMailAuto".intern();
   public static final String EXO_EMPTYTRASH = "exo:emptyTrash".intern();
   public static final String EXO_PLACESIGNATURE = "exo:placeSignature".intern();
+  public static final String EXO_ISROOT = "exo:isRoot".intern();
+  public static final String EXO_ADDRESSES = "exo:addresses".intern();
+  public static final String EXO_MESSAGEIDS = "exo:messageIds".intern();
+  public static final String EXO_ROOT = "exo:root".intern();
+  
 
   public static final String EXO_MAIL_SETTING = "exo:mailSetting".intern();
   public static final String EXO_NUMBER_OF_CONVERSATION = "exo:showNumberOfConversation".intern();

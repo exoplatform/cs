@@ -90,8 +90,8 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
     for(UIComponent c : getChildren()) {
       chidrenMap_.put(getChildren().indexOf(c) + 1, c.getId()) ;
     }
-    
-    setRenderedChild(getCurrentChild()) ;
+    setSelectedTab(getCurrentChild()) ;
+    //setRenderedChild(getCurrentChild()) ;
   }
 
   public boolean showStepActions() {return isShowStepActions_ ;}
@@ -113,16 +113,19 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
 
   protected void viewStep(int step) {  
     currentStep_ = step ;
-    setRenderedChild(chidrenMap_.get(getCurrentStep())) ;
+    setSelectedTab(chidrenMap_.get(getCurrentStep())) ;
+    //setRenderedChild(chidrenMap_.get(getCurrentStep())) ;
   }
   
   protected void nextStep() {
     currentStep_ ++ ;
-    setRenderedChild(chidrenMap_.get(getCurrentStep())) ;
+    setSelectedTab(chidrenMap_.get(getCurrentStep())) ;
+    //setRenderedChild(chidrenMap_.get(getCurrentStep())) ;
   }
   protected void backStep() {
     currentStep_ -- ;
-    setRenderedChild(chidrenMap_.get(getCurrentStep())) ;
+    setSelectedTab(chidrenMap_.get(getCurrentStep())) ;
+    //setRenderedChild(chidrenMap_.get(getCurrentStep())) ;
   }
 
   public String[] getActions(){

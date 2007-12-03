@@ -10,10 +10,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.activation.DataHandler;
@@ -227,7 +230,7 @@ public class MailServiceImpl implements MailService{
     transport.close();
   }
   
-  public String send(Session session,Transport transport, Message message) throws Exception {
+  private String send(Session session,Transport transport, Message message) throws Exception {
     javax.mail.Message mimeMessage = new MimeMessage(session);
     String status = "";
     InternetAddress addressFrom ;
@@ -360,6 +363,14 @@ public class MailServiceImpl implements MailService{
           newMsg.setUnread(true);
           newMsg.setHasStar(false);       
           newMsg.setPriority(Utils.PRIORITY_NORMAL);
+          Message rootMsg  = getRootMessage(username, accountId, newMsg) ;
+          if (rootMsg != null) {
+            newMsg.setIsRootConversation(false);
+            newMsg.setRoot(rootMsg.getId());
+            updateRootMessage(username, accountId, rootMsg, newMsg);
+          } else {
+            newMsg.setIsRootConversation(true);
+          }
           String[] xPriority = msg.getHeader("X-Priority");
           String[] importance = msg.getHeader("Importance");
           
@@ -428,7 +439,6 @@ public class MailServiceImpl implements MailService{
     }catch(Exception e) {
       e.printStackTrace() ;
     }   
-
   }
 
   private void setPart(Part part, Message newMail, String username){
@@ -473,7 +483,7 @@ public class MailServiceImpl implements MailService{
     }
   }
 
-  public void setMessageBody(Part part, Message newMail) throws Exception {
+  private void setMessageBody(Part part, Message newMail) throws Exception {
     StringBuffer messageBody =new StringBuffer();
     InputStream is = part.getInputStream();
     BufferedReader reader = new BufferedReader(new InputStreamReader(is));
@@ -483,6 +493,62 @@ public class MailServiceImpl implements MailService{
       messageBody.append(inputLine + "\n");
     }
     newMail.setMessageBody(messageBody.toString());
+  }
+  
+  private Message getRootMessage(String username, String accountId, Message newMsg) throws Exception {
+    MessageFilter filter = new MessageFilter("");
+    filter.setAccountId(accountId);
+    filter.setSubjectCondition(Utils.CONDITION_IS);
+    filter.setSubject(newMsg.getSubject());
+    List<Message> msgList = getMessages(username, filter).getAll(username);
+    if (msgList != null && msgList.size() > 0) {
+      for (Message msg : msgList) {
+        if (msg.isRootConversation()) {
+          List<String> addressList = new ArrayList<String>() ;
+          if (msg.getAddresses() != null && msg.getAddresses().length > 0) {
+            addressList.addAll(new ArrayList<String>(Arrays.asList(msg.getAddresses())));
+          }
+          addressList.addAll(new ArrayList<String>(Arrays.asList(msg.getFrom())));
+          addressList.addAll(new ArrayList<String>(Arrays.asList(msg.getMessageCc())));
+          addressList.addAll(new ArrayList<String>(Arrays.asList(msg.getMessageBcc())));
+          if (addressList.indexOf(newMsg.getFrom()) > -1) {
+            return msg;
+          }
+        }
+      }
+    }
+    return null;
+  }
+  
+  private void updateRootMessage(String username, String accountId,Message rootMsg, Message newMsg) throws Exception {
+    Map<String, String> addressMap = new HashMap<String, String> () ;
+    List<String> addressList = new ArrayList<String>();
+    if (rootMsg.getAddresses() != null && rootMsg.getAddresses().length > 0) {
+      addressList.addAll(new ArrayList<String>(Arrays.asList(rootMsg.getAddresses())));
+    }
+    for(String value : addressList) {
+      addressMap.put(value, value) ;
+    }
+    
+    Map<String, String> newAddressMap = new HashMap<String, String> () ;
+    List<String> newAddressList = new ArrayList<String>(); 
+    newAddressList.addAll(new ArrayList<String>(Arrays.asList(newMsg.getFrom())));
+    newAddressList.addAll(new ArrayList<String>(Arrays.asList(newMsg.getMessageCc())));
+    newAddressList.addAll(new ArrayList<String>(Arrays.asList(newMsg.getMessageBcc())));
+    
+    for(String value : newAddressList) {
+      newAddressMap.put(value, value) ;
+    }
+    addressMap.putAll(newAddressMap);
+    rootMsg.setAddresses(addressMap.values().toArray(new String[]{}));
+    
+    List<String> msgIdList = new ArrayList<String>();
+    if (rootMsg.getMessageIds() != null && rootMsg.getMessageIds().length > 0) {
+      msgIdList.addAll(new ArrayList<String>(Arrays.asList(rootMsg.getMessageIds())));
+    }
+    msgIdList.add(newMsg.getId());
+    rootMsg.setMessageIds(msgIdList.toArray(new String[]{}));
+    saveMessage(username, accountId, rootMsg, false);
   }
   
   public void createAccount(String username, Account account) throws Exception {

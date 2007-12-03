@@ -5,8 +5,10 @@
 package org.exoplatform.mail.webui ;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.mail.internet.InternetAddress;
 
@@ -188,6 +190,29 @@ public class UIMessageList extends UIForm {
     }
     return new Tag();
   } 
+  
+  public List<Message> getConversations(Message msg) throws Exception {
+    List<Message> msgList = new ArrayList<Message>();
+    msgList.add(msg);
+    String username = MailUtils.getCurrentUser();
+    String accountId = MailUtils.getAccountId();
+    MailService mailSrv = MailUtils.getMailService();
+    if (msg.isRootConversation() && (msg.getMessageIds() != null && msg.getMessageIds().length > 0)) {
+      for (int i=0; i < msg.getMessageIds().length; i++) {
+        msgList.add(mailSrv.getMessageById(username, accountId, msg.getMessageIds()[i]));
+      }
+    }
+    return msgList ;
+  }
+  
+  public List<String> getParticipators(Message msg) throws Exception {
+    List<Message> msgList = getConversations(msg);
+    Map<String, String> participators = new HashMap<String, String>();
+    for (Message message : msgList) {
+      participators.put(Utils.getPersonal(Utils.getInternetAddress(message.getFrom())[0]), Utils.getPersonal(Utils.getInternetAddress(message.getFrom())[0]));
+    }
+    return new ArrayList<String>(participators.values());
+  }
   
   public String getAllTagName(Message msg) throws Exception {
     UIMailPortlet uiPortlet = getAncestorOfType(UIMailPortlet.class);

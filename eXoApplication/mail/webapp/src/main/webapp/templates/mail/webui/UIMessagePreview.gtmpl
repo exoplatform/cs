@@ -8,15 +8,15 @@
 %>
 <div class="UIMessagePreview" id="<%=uicomponent.getId()%>">
 <%
-  Message msg = uicomponent.getMessage();
-  if (msg != null) {
-%>
+  Message msgRoot = uicomponent.getMessage();
+  if (msgRoot != null) {
+%> 
 	<div class="ReadingPaneBar">
 		<div class="Subject"><span>Subject: </span><span>
 		<%
 		  String subject = "(No Subject)"
-		  if (msg.getSubject() != null && msg.getSubject() != "") {
-		    subject = msg.getSubject();
+		  if (msgRoot.getSubject() != null && msgRoot.getSubject() != "") {
+		    subject = msgRoot.getSubject();
 		  }
 		%>
 		<%=subject%>
@@ -26,6 +26,7 @@
 	</div>
 	<div class="ReadingPaneDetails">
 <!--  Start DecoratorBox ViewBoxStyle -->
+    <% for (Message msg : uicomponent.getConversations()) {%>
 		<div class="DecoratorBox">
 			<div class="ViewBoxStyle">
 				<div class="TopLeftViewBoxStyle">
@@ -179,6 +180,7 @@
 				</div>
 			</div>
 		</div>
+    <%}%>
 <!--  End DecoratorBox ViewBoxStyle -->
 	</div>
 <%} else {%>

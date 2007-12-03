@@ -112,7 +112,7 @@ public class UIAccountSetting extends UIFormTabPane {
     serverInputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_EMPTY_TRASH, null, null));
     addUIFormInput(serverInputSet); 
     
-    setRenderedChild(TAB_ACCOUNT);
+    //setRenderedChild(TAB_ACCOUNT);
     if (getAccounts() != null && getAccounts().size() > 0) { 
       setSelectedAccountId(getAccounts().get(0).getId()); 
     }
