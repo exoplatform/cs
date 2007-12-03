@@ -104,7 +104,7 @@ public class UICategories extends UIContainer  {
       uiForumContainer.getChild(UIForumDescription.class).setForumIds(id[0], id[1]);
       uiTopicDetail.setUpdateTopic(id[0], id[1], id[2], true) ;
       uiTopicDetailContainer.getChild(UITopicPoll.class).updateFormPoll(id[0], id[1], id[2]) ;
-      forumPortlet.getChild(UIForumLinks.class).setValueOption((id[0]+"/"+id[1]));
+      forumPortlet.getChild(UIForumLinks.class).setValueOption((id[0]+"/"+id[1] + " "));
       event.getRequestContext().addUIComponentToUpdateByAjax(forumPortlet) ;
     }
   }

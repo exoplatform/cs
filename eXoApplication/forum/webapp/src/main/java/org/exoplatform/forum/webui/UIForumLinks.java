@@ -61,7 +61,7 @@ public class UIForumLinks extends UIForm {
   	this.getChild(UIFormSelectBoxForum.class).setOptions(list) ;
   }
   
-  public void setValueOption( String path) throws Exception {
+  public void setValueOption(String path) throws Exception {
   	this.path = path ;
 	  this.getChild(UIFormSelectBoxForum.class).setValue(path.trim()) ;
   }
@@ -70,18 +70,16 @@ public class UIForumLinks extends UIForm {
     public void execute(Event<UIForumLinks> event) throws Exception {
       UIForumLinks uiForm = event.getSource() ;
       UIFormSelectBoxForum selectBoxForum = uiForm.getUIFormSelectBoxForum(FIELD_FORUMLINK_SELECTBOX) ;
-      String path = selectBoxForum.getValue().trim();
-      System.out.println("\n\n1" + path + "\n\n");
+      String path = selectBoxForum.getValue();
       if(!path.equals(uiForm.path)) {
       	uiForm.path = path ;
 	      UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
 	      if(path.indexOf("orumServic") > 0) {
-	      	System.out.println("\n\n2" + path + "\n\n");
 	      	UICategoryContainer categoryContainer = forumPortlet.getChild(UICategoryContainer.class) ;
 	      	categoryContainer.updateIsRender(true) ;
 	      	forumPortlet.updateIsRendered(1);
 	      }else if(path.indexOf("forum") > 0) {
-	      	String id[] = path.split("/");
+	      	String id[] = path.trim().split("/");
 	      	forumPortlet.updateIsRendered(2);
 	      	UIForumContainer forumContainer = forumPortlet.findFirstComponentOfType(UIForumContainer.class);
 	      	forumContainer.setIsRenderChild(true) ;
@@ -89,11 +87,11 @@ public class UIForumLinks extends UIForm {
 	      	forumContainer.getChild(UITopicContainer.class).updateByBreadcumbs(id[0], id[1], true) ;
 	      }else {
 	      	UICategoryContainer categoryContainer = forumPortlet.getChild(UICategoryContainer.class) ;
-	      	categoryContainer.getChild(UICategory.class).updateByBreadcumbs(path) ;
+	      	categoryContainer.getChild(UICategory.class).updateByBreadcumbs(path.trim()) ;
 	        categoryContainer.updateIsRender(false) ;
 	        forumPortlet.updateIsRendered(1);
 	      }
-	      forumPortlet.getChild(UIBreadcumbs.class).setUpdataPath(path);
+	      forumPortlet.getChild(UIBreadcumbs.class).setUpdataPath(path.trim());
 	      event.getRequestContext().addUIComponentToUpdateByAjax(forumPortlet) ;
       }
     }

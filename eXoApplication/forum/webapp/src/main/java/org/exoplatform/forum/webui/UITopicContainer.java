@@ -252,6 +252,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
       uiTopicDetail.setUpdateContainer(uiTopicContainer.categoryId, uiTopicContainer.forumId, topic, true, Long.parseLong(temp[1])) ;
       uiTopicDetail.setUpdatePageList(uiTopicContainer.getPageListPost(temp[0])) ;
       uiTopicDetailContainer.getChild(UITopicPoll.class).updatePoll(uiTopicContainer.categoryId, uiTopicContainer.forumId, topic ) ;
+      forumPortlet.getChild(UIForumLinks.class).setValueOption((uiTopicContainer.categoryId+"/"+ uiTopicContainer.forumId + " "));
       WebuiRequestContext context = event.getRequestContext() ;
       context.addUIComponentToUpdateByAjax(uiForumContainer) ;
       context.addUIComponentToUpdateByAjax(forumPortlet.getChild(UIBreadcumbs.class)) ;
