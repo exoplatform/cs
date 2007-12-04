@@ -63,8 +63,6 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
   
   public UIExportForm() throws Exception {
     setId("UIExportForm") ;
-    
-    //getChildren().clear() ;
     sortedBy_ = fullName ;
   }  
 
@@ -78,8 +76,23 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
   
   public void activate() throws Exception {}
   public void deActivate() throws Exception {}
-  
 
+  public void setAscending(boolean isAsc) { isAscending_ = isAsc;}
+  public boolean isAscending() { return isAscending_; }
+
+  public void setSortedBy(String s) { sortedBy_ = s;}
+  public String getSortedBy() { return sortedBy_; }
+
+  public String getViewQuery() { return viewQuery_; }
+  public void setViewQuery(String view) { viewQuery_ = view; }
+
+  public void setContacts(Contact[] contacts) throws Exception { contacts_ = contacts; }
+  public Contact[] getContacts() throws Exception {
+    return contactMap.values().toArray(new Contact[] {});
+  }
+
+  public void setSelectedGroup(String s) throws Exception { selectedGroup = s; }
+  public String getSelectedGroup() { return selectedGroup; }
   public String getSelectedGroupName() throws Exception {
     ContactService contactService = ContactUtils.getContactService();
     String username = ContactUtils.getCurrentUser() ; 
@@ -87,54 +100,9 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
     if (group != null) return group.getName() ;
     else return selectedGroup ;
   }
-  
-  public void setAscending(boolean isAsc) {
-    isAscending_ = isAsc;
-  }
 
-  public boolean isAscending() {
-    return isAscending_;
-  }
-
-  public void setSortedBy(String s) {
-    sortedBy_ = s;
-  }
-
-  public String getSortedBy() {
-    return sortedBy_;
-  }
-
-  public String getViewQuery() {
-    return viewQuery_;
-  }
-
-  public void setViewQuery(String view) {
-    viewQuery_ = view;
-  }
-
-  public void setContacts(Contact[] contacts) throws Exception {
-    contacts_ = contacts;
-  }
-
-  public Contact[] getContacts() throws Exception {
-    return contactMap.values().toArray(new Contact[] {});
-  }
-
-  public void setSelectedGroup(String s) throws Exception {
-    selectedGroup = s;
-  }
-
-  public String getSelectedGroup() {
-    return selectedGroup;
-  }
-
-  public void setViewContactsList(boolean list) {
-    viewContactsList = list;
-  }
-
-  public boolean getViewContactsList() {
-    return viewContactsList;
-  }
+  public void setViewContactsList(boolean list) { viewContactsList = list; }
+  public boolean getViewContactsList() { return viewContactsList; }
 
   public void updateList() throws Exception { 
     getChildren().clear() ;
@@ -165,17 +133,12 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
     return checkedContacts;
   }
 
-  public String getSelectedTag() {
-    return selectedTag_;
-  }
+  public String getSelectedTag() { return selectedTag_; }
   public String getSelectedTagName() throws Exception {
     return ContactUtils.getContactService()
       .getTag(ContactUtils.getCurrentUser(), selectedTag_).getName() ;
   }
-  
-  public void setSelectedTag(String tagId) {
-    selectedTag_ = tagId;
-  }
+  public void setSelectedTag(String tagId) { selectedTag_ = tagId; }
   
   static  public class SaveActionListener extends EventListener<UIExportForm> {
     public void execute(Event<UIExportForm> event) throws Exception {

@@ -162,7 +162,7 @@
 	 	      	    <% 
 	 	      	    	if(isDisplaySearchResult) {	
 	 	      	    %>
-	 	      	    	<th> Address Book </th>
+	 	      	    	<th style="padding-left: 7px;"> Address Book </th>
 	 	      	    <% } %>
 	 	      	    	
 	  	 	      </tr>

@@ -18,16 +18,16 @@
 		<div class="WorkingContainer">
 		  <div class="Title">
 		  <% 
-		    String text = uicomponent.getSelectedGroup();
-		    if ((text != null) && !text.equals("")) {
+		    if (!ContactUtils.isEmpty(uicomponent.getSelectedGroup())) {
 		      text = uicomponent.getSelectedGroupName();
 		  %>
 		      Address Book : <%=text%>
-		  <%} else {
+		  <%} else if (!ContactUtils.isEmpty(uicomponent.getSelectedTag())) {
 		      text = uicomponent.getSelectedTagName();
 		  %>
 		      Tag : <%=text%>
-		  <%}%>
+		  <%} %>
+
 		  </div>
 	  
 			<div class="UIMessageList">

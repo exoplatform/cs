@@ -97,6 +97,7 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
         if (uiCategorySelect != null) {
           List<SelectItemOption<String>> ls = uiCategorySelect.getCategoryList();
           uiCategorySelect.setCategoryList(ls);
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiCategorySelect) ;
         } else {
           UIImportForm importForm = popupContainer.findFirstComponentOfType(UIImportForm.class) ;
           importForm.setCategoryList(importForm.getCategoryList()) ;
@@ -105,11 +106,7 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
         UIPopupAction action = popupContainer.getChild(UIPopupAction.class) ;
         if (action != null) {
           action.deActivate() ;
-          if(action.getAncestorOfType(UIPopupAction.class) != null) {
-            event.getRequestContext().addUIComponentToUpdateByAjax(action.getAncestorOfType(UIPopupAction.class));
-          }
-            
-                    
+          event.getRequestContext().addUIComponentToUpdateByAjax(action);          
           UIAddressBooks uiAddressBook = uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook) ;
         }
@@ -127,7 +124,6 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
   static  public class CancelActionListener extends EventListener<UICategoryForm> {
     public void execute(Event<UICategoryForm> event) throws Exception {
       UICategoryForm uiCategoryForm = event.getSource() ;
-      
       /*
       UIPopupAction uiPopupAction = uiCategoryForm.getAncestorOfType(UIPopupAction.class) ;
       uiPopupAction.deActivate() ;
@@ -140,10 +136,15 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
         .getAncestorOfType(UIContactPortlet.class).findFirstComponentOfType(UIAddressBooks.class) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(addressBooks) ;      
       */
-
-      UIPopupAction uiPopupAction = uiCategoryForm.getAncestorOfType(UIPopupAction.class) ;
-      uiPopupAction.deActivate() ;
-    
+      
+      UIPopupContainer uiPopupContainer = uiCategoryForm.getAncestorOfType(UIPopupContainer.class) ;
+      UIPopupAction uiPopup = uiPopupContainer.getChild(UIPopupAction.class) ;    
+      uiPopup.deActivate() ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup) ;
+      
+      //System.out.println("\n\n action 222222222 categoryform:" + uiPopupContainer.getAncestorOfType(UIPopupAction.class).getId() + "\n\n");
+      //event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupContainer.getAncestorOfType(UIPopupAction.class)) ;
+      
     }
   }
   

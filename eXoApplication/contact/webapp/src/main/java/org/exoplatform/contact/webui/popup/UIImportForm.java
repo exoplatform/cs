@@ -97,9 +97,7 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
     UIFormInputWithActions iput = getChildById(INPUT_CATEGORY) ;
      iput.getUIFormSelectBox(FIELD_CATEGORY).setOptions(options) ;
   }
-  
 
-  
   public void setValues(String group) {
     getUIFormSelectBox(FIELD_CATEGORY).setValue(group) ;
   }  
@@ -110,7 +108,7 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
   static  public class AddCategoryActionListener extends EventListener<UIImportForm> {
     public void execute(Event<UIImportForm> event) throws Exception {
       UIImportForm uiForm = event.getSource() ;
-      UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
+      UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ; 
       UIPopupAction uiChildPopup = uiPopupContainer.getChild(UIPopupAction.class) ;
       uiChildPopup.activate(UICategoryForm.class, 500) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
