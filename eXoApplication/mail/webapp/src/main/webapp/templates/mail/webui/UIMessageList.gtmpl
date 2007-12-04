@@ -321,10 +321,11 @@
   				<td style="padding: 0px auto;"><a href="$actionAddStar" ><div class="$starClass"><span></span></div></a></td>
           <td class="$readStatus">
             <% if (msg.isRootConversation()) {
+                int numberConver = 1;
                 for (String conver : uicomponent.getParticipators(msg)) {
              %>
-               <a href="$actionLink">$conver <a>
-            <%}  }%>  
+               <a href="$actionLink"><% if (numberConver>1){ %> , <% } %>  $conver <a>
+            <% numberConver++ }  }%>  
           </td>
   				<td style="padding: 0px auto;">
   				  <% 

@@ -363,14 +363,6 @@ public class MailServiceImpl implements MailService{
           newMsg.setUnread(true);
           newMsg.setHasStar(false);       
           newMsg.setPriority(Utils.PRIORITY_NORMAL);
-          Message rootMsg  = getRootMessage(username, accountId, newMsg) ;
-          if (rootMsg != null) {
-            newMsg.setIsRootConversation(false);
-            newMsg.setRoot(rootMsg.getId());
-            updateRootMessage(username, accountId, rootMsg, newMsg);
-          } else {
-            newMsg.setIsRootConversation(true);
-          }
           String[] xPriority = msg.getHeader("X-Priority");
           String[] importance = msg.getHeader("Importance");
           
@@ -398,6 +390,16 @@ public class MailServiceImpl implements MailService{
             setMultiPart((Multipart)obj, newMsg, username);
           } else {
             setPart(msg, newMsg, username);
+          }
+          
+          // Use for conversation
+          Message rootMsg  = getRootMessage(username, accountId, newMsg) ;
+          if (rootMsg != null) {
+            newMsg.setIsRootConversation(false);
+            newMsg.setRoot(rootMsg.getId());
+            updateRootMessage(username, accountId, rootMsg, newMsg);
+          } else {
+            newMsg.setIsRootConversation(true);
           }
           storage_.saveMessage(username, account.getId(), newMsg, true);
           messageList.add(newMsg);
@@ -499,7 +501,13 @@ public class MailServiceImpl implements MailService{
     MessageFilter filter = new MessageFilter("");
     filter.setAccountId(accountId);
     filter.setSubjectCondition(Utils.CONDITION_IS);
-    filter.setSubject(newMsg.getSubject());
+    String subject = newMsg.getSubject() ;
+    if (subject.indexOf("Re:") == 0) {
+      subject = subject.substring(3, subject.length()).trim();
+    } else if(subject.indexOf("Fwd:") == 0) {
+      subject = subject.substring(4, subject.length()).trim();
+    }
+    filter.setSubject(subject);
     List<Message> msgList = getMessages(username, filter).getAll(username);
     if (msgList != null && msgList.size() > 0) {
       for (Message msg : msgList) {
@@ -508,10 +516,11 @@ public class MailServiceImpl implements MailService{
           if (msg.getAddresses() != null && msg.getAddresses().length > 0) {
             addressList.addAll(new ArrayList<String>(Arrays.asList(msg.getAddresses())));
           }
-          addressList.addAll(new ArrayList<String>(Arrays.asList(msg.getFrom())));
-          addressList.addAll(new ArrayList<String>(Arrays.asList(msg.getMessageCc())));
-          addressList.addAll(new ArrayList<String>(Arrays.asList(msg.getMessageBcc())));
-          if (addressList.indexOf(newMsg.getFrom()) > -1) {
+          if (msg.getFrom() != null) addressList.addAll(new ArrayList<String>(Arrays.asList(Utils.getAddresses(msg.getFrom()))));
+          if (msg.getMessageTo() != null) addressList.addAll(new ArrayList<String>(Arrays.asList(Utils.getAddresses(msg.getMessageTo()))));
+          if (msg.getMessageCc() != null) addressList.addAll(new ArrayList<String>(Arrays.asList(Utils.getAddresses(msg.getMessageCc()))));
+          if (msg.getMessageBcc() != null) addressList.addAll(new ArrayList<String>(Arrays.asList(Utils.getAddresses(msg.getMessageBcc()))));
+          if (addressList.indexOf(Utils.getAddresses(newMsg.getFrom())[0]) > -1) {
             return msg;
           }
         }
@@ -532,9 +541,10 @@ public class MailServiceImpl implements MailService{
     
     Map<String, String> newAddressMap = new HashMap<String, String> () ;
     List<String> newAddressList = new ArrayList<String>(); 
-    newAddressList.addAll(new ArrayList<String>(Arrays.asList(newMsg.getFrom())));
-    newAddressList.addAll(new ArrayList<String>(Arrays.asList(newMsg.getMessageCc())));
-    newAddressList.addAll(new ArrayList<String>(Arrays.asList(newMsg.getMessageBcc())));
+    if (newMsg.getFrom() != null) newAddressList.addAll(new ArrayList<String>(Arrays.asList(Utils.getAddresses(newMsg.getFrom()))));
+    if (newMsg.getMessageTo() != null) newAddressList.addAll(new ArrayList<String>(Arrays.asList(Utils.getAddresses(newMsg.getMessageTo()))));
+    if (newMsg.getMessageCc() != null) newAddressList.addAll(new ArrayList<String>(Arrays.asList(Utils.getAddresses(newMsg.getMessageCc()))));
+    if (newMsg.getMessageBcc() != null) newAddressList.addAll(new ArrayList<String>(Arrays.asList(Utils.getAddresses(newMsg.getMessageBcc()))));
     
     for(String value : newAddressList) {
       newAddressMap.put(value, value) ;
@@ -548,6 +558,8 @@ public class MailServiceImpl implements MailService{
     }
     msgIdList.add(newMsg.getId());
     rootMsg.setMessageIds(msgIdList.toArray(new String[]{}));
+    rootMsg.setFolders(newMsg.getFolders());
+    rootMsg.setReceivedDate(newMsg.getReceivedDate());
     saveMessage(username, accountId, rootMsg, false);
   }
   

@@ -204,6 +204,15 @@ public class Utils {
     return personal;
   }
   
+  public static String[] getAddresses(String addressList)  throws Exception { 
+    InternetAddress[] internetAddresses = getInternetAddress(addressList);
+    String[] strs = new String[internetAddresses.length];
+    for (int i = 0; i < internetAddresses.length; i++ ) {
+      strs[i] = internetAddresses[i].getAddress();
+    }
+    return strs;
+  }
+  
   public static InternetAddress[] getInternetAddress(String addressList) throws Exception {
     if (addressList == null || addressList == "") 
       return new InternetAddress[1];

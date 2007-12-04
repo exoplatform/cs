@@ -206,10 +206,15 @@ public class UIMessageList extends UIForm {
   }
   
   public List<String> getParticipators(Message msg) throws Exception {
+    String username = MailUtils.getCurrentUser();
+    String accountId = MailUtils.getAccountId();
+    MailService mailSrv = MailUtils.getMailService();
     List<Message> msgList = getConversations(msg);
-    Map<String, String> participators = new HashMap<String, String>();
+    LinkedHashMap<String, String> participators = new LinkedHashMap<String, String>();
     for (Message message : msgList) {
-      participators.put(Utils.getPersonal(Utils.getInternetAddress(message.getFrom())[0]), Utils.getPersonal(Utils.getInternetAddress(message.getFrom())[0]));
+      String personal = Utils.getPersonal(Utils.getInternetAddress(message.getFrom())[0]);
+      if (personal.equals(mailSrv.getAccountById(username, accountId).getUserDisplayName())) personal = "me";
+      participators.put(personal, personal);
     }
     return new ArrayList<String>(participators.values());
   }
@@ -320,7 +325,6 @@ public class UIMessageList extends UIForm {
   static public class ViewAllActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource();
-      System.out.println("======>>>>> ViewAllActionListener");
       uiMessageList.filterMessage("");
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
@@ -328,8 +332,7 @@ public class UIMessageList extends UIForm {
   
   static public class ViewStarredActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
-      UIMessageList uiMessageList = event.getSource();
-      System.out.println("======>>>>> ViewStaredActionListener");      
+      UIMessageList uiMessageList = event.getSource();     
       uiMessageList.filterMessage("@" + Utils.EXO_STAR + "='true'");
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
@@ -338,7 +341,6 @@ public class UIMessageList extends UIForm {
   static public class ViewUnstarredActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource();
-      System.out.println("======>>>>> ViewUnstaredActionListener");
       uiMessageList.filterMessage("@" + Utils.EXO_STAR + "='false'");
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
@@ -347,7 +349,6 @@ public class UIMessageList extends UIForm {
   static public class ViewUnreadActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource();
-      System.out.println("======>>>>> ViewUnreadActionListener");
       uiMessageList.filterMessage("@" + Utils.EXO_ISUNREAD + "='true'");
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
@@ -356,7 +357,6 @@ public class UIMessageList extends UIForm {
   static public class ViewReadActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource();
-      System.out.println("======>>>>> ViewReadActionListener");
       uiMessageList.filterMessage("@" + Utils.EXO_ISUNREAD + "='false'");
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
@@ -365,7 +365,6 @@ public class UIMessageList extends UIForm {
   static public class ViewAttachmentActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource();
-      System.out.println("======>>>>> ViewAttachmentActionListener");
       uiMessageList.filterMessage("@" + Utils.EXO_HASATTACH + "='true'");
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
@@ -395,7 +394,6 @@ public class UIMessageList extends UIForm {
   static public class ReplyActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource() ; 
-      System.out.println(" =========== > Reply Action");
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       if (msgId == null) msgId = uiMessageList.getSelectedMessageId();
       UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
@@ -431,7 +429,6 @@ public class UIMessageList extends UIForm {
   static  public class ReplyAllActionListener extends EventListener<UIMessageList> {    
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource() ; 
-      System.out.println(" =========== > Reply All Action");
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       if (msgId == null) msgId = uiMessageList.getSelectedMessageId();
       UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
