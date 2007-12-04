@@ -52,7 +52,7 @@
   
   <component>
       <key>org.exoplatform.application.registry.ApplicationRegistryService</key>
-      <type>org.exoplatform.application.registry.jcr.ApplicationRegistryServiceImpl</type>
+      <type>org.exoplatform.application.registry.jcrregistry.ApplicationRegistryServiceImpl</type>
     </component>     
   
   
