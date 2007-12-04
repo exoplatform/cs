@@ -73,7 +73,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
   private String errorMsg_ = null ;
   private String calType_ = "0" ;
   public UITaskForm() throws Exception {
-    super("UIEventForm", false);
+    super("UIEventForm");
     UITaskDetailTab uiTaskDetailTab =  new UITaskDetailTab(TAB_TASKDETAIL) ;
     addChild(uiTaskDetailTab) ;
     UIEventReminderTab eventReminderTab =  new UIEventReminderTab(TAB_TASKREMINDER) ;

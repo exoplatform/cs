@@ -57,7 +57,7 @@ public class UIRssForm extends UIFormTabPane implements UIPopupComponent{
   /*final static private String[] version = 
     new String[]{"rss_2.0","rss_1.0","rss_0.94","rss_0.93","rss_0.92","rss_0.91","rss_0.90"} ;*/
   public UIRssForm() throws Exception{
-    super("UIRssForm", false);
+    super("UIRssForm");
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     UIFormInputWithActions rssInfo = new UIFormInputWithActions("rssInfo") ;
@@ -74,7 +74,6 @@ public class UIRssForm extends UIFormTabPane implements UIPopupComponent{
     rssInfo.addUIFormInput(new UIFormStringInput(LINK, LINK, "www.exoplatform.org")) ;    
     rssInfo.addUIFormInput(new UIFormDateTimeInput(PUBLIC_DATE, PUBLIC_DATE, new Date())) ;
     setSelectedTab(rssInfo.getId()) ;
-    //rssInfo.setRendered(true) ;
     addUIFormInput(rssInfo) ;
     UIFormInputWithActions rssCalendars = new UIFormInputWithActions("rssCalendars") ;
     
@@ -82,7 +81,6 @@ public class UIRssForm extends UIFormTabPane implements UIPopupComponent{
     for(Calendar calendar : calendars) {
       rssCalendars.addUIFormInput(new UIFormCheckBoxInput<Boolean>(calendar.getName(), calendar.getId(), true)) ;
     }
-    //rssCalendars.setRendered(false) ;
     addUIFormInput(rssCalendars) ;
   }
   

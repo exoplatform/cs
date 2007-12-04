@@ -72,7 +72,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
   private boolean isAddNew_ = true ;
   public String calendarId_ = null ;
   public UICalendarForm() throws Exception{
-    super("UICalendarForm", false);
+    super("UICalendarForm");
 
     UIFormInputWithActions calendarDetail = new UIFormInputWithActions(INPUT_CALENDAR) ;
     calendarDetail.addUIFormInput(new UIFormStringInput(DISPLAY_NAME, DISPLAY_NAME, null).addValidator(EmptyFieldValidator.class)) ;
@@ -115,7 +115,6 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
     membershipPerm.setCssIconClass("SelectMemberIcon") ;
     actions.add(membershipPerm) ;
     sharing.setActionField(EDIT_PERMISSION, actions) ;
-    //sharing.setRendered(false) ;
     addChild(sharing) ;
   }
 

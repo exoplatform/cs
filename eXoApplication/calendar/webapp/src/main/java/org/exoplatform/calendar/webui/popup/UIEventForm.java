@@ -89,7 +89,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   private String errorMsg_ = null ;
 
   public UIEventForm() throws Exception {
-    super("UIEventForm", false);
+    super("UIEventForm");
     UIEventDetailTab eventDetailTab =  new UIEventDetailTab(TAB_EVENTDETAIL) ;
     addChild(eventDetailTab) ;
     UIEventReminderTab eventReminderTab =  new UIEventReminderTab(TAB_EVENTREMINDER) ;

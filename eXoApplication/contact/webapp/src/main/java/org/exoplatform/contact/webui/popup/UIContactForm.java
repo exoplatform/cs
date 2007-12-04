@@ -99,7 +99,7 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent, UI
   public static String FIELD_INPUT_INFO = "selectGroups";
 
   public UIContactForm() throws Exception {
-    super("UIContactForm", false);
+    super("UIContactForm");
     UIProfileInputSet ProfileTab = new UIProfileInputSet(INPUT_PROFILETAB) ;
     UIFormInputWithActions IMContactTab = new UIFormInputWithActions(INPUT_IMCONTACTTAB) ;
     UIFormInputWithActions HomeTab = new UIFormInputWithActions(INPUT_HOMETAB) ;
@@ -166,7 +166,7 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent, UI
     membershipPerm.setCssIconClass("SelectMemberIcon") ;
     actions.add(membershipPerm) ;
     sharing.setActionField(FIELD_EDITPERMISSION, actions) ;
-    sharing.setRendered(false) ;   
+    //sharing.setRendered(false) ;   
     
     addUIFormInput(ProfileTab) ;
     addUIFormInput(WorkTab) ;
