@@ -416,13 +416,14 @@ public class UIMessageList extends UIForm {
       String username = uiPortlet.getCurrentUser() ;
       if (msgId != null) {
         Message message = mailSvr.getMessageById(username, accId, msgId);
-        uiComposeForm.setMessage(null);
+        uiComposeForm.setMessage(message);
         uiComposeForm.setFieldToValue(message.getFrom());
         uiComposeForm.setFieldSubjectValue("Re: " + message.getSubject());
         uiComposeForm.setFieldContentValue(message.getMessageBody());
       }
       uiPopupContainer.addChild(uiComposeForm) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessageArea.class));
     }
   }
   
@@ -451,7 +452,7 @@ public class UIMessageList extends UIForm {
       String username = uiPortlet.getCurrentUser() ;
       if (msgId != null) {
         Message message = mailSvr.getMessageById(username, accId, msgId);
-        uiComposeForm.setMessage(null);
+        uiComposeForm.setMessage(message);
         uiComposeForm.setFieldSubjectValue("Re: " + message.getSubject());
         String replyAll = message.getFrom();
         if (message.getMessageCc() != null) replyAll += "," + message.getMessageCc();
@@ -461,6 +462,7 @@ public class UIMessageList extends UIForm {
       }
       uiPopupContainer.addChild(uiComposeForm) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessageArea.class));
     }
   }
      
@@ -491,7 +493,7 @@ public class UIMessageList extends UIForm {
       String username = uiPortlet.getCurrentUser() ;
       if (msgId != null) {
         Message message = mailSvr.getMessageById(username, accId, msgId);
-        uiComposeForm.setMessage(null);
+        uiComposeForm.setMessage(message);
         uiComposeForm.setFieldSubjectValue("Fwd: " + message.getSubject());
         String forwardedText = "\n\n\n-------- Original Message --------\n" +
             "Subject: " + message.getSubject() + "\nDate: " + message.getSendDate() + 
@@ -503,6 +505,7 @@ public class UIMessageList extends UIForm {
       }
       uiPopupContainer.addChild(uiComposeForm) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessageArea.class));
     }
   }  
   
@@ -564,6 +567,7 @@ public class UIMessageList extends UIForm {
       UIPrintPreview uiPrintPreview = uiPopup.activate(UIPrintPreview.class, 700) ;
       uiPrintPreview.setPrintMessageId(msgId) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessageArea.class));
     }
   }
   
