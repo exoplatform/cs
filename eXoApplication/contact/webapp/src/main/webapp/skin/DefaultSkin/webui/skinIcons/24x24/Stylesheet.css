@@ -1,0 +1,53 @@
+.AddNew {
+	background: url('icons/Add.gif') no-repeat center;
+	height: 20px; width: 24px;
+}
+
+.AddressOptionIcon {
+	background: url('icons/AddressOptionIcon.gif') no-repeat left center;
+}
+
+.ContactIcon {
+	background: url('icons/ContactIcon.gif') no-repeat left center;;
+}
+
+.CustomLayoutIcon {
+	background: url('icons/CustomLayoutIcon.gif') no-repeat left center;
+}
+
+.ExportContactIcon {
+	background: url('icons/ExportContactIcon.gif') no-repeat left center;
+}
+
+.ChatIcon {
+	background: url('icons/GoChatIcon.gif') no-repeat left center;
+	width: 16px ; height: 20px;
+}
+
+.ImportContactIcon {
+	background: url('icons/ImportContactIcon.gif') no-repeat left center;
+}
+
+.MessageIcon {
+	background: url('icons/MessageIcon.gif') no-repeat left center;
+}
+
+.MoveAddressIcon {
+	background: url('icons/MoveAddressIcon.gif') no-repeat left center;
+}
+
+.MoveTagIcon {
+	background: url('icons/MoveTagIcon.gif') no-repeat left center;
+}
+
+.MyLDAPIcon {
+	background: url('icons/MyLDAPIcon.gif') no-repeat left center;
+}
+
+.PrintIcon {
+	background: url('icons/PrintIcon.gif') no-repeat left center;
+}
+
+.ViewIcon {
+	background: url('icons/ViewIcon.gif') no-repeat left center;
+}
