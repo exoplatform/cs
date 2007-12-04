@@ -67,15 +67,6 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent, UI
   public static final String FIELD_WORKMOBILEPHONE_INPUT = "mobilePhone";
   public static final String FIELD_WORKWEBPAGE_INPUT = "webPage";
   
-  public static final String FIELD_EXOCHAT_INPUT = "exoChat";
-  public static final String FIELD_GOOGLE_INPUT = "google";
-  public static final String FIELD_MSN_INPUT = "msn";
-  public static final String FIELD_AOLAIM_INPUT = "aolAim";
-  public static final String FIELD_YAHOO_INPUT = "yahoo";
-  public static final String FIELD_ICR_INPUT = "icr";
-  public static final String FIELD_SKYPE_INPUT = "skype";
-  public static final String FIELD_ICQ_INPUT = "icq";
-  
   public static final String FIELD_HOMEADDRESS_INPUT = "homeAddress";
   public static final String FIELD_HOMECITY_INPUT = "homeCity";
   public static final String FIELD_HOMESTATE_INPUT = "homeState_province";
@@ -101,7 +92,7 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent, UI
   public UIContactForm() throws Exception {
     super("UIContactForm");
     UIProfileInputSet ProfileTab = new UIProfileInputSet(INPUT_PROFILETAB) ;
-    UIFormInputWithActions IMContactTab = new UIFormInputWithActions(INPUT_IMCONTACTTAB) ;
+    UIFormInputWithActions IMContactTab = new UIIMContactInputSet(INPUT_IMCONTACTTAB) ;
     UIFormInputWithActions HomeTab = new UIFormInputWithActions(INPUT_HOMETAB) ;
     UIFormInputWithActions WorkTab = new UIFormInputWithActions(INPUT_WORKTAB) ;
     UIFormInputWithActions NoteTab = new UIFormInputWithActions(INPUT_NODETAB) ;
@@ -116,15 +107,6 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent, UI
     WorkTab.addUIFormInput(new UIFormStringInput(FIELD_WORKFAX_INPUT, FIELD_WORKFAX_INPUT, null));
     WorkTab.addUIFormInput(new UIFormStringInput(FIELD_WORKMOBILEPHONE_INPUT, FIELD_WORKMOBILEPHONE_INPUT, null));
     WorkTab.addUIFormInput(new UIFormStringInput(FIELD_WORKWEBPAGE_INPUT, FIELD_WORKWEBPAGE_INPUT, null));
-
-    IMContactTab.addUIFormInput(new UIFormStringInput(FIELD_EXOCHAT_INPUT, FIELD_EXOCHAT_INPUT, null));
-    IMContactTab.addUIFormInput(new UIFormStringInput(FIELD_GOOGLE_INPUT, FIELD_GOOGLE_INPUT, null));
-    IMContactTab.addUIFormInput(new UIFormStringInput(FIELD_MSN_INPUT, FIELD_MSN_INPUT, null));
-    IMContactTab.addUIFormInput(new UIFormStringInput(FIELD_AOLAIM_INPUT, FIELD_AOLAIM_INPUT, null));
-    IMContactTab.addUIFormInput(new UIFormStringInput(FIELD_YAHOO_INPUT, FIELD_YAHOO_INPUT, null));
-    IMContactTab.addUIFormInput(new UIFormStringInput(FIELD_ICR_INPUT, FIELD_ICR_INPUT, null));
-    IMContactTab.addUIFormInput(new UIFormStringInput(FIELD_SKYPE_INPUT, FIELD_SKYPE_INPUT, null));
-    IMContactTab.addUIFormInput(new UIFormStringInput(FIELD_ICQ_INPUT, FIELD_ICQ_INPUT, null));
 
     HomeTab.addUIFormInput(new UIFormStringInput(FIELD_HOMEADDRESS_INPUT, FIELD_HOMEADDRESS_INPUT, null));
     HomeTab.addUIFormInput(new UIFormStringInput(FIELD_HOMECITY_INPUT, FIELD_HOMECITY_INPUT, null));
@@ -205,6 +187,7 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent, UI
     return groups  ;
   }
   
+  @Override
   public String[] getActions() { return new String[] {"Save", "Cancel"} ; }
   public void activate() throws Exception {}
   public void deActivate() throws Exception {}
@@ -260,14 +243,14 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent, UI
     getUIStringInput(FIELD_WORKMOBILEPHONE_INPUT).setValue(contact.getMobilePhone());
     getUIStringInput(FIELD_WORKWEBPAGE_INPUT).setValue(contact.getWebPage());
     
-    getUIStringInput(FIELD_EXOCHAT_INPUT).setValue(contact.getExoId());
-    getUIStringInput(FIELD_GOOGLE_INPUT).setValue(contact.getGoogleId());
-    getUIStringInput(FIELD_MSN_INPUT).setValue(contact.getMsnId());
-    getUIStringInput(FIELD_AOLAIM_INPUT).setValue(contact.getAolId());
-    getUIStringInput(FIELD_YAHOO_INPUT).setValue(contact.getYahooId());
-    getUIStringInput(FIELD_ICR_INPUT).setValue(contact.getIcrId());
-    getUIStringInput(FIELD_SKYPE_INPUT).setValue(contact.getSkypeId());
-    getUIStringInput(FIELD_ICQ_INPUT).setValue(contact.getIcqId());
+    getUIStringInput(UIIMContactInputSet.FIELD_EXOCHAT_INPUT).setValue(contact.getExoId());
+    getUIStringInput(UIIMContactInputSet.FIELD_GOOGLE_INPUT).setValue(contact.getGoogleId());
+    getUIStringInput(UIIMContactInputSet.FIELD_MSN_INPUT).setValue(contact.getMsnId());
+    getUIStringInput(UIIMContactInputSet.FIELD_AOLAIM_INPUT).setValue(contact.getAolId());
+    getUIStringInput(UIIMContactInputSet.FIELD_YAHOO_INPUT).setValue(contact.getYahooId());
+    getUIStringInput(UIIMContactInputSet.FIELD_IRC_INPUT).setValue(contact.getIcrId());
+    getUIStringInput(UIIMContactInputSet.FIELD_SKYPE_INPUT).setValue(contact.getSkypeId());
+    getUIStringInput(UIIMContactInputSet.FIELD_ICQ_INPUT).setValue(contact.getIcqId());
     
     getUIStringInput(FIELD_HOMEADDRESS_INPUT).setValue(contact.getHomeAddress());
     getUIStringInput(FIELD_HOMECITY_INPUT).setValue(contact.getHomeCity());
@@ -282,6 +265,7 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent, UI
   }
   
   static  public class SaveActionListener extends EventListener<UIContactForm> {
+    @Override
     public void execute(Event<UIContactForm> event) throws Exception {
       UIContactForm uiContactForm = event.getSource() ;
       UIApplication uiApp = uiContactForm.getAncestorOfType(UIApplication.class) ;
@@ -344,14 +328,14 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent, UI
       contact.setMobilePhone(uiContactForm.getUIStringInput(FIELD_WORKMOBILEPHONE_INPUT).getValue());
       contact.setWebPage(uiContactForm.getUIStringInput(FIELD_WORKWEBPAGE_INPUT).getValue());
     
-      contact.setExoId(uiContactForm.getUIStringInput(FIELD_EXOCHAT_INPUT).getValue());
-      contact.setGoogleId(uiContactForm.getUIStringInput(FIELD_GOOGLE_INPUT).getValue());
-      contact.setMsnId(uiContactForm.getUIStringInput(FIELD_MSN_INPUT).getValue());
-      contact.setAolId(uiContactForm.getUIStringInput(FIELD_AOLAIM_INPUT).getValue());
-      contact.setYahooId(uiContactForm.getUIStringInput(FIELD_YAHOO_INPUT).getValue());
-      contact.setIcrId(uiContactForm.getUIStringInput(FIELD_ICR_INPUT).getValue() );
-      contact.setSkypeId(uiContactForm.getUIStringInput(FIELD_SKYPE_INPUT).getValue());
-      contact.setIcqId(uiContactForm.getUIStringInput(FIELD_ICQ_INPUT).getValue());
+      contact.setExoId(uiContactForm.getUIStringInput(UIIMContactInputSet.FIELD_EXOCHAT_INPUT).getValue());
+      contact.setGoogleId(uiContactForm.getUIStringInput(UIIMContactInputSet.FIELD_GOOGLE_INPUT).getValue());
+      contact.setMsnId(uiContactForm.getUIStringInput(UIIMContactInputSet.FIELD_MSN_INPUT).getValue());
+      contact.setAolId(uiContactForm.getUIStringInput(UIIMContactInputSet.FIELD_AOLAIM_INPUT).getValue());
+      contact.setYahooId(uiContactForm.getUIStringInput(UIIMContactInputSet.FIELD_YAHOO_INPUT).getValue());
+      contact.setIcrId(uiContactForm.getUIStringInput(UIIMContactInputSet.FIELD_IRC_INPUT).getValue() );
+      contact.setSkypeId(uiContactForm.getUIStringInput(UIIMContactInputSet.FIELD_SKYPE_INPUT).getValue());
+      contact.setIcqId(uiContactForm.getUIStringInput(UIIMContactInputSet.FIELD_ICQ_INPUT).getValue());
       
       contact.setHomeAddress(uiContactForm.getUIStringInput(FIELD_HOMEADDRESS_INPUT).getValue());
       contact.setHomeCity(uiContactForm.getUIStringInput(FIELD_HOMECITY_INPUT).getValue());
@@ -407,6 +391,7 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent, UI
   }
   
   static  public class CancelActionListener extends EventListener<UIContactForm> {
+    @Override
     public void execute(Event<UIContactForm> event) throws Exception {
       UIContactForm uiForm = event.getSource() ;
       UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
@@ -415,6 +400,7 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent, UI
   }
   
   static  public class ChangeImageActionListener extends EventListener<UIContactForm> {
+    @Override
     public void execute(Event<UIContactForm> event) throws Exception {
       UIContactForm uiContactForm = event.getSource() ;
       UIPopupContainer popupContainer = uiContactForm.getAncestorOfType(UIPopupContainer.class) ;
@@ -425,6 +411,7 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent, UI
   }
   
   static  public class DeleteImageActionListener extends EventListener<UIContactForm> {
+    @Override
     public void execute(Event<UIContactForm> event) throws Exception {
       UIContactForm uiContactForm = event.getSource() ;
       UIProfileInputSet profileTab = uiContactForm.getChildById(INPUT_PROFILETAB) ;
@@ -437,6 +424,7 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent, UI
   }
  
   static  public class SelectPermissionActionListener extends EventListener<UIContactForm> {
+    @Override
     public void execute(Event<UIContactForm> event) throws Exception {
       UIContactForm uiForm = event.getSource() ;
       String permType = event.getRequestContext().getRequestParameter(OBJECTID) ;

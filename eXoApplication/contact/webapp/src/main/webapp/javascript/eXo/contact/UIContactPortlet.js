@@ -252,4 +252,80 @@ UIContactPortlet.prototype.addCheckedIcon = function(layout) {
   eXo.core.Browser.setCookie("layoutno", layout, 7) ;
 } ;
 
+UIContactPortlet.prototype.imFormOnload = function(root){
+  var domUtil = eXo.core.DOMUtil ;
+  root = document.getElementById(root) ;
+  if (!root) { return false ;}
+  eXo.contact.UIContactPortlet.imFormRoot = root ;
+  var menu4Remove = [] ;
+  var inputLst = root.getElementsByTagName('input') ;
+  for (var i=1; i<inputLst.length; i++) {
+    var trTag = eXo.core.DOMUtil.findAncestorByTagName(inputLst[i], 'tr') ;
+    if (inputLst[i].value != '') {
+      trTag.style.display = 'table-row' ;
+      menu4Remove[menu4Remove.length] = inputLst[i].name ;
+    } else {
+      trTag.style.display = 'none' ;
+    }
+  }
+  var menuRoot = document.getElementById(root.id + '_PopupMenu') ;
+  var menuItems = domUtil.findDescendantsByClass(menuRoot, 'div', 'ItemIcon') ;
+  for (var i=0; i<menuItems.length; i++) {
+    menuItems[i].onclick = eXo.contact.UIContactPortlet.showImField ;
+  }
+  if (menu4Remove.length > 0) {
+    root.setAttribute('sync', '1') ;
+  }
+  eXo.contact.UIContactPortlet.synchonizeMenu(menuRoot, menu4Remove) ;
+} ;
+
+UIContactPortlet.prototype.synchonizeMenu = function(menuRoot, menu4Remove){
+  var domUtil = eXo.core.DOMUtil ;
+  var menuItems = domUtil.findDescendantsByClass(menuRoot, 'div', 'ItemIcon') ;
+  for (var i=0; i<menuItems.length; i++) {
+    var menuItem = menuItems[i] ;
+    var fieldName = menuItem.getAttribute('fieldname') ;
+    for (var j=0; j<menu4Remove.length; j++) {
+      if (fieldName == menu4Remove[j]) {
+        domUtil.findAncestorByTagName(menuItem, 'span').style.display = 'none' ;
+        break ;
+      }
+    }
+  }
+} ;
+
+UIContactPortlet.prototype.showImField = function() {
+  var domUtil = eXo.core.DOMUtil ;
+  var menuItem = this ;
+  var fieldName = menuItem.getAttribute('fieldname') ;
+  var uiIMContact = domUtil.findAncestorByClass(menuItem, 'UIIMContact') ;
+  var imFields = domUtil.findDescendantsByTagName(uiIMContact, 'input') ;
+  for (var i=0; i<imFields.length; i++) {
+    if (imFields[i].name == fieldName) {
+      var trTag = domUtil.findAncestorByTagName(imFields[i], 'tr') ;
+      trTag.style.display = 'table-row' ;
+      var aTag = domUtil.findAncestorByTagName(menuItem, 'span') ;
+      aTag.style.display = 'none' ;
+      break ;
+    }
+  }
+  // fix display
+  var root = eXo.contact.UIContactPortlet.imFormRoot ;
+  if (!root.getAttribute('sync') || root.getAttribute('sync') != '1') {
+    var trTags = root.getElementsByTagName('tr') ;
+    for (var i=0; i<trTags.length; i++) {
+      if (trTags[i].style.display != 'none') {
+        trTags[i].style.display = 'none' ;
+        window.setTimeout(eXo.contact.UIContactPortlet.showTrTimer, 10, trTags[i]) ;
+      }
+    }
+    root.setAttribute('sync', '1') ;
+  }
+  return false ;
+} ;
+
+UIContactPortlet.prototype.showTrTimer = function(e) {
+  e.style.display = 'table-row' ;  
+} ;
+
 eXo.contact.UIContactPortlet = new UIContactPortlet() ;
