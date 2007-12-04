@@ -87,3 +87,7 @@
 .FilterIcon {
 	background: url('icons/FilterIcon.gif') no-repeat;
 }
+
+.SpamMail {
+	background: url('icons/SpamMail.gif') no-repeat;
+}

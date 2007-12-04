@@ -23,7 +23,7 @@
     <div class="IconHolder DeleteIcon"><span></span></div>
   </a>
   <a href="<%=uicomponent.event("ReportSpam")%>" class="ControlButton">
-    <div class="IconHolder DeleteIcon"><span></span></div>
+    <div class="IconHolder SpamMail"><span></span></div>
   </a>
   <a href="<%=uicomponent.event("Print")%>" class="ControlButton">
     <div class="IconHolder PrintIcon"><span></span></div>
