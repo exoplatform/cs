@@ -50,8 +50,8 @@
     		                        tabName = _ctx.appRes(uicomponent.getName() + ".tab.label." + inputSet.name) ;
     		                      }
     		                      
-    		                      boolean renderTab = uicomponent.hasWithRenderTab();
-    		                      if(renderTab){
+    		                      //boolean renderTab = uicomponent.hasWithRenderTab();
+    		                      //if(renderTab){
     		                  %>
     		                      <div class="UITab NormalTabStyle">
     		                        <div class="$className">
@@ -62,7 +62,7 @@
     		                          </div>
     		                        </div>
     		                      </div>
-    		                  <%  }
+    		                  <%  //}
     		                    }
     		                  %>
     		                </div>

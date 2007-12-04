@@ -20,8 +20,8 @@
               if(renderResource) {
                 tabName = _ctx.appRes(compName + ".tab.info." + inputSet.name) ;
               }
-	        		boolean renderTab = uicomponent.hasWithRenderTab();
-              if(renderTab){
+	        		//boolean renderTab = uicomponent.hasWithRenderTab();
+              //if(renderTab){
 	        %>	
 				        <div style="display:$display">        
 					        <div class="AccountCreationStep">
@@ -39,7 +39,7 @@
 										</div>	
 									</div>
 				        </div>
-	        <%  }
+	        <% // }
 	          }
 	        %>
 	        <%uiform.begin()%>
