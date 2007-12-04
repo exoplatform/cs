@@ -11,6 +11,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.EventQuery;
@@ -57,11 +58,11 @@ public class UIYearView extends UICalendarView {
   public void refresh() throws Exception { 
     System.out.println("\n\n>>>>>>>>>> YEAR VIEW") ;
     yearData_.clear() ;
-    Calendar cal = new GregorianCalendar(getCurrentYear(), 0, 1, 0, 0, 0) ;
+    Calendar cal =  new GregorianCalendar(getCurrentYear(), 0, 1, 0, 0, 0) ;
     Calendar cal2 = new GregorianCalendar(getCurrentYear(), 0, 1, 0, 0, 0) ;
-    Calendar beginYear = cal ;
+    Calendar beginYear = CalendarUtils.getBeginDay(cal) ;
     cal2.add(Calendar.YEAR, 1) ;
-    Calendar endYear = cal2 ;
+    Calendar endYear = CalendarUtils.getEndDay(cal2) ;
     CalendarService calendarService = getApplicationComponent(CalendarService.class) ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     EventQuery eventQuery = new EventQuery() ;

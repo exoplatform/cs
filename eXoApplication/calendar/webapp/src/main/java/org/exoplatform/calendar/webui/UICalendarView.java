@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.SimpleTimeZone;
 import java.util.TimeZone;
 
 import org.exoplatform.calendar.CalendarUtils;
@@ -121,8 +122,13 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
 
   public UICalendarView() throws Exception{
     initCategories() ;
-    calendar_ = GregorianCalendar.getInstance(TimeZone.getDefault()) ;
+    
+    calendar_ = GregorianCalendar.getInstance() ;
     calendar_.setLenient(false) ;
+    int gmtoffset = calendar_.get(Calendar.DST_OFFSET) + calendar_.get(Calendar.ZONE_OFFSET);
+    calendar_.setTimeInMillis(System.currentTimeMillis() - gmtoffset) ;
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, dd MMM yyyy k:m:s z");
+    System.out.println("\n\n GMT Time " + simpleDateFormat.format(calendar_.getTime()));
     int i = 0 ; 
     for(String month : MONTHS) {
       monthsMap_.put(i, month) ;
@@ -150,9 +156,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
     }
     dateTimeFormat_ = getDateFormat() + " " + getTimeFormat() ;
     TimeZone settingTimeZone = TimeZone.getTimeZone(calendarSetting_.getTimeZone()) ;
-    calendar_.setTimeZone(settingTimeZone) ;
-    //calendar_.add(Calendar.MILLISECOND,  -settingTimeZone.getRawOffset()) ;
-    System.out.println("\n\n Server Time " + calendar_.getTime());
+   // calendar_.set(Calendar.ZONE_OFFSET, settingTimeZone.getRawOffset()) ;
   }
   public void setViewType(String viewType) { this.viewType_ = viewType ; }
   public String getViewType() { return viewType_ ; }

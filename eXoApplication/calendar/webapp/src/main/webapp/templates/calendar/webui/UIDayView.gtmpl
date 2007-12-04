@@ -5,6 +5,9 @@
 	import java.util.Calendar;
 	import java.util.GregorianCalendar;
 	import org.exoplatform.calendar.CalendarUtils;
+	import java.util.TimeZone;
+	import java.util.Date;
+	import java.util.SimpleTimeZone;
 	
 	int currentDay = uicomponent.getCurrentDay() ;
 	int currentMonth = uicomponent.getCurrentMonth() ;
@@ -36,7 +39,6 @@
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.showEvent() ;') ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.initSelection() ;') ;
   cssClass = "Day" ;
-  if(uicomponent.isSameDate(uicomponent.getCurrentCalendar(), new GregorianCalendar())) {cssClass = "Today";}
 %>
 <div class="UIDayView">
   <div class="TitleBar">

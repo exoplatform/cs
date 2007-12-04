@@ -4,6 +4,9 @@
  **************************************************************************/
 package org.exoplatform.calendar.service;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
 /**
  * Created by The eXo Platform SARL
  * Author : Pham Tuan
@@ -76,4 +79,10 @@ public class Utils {
   public static final String ATTACHMENT = "ATTACHMENT".intern();
   public static final String INLINE = "INLINE".intern();
   
+  public static GregorianCalendar getInstanceTempCalendar() { 
+	  GregorianCalendar  calendar = new GregorianCalendar() ;
+		int gmtoffset = calendar.get(Calendar.DST_OFFSET) + calendar.get(Calendar.ZONE_OFFSET);
+		calendar.setTimeInMillis(System.currentTimeMillis() - gmtoffset) ;
+		return  calendar;
+	}
 }

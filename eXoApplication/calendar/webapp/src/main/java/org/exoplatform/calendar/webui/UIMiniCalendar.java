@@ -45,9 +45,9 @@ public class UIMiniCalendar extends UICalendarView  {
   public void updateMiniCal() throws Exception {
     EventQuery eventQuery = new EventQuery() ;
     java.util.Calendar fromcalendar = new GregorianCalendar(getCurrentYear(), getCurrentMonth(), 1, 0,0,0) ;
-    eventQuery.setFromDate(fromcalendar) ;
+    eventQuery.setFromDate(CalendarUtils.getBeginDay(fromcalendar)) ;
     java.util.Calendar tocalendar = new GregorianCalendar(getCurrentYear(), getCurrentMonth(), getDaysInMonth(), 24,0,0) ;
-    eventQuery.setToDate(tocalendar) ;
+    eventQuery.setToDate(CalendarUtils.getEndDay(tocalendar)) ;
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     dataMap = calendarService.searchHightLightEvent(CalendarUtils.getCurrentUser(), eventQuery, getPublicCalendars());
   }
