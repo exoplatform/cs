@@ -6,7 +6,7 @@
 		<owner-id>webos</owner-id>
     <name>content</name>		
     <factory-id>Desktop</factory-id>
-	  <access-permissions>*:/guest</access-permissions>
+	  <access-permissions>Everyone</access-permissions>
 	  <edit-permission>owner:/portal/admin</edit-permission>
     <show-max-window>true</show-max-window>
     
@@ -28,7 +28,7 @@
 		<owner-id>webos</owner-id>  	
     <name>desktop</name>		
     <factory-id>Desktop</factory-id>
-	  <access-permissions>*:/guest</access-permissions>
+	  <access-permissions>Everyone</access-permissions>
 	  <edit-permission>owner:/portal/admin</edit-permission>
     <show-max-window>true</show-max-window>
 
