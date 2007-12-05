@@ -189,9 +189,6 @@
       <div class="MiddleLeftRightClickPopupMenu">
         <div class="MiddleRightRightClickPopupMenu">
           <div class="UIRightPopupMenuContainer">
-            <a class="MenuItem" style="color:gray;"">   
-              <div class="ItemIcon OpenMailIcon"> Open </div>
-            </a>
             <a class="MenuItem" href="<%=uicomponent.event("Print", "id")%>">   
               <div class="ItemIcon PrintMailIcon"> Print </div>
             </a>
