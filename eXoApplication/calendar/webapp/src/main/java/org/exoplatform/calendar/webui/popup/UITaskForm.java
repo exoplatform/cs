@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.exoplatform.calendar.CalendarUtils;
+import org.exoplatform.calendar.SessionsUtils;
 import org.exoplatform.calendar.service.Attachment;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
@@ -130,7 +131,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
   public static List<SelectItemOption<String>> getCategory() throws Exception {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
-    List<EventCategory> eventCategories = calendarService.getEventCategories(Util.getPortalRequestContext().getRemoteUser()) ;
+    List<EventCategory> eventCategories = calendarService.getEventCategories(SessionsUtils.getSessionProvider(), Util.getPortalRequestContext().getRemoteUser()) ;
     for(EventCategory category : eventCategories) {
       options.add(new SelectItemOption<String>(category.getName(), category.getName())) ;
     }
@@ -438,7 +439,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
-    List<org.exoplatform.calendar.service.Calendar> calendars = calendarService.getUserCalendars(username) ;
+    List<org.exoplatform.calendar.service.Calendar> calendars = calendarService.getUserCalendars(SessionsUtils.getSessionProvider(), username) ;
     for(org.exoplatform.calendar.service.Calendar c : calendars) {
       options.add(new SelectItemOption<String>(c.getName(), c.getId())) ;
     }
@@ -561,11 +562,11 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
         calendarEvent.setReminders(uiForm.getEventReminders(from)) ;
         try {
           if(uiForm.calType_.equals(CalendarUtils.PRIVATE_TYPE)) {
-            CalendarUtils.getCalendarService().saveUserEvent(username, calendarId, calendarEvent, uiForm.isAddNew_) ;
+            CalendarUtils.getCalendarService().saveUserEvent(SessionsUtils.getSessionProvider(), username, calendarId, calendarEvent, uiForm.isAddNew_) ;
           }else if(uiForm.calType_.equals(CalendarUtils.SHARED_TYPE)){
-            CalendarUtils.getCalendarService().saveEventToSharedCalendar(username, calendarId, calendarEvent, uiForm.isAddNew_) ;
+            CalendarUtils.getCalendarService().saveEventToSharedCalendar(SessionsUtils.getSystemProvider(), username, calendarId, calendarEvent, uiForm.isAddNew_) ;
           }else if(uiForm.calType_.equals(CalendarUtils.PUBLIC_TYPE)){
-            CalendarUtils.getCalendarService().saveGroupEvent(calendarId, calendarEvent, uiForm.isAddNew_) ;          
+            CalendarUtils.getCalendarService().saveGroupEvent(SessionsUtils.getSystemProvider(), calendarId, calendarEvent, uiForm.isAddNew_) ;          
           }
           CalendarView calendarView = (CalendarView)uiViewContainer.getRenderedChild() ;
           calendarView.setLastUpdatedEventId(calendarEvent.getId()) ;

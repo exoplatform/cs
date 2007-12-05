@@ -31,6 +31,7 @@ public class Reminder {
   private Date fromDateTime  ;
   private boolean isRepeat = false ;
   private long repeatInterval = 0 ;
+  private String summary ;
   
   public Reminder() {
     id = "Reminder" + IdGenerator.generate() ;
@@ -59,4 +60,7 @@ public class Reminder {
   
   public boolean isRepeat() { return isRepeat ; }
   public void setRepeate(boolean b) { isRepeat = b ; }
+  
+  public void setSummary(String sm) { this.summary = sm ; }
+  public String getSummary() { return summary ; }
 }

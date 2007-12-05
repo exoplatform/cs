@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.exoplatform.calendar.CalendarUtils;
+import org.exoplatform.calendar.SessionsUtils;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.portal.webui.util.Util;
@@ -36,7 +37,7 @@ public class UIFeed extends UIForm implements UIPopupComponent{
   
   public List getFeeds() throws Exception {
     CalendarService calService = CalendarUtils.getCalendarService() ;
-    return calService.getFeeds(Util.getPortalRequestContext().getRemoteUser()) ;
+    return calService.getFeeds(SessionsUtils.getSessionProvider(), Util.getPortalRequestContext().getRemoteUser()) ;
   }
   public void activate() throws Exception {}
   public void deActivate() throws Exception {}  

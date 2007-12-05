@@ -11,6 +11,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+
+import org.exoplatform.calendar.SessionsUtils;
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
@@ -68,7 +70,7 @@ public class UIYearView extends UICalendarView {
     EventQuery eventQuery = new EventQuery() ;
     eventQuery.setFromDate(beginYear) ;
     eventQuery.setToDate(endYear) ;
-    yearData_ = calendarService.searchHightLightEvent(username, eventQuery, getPublicCalendars());
+    yearData_ = calendarService.searchHightLightEvent(SessionsUtils.getSystemProvider(), username, eventQuery, getPublicCalendars());
   }
   
   private List getEventList() {

@@ -5,6 +5,7 @@
 package org.exoplatform.calendar.webui.popup;
 
 import org.exoplatform.calendar.CalendarUtils;
+import org.exoplatform.calendar.SessionsUtils;
 import org.exoplatform.calendar.service.CalendarCategory;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
@@ -55,7 +56,7 @@ public class UICalendarCategoryForm extends UIForm {
     setAddNew(false) ;
     CalendarService calService = getApplicationComponent(CalendarService.class) ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
-    CalendarCategory category = calService.getCalendarCategory(username, categoryId) ;
+    CalendarCategory category = calService.getCalendarCategory(SessionsUtils.getSessionProvider(), username, categoryId) ;
     setCategoryId(category.getId()) ;
     setCategoryName(category.getName()) ;
     setCategoryDescription(category.getDescription()) ;
@@ -102,7 +103,7 @@ public class UICalendarCategoryForm extends UIForm {
         category.setName(categoryName) ;
         category.setDescription(description) ;
         String username = Util.getPortalRequestContext().getRemoteUser() ;
-        calendarService.saveCalendarCategory(username, category, uiForm.isAddNew()) ;
+        calendarService.saveCalendarCategory(SessionsUtils.getSessionProvider(), username, category, uiForm.isAddNew()) ;
         UICalendarForm uiCalendarForm = calendarPortlet.findFirstComponentOfType(UICalendarForm.class) ;
         if(uiCalendarForm != null) uiCalendarForm.reloadCategory() ;
         uiManager.updateGrid() ;

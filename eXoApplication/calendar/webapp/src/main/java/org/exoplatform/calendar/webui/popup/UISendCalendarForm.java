@@ -4,6 +4,7 @@
  **************************************************************************/
 package org.exoplatform.calendar.webui.popup;
 
+import org.exoplatform.calendar.SessionsUtils;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.portal.webui.util.Util;
@@ -47,7 +48,7 @@ public class UISendCalendarForm extends UIForm implements UIPopupComponent {
     calendarId_ = calendarId ;
     CalendarService calService = getApplicationComponent(CalendarService.class) ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
-    Calendar cal = calService.getUserCalendar(username, calendarId) ;
+    Calendar cal = calService.getUserCalendar(SessionsUtils.getSessionProvider(), username, calendarId) ;
     setCalendarName(cal.getName()) ;
   }
 

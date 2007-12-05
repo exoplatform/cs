@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.exoplatform.calendar.CalendarUtils;
+import org.exoplatform.calendar.SessionsUtils;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.portal.webui.container.UIContainer;
@@ -46,7 +47,7 @@ public class UICalendarViewContainer extends UIContainer  {
     addChild(UIScheduleView.class, null, null).setRendered(false) ;
     CalendarService cservice = CalendarUtils.getCalendarService() ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
-    CalendarSetting calendarSetting = cservice.getCalendarSetting(username) ;
+    CalendarSetting calendarSetting = cservice.getCalendarSetting(SessionsUtils.getSessionProvider(), username) ;
     setRenderedChild(TYPES[Integer.parseInt(calendarSetting.getViewType())]) ;
     refresh() ;
   }  

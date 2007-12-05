@@ -10,6 +10,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.exoplatform.calendar.CalendarUtils;
+import org.exoplatform.calendar.SessionsUtils;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.EventQuery;
@@ -49,15 +50,12 @@ public class UIMiniCalendar extends UICalendarView  {
     java.util.Calendar tocalendar = new GregorianCalendar(getCurrentYear(), getCurrentMonth(), getDaysInMonth(), 24,0,0) ;
     eventQuery.setToDate(CalendarUtils.getEndDay(tocalendar)) ;
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
-    dataMap = calendarService.searchHightLightEvent(CalendarUtils.getCurrentUser(), eventQuery, getPublicCalendars());
+    dataMap = calendarService.searchHightLightEvent(SessionsUtils.getSystemProvider(), CalendarUtils.getCurrentUser(), eventQuery, getPublicCalendars());
   }
   protected int getWeeksOfTheMonth(int year, int month, int day) {
     return new GregorianCalendar(year, month, day).getActualMaximum(java.util.Calendar.WEEK_OF_MONTH) ;
   }
   private Map<Integer, String> getData(){ return dataMap ; }
- /* protected void moveYear(int yearStep) {
-    calendar_.add(Calendar.YEAR, yearStep) ;
-  }*/
   public LinkedHashMap<String, CalendarEvent> getDataMap(){ return null ; }
   
   public java.util.Calendar getBeginDateOfMonth() throws Exception{

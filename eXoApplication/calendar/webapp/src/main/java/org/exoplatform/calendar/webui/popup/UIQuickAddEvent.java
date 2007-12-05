@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.exoplatform.calendar.CalendarUtils;
+import org.exoplatform.calendar.SessionsUtils;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
@@ -142,7 +143,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
-    List<Calendar> calendars = calendarService.getUserCalendars(username) ;
+    List<Calendar> calendars = calendarService.getUserCalendars(SessionsUtils.getSessionProvider(), username) ;
     for(Calendar c : calendars) {
       options.add(new SelectItemOption<String>(c.getName(), c.getId())) ;
     }
@@ -222,11 +223,11 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
         calEvent.setCalType(uiForm.calType_) ;
         String username = CalendarUtils.getCurrentUser() ;
         if(uiForm.calType_.equals(CalendarUtils.PRIVATE_TYPE)) {
-          CalendarUtils.getCalendarService().saveUserEvent(username, calEvent.getCalendarId(), calEvent, true) ;
+          CalendarUtils.getCalendarService().saveUserEvent(SessionsUtils.getSessionProvider(), username, calEvent.getCalendarId(), calEvent, true) ;
         }else if(uiForm.calType_.equals(CalendarUtils.SHARED_TYPE)){
-          CalendarUtils.getCalendarService().saveEventToSharedCalendar(username, calEvent.getCalendarId(), calEvent, true) ;
+          CalendarUtils.getCalendarService().saveEventToSharedCalendar(SessionsUtils.getSystemProvider(), username, calEvent.getCalendarId(), calEvent, true) ;
         }else if(uiForm.calType_.equals(CalendarUtils.PUBLIC_TYPE)){
-          CalendarUtils.getCalendarService().saveGroupEvent(calEvent.getCalendarId(), calEvent, true) ;          
+          CalendarUtils.getCalendarService().saveGroupEvent(SessionsUtils.getSystemProvider(), calEvent.getCalendarId(), calEvent, true) ;          
         }
         UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class) ;
         uiPopupAction.deActivate() ;

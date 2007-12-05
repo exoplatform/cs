@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.TimeZone;
 
 import org.exoplatform.calendar.CalendarUtils;
+import org.exoplatform.calendar.SessionsUtils;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarCategory;
 import org.exoplatform.calendar.service.CalendarService;
@@ -132,7 +133,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
   private  List<SelectItemOption<String>> getCategory() throws Exception {
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
-    List<CalendarCategory> categories = calendarService.getCategories(username) ;
+    List<CalendarCategory> categories = calendarService.getCategories(SessionsUtils.getSessionProvider(), username) ;
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     for(CalendarCategory category : categories) {
       options.add(new SelectItemOption<String>(category.getName(), category.getId())) ;
@@ -355,14 +356,14 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
         if(!CalendarUtils.isEmpty(editPermission)) {
           calendar.setEditPermission(editPermission.split(CalendarUtils.COLON)) ;
         }
-        calendarService.saveGroupCalendar(calendar, uiForm.isAddNew_) ;
+        calendarService.saveGroupCalendar(SessionsUtils.getSystemProvider(), calendar, uiForm.isAddNew_) ;
       }else {
         if(CalendarUtils.isEmpty(uiForm.getUIFormSelectBox(CATEGORY).getValue())) {
           uiApp.addMessage(new ApplicationMessage("UICalendarForm.msg.category-empty", null, ApplicationMessage.WARNING) ) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;
         } 
-        calendarService.saveUserCalendar(username, calendar, uiForm.isAddNew_) ;        
+        calendarService.saveUserCalendar(SessionsUtils.getSystemProvider(), username, calendar, uiForm.isAddNew_) ;        
       }
       UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
       calendarPortlet.cancelAction() ;

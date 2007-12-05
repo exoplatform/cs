@@ -14,6 +14,7 @@ import java.util.MissingResourceException;
 import net.fortuna.ical4j.model.ValidationException;
 
 import org.exoplatform.calendar.CalendarUtils;
+import org.exoplatform.calendar.SessionsUtils;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarImportExport;
 import org.exoplatform.calendar.service.CalendarService;
@@ -78,11 +79,11 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
     CalendarService calendarService = CalendarUtils.getCalendarService();
     List<Calendar> calendars = new ArrayList<Calendar>();
     if(calType.equals("0")) {
-      calendars = calendarService.getUserCalendars(CalendarUtils.getCurrentUser()) ;
+      calendars = calendarService.getUserCalendars(SessionsUtils.getSessionProvider(), CalendarUtils.getCurrentUser()) ;
     }else if(calType.equals("1")) {
-      calendars = calendarService.getSharedCalendars(CalendarUtils.getCurrentUser()).getCalendars() ;
+      calendars = calendarService.getSharedCalendars(SessionsUtils.getSystemProvider(), CalendarUtils.getCurrentUser()).getCalendars() ;
     }else if(calType.equals("2")){
-      List<GroupCalendarData> groups = calendarService.getGroupCalendars(CalendarUtils.getUserGroups(CalendarUtils.getCurrentUser())) ;
+      List<GroupCalendarData> groups = calendarService.getGroupCalendars(SessionsUtils.getSystemProvider(), CalendarUtils.getUserGroups(CalendarUtils.getCurrentUser())) ;
       for(GroupCalendarData group : groups) {
         calendars.addAll(group.getCalendars()) ;
       }
@@ -132,7 +133,7 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
       CalendarImportExport importExport = calendarService.getCalendarImportExports(type) ;
       OutputStream out = null ;
       try {
-        out = importExport.exportCalendar(CalendarUtils.getCurrentUser(), calendarIds, uiForm.calType) ;        
+        out = importExport.exportCalendar(SessionsUtils.getSystemProvider(), CalendarUtils.getCurrentUser(), calendarIds, uiForm.calType) ;        
       }catch(ValidationException e) {
         uiApp.addMessage(new ApplicationMessage("UIExportForm.msg.event-does-not-existing", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;

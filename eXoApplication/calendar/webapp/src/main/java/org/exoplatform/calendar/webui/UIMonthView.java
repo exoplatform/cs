@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.exoplatform.calendar.CalendarUtils;
+import org.exoplatform.calendar.SessionsUtils;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
@@ -68,7 +69,7 @@ public class UIMonthView extends UICalendarView {
     EventQuery eventQuery = new EventQuery() ;
     eventQuery.setFromDate(getBeginDateOfMonth()) ;
     eventQuery.setToDate(getEndDateOfMonth()) ;
-    List<CalendarEvent> allEvents = calendarService.getEvent(username, eventQuery, getPublicCalendars()) ;
+    List<CalendarEvent> allEvents = calendarService.getEvent(SessionsUtils.getSystemProvider(), username, eventQuery, getPublicCalendars()) ;
     Iterator childIter = getChildren().iterator() ;
     while(childIter.hasNext()) {
       UIComponent comp = (UIComponent)childIter.next() ;
@@ -92,7 +93,7 @@ public class UIMonthView extends UICalendarView {
   protected void refreshSelectedCalendarIds() throws Exception {
     CalendarService calendarService = getApplicationComponent(CalendarService.class) ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
-    for(Calendar c : calendarService.getUserCalendars(username)) {
+    for(Calendar c : calendarService.getUserCalendars(SessionsUtils.getSessionProvider(), username)) {
       addCalendarId(c.getId()) ;
     }
   }
@@ -192,11 +193,11 @@ public class UIMonthView extends UICalendarView {
           cal1.add(java.util.Calendar.DATE, amount) ;
           calEvent.setToDateTime(cal1.getTime()) ;
           if(calEvent.getCalType().equals(CalendarUtils.PRIVATE_TYPE)) {
-            CalendarUtils.getCalendarService().saveUserEvent(username, calendarId, calEvent, false) ;
+            CalendarUtils.getCalendarService().saveUserEvent(SessionsUtils.getSessionProvider(), username, calendarId, calEvent, false) ;
           }else if(calEvent.getCalType().equals(CalendarUtils.SHARED_TYPE)){
-            CalendarUtils.getCalendarService().saveEventToSharedCalendar(username, calendarId, calEvent, false) ;
+            CalendarUtils.getCalendarService().saveEventToSharedCalendar(SessionsUtils.getSystemProvider(), username, calendarId, calEvent, false) ;
           }else if(calEvent.getCalType().equals(CalendarUtils.PUBLIC_TYPE)){
-            CalendarUtils.getCalendarService().saveGroupEvent(calendarId, calEvent, false) ;          
+            CalendarUtils.getCalendarService().saveGroupEvent(SessionsUtils.getSystemProvider(), calendarId, calEvent, false) ;          
           }
           //calService.saveUserEvent(username, calendarId, calEvent, false) ;
           UIMiniCalendar uiMiniCalendar = uiPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;

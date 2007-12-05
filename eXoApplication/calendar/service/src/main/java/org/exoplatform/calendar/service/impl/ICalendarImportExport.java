@@ -41,6 +41,7 @@ import org.exoplatform.calendar.service.CalendarImportExport;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.Reminder;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 
 
 /**
@@ -59,14 +60,14 @@ public class ICalendarImportExport implements CalendarImportExport{
     storage_ = storage ;
   }
 
-  public OutputStream exportCalendar(String username, List<String> calendarIds, String type) throws Exception {
+  public OutputStream exportCalendar(SessionProvider sProvider, String username, List<String> calendarIds, String type) throws Exception {
     List<CalendarEvent> events = new ArrayList<CalendarEvent>();
     if(type.equals(PRIVATE_TYPE)) {
-      events = storage_.getUserEventByCalendar(username, calendarIds) ;
+      events = storage_.getUserEventByCalendar(sProvider, username, calendarIds) ;
     }else if(type.equals(SHARED_TYPE)) {
-      events = storage_.getSharedEventByCalendars(username, calendarIds) ;
+      events = storage_.getSharedEventByCalendars(sProvider, username, calendarIds) ;
     }else if(type.equals(PUBLIC_TYPE)){
-      events = storage_.getGroupEventByCalendar(calendarIds) ;
+      events = storage_.getGroupEventByCalendar(sProvider, calendarIds) ;
     }
     net.fortuna.ical4j.model.Calendar calendar = new net.fortuna.ical4j.model.Calendar();
     calendar.getProperties().add(new ProdId("-//Ben Fortuna//iCal4j 1.0//EN"));
@@ -149,11 +150,11 @@ public class ICalendarImportExport implements CalendarImportExport{
     return bout;
   }
 
-  public void importCalendar(String username, InputStream icalInputStream, String calendarName) throws Exception {
+  public void importCalendar(SessionProvider sProvider, String username, InputStream icalInputStream, String calendarName) throws Exception {
     CalendarBuilder calendarBuilder = new CalendarBuilder() ;
     net.fortuna.ical4j.model.Calendar iCalendar = calendarBuilder.build(icalInputStream) ;
     GregorianCalendar currentDateTime = new GregorianCalendar() ;
-    NodeIterator iter = storage_.getCalendarCategoryHome(username).getNodes() ;
+    NodeIterator iter = storage_.getCalendarCategoryHome(sProvider, username).getNodes() ;
     Node cat = null;
     String categoryId ;
     boolean isExists = false ;
@@ -170,7 +171,7 @@ public class ICalendarImportExport implements CalendarImportExport{
       calendarCate.setDescription("Imported icalendar category") ;
       calendarCate.setName("Imported") ;
       categoryId = calendarCate.getId() ;
-      storage_.saveCalendarCategory(username, calendarCate, true) ;
+      storage_.saveCalendarCategory(sProvider, username, calendarCate, true) ;
     }else {
       categoryId = cat.getProperty("exo:id").getString() ;
     }
@@ -179,7 +180,7 @@ public class ICalendarImportExport implements CalendarImportExport{
     exoCalendar.setDescription(iCalendar.getProductId().getValue()) ;
     exoCalendar.setCategoryId(categoryId) ;
     exoCalendar.setPublic(true) ;
-    storage_.saveUserCalendar(username, exoCalendar, true) ;   
+    storage_.saveUserCalendar(sProvider, username, exoCalendar, true) ;   
 
     ComponentList componentList = iCalendar.getComponents() ;
     VEvent event ;
@@ -194,7 +195,7 @@ public class ICalendarImportExport implements CalendarImportExport{
           evCate.setName(event.getProperty(Property.CATEGORIES).getValue()) ;
           evCate.setDescription(event.getProperty(Property.CATEGORIES).getValue()) ;
           try{
-            storage_.saveEventCategory(username, evCate, null, true) ;
+            storage_.saveEventCategory(sProvider, username, evCate, null, true) ;
           }catch(Exception e){            
           }
           eventCategoryId = evCate.getName() ;
@@ -228,7 +229,7 @@ public class ICalendarImportExport implements CalendarImportExport{
           }
           exoEvent.setInvitation(invitation) ;
         }
-        storage_.saveUserEvent(username, exoCalendar.getId(), exoEvent, true) ;
+        storage_.saveUserEvent(sProvider, username, exoCalendar.getId(), exoEvent, true) ;
       }
     }
   }  

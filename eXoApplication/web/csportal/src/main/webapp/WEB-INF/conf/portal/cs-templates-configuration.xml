@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<configuration>
-  
+<configuration>  
    <external-component-plugins>
     <target-component>org.exoplatform.services.cms.templates.TemplateService</target-component>
       <component-plugin>
@@ -75,4 +74,35 @@
       </component-plugin>
   </external-component-plugins>
   
+  <!--external-component-plugins>
+    <target-component>org.exoplatform.services.scheduler.JobSchedulerService</target-component>
+    <component-plugin>
+      <name>RecordsJob</name>
+      <set-method>addPeriodJob</set-method>
+      <type>org.exoplatform.calendar.service.ReminderPeriodJob</type>
+      <description>add a job to the JobSchedulerService</description>
+      <init-params>
+        <properties-param>
+          <name>job.info</name>
+          <description>save the monitor data  periodically</description>
+          <property name="jobName" value="ReminderJob"/>
+          <property name="groupName" value="CollaborationSuite"/>
+          <property name="job" value="org.exoplatform.calendar.service.ReminderJob"/>
+          <property name="repeatCount" value="0"/>
+          <property name="period" value="300000"/>     
+          <property name="startTime" value="+0"/>
+          <property name="endTime" value=""/>               
+        </properties-param>
+        <properties-param>
+          <name>reminder.info</name>
+          <description>save the monitor data  periodically</description>
+          <property name="timeZone" value="This is TimeZone"/>          
+          <property name="account" value="exoservice@gmail.com"/>          
+          <property name="password" value="exoadmin"/>          
+          <property name="outgoing" value="smtp.gmail.com"/>          
+          <property name="port" value="465"/>          
+        </properties-param>
+      </init-params>
+    </component-plugin>
+  </external-component-plugins-->  
 </configuration>

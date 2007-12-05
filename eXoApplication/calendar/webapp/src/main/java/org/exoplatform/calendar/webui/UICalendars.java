@@ -12,7 +12,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.exoplatform.calendar.CalendarUtils;
+import org.exoplatform.calendar.SessionsUtils;
 import org.exoplatform.calendar.service.Calendar;
+import org.exoplatform.calendar.service.CalendarCategory;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.GroupCalendarData;
@@ -84,7 +86,8 @@ public class UICalendars extends UIForm  {
   protected List<GroupCalendarData> getPrivateCalendars() throws Exception{
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
-    List<GroupCalendarData> groupCalendars = calendarService.getCalendarCategories(username) ;
+    //List<CalendarCategory> categories = calendarService.getCategories(SessionsUtils.getSessionProvider(), username) ;
+    List<GroupCalendarData> groupCalendars = calendarService.getCalendarCategories(SessionsUtils.getSessionProvider(), username) ;
     for(GroupCalendarData group : groupCalendars) {
       List<Calendar> calendars = group.getCalendars() ;
       for(Calendar calendar : calendars) {
@@ -103,7 +106,7 @@ public class UICalendars extends UIForm  {
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     String[] groups = CalendarUtils.getUserGroups(username) ;
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
-    List<GroupCalendarData> groupCalendars = calendarService.getGroupCalendars(groups) ;
+    List<GroupCalendarData> groupCalendars = calendarService.getGroupCalendars(SessionsUtils.getSystemProvider(), groups) ;
     Map<String, String> map = new HashMap<String, String> () ;    
     for(GroupCalendarData group : groupCalendars) {
       List<Calendar> calendars = group.getCalendars() ;
@@ -121,7 +124,7 @@ public class UICalendars extends UIForm  {
 
   protected GroupCalendarData getSharedCalendars() throws Exception{
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
-    GroupCalendarData groupCalendars = calendarService.getSharedCalendars(CalendarUtils.getCurrentUser()) ;
+    GroupCalendarData groupCalendars = calendarService.getSharedCalendars(SessionsUtils.getSystemProvider(), CalendarUtils.getCurrentUser()) ;
     if(groupCalendars != null) {
       List<Calendar> calendars = groupCalendars.getCalendars() ;
       for(Calendar calendar : calendars) {
@@ -176,7 +179,7 @@ public class UICalendars extends UIForm  {
       UICalendarPortlet uiPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
       CalendarService calService = uiComponent.getApplicationComponent(CalendarService.class) ;
       String username = event.getRequestContext().getRemoteUser() ;
-      calService.removeCalendarCategory(username, calendarCategoryId) ;
+      calService.removeCalendarCategory(SessionsUtils.getSessionProvider(), username, calendarCategoryId) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent) ; 
       UICalendarWorkingContainer uiWorkingContainer = uiPortlet.findFirstComponentOfType(UICalendarWorkingContainer.class) ;
       UICalendarViewContainer uiViewContainer = uiPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
@@ -270,7 +273,7 @@ public class UICalendars extends UIForm  {
       uiPopupContainer.setId(UIPopupContainer.UICALENDARPOPUP) ;
       UICalendarForm uiCalendarForm = uiPopupContainer.addChild(UICalendarForm.class, null, null) ;
       CalendarService calService = uiCalendarForm.getApplicationComponent(CalendarService.class) ;
-      Calendar calendar = calService.getUserCalendar(username, calendarId) ;
+      Calendar calendar = calService.getUserCalendar(SessionsUtils.getSessionProvider(), username, calendarId) ;
       uiCalendarForm.init(calendar) ;
       popupAction.activate(uiPopupContainer, 600, 0, true) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
@@ -288,11 +291,11 @@ public class UICalendars extends UIForm  {
       UICalendarViewContainer uiViewContainer = uiPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
       UICalendarWorkingContainer workingContainer = uiComponent.getAncestorOfType(UICalendarWorkingContainer.class) ;
       if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
-        CalendarUtils.getCalendarService().removeUserCalendar(username, calendarId) ;
+        CalendarUtils.getCalendarService().removeUserCalendar(SessionsUtils.getSessionProvider(), username, calendarId) ;
       }else if(calType.equals(CalendarUtils.SHARED_TYPE)) {
-        CalendarUtils.getCalendarService().removeSharedCalendar(username, calendarId) ;
+        CalendarUtils.getCalendarService().removeSharedCalendar(SessionsUtils.getSystemProvider(), username, calendarId) ;
       }else if(calType.equals(CalendarUtils.PUBLIC_TYPE)) {
-        CalendarUtils.getCalendarService().removeGroupCalendar(calendarId) ;
+        CalendarUtils.getCalendarService().removeGroupCalendar(SessionsUtils.getSystemProvider(), calendarId) ;
       }
       try{        
         uiMiniCalendar.updateMiniCal() ;
@@ -336,7 +339,7 @@ public class UICalendars extends UIForm  {
       UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
       UIExportForm exportForm = popupAction.activate(UIExportForm.class, 500) ;
       String username = event.getRequestContext().getRemoteUser() ;
-      exportForm.initCheckBox(CalendarUtils.getCalendarService().getUserCalendarsByCategory(username, groupId), null) ;
+      exportForm.initCheckBox(CalendarUtils.getCalendarService().getUserCalendarsByCategory(SessionsUtils.getSessionProvider(), username, groupId), null) ;
       //exportForm.addUIFormInput(arg0)
       //exportForm.update("0", groupId) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
@@ -376,7 +379,7 @@ public class UICalendars extends UIForm  {
       UISharedForm uiSharedForm = uiPopupContainer.addChild(UISharedForm.class, null, null) ;
       CalendarService calService = CalendarUtils.getCalendarService() ;
       String username = event.getRequestContext().getRemoteUser() ;
-      Calendar cal = calService.getUserCalendar(username, selectedCalendarId) ;
+      Calendar cal = calService.getUserCalendar(SessionsUtils.getSessionProvider(), username, selectedCalendarId) ;
       uiSharedForm.init(null, cal, true) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarPortlet) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
@@ -395,11 +398,11 @@ public class UICalendars extends UIForm  {
       try{        
         Calendar calendar = null ;
         if(CalendarUtils.PRIVATE_TYPE.equals(calType)) {
-          calendar = calService.getUserCalendar(username, calendarId) ;
+          calendar = calService.getUserCalendar(SessionsUtils.getSessionProvider(), username, calendarId) ;
           calendar.setCalendarColor(color) ;
-          calService.saveUserCalendar(username, calendar, false) ;
+          calService.saveUserCalendar(SessionsUtils.getSessionProvider(), username, calendar, false) ;
         } else if(CalendarUtils.SHARED_TYPE.equals(calType)){
-          Iterator iter = calService.getSharedCalendars(username).getCalendars().iterator() ;
+          Iterator iter = calService.getSharedCalendars(SessionsUtils.getSystemProvider(), username).getCalendars().iterator() ;
           while (iter.hasNext()) {
             Calendar cal = ((Calendar)iter.next()) ;
             if(cal.getId().equals(calendarId)) {
@@ -408,11 +411,11 @@ public class UICalendars extends UIForm  {
             }  
           }
           calendar.setCalendarColor(color) ;
-          calService.saveUserCalendar(username, calendar, false) ;
+          calService.saveUserCalendar(SessionsUtils.getSessionProvider(), username, calendar, false) ;
         } else if(CalendarUtils.PUBLIC_TYPE.equals(calType)){
-          calendar = calService.getGroupCalendar(calendarId) ;
+          calendar = calService.getGroupCalendar(SessionsUtils.getSystemProvider(), calendarId) ;
           calendar.setCalendarColor(color) ;
-          calService.saveGroupCalendar(calendar, false) ;
+          calService.saveGroupCalendar(SessionsUtils.getSystemProvider(), calendar, false) ;
         }
       } catch (Exception e) {
         e.printStackTrace() ;
@@ -430,7 +433,7 @@ public class UICalendars extends UIForm  {
       UICalendarSettingForm uiCalendarSettingForm = popupAction.activate(UICalendarSettingForm.class, 600) ;
       CalendarService cservice = CalendarUtils.getCalendarService() ;
       String username = Util.getPortalRequestContext().getRemoteUser() ;
-      CalendarSetting calendarSetting = cservice.getCalendarSetting(username) ;
+      CalendarSetting calendarSetting = cservice.getCalendarSetting(SessionsUtils.getSessionProvider(), username) ;
       uiCalendarSettingForm.init(calendarSetting) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent.getParent()) ;

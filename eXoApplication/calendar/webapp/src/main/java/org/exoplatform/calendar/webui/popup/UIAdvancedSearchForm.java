@@ -10,6 +10,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.exoplatform.calendar.CalendarUtils;
+import org.exoplatform.calendar.SessionsUtils;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarCategory;
 import org.exoplatform.calendar.service.CalendarEvent;
@@ -68,14 +69,14 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     CalendarService cservice = CalendarUtils.getCalendarService() ;
     options.add(new SelectItemOption<String>("", "")) ;
-    for(Calendar cal : cservice.getUserCalendars(CalendarUtils.getCurrentUser())) {
+    for(Calendar cal : cservice.getUserCalendars(SessionsUtils.getSessionProvider(), CalendarUtils.getCurrentUser())) {
       options.add(new SelectItemOption<String>(cal.getName(), cal.getId())) ;
     }
     addChild(new UIFormSelectBox(CALENDAR, CALENDAR, options)) ;
     
     options = new ArrayList<SelectItemOption<String>>() ;
     options.add(new SelectItemOption<String>("", "")) ;
-    for(CalendarCategory cat : cservice.getCategories(CalendarUtils.getCurrentUser())) {
+    for(CalendarCategory cat : cservice.getCategories(SessionsUtils.getSessionProvider(), CalendarUtils.getCurrentUser())) {
       options.add(new SelectItemOption<String>(cat.getName(), cat.getId())) ;
     }
     addChild(new UIFormSelectBox(CATEGORY, CATEGORY, options)) ;
@@ -122,7 +123,7 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
       calendarViewContainer.setRenderedChild(UICalendarViewContainer.LIST_VIEW) ;
       UIListView uiListView = calendarViewContainer.findFirstComponentOfType(UIListView.class) ;
       EventPageList resultPageList =  
-        CalendarUtils.getCalendarService().searchEvent(username, query, uiListView.getPublicCalendars()) ;
+        CalendarUtils.getCalendarService().searchEvent(SessionsUtils.getSystemProvider(), username, query, uiListView.getPublicCalendars()) ;
       calendarPortlet.cancelAction() ;
       uiListView.update(resultPageList) ;
       uiListView.setViewType(UIListView.TYPE_BOTH) ;

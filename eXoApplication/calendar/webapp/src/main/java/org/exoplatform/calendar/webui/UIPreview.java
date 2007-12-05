@@ -26,6 +26,7 @@ import org.exoplatform.webui.event.EventListener;
  */
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
+    template =  "app:/templates/calendar/webui/UIDefaultPreview.gtmpl",
     events = {
       @EventConfig(listeners = UIPreview.ViewActionListener.class),  
       @EventConfig(listeners = UICalendarView.EditActionListener.class),  

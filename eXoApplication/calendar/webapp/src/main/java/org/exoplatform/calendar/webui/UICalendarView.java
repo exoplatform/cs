@@ -18,6 +18,7 @@ import java.util.SimpleTimeZone;
 import java.util.TimeZone;
 
 import org.exoplatform.calendar.CalendarUtils;
+import org.exoplatform.calendar.SessionsUtils;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
@@ -152,7 +153,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
     } catch (Exception e) {
       CalendarService calService = getApplicationComponent(CalendarService.class) ;
       String username = Util.getPortalRequestContext().getRemoteUser() ;
-      calendarSetting_ = calService.getCalendarSetting(username) ;
+      calendarSetting_ = calService.getCalendarSetting(SessionsUtils.getSessionProvider(), username) ;
     }
     dateTimeFormat_ = getDateFormat() + " " + getTimeFormat() ;
     TimeZone settingTimeZone = TimeZone.getTimeZone(calendarSetting_.getTimeZone()) ;
@@ -172,7 +173,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       String[] groups = CalendarUtils.getUserGroups(CalendarUtils.getCurrentUser()) ;
       CalendarService calendarService = CalendarUtils.getCalendarService() ;
       Map<String, String> map = new HashMap<String, String> () ;    
-      for(GroupCalendarData group : calendarService.getGroupCalendars(groups)) {
+      for(GroupCalendarData group : calendarService.getGroupCalendars(SessionsUtils.getSystemProvider(), groups)) {
         for(org.exoplatform.calendar.service.Calendar calendar : group.getCalendars()) {
           map.put(calendar.getId(), calendar.getId()) ;          
         }
@@ -183,7 +184,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   protected List<GroupCalendarData> getPublicCalendars(String username) throws Exception{
     String[] groups = CalendarUtils.getUserGroups(username) ;
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
-    List<GroupCalendarData> groupCalendars = calendarService.getGroupCalendars(groups) ;
+    List<GroupCalendarData> groupCalendars = calendarService.getGroupCalendars(SessionsUtils.getSystemProvider(), groups) ;
     return groupCalendars ;
   }
 
@@ -199,7 +200,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   public void refresh() throws Exception {} ;
   public void initCategories() throws Exception {
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
-    List<EventCategory> eventCategories = calendarService.getEventCategories(Util.getPortalRequestContext().getRemoteUser()) ;
+    List<EventCategory> eventCategories = calendarService.getEventCategories(SessionsUtils.getSessionProvider(), Util.getPortalRequestContext().getRemoteUser()) ;
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     options.add(new SelectItemOption<String>("all", "")) ;
     for(EventCategory category : eventCategories) {
@@ -247,7 +248,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   }
   public void update() throws Exception {
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
-    List<EventCategory> eventCategories = calendarService.getEventCategories(Util.getPortalRequestContext().getRemoteUser()) ;
+    List<EventCategory> eventCategories = calendarService.getEventCategories(SessionsUtils.getSessionProvider(), Util.getPortalRequestContext().getRemoteUser()) ;
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     options.add(new SelectItemOption<String>("all", "")) ;
     for(EventCategory category : eventCategories) {
@@ -260,17 +261,17 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     List<CalendarEvent> events = new ArrayList<CalendarEvent>() ;
     if(privateCalendarIds.size() > 0) {
-      events = calendarService.getUserEventByCalendar(Util.getPortalRequestContext().getRemoteUser(), privateCalendarIds)  ;
+      events = calendarService.getUserEventByCalendar(SessionsUtils.getSessionProvider(), Util.getPortalRequestContext().getRemoteUser(), privateCalendarIds)  ;
     }
     if(publicCalendarIds.size() > 0) {
       if(events.size() > 0) {
         List<CalendarEvent> publicEvents = 
-          calendarService.getGroupEventByCalendar(publicCalendarIds) ;
+          calendarService.getGroupEventByCalendar(SessionsUtils.getSystemProvider(), publicCalendarIds) ;
         for(CalendarEvent event : publicEvents) {
           events.add(event) ;
         }
       }else {
-        events = calendarService.getGroupEventByCalendar(publicCalendarIds)  ;
+        events = calendarService.getGroupEventByCalendar(SessionsUtils.getSystemProvider(), publicCalendarIds)  ;
       }
     }
     return events ;
@@ -330,9 +331,9 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     for (CalendarEvent ce : events) {
       if(CalendarUtils.PUBLIC_TYPE.equals(ce.getCalType())){
-        calService.removeGroupEvent(ce.getCalendarId(), ce.getId()) ;
+        calService.removeGroupEvent(SessionsUtils.getSystemProvider(), ce.getCalendarId(), ce.getId()) ;
       } else {
-        calService.removeUserEvent(username, ce.getCalendarId(), ce.getId()) ;
+        calService.removeUserEvent(SessionsUtils.getSessionProvider(), username, ce.getCalendarId(), ce.getId()) ;
       }
     }
   }
@@ -421,7 +422,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       String username = event.getRequestContext().getRemoteUser() ;
       List<org.exoplatform.calendar.service.Calendar> privateCalendars = 
-        calendarService.getUserCalendars(username) ;
+        calendarService.getUserCalendars(SessionsUtils.getSessionProvider(), username) ;
       if(privateCalendars.isEmpty()) {
         uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.calendar-list-empty", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -579,7 +580,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
           if(CalendarUtils.PRIVATE_TYPE.equals(calType)) {
             options = null ;
           } else if(CalendarUtils.SHARED_TYPE.equals(calType)) {
-            GroupCalendarData calendarData = calendarService.getSharedCalendars(CalendarUtils.getCurrentUser())  ;
+            GroupCalendarData calendarData = calendarService.getSharedCalendars(SessionsUtils.getSystemProvider(), CalendarUtils.getCurrentUser())  ;
             for(org.exoplatform.calendar.service.Calendar cal : calendarData.getCalendars()) {
               options.add(new SelectItemOption<String>(cal.getName(), cal.getId())) ;
             }
@@ -604,7 +605,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
           if(CalendarUtils.PRIVATE_TYPE.equals(calType)) {
             options = null ;
           } else if(CalendarUtils.SHARED_TYPE.equals(calType)) {
-            GroupCalendarData calendarData = calendarService.getSharedCalendars(CalendarUtils.getCurrentUser())  ;
+            GroupCalendarData calendarData = calendarService.getSharedCalendars(SessionsUtils.getSystemProvider(), CalendarUtils.getCurrentUser())  ;
             for(org.exoplatform.calendar.service.Calendar cal : calendarData.getCalendars()) {
               options.add(new SelectItemOption<String>(cal.getName(), cal.getId())) ;
             }
@@ -643,11 +644,11 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         CalendarService calService = calendarview.getApplicationComponent(CalendarService.class) ;
         String username = event.getRequestContext().getRemoteUser() ;
         if(CalendarUtils.PUBLIC_TYPE.equals(calType)){
-          calService.removeGroupEvent(calendarId, eventId) ;
+          calService.removeGroupEvent(SessionsUtils.getSystemProvider(), calendarId, eventId) ;
         } else if(CalendarUtils.PRIVATE_TYPE.equals(calType)){
-          calService.removeUserEvent(username, calendarId, eventId) ;
+          calService.removeUserEvent(SessionsUtils.getSessionProvider(), username, calendarId, eventId) ;
         } else if(CalendarUtils.SHARED_TYPE.equals(calType)) {
-          //calService.remove
+          // need to implement
         }
         uiMiniCalendar.updateMiniCal() ;
         calendarview.setLastUpdatedEventId(null) ;
@@ -673,7 +674,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       eventQuery.setFromDate(fromcalendar) ;
       java.util.Calendar tocalendar = uiListView.getEndDay(new GregorianCalendar(uiListView.getCurrentYear(), uiListView.getCurrentMonth(), uiListView.getCurrentDay())) ;
       eventQuery.setToDate(tocalendar) ;
-      uiListView.update(calendarService.searchEvent(username, eventQuery, uiCalendarView.getPublicCalendars())) ; 
+      uiListView.update(calendarService.searchEvent(SessionsUtils.getSystemProvider(), username, eventQuery, uiCalendarView.getPublicCalendars())) ; 
       uiListView.setShowEventAndTask(false) ;
       uiListView.setDisplaySearchResult(false) ;
       uiListView.isShowEvent_ = false ;
@@ -771,7 +772,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       CalendarService calendarService = CalendarUtils.getCalendarService() ;
       UIApplication uiApp = calendarview.getAncestorOfType(UIApplication.class) ;
       List<org.exoplatform.calendar.service.Calendar> privateCalendars = 
-        calendarService.getUserCalendars(CalendarUtils.getCurrentUser()) ;
+        calendarService.getUserCalendars(SessionsUtils.getSessionProvider(), CalendarUtils.getCurrentUser()) ;
       if(privateCalendars.isEmpty()) {
         uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.calendar-list-empty", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;

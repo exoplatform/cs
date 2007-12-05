@@ -56,7 +56,7 @@ public class ICalServlet extends HttpServlet {
       CalendarService calService = 
         (CalendarService)pcontainer.getComponentInstanceOfType(CalendarService.class) ;
       
-      Node node = calService.getRssHome(userName).getNode(fileName.toString()) ;
+      Node node = calService.getRssHome(SessionsUtils.getSystemProvider(), userName).getNode(fileName.toString()) ;
       if (node == null) throw new Exception("Node " + fileName + " not found. ");
       Node content;
       if(node.isNodeType("exo:rssData")) {

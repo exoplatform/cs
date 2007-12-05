@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.exoplatform.calendar.CalendarUtils;
+import org.exoplatform.calendar.SessionsUtils;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.RssData;
@@ -68,7 +69,7 @@ public class UIRssForm extends UIFormTabPane implements UIPopupComponent{
       options.add(new SelectItemOption<String>(vs, vs)) ;
     }*/
     //rssInfo.addUIFormInput(new UIFormSelectBox(VERSION, VERSION, options)) ;
-    rssInfo.addUIFormInput(new UIFormStringInput(URL, URL, calendarService.getCalendarSetting(username).getBaseURL())) ;
+    rssInfo.addUIFormInput(new UIFormStringInput(URL, URL, calendarService.getCalendarSetting(SessionsUtils.getSessionProvider(), username).getBaseURL())) ;
     rssInfo.addUIFormInput(new UIFormTextAreaInput(DESCRIPTION, DESCRIPTION, "This RSS provided by eXo Platform opensource company")) ;
     rssInfo.addUIFormInput(new UIFormStringInput(COPYRIGHT, COPYRIGHT, "Copyright by 2000-2005 eXo Platform SARL")) ;
     rssInfo.addUIFormInput(new UIFormStringInput(LINK, LINK, "www.exoplatform.org")) ;    
@@ -77,7 +78,7 @@ public class UIRssForm extends UIFormTabPane implements UIPopupComponent{
     addUIFormInput(rssInfo) ;
     UIFormInputWithActions rssCalendars = new UIFormInputWithActions("rssCalendars") ;
     
-    List<Calendar> calendars = calendarService.getUserCalendars(username) ;
+    List<Calendar> calendars = calendarService.getUserCalendars(SessionsUtils.getSessionProvider(), username) ;
     for(Calendar calendar : calendars) {
       rssCalendars.addUIFormInput(new UIFormCheckBoxInput<Boolean>(calendar.getName(), calendar.getId(), true)) ;
     }
@@ -123,7 +124,7 @@ public class UIRssForm extends UIFormTabPane implements UIPopupComponent{
       rssData.setTitle(title) ;
       rssData.setVersion("rss_2.0") ;
       rssData.setPubDate(uiForm.getUIFormDateTimeInput(uiForm.PUBLIC_DATE).getCalendar().getTime()) ;
-      calendarService.generateRss(Util.getPortalRequestContext().getRemoteUser(), calendarIds, rssData) ;
+      calendarService.generateRss(SessionsUtils.getSystemProvider(), Util.getPortalRequestContext().getRemoteUser(), calendarIds, rssData) ;
       UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
       calendarPortlet.cancelAction() ;  
       Object[] object = new Object[]{title} ;

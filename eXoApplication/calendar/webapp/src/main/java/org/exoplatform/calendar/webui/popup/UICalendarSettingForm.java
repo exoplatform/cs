@@ -16,6 +16,7 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import org.exoplatform.calendar.CalendarUtils;
+import org.exoplatform.calendar.SessionsUtils;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
@@ -158,7 +159,7 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
       }
       setBaseUrl(calendarSetting.getBaseURL()) ;
     }
-    calendars_ = cservice.getUserCalendars(username) ;
+    calendars_ = cservice.getUserCalendars(SessionsUtils.getSessionProvider(), username) ;
     List<String> settedCalendars = new ArrayList<String>() ;
     if(calendarSetting != null && calendarSetting.getDefaultPrivateCalendars() != null) {
       settedCalendars = new ArrayList<String>(Arrays.asList(calendarSetting.getDefaultPrivateCalendars())) ;
@@ -324,7 +325,7 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
       } 
       if(defaultCalendars.size() > 0)calendarSetting.setDefaultPrivateCalendars(defaultCalendars.toArray(new String[] {})) ;
       CalendarService cservice = CalendarUtils.getCalendarService() ;
-      cservice.saveCalendarSetting(Util.getPortalRequestContext().getRemoteUser(), calendarSetting) ;
+      cservice.saveCalendarSetting(SessionsUtils.getSessionProvider(), Util.getPortalRequestContext().getRemoteUser(), calendarSetting) ;
       UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
       calendarPortlet.setCalendarSetting(calendarSetting) ;
       calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class).refresh() ;

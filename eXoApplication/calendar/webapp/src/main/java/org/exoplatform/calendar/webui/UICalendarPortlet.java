@@ -5,6 +5,7 @@
 package org.exoplatform.calendar.webui;
 
 import org.exoplatform.calendar.CalendarUtils;
+import org.exoplatform.calendar.SessionsUtils;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.webui.popup.UIPopupAction;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -34,7 +35,7 @@ public class UICalendarPortlet extends UIPortletApplication {
   
   public CalendarSetting getCalendarSetting() throws Exception{
     if(calendarSetting_ != null ) return calendarSetting_ ;
-    calendarSetting_ = CalendarUtils.getCalendarService().getCalendarSetting(CalendarUtils.getCurrentUser()) ; 
+    calendarSetting_ = CalendarUtils.getCalendarService().getCalendarSetting(SessionsUtils.getSessionProvider(), CalendarUtils.getCurrentUser()) ; 
     return calendarSetting_ ; 
   }
   public void setCalendarSetting(CalendarSetting setting) throws Exception{

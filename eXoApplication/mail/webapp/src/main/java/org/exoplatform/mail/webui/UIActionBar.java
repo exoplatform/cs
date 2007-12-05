@@ -11,6 +11,7 @@ import javax.mail.AuthenticationFailedException;
 
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.mail.MailUtils;
+import org.exoplatform.mail.SessionsUtils;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MailSetting;
@@ -138,7 +139,7 @@ public class UIActionBar extends UIContainer {
       uiPopupAction.activate(uiPopupContainer, 600, 0, true) ;
       UIEventForm uiEventForm = uiPopupContainer.createUIComponent(UIEventForm.class, null, null);
       uiPopupContainer.addChild(uiEventForm) ;
-      uiEventForm.initForm(calendarService.getCalendarSetting(MailUtils.getCurrentUser()), null) ;
+      uiEventForm.initForm(calendarService.getCalendarSetting(SessionsUtils.getSessionProvider() ,MailUtils.getCurrentUser()), null) ;
       uiEventForm.update(CalendarUtils.PRIVATE_TYPE, null) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }

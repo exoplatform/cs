@@ -5,6 +5,7 @@
 package org.exoplatform.calendar.webui;
 
 import org.exoplatform.calendar.CalendarUtils;
+import org.exoplatform.calendar.SessionsUtils;
 import org.exoplatform.calendar.service.EventPageList;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.webui.popup.UIAdvancedSearchForm;
@@ -59,7 +60,7 @@ public class UISearchForm extends UIForm {
         calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
       UIListView uiListView = calendarViewContainer.findFirstComponentOfType(UIListView.class) ;
       EventPageList resultPageList = 
-        CalendarUtils.getCalendarService().searchEvent(username, eventQuery, uiListView.getPublicCalendars()) ;
+        CalendarUtils.getCalendarService().searchEvent(SessionsUtils.getSessionProvider(), username, eventQuery, uiListView.getPublicCalendars()) ;
       calendarViewContainer.setRenderedChild(UICalendarViewContainer.LIST_VIEW) ;
       uiListView.update(resultPageList) ;
       uiListView.setViewType(UIListView.TYPE_BOTH) ;

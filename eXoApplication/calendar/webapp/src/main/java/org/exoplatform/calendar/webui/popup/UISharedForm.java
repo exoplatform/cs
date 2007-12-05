@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.exoplatform.calendar.CalendarUtils;
+import org.exoplatform.calendar.SessionsUtils;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
@@ -147,13 +148,13 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
         receiverUser.add(names.trim()) ;
       }      
       if(uiForm.canEdit()) {
-        Calendar cal = calendarService.getUserCalendar(CalendarUtils.getCurrentUser(), uiForm.calendarId_) ;
+        Calendar cal = calendarService.getUserCalendar(SessionsUtils.getSessionProvider(), CalendarUtils.getCurrentUser(), uiForm.calendarId_) ;
         String[] perms =  new String[]{} ;
         receiverUser.toArray(perms) ;
         cal.setEditPermission(perms) ;
-        calendarService.saveUserCalendar(CalendarUtils.getCurrentUser(), cal, false) ;
+        calendarService.saveUserCalendar(SessionsUtils.getSessionProvider(), CalendarUtils.getCurrentUser(), cal, false) ;
       }
-      calendarService.shareCalendar(CalendarUtils.getCurrentUser(), uiForm.calendarId_, receiverUser) ;
+      calendarService.shareCalendar(SessionsUtils.getSystemProvider(), CalendarUtils.getCurrentUser(), uiForm.calendarId_, receiverUser) ;
       UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
       UICalendars uiCalendars = calendarPortlet.findFirstComponentOfType(UICalendars.class) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendars) ;

@@ -23,8 +23,9 @@ import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.FeedData;
 import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.service.RssData;
-import org.exoplatform.registry.JCRRegistryService;
 import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 
 /**
  * Created by The eXo Platform SARL
@@ -40,66 +41,66 @@ public class CalendarServiceImpl implements CalendarService{
   private Map<String, CalendarImportExport> calendarImportExport_ = new HashMap<String, CalendarImportExport>() ;
 
   public CalendarServiceImpl(RepositoryService  repositoryService, 
-      JCRRegistryService jcrRegistryService) throws Exception {
-    storage_ = new JCRDataStorage(repositoryService, jcrRegistryService) ;
+  		NodeHierarchyCreator nodeHierarchyCreator) throws Exception {
+    storage_ = new JCRDataStorage(repositoryService, nodeHierarchyCreator) ;
     calendarImportExport_.put(ICALENDAR, new ICalendarImportExport(storage_)) ;
   }
 
-  public List<CalendarCategory> getCategories(String username) throws Exception {
-    return storage_.getCategories(username) ;
+  public List<CalendarCategory> getCategories(SessionProvider sProvider, String username) throws Exception {
+    return storage_.getCategories(sProvider, username) ;
   }
 
-  public List<GroupCalendarData> getCalendarCategories(String username) throws Exception {
-    return storage_.getCalendarCategories(username);
+  public List<GroupCalendarData> getCalendarCategories(SessionProvider sProvider, String username) throws Exception {
+    return storage_.getCalendarCategories(sProvider, username);
   }
-  public CalendarCategory getCalendarCategory(String username, String calendarCategoryId) throws Exception {
-    return storage_.getCalendarCategory(username, calendarCategoryId) ;
+  public CalendarCategory getCalendarCategory(SessionProvider sProvider, String username, String calendarCategoryId) throws Exception {
+    return storage_.getCalendarCategory(sProvider, username, calendarCategoryId) ;
   }
-  public void saveCalendarCategory(String username, CalendarCategory calendarCategory, boolean isNew) throws Exception {
-    storage_.saveCalendarCategory(username, calendarCategory, isNew) ;
+  public void saveCalendarCategory(SessionProvider sProvider, String username, CalendarCategory calendarCategory, boolean isNew) throws Exception {
+    storage_.saveCalendarCategory(sProvider, username, calendarCategory, isNew) ;
   }
-  public CalendarCategory removeCalendarCategory(String username, String calendarCategoryId) throws Exception {
-    return storage_.removeCalendarCategory(username, calendarCategoryId);
-  }
-
-  public Calendar getUserCalendar(String username, String calendarId) throws Exception {
-    return storage_.getUserCalendar(username, calendarId);
-  }
-  public List<Calendar> getUserCalendars(String username) throws Exception {
-    return storage_.getUserCalendars(username) ;
-  }
-  public List<Calendar> getUserCalendarsByCategory(String username, String calendarCategoryId) throws Exception {
-    return storage_.getUserCalendarsByCategory(username, calendarCategoryId);
-  }
-  public void saveUserCalendar(String username, Calendar calendar, boolean isNew) throws Exception {
-    storage_.saveUserCalendar(username, calendar, isNew) ;
-  }
-  public Calendar removeUserCalendar(String username, String calendarId) throws Exception {
-    return storage_.removeUserCalendar(username, calendarId);
+  public CalendarCategory removeCalendarCategory(SessionProvider sProvider, String username, String calendarCategoryId) throws Exception {
+    return storage_.removeCalendarCategory(sProvider, username, calendarCategoryId);
   }
 
+  public Calendar getUserCalendar(SessionProvider sProvider, String username, String calendarId) throws Exception {
+    return storage_.getUserCalendar(sProvider, username, calendarId);
+  }
+  public List<Calendar> getUserCalendars(SessionProvider sProvider, String username) throws Exception {
+    return storage_.getUserCalendars(sProvider, username) ;
+  }
+  public List<Calendar> getUserCalendarsByCategory(SessionProvider sProvider, String username, String calendarCategoryId) throws Exception {
+    return storage_.getUserCalendarsByCategory(sProvider, username, calendarCategoryId);
+  }
+  public void saveUserCalendar(SessionProvider sProvider, String username, Calendar calendar, boolean isNew) throws Exception {
+    storage_.saveUserCalendar(sProvider, username, calendar, isNew) ;
+  }
+  public Calendar removeUserCalendar(SessionProvider sProvider, String username, String calendarId) throws Exception {
+    return storage_.removeUserCalendar(sProvider, username, calendarId);
+  }
 
-  public Calendar getGroupCalendar(String calendarId) throws Exception {
-    return storage_.getGroupCalendar(calendarId);
+
+  public Calendar getGroupCalendar(SessionProvider sProvider, String calendarId) throws Exception {
+    return storage_.getGroupCalendar(sProvider, calendarId);
   }
-  public List<GroupCalendarData> getGroupCalendars(String[] groupIds) throws Exception {
-    return storage_.getGroupCalendars(groupIds);
+  public List<GroupCalendarData> getGroupCalendars(SessionProvider sProvider, String[] groupIds) throws Exception {
+    return storage_.getGroupCalendars(sProvider, groupIds);
   }
-  public void saveGroupCalendar(Calendar calendar, boolean isNew) throws Exception {
-    storage_.saveGroupCalendar(calendar, isNew) ;
+  public void saveGroupCalendar(SessionProvider sProvider, Calendar calendar, boolean isNew) throws Exception {
+    storage_.saveGroupCalendar(sProvider, calendar, isNew) ;
   }
-  public Calendar removeGroupCalendar(String calendarId) throws Exception {
-    return storage_.removeGroupCalendar(calendarId);
+  public Calendar removeGroupCalendar(SessionProvider sProvider, String calendarId) throws Exception {
+    return storage_.removeGroupCalendar(sProvider, calendarId);
   }
 
-  public List<EventCategory> getEventCategories(String username) throws Exception {
-    return storage_.getEventCategories(username) ;
+  public List<EventCategory> getEventCategories(SessionProvider sProvider, String username) throws Exception {
+    return storage_.getEventCategories(sProvider, username) ;
   }
-  public void saveEventCategory(String username, EventCategory eventCategory, EventCategory newEventCategory, boolean isNew) throws Exception {
-    storage_.saveEventCategory(username, eventCategory, newEventCategory, isNew) ;
+  public void saveEventCategory(SessionProvider sProvider, String username, EventCategory eventCategory, EventCategory newEventCategory, boolean isNew) throws Exception {
+    storage_.saveEventCategory(sProvider, username, eventCategory, newEventCategory, isNew) ;
   }
-  public void removeEventCategory(String username, String eventCategoryName) throws Exception {
-    storage_.removeEventCategory(username,eventCategoryName);
+  public void removeEventCategory(SessionProvider sProvider, String username, String eventCategoryName) throws Exception {
+    storage_.removeEventCategory(sProvider, username,eventCategoryName);
   }  
   /*public void saveGroupEventCategory(Calendar calendar, EventCategory eventCategory, boolean isNew) throws Exception {
     storage_.saveGroupEventCategory(calendar, eventCategory, isNew) ;
@@ -109,37 +110,37 @@ public class CalendarServiceImpl implements CalendarService{
   }*/
 
 
-  public CalendarEvent getUserEvent(String username, String calendarId, String eventId) throws Exception {
-    return storage_.getUserEvent(username, calendarId, eventId);
+  public CalendarEvent getUserEvent(SessionProvider sProvider, String username, String calendarId, String eventId) throws Exception {
+    return storage_.getUserEvent(sProvider, username, calendarId, eventId);
   }
-  public List<CalendarEvent> getUserEventByCalendar(String username, List<String> calendarIds) throws Exception {
-    return storage_.getUserEventByCalendar(username, calendarIds);
+  public List<CalendarEvent> getUserEventByCalendar(SessionProvider sProvider, String username, List<String> calendarIds) throws Exception {
+    return storage_.getUserEventByCalendar(sProvider, username, calendarIds);
   }
-  public List<CalendarEvent> getUserEvents(String username, EventQuery eventQuery) throws Exception {
-    return storage_.getUserEvents(username, eventQuery) ;
+  public List<CalendarEvent> getUserEvents(SessionProvider sProvider, String username, EventQuery eventQuery) throws Exception {
+    return storage_.getUserEvents(sProvider, username, eventQuery) ;
   }
-  public void saveUserEvent(String username, String calendarId, CalendarEvent event, boolean isNew) throws Exception {
-    storage_.saveUserEvent(username, calendarId, event, isNew) ;
+  public void saveUserEvent(SessionProvider sProvider, String username, String calendarId, CalendarEvent event, boolean isNew) throws Exception {
+    storage_.saveUserEvent(sProvider, username, calendarId, event, isNew) ;
   }
-  public CalendarEvent removeUserEvent(String username, String calendarId, String eventId) throws Exception {
-    return storage_.removeUserEvent(username, calendarId, eventId);
+  public CalendarEvent removeUserEvent(SessionProvider sProvider, String username, String calendarId, String eventId) throws Exception {
+    return storage_.removeUserEvent(sProvider, username, calendarId, eventId);
   }
 
 
-  public CalendarEvent getGroupEvent(String calendarId, String eventId) throws Exception {
-    return storage_.getGroupEvent(calendarId, eventId);
+  public CalendarEvent getGroupEvent(SessionProvider sProvider, String calendarId, String eventId) throws Exception {
+    return storage_.getGroupEvent(sProvider, calendarId, eventId);
   }  
-  public List<CalendarEvent> getGroupEventByCalendar(List<String> calendarIds) throws Exception {
-    return storage_.getGroupEventByCalendar(calendarIds);
+  public List<CalendarEvent> getGroupEventByCalendar(SessionProvider sProvider, List<String> calendarIds) throws Exception {
+    return storage_.getGroupEventByCalendar(sProvider, calendarIds);
   } 
-  public List<CalendarEvent> getPublicEvents(EventQuery eventQuery) throws Exception {
-    return storage_.getPublicEvents(eventQuery) ;
+  public List<CalendarEvent> getPublicEvents(SessionProvider sProvider, EventQuery eventQuery) throws Exception {
+    return storage_.getPublicEvents(sProvider, eventQuery) ;
   }
-  public void saveGroupEvent(String calendarId, CalendarEvent event, boolean isNew) throws Exception {
-    storage_.saveGroupEvent(calendarId, event, isNew) ;
+  public void saveGroupEvent(SessionProvider sProvider, String calendarId, CalendarEvent event, boolean isNew) throws Exception {
+    storage_.saveGroupEvent(sProvider, calendarId, event, isNew) ;
   }  
-  public CalendarEvent removeGroupEvent(String calendarId, String eventId) throws Exception {
-    return storage_.removeGroupEvent(calendarId, eventId);
+  public CalendarEvent removeGroupEvent(SessionProvider sProvider, String calendarId, String eventId) throws Exception {
+    return storage_.removeGroupEvent(sProvider, calendarId, eventId);
   }
 
   public CalendarImportExport  getCalendarImportExports(String type) {
@@ -150,56 +151,56 @@ public class CalendarServiceImpl implements CalendarService{
     return calendarImportExport_.keySet().toArray(new String[]{}) ;
   }
 
-  public void saveCalendarSetting(String username, CalendarSetting setting) throws Exception {
-    storage_.saveCalendarSetting(username, setting) ;
+  public void saveCalendarSetting(SessionProvider sProvider, String username, CalendarSetting setting) throws Exception {
+    storage_.saveCalendarSetting(sProvider, username, setting) ;
 
   }
 
-  public CalendarSetting getCalendarSetting(String username) throws Exception {
-    return storage_.getCalendarSetting(username) ;
+  public CalendarSetting getCalendarSetting(SessionProvider sProvider, String username) throws Exception {
+    return storage_.getCalendarSetting(sProvider, username) ;
   }
 
-  public void generateRss(String username, List<String> calendarIds, RssData rssData) throws Exception {
-    storage_.generateRss(username, calendarIds, rssData, calendarImportExport_.get(ICALENDAR)) ;
+  public void generateRss(SessionProvider sProvider, String username, List<String> calendarIds, RssData rssData) throws Exception {
+    storage_.generateRss(sProvider, username, calendarIds, rssData, calendarImportExport_.get(ICALENDAR)) ;
   }
 
-  public List<FeedData> getFeeds(String username) throws Exception {
-    return storage_.getFeeds(username) ;
+  public List<FeedData> getFeeds(SessionProvider sProvider, String username) throws Exception {
+    return storage_.getFeeds(sProvider, username) ;
   }
 
-  public Node getRssHome(String username) throws Exception {
-    return storage_.getRssHome(username) ;
+  public Node getRssHome(SessionProvider sProvider, String username) throws Exception {
+    return storage_.getRssHome(sProvider, username) ;
   }
   
-  public EventPageList searchEvent(String username, EventQuery query, String[] publicCalendarIds)throws Exception {
-    return storage_.searchEvent(username, query, publicCalendarIds) ;
+  public EventPageList searchEvent(SessionProvider sProvider, String username, EventQuery query, String[] publicCalendarIds)throws Exception {
+    return storage_.searchEvent(sProvider, username, query, publicCalendarIds) ;
   }
 
-  public EventCategory getEventCategory(String username, String eventCategoryId) throws Exception {
-    return storage_.getEventCategory(username, eventCategoryId) ;
+  public EventCategory getEventCategory(SessionProvider sProvider, String username, String eventCategoryId) throws Exception {
+    return storage_.getEventCategory(sProvider, username, eventCategoryId) ;
   }
   
-  public Map<Integer, String > searchHightLightEvent(String username, EventQuery eventQuery, String[] publicCalendarIds)throws Exception  {
-    return storage_.searchHightLightEvent(username, eventQuery, publicCalendarIds) ;
+  public Map<Integer, String > searchHightLightEvent(SessionProvider sProvider, String username, EventQuery eventQuery, String[] publicCalendarIds)throws Exception  {
+    return storage_.searchHightLightEvent(sProvider, username, eventQuery, publicCalendarIds) ;
   }
   
-  public void shareCalendar(String username, String calendarId, List<String> receiverUsers) throws Exception {
-    storage_.shareCalendar(username, calendarId, receiverUsers) ;
+  public void shareCalendar(SessionProvider sProvider, String username, String calendarId, List<String> receiverUsers) throws Exception {
+    storage_.shareCalendar(sProvider, username, calendarId, receiverUsers) ;
   }
   
-  public GroupCalendarData getSharedCalendars(String username) throws Exception {
-    return storage_.getSharedCalendars(username) ;
+  public GroupCalendarData getSharedCalendars(SessionProvider sProvider, String username) throws Exception {
+    return storage_.getSharedCalendars(sProvider, username) ;
   }
   
-  public List<CalendarEvent> getEvent(String username, EventQuery eventQuery, String[] publicCalendarIds) throws Exception{
-    return storage_.getEvent(username, eventQuery, publicCalendarIds) ;
+  public List<CalendarEvent> getEvent(SessionProvider sProvider, String username, EventQuery eventQuery, String[] publicCalendarIds) throws Exception{
+    return storage_.getEvent(sProvider, username, eventQuery, publicCalendarIds) ;
   }
   
-  public void removeSharedCalendar(String username, String calendarId) throws Exception {
-    storage_.removeSharedCalendar(username, calendarId) ;
+  public void removeSharedCalendar(SessionProvider sProvider, String username, String calendarId) throws Exception {
+    storage_.removeSharedCalendar(sProvider, username, calendarId) ;
   }
   
-  public void saveEventToSharedCalendar(String username, String calendarId, CalendarEvent event, boolean isNew) throws Exception  {
-    storage_.saveEventToSharedCalendar(username, calendarId, event, isNew) ;
+  public void saveEventToSharedCalendar(SessionProvider sProvider, String username, String calendarId, CalendarEvent event, boolean isNew) throws Exception  {
+    storage_.saveEventToSharedCalendar(sProvider, username, calendarId, event, isNew) ;
   }
 }

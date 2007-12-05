@@ -5,6 +5,7 @@
 package org.exoplatform.calendar.webui.popup;
 
 import org.exoplatform.calendar.CalendarUtils;
+import org.exoplatform.calendar.SessionsUtils;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
@@ -84,13 +85,13 @@ public class UIEventCategoryForm extends UIForm {
       eventCat.setName(name) ;
       eventCat.setDescription(description) ;
       try {
-        if(uiForm.isAddNew_) calendarService.saveEventCategory(username, eventCat, null, true) ;
+        if(uiForm.isAddNew_) calendarService.saveEventCategory(SessionsUtils.getSessionProvider(), username, eventCat, null, true) ;
         else { 
           eventCat = uiForm.getEventCategory() ;
           EventCategory newEventCategory = new EventCategory() ;
           newEventCategory.setName(name) ;
           newEventCategory.setDescription(uiForm.getCategoryDescription()) ;
-          calendarService.saveEventCategory(username, eventCat, newEventCategory, false) ; 
+          calendarService.saveEventCategory(SessionsUtils.getSessionProvider(), username, eventCat, newEventCategory, false) ; 
         }
         uiManager.updateGrid() ;
         uiForm.reset() ;

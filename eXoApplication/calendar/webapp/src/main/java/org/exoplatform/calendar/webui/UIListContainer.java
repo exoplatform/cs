@@ -22,8 +22,8 @@ import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
 )
 public class UIListContainer extends UIContainer implements CalendarView {
   public UIListContainer() throws Exception {
-    addChild(UIListView.class, null, null).setRendered(true) ;
-    addChild(UIPreview.class, null, null).setRendered(true) ;    
+    addChild(UIListView.class, null, null) ;
+    addChild(UIPreview.class, null, null) ;    
   }
 
   public void refresh() throws Exception {

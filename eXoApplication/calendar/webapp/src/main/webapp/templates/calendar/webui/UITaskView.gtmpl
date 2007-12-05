@@ -13,6 +13,7 @@
 	
 	_ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");
 %>
+TaskView
 <div class="TitleBar Result">
 	    <table>
 				<body>

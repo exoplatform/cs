@@ -8,6 +8,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
+
 
 /**
  * Created by The eXo Platform SARL
@@ -16,6 +18,6 @@ import java.util.List;
  * Jul 2, 2007  
  */
 public interface CalendarImportExport {  
-  public void importCalendar(String username, InputStream icalInputStream, String calendarName) throws Exception ;
-  public OutputStream exportCalendar(String username, List<String> calendarIds, String type) throws Exception ;
+  public void importCalendar(SessionProvider sProvider, String username, InputStream icalInputStream, String calendarName) throws Exception ;
+  public OutputStream exportCalendar(SessionProvider sProvider, String username, List<String> calendarIds, String type) throws Exception ;
 }

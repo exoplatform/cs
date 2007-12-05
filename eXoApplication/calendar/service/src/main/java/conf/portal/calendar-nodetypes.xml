@@ -28,6 +28,12 @@
 	  		<propertyDefinition name="exo:isRepeat" requiredType="Boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
   				<valueConstraints/>
 	  		</propertyDefinition>
+	  		<propertyDefinition name="exo:isOver" requiredType="Boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  				<valueConstraints/>
+	  		</propertyDefinition>
+	  		<propertyDefinition name="exo:eventSummary" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  				<valueConstraints/>
+	  		</propertyDefinition>
 	  	</propertyDefinitions>	
 	  </nodeType>	
 	  <nodeType	name="exo:eventAttachment" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">

@@ -11,6 +11,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.exoplatform.calendar.CalendarUtils;
+import org.exoplatform.calendar.SessionsUtils;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.EventQuery;
@@ -31,6 +32,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
  */
 @ComponentConfig(   
     lifecycle = UIFormLifecycle.class,
+    template =  "app:/templates/calendar/webui/UIEventView.gtmpl",
     events = {
       @EventConfig(listeners = UICalendarView.AddEventActionListener.class),      
       @EventConfig(listeners = UICalendarView.DeleteEventActionListener.class),
@@ -78,7 +80,7 @@ public class UIListView extends UICalendarView {
     if(!getViewType().equals(TYPE_BOTH)) {
       eventQuery.setEventType(getViewType()) ;
     }
-    update(calendarService.searchEvent(username, eventQuery, getPublicCalendars())) ; 
+    update(calendarService.searchEvent(SessionsUtils.getSystemProvider(), username, eventQuery, getPublicCalendars())) ; 
   }
   public void update(JCRPageList pageList) throws Exception {
     pageList_ = pageList ;
