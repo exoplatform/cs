@@ -816,7 +816,7 @@
 }
 
 .UIWeekView .EventAlldayContainer .LeftContinueEvent {
-	background: url('background/RightContinueEvent8x9.gif') no-repeat ;	
+	background: url('background/LeftContinueEvent8x9.gif') no-repeat ;	
 	width: 8px;
 	height: 9px;
 	float: left;
