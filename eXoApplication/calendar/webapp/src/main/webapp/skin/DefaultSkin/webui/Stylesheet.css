@@ -615,6 +615,7 @@
 	border:1px solid #ffffff;
 	border-top: none;
 	border-bottom: none;
+	overflow: hidden ;
 }
 
 .UIDayView .EventDayContent .ResizeEventContainer{
