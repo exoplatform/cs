@@ -97,21 +97,18 @@
 							<td ><div  style="width: 55px;"><span></span></div></td>
 							<td colspan="7" class="EventAllday"><div style="position: relative ;">
 								<% for (event in uicomponent.getEventList().values()) {
-									int indexBeginDate = -1 ;
-									int indexEndDate = 7 ;
+									//int indexBeginDate = -1 ;
+									//int indexEndDate = 7 ;
 									begindate =  event.getFromDateTime().getTime() ; //tf.format(event.fromDateTime) ;
 									enddate = event.getToDateTime().getTime() ;//tf.format(event.toDateTime) ;
-									cl = uicomponent.getBeginDateOfWeek() ;				
-								  t = -1 ; 
-									while(t++ <6) {
-						 			  if(uicomponent.isSameDate(event.fromDateTime, cl.time)){
-						 			  	indexBeginDate = t ;
-						 			  }
-						 			  if(uicomponent.isSameDate(event.toDateTime, cl.time)){
-						 			  	indexEndDate = t ;
-						 			  }
-						 			 cl.add(Calendar.DATE, 1) ; 
-							 		}
+									leftClass = "LeftResizeEvent" ;
+									if(event.fromDateTime.before(uicomponent.getBeginDateOfWeek().getTime())){
+									  leftClass = "LeftContinueEvent" ;
+									}  
+									rightClass = "RightResizeEvent" ;
+									if(event.toDateTime.after(uicomponent.getEndDateOfWeek().getTime())){
+									  rightClass = "RightContinueEvent" ;
+									}  		
 							 		//cal = new GregorianCalendar() ;
 								 	//cal.setTime(event.getFromDateTime()) ;
 								  long 	startTime = event.getFromDateTime().getTime() ; // cal.get(Calendar.HOUR_OF_DAY)*60 + cal.get(Calendar.MINUTE) ;
@@ -121,13 +118,13 @@
 									title = tf.format(event.getFromDateTime()) + "->" + tf.format(event.getToDateTime())+ ":&#013; " + event.summary ;
 									actionLink =  uicomponent.event("SaveEvent",event.getId()+"&calendarId="+event.getCalendarId()+"&startTime=beginTime&finishTime=endTime") ;
 								%>	
-										 <div class="EventContainer EventAlldayContainer WeekViewEventBoxes $color" eventCat="$event.eventCategoryId" style="position: absolute ; border: solid 1px grey ;" indexBeginDate='$indexBeginDate' indexEndDate='$indexEndDate' calType="$event.calType"  eventid="$event.id" calid="$event.calendarId" starttime="$begindate" endtime="$enddate"  style="height: 22px;" title="$title" actionlink="$actionLink">
-										 	<div class="LeftResizeEvent"><span></span></div>
+										 <div class="EventContainer EventAlldayContainer WeekViewEventBoxes $color" eventCat="$event.eventCategoryId" style="position: absolute ; border: solid 1px grey ;" calType="$event.calType"  eventid="$event.id" calid="$event.calendarId" starttime="$begindate" endtime="$enddate"  style="height: 22px;" title="$title" actionlink="$actionLink">
+										 	<div class="$leftClass"><span></span></div>
 										 	<div class="EventAlldayContent" style="float: left;">
 											 	<%=event.summary%>
 											 	<%//=tf.format(event.fromDateTime)%>
 											 </div>
-										 	<div class="RightContinueEvent"><span></span></div>
+										 	<div class="$rightClass"><span></span></div>
 										 	<div style="clear: left;"><span></span></div>
 										 </div>
 								<%}%>
