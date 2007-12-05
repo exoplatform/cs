@@ -166,6 +166,10 @@
 	background: url('icons/ApproveThreadsIcon.gif') no-repeat left center;
 }
 
+.SetUnApproveIcon {
+	background: url('icons/ModeratedIcon.gif') no-repeat left center;
+}
+
 .SetCloseIcon {
 	background: url('icons/CloseSelectedForum.gif') no-repeat left center;
 }

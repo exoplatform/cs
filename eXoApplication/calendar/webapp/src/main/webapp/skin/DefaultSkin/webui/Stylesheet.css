@@ -785,6 +785,10 @@
 	overflow: hidden;
 }
 
+.UIWeekView .EventAlldayContainer {
+	height: 13px;
+}
+
 .UIWeekView .EventAlldayContainer .LeftResizeEvent{
 	background: url('background/LeftResizeEvent2x11.gif') no-repeat ;	
 	width: 2px;
@@ -802,6 +806,15 @@
 	cursor: w-resize;
 	margin: 1px 0px 0px 0px ;
 }
+
+.UIWeekView .EventAlldayContainer .ContinueEvent{
+	background: url('background/ContinueEvent8x9.gif') no-repeat ;	
+	width: 8px;
+	height: 9px;
+	float: right;
+	margin: 2px 0px 0px 0px ;
+}
+
 .UIWeekView .WorkOffTime {
 	background-color: #f3f3f3;
 }
