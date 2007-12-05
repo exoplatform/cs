@@ -8,6 +8,8 @@ import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.mail.internet.InternetAddress;
+
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadResource;
 import org.exoplatform.download.DownloadService;
@@ -17,8 +19,17 @@ import org.exoplatform.mail.service.Attachment;
 import org.exoplatform.mail.service.JCRMessageAttachment;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
+import org.exoplatform.mail.service.Utils;
+import org.exoplatform.mail.webui.popup.UIAddContactForm;
+import org.exoplatform.mail.webui.popup.UIComposeForm;
+import org.exoplatform.mail.webui.popup.UIExportForm;
+import org.exoplatform.mail.webui.popup.UIPopupAction;
+import org.exoplatform.mail.webui.popup.UIPopupActionContainer;
+import org.exoplatform.mail.webui.popup.UIPrintPreview;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -34,7 +45,12 @@ import org.exoplatform.webui.event.EventListener;
     template =  "app:/templates/mail/webui/UIMessagePreview.gtmpl",
     events = {
         @EventConfig(listeners = UIMessagePreview.DownloadAttachmentActionListener.class),
-        @EventConfig(listeners = UIMessagePreview.AddStarActionListener.class)
+        @EventConfig(listeners = UIMessagePreview.AddStarActionListener.class),
+        @EventConfig(listeners = UIMessagePreview.ReplyActionListener.class),
+        @EventConfig(listeners = UIMessagePreview.ForwardActionListener.class), 
+        @EventConfig(listeners = UIMessagePreview.PrintActionListener.class),
+        @EventConfig(listeners = UIMessagePreview.ExportActionListener.class),
+        @EventConfig(listeners = UIMessagePreview.AddContactActionListener.class)
     }
 )
 
@@ -90,18 +106,140 @@ public class UIMessagePreview extends UIComponent {
   static public class AddStarActionListener extends EventListener<UIMessagePreview> {
     public void execute(Event<UIMessagePreview> event) throws Exception { 
       UIMessagePreview uiMessagePreview = event.getSource();
+      String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
       UIMailPortlet uiPortlet = uiMessagePreview.getAncestorOfType(UIMailPortlet.class);
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       MailService mailServ = uiPortlet.getApplicationComponent(MailService.class);
       try {
-        Message msg = uiMessagePreview.getMessage();
+        Message msg = mailServ.getMessageById(username, accountId, msgId);
         msg.setHasStar(!msg.hasStar());
         mailServ.saveMessage(username, accountId, msg, false);
       } catch (Exception e) { }
       uiMessageList.updateList();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
+    }
+  }
+  
+  static public class ReplyActionListener extends EventListener<UIMessagePreview> {
+    public void execute(Event<UIMessagePreview> event) throws Exception {
+      UIMessagePreview uiMessagePreview = event.getSource() ; 
+      String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      UIMailPortlet uiPortlet = uiMessagePreview.getAncestorOfType(UIMailPortlet.class) ;
+      UINavigationContainer uiNavigation = uiPortlet.getChild(UINavigationContainer.class) ;
+      UISelectAccount uiSelect = uiNavigation.getChild(UISelectAccount.class) ;
+      String accId = uiSelect.getSelectedValue() ;
+      UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
+      UIPopupActionContainer uiPopupContainer = uiPopupAction.activate(UIPopupActionContainer.class, 850) ;
+      
+      UIComposeForm uiComposeForm = uiPopupContainer.createUIComponent(UIComposeForm.class, null, null);
+      MailService mailSvr = uiMessagePreview.getApplicationComponent(MailService.class) ;
+      String username = uiPortlet.getCurrentUser() ;
+      if (msgId != null) {
+        Message message = mailSvr.getMessageById(username, accId, msgId);
+        uiComposeForm.setMessage(message);
+        uiComposeForm.setFieldToValue(message.getFrom());
+        uiComposeForm.setFieldSubjectValue("Re: " + message.getSubject());
+        uiComposeForm.setFieldContentValue(message.getMessageBody());
+      }
+      uiPopupContainer.addChild(uiComposeForm) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessagePreview.class));
+    }
+  }
+  
+  static public class ForwardActionListener extends EventListener<UIMessagePreview> {
+    public void execute(Event<UIMessagePreview> event) throws Exception {
+      UIMessagePreview uiMessagePreview = event.getSource() ; 
+      String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      UIMailPortlet uiPortlet = uiMessagePreview.getAncestorOfType(UIMailPortlet.class) ;
+      UINavigationContainer uiNavigation = uiPortlet.getChild(UINavigationContainer.class) ;
+      UISelectAccount uiSelect = uiNavigation.getChild(UISelectAccount.class) ;
+      String accId = uiSelect.getSelectedValue() ;
+      UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
+      UIPopupActionContainer uiPopupContainer = uiPopupAction.activate(UIPopupActionContainer.class, 850) ;
+      
+      UIComposeForm uiComposeForm = uiPopupContainer.createUIComponent(UIComposeForm.class, null, null);
+
+      MailService mailSvr = uiMessagePreview.getApplicationComponent(MailService.class) ;
+      String username = uiPortlet.getCurrentUser() ;
+      if (msgId != null) {
+        Message message = mailSvr.getMessageById(username, accId, msgId);
+        uiComposeForm.setMessage(message);
+        uiComposeForm.setFieldSubjectValue("Fwd: " + message.getSubject());
+        String forwardedText = "\n\n\n-------- Original Message --------\n" +
+            "Subject: " + message.getSubject() + "\nDate: " + message.getSendDate() + 
+            "\nFrom: " + message.getFrom() + 
+            "\nTo: " + message.getMessageTo() + 
+            "\n\n" + message.getMessageBody();         
+        uiComposeForm.setFieldContentValue(forwardedText);
+        uiComposeForm.setFieldToValue("");
+      }
+      uiPopupContainer.addChild(uiComposeForm) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessagePreview.class));
+    }
+  }
+  
+  static public class PrintActionListener extends EventListener<UIMessagePreview> {
+    public void execute(Event<UIMessagePreview> event) throws Exception {
+      UIMessagePreview uiMessagePreview = event.getSource();
+      String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      UIMailPortlet uiPortlet = uiMessagePreview.getAncestorOfType(UIMailPortlet.class);
+      UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
+      UIPrintPreview uiPrintPreview = uiPopup.activate(UIPrintPreview.class, 700) ;
+      uiPrintPreview.setPrintMessageId(msgId) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessagePreview.class));
+    }
+  }
+  
+  static public class AddContactActionListener extends EventListener<UIMessagePreview> {
+    public void execute(Event<UIMessagePreview> event) throws Exception {
+      UIMessagePreview uiMessagePreview = event.getSource() ;   
+      String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      String username = MailUtils.getCurrentUser();
+      String accountId = MailUtils.getAccountId() ;
+      MailService mailServ = MailUtils.getMailService() ;
+      Message msg = mailServ.getMessageById(username, accountId, msgId);
+      UIMailPortlet uiPortlet = uiMessagePreview.getAncestorOfType(UIMailPortlet.class);
+      UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
+      UIAddContactForm uiAddContactForm = uiPopup.createUIComponent(UIAddContactForm.class, null, null);
+      uiPopup.activate(uiAddContactForm, 560, 0, true);
+      InternetAddress[] addresses  = Utils.getInternetAddress(msg.getFrom());
+      String personal = Utils.getPersonal(addresses[0]);
+      String firstName = personal;
+      String lastName = "";
+      if (personal.indexOf(" ") > 0) {
+        firstName = personal.substring(0, personal.indexOf(" "));
+        lastName = personal.substring(personal.indexOf(" ") + 1, personal.length());
+      }
+      uiAddContactForm.setFirstNameField(firstName);
+      uiAddContactForm.setLastNameField(lastName);
+      uiAddContactForm.setEmailField(addresses[0].getAddress());
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup);   
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessagePreview.class));
+    }
+  }
+  
+  static public class ExportActionListener extends EventListener<UIMessagePreview> {
+    public void execute(Event<UIMessagePreview> event) throws Exception {
+      UIMessagePreview uiMessagePreview = event.getSource() ;   
+      String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      UIMailPortlet uiPortlet = uiMessagePreview.getAncestorOfType(UIMailPortlet.class);
+      UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
+      UIExportForm uiExportForm = uiPopup.createUIComponent(UIExportForm.class, null, null);
+      uiPopup.activate(uiExportForm, 600, 0, true);
+      String username = uiPortlet.getCurrentUser();
+      String accountId = MailUtils.getAccountId();
+      MailService mailServ = MailUtils.getMailService();
+      try {
+      Message msg = mailServ.getMessageById(username, accountId, msgId);
+      uiExportForm.setExportMessage(msg);
+      } catch (Exception e) { }
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup);  
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessagePreview.class));
     }
   }
 }

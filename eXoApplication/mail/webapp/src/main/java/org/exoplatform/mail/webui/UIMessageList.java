@@ -165,10 +165,20 @@ public class UIMessageList extends UIForm {
   
   public List<Message> getCheckedMessage() throws Exception {
     List<Message> messageList = new ArrayList<Message>();
+    String username = MailUtils.getCurrentUser();
+    String accountId = MailUtils.getAccountId();
+    MailService mailSrv = MailUtils.getMailService();
     for (Message msg : getMessageList()) {
       UIFormCheckBoxInput<Boolean> uiCheckbox = getChildById(msg.getId());
       if (uiCheckbox != null && uiCheckbox.isChecked()) {
         messageList.add(msg);
+        // For Conversation
+        if (msg.isRootConversation() && msg.getMessageIds() != null) {
+          for (int i = 0; i < msg.getMessageIds().length; i++) {
+            Message conversation = mailSrv.getMessageById(username, accountId, msg.getMessageIds()[i]);
+            if (conversation != null) messageList.add(conversation);
+          }
+        }
       }
     }
     return messageList;
@@ -272,7 +282,7 @@ public class UIMessageList extends UIForm {
   
   static public class ReadActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
-      
+      //TODO : implement this function
     }
   }
   
@@ -467,7 +477,6 @@ public class UIMessageList extends UIForm {
   static public class ForwardActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource() ; 
-      System.out.println(" =========== > Forward Action");
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       if (msgId == null) msgId = uiMessageList.getSelectedMessageId();
       UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
@@ -510,7 +519,6 @@ public class UIMessageList extends UIForm {
   static public class DeleteActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource();
-      System.out.println("======== >>> DeleteActionListener");
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
@@ -587,9 +595,8 @@ public class UIMessageList extends UIForm {
         }
       }
       uiMessageList.updateList();
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList);
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIFolderContainer.class));
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessageArea.class));
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIFolderContainer.class));
     }
   }
   
@@ -611,9 +618,8 @@ public class UIMessageList extends UIForm {
         }
       }
       uiMessageList.updateList();
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList);
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIFolderContainer.class));
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessageArea.class));
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIFolderContainer.class));
     }
   }
 
@@ -661,7 +667,6 @@ public class UIMessageList extends UIForm {
   
   static public class MoveMessagesActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
-      System.out.println(" === >>> Move Messages Action Listener");
       UIMessageList uiMessageList = event.getSource() ;    
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class);    

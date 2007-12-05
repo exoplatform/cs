@@ -397,10 +397,9 @@ public class MailServiceImpl implements MailService{
           if (rootMsg != null) {
             newMsg.setIsRootConversation(false);
             newMsg.setRoot(rootMsg.getId());
+            newMsg.setUnread(false);
             updateRootMessage(username, accountId, rootMsg, newMsg);
-          } else {
-            newMsg.setIsRootConversation(true);
-          }
+          } 
           storage_.saveMessage(username, account.getId(), newMsg, true);
           messageList.add(newMsg);
                     
@@ -413,8 +412,12 @@ public class MailServiceImpl implements MailService{
               storeFolder.setLabel(account.getIncomingFolder()) ;
               storeFolder.setPersonalFolder(false) ;
             }  
-            storeFolder.setNumberOfUnreadMessage(storeFolder.getNumberOfUnreadMessage() + 1) ;
-            storeFolder.setTotalMessage(storeFolder.getTotalMessage() + 1) ;
+            if (newMsg.isRootConversation() || (rootMsg != null && !rootMsg.isUnread())) {
+              storeFolder.setNumberOfUnreadMessage((storeFolder.getNumberOfUnreadMessage() + 1)) ;
+            }
+            if (newMsg.isRootConversation()) {
+              storeFolder.setTotalMessage(storeFolder.getTotalMessage() + 1) ;
+            }
             storage_.saveFolder(username, account.getId(), storeFolder) ;
           }
           
@@ -558,6 +561,7 @@ public class MailServiceImpl implements MailService{
     }
     msgIdList.add(newMsg.getId());
     rootMsg.setMessageIds(msgIdList.toArray(new String[]{}));
+    if (!rootMsg.isUnread()) rootMsg.setUnread(true);
     rootMsg.setFolders(newMsg.getFolders());
     rootMsg.setReceivedDate(newMsg.getReceivedDate());
     saveMessage(username, accountId, rootMsg, false);

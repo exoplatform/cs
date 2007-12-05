@@ -121,7 +121,57 @@
 									<div class="DownArrow1Icon"><span></span></div>
 									<div class="ShowHideTitle" onclick="javascript:eXo.mail.UIMailPortlet.showHideMessageHeader(this)">Show details</div>
 									<div class="MonthDate">June 26</div>
-									<div class="Actions" title="Actions on this message"><span></span></div>
+									<div class="Actions" title="Actions on this message" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
+                  <% /*Begin Popup Menu*/ %>
+                    <div style="position: relative;">
+                      <div class="UIPopupCategory" style="display: none;">
+                        <div class="PopupCategoryDecorator">
+                      
+                          <div class="UIRightClickPopupMenu" style="display: block;">
+                            <div class="UIContextMenuContainer">
+                              <div class="TopLeftRightClickPopupMenu">
+                                <div class="TopRightRightClickPopupMenu">
+                                  <div class="TopCenterRightClickPopupMenu"><span></span></div>
+                                </div>
+                              </div>
+                              <div class="MiddleLeftRightClickPopupMenu">
+                                <div class="MiddleRightRightClickPopupMenu">
+                                  <div class="UIRightPopupMenuContainer">
+                                    <a class="MenuItem" href="<%=uicomponent.event("Reply", msg.getId())%>">   
+                                      <div class="ItemIcon ReplyMailIcon"> Reply</div>
+                                    </a>  
+                                    <a class="MenuItem" href="<%=uicomponent.event("Forward", msg.getId())%>">   
+                                      <div class="ItemIcon ForwardMailIcon"> Forward </div>
+                                    </a>
+                                    <a class="MenuItem" href="<%=uicomponent.event("Print", msg.getId())%>">   
+                                      <div class="ItemIcon PrintMailIcon"> Print </div>
+                                    </a>
+                                    <a class="MenuItem" href="<%=uicomponent.event("Delete", msg.getId())%>">   
+                                      <div class="ItemIcon DeleteMailIcon"> Delete </div>
+                                    </a>
+                                    <a class="MenuItem" href="<%=uicomponent.event("Print", msg.getId())%>">   
+                                      <div class="ItemIcon AddContactIcon"> Add contact </div>
+                                    </a>
+                                    <a class="MenuItem" href="<%=uicomponent.event("Export", msg.getId())%>">   
+                                    <div class="ItemIcon ExportIcon"> Export (*.eml) </div>
+                                    </a>
+                                    <div class="RightClickCustomItem"></div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="BottomLeftRightClickPopupMenu">
+                            <div class="BottomRightRightClickPopupMenu">
+                              <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+                            </div>
+                          </div>
+                            </div>
+                          </div>
+                        </div>
+                      
+                      </div>
+                    </div>
+                <% /*End Popup Menu*/ %>
+                  </div>
 									<div style="clear: both;"><span></span></div>
 								</div>
 								<div style="clear: both;"><span></span></div>
