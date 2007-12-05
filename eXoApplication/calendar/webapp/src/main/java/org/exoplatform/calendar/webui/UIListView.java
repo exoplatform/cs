@@ -53,7 +53,7 @@ public class UIListView extends UICalendarView {
   private String selectedEvent_ = null ;
   private boolean isShowEventAndTask = true ;
   private boolean isSearchResult = false ;
-  private long currentPage_ = 1 ;
+  //private long currentPage_ = 1 ;
   public UIListView() throws Exception{
     if(getEvents().length > 0 ) {
       selectedEvent_ = getEvents()[0].getId() ;
@@ -109,14 +109,14 @@ public class UIListView extends UICalendarView {
   public long getAvailablePage(){
     return pageList_.getAvailablePage() ; 
   }
-  public long getCurrentPage() { return currentPage_;}
-  public void setCurrentPage(long page) { currentPage_ = page ;}
+  public long getCurrentPage() { return pageList_.getCurrentPage();}
+  public void setCurrentPage(long page) { pageList_.setCurrentPage(page) ;}
   protected boolean isShowEvent() {return isShowEvent_ ;}
 
   protected boolean isShowEventAndTask() {return isShowEventAndTask ;}
   public void setShowEventAndTask(boolean show) {isShowEventAndTask = show ;}
 
-  protected boolean isDisplaySearchResult() {return isSearchResult ;}
+  public boolean isDisplaySearchResult() {return isSearchResult ;}
   public void setDisplaySearchResult(boolean show) {isSearchResult = show ;}
 
   public void setSelectedEvent(String selectedEvent) { this.selectedEvent_ = selectedEvent ; }

@@ -123,7 +123,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
 
   public UICalendarView() throws Exception{
     initCategories() ;
-    
+
     calendar_ = GregorianCalendar.getInstance() ;
     calendar_.setLenient(false) ;
     int gmtoffset = calendar_.get(Calendar.DST_OFFSET) + calendar_.get(Calendar.ZONE_OFFSET);
@@ -157,7 +157,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
     }
     dateTimeFormat_ = getDateFormat() + " " + getTimeFormat() ;
     TimeZone settingTimeZone = TimeZone.getTimeZone(calendarSetting_.getTimeZone()) ;
-   // calendar_.set(Calendar.ZONE_OFFSET, settingTimeZone.getRawOffset()) ;
+    // calendar_.set(Calendar.ZONE_OFFSET, settingTimeZone.getRawOffset()) ;
   }
   public void setViewType(String viewType) { this.viewType_ = viewType ; }
   public String getViewType() { return viewType_ ; }
@@ -709,8 +709,11 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
             uiView.refresh() ;
           } else if(uiContainer.getRenderedChild() instanceof UIListContainer) {
             UIListContainer uiView = uiContainer.getChild(UIListContainer.class) ;
-            uiView.setCurrentCalendar(cal) ;
-            uiView.refresh() ;
+            UIListView uiListView = uiView.getChild(UIListView.class) ;
+            if(!uiListView.isDisplaySearchResult()){
+              uiView.setCurrentCalendar(cal) ;
+              uiView.refresh() ;
+            }
           } else {
             uiContainer.setRenderedChild(UIDayView.class) ;
             UIDayView uiView = uiContainer.getChild(UIDayView.class) ;
