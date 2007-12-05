@@ -66,7 +66,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
   final public static String FIELD_DESCRIPTION = "description".intern() ;
   final public static String UIQUICKADDTASK = "UIQuickAddTask".intern() ;
 
-  private String calType_ = "0" ;
+  private String calType_ = "0".intern() ;
   private boolean isEvent_ = true ;
   public UIQuickAddEvent() throws Exception {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
@@ -206,33 +206,6 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
       } else if(from.equals(to)) {
         to = CalendarUtils.getEndDay(from).getTime() ;
       } 
-      /*if(uiForm.getIsAllDay()) {
-        java.util.Calendar cal = GregorianCalendar.getInstance() ;
-        cal.setTime(from) ;
-        from = CalendarUtils.getBeginDay(cal).getTime() ;
-        cal.setTime(to) ;
-        cal.set(java.util.Calendar.HOUR, 0) ;
-        cal.set(java.util.Calendar.MINUTE, 0) ;
-        if(from.equals(cal.getTime())) {
-          cal.add(java.util.Calendar.DATE,1) ;
-        } else if(from.after(cal.getTime())) {
-          uiApp.addMessage(new ApplicationMessage(uiForm.getId() + ".msg.logic-required", null, ApplicationMessage.WARNING)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-          return ;
-        } else {
-          cal.setTime(to) ;
-          cal.set(java.util.Calendar.HOUR, 0) ;
-          cal.set(java.util.Calendar.MINUTE, 0) ;
-          cal.add(java.util.Calendar.DATE,1) ;
-        }
-        to = cal.getTime() ;
-      }else {      
-        if(from.equals(to) || from.after(to)) {
-          uiApp.addMessage(new ApplicationMessage(uiForm.getId() + ".msg.logic-required", null, ApplicationMessage.WARNING)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-          return ;
-        }  
-      }*/
       try {
         CalendarEvent calEvent = new CalendarEvent() ;
         calEvent.setSummary(uiForm.getEventSummary()) ;

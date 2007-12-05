@@ -87,8 +87,8 @@ uiform.begin() ;
 	              </tr> 	              
 	              <tr>
 	               <td ></td>
-	               <td class="Text">Event Sharing:        </td>
-	               <td class="Text"><%=(event.isPrivate() == null)? "" : event.isPrivate()%></td>
+	               <td class="Text">Event Sharing:</td>
+	               <td class="Text"><%=(event.isPrivate() == null)? "" : !event.isPrivate()%></td>
 	              </tr> 
 	              <tr>
 	               <td ></td>

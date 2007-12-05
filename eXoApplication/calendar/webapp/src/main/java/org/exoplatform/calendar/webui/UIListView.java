@@ -164,6 +164,10 @@ public class UIListView extends UICalendarView {
       UIListView uiListView = event.getSource() ;
       uiListView.setDisplaySearchResult(false) ;
       uiListView.refresh() ;
+      UICalendarPortlet uiPortlet = uiListView.getAncestorOfType(UICalendarPortlet.class) ;
+      UISearchForm uiSearchForm = uiPortlet.findFirstComponentOfType(UISearchForm.class) ;
+      uiSearchForm.reset() ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiSearchForm) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiListView.getParent()) ;
     }
   }

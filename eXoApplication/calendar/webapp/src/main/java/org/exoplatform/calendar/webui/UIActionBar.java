@@ -4,7 +4,6 @@
  **************************************************************************/
 package org.exoplatform.calendar.webui;
 
-import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -16,9 +15,7 @@ import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.webui.popup.UICalendarSettingForm;
 import org.exoplatform.calendar.webui.popup.UIFeed;
 import org.exoplatform.calendar.webui.popup.UIPopupAction;
-import org.exoplatform.calendar.webui.popup.UIPopupContainer;
 import org.exoplatform.calendar.webui.popup.UIQuickAddEvent;
-import org.exoplatform.calendar.webui.popup.UITaskForm;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -39,7 +36,6 @@ import org.exoplatform.webui.event.EventListener;
     template =  "app:/templates/calendar/webui/UIActionBar.gtmpl", 
     events = {
         @EventConfig(listeners = UIActionBar.QuickAddEventActionListener.class),
-        //@EventConfig(listeners = UIActionBar.AddTasksActionListener.class),
         @EventConfig(listeners = UIActionBar.ChangeViewActionListener.class),
         @EventConfig(listeners = UIActionBar.SettingActionListener.class),
         @EventConfig(listeners = UIActionBar.RSSActionListener.class),
