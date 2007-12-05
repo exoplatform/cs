@@ -807,11 +807,19 @@
 	margin: 1px 0px 0px 0px ;
 }
 
-.UIWeekView .EventAlldayContainer .ContinueEvent{
-	background: url('background/ContinueEvent8x9.gif') no-repeat ;	
+.UIWeekView .EventAlldayContainer .RightContinueEvent {
+	background: url('background/RightContinueEvent8x9.gif') no-repeat ;	
 	width: 8px;
 	height: 9px;
 	float: right;
+	margin: 2px 0px 0px 0px ;
+}
+
+.UIWeekView .EventAlldayContainer .LeftContinueEvent {
+	background: url('background/RightContinueEvent8x9.gif') no-repeat ;	
+	width: 8px;
+	height: 9px;
+	float: left;
 	margin: 2px 0px 0px 0px ;
 }
 

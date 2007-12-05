@@ -127,7 +127,7 @@
 											 	<%=event.summary%>
 											 	<%//=tf.format(event.fromDateTime)%>
 											 </div>
-										 	<div class="ContinueEvent"><span></span></div>
+										 	<div class="RightContinueEvent"><span></span></div>
 										 	<div style="clear: left;"><span></span></div>
 										 </div>
 								<%}%>
