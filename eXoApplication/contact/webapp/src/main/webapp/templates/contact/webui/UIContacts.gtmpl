@@ -427,7 +427,7 @@
 			  	<div class="TitleVCards" >
 				  	<div class="StateIcon OnlineIcon"><%=(contact.getFullName()==null ? "_" : contact.getFullName())%></div>
 			  		<% if (tagIds != null && tagIds.length > 0) { %>
-					  		<a href="<%=uicomponent.event("TagInfo", contact.getId())%>">
+					  		<a href="#">
 					  			<div class="TagIcon $iconTag" title="Show tag info"><span></span></div>
 					  		</a>
 			  		<% } %>
@@ -505,7 +505,7 @@
 			  	<div class="TitleVCards" >
 				  	<div class="StateIcon OfflineIcon"><%=(contact.getFullName()==null ? "_" : contact.getFullName())%></div>
 			  		<% if (tagIds != null && tagIds.length > 0) { %>
-						     <a href="<%=uicomponent.event("TagInfo", contact.getId())%>">
+						     <a href="#">
 							   	 <div class="TagIcon $iconTag" title="Show tag info"><span></span></div>
 								 </a>
 			  		<% } %>	
