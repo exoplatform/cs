@@ -81,18 +81,7 @@ public class UIMoveMessageForm extends UIForm implements UIPopupComponent {
       String destFolder = uiMoveMessageForm.getUIFormSelectBox(SELECT_FOLDER).getValue();     
 
       for(Message message: uiMoveMessageForm.getMessageList()) {
-         Folder oldFolder = mailSrv.getFolder(username, accountId, message.getFolders()[0]);
-         message.setFolders(new String[] {destFolder});         
-         mailSrv.saveMessage(username, accountId, message, false);
-         Folder folder = mailSrv.getFolder(username, accountId, message.getFolders()[0]);
-         oldFolder.setTotalMessage(oldFolder.getTotalMessage() - 1);
-         folder.setTotalMessage(folder.getTotalMessage() + 1);
-         if (message.isUnread()) {           
-           oldFolder.setNumberOfUnreadMessage(oldFolder.getNumberOfUnreadMessage() - 1);         
-           folder.setNumberOfUnreadMessage(folder.getNumberOfUnreadMessage() + 1);                    
-         }
-         mailSrv.saveFolder(username, accountId, oldFolder);
-         mailSrv.saveFolder(username, accountId, folder);
+         mailSrv.moveMessages(username, accountId, message.getId(), message.getFolders()[0], destFolder);
       }       
       uiMessageList.updateList(); 
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMoveMessageForm.getAncestorOfType(UIPopupAction.class)) ;     

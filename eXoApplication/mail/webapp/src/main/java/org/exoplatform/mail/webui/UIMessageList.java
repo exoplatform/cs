@@ -679,18 +679,7 @@ public class UIMessageList extends UIForm {
       String username = MailUtils.getCurrentUser();
       String accountId = MailUtils.getAccountId();
       for(Message message : uiMessageList.getCheckedMessage()) {
-        Folder oldFolder = mailSrv.getFolder(username, accountId, message.getFolders()[0]);
-        message.setFolders(new String[]{ folderId });         
-        mailSrv.saveMessage(username, accountId, message, false);
-        Folder folder = mailSrv.getFolder(username, accountId, folderId);
-        oldFolder.setTotalMessage(oldFolder.getTotalMessage() - 1);
-        folder.setTotalMessage(folder.getTotalMessage() + 1);
-        if (message.isUnread()) {           
-          oldFolder.setNumberOfUnreadMessage(oldFolder.getNumberOfUnreadMessage() - 1);         
-          folder.setNumberOfUnreadMessage(folder.getNumberOfUnreadMessage() + 1);                    
-        }
-        mailSrv.saveFolder(username, accountId, oldFolder);
-        mailSrv.saveFolder(username, accountId, folder);
+        mailSrv.moveMessages(username, accountId, message.getId(), message.getFolders()[0], folderId);
      }       
      uiMessageList.updateList();                   
     }
