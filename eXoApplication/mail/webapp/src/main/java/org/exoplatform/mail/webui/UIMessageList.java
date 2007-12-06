@@ -675,9 +675,8 @@ public class UIMessageList extends UIForm {
         uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-no-messages", null, ApplicationMessage.INFO)) ;
         return;
       }
-            
       UIMoveMessageForm uiMoveMessageForm = uiMessageList.createUIComponent(UIMoveMessageForm.class,null, null);
-      
+      uiMoveMessageForm.setMessageList(uiMessageList.getCheckedMessage());
       uiPopupAction.activate(uiMoveMessageForm, 600, 0, true);             
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);        
     }

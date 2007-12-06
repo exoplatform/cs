@@ -72,7 +72,6 @@ public class UIMoveMessageForm extends UIForm implements UIPopupComponent {
   
   static public class SaveActionListener extends EventListener<UIMoveMessageForm> {
     public void execute(Event<UIMoveMessageForm> event) throws Exception {
-      System.out.println("=====>>>> Move Folder Action Listener");
       UIMoveMessageForm uiMoveMessageForm = event.getSource() ;
       MailService mailSrv = uiMoveMessageForm.getApplicationComponent(MailService.class) ;
       UIMailPortlet uiPortlet = uiMoveMessageForm.getAncestorOfType(UIMailPortlet.class) ;
@@ -80,12 +79,10 @@ public class UIMoveMessageForm extends UIForm implements UIPopupComponent {
       String username = uiPortlet.getCurrentUser() ;
       String accountId =  MailUtils.getAccountId();
       String destFolder = uiMoveMessageForm.getUIFormSelectBox(SELECT_FOLDER).getValue();     
-          
-      String[] destFolders = { destFolder };  
 
-      for(Message message: uiMessageList.getCheckedMessage()) {
+      for(Message message: uiMoveMessageForm.getMessageList()) {
          Folder oldFolder = mailSrv.getFolder(username, accountId, message.getFolders()[0]);
-         message.setFolders(destFolders);         
+         message.setFolders(new String[] {destFolder});         
          mailSrv.saveMessage(username, accountId, message, false);
          Folder folder = mailSrv.getFolder(username, accountId, message.getFolders()[0]);
          oldFolder.setTotalMessage(oldFolder.getTotalMessage() - 1);
@@ -97,10 +94,10 @@ public class UIMoveMessageForm extends UIForm implements UIPopupComponent {
          mailSrv.saveFolder(username, accountId, oldFolder);
          mailSrv.saveFolder(username, accountId, folder);
       }       
-      uiMessageList.updateList();
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));   
+      uiMessageList.updateList(); 
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMoveMessageForm.getAncestorOfType(UIPopupAction.class)) ;     
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIFolderContainer.class)) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));  
       uiPortlet.cancelAction();
     }
   }

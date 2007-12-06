@@ -23,6 +23,7 @@ import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.popup.UIAddContactForm;
 import org.exoplatform.mail.webui.popup.UIComposeForm;
 import org.exoplatform.mail.webui.popup.UIExportForm;
+import org.exoplatform.mail.webui.popup.UIMoveMessageForm;
 import org.exoplatform.mail.webui.popup.UIPopupAction;
 import org.exoplatform.mail.webui.popup.UIPopupActionContainer;
 import org.exoplatform.mail.webui.popup.UIPrintPreview;
@@ -48,7 +49,8 @@ import org.exoplatform.webui.event.EventListener;
         @EventConfig(listeners = UIMessagePreview.ForwardActionListener.class), 
         @EventConfig(listeners = UIMessagePreview.PrintActionListener.class),
         @EventConfig(listeners = UIMessagePreview.ExportActionListener.class),
-        @EventConfig(listeners = UIMessagePreview.AddContactActionListener.class)
+        @EventConfig(listeners = UIMessagePreview.AddContactActionListener.class),
+        @EventConfig(listeners = UIMessagePreview.MoveMessagesActionListener.class)
     }
 )
 
@@ -238,6 +240,24 @@ public class UIMessagePreview extends UIComponent {
       } catch (Exception e) { }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup);  
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessagePreview.class));
+    }
+  }
+
+  static public class MoveMessagesActionListener extends EventListener<UIMessagePreview> {
+    public void execute(Event<UIMessagePreview> event) throws Exception {
+      UIMessagePreview uiMessagePreview = event.getSource() ;    
+      String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      String username = MailUtils.getCurrentUser();
+      String accountId = MailUtils.getAccountId();
+      MailService mailSrv = MailUtils.getMailService();
+      UIMailPortlet uiPortlet = uiMessagePreview.getAncestorOfType(UIMailPortlet.class);
+      UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class);     
+      UIMoveMessageForm uiMoveMessageForm = uiMessagePreview.createUIComponent(UIMoveMessageForm.class,null, null);
+      List<Message> msgList = new ArrayList<Message>();
+      msgList.add(mailSrv.getMessageById(username, accountId, msgId));
+      uiMoveMessageForm.setMessageList(msgList);
+      uiPopupAction.activate(uiMoveMessageForm, 600, 0, true);             
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);        
     }
   }
 }
