@@ -7,7 +7,7 @@
   <packaging>pom</packaging>
 
   <modules>
-    <module>eXoApplication/web/csportal</module>
+    <module>web/csportal</module>
     
     <module>eXoApplication/mail/webapp</module>
     <module>eXoApplication/mail/service</module>
@@ -117,13 +117,11 @@
         <org.exoplatform.jcr.version>1.7</org.exoplatform.jcr.version>
         <org.exoplatform.pc.version>1.5</org.exoplatform.pc.version>
         <org.exoplatform.portal.version>trunk</org.exoplatform.portal.version>
-        <org.exoplatform.ecm.version>trunk</org.exoplatform.ecm.version>
         <org.exoplatform.cs.version>trunk</org.exoplatform.cs.version>
 
         <test.classes>Test</test.classes>
         <test.skip>true</test.skip>
 
-        <bonita.version>2.1</bonita.version>
       </properties>
     </profile>
   </profiles>

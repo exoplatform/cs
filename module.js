@@ -30,6 +30,7 @@ function getModule(params) {
   module.eXoApplication.calendar = 
     new Project("org.exoplatform.cs", "exo.cs.eXoApplication.calendar.webapp", "war", module.version).
       addDependency(new Project("org.exoplatform.cs", "exo.cs.eXoApplication.calendar.service", "jar",  module.version)).
+	  addDependency(new Project("rome", "rome", "jar", "0.8")).
       addDependency(new Project("ical4j", "ical4j", "jar", "0.9.20")) ;
   module.eXoApplication.calendar.deployName = "calendar";
     
@@ -44,9 +45,9 @@ function getModule(params) {
       addDependency(new Project("org.exoplatform.cs", "exo.cs.eXoApplication.content.service", "jar",  module.version));
   module.eXoApplication.content.deployName = "content";
     
-  module.eXoApplication.web = {}
-  module.eXoApplication.web.csportal = 
-    new Project("org.exoplatform.cs", "exo.cs.eXoApplication.web.portal", "exo-portal", module.version).
+  module.web = {}
+  module.web.csportal = 
+    new Project("org.exoplatform.cs", "exo.cs.web.portal", "exo-portal", module.version).
       addDependency(portal.web.eXoResources) .
       addDependency(portal.web.eXoMacSkin) .
       addDependency(portal.web.eXoVistaSkin) .
