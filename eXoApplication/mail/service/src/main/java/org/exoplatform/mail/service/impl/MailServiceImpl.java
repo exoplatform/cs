@@ -29,6 +29,7 @@ import javax.mail.Store;
 import javax.mail.Transport;
 import javax.mail.URLName;
 import javax.mail.internet.AddressException;
+import javax.mail.internet.ContentType;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
@@ -491,7 +492,13 @@ public class MailServiceImpl implements MailService{
   private void setMessageBody(Part part, Message newMail) throws Exception {
     StringBuffer messageBody =new StringBuffer();
     InputStream is = part.getInputStream();
-    BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+    String contentType = part.getContentType() ;
+    String charset = "UTF-8" ;
+    if(contentType != null){
+      String cs = new ContentType(contentType).getParameter("charset");
+      if (cs != null) { charset = cs ; }
+    }
+    BufferedReader reader = new BufferedReader(new InputStreamReader(is , charset));
     String inputLine;
     
     while ((inputLine = reader.readLine()) != null) {
