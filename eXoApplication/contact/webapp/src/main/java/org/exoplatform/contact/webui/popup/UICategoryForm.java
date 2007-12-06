@@ -7,6 +7,7 @@ package org.exoplatform.contact.webui.popup;
 import java.util.List;
 
 import org.exoplatform.contact.ContactUtils;
+import org.exoplatform.contact.SessionsUtils;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.webui.UIAddressBooks;
@@ -63,7 +64,7 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
   public void setValues(String groupId) throws Exception {
     ContactService contactService = ContactUtils.getContactService();
     String username = ContactUtils.getCurrentUser() ;
-    ContactGroup contactGroup = contactService.getGroup(username, groupId) ;
+    ContactGroup contactGroup = contactService.getGroup(SessionsUtils.getSessionProvider(), username, groupId) ;
     if (contactGroup != null) {
       groupId_ = groupId ;
       getUIStringInput(FIELD_CATEGORYNAME_INPUT).setValue(contactGroup.getName()) ;
@@ -82,14 +83,15 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ; 
       }
-      ContactGroup group ; 
+      ContactGroup group = new ContactGroup() ;
       String username = ContactUtils.getCurrentUser() ;
       ContactService contactService = ContactUtils.getContactService();
-      if (uiCategoryForm.isNew_) group = new ContactGroup() ;
-      else group = contactService.getGroup(username, uiCategoryForm.groupId_) ;
+      /*if (uiCategoryForm.isNew_) group = new ContactGroup() ;
+      else group = contactService.getGroup(SessionsUtils.getSessionProvider(), username, uiCategoryForm.groupId_) ;*/
+      if (!uiCategoryForm.isNew_) group.setId(uiCategoryForm.groupId_) ;
       group.setName(groupName) ;
       group.setDescription(uiCategoryForm.getUIFormTextAreaInput(FIELD_DESCRIPTION_INPUT).getValue()) ;
-      contactService.saveGroup(username, group, uiCategoryForm.isNew_) ; 
+      contactService.saveGroup(SessionsUtils.getSessionProvider(), username, group, uiCategoryForm.isNew_) ; 
       UIContactPortlet uiContactPortlet = uiCategoryForm.getAncestorOfType(UIContactPortlet.class) ;
       UIPopupContainer popupContainer = uiCategoryForm.getAncestorOfType(UIPopupContainer.class) ;
       if (popupContainer != null) {

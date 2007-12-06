@@ -80,18 +80,15 @@ public class JCRDataStorage implements DataStorage{
   private static final String SHARED_PROP = "exo:sharedId".intern();
   private final static String VALUE = "value".intern() ; 
 
-  private RepositoryService  repositoryService_ ; 
   private NodeHierarchyCreator nodeHierarchyCreator_ ;
   //private JCRRegistryService jcrRegistryService_ ;
 
-  public JCRDataStorage(RepositoryService  repositoryService, 
-  		NodeHierarchyCreator nodeHierarchyCreator)throws Exception {
-    repositoryService_ = repositoryService ;
+  public JCRDataStorage(NodeHierarchyCreator nodeHierarchyCreator)throws Exception {
     nodeHierarchyCreator_ = nodeHierarchyCreator ; 
     //jcrRegistryService_ = jcrRegistryService ;
   }  
 
-  private Node getCalendarServiceHome(SessionProvider sProvider) throws Exception {
+  private Node getPublicCalendarServiceHome(SessionProvider sProvider) throws Exception {
     /*ServiceRegistry serviceRegistry = new ServiceRegistry("CalendarService") ;
     Session session = getJCRSession() ;
     jcrRegistryService_.createServiceRegistry(serviceRegistry, false) ;
@@ -105,12 +102,12 @@ public class JCRDataStorage implements DataStorage{
   }
 
   private Node getSharedCalendarHome(SessionProvider sProvider) throws Exception {
-    Node calendarServiceHome = getCalendarServiceHome(sProvider) ;
+    Node calendarServiceHome = getPublicCalendarServiceHome(sProvider) ;
     if(calendarServiceHome.hasNode(SHARED_CALENDAR)) return calendarServiceHome.getNode(SHARED_CALENDAR) ;
     return calendarServiceHome.addNode(SHARED_CALENDAR, NT_UNSTRUCTURED) ;
   }
   
-  private Node getCalendarServiceHome(SessionProvider sProvider, String username) throws Exception {
+  private Node getUserCalendarServiceHome(SessionProvider sProvider, String username) throws Exception {
     /*ServiceRegistry serviceRegistry = new ServiceRegistry("CalendarService") ;
     Session session = getJCRSession() ;
     if(jcrRegistryService_.getUserNode(session, username) == null)
@@ -134,47 +131,42 @@ public class JCRDataStorage implements DataStorage{
   }
   
   private Node getCalendarHome(SessionProvider sProvider) throws Exception {
-    Node calendarServiceHome = getCalendarServiceHome(sProvider) ;
+    Node calendarServiceHome = getPublicCalendarServiceHome(sProvider) ;
     if(calendarServiceHome.hasNode(CALENDARS)) return calendarServiceHome.getNode(CALENDARS) ;
     return calendarServiceHome.addNode(CALENDARS, NT_UNSTRUCTURED) ;
   }
   
   private Node getCalendarHome(SessionProvider sProvider, String username) throws Exception {
-    Node calendarServiceHome = getCalendarServiceHome(sProvider, username) ;
+    Node calendarServiceHome = getUserCalendarServiceHome(sProvider, username) ;
     if(calendarServiceHome.hasNode(CALENDARS)) return calendarServiceHome.getNode(CALENDARS) ;
     return calendarServiceHome.addNode(CALENDARS, NT_UNSTRUCTURED) ;
   }
   
   public Node getRssHome(SessionProvider sProvider, String username) throws Exception {
-    Node calendarServiceHome = getCalendarServiceHome(sProvider, username) ;
+    Node calendarServiceHome = getUserCalendarServiceHome(sProvider, username) ;
     if(calendarServiceHome.hasNode(FEED)) return calendarServiceHome.getNode(FEED) ;
     return calendarServiceHome.addNode(FEED, NT_UNSTRUCTURED) ;
   }
 
   protected Node getCalendarCategoryHome(SessionProvider sProvider, String username) throws Exception {
-    Node calendarServiceHome = getCalendarServiceHome(sProvider, username) ;
+    Node calendarServiceHome = getUserCalendarServiceHome(sProvider, username) ;
     if(calendarServiceHome.hasNode(CALENDAR_CATEGORIES)) return calendarServiceHome.getNode(CALENDAR_CATEGORIES) ;
     return calendarServiceHome.addNode(CALENDAR_CATEGORIES, NT_UNSTRUCTURED) ;
   }
 
   protected Node getEventCategoryHome(SessionProvider sProvider, String username) throws Exception {
-    Node calendarServiceHome = getCalendarServiceHome(sProvider, username) ;
+    Node calendarServiceHome = getUserCalendarServiceHome(sProvider, username) ;
     if(calendarServiceHome.hasNode(EVENT_CATEGORIES)) return calendarServiceHome.getNode(EVENT_CATEGORIES) ;
     return calendarServiceHome.addNode(EVENT_CATEGORIES, NT_UNSTRUCTURED) ;
   }
 
   private Node getCalendarGroupHome(SessionProvider sProvider) throws Exception {
-    Node calendarServiceHome = getCalendarServiceHome(sProvider) ;
+    Node calendarServiceHome = getPublicCalendarServiceHome(sProvider) ;
     if(calendarServiceHome.hasNode(CALENDAR_GROUPS)) return calendarServiceHome.getNode(CALENDAR_GROUPS) ;
     return calendarServiceHome.addNode(CALENDAR_GROUPS, NT_UNSTRUCTURED) ;
   }
 
-  private Session getJCRSession() throws Exception {
-    SessionProvider sessionProvider = SessionProvider.createSystemProvider() ; 
-    String defaultWS = 
-      repositoryService_.getDefaultRepository().getConfiguration().getDefaultWorkspaceName() ;
-    return sessionProvider.getSession(defaultWS, repositoryService_.getCurrentRepository()) ;    
-  }
+  
 
   public Calendar getUserCalendar(SessionProvider sProvider, String username, String calendarId) throws Exception {
     Node calendarNode = getCalendarHome(sProvider, username).getNode(calendarId) ;
@@ -915,7 +907,7 @@ public class JCRDataStorage implements DataStorage{
   }
   
   private Node getReminderHome(SessionProvider sProvider) throws Exception {
-    Node calendarServiceHome  = getCalendarServiceHome(sProvider) ;    
+    Node calendarServiceHome  = getPublicCalendarServiceHome(sProvider) ;    
     if(calendarServiceHome.hasNode(CALENDAR_REMINDER)) return calendarServiceHome.getNode(CALENDAR_REMINDER) ;
     return calendarServiceHome.addNode(CALENDAR_REMINDER, NT_UNSTRUCTURED) ;
   }
@@ -996,7 +988,7 @@ public class JCRDataStorage implements DataStorage{
     return attachments ;
   }
   public void saveCalendarSetting(SessionProvider sProvider, String username, CalendarSetting setting) throws Exception {
-    Node calendarHome = getCalendarServiceHome(sProvider, username) ;
+    Node calendarHome = getUserCalendarServiceHome(sProvider, username) ;
     addCalendarSetting(calendarHome, setting) ;
     calendarHome.getSession().save() ;
   }
@@ -1023,7 +1015,7 @@ public class JCRDataStorage implements DataStorage{
     settingNode.setProperty("exo:sharedCalendarsColors", setting.getSharedCalendarsColors()) ;
   }
   public CalendarSetting getCalendarSetting(SessionProvider sProvider ,String username) throws Exception{
-    Node calendarHome = getCalendarServiceHome(sProvider, username) ;
+    Node calendarHome = getUserCalendarServiceHome(sProvider, username) ;
     if(calendarHome.hasNode(CALENDAR_SETTING)){
       CalendarSetting calendarSetting = new CalendarSetting() ;
       Node settingNode = calendarHome.getNode(CALENDAR_SETTING) ;      
@@ -1282,7 +1274,7 @@ public class JCRDataStorage implements DataStorage{
     } else {
       calendarNode.addMixin(SHARED_MIXIN);     
     }
-    Session systemSession = getJCRSession() ;
+    Session systemSession = sharedCalendarHome.getSession() ;
     Node userNode ;
     List<Value> valueList = new ArrayList<Value>() ;
     for(String user : receiverUsers) {

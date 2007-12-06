@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.exoplatform.contact.ContactUtils;
+import org.exoplatform.contact.SessionsUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactAttachment;
 import org.exoplatform.contact.service.ContactService;
@@ -358,7 +359,7 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent, UI
           if (!ContactUtils.isEmpty(editPermission))
             contact.setEditPermission(editPermission.split(","));
           contact.setShared(true) ;
-          contactService.saveSharedContact(contact, isNew);
+          contactService.saveSharedContact(SessionsUtils.getSystemProvider(), contact, isNew);
         } else {       
           UIPopupContainer popupContainer = uiContactForm.getParent() ;
           UICategorySelect uiCategorySelect = popupContainer.getChild(UICategorySelect.class); 
@@ -370,11 +371,11 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent, UI
             return ;
           }
           contact.setCategories(new String[] { category });
-          contactService.saveContact(username, contact, isNew);
+          contactService.saveContact(SessionsUtils.getSessionProvider(), username, contact, isNew);
         }
       } else {
-        if (contact.isShared()) contactService.saveSharedContact(contact, isNew) ;
-        else contactService.saveContact(username, contact, isNew) ;
+        if (contact.isShared()) contactService.saveSharedContact(SessionsUtils.getSystemProvider(), contact, isNew) ;
+        else contactService.saveContact(SessionsUtils.getSessionProvider(), username, contact, isNew) ;
       }
       UIContactPortlet uiContactPortlet = uiContactForm.getAncestorOfType(UIContactPortlet.class) ;
       UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;

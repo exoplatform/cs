@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.MissingResourceException;
 
 import org.exoplatform.contact.ContactUtils;
+import org.exoplatform.contact.SessionsUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.ContactGroup;
@@ -96,7 +97,7 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
   public String getSelectedGroupName() throws Exception {
     ContactService contactService = ContactUtils.getContactService();
     String username = ContactUtils.getCurrentUser() ; 
-    ContactGroup group = contactService.getGroup(username, selectedGroup);
+    ContactGroup group = contactService.getGroup(SessionsUtils.getSessionProvider(), username, selectedGroup);
     if (group != null) return group.getName() ;
     else return selectedGroup ;
   }
@@ -136,7 +137,7 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
   public String getSelectedTag() { return selectedTag_; }
   public String getSelectedTagName() throws Exception {
     return ContactUtils.getContactService()
-      .getTag(ContactUtils.getCurrentUser(), selectedTag_).getName() ;
+      .getTag(SessionsUtils.getSessionProvider(), ContactUtils.getCurrentUser(), selectedTag_).getName() ;
   }
   public void setSelectedTag(String tagId) { selectedTag_ = tagId; }
   
@@ -205,7 +206,7 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
   
   static public class SortActionListener extends EventListener<UIExportForm> {
     public void execute(Event<UIExportForm> event) throws Exception {
-      UIExportForm uiForm = event.getSource();
+      /*UIExportForm uiForm = event.getSource();
       String sortedBy = event.getRequestContext().getRequestParameter(OBJECTID);
       ContactService contactService = ContactUtils.getContactService();
       String username = ContactUtils.getCurrentUser();
@@ -218,17 +219,17 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
         filter.setViewQuery(uiForm.getViewQuery());
         filter.setCategories(new String[] {uiForm.getSelectedGroup()});
 
-        uiForm.setContacts(contactService.getContactPageListByGroup(username,filter, false).getAll().toArray(new Contact[] {}));
+        uiForm.setContacts(contactService.getContactPageListByGroup(SessionsUtils.getSessionProvider(), username,filter, false).getAll().toArray(new Contact[] {}));
       } else if (uiForm.getSelectedTag() != null) {
         ContactFilter filter = new ContactFilter();
         filter.setAscending(uiForm.isAscending_);
         filter.setOrderBy(uiForm.getSortedBy());
         filter.setViewQuery(uiForm.getViewQuery());
         filter.setTag(new String[] {uiForm.getSelectedTag()});
-        uiForm.setContacts(contactService.getContactPageListByTag(username, filter).getAll().toArray(new Contact[] {}));
+        uiForm.setContacts(contactService.getContactPageListByTag(SessionsUtils.getSystemProvider(), username, filter).getAll().toArray(new Contact[] {}));
       }
       uiForm.updateList();
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent());
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent());*/
     }
   }
 

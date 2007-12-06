@@ -71,7 +71,7 @@ public class ContactUtils {
   }
   
   public static boolean isTagNameExisted(String tagName) throws Exception {
-    List<Tag> tags = getContactService().getTags(getCurrentUser()) ;
+    List<Tag> tags = getContactService().getTags(SessionsUtils.getSessionProvider(), getCurrentUser()) ;
     for (Tag tag : tags)
       if (tag.getName().equalsIgnoreCase(tagName)) return true ;
     return false ;

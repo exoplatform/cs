@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.exoplatform.contact.ContactUtils;
+import org.exoplatform.contact.SessionsUtils;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.Tag;
 import org.exoplatform.contact.webui.UIContactPortlet;
@@ -65,7 +66,7 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
   public void setValues(String tagId) throws Exception {
     ContactService contactService = ContactUtils.getContactService();
     String username = ContactUtils.getCurrentUser() ;
-    Tag tag = contactService.getTag(username, tagId) ;
+    Tag tag = contactService.getTag(SessionsUtils.getSessionProvider(), username, tagId) ;
     tagId_ = tagId ;
     if (tag != null) {
       getUIStringInput(FIELD_TAGNAME_INPUT).setValue(tag.getName()) ;
@@ -86,7 +87,7 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
       }
       ContactService contactService = ContactUtils.getContactService() ;
       String username = ContactUtils.getCurrentUser() ;
-      Tag tag = contactService.getTag(username, uiEditTagForm.tagId_) ;
+      Tag tag = contactService.getTag(SessionsUtils.getSessionProvider(), username, uiEditTagForm.tagId_) ;
       if (!tag.getName().equalsIgnoreCase(tagName) && ContactUtils.isTagNameExisted(tagName)) {
         uiApp.addMessage(new ApplicationMessage("UIEditTagForm.msg.tagName-existed", null, 
             ApplicationMessage.WARNING)) ;
@@ -95,7 +96,7 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
       }
       tag.setName(tagName) ;
       tag.setColor(uiEditTagForm.getUIFormSelectBox(FIELD_COLOR).getValue()) ;
-      contactService.updateTag(username, tag) ;
+      contactService.updateTag(SessionsUtils.getSessionProvider(), username, tag) ;
       UIContactPortlet uiContactPortlet = uiEditTagForm.getAncestorOfType(UIContactPortlet.class) ;
       WebuiRequestContext context = event.getRequestContext() ;
       context.addUIComponentToUpdateByAjax(uiContactPortlet.findFirstComponentOfType(UITags.class)) ;

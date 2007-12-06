@@ -17,8 +17,8 @@ import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.GroupContactData;
 import org.exoplatform.contact.service.Tag;
 import org.exoplatform.contact.service.DataPageList;
-import org.exoplatform.registry.JCRRegistryService;
-import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 
 /**
  * Created by The eXo Platform SARL
@@ -33,124 +33,123 @@ public class ContactServiceImpl implements ContactService {
   private JCRDataStorage storage_ ;
   private Map<String, ContactImportExport> contactImportExport_ = new HashMap<String, ContactImportExport>() ;
   
-  public ContactServiceImpl(RepositoryService  repositoryService, 
-      JCRRegistryService jcrRegistryService) throws Exception {
-      storage_ = new JCRDataStorage(repositoryService, jcrRegistryService) ;
+  public ContactServiceImpl(NodeHierarchyCreator nodeHierarchyCreator) throws Exception {
+      storage_ = new JCRDataStorage(nodeHierarchyCreator) ;
       
       contactImportExport_.put(VCARD, new VCardImportExport(storage_)) ;
   }
   
-  public List<Contact> getAllContact(String username) throws Exception {
-    return storage_.getAllContact(username);
+  public List<Contact> getAllContact(SessionProvider sProvider, String username) throws Exception {
+    return storage_.getAllContact(sProvider, username);
   }
   
-  public ContactPageList getContactPageListByTag(String username, ContactFilter filter) throws Exception {
+  /*public ContactPageList getContactPageListByTag(String username, ContactFilter filter) throws Exception {
     return storage_.getContactPageListByTag(username, filter);
-  }
+  }*/
   
-  public ContactPageList getContactPageListByGroup(String username, String groupId) throws Exception {
-    return storage_.getContactPageListByGroup(username, groupId);
+  public ContactPageList getContactPageListByGroup(SessionProvider sProvider, String username, String groupId) throws Exception {
+    return storage_.getContactPageListByGroup(sProvider, username, groupId);
   }
 
-  public ContactPageList getContactPageListByGroup(String username, ContactFilter filter, boolean isPublic) throws Exception {
-    return storage_.getContactPageListByGroup(username, filter, isPublic) ;
+  public ContactPageList getContactPageListByGroup(SessionProvider sProvider, String username, ContactFilter filter, boolean isPublic) throws Exception {
+    return storage_.getContactPageListByGroup(sProvider, username, filter, isPublic) ;
   }
   
-  public List<String> getAllEmailAddressByGroup(String username, String groupId) throws Exception {
-    return storage_.getAllEmailAddressByGroup(username, groupId);
+  public List<String> getAllEmailAddressByGroup(SessionProvider sProvider, String username, String groupId) throws Exception {
+    return storage_.getAllEmailAddressByGroup(sProvider, username, groupId);
   }
-  public Contact getContact(String username, String contactId) throws Exception {
-    return storage_.getContact(username, contactId);
-  }
-  
-  public void saveContact(String username, Contact contact, boolean isNew) throws Exception {
-    storage_.saveContact(username, contact, isNew);    
+  public Contact getContact(SessionProvider sProvider, String username, String contactId) throws Exception {
+    return storage_.getContact(sProvider, username, contactId);
   }
   
-  public List<Contact> removeContacts(String username, List<String> contactIds) throws Exception {
-    return storage_.removeContacts(username, contactIds);
+  public void saveContact(SessionProvider sProvider, String username, Contact contact, boolean isNew) throws Exception {
+    storage_.saveContact(sProvider, username, contact, isNew);    
   }
   
-  public List<Contact> moveContacts(String username, List<String> contactIds, String[] groupId) throws Exception {
-    return storage_.moveContacts(username, contactIds, groupId) ;
+  public List<Contact> removeContacts(SessionProvider sProvider, String username, List<String> contactIds) throws Exception {
+    return storage_.removeContacts(sProvider, username, contactIds);
+  }
+  
+  public List<Contact> moveContacts(SessionProvider sProvider, String username, List<String> contactIds, String[] groupId) throws Exception {
+    return storage_.moveContacts(sProvider, username, contactIds, groupId) ;
   }
    
-  public List<ContactGroup> getGroups(String username) throws Exception {
-    return storage_.getGroups(username);
+  public List<ContactGroup> getGroups(SessionProvider sProvider, String username) throws Exception {
+    return storage_.getGroups(sProvider, username);
   }
   
-  public ContactGroup getGroup(String username, String groupId) throws Exception {
-    return storage_.getGroup(username, groupId);
+  public ContactGroup getGroup(SessionProvider sProvider, String username, String groupId) throws Exception {
+    return storage_.getGroup(sProvider, username, groupId);
   }
   
-  public void saveGroup(String username, ContactGroup group, boolean isNew) throws Exception {
-    storage_.saveGroup(username, group, isNew);    
+  public void saveGroup(SessionProvider sProvider, String username, ContactGroup group, boolean isNew) throws Exception {
+    storage_.saveGroup(sProvider, username, group, isNew);    
   }
   
-  public ContactGroup removeGroup(String username, String groupId) throws Exception {
-    return storage_.removeGroup(username, groupId);
+  public ContactGroup removeGroup(SessionProvider sProvider, String username, String groupId) throws Exception {
+    return storage_.removeGroup(sProvider, username, groupId);
   }
 
-  public List<GroupContactData> getPublicContacts(String[] groupIds) throws Exception {
-    return storage_.getPublicContacts(groupIds);
+  public List<GroupContactData> getPublicContacts(SessionProvider sProvider, String[] groupIds) throws Exception {
+    return storage_.getPublicContacts(sProvider, groupIds);
   }
 
-  public List<Contact> shareContacts(String username, List<String> contactIds, String[] groupIds) throws Exception {
-    return storage_.shareContacts(username, contactIds, groupIds) ;
+  public List<Contact> shareContacts(SessionProvider sProvider, String username, List<String> contactIds, String[] groupIds) throws Exception {
+    return storage_.shareContacts(sProvider, username, contactIds, groupIds) ;
   }
 
-  public Contact getSharedContact(String contactId) throws Exception {
-    return storage_.getSharedContact(contactId);
+  public Contact getSharedContact(SessionProvider sProvider, String contactId) throws Exception {
+    return storage_.getSharedContact(sProvider, contactId);
   }
 
-  public List<GroupContactData> getSharedContacts(String[] groupIds) throws Exception {
-    return storage_.getSharedContacts(groupIds);
+  public List<GroupContactData> getSharedContacts(SessionProvider sProvider, String[] groupIds) throws Exception {
+    return storage_.getSharedContacts(sProvider, groupIds);
   }
   
-  public List<String> getSharedGroupContacts(String[] groupIds) throws Exception{
-    return storage_.getSharedGroupContacts(groupIds);
+  public List<String> getSharedGroupContacts(SessionProvider sProvider, String[] groupIds) throws Exception{
+    return storage_.getSharedGroupContacts(sProvider, groupIds);
   }
-  public Contact removeSharedContact(String contactId) throws Exception {
-    return storage_.removeSharedContact(contactId);
+  public Contact removeSharedContact(SessionProvider sProvider, String contactId) throws Exception {
+    return storage_.removeSharedContact(sProvider, contactId);
   }
 
-  public void saveSharedContact(Contact contact, boolean isNew) throws Exception {
-    storage_.saveSharedContact(contact, isNew);
+  public void saveSharedContact(SessionProvider sProvider, Contact contact, boolean isNew) throws Exception {
+    storage_.saveSharedContact(sProvider, contact, isNew);
   } 
   
-  public Tag getTag(String username, String tagName) throws Exception {
-    return storage_.getTag(username, tagName) ;
+  public Tag getTag(SessionProvider sProvider, String username, String tagName) throws Exception {
+    return storage_.getTag(sProvider, username, tagName) ;
   }
   
-  public List<Tag> getTags(String username) throws Exception {
-    return storage_.getTags(username);
+  public List<Tag> getTags(SessionProvider sProvider, String username) throws Exception {
+    return storage_.getTags(sProvider, username);
   }
-  public DataPageList getContactPageListByTag(String username, String tagName) throws Exception {
-    return storage_.getContactPageListByTag(username, tagName);
-  }
-  
-  public void addTag(String username, List<String> contactIds, List<Tag> tags) throws Exception {
-    storage_.addTag(username, contactIds, tags);
+  public DataPageList getContactPageListByTag(SessionProvider sProvider, String username, String tagName) throws Exception {
+    return storage_.getContactPageListByTag(sProvider, username, tagName);
   }
   
-  public void addTag(String username, List<String> contactIds, String tagId) throws Exception {
-	  storage_.addTag(username, contactIds, tagId);
+  public void addTag(SessionProvider sProvider, String username, List<String> contactIds, List<Tag> tags) throws Exception {
+    storage_.addTag(sProvider, username, contactIds, tags);
   }
   
-  public Tag removeTag(String username, String tagName) throws Exception {
-    return storage_.removeTag(username, tagName);
+  public void addTag(SessionProvider sProvider, String username, List<String> contactIds, String tagId) throws Exception {
+	  storage_.addTag(sProvider, username, contactIds, tagId);
   }
   
-  public void updateTag(String username,Tag tag) throws Exception {
-    storage_.updateTag(username, tag) ;
+  public Tag removeTag(SessionProvider sProvider, String username, String tagName) throws Exception {
+    return storage_.removeTag(sProvider, username, tagName);
   }
   
-  public void removeContactTag(String username, List<String>contactIds, List<String> tags) throws Exception {
-    storage_.removeContactTag(username, contactIds, tags) ;
+  public void updateTag(SessionProvider sProvider, String username,Tag tag) throws Exception {
+    storage_.updateTag(sProvider, username, tag) ;
   }
   
-  public ContactPageList getSharedContactsByGroup(String groupId) throws Exception {
-    return storage_.getSharedContactsByGroup(groupId) ;
+  public void removeContactTag(SessionProvider sProvider, String username, List<String>contactIds, List<String> tags) throws Exception {
+    storage_.removeContactTag(sProvider, username, contactIds, tags) ;
+  }
+  
+  public ContactPageList getSharedContactsByGroup(SessionProvider sProvider, String groupId) throws Exception {
+    return storage_.getSharedContactsByGroup(sProvider, groupId) ;
   }
   
   
@@ -162,7 +161,7 @@ public class ContactServiceImpl implements ContactService {
     return contactImportExport_.keySet().toArray(new String[]{}) ;
   }
 
-  public DataPageList searchContact(String username, ContactFilter filter) throws Exception {
-    return storage_.searchContact(username, filter) ;
+  public DataPageList searchContact(SessionProvider sProvider, String username, ContactFilter filter) throws Exception {
+    return storage_.searchContact(sProvider, username, filter) ;
   }
 }

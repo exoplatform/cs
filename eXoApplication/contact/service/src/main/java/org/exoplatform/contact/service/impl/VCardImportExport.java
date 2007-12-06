@@ -41,6 +41,7 @@ import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.ContactImportExport;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 
 /**
  * Author : Huu-Dung Kieu huu-dung.kieu@bull.be 16 oct. 07
@@ -63,12 +64,12 @@ public class VCardImportExport implements ContactImportExport {
   	storage_ = storage ;
   }
   
-  public OutputStream exportContact(String username, String[] addressBookIds) throws Exception {
+  public OutputStream exportContact(SessionProvider sProvider, String username, String[] addressBookIds) throws Exception {
   	List<Contact> contactList = new ArrayList<Contact>() ;
   	List<String> privateAddress = new ArrayList<String> () ;
   	List<String> publicAddress = new ArrayList<String> () ;
   	for(String address : addressBookIds){
-  		Node contactGroupHome = storage_.getContactGroupHome(username) ;
+  		Node contactGroupHome = storage_.getUserContactGroupHome(sProvider, username) ;
   		try {
   			if(contactGroupHome.hasNode(address)) {
     			privateAddress.add(address) ;
@@ -82,12 +83,12 @@ public class VCardImportExport implements ContactImportExport {
   	if(privateAddress.size() > 0) {
   		ContactFilter filter = new ContactFilter() ;
   		filter.setCategories(privateAddress.toArray(new String[]{})) ;
-  		contactList.addAll(storage_.getContactPageListByGroup(username, filter, false).getAll()) ;
+  		contactList.addAll(storage_.getContactPageListByGroup(sProvider, username, filter, false).getAll()) ;
   	}
   	if(publicAddress.size() > 0) {
   		ContactFilter filter = new ContactFilter() ;
   		filter.setCategories(publicAddress.toArray(new String[]{})) ;
-  		contactList.addAll(storage_.getContactPageListByGroup(username, filter, true).getAll()) ;
+  		contactList.addAll(storage_.getContactPageListByGroup(sProvider, username, filter, true).getAll()) ;
   	}
   	if(contactList.size() > 0) {
   		return exportContact(username, contactList) ;
@@ -239,10 +240,7 @@ public class VCardImportExport implements ContactImportExport {
     return out;
   }
   
-  private OutputStream getOutputStream() throws Exception{
-  	return null ;
-  }
-  public void importContact(String username, InputStream input, String groupId) throws Exception {
+  public void importContact(SessionProvider sProvider, String username, InputStream input, String groupId) throws Exception {
 
     ContactIOFactory ciof = Pim.getContactIOFactory();
     ContactUnmarshaller unmarshaller = ciof.createContactUnmarshaller();
@@ -456,7 +454,7 @@ public class VCardImportExport implements ContactImportExport {
       contact.setCategories(new String[] { groupId });
       ContactService contactService = (ContactService) PortalContainer
           .getComponent(ContactService.class);
-      contactService.saveContact(username, contact, true);
+      contactService.saveContact(sProvider, username, contact, true);
     }
   }
 

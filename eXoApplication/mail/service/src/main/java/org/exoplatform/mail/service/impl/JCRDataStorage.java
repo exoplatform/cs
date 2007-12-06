@@ -33,10 +33,10 @@ import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.MessagePageList;
 import org.exoplatform.mail.service.Tag;
 import org.exoplatform.mail.service.Utils;
-import org.exoplatform.registry.JCRRegistryService;
 import org.exoplatform.registry.ServiceRegistry;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 
 /**
  * Created by The eXo Platform SARL
@@ -44,17 +44,14 @@ import org.exoplatform.services.jcr.ext.common.SessionProvider;
  *          tuan.nguyen@exoplatform.com
  * Jun 23, 2007  
  */
-public class JCRDataStorage implements DataStorage{
-  private RepositoryService  repositoryService_ ;
-  private JCRRegistryService jcrRegistryService_ ;
+public class JCRDataStorage{
+  private NodeHierarchyCreator nodeHierarchyCreator_ ;
   //private SimpleCredentials credentials_ = new SimpleCredentials("exoadmin", "exo".toCharArray());
 
-  public JCRDataStorage(RepositoryService  repositoryService, JCRRegistryService jcrRegistryService) {
-    repositoryService_ = repositoryService ;
-    jcrRegistryService_ = jcrRegistryService ;
+  public JCRDataStorage(NodeHierarchyCreator nodeHierarchyCreator) {
+  	nodeHierarchyCreator_ = nodeHierarchyCreator ;
   }
-
-
+  
   public Account getAccountById(String username, String id) throws Exception {
     //  get the account of the specified user with the specified id
     /*QueryManager qm = getMailHomeNode(username).getSession().getWorkspace().getQueryManager();

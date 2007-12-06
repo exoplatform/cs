@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.MissingResourceException;
 
 import org.exoplatform.contact.ContactUtils;
+import org.exoplatform.contact.SessionsUtils;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.webui.UIContactPortlet;
@@ -138,7 +139,7 @@ public class UIExportAddressBookForm extends UIForm implements UIPopupComponent{
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-      OutputStream out = contactService.getContactImportExports(exportFormat).exportContact(username, groupIds.toArray(new String[]{})) ;
+      OutputStream out = contactService.getContactImportExports(exportFormat).exportContact(SessionsUtils.getSystemProvider(), username, groupIds.toArray(new String[]{})) ;
       if(out == null) {
       	 uiApp.addMessage(new ApplicationMessage("UIExportAddressBookForm.msg.there-is-not-contacts-exists", null,
            ApplicationMessage.WARNING)) ;

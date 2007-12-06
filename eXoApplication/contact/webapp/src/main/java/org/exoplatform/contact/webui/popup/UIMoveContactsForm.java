@@ -7,6 +7,7 @@ package org.exoplatform.contact.webui.popup;
 import java.util.List;
 
 import org.exoplatform.contact.ContactUtils;
+import org.exoplatform.contact.SessionsUtils;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.webui.UIAddressBooks;
 import org.exoplatform.contact.webui.UIContactContainer;
@@ -72,7 +73,7 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
     addUIFormInput(moveBox) ; 
     if (contactIds_.size() == 1) {
       String[] categories = ContactUtils.getContactService()
-        .getSharedContact(contactIds_.get(0)).getCategories();
+        .getSharedContact(SessionsUtils.getSystemProvider(), contactIds_.get(0)).getCategories();
       for (String category : categories) {
         UIFormCheckBoxInput check = getUIFormCheckBoxInput(category) ;
         if (check != null) check.setChecked(true) ;
@@ -81,7 +82,7 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
   }
 
   public List<ContactGroup> getContactGroups() throws Exception { 
-    return ContactUtils.getContactService().getGroups(ContactUtils.getCurrentUser()) ; 
+    return ContactUtils.getContactService().getGroups(SessionsUtils.getSessionProvider(), ContactUtils.getCurrentUser()) ; 
   }
 
   static  public class SelectGroupActionListener extends EventListener<UIMoveContactsForm> {
@@ -91,7 +92,7 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
       UIContactPortlet uiContactPortlet = uiMoveContactForm.getAncestorOfType(UIContactPortlet.class);
       if (!uiMoveContactForm.groupId_.equals(groupId)) {  
         ContactUtils.getContactService()
-          .moveContacts(ContactUtils.getCurrentUser(), uiMoveContactForm.contactIds_, new String[] { groupId }) ;
+          .moveContacts(SessionsUtils.getSystemProvider(), ContactUtils.getCurrentUser(), uiMoveContactForm.contactIds_, new String[] { groupId }) ;
         uiContactPortlet.findFirstComponentOfType(UIContacts.class).updateList() ;
       }
       uiContactPortlet.cancelAction() ;
@@ -117,7 +118,7 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
       }
       String[] categories = sharedGroups.toString().split(",") ;
       ContactUtils.getContactService()
-        .moveContacts(ContactUtils.getCurrentUser(), uiMoveContactForm.contactIds_, categories) ;
+        .moveContacts(SessionsUtils.getSystemProvider(), ContactUtils.getCurrentUser(), uiMoveContactForm.contactIds_, categories) ;
       UIContactContainer contactContainer = uiContactPortlet.findFirstComponentOfType(UIContactContainer.class) ;
       contactContainer.getChild(UIContacts.class).updateList() ;
       uiContactPortlet.cancelAction() ;

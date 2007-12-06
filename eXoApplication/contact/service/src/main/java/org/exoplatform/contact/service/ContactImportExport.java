@@ -8,13 +8,15 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
+
 /**
  * Author : Huu-Dung Kieu
  *          huu-dung.kieu@bull.be
  * 16 oct. 07  
  */
 public interface ContactImportExport {
-  public void importContact(String username, InputStream input, String groupId) throws Exception ;
+  public void importContact(SessionProvider sProvider, String username, InputStream input, String groupId) throws Exception ;
   public OutputStream exportContact(String username, List<Contact> contacts) throws Exception ;
-  public OutputStream exportContact(String username, String[] addressBookIds) throws Exception ;
+  public OutputStream exportContact(SessionProvider sProvider, String username, String[] addressBookIds) throws Exception ;
 }

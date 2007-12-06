@@ -73,11 +73,9 @@ public class UIYearView extends UICalendarView {
     yearData_ = calendarService.searchHightLightEvent(SessionsUtils.getSystemProvider(), username, eventQuery, getPublicCalendars());
   }
   
-  private List getEventList() {
-    return null ;
-  }
+ 
   @Override
-  LinkedHashMap<String, CalendarEvent> getDataMap() {
+  public LinkedHashMap<String, CalendarEvent> getDataMap() {
     // TODO Auto-generated method stub
     return null;
   }

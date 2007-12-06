@@ -23,7 +23,6 @@ import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.FeedData;
 import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.service.RssData;
-import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 
@@ -40,9 +39,8 @@ public class CalendarServiceImpl implements CalendarService{
   private JCRDataStorage storage_ ;
   private Map<String, CalendarImportExport> calendarImportExport_ = new HashMap<String, CalendarImportExport>() ;
 
-  public CalendarServiceImpl(RepositoryService  repositoryService, 
-  		NodeHierarchyCreator nodeHierarchyCreator) throws Exception {
-    storage_ = new JCRDataStorage(repositoryService, nodeHierarchyCreator) ;
+  public CalendarServiceImpl(NodeHierarchyCreator nodeHierarchyCreator) throws Exception {
+    storage_ = new JCRDataStorage(nodeHierarchyCreator) ;
     calendarImportExport_.put(ICALENDAR, new ICalendarImportExport(storage_)) ;
   }
 

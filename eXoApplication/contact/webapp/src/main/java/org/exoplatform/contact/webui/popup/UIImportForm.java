@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.MissingResourceException;
 
 import org.exoplatform.contact.ContactUtils;
+import org.exoplatform.contact.SessionsUtils;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.webui.UIContactPortlet;
@@ -86,7 +87,7 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
   
   public List<SelectItemOption<String>> getCategoryList() throws Exception {
     String username = ContactUtils.getCurrentUser();
-    List<ContactGroup> contactGroups =  ContactUtils.getContactService().getGroups(username);
+    List<ContactGroup> contactGroups =  ContactUtils.getContactService().getGroups(SessionsUtils.getSessionProvider(), username);
     List<SelectItemOption<String>> categories = new ArrayList<SelectItemOption<String>>() ; 
     for(ContactGroup contactGroup : contactGroups)
       categories.add(new SelectItemOption<String>(contactGroup.getName(),contactGroup.getId() )) ;
@@ -152,7 +153,7 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
       String importFormat = uiForm.getUIFormSelectBox(UIImportForm.TYPE).getValue() ;
       try {
         ContactUtils.getContactService().getContactImportExports(importFormat)
-          .importContact(ContactUtils.getCurrentUser(), input.getUploadDataAsStream(), category) ;
+          .importContact(SessionsUtils.getSessionProvider(), ContactUtils.getCurrentUser(), input.getUploadDataAsStream(), category) ;
         UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
         uploadService.removeUpload(input.getUploadId()) ;
         uiContacts.updateList() ;

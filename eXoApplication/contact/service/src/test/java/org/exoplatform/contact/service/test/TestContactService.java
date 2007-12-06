@@ -24,10 +24,10 @@ public class TestContactService extends BaseContactTestCase{
   private String username = "exo";
   
   public void testContactService() throws Exception {
-    assertNull(null) ;
+    //assertNull(null) ;
   }
   
-  public void  testContact() throws Exception {   
+ /* public void  testContact() throws Exception {   
     Contact contact = createContact();
     contact.setCategories(new String[] { "friend", "work" });
     
@@ -149,7 +149,7 @@ public class TestContactService extends BaseContactTestCase{
   
   public void testTag() throws Exception {  
   
-    /*
+    
     
     // addTag & getContactsByTag
     Contact contact1 = createContact();
@@ -169,7 +169,7 @@ public class TestContactService extends BaseContactTestCase{
     contactService_.addTag(username, contactIds, tags) ;
     assertEquals(contactService_.getContactsByTag(username, tag.getName()).size(), 2);
     
-    */
+    
     
 //    Tag tag2 = new Tag() ;
 //    tag2.setName("Customer") ;
@@ -187,7 +187,7 @@ public class TestContactService extends BaseContactTestCase{
 //    assertNotNull(contactService_.removeTag(username, tag.getName()));
 //    assertEquals(contactService_.getTags(username).size(), 1);
   }
-  /*
+  
   public void  testSharedContact() throws Exception {
     Contact contact = createContact();
     contact.setCategories(new String[] {"friend", "work"});

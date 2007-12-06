@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.exoplatform.contact.ContactUtils;
+import org.exoplatform.contact.SessionsUtils;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.webui.popup.UIPopupAction;
 import org.exoplatform.contact.webui.popup.UISendEmail;
@@ -42,11 +43,11 @@ public class UIContactContainer extends UIContainer  {
   public void setSeletedGroup(String group) throws Exception{
     ContactService contactService = ContactUtils.getContactService() ;
     getChild(UIContacts.class)
-    .setContacts(contactService.getContactPageListByGroup(ContactUtils.getCurrentUser(), group)) ;
+    .setContacts(contactService.getContactPageListByGroup(SessionsUtils.getSessionProvider(), ContactUtils.getCurrentUser(), group)) ;
   }
   public static class SendEmailActionListener extends EventListener<UIContactContainer> {
     public void execute(Event<UIContactContainer> event) throws Exception {
-      UIContactContainer uiContactContainer = event.getSource() ;  
+      /*UIContactContainer uiContactContainer = event.getSource() ;  
       List<String> emails = new ArrayList<String>() ;
       String contactId = event.getRequestContext().getRequestParameter(OBJECTID);
       String username = ContactUtils.getCurrentUser() ;
@@ -67,7 +68,7 @@ public class UIContactContainer extends UIContainer  {
       UISendEmail uiSendEmail = uiPopupAction.createUIComponent(UISendEmail.class, null, "UISendEmail") ;
       uiSendEmail.setEmails(emails) ;
       uiPopupAction.activate(uiSendEmail, 700, 0, true) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;*/
       
     }
   }

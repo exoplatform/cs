@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.exoplatform.contact.ContactUtils;
+import org.exoplatform.contact.SessionsUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.ContactService;
@@ -290,7 +291,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
       contactIds = uiContacts.getCheckedContacts() ;
       ContactService contactService = ContactUtils.getContactService(); 
-      contactService.addTag(ContactUtils.getCurrentUser(), contactIds, tagId);
+      contactService.addTag(SessionsUtils.getSystemProvider(), ContactUtils.getCurrentUser(), contactIds, tagId);
       uiContacts.updateList() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
     }
@@ -341,7 +342,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
       contactIds = uiContacts.getCheckedContacts() ;
       ContactService contactService = ContactUtils.getContactService(); 
-      contactService.moveContacts(ContactUtils.getCurrentUser(), contactIds, addressBooks) ;
+      contactService.moveContacts(SessionsUtils.getSystemProvider(), ContactUtils.getCurrentUser(), contactIds, addressBooks) ;
       uiContacts.updateList() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
     }
@@ -367,12 +368,12 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       ContactService contactService = ContactUtils.getContactService() ;
       String username = ContactUtils.getCurrentUser() ;
       
-      contactService.removeContacts(username, contactIds) ;
+      contactService.removeContacts(SessionsUtils.getSystemProvider(), username, contactIds) ;
       if(contactIds.contains(uiContactPreview.getContact().getId())) 
         uiContactPreview.setContact(null) ;
       if (uiContacts.getSelectedTag() != null) {
         String tagName = uiWorkingContainer.findFirstComponentOfType(UITags.class).getSelectedTag() ;
-        uiContacts.setContacts(contactService.getContactPageListByTag(username, tagName)) ;
+        uiContacts.setContacts(contactService.getContactPageListByTag(SessionsUtils.getSystemProvider(), username, tagName)) ;
       } else {
         uiContacts.updateList() ;
       }
@@ -506,8 +507,15 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         filter.setAscending(uiContacts.isAscending_);
         filter.setOrderBy(uiContacts.getSortedBy());
         filter.setCategories(new String[] { group } ) ;
-        pageList = ContactUtils.getContactService().getContactPageListByGroup(
-          ContactUtils.getCurrentUser(), filter, ContactUtils.isPublicGroup(group)) ;
+        boolean isPublic = ContactUtils.isPublicGroup(group) ;
+        if(isPublic){
+        	pageList = ContactUtils.getContactService().getContactPageListByGroup(SessionsUtils.getSystemProvider(), 
+              ContactUtils.getCurrentUser(), filter, isPublic) ;
+        }else {
+        	pageList = ContactUtils.getContactService().getContactPageListByGroup(SessionsUtils.getSessionProvider(), 
+              ContactUtils.getCurrentUser(), filter, isPublic) ;
+        }
+        
       } else {      //if (!ContactUtils.isEmpty(uiContacts.getSelectedTag())) {
           pageList = uiContacts.pageList_ ;
           if (pageList != null) {
@@ -574,14 +582,14 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       if (!ContactUtils.isEmpty(group)) {        
         addressBooks.setSelectedGroup(group) ;
         if (ContactUtils.isPublicGroup(group)) {
-          uiContacts.setContacts(contactService.getSharedContactsByGroup(group)); 
+          uiContacts.setContacts(contactService.getSharedContactsByGroup(SessionsUtils.getSystemProvider(), group)); 
         } else {
-          uiContacts.setContacts(contactService.getContactPageListByGroup(username, group));
+          uiContacts.setContacts(contactService.getContactPageListByGroup(SessionsUtils.getSessionProvider(), username, group));
         }
       } else if (!ContactUtils.isEmpty(uiContacts.selectedTag_)) {
         uiTags.setSelectedTag(uiContacts.selectedTag_) ;
         uiContacts.setContacts(ContactUtils.getContactService()
-          .getContactPageListByTag(username, uiContacts.selectedTag_)) ;
+          .getContactPageListByTag(SessionsUtils.getSystemProvider(), username, uiContacts.selectedTag_)) ;
       } else {
         uiContacts.setContacts(null) ;
       } 

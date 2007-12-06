@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.exoplatform.contact.ContactUtils;
+import org.exoplatform.contact.SessionsUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.Tag;
@@ -49,7 +50,7 @@ public class UITags extends UIComponent {
   public List<Tag> getTags() throws Exception {
     ContactService contactService = ContactUtils.getContactService();
     String username = ContactUtils.getCurrentUser() ;
-    List<Tag> tags = contactService.getTags(username) ;
+    List<Tag> tags = contactService.getTags(SessionsUtils.getSessionProvider(), username) ;
     tagMap_.clear() ;
     for(Tag tag : tags) { tagMap_.put(tag.getId(), tag) ; }
     return tags;
@@ -69,7 +70,7 @@ public class UITags extends UIComponent {
       
       String username = ContactUtils.getCurrentUser() ;
       UIContacts uiContacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class) ;
-      uiContacts.setContacts(ContactUtils.getContactService().getContactPageListByTag(username, tagId)) ;
+      uiContacts.setContacts(ContactUtils.getContactService().getContactPageListByTag(SessionsUtils.getSystemProvider(), username, tagId)) ;
       uiContacts.setSelectedGroup(null) ;
       uiContacts.setSelectedTag(tagId) ;
       uiContacts.setDisplaySearchResult(false) ;
@@ -102,7 +103,7 @@ public class UITags extends UIComponent {
       uiExportForm.setSelectedTag(tagName) ;
       Contact[] contacts = null ;
       contacts = ContactUtils.getContactService()
-        .getContactPageListByTag(ContactUtils.getCurrentUser(), tagName).getAll().toArray(new Contact[] {});
+        .getContactPageListByTag(SessionsUtils.getSystemProvider(), ContactUtils.getCurrentUser(), tagName).getAll().toArray(new Contact[] {});
       if (contacts == null || contacts.length == 0) {
         UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UITag.msg.noContactToExport", null,
@@ -121,7 +122,7 @@ public class UITags extends UIComponent {
     public void execute(Event<UITags> event) throws Exception {
       UITags uiTags = event.getSource() ;
       String tagId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      ContactUtils.getContactService().removeTag(ContactUtils.getCurrentUser(), tagId) ;
+      ContactUtils.getContactService().removeTag(SessionsUtils.getSystemProvider(), ContactUtils.getCurrentUser(), tagId) ;
       UIWorkingContainer uiWorkingContainer = uiTags.getAncestorOfType(UIWorkingContainer.class) ;
       UIContacts uiContacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class) ;
       if (tagId.equals(uiTags.getSelectedTag())) {

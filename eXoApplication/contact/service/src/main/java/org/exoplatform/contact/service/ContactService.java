@@ -6,6 +6,8 @@ package org.exoplatform.contact.service;
 
 import java.util.List;
 
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
+
 /**
  * Created by The eXo Platform SARL
  * Author : Hung Nguyen Quang
@@ -14,40 +16,40 @@ import java.util.List;
  */
 public interface ContactService {
   
-  public List<Contact> getAllContact(String username) throws Exception ;
-  public ContactPageList getContactPageListByGroup(String username, String groupId) throws Exception ;
-  public List<String>  getAllEmailAddressByGroup(String username, String groupId) throws Exception ;
-  public Contact getContact(String username, String contactId) throws Exception ;
-  public void saveContact(String username, Contact contact, boolean isNew) throws Exception ;
-  public List<Contact> removeContacts(String username, List<String> contactIds) throws Exception ;
-  public List<Contact> moveContacts(String username, List<String> contactIds, String[] groupId) throws Exception ;
-  public ContactPageList getContactPageListByTag(String username, ContactFilter filter) throws Exception ;
-  public ContactPageList getContactPageListByGroup(String username, ContactFilter filter, boolean isPublic) throws Exception;
-  public DataPageList searchContact(String username, ContactFilter filter) throws Exception ;
+  public List<Contact> getAllContact(SessionProvider sProvider, String username) throws Exception ;
+  public ContactPageList getContactPageListByGroup(SessionProvider sProvider, String username, String groupId) throws Exception ;
+  public List<String>  getAllEmailAddressByGroup(SessionProvider sProvider, String username, String groupId) throws Exception ;
+  public Contact getContact(SessionProvider sProvider, String username, String contactId) throws Exception ;
+  public void saveContact(SessionProvider sProvider, String username, Contact contact, boolean isNew) throws Exception ;
+  public List<Contact> removeContacts(SessionProvider sProvider, String username, List<String> contactIds) throws Exception ;
+  public List<Contact> moveContacts(SessionProvider sProvider, String username, List<String> contactIds, String[] groupId) throws Exception ;
+  //public ContactPageList getContactPageListByTag(SessionProvider sProvider, String username, ContactFilter filter) throws Exception ;
+  public ContactPageList getContactPageListByGroup(SessionProvider sProvider, String username, ContactFilter filter, boolean isPublic) throws Exception;
+  public DataPageList searchContact(SessionProvider sProvider, String username, ContactFilter filter) throws Exception ;
   
-  public ContactPageList getSharedContactsByGroup(String groupId) throws Exception ;
-  public List<GroupContactData> getSharedContacts(String[] groupIds) throws Exception ;
-  public List<String> getSharedGroupContacts(String[] groupIds) throws Exception ;
-  public Contact getSharedContact(String contactId) throws Exception ;
-  public void saveSharedContact(Contact contact, boolean isNew) throws Exception ;
-  public Contact removeSharedContact(String contactId) throws Exception ;
+  public ContactPageList getSharedContactsByGroup(SessionProvider sProvider, String groupId) throws Exception ;
+  public List<GroupContactData> getSharedContacts(SessionProvider sProvider, String[] groupIds) throws Exception ;
+  public List<String> getSharedGroupContacts(SessionProvider sProvider, String[] groupIds) throws Exception ;
+  public Contact getSharedContact(SessionProvider sProvider, String contactId) throws Exception ;
+  public void saveSharedContact(SessionProvider sProvider, Contact contact, boolean isNew) throws Exception ;
+  public Contact removeSharedContact(SessionProvider sProvider, String contactId) throws Exception ;
   
-  public List<ContactGroup> getGroups(String username) throws Exception ;
-  public ContactGroup getGroup(String username, String groupId) throws Exception ;
-  public void saveGroup(String username, ContactGroup group, boolean isNew) throws Exception ;
-  public ContactGroup removeGroup(String username, String groupId) throws Exception ;
+  public List<ContactGroup> getGroups(SessionProvider sProvider, String username) throws Exception ;
+  public ContactGroup getGroup(SessionProvider sProvider, String username, String groupId) throws Exception ;
+  public void saveGroup(SessionProvider sProvider, String username, ContactGroup group, boolean isNew) throws Exception ;
+  public ContactGroup removeGroup(SessionProvider sProvider, String username, String groupId) throws Exception ;
   
-  public List<Contact> shareContacts(String username, List<String> contactIds, String[] groupIds) throws Exception;
-  public List<GroupContactData> getPublicContacts(String[] groupIds) throws Exception ;
+  public List<Contact> shareContacts(SessionProvider sProvider, String username, List<String> contactIds, String[] groupIds) throws Exception;
+  public List<GroupContactData> getPublicContacts(SessionProvider sProvider, String[] groupIds) throws Exception ;
   
-  public List<Tag> getTags(String username) throws Exception ;
-  public Tag getTag(String username, String tagId) throws Exception ;
-  public DataPageList getContactPageListByTag(String username, String tagId) throws Exception ;
-  public void addTag(String username, List<String> contactIds, List<Tag> tags) throws Exception ;
-  public void addTag(String username, List<String> contactIds, String tagId) throws Exception ;
-  public Tag removeTag(String username, String tagName) throws Exception ;
-  public void removeContactTag(String username, List<String>contactIds, List<String> tags) throws Exception ;
-  public void updateTag(String username,Tag tag) throws Exception ;
+  public List<Tag> getTags(SessionProvider sProvider, String username) throws Exception ;
+  public Tag getTag(SessionProvider sProvider, String username, String tagId) throws Exception ;
+  public DataPageList getContactPageListByTag(SessionProvider sProvider, String username, String tagId) throws Exception ;
+  public void addTag(SessionProvider sProvider, String username, List<String> contactIds, List<Tag> tags) throws Exception ;
+  public void addTag(SessionProvider sProvider, String username, List<String> contactIds, String tagId) throws Exception ;
+  public Tag removeTag(SessionProvider sProvider, String username, String tagName) throws Exception ;
+  public void removeContactTag(SessionProvider sProvider, String username, List<String>contactIds, List<String> tags) throws Exception ;
+  public void updateTag(SessionProvider sProvider, String username,Tag tag) throws Exception ;
   
   public ContactImportExport getContactImportExports(String type) ;
   public String[] getImportExportType() throws Exception ;

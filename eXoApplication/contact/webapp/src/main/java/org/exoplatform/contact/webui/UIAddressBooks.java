@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.exoplatform.contact.ContactUtils;
+import org.exoplatform.contact.SessionsUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.ContactGroup;
@@ -57,14 +58,14 @@ public class UIAddressBooks extends UIComponent {
 
   public List<ContactGroup> getGroups() throws Exception {
     List<ContactGroup> groupList = ContactUtils.getContactService()
-      .getGroups(ContactUtils.getCurrentUser());
+      .getGroups(SessionsUtils.getSessionProvider(), ContactUtils.getCurrentUser());
     privateGroupMap_.clear() ;
     for (ContactGroup group : groupList) privateGroupMap_.put(group.getId(), group.getName()) ; 
     return groupList;
   }
   public List<String> getSharedContactGroups() throws Exception {
     List<String> sharedGroup = ContactUtils.getContactService()
-      .getSharedGroupContacts(ContactUtils.getUserGroups());
+      .getSharedGroupContacts(SessionsUtils.getSystemProvider(), ContactUtils.getUserGroups());
     publicGroupMap_.clear() ;
     for (String group : sharedGroup) publicGroupMap_.put(group, group) ; 
     return sharedGroup ;
@@ -105,10 +106,10 @@ public class UIAddressBooks extends UIComponent {
         String username = ContactUtils.getCurrentUser() ;
         Contact[] contacts = null ;
         if (ContactUtils.isPublicGroup(addressBookId))
-          contacts = contactService.getContactPageListByGroup(username, filter, true)
+          contacts = contactService.getContactPageListByGroup(SessionsUtils.getSystemProvider(), username, filter, true)
             .getAll().toArray(new Contact[] {});
         else
-          contacts = contactService.getContactPageListByGroup(username, filter, false)
+          contacts = contactService.getContactPageListByGroup(SessionsUtils.getSessionProvider(), username, filter, false)
             .getAll().toArray(new Contact[] {});
         if (contacts == null || contacts.length == 0) {
           UIApplication uiApp = uiAddressBook.getAncestorOfType(UIApplication.class) ;
@@ -220,7 +221,7 @@ public class UIAddressBooks extends UIComponent {
       String groupId = event.getRequestContext().getRequestParameter(OBJECTID);
       String username = ContactUtils.getCurrentUser();
       ContactService contactService = ContactUtils.getContactService();
-      List<String> addresses = contactService.getAllEmailAddressByGroup(username, groupId);
+      List<String> addresses = contactService.getAllEmailAddressByGroup(SessionsUtils.getSessionProvider(), username, groupId);
       uiSendEmail.setEmails(addresses);
       uiPopupAction.activate(uiSendEmail, 700, 0, true);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
@@ -243,10 +244,10 @@ public class UIAddressBooks extends UIComponent {
         uiContacts.setContacts(null);
         event.getRequestContext().addUIComponentToUpdateByAjax(contactContainer);
       }
-      contactService.removeGroup(username, groupId);
+      contactService.removeGroup(SessionsUtils.getSessionProvider(), username, groupId);
       String selectedTag = uiContacts.getSelectedTag() ;
       if (!ContactUtils.isEmpty(selectedTag)) {
-        uiContacts.setContacts(contactService.getContactPageListByTag(username, selectedTag)) ;
+        uiContacts.setContacts(contactService.getContactPageListByTag(SessionsUtils.getSystemProvider(), username, selectedTag)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(contactContainer);
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook);
@@ -263,7 +264,7 @@ public class UIAddressBooks extends UIComponent {
       uiAddressBook.selectedGroup = groupId;
       ContactService contactService = ContactUtils.getContactService();
       UIContacts uiContacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class);
-      uiContacts.setContacts(contactService.getContactPageListByGroup(
+      uiContacts.setContacts(contactService.getContactPageListByGroup(SessionsUtils.getSessionProvider(), 
           ContactUtils.getCurrentUser(), groupId));
       uiContacts.setSelectedGroup(groupId);
       uiContacts.setSelectedTag(null);
@@ -282,7 +283,7 @@ public class UIAddressBooks extends UIComponent {
       uiAddressBook.selectedGroup = groupId;
       ContactService contactService = ContactUtils.getContactService();
       UIContacts uiContacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class);
-      uiContacts.setContacts(contactService.getSharedContactsByGroup(groupId));
+      uiContacts.setContacts(contactService.getSharedContactsByGroup(SessionsUtils.getSystemProvider(), groupId));
       uiContacts.setSelectedGroup(groupId);
       uiContacts.setSelectedTag(null);
       uiContacts.setDisplaySearchResult(false) ;

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.exoplatform.contact.ContactUtils;
+import org.exoplatform.contact.SessionsUtils;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -61,7 +62,7 @@ public class UICategorySelect extends UIForm {
 
   public List<SelectItemOption<String>> getCategoryList() throws Exception {
     String username = ContactUtils.getCurrentUser();
-    List<ContactGroup> contactGroups =  ContactUtils.getContactService().getGroups(username);
+    List<ContactGroup> contactGroups =  ContactUtils.getContactService().getGroups(SessionsUtils.getSessionProvider(), username);
     List<SelectItemOption<String>> categories = new ArrayList<SelectItemOption<String>>() ; 
     for(ContactGroup contactGroup : contactGroups)
       categories.add(new SelectItemOption<String>(contactGroup.getName(),contactGroup.getId() )) ;
