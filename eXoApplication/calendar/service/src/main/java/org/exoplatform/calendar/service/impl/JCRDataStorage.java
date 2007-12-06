@@ -42,7 +42,6 @@ import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.xml.PortalContainerInfo;
-import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 
@@ -676,7 +675,7 @@ public class JCRDataStorage implements DataStorage{
   	// Need to use system session
   	Node node = getReminderFolder(sProvider, eventNode.getProperty("exo:fromDateTime").getDate().getTime()) ;
   	if(node.hasNode(eventNode.getName())) node.getNode(eventNode.getName()).remove() ;
-  	node.save() ;  	
+  	//node.save() ;  	
   } 
   
   public CalendarEvent getGroupEvent(SessionProvider sProvider, String calendarId, String eventId) throws Exception {
