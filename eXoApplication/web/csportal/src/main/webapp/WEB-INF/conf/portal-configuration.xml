@@ -13,8 +13,13 @@
   
   <component>
     <key>org.exoplatform.portal.config.DataStorage</key>
-    <type>org.exoplatform.portal.config.jcrregistry.DataStorageImpl</type>     
+    <type>org.exoplatform.portal.config.jcr.DataStorageImpl</type>     
   </component> 
+
+  <component>
+    <key>org.exoplatform.portal.application.UserWidgetStorage</key>
+    <type>org.exoplatform.portal.application.jcr.UserWidgetStorageImpl</type>
+  </component>    
   
   <component>
     <key>org.exoplatform.portal.config.UserACL</key>
@@ -52,7 +57,7 @@
   
   <component>
       <key>org.exoplatform.application.registry.ApplicationRegistryService</key>
-      <type>org.exoplatform.application.registry.jcrregistry.ApplicationRegistryServiceImpl</type>
+      <type>org.exoplatform.application.registry.jcr.ApplicationRegistryServiceImpl</type>
     </component>     
   
   

@@ -50,6 +50,7 @@ function getModule(params) {
       addDependency(portal.web.eXoResources) .
       addDependency(portal.web.eXoMacSkin) .
       addDependency(portal.web.eXoVistaSkin) .
+			addDependency(new Project("org.exoplatform.portal", "exo.portal.component.jcrext", "jar", module.version)).
       addDependency(portal.webui.portal) .
       addDependency(jcr.frameworks.command) .
       addDependency(jcr.frameworks.web) ;
