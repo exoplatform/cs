@@ -16,6 +16,7 @@ import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Attachment;
+import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.JCRMessageAttachment;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
@@ -46,6 +47,7 @@ import org.exoplatform.webui.event.EventListener;
         @EventConfig(listeners = UIMessagePreview.DownloadAttachmentActionListener.class),
         @EventConfig(listeners = UIMessagePreview.AddStarActionListener.class),
         @EventConfig(listeners = UIMessagePreview.ReplyActionListener.class),
+        @EventConfig(listeners = UIMessagePreview.DeleteActionListener.class),
         @EventConfig(listeners = UIMessagePreview.ForwardActionListener.class), 
         @EventConfig(listeners = UIMessagePreview.PrintActionListener.class),
         @EventConfig(listeners = UIMessagePreview.ExportActionListener.class),
@@ -179,6 +181,28 @@ public class UIMessagePreview extends UIComponent {
       uiPopupContainer.addChild(uiComposeForm) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessagePreview.class));
+    }
+  }
+  
+  static public class DeleteActionListener extends EventListener<UIMessagePreview> {
+    public void execute(Event<UIMessagePreview> event) throws Exception {
+      UIMessagePreview uiPreview = event.getSource();
+      String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      UIMailPortlet uiPortlet = uiPreview.getAncestorOfType(UIMailPortlet.class);
+      UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
+      UIMessageArea uiMessageArea = uiPortlet.findFirstComponentOfType(UIMessageArea.class);
+      UITagContainer uiTags = uiPortlet.findFirstComponentOfType(UITagContainer.class); 
+      MailService mailSrv = uiPreview.getApplicationComponent(MailService.class);
+      String username = MailUtils.getCurrentUser();
+      String accountId = MailUtils.getAccountId();
+      
+      Message msg = mailSrv.getMessageById(username, accountId, msgId);
+      mailSrv.moveMessages(username, accountId, msgId, msg.getFolders()[0],  Utils.createFolderId(accountId, Utils.FD_TRASH, false));
+      
+      uiPortlet.findFirstComponentOfType(UIMessageList.class).updateList();
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageArea);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiTags);
     }
   }
   

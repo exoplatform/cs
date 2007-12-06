@@ -144,6 +144,10 @@ public class MailServiceImpl implements MailService{
   public void removeMessage(String username,String accountId, List<String> messageIds) throws Exception {
     storage_.removeMessage(username, accountId, messageIds);
   } 
+  
+  public void moveMessages(String username,String accountId, String msgId, String currentFolderId, String destFolderId) throws Exception {
+    storage_.moveMessages(username, accountId, msgId, currentFolderId, destFolderId);
+  }
 
   public MessagePageList getMessages(String username, MessageFilter filter) throws Exception {
     return storage_.getMessages(username, filter);

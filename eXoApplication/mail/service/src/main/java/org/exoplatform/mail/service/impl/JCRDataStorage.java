@@ -269,6 +269,44 @@ public class JCRDataStorage implements DataStorage{
       removeMessage(username, accountId, messageId);
     }
   }
+  
+  public void moveMessages(String username, String accountId, String msgId, String currentFolderId, String destFolderId) throws Exception {
+    Node messageHome = getMessageHome(username, accountId);
+    Node folderHome = getFolderHome(username, accountId);
+    if (messageHome.hasNode(msgId)) {
+      Node msgNode = messageHome.getNode(msgId) ;
+      if (msgNode.hasProperty(Utils.EXO_FOLDERS)) {
+        Value[] propFolders = msgNode.getProperty(Utils.EXO_FOLDERS).getValues();
+        String[] folderIds = new String[propFolders.length];
+        for (int i = 0; i < propFolders.length; i++) {
+          folderIds[i] = propFolders[i].getString();
+        }
+        List<String> folderList = new ArrayList<String>(Arrays.asList(folderIds)); 
+        folderList.remove(currentFolderId);
+        folderList.add(destFolderId);
+        folderIds = folderList.toArray(new String[folderList.size()]);
+        msgNode.setProperty(Utils.EXO_FOLDERS, folderIds);
+
+        Boolean isUnread = msgNode.getProperty(Utils.EXO_ISUNREAD).getBoolean();
+        Boolean isRootConversation = msgNode.getProperty(Utils.EXO_ISROOT).getBoolean();
+        // Update number of unread messages
+        Node currentFolderNode = folderHome.getNode(currentFolderId);
+        Node destFolderNode = folderHome.getNode(destFolderId);
+        if (isUnread && isRootConversation) {
+          currentFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (currentFolderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong() - 1));
+          destFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (destFolderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong() + 1));
+        }
+        currentFolderNode.setProperty(Utils.EXO_TOTALMESSAGE, (currentFolderNode.getProperty(Utils.EXO_TOTALMESSAGE).getLong() - 1));
+        destFolderNode.setProperty(Utils.EXO_TOTALMESSAGE, (destFolderNode.getProperty(Utils.EXO_TOTALMESSAGE).getLong() + 1));
+        
+        currentFolderNode.getSession().save();
+        destFolderNode.getSession().save();
+      }
+    }
+    messageHome.getSession().save();
+  }
+  
+  
 
   public void saveAccount(String username, Account account, boolean isNew) throws Exception {
     // creates or updates an account, depending on the isNew flag
@@ -697,7 +735,7 @@ public class JCRDataStorage implements DataStorage{
           for (String tagId : tagIds) listTags.remove(tagId);
           tags = listTags.toArray(new String[listTags.size()]);
           message.setTags(tags);
-          saveMessage(username, message.getAccountId(), message, false);
+
         }
       }
     }

@@ -47,6 +47,8 @@ public interface DataStorage {
   public void removeMessage(String username, String accountId, String messageId) throws Exception ;
 
   public void removeMessage(String username, String accountId, List<String> messageIds) throws Exception ;
+  
+  public void moveMessages(String username, String accountId, String msgId, String currentFolderId, String destFolderId) throws Exception ;
 
   public void saveAccount(String username, Account account, boolean isNew) throws Exception ;
 

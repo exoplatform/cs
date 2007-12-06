@@ -259,6 +259,8 @@ public interface MailService {
    * @throws Exception
    */
   public void removeMessage(String username, String accountId, List<String> messageIds) throws Exception ;
+  
+  public void moveMessages(String username,String accountId, String msgId, String currentFolderId, String destFolderId) throws Exception ;
 
   public void sendMessages(List<Message> msgList, ServerConfiguration serverConfig) throws Exception ;
   /**
