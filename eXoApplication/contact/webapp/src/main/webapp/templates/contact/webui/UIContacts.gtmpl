@@ -419,7 +419,7 @@
 									break ;
 								}	
 							}
-						}		
+						}
 		
 				%>	
 		  <div class="LeftVCardsContent">
@@ -427,9 +427,42 @@
 			  	<div class="TitleVCards" >
 				  	<div class="StateIcon OnlineIcon"><%=(contact.getFullName()==null ? "_" : contact.getFullName())%></div>
 			  		<% if (tagIds != null && tagIds.length > 0) { %>
-					  		<a href="#">
-					  			<div class="TagIcon $iconTag" title="Show tag info"><span></span></div>
-					  		</a>
+                <div onclick="eXo.webui.UIPopupSelectCategory.show(this, event);" style="cursor: pointer; display: inline" class="TagIcon $iconTag" title="Show tag info">
+                  <% /*Begin Popup Menu*/ %>
+                  <span style="position: absolute;">
+                    <div class="UIPopupCategory" style="display: none;">
+                      <div class="UIRightClickPopupMenu" style="display: block;">
+                        <div class="UIContextMenuContainer">
+                          <div class="TopLeftRightClickPopupMenu">
+                            <div class="TopRightRightClickPopupMenu">
+                              <div class="TopCenterRightClickPopupMenu"><span></span></div>
+                            </div>
+                          </div>
+                          <div class="MiddleLeftRightClickPopupMenu">
+                            <div class="MiddleRightRightClickPopupMenu">
+                              <div class="UIRightPopupMenuContainer">
+                                <%
+                                for (String tagId : tagIds) {
+                                  Tag tag = tagMap.get(tagId) ;
+                                %>
+                                <span class="MenuItem">   
+                                  <div class="ItemIcon <%=tag.getColor()%>Tag"><%=tag.getName()%></div>
+                                </span>
+                                <%}%>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="BottomLeftRightClickPopupMenu">
+                          <div class="BottomRightRightClickPopupMenu">
+                            <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+                          </div>
+                        </div>
+                        </div>
+                      </div>
+                    </div>
+                  </span>
+                  <% /*End Popup Menu*/ %>
+                </div>
 			  		<% } %>
 			  		<div style="clear: both;"><span></span></div>
 			  	</div>
@@ -505,9 +538,42 @@
 			  	<div class="TitleVCards" >
 				  	<div class="StateIcon OfflineIcon"><%=(contact.getFullName()==null ? "_" : contact.getFullName())%></div>
 			  		<% if (tagIds != null && tagIds.length > 0) { %>
-						     <a href="#">
-							   	 <div class="TagIcon $iconTag" title="Show tag info"><span></span></div>
-								 </a>
+					     <div onclick="eXo.webui.UIPopupSelectCategory.show(this, event);" style="cursor: pointer; display: inline" class="TagIcon $iconTag" title="Show tag info">
+                <% /*Begin Popup Menu*/ %>
+                <div style="position: absolute;">
+                  <div class="UIPopupCategory" style="display: none;">
+                    <div class="UIRightClickPopupMenu" style="display: block;">
+                      <div class="UIContextMenuContainer">
+                        <div class="TopLeftRightClickPopupMenu">
+                          <div class="TopRightRightClickPopupMenu">
+                            <div class="TopCenterRightClickPopupMenu"><span></span></div>
+                          </div>
+                        </div>
+                        <div class="MiddleLeftRightClickPopupMenu">
+                          <div class="MiddleRightRightClickPopupMenu">
+                            <div class="UIRightPopupMenuContainer">
+                              <%
+                              for (String tagId : tagIds) {
+                                Tag tag = tagMap.get(tagId) ;
+                              %>
+                              <span class="MenuItem">   
+                                <div class="ItemIcon <%=tag.getColor()%>Tag"><%=tag.getName()%></div>
+                              </span>
+                              <%}%>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="BottomLeftRightClickPopupMenu">
+                        <div class="BottomRightRightClickPopupMenu">
+                          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+                        </div>
+                      </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <% /*End Popup Menu*/ %>
+              </div>
 			  		<% } %>	
 			  		<div style="clear: both;"><span></span></div>
 			  	</div>
