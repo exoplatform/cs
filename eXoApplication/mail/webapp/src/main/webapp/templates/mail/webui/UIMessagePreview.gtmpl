@@ -140,6 +140,9 @@
                                     <a class="MenuItem" href="<%=uicomponent.event("Reply", msg.getId())%>">   
                                       <div class="ItemIcon ReplyMailIcon"> Reply</div>
                                     </a>  
+                                    <a class="MenuItem" href="<%=uicomponent.event("ReplyAll", msg.getId())%>">   
+                                      <div class="ItemIcon ReplyMailIcon"> Reply to All</div>
+                                    </a>  
                                     <a class="MenuItem" href="<%=uicomponent.event("Forward", msg.getId())%>">   
                                       <div class="ItemIcon ForwardMailIcon"> Forward </div>
                                     </a>
@@ -149,8 +152,14 @@
                                     <a class="MenuItem" href="<%=uicomponent.event("Delete", msg.getId())%>">   
                                       <div class="ItemIcon DeleteMailIcon"> Delete </div>
                                     </a>
-                                    <a class="MenuItem" href="<%=uicomponent.event("Print", msg.getId())%>">   
-                                      <div class="ItemIcon AddContactIcon"> Add contact </div>
+                                    <a class="MenuItem" href="<%=uicomponent.event("AddTag", msg.getId())%>">   
+                                      <div class="ItemIcon TagMailIcon"> Tag </div>
+                                    </a>
+                                    <a class="MenuItem" href="<%=uicomponent.event("MoveMessages", msg.getId())%>">   
+                                      <div class="ItemIcon MoveMailIcon">Move to Folder </div>
+                                    </a>
+                                    <a class="MenuItem" href="<%=uicomponent.event("AddContact", msg.getId())%>">   
+                                      <div class="ItemIcon AddContactIcon"> Add to Contacts </div>
                                     </a>
                                     <a class="MenuItem" href="<%=uicomponent.event("Export", msg.getId())%>">   
                                     <div class="ItemIcon ExportIcon"> Export (*.eml) </div>
@@ -233,57 +242,6 @@
     <%}%>
 <!--  End DecoratorBox ViewBoxStyle -->
 	</div>
-  <% /*Popup menu for the message*/ %>
-  <div class="UIRightClickPopupMenu" id="UIMessagePreviewPopupMenu" eXoCallback="eXo.mail.UIMailPortlet.msgPreviewPopupMenuCallback">
-    <div class="UIContextMenuContainer">
-      <div class="TopLeftRightClickPopupMenu" id="test">
-        <div class="TopRightRightClickPopupMenu">
-          <div class="TopCenterRightClickPopupMenu"><span></span></div>
-        </div>
-      </div>
-      
-      <div class="MiddleLeftRightClickPopupMenu">
-        <div class="MiddleRightRightClickPopupMenu">
-          <div class="UIRightPopupMenuContainer">
-            <a class="MenuItem" href="<%=uicomponent.event("Print", "id")%>">   
-              <div class="ItemIcon PrintMailIcon"> Print </div>
-            </a>
-            <a class="MenuItem" href="<%=uicomponent.event("Reply", "id")%>">   
-              <div class="ItemIcon ReplyMailIcon"> Reply to Sender</div>
-            </a>  
-            <a class="MenuItem" href="<%=uicomponent.event("ReplyAll", "id")%>">   
-              <div class="ItemIcon ReplyAllMailIcon"> Reply to All </div>
-            </a>
-            <a class="MenuItem" href="<%=uicomponent.event("Forward", "id")%>">   
-              <div class="ItemIcon ForwardMailIcon"> Forward </div>
-            </a>
-            <a class="MenuItem" href="<%=uicomponent.event("MoveMessages", "id")%>">   
-              <div class="ItemIcon MoveMailIcon"> Move to Folder </div>
-            </a>
-            <a class="MenuItem" href="<%=uicomponent.event("AddTag", "id")%>">   
-              <div class="ItemIcon TagMailIcon"> Tag </div>
-            </a>          
-            <a class="MenuItem" href="<%=uicomponent.event("Delete", "id")%>">   
-              <div class="ItemIcon DeleteMailIcon"> Delete </div>
-            </a>
-            <a class="MenuItem" href="<%=uicomponent.event("AddContact", "id")%>">   
-              <div class="ItemIcon AddContactIcon"> Add Sender to Contacts </div>
-            </a>
-            <a class="MenuItem" href="<%=uicomponent.event("Export", "id")%>">   
-            <div class="ItemIcon ExportIcon"> Export (*.eml) </div>
-            </a>
-          </div>
-        </div>
-      </div>
-      
-      <div class="BottomLeftRightClickPopupMenu">
-        <div class="BottomRightRightClickPopupMenu">
-          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
-        </div>
-      </div>           
-    </div>
-  </div>  
-  <% /* End popup menu for the message*/ %>
 <%} else {%>
   <div class="SubjectMail">
 	  <div class="WelcomeMail">

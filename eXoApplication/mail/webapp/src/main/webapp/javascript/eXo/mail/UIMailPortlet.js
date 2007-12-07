@@ -12,7 +12,6 @@ UIMailPortlet.prototype.showContextMenu = function() {
 		'preventForms':false
 	} ;	
 	UIContextMenu.init(config) ;
-	UIContextMenu.attach('DecoratorBox', 'UIMessagePreviewPopupMenu') ;
 	UIContextMenu.attach('MessageItem', 'UIMessagePopupMenu') ;
 	UIContextMenu.attach('IconFolder', 'UIFolderListPopupMenu') ;
 	UIContextMenu.attach('IconTagHolder', 'UITagListPopupMenu') ;
@@ -56,24 +55,6 @@ UIMailPortlet.prototype.msgPopupMenuCallback = function(evt) {
 		str.className += " SelectedItem";
 	}
 	id = src.getAttribute("msgId");
-	eXo.webui.UIContextMenu.changeAction(UIContextMenu.menuElement, id) ;
-} ;
-
-UIMailPortlet.prototype.msgPreviewPopupMenuCallback = function(evt) {
-	var UIContextMenu = eXo.webui.UIContextMenu ;
-	var _e = window.event || evt ;
-	//_e.cancelBubble = true ;
-	var src = null ;
-	if (UIContextMenu.IE) {
-		src = _e.srcElement;
-	} else {
-		src = _e.target;
-	}
-	if (src.className != "DecoratorBox"){
-		src = eXo.core.DOMUtil.findAncestorByClass(src, "DecoratorBox");
-	}
-	
-	id = src.getAttribute("previewId");
 	eXo.webui.UIContextMenu.changeAction(UIContextMenu.menuElement, id) ;
 } ;
 

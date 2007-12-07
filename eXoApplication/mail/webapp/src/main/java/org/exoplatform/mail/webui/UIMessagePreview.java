@@ -16,7 +16,6 @@ import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Attachment;
-import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.JCRMessageAttachment;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;

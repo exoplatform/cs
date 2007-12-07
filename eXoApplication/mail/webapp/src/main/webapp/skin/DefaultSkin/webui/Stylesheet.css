@@ -431,6 +431,10 @@
 	padding-right: 18px; 
 }
 
+.UIRightClickPopupMenu .MenuItem {
+	font-size:11px;
+}
+
 /*================================== UIGrid==============================*/
 
 .UIMailPortlet .MailWorkingWorkspace .UIMessageList {
