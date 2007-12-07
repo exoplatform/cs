@@ -8,6 +8,7 @@
 
   <modules>
     <module>web/csportal</module>
+    <module>web/csResources</module>
     
     <module>eXoApplication/mail/webapp</module>
     <module>eXoApplication/mail/service</module>

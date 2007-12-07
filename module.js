@@ -46,6 +46,8 @@ function getModule(params) {
   module.eXoApplication.content.deployName = "content";
     
   module.web = {}
+  module.web.csResources = 
+    new Project("org.exoplatform.cs", "exo.cs.web.csResources", "war", module.version) ;
   module.web.csportal = 
     new Project("org.exoplatform.cs", "exo.cs.web.portal", "exo-portal", module.version).
       addDependency(portal.web.eXoResources) .
