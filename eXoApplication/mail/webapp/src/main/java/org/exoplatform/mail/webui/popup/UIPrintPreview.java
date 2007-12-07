@@ -6,6 +6,7 @@ package org.exoplatform.mail.webui.popup;
 
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.mail.MailUtils;
+import org.exoplatform.mail.SessionsUtils;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
@@ -52,7 +53,7 @@ public class UIPrintPreview extends UIForm implements UIPopupComponent {
     String accountId = MailUtils.getAccountId();
     MailService mailSrv = MailUtils.getMailService();
     try {
-      return mailSrv.getMessageById(username, accountId, msgId);
+      return mailSrv.getMessageById(SessionsUtils.getSessionProvider(), username, accountId, msgId);
     } catch(Exception e) {
       return null ;
     }
@@ -67,7 +68,7 @@ public class UIPrintPreview extends UIForm implements UIPopupComponent {
     String accountId = MailUtils.getAccountId();
     MailService mailSrv = MailUtils.getMailService();
     try {
-      return mailSrv.getAccountById(username, accountId);
+      return mailSrv.getAccountById(SessionsUtils.getSessionProvider(), username, accountId);
     } catch(Exception e) {
       return null ;
     }

@@ -9,6 +9,7 @@ import java.util.Map;
 
 import javax.mail.AuthenticationFailedException;
 
+import org.exoplatform.mail.SessionsUtils;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
@@ -144,19 +145,19 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
   
   protected void saveForm(String currentUser, Account account) throws Exception {
     MailService mailSvr = getApplicationComponent(MailService.class) ;
-    mailSvr.createAccount(currentUser, account) ;
+    mailSvr.createAccount(SessionsUtils.getSessionProvider(), currentUser, account) ;
     UIMailPortlet uiPortlet = getAncestorOfType(UIMailPortlet.class) ;
     String username = uiPortlet.getCurrentUser() ;
     for(String folderName : defaultFolders_) {
       String folderId = Utils.createFolderId(account.getId(), folderName, false);
-      Folder folder = mailSvr.getFolder(username, account.getId(), folderId) ;
+      Folder folder = mailSvr.getFolder(SessionsUtils.getSessionProvider(), username, account.getId(), folderId) ;
       if(folder == null) {
         folder = new Folder() ;
         folder.setId(folderId);
         folder.setName(folderName) ;
         folder.setLabel(folderName) ;
         folder.setPersonalFolder(false) ;
-        mailSvr.saveFolder(username, account.getId(), folder) ;
+        mailSvr.saveFolder(SessionsUtils.getSessionProvider(), username, account.getId(), folder) ;
       }
     }
   }
@@ -165,7 +166,7 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
     MailService mailSvr = getApplicationComponent(MailService.class) ;
     UIMailPortlet uiPortlet = getAncestorOfType(UIMailPortlet.class) ;
     String username = uiPortlet.getCurrentUser() ;
-    mailSvr.checkNewMessage(username, accountId) ;
+    mailSvr.checkNewMessage(SessionsUtils.getSessionProvider(), username, accountId) ;
   }
 
   protected void resetForm() {

@@ -14,6 +14,7 @@ import org.exoplatform.download.DownloadResource;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.mail.MailUtils;
+import org.exoplatform.mail.SessionsUtils;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.Utils;
@@ -78,7 +79,7 @@ public class UIExportForm extends UIForm implements UIPopupComponent {
       String username = MailUtils.getCurrentUser();
       String accountId = MailUtils.getAccountId();
       MailService mailSrv = MailUtils.getMailService();      
-      ByteArrayOutputStream outputStream = (ByteArrayOutputStream)mailSrv.exportMessage(username, accountId, msgExport);
+      ByteArrayOutputStream outputStream = (ByteArrayOutputStream)mailSrv.exportMessage(SessionsUtils.getSessionProvider(), username, accountId, msgExport);
       ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
       String fileName = uiExportForm.getUIStringInput(EXPORT_FILE_NAME).getValue();
       String type = uiExportForm.getUIFormSelectBox(EXPORT_FILE_TYPE).getValue();

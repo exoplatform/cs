@@ -5,6 +5,7 @@
 package org.exoplatform.mail.webui.popup;
 
 import org.exoplatform.mail.MailUtils;
+import org.exoplatform.mail.SessionsUtils;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.webui.UIFolderContainer;
@@ -53,7 +54,7 @@ public class UIRenameFolderForm extends UIForm implements UIPopupComponent {
     MailService mailSrv = getApplicationComponent(MailService.class);
     String username = MailUtils.getCurrentUser();
     String accountId = getAncestorOfType(UIMailPortlet.class).findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-    Folder folder = mailSrv.getFolder(username, accountId, folderId);
+    Folder folder = mailSrv.getFolder(SessionsUtils.getSessionProvider(), username, accountId, folderId);
     getUIFormInputInfo(CUR_FOLDER_NAME).setValue(folder.getName());    
   }
 
@@ -78,11 +79,11 @@ public class UIRenameFolderForm extends UIForm implements UIPopupComponent {
       
       try {
         String newFolderId = accountId + "UserFolder" + newFolderName;
-        if (mailService.getFolder(username, accountId, newFolderId) == null) {
-          Folder folder =  mailService.getFolder(username, accountId, folderId);
+        if (mailService.getFolder(SessionsUtils.getSessionProvider(), username, accountId, newFolderId) == null) {
+          Folder folder =  mailService.getFolder(SessionsUtils.getSessionProvider(), username, accountId, folderId);
           folder.setLabel(newFolderName) ;
           folder.setName(newFolderName) ;
-          mailService.saveFolder(username, accountId, folder) ;
+          mailService.saveFolder(SessionsUtils.getSessionProvider(), username, accountId, folder) ;
         } else {
           uiApp.addMessage(new ApplicationMessage("UIFolderForm.msg.folder-exist", new Object[]{newFolderName})) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;

@@ -75,7 +75,7 @@ public class UIActionBar extends UIContainer {
       }
       String username =  uiPortlet.getCurrentUser() ;
       try {
-        mailSvr.checkNewMessage(username, accId) ;
+        mailSvr.checkNewMessage(SessionsUtils.getSessionProvider(), username, accId) ;
         uiMessageList.updateList();
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UINavigationContainer.class)); 
         event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class)); 
@@ -177,9 +177,9 @@ public class UIActionBar extends UIContainer {
       UIMailSettings uiMailSetting = uiPopupAction.activate(UIMailSettings.class, 750) ;
       MailService mailSrv = uiActionBar.getApplicationComponent(MailService.class);
       String username = Util.getPortalRequestContext().getRemoteUser();
-      MailSetting mailSetting = mailSrv.getMailSetting(username);
+      MailSetting mailSetting = mailSrv.getMailSetting(SessionsUtils.getSessionProvider(), username);
       List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>();
-      for(Account acc : mailSrv.getAccounts(username)) {
+      for(Account acc : mailSrv.getAccounts(SessionsUtils.getSessionProvider(), username)) {
         SelectItemOption<String> itemOption = new SelectItemOption<String>(acc.getUserDisplayName() + " &lt;" + acc.getEmailAddress() + 
             "&gt;", acc.getUserDisplayName() + "<" + acc.getEmailAddress() + ">");
         options.add(itemOption) ;

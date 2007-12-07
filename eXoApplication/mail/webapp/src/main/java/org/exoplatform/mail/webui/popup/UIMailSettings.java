@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.exoplatform.mail.MailUtils;
+import org.exoplatform.mail.SessionsUtils;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MailSetting;
 import org.exoplatform.mail.webui.UIMailPortlet;
@@ -185,9 +186,9 @@ public class UIMailSettings extends UIForm implements UIPopupComponent {
       mailSetting.setPrefixMessageWith(uiMailSetting.getPrefixMessageWith());
       mailSetting.setSaveMessageInSent(uiMailSetting.saveMessageInSent());
       MailService mailService = uiMailSetting.getApplicationComponent(MailService.class);
-      mailService.saveMailSetting(username, mailSetting);
+      mailService.saveMailSetting(SessionsUtils.getSessionProvider(), username, mailSetting);
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
-      uiMessageList.setMessagePageList(mailSrv.getMessages(username, uiMessageList.getMessageFilter()));
+      uiMessageList.setMessagePageList(mailSrv.getMessages(SessionsUtils.getSessionProvider(), username, uiMessageList.getMessageFilter()));
       uiMessageList.updateList();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
       uiPortlet.cancelAction();

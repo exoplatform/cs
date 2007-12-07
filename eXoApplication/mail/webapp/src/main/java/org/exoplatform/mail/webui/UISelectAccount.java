@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.exoplatform.mail.MailUtils;
+import org.exoplatform.mail.SessionsUtils;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Utils;
@@ -57,7 +58,7 @@ public class UISelectAccount extends UIForm {
   private List<Account> getAccounts() throws Exception {
     MailService mailSvr = getApplicationComponent(MailService.class) ;
     String currentUser = Util.getPortalRequestContext().getRemoteUser() ;
-    return mailSvr.getAccounts(currentUser) ;
+    return mailSvr.getAccounts(SessionsUtils.getSessionProvider(), currentUser) ;
   }
   
   private List<SelectItemOption<String>> getValues() throws Exception {

@@ -11,6 +11,7 @@ import java.util.List;
 import javax.mail.internet.InternetAddress;
 
 import org.exoplatform.mail.MailUtils;
+import org.exoplatform.mail.SessionsUtils;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
@@ -104,7 +105,7 @@ public class UIMessageList extends UIForm {
     if (accountId != null){
       selectedFolderId_ = Utils.createFolderId(accountId, Utils.FD_INBOX, false);
       filter.setFolder(new String[] { selectedFolderId_ });
-      setMessagePageList(mailSrv.getMessagePageListByFolder(username, accountId, selectedFolderId_));
+      setMessagePageList(mailSrv.getMessagePageListByFolder(SessionsUtils.getSessionProvider(), username, accountId, selectedFolderId_));
     }
     setMessageFilter(filter);
   }
@@ -175,7 +176,7 @@ public class UIMessageList extends UIForm {
         // For Conversation
         if (msg.isRootConversation() && msg.getMessageIds() != null) {
           for (int i = 0; i < msg.getMessageIds().length; i++) {
-            Message conversation = mailSrv.getMessageById(username, accountId, msg.getMessageIds()[i]);
+            Message conversation = mailSrv.getMessageById(SessionsUtils.getSessionProvider(), username, accountId, msg.getMessageIds()[i]);
             if (conversation != null) messageList.add(conversation);
           }
         }
@@ -192,7 +193,7 @@ public class UIMessageList extends UIForm {
     String[] tagIds = msg.getTags();
     String tagId = "";
     if (tagIds != null && tagIds.length > 0) tagId = tagIds[0];
-    List<Tag> tagList = mailServ.getTags(username, accountId);
+    List<Tag> tagList = mailServ.getTags(SessionsUtils.getSessionProvider(), username, accountId);
     for (Tag tag : tagList) {
       if (tag.getId().equals(tagId)) return tag;
     }
@@ -207,7 +208,7 @@ public class UIMessageList extends UIForm {
     MailService mailSrv = MailUtils.getMailService();
     if (msg.isRootConversation() && (msg.getMessageIds() != null && msg.getMessageIds().length > 0)) {
       for (int i=0; i < msg.getMessageIds().length; i++) {
-        msgList.add(mailSrv.getMessageById(username, accountId, msg.getMessageIds()[i]));
+        msgList.add(mailSrv.getMessageById(SessionsUtils.getSessionProvider(), username, accountId, msg.getMessageIds()[i]));
       }
     }
     return msgList ;
@@ -221,7 +222,7 @@ public class UIMessageList extends UIForm {
     LinkedHashMap<String, String> participators = new LinkedHashMap<String, String>();
     for (Message message : msgList) {
       String personal = Utils.getPersonal(Utils.getInternetAddress(message.getFrom())[0]);
-      if (personal.equals(mailSrv.getAccountById(username, accountId).getUserDisplayName())) personal = "me";
+      if (personal.equals(mailSrv.getAccountById(SessionsUtils.getSessionProvider(), username, accountId).getUserDisplayName())) personal = "me";
       participators.put(personal, personal);
     }
     return new ArrayList<String>(participators.values());
@@ -237,7 +238,7 @@ public class UIMessageList extends UIForm {
     if (msg.getTags() != null && msg.getTags().length > 0) {
       for (int i = 0; i < msg.getTags().length; i++) {
         if (i > 0) tags += ", ";
-        Tag tag = mailSrv.getTag(username, accountId, msg.getTags()[i]);
+        Tag tag = mailSrv.getTag(SessionsUtils.getSessionProvider(), username, accountId, msg.getTags()[i]);
         tags += "[" + tag.getName() + "]";
       }
     }
@@ -248,14 +249,15 @@ public class UIMessageList extends UIForm {
     public void execute(Event<UIMessageList> event) throws Exception {
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UIMessageList uiMessageList = event.getSource();
+      //TODO: update Unread counter to folder in saveMessage(...), avoid call service alot
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       UIMessagePreview uiMessagePreview = uiPortlet.findFirstComponentOfType(UIMessagePreview.class);
       UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       MailService mailServ = uiPortlet.getApplicationComponent(MailService.class);
-      Message msg = mailServ.getMessageById(username, accountId, msgId);
-      Folder folder = mailServ.getFolder(username, accountId, msg.getFolders()[0]);
+      Message msg = mailServ.getMessageById(SessionsUtils.getSessionProvider(), username, accountId, msgId);
+      Folder folder = mailServ.getFolder(SessionsUtils.getSessionProvider(), username, accountId, msg.getFolders()[0]);
       String selectedFolderId = uiMessageList.getSelectedFolderId();
       if (selectedFolderId !=null && selectedFolderId.equalsIgnoreCase(Utils.createFolderId(accountId, Utils.FD_DRAFTS, false))) {
         UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
@@ -267,9 +269,9 @@ public class UIMessageList extends UIForm {
       } else {
         if (msg.isUnread()) {
           msg.setUnread(false);
-          mailServ.saveMessage(username, accountId, msg, false);
+          mailServ.saveMessage(SessionsUtils.getSessionProvider(), username, accountId, msg, false);
           folder.setNumberOfUnreadMessage(folder.getNumberOfUnreadMessage() - 1);
-          mailServ.saveFolder(username, accountId, folder);
+          mailServ.saveFolder(SessionsUtils.getSessionProvider(), username, accountId, folder);
         }
         uiMessageList.setSelectedMessageId(msgId);
         uiMessagePreview.setMessage(msg);
@@ -295,15 +297,15 @@ public class UIMessageList extends UIForm {
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       MailService mailServ = uiPortlet.getApplicationComponent(MailService.class);
       try {
-        Message msg = mailServ.getMessageById(username, accountId, msgId);
+        Message msg = mailServ.getMessageById(SessionsUtils.getSessionProvider(), username, accountId, msgId);
         msg.setHasStar(!msg.hasStar());
-        mailServ.saveMessage(username, accountId, msg, false);
+        mailServ.saveMessage(SessionsUtils.getSessionProvider(), username, accountId, msg, false);
         uiMessageList.setSelectedMessageId(msgId);
       } catch (Exception e) {
         for (Message msg : uiMessageList.getCheckedMessage()) {
           if (!msg.hasStar()) {
             msg.setHasStar(true);
-            mailServ.saveMessage(username, accountId, msg, false);
+            mailServ.saveMessage(SessionsUtils.getSessionProvider(), username, accountId, msg, false);
           }
         }
       }
@@ -322,7 +324,7 @@ public class UIMessageList extends UIForm {
       for (Message msg : uiMessageList.getCheckedMessage()) {
         if (msg.hasStar()) {
           msg.setHasStar(false);
-          mailServ.saveMessage(username, accountId, msg, false);
+          mailServ.saveMessage(SessionsUtils.getSessionProvider(), username, accountId, msg, false);
         }
       }
       uiMessageList.updateList();
@@ -395,7 +397,7 @@ public class UIMessageList extends UIForm {
       msgFilter.setFolder((getSelectedFolderId() == null) ? null : new String[] {getSelectedFolderId()});
       msgFilter.setTag((getSelectedTagId() == null) ? null : new String[] {getSelectedTagId()});
     }
-    setMessagePageList(mailSrv.getMessages(username, msgFilter));
+    setMessagePageList(mailSrv.getMessages(SessionsUtils.getSessionProvider(), username, msgFilter));
     updateList();
   }
 
@@ -423,7 +425,7 @@ public class UIMessageList extends UIForm {
       MailService mailSvr = uiMessageList.getApplicationComponent(MailService.class) ;
       String username = uiPortlet.getCurrentUser() ;
       if (msgId != null) {
-        Message message = mailSvr.getMessageById(username, accId, msgId);
+        Message message = mailSvr.getMessageById(SessionsUtils.getSessionProvider(), username, accId, msgId);
         uiComposeForm.setMessage(message);
         uiComposeForm.setFieldToValue(message.getFrom());
         uiComposeForm.setFieldSubjectValue("Re: " + message.getSubject());
@@ -459,7 +461,7 @@ public class UIMessageList extends UIForm {
       MailService mailSvr = uiMessageList.getApplicationComponent(MailService.class) ;
       String username = uiPortlet.getCurrentUser() ;
       if (msgId != null) {
-        Message message = mailSvr.getMessageById(username, accId, msgId);
+        Message message = mailSvr.getMessageById(SessionsUtils.getSessionProvider(), username, accId, msgId);
         uiComposeForm.setMessage(message);
         uiComposeForm.setFieldSubjectValue("Re: " + message.getSubject());
         String replyAll = message.getFrom();
@@ -499,7 +501,7 @@ public class UIMessageList extends UIForm {
       MailService mailSvr = uiMessageList.getApplicationComponent(MailService.class) ;
       String username = uiPortlet.getCurrentUser() ;
       if (msgId != null) {
-        Message message = mailSvr.getMessageById(username, accId, msgId);
+        Message message = mailSvr.getMessageById(SessionsUtils.getSessionProvider(), username, accId, msgId);
         uiComposeForm.setMessage(message);
         uiComposeForm.setFieldSubjectValue("Fwd: " + message.getSubject());
         String forwardedText = "\n\n\n-------- Original Message --------\n" +
@@ -529,12 +531,12 @@ public class UIMessageList extends UIForm {
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       List<Message> checkedMessageList = new ArrayList<Message>();
       if (msgId != null) { 
-        checkedMessageList.add(mailSrv.getMessageById(username, accountId, msgId));
+        checkedMessageList.add(mailSrv.getMessageById(SessionsUtils.getSessionProvider(), username, accountId, msgId));
       } else {
         checkedMessageList = uiMessageList.getCheckedMessage();
       }
       for (Message message : checkedMessageList) {
-        mailSrv.moveMessages(username, accountId, msgId, message.getFolders()[0], Utils.createFolderId(accountId, Utils.FD_TRASH, false));
+        mailSrv.moveMessages(SessionsUtils.getSessionProvider(), username, accountId, msgId, message.getFolders()[0], Utils.createFolderId(accountId, Utils.FD_TRASH, false));
       }
       uiMessageList.updateList();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer);
@@ -577,10 +579,10 @@ public class UIMessageList extends UIForm {
       for (Message msg : checkedMessage) {
         if (msg.isUnread()) {
           msg.setUnread(false);
-          mailSrv.saveMessage(username, accountId, msg, false);
-          Folder folder = mailSrv.getFolder(username, accountId, msg.getFolders()[0]);
+          mailSrv.saveMessage(SessionsUtils.getSessionProvider(), username, accountId, msg, false);
+          Folder folder = mailSrv.getFolder(SessionsUtils.getSessionProvider(), username, accountId, msg.getFolders()[0]);
           folder.setNumberOfUnreadMessage(folder.getNumberOfUnreadMessage() - 1);
-          mailSrv.saveFolder(username, accountId, folder);
+          mailSrv.saveFolder(SessionsUtils.getSessionProvider(), username, accountId, folder);
         }
       }
       uiMessageList.updateList();
@@ -600,10 +602,10 @@ public class UIMessageList extends UIForm {
       for (Message msg : checkedMessage) {
         if (!msg.isUnread()) {
           msg.setUnread(true);
-          mailSrv.saveMessage(username, accountId, msg, false);
-          Folder folder = mailSrv.getFolder(username, accountId, msg.getFolders()[0]);
+          mailSrv.saveMessage(SessionsUtils.getSessionProvider(), username, accountId, msg, false);
+          Folder folder = mailSrv.getFolder(SessionsUtils.getSessionProvider(), username, accountId, msg.getFolders()[0]);
           folder.setNumberOfUnreadMessage(folder.getNumberOfUnreadMessage() + 1);
-          mailSrv.saveFolder(username, accountId, folder);
+          mailSrv.saveFolder(SessionsUtils.getSessionProvider(), username, accountId, folder);
         }
       }
       uiMessageList.updateList();
@@ -623,7 +625,7 @@ public class UIMessageList extends UIForm {
       UINavigationContainer uiNavigation = uiPortlet.getChild(UINavigationContainer.class) ;
       UISelectAccount uiSelect = uiNavigation.getChild(UISelectAccount.class) ;
       String accId = uiSelect.getSelectedValue() ;
-      List<Tag> listTags = mailService.getTags(username, accId);
+      List<Tag> listTags = mailService.getTags(SessionsUtils.getSessionProvider(), username, accId);
       uiPopupAction.activate(uiTagForm, 600, 0, true);
       uiTagForm.setMessageList(uiMessageList.getCheckedMessage());
       uiTagForm.setTagList(listTags) ;
@@ -641,12 +643,12 @@ public class UIMessageList extends UIForm {
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       MailService mailSrv = uiMessageList.getApplicationComponent(MailService.class);
       List<Tag> tagList = new ArrayList<Tag>();      
-      tagList.add(mailSrv.getTag(username, accountId, tagId));
+      tagList.add(mailSrv.getTag(SessionsUtils.getSessionProvider(), username, accountId, tagId));
       List<String> msgIdList = new ArrayList<String>();
       for (Message message : uiMessageList.getCheckedMessage()) {
         msgIdList.add(message.getId());
       }
-      mailSrv.addTag(username, accountId, msgIdList, tagList);
+      mailSrv.addTag(SessionsUtils.getSessionProvider(), username, accountId, msgIdList, tagList);
       
       uiMessageList.updateList();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class)) ;
@@ -679,7 +681,7 @@ public class UIMessageList extends UIForm {
       String username = MailUtils.getCurrentUser();
       String accountId = MailUtils.getAccountId();
       for(Message message : uiMessageList.getCheckedMessage()) {
-        mailSrv.moveMessages(username, accountId, message.getId(), message.getFolders()[0], folderId);
+        mailSrv.moveMessages(SessionsUtils.getSessionProvider(), username, accountId, message.getId(), message.getFolders()[0], folderId);
      }       
      uiMessageList.updateList();                   
     }
@@ -693,7 +695,7 @@ public class UIMessageList extends UIForm {
       String username = MailUtils.getCurrentUser();
       String accountId = MailUtils.getAccountId() ;
       MailService mailServ = MailUtils.getMailService() ;
-      Message msg = mailServ.getMessageById(username, accountId, msgId);
+      Message msg = mailServ.getMessageById(SessionsUtils.getSessionProvider(), username, accountId, msgId);
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
       UIAddContactForm uiAddContactForm = uiPopup.createUIComponent(UIAddContactForm.class, null, null);
@@ -753,7 +755,7 @@ public class UIMessageList extends UIForm {
       String accountId = MailUtils.getAccountId();
       MailService mailServ = MailUtils.getMailService();
       try {
-      Message msg = mailServ.getMessageById(username, accountId, msgId);
+      Message msg = mailServ.getMessageById(SessionsUtils.getSessionProvider(), username, accountId, msgId);
       uiExportForm.setExportMessage(msg);
       } catch (Exception e) {
         System.out.println("=====>>>> " + msgId + "\n" + e.getStackTrace()); 
@@ -821,7 +823,7 @@ public class UIMessageList extends UIForm {
         msgFilter.setFolder((uiMessageList.getSelectedFolderId() == null) ? null : new String[] {uiMessageList.getSelectedFolderId()});
         msgFilter.setTag((uiMessageList.getSelectedTagId() == null) ? null : new String[] {uiMessageList.getSelectedTagId()});
       }
-      uiMessageList.setMessagePageList(mailSrv.getMessages(username, msgFilter));
+      uiMessageList.setMessagePageList(mailSrv.getMessages(SessionsUtils.getSessionProvider(), username, msgFilter));
       uiMessageList.setMessageFilter(msgFilter);
       uiMessageList.updateList();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));

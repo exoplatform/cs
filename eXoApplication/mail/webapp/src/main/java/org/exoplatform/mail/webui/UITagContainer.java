@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.mail.SessionsUtils;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.MessageFilter;
@@ -47,7 +48,7 @@ public class UITagContainer extends UIComponent {
     String username = uiPortlet.getCurrentUser() ;
     String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
     if (accountId != null && accountId != "")  
-      tagList = mailService.getTags(username, accountId);
+      tagList = mailService.getTags(SessionsUtils.getSessionProvider(), username, accountId);
     return tagList;
   }
   
@@ -60,7 +61,7 @@ public class UITagContainer extends UIComponent {
       MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-      uiMessageList.setMessagePageList(mailSrv.getMessagePagelistByTag(username, accountId, tagId));
+      uiMessageList.setMessagePageList(mailSrv.getMessagePagelistByTag(SessionsUtils.getSessionProvider(), username, accountId, tagId));
       MessageFilter filter = new MessageFilter("Tag"); 
       filter.setTag(new String[] { tagId });
       filter.setAccountId(accountId);
@@ -92,7 +93,7 @@ public class UITagContainer extends UIComponent {
       MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-      mailSrv.removeTag(username, accountId, tagId);
+      mailSrv.removeTag(SessionsUtils.getSessionProvider(), username, accountId, tagId);
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
       uiMessageList.updateList();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class)) ;
@@ -111,14 +112,14 @@ public class UITagContainer extends UIComponent {
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       
-      List<Message> listMessage = mailSrv.getMessageByTag(username, accountId, tagId);
+      List<Message> listMessage = mailSrv.getMessageByTag(SessionsUtils.getSessionProvider(), username, accountId, tagId);
       List<String> listTag = new ArrayList<String>();
       List<String> listMessageId = new ArrayList<String>();
       for (Message mess : listMessage) {
         listMessageId.add(mess.getId());
       }
       listTag.add(tagId);
-      mailSrv.removeMessageTag(username, accountId, listMessageId, listTag);
+      mailSrv.removeMessageTag(SessionsUtils.getSessionProvider(), username, accountId, listMessageId, listTag);
       uiMessageList.updateList();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiTag);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));

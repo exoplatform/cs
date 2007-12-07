@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.exoplatform.mail.MailUtils;
+import org.exoplatform.mail.SessionsUtils;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Tag;
 import org.exoplatform.mail.service.Utils;
@@ -70,7 +71,7 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
     MailService mailSrv = getApplicationComponent(MailService.class);
     String username = MailUtils.getCurrentUser();
     String accountId = getAncestorOfType(UIMailPortlet.class).findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-    List<Tag> tagList= mailSrv.getTags(username, accountId);
+    List<Tag> tagList= mailSrv.getTags(SessionsUtils.getSessionProvider(), username, accountId);
     
     if (tagList.isEmpty()) return;   
     
@@ -112,7 +113,7 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
 
       try {      
         uiEditTagForm.setTag(tagId);        
-        List<Tag> tagList = mailService.getTags(username, accountId);
+        List<Tag> tagList = mailService.getTags(SessionsUtils.getSessionProvider(), username, accountId);
         for (Tag tag : tagList) {
           if(tag.getName().equals(newTagName)&&!tag.getId().equals(tagId)) {
             uiApp.addMessage(new ApplicationMessage("UITagForm.msg.Tag-exist", new Object[]{newTagName})) ;
@@ -123,7 +124,7 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
             tag.setName(newTagName);
             tag.setColor(color);
             tag.setDescription(description);
-            mailService.updateTag(username, accountId, tag);
+            mailService.updateTag(SessionsUtils.getSessionProvider(), username, accountId, tag);
           }
         }
       } catch (Exception e){

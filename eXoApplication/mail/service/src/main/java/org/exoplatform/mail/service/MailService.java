@@ -8,6 +8,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
+
 
 /**
  * Created by The eXo Platform SARL
@@ -17,7 +19,7 @@ import java.util.List;
  */
 public interface MailService {
   
-  public List<AccountData> getAccountDatas() throws Exception ;
+  //public List<AccountData> getAccountDatas() throws Exception ;
   
   /**
    * This method should: 
@@ -29,7 +31,7 @@ public interface MailService {
    * @return
    * @throws Exception
    */
-  public List<Account> getAccounts(String username) throws Exception ;
+  public List<Account> getAccounts(SessionProvider sProvider, String username) throws Exception ;
   /**
    * This method should:
    * 1. Check if the list of the accounts is cached. If not call the method List<Account> getAccounts(String username)
@@ -41,7 +43,7 @@ public interface MailService {
    * @return
    * @throws Exception
    */
-  public Account getAccountById(String username, String id) throws Exception ;
+  public Account getAccountById(SessionProvider sProvider, String username, String id) throws Exception ;
   
   /**
    * Use save for create and update 
@@ -55,7 +57,7 @@ public interface MailService {
    * @param account
    * @throws Exception
    */
-  public void createAccount(String username, Account account) throws Exception ;
+  public void createAccount(SessionProvider sProvider, String username, Account account) throws Exception ;
   /**
    * This method should:
    * 1. This method check the madatory field and save the updated account into the database
@@ -64,7 +66,7 @@ public interface MailService {
    * @param account
    * @throws Exception
    */
-  public void updateAccount(String username, Account account) throws Exception ;
+  public void updateAccount(SessionProvider sProvider, String username, Account account) throws Exception ;
   /**
    * This method should:
    * 1.  Remove the account from the database
@@ -73,7 +75,7 @@ public interface MailService {
    * @param account
    * @throws Exception
    */
-  public void removeAccount(String username, Account account) throws Exception ;
+  public void removeAccount(SessionProvider sProvider, String username, Account account) throws Exception ;
   /**
    * This method should: 
    * @param username
@@ -81,7 +83,7 @@ public interface MailService {
    * @return List folder
    * @throws Exception
    */
-  public List<Folder> getFolders(String username, String accountId) throws Exception ;
+  public List<Folder> getFolders(SessionProvider sProvider, String username, String accountId) throws Exception ;
   /**
    * This method should: 
    * @param username
@@ -90,7 +92,7 @@ public interface MailService {
    * @return List folder
    * @throws Exception
    */
-  public List<Folder> getFolders(String username, String accountId, boolean isPersonal) throws Exception ;
+  public List<Folder> getFolders(SessionProvider sProvider, String username, String accountId, boolean isPersonal) throws Exception ;
   /**
    * This method should: 
    * @param username
@@ -99,7 +101,7 @@ public interface MailService {
    * @return Folder
    * @throws Exception
    */
-  public Folder getFolder(String username, String accountId, String folderId) throws Exception ;  
+  public Folder getFolder(SessionProvider sProvider, String username, String accountId, String folderId) throws Exception ;  
   /**
    * This method should:
    * 1. Get account
@@ -109,7 +111,7 @@ public interface MailService {
    * @param folder
    * @throws Exception
    */
-  public void saveFolder(String username, String accountId, Folder folder) throws Exception ;  
+  public void saveFolder(SessionProvider sProvider, String username, String accountId, Folder folder) throws Exception ;  
   /**
    * This method should:
    * 1. Move all the message in the  folder to the  default inbox folder
@@ -121,7 +123,7 @@ public interface MailService {
    * @param folder
    * @throws Exception
    */
-  public void removeUserFolder(String username, Account account, Folder folder) throws Exception ;
+  public void removeUserFolder(SessionProvider sProvider, String username, Account account, Folder folder) throws Exception ;
   
   /**
    * This method should: 
@@ -130,7 +132,7 @@ public interface MailService {
    * @return List all filter
    * @throws Exception
    */
-  public List<MessageFilter> getFilters(String username, String accountId) throws Exception ;
+  public List<MessageFilter> getFilters(SessionProvider sProvider, String username, String accountId) throws Exception ;
   
   /**
    * This method should: 
@@ -140,7 +142,7 @@ public interface MailService {
    * @return MessageFilter
    * @throws Exception
    */
-  public MessageFilter getFilterById(String username, String accountId, String filterId) throws Exception ;
+  public MessageFilter getFilterById(SessionProvider sProvider, String username, String accountId, String filterId) throws Exception ;
   
   /**
    * This method should: 
@@ -150,19 +152,19 @@ public interface MailService {
    * @return save filter to database
    * @throws Exception
    */
-  public void saveFilter(String username, String accountId, MessageFilter filter) throws Exception ;
+  public void saveFilter(SessionProvider sProvider, String username, String accountId, MessageFilter filter) throws Exception ;
   
-  public void removeFilter(String username, String accountId, String filterId) throws Exception ;
+  public void removeFilter(SessionProvider sProvider, String username, String accountId, String filterId) throws Exception ;
   
-  public List<Message> getMessageByTag(String username, String accountId, String tagId) throws Exception ;
+  public List<Message> getMessageByTag(SessionProvider sProvider, String username, String accountId, String tagId) throws Exception ;
   
-  public MessagePageList getMessagePagelistByTag(String username, String accountId, String tagId) throws Exception ;
+  public MessagePageList getMessagePagelistByTag(SessionProvider sProvider, String username, String accountId, String tagId) throws Exception ;
  
-  public MessagePageList getMessagePageListByFolder(String username, String accountId, String folderId) throws Exception ;
+  public MessagePageList getMessagePageListByFolder(SessionProvider sProvider, String username, String accountId, String folderId) throws Exception ;
   
-  public List<Tag> getTags(String username, String accountId) throws Exception ;
+  public List<Tag> getTags(SessionProvider sProvider, String username, String accountId) throws Exception ;
   
-  public Tag getTag(String username, String accountId, String tagId) throws Exception;
+  public Tag getTag(SessionProvider sProvider, String username, String accountId, String tagId) throws Exception;
   /** This method should:
     * 1. Check the tag name to see if  the tag name is configured in the account
     * 2. Check to see if the tag is already set in the message
@@ -173,7 +175,7 @@ public interface MailService {
     * @param tag
     * @throws Exception
     */
-   public void addTag(String username, String accountId, List<String> messagesId, List<Tag> tag) throws Exception ;
+   public void addTag(SessionProvider sProvider, String username, String accountId, List<String> messagesId, List<Tag> tag) throws Exception ;
    /**
     * This method should: 
     * 1. Remove the tag from the message
@@ -184,7 +186,7 @@ public interface MailService {
     * @param tags
     * @throws Exception
     */
-   public void removeMessageTag(String username, String accountId, List<String> messageId, List<String> tags) throws Exception ;
+   public void removeMessageTag(SessionProvider sProvider, String username, String accountId, List<String> messageId, List<String> tags) throws Exception ;
   /**
    * This method should:
    * 1. Find all the message that has the tag , remove the tag from the message and save
@@ -195,7 +197,7 @@ public interface MailService {
    * @param tag
    * @throws Exception
    */
-  public void removeTag(String username, String accountId, String tag) throws Exception ;
+  public void removeTag(SessionProvider sProvider, String username, String accountId, String tag) throws Exception ;
   /**
    * This method should:
    * 1. Update a tag.
@@ -204,7 +206,7 @@ public interface MailService {
    * @param tag
    * @throws Exception
    */
-  public void updateTag(String username, String accountId, Tag tag) throws Exception ;
+  public void updateTag(SessionProvider sProvider, String username, String accountId, Tag tag) throws Exception ;
   
   /**
    * This method should:
@@ -216,7 +218,7 @@ public interface MailService {
    * @return
    * @throws Exception
    */
-  public Message getMessageById(String username, String accountId, String nodeName) throws Exception ;
+  public Message getMessageById(SessionProvider sProvider, String username, String accountId, String nodeName) throws Exception ;
   /**
    * This method should:
    * 1. Find all the message according the parameter that is specified in the filter object
@@ -226,9 +228,9 @@ public interface MailService {
    * @return
    * @throws Exception
    */
-  public MessagePageList getMessages(String username, MessageFilter filter) throws Exception ;
+  public MessagePageList getMessages(SessionProvider sProvider, String username, MessageFilter filter) throws Exception ;
   
-  public void saveMessage(String username, String accountId, Message message, boolean isNew) throws Exception;
+  public void saveMessage(SessionProvider sProvider, String username, String accountId, Message message, boolean isNew) throws Exception;
   /**
    * This method should:
    * 1. Update the message in the database if it is existed
@@ -248,7 +250,7 @@ public interface MailService {
    * @param messageId
    * @throws Exception
    */
-  public void removeMessage(String username, String accountId, String messageId) throws Exception ;
+  public void removeMessage(SessionProvider sProvider, String username, String accountId, String messageId) throws Exception ;
   /**
    * This method should:
    * 1. Remove all the messages 
@@ -258,9 +260,9 @@ public interface MailService {
    * @param messageId
    * @throws Exception
    */
-  public void removeMessage(String username, String accountId, List<String> messageIds) throws Exception ;
+  public void removeMessage(SessionProvider sProvider, String username, String accountId, List<String> messageIds) throws Exception ;
   
-  public void moveMessages(String username,String accountId, String msgId, String currentFolderId, String destFolderId) throws Exception ;
+  public void moveMessages(SessionProvider sProvider, String username,String accountId, String msgId, String currentFolderId, String destFolderId) throws Exception ;
 
   public void sendMessages(List<Message> msgList, ServerConfiguration serverConfig) throws Exception ;
   /**
@@ -275,7 +277,7 @@ public interface MailService {
    * @param message
    * @throws Exception
    */
-  public void sendMessage(String username, Message message) throws Exception ;
+  public void sendMessage(SessionProvider sProvider, String username, Message message) throws Exception ;
   /**
    * This method should check  for the new message in the mail server, download and save them in the 
    * Inbox folder
@@ -284,24 +286,24 @@ public interface MailService {
    * @return the number of the new message
    * @throws Exception
    */
-  public List<Message>  checkNewMessage(String username, String accountId) throws Exception ;  
+  public List<Message>  checkNewMessage(SessionProvider sProvider, String username, String accountId) throws Exception ;  
   /**
    * This method get mail settings
    * @param username
    * @return settings of mail
    * @throws Exception
    */
-  public MailSetting  getMailSetting(String username) throws Exception ;  
+  public MailSetting  getMailSetting(SessionProvider sProvider, String username) throws Exception ;  
   /**
    * This method to update mail setting
    * @param username
    * @param newSetting
    * @throws Exception
    */
-  public void saveMailSetting(String username, MailSetting newSetting) throws Exception;
+  public void saveMailSetting(SessionProvider sProvider, String username, MailSetting newSetting) throws Exception;
   
-  public void importMessage(String username, String accountId, String folderId, InputStream inputStream, String type) throws Exception;
-  public OutputStream exportMessage(String username,String accountId, String messageId) throws Exception;
+  public void importMessage(SessionProvider sProvider, String username, String accountId, String folderId, InputStream inputStream, String type) throws Exception;
+  public OutputStream exportMessage(SessionProvider sProvider, String username,String accountId, String messageId) throws Exception;
   
-  public void execFilters(String username, String accountId) throws Exception ;
+  public void execFilters(SessionProvider sProvider, String username, String accountId) throws Exception ;
 }

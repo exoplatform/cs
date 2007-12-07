@@ -7,6 +7,7 @@ package org.exoplatform.mail.webui.popup;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.exoplatform.mail.SessionsUtils;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Utils;
@@ -53,7 +54,7 @@ public class UIAccountWizardStepIntro extends UIFormInputSet implements WizardSt
     if(!isCreateNew()) {
       MailService mailSvr = getApplicationComponent(MailService.class) ;
       String username = Util.getPortalRequestContext().getRemoteUser() ;
-      for(Account acc : mailSvr.getAccounts(username)) {
+      for(Account acc : mailSvr.getAccounts(SessionsUtils.getSessionProvider(), username)) {
         options.add(new SelectItemOption<String>(acc.getUserDisplayName(), acc.getId())) ;
       }  
     }

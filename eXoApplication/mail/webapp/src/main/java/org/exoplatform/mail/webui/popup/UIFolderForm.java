@@ -4,6 +4,7 @@
  **************************************************************************/
 package org.exoplatform.mail.webui.popup;
 
+import org.exoplatform.mail.SessionsUtils;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.webui.UIFolderContainer;
@@ -59,13 +60,13 @@ public class UIFolderForm extends UIForm implements UIPopupComponent {
       }
       try {
         String folderId = accountId + "UserFolder" + folderName;
-        Folder folder = mailSvr.getFolder(username, accountId, folderId) ;
+        Folder folder = mailSvr.getFolder(SessionsUtils.getSessionProvider(), username, accountId, folderId) ;
         if(folder == null) {
           folder = new Folder() ;
           folder.setId(folderId);
           folder.setName(folderName) ;
           folder.setLabel(folderName) ;
-          mailSvr.saveFolder(username, accountId, folder) ;
+          mailSvr.saveFolder(SessionsUtils.getSessionProvider(), username, accountId, folder) ;
         } else {
           uiApp.addMessage(new ApplicationMessage("UIFolderForm.msg.folder-exist", new Object[]{folderName})) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;

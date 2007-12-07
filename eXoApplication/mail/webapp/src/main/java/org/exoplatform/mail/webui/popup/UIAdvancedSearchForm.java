@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.mail.MailUtils;
+import org.exoplatform.mail.SessionsUtils;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MessageFilter;
@@ -73,7 +74,7 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
     String accountId = MailUtils.getAccountId();
     MailService mailSrv = getApplicationComponent(MailService.class);
     List<SelectItemOption<String>> optionList = new ArrayList<SelectItemOption<String>>();    
-    List<Folder> folderList = mailSrv.getFolders(username, accountId); 
+    List<Folder> folderList = mailSrv.getFolders(SessionsUtils.getSessionProvider(), username, accountId); 
     optionList.add(new SelectItemOption<String>(ALL_FOLDER_SEARCH, ""));
     for (Folder folder : folderList) {   
       optionList.add(new SelectItemOption<String>(folder.getName(), folder.getId()));    
@@ -235,7 +236,7 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
       uiMessageList.setSelectedTagId(null);
       uiMessageList.setMessageFilter(filter);
 
-      uiMessageList.setMessagePageList(mailService.getMessages(username, filter));
+      uiMessageList.setMessagePageList(mailService.getMessages(SessionsUtils.getSessionProvider(), username, filter));
       uiMessageList.updateList();
       UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
       uiFolderContainer.setSelectedFolder(null);

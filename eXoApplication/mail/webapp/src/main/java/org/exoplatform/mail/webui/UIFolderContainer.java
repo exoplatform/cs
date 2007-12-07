@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.exoplatform.mail.MailUtils;
+import org.exoplatform.mail.SessionsUtils;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
@@ -64,7 +65,7 @@ public class UIFolderContainer extends UIContainer {
     String username = getAncestorOfType(UIMailPortlet.class).getCurrentUser() ;
     String accountId = getAncestorOfType(UINavigationContainer.class).
     getChild(UISelectAccount.class).getSelectedValue() ;
-    return mailSvr.getFolder(username, accountId, getSelectedFolder()) ;
+    return mailSvr.getFolder(SessionsUtils.getSessionProvider(), username, accountId, getSelectedFolder()) ;
   }
   
   public List<Folder> getFolders(boolean isPersonal) throws Exception{
@@ -74,7 +75,7 @@ public class UIFolderContainer extends UIContainer {
     String accountId = getAncestorOfType(UINavigationContainer.class).
     getChild(UISelectAccount.class).getSelectedValue() ;
     try {
-      folders.addAll(mailSvr.getFolders(username, accountId, isPersonal)) ;
+      folders.addAll(mailSvr.getFolders(SessionsUtils.getSessionProvider(), username, accountId, isPersonal)) ;
     } catch (Exception e){
       //e.printStackTrace() ;
     }
@@ -106,7 +107,7 @@ public class UIFolderContainer extends UIContainer {
       MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-      uiMessageList.setMessagePageList(mailSrv.getMessagePageListByFolder(username, accountId, folderId));
+      uiMessageList.setMessagePageList(mailSrv.getMessagePageListByFolder(SessionsUtils.getSessionProvider(), username, accountId, folderId));
       MessageFilter filter = new MessageFilter("Folder"); 
       filter.setAccountId(accountId);
       filter.setFolder(new String[] {folderId});
@@ -142,9 +143,9 @@ public class UIFolderContainer extends UIContainer {
       UINavigationContainer uiNavigationContainer = uiFolderContainer.getAncestorOfType(UINavigationContainer.class);
       String accountId = uiNavigationContainer.getChild(UISelectAccount.class).getSelectedValue();
       
-      Account account = mailService.getAccountById(username, accountId);
-      Folder folder = mailService.getFolder(username, accountId, folderId);  
-      mailService.removeUserFolder(username, account, folder);      
+      Account account = mailService.getAccountById(SessionsUtils.getSessionProvider(), username, accountId);
+      Folder folder = mailService.getFolder(SessionsUtils.getSessionProvider(), username, accountId, folderId);  
+      mailService.removeUserFolder(SessionsUtils.getSessionProvider(), username, account, folder);      
     }
   }
   
@@ -156,9 +157,9 @@ public class UIFolderContainer extends UIContainer {
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
-      List<Message> messageList = mailSrv.getMessagePageListByFolder(username, accountId, folderId).getAll(username);
+      List<Message> messageList = mailSrv.getMessagePageListByFolder(SessionsUtils.getSessionProvider(), username, accountId, folderId).getAll(username);
       for (Message message : messageList) {
-        mailSrv.removeMessage(username, accountId, message.getId());
+        mailSrv.removeMessage(SessionsUtils.getSessionProvider(), username, accountId, message.getId());
       }
     }
   }
@@ -171,16 +172,16 @@ public class UIFolderContainer extends UIContainer {
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
-      List<Message> messageList = mailSrv.getMessagePageListByFolder(username, accountId, folderId).getAll(username);
-      Folder folder = mailSrv.getFolder(username, accountId, folderId);
+      List<Message> messageList = mailSrv.getMessagePageListByFolder(SessionsUtils.getSessionProvider(), username, accountId, folderId).getAll(username);
+      Folder folder = mailSrv.getFolder(SessionsUtils.getSessionProvider(), username, accountId, folderId);
       for (Message message : messageList) {
         if (message.isUnread()) {
           message.setUnread(false);
-          mailSrv.saveMessage(username, accountId, message, false);
+          mailSrv.saveMessage(SessionsUtils.getSessionProvider(), username, accountId, message, false);
           folder.setNumberOfUnreadMessage(folder.getNumberOfUnreadMessage() - 1);
         }
       }
-      mailSrv.saveFolder(username, accountId, folder);
+      mailSrv.saveFolder(SessionsUtils.getSessionProvider(), username, accountId, folder);
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
       UIFolderContainer uiFolder = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
       uiMessageList.updateList();

@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.exoplatform.mail.SessionsUtils;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.Tag;
@@ -93,7 +94,7 @@ public class UITagForm extends UIForm implements UIPopupComponent{
       if (msg.getTags() != null && msg.getTags().length > 0) {
         for (int i = 0; i < msg.getTags().length; i++) {
           if (i > 0) tags += ", ";
-          Tag tag = mailSrv.getTag(username, accountId, msg.getTags()[i]);
+          Tag tag = mailSrv.getTag(SessionsUtils.getSessionProvider(), username, accountId, msg.getTags()[i]);
           tags += "[" + tag.getName() + "]";
         }
       } else tags = "No tag";
@@ -139,7 +140,7 @@ public class UITagForm extends UIForm implements UIPopupComponent{
 
       if (newTagName != null && newTagName != "") {
         boolean isExist = false;
-        for (Tag tag: mailSrv.getTags(username, accountId)) {
+        for (Tag tag: mailSrv.getTags(SessionsUtils.getSessionProvider(), username, accountId)) {
           if (tag.getName().equals(newTagName)) { 
             isExist = true;
             tagList.add(tag);
@@ -155,7 +156,7 @@ public class UITagForm extends UIForm implements UIPopupComponent{
       }
       
       tagList.addAll(uiTagForm.getCheckedTags());
-      mailSrv.addTag(username, accountId, uiTagForm.getMessageList(), tagList);
+      mailSrv.addTag(SessionsUtils.getSessionProvider(), username, accountId, uiTagForm.getMessageList(), tagList);
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
       uiMessageList.updateList();
       uiPortlet.cancelAction() ;
@@ -175,7 +176,7 @@ public class UITagForm extends UIForm implements UIPopupComponent{
       for (Tag tag : uiTagForm.getCheckedTags()) {
         tagList.add(tag.getId());
       }
-      mailSrv.removeMessageTag(username, accountId, uiTagForm.getMessageList(), tagList);
+      mailSrv.removeMessageTag(SessionsUtils.getSessionProvider(), username, accountId, uiTagForm.getMessageList(), tagList);
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
       uiMessageList.updateList();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class)) ;

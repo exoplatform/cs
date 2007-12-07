@@ -7,6 +7,7 @@ package org.exoplatform.mail.webui.popup;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.exoplatform.mail.SessionsUtils;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Utils;
@@ -220,7 +221,7 @@ public class UIAccountSetting extends UIFormTabPane {
   public void fillAllField() throws Exception {
     MailService mailSrv = getApplicationComponent(MailService.class);
     String username = Util.getPortalRequestContext().getRemoteUser();
-    Account account = mailSrv.getAccountById(username, getSelectedAccountId());
+    Account account = mailSrv.getAccountById(SessionsUtils.getSessionProvider(), username, getSelectedAccountId());
     fillAllField(account);
   }
   
@@ -258,7 +259,7 @@ public class UIAccountSetting extends UIFormTabPane {
   public List<Account> getAccounts() throws Exception {
     MailService mailSrv = getApplicationComponent(MailService.class);
     String username = Util.getPortalRequestContext().getRemoteUser();
-    return mailSrv.getAccounts(username);
+    return mailSrv.getAccounts(SessionsUtils.getSessionProvider(), username);
   }
   
   static  public class SelectAccountActionListener extends EventListener<UIAccountSetting> {
@@ -289,8 +290,8 @@ public class UIAccountSetting extends UIFormTabPane {
       String username = uiPortlet.getCurrentUser();
       MailService mailServ = uiPortlet.getApplicationComponent(MailService.class);
       try {
-        Account account = mailServ.getAccountById(username, uiAccountSetting.getSelectedAccountId());
-        mailServ.removeAccount(username, account);
+        Account account = mailServ.getAccountById(SessionsUtils.getSessionProvider(), username, uiAccountSetting.getSelectedAccountId());
+        mailServ.removeAccount(SessionsUtils.getSessionProvider(), username, account);
         uiAccountSetting.setSelectedAccountId(uiAccountSetting.getAccounts().get(0).getId());
         uiAccountSetting.fillAllField();
         event.getRequestContext().addUIComponentToUpdateByAjax(uiAccountSetting.getAncestorOfType(UIPopupActionContainer.class)) ;
@@ -306,7 +307,7 @@ public class UIAccountSetting extends UIFormTabPane {
       MailService mailSrv = uiAccountSetting.getApplicationComponent(MailService.class);
       UIMailPortlet uiPortlet = uiAccountSetting.getAncestorOfType(UIMailPortlet.class);
       String username = Util.getPortalRequestContext().getRemoteUser();
-      Account acc = mailSrv.getAccountById(username, uiAccountSetting.getSelectedAccountId());
+      Account acc = mailSrv.getAccountById(SessionsUtils.getSessionProvider(), username, uiAccountSetting.getSelectedAccountId());
       String accName = uiAccountSetting.getFieldAccountNameValue();
       String accDes = uiAccountSetting.getFieldAccountDescription();
       String displayName = uiAccountSetting.getDisplayName();
@@ -346,7 +347,7 @@ public class UIAccountSetting extends UIFormTabPane {
       
       UIApplication uiApp = uiAccountSetting.getAncestorOfType(UIApplication.class) ;
       try {
-        mailSrv.updateAccount(username, acc);
+        mailSrv.updateAccount(SessionsUtils.getSessionProvider(), username, acc);
         uiApp.addMessage(new ApplicationMessage("UIAccountSetting.msg.edit-acc-successfully", null));
         uiPortlet.findFirstComponentOfType(UISelectAccount.class).updateAccount();
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UINavigationContainer.class)) ;

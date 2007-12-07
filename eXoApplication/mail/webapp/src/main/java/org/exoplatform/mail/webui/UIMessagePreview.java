@@ -15,6 +15,7 @@ import org.exoplatform.download.DownloadResource;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.mail.MailUtils;
+import org.exoplatform.mail.SessionsUtils;
 import org.exoplatform.mail.service.Attachment;
 import org.exoplatform.mail.service.JCRMessageAttachment;
 import org.exoplatform.mail.service.MailService;
@@ -75,7 +76,7 @@ public class UIMessagePreview extends UIComponent {
     MailService mailSrv = MailUtils.getMailService();
     if (selectedMessage_.isRootConversation() && (selectedMessage_.getMessageIds() != null && selectedMessage_.getMessageIds().length > 0)) {
       for (int i=0; i < selectedMessage_.getMessageIds().length; i++) {
-        msgList.add(mailSrv.getMessageById(username, accountId, selectedMessage_.getMessageIds()[i]));
+        msgList.add(mailSrv.getMessageById(SessionsUtils.getSessionProvider(), username, accountId, selectedMessage_.getMessageIds()[i]));
       }
     }
     return msgList ;
@@ -117,9 +118,9 @@ public class UIMessagePreview extends UIComponent {
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       MailService mailServ = uiPortlet.getApplicationComponent(MailService.class);
       try {
-        Message msg = mailServ.getMessageById(username, accountId, msgId);
+        Message msg = mailServ.getMessageById(SessionsUtils.getSessionProvider(), username, accountId, msgId);
         msg.setHasStar(!msg.hasStar());
-        mailServ.saveMessage(username, accountId, msg, false);
+        mailServ.saveMessage(SessionsUtils.getSessionProvider(), username, accountId, msg, false);
       } catch (Exception e) { }
       uiMessageList.updateList();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
@@ -141,7 +142,7 @@ public class UIMessagePreview extends UIComponent {
       MailService mailSvr = uiMessagePreview.getApplicationComponent(MailService.class) ;
       String username = uiPortlet.getCurrentUser() ;
       if (msgId != null) {
-        Message message = mailSvr.getMessageById(username, accId, msgId);
+        Message message = mailSvr.getMessageById(SessionsUtils.getSessionProvider(), username, accId, msgId);
         uiComposeForm.setMessage(message);
         uiComposeForm.setFieldToValue(message.getFrom());
         uiComposeForm.setFieldSubjectValue("Re: " + message.getSubject());
@@ -169,7 +170,7 @@ public class UIMessagePreview extends UIComponent {
       MailService mailSvr = uiMessagePreview.getApplicationComponent(MailService.class) ;
       String username = uiPortlet.getCurrentUser() ;
       if (msgId != null) {
-        Message message = mailSvr.getMessageById(username, accId, msgId);
+        Message message = mailSvr.getMessageById(SessionsUtils.getSessionProvider(), username, accId, msgId);
         uiComposeForm.setMessage(message);
         uiComposeForm.setFieldSubjectValue("Fwd: " + message.getSubject());
         String forwardedText = "\n\n\n-------- Original Message --------\n" +
@@ -198,8 +199,8 @@ public class UIMessagePreview extends UIComponent {
       String username = MailUtils.getCurrentUser();
       String accountId = MailUtils.getAccountId();
       
-      Message msg = mailSrv.getMessageById(username, accountId, msgId);
-      mailSrv.moveMessages(username, accountId, msgId, msg.getFolders()[0],  Utils.createFolderId(accountId, Utils.FD_TRASH, false));
+      Message msg = mailSrv.getMessageById(SessionsUtils.getSessionProvider(), username, accountId, msgId);
+      mailSrv.moveMessages(SessionsUtils.getSessionProvider(), username, accountId, msgId, msg.getFolders()[0],  Utils.createFolderId(accountId, Utils.FD_TRASH, false));
       
       uiPortlet.findFirstComponentOfType(UIMessageList.class).updateList();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer);
@@ -228,7 +229,7 @@ public class UIMessagePreview extends UIComponent {
       String username = MailUtils.getCurrentUser();
       String accountId = MailUtils.getAccountId() ;
       MailService mailServ = MailUtils.getMailService() ;
-      Message msg = mailServ.getMessageById(username, accountId, msgId);
+      Message msg = mailServ.getMessageById(SessionsUtils.getSessionProvider(), username, accountId, msgId);
       UIMailPortlet uiPortlet = uiMessagePreview.getAncestorOfType(UIMailPortlet.class);
       UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
       UIAddContactForm uiAddContactForm = uiPopup.createUIComponent(UIAddContactForm.class, null, null);
@@ -261,7 +262,7 @@ public class UIMessagePreview extends UIComponent {
       String accountId = MailUtils.getAccountId();
       MailService mailServ = MailUtils.getMailService();
       try {
-      Message msg = mailServ.getMessageById(username, accountId, msgId);
+      Message msg = mailServ.getMessageById(SessionsUtils.getSessionProvider(), username, accountId, msgId);
       uiExportForm.setExportMessage(msg);
       } catch (Exception e) { }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup);  
@@ -282,10 +283,10 @@ public class UIMessagePreview extends UIComponent {
       UINavigationContainer uiNavigation = uiPortlet.getChild(UINavigationContainer.class) ;
       UISelectAccount uiSelect = uiNavigation.getChild(UISelectAccount.class) ;
       String accId = uiSelect.getSelectedValue() ;
-      List<Tag> listTags = mailSrv.getTags(username, accId);
+      List<Tag> listTags = mailSrv.getTags(SessionsUtils.getSessionProvider(), username, accId);
       uiPopupAction.activate(uiTagForm, 600, 0, true);
       List<Message> msgList = new ArrayList<Message>();
-      msgList.add(mailSrv.getMessageById(username, accountId, msgId));
+      msgList.add(mailSrv.getMessageById(SessionsUtils.getSessionProvider(), username, accountId, msgId));
       uiTagForm.setMessageList(msgList);
       uiTagForm.setTagList(listTags) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
@@ -304,7 +305,7 @@ public class UIMessagePreview extends UIComponent {
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class);     
       UIMoveMessageForm uiMoveMessageForm = uiMessagePreview.createUIComponent(UIMoveMessageForm.class,null, null);
       List<Message> msgList = new ArrayList<Message>();
-      msgList.add(mailSrv.getMessageById(username, accountId, msgId));
+      msgList.add(mailSrv.getMessageById(SessionsUtils.getSessionProvider(), username, accountId, msgId));
       uiMoveMessageForm.setMessageList(msgList);
       uiPopupAction.activate(uiMoveMessageForm, 600, 0, true);             
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);        

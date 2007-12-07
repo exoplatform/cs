@@ -5,6 +5,7 @@
 package org.exoplatform.mail.webui;
 
 import org.exoplatform.mail.MailUtils;
+import org.exoplatform.mail.SessionsUtils;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.Utils;
@@ -66,7 +67,7 @@ public class UISearchForm extends UIForm {
       String username = uiPortlet.getCurrentUser();
       MailService mailService = uiPortlet.getApplicationComponent(MailService.class);
       
-      uiMessageList.setMessagePageList(mailService.getMessages(username, filter));
+      uiMessageList.setMessagePageList(mailService.getMessages(SessionsUtils.getSessionProvider(), username, filter));
       uiMessageList.setSelectedFolderId(null);
       uiMessageList.setSelectedTagId(null);
       uiMessageList.setMessageFilter(filter);

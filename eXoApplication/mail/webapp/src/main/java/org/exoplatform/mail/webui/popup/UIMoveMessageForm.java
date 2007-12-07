@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.exoplatform.mail.MailUtils;
+import org.exoplatform.mail.SessionsUtils;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
@@ -52,7 +53,7 @@ public class UIMoveMessageForm extends UIForm implements UIPopupComponent {
     
     List<SelectItemOption<String>> optionList = new ArrayList<SelectItemOption<String>>();   
 
-    for (Folder folder : mailSrv.getFolders(username, accountId)) {   
+    for (Folder folder : mailSrv.getFolders(SessionsUtils.getSessionProvider(), username, accountId)) {   
       if(!folder.getName().equals("Sent"))
         optionList.add(new SelectItemOption<String>(folder.getName(), folder.getId()));       
     }    
@@ -81,7 +82,7 @@ public class UIMoveMessageForm extends UIForm implements UIPopupComponent {
       String destFolder = uiMoveMessageForm.getUIFormSelectBox(SELECT_FOLDER).getValue();     
 
       for(Message message: uiMoveMessageForm.getMessageList()) {
-         mailSrv.moveMessages(username, accountId, message.getId(), message.getFolders()[0], destFolder);
+         mailSrv.moveMessages(SessionsUtils.getSessionProvider(), username, accountId, message.getId(), message.getFolders()[0], destFolder);
       }       
       uiMessageList.updateList(); 
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMoveMessageForm.getAncestorOfType(UIPopupAction.class)) ;     

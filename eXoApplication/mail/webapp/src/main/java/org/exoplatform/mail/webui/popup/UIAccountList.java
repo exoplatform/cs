@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.exoplatform.commons.utils.ObjectPageList;
+import org.exoplatform.mail.SessionsUtils;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Utils;
@@ -48,7 +49,7 @@ public class UIAccountList extends UIGrid  implements UIPopupComponent{
     List<AccountData> accounts = new ArrayList<AccountData>() ;
     String userId = Util.getPortalRequestContext().getRemoteUser() ;
     MailService mailSvr = getApplicationComponent(MailService.class) ;
-    for(Account acc : mailSvr.getAccounts(userId)) {
+    for(Account acc : mailSvr.getAccounts(SessionsUtils.getSessionProvider(), userId)) {
       accounts.add(new AccountData(acc.getId(), acc.getUserDisplayName(), acc.getEmailAddress(), 
           acc.getServerProperties().get(Utils.SVR_INCOMING_HOST), acc.getProtocol())) ;
     }
@@ -98,9 +99,9 @@ public class UIAccountList extends UIGrid  implements UIPopupComponent{
       MailService mailSvr = uiAccountList.getApplicationComponent(MailService.class) ;
       String username = event.getRequestContext().getRemoteUser() ;
       UIMailPortlet uiPortlet = uiAccountList.getAncestorOfType(UIMailPortlet.class) ;
-      Account account = mailSvr.getAccountById(username, accId) ;
+      Account account = mailSvr.getAccountById(SessionsUtils.getSessionProvider(), username, accId) ;
       try {
-        mailSvr.removeAccount(username, account) ;
+        mailSvr.removeAccount(SessionsUtils.getSessionProvider(), username, account) ;
         UISelectAccount uiSelectAccount = uiPortlet.findFirstComponentOfType(UISelectAccount.class) ;
         uiSelectAccount.refreshItems() ;
         uiAccountList.updateGrid() ;

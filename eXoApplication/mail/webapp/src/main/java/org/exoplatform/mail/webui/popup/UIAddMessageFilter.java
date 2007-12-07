@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.exoplatform.mail.MailUtils;
+import org.exoplatform.mail.SessionsUtils;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MessageFilter;
@@ -93,13 +94,13 @@ public class UIAddMessageFilter extends UIForm implements UIPopupComponent{
     String accountId = MailUtils.getAccountId();
     MailService mailSrv = MailUtils.getMailService();
     List<SelectItemOption<String>> folderList = new ArrayList<SelectItemOption<String>>();   
-    for (Folder folder : mailSrv.getFolders(username, accountId)) {   
+    for (Folder folder : mailSrv.getFolders(SessionsUtils.getSessionProvider(), username, accountId)) {   
       folderList.add(new SelectItemOption<String>(folder.getName(), folder.getId()));       
     }    
     addUIFormInput(new UIFormSelectBox(FILTER_APPLY_FOLDER, FILTER_APPLY_FOLDER, folderList));
     List<SelectItemOption<String>> tagList = new ArrayList<SelectItemOption<String>>();   
     tagList.add(new SelectItemOption<String>("-- Choose tag --", ""));       
-    for (Tag tag : mailSrv.getTags(username, accountId)) {   
+    for (Tag tag : mailSrv.getTags(SessionsUtils.getSessionProvider(), username, accountId)) {   
       tagList.add(new SelectItemOption<String>(tag.getName(), tag.getId()));       
     }    
     addUIFormInput(new UIFormSelectBox(FILTER_APPLY_TAG, FILTER_APPLY_TAG, tagList));
@@ -261,7 +262,7 @@ public class UIAddMessageFilter extends UIForm implements UIPopupComponent{
       String accountId = MailUtils.getAccountId();
       MailService mailSrv = MailUtils.getMailService();
       try {
-        mailSrv.saveFilter(username, accountId, filter);
+        mailSrv.saveFilter(SessionsUtils.getSessionProvider(), username, accountId, filter);
       } catch (Exception e) {
         e.printStackTrace();
       }

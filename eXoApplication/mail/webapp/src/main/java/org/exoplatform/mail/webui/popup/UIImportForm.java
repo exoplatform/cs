@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.exoplatform.mail.MailUtils;
+import org.exoplatform.mail.SessionsUtils;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Utils;
@@ -53,7 +54,7 @@ public class UIImportForm extends UIForm implements UIPopupComponent {
     String username = MailUtils.getCurrentUser() ;
     MailService mailSrv = MailUtils.getMailService(); 
 
-    for (Folder folder : mailSrv.getFolders(username, accountId)) {   
+    for (Folder folder : mailSrv.getFolders(SessionsUtils.getSessionProvider(), username, accountId)) {   
       if (!folder.getName().equals(Utils.FD_SENT)) {
         SelectItemOption<String> option = new SelectItemOption<String>(folder.getName(), folder.getId());
         options.add(option);
@@ -74,6 +75,7 @@ public class UIImportForm extends UIForm implements UIPopupComponent {
   static public class ImportActionListener extends EventListener<UIImportForm> {
     public void execute(Event<UIImportForm> event) throws Exception {
       System.out.println(" === >>> Import Listener");
+      // TODO Call service alot, need to review
       UIImportForm uiImportForm = event.getSource();
       UIApplication  uiApp = uiImportForm.getAncestorOfType(UIApplication.class);
       UIMailPortlet uiPortlet = uiImportForm.getAncestorOfType(UIMailPortlet.class);
@@ -91,10 +93,10 @@ public class UIImportForm extends UIForm implements UIPopupComponent {
       String username = uiPortlet.getCurrentUser() ;
       String folderId = uiImportForm.getUIFormSelectBox(IMPORT_TO_FOLDER).getValue();
       MailService mailSrv = MailUtils.getMailService();
-      mailSrv.importMessage(username, accountId, folderId, inputStream, type);
-      Folder folder = mailSrv.getFolder(username, accountId, folderId);
+      mailSrv.importMessage(SessionsUtils.getSessionProvider(), username, accountId, folderId, inputStream, type);
+      Folder folder = mailSrv.getFolder(SessionsUtils.getSessionProvider(), username, accountId, folderId);
       folder.setNumberOfUnreadMessage(folder.getNumberOfUnreadMessage() + 1);
-      mailSrv.saveFolder(username, accountId, folder);
+      mailSrv.saveFolder(SessionsUtils.getSessionProvider(), username, accountId, folder);
       uiPortlet.cancelAction() ;
     }
   }

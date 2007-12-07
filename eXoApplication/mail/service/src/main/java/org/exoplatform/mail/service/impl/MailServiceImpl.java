@@ -52,6 +52,8 @@ import org.exoplatform.mail.service.Tag;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.registry.JCRRegistryService;
 import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.jcr.util.IdGenerator;
 
 import com.sun.mail.smtp.SMTPSendFailedException;
@@ -65,14 +67,11 @@ import com.sun.mail.smtp.SMTPSendFailedException;
 public class MailServiceImpl implements MailService{
 
   private JCRDataStorage storage_ ;
-
-  public MailServiceImpl(RepositoryService  repositoryService, 
-      JCRRegistryService jcrRegistryService) throws Exception {
-    storage_ = new JCRDataStorage(repositoryService, jcrRegistryService) ;  
-  }
-
-  public List<AccountData> getAccountDatas() throws Exception {
-    return null ;
+  //will be use map for multi import/export email type 
+  private EMLImportExport emlImportExport_ ;
+  public MailServiceImpl(NodeHierarchyCreator nodeHierarchyCreator) throws Exception {
+    storage_ = new JCRDataStorage(nodeHierarchyCreator) ;
+    emlImportExport_ = new EMLImportExport(storage_) ;
   }
 
   /**
@@ -80,86 +79,86 @@ public class MailServiceImpl implements MailService{
    * @return
    * @throws Exception
    */
-  public List<Account> getAccounts(String username) throws Exception {
-    return storage_.getAccounts(username);
+  public List<Account> getAccounts(SessionProvider sProvider, String username) throws Exception {
+    return storage_.getAccounts(sProvider, username);
   }
 
-  public Account getAccountById(String username, String id) throws Exception {
-    return storage_.getAccountById(username, id);
+  public Account getAccountById(SessionProvider sProvider, String username, String id) throws Exception {
+    return storage_.getAccountById(sProvider, username, id);
   }
 
-  public void saveAccount(String username, Account account, boolean isNew) throws Exception {
-    storage_.saveAccount(username, account, isNew);
+  public void saveAccount(SessionProvider sProvider, String username, Account account, boolean isNew) throws Exception {
+    storage_.saveAccount(sProvider, username, account, isNew);
   }
 
-  public void updateAccount(String username, Account account) throws Exception {
-    saveAccount(username, account, false);
+  public void updateAccount(SessionProvider sProvider, String username, Account account) throws Exception {
+    saveAccount(sProvider, username, account, false);
   }
 
-  public void removeAccount(String username, Account account) throws Exception {
-    storage_.removeAccount(username, account);
+  public void removeAccount(SessionProvider sProvider, String username, Account account) throws Exception {
+    storage_.removeAccount(sProvider, username, account);
   }
 
-  public Folder getFolder(String username, String accountId, String folderId) throws Exception {
-    return storage_.getFolder(username, accountId, folderId);
+  public Folder getFolder(SessionProvider sProvider, String username, String accountId, String folderId) throws Exception {
+    return storage_.getFolder(sProvider, username, accountId, folderId);
   } 
   
-  public void saveFolder(String username, String accountId, Folder folder) throws Exception {
-    storage_.saveFolder(username, accountId, folder);
+  public void saveFolder(SessionProvider sProvider, String username, String accountId, Folder folder) throws Exception {
+    storage_.saveFolder(sProvider, username, accountId, folder);
   }
 
 
-  public void removeUserFolder(String username, Folder folder) throws Exception {
-    storage_.removeUserFolder(username, folder);
+  public void removeUserFolder(SessionProvider sProvider, String username, Folder folder) throws Exception {
+    storage_.removeUserFolder(sProvider, username, folder);
   }
 
-  public void removeUserFolder(String username, Account account, Folder folder) throws Exception {
-    storage_.removeUserFolder(username, account, folder);
+  public void removeUserFolder(SessionProvider sProvider, String username, Account account, Folder folder) throws Exception {
+    storage_.removeUserFolder(sProvider, username, account, folder);
   }
   
-  public List<MessageFilter> getFilters(String username, String accountId) throws Exception {
-    return storage_.getFilters(username, accountId);
+  public List<MessageFilter> getFilters(SessionProvider sProvider, String username, String accountId) throws Exception {
+    return storage_.getFilters(sProvider, username, accountId);
   }
   
-  public MessageFilter getFilterById(String username, String accountId, String filterId) throws Exception {
-    return storage_.getFilterById(username, accountId, filterId);
+  public MessageFilter getFilterById(SessionProvider sProvider, String username, String accountId, String filterId) throws Exception {
+    return storage_.getFilterById(sProvider, username, accountId, filterId);
   }
   
-  public void saveFilter(String username, String accountId, MessageFilter filter) throws Exception {
-    storage_.saveFilter(username, accountId, filter);
+  public void saveFilter(SessionProvider sProvider, String username, String accountId, MessageFilter filter) throws Exception {
+    storage_.saveFilter(sProvider, username, accountId, filter);
   }
   
-  public void removeFilter(String username, String accountId, String filterId) throws Exception {
-    storage_.removeFilter(username, accountId, filterId);
+  public void removeFilter(SessionProvider sProvider, String username, String accountId, String filterId) throws Exception {
+    storage_.removeFilter(sProvider, username, accountId, filterId);
   }
 
-  public Message getMessageById(String username, String accountId, String msgId) throws Exception {
-    return storage_.getMessageById(username, accountId, msgId);
+  public Message getMessageById(SessionProvider sProvider, String username, String accountId, String msgId) throws Exception {
+    return storage_.getMessageById(sProvider, username, accountId, msgId);
   }
 
-  public void removeMessage(String username, String accountId, String messageId) throws Exception {
-    storage_.removeMessage(username, accountId, messageId);
+  public void removeMessage(SessionProvider sProvider, String username, String accountId, String messageId) throws Exception {
+    storage_.removeMessage(sProvider, username, accountId, messageId);
   }
 
-  public void removeMessage(String username,String accountId, List<String> messageIds) throws Exception {
-    storage_.removeMessage(username, accountId, messageIds);
+  public void removeMessage(SessionProvider sProvider, String username,String accountId, List<String> messageIds) throws Exception {
+    storage_.removeMessage(sProvider, username, accountId, messageIds);
   } 
   
-  public void moveMessages(String username,String accountId, String msgId, String currentFolderId, String destFolderId) throws Exception {
-    storage_.moveMessages(username, accountId, msgId, currentFolderId, destFolderId);
+  public void moveMessages(SessionProvider sProvider, String username,String accountId, String msgId, String currentFolderId, String destFolderId) throws Exception {
+    storage_.moveMessages(sProvider, username, accountId, msgId, currentFolderId, destFolderId);
   }
 
-  public MessagePageList getMessages(String username, MessageFilter filter) throws Exception {
-    return storage_.getMessages(username, filter);
+  public MessagePageList getMessages(SessionProvider sProvider, String username, MessageFilter filter) throws Exception {
+    return storage_.getMessages(sProvider, username, filter);
   }
 
-  public void saveMessage(String username, String accountId, Message message, boolean isNew) throws Exception {
-    storage_.saveMessage(username, accountId, message, isNew);
+  public void saveMessage(SessionProvider sProvider, String username, String accountId, Message message, boolean isNew) throws Exception {
+    storage_.saveMessage(sProvider, username, accountId, message, isNew);
   }
 
-  public void sendMessage(String username, Message message) throws Exception {
+  public void sendMessage(SessionProvider sProvider, String username, Message message) throws Exception {
     String accountId = message.getAccountId() ;
-    Account acc = getAccountById(username, accountId) ;
+    Account acc = getAccountById(sProvider, username, accountId) ;
     String smtpUser = acc.getIncomingUser() ;
     String outgoingHost = acc.getOutgoingHost() ;
     String outgoingPort  = acc.getOutgoingPort() ;
@@ -315,8 +314,8 @@ public class MailServiceImpl implements MailService{
     return status ;
   }
 
-  public List<Message> checkNewMessage(String username, String accountId) throws Exception {
-    Account account = getAccountById(username, accountId) ;
+  public List<Message> checkNewMessage(SessionProvider sProvider, String username, String accountId) throws Exception {
+    Account account = getAccountById(sProvider, username, accountId) ;
     System.out.println(" #### Getting mail from " + account.getIncomingHost() + " ... !");
     List<Message> messageList = new ArrayList<Message>();
     int totalNew = -1;
@@ -398,18 +397,18 @@ public class MailServiceImpl implements MailService{
           }
           
           // Use for conversation
-          Message rootMsg  = getRootMessage(username, accountId, newMsg) ;
+          Message rootMsg  = getRootMessage(sProvider, username, accountId, newMsg) ;
           if (rootMsg != null) {
             newMsg.setIsRootConversation(false);
             newMsg.setRoot(rootMsg.getId());
             newMsg.setUnread(false);
-            updateRootMessage(username, accountId, rootMsg, newMsg);
+            updateRootMessage(sProvider, username, accountId, rootMsg, newMsg);
           } 
-          storage_.saveMessage(username, account.getId(), newMsg, true);
+          storage_.saveMessage(sProvider, username, account.getId(), newMsg, true);
           messageList.add(newMsg);
                     
           for(String folderId : folderIds) {
-            Folder storeFolder = storage_.getFolder(username, account.getId(), folderId) ;
+            Folder storeFolder = storage_.getFolder(sProvider, username, account.getId(), folderId) ;
             if(storeFolder == null) {
               storeFolder = new Folder() ;
               storeFolder.setId(folderId);
@@ -423,7 +422,7 @@ public class MailServiceImpl implements MailService{
             if (newMsg.isRootConversation()) {
               storeFolder.setTotalMessage(storeFolder.getTotalMessage() + 1) ;
             }
-            storage_.saveFolder(username, account.getId(), storeFolder) ;
+            storage_.saveFolder(sProvider, username, account.getId(), storeFolder) ;
           }
           
           i ++ ;
@@ -434,7 +433,7 @@ public class MailServiceImpl implements MailService{
     }  catch (Exception e) { 
       e.printStackTrace();
     }
-    execFilters(username, accountId);
+    execFilters(sProvider, username, accountId);
     return messageList;
   }
 
@@ -511,7 +510,7 @@ public class MailServiceImpl implements MailService{
     newMail.setMessageBody(messageBody.toString());
   }
   
-  private Message getRootMessage(String username, String accountId, Message newMsg) throws Exception {
+  private Message getRootMessage(SessionProvider sProvider, String username, String accountId, Message newMsg) throws Exception {
     MessageFilter filter = new MessageFilter("");
     filter.setAccountId(accountId);
     filter.setSubjectCondition(Utils.CONDITION_IS);
@@ -522,7 +521,7 @@ public class MailServiceImpl implements MailService{
       subject = subject.substring(4, subject.length()).trim();
     }
     filter.setSubject(subject);
-    List<Message> msgList = getMessages(username, filter).getAll(username);
+    List<Message> msgList = getMessages(sProvider, username, filter).getAll(username);
     if (msgList != null && msgList.size() > 0) {
       for (Message msg : msgList) {
         if (msg.isRootConversation()) {
@@ -543,7 +542,7 @@ public class MailServiceImpl implements MailService{
     return null;
   }
   
-  private void updateRootMessage(String username, String accountId,Message rootMsg, Message newMsg) throws Exception {
+  private void updateRootMessage(SessionProvider sProvider, String username, String accountId,Message rootMsg, Message newMsg) throws Exception {
     Map<String, String> addressMap = new HashMap<String, String> () ;
     List<String> addressList = new ArrayList<String>();
     if (rootMsg.getAddresses() != null && rootMsg.getAddresses().length > 0) {
@@ -575,20 +574,20 @@ public class MailServiceImpl implements MailService{
     if (!rootMsg.isUnread()) rootMsg.setUnread(true);
     rootMsg.setFolders(newMsg.getFolders());
     rootMsg.setReceivedDate(newMsg.getReceivedDate());
-    saveMessage(username, accountId, rootMsg, false);
+    saveMessage(sProvider, username, accountId, rootMsg, false);
   }
   
-  public void createAccount(String username, Account account) throws Exception {
-    saveAccount(username, account, true);
+  public void createAccount(SessionProvider sProvider, String username, Account account) throws Exception {
+    saveAccount(sProvider, username, account, true);
   }
 
-  public List<Folder> getFolders(String username, String accountId) throws Exception {
-    return storage_.getFolders(username, accountId) ;  
+  public List<Folder> getFolders(SessionProvider sProvider, String username, String accountId) throws Exception {
+    return storage_.getFolders(sProvider, username, accountId) ;  
   }
   
-  public List<Folder> getFolders(String username, String accountId, boolean isPersonal) throws Exception {
+  public List<Folder> getFolders(SessionProvider sProvider, String username, String accountId, boolean isPersonal) throws Exception {
     List<Folder> folders = new ArrayList<Folder>() ;
-    for(Folder folder : storage_.getFolders(username, accountId))  
+    for(Folder folder : storage_.getFolders(sProvider, username, accountId))  
       if(isPersonal) {
         if(folder.isPersonalFolder()) folders.add(folder) ;
       } else {
@@ -597,82 +596,88 @@ public class MailServiceImpl implements MailService{
     return folders ;
   }
 
-  public void addTag(String username, String accountId, List<String> messagesId, List<Tag> tag)
+  public void addTag(SessionProvider sProvider, String username, String accountId, List<String> messagesId, List<Tag> tag)
       throws Exception {
-    storage_.addTag(username, accountId, messagesId, tag);
+    storage_.addTag(sProvider, username, accountId, messagesId, tag);
   }
 
-  public List<Tag> getTags(String username, String accountId) throws Exception {
-    return storage_.getTags(username, accountId);
+  public List<Tag> getTags(SessionProvider sProvider, String username, String accountId) throws Exception {
+    return storage_.getTags(sProvider, username, accountId);
   }
   
-  public Tag getTag(String username, String accountId, String tagId) throws Exception {
-    return storage_.getTag(username, accountId, tagId);
+  public Tag getTag(SessionProvider sProvider, String username, String accountId, String tagId) throws Exception {
+    return storage_.getTag(sProvider, username, accountId, tagId);
   }
 
-  public void removeMessageTag(String username, String accountId, List<String> messageIds, List<String> tags)
+  public void removeMessageTag(SessionProvider sProvider, String username, String accountId, List<String> messageIds, List<String> tags)
       throws Exception {
-    storage_.removeMessageTag(username, accountId, messageIds, tags);   
+    storage_.removeMessageTag(sProvider, username, accountId, messageIds, tags);   
   }
 
-  public void removeTag(String username, String accountId, String tag) throws Exception {
-    storage_.removeTag(username, accountId, tag);
+  public void removeTag(SessionProvider sProvider, String username, String accountId, String tag) throws Exception {
+    storage_.removeTag(sProvider, username, accountId, tag);
   }
 
-  public void updateTag(String username, String accountId, Tag tag) throws Exception {
-    storage_.updateTag(username, accountId, tag);
+  public void updateTag(SessionProvider sProvider, String username, String accountId, Tag tag) throws Exception {
+    storage_.updateTag(sProvider, username, accountId, tag);
   }
   
-  public List<Message> getMessageByTag(String username, String accountId, String tagName)
+  public List<Message> getMessageByTag(SessionProvider sProvider, String username, String accountId, String tagName)
       throws Exception {
-    return storage_.getMessageByTag(username, accountId, tagName);
+    return storage_.getMessageByTag(sProvider, username, accountId, tagName);
   }
   
-  public MessagePageList getMessagePagelistByTag(String username, String accountId, String tagId) throws Exception {
+  public MessagePageList getMessagePagelistByTag(SessionProvider sProvider, String username, String accountId, String tagId) throws Exception {
     MessageFilter filter = new MessageFilter("Filter By Tag") ;
     filter.setAccountId(accountId) ;
     filter.setTag(new String[]{tagId} ) ;
-    return getMessages(username, filter) ;   
+    return getMessages(sProvider, username, filter) ;   
   }
   
-  public MessagePageList getMessagePageListByFolder(String username, String accountId, String folderId) throws Exception {
+  public MessagePageList getMessagePageListByFolder(SessionProvider sProvider, String username, String accountId, String folderId) throws Exception {
     MessageFilter filter = new MessageFilter("Filter By Folder") ;
     filter.setAccountId(accountId) ;
     filter.setFolder(new String[]{folderId} ) ;
-    return getMessages(username, filter) ;   
+    return getMessages(sProvider, username, filter) ;   
   }
   
-  public MailSetting getMailSetting(String username) throws Exception {
-    return storage_.getMailSetting(username);
+  public MailSetting getMailSetting(SessionProvider sProvider, String username) throws Exception {
+    return storage_.getMailSetting(sProvider, username);
   }  
   
-  public void saveMailSetting(String username, MailSetting newSetting) throws Exception {
-    storage_.saveMailSetting(username, newSetting);
+  public void saveMailSetting(SessionProvider sProvider, String username, MailSetting newSetting) throws Exception {
+    storage_.saveMailSetting(sProvider, username, newSetting);
   }
   
-  public void importMessage(String username, String accountId, String folderId, InputStream inputStream, String type) throws Exception {
-    Properties props = System.getProperties();
+  public void importMessage(SessionProvider sProvider, String username, String accountId, String folderId, InputStream inputStream, String type) throws Exception {
+    /*Properties props = System.getProperties();
     Session session = Session.getDefaultInstance(props, null);
     MimeMessage mimeMessage = new MimeMessage(session, inputStream);
     Message message = new Message();
     message.setAccountId(accountId);
     message = Utils.mergeFromMimeMessage(message, mimeMessage);
     message.setFolders(new String[] {folderId});
-    saveMessage(username, accountId, message, true);
+    saveMessage(sProvider, username, accountId, message, true);*/
+  	emlImportExport_.importMessage(sProvider, username, accountId, folderId, inputStream, type) ;
   }
   
-  public OutputStream exportMessage(String username, String accountId, String messageId) throws Exception {
-    Properties props = System.getProperties();
+  public OutputStream exportMessage(SessionProvider sProvider, String username, String accountId, String messageId) throws Exception {
+    /*Properties props = System.getProperties();
     Session session = Session.getDefaultInstance(props, null);
-    Message message = getMessageById(username, accountId, messageId);
+    Message message = getMessageById(sProvider, username, accountId, messageId);
     MimeMessage mimeMessage = new MimeMessage(session);
     mimeMessage = Utils.mergeToMimeMessage(message, mimeMessage);
     OutputStream outputStream = new ByteArrayOutputStream();
-    mimeMessage.writeTo(outputStream);
-    return outputStream ; 
+    mimeMessage.writeTo(outputStream);*/
+    return emlImportExport_.exportMessage(sProvider, username, accountId, messageId) ; 
   }
   
-  public void execFilters(String username, String accountId) throws Exception {
-    storage_.execFilters(username, accountId);
+  public void execFilters(SessionProvider sProvider, String username, String accountId) throws Exception {
+    storage_.execFilters(sProvider, username, accountId);
   }
+
+	public List<AccountData> getAccountDatas(SessionProvider sProvider) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}	
 }

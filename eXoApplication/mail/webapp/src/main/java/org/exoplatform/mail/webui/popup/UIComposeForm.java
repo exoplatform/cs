@@ -108,7 +108,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
     List<SelectItemOption<String>>  options = new ArrayList<SelectItemOption<String>>() ;
     String username = MailUtils.getCurrentUser();
     MailService mailSrv = getApplicationComponent(MailService.class);
-    for(Account acc : mailSrv.getAccounts(username)) {
+    for(Account acc : mailSrv.getAccounts(SessionsUtils.getSessionProvider(), username)) {
       SelectItemOption<String> itemOption = new SelectItemOption<String>(acc.getUserDisplayName() + " &lt;" + acc.getEmailAddress() + 
           "&gt;", acc.getUserDisplayName() + "<" + acc.getEmailAddress() + ">");
       if (acc.getId().equals(MailUtils.getAccountId())) { itemOption.setSelected(true); }
@@ -130,7 +130,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
     inputSet.addUIFormInput(new UIFormInputInfo(FIELD_ATTACHMENTS, FIELD_ATTACHMENTS, null)) ;
     inputSet.setActionField(FIELD_ATTACHMENTS, getUploadFileList()) ;
     addUIFormInput(inputSet) ;
-    MailSetting mailSetting = mailSrv.getMailSetting(username);
+    MailSetting mailSetting = mailSrv.getMailSetting(SessionsUtils.getSessionProvider(), username);
     isVisualEditor = ((mailSetting.getTypeOfEditor().equals(MailSetting.WYSIWYG)) ? true : false );
     if (isVisualEditor) {
       addUIFormInput(new UIFormWYSIWYGInput(FIELD_MESSAGECONTENT, null, null, true));    
@@ -246,7 +246,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
     String username = MailUtils.getCurrentUser();
     String accountId = MailUtils.getAccountId();
     MailService mailSrv = getApplicationComponent(MailService.class);
-    Account account = mailSrv.getAccountById(username, accountId);
+    Account account = mailSrv.getAccountById(SessionsUtils.getSessionProvider(), username, accountId);
     if (isVisualEditor) {
       if (!MailUtils.isFieldEmpty(account.getSignature())) {value += "</br> -- <br />" + account.getSignature() + "";}
       getChild(UIFormWYSIWYGInput.class).setValue(value);
@@ -275,7 +275,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
     String accountId = uiSelectAcc.getSelectedValue() ;
     String usename = uiPortlet.getCurrentUser() ;
     MailService mailSvr = this.getApplicationComponent(MailService.class) ;
-    Account account = mailSvr.getAccountById(usename, accountId);
+    Account account = mailSvr.getAccountById(SessionsUtils.getSessionProvider(), usename, accountId);
     String from = this.getFieldFromValue() ;
     String subject = this.getFieldSubjectValue() ;
     String to = this.getFieldToValue() ;
@@ -328,7 +328,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
       UIPopupAction uiChildPopup = uiForm.getAncestorOfType(UIPopupAction.class) ;
       Message message = uiForm.getNewMessage() ;      
       try {
-        mailSvr.sendMessage(usename, message) ;
+        mailSvr.sendMessage(SessionsUtils.getSessionProvider(), usename, message) ;
         uiChildPopup.deActivate() ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
       }catch (Exception e) {
@@ -338,20 +338,20 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
         return ;
       }
       try {
-        MailSetting mailSetting = mailSvr.getMailSetting(usename);
+        MailSetting mailSetting = mailSvr.getMailSetting(SessionsUtils.getSessionProvider(), usename);
         if (mailSetting.saveMessageInSent()) {
           message.setFolders(new String[]{Utils.createFolderId(accountId, Utils.FD_SENT, false)}) ;
-          Folder folder = mailSvr.getFolder(usename, accountId, Utils.createFolderId(accountId, Utils.FD_SENT, false));
+          Folder folder = mailSvr.getFolder(SessionsUtils.getSessionProvider(), usename, accountId, Utils.createFolderId(accountId, Utils.FD_SENT, false));
           folder.setTotalMessage(folder.getTotalMessage() + 1);
-          mailSvr.saveFolder(usename, accountId, folder);
+          mailSvr.saveFolder(SessionsUtils.getSessionProvider(), usename, accountId, folder);
         }
         if (!uiForm.fromDrafts()) {
-          mailSvr.saveMessage(usename, accountId, message, true) ;          
-          Folder drafts = mailSvr.getFolder(usename, accountId, Utils.createFolderId(accountId, Utils.FD_DRAFTS, false));
+          mailSvr.saveMessage(SessionsUtils.getSessionProvider(), usename, accountId, message, true) ;          
+          Folder drafts = mailSvr.getFolder(SessionsUtils.getSessionProvider(), usename, accountId, Utils.createFolderId(accountId, Utils.FD_DRAFTS, false));
           drafts.setTotalMessage(drafts.getTotalMessage() - 1);
-          mailSvr.saveFolder(usename, accountId, drafts);
+          mailSvr.saveFolder(SessionsUtils.getSessionProvider(), usename, accountId, drafts);
         } else {
-          mailSvr.saveMessage(usename, accountId, message, false) ;
+          mailSvr.saveMessage(SessionsUtils.getSessionProvider(), usename, accountId, message, false) ;
         }
       } catch (Exception e) {
         uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.save-sent-error", null)) ;
@@ -367,6 +367,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
   static public class SaveDraftActionListener extends EventListener<UIComposeForm> {
     public void execute(Event<UIComposeForm> event) throws Exception {
       UIComposeForm uiForm = event.getSource() ;
+      //TODO review code and use only one SessionProvider, reduce call mailservice for performance problem 
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       UIMailPortlet uiPortlet = uiForm.getAncestorOfType(UIMailPortlet.class) ;
       UISelectAccount uiSelectAcc = uiPortlet.findFirstComponentOfType(UISelectAccount.class) ;
@@ -380,12 +381,12 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
       try {
         message.setFolders(new String[]{Utils.createFolderId(accountId, Utils.FD_DRAFTS, false)}) ;
         if (! uiForm.fromDrafts()) {
-          mailSvr.saveMessage(usename, accountId, message, true) ;
-          Folder drafts = mailSvr.getFolder(usename, accountId, Utils.createFolderId(accountId, Utils.FD_DRAFTS, false));
+          mailSvr.saveMessage(SessionsUtils.getSessionProvider(), usename, accountId, message, true) ;
+          Folder drafts = mailSvr.getFolder(SessionsUtils.getSessionProvider(), usename, accountId, Utils.createFolderId(accountId, Utils.FD_DRAFTS, false));
           drafts.setTotalMessage(drafts.getTotalMessage() + 1);
-          mailSvr.saveFolder(usename, accountId, drafts);
+          mailSvr.saveFolder(SessionsUtils.getSessionProvider(), usename, accountId, drafts);
         } else {
-          mailSvr.saveMessage(usename, accountId, message, false) ;
+          mailSvr.saveMessage(SessionsUtils.getSessionProvider(), usename, accountId, message, false) ;
         }
       }
       catch (Exception e) {
