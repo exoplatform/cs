@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.exoplatform.calendar.CalendarUtils;
+import org.exoplatform.calendar.SessionsUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.ContactGroup;
@@ -73,7 +74,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
     ContactService contactService = getApplicationComponent(ContactService.class) ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     options.add(new SelectItemOption<String>("all", "")) ;
-    for( ContactGroup cg : contactService.getGroups(username)) {
+    for( ContactGroup cg : contactService.getGroups(SessionsUtils.getSessionProvider(), username)) {
       options.add(new SelectItemOption<String>(cg.getName(), cg.getId())) ;
     }
     return options;
@@ -99,9 +100,9 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
     ContactService contactSrv = getApplicationComponent(ContactService.class);
     String username = Util.getPortalRequestContext().getRemoteUser();   
     if (groupId == null || groupId == "") {
-      contacts = contactSrv.getAllContact(username);
+      contacts = contactSrv.getAllContact(SessionsUtils.getSessionProvider(), username);
     } else {
-      contacts = contactSrv.getContactPageListByGroup(username, groupId).getAll();
+      contacts = contactSrv.getContactPageListByGroup(SessionsUtils.getSessionProvider(), username, groupId).getAll();
     }
     setContactList(contacts);
   }
@@ -190,7 +191,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       }
       filter.setText(text) ;
       DataPageList resultPageList = 
-        contactService.searchContact(event.getRequestContext().getRemoteUser(), filter) ;
+        contactService.searchContact(SessionsUtils.getSystemProvider(), event.getRequestContext().getRemoteUser(), filter) ;
       uiForm.setContactList(resultPageList.getAll()) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiForm) ;
     }
