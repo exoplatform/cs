@@ -29,6 +29,7 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
 public class ReminderJob implements Job {
+  
 
 	final private static String CALENDAR_REMINDER = "reminders".intern();
 

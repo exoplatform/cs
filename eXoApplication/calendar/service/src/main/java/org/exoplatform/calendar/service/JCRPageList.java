@@ -32,7 +32,6 @@ abstract public class JCRPageList {
   }
   
   public long getCurrentPage() { return currentPage_ ; }
-  public void setCurrentPage(long  currentPage) { currentPage_ = currentPage; }
   public long getAvailable() { return available_ ; }
   
   public long getAvailablePage() { return availablePage_ ; }

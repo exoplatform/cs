@@ -15,11 +15,13 @@ import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendars;
+import org.exoplatform.calendar.webui.UIFormComboBox;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
+import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
@@ -58,7 +60,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
     inputset.addChild(new UIFormInputInfo(FIELD_NAME, FIELD_NAME, null)) ;
     inputset.addUIFormInput(new UIFormStringInput(FIELD_USER, FIELD_USER, null)) ;
     List<ActionData> actions = new ArrayList<ActionData>() ;
-   /* ActionData selectGroupAction = new ActionData() ;
+    /* ActionData selectGroupAction = new ActionData() ;
     selectGroupAction.setActionListener("SelectPermission") ;
     selectGroupAction.setActionName("SelectGroup") ;
     selectGroupAction.setActionType(ActionData.TYPE_ICON) ;
@@ -71,7 +73,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
     selectUserAction.setActionType(ActionData.TYPE_ICON) ;
     selectUserAction.setActionParameter(UISelectComponent.TYPE_USER) ;
     actions.add(selectUserAction) ;
-    
+
     /*ActionData selectMemberAction = new ActionData() ;
     selectMemberAction.setActionListener("SelectPermission") ;
     selectMemberAction.setActionName("SelectMemberShip") ;
@@ -81,6 +83,12 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
     actions.add(selectMemberAction) ;*/
     inputset.setActionField(FIELD_USER, actions) ;
     inputset.addChild(new UIFormCheckBoxInput<Boolean>(FIELD_EDIT, FIELD_EDIT, null)) ;
+    List<SelectItemOption<String>> options = new  ArrayList<SelectItemOption<String>>() ;
+    options.add(new SelectItemOption<String>("a","a")) ;
+    options.add(new SelectItemOption<String>("b","b")) ;
+    options.add(new SelectItemOption<String>("c","c")) ;
+    options.add(new SelectItemOption<String>("d","d")) ;
+    inputset.addChild(new UIFormComboBox("UIComboBox", "UIComboBox", options)) ;
     addChild(inputset) ;
   }
 
@@ -98,6 +106,14 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
       }
     }
     setCanEdit(canEdit) ;
+  }
+  public String getLabel(String id) {
+    try {
+      return super.getLabel(id) ;
+    } catch (Exception e) {
+      // TODO: handle exception
+      return id ;
+    }
   }
   public void setSelectedCalendarId(String id) { calendarId_ = id ;}
   public void setCalendarName(String value) {
@@ -117,7 +133,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
   }
   public void activate() throws Exception {}
   public void deActivate() throws Exception {}
-  
+
   public void updateSelect(String selectField, String value) throws Exception {
     UIFormStringInput fieldInput = getUIStringInput(selectField) ;
     permission_.put(value, value) ;

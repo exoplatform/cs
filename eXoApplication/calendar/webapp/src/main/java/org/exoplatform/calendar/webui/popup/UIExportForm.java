@@ -134,7 +134,7 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
       OutputStream out = null ;
       try {
         out = importExport.exportCalendar(SessionsUtils.getSystemProvider(), CalendarUtils.getCurrentUser(), calendarIds, uiForm.calType) ;        
-      }catch(ValidationException e) {
+      }catch(Exception e) {
         uiApp.addMessage(new ApplicationMessage("UIExportForm.msg.event-does-not-existing", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;

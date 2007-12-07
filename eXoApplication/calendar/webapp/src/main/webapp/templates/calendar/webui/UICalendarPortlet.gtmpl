@@ -12,6 +12,7 @@
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.setting(' + timeStep + ', "' + workingStart + '") ;') ;
   //rcontext.getJavascriptManager().addJavascript('eXo.calendar.UIWeekView.init(' + defaultTimeInterval + ', "' + workingStart + '") ;') ;
   //rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.showEvent() ;') ;
+  rcontext.getJavascriptManager().importJavascript('eXo.calendar.UICombobox','/calendar/javascript/') ;
 %>
 <div class="$uicomponent.id" oncontextmenu="return false;" id="$uicomponent.id">
   <div class="ApplicationMinWidth">

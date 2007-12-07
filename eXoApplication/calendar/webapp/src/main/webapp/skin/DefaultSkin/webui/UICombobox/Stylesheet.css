@@ -1,0 +1,52 @@
+.UIComboboxContainer {
+	
+}
+.UIComboboxContainer .UIComboboxInput {
+	z-index: 0 ;
+	border: solid 1px gray ;
+	width: 150px ;
+}
+.UIComboboxContainer .UIComboboxList {
+	background: white ;
+	position: absolute ;
+	border: solid 1px gray ;
+	height: 150px ;
+	width: 150px ;
+	overflow-y: auto ;
+	display: none ;
+}
+.UIComboboxContainer .UIComboboxItem {
+	display: block ;
+	padding: 3px 5px ;
+	text-decoration: none ;
+	color: black ;
+}
+
+.UIComboboxContainer .UIComboboxList a:hover{
+	background: blue ;
+	color: white ;
+}
+
+.UIComboboxContainer .UIComboboxList a:visit{
+	background: white ;
+	color: black ;
+}
+
+.UIComboboxContainer .UIComboboxList a:link{
+	background: white ;
+	color: black ;
+}
+
+.UIComboboxContainer .UIComboboxIcon {
+
+}
+
+.UIComboboxContainer .UIComboboxSelectedIcon {
+	background: url(background/BlueCheckerIcon.gif) left no-repeat ;
+}
+
+.UIComboboxContainer .UIComboboxLabel {
+	font-family: tahoma ;
+	font-size: 11px ;
+	margin-left: 16px ;
+}

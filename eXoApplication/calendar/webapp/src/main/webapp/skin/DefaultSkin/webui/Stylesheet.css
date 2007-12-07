@@ -20,7 +20,7 @@
 @import url("UIFeed/Stylesheet.css") ;
 @import url("UIInsertAddress/Stylesheet.css");
 @import url("UIPopup/Stylesheet.css");
-
+@import url("UICombobox/Stylesheet.css");
 /*=========================== MailBanner ==================================*/
 
 .UICalendarPortlet .UIBannerContainer {

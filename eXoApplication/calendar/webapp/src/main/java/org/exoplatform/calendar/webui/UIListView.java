@@ -14,6 +14,7 @@ import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.SessionsUtils;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
+import org.exoplatform.calendar.service.EventPageList;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.JCRPageList;
 import org.exoplatform.portal.webui.util.Util;
@@ -49,7 +50,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
 )
 public class UIListView extends UICalendarView {
   private LinkedHashMap<String, CalendarEvent> eventMap_ = new LinkedHashMap<String, CalendarEvent>() ;
-  private JCRPageList pageList_ = null ;
+  private EventPageList pageList_ = null ;
   private String selectedEvent_ = null ;
   private boolean isShowEventAndTask = true ;
   private boolean isSearchResult = false ;
@@ -82,16 +83,16 @@ public class UIListView extends UICalendarView {
     }
     update(calendarService.searchEvent(SessionsUtils.getSystemProvider(), username, eventQuery, getPublicCalendars())) ; 
   }
-  public void update(JCRPageList pageList) throws Exception {
+  public void update(EventPageList pageList) throws Exception {
     pageList_ = pageList ;
-    updateCurrentPage() ;
+    updateCurrentPage(pageList_.getCurrentPage()) ;
   }
-  protected void updateCurrentPage() throws Exception{
+  protected void updateCurrentPage(long page) throws Exception{
     getChildren().clear() ;
     initCategories() ;
     eventMap_.clear();
     if(pageList_ != null) {
-      for(CalendarEvent calendarEvent : pageList_.getPage(getCurrentPage() ,CalendarUtils.getCurrentUser())) {
+      for(CalendarEvent calendarEvent : pageList_.getPage(page ,CalendarUtils.getCurrentUser())) {
         UIFormCheckBoxInput<Boolean> checkbox = new UIFormCheckBoxInput<Boolean>(calendarEvent.getId(),calendarEvent.getId(), false) ;
         addUIFormInput(checkbox);
         if(getViewType().equals(TYPE_BOTH)) eventMap_.put(calendarEvent.getId(), calendarEvent) ;
@@ -110,7 +111,7 @@ public class UIListView extends UICalendarView {
     return pageList_.getAvailablePage() ; 
   }
   public long getCurrentPage() { return pageList_.getCurrentPage();}
-  public void setCurrentPage(long page) { pageList_.setCurrentPage(page) ;}
+ // public void setCurrentPage(long page) { pageList_.setCurrentPage(page) ;}
   protected boolean isShowEvent() {return isShowEvent_ ;}
 
   protected boolean isShowEventAndTask() {return isShowEventAndTask ;}
@@ -177,8 +178,7 @@ public class UIListView extends UICalendarView {
     public void execute(Event<UIListView> event) throws Exception {
       UIListView uiListView = event.getSource() ;
       int page = Integer.parseInt(event.getRequestContext().getRequestParameter(OBJECTID)) ;
-      uiListView.setCurrentPage(page) ;
-      uiListView.updateCurrentPage() ; 
+      uiListView.updateCurrentPage(page) ; 
       event.getRequestContext().addUIComponentToUpdateByAjax(uiListView.getParent());           
     }
   }

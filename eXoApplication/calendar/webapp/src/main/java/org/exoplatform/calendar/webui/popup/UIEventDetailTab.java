@@ -99,7 +99,7 @@ public class UIEventDetailTab extends UIFormInputWithActions {
   protected UIForm getParentFrom() {
     return (UIForm)getParent() ;
   }
-
+  
   public List<ActionData> getUploadFileList() { 
     List<ActionData> uploadedFiles = new ArrayList<ActionData>() ;
     for(Attachment attachdata : attachments_) {
