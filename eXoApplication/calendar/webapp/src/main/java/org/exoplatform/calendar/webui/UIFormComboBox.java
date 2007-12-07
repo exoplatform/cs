@@ -19,15 +19,7 @@ import org.exoplatform.webui.form.UIFormInputBase;
  * Dec 3, 2007  
  */
 public class UIFormComboBox extends UIFormInputBase<String>  {
-  final  static public short TEXT_TYPE = 0 ;
-  /**
-   * type : password
-   */
-  final  static public short PASSWORD_TYPE = 1 ;
-  /**
-   * type of the text field
-   */
-  private short type_ = TEXT_TYPE ;
+   
   /**
    * The size of the list (number of select options)
    */
@@ -55,11 +47,6 @@ public class UIFormComboBox extends UIFormInputBase<String>  {
   public UIFormComboBox(String name, String value) {
     this(name, null, value);
   }
-
-  public UIFormComboBox setType(short type) {
-    type_ = type;
-    return this ;
-  } 
   final public UIFormComboBox setOptions(List<SelectItemOption<String>> options) { 
     options_ = options ; 
     if(options_ == null || options_.size() < 1) return this;
@@ -72,6 +59,7 @@ public class UIFormComboBox extends UIFormInputBase<String>  {
     if(value_ != null && value_.length() == 0) value_ = null ;
   }
   public void setOnChange(String onchange){ onchange_ = onchange; } 
+  
   protected String renderOnChangeEvent(UIForm uiForm) throws Exception {
     return uiForm.event(onchange_, (String)null);
   }
@@ -82,10 +70,14 @@ public class UIFormComboBox extends UIFormInputBase<String>  {
     context.getJavascriptManager().addJavascript("eXo.calendar.UICombobox.init('" + getUIform().getId()+ "');") ;  
     Writer w =  context.getWriter() ;
     w.write("<div class='UIComboboxContainer'>") ;
-      w.write("<input type='text' value=''><br>") ;
+      w.write("<input name='"+getName()+"' type='text'" + " id='"+getId()+"'");
+      if(value_ != null && value_.trim().length() > 0) {      
+        w.write(" value='"+encodeValue(value_).toString()+"'");
+      }
+      w.write(" \\><br>") ;
       w.write("<div class='UIComboboxList'>") ;
         for(SelectItemOption item : options_) {
-          w.write("<a href='#' value='" + item.getValue()+ "' class='UIComboboxItem'>") ;
+          w.write("<a href='javascript:void(0);' value='" + item.getValue()+ "' class='UIComboboxItem'>") ;
             w.write("<div class='UIComboboxIcon'>") ;
               w.write("<div class='UIComboboxLabel'>" + item.getLabel() + "</div>") ;
             w.write("</div>");

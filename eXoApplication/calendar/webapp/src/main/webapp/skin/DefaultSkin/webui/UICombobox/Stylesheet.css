@@ -4,14 +4,11 @@
 .UIComboboxContainer .UIComboboxInput {
 	z-index: 0 ;
 	border: solid 1px gray ;
-	width: 150px ;
 }
 .UIComboboxContainer .UIComboboxList {
 	background: white ;
 	position: absolute ;
 	border: solid 1px gray ;
-	height: 150px ;
-	width: 150px ;
 	overflow-y: auto ;
 	display: none ;
 }
@@ -32,17 +29,12 @@
 	color: black ;
 }
 
-.UIComboboxContainer .UIComboboxList a:link{
-	background: white ;
-	color: black ;
-}
-
 .UIComboboxContainer .UIComboboxIcon {
 
 }
 
-.UIComboboxContainer .UIComboboxSelectedIcon {
-	background: url(background/BlueCheckerIcon.gif) left no-repeat ;
+.UIComboboxContainer .UIComboboxSelectedIcon a{
+	background: blue ;
 }
 
 .UIComboboxContainer .UIComboboxLabel {

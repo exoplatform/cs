@@ -9,6 +9,7 @@ UICombobox.prototype.init = function(container) {
 	for(var i = 0 ; i < len ; i++) {
 		textbox = eXo.core.DOMUtil.findDescendantsByTagName(UIComboboxContainer[i], "input")[0] ;
 		textbox.onfocus = eXo.calendar.UICombobox.show ;
+		textbox.onclick = eXo.calendar.UICombobox.show ;		
 	}
 } ;
 
@@ -25,8 +26,10 @@ UICombobox.prototype.show = function(evt) {
 		UICombobox.items[i].onclick = UICombobox.getValue ; 
 	}
 	if (len <= 0) return ;
+	UICombobox.list.style.width = (this.offsetWidth - 2) + "px" ;
 	UICombobox.list.style.overflowX = "hidden" ;
 	UICombobox.list.style.display = "block" ;
+	eXo.core.DOMUtil.listHideElements(UICombobox.list) ;
 } ;
 
 UICombobox.prototype.getValue = function() {

@@ -83,12 +83,6 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
     actions.add(selectMemberAction) ;*/
     inputset.setActionField(FIELD_USER, actions) ;
     inputset.addChild(new UIFormCheckBoxInput<Boolean>(FIELD_EDIT, FIELD_EDIT, null)) ;
-    List<SelectItemOption<String>> options = new  ArrayList<SelectItemOption<String>>() ;
-    options.add(new SelectItemOption<String>("a","a")) ;
-    options.add(new SelectItemOption<String>("b","b")) ;
-    options.add(new SelectItemOption<String>("c","c")) ;
-    options.add(new SelectItemOption<String>("d","d")) ;
-    inputset.addChild(new UIFormComboBox("UIComboBox", "UIComboBox", options)) ;
     addChild(inputset) ;
   }
 
