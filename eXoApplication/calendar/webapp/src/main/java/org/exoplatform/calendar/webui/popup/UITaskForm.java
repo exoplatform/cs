@@ -21,6 +21,7 @@ import org.exoplatform.calendar.service.Reminder;
 import org.exoplatform.calendar.webui.CalendarView;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
+import org.exoplatform.calendar.webui.UIFormComboBox;
 import org.exoplatform.calendar.webui.UIMiniCalendar;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -98,8 +99,8 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
     UITaskDetailTab taskDetailTab = getChildById(TAB_TASKDETAIL) ;
     List<SelectItemOption<String>> fromTimes = CalendarUtils.getTimesSelectBoxOptions(calSetting.getTimeFormat()) ;
     List<SelectItemOption<String>> toTimes = CalendarUtils.getTimesSelectBoxOptions(calSetting.getTimeFormat()) ;
-    taskDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_FROM_TIME).setOptions(fromTimes) ;
-    taskDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_TO_TIME).setOptions(toTimes) ;
+    taskDetailTab.getUIFormComboBox(UITaskDetailTab.FIELD_FROM_TIME).setOptions(fromTimes) ;
+    taskDetailTab.getUIFormComboBox(UITaskDetailTab.FIELD_TO_TIME).setOptions(toTimes) ;
     if(eventCalendar != null) {
       isAddNew_ = false ;
       calendarEvent_ = eventCalendar ;
@@ -183,6 +184,20 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
         return false ;
       } 
     }
+    try {
+      getEventFromDate() ;
+    } catch (Exception e) {
+      e.printStackTrace() ;
+      errorMsg_ = getId() +  ".msg.event-fromdate-notvalid" ;
+      return false ;
+    }
+    try {
+      getEventToDate() ;
+    } catch (Exception e) {
+      e.printStackTrace() ;
+      errorMsg_ = getId() +  ".msg.event-fromdate-notvalid" ;
+      return false ;
+    }
     if(getEmailReminder() && CalendarUtils.isEmpty(getEmailAddress())) {
       errorMsg_ = getId() + ".msg.event-email-required" ;
       return false ;
@@ -226,7 +241,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
 
   protected Date getEventFromDate() throws Exception {
     UITaskDetailTab taskDetailTab =  getChildById(TAB_TASKDETAIL) ;
-    UIFormSelectBox timeField = taskDetailTab.getUIFormSelectBox(UITaskDetailTab.FIELD_FROM_TIME) ;
+    UIFormComboBox timeField = taskDetailTab.getUIFormComboBox(UITaskDetailTab.FIELD_FROM_TIME) ;
     UIFormDateTimeInput fromField = taskDetailTab.getChildById(UITaskDetailTab.FIELD_FROM) ;
     if(getEventAllDate()) {
       DateFormat df = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
@@ -244,14 +259,14 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
     UITaskDetailTab taskDetailTab =  getChildById(TAB_TASKDETAIL) ;
     ((UIFormDateTimeInput)taskDetailTab.getChildById(UITaskDetailTab.FIELD_FROM))
     .setValue(CalendarUtils.parse(date, CalendarUtils.DATEFORMAT)) ;
-    taskDetailTab.getUIFormSelectBox(UITaskDetailTab.FIELD_FROM_TIME)
+    taskDetailTab.getUIFormComboBox(UITaskDetailTab.FIELD_FROM_TIME)
     .setValue(CalendarUtils.parse(date, CalendarUtils.TIMEFORMAT)) ;    
 
   }
 
   protected Date getEventToDate() throws Exception {
     UITaskDetailTab taskDetailTab =  getChildById(TAB_TASKDETAIL) ;
-    UIFormSelectBox timeField = taskDetailTab.getUIFormSelectBox(UITaskDetailTab.FIELD_TO_TIME) ;
+    UIFormComboBox timeField = taskDetailTab.getUIFormComboBox(UITaskDetailTab.FIELD_TO_TIME) ;
     UIFormDateTimeInput toField = taskDetailTab.getChildById(UITaskDetailTab.FIELD_TO) ;
     if(getEventAllDate()) {
       DateFormat df = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
@@ -269,7 +284,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
     UITaskDetailTab taskDetailTab =  getChildById(TAB_TASKDETAIL) ;
     ((UIFormDateTimeInput)taskDetailTab.getChildById(UITaskDetailTab.FIELD_TO))
     .setValue(CalendarUtils.parse(date, CalendarUtils.DATEFORMAT)) ;
-    taskDetailTab.getUIFormSelectBox(UITaskDetailTab.FIELD_TO_TIME)
+    taskDetailTab.getUIFormComboBox(UITaskDetailTab.FIELD_TO_TIME)
     .setValue(CalendarUtils.parse(date, CalendarUtils.TIMEFORMAT)) ; 
   }
 
