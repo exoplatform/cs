@@ -4,6 +4,7 @@
  **************************************************************************/
 package org.exoplatform.forum.service;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -84,21 +85,24 @@ public class ForumPageList extends JCRPageList {
     if(postNode.hasProperty("exo:remoteAddr")) postNew.setRemoteAddr(postNode.getProperty("exo:remoteAddr").getString()) ;
     if(postNode.hasProperty("exo:icon")) postNew.setIcon(postNode.getProperty("exo:icon").getString()) ;
     if(postNode.hasProperty("exo:isApproved")) postNew.setIsApproved(postNode.getProperty("exo:isApproved").getBoolean()) ;
-    if(postNode.hasProperty("exo:hasAttach")) {
-    	if(postNode.getProperty("exo:hasAttach").getBoolean()) {
+    if(postNode.hasProperty("exo:numberAttach")) {
+    	if(postNode.getProperty("exo:numberAttach").getLong() > 0) {
 		    NodeIterator postAttachments = postNode.getNodes();
 		    List<ForumAttachment> attachments = new ArrayList<ForumAttachment>();
-		    while (postAttachments.hasNext()) {
-		      Node node = postAttachments.nextNode();
-		      if (node.isNodeType("nt:file")) {
-		      	JCRForumAttachment attachment = new JCRForumAttachment() ;
-		        attachment.setId(node.getPath());
-		        attachment.setMimeType(node.getNode("jcr:content").getProperty("jcr:mimeType").getString());
-		        attachment.setName(node.getName());
-		        attachment.setWorkspace(node.getSession().getWorkspace().getName()) ;
-		        attachments.add(attachment);
-		      }
-		    }
+		    Node nodeFile ;
+        while (postAttachments.hasNext()) {
+          Node node = postAttachments.nextNode();
+          if (node.isNodeType("nt:file")) {
+          	JCRForumAttachment attachment = new JCRForumAttachment() ;
+          	nodeFile = node.getNode("jcr:content") ;
+            attachment.setId(node.getPath());
+            attachment.setMimeType(nodeFile.getProperty("jcr:mimeType").getString());
+            attachment.setName(node.getName());
+            attachment.setWorkspace(node.getSession().getWorkspace().getName()) ;
+            attachment.setSize(nodeFile.getProperty("jcr:data").getStream().available());
+            attachments.add(attachment);
+          }
+        }
 		    postNew.setAttachments(attachments);
     	}
     }
@@ -120,6 +124,7 @@ public class ForumPageList extends JCRPageList {
     if(topicNode.hasProperty("exo:description")) topicNew.setDescription(topicNode.getProperty("exo:description").getString()) ;
     if(topicNode.hasProperty("exo:postCount")) topicNew.setPostCount(topicNode.getProperty("exo:postCount").getLong()) ;
     if(topicNode.hasProperty("exo:viewCount")) topicNew.setViewCount(topicNode.getProperty("exo:viewCount").getLong()) ;
+    if(topicNode.hasProperty("exo:numberAttachments")) topicNew.setNumberAttachment(topicNode.getProperty("exo:numberAttachments").getLong()) ;
     if(topicNode.hasProperty("exo:icon")) topicNew.setIcon(topicNode.getProperty("exo:icon").getString()) ;
     
     if(topicNode.hasProperty("exo:isNotifyWhenAddPost")) topicNew.setIsNotifyWhenAddPost(topicNode.getProperty("exo:isNotifyWhenAddPost").getBoolean()) ;
@@ -139,8 +144,8 @@ public class ForumPageList extends JCRPageList {
     String idFirstPost = topicNode.getName().replaceFirst("topic", "post") ;
     if(topicNode.hasNode(idFirstPost)) {
       Node FirstPostNode  = topicNode.getNode(idFirstPost) ;
-      if(FirstPostNode.hasProperty("exo:hasAttach")) {
-      	if(FirstPostNode.getProperty("exo:hasAttach").getBoolean()) {
+      if(FirstPostNode.hasProperty("exo:numberAttachments")) {
+      	if(FirstPostNode.getProperty("exo:numberAttachments").getLong() > 0) {
       		NodeIterator postAttachments = FirstPostNode.getNodes();
       		List<ForumAttachment> attachments = new ArrayList<ForumAttachment>();
           while (postAttachments.hasNext()) {

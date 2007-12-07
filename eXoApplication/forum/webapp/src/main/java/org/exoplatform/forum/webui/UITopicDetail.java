@@ -81,7 +81,7 @@ public class UITopicDetail extends UIForm  {
   private ForumService forumService = (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
   private String categoryId ;
   private String forumId ; 
-  private String topicId;
+  private String topicId = "";
   private boolean viewTopic = true ;
   private Topic topic;
   private JCRPageList pageList ;
@@ -91,6 +91,7 @@ public class UITopicDetail extends UIForm  {
   private boolean isUpdatePageList = false ;
   private List<Post> posts ;
   private long maxPost = 10 ;
+  private String userName = "" ;
   public UITopicDetail() throws Exception {
     addUIFormInput( new UIFormStringInput("gopage1", null)) ;
     addUIFormInput( new UIFormStringInput("gopage2", null)) ;
@@ -108,14 +109,20 @@ public class UITopicDetail extends UIForm  {
     this.topic = forumService.getTopic(categoryId, forumId, topicId, viewTopic) ;
   }
   
-  public void setUpdateContainer(String categoryId, String forumId, Topic topic, boolean viewTopic , long numberPage) throws Exception {
+  public void setUpdateContainer(String categoryId, String forumId, Topic topic, long numberPage) throws Exception {
+  	if(this.topicId == null || !this.topicId.equals(topic.getId())) this.userName = "" ;
   	this.categoryId = categoryId ;
   	this.forumId = forumId ;
   	this.topicId = topic.getId() ;
-  	this.viewTopic = viewTopic ;
+  	this.viewTopic = false ;
   	this.pageSelect = numberPage ;
 	  this.isGopage = true ;
-	  this.topic = topic ;
+	  this.isEditTopic = false ;
+	  String userName = Util.getPortalRequestContext().getRemoteUser() ;
+	  if(!userName.equals(this.userName)) {
+	  	this.topic = forumService.getTopic(categoryId, forumId, topic.getId(), true) ;
+	  	this.userName = userName ;
+	  } else this.topic = topic ;
 	  this.getChild(UIForumPageIterator.class).setSelectPage(numberPage) ;
   	this.getAncestorOfType(UIForumPortlet.class).getChild(UIBreadcumbs.class).setUpdataPath((categoryId + "/" + forumId + "/" + topicId)) ;
   }

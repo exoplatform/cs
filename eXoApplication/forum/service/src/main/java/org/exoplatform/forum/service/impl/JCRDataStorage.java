@@ -345,6 +345,7 @@ public class JCRDataStorage implements DataStorage {
     if(topicNode.hasProperty("exo:description")) topicNew.setDescription(topicNode.getProperty("exo:description").getString()) ;
     if(topicNode.hasProperty("exo:postCount")) topicNew.setPostCount(topicNode.getProperty("exo:postCount").getLong()) ;
     if(topicNode.hasProperty("exo:viewCount")) topicNew.setViewCount(topicNode.getProperty("exo:viewCount").getLong()) ;
+    if(topicNode.hasProperty("exo:numberAttachments")) topicNew.setNumberAttachment(topicNode.getProperty("exo:numberAttachments").getLong()) ;
     if(topicNode.hasProperty("exo:icon")) topicNew.setIcon(topicNode.getProperty("exo:icon").getString()) ;
     
     if(topicNode.hasProperty("exo:isNotifyWhenAddPost")) topicNew.setIsNotifyWhenAddPost(topicNode.getProperty("exo:isNotifyWhenAddPost").getBoolean()) ;
@@ -364,18 +365,21 @@ public class JCRDataStorage implements DataStorage {
     String idFirstPost = topicNode.getName().replaceFirst("topic", "post") ;
     if(topicNode.hasNode(idFirstPost)) {
       Node FirstPostNode  = topicNode.getNode(idFirstPost) ;
-      if(FirstPostNode.hasProperty("exo:hasAttach")) {
-      	if(FirstPostNode.getProperty("exo:hasAttach").getBoolean()) {
+      if(FirstPostNode.hasProperty("exo:numberAttachments")) {
+      	if(FirstPostNode.getProperty("exo:numberAttachments").getLong() > 0) {
       		NodeIterator postAttachments = FirstPostNode.getNodes();
       		List<ForumAttachment> attachments = new ArrayList<ForumAttachment>();
+      		Node nodeFile ;
           while (postAttachments.hasNext()) {
             Node node = postAttachments.nextNode();
             if (node.isNodeType("nt:file")) {
             	JCRForumAttachment attachment = new JCRForumAttachment() ;
+            	nodeFile = node.getNode("jcr:content") ;
               attachment.setId(node.getPath());
-              attachment.setMimeType(node.getNode("jcr:content").getProperty("jcr:mimeType").getString());
+              attachment.setMimeType(nodeFile.getProperty("jcr:mimeType").getString());
               attachment.setName(node.getName());
               attachment.setWorkspace(node.getSession().getWorkspace().getName()) ;
+              attachment.setSize(nodeFile.getProperty("jcr:data").getStream().available());
               attachments.add(attachment);
             }
           }
@@ -433,7 +437,7 @@ public class JCRDataStorage implements DataStorage {
 		    topicNode.setProperty("exo:canPost", topic.getCanPost()) ;
         topicNode.setProperty("exo:userVoteRating", topic.getUserVoteRating()) ;
         topicNode.setProperty("exo:voteRating", topic.getVoteRating()) ;
-
+        topicNode.setProperty("exo:numberAttachments", 0) ;
         forumHomeNode.save() ;
         forumHomeNode.getSession().save() ;
 		    if(isNew) {
@@ -449,7 +453,6 @@ public class JCRDataStorage implements DataStorage {
 					post.setMessage(topic.getDescription()) ;
 					post.setRemoteAddr("") ;
 					post.setIcon(topic.getIcon()) ;
-          post.setNumberOfAttachment(topic.getAttachmentFirstPost()) ;
 					post.setIsApproved(false) ;
 					post.setAttachments(topic.getAttachments()) ;
 					
@@ -465,7 +468,6 @@ public class JCRDataStorage implements DataStorage {
             post.setMessage(topic.getDescription()) ;
             post.setIcon(topic.getIcon()) ;
             post.setAttachments(topic.getAttachments()) ;
-
             savePost(categoryId, forumId, topic.getId(), post, false) ;
           }
 		    }
@@ -572,21 +574,24 @@ public class JCRDataStorage implements DataStorage {
     if(postNode.hasProperty("exo:remoteAddr")) postNew.setRemoteAddr(postNode.getProperty("exo:remoteAddr").getString()) ;
     if(postNode.hasProperty("exo:icon")) postNew.setIcon(postNode.getProperty("exo:icon").getString()) ;
     if(postNode.hasProperty("exo:isApproved")) postNew.setIsApproved(postNode.getProperty("exo:isApproved").getBoolean()) ;
-    if(postNode.hasProperty("exo:hasAttach")) {
-    	if(postNode.getProperty("exo:hasAttach").getBoolean()) {
+    if(postNode.hasProperty("exo:numberAttach")) {
+    	if(postNode.getProperty("exo:numberAttach").getLong() > 0) {
 		    NodeIterator postAttachments = postNode.getNodes();
 		    List<ForumAttachment> attachments = new ArrayList<ForumAttachment>();
-		    while (postAttachments.hasNext()) {
-		      Node node = postAttachments.nextNode();
-		      if (node.isNodeType("nt:file")) {
-		      	JCRForumAttachment attachment = new JCRForumAttachment() ;
-		        attachment.setId(node.getPath());
-		        attachment.setMimeType(node.getNode("jcr:content").getProperty("jcr:mimeType").getString());
-		        attachment.setName(node.getName());
-		        attachment.setWorkspace(node.getSession().getWorkspace().getName()) ;
-		        attachments.add(attachment);
-		      }
-		    }
+		    Node nodeFile ;
+        while (postAttachments.hasNext()) {
+          Node node = postAttachments.nextNode();
+          if (node.isNodeType("nt:file")) {
+          	JCRForumAttachment attachment = new JCRForumAttachment() ;
+          	nodeFile = node.getNode("jcr:content") ;
+            attachment.setId(node.getPath());
+            attachment.setMimeType(nodeFile.getProperty("jcr:mimeType").getString());
+            attachment.setName(node.getName());
+            attachment.setWorkspace(node.getSession().getWorkspace().getName()) ;
+            attachment.setSize(nodeFile.getProperty("jcr:data").getStream().available());
+            attachments.add(attachment);
+          }
+        }
 		    postNew.setAttachments(attachments);
     	}
     }
@@ -617,7 +622,7 @@ public class JCRDataStorage implements DataStorage {
 				postNode.setProperty("exo:remoteAddr", post.getRemoteAddr()) ;
 				postNode.setProperty("exo:icon", post.getIcon()) ;
 				postNode.setProperty("exo:isApproved", post.getIsApproved()) ;
-				postNode.setProperty("exo:hasAttach", false) ;
+				long numberAttach = 0 ;
 				List<ForumAttachment> attachments = post.getAttachments();
 	      if(attachments != null) { 
 	        Iterator<ForumAttachment> it = attachments.iterator();
@@ -632,20 +637,25 @@ public class JCRDataStorage implements DataStorage {
 	          nodeContent.setProperty("jcr:mimeType", file.getMimeType());
 	          nodeContent.setProperty("jcr:data", file.getInputStream());
 	          nodeContent.setProperty("jcr:lastModified", Calendar.getInstance().getTimeInMillis());
-	          postNode.setProperty("exo:hasAttach", true ) ;
+	          ++ numberAttach ;
 	        }
 	      }				
-				
 				if(isNew) {
 			    // set InfoPost for Topic
 					long topicPostCount = topicNode.getProperty("exo:postCount").getLong() + 1 ;
 					topicNode.setProperty("exo:postCount", topicPostCount ) ;
 					topicNode.setProperty("exo:lastPostDate", GregorianCalendar.getInstance()) ;
+					long newNumberAttach =  topicNode.getProperty("exo:numberAttachments").getLong() + numberAttach ;
+					topicNode.setProperty("exo:numberAttachments", newNumberAttach);
 					// set InfoPost for Forum
 					long forumPostCount = forumNode.getProperty("exo:postCount").getLong() + 1 ;
 					forumNode.setProperty("exo:postCount", forumPostCount ) ;
 					forumNode.setProperty("exo:lastTopicPath", topicNode.getPath()) ;
+				} else {
+					long temp = topicNode.getProperty("exo:numberAttachments").getLong() -  postNode.getProperty("exo:numberAttach").getLong() ;
+					topicNode.setProperty("exo:numberAttachments", (temp + numberAttach));
 				}
+				postNode.setProperty("exo:numberAttach", numberAttach) ;
 		    forumHomeNode.save() ;
 		    forumHomeNode.getSession().save() ;
 		  }
@@ -661,10 +671,13 @@ public class JCRDataStorage implements DataStorage {
 			  post = getPost(categoryId, forumId, topicId, postId) ;
 				Node forumNode = CategoryNode.getNode(forumId) ;
 				Node topicNode = forumNode.getNode(topicId) ;
+				long numberAttachs = topicNode.getNode(postId).getProperty("exo:numberAttach").getLong() ; 
 				topicNode.getNode(postId).remove() ;
 				// setPostCount for Topic
 				long topicPostCount = topicNode.getProperty("exo:postCount").getLong() - 1 ;
 				topicNode.setProperty("exo:postCount", topicPostCount ) ;
+				long newNumberAttachs = topicNode.getProperty("exo:numberAttachments").getLong() - numberAttachs ;
+				topicNode.setProperty("exo:numberAttachments", newNumberAttachs) ;
 				// setPostCount for Forum
 				long forumPostCount = forumNode.getProperty("exo:postCount").getLong() - 1 ;
 				forumNode.setProperty("exo:postCount", forumPostCount ) ;
@@ -688,11 +701,14 @@ public class JCRDataStorage implements DataStorage {
     forumHomeNode.getSession().getWorkspace().move(postPath, newPostPath) ;
     //Node Post move
     Node postNode = (Node)forumHomeNode.getSession().getItem(newPostPath) ;
+    long numberAttach = postNode.getProperty("exo:numberAttach").getLong() ;
+    srcTopicNode.setProperty("exo:numberAttachments", srcTopicNode.getProperty("exo:numberAttachments").getLong() - numberAttach);
     postNode.setProperty("exo:path", newPostPath) ;
     //Node Topic add Post
     Node destTopicNode = (Node)forumHomeNode.getSession().getItem(destTopicPath) ;
     Node destForumNode = (Node)destTopicNode.getParent() ;
     destTopicNode.setProperty("exo:postCount", destTopicNode.getProperty("exo:postCount").getLong() + 1 ) ;
+    destTopicNode.setProperty("exo:numberAttachments", destTopicNode.getProperty("exo:numberAttachments").getLong() + numberAttach);
     destForumNode.setProperty("exo:postCount", destForumNode.getProperty("exo:postCount").getLong() + 1 ) ;
   	forumHomeNode.save() ;
   	forumHomeNode.getSession().save() ;

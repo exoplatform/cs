@@ -302,14 +302,24 @@
 						  	<div class="AttachmentContent">
 						  	<% for(attachment in attachments) {
 						  	 	   String fileName = attachment.getName() ;
-						  	 	   long sizeNumber = attachment.getSize() ;
+						  	 	   String unit = "Bytes" ;
+						  	 	   double sizeNumber = attachment.getSize() ;
+						  	 	   if(sizeNumber > 1024) {
+						  	 	   	 sizeNumber = sizeNumber/1024 ;
+						  	 	   	 unit = "Kb" ;
+						  	 	   }
+						  	 	   if(sizeNumber > 1024) {
+						  	 	   	 sizeNumber = sizeNumber/1024 ;
+						  	 	   	 unit = "Mb" ;
+						  	 	   }
 						  	 	   String size = "" + sizeNumber ;
+						  	 	   if(size.length() > 5) size = size.substring(0,5);
 						  	%>
 						  		<div class="AttachmentBox">
 										<div class="AttachmentIcon WordIcon"><span/></div>
 										<a class="AttachmentLabel" href="#">$fileName</a>
 										<div style="clear: left;"><span/></div>
-										<div class="Size">Size: ${size}Kb</div>
+										<div class="Size">Size: ${size} ${unit}</div>
 						  		</div>
 						  	<% } %>
 						  		<div style="clear: left;"><span/></div>

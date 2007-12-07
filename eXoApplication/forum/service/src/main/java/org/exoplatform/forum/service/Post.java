@@ -29,7 +29,6 @@ public class Post {
   private String remoteAddr;
   private String icon; 
   private boolean isApproved = false ;
-  private long    attachment ;
   private List<ForumAttachment> attachments ;
   
   
@@ -73,9 +72,6 @@ public class Post {
   
   public String getRemoteAddr(){return remoteAddr;}
   public void setRemoteAddr(String remoteAddr){this.remoteAddr = remoteAddr;}
-  
-  public long  getNumberOfAttachment() { return attachment ; }
-  public void setNumberOfAttachment(long number) { this.attachment = number ;}
   
   public String getIcon() { return icon;}
   public void setIcon( String icon) { this.icon = icon;}

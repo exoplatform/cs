@@ -256,11 +256,11 @@
 					        String postNewBy = topic.getLastPostBy() ;
 					        String lastPostDate = topic.getLastPostDate().toString() ;
 					        lastPostDate = lastPostDate.substring(0, (lastPostDate.length() - 8))
-					        String titlePost = topic.getDescription();
+					        String titlePost = uicomponent.getStringCleanHtmlCode(topic.getDescription());
 					        if(titlePost.length() > 100) {
 					        	titlePost = titlePost.substring(0, 99) + "...";
 					        }
-					        String attachment = String.valueOf(topic.getAttachmentFirstPost());
+					        String attachment = String.valueOf(topic.getNumberAttachment());
 					        String postCount = String.valueOf(topic.getPostCount());
 					        String postView = String.valueOf(topic.getViewCount());
 					        String titleTopicStatus = "Hot thread with new post" ;

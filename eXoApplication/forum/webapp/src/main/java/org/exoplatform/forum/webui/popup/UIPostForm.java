@@ -140,7 +140,7 @@ public class UIPostForm extends UIForm implements UIPopupComponent {
     	this.temp = "<div style=\"padding: 0px 10px 10px;\"><div style=\"height: 16px;\">" + getLabel("Quote") + ":</div><div class=\"ClassQuote\" " ;
       Post post = this.forumService.getPost(this.categoryId, this.forumId, this.topicId, postId) ;
       String messenger = post.getMessage() ;
-      if(isQuote) {
+      if(isQuote) {//quote
       	int begin = messenger.indexOf("TheEndQuote") ;
       	if(begin > 0) messenger = messenger.substring((begin + 15), messenger.length()) ;
         String title = "" ;
@@ -151,18 +151,19 @@ public class UIPostForm extends UIForm implements UIPopupComponent {
         getChild(UIFormWYSIWYGInput.class).setValue(value);
         //getUIFormTextAreaInput(FIELD_MESSENGER_TEXTAREA).setDefaultValue(value) ;
         getChild(UIFormInputIconSelector.class).setSelectedIcon(post.getIcon());
-      } else {
+      } else {//edit
         getUIStringInput(FIELD_POSTTITLE_INPUT).setValue(post.getSubject()) ;
         int index = messenger.indexOf(("<div>" + getLabel(FIELD_ORIGINALLY))) ;
         if(index > 0) {
         	messenger = this.temp + this.style + messenger.substring(index, messenger.length());
         }
+//        this.attachments_ = post.getAttachments();
+//        this.refreshUploadFileList();
         getChild(UIFormWYSIWYGInput.class).setValue(messenger);
-        //getUIFormTextAreaInput(FIELD_MESSENGER_TEXTAREA).setDefaultValue(messenger) ;
         getChild(UIFormInputIconSelector.class).setSelectedIcon(post.getIcon());
       }
     } else {
-      if(!isQuote) {
+      if(!isQuote) {//reply
         Topic topic = this.forumService.getTopic(this.categoryId, this.forumId, this.topicId, false) ;
         String title = topic.getTopicName() ;
         getUIStringInput(FIELD_POSTTITLE_INPUT).setValue(getLabel(FIELD_LABEL_QUOTE) + ": " + title) ;
@@ -208,7 +209,6 @@ public class UIPostForm extends UIForm implements UIPopupComponent {
 	      post.setRemoteAddr("") ;
 	      UIFormInputIconSelector uiIconSelector = uiForm.getChild(UIFormInputIconSelector.class);
 	      post.setIcon(uiIconSelector.getSelectedIcon());
-	      post.setNumberOfAttachment(0) ;
 	      post.setIsApproved(false) ;
 	      post.setAttachments(uiForm.attachments_) ;
 	      
@@ -257,7 +257,6 @@ public class UIPostForm extends UIForm implements UIPopupComponent {
 	      post.setRemoteAddr("") ;
 	      UIFormInputIconSelector uiIconSelector = uiForm.getChild(UIFormInputIconSelector.class);
 	      post.setIcon(uiIconSelector.getSelectedIcon());
-	      post.setNumberOfAttachment(0) ;
 	      post.setIsApproved(false) ;
 	      post.setAttachments(uiForm.attachments_) ;
 	      if(uiForm.postId != null && uiForm.postId.length() > 0) {

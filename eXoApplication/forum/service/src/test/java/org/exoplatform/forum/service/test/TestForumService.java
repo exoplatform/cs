@@ -7,6 +7,8 @@ package org.exoplatform.forum.service.test;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import org.exoplatform.forum.service.Category;
 import org.exoplatform.forum.service.Forum;
@@ -27,23 +29,90 @@ public class TestForumService extends BaseForumTestCase{
     assertNull(null) ;
   }
   
+  private String getTimeZonNumberInString(String string) {
+  	if(string != null && string.length() > 0) {
+  		StringBuffer stringBuffer = new StringBuffer();
+  		int t = 0;
+  		for(int i = 0; i <  string.length(); ++i) {
+  			char c = string.charAt(i) ; 
+  			if (Character.isDigit(c) || c == '-' || c == '+' || c == ':'){
+          if(c == ':') c = '.';
+          if(c == '-' || c == '+') t = t + 1;
+          if(c == '3' && string.charAt(i-1) == ':') c = '5';
+          if(t == 1 || t == 0) stringBuffer.append(c);
+          if(t == 2) t = 1;
+        }
+  		}
+  		return stringBuffer.toString() ;
+  	}
+  	return null ;
+  }
   public void testCategory() throws Exception {  
-	 Category cat = createCategory() ;
-    forumService_.saveCategory(cat, true) ;
-    // add category
-    assertNotNull(forumService_.getCategory(cat.getId())) ;
-    // get categories
-    List<Category> categories = forumService_.getCategories() ;
-    assertEquals(categories.size(), 1) ;
-    // update category
-    cat.setCategoryName("a1234567890") ;
-    forumService_.saveCategory(cat, false) ;
-    Category updatedCat = forumService_.getCategory(cat.getId()) ;
-    assertNotNull(updatedCat) ;
-    assertEquals("a1234567890", updatedCat.getCategoryName()) ;
-    // test removeCategory
-    assertNotNull(forumService_.removeCategory(cat.getId()));
-    
+//	 Category cat = createCategory() ;
+//    forumService_.saveCategory(cat, true) ;
+//    // add category
+//    assertNotNull(forumService_.getCategory(cat.getId())) ;
+//    // get categories
+//    List<Category> categories = forumService_.getCategories() ;
+//    assertEquals(categories.size(), 1) ;
+//    // update category
+//    cat.setCategoryName("a1234567890") ;
+//    forumService_.saveCategory(cat, false) ;
+//    Category updatedCat = forumService_.getCategory(cat.getId()) ;
+//    assertNotNull(updatedCat) ;
+//    assertEquals("a1234567890", updatedCat.getCategoryName()) ;
+//    // test removeCategory
+//    assertNotNull(forumService_.removeCategory(cat.getId()));
+//    
+  	String[] timeZone = {
+  			"(GMT -12:00) Eniwetok, Kwajalein", 
+  			"(GMT -11:00) Midway Island, Samoa", 
+  			"(GMT -10:00) Hawaii", 
+  			"(GMT -9:00) Alaska", 
+  			"(GMT -8:00) Pacific Time (US &amp; Canada)", 
+  			"(GMT -7:00) Mountain Time (US &amp; Canada)", 
+  			"(GMT -6:00) Central Time (US &amp; Canada), Mexico City", 
+  			"(GMT -5:00) Eastern Time (US &amp; Canada), Bogota, Lima", 
+  			"(GMT -4:00) Atlantic Time (Canada), Caracas, La Paz", 
+  			"(GMT -3:30) Newfoundland", 
+  			"(GMT -3:00) Brazil, Buenos Aires, Georgetown", 
+  			"(GMT -2:00) Mid-Atlantic", 
+  			"(GMT -1:00) Azores, Cape Verde Islands", 
+  			"(GMT  0:00) Western Europe Time, London, Lisbon, Casablanca", 
+  			"(GMT +1:00) Brussels, Copenhagen, Madrid, Paris", 
+  			"(GMT +2:00) Kaliningrad, South Africa", 
+  			"(GMT +3:00) Baghdad, Riyadh, Moscow, St. Petersburg", 
+  			"(GMT +3:30) Tehran", 
+  			"(GMT +4:00) Abu Dhabi, Muscat, Baku, Tbilisi", 
+  			"(GMT +4:30) Kabul", 
+  			"(GMT +5:00) Ekaterinburg, Islamabad, Karachi, Tashkent", 
+  			"(GMT +5:30) Bombay, Calcutta, Madras, New Delhi", 
+  			"(GMT +6:00) Almaty, Dhaka, Colombo", 
+  			"(GMT +7:00) Bangkok, Ha Noi, Jakarta", 
+  			"(GMT +8:00) Beijing, Perth, Singapore, Hong Kong", 
+  			"(GMT +9:00) Tokyo, Seoul, Osaka, Sapporo, Yakutsk", 
+  			"(GMT +9:30) Adelaide, Darwin", 
+  			"(GMT +10:00) Eastern Australia, Guam, Vladivostok", 
+  			"(GMT +11:00) Magadan, Solomon Islands, New Caledonia", 
+  			"(GMT +12:00) Auckland, Wellington, Fiji, Kamchatka", 
+  		} ;
+    String []temp = TimeZone.getAvailableIDs() ;
+    int i = 0;
+    String t = "+";
+    Locale loca = new Locale("vi","AO");
+    Date postDate = new Date();
+    System.out.println("\n" + postDate.getTimezoneOffset() );
+    long date = postDate.getTime() ;
+    for(int k=0; k < 13; k++) {
+	  //  System.out.println("\n" + "   test:   "  + TimeZone.getTimeZone("GMT" + t + k + ":00").getOffset(date) );
+	    if(k == 12 && i == 2) break;
+	    if(k == 12) {k = 0; t = "-"; i = 2; }
+    }
+  	for (String string : timeZone) {
+	   // System.out.println("\n" + getTimeZonNumberInString(string) + "  :  "+ string );
+    }
+//    TimeZone timeZone = TimeZone.getTimeZone("GMT-7:00");
+//    timeZone.getDisplayName() ;
 //    String temporary = "123456789";
 //    char tmp = temporary.charAt((temporary.length() - 1));
 //    int t = (new Integer(tmp)).intValue() - 48;
@@ -69,57 +138,57 @@ public class TestForumService extends BaseForumTestCase{
 //    a.length()
   }
 
-  public void testForum() throws Exception {
-  	Category cat = createCategory();
-  	forumService_.saveCategory(cat, true);
-  	
-  	Forum forum = createdForum();
-  	//forum la forum khoi tao
-  	// add forum
-  	forumService_.saveForum(cat.getId(), forum, true);
-  	// getForum
-  	assertNotNull(forumService_.getForum(cat.getId(), forum.getId()));
-  	Forum forumNew  = forumService_.getForum(cat.getId(), forum.getId());
-//  	Date a = new Date();
-//  	System.out.println(forumNew.getCreatedDate().toString());
-		// getForumByPath
-//  	Forum forumN = (Forum)forumService_.getObjectByPath(forumNew.getPath());
-//  	assertEquals(forumN.getDescription(),forumNew.getDescription());
-		// getList Forum
-  	List<Forum> forums0 = new ArrayList<Forum>();
-  	for (int i = 0; i < 15; i++) {
-  		forums0.add(createdForum());
-  		forumService_.saveForum(cat.getId(), forums0.get(i), true);
-  	}
-  	List<Forum> forums = forumService_.getForums(cat.getId());
-//  	for (int i = 0; i < forums.size(); i++) {
-//  		System.out.println("\n =============== > HHH:  " + forums.get(i).getId()) ;
-//		}
-  	
-  	List<ForumLinkData> listLink = forumService_.getAllLink() ;
-  	
-  	for (ForumLinkData forumLinkData : listLink) {
-  		System.out.println("\n =============== >   ID:  " + forumLinkData.getId() + "\n =============== > Name:  " + forumLinkData.getName()) ;
-    }
-  	//assertEquals(forums.size(), 1);
-  	// update Forum
-  	forumNew.setForumName("Forum update");
-  	forumService_.saveForum(cat.getId(), forumNew, false);
-  	assertEquals("Forum update", forumService_.getForum(cat.getId(), forumNew.getId()).getForumName());
-  	// test moveForum from cat to cate
-  	Category cate = createCategory();
-  	forumService_.saveCategory(cate, true);
-  	Category cateNew = forumService_.getCategory(cate.getId());
-  	Category cat_ = forumService_.getCategory(cat.getId());
-  	String oldPath = forumNew.getPath();
-  	forumService_.moveForum(forumNew.getId(), oldPath, cateNew.getPath());
-  	assertNotNull(forumService_.getForum(cate.getId(), forumNew.getId()));
-  	Forum test = forumService_.getForum(cate.getId(), forumNew.getId());
-  	forumService_.moveForum(test.getId(), test.getPath(), cat_.getPath());
-  	// remove Forum return Forum
-  	//assertNotNull(forumService_.removeForum("idC1", forumNew.getId()));
-  }
-  
+//  public void testForum() throws Exception {
+//  	Category cat = createCategory();
+//  	forumService_.saveCategory(cat, true);
+//  	
+//  	Forum forum = createdForum();
+//  	//forum la forum khoi tao
+//  	// add forum
+//  	forumService_.saveForum(cat.getId(), forum, true);
+//  	// getForum
+//  	assertNotNull(forumService_.getForum(cat.getId(), forum.getId()));
+//  	Forum forumNew  = forumService_.getForum(cat.getId(), forum.getId());
+////  	Date a = new Date();
+////  	System.out.println(forumNew.getCreatedDate().toString());
+//		// getForumByPath
+////  	Forum forumN = (Forum)forumService_.getObjectByPath(forumNew.getPath());
+////  	assertEquals(forumN.getDescription(),forumNew.getDescription());
+//		// getList Forum
+//  	List<Forum> forums0 = new ArrayList<Forum>();
+//  	for (int i = 0; i < 15; i++) {
+//  		forums0.add(createdForum());
+//  		forumService_.saveForum(cat.getId(), forums0.get(i), true);
+//  	}
+//  	List<Forum> forums = forumService_.getForums(cat.getId());
+////  	for (int i = 0; i < forums.size(); i++) {
+////  		System.out.println("\n =============== > HHH:  " + forums.get(i).getId()) ;
+////		}
+//  	
+//  	List<ForumLinkData> listLink = forumService_.getAllLink() ;
+//  	
+//  	for (ForumLinkData forumLinkData : listLink) {
+//  		System.out.println("\n =============== >   ID:  " + forumLinkData.getId() + "\n =============== > Name:  " + forumLinkData.getName()) ;
+//    }
+//  	//assertEquals(forums.size(), 1);
+//  	// update Forum
+//  	forumNew.setForumName("Forum update");
+//  	forumService_.saveForum(cat.getId(), forumNew, false);
+//  	assertEquals("Forum update", forumService_.getForum(cat.getId(), forumNew.getId()).getForumName());
+//  	// test moveForum from cat to cate
+//  	Category cate = createCategory();
+//  	forumService_.saveCategory(cate, true);
+//  	Category cateNew = forumService_.getCategory(cate.getId());
+//  	Category cat_ = forumService_.getCategory(cat.getId());
+//  	String oldPath = forumNew.getPath();
+//  	forumService_.moveForum(forumNew.getId(), oldPath, cateNew.getPath());
+//  	assertNotNull(forumService_.getForum(cate.getId(), forumNew.getId()));
+//  	Forum test = forumService_.getForum(cate.getId(), forumNew.getId());
+//  	forumService_.moveForum(test.getId(), test.getPath(), cat_.getPath());
+//  	// remove Forum return Forum
+//  	//assertNotNull(forumService_.removeForum("idC1", forumNew.getId()));
+//  }
+//  
 //  public void testTopic() throws Exception {
 //    Category cat = createCategory();
 //		forumService_.saveCategory(cat, true);
@@ -258,7 +327,6 @@ public class TestForumService extends BaseForumTestCase{
 		topicNew.setIsClosed(false);
 		topicNew.setIsLock(false);
 		topicNew.setIcon("classNameIcon");
-		topicNew.setAttachmentFirstPost(0) ;
 		topicNew.setIsApproved(false);  
 		topicNew.setCanView(new String[] {});
 		topicNew.setCanPost(new String[] {});

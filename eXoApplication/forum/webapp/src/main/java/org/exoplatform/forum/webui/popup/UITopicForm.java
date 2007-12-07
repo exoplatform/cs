@@ -251,7 +251,6 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
 	      postNew.setAttachments(uiForm.attachments_) ;
 	      UIFormInputIconSelector uiIconSelector = uiForm.getChild(UIFormInputIconSelector.class);
 	      postNew.setIcon(uiIconSelector.getSelectedIcon());
-	      postNew.setNumberOfAttachment(0) ;
 	      
 	      UIPopupContainer popupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
 	      UIPopupAction popupAction = popupContainer.getChild(UIPopupAction.class).setRendered(true) ;

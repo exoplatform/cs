@@ -27,7 +27,7 @@ public class Topic {
   private long postCount = 0;  
 	private long viewCount = 0;
 	private String icon ;
-  private long attachmentFirstPost = 0 ;
+  private long numberAttachments = 0 ;
 	
   private boolean isModeratePost = false ;
   private boolean isNotifyWhenAddPost = false ;  
@@ -40,6 +40,7 @@ public class Topic {
   private String[] canView;
   private String[] canPost;
   private String[] userVoteRating ;
+  private String[] tags ;
   private Double voteRating = 0.0;
   private List<ForumAttachment> attachments ;
   
@@ -101,8 +102,8 @@ public class Topic {
   public String getIcon() { return icon;}
   public void setIcon( String icon) { this.icon = icon;}
 
-  public long getAttachmentFirstPost() { return attachmentFirstPost;}
-  public void setAttachmentFirstPost( long attachmentFirstPost) { this.attachmentFirstPost = attachmentFirstPost;}
+  public long getNumberAttachment() { return numberAttachments;}
+  public void setNumberAttachment(long numberAttachments) { this.numberAttachments = numberAttachments;}
   
   public boolean getIsApproved() { return isApproved;}
   public void setIsApproved(boolean isApproved) { this.isApproved = isApproved;}
@@ -122,6 +123,9 @@ public class Topic {
   public String[] getUserVoteRating(){return userVoteRating;}
   public void setUserVoteRating(String[] userVoteRating){this.userVoteRating = userVoteRating;}
 
+  public String[] getTags(){return tags;}
+  public void setTags(String[] tags){this.tags = tags;}
+  
   public Double getVoteRating(){return voteRating;}
   public void setVoteRating(Double voteRating){this.voteRating = voteRating;}
   

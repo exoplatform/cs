@@ -203,8 +203,18 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
   	pageListPost.setPageSize(this.maxPost) ;
   	return pageListPost;
   }
-  
-  
+  @SuppressWarnings("unused")
+  private String getStringCleanHtmlCode(String sms) {
+  	StringBuffer string = new StringBuffer();
+  	char c; boolean get = true ;
+  	for (int i = 0; i < sms.length(); i++) {
+  		c = sms.charAt(i);
+	    if(c == '<') get = false ;
+	    if(get) string.append(c);
+	    if(c == '>') get = true ;
+    }
+  	return string.toString();
+  }
   static public class GoNumberPageActionListener extends EventListener<UITopicContainer> {
   	public void execute(Event<UITopicContainer> event) throws Exception {
   		UITopicContainer topicContainer = event.getSource() ;
@@ -260,7 +270,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
       UITopicDetailContainer uiTopicDetailContainer = uiForumContainer.getChild(UITopicDetailContainer.class) ;
       uiForumContainer.setIsRenderChild(false) ;
       UITopicDetail uiTopicDetail = uiTopicDetailContainer.getChild(UITopicDetail.class) ;
-      uiTopicDetail.setUpdateContainer(uiTopicContainer.categoryId, uiTopicContainer.forumId, topic, true, Long.parseLong(temp[1])) ;
+      uiTopicDetail.setUpdateContainer(uiTopicContainer.categoryId, uiTopicContainer.forumId, topic, Long.parseLong(temp[1])) ;
       uiTopicDetail.setUpdatePageList(uiTopicContainer.getPageListPost(temp[0])) ;
       uiTopicDetailContainer.getChild(UITopicPoll.class).updatePoll(uiTopicContainer.categoryId, uiTopicContainer.forumId, topic ) ;
       forumPortlet.getChild(UIForumLinks.class).setValueOption((uiTopicContainer.categoryId+"/"+ uiTopicContainer.forumId + " "));
@@ -673,18 +683,5 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
       event.getRequestContext().addUIComponentToUpdateByAjax(forumPortlet) ;
     }
   }  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
   
 }

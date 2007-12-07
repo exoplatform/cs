@@ -44,3 +44,7 @@
 .UIForumPortlet .optionSelected {
 	background: #8eb3da ;
 }
+
+.UIForumPortlet .timeZone {
+	line-height: 16px;
+}
