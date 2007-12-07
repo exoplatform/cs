@@ -19,6 +19,7 @@ import org.exoplatform.mail.service.Attachment;
 import org.exoplatform.mail.service.JCRMessageAttachment;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
+import org.exoplatform.mail.service.Tag;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.popup.UIAddContactForm;
 import org.exoplatform.mail.webui.popup.UIComposeForm;
@@ -27,6 +28,7 @@ import org.exoplatform.mail.webui.popup.UIMoveMessageForm;
 import org.exoplatform.mail.webui.popup.UIPopupAction;
 import org.exoplatform.mail.webui.popup.UIPopupActionContainer;
 import org.exoplatform.mail.webui.popup.UIPrintPreview;
+import org.exoplatform.mail.webui.popup.UITagForm;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIComponent;
@@ -50,6 +52,7 @@ import org.exoplatform.webui.event.EventListener;
         @EventConfig(listeners = UIMessagePreview.ForwardActionListener.class), 
         @EventConfig(listeners = UIMessagePreview.PrintActionListener.class),
         @EventConfig(listeners = UIMessagePreview.ExportActionListener.class),
+        @EventConfig(listeners = UIMessagePreview.AddTagActionListener.class),
         @EventConfig(listeners = UIMessagePreview.AddContactActionListener.class),
         @EventConfig(listeners = UIMessagePreview.MoveMessagesActionListener.class)
     }
@@ -262,6 +265,30 @@ public class UIMessagePreview extends UIComponent {
       uiExportForm.setExportMessage(msg);
       } catch (Exception e) { }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup);  
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessagePreview.class));
+    }
+  }
+  
+  static public class AddTagActionListener extends EventListener<UIMessagePreview> {
+    public void execute(Event<UIMessagePreview> event) throws Exception {
+      UIMessagePreview uiMessagePreview = event.getSource() ; 
+      String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      UIMailPortlet uiPortlet = uiMessagePreview.getAncestorOfType(UIMailPortlet.class);
+      UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class);
+      UITagForm uiTagForm = uiMessagePreview.createUIComponent(UITagForm.class, null, null) ;
+      String username = uiPortlet.getCurrentUser();
+      String accountId = MailUtils.getAccountId();
+      MailService mailSrv = MailUtils.getMailService();
+      UINavigationContainer uiNavigation = uiPortlet.getChild(UINavigationContainer.class) ;
+      UISelectAccount uiSelect = uiNavigation.getChild(UISelectAccount.class) ;
+      String accId = uiSelect.getSelectedValue() ;
+      List<Tag> listTags = mailSrv.getTags(username, accId);
+      uiPopupAction.activate(uiTagForm, 600, 0, true);
+      List<Message> msgList = new ArrayList<Message>();
+      msgList.add(mailSrv.getMessageById(username, accountId, msgId));
+      uiTagForm.setMessageList(msgList);
+      uiTagForm.setTagList(listTags) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessagePreview.class));
     }
   }
