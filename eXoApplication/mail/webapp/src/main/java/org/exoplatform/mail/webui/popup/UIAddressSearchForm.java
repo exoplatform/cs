@@ -11,6 +11,7 @@ import java.util.Map;
 
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactService;
+import org.exoplatform.mail.SessionsUtils;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -74,9 +75,9 @@ public class UIAddressSearchForm extends UIForm implements UIPopupComponent {
     ContactService contactSrv = getApplicationComponent(ContactService.class);
     String username = Util.getPortalRequestContext().getRemoteUser();   
     if (groupId == null || groupId == "") {
-      contacts = contactSrv.getAllContact(username);
+      contacts = contactSrv.getAllContact(SessionsUtils.getSessionProvider(), username);
     } else {
-      contacts = contactSrv.getContactPageListByGroup(username, groupId).getAll();
+      contacts = contactSrv.getContactPageListByGroup(SessionsUtils.getSessionProvider(), username, groupId).getAll();
     }
     setContactList(contacts);
   }

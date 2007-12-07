@@ -16,6 +16,7 @@ import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.DataPageList;
 import org.exoplatform.mail.MailUtils;
+import org.exoplatform.mail.SessionsUtils;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -68,7 +69,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
     ContactService contactSrv = getApplicationComponent(ContactService.class);
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>();
     options.add(new SelectItemOption<String>(ALL_GROUP_ITEM, ""));
-    for (ContactGroup group : contactSrv.getGroups(username)) {
+    for (ContactGroup group : contactSrv.getGroups(SessionsUtils.getSessionProvider(), username)) {
       options.add(new SelectItemOption<String>(group.getName(), group.getId()));
     }
     addUIFormInput(new UIFormStringInput(CONTACT_SEARCH, CONTACT_SEARCH, null));
@@ -106,9 +107,9 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
     ContactService contactSrv = getApplicationComponent(ContactService.class);
     String username = Util.getPortalRequestContext().getRemoteUser();
     if (groupId == null || groupId == "") {
-      contacts = contactSrv.getAllContact(username);
+      contacts = contactSrv.getAllContact(SessionsUtils.getSessionProvider(), username);
     } else {
-      contacts = contactSrv.getContactPageListByGroup(username, groupId).getAll();
+      contacts = contactSrv.getContactPageListByGroup(SessionsUtils.getSessionProvider(), username, groupId).getAll();
     }
     setContactList(contacts);
   }
@@ -173,7 +174,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       if (groupId != null && !groupId.equals("")) 
         filter.setCategories(new String[] {groupId});
       filter.setText(text);
-      DataPageList pageList = contactSrv.searchContact(username, filter);
+      DataPageList pageList = contactSrv.searchContact(SessionsUtils.getSystemProvider(), username, filter);
       uiAddressForm.setContactList(pageList.getAll());
       event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressForm);
     }

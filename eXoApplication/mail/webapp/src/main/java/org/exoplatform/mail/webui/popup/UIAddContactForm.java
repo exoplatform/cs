@@ -12,6 +12,7 @@ import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.mail.MailUtils;
+import org.exoplatform.mail.SessionsUtils;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -63,7 +64,7 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
   public UIAddContactForm() throws Exception { 
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>();
     ContactService contactSrv = getApplicationComponent(ContactService.class);
-    for (ContactGroup group : contactSrv.getGroups(MailUtils.getCurrentUser())) {
+    for (ContactGroup group : contactSrv.getGroups(SessionsUtils.getSessionProvider(), MailUtils.getCurrentUser())) {
       options.add(new SelectItemOption<String>(group.getName(), group.getId()));
     }
     addUIFormInput(new UIFormSelectBox(SELECT_GROUP, SELECT_GROUP, options));
@@ -157,7 +158,7 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
       contact.setMobilePhone(phone);
       ContactService contactSrv = uiContact.getApplicationComponent(ContactService.class);
       try {
-        contactSrv.saveContact(uiPortlet.getCurrentUser(), contact, true);
+        contactSrv.saveContact(SessionsUtils.getSessionProvider(), uiPortlet.getCurrentUser(), contact, true);
         uiContact.getAncestorOfType(UIPopupAction.class).deActivate() ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet) ;
       } catch(Exception e) { e.printStackTrace() ; }

@@ -16,6 +16,7 @@ import org.exoplatform.download.DownloadResource;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.mail.MailUtils;
+import org.exoplatform.mail.SessionsUtils;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Attachment;
 import org.exoplatform.mail.service.BufferAttachment;
@@ -258,7 +259,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
   public List<Contact> getContacts() throws Exception {
     ContactService contactSrv = getApplicationComponent(ContactService.class);
     String username = MailUtils.getCurrentUser();
-    return contactSrv.getAllContact(username);
+    return contactSrv.getAllContact(SessionsUtils.getSessionProvider(), username);
   }
   
   public void resetFields() { reset() ; }
