@@ -17,6 +17,7 @@ import org.exoplatform.services.jcr.util.IdGenerator;
 public class Tag {
   private String id ;
   private String name ;
+  private String owner ;
   private String description ;
   private String color ;
   
@@ -29,6 +30,9 @@ public class Tag {
   
   public void setName(String name) { this.name = name ; }
   public String getName() { return name ; }
+  
+  public String getOwner(){return owner;}
+  public void setOwner(String owner){this.owner = owner;}
   
   public void setDescription(String description) { this.description = description ; }
   public String getDescription() { return description ; }
