@@ -19,6 +19,7 @@ import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.webui.CalendarView;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
+import org.exoplatform.calendar.webui.UIFormComboBox;
 import org.exoplatform.calendar.webui.UIMiniCalendar;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -75,19 +76,27 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
     addUIFormInput(new UIFormTextAreaInput(FIELD_DESCRIPTION, FIELD_DESCRIPTION, null)) ;
     addUIFormInput(new UIFormDateTimeInput(FIELD_FROM, FIELD_FROM, new Date(), false).addValidator(EmptyFieldValidator.class));
     addUIFormInput(new UIFormDateTimeInput(FIELD_TO, FIELD_TO, new Date(), false).addValidator(EmptyFieldValidator.class));
-    addUIFormInput(new UIFormSelectBox(FIELD_FROM_TIME, FIELD_FROM_TIME, options));
-    addUIFormInput(new UIFormSelectBox(FIELD_TO_TIME, FIELD_TO_TIME, options));
+    
+    addUIFormInput(new UIFormComboBox(FIELD_FROM_TIME, FIELD_FROM_TIME, options));
+    addUIFormInput(new UIFormComboBox(FIELD_TO_TIME, FIELD_TO_TIME, options));
+    
+    //addUIFormInput(new UIFormSelectBox(FIELD_FROM_TIME, FIELD_FROM_TIME, options));
+    //addUIFormInput(new UIFormSelectBox(FIELD_TO_TIME, FIELD_TO_TIME, options));
+    
     addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_ALLDAY, FIELD_ALLDAY, false));
     addUIFormInput(new UIFormSelectBox(FIELD_CALENDAR, FIELD_CALENDAR, null)) ;
     addUIFormInput(new UIFormSelectBox(FIELD_CATEGORY, FIELD_CATEGORY, UIEventForm.getCategory())) ;
   }
 
-
+  public UIFormComboBox getUIFormCombobox(String name) {
+    return  findComponentById(name) ;
+  }
+  
   public void init(CalendarSetting  calendarSetting, String startTime, String endTime) throws Exception {
     List<SelectItemOption<String>> fromOptions = CalendarUtils.getTimesSelectBoxOptions(calendarSetting.getTimeFormat()) ;
     List<SelectItemOption<String>> toOptions = CalendarUtils.getTimesSelectBoxOptions(calendarSetting.getTimeFormat()) ;
-    getUIFormSelectBox(FIELD_FROM_TIME).setOptions(fromOptions) ;
-    getUIFormSelectBox(FIELD_TO_TIME).setOptions(toOptions) ;
+    getUIFormCombobox(FIELD_FROM_TIME).setOptions(fromOptions) ;
+    getUIFormCombobox(FIELD_TO_TIME).setOptions(toOptions) ;
     java.util.Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
     if(startTime != null) cal.setTimeInMillis(Long.parseLong(startTime)) ;
     else {
@@ -100,10 +109,12 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
     }
     setEventToDate(cal.getTime()) ;
   }
-
+  
+  
+  
   private void setEventFromDate(Date value) {
     UIFormDateTimeInput fromField = getChildById(FIELD_FROM) ;
-    UIFormSelectBox timeFile = getChildById(FIELD_FROM_TIME) ;
+    UIFormComboBox timeFile = getChildById(FIELD_FROM_TIME) ;
     DateFormat df = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
     fromField.setValue(df.format(value)) ;
     df = new SimpleDateFormat(CalendarUtils.TIMEFORMAT) ;
@@ -112,7 +123,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
 
   private Date getEventFromDate() throws Exception {
     UIFormDateTimeInput fromField = getChildById(FIELD_FROM) ;
-    UIFormSelectBox timeFile = getChildById(FIELD_FROM_TIME) ;
+    UIFormComboBox timeFile = getChildById(FIELD_FROM_TIME) ;
     if(getIsAllDay()) {
       DateFormat df = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
       return CalendarUtils.getBeginDay(df.parse(fromField.getValue())).getTime();
@@ -122,17 +133,18 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
   }
   private Date getEventToDate() throws Exception {
     UIFormDateTimeInput toField = getChildById(FIELD_TO) ;
-    UIFormSelectBox timeFile = getChildById(FIELD_TO_TIME) ;
+    UIFormComboBox timeFile = getChildById(FIELD_TO_TIME) ;
     if(getIsAllDay()) {
       DateFormat df = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
       return CalendarUtils.getBeginDay(df.parse(toField.getValue())).getTime();
     } 
+    System.out.println("\n\n " + timeFile.getValue());
     DateFormat df = new SimpleDateFormat(CalendarUtils.DATETIMEFORMAT) ;
     return df.parse(toField.getValue() + " " + timeFile.getValue() ) ;
   }
   private void setEventToDate(Date value) {
     UIFormDateTimeInput toField =  getChildById(FIELD_TO) ;
-    UIFormSelectBox timeField =  getChildById(FIELD_TO_TIME) ;
+    UIFormComboBox timeField =  getChildById(FIELD_TO_TIME) ;
     DateFormat df = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
     toField.setValue(df.format(value)) ;
     df = new SimpleDateFormat(CalendarUtils.TIMEFORMAT) ;

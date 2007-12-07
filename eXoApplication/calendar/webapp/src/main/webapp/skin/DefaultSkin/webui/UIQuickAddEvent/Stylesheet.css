@@ -27,6 +27,7 @@
 .UIQuickAddEvent .UIFormGrid .FieldComponent .Time{
 	font-size: 11px;
 }
-.UIQuickAddEvent .UIFormGrid .FieldComponent .Time .selectbox{
-	width: 104px;
+ 
+.UIQuickAddEvent .Time .UIComboboxInput {
+  width: 120px ;
 }

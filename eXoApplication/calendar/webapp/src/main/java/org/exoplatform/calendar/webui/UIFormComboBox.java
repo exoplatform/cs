@@ -69,12 +69,7 @@ public class UIFormComboBox extends UIFormInputBase<String>  {
   public void processRender(WebuiRequestContext context) throws Exception {
     context.getJavascriptManager().addJavascript("eXo.calendar.UICombobox.init('" + getUIform().getId()+ "');") ;  
     Writer w =  context.getWriter() ;
-    w.write("<div class='UIComboboxContainer'>") ;
-      w.write("<input name='"+getName()+"' type='text'" + " id='"+getId()+"'");
-      if(value_ != null && value_.trim().length() > 0) {      
-        w.write(" value='"+encodeValue(value_).toString()+"'");
-      }
-      w.write(" \\><br>") ;
+    //w.write("<div class='UIComboboxContainer'>") ;
       w.write("<div class='UIComboboxList'>") ;
         for(SelectItemOption item : options_) {
           w.write("<a href='javascript:void(0);' value='" + item.getValue()+ "' class='UIComboboxItem'>") ;
@@ -84,7 +79,12 @@ public class UIFormComboBox extends UIFormInputBase<String>  {
           w.write("</a>") ;
         }
       w.write("</div>") ;
-    w.write("</div>") ;
+      w.write("<input class='UIComboboxInput' name='"+getName()+"' type='text'" + " id='"+getId()+"'");
+      if(value_ != null && value_.trim().length() > 0) {      
+        w.write(" value='"+encodeValue(value_).toString()+"'");
+      }
+      w.write(" \\>") ;
+    //w.write("</div>") ;
   }
 
   private StringBuilder encodeValue(String value){

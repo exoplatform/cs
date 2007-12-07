@@ -960,7 +960,7 @@ UICalendarPortlet.prototype.showHideTime = function(chk) {
 	if(chk.tagName.toLowerCase() != "input") {
 		chk = DOMUtil.findFirstDescendantByClass(chk, "input", "checkbox") ;
 	}
-	var selectboxes = DOMUtil.findDescendantsByTagName(chk.form, "select") ;
+	var selectboxes = DOMUtil.findDescendantsByTagName(chk.form, "input") ;
 	var fields = new Array() ;
 	var len = selectboxes.length ;
 	for(var i = 0 ; i < len ; i ++) {
