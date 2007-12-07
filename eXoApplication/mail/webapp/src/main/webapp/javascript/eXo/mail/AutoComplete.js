@@ -3,12 +3,23 @@
  */
 // ACMain
 function ACMain() {
+  this.dataObj = false ;
 }
 
-ACMain.prototype.init = function(dataObj, rootElement, klazz) {
+ACMain.prototype.init = function(dataObj, rootElement, klazz, updateOnlyNeed) {
+  if (updateOnlyNeed == null) {
+    updateOnlyNeed = true ;
+  }
   eXo.mail.AutoComplete.ACView.init() ;
-  eXo.mail.AutoComplete.ACModel.parseData(dataObj) ;
+  if (this.dataObj == dataObj) {
+    if (!updateOnlyNeed) {
+      eXo.mail.AutoComplete.ACModel.parseData(dataObj) ;
+    }
+  } else {
+    eXo.mail.AutoComplete.ACModel.parseData(dataObj) ;
+  }
   eXo.mail.AutoComplete.ACControl.regEvent(rootElement, klazz) ;
+  this.dataObj = dataObj ;
 } ;
 
 // ACModelPrototype
@@ -18,16 +29,15 @@ function ACModelPrototype() {
 ACModelPrototype.prototype = {
   contain : function(keyword) { return false ;}
   ,
-  
   compare : function(keyword) { return false ;}
   ,
-  
   highLight : function(keyword) { return 'Not implement' ;}
 } ;
 
 // ACModel
 function ACModel() {
   this.data = [] ;
+  this.separatorChar = ',' ;
 }
 
 ACModel.prototype.init = function() {
@@ -75,7 +85,47 @@ ACModel.prototype.query = function(keyword) {
       result[result.length] = this.data[i] ;
     }
   }
+  this.currentResult = result ;
   return result ;
+} ;
+
+// ACKeyboardHandler
+function ACKeyboardHandler() {
+}
+
+ACKeyboardHandler.prototype = new eXo.core.KeyboardListenerAPI() ;
+
+ACKeyboardHandler.prototype.init = function() {
+  var keyboard = eXo.core.Keyboard ;
+  keyboard.register(eXo.mail.AutoComplete.ACKeyboardHandler) ;
+  keyboard.init() ;
+}
+
+ACKeyboardHandler.prototype.finish = function() {
+  eXo.core.Keyboard.finish() ;
+}
+
+ACKeyboardHandler.prototype.onDefaultCharset = function(keynum, keychar) {
+  eXo.mail.AutoComplete.ACView.show(keychar) ;
+} ;
+
+ACKeyboardHandler.prototype.onAlphabet = eXo.mail.AutoComplete.ACKeyboardHandler.onDefaultCharset ;
+ACKeyboardHandler.prototype.onDigit = eXo.mail.AutoComplete.ACKeyboardHandler.onDefaultCharset ;
+ACKeyboardHandler.prototype.onPunctuation = eXo.mail.AutoComplete.ACKeyboardHandler.onDefaultCharset ;
+
+ACKeyboardHandler.prototype.onUpArrow = function() {
+  eXo.mail.AutoComplete.ACView.highLightPrevious() ;
+  return false ;
+} ;
+
+ACKeyboardHandler.prototype.onDownArrow = function() {
+  eXo.mail.AutoComplete.ACView.highLightNext() ;
+  return false ;
+} ;
+
+ACKeyboardHandler.prototype.onEnter = function() {
+  eXo.mail.AutoComplete.ACView.selectCurrent() ;
+  return false ;
 } ;
 
 // ACView
@@ -94,24 +144,24 @@ function ACView() {
     display = 'none' ;
   }
   document.body.appendChild(this.displayBoxNode) ;
+  this.activeNode = false ;
+  this.currentIndex = 0 ;
 }
 
 ACView.prototype.init = function(event, element) {
   element = element ? element : this ;
-  event = event ?  event : window.event ;
-  eXo.mail.AutoComplete.ACView.show(event, element) ;
+  this.activeNode = element ;
+  eXo.mail.AutoComplete.ACView.show() ;
 } ;
 
 ACView.prototype.finish = function() {
+  this.activeNode = false ;
   eXo.mail.AutoComplete.ACView.displayBoxNode.style.display = 'none' ;
 } ;
 
-ACView.prototype.show = function(event, element) {
-  element = element ? element : this ;
-  event = event ?  event : window.event ;
-  if (!event || !element) {
-    return ;
-  }
+ACView.prototype.show = function() {
+  this.currentIndex = 0 ;
+  element = this.activeNode ;
   var displayBoxNode = eXo.mail.AutoComplete.ACView.displayBoxNode ;
   displayBoxNode.innerHTML = '' ;
   displayBoxNode.style.display = 'none' ;
@@ -120,8 +170,12 @@ ACView.prototype.show = function(event, element) {
     return ;
   }
   var result = eXo.mail.AutoComplete.ACModel.query(keyword) ;
+  if (result.length <= 0) {
+    return ;
+  }
   
   var contactItem = document.createElement('div') ;
+  contactItem.className = '_contact_' ;
   with(contactItem.style) {
     borderBottom = 'solid 1px #6c6c6c' ;
     margin = '5px' ;
@@ -132,13 +186,40 @@ ACView.prototype.show = function(event, element) {
     displayBoxNode.appendChild(tmp) ;
   }
   var topPos = eXo.core.Browser.findPosY(element) + element.offsetHeight ;
-  var leftPos = eXo.core.Browser.findPosX(element) + (keyword.length * 8) ;
+  var leftPos = eXo.core.Browser.findPosX(element) ;
   with(displayBoxNode.style) {
     top = topPos + 'px' ;
     left = leftPos + 'px' ;
     display = 'block' ;
   }
 } ;
+
+ACView.prototype.highLightPrevious = function()  {
+  this.currentIndex -- ;
+  this.applyChange() ;
+} ;
+
+ACView.prototype.highLightNext = function()  {
+  this.currentIndex ++ ;
+  this.applyChange() ;
+} ;
+
+ACView.prototype.selectCurrent = function()  {
+  this.activeNode.value = 
+      this.activeNode.value + eXo.mail.AutoComplete.ACModel.result[this.currentIndex] ;
+} ;
+
+ACView.prototype.applyChange = function() {
+  var contactLst = eXo.core.DOMUtil.findDescendantsByClass(this.displayBoxNode, 'div', '_contact_') ;
+  for (var i=0; i<contactLst.length; i++) {
+    var contact = contactLst[i] ;
+    var bgColor = 'none' ;
+    if (i == this.currentIndex) {
+      bgColor = '#121212' ;
+    }
+    contact.style.background = bgColor ;
+  }
+}
 
 // ACControl
 function ACControl() {
@@ -169,7 +250,7 @@ ACControl.prototype.regEvent = function(rootElement, klazz) {
       if (tmpE) {
         tmpE.onfocus = eXo.mail.AutoComplete.ACView.init ;
         tmpE.onblur = eXo.mail.AutoComplete.ACView.finish ;
-        tmpE.onkeyup =  eXo.mail.AutoComplete.ACView.show ;
+        tmpE.onkeyup =  eXo.mail.AutoComplete.ACKeyboardHandler.init ;
       }
     }
   }
@@ -184,6 +265,8 @@ eXo.mail.AutoComplete = {
   ,
   ACView : new ACView()
   ,
+  ACKeyboardHandler : new ACKeyboardHandler()
+  ,
   ACControl : new ACControl()
 } ;
 
@@ -195,18 +278,15 @@ function Contact(name, emailAddress) {
 
 Contact.prototype.constructor = new eXo.mail.AutoComplete.ACModelPrototype() ;
 
-Contact.prototype.contain = function(keyword) {
-  keyword = keyword.toLowerCase() ;
-  window.alert(this.name.toLowerCase()) ;
-  var containName = false ;
-  var containEmailAddress = false ;
-  if (this.name.toLowerCase().indexOf(keyword) != -1) {
-    containName = true ;
+/**
+ * 
+ * @param {Contact} obj
+ */
+Contact.prototype.compare = function(obj) {
+  if (this.name == obj.name &&  this.emailAddress == obj.emailAddress) {
+    return true ;
   }
-  if (this.emailAddress.toLowerCase().indexOf(keyword) != -1) {
-    containEmailAddress = true ;
-  }
-  return (containName || containEmailAddress) ;
+  return false ;
 } ;
 
 Contact.prototype.contain = function(keyword) {
