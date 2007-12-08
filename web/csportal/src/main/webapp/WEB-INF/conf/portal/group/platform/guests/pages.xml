@@ -19,7 +19,7 @@
   	<owner-type>group</owner-type>
     <owner-id>platform/guest</owner-id>
     <name>sitemap</name>
-    <access-permissions>*:platform/guests</access-permissions>
+    <access-permissions>*:/platform/guests</access-permissions>
     <edit-permission>*:/platform/administrators</edit-permission>
     <application>
       <instance-id>group#platform/guests:/web/SiteMapPortlet/sitemapportlet</instance-id>
