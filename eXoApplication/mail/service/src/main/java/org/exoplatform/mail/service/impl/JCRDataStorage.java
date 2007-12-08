@@ -33,8 +33,6 @@ import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.MessagePageList;
 import org.exoplatform.mail.service.Tag;
 import org.exoplatform.mail.service.Utils;
-import org.exoplatform.registry.ServiceRegistry;
-import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 

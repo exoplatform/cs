@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.forum.ForumUtils;
 import org.exoplatform.forum.service.BufferAttachment;
 import org.exoplatform.forum.service.ForumAttachment;
 import org.exoplatform.forum.service.ForumService;
@@ -134,11 +135,12 @@ public class UIPostForm extends UIForm implements UIPopupComponent {
   }
    
   public void updatePost(String postId, boolean isQuote) throws Exception {
+  	//TODO: Cann't write HTML code here!!!!
     this.postId = postId ;
     this.isQuote = isQuote ;
     if(this.postId != null && this.postId.length() > 0) {
     	this.temp = "<div style=\"padding: 0px 10px 10px;\"><div style=\"height: 16px;\">" + getLabel("Quote") + ":</div><div class=\"ClassQuote\" " ;
-      Post post = this.forumService.getPost(this.categoryId, this.forumId, this.topicId, postId) ;
+      Post post = this.forumService.getPost(ForumUtils.getSystemProvider(), this.categoryId, this.forumId, this.topicId, postId) ;
       String messenger = post.getMessage() ;
       if(isQuote) {//quote
       	int begin = messenger.indexOf("TheEndQuote") ;
@@ -164,7 +166,7 @@ public class UIPostForm extends UIForm implements UIPopupComponent {
       }
     } else {
       if(!isQuote) {//reply
-        Topic topic = this.forumService.getTopic(this.categoryId, this.forumId, this.topicId, false) ;
+        Topic topic = this.forumService.getTopic(ForumUtils.getSystemProvider(), this.categoryId, this.forumId, this.topicId, false) ;
         String title = topic.getTopicName() ;
         getUIStringInput(FIELD_POSTTITLE_INPUT).setValue(getLabel(FIELD_LABEL_QUOTE) + ": " + title) ;
         getChild(UIFormInputIconSelector.class).setSelectedIcon(topic.getIcon());
@@ -261,13 +263,13 @@ public class UIPostForm extends UIForm implements UIPopupComponent {
 	      post.setAttachments(uiForm.attachments_) ;
 	      if(uiForm.postId != null && uiForm.postId.length() > 0) {
 	        if(uiForm.isQuote) {
-	          uiForm.forumService.savePost(uiForm.categoryId, uiForm.forumId, uiForm.topicId, post, true) ;
+	          uiForm.forumService.savePost(ForumUtils.getSystemProvider(), uiForm.categoryId, uiForm.forumId, uiForm.topicId, post, true) ;
 	        } else {
 	          post.setId(uiForm.postId) ;
-	          uiForm.forumService.savePost(uiForm.categoryId, uiForm.forumId, uiForm.topicId, post, false) ;
+	          uiForm.forumService.savePost(ForumUtils.getSystemProvider(), uiForm.categoryId, uiForm.forumId, uiForm.topicId, post, false) ;
 	        }
 	      } else {
-	        uiForm.forumService.savePost(uiForm.categoryId, uiForm.forumId, uiForm.topicId, post, true) ;
+	        uiForm.forumService.savePost(ForumUtils.getSystemProvider(), uiForm.categoryId, uiForm.forumId, uiForm.topicId, post, true) ;
 	      }
 	      UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
 	      forumPortlet.cancelAction() ;

@@ -15,8 +15,8 @@ import org.exoplatform.forum.service.Poll;
 import org.exoplatform.forum.service.Post;
 import org.exoplatform.forum.service.Topic;
 import org.exoplatform.forum.service.TopicView;
-import org.exoplatform.registry.JCRRegistryService;
-import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 
 /**
  * Created by The eXo Platform SARL
@@ -27,124 +27,123 @@ import org.exoplatform.services.jcr.RepositoryService;
 public class ForumServiceImpl implements ForumService{
   private JCRDataStorage storage_ ;
   
-  public ForumServiceImpl(RepositoryService  repositoryService, 
-                          JCRRegistryService jcrRegistryService)throws Exception {
-    storage_ = new JCRDataStorage(repositoryService, jcrRegistryService) ;
+  public ForumServiceImpl(NodeHierarchyCreator nodeHierarchyCreator)throws Exception {
+    storage_ = new JCRDataStorage(nodeHierarchyCreator) ;
   }
   
-  public void saveCategory(Category category, boolean isNew) throws Exception {
-    storage_.saveCategory(category, isNew);
+  public void saveCategory(SessionProvider sProvider, Category category, boolean isNew) throws Exception {
+    storage_.saveCategory(sProvider, category, isNew);
   }
   
-  public Category getCategory(String categoryId) throws Exception {
-    return storage_.getCategory(categoryId);
+  public Category getCategory(SessionProvider sProvider, String categoryId) throws Exception {
+    return storage_.getCategory(sProvider, categoryId);
   }
   
-  public List<Category> getCategories() throws Exception {
-    return storage_.getCategories();
+  public List<Category> getCategories(SessionProvider sProvider) throws Exception {
+    return storage_.getCategories(sProvider);
   }
   
-  public Category removeCategory(String categoryId) throws Exception {
-    return storage_.removeCategory(categoryId) ;
+  public Category removeCategory(SessionProvider sProvider, String categoryId) throws Exception {
+    return storage_.removeCategory(sProvider, categoryId) ;
   }
   
-  public void saveForum(String categoryId, Forum forum, boolean isNew) throws Exception {
-    storage_.saveForum(categoryId, forum, isNew);
+  public void saveForum(SessionProvider sProvider, String categoryId, Forum forum, boolean isNew) throws Exception {
+    storage_.saveForum(sProvider, categoryId, forum, isNew);
   }
 
-	public void moveForum(String forumId, String forumPath, String destCategoryPath) throws Exception {
-    storage_.moveForum(forumId, forumPath, destCategoryPath);
+	public void moveForum(SessionProvider sProvider, String forumId, String forumPath, String destCategoryPath) throws Exception {
+    storage_.moveForum(sProvider, forumId, forumPath, destCategoryPath);
   }
   
-  public Forum getForum(String categoryId, String forumId) throws Exception {
-    return storage_.getForum(categoryId, forumId);
+  public Forum getForum(SessionProvider sProvider, String categoryId, String forumId) throws Exception {
+    return storage_.getForum(sProvider, categoryId, forumId);
   }
   
-  public List<Forum> getForums(String categoryId) throws Exception {
-    return storage_.getForums(categoryId);
+  public List<Forum> getForums(SessionProvider sProvider, String categoryId) throws Exception {
+    return storage_.getForums(sProvider, categoryId);
   }
   
-  public Forum removeForum(String categoryId, String forumId) throws Exception {
-  	return storage_.removeForum(categoryId, forumId);
+  public Forum removeForum(SessionProvider sProvider, String categoryId, String forumId) throws Exception {
+  	return storage_.removeForum(sProvider, categoryId, forumId);
   }
   
-  public void saveTopic(String categoryId, String forumId, Topic topic, boolean isNew) throws Exception {
-	  storage_.saveTopic(categoryId, forumId, topic, isNew);
+  public void saveTopic(SessionProvider sProvider, String categoryId, String forumId, Topic topic, boolean isNew) throws Exception {
+	  storage_.saveTopic(sProvider, categoryId, forumId, topic, isNew);
   }
   
-  public Topic getTopic(String categoryId, String forumId, String topicId, boolean viewTopic) throws Exception {
-  	return storage_.getTopic(categoryId, forumId, topicId, viewTopic);
+  public Topic getTopic(SessionProvider sProvider, String categoryId, String forumId, String topicId, boolean viewTopic) throws Exception {
+  	return storage_.getTopic(sProvider, categoryId, forumId, topicId, viewTopic);
   }
   
-  public Topic getTopicByPath(String topicPath) throws Exception{
-    return storage_.getTopicByPath(topicPath) ;
+  public Topic getTopicByPath(SessionProvider sProvider, String topicPath) throws Exception{
+    return storage_.getTopicByPath(sProvider, topicPath) ;
   }
   
-  public TopicView getTopicView(String categoryId, String forumId, String topicId) throws Exception {
-	  return storage_.getTopicView(categoryId, forumId, topicId);
+  public TopicView getTopicView(SessionProvider sProvider, String categoryId, String forumId, String topicId) throws Exception {
+	  return storage_.getTopicView(sProvider, categoryId, forumId, topicId);
   }
   
-  public JCRPageList getPageTopic(String categoryId, String forumId) throws Exception {
-	  return storage_.getPageTopic(categoryId, forumId);
+  public JCRPageList getPageTopic(SessionProvider sProvider, String categoryId, String forumId) throws Exception {
+	  return storage_.getPageTopic(sProvider, categoryId, forumId);
   }
 
-  public List<Topic> getTopics(String categoryId, String forumId) throws Exception {
-    return storage_.getTopics(categoryId, forumId);
+  public List<Topic> getTopics(SessionProvider sProvider, String categoryId, String forumId) throws Exception {
+    return storage_.getTopics(sProvider, categoryId, forumId);
   }
   
-  public void moveTopic(String topicId, String  topicPath, String destForumPath) throws Exception {
-  	storage_.moveTopic(topicId, topicPath, destForumPath);
+  public void moveTopic(SessionProvider sProvider, String topicId, String  topicPath, String destForumPath) throws Exception {
+  	storage_.moveTopic(sProvider, topicId, topicPath, destForumPath);
   }
   
-  public Topic removeTopic(String categoryId, String forumId, String topicId) throws Exception {
-  	return storage_.removeTopic(categoryId, forumId, topicId);
+  public Topic removeTopic(SessionProvider sProvider, String categoryId, String forumId, String topicId) throws Exception {
+  	return storage_.removeTopic(sProvider, categoryId, forumId, topicId);
   }
 
-  public void savePost(String categoryId, String forumId, String topicId, Post post, boolean isNew) throws Exception {
-  	storage_.savePost(categoryId, forumId, topicId, post, isNew);
+  public void savePost(SessionProvider sProvider, String categoryId, String forumId, String topicId, Post post, boolean isNew) throws Exception {
+  	storage_.savePost(sProvider, categoryId, forumId, topicId, post, isNew);
   }
   
-  public Post getPost(String categoryId, String forumId, String topicId, String postId) throws Exception {
-    return storage_.getPost(categoryId, forumId, topicId, postId);
+  public Post getPost(SessionProvider sProvider, String categoryId, String forumId, String topicId, String postId) throws Exception {
+    return storage_.getPost(sProvider, categoryId, forumId, topicId, postId);
   }
 
-  public JCRPageList getPosts(String categoryId, String forumId, String topicId) throws Exception {
-  	return storage_.getPosts(categoryId, forumId, topicId);
+  public JCRPageList getPosts(SessionProvider sProvider, String categoryId, String forumId, String topicId) throws Exception {
+  	return storage_.getPosts(sProvider, categoryId, forumId, topicId);
   }
   
-  public void movePost(String postId, String postPath, String destTopicPath) throws Exception {
-    storage_.movePost(postId, postPath, destTopicPath);
+  public void movePost(SessionProvider sProvider, String postId, String postPath, String destTopicPath) throws Exception {
+    storage_.movePost(sProvider, postId, postPath, destTopicPath);
   }
   
-  public Post removePost(String categoryId, String forumId, String topicId, String postId) throws Exception {
-    return storage_.removePost(categoryId, forumId, topicId, postId);
+  public Post removePost(SessionProvider sProvider, String categoryId, String forumId, String topicId, String postId) throws Exception {
+    return storage_.removePost(sProvider, categoryId, forumId, topicId, postId);
   }
 
-	public Object getObjectNameByPath(String path) throws Exception {
-		return storage_.getObjectNameByPath(path);
+	public Object getObjectNameByPath(SessionProvider sProvider, String path) throws Exception {
+		return storage_.getObjectNameByPath(sProvider, path);
 	}
   
-  public List getPage(long page, JCRPageList pageList) throws Exception {
-    return storage_.getPage(page, pageList) ;
+  public List getPage(long page, JCRPageList pageList, SessionProvider sProvider) throws Exception {
+    return storage_.getPage(page, pageList, sProvider) ;
   }
   
-  public List<ForumLinkData> getAllLink()throws Exception {
-    return storage_.getAllLink() ;
+  public List<ForumLinkData> getAllLink(SessionProvider sProvider)throws Exception {
+    return storage_.getAllLink(sProvider) ;
   }
   
-  public String getForumHomePath() throws Exception {
-  	return storage_.getForumHomeNode().getPath() ;
+  public String getForumHomePath(SessionProvider sProvider) throws Exception {
+  	return storage_.getForumHomeNode(sProvider).getPath() ;
 	}
 
-  public Poll getPoll(String categoryId, String forumId, String topicId) throws Exception {
-    return storage_.getPoll(categoryId, forumId, topicId) ;
+  public Poll getPoll(SessionProvider sProvider, String categoryId, String forumId, String topicId) throws Exception {
+    return storage_.getPoll(sProvider, categoryId, forumId, topicId) ;
   }
 
-  public Poll removePoll(String categoryId, String forumId, String topicId) throws Exception {
-    return storage_.removePoll(categoryId, forumId, topicId);
+  public Poll removePoll(SessionProvider sProvider, String categoryId, String forumId, String topicId) throws Exception {
+    return storage_.removePoll(sProvider, categoryId, forumId, topicId);
   }
 
-  public void savePoll(String categoryId, String forumId, String topicId, Poll poll, boolean isNew, boolean isVote) throws Exception {
-    storage_.savePoll(categoryId, forumId, topicId, poll, isNew, isVote) ;
+  public void savePoll(SessionProvider sProvider, String categoryId, String forumId, String topicId, Poll poll, boolean isNew, boolean isVote) throws Exception {
+    storage_.savePoll(sProvider, categoryId, forumId, topicId, poll, isNew, isVote) ;
   }
 }

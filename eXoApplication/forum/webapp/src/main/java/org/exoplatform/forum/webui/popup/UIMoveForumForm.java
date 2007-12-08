@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.forum.ForumUtils;
 import org.exoplatform.forum.service.Category;
 import org.exoplatform.forum.service.Forum;
 import org.exoplatform.forum.service.ForumService;
@@ -60,7 +61,7 @@ public class UIMoveForumForm extends UIForm implements UIPopupComponent {
   private List<Category> getCategories() throws Exception {
     ForumService forumService =  (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
     List<Category> categorys =  new ArrayList<Category>();
-    for (Category category :forumService.getCategories()) {
+    for (Category category :forumService.getCategories(ForumUtils.getSystemProvider())) {
       if( !category.getId().equals(categoryId_) ) {
         categorys.add(category) ;
       }
@@ -92,7 +93,7 @@ public class UIMoveForumForm extends UIForm implements UIPopupComponent {
       }
       List<Forum> forums = uiForm.forums_ ;
       for (Forum forum : forums) {
-				forumService.moveForum(forum.getId(), forum.getPath(), categoryPath) ;
+				forumService.moveForum(ForumUtils.getSystemProvider(), forum.getId(), forum.getPath(), categoryPath) ;
 			}
       UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
       forumPortlet.cancelAction() ;

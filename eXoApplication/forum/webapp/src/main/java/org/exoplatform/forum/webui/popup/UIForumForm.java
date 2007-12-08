@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.forum.ForumUtils;
 import org.exoplatform.forum.service.Category;
 import org.exoplatform.forum.service.Forum;
 import org.exoplatform.forum.service.ForumService;
@@ -72,7 +73,7 @@ public class UIForumForm extends UIForm implements UIPopupComponent {
   
   @SuppressWarnings("unchecked")
   public UIForumForm() throws Exception {
-  	List<Category> categorys = forumService.getCategories();
+  	List<Category> categorys = forumService.getCategories(ForumUtils.getSystemProvider());
   	List<SelectItemOption<String>> list = new ArrayList<SelectItemOption<String>>() ;
   	for (Category category :categorys) {
   		list.add(new SelectItemOption<String>(category.getCategoryName(), category.getId())) ;
@@ -242,10 +243,10 @@ public class UIForumForm extends UIForm implements UIPopupComponent {
   		ForumService forumService = (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
       if(uiForm.forumId.length() > 0)	{
       	newForum.setId(uiForm.forumId);
-      	forumService.saveForum(categoryId, newForum, false);
+      	forumService.saveForum(ForumUtils.getSystemProvider(), categoryId, newForum, false);
       }
       else {
-      	forumService.saveForum(categoryId, newForum, true);
+      	forumService.saveForum(ForumUtils.getSystemProvider(), categoryId, newForum, true);
       }
       forumPortlet.getChild(UIForumLinks.class).setUpdateForumLinks() ;
       forumPortlet.cancelAction() ;

@@ -1,7 +1,7 @@
 <repository-service default-repository="repository">
    <repositories>
 
-    <repository name="repository" system-workspace="system" default-workspace="production">
+    <repository name="repository" system-workspace="system" default-workspace="collaboration">
      <security-domain>exo-domain</security-domain>
      <access-control>optional</access-control>
 
@@ -65,7 +65,7 @@
 			     </persister>
 			   </lock-manager>
        </workspace>
-       <workspace name="production" auto-init-root-nodetype="nt:unstructured" auto-init-permissions="any read;*:/admin read;*:/admin add_node;*:/admin set_property;*:/admin remove" >
+       <workspace name="collaboration" auto-init-root-nodetype="nt:unstructured" auto-init-permissions="any read;*:/admin read;*:/admin add_node;*:/admin set_property;*:/admin remove" >
           <!-- for system storage -->
           <container class="org.exoplatform.services.jcr.impl.storage.jdbc.JDBCWorkspaceDataContainer">
             <properties>
@@ -75,12 +75,12 @@
               <property name="multi-db" value="false"/>
               <property name="update-storage" value="true"/>
               <property name="max-buffer-size" value="204800"/>
-              <property name="swap-directory" value="../temp/swap/production"/>
+              <property name="swap-directory" value="../temp/swap/collaboration"/>
             </properties>
             <value-storages>
-              <value-storage id="production" class="org.exoplatform.services.jcr.impl.storage.value.fs.TreeFileValueStorage">
+              <value-storage id="collaboration" class="org.exoplatform.services.jcr.impl.storage.value.fs.TreeFileValueStorage">
                 <properties>
-                  <property name="path" value="../temp/values/production"/>
+                  <property name="path" value="../temp/values/collaboration"/>
                 </properties>
                 <filters>
                   <filter property-type="Binary"/>

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.forum.ForumUtils;
 import org.exoplatform.forum.service.ForumLinkData;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -36,7 +37,7 @@ public class UIForumLinks extends UIForm {
 	public static final String FIELD_FORUMLINK_SELECTBOX = "forumLink" ;
 	private String path  = "";
 	public UIForumLinks() throws Exception {
-  	List<ForumLinkData> forumLinks = forumService.getAllLink();
+  	List<ForumLinkData> forumLinks = forumService.getAllLink(ForumUtils.getSystemProvider());
   	List<SelectItemOption<String>> list = new ArrayList<SelectItemOption<String>>() ;
   	list.add(new SelectItemOption<String>("Forum Home Page/hompage", "ForumService")) ;
   	for(ForumLinkData linkData : forumLinks) {
@@ -52,7 +53,7 @@ public class UIForumLinks extends UIForm {
   }
   
   public void setUpdateForumLinks() throws Exception {
-  	List<ForumLinkData> forumLinks = forumService.getAllLink();
+  	List<ForumLinkData> forumLinks = forumService.getAllLink(ForumUtils.getSystemProvider());
   	List<SelectItemOption<String>> list = new ArrayList<SelectItemOption<String>>() ;
   	list.add(new SelectItemOption<String>("Forum Home Page;hompage", "ForumService")) ;
   	for(ForumLinkData linkData : forumLinks) {

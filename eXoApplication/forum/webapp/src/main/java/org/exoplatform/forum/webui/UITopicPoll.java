@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.forum.ForumUtils;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.service.Poll;
 import org.exoplatform.forum.service.Topic;
@@ -87,11 +88,11 @@ public class UITopicPoll extends UIForm  {
   private Poll getPoll() throws Exception {
     if(categoryId != null && categoryId.length() > 0) {
     	if(this.isEditPoll) {
-    		this.topic = forumService.getTopic(categoryId, forumId, topicId, false) ;
+    		this.topic = forumService.getTopic(ForumUtils.getSystemProvider(), categoryId, forumId, topicId, false) ;
     		this.isEditPoll = false ;
     	}
       if(this.topic.getIsPoll()) {
-        Poll poll = forumService.getPoll(categoryId, forumId, topicId) ; 
+        Poll poll = forumService.getPoll(ForumUtils.getSystemProvider(), categoryId, forumId, topicId) ; 
         poll_ = poll ;
         this.init() ;
         return poll ;
@@ -102,7 +103,7 @@ public class UITopicPoll extends UIForm  {
   
   @SuppressWarnings("unused")
   private boolean getIsVoted() throws Exception {
-    Poll poll = forumService.getPoll(categoryId, forumId, topicId) ;
+    Poll poll = forumService.getPoll(ForumUtils.getSystemProvider(), categoryId, forumId, topicId) ;
     if(this.isMultiCheck) {
       return false ;
     }
@@ -213,7 +214,7 @@ public class UITopicPoll extends UIForm  {
         poll.setId(topicPoll.poll_.getId()) ;
         poll.setVote(votes) ;
         poll.setUserVote(setUserVote) ;
-        topicPoll.forumService.savePoll(topicPoll.categoryId, topicPoll.forumId, topicPoll.topicId, poll, false, true) ;
+        topicPoll.forumService.savePoll(ForumUtils.getSystemProvider(), topicPoll.categoryId, topicPoll.forumId, topicPoll.topicId, poll, false, true) ;
         topicPoll.isMultiCheck = false ;
         event.getRequestContext().addUIComponentToUpdateByAjax(topicPoll.getParent()) ;
       }
@@ -237,7 +238,7 @@ public class UITopicPoll extends UIForm  {
   static public class RemovePollActionListener extends EventListener<UITopicPoll> {
     public void execute(Event<UITopicPoll> event) throws Exception {
       UITopicPoll topicPoll = event.getSource() ;
-      topicPoll.forumService.removePoll(topicPoll.categoryId, topicPoll.forumId, topicPoll.topicId) ;
+      topicPoll.forumService.removePoll(ForumUtils.getSystemProvider(), topicPoll.categoryId, topicPoll.forumId, topicPoll.topicId) ;
       topicPoll.removeChild(UIFormRadioBoxInput.class) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(topicPoll.getParent()) ;
       topicPoll.isEditPoll = false ;

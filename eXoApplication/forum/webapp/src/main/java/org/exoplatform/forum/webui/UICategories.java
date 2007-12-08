@@ -7,6 +7,7 @@ package org.exoplatform.forum.webui;
 import java.util.List;
 
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.forum.ForumUtils;
 import org.exoplatform.forum.service.Category;
 import org.exoplatform.forum.service.Forum;
 import org.exoplatform.forum.service.ForumService;
@@ -40,18 +41,18 @@ public class UICategories extends UIContainer  {
 
   private List<Category> getCategoryList() throws Exception {
   	this.getAncestorOfType(UIForumPortlet.class).getChild(UIBreadcumbs.class).setUpdataPath("ForumService") ;
-		List<Category> categoryList = forumService.getCategories();
+		List<Category> categoryList = forumService.getCategories(ForumUtils.getSystemProvider());
   	return categoryList;
 	}  
 	
   private List<Forum> getForumList(String categoryId) throws Exception {
-		List<Forum> forumList = forumService.getForums(categoryId);
+		List<Forum> forumList = forumService.getForums(ForumUtils.getSystemProvider(), categoryId);
 		return forumList;
 	}
 	
   @SuppressWarnings("unused")
   private Topic getLastTopic(String topicPath) throws Exception {
-		return forumService.getTopicByPath(topicPath) ;
+		return forumService.getTopicByPath(ForumUtils.getSystemProvider(), topicPath) ;
 	}
 	
   private Category getCategory(String categoryId) throws Exception {

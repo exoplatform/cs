@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.forum.ForumUtils;
 import org.exoplatform.forum.service.BufferAttachment;
 import org.exoplatform.forum.service.ForumAttachment;
 import org.exoplatform.forum.service.ForumService;
@@ -328,12 +329,12 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
 	      ForumService forumService = (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
 	      if(uiForm.topicId != null && uiForm.topicId.length() > 0) {
 	        topicNew.setId(uiForm.topicId);
-	        forumService.saveTopic(uiForm.categoryId, uiForm.forumId, topicNew, false);
+	        forumService.saveTopic(ForumUtils.getSystemProvider(), uiForm.categoryId, uiForm.forumId, topicNew, false);
 	        forumPortlet.getChild(UIBreadcumbs.class).setUpdataPath((uiForm.categoryId + "/" + uiForm.forumId + "/" + uiForm.topicId)) ;
 	      } else {
 	        topicNew.setVoteRating(0.0) ;
 	        topicNew.setUserVoteRating(new String[] {}) ;
-	        forumService.saveTopic(uiForm.categoryId, uiForm.forumId, topicNew, true);
+	        forumService.saveTopic(ForumUtils.getSystemProvider(), uiForm.categoryId, uiForm.forumId, topicNew, true);
 	      }
 	      forumPortlet.cancelAction() ;
 	      WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;

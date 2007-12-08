@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.forum.ForumUtils;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.service.Poll;
 import org.exoplatform.forum.webui.UIForumPortlet;
@@ -200,9 +201,9 @@ public class UIPollForm extends UIForm implements UIPopupComponent {
         if(uiForm.isUpdate) {
           poll.setId(uiForm.getId()) ;
           if(newUser.length > 0) poll.setUserVote(newUser) ;
-          forumService.savePoll(id[id.length - 3], id[id.length - 2], id[id.length - 1], poll, false, false) ;
+          forumService.savePoll(ForumUtils.getSystemProvider(), id[id.length - 3], id[id.length - 2], id[id.length - 1], poll, false, false) ;
         } else {
-          forumService.savePoll(id[id.length - 3], id[id.length - 2], id[id.length - 1], poll, true, false) ;
+          forumService.savePoll(ForumUtils.getSystemProvider(), id[id.length - 3], id[id.length - 2], id[id.length - 1], poll, true, false) ;
         }
         UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
         forumPortlet.cancelAction() ;

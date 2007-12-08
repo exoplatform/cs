@@ -7,6 +7,7 @@ package org.exoplatform.forum.webui.popup;
 import java.util.Date;
 
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.forum.ForumUtils;
 import org.exoplatform.forum.service.Category;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.webui.EmptyNameValidator;
@@ -108,14 +109,14 @@ public class UICategoryForm extends UIForm implements UIPopupComponent{
       
       if(uiForm.categoryId.length() > 0) {
       	cat.setId(uiForm.categoryId) ;
-      	forumService.saveCategory(cat, false);
+      	forumService.saveCategory(ForumUtils.getSystemProvider(), cat, false);
       	forumPortlet.cancelAction() ;
       	UICategory uiCategory = forumPortlet.getChild(UICategoryContainer.class).getChild(UICategory.class) ;
       	WebuiRequestContext context = event.getRequestContext() ;
       	context.addUIComponentToUpdateByAjax(forumPortlet.getChild(UIBreadcumbs.class)) ;
       	context.addUIComponentToUpdateByAjax(uiCategory) ;
       } else {
-      	forumService.saveCategory(cat, true);
+      	forumService.saveCategory(ForumUtils.getSystemProvider(), cat, true);
       	forumPortlet.cancelAction() ;
       	UICategories uiCategories = forumPortlet.findFirstComponentOfType(UICategories.class) ;
       	event.getRequestContext().addUIComponentToUpdateByAjax(uiCategories) ;

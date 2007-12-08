@@ -7,6 +7,7 @@ package org.exoplatform.forum.webui;
 import java.util.List;
 
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.forum.ForumUtils;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.webui.popup.UICategoryForm;
 import org.exoplatform.forum.webui.popup.UIForumForm;
@@ -56,7 +57,7 @@ public class UIForumActionBar extends UIContainer  {
     public void execute(Event<UIForumActionBar> event) throws Exception {
       UIForumActionBar uiActionBar = event.getSource() ;      
       ForumService forumService =  (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
-      List cates = forumService.getCategories() ;
+      List cates = forumService.getCategories(ForumUtils.getSystemProvider()) ;
       if(cates.size() > 0) {
         UIForumPortlet forumPortlet = uiActionBar.getAncestorOfType(UIForumPortlet.class) ;
         UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;

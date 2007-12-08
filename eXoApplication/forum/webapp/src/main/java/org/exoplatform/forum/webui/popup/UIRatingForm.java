@@ -5,6 +5,7 @@
 package org.exoplatform.forum.webui.popup;
 
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.forum.ForumUtils;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.service.Topic;
 import org.exoplatform.forum.webui.UIForumPortlet;
@@ -71,7 +72,7 @@ public class UIRatingForm extends UIForm implements UIPopupComponent {
       topic.setVoteRating(voteRating) ;
       topic.setUserVoteRating(temp) ;
       ForumService forumService = (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
-      forumService.saveTopic(uiForm.categoryId, uiForm.forumId, topic, false) ;
+      forumService.saveTopic(ForumUtils.getSystemProvider(), uiForm.categoryId, uiForm.forumId, topic, false) ;
       UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
       forumPortlet.cancelAction() ;
     }

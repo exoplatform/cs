@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.forum.ForumUtils;
 import org.exoplatform.forum.service.Category;
 import org.exoplatform.forum.service.Forum;
 import org.exoplatform.forum.service.ForumService;
@@ -38,7 +39,7 @@ public class UIBreadcumbs extends UIContainer {
 	private String forumHomePath_ ;
 	public static final String FIELD_FORUMHOME_BREADCUMBS = "forumHome" ;
   public UIBreadcumbs()throws Exception {
-  	forumHomePath_ = forumService.getForumHomePath() ;
+  	forumHomePath_ = forumService.getForumHomePath(ForumUtils.getSystemProvider()) ;
   	breadcumbs_.add("eXo Forum") ;
   	path_.add("ForumService") ;
   }
@@ -57,15 +58,15 @@ public class UIBreadcumbs extends UIContainer {
   			pathNode = pathNode + "/" + string;
   			if(t == 0) {
   				tempPath = string;
-  				Category category = (Category)forumService.getObjectNameByPath(pathNode);
+  				Category category = (Category)forumService.getObjectNameByPath(ForumUtils.getSystemProvider(), pathNode);
   				breadcumbs_.add(category.getCategoryName()) ;
   			}else if(t == 1) {
   				tempPath = tempPath + "/" + string ;
-  				Forum forum = (Forum)forumService.getObjectNameByPath(pathNode);
+  				Forum forum = (Forum)forumService.getObjectNameByPath(ForumUtils.getSystemProvider(), pathNode);
   				breadcumbs_.add(forum.getForumName()) ;
   			}else if(t == 2) {
   				tempPath = tempPath + "/" + string ;
-  				Topic topic = (Topic)forumService.getObjectNameByPath(pathNode);
+  				Topic topic = (Topic)forumService.getObjectNameByPath(ForumUtils.getSystemProvider(), pathNode);
   				breadcumbs_.add(topic.getTopicName()) ;
   			}
   			path_.add(tempPath) ;

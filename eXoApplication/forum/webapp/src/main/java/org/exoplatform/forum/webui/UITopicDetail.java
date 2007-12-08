@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.forum.ForumUtils;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.service.JCRPageList;
 import org.exoplatform.forum.service.Post;
@@ -106,7 +107,7 @@ public class UITopicDetail extends UIForm  {
     this.topicId = topicId ;
     this.viewTopic = viewTopic ;
     this.getAncestorOfType(UIForumPortlet.class).getChild(UIBreadcumbs.class).setUpdataPath((categoryId + "/" + forumId + "/" + topicId)) ;
-    this.topic = forumService.getTopic(categoryId, forumId, topicId, viewTopic) ;
+    this.topic = forumService.getTopic(ForumUtils.getSystemProvider(), categoryId, forumId, topicId, viewTopic) ;
   }
   
   public void setUpdateContainer(String categoryId, String forumId, Topic topic, long numberPage) throws Exception {
@@ -120,7 +121,7 @@ public class UITopicDetail extends UIForm  {
 	  this.isEditTopic = false ;
 	  String userName = Util.getPortalRequestContext().getRemoteUser() ;
 	  if(!userName.equals(this.userName)) {
-	  	this.topic = forumService.getTopic(categoryId, forumId, topic.getId(), true) ;
+	  	this.topic = forumService.getTopic(ForumUtils.getSystemProvider(), categoryId, forumId, topic.getId(), true) ;
 	  	this.userName = userName ;
 	  } else this.topic = topic ;
 	  this.getChild(UIForumPageIterator.class).setSelectPage(numberPage) ;
@@ -139,7 +140,7 @@ public class UITopicDetail extends UIForm  {
   private Topic getTopic() throws Exception {
     try {
     	if(this.isEditTopic) {
-    		this.topic = forumService.getTopic(categoryId, forumId, topicId, viewTopic) ;
+    		this.topic = forumService.getTopic(ForumUtils.getSystemProvider(), categoryId, forumId, topicId, viewTopic) ;
     		this.isEditTopic = false ;
     	}
       return this.topic ;
@@ -157,7 +158,7 @@ public class UITopicDetail extends UIForm  {
   	if(this.isUpdatePageList) {
 	  	this.isUpdatePageList = false ;
   	} else {
-  		this.pageList = forumService.getPosts(categoryId, forumId, topicId) ;
+  		this.pageList = forumService.getPosts(ForumUtils.getSystemProvider(), categoryId, forumId, topicId) ;
   	}
   	pageList.setPageSize(this.maxPost) ;
   	this.getChild(UIForumPageIterator.class).updatePageList(this.pageList) ;
@@ -169,7 +170,7 @@ public class UITopicDetail extends UIForm  {
   		this.pageSelect = this.getChild(UIForumPageIterator.class).getPageSelected() ;
   	}
     if(this.pageList == null || this.pageSelect < 1) return null ;
-    this.posts = forumService.getPage(this.pageSelect, this.pageList) ;
+    this.posts = forumService.getPage(this.pageSelect, this.pageList, ForumUtils.getSystemProvider()) ;
     for (Post post : this.posts) {
       if(getUIFormCheckBoxInput(post.getId()) != null) {
         getUIFormCheckBoxInput(post.getId()).setChecked(false) ;
@@ -287,7 +288,7 @@ public class UITopicDetail extends UIForm  {
     public void execute(Event<UITopicDetail> event) throws Exception {
       UITopicDetail topicDetail = event.getSource() ;
       String postId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      topicDetail.forumService.removePost(topicDetail.categoryId, topicDetail.forumId, topicDetail.topicId, postId) ;
+      topicDetail.forumService.removePost(ForumUtils.getSystemProvider(), topicDetail.categoryId, topicDetail.forumId, topicDetail.topicId, postId) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(topicDetail.getParent()) ;
     }
   }
@@ -351,7 +352,7 @@ public class UITopicDetail extends UIForm  {
       Topic topic = topicDetail.topic ;
       if(topic.getIsClosed()) {
         topic.setIsClosed(false) ;
-        topicDetail.forumService.saveTopic(topicDetail.categoryId, topicDetail.forumId, topic, false) ;
+        topicDetail.forumService.saveTopic(ForumUtils.getSystemProvider(), topicDetail.categoryId, topicDetail.forumId, topic, false) ;
         topicDetail.viewTopic = false ;
         topicDetail.isEditTopic = true ;
         event.getRequestContext().addUIComponentToUpdateByAjax(topicDetail) ;
@@ -368,7 +369,7 @@ public class UITopicDetail extends UIForm  {
       Topic topic = topicDetail.topic ;
       if(!topic.getIsClosed()) {
         topic.setIsClosed(true) ;
-        topicDetail.forumService.saveTopic(topicDetail.categoryId, topicDetail.forumId, topic, false) ;
+        topicDetail.forumService.saveTopic(ForumUtils.getSystemProvider(), topicDetail.categoryId, topicDetail.forumId, topic, false) ;
         topicDetail.viewTopic = false ;
         topicDetail.isEditTopic = true ;
         event.getRequestContext().addUIComponentToUpdateByAjax(topicDetail) ;
@@ -385,7 +386,7 @@ public class UITopicDetail extends UIForm  {
       Topic topic = topicDetail.topic ;
       if(!topic.getIsLock()) {
         topic.setIsLock(true) ;
-        topicDetail.forumService.saveTopic(topicDetail.categoryId, topicDetail.forumId, topic, false) ;
+        topicDetail.forumService.saveTopic(ForumUtils.getSystemProvider(), topicDetail.categoryId, topicDetail.forumId, topic, false) ;
         topicDetail.viewTopic = false ;
         topicDetail.isEditTopic = true ;
         event.getRequestContext().addUIComponentToUpdateByAjax(topicDetail) ;
@@ -402,7 +403,7 @@ public class UITopicDetail extends UIForm  {
       Topic topic = topicDetail.topic ;
       if(topic.getIsLock()) {
         topic.setIsLock(false) ;
-        topicDetail.forumService.saveTopic(topicDetail.categoryId, topicDetail.forumId, topic, false) ;
+        topicDetail.forumService.saveTopic(ForumUtils.getSystemProvider(), topicDetail.categoryId, topicDetail.forumId, topic, false) ;
         topicDetail.viewTopic = false ;
         topicDetail.isEditTopic = true ;
         event.getRequestContext().addUIComponentToUpdateByAjax(topicDetail) ;
@@ -434,7 +435,7 @@ public class UITopicDetail extends UIForm  {
       Topic topic = topicDetail.topic ;
       if(!topic.getIsSticky()) {
         topic.setIsSticky(true) ;
-        topicDetail.forumService.saveTopic(topicDetail.categoryId, topicDetail.forumId, topic, false) ;
+        topicDetail.forumService.saveTopic(ForumUtils.getSystemProvider(), topicDetail.categoryId, topicDetail.forumId, topic, false) ;
         topicDetail.viewTopic = false ;
         topicDetail.isEditTopic = true ;
         event.getRequestContext().addUIComponentToUpdateByAjax(topicDetail) ;
@@ -451,7 +452,7 @@ public class UITopicDetail extends UIForm  {
       Topic topic = topicDetail.topic ;
       if(topic.getIsSticky()) {
         topic.setIsSticky(false) ;
-        topicDetail.forumService.saveTopic(topicDetail.categoryId, topicDetail.forumId, topic, false) ;
+        topicDetail.forumService.saveTopic(ForumUtils.getSystemProvider(), topicDetail.categoryId, topicDetail.forumId, topic, false) ;
         topicDetail.viewTopic = false ;
         topicDetail.isEditTopic = true ;
         event.getRequestContext().addUIComponentToUpdateByAjax(topicDetail) ;
@@ -484,7 +485,7 @@ public class UITopicDetail extends UIForm  {
     public void execute(Event<UITopicDetail> event) throws Exception {
       UITopicDetail topicDetail = event.getSource() ;
       Topic topic = topicDetail.topic ;
-      topicDetail.forumService.removeTopic(topicDetail.categoryId, topicDetail.forumId, topic.getId()) ;
+      topicDetail.forumService.removeTopic(ForumUtils.getSystemProvider(), topicDetail.categoryId, topicDetail.forumId, topic.getId()) ;
       UIForumPortlet forumPortlet = topicDetail.getAncestorOfType(UIForumPortlet.class) ;
       UIForumContainer uiForumContainer = forumPortlet.getChild(UIForumContainer.class) ;
       uiForumContainer.setIsRenderChild(true) ;
@@ -563,7 +564,7 @@ public class UITopicDetail extends UIForm  {
       }
       if(posts.size() > 0) {
         for(Post post : posts) {
-          topicDetail.forumService.removePost(topicDetail.categoryId, topicDetail.forumId, topicDetail.topicId, post.getId()) ;
+          topicDetail.forumService.removePost(ForumUtils.getSystemProvider(), topicDetail.categoryId, topicDetail.forumId, topicDetail.topicId, post.getId()) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(topicDetail) ;
         }
       } else {

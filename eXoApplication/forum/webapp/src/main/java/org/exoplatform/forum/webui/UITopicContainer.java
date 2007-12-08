@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.forum.ForumUtils;
 import org.exoplatform.forum.service.Forum;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.service.JCRPageList;
@@ -111,7 +112,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
   
   private Forum getForum() throws Exception {
   	if(this.isUpdate) {
-  		this.forum = forumService.getForum(categoryId, forumId);
+  		this.forum = forumService.getForum(ForumUtils.getSystemProvider(), categoryId, forumId);
   		this.isUpdate = false ;
   	}
     return this.forum ;
@@ -119,7 +120,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
   
   @SuppressWarnings("unused")
   private void initPage() throws Exception {
-  	this.pageList = forumService.getPageTopic(categoryId, forumId);
+  	this.pageList = forumService.getPageTopic(ForumUtils.getSystemProvider(), categoryId, forumId);
   	this.pageList.setPageSize(this.maxTopic);
   	this.getChild(UIForumPageIterator.class).updatePageList(this.pageList) ;
   }
@@ -150,7 +151,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
     if(!this.isGoPage) {
     	this.page = this.getChild(UIForumPageIterator.class).getPageSelected() ;
     }
-    this.topicList = this.forumService.getPage(this.page, this.pageList);
+    this.topicList = this.forumService.getPage(this.page, this.pageList, ForumUtils.getSystemProvider());
     for(Topic topic : this.topicList) {
       if(getUIFormCheckBoxInput(topic.getId()) != null) {
         getUIFormCheckBoxInput(topic.getId()).setChecked(false) ;
@@ -199,7 +200,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
   }
   
   private JCRPageList getPageListPost(String topicId) throws Exception {
-  	JCRPageList pageListPost = this.forumService.getPosts(this.categoryId, this.forumId, topicId)  ; 
+  	JCRPageList pageListPost = this.forumService.getPosts(ForumUtils.getSystemProvider(), this.categoryId, this.forumId, topicId)  ; 
   	pageListPost.setPageSize(this.maxPost) ;
   	return pageListPost;
   }
@@ -302,7 +303,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
       Forum forum = uiTopicContainer.getForum() ;
       forum.setIsLock(true);
       uiTopicContainer.isUpdate = true ;
-      uiTopicContainer.forumService.saveForum(uiTopicContainer.categoryId, forum, false) ;
+      uiTopicContainer.forumService.saveForum(ForumUtils.getSystemProvider(), uiTopicContainer.categoryId, forum, false) ;
       UIForumPortlet forumPortlet = uiTopicContainer.getAncestorOfType(UIForumPortlet.class) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(forumPortlet) ;
     }
@@ -314,7 +315,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
       Forum forum = uiTopicContainer.getForum() ;
       forum.setIsLock(false);
       uiTopicContainer.isUpdate = true ;
-      uiTopicContainer.forumService.saveForum(uiTopicContainer.categoryId, forum, false) ;
+      uiTopicContainer.forumService.saveForum(ForumUtils.getSystemProvider(), uiTopicContainer.categoryId, forum, false) ;
       UIForumPortlet forumPortlet = uiTopicContainer.getAncestorOfType(UIForumPortlet.class) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(forumPortlet) ;
     }
@@ -326,7 +327,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
       Forum forum = uiTopicContainer.getForum() ;
       forum.setIsClosed(false);
       uiTopicContainer.isUpdate = true ;
-      uiTopicContainer.forumService.saveForum(uiTopicContainer.categoryId, forum, false) ;
+      uiTopicContainer.forumService.saveForum(ForumUtils.getSystemProvider(), uiTopicContainer.categoryId, forum, false) ;
       UIForumPortlet forumPortlet = uiTopicContainer.getAncestorOfType(UIForumPortlet.class) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(forumPortlet) ;
     }
@@ -338,7 +339,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
       Forum forum = uiTopicContainer.getForum() ;
       forum.setIsClosed(true);
       uiTopicContainer.isUpdate = true ;
-      uiTopicContainer.forumService.saveForum(uiTopicContainer.categoryId, forum, false) ;
+      uiTopicContainer.forumService.saveForum(ForumUtils.getSystemProvider(), uiTopicContainer.categoryId, forum, false) ;
       UIForumPortlet forumPortlet = uiTopicContainer.getAncestorOfType(UIForumPortlet.class) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(forumPortlet) ;
     }
@@ -373,7 +374,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
       UITopicContainer uiTopicContainer = event.getSource();
       Forum forum = uiTopicContainer.getForum() ;
       UIForumPortlet forumPortlet = uiTopicContainer.getAncestorOfType(UIForumPortlet.class) ;
-      uiTopicContainer.forumService.removeForum(uiTopicContainer.categoryId, forum.getId()) ;
+      uiTopicContainer.forumService.removeForum(ForumUtils.getSystemProvider(), uiTopicContainer.categoryId, forum.getId()) ;
       UICategoryContainer categoryContainer = forumPortlet.getChild(UICategoryContainer.class) ;
       forumPortlet.updateIsRendered(1) ;
       categoryContainer.updateIsRender(false) ;
@@ -440,7 +441,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
       if(topics.size() > 0 && sms.length() == 0) {
         for(Topic topic : topics) {
           topic.setIsClosed(false) ;
-          uiTopicContainer.forumService.saveTopic(uiTopicContainer.categoryId, uiTopicContainer.forumId, topic, false) ;
+          uiTopicContainer.forumService.saveTopic(ForumUtils.getSystemProvider(), uiTopicContainer.categoryId, uiTopicContainer.forumId, topic, false) ;
         }
       } 
       if(topics.size() == 0 && sms.length() == 0){
@@ -475,7 +476,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
       if(topics.size() > 0 && sms.length() == 0) {
         for(Topic topic : topics) {
           topic.setIsClosed(true) ;
-          uiTopicContainer.forumService.saveTopic(uiTopicContainer.categoryId, uiTopicContainer.forumId, topic, false) ;
+          uiTopicContainer.forumService.saveTopic(ForumUtils.getSystemProvider(), uiTopicContainer.categoryId, uiTopicContainer.forumId, topic, false) ;
         }
       } 
       if(topics.size() == 0 && sms.length() == 0){
@@ -510,7 +511,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
       if(topics.size() > 0 && sms.length() == 0) {
         for(Topic topic : topics) {
           topic.setIsLock(true) ;
-          uiTopicContainer.forumService.saveTopic(uiTopicContainer.categoryId, uiTopicContainer.forumId, topic, false) ;
+          uiTopicContainer.forumService.saveTopic(ForumUtils.getSystemProvider(), uiTopicContainer.categoryId, uiTopicContainer.forumId, topic, false) ;
         }
       } 
       if(topics.size() == 0 && sms.length() == 0){
@@ -545,7 +546,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
       if(topics.size() > 0 && sms.length() == 0) {
         for(Topic topic : topics) {
           topic.setIsLock(false) ;
-          uiTopicContainer.forumService.saveTopic(uiTopicContainer.categoryId, uiTopicContainer.forumId, topic, false) ;
+          uiTopicContainer.forumService.saveTopic(ForumUtils.getSystemProvider(), uiTopicContainer.categoryId, uiTopicContainer.forumId, topic, false) ;
         }
       } 
       if(topics.size() == 0 && sms.length() == 0){
@@ -580,7 +581,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
 		  if(topics.size() > 0 && sms.length() == 0) {
 			  for(Topic topic : topics) {
 				  topic.setIsSticky(false) ;
-				  uiTopicContainer.forumService.saveTopic(uiTopicContainer.categoryId, uiTopicContainer.forumId, topic, false) ;
+				  uiTopicContainer.forumService.saveTopic(ForumUtils.getSystemProvider(), uiTopicContainer.categoryId, uiTopicContainer.forumId, topic, false) ;
 			  }
 		  } 
 		  if(topics.size() == 0 && sms.length() == 0){
@@ -615,7 +616,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
 		  if(topics.size() > 0 && sms.length() == 0) {
 			  for(Topic topic : topics) {
 				  topic.setIsSticky(true) ;
-				  uiTopicContainer.forumService.saveTopic(uiTopicContainer.categoryId, uiTopicContainer.forumId, topic, false) ;
+				  uiTopicContainer.forumService.saveTopic(ForumUtils.getSystemProvider(), uiTopicContainer.categoryId, uiTopicContainer.forumId, topic, false) ;
 			  }
 		  } 
 		  if(topics.size() == 0 && sms.length() == 0){
@@ -673,7 +674,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
       UIForumPortlet forumPortlet = uiTopicContainer.getAncestorOfType(UIForumPortlet.class) ;
       if(topics.size() > 0) {
         for(Topic topic : topics) {
-          uiTopicContainer.forumService.removeTopic(uiTopicContainer.categoryId, uiTopicContainer.forumId, topic.getId()) ;
+          uiTopicContainer.forumService.removeTopic(ForumUtils.getSystemProvider(), uiTopicContainer.categoryId, uiTopicContainer.forumId, topic.getId()) ;
         }
       } 
       if(topics.size() == 0){

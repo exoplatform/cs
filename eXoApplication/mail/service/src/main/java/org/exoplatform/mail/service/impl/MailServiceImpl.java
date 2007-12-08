@@ -5,7 +5,6 @@
 package org.exoplatform.mail.service.impl;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -50,8 +49,6 @@ import org.exoplatform.mail.service.MessagePageList;
 import org.exoplatform.mail.service.ServerConfiguration;
 import org.exoplatform.mail.service.Tag;
 import org.exoplatform.mail.service.Utils;
-import org.exoplatform.registry.JCRRegistryService;
-import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.jcr.util.IdGenerator;

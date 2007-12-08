@@ -5,6 +5,8 @@
 package org.exoplatform.forum.service;
 
 import java.util.List;
+
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 /**
  * Created by The eXo Platform SARL  
  */
@@ -18,7 +20,7 @@ public interface ForumService {
    * @return
    * @throws Exception
    */
-  public List<Category> getCategories() throws Exception;
+  public List<Category> getCategories(SessionProvider sProvider) throws Exception;
   /**
    * This method should
    * 1. If the list of the categories is not loaded and cached, call the method getCategories() 
@@ -29,7 +31,7 @@ public interface ForumService {
    * @return
    * @throws Exception
    */
-  public Category getCategory(String categoryId) throws Exception;
+  public Category getCategory(SessionProvider sProvider, String categoryId) throws Exception;
   /**
    * This method should:
    * 1. Check all the mandatory field for the category
@@ -40,7 +42,7 @@ public interface ForumService {
    * @return
    * @throws Exception
    */
-  public void saveCategory(Category category, boolean isNew)throws Exception;
+  public void saveCategory(SessionProvider sProvider, Category category, boolean isNew)throws Exception;
   /**
    * This method should:
    * 1. Check for the mandatory fields
@@ -52,7 +54,7 @@ public interface ForumService {
    * @return
    * @throws Exception
    */
-  public Category removeCategory(String categoryId)throws Exception;  
+  public Category removeCategory(SessionProvider sProvider, String categoryId)throws Exception;  
   /**
    * This method should: 
    * 1. Load all the forums
@@ -63,7 +65,7 @@ public interface ForumService {
    * @return
    * @throws Exception
    */
-  public List<Forum> getForums(String categoryId)throws Exception;
+  public List<Forum> getForums(SessionProvider sProvider, String categoryId)throws Exception;
   /**
    * This method should:
    * 1. Find the category id from the forum id
@@ -75,7 +77,7 @@ public interface ForumService {
    * @return
    * @throws Exception
    */
-  public Forum getForum(String categoryId, String forumId)throws Exception;  
+  public Forum getForum(SessionProvider sProvider, String categoryId, String forumId)throws Exception;  
   /**
    * This method should:
    * 1. Check all the mandatory fields of the forum
@@ -88,7 +90,7 @@ public interface ForumService {
    * @return
    * @throws Exception
    */
-  public void saveForum(String categoryId, Forum forum, boolean isNew) throws Exception;
+  public void saveForum(SessionProvider sProvider, String categoryId, Forum forum, boolean isNew) throws Exception;
   /**
    * This method should:
    * 1. Check the mandatory fields
@@ -99,7 +101,7 @@ public interface ForumService {
    * @return
    * @throws Exception
    */
-  public Forum removeForum(String categoryId, String forumId)throws Exception;  
+  public Forum removeForum(SessionProvider sProvider, String categoryId, String forumId)throws Exception;  
 	/**
    * This method should:
    * 1. Check to see if the user has the right to remove the forum. Throw an exception if the user do not
@@ -112,7 +114,7 @@ public interface ForumService {
    * @return
    * @throws Exception
    */
-  public void moveForum(String forumId, String forumPath, String destCategoryPath)throws Exception;  
+  public void moveForum(SessionProvider sProvider, String forumId, String forumPath, String destCategoryPath)throws Exception;  
   /**
    * This method should: 
    * 1. Implement a JCRPageList in jcrext module
@@ -124,7 +126,7 @@ public interface ForumService {
    * @return
    * @throws Exception
    */
-  public JCRPageList getPageTopic(String categoryId, String forumId) throws Exception;
+  public JCRPageList getPageTopic(SessionProvider sProvider, String categoryId, String forumId) throws Exception;
   /**
    * This method should:
    * 
@@ -136,7 +138,7 @@ public interface ForumService {
    * @throws Exception
    */
 
-  public List<Topic> getTopics(String categoryId, String forumId) throws Exception;
+  public List<Topic> getTopics(SessionProvider sProvider, String categoryId, String forumId) throws Exception;
   /**
    * This method should:
    * 
@@ -147,7 +149,7 @@ public interface ForumService {
    * @return
    * @throws Exception
    */
-  public Topic getTopic(String categoryId, String forumId, String topicId, boolean viewTopic) throws Exception;    
+  public Topic getTopic(SessionProvider sProvider, String categoryId, String forumId, String topicId, boolean viewTopic) throws Exception;    
   /**
    * This method should:
    * 1. Load the topic from the database
@@ -155,7 +157,7 @@ public interface ForumService {
    * @return
    * @throws Exception
    */
-  public Topic getTopicByPath(String topicPath) throws Exception;
+  public Topic getTopicByPath(SessionProvider sProvider, String topicPath) throws Exception;
   /**
    * This method should: 
    * 1. Load the topic and the list of the post belong to the topic. Create the TopicView object and 
@@ -167,7 +169,7 @@ public interface ForumService {
    * @return
    * @throws Exception
    */
-  public TopicView getTopicView(String categoryId, String forumId, String topicId) throws Exception;
+  public TopicView getTopicView(SessionProvider sProvider, String categoryId, String forumId, String topicId) throws Exception;
   /**
    * This method should:
    * 1. Check the user permission
@@ -182,7 +184,7 @@ public interface ForumService {
    * @return
    * @throws Exception
    */
-  public void saveTopic(String categoryId, String forumId, Topic topic, boolean isNew) throws Exception;
+  public void saveTopic(SessionProvider sProvider, String categoryId, String forumId, Topic topic, boolean isNew) throws Exception;
   /**
    * This method should:
    * 1. Check the user permission
@@ -195,7 +197,7 @@ public interface ForumService {
    * @return
    * @throws Exception
    */
-  public Topic removeTopic(String categoryId, String forumId, String topicId) throws Exception;
+  public Topic removeTopic(SessionProvider sProvider, String categoryId, String forumId, String topicId) throws Exception;
   /**
    * This method should:
    * 1. Check the user permission
@@ -207,7 +209,7 @@ public interface ForumService {
    * @return
    * @throws Exception
    */
-  public void moveTopic(String topicId, String  topicPath, String destForumPath) throws Exception;
+  public void moveTopic(SessionProvider sProvider, String topicId, String  topicPath, String destForumPath) throws Exception;
   /**
    * This method should: 
    * 1. Check the user permission
@@ -220,7 +222,7 @@ public interface ForumService {
    * @return
    * @throws Exception
    */
-  public JCRPageList getPosts(String categoryId, String forumId, String topicId)throws Exception;
+  public JCRPageList getPosts(SessionProvider sProvider, String categoryId, String forumId, String topicId)throws Exception;
   /**
    * This method should:
    * 1. Check the user permission
@@ -230,7 +232,7 @@ public interface ForumService {
    * @return
    * @throws Exception
    */
-  public Post getPost(String categoryId, String forumId, String topicId, String postId)throws Exception;
+  public Post getPost(SessionProvider sProvider, String categoryId, String forumId, String topicId, String postId)throws Exception;
   /**
    * This method should: 
    * 1. Check the user permission
@@ -244,16 +246,16 @@ public interface ForumService {
    * @return
    * @throws Exception
    */
-  public void savePost(String categoryId, String forumId, String topicId, Post post, boolean isNew)throws Exception;
-  public Post removePost(String categoryId, String forumId, String topicId, String postId)throws Exception;
-  public void movePost(String postId, String postPath, String destTopicPath) throws Exception ;
+  public void savePost(SessionProvider sProvider, String categoryId, String forumId, String topicId, Post post, boolean isNew)throws Exception;
+  public Post removePost(SessionProvider sProvider, String categoryId, String forumId, String topicId, String postId)throws Exception;
+  public void movePost(SessionProvider sProvider, String postId, String postPath, String destTopicPath) throws Exception ;
   
-  public Poll getPoll(String categoryId, String forumId, String topicId)throws Exception;
-  public void savePoll(String categoryId, String forumId, String topicId, Poll poll, boolean isNew, boolean isVote)throws Exception;
-  public Poll removePoll(String categoryId, String forumId, String topicId)throws Exception;
+  public Poll getPoll(SessionProvider sProvider, String categoryId, String forumId, String topicId)throws Exception;
+  public void savePoll(SessionProvider sProvider, String categoryId, String forumId, String topicId, Poll poll, boolean isNew, boolean isVote)throws Exception;
+  public Poll removePoll(SessionProvider sProvider, String categoryId, String forumId, String topicId)throws Exception;
   
-  public Object getObjectNameByPath(String path) throws Exception ;
-  public List<ForumLinkData> getAllLink()throws Exception ;
-  public List getPage(long page, JCRPageList pageList) throws Exception ;
-  public String getForumHomePath() throws Exception ;
+  public Object getObjectNameByPath(SessionProvider sProvider, String path) throws Exception ;
+  public List<ForumLinkData> getAllLink(SessionProvider sProvider)throws Exception ;
+  public List getPage(long page, JCRPageList pageList, SessionProvider sProvider) throws Exception ;
+  public String getForumHomePath(SessionProvider sProvider) throws Exception ;
 }
