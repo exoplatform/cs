@@ -1,4 +1,4 @@
-
+ 
 <%
 	import org.exoplatform.contact.service.ContactGroup;
 	import org.exoplatform.contact.service.Tag;
@@ -707,7 +707,7 @@
 			          <div class="MiddleRightRightClickPopupMenu">
               		<div class="UIRightPopupMenuContainer">
 										<a class="MenuItem" href="<%=uicomponent.event("EditContact", "id")%>">   
-	                    <div class="ItemIcon EditIcon">
+	                    <div class="ItemIcon EditActionIcon">
 	                      <%=_ctx.appRes(uicomponent.getName() + ".label.edit")%>
 	                    </div>
                     </a>
@@ -727,7 +727,7 @@
 	                    </div>
                     </a>
                     <a class="MenuItem" href="<%=uicomponent.event("MoveContacts", "id")%>">   
-	                    <div class="ItemIcon MoveContactIcon">
+	                    <div class="ItemIcon MoveIcon">
 	                      <%=_ctx.appRes(uicomponent.getName() + ".label.move")%>
 	                    </div>
                     </a>
