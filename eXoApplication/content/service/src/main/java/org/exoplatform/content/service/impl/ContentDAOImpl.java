@@ -8,15 +8,14 @@ import java.util.Calendar;
 import java.util.Date;
 
 import javax.jcr.Node;
-import javax.jcr.Session;
 
-import org.exoplatform.content.service.BaseContentService;
-import org.exoplatform.content.service.ContentDAO;
 import org.exoplatform.content.model.ContentData;
 import org.exoplatform.content.model.ContentNavigation;
-import org.exoplatform.registry.ApplicationRegistry;
-import org.exoplatform.registry.JCRRegistryService;
+import org.exoplatform.content.service.BaseContentService;
+import org.exoplatform.content.service.ContentDAO;
 import org.exoplatform.services.cache.CacheService;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 
 /**
  * Created by The eXo Platform SARL        .
@@ -40,37 +39,52 @@ public class ContentDAOImpl extends BaseContentService implements ContentDAO {
   final private static String CREATED_DATE = "createdDate";
   final private static String MODIFIED_DATE = "modifiedDate";
   
-  final private static String DATA_NODE_TYPE = "exo:data";
+  final private static String DATA_NODE_TYPE = "exo:content";
   
   final public static String APPLICATION_NAME = "ContentService";
-  private JCRRegistryService jcrRegService_;
+  private NodeHierarchyCreator nodeCreator_ ;
   
-  public ContentDAOImpl(CacheService cservice, JCRRegistryService jcrRegService) throws Exception {
+  public ContentDAOImpl(CacheService cservice, NodeHierarchyCreator creator) throws Exception {
     super(cservice);
-    jcrRegService_ = jcrRegService; 
+    nodeCreator_ = creator ;
+  }
+  
+  private Node createNode(Node parent, String name) throws Exception {
+    if(parent.hasNode(name)) return parent.getNode(name) ;
+    Node node = parent.addNode(name) ;
+    parent.save() ;
+    return node ;
+  }
+  
+  private Node createApplicationNode(SessionProvider sessionProvider, String userName) throws Exception {
+    Node userAppsNode = nodeCreator_.getUserApplicationNode(sessionProvider, userName) ;
+    Node appNode = createNode(userAppsNode, APPLICATION_NAME) ;    
+    return appNode ;
+  }
+  
+  private Node getApplicationNode(SessionProvider sessionProvider, String userName) throws Exception {
+    Node userAppsNode = nodeCreator_.getUserApplicationNode(sessionProvider, userName) ;
+    if(userAppsNode.hasNode(APPLICATION_NAME)) return userAppsNode.getNode(APPLICATION_NAME) ;
+    return null ;
   }
   
   public void create(final ContentNavigation navigation) throws Exception {
-    jcrRegService_.createUserHome(navigation.getOwner(), false);
-    ApplicationRegistry app = new ApplicationRegistry(APPLICATION_NAME) {
-      @SuppressWarnings("unused")
-      public void postAction(JCRRegistryService service, Node appNode) throws Exception {
-        ContentData data = new ContentData();
-        data.setDataType(ContentNavigation.class.getName());    
-        data.setId(navigation.getOwner()+"::"+ContentNavigation.class.getName());
-        data.setOwner(navigation.getOwner());
-        data.setData(toXML(navigation));
-        saveData(appNode, data); 
-      }
-    };
-    jcrRegService_.createApplicationRegistry(navigation.getOwner(), app, true);    
+    SessionProvider sessionProvider = SessionProvider.createSystemProvider() ;
+    Node appNode = createApplicationNode(sessionProvider, navigation.getOwner()) ;
+    ContentData data = new ContentData();
+    data.setDataType(ContentNavigation.class.getName());    
+    data.setId(navigation.getOwner()+"::"+ContentNavigation.class.getName());
+    data.setOwner(navigation.getOwner());
+    data.setData(toXML(navigation));
+    saveData(appNode, data);
+    sessionProvider.close() ;
   }
   
   public void save(ContentNavigation navigation) throws Exception {
-    Session session = jcrRegService_.getSession() ;
-    Node portalNode = jcrRegService_.getApplicationRegistryNode(session, navigation.getOwner(), APPLICATION_NAME);
-    if(portalNode == null) {
-      session.logout();
+    SessionProvider sessionProvider = SessionProvider.createSystemProvider() ;
+    Node appNode = getApplicationNode(sessionProvider, navigation.getOwner()) ;
+    if(appNode == null) {
+      sessionProvider.close() ;
       create(navigation);
       return;
     }
@@ -79,9 +93,8 @@ public class ContentDAOImpl extends BaseContentService implements ContentDAO {
     data.setId(navigation.getOwner()+"::"+ContentNavigation.class.getName());
     data.setOwner(navigation.getOwner());
     data.setData(toXML(navigation));
-    saveData(portalNode, data);
-    session.save();
-    session.logout();
+    saveData(appNode, data);
+    sessionProvider.close() ;
   }
   
   public ContentNavigation get(String owner) throws Exception {
@@ -98,15 +111,15 @@ public class ContentDAOImpl extends BaseContentService implements ContentDAO {
   }
   
   private ContentData getDataByOwner(String owner) throws Exception {
-    Session session = jcrRegService_.getSession() ;
-    Node parentNode = jcrRegService_.getApplicationRegistryNode(session, owner, APPLICATION_NAME);
-    if(parentNode == null || parentNode.hasNode(NODE_NAME) == false){
-      session.logout();
+    SessionProvider sessionProvider = SessionProvider.createSystemProvider() ;
+    Node appNode = getApplicationNode(sessionProvider, owner) ;
+    if(appNode == null || appNode.hasNode(NODE_NAME) == false){
+      sessionProvider.close() ;
       return null;    
     }
-    Node node = parentNode.getNode(NODE_NAME);
+    Node node = appNode.getNode(NODE_NAME);
     ContentData contentData = nodeToContentData(node);
-    session.logout();
+    sessionProvider.close() ;
     return contentData;
   }
   
@@ -120,17 +133,16 @@ public class ContentDAOImpl extends BaseContentService implements ContentDAO {
   } 
   
   private void removeDataByOwner(String owner) throws Exception {
-    Session session = jcrRegService_.getSession() ;
-    Node parentNode = jcrRegService_.getApplicationRegistryNode(session, owner, APPLICATION_NAME);
-    if(parentNode.hasNode(NODE_NAME) == false) {
-      session.logout();
+    SessionProvider sessionProvider = SessionProvider.createSystemProvider() ;
+    Node appNode = getApplicationNode(sessionProvider, owner) ;
+    if(appNode.hasNode(NODE_NAME) == false) {
+      sessionProvider.close() ;
       return ;
     }
-    Node node = parentNode.getNode(NODE_NAME);
+    Node node = appNode.getNode(NODE_NAME);
     node.remove();
-    parentNode.save();
-    session.save();
-    session.logout();
+    appNode.save();
+    sessionProvider.close() ;
   }
   
   private void saveData(Node parentNode, ContentData data) throws Exception {

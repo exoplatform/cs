@@ -7,9 +7,9 @@ package org.exoplatform.content.webui;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.exoplatform.content.service.ContentDAO;
 import org.exoplatform.content.model.ContentNavigation;
 import org.exoplatform.content.model.ContentNode;
+import org.exoplatform.content.service.ContentDAO;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -51,10 +51,13 @@ public class UIContentNavigation extends UIContainer {
   
   void refresh() throws Exception {
     ContentDAO contentService = getApplicationComponent(ContentDAO.class) ;
-    nav_ = contentService.get(Util.getUIPortal().getOwner());
+//    nav_ = contentService.get(Util.getUIPortal().getOwner());
+    String userName = Util.getPortalRequestContext().getRemoteUser() ;
+    nav_ = contentService.get(userName) ;
     if(nav_ == null) {
       nav_ = new ContentNavigation();
-      nav_.setOwner(Util.getUIPortal().getOwner());
+      //nav_.setOwner(Util.getUIPortal().getOwner());
+      nav_.setOwner(userName) ;
     }
     if(nav_.getNodes() != null && nav_.getNodes().size() > 0){
       setSelectedNode(nav_.getNode(0).getId()); 

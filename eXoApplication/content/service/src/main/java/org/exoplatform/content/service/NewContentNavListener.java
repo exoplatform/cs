@@ -39,11 +39,16 @@ public class NewContentNavListener extends BaseComponentPlugin {
     cservice_ = cservice ;
     contentService_ = contentService;    
     
-    String checkPortal = "site";
-    ValueParam valueParam = params.getValueParam("check.portal");
-    if(valueParam != null) checkPortal = valueParam.getValue();
-    if(checkPortal == null  || checkPortal.trim().length() == 0) checkPortal = "site";    
-    if(isInitedDB(checkPortal)) return;
+//    String checkPortal = "site";
+//    ValueParam valueParam = params.getValueParam("check.portal");
+//    if(valueParam != null) checkPortal = valueParam.getValue();
+//    if(checkPortal == null  || checkPortal.trim().length() == 0) checkPortal = "site";    
+//    if(isInitedDB(checkPortal)) return;
+    String checkUser = "root";
+    ValueParam valueParam = params.getValueParam("check.user");
+    if(valueParam != null) checkUser = valueParam.getValue();
+    if(checkUser == null  || checkUser.trim().length() == 0) checkUser = "root";    
+    if(isInitedDB(checkUser)) return;
     
     config_ = (NewPortalConfig) params.getObjectParamValues(NewPortalConfig.class).get(0) ;
     initDB();  

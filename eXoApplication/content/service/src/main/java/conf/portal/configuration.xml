@@ -3,7 +3,23 @@
   <component>
     <key>org.exoplatform.content.service.ContentDAO</key>
     <type>org.exoplatform.content.service.impl.ContentDAOImpl</type>     
-  </component>  
+  </component>
+  
+  <external-component-plugins>
+	  <target-component>org.exoplatform.services.jcr.RepositoryService</target-component>      
+	  <component-plugin> 
+	    <name>add.content.nodeType</name>
+	    <set-method>addPlugin</set-method>
+	    <type>org.exoplatform.services.jcr.impl.AddNodeTypePlugin</type>
+	    <init-params>
+	      <values-param>
+	        <name>autoCreatedInNewRepository</name>
+	        <description>Node types configuration file</description>
+	        <value>jar:/conf/portal/content-nodetypes.xml</value>
+	      </values-param>
+	    </init-params>
+	  </component-plugin>
+	</external-component-plugins>	    
   
   <external-component-plugins>  
     <target-component>org.exoplatform.content.service.ContentDAO</target-component>      
@@ -16,7 +32,7 @@
         <value-param>
           <name>check.user</name>
           <description>The check user for checking db is empty or not</description>
-          <value>site</value>          
+          <value>root</value>          
         </value-param>
         <object-param>
           <name>configuration</name>
@@ -24,10 +40,10 @@
           <object type="org.exoplatform.portal.config.NewPortalConfig">
             <field  name="predefinedOwner">
               <collection type="java.util.HashSet">                
-                <value><string>exo</string></value>
-                <value><string>exoadmin</string></value>
-                <value><string>company</string></value>
-                <value><string>community</string></value>
+                <value><string>root</string></value>
+                <value><string>marry</string></value>
+                <value><string>john</string></value>
+                <value><string>demo</string></value>
               </collection>
             </field>
             <field  name="ownerType"><string>user</string></field>
@@ -60,11 +76,13 @@
       <set-method>addListenerPlugin</set-method>
       <type>org.exoplatform.content.service.UserContentNavListener</type>
     </component-plugin>
+<!--    
     <component-plugin> 
       <name>group.content.nav.listener</name>
       <set-method>addListenerPlugin</set-method>
       <type>org.exoplatform.content.service.GroupContentNavListener</type>
     </component-plugin>    
+-->    
   </external-component-plugins>
 </configuration>
 
