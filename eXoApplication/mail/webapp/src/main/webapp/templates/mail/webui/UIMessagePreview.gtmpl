@@ -21,7 +21,7 @@
 		%>
 		<%=subject%>
 		</span></div>
-		<div><a href="javascript:eXo.mail.UIMailPortlet.showHidePreviewPane()"><span class="MaximizeReadingPane" title="Maximize Reading Pane"></span></a></div>
+		<div><a href="javascript:eXo.mail.UIMailPortlet.showHidePreviewPane()"><span id="ActionReadingPane" class="MaximizeReadingPane" title="Maximize Reading Pane"></span></a></div>
 		<div style="clear:both;"><span></span></div>
 	</div>
 	<div class="ReadingPaneDetails">

@@ -583,7 +583,12 @@
 }
 
 .UIMailPortlet .MailWorkingWorkspace .UIMessagePreview .MaximizeReadingPane {
-  float: right;
+    float: right;
+	margin: 4px 4px 0px 0px;
+}
+
+.UIMailPortlet .MailWorkingWorkspace .UIMessagePreview .MinimumReadingPane {
+    float: right;
 	margin: 4px 4px 0px 0px;
 }
 

@@ -12,6 +12,12 @@
 	cursor: pointer;
 }
 
+.MinimumReadingPane {
+	background: url('icons/MinimumReadingPane.gif') no-repeat;
+	width: 17px; height: 16px;
+	cursor: pointer;
+}
+
 .PriorityIcon {
 	background: url('icons/LowPriorityIcon.gif') no-repeat;
 	width: 16px; height: 16px;

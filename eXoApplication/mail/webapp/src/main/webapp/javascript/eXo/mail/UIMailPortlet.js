@@ -285,14 +285,17 @@ UIMailPortlet.prototype.showHidePreviewPane = function(layout) {
     var	uiMessageList = document.getElementById("uiMessageListResizableArea") ;
 	var	previewPane = document.getElementById("SpliterResizableArea") ;
 	var resizePane = document.getElementById("ResizeReadingPane");
+	var actionReadingPane = document.getElementById("ActionReadingPane");
 	if (uiMessageList.style.display == "block") {
 		uiMessageList.style.display = "none";
 		resizePane.style.display = "none";
+		actionReadingPane.className = "MinimumReadingPane";
 		Browser.setCookie("uiMessageListResizableArea", "none", 30)
 		Browser.setCookie("ResizeReadingPane", "none", 30)
 	} else {
 		uiMessageList.style.display = "block";
 		resizePane.style.display = "block";
+		actionReadingPane.className = "MaximizeReadingPane";
 		Browser.setCookie("uiMessageListResizableArea", "block", 30)
 		Browser.setCookie("ResizeReadingPane", "block", 30)
 	}
