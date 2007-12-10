@@ -310,4 +310,6 @@ public interface MailService {
   public SpamFilter getSpamFilter(SessionProvider sProvider, String username, String accountId) throws Exception ;
   
   public void saveSpamFilter(SessionProvider sProvider, String username, String accountId, SpamFilter spamFilter) throws Exception ;
+  
+  public void toggleMessageProperty(SessionProvider sProvider, String username, String accountId, List<String> msgList, String property) throws Exception ;
 }

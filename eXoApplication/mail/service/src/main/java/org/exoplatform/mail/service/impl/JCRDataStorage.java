@@ -833,4 +833,29 @@ public class JCRDataStorage{
     spamFilterNode.setProperty(Utils.EXO_FROMS, spamFilter.getSenders());
     accountNode.getSession().save();
   }
+  
+  public void toggleMessageProperty(SessionProvider sProvider, String username, String accountId, List<String> msgList, String property) throws Exception {
+    Node messageHome = getMessageHome(sProvider, username, accountId);
+    Node folderHome = getFolderHome(sProvider, username, accountId);
+    for (String msgId : msgList) {
+      if (messageHome.hasNode(msgId)) {
+        Node msgNode = messageHome.getNode(msgId) ;
+        if (property.equals(Utils.EXO_STAR)) {
+          msgNode.setProperty(Utils.EXO_STAR, ! msgNode.getProperty(Utils.EXO_STAR).getBoolean());
+        } else if (property.equals(Utils.EXO_ISUNREAD)) {
+          boolean isUnread = msgNode.getProperty(Utils.EXO_ISUNREAD).getBoolean();
+          msgNode.setProperty(Utils.EXO_ISUNREAD, ! isUnread);
+          Boolean isRootConversation = msgNode.getProperty(Utils.EXO_ISROOT).getBoolean();
+          Node currentFolderNode = folderHome.getNode(msgNode.getProperty(Utils.EXO_FOLDERS).getValues()[0].getString());
+          if (isUnread && isRootConversation) {
+            currentFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (currentFolderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong() - 1));
+          } else if (! isUnread && isRootConversation) {
+            currentFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (currentFolderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong() + 1));
+          }
+          currentFolderNode.getSession().save();
+        }
+      }
+    }
+    messageHome.getSession().save();
+  }
 }

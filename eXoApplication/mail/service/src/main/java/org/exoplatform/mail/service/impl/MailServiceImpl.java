@@ -684,6 +684,10 @@ public class MailServiceImpl implements MailService{
   public void saveSpamFilter(SessionProvider sProvider, String username, String accountId, SpamFilter spamFilter) throws Exception {
     storage_.saveSpamFilter(sProvider, username, accountId, spamFilter);
   }
+  
+  public void toggleMessageProperty(SessionProvider sProvider, String username, String accountId, List<String> msgList, String property) throws Exception {
+    storage_.toggleMessageProperty(sProvider, username, accountId, msgList, property) ;
+  }
 
 	public List<AccountData> getAccountDatas(SessionProvider sProvider) throws Exception {
 		// TODO Auto-generated method stub
