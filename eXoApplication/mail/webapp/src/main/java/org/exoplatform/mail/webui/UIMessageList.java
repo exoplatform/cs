@@ -59,6 +59,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
         @EventConfig(listeners = UIMessageList.ForwardActionListener.class), 
         @EventConfig(listeners = UIMessageList.DeleteActionListener.class),
         @EventConfig(listeners = UIMessageList.ReportSpamActionListener.class),
+        @EventConfig(listeners = UIMessageList.NotSpamActionListener.class),
         @EventConfig(listeners = UIMessageList.PrintActionListener.class),
         @EventConfig(listeners = UIMessageList.MarkAsReadActionListener.class),
         @EventConfig(listeners = UIMessageList.MarkAsUnReadActionListener.class),
@@ -126,6 +127,14 @@ public class UIMessageList extends UIForm {
   
   public String getSelectedTagId() {return selectedTagId_ ;}
   public void setSelectedTagId(String tagId) {selectedTagId_ = tagId ;}
+  
+  public boolean selectedSpamFolder() throws Exception {
+    return (getSelectedFolderId().equals(Utils.createFolderId(MailUtils.getAccountId(), Utils.FD_SPAM, false)));
+  }
+  
+  public boolean selectedDraftFolder() throws Exception {
+    return (getSelectedFolderId().equals(Utils.createFolderId(MailUtils.getAccountId(), Utils.FD_DRAFTS, false)));
+  }
   
   public String getViewQuery() {return viewQuery_ ;}
   public void setViewQuery(String view) {viewQuery_ = view ;}
@@ -573,7 +582,35 @@ public class UIMessageList extends UIForm {
       uiMessageList.updateList(); 
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIFolderContainer.class)) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));  
-      uiPortlet.cancelAction();
+    }
+  }
+  
+  static public class NotSpamActionListener extends EventListener<UIMessageList> {
+    public void execute(Event<UIMessageList> event) throws Exception {
+      UIMessageList uiMessageList = event.getSource();
+      String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class) ;
+      String username = MailUtils.getCurrentUser();
+      String accountId = MailUtils.getAccountId();
+      MailService mailSrv = MailUtils.getMailService();
+      List<Message> checkedMessageList = new ArrayList<Message>();
+      if (msgId != null) { 
+        checkedMessageList.add(mailSrv.getMessageById(SessionsUtils.getSessionProvider(), username, accountId, msgId));
+      } else {
+        checkedMessageList = uiMessageList.getCheckedMessage();
+      }    
+      
+      SpamFilter spamFilter = mailSrv.getSpamFilter(SessionsUtils.getSessionProvider(), username, accountId);
+
+      for(Message message: checkedMessageList) {
+         mailSrv.moveMessages(SessionsUtils.getSessionProvider(), username, accountId, message.getId(), message.getFolders()[0], Utils.createFolderId(accountId, Utils.FD_INBOX, false));
+         spamFilter.notSpam(message);
+      }       
+      mailSrv.saveSpamFilter(SessionsUtils.getSessionProvider(), username, accountId, spamFilter);
+      
+      uiMessageList.updateList(); 
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIFolderContainer.class)) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));  
     }
   }
   

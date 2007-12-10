@@ -22,9 +22,15 @@
   <a href="<%=uicomponent.event("Delete")%>" class="ControlButton">
     <div class="IconHolder DeleteIcon"><span></span></div>
   </a>
-  <a href="<%=uicomponent.event("ReportSpam")%>" class="ControlButton">
-    <div class="IconHolder SpamMail"><span></span></div>
-  </a>
+  <% if (!uicomponent.selectedSpamFolder()) { %>
+    <a href="<%=uicomponent.event("ReportSpam")%>" class="ControlButton">
+      <div class="IconHolder SpamMail"><span></span></div>
+    </a>
+  <% } else { %>
+    <a href="<%=uicomponent.event("NotSpam")%>" class="ControlButton">
+      <div class="IconHolder NotSpamMail"><span></span></div>
+    </a>
+  <% } %>
   <a href="<%=uicomponent.event("Print")%>" class="ControlButton">
     <div class="IconHolder PrintIcon"><span></span></div>
   </a>
