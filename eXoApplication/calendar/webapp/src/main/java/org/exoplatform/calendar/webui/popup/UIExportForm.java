@@ -11,8 +11,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.MissingResourceException;
 
-import net.fortuna.ical4j.model.ValidationException;
-
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.SessionsUtils;
 import org.exoplatform.calendar.service.Calendar;
@@ -105,10 +103,10 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
       return id ;
     }
   } 
-  
+
   public void activate() throws Exception {}
   public void deActivate() throws Exception {}
-  
+
   static  public class SaveActionListener extends EventListener<UIExportForm> {
     public void execute(Event<UIExportForm> event) throws Exception {
       UIExportForm uiForm = event.getSource() ;
@@ -134,27 +132,27 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
       OutputStream out = null ;
       try {
         out = importExport.exportCalendar(SessionsUtils.getSystemProvider(), CalendarUtils.getCurrentUser(), calendarIds, uiForm.calType) ;        
+        ByteArrayInputStream is = new ByteArrayInputStream(out.toString().getBytes()) ;
+        DownloadResource dresource = new InputStreamDownloadResource(is, "text/iCalendar") ;
+        DownloadService dservice = (DownloadService)PortalContainer.getInstance().getComponentInstanceOfType(DownloadService.class) ;
+        if(name != null && name.length() > 0) {
+          if(name.length() > 4 && name.substring(name.length() - 4).equals(".ics") )dresource.setDownloadName(name);
+          else dresource.setDownloadName(name + ".ics");
+        }else {
+          dresource.setDownloadName("eXoICalendar.ics");
+        }
+        String downloadLink = dservice.getDownloadLink(dservice.addDownloadResource(dresource)) ;
+        UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
+        event.getRequestContext().getJavascriptManager().addJavascript("ajaxRedirect('" + downloadLink + "');") ;
+        calendarPortlet.cancelAction() ;      
       }catch(Exception e) {
         uiApp.addMessage(new ApplicationMessage("UIExportForm.msg.event-does-not-existing", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-      ByteArrayInputStream is = new ByteArrayInputStream(out.toString().getBytes()) ;
-      DownloadResource dresource = new InputStreamDownloadResource(is, "text/iCalendar") ;
-      DownloadService dservice = (DownloadService)PortalContainer.getInstance().getComponentInstanceOfType(DownloadService.class) ;
-      if(name != null && name.length() > 0) {
-        if(name.length() > 4 && name.substring(name.length() - 4).equals(".ics") )dresource.setDownloadName(name);
-        else dresource.setDownloadName(name + ".ics");
-      }else {
-        dresource.setDownloadName("eXoICalendar.ics");
-      }
-      String downloadLink = dservice.getDownloadLink(dservice.addDownloadResource(dresource)) ;
-      UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
-      event.getRequestContext().getJavascriptManager().addJavascript("ajaxRedirect('" + downloadLink + "');") ;
-      calendarPortlet.cancelAction() ;      
     }
   }
-  
+
   static  public class CancelActionListener extends EventListener<UIExportForm> {
     public void execute(Event<UIExportForm> event) throws Exception {
       UIExportForm uiForm = event.getSource() ;
