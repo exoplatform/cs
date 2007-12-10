@@ -152,9 +152,11 @@ public class JCRDataStorage{
     Node homeMsg = getMessageHome(sProvider, username, filter.getAccountId());
     filter.setAccountPath(homeMsg.getPath()) ;
     QueryManager qm = homeMsg.getSession().getWorkspace().getQueryManager();
-    Query query = qm.createQuery(filter.getStatement(), Query.XPATH);
+    String queryString = filter.getStatement();
+    long pageSize = getMailSetting(sProvider, username).getShowNumberMessage();
+    Query query = qm.createQuery(queryString, Query.XPATH);
     QueryResult result = query.execute();    
-    MessagePageList pageList = new MessagePageList(result.getNodes(), getMailSetting(sProvider, username).getShowNumberMessage(), filter.getStatement(), true) ;
+    MessagePageList pageList = new MessagePageList(result.getNodes(), pageSize, queryString, true) ;
     return pageList ;
   }
 
