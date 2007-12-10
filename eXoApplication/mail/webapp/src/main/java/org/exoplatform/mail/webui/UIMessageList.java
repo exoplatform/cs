@@ -306,19 +306,20 @@ public class UIMessageList extends UIForm {
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-      MailService mailServ = uiPortlet.getApplicationComponent(MailService.class);
-      try {
-        Message msg = mailServ.getMessageById(SessionsUtils.getSessionProvider(), username, accountId, msgId);
-        msg.setHasStar(!msg.hasStar());
-        mailServ.saveMessage(SessionsUtils.getSessionProvider(), username, accountId, msg, false);
+      MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
+      if ( msgId != null ) {
+        List<String> msgList = new ArrayList<String>() ;
+        msgList.add(msgId);
+        mailSrv.toggleMessageProperty(SessionsUtils.getSessionProvider(), username, accountId, msgList, Utils.EXO_STAR);
         uiMessageList.setSelectedMessageId(msgId);
-      } catch (Exception e) {
+      } else {
+        List<String> msgList = new ArrayList<String>() ;
         for (Message msg : uiMessageList.getCheckedMessage()) {
           if (!msg.hasStar()) {
-            msg.setHasStar(true);
-            mailServ.saveMessage(SessionsUtils.getSessionProvider(), username, accountId, msg, false);
+            msgList.add(msg.getId());
           }
         }
+        mailSrv.toggleMessageProperty(SessionsUtils.getSessionProvider(), username, accountId, msgList, Utils.EXO_STAR);
       }
       uiMessageList.updateList();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
@@ -331,13 +332,14 @@ public class UIMessageList extends UIForm {
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-      MailService mailServ = uiPortlet.getApplicationComponent(MailService.class);
+      MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
+      List<String> msgList = new ArrayList<String>() ;
       for (Message msg : uiMessageList.getCheckedMessage()) {
         if (msg.hasStar()) {
-          msg.setHasStar(false);
-          mailServ.saveMessage(SessionsUtils.getSessionProvider(), username, accountId, msg, false);
+          msgList.add(msg.getId());
         }
       }
+      mailSrv.toggleMessageProperty(SessionsUtils.getSessionProvider(), username, accountId, msgList, Utils.EXO_STAR);
       uiMessageList.updateList();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent());
     }
@@ -438,7 +440,7 @@ public class UIMessageList extends UIForm {
       if (msgId != null) {
         Message message = mailSvr.getMessageById(SessionsUtils.getSessionProvider(), username, accId, msgId);
         uiComposeForm.setMessage(message);
-        uiComposeForm.setFieldToValue(message.getFrom());
+        uiComposeForm.setFieldToValue(message.getReplyTo());
         uiComposeForm.setFieldSubjectValue("Re: " + message.getSubject());
         uiComposeForm.setFieldContentValue(message.getMessageBody());
       }
@@ -475,7 +477,7 @@ public class UIMessageList extends UIForm {
         Message message = mailSvr.getMessageById(SessionsUtils.getSessionProvider(), username, accId, msgId);
         uiComposeForm.setMessage(message);
         uiComposeForm.setFieldSubjectValue("Re: " + message.getSubject());
-        String replyAll = message.getFrom();
+        String replyAll = message.getReplyTo();
         if (message.getMessageCc() != null) replyAll += "," + message.getMessageCc();
         if (message.getMessageBcc() != null) replyAll += "," + message.getMessageBcc();
         uiComposeForm.setFieldToValue(replyAll);
@@ -645,15 +647,13 @@ public class UIMessageList extends UIForm {
       MailService mailSrv = uiMessageList.getApplicationComponent(MailService.class);
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      List<String> msgList = new ArrayList<String>();
       for (Message msg : checkedMessage) {
         if (msg.isUnread()) {
-          msg.setUnread(false);
-          mailSrv.saveMessage(SessionsUtils.getSessionProvider(), username, accountId, msg, false);
-          Folder folder = mailSrv.getFolder(SessionsUtils.getSessionProvider(), username, accountId, msg.getFolders()[0]);
-          folder.setNumberOfUnreadMessage(folder.getNumberOfUnreadMessage() - 1);
-          mailSrv.saveFolder(SessionsUtils.getSessionProvider(), username, accountId, folder);
+          msgList.add(msg.getId());
         }
       }
+      mailSrv.toggleMessageProperty(SessionsUtils.getSessionProvider(), username, accountId, msgList, Utils.EXO_ISUNREAD);
       uiMessageList.updateList();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessageArea.class));
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIFolderContainer.class));
@@ -668,15 +668,13 @@ public class UIMessageList extends UIForm {
       MailService mailSrv = uiMessageList.getApplicationComponent(MailService.class);
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      List<String> msgList = new ArrayList<String>();
       for (Message msg : checkedMessage) {
         if (!msg.isUnread()) {
-          msg.setUnread(true);
-          mailSrv.saveMessage(SessionsUtils.getSessionProvider(), username, accountId, msg, false);
-          Folder folder = mailSrv.getFolder(SessionsUtils.getSessionProvider(), username, accountId, msg.getFolders()[0]);
-          folder.setNumberOfUnreadMessage(folder.getNumberOfUnreadMessage() + 1);
-          mailSrv.saveFolder(SessionsUtils.getSessionProvider(), username, accountId, folder);
+          msgList.add(msg.getId());
         }
       }
+      mailSrv.toggleMessageProperty(SessionsUtils.getSessionProvider(), username, accountId, msgList, Utils.EXO_ISUNREAD);
       uiMessageList.updateList();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessageArea.class));
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIFolderContainer.class));
