@@ -87,7 +87,9 @@
 .SelectMemberIcon {
 	background: url('icons/SmallMemberIcon.gif') no-repeat;
 }
-
+.SelectGroupIcon {
+	background: url('icons/SmallGroupIcon.gif') no-repeat;
+}
 .SelectUserIcon {
 	background: url('icons/SmallUserIcon.gif') no-repeat;
 }

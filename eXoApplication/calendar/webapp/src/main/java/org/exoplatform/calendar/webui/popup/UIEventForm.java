@@ -8,7 +8,10 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.SessionsUtils;
@@ -87,6 +90,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   private CalendarEvent calendarEvent_ = null ;
   protected String calType_ = "0" ;
   private String errorMsg_ = null ;
+  private LinkedHashMap<String, String> participants_ = new LinkedHashMap<String, String>() ;
 
   public UIEventForm() throws Exception {
     super("UIEventForm");
@@ -101,11 +105,29 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     eventShareTab.addUIFormInput(new UIFormTextAreaInput(FIELD_MEETING, FIELD_MEETING, null)) ;
     eventShareTab.addUIFormInput(new UIFormTextAreaInput(FIELD_PARTICIPANT, FIELD_PARTICIPANT, null)) ;
     actions = new ArrayList<ActionData>() ;
-    ActionData addParticipant = new ActionData() ;
-    addParticipant.setActionListener("AddParticipant") ;
-    addParticipant.setActionName("AddParticipant") ;
-    addParticipant.setActionType(ActionData.TYPE_ICON) ;
-    actions.add(addParticipant) ;
+    ActionData addGroup = new ActionData() ;
+    addGroup.setActionListener("AddParticipant") ;
+    addGroup.setActionName("AddGroup") ;
+    addGroup.setActionParameter(UIGroupSelector.TYPE_GROUP);
+    addGroup.setActionType(ActionData.TYPE_ICON) ;
+    addGroup.setCssIconClass("SelectGroupIcon") ;
+    actions.add(addGroup) ;
+
+    ActionData addUser = new ActionData() ;
+    addUser.setActionListener("AddParticipant") ;
+    addUser.setActionName("AddUser") ;
+    addUser.setActionParameter(UIGroupSelector.TYPE_USER);
+    addUser.setActionType(ActionData.TYPE_ICON) ;
+    addUser.setCssIconClass("SelectUserIcon") ;
+    actions.add(addUser) ;
+    ActionData addMember = new ActionData() ;
+    addMember.setActionListener("AddParticipant") ;
+    addMember.setActionName("AddMember") ;
+    addMember.setActionParameter(UIGroupSelector.TYPE_MEMBERSHIP);
+    addMember.setActionType(ActionData.TYPE_ICON) ;
+    addMember.setCssIconClass("SelectMemberIcon") ;
+    actions.add(addMember) ;
+
     eventShareTab.setActionField(FIELD_PARTICIPANT, actions) ;
     addChild(eventShareTab) ;
     UIEventAttenderTab eventAttenderTab = new UIEventAttenderTab(TAB_EVENTATTENDER) ;
@@ -122,7 +144,10 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   }
   public void reset() {
     super.reset() ;
-    calendarEvent_ = null;
+    if(isAddNew_) {
+      calendarEvent_ = null;
+      participants_.clear() ; 
+    } 
   }
   public void initForm(CalendarSetting calSetting, CalendarEvent eventCalendar) throws Exception {
     reset() ;
@@ -222,8 +247,11 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   }
   public void activate() throws Exception {}
   public void deActivate() throws Exception {}
-  public void updateSelect(String selectField, String value) throws Exception {
 
+  public void updateSelect(String selectField, String value) throws Exception {
+    if(TAB_EVENTSHARE.equals(getSelectedTabId())) {
+       setParticipant(new String[]{value}) ;
+    }
   }
 
   protected boolean isEventDetailValid(){
@@ -484,6 +512,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     uiEventDetailTab.refreshUploadFileList() ;
   }
   protected void setEventReminders(List<Reminder> reminders){
+    System.out.println("\n\n reminders " + reminders.size());
     for(Reminder rm : reminders) {
       if(Reminder.TYPE_EMAIL.equals(rm.getReminderType())) {
         setEmailReminder(true) ;
@@ -498,15 +527,15 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   protected List<Reminder>  getEventReminders(Date fromDateTime, List<Reminder> currentReminders) {
     List<Reminder> reminders = new ArrayList<Reminder>() ;
     if(getEmailReminder()) {
-    	Reminder email = new Reminder() ;
-    	if(currentReminders != null) {
-    		for(Reminder rm : currentReminders) {
-      		if(rm.getReminderType().equals(Reminder.TYPE_EMAIL)) {
-      			email = rm ;
-      			break ;
-      		}
-      	}
-    	}     
+      Reminder email = new Reminder() ;
+      if(currentReminders != null) {
+        for(Reminder rm : currentReminders) {
+          if(rm.getReminderType().equals(Reminder.TYPE_EMAIL)) {
+            email = rm ;
+            break ;
+          }
+        }
+      }     
       email.setReminderType(Reminder.TYPE_EMAIL) ;
       email.setAlarmBefore(Long.parseLong(getEmailRemindBefore())) ;
       email.setEmailAddress(getEmailAddress()) ;
@@ -518,12 +547,12 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     if(getPopupReminder()) {
       Reminder popup = new Reminder() ;
       if(currentReminders != null) {
-      	for(Reminder rm : currentReminders) {
-      		if(rm.getReminderType().equals(Reminder.TYPE_POPUP)) {
-      			popup = rm ;
-      			break ;
-      		}
-      	}
+        for(Reminder rm : currentReminders) {
+          if(rm.getReminderType().equals(Reminder.TYPE_POPUP)) {
+            popup = rm ;
+            break ;
+          }
+        }
       } 
       popup.setReminderType(Reminder.TYPE_POPUP) ;
       popup.setAlarmBefore(Long.parseLong(getPopupReminderTime())) ;
@@ -590,8 +619,11 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     StringBuffer sb = new StringBuffer() ;
     if(values != null) {
       for(String s : values) {
-        sb.append(s).append("\n") ;
+        participants_.put(s, s) ;
       }
+    }
+    for(String p : participants_.values()) {
+      sb.append(p).append("\n") ;
     }
     eventDetailTab.getUIFormTextAreaInput(FIELD_PARTICIPANT).setValue(sb.toString()) ;
   }
@@ -661,8 +693,17 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
 
   static  public class AddParticipantActionListener extends EventListener<UIEventForm> {
     public void execute(Event<UIEventForm> event) throws Exception {
-      UIEventForm uiForm = event.getSource() ;
       System.out.println( "\n\n ==========> AddParticipantActionListener");
+      UIEventForm uiForm = event.getSource() ;
+      String type = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      UIPopupContainer uiContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
+      UIPopupAction uiChildPopupAction = uiContainer.getChild(UIPopupAction.class) ;
+      UIGroupSelector uiParticipantSelect = uiChildPopupAction.activate(UIGroupSelector.class, 500) ;
+      uiParticipantSelect.setComponent(uiForm, new String[]{UIEventForm.FIELD_PARTICIPANT}) ;
+      uiParticipantSelect.setType(type) ;
+      uiParticipantSelect.setSelectedGroups(null) ;
+      uiForm.setSelectedTab(TAB_EVENTSHARE) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopupAction) ;
     }
   }
 
