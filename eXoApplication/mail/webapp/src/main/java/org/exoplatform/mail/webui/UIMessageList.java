@@ -129,11 +129,11 @@ public class UIMessageList extends UIForm {
   public void setSelectedTagId(String tagId) {selectedTagId_ = tagId ;}
   
   public boolean selectedSpamFolder() throws Exception {
-    return (getSelectedFolderId().equals(Utils.createFolderId(MailUtils.getAccountId(), Utils.FD_SPAM, false)));
+    return (getSelectedFolderId() != null) ? getSelectedFolderId().equals(Utils.createFolderId(MailUtils.getAccountId(), Utils.FD_SPAM, false)) : false ;
   }
   
   public boolean selectedDraftFolder() throws Exception {
-    return (getSelectedFolderId().equals(Utils.createFolderId(MailUtils.getAccountId(), Utils.FD_DRAFTS, false)));
+    return (getSelectedFolderId() != null) ? getSelectedFolderId().equals(Utils.createFolderId(MailUtils.getAccountId(), Utils.FD_DRAFTS, false)) : false ;
   }
   
   public String getViewQuery() {return viewQuery_ ;}
