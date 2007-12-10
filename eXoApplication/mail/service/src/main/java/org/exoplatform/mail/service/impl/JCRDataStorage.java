@@ -299,8 +299,6 @@ public class JCRDataStorage{
     }
     messageHome.getSession().save();
   }
-  
-  
 
   public void saveAccount(SessionProvider sProvider, String username, Account account, boolean isNew) throws Exception {
     // creates or updates an account, depending on the isNew flag
@@ -670,7 +668,6 @@ public class JCRDataStorage{
         }
         messageTagMap.putAll(tagMap) ;
         messageNode.setProperty(Utils.EXO_TAGS, messageTagMap.values().toArray(new String[]{})) ;
-        messageNode.save() ;
       }
     }
     messageHome.getSession().save() ;
@@ -709,20 +706,22 @@ public class JCRDataStorage{
     return tag ;
   }
 
-  public void removeMessageTag(SessionProvider sProvider, String username, String accountId, List<String> messageIds, List<String> tagIds) 
+  public void removeMessageTag(SessionProvider sProvider, String username, String accountId, List<String> msgIds, List<String> tagIds) 
   throws Exception {
     Node messageHome = getMessageHome(sProvider, username, accountId);
-    for (String messageId : messageIds) {
-      if (messageHome.hasNode(messageId)) {
-        Node messageNode = messageHome.getNode(messageId);
-        if (messageNode.hasProperty(Utils.EXO_TAGS)) {
-          Message message = getMessage(messageNode);
-          String[] tags = message.getTags();
-          List<String> listTags = new ArrayList<String>(Arrays.asList(tags)); 
-          for (String tagId : tagIds) listTags.remove(tagId);
-          tags = listTags.toArray(new String[listTags.size()]);
-          message.setTags(tags);
-
+    for (String msgId : msgIds) {
+      if (messageHome.hasNode(msgId)) {
+        Node msgNode = messageHome.getNode(msgId);
+        if (msgNode.hasProperty(Utils.EXO_TAGS)) {
+          Value[] propTags = msgNode.getProperty(Utils.EXO_TAGS).getValues();
+          String[] oldTagIds = new String[propTags.length];
+          for (int i = 0; i < propTags.length; i++) {
+            oldTagIds[i] = propTags[i].getString();
+          }
+          List<String> tagList = new ArrayList<String>(Arrays.asList(oldTagIds)); 
+          tagList.removeAll(tagIds);
+          String[] newTagIds = tagList.toArray(new String[tagList.size()]);
+          msgNode.setProperty(Utils.EXO_TAGS, newTagIds);
         }
       }
     }

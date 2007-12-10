@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.SessionsUtils;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
@@ -169,8 +170,8 @@ public class UITagForm extends UIForm implements UIPopupComponent{
     public void execute(Event<UITagForm> event) throws Exception {
       UITagForm uiTagForm = event.getSource(); 
       UIMailPortlet uiPortlet = uiTagForm.getAncestorOfType(UIMailPortlet.class);
-      String username = uiPortlet.getCurrentUser() ;
-      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      String username = MailUtils.getCurrentUser();
+      String accountId = MailUtils.getAccountId();
       MailService mailSrv = uiTagForm.getApplicationComponent(MailService.class);
       List<String> tagList = new ArrayList<String>();
       for (Tag tag : uiTagForm.getCheckedTags()) {
