@@ -18,8 +18,6 @@ import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.ServerConfiguration;
 import org.exoplatform.mail.service.Message;
-import org.exoplatform.registry.JCRRegistryService;
-import org.exoplatform.registry.ServiceRegistry;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
@@ -37,14 +35,10 @@ public class ReminderJob implements Job {
 
 	private RepositoryService repositoryService_;
 
-	private JCRRegistryService jcrRegistryService_;
-
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 		// Session session = null ;
 		try {
 			ExoContainer container = ExoContainerContext.getCurrentContainer();
-			jcrRegistryService_ = (JCRRegistryService) container
-					.getComponentInstanceOfType(JCRRegistryService.class);
 			repositoryService_ = (RepositoryService) container
 					.getComponentInstanceOfType(RepositoryService.class);
 			MailService mailService = (MailService) container
@@ -144,12 +138,12 @@ public class ReminderJob implements Job {
 	}
 
 	private Node getCalendarServiceHome() throws Exception {
-		ServiceRegistry serviceRegistry = new ServiceRegistry("CalendarService");
+		/*ServiceRegistry serviceRegistry = new ServiceRegistry("CalendarService");
 		Session session = getJCRSession();
 		jcrRegistryService_.createServiceRegistry(serviceRegistry, false);
 		Node node = jcrRegistryService_.getServiceRegistryNode(session,
 				serviceRegistry.getName());
-		session.logout();
-		return node;
+		session.logout();*/
+		return null;
 	}
 }

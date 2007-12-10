@@ -80,7 +80,6 @@ public class JCRDataStorage implements DataStorage{
   private final static String VALUE = "value".intern() ; 
 
   private NodeHierarchyCreator nodeHierarchyCreator_ ;
-  //private JCRRegistryService jcrRegistryService_ ;
 
   public JCRDataStorage(NodeHierarchyCreator nodeHierarchyCreator)throws Exception {
     nodeHierarchyCreator_ = nodeHierarchyCreator ; 
@@ -88,12 +87,7 @@ public class JCRDataStorage implements DataStorage{
   }  
 
   private Node getPublicCalendarServiceHome(SessionProvider sProvider) throws Exception {
-    /*ServiceRegistry serviceRegistry = new ServiceRegistry("CalendarService") ;
-    Session session = getJCRSession() ;
-    jcrRegistryService_.createServiceRegistry(serviceRegistry, false) ;
-    Node node = jcrRegistryService_.getServiceRegistryNode(session, serviceRegistry.getName()) ;
-    session.logout() ;*/
-  	Node calendarSer ;
+    Node calendarSer ;
   	Node publicApp = nodeHierarchyCreator_.getPublicApplicationNode(sProvider)  ;
   	if(publicApp.hasNode(CALENDAR_APP)) calendarSer = publicApp.getNode(CALENDAR_APP) ;
   	else calendarSer = publicApp.addNode(CALENDAR_APP, NT_UNSTRUCTURED) ;

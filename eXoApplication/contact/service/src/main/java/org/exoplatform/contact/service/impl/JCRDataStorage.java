@@ -49,30 +49,19 @@ public class JCRDataStorage{
   final private static String CONTACT_APP = "ContactApplication".intern() ;
   
   private NodeHierarchyCreator nodeHierarchyCreator_ ;
-  //private JCRRegistryService jcrRegistryService_ ;
   
   public JCRDataStorage(NodeHierarchyCreator nodeHierarchyCreator)throws Exception {
     nodeHierarchyCreator_ = nodeHierarchyCreator ;
   }  
   
   private Node getUserContactServiceHome(SessionProvider sProvider, String username) throws Exception {
-    /*ServiceRegistry serviceRegistry = new ServiceRegistry("ContactService") ;
-    Session session = getJCRSession() ;
-    if(jcrRegistryService_.getUserNode(session, username) == null)
-      jcrRegistryService_.createUserHome(username, false) ;
-    jcrRegistryService_.createServiceRegistry(username, serviceRegistry, false) ;    
-    return jcrRegistryService_.getServiceRegistryNode(session, username, serviceRegistry.getName()) ;*/
-  	Node userApp = nodeHierarchyCreator_.getUserApplicationNode(sProvider, username)  ;
+    Node userApp = nodeHierarchyCreator_.getUserApplicationNode(sProvider, username)  ;
   	if(userApp.hasNode(CONTACT_APP)) return userApp.getNode(CONTACT_APP) ;
   	return  userApp.addNode(CONTACT_APP, NT_UNSTRUCTURED) ;
   }
   
   private Node getPublicContactServiceHome(SessionProvider sProvider) throws Exception {
-    /*ServiceRegistry serviceRegistry = new ServiceRegistry("ContactService") ;
-    Session session = getJCRSession() ;
-    jcrRegistryService_.createServiceRegistry(serviceRegistry, false) ;    
-    return jcrRegistryService_.getServiceRegistryNode(session, serviceRegistry.getName()) ;*/
-  	Node userApp = nodeHierarchyCreator_.getPublicApplicationNode(sProvider) ;
+    Node userApp = nodeHierarchyCreator_.getPublicApplicationNode(sProvider) ;
   	if(userApp.hasNode(CONTACT_APP)) return userApp.getNode(CONTACT_APP) ;
   	return  userApp.addNode(CONTACT_APP, NT_UNSTRUCTURED) ;
   }

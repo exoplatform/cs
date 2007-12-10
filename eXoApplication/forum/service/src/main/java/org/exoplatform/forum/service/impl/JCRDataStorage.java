@@ -45,19 +45,13 @@ import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 public class JCRDataStorage{
 	private final static String FORUM_SERVICE = "ForumService" ;
 	private final static String NT_UNSTRUCTURED = "nt:unstructured".intern() ;
-  //private RepositoryService  repositoryService_ ; 
-  //private JCRRegistryService jcrRegistryService_ ;
   private NodeHierarchyCreator nodeHierarchyCreator_ ;
   public JCRDataStorage(NodeHierarchyCreator nodeHierarchyCreator)throws Exception {
   	nodeHierarchyCreator_ = nodeHierarchyCreator ;
   }
   
   protected Node getForumHomeNode(SessionProvider sProvider) throws Exception {
-    /*ServiceRegistry serviceRegistry = new ServiceRegistry("ForumService") ;
-    Session session = getJCRSession() ;
-    jcrRegistryService_.createServiceRegistry(serviceRegistry, false) ;    
-    return jcrRegistryService_.getServiceRegistryNode(session, serviceRegistry.getName()) ;*/
-  	Node appNode = nodeHierarchyCreator_.getPublicApplicationNode(sProvider) ;
+    Node appNode = nodeHierarchyCreator_.getPublicApplicationNode(sProvider) ;
   	if(appNode.hasNode(FORUM_SERVICE)) return appNode.getNode(FORUM_SERVICE) ;
   	return appNode.addNode(FORUM_SERVICE, NT_UNSTRUCTURED) ;
   }
