@@ -52,7 +52,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
     events = {
         @EventConfig(listeners = UIContacts.EditContactActionListener.class),
         @EventConfig(listeners = UIContacts.InstantMessageActionListener.class),
-        @EventConfig(listeners = UIContacts.TagActionListener.class),
+        @EventConfig(listeners = UIContacts.TagCheckedActionListener.class),
         @EventConfig(listeners = UIContacts.MoveContactsActionListener.class),
         @EventConfig(listeners = UIContacts.DNDContactsActionListener.class),
         @EventConfig(listeners = UIContacts.DNDContactsToTagActionListener.class),
@@ -205,15 +205,19 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       UIPopupContainer popupContainer =  popupAction.activate(UIPopupContainer.class, 800) ;
       popupContainer.setId("AddNewContact");
       UICategorySelect uiCategorySelect = popupContainer.addChild(UICategorySelect.class, null, null) ;
+      
       UIContactForm uiContactForm = popupContainer.addChild(UIContactForm.class, null, null) ;      
       Contact contact = uiContacts.contactMap.get(contactId) ;
-      if (contact != null && contact.getCategories().length > 0){
+      if (!contact.isShared()){ 
+        uiCategorySelect.setPrivateGroupMap(contactPortlet
+            .findFirstComponentOfType(UIAddressBooks.class).getPrivateGroupMap()) ;
+        uiCategorySelect.addCategories() ;
         uiCategorySelect.setValue(contact.getCategories()[0]) ;
-        uiCategorySelect.disableSelect() ;
-        uiContactForm.setValues(contact);
-        uiContactForm.setNew(false) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
       }
+      uiCategorySelect.disableSelect() ;
+      uiContactForm.setValues(contact);
+      uiContactForm.setNew(false) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
     }
   } 
@@ -228,7 +232,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
     }
   }
   
-  static public class TagActionListener extends EventListener<UIContacts> {
+  static public class TagCheckedActionListener extends EventListener<UIContacts> {
     public void execute(Event<UIContacts> event) throws Exception {
       UIContacts uiContacts = event.getSource() ;
       String contactId = event.getRequestContext().getRequestParameter(OBJECTID);
