@@ -4,11 +4,12 @@
  **************************************************************************/
 package org.exoplatform.contact.webui.popup;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.SessionsUtils;
-import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.webui.UIAddressBooks;
 import org.exoplatform.contact.webui.UIContactContainer;
 import org.exoplatform.contact.webui.UIContactPortlet;
@@ -46,7 +47,7 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
   private boolean isPersonal_ ;
   public static String[] FIELD_SHAREDCONTACT_BOX = null;
   public static final String INPUT_MOVE_BOX =  "move" ;
-  
+  private Map<String, String> privateGroupMap_ = new HashMap<String, String>() ;
   public UIMoveContactsForm() throws Exception { }
   
   public void setContacts(List<String> contactIds) { contactIds_ = contactIds ; }
@@ -70,20 +71,11 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
       FIELD_SHAREDCONTACT_BOX[i] = groups[i] ; 
       moveBox.addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_SHAREDCONTACT_BOX[i], FIELD_SHAREDCONTACT_BOX[i], false));
     }
-    addUIFormInput(moveBox) ; 
-    if (contactIds_.size() == 1) {
-      String[] categories = ContactUtils.getContactService()
-        .getSharedContact(SessionsUtils.getSystemProvider(), contactIds_.get(0)).getCategories();
-      for (String category : categories) {
-        UIFormCheckBoxInput check = getUIFormCheckBoxInput(category) ;
-        if (check != null) check.setChecked(true) ;
-      }  
-    }
+    addUIFormInput(moveBox) ;
   }
 
-  public List<ContactGroup> getContactGroups() throws Exception { 
-    return ContactUtils.getContactService().getGroups(SessionsUtils.getSessionProvider(), ContactUtils.getCurrentUser()) ; 
-  }
+  public Map<String, String> getPrivateGroupMap() { return privateGroupMap_ ; }
+  public void setPrivateGroupMap(Map<String, String> map) { privateGroupMap_ = map ; }
 
   static  public class SelectGroupActionListener extends EventListener<UIMoveContactsForm> {
     public void execute(Event<UIMoveContactsForm> event) throws Exception {
@@ -91,8 +83,8 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
       String groupId = event.getRequestContext().getRequestParameter(OBJECTID);
       UIContactPortlet uiContactPortlet = uiMoveContactForm.getAncestorOfType(UIContactPortlet.class);
       if (!uiMoveContactForm.groupId_.equals(groupId)) {  
-        ContactUtils.getContactService()
-          .moveContacts(SessionsUtils.getSystemProvider(), ContactUtils.getCurrentUser(), uiMoveContactForm.contactIds_, new String[] { groupId }) ;
+        ContactUtils.getContactService().moveContacts(SessionsUtils.getSystemProvider()
+            , ContactUtils.getCurrentUser(), uiMoveContactForm.contactIds_, new String[] { groupId }) ;
         uiContactPortlet.findFirstComponentOfType(UIContacts.class).updateList() ;
       }
       uiContactPortlet.cancelAction() ;

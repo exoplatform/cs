@@ -12,10 +12,7 @@ import java.util.List;
 import java.util.MissingResourceException;
 
 import org.exoplatform.contact.ContactUtils;
-import org.exoplatform.contact.SessionsUtils;
 import org.exoplatform.contact.service.Contact;
-import org.exoplatform.contact.service.ContactFilter;
-import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.container.PortalContainer;
@@ -43,8 +40,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
     template = "app:/templates/contact/webui/popup/UIExportForm.gtmpl",
     events = {
       @EventConfig(listeners = UIExportForm.SaveActionListener.class),      
-      @EventConfig(listeners = UIExportForm.CancelActionListener.class),
-      @EventConfig(listeners = UIExportForm.SortActionListener.class)
+      @EventConfig(listeners = UIExportForm.CancelActionListener.class)
     }
 )
 public class UIExportForm extends UIForm implements UIPopupComponent{
@@ -94,13 +90,6 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
 
   public void setSelectedGroup(String s) throws Exception { selectedGroup = s; }
   public String getSelectedGroup() { return selectedGroup; }
-  public String getSelectedGroupName() throws Exception {
-    ContactService contactService = ContactUtils.getContactService();
-    String username = ContactUtils.getCurrentUser() ; 
-    ContactGroup group = contactService.getGroup(SessionsUtils.getSessionProvider(), username, selectedGroup);
-    if (group != null) return group.getName() ;
-    else return selectedGroup ;
-  }
 
   public void setViewContactsList(boolean list) { viewContactsList = list; }
   public boolean getViewContactsList() { return viewContactsList; }
@@ -117,7 +106,7 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
     addUIFormInput(new UIFormSelectBox(TYPE, TYPE, options)) ;    
     for (Contact contact : contacts_) {
       UIFormCheckBoxInput<Boolean> checkbox 
-        = new UIFormCheckBoxInput<Boolean>(contact.getId(), contact.getId(), false);
+        = new UIFormCheckBoxInput<Boolean>(contact.getId(), contact.getId(), true);
       addUIFormInput(checkbox);
       contactMap.put(contact.getId(), contact);
     }
@@ -135,11 +124,7 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
   }
 
   public String getSelectedTag() { return selectedTag_; }
-  public String getSelectedTagName() throws Exception {
-    return ContactUtils.getContactService()
-      .getTag(SessionsUtils.getSessionProvider(), ContactUtils.getCurrentUser(), selectedTag_).getName() ;
-  }
-  public void setSelectedTag(String tagId) { selectedTag_ = tagId; }
+  public void setSelectedTag(String tagName) { selectedTag_ = tagName; }
   
   static  public class SaveActionListener extends EventListener<UIExportForm> {
     public void execute(Event<UIExportForm> event) throws Exception {
@@ -188,11 +173,9 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
         dresource.setDownloadName("eXoExported.vcf");
       }
       String downloadLink = dservice.getDownloadLink(dservice.addDownloadResource(dresource)) ;
-      
-      event.getRequestContext().getJavascriptManager().addJavascript("ajaxRedirect('" + downloadLink + "');") ;
-      
+      event.getRequestContext().getJavascriptManager()
+        .addJavascript("ajaxRedirect('" + downloadLink + "');") ;
       uiContactPortlet.cancelAction() ;
-      
     }
   }
   
@@ -201,35 +184,6 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
       UIExportForm uiForm = event.getSource() ;
       UIContactPortlet contactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
       contactPortlet.cancelAction() ;
-    }
-  }  
-  
-  static public class SortActionListener extends EventListener<UIExportForm> {
-    public void execute(Event<UIExportForm> event) throws Exception {
-      /*UIExportForm uiForm = event.getSource();
-      String sortedBy = event.getRequestContext().getRequestParameter(OBJECTID);
-      ContactService contactService = ContactUtils.getContactService();
-      String username = ContactUtils.getCurrentUser();
-      uiForm.setAscending(!uiForm.isAscending_);
-      uiForm.setSortedBy(sortedBy);
-      if (uiForm.selectedGroup != null) {
-        ContactFilter filter = new ContactFilter();
-        filter.setAscending(uiForm.isAscending_);
-        filter.setOrderBy(uiForm.getSortedBy());
-        filter.setViewQuery(uiForm.getViewQuery());
-        filter.setCategories(new String[] {uiForm.getSelectedGroup()});
-
-        uiForm.setContacts(contactService.getContactPageListByGroup(SessionsUtils.getSessionProvider(), username,filter, false).getAll().toArray(new Contact[] {}));
-      } else if (uiForm.getSelectedTag() != null) {
-        ContactFilter filter = new ContactFilter();
-        filter.setAscending(uiForm.isAscending_);
-        filter.setOrderBy(uiForm.getSortedBy());
-        filter.setViewQuery(uiForm.getViewQuery());
-        filter.setTag(new String[] {uiForm.getSelectedTag()});
-        uiForm.setContacts(contactService.getContactPageListByTag(SessionsUtils.getSystemProvider(), username, filter).getAll().toArray(new Contact[] {}));
-      }
-      uiForm.updateList();
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent());*/
     }
   }
 

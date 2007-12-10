@@ -27,7 +27,6 @@ import org.exoplatform.contact.webui.popup.UICategorySelect;
 import org.exoplatform.contact.webui.popup.UIContactForm;
 import org.exoplatform.contact.webui.popup.UIPopupAction;
 import org.exoplatform.contact.webui.popup.UIPopupContainer;
-import org.exoplatform.contact.webui.popup.UITagInfo;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -53,8 +52,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
     events = {
         @EventConfig(listeners = UIContacts.EditContactActionListener.class),
         @EventConfig(listeners = UIContacts.InstantMessageActionListener.class),
-        @EventConfig(listeners = UIContacts.TagPopupActionListener.class),
-        @EventConfig(listeners = UIContacts.TagCheckedActionListener.class),
+        @EventConfig(listeners = UIContacts.TagActionListener.class),
         @EventConfig(listeners = UIContacts.MoveContactsActionListener.class),
         @EventConfig(listeners = UIContacts.DNDContactsActionListener.class),
         @EventConfig(listeners = UIContacts.DNDContactsToTagActionListener.class),
@@ -69,7 +67,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
         @EventConfig(listeners = UIContacts.LastPageActionListener.class),
         @EventConfig(listeners = UIContacts.ExportContactActionListener.class),
         @EventConfig(listeners = UIContacts.CancelActionListener.class),
-        @EventConfig(listeners = UIContacts.TagInfoActionListener.class),
+        //@EventConfig(listeners = UIContacts.TagInfoActionListener.class),
         @EventConfig(listeners = UIContacts.CloseSearchActionListener.class)
     }
 )
@@ -88,15 +86,11 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   public static String emailAddress = "emailAddress".intern() ;
   public static String jobTitle = "jobTitle".intern() ;
   private boolean isSearchResult = false ;
-  private boolean isListBeforeSearch ;
   
   public UIContacts() throws Exception { } 
   public String[] getActions() { return new String[] {"Cancel"} ; }
   public void activate() throws Exception { }
   public void deActivate() throws Exception { } 
-
-  public void setListBeforeSearch(boolean list) { isListBeforeSearch = list ;}
-  public boolean getListBeforeSearch() { return isListBeforeSearch ; }
   
   protected boolean isDisplaySearchResult() {return isSearchResult ;}
   public void setDisplaySearchResult(boolean search) { isSearchResult = search ; }
@@ -208,19 +202,16 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       String contactId = event.getRequestContext().getRequestParameter(OBJECTID);
       UIContactPortlet contactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class) ;
       UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
-      UIPopupContainer popupContainer = popupAction.createUIComponent(UIPopupContainer.class, null, "AddNewContact") ;
-      popupContainer.addChild(UICategorySelect.class, null, null) ;
-      popupContainer.addChild(UIContactForm.class, null, null) ;
-      UICategorySelect uiCategorySelect = popupContainer.findFirstComponentOfType(UICategorySelect.class);
-      
+      UIPopupContainer popupContainer =  popupAction.activate(UIPopupContainer.class, 800) ;
+      popupContainer.setId("AddNewContact");
+      UICategorySelect uiCategorySelect = popupContainer.addChild(UICategorySelect.class, null, null) ;
+      UIContactForm uiContactForm = popupContainer.addChild(UIContactForm.class, null, null) ;      
       Contact contact = uiContacts.contactMap.get(contactId) ;
       if (contact != null && contact.getCategories().length > 0){
         uiCategorySelect.setValue(contact.getCategories()[0]) ;
-        uiCategorySelect.disableSelect() ;        
-        UIContactForm uiContactForm = popupContainer.findFirstComponentOfType(UIContactForm.class);
+        uiCategorySelect.disableSelect() ;
         uiContactForm.setValues(contact);
         uiContactForm.setNew(false) ;
-        popupAction.activate(popupContainer, 800, 0, true) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
@@ -236,48 +227,30 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       return ;
     }
   }
-
-  static public class TagPopupActionListener extends EventListener<UIContacts> {
-    public void execute(Event<UIContacts> event) throws Exception {
-      UIContacts uiContacts = event.getSource() ;
-      String contactId = event.getRequestContext().getRequestParameter(OBJECTID);      
-      List<String> contactIds = new ArrayList<String>();
-      if (!ContactUtils.isEmpty(contactId)) {
-        contactIds.add(contactId) ;
-        UIContactPortlet contactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class) ;
-        UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
-        
-        UITagForm uiTagForm = uiContacts.createUIComponent(UITagForm.class, null, "UITagForm") ;
-        uiTagForm.setContactIds(contactIds) ;
-        
-        uiTagForm.update() ;
-        popupAction.activate(uiTagForm, 600, 0, true) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
-      }
-    }
-  }
   
-  static public class TagCheckedActionListener extends EventListener<UIContacts> {
+  static public class TagActionListener extends EventListener<UIContacts> {
     public void execute(Event<UIContacts> event) throws Exception {
       UIContacts uiContacts = event.getSource() ;
+      String contactId = event.getRequestContext().getRequestParameter(OBJECTID);
       List<String> contactIds = new ArrayList<String>();
-      contactIds = uiContacts.getCheckedContacts() ;
-      if (contactIds.size() == 0) {
-        UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIContacts.msg.checkContact-required", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
-      } 
+      if (!ContactUtils.isEmpty(contactId)) contactIds.add(contactId) ;
+      else {
+        contactIds = uiContacts.getCheckedContacts() ;
+        if (contactIds.size() == 0) {
+          UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
+          uiApp.addMessage(new ApplicationMessage("UIContacts.msg.checkContact-required", null)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        }
+      }  
       UIContactPortlet contactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class) ;
       UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
-      
       UITagForm uiTagForm = uiContacts.createUIComponent(UITagForm.class, null, "UITagForm") ;
-      uiTagForm.setContactIds(contactIds) ;
-        //popupAction.createUIComponent() ;
-      
-      uiTagForm.update() ;
+      List<Contact> contacts = new ArrayList<Contact>() ;
+      for (String id : contactIds) { contacts.add(uiContacts.contactMap.get(id)) ; }
+      uiTagForm.setContacts(contacts) ;
       popupAction.activate(uiTagForm, 600, 0, true) ;
+      uiTagForm.update() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   }
@@ -303,11 +276,11 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       if (!ContactUtils.isEmpty(uiContacts.selectedGroup)) {
         String contactId = event.getRequestContext().getRequestParameter(OBJECTID);   
         List<String> contactIds = new ArrayList<String>();
-        UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
         if (!ContactUtils.isEmpty(contactId)) contactIds.add(contactId) ;
         else {
           contactIds = uiContacts.getCheckedContacts() ;
           if (contactIds.size() == 0) { 
+            UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
             uiApp.addMessage(new ApplicationMessage("UIContacts.msg.checkContact-required", null)) ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
             return ;
@@ -317,13 +290,26 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         UIPopupAction popupAction = uiContactPortlet.getChild(UIPopupAction.class) ;
         UIMoveContactsForm uiMoveForm = popupAction.createUIComponent(UIMoveContactsForm.class, null, null) ;
         uiMoveForm.setContacts(contactIds) ;
-        List<String> sharedGroup = uiContactPortlet
-          .findFirstComponentOfType(UIAddressBooks.class).getSharedContactGroups() ;
+        
+        UIAddressBooks addressBooks = uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class) ;
+        List<String> sharedGroup = addressBooks.getSharedContactGroups() ;
         if (sharedGroup.contains(uiContacts.selectedGroup)) {
           uiMoveForm.addComponent() ;
           uiMoveForm.setPersonal(false) ;
-        } else uiMoveForm.setPersonal(true) ;
-        uiMoveForm.setGroup(uiContacts.selectedGroup) ;
+          
+          if (contactIds.size() == 1) {
+            String[] categories = uiContacts.contactMap.get(contactIds.get(0)).getCategories() ;
+            for (String category : categories) {
+              UIFormCheckBoxInput check = uiMoveForm.getUIFormCheckBoxInput(category) ;
+              if (check != null) check.setChecked(true) ;
+            }  
+          }
+        } else {
+          uiMoveForm.setPrivateGroupMap(addressBooks.getPrivateGroupMap()) ;
+          uiMoveForm.setPersonal(true) ;
+          uiMoveForm.setGroup(uiContacts.selectedGroup) ;
+        }
+        
         popupAction.activate(uiMoveForm, 410, 0, true) ;
         event.getRequestContext()
         .addUIComponentToUpdateByAjax(uiContactPortlet.findFirstComponentOfType(UIContactContainer.class));
@@ -364,25 +350,24 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         }
       }
       UIWorkingContainer uiWorkingContainer = uiContacts.getAncestorOfType(UIWorkingContainer.class) ;
-      UIContactPreview uiContactPreview = uiWorkingContainer.findFirstComponentOfType(UIContactPreview.class) ;
       ContactService contactService = ContactUtils.getContactService() ;
       String username = ContactUtils.getCurrentUser() ;
       
       contactService.removeContacts(SessionsUtils.getSystemProvider(), username, contactIds) ;
-      if(contactIds.contains(uiContactPreview.getContact().getId())) 
-        uiContactPreview.setContact(null) ;
+      
+//      if(contactIds.contains(uiContactPreview.getContact().getId())) 
+//        uiContactPreview.setContact(null) ;
+    
       if (uiContacts.getSelectedTag() != null) {
         String tagName = uiWorkingContainer.findFirstComponentOfType(UITags.class).getSelectedTag() ;
         uiContacts.setContacts(contactService.getContactPageListByTag(SessionsUtils.getSystemProvider(), username, tagName)) ;
       } else {
         uiContacts.updateList() ;
       }
-      
-      // add
-      if (uiContacts.isDisplaySearchResult()) {
-        for (String contact : contactIds)
-          uiContacts.pageList_.getAll().remove(contact) ;        
-      }
+//      if (uiContacts.isDisplaySearchResult()) {
+//        for (String contact : contactIds)
+//          uiContacts.pageList_.getAll().remove(contact) ;        
+//      }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer) ;
     }
   } 
@@ -394,12 +379,13 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       UIContactPortlet uiContactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class);
       UIPopupAction uiPopupAction = uiContactPortlet.getChild(UIPopupAction.class);
       UIExportForm uiExportForm = uiPopupAction.createUIComponent(UIExportForm.class, null,"ExportForm");
-      uiExportForm.setSelectedGroup(uiContacts.selectedGroup) ;
-      uiExportForm.setSelectedTag(uiContacts.selectedTag_) ;
+      
+      //uiExportForm.setSelectedGroup(uiContacts.selectedGroup) ;
+      //uiExportForm.setSelectedTag(uiContacts.selectedTag_) ;
       Contact contact = uiContacts.contactMap.get(contactId) ;
       uiExportForm.setContacts(new Contact[] { contact }) ;
       uiExportForm.updateList();
-      uiExportForm.getUIFormCheckBoxInput(contact.getId()).setChecked(true) ;
+      //uiExportForm.getUIFormCheckBoxInput(contact.getId()).setChecked(true) ;
       
       uiPopupAction.activate(uiExportForm, 500, 0, true);
       event.getRequestContext()
@@ -427,7 +413,8 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       String contactId = event.getRequestContext().getRequestParameter(OBJECTID);
       UIContactPortlet contactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class) ;
       UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
-      UIContactPreviewForm uiContactPreviewForm = popupAction.createUIComponent(UIContactPreviewForm.class, null, "UIContactPreviewForm") ; 
+      UIContactPreviewForm uiContactPreviewForm = popupAction
+        .createUIComponent(UIContactPreviewForm.class, null, "UIContactPreviewForm") ; 
       uiContactPreviewForm.setContact(uiContacts.contactMap.get(contactId)) ;
       popupAction.activate(uiContactPreviewForm, 700, 0, true) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;  
@@ -573,6 +560,10 @@ public class UIContacts extends UIForm implements UIPopupComponent {
     public void execute(Event<UIContacts> event) throws Exception {
       UIContacts uiContacts = event.getSource() ;
       uiContacts.setDisplaySearchResult(false) ;
+      uiContacts.setContacts(null) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
+      
+      /*
       ContactService contactService = ContactUtils.getContactService();
       String username = ContactUtils.getCurrentUser() ;
       String group = uiContacts.selectedGroup ;  
@@ -597,9 +588,11 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       uiContacts.setViewContactsList(uiContacts.getListBeforeSearch()) ;
       
       event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer) ;
+>>>>>>> .r22506
+       */
     }
   }
-  
+  /*
   static public class TagInfoActionListener extends EventListener<UIContacts> {
     public void execute(Event<UIContacts> event) throws Exception {
       UIContacts uiContacts = event.getSource() ;
@@ -618,4 +611,5 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
     }
   }
+  */
 }

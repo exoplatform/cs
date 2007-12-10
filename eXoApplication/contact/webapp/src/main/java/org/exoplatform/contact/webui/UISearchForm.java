@@ -62,8 +62,7 @@ public class UISearchForm extends UIForm {
       uiContactPortlet.findFirstComponentOfType(UITags.class).setSelectedTag(null) ;      
       UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;      
       uiContacts.setContacts(resultPageList) ;
-      uiContacts.setDisplaySearchResult(true) ; 
-      uiContacts.setListBeforeSearch(uiContacts.getViewContactsList()) ;
+      uiContacts.setDisplaySearchResult(true) ;
       uiContacts.setViewContactsList(true) ; 
       uiContacts.setSelectedGroup(null) ;
       uiContacts.setSelectedTag(null) ;

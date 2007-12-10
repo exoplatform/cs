@@ -9,7 +9,6 @@ import java.util.List;
 
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.SessionsUtils;
-import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.Tag;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContacts;
@@ -43,7 +42,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
     }
 )
 public class UIEditTagForm extends UIForm implements UIPopupComponent {
-  private String tagId_ = null ;
+  private Tag tag_ = null ;
   public static final String FIELD_TAGNAME_INPUT = "tagName";
   public static final String FIELD_COLOR = "color";
   public static final String RED = "Red".intern() ;
@@ -62,12 +61,9 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
   public String[] getActions() { return new String[] {"Save", "Cancel"} ; }
   public void activate() throws Exception { }
   public void deActivate() throws Exception { }
-  
-  public void setValues(String tagId) throws Exception {
-    ContactService contactService = ContactUtils.getContactService();
-    String username = ContactUtils.getCurrentUser() ;
-    Tag tag = contactService.getTag(SessionsUtils.getSessionProvider(), username, tagId) ;
-    tagId_ = tagId ;
+
+  public void setValues(Tag tag) throws Exception {
+    tag_ = tag ;
     if (tag != null) {
       getUIStringInput(FIELD_TAGNAME_INPUT).setValue(tag.getName()) ;
       getUIFormSelectBox(FIELD_COLOR).setValue(tag.getColor()) ;
@@ -85,9 +81,7 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ; 
       }
-      ContactService contactService = ContactUtils.getContactService() ;
-      String username = ContactUtils.getCurrentUser() ;
-      Tag tag = contactService.getTag(SessionsUtils.getSessionProvider(), username, uiEditTagForm.tagId_) ;
+      Tag tag = uiEditTagForm.tag_ ;
       if (!tag.getName().equalsIgnoreCase(tagName) && ContactUtils.isTagNameExisted(tagName)) {
         uiApp.addMessage(new ApplicationMessage("UIEditTagForm.msg.tagName-existed", null, 
             ApplicationMessage.WARNING)) ;
@@ -96,7 +90,8 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
       }
       tag.setName(tagName) ;
       tag.setColor(uiEditTagForm.getUIFormSelectBox(FIELD_COLOR).getValue()) ;
-      contactService.updateTag(SessionsUtils.getSessionProvider(), username, tag) ;
+      ContactUtils.getContactService().updateTag(
+          SessionsUtils.getSessionProvider(), ContactUtils.getCurrentUser(), tag) ;
       UIContactPortlet uiContactPortlet = uiEditTagForm.getAncestorOfType(UIContactPortlet.class) ;
       WebuiRequestContext context = event.getRequestContext() ;
       context.addUIComponentToUpdateByAjax(uiContactPortlet.findFirstComponentOfType(UITags.class)) ;

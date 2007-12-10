@@ -113,7 +113,6 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent {
       uiContactPortlet.findFirstComponentOfType(UITags.class).setSelectedTag(null) ;      
       UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
       uiContacts.setContacts(resultPageList) ;
-      uiContacts.setListBeforeSearch(uiContacts.getViewContactsList()) ;
       uiContacts.setViewContactsList(true) ;
       uiContacts.setDisplaySearchResult(true) ;
       uiContacts.setSelectedGroup(null) ;

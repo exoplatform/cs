@@ -5,6 +5,7 @@
 package org.exoplatform.contact.webui;
 
 import java.util.List;
+import java.util.Map;
 
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.webui.popup.UICategoryForm;
@@ -48,12 +49,14 @@ public class UIActionBar extends UIContainer  {
       UIActionBar uiActionBar = event.getSource() ;
       UIContactPortlet uiContactPortlet = uiActionBar.getAncestorOfType(UIContactPortlet.class) ;
       UIPopupAction uiPopupAction = uiContactPortlet.getChild(UIPopupAction.class) ; 
-      UIPopupContainer uiPopupContainer = uiContactPortlet.createUIComponent(UIPopupContainer.class, null, null) ;  
-      uiPopupContainer.setId("AddNewContact") ; 
-      uiPopupContainer.addChild(UICategorySelect.class, null, null) ;
+      UIPopupContainer uiPopupContainer = uiPopupAction.activate(UIPopupContainer.class,800) ;  
+      uiPopupContainer.setId("AddNewContact") ;
+      UICategorySelect categorySelect = uiPopupContainer.addChild(UICategorySelect.class, null, null) ;
+      categorySelect.setPrivateGroupMap(
+          uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class).getPrivateGroupMap()) ;
+      categorySelect.addCategories() ;
       UIContactForm contactForm = uiPopupContainer.addChild(UIContactForm.class, null, null) ;
       contactForm.setNew(true) ;
-      uiPopupAction.activate(uiPopupContainer, 800, 0, true) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiActionBar.getParent()) ;
     }  
@@ -64,10 +67,11 @@ public class UIActionBar extends UIContainer  {
       UIActionBar uiForm = event.getSource() ;
       UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
       UIPopupAction uiPopupAction = uiContactPortlet.getChild(UIPopupAction.class) ;
-      UIPopupContainer uiPopupContainer = uiContactPortlet.createUIComponent(UIPopupContainer.class, null, null) ;
-      uiPopupContainer.setId("ImportAddress") ;
-      uiPopupContainer.addChild(UIImportForm.class, null, null) ; 
-      uiPopupAction.activate(uiPopupContainer, 600, 0, true) ;
+      UIPopupContainer uiPopupContainer =  uiPopupAction.activate(UIPopupContainer.class, 600) ;
+      uiPopupContainer.setId("ImportAddress") ;      
+      UIImportForm importForm = uiPopupContainer.addChild(UIImportForm.class, null, null) ; 
+      importForm.setGroup(uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class).getPrivateGroupMap()) ;
+      importForm.addConponent() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
     }  
@@ -104,9 +108,7 @@ public class UIActionBar extends UIContainer  {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
     }  
   }
-  
-  
-  
+
   static public class ExportContactActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {        
       UIActionBar uiActionBar = event.getSource();
@@ -117,9 +119,10 @@ public class UIActionBar extends UIContainer  {
             UIExportAddressBookForm.class, null, "UIExportAddressBookForm");
         UIAddressBooks uiAddressBooks = uiActionBar.getAncestorOfType(UIContactPortlet.class)
           .findFirstComponentOfType(UIAddressBooks.class) ;
-        ContactGroup[] groups = uiAddressBooks.getGroups().toArray(new ContactGroup[] {}) ;
-        List<String> sharedGroups = uiAddressBooks.getSharedContactGroups() ;
-        if ((sharedGroups == null || sharedGroups.size() == 0) && (groups == null || groups.length == 0)) {
+        
+        Map<String, String> groups = uiAddressBooks.getPrivateGroupMap() ;
+        Map<String, String> sharedGroups = uiAddressBooks.getPublicGroupMap() ;
+        if ((sharedGroups == null || sharedGroups.size() == 0) && (groups == null || groups.size() == 0)) {
           UIApplication uiApp = uiActionBar.getAncestorOfType(UIApplication.class) ;
           uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.no-addressbook", null,
             ApplicationMessage.WARNING)) ;

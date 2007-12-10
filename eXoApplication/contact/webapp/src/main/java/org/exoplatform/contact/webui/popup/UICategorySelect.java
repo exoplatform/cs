@@ -5,17 +5,17 @@
 package org.exoplatform.contact.webui.popup;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import org.exoplatform.contact.ContactUtils;
-import org.exoplatform.contact.SessionsUtils;
-import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormSelectBox;
@@ -32,15 +32,18 @@ import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
     lifecycle = UIFormLifecycle.class,
     template = "app:/templates/contact/webui/popup/UICategorySelect.gtmpl", 
     events = {
-      @EventConfig(listeners = UICategorySelect.AddCategoryActionListener.class),
+      @EventConfig(listeners = UICategorySelect.AddCategoryActionListener.class, phase=Phase.DECODE),
       @EventConfig(listeners = UICategorySelect.OnchangeActionListener.class)    
     }
 )
 public class UICategorySelect extends UIForm {
   public static final String INPUT_CATEGORY = "categoryInput";
   public static final String FIELD_CATEGORY = "category";
+  private Map<String, String> privateGroupMap_ = new HashMap<String, String>() ;
   
-  public UICategorySelect() throws Exception {
+  public UICategorySelect() { }
+  
+  public void addCategories() throws Exception {
     UIFormInputWithActions input = new UIFormInputWithActions(INPUT_CATEGORY) ;
     input.addUIFormInput(new UIFormSelectBox(FIELD_CATEGORY, FIELD_CATEGORY, getCategoryList())) ;
     UIFormSelectBox uiSelectBox = input.getUIFormSelectBox(FIELD_CATEGORY) ;
@@ -55,23 +58,24 @@ public class UICategorySelect extends UIForm {
     addUIFormInput(input) ;
   }
 
+  public Map<String, String> getPrivateGroupMap() { return privateGroupMap_ ; }
+  public void setPrivateGroupMap(Map<String, String> map) { privateGroupMap_ = map ; }
+  
   public String getSelectedCategory() {
     UIFormInputWithActions input = getChildById(INPUT_CATEGORY) ;
     return input.getUIFormSelectBox(FIELD_CATEGORY).getValue() ;
   }
 
   public List<SelectItemOption<String>> getCategoryList() throws Exception {
-    String username = ContactUtils.getCurrentUser();
-    List<ContactGroup> contactGroups =  ContactUtils.getContactService().getGroups(SessionsUtils.getSessionProvider(), username);
-    List<SelectItemOption<String>> categories = new ArrayList<SelectItemOption<String>>() ; 
-    for(ContactGroup contactGroup : contactGroups)
-      categories.add(new SelectItemOption<String>(contactGroup.getName(),contactGroup.getId() )) ;
+    List<SelectItemOption<String>> categories = new ArrayList<SelectItemOption<String>>() ;
+    for(String group : privateGroupMap_.keySet())
+      categories.add(new SelectItemOption<String>(privateGroupMap_.get(group), group)) ;
     return categories ;
   }
   
   public void setCategoryList(List<SelectItemOption<String>> options ) {
-    UIFormInputWithActions iput = getChildById(INPUT_CATEGORY) ;
-     iput.getUIFormSelectBox(FIELD_CATEGORY).setOptions(options) ;
+    UIFormInputWithActions input = getChildById(INPUT_CATEGORY) ;
+     input.getUIFormSelectBox(FIELD_CATEGORY).setOptions(options) ;
   }
   
   public void setValue(String groupId) throws Exception {
@@ -92,9 +96,6 @@ public class UICategorySelect extends UIForm {
       UIPopupContainer popupContainer = uiCategorySelect.getAncestorOfType(UIPopupContainer.class) ;
       UIPopupAction popupAction = popupContainer.getChild(UIPopupAction.class) ;
       popupAction.activate(UICategoryForm.class, 425) ;
-   /*   UICategoryForm uiCategoryForm = 
-      uiCategoryForm.isNew_ = true ;*/
-      //popupAction.activate(uiCategoryForm, 425, 0 , true) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   }

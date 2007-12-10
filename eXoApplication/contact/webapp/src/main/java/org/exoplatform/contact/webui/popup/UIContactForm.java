@@ -54,7 +54,7 @@ import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
       @EventConfig(phase = Phase.DECODE, listeners = UIContactForm.SelectPermissionActionListener.class)
     }
 )
-public class UIContactForm extends UIFormTabPane implements UIPopupComponent, UISelector {
+public class UIContactForm extends UIFormTabPane implements UISelector {
   private Contact contact_ = null ;
   private boolean isNew_ = true;
   public static final String FIELD_WORKADDRESS_INPUT = "workAddress";
@@ -119,7 +119,6 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent, UI
     HomeTab.addUIFormInput(new UIFormStringInput(FIELD_HOMEFAX_INPUT, FIELD_HOMEFAX_INPUT, null));
     HomeTab.addUIFormInput(new UIFormStringInput(FIELD_PERSONALSITE_INPUT, FIELD_PERSONALSITE_INPUT, null));
     NoteTab.addUIFormInput(new UIFormTextAreaInput(FIELD_NOTE_INPUT, FIELD_NOTE_INPUT, null));
-    this.setSelectedTab(ProfileTab.getId());
     UIFormInputWithActions sharing = new UIFormInputWithActions(INPUT_SHARETAB) ;
     sharing.addUIFormInput(new UIFormInputInfo(FIELD_INPUT_INFO, FIELD_INPUT_INFO, null)) ;
     
@@ -157,7 +156,8 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent, UI
     addUIFormInput(HomeTab) ;
     addUIFormInput(NoteTab) ;
     addChild(sharing) ;
-    setRenderedChild(UIProfileInputSet.class) ;  
+    //setRenderedChild(UIProfileInputSet.class) ;  
+    this.setSelectedTab(ProfileTab.getId());
   }
   
   public List<String> getCheckedSharedGroup() {
@@ -190,9 +190,6 @@ public class UIContactForm extends UIFormTabPane implements UIPopupComponent, UI
   
   @Override
   public String[] getActions() { return new String[] {"Save", "Cancel"} ; }
-  public void activate() throws Exception {}
-  public void deActivate() throws Exception {}
- 
   public void updateSelect(String selectField, String value) {
     getUIStringInput(selectField).setValue(value);
   }

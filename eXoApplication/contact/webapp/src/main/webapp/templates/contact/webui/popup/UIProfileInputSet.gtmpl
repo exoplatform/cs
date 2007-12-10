@@ -1,4 +1,6 @@
-
+<%
+uiForm = uicomponent.getParentFrom() ;
+%>
 <div class="Profile $uicomponent.id">
   <div class="FormContainer ProfileContainer">
 	  <table class="UIFormGrid">
@@ -15,7 +17,9 @@
 							   	%>
 			            <tr>
 		                <td class="FieldLabel"> $label </td>
-			              <td class="FieldComponent"><%uicomponent.renderUIComponent(field)%></td>
+			              <td class="FieldComponent">
+			              <%uiForm.renderField("firstName")%>
+			              </td>
 			            </tr>
 			            <%								
 			      			  field = uicomponent.getChildById("lastName")

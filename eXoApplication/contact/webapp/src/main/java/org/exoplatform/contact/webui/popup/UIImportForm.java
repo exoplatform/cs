@@ -5,12 +5,13 @@
 package org.exoplatform.contact.webui.popup;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.MissingResourceException;
 
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.SessionsUtils;
-import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContacts;
@@ -26,6 +27,7 @@ import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormSelectBox;
@@ -41,19 +43,19 @@ import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
     events = {
       @EventConfig(listeners = UIImportForm.SaveActionListener.class),      
       @EventConfig(listeners = UIImportForm.CancelActionListener.class),
-      @EventConfig(listeners = UIImportForm.AddCategoryActionListener.class)
+      @EventConfig(listeners = UIImportForm.AddCategoryActionListener.class,  phase=Phase.DECODE)
     }
 )
-public class UIImportForm extends UIForm implements UIPopupComponent{
+public class UIImportForm extends UIForm {
   final static public String FIELD_UPLOAD = "upload".intern() ;
   final static public String TYPE = "type".intern() ;
   public static final String INPUT_CATEGORY = "categoryInput";
   public static final String FIELD_CATEGORY = "category";
   public static String[] Types = null ;
+  private Map<String, String> groups_ = new HashMap<String, String>() ;
+  public UIImportForm() { this.setMultiPart(true) ; }
   
-  public UIImportForm() throws Exception {
-    //setId("UIImportForm") ;
-    this.setMultiPart(true) ;
+  public void addConponent() throws Exception {
     UIFormInputWithActions input = new UIFormInputWithActions(INPUT_CATEGORY) ;
     input.addUIFormInput(new UIFormSelectBox(FIELD_CATEGORY, FIELD_CATEGORY, getCategoryList())) ; 
     List<ActionData> actions = new ArrayList<ActionData>() ;
@@ -63,8 +65,6 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
     addAction.setActionName("AddCategory") ;
     actions.add(addAction) ;
     input.setActionField(FIELD_CATEGORY, actions) ;
-      
-    
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     ContactService contactService = ContactUtils.getContactService();
     Types = contactService.getImportExportType() ;
@@ -73,7 +73,7 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
     }
     input.addUIFormInput(new UIFormSelectBox(TYPE, TYPE, options)) ;
     input.addUIFormInput(new UIFormUploadInput(FIELD_UPLOAD, FIELD_UPLOAD)) ;
-    addUIFormInput(input) ;
+    addUIFormInput(input) ;    
   }
   
   public String getLabel(String id) throws Exception {
@@ -84,15 +84,14 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
     }
   }
   public String[] getActions() { return new String[] {"Save", "Cancel"} ; }
-  
+
   public List<SelectItemOption<String>> getCategoryList() throws Exception {
-    String username = ContactUtils.getCurrentUser();
-    List<ContactGroup> contactGroups =  ContactUtils.getContactService().getGroups(SessionsUtils.getSessionProvider(), username);
-    List<SelectItemOption<String>> categories = new ArrayList<SelectItemOption<String>>() ; 
-    for(ContactGroup contactGroup : contactGroups)
-      categories.add(new SelectItemOption<String>(contactGroup.getName(),contactGroup.getId() )) ;
+    List<SelectItemOption<String>> categories = new ArrayList<SelectItemOption<String>>() ;
+    for(String group : groups_.keySet())
+      categories.add(new SelectItemOption<String>(groups_.get(group),group)) ;
     return categories ;
   }
+  public void setGroup(Map<String, String> groups) { groups_ = groups ; }
   
   public void setCategoryList(List<SelectItemOption<String>> options ) {
     UIFormInputWithActions iput = getChildById(INPUT_CATEGORY) ;
@@ -102,14 +101,10 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
   public void setValues(String group) {
     getUIFormSelectBox(FIELD_CATEGORY).setValue(group) ;
   }  
-
-  public void activate() throws Exception {}
-  public void deActivate() throws Exception {} 
-  
   static  public class AddCategoryActionListener extends EventListener<UIImportForm> {
     public void execute(Event<UIImportForm> event) throws Exception {
       UIImportForm uiForm = event.getSource() ;
-      UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ; 
+      UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       UIPopupAction uiChildPopup = uiPopupContainer.getChild(UIPopupAction.class) ;
       uiChildPopup.activate(UICategoryForm.class, 500) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;

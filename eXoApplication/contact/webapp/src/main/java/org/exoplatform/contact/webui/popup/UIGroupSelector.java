@@ -56,7 +56,7 @@ public class UIGroupSelector extends UIGroupMembershipSelector implements UIPopu
   private List selectedGroup_ ;
   private String returnFieldName = null ;
 
-  public UIGroupSelector() throws Exception {}
+  public UIGroupSelector() throws Exception { }
 
   public UIComponent getReturnComponent() { return uiComponent ; }
   public String getReturnField() { return returnFieldName ; }
@@ -121,22 +121,11 @@ public class UIGroupSelector extends UIGroupMembershipSelector implements UIPopu
       tree.setChildren(null);
     }
   }
-
-  public void activate() throws Exception {
-    // TODO Auto-generated method stub
-
-  }
-
-  public void deActivate() throws Exception {
-    // TODO Auto-generated method stub
-  }
-  public void setType(String type) {
-    this.type_ = type;
-  }
-
-  public String getType() {
-    return type_;
-  }
+  public void activate() throws Exception { }
+  public void deActivate() throws Exception { }
+  
+  public void setType(String type) { this.type_ = type; }
+  public String getType() { return type_; }
 
   static  public class SelectMembershipActionListener extends EventListener<UIGroupSelector> {   
     public void execute(Event<UIGroupSelector> event) throws Exception {
@@ -148,7 +137,15 @@ public class UIGroupSelector extends UIGroupMembershipSelector implements UIPopu
       ((UISelector)uiGroupSelector.getReturnComponent()).updateSelect(returnField, user) ;
       uiPopup.deActivate() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup) ;
+
+      UIContactForm contactForm = uiPopupContainer.getChild(UIContactForm.class) ;
+      contactForm.setSelectedTab(UIContactForm.INPUT_SHARETAB) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(contactForm) ;
+      
+      
+      //System.out.println("\n\n popup action:" + uiPopupContainer.getAncestorOfType(UIPopupAction.class).getId() + "\n\n");
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupContainer.getAncestorOfType(UIPopupAction.class)) ;
+      
     }
   }
 

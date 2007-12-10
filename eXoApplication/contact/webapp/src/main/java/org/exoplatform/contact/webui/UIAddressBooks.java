@@ -87,30 +87,30 @@ public class UIAddressBooks extends UIComponent {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
     }
   }
-
+  
   static public class ExportAddressActionListener extends EventListener<UIAddressBooks> {
     public void execute(Event<UIAddressBooks> event) throws Exception {
       UIAddressBooks uiAddressBook = event.getSource();
       UIContactPortlet uiContactPortlet = uiAddressBook.getAncestorOfType(UIContactPortlet.class);
-      UIPopupAction uiPopupAction = uiContactPortlet.getChild(UIPopupAction.class);
-      
+      UIPopupAction uiPopupAction = uiContactPortlet.getChild(UIPopupAction.class); 
       String addressBookId = event.getRequestContext().getRequestParameter(OBJECTID);
       if (addressBookId != null) {
-        UIExportForm uiExportForm = uiPopupAction.createUIComponent(UIExportForm.class, null,
-            "ExportForm");     
-        uiExportForm.setSelectedGroup(addressBookId) ;
         ContactFilter filter = new ContactFilter();
         filter.setAscending(true);
         filter.setCategories(new String[] { addressBookId });
-        ContactService contactService = ContactUtils.getContactService() ;
-        String username = ContactUtils.getCurrentUser() ;
         Contact[] contacts = null ;
-        if (ContactUtils.isPublicGroup(addressBookId))
-          contacts = contactService.getContactPageListByGroup(SessionsUtils.getSystemProvider(), username, filter, true)
-            .getAll().toArray(new Contact[] {});
-        else
-          contacts = contactService.getContactPageListByGroup(SessionsUtils.getSessionProvider(), username, filter, false)
-            .getAll().toArray(new Contact[] {});
+        UIExportForm uiExportForm = uiPopupAction.createUIComponent(UIExportForm.class, null,
+            "ExportForm");  
+        Map<String, String> privateGroup = uiAddressBook.privateGroupMap_ ;
+        if (privateGroup.containsKey(addressBookId)) {
+          uiExportForm.setSelectedGroup(privateGroup.get(addressBookId)) ;
+          contacts = ContactUtils.getContactService().getContactPageListByGroup(SessionsUtils.getSessionProvider()
+              , ContactUtils.getCurrentUser(), filter, false).getAll().toArray(new Contact[] {});
+        } else {
+          uiExportForm.setSelectedGroup(addressBookId) ;
+          contacts = ContactUtils.getContactService().getContactPageListByGroup(SessionsUtils.getSystemProvider()
+              , ContactUtils.getCurrentUser(), filter, true).getAll().toArray(new Contact[] {});
+        } 
         if (contacts == null || contacts.length == 0) {
           UIApplication uiApp = uiAddressBook.getAncestorOfType(UIApplication.class) ;
           uiApp.addMessage(new ApplicationMessage("UIAddressBooks.msg.noContactToExport", null,
@@ -122,15 +122,14 @@ public class UIAddressBooks extends UIComponent {
         uiExportForm.setContacts(contacts) ;         
         uiExportForm.updateList();
         uiPopupAction.activate(uiExportForm, 500, 0, true);
-      } else {      
-        // There is no specific address book 
-        // so display the address books list      
+      } else {
         
+        // There is no specific address book so display the address books list        
         UIExportAddressBookForm uiExportForm = uiPopupAction.createUIComponent(
             UIExportAddressBookForm.class, null, "UIExportAddressBookForm");
-        ContactGroup[] groups = uiAddressBook.getGroups().toArray(new ContactGroup[] {}) ;
-        List<String> sharedGroups = uiAddressBook.getSharedContactGroups() ;
-        if ((sharedGroups == null || sharedGroups.size() == 0) && (groups == null || groups.length == 0)) {
+        Map<String, String> groups = uiAddressBook.privateGroupMap_ ;
+        Map<String, String> sharedGroups = uiAddressBook.publicGroupMap_ ;
+        if ((sharedGroups == null || sharedGroups.size() == 0) && (groups == null || groups.size() == 0)) {
           UIApplication uiApp = uiAddressBook.getAncestorOfType(UIApplication.class) ;
           uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.no-addressbook", null,
             ApplicationMessage.WARNING)) ;
@@ -158,8 +157,11 @@ public class UIAddressBooks extends UIComponent {
       else
         uiPopupContainer =  uiContactPortlet.createUIComponent(UIPopupContainer.class, null, "ImportAddress") ;
       UIImportForm uiImportForm = uiPopupContainer.addChild(UIImportForm.class, null, null) ; 
-      
+      uiImportForm.setGroup(uiAddressBook.privateGroupMap_) ;
+      uiImportForm.addConponent() ;      
       if (!ContactUtils.isEmpty(addressBookId)) uiImportForm.setValues(addressBookId) ;
+      
+ 
       uiPopupAction.activate(uiPopupContainer, 600, 0, true) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction); 
       event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook.getParent());

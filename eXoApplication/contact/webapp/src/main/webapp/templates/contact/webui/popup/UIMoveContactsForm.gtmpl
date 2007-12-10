@@ -8,16 +8,14 @@
 	<div class="TitleMoveContactsForm">Choose a Destination Address Book:</div>
 	
 	<div class="MoveContactsFormContainer">
-		<%  
-			
-				ContactGroup[] contactGroups = uicomponent.getContactGroups();
-				for(contactGroup in contactGroups) {
-					String actionLink  = uicomponent.event("SelectGroup", contactGroup.getId()) ;
+		<%  Map map = uicomponent.getPrivateGroupMap() ;
+				for(groupId in map.keySet()) {
+					String actionLink  = uicomponent.event("SelectGroup", groupId) ;
 					cssClass = "NormalItem" ;
-					if(contactGroup.getId().equals(uicomponent.groupId_))	cssClass = "SelectedItem" ;
+					if(groupId.equals(uicomponent.groupId_))	cssClass = "SelectedItem" ;
 		%>
 		<div class="ItemList $cssClass">
-			<div class="Icon AddressIcon"><a href="$actionLink"><%=contactGroup.getName()%></a></div>
+			<div class="Icon AddressIcon"><a href="$actionLink"><%=map.get(groupId)%></a></div>
 		</div>
 		<%  } %>
 		

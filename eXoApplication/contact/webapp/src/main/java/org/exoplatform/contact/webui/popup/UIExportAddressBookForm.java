@@ -7,12 +7,13 @@ package org.exoplatform.contact.webui.popup;
 import java.io.ByteArrayInputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.MissingResourceException;
 
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.SessionsUtils;
-import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.container.PortalContainer;
@@ -47,8 +48,8 @@ public class UIExportAddressBookForm extends UIForm implements UIPopupComponent{
   final static private String NAME = "name".intern() ;
   final static private String TYPE = "type".intern() ;
   
-  private ContactGroup[]                 contactGroups_   = null;
-  private List<String>                   sharedContactGroup_ = null ;
+  private Map<String, String> privateGroupMap_ = new HashMap<String, String>() ;
+  private Map<String, String> publicGroupMap_ = new HashMap <String, String>() ;
   
   public UIExportAddressBookForm() throws Exception {
   }  
@@ -64,52 +65,43 @@ public class UIExportAddressBookForm extends UIForm implements UIPopupComponent{
   public void activate() throws Exception {}
   public void deActivate() throws Exception {}
   
-  public List<String> getSharedContactGroup() { return sharedContactGroup_ ; }
-  public void setSharedContactGroup(List<String> groups) { sharedContactGroup_ = groups ; }
+  public Map<String, String> getSharedContactGroup() { return publicGroupMap_ ; }
+  public void setSharedContactGroup(Map<String, String> groups) { publicGroupMap_ = groups ; }
   
-  public ContactGroup[] getContactGroups() {
-    return contactGroups_;
-  }
-
-  public void setContactGroups(ContactGroup[] contactGroups_) {
-    this.contactGroups_ = contactGroups_;
-  }
+  public Map<String, String> getContactGroups() { return privateGroupMap_; }
+  public void setContactGroups(Map<String, String> contactGroups) { privateGroupMap_ = contactGroups ; }
 
   public void updateList() throws Exception { 
     getChildren().clear() ;
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     ContactService contactService = ContactUtils.getContactService();
-    
     for(String type : contactService.getImportExportType()) {
       options.add(new SelectItemOption<String>(type, type)) ;
-    }
-    
+    }  
     addUIFormInput(new UIFormStringInput(NAME, NAME, null)) ;
     addUIFormInput(new UIFormSelectBox(TYPE, TYPE, options)) ;
-    for (ContactGroup group : contactGroups_) {
-      UIFormCheckBoxInput<Boolean> checkbox = new UIFormCheckBoxInput<Boolean>(group.getId(),
-          group.getName(), false);
+    for (String group : privateGroupMap_.keySet()) {
+      UIFormCheckBoxInput<Boolean> checkbox = new UIFormCheckBoxInput<Boolean>(group,privateGroupMap_.get(group), false);
       addUIFormInput(checkbox);
     }
-    for (String group : sharedContactGroup_) {
-      UIFormCheckBoxInput<Boolean> checkbox = new UIFormCheckBoxInput<Boolean>(group,
-          group, false);
+    for (String group : publicGroupMap_.keySet()) {
+      UIFormCheckBoxInput<Boolean> checkbox = new UIFormCheckBoxInput<Boolean>(group, group, false);
       addUIFormInput(checkbox);
     }
   }
 
   public List<String> getCheckedGroups() throws Exception {
     List<String> checked = new ArrayList<String>();
-    for (ContactGroup group : getContactGroups()) {
-      UIFormCheckBoxInput uiCheckBox = getChildById(group.getId());
+    for (String group : privateGroupMap_.keySet()) {
+      UIFormCheckBoxInput uiCheckBox = getChildById(group);
       if (uiCheckBox != null && uiCheckBox.isChecked()) {
-        checked.add(group.getId());
+        checked.add(group);
       }
     }
-    for (String groupId : getSharedContactGroup()) {
-      UIFormCheckBoxInput uiCheckBox = getChildById(groupId);
+    for (String group : publicGroupMap_.keySet()) {
+      UIFormCheckBoxInput uiCheckBox = getChildById(group);
       if (uiCheckBox != null && uiCheckBox.isChecked()) {
-        checked.add(groupId);
+        checked.add(group);
       }
     }
     return checked;

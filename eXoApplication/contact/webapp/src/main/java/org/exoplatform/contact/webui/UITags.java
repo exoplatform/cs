@@ -85,7 +85,7 @@ public class UITags extends UIComponent {
       UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
       UIPopupAction popupAction = uiContactPortlet.getChild(UIPopupAction.class) ;
       UIEditTagForm uiEditTagForm = popupAction.createUIComponent(UIEditTagForm.class, null, "UIEditTagForm") ;
-      uiEditTagForm.setValues(tagId) ;
+      uiEditTagForm.setValues(uiForm.tagMap_.get(tagId)) ;
       popupAction.activate(uiEditTagForm, 500, 0, true) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
@@ -94,16 +94,16 @@ public class UITags extends UIComponent {
   static  public class ExportAddressActionListener extends EventListener<UITags> {
     public void execute(Event<UITags> event) throws Exception {
       UITags uiForm = event.getSource() ;
-      String tagName = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      String tagId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
       UIPopupAction popupAction = uiContactPortlet.getChild(UIPopupAction.class) ;
       
-      UIExportForm uiExportForm = popupAction.createUIComponent(UIExportForm.class, null,
-          "ExportForm");
-      uiExportForm.setSelectedTag(tagName) ;
+      UIExportForm uiExportForm = popupAction.createUIComponent(UIExportForm.class, null,"ExportForm");
+      uiExportForm.setSelectedTag(uiForm.tagMap_.get(tagId).getName()) ;
+
       Contact[] contacts = null ;
-      contacts = ContactUtils.getContactService()
-        .getContactPageListByTag(SessionsUtils.getSystemProvider(), ContactUtils.getCurrentUser(), tagName).getAll().toArray(new Contact[] {});
+      contacts = ContactUtils.getContactService().getContactPageListByTag(
+          SessionsUtils.getSystemProvider(), ContactUtils.getCurrentUser(), tagId).getAll().toArray(new Contact[] {});
       if (contacts == null || contacts.length == 0) {
         UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UITag.msg.noContactToExport", null,

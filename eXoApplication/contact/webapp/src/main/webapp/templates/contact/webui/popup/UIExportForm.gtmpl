@@ -3,13 +3,6 @@
 
   import org.exoplatform.contact.service.Contact;
   import org.exoplatform.contact.ContactUtils;
-  import org.exoplatform.contact.service.Tag;
-  
-  import org.exoplatform.webui.core.model.SelectItemOption;
-  
-  import org.exoplatform.webui.form.UIFormSelectBox;
-  import org.exoplatform.webui.form.UIFormStringInput;
-  
 	uiform.begin()
 %>
 
@@ -19,11 +12,11 @@
 		  <div class="Title">
 		  <% 
 		    if (!ContactUtils.isEmpty(uicomponent.getSelectedGroup())) {
-		      text = uicomponent.getSelectedGroupName();
+		      text = uicomponent.getSelectedGroup();
 		  %>
 		      Address Book : <%=text%>
 		  <%} else if (!ContactUtils.isEmpty(uicomponent.getSelectedTag())) {
-		      text = uicomponent.getSelectedTagName();
+		      text = uicomponent.getSelectedTag();
 		  %>
 		      Tag : <%=text%>
 		  <%} %>
@@ -36,33 +29,10 @@
 		  			<tr>
 		  		    <th style="width: 23px; padding-left: 3px;" class="text"><input type="checkbox" class="checkbox" title="Check all" value="4"/></th>
 		  		    <th style="width: 40%; padding-left: 2px;" class="text">
-		  		        	
-			  		   	<%
-						      String sortedByName = uicomponent.event("Sort","fullName");
-				          String classArrowName = "";
-				          if (uicomponent.getSortedBy().equals("fullName")) {
-				            if (uicomponent.isAscending()) classArrowName = "UpArrow1Icon";
-				            else classArrowName = "DownArrow1Icon"
-				          }
-			    			%>
-		  		      <a href="$sortedByName">
-		  		      	<div class="$classArrowName" > Name </div>
-		  		      </a>
+		  		      	<div> Name </div>
 		  		    </th>
 		 	      	<th class="text" style="padding-left: 7px;">
-		 	      	    
-		 	      		<%
-		    		      String sortedByEmail = uicomponent.event("Sort","emailAddress");
-		              String classArrowEmail = "";
-		              if (uicomponent.getSortedBy().equals("emailAddress")) {
-		                if (uicomponent.isAscending()) classArrowEmail = "UpArrow1Icon";
-		                else classArrowEmail = "DownArrow1Icon"
-		              }
-		    				%>
-		 	      	    
-		 	      	 	<a href="$sortedByEmail">
-		  		    	 	<div class="$classArrowEmail" title="Sort by Email">Email</div>
-		  		     	</a>
+		  		    	 	<div>Email</div>
 		  		    </th>
 		  	 	  </tr>
 		  	 	</thead>
@@ -71,12 +41,6 @@
 							Contact[] contacts = uicomponent.getContacts();
 							for(contact in contacts) {
 								checkboxField = uicomponent.getChildById(contact.getId()) ;
-								iconTag = "Icon" ;
-								String[] tagNames = contact.getTags() ; 
-								if (tagNames != null && tagNames.length > 0) {
-									Tag tag = ContactUtils.getContactService().getTag(ContactUtils.getCurrentUser(), contact.getTags()[0]) ;
-									iconTag = "Icon " + tag.getColor() + "Tag" ; 
-								}
 						%>
 		  			<tr class="UIContactList" selectedTag="<%=uicomponent.getSelectedTag()%>">
 		  			  <td class="text" style="padding-left: 7px;">
@@ -84,8 +48,6 @@
 		  			  		if(checkboxField != null) uicomponent.renderField(checkboxField) ;
 		  			  	%>
 		  			  </td>
-		  						  
-							
 							<td class="text">
 								<div class="State OnlineIcon" title="Available">
 									<%=(contact.getFullName()==null ? "" : contact.getFullName())%>
