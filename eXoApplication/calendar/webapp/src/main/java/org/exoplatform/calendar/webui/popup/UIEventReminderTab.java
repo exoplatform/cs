@@ -47,15 +47,21 @@ public class UIEventReminderTab extends UIFormInputWithActions {
     super(arg0);
     setComponentConfig(getClass(), null) ;
     actionField_ = new HashMap<String, List<ActionData>>() ;
-    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-    options.add(new SelectItemOption<String>("no repeat", "false")) ;
-    options.add(new SelectItemOption<String>("repeat", "true")) ;
-    List<SelectItemOption<String>> remindOptions = getReminderTimes(5,60) ;
+    List<SelectItemOption<String>> isPopupRepeatOptions = new ArrayList<SelectItemOption<String>>() ;
+    isPopupRepeatOptions.add(new SelectItemOption<String>("no repeat", "false")) ;
+    isPopupRepeatOptions.add(new SelectItemOption<String>("repeat", "true")) ;
+    
+    List<SelectItemOption<String>> isMailRepeatOptions = new ArrayList<SelectItemOption<String>>() ;
+    isMailRepeatOptions.add(new SelectItemOption<String>("no repeat", "false")) ;
+    isMailRepeatOptions.add(new SelectItemOption<String>("repeat", "true")) ;
+    
+    List<SelectItemOption<String>> emailRemindOptions = getReminderTimes(5,60) ;
+    List<SelectItemOption<String>> popupRemindOptions = getReminderTimes(5,60) ;
     addUIFormInput(new UIFormCheckBoxInput<Boolean>(REMIND_BY_EMAIL, REMIND_BY_EMAIL, false)) ;
-    addUIFormInput(new UIFormSelectBox(EMAIL_REMIND_BEFORE, EMAIL_REMIND_BEFORE, remindOptions));
+    addUIFormInput(new UIFormSelectBox(EMAIL_REMIND_BEFORE, EMAIL_REMIND_BEFORE, popupRemindOptions));
     addUIFormInput(new UIFormTextAreaInput(FIELD_EMAIL_ADDRESS, FIELD_EMAIL_ADDRESS, null)) ;
-    addUIFormInput(new UIFormSelectBox(EMAIL_IS_REPEAT, EMAIL_IS_REPEAT, options));
-    addUIFormInput(new UIFormSelectBox(EMAIL_REPEAT_INTERVAL, EMAIL_REPEAT_INTERVAL, remindOptions));
+    addUIFormInput(new UIFormSelectBox(EMAIL_IS_REPEAT, EMAIL_IS_REPEAT, isMailRepeatOptions));
+    addUIFormInput(new UIFormSelectBox(EMAIL_REPEAT_INTERVAL, EMAIL_REPEAT_INTERVAL, emailRemindOptions));
     ActionData addEmailAddress = new ActionData() ;
     addEmailAddress.setActionType(ActionData.TYPE_ICON) ;
     addEmailAddress.setActionName(UIEventForm.ACT_ADDEMAIL) ;
@@ -64,11 +70,13 @@ public class UIEventReminderTab extends UIFormInputWithActions {
     List<ActionData> addMailActions = new ArrayList<ActionData>() ;
     addMailActions.add(addEmailAddress) ;
     setActionField(FIELD_EMAIL_ADDRESS, addMailActions) ;
-
+    List<SelectItemOption<String>> emailRemindBeforeOptions = getReminderTimes(5,60) ;
+    List<SelectItemOption<String>> popupRemindBeforeOptions = getReminderTimes(5,60) ;
+    
     addUIFormInput(new UIFormCheckBoxInput<Boolean>(REMIND_BY_POPUP, REMIND_BY_POPUP, false)) ;
-    addUIFormInput(new UIFormSelectBox(POPUP_REMIND_BEFORE, POPUP_REMIND_BEFORE, remindOptions));
-    addUIFormInput(new UIFormSelectBox(POPUP_IS_REPEAT, POPUP_IS_REPEAT, options));
-    addUIFormInput(new UIFormSelectBox(POPUP_REPEAT_INTERVAL, POPUP_REPEAT_INTERVAL, remindOptions));
+    addUIFormInput(new UIFormSelectBox(POPUP_REMIND_BEFORE, POPUP_REMIND_BEFORE, popupRemindBeforeOptions));
+    addUIFormInput(new UIFormSelectBox(POPUP_IS_REPEAT, POPUP_IS_REPEAT, isPopupRepeatOptions));
+    addUIFormInput(new UIFormSelectBox(POPUP_REPEAT_INTERVAL, POPUP_REPEAT_INTERVAL, emailRemindBeforeOptions));
     
     
   }
