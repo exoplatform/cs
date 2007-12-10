@@ -911,6 +911,7 @@ public class JCRDataStorage implements DataStorage{
     Node reminderFolder = getReminderFolder(sProvider, fromDate) ;
     if(reminderFolder.hasNode(eventNode.getName())) {
     	NodeIterator iter = reminderFolder.getNode(eventNode.getName()).getNodes() ;
+      System.out.println("\n\n number of reminder " + iter.getSize());
       while(iter.hasNext()) {
         Node reminderNode = iter.nextNode() ;
         if(reminderNode.isNodeType("exo:reminder")) {
