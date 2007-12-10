@@ -31,6 +31,7 @@ import org.exoplatform.mail.service.MailSetting;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.MessagePageList;
+import org.exoplatform.mail.service.SpamFilter;
 import org.exoplatform.mail.service.Tag;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -787,5 +788,48 @@ public class JCRDataStorage{
       NodeIterator iter = result.getNodes();
       filter.execActions(homeMsg.getSession(), iter);      
     }
+  }
+  
+  public Node getSpamFilterHome(SessionProvider sProvider, String username, String accountId) throws Exception {
+    Node accountHome = getMailHomeNode(sProvider, username).getNode(accountId);
+    if(accountHome.hasNode(Utils.KEY_SPAM_FILTER)) return accountHome.getNode(Utils.KEY_SPAM_FILTER) ;
+    else return accountHome.addNode(Utils.KEY_SPAM_FILTER, Utils.NT_UNSTRUCTURED) ;
+  }
+  
+  public SpamFilter getSpamFilter(SessionProvider sProvider, String username, String accountId) throws Exception { 
+    Node accountNode = getSpamFilterHome(sProvider, username, accountId);
+    NodeIterator it = accountNode.getNodes();
+    Node spamFilterNode = null;
+    while (it.hasNext()) {
+      Node node = it.nextNode();
+      if (node.isNodeType(Utils.EXO_SPAM_FILTER)) {
+        spamFilterNode = node;
+      }
+    }
+    SpamFilter spamFilter = new SpamFilter();
+    if (spamFilterNode != null) {
+      if (spamFilterNode.hasProperty(Utils.EXO_FROMS)) {
+        Value[] propFroms = spamFilterNode.getProperty(Utils.EXO_FROMS).getValues();
+        String[] froms = new String[propFroms.length];
+        for (int i = 0; i < propFroms.length; i++) {
+          froms[i] = propFroms[i].getString();
+        }
+        spamFilter.setSenders(froms);
+      }
+    }
+    return spamFilter ;
+  }
+  
+  public void saveSpamFilter(SessionProvider sProvider, String username, String accountId, SpamFilter spamFilter) throws Exception {
+    Node accountNode = getSpamFilterHome(sProvider, username, accountId);
+    Node spamFilterNode = null;
+    if (accountNode.hasNode(Utils.EXO_SPAM_FILTER)) {
+      spamFilterNode = accountNode.getNode(Utils.EXO_SPAM_FILTER);
+    } else {
+      spamFilterNode = accountNode.addNode(Utils.EXO_SPAM_FILTER, Utils.EXO_SPAM_FILTER);
+    }
+    
+    spamFilterNode.setProperty(Utils.EXO_FROMS, spamFilter.getSenders());
+    accountNode.getSession().save();
   }
 }

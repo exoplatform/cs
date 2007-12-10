@@ -47,6 +47,7 @@ import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.MessagePageList;
 import org.exoplatform.mail.service.ServerConfiguration;
+import org.exoplatform.mail.service.SpamFilter;
 import org.exoplatform.mail.service.Tag;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -385,6 +386,9 @@ public class MailServiceImpl implements MailService{
           
           newMsg.setAttachements(new ArrayList<Attachment>());
           String[] folderIds = { Utils.createFolderId(accountId, account.getIncomingFolder(), false)};
+          if (getSpamFilter(sProvider, username, account.getId()).checkSpam(msg)) {
+            folderIds = new String[] { Utils.createFolderId(accountId, Utils.FD_SPAM, false) } ;
+          }
           newMsg.setFolders(folderIds);
           Object obj = msg.getContent() ;
           if (obj instanceof Multipart) {
@@ -671,6 +675,14 @@ public class MailServiceImpl implements MailService{
   
   public void execFilters(SessionProvider sProvider, String username, String accountId) throws Exception {
     storage_.execFilters(sProvider, username, accountId);
+  }
+  
+  public SpamFilter getSpamFilter(SessionProvider sProvider, String username, String accountId) throws Exception {
+    return storage_.getSpamFilter(sProvider, username, accountId);
+  }
+  
+  public void saveSpamFilter(SessionProvider sProvider, String username, String accountId, SpamFilter spamFilter) throws Exception {
+    storage_.saveSpamFilter(sProvider, username, accountId, spamFilter);
   }
 
 	public List<AccountData> getAccountDatas(SessionProvider sProvider) throws Exception {

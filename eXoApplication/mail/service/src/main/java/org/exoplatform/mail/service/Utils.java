@@ -62,6 +62,7 @@ public class Utils {
   public static final String KEY_MESSAGE = "Messages".intern() ;
   public static final String KEY_TAGS = "Tags".intern() ;
   public static final String KEY_FILTER = "Filter".intern() ;
+  public static final String KEY_SPAM_FILTER = "SpamFilter".intern() ;
   public static final String KEY_ACCOUNT = "account".intern() ;
   public static final String KEY_HEADER = "mailHeader".intern() ;
   
@@ -74,6 +75,7 @@ public class Utils {
   public static final String EXO_SIGNATURE = "exo:signature".intern() ;
   public static final String EXO_DESCRIPTION = "exo:description".intern() ;
   public static final String EXO_FROM = "exo:from".intern();
+  public static final String EXO_FROMS = "exo:froms".intern();
   public static final String EXO_TO = "exo:to".intern() ;
   public static final String EXO_SUBJECT = "exo:subject".intern() ;
   public static final String EXO_CONTENT_TYPE = "exo:contentType".intern() ;
@@ -106,6 +108,7 @@ public class Utils {
   public static final String EXO_ADDRESSES = "exo:addresses".intern();
   public static final String EXO_MESSAGEIDS = "exo:messageIds".intern();
   public static final String EXO_ROOT = "exo:root".intern();
+  public static final String EXO_SPAM_FILTER = "exo:spamFilter".intern();
   
 
   public static final String EXO_MAIL_SETTING = "exo:mailSetting".intern();

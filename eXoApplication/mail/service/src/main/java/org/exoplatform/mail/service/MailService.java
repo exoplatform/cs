@@ -306,4 +306,8 @@ public interface MailService {
   public OutputStream exportMessage(SessionProvider sProvider, String username,String accountId, String messageId) throws Exception;
   
   public void execFilters(SessionProvider sProvider, String username, String accountId) throws Exception ;
+  
+  public SpamFilter getSpamFilter(SessionProvider sProvider, String username, String accountId) throws Exception ;
+  
+  public void saveSpamFilter(SessionProvider sProvider, String username, String accountId, SpamFilter spamFilter) throws Exception ;
 }
