@@ -77,7 +77,7 @@
   					<table class="UIGrid" id="" cellspacing="0" borderspacing="0">
   						<tbody>
   						<%
-  						 calendar = uicomponent.getBeginDateOfMonth() ;
+  						 calendar = uicomponent.getBeginDateOfMonthView() ;
 					week = 0 ; 
 					dayOfMonth = 1 ;
 					validDay = 0 ;
