@@ -23,6 +23,7 @@ import org.exoplatform.contact.webui.popup.UIImportForm;
 import org.exoplatform.contact.webui.popup.UIPopupAction;
 import org.exoplatform.contact.webui.popup.UIPopupContainer;
 import org.exoplatform.contact.webui.popup.UISendEmail;
+import org.exoplatform.contact.webui.popup.UISharedForm;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -209,10 +210,17 @@ public class UIAddressBooks extends UIComponent {
   static public class ShareGroupActionListener extends EventListener<UIAddressBooks> {
     public void execute(Event<UIAddressBooks> event) throws Exception {
       UIAddressBooks uiAddressBook = event.getSource();
-      UIApplication uiApp = uiAddressBook.getAncestorOfType(UIApplication.class) ;
-      uiApp.addMessage(new ApplicationMessage("UIAddressBooks.msg.not-already", null)) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-      return ;
+      String groupId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      UIContactPortlet contactPortlet = uiAddressBook.getAncestorOfType(UIContactPortlet.class) ;
+      UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
+      UIPopupContainer uiPopupContainer = popupAction.activate(UIPopupContainer.class, 600) ;
+      uiPopupContainer.setId("UIPermissionSelectPopup") ;
+      UISharedForm uiSharedForm = uiPopupContainer.addChild(UISharedForm.class, null, null) ;
+      
+      
+      uiSharedForm.init(null, ContactUtils.getContactService()
+        .getGroup(SessionsUtils.getSessionProvider(), ContactUtils.getCurrentUser(), groupId), true) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   }
 

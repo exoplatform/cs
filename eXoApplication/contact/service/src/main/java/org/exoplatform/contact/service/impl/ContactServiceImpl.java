@@ -70,8 +70,8 @@ public class ContactServiceImpl implements ContactService {
     return storage_.removeContacts(sProvider, username, contactIds);
   }
   
-  public List<Contact> moveContacts(SessionProvider sProvider, String username, List<String> contactIds, String[] groupId) throws Exception {
-    return storage_.moveContacts(sProvider, username, contactIds, groupId) ;
+  public List<Contact> moveContacts(SessionProvider sProvider, String username, List<String> contactIds, String[] groupId, boolean toPublic) throws Exception {
+    return storage_.moveContacts(sProvider, username, contactIds, groupId, toPublic) ;
   }
    
   public List<ContactGroup> getGroups(SessionProvider sProvider, String username) throws Exception {

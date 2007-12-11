@@ -13,6 +13,7 @@ import org.exoplatform.contact.service.ContactPageList;
 import org.exoplatform.contact.service.GroupContactData;
 import org.exoplatform.contact.service.Tag;
 import org.exoplatform.contact.service.DataPageList;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 
 
 
@@ -32,7 +33,7 @@ public interface DataStorage {
   public Contact getContact(String username, String contactId) throws Exception ;
   public void saveContact(String username, Contact contact, boolean isNew) throws Exception ;
   public List<Contact> removeContacts(String username, List<String> contactIds) throws Exception ;
-  public List<Contact> moveContacts(String username, List<String> contactIds, String[] groupId) throws Exception ;
+  public List<Contact> moveContacts(SessionProvider sysProvider, String username, List<String> contactIds, String[] groupId, boolean toPublic) throws Exception ;
   
   public ContactPageList getSharedContactsByGroup(String groupId) throws Exception ;
   public List<GroupContactData> getSharedContacts(String[] groupIds) throws Exception ;

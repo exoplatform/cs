@@ -22,7 +22,7 @@ public interface ContactService {
   public Contact getContact(SessionProvider sProvider, String username, String contactId) throws Exception ;
   public void saveContact(SessionProvider sProvider, String username, Contact contact, boolean isNew) throws Exception ;
   public List<Contact> removeContacts(SessionProvider sProvider, String username, List<String> contactIds) throws Exception ;
-  public List<Contact> moveContacts(SessionProvider sProvider, String username, List<String> contactIds, String[] groupId) throws Exception ;
+  public List<Contact> moveContacts(SessionProvider sProvider, String username, List<String> contactIds, String[] groupId, boolean toPublic) throws Exception ;
   //public ContactPageList getContactPageListByTag(SessionProvider sProvider, String username, ContactFilter filter) throws Exception ;
   public ContactPageList getContactPageListByGroup(SessionProvider sProvider, String username, ContactFilter filter, boolean isPublic) throws Exception;
   public DataPageList searchContact(SessionProvider sProvider, String username, ContactFilter filter) throws Exception ;

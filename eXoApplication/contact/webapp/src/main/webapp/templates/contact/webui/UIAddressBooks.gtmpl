@@ -74,6 +74,28 @@
 		<% } %>		
 	</div>
 	
+	
+	
+	
+	<div class="PersonalAddress">
+		<div class="AddressTitle">
+			<div class="DownArrow3Icon" title="Collapse/Expand all"><span></span></div>
+			<div class="Label">Shared Address Book</div>
+      <div style="clear: left"><span></span></div>
+		</div>
+		<div  class="ItemList Normal">
+			
+				Share
+			
+		</div>
+	
+	</div>
+	
+	
+	
+	
+	
+	
 	<div class="PublicAddress">
 		<div class="AddressTitle">
 			<div class="DownArrow3Icon" title="Collapse/Expand all"><span></span></div>
@@ -90,8 +112,7 @@
 				<div class="ItemList $cssClass">
 					<a id="$group" href="$actionLink2" class="IconHolder AddressIcon"  isPublic="true">$group</a>
 				</div>
-			<%
-			} %>
+		<% } %>
 	</div>
 	
 	
@@ -112,13 +133,11 @@
 			              Add Contact
 			            </div>
 				        </a>
-				  	
-				        <!--a class="MenuItem" href="<%=uicomponent.event("ShareGroup", "id")%>"-->   
-			            <div style="color : gray ;" class="ItemIcon ShareIcon">
+				        <a class="MenuItem" href="<%=uicomponent.event("ShareGroup", "id")%>">   
+			            <div class="ItemIcon ShareIcon">
 			              Share
 			            </div>
-				        <!--/a-->
-				     
+				        </a>				     
 				        <a class="MenuItem" href="<%=uicomponent.event("ExportAddress", "id")%>">   
 			            <div class="ItemIcon ExportContactIcon">
 			              Export Contacts

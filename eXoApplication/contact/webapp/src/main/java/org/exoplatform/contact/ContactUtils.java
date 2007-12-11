@@ -11,6 +11,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import javax.jcr.PathNotFoundException;
+
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactAttachment;
 import org.exoplatform.contact.service.ContactService;
@@ -56,15 +58,19 @@ public class ContactUtils {
   public static String getImageSource(Contact contact, DownloadService dservice) throws Exception {    
     ContactAttachment contactAttachment = contact.getAttachment();
     if (contactAttachment != null) {
-      InputStream input = contactAttachment.getInputStream() ;
-      byte[] imageBytes = null ;
-      if (input != null) {
-        imageBytes = new byte[input.available()] ;
-        input.read(imageBytes) ;
-        ByteArrayInputStream byteImage = new ByteArrayInputStream(imageBytes) ;
-        InputStreamDownloadResource dresource = new InputStreamDownloadResource(byteImage, "image") ;
-        dresource.setDownloadName(contactAttachment.getFileName()) ;
-        return  dservice.getDownloadLink(dservice.addDownloadResource(dresource)) ;        
+      try {
+        InputStream input = contactAttachment.getInputStream() ;
+        byte[] imageBytes = null ;
+        if (input != null) {
+          imageBytes = new byte[input.available()] ;
+          input.read(imageBytes) ;
+          ByteArrayInputStream byteImage = new ByteArrayInputStream(imageBytes) ;
+          InputStreamDownloadResource dresource = new InputStreamDownloadResource(byteImage, "image") ;
+          dresource.setDownloadName(contactAttachment.getFileName()) ;
+          return  dservice.getDownloadLink(dservice.addDownloadResource(dresource)) ;        
+        }
+      } catch (PathNotFoundException ex) {
+        return null ;
       }
     }
     return null ;

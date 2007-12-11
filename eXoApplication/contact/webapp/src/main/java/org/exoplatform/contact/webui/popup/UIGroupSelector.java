@@ -139,12 +139,12 @@ public class UIGroupSelector extends UIGroupMembershipSelector implements UIPopu
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup) ;
 
       UIContactForm contactForm = uiPopupContainer.getChild(UIContactForm.class) ;
-      contactForm.setSelectedTab(UIContactForm.INPUT_SHARETAB) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(contactForm) ;
-      
-      
-      //System.out.println("\n\n popup action:" + uiPopupContainer.getAncestorOfType(UIPopupAction.class).getId() + "\n\n");
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupContainer.getAncestorOfType(UIPopupAction.class)) ;
+      if (contactForm != null) {
+        contactForm.setSelectedTab(UIContactForm.INPUT_SHARETAB) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(contactForm) ;
+      }
+      event.getRequestContext()
+        .addUIComponentToUpdateByAjax(uiPopupContainer.getAncestorOfType(UIPopupAction.class)) ;
       
     }
   }

@@ -3,45 +3,25 @@
 	import org.exoplatform.contact.service.GroupContactData;
 	uiform.begin()
 %>
-<% if (uicomponent.isPersonalAddressBookSelected()) { %>
+
 <div class="UIMoveContactsForm">
-	<div class="TitleMoveContactsForm">Choose a Destination Address Book:</div>
+	
+	Contacts : <%=uicomponent.getContactsName()%>
+
+	<div class="TitleMoveContactsForm">Private Address Books:</div>
 	
 	<div class="MoveContactsFormContainer">
 		<%  Map map = uicomponent.getPrivateGroupMap() ;
 				for(groupId in map.keySet()) {
 					String actionLink  = uicomponent.event("SelectGroup", groupId) ;
-					cssClass = "NormalItem" ;
-					if(groupId.equals(uicomponent.groupId_))	cssClass = "SelectedItem" ;
 		%>
-		<div class="ItemList $cssClass">
+		<div class="ItemList">
 			<div class="Icon AddressIcon"><a href="$actionLink"><%=map.get(groupId)%></a></div>
 		</div>
-		<%  } %>
-		
+		<% } %>
 	</div>
-	
-	<div class="UIAction"> 
-		<table class="ActionContainer" align="center">
-			<tr>
-				<td align="center">
-		  		<a href="<%=uicomponent.event("Cancel")%>" class="ActionButton LightBlueStyle">
-		        <div class="ButtonLeft">
-		          <div class="ButtonRight">
-		            <div class="ButtonMiddle">
-		              <%=_ctx.appRes(uicomponent.getName() + ".action.Cancel")%>
-		            </div>
-		          </div>
-		        </div>
-		   		</a>      
-		  	</td>
-		  </tr>  
-		</table>
-  </div>
 
 </div>
-
-<% } else { %>
 			
 			
 		<% String fieldName; %>
@@ -103,8 +83,5 @@
 		    </div>
 		  </div>
 		</div>
-
-			
-		<% } %>
 
 <%uiform.end()%>
