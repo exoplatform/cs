@@ -1790,3 +1790,8 @@
 .UICalendarPortlet .SelectGroupIcon {
 	width: 16px ; height: 16px;
 }
+
+/********************************** UISelectUserForm ***************************************/
+.UISelectUserForm {
+	padding: 10px;
+}

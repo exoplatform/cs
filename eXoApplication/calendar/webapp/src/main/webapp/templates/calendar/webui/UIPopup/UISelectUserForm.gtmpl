@@ -1,8 +1,8 @@
 <%
  import org.exoplatform.services.organization.User;
  uiform.begin() %>
-<div class="UIInsertAddress">
-  <div class="InsertAddressContainer">
+<div class="UISelectUserForm">
+  <div class="SelectUserContainer">
   	<%if(uicomponent.isShowSearch()){%>
     <div class="UISearch">
       <div class="UIBarStyle">
@@ -36,15 +36,10 @@
         <table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
             <thead>
               <tr>
-                <th style="width: 20px;" class="BorderAddress"><input type="checkbox" class="checkbox" value="4" /></th>
+                <th style="width: 30px;" class="BorderAddress"><input type="checkbox" class="checkbox" value="4" /></th>
                 <th class="BorderAddress">
                   <div class="BlueDownArrowIcon">
                     <div class="Label">Name</div>
-                  </div>
-                </th>
-                <th style="width: 48%;" >
-                  <div class="BlueDownArrowIcon">
-                    <div class="Label">Email</div>
                   </div>
                 </th>
               </tr>
