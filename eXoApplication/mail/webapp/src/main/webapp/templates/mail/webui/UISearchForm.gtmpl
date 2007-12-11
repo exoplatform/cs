@@ -3,7 +3,10 @@
 	<a href="<%=uicomponent.event("Advanced")%>"><div class="AdvancedSearch" title="Advance Search"><span></span></div></a>
 	<div class="SeparatorLine"><span></span></div>
 	<a href="<%=uicomponent.event("Search")%>"><div class="Search" title="Search"><span></span></div></a>
-  <input class="Input" type="text" id="search" name="search"/>
+  <div class="InputSearch">
+  	<a href="#" class="SearchActions"><span></span></a>
+  	<input class="Input" type="text" id="search" name="search"/>
+  </div>
   <% 
     String label = _ctx.appRes(uicomponent.getName() + ".label.search") ;
   %>

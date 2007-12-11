@@ -347,3 +347,7 @@
 .SearchFolderIcon {
 	background: url('icons/SearchFolderIcon.gif') no-repeat left center;
 }
+
+.SearchActions {
+	background: url('icons/SearchActions.gif') no-repeat center;
+}

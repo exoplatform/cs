@@ -36,14 +36,27 @@
 	color: #595b6a; 
 }
 
-.UIMailPortlet .SearchForm .Input {
-  background: white url('skinIcons/16x16/icons/SearchActions.gif') no-repeat center left;	
+.UIMailPortlet .SearchForm .InputSearch {
   border: 1px solid #b7b7b7;
-	width: 113px;
+	width: 135px;
 	float: right;
-	padding-left: 20px;
-	height: 20px;
+	height: 22px;
   margin: 5px 8px 5px 0px;
+  line-height: 22px;
+  background: white;
+}
+
+.UIMailPortlet .SearchForm .SearchActions {
+	width: 20px;
+	height: 20px;
+	float: left;
+	display: block;
+}
+
+.UIMailPortlet .SearchForm .Input {
+	border: none;
+	float: left;
+	width: 110px;
 }
 
 .UIMailPortlet .SearchForm .Search {
