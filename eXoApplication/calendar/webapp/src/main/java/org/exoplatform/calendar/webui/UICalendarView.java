@@ -5,6 +5,7 @@
 package org.exoplatform.calendar.webui;
 
 import java.text.DateFormat;
+import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -13,6 +14,7 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.SimpleTimeZone;
 import java.util.TimeZone;
@@ -129,6 +131,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
     int gmtoffset = calendar_.get(Calendar.DST_OFFSET) + calendar_.get(Calendar.ZONE_OFFSET);
     calendar_.setTimeInMillis(System.currentTimeMillis() - gmtoffset) ;
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, dd MMM yyyy k:m:s z");
+    DateFormatSymbols dfs = new DateFormatSymbols() ;
     System.out.println("\n\n GMT Time " + simpleDateFormat.format(calendar_.getTime()));
     int i = 0 ; 
     for(String month : MONTHS) {
@@ -428,6 +431,8 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
       } else {
         String type = event.getRequestContext().getRequestParameter(OBJECTID) ;
+        String value = uiForm.getUIFormSelectBox(EVENT_CATEGORIES).getValue() ;
+        System.out.println("\n\n value " + value);
         UICalendarPortlet uiPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
         UIPopupAction uiParenPopup = uiPortlet.getChild(UIPopupAction.class) ;
         UIPopupContainer uiPopupContainer = uiParenPopup.activate(UIPopupContainer.class, 700) ;
@@ -436,15 +441,16 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
           UITaskForm uiTaskForm = uiPopupContainer.addChild(UITaskForm.class, null, null) ;
           uiTaskForm.initForm(uiPortlet.getCalendarSetting(), null) ;
           uiTaskForm.update(CalendarUtils.PRIVATE_TYPE, null) ;
+          uiTaskForm.setSelectedCalendarId(value) ;
         } else {
           uiPopupContainer.setId(UIPopupContainer.UIEVENTPOPUP) ;
           UIEventForm uiEventForm =  uiPopupContainer.addChild(UIEventForm.class, null, null) ;
           uiEventForm.initForm(uiPortlet.getCalendarSetting(), null) ;
           uiEventForm.update(CalendarUtils.PRIVATE_TYPE, null) ;
+          uiEventForm.setSelectedCalendarId(value) ;
         }
         event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiParenPopup) ;     
-
       }
     }
   }
@@ -784,9 +790,11 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       String type = event.getRequestContext().getRequestParameter(OBJECTID) ;
       String startTime = event.getRequestContext().getRequestParameter("startTime") ;
       String finishTime = event.getRequestContext().getRequestParameter("finishTime") ;
+      String selectedCategory = calendarview.getUIFormSelectBox(EVENT_CATEGORIES).getValue() ;
       UICalendarPortlet uiPortlet = calendarview.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
       UIQuickAddEvent uiQuickAddEvent = uiPopupAction.activate(UIQuickAddEvent.class, 600) ;
+      uiQuickAddEvent.setSelectedCategory(selectedCategory) ;
       if(CalendarEvent.TYPE_TASK.equals(type)) {
         uiQuickAddEvent.setEvent(false) ;
         uiQuickAddEvent.setId("UIQuickAddTask") ;

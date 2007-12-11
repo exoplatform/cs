@@ -190,6 +190,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
   }
   private String getEventCalendar() {return getUIFormSelectBox(FIELD_CALENDAR).getValue() ;}
   public void setSelectedCalendar(String value) {getUIFormSelectBox(FIELD_CALENDAR).setValue(value) ;}
+  public void setSelectedCategory(String value) {getUIFormSelectBox(FIELD_CATEGORY).setValue(value) ;}
   private String getEventCategory() {return getUIFormSelectBox(FIELD_CATEGORY).getValue() ;}
   public void activate() throws Exception {}
   public void deActivate() throws Exception {}

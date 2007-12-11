@@ -234,8 +234,8 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
     UIFormInputWithActions taskDetailTab =  getChildById(TAB_TASKDETAIL) ;
     return taskDetailTab.getUIFormSelectBox(UITaskDetailTab.FIELD_CATEGORY).getValue() ;
   }
-  protected void setSelectedCategory(String value) {
-    UIFormInputWithActions taskDetailTab =  getChildById(TAB_TASKDETAIL) ;
+  public void setSelectedCategory(String value) {
+    UITaskDetailTab taskDetailTab =  getChildById(TAB_TASKDETAIL) ;
     taskDetailTab.getUIFormSelectBox(UITaskDetailTab.FIELD_CATEGORY).setValue(value) ;
   }
 

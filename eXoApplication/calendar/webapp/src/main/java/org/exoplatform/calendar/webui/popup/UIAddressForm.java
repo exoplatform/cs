@@ -156,7 +156,8 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       UIEventForm uiEventForm = uiContainer.findFirstComponentOfType(UIEventForm.class) ;
       StringBuilder sb = new StringBuilder() ;
       for(Contact c : uiForm.getCheckedContact()) {
-        sb.append(c.getEmailAddress()).append("\n") ;
+        if(sb != null && sb.length() > 0) sb.append(CalendarUtils.COLON) ;
+        sb.append(c.getEmailAddress()) ;
       }
       if(uiTaskForm != null) {
         uiTaskForm.setRenderedChild(UITaskForm.TAB_TASKREMINDER) ;
