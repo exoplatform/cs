@@ -91,3 +91,7 @@
 .SpamMail {
 	background: url('icons/SpamMail.gif') no-repeat;
 }
+
+.NotSpamMail {
+	background: url('icons/NotSpam.gif') no-repeat;
+}
