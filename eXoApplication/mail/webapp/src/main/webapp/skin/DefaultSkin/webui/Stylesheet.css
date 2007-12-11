@@ -57,6 +57,8 @@
 	border: none;
 	float: left;
 	width: 110px;
+	font-size: 11px;
+	padding: 3px 0px 0px 2px;
 }
 
 .UIMailPortlet .SearchForm .Search {
