@@ -39,7 +39,7 @@
 .UIMailPortlet .SearchForm .Input {
   background: white url('skinIcons/16x16/icons/SearchActions.gif') no-repeat center left;	
   border: 1px solid #b7b7b7;
-	width: 110px;
+	width: 113px;
 	float: right;
 	padding-left: 20px;
 	height: 20px;
@@ -64,7 +64,7 @@
 
 .UIMailPortlet .MailWorkingWorkspace .SearchForm .SeparatorLine {
   float: right;
-  margin: 3px 5px 2px 5px;
+  margin: 3px 5px 2px 1px;
 }
 
 /***************************************MailWorkingWorkspace********************************/
