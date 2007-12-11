@@ -8,7 +8,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Map;
 
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.SessionsUtils;
@@ -16,6 +18,7 @@ import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
+import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.webui.CalendarView;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
@@ -319,7 +322,27 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
   }
   static  public class CancelActionListener extends EventListener<UIQuickAddEvent> {
     public void execute(Event<UIQuickAddEvent> event) throws Exception {
-      event.getSource().getAncestorOfType(UICalendarPortlet.class).cancelAction() ;
+    	java.util.Calendar cal = new GregorianCalendar() ;
+    	cal.set(java.util.Calendar.HOUR_OF_DAY, 1) ;
+    	cal.set(java.util.Calendar.MINUTE, 1) ;
+    	EventQuery eventQuery = new EventQuery() ;
+    	eventQuery.setFromDate(cal) ;
+    	cal = new GregorianCalendar() ;
+    	cal.set(java.util.Calendar.HOUR_OF_DAY, 23) ;
+    	cal.set(java.util.Calendar.MINUTE, 1) ;
+    	eventQuery.setToDate(cal) ;
+    	eventQuery.setParticipants(new String[]{"root", "demo"}) ;
+    	eventQuery.setNodeType("exo:calendarPublicEvent") ;
+    	Map<String, List<String>> parsMap = 
+    		CalendarUtils.getCalendarService().checkFreeBusy(SessionsUtils.getSystemProvider(), eventQuery) ;
+    	String[] pars = parsMap.keySet().toArray(new String[]{}) ;
+    	for(String par : pars) {
+    		System.out.println("\n\n Name: "  + par ) ;
+    		for(String time : parsMap.get(par)) {
+    			System.out.println("\n\n time: "  + time ) ;
+    		}
+    	}
+    	event.getSource().getAncestorOfType(UICalendarPortlet.class).cancelAction() ;
     }
   }
 

@@ -38,6 +38,7 @@ import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.service.Reminder;
 import org.exoplatform.calendar.service.RssData;
 import org.exoplatform.calendar.service.Utils;
+import org.exoplatform.commons.utils.ISO8601;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
@@ -60,7 +61,7 @@ import com.sun.syndication.io.SyndFeedOutput;
  *          hung.nguyen@exoplatform.com
  * Jul 10, 2007  
  */
-public class JCRDataStorage implements DataStorage{
+public class JCRDataStorage{
 
   final private static String CALENDARS = "calendars".intern() ;
   
@@ -71,6 +72,7 @@ public class JCRDataStorage implements DataStorage{
   final private static String FEED = "eXoCalendarFeed".intern() ;
   final private static String CALENDAR_GROUPS = "groups".intern() ;
   final private static String CALENDAR_REMINDER = "reminders".intern() ;
+  final private static String CALENDAR_EVENT = "events".intern() ;
   final private static String CALENDAR_SETTING = "calendarSetting".intern() ;
   final private static String EVENT_CATEGORIES = "eventCategories".intern() ;
   final private static String NT_UNSTRUCTURED = "nt:unstructured".intern() ;
@@ -83,90 +85,118 @@ public class JCRDataStorage implements DataStorage{
 
   public JCRDataStorage(NodeHierarchyCreator nodeHierarchyCreator)throws Exception {
     nodeHierarchyCreator_ = nodeHierarchyCreator ; 
-    //jcrRegistryService_ = jcrRegistryService ;
   }  
 
   private Node getPublicCalendarServiceHome(SessionProvider sProvider) throws Exception {
-    Node calendarSer ;
   	Node publicApp = nodeHierarchyCreator_.getPublicApplicationNode(sProvider)  ;
-  	if(publicApp.hasNode(CALENDAR_APP)) calendarSer = publicApp.getNode(CALENDAR_APP) ;
-  	else calendarSer = publicApp.addNode(CALENDAR_APP, NT_UNSTRUCTURED) ;
-  	return calendarSer ;
+  	if(publicApp.hasNode(CALENDAR_APP)) return publicApp.getNode(CALENDAR_APP) ;
+  	else {
+  		publicApp.addNode(CALENDAR_APP, NT_UNSTRUCTURED) ;
+  		getPublicRoot(sProvider).getSession().save() ;
+  	}
+  	return publicApp.getNode(CALENDAR_APP) ;
   }
 
   private Node getSharedCalendarHome(SessionProvider sProvider) throws Exception {
     Node calendarServiceHome = getPublicCalendarServiceHome(sProvider) ;
     if(calendarServiceHome.hasNode(SHARED_CALENDAR)) return calendarServiceHome.getNode(SHARED_CALENDAR) ;
-    return calendarServiceHome.addNode(SHARED_CALENDAR, NT_UNSTRUCTURED) ;
+    else {
+    	calendarServiceHome.addNode(SHARED_CALENDAR, NT_UNSTRUCTURED) ;
+    	getPublicRoot(sProvider).getSession().save() ;
+    }
+    return calendarServiceHome.getNode(SHARED_CALENDAR) ; 
+  }
+  
+  private Node getUserRoot(SessionProvider sProvider, String username) throws Exception {
+  	return nodeHierarchyCreator_.getUserApplicationNode(sProvider, username)  ;
+  }
+  
+  private Node getPublicRoot(SessionProvider sysProvider) throws Exception {
+  	return nodeHierarchyCreator_.getPublicApplicationNode(sysProvider) ;
   }
   
   private Node getUserCalendarServiceHome(SessionProvider sProvider, String username) throws Exception {
-    /*ServiceRegistry serviceRegistry = new ServiceRegistry("CalendarService") ;
-    Session session = getJCRSession() ;
-    if(jcrRegistryService_.getUserNode(session, username) == null)
-      jcrRegistryService_.createUserHome(username, false) ;
-    jcrRegistryService_.createServiceRegistry(username, serviceRegistry, false) ;
-    Node calServiceNode = jcrRegistryService_.getServiceRegistryNode(session, username, serviceRegistry.getName()) ;
-    if(!calServiceNode.hasNode(CALENDAR_SETTING)) {
-      addCalendarSetting(calServiceNode, new CalendarSetting()) ;
-      calServiceNode.getSession().save() ;
-    }
-    session.logout() ;*/
-  	Node userApp = nodeHierarchyCreator_.getUserApplicationNode(sProvider, username)  ;
+   	Node userApp = nodeHierarchyCreator_.getUserApplicationNode(sProvider, username)  ;
   	Node calendarRoot ; 
   	if(userApp.hasNode(CALENDAR_APP)) calendarRoot = userApp.getNode(CALENDAR_APP) ;
-  	else calendarRoot = userApp.addNode(CALENDAR_APP, NT_UNSTRUCTURED) ;
+  	else {
+  		userApp.addNode(CALENDAR_APP, NT_UNSTRUCTURED) ;
+  		calendarRoot = userApp.getNode(CALENDAR_APP) ;
+  		userApp.save() ;
+  	}
   	if(!calendarRoot.hasNode(CALENDAR_SETTING)) {
       addCalendarSetting(calendarRoot, new CalendarSetting()) ;
-      calendarRoot.getSession().save() ;
-    }
+      userApp.save() ;
+    }  	
   	return calendarRoot ;
   }
   
-  private Node getCalendarHome(SessionProvider sProvider) throws Exception {
+  private Node getPublicCalendarHome(SessionProvider sProvider) throws Exception {
     Node calendarServiceHome = getPublicCalendarServiceHome(sProvider) ;
     if(calendarServiceHome.hasNode(CALENDARS)) return calendarServiceHome.getNode(CALENDARS) ;
-    return calendarServiceHome.addNode(CALENDARS, NT_UNSTRUCTURED) ;
+    else {
+    	calendarServiceHome.addNode(CALENDARS, NT_UNSTRUCTURED) ;
+    	getPublicRoot(sProvider).getSession().save() ;
+    }
+    return calendarServiceHome.getNode(CALENDARS) ; 
   }
   
-  private Node getCalendarHome(SessionProvider sProvider, String username) throws Exception {
+  private Node getUserCalendarHome(SessionProvider sProvider, String username) throws Exception {
     Node calendarServiceHome = getUserCalendarServiceHome(sProvider, username) ;
     if(calendarServiceHome.hasNode(CALENDARS)) return calendarServiceHome.getNode(CALENDARS) ;
-    return calendarServiceHome.addNode(CALENDARS, NT_UNSTRUCTURED) ;
+    else{
+    	calendarServiceHome.addNode(CALENDARS, NT_UNSTRUCTURED) ;
+    	getUserRoot(sProvider, username).getSession().save() ;
+    }
+    return calendarServiceHome.getNode(CALENDARS) ; 
   }
   
   public Node getRssHome(SessionProvider sProvider, String username) throws Exception {
     Node calendarServiceHome = getUserCalendarServiceHome(sProvider, username) ;
     if(calendarServiceHome.hasNode(FEED)) return calendarServiceHome.getNode(FEED) ;
-    return calendarServiceHome.addNode(FEED, NT_UNSTRUCTURED) ;
+    else {
+    	calendarServiceHome.addNode(FEED, NT_UNSTRUCTURED) ;
+    	getUserRoot(sProvider, username).getSession().save() ;
+    }
+    return calendarServiceHome.getNode(FEED) ;
   }
 
   protected Node getCalendarCategoryHome(SessionProvider sProvider, String username) throws Exception {
     Node calendarServiceHome = getUserCalendarServiceHome(sProvider, username) ;
     if(calendarServiceHome.hasNode(CALENDAR_CATEGORIES)) return calendarServiceHome.getNode(CALENDAR_CATEGORIES) ;
-    return calendarServiceHome.addNode(CALENDAR_CATEGORIES, NT_UNSTRUCTURED) ;
+    else {
+    	calendarServiceHome.addNode(CALENDAR_CATEGORIES, NT_UNSTRUCTURED) ;
+    	getUserRoot(sProvider, username).getSession().save() ;
+    }
+    return calendarServiceHome.getNode(CALENDAR_CATEGORIES) ;
   }
 
   protected Node getEventCategoryHome(SessionProvider sProvider, String username) throws Exception {
     Node calendarServiceHome = getUserCalendarServiceHome(sProvider, username) ;
     if(calendarServiceHome.hasNode(EVENT_CATEGORIES)) return calendarServiceHome.getNode(EVENT_CATEGORIES) ;
-    return calendarServiceHome.addNode(EVENT_CATEGORIES, NT_UNSTRUCTURED) ;
+    else {
+    	calendarServiceHome.addNode(EVENT_CATEGORIES, NT_UNSTRUCTURED) ;
+    	getUserRoot(sProvider, username).getSession().save() ;
+    }
+    return calendarServiceHome.getNode(EVENT_CATEGORIES) ; 
   }
 
   private Node getCalendarGroupHome(SessionProvider sProvider) throws Exception {
     Node calendarServiceHome = getPublicCalendarServiceHome(sProvider) ;
     if(calendarServiceHome.hasNode(CALENDAR_GROUPS)) return calendarServiceHome.getNode(CALENDAR_GROUPS) ;
-    return calendarServiceHome.addNode(CALENDAR_GROUPS, NT_UNSTRUCTURED) ;
-  }
-
-  
+    else {
+    	calendarServiceHome.addNode(CALENDAR_GROUPS, NT_UNSTRUCTURED) ;
+    	getPublicRoot(sProvider).getSession().save() ;
+    }
+    return calendarServiceHome.getNode(CALENDAR_GROUPS) ; 
+  } 
 
   public Calendar getUserCalendar(SessionProvider sProvider, String username, String calendarId) throws Exception {
-    Node calendarNode = getCalendarHome(sProvider, username).getNode(calendarId) ;
+    Node calendarNode = getUserCalendarHome(sProvider, username).getNode(calendarId) ;
     return getCalendar(username, calendarNode) ;
   }
   public List<Calendar> getUserCalendars(SessionProvider sProvider, String username) throws Exception {
-    NodeIterator iter = getCalendarHome(sProvider, username).getNodes() ;
+    NodeIterator iter = getUserCalendarHome(sProvider, username).getNodes() ;
     List<Calendar> calList = new ArrayList<Calendar>() ;
     while(iter.hasNext()) {
       calList.add(getCalendar(username, iter.nextNode())) ;
@@ -174,7 +204,7 @@ public class JCRDataStorage implements DataStorage{
     return calList ;
   }
   public List<Calendar> getUserCalendarsByCategory(SessionProvider sProvider, String username, String calendarCategoryId) throws Exception {
-    Node calendarHome = getCalendarHome(sProvider, username) ;    
+    Node calendarHome = getUserCalendarHome(sProvider, username) ;    
     QueryManager qm = calendarHome.getSession().getWorkspace().getQueryManager();
     StringBuffer queryString = new StringBuffer("/jcr:root" + calendarHome.getPath() 
         + "//element(*,exo:calendar)[@exo:categoryId='").
@@ -190,7 +220,7 @@ public class JCRDataStorage implements DataStorage{
     return calendares;
   }
   public void saveUserCalendar(SessionProvider sProvider, String username, Calendar calendar, boolean isNew) throws Exception {
-    Node calendarHome = getCalendarHome(sProvider, username) ;
+    Node calendarHome = getUserCalendarHome(sProvider, username) ;
     Node calendarNode ;
     if(isNew) {
       if(calendarHome.hasNode(calendar.getId())) throw new Exception("This calendar is already exists") ;
@@ -214,11 +244,16 @@ public class JCRDataStorage implements DataStorage{
       checkToSave(calendarCategory, calendar.getId()) ;
       calendarCategory.save() ;
     }*/
-    calendarHome.getSession().save() ;
+    if(! calendarHome.isNew()) {
+    	calendarHome.getSession().save() ;
+    }else {
+    	getUserRoot(sProvider, username).getSession().save() ;
+    }
+    
   }
 
   public Calendar removeUserCalendar(SessionProvider sProvider, String username, String calendarId) throws Exception {
-    Node calendarHome = getCalendarHome(sProvider, username) ;
+    Node calendarHome = getUserCalendarHome(sProvider, username) ;
     if(calendarHome.hasNode(calendarId)) {
       Node calNode = calendarHome.getNode(calendarId) ;
       Calendar calendar = getCalendar(username, calNode) ;
@@ -236,12 +271,12 @@ public class JCRDataStorage implements DataStorage{
   }
 
   public Calendar getGroupCalendar(SessionProvider sProvider, String calendarId) throws Exception {
-    Node calendarNode = getCalendarHome(sProvider).getNode(calendarId) ;
+    Node calendarNode = getPublicCalendarHome(sProvider).getNode(calendarId) ;
     return getCalendar(null, calendarNode) ;
   }
 
   public List<GroupCalendarData> getGroupCalendars(SessionProvider sProvider, String[] groupIds) throws Exception {
-    Node calendarHome = getCalendarHome(sProvider) ;
+    Node calendarHome = getPublicCalendarHome(sProvider) ;
     List<Calendar> calendars ;
     QueryManager qm ;
     List<GroupCalendarData> groupCalendars = new ArrayList<GroupCalendarData>();
@@ -267,7 +302,7 @@ public class JCRDataStorage implements DataStorage{
   }
 
   public void saveGroupCalendar(SessionProvider sProvider, Calendar calendar, boolean isNew) throws Exception {
-    Node calendarHome = getCalendarHome(sProvider) ;
+    Node calendarHome = getPublicCalendarHome(sProvider) ;
     Node calendarNode ;
     if(isNew) {
       if(calendarHome.hasNode(calendar.getId())) throw new Exception("This calendar is already exists") ;
@@ -306,7 +341,7 @@ public class JCRDataStorage implements DataStorage{
   }  
 
   public Calendar removeGroupCalendar(SessionProvider sProvider, String calendarId) throws Exception {
-    Node calendarHome = getCalendarHome(sProvider) ;
+    Node calendarHome = getPublicCalendarHome(sProvider) ;
     if(calendarHome.hasNode(calendarId)) {
       Node calNode = calendarHome.getNode(calendarId) ;
       Calendar calendar = getCalendar(null, calNode) ;
@@ -395,7 +430,7 @@ public class JCRDataStorage implements DataStorage{
   }  
 
   public List<GroupCalendarData> getCalendarCategories(SessionProvider sProvider, String username) throws Exception {
-    Node calendarHome = getCalendarHome(sProvider, username) ;
+    Node calendarHome = getUserCalendarHome(sProvider, username) ;
     NodeIterator iter = getCalendarCategoryHome(sProvider, username).getNodes() ;
     List<GroupCalendarData> calendarCategories = new ArrayList<GroupCalendarData> () ;
     List<Calendar> calendars ;
@@ -585,14 +620,14 @@ public class JCRDataStorage implements DataStorage{
   // Event APIs
 
   public CalendarEvent getUserEvent(SessionProvider sProvider, String username, String calendarId, String eventId) throws Exception {
-    Node calendarNode = getCalendarHome(sProvider, username).getNode(calendarId) ;
+    Node calendarNode = getUserCalendarHome(sProvider, username).getNode(calendarId) ;
     return getEvent(sProvider, calendarNode.getNode(eventId)) ;
   }
 
   public List<CalendarEvent> getUserEventByCalendar(SessionProvider sProvider, String username, List<String> calendarIds) throws Exception {
     List<CalendarEvent> events = new ArrayList<CalendarEvent>() ;
     for(String calendarId : calendarIds) {
-      Node calendarNode = getCalendarHome(sProvider, username).getNode(calendarId) ;
+      Node calendarNode = getUserCalendarHome(sProvider, username).getNode(calendarId) ;
       NodeIterator it = calendarNode.getNodes();
       while(it.hasNext()) {
         events.add(getEvent(sProvider, it.nextNode())) ;
@@ -601,7 +636,7 @@ public class JCRDataStorage implements DataStorage{
     return events ;
   }
   public List<CalendarEvent> getUserEventByCategory(SessionProvider sProvider, String username, String eventCategoryId) throws Exception {
-    Node calendarHome = getCalendarHome(sProvider, username) ;
+    Node calendarHome = getUserCalendarHome(sProvider, username) ;
     QueryManager qm = calendarHome.getSession().getWorkspace().getQueryManager();
     List<CalendarEvent> events = new ArrayList<CalendarEvent> () ;
     NodeIterator calIter = calendarHome.getNodes() ;
@@ -622,7 +657,7 @@ public class JCRDataStorage implements DataStorage{
     return events;
   }
   public List<CalendarEvent> getUserEvents(SessionProvider sProvider, String username, EventQuery eventQuery) throws Exception {
-    Node calendarHome = getCalendarHome(sProvider, username) ;
+    Node calendarHome = getUserCalendarHome(sProvider, username) ;
     eventQuery.setCalendarPath(calendarHome.getPath()) ;
     QueryManager qm = calendarHome.getSession().getWorkspace().getQueryManager() ;
     List<CalendarEvent> events = new ArrayList<CalendarEvent>() ;
@@ -639,19 +674,20 @@ public class JCRDataStorage implements DataStorage{
   }
 
   public void saveUserEvent(SessionProvider sProvider, String username, String calendarId, CalendarEvent event, boolean isNew) throws Exception {
-    Node calendarNode = getCalendarHome(sProvider, username).getNode(calendarId);
+    Node calendarNode = getUserCalendarHome(sProvider, username).getNode(calendarId);
+    Node eventFolder = getEventFolder(SessionProvider.createSystemProvider(), event.getFromDateTime()) ;
     if(event.getReminders() != null && event.getReminders().size() > 0) {
     	//Need to use system session
     	Node reminderFolder = getReminderFolder(sProvider, event.getFromDateTime()) ;
-    	saveEvent(calendarNode, event, reminderFolder, isNew) ;
+    	saveEvent(calendarNode, event, eventFolder, reminderFolder, isNew) ;
     }else {
-    	saveEvent(calendarNode, event, null, isNew) ;
+    	saveEvent(calendarNode, event, eventFolder, null, isNew) ;
     }
     
   }
 
   public CalendarEvent removeUserEvent(SessionProvider sProvider, String username, String calendarId, String eventId) throws Exception {
-    Node calendarNode = getCalendarHome(sProvider, username).getNode(calendarId);
+    Node calendarNode = getUserCalendarHome(sProvider, username).getNode(calendarId);
     if(calendarNode.hasNode(eventId)){
       Node eventNode = calendarNode.getNode(eventId) ;
       CalendarEvent event = getEvent(sProvider, eventNode) ;
@@ -673,7 +709,7 @@ public class JCRDataStorage implements DataStorage{
   } 
   
   public CalendarEvent getGroupEvent(SessionProvider sProvider, String calendarId, String eventId) throws Exception {
-    Node calendarNode = getCalendarHome(sProvider).getNode(calendarId) ;
+    Node calendarNode = getPublicCalendarHome(sProvider).getNode(calendarId) ;
     CalendarEvent calEvent = getEvent(sProvider, calendarNode.getNode(eventId)) ;
     calEvent.setCalType("2") ;
     return calEvent ;
@@ -682,7 +718,7 @@ public class JCRDataStorage implements DataStorage{
   public List<CalendarEvent> getGroupEventByCalendar(SessionProvider sProvider, List<String> calendarIds) throws Exception {
     List<CalendarEvent> events = new ArrayList<CalendarEvent>() ;
     for(String calendarId : calendarIds){
-      Node calendarNode = getCalendarHome(sProvider).getNode(calendarId) ;    
+      Node calendarNode = getPublicCalendarHome(sProvider).getNode(calendarId) ;    
       NodeIterator it = calendarNode.getNodes();
       while(it.hasNext()) {
         events.add(getEvent(sProvider, it.nextNode())) ;
@@ -692,7 +728,7 @@ public class JCRDataStorage implements DataStorage{
   }
 
   public List<CalendarEvent> getPublicEvents(SessionProvider sProvider, EventQuery eventQuery) throws Exception {
-    Node calendarHome = getCalendarHome(sProvider) ;
+    Node calendarHome = getPublicCalendarHome(sProvider) ;
     eventQuery.setCalendarPath(calendarHome.getPath()) ;
     QueryManager qm = calendarHome.getSession().getWorkspace().getQueryManager() ;
     List<CalendarEvent> events = new ArrayList<CalendarEvent>() ;
@@ -708,13 +744,14 @@ public class JCRDataStorage implements DataStorage{
     return events ;
   }
   public void saveGroupEvent(SessionProvider sProvider, String calendarId, CalendarEvent event, boolean isNew) throws Exception {
-    Node calendarNode = getCalendarHome(sProvider).getNode(calendarId) ;
+    Node calendarNode = getPublicCalendarHome(sProvider).getNode(calendarId) ;
+    Node eventFolder = getEventFolder(SessionProvider.createSystemProvider(), event.getFromDateTime()) ;
     Node reminderFolder = getReminderFolder(sProvider, event.getFromDateTime()) ;
-    saveEvent(calendarNode, event, reminderFolder, isNew) ;
+    saveEvent(calendarNode, event, eventFolder, reminderFolder, isNew) ;
   }
 
   public CalendarEvent removeGroupEvent(SessionProvider sProvider, String calendarId, String eventId) throws Exception {
-    Node calendarNode = getCalendarHome(sProvider).getNode(calendarId) ;
+    Node calendarNode = getPublicCalendarHome(sProvider).getNode(calendarId) ;
     if(calendarNode.hasNode(eventId)){
       Node eventNode = calendarNode.getNode(eventId) ;
       CalendarEvent event = getEvent(sProvider, eventNode) ;
@@ -774,7 +811,7 @@ public class JCRDataStorage implements DataStorage{
     return event ;
   }
 
-  private void saveEvent(Node calendarNode, CalendarEvent event, Node reminderFolder, boolean isNew) throws Exception {
+  private void saveEvent(Node calendarNode, CalendarEvent event, Node eventFolder, Node reminderFolder, boolean isNew) throws Exception {
     Node eventNode ;
     if(isNew) {
       eventNode = calendarNode.addNode(event.getId(), "exo:calendarEvent") ;
@@ -832,7 +869,10 @@ public class JCRDataStorage implements DataStorage{
       }
     }
     calendarNode.save() ;
-    calendarNode.getSession().save()  ;
+    
+    addEvent(eventFolder, event) ;
+    
+    //calendarNode.getSession().save()  ;
   }
   private void addReminder(Node eventNode, Node reminderFolder, Reminder reminder) throws Exception {
     Node reminderNode ;
@@ -858,11 +898,15 @@ public class JCRDataStorage implements DataStorage{
     reminderNode.setProperty("exo:reminderType", reminder.getReminderType()) ;
     reminderNode.setProperty("exo:email", reminder.getEmailAddress()) ;
     reminderNode.setProperty("exo:isRepeat", reminder.isRepeat()) ;
+    reminderNode.setProperty("exo:isOver", true) ;
     java.util.Calendar cal = new GregorianCalendar() ;
     if(reminder.getFromDateTime() != null) {
+    	cal.setTime(reminder.getFromDateTime()) ;
+    	reminderNode.setProperty("exo:fromDateTime", cal) ;
     	long time = reminder.getFromDateTime().getTime() - (reminder.getAlarmBefore() * 60 * 1000) ;
+    	cal = new GregorianCalendar() ;
     	cal.setTimeInMillis(time) ;
-      reminderNode.setProperty("exo:fromDateTime", cal) ;
+      reminderNode.setProperty("exo:remindDateTime", cal) ;
     }
     StringBuffer summary = new StringBuffer("Event: ") ;
     summary.append(eventNode.getProperty("exo:summary").getString()).append("<br>") ;
@@ -879,31 +923,78 @@ public class JCRDataStorage implements DataStorage{
     summary.append(cal.get(java.util.Calendar.MONTH)).append("/") ;
     summary.append(cal.get(java.util.Calendar.YEAR)).append("<br>") ;
     reminderNode.setProperty("exo:eventSummary", summary.toString()) ;
-    reminderFolder.getSession().save() ;
+    if(!reminderFolder.isNew()) reminderFolder.save() ;
+    else reminderFolder.getSession().save() ;
   }
   
-  private Node getReminderFolder(SessionProvider sProvider, Date fromDate)throws Exception {
+  private void addEvent(Node eventFolder, CalendarEvent event) throws Exception {
+  	Node publicEvent ;
+  	if(eventFolder.hasNode(event.getId())) publicEvent = eventFolder.getNode(event.getId()) ;
+  	else publicEvent = eventFolder.addNode(event.getId(), "exo:calendarPublicEvent") ;
+  	publicEvent.setProperty("exo:id", event.getId()) ;
+  	publicEvent.setProperty("exo:eventType", event.getEventType()) ;
+  	publicEvent.setProperty("exo:calendarId", event.getCalendarId()) ;
+  	GregorianCalendar dateTime = Utils.getInstanceTempCalendar() ;
+    dateTime.setTime(event.getFromDateTime()) ;
+  	publicEvent.setProperty("exo:fromDateTime", dateTime) ;
+  	dateTime.setTime(event.getToDateTime()) ;
+  	publicEvent.setProperty("exo:toDateTime", dateTime) ;
+  	publicEvent.setProperty("exo:participant", event.getParticipant()) ;
+  	try{
+  		if(!eventFolder.isNew()) eventFolder.save() ;
+    	else eventFolder.getSession().save() ;
+  	}catch(Exception e) {
+  		eventFolder.getSession().refresh(true) ;
+  		eventFolder.getSession().save() ;
+  		//e.printStackTrace() ;
+  	}
+  	
+  }
+  
+  private Node getReminderFolder(SessionProvider sysProvider, Date fromDate)throws Exception {
+  	Node publicApp = getPublicCalendarServiceHome(sysProvider) ;
+  	Node dateFolder = getDateFolder(publicApp, fromDate) ;
+  	if(dateFolder.hasNode(CALENDAR_REMINDER)) return dateFolder.getNode(CALENDAR_REMINDER) ;
+  	else {
+  		dateFolder.addNode(CALENDAR_REMINDER, NT_UNSTRUCTURED) ;
+    	getPublicRoot(sysProvider).getSession().save() ;
+  	}
+  	
+  	return dateFolder.getNode(CALENDAR_REMINDER) ;
+  }
+  
+  private Node getEventFolder(SessionProvider sysProvider, Date fromDate)throws Exception {
+  	Node publicApp = getPublicCalendarServiceHome(sysProvider) ;
+  	Node dateFolder = getDateFolder(publicApp, fromDate) ;
+  	if(dateFolder.hasNode(CALENDAR_EVENT)) return dateFolder.getNode(CALENDAR_EVENT) ;
+  	else {
+  		dateFolder.addNode(CALENDAR_EVENT, NT_UNSTRUCTURED) ;
+    	getPublicRoot(sysProvider).getSession().save() ;
+  	}
+  	return dateFolder.getNode(CALENDAR_EVENT) ;
+  }
+  
+  private Node getDateFolder(Node publicApp, Date date) throws Exception {
   	java.util.Calendar fromCalendar = new GregorianCalendar() ;
-  	fromCalendar.setTime(fromDate) ;
-  	Node reminderHome = getReminderHome(sProvider) ;
+  	fromCalendar.setTime(date) ;
   	Node yearNode;
   	Node monthNode;
-  	String year = String.valueOf(fromCalendar.get(java.util.Calendar.YEAR)) ;
-  	String month = String.valueOf(fromCalendar.get(java.util.Calendar.MONTH) + 1) ;
-  	String day = String.valueOf(fromCalendar.get(java.util.Calendar.DATE)) ;
-  	if(reminderHome.hasNode(year)) yearNode = reminderHome.getNode(year) ;
-  	else yearNode = reminderHome.addNode(year, NT_UNSTRUCTURED) ;
+  	String year = "Y" + String.valueOf(fromCalendar.get(java.util.Calendar.YEAR)) ;
+  	String month = "M" + String.valueOf(fromCalendar.get(java.util.Calendar.MONTH) + 1) ;
+  	String day = "D" + String.valueOf(fromCalendar.get(java.util.Calendar.DATE)) ;
+  	if(publicApp.hasNode(year)) yearNode = publicApp.getNode(year) ;
+  	else yearNode = publicApp.addNode(year, NT_UNSTRUCTURED) ;
   	if(yearNode.hasNode(month)) monthNode = yearNode.getNode(month) ;
   	else monthNode = yearNode.addNode(month, NT_UNSTRUCTURED) ;
   	if(monthNode.hasNode(day)) return monthNode.getNode(day) ;
-  	else return monthNode.addNode(day, NT_UNSTRUCTURED) ;  	
+  	else return monthNode.addNode(day, NT_UNSTRUCTURED) ;
   }
   
-  private Node getReminderHome(SessionProvider sProvider) throws Exception {
+  /*private Node getReminderHome(SessionProvider sProvider) throws Exception {
     Node calendarServiceHome  = getPublicCalendarServiceHome(sProvider) ;    
     if(calendarServiceHome.hasNode(CALENDAR_REMINDER)) return calendarServiceHome.getNode(CALENDAR_REMINDER) ;
     return calendarServiceHome.addNode(CALENDAR_REMINDER, NT_UNSTRUCTURED) ;
-  }
+  }*/
   
   private List<Reminder> getReminders(SessionProvider sProvider, Node eventNode) throws Exception {
     List<Reminder> reminders = new ArrayList<Reminder> () ;
@@ -1180,7 +1271,7 @@ public class JCRDataStorage implements DataStorage{
     QueryManager qm ;
     // private events
     if(username != null && username.length() > 0) {
-      Node calendarHome = getCalendarHome(sProvider, username) ;
+      Node calendarHome = getUserCalendarHome(sProvider, username) ;
       eventQuery.setCalendarPath(calendarHome.getPath()) ;
       qm = calendarHome.getSession().getWorkspace().getQueryManager() ;
       query = qm.createQuery(eventQuery.getQueryStatement(), Query.XPATH) ;
@@ -1204,7 +1295,7 @@ public class JCRDataStorage implements DataStorage{
       }
     }  
     // public events
-    Node publicCalHome = getCalendarHome(sProvider) ;
+    Node publicCalHome = getPublicCalendarHome(sProvider) ;
     eventQuery.setCalendarPath(publicCalHome.getPath()) ;
     qm = publicCalHome.getSession().getWorkspace().getQueryManager() ;
     eventQuery.setCalendarId(publicCalendarIds) ;
@@ -1213,7 +1304,8 @@ public class JCRDataStorage implements DataStorage{
     mapData = updateMap(mapData, it, eventQuery.getFromDate(), eventQuery.getToDate()) ;  
     return mapData ;    
   }
-
+  
+  
   private Map<Integer, String> updateMap(Map<Integer, String> data, NodeIterator it, java.util.Calendar fromDate, java.util.Calendar toDate) throws Exception {
     Long start = new Long(1);
     Long end ;
@@ -1260,7 +1352,7 @@ public class JCRDataStorage implements DataStorage{
   
   public void shareCalendar(SessionProvider sProvider, String username, String calendarId, List<String> receiverUsers) throws Exception {
     Node sharedCalendarHome = getSharedCalendarHome(sProvider) ;
-    Node calendarNode = getCalendarHome(sProvider, username).getNode(calendarId) ;
+    Node calendarNode = getUserCalendarHome(sProvider, username).getNode(calendarId) ;
     Value[] values = {};
     if (calendarNode.isNodeType(SHARED_MIXIN)) {     
       values = calendarNode.getProperty(SHARED_PROP).getValues();
@@ -1407,6 +1499,7 @@ public class JCRDataStorage implements DataStorage{
   
   public void saveEventToSharedCalendar(SessionProvider sProvider, String username, String calendarId, CalendarEvent event, boolean isNew) throws Exception  {
     Node sharedCalendarHome = getSharedCalendarHome(sProvider) ;
+    Node eventFolder = getEventFolder(SessionProvider.createSystemProvider(), event.getFromDateTime()) ;
     if(sharedCalendarHome.hasNode(username)) {
       Node userNode = sharedCalendarHome.getNode(username) ;
       PropertyIterator iter = userNode.getReferences() ;
@@ -1415,12 +1508,44 @@ public class JCRDataStorage implements DataStorage{
         calendar = iter.nextProperty().getParent() ;
         if(calendar.getProperty("exo:id").getString().equals(calendarId)) {
         	Node reminderFolder = getReminderFolder(sProvider, event.getFromDateTime()) ;
-          saveEvent(calendar, event, reminderFolder, isNew) ;
+          saveEvent(calendar, event, eventFolder, reminderFolder, isNew) ;
           calendar.save() ;
           break ;
         }
       }      
     }
+  }
+  
+  
+  public Map<String, List<String>> checkFreeBusy(SessionProvider sysProvider, EventQuery eventQuery) throws Exception {
+  	Node eventFolder = getEventFolder(sysProvider, eventQuery.getFromDate().getTime()) ;
+  	Map<String, List<String>> participantMap = new HashMap<String, List<String>>() ;
+  	eventQuery.setCalendarPath(eventFolder.getPath()) ;
+  	eventQuery.setOrderBy(new String[]{"exo:fromDateTime"}) ;
+  	QueryManager qm = eventFolder.getSession().getWorkspace().getQueryManager();
+  	String[] pars = eventQuery.getParticipants() ;
+  	Query query ;
+  	Node event ;
+  	List<String> time ;
+  	String from ;
+  	String to ;
+  	for(String par : pars) {
+  		eventQuery.setParticipants(new String[]{par}) ;
+  		//System.out.println("eventQuery.getQueryStatement() ========>" + eventQuery.getQueryStatement()) ;
+  		query = qm.createQuery(eventQuery.getQueryStatement(), Query.XPATH);
+      QueryResult result = query.execute();
+      NodeIterator it = result.getNodes();
+      time = new ArrayList<String>() ;
+      //System.out.println(par + " ========>" + it.getSize()) ;
+      while(it.hasNext()) {
+      	event = it.nextNode() ;
+      	from = String.valueOf(event.getProperty("exo:fromDateTime").getDate().getTimeInMillis()) ;
+      	to = String.valueOf(event.getProperty("exo:toDateTime").getDate().getTimeInMillis()) ;
+      	time.add(from + ":" + to) ;
+      }
+      participantMap.put(par, time) ;
+  	}    
+  	return participantMap ;
   }
 }
 

@@ -108,9 +108,9 @@ public class CalendarServiceImpl implements CalendarService{
   }*/
 
 
-  public CalendarEvent getUserEvent(SessionProvider sProvider, String username, String calendarId, String eventId) throws Exception {
+  /*public CalendarEvent getUserEvent(SessionProvider sProvider, String username, String calendarId, String eventId) throws Exception {
     return storage_.getUserEvent(sProvider, username, calendarId, eventId);
-  }
+  }*/
   public List<CalendarEvent> getUserEventByCalendar(SessionProvider sProvider, String username, List<String> calendarIds) throws Exception {
     return storage_.getUserEventByCalendar(sProvider, username, calendarIds);
   }
@@ -200,5 +200,9 @@ public class CalendarServiceImpl implements CalendarService{
   
   public void saveEventToSharedCalendar(SessionProvider sProvider, String username, String calendarId, CalendarEvent event, boolean isNew) throws Exception  {
     storage_.saveEventToSharedCalendar(sProvider, username, calendarId, event, isNew) ;
+  }
+  
+  public Map<String, List<String>> checkFreeBusy(SessionProvider sysProvider, EventQuery eventQuery) throws Exception {
+  	return storage_.checkFreeBusy(sysProvider, eventQuery) ;
   }
 }

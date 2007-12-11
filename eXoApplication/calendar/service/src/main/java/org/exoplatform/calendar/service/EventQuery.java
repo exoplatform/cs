@@ -13,6 +13,7 @@ import org.exoplatform.commons.utils.ISO8601;
  * Jul 11, 2007  
  */
 public class EventQuery {
+	private String nodeType = "exo:calendarEvent" ;
   private String eventType ;
   private String text = null ;
   private String[] categoryIds = null ;
@@ -22,15 +23,18 @@ public class EventQuery {
   private String calendarPath ;
   private String priority ;
   private String state ;
-  private String[] orderBy ;
-  private String orderType ;
+  private String[] orderBy ; 
+  private String[] participants ;  
+  private String orderType = "ascending" ;//ascending or descending
+  
+  public String getNodeType() { return nodeType ; }
+  public void setNodeType(String nt) { this.nodeType = nt ; }
   
   public String getEventType() { return eventType ; }
+  public void setEventType(String eventType) { this.eventType = eventType ; }
   
   public void setText(String fullTextSearch) { this.text = fullTextSearch ; }
   public String getText() { return text ; }
-  
-  public void setEventType(String eventType) { this.eventType = eventType ; }
   
   public String[] getCategoryId() { return categoryIds ; }
   public void setCategoryId(String[] categoryIds) { this.categoryIds = categoryIds ; }
@@ -56,11 +60,14 @@ public class EventQuery {
   public String[] getOrderBy() { return orderBy ; }
   public void setOrderBy(String[] order) { this.orderBy = order ; }
   
+  public String[] getParticipants() { return participants ; }
+  public void setParticipants(String[] par) { this.participants = par ; }
+  
   public String getOrderType() { return orderType ; }
   public void setOrderType(String type) { this.orderType = type ; }
   
   public String getQueryStatement() throws Exception {
-    StringBuffer queryString = new StringBuffer("/jcr:root" + calendarPath + "//element(*,exo:calendarEvent)") ;
+    StringBuffer queryString = new StringBuffer("/jcr:root" + calendarPath + "//element(*," + nodeType + ")") ;
     boolean hasConjuntion = false ;
     StringBuffer stringBuffer = new StringBuffer("[") ;
     //desclared full text query
@@ -114,6 +121,17 @@ public class EventQuery {
       stringBuffer.append(")") ;
       hasConjuntion = true ;
     }
+    // desclared participants query
+    if(participants != null && participants.length > 0) {
+      if(hasConjuntion) stringBuffer.append(" and (") ;
+      else stringBuffer.append("(") ;
+      for(int i = 0; i < participants.length; i ++) {
+        if(i == 0) stringBuffer.append("@exo:participant='" + participants[i] +"'") ;
+        else stringBuffer.append(" or @exo:participant='" + participants[i] +"'") ;
+      }
+      stringBuffer.append(")") ;
+      hasConjuntion = true ;
+    }
     
     // desclared Date time
     if(fromDate != null && toDate != null){
@@ -163,8 +181,8 @@ public class EventQuery {
     //declared order by
     if(orderBy != null && orderBy.length > 0 && orderType != null && orderType.length() > 0) {
       for(int i = 0; i < orderBy.length; i ++) {
-        if(i == 0) stringBuffer.append(" order by " + orderBy[i] + " " + orderType) ;
-        else stringBuffer.append(", order by " + orderBy[i] + " " + orderType) ;
+        if(i == 0) stringBuffer.append(" order by @" + orderBy[i].trim() + " " + orderType) ;
+        else stringBuffer.append(", order by @" + orderBy[i].trim() + " " + orderType) ;
       }
       hasConjuntion = true ;
     }

@@ -7,7 +7,9 @@ package org.exoplatform.calendar.webui.popup;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -18,6 +20,7 @@ import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.EventCategory;
+import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.Reminder;
 import org.exoplatform.calendar.webui.CalendarView;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
@@ -611,8 +614,15 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTSHARE) ;
     String participant = eventDetailTab.getUIFormTextAreaInput(FIELD_PARTICIPANT).getValue() ;
     if(CalendarUtils.isEmpty(participant)) return null ;
-    else return participant.split(CalendarUtils.COLON) ;
+    else {
+    	String[] pars = participant.split(CalendarUtils.COLON) ;
+    	for(int i = 0; i < pars.length; i++) {
+    		pars[i] = pars[i].trim() ;
+    	}
+    	return pars ;
+    }
   } 
+  
   protected void setParticipant(String values) {
     UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTSHARE) ;
     StringBuffer sb = new StringBuffer() ;
@@ -759,7 +769,8 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
         calendarEvent.setAttachment(uiForm.getAttachments(calendarEvent.getId(), uiForm.isAddNew_)) ;
         calendarEvent.setReminders(uiForm.getEventReminders(from, calendarEvent.getReminders())) ;
         if(uiForm.getMeetingInvitation() != null) calendarEvent.setInvitation(uiForm.getMeetingInvitation()) ;
-        if(uiForm.getParticipant() != null) calendarEvent.setParticipant(uiForm.getParticipant()) ;
+        String[] pars = uiForm.getParticipant() ;
+        if(pars != null && pars.length > 0) calendarEvent.setParticipant(pars) ;
         try {
           if(uiForm.calType_.equals(CalendarUtils.PRIVATE_TYPE)) {
             CalendarUtils.getCalendarService().saveUserEvent(SessionsUtils.getSessionProvider(), username, calendarId, calendarEvent, uiForm.isAddNew_) ;
@@ -790,8 +801,10 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       }
     }
   }
+  
   static  public class CancelActionListener extends EventListener<UIEventForm> {
     public void execute(Event<UIEventForm> event) throws Exception {
+    	System.out.println("CancelActionListener ========>") ;
       UIEventForm uiForm = event.getSource() ;
       UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class);
       uiPopupAction.deActivate() ;

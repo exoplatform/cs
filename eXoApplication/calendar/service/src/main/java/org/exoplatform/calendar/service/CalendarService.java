@@ -215,7 +215,7 @@ public interface CalendarService {
    * @return Event
    * @throws Exception
    */
-  public CalendarEvent getUserEvent(SessionProvider sProvider, String username, String calendarId, String eventId) throws Exception ;
+  //public CalendarEvent getUserEvent(SessionProvider sProvider, String username, String calendarId, String eventId) throws Exception ;
   /**
    * This method should:
    * 1. Get calendar service root node by current user
@@ -339,4 +339,5 @@ public interface CalendarService {
   public List<CalendarEvent> getEvent(SessionProvider sProvider, String username, EventQuery eventQuery, String[] publicCalendarIds) throws Exception ;
   public void removeSharedCalendar(SessionProvider sProvider, String username, String calendarId) throws Exception  ;
   public void saveEventToSharedCalendar(SessionProvider sProvider, String username, String calendarId, CalendarEvent event, boolean isNew) throws Exception  ;
+  public Map<String, List<String>> checkFreeBusy(SessionProvider sysProvider, EventQuery eventQuery) throws Exception  ;
 }
