@@ -173,22 +173,18 @@ public class UIFolderContainer extends UIContainer {
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
       List<Message> messageList = mailSrv.getMessagePageListByFolder(SessionsUtils.getSessionProvider(), username, accountId, folderId).getAll(username);
-      Folder folder = mailSrv.getFolder(SessionsUtils.getSessionProvider(), username, accountId, folderId);
+      List<String> msgIds = new ArrayList<String>() ;
       for (Message message : messageList) {
         if (message.isUnread()) {
-          message.setUnread(false);
-          mailSrv.saveMessage(SessionsUtils.getSessionProvider(), username, accountId, message, false);
-          folder.setNumberOfUnreadMessage(folder.getNumberOfUnreadMessage() - 1);
+          msgIds.add(message.getId());
         }
       }
-      mailSrv.saveFolder(SessionsUtils.getSessionProvider(), username, accountId, folder);
+      mailSrv.toggleMessageProperty(SessionsUtils.getSessionProvider(), username, accountId, msgIds, Utils.EXO_ISUNREAD);
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
       UIFolderContainer uiFolder = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
       uiMessageList.updateList();
-      UIMessageArea uiMessageArea = uiMessageList.getParent();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiFolder) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageArea) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent()) ;
     }
   }
-  
 }

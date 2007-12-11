@@ -456,14 +456,14 @@ public class MailServiceImpl implements MailService{
       String disposition = part.getDisposition();
       String contentType = part.getContentType();
       if (disposition == null) {
-        if (part.isMimeType("text/plain") || part.isMimeType("text/html")) {
-          setMessageBody(part, newMail);
-        } else {
-          MimeMultipart mimeMultiPart = (MimeMultipart)part.getContent() ;
-          for (int i=0; i<mimeMultiPart.getCount();i++) {
+        if (part.getContent() instanceof MimeMultipart) {
+          MimeMultipart mimeMultiPart = (MimeMultipart) part.getContent() ;
+          for (int i = 0; i< mimeMultiPart.getCount(); i++) {
             // for each part, set the body content
             setPart(mimeMultiPart.getBodyPart(i), newMail, username);
           }
+        } else {
+          setMessageBody(part, newMail);
         }
       } else {
         if (disposition.equalsIgnoreCase(Part.INLINE)) {

@@ -549,7 +549,7 @@ public class UIMessageList extends UIForm {
         checkedMessageList = uiMessageList.getCheckedMessage();
       }
       for (Message message : checkedMessageList) {
-        mailSrv.moveMessages(SessionsUtils.getSessionProvider(), username, accountId, msgId, message.getFolders()[0], Utils.createFolderId(accountId, Utils.FD_TRASH, false));
+        mailSrv.moveMessages(SessionsUtils.getSessionProvider(), username, accountId, message.getId(), message.getFolders()[0], Utils.createFolderId(accountId, Utils.FD_TRASH, false));
       }
       uiMessageList.updateList();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer);
