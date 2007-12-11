@@ -24,7 +24,7 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 )
 public class UIMailPortlet extends UIPortletApplication {
   public UIMailPortlet() throws Exception {
-    addChild(UIBannerContainer.class, null, null) ;
+//    addChild(UIBannerContainer.class, null, null) ;
     addChild(UIActionBar.class, null, null) ;
     addChild(UINavigationContainer.class, null, null) ;
     addChild(UIMessageArea.class, null, null) ;

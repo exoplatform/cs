@@ -18,46 +18,31 @@
 }
  
 /******************************************** MailBanner ****************************************/
-.UIMailPortlet .UIBannerContainer {
-  background: url('background/BgBanner457x63.gif') no-repeat left;
-  height: 64px;
-  padding: 0px 1px 0px 155px;
-}
 
-.UIMailPortlet .UIBannerContainer .LeftHorizontalLine {
-  background: url('background/LeftHorizontalLine44x2.gif') no-repeat left bottom;	
-  padding-left: 44px;
-  height: 30px;
-}
 
-.UIMailPortlet .UIBannerContainer .RepeatHorizontalLine {
-	font-size: 13px; font-family: tahoma;
-	color: #5f5f5f; font-weight: bold;
-  background: url('background/RepeatHorizontalLine1x2.gif') repeat-x bottom;	
-  height: 21px; padding-top: 9px;
-}
-
-.UIMailPortlet .UIBannerContainer .SearchForm {
-  background: url('background/RightBottomBanner440x34.gif') no-repeat right;	
+.UIMailPortlet .SearchForm {
+  background: url('background/SearchForm1x34.gif') repeat-x;	
   height: 34px; line-height: 34px;
 	padding-right: 13px;
 	border-right: 1px solid #787e9f;
+	margin-top: 8px;
+	border: 1px solid #c7c7c7;
 }
 
-.UIMailPortlet .UIBannerContainer .Label {
+.UIMailPortlet .SearchForm .Label {
 	float: right;
 	line-height: 20px;
 	margin: 5px 0px;
 	color: #595b6a; 
 }
 
-.UIMailPortlet .UIBannerContainer .Input {
-	width: 195px;
+.UIMailPortlet .SearchForm .Input {
+	width: 120px;
 	float: right;
   margin: 5px 8px;
 }
 
-.UIMailPortlet .UIBannerContainer .Search {
+.UIMailPortlet .SearchForm .Search {
   background: url('skinIcons/16x16/icons/SearchIcon.gif') no-repeat ;	
   height: 16px;
   width: 16px;
@@ -66,17 +51,16 @@
   cursor: pointer;
 }
 
-.UIMailPortlet .UIBannerContainer .AdvancedSearch {
+.UIMailPortlet .SearchForm .AdvancedSearch {
   background: url('skinIcons/16x16/icons/FindIcon.gif') no-repeat ;	
   height: 16px; width: 16px;
   float: right; cursor: pointer;
   margin: 8px 0px 0px 2px;
 }
 
-.UIMailPortlet .UIBannerContainer .SeparatorLine {
-	background: url('background/SeparatorLineBaner2x26.gif') no-repeat ;
+.UIMailPortlet .MailWorkingWorkspace .SearchForm .SeparatorLine {
   float: right;
-  margin: 3px 7px;
+  margin: 3px 5px 2px 5px;
 }
 
 /***************************************MailWorkingWorkspace********************************/
@@ -307,7 +291,6 @@
 .UIMailPortlet .MailWorkingWorkspace  .UIActionBar a:hover.ControlButton {
 	background: url('background/ControlButtonBG1x26.gif') repeat-x ;
 	color: #058ee6; border: 1px solid #cbcbcb;
-	height: 24px;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .SeparatorLine {
