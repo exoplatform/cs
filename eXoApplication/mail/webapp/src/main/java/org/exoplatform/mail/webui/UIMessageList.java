@@ -268,9 +268,7 @@ public class UIMessageList extends UIForm {
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       MailService mailServ = uiPortlet.getApplicationComponent(MailService.class);
       Message msg = mailServ.getMessageById(SessionsUtils.getSessionProvider(), username, accountId, msgId);
-      Folder folder = mailServ.getFolder(SessionsUtils.getSessionProvider(), username, accountId, msg.getFolders()[0]);
-      String selectedFolderId = uiMessageList.getSelectedFolderId();
-      if (selectedFolderId !=null && selectedFolderId.equalsIgnoreCase(Utils.createFolderId(accountId, Utils.FD_DRAFTS, false))) {
+      if (uiMessageList.selectedDraftFolder()) {
         UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
         UIPopupActionContainer uiPopupContainer = uiPopupAction.activate(UIPopupActionContainer.class, 850) ;
         UIComposeForm uiComposeForm = uiPopupContainer.createUIComponent(UIComposeForm.class, null, null);
@@ -279,10 +277,9 @@ public class UIMessageList extends UIForm {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;  
       } else {
         if (msg.isUnread()) {
-          msg.setUnread(false);
-          mailServ.saveMessage(SessionsUtils.getSessionProvider(), username, accountId, msg, false);
-          folder.setNumberOfUnreadMessage(folder.getNumberOfUnreadMessage() - 1);
-          mailServ.saveFolder(SessionsUtils.getSessionProvider(), username, accountId, folder);
+          List<String> msgIds  = new ArrayList<String>();
+          msgIds.add(msg.getId());
+          mailServ.toggleMessageProperty(SessionsUtils.getSessionProvider(), username, accountId, msgIds, Utils.EXO_ISUNREAD);
         }
         uiMessageList.setSelectedMessageId(msgId);
         uiMessagePreview.setMessage(msg);
