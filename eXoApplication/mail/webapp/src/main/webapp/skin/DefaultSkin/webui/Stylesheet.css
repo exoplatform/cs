@@ -37,9 +37,13 @@
 }
 
 .UIMailPortlet .SearchForm .Input {
-	width: 120px;
+  background: white url('skinIcons/16x16/icons/SearchActions.gif') no-repeat center left;	
+  border: 1px solid #b7b7b7;
+	width: 110px;
 	float: right;
-  margin: 5px 8px;
+	padding-left: 20px;
+	height: 20px;
+  margin: 5px 8px 5px 0px;
 }
 
 .UIMailPortlet .SearchForm .Search {
