@@ -55,6 +55,7 @@ public class UIMiniCalendar extends UICalendarView  {
   protected int getWeeksOfTheMonth(int year, int month, int day) {
     return new GregorianCalendar(year, month, day).getActualMaximum(java.util.Calendar.WEEK_OF_MONTH) ;
   }
+  @SuppressWarnings("unused")
   private Map<Integer, String> getData(){ return dataMap ; }
   public LinkedHashMap<String, CalendarEvent> getDataMap(){ return null ; }
   

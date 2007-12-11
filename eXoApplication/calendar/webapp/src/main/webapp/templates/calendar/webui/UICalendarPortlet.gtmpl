@@ -4,7 +4,9 @@
 	import org.exoplatform.calendar.webui.UICalendarWorkingContainer ;
 	import org.exoplatform.calendar.webui.popup.UIPopupAction ;
 	import org.exoplatform.calendar.service.CalendarSetting;
-	
+	%>
+<div class="$uicomponent.id" oncontextmenu="return false;" id="$uicomponent.id">
+	<%
 	timeStep = 15 ; // timeStep that period of time is changed when you drag or resize event in Day View, is capable of changing by user's Seting.
   workingStart = uicomponent.getCalendarSetting().getWorkingTimeBegin() ;
   CalendarSetting calendarSetting = uicomponent.getCalendarSetting() ;
@@ -16,7 +18,6 @@
   rcontext.getJavascriptManager().importJavascript('eXo.calendar.UICombobox','/calendar/javascript/') ;
   
 %>
-<div class="$uicomponent.id" oncontextmenu="return false;" id="$uicomponent.id">
   <div class="ApplicationMinWidth">
   	<div class="UICalendarPortlet">
 <!-- Start Mail Working Workspace -->
