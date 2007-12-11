@@ -256,6 +256,14 @@ public interface ForumService {
   
   public Object getObjectNameByPath(SessionProvider sProvider, String path) throws Exception ;
   public List<ForumLinkData> getAllLink(SessionProvider sProvider)throws Exception ;
+  @SuppressWarnings("unchecked")
   public List getPage(long page, JCRPageList pageList, SessionProvider sProvider) throws Exception ;
   public String getForumHomePath(SessionProvider sProvider) throws Exception ;
+
+  public Tag getTag(SessionProvider sProvider, String tagId) throws Exception ;
+  public List<Tag> getTagsByTopic(SessionProvider sProvider, String topicId) throws Exception ;
+  public List<Topic> getTopicsByTag(SessionProvider sProvider, String tagId) throws Exception ;
+  public void saveTag(SessionProvider sProvider) throws Exception ;
+  public void addTopicInTag(SessionProvider sProvider, String topicId) throws Exception ;
+  public void removeTag(SessionProvider sProvider, String tagId) throws Exception ;
 }

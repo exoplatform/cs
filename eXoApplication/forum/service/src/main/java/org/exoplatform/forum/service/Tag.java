@@ -20,13 +20,13 @@ public class Tag {
   private String owner ;
   private String description ;
   private String color ;
-  
+  private String []topicIds = new String[] {} ;
   public Tag() {
     id = "Tag" + IdGenerator.generate() ;
   }
   
   public String getId()  { return id ; }
-  public void   setId(String s) { id = s ; }
+  public void setId(String s) { id = s ; }
   
   public void setName(String name) { this.name = name ; }
   public String getName() { return name ; }
@@ -39,4 +39,8 @@ public class Tag {
     
   public void setColor(String color) { this.color = color ; }
   public String getColor() { return color ; }
+  
+  public String[] getTags(){return topicIds;}
+  public void setTags(String[] topicIds){this.topicIds = topicIds;}
+  
 }

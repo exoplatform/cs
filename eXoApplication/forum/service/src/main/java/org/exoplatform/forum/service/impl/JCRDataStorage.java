@@ -28,6 +28,7 @@ import org.exoplatform.forum.service.JCRForumAttachment;
 import org.exoplatform.forum.service.JCRPageList;
 import org.exoplatform.forum.service.Poll;
 import org.exoplatform.forum.service.Post;
+import org.exoplatform.forum.service.Tag;
 import org.exoplatform.forum.service.Topic;
 import org.exoplatform.forum.service.TopicView;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -807,7 +808,40 @@ public class JCRDataStorage{
       }
     }
   }
+
   
+  public void addTopicInTag(SessionProvider provider, String topicId) {
+    
+  }
+
+  public Tag getTag(SessionProvider provider, String tagId) {
+    return null;
+  }
+
+  public List<Tag> getTagsByTopic(SessionProvider provider, String topicId) {
+    return null;
+  }
+
+  public List<Topic> getTopicsByTag(SessionProvider provider, String tagId) {
+    return null;
+  }
+
+  public void removeTag(SessionProvider provider, String tagId) {
+    
+  }
+
+  public void saveTag(SessionProvider provider) {
+    
+  }
+  
+  
+  
+  
+  
+  
+  
+  
+  @SuppressWarnings("unchecked")
   public List getPage(long page, JCRPageList pageList, SessionProvider sProvider) throws Exception {
     try {
       return pageList.getPage(page, getForumHomeNode(sProvider).getSession()) ;
@@ -894,4 +928,6 @@ public class JCRDataStorage{
     }
     return forumLinks ;
   }
+
+
 }
