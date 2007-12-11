@@ -6,6 +6,9 @@
 	display: none ;
 	max-height: 150px;
 }
+.UIComboboxList {
+	*height: 150px ;
+}
 .UIComboboxList .UIComboboxItem {
 	display: block ;
 	padding: 3px 5px ;

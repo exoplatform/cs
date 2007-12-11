@@ -330,7 +330,8 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
       calendarPortlet.setCalendarSetting(calendarSetting) ;
       calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class).refresh() ;
       calendarPortlet.cancelAction() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class)) ;
+      //event.getRequestContext().addUIComponentToUpdateByAjax(calendarPortlet) ;
+      System.out.println("\n\n chay vao day");
     }
   }
 

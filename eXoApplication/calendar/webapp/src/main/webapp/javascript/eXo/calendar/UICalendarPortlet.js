@@ -81,12 +81,13 @@ UICalendarPortlet.prototype.getWeekNumber = function(now) {
 } ;
 
 UICalendarPortlet.prototype.setting = function() {
-	// paras 1: time interval, paras 2: working time, paras 3: time zone 
+	// paras 1: time interval, paras 2: working time, paras 3: time format type 
 	var UICalendarPortlet = eXo.calendar.UICalendarPortlet ;
 	UICalendarPortlet.interval = ((arguments.length > 0) && (isNaN(parseInt(arguments[0])) == false )) ? parseInt(arguments[0]) : parseInt(15) ;
 	var workingStart =  ((arguments.length > 1) && (isNaN(parseInt(arguments[1])) == false ) && (arguments[1] != "null")) ? arguments[1] : "" ;
 	workingStart = "1/1/2007 " + workingStart ;
 	UICalendarPortlet.workingStart = UICalendarPortlet.timeToMin(workingStart) ;
+	UICalendarPortlet.timeFormat = (arguments.length > 2) ? (new String(arguments[2])).trim() : null ;
 } ;
 
 UICalendarPortlet.prototype.setFocus = function(obj, events, container) {

@@ -6,14 +6,13 @@
 	import org.exoplatform.calendar.service.CalendarSetting;
 	
 	timeStep = 15 ; // timeStep that period of time is changed when you drag or resize event in Day View, is capable of changing by user's Seting.
+  workingStart = uicomponent.getCalendarSetting().getWorkingTimeBegin() ;
+  CalendarSetting calendarSetting = uicomponent.getCalendarSetting() ;
+  String timeFormat = calendarSetting.getTimeFormat() ;
 	def rcontext = _ctx.getRequestContext() ;
   rcontext.getJavascriptManager().importJavascript('eXo.calendar.UICalendarPortlet','/calendar/javascript/') ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.showContextMenu() ;') ;
-  workingStart = uicomponent.getCalendarSetting().getWorkingTimeBegin() ;
-  //int defaultTimeInterval = uicomponent.getDefaultTimeInterval() ;
-  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.setting(' + timeStep + ', "' + workingStart + '") ;') ;
-  //rcontext.getJavascriptManager().addJavascript('eXo.calendar.UIWeekView.init(' + defaultTimeInterval + ', "' + workingStart + '") ;') ;
-  //rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.showEvent() ;') ;
+  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.setting(' + timeStep + ', "' + workingStart + '", "' + timeFormat +'") ;') ;
   rcontext.getJavascriptManager().importJavascript('eXo.calendar.UICombobox','/calendar/javascript/') ;
   
 %>
