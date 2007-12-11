@@ -48,17 +48,9 @@ public class UISelectUserForm extends UIForm implements UIPopupComponent {
   final public static String FIELD_KEYWORD = "keyWord".intern() ;
   final public static String FIELD_GROUP = "group".intern() ;
 
-  private List<Contact> alreadyCheckedContact = new ArrayList<Contact>();
 
   private List<User> data_  = new ArrayList<User>() ;
-  private String recipientsType = "";
   private boolean isShowSearch_ = false ;
-  public void setRecipientsType(String type)  {
-    recipientsType=type;
-  }
-  public String getRecipientType(){
-    return recipientsType;
-  }
   public List<User> getData() {
     return data_ ;
   }
@@ -66,7 +58,6 @@ public class UISelectUserForm extends UIForm implements UIPopupComponent {
     data_ = list ;
   }
   public UISelectUserForm() throws Exception {  
-    // setContactList();
     OrganizationService service = getApplicationComponent(OrganizationService.class) ;
     PageList pl = service.getUserHandler().getUserPageList(0) ;
     for(Object o : pl.getAll()){
@@ -74,8 +65,6 @@ public class UISelectUserForm extends UIForm implements UIPopupComponent {
       data_.add(user) ;
       addUIFormInput(new UIFormCheckBoxInput<Boolean>(user.getUserName(),user.getUserName(), false)) ;
     }
-    System.out.println("\n\n pl " + pl.getAll().size());
-    //for (Object child : service.getGroupHandler().findGroups(this.getCurrentGroup())) {}
     initSearchForm() ;
 
   }
@@ -97,26 +86,12 @@ public class UISelectUserForm extends UIForm implements UIPopupComponent {
   public String[] getActions() { return new String[]{"Save", "Cancel"}; }
   public void activate() throws Exception {}
   public void deActivate() throws Exception {} 
-
-  public void setAlreadyCheckedContact(List<Contact> alreadyCheckedContact) throws Exception {
-    if(alreadyCheckedContact!=null)
-    {    
-      this.alreadyCheckedContact = alreadyCheckedContact;
-    }
-  }
-
-  public List<Contact> getAlreadyCheckedContact() {
-    return alreadyCheckedContact;
-  }
-
-
   public void setShowSearch(boolean isShowSearch) {
     this.isShowSearch_ = isShowSearch;
   }
   public boolean isShowSearch() {
     return isShowSearch_;
   }
-
 
   static  public class SaveActionListener extends EventListener<UISelectUserForm> {
     public void execute(Event<UISelectUserForm> event) throws Exception { 

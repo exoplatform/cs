@@ -100,16 +100,9 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     List<ActionData> actions = new ArrayList<ActionData>() ;
     eventShareTab.addUIFormInput(new UIFormSelectBox(FIELD_SHARE, FIELD_SHARE, getShareValue()) ) ;
     eventShareTab.addUIFormInput(new UIFormSelectBox(FIELD_STATUS, FIELD_STATUS, getStatusValue()) ) ;
-    eventShareTab.addUIFormInput(new UIFormTextAreaInput(FIELD_MEETING, FIELD_MEETING, null)) ;
     eventShareTab.addUIFormInput(new UIFormTextAreaInput(FIELD_PARTICIPANT, FIELD_PARTICIPANT, null)) ;
+    eventShareTab.addUIFormInput(new UIFormTextAreaInput(FIELD_MEETING, FIELD_MEETING, null)) ;
     actions = new ArrayList<ActionData>() ;
-    /*ActionData addGroup = new ActionData() ;
-    addGroup.setActionListener("AddParticipant") ;
-    addGroup.setActionName("AddGroup") ;
-    addGroup.setActionParameter(UIGroupSelector.TYPE_GROUP);
-    addGroup.setActionType(ActionData.TYPE_ICON) ;
-    addGroup.setCssIconClass("SelectGroupIcon") ;
-    actions.add(addGroup) ;*/
 
     ActionData addUser = new ActionData() ;
     addUser.setActionListener("AddParticipant") ;
@@ -118,14 +111,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     addUser.setActionType(ActionData.TYPE_ICON) ;
     addUser.setCssIconClass("SelectUserIcon") ;
     actions.add(addUser) ;
-
-    /* ActionData addMember = new ActionData() ;
-    addMember.setActionListener("AddParticipant") ;
-    addMember.setActionName("AddMember") ;
-    addMember.setActionParameter(UIGroupSelector.TYPE_MEMBERSHIP);
-    addMember.setActionType(ActionData.TYPE_ICON) ;
-    addMember.setCssIconClass("SelectMemberIcon") ;
-    actions.add(addMember) ;*/
 
     eventShareTab.setActionField(FIELD_PARTICIPANT, actions) ;
     addChild(eventShareTab) ;
@@ -340,7 +325,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
     return eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CATEGORY).getValue() ;
   }
-  protected void setSelectedCategory(String value) {
+  public void setSelectedCategory(String value) {
     UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
     eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CATEGORY).setValue(value) ;
   }
@@ -792,13 +777,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
           event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
           uiForm.getAncestorOfType(UIPopupAction.class).deActivate() ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
-          /* if(uiForm.isAddNew_) {
-            uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.add-event-successfully", null));
-          } else {
-            uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.update-event-successfully", null));
-          }*/
-          uiForm.reset() ;
-          /*event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;*/
         }catch (Exception e) {
           uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.add-event-error", null));
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -806,8 +784,9 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
         }
       } else {
         uiApp.addMessage(new ApplicationMessage(uiForm.errorMsg_, null));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         uiForm.setSelectedTab(TAB_EVENTDETAIL) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
       }
     }
   }

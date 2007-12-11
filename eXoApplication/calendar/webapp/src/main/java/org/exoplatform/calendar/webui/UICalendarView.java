@@ -432,7 +432,6 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       } else {
         String type = event.getRequestContext().getRequestParameter(OBJECTID) ;
         String value = uiForm.getUIFormSelectBox(EVENT_CATEGORIES).getValue() ;
-        System.out.println("\n\n value " + value);
         UICalendarPortlet uiPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
         UIPopupAction uiParenPopup = uiPortlet.getChild(UIPopupAction.class) ;
         UIPopupContainer uiPopupContainer = uiParenPopup.activate(UIPopupContainer.class, 700) ;
@@ -441,13 +440,13 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
           UITaskForm uiTaskForm = uiPopupContainer.addChild(UITaskForm.class, null, null) ;
           uiTaskForm.initForm(uiPortlet.getCalendarSetting(), null) ;
           uiTaskForm.update(CalendarUtils.PRIVATE_TYPE, null) ;
-          uiTaskForm.setSelectedCalendarId(value) ;
+          uiTaskForm.setSelectedCategory(value) ;
         } else {
           uiPopupContainer.setId(UIPopupContainer.UIEVENTPOPUP) ;
           UIEventForm uiEventForm =  uiPopupContainer.addChild(UIEventForm.class, null, null) ;
           uiEventForm.initForm(uiPortlet.getCalendarSetting(), null) ;
           uiEventForm.update(CalendarUtils.PRIVATE_TYPE, null) ;
-          uiEventForm.setSelectedCalendarId(value) ;
+          uiEventForm.setSelectedCategory(value) ;
         }
         event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiParenPopup) ;     

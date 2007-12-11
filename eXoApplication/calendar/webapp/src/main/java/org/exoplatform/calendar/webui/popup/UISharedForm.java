@@ -15,13 +15,11 @@ import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendars;
-import org.exoplatform.calendar.webui.UIFormComboBox;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
-import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
@@ -133,7 +131,8 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
     permission_.put(value, value) ;
     StringBuilder sb = new StringBuilder() ;
     for(String s : permission_.values()) {
-      sb.append(s).append(CalendarUtils.COLON) ;
+      if(sb != null && sb.length() > 0) sb.append(CalendarUtils.COLON) ;
+      sb.append(s) ;
     }
     fieldInput.setValue(sb.toString()) ;
   }  
