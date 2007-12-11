@@ -235,7 +235,6 @@
   </div>  
   <% /* End popup menu for the message*/ %>
   
-  <%if (uicomponent.getMessageList().size() > 0) {%>
   <div class="UIMessageList" >
   	<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
     	<thead>
@@ -299,88 +298,89 @@
    	      </th>
     	 	</tr>
     	</thead>
-    	<tbody>
-    	<%
-        int i = 0;
-  			for(Message msg : uicomponent.getMessageList()) {
-          if (msg.isRootConversation()) {
-    			  String actionLink = uicomponent.event("SelectMessage", msg.getId());
-    			  checkboxField = uicomponent.getChildById(msg.getId());
-    			  String actionAddStar = uicomponent.event("AddStar", msg.getId());
-    			  String selectedClass = "OddItem" ;
-            if ((i%2) == 1) selectedClass = "EvenItem";
-            String readStatus = "ReadItem" ;
-            if (msg.isUnread()) readStatus = "UnreadItem" ;
-    			  if (msg.getId().equals(uicomponent.getSelectedMessageId()) || checkboxField.checked) selectedClass += " SelectedItem" ;
-            String starClass = "UnStarredIcon" ;
-            if (msg.hasStar()) starClass = "StarredIcon";
-  		%>
-  		<tr class="MessageItem $selectedClass" msgId="<%=msg.getId()%>">
-  	  		<td onclick="eXo.mail.UIMailPortlet.selectItem(this);">
-            <%
-  	  		    if (checkboxField != null) uicomponent.renderField(checkboxField);
-  	  		  %>
-  	  		</td>
-  				<td style="padding: 0px auto;"><a href="$actionAddStar" ><div class="$starClass"><span></span></div></a></td>
-          <td class="$readStatus">
-            <% if (msg.isRootConversation()) {
-                int numberConver = 1;
-                for (String conver : uicomponent.getParticipators(msg)) {
-             %>
-               <a href="$actionLink"><% if (numberConver>1){ %> , <% } %>  $conver <a>
-            <% numberConver++ }  }%>  
-          </td>
-  				<td style="padding: 0px auto;">
-  				  <% 
-  				    if (msg.getAttachments().size() > 0) {
-  				  %>
-  				  <a href="$actionLink"><div class="AttachmentIcon"><span></span></div></a>
-  				  <%}%>
-  				</td>
-  				<td style="padding: 0px; border-right: 1px solid #ffffff;">
-  				  <% 
-              if (msg.getTags() != null && msg.getTags().length > 0) {
-                String colorCss = uicomponent.getFirstTag(msg).getColor() + "Tag"; 
-                String title = uicomponent.getAllTagName(msg);
-            %>
-              <a href="$actionLink" title="$title"><div class="IconTag $colorCss"><span></span></div></a>
-            <%}%>
-  				</td>
-  				<td class="$readStatus"><a href="$actionLink"><%=msg.getSubject()%></a></td>
-  				<td class="text">( <%= (msg.isRootConversation()) ? uicomponent.getConversations(msg).size() : 1 %> )</td>
-  				<td class="$readStatus">
-  				  <a href="$actionLink">
-  				    <%if (msg.getReceivedDate() != null) { %>
-  				      <%=Utils.formatDate('MMM dd, yyyy HH:mm aaa', msg.getReceivedDate())%>
-  				    <%} else if (msg.getSendDate() != null){%>
-  				      <%=Utils.formatDate('MMM dd, yyyy HH:mm aaa', msg.getSendDate())%>
-  				    <%}%>
-  				  </a>
-  				</td>
-  				<td class="$readStatus"><a href="$actionLink">
-  				   <%
-  				     if (msg.getSize() > 1024) {
-  				   %> 
-  				       <%=(int)(msg.getSize()/1024)%> KB
-  				   <%
-  				     } else {   				   
-  				   %> 
-  				     <%=msg.getSize()%> B
-  				   <%}%>
-  				</a></td>
-  				<%
-  				  String priClass = "";
-  				  if (msg.getPriority().equals(Utils.PRIORITY_LOW)) priClass = "LowPriority";
-  				  else if (msg.getPriority().equals(Utils.PRIORITY_NORMAL)) priClass = "NormalPriority";
-  				  else if (msg.getPriority().equals(Utils.PRIORITY_HIGH)) priClass = "HighPriority";
-  				%>
-  				<td style="padding: 0px;" ><div class="text $priClass" title ><span></span></div></td>
-     	 </tr>
-  		<% i++; }}%>
-    	</tbody>
+      <%if (uicomponent.getMessageList().size() > 0) {%>
+      	<tbody>
+      	<%
+          int i = 0;
+    			for(Message msg : uicomponent.getMessageList()) {
+            if (msg.isRootConversation()) {
+      			  String actionLink = uicomponent.event("SelectMessage", msg.getId());
+      			  checkboxField = uicomponent.getChildById(msg.getId());
+      			  String actionAddStar = uicomponent.event("AddStar", msg.getId());
+      			  String selectedClass = "OddItem" ;
+              if ((i%2) == 1) selectedClass = "EvenItem";
+              String readStatus = "ReadItem" ;
+              if (msg.isUnread()) readStatus = "UnreadItem" ;
+      			  if (msg.getId().equals(uicomponent.getSelectedMessageId()) || checkboxField.checked) selectedClass += " SelectedItem" ;
+              String starClass = "UnStarredIcon" ;
+              if (msg.hasStar()) starClass = "StarredIcon";
+    		%>
+    		<tr class="MessageItem $selectedClass" msgId="<%=msg.getId()%>">
+    	  		<td onclick="eXo.mail.UIMailPortlet.selectItem(this);">
+              <%
+    	  		    if (checkboxField != null) uicomponent.renderField(checkboxField);
+    	  		  %>
+    	  		</td>
+    				<td style="padding: 0px auto;"><a href="$actionAddStar" ><div class="$starClass"><span></span></div></a></td>
+            <td class="$readStatus">
+              <% if (msg.isRootConversation()) {
+                  int numberConver = 1;
+                  for (String conver : uicomponent.getParticipators(msg)) {
+               %>
+                 <a href="$actionLink"><% if (numberConver>1){ %> , <% } %>  $conver <a>
+              <% numberConver++ }  }%>  
+            </td>
+    				<td style="padding: 0px auto;">
+    				  <% 
+    				    if (msg.getAttachments().size() > 0) {
+    				  %>
+    				  <a href="$actionLink"><div class="AttachmentIcon"><span></span></div></a>
+    				  <%}%>
+    				</td>
+    				<td style="padding: 0px; border-right: 1px solid #ffffff;">
+    				  <% 
+                if (msg.getTags() != null && msg.getTags().length > 0) {
+                  String colorCss = uicomponent.getFirstTag(msg).getColor() + "Tag"; 
+                  String title = uicomponent.getAllTagName(msg);
+              %>
+                <a href="$actionLink" title="$title"><div class="IconTag $colorCss"><span></span></div></a>
+              <%}%>
+    				</td>
+    				<td class="$readStatus"><a href="$actionLink"><%=msg.getSubject()%></a></td>
+    				<td class="text">( <%= (msg.isRootConversation()) ? uicomponent.getConversations(msg).size() : 1 %> )</td>
+    				<td class="$readStatus">
+    				  <a href="$actionLink">
+    				    <%if (msg.getReceivedDate() != null) { %>
+    				      <%=Utils.formatDate('MMM dd, yyyy HH:mm aaa', msg.getReceivedDate())%>
+    				    <%} else if (msg.getSendDate() != null){%>
+    				      <%=Utils.formatDate('MMM dd, yyyy HH:mm aaa', msg.getSendDate())%>
+    				    <%}%>
+    				  </a>
+    				</td>
+    				<td class="$readStatus"><a href="$actionLink">
+    				   <%
+    				     if (msg.getSize() > 1024) {
+    				   %> 
+    				       <%=(int)(msg.getSize()/1024)%> KB
+    				   <%
+    				     } else {   				   
+    				   %> 
+    				     <%=msg.getSize()%> B
+    				   <%}%>
+    				</a></td>
+    				<%
+    				  String priClass = "";
+    				  if (msg.getPriority().equals(Utils.PRIORITY_LOW)) priClass = "LowPriority";
+    				  else if (msg.getPriority().equals(Utils.PRIORITY_NORMAL)) priClass = "NormalPriority";
+    				  else if (msg.getPriority().equals(Utils.PRIORITY_HIGH)) priClass = "HighPriority";
+    				%>
+    				<td style="padding: 0px;" ><div class="text $priClass" title ><span></span></div></td>
+       	 </tr>
+    		<% i++; }}%>
+      	</tbody>
+      <% } else {%>
+        <tbody><tr><td colspan="10"><div class="MessageNotice SpliterResizableListArea" id="uiMessageListResizableArea">There are no messages !</div></td></tr></tbody>
+    <%}%>
   	</table>
   </div>
-  <% } else {%>
-    <div class="MessageNotice SpliterResizableListArea" id="uiMessageListResizableArea">There are no messages !</div>
-  <%}%>
 <%uiform.end()%>    
