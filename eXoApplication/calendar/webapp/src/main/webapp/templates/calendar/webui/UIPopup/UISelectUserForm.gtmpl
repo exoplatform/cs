@@ -1,5 +1,5 @@
 <%
-	import org.exoplatform.services.organization.User;
+ import org.exoplatform.services.organization.User;
  uiform.begin() %>
 <div class="UIInsertAddress">
   <div class="InsertAddressContainer">

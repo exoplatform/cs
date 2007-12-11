@@ -230,7 +230,8 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
     permission_.put(value, value) ;
     StringBuilder sb = new StringBuilder() ;
     for(String s : permission_.values()) {
-      sb.append(s).append(CalendarUtils.COLON) ;
+      if(sb != null && sb.length() > 0) sb.append(CalendarUtils.COLON) ;
+      sb.append(s) ;
     }
     fieldInput.setValue(sb.toString()) ;
     setSelectedTab(shareTab.getId()) ;

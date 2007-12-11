@@ -146,7 +146,6 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
     }
     return contactList;
   }
-  
   static  public class SaveActionListener extends EventListener<UIAddressForm> {
     public void execute(Event<UIAddressForm> event) throws Exception { 
       System.out.println("======== >>>UIAddressForm.SaveActionListener");
