@@ -6,7 +6,6 @@
 	<%
 		String label = _ctx.appRes(uicomponent.getName() + ".label.inputValue") ;
 	%>
-	<div class="SearchLabel">$label</div>
 	<div style="clear:right;"><span></span></div>
 </div>
 <%uiform.end();%>

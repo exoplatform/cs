@@ -6,82 +6,77 @@
 
 <div class="UIMoveContactsForm">
 	
-	Contacts : <%=uicomponent.getContactsName()%>
-
-	<div class="TitleMoveContactsForm">Private Address Books:</div>
+	<div class="MoveContactsName"><span style="font-weight: normal">Contacts :</span> <%=uicomponent.getContactsName()%></div>
+		
+	<div class="MoveContainer">
+		<div class="PrivateAdress">
+			<div class="TitleMoveContactsForm">Private Address Books:</div>
+			
+			<div class="MoveContactsFormContainer">
+			<%  Map map = uicomponent.getPrivateGroupMap() ;
+					for(groupId in map.keySet()) {
+						String actionLink  = uicomponent.event("SelectGroup", groupId) ;
+			%>
+			<div class="ItemList">
+				<div class="Icon AddressIcon"><a href="$actionLink"><%=map.get(groupId)%></a></div>
+			</div>
+			<% } %>
+		</div>
+		</div>		
+		
+			<% String fieldName; %>
+			<div class="UIForm PublicAdress">
+				<div class="TitleMoveContactsForm">Public Address Books</div>
+			  <div class="HorizontalLayout">
+			    <div class="FormContainer">
+			      <table class="UIFormGrid">
+				      <tbody>
+				      	<tr>
+				      		<td class="FieldLabel">/organization/management/executive-board</td>
+				      		<td class="FieldComponent">
+				      			<input type="checkbox" class="checkbox"/>
+				      		</td>
+				      	</tr>
+				      	<tr>
+				      		<td class="FieldLabel">/platform/administrators</td>
+				      		<td class="FieldComponent">
+				      			<input type="checkbox" class="checkbox" />
+				      		</td>
+				      	</tr>
+				      	<tr>
+				      		<td class="FieldLabel">/platform/users</td>
+				      		<td class="FieldComponent">
+				      			<input type="checkbox" class="checkbox"/>
+				      		</td>
+				      	</tr>
+				      </tbody>
+		      	</table>
+		    	</div>
+		  	</div>
+			</div>
 	
-	<div class="MoveContactsFormContainer">
-		<%  Map map = uicomponent.getPrivateGroupMap() ;
-				for(groupId in map.keySet()) {
-					String actionLink  = uicomponent.event("SelectGroup", groupId) ;
-		%>
-		<div class="ItemList">
-			<div class="Icon AddressIcon"><a href="$actionLink"><%=map.get(groupId)%></a></div>
-		</div>
-		<% } %>
 	</div>
-
+	<div class="UIAction"> 
+    <table class="ActionContainer" align="center">
+    	<tr>
+    		<td align="center">
+	          <% for(action in uicomponent.getActions()) { 
+            	 String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action) ;
+               String link = uicomponent.event(action) ;
+      		%>
+      		<a href="$link" class="ActionButton LightBlueStyle">
+            <div class="ButtonLeft">
+              <div class="ButtonRight">
+                <div class="ButtonMiddle">
+                  $actionLabel
+                </div>
+              </div>
+            </div>
+       		</a>
+      		<%}%>        
+      	</td>
+      </tr>  
+    </table>
+  </div>
 </div>
-			
-			
-		<% String fieldName; %>
-		<div class="UIForm">
-		  <div class="HorizontalLayout">
-		    <div class="FormContainer">
-		      <table class="UIFormGrid">
-			      <% 
-			        for(field in uiform.getChildren()) { 
-			          if(field.isRendered()) {
-			      %>
-			      			<tr>
-			      				<td class="FieldLabel" style="font-weight:bold; line-height:25px; padding-left:25px; text-align:left;">
-			              	<%=uicomponent.getLabel(field.getName())%>
-			              </td>
-			            </tr>
-		              <tr>
-			              <%//TODO: Tung.Pham modified
-			              	//if(!fieldName.equals(uicomponent.getId())) {
-			              	if(fieldName != null && fieldName.length() > 0 && !fieldName.equals(uicomponent.getId())) {
-			              %>                        
-		  	              <td class="FieldLabel">
-		                    <%/*if(fieldName != null && fieldName.length() > 0) {*/%> 
-		                      <%=uicomponent.getLabel(field.getName()) %>
-		                    <%/*}*/%>
-		                  </td>
-		  	              <td class="FieldComponent"><% uiform.renderField(field) %></td>
-			              <%} else {%>
-			                <td class="FieldComponent" colspan="2"><% uiform.renderField(field) %></td>
-			              <%}%>
-			            </tr>
-			      <%
-			          }
-			        }
-			      %>
-		      </table>
-		      <div class="UIAction"> 
-		        <table class="ActionContainer" align="center">
-		        	<tr>
-		        		<td align="center">
-				          <% for(action in uicomponent.getActions()) { 
-		                	 String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action) ;
-		                   String link = uicomponent.event(action) ;
-		          		%>
-		          		<a href="$link" class="ActionButton LightBlueStyle">
-		                <div class="ButtonLeft">
-		                  <div class="ButtonRight">
-		                    <div class="ButtonMiddle">
-		                      $actionLabel
-		                    </div>
-		                  </div>
-		                </div>
-		           		</a>
-		          		<%}%>        
-		          	</td>
-		          </tr>  
-		        </table>
-		      </div>
-		    </div>
-		  </div>
-		</div>
-
 <%uiform.end()%>

@@ -23,24 +23,26 @@
 	padding: 12px 0px 0px 40px;
 }
 
-.UIForumPortlet .ForumBanner .SearchForm {
+/**************************** UISearchForm **************************/
+
+.UIForumPortlet .UISearchForm .SearchForm {
 	padding-right: 13px;
 }
 
-.UIForumPortlet .ForumBanner .Label {
+.UIForumPortlet .UISearchForm .Label {
 	float: right;
 	line-height: 20px;
 	margin: 2px 0px;
 	color: #595b6a; 
 }
 
-.UIForumPortlet .ForumBanner .Input {
+.UIForumPortlet .UISearchForm .Input {
 	width: 195px;
 	float: right;
 	margin: 0px 8px;
 }
 
-.UIForumPortlet .ForumBanner .Search {
+.UIForumPortlet .UISearchForm .Search {
   background: url('icons/16x16/SearchIcon.gif') no-repeat ;	
   height: 16px;
   width: 16px;
@@ -49,14 +51,14 @@
   cursor: pointer;
 }
 
-.UIForumPortlet .ForumBanner .AdvancedSearch {
+.UIForumPortlet .UISearchForm .AdvancedSearch {
   background: url('icons/16x16/FindIcon.gif') no-repeat ;	
   height: 16px; width: 16px;
   float: right; cursor: pointer;
   margin: 3px 0px 0px 2px;
 }
 
-.UIForumPortlet .ForumBanner .SeparatorLine {
+.UIForumPortlet .UISearchForm .SeparatorLine {
 	background: url('background/SeparatorLine2x27.gif') no-repeat ;
   float: right;
   margin: 0px 7px;
@@ -70,6 +72,7 @@
 	border: 1px solid #e2e2e2;
 	padding: 0px 15px 0px 10px;
 	margin: 3px 10px;
+	height: 25px;
 }
 
 .UIForumPortlet .UIBreadcumbs .BreadcumbsInfoBar {

@@ -1,13 +1,30 @@
 .UIMoveContactsForm {
 	color: #272727;
-	background: #f3f3f3;
 	padding: 10px;
 }
 
+.UIMoveContactsForm .MoveContainer {
+	background: #f3f3f3;
+	border: 1px solid #b7b7b7;	
+}
+
+.UIMoveContactsForm .MoveContactsName {
+	background: #f3f3f3;
+	border: 1px solid #b7b7b7;	
+	line-height: 25px;
+	padding-left: 10px;
+	font-weight: bold;
+	color: #3f3f3f;
+	margin-bottom: 5px;
+}
+
 .UIMoveContactsForm .TitleMoveContactsForm {
-	line-height: 30px;
-	width: 240px;
-	margin: auto;
+	line-height: 25px;
+	margin-bottom: 10px;
+	padding-left: 25px;
+	font-weight: bold;
+	color: #3f3f3f;
+	background: #d6d6d6;
 }
 
 .UIMoveContactsForm .MoveContactsFormContainer {
@@ -31,15 +48,13 @@
 	padding-left: 24px;
 }
 
-#UIMoveContactsForm .UIForm {
+.UIMoveContactsForm .UIForm {
 	background: #f3f3f3;
 	padding: 10px 0px;
 }
 
-#UIMoveContactsForm .UIForm .HorizontalLayout {
+.UIMoveContactsForm .UIForm .HorizontalLayout {
 	border: none;
-}
-
-#UIMoveContactsForm .move .UIFormGrid td.FieldLabel {
-	width: 175px;
+	width: 250px;
+	margin: auto;
 }

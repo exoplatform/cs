@@ -301,7 +301,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       uiMoveForm.setContacts(movedContacts) ;
       UIAddressBooks addressBooks = uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class) ;
       uiMoveForm.setPrivateGroupMap(addressBooks.getPrivateGroupMap()) ;
-      popupAction.activate(uiMoveForm, 410, 0, true) ;
+      popupAction.activate(uiMoveForm, 540, 0, true) ;
       event.getRequestContext()
       .addUIComponentToUpdateByAjax(uiContactPortlet.findFirstComponentOfType(UIContactContainer.class));
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;     

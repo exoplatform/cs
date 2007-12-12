@@ -32,7 +32,7 @@
 }
 
 .UIContactPortlet .UISearchForm input {
-	width: 90px;
+	width: 140px;
 	float: right;
 	margin: 3px 8px;
 }
@@ -235,6 +235,7 @@
 .UIContactPortlet .UINavigationContainer .ItemList {
 	padding: 0px 13px;
 	height: 24px; line-height: 24px;
+	overflow: hidden;
 }
 
 .UIContactPortlet .UINavigationContainer .ItemList a {
