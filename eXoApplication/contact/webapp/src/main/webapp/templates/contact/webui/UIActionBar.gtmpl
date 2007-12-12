@@ -1,18 +1,117 @@
 <div class="UIActionBar">
-		<div class="UIToolbar">
-			<div class="HeaderToolbar">
-				<div class="LeftBar">
-					<div class="RightBar">
-						<div class="CenterBar">
+	<div class="UIToolbar">
+		<div class="HeaderToolbar">
+			<div class="LeftBar">
+				<div class="RightBar">
+					<div class="CenterBar">
+					
+						<div class="SelectButton" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
+							<div class="IconHolder BlueCirclePlusIcon" >
+								<div class="DownArrow1Icon">Add New</div>
+							</div>
+							<% /*Begin Popup Menu*/ %>
+								<div style="position: relative;">
+			      			<div class="UIPopupCategory" style="display: none;">
+			      				<div class="UIRightClickPopupMenu" style="display: block;">
+			      					<div class="UIContextMenuContainer">
+											  <div class="TopLeftRightClickPopupMenu">
+					          			<div class="TopRightRightClickPopupMenu">
+					            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
+					          			</div>
+					        			</div>
+								        <div class="MiddleLeftRightClickPopupMenu">
+								          <div class="MiddleRightRightClickPopupMenu">
+					              		<div class="UIRightPopupMenuContainer">
+					                    <a class="MenuItem" href="<%=uicomponent.event("AddContact")%>">   
+						                    <div class="ItemIcon ContactIcon">
+						                      <%=_ctx.appRes(uicomponent.getName() + ".label.contact")%>
+						                    </div>
+					                    </a>
+					                    <a class="MenuItem" href="<%=uicomponent.event("AddAddressBook")%>">   
+						                    <div class="ItemIcon AddressIcon">
+						                      <%=_ctx.appRes(uicomponent.getName() + ".label.addressBook")%>
+						                    </div>
+					                    </a>
+					             
+														</div>
+						          		</div>
+						        		</div>
+									      <div class="BottomLeftRightClickPopupMenu">
+								        <div class="BottomRightRightClickPopupMenu">
+								          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+								        </div>
+								      </div>
+					      			</div>
+								    </div>
+			      			</div>
+			      		</div>
+			      		<% /*End Popup Menu*/ %>
+						</div>
 						
-							<div class="SelectButton" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
-								<div class="IconHolder BlueCirclePlusIcon" >
-									<div class="DownArrow1Icon">Add New</div>
-								</div>
+          <a href="<%=uicomponent.event("ImportContact")%>" class="ControlButton">
+						<div class="ImportAddressIcon" title="Import Address">
+							<span></span>
+						</div>
+          </a>
+          
+          <a href="<%=uicomponent.event("ExportContact")%>" class="ControlButton">
+						<div class="ExportAddressIcon" title="Export Address">
+							<span></span>
+						</div>
+          </a>
+          
+						<div class="SeparatorLine"><span></span></div>
+						<div class="SelectButton" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
+							<div class="IconHolder ViewIcon">
+								<div class="DownArrow1Icon">Contacts View</div>
+							</div>
+								<% /*Begin Popup Menu*/ %>
+								<div style="position: relative;">
+			      			<div class="UIPopupCategory" style="display: none;">
+			      				<div class="UIRightClickPopupMenu" style="display: block;">
+			      					<div class="UIContextMenuContainer">
+											  <div class="TopLeftRightClickPopupMenu">
+					          			<div class="TopRightRightClickPopupMenu">
+					            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
+					          			</div>
+					        			</div>
+								        <div class="MiddleLeftRightClickPopupMenu">
+								          <div class="MiddleRightRightClickPopupMenu">
+					              		<div class="UIRightPopupMenuContainer">
+					            
+					                    <a class="MenuItem" href="<%=uicomponent.event("ListView")%>">   
+						                    <div class="ItemIcon ContactListIcon">
+						                      <%=_ctx.appRes(uicomponent.getName() + ".label.contactsList")%>
+						                    </div>
+					                    </a>
+					                    <a class="MenuItem" href="<%=uicomponent.event("VCardView")%>">   
+						                    <div class="ItemIcon ContactIcon">
+						                      <%=_ctx.appRes(uicomponent.getName() + ".label.vcard")%>
+						                    </div>
+					                    </a>
+					                
+														</div>
+						          		</div>
+						        		</div>
+									      <div class="BottomLeftRightClickPopupMenu">
+								        <div class="BottomRightRightClickPopupMenu">
+								          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+								        </div>
+								      </div>
+					      			</div>
+								    </div>
+			      			</div>
+			      		</div>
+			      		<% /*End Popup Menu*/ %>
+						</div>
+						
+						<div class="SelectButton">
+							<div class="IconHolder CustomLayoutIcon" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
+								<div class="DownArrow1Icon">Custom Layout View</div>
 								<% /*Begin Popup Menu*/ %>
 									<div style="position: relative;">
-				      			<div class="UIPopupCategory" style="display: none;">
-				      				<div class="UIRightClickPopupMenu" style="display: block;">
+			      			<div class="UIPopupCategory" style="display: none;">
+			      				<div class="UIRightClickPopupMenu" style="display: block;">
 				      					<div class="UIContextMenuContainer">
 												  <div class="TopLeftRightClickPopupMenu">
 						          			<div class="TopRightRightClickPopupMenu">
@@ -21,18 +120,22 @@
 						        			</div>
 									        <div class="MiddleLeftRightClickPopupMenu">
 									          <div class="MiddleRightRightClickPopupMenu">
-						              		<div class="UIRightPopupMenuContainer">
-						                    <a class="MenuItem" href="<%=uicomponent.event("AddContact")%>">   
-							                    <div class="ItemIcon ContactIcon">
-							                      <%=_ctx.appRes(uicomponent.getName() + ".label.contact")%>
+						              		<div class="UIRightPopupMenuContainer" id="customLayoutViewMenu">
+																<a class="MenuItem" href="javascript:eXo.contact.UIContactPortlet.switchLayout(0)" >   
+							                    <div class="ItemIcon MoveNavigationIcon">
+							                       Show/Hide Navigation
 							                    </div>
 						                    </a>
-						                    <a class="MenuItem" href="<%=uicomponent.event("AddAddressBook")%>">   
-							                    <div class="ItemIcon AddressIcon">
-							                      <%=_ctx.appRes(uicomponent.getName() + ".label.addressBook")%>
+						                    <a class="MenuItem" href="javascript:eXo.contact.UIContactPortlet.switchLayout(1)" >   
+							                    <div class="ItemIcon MoveAddressIcon">
+							                       Show/Hide Addressbooks
 							                    </div>
 						                    </a>
-						             
+						                    <a class="MenuItem" href="javascript:eXo.contact.UIContactPortlet.switchLayout(2)" >
+							                    <div class="ItemIcon MoveTagIcon">
+							                      Show/Hide Tags
+							                    </div>
+						                    </a>
 															</div>
 							          		</div>
 							        		</div>
@@ -47,119 +150,15 @@
 				      		</div>
 				      		<% /*End Popup Menu*/ %>
 							</div>
-							
-              <a href="<%=uicomponent.event("ImportContact")%>" class="ControlButton">
-							<div class="ImportAddressIcon" title="Import Address">
-								<span></span>
-							</div>
-              </a>
-              
-              <a href="<%=uicomponent.event("ExportContact")%>" class="ControlButton">
-							<div class="ExportAddressIcon" title="Export Address">
-								<span></span>
-							</div>
-              </a>
-              
-							<div class="SeparatorLine"><span></span></div>
-							<div class="SelectButton" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
-								<div class="IconHolder ViewIcon">
-									<div class="DownArrow1Icon">Contacts View</div>
-								</div>
-									<% /*Begin Popup Menu*/ %>
-									<div style="position: relative;">
-				      			<div class="UIPopupCategory" style="display: none;">
-				      				<div class="UIRightClickPopupMenu" style="display: block;">
-				      					<div class="UIContextMenuContainer">
-												  <div class="TopLeftRightClickPopupMenu">
-						          			<div class="TopRightRightClickPopupMenu">
-						            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
-						          			</div>
-						        			</div>
-									        <div class="MiddleLeftRightClickPopupMenu">
-									          <div class="MiddleRightRightClickPopupMenu">
-						              		<div class="UIRightPopupMenuContainer">
-						            
-						                    <a class="MenuItem" href="<%=uicomponent.event("ListView")%>">   
-							                    <div class="ItemIcon ContactListIcon">
-							                      <%=_ctx.appRes(uicomponent.getName() + ".label.contactsList")%>
-							                    </div>
-						                    </a>
-						                    <a class="MenuItem" href="<%=uicomponent.event("VCardView")%>">   
-							                    <div class="ItemIcon ContactIcon">
-							                      <%=_ctx.appRes(uicomponent.getName() + ".label.vcard")%>
-							                    </div>
-						                    </a>
-						                
-															</div>
-							          		</div>
-							        		</div>
-										      <div class="BottomLeftRightClickPopupMenu">
-									        <div class="BottomRightRightClickPopupMenu">
-									          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
-									        </div>
-									      </div>
-						      			</div>
-									    </div>
-				      			</div>
-				      		</div>
-				      		<% /*End Popup Menu*/ %>
-							</div>
-							
-							<div class="SelectButton">
-								<div class="IconHolder CustomLayoutIcon" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
-									<div class="DownArrow1Icon">Custom Layout View</div>
-									<% /*Begin Popup Menu*/ %>
-										<div style="position: relative;">
-				      			<div class="UIPopupCategory" style="display: none;">
-				      				<div class="UIRightClickPopupMenu" style="display: block;">
-					      					<div class="UIContextMenuContainer">
-													  <div class="TopLeftRightClickPopupMenu">
-							          			<div class="TopRightRightClickPopupMenu">
-							            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
-							          			</div>
-							        			</div>
-										        <div class="MiddleLeftRightClickPopupMenu">
-										          <div class="MiddleRightRightClickPopupMenu">
-							              		<div class="UIRightPopupMenuContainer" id="customLayoutViewMenu">
-																	<a class="MenuItem" href="javascript:eXo.contact.UIContactPortlet.switchLayout(0)" >   
-								                    <div class="ItemIcon MoveNavigationIcon">
-								                       Show/Hide Navigation
-								                    </div>
-							                    </a>
-							                    <a class="MenuItem" href="javascript:eXo.contact.UIContactPortlet.switchLayout(1)" >   
-								                    <div class="ItemIcon MoveAddressIcon">
-								                       Show/Hide Addressbooks
-								                    </div>
-							                    </a>
-							                    <a class="MenuItem" href="javascript:eXo.contact.UIContactPortlet.switchLayout(2)" >
-								                    <div class="ItemIcon MoveTagIcon">
-								                      Show/Hide Tags
-								                    </div>
-							                    </a>
-																</div>
-								          		</div>
-								        		</div>
-											      <div class="BottomLeftRightClickPopupMenu">
-										        <div class="BottomRightRightClickPopupMenu">
-										          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
-										        </div>
-										      </div>
-							      			</div>
-										    </div>
-					      			</div>
-					      		</div>
-					      		<% /*End Popup Menu*/ %>
-								</div>
-							</div>
-							
-							<!--a href="#">
-								<div class="IconHolder AddressOptionIcon">Address Book Options</div>
-							</a-->
-							<div style="clear:left;"><span></span></div>
 						</div>
+						
+						<!--a href="#">
+							<div class="IconHolder AddressOptionIcon">Address Book Options</div>
+						</a-->
+						<div style="clear:left;"><span></span></div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-	<div style="clear: left;"><span></span></div>
+</div>

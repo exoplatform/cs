@@ -72,8 +72,13 @@
 	border: 1px solid #e2e2e2;
 	padding: 0px 15px 0px 10px;
 	margin: 3px 10px;
-	height: 25px;
+	height: 28px;
 }
+
+.UIForumPortlet .UIBreadcumbs .CenterBreadcumbs{
+	height: 28px;
+}
+
 
 .UIForumPortlet .UIBreadcumbs .BreadcumbsInfoBar {
 	float: left;
@@ -133,8 +138,9 @@
 	border: 2px solid white;
 	border-bottom: none;
 	background: url('background/BgToolbar1x28.gif') repeat-x ;
-	padding: 0px 0px 0px 13px;
+	padding-left: 10px;
 	line-height: 28px;
+	height: 28px;
 }
 
 .UIForumPortlet .UIForumActionBar .Icon {
@@ -205,7 +211,7 @@
 /*=============================Content UICategoriesSummary====================*/
 
 .UIForumPortlet .UICategoriesSummary {
-	padding: 5px 10px;
+	padding: 3px 10px;
 }
 
 .UIForumPortlet .ContentContainer .UserIcon {
