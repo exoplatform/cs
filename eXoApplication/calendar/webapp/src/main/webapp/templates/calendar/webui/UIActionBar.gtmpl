@@ -68,7 +68,7 @@
 						</div>
 						<div class="SeparatorLine"><span></span></div>
 						<a href="<%=uicomponent.event("Setting")%>" class="ControlButton">
-							<div class="IconHolder SettingCalendarIcon"> Setting </div>
+							<div class="IconHolder SettingCalendarIcon">Calendar Setting </div>
 						</a>
 						<div class="SeparatorLine"><span></span></div>
 						<a href="<%=uicomponent.event("RSS")%>" class="ControlButton">
@@ -81,7 +81,7 @@
 						<div class="SeparatorLine"><span></span></div>
 						<div class="ControlButton" onclick="eXo.calendar.UICalendarPortlet.showView(this, event);">
 						<a class="ControlButton">
-							<div class="IconHolder LayoutSwitcherIcon" title="Layout Switcher"><span></span></div>
+							<div class="IconHolder LayoutSwitcherIcon" title="Show/Hide Navigation Pane"><span></span></div>
 						</a>
 							<% /*Begin Popup Menu*/ %>
 							<!--<div style="position: relative; top: -21px ;">
@@ -103,7 +103,7 @@
 				                    </a>
 				                    <a class="MenuItem" href="javascript:eXo.calendar.UICalendarPortlet.switchLayout(1)" >   
 					                    <div class="ItemIcon ShowMinicalendar">
-					                       MiniCalendar
+					                       Mini Calendar
 					                    </div>
 				                    </a>
 				                    <a class="MenuItem" href="javascript:eXo.calendar.UICalendarPortlet.switchLayout(2)" >
@@ -125,14 +125,6 @@
 		      		</div>-->
 		      		<% /*End Popup Menu*/ %>
 		      		</div>
-						<a class="RightControlButton">
-							<div class="NextIcon" title="Next day"><span></span></div>
-						</a>
-						<div class="Title RightControlButton" ><span></span></div>
-						<a class="RightControlButton">
-							<div class="BackIcon" title="Back day"><span></span></div>
-						</a>
-						<div class="SeparatorLine RightLine"><span></span></div>
 						<a href="<%=uicomponent.event("Today")%>" class="RightControlButton">
 							<div class="IconHolder TodayIcon">Today</div>
 						</a>

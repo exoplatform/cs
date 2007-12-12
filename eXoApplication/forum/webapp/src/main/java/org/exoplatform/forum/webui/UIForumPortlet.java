@@ -25,7 +25,6 @@ public class UIForumPortlet extends UIPortletApplication {
 	private boolean isForumRendered = false;
 	private boolean isPostRendered = false;
   public UIForumPortlet() throws Exception {
-    addChild(UIBannerContainer.class, null, null) ;
     addChild(UIBreadcumbs.class, null, null) ;
     addChild(UICategoryContainer.class, null, null).setRendered(isCategoryRendered) ;
     addChild(UIForumContainer.class, null, null).setRendered(isForumRendered) ;
