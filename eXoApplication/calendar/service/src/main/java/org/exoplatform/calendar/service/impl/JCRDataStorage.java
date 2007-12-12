@@ -910,8 +910,14 @@ public class JCRDataStorage{
     }
     StringBuffer summary = new StringBuffer("Event      : ") ;
     summary.append(eventNode.getProperty("exo:summary").getString()).append("<br>") ;
-    summary.append("Description: ").append(eventNode.getProperty("exo:description").getString()).append("<br>") ;
-    summary.append("Location   : ").append(eventNode.getProperty("exo:location").getString()).append("<br>") ;
+    summary.append("Description: ") ;
+    if(eventNode.hasProperty("exo:description"))
+    	summary.append(eventNode.getProperty("exo:description").getString());    	
+    summary.append("<br>")  ;
+    summary.append("Location   : ") ; 
+    if(eventNode.hasProperty("exo:location")) 
+    	summary.append(eventNode.getProperty("exo:location").getString()) ;
+    summary.append("<br>") ;
     cal.setTime(eventNode.getProperty("exo:fromDateTime").getDate().getTime()) ;
     summary.append("From       : ").append(cal.get(java.util.Calendar.HOUR_OF_DAY)).append(":") ;
     summary.append(cal.get(java.util.Calendar.MINUTE)).append(" - ") ;
