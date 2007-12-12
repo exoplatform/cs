@@ -898,7 +898,7 @@ public class JCRDataStorage{
     reminderNode.setProperty("exo:reminderType", reminder.getReminderType()) ;
     reminderNode.setProperty("exo:email", reminder.getEmailAddress()) ;
     reminderNode.setProperty("exo:isRepeat", reminder.isRepeat()) ;
-    reminderNode.setProperty("exo:isOver", true) ;
+    reminderNode.setProperty("exo:isOver", false) ;
     java.util.Calendar cal = new GregorianCalendar() ;
     if(reminder.getFromDateTime() != null) {
     	cal.setTime(reminder.getFromDateTime()) ;
@@ -908,16 +908,18 @@ public class JCRDataStorage{
     	cal.setTimeInMillis(time) ;
       reminderNode.setProperty("exo:remindDateTime", cal) ;
     }
-    StringBuffer summary = new StringBuffer("Event: ") ;
+    StringBuffer summary = new StringBuffer("Event      : ") ;
     summary.append(eventNode.getProperty("exo:summary").getString()).append("<br>") ;
+    summary.append("Description: ").append(eventNode.getProperty("exo:description").getString()).append("<br>") ;
+    summary.append("Location   : ").append(eventNode.getProperty("exo:location").getString()).append("<br>") ;
     cal.setTime(eventNode.getProperty("exo:fromDateTime").getDate().getTime()) ;
-    summary.append("From : ").append(cal.get(java.util.Calendar.HOUR_OF_DAY)).append(":") ;
+    summary.append("From       : ").append(cal.get(java.util.Calendar.HOUR_OF_DAY)).append(":") ;
     summary.append(cal.get(java.util.Calendar.MINUTE)).append(" - ") ;
     summary.append(cal.get(java.util.Calendar.DATE)).append("/") ;
     summary.append(cal.get(java.util.Calendar.MONTH)).append("/") ;
     summary.append(cal.get(java.util.Calendar.YEAR)).append("<br>") ;
     cal.setTime(eventNode.getProperty("exo:toDateTime").getDate().getTime()) ;
-    summary.append("To   : ").append(cal.get(java.util.Calendar.HOUR_OF_DAY)).append(":") ;
+    summary.append("To         : ").append(cal.get(java.util.Calendar.HOUR_OF_DAY)).append(":") ;
     summary.append(cal.get(java.util.Calendar.MINUTE)).append(" - ") ;
     summary.append(cal.get(java.util.Calendar.DATE)).append("/") ;
     summary.append(cal.get(java.util.Calendar.MONTH)).append("/") ;

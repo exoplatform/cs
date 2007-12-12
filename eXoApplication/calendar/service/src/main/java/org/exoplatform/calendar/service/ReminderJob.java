@@ -33,7 +33,6 @@ public class ReminderJob implements Job {
 
 	private static Log log_ = ExoLogger.getLogger("job.RecordsJob");
 	public void execute(JobExecutionContext context) throws JobExecutionException {
-		// Session session = null ;
 		try {
 			ExoContainer container = ExoContainerContext.getCurrentContainer();
 			MailService mailService = (MailService) container
@@ -41,6 +40,10 @@ public class ReminderJob implements Job {
 			if (log_.isDebugEnabled())
 				log_.debug("Calendar reminder service");
 			java.util.Calendar fromCalendar = new GregorianCalendar();
+			
+			/*long tmpTime = fromCalendar.getTimeInMillis() ;
+			tmpTime = tmpTime + (7 * 60 * 60 * 1000) ;
+			fromCalendar.setTimeInMillis(tmpTime) ;*/
 			JobDataMap jdatamap = context.getJobDetail().getJobDataMap();
 
 			ServerConfiguration config = new ServerConfiguration();
@@ -56,12 +59,13 @@ public class ReminderJob implements Job {
 			StringBuffer path = new StringBuffer(getReminderPath(fromCalendar));
 			path.append("//element(*,exo:reminder)");
 			path.append("[@exo:remindDateTime <= xs:dateTime('"	+ ISO8601.format(fromCalendar)
-					+ "') and @exo:reminderType = 'email' and @exo:isOver = 'true']");			
+					+ "') and @exo:reminderType = 'email' and @exo:isOver = 'false']");
+			//System.out.println("\n\n\n path >>>>>" + path.toString());
 			QueryManager queryManager = calendarHome.getSession().getWorkspace().getQueryManager();
 			Query query = queryManager.createQuery(path.toString(), Query.XPATH);
 			QueryResult results = query.execute();
 			NodeIterator iter = results.getNodes();
-			System.out.println("\n\n\n >>>>>" + iter.getSize());
+			//System.out.println("\n\n\n >>>>>" + iter.getSize());
 			Message message;
 			Node reminder;
 			List<Message> messageList = new ArrayList<Message>();
@@ -98,10 +102,7 @@ public class ReminderJob implements Job {
 			}
 			if(messageList.size() > 0) mailService.sendMessages(messageList, config);
 		} catch (Exception e) {
-			e.printStackTrace();
-			/*
-			 * if(session != null) { session.logout(); }
-			 */
+			e.printStackTrace();			
 		}
 		if (log_.isDebugEnabled())
 			log_.debug("File plan job done");
