@@ -214,7 +214,6 @@ public class UIMessagePreview extends UIComponent {
       }
       
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UINavigationContainer.class));
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessagePreview.class));
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageArea);
     }
   }

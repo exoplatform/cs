@@ -43,7 +43,7 @@
                     String starClass = "UnStarredIcon" ;
                     if (msg.hasStar()) starClass = "StarredIcon";
                   %>
-									<div><a href="<%=uicomponent.event("AddStar")%>"><div  class="$starClass" title="Add star for this message"><span></span></div></a></div>
+									<div><a href="<%=uicomponent.event("AddStar", msg.getId())%>"><div  class="$starClass" title="Add star for this message"><span></span></div></a></div>
 									<div style="clear: left;"><span></span></div>
 								</div>
 								<div id="CollapseMessageAddressPreview" class="CollapseMessageAddress">
