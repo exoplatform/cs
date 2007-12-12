@@ -1514,8 +1514,7 @@ public class JCRDataStorage{
         }
       }      
     }
-  }
-  
+  }  
   
   public Map<String, List<String>> checkFreeBusy(SessionProvider sysProvider, EventQuery eventQuery) throws Exception {
   	Node eventFolder = getEventFolder(sysProvider, eventQuery.getFromDate().getTime()) ;
