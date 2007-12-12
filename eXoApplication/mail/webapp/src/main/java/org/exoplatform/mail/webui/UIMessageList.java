@@ -12,7 +12,6 @@ import javax.mail.internet.InternetAddress;
 
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.SessionsUtils;
-import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.MessageFilter;

@@ -4,7 +4,7 @@
 	<div class="SeparatorLine"><span></span></div>
 	<a href="<%=uicomponent.event("Search")%>"><div class="Search" title="Search"><span></span></div></a>
   <div class="InputSearch">
-  	<a href="#" class="SearchActions"><span></span></a>
+  	<a class="SearchActions"><span></span></a>
   	<input class="Input" type="text" id="search" name="search"/>
   </div>
   <% 

@@ -192,20 +192,30 @@ public class UIMessagePreview extends UIComponent {
       UIMessagePreview uiPreview = event.getSource();
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UIMailPortlet uiPortlet = uiPreview.getAncestorOfType(UIMailPortlet.class);
-      UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
       UIMessageArea uiMessageArea = uiPortlet.findFirstComponentOfType(UIMessageArea.class);
-      UITagContainer uiTags = uiPortlet.findFirstComponentOfType(UITagContainer.class); 
       MailService mailSrv = uiPreview.getApplicationComponent(MailService.class);
       String username = MailUtils.getCurrentUser();
       String accountId = MailUtils.getAccountId();
-      
+      List<String> msgList = new ArrayList<String>();
+      for (Message message : uiPreview.getConversations()) {
+        msgList.add(message.getId());
+      }
+       
       Message msg = mailSrv.getMessageById(SessionsUtils.getSessionProvider(), username, accountId, msgId);
       mailSrv.moveMessages(SessionsUtils.getSessionProvider(), username, accountId, msgId, msg.getFolders()[0],  Utils.createFolderId(accountId, Utils.FD_TRASH, false));
-      
       uiPortlet.findFirstComponentOfType(UIMessageList.class).updateList();
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer);
+      
+      // For conversation
+      msgList.remove(msg.getId());
+      for (String messageId : msgList) {
+        Message message = mailSrv.getMessageById(SessionsUtils.getSessionProvider(), username, accountId, messageId);
+        if (message.isRootConversation()) 
+          uiPreview.setMessage(message);
+      }
+      
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UINavigationContainer.class));
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessagePreview.class));
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageArea);
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiTags);
     }
   }
   

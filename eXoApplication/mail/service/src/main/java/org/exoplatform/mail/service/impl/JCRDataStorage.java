@@ -251,10 +251,48 @@ public class JCRDataStorage{
   }
 
   public void removeMessage(SessionProvider sProvider, String username, String accountId, String messageId) throws Exception {
-    Node messages = getMessageHome(sProvider, username, accountId);
-    //  removes it
-    if (messages.hasNode(messageId)) messages.getNode(messageId).remove();
-    messages.getSession().save();
+    Node msgHomeNode = getMessageHome(sProvider, username, accountId);
+    Node msgNode = null;
+    if (msgHomeNode.hasNode(messageId)) msgNode = msgHomeNode.getNode(messageId) ;
+    
+    // For conversation
+    boolean isRoot = msgNode.getProperty(Utils.EXO_ISROOT).getBoolean();
+    if (isRoot) {
+      if (msgNode.hasProperty(Utils.EXO_MESSAGEIDS)) {
+        Value[] propMessageIds = msgNode.getProperty(Utils.EXO_MESSAGEIDS).getValues();
+        List<String> messageIds = new ArrayList<String>();
+        for (int i = 0; i < propMessageIds.length; i++) {
+          String msgId  = propMessageIds[i].getString();
+          messageIds.add(msgId);
+        }
+        if (messageIds.size() > 0) {
+          Node newRoot = msgHomeNode.getNode(messageIds.get(0));
+          newRoot.setProperty(Utils.EXO_ISROOT, true);
+          messageIds.remove(0);
+          newRoot.setProperty(Utils.EXO_ADDRESSES, msgNode.getProperty(Utils.EXO_ADDRESSES).getValues());
+          newRoot.setProperty(Utils.EXO_MESSAGEIDS, messageIds.toArray(new String[]{}));
+          for (String msgId : messageIds) {
+            Node conversation = msgHomeNode.getNode(msgId);
+            conversation.setProperty(Utils.EXO_ROOT, newRoot.getProperty(Utils.EXO_ID).getString());
+          }
+        }
+      }
+      msgNode.remove();
+    } else {
+      Node rootNode = null ;
+      rootNode = msgHomeNode.getNode(msgNode.getProperty(Utils.EXO_ROOT).getString()) ;
+      msgNode.remove() ;
+      if (rootNode.hasProperty(Utils.EXO_MESSAGEIDS)) {
+        Value[] propMessageIds = rootNode.getProperty(Utils.EXO_MESSAGEIDS).getValues();
+        List<String> messageIds = new ArrayList<String>();
+        for (int i = 0; i < propMessageIds.length; i++) {
+          String msgId  = propMessageIds[i].getString();
+          if (!msgId.equals(messageId))  messageIds.add(msgId);
+        }
+        rootNode.setProperty(Utils.EXO_MESSAGEIDS, messageIds.toArray(new String[]{}));
+      }
+    }
+    msgHomeNode.getSession().save();
   }
 
   public void removeMessage(SessionProvider sProvider, String username, String accountId, List<String> messageIds) throws Exception {
@@ -270,6 +308,11 @@ public class JCRDataStorage{
     if (messageHome.hasNode(msgId)) {
       Node msgNode = messageHome.getNode(msgId) ;
       if (msgNode.hasProperty(Utils.EXO_FOLDERS)) {
+        Boolean isRootConversation = msgNode.getProperty(Utils.EXO_ISROOT).getBoolean();
+        
+        Boolean isUnread = msgNode.getProperty(Utils.EXO_ISUNREAD).getBoolean();
+        Node currentFolderNode = folderHome.getNode(currentFolderId);
+        Node destFolderNode = folderHome.getNode(destFolderId);
         Value[] propFolders = msgNode.getProperty(Utils.EXO_FOLDERS).getValues();
         String[] folderIds = new String[propFolders.length];
         for (int i = 0; i < propFolders.length; i++) {
@@ -280,21 +323,50 @@ public class JCRDataStorage{
         folderList.add(destFolderId);
         folderIds = folderList.toArray(new String[folderList.size()]);
         msgNode.setProperty(Utils.EXO_FOLDERS, folderIds);
+        
+        if (isRootConversation) {
+          if (msgNode.hasProperty(Utils.EXO_MESSAGEIDS)) {
+            Value[] propMessageIds = msgNode.getProperty(Utils.EXO_MESSAGEIDS).getValues();
+            if (propMessageIds != null && propMessageIds.length >0 ) {
+              List<String> messageIds = new ArrayList<String>();
+              for (int i = 0; i < propMessageIds.length; i++) {
+                String msgConverId  = propMessageIds[i].getString();
+                messageIds.add(msgConverId);
+              }
 
-        Boolean isUnread = msgNode.getProperty(Utils.EXO_ISUNREAD).getBoolean();
-        Boolean isRootConversation = msgNode.getProperty(Utils.EXO_ISROOT).getBoolean();
-        // Update number of unread messages
-        Node currentFolderNode = folderHome.getNode(currentFolderId);
-        Node destFolderNode = folderHome.getNode(destFolderId);
-        if (isUnread && isRootConversation) {
-          currentFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (currentFolderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong() - 1));
-          destFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (destFolderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong() + 1));
+              Node newRoot = messageHome.getNode(messageIds.get(0));
+              newRoot.setProperty(Utils.EXO_ISROOT, true);
+              messageIds.remove(0);
+              newRoot.setProperty(Utils.EXO_ADDRESSES, msgNode.getProperty(Utils.EXO_ADDRESSES).getValues());
+              newRoot.setProperty(Utils.EXO_MESSAGEIDS, messageIds.toArray(new String[]{}));
+              for (String msgNewConverId : messageIds) {
+                Node conversation = messageHome.getNode(msgNewConverId);
+                conversation.setProperty(Utils.EXO_ROOT, newRoot.getProperty(Utils.EXO_ID).getString());
+              }
+              msgNode.setProperty(Utils.EXO_ADDRESSES, new String[] {});
+              msgNode.setProperty(Utils.EXO_MESSAGEIDS, new String[] {});
+            }
+          }
+          // Update number of unread messages
+          if (isUnread) {
+            currentFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (currentFolderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong() - 1));
+            destFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (destFolderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong() + 1));
+          }
+        } else {
+          msgNode.setProperty(Utils.EXO_ISROOT, true);
+          Node rootMsg = messageHome.getNode(msgNode.getProperty(Utils.EXO_ROOT).getString());
+          Value[] propMessageIds = rootMsg.getProperty(Utils.EXO_MESSAGEIDS).getValues();
+          List<String> messageIds = new ArrayList<String>();
+          for (int i = 0; i < propMessageIds.length; i++) {
+            String msgConverId  = propMessageIds[i].getString();
+            messageIds.add(msgConverId);
+          }
+          messageIds.remove(msgId);
+          rootMsg.setProperty(Utils.EXO_MESSAGEIDS, messageIds.toArray(new String[]{}));
         }
+        
         currentFolderNode.setProperty(Utils.EXO_TOTALMESSAGE, (currentFolderNode.getProperty(Utils.EXO_TOTALMESSAGE).getLong() - 1));
         destFolderNode.setProperty(Utils.EXO_TOTALMESSAGE, (destFolderNode.getProperty(Utils.EXO_TOTALMESSAGE).getLong() + 1));
-        
-        currentFolderNode.getSession().save();
-        destFolderNode.getSession().save();
       }
     }
     messageHome.getSession().save();
