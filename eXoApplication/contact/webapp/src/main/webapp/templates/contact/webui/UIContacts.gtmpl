@@ -430,7 +430,7 @@
 			  	<div class="TitleVCards" >
 				  	<div class="StateIcon OnlineIcon"><%=(contact.getFullName()==null ? "_" : contact.getFullName())%></div>
 			  		<% if (tagIds != null && tagIds.length > 0) { %>
-                <div onclick="eXo.webui.UIPopupSelectCategory.show(this, event);" style="cursor: pointer; display: inline" class="TagIcon $iconTag" title="Show tag info">
+                <div onclick="eXo.webui.UIPopupSelectCategory.show(this, event);" style="cursor: pointer; display: inline" class="TagIcon $iconTag">
                   <% /*Begin Popup Menu*/ %>
                   <span style="position: absolute;">
                     <div class="UIPopupCategory" style="display: none;">
@@ -448,10 +448,12 @@
                                 for (String tagId : tagIds) {
                                   Tag tag = tagMap.get(tagId) ;
                                 %>
-                                <span class="MenuItem">   
+                                <a class="MenuItem" href="<%=uicomponent.event("SelectTag", "$tagId")%>">   
                                   <div class="ItemIcon <%=tag.getColor()%>Tag"><%=tag.getName()%></div>
-                                </span>
+                                </a>
                                 <%}%>
+  
+                                
                               </div>
                             </div>
                           </div>
@@ -541,7 +543,7 @@
 			  	<div class="TitleVCards" >
 				  	<div class="StateIcon OfflineIcon"><%=(contact.getFullName()==null ? "_" : contact.getFullName())%></div>
 			  		<% if (tagIds != null && tagIds.length > 0) { %>
-					     <div onclick="eXo.webui.UIPopupSelectCategory.show(this, event);" style="cursor: pointer; display: inline" class="TagIcon $iconTag" title="Show tag info">
+					     <div onclick="eXo.webui.UIPopupSelectCategory.show(this, event);" style="cursor: pointer; display: inline" class="TagIcon $iconTag">
                 <% /*Begin Popup Menu*/ %>
                 <div style="position: absolute;">
                   <div class="UIPopupCategory" style="display: none;">
@@ -559,9 +561,9 @@
                               for (String tagId : tagIds) {
                                 Tag tag = tagMap.get(tagId) ;
                               %>
-                              <span class="MenuItem">   
+                              <a class="MenuItem" href="<%=uicomponent.event("SelectTag", "$tagId")%>">   
                                 <div class="ItemIcon <%=tag.getColor()%>Tag"><%=tag.getName()%></div>
-                              </span>
+                              </a> 
                               <%}%>
                             </div>
                           </div>
@@ -757,14 +759,6 @@
 				    </div>		      		
 				  </div>
 
-  		<% /*End Popup Menu*/ %>
-			
-			
-			
-			
-			
-			
-			
-			
+  		<% /*End Popup Menu*/ %>		
 			
 <%uiform.end()%>	

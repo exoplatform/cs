@@ -678,6 +678,7 @@ public class JCRDataStorage{
     
     contactNode.setProperty("exo:note", contact.getNote());
     contactNode.setProperty("exo:categories", contact.getCategories());
+    contactNode.setProperty("exo:tags", contact.getTags());
     contactNode.setProperty("exo:editPermission", contact.getEditPermission());
 
     dateTime.setTime(contact.getLastUpdated()) ;

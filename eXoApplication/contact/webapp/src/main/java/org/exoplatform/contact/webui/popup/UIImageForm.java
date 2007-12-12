@@ -60,13 +60,13 @@ public class UIImageForm extends UIForm implements UIPopupComponent{
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       UIFormUploadInput input = (UIFormUploadInput)uiForm.getUIInput(FIELD_UPLOAD);
       UploadResource uploadResource = input.getUploadResource() ;
-      String mimeType = uploadResource.getMimeType() ;
       if(uploadResource == null) {
-        uiApp.addMessage(new ApplicationMessage("UIAttachFileForm.msg.fileName-error", null, 
+        uiApp.addMessage(new ApplicationMessage("UIAttachFileForm.msg.selectFile-required", null, 
             ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
+      String mimeType = uploadResource.getMimeType() ;
       String fileName = uploadResource.getFileName() ;
       boolean isImage = false ;
       for(String imageType : imageTypes)

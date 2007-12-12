@@ -83,11 +83,12 @@
 			<div class="Label">Shared Address Book</div>
       <div style="clear: left"><span></span></div>
 		</div>
-		<div  class="ItemList Normal">
+		
+		<!--<div  class="ItemList Normal">
 			
 				Share
 			
-		</div>
+		</div>-->
 	
 	</div>
 	

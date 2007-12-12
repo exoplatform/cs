@@ -67,10 +67,9 @@ public class UITags extends UIComponent {
       uiForm.setSelectedTag(tagId) ;
       UIWorkingContainer uiWorkingContainer = uiForm.getAncestorOfType(UIWorkingContainer.class) ;
       uiWorkingContainer.findFirstComponentOfType(UIAddressBooks.class).setSelectedGroup(null) ;
-      
-      String username = ContactUtils.getCurrentUser() ;
       UIContacts uiContacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class) ;
-      uiContacts.setContacts(ContactUtils.getContactService().getContactPageListByTag(SessionsUtils.getSystemProvider(), username, tagId)) ;
+      uiContacts.setContacts(ContactUtils.getContactService()
+        .getContactPageListByTag(SessionsUtils.getSystemProvider(), ContactUtils.getCurrentUser(), tagId)) ;
       uiContacts.setSelectedGroup(null) ;
       uiContacts.setSelectedTag(tagId) ;
       uiContacts.setDisplaySearchResult(false) ;

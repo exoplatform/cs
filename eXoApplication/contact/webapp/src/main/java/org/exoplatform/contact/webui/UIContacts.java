@@ -68,7 +68,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
         @EventConfig(listeners = UIContacts.LastPageActionListener.class),
         @EventConfig(listeners = UIContacts.ExportContactActionListener.class),
         @EventConfig(listeners = UIContacts.CancelActionListener.class),
-        //@EventConfig(listeners = UIContacts.TagInfoActionListener.class),
+        @EventConfig(listeners = UIContacts.SelectTagActionListener.class),
         @EventConfig(listeners = UIContacts.CloseSearchActionListener.class)
     }
 )
@@ -105,7 +105,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   
   public void setContacts(JCRPageList pageList) throws Exception {
     pageList_ = pageList ;
-    updateList() ;
+    updateList() ; 
   }
   public JCRPageList getContactPageList() { return pageList_ ; }
   
@@ -264,9 +264,11 @@ public class UIContacts extends UIForm implements UIPopupComponent {
     public void execute(Event<UIContacts> event) throws Exception {
       UIContacts uiContacts = event.getSource();
       String tagId = event.getRequestContext().getRequestParameter(OBJECTID);   
-      //String type = event.getRequestContext().getRequestParameter("contactType");
+      @SuppressWarnings("unused")
+      String type = event.getRequestContext().getRequestParameter("contactType");
       List<String> contactIds = new ArrayList<String>();
-      //UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
+      @SuppressWarnings("unused")
+      UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
       contactIds = uiContacts.getCheckedContacts() ;
       ContactService contactService = ContactUtils.getContactService(); 
       contactService.addTag(SessionsUtils.getSystemProvider(), ContactUtils.getCurrentUser(), contactIds, tagId);
@@ -312,10 +314,12 @@ public class UIContacts extends UIForm implements UIPopupComponent {
     public void execute(Event<UIContacts> event) throws Exception {
       UIContacts uiContacts = event.getSource();
       String addressBookId = event.getRequestContext().getRequestParameter(OBJECTID);
-      //String type = event.getRequestContext().getRequestParameter("contactType");
+      @SuppressWarnings("unused")
+      String type = event.getRequestContext().getRequestParameter("contactType");
       String[] addressBooks = {addressBookId} ;
       List<String> contactIds = new ArrayList<String>();
-      //UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
+      @SuppressWarnings("unused")
+      UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
       contactIds = uiContacts.getCheckedContacts() ;
       boolean toPublic = uiContacts.getAncestorOfType(UIWorkingContainer.class)
         .findFirstComponentOfType(UIAddressBooks.class).getPublicGroupMap().containsKey(addressBookId) ;
@@ -584,24 +588,22 @@ public class UIContacts extends UIForm implements UIPopupComponent {
        */
     }
   }
-  /*
-  static public class TagInfoActionListener extends EventListener<UIContacts> {
+  
+  static public class SelectTagActionListener extends EventListener<UIContacts> {
     public void execute(Event<UIContacts> event) throws Exception {
       UIContacts uiContacts = event.getSource() ;
-      String contactId = event.getRequestContext().getRequestParameter(OBJECTID);
-      Contact contact = uiContacts.contactMap.get(contactId) ;
-      String[] tagIds = contact.getTags() ;
-      List<Tag> tags = new ArrayList<Tag>() ;
-      Map<String, Tag> tagMap = uiContacts.getTagMap() ;
-      for (String tagId : tagIds) tags.add(tagMap.get(tagId)) ;
-      UIContactPortlet contactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class) ;
-      UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
-      UITagInfo uiTagInfo = popupAction.createUIComponent(UITagInfo.class, null, "UITagInfo") ;
-      uiTagInfo.setTags(tags) ;
-      popupAction.activate(uiTagInfo, 400, 0, true) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;  
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
+      String tagId = event.getRequestContext().getRequestParameter(OBJECTID) ; 
+      UIWorkingContainer uiWorkingContainer = uiContacts.getAncestorOfType(UIWorkingContainer.class) ;
+      uiWorkingContainer.findFirstComponentOfType(UIAddressBooks.class).setSelectedGroup(null) ;
+      UITags tags = uiWorkingContainer.findFirstComponentOfType(UITags.class) ;
+      tags.setSelectedTag(tagId) ;
+      uiContacts.setContacts(ContactUtils.getContactService()
+        .getContactPageListByTag(SessionsUtils.getSystemProvider(), ContactUtils.getCurrentUser(), tagId)) ;
+      uiContacts.setSelectedGroup(null) ;
+      uiContacts.setSelectedTag(tagId) ;
+      uiContacts.setDisplaySearchResult(false) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer) ;
     }
   }
-  */
+  
 }

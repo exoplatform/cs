@@ -4,10 +4,8 @@
  **************************************************************************/
 package org.exoplatform.contact.webui;
 
-import java.util.List;
 import java.util.Map;
 
-import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.webui.popup.UICategoryForm;
 import org.exoplatform.contact.webui.popup.UICategorySelect;
 import org.exoplatform.contact.webui.popup.UIContactForm;

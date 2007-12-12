@@ -127,26 +127,14 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
   static  public class CancelActionListener extends EventListener<UICategoryForm> {
     public void execute(Event<UICategoryForm> event) throws Exception {
       UICategoryForm uiCategoryForm = event.getSource() ;
-      /*
       UIPopupAction uiPopupAction = uiCategoryForm.getAncestorOfType(UIPopupAction.class) ;
       uiPopupAction.deActivate() ;
-      if(uiPopupAction.getAncestorOfType(UIPopupAction.class) != null) {
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction.getAncestorOfType(UIPopupAction.class));
+      UIPopupAction parentPopup = uiPopupAction.getAncestorOfType(UIPopupAction.class) ;
+      if(parentPopup != null) {
+        event.getRequestContext().addUIComponentToUpdateByAjax(parentPopup);
       } else {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
       }
-      UIAddressBooks addressBooks = uiCategoryForm
-        .getAncestorOfType(UIContactPortlet.class).findFirstComponentOfType(UIAddressBooks.class) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(addressBooks) ;      
-      */
-      
-     // UIPopupContainer uiPopupContainer = uiCategoryForm.getAncestorOfType(UIPopupContainer.class) ;
-     // UIPopupAction uiPopup = uiPopupContainer.getChild(UIPopupAction.class) ;    
-      
-      UIPopupAction uiPopupAction = uiCategoryForm.getAncestorOfType(UIPopupAction.class) ; 
-      uiPopupAction.deActivate() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction.getAncestorOfType(UIPopupAction.class)) ; 
     }
   } 
   

@@ -11,13 +11,10 @@ import java.util.Map;
 
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.SessionsUtils;
-import org.exoplatform.contact.webui.UIAddressBooks;
 import org.exoplatform.contact.webui.UIContactContainer;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContacts;
-import org.exoplatform.contact.webui.UINavigationContainer;
 import org.exoplatform.contact.webui.UIWorkingContainer;
-import org.exoplatform.contact.webui.UIContacts.MoveContactsActionListener;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -121,10 +118,8 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
       }
      
       String[] categories = sharedGroups.toString().split(",") ;
-      System.out.println("\n\n begin move\n\n");
       ContactUtils.getContactService().moveContacts(SessionsUtils.getSystemProvider()
         , ContactUtils.getCurrentUser(), uiMoveContactForm.getContactIds(), categories, true) ;
-      System.out.println("\n\n end move \n\n");
       UIContactContainer contactContainer = uiContactPortlet.findFirstComponentOfType(UIContactContainer.class) ;
       contactContainer.getChild(UIContacts.class).updateList() ;
       uiContactPortlet.cancelAction() ;
