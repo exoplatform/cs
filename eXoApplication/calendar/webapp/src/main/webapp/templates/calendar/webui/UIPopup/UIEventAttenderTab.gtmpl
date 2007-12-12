@@ -69,7 +69,6 @@
 								<td>
 									<div class="LeftSide">
 										<a href="<%=uiForm.event("DeleteUser")%>"><div class="DeleteUserIcon" title="Delete username"><span></span></div></a>
-										<a href="<%=uiForm.event("SaveUser")%>"><div class="SaveUserIcon" title="Save username"><span></span></div></a>
 										<a href="<%=uiForm.event("AddParticipant",uicomponent.id)%>"><div class="AddUserIcon" title="Add username"><span></span></div></a>
 										<div class="Title">Participancs</div>
 										<div style="clear: both">
@@ -83,7 +82,7 @@
 									<td class="$styleClassF">&nbsp;</td>
 								<%}%>
 							</tr>
-             	<%for(String p in uicomponent.getParticipancs().keySet()) {%>
+             	<%for(String p in uicomponent.getParticipants()) {%>
 	             	<tr>
 									<td>
 										<div class="LeftSide">

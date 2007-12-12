@@ -103,19 +103,22 @@ public class UISelectUserForm extends UIForm implements UIPopupComponent {
       if(uiEventForm != null) {
         StringBuilder sb = new StringBuilder() ;
         for(User u : uiForm.getData()) {
-          UIFormCheckBoxInput<Boolean> input = uiForm.getChildById(u.getUserName()) ;
+          UIFormCheckBoxInput input = uiForm.getUIFormCheckBoxInput(u.getUserName()) ;
           if(input != null && input.isChecked()) {
-            sb.append(u.getUserName()).append(CalendarUtils.COLON) ;
+            if(sb != null && sb.length() > 0) sb.append(CalendarUtils.COLON) ;
+          	sb.append(u.getUserName()) ;
           }
         }
         uiEventForm.setSelectedTab(uiForm.tabId_) ;
         uiEventForm.setParticipant(sb.toString()) ;
+        ((UIEventAttenderTab)uiEventForm.getChildById(uiEventForm.TAB_EVENTATTENDER)).updateParticipants(sb.toString()) ;
       } 
-      UIPopupAction parentPopup = uiContainer.getAncestorOfType(UIPopupAction.class) ;
+      //UIPopupAction parentPopup = uiContainer.getAncestorOfType(UIPopupAction.class) ;
       UIPopupAction chilPopup =  uiContainer.getChild(UIPopupAction.class) ;
       chilPopup.deActivate() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(chilPopup) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(parentPopup) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiEventForm.getChildById(uiEventForm.TAB_EVENTATTENDER)) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiEventForm.getChildById(uiEventForm.TAB_EVENTSHARE)) ;
     }  
   } 
   static  public class SearchActionListener extends EventListener<UISelectUserForm> {

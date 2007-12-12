@@ -321,27 +321,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
     }
   }
   static  public class CancelActionListener extends EventListener<UIQuickAddEvent> {
-    public void execute(Event<UIQuickAddEvent> event) throws Exception {
-    	java.util.Calendar cal = new GregorianCalendar() ;
-    	cal.set(java.util.Calendar.HOUR_OF_DAY, 1) ;
-    	cal.set(java.util.Calendar.MINUTE, 1) ;
-    	EventQuery eventQuery = new EventQuery() ;
-    	eventQuery.setFromDate(cal) ;
-    	cal = new GregorianCalendar() ;
-    	cal.set(java.util.Calendar.HOUR_OF_DAY, 23) ;
-    	cal.set(java.util.Calendar.MINUTE, 1) ;
-    	eventQuery.setToDate(cal) ;
-    	eventQuery.setParticipants(new String[]{"root", "demo"}) ;
-    	eventQuery.setNodeType("exo:calendarPublicEvent") ;
-    	Map<String, List<String>> parsMap = 
-    		CalendarUtils.getCalendarService().checkFreeBusy(SessionsUtils.getSystemProvider(), eventQuery) ;
-    	String[] pars = parsMap.keySet().toArray(new String[]{}) ;
-    	for(String par : pars) {
-    		System.out.println("\n\n Name: "  + par ) ;
-    		for(String time : parsMap.get(par)) {
-    			System.out.println("\n\n time: "  + time ) ;
-    		}
-    	}
+    public void execute(Event<UIQuickAddEvent> event) throws Exception {    	
     	event.getSource().getAncestorOfType(UICalendarPortlet.class).cancelAction() ;
     }
   }

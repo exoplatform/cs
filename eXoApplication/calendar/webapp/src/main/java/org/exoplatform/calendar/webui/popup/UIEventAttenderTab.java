@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.exoplatform.calendar.CalendarUtils;
+import org.exoplatform.calendar.SessionsUtils;
+import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.webui.UIFormComboBox;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -41,8 +43,7 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
   final public static String FIELD_DATEALL = "dateAll".intern();
   final public static String FIELD_CURRENTATTENDER = "currentAttender".intern() ;
 
-  //private Map<String, String> participance_ = new HashMap<String, String>() ;
-  private Map<String, UIComponent> participanceCheckBox_ = new HashMap<String, UIComponent>() ;
+  protected Map<String, List<String>> parMap_ = new HashMap<String, List<String>>() ;
   private Calendar calendar_ ;
   public UIEventAttenderTab(String arg0) {
     super(arg0);
@@ -63,21 +64,63 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
   protected UIFormComboBox getUIFormComboBox(String id) {
     return findComponentById(id) ;
   }
-  private Map<String, String> getParticipancs() {
-    return getAncestorOfType(UIEventForm.class).participants_; 
+  
+  protected void updateParticipants(String values) throws Exception{
+  	Map<String, List<String>> tmpMap = new HashMap<String, List<String>>() ;
+  	tmpMap.putAll(parMap_) ;
+  	for(String id : parMap_.keySet()) {
+  		removeChildById(id) ;
+  	}
+  	List<String> newPars = new ArrayList<String>() ;
+  	parMap_.clear() ;
+  	if(values != null && values.length() > 0) {
+  		for(String par : values.split(",")) {
+  			parMap_.put(par, tmpMap.get(par)) ;
+  			if(tmpMap.get(par) == null) newPars.add(par) ;  			
+  		}
+  	}
+  	
+  	for(String id : parMap_.keySet()) {
+  		addUIFormInput(new UIFormCheckBoxInput<Boolean>(id, id, false)) ;
+  	}
+  	
+  	/*java.util.Calendar cal = new GregorianCalendar() ;
+  	cal.set(java.util.Calendar.HOUR_OF_DAY, 1) ;
+  	cal.set(java.util.Calendar.MINUTE, 1) ;*/
+  	EventQuery eventQuery = new EventQuery() ;
+  	eventQuery.setFromDate(CalendarUtils.getBeginDay(calendar_)) ;
+  	/*cal = new GregorianCalendar() ;
+  	cal.set(java.util.Calendar.HOUR_OF_DAY, 23) ;
+  	cal.set(java.util.Calendar.MINUTE, 1) ;*/
+  	eventQuery.setToDate(CalendarUtils.getEndDay(calendar_)) ;
+  	eventQuery.setParticipants(newPars.toArray(new String[]{})) ;
+  	eventQuery.setNodeType("exo:calendarPublicEvent") ;
+  	Map<String, List<String>> parsMap = 
+  		CalendarUtils.getCalendarService().checkFreeBusy(SessionsUtils.getSystemProvider(), eventQuery) ;
+  	
+  	for(String par : parsMap.keySet()) {
+  		System.out.println("\n\n Name: "  + par ) ;
+  		for(String time : parsMap.get(par)) {
+  			System.out.println("\n\n time: "  + time ) ;
+  		}
+  	}
+  	System.out.println("\n\n BREKA: ") ;
+  	
+  	parMap_.putAll(parsMap) ;
+  	
+  	for(String par : parMap_.keySet()) {
+  		System.out.println("\n\n Name: "  + par ) ;
+  		for(String time : parMap_.get(par)) {
+  			System.out.println("\n\n time: "  + time ) ;
+  		}
+  	}
   }
-  /*protected void setParticipancs(Map<String, String> participance) {
-    participance_  = participance;
-    for(String oldId : participanceCheckBox_.keySet()) {
-      removeChildById(oldId) ;
-    }
-    participanceCheckBox_.clear() ;
-    for(String id : participance_.keySet()) {
-      UIFormCheckBoxInput<Boolean> uiCheckBox = new UIFormCheckBoxInput<Boolean>(id,id, null) ;
-      addChild(uiCheckBox) ;
-      participanceCheckBox_.put(id, uiCheckBox) ;
-    }
-  }*/
+  
+  protected void updateData(Map<String, List<String>> data) throws Exception{
+  	parMap_.putAll(data) ;
+  }
+  
+  protected String[] getParticipants() { return parMap_.keySet().toArray(new String[]{}) ; } 
   
   protected void moveNextDay() {
     calendar_.add(Calendar.DATE, 1) ;
@@ -102,9 +145,7 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
     UIForm uiForm = getAncestorOfType(UIForm.class);
     return uiForm.getId() ; 
   }
-  private List<UIComponent> getAttenderFlields() {
-    return new ArrayList<UIComponent>(participanceCheckBox_.values()) ;
-  }
+
   private UIComponent getFromField() {
     return getChildById(FIELD_FROM_DATE) ;
   }
