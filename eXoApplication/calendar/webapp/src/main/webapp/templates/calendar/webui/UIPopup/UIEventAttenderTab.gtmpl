@@ -1,4 +1,15 @@
-
+<%
+	import java.text.DateFormat;
+	import java.text.SimpleDateFormat;
+	DateFormat df = new SimpleDateFormat("MMM, dd, yyyy") ;
+	
+	uiForm = uicomponent.getParentFrom() ;
+	int timeInterval = 15;
+	int blocks = 60/timeInterval ;
+	public int mod(int value, int div) {
+		return (value % div) ;
+	}
+%>
 <div class="UIAddNewEvent $uicomponent.id" id="$uicomponent.id">
  <div class="NewEventAttendee">
  		<div class="UIFormInputSet">
@@ -12,10 +23,16 @@
  							<%=_ctx.appRes(uicomponent.getFormName() + ".label." + uicomponent.getAllDateField().getId())%>:
  						</div>
  						<div class="Field">
+ 							<%uicomponent.renderChild(uicomponent.getToTimeField().getId())%>
+ 						</div>
+ 						<div class="Field">
  							<%uicomponent.renderChild(uicomponent.getToField().getId())%>
  						</div>
  						<div class="Label">
  							<%=_ctx.appRes(uicomponent.getFormName() + ".label." + uicomponent.getToField().getId())%>:
+ 						</div>
+ 						<div class="Field">
+ 							 <%uicomponent.renderChild(uicomponent.getFromTimeField().getId())%>
  						</div>
  						<div class="Field">
  							 <%uicomponent.renderChild(uicomponent.getFromField().getId())%>
@@ -25,264 +42,67 @@
  						</div>
  						<div style="clear: right;"><span></span></div>
  					</div>
- 					<div class="TitleBar">
-						<div class="BackIcon" title="Back day"><span></span></div>
-						<div class="Title">June 20, 2007</div>
-						<div class="NextIcon" title="Next day"><span></span></div>
-						<div class="TimeNumber" style="text-align: right; width: 12px;">12</div>
-						<div class="TimeNumber">11</div>
-						<div class="TimeNumber">10</div>
-						<div class="TimeNumber">9</div>
-						<div class="TimeNumber">8</div>
-						<div class="TimeNumber">7</div>
-						<div class="TimeNumber">6</div>
-						<div class="TimeNumber">5</div>
-						<div class="TimeNumber">4</div>
-						<div class="TimeNumber">3</div>
-						<div class="TimeNumber">2</div>
-						<div class="TimeNumber">1</div>
-						<div class="TimeNumber">12</div>
-						<div class="TimeNumber">11</div>
-						<div class="TimeNumber">10</div>
-						<div class="TimeNumber">9</div>
-						<div class="TimeNumber">8</div>
-						<div class="TimeNumber">7</div>
-						<div class="TimeNumber">6</div>
-						<div class="TimeNumber">5</div>
-						<div class="TimeNumber">4</div>
-						<div class="TimeNumber">3</div>
-						<div class="TimeNumber">2</div>
-						<div class="TimeNumber">1</div>
-						<div class="TimeNumber">12</div>
- 					</div>
  					<table class="UIGrid" id="RowContainerDay" cellspacing="0" borderspacing="0">
             <tbody>
+            	<tr class="TitleBar">
+								<td>
+									<div class="LeftSide">
+										<a href="<%=uiForm.event("MovePrevious")%>"><div class="BackIcon" title="Back day">&nbsp;</div></a>
+										<div class="Title"><%=df.format(uicomponent.calendar_.getTime())%></div>
+										<a href="<%=uiForm.event("MoveNext")%>"><div class="NextIcon" title="Next day">&nbsp;</div></a>
+									</div>
+								</td>
+								<%
+									flag = true ;
+									int i = 0 ;
+									for(String label : uicomponent.getDisplayTimes("HH", timeInterval)){
+										if(mod(i, blocks) == 0) {
+								%>
+										<td colspan="$blocks"; class="TimeNumber">$label</td>
+								<%
+										}
+									i++ ;
+									}
+								%>
+							</tr>
             	<tr>
-								<td style="width: 150px;">
-									<div class="DeleteUserIcon" title="Delete username"><span></span></div>
-									<div class="SaveUserIcon" title="Save username"><span></span></div>
-									<div class="AddUserIcon" title="Add username"><span></span></div>
-									<div class="Title">Participancs</div>
-									<div style="clear: both">
+								<td>
+									<div class="LeftSide">
+										<a href="<%=uiForm.event("DeleteUser")%>"><div class="DeleteUserIcon" title="Delete username"><span></span></div></a>
+										<a href="<%=uiForm.event("SaveUser")%>"><div class="SaveUserIcon" title="Save username"><span></span></div></a>
+										<a href="<%=uiForm.event("AddParticipant",uicomponent.id)%>"><div class="AddUserIcon" title="Add username"><span></span></div></a>
+										<div class="Title">Participancs</div>
+										<div style="clear: both">
+									</div>
 								</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="BusyTime">&nbsp;</td>
-								<td class="BusyTime">&nbsp;</td>
-								<td class="BusyTime">&nbsp;</td>
-								<td class="BusyTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="BusyTime">&nbsp;</td>
-								<td class="BusyTime">&nbsp;</td>
-								<td class="BusyTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="BusyTime">&nbsp;</td>
-								<td class="BusyTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
+								<%
+									for(String label : uicomponent.getDisplayTimes("HH", timeInterval)){
+									styleClassF = "FreeTime" ;
+									styleClassB = "BusyTime" ;
+								%>
+									<td class="$styleClassF">&nbsp;</td>
+								<%}%>
 							</tr>
-             	
-             	<tr>
-								<td style="width: 150px;">
-									<div class="Input"><input style="width: 15px;" type="checkbox"/></div>
-									<div class="Title">Brice Revanant</div>
-									<div style="clear: left;"><span></span></div>
-								</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="BusyTime">&nbsp;</td>
-								<td class="BusyTime">&nbsp;</td>
-								<td class="BusyTime">&nbsp;</td>
-								<td class="BusyTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-							</tr>
-							<%for(String s in uicomponent.getParticipancs().keySet()) {}%>
-							<tr>
-								<td style="width: 150px;">
-									<div class="Input"><input style="width: 15px;" type="checkbox"/></div>
-									<div class="Input"><input type="text" /></div>
-									<div style="clear: left;"><span></span></div>
-								</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="BusyTime">&nbsp;</td>
-								<td class="BusyTime">&nbsp;</td>
-								<td class="BusyTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-							</tr>
-							
-							<tr>
-								<td style="width: 150px;">
-									<div class="Input"><input style="width: 15px;" type="checkbox"/></div>
-									<div class="Input"><input type="text" /></div>
-									<div style="clear: left;"><span></span></div>
-								</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="BusyTime">&nbsp;</td>
-								<td class="BusyTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-								<td class="FreeTime">&nbsp;</td>
-							</tr>
-      			  
+             	<%for(String p in uicomponent.getParticipancs().keySet()) {%>
+	             	<tr>
+									<td>
+										<div class="LeftSide">
+											<div class="Input">
+											<%uiForm.renderField(p)%>
+											</div>
+											<div class="Title">$p</div>
+											<div style="clear: left;"><span></span></div>
+										</div>
+									</td>
+									<%
+										for(String label : uicomponent.getDisplayTimes("HH", timeInterval)){
+										styleClassF = "FreeTime" ;
+										styleClassB = "BusyTime" ;
+									%>
+										<td class="$styleClassF">&nbsp;</td>
+									<%}%>
+								</tr>
+							<%}%>
       			</tbody>
       		</table>
       		<div class="ThiefBox">

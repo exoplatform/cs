@@ -232,8 +232,8 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   }
 
   protected int getDaysInMonth() {
-    Calendar cal = new GregorianCalendar(getCurrentYear(), getCurrentMonth(), getCurrentDay()) ;
-    return cal.getActualMaximum(Calendar.DAY_OF_MONTH) ;
+    //Calendar cal = new GregorianCalendar(getCurrentYear(), getCurrentMonth(), getCurrentDay()) ;
+    return calendar_.getActualMaximum(Calendar.DAY_OF_MONTH) ;
   }
   protected int getDaysInMonth(int month, int year) {
     Calendar cal = new GregorianCalendar(year, month, 1) ;

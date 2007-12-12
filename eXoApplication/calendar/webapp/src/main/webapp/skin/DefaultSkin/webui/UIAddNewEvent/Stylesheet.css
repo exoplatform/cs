@@ -191,12 +191,22 @@
 }
 
 .UIAddNewEvent .NewEventAttendee .TimeNumber {
-	float: right;
-	width: 24px;
 	text-align: center;
 	margin-top: 9px;
 }
-
+.UIAddNewEvent .NewEventAttendee .DateTimeContainer input{
+	 width: 70px;
+}
+.UIAddNewEvent .NewEventAttendee .DateTimeContainer .checkbox{
+	 width: 16px;
+}
+.UIAddNewEvent .NewEventAttendee .TimeNumberDisable {
+ display: none ;
+}
+.UIAddNewEvent .NewEventAttendee .LeftSide {
+	 width: 160px;
+	 height: 20px;
+}
 .UIAddNewEvent .NewEventAttendee .ThiefBox {
 	border: 1px solid #c7c7c7;
 	border-top: none;

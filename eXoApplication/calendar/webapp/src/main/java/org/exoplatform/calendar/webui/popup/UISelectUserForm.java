@@ -47,10 +47,11 @@ import org.exoplatform.webui.form.UIFormStringInput;
 public class UISelectUserForm extends UIForm implements UIPopupComponent { 
   final public static String FIELD_KEYWORD = "keyWord".intern() ;
   final public static String FIELD_GROUP = "group".intern() ;
-
+  
 
   private List<User> data_  = new ArrayList<User>() ;
   private boolean isShowSearch_ = false ;
+  protected String tabId_ = null ;
   public List<User> getData() {
     return data_ ;
   }
@@ -107,7 +108,7 @@ public class UISelectUserForm extends UIForm implements UIPopupComponent {
             sb.append(u.getUserName()).append(CalendarUtils.COLON) ;
           }
         }
-        uiEventForm.setRenderedChild(UIEventForm.TAB_EVENTREMINDER) ;
+        uiEventForm.setSelectedTab(uiForm.tabId_) ;
         uiEventForm.setParticipant(sb.toString()) ;
       } 
       UIPopupAction parentPopup = uiContainer.getAncestorOfType(UIPopupAction.class) ;
