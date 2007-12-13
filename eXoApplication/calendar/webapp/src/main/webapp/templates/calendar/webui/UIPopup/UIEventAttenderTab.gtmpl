@@ -122,7 +122,6 @@
 							<%}%>
       			</tbody>
       		</table>
-      		<%=uicomponent.getParticipants() ;%>
       		<div class="ThiefBox">
       			<div class="Label">Busy time</div>
       			<div class="BusyTime"><span></span></div>

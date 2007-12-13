@@ -4,15 +4,11 @@
  **************************************************************************/
 package org.exoplatform.calendar.webui.popup;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.SessionsUtils;
@@ -83,7 +79,6 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
   		addUIFormInput(new UIFormCheckBoxInput<Boolean>(id, id, false)) ;
   	}
   	
-  	System.out.println("newPars =====>" + newPars.size()) ;
   	if(newPars.size() > 0) {
   		EventQuery eventQuery = new EventQuery() ;
     	eventQuery.setFromDate(CalendarUtils.getBeginDay(calendar_)) ;
@@ -97,14 +92,10 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
   	
   }
 
-  /*protected void updateData(Map<String, List<String>> data) throws Exception{
-    parMap_.putAll(data) ;
-  }*/
+  
   private Map<String, String> getMap(){ return parMap_ ; }
   
-  protected String[] getParticipants() { 
-  	System.out.println("====>getParticipants") ;
-  	return parMap_.keySet().toArray(new String[]{}) ; } 
+  protected String[] getParticipants() { return parMap_.keySet().toArray(new String[]{}) ; } 
 
   protected void moveNextDay() throws Exception{
     calendar_.add(Calendar.DATE, 1) ;
@@ -126,17 +117,7 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
     parMap_.clear() ;
     updateParticipants(values.toString()) ;
   }
-  /*protected List<String> getDisplayTimes(String timeFormat, int timeInterval) {
-    List<String> times = new ArrayList<String>() ;
-    Calendar cal = CalendarUtils.getBeginDay(GregorianCalendar.getInstance()) ;
-    DateFormat df = new SimpleDateFormat(timeFormat) ;
-    for(int i = 0; i < 24*(60/timeInterval); i++) {
-      times.add(df.format(cal.getTime())) ;
-      cal.add(java.util.Calendar.MINUTE, timeInterval) ;
-    }
-    return times ;
-  }
-  */
+  
   private UIForm getParentFrom() {
     return getAncestorOfType(UIForm.class) ;
   }
