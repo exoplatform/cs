@@ -1058,9 +1058,9 @@ UICalendarPortlet.prototype.initCheck = function(container) {
 	var table = DOMUtil.findFirstDescendantByClass(container, "table", "UIGrid") ;
 	var tr = DOMUtil.findDescendantsByTagName(table, "tr") ;	
 	var firstTr = tr[1] ;
-	this.busyCell = DOMUtil.findDescendantsByTagName(firstTr, "td").slice(2) ;
+	this.busyCell = DOMUtil.findDescendantsByTagName(firstTr, "td").slice(1) ;
 	var len = tr.length ;
-	for(var i = 0 ; i < len ; i ++) {
+	for(var i = 2 ; i < len ; i ++) {
 		this.showBusyTime(tr[i]) ;
 	}
 	eXo.calendar.UICalendarPortlet.initSelectionX(firstTr) ;
@@ -1130,7 +1130,6 @@ UICalendarPortlet.prototype.callbackSelectionX = function() {
 		if (name.indexOf("from") >= 0) UIComboboxInputs[i].value = start ;
 		else  UIComboboxInputs[i].value = end ;
 	}
-	window.status = start + " - " + end ;
 } ;
 
 eXo.calendar.UICalendarPortlet = new UICalendarPortlet() ;
