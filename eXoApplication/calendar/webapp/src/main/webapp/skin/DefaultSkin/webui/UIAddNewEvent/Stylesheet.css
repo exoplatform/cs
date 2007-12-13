@@ -159,7 +159,7 @@
 
 .UIAddNewEvent .NewEventAttendee .UIGrid .Input {
 	float: left;
-	margin: 1px 0px 0px 2px;
+	margin: 5px 0px 0px 4px;
 }
 
 .UIAddNewEvent .NewEventAttendee .UIGrid input {
@@ -198,7 +198,7 @@
 
 .UIAddNewEvent .NewEventAttendee .TimeNumber {
 	text-align: center;
-	margin-top: 9px;
+	line-height: 20px;
 }
 .UIAddNewEvent .NewEventAttendee .DateTimeContainer input{
 	 width: 70px;
@@ -212,6 +212,10 @@
 .UIAddNewEvent .NewEventAttendee .LeftSide {
 	 width: 160px;
 	 height: 20px;
+}
+.UIAddNewEvent .NewEventAttendee .LeftSide .Input .checkbox{
+	 width: 13px;
+	 height: 13px;
 }
 .UIAddNewEvent .NewEventAttendee .ThiefBox {
 	border: 1px solid #c7c7c7;
