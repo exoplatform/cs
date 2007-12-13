@@ -146,6 +146,11 @@
 	width: 11px;
 }
 
+.UIAddNewEvent .NewEventAttendee .BusyDotTime {
+	background-image: url(background/BusyDot2x2.gif) ;
+	width: 11px;
+}
+
 .UIAddNewEvent .NewEventAttendee .UIGrid .Title {
 	float: left;
 	color: black;
