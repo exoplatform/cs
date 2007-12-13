@@ -646,7 +646,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       UIPopupContainer uiContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       UIPopupAction uiChildPopup = uiContainer.getChild(UIPopupAction.class) ;
       uiChildPopup.activate(UIEventCategoryManager.class, 470) ;
-      uiForm.setSelectedTab(TAB_EVENTDETAIL) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
     }
   }
@@ -654,7 +653,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     public void execute(Event<UIEventForm> event) throws Exception {
       System.out.println("\n\n AddEmailAddressActionListener");
       UIEventForm uiForm = event.getSource() ;
-      uiForm.setSelectedTab(TAB_EVENTREMINDER) ;
       if(!uiForm.getEmailReminder()) uiForm.setEmailReminder(true) ;
       /*UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.email-reminder-required", null));
@@ -673,7 +671,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       UIPopupContainer uiContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       UIPopupAction uiChildPopup = uiContainer.getChild(UIPopupAction.class) ;
       uiChildPopup.activate(UIAttachFileForm.class, 500) ;
-      uiForm.setSelectedTab(TAB_EVENTDETAIL) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
     }
   }
@@ -711,7 +708,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       UISelectUserForm uiSelectUserForm = uiChildPopupAction.activate(UISelectUserForm.class, 500) ;
       uiSelectUserForm.init(((UIEventAttenderTab)uiForm.getChildById(TAB_EVENTATTENDER)).parMap_.keySet()) ;
       uiSelectUserForm.tabId_ = tabId ;
-      uiForm.setSelectedTab(tabId) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopupAction) ;      
     }
   }

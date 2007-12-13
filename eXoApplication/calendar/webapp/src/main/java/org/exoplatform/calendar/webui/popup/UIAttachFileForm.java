@@ -81,69 +81,26 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
         UIEventForm uiEventForm = uiPopupContainer.getChild(UIEventForm.class) ;
         UITaskForm uiTaskForm = uiPopupContainer.getChild(UITaskForm.class) ;
         if(uiEventForm != null) {
+          uiEventForm.setSelectedTab(UIEventForm.TAB_EVENTDETAIL) ;
           UIEventDetailTab uiEventDetailTab = uiEventForm.getChild(UIEventDetailTab.class) ;
           for(Attachment file :  files){
             uiEventDetailTab.addToUploadFileList(file) ;
-            //uiEventDetailTab.setAttachments(files) ;
           }
           uiEventDetailTab.refreshUploadFileList() ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiEventDetailTab) ;
         } else if(uiTaskForm != null) {
+          uiTaskForm.setSelectedTab(UITaskForm.TAB_TASKDETAIL) ;
           UITaskDetailTab uiTaskDetailTab = uiTaskForm.getChild(UITaskDetailTab.class) ;
           for(Attachment file :  files){
             uiTaskDetailTab.addToUploadFileList(file) ;  
-            //uiTaskDetailTab.setAttachments(files) ;
           }
           uiTaskDetailTab.refreshUploadFileList() ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiTaskDetailTab) ;
         }
         UIPopupAction uiPopupAction = uiPopupContainer.getChild(UIPopupAction.class) ;
-        /*UploadService uploadService = uiForm.getApplicationComponent(UploadService.class) ;
-        uploadService.removeUpload(input.getUploadId()) ;*/
         uiPopupAction.deActivate() ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction.getAncestorOfType(UIPopupAction.class)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
       }
-      /*if(uploadResource == null) {
-        uiApp.addMessage(new ApplicationMessage("UIAttachFileForm.msg.fileName-error", null, 
-            ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
-      }
-      String fileName = uploadResource.getFileName() ;
-      if(fileName == null || fileName.equals("")) {
-        uiApp.addMessage(new ApplicationMessage("UIAttachFileForm.msg.fileName-error", null, 
-            ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
-      }*/
-      /*UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
-      UIEventForm uiEventForm = uiPopupContainer.getChild(UIEventForm.class) ;
-      UITaskForm uiTaskForm = uiPopupContainer.getChild(UITaskForm.class) ;
-      UIPopupAction uiPopupAction = uiPopupContainer.getChild(UIPopupAction.class) ;
-      try {
-        Attachment attachfile = new Attachment() ;
-        attachfile.setName(uploadResource.getFileName()) ;
-        attachfile.setInputStream(input.getUploadDataAsStream()) ;
-        attachfile.setMimeType(uploadResource.getMimeType()) ;
-        attachfile.setSize((long)uploadResource.getUploadedSize());
-        if(uiEventForm != null) {
-          UIEventDetailTab uiEventDetailTab = uiEventForm.getChild(UIEventDetailTab.class) ;
-          uiEventDetailTab.addToUploadFileList(attachfile) ;
-          uiEventDetailTab.refreshUploadFileList() ;
-        } else if(uiTaskForm != null) {
-          UITaskDetailTab uiTaskDetailTab = uiTaskForm.getChild(UITaskDetailTab.class) ;
-          uiTaskDetailTab.addToUploadFileList(attachfile) ;
-          uiTaskDetailTab.refreshUploadFileList() ;
-        }
-        UploadService uploadService = uiForm.getApplicationComponent(UploadService.class) ;
-        uploadService.removeUpload(input.getUploadId()) ;
-        uiPopupAction.deActivate() ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction.getAncestorOfType(UIPopupAction.class)) ;
-      } catch(Exception e) {
-        uiApp.addMessage(new ApplicationMessage("UIAttachFileForm.msg.upload-error", null, 
-            ApplicationMessage.WARNING));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        e.printStackTrace() ;
-        return ;
-      }*/
     }
   }
 
@@ -152,7 +109,7 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
       UIAttachFileForm uiFileForm = event.getSource() ;
       UIPopupAction uiPopupAction = uiFileForm.getAncestorOfType(UIPopupAction.class) ;
       uiPopupAction.deActivate() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction.getAncestorOfType(UIPopupAction.class)) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }
   }
 }

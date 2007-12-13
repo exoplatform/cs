@@ -113,8 +113,13 @@ public class UIEventCategoryForm extends UIForm {
           System.out.println("\n\n uiPopupContainer " + uiPopupContainer.getId());
           UIEventForm uiEventForm = uiPopupContainer.getChild(UIEventForm.class) ;
           UITaskForm uiTaskForm = uiPopupContainer.getChild(UITaskForm.class) ;
-          if(uiEventForm != null) uiEventForm.refreshCategory() ;
-          if(uiTaskForm != null) uiTaskForm.refreshCategory() ;
+          if(uiEventForm != null){ 
+            uiEventForm.setSelectedTab(UIEventForm.TAB_EVENTDETAIL) ;
+            uiEventForm.refreshCategory() ;
+          }
+          if(uiTaskForm != null) { 
+            uiTaskForm.setSelectedTab(UITaskForm.TAB_TASKDETAIL) ;
+            uiTaskForm.refreshCategory() ; }
         }
       } catch (RepositoryException e) {
         UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
