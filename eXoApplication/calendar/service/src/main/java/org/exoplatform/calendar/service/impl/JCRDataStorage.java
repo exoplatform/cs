@@ -1538,12 +1538,12 @@ public class JCRDataStorage{
   	String to ;
   	for(String par : pars) {
   		eventQuery.setParticipants(new String[]{par}) ;
-  		//System.out.println("eventQuery.getQueryStatement() ========>" + eventQuery.getQueryStatement()) ;
+  		System.out.println("eventQuery.getQueryStatement() ========>" + eventQuery.getQueryStatement()) ;
   		query = qm.createQuery(eventQuery.getQueryStatement(), Query.XPATH);
       QueryResult result = query.execute();
       NodeIterator it = result.getNodes();
       time = new ArrayList<String>() ;
-      //System.out.println(par + " ========>" + it.getSize()) ;
+      System.out.println(par + " ========>" + it.getSize()) ;
       while(it.hasNext()) {
       	event = it.nextNode() ;
       	from = String.valueOf(event.getProperty("exo:fromDateTime").getDate().getTimeInMillis()) ;

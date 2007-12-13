@@ -5,12 +5,12 @@
 package org.exoplatform.calendar.webui.popup;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.SessionsUtils;
 import org.exoplatform.commons.utils.PageList;
-import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.portal.webui.util.Util;
@@ -47,7 +47,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
 public class UISelectUserForm extends UIForm implements UIPopupComponent { 
   final public static String FIELD_KEYWORD = "keyWord".intern() ;
   final public static String FIELD_GROUP = "group".intern() ;
-  
+
 
   private List<User> data_  = new ArrayList<User>() ;
   private boolean isShowSearch_ = false ;
@@ -59,6 +59,10 @@ public class UISelectUserForm extends UIForm implements UIPopupComponent {
     data_ = list ;
   }
   public UISelectUserForm() throws Exception {  
+    //initSearchForm() ;
+  }
+  public void init(Collection<String> pars) throws Exception{
+    if(getChildren()!= null) getChildren().clear() ;
     OrganizationService service = getApplicationComponent(OrganizationService.class) ;
     PageList pl = service.getUserHandler().getUserPageList(0) ;
     for(Object o : pl.getAll()){
@@ -66,8 +70,9 @@ public class UISelectUserForm extends UIForm implements UIPopupComponent {
       data_.add(user) ;
       addUIFormInput(new UIFormCheckBoxInput<Boolean>(user.getUserName(),user.getUserName(), false)) ;
     }
-    initSearchForm() ;
-
+    for(String s : pars) {
+      if(getUIFormCheckBoxInput(s) != null) getUIFormCheckBoxInput(s).setChecked(true) ;
+    }
   }
   public void  initSearchForm() throws Exception{
     addUIFormInput(new UIFormStringInput(FIELD_KEYWORD, FIELD_KEYWORD, null)) ;
@@ -106,19 +111,20 @@ public class UISelectUserForm extends UIForm implements UIPopupComponent {
           UIFormCheckBoxInput input = uiForm.getUIFormCheckBoxInput(u.getUserName()) ;
           if(input != null && input.isChecked()) {
             if(sb != null && sb.length() > 0) sb.append(CalendarUtils.COLON) ;
-          	sb.append(u.getUserName()) ;
+            sb.append(u.getUserName()) ;
           }
         }
         uiEventForm.setSelectedTab(uiForm.tabId_) ;
         uiEventForm.setParticipant(sb.toString()) ;
         ((UIEventAttenderTab)uiEventForm.getChildById(uiEventForm.TAB_EVENTATTENDER)).updateParticipants(sb.toString()) ;
       } 
-      //UIPopupAction parentPopup = uiContainer.getAncestorOfType(UIPopupAction.class) ;
+      UIPopupAction parentPopup = uiContainer.getAncestorOfType(UIPopupAction.class) ;
       UIPopupAction chilPopup =  uiContainer.getChild(UIPopupAction.class) ;
       chilPopup.deActivate() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(chilPopup) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiEventForm.getChildById(uiEventForm.TAB_EVENTATTENDER)) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiEventForm.getChildById(uiEventForm.TAB_EVENTSHARE)) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(parentPopup) ;
+      /*event.getRequestContext().addUIComponentToUpdateByAjax(uiEventForm.getChildById(uiEventForm.TAB_EVENTATTENDER)) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiEventForm.getChildById(uiEventForm.TAB_EVENTSHARE)) ;*/
     }  
   } 
   static  public class SearchActionListener extends EventListener<UISelectUserForm> {

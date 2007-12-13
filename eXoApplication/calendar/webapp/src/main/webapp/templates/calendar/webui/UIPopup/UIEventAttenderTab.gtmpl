@@ -18,31 +18,37 @@
  			<div class="UIFormInputSetWithAction">
  				<div class="FormContainer">
  					<div class="DateTimeContainer">
- 						<div class="Field">
- 							<%uicomponent.renderChild(uicomponent.getAllDateField().getId())%>
+ 						<div style="float:left; width: 150px; line-height:20px;">
+	 					  <div class="Field">
+	 							<%uiForm.renderField(uicomponent.FIELD_CHECK_TIME)%>
+	 						</div>
+	 					  <div class="Label">
+	 							<%=_ctx.appRes(uiForm.id + ".label." + uicomponent.FIELD_CHECK_TIME)%>:
+	 						</div>
+ 							<div style="clear:right;"><span></span></div>
  						</div>
- 						<div class="Label">
- 							<%=_ctx.appRes(uicomponent.getFormName() + ".label." + uicomponent.getAllDateField().getId())%>:
- 						</div>
- 						<div class="Field">
- 							<%uicomponent.renderChild(uicomponent.getToTimeField().getId())%>
- 						</div>
- 						<div class="Field">
- 							<%uicomponent.renderChild(uicomponent.getToField().getId())%>
- 						</div>
- 						<div class="Label">
- 							<%=_ctx.appRes(uicomponent.getFormName() + ".label." + uicomponent.getToField().getId())%>:
- 						</div>
- 						<div class="Field">
- 							 <%uicomponent.renderChild(uicomponent.getFromTimeField().getId())%>
- 						</div>
- 						<div class="Field">
- 							 <%uicomponent.renderChild(uicomponent.getFromField().getId())%>
- 						</div>
- 						<div class="Label">
- 							<%=_ctx.appRes(uicomponent.getFormName() + ".label." + uicomponent.getFromField().getId())%>:
- 						</div>
- 						<div style="clear: right;"><span></span></div>
+ 						<div>
+	 						<div class="Field">
+	 							<%uiForm.renderField(uicomponent.FIELD_DATEALL)%>
+	 						</div>
+	 						<div class="Label">
+	 							<%=_ctx.appRes(uiForm.id + ".label." + uicomponent.FIELD_DATEALL)%>:
+	 						</div>
+	 						<div class="Field">
+	 							<%uiForm.renderField(uicomponent.FIELD_TO_TIME)%>
+	 						</div>
+	 						<div class="Label">
+	 							<%=_ctx.appRes(uiForm.id + ".label." + uicomponent.FIELD_TO_TIME)%>:
+	 						</div>
+	 						<div class="Field">
+	 							 <%uiForm.renderField(uicomponent.FIELD_FROM_TIME)%>
+	 						</div>
+	 						<div class="Label">
+	 							<%=_ctx.appRes(uiForm.id + ".label." + uicomponent.FIELD_FROM_TIME)%>:
+	 						</div>
+	 						<div style="clear: right;"><span></span></div>
+	 					</div>
+	 					<div style="clear:left;"><span></span></div>
  					</div>
  					<table class="UIGrid" id="RowContainerDay" cellspacing="0" borderspacing="0">
             <tbody  eXoCallback="eXo.calendar.UICalendarPortlet.callbackSelectionX() ;">

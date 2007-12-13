@@ -131,7 +131,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
     int gmtoffset = calendar_.get(Calendar.DST_OFFSET) + calendar_.get(Calendar.ZONE_OFFSET);
     calendar_.setTimeInMillis(System.currentTimeMillis() - gmtoffset) ;
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, dd MMM yyyy k:m:s z");
-    DateFormatSymbols dfs = new DateFormatSymbols() ;
+    //DateFormatSymbols dfs = new DateFormatSymbols() ;
     System.out.println("\n\n GMT Time " + simpleDateFormat.format(calendar_.getTime()));
     int i = 0 ; 
     for(String month : MONTHS) {
