@@ -445,6 +445,7 @@
 }
 
 .UIMailPortlet .MailWorkingWorkspace .UIGrid {
+	background: #ffffff;
 	border-bottom: 1px solid #e8e8e8;
 	border-right: none;
 	border-left: none;	
@@ -462,6 +463,17 @@
 	border-right: 1px solid #e8e8e8;
 	text-align: left;
 	padding: 0px 5px;
+}
+
+.UIMailPortlet .MailWorkingWorkspace .UIGrid td.Border {
+	border-right: 1px solid #e8e8e8;
+}
+
+.UIMailPortlet .MailWorkingWorkspace .UIGrid td {
+	height: 20px; line-height: 20px;
+	border-left: none;
+	border-right: 1px solid #e8e8e8;
+	padding: 0px 0px 0px 6px;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .UIGrid .IconTag {
@@ -490,23 +502,8 @@
 	margin: 1px 0px 0px 4px;
 }
 
-.UIMailPortlet .MailWorkingWorkspace .UIGrid {
-	background: #ffffff;
-}
-
 .UIMailPortlet .MailWorkingWorkspace .UIMessageCompose table {
 	background: none;
-}
-
-.UIMailPortlet .MailWorkingWorkspace .UIGrid td.Border {
-	border-right: 1px solid #e8e8e8;
-}
-
-.UIMailPortlet .MailWorkingWorkspace .UIGrid td {
-	height: 20px; line-height: 20px;
-	border-left: none;
-	border-right: 1px solid #e8e8e8;
-	padding: 0px 0px 0px 6px;
 }
 
 .UIMailPortlet .MailWorkingWorkspace input.checkbox {

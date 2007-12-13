@@ -236,6 +236,12 @@
   <% /* End popup menu for the message*/ %>
   
   <div class="UIMessageList" >
+    <div style="display: none;" class="AdvancedTooltipTmpl" id="mailAdvancedTooltipTmpl">
+      <div class="Item">
+        <div class="Key">Name: </div>
+        <div class="Value">\$name</div>
+      </div>
+    </div>
   	<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
     	<thead>
     		<tr>
@@ -299,7 +305,7 @@
     	 	</tr>
     	</thead>
       <%if (uicomponent.getMessageList().size() > 0) {%>
-      	<tbody>
+      	<tbody class="SpliterResizableListArea" id="uiMessageListResizableArea">
       	<%
           int i = 0;
     			for(Message msg : uicomponent.getMessageList()) {
@@ -327,7 +333,7 @@
                   int numberConver = 1;
                   for (String conver : uicomponent.getParticipators(msg)) {
                %>
-                 <a href="$actionLink"><% if (numberConver>1){ %> , <% } %>  $conver <a>
+                 <a href="$actionLink" advancedtooltip="true" name="test" email="email"><% if (numberConver>1){ %> , <% } %>  $conver <a>
               <% numberConver++ }  }%>  
             </td>
     				<td style="padding: 0px auto;">
@@ -354,7 +360,7 @@
     				      <%=Utils.formatDate('MMM dd, yyyy HH:mm aaa', msg.getReceivedDate())%>
     				    <%} else if (msg.getSendDate() != null){%>
     				      <%=Utils.formatDate('MMM dd, yyyy HH:mm aaa', msg.getSendDate())%>
-    				    <%}%>
+    				    <%}%>[st]
     				  </a>
     				</td>
     				<td class="$readStatus"><a href="$actionLink">

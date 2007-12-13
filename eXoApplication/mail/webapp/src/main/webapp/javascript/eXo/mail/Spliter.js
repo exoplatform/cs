@@ -5,7 +5,7 @@
 function Spliter() {  
 } ;
 
-Spliter.prototype.exeRowSplit = function(e , markerobj, beforeAreaObj, afterAreaObj) {
+Spliter.prototype.doResize = function(e , markerobj, beforeAreaObj, afterAreaObj) {
   _e = (window.event) ? window.event : e ;
   this.posY = _e.clientY; 
   var marker = (typeof(markerobj) == "string")? document.getElementById(markerobj):markerobj ;

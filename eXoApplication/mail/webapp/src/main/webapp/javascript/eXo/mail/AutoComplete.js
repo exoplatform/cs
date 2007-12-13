@@ -1,6 +1,7 @@
 /**
  * @author uocnb
  */
+
 // ACMain
 function ACMain() {
   this.dataObj = false ;
@@ -90,8 +91,7 @@ ACModel.prototype.query = function(keyword) {
 } ;
 
 // ACKeyboardHandler
-function ACKeyboardHandler() {
-}
+function ACKeyboardHandler() {}
 
 ACKeyboardHandler.prototype = new eXo.core.KeyboardListenerAPI() ;
 
@@ -313,4 +313,3 @@ Contact.prototype.toString = function() {
   return ('<b>name:</b> ' + this.name
           + '<br/><b>emailaddress:</b> ' + this.emailAddress) ;
 } ;
-
