@@ -978,7 +978,9 @@ UISelectionX.prototype.start = function(evt) {
 		var src = _e.srcElement || _e.target ;
 		if(src.tagName.toLowerCase() == "a") return ;
 		UISelectionX.container = this ;
+		if(document.getElementById("UserSelectionBlock")) eXo.core.DOMUtil.removeElement(document.getElementById("UserSelectionBlock")) ;
 		UISelectionX.block = document.createElement("div") ;
+		UISelectionX.block.setAttribute("id","UserSelectionBlock") ;
 		UISelectionX.block.className = "UserSelectionBlock" ;
 		UISelectionX.container.appendChild(UISelectionX.block) ;
 		UISelectionX.step = UISelectionX.container.offsetWidth ;
@@ -987,7 +989,8 @@ UISelectionX.prototype.start = function(evt) {
 		UISelectionX.maxX = UISelectionX.minX + UISelectionX.step*len ;
 		if (UISelectionX.container.getAttribute("startTime")) UISelectionX.startTime = UISelectionX.container.getAttribute("startTime") ;
 		if (UISelectionX.container.parentNode.parentNode.getAttribute("eXoCallback")) UISelectionX.callback = UISelectionX.container.parentNode.parentNode.getAttribute("eXoCallback") ;
-		UISelectionX.startX = eXo.core.Browser.findPosXInContainer(UISelectionX.container, UISelectionX.block.offsetParent) ;
+		UISelectionX.startX = eXo.calendar.UICalendarPortlet.round(eXo.core.Browser.findMouseRelativeX(UISelectionX.block.offsetParent,_e),UISelectionX.step) ;
+		if(eXo.core.DOMUtil.findAncestorByClass(UISelectionX.container,"EventWeekBar")) UISelectionX.startX = eXo.core.Browser.findPosXInContainer(UISelectionX.container, UISelectionX.block.offsetParent) ;
 		UISelectionX.startY = (UISelectionX.relativeObject) ? (eXo.core.Browser.findPosYInContainer(UISelectionX.container, UISelectionX.block.offsetParent) - UISelectionX.relativeObject.scrollTop) : eXo.core.Browser.findPosYInContainer(UISelectionX.container, UISelectionX.block.offsetParent) ;
 		UISelectionX.block.style.height = UISelectionX.container.offsetHeight  + "px" ;
 		UISelectionX.block.style.left = UISelectionX.startX  + "px" ;
@@ -1004,7 +1007,7 @@ UISelectionX.prototype.start = function(evt) {
 UISelectionX.prototype.execute = function(evt) {
 	var UISelectionX = eXo.calendar.UISelectionX ;
 	var _e = window.event || evt ;
-	var delta = null ;	
+	var delta = null ;
 	var mouseX = eXo.core.Browser.findMouseRelativeX(UISelectionX.block.offsetParent,_e) ;//eXo.core.Browser.findMouseXInPage(_e) ;
 	var posX = UISelectionX.block.offsetLeft ;
 	var width = UISelectionX.block.offsetWidth ;
@@ -1038,7 +1041,7 @@ UISelectionX.prototype.execute = function(evt) {
 UISelectionX.prototype.clear = function(evt) {
 	var UISelectionX = eXo.calendar.UISelectionX ;
 	if (UISelectionX.callback) eval(UISelectionX.callback) ;
-	eXo.core.DOMUtil.removeElement(UISelectionX.block) ;
+	//eXo.core.DOMUtil.removeElement(UISelectionX.block) ;
 	document.onmousemove = null ;
 	document.onmouseup = null ;
 } ;
@@ -1097,7 +1100,7 @@ UICalendarPortlet.prototype.setBusyTime = function(from, to, tr) {
 	var start = this.round(from,15)/15 ;
 	var end = this.round(to,15)/15 ;
 	for(var i = start ; i < end ; i ++) {
-		cell[i].className = "BusyTime" ;
+		cell[i].className = "BusyDotTime" ;
 		this.busyCell[i].className = "BusyTime" ;		
 	}
 } ;
@@ -1119,8 +1122,12 @@ UICalendarPortlet.prototype.initSelectionX = function(tr) {
 UICalendarPortlet.prototype.callbackSelectionX = function() {
 	var DOMUtil = eXo.core.DOMUtil ;
 	var UISelectionX = eXo.calendar.UISelectionX ;
-	var start = this.minToTime((UISelectionX.container.cellIndex - 1)*15) ;
-	var end = this.minToTime((UISelectionX.container.cellIndex - 1 + UISelectionX.block.offsetWidth/UISelectionX.step)*15) ;
+	var index = parseInt(((UISelectionX.startX - eXo.core.Browser.findPosXInContainer(this.busyCell[0], UISelectionX.block.offsetParent))/UISelectionX.step)) + 1;
+	//alert(index + " " + UISelectionX.container.cellIndex) ;
+	//var start = this.minToTime((UISelectionX.container.cellIndex - 1)*15) ;
+	//var end = this.minToTime((UISelectionX.container.cellIndex - 1 + UISelectionX.block.offsetWidth/UISelectionX.step)*15) ;
+	var start = this.minToTime(index*15) ;
+	var end = this.minToTime((index + UISelectionX.block.offsetWidth/UISelectionX.step)*15) ;
 	var uiTabContentContainer = DOMUtil.findAncestorByClass(UISelectionX.container, "UITabContentContainer") ;
 	var UIComboboxInputs = DOMUtil.findDescendantsByClass(uiTabContentContainer, "input","UIComboboxInput") ;
 	var len = UIComboboxInputs.length ;
