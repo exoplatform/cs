@@ -8,8 +8,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.exoplatform.calendar.CalendarUtils;
@@ -162,7 +160,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       }
       setSelectedEventState(eventCalendar.getEventState()) ;
       setMeetingInvitation(eventCalendar.getInvitation()) ;
-      StringBuffer pars = new StringBuffer() ;
+      StringBuffer pars = new StringBuffer("") ;
       for(String par : eventCalendar.getParticipant()) {
       	if(pars != null && pars.length() > 0) pars.append(",") ;
       	pars.append(par) ;

@@ -176,19 +176,23 @@ public class CalendarUtils {
 	}
 
 	public static Calendar getBeginDay(Calendar cal) {
-		cal.set(Calendar.HOUR_OF_DAY, 0) ;
-		cal.set(Calendar.MINUTE, 0) ;
-		cal.set(Calendar.SECOND, 0) ;
-		cal.set(Calendar.MILLISECOND, 0) ;
-		return cal ;
+    Calendar newCal = new GregorianCalendar() ;
+    newCal.setTime(cal.getTime()) ;
+    newCal.set(Calendar.HOUR_OF_DAY, 0) ;
+    newCal.set(Calendar.MINUTE, 0) ;
+    newCal.set(Calendar.SECOND, 0) ;
+    newCal.set(Calendar.MILLISECOND, 0) ;
+		return newCal ;
 	}
 	public static Calendar getEndDay(Calendar cal)  {
-		cal.set(Calendar.HOUR_OF_DAY, 0) ;
-		cal.set(Calendar.MINUTE, 0) ;
-		cal.set(Calendar.SECOND, 0) ;
-		cal.set(Calendar.MILLISECOND, 0) ;
-		cal.add(Calendar.HOUR_OF_DAY, 24) ;
-		return cal ;
+    Calendar newCal = new GregorianCalendar() ;
+    newCal.setTime(cal.getTime()) ;
+    newCal.set(Calendar.HOUR_OF_DAY, 0) ;
+    newCal.set(Calendar.MINUTE, 0) ;
+    newCal.set(Calendar.SECOND, 0) ;
+    newCal.set(Calendar.MILLISECOND, 0) ;
+    newCal.add(Calendar.HOUR_OF_DAY, 24) ;
+		return newCal ;
 	}
 
 	public static Calendar getBeginDay(Date date) {
