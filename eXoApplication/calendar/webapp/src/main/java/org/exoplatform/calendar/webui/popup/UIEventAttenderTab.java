@@ -65,6 +65,16 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
     return findComponentById(id) ;
   }
   
+  //template call this method
+  private String getBusyTime(String par) throws Exception {
+  	List<String> timeList = parMap_.get(par) ;
+  	StringBuilder sb = new StringBuilder() ;
+  	for(String time : timeList) {
+  		if(sb != null && sb.length() > 0) sb.append(",") ;
+  		sb.append(time) ;
+  	}
+  	return sb.toString() ;
+  }
   protected void updateParticipants(String values) throws Exception{
   	Map<String, List<String>> tmpMap = new HashMap<String, List<String>>() ;
   	tmpMap.putAll(parMap_) ;
@@ -84,36 +94,14 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
   		addUIFormInput(new UIFormCheckBoxInput<Boolean>(id, id, false)) ;
   	}
   	
-  	/*java.util.Calendar cal = new GregorianCalendar() ;
-  	cal.set(java.util.Calendar.HOUR_OF_DAY, 1) ;
-  	cal.set(java.util.Calendar.MINUTE, 1) ;*/
   	EventQuery eventQuery = new EventQuery() ;
   	eventQuery.setFromDate(CalendarUtils.getBeginDay(calendar_)) ;
-  	/*cal = new GregorianCalendar() ;
-  	cal.set(java.util.Calendar.HOUR_OF_DAY, 23) ;
-  	cal.set(java.util.Calendar.MINUTE, 1) ;*/
   	eventQuery.setToDate(CalendarUtils.getEndDay(calendar_)) ;
   	eventQuery.setParticipants(newPars.toArray(new String[]{})) ;
   	eventQuery.setNodeType("exo:calendarPublicEvent") ;
   	Map<String, List<String>> parsMap = 
   		CalendarUtils.getCalendarService().checkFreeBusy(SessionsUtils.getSystemProvider(), eventQuery) ;
-  	
-  	for(String par : parsMap.keySet()) {
-  		System.out.println("\n\n Name: "  + par ) ;
-  		for(String time : parsMap.get(par)) {
-  			System.out.println("\n\n time: "  + time ) ;
-  		}
-  	}
-  	System.out.println("\n\n BREKA: ") ;
-  	
   	parMap_.putAll(parsMap) ;
-  	
-  	for(String par : parMap_.keySet()) {
-  		System.out.println("\n\n Name: "  + par ) ;
-  		for(String time : parMap_.get(par)) {
-  			System.out.println("\n\n time: "  + time ) ;
-  		}
-  	}
   }
   
   protected void updateData(Map<String, List<String>> data) throws Exception{

@@ -1548,7 +1548,7 @@ public class JCRDataStorage{
       	event = it.nextNode() ;
       	from = String.valueOf(event.getProperty("exo:fromDateTime").getDate().getTimeInMillis()) ;
       	to = String.valueOf(event.getProperty("exo:toDateTime").getDate().getTimeInMillis()) ;
-      	time.add(from + ":" + to) ;
+      	time.add(from + "," + to) ;
       }
       participantMap.put(par, time) ;
   	}    

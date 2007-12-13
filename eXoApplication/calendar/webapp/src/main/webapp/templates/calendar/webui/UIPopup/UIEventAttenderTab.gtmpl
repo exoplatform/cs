@@ -85,7 +85,7 @@
 								<%}%>
 							</tr>
              	<%for(String p in uicomponent.getParticipants()) {%>
-	             	<tr busytime = "time busy">
+	             	<tr busytime = "<%=uicomponent.getBusyTime(p) ;%>">
 									<td>
 										<div class="LeftSide">
 											<div class="Input">
