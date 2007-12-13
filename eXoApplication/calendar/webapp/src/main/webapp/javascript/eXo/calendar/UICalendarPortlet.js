@@ -995,7 +995,7 @@ UISelectionX.prototype.start = function(evt) {
 		UISelectionX.block.style.height = UISelectionX.container.offsetHeight  + "px" ;
 		UISelectionX.block.style.left = UISelectionX.startX  + "px" ;
 		UISelectionX.block.style.top = UISelectionX.startY  + "px" ;
-		UISelectionX.block.style.width = UISelectionX.step + "px" ;				
+		UISelectionX.block.style.width = UISelectionX.step + "px" ;
 		eXo.calendar.UICalendarPortlet.resetZIndex(UISelectionX.block) ;
 		document.onmousemove = UISelectionX.execute ;
 		document.onmouseup = UISelectionX.clear ;		
@@ -1040,8 +1040,7 @@ UISelectionX.prototype.execute = function(evt) {
 
 UISelectionX.prototype.clear = function(evt) {
 	var UISelectionX = eXo.calendar.UISelectionX ;
-	if (UISelectionX.callback) eval(UISelectionX.callback) ;
-	//eXo.core.DOMUtil.removeElement(UISelectionX.block) ;
+	if (UISelectionX.callback) eval(UISelectionX.callback) ;	
 	document.onmousemove = null ;
 	document.onmouseup = null ;
 } ;
@@ -1137,6 +1136,9 @@ UICalendarPortlet.prototype.callbackSelectionX = function() {
 		if (name.indexOf("from") >= 0) UIComboboxInputs[i].value = start ;
 		else  UIComboboxInputs[i].value = end ;
 	}
+	DOMUtil.addClass(UISelectionX.block, "BlueBlock") ;
+	UISelectionX.block.style.width = parseFloat(UISelectionX.block.offsetWidth/UISelectionX.block.offsetParent.offsetWidth)*100  + "%" ;
+	UISelectionX.block.style.left = parseFloat(UISelectionX.block.offsetLeft/UISelectionX.block.offsetParent.offsetWidth)*100  + "%" ;
 } ;
 
 eXo.calendar.UICalendarPortlet = new UICalendarPortlet() ;
