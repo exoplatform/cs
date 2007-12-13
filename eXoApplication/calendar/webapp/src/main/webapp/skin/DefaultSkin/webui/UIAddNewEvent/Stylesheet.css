@@ -136,6 +136,12 @@
 }
 
 .UIAddNewEvent .NewEventAttendee .FreeTime {
+	background-color: #f6f6f6; 
+	width: 11px;
+	-moz-user-select: none ;
+}
+
+.UIAddNewEvent .NewEventAttendee .ParticipantsFreeTime {
 	background-color: white; 
 	width: 11px;
 	-moz-user-select: none ;

@@ -118,13 +118,11 @@ public class UISelectUserForm extends UIForm implements UIPopupComponent {
         uiEventForm.setParticipant(sb.toString()) ;
         ((UIEventAttenderTab)uiEventForm.getChildById(uiEventForm.TAB_EVENTATTENDER)).updateParticipants(sb.toString()) ;
       } 
-      UIPopupAction parentPopup = uiContainer.getAncestorOfType(UIPopupAction.class) ;
       UIPopupAction chilPopup =  uiContainer.getChild(UIPopupAction.class) ;
       chilPopup.deActivate() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(chilPopup) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(parentPopup) ;
-      /*event.getRequestContext().addUIComponentToUpdateByAjax(uiEventForm.getChildById(uiEventForm.TAB_EVENTATTENDER)) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiEventForm.getChildById(uiEventForm.TAB_EVENTSHARE)) ;*/
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiEventForm.getChildById(uiEventForm.TAB_EVENTATTENDER)) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiEventForm.getChildById(uiEventForm.TAB_EVENTSHARE)) ;
     }  
   } 
   static  public class SearchActionListener extends EventListener<UISelectUserForm> {
@@ -135,11 +133,9 @@ public class UISelectUserForm extends UIForm implements UIPopupComponent {
     public void execute(Event<UISelectUserForm> event) throws Exception {
       UISelectUserForm uiAddressForm = event.getSource();  
       UIPopupContainer uiContainer = uiAddressForm.getAncestorOfType(UIPopupContainer.class) ;
-      UIPopupAction parentPopup = uiContainer.getAncestorOfType(UIPopupAction.class) ;
       UIPopupAction chilPopup =  uiContainer.getChild(UIPopupAction.class) ;
       chilPopup.deActivate() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(chilPopup) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(parentPopup) ;
     }
   }
 }

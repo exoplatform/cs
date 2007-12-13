@@ -1524,33 +1524,33 @@ public class JCRDataStorage{
     }
   }  
   
-  public Map<String, List<String>> checkFreeBusy(SessionProvider sysProvider, EventQuery eventQuery) throws Exception {
+  public Map<String, String> checkFreeBusy(SessionProvider sysProvider, EventQuery eventQuery) throws Exception {
   	Node eventFolder = getEventFolder(sysProvider, eventQuery.getFromDate().getTime()) ;
-  	Map<String, List<String>> participantMap = new HashMap<String, List<String>>() ;
+  	Map<String, String> participantMap = new HashMap<String, String>() ;
   	eventQuery.setCalendarPath(eventFolder.getPath()) ;
   	eventQuery.setOrderBy(new String[]{"exo:fromDateTime"}) ;
   	QueryManager qm = eventFolder.getSession().getWorkspace().getQueryManager();
   	String[] pars = eventQuery.getParticipants() ;
   	Query query ;
   	Node event ;
-  	List<String> time ;
   	String from ;
   	String to ;
   	for(String par : pars) {
   		eventQuery.setParticipants(new String[]{par}) ;
-  		System.out.println("eventQuery.getQueryStatement() ========>" + eventQuery.getQueryStatement()) ;
+  		//System.out.println("eventQuery.getQueryStatement() ========>" + eventQuery.getQueryStatement()) ;
   		query = qm.createQuery(eventQuery.getQueryStatement(), Query.XPATH);
       QueryResult result = query.execute();
       NodeIterator it = result.getNodes();
-      time = new ArrayList<String>() ;
-      System.out.println(par + " ========>" + it.getSize()) ;
+      //System.out.println(par + " ========>" + it.getSize()) ;
+      StringBuilder timeValues = new StringBuilder() ;
       while(it.hasNext()) {
       	event = it.nextNode() ;
       	from = String.valueOf(event.getProperty("exo:fromDateTime").getDate().getTimeInMillis()) ;
       	to = String.valueOf(event.getProperty("exo:toDateTime").getDate().getTimeInMillis()) ;
-      	time.add(from + "," + to) ;
+      	if(timeValues != null && timeValues.length() > 0) timeValues.append(",") ;
+      	timeValues.append(from).append(",").append(to) ;
       }
-      participantMap.put(par, time) ;
+      participantMap.put(par, timeValues.toString()) ;
   	}    
   	return participantMap ;
   }

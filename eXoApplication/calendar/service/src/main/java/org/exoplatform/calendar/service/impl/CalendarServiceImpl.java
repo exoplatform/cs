@@ -202,7 +202,7 @@ public class CalendarServiceImpl implements CalendarService{
     storage_.saveEventToSharedCalendar(sProvider, username, calendarId, event, isNew) ;
   }
   
-  public Map<String, List<String>> checkFreeBusy(SessionProvider sysProvider, EventQuery eventQuery) throws Exception {
+  public Map<String, String> checkFreeBusy(SessionProvider sysProvider, EventQuery eventQuery) throws Exception {
   	return storage_.checkFreeBusy(sysProvider, eventQuery) ;
   }
 }

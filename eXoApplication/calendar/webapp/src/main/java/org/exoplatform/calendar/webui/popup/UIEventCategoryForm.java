@@ -122,8 +122,7 @@ public class UIEventCategoryForm extends UIForm {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ; 
         return ;
       } catch (Exception e) {
-        e.printStackTrace() ;
-        
+        e.printStackTrace() ;        
       }
     }
   }

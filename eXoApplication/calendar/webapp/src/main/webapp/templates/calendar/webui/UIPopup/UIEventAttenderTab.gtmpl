@@ -60,38 +60,46 @@
 										<a href="<%=uiForm.event("MoveNext")%>"><div class="NextIcon" title="Next day">&nbsp;</div></a>
 									</div>
 								</td>
+								
 								<%
-									flag = true ;
 									int i = 0 ;
-									for(String label : uicomponent.getDisplayTimes("HH", timeInterval)){
-										if(mod(i, blocks) == 0) {
-								%>
-										<td colspan="$blocks"; class="TimeNumber">$label</td>
-								<%
+									while(i < 24){
+										if(i < 10) {
+											mylabel = "0" + i ;
+										}else {
+											mylabel = i ;
 										}
-									i++ ;
+								%>
+										<td colspan="4"; class="TimeNumber">$mylabel</td>
+								<%	
+										i++ ;
 									}
 								%>
+								
 							</tr>
             	<tr>
 								<td>
 									<div class="LeftSide">
 										<a href="<%=uiForm.event("DeleteUser")%>"><div class="DeleteUserIcon" title="Delete username"><span></span></div></a>
 										<a href="<%=uiForm.event("AddParticipant",uicomponent.id)%>"><div class="AddUserIcon" title="Add username"><span></span></div></a>
-										<div class="Title">Participancs</div>
+										<div class="Title">Participants</div>
 										<div style="clear: both">
 									</div>
 								</td>
 								<%
-									for(String label : uicomponent.getDisplayTimes("HH", timeInterval)){
-									styleClassF = "FreeTime" ;
-									styleClassB = "BusyTime" ;
+									styleClassF = "ParticipantsFreeTime" ;
+									j = 0
+									while(j < 96){
 								%>
-									<td class="$styleClassF">&nbsp;</td>
-								<%}%>
+									<td class="$styleClassF">&nbsp;</td>									
+								<%
+									j ++ ;
+								}								
+								%>
 							</tr>
+							<% Map parMap = uicomponent.getMap() ; %>
              	<%for(String p in uicomponent.getParticipants()) {%>
-	             	<tr busytime = "<%=uicomponent.getBusyTime(p) ;%>">
+	             	<tr busytime = "<%=parMap.get(p) ;%>">
 									<td>
 										<div class="LeftSide">
 											<div class="Input">
@@ -102,16 +110,19 @@
 										</div>
 									</td>
 									<%
-										for(String label : uicomponent.getDisplayTimes("HH", timeInterval)){
-										styleClassF = "FreeTime" ;
-										styleClassB = "BusyTime" ;
+										j = 0 ;
+										styleClassF = "FreeTime" ;										
+										while(j < 96){										
 									%>
-										<td class="$styleClassF">&nbsp;</td>
-									<%}%>
+										<td class="$styleClassF">&nbsp;</td>										
+									<%
+										j ++ ;
+									}%>
 								</tr>
 							<%}%>
       			</tbody>
       		</table>
+      		<%=uicomponent.getParticipants() ;%>
       		<div class="ThiefBox">
       			<div class="Label">Busy time</div>
       			<div class="BusyTime"><span></span></div>

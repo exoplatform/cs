@@ -12,6 +12,7 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.SessionsUtils;
@@ -39,7 +40,7 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
   final public static String FIELD_DATEALL = "dateAll".intern();
   final public static String FIELD_CURRENTATTENDER = "currentAttender".intern() ;
 
-  protected Map<String, List<String>> parMap_ = new HashMap<String, List<String>>() ;
+  protected Map<String, String> parMap_ = new HashMap<String, String>() ;
   private Calendar calendar_ ;
   public UIEventAttenderTab(String arg0) {
     super(arg0);
@@ -61,58 +62,71 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
   protected UIFormComboBox getUIFormComboBox(String id) {
     return findComponentById(id) ;
   }
-
-  //template call this method
-  private String getBusyTime(String par) throws Exception {
-    List<String> timeList = parMap_.get(par) ;
-    StringBuilder sb = new StringBuilder() ;
-    for(String time : timeList) {
-      if(sb != null && sb.length() > 0) sb.append(",") ;
-      sb.append(time) ;
-    }
-    return sb.toString() ;
-  }
+  
   protected void updateParticipants(String values) throws Exception{
-    Map<String, List<String>> tmpMap = new HashMap<String, List<String>>() ;
-    tmpMap.putAll(parMap_) ;
-    for(String id : parMap_.keySet()) {
-      removeChildById(id) ;
-    }
-    List<String> newPars = new ArrayList<String>() ;
-    parMap_.clear() ;
-    if(values != null && values.length() > 0) {
-      for(String par : values.split(",")) {
-        parMap_.put(par, tmpMap.get(par)) ;
-        if(tmpMap.get(par) == null) newPars.add(par) ;  			
-      }
-    }
-
-    for(String id : parMap_.keySet()) {
-      addUIFormInput(new UIFormCheckBoxInput<Boolean>(id, id, false)) ;
-    }
-
-    EventQuery eventQuery = new EventQuery() ;
-    eventQuery.setFromDate(CalendarUtils.getBeginDay(calendar_)) ;
-    eventQuery.setToDate(CalendarUtils.getEndDay(calendar_)) ;
-    eventQuery.setParticipants(newPars.toArray(new String[]{})) ;
-    eventQuery.setNodeType("exo:calendarPublicEvent") ;
-    Map<String, List<String>> parsMap = 
-      CalendarUtils.getCalendarService().checkFreeBusy(SessionsUtils.getSystemProvider(), eventQuery) ;
-    parMap_.putAll(parsMap) ;
+  	Map<String, String> tmpMap = new HashMap<String, String>() ;
+  	tmpMap.putAll(parMap_) ;
+  	for(String id : parMap_.keySet()) {
+  		removeChildById(id) ;
+  	}
+  	List<String> newPars = new ArrayList<String>() ;
+  	parMap_.clear() ;
+  	if(values != null && values.length() > 0) {
+  		for(String par : values.split(",")) {
+  			String vl = tmpMap.get(par) ;
+  			parMap_.put(par, vl) ;
+  			if(vl == null) newPars.add(par) ;  			
+  		}
+  	}
+  	
+  	for(String id : parMap_.keySet()) {
+  		addUIFormInput(new UIFormCheckBoxInput<Boolean>(id, id, false)) ;
+  	}
+  	
+  	System.out.println("newPars =====>" + newPars.size()) ;
+  	if(newPars.size() > 0) {
+  		EventQuery eventQuery = new EventQuery() ;
+    	eventQuery.setFromDate(CalendarUtils.getBeginDay(calendar_)) ;
+    	eventQuery.setToDate(CalendarUtils.getEndDay(calendar_)) ;
+    	eventQuery.setParticipants(newPars.toArray(new String[]{})) ;
+    	eventQuery.setNodeType("exo:calendarPublicEvent") ;
+    	Map<String, String> parsMap = 
+    		CalendarUtils.getCalendarService().checkFreeBusy(SessionsUtils.getSystemProvider(), eventQuery) ;
+    	parMap_.putAll(parsMap) ;
+  	}
+  	
   }
 
-  protected void updateData(Map<String, List<String>> data) throws Exception{
+  /*protected void updateData(Map<String, List<String>> data) throws Exception{
     parMap_.putAll(data) ;
-  }
-  protected String[] getParticipants() { return parMap_.keySet().toArray(new String[]{}) ; } 
+  }*/
+  private Map<String, String> getMap(){ return parMap_ ; }
+  
+  protected String[] getParticipants() { 
+  	System.out.println("====>getParticipants") ;
+  	return parMap_.keySet().toArray(new String[]{}) ; } 
 
-  protected void moveNextDay() {
+  protected void moveNextDay() throws Exception{
     calendar_.add(Calendar.DATE, 1) ;
+    StringBuilder values = new StringBuilder(); 
+    for(String par : parMap_.keySet()) {
+    	if(values != null && values.length() > 0) values.append(",") ;
+    	values.append(par) ;    	
+    }
+    parMap_.clear() ;
+    updateParticipants(values.toString()) ;
   }
-  protected void movePreviousDay() {
+  protected void movePreviousDay() throws Exception{
     calendar_.add(Calendar.DATE, -1) ;
+    StringBuilder values = new StringBuilder(); 
+    for(String par : parMap_.keySet()) {
+    	if(values != null && values.length() > 0) values.append(",") ;
+    	values.append(par) ;    	
+    }
+    parMap_.clear() ;
+    updateParticipants(values.toString()) ;
   }
-  protected List<String> getDisplayTimes(String timeFormat, int timeInterval) {
+  /*protected List<String> getDisplayTimes(String timeFormat, int timeInterval) {
     List<String> times = new ArrayList<String>() ;
     Calendar cal = CalendarUtils.getBeginDay(GregorianCalendar.getInstance()) ;
     DateFormat df = new SimpleDateFormat(timeFormat) ;
@@ -122,6 +136,7 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
     }
     return times ;
   }
+  */
   private UIForm getParentFrom() {
     return getAncestorOfType(UIForm.class) ;
   }
