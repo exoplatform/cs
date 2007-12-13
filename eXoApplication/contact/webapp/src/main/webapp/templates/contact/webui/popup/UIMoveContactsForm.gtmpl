@@ -30,26 +30,28 @@
 			  <div class="HorizontalLayout">
 			    <div class="FormContainer">
 			      <table class="UIFormGrid">
-				      <tbody>
-				      	<tr>
-				      		<td class="FieldLabel">/organization/management/executive-board</td>
-				      		<td class="FieldComponent">
-				      			<input type="checkbox" class="checkbox"/>
-				      		</td>
-				      	</tr>
-				      	<tr>
-				      		<td class="FieldLabel">/platform/administrators</td>
-				      		<td class="FieldComponent">
-				      			<input type="checkbox" class="checkbox" />
-				      		</td>
-				      	</tr>
-				      	<tr>
-				      		<td class="FieldLabel">/platform/users</td>
-				      		<td class="FieldComponent">
-				      			<input type="checkbox" class="checkbox"/>
-				      		</td>
-				      	</tr>
-				      </tbody>
+				      <% 
+				        for(field in uiform.getChildren()) { 
+				          if(field.isRendered()) {
+	      			%>
+              <tr>
+	              <%fieldName = uicomponent.getLabel(field.getName());%>
+	              <%//TODO: Tung.Pham modified
+	              	//if(!fieldName.equals(uicomponent.getId())) {
+	              	if(fieldName != null && fieldName.length() > 0 && !fieldName.equals(uicomponent.getId())) {
+	              %>                        
+  	              <td class="FieldLabel">
+                      <%=uicomponent.getLabel(field.getName()) %>
+                  </td>
+  	              <td class="FieldComponent"><% uiform.renderField(field) %></td>
+	              <%} else { %>
+	                <td class="FieldComponent" colspan="2"><% uiform.renderField(field) %></td>
+	              <%}%>
+	            </tr>
+			      <%
+			          }
+			        }
+			      %>
 		      	</table>
 		    	</div>
 		  	</div>

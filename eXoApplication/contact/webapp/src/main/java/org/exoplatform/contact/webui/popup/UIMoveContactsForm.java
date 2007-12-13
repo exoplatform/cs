@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.MissingResourceException;
 
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.SessionsUtils;
@@ -24,7 +25,6 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
-import org.exoplatform.webui.form.UIFormInputWithActions;
 
 /**
  * Created by The eXo Platform SARL
@@ -44,18 +44,23 @@ import org.exoplatform.webui.form.UIFormInputWithActions;
 public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
   private Map<String, String> movedContacts = new HashMap<String, String>() ;
   private static String[] FIELD_SHAREDCONTACT_BOX = null;
-  private static final String INPUT_MOVE_BOX =  "move" ;
   private Map<String, String> privateGroupMap_ = new HashMap<String, String>() ;
   
   public UIMoveContactsForm() throws Exception { 
-    UIFormInputWithActions moveBox = new UIFormInputWithActions(INPUT_MOVE_BOX) ;
     String[] groups = ContactUtils.getUserGroups() ;
     FIELD_SHAREDCONTACT_BOX = new String[groups.length];
     for(int i = 0; i < groups.length; i ++) {
       FIELD_SHAREDCONTACT_BOX[i] = groups[i] ; 
-      moveBox.addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_SHAREDCONTACT_BOX[i], FIELD_SHAREDCONTACT_BOX[i], false));
+      addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_SHAREDCONTACT_BOX[i], FIELD_SHAREDCONTACT_BOX[i], false));
     }
-    addUIFormInput(moveBox) ;
+  }
+  
+  public String getLabel(String id) throws Exception {
+    try {
+      return  super.getLabel(id) ;
+    } catch (MissingResourceException mre) {
+      return id ;
+    }
   }
   
   public void setContacts(Map<String, String> contacts) { movedContacts = contacts ; }

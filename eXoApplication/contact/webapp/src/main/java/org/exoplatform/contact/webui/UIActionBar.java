@@ -79,9 +79,8 @@ public class UIActionBar extends UIContainer  {
     public void execute(Event<UIActionBar> event) throws Exception {
       UIActionBar uiActionBar = event.getSource() ;
       UIContactPortlet uiContactPortlet = uiActionBar.getAncestorOfType(UIContactPortlet.class) ;
-      UIPopupAction uiPopupAction = uiContactPortlet.getChild(UIPopupAction.class) ;     
-      UICategoryForm uiCategoryForm = uiPopupAction.createUIComponent(UICategoryForm.class, null, "UICategoryForm") ;
-      uiPopupAction.activate(uiCategoryForm, 500, 0, true) ;
+      UIPopupAction uiPopupAction = uiContactPortlet.getChild(UIPopupAction.class) ;
+      uiPopupAction.activate(UICategoryForm.class, 400) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }  
   }
@@ -111,26 +110,23 @@ public class UIActionBar extends UIContainer  {
     public void execute(Event<UIActionBar> event) throws Exception {        
       UIActionBar uiActionBar = event.getSource();
       UIContactPortlet uiContactPortlet = uiActionBar.getAncestorOfType(UIContactPortlet.class);
-      UIPopupAction uiPopupAction = uiContactPortlet.getChild(UIPopupAction.class);
-        
-        UIExportAddressBookForm uiExportForm = uiPopupAction.createUIComponent(
-            UIExportAddressBookForm.class, null, "UIExportAddressBookForm");
-        UIAddressBooks uiAddressBooks = uiActionBar.getAncestorOfType(UIContactPortlet.class)
-          .findFirstComponentOfType(UIAddressBooks.class) ;
-        
-        Map<String, String> groups = uiAddressBooks.getPrivateGroupMap() ;
-        Map<String, String> sharedGroups = uiAddressBooks.getPublicGroupMap() ;
-        if ((sharedGroups == null || sharedGroups.size() == 0) && (groups == null || groups.size() == 0)) {
-          UIApplication uiApp = uiActionBar.getAncestorOfType(UIApplication.class) ;
-          uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.no-addressbook", null,
-            ApplicationMessage.WARNING)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-          return ;   
-        }
-        uiExportForm.setContactGroups(groups) ;
-        uiExportForm.setSharedContactGroup(sharedGroups) ;
-        uiExportForm.updateList();
-        uiPopupAction.activate(uiExportForm, 500, 0, true);
+      UIPopupAction uiPopupAction = uiContactPortlet.getChild(UIPopupAction.class); 
+      UIExportAddressBookForm uiExportForm = uiPopupAction.activate(UIExportAddressBookForm.class, 500);
+      uiExportForm.setId("UIExportAddressBookForm") ;
+      UIAddressBooks uiAddressBooks = uiActionBar.getAncestorOfType(UIContactPortlet.class)
+        .findFirstComponentOfType(UIAddressBooks.class) ;
+      Map<String, String> groups = uiAddressBooks.getPrivateGroupMap() ;
+      Map<String, String> sharedGroups = uiAddressBooks.getPublicGroupMap() ;
+      if ((sharedGroups == null || sharedGroups.size() == 0) && (groups == null || groups.size() == 0)) {
+        UIApplication uiApp = uiActionBar.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.no-addressbook", null,
+          ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;   
+      }
+      uiExportForm.setContactGroups(groups) ;
+      uiExportForm.setSharedContactGroup(sharedGroups) ;
+      uiExportForm.updateList();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
     }  
   }

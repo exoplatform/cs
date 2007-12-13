@@ -83,9 +83,8 @@ public class UITags extends UIComponent {
       String tagId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
       UIPopupAction popupAction = uiContactPortlet.getChild(UIPopupAction.class) ;
-      UIEditTagForm uiEditTagForm = popupAction.createUIComponent(UIEditTagForm.class, null, "UIEditTagForm") ;
+      UIEditTagForm uiEditTagForm = popupAction.activate(UIEditTagForm.class, 500) ;
       uiEditTagForm.setValues(uiForm.tagMap_.get(tagId)) ;
-      popupAction.activate(uiEditTagForm, 500, 0, true) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   }
@@ -95,9 +94,9 @@ public class UITags extends UIComponent {
       UITags uiForm = event.getSource() ;
       String tagId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
-      UIPopupAction popupAction = uiContactPortlet.getChild(UIPopupAction.class) ;
-      
-      UIExportForm uiExportForm = popupAction.createUIComponent(UIExportForm.class, null,"ExportForm");
+      UIPopupAction popupAction = uiContactPortlet.getChild(UIPopupAction.class) ;  
+      UIExportForm uiExportForm = popupAction.activate(UIExportForm.class, 500) ;
+          uiExportForm.setId("ExportForm");
       uiExportForm.setSelectedTag(uiForm.tagMap_.get(tagId).getName()) ;
 
       Contact[] contacts = null ;
@@ -112,7 +111,6 @@ public class UITags extends UIComponent {
       }
       uiExportForm.setContacts(contacts) ;
       uiExportForm.updateList();
-      popupAction.activate(uiExportForm, 500, 0, true);
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   }  
@@ -132,8 +130,7 @@ public class UITags extends UIComponent {
       } else {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiTags) ;        
         event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts) ;
-      }  
-      
+      }
     }
   }
   

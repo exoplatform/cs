@@ -26,7 +26,7 @@ public class DataPageList extends JCRPageList {
     
   }
   
-  protected void populateCurrentPage(long page, String username) throws Exception  {
+  protected void populateCurrentPage(long page, String username) throws Exception {
     setAvailablePage(contactList_.size()) ;
     //Node currentNode ;
     long pageSize = getPageSize() ;

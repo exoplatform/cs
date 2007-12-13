@@ -10,7 +10,6 @@ import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
-import org.exoplatform.webui.form.UIFormStringInput;
 
 /**
  * Created by The eXo Platform SARL
@@ -34,13 +33,11 @@ public class UILDAPCategoryForm extends UIForm {
   
   static  public class SaveActionListener extends EventListener<UILDAPCategoryForm> {
     public void execute(Event<UILDAPCategoryForm> event) throws Exception {
-      UILDAPCategoryForm uiForm = event.getSource() ;
     }
   }
   
   static  public class CancelActionListener extends EventListener<UILDAPCategoryForm> {
     public void execute(Event<UILDAPCategoryForm> event) throws Exception {
-      UILDAPCategoryForm uiForm = event.getSource() ;
     }
   }
 }

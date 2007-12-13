@@ -416,8 +416,8 @@ public class UIContactForm extends UIFormTabPane implements UISelector {
       profileTab.setImage(null) ;
       profileTab.setFileName(null) ;
       profileTab.setMimeType(null) ;
-      UIPopupAction uiPopupAction = uiContactForm.getAncestorOfType(UIPopupAction.class) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(
+        uiContactForm.getAncestorOfType(UIPopupAction.class)) ;
     }
   }
  
