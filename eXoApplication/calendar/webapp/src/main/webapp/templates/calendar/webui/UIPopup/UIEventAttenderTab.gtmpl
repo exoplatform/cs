@@ -9,6 +9,8 @@
 	public int mod(int value, int div) {
 		return (value % div) ;
 	}
+	def rcontext = _ctx.getRequestContext() ;
+	rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.initCheck("' + uicomponent.id + '") ;') ;
 %>
 <div class="UIAddNewEvent $uicomponent.id" id="$uicomponent.id">
  <div class="NewEventAttendee">
@@ -43,7 +45,7 @@
  						<div style="clear: right;"><span></span></div>
  					</div>
  					<table class="UIGrid" id="RowContainerDay" cellspacing="0" borderspacing="0">
-            <tbody>
+            <tbody  eXoCallback="eXo.calendar.UICalendarPortlet.callbackSelectionX() ;">
             	<tr class="TitleBar">
 								<td>
 									<div class="LeftSide">
@@ -83,7 +85,7 @@
 								<%}%>
 							</tr>
              	<%for(String p in uicomponent.getParticipants()) {%>
-	             	<tr>
+	             	<tr busytime = "time busy">
 									<td>
 										<div class="LeftSide">
 											<div class="Input">

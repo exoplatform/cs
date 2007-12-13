@@ -138,6 +138,7 @@
 .UIAddNewEvent .NewEventAttendee .FreeTime {
 	background-color: white; 
 	width: 11px;
+	-moz-user-select: none ;
 }
 
 .UIAddNewEvent .NewEventAttendee .BusyTime {

@@ -4,8 +4,9 @@ function UICalendarPortlet() {
 		
 }
 
-/* for general calendar */
+/* utility method */
 UICalendarPortlet.prototype.timeToMin = function(milliseconds) {
+	if (typeof(milliseconds) == "string") milliseconds = parseInt(milliseconds) ;
 	var d = new Date(milliseconds) ;
 	var hour = d.getHours();
 	var min = d.getMinutes();
@@ -13,15 +14,13 @@ UICalendarPortlet.prototype.timeToMin = function(milliseconds) {
 	return min ;
 }	;
 
-//UICalendarPortlet.prototype.timeToDate = function(milliseconds) {
-//	var d = new Date(milliseconds) ;
-//	var date = d.getDate() ;
-//	var month = d.getMonth() + 1;
-//	var year = d.getFullYear() ;
-//	var currentDate = month + "/" + date + "/" + year + " 00:00:00 AM" ;
-//	currentDate = Date.parse(currentDate) ;
-//	return currentDate ;
-//} ;
+UICalendarPortlet.prototype.minToTime = function(min) {
+	var minutes = min%60 ;
+	var hour = (min - minutes)/ 60 ;
+	if (hour < 10) hour = "0" + hour ;
+	if (minutes < 10) minutes = "0" + minutes ;
+	return hour + ":" + minutes ;
+} ;
 
 UICalendarPortlet.prototype.dateDiff = function(start,end) {
 	start = (new Date(start)).getDate() ;
@@ -79,6 +78,8 @@ UICalendarPortlet.prototype.getWeekNumber = function(now) {
 	var NumberOfWeek =  Math.round((((now-then)/86400000) + Compensation)/7) ;
 	return NumberOfWeek ;
 } ;
+
+/* common method */
 
 UICalendarPortlet.prototype.setting = function() {
 	// paras 1: time interval, paras 2: working time, paras 3: time format type 
@@ -202,19 +203,6 @@ UICalendarPortlet.prototype.show = function(obj, evt) {
 	}
 } ;
 
-//UICalendarPortlet.prototype.showAction = function(obj, evt) {
-//	eXo.webui.UIPopupSelectCategory.show(obj, evt) ;
-//	if (this.viewer && document.all) {
-//		//this.viewer.style.visibility = "hidden" ;
-//		//var uiPopupCategory = eXo.core.DOMUtil.findFirstDescendantByClass(obj, "div", "UIPopupCategory") ;
-//		//if (uiPopupCategory.style.display == "none") this.viewer.style.visibility = "visible" ;
-//		//var board = eXo.core.DOMUtil.findFirstDescendantByClass(this.viewer, "div", "EventBoard") ;
-//		//board.style.position = "static" ;
-//	}
-////	var uiPopupCategory = eXo.core.DOMUtil.findFirstDescendantByClass(obj, "div", "UIPopupCategory") ;
-//} ;
-
-
 UICalendarPortlet.prototype.checkLayout = function() {
 	try{
 		var Browser = eXo.core.Browser ;
@@ -337,7 +325,6 @@ UICalendarPortlet.prototype.setSize = function(obj) {
 	if (end == 0) end = 1440 ;
 	end = (end !=0) ? end : 1440 ;
 	height = Math.abs(start - end) ;
-	//var workingStart = (eXo.calendar.UICalendarPortlet.workingStart) ? parseInt(eXo.calendar.UICalendarPortlet.workingStart) : 0 ;
 	var workingStart = 0 ;
 	var top = start - workingStart ;
 	obj.style.height = (height - 2) + "px" ;
@@ -464,61 +451,6 @@ UIResizeEvent.prototype.init = function(evt) {
 	UIResizeEvent.start(_e, innerElement, outerElement, container, minHeight, interval) ;
 	UIResizeEvent.callback = UIResizeEvent.resizeCallback ;
 } ;
-
-//UIResizeEvent.prototype.start = function(evt, innerElement, outerElement, container, minHeight, interval) {
-//	var _e = window.event || evt ; 
-//	var UIResizeEvent = eXo.calendar.UIResizeEvent ;
-//	UIResizeEvent.innerElement = innerElement ;
-//	UIResizeEvent.outerElement = outerElement ;
-//	UIResizeEvent.container = container ;
-//	eXo.calendar.UICalendarPortlet.resetZIndex(UIResizeEvent.outerElement) ;
-//	UIResizeEvent.posY = _e.clientY ;
-//	UIResizeEvent.minHeight = (minHeight) ? parseInt(minHeight) : 0 ;
-//	UIResizeEvent.interval = (interval != "undefined") ? parseInt(interval) : 15 ;
-//	UIResizeEvent.beforeHeight =  UIResizeEvent.outerElement.offsetHeight ;
-//	UIResizeEvent.container.onmousemove = UIResizeEvent.execute ;
-//	UIResizeEvent.container.onmouseup = UIResizeEvent.end ;
-//} ;
-//
-//UIResizeEvent.prototype.execute = function(evt) {
-//	var _e = window.event || evt ;
-//	var UIResizeEvent = eXo.calendar.UIResizeEvent ;
-//	var height = UIResizeEvent.outerElement.offsetHeight ;
-//	var mouseY = eXo.core.Browser.findMouseRelativeY(UIResizeEvent.container,_e) + UIResizeEvent.container.scrollTop ;
-//	var posY = UIResizeEvent.outerElement.offsetTop ;
-//	var delta = posY + height - mouseY ;
-//	if (height <= UIResizeEvent.minHeight) {
-//		if (mouseY >= (posY + height)) {
-//			UIResizeEvent.outerElement.style.height = parseInt(UIResizeEvent.outerElement.style.height) + UIResizeEvent.interval + "px" ;
-//			UIResizeEvent.innerElement.style.height = parseInt(UIResizeEvent.innerElement.style.height) + UIResizeEvent.interval + "px" ;		
-//		}
-//	} else {		
-//		if (delta >= UIResizeEvent.interval) {
-//			UIResizeEvent.outerElement.style.height = parseInt(UIResizeEvent.outerElement.style.height) - UIResizeEvent.interval + "px" ;
-//			UIResizeEvent.innerElement.style.height = parseInt(UIResizeEvent.innerElement.style.height) - UIResizeEvent.interval + "px" ;
-//		}
-//		if (mouseY >= (posY + height)) {
-//			UIResizeEvent.outerElement.style.height = parseInt(UIResizeEvent.outerElement.style.height) + UIResizeEvent.interval + "px" ;
-//			UIResizeEvent.innerElement.style.height = parseInt(UIResizeEvent.innerElement.style.height) + UIResizeEvent.interval + "px" ;		
-//		}
-//	}
-//} ;
-//
-//UIResizeEvent.prototype.end = function(evt) {
-//	var _e = window.event || evt ;
-//	var UIResizeEvent = eXo.calendar.UIResizeEvent ;
-//	if (typeof(UIResizeEvent.callback) == "function") UIResizeEvent.callback() ;
-//	UIResizeEvent.innerElement = null ;
-//	UIResizeEvent.outerElement = null ;
-//	UIResizeEvent.posY = null ;
-//	UIResizeEvent.minHeight = null ;
-//	UIResizeEvent.interval = null ;
-//	UIResizeEvent.innerElementHeight =  null;
-//	UIResizeEvent.outerElementHeight =  null ;
-//	UIResizeEvent.container.onmousemove = null ;
-//	UIResizeEvent.container.onmouseup = null ;
-//	UIResizeEvent.container = null ;
-//} ;
 
 UIResizeEvent.prototype.start = function(evt, innerElement, outerElement, container, minHeight, interval) {
 	var _e = window.event || evt ; 
@@ -825,40 +757,6 @@ UICalendarPortlet.prototype.filterByGroup = function(obj) {
 	}
 } ;
 
-//UICalendarPortlet.prototype.checkSpaceAvailable = function() {
-//	var uiMonthViewGrid = document.getElementById("UIMonthViewGrid") ;
-//	if (!uiMonthViewGrid) return ;
-//	var DOMUtil = eXo.core.DOMUtil ;
-//	var tds = DOMUtil.findDescendantsByTagName(uiMonthViewGrid, "td") ;
-//	var eventBoxes = null ;
-//	for(var i = 0 ; i < tds.length ; i ++) {
-//		eventBoxes = DOMUtil.findDescendantsByClass(tds[i], "div", "EventBoxes") ;
-//		if (!eventBoxes || (eventBoxes.length <= 3)) continue ;
-//		var n = 0 ;
-//		var height = 0 ;
-//		var len = eventBoxes.length ;
-//		for(var j = 0 ; j < len ; j ++) {
-//			if (eventBoxes[j].style.display != "none") {
-//				n++ ;
-//				height += eventBoxes[j].offsetHeight ;
-//				if (height >= 50) break ;
-//			}	
-//		}
-//		var newMore = len - n ;
-//		var more = tds[i].getElementsByTagName("a")[0] ;
-//		if ((n < 3) && (n > 0)) {
-//			more.innerHTML = String(more.innerHTML).replace(/\+\s+\d*/,"+ " + newMore) ;
-//			more.style.display = "block" ;
-//		} else if (n == 0){
-//			more.style.display = "none" ;
-//		} else {
-//			more.innerHTML = String(more.innerHTML).replace(/\+\s+\d*/,"+ " + newMore) ;
-//			more.style.display = "block" ;
-//		}
-//		eventBoxes = null ;
-//	}
-//} ;
-
 UICalendarPortlet.prototype.filterByCalendar = function(calendarId, status) {
 	var uiCalendarViewContainer = document.getElementById("UICalendarViewContainer") ;
 	var UICalendarPortlet = eXo.calendar.UICalendarPortlet ;
@@ -907,10 +805,8 @@ UICalendarPortlet.prototype.filterByCategory = function() {
 		}
 		else events[i].style.display = "none" ;
 	}
-	//if (document.getElementById("UIMonthViewGrid")) eXo.calendar.UICalendarPortlet.checkSpaceAvailable() ;
 	if (document.getElementById("UIDayViewGrid")) eXo.calendar.UICalendarPortlet.showEvent() ;
 	if (document.getElementById("UIWeekViewGrid")) eXo.calendar.UIWeekView.init() ;
-	//eXo.calendar.UICalendarPortlet.checkSpaceAvailable() ;	
 } ;
 UICalendarPortlet.prototype.showView = function(obj, evt) {
 	var _e = window.event || evt ;
@@ -1086,11 +982,13 @@ UISelectionX.prototype.start = function(evt) {
 		UISelectionX.block.className = "UserSelectionBlock" ;
 		UISelectionX.container.appendChild(UISelectionX.block) ;
 		UISelectionX.step = UISelectionX.container.offsetWidth ;
+		var len = eXo.core.DOMUtil.findDescendantsByTagName(UISelectionX.supObject.parentNode, UISelectionX.supObject.tagName.toLowerCase()).length - 1;
 		UISelectionX.minX = eXo.core.Browser.findPosXInContainer(UISelectionX.supObject, UISelectionX.block.offsetParent) ;
-		UISelectionX.maxX = UISelectionX.minX + UISelectionX.supObject.offsetWidth*7 ;
-		UISelectionX.startTime = UISelectionX.container.getAttribute("startTime") ;
+		UISelectionX.maxX = UISelectionX.minX + UISelectionX.step*len ;
+		if (UISelectionX.container.getAttribute("startTime")) UISelectionX.startTime = UISelectionX.container.getAttribute("startTime") ;
+		if (UISelectionX.container.parentNode.parentNode.getAttribute("eXoCallback")) UISelectionX.callback = UISelectionX.container.parentNode.parentNode.getAttribute("eXoCallback") ;
 		UISelectionX.startX = eXo.core.Browser.findPosXInContainer(UISelectionX.container, UISelectionX.block.offsetParent) ;
-		UISelectionX.startY = (UISelectionX.relativeObject) ? (eXo.core.Browser.findPosY(UISelectionX.container) - UISelectionX.relativeObject.scrollTop) :eXo.core.Browser.findPosY(UISelectionX.container) ;
+		UISelectionX.startY = (UISelectionX.relativeObject) ? (eXo.core.Browser.findPosYInContainer(UISelectionX.container, UISelectionX.block.offsetParent) - UISelectionX.relativeObject.scrollTop) : eXo.core.Browser.findPosYInContainer(UISelectionX.container, UISelectionX.block.offsetParent) ;
 		UISelectionX.block.style.height = UISelectionX.container.offsetHeight  + "px" ;
 		UISelectionX.block.style.left = UISelectionX.startX  + "px" ;
 		UISelectionX.block.style.top = UISelectionX.startY  + "px" ;
@@ -1099,7 +997,7 @@ UISelectionX.prototype.start = function(evt) {
 		document.onmousemove = UISelectionX.execute ;
 		document.onmouseup = UISelectionX.clear ;		
 	} catch(e) {
-		//alert(e.message) ;
+		alert(e.message) ;
 	}
 } ;
 
@@ -1107,7 +1005,7 @@ UISelectionX.prototype.execute = function(evt) {
 	var UISelectionX = eXo.calendar.UISelectionX ;
 	var _e = window.event || evt ;
 	var delta = null ;	
-	var mouseX = eXo.core.Browser.findMouseXInPage(_e) ;
+	var mouseX = eXo.core.Browser.findMouseRelativeX(UISelectionX.block.offsetParent,_e) ;//eXo.core.Browser.findMouseXInPage(_e) ;
 	var posX = UISelectionX.block.offsetLeft ;
 	var width = UISelectionX.block.offsetWidth ;
 	if (mouseX <= UISelectionX.minX) UISelectionX.block.style.left = UISelectionX.minX + "px" ;
@@ -1139,22 +1037,101 @@ UISelectionX.prototype.execute = function(evt) {
 
 UISelectionX.prototype.clear = function(evt) {
 	var UISelectionX = eXo.calendar.UISelectionX ;
-	var endTime = parseInt(UISelectionX.block.offsetWidth/UISelectionX.step)*24*60*60*1000 + parseInt(UISelectionX.startTime) ;
-	var startTime = UISelectionX.startTime ;
-	var _e = window.event || evt ;
-	var src = _e.target || _e.srcElement ;
-	if(UISelectionX.block.offsetLeft < UISelectionX.startX) {
-		startTime = parseInt(UISelectionX.startTime) - parseInt(UISelectionX.block.offsetWidth/UISelectionX.step)*24*60*60*1000 + 24*60*60*1000 ;
-		endTime = parseInt(UISelectionX.startTime) + 24*60*60*1000 ;
-	}
-	eXo.webui.UIForm.submitEvent(UISelectionX.viewType ,'QuickAdd','&objectId=Event&startTime=' + startTime + '&finishTime=' + endTime) ;	
-	try{		
-		eXo.core.DOMUtil.removeElement(UISelectionX.block) ;
-	}catch(e) {alert(e.message) ;}
+	if (UISelectionX.callback) eval(UISelectionX.callback) ;
+	eXo.core.DOMUtil.removeElement(UISelectionX.block) ;
 	document.onmousemove = null ;
 	document.onmouseup = null ;
 } ;
 
+// check free/busy time
+UICalendarPortlet.prototype.initCheck = function(container) {
+	var DOMUtil = eXo.core.DOMUtil ;
+	if(typeof(container) == "string") container = document.getElementById(container) ;
+//	var grandparent = container.parentNode.parentNode ;
+//	var child = DOMUtil.findDescendantsByClass(grandparent, "div", "UITabContent") ;
+//	var l = child.length ;
+//	for(var i = 0 ; i < l ; i++) {
+//		child[i].style.display = "none" ;
+//	}
+//	child[l - 1].style.display = "block" ;
+	
+	var table = DOMUtil.findFirstDescendantByClass(container, "table", "UIGrid") ;
+	var tr = DOMUtil.findDescendantsByTagName(table, "tr") ;	
+	var firstTr = tr[1] ;
+	this.busyCell = DOMUtil.findDescendantsByTagName(firstTr, "td").slice(2) ;
+	var len = tr.length ;
+	for(var i = 0 ; i < len ; i ++) {
+		this.showBusyTime(tr[i]) ;
+	}
+	eXo.calendar.UICalendarPortlet.initSelectionX(firstTr) ;
+} ;
+
+UICalendarPortlet.prototype.parseTime = function(string) {
+	var stringTime = string.split(",") ;
+	var len = stringTime.length ;
+	var time = new Array() ;
+	var tmp = null ;
+	for(var i = 0 ; i < len ; i += 2) {
+		tmp = {"from": this.timeToMin(stringTime[i]),"to":this.timeToMin(stringTime[i+1])} ;
+		time.push(tmp) ;
+	}
+	return time ;
+} ;
+
+UICalendarPortlet.prototype.showBusyTime = function(tr) {
+	var stringTime = tr.getAttribute("busytime") ;
+	if (!stringTime) return ;
+	var time = this.parseTime(stringTime) ;
+	var len = time.length ;
+	var from = null ;
+	var to = null ;
+	for(var i = 0 ; i < len ; i ++) {
+		from = parseInt(time[i].from) ;
+		to = parseInt(time[i].to) ;
+		this.setBusyTime(from, to, tr)
+	}
+} ;
+
+UICalendarPortlet.prototype.setBusyTime = function(from, to, tr) {
+	var cell = eXo.core.DOMUtil.findDescendantsByTagName(tr, "td").slice(1) ;
+	var start = this.round(from,15)/15 ;
+	var end = this.round(to,15)/15 ;
+	for(var i = start ; i < end ; i ++) {
+		cell[i].className = "BusyTime" ;
+		this.busyCell[i].className = "BusyTime" ;		
+	}
+} ;
+
+UICalendarPortlet.prototype.round = function(number, dividend) {	
+	return	number = number - (number%dividend) ;	
+} ;
+
+UICalendarPortlet.prototype.initSelectionX = function(tr) {	
+	var UISelectionX = eXo.calendar.UISelectionX ;
+	var cell = eXo.core.DOMUtil.findDescendantsByTagName(tr, "td").slice(1) ;
+	var len = cell.length ;
+	for(var i = 0 ; i < len ; i ++) {
+		cell[i].onmousedown = eXo.calendar.UISelectionX.start ;
+	}
+	UISelectionX.supObject = cell[0] ;
+} ;
+
+UICalendarPortlet.prototype.callbackSelectionX = function() {
+	var DOMUtil = eXo.core.DOMUtil ;
+	var UISelectionX = eXo.calendar.UISelectionX ;
+	var start = this.minToTime((UISelectionX.container.cellIndex - 1)*15) ;
+	var end = this.minToTime((UISelectionX.container.cellIndex - 1 + UISelectionX.block.offsetWidth/UISelectionX.step)*15) ;
+	var uiTabContentContainer = DOMUtil.findAncestorByClass(UISelectionX.container, "UITabContentContainer") ;
+	var UIComboboxInputs = DOMUtil.findDescendantsByClass(uiTabContentContainer, "input","UIComboboxInput") ;
+	var len = UIComboboxInputs.length ;
+	var name = null ;
+	for(var i = 0 ; i < len ; i ++) {
+		name = UIComboboxInputs[i].name.toLowerCase() ;
+		if (name.indexOf("from") >= 0) UIComboboxInputs[i].value = start ;
+		else  UIComboboxInputs[i].value = end ;
+	}
+	window.status = start + " - " + end ;
+} ;
 
 eXo.calendar.UICalendarPortlet = new UICalendarPortlet() ;
 eXo.calendar.UIResizeEvent = new UIResizeEvent() ;

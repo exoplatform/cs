@@ -23,7 +23,7 @@
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.setting(' + defaultTimeInterval + ', "' + workingStart + '") ;') ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UIWeekView.init() ;') ;
 	rcontext.getJavascriptManager().addJavascript('eXo.calendar.UIWeekView.initSelection() ;') ;
-	rcontext.getJavascriptManager().addJavascript('eXo.calendar.UIWeekView.initSelectionX() ;') ;    
+	rcontext.getJavascriptManager().addJavascript('eXo.calendar.UIWeekView.initSelectionX() ;') ;
  	yearViewAction = uicomponent.TYPE_YEAR +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"="+ currentMonth +"&"+ uicomponent.DAY + "=1" ;
  	dateFormat = uicomponent.getDateFormat() ;
 	timeFormat = uicomponent.getTimeFormat() ;
@@ -65,7 +65,7 @@
 	<div class="EventWeekContainer" >
 		<div class="EventWeekBar">
 			<table class="UIGrid" id="UIWeekViewGridAllDay" cellspacing="0" borderspacing="0">
-				<thead>
+				<thead eXoCallback="eXo.calendar.UIWeekView.callbackSelectionX();">
 					<tr>
 						<th style="width: 55px;"></th>
 						<%			
@@ -101,11 +101,11 @@
 									//int indexEndDate = 7 ;
 									begindate =  event.getFromDateTime().getTime() ; //tf.format(event.fromDateTime) ;
 									enddate = event.getToDateTime().getTime() ;//tf.format(event.toDateTime) ;
-									leftClass = "LeftResizeEvent" ;
+									leftClass = "LeftResizeEvent ResizableSign" ;
 									if(event.fromDateTime.before(uicomponent.getBeginDateOfWeek().getTime())){
 									  leftClass = "LeftContinueEvent" ;
 									}  
-									rightClass = "RightResizeEvent" ;
+									rightClass = "RightResizeEvent ResizableSign" ;
 									if(event.toDateTime.after(uicomponent.getEndDateOfWeek().getTime())){
 									  rightClass = "RightContinueEvent" ;
 									}  		
