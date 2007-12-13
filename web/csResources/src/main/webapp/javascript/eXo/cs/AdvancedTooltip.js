@@ -68,8 +68,8 @@ AdvancedTooltip.prototype.showAdvancedTooltip = function(e) {
 AdvancedTooltip.prototype.show = function(e, element) {
   var compiledTmpl = this.applyTemplate(this.tmpl.innerHTML, element) ;
   this.tooltipE.innerHTML = compiledTmpl ;
-  this.tooltipE.style['top'] = e.clientY + document.body.scrollTop + 2 + 'px' ;
-  this.tooltipE.style['left'] = e.clientX + document.body.scrollLeft + 2 + 'px' ;
+  this.tooltipE.style['top'] = eXo.core.Browser.findMouseRelativeY(document.body, e) + 2 + 'px' ;
+  this.tooltipE.style['left'] = eXo.core.Browser.findMouseRelativeX(document.body, e) + 2 + 'px' ;
   if (this.tooltipE.style['display'] == 'none') {
     this.showTimeoutId = window.setTimeout("eXo.cs.AdvancedTooltip.tooltipE.style['display'] = 'block' ;", 2*1000)
   }

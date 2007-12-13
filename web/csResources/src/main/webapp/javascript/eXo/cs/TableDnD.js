@@ -7,7 +7,7 @@ function TableDnD() {
   this.DOMUtil = eXo.core.DOMUtil ;
   this.DragDrop = eXo.core.DragDrop ;
   this.tableMan = eXo.cs.TableMan ;
-  this.dropableLst = [] ;
+  this.dropableLst = [] ;                                      
 } ;
 
 TableDnD.prototype.init = function(root){
@@ -28,6 +28,10 @@ TableDnD.prototype.init = function(root){
 
 TableDnD.prototype.dndTrigger = function(e) {
   e = e ? e : window.event ;
+  var srcE = eXo.core.Browser.getEventSource(e) ;
+  if ((srcE.tagName + '') != 'th' && (srcE.onclick)) {
+    return true ;
+  }
   return eXo.cs.TableDnD.initDnD(eXo.cs.TableDnD.dropableLst, this, this, e) ;
 } ;
 
@@ -52,7 +56,7 @@ TableDnD.prototype.initDnD = function(dropableObjs, clickObj, dragObj, e) {
   var cellIndex = this.tableMan.cellIndexOf(clickBlock) ;
   headerRow.appendChild(tableData.header[cellIndex].cloneNode(true)) ;
   tableNode.appendChild(headerRow) ;
-//  var colNodes = this.tableMan.getCol(cellIndex) ;
+  var colNodes = this.tableMan.getCol(cellIndex) ;
 //  for (var i=0; i<colNodes.length; i++) {
 //    var rowNode = document.createElement('tr') ;
 //    rowNode.appendChild(colNodes[i].cloneNode(true)) ;
@@ -110,18 +114,24 @@ TableDnD.prototype.dragCallback = function(dndEvent) {
 } ;
 
 TableDnD.prototype.dropCallback = function(dndEvent) {
-  if (this.foundTargetObjectCatch) {
-    this.foundTargetObjectCatch.style[eXo.cs.TableDnD.scKey] = this.foundTargetObjectCatchStyle ;
+  if (dndEvent.dragObject) {
+    dndEvent.dragObject.parentNode.removeChild(dndEvent.dragObject) ;
   }
-  this.foundTargetObjectCatch = dndEvent.foundTargetObject ;
-  if (this.foundTargetObjectCatch) {
-    var tableMan = eXo.cs.TableMan ;    
-    var x1 = tableMan.cellIndexOf(this.foundTargetObjectCatch) ;
-    var x2 = tableMan.cellIndexOf(dndEvent.clickObject) ;
-    tableMan.swapColumn(x1, x2) ;
-  }
-  var parentNode = dndEvent.dragObject.parentNode ;
-  parentNode.removeChild(dndEvent.dragObject) ;
+  try {
+    
+    if (this.foundTargetObjectCatch) {
+      this.foundTargetObjectCatch.style[eXo.cs.TableDnD.scKey] = this.foundTargetObjectCatchStyle ;
+    }
+    this.foundTargetObjectCatch = dndEvent.foundTargetObject ;
+    if (this.foundTargetObjectCatch) {
+      var tableMan = eXo.cs.TableMan ;    
+      var x1 = tableMan.cellIndexOf(this.foundTargetObjectCatch) ;
+      var x2 = tableMan.cellIndexOf(dndEvent.clickObject) ;
+      tableMan.swapColumn(x1, x2) ;
+    }
+  } catch(e) {}
+  eXo.core.DragDrop.destroy() ;
+  return true ;
 } ;
 
 

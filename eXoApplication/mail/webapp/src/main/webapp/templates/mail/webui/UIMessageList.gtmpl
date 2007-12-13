@@ -305,7 +305,7 @@
     	 	</tr>
     	</thead>
       <%if (uicomponent.getMessageList().size() > 0) {%>
-      	<tbody class="SpliterResizableListArea" id="uiMessageListResizableArea">
+      	<tbody class="_SpliterResizableListArea" id="uiMessageListResizableArea">
       	<%
           int i = 0;
     			for(Message msg : uicomponent.getMessageList()) {

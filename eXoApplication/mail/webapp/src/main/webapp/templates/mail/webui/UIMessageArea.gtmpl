@@ -11,14 +11,14 @@
   rcontext.getJavascriptManager().importJavascript('eXo.mail.Spliter','/mail/javascript/');
   rcontext.getJavascriptManager().addOnLoadJavascript('eXo.mail.UIMailDragDrop.onLoad');
   rcontext.getJavascriptManager().addOnLoadJavascript('eXo.cs.AdvancedTooltip.onLoad(\'UIListUsers\', \'mailAdvancedTooltipTmpl\')');
-  rcontext.getJavascriptManager().addOnLoadJavascript('eXo.cs.TableDnD.init(\'UIListUsers\')');
+  //rcontext.getJavascriptManager().addOnLoadJavascript('eXo.cs.TableDnD.init(\'UIListUsers\')');
 %>
 
 <div class="MailWorkingDetails SpliterContainer" id="<%=uicomponent.getId()%>">
-	<div class="UIMessageArea">		
+	<div class="UIMessageArea SpliterResizableListArea" id="uiMessageListResizableAreaMain">		
 		<%uicomponent.renderChild(UIMessageList.class);%>
 	</div>
-	<div class="ResizeReadingPane" id="ResizeReadingPane" onmousedown="eXo.mail.Spliter.doResize(event, this, 'uiMessageListResizableArea', 'SpliterResizableArea');"><span></span></div>
+	<div class="ResizeReadingPane" id="ResizeReadingPane" onmousedown="eXo.mail.Spliter.doResize(event, this, 'uiMessageListResizableAreaMain', 'SpliterResizableArea');"><span></span></div>
 	<div  class="SpliterResizableArea" id="SpliterResizableArea">
 		<%uicomponent.renderChild(UIMessagePreview.class);%>
 	</div>
