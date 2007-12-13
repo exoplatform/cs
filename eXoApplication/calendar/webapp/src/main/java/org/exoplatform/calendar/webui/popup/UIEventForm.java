@@ -162,7 +162,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       }
       setSelectedEventState(eventCalendar.getEventState()) ;
       setMeetingInvitation(eventCalendar.getInvitation()) ;
-      StringBuffer pars = new StringBuffer("") ;
+      StringBuffer pars = new StringBuffer() ;
       if(eventCalendar.getParticipant() != null) {
         for(String par : eventCalendar.getParticipant()) {
           if(pars != null && pars.length() > 0) pars.append(",") ;
@@ -843,11 +843,19 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   }
   static  public class OnChangeActionListener extends EventListener<UIEventForm> {
     public void execute(Event<UIEventForm> event) throws Exception {
-      System.out.println("\n\n OnChangeActionListener") ;
       UIEventForm uiForm = event.getSource() ;
-
+      UIEventAttenderTab attendTab = uiForm.getChildById(TAB_EVENTATTENDER) ;
+      boolean isCheckFreeTime = attendTab.getUIFormCheckBoxInput(attendTab.FIELD_CHECK_TIME).isChecked() ;
+      if(isCheckFreeTime) {
+      	StringBuilder sb = new StringBuilder() ;
+        for(String par : attendTab.getParticipants()) {
+        	if(sb != null && sb.length() > 0) sb.append(",") ;
+        	sb.append(par) ;
+        }
+        attendTab.updateParticipants(sb.toString()) ;
+      }
       uiForm.setSelectedTab(TAB_EVENTATTENDER) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getChildById(TAB_EVENTATTENDER)) ;
     }
   }
   static  public class CancelActionListener extends EventListener<UIEventForm> {

@@ -78,8 +78,8 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
   	for(String id : parMap_.keySet()) {
   		addUIFormInput(new UIFormCheckBoxInput<Boolean>(id, id, false)) ;
   	}
-  	
-  	if(newPars.size() > 0) {
+  	boolean isCheckFreeTime = getUIFormCheckBoxInput(FIELD_CHECK_TIME).isChecked() ;
+  	if(newPars.size() > 0 && isCheckFreeTime) {
   		EventQuery eventQuery = new EventQuery() ;
     	eventQuery.setFromDate(CalendarUtils.getBeginDay(calendar_)) ;
     	eventQuery.setToDate(CalendarUtils.getEndDay(calendar_)) ;
