@@ -94,7 +94,6 @@ public class UIActionBar extends UIContainer {
   static public class ComposeActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {
       UIActionBar uiActionBar = event.getSource() ; 
-      System.out.println(" =========== > Compose Action");
       UIMailPortlet uiPortlet = uiActionBar.getParent() ;
       UIApplication uiApp = uiActionBar.getAncestorOfType(UIApplication.class) ;
       UINavigationContainer uiNavigation = uiPortlet.getChild(UINavigationContainer.class) ;
@@ -106,7 +105,8 @@ public class UIActionBar extends UIContainer {
         return ;
       }
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
-      UIPopupActionContainer uiPopupContainer = uiPopupAction.activate(UIPopupActionContainer.class, 850) ;
+      UIPopupActionContainer uiPopupContainer = uiPopupAction.createUIComponent(UIPopupActionContainer.class, null, null) ;
+      uiPopupAction.activate(uiPopupContainer, 850, 0, true);
       
       UIComposeForm uiComposeForm = uiPopupContainer.createUIComponent(UIComposeForm.class, null, null);
       uiPopupContainer.addChild(uiComposeForm) ;
@@ -117,7 +117,6 @@ public class UIActionBar extends UIContainer {
   static public class AddressActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {
       UIActionBar uiActionBar = event.getSource() ; 
-      System.out.println(" =========== > AddAddressActionListener"); 
       UIMailPortlet uiPortlet = uiActionBar.getAncestorOfType(UIMailPortlet.class);
       UIPopupAction uiPopupAction = uiPortlet.findFirstComponentOfType(UIPopupAction.class);
       UIPopupActionContainer uiPopupContainer = uiPopupAction.createUIComponent(UIPopupActionContainer.class, null, "UIPopupActionAddressContainer");

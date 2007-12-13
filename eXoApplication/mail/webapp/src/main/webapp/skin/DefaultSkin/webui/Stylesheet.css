@@ -51,6 +51,7 @@
 	height: 20px;
 	float: left;
 	display: block;
+	padding-left: 3px;
 }
 
 .UIMailPortlet .SearchForm .Input {

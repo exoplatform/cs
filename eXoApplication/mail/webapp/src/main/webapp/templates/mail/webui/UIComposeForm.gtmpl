@@ -3,8 +3,8 @@
   import org.exoplatform.contact.service.Contact;
   
   def rcontext = _ctx.getRequestContext() ;
-  rcontext.getJavascriptManager().importJavascript('eXo.mail.AutoComplete','/mail/javascript/');
-  rcontext.getJavascriptManager().addOnLoadJavascript('eXo.mail.AutoComplete.ACMain.init("autoComplete", ["to", "cc", "bcc"])');
+  //rcontext.getJavascriptManager().importJavascript('eXo.mail.AutoComplete','/mail/javascript/');
+  //rcontext.getJavascriptManager().addOnLoadJavascript('eXo.mail.AutoComplete.ACMain.init("autoComplete", ["to", "cc", "bcc"])');
 %>
 <% uiform.begin() %>
 <div class="$uicomponent.id UIApplication">
