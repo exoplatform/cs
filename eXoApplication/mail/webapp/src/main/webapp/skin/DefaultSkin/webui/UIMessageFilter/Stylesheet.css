@@ -81,3 +81,35 @@
 	padding: 5px 10px;
 	
 }
+/************************************Filter NULL*************************************/
+
+.UIMessageFilter .FilterSettingContainer .TitleFilterMail {
+	margin: 1px 1px 0px 1px;
+	background: #ccddf1;
+	line-height: 25px;
+	padding-left: 12px;
+	color: #0101ff;
+	font-weight: bold;
+}
+
+.UIMessageFilter .FilterSettingContainer .FilterContent {
+	background: url('background/BGIntroduction89x1.png') repeat-y right top ;
+	margin: 0px 1px;
+}
+
+.UIMessageFilter .FilterSettingContainer .IntroductionContent {
+	background: url('background/BGMailFilter54x132.gif') no-repeat 265px 16px ;
+	height: 328px;
+	padding: 0px 85px 0px 12px;
+}
+
+.UIMessageFilter .FilterSettingContainer .IntroductionContent .TitleFilter {
+	color: #ff1b1b;
+	line-height: 20px;
+	padding-top: 20px;
+}
+
+.UIMessageFilter .FilterSettingContainer .IntroductionContent .Text {
+	color: #2d2d2d;
+	padding-left: 5px;
+}

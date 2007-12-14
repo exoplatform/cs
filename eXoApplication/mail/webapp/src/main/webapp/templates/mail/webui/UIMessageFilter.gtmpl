@@ -47,7 +47,21 @@
             <% if (filter.getApplyFolder() != null) { %><div>Folder : <%=uicomponent.getFolder().getName()%> </div><% } %> 
             <% if (filter.getApplyTag() != null) { %><div>Tag : <%=uicomponent.getTag().getName()%></div><% } %>
           </div>
-        <% } %>
+        <% } else {%>
+        	<div class="TitleFilterMail">Email Filter</div>
+        	<div class="FilterContent">
+        		<div class="IntroductionContent">
+        			<div class="TitleFilter">Protecting your inbox from email based threats</div>
+        			<div class="Text">
+        				The email filter is designed solely to protect your inbox from email based threats and includes anti spam, anti virus, message quarantine, content filtration, phishing protection and more.
+        			</div>
+        			<div class="TitleFilter">Email Filter</div>
+        			<div class="Text">
+        				Relax with our Mail Filter Email Service and keep your email safe, secure and productive. The Internetters Filter stops spam, viruses and undesirable content before it ever reaches you, and you don't even need to have your email account with Internetters. 
+        			</div>
+        		</div>
+        	</div>
+        <%}%>
       </div>
     <div style="clear: left;"><span></span></div>
   </div>  
