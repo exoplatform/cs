@@ -335,6 +335,7 @@ public class JCRDataStorage{
               }
               messageIds.remove(msgId);  
               Node newRoot = messageHome.getNode(messageIds.get(messageIds.size() - 1));
+              newRoot.setProperty(Utils.EXO_ISUNREAD, false);
               newRoot.setProperty(Utils.EXO_ISROOT, true);
               newRoot.setProperty(Utils.EXO_ADDRESSES, msgNode.getProperty(Utils.EXO_ADDRESSES).getValues());
               newRoot.setProperty(Utils.EXO_MESSAGEIDS, messageIds.toArray(new String[]{}));
