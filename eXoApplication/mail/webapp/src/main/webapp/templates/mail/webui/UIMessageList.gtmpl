@@ -236,10 +236,10 @@
   <% /* End popup menu for the message*/ %>
   
   <div class="UIMessageList" >
-    <div style="display: none;" class="AdvancedTooltipTmpl" id="mailAdvancedTooltipTmpl">
+    <div class="AdvancedTooltipTmpl" id="mailAdvancedTooltipTmpl">
       <div class="Item">
-        <div class="Key">Name: </div>
-        <div class="Value">\$name</div>
+        <div class="Key">Email: </div>
+        <div class="Value">\$email</div>
       </div>
     </div>
   	<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
@@ -332,8 +332,9 @@
               <% if (msg.isRootConversation()) {
                   int numberConver = 1;
                   for (String conver : uicomponent.getParticipators(msg)) {
+                    String email = Utils.getAddresses(msg.getFrom())[0];
                %>
-                 <a href="$actionLink" advancedtooltip="true" name="test" email="email"><% if (numberConver>1){ %> , <% } %>  $conver <a>
+                 <a href="$actionLink" advancedtooltip="true" email="$email"><% if (numberConver>1){ %> , <% } %>  $conver <a>
               <% numberConver++ }  }%>  
             </td>
     				<td style="padding: 0px auto;">

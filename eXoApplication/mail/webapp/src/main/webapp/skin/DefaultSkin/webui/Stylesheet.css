@@ -532,6 +532,13 @@
 	padding-right: 16px;
 }
 
+.AdvancedTooltipTmpl {
+	display: none ;
+	height: 80px;
+	width: 250px;
+	border: 1px solid red;
+}
+
 .UIMailPortlet .MailWorkingWorkspace .MessageNotice {
 	height: 35px; width: 300px;
 	line-height: 35px;

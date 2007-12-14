@@ -9,7 +9,7 @@
 <div class="UIMessagePreview" id="<%=uicomponent.getId()%>">
 <%
   Message msgRoot = uicomponent.getMessage();
-  if (msgRoot != null) {
+  if (msgRoot != null && ( uicomponent.getConversations() != null && uicomponent.getConversations().size() > 0)) {
 %> 
 	<div class="ReadingPaneBar">
 		<div class="Subject"><span>Subject: </span><span>

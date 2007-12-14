@@ -400,11 +400,22 @@ public class MailServiceImpl implements MailService{
           // Use for conversation
           Message rootMsg  = getRootMessage(sProvider, username, accountId, newMsg) ;
           if (rootMsg != null) {
-            newMsg.setIsRootConversation(false);
-            newMsg.setRoot(rootMsg.getId());
-            newMsg.setUnread(false);
-            updateRootMessage(sProvider, username, accountId, rootMsg, newMsg);
-          } 
+            newMsg = updateRootMessage(sProvider, username, accountId, rootMsg, newMsg);
+          } else {
+            newMsg.setMessageIds(new String[] {newMsg.getId()});
+            Map<String, String> addressMap = new HashMap<String, String> () ;
+            List<String> addressList = new ArrayList<String>(); 
+            if (newMsg.getFrom() != null) addressList.addAll(new ArrayList<String>(Arrays.asList(Utils.getAddresses(newMsg.getFrom()))));
+            if (newMsg.getMessageTo() != null) addressList.addAll(new ArrayList<String>(Arrays.asList(Utils.getAddresses(newMsg.getMessageTo()))));
+            if (newMsg.getMessageCc() != null) addressList.addAll(new ArrayList<String>(Arrays.asList(Utils.getAddresses(newMsg.getMessageCc()))));
+            if (newMsg.getMessageBcc() != null) addressList.addAll(new ArrayList<String>(Arrays.asList(Utils.getAddresses(newMsg.getMessageBcc()))));
+            
+            for(String value : addressList) {
+              addressMap.put(value, value) ;
+            }
+            newMsg.setAddresses(addressMap.values().toArray(new String[] {}));
+            newMsg.setRoot(newMsg.getId());
+          }
           storage_.saveMessage(sProvider, username, account.getId(), newMsg, true);
           messageList.add(newMsg);
                     
@@ -417,10 +428,10 @@ public class MailServiceImpl implements MailService{
               storeFolder.setLabel(account.getIncomingFolder()) ;
               storeFolder.setPersonalFolder(false) ;
             }  
-            if (newMsg.isRootConversation() || (rootMsg != null && !rootMsg.isUnread())) {
+            if (rootMsg == null) {
               storeFolder.setNumberOfUnreadMessage((storeFolder.getNumberOfUnreadMessage() + 1)) ;
-            }
-            if (newMsg.isRootConversation()) {
+            } 
+            if (rootMsg == null) {
               storeFolder.setTotalMessage(storeFolder.getTotalMessage() + 1) ;
             }
             storage_.saveFolder(sProvider, username, account.getId(), storeFolder) ;
@@ -543,7 +554,7 @@ public class MailServiceImpl implements MailService{
     return null;
   }
   
-  private void updateRootMessage(SessionProvider sProvider, String username, String accountId,Message rootMsg, Message newMsg) throws Exception {
+  private Message updateRootMessage(SessionProvider sProvider, String username, String accountId, Message rootMsg, Message newMsg) throws Exception {
     Map<String, String> addressMap = new HashMap<String, String> () ;
     List<String> addressList = new ArrayList<String>();
     if (rootMsg.getAddresses() != null && rootMsg.getAddresses().length > 0) {
@@ -564,18 +575,22 @@ public class MailServiceImpl implements MailService{
       newAddressMap.put(value, value) ;
     }
     addressMap.putAll(newAddressMap);
-    rootMsg.setAddresses(addressMap.values().toArray(new String[]{}));
+    newMsg.setAddresses(addressMap.values().toArray(new String[]{}));
     
     List<String> msgIdList = new ArrayList<String>();
     if (rootMsg.getMessageIds() != null && rootMsg.getMessageIds().length > 0) {
       msgIdList.addAll(new ArrayList<String>(Arrays.asList(rootMsg.getMessageIds())));
     }
     msgIdList.add(newMsg.getId());
-    rootMsg.setMessageIds(msgIdList.toArray(new String[]{}));
-    if (!rootMsg.isUnread()) rootMsg.setUnread(true);
-    rootMsg.setFolders(newMsg.getFolders());
-    rootMsg.setReceivedDate(newMsg.getReceivedDate());
+    newMsg.setMessageIds(msgIdList.toArray(new String[]{}));
+    
+    rootMsg.setIsRootConversation(false);
+    rootMsg.setUnread(false);
+    rootMsg.setRoot(newMsg.getId());
+    rootMsg.setAddresses(new String[] {});
+    rootMsg.setMessageIds(new String[] {});
     saveMessage(sProvider, username, accountId, rootMsg, false);
+    return newMsg ;
   }
   
   public void createAccount(SessionProvider sProvider, String username, Account account) throws Exception {

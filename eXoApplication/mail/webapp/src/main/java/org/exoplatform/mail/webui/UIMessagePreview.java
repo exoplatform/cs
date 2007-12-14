@@ -64,13 +64,25 @@ public class UIMessagePreview extends UIComponent {
   
   public UIMessagePreview() throws Exception {}
   
-  public Message getMessage() throws Exception { return selectedMessage_; }
+  public Message getMessage() throws Exception { 
+    String username = MailUtils.getCurrentUser();
+    String accountId = MailUtils.getAccountId();
+    MailService mailSrv = MailUtils.getMailService();
+    if (selectedMessage_ != null) {
+      return mailSrv.getMessageById(SessionsUtils.getSessionProvider(), username, accountId, selectedMessage_.getId());
+    }
+    return null;
+  }
   
-  public void setMessage(Message msg) throws Exception { selectedMessage_ = msg; }
+  public void setMessage(Message msg) throws Exception {
+    String username = MailUtils.getCurrentUser();
+    String accountId = MailUtils.getAccountId();
+    MailService mailSrv = MailUtils.getMailService();
+    selectedMessage_ = mailSrv.getMessageById(SessionsUtils.getSessionProvider(), username, accountId, msg.getId()); 
+  }
   
   public List<Message> getConversations() throws Exception {
     List<Message> msgList = new ArrayList<Message>();
-    msgList.add(selectedMessage_);
     String username = MailUtils.getCurrentUser();
     String accountId = MailUtils.getAccountId();
     MailService mailSrv = MailUtils.getMailService();

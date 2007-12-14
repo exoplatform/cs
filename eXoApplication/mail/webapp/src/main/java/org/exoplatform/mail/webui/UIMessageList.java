@@ -212,7 +212,6 @@ public class UIMessageList extends UIForm {
   
   public List<Message> getConversations(Message msg) throws Exception {
     List<Message> msgList = new ArrayList<Message>();
-    msgList.add(msg);
     String username = MailUtils.getCurrentUser();
     String accountId = MailUtils.getAccountId();
     MailService mailSrv = MailUtils.getMailService();

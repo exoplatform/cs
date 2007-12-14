@@ -327,16 +327,15 @@ public class JCRDataStorage{
         if (isRootConversation) {
           if (msgNode.hasProperty(Utils.EXO_MESSAGEIDS)) {
             Value[] propMessageIds = msgNode.getProperty(Utils.EXO_MESSAGEIDS).getValues();
-            if (propMessageIds != null && propMessageIds.length >0 ) {
+            if (propMessageIds != null && propMessageIds.length > 1 ) {
               List<String> messageIds = new ArrayList<String>();
               for (int i = 0; i < propMessageIds.length; i++) {
                 String msgConverId  = propMessageIds[i].getString();
                 messageIds.add(msgConverId);
               }
-
-              Node newRoot = messageHome.getNode(messageIds.get(0));
+              messageIds.remove(msgId);  
+              Node newRoot = messageHome.getNode(messageIds.get(messageIds.size() - 1));
               newRoot.setProperty(Utils.EXO_ISROOT, true);
-              messageIds.remove(0);
               newRoot.setProperty(Utils.EXO_ADDRESSES, msgNode.getProperty(Utils.EXO_ADDRESSES).getValues());
               newRoot.setProperty(Utils.EXO_MESSAGEIDS, messageIds.toArray(new String[]{}));
               for (String msgNewConverId : messageIds) {
@@ -344,7 +343,7 @@ public class JCRDataStorage{
                 conversation.setProperty(Utils.EXO_ROOT, newRoot.getProperty(Utils.EXO_ID).getString());
               }
               msgNode.setProperty(Utils.EXO_ADDRESSES, new String[] {});
-              msgNode.setProperty(Utils.EXO_MESSAGEIDS, new String[] {});
+              msgNode.setProperty(Utils.EXO_MESSAGEIDS, new String[] {msgId});
             }
           }
           // Update number of unread messages
@@ -352,8 +351,15 @@ public class JCRDataStorage{
             currentFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (currentFolderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong() - 1));
             destFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (destFolderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong() + 1));
           }
+          currentFolderNode.setProperty(Utils.EXO_TOTALMESSAGE, (currentFolderNode.getProperty(Utils.EXO_TOTALMESSAGE).getLong() - 1));
+          destFolderNode.setProperty(Utils.EXO_TOTALMESSAGE, (destFolderNode.getProperty(Utils.EXO_TOTALMESSAGE).getLong() + 1));
         } else {
           msgNode.setProperty(Utils.EXO_ISROOT, true);
+          if (isUnread) {
+            destFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (destFolderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong() + 1));
+          }
+          destFolderNode.setProperty(Utils.EXO_TOTALMESSAGE, (destFolderNode.getProperty(Utils.EXO_TOTALMESSAGE).getLong() + 1));
+          msgNode.setProperty(Utils.EXO_MESSAGEIDS, new String[] {msgId});
           Node rootMsg = messageHome.getNode(msgNode.getProperty(Utils.EXO_ROOT).getString());
           Value[] propMessageIds = rootMsg.getProperty(Utils.EXO_MESSAGEIDS).getValues();
           List<String> messageIds = new ArrayList<String>();
@@ -364,9 +370,6 @@ public class JCRDataStorage{
           messageIds.remove(msgId);
           rootMsg.setProperty(Utils.EXO_MESSAGEIDS, messageIds.toArray(new String[]{}));
         }
-        
-        currentFolderNode.setProperty(Utils.EXO_TOTALMESSAGE, (currentFolderNode.getProperty(Utils.EXO_TOTALMESSAGE).getLong() - 1));
-        destFolderNode.setProperty(Utils.EXO_TOTALMESSAGE, (destFolderNode.getProperty(Utils.EXO_TOTALMESSAGE).getLong() + 1));
       }
     }
     messageHome.getSession().save();
