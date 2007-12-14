@@ -109,6 +109,7 @@ public class UICalendarCategoryForm extends UIForm {
         uiManager.updateGrid() ;
         uiForm.reset() ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiManager) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(calendarPortlet.findFirstComponentOfType(UICalendars.class)) ;
       } catch (Exception e) {
         e.printStackTrace() ; 
       }
@@ -126,14 +127,7 @@ public class UICalendarCategoryForm extends UIForm {
       UICalendarCategoryForm uiForm = event.getSource() ;
       UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class) ; 
       uiPopupAction.deActivate() ;
-      if(uiPopupAction.getAncestorOfType(UIPopupAction.class) != null) {
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction.getAncestorOfType(UIPopupAction.class));
-      } else {
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
-      }
-      UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
-      UICalendars uiCalendars = calendarPortlet.findFirstComponentOfType(UICalendars.class) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendars) ; 
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }
   }
 

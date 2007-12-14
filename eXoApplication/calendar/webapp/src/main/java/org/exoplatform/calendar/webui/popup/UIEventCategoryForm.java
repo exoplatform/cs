@@ -81,9 +81,15 @@ public class UIEventCategoryForm extends UIForm {
   static  public class SaveActionListener extends EventListener<UIEventCategoryForm> {
     public void execute(Event<UIEventCategoryForm> event) throws Exception {
       UIEventCategoryForm uiForm = event.getSource() ;
+      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+      String name = uiForm.getUIStringInput(UIEventCategoryForm.EVENT_CATEGORY_NAME).getValue() ;
+      if(!CalendarUtils.isNameValid(name, CalendarUtils.SPECIALCHARACTER)) {
+        uiApp.addMessage(new ApplicationMessage("UIEventCategoryForm.msg.name-invalid", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ; 
+        return ;
+      }
       UIEventCategoryManager uiManager = uiForm.getAncestorOfType(UIEventCategoryManager.class) ;
       CalendarService calendarService = CalendarUtils.getCalendarService();
-      String name = uiForm.getUIStringInput(UIEventCategoryForm.EVENT_CATEGORY_NAME).getValue() ;
       String description = uiForm.getUIStringInput(UIEventCategoryForm.DESCRIPTION).getValue() ;
       String username = Util.getPortalRequestContext().getRemoteUser() ;
       EventCategory eventCat = new EventCategory() ;
@@ -124,7 +130,6 @@ public class UIEventCategoryForm extends UIForm {
           }
         }
       } catch (RepositoryException e) {
-        UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UIEventCategoryForm.msg.name-invalid", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ; 
         return ;
