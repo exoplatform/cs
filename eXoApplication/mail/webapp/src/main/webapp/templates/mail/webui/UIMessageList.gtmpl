@@ -305,7 +305,7 @@
     	 	</tr>
     	</thead>
       <%if (uicomponent.getMessageList().size() > 0) {%>
-      	<tbody class="_SpliterResizableListArea" id="uiMessageListResizableArea">
+      <tbody class="_SpliterResizableListArea" id="uiMessageListResizableArea">
       	<%
           int i = 0;
     			for(Message msg : uicomponent.getMessageList()) {
@@ -360,7 +360,7 @@
     				      <%=Utils.formatDate('MMM dd, yyyy HH:mm aaa', msg.getReceivedDate())%>
     				    <%} else if (msg.getSendDate() != null){%>
     				      <%=Utils.formatDate('MMM dd, yyyy HH:mm aaa', msg.getSendDate())%>
-    				    <%}%>[st]
+    				    <%}%>
     				  </a>
     				</td>
     				<td class="$readStatus"><a href="$actionLink">
