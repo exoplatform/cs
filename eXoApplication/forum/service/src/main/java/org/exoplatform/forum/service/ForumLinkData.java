@@ -6,25 +6,25 @@ package org.exoplatform.forum.service ;
 
 
 /**
- * March 2, 2007  
+ * March 2, 2007	
  */
 public class ForumLinkData {
-   private String id;
-   private String name;
-   private String path;
-   private String type;
-   
+	 private String id;
+	 private String name;
+	 private String path;
+	 private String type;
+	 
 
-   public String getId(){return id;}
-   public void setId(String id){ this.id = id;}
-   
-   public String getName(){return name;}
-   public void setName(String Name){this.name = Name;}
-   
-   public String getPath(){return path;}
-   public void setPath(String path){this.path = path ; }
-   
-   public String getType(){return type;}
-   public void setType(String type){this.type = type ; }
-   
+	 public String getId(){return id;}
+	 public void setId(String id){ this.id = id;}
+	 
+	 public String getName(){return name;}
+	 public void setName(String Name){this.name = Name;}
+	 
+	 public String getPath(){return path;}
+	 public void setPath(String path){this.path = path ; }
+	 
+	 public String getType(){return type;}
+	 public void setType(String type){this.type = type ; }
+	 
 }

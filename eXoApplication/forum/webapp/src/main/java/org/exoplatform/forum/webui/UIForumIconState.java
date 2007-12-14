@@ -1,6 +1,6 @@
 /***************************************************************************
- * Copyright 2001-2007 The eXo Platform SARL         All rights reserved.  *
- * Please look at license.txt in info directory for more license detail.   *
+ * Copyright 2001-2007 The eXo Platform SARL				 All rights reserved.	*
+ * Please look at license.txt in info directory for more license detail.	 *
  **************************************************************************/
 package org.exoplatform.forum.webui;
 
@@ -10,23 +10,23 @@ import org.exoplatform.webui.core.UIContainer;
 /**
  * Created by The eXo Platform SARL
  * Author : Hung Nguyen
- *          hung.nguyen@exoplatform.com
+ *					hung.nguyen@exoplatform.com
  * Aus 01, 2007 2:48:18 PM 
  */
 
 @ComponentConfig(
-    template =  "app:/templates/forum/webui/UIForumIconState.gtmpl"
+		template =	"app:/templates/forum/webui/UIForumIconState.gtmpl"
 )
-public class UIForumIconState extends UIContainer  {
-  private boolean isIconForum = true ;
-  public UIForumIconState() throws Exception {    
-  }
-  
-  public void updateInfor(boolean isIconForum) {
-    this.isIconForum = isIconForum ;
-  }
-  
-  public boolean getIsIconForum() {
-    return this.isIconForum ;
-  }
+public class UIForumIconState extends UIContainer	{
+	private boolean isIconForum = true ;
+	public UIForumIconState() throws Exception {		
+	}
+	
+	public void updateInfor(boolean isIconForum) {
+		this.isIconForum = isIconForum ;
+	}
+	
+	public boolean getIsIconForum() {
+		return this.isIconForum ;
+	}
 }

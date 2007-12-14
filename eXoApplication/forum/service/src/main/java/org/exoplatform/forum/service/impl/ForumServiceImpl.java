@@ -1,6 +1,6 @@
 /***************************************************************************
- * Copyright 2001-2007 The eXo Platform SARL         All rights reserved.  *
- * Please look at license.txt in info directory for more license detail.   *
+ * Copyright 2001-2007 The eXo Platform SARL				 All rights reserved.	*
+ * Please look at license.txt in info directory for more license detail.	 *
  **************************************************************************/
 package org.exoplatform.forum.service.impl;
 
@@ -148,27 +148,35 @@ public class ForumServiceImpl implements ForumService{
 		storage_.savePoll(sProvider, categoryId, forumId, topicId, poll, isNew, isVote) ;
 	}
 
-	public void addTopicInTag(SessionProvider provider, String topicId) throws Exception {
-		storage_.addTopicInTag(provider, topicId) ;
+	public void addTopicInTag(SessionProvider sProvider, String tagId, String topicPath) throws Exception {
+		storage_.addTopicInTag(sProvider, tagId, topicPath) ;
 	}
 
-	public Tag getTag(SessionProvider provider, String tagId) throws Exception {
-		return storage_.getTag(provider, tagId);
+	public Tag getTag(SessionProvider sProvider, String tagId) throws Exception {
+		return storage_.getTag(sProvider, tagId);
 	}
 
-	public List<Tag> getTagsByTopic(SessionProvider provider, String topicId) throws Exception {
-		return storage_.getTagsByTopic(provider, topicId);
+	public List<Tag> getTagsByUser(SessionProvider sProvider, String userName) throws Exception {
+		return storage_.getTagsByUser(sProvider, userName);
+	}
+	
+	public List<Tag> getTags(SessionProvider sProvider) throws Exception {
+		return storage_.getTags(sProvider);
 	}
 
-	public List<Topic> getTopicsByTag(SessionProvider provider, String tagId) throws Exception {
-		return storage_.getTopicsByTag(provider, tagId) ;
+	public List<Tag> getTagsByTopic(SessionProvider sProvider, String topicPath) throws Exception {
+		return storage_.getTagsByTopic(sProvider, topicPath);
+	}
+	
+	public List<Topic> getTopicsByTag(SessionProvider sProvider, String tagId) throws Exception {
+		return storage_.getTopicsByTag(sProvider, tagId) ;
 	}
 
-	public void removeTag(SessionProvider provider, String tagId) throws Exception {
-		storage_.removeTag(provider, tagId) ;
+	public void removeTag(SessionProvider sProvider, String tagId) throws Exception {
+		storage_.removeTag(sProvider, tagId) ;
 	}
 
-	public void saveTag(SessionProvider provider) throws Exception {
-		storage_.saveTag(provider) ;
+	public void saveTag(SessionProvider sProvider, Tag newTag) throws Exception {
+		storage_.saveTag(sProvider, newTag) ;
 	}
 }

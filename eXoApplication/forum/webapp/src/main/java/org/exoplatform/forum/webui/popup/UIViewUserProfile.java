@@ -1,6 +1,6 @@
 /***************************************************************************
- * Copyright 2001-2006 The eXo Platform SARL         All rights reserved.  *
- * Please look at license.txt in info directory for more license detail.   *
+ * Copyright 2001-2006 The eXo Platform SARL				 All rights reserved.	*
+ * Please look at license.txt in info directory for more license detail.	 *
  **************************************************************************/
 package org.exoplatform.forum.webui.popup;
 
@@ -15,26 +15,26 @@ import org.exoplatform.webui.event.Event.Phase;
 /**
  * Created by The eXo Platform SARL
  * Author : Hung Nguyen
- *          hung.nguyen@exoplatform.com
+ *					hung.nguyen@exoplatform.com
  * Aus 01, 2007 2:48:18 PM 
  */
 @ComponentConfig(
-    lifecycle = UIFormLifecycle.class,
-    template = "app:/templates/forum/webui/UIViewUserProfile.gtmpl",
-    events = {
-      @EventConfig(listeners = UIViewUserProfile.CloseActionListener.class,phase = Phase.DECODE)
-    }
+		lifecycle = UIFormLifecycle.class,
+		template = "app:/templates/forum/webui/UIViewUserProfile.gtmpl",
+		events = {
+			@EventConfig(listeners = UIViewUserProfile.CloseActionListener.class,phase = Phase.DECODE)
+		}
 )
 public class UIViewUserProfile extends UIComponent {
-  
-  
-  public UIViewUserProfile() {
-    
-  }
-  
-  static  public class CloseActionListener extends EventListener<UIViewUserProfile> {
-    public void execute(Event<UIViewUserProfile> event) throws Exception {
-      UIViewUserProfile uiForm = event.getSource() ;
-    }
-  }
+	
+	
+	public UIViewUserProfile() {
+		
+	}
+	
+	static	public class CloseActionListener extends EventListener<UIViewUserProfile> {
+		public void execute(Event<UIViewUserProfile> event) throws Exception {
+			UIViewUserProfile uiForm = event.getSource() ;
+		}
+	}
 }

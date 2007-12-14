@@ -1,6 +1,6 @@
 /***************************************************************************
- * Copyright 2001-2006 The eXo Platform SARL         All rights reserved.  *
- * Please look at license.txt in info directory for more license detail.   *
+ * Copyright 2001-2006 The eXo Platform SARL				 All rights reserved.	*
+ * Please look at license.txt in info directory for more license detail.	 *
  **************************************************************************/
 package org.exoplatform.forum.webui.popup;
 
@@ -29,90 +29,90 @@ import org.exoplatform.webui.form.UIForm;
 /**
  * Created by The eXo Platform SARL
  * Author : Vu Duy Tu
- *          tu.duy@exoplatform.com
+ *					tu.duy@exoplatform.com
  * Aus 15, 2007 2:48:18 PM 
  */
 @ComponentConfig(
-    lifecycle = UIFormLifecycle.class,
-    template = "app:/templates/forum/webui/popup/UIMovePostForm.gtmpl",
-    events = {
-      @EventConfig(listeners = UIMovePostForm.SaveActionListener.class), 
-      @EventConfig(listeners = UIMovePostForm.CancelActionListener.class,phase = Phase.DECODE)
-    }
+		lifecycle = UIFormLifecycle.class,
+		template = "app:/templates/forum/webui/popup/UIMovePostForm.gtmpl",
+		events = {
+			@EventConfig(listeners = UIMovePostForm.SaveActionListener.class), 
+			@EventConfig(listeners = UIMovePostForm.CancelActionListener.class,phase = Phase.DECODE)
+		}
 )
 public class UIMovePostForm extends UIForm implements UIPopupComponent {
-  private ForumService forumService = (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
-  private String topicId ;
-  private List<Post> posts ;
-  
-  public UIMovePostForm() throws Exception {
-    
-  }
-  
-  public void activate() throws Exception {
-    // TODO Auto-generated method stub
-  }
-  public void deActivate() throws Exception {
-    // TODO Auto-generated method stub
-  }
-  
-  public void updatePost(String topicId, List<Post> posts) {
-    this.topicId = topicId ;
-    this.posts = posts ;
-  }
-  
-  @SuppressWarnings("unused")
-  private List<Category> getCategories() throws Exception {
-    return this.forumService.getCategories(ForumUtils.getSystemProvider()) ;
-  }
-  
-  @SuppressWarnings("unused")
-  private boolean getSelectForum(String forumId) throws Exception {
-    if(this.posts.get(0).getPath().contains(forumId)) return true ;
-    else return false ;
-  }
+	private ForumService forumService = (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
+	private String topicId ;
+	private List<Post> posts ;
+	
+	public UIMovePostForm() throws Exception {
+		
+	}
+	
+	public void activate() throws Exception {
+		// TODO Auto-generated method stub
+	}
+	public void deActivate() throws Exception {
+		// TODO Auto-generated method stub
+	}
+	
+	public void updatePost(String topicId, List<Post> posts) {
+		this.topicId = topicId ;
+		this.posts = posts ;
+	}
+	
+	@SuppressWarnings("unused")
+	private List<Category> getCategories() throws Exception {
+		return this.forumService.getCategories(ForumUtils.getSystemProvider()) ;
+	}
+	
+	@SuppressWarnings("unused")
+	private boolean getSelectForum(String forumId) throws Exception {
+		if(this.posts.get(0).getPath().contains(forumId)) return true ;
+		else return false ;
+	}
 
-  @SuppressWarnings("unused")
-  private List<Forum> getForums(String categoryId) throws Exception {
-    return this.forumService.getForums(ForumUtils.getSystemProvider(), categoryId) ;
-  }
+	@SuppressWarnings("unused")
+	private List<Forum> getForums(String categoryId) throws Exception {
+		return this.forumService.getForums(ForumUtils.getSystemProvider(), categoryId) ;
+	}
 
-  @SuppressWarnings("unused")
-  private List<Topic> getTopics(String categoryId, String forumId) throws Exception {
-    List<Topic> topics = new ArrayList<Topic>() ;
-    for(Topic topic : this.forumService.getTopics(ForumUtils.getSystemProvider(), categoryId, forumId)) {
-      if(topic.getId().equalsIgnoreCase(this.topicId)) continue ;
-      topics.add(topic) ;
-    }
-    return topics ;
-  }
-  
-  static  public class SaveActionListener extends EventListener<UIMovePostForm> {
-    public void execute(Event<UIMovePostForm> event) throws Exception {
-      UIMovePostForm uiForm = event.getSource() ;
-      String topicPath = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      if(topicPath != null && topicPath.length() > 0) {
-        List<Post> posts = uiForm.posts ;
-        for (Post post : posts) {
-          uiForm.forumService.movePost(ForumUtils.getSystemProvider(), post.getId(), post.getPath(), topicPath) ;
-        }
-        UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
-        forumPortlet.cancelAction() ;
-        String[] temp = topicPath.split("/") ;
-        UITopicDetailContainer topicDetailContainer = forumPortlet.findFirstComponentOfType(UITopicDetailContainer.class) ;
-        topicDetailContainer.getChild(UITopicDetail.class).setUpdateTopic(temp[temp.length - 3], temp[temp.length - 2], temp[temp.length - 1], false) ;
-        topicDetailContainer.getChild(UITopicPoll.class).updateFormPoll(temp[temp.length - 3], temp[temp.length - 2], temp[temp.length - 1]) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(forumPortlet) ;
-      }
-    }
-  }
-  
-  static  public class CancelActionListener extends EventListener<UIMovePostForm> {
-    public void execute(Event<UIMovePostForm> event) throws Exception {
-      UIMovePostForm uiForm = event.getSource() ;
-      UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
-      forumPortlet.cancelAction() ;
-    }
-  }
-  
+	@SuppressWarnings("unused")
+	private List<Topic> getTopics(String categoryId, String forumId) throws Exception {
+		List<Topic> topics = new ArrayList<Topic>() ;
+		for(Topic topic : this.forumService.getTopics(ForumUtils.getSystemProvider(), categoryId, forumId)) {
+			if(topic.getId().equalsIgnoreCase(this.topicId)) continue ;
+			topics.add(topic) ;
+		}
+		return topics ;
+	}
+	
+	static	public class SaveActionListener extends EventListener<UIMovePostForm> {
+		public void execute(Event<UIMovePostForm> event) throws Exception {
+			UIMovePostForm uiForm = event.getSource() ;
+			String topicPath = event.getRequestContext().getRequestParameter(OBJECTID) ;
+			if(topicPath != null && topicPath.length() > 0) {
+				List<Post> posts = uiForm.posts ;
+				for (Post post : posts) {
+					uiForm.forumService.movePost(ForumUtils.getSystemProvider(), post.getId(), post.getPath(), topicPath) ;
+				}
+				UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
+				forumPortlet.cancelAction() ;
+				String[] temp = topicPath.split("/") ;
+				UITopicDetailContainer topicDetailContainer = forumPortlet.findFirstComponentOfType(UITopicDetailContainer.class) ;
+				topicDetailContainer.getChild(UITopicDetail.class).setUpdateTopic(temp[temp.length - 3], temp[temp.length - 2], temp[temp.length - 1], false) ;
+				topicDetailContainer.getChild(UITopicPoll.class).updateFormPoll(temp[temp.length - 3], temp[temp.length - 2], temp[temp.length - 1]) ;
+				event.getRequestContext().addUIComponentToUpdateByAjax(forumPortlet) ;
+			}
+		}
+	}
+	
+	static	public class CancelActionListener extends EventListener<UIMovePostForm> {
+		public void execute(Event<UIMovePostForm> event) throws Exception {
+			UIMovePostForm uiForm = event.getSource() ;
+			UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
+			forumPortlet.cancelAction() ;
+		}
+	}
+	
 }

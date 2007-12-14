@@ -9,19 +9,19 @@ import java.io.InputStream;
 /**
  * Created by The eXo Platform SARL
  * Author : Hung Ngyen Quang
- *          hung.nguyen@exoplatform.com
+ *					hung.nguyen@exoplatform.com
  * Jul 9, 2007
  */
 public class BufferAttachment extends ForumAttachment {
-  
-  private InputStream inputStream;
-  
-  public InputStream getInputStream()throws Exception{
-    /*DownloadService downloadService = (DownloadService)PortalContainer.getComponent(DownloadService.class) ;
-    DownloadResource downloadResource = downloadService.getDownloadResource(getId()) ;
-    downloadResource.getInputStream() ;*/
-    return inputStream ; 
-  }
-  public void setInputStream(InputStream is){ inputStream = is ; }
-  
+	
+	private InputStream inputStream;
+	
+	public InputStream getInputStream()throws Exception{
+		/*DownloadService downloadService = (DownloadService)PortalContainer.getComponent(DownloadService.class) ;
+		DownloadResource downloadResource = downloadService.getDownloadResource(getId()) ;
+		downloadResource.getInputStream() ;*/
+		return inputStream ; 
+	}
+	public void setInputStream(InputStream is){ inputStream = is ; }
+	
 }

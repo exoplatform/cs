@@ -1,6 +1,6 @@
 /***************************************************************************
- * Copyright 2001-2003 The eXo Platform SARL         All rights reserved.  *
- * Please look at license.txt in info directory for more license detail.   *
+ * Copyright 2001-2003 The eXo Platform SARL				 All rights reserved.	*
+ * Please look at license.txt in info directory for more license detail.	 *
  **************************************************************************/
 package org.exoplatform.forum.webui.popup;
 
@@ -11,6 +11,6 @@ package org.exoplatform.forum.webui.popup;
  */
 
 public interface UIPopupComponent {
-  public void  activate()  throws Exception ;
-  public void  deActivate()  throws Exception ;
+	public void	activate()	throws Exception ;
+	public void	deActivate()	throws Exception ;
 }

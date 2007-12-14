@@ -1,6 +1,6 @@
 /***************************************************************************
- * Copyright 2001-2007 The eXo Platform SARL         All rights reserved.  *
- * Please look at license.txt in info directory for more license detail.   *
+ * Copyright 2001-2007 The eXo Platform SARL				 All rights reserved.	*
+ * Please look at license.txt in info directory for more license detail.	 *
  **************************************************************************/
 package org.exoplatform.forum.webui;
 
@@ -10,25 +10,25 @@ import org.exoplatform.webui.core.UIContainer;
 /**
  * Created by The eXo Platform SARL
  * Author : Hung Nguyen
- *          hung.nguyen@exoplatform.com
+ *					hung.nguyen@exoplatform.com
  * Aus 01, 2007 2:48:18 PM 
  */
 
 @ComponentConfig(
-    template =  "app:/templates/forum/webui/UIForumContainer.gtmpl"
+		template =	"app:/templates/forum/webui/UIForumContainer.gtmpl"
 )
-public class UIForumContainer extends UIContainer  {
-  public UIForumContainer() throws Exception {
-    addChild(UIForumDescription.class, null, null) ;
-    addChild(UITopicContainer.class, null, null) ;
-    addChild(UITopicDetailContainer.class, null, null).setRendered(false) ;
-    addChild(UIForumSummary.class, null, null) ;
-  } 
-  
-  public void setIsRenderChild(boolean isRender) {
-    getChild(UITopicContainer.class).setRendered(isRender) ;
-    getChild(UITopicDetailContainer.class).setRendered(!isRender) ;
-    getChild(UIForumSummary.class).setRendered(isRender) ;
-    this.getAncestorOfType(UIForumPortlet.class).getChild(UIForumLinks.class).setRendered(true) ;
-  }
+public class UIForumContainer extends UIContainer	{
+	public UIForumContainer() throws Exception {
+		addChild(UIForumDescription.class, null, null) ;
+		addChild(UITopicContainer.class, null, null) ;
+		addChild(UITopicDetailContainer.class, null, null).setRendered(false) ;
+		addChild(UIForumSummary.class, null, null) ;
+	} 
+	
+	public void setIsRenderChild(boolean isRender) {
+		getChild(UITopicContainer.class).setRendered(isRender) ;
+		getChild(UITopicDetailContainer.class).setRendered(!isRender) ;
+		getChild(UIForumSummary.class).setRendered(isRender) ;
+		this.getAncestorOfType(UIForumPortlet.class).getChild(UIForumLinks.class).setRendered(true) ;
+	}
 }

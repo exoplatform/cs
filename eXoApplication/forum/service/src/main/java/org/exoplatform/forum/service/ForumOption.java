@@ -10,10 +10,10 @@ public class ForumOption {
 	private String userName ;
 	
 	public ForumOption() {
-	  // TODO Auto-generated constructor stub
-  }
+		// TODO Auto-generated constructor stub
+	}
 	public void setTimeZone(Double timeZone) { this.timeZone = timeZone ; }
-	public double getTimeZone() {return this.timeZone ;  }
+	public double getTimeZone() {return this.timeZone ;	}
 	
 	public void setDateFormat(String dateFormat) { this.dateFormat = dateFormat ;}
 	public String getDateFormat() { return this.dateFormat;}

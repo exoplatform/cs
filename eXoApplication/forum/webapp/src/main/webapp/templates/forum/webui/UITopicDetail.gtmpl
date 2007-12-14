@@ -1,4 +1,4 @@
-<%  
+<%	
 	import org.exoplatform.forum.webui.UIPostRules ;
 	import org.exoplatform.forum.webui.UIForumLinks ;
 	import org.exoplatform.forum.webui.UIForumPageIterator ;
@@ -6,7 +6,7 @@
 	import org.exoplatform.forum.service.Topic ;
 %>
 <%
-	uicomponent.initPage() ;  
+	uicomponent.initPage() ;	
 	Topic topic = uicomponent.getTopic() ;
 %>
 
@@ -19,102 +19,102 @@
 	<% } else { %>
 		<div class="UIActionForum" style="float: left;">
 	<% } %>
-		  <div class="ActionButton">
-		  	<div class="NormalStyle">
-		  		<div class="ButtonLeft">
-		  			<div class="ButtonRight">
-		  				<div class="ButtonMiddle">
-		  				<% if(topic.getIsLock()) { %>
-		  						<div class="IconButton LockIcon" title="You can not reply this thread."><span class="LockLabel"></span>Post Reply</div>
-		  				<% } else { %>
-		  					<a href="<%=uicomponent.event("AddPost")%>">
-		  						<div class="IconButton PostReplyIcon"><span class="LabelIcon"></span>
-		  							<%=_ctx.appRes(uicomponent.getName() + ".action.AddPost");%>
+			<div class="ActionButton">
+				<div class="NormalStyle">
+					<div class="ButtonLeft">
+						<div class="ButtonRight">
+							<div class="ButtonMiddle">
+							<% if(topic.getIsLock()) { %>
+									<div class="IconButton LockIcon" title="You can not reply this thread."><span class="LockLabel"></span>Post Reply</div>
+							<% } else { %>
+								<a href="<%=uicomponent.event("AddPost")%>">
+									<div class="IconButton PostReplyIcon"><span class="LabelIcon"></span>
+										<%=_ctx.appRes(uicomponent.getName() + ".action.AddPost");%>
 									</div>
-		  					</a>
-		  				<% } %>
-		  					</a>
-		  				</div>
-		  			</div>
-		  		</div>
-		  	</div>
-		  </div>
+								</a>
+							<% } %>
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 		<div title="Go to page Number " class="GotoPageIcon" >
 			<div onclick="eXo.forum.UIForumPortlet.showPopup(this, event);" style="width: 20px; height: 16px;"><span></span></div>
 			<% /*Begin Popup Menu*/ %>
 			<div style="position: relative;">
-  			<div class="UIPopupCategory" style="display: none; ">
-  				<div class="UIRightClickPopupMenu" style="display: block; left: -70px;">
-  					<div class="UIContextMenuContainer">
-						  <div class="TopLeftRightClickPopupMenu">
-          			<div class="TopRightRightClickPopupMenu">
-            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
-          			</div>
-        			</div>
-			        <div class="MiddleLeftRightClickPopupMenu">
-			          <div class="MiddleRightRightClickPopupMenu">
-              		<div class="UIRightPopupMenuContainer" style="padding: 10px 15px;">
-              			<div class="InputPage" style="float:left;">
-              				<% uicomponent.renderChild("gopage1") ; %>
-              			</div>
+				<div class="UIPopupCategory" style="display: none; ">
+					<div class="UIRightClickPopupMenu" style="display: block; left: -70px;">
+						<div class="UIContextMenuContainer">
+							<div class="TopLeftRightClickPopupMenu">
+								<div class="TopRightRightClickPopupMenu">
+									<div class="TopCenterRightClickPopupMenu"><span></span></div>
+								</div>
+							</div>
+							<div class="MiddleLeftRightClickPopupMenu">
+								<div class="MiddleRightRightClickPopupMenu">
+									<div class="UIRightPopupMenuContainer" style="padding: 10px 15px;">
+										<div class="InputPage" style="float:left;">
+											<% uicomponent.renderChild("gopage1") ; %>
+										</div>
 										<div class="UIActionForum" style="float:left;">
-									  	<div class="NormalButtom">
-									  		<div class="ButtonLeft">
-									  			<div class="ButtonRight">
-									  				<div class="ButtonMiddle">
-									  				 <a href="<%=uicomponent.event("GoNumberPage")%>">Go Page</a>
-									  				</div>
-									  			</div>
-									  		</div>
-									  	</div>
-									  </div>
-									  <div style="clear: left;"><span></span></div>
+											<div class="NormalButtom">
+												<div class="ButtonLeft">
+													<div class="ButtonRight">
+														<div class="ButtonMiddle">
+														 <a href="<%=uicomponent.event("GoNumberPage")%>">Go Page</a>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div style="clear: left;"><span></span></div>
 									</div>
-	          		</div>
-	        		</div>
-				      <div class="BottomLeftRightClickPopupMenu">
-			        <div class="BottomRightRightClickPopupMenu">
-			          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
-			        </div>
-			      </div>
-      			</div>
-			    </div>
-  			</div>
-  		</div>
-		  <% /*End Popup Menu*/ %>
+								</div>
+							</div>
+							<div class="BottomLeftRightClickPopupMenu">
+							<div class="BottomRightRightClickPopupMenu">
+								<div class="BottomCenterRightClickPopupMenu"><span></span></div>
+							</div>
+						</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<% /*End Popup Menu*/ %>
 		</div>
 		<% uicomponent.renderChild(UIForumPageIterator.class) ; %>
 		<div style="clear: left;"><span></span></div>
 	</div>
 <!-- Start PostsInThreadContainer -->	
 	<div class="PostsInThreadContainer">
-	  <div class="ForumToolbar">
-		  <div class="LeftBar">
-		  	<div class="RightBar">
-		  		<div class="CenterBar">
-		  			<div class="ToolbarActionsContainer">
-		  				<div class="StatusIcon ModerationIcon" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
+		<div class="ForumToolbar">
+			<div class="LeftBar">
+				<div class="RightBar">
+					<div class="CenterBar">
+						<div class="ToolbarActionsContainer">
+							<div class="StatusIcon ModerationIcon" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
 								<a class="DownArrow1Icon">Moderation</a>
 								<% /*Begin Popup Menu*/ %>
 								<div style="position: relative;">
-			      			<div class="UIPopupCategory" style="display: none; ">
-			      				<div class="UIRightClickPopupMenu" style="display: block; left: -70px;">
-			      					<div class="UIContextMenuContainer">
-											  <div class="TopLeftRightClickPopupMenu">
-					          			<div class="TopRightRightClickPopupMenu">
-					            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
-					          			</div>
-					        			</div>
-								        <div class="MiddleLeftRightClickPopupMenu">
-								          <div class="MiddleRightRightClickPopupMenu">
-					              		<div class="UIRightPopupMenuContainer">
-														<%  
+									<div class="UIPopupCategory" style="display: none; ">
+										<div class="UIRightClickPopupMenu" style="display: block; left: -70px;">
+											<div class="UIContextMenuContainer">
+												<div class="TopLeftRightClickPopupMenu">
+													<div class="TopRightRightClickPopupMenu">
+														<div class="TopCenterRightClickPopupMenu"><span></span></div>
+													</div>
+												</div>
+												<div class="MiddleLeftRightClickPopupMenu">
+													<div class="MiddleRightRightClickPopupMenu">
+														<div class="UIRightPopupMenuContainer">
+														<%	
 															String[] actionMenuPost = ["MovePost", "SetApprovePost", "SetUnApprovePost", "SetApproveAttachment", "SetUnApproveAttachment", "DeletePost"];
 															for( action in actionMenuPost ) {
 																String link = uicomponent.event(action) ;
 																String classIcon = action + "Icon";
-					                   		String itemLabel = _ctx.appRes(uicomponent.getName() + ".action." + action);
+														 		String itemLabel = _ctx.appRes(uicomponent.getName() + ".action." + action);
 																if(action.indexOf("eleteP") > 0) {
 																	String confirm = _ctx.appRes(uicomponent.getName() + ".confirm." + action);
 																	link = "javascript:if(confirm('" + confirm + "?')){"+uicomponent.event(action)+"}" ;
@@ -122,117 +122,117 @@
 																
 																
 																if(action.indexOf("Approve") > 0) {
-					                   %>
-					                    <div class="MenuItem" style="opacity: 0.3; cursor: none;">   
-						                    <div class="ItemIcon $classIcon">
-						                      $itemLabel
-						                    </div>
-					                    </div>
-					                    <% } else { %>
-															<a class="MenuItem" href="$link">   
-						                    <div class="ItemIcon $classIcon">
-						                      $itemLabel
-						                    </div>
-					                    </a>
-					                    <% } %>
-					                    <% } %>
+														 %>
+															<div class="MenuItem" style="opacity: 0.3; cursor: none;">	 
+																<div class="ItemIcon $classIcon">
+																	$itemLabel
+																</div>
+															</div>
+															<% } else { %>
+															<a class="MenuItem" href="$link">	 
+																<div class="ItemIcon $classIcon">
+																	$itemLabel
+																</div>
+															</a>
+															<% } %>
+															<% } %>
 														</div>
-						          		</div>
-						        		</div>
-									      <div class="BottomLeftRightClickPopupMenu">
-								        <div class="BottomRightRightClickPopupMenu">
-								          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
-								        </div>
-								      </div>
-					      			</div>
-								    </div>
-			      			</div>
-			      		</div>
-			      		<% /*End Popup Menu*/ %>
-		  				</div>
-		  				<div class="SeparatorLine"><span></span></div>
-							<div class="StatusIcon TagIcon">Tag</div>
-		  				<div class="SeparatorLine"><span></span></div>
+													</div>
+												</div>
+												<div class="BottomLeftRightClickPopupMenu">
+												<div class="BottomRightRightClickPopupMenu">
+													<div class="BottomCenterRightClickPopupMenu"><span></span></div>
+												</div>
+											</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<% /*End Popup Menu*/ %>
+							</div>
+							<div class="SeparatorLine"><span></span></div>
+							<div class="StatusIcon TagIcon"><a href="<%=uicomponent.event("AddTagTopic")%>">Tag</a></div>
+							<div class="SeparatorLine"><span></span></div>
 							<a class="StatusIcon VoteIcon" href="<%=uicomponent.event("RatingTopic");%>">Vote Thread</a>
-		  				<div class="SeparatorLine"><span></span></div>
+							<div class="SeparatorLine"><span></span></div>
 							<div class="StatusIcon SearchIcon">Search Thread</div>
-		  				<div class="SeparatorLine"><span></span></div>
-		  				<div class="StatusIcon ToolIcon" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
+							<div class="SeparatorLine"><span></span></div>
+							<div class="StatusIcon ToolIcon" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
 								<a class="DownArrow1Icon">Thread Tools</a>
 								<% /*Begin Popup Menu*/ %>
 								<div style="position: relative;">
-			      			<div class="UIPopupCategory" style="display: none; ">
-			      				<div class="UIRightClickPopupMenu" style="display: block;">
-			      					<div class="UIContextMenuContainer">
-											  <div class="TopLeftRightClickPopupMenu">
-					          			<div class="TopRightRightClickPopupMenu">
-					            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
-					          			</div>
-					        			</div>
-								        <div class="MiddleLeftRightClickPopupMenu">
-								          <div class="MiddleRightRightClickPopupMenu">
-					              		<div class="UIRightPopupMenuContainer">
+									<div class="UIPopupCategory" style="display: none; ">
+										<div class="UIRightClickPopupMenu" style="display: block;">
+											<div class="UIContextMenuContainer">
+												<div class="TopLeftRightClickPopupMenu">
+													<div class="TopRightRightClickPopupMenu">
+														<div class="TopCenterRightClickPopupMenu"><span></span></div>
+													</div>
+												</div>
+												<div class="MiddleLeftRightClickPopupMenu">
+													<div class="MiddleRightRightClickPopupMenu">
+														<div class="UIRightPopupMenuContainer">
 															<% 
 															String[] menuTopicActions = ["EditTopic", "PrintPage", "AddPoll", "SetOpenTopic", "SetCloseTopic", 
 															"SetLockedTopic", "SetUnLockTopic", "SetStickTopic", "SetUnStickTopic", "SplitTopic", 
 															"SetApproveTopic", "SetUnApproveTopic", "SetMoveTopic", "SetDeleteTopic"] ;
-					                   		for(action in menuTopicActions) {
-					                   			if(topic.getIsPoll()){
-					                   				if(action.equals("AddPoll")) continue ;
-					                   			}
-					                   			String link = uicomponent.event(action) ;
-						                   		String itemLabel = _ctx.appRes(uicomponent.getName() + ".action." + action);
-						                   		String classIcon = null;
-						                   		if(action.length() < 11) classIcon = action + "Icon";
-						                   		else classIcon = action.replaceFirst("Topic", "Icon");
-						                   		if(action.indexOf("Delete") > 0) {
-						                   			String confirm = _ctx.appRes(uicomponent.getName() + ".confirm." + action);
-						                   			link = "javascript:if(confirm('" + confirm + "?')){"+uicomponent.event(action)+"}";
-						                   		}
-						                   		
-						                   		
-						                   		if(action.indexOf("Close") > 0 || action.indexOf("Open") > 0 || action.indexOf("intPa") > 0
-						                   			 || action.indexOf("plitTo") > 0 || action.indexOf("Approve") > 0) {
-					                   %>
-					                    <div class="MenuItem" style="opacity: 0.3; cursor: none;">   
-						                    <div class="ItemIcon $classIcon">
-						                      $itemLabel
-						                    </div>
-					                    </div>
-					                    <% } else { %>
-					                    <a class="MenuItem" href="$link">   
-						                    <div class="ItemIcon $classIcon">
-						                      $itemLabel
-						                    </div>
-					                    </a>
-					                    <% } %>
-					                   <% } %>
+														 		for(action in menuTopicActions) {
+														 			if(topic.getIsPoll()){
+														 				if(action.equals("AddPoll")) continue ;
+														 			}
+														 			String link = uicomponent.event(action) ;
+															 		String itemLabel = _ctx.appRes(uicomponent.getName() + ".action." + action);
+															 		String classIcon = null;
+															 		if(action.length() < 11) classIcon = action + "Icon";
+															 		else classIcon = action.replaceFirst("Topic", "Icon");
+															 		if(action.indexOf("Delete") > 0) {
+															 			String confirm = _ctx.appRes(uicomponent.getName() + ".confirm." + action);
+															 			link = "javascript:if(confirm('" + confirm + "?')){"+uicomponent.event(action)+"}";
+															 		}
+															 		
+															 		
+															 		if(action.indexOf("Close") > 0 || action.indexOf("Open") > 0 || action.indexOf("intPa") > 0
+															 			 || action.indexOf("plitTo") > 0 || action.indexOf("Approve") > 0) {
+														 %>
+															<div class="MenuItem" style="opacity: 0.3; cursor: none;">	 
+																<div class="ItemIcon $classIcon">
+																	$itemLabel
+																</div>
+															</div>
+															<% } else { %>
+															<a class="MenuItem" href="$link">	 
+																<div class="ItemIcon $classIcon">
+																	$itemLabel
+																</div>
+															</a>
+															<% } %>
+														 <% } %>
 														</div>
-						          		</div>
-						        		</div>
-									      <div class="BottomLeftRightClickPopupMenu">
-								        <div class="BottomRightRightClickPopupMenu">
-								          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
-								        </div>
-								      </div>
-					      			</div>
-								    </div>
-			      			</div>
-			      		</div>
-			      		<% /*End Popup Menu*/ %>
-		  				</div>
-		  				<div style="clear: right;"><span></span></div>
+													</div>
+												</div>
+												<div class="BottomLeftRightClickPopupMenu">
+												<div class="BottomRightRightClickPopupMenu">
+													<div class="BottomCenterRightClickPopupMenu"><span></span></div>
+												</div>
+											</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<% /*End Popup Menu*/ %>
+							</div>
+							<div style="clear: right;"><span></span></div>
 						</div>
-		  		</div>
-		  	</div>
-		  </div>
-	  </div>
-	  
+					</div>
+				</div>
+			</div>
+		</div>
+		
 <!-- Start ContentContainer -->
 
-		<%  
+		<%	
 			List posts = uicomponent.getPostPageList() ;
-			//System.out.println("\n\n\n Size:  " + posts.size()) ;
+			//System.out.println("\n\n\n Size:	" + posts.size()) ;
 			int checked = 0 ;
 			for(post in posts) {
 				String owner = post.getOwner() ;
@@ -247,89 +247,89 @@
 				List attachments = post.getAttachments() ;
 		%>
 
-	  <div class="ContentContainer" style="margin: 2px 0px 0px 0px;">
-		  <table class="TablePost" cellspacing="0" borderspacing="0">
-		  	<tbody>
-		  		<tr>
-<!-- Start MemberContainer -->	  
+		<div class="ContentContainer" style="margin: 2px 0px 0px 0px;">
+			<table class="TablePost" cellspacing="0" borderspacing="0">
+				<tbody>
+					<tr>
+<!-- Start MemberContainer -->		
 						<td class="MemberContainer">
-				  		<div class="MemberContent">
-					  		<div class="MemberName">
-					  			<div class="State AvailableIcon" title="Phuong's Available"><span></span></div>
-					  			<div class="Name">$owner</div>
-					  			<div class="Action"><span></span></div>
-					  			<div style="clear: left;"><span></span></div>
-					  		</div>
-					  		<div class="Rank">Junior Member</div>
-					  		<img src="/forum/skin/DefaultSkin/webui/background/Avatar1.gif" class="Img" />
-					  		<div class="InfoMember">
-					  			<div>Join Date: Feb 2006</div>
+							<div class="MemberContent">
+								<div class="MemberName">
+									<div class="State AvailableIcon" title="Phuong's Available"><span></span></div>
+									<div class="Name">$owner</div>
+									<div class="Action"><span></span></div>
+									<div style="clear: left;"><span></span></div>
+								</div>
+								<div class="Rank">Junior Member</div>
+								<img src="/forum/skin/DefaultSkin/webui/background/Avatar1.gif" class="Img" />
+								<div class="InfoMember">
+									<div>Join Date: Feb 2006</div>
 									<div>Posts: 150</div>
 									<div>Location: Hanoi, Vietnam</div>
-					  		</div>
-					  	</div>
-					  </td>
+								</div>
+							</div>
+						</td>
 	<!-- End MemberContainer -->
 	
 	<!-- Start PostViewContainer -->
 						<td class="PostViewContainer">
-					  	
-				  		<div class="PostViewHeader">
-				  		<% if(checked == 0) {%>
-				  			<div class="PostViewTitle">
-					  			<div class="PostViewIcon $classIconPost">$subject</div>
-					  			<div class="PostTime">Posted: $createdDate</div>
-					  		</div>
-					  		<% checked = 1;
-					  		  } else { %>
-				  			<div class="PostViewTitle" style="float: left;">
-					  			<div class="PostViewIcon $classIconPost">$subject</div>
-					  			<div class="PostTime">Posted: $createdDate</div>
-					  		</div>
-					  		<div class="CheckPost" style="float: right;">
-					  			<% uiform.renderChild(post.getId()) %>
-					  		</div>
-					  		<div style="clear: both;"><span></span></div>
-					  		<% } %>
-				  		</div>
-				  	<div class="PostContentContainer">	
-				  		<div class="PostContent">
-				  			<div style="padding-top: 8px">$messager</div>
-				  		</div>
-				  		<% if(attachments != null && attachments.size() > 0) {%>
-				  		<div class="AttachmentContainer">
-						  	<div class="AttachmentTitle">Attachments:</div>
-						  	<div class="AttachmentContent">
-						  	<% for(attachment in attachments) {
-						  	 	   String fileName = attachment.getName() ;
-						  	 	   String unit = "Bytes" ;
-						  	 	   double sizeNumber = attachment.getSize() ;
-						  	 	   if(sizeNumber > 1024) {
-						  	 	   	 sizeNumber = sizeNumber/1024 ;
-						  	 	   	 unit = "Kb" ;
-						  	 	   }
-						  	 	   if(sizeNumber > 1024) {
-						  	 	   	 sizeNumber = sizeNumber/1024 ;
-						  	 	   	 unit = "Mb" ;
-						  	 	   }
-						  	 	   String size = "" + sizeNumber ;
-						  	 	   if(size.length() > 5) size = size.substring(0,5);
-						  	%>
-						  		<div class="AttachmentBox">
+							
+							<div class="PostViewHeader">
+							<% if(checked == 0) {%>
+								<div class="PostViewTitle">
+									<div class="PostViewIcon $classIconPost">$subject</div>
+									<div class="PostTime">Posted: $createdDate</div>
+								</div>
+								<% checked = 1;
+									} else { %>
+								<div class="PostViewTitle" style="float: left;">
+									<div class="PostViewIcon $classIconPost">$subject</div>
+									<div class="PostTime">Posted: $createdDate</div>
+								</div>
+								<div class="CheckPost" style="float: right;">
+									<% uiform.renderChild(post.getId()) %>
+								</div>
+								<div style="clear: both;"><span></span></div>
+								<% } %>
+							</div>
+						<div class="PostContentContainer">	
+							<div class="PostContent">
+								<div style="padding-top: 8px">$messager</div>
+							</div>
+							<% if(attachments != null && attachments.size() > 0) {%>
+							<div class="AttachmentContainer">
+								<div class="AttachmentTitle">Attachments:</div>
+								<div class="AttachmentContent">
+								<% for(attachment in attachments) {
+								 		 String fileName = attachment.getName() ;
+								 		 String unit = "Bytes" ;
+								 		 double sizeNumber = attachment.getSize() ;
+								 		 if(sizeNumber > 1024) {
+								 		 	 sizeNumber = sizeNumber/1024 ;
+								 		 	 unit = "Kb" ;
+								 		 }
+								 		 if(sizeNumber > 1024) {
+								 		 	 sizeNumber = sizeNumber/1024 ;
+								 		 	 unit = "Mb" ;
+								 		 }
+								 		 String size = "" + sizeNumber ;
+								 		 if(size.length() > 5) size = size.substring(0,5);
+								%>
+									<div class="AttachmentBox">
 										<div class="AttachmentIcon WordIcon"><span/></div>
 										<a class="AttachmentLabel" href="#">$fileName</a>
 										<div style="clear: left;"><span/></div>
 										<div class="Size">Size: ${size} ${unit}</div>
-						  		</div>
-						  	<% } %>
-						  		<div style="clear: left;"><span/></div>
-						  	</div>
-						  </div>
-				  		<% } %>
-				  	</div>
-				  		<div class="FootPost">
-				  			<div class="PostInfo">
-					  			<div>Last edited by <a href="#">$editBy</a> on $editDate</div>
+									</div>
+								<% } %>
+									<div style="clear: left;"><span/></div>
+								</div>
+							</div>
+							<% } %>
+						</div>
+							<div class="FootPost">
+								<div class="PostInfo">
+									<div>Last edited by <a href="#">$editBy</a> on $editDate</div>
 									<div>Reason: Add new</div>
 								</div>
 								<div class="ButtonContainer">
@@ -343,32 +343,32 @@
 											String actionLink = uicomponent.event(action, post.getId());
 											if(action.equals("Delete")) actionLink = "javascript:if(confirm('Are you sure you want to Delete this Post?')){"+uicomponent.event(action, post.getId())+"}"
 									%>
-									  <div class="ActionButton">
-									  	<div class="NormalStyle">
-									  		<div class="ButtonLeft">
-									  			<div class="ButtonRight">
-									  				<div class="ButtonMiddle">
-									  					<a href="$actionLink">
-									  						<div class="IconButton ${action}PostIcon" title="$title"><span class="LabelIcon"></span>$label</div>
-									  					</a>
-									  				</div>
-									  			</div>
-									  		</div>
-									  	</div>
-									  </div>
-									  <% } %>
+										<div class="ActionButton">
+											<div class="NormalStyle">
+												<div class="ButtonLeft">
+													<div class="ButtonRight">
+														<div class="ButtonMiddle">
+															<a href="$actionLink">
+																<div class="IconButton ${action}PostIcon" title="$title"><span class="LabelIcon"></span>$label</div>
+															</a>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<% } %>
 									</div>
 								</div>
 								<div style="clear: both"><span></span></div>
-				  		</div>
-					  		
-					  </td>
+							</div>
+								
+						</td>
 	<!-- End PostViewContainer-->
 					</tr>
 				</tbody>
-      </table>
-	  </div>
-	  <% } %>
+			</table>
+		</div>
+		<% } %>
 <!-- End ContentContainer -->
 
 	</div>	
@@ -379,70 +379,70 @@
 	<% } else { %>
 		<div class="UIActionForum" style="float: left;">
 	<% } %>
-		  <div class="ActionButton">
-		  	<div class="NormalStyle">
-		  		<div class="ButtonLeft">
-		  			<div class="ButtonRight">
-		  				<div class="ButtonMiddle">
-		  				<% if(topic.getIsLock()) { %>
-		  						<div class="IconButton LockIcon" title="You can not reply this thread."><span class="LockLabel"></span>Post Reply</div>
-		  				<% } else { %>
-		  					<a href="<%=uicomponent.event("AddPost")%>">
-		  						<div class="IconButton PostReplyIcon"><span class="LabelIcon"></span>
-		  							<%=_ctx.appRes(uicomponent.getName() + ".action.AddPost");%>
+			<div class="ActionButton">
+				<div class="NormalStyle">
+					<div class="ButtonLeft">
+						<div class="ButtonRight">
+							<div class="ButtonMiddle">
+							<% if(topic.getIsLock()) { %>
+									<div class="IconButton LockIcon" title="You can not reply this thread."><span class="LockLabel"></span>Post Reply</div>
+							<% } else { %>
+								<a href="<%=uicomponent.event("AddPost")%>">
+									<div class="IconButton PostReplyIcon"><span class="LabelIcon"></span>
+										<%=_ctx.appRes(uicomponent.getName() + ".action.AddPost");%>
 									</div>
-		  					</a>
-		  				<% } %>
-		  					</a>
-		  				</div>
-		  			</div>
-		  		</div>
-		  	</div>
-		  </div>
+								</a>
+							<% } %>
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 		<div title="Go to page Number " class="GotoPageIcon" >
 			<div onclick="eXo.forum.UIForumPortlet.showPopup(this, event);" style="width: 20px; height: 16px;"><span></span></div>
 			<% /*Begin Popup Menu*/ %>
 			<div style="position: relative;">
-  			<div class="UIPopupCategory" style="display: none; ">
-  				<div class="UIRightClickPopupMenu" style="display: block; left: -70px;">
-  					<div class="UIContextMenuContainer">
-						  <div class="TopLeftRightClickPopupMenu">
-          			<div class="TopRightRightClickPopupMenu">
-            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
-          			</div>
-        			</div>
-			        <div class="MiddleLeftRightClickPopupMenu">
-			          <div class="MiddleRightRightClickPopupMenu">
-              		<div class="UIRightPopupMenuContainer" style="padding: 10px 15px;">
-              			<div class="InputPage" style="float:left;">
-              				<% uicomponent.renderChild("gopage2") ; %>
-              			</div>
+				<div class="UIPopupCategory" style="display: none; ">
+					<div class="UIRightClickPopupMenu" style="display: block; left: -70px;">
+						<div class="UIContextMenuContainer">
+							<div class="TopLeftRightClickPopupMenu">
+								<div class="TopRightRightClickPopupMenu">
+									<div class="TopCenterRightClickPopupMenu"><span></span></div>
+								</div>
+							</div>
+							<div class="MiddleLeftRightClickPopupMenu">
+								<div class="MiddleRightRightClickPopupMenu">
+									<div class="UIRightPopupMenuContainer" style="padding: 10px 15px;">
+										<div class="InputPage" style="float:left;">
+											<% uicomponent.renderChild("gopage2") ; %>
+										</div>
 										<div class="UIActionForum" style="float:left;">
-									  	<div class="NormalButtom">
-									  		<div class="ButtonLeft">
-									  			<div class="ButtonRight">
-									  				<div class="ButtonMiddle">
-									  				 <a href="<%=uicomponent.event("GoNumberPage")%>">Go Page</a>
-									  				</div>
-									  			</div>
-									  		</div>
-									  	</div>
-									  </div>
-									  <div style="clear: left;"><span></span></div>
+											<div class="NormalButtom">
+												<div class="ButtonLeft">
+													<div class="ButtonRight">
+														<div class="ButtonMiddle">
+														 <a href="<%=uicomponent.event("GoNumberPage")%>">Go Page</a>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div style="clear: left;"><span></span></div>
 									</div>
-	          		</div>
-	        		</div>
-				      <div class="BottomLeftRightClickPopupMenu">
-			        <div class="BottomRightRightClickPopupMenu">
-			          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
-			        </div>
-			      </div>
-      			</div>
-			    </div>
-  			</div>
-  		</div>
-		  <% /*End Popup Menu*/ %>
+								</div>
+							</div>
+							<div class="BottomLeftRightClickPopupMenu">
+							<div class="BottomRightRightClickPopupMenu">
+								<div class="BottomCenterRightClickPopupMenu"><span></span></div>
+							</div>
+						</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<% /*End Popup Menu*/ %>
 		</div>
 		<% uicomponent.renderChild(UIForumPageIterator.class) ; %>
 		<div style="clear: left;"><span></span></div>

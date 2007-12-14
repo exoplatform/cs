@@ -1,6 +1,6 @@
 /***************************************************************************
- * Copyright 2001-2006 The eXo Platform SARL         All rights reserved.  *
- * Please look at license.txt in info directory for more license detail.   *
+ * Copyright 2001-2006 The eXo Platform SARL				 All rights reserved.	*
+ * Please look at license.txt in info directory for more license detail.	 *
  **************************************************************************/
 package org.exoplatform.forum.webui;
 
@@ -14,26 +14,26 @@ import org.exoplatform.webui.event.EventListener;
 /**
  * Created by The eXo Platform SARL
  * Author : Hung Nguyen
- *          hung.nguyen@exoplatform.com
+ *					hung.nguyen@exoplatform.com
  * Aus 01, 2007 2:48:18 PM 
  */
 @ComponentConfig(
-    lifecycle = UIFormLifecycle.class,
-    template = "app:/templates/forum/webui/UIPostPreview.gtmpl",
-    events = {
-      @EventConfig(listeners = UIPostPreview.BackActionListener.class)
-    }
+		lifecycle = UIFormLifecycle.class,
+		template = "app:/templates/forum/webui/UIPostPreview.gtmpl",
+		events = {
+			@EventConfig(listeners = UIPostPreview.BackActionListener.class)
+		}
 )
 public class UIPostPreview extends UIComponent {
-  
-  
-  public UIPostPreview() {
-    
-  }
-  
-  static  public class BackActionListener extends EventListener<UIPostPreview> {
-    public void execute(Event<UIPostPreview> event) throws Exception {
-      UIPostPreview uiForm = event.getSource() ;
-    }
-  }
+	
+	
+	public UIPostPreview() {
+		
+	}
+	
+	static	public class BackActionListener extends EventListener<UIPostPreview> {
+		public void execute(Event<UIPostPreview> event) throws Exception {
+			UIPostPreview uiForm = event.getSource() ;
+		}
+	}
 }

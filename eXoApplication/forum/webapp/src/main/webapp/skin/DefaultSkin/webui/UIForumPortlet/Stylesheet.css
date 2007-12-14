@@ -8,13 +8,13 @@
  
 /******************************************** ForumBanner ****************************************/
 .UIForumPortlet .ForumBanner {
-  background: url('background/BgBanner1x66.gif') repeat-x top;	
+	background: url('background/BgBanner1x66.gif') repeat-x top;	
 }
 
 .UIForumPortlet .ForumBanner .LeftBanner {
-  background: url('background/Logo223x66.gif') no-repeat left top;	
-  height: 66px;
-  padding-left: 223px;
+	background: url('background/Logo223x66.gif') no-repeat left top;	
+	height: 66px;
+	padding-left: 223px;
 }
 
 .UIForumPortlet .ForumBanner .BannerTitle {
@@ -43,26 +43,26 @@
 }
 
 .UIForumPortlet .UISearchForm .Search {
-  background: url('icons/16x16/SearchIcon.gif') no-repeat ;	
-  height: 16px;
-  width: 16px;
-  float: right;
-  margin: 3px 5px 0px 0px;
-  cursor: pointer;
+	background: url('icons/16x16/SearchIcon.gif') no-repeat ;	
+	height: 16px;
+	width: 16px;
+	float: right;
+	margin: 3px 5px 0px 0px;
+	cursor: pointer;
 }
 
 .UIForumPortlet .UISearchForm .AdvancedSearch {
-  background: url('icons/16x16/FindIcon.gif') no-repeat ;	
-  height: 16px; width: 16px;
-  float: right; cursor: pointer;
-  margin: 3px 0px 0px 2px;
+	background: url('icons/16x16/FindIcon.gif') no-repeat ;	
+	height: 16px; width: 16px;
+	float: right; cursor: pointer;
+	margin: 3px 0px 0px 2px;
 }
 
 .UIForumPortlet .UISearchForm .SeparatorLine {
 	background: url('background/SeparatorLine2x27.gif') no-repeat ;
-  float: right;
-  margin: 0px 7px;
-  height: 27px; width: 2px;
+	float: right;
+	margin: 0px 7px;
+	height: 27px; width: 2px;
 }
 
 /******************************************** UIBreadcumbs ****************************************/
@@ -295,7 +295,7 @@
 	margin: 0px 4px;
 }
 
-.UIForumPortlet .ContentContainer .UIGrid .Tdbox  {
+.UIForumPortlet .ContentContainer .UIGrid .Tdbox	{
 	padding: 0px;
 	text-align: center;
 	vertical-align: middle;

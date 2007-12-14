@@ -1,6 +1,6 @@
 /***************************************************************************
- * Copyright 2001-2006 The eXo Platform SARL         All rights reserved.  *
- * Please look at license.txt in info directory for more license detail.   *
+ * Copyright 2001-2006 The eXo Platform SARL				 All rights reserved.	*
+ * Please look at license.txt in info directory for more license detail.	 *
  **************************************************************************/
 package org.exoplatform.forum.webui;
 
@@ -15,26 +15,26 @@ import org.exoplatform.webui.form.UIFormStringInput;
 /**
  * Created by The eXo Platform SARL
  * Author : Hung Nguyen
- *          hung.nguyen@exoplatform.com
+ *					hung.nguyen@exoplatform.com
  * Aus 01, 2007 2:48:18 PM 
  */
 @ComponentConfig(
-    lifecycle = UIFormLifecycle.class,
-    template = "app:/templates/forum/webui/UISearchForm.gtmpl",
-    events = {
-      @EventConfig(listeners = UISearchForm.SearchActionListener.class)      
-    }
+		lifecycle = UIFormLifecycle.class,
+		template = "app:/templates/forum/webui/UISearchForm.gtmpl",
+		events = {
+			@EventConfig(listeners = UISearchForm.SearchActionListener.class)			
+		}
 )
 public class UISearchForm extends UIForm {
-  final static  private String FIELD_SEARCHVALUE = "inputValue" ;
-  
-  public UISearchForm() {
-    addChild(new UIFormStringInput(FIELD_SEARCHVALUE, FIELD_SEARCHVALUE, null)) ;
-  }
-  
-  static  public class SearchActionListener extends EventListener<UISearchForm> {
-    public void execute(Event<UISearchForm> event) throws Exception {
-      UISearchForm uiForm = event.getSource() ;
-    }
-  }
+	final static	private String FIELD_SEARCHVALUE = "inputValue" ;
+	
+	public UISearchForm() {
+		addChild(new UIFormStringInput(FIELD_SEARCHVALUE, FIELD_SEARCHVALUE, null)) ;
+	}
+	
+	static	public class SearchActionListener extends EventListener<UISearchForm> {
+		public void execute(Event<UISearchForm> event) throws Exception {
+			UISearchForm uiForm = event.getSource() ;
+		}
+	}
 }

@@ -17,95 +17,95 @@
 			 
 		 %>
 			<div class="UIForumCategory">
-			  <div class="ForumToolbar">
-				  <div class="LeftBar">
-				  	<div class="RightBar">
-				  		<div class="CenterBar">
-				  			<div class="Title" title="$description"><a href="<%=uicomponent.event("OpenCategory", category.getId())%>">$title</a></div>
-				  			<div class="CollapseButton" title="Collapse"  onclick="eXo.forum.UIForumPortlet.expandCollapse(this) ;"><span></span></div>
+				<div class="ForumToolbar">
+					<div class="LeftBar">
+						<div class="RightBar">
+							<div class="CenterBar">
+								<div class="Title" title="$description"><a href="<%=uicomponent.event("OpenCategory", category.getId())%>">$title</a></div>
+								<div class="CollapseButton" title="Collapse"	onclick="eXo.forum.UIForumPortlet.expandCollapse(this) ;"><span></span></div>
 								<div style="clear: both;"><span></span></div>
-				  		</div>
-				  	</div>
-				  </div>
-			  </div>
-			  <div class="ContentContainer">
-				  <div class="ForumList">
-				  	<table cellspacing="0" borderspacing="0" id="" class="UIGrid">
-				  		<thead>
-				  			<tr>
-				      		<th style="width: 40px;"></th>
-					      	<th>Forums</th>
-					      	<th style="width: 30%;">Last posts</th>
-					      	<th style="width: 50px;">Threads</th>
-					      	<th style="width: 50px;">Posts</th>
-					 	      <th style="width: 170px;">Moderator</th>
-					      </tr>
-					    </thead>
-					    <tbody>
-					    <% 
-					    	List forums = uicomponent.getForumList(category.getId());
-					    	if(forums.size() == 0) {
-					    %>
-					    	<tr>
-					    		<td></td>
-					    		<td class="Tdbox">Not Forum !</td>
-					    		<td class="Tdbox">Not Theard !</td>
-					    		<td class="Tdbox">0</td>
-					    		<td class="Tdbox">0</td>
-					    		<td></td>
-					    	</tr>
-					    <% }else {%>
-					      <%
-					        GregorianCalendar calendar = new GregorianCalendar() ;
-					        long toDay = calendar.getTimeInMillis();
-						    	String classRow = "whileRow";
-						    	int i = 0;
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="ContentContainer">
+					<div class="ForumList">
+						<table cellspacing="0" borderspacing="0" id="" class="UIGrid">
+							<thead>
+								<tr>
+									<th style="width: 40px;"></th>
+									<th>Forums</th>
+									<th style="width: 30%;">Last posts</th>
+									<th style="width: 50px;">Threads</th>
+									<th style="width: 50px;">Posts</th>
+					 				<th style="width: 170px;">Moderator</th>
+								</tr>
+							</thead>
+							<tbody>
+							<% 
+								List forums = uicomponent.getForumList(category.getId());
+								if(forums.size() == 0) {
+							%>
+								<tr>
+									<td></td>
+									<td class="Tdbox">Not Forum !</td>
+									<td class="Tdbox">Not Theard !</td>
+									<td class="Tdbox">0</td>
+									<td class="Tdbox">0</td>
+									<td></td>
+								</tr>
+							<% }else {%>
+								<%
+									GregorianCalendar calendar = new GregorianCalendar() ;
+									long toDay = calendar.getTimeInMillis();
+									String classRow = "whileRow";
+									int i = 0;
 				 					for(forum in forums) {
-						        if(i%2 == 0) classRow = "whileRow";
-						        else classRow = "OddRow";
-						        ++i;
-						        String classIconForum = "ForumNormalIcon";
-			              String titleIconForum = "Forum Contains No New Post";
-						        String forumTitle = forum.getForumName();
-						        String forumDescription = forum.getDescription();
-						        String topicNewPostIcon = "";
-						        String topicNewPostTitle = "";
-						        String lastPostBy = "";
-						        String dateTime = "";
-						        String openLinkLastPost = "#";
-						        
+										if(i%2 == 0) classRow = "whileRow";
+										else classRow = "OddRow";
+										++i;
+										String classIconForum = "ForumNormalIcon";
+										String titleIconForum = "Forum Contains No New Post";
+										String forumTitle = forum.getForumName();
+										String forumDescription = forum.getDescription();
+										String topicNewPostIcon = "";
+										String topicNewPostTitle = "";
+										String lastPostBy = "";
+										String dateTime = "";
+										String openLinkLastPost = "#";
+										
 				 						Topic topicNewPost = uicomponent.getLastTopic(forum.getLastTopicPath());
 				 						if(topicNewPost != null) {
-							        topicNewPostIcon = topicNewPost.getIcon();
-							        if(topicNewPostIcon.length() <= 0)
-							        	topicNewPostIcon = "NormalTopicIcon" ;
-							        topicNewPostTitle = topicNewPost.getTopicName();
-							        lastPostBy = topicNewPost.getLastPostBy();
-							        Date postDate = topicNewPost.getLastPostDate();
-							        dateTime = (1+postDate.getMonth()) + "/" + postDate.getDate() + "/" + (1900 + postDate.getYear());
-							        long createdDate = topicNewPost.getLastPostDate().getTime();
-							        if((toDay-createdDate)/86400000 < 4){
-							          classIconForum = "ForumNewPostIcon";
-							          titleIconForum = "Forum Contains New Posts";
-							        }
-							        openLinkLastPost = uicomponent.event("OpenLastTopicLink", (category.getId()+","+forum.getId()+","+topicNewPost.getId()))
-						        }
-			              if(forum.getIsLock() == true){
-			                classIconForum = "ForumLockedIcon";
-			                titleIconForum = "Forum is Locked for Posting";
-			              }
-			              if(forum.getIsClosed() == true){
-			                classIconForum = "ForumLockedIcon";//TODO: Rename class ForumLockedIcon into ForumCloseIcon
-			                titleIconForum = "Forum is Closed for Posting";
-			              }
+											topicNewPostIcon = topicNewPost.getIcon();
+											if(topicNewPostIcon.length() <= 0)
+												topicNewPostIcon = "NormalTopicIcon" ;
+											topicNewPostTitle = topicNewPost.getTopicName();
+											lastPostBy = topicNewPost.getLastPostBy();
+											Date postDate = topicNewPost.getLastPostDate();
+											dateTime = (1+postDate.getMonth()) + "/" + postDate.getDate() + "/" + (1900 + postDate.getYear());
+											long createdDate = topicNewPost.getLastPostDate().getTime();
+											if((toDay-createdDate)/86400000 < 4){
+												classIconForum = "ForumNewPostIcon";
+												titleIconForum = "Forum Contains New Posts";
+											}
+											openLinkLastPost = uicomponent.event("OpenLastTopicLink", (category.getId()+","+forum.getId()+","+topicNewPost.getId()))
+										}
+										if(forum.getIsLock() == true){
+											classIconForum = "ForumLockedIcon";
+											titleIconForum = "Forum is Locked for Posting";
+										}
+										if(forum.getIsClosed() == true){
+											classIconForum = "ForumLockedIcon";//TODO: Rename class ForumLockedIcon into ForumCloseIcon
+											titleIconForum = "Forum is Closed for Posting";
+										}
 
-						        String topicCount = (String)forum.getTopicCount();
-						        String postCount = (String)forum.getPostCount();
-						        String [] forumModerators = forum.getModerators();
-						        String id = category.getId() + "," + forum.getId();
-						        
-						    %>
-							    	<tr class="$classRow">
+										String topicCount = (String)forum.getTopicCount();
+										String postCount = (String)forum.getPostCount();
+										String [] forumModerators = forum.getModerators();
+										String id = category.getId() + "," + forum.getId();
+										
+								%>
+										<tr class="$classRow">
 											<td class="Tdbox"><div class="ForumStatusIcon $classIconForum" title="$titleIconForum"><span></span></div></td>
 											<td >
 												<a href="<%=uicomponent.event("OpenForumLink", id)%>" class="ForumTitle">$forumTitle</a><span class="ForumQuantity">&nbsp;(5 viewing)</span>
@@ -133,15 +133,15 @@
 											<% } %>
 												<div style="clear: left;"><span></span></div>
 											</td>
-						   			</tr>
-					   		<% } 
-					   		 }
-					    %>
-						  </tbody>
-					  </table>							
-				  	
-			  	</div>
-			  </div>
+							 			</tr>
+						 		<% } 
+						 		 }
+							%>
+							</tbody>
+						</table>							
+						
+					</div>
+				</div>
 			</div>	
 		<% } %>
 		<% // End ForumCategory%>

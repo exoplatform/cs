@@ -44,5 +44,110 @@
 }
 
 .UITagForm .TagsList .Selected {
-	background: #e8e8ef url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/RedTagIcon.gif') no-repeat 10px center;
+	background: #e8e8ef url('../../skinIcons/16x16/icons/RedTagIcon.gif') no-repeat 10px center;
 }
+
+.UIForumPortlet .Color {
+	background: url('background/Color.gif') no-repeat;
+	line-height: 16px;
+	height: 16px;
+	padding-left: 28px;
+	margin: 2px 0px;
+}
+
+.UIForumPortlet .Blue {
+	background-position: left top;
+}
+
+.UIForumPortlet .DarkGoldenRod {
+	background-position: left -24px;	
+}
+
+.UIForumPortlet .Green {
+	background-position: left -48px;	
+}
+
+.UIForumPortlet .Yellow {
+	background-position: left -72px;	
+}
+
+.UIForumPortlet .BlueViolet {
+	background-position: left -96px;	
+}
+
+.UIForumPortlet .Orange {
+	background-position: left -120px;	
+}
+
+.UIForumPortlet .DarkBlue {
+	background-position: left -144px;	
+}
+
+.UIForumPortlet .IndianRed {
+	background-position: left -168px;	
+}
+
+.UIForumPortlet .DarkCyan {
+	background-position: left -192px;	
+}
+
+.UIForumPortlet .LawnGreen {
+	background-position: left -216px;	
+}
+
+.UIForumPortlet .Violet {
+	background-position: left -230px;	
+}
+
+.UIForumPortlet .Red {
+	background-position: left bottom;	
+}
+
+.BlueTagIcon {
+	background: url('icons/BlueTagIcon.gif') no-repeat ;
+}
+
+.DarkGoldenRodTagIcon {
+	background: url('icons/DarkGoldenRodTagIcon.gif') no-repeat ;
+}
+
+.GreenTagIcon {
+	background: url('icons/GreenTagIcon.gif') no-repeat ;
+}
+
+.YellowTagIcon {
+	background: url('icons/YellowTagIcon.gif') no-repeat ;
+}
+
+.BlueVioletTagIcon {
+	background: url('icons/BlueVioletTagIcon.gif') no-repeat ;
+}
+
+.OrangeTagIcon {
+	background: url('icons/OrangeTagIcon.gif') no-repeat ;
+}
+
+.DarkBlueTagIcon {
+	background: url('icons/DarkBlueTagIcon.gif') no-repeat ;
+}
+
+.IndianRedTagIcon {
+	background: url('icons/IndianRedTagIcon.gif') no-repeat ;
+}
+
+.DarkCyanTagIcon {
+	background: url('icons/DarkCyanTagIcon.gif') no-repeat ;
+}
+
+.LawnGreenTagIcon {
+	background: url('icons/LawnGreenTagIcon.gif') no-repeat ;
+}
+
+.VioletTagIcon {
+	background: url('icons/VioletTagIcon.gif') no-repeat ;
+}
+
+.RedTagIcon {
+	background: url('icons/RedTagIcon.gif') no-repeat ;
+}
+

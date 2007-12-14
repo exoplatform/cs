@@ -35,7 +35,7 @@ public class UserForum {
 	public Long getTotalTopic() {return this.totalTopic ;}
 	
 	public String[] getReadTopic(){return readTopic;}
-  public void setReadTopic(String[] readTopic){this.readTopic = readTopic;}
+	public void setReadTopic(String[] readTopic){this.readTopic = readTopic;}
 	
 	
 	

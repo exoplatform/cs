@@ -1,6 +1,6 @@
 /***************************************************************************
- * Copyright 2001-2007 The eXo Platform SARL         All rights reserved.  *
- * Please look at license.txt in info directory for more license detail.   *
+ * Copyright 2001-2007 The eXo Platform SARL				 All rights reserved.	*
+ * Please look at license.txt in info directory for more license detail.	 *
  **************************************************************************/
 package org.exoplatform.forum.webui.popup;
 
@@ -24,100 +24,100 @@ import org.exoplatform.webui.form.UIFormUploadInput;
 /**
  * Created by The eXo Platform SARL
  * Author : Pham Tuan
- *          tuan.pham@exoplatform.com
- * Aug 24, 2007  
+ *					tuan.pham@exoplatform.com
+ * Aug 24, 2007	
  */
 @ComponentConfig(
-    lifecycle = UIFormLifecycle.class,
-    template =  "system:/groovy/webui/form/UIForm.gtmpl",
-    events = {
-      @EventConfig(listeners = UIAttachFileForm.SaveActionListener.class), 
-      @EventConfig(listeners = UIAttachFileForm.CancelActionListener.class, phase = Phase.DECODE)
-    }
+		lifecycle = UIFormLifecycle.class,
+		template =	"system:/groovy/webui/form/UIForm.gtmpl",
+		events = {
+			@EventConfig(listeners = UIAttachFileForm.SaveActionListener.class), 
+			@EventConfig(listeners = UIAttachFileForm.CancelActionListener.class, phase = Phase.DECODE)
+		}
 )
 
 public class UIAttachFileForm extends UIForm implements UIPopupComponent {
 
-  final static public String FIELD_UPLOAD = "upload" ;  
-  private boolean isTopicForm = true ;
+	final static public String FIELD_UPLOAD = "upload" ;	
+	private boolean isTopicForm = true ;
 
-  public UIAttachFileForm() throws Exception {
-    setMultiPart(true) ;
-    UIFormUploadInput uiInput = new UIFormUploadInput(FIELD_UPLOAD, FIELD_UPLOAD) ;
-    addUIFormInput(uiInput) ;
-  }
+	public UIAttachFileForm() throws Exception {
+		setMultiPart(true) ;
+		UIFormUploadInput uiInput = new UIFormUploadInput(FIELD_UPLOAD, FIELD_UPLOAD) ;
+		addUIFormInput(uiInput) ;
+	}
 
 	public void updateIsTopicForm(boolean isTopicForm) throws Exception {
-	  this.isTopicForm = isTopicForm ;
+		this.isTopicForm = isTopicForm ;
 	}
 	
-  public void activate() throws Exception {}
-  public void deActivate() throws Exception {}
+	public void activate() throws Exception {}
+	public void deActivate() throws Exception {}
 
-  static  public class SaveActionListener extends EventListener<UIAttachFileForm> {
-    public void execute(Event<UIAttachFileForm> event) throws Exception {
-      UIAttachFileForm uiForm = event.getSource();
-      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-      UIFormUploadInput input = (UIFormUploadInput)uiForm.getUIInput(FIELD_UPLOAD);
-      UploadResource uploadResource = input.getUploadResource() ;
-      if(uploadResource == null) {
-        uiApp.addMessage(new ApplicationMessage("UIAttachFileForm.msg.fileName-error", null, 
-            ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
-      }
-      String fileName = uploadResource.getFileName() ;
-      if(fileName == null || fileName.equals("")) {
-        uiApp.addMessage(new ApplicationMessage("UIAttachFileForm.msg.fileName-error", null, 
-            ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
-      }
-      UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
-      UITopicForm topicForm = forumPortlet.findFirstComponentOfType(UITopicForm.class);
-      UIPostForm postForm = forumPortlet.findFirstComponentOfType(UIPostForm.class);
+	static	public class SaveActionListener extends EventListener<UIAttachFileForm> {
+		public void execute(Event<UIAttachFileForm> event) throws Exception {
+			UIAttachFileForm uiForm = event.getSource();
+			UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+			UIFormUploadInput input = (UIFormUploadInput)uiForm.getUIInput(FIELD_UPLOAD);
+			UploadResource uploadResource = input.getUploadResource() ;
+			if(uploadResource == null) {
+				uiApp.addMessage(new ApplicationMessage("UIAttachFileForm.msg.fileName-error", null, 
+						ApplicationMessage.WARNING)) ;
+				event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+				return ;
+			}
+			String fileName = uploadResource.getFileName() ;
+			if(fileName == null || fileName.equals("")) {
+				uiApp.addMessage(new ApplicationMessage("UIAttachFileForm.msg.fileName-error", null, 
+						ApplicationMessage.WARNING)) ;
+				event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+				return ;
+			}
+			UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
+			UITopicForm topicForm = forumPortlet.findFirstComponentOfType(UITopicForm.class);
+			UIPostForm postForm = forumPortlet.findFirstComponentOfType(UIPostForm.class);
 			
-      try {
-        BufferAttachment attachfile = new BufferAttachment() ;
-        attachfile.setId("Attachment" + IdGenerator.generate());
-        attachfile.setName(uploadResource.getFileName()) ;
-        attachfile.setInputStream(input.getUploadDataAsStream()) ;
-        attachfile.setMimeType(uploadResource.getMimeType()) ;
-        attachfile.setSize((long)uploadResource.getUploadedSize());
+			try {
+				BufferAttachment attachfile = new BufferAttachment() ;
+				attachfile.setId("Attachment" + IdGenerator.generate());
+				attachfile.setName(uploadResource.getFileName()) ;
+				attachfile.setInputStream(input.getUploadDataAsStream()) ;
+				attachfile.setMimeType(uploadResource.getMimeType()) ;
+				attachfile.setSize((long)uploadResource.getUploadedSize());
 				if(uiForm.isTopicForm) {
 					topicForm.addToUploadFileList(attachfile) ;
-          topicForm.refreshUploadFileList() ;
+					topicForm.refreshUploadFileList() ;
 				} else {
 					postForm.addToUploadFileList(attachfile) ;
-          postForm.refreshUploadFileList() ;
+					postForm.refreshUploadFileList() ;
 				}
-         UploadService uploadService = uiForm.getApplicationComponent(UploadService.class) ;
-         uploadService.removeUpload(input.getUploadId()) ;
-      } catch(Exception e) {
-        uiApp.addMessage(new ApplicationMessage("UIAttachFileForm.msg.upload-error", null, 
-            ApplicationMessage.WARNING));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        e.printStackTrace() ;
-        return ;
-      }
-      UIPopupAction popupAction = forumPortlet.findComponentById("UIChildPopupAction") ;
-      popupAction.deActivate() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
-      if(uiForm.isTopicForm) {
-      	event.getRequestContext().addUIComponentToUpdateByAjax(topicForm) ;
-      } else {
-      	event.getRequestContext().addUIComponentToUpdateByAjax(postForm) ;
-      }
-    }
-  }
+				 UploadService uploadService = uiForm.getApplicationComponent(UploadService.class) ;
+				 uploadService.removeUpload(input.getUploadId()) ;
+			} catch(Exception e) {
+				uiApp.addMessage(new ApplicationMessage("UIAttachFileForm.msg.upload-error", null, 
+						ApplicationMessage.WARNING));
+				event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+				e.printStackTrace() ;
+				return ;
+			}
+			UIPopupAction popupAction = forumPortlet.findComponentById("UIChildPopupAction") ;
+			popupAction.deActivate() ;
+			event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+			if(uiForm.isTopicForm) {
+				event.getRequestContext().addUIComponentToUpdateByAjax(topicForm) ;
+			} else {
+				event.getRequestContext().addUIComponentToUpdateByAjax(postForm) ;
+			}
+		}
+	}
 
-  static  public class CancelActionListener extends EventListener<UIAttachFileForm> {
-    public void execute(Event<UIAttachFileForm> event) throws Exception {
-      UIForumPortlet forumPortlet = event.getSource().getAncestorOfType(UIForumPortlet.class) ;
-      UIPopupAction popupAction = forumPortlet.findComponentById("UIChildPopupAction");
-      popupAction.setRendered(false)  ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
-    }
-  }
+	static	public class CancelActionListener extends EventListener<UIAttachFileForm> {
+		public void execute(Event<UIAttachFileForm> event) throws Exception {
+			UIForumPortlet forumPortlet = event.getSource().getAncestorOfType(UIForumPortlet.class) ;
+			UIPopupAction popupAction = forumPortlet.findComponentById("UIChildPopupAction");
+			popupAction.setRendered(false)	;
+			event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+		}
+	}
 
 }

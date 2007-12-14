@@ -1,6 +1,6 @@
 /***************************************************************************
- * Copyright 2001-2007 The eXo Platform SARL         All rights reserved.  *
- * Please look at license.txt in info directory for more license detail.   *
+ * Copyright 2001-2007 The eXo Platform SARL				 All rights reserved.	*
+ * Please look at license.txt in info directory for more license detail.	 *
  **************************************************************************/
 package org.exoplatform.forum.service.impl;
 
@@ -20,17 +20,17 @@ import org.exoplatform.services.jcr.ext.common.SessionProvider;
 /**
  * Created by The eXo Platform SARL
  * Author : Tuan Nguyen
- *          tuan.nguyen@exoplatform.com
- * Jul 2, 2007  
+ *					tuan.nguyen@exoplatform.com
+ * Jul 2, 2007	
  */
 public interface DataStorage {
 	public List<Category> getCategories() throws Exception;
 	public Category getCategory(String categoryId) throws Exception;
 	public void saveCategory(Category category, boolean isNew)throws Exception;
-	public Category removeCategory(String categoryId)throws Exception;  
+	public Category removeCategory(String categoryId)throws Exception;	
 	
 	public List<Forum> getForums(String categoryId)throws Exception;
-	public Forum getForum(String categoryId, String forumId)throws Exception;  
+	public Forum getForum(String categoryId, String forumId)throws Exception;	
 	public void saveForum(String categoryId, Forum forum, boolean isNew) throws Exception;
 	public Forum removeForum(String categoryId, String forumId)throws Exception;
 	public void moveForum(String forumId, String forumPath, String destCategoryPath) throws Exception;
@@ -42,7 +42,7 @@ public interface DataStorage {
 	public TopicView getTopicView(String categoryId, String forumId, String topicId) throws Exception;
 	public void saveTopic(String categoryId, String forumId, Topic topic, boolean isNew) throws Exception;
 	public Topic removeTopic(String categoryId, String forumId, String topicId) throws Exception;
-	public void moveTopic(String topicId, String  topicPath, String destForumPath) throws Exception;
+	public void moveTopic(String topicId, String	topicPath, String destForumPath) throws Exception;
 	
 	public JCRPageList getPosts(String categoryId, String forumId, String topicId)throws Exception;
 	public Post getPost(String categoryId, String forumId, String topicId, String postId)throws Exception;
@@ -60,9 +60,11 @@ public interface DataStorage {
 	public List<ForumLinkData> getAllLink() throws Exception ;
 	
 	public Tag getTag(SessionProvider sProvider, String tagId) throws Exception ;
-	public List<Tag> getTagsByTopic(SessionProvider sProvider, String topicId) throws Exception ;
+	public List<Tag> getTags(SessionProvider sProvider) throws Exception ;
+	public List<Tag> getTagsByUser(SessionProvider sProvider, String userName) throws Exception ;
+	public List<Tag> getTagsByTopic(SessionProvider sProvider, String topicPath) throws Exception ;
 	public List<Topic> getTopicsByTag(SessionProvider sProvider, String tagId) throws Exception ;
-	public void saveTag(SessionProvider sProvider) throws Exception ;
-	public void addTopicInTag(SessionProvider sProvider, String topicId) throws Exception ;
+	public void saveTag(SessionProvider sProvider, Tag newTag) throws Exception ;
+	public void addTopicInTag(SessionProvider sProvider, String tagId, String topicPath) throws Exception ;
 	public void removeTag(SessionProvider sProvider, String tagId) throws Exception ;
 }

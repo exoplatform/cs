@@ -20,17 +20,17 @@
 }
  
 .UIForumPortlet .UIActionForum .NormalStyle .ButtonLeft {
-  background: url('background/buttons/LeftNormalStyleButton7x22.gif') no-repeat left top;
-  padding: 0px 0px 0px 7px;
+	background: url('background/buttons/LeftNormalStyleButton7x22.gif') no-repeat left top;
+	padding: 0px 0px 0px 7px;
 }
 
 .UIForumPortlet .UIActionForum .NormalStyle .ButtonRight {
-  background: url('background/buttons/RightNormalStyleButton7x22.gif') no-repeat right top;
-  padding: 0px 7px 0px 0px ;
+	background: url('background/buttons/RightNormalStyleButton7x22.gif') no-repeat right top;
+	padding: 0px 7px 0px 0px ;
 }
 
 .UIForumPortlet .UIActionForum .NormalStyle .ButtonMiddle {
-  line-height: 20px;
+	line-height: 20px;
 	background: url('background/buttons/MiddleNormalStyleButton1x22.gif') repeat-x top;
 }
 
@@ -54,17 +54,17 @@
 }
  
 .UIForumPortlet .UIActionForum .NormalButtom .ButtonLeft {
-  background: url('background/buttons/LeftButtom3x18.gif') no-repeat left top;
-  padding: 0px 0px 0px 3px;
+	background: url('background/buttons/LeftButtom3x18.gif') no-repeat left top;
+	padding: 0px 0px 0px 3px;
 }
 
 .UIForumPortlet .UIActionForum .NormalButtom .ButtonRight {
-  background: url('background/buttons/RightButtom3x18.gif') no-repeat right top;
-  padding: 0px 3px 0px 0px ;
+	background: url('background/buttons/RightButtom3x18.gif') no-repeat right top;
+	padding: 0px 3px 0px 0px ;
 }
 
 .UIForumPortlet .UIActionForum .NormalButtom .ButtonMiddle {
-  line-height: 18px;
+	line-height: 18px;
 	background: url('background/buttons/MiddleButtom1x18.gif') repeat-x top;
 }
 
@@ -145,7 +145,7 @@
 	white-space: nowrap;
 }
 
-/******************************  OverButton  ***************************************/
+/******************************	OverButton	***************************************/
 .UIForumPortlet .UICategoryStyle .LeftOverButton {
 	background: url('background/LeftOverButton5x22.gif') no-repeat left top;
 	padding-left: 5px;
