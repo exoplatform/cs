@@ -13,6 +13,7 @@ import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
 import org.exoplatform.calendar.webui.UICalendars;
+import org.exoplatform.calendar.webui.UIMiniCalendar;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.upload.UploadResource;
@@ -88,8 +89,10 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
         UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
         UICalendars uiCalendars = calendarPortlet.findFirstComponentOfType(UICalendars.class) ;
         UICalendarViewContainer uiCalendarViewContainer = calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
+        calendarPortlet.findFirstComponentOfType(UIMiniCalendar.class).updateMiniCal() ;
         uiCalendarViewContainer.refresh() ;
         uploadService.removeUpload(input.getUploadId()) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(calendarPortlet.findFirstComponentOfType(UIMiniCalendar.class)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendars) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarViewContainer) ;
         calendarPortlet.cancelAction() ;
