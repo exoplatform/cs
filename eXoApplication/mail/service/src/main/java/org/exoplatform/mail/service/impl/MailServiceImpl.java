@@ -397,9 +397,13 @@ public class MailServiceImpl implements MailService{
             setPart(msg, newMsg, username);
           }
           
+          boolean rootIsUnread = true; 
           // Use for conversation
           Message rootMsg  = getRootMessage(sProvider, username, accountId, newMsg) ;
           if (rootMsg != null) {
+            if (!rootMsg.isUnread()) {
+              rootIsUnread = false ;
+            }
             newMsg = updateRootMessage(sProvider, username, accountId, rootMsg, newMsg);
           } else {
             newMsg.setMessageIds(new String[] {newMsg.getId()});
@@ -428,7 +432,8 @@ public class MailServiceImpl implements MailService{
               storeFolder.setLabel(account.getIncomingFolder()) ;
               storeFolder.setPersonalFolder(false) ;
             }  
-            if (rootMsg == null) {
+
+            if (rootMsg == null || (!rootIsUnread)) {
               storeFolder.setNumberOfUnreadMessage((storeFolder.getNumberOfUnreadMessage() + 1)) ;
             } 
             if (rootMsg == null) {
