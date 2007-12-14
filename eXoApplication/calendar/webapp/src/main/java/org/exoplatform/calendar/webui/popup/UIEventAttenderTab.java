@@ -42,9 +42,11 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
     super(arg0);
     setComponentConfig(getClass(), null) ;
     calendar_ = CalendarUtils.getInstanceTempCalendar() ;
-
-    addUIFormInput(new UIFormComboBox(FIELD_FROM_TIME, FIELD_FROM_TIME, getTimes())) ;
-    addUIFormInput(new UIFormComboBox(FIELD_TO_TIME, FIELD_TO_TIME, getTimes())) ;
+    Map<String, String> fromJsActions = new HashMap<String, String>() ;
+    fromJsActions.put(UIFormComboBox.ON_BLUR, "eXo.calendar.UICombobox.synchronize(this)") ;
+    addUIFormInput(new UIFormComboBox(FIELD_FROM_TIME, FIELD_FROM_TIME, getTimes(), fromJsActions)) ;
+    addUIFormInput(new UIFormComboBox(FIELD_TO_TIME, FIELD_TO_TIME, getTimes(), fromJsActions)) ;
+    
     addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_DATEALL, FIELD_DATEALL, false)) ;
     UIFormCheckBoxInput<Boolean> checkFreeInput = new UIFormCheckBoxInput<Boolean>(FIELD_CHECK_TIME, FIELD_CHECK_TIME, false) ;
     checkFreeInput.setOnChange("OnChange") ;

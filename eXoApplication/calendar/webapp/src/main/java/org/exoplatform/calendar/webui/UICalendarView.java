@@ -122,7 +122,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   private Map<Integer, String> monthsMap_ = new LinkedHashMap<Integer, String>() ;
   private Map<String, String> priorityMap_ = new HashMap<String, String>() ;
   abstract LinkedHashMap<String, CalendarEvent> getDataMap() ;
-
+  protected DateFormatSymbols dfs_  ;
   public UICalendarView() throws Exception{
     initCategories() ;
 
@@ -131,15 +131,15 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
     int gmtoffset = calendar_.get(Calendar.DST_OFFSET) + calendar_.get(Calendar.ZONE_OFFSET);
     calendar_.setTimeInMillis(System.currentTimeMillis() - gmtoffset) ;
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, dd MMM yyyy k:m:s z");
-    //DateFormatSymbols dfs = new DateFormatSymbols() ;
+    dfs_ = new DateFormatSymbols() ;
     System.out.println("\n\n GMT Time " + simpleDateFormat.format(calendar_.getTime()));
     int i = 0 ; 
-    for(String month : MONTHS) {
+    for(String month : dfs_.getMonths()) {
       monthsMap_.put(i, month) ;
       i++ ;
     }
     int j = 1 ;
-    for(String month : DAYS) {
+    for(String month : dfs_.getWeekdays()) {
       daysMap_.put(j, month) ;
       j++ ;
     }

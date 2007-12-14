@@ -62,10 +62,11 @@
 					<%
 						String cssStyle = "" ;
 						String dayLabel = "" ;
-					 	for(day in uicomponent.getDaysName()) {
+						i= 0;
+						while(i++ <7) {
 							cssStyle = "" ;
-							if(day.equals(uicomponent.SUNDAY)) cssStyle = "color: red;" ;
-							dayLabel = _ctx.appRes("UICalendarView.label." + day) ;
+							if(i==0) cssStyle = "color: red;" ;
+							dayLabel = uicomponent.dfs_.getWeekdays()[i] ;
 					%>
   						<div class="WeekTitle" style="$cssStyle">$dayLabel</div>
 	  			<%
@@ -95,6 +96,9 @@
 							<div class="EventOnDayContent">
 								<div style="float:left;margin:3px 0px 0px 2px;">
 									<%uicomponent.renderField(uicomponent.getChildById(event.id))%>
+								</div>
+								<div>
+									<div class="<%=(uicomponent.getPriority(event.getPriority()) == null)? "" :  uicomponent.getPriority(event.getPriority())%>PriorityIcon" style="float:left;"><span></span></div>
 									$event.summary
 								</div>
 							</div>

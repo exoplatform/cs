@@ -2,14 +2,14 @@ function UICombobox() {
 }
 
 UICombobox.prototype.init = function(textbox) {
-	 if(typeof(textbox) == "string") textbox = document.getElementById(textbox) ;
- var UICombobox = eXo.calendar.UICombobox ;
- var onfocus = textbox.getAttribute("onfocus") ;
- var onclick = textbox.getAttribute("onclick") ;
- var onblur = textbox.getAttribute("onblur") ;
- if(!onfocus) textbox.onfocus = UICombobox.show ;
- if(!onclick) textbox.onclick = UICombobox.show ;
- if(!onblur)  textbox.onblur = UICombobox.correct ;
+	if(typeof(textbox) == "string") textbox = document.getElementById(textbox) ;
+	var UICombobox = eXo.calendar.UICombobox ;
+	var onfocus = textbox.getAttribute("onfocus") ;
+	var onclick = textbox.getAttribute("onclick") ;
+	var onblur = textbox.getAttribute("onblur") ;
+	if(!onfocus) textbox.onfocus = UICombobox.show ;
+	if(!onclick) textbox.onclick = UICombobox.show ;
+	if(!onblur)  textbox.onblur = UICombobox.correct ;
 } ;
 
 UICombobox.prototype.show = function(evt) {
@@ -35,9 +35,7 @@ UICombobox.prototype.show = function(evt) {
 	var left = eXo.core.Browser.findPosXInContainer(this, UICombobox.list.offsetParent) ;
 	UICombobox.list.style.top = top + "px" ;	
 	UICombobox.list.style.left = left + "px" ;
-	//eXo.core.DOMUtil.listHideElements(UICombobox.list) ;
 	document.onmousedown = eXo.calendar.UICombobox.hide ;
-	if (typeof(UICombobox.validator) == "function") this.onblur = UICombobox.validator ;
 } ;
 
 UICombobox.prototype.cancelBubbe = function(evt) {
@@ -67,7 +65,7 @@ UICombobox.prototype.getValue = function(evt) {
 	selectedIcon = eXo.core.DOMUtil.findFirstDescendantByClass(this,"div", "UIComboboxIcon") ;
 	eXo.core.DOMUtil.addClass(selectedIcon, "UIComboboxSelectedIcon") ;
 	UICombobox.list.style.display = "none" ;
-	//if (typeof(UICombobox.validator) == "function") eval((UICombobox.validator).toString() + "();") ;
+	UICombobox.synchronize(textbox) ;
 } ;
 
 // For validating
@@ -149,4 +147,31 @@ UICombobox.prototype.getDigit = function(stringNo) {
 	}
 	return parsedNo ;
 } ;
+
+UICombobox.prototype.synchronize = function(obj) {
+	var DOMUtil = eXo.core.DOMUtil ;
+	var UICombobox = eXo.calendar.UICombobox ;
+	var value = obj.value ;
+	obj.value = UICombobox.setValue(value) ;
+	var uiTabContentContainer = DOMUtil.findAncestorByClass(obj, "UITabContentContainer") ;
+	var UIComboboxInputs = DOMUtil.findDescendantsByClass(uiTabContentContainer, "input","UIComboboxInput") ;
+	var len = UIComboboxInputs.length ;
+	var name = obj.name.toLowerCase() ;
+	var inputname = null ;
+	var ifrom = null ;
+	var ito = null ;
+	var from = (name.indexOf("from") >=0) ;
+	var to = (name.indexOf("to") >=0) ;
+	for(var i = 0 ; i < len ; i ++) {
+		inputname = UIComboboxInputs[i].name.toLowerCase() ;
+		ifrom = (inputname.indexOf("from") >=0) ;
+		ito = (inputname.indexOf("to") >=0) ;
+		if((from && ifrom) || (to && ito)) 
+			UIComboboxInputs[i].value = obj.value ;
+	}
+	var onfocus = obj.getAttribute("onfocus") ;
+	var onclick = obj.getAttribute("onclick") ;
+	if(!onfocus) obj.onfocus = UICombobox.show ;
+	if(!onclick) obj.onclick = UICombobox.show ;
+}
 eXo.calendar.UICombobox = new UICombobox() ;

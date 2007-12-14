@@ -140,11 +140,14 @@
 								 	actionLink =  uicomponent.event("SaveEvent",ce.id+"&calendarId="+ce.calendarId+"&startTime=beginTime&finishTime=endTime") ;
                   %>
                   <div class="EventContainerBorder EventBoxes $color" calType="$ce.calType" eventCat="$ce.eventCategoryId" eventid="$ce.id" calid="$ce.calendarId" actionlink="$actionLink"  starttime="$beginTime" endtime="$endTime">
+                    <div class="<%=(uicomponent.getPriority(ce.getPriority()) == null)? "" :  uicomponent.getPriority(ce.getPriority())%>PriorityIcon" style="float:left;"><span></span></div>
                     <div unselectable="on" class="EventContainerBar EventTitle" title="<%=df.format(ce.getFromDateTime())%> :-> <%=df.format(ce.getToDateTime())%>">
+                    	
                     	<p>
 	                      <%=tf.format(ce.getFromDateTime())%> -> <%=tf.format(ce.getToDateTime())%>
                       </p>
                     </div>
+                    <div style="clear:left;"><span></span></div>
                     <div class="EventContainer">
                       <%=ce.getSummary()%>
                     </div>

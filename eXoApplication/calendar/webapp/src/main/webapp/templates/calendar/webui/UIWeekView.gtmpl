@@ -97,8 +97,6 @@
 							<td ><div  style="width: 55px;"><span></span></div></td>
 							<td colspan="7" class="EventAllday"><div style="position: relative ;">
 								<% for (event in uicomponent.getEventList().values()) {
-									//int indexBeginDate = -1 ;
-									//int indexEndDate = 7 ;
 									begindate =  event.getFromDateTime().getTime() ; //tf.format(event.fromDateTime) ;
 									enddate = event.getToDateTime().getTime() ;//tf.format(event.toDateTime) ;
 									leftClass = "LeftResizeEvent ResizableSign" ;
@@ -109,10 +107,7 @@
 									if(event.toDateTime.after(uicomponent.getEndDateOfWeek().getTime())){
 									  rightClass = "RightContinueEvent" ;
 									}  		
-							 		//cal = new GregorianCalendar() ;
-								 	//cal.setTime(event.getFromDateTime()) ;
 								  long 	startTime = event.getFromDateTime().getTime() ; // cal.get(Calendar.HOUR_OF_DAY)*60 + cal.get(Calendar.MINUTE) ;
-								  //cal.setTime(event.getToDateTime()) ;
 								  long	finishTime = event.getToDateTime().getTime() ; // cal.get(Calendar.HOUR_OF_DAY)*60 + cal.get(Calendar.MINUTE) ;
 									color = uicomponent.getColors().get(event.getCalendarId()) ;
 									title = tf.format(event.getFromDateTime()) + "->" + tf.format(event.getToDateTime())+ ":&#013; " + event.summary ;
@@ -162,7 +157,9 @@
 				%>
 
 							<div class="EventContainerBorder WeekViewEventBoxes $color" eventIndex="$dayOfWeek" style="position:absolute ;" eventCat="$event.eventCategoryId" calType="$event.calType" eventid="$event.id" calid="$event.calendarId" actionlink="$actionLink" unselectable="on" starttime="$beginTime" endtime="$endTime">
+								<div class="<%=(uicomponent.getPriority(event.getPriority()) == null)? "" :  uicomponent.getPriority(event.getPriority())%>PriorityIcon" style="float:left;"><span></span></div>
 								<div class="EventContainerBar EventTitle" title="$begindate -> $enddate " ><p unselectable="on">$begin -> $end</p></div>
+								<div style="clear:left;"><span></span></div>
 								<div class="EventContainer">$event.summary</div>
 								<div class="ResizeEventContainer" unselectable="on"><span></span></div>
 							</div>

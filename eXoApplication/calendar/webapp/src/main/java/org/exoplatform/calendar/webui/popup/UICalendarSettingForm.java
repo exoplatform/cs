@@ -5,14 +5,13 @@
 package org.exoplatform.calendar.webui.popup;
 
 import java.text.DateFormat;
+import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.TimeZone;
 
 import org.exoplatform.calendar.CalendarUtils;
@@ -73,7 +72,7 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
   public UICalendarSettingForm() throws Exception{
     super("UICalendarSettingForm") ;
     UIFormInputWithActions setting = new UIFormInputWithActions("setting") ;//.setRendered(true) ;
-    
+
     List<SelectItemOption<String>> viewTypes = new ArrayList<SelectItemOption<String>>() ;
     viewTypes.add(new SelectItemOption<String>("Day view", CalendarSetting.DAY_VIEW)) ;
     viewTypes.add(new SelectItemOption<String>("Week view", CalendarSetting.WEEK_VIEW)) ;
@@ -92,13 +91,17 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
     setting.addUIFormInput(new UIFormSelectBox(TIME_INTERVAL, TIME_INTERVAL, timeInterval)) ;
 
     List<SelectItemOption<String>> weekStartOn = new ArrayList<SelectItemOption<String>>() ;
-    weekStartOn.add(new SelectItemOption<String>(UICalendarView.MONDAY, String.valueOf(java.util.Calendar.MONDAY))) ;
-    weekStartOn.add(new SelectItemOption<String>(UICalendarView.TUESDAY, String.valueOf(java.util.Calendar.TUESDAY))) ;
+    DateFormatSymbols dfs = new DateFormatSymbols() ;  ;
+    for(int id =1 ;id<  dfs.getWeekdays().length; id++) {
+      weekStartOn.add(new SelectItemOption<String>(dfs.getWeekdays()[id], String.valueOf(id))) ;
+    }
+    /*weekStartOn.add(new SelectItemOption<String>(UICalendarView.TUESDAY, String.valueOf(java.util.Calendar.TUESDAY))) ;
     weekStartOn.add(new SelectItemOption<String>(UICalendarView.WEDNESDAY, String.valueOf(java.util.Calendar.WEDNESDAY))) ;
     weekStartOn.add(new SelectItemOption<String>(UICalendarView.THURSDAY, String.valueOf(java.util.Calendar.THURSDAY))) ;
     weekStartOn.add(new SelectItemOption<String>(UICalendarView.FRIDAY, String.valueOf(java.util.Calendar.FRIDAY))) ;
     weekStartOn.add(new SelectItemOption<String>(UICalendarView.SATURDAY, String.valueOf(java.util.Calendar.SATURDAY))) ;
-    weekStartOn.add(new SelectItemOption<String>(UICalendarView.SUNDAY, String.valueOf(java.util.Calendar.SUNDAY))) ;    
+    weekStartOn.add(new SelectItemOption<String>(UICalendarView.SUNDAY, String.valueOf(java.util.Calendar.SUNDAY))) ;    */
+    
     setting.addUIFormInput(new UIFormSelectBox(WEEK_START_ON, WEEK_START_ON, weekStartOn)) ;
 
     List<SelectItemOption<String>> dateFormat = new ArrayList<SelectItemOption<String>>() ;
@@ -175,7 +178,7 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
     }
   }
   private List<SelectItemOption<String>> getLocales() {
-   return CalendarUtils.getLocaleSelectBoxOptions(java.util.Calendar.getAvailableLocales()) ;
+    return CalendarUtils.getLocaleSelectBoxOptions(java.util.Calendar.getAvailableLocales()) ;
   }
 
   protected String getViewType() {

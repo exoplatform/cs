@@ -1127,16 +1127,15 @@
 	margin: 4px;
 }
 
-
-.UIListView .highPriorityIcon {
+.highPriorityIcon {
 	width: 16px;
 	height: 16px;
 }
-.UIListView .normalPriorityIcon {
+.normalPriorityIcon {
 	width: 16px;
 	height: 16px;
 }
-.UIListView .lowPriorityIcon{
+.lowPriorityIcon{
 	width: 16px;
 	height: 16px;
 }
