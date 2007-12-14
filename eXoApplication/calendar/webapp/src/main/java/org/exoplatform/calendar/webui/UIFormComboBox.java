@@ -5,7 +5,9 @@
 package org.exoplatform.calendar.webui;
 
 import java.io.Writer;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.model.SelectItemOption;
@@ -34,6 +36,39 @@ public class UIFormComboBox extends UIFormInputBase<String>  {
    * The javascript expression executed when an onChange event fires
    */
   private String onchange_;
+  
+  /**
+   * The javascript expression executed when an client onChange event fires
+   */
+  public static final String ON_CHANGE = "onchange".intern();
+  
+  /**
+   * The javascript expression executed when an client event fires
+   */
+  public static final String ON_BLUR = "onblur".intern();
+  
+  /**
+   * The javascript expression executed when an client event fires
+   */
+  public static final String ON_FOCUS = "onfocus".intern();
+  
+  /**
+   * The javascript expression executed when an client event fires
+   */
+  public static final String ON_KEYUP = "onkeyup".intern();
+  
+  /**
+   * The javascript expression executed when an client event fires
+   */
+  public static final String ON_KEYDOWN = "onkeydown".intern();
+  
+  /**
+   * The javascript expression executed when an client event fires
+   */
+  public static final String ON_CLICK = "onclick".intern();
+  
+  private Map<String, String> jsActions_ = new HashMap<String, String>() ;
+  
   public UIFormComboBox(String name, String bindingExpression, String value) {
     super(name, bindingExpression, String.class);
     this.value_ = value ;
@@ -44,6 +79,22 @@ public class UIFormComboBox extends UIFormInputBase<String>  {
     setOptions(options);
   }
 
+  public void setJsActions(Map<String, String> jsActions) {
+    if(jsActions != null) jsActions_ = jsActions;
+  }
+
+  public Map<String, String> getJsActions() {
+    return jsActions_;
+  }
+  public void addJsActions(String action, String javaScript) {
+    jsActions_.put(action, javaScript) ;
+  }
+  public UIFormComboBox(String name, String bindingExpression, List<SelectItemOption<String>> options, Map<String, String> jsActions) {
+    super(name, bindingExpression, null);
+    setOptions(options);
+    setJsActions(jsActions) ;
+  }
+  
   public UIFormComboBox(String name, String value) {
     this(name, null, value);
   }
@@ -66,10 +117,21 @@ public class UIFormComboBox extends UIFormInputBase<String>  {
   private UIForm getUIform() {
     return getAncestorOfType(UIForm.class) ; 
   }
+  
+  private String renderJsActions() {
+    StringBuffer sb = new StringBuffer() ;
+    for(String k : jsActions_.keySet()){
+      if(sb != null && sb.length() > 0 ) sb.append(" ") ;
+      if(jsActions_.get(k) != null) {
+        sb.append(k).append("=\"").append(jsActions_.get(k)).append("\"") ;
+      }  
+    }
+    return sb.toString() ;
+  }
+  
   public void processRender(WebuiRequestContext context) throws Exception {
-    context.getJavascriptManager().addJavascript("eXo.calendar.UICombobox.init('" + getUIform().getId()+ "');") ;  
+    context.getJavascriptManager().addJavascript("eXo.calendar.UICombobox.init('" + getId()+ "');") ;  
     Writer w =  context.getWriter() ;
-    //w.write("<div class='UIComboboxContainer'>") ;
       w.write("<div class='UIComboboxList'>") ;
         for(SelectItemOption item : options_) {
           w.write("<a href='javascript:void(0);' value='" + item.getValue()+ "' class='UIComboboxItem'>") ;
@@ -79,12 +141,11 @@ public class UIFormComboBox extends UIFormInputBase<String>  {
           w.write("</a>") ;
         }
       w.write("</div>") ;
-      w.write("<input class='UIComboboxInput' name='"+getName()+"' type='text'" + " id='"+getId()+"'");
+      w.write("<input class='UIComboboxInput' name='"+getName()+"' type='text'" + " id='"+getId()+"' " + renderJsActions());
       if(value_ != null && value_.trim().length() > 0) {      
         w.write(" value='"+encodeValue(value_).toString()+"'");
       }
       w.write(" \\>") ;
-    //w.write("</div>") ;
   }
 
   private StringBuilder encodeValue(String value){

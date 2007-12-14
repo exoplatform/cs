@@ -1,17 +1,15 @@
 function UICombobox() {
 }
 
-UICombobox.prototype.init = function(container) {
-	if(typeof(container) == "string") container = document.getElementById(container) ;
-	var UIComboboxContainer = eXo.core.DOMUtil.findDescendantsByClass(container, "div", "UIComboboxList") ;
-	var len = UIComboboxContainer.length ;
-	var textbox = null ;
-	for(var i = 0 ; i < len ; i++) {
-		textbox = eXo.core.DOMUtil.findNextElementByTagName(UIComboboxContainer[i], "input");
-		textbox.onfocus = eXo.calendar.UICombobox.show ;
-		textbox.onclick = eXo.calendar.UICombobox.show ;
-	}
-	this.validator = eXo.calendar.UICombobox.correct ;
+UICombobox.prototype.init = function(textbox) {
+	 if(typeof(textbox) == "string") textbox = document.getElementById(textbox) ;
+ var UICombobox = eXo.calendar.UICombobox ;
+ var onfocus = textbox.getAttribute("onfocus") ;
+ var onclick = textbox.getAttribute("onclick") ;
+ var onblur = textbox.getAttribute("onblur") ;
+ if(!onfocus) textbox.onfocus = UICombobox.show ;
+ if(!onclick) textbox.onclick = UICombobox.show ;
+ if(!onblur)  textbox.onblur = UICombobox.correct ;
 } ;
 
 UICombobox.prototype.show = function(evt) {
