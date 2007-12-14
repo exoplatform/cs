@@ -496,7 +496,6 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
       UIPopupContainer uiContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       UIPopupAction uiChildPopup = uiContainer.getChild(UIPopupAction.class) ;
       uiChildPopup.activate(UIAttachFileForm.class, 500) ;
-      uiForm.setSelectedTab(TAB_TASKDETAIL) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
     }
   }
@@ -534,7 +533,6 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
       uiGroupSelector.setType(UISelectComponent.TYPE_USER) ;
       uiGroupSelector.setSelectedGroups(null) ;
       uiGroupSelector.setComponent(uiForm,new String[]{UITaskDetailTab.FIELD_DELEGATION}) ;
-      uiForm.setSelectedTab(TAB_TASKDETAIL) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }
   }
@@ -592,13 +590,6 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
           event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
           uiForm.getAncestorOfType(UIPopupAction.class).deActivate() ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
-          /*if(uiForm.isAddNew_) {
-            uiApp.addMessage(new ApplicationMessage(uiForm.getId() + ".msg.add-event-successfully", null));
-          } else {
-            uiApp.addMessage(new ApplicationMessage(uiForm.getId() + ".msg.update-event-successfully", null));
-          }*/
-          uiForm.reset() ;
-          /*event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;*/
         }catch (Exception e) {
           uiApp.addMessage(new ApplicationMessage(uiForm.getId() + ".msg.add-event-error", null));
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;

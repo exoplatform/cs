@@ -110,16 +110,18 @@ public class UIEventCategoryForm extends UIForm {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiViewContainer) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
         if(uiPopupContainer != null) {
-          System.out.println("\n\n uiPopupContainer " + uiPopupContainer.getId());
           UIEventForm uiEventForm = uiPopupContainer.getChild(UIEventForm.class) ;
           UITaskForm uiTaskForm = uiPopupContainer.getChild(UITaskForm.class) ;
           if(uiEventForm != null){ 
             uiEventForm.setSelectedTab(UIEventForm.TAB_EVENTDETAIL) ;
             uiEventForm.refreshCategory() ;
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiEventForm.getChildById(UIEventForm.TAB_EVENTDETAIL)) ;
           }
           if(uiTaskForm != null) { 
             uiTaskForm.setSelectedTab(UITaskForm.TAB_TASKDETAIL) ;
-            uiTaskForm.refreshCategory() ; }
+            uiTaskForm.refreshCategory() ;
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiEventForm.getChildById(UITaskForm.TAB_TASKDETAIL)) ;
+          }
         }
       } catch (RepositoryException e) {
         UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
@@ -144,11 +146,7 @@ public class UIEventCategoryForm extends UIForm {
       UIEventCategoryForm uiForm = event.getSource() ;
       UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class) ;
       uiPopupAction.deActivate() ;
-      if(uiPopupAction.getAncestorOfType(UIPopupAction.class) != null) {
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction.getAncestorOfType(UIPopupAction.class));
-      } else {
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
-      }
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }
   }
 }
