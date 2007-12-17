@@ -71,6 +71,7 @@ AdvancedTooltip.prototype.show = function(e, element) {
   this.tooltipE.style['top'] = eXo.core.Browser.findMouseRelativeY(document.body, e) + 2 + 'px' ;
   this.tooltipE.style['left'] = eXo.core.Browser.findMouseRelativeX(document.body, e) + 2 + 'px' ;
   if (this.tooltipE.style['display'] == 'none') {
+    this.cancelShowTimeout() ;
     this.showTimeoutId = window.setTimeout("eXo.cs.AdvancedTooltip.tooltipE.style['display'] = 'block' ;", 2*1000)
   }
 } ;
@@ -81,11 +82,15 @@ AdvancedTooltip.prototype.hideAdvancedTooltip = function(e){
 } ;
 
 AdvancedTooltip.prototype.hide = function(e, element) {
+  this.cancelShowTimeout() ;
+  window.setTimeout("eXo.cs.AdvancedTooltip.tooltipE.style['display'] = 'none' ;", 0.1*1000) ;
+} ;
+
+AdvancedTooltip.prototype.cancelShowTimeout = function() {
   if (this.showTimeoutId) {
     window.clearTimeout(this.showTimeoutId) ;
     this.showTimeoutId = false ;
   }
-  this.tooltipE.style['display'] = 'none' ;
 } ;
 
 eXo.cs.AdvancedTooltip = new AdvancedTooltip() ;
