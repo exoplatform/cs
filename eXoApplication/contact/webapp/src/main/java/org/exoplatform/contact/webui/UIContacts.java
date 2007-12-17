@@ -208,12 +208,10 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       UICategorySelect uiCategorySelect = popupContainer.addChild(UICategorySelect.class, null, null) ;
       UIContactForm uiContactForm = popupContainer.addChild(UIContactForm.class, null, null) ;      
       Contact contact = uiContacts.contactMap.get(contactId) ;
-      if (!contact.isShared()){ 
-        uiCategorySelect.setPrivateGroupMap(contactPortlet
-            .findFirstComponentOfType(UIAddressBooks.class).getPrivateGroupMap()) ;
-        uiCategorySelect.addCategories() ;
-        uiCategorySelect.setValue(contact.getCategories()[0]) ;
-      }
+      uiCategorySelect.setPrivateGroupMap(contactPortlet
+          .findFirstComponentOfType(UIAddressBooks.class).getPrivateGroupMap()) ;
+      uiCategorySelect.addCategories() ;
+      uiCategorySelect.setValue(contact.getCategories()[0]) ;
       uiCategorySelect.disableSelect() ;
       uiContactForm.setValues(contact);
       uiContactForm.setNew(false) ;
