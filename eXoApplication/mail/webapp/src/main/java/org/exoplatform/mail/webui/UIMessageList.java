@@ -174,6 +174,16 @@ public class UIMessageList extends UIForm {
     }
   }
   
+  public List<Message> getCheckedRootMessage() throws Exception {
+    List<Message> messageList = new ArrayList<Message>();
+    for (Message msg : getMessageList()) {
+      UIFormCheckBoxInput<Boolean> uiCheckbox = getChildById(msg.getId());
+      if (uiCheckbox != null && uiCheckbox.isChecked()) {
+      }
+    }
+    return messageList;
+  }
+  
   public List<Message> getCheckedMessage() throws Exception {
     List<Message> messageList = new ArrayList<Message>();
     String username = MailUtils.getCurrentUser();
@@ -258,7 +268,6 @@ public class UIMessageList extends UIForm {
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UIMessageList uiMessageList = event.getSource();
       //TODO: update Unread counter to folder in saveMessage(...), avoid call service alot
-      try {
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       UIMessagePreview uiMessagePreview = uiPortlet.findFirstComponentOfType(UIMessagePreview.class);
       UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
@@ -270,7 +279,7 @@ public class UIMessageList extends UIForm {
         UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
         UIPopupActionContainer uiPopupContainer = uiPopupAction.activate(UIPopupActionContainer.class, 850) ;
         UIComposeForm uiComposeForm = uiPopupContainer.createUIComponent(UIComposeForm.class, null, null);
-        uiComposeForm.setMessage(msg);
+        uiComposeForm.setMessage(msg, uiComposeForm.MESSAGE_IN_DRAFT);
         uiPopupContainer.addChild(uiComposeForm) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;  
       } else {
@@ -284,9 +293,6 @@ public class UIMessageList extends UIForm {
         uiMessageList.updateList();
         event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent());
         event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer);        
-      }
-      }catch(Exception e) {
-        System.out.println("====>>>>>>>>>" + e.getMessage());
       }
     }
   }
@@ -421,7 +427,7 @@ public class UIMessageList extends UIForm {
       if(uiMessageList.getCheckedMessage().isEmpty()) {
         uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-no-messages", null, ApplicationMessage.INFO)) ;
         return;
-      } else if (uiMessageList.getCheckedMessage().size() > 1){
+      } else if (uiMessageList.getCheckedRootMessage().size() > 1){
         uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-many-messages", null, ApplicationMessage.INFO)) ;
         return;
       }
@@ -437,10 +443,7 @@ public class UIMessageList extends UIForm {
       String username = uiPortlet.getCurrentUser() ;
       if (msgId != null) {
         Message message = mailSvr.getMessageById(SessionsUtils.getSessionProvider(), username, accId, msgId);
-        uiComposeForm.setMessage(message);
-        uiComposeForm.setFieldToValue(message.getReplyTo());
-        uiComposeForm.setFieldSubjectValue("Re: " + message.getSubject());
-        uiComposeForm.setFieldContentValue(message.getMessageBody());
+        uiComposeForm.setMessage(message, uiComposeForm.MESSAGE_REPLY);
       }
       uiPopupContainer.addChild(uiComposeForm) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
@@ -457,7 +460,7 @@ public class UIMessageList extends UIForm {
       if(uiMessageList.getCheckedMessage().isEmpty()) {
         uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-no-messages", null, ApplicationMessage.INFO)) ;
         return;
-      } else if (uiMessageList.getCheckedMessage().size() > 1){
+      } else if (uiMessageList.getCheckedRootMessage().size() > 1){
         uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-many-messages", null, ApplicationMessage.INFO)) ;
         return;
       }
@@ -473,13 +476,7 @@ public class UIMessageList extends UIForm {
       String username = uiPortlet.getCurrentUser() ;
       if (msgId != null) {
         Message message = mailSvr.getMessageById(SessionsUtils.getSessionProvider(), username, accId, msgId);
-        uiComposeForm.setMessage(message);
-        uiComposeForm.setFieldSubjectValue("Re: " + message.getSubject());
-        String replyAll = message.getReplyTo();
-        if (message.getMessageCc() != null) replyAll += "," + message.getMessageCc();
-        if (message.getMessageBcc() != null) replyAll += "," + message.getMessageBcc();
-        uiComposeForm.setFieldToValue(replyAll);
-        uiComposeForm.setFieldContentValue(message.getMessageBody());
+        uiComposeForm.setMessage(message, uiComposeForm.MESSAGE_REPLY_ALL);
       }
       uiPopupContainer.addChild(uiComposeForm) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
@@ -496,7 +493,7 @@ public class UIMessageList extends UIForm {
       if(uiMessageList.getCheckedMessage().isEmpty()) {
         uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-no-messages", null, ApplicationMessage.INFO)) ;
         return;
-      } else if (uiMessageList.getCheckedMessage().size() > 1){
+      } else if (uiMessageList.getCheckedRootMessage().size() > 1){
         uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-many-messages", null, ApplicationMessage.INFO)) ;
         return;
       }
@@ -513,15 +510,7 @@ public class UIMessageList extends UIForm {
       String username = uiPortlet.getCurrentUser() ;
       if (msgId != null) {
         Message message = mailSvr.getMessageById(SessionsUtils.getSessionProvider(), username, accId, msgId);
-        uiComposeForm.setMessage(message);
-        uiComposeForm.setFieldSubjectValue("Fwd: " + message.getSubject());
-        String forwardedText = "\n\n\n-------- Original Message --------\n" +
-            "Subject: " + message.getSubject() + "\nDate: " + message.getSendDate() + 
-            "\nFrom: " + message.getFrom() + 
-            "\nTo: " + message.getMessageTo() + 
-            "\n\n" + message.getMessageBody();         
-        uiComposeForm.setFieldContentValue(forwardedText);
-        uiComposeForm.setFieldToValue("");
+        uiComposeForm.setMessage(message, uiComposeForm.MESSAGE_FOWARD);
       }
       uiPopupContainer.addChild(uiComposeForm) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
@@ -624,7 +613,7 @@ public class UIMessageList extends UIForm {
       if(uiMessageList.getCheckedMessage().isEmpty()) {
         uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-no-messages", null, ApplicationMessage.INFO)) ;
         return;
-      } else if (uiMessageList.getCheckedMessage().size() > 1){
+      } else if (uiMessageList.getCheckedRootMessage().size() > 1){
         uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-many-messages", null, ApplicationMessage.INFO)) ;
         return;
       }
@@ -810,7 +799,7 @@ public class UIMessageList extends UIForm {
       if(uiMessageList.getCheckedMessage().isEmpty()) {
         uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-no-messages", null, ApplicationMessage.INFO)) ;
         return;
-      } else if (uiMessageList.getCheckedMessage().size() > 1){
+      } else if (uiMessageList.getCheckedRootMessage().size() > 1){
         uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-many-messages", null, ApplicationMessage.INFO)) ;
         return;
       }

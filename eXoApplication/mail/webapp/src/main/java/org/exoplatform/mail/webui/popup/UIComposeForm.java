@@ -84,22 +84,20 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
   final static public String ACT_CC = "ToCC" ;
   final static public String ACT_BCC = "ToBCC" ;
   final static public String ACT_REMOVE = "remove" ;
+  final static public int MESSAGE_NEW = 0;
+  final public int MESSAGE_IN_DRAFT = 1;
+  final public int MESSAGE_REPLY = 2;
+  final public int MESSAGE_REPLY_ALL = 3;
+  final public int MESSAGE_FOWARD = 4;
   private List<Attachment> attachments_ = new ArrayList<Attachment>() ;
   private Message message_ = null;
   private long priority_ = Utils.PRIORITY_NORMAL;
   private Boolean isVisualEditor = true;
-
+  private int composeType_;
+  
   public List<Contact> toContacts = new ArrayList<Contact>();
   public List<Contact> ccContacts = new ArrayList<Contact>();
   public List<Contact> bccContacts = new ArrayList<Contact>();
-  
-  public List<Contact> getToContacts(){ return toContacts; }
-  public List<Contact> getCcContacts(){ return ccContacts; }
-  public List<Contact> getBccContacts(){ return bccContacts; }
-  
-  public void setToContacts(List<Contact> contactList) { toContacts = contactList; }
-  public void setCcContacts(List<Contact> contactList) { ccContacts = contactList; }
-  public void setBccContacts(List<Contact> contactList) { bccContacts = contactList; }
   
   public boolean isVisualEditor() { return isVisualEditor; }
   public void setVisualEditor(boolean b) { isVisualEditor = b; }
@@ -139,6 +137,17 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
     }  
     setPriority(Utils.PRIORITY_NORMAL);
   }
+  
+  public List<Contact> getToContacts(){ return toContacts; }
+  public List<Contact> getCcContacts(){ return ccContacts; }
+  public List<Contact> getBccContacts(){ return bccContacts; }
+  
+  public void setToContacts(List<Contact> contactList) { toContacts = contactList; }
+  public void setCcContacts(List<Contact> contactList) { ccContacts = contactList; }
+  public void setBccContacts(List<Contact> contactList) { bccContacts = contactList; }
+  
+  public int getComposeType() { return composeType_ ; }
+  public void setComposeType(int t) { composeType_ = t; }
 
   public List<ActionData> getUploadFileList() { 
     List<ActionData> uploadedFiles = new ArrayList<ActionData>() ;
@@ -178,17 +187,75 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
   public List<Attachment> getAttachFileList() {
     return attachments_ ;
   }
+  
   public Message getMessage() { return message_; }
-  public void setMessage(Message message) throws Exception { 
+  public void setMessage(Message message , int composeType) throws Exception { 
+    setComposeType(composeType) ;
     this.message_ = message; 
     fillFields(message_);
   }
   
   public void fillFields(Message msg) throws Exception {
     if (msg != null) {
-      setFieldSubjectValue(msg.getSubject());
-      setFieldToValue(msg.getMessageTo());
-      setFieldContentValue(msg.getMessageBody());
+      MailService mailSrv = MailUtils.getMailService();
+      MailSetting mailSetting = mailSrv.getMailSetting(SessionsUtils.getSessionProvider(), MailUtils.getCurrentUser());
+      switch (getComposeType()) {
+        case MESSAGE_IN_DRAFT :
+          setFieldSubjectValue(msg.getSubject());
+          setFieldToValue(msg.getMessageTo());
+          setFieldContentValue(msg.getMessageBody());
+          for (Attachment att : msg.getAttachments()) {
+            attachments_.add(att);
+            refreshUploadFileList();
+          }
+          break;
+        case MESSAGE_REPLY :
+          String replyWithAtt = mailSetting.getReplyMessageWith();
+          setFieldToValue(msg.getReplyTo());
+          setFieldSubjectValue("Re: " + msg.getSubject());
+          setFieldContentValue(msg.getMessageBody());
+          if (replyWithAtt.equals(MailSetting.REPLY_WITH_ATTACH)) {
+            for (Attachment att : msg.getAttachments()) {
+              attachments_.add(att);
+              refreshUploadFileList();
+            }
+          }
+          break ;
+        case MESSAGE_REPLY_ALL :
+          replyWithAtt = mailSetting.getReplyMessageWith();
+          setFieldSubjectValue("Re: " + msg.getSubject());
+          String replyAll = msg.getReplyTo();
+          if (msg.getMessageCc() != null) replyAll += "," + msg.getMessageCc();
+          if (msg.getMessageBcc() != null) replyAll += "," + msg.getMessageBcc();
+          setFieldToValue(replyAll);
+          setFieldContentValue(msg.getMessageBody());
+          if (replyWithAtt.equals(MailSetting.REPLY_WITH_ATTACH)) {
+            for (Attachment att : msg.getAttachments()) {
+              attachments_.add(att);
+              refreshUploadFileList();
+            }
+          }
+          break;
+        case MESSAGE_FOWARD : 
+          String forwardWithAtt = mailSetting.getReplyMessageWith();
+          setFieldSubjectValue("Fwd: " + msg.getSubject());
+          String forwardedText = "\n\n\n-------- Original Message --------\n" +
+              "Subject: " + msg.getSubject() + "\nDate: " + msg.getSendDate() + 
+              "\nFrom: " + msg.getFrom() + 
+              "\nTo: " + msg.getMessageTo() + 
+              "\n\n" + msg.getMessageBody();         
+          setFieldContentValue(forwardedText);
+          setFieldToValue("");
+          if (forwardWithAtt.equals(MailSetting.FORWARD_WITH_ATTACH)) {
+            for (Attachment att : msg.getAttachments()) {
+              attachments_.add(att);
+              refreshUploadFileList();
+            }
+          }
+          break ;
+        default :
+          break;
+      }
     }
   }
   

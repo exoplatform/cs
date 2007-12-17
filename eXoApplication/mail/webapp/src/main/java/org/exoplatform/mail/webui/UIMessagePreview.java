@@ -155,10 +155,7 @@ public class UIMessagePreview extends UIComponent {
       String username = uiPortlet.getCurrentUser() ;
       if (msgId != null) {
         Message message = mailSvr.getMessageById(SessionsUtils.getSessionProvider(), username, accId, msgId);
-        uiComposeForm.setMessage(message);
-        uiComposeForm.setFieldToValue(message.getFrom());
-        uiComposeForm.setFieldSubjectValue("Re: " + message.getSubject());
-        uiComposeForm.setFieldContentValue(message.getMessageBody());
+        uiComposeForm.setMessage(message, uiComposeForm.MESSAGE_REPLY);
       }
       uiPopupContainer.addChild(uiComposeForm) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
@@ -183,15 +180,7 @@ public class UIMessagePreview extends UIComponent {
       String username = uiPortlet.getCurrentUser() ;
       if (msgId != null) {
         Message message = mailSvr.getMessageById(SessionsUtils.getSessionProvider(), username, accId, msgId);
-        uiComposeForm.setMessage(message);
-        uiComposeForm.setFieldSubjectValue("Fwd: " + message.getSubject());
-        String forwardedText = "\n\n\n-------- Original Message --------\n" +
-            "Subject: " + message.getSubject() + "\nDate: " + message.getSendDate() + 
-            "\nFrom: " + message.getFrom() + 
-            "\nTo: " + message.getMessageTo() + 
-            "\n\n" + message.getMessageBody();         
-        uiComposeForm.setFieldContentValue(forwardedText);
-        uiComposeForm.setFieldToValue("");
+        uiComposeForm.setMessage(message, uiComposeForm.MESSAGE_FOWARD);
       }
       uiPopupContainer.addChild(uiComposeForm) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
