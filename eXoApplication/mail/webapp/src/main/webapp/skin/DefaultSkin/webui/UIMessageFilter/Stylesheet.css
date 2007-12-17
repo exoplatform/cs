@@ -55,6 +55,12 @@
 	color: #3d3d3d;
 }
 
+.UIMessageFilter .FilterSettingCategory .FilterSettingList .AddNewFilter{
+	color: #0101ff;
+	text-decoration:underline;
+	text-align:center;
+}
+
 .UIMessageFilter .FilterSettingCategory .NormalItem {
 	padding: 0px 27px;
 	line-height: 22px;
