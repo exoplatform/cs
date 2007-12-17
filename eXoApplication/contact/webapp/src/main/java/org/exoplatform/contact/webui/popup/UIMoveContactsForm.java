@@ -125,10 +125,10 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
       String[] categories = sharedGroups.toString().split(",") ;
       ContactUtils.getContactService().moveContacts(SessionsUtils.getSystemProvider()
         , ContactUtils.getCurrentUser(), uiMoveContactForm.getContactIds(), categories, true) ;
-      UIContactContainer contactContainer = uiContactPortlet.findFirstComponentOfType(UIContactContainer.class) ;
-      contactContainer.getChild(UIContacts.class).updateList() ;
+      
+      uiContactPortlet.findFirstComponentOfType(UIContacts.class).updateList() ;
       uiContactPortlet.cancelAction() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(contactContainer.getParent()) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContactPortlet.getChild(UIWorkingContainer.class)) ;
     }
   }
   

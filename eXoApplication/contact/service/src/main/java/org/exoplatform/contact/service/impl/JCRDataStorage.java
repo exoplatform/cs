@@ -17,6 +17,7 @@ import java.util.Map;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.PropertyIterator;
+import javax.jcr.Session;
 import javax.jcr.Value;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
@@ -311,57 +312,46 @@ public class JCRDataStorage{
   public List<Contact> moveContacts(SessionProvider sysProvider, String username, List<String> contactIds, String[] groupId, boolean toPublic) throws Exception {
     Node contactHomeNode = getUserContactHome(sysProvider, username);
     Node publicContactHomeNode = getPublicContactHome(sysProvider) ;
+    Node contactNode = null;
     Contact contact = null;
     List<Contact> contacts = new ArrayList<Contact>() ;
+    Session session = getPublicContactServiceHome(SessionProvider.createSystemProvider()).getSession() ;
+    
+    System.out.println("\n\n PublicContactService :" +
+        getPublicContactServiceHome(SessionProvider.createSystemProvider()).getPath() + "\n\n") ;
+    System.out.println("\n\n contactHomeNode:" + contactHomeNode.getPath() + "\n\n");
+    System.out.println("\n\n publicContactHomeNode:" + publicContactHomeNode.getPath() + "\n\n");
+    
     for (String contactId : contactIds) {
       if (contactHomeNode.hasNode(contactId)) {
-        contact = getContact(sysProvider, username, contactId);
+        contactNode = contactHomeNode.getNode(contactId) ;
       } else if(publicContactHomeNode.hasNode(contactId)) {
-        contact = getSharedContact(sysProvider, contactId);
+        contactNode = publicContactHomeNode.getNode(contactId) ;
       }
-      if (contact != null && canMove(username, contact)) {
-        if (canRemove(username, contact)) {
-          if (contact.isShared()) publicContactHomeNode.getNode(contactId).remove() ;
-          else contactHomeNode.getNode(contactId).remove() ;
+      if (contactNode != null) {
+        contact = getContact(contactNode);
+        contacts.add(contact) ;
+        if (canMove(username, contact)) {
+          contactNode.setProperty("exo:categories", groupId);
+          if (toPublic) {
+            if (!contact.isShared()) { 
+              contactNode.setProperty("exo:isShared", true);
+              contactNode.getSession().move(contactNode.getPath() , publicContactHomeNode.getPath() + "/" + contactId) ;
+            } 
+          } else if (contact.isShared()) {
+            contactNode.setProperty("exo:isShared", false); 
+            contactNode.getSession().move(contactNode.getPath(), contactHomeNode.getPath() + "/" + contactId) ;
+          }
+          session.save() ;
+          //contactHomeNode.getSession().save() ;
+          //publicContactHomeNode.getSession().save() ;
+        
+          System.out.println("\n\n private:" + contactHomeNode.hasNode(contactId));
+          System.out.println("\n\n public :" + publicContactHomeNode.hasNode(contactId) + "\n\n");
         }
-        contact.setCategories(groupId) ;
-        if (toPublic) {
-          contact.setShared(true) ;
-          saveSharedContact(sysProvider, contact, true) ;
-        } else {
-          contact.setShared(false) ;
-          saveContact(sysProvider, username, contact, true) ;
-        }
-        contacts.add(contact) ;        
       }
     } 
     return contacts ;
-    
-    
-    /*
-     * if() {
-          contactNode = contactHomeNode.getNode(contactId) ;
-          contactNode.setProperty("exo:categories", groupId);
-          
-          if (toPublic) {
-            publicContactHomeNode.addNode(contactId, "exo:contact"); 
-            //saveContact(sysProvider, username, contact, true) ;
-            contactNode.remove() ;
-          }
-          
-          publicContactHomeNode.getSession().save();
-          contactHomeNode.getSession().save();
-          contacts.add(contact) ;
-        }
-      
-          
-          if(canMove(username, contact)) {
-            contactNode =  publicContactHomeNode.getNode(contactId);
-            contactNode.setProperty("exo:categories", groupId);
-            publicContactHomeNode.getSession().save();
-            contacts.add(contact) ;
-          }
-     */
   }
   
   private List<String> getUserContactNodesByGroup(SessionProvider sProvider, String username, String groupId) throws Exception {

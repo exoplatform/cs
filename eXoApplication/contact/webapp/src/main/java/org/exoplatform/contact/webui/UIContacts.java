@@ -318,12 +318,14 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       @SuppressWarnings("unused")
       UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
       contactIds = uiContacts.getCheckedContacts() ;
-      boolean toPublic = uiContacts.getAncestorOfType(UIWorkingContainer.class)
-        .findFirstComponentOfType(UIAddressBooks.class).getPublicGroupMap().containsKey(addressBookId) ;
+      UIAddressBooks uiAddressBooks = uiContacts.getAncestorOfType(UIWorkingContainer.class)
+        .findFirstComponentOfType(UIAddressBooks.class) ;
+      boolean toPublic = uiAddressBooks.getPublicGroupMap().containsKey(addressBookId) ;
       ContactUtils.getContactService().moveContacts(SessionsUtils.getSystemProvider()
         , ContactUtils.getCurrentUser(), contactIds, addressBooks, toPublic) ;
       uiContacts.updateList() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBooks) ;
     }
   }
   
