@@ -315,12 +315,12 @@ public class JCRDataStorage{
     Node contactNode = null;
     Contact contact = null;
     List<Contact> contacts = new ArrayList<Contact>() ;
-    Session session = getPublicContactServiceHome(SessionProvider.createSystemProvider()).getSession() ;
+    //Session session = getPublicContactServiceHome(SessionProvider.createSystemProvider()).getSession() ;
     
-    System.out.println("\n\n PublicContactService :" +
+    /*System.out.println("\n\n PublicContactService :" +
         getPublicContactServiceHome(SessionProvider.createSystemProvider()).getPath() + "\n\n") ;
     System.out.println("\n\n contactHomeNode:" + contactHomeNode.getPath() + "\n\n");
-    System.out.println("\n\n publicContactHomeNode:" + publicContactHomeNode.getPath() + "\n\n");
+    System.out.println("\n\n publicContactHomeNode:" + publicContactHomeNode.getPath() + "\n\n");*/
     
     for (String contactId : contactIds) {
       if (contactHomeNode.hasNode(contactId)) {
@@ -342,15 +342,16 @@ public class JCRDataStorage{
             contactNode.setProperty("exo:isShared", false); 
             contactNode.getSession().move(contactNode.getPath(), contactHomeNode.getPath() + "/" + contactId) ;
           }
-          session.save() ;
-          //contactHomeNode.getSession().save() ;
-          //publicContactHomeNode.getSession().save() ;
+          //session.save() ;
+          
         
-          System.out.println("\n\n private:" + contactHomeNode.hasNode(contactId));
-          System.out.println("\n\n public :" + publicContactHomeNode.hasNode(contactId) + "\n\n");
+         // System.out.println("\n\n private:" + contactHomeNode.hasNode(contactId));
+          //System.out.println("\n\n public :" + publicContactHomeNode.hasNode(contactId) + "\n\n");
         }
       }
     } 
+    contactHomeNode.getSession().save() ;
+    publicContactHomeNode.getSession().save() ;
     return contacts ;
   }
   

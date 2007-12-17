@@ -135,7 +135,7 @@ public class UIImportForm extends UIForm {
       boolean canImport = false ;
       String[] array = uploadResource.getMimeType().split("/") ;
       String extend = array[array.length - 1] ;
-      for(String type : Types) {
+      for(String type : Types) {        
         if (extend.equalsIgnoreCase(type)) canImport = true ;
       }
       if(!canImport) {
