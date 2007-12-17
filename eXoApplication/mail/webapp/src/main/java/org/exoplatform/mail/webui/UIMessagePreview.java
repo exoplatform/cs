@@ -49,6 +49,7 @@ import org.exoplatform.webui.event.EventListener;
         @EventConfig(listeners = UIMessagePreview.DownloadAttachmentActionListener.class),
         @EventConfig(listeners = UIMessagePreview.AddStarActionListener.class),
         @EventConfig(listeners = UIMessagePreview.ReplyActionListener.class),
+        @EventConfig(listeners = UIMessagePreview.ReplyAllActionListener.class),
         @EventConfig(listeners = UIMessagePreview.DeleteActionListener.class),
         @EventConfig(listeners = UIMessagePreview.ForwardActionListener.class), 
         @EventConfig(listeners = UIMessagePreview.PrintActionListener.class),
@@ -160,6 +161,30 @@ public class UIMessagePreview extends UIComponent {
       uiPopupContainer.addChild(uiComposeForm) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessagePreview.class));
+    }
+  }
+  
+  static  public class ReplyAllActionListener extends EventListener<UIMessagePreview> {    
+    public void execute(Event<UIMessagePreview> event) throws Exception {
+      UIMessagePreview uiMessagePreview = event.getSource() ; 
+      String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      UIMailPortlet uiPortlet = uiMessagePreview.getAncestorOfType(UIMailPortlet.class) ;
+      UINavigationContainer uiNavigation = uiPortlet.getChild(UINavigationContainer.class) ;
+      UISelectAccount uiSelect = uiNavigation.getChild(UISelectAccount.class) ;
+      String accId = uiSelect.getSelectedValue() ;
+      UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
+      UIPopupActionContainer uiPopupContainer = uiPopupAction.activate(UIPopupActionContainer.class, 850) ;
+      
+      UIComposeForm uiComposeForm = uiPopupContainer.createUIComponent(UIComposeForm.class, null, null);
+      MailService mailSvr = uiMessagePreview.getApplicationComponent(MailService.class) ;
+      String username = uiPortlet.getCurrentUser() ;
+      if (msgId != null) {
+        Message message = mailSvr.getMessageById(SessionsUtils.getSessionProvider(), username, accId, msgId);
+        uiComposeForm.setMessage(message, uiComposeForm.MESSAGE_REPLY_ALL);
+      }
+      uiPopupContainer.addChild(uiComposeForm) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessageArea.class));
     }
   }
   
