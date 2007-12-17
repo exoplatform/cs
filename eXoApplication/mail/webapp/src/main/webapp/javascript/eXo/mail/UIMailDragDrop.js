@@ -46,9 +46,16 @@ UIMailDragDrop.prototype.regDnDItem = function() {
   }
 } ;
 
+/**
+ * 
+ * @param {Event} e
+ */
 UIMailDragDrop.prototype.mailMDTrigger = function(e) {
   e = e ? e : window.event ;
-  return eXo.mail.UIMailDragDrop.initDnD(eXo.mail.UIMailDragDrop.dropableSets, this, this, e) ;
+  if (e.button == 1 || e.which == 0) {
+    return eXo.mail.UIMailDragDrop.initDnD(eXo.mail.UIMailDragDrop.dropableSets, this, this, e) ;
+  }
+  return true ;
 } ;
 
 UIMailDragDrop.prototype.initDnD = function(dropableObjs, clickObj, dragObj, e) {

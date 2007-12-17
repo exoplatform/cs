@@ -50,9 +50,12 @@ UIContactDragDrop.prototype.regDnDItem = function() {
   }
 } ;
 
-UIContactDragDrop.prototype.dndTrigger = function(e) {
-  e = e ? e : window.event ;
-  return eXo.contact.UIContactDragDrop.initDnD(eXo.contact.UIContactDragDrop.dropableSets, this, this, e) ;
+UIContactDragDrop.prototype.dndTrigger = function(e){
+  e = e ? e : window.event;
+  if (e.button == 1 || e.which == 0) {
+    return eXo.contact.UIContactDragDrop.initDnD(eXo.contact.UIContactDragDrop.dropableSets, this, this, e);
+  }
+  return true ;    
 } ;
 
 UIContactDragDrop.prototype.initDnD = function(dropableObjs, clickObj, dragObj, e) {
