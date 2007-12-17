@@ -328,7 +328,7 @@
 											String color = tag.getColor() ;
 											String description = tag.getDescription() ;
 									%>
-										<div class="StatusIcon ${color}TagIcon" title="$description"><span></span></div>
+										<a href="<%=uicomponent.event("OpenTopicsTag", tag.getId());%>"><div class="StatusIcon ${color}TagIcon" title="$description"><span></span></div></a>
 									<% } %>
 									</td>
 								 	<td >
@@ -375,7 +375,6 @@
 				</div>
 			</div>
 		</div>
-		
 		
 		<div title="Go to page Number " class="GotoPageIcon" >
 			<div onclick="eXo.forum.UIForumPortlet.showPopup(this, event);" style="width: 20px; height: 16px;"><span></span></div>

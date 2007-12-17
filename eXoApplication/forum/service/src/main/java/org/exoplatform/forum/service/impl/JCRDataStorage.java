@@ -811,9 +811,7 @@ public class JCRDataStorage{
 
 	
 	public void addTopicInTag(SessionProvider sProvider, String tagId, String topicPath) throws Exception {
-		System.out.println("\n\n addTopicInTag: " + tagId);
 		Node forumHomeNode = getForumHomeNode(sProvider) ;
-
 		Node tagNode ;
 		if(forumHomeNode.hasNode(tagId)) {
 			tagNode = forumHomeNode.getNode(tagId) ;
@@ -822,10 +820,8 @@ public class JCRDataStorage{
 			String []newTopicPath = new String[t+1];
 			for (int i = 0; i < t; i++) {
 				newTopicPath[i] = oldTopicPath[i];
-				System.out.println("\n\n addTopicInTag:  " + newTopicPath[i]);
 			}
 			newTopicPath[t] = topicPath ;
-			System.out.println("\n\n addTopicInTag:  " + newTopicPath[t]);
 			tagNode.setProperty("exo:topicPath", newTopicPath);
 			forumHomeNode.save() ;
 			forumHomeNode.getSession().save() ;
@@ -990,7 +986,13 @@ public class JCRDataStorage{
 			category.setPath(path);
 			category.setCategoryName(myNode.getProperty("exo:name").getString()) ;
 			object = (Object)category ;
-		} else return null;
+		} else if(path.indexOf("tag") > 0){
+			Tag tag = new Tag() ;
+			tag.setId(myNode.getName()) ;
+			tag.setName(myNode.getProperty("exo:name").getString()) ;
+			object = (Object)tag ;
+		} else return null ;
+
 		return object;
 	}
 	

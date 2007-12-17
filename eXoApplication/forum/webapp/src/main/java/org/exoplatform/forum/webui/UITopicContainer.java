@@ -49,7 +49,8 @@ import org.exoplatform.webui.form.validator.PositiveNumberFormatValidator;
 			@EventConfig(listeners = UITopicContainer.GoNumberPageActionListener.class ),	
 			@EventConfig(listeners = UITopicContainer.AddTopicActionListener.class ),	
 			@EventConfig(listeners = UITopicContainer.OpenTopicActionListener.class ),
-			@EventConfig(listeners = UITopicContainer.DisplayOptionActionListener.class ),
+			@EventConfig(listeners = UITopicContainer.OpenTopicsTagActionListener.class ),
+			@EventConfig(listeners = UITopicContainer.DisplayOptionActionListener.class ),//Menu Forum
 			@EventConfig(listeners = UITopicContainer.EditForumActionListener.class ),	
 			@EventConfig(listeners = UITopicContainer.SetLockedForumActionListener.class),
 			@EventConfig(listeners = UITopicContainer.SetUnLockForumActionListener.class),
@@ -254,7 +255,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
 	static public class AddTopicActionListener extends EventListener<UITopicContainer> {
 		public void execute(Event<UITopicContainer> event) throws Exception {
 			UITopicContainer uiTopicContainer = event.getSource() ;
-			UIForumPortlet forumPortlet = event.getSource().getAncestorOfType(UIForumPortlet.class) ;
+			UIForumPortlet forumPortlet =uiTopicContainer.getAncestorOfType(UIForumPortlet.class) ;
 			UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;
 			UIPopupContainer popupContainer = popupAction.createUIComponent(UIPopupContainer.class, null, null) ;
 			UITopicForm topicForm = popupContainer.addChild(UITopicForm.class, null, null) ;
@@ -262,6 +263,18 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
 			popupContainer.setId("UIAddTopicContainer") ;
 			popupAction.activate(popupContainer, 670, 440) ;
 			event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+		}
+	}
+	
+	static public class OpenTopicsTagActionListener extends EventListener<UITopicContainer> {
+		public void execute(Event<UITopicContainer> event) throws Exception {
+			UITopicContainer uiTopicContainer = event.getSource() ;
+			String tagId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+			UIForumPortlet forumPortlet = uiTopicContainer.getAncestorOfType(UIForumPortlet.class) ;
+			forumPortlet.updateIsRendered(3) ;
+			forumPortlet.getChild(UIBreadcumbs.class).setUpdataPath(tagId) ;
+			forumPortlet.getChild(UITopicsTag.class).setIdTag(tagId) ;
+			event.getRequestContext().addUIComponentToUpdateByAjax(forumPortlet) ;
 		}
 	}
 	

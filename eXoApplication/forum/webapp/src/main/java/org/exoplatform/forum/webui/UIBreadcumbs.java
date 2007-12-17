@@ -12,6 +12,7 @@ import org.exoplatform.forum.ForumUtils;
 import org.exoplatform.forum.service.Category;
 import org.exoplatform.forum.service.Forum;
 import org.exoplatform.forum.service.ForumService;
+import org.exoplatform.forum.service.Tag;
 import org.exoplatform.forum.service.Topic;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -58,8 +59,13 @@ public class UIBreadcumbs extends UIContainer {
 				pathNode = pathNode + "/" + string;
 				if(t == 0) {
 					tempPath = string;
-					Category category = (Category)forumService.getObjectNameByPath(ForumUtils.getSystemProvider(), pathNode);
-					breadcumbs_.add(category.getCategoryName()) ;
+					if(string.indexOf("ategory")> 0) {
+						Category category = (Category)forumService.getObjectNameByPath(ForumUtils.getSystemProvider(), pathNode);
+						breadcumbs_.add(category.getCategoryName()) ;
+					} else {
+						Tag tag = (Tag)forumService.getObjectNameByPath(ForumUtils.getSystemProvider(), pathNode);
+						breadcumbs_.add(tag.getName()) ;
+					}
 				}else if(t == 1) {
 					tempPath = tempPath + "/" + string ;
 					Forum forum = (Forum)forumService.getObjectNameByPath(ForumUtils.getSystemProvider(), pathNode);

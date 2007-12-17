@@ -28,8 +28,8 @@ public class UIForumPortlet extends UIPortletApplication {
 		addChild(UIBreadcumbs.class, null, null) ;
 		addChild(UICategoryContainer.class, null, null).setRendered(isCategoryRendered) ;
 		addChild(UIForumContainer.class, null, null).setRendered(isForumRendered) ;
+		addChild(UITopicsTag.class, null, null).setRendered(isPostRendered) ;
 		addChild(UIForumLinks.class, null, null).setRendered(isForumRendered) ;
-		addChild(UIPostPreview.class, null, null).setRendered(isPostRendered) ;
 		addChild(UIPopupAction.class, null, null) ;
 	}
 
@@ -51,7 +51,7 @@ public class UIForumPortlet extends UIPortletApplication {
 		}
 		getChild(UICategoryContainer.class).setRendered(isCategoryRendered) ;
 		getChild(UIForumContainer.class).setRendered(isForumRendered) ;
-		getChild(UIPostPreview.class).setRendered(isPostRendered) ;
+		getChild(UITopicsTag.class).setRendered(isPostRendered) ;
 	}
 	
 	public void renderPopupMessages() throws Exception {

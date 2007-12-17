@@ -17,11 +17,5 @@
       }
     }
 	%>
-	<%uicomponent.renderPopupMessages()%>
-	<%  
-		String []colors = ["blue", "DarkGoldenRod", "green", "yellow", "BlueViolet", "orange","darkBlue", "IndianRed","DarkCyan" ,"lawnGreen"];
-		for(color in colors) {
-	%>
-	<div class="${color}"><span>${color}</span></div>
-	<% } %>
+	<%uicomponent.renderPopupMessages();%>
 </div>
