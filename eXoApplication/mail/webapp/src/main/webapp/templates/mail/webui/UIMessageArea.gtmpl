@@ -15,7 +15,7 @@
 %>
 
 <div class="MailWorkingDetails SpliterContainer" id="<%=uicomponent.getId()%>">
-	<div class="UIMessageArea SpliterResizableListArea" id="uiMessageListResizableAreaMain">		
+	<div class="UIMessageArea SpliterResizableListArea" id="uiMessageListResizableArea">		
 		<%uicomponent.renderChild(UIMessageList.class);%>
 	</div>
 	<div class="ResizeReadingPane" id="ResizeReadingPane" onmousedown="eXo.mail.Spliter.doResize(event, this, 'uiMessageListResizableAreaMain', 'SpliterResizableArea');"><span></span></div>
