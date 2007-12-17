@@ -182,7 +182,6 @@ public class UIMessageList extends UIForm {
     for (Message msg : getMessageList()) {
       UIFormCheckBoxInput<Boolean> uiCheckbox = getChildById(msg.getId());
       if (uiCheckbox != null && uiCheckbox.isChecked()) {
-        messageList.add(msg);
         // For Conversation
         if (msg.isRootConversation() && msg.getMessageIds() != null) {
           for (int i = 0; i < msg.getMessageIds().length; i++) {
