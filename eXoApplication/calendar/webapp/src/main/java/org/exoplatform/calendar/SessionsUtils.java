@@ -20,9 +20,16 @@ public class SessionsUtils {
     return false ;
   }
   
-  public static SessionProvider getSystemProvider() {   
-    String key = Util.getPortalRequestContext().getSessionId() + SYSTEM_SUFFIX;
-    return getJcrSessionProvider(key) ;
+  public static SessionProvider getSystemProvider() {
+  	String sessionId ;
+  	String key ;
+  	try{
+  		sessionId = Util.getPortalRequestContext().getSessionId() ; 
+      key = sessionId + SYSTEM_SUFFIX;
+  	}catch(Exception e) {
+  		key = SYSTEM_SUFFIX;
+  	}
+  	return getJcrSessionProvider(key) ;
   }    
 
   public static SessionProvider getSessionProvider() {    
