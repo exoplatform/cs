@@ -602,12 +602,8 @@ UIWeekView.prototype.initSelectionX = function() {
 	for(var i = 1 ; i < len ; i ++) {
 		containers[i].onmousedown = UISelectionX.start ;
 	}
-//	UISelectionX.offsetParent = document.getElementById("UIControlWorkspace") ;
-//	UISelectionX.minX = eXo.core.Browser.findPosXInContainer(containers[1], UISelectionX.offsetParent) ;
-//	UISelectionX.maxX = UISelectionX.minX + containers[1].offsetWidth*7 ;
 	UISelectionX.supObject = containers[1] ;
 	UISelectionX.viewType = "UIWeekView" ;
-	//UISelectionX.callback = eXo.calendar.UIWeekView.callbackSelectionX ;
 } ;
 
 UIWeekView.prototype.callbackSelectionX = function() {

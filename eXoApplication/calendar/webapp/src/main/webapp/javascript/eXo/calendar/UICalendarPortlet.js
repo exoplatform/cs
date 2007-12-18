@@ -1,5 +1,5 @@
 eXo.require('eXo.webui.UIContextMenu') ;
-
+eXo.require('eXo.calendar.CalendarUtils','/calendar/javascript/') ;
 function UICalendarPortlet() {
 		
 }
@@ -28,12 +28,6 @@ UICalendarPortlet.prototype.dateDiff = function(start,end) {
 	return (end - start) ;
 } ;
 
-//UICalendarPortlet.prototype.isMatchDate = function(start,end) {
-//	start = (new Date(start)).getDate() ;
-//	end = (new Date(end)).getDate() ;
-//	if (end == start) return true ;
-//	return false ;
-//} ;
 UICalendarPortlet.prototype.toSettingTime = function(time, settingTimeZone, severTimeZone) {
 	var GMT = time - (3600000*serverTimeZone) ;
 	var settingTime = GMT + (3600000*settingTimeZone) ;
@@ -992,9 +986,9 @@ UISelectionX.prototype.start = function(evt) {
 		UISelectionX.startX = eXo.calendar.UICalendarPortlet.round(eXo.core.Browser.findMouseRelativeX(UISelectionX.block.offsetParent,_e),UISelectionX.step) ;
 		if(eXo.core.DOMUtil.findAncestorByClass(UISelectionX.container,"EventWeekBar")) UISelectionX.startX = eXo.core.Browser.findPosXInContainer(UISelectionX.container, UISelectionX.block.offsetParent) ;
 		UISelectionX.startY = (UISelectionX.relativeObject) ? (eXo.core.Browser.findPosYInContainer(UISelectionX.container, UISelectionX.block.offsetParent) - UISelectionX.relativeObject.scrollTop) : eXo.core.Browser.findPosYInContainer(UISelectionX.container, UISelectionX.block.offsetParent) ;
-		UISelectionX.block.style.height = UISelectionX.container.offsetHeight  + "px" ;
+		UISelectionX.block.style.height = UISelectionX.container.offsetHeight - 1  + "px" ;
 		UISelectionX.block.style.left = UISelectionX.startX  + "px" ;
-		UISelectionX.block.style.top = UISelectionX.startY  + "px" ;
+		UISelectionX.block.style.top = UISelectionX.startY + "px" ;
 		UISelectionX.block.style.width = UISelectionX.step + "px" ;
 		eXo.calendar.UICalendarPortlet.resetZIndex(UISelectionX.block) ;
 		document.onmousemove = UISelectionX.execute ;
@@ -1122,9 +1116,6 @@ UICalendarPortlet.prototype.callbackSelectionX = function() {
 	var DOMUtil = eXo.core.DOMUtil ;
 	var UISelectionX = eXo.calendar.UISelectionX ;
 	var index = parseInt(((UISelectionX.startX - eXo.core.Browser.findPosXInContainer(this.busyCell[0], UISelectionX.block.offsetParent))/UISelectionX.step)) + 1;
-	//alert(index + " " + UISelectionX.container.cellIndex) ;
-	//var start = this.minToTime((UISelectionX.container.cellIndex - 1)*15) ;
-	//var end = this.minToTime((UISelectionX.container.cellIndex - 1 + UISelectionX.block.offsetWidth/UISelectionX.step)*15) ;
 	var start = this.minToTime(index*15) ;
 	var end = this.minToTime((index + UISelectionX.block.offsetWidth/UISelectionX.step)*15) ;
 	var uiTabContentContainer = DOMUtil.findAncestorByClass(UISelectionX.container, "UITabContentContainer") ;
