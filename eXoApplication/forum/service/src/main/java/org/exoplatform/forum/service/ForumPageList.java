@@ -4,7 +4,6 @@
  **************************************************************************/
 package org.exoplatform.forum.service;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -140,6 +139,7 @@ public class ForumPageList extends JCRPageList {
 		if(topicNode.hasProperty("exo:canPost")) topicNew.setCanPost(ValuesToStrings(topicNode.getProperty("exo:canPost").getValues())) ;
 		if(topicNode.hasProperty("exo:isPoll")) topicNew.setIsPoll(topicNode.getProperty("exo:isPoll").getBoolean()) ;
 		if(topicNode.hasProperty("exo:userVoteRating")) topicNew.setUserVoteRating(ValuesToStrings(topicNode.getProperty("exo:userVoteRating").getValues())) ;
+		if(topicNode.hasProperty("exo:tagId")) topicNew.setTagId(ValuesToStrings(topicNode.getProperty("exo:tagId").getValues())) ;
 		if(topicNode.hasProperty("exo:voteRating")) topicNew.setVoteRating(topicNode.getProperty("exo:voteRating").getDouble()) ;
 		String idFirstPost = topicNode.getName().replaceFirst("topic", "post") ;
 		if(topicNode.hasNode(idFirstPost)) {
@@ -177,6 +177,7 @@ public class ForumPageList extends JCRPageList {
 	}
 	
 	@Override
+	@SuppressWarnings("unchecked")
 	public List getAll() throws Exception { return null; }
 
 

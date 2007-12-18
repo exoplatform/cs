@@ -60,9 +60,15 @@ public class UITagForm extends UIForm implements UIPopupComponent {
   }
 	
 	@SuppressWarnings("unused")
+  private boolean getSelected(String tagId) throws Exception {
+		if(this.IdSelected.equals(tagId)) return true ;
+		return false ;
+	}
+	
+	@SuppressWarnings("unused")
   private List<Tag> getAllTag() throws Exception {
 		List<Tag> tags = forumService.getTags(ForumUtils.getSystemProvider());
-		if(tags.size() > 0) this.IdSelected = tags.get(0).getId() ;
+		if(tags.size() > 0 && this.IdSelected.length() == 0) this.IdSelected = tags.get(0).getId() ;
 		return tags ;
 	}
 	

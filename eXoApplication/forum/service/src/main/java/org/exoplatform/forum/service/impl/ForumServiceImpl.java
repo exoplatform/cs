@@ -124,7 +124,8 @@ public class ForumServiceImpl implements ForumService{
 		return storage_.getObjectNameByPath(sProvider, path);
 	}
 	
-	public List getPage(long page, JCRPageList pageList, SessionProvider sProvider) throws Exception {
+	@SuppressWarnings("unchecked")
+  public List getPage(long page, JCRPageList pageList, SessionProvider sProvider) throws Exception {
 		return storage_.getPage(page, pageList, sProvider) ;
 	}
 	
@@ -151,6 +152,10 @@ public class ForumServiceImpl implements ForumService{
 	public void addTopicInTag(SessionProvider sProvider, String tagId, String topicPath) throws Exception {
 		storage_.addTopicInTag(sProvider, tagId, topicPath) ;
 	}
+	
+	public void removeTopicInTag(SessionProvider sProvider, String tagId, String topicPath) throws Exception {
+		storage_.removeTopicInTag(sProvider, tagId, topicPath);
+	}
 
 	public Tag getTag(SessionProvider sProvider, String tagId) throws Exception {
 		return storage_.getTag(sProvider, tagId);
@@ -164,19 +169,19 @@ public class ForumServiceImpl implements ForumService{
 		return storage_.getTags(sProvider);
 	}
 
-	public List<Tag> getTagsByTopic(SessionProvider sProvider, String topicPath) throws Exception {
-		return storage_.getTagsByTopic(sProvider, topicPath);
+	public List<Tag> getTagsByTopic(SessionProvider sProvider, String[] tagIds) throws Exception {
+		return storage_.getTagsByTopic(sProvider, tagIds);
 	}
 	
-	public List<Topic> getTopicsByTag(SessionProvider sProvider, String tagId) throws Exception {
-		return storage_.getTopicsByTag(sProvider, tagId) ;
+	public JCRPageList getTopicsByTag(SessionProvider sProvider, String tagId) throws Exception {
+		return storage_.getTopicsByTag(sProvider, tagId);
 	}
-
-	public void removeTag(SessionProvider sProvider, String tagId) throws Exception {
-		storage_.removeTag(sProvider, tagId) ;
-	}
-
+	
 	public void saveTag(SessionProvider sProvider, Tag newTag) throws Exception {
 		storage_.saveTag(sProvider, newTag) ;
+	}
+	
+	public void removeTag(SessionProvider sProvider, String tagId) throws Exception {
+		storage_.removeTag(sProvider, tagId) ;
 	}
 }

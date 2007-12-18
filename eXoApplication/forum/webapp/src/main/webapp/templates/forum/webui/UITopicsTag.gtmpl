@@ -1,6 +1,6 @@
 <%  
 	import org.exoplatform.forum.service.Topic ;
-	import org.exoplatform.forum.webui.UIPostPreview ;
+	import org.exoplatform.forum.webui.UITopicsTag ;
 	import org.exoplatform.forum.service.Tag ;
 	
 	List topics = uicomponent.getTopicsTag() ; 

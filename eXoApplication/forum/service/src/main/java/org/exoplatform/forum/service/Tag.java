@@ -20,7 +20,6 @@ public class Tag {
 	private String owner ;
 	private String description ;
 	private String color ;
-	private String []topicPath = new String[] {} ;
 	public Tag() {
 		id = "tag" + IdGenerator.generate() ;
 	}
@@ -39,8 +38,4 @@ public class Tag {
 		
 	public void setColor(String color) { this.color = color ; }
 	public String getColor() { return color ; }
-	
-	public String[] getTopicPath(){return topicPath;}
-	public void setTopicPath(String[] topicPath){this.topicPath = topicPath;}
-	
 }

@@ -7,7 +7,7 @@ public class ForumOption {
 	private long maxTopic ;
 	private long maxPost ;
 	private boolean isShowForumJump = false ;
-	private String userName ;
+	//private String userName ;
 	
 	public ForumOption() {
 		// TODO Auto-generated constructor stub

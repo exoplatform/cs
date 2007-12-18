@@ -106,7 +106,6 @@ public class UIAddTagForm extends UIForm implements UIPopupComponent {
 			newTag.setColor(color);
 			newTag.setDescription(descriptiom) ;
 			newTag.setOwner(userName) ;
-			newTag.setTopicPath(uiForm.topicPath);
 			ForumService forumService = (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
 			forumService.saveTag(ForumUtils.getSystemProvider(), newTag);
 			UIPopupContainer popupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;

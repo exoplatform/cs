@@ -37,7 +37,9 @@ import org.exoplatform.webui.form.UIForm;
 public class UITopicsTag extends UIForm {
 	private ForumService forumService = (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
 	private String tagId = "" ;
+	private JCRPageList listTopic ;
 	private List<Topic> topics ;
+	private long page = 1 ;
 	private List <JCRPageList> listPageListPost = new ArrayList<JCRPageList>() ;
 	public UITopicsTag() throws Exception {
 		//addChild(UIForumPageIterator.class, null, null) ;
@@ -47,17 +49,24 @@ public class UITopicsTag extends UIForm {
 		this.tagId = tagId ;
   }
 	
-	private List<Topic> getTopicsTag() throws Exception {
-		this.topics = forumService.getTopicsByTag(ForumUtils.getSystemProvider(), this.tagId) ;
+	@SuppressWarnings("unused")
+  private JCRPageList getListTopicTag() throws Exception {
+		System.out.println("\n\n Xem chay cai nay chua da UI" + this.tagId);
+		this.listTopic = forumService.getTopicsByTag(ForumUtils.getSystemProvider(), this.tagId) ;
+		return this.listTopic ;
+	}
+
+	@SuppressWarnings({ "unchecked", "unused" })
+  private List<Topic> getTopicsTag() throws Exception {
+		this.listTopic = forumService.getTopicsByTag(ForumUtils.getSystemProvider(), this.tagId) ;
+		this.topics = forumService.getPage(page, this.listTopic, ForumUtils.getSystemProvider()) ;
 		return this.topics ;
 	}
-
-	private Tag getTagById() throws Exception {
+	
+	@SuppressWarnings("unused")
+  private Tag getTagById() throws Exception {
 		return forumService.getTag(ForumUtils.getSystemProvider(), this.tagId) ;
 	}
-
-
-
 
 	@SuppressWarnings("unused")
 	private String[] getStarNumber(Topic topic) throws Exception {
@@ -99,8 +108,8 @@ public class UITopicsTag extends UIForm {
 		return string.toString();
 	}
 	@SuppressWarnings("unused")
-	private List<Tag> getTagsByTopic(String topicPath) throws Exception {
-		return this.forumService.getTagsByTopic(ForumUtils.getSystemProvider(), topicPath);	
+	private List<Tag> getTagsByTopic(String[] tagIds) throws Exception {
+		return this.forumService.getTagsByTopic(ForumUtils.getSystemProvider(), tagIds);	
 	}
 	
 	private Topic getTopic(String topicId) throws Exception {

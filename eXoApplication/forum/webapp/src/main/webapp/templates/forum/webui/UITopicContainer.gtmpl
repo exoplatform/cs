@@ -323,7 +323,7 @@
 					 					</div>
 									</td>
 									<td class="Tdbox">
-									<% List tags = uicomponent.getTagsByTopic(topic.getPath()); 
+									<% List tags = uicomponent.getTagsByTopic(topic.getTagId()); 
 										for(tag in tags) {
 											String color = tag.getColor() ;
 											String description = tag.getDescription() ;

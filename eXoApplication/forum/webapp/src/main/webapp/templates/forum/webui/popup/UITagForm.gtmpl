@@ -18,8 +18,10 @@
 			  String color = tag.getColor() ;
 			  String description = tag.getDescription() ;
 			  String tagId = tag.getId() ;
+			  String classCss = "Normal";
+			  if(uicomponent.getSelected(tagId)) classCss = "Selected";
 		%>
-			<a href="<%=uicomponent.event("Selected",tagId);%>" class="IconHolder Normal ${color}TagIcon" title="$description">$tagName</a>
+			<a href="<%=uicomponent.event("Selected",tagId);%>" class="IconHolder $classCss ${color}TagIcon" title="$description">$tagName</a>
 		<% } %>
 		</div>
 	</div>

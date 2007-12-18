@@ -44,7 +44,7 @@
 }
 
 .UITagForm .TagsList .Selected {
-	background: #e8e8ef url('../../skinIcons/16x16/icons/RedTagIcon.gif') no-repeat 10px center;
+	background-color: #e8e8ef;
 }
 
 .UIForumPortlet .Color {

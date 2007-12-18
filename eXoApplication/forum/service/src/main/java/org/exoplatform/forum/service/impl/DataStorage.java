@@ -59,12 +59,13 @@ public interface DataStorage {
 	public List getPage(long page, JCRPageList pageList) throws Exception ;
 	public List<ForumLinkData> getAllLink() throws Exception ;
 	
+	public void addTopicInTag(SessionProvider sProvider, String tagId, String topicPath) throws Exception ;
+	public void removeTopicInTag(SessionProvider sProvider, String tagId, String topicPath) throws Exception ;
 	public Tag getTag(SessionProvider sProvider, String tagId) throws Exception ;
 	public List<Tag> getTags(SessionProvider sProvider) throws Exception ;
 	public List<Tag> getTagsByUser(SessionProvider sProvider, String userName) throws Exception ;
-	public List<Tag> getTagsByTopic(SessionProvider sProvider, String topicPath) throws Exception ;
-	public List<Topic> getTopicsByTag(SessionProvider sProvider, String tagId) throws Exception ;
+	public List<Tag> getTagsByTopic(SessionProvider sProvider, String[] tagIds) throws Exception ;
+	public JCRPageList getTopicsByTag(SessionProvider sProvider, String tagId) throws Exception ;
 	public void saveTag(SessionProvider sProvider, Tag newTag) throws Exception ;
-	public void addTopicInTag(SessionProvider sProvider, String tagId, String topicPath) throws Exception ;
 	public void removeTag(SessionProvider sProvider, String tagId) throws Exception ;
 }

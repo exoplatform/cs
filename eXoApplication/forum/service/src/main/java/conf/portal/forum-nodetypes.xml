@@ -170,6 +170,9 @@
 			<propertyDefinition name="exo:userVoteRating" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
 				<valueConstraints/>
 			</propertyDefinition>
+			<propertyDefinition name="exo:tagId" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
+				<valueConstraints/>
+			</propertyDefinition>
 			<propertyDefinition name="exo:voteRating" requiredType="Double" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
 				<valueConstraints/>
 			</propertyDefinition>
@@ -338,9 +341,6 @@
 			<propertyDefinition name="exo:color" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
 				<valueConstraints/>
 			</propertyDefinition>
-			<propertyDefinition name="exo:topicPath" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
-				<valueConstraints/>
-			</propertyDefinition>	
 		</propertyDefinitions>
 	</nodeType>	 	 	 	
 	
