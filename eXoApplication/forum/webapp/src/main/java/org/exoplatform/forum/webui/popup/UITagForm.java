@@ -5,6 +5,7 @@
 
 package org.exoplatform.forum.webui.popup;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.exoplatform.container.PortalContainer;
@@ -44,6 +45,7 @@ public class UITagForm extends UIForm implements UIPopupComponent {
 	@SuppressWarnings("unused")
   private String IdSelected = "";
 	private String topicPath = "";
+	private String tagId[] = new String[] {} ;
 	public UITagForm() throws Exception {
   }
 
@@ -55,8 +57,9 @@ public class UITagForm extends UIForm implements UIPopupComponent {
 	  // TODO Auto-generated method stub
   }
 	
-	public void setTopicPath(String topicPath) {
+	public void setTopicPathAndTagId(String topicPath, String[] tagId) {
 	  this.topicPath = topicPath ;
+	  this.tagId = tagId ;
   }
 	
 	@SuppressWarnings("unused")
@@ -68,8 +71,21 @@ public class UITagForm extends UIForm implements UIPopupComponent {
 	@SuppressWarnings("unused")
   private List<Tag> getAllTag() throws Exception {
 		List<Tag> tags = forumService.getTags(ForumUtils.getSystemProvider());
-		if(tags.size() > 0 && this.IdSelected.length() == 0) this.IdSelected = tags.get(0).getId() ;
-		return tags ;
+		List<Tag> tags_ = new ArrayList<Tag>() ;
+		boolean isUpdate = true ;
+		for (Tag tag : tags) {
+	    String tagId = tag.getId() ;
+	    for(String str : this.tagId) {
+	    	if(tagId.equals(str)) {
+	    		isUpdate = false ;
+	    		break ;
+	    	}
+	    }
+	    if(isUpdate) tags_.add(tag) ;
+	    isUpdate = true ;
+    }
+		if(tags_.size() > 0 && this.IdSelected.length() == 0) this.IdSelected = tags.get(0).getId() ;
+		return tags_ ;
 	}
 	
 	static  public class AddTagActionListener extends EventListener<UITagForm> {

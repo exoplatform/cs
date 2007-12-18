@@ -239,7 +239,7 @@ public class UITopicDetail extends UIForm	{
 			UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;
 			UIPopupContainer popupContainer = popupAction.createUIComponent(UIPopupContainer.class, null, null) ;
 			UITagForm tagForm = popupContainer.addChild(UITagForm.class, null, null) ;
-			tagForm.setTopicPath(topicDetail.topic.getPath()) ;
+			tagForm.setTopicPathAndTagId(topicDetail.topic.getPath(), topicDetail.topic.getTagId()) ;
 			popupAction.activate(popupContainer, 240, 280) ;
 			event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
 		}

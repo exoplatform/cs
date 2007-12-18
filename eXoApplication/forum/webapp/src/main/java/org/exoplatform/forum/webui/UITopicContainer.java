@@ -219,9 +219,6 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
 	}
 	@SuppressWarnings("unused")
 	private List<Tag> getTagsByTopic(String[] tagIds) throws Exception {
-		for (String string : tagIds) {
-	    System.out.println("\n\n " + string);
-    }
 		return this.forumService.getTagsByTopic(ForumUtils.getSystemProvider(), tagIds);	
 	}
 	
