@@ -67,7 +67,7 @@ public class UISelectAccount extends UIForm {
       options.add(new SelectItemOption<String>(acc.getLabel(), acc.getId())) ;
     }
     //TODO : get default account
-    if (getAccounts().size() > 0) { MailUtils.setAccountId(getAccounts().get(0).getId()); }
+    //if (getAccounts().size() > 0) { MailUtils.setAccountId(getAccounts().get(0).getId()); }
     return options ;
   }
   

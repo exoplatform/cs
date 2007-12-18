@@ -670,6 +670,13 @@ public class MailServiceImpl implements MailService{
     storage_.saveMailSetting(sProvider, username, newSetting);
   }
   
+  public String getCurrentAccount(SessionProvider sProvider, String username) throws Exception{
+  	return storage_.getCurrentAccount(sProvider, username) ;
+  }
+  public void updateCurrentAccount(SessionProvider sProvider, String username, String accountId) throws Exception{
+  	storage_.updateCurrentAccount(sProvider, username, accountId) ;
+  }
+  
   public void importMessage(SessionProvider sProvider, String username, String accountId, String folderId, InputStream inputStream, String type) throws Exception {
     /*Properties props = System.getProperties();
     Session session = Session.getDefaultInstance(props, null);

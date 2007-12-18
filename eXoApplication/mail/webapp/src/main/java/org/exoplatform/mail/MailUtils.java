@@ -25,7 +25,6 @@ import org.exoplatform.portal.webui.util.Util;
  */
 public class MailUtils { 
   
-  private static String selectedAccountId_;
   
   static public MailService getMailService() throws Exception {
     return (MailService)PortalContainer.getComponent(MailService.class) ;
@@ -36,11 +35,11 @@ public class MailUtils {
   }
   
   static public String getAccountId() throws Exception { 
-    return selectedAccountId_ ;
+  	return getMailService().getCurrentAccount(SessionsUtils.getSessionProvider(), getCurrentUser()) ;
   }
   
   static public void setAccountId(String accId) throws Exception { 
-    selectedAccountId_ = accId ;
+  	getMailService().updateCurrentAccount(SessionsUtils.getSessionProvider(), getCurrentUser(), accId) ;
   }
   
   public static String getImageSource(Contact contact, DownloadService dservice) throws Exception {    
