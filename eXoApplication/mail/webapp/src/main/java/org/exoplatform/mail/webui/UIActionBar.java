@@ -180,7 +180,7 @@ public class UIActionBar extends UIContainer {
       List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>();
       for(Account acc : mailSrv.getAccounts(SessionsUtils.getSessionProvider(), username)) {
         SelectItemOption<String> itemOption = new SelectItemOption<String>(acc.getUserDisplayName() + " &lt;" + acc.getEmailAddress() + 
-            "&gt;", acc.getUserDisplayName() + "<" + acc.getEmailAddress() + ">");
+            "&gt;", acc.getId());
         options.add(itemOption) ;
       }
       uiMailSetting.fillFormAccount(options);

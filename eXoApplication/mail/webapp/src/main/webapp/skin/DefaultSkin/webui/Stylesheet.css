@@ -228,7 +228,7 @@
 }
 
 .UIMailPortlet .UINavigationContainer .MyFolder .Icon  {
-	padding: 0px;
+	padding-left: 30px;
 }
 
 .UIMailPortlet .MyFolder .ChildrenContainer {

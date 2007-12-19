@@ -314,4 +314,10 @@ public interface MailService {
   public void saveSpamFilter(SessionProvider sProvider, String username, String accountId, SpamFilter spamFilter) throws Exception ;
   
   public void toggleMessageProperty(SessionProvider sProvider, String username, String accountId, List<String> msgList, String property) throws Exception ;
+  
+  public String getFolderHomePath(SessionProvider sProvider, String username, String accountId) throws Exception ;
+  
+  public void saveFolder(SessionProvider sProvider, String username, String accountId, String parentPath, Folder folder) throws Exception ;
+  
+  public List<Folder> getSubFolders(SessionProvider sProvider, String username, String accountId, String parentPath) throws Exception ;
 }

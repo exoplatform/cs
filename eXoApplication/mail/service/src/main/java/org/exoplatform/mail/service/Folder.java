@@ -15,6 +15,7 @@ package org.exoplatform.mail.service;
  */
 public class Folder {
   private String id ;
+  private String path;
   private String name ;
   private String label ;
   private long unreadMessage = 0 ;
@@ -27,6 +28,9 @@ public class Folder {
    */
   public String getId()  { return id ; }
   public void   setId(String s) { id = s ; }
+  
+  public String getPath() { return path ; }
+  public void setPath(String s) { path = s; }
   
   /**
    * The name of the folder like Inbox, Sent, MyFolder

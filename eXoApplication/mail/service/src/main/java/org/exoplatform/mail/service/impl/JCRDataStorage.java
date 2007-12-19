@@ -439,6 +439,9 @@ public class JCRDataStorage{
     	Node mailSetting = mailHome.getNode(Utils.EXO_MAIL_SETTING) ;
     	if(mailSetting.hasProperty(Utils.EXO_DEFAULT_ACCOUNT)) 
     		return mailSetting.getProperty(Utils.EXO_DEFAULT_ACCOUNT).getString() ;
+    } else if (getAccounts(sProvider, username).size() > 0) {
+      System.out.println("===" + getAccounts(sProvider, username).get(0).getId());
+      return getAccounts(sProvider, username).get(0).getId();
     }
   	return null ;
   }
@@ -553,11 +556,26 @@ public class JCRDataStorage{
       folder = new Folder();
       folder.setId(node.getProperty(Utils.EXO_ID).getString());
       folder.setLabel(node.getProperty(Utils.EXO_LABEL).getString());
+      folder.setPath(node.getPath());
       folder.setName(node.getProperty(Utils.EXO_NAME).getString());
       folder.setPersonalFolder(node.getProperty(Utils.EXO_PERSONAL).getBoolean()) ;
       folder.setNumberOfUnreadMessage(node.getProperty(Utils.EXO_UNREADMESSAGES).getLong());
       folder.setTotalMessage(node.getProperty(Utils.EXO_TOTALMESSAGE).getLong());
     }
+    return folder ;
+  }
+  
+  public Folder getFolder(Node node) throws Exception {
+    Folder folder = new Folder();
+  // if this folder exists, creates the object and returns it
+    folder.setId(node.getProperty(Utils.EXO_ID).getString());
+    folder.setLabel(node.getProperty(Utils.EXO_LABEL).getString());
+    folder.setPath(node.getPath());
+    folder.setName(node.getProperty(Utils.EXO_NAME).getString());
+    folder.setPersonalFolder(node.getProperty(Utils.EXO_PERSONAL).getBoolean()) ;
+    folder.setNumberOfUnreadMessage(node.getProperty(Utils.EXO_UNREADMESSAGES).getLong());
+    folder.setTotalMessage(node.getProperty(Utils.EXO_TOTALMESSAGE).getLong());
+    
     return folder ;
   }
 
@@ -580,6 +598,26 @@ public class JCRDataStorage{
       myFolder = home.getNode(folder.getId());
     } else { // if it doesn't exist, creates it
       myFolder = home.addNode(folder.getId(), Utils.EXO_FOLDER);
+    }
+    // sets some properties
+    myFolder.setProperty(Utils.EXO_ID, folder.getId());
+    myFolder.setProperty(Utils.EXO_NAME, folder.getName());
+    myFolder.setProperty(Utils.EXO_LABEL, folder.getLabel());
+    myFolder.setProperty(Utils.EXO_UNREADMESSAGES, folder.getNumberOfUnreadMessage());
+    myFolder.setProperty(Utils.EXO_TOTALMESSAGE, folder.getTotalMessage());
+    myFolder.setProperty(Utils.EXO_PERSONAL, folder.isPersonalFolder()) ;
+    home.getSession().save();
+  }
+  
+  public void saveFolder(SessionProvider sProvider, String username, String accountId, String parentPath, Folder folder) throws Exception {
+    // gets folder home node of the specified account
+    Node home = getFolderHome(sProvider, username, accountId);
+    Node parentNode = (Node)home.getSession().getItem(parentPath);
+    Node myFolder = null;
+    if (parentNode.hasNode(folder.getId())) { // if the folder exists, gets it
+      myFolder = parentNode.getNode(folder.getId());
+    } else { // if it doesn't exist, creates it
+      myFolder = parentNode.addNode(folder.getId(), Utils.EXO_FOLDER);
     }
     // sets some properties
     myFolder.setProperty(Utils.EXO_ID, folder.getId());
@@ -705,24 +743,18 @@ public class JCRDataStorage{
   }
 
   public Node getMessageHome(SessionProvider sProvider, String username, String accountId) throws Exception {
-  	System.out.println("accountId ==========>" + accountId);
     Node accountHome = getMailHomeNode(sProvider, username).getNode(accountId);
     if(accountHome.hasNode(Utils.KEY_MESSAGE)) return accountHome.getNode(Utils.KEY_MESSAGE) ;
     else return accountHome.addNode(Utils.KEY_MESSAGE, Utils.NT_UNSTRUCTURED) ;
   }
 
-  private Node getFolderHome(SessionProvider sProvider, String username, String accountId) throws Exception {
-    Node home = getMailHomeNode(sProvider, username);
-    Account account = getAccountById(sProvider, username, accountId);
-    Node returnNode = null;
-    if (home.getNode(account.getId()).hasNode(Utils.KEY_FOLDERS)) 
-      returnNode = home.getNode(account.getId()).getNode(Utils.KEY_FOLDERS);
-    else
-      returnNode = home.getNode(account.getId()).addNode(Utils.KEY_FOLDERS, Utils.NT_UNSTRUCTURED);
-    return returnNode;
+  public Node getFolderHome(SessionProvider sProvider, String username, String accountId) throws Exception {
+    Node accountHome = getMailHomeNode(sProvider, username).getNode(accountId);
+    if (accountHome.hasNode(Utils.KEY_FOLDERS)) return accountHome.getNode(Utils.KEY_FOLDERS);
+    else return accountHome.addNode(Utils.KEY_FOLDERS, Utils.NT_UNSTRUCTURED);
   }
 
-  private Node getTagHome(SessionProvider sProvider, String username, String accountId) throws Exception {
+  public Node getTagHome(SessionProvider sProvider, String username, String accountId) throws Exception {
     Node accountNode = getMailHomeNode(sProvider, username).getNode(accountId);
     if(accountNode.hasNode(Utils.KEY_TAGS)) return accountNode.getNode(Utils.KEY_TAGS) ;
     else return accountNode.addNode(Utils.KEY_TAGS, Utils.NT_UNSTRUCTURED) ;    
@@ -954,5 +986,24 @@ public class JCRDataStorage{
       }
     }
     messageHome.getSession().save();
+  }
+    
+  public String getFolderHomePath(SessionProvider sProvider, String username, String accountId) throws Exception {
+    return getFolderHome(sProvider, username, accountId).getPath();
+  }
+  
+  public List<Folder> getSubFolders(SessionProvider sProvider, String username, String accountId, String parentPath) throws Exception {
+    Node home = getFolderHome(sProvider, username, accountId);
+    Node parentNode = (Node)home.getSession().getItem(parentPath);
+    List<Folder> childFolders = new ArrayList<Folder>();
+    NodeIterator it = parentNode.getNodes();
+    while (it.hasNext()) {
+      // browse the accounts and add them to the return list
+      Node node = it.nextNode();
+      if (node.isNodeType(Utils.EXO_FOLDER)) {
+        if (node.hasProperty(Utils.EXO_PERSONAL) && node.getProperty(Utils.EXO_PERSONAL).getBoolean()) childFolders.add(getFolder(node));
+      }
+    }
+    return childFolders ;
   }
 }

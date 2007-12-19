@@ -39,10 +39,16 @@ import org.exoplatform.webui.form.UIFormStringInput;
 )
 public class UIFolderForm extends UIForm implements UIPopupComponent {
   final public static String FIELD_NAME = "folderName" ;
+  
+  private String parentPath_ ;
+  
   public UIFolderForm() { 
     addUIFormInput(new UIFormStringInput(FIELD_NAME, FIELD_NAME, null)) ;
   }
 
+  public String getParentPath() { return parentPath_; }
+  public void setParentPath(String s) { parentPath_ = s ; }
+  
   static  public class SaveActionListener extends EventListener<UIFolderForm> {
     public void execute(Event<UIFolderForm> event) throws Exception {
       UIFolderForm uiForm = event.getSource() ;
@@ -66,7 +72,11 @@ public class UIFolderForm extends UIForm implements UIPopupComponent {
           folder.setId(folderId);
           folder.setName(folderName) ;
           folder.setLabel(folderName) ;
-          mailSvr.saveFolder(SessionsUtils.getSessionProvider(), username, accountId, folder) ;
+          if (uiForm.getParentPath() != null && !"".equals(uiForm.getParentPath().trim())) {
+            mailSvr.saveFolder(SessionsUtils.getSessionProvider(), username, accountId, uiForm.getParentPath(), folder) ;
+          } else {
+            mailSvr.saveFolder(SessionsUtils.getSessionProvider(), username, accountId, folder) ;
+          }
         } else {
           uiApp.addMessage(new ApplicationMessage("UIFolderForm.msg.folder-exist", new Object[]{folderName})) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;

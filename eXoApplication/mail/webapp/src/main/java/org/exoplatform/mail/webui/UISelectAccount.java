@@ -153,7 +153,9 @@ public class UISelectAccount extends UIForm {
       UISelectAccount uiSelectAcc = event.getSource() ;
       System.out.println("\n\n SelectAccountActionListener");
       String accId = uiSelectAcc.getSelectedValue() ;
-      MailUtils.setAccountId(accId);
+      MailService mailSrv = MailUtils.getMailService();
+      String username = MailUtils.getCurrentUser();
+      mailSrv.updateCurrentAccount(SessionsUtils.getSessionProvider(), username, accId);
       UIMailPortlet uiPortlet = uiSelectAcc.getAncestorOfType(UIMailPortlet.class) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet) ;
     }

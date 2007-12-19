@@ -35,6 +35,7 @@ import org.exoplatform.webui.event.EventListener;
     events = {
         @EventConfig(listeners = UIFolderContainer.ChangeFolderActionListener.class),
         @EventConfig(listeners = UIFolderContainer.AddFolderActionListener.class),
+        @EventConfig(listeners = UIFolderContainer.AddSubFolderActionListener.class),
         @EventConfig(listeners = UIFolderContainer.RenameFolderActionListener.class),
         @EventConfig(listeners = UIFolderContainer.RemoveFolderActionListener.class, confirm="UIFolderContainer.msg.confirm-remove-folder"),
         @EventConfig(listeners = UIFolderContainer.MarkReadActionListener.class),
@@ -43,6 +44,7 @@ import org.exoplatform.webui.event.EventListener;
 )
 public class UIFolderContainer extends UIContainer {
   private String currentFolder_ = null ;
+  public int i = 1;
   
   public UIFolderContainer() throws Exception {
     String accountId = MailUtils.getAccountId();
@@ -58,6 +60,28 @@ public class UIFolderContainer extends UIContainer {
   
   public List<Folder> getCustomizeFolders() throws Exception{
     return getFolders(true);
+  }
+  
+  public List<Folder> getSubFolders(String parentPath) throws Exception {
+    MailService mailSvr = MailUtils.getMailService();
+    String username = MailUtils.getCurrentUser() ;
+    String accountId = MailUtils.getAccountId();
+    List<Folder> subFolders = new ArrayList<Folder>();
+    for (Folder f : mailSvr.getSubFolders(SessionsUtils.getSessionProvider(), username, accountId, parentPath)) {
+      subFolders.add(f);
+    }
+    return subFolders ;
+  }
+  
+  public String getCustomerFolderPath() throws Exception {
+    MailService mailSvr = MailUtils.getMailService();
+    String username = MailUtils.getCurrentUser() ;
+    String accountId = MailUtils.getAccountId();
+    String path = "";
+    if (accountId != null) {
+      path = mailSvr.getFolderHomePath(SessionsUtils.getSessionProvider(), username, accountId) ;
+    } 
+    return path;
   }
   
   public Folder getCurrentFolder() throws Exception{
@@ -95,6 +119,20 @@ public class UIFolderContainer extends UIContainer {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiFolder.getAncestorOfType(UIMailPortlet.class)) ;
     }
   }
+  
+  static public class AddSubFolderActionListener extends EventListener<UIFolderContainer> {
+    public void execute(Event<UIFolderContainer> event) throws Exception {
+      System.out.println("\n\n AddSubFolderActionListener");
+      String folderPath = event.getRequestContext().getRequestParameter(OBJECTID) ; 
+      UIFolderContainer uiFolder = event.getSource() ;
+      UIPopupAction uiPopup = uiFolder.getAncestorOfType(UIMailPortlet.class).getChild(UIPopupAction.class) ;
+      UIFolderForm uiFolderForm = uiPopup.createUIComponent(UIFolderForm.class, null, null);
+      uiFolderForm.setParentPath(folderPath);
+      uiPopup.activate(uiFolderForm, 450, 0, false) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiFolder.getAncestorOfType(UIMailPortlet.class)) ;
+    }
+  }
+  
   static public class ChangeFolderActionListener extends EventListener<UIFolderContainer> {
     public void execute(Event<UIFolderContainer> event) throws Exception {
       System.out.println("\n\n ChangeFolderActionListener");

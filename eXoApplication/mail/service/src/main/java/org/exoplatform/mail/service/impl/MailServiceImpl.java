@@ -720,4 +720,16 @@ public class MailServiceImpl implements MailService{
 		// TODO Auto-generated method stub
 		return null;
 	}	
+  
+  public String getFolderHomePath(SessionProvider sProvider, String username, String accountId) throws Exception {
+    return storage_.getFolderHomePath(sProvider, username, accountId);
+  }
+  
+  public void saveFolder(SessionProvider sProvider, String username, String accountId, String parentPath, Folder folder) throws Exception {
+    storage_.saveFolder(sProvider, username, accountId, parentPath, folder);
+  }
+  
+  public List<Folder> getSubFolders(SessionProvider sProvider, String username, String accountId, String parentPath) throws Exception {
+    return storage_.getSubFolders(sProvider, username, accountId, parentPath) ;
+  }
 }

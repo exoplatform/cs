@@ -1,6 +1,8 @@
 <%
 	import org.exoplatform.mail.service.Folder;
- import org.exoplatform.mail.service.Utils;
+  import org.exoplatform.mail.webui.UITreeJCRExplorer; 
+  import org.exoplatform.mail.service.Utils;
+  import org.exoplatform.mail.MailUtils;
   def rcontext = _ctx.getRequestContext() ;  
   rcontext.getJavascriptManager().addJavascript("eXo.mail.UIMailPortlet.showContextMenu() ;") ;
 
@@ -164,7 +166,7 @@
 	        <a class="MenuItem" href="<%=uicomponent.event("RemoveFolder", "id")%>">   
 	          <div class="ItemIcon RemoveFolderIcon"> Remove </div>
 	        </a>
-          <a class="MenuItem" href="<%=uicomponent.event("AddFolder", "id")%>">   
+          <a class="MenuItem" href="<%=uicomponent.event("AddSubFolder", "id")%>">   
             <div class="ItemIcon AddFolderIcon"> New Subfoder </div>
           </a>  
 	        <a class="MenuItem" href="<%=uicomponent.event("EmptyFolder", "id")%>">   
@@ -190,18 +192,31 @@
   <div style="clear: left"><span></span></div>
 </div>
 <div class="MyFolderContent">
-<% for(Folder f : uicomponent.getCustomizeFolders()) {
-  String pid = f.getId() ;
-  String name = f.getName();
-  long pUnreadMess = f.getNumberOfUnreadMessage();
-  String pCssClass = "CloseFolder NormalLabel" ;
-  String pActionLink = uicomponent.event('ChangeFolder', pid);
-  if(pid.equals(uicomponent.getSelectedFolder())) pCssClass = "OpenFolder SelectedLabel" ;
+<% 
+
+  public void printNodes(String path) throws Exception {
+    if (!path.equals("")) {
+      for (Folder cf : uicomponent.getSubFolders(path)) {
+        if (cf != null) {
+          String pid = cf.getPath() ;
+          String name = cf.getName();
+          long pUnreadMess = cf.getNumberOfUnreadMessage();
+          String pCssClass = "CloseFolder NormalLabel" ;
+          String pActionLink = uicomponent.event('ChangeFolder', pid);
+          if(pid.equals(uicomponent.getSelectedFolder())) pCssClass = "OpenFolder SelectedLabel" ;
+          StringBuilder builder = new StringBuilder() ;
+          builder.append("<a href=\"$pActionLink\" class=\"IconFolder Folder $pCssClass\" folder=\"").append(pid).append("\">");
+          builder.append(name);
+          builder.append("</a>");
+          println(builder.toString());
+          if (uicomponent.getSubFolders(cf.getPath()).size() > 0) 
+            printNodes(cf.getPath());
+        }
+      }
+    }
+  }
+  printNodes(uicomponent.getCustomerFolderPath()); 
 %>
-  <a href="$pActionLink" class="IconFolder Folder $pCssClass" folder="$pid">$name
-    <% if(pUnreadMess > 0) print "<span class=\"MailQuantity\">($pUnreadMess)</span>"%>
-  </a>
-<%}%>
 </div>
 </div>
 </div>
