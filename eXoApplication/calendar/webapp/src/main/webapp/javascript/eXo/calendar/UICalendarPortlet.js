@@ -54,6 +54,13 @@ UICalendarPortlet.prototype.isBeginDate = function(milliseconds) {
 	return false ;
 } ;
 
+UICalendarPortlet.prototype.isBeginWeek = function(milliseconds) {
+	var d = new Date(milliseconds) ;
+	var day = d.getDay() ;
+	if(day == 0) return true ;
+	return false ;
+} ;
+
 UICalendarPortlet.prototype.getWeekNumber = function(now) {
 	var today = new Date(now) ;
 	var Year = this.getYear(today) ;
@@ -1102,22 +1109,22 @@ UICalendarPortlet.prototype.round = function(number, dividend) {
 } ;
 
 UICalendarPortlet.prototype.initSelectionX = function(tr) {	
-	var UISelectionX = eXo.calendar.UISelectionX ;
-	var cell = eXo.core.DOMUtil.findDescendantsByTagName(tr, "td").slice(1) ;
+	cell = eXo.core.DOMUtil.findDescendantsByTagName(tr, "td", "UICellBlock").slice(1);
 	var len = cell.length ;
 	for(var i = 0 ; i < len ; i ++) {
-		cell[i].onmousedown = eXo.calendar.UISelectionX.start ;
+		cell[i].onmousedown = eXo.calendar.Highlighter.start ;
 	}
-	UISelectionX.supObject = cell[0] ;
 } ;
 
 UICalendarPortlet.prototype.callbackSelectionX = function() {
+	var Highlighter = eXo.calendar.Highlighter ;
 	var DOMUtil = eXo.core.DOMUtil ;
-	var UISelectionX = eXo.calendar.UISelectionX ;
-	var index = parseInt(((UISelectionX.startX - eXo.core.Browser.findPosXInContainer(this.busyCell[0], UISelectionX.block.offsetParent))/UISelectionX.step)) + 1;
-	var start = this.minToTime(index*15) ;
-	var end = this.minToTime((index + UISelectionX.block.offsetWidth/UISelectionX.step)*15) ;
-	var uiTabContentContainer = DOMUtil.findAncestorByClass(UISelectionX.container, "UITabContentContainer") ;
+	var len = Math.abs(Highlighter.firstCell.cellIndex - Highlighter.lastCell.cellIndex - 1) ;
+	var start = (Highlighter.firstCell.cellIndex - 1)*15 ;
+	var end = start + len*15 ;
+	start = this.minToTime(start) ;
+	end = this.minToTime(end) ;
+	var uiTabContentContainer = DOMUtil.findAncestorByClass(Highlighter.startCell, "UITabContentContainer") ;
 	var UIComboboxInputs = DOMUtil.findDescendantsByClass(uiTabContentContainer, "input","UIComboboxInput") ;
 	var len = UIComboboxInputs.length ;
 	var name = null ;
@@ -1126,9 +1133,10 @@ UICalendarPortlet.prototype.callbackSelectionX = function() {
 		if (name.indexOf("from") >= 0) UIComboboxInputs[i].value = start ;
 		else  UIComboboxInputs[i].value = end ;
 	}
-	DOMUtil.addClass(UISelectionX.block, "BlueBlock") ;
-	UISelectionX.block.style.width = parseFloat(UISelectionX.block.offsetWidth/UISelectionX.block.offsetParent.offsetWidth)*100  + "%" ;
-	UISelectionX.block.style.left = parseFloat(UISelectionX.block.offsetLeft/UISelectionX.block.offsetParent.offsetWidth)*100  + "%" ;
+	DOMUtil.addClass(Highlighter.block[1], "BlueBlock") ;
+	Highlighter.block[1].style.width = parseFloat(Highlighter.block[1].offsetWidth/Highlighter.container.offsetWidth)*100  + "%" ;
+	Highlighter.block[1].style.left = parseFloat(Highlighter.block[1].offsetLeft/Highlighter.container.offsetWidth)*100  + "%" ;	
+
 } ;
 
 eXo.calendar.UICalendarPortlet = new UICalendarPortlet() ;

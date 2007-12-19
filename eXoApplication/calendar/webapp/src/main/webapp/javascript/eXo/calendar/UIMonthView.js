@@ -1,7 +1,6 @@
-eXo.require('eXo.calendar.UICalendarPortlet', '/javascript/calendar/') ;
 function UIMonthView() {
 	
-}
+} ;
 
 UIMonthView.prototype.init = function() {
 	var UIMonthView = document.getElementById("UIMonthView") ;
@@ -30,6 +29,22 @@ UIMonthView.prototype.init = function() {
 		eventInRows = this.getEventsInRow(i, this.items) ;
 		this.arrangeEventInRows(eventInRows) ;
 	}
+	this.scrollTo(this.eventContainer, this.items)
+} ;
+
+UIMonthView.prototype.scrollTo = function(container, events) {
+	var len = events.length ;
+	var lastUpdatedId = container.getAttribute("lastUpdatedId") ;
+	var eventid = null ;
+	for(var i = 0 ; i < len ; i ++) {
+		eventid = events[i].getAttribute("eventid") ;		
+		if(eventid == lastUpdatedId) {
+			var top = events[i].offsetTop ;
+			container.scrollTop = top ;
+			return ;
+		}
+	}
+	
 } ;
 
 UIMonthView.prototype.createBars = function(event) {
@@ -57,7 +72,7 @@ UIMonthView.prototype.createBars = function(event) {
 		event.style.top = (top - 1) * this.unitY + 16 + "px" ;
 		event.style.left = startDay * this.unitX + "px" ;
 		event.style.width = (7 - startDay) * this.unitX + "px" ;
-		if (!UICalendarPortlet.isBeginDate(end)) {			
+		if (!UICalendarPortlet.isBeginWeek(end)) {
 			var event1 = event.cloneNode(true) ;
 			event1.style.top = parseInt(event.style.top) + this.unitY + "px" ;
 			event1.style.left = "0px" ;
@@ -167,5 +182,24 @@ UIMonthView.prototype.sortEventsInRow = function(obj, type) {
 	}
 	return obj ;
 };
+
+// Initialize  highlighter
+
+UIMonthView.prototype.initHighlighter = function(form) {
+	if (typeof(form) == "string") form = document.getElementById(form) ;
+	var table = eXo.core.DOMUtil.findFirstDescendantByClass(form, "table", "UIGrid") ;
+	cell = eXo.core.DOMUtil.findDescendantsByClass(table, "td", "UICellBlock") ;
+	var len = cell.length ;
+	for(var i = 0 ; i < len ; i ++) {
+		cell[i].onmousedown = eXo.calendar.Highlighter.start ;
+	}
+} ;
+
+UIMonthView.prototype.callbackHighlighter = function() {
+	var Highlighter = eXo.calendar.Highlighter ;
+	var startTime = parseInt(Highlighter.firstCell.getAttribute("startTime")) ;
+	var endTime = parseInt(Highlighter.lastCell.getAttribute("startTime"))  + 24*60*60*1000 ;
+	eXo.webui.UIForm.submitEvent("UIMonthView" ,'QuickAdd','&objectId=Event&startTime=' + startTime + '&finishTime=' + endTime) ;	
+} ;
 
 eXo.calendar.UIMonthView = new UIMonthView() ;

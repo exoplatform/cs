@@ -380,7 +380,6 @@ UIWeekView.prototype.initAllday = function() {
 	this.weekdays = eXo.core.DOMUtil.findDescendantsByTagName(uiWeekViewGridAllDay, "th") ;
 	this.startWeek = 	UIWeekView.weekdays[1] ;
 	this.endWeek = 	UIWeekView.weekdays[7] ;
-	//eventAllday = this.sortEventsInCol(eventAllday) ;
 	this.setPosition(eventAllday) ;
 } ;
 
@@ -596,26 +595,21 @@ UIWeekView.prototype.initSelection = function() {
 } ;
 
 UIWeekView.prototype.initSelectionX = function() {
-	var UISelectionX = eXo.calendar.UISelectionX ;
-	var containers = eXo.core.DOMUtil.findDescendantsByTagName(document.getElementById("UIWeekViewGridAllDay"), "th") ;
-	var len = containers.length ;
-	for(var i = 1 ; i < len ; i ++) {
-		containers[i].onmousedown = UISelectionX.start ;
+	var Highlighter = eXo.calendar.Highlighter ;
+	var table = document.getElementById("UIWeekViewGridAllDay") ;
+	var cell = eXo.core.DOMUtil.findDescendantsByTagName(table, "th");	
+	var len = cell.length ;
+	for(var i = 0 ; i < len ; i ++) {
+		cell[i].onmousedown = Highlighter.start ;
 	}
-	UISelectionX.supObject = containers[1] ;
-	UISelectionX.viewType = "UIWeekView" ;
 } ;
 
 UIWeekView.prototype.callbackSelectionX = function() {
-	var day = 24*60*60*1000 ;
-	var UISelectionX = eXo.calendar.UISelectionX ;
-	var endTime = parseInt(UISelectionX.block.offsetWidth/UISelectionX.step)*day + parseInt(UISelectionX.startTime) ;
-	var startTime = UISelectionX.startTime ;
-	if(UISelectionX.block.offsetLeft < UISelectionX.startX) {
-		startTime = parseInt(UISelectionX.startTime) - parseInt(UISelectionX.block.offsetWidth/UISelectionX.step)*day + day ;
-		endTime = parseInt(UISelectionX.startTime) + day ;
-	}
-	eXo.webui.UIForm.submitEvent(UISelectionX.viewType ,'QuickAdd','&objectId=Event&startTime=' + startTime + '&finishTime=' + endTime) ;		
+	var Highlighter = eXo.calendar.Highlighter ;
+	Highlighter.block[0].style.display = "none" ;
+	var startTime = parseInt(Highlighter.firstCell.getAttribute("startTime")) ;
+	var endTime = parseInt(Highlighter.lastCell.getAttribute("startTime")) + 24*60*60*1000 ;
+	eXo.webui.UIForm.submitEvent("UIWeekView" ,'QuickAdd','&objectId=Event&startTime=' + startTime + '&finishTime=' + endTime) ;	
 } ;
 eXo.calendar.UIHorizontalResize = new UIHorizontalResize() ;
 eXo.calendar.UIWeekView = new UIWeekView() ;

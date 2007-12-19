@@ -52,18 +52,44 @@ Highlighter.prototype.hideBlock = function(start,end) {
 	}
 } ;
 
+Highlighter.prototype.createBlock = function(cell) {
+	var DOMUtil = eXo.core.DOMUtil ;
+	var table = DOMUtil.findAncestorByTagName(cell, "table") ;
+	var tr = DOMUtil.findDescendantsByTagName(table, "tr") ;
+	var len = tr.length ;
+	var div = null ;
+	var block = new Array() ;
+	for(var i = 0 ; i < len ; i ++) {
+		div = document.createElement("div") ;
+		div.onmousedown = eXo.calendar.Highlighter.hideAll ;
+		if(document.getElementById("UserSelectionBlock"+i)) DOMUtil.removeElement(document.getElementById("UserSelectionBlock"+i)) ; 
+		div.setAttribute("id", "UserSelectionBlock"+i) ;
+		div.className = "UserSelectionBlock" ;
+		table.parentNode.appendChild(div) ;
+		block.push(div) ;
+	}
+	eXo.calendar.Highlighter.block = block ;
+} ;
+
 Highlighter.prototype.start = function(evt) {
+	try{		
 	var Highlighter = eXo.calendar.Highlighter ;
 	var _e = window.event || evt ;
 	if(_e.button == 2) return ;
 	_e.cancelBubble = true ;
 	Highlighter.startCell = this ;
+	var table = eXo.core.DOMUtil.findAncestorByTagName(Highlighter.startCell, "table") ;
+	var callback = table.getAttribute("eXoCallback") ;
+	if (callback) Highlighter.callback = callback ;
+	Highlighter.cell = eXo.core.DOMUtil.findDescendantsByClass(table, Highlighter.startCell.tagName.toLowerCase(), "UICellBlock") ;
 	Highlighter.cellLength = eXo.core.DOMUtil.findDescendantsByTagName(Highlighter.startCell.parentNode,Highlighter.startCell.tagName.toLowerCase()).length ;
 	Highlighter.dimension = {"x":(Highlighter.startCell.offsetWidth), "y":(Highlighter.startCell.offsetHeight)} ;
 	var pos = Highlighter.getPos(Highlighter.startCell) ;
+	Highlighter.createBlock(Highlighter.startCell) ;
 	Highlighter.hideAll() ;
 	Highlighter.startBlock = Highlighter.block[pos.y] ;
 	Highlighter.startBlock.style.display = "block" ;
+	Highlighter.container = Highlighter.startBlock.offsetParent ;
 	var x = eXo.core.Browser.findPosXInContainer(Highlighter.startCell, Highlighter.container) ;
 	var y = eXo.core.Browser.findPosYInContainer(Highlighter.startCell, Highlighter.container) ;
 	Highlighter.startBlock.style.top = y + "px" ;
@@ -72,6 +98,9 @@ Highlighter.prototype.start = function(evt) {
 	Highlighter.startBlock.style.height = Highlighter.dimension.y + "px" ;
 	document.onmousemove = Highlighter.execute ;
 	document.onmouseup = Highlighter.end ;
+	Highlighter.firstCell = Highlighter.startCell ;
+	Highlighter.lastCell = Highlighter.startCell ;
+	} catch(e) {alert(e.message) ;}
 } ;
 
 Highlighter.prototype.execute = function(evt) {
@@ -160,6 +189,10 @@ Highlighter.prototype.end = function(evt) {
 	if (Highlighter.callback) eval(Highlighter.callback) ;	
 	document.onmousemove = null ;
 	document.onmouseup = null ;
+} ;
+
+Highlighter.prototype.setCallback = function(str) {
+	this.container.setAttribute("eXoCallback",str) ;
 } ;
 
 eXo.calendar.Highlighter = new Highlighter() ;

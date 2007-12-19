@@ -50,8 +50,8 @@
 	 					</div>
 	 					<div style="clear:left;"><span></span></div>
  					</div>
- 					<table class="UIGrid" id="RowContainerDay" cellspacing="0" borderspacing="0">
-            <tbody  eXoCallback="eXo.calendar.UICalendarPortlet.callbackSelectionX() ;">
+ 					<table class="UIGrid" id="RowContainerDay" cellspacing="0" borderspacing="0" eXoCallback="eXo.calendar.UICalendarPortlet.callbackSelectionX() ;">
+            <tbody>
             	<tr class="TitleBar">
 								<td>
 									<div class="LeftSide">
@@ -91,7 +91,7 @@
 									j = 0
 									while(j < 96){
 								%>
-									<td class="$styleClassF">&nbsp;</td>									
+									<td class="$styleClassF UICellBlock">&nbsp;</td>									
 								<%
 									j ++ ;
 								}								

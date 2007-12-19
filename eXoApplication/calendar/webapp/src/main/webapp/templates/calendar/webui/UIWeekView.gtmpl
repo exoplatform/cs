@@ -64,8 +64,8 @@
 	</div>
 	<div class="EventWeekContainer" >
 		<div class="EventWeekBar">
-			<table class="UIGrid" id="UIWeekViewGridAllDay" cellspacing="0" borderspacing="0">
-				<thead eXoCallback="eXo.calendar.UIWeekView.callbackSelectionX();">
+			<table class="UIGrid" id="UIWeekViewGridAllDay" cellspacing="0" borderspacing="0" eXoCallback="eXo.calendar.UIWeekView.callbackSelectionX();">
+				<thead>
 					<tr>
 						<th style="width: 55px;"></th>
 						<%			
@@ -83,7 +83,7 @@
 							   styleCss = "color:red;" ;
 							  }
 						%>
-							<th class="$cssClass" startTime="<%=cl.getTimeInMillis()%>">
+							<th class="$cssClass UICellBlock" startTime="<%=cl.getTimeInMillis()%>">
 								<a href="$actionLink" style="$styleCss"><%=wf.format(cl.getTime())%></a>
 							</th>
 						<%
