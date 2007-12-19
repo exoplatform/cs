@@ -1,5 +1,4 @@
 eXo.require('eXo.webui.UIContextMenu') ;
-eXo.require('eXo.calendar.CalendarUtils','/calendar/javascript/') ;
 function UICalendarPortlet() {
 		
 }
