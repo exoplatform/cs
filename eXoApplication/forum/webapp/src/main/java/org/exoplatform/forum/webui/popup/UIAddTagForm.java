@@ -51,7 +51,7 @@ import org.exoplatform.webui.form.UIFormTextAreaInput;
 		template = "app:/templates/forum/webui/popup/UICategoryForm.gtmpl",
 		events = {
 			@EventConfig(listeners = UIAddTagForm.SaveActionListener.class),
-			@EventConfig(listeners = UIAddTagForm.CancelActionListener.class,phase = Phase.DECODE)
+			@EventConfig(listeners = UIAddTagForm.CancelActionListener.class)
 		}
 )
 public class UIAddTagForm extends UIForm implements UIPopupComponent {
@@ -143,7 +143,7 @@ public class UIAddTagForm extends UIForm implements UIPopupComponent {
 			UIAddTagForm uiForm = event.getSource() ;
 			UIPopupContainer popupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
 			UIPopupAction popupAction = popupContainer.getChild(UIPopupAction.class).setRendered(false) ;
-			event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+			event.getRequestContext().addUIComponentToUpdateByAjax(popupContainer) ;
 		}
 	}
 	
