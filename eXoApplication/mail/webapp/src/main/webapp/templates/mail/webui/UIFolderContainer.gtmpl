@@ -192,9 +192,9 @@
 </div>
 <div class="MyFolderContent">
 <% 
-
   public void printNodes(String path) throws Exception {
-    if (!path.equals("")) {
+    if (!path.equals("") && uicomponent.getSubFolders(path).size() > 0) {
+      println("<div style='padding-left:20px;'>");
       for (Folder cf : uicomponent.getSubFolders(path)) {
         if (cf != null) {
           String pid = cf.getPath() ;
@@ -208,13 +208,16 @@
           builder.append(name);
           builder.append("</a>");
           println(builder.toString());
-          if (uicomponent.getSubFolders(cf.getPath()).size() > 0) 
+          if (uicomponent.getSubFolders(cf.getPath()).size() > 0) { 
             printNodes(cf.getPath());
+          }
         }
       }
+      println("</div>");
     }
   }
-  printNodes(uicomponent.getCustomerFolderPath()); 
+  
+  printNodes(uicomponent.getCustomerFolderPath());  
 %>
 </div>
 </div>
