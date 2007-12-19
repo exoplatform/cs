@@ -452,7 +452,6 @@ public class JCRDataStorage{
     	if(mailSetting.hasProperty(Utils.EXO_DEFAULT_ACCOUNT)) 
     		return mailSetting.getProperty(Utils.EXO_DEFAULT_ACCOUNT).getString() ;
     } else if (getAccounts(sProvider, username).size() > 0) {
-      System.out.println("===" + getAccounts(sProvider, username).get(0).getId());
       return getAccounts(sProvider, username).get(0).getId();
     }
   	return null ;
