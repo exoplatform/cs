@@ -1,12 +1,25 @@
-/***************************************************************************
- * Copyright 2001-2007 The eXo Platform SARL         All rights reserved.  *
- * Please look at license.txt in info directory for more license detail.   *
- **************************************************************************/
+/*
+ * Copyright (C) 2003-2007 eXo Platform SAS.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation; either version 3
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see<http://www.gnu.org/licenses/>.
+ */
 package org.exoplatform.contact.webui.popup;
 
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIContainer;
+import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
 
 /**
@@ -21,7 +34,8 @@ import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
 )
 public class UIPopupContainer extends UIContainer implements UIPopupComponent {
   public UIPopupContainer() throws Exception {    
-    addChild(UIPopupAction.class, null, "contactAction") ;
+    UIPopupAction uiPopupAction = addChild(UIPopupAction.class, null, "contactAction") ;
+    uiPopupAction.getChild(UIPopupWindow.class).setId("contactActionUIPopupWindow");
   }
   
   public void activate() throws Exception {

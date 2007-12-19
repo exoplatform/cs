@@ -1,7 +1,19 @@
-/***************************************************************************
- * Copyright 2001-2006 The eXo Platform SARL         All rights reserved.  *
- * Please look at license.txt in info directory for more license detail.   *
- **************************************************************************/
+/*
+ * Copyright (C) 2003-2007 eXo Platform SAS.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation; either version 3
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see<http://www.gnu.org/licenses/>.
+ */
 package org.exoplatform.contact.webui.popup;
 
 import java.util.ArrayList;
@@ -9,6 +21,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.MissingResourceException;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.SessionsUtils;
@@ -53,6 +67,9 @@ public class UIImportForm extends UIForm {
   public static final String FIELD_CATEGORY = "category";
   public static String[] Types = null ;
   private Map<String, String> groups_ = new HashMap<String, String>() ;
+  private UploadResource uploadResource_ = null ;
+  private byte[] importBytes_ = null;
+  
   public UIImportForm() { this.setMultiPart(true) ; }
   
   public void addConponent() throws Exception {
@@ -104,21 +121,28 @@ public class UIImportForm extends UIForm {
   static  public class AddCategoryActionListener extends EventListener<UIImportForm> {
     public void execute(Event<UIImportForm> event) throws Exception {
       UIImportForm uiForm = event.getSource() ;
+      
+      // added
+      UIFormUploadInput uiformInput = uiForm.getUIInput(FIELD_UPLOAD) ;
+      uiForm.uploadResource_ = uiformInput.getUploadResource() ;
+      InputStream inputStream = uiformInput.getUploadDataAsStream() ;
+      if (inputStream != null) {
+        uiForm.importBytes_ = new byte[inputStream.available()] ; 
+        inputStream.read(uiForm.importBytes_) ;
+      }
+      
+      
       UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       UIPopupAction uiChildPopup = uiPopupContainer.getChild(UIPopupAction.class) ;
       uiChildPopup.activate(UICategoryForm.class, 500) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
     }
-  }
-  
+  }  
   
   static  public class SaveActionListener extends EventListener<UIImportForm> {
     public void execute(Event<UIImportForm> event) throws Exception {
       UIImportForm uiForm = event.getSource() ;
       String category = uiForm.getUIFormSelectBox(FIELD_CATEGORY).getValue() ;
-      UploadService uploadService = (UploadService)PortalContainer.getComponent(UploadService.class) ;
-      UIFormUploadInput input = uiForm.getUIInput(FIELD_UPLOAD) ;
-      UploadResource uploadResource = input.getUploadResource() ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       if (ContactUtils.isEmpty(category)) {
         uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.addGroup-required", null, 
@@ -126,12 +150,31 @@ public class UIImportForm extends UIForm {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;        
       }
+      UploadService uploadService = (UploadService)PortalContainer.getComponent(UploadService.class) ;
+      UIFormUploadInput uiformInput = uiForm.getUIInput(FIELD_UPLOAD) ;      
+      UploadResource uploadResource = uiformInput.getUploadResource() ;
+
+      ByteArrayInputStream inputStream ;
+      String uploadId = uiformInput.getUploadId() ;
+      if (uploadResource == null) {
+        System.out.println("\n\n hehe \n\n");
+        uploadResource = uiForm.uploadResource_ ;
+        inputStream = new ByteArrayInputStream(uiForm.importBytes_) ;
+      } else {
+        byte[] input = new byte[uiformInput.getUploadDataAsStream().available()] ;
+        uiformInput.getUploadDataAsStream().read(input) ;
+        inputStream = new ByteArrayInputStream(input) ;
+      }      
+      System.out.println("\n\n uploadResource 2 :" + uploadResource);
+      System.out.println("input stream 2 :" + inputStream) ;
+      System.out.println("upload id 2 :" + uploadId + "\n\n");
+      
       if (uploadResource == null) {
         uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.uploadResource-empty", null, 
             ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;        
-      }       
+      }
       boolean canImport = false ;
       String[] array = uploadResource.getMimeType().split("/") ;
       String extend = array[array.length - 1] ;
@@ -143,18 +186,17 @@ public class UIImportForm extends UIForm {
             ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
-      }  
+      }
       UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
       String importFormat = uiForm.getUIFormSelectBox(UIImportForm.TYPE).getValue() ;
       try {
-        ContactUtils.getContactService().getContactImportExports(importFormat)
-          .importContact(SessionsUtils.getSessionProvider(), ContactUtils.getCurrentUser(), input.getUploadDataAsStream(), category) ;
+        ContactUtils.getContactService().getContactImportExports(importFormat).importContact(SessionsUtils
+            .getSessionProvider(), ContactUtils.getCurrentUser(), inputStream, category) ;
         UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
-        uploadService.removeUpload(input.getUploadId()) ;
-        uiContacts.updateList() ;
+        uploadService.removeUpload(uploadId) ;
+        uiContacts.updateList() ;        
       } catch (Exception ex) {
         ex.printStackTrace() ;
-
         uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.invalid-format", null, 
             ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;

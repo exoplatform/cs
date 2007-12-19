@@ -1,7 +1,19 @@
-/***************************************************************************
- * Copyright 2001-2006 The eXo Platform SARL         All rights reserved.  *
- * Please look at license.txt in info directory for more license detail.   *
- **************************************************************************/
+/*
+ * Copyright (C) 2003-2007 eXo Platform SAS.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation; either version 3
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see<http://www.gnu.org/licenses/>.
+ */
 package org.exoplatform.contact.webui.popup;
 
 import java.util.List;
@@ -97,7 +109,9 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
           List<SelectItemOption<String>> ls = uiCategorySelect.getCategoryList();
           ls.add(new SelectItemOption<String>(groupName, group.getId())) ;
           uiCategorySelect.setCategoryList(ls);
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiCategorySelect) ;
+          
+          //event.getRequestContext().addUIComponentToUpdateByAjax(uiCategorySelect) ;
+          
         } else {
           UIImportForm importForm = popupContainer.findFirstComponentOfType(UIImportForm.class) ;
           List<SelectItemOption<String>> ls = importForm.getCategoryList();
@@ -106,13 +120,11 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
           event.getRequestContext().addUIComponentToUpdateByAjax(importForm) ;
         }        
 
-        UIPopupAction action = popupContainer.getChild(UIPopupAction.class) ;
-        if (action != null) {          
-          UIPopupAction parentPopup = action.getAncestorOfType(UIPopupAction.class);
-          action.deActivate() ;          
-          UIAddressBooks uiAddressBook = uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook) ; 
-          event.getRequestContext().addUIComponentToUpdateByAjax(parentPopup) ;
+        UIPopupAction action = uiCategoryForm.getAncestorOfType(UIPopupAction.class) ;
+        if (action != null) {
+          System.out.println("\n\n khac null \n\n");
+          action.deActivate() ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(action) ;
         } 
       } else {
         UIAddressBooks uiAddressBook = uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class) ;
@@ -121,6 +133,10 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
         event.getRequestContext().addUIComponentToUpdateByAjax(contacts) ;
         uiContactPortlet.cancelAction() ;
       }
+      
+      UIAddressBooks uiAddressBook = uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook) ;
+    
     }
   }
   
@@ -129,12 +145,7 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
       UICategoryForm uiCategoryForm = event.getSource() ;
       UIPopupAction uiPopupAction = uiCategoryForm.getAncestorOfType(UIPopupAction.class) ;
       uiPopupAction.deActivate() ;
-      UIPopupAction parentPopup = uiPopupAction.getAncestorOfType(UIPopupAction.class) ;
-      if(parentPopup != null) {
-        event.getRequestContext().addUIComponentToUpdateByAjax(parentPopup);
-      } else {
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
-      }
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;      
     }
   } 
   
