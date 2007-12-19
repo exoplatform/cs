@@ -111,24 +111,18 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
 				e.printStackTrace() ;
 				return ;
 			}
-			UIPopupAction popupAction = forumPortlet.findComponentById("UIChildPopupAction") ;
-			popupAction.deActivate() ;
-			event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
-			if(uiForm.isTopicForm) {
-				event.getRequestContext().addUIComponentToUpdateByAjax(topicForm) ;
-			} else {
-				event.getRequestContext().addUIComponentToUpdateByAjax(postForm) ;
-			}
+			UIPopupContainer popupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
+			popupContainer.getChild(UIPopupAction.class).deActivate() ;
+			event.getRequestContext().addUIComponentToUpdateByAjax(popupContainer) ;
 		}
 	}
 
 	static	public class CancelActionListener extends EventListener<UIAttachFileForm> {
 		public void execute(Event<UIAttachFileForm> event) throws Exception {
-			UIForumPortlet forumPortlet = event.getSource().getAncestorOfType(UIForumPortlet.class) ;
-			UIPopupAction popupAction = forumPortlet.findComponentById("UIChildPopupAction");
-			popupAction.setRendered(false)	;
-			event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+			UIAttachFileForm uiForm = event.getSource() ;
+			UIPopupContainer popupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
+			popupContainer.getChild(UIPopupAction.class).deActivate() ;
+			event.getRequestContext().addUIComponentToUpdateByAjax(popupContainer) ;
 		}
 	}
-
 }

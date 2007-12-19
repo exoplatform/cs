@@ -138,11 +138,11 @@ public class UIAddTagForm extends UIForm implements UIPopupComponent {
 		}
 	}
 	
-	static	public class CancelActionListener extends EventListener<UIAddTagForm> {
-		public void execute(Event<UIAddTagForm> event) throws Exception {
-			UIAddTagForm uiForm = event.getSource() ;
+	static	public class CancelActionListener extends EventListener<UIAttachFileForm> {
+		public void execute(Event<UIAttachFileForm> event) throws Exception {
+			UIAttachFileForm uiForm = event.getSource() ;
 			UIPopupContainer popupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
-			UIPopupAction popupAction = popupContainer.getChild(UIPopupAction.class).setRendered(false) ;
+			popupContainer.getChild(UIPopupAction.class).deActivate() ;
 			event.getRequestContext().addUIComponentToUpdateByAjax(popupContainer) ;
 		}
 	}

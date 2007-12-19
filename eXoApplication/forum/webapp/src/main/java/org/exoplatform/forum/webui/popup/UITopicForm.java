@@ -35,6 +35,7 @@ import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
@@ -271,14 +272,17 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
 				viewTopic.setPostView(postNew) ;
 				event.getRequestContext().addUIComponentToUpdateByAjax(popupContainer) ;
 			}else {
-				String[] args = { ""} ;
+				String[] sms = { ""} ;
+				UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
 				if(k == 0) {
-					args = new String[] { "Thread Title" } ;
-					if(t < 20) args = new String[] { "Thread Title and Messenger" } ;
-					throw new MessageException(new ApplicationMessage("NameValidator.msg.ShortText", args)) ;
+					sms = new String[] { "Thread Title" } ;
+					if(t < 20) sms = new String[] { "Thread Title and Messenger" } ;
+					Object[] args = { sms };
+					uiApp.addMessage(new ApplicationMessage("NameValidator.msg.ShortText", args, ApplicationMessage.WARNING)) ;
 				} else if(t < 20) {
-					args = new String[] { "Messenger" } ;
-					throw new MessageException(new ApplicationMessage("NameValidator.msg.ShortMessenger", args)) ;
+					sms = new String[] { "Messenger" } ;
+					Object[] args = { sms };
+					uiApp.addMessage(new ApplicationMessage("NameValidator.msg.ShortMessenger", args, ApplicationMessage.WARNING)) ;
 				}
 			}
 		}
