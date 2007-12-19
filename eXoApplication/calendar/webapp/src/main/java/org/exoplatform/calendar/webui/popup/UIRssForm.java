@@ -58,6 +58,8 @@ public class UIRssForm extends UIFormTabPane implements UIPopupComponent{
   final static private String PUBLIC_DATE = "pubDate".intern() ;
   final static private String INFOR = "info".intern() ;
   final static private String MESSAGE = "message".intern() ;
+  final static private String DESCRIPTIONS = "descriptions".intern() ;
+  final static private String COPYRIGHTS = "copyrights".intern() ;
   
   /*final static private String[] version = 
     new String[]{"rss_2.0","rss_1.0","rss_0.94","rss_0.93","rss_0.92","rss_0.91","rss_0.90"} ;*/
@@ -76,8 +78,8 @@ public class UIRssForm extends UIFormTabPane implements UIPopupComponent{
     String url = calendarService.getCalendarSetting(SessionsUtils.getSessionProvider(), username).getBaseURL() ;
     if(url == null) url = CalendarUtils.getServerBaseUrl() + "calendar/iCalRss" ;
     rssInfo.addUIFormInput(new UIFormStringInput(URL, URL, url)) ;
-    rssInfo.addUIFormInput(new UIFormTextAreaInput(DESCRIPTION, DESCRIPTION, "This RSS provided by eXo Platform opensource company")) ;
-    rssInfo.addUIFormInput(new UIFormStringInput(COPYRIGHT, COPYRIGHT, "Copyright by 2000-2005 eXo Platform SARL")) ;
+    rssInfo.addUIFormInput(new UIFormTextAreaInput(DESCRIPTION, DESCRIPTION, null)) ;
+    rssInfo.addUIFormInput(new UIFormStringInput(COPYRIGHT, COPYRIGHT, null)) ;
     rssInfo.addUIFormInput(new UIFormStringInput(LINK, LINK, "www.exoplatform.org")) ;    
     rssInfo.addUIFormInput(new UIFormDateTimeInput(PUBLIC_DATE, PUBLIC_DATE, new Date())) ;
     setSelectedTab(rssInfo.getId()) ;
@@ -91,6 +93,9 @@ public class UIRssForm extends UIFormTabPane implements UIPopupComponent{
     addUIFormInput(rssCalendars) ;
   }
   public void init() throws Exception{
+    UIFormInputWithActions rssInfo = getChildById("rssInfo") ;
+    rssInfo.getUIFormTextAreaInput(DESCRIPTION).setValue(getLabel(DESCRIPTIONS)) ;
+    rssInfo.getUIStringInput(COPYRIGHT).setValue(getLabel(COPYRIGHTS)) ;
     UIFormInputWithActions rssTab = getChildById("rssCalendars") ;
     rssTab.getUIFormInputInfo(INFOR).setValue(getLabel(MESSAGE)) ;
   }

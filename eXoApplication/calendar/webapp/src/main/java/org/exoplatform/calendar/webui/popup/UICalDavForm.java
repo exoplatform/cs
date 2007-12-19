@@ -59,6 +59,8 @@ public class UICalDavForm extends UIFormTabPane implements UIPopupComponent{
   final static private String PUBLIC_DATE = "pubDate".intern() ;
   final static private String INFOR = "info".intern() ;
   final static private String MESSAGE = "message".intern() ;
+  final static private String DESCRIPTIONS = "descriptions".intern() ;
+  final static private String COPYRIGHTS = "copyrights".intern() ;
   
   public UICalDavForm() throws Exception{
     super("UICalDavForm");
@@ -69,7 +71,7 @@ public class UICalDavForm extends UIFormTabPane implements UIPopupComponent{
     String url = calendarService.getCalendarSetting(SessionsUtils.getSessionProvider(), username).getBaseURL();
     if(url == null) url = CalendarUtils.getServerBaseUrl() + "calendar/iCalRss" ;
     rssInfo.addUIFormInput(new UIFormStringInput(URL, URL, url)) ;
-    rssInfo.addUIFormInput(new UIFormTextAreaInput(DESCRIPTION, DESCRIPTION, "This RSS provided by eXo Platform opensource company")) ;
+    rssInfo.addUIFormInput(new UIFormTextAreaInput(DESCRIPTION, DESCRIPTION, DESCRIPTIONS)) ;
     rssInfo.addUIFormInput(new UIFormStringInput(COPYRIGHT, COPYRIGHT, "Copyright by 2000-2005 eXo Platform SARL")) ;
     rssInfo.addUIFormInput(new UIFormDateTimeInput(PUBLIC_DATE, PUBLIC_DATE, new Date())) ;
     setSelectedTab(rssInfo.getId()) ;
@@ -83,6 +85,9 @@ public class UICalDavForm extends UIFormTabPane implements UIPopupComponent{
     addUIFormInput(rssCalendars) ;
   }
   public void init() throws Exception{
+    UIFormInputWithActions rssInfo = getChildById("rssInfo") ;
+    rssInfo.getUIFormTextAreaInput(DESCRIPTION).setValue(getLabel(DESCRIPTIONS)) ;
+    rssInfo.getUIStringInput(COPYRIGHT).setValue(getLabel(COPYRIGHTS)) ;
     UIFormInputWithActions rssTab = getChildById("rssCalendars") ;
     rssTab.getUIFormInputInfo(INFOR).setValue(getLabel(MESSAGE)) ;
   }
