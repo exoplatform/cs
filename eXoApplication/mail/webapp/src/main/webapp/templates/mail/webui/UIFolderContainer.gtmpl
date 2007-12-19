@@ -1,6 +1,5 @@
 <%
 	import org.exoplatform.mail.service.Folder;
-  import org.exoplatform.mail.webui.UITreeJCRExplorer; 
   import org.exoplatform.mail.service.Utils;
   import org.exoplatform.mail.MailUtils;
   def rcontext = _ctx.getRequestContext() ;  
