@@ -1,8 +1,19 @@
 /***************************************************************************
- * Copyright 2001-2007 The eXo Platform SARL         All rights reserved.  *
- * Please look at license.txt in info directory for more license detail.   *
- **************************************************************************/
-
+ * Copyright (C) 2003-2007 eXo Platform SAS.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation; either version 3
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see<http://www.gnu.org/licenses/>.
+ ***************************************************************************/
 package org.exoplatform.forum.webui.popup;
 
 import java.util.ArrayList;
@@ -13,6 +24,7 @@ import org.exoplatform.forum.ForumUtils;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.service.Tag;
 import org.exoplatform.forum.webui.UIForumPortlet;
+import org.exoplatform.forum.webui.UITopicDetail;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
@@ -46,6 +58,8 @@ public class UITagForm extends UIForm implements UIPopupComponent {
   private String IdSelected = "";
 	private String topicPath = "";
 	private String tagId[] = new String[] {} ;
+	private boolean isUpdateList = true ;
+	List<Tag> tags_ = new ArrayList<Tag>() ;
 	public UITagForm() throws Exception {
   }
 
@@ -60,6 +74,7 @@ public class UITagForm extends UIForm implements UIPopupComponent {
 	public void setTopicPathAndTagId(String topicPath, String[] tagId) {
 	  this.topicPath = topicPath ;
 	  this.tagId = tagId ;
+	  this.isUpdateList = true ;
   }
 	
 	@SuppressWarnings("unused")
@@ -70,23 +85,39 @@ public class UITagForm extends UIForm implements UIPopupComponent {
 	
 	@SuppressWarnings("unused")
   private List<Tag> getAllTag() throws Exception {
-		List<Tag> tags = forumService.getTags(ForumUtils.getSystemProvider());
-		List<Tag> tags_ = new ArrayList<Tag>() ;
-		boolean isUpdate = true ;
-		for (Tag tag : tags) {
-	    String tagId = tag.getId() ;
-	    for(String str : this.tagId) {
-	    	if(tagId.equals(str)) {
-	    		isUpdate = false ;
-	    		break ;
-	    	}
+		if(this.isUpdateList) {
+			List<Tag> tags = forumService.getTags(ForumUtils.getSystemProvider());
+			this.tags_.clear() ;
+			boolean isAdd = true ;
+			for (Tag tag : tags) {
+		    String tagId = tag.getId() ;
+		    for(String str : this.tagId) {
+		    	if(tagId.equals(str)) {
+		    		isAdd = false ;
+		    		break ;
+		    	}
+		    }
+		    if(isAdd) this.tags_.add(tag) ;
+		    isAdd = true ;
 	    }
-	    if(isUpdate) tags_.add(tag) ;
-	    isUpdate = true ;
-    }
-		if(tags_.size() > 0 && this.IdSelected.length() == 0) this.IdSelected = tags.get(0).getId() ;
-		return tags_ ;
+			if(this.tags_.size() > 0) this.IdSelected = tags_.get(0).getId() ;
+			else this.IdSelected = "" ;
+			this.isUpdateList = false ;
+		}
+		return this.tags_ ;
 	}
+	
+	public void setUpdateList( boolean isUpdateList) {
+	  this.isUpdateList = isUpdateList ;
+  }
+
+	private Tag getTagEdit() {
+		List<Tag> tags = this.tags_ ;
+		for (Tag tag : tags) {
+	    if(tag.getId().equals(this.IdSelected)) return tag ;
+    }
+		return null ;
+  }
 	
 	static  public class AddTagActionListener extends EventListener<UITagForm> {
 		public void execute(Event<UITagForm> event) throws Exception {
@@ -94,6 +125,7 @@ public class UITagForm extends UIForm implements UIPopupComponent {
 			UIPopupContainer popupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       UIPopupAction uiChildPopup = popupContainer.getChild(UIPopupAction.class).setRendered(true) ;
       uiChildPopup.activate(UIAddTagForm.class, 400) ;
+      uiForm.isUpdateList = true ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupContainer) ;
 		}
 	}
@@ -103,7 +135,9 @@ public class UITagForm extends UIForm implements UIPopupComponent {
 			UITagForm uiForm = event.getSource() ;
 			UIPopupContainer popupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       UIPopupAction uiChildPopup = popupContainer.getChild(UIPopupAction.class).setRendered(true) ;
-      uiChildPopup.activate(UIAddTagForm.class, 400) ;
+      UIAddTagForm addTagForm = uiChildPopup.createUIComponent(UIAddTagForm.class, null, null) ;
+      addTagForm.setUpdateTag(uiForm.getTagEdit());
+			uiChildPopup.activate(addTagForm, 662, 466) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupContainer) ;
 		}
 	}
@@ -112,6 +146,7 @@ public class UITagForm extends UIForm implements UIPopupComponent {
 		public void execute(Event<UITagForm> event) throws Exception {
 			UITagForm uiForm = event.getSource() ;
 			uiForm.forumService.removeTag(ForumUtils.getSystemProvider(), uiForm.IdSelected);
+			uiForm.isUpdateList = true ;
 			event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
 		}
 	}
@@ -131,6 +166,7 @@ public class UITagForm extends UIForm implements UIPopupComponent {
 				uiForm.forumService.addTopicInTag(ForumUtils.getSystemProvider(), uiForm.IdSelected, uiForm.topicPath);
 			}
 			UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
+			forumPortlet.findFirstComponentOfType(UITopicDetail.class).setIsEditTopic(true) ;
       forumPortlet.cancelAction() ;
 			event.getRequestContext().addUIComponentToUpdateByAjax(forumPortlet) ;
 		}

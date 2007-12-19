@@ -3,16 +3,22 @@
 %>
 <div class="UITagForm">
 	<% uiform.begin() %>
+	<% List tags = uicomponent.getAllTag(); %>
 	<div class="TagContent">
 		<div class="TagControlBar">
 			<div class="TagTitle">Tags</div>
+			<% if(tags.size() > 0) { %>
 			<a href="<%=uicomponent.event("Delete");%>"><div class="TagIcon DustBin16x16Icon"><span></span></div></a>
 			<a href="<%=uicomponent.event("EditTag");%>"><div class="TagIcon	EditIcon"><span></span></div></a>
+			<% } else {%>
+			<div class="TagIcon DustBin16x16Icon DisableLabel"><span></span></div>
+			<div class="TagIcon	EditIcon DisableLabel"><span></span></div>
+			<% } %>
 			<a href="<%=uicomponent.event("AddTag");%>"><div class="TagIcon AddNewNodeIcon"><span></span></div></a>
 	  	<div style="clear: both"><span></span></div>
 		</div>
 		<div class="TagsList">
-		<% List tags = uicomponent.getAllTag();
+		<%
 			for(tag in tags) {
 			  String tagName = tag.getName() ;
 			  String color = tag.getColor() ;

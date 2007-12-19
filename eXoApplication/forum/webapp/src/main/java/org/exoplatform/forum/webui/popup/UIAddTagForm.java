@@ -1,8 +1,19 @@
 /***************************************************************************
- * Copyright 2001-2007 The eXo Platform SARL				 All rights reserved.	*
- * Please look at license.txt in info directory for more license detail.	 *
- **************************************************************************/
-
+ * Copyright (C) 2003-2007 eXo Platform SAS.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation; either version 3
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see<http://www.gnu.org/licenses/>.
+ ***************************************************************************/
 package org.exoplatform.forum.webui.popup;
 
 import java.util.ArrayList;
@@ -48,7 +59,8 @@ public class UIAddTagForm extends UIForm implements UIPopupComponent {
 	public static final String FIELD_TAGDESCRIPTION_TEXTAREA = "TagDescription" ;
 	public static final String FIELD_TAGCOLOR_SELECTBOX = "TagColor" ;
 	private String colors[] = new String[] {"Blue", "DarkGoldenRod", "Green", "Yellow", "BlueViolet", "Orange","DarkBlue", "IndianRed", "DarkCyan", "LawnGreen", "Violet", "Red"} ;
-	private String[] topicPath = new String[]{} ;
+	private boolean isUpdate = false ;
+	private String tagId = "" ;
 	public UIAddTagForm() throws Exception {
 		UIFormStringInput tagName = new UIFormStringInput(FIELD_TAGNAME_INPUT, FIELD_TAGNAME_INPUT, null);
 		UIFormStringInput description = new UIFormTextAreaInput(FIELD_TAGDESCRIPTION_TEXTAREA, FIELD_TAGDESCRIPTION_TEXTAREA, null);
@@ -64,6 +76,15 @@ public class UIAddTagForm extends UIForm implements UIPopupComponent {
 		addUIFormInput(tagColor);
 		addUIFormInput(description);
 	}
+	
+	public void setUpdateTag(Tag tag) {
+		this.isUpdate = true ;
+		this.tagId = tag.getId() ;
+	  getUIStringInput(FIELD_TAGNAME_INPUT).setValue(tag.getName()) ;
+	  getUIFormTextAreaInput(FIELD_TAGDESCRIPTION_TEXTAREA).setValue(tag.getDescription()) ;
+	  getUIFormSelectBoxForum(FIELD_TAGCOLOR_SELECTBOX).setValue(tag.getColor()) ;
+  }
+	
 	
 	private Map<String, String> getColorName() throws Exception {
 		String colorsName[] = new String[] {"Blue", "Dark Golden Rod", "Green", "Yellow", "Blue Violet", "Orange","Dark Blue", "Indian Red","Dark Cyan" ,"Lawn Green", "Violet", "Red"} ;
@@ -88,9 +109,6 @@ public class UIAddTagForm extends UIForm implements UIPopupComponent {
 		return	findComponentById(name) ;
 	}
 	
-	public void setTopicPath(String[] topicPath) {
-		this.topicPath = topicPath ;
-	}
 	
 	static	public class SaveActionListener extends EventListener<UIAddTagForm> {
 		public void execute(Event<UIAddTagForm> event) throws Exception {
@@ -100,15 +118,21 @@ public class UIAddTagForm extends UIForm implements UIPopupComponent {
 			String tagName = tagNameInput.getValue() ;
 			String color = uiForm.getUIFormSelectBoxForum(FIELD_TAGCOLOR_SELECTBOX).getValue() ;
 			String descriptiom = uiForm.getUIFormTextAreaInput(FIELD_TAGDESCRIPTION_TEXTAREA).getValue() ;
-			String userName = Util.getPortalRequestContext().getRemoteUser() ;
 			Tag newTag = new Tag() ;
 			newTag.setName(tagName) ;
 			newTag.setColor(color);
 			newTag.setDescription(descriptiom) ;
-			newTag.setOwner(userName) ;
 			ForumService forumService = (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
-			forumService.saveTag(ForumUtils.getSystemProvider(), newTag);
+			if(uiForm.isUpdate) {
+				newTag.setId(uiForm.tagId); 
+				forumService.saveTag(ForumUtils.getSystemProvider(), newTag, false);
+			} else {
+				String userName = Util.getPortalRequestContext().getRemoteUser() ;
+				newTag.setOwner(userName) ;
+				forumService.saveTag(ForumUtils.getSystemProvider(), newTag, true);
+			}
 			UIPopupContainer popupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
+			popupContainer.getChild(UITagForm.class).setUpdateList(true) ;
 			popupContainer.getChild(UIPopupAction.class).setRendered(false) ;
 			event.getRequestContext().addUIComponentToUpdateByAjax(popupContainer) ;
 		}

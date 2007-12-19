@@ -1,7 +1,19 @@
 /***************************************************************************
- * Copyright 2001-2006 The eXo Platform SARL				 All rights reserved.	*
- * Please look at license.txt in info directory for more license detail.	 *
- **************************************************************************/
+ * Copyright (C) 2003-2007 eXo Platform SAS.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation; either version 3
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see<http://www.gnu.org/licenses/>.
+ ***************************************************************************/
 package org.exoplatform.forum.webui;
 
 import java.util.ArrayList;
@@ -30,7 +42,8 @@ import org.exoplatform.webui.form.UIForm;
 		lifecycle = UIFormLifecycle.class,
 		template =	"app:/templates/forum/webui/UITopicsTag.gtmpl",
 		events = {
-				@EventConfig(listeners = UITopicsTag.OpenTopicActionListener.class )
+				@EventConfig(listeners = UITopicsTag.OpenTopicActionListener.class ),
+				@EventConfig(listeners = UITopicsTag.OpenTopicsTagActionListener.class )
 		}
 )
 
@@ -51,7 +64,6 @@ public class UITopicsTag extends UIForm {
 	
 	@SuppressWarnings("unused")
   private JCRPageList getListTopicTag() throws Exception {
-		System.out.println("\n\n Xem chay cai nay chua da UI" + this.tagId);
 		this.listTopic = forumService.getTopicsByTag(ForumUtils.getSystemProvider(), this.tagId) ;
 		return this.listTopic ;
 	}
@@ -109,7 +121,15 @@ public class UITopicsTag extends UIForm {
 	}
 	@SuppressWarnings("unused")
 	private List<Tag> getTagsByTopic(String[] tagIds) throws Exception {
-		return this.forumService.getTagsByTopic(ForumUtils.getSystemProvider(), tagIds);	
+		String []ids = new String[tagIds.length-1] ; 
+		int t = 0;
+		for (String string : tagIds) {
+	    if(!string.equals(this.tagId)){
+	    	ids[t] = string ;
+	    	++t;
+	    }
+    }
+		return this.forumService.getTagsByTopic(ForumUtils.getSystemProvider(), ids);
 	}
 	
 	private Topic getTopic(String topicId) throws Exception {
@@ -139,6 +159,20 @@ public class UITopicsTag extends UIForm {
 		}
 	}
 	
-
+	static public class OpenTopicsTagActionListener extends EventListener<UITopicsTag> {
+		public void execute(Event<UITopicsTag> event) throws Exception {
+			UITopicsTag topicsTag = event.getSource() ;
+			String tagId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+			UIForumPortlet forumPortlet = topicsTag.getParent() ;
+			forumPortlet.getChild(UIBreadcumbs.class).setUpdataPath(tagId) ;
+			topicsTag.setIdTag(tagId) ;
+			event.getRequestContext().addUIComponentToUpdateByAjax(forumPortlet) ;
+		}
+	}
+	
+	
+	
+	
+	
 
 }

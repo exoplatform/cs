@@ -1,7 +1,19 @@
 /***************************************************************************
- * Copyright 2001-2007 The eXo Platform SARL				 All rights reserved.	*
- * Please look at license.txt in info directory for more license detail.	 *
- **************************************************************************/
+ * Copyright (C) 2003-2007 eXo Platform SAS.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation; either version 3
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see<http://www.gnu.org/licenses/>.
+ ***************************************************************************/
 package org.exoplatform.forum.service.impl;
 
 import java.util.ArrayList;
@@ -890,19 +902,28 @@ public class JCRDataStorage{
 		}
 		return tags;
 	}
+	
 	public List<Tag> getTagsByTopic(SessionProvider sProvider, String[] tagIds) throws Exception {
+		Node forumHomeNode = getForumHomeNode(sProvider) ;
+		QueryManager qm = forumHomeNode.getSession().getWorkspace().getQueryManager() ;
+		StringBuffer queryString = new StringBuffer("/jcr:root" + forumHomeNode.getPath() +"//element(*,exo:forumTag)") ;
+		Query query = qm.createQuery(queryString.toString(), Query.XPATH) ;
+		QueryResult result = query.execute() ;
+		NodeIterator iter = result.getNodes() ;
 		List<Tag>tags = new ArrayList<Tag>() ;
-		List<Tag>tags_ = getTags(sProvider) ;
-		for(Tag tag : tags_) {
-			String id = tag.getId() ;
+		while (iter.hasNext()) {
+			Node tagNode = iter.nextNode() ;
+			String nodeId = tagNode.getName() ;
 			for(String tagId : tagIds) {
-				if(id.equals(tagId)){ 
-					tags.add(tag) ;
+				if(nodeId.equals(tagId)){ 
+					tags.add(getTagNode(tagNode)) ;
+					break ;
 				}
 			}
 		}
 		return tags;
 	}
+	
 	public JCRPageList getTopicsByTag(SessionProvider sProvider, String tagId) throws Exception {
 		Node forumHomeNode = getForumHomeNode(sProvider) ;
 		QueryManager qm = forumHomeNode.getSession().getWorkspace().getQueryManager() ;
@@ -914,12 +935,16 @@ public class JCRDataStorage{
 		return pagelist ;
 	}
 
-	public void saveTag(SessionProvider sProvider, Tag newTag) throws Exception {
+	public void saveTag(SessionProvider sProvider, Tag newTag, boolean isNew) throws Exception {
 		Node forumHomeNode = getForumHomeNode(sProvider) ;
 		Node newTagNode ;
-		newTagNode = forumHomeNode.addNode(newTag.getId(), "exo:forumTag") ;
-		newTagNode.setProperty("exo:id", newTag.getId()) ;
-		newTagNode.setProperty("exo:owner", newTag.getOwner()) ;
+		if(isNew) {
+			newTagNode = forumHomeNode.addNode(newTag.getId(), "exo:forumTag") ;
+			newTagNode.setProperty("exo:id", newTag.getId()) ;
+			newTagNode.setProperty("exo:owner", newTag.getOwner()) ;
+		} else {
+			newTagNode = forumHomeNode.getNode(newTag.getId()) ;
+		}
 		newTagNode.setProperty("exo:name", newTag.getName()) ;
 		newTagNode.setProperty("exo:description", newTag.getDescription()) ;
 		newTagNode.setProperty("exo:color", newTag.getColor()) ;
