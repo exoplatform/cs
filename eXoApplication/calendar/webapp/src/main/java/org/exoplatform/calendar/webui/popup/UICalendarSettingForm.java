@@ -67,7 +67,7 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
   final private static String WORKINGTIME_END = "endTime".intern() ;
   final private static String BASE_URL = "baseURL".intern() ;
   final private static String DEFAULT_CALENDARS = "defaultCalendars".intern() ;
-
+  final private static String DEFAULT_CALENDARS_NOTE = "note".intern() ;
   private List<Calendar> calendars_ ;
   public UICalendarSettingForm() throws Exception{
     super("UICalendarSettingForm") ;
@@ -127,7 +127,7 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
     setting.addUIFormInput(new UIFormStringInput(BASE_URL, BASE_URL, null)) ;
     addUIFormInput(setting) ;
     setSelectedTab(setting.getId()) ;
-    UIFormInputWithActions defaultCalendars = new UIFormInputWithActions("defaultCalendars") ;    
+    UIFormInputWithActions defaultCalendars = new UIFormInputWithActions(DEFAULT_CALENDARS) ;    
     addUIFormInput(defaultCalendars) ;
   }
 
@@ -167,8 +167,8 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
     if(calendarSetting != null && calendarSetting.getDefaultPrivateCalendars() != null) {
       settedCalendars = new ArrayList<String>(Arrays.asList(calendarSetting.getDefaultPrivateCalendars())) ;
     }
-    UIFormInputWithActions defaultCalendars = getChildById("defaultCalendars") ;    
-    defaultCalendars.addChild(new UIFormInputInfo(DEFAULT_CALENDARS, DEFAULT_CALENDARS, DEFAULT_CALENDARS)) ;
+    UIFormInputWithActions defaultCalendars = getChildById(DEFAULT_CALENDARS) ;    
+    defaultCalendars.addChild(new UIFormInputInfo(DEFAULT_CALENDARS, DEFAULT_CALENDARS, getLabel(DEFAULT_CALENDARS_NOTE))) ;
     for(Calendar calendar : calendars_) {
       UIFormCheckBoxInput checkBox = new UIFormCheckBoxInput<Boolean>(calendar.getName(), calendar.getId(), false) ;
       for(String calendarId : settedCalendars) {

@@ -1230,6 +1230,60 @@ public class JCRDataStorage{
     }     
   }
 
+  
+  public void generateCalDav(SessionProvider sProvider ,String username, List<String> calendarIds, RssData rssData, 
+      CalendarImportExport importExport) throws Exception {
+    Node rssHomeNode = getRssHome(sProvider, username) ;
+    Node WebDaveiCalHome = null ;
+    if(rssHomeNode.hasNode("WebDavCalendars")) WebDaveiCalHome = rssHomeNode.getNode("WebDavCalendars") ;
+    else WebDaveiCalHome = rssHomeNode.addNode("WebDavCalendars", NT_UNSTRUCTURED) ;
+    try {         
+      SyndFeed feed = new SyndFeedImpl();      
+      feed.setFeedType(rssData.getVersion());      
+      feed.setTitle(rssData.getTitle());
+      feed.setLink(rssData.getLink());
+      feed.setDescription(rssData.getDescription());     
+      List<SyndEntry> entries = new ArrayList<SyndEntry>();
+      SyndEntry entry;
+      SyndContent description;
+      List<String> ids = new ArrayList<String>();
+      for(String calendarId : calendarIds) {        
+        ids.clear() ;
+        ids.add(calendarId) ;
+        OutputStream out = importExport.exportCalendar(sProvider, username, ids, "0") ;
+        if(out != null) {
+          ByteArrayInputStream is = new ByteArrayInputStream(out.toString().getBytes()) ;
+          if(WebDaveiCalHome.hasNode(calendarId + ".ics")){
+            WebDaveiCalHome.getNode(calendarId + ".ics").setProperty("exo:data", is) ;          
+          }else {
+            Node ical = WebDaveiCalHome.addNode(calendarId + ".ics", "exo:iCalData") ;
+            ical.setProperty("exo:data", is) ;
+          }
+          String link = rssData.getLink() + WebDaveiCalHome.getPath()+"/"+calendarId + ".ics" ;
+          Calendar exoCal = getUserCalendar(sProvider, username, calendarId) ;
+          entry = new SyndEntryImpl();
+          entry.setTitle(exoCal.getName());                
+          entry.setLink(link);     
+          description = new SyndContentImpl();
+          description.setType("text/plain");
+          description.setValue(exoCal.getDescription());
+          entry.setDescription(description);        
+          entries.add(entry);
+          entry.getEnclosures() ;     
+        }                   
+      }      
+      feed.setEntries(entries);      
+      feed.setEncoding("UTF-8") ;     
+      SyndFeedOutput output = new SyndFeedOutput();      
+      String feedXML = output.outputString(feed);      
+      feedXML = StringUtils.replace(feedXML,"&amp;","&");      
+      storeXML(feedXML, rssHomeNode, rssData.getName(), rssData); 
+      rssHomeNode.getSession().save() ;
+    } catch (Exception e) {
+      e.printStackTrace();
+    }     
+  }
+  
   private void storeXML(String feedXML, Node rssHome, String rssNodeName, RssData rssData) throws Exception{
     Node rss ;
     if(rssHome.hasNode(rssNodeName)) rss = rssHome.getNode(rssNodeName);
@@ -1554,6 +1608,7 @@ public class JCRDataStorage{
   	}    
   	return participantMap ;
   }
+ 
 }
 
 

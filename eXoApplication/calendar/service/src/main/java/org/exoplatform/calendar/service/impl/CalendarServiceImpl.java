@@ -161,7 +161,9 @@ public class CalendarServiceImpl implements CalendarService{
   public void generateRss(SessionProvider sProvider, String username, List<String> calendarIds, RssData rssData) throws Exception {
     storage_.generateRss(sProvider, username, calendarIds, rssData, calendarImportExport_.get(ICALENDAR)) ;
   }
-
+  public void generateCalDav(SessionProvider sProvider, String username, List<String> calendarIds, RssData rssData) throws Exception {
+    storage_.generateCalDav(sProvider, username, calendarIds, rssData, calendarImportExport_.get(ICALENDAR)) ;
+  }
   public List<FeedData> getFeeds(SessionProvider sProvider, String username) throws Exception {
     return storage_.getFeeds(sProvider, username) ;
   }

@@ -75,10 +75,6 @@
 							<div class="IconHolder RssIcon">RSS</div>
 						</a>
 						<div class="SeparatorLine"><span></span></div>
-						<a href="<%=uicomponent.event("CalDav")%>" class="ControlButton">
-							<div class="IconHolder CalDavIcon">Cal dav</div>
-						</a>
-						<div class="SeparatorLine"><span></span></div>
 						<a class="ControlButton" style="color:gray;">
 							<div class="IconHolder PrintCalendarIcon">Print </div>
 						</a>

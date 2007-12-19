@@ -75,6 +75,7 @@ public interface CalendarService {
    * @throws Exception
    */
   public Calendar getUserCalendar(SessionProvider sProvider, String username, String calendarId) throws Exception ;
+  
   public List<Calendar> getUserCalendars(SessionProvider sProvider, String username) throws Exception ;
   /**
    * This method should:
@@ -340,4 +341,6 @@ public interface CalendarService {
   public void removeSharedCalendar(SessionProvider sProvider, String username, String calendarId) throws Exception  ;
   public void saveEventToSharedCalendar(SessionProvider sProvider, String username, String calendarId, CalendarEvent event, boolean isNew) throws Exception  ;
   public Map<String, String> checkFreeBusy(SessionProvider sysProvider, EventQuery eventQuery) throws Exception  ;
+  
+  public void generateCalDav(SessionProvider sProvider, String username, List<String> calendarIds, RssData rssData) throws Exception ;
 }
