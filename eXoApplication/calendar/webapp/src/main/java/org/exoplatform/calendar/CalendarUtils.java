@@ -25,6 +25,7 @@ import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.impl.GroupImpl;
+import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.core.model.SelectItemOption;
 
 
@@ -230,4 +231,13 @@ public class CalendarUtils {
 	public static boolean isNameEmpty(String name) {
 		return (name == null || name.trim().length() == 0) ;
 	}
+  
+   public static String getServerBaseUrl() {
+      PortletRequestContext portletRequestContext = PortletRequestContext.getCurrentInstance() ;
+      String url = portletRequestContext.getRequest().getScheme() + "://" + 
+      portletRequestContext.getRequest().getServerName() + ":" +
+      String.format("%s",portletRequestContext.getRequest().getServerPort()) 
+      + "/" ;
+      return url ;
+    }
 }

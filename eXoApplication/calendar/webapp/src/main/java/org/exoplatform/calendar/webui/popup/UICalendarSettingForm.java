@@ -24,6 +24,7 @@ import org.exoplatform.calendar.webui.UICalendarView;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -160,6 +161,7 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
         setWorkingBegin(calendarSetting.getWorkingTimeBegin(), CalendarUtils.DATEFORMAT + " " + calendarSetting.getTimeFormat()) ;
         setWorkingEnd(calendarSetting.getWorkingTimeEnd(), CalendarUtils.DATEFORMAT + " " + calendarSetting.getTimeFormat()) ;
       }
+      if(calendarSetting.getBaseURL() == null) calendarSetting.setBaseURL(CalendarUtils.getServerBaseUrl() + "calendar/iCalRss") ;
       setBaseUrl(calendarSetting.getBaseURL()) ;
     }
     calendars_ = cservice.getUserCalendars(SessionsUtils.getSessionProvider(), username) ;
@@ -177,6 +179,7 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
       defaultCalendars.addUIFormInput(checkBox) ;
     }
   }
+
   private List<SelectItemOption<String>> getLocales() {
     return CalendarUtils.getLocaleSelectBoxOptions(java.util.Calendar.getAvailableLocales()) ;
   }

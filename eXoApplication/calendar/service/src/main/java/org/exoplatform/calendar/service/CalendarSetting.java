@@ -56,7 +56,6 @@ public class CalendarSetting {
     isShowWorkingTime = false ;
     timeZone = TimeZone.getDefault().getID() ;
     location = Locale.getDefault().getISO3Country() ;
-    baseURL = "http://localhost:8080/calendar/iCalRss" ;
     defaultPrivateCalendars = new String[]{} ;
     defaultPublicCalendars = new String[]{} ;
     sharedCalendarsColors = new String[]{} ;

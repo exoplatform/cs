@@ -30,6 +30,7 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormDateTimeInput;
+import org.exoplatform.webui.form.UIFormInputInfo;
 import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
@@ -56,36 +57,41 @@ public class UICalDavForm extends UIFormTabPane implements UIPopupComponent{
   final static private String COPYRIGHT = "copyright".intern() ;
   final static private String TITLE = "title".intern() ;
   final static private String PUBLIC_DATE = "pubDate".intern() ;
+  final static private String INFOR = "info".intern() ;
+  final static private String MESSAGE = "message".intern() ;
+  
   public UICalDavForm() throws Exception{
     super("UICalDavForm");
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     UIFormInputWithActions rssInfo = new UIFormInputWithActions("rssInfo") ;
     rssInfo.addUIFormInput(new UIFormStringInput(TITLE, TITLE, "eXoCalendar")) ;
-    rssInfo.addUIFormInput(new UIFormStringInput(URL, URL, calendarService.getCalendarSetting(SessionsUtils.getSessionProvider(), username).getBaseURL())) ;
+    String url = calendarService.getCalendarSetting(SessionsUtils.getSessionProvider(), username).getBaseURL();
+    if(url == null) url = CalendarUtils.getServerBaseUrl() + "calendar/iCalRss" ;
+    rssInfo.addUIFormInput(new UIFormStringInput(URL, URL, url)) ;
     rssInfo.addUIFormInput(new UIFormTextAreaInput(DESCRIPTION, DESCRIPTION, "This RSS provided by eXo Platform opensource company")) ;
     rssInfo.addUIFormInput(new UIFormStringInput(COPYRIGHT, COPYRIGHT, "Copyright by 2000-2005 eXo Platform SARL")) ;
     rssInfo.addUIFormInput(new UIFormDateTimeInput(PUBLIC_DATE, PUBLIC_DATE, new Date())) ;
     setSelectedTab(rssInfo.getId()) ;
     addUIFormInput(rssInfo) ;
     UIFormInputWithActions rssCalendars = new UIFormInputWithActions("rssCalendars") ;
-
+    rssCalendars.addUIFormInput(new UIFormInputInfo(INFOR,INFOR, null)) ; 
     List<Calendar> calendars = calendarService.getUserCalendars(SessionsUtils.getSessionProvider(), username) ;
     for(Calendar calendar : calendars) {
       rssCalendars.addUIFormInput(new UIFormCheckBoxInput<Boolean>(calendar.getName(), calendar.getId(), true)) ;
     }
     addUIFormInput(rssCalendars) ;
   }
-
+  public void init() throws Exception{
+    UIFormInputWithActions rssTab = getChildById("rssCalendars") ;
+    rssTab.getUIFormInputInfo(INFOR).setValue(getLabel(MESSAGE)) ;
+  }
   public void activate() throws Exception {}
   public void deActivate() throws Exception {}
   
   public String getWebDAVServerPrefix() throws Exception {    
-    PortletRequestContext portletRequestContext = PortletRequestContext.getCurrentInstance() ;
-    String prefixWebDAV = portletRequestContext.getRequest().getScheme() + "://" + 
-    portletRequestContext.getRequest().getServerName() + ":" +
-    String.format("%s",portletRequestContext.getRequest().getServerPort()) 
-    + "/"+ getPortalName() + "/rest/jcr/"+getRepository().getConfiguration().getName() +"/" + getWorkspaceName()  ;
+   String prefixWebDAV = CalendarUtils.getServerBaseUrl() + 
+           getPortalName() + "/rest/jcr/"+getRepository().getConfiguration().getName() +"/" + getWorkspaceName()  ;
     return prefixWebDAV ;
   }
   public String getPortalName() {

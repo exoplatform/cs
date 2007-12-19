@@ -517,7 +517,6 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   static  public class AddCategoryActionListener extends EventListener<UICalendarView> {
     public void execute(Event<UICalendarView> event) throws Exception {
       UICalendarView listView = event.getSource() ;
-      System.out.println("\n\n goto add event category");
       UICalendarPortlet calendarPortlet = listView.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction popupAction = calendarPortlet.getChild(UIPopupAction.class) ;
       popupAction.activate(UIEventCategoryManager.class, 470) ;
