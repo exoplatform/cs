@@ -72,14 +72,17 @@ public class UIMiniCalendar extends UICalendarView  {
   public LinkedHashMap<String, CalendarEvent> getDataMap(){ return null ; }
   
   public java.util.Calendar getBeginDateOfMonthView() throws Exception{
-    java.util.Calendar temCal = CalendarUtils.getInstanceTempCalendar() ;
-    temCal.setTime(calendar_.getTime()) ;
-    temCal.setFirstDayOfWeek(java.util.Calendar.SUNDAY) ;
-    temCal.set(java.util.Calendar.DATE, 1) ;
-    int amount1 = temCal.getFirstDayOfWeek() - temCal.get(java.util.Calendar.DAY_OF_WEEK) ;
-    return getBeginDay(getDateByValue(getCurrentYear(), getCurrentMonth(),1, UICalendarView.TYPE_DATE, amount1)) ;
+    java.util.Calendar temCal = getBeginDateOfMonth() ;
+    int amount = temCal.getFirstDayOfWeek() - temCal.get(java.util.Calendar.DAY_OF_WEEK) ;
+    temCal.add(java.util.Calendar.DATE, amount) ;
+    return getBeginDay(temCal) ;
   }
-  
+  public java.util.Calendar getEndDateOfMonthView() throws Exception{
+    java.util.Calendar temCal = getEndDateOfMonth() ;
+    int amount = temCal.getMaximum(java.util.Calendar.DAY_OF_WEEK) - temCal.get(java.util.Calendar.DAY_OF_WEEK) ; 
+    temCal.add(java.util.Calendar.DATE, amount) ;
+    return getEndDay(temCal) ;
+  }
   public java.util.Calendar getBeginDateOfMonth() throws Exception{
     java.util.Calendar temCal = CalendarUtils.getInstanceTempCalendar() ;
     temCal.setTime(calendar_.getTime()) ;

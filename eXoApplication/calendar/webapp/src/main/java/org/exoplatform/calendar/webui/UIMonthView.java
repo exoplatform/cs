@@ -79,8 +79,8 @@ public class UIMonthView extends UICalendarView {
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     EventQuery eventQuery = new EventQuery() ;
-    eventQuery.setFromDate(getBeginDateOfMonth()) ;
-    eventQuery.setToDate(getEndDateOfMonth()) ;
+    eventQuery.setFromDate(getBeginDateOfMonthView()) ;
+    eventQuery.setToDate(getEndDateOfMonthView()) ;
     List<CalendarEvent> allEvents = calendarService.getEvent(SessionsUtils.getSystemProvider(), username, eventQuery, getPublicCalendars()) ;
     Iterator childIter = getChildren().iterator() ;
     while(childIter.hasNext()) {
@@ -114,16 +114,25 @@ public class UIMonthView extends UICalendarView {
     System.out.println("\n\n>>>>>>>>>> MONTH VIEW") ;
     refreshSelectedCalendarIds() ;
     refreshEvents() ;
+    
+    System.out.println("\n\n Begin month view " + getBeginDateOfMonthView().getTime());
+    System.out.println("\n\n End month view " + getEndDateOfMonthView().getTime());
 
   }
   public java.util.Calendar getBeginDateOfMonthView() throws Exception{
-    java.util.Calendar temCal = CalendarUtils.getInstanceTempCalendar() ;
-    temCal.setTime(calendar_.getTime()) ;
-    temCal.setFirstDayOfWeek(java.util.Calendar.SUNDAY) ;
-    temCal.set(java.util.Calendar.DATE, 1) ;
-    int amount1 = temCal.getFirstDayOfWeek() - temCal.get(java.util.Calendar.DAY_OF_WEEK) ;
-    return getBeginDay(getDateByValue(getCurrentYear(), getCurrentMonth(),1, UICalendarView.TYPE_DATE, amount1)) ;
+    java.util.Calendar temCal = getBeginDateOfMonth() ;
+    int amount = temCal.getFirstDayOfWeek() - temCal.get(java.util.Calendar.DAY_OF_WEEK) ;
+    temCal.add(java.util.Calendar.DATE, amount) ;
+    return getBeginDay(temCal) ;
   }
+  
+  public java.util.Calendar getEndDateOfMonthView() throws Exception{
+    java.util.Calendar temCal = getEndDateOfMonth() ;
+    int amount = temCal.getMaximum(java.util.Calendar.DAY_OF_WEEK) - temCal.get(java.util.Calendar.DAY_OF_WEEK) ; 
+    temCal.add(java.util.Calendar.DATE, amount) ;
+    return getEndDay(temCal) ;
+  }
+  
   public java.util.Calendar getBeginDateOfMonth() throws Exception{
     java.util.Calendar temCal = CalendarUtils.getInstanceTempCalendar() ;
     temCal.setTime(calendar_.getTime()) ;
