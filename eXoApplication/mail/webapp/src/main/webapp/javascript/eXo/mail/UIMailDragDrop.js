@@ -52,7 +52,7 @@ UIMailDragDrop.prototype.regDnDItem = function() {
  */
 UIMailDragDrop.prototype.mailMDTrigger = function(e) {
   e = e ? e : window.event ;
-  if (e.button == 1 || e.which == 0) {
+  if (e.button == 0 || e.which == 1) {
     return eXo.mail.UIMailDragDrop.initDnD(eXo.mail.UIMailDragDrop.dropableSets, this, this, e) ;
   }
   return true ;
