@@ -115,8 +115,8 @@ public class UIMonthView extends UICalendarView {
     refreshSelectedCalendarIds() ;
     refreshEvents() ;
     
-    System.out.println("\n\n Begin month view " + getBeginDateOfMonthView().getTime());
-    System.out.println("\n\n End month view " + getEndDateOfMonthView().getTime());
+    //System.out.println("\n\n Begin month view " + getBeginDateOfMonthView().getTime());
+    //System.out.println("\n\n End month view " + getEndDateOfMonthView().getTime());
 
   }
   public java.util.Calendar getBeginDateOfMonthView() throws Exception{
