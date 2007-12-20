@@ -117,7 +117,10 @@ public class UICalendarCategoryForm extends UIForm {
         String username = Util.getPortalRequestContext().getRemoteUser() ;
         calendarService.saveCalendarCategory(SessionsUtils.getSessionProvider(), username, category, uiForm.isAddNew()) ;
         UICalendarForm uiCalendarForm = calendarPortlet.findFirstComponentOfType(UICalendarForm.class) ;
-        if(uiCalendarForm != null) uiCalendarForm.reloadCategory() ;
+        if(uiCalendarForm != null) {
+          uiCalendarForm.reloadCategory() ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarForm.getChildById(UICalendarForm.INPUT_CALENDAR)) ;
+        }
         uiManager.updateGrid() ;
         uiForm.reset() ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiManager) ;
