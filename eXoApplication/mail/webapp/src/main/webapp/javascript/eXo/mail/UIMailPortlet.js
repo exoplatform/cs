@@ -303,14 +303,17 @@ UIMailPortlet.prototype.showHidePreviewPane = function(layout) {
 
 UIMailPortlet.prototype.showHideMessageHeader = function(obj) {
 	var DOMUtil = eXo.core.DOMUtil ;
-	var colapse = document.getElementById("CollapseMessageAddressPreview");
-	var expand = document.getElementById("MessageAddressPreview");
+	var decorator = DOMUtil.findAncestorByClass(obj, "DecoratorBox");
+	var colapse = DOMUtil.findDescendantById(decorator, "CollapseMessageAddressPreview");
+	var expand = DOMUtil.findDescendantById(decorator, "MessageAddressPreview");
 	if (colapse.style.display == "none") {
 		expand.style.display = "none";
 		colapse.style.display = "block"
+		obj.innerHTML = "Show details";
 	} else {
 		colapse.style.display = "none"
 		expand.style.display = "block";
+		obj.innerHTML = "Hide details";
 	}
   var icons = eXo.core.DOMUtil.findDescendantsByClass(obj.parentNode, 'div', 'DownArrow1Icon') ;
   if (icons.length > 0) {
@@ -382,9 +385,9 @@ UIMailPortlet.prototype.collapseExpandFolder = function(obj) {
     
     if (divChild != null) {
 		var childClass = divChild.className ;
-		if (childClass == "Expand") {
+		if (childClass.indexOf("Expand") > -1) {
 			divChild.className = "Collapse" ;
- 		} else {
+ 		} else if (childClass.indexOf("Collapse") > -1){
 			divChild.className = "Expand" ;
 		} 
 	} 
