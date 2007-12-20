@@ -26,6 +26,10 @@ UIMailDragDrop.prototype.getAllDropableSets = function() {
   for (var i=0; i<folderList.length; i++) {
     this.dropableSets[this.dropableSets.length] = folderList[i] ;
   }
+  folderList = this.DOMUtil.findDescendantsByClass(uiFolderContainerNode, 'a', 'FolderLink') ;
+  for (var i=0; i<folderList.length; i++) {
+    this.dropableSets[this.dropableSets.length] = folderList[i] ;
+  }
   var uiTagContainerNode = document.getElementById('UITagContainer') ;
   var tagLists = this.DOMUtil.findDescendantsByClass(uiTagContainerNode, 'a', 'IconTagHolder') ;
   for (var i=0; i<tagLists.length; i++) {
