@@ -85,14 +85,14 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
       options.add(new SelectItemOption<String>(cal.getName(), cal.getId())) ;
     }
     addChild(new UIFormSelectBox(CALENDAR, CALENDAR, options)) ;
-    
+
     options = new ArrayList<SelectItemOption<String>>() ;
     options.add(new SelectItemOption<String>("", "")) ;
     for(CalendarCategory cat : cservice.getCategories(SessionsUtils.getSessionProvider(), CalendarUtils.getCurrentUser())) {
       options.add(new SelectItemOption<String>(cat.getName(), cat.getId())) ;
     }
     addChild(new UIFormSelectBox(CATEGORY, CATEGORY, options)) ;
-    
+
     options = new ArrayList<SelectItemOption<String>>() ;
     options.add(new SelectItemOption<String>("", "")) ;
     options.add(new SelectItemOption<String>(CalendarEvent.PRIORITY_LOW, CalendarEvent.PRIORITY_LOW)) ;
@@ -108,51 +108,49 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
   }
   public void activate() throws Exception {}
   public void deActivate() throws Exception {
-    
+
   }
   static  public class SearchActionListener extends EventListener<UIAdvancedSearchForm> {
     public void execute(Event<UIAdvancedSearchForm> event) throws Exception {
       UIAdvancedSearchForm uiForm = event.getSource() ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;      
-      EventQuery query = new EventQuery() ;
-      query.setText(uiForm.getUIStringInput(uiForm.TEXT).getValue()) ;
-      query.setEventType(uiForm.getUIFormSelectBox(uiForm.TYPE).getValue()) ;
-      String calendarId = uiForm.getUIFormSelectBox(uiForm.CALENDAR).getValue() ;
-      if(calendarId != null && calendarId.length() > 0) query.setCalendarId(new String[]{calendarId}) ;
-      String categoryId = uiForm.getUIFormSelectBox(uiForm.CATEGORY).getValue() ;
-      if(categoryId != null && categoryId.length() > 0) query.setCategoryId(new String[]{categoryId}) ;
-      query.setFromDate(uiForm.getUIFormDateTimeInput(uiForm.FROMDATE).getCalendar()) ;
-      query.setToDate(uiForm.getUIFormDateTimeInput(uiForm.TODATE).getCalendar()) ;
-      if(query.getToDate().getTimeInMillis() <= query.getFromDate().getTimeInMillis()) {
+      if(uiForm.getUIFormDateTimeInput(uiForm.FROMDATE).getCalendar().getTimeInMillis() >= 
+        uiForm.getUIFormDateTimeInput(uiForm.TODATE).getCalendar().getTimeInMillis()) {
         uiApp.addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.date-time-invalid", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-      String username = CalendarUtils.getCurrentUser() ;
-      UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
-      UICalendarViewContainer calendarViewContainer = 
-        calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
-      calendarViewContainer.setRenderedChild(UICalendarViewContainer.LIST_VIEW) ;
-      UIListView uiListView = calendarViewContainer.findFirstComponentOfType(UIListView.class) ;
-      EventPageList resultPageList =  
-        CalendarUtils.getCalendarService().searchEvent(SessionsUtils.getSystemProvider(), username, query, uiListView.getPublicCalendars()) ;
-      calendarPortlet.cancelAction() ;
-      uiListView.update(resultPageList) ;
-      uiListView.setViewType(UIListView.TYPE_BOTH) ;
-      uiListView.setDisplaySearchResult(true) ;
-      uiListView.setSelectedEvent(null) ;
-      calendarViewContainer.findFirstComponentOfType(UIPreview.class).setEvent(null) ;
-      /*if(query.getEventType() == null || query.getEventType().equals("")) 
-        uiListView.setShowEventAndTask(true) ;
-      else{
-        uiListView.setShowEventAndTask(false) ;
-        if(query.getEventType().equals(CalendarEvent.TYPE_EVENT)) uiListView.isShowEvent_ = true ;
-        else uiListView.isShowEvent_ = false ;
-      }*/ 
-      UIActionBar uiActionBar = calendarPortlet.findFirstComponentOfType(UIActionBar.class) ;
-      uiActionBar.setCurrentView(UICalendarViewContainer.LIST_VIEW) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiActionBar) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(calendarViewContainer) ;
+      try {
+        EventQuery query = new EventQuery() ;
+        query.setText(uiForm.getUIStringInput(UIAdvancedSearchForm.TEXT).getValue()) ;
+        query.setEventType(uiForm.getUIFormSelectBox(UIAdvancedSearchForm.TYPE).getValue()) ;
+        String calendarId = uiForm.getUIFormSelectBox(UIAdvancedSearchForm.CALENDAR).getValue() ;
+        if(calendarId != null && calendarId.length() > 0) query.setCalendarId(new String[]{calendarId}) ;
+        String categoryId = uiForm.getUIFormSelectBox(UIAdvancedSearchForm.CATEGORY).getValue() ;
+        if(categoryId != null && categoryId.length() > 0) query.setCategoryId(new String[]{categoryId}) ;
+        query.setFromDate(uiForm.getUIFormDateTimeInput(UIAdvancedSearchForm.FROMDATE).getCalendar()) ;
+        query.setToDate(uiForm.getUIFormDateTimeInput(UIAdvancedSearchForm.TODATE).getCalendar()) ;
+        String username = CalendarUtils.getCurrentUser() ;
+        UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
+        UICalendarViewContainer calendarViewContainer = 
+          calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
+        UIListView uiListView = calendarViewContainer.findFirstComponentOfType(UIListView.class) ;
+        EventPageList resultPageList =  
+          CalendarUtils.getCalendarService().searchEvent(SessionsUtils.getSystemProvider(), username, query, uiListView.getPublicCalendars()) ;
+        calendarPortlet.cancelAction() ;
+        uiListView.update(resultPageList) ;
+        calendarViewContainer.setRenderedChild(UICalendarViewContainer.LIST_VIEW) ;
+        uiListView.setViewType(UIListView.TYPE_BOTH) ;
+        uiListView.setDisplaySearchResult(true) ;
+        uiListView.setSelectedEvent(null) ;
+        calendarViewContainer.findFirstComponentOfType(UIPreview.class).setEvent(null) ;
+        UIActionBar uiActionBar = calendarPortlet.findFirstComponentOfType(UIActionBar.class) ;
+        uiActionBar.setCurrentView(UICalendarViewContainer.LIST_VIEW) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiActionBar) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(calendarViewContainer) ;
+      } catch (Exception e) {
+        e.printStackTrace() ;
+      }
     }
   }
   static  public class CancelActionListener extends EventListener<UIAdvancedSearchForm> {

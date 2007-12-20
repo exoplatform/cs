@@ -63,27 +63,31 @@ public class UISearchForm extends UIForm {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-      EventQuery eventQuery = new EventQuery() ;
-      eventQuery.setText(text) ;
-      System.out.println("\n\n eventQuery " + eventQuery.getQueryStatement());
-      String username = CalendarUtils.getCurrentUser() ;
-      UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
-      UICalendarViewContainer calendarViewContainer = 
-        calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
-      UIListView uiListView = calendarViewContainer.findFirstComponentOfType(UIListView.class) ;
-      EventPageList resultPageList = 
-        CalendarUtils.getCalendarService().searchEvent(SessionsUtils.getSessionProvider(), username, eventQuery, uiListView.getPublicCalendars()) ;
-      calendarViewContainer.setRenderedChild(UICalendarViewContainer.LIST_VIEW) ;
-      uiListView.update(resultPageList) ;
-      uiListView.setViewType(UIListView.TYPE_BOTH) ;
-      uiListView.setDisplaySearchResult(true) ;
-      uiListView.setSelectedEvent(null) ;
-      calendarViewContainer.findFirstComponentOfType(UIPreview.class).setEvent(null) ;
-      UIActionBar uiActionBar = calendarPortlet.findFirstComponentOfType(UIActionBar.class) ;
-      uiActionBar.setCurrentView(UICalendarViewContainer.LIST_VIEW) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiActionBar) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(calendarViewContainer) ;
+      try {
+        EventQuery eventQuery = new EventQuery() ;
+        eventQuery.setText(text) ;
+        System.out.println("\n\n eventQuery " + eventQuery.getQueryStatement());
+        String username = CalendarUtils.getCurrentUser() ;
+        UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
+        UICalendarViewContainer calendarViewContainer = 
+          calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
+        UIListView uiListView = calendarViewContainer.findFirstComponentOfType(UIListView.class) ;
+        EventPageList resultPageList = 
+          CalendarUtils.getCalendarService().searchEvent(SessionsUtils.getSessionProvider(), username, eventQuery, uiListView.getPublicCalendars()) ;
+        calendarViewContainer.setRenderedChild(UICalendarViewContainer.LIST_VIEW) ;
+        uiListView.update(resultPageList) ;
+        uiListView.setViewType(UIListView.TYPE_BOTH) ;
+        uiListView.setDisplaySearchResult(true) ;
+        uiListView.setSelectedEvent(null) ;
+        calendarViewContainer.findFirstComponentOfType(UIPreview.class).setEvent(null) ;
+        UIActionBar uiActionBar = calendarPortlet.findFirstComponentOfType(UIActionBar.class) ;
+        uiActionBar.setCurrentView(UICalendarViewContainer.LIST_VIEW) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiActionBar) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiForm) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(calendarViewContainer) ;
+      } catch (Exception e) {
+        e.printStackTrace() ;
+      }
     }
   }
   static  public class AdvancedSearchActionListener extends EventListener<UISearchForm> {

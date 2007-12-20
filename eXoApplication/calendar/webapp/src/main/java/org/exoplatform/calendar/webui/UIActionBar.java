@@ -101,32 +101,6 @@ public class UIActionBar extends UIContainer  {
     }
   }
 
-
-  /*static public class AddTasksActionListener extends EventListener<UIActionBar> {
-    public void execute(Event<UIActionBar> event) throws Exception {
-      UIActionBar uiActionBar = event.getSource() ;
-      CalendarService calendarService = uiActionBar.getApplicationComponent(CalendarService.class) ;
-      UIApplication uiApp = uiActionBar.getAncestorOfType(UIApplication.class) ;
-      List<org.exoplatform.calendar.service.Calendar> privateCalendars = 
-        calendarService.getUserCalendars(CalendarUtils.getCurrentUser()) ;
-      if(privateCalendars.isEmpty()) {
-        uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.calendar-list-empty", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
-      }
-      UICalendarPortlet uiPortlet = uiActionBar.getAncestorOfType(UICalendarPortlet.class) ;
-      UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
-      UIPopupContainer uiContainer = uiPopupAction.activate(UIPopupContainer.class, 700) ;
-      uiContainer.setId(UIPopupContainer.UITASKPOPUP) ;
-      UITaskForm uiTaskForm = uiContainer.createUIComponent(UITaskForm.class, null, null) ;
-      uiTaskForm.initForm(uiPortlet.getCalendarSetting(), null) ;
-      uiTaskForm.update(CalendarUtils.PRIVATE_TYPE, null) ;
-      uiContainer.addChild(uiTaskForm) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
-    }
-  }*/
-  
-  
   static public class ChangeViewActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {
       UIActionBar uiActionBar = event.getSource() ;     
@@ -135,14 +109,15 @@ public class UIActionBar extends UIContainer  {
       UICalendarViewContainer uiViewContainer = uiPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
       if(viewType.equals("UIListContainer")) {
         UIListView uiListView = uiViewContainer.findFirstComponentOfType(UIListView.class) ;
-        CalendarService calendarService = uiActionBar.getApplicationComponent(CalendarService.class) ;
+        /*alendarService calendarService = uiActionBar.getApplicationComponent(CalendarService.class) ;
         String username = CalendarUtils.getCurrentUser() ;
         EventQuery eventQuery = new EventQuery() ;
         java.util.Calendar fromcalendar =  uiListView.getBeginDay(new GregorianCalendar(uiListView.getCurrentYear(), uiListView.getCurrentMonth(), uiListView.getCurrentDay())) ;
         eventQuery.setFromDate(fromcalendar) ;
         java.util.Calendar tocalendar =  uiListView.getEndDay(new GregorianCalendar(uiListView.getCurrentYear(), uiListView.getCurrentMonth(), uiListView.getCurrentDay())) ;
         eventQuery.setToDate(tocalendar) ;
-        uiListView.update(calendarService.searchEvent(SessionsUtils.getSystemProvider(), username, eventQuery, uiListView.getPublicCalendars())) ; 
+        uiListView.update(calendarService.searchEvent(SessionsUtils.getSystemProvider(), username, eventQuery, uiListView.getPublicCalendars())) ;*/ 
+        uiListView.refresh(null) ;
         uiListView.setShowEventAndTask(false) ;
         uiListView.setDisplaySearchResult(false) ;
         uiListView.isShowEvent_ = true ;
@@ -155,17 +130,6 @@ public class UIActionBar extends UIContainer  {
     }
   }  
   
- /* static public class ShowHiddenActionListener extends EventListener<UIActionBar> {
-    public void execute(Event<UIActionBar> event) throws Exception {
-      UIActionBar uiActionBar = event.getSource() ;    
-      uiActionBar.isShowPane_ = ! uiActionBar.isShowPane_ ;
-      UICalendarPortlet uiPortlet = uiActionBar.getAncestorOfType(UICalendarPortlet.class) ;
-      UICalendarWorkingContainer uiWorkingContainer = uiPortlet.findFirstComponentOfType(UICalendarWorkingContainer.class) ;
-      uiWorkingContainer.getChild(UICalendarContainer.class).setRendered(uiActionBar.isShowPane_ ) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiActionBar) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer) ;
-    }
-  }  */
   static public class TodayActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {
       UIActionBar uiActionBar = event.getSource() ;     
@@ -173,7 +137,6 @@ public class UIActionBar extends UIContainer  {
       UICalendarViewContainer uiViewContainer = uiPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
       CalendarView renderedChild = (CalendarView)uiViewContainer.getRenderedChild() ;
       renderedChild.setCurrentCalendar(CalendarUtils.getInstanceTempCalendar()) ;
-      System.out.println("\n\n renderedChild " + renderedChild);
       renderedChild.refresh() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiViewContainer) ;
     }

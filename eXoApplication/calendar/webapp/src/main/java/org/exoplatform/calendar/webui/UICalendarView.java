@@ -495,6 +495,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       UIMiniCalendar uiMiniCalendar = uiCalendarView.getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UIMiniCalendar.class) ;
       uiMiniCalendar.updateMiniCal() ;
       uiCalendarView.setLastUpdatedEventId(null) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarView.getParent()) ;
     }
   }
