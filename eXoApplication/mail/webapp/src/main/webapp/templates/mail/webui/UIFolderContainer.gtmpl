@@ -202,7 +202,7 @@
           long pUnreadMess = cf.getNumberOfUnreadMessage();
           String pCssClass = "CloseFolder NormalLabel" ;
           String pActionLink = uicomponent.event('ChangeFolder', pid);
-          if(pid.equals(uicomponent.getSelectedFolder())) pCssClass = "OpenFolder SelectedLabel" ;
+          //if(pid.equals(uicomponent.getSelectedFolder())) pCssClass = "OpenFolder SelectedLabel" ;
           StringBuilder builder = new StringBuilder() ;
           builder.append("<div class=\"IconFolder Folder $pCssClass\" onClick=\"javascript:eXo.mail.UIMailPortlet.collapseExpandFolder(this)\" folder=\"").append(pid).append("\">");
           builder.append("<a class=\"FolderLink\" href=\"$pActionLink\" folder=\"").append(pid).append("\">");
@@ -226,10 +226,10 @@
       long pUnreadMess = cf.getNumberOfUnreadMessage();
       String pCssClass = "CloseFolder NormalLabel" ;
       String pActionLink = uicomponent.event('ChangeFolder', pid);
-      if(pid.equals(uicomponent.getSelectedFolder())) pCssClass = "OpenFolder SelectedLabel" ;
+      //if(pid.equals(uicomponent.getSelectedFolder())) pCssClass = "OpenFolder SelectedLabel" ;
       StringBuilder builder = new StringBuilder() ;
       builder.append("<div class=\"IconFolder Folder $pCssClass\" onClick=\"javascript:eXo.mail.UIMailPortlet.collapseExpandFolder(this)\" folder=\"").append(pid).append("\">");
-      builder.append("<a class=\"FolderLink\" href=\"$pActionLink\" folder=\"").append(pid).append("\">");
+      builder.append("<a class=\"FolderLink\" onclick=\"\" href=\"$pActionLink\" folder=\"").append(pid).append("\">");
       builder.append(name);
       builder.append("</a>");
       builder.append("</div>")
