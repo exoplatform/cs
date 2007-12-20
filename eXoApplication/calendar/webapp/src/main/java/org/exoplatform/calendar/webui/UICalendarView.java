@@ -26,6 +26,7 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
@@ -113,12 +114,13 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   protected DateFormatSymbols dfs_  ;
   public UICalendarView() throws Exception{
     initCategories() ;
+    applySeting() ;
     calendar_ = GregorianCalendar.getInstance() ;
     calendar_.setLenient(false) ;
     int gmtoffset = calendar_.get(Calendar.DST_OFFSET) + calendar_.get(Calendar.ZONE_OFFSET);
     calendar_.setTimeInMillis(System.currentTimeMillis() - gmtoffset) ;
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, dd MMM yyyy k:m:s z");
-    dfs_ = new DateFormatSymbols() ;
+    dfs_ = new DateFormatSymbols(new Locale(getCalendarSetting().getLocation())) ;
     System.out.println("\n\n GMT Time " + simpleDateFormat.format(calendar_.getTime()));
     for(int i = 0; i< dfs_.getMonths().length; i++) {
       monthsMap_.put(i, dfs_.getMonths()[i]) ;
@@ -129,7 +131,6 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
     for(int i = 0 ; i < CalendarEvent.PRIORITY.length ; i++ ) {
       priorityMap_.put(String.valueOf(i), CalendarEvent.PRIORITY[i]) ;
     }
-    applySeting() ;
   }
   public void applySeting() throws Exception {
     try {
@@ -141,6 +142,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
     }
     dateTimeFormat_ = getDateFormat() + " " + getTimeFormat() ;
     TimeZone settingTimeZone = TimeZone.getTimeZone(calendarSetting_.getTimeZone()) ;
+    //dfs_ =  new DateFormatSymbols(new Locale(calendarSetting_.getLocation())) ;
     // calendar_.set(Calendar.ZONE_OFFSET, settingTimeZone.getRawOffset()) ;
   }
   public void setViewType(String viewType) { this.viewType_ = viewType ; }
