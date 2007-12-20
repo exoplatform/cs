@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.jcr.ItemExistsException;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.PropertyIterator;
@@ -562,7 +563,7 @@ public class JCRDataStorage{
     String name = null ;
     String description = null ;
     if(isNew){
-      if(eventCategoryHome.hasNode(eventCategory.getName())) throw new Exception("This event category is already exists!") ;
+      if(eventCategoryHome.hasNode(eventCategory.getName())) throw new ItemExistsException("This event category is already exists!") ;
       eventCategoryNode = eventCategoryHome.addNode(eventCategory.getName(), "exo:eventCategory") ;
       name = eventCategory.getName() ;
       description = eventCategory.getDescription() ;
@@ -573,7 +574,7 @@ public class JCRDataStorage{
         description = newEventCategory.getDescription() ;
       } else {
         if(eventCategoryHome.hasNode(newEventCategory.getName())){
-          throw new Exception("This event category is already exists!") ;
+          throw new ItemExistsException("This event category is already exists!") ;
         } else {
           eventCategoryNode.remove() ;
           eventCategoryHome.addNode(newEventCategory.getName()) ;
