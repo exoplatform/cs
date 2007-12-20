@@ -197,7 +197,7 @@
       println("<div style='padding-left:20px;'>");
       for (Folder cf : uicomponent.getSubFolders(path)) {
         if (cf != null) {
-          String pid = cf.getPath() ;
+          String pid = cf.getId() ;
           String name = cf.getName();
           long pUnreadMess = cf.getNumberOfUnreadMessage();
           String pCssClass = "CloseFolder NormalLabel" ;

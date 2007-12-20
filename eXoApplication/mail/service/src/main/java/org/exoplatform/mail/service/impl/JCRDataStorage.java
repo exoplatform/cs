@@ -317,15 +317,14 @@ public class JCRDataStorage{
   
   public void moveMessages(SessionProvider sProvider, String username, String accountId, String msgId, String currentFolderId, String destFolderId) throws Exception {
     Node messageHome = getMessageHome(sProvider, username, accountId);
-    Node folderHome = getFolderHome(sProvider, username, accountId);
     if (messageHome.hasNode(msgId)) {
       Node msgNode = messageHome.getNode(msgId) ;
       if (msgNode.hasProperty(Utils.EXO_FOLDERS)) {
         Boolean isRootConversation = msgNode.getProperty(Utils.EXO_ISROOT).getBoolean();
         
         Boolean isUnread = msgNode.getProperty(Utils.EXO_ISUNREAD).getBoolean();
-        Node currentFolderNode = folderHome.getNode(currentFolderId);
-        Node destFolderNode = folderHome.getNode(destFolderId);
+        Node currentFolderNode = getFolderNodeById(sProvider, username, accountId, currentFolderId);
+        Node destFolderNode = getFolderNodeById(sProvider, username, accountId, destFolderId);
         Value[] propFolders = msgNode.getProperty(Utils.EXO_FOLDERS).getValues();
         String[] folderIds = new String[propFolders.length];
         for (int i = 0; i < propFolders.length; i++) {
@@ -559,11 +558,8 @@ public class JCRDataStorage{
 
   public Folder getFolder(SessionProvider sProvider, String username, String accountId, String folderId) throws Exception {
     Folder folder = null;
-    Node folderHome = getFolderHome(sProvider, username, accountId);
-    Node node = null;
-    // if this folder exists, creates the object and returns it
-    if (folderHome.hasNode(folderId)) {
-      node = folderHome.getNode(folderId);
+    Node node = getFolderNodeById(sProvider, username, accountId, folderId);
+    if (node != null) { 
       folder = new Folder();
       folder.setId(node.getProperty(Utils.EXO_ID).getString());
       folder.setLabel(node.getProperty(Utils.EXO_LABEL).getString());
@@ -574,6 +570,21 @@ public class JCRDataStorage{
       folder.setTotalMessage(node.getProperty(Utils.EXO_TOTALMESSAGE).getLong());
     }
     return folder ;
+  }
+  
+  private Node getFolderNodeById(SessionProvider sProvider, String username, String accountId, String folderId) throws Exception {
+    Session sess = getMailHomeNode(sProvider, username).getSession();
+    QueryManager qm = sess.getWorkspace().getQueryManager();
+    // gets the specified folder node
+    StringBuffer queryString = new StringBuffer("//element(*,exo:folder)[@exo:id='").
+    append(folderId).
+    append("']");
+    Query query = qm.createQuery(queryString.toString(), Query.XPATH);
+    QueryResult result = query.execute();
+    NodeIterator it = result.getNodes();
+    Node node = null ; 
+    if (it.hasNext()) node = it.nextNode();
+    return node;
   }
   
   public Folder getFolder(Node node) throws Exception {
@@ -605,8 +616,9 @@ public class JCRDataStorage{
     // gets folder home node of the specified account
     Node home = getFolderHome(sProvider, username, accountId);
     Node myFolder = null;
-    if (home.hasNode(folder.getId())) { // if the folder exists, gets it
-      myFolder = home.getNode(folder.getId());
+    Node node = getFolderNodeById(sProvider, username, accountId, folder.getId());
+    if (node != null) { // if the folder exists, gets it
+      myFolder = node;
     } else { // if it doesn't exist, creates it
       myFolder = home.addNode(folder.getId(), Utils.EXO_FOLDER);
     }
@@ -620,10 +632,10 @@ public class JCRDataStorage{
     home.getSession().save();
   }
   
-  public void saveFolder(SessionProvider sProvider, String username, String accountId, String parentPath, Folder folder) throws Exception {
+  public void saveFolder(SessionProvider sProvider, String username, String accountId, String parentId, Folder folder) throws Exception {
     // gets folder home node of the specified account
     Node home = getFolderHome(sProvider, username, accountId);
-    Node parentNode = (Node)home.getSession().getItem(parentPath);
+    Node parentNode = getFolderNodeById(sProvider, username, accountId, parentId);
     Node myFolder = null;
     if (parentNode.hasNode(folder.getId())) { // if the folder exists, gets it
       myFolder = parentNode.getNode(folder.getId());
@@ -658,11 +670,11 @@ public class JCRDataStorage{
 
   public void removeUserFolder(SessionProvider sProvider, String username, Account account, Folder folder) throws Exception {
     //  gets the specified folder
-    Node folderHome = getFolderHome(sProvider, username, account.getId());
-    if (folderHome.hasNode(folder.getId())) {
-      folderHome.getNode(folder.getId()).remove();
+    Node node = getFolderNodeById(sProvider, username, account.getId(), folder.getId()); 
+    if (node != null) {
+      node.remove();
     }
-    folderHome.getSession().save();
+    node.getSession().save();
   }
   
   

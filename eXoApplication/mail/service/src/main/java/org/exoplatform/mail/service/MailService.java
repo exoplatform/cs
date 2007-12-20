@@ -329,7 +329,7 @@ public interface MailService {
   
   public String getFolderHomePath(SessionProvider sProvider, String username, String accountId) throws Exception ;
   
-  public void saveFolder(SessionProvider sProvider, String username, String accountId, String parentPath, Folder folder) throws Exception ;
+  public void saveFolder(SessionProvider sProvider, String username, String accountId, String parentId, Folder folder) throws Exception ;
   
   public List<Folder> getSubFolders(SessionProvider sProvider, String username, String accountId, String parentPath) throws Exception ;
 }

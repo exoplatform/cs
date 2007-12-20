@@ -737,8 +737,8 @@ public class MailServiceImpl implements MailService{
     return storage_.getFolderHomePath(sProvider, username, accountId);
   }
   
-  public void saveFolder(SessionProvider sProvider, String username, String accountId, String parentPath, Folder folder) throws Exception {
-    storage_.saveFolder(sProvider, username, accountId, parentPath, folder);
+  public void saveFolder(SessionProvider sProvider, String username, String accountId, String parentId, Folder folder) throws Exception {
+    storage_.saveFolder(sProvider, username, accountId, parentId, folder);
   }
   
   public List<Folder> getSubFolders(SessionProvider sProvider, String username, String accountId, String parentPath) throws Exception {

@@ -135,11 +135,11 @@ public class UIFolderContainer extends UIContainer {
   static public class AddSubFolderActionListener extends EventListener<UIFolderContainer> {
     public void execute(Event<UIFolderContainer> event) throws Exception {
       System.out.println("\n\n AddSubFolderActionListener");
-      String folderPath = event.getRequestContext().getRequestParameter(OBJECTID) ; 
+      String folderId = event.getRequestContext().getRequestParameter(OBJECTID) ; 
       UIFolderContainer uiFolder = event.getSource() ;
       UIPopupAction uiPopup = uiFolder.getAncestorOfType(UIMailPortlet.class).getChild(UIPopupAction.class) ;
       UIFolderForm uiFolderForm = uiPopup.createUIComponent(UIFolderForm.class, null, null);
-      uiFolderForm.setParentPath(folderPath);
+      uiFolderForm.setParentPath(folderId);
       uiPopup.activate(uiFolderForm, 450, 0, false) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiFolder.getAncestorOfType(UIMailPortlet.class)) ;
     }
