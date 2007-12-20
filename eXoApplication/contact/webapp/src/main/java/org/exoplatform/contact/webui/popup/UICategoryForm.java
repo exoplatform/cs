@@ -37,7 +37,6 @@ import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
 
-
 /**
  * Created by The eXo Platform SARL
  * Author : Hung Nguyen
@@ -106,23 +105,24 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
       if (popupContainer != null) {
         UICategorySelect uiCategorySelect = popupContainer.findFirstComponentOfType(UICategorySelect.class);
         if (uiCategorySelect != null) {
+          String selectedGroup = uiCategorySelect.getSelectedCategory();          
           List<SelectItemOption<String>> ls = uiCategorySelect.getCategoryList();
           ls.add(new SelectItemOption<String>(groupName, group.getId())) ;
           uiCategorySelect.setCategoryList(ls);
-          
-          //event.getRequestContext().addUIComponentToUpdateByAjax(uiCategorySelect) ;
-          
+          uiCategorySelect.setValue(selectedGroup) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiCategorySelect) ;          
         } else {
           UIImportForm importForm = popupContainer.findFirstComponentOfType(UIImportForm.class) ;
+          String category = importForm.getUIFormSelectBox(UIImportForm.FIELD_CATEGORY).getValue() ; 
           List<SelectItemOption<String>> ls = importForm.getCategoryList();
           ls.add(new SelectItemOption<String>(groupName, group.getId())) ;
           importForm.setCategoryList(ls);
+          importForm.setValues(category) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(importForm) ;
         }        
 
         UIPopupAction action = uiCategoryForm.getAncestorOfType(UIPopupAction.class) ;
         if (action != null) {
-          System.out.println("\n\n khac null \n\n");
           action.deActivate() ;
           event.getRequestContext().addUIComponentToUpdateByAjax(action) ;
         } 
@@ -135,8 +135,7 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
       }
       
       UIAddressBooks uiAddressBook = uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook) ;
-    
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook) ; 
     }
   }
   

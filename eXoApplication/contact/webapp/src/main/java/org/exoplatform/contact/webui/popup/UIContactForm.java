@@ -19,7 +19,9 @@ package org.exoplatform.contact.webui.popup;
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.SessionsUtils;
@@ -101,6 +103,7 @@ public class UIContactForm extends UIFormTabPane implements UISelector {
   final static public String FIELD_EDITPERMISSION = "editPermission" ;
   public static String[] FIELD_SHAREDCONTACT_BOX = null ;
   public static String FIELD_INPUT_INFO = "selectGroups";
+  private Map<String, String> permission_ = new HashMap<String, String>() ;
 
   public UIContactForm() throws Exception {
     super("UIContactForm");
@@ -202,9 +205,20 @@ public class UIContactForm extends UIFormTabPane implements UISelector {
   
   @Override
   public String[] getActions() { return new String[] {"Save", "Cancel"} ; }
-  public void updateSelect(String selectField, String value) {
-    getUIStringInput(selectField).setValue(value);
+  
+  public void updateSelect(String selectField, String value) throws Exception {
+    UIFormInputWithActions shareTab = getChildById(INPUT_SHARETAB) ;
+    UIFormStringInput fieldInput = shareTab.getUIStringInput(selectField) ;
+    permission_.put(value, value) ;
+    StringBuilder sb = new StringBuilder() ;
+    for(String s : permission_.values()) {
+      if(sb != null && sb.length() > 0) sb.append(", ") ;
+      sb.append(s) ;
+    }
+    fieldInput.setValue(sb.toString()) ;
+    setSelectedTab(shareTab.getId()) ;
   }
+  
   public void setNew(boolean isNew) { isNew_ = isNew ; }
   
   public void setValues(Contact contact) throws Exception {
@@ -456,8 +470,7 @@ public class UIContactForm extends UIFormTabPane implements UISelector {
       UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       UIPopupAction uiChildPopup = uiPopupContainer.getChild(UIPopupAction.class) ;
       uiChildPopup.activate(uiGroupSelector, 500, 0, true) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
-      
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;      
     }
   }
   

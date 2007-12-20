@@ -31,17 +31,12 @@
 		        even = !even ;
 		        	key = "" ;
 			        if(uicomponent.isSelectMemberShip()){ 
-			        	if(uicomponent.getCurrentGroup().getParentId() != null) {
-			        		 key = user + ":"+  uicomponent.getCurrentGroup().getParentId();
-			        	} else {
-			        		 key = user + ":/"+  uicomponent.getCurrentGroup().getGroupName() ;
-			        	}
+			        		 key = user + ":" +  uicomponent.getCurrentGroup().getId() ;
 			        } else if(uicomponent.isSelectUser()){ 
 			        	key = user ;
 			        } else if(uicomponent.isSelectGroup()){ 
-			        	key = user ;
-			        }
-			          
+			        	key = uicomponent.getCurrentGroup().getId()+"/"+user ;
+			        }      
 	      %>
 			      <div class="$rowCssClass">
 			        <div class="ItemIcon"><span></span></div>

@@ -77,6 +77,11 @@ public class UICategorySelect extends UIForm {
     UIFormInputWithActions input = getChildById(INPUT_CATEGORY) ;
     return input.getUIFormSelectBox(FIELD_CATEGORY).getValue() ;
   }
+  public void setValue(String groupId) throws Exception {
+    UIFormInputWithActions input = getChildById(INPUT_CATEGORY) ;
+    input.getUIFormSelectBox(FIELD_CATEGORY).setValue(groupId) ;
+  }
+  public void disableSelect() { getUIFormSelectBox(FIELD_CATEGORY).setEnable(false) ; }
 
   public List<SelectItemOption<String>> getCategoryList() throws Exception {
     List<SelectItemOption<String>> categories = new ArrayList<SelectItemOption<String>>() ;
@@ -89,12 +94,6 @@ public class UICategorySelect extends UIForm {
     UIFormInputWithActions input = getChildById(INPUT_CATEGORY) ;
      input.getUIFormSelectBox(FIELD_CATEGORY).setOptions(options) ;
   }
-  
-  public void setValue(String groupId) throws Exception {
-    UIFormInputWithActions input = getChildById(INPUT_CATEGORY) ;
-    input.getUIFormSelectBox(FIELD_CATEGORY).setValue(groupId) ;
-  }
-  public void disableSelect() { getUIFormSelectBox(FIELD_CATEGORY).setEnable(false) ; }
 
   static  public class OnchangeActionListener extends EventListener<UICategorySelect> {
     public void execute(Event<UICategorySelect> event) throws Exception {
