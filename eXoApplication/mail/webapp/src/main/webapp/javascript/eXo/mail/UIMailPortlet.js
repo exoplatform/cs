@@ -13,7 +13,7 @@ UIMailPortlet.prototype.showContextMenu = function() {
 	} ;	
 	UIContextMenu.init(config) ;
 	UIContextMenu.attach('MessageItem', 'UIMessagePopupMenu') ;
-	UIContextMenu.attach('IconFolder', 'UIFolderListPopupMenu') ;
+	UIContextMenu.attach('FolderLink', 'UIFolderListPopupMenu') ;
 	UIContextMenu.attach('IconTagHolder', 'UITagListPopupMenu') ;
 	UIContextMenu.attach('InboxIcon', 'UIDefaultFolderPopupMenu') ;
 	UIContextMenu.attach('DraftsIcon', 'UIDefaultFolderPopupMenu') ;
@@ -365,4 +365,28 @@ UIMailPortlet.prototype.showHideField = function(chk,fields) {
 	}
 } ;
 
+UIMailPortlet.prototype.collapseExpandFolder = function(obj) {
+	var DOMUtil = eXo.core.DOMUtil;
+	var divChild = DOMUtil.findNextElementByTagName(obj, "div");
+	
+	var objClass = obj.className;
+	if (objClass.indexOf(" OpenFolder") > -1) { 
+		objClass = objClass.replace(" OpenFolder", "");
+		objClass = objClass + " CloseFolder" ;
+		obj.className = objClass ;
+    } else if (objClass.indexOf(" CloseFolder") > -1) { 
+		objClass = objClass.replace(" CloseFolder", "");
+		objClass = objClass + " OpenFolder" ;
+		obj.className = objClass ;
+    }	
+    
+    if (divChild != null) {
+		var childClass = divChild.className ;
+		if (childClass == "Expand") {
+			divChild.className = "Collapse" ;
+ 		} else {
+			divChild.className = "Expand" ;
+		} 
+	} 
+}
 eXo.mail.UIMailPortlet = new UIMailPortlet();

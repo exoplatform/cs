@@ -242,7 +242,25 @@
 }
 
 .UIMailPortlet .MyFolder .MyFolderContent {
-	padding: 5px 0px 0px 3px;
+	padding: 5px 0px 0px 20px;
+}
+
+.UIMailPortlet .UIFolderContainer .NormalLabel {
+	font-weight: normal ;
+}
+
+.UIMailPortlet .UIFolderContainer .SelectedLabel {
+	font-weight: bold ;
+}
+
+.UIMailPortlet .UINavigationContainer .MyFolder .Collapse {
+	padding-left:20px;
+	display: none ;
+}
+
+.UIMailPortlet .UINavigationContainer .MyFolder .Expand {
+    padding-left:20px;
+	display: block ;
 }
 
 /*********************************TagList*************************************/
@@ -877,14 +895,6 @@
 }
 
 .UnreadItem { 
-	font-weight: bold ;
-}
-
-.UIMailPortlet .UIFolderContainer .NormalLabel {
-	font-weight: normal ;
-}
-
-.UIMailPortlet .UIFolderContainer .SelectedLabel {
 	font-weight: bold ;
 }
 

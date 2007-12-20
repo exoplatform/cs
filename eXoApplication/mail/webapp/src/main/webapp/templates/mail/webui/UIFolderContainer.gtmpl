@@ -194,7 +194,7 @@
 <% 
   public void printNodes(String path) throws Exception {
     if (!path.equals("") && uicomponent.getSubFolders(path).size() > 0) {
-      println("<div style='padding-left:20px;'>");
+      println("<div class=\"Collapse\" >");
       for (Folder cf : uicomponent.getSubFolders(path)) {
         if (cf != null) {
           String pid = cf.getId() ;
@@ -204,9 +204,11 @@
           String pActionLink = uicomponent.event('ChangeFolder', pid);
           if(pid.equals(uicomponent.getSelectedFolder())) pCssClass = "OpenFolder SelectedLabel" ;
           StringBuilder builder = new StringBuilder() ;
-          builder.append("<a href=\"$pActionLink\" class=\"IconFolder Folder $pCssClass\" folder=\"").append(pid).append("\">");
+          builder.append("<div class=\"IconFolder Folder $pCssClass\" onClick=\"javascript:eXo.mail.UIMailPortlet.collapseExpandFolder(this)\" folder=\"").append(pid).append("\">");
+          builder.append("<a class=\"FolderLink\" href=\"$pActionLink\" folder=\"").append(pid).append("\">");
           builder.append(name);
           builder.append("</a>");
+          builder.append("</div>")
           println(builder.toString());
           if (uicomponent.getSubFolders(cf.getPath()).size() > 0) { 
             printNodes(cf.getPath());
@@ -217,7 +219,28 @@
     }
   }
   
-  printNodes(uicomponent.getCustomerFolderPath());  
+  for (Folder cf : uicomponent.getCustomizeFolders()) {
+    if (cf != null) {
+      String pid = cf.getId() ;
+      String name = cf.getName();
+      long pUnreadMess = cf.getNumberOfUnreadMessage();
+      String pCssClass = "CloseFolder NormalLabel" ;
+      String pActionLink = uicomponent.event('ChangeFolder', pid);
+      if(pid.equals(uicomponent.getSelectedFolder())) pCssClass = "OpenFolder SelectedLabel" ;
+      StringBuilder builder = new StringBuilder() ;
+      builder.append("<div class=\"IconFolder Folder $pCssClass\" onClick=\"javascript:eXo.mail.UIMailPortlet.collapseExpandFolder(this)\" folder=\"").append(pid).append("\">");
+      builder.append("<a class=\"FolderLink\" href=\"$pActionLink\" folder=\"").append(pid).append("\">");
+      builder.append(name);
+      builder.append("</a>");
+      builder.append("</div>")
+      println(builder.toString());
+      if (uicomponent.getSubFolders(cf.getPath()).size() > 0) { 
+        printNodes(cf.getPath());
+      }
+    }
+  }
+  
+  //printNodes(uicomponent.getCustomerFolderPath());  
 %>
 </div>
 </div>
