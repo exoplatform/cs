@@ -124,7 +124,7 @@ public class UITagForm extends UIForm implements UIPopupComponent {
 			UITagForm uiForm = event.getSource() ;
 			UIPopupContainer popupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       UIPopupAction uiChildPopup = popupContainer.getChild(UIPopupAction.class).setRendered(true) ;
-      uiChildPopup.activate(UIAddTagForm.class, 400) ;
+      uiChildPopup.activate(UIAddTagForm.class, 410) ;
       uiForm.isUpdateList = true ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupContainer) ;
 		}
@@ -137,7 +137,8 @@ public class UITagForm extends UIForm implements UIPopupComponent {
       UIPopupAction uiChildPopup = popupContainer.getChild(UIPopupAction.class).setRendered(true) ;
       UIAddTagForm addTagForm = uiChildPopup.createUIComponent(UIAddTagForm.class, null, null) ;
       addTagForm.setUpdateTag(uiForm.getTagEdit());
-			uiChildPopup.activate(addTagForm, 662, 466) ;
+      addTagForm.setIsTopicTag(false) ;
+			uiChildPopup.activate(addTagForm, 410, 263) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupContainer) ;
 		}
 	}

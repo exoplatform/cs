@@ -16,7 +16,6 @@
  ***************************************************************************/
 package org.exoplatform.forum.webui;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.exoplatform.container.PortalContainer;
@@ -25,12 +24,18 @@ import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.service.JCRPageList;
 import org.exoplatform.forum.service.Tag;
 import org.exoplatform.forum.service.Topic;
+import org.exoplatform.forum.webui.popup.UIAddTagForm;
+import org.exoplatform.forum.webui.popup.UIPopupAction;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.exception.MessageException;
 import org.exoplatform.webui.form.UIForm;
+import org.exoplatform.webui.form.UIFormCheckBoxInput;
 
 /**
  * Created by The eXo Platform SARL
@@ -43,7 +48,10 @@ import org.exoplatform.webui.form.UIForm;
 		template =	"app:/templates/forum/webui/UITopicsTag.gtmpl",
 		events = {
 				@EventConfig(listeners = UITopicsTag.OpenTopicActionListener.class ),
-				@EventConfig(listeners = UITopicsTag.OpenTopicsTagActionListener.class )
+				@EventConfig(listeners = UITopicsTag.EditTagActionListener.class ),
+				@EventConfig(listeners = UITopicsTag.OpenTopicsTagActionListener.class ),
+				@EventConfig(listeners = UITopicsTag.RemoveTopicActionListener.class ),
+				@EventConfig(listeners = UITopicsTag.RemoveTagActionListener.class )
 		}
 )
 
@@ -53,13 +61,16 @@ public class UITopicsTag extends UIForm {
 	private JCRPageList listTopic ;
 	private List<Topic> topics ;
 	private long page = 1 ;
-	private List <JCRPageList> listPageListPost = new ArrayList<JCRPageList>() ;
+	private Tag tag ;
+	private boolean isUpdateTag = true ;
+	//private List <JCRPageList> listPageListPost = new ArrayList<JCRPageList>() ;
 	public UITopicsTag() throws Exception {
 		//addChild(UIForumPageIterator.class, null, null) ;
 	}
 	
 	public void setIdTag(String tagId) {
 		this.tagId = tagId ;
+		this.isUpdateTag = true ;
   }
 	
 	@SuppressWarnings("unused")
@@ -72,12 +83,23 @@ public class UITopicsTag extends UIForm {
   private List<Topic> getTopicsTag() throws Exception {
 		this.listTopic = forumService.getTopicsByTag(ForumUtils.getSystemProvider(), this.tagId) ;
 		this.topics = forumService.getPage(page, this.listTopic, ForumUtils.getSystemProvider()) ;
+		for(Topic topic : this.topics) {
+			if(getUIFormCheckBoxInput(topic.getId()) != null) {
+				getUIFormCheckBoxInput(topic.getId()).setChecked(false) ;
+			}else {
+				addUIFormInput(new UIFormCheckBoxInput(topic.getId(), topic.getId(), false) );
+			}
+		}
 		return this.topics ;
 	}
 	
 	@SuppressWarnings("unused")
   private Tag getTagById() throws Exception {
-		return forumService.getTag(ForumUtils.getSystemProvider(), this.tagId) ;
+		if(this.isUpdateTag) {
+			this.tag = forumService.getTag(ForumUtils.getSystemProvider(), this.tagId) ;
+			this.isUpdateTag = false ;
+		}
+		return this.tag ;
 	}
 
 	@SuppressWarnings("unused")
@@ -103,8 +125,6 @@ public class UITopicsTag extends UIForm {
 		}
 		return className ;
 	}
-	
-	
 	
 	
 	@SuppressWarnings("unused")
@@ -170,9 +190,59 @@ public class UITopicsTag extends UIForm {
 		}
 	}
 	
+	static public class EditTagActionListener extends EventListener<UITopicsTag> {
+		public void execute(Event<UITopicsTag> event) throws Exception {
+			UITopicsTag topicsTag = event.getSource() ;
+			UIForumPortlet forumPortlet = topicsTag.getParent() ;
+      UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;
+      UIAddTagForm addTagForm = popupAction.createUIComponent(UIAddTagForm.class, null, null) ;
+      addTagForm.setUpdateTag(topicsTag.tag);
+      addTagForm.setIsTopicTag(true) ;
+			popupAction.activate(addTagForm, 410, 263) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+		}
+	}
 	
+	static public class RemoveTopicActionListener extends EventListener<UITopicsTag> {
+		@SuppressWarnings("unchecked")
+    public void execute(Event<UITopicsTag> event) throws Exception {
+			UITopicsTag topicsTag = event.getSource() ;
+			List<UIComponent> children = topicsTag.getChildren() ;
+			boolean hasCheck = false ;
+			String topicPath = "" ;
+			for(UIComponent child : children) {
+				if(child instanceof UIFormCheckBoxInput) {
+					if(((UIFormCheckBoxInput)child).isChecked()) {
+						topicPath = topicsTag.getTopic(child.getName()).getPath() ;
+						topicsTag.forumService.removeTopicInTag(ForumUtils.getSystemProvider(), 
+								topicsTag.tagId,topicPath ) ;
+						hasCheck = true ;
+					}
+				}
+			}
+			if(!hasCheck) {
+				Object[] args = { };
+				throw new MessageException(new ApplicationMessage("UITopicContainer.sms.notCheck", 
+						args, ApplicationMessage.WARNING)) ;
+			}else {
+				topicsTag.isUpdateTag = true ;
+			}
+			UIForumPortlet forumPortlet = topicsTag.getParent() ;
+			event.getRequestContext().addUIComponentToUpdateByAjax(forumPortlet) ;
+		}
+	}
 	
-	
-	
+	static public class RemoveTagActionListener extends EventListener<UITopicsTag> {
+		public void execute(Event<UITopicsTag> event) throws Exception {
+			UITopicsTag topicsTag = event.getSource() ;
+			UIForumPortlet forumPortlet = topicsTag.getParent() ;
+			topicsTag.forumService.removeTag(ForumUtils.getSystemProvider(), topicsTag.tagId) ;
+			forumPortlet.updateIsRendered(1) ;
+			UICategoryContainer categoryContainer = forumPortlet.getChild(UICategoryContainer.class) ;
+			categoryContainer.updateIsRender(true) ;
+			forumPortlet.getChild(UIBreadcumbs.class).setUpdataPath("ForumService") ;
+			event.getRequestContext().addUIComponentToUpdateByAjax(forumPortlet) ;
+		}
+	}
 
 }

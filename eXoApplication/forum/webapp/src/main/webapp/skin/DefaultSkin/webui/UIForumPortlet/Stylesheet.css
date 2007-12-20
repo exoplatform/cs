@@ -161,6 +161,19 @@
 	margin: 0px 13px 0px 0px;
 }
 
+.UIForumPortlet .ToolbarActionsTag {
+	float:right;
+	margin:2px 0px 0px;
+	width:120px;
+}
+
+.UIForumPortlet .ToolbarActionsTag .ManageTagButton {
+	cursor:pointer;
+	height:22px;
+	line-height:22px;
+	padding-left:22px;
+}
+
 /******************************************** UIForumDescription ****************************************/
 
 .UIForumPortlet .UIForumDescription {

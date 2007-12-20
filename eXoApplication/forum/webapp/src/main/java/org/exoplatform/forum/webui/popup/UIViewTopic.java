@@ -61,9 +61,9 @@ public class UIViewTopic extends UIForm implements UIPopupComponent {
 		// TODO Auto-generated method stub
 	}
 	
-	static	public class CloseActionListener extends EventListener<UIAttachFileForm> {
-		public void execute(Event<UIAttachFileForm> event) throws Exception {
-			UIAttachFileForm uiForm = event.getSource() ;
+	static	public class CloseActionListener extends EventListener<UIViewTopic> {
+		public void execute(Event<UIViewTopic> event) throws Exception {
+			UIViewTopic uiForm = event.getSource() ;
 			UIPopupContainer popupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
 			popupContainer.getChild(UIPopupAction.class).deActivate() ;
 			event.getRequestContext().addUIComponentToUpdateByAjax(popupContainer) ;

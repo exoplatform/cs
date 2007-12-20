@@ -26,7 +26,10 @@ import org.exoplatform.forum.ForumUtils;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.service.Tag;
 import org.exoplatform.forum.webui.EmptyNameValidator;
+import org.exoplatform.forum.webui.UIBreadcumbs;
 import org.exoplatform.forum.webui.UIFormSelectBoxForum;
+import org.exoplatform.forum.webui.UIForumPortlet;
+import org.exoplatform.forum.webui.UITopicsTag;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -34,7 +37,6 @@ import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
-import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
@@ -61,6 +63,7 @@ public class UIAddTagForm extends UIForm implements UIPopupComponent {
 	private String colors[] = new String[] {"Blue", "DarkGoldenRod", "Green", "Yellow", "BlueViolet", "Orange","DarkBlue", "IndianRed", "DarkCyan", "LawnGreen", "Violet", "Red"} ;
 	private boolean isUpdate = false ;
 	private String tagId = "" ;
+	private boolean isTopicTag  = false ;
 	public UIAddTagForm() throws Exception {
 		UIFormStringInput tagName = new UIFormStringInput(FIELD_TAGNAME_INPUT, FIELD_TAGNAME_INPUT, null);
 		UIFormStringInput description = new UIFormTextAreaInput(FIELD_TAGDESCRIPTION_TEXTAREA, FIELD_TAGDESCRIPTION_TEXTAREA, null);
@@ -97,6 +100,10 @@ public class UIAddTagForm extends UIForm implements UIPopupComponent {
 		return map ;	
 	}
 	
+	public void setIsTopicTag(boolean b) {
+		this.isTopicTag = b ;
+	}
+	
 	public void activate() throws Exception {
 		// TODO Auto-generated method stub
 	}
@@ -131,19 +138,34 @@ public class UIAddTagForm extends UIForm implements UIPopupComponent {
 				newTag.setOwner(userName) ;
 				forumService.saveTag(ForumUtils.getSystemProvider(), newTag, true);
 			}
-			UIPopupContainer popupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
-			popupContainer.getChild(UITagForm.class).setUpdateList(true) ;
-			popupContainer.getChild(UIPopupAction.class).setRendered(false) ;
-			event.getRequestContext().addUIComponentToUpdateByAjax(popupContainer) ;
+			if(uiForm.isTopicTag) {
+				UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class);
+				uiForm.isTopicTag = false ;
+				UITopicsTag topicsTag = forumPortlet.getChild(UITopicsTag.class) ;
+				topicsTag.setIdTag(uiForm.tagId) ;
+				forumPortlet.cancelAction() ;
+				forumPortlet.getChild(UIBreadcumbs.class).setUpdataPath(uiForm.tagId) ;
+				event.getRequestContext().addUIComponentToUpdateByAjax(forumPortlet) ;
+			}else {
+				UIPopupContainer popupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
+				popupContainer.getChild(UITagForm.class).setUpdateList(true) ;
+				popupContainer.getChild(UIPopupAction.class).deActivate() ;
+				event.getRequestContext().addUIComponentToUpdateByAjax(popupContainer) ;
+			}
 		}
 	}
 	
-	static	public class CancelActionListener extends EventListener<UIAttachFileForm> {
-		public void execute(Event<UIAttachFileForm> event) throws Exception {
-			UIAttachFileForm uiForm = event.getSource() ;
-			UIPopupContainer popupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
-			popupContainer.getChild(UIPopupAction.class).deActivate() ;
-			event.getRequestContext().addUIComponentToUpdateByAjax(popupContainer) ;
+	static	public class CancelActionListener extends EventListener<UIAddTagForm> {
+		public void execute(Event<UIAddTagForm> event) throws Exception {
+			UIAddTagForm uiForm = event.getSource() ;
+			if(uiForm.isTopicTag) {
+				uiForm.getAncestorOfType(UIForumPortlet.class).cancelAction() ;
+				uiForm.isTopicTag = false ;
+			}else {
+				UIPopupContainer popupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
+				popupContainer.getChild(UIPopupAction.class).deActivate() ;
+				event.getRequestContext().addUIComponentToUpdateByAjax(popupContainer) ;
+			}
 		}
 	}
 	

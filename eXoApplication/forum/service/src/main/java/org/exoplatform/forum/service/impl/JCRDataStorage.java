@@ -840,6 +840,7 @@ public class JCRDataStorage{
 			forumHomeNode.getSession().save() ;
 		}
 	}
+	
 	public void removeTopicInTag(SessionProvider sProvider, String tagId, String topicPath) throws Exception {
 		Node forumHomeNode = getForumHomeNode(sProvider) ;
 		Node topicNode = (Node)getForumHomeNode(sProvider).getSession().getItem(topicPath);
@@ -856,6 +857,7 @@ public class JCRDataStorage{
 		forumHomeNode.save() ;
 		forumHomeNode.getSession().save() ;
 	}
+	
 	public Tag getTag(SessionProvider sProvider, String tagId) throws Exception {
 		Node forumHomeNode = getForumHomeNode(sProvider) ;
 		if(forumHomeNode.hasNode(tagId)) {
@@ -865,6 +867,7 @@ public class JCRDataStorage{
 		}
 		return null ;
 	}
+	
 	public List<Tag> getTags(SessionProvider sProvider) throws Exception {
 		Node forumHomeNode = getForumHomeNode(sProvider) ;
 		QueryManager qm = forumHomeNode.getSession().getWorkspace().getQueryManager() ;
@@ -879,6 +882,7 @@ public class JCRDataStorage{
 		}
 		return tags;
 	}
+	
 	private Tag getTagNode(Node tagNode) throws Exception {
 		Tag newTag = new Tag() ;
 		if(tagNode.hasProperty("exo:id"))newTag.setId(tagNode.getProperty("exo:id").getString());
@@ -888,6 +892,7 @@ public class JCRDataStorage{
 		if(tagNode.hasProperty("exo:color"))newTag.setColor(tagNode.getProperty("exo:color").getString());
 		return newTag;
 	}
+	
 	public List<Tag> getTagsByUser(SessionProvider sProvider, String userName) throws Exception {
 		Node forumHomeNode = getForumHomeNode(sProvider) ;
 		QueryManager qm = forumHomeNode.getSession().getWorkspace().getQueryManager() ;
@@ -958,10 +963,6 @@ public class JCRDataStorage{
 		forumHomeNode.save() ;
 		forumHomeNode.getSession().save() ;
 	}
-	
-	
-	
-	
 	
 	
 	@SuppressWarnings("unchecked")

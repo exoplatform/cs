@@ -13,8 +13,7 @@
 		<div class="LeftDescription">
 			<div class="RightDescription">
 				<div class="CenterDescription">
-					<span class="ForumLabel">Tag Name:</span> 
-					<span class="NameForum">$tagName</span>
+					<span class="NameForum">Description:</span> 
 					<span class="Description"><%=tag_.getDescription()%></span>
 				</div>
 			</div>
@@ -27,6 +26,73 @@
 					<div class="RightBar">
 						<div class="CenterBar">
 							<div class="Title"><span style="font-weight: normal;">Tag Name:</span>$tagName</div>
+							<div class="CollapseButton" title="Collapse" onclick="eXo.forum.UIForumPortlet.expandCollapse(this) ;"><span></span></div>
+							<% 
+								String showCategory = "eXo.webui.UIPopupSelectCategory.show(this, event);" 
+								String styleSkin = uicomponent.id; //UICategory
+							%>
+							<div class="SeparatorLine"><span></span></div>
+							<div class="ToolbarActionsTag" onclick="$showCategory">
+								<div class="UICategory" onmouseover="eXo.forum.UIForumPortlet.OverButton(this)" onmouseout="eXo.forum.UIForumPortlet.OverButton(this)">
+									<div class="LeftOverButton">
+										<div class="RightOverButton">
+											<div class="CenterOverButton">
+												<div class="ManageTagButton">Manage Tag</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<% /*Begin Popup Menu*/ %>
+								<div style="position: relative;">
+									<div class="UIPopupCategory" style="display: none;">
+										<div class="PopupCategoryDecorator">
+									
+											<div class="UIRightClickPopupMenu" style="display: block; width: 165px;">
+												<div class="UIContextMenuContainer">
+													<div class="TopLeftRightClickPopupMenu">
+														<div class="TopRightRightClickPopupMenu">
+															<div class="TopCenterRightClickPopupMenu"><span></span></div>
+														</div>
+													</div>
+													<div class="MiddleLeftRightClickPopupMenu">
+														<div class="MiddleRightRightClickPopupMenu">
+															<div class="UIRightPopupMenuContainer">
+																<a class="MenuItem" href="<%=uicomponent.event("EditTag");%>">	 
+																	<div class="ItemIcon EditTopicIcon ">
+																		Edit Tag
+																	</div>
+																</a>
+																<a class="MenuItem" href="<%=uicomponent.event("RemoveTag");%>">	 
+																	<div class="ItemIcon SetDeleteIcon">
+																		Remove this Tag
+																	</div>
+																</a>
+															</div>
+															<div class="UIRightPopupMenuContainer">
+																<div class="RightClickCustomItem"><span></span></div>
+																<a class="MenuItem" href="<%= uicomponent.event("RemoveTopic");%>">	 
+																	<div class="ItemIcon classIconItem">
+																		Remove Topics in Tag
+																	</div>
+																</a>
+															</div>
+														</div>
+													</div>
+													<div class="BottomLeftRightClickPopupMenu">
+														<div class="BottomRightRightClickPopupMenu">
+															<div class="BottomCenterRightClickPopupMenu"><span></span></div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									
+									</div>
+								</div>
+								<% /*End Popup Menu*/ %>
+								
+							</div>
+							<div style="clear: both;"><span></span></div>
 						</div>
 					</div>
 				</div>
@@ -46,6 +112,7 @@
 								<th style="width: 130px;"><div class="DownArrow1Icon">Last posts</div></th>
 								<th style="width: 50px;">Replies</th>
 								<th style="width: 50px;">Views</th>
+								<th style="width: 30px;"><input type="checkbox" class="checkbox" title="Check all" value="4" onClick="eXo.forum.UIForumPortlet.checkAll(this);"/></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -128,6 +195,9 @@
 									</td>
 								 	<td class="Tdbox" align="center"><div>$postCount</div></td>
 									<td class="Tdbox" align="center">$postView</td>
+									<td class="Tdbox" align="center" onClick="eXo.forum.UIForumPortlet.selectItem(this.firstChild);">
+									<%uicomponent.renderChild(topic.getId())%>
+									</td>
 					 			</tr>
 						 	<% i = i + 1;} %>
 						</tbody>
