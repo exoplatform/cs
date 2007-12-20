@@ -4,6 +4,7 @@ function UICalendarPortlet() {
 }
 
 /* utility method */
+
 UICalendarPortlet.prototype.timeToMin = function(milliseconds) {
 	if (typeof(milliseconds) == "string") milliseconds = parseInt(milliseconds) ;
 	var d = new Date(milliseconds) ;
@@ -21,10 +22,21 @@ UICalendarPortlet.prototype.minToTime = function(min) {
 	return hour + ":" + minutes ;
 } ;
 
+UICalendarPortlet.prototype.getBeginDay = function(millis) {
+	var d = new Date(millis) ;
+	var date = d.getDate() ;
+	var month = d.getMonth() + 1 ;
+	var year = d.getFullYear() ;
+	var strDate = month + "/" + date + "/" + year + " 00:00:00 AM" ;
+	return Date.parse(strDate) ;
+} ;
+
 UICalendarPortlet.prototype.dateDiff = function(start,end) {
-	start = (new Date(start)).getDate() ;
-	end = (new Date(end)).getDate() ;
-	return (end - start) ;
+	var start = this.getBeginDay(start) ;
+	var end = this.getBeginDay(end) ;
+	var msDiff = end - start ;
+	var dateDiff = msDiff/(24*60*60*1000) ;
+	return dateDiff ;
 } ;
 
 UICalendarPortlet.prototype.toSettingTime = function(time, settingTimeZone, severTimeZone) {
@@ -57,7 +69,9 @@ UICalendarPortlet.prototype.isBeginDate = function(milliseconds) {
 UICalendarPortlet.prototype.isBeginWeek = function(milliseconds) {
 	var d = new Date(milliseconds) ;
 	var day = d.getDay() ;
-	if(day == 0) return true ;
+	var hour = d.getHours() ;
+	var min = d.getMinutes() ;
+	if((day == 0) && (hour == 0) && (min == 0)) return true ;
 	return false ;
 } ;
 

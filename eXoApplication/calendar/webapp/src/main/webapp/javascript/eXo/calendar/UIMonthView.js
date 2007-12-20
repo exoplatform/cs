@@ -15,7 +15,7 @@ UIMonthView.prototype.init = function() {
 	if (len <=0 ) return ;
 	this.cells = eXo.core.DOMUtil.findDescendantsByTagName(UIMonthViewGrid, "td") ;
 	this.startMonth = parseInt(this.cells[0].getAttribute("startTime")) ;
-	this.endMonth = parseInt(this.cells[this.cells.length-1].getAttribute("startTime")) ;
+	this.endMonth = parseInt(this.cells[this.cells.length-1].getAttribute("startTime")) + 24*60*60*1000 - 1 ;
 	this.unitX = this.cells[0].offsetWidth - 1;
 	this.unitY = this.cells[0].offsetHeight - 1 ;
 	for(var i = 0 ; i < len ; i++) {
@@ -40,11 +40,28 @@ UIMonthView.prototype.scrollTo = function(container, events) {
 		eventid = events[i].getAttribute("eventid") ;		
 		if(eventid == lastUpdatedId) {
 			var top = events[i].offsetTop ;
-			container.scrollTop = top ;
+			container.scrollTop = top - 16;
 			return ;
 		}
+	}	
+} ;
+
+UIMonthView.prototype.getStartIndex = function(start) {
+	var DOMUtil = eXo.core.DOMUtil ;
+	var table = DOMUtil.findFirstDescendantByClass(this.eventContainer, "table", "UIGrid") ;
+	var tr = DOMUtil.findDescendantsByTagName(table, "tr") ;
+	var rowLength = tr.length ;
+	var startWeek = 0 ;
+	var endWeek = 0 ;
+	var startCell = null ;
+	for(var i = 0 ; i < rowLength  ; i ++) {
+		startCell = DOMUtil.findFirstDescendantByClass(tr[i], "td", "UICellBlock") ;
+		startWeek = parseInt(startCell.getAttribute("startTime"))  ;//this.startMonth + i*24*7*60*60*1000 ;
+		endWeek = startWeek + 24*7*60*60*1000;
+		if ((start >= startWeek) && (start < endWeek)) {
+			return (i+1) ;
+		}
 	}
-	
 } ;
 
 UIMonthView.prototype.createBars = function(event) {
@@ -53,10 +70,10 @@ UIMonthView.prototype.createBars = function(event) {
 	var start = parseInt(event.getAttribute("startTime")) ;
 	var end = parseInt(event.getAttribute("endTime")) ;
 	if(start < this.startMonth) start = this.startMonth ;
-	if(end > this.endMonth) end = this.endMonth ;
-	var top = parseInt(event.getAttribute("startIndex")) ;
-	var startWeek = UICalendarPortlet.getWeekNumber(start) ;
-	var endWeek = UICalendarPortlet.getWeekNumber(end) ;
+	if(end > this.endMonth)	end = this.endMonth ;
+	var top = this.getStartIndex(start) ;
+	var startWeek = this.getStartIndex(start) ; 
+	var endWeek = this.getStartIndex(end) ; 
 	var delta = endWeek - startWeek ;
 	var startDay = UICalendarPortlet.getDay(start) ;
 	var endDay = UICalendarPortlet.getDay(end) ;
@@ -64,10 +81,9 @@ UIMonthView.prototype.createBars = function(event) {
 	if (delta == 0) {
 		event.style.top = (top - 1) * this.unitY + 16 + "px" ;
 		event.style.left = startDay * this.unitX + "px" ;
-		if (UICalendarPortlet.isBeginDate(end))
-			event.style.width = (endDay - startDay) * this.unitX + "px" ;		
-		else
-			event.style.width = (endDay - startDay) * this.unitX + this.unitX  + "px" ;
+		var datediff = UICalendarPortlet.dateDiff(start,end) ;
+		if ((datediff != 0) && UICalendarPortlet.isBeginDate(end)) event.style.width = datediff * this.unitX + "px" ;		
+		else event.style.width = datediff * this.unitX  + this.unitX  + "px" ;
 	}	else if (delta == 1) {
 		event.style.top = (top - 1) * this.unitY + 16 + "px" ;
 		event.style.left = startDay * this.unitX + "px" ;
@@ -82,7 +98,7 @@ UIMonthView.prototype.createBars = function(event) {
 			if (checkbox) DOMUtil.removeElement(checkbox) ;
 			this.eventContainer.appendChild(event1) ;
 		}
-	}else {
+	}else if(delta > 1) {
 		var fullDayEvent = new Array() ;
 		fullDayEvent.push(event) ;
 		for(var i = 0 ; i < delta ; i ++) {
@@ -103,6 +119,7 @@ UIMonthView.prototype.createBars = function(event) {
 		}
 		if((endDay == 0) && UICalendarPortlet.isBeginDate(end)) fullDayEvent.pop() ;
 		else {
+			try{				
 			fullDayEvent[len - 1].style.top = parseInt(fullDayEvent[len - 2].style.top) + this.unitY + "px" ;
 			fullDayEvent[len - 1].style.left = "0px" ;
 			if (UICalendarPortlet.isBeginDate(end)) fullDayEvent[len - 1].style.width = endDay * this.unitX + "px" ;
@@ -110,7 +127,10 @@ UIMonthView.prototype.createBars = function(event) {
 			checkbox = DOMUtil.findFirstDescendantByClass(fullDayEvent[len-1], "input", "checkbox") ;
 			if (checkbox) DOMUtil.removeElement(checkbox) ;
 			this.eventContainer.appendChild(fullDayEvent[len-1]) ;
+			}catch(e) {alert(e.message) ; }
 		}
+	} else {
+		//alert("adsfasd") ;
 	}
 }
 

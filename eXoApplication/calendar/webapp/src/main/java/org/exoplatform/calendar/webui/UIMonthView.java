@@ -205,7 +205,8 @@ public class UIMonthView extends UICalendarView {
         if(calEvent != null) {
           java.util.Calendar tempCal = CalendarUtils.getInstanceTempCalendar() ;
           tempCal.setTime(calEvent.getFromDateTime()) ;
-          int moveAmount =   Integer.valueOf((int)(tempCal.getTimeInMillis() - Long.parseLong(value))) ; 
+          int moveAmount =   Integer.valueOf((int)(Long.parseLong(value) - tempCal.getTimeInMillis())) ; 
+          System.out.println("\n\nmoveAmount " + moveAmount);
           tempCal.add(java.util.Calendar.MILLISECOND, moveAmount) ;
           calEvent.setFromDateTime(tempCal.getTime()) ;
           tempCal.setTime(calEvent.getToDateTime()) ;
