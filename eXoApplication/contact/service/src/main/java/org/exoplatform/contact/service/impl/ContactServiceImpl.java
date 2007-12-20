@@ -102,31 +102,50 @@ public class ContactServiceImpl implements ContactService {
     return storage_.removeGroup(sProvider, username, groupId);
   }
 
+  /*public List<GroupContactData> getPublicContacts(SessionProvider sProvider, String[] groupIds) throws Exception {
+    return storage_.getPublicContacts(sProvider, groupIds);
+  }*/
+
+  /*public List<Contact> shareContacts(SessionProvider sProvider, String username, List<String> contactIds, String[] groupIds) throws Exception {
+    return storage_.shareContacts(sProvider, username, contactIds, groupIds) ;
+  }*/
+  
+  
+  public void shareAddressBook(SessionProvider sProvider, String username, String addressBookId, List<String> receiverUsers) throws Exception {
+  	storage_.shareAddressBook(sProvider, username, addressBookId, receiverUsers) ;
+  }
+  public List<String> getSharedAddressBooks(SessionProvider sProvider, String username) throws Exception {
+  	return storage_.getSharedAddressBooks(sProvider, username) ;
+  }
+  public ContactPageList getSharedContactsByAddressBook(SessionProvider sProvider, String username, String addressBookId) throws Exception {
+  	return storage_.getSharedContactsByAddressBook(sProvider, username, addressBookId) ;
+  }
+  public void removeSharedAddressBook(SessionProvider sProvider, String username, String addressBookId) throws Exception {
+  	storage_.removeSharedAddressBook(sProvider, username, addressBookId) ;
+  }
+  public void saveContactToSharedAddressBook(SessionProvider sProvider, String username, String addressBookId, Contact contact, boolean isNew) throws Exception {
+  	storage_.saveContactToSharedAddressBook(sProvider, username, addressBookId, contact, isNew) ;
+  }
+  
+  
+  
+  public Contact getPublicContact(SessionProvider sProvider, String contactId) throws Exception {
+    return storage_.getPublicContact(sProvider, contactId);
+  }
+
   public List<GroupContactData> getPublicContacts(SessionProvider sProvider, String[] groupIds) throws Exception {
     return storage_.getPublicContacts(sProvider, groupIds);
   }
-
-  public List<Contact> shareContacts(SessionProvider sProvider, String username, List<String> contactIds, String[] groupIds) throws Exception {
-    return storage_.shareContacts(sProvider, username, contactIds, groupIds) ;
-  }
-
-  public Contact getSharedContact(SessionProvider sProvider, String contactId) throws Exception {
-    return storage_.getSharedContact(sProvider, contactId);
-  }
-
-  public List<GroupContactData> getSharedContacts(SessionProvider sProvider, String[] groupIds) throws Exception {
-    return storage_.getSharedContacts(sProvider, groupIds);
-  }
   
-  public List<String> getSharedGroupContacts(SessionProvider sProvider, String[] groupIds) throws Exception{
-    return storage_.getSharedGroupContacts(sProvider, groupIds);
+  public List<String> getPublicAddressBookContacts(SessionProvider sProvider, String[] groupIds) throws Exception{
+    return storage_.getPublicAddressBookContacts(sProvider, groupIds);
   }
-  public Contact removeSharedContact(SessionProvider sProvider, String contactId) throws Exception {
-    return storage_.removeSharedContact(sProvider, contactId);
+  public Contact removePublicContact(SessionProvider sProvider, String contactId) throws Exception {
+    return storage_.removePublicContact(sProvider, contactId);
   }
 
-  public void saveSharedContact(SessionProvider sProvider, Contact contact, boolean isNew) throws Exception {
-    storage_.saveSharedContact(sProvider, contact, isNew);
+  public void savePublicContact(SessionProvider sProvider, Contact contact, boolean isNew) throws Exception {
+    storage_.savePublicContact(sProvider, contact, isNew);
   } 
   
   public Tag getTag(SessionProvider sProvider, String username, String tagName) throws Exception {
@@ -160,8 +179,8 @@ public class ContactServiceImpl implements ContactService {
     storage_.removeContactTag(sProvider, username, contactIds, tags) ;
   }
   
-  public ContactPageList getSharedContactsByGroup(SessionProvider sProvider, String groupId) throws Exception {
-    return storage_.getSharedContactsByGroup(sProvider, groupId) ;
+  public ContactPageList getPublicContactsByAddressBook(SessionProvider sProvider, String groupId) throws Exception {
+    return storage_.getPublicContactsByAddressBook(sProvider, groupId) ;
   }
   
   

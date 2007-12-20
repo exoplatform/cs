@@ -1535,16 +1535,7 @@ public class JCRDataStorage{
     return events ;
   }
   
-  public List<CalendarEvent> getEvent(SessionProvider sProvider, String username, EventQuery eventQuery, String[] publicCalendarIds) throws Exception {
-    List<CalendarEvent> events = new ArrayList<CalendarEvent>() ;
-    //user session
-    events.addAll(getUserEvents(sProvider, username, eventQuery)) ;
-    //system session
-    events.addAll(getSharedEvent(sProvider, username, eventQuery)) ;
-    eventQuery.setCalendarId(publicCalendarIds) ;
-    events.addAll(getPublicEvents(sProvider, eventQuery)) ;
-    return events ;
-  }
+  
   
   public void removeSharedCalendar(SessionProvider sProvider, String username, String calendarId) throws Exception {
     Node sharedCalendarHome = getSharedCalendarHome(sProvider) ;
@@ -1588,7 +1579,19 @@ public class JCRDataStorage{
         }
       }      
     }
-  }  
+  } 
+  
+  public List<CalendarEvent> getEvent(SessionProvider sProvider, String username, EventQuery eventQuery, String[] publicCalendarIds) throws Exception {
+    List<CalendarEvent> events = new ArrayList<CalendarEvent>() ;
+    //user session
+    events.addAll(getUserEvents(sProvider, username, eventQuery)) ;
+    //system session
+    events.addAll(getSharedEvent(sProvider, username, eventQuery)) ;
+    eventQuery.setCalendarId(publicCalendarIds) ;
+    events.addAll(getPublicEvents(sProvider, eventQuery)) ;
+    return events ;
+  }
+  
   
   public Map<String, String> checkFreeBusy(SessionProvider sysProvider, EventQuery eventQuery) throws Exception {
   	Node eventFolder = getEventFolder(sysProvider, eventQuery.getFromDate().getTime()) ;

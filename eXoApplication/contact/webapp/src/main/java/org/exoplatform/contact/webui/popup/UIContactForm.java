@@ -368,7 +368,7 @@ public class UIContactForm extends UIFormTabPane implements UISelector {
           if (!ContactUtils.isEmpty(editPermission))
             contact.setEditPermission(editPermission.split(","));
           contact.setShared(true) ;
-          contactService.saveSharedContact(SessionsUtils.getSystemProvider(), contact, isNew);
+          contactService.savePublicContact(SessionsUtils.getSystemProvider(), contact, isNew);
         } else {       
           UIPopupContainer popupContainer = uiContactForm.getParent() ;
           UICategorySelect uiCategorySelect = popupContainer.getChild(UICategorySelect.class); 
@@ -383,7 +383,7 @@ public class UIContactForm extends UIFormTabPane implements UISelector {
           contactService.saveContact(SessionsUtils.getSessionProvider(), username, contact, isNew);
         }
       } else {
-        if (contact.isShared()) contactService.saveSharedContact(SessionsUtils.getSystemProvider(), contact, isNew) ;
+        if (contact.isShared()) contactService.savePublicContact(SessionsUtils.getSystemProvider(), contact, isNew) ;
         else contactService.saveContact(SessionsUtils.getSessionProvider(), username, contact, isNew) ;
       }
       UIContactPortlet uiContactPortlet = uiContactForm.getAncestorOfType(UIContactPortlet.class) ;

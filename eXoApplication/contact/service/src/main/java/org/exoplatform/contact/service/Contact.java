@@ -71,6 +71,12 @@ public class Contact {
   private String personalSite ;
   
   private String note ;
+  /*
+   * Contact Type:
+   * 	0: Private
+   * 	1: Shared
+   * 	2: Public */
+  private String contactType = "0" ;
   
   private String[] categories ;
   private String[] tags ;
@@ -196,6 +202,9 @@ public class Contact {
   
   public String getNote()  { return note ; }
   public void   setNote(String s) { note = s ; }
+  
+  public String getContactType()  { return contactType ; }
+  public void   setContactType(String s) { contactType = s ; }
   
   public String[] getCategories() { return categories ; }
   public void   setCategories(String[] s) { categories = s ; }

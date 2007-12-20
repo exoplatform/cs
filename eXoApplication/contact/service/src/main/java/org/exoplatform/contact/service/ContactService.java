@@ -39,20 +39,26 @@ public interface ContactService {
   public ContactPageList getContactPageListByGroup(SessionProvider sProvider, String username, ContactFilter filter, boolean isPublic) throws Exception;
   public DataPageList searchContact(SessionProvider sProvider, String username, ContactFilter filter) throws Exception ;
   
-  public ContactPageList getSharedContactsByGroup(SessionProvider sProvider, String groupId) throws Exception ;
-  public List<GroupContactData> getSharedContacts(SessionProvider sProvider, String[] groupIds) throws Exception ;
-  public List<String> getSharedGroupContacts(SessionProvider sProvider, String[] groupIds) throws Exception ;
-  public Contact getSharedContact(SessionProvider sProvider, String contactId) throws Exception ;
-  public void saveSharedContact(SessionProvider sProvider, Contact contact, boolean isNew) throws Exception ;
-  public Contact removeSharedContact(SessionProvider sProvider, String contactId) throws Exception ;
+  public ContactPageList getPublicContactsByAddressBook(SessionProvider sProvider, String addressBookId) throws Exception ;
+  public List<GroupContactData> getPublicContacts(SessionProvider sProvider, String[] groupIds) throws Exception ;
+  public List<String> getPublicAddressBookContacts(SessionProvider sProvider, String[] groupIds) throws Exception ;
+  public Contact getPublicContact(SessionProvider sProvider, String contactId) throws Exception ;
+  public void savePublicContact(SessionProvider sProvider, Contact contact, boolean isNew) throws Exception ;
+  public Contact removePublicContact(SessionProvider sProvider, String contactId) throws Exception ;
   
   public List<ContactGroup> getGroups(SessionProvider sProvider, String username) throws Exception ;
   public ContactGroup getGroup(SessionProvider sProvider, String username, String groupId) throws Exception ;
   public void saveGroup(SessionProvider sProvider, String username, ContactGroup group, boolean isNew) throws Exception ;
   public ContactGroup removeGroup(SessionProvider sProvider, String username, String groupId) throws Exception ;
   
-  public List<Contact> shareContacts(SessionProvider sProvider, String username, List<String> contactIds, String[] groupIds) throws Exception;
-  public List<GroupContactData> getPublicContacts(SessionProvider sProvider, String[] groupIds) throws Exception ;
+  public void shareAddressBook(SessionProvider sProvider, String username, String addressBookId, List<String> receiverUsers) throws Exception ;
+  public List<String> getSharedAddressBooks(SessionProvider sProvider, String username) throws Exception ;
+  public ContactPageList getSharedContactsByAddressBook(SessionProvider sProvider, String username, String addressBookId) throws Exception ;
+  public void removeSharedAddressBook(SessionProvider sProvider, String username, String addressBookId) throws Exception ;
+  public void saveContactToSharedAddressBook(SessionProvider sProvider, String username, String addressBookId, Contact contact, boolean isNew) throws Exception ;
+  
+  //public List<Contact> shareContacts(SessionProvider sProvider, String username, List<String> contactIds, String[] groupIds) throws Exception;
+  //public List<GroupContactData> getPublicContacts(SessionProvider sProvider, String[] groupIds) throws Exception ;
   
   public List<Tag> getTags(SessionProvider sProvider, String username) throws Exception ;
   public Tag getTag(SessionProvider sProvider, String username, String tagId) throws Exception ;

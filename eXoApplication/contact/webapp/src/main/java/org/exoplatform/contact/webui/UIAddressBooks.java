@@ -78,7 +78,7 @@ public class UIAddressBooks extends UIComponent {
   }
   public List<String> getSharedContactGroups() throws Exception {
     List<String> sharedGroup = ContactUtils.getContactService()
-      .getSharedGroupContacts(SessionsUtils.getSystemProvider(), ContactUtils.getUserGroups());
+      .getPublicAddressBookContacts(SessionsUtils.getSystemProvider(), ContactUtils.getUserGroups());
     publicGroupMap_.clear() ;
     for (String group : sharedGroup) publicGroupMap_.put(group, group) ; 
     return sharedGroup ;
@@ -296,7 +296,7 @@ public class UIAddressBooks extends UIComponent {
       uiAddressBook.selectedGroup = groupId;
       ContactService contactService = ContactUtils.getContactService();
       UIContacts uiContacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class);
-      uiContacts.setContacts(contactService.getSharedContactsByGroup(SessionsUtils.getSystemProvider(), groupId));
+      uiContacts.setContacts(contactService.getPublicContactsByAddressBook(SessionsUtils.getSystemProvider(), groupId));
       uiContacts.setSelectedGroup(groupId);
       uiContacts.setSelectedTag(null);
       uiContacts.setDisplaySearchResult(false) ;
