@@ -26,9 +26,7 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.SimpleTimeZone;
 import java.util.TimeZone;
 
 import org.exoplatform.calendar.CalendarUtils;
@@ -64,29 +62,7 @@ import org.exoplatform.webui.form.UIFormSelectBox;
 
 public abstract class UICalendarView extends UIForm  implements CalendarView {
   final static protected String EVENT_CATEGORIES = "eventCategories".intern() ;
-
-  final public static String JANUARY = "January".intern() ;
-  final public static String FEBRUARY = "February".intern() ;
-  final public static String MARCH = "March".intern() ;
-  final public static String APRIL = "April".intern() ;
-  final public static String MAY = "May".intern() ;
-  final public static String JUNE = "June".intern() ;
-  final public static String JULY = "July".intern() ;
-  final public static String AUGUST = "August".intern() ;
-  final public static String SEPTEMBER = "September".intern() ;
-  final public static String OCTOBER = "October".intern() ;
-  final public static String NOVEMBER = "November".intern() ;
-  final public static String DECEMBER = "December".intern() ;
-  final public static String[] MONTHS = {JANUARY, FEBRUARY, MARCH, APRIL, MAY, JUNE, JULY, AUGUST, SEPTEMBER, OCTOBER, NOVEMBER, DECEMBER} ;
-
-  final public static String MONDAY = "Monday".intern() ;
-  final public static String TUESDAY = "Tuesday".intern() ;
-  final public static String WEDNESDAY = "Wednesday".intern() ;
-  final public static String THURSDAY = "Thursday".intern() ;
-  final public static String FRIDAY = "Friday".intern() ;
-  final public static String SATURDAY = "Saturday".intern() ;
-  final public static String SUNDAY = "Sunday".intern() ;
-  final public static String[] DAYS = {SUNDAY, MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY} ;
+  
   final public static int TYPE_DATE = 1 ;
   final public static int TYPE_WEEK = 2 ;
   final public static int TYPE_MONTH = 3 ;
@@ -137,7 +113,6 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   protected DateFormatSymbols dfs_  ;
   public UICalendarView() throws Exception{
     initCategories() ;
-
     calendar_ = GregorianCalendar.getInstance() ;
     calendar_.setLenient(false) ;
     int gmtoffset = calendar_.get(Calendar.DST_OFFSET) + calendar_.get(Calendar.ZONE_OFFSET);
@@ -145,20 +120,14 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, dd MMM yyyy k:m:s z");
     dfs_ = new DateFormatSymbols() ;
     System.out.println("\n\n GMT Time " + simpleDateFormat.format(calendar_.getTime()));
-    int i = 0 ; 
-    for(String month : dfs_.getMonths()) {
-      monthsMap_.put(i, month) ;
-      i++ ;
+    for(int i = 0; i< dfs_.getMonths().length; i++) {
+      monthsMap_.put(i, dfs_.getMonths()[i]) ;
     }
-    int j = 1 ;
-    for(String month : dfs_.getWeekdays()) {
-      daysMap_.put(j, month) ;
-      j++ ;
+    for(int i = 1; i < dfs_.getWeekdays().length ; i ++) {
+      daysMap_.put(i, dfs_.getWeekdays()[i]) ;
     }
-    int p = 1 ;
-    for(String s : CalendarEvent.PRIORITY) {
-      priorityMap_.put(String.valueOf(p), s) ;
-      p ++ ;
+    for(int i = 0 ; i < CalendarEvent.PRIORITY.length ; i++ ) {
+      priorityMap_.put(String.valueOf(i), CalendarEvent.PRIORITY[i]) ;
     }
     applySeting() ;
   }
@@ -225,10 +194,10 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   }
 
   protected String[] getMonthsName() { 
-    return MONTHS ;
+    return monthsMap_.values().toArray(new String[]{})  ;
   }
   protected String[] getDaysName() { 
-    return DAYS ;
+    return daysMap_.values().toArray(new String[]{})  ;
   }
 
   protected Calendar getDateByValue(int year, int month, int day, int type, int value) {
@@ -429,6 +398,16 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   public String getPriority(String key) {
     return priorityMap_.get(key) ;
   }
+
+  public String getLabel(String arg) {
+    try {
+      return super.getLabel(arg) ;
+    } catch (Exception e) {
+      e.printStackTrace() ;
+      return arg ;
+    }
+  }  
+
   static  public class AddEventActionListener extends EventListener<UICalendarView> {
     public void execute(Event<UICalendarView> event) throws Exception {
       UICalendarView uiForm = event.getSource() ;

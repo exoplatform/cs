@@ -201,18 +201,16 @@ public class UIMonthView extends UICalendarView {
       String eventId = event.getRequestContext().getRequestParameter(EVENTID) ;
       String calendarId = event.getRequestContext().getRequestParameter(CALENDARID) ;
       try {
-        CalendarEvent calEvent = calendarview.getDataMap().get(eventId);// calService.getUserEvent(username, calendarId, eventId) ;
+        CalendarEvent calEvent = calendarview.getDataMap().get(eventId); 
         if(calEvent != null) {
-          int day = Integer.parseInt(value) ;
-          //CalendarService calService = calendarview.getApplicationComponent(CalendarService.class) ;
-          java.util.Calendar cal1 = CalendarUtils.getInstanceTempCalendar() ;
-          cal1.setTime(calEvent.getFromDateTime()) ;
-          int amount =  day - cal1.get(java.util.Calendar.DATE) ;
-          cal1.add(java.util.Calendar.DATE, amount) ;
-          calEvent.setFromDateTime(cal1.getTime()) ;
-          cal1.setTime(calEvent.getToDateTime()) ;
-          cal1.add(java.util.Calendar.DATE, amount) ;
-          calEvent.setToDateTime(cal1.getTime()) ;
+          java.util.Calendar tempCal = CalendarUtils.getInstanceTempCalendar() ;
+          tempCal.setTime(calEvent.getFromDateTime()) ;
+          int moveAmount =   Integer.valueOf((int)(tempCal.getTimeInMillis() - Long.parseLong(value))) ; 
+          tempCal.add(java.util.Calendar.MILLISECOND, moveAmount) ;
+          calEvent.setFromDateTime(tempCal.getTime()) ;
+          tempCal.setTime(calEvent.getToDateTime()) ;
+          tempCal.add(java.util.Calendar.MILLISECOND, moveAmount) ;
+          calEvent.setToDateTime(tempCal.getTime()) ;
           if(calEvent.getCalType().equals(CalendarUtils.PRIVATE_TYPE)) {
             CalendarUtils.getCalendarService().saveUserEvent(SessionsUtils.getSessionProvider(), username, calendarId, calEvent, false) ;
           }else if(calEvent.getCalType().equals(CalendarUtils.SHARED_TYPE)){
@@ -220,7 +218,6 @@ public class UIMonthView extends UICalendarView {
           }else if(calEvent.getCalType().equals(CalendarUtils.PUBLIC_TYPE)){
             CalendarUtils.getCalendarService().saveGroupEvent(SessionsUtils.getSystemProvider(), calendarId, calEvent, false) ;          
           }
-          //calService.saveUserEvent(username, calendarId, calEvent, false) ;
           UIMiniCalendar uiMiniCalendar = uiPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;
           uiMiniCalendar.updateMiniCal() ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;

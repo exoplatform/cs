@@ -67,7 +67,7 @@
 			<div class="WeekList">
 			  <%for(day in uicomponent.getDaysName()) {
 				  	cssStyle = "DayTitle" ;
-						if(day.equals(uicomponent.SUNDAY)) cssStyle = "SundayTitle" ;
+						if(day.equals(uicomponent.getDaysName()[0])) cssStyle = "SundayTitle" ;
 				%>
 			<div class="$cssStyle"><%=day.substring(0,1)%></div>
 			  <%}%>
