@@ -120,7 +120,7 @@
 								<div class="MessageActions" >
 									<div class="DownArrow1Icon"><span></span></div>
 									<div class="ShowHideTitle" onclick="javascript:eXo.mail.UIMailPortlet.showHideMessageHeader(this)">Show details</div>
-									<div class="MonthDate">June 26</div>
+									<div class="MonthDate"></div>
 									<div class="Actions" title="Actions on this message" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
                   <% /*Begin Popup Menu*/ %>
                     <div style="position: relative;">

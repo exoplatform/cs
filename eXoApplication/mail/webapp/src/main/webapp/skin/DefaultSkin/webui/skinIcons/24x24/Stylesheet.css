@@ -2,7 +2,7 @@
 .Actions {
 	background: url(icons/ThisMessageAction.gif) no-repeat bottom;
 	cursor: pointer;
-	float: left;
+	float: right;
 	width: 24px; height: 22px;
 }
 
