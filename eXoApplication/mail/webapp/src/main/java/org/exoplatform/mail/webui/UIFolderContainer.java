@@ -124,7 +124,6 @@ public class UIFolderContainer extends UIContainer {
   
   static public class AddFolderActionListener extends EventListener<UIFolderContainer> {
     public void execute(Event<UIFolderContainer> event) throws Exception {
-      System.out.println("\n\n AddFolderActionListener");
       UIFolderContainer uiFolder = event.getSource() ;
       UIPopupAction uiPopup = uiFolder.getAncestorOfType(UIMailPortlet.class).getChild(UIPopupAction.class) ;
       uiPopup.activate(UIFolderForm.class, 450) ;
@@ -134,7 +133,6 @@ public class UIFolderContainer extends UIContainer {
   
   static public class AddSubFolderActionListener extends EventListener<UIFolderContainer> {
     public void execute(Event<UIFolderContainer> event) throws Exception {
-      System.out.println("\n\n AddSubFolderActionListener");
       String folderId = event.getRequestContext().getRequestParameter(OBJECTID) ; 
       UIFolderContainer uiFolder = event.getSource() ;
       UIPopupAction uiPopup = uiFolder.getAncestorOfType(UIMailPortlet.class).getChild(UIPopupAction.class) ;
@@ -147,7 +145,6 @@ public class UIFolderContainer extends UIContainer {
   
   static public class ChangeFolderActionListener extends EventListener<UIFolderContainer> {
     public void execute(Event<UIFolderContainer> event) throws Exception {
-      System.out.println("\n\n ChangeFolderActionListener");
       String folderId = event.getRequestContext().getRequestParameter(OBJECTID) ;  
       UIFolderContainer uiFolder = event.getSource() ;
       UIMailPortlet uiPortlet = uiFolder.getAncestorOfType(UIMailPortlet.class);
@@ -171,8 +168,6 @@ public class UIFolderContainer extends UIContainer {
   static public class RenameFolderActionListener extends EventListener<UIFolderContainer> {
     public void execute(Event<UIFolderContainer> event) throws Exception {
       String folderId = event.getRequestContext().getRequestParameter(OBJECTID) ;      
-      System.out.println("=====>>>  RenameFolderActionListener ");
-      
       UIFolderContainer uiFolder = event.getSource() ;
       UIPopupAction uiPopup = uiFolder.getAncestorOfType(UIMailPortlet.class).getChild(UIPopupAction.class) ;
       UIRenameFolderForm uiRenameFolderForm = uiPopup.activate(UIRenameFolderForm.class, 450) ;
@@ -183,8 +178,6 @@ public class UIFolderContainer extends UIContainer {
   static public class RemoveFolderActionListener extends EventListener<UIFolderContainer> {
     public void execute(Event<UIFolderContainer> event) throws Exception {
       String folderId = event.getRequestContext().getRequestParameter(OBJECTID) ;          
-      System.out.println("====>>>>  RemoveFolderActionListener : " + folderId );
-  
       UIFolderContainer uiFolderContainer = event.getSource() ;
       UIMailPortlet uiMailPortlet = uiFolderContainer.getAncestorOfType(UIMailPortlet.class);
       MailService mailService = uiMailPortlet.getApplicationComponent(MailService.class);
