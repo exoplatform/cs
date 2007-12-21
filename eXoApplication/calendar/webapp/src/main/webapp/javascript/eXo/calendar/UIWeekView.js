@@ -599,9 +599,17 @@ UIWeekView.prototype.initSelectionX = function() {
 	var table = document.getElementById("UIWeekViewGridAllDay") ;
 	var cell = eXo.core.DOMUtil.findDescendantsByTagName(table, "th");	
 	var len = cell.length ;
+	var link = null ;
 	for(var i = 0 ; i < len ; i ++) {
+		link = eXo.core.DOMUtil.getChildrenByTagName(cell[i],"a")[0] ;		
+		if (link) link.onmousedown = eXo.calendar.UIWeekView.cancelBubble ;
 		cell[i].onmousedown = Highlighter.start ;
 	}
+} ;
+
+UIWeekView.prototype.cancelBubble = function(evt) {
+	var _e = evt || window.event ;
+	_e.cancelBubble = true ;
 } ;
 
 UIWeekView.prototype.callbackSelectionX = function() {
