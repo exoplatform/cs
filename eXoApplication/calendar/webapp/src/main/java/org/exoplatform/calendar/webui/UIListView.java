@@ -46,7 +46,7 @@ import org.exoplatform.webui.form.UIFormSelectBox;
  */
 @ComponentConfig(   
     lifecycle = UIFormLifecycle.class,
-    template =  "app:/templates/calendar/webui/UIEventView.gtmpl",
+    //template =  "app:/templates/calendar/webui/UIEventView.gtmpl",
     events = {
       @EventConfig(listeners = UICalendarView.AddEventActionListener.class),      
       @EventConfig(listeners = UICalendarView.DeleteEventActionListener.class),
