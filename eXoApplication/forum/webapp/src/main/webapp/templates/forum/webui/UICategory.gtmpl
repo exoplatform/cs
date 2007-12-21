@@ -15,76 +15,71 @@
 				<div class="CenterBar CategoryDetectPosition">
 					<div class="Title"><%=category.getCategoryName()%></div>
 					<div class="CollapseButton" title="Collapse" onclick="eXo.forum.UIForumPortlet.expandCollapse(this) ;"><span></span></div>
-					<% 
-						String showCategory = "eXo.forum.UIForumPortlet.checkAction(this, event, 3);" 
-						String styleSkin = uicomponent.id; //UICategory
-					%>
 					<div class="SeparatorLine"><span></span></div>
-					<div class="ToolbarActionsContainer" onclick="$showCategory">
-						<div class="$styleSkin" onmouseover="eXo.forum.UIForumPortlet.OverButton(this)" onmouseout="eXo.forum.UIForumPortlet.OverButton(this)">
-							<div class="LeftOverButton">
-								<div class="RightOverButton">
-									<div class="CenterOverButton">
-										<div class="ManageCategoryButton"><%= _ctx.appRes("UICategory.label.manageCategory"); %></div>
-									</div>
-								</div>
-							</div>
-						</div>
-							<% /*Begin Popup Menu*/ %>
-							<div style="position: relative;">
-								<div class="UIPopupCategory" style="display: none;">
-									<div class="PopupCategoryDecorator">
-								
-										<div class="UIRightClickPopupMenu" style="display: block;">
-											<div class="UIContextMenuContainer">
-												<div class="TopLeftRightClickPopupMenu">
-													<div class="TopRightRightClickPopupMenu">
-														<div class="TopCenterRightClickPopupMenu"><span></span></div>
-													</div>
-												</div>
-												<div class="MiddleLeftRightClickPopupMenu">
-													<div class="MiddleRightRightClickPopupMenu">
-											
-														<div class="UIRightPopupMenuContainer">
-															<%
-																for(action in uicomponent.getActions()) {
-																	if(action.indexOf("Link") > 0) continue ;
-																	String nameItem = _ctx.appRes(uicomponent.getName() + ".action." + action);
-																	String classIconItem = action + "Icon";
-																	String link = uicomponent.event(action) ;
-																	if(action.indexOf("eleteCate") > 0 || action.indexOf("emoveFor") > 0) {
-																		String confirm = _ctx.appRes(uicomponent.getName() + ".confirm." + action);
-																		link = "javascript:if(confirm('" + confirm + "?')){"+uicomponent.event(action)+"}" ;
-																	}
-															%>
-																	 <a class="MenuItem" href="$link">	 
-																		<div class="ItemIcon $classIconItem">
-																			<%=nameItem%>
-																		</div>
-																	 </a>
-															<%	if(action.equals("DeleteCategory")) { %>
-																 <div class="LineMenu"><span></span></div>
-															<%	}
-																} 
-															%>
-															<div class="RightClickCustomItem"></div>
-														</div>
-											
-													</div>
-												</div>
-												<div class="BottomLeftRightClickPopupMenu">
-												<div class="BottomRightRightClickPopupMenu">
-													<div class="BottomCenterRightClickPopupMenu"><span></span></div>
-												</div>
-											</div>
-											</div>
+					<div class="ToolbarActionsContainer" onclick="eXo.forum.UIForumPortlet.checkAction(this, event, 3);">
+						<div style="position: relative;">
+							<div class="DefaultStyle Forum" onmouseover="eXo.forum.UIForumPortlet.OverButton(this)" onmouseout="eXo.forum.UIForumPortlet.OverButton(this)">
+								<div class="LeftOverButton">
+									<div class="RightOverButton">
+										<div class="CenterOverButton">
+											<div class="ManageCategoryButton"><%= _ctx.appRes("UICategory.label.manageCategory"); %></div>
 										</div>
 									</div>
-								
 								</div>
 							</div>
-							<% /*End Popup Menu*/ %>
-						
+						<% /*Begin Popup Menu*/ %>
+							<div class="UIPopupCategory" style="display: none;">
+								<div class="PopupCategoryDecorator">
+							
+									<div class="UIRightClickPopupMenu" style="display: block;">
+										<div class="UIContextMenuContainer">
+											<div class="TopLeftRightClickPopupMenu">
+												<div class="TopRightRightClickPopupMenu">
+													<div class="TopCenterRightClickPopupMenu"><span></span></div>
+												</div>
+											</div>
+											<div class="MiddleLeftRightClickPopupMenu">
+												<div class="MiddleRightRightClickPopupMenu">
+										
+													<div class="UIRightPopupMenuContainer">
+														<%
+															for(action in uicomponent.getActions()) {
+																if(action.indexOf("Link") > 0) continue ;
+																String nameItem = _ctx.appRes(uicomponent.getName() + ".action." + action);
+																String classIconItem = action + "Icon";
+																String link = uicomponent.event(action) ;
+																if(action.indexOf("eleteCate") > 0 || action.indexOf("emoveFor") > 0) {
+																	String confirm = _ctx.appRes(uicomponent.getName() + ".confirm." + action);
+																	link = "javascript:if(confirm('" + confirm + "?')){"+uicomponent.event(action)+"}" ;
+																}
+														%>
+																 <a class="MenuItem" href="$link">	 
+																	<div class="ItemIcon $classIconItem">
+																		<%=nameItem%>
+																	</div>
+																 </a>
+														<%	if(action.equals("DeleteCategory")) { %>
+															 <div class="LineMenu"><span></span></div>
+														<%	}
+															} 
+														%>
+														<div class="RightClickCustomItem"></div>
+													</div>
+										
+												</div>
+											</div>
+											<div class="BottomLeftRightClickPopupMenu">
+											<div class="BottomRightRightClickPopupMenu">
+												<div class="BottomCenterRightClickPopupMenu"><span></span></div>
+											</div>
+										</div>
+										</div>
+									</div>
+								</div>
+							
+							</div>
+						<% /*End Popup Menu*/ %>
+						</div>
 					</div>
 					<div style="clear: both;"><span></span></div>
 				</div>

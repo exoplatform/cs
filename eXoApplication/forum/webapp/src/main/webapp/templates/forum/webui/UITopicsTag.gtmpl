@@ -27,23 +27,19 @@
 						<div class="CenterBar">
 							<div class="Title"><span style="font-weight: normal;">Tag Name:</span>$tagName</div>
 							<div class="CollapseButton" title="Collapse" onclick="eXo.forum.UIForumPortlet.expandCollapse(this) ;"><span></span></div>
-							<% 
-								String showCategory = "eXo.webui.UIPopupSelectCategory.show(this, event);" 
-								String styleSkin = uicomponent.id; //UICategory
-							%>
-							<div class="SeparatorLine"><span></span></div>
-							<div class="ToolbarActionsTag" onclick="$showCategory">
-								<div class="UICategory" onmouseover="eXo.forum.UIForumPortlet.OverButton(this)" onmouseout="eXo.forum.UIForumPortlet.OverButton(this)">
-									<div class="LeftOverButton">
-										<div class="RightOverButton">
-											<div class="CenterOverButton">
-												<div class="ManageTagButton">Manage Tag</div>
+							<div class="SeparatorLine" style="margin-right: 7px;"><span></span></div>
+							<div class="ToolbarActionsTag" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
+								<div style="position: relative;">
+									<div class="DefaultStyle Forum" onmouseover="eXo.forum.UIForumPortlet.OverButton(this)" onmouseout="eXo.forum.UIForumPortlet.OverButton(this)">
+										<div class="LeftOverButton">
+											<div class="RightOverButton">
+												<div class="CenterOverButton">
+													<div class="StatusIcon ToolIcon">Manage Tag</div>
+												</div>
 											</div>
 										</div>
 									</div>
-								</div>
 								<% /*Begin Popup Menu*/ %>
-								<div style="position: relative;">
 									<div class="UIPopupCategory" style="display: none;">
 										<div class="PopupCategoryDecorator">
 									
@@ -88,9 +84,8 @@
 										</div>
 									
 									</div>
-								</div>
 								<% /*End Popup Menu*/ %>
-								
+								</div>
 							</div>
 							<div style="clear: both;"><span></span></div>
 						</div>

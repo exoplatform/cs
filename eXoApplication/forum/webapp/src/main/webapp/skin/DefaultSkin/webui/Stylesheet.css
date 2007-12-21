@@ -124,10 +124,11 @@
 }
 
 .UIForumPortlet .ForumToolbar .UIPopupCategory {
-	left: -20px;
-	position:absolute;
-	top:3px;
+	left: 0px;
+	position: absolute;
+	top: 24px;
 	width: auto;
+	z-index: 100;
 }
 
 .UIForumPortlet .ForumToolbar .UIRightClickPopupMenu {
@@ -146,35 +147,65 @@
 }
 
 /******************************	OverButton	***************************************/
-.UIForumPortlet .UICategoryStyle .LeftOverButton {
-	background: url('background/LeftOverButton5x22.gif') no-repeat left top;
+.UIForumPortlet .DefaultStyle .LeftOverButton {
 	padding-left: 5px;
 }
 
-.UIForumPortlet .UICategoryStyle .RightOverButton {
-	background: url('background/RightOverButton5x22.gif') no-repeat right top;
+.UIForumPortlet .DefaultStyle .RightOverButton {
 	padding-right: 5px;
 }
 
-.UIForumPortlet .UICategoryStyle .CenterOverButton {
+.UIForumPortlet .DefaultStyle .CenterOverButton {
+	padding-left: 3px;
+}
+/*ForumAction*/
+.UIForumPortlet .Forum {
+	background: none;
+	height: 22px;
+}
+
+.UIForumPortlet .ForumAction .LeftOverButton {
+	background: url('background/LeftOverButton5x22.gif') no-repeat left top;
+}
+
+.UIForumPortlet .ForumAction .RightOverButton {
+	background: url('background/RightOverButton5x22.gif') no-repeat right top;
+}
+
+.UIForumPortlet .ForumAction .CenterOverButton {
 	background: url('background/CenterOverButton1x22.gif') repeat-x top;
 	height: 22px;
-	padding-left: 3px;
+}
+/*ForumBarAction*/
+.UIForumPortlet .ForumBar {
+	background: none;
+	float: left;
+	height: 23px;
+	line-height: 22px;
+	margin: 3px 6px 0px 6px; 
 }
 
-.UIForumPortlet .UICategory .LeftOverButton {
-	padding-left: 5px;
+.UIForumPortlet .ForumBarAction {
+	float: left;
+	line-height: 22px;
+	margin: 3px 6px 0px 6px; 
 }
 
-.UIForumPortlet .UICategory .RightOverButton {
-	padding-right: 5px;
+.UIForumPortlet .ForumBarAction .LeftOverButton {
+	background: url('background/LeftOverButton5x23.gif') no-repeat left top;
 }
 
-.UIForumPortlet .UICategory .CenterOverButton {
-	height: 22px;
-	padding-left: 3px;
+.UIForumPortlet .ForumBarAction .RightOverButton {
+	background: url('background/RightOverButton5x23.gif') no-repeat right top;
 }
 
+.UIForumPortlet .ForumBarAction .CenterOverButton {
+	background: url('background/CenterOverButton1x23.gif') repeat-x top;
+	height: 23px;
+}
+
+
+/******************************	End OverButton	***************************************/
 .UIRightClickPopupMenu .UIRightPopupMenuContainer .DisableMenuItem {
 	color:#cccccc ;	
 }

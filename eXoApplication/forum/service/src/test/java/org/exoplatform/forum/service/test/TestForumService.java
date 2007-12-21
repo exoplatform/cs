@@ -29,24 +29,25 @@ public class TestForumService extends BaseForumTestCase{
     assertNull(null) ;
   }
   
-  private String getTimeZonNumberInString(String string) {
-  	if(string != null && string.length() > 0) {
-  		StringBuffer stringBuffer = new StringBuffer();
-  		int t = 0;
-  		for(int i = 0; i <  string.length(); ++i) {
-  			char c = string.charAt(i) ; 
-  			if (Character.isDigit(c) || c == '-' || c == '+' || c == ':'){
-          if(c == ':') c = '.';
-          if(c == '-' || c == '+') t = t + 1;
-          if(c == '3' && string.charAt(i-1) == ':') c = '5';
-          if(t == 1 || t == 0) stringBuffer.append(c);
-          if(t == 2) t = 1;
-        }
-  		}
-  		return stringBuffer.toString() ;
-  	}
-  	return null ;
-  }
+//  private String getTimeZonNumberInString(String string) {
+//  	if(string != null && string.length() > 0) {
+//  		StringBuffer stringBuffer = new StringBuffer();
+//  		int t = 0;
+//  		for(int i = 0; i <  string.length(); ++i) {
+//  			char c = string.charAt(i) ; 
+//  			if (Character.isDigit(c) || c == '-' || c == '+' || c == ':'){
+//          if(c == ':') c = '.';
+//          if(c == '-' || c == '+') t = t + 1;
+//          if(c == '3' && string.charAt(i-1) == ':') c = '5';
+//          if(t == 1 || t == 0) stringBuffer.append(c);
+//          if(t == 2) t = 1;
+//        }
+//  		}
+//  		return stringBuffer.toString() ;
+//  	}
+//  	return null ;
+//  }
+  @SuppressWarnings("deprecation")
   public void testCategory() throws Exception {  
 //	 Category cat = createCategory() ;
 //    forumService_.saveCategory(cat, true) ;
@@ -64,53 +65,54 @@ public class TestForumService extends BaseForumTestCase{
 //    // test removeCategory
 //    assertNotNull(forumService_.removeCategory(cat.getId()));
 //    
-  	String[] timeZone = {
-  			"(GMT -12:00) Eniwetok, Kwajalein", 
-  			"(GMT -11:00) Midway Island, Samoa", 
-  			"(GMT -10:00) Hawaii", 
-  			"(GMT -9:00) Alaska", 
-  			"(GMT -8:00) Pacific Time (US &amp; Canada)", 
-  			"(GMT -7:00) Mountain Time (US &amp; Canada)", 
-  			"(GMT -6:00) Central Time (US &amp; Canada), Mexico City", 
-  			"(GMT -5:00) Eastern Time (US &amp; Canada), Bogota, Lima", 
-  			"(GMT -4:00) Atlantic Time (Canada), Caracas, La Paz", 
-  			"(GMT -3:30) Newfoundland", 
-  			"(GMT -3:00) Brazil, Buenos Aires, Georgetown", 
-  			"(GMT -2:00) Mid-Atlantic", 
-  			"(GMT -1:00) Azores, Cape Verde Islands", 
-  			"(GMT  0:00) Western Europe Time, London, Lisbon, Casablanca", 
-  			"(GMT +1:00) Brussels, Copenhagen, Madrid, Paris", 
-  			"(GMT +2:00) Kaliningrad, South Africa", 
-  			"(GMT +3:00) Baghdad, Riyadh, Moscow, St. Petersburg", 
-  			"(GMT +3:30) Tehran", 
-  			"(GMT +4:00) Abu Dhabi, Muscat, Baku, Tbilisi", 
-  			"(GMT +4:30) Kabul", 
-  			"(GMT +5:00) Ekaterinburg, Islamabad, Karachi, Tashkent", 
-  			"(GMT +5:30) Bombay, Calcutta, Madras, New Delhi", 
-  			"(GMT +6:00) Almaty, Dhaka, Colombo", 
-  			"(GMT +7:00) Bangkok, Ha Noi, Jakarta", 
-  			"(GMT +8:00) Beijing, Perth, Singapore, Hong Kong", 
-  			"(GMT +9:00) Tokyo, Seoul, Osaka, Sapporo, Yakutsk", 
-  			"(GMT +9:30) Adelaide, Darwin", 
-  			"(GMT +10:00) Eastern Australia, Guam, Vladivostok", 
-  			"(GMT +11:00) Magadan, Solomon Islands, New Caledonia", 
-  			"(GMT +12:00) Auckland, Wellington, Fiji, Kamchatka", 
-  		} ;
-    String []temp = TimeZone.getAvailableIDs() ;
-    int i = 0;
-    String t = "+";
-    Locale loca = new Locale("vi","AO");
+//  	String[] timeZone = {
+//  			"(GMT -12:00) Eniwetok, Kwajalein", 
+//  			"(GMT -11:00) Midway Island, Samoa", 
+//  			"(GMT -10:00) Hawaii", 
+//  			"(GMT -9:00) Alaska", 
+//  			"(GMT -8:00) Pacific Time (US &amp; Canada)", 
+//  			"(GMT -7:00) Mountain Time (US &amp; Canada)", 
+//  			"(GMT -6:00) Central Time (US &amp; Canada), Mexico City", 
+//  			"(GMT -5:00) Eastern Time (US &amp; Canada), Bogota, Lima", 
+//  			"(GMT -4:00) Atlantic Time (Canada), Caracas, La Paz", 
+//  			"(GMT -3:30) Newfoundland", 
+//  			"(GMT -3:00) Brazil, Buenos Aires, Georgetown", 
+//  			"(GMT -2:00) Mid-Atlantic", 
+//  			"(GMT -1:00) Azores, Cape Verde Islands", 
+//  			"(GMT  0:00) Western Europe Time, London, Lisbon, Casablanca", 
+//  			"(GMT +1:00) Brussels, Copenhagen, Madrid, Paris", 
+//  			"(GMT +2:00) Kaliningrad, South Africa", 
+//  			"(GMT +3:00) Baghdad, Riyadh, Moscow, St. Petersburg", 
+//  			"(GMT +3:30) Tehran", 
+//  			"(GMT +4:00) Abu Dhabi, Muscat, Baku, Tbilisi", 
+//  			"(GMT +4:30) Kabul", 
+//  			"(GMT +5:00) Ekaterinburg, Islamabad, Karachi, Tashkent", 
+//  			"(GMT +5:30) Bombay, Calcutta, Madras, New Delhi", 
+//  			"(GMT +6:00) Almaty, Dhaka, Colombo", 
+//  			"(GMT +7:00) Bangkok, Ha Noi, Jakarta", 
+//  			"(GMT +8:00) Beijing, Perth, Singapore, Hong Kong", 
+//  			"(GMT +9:00) Tokyo, Seoul, Osaka, Sapporo, Yakutsk", 
+//  			"(GMT +9:30) Adelaide, Darwin", 
+//  			"(GMT +10:00) Eastern Australia, Guam, Vladivostok", 
+//  			"(GMT +11:00) Magadan, Solomon Islands, New Caledonia", 
+//  			"(GMT +12:00) Auckland, Wellington, Fiji, Kamchatka", 
+//  		} ;
+//    int i = 0;
+//    String t = "+";
     Date postDate = new Date();
-    System.out.println("\n" + postDate.getTimezoneOffset() );
-    long date = postDate.getTime() ;
-    for(int k=0; k < 13; k++) {
-	  //  System.out.println("\n" + "   test:   "  + TimeZone.getTimeZone("GMT" + t + k + ":00").getOffset(date) );
-	    if(k == 12 && i == 2) break;
-	    if(k == 12) {k = 0; t = "-"; i = 2; }
-    }
-  	for (String string : timeZone) {
-	   // System.out.println("\n" + getTimeZonNumberInString(string) + "  :  "+ string );
-    }
+    System.out.println("\n" + "   test:   "  + postDate.getHours() + " : " + postDate.getMinutes() );
+
+      
+//      
+//    for(int k=0; k < 13; k++) {
+//	  //  System.out.println("\n" + "   test:   "  + TimeZone.getTimeZone("GMT" + t + k + ":00").getOffset(date) );
+//	    if(k == 12 && i == 2) break;
+//	    if(k == 12) {k = 0; t = "-"; i = 2; }
+//    }
+//    t = t +"";
+//  	for (String string : timeZone) {
+//	    System.out.println("\n" + getTimeZonNumberInString(string) + "  :  "+ string );
+//    }
 //    TimeZone timeZone = TimeZone.getTimeZone("GMT-7:00");
 //    timeZone.getDisplayName() ;
 //    String temporary = "123456789";
@@ -292,86 +294,86 @@ public class TestForumService extends BaseForumTestCase{
 //  }
 //  
 //  
-  
-  private Post createdPost() {
-		Post post = new Post();
-		
-		post.setOwner("duytu");
-		post.setCreatedDate(new Date());
-		post.setModifiedBy("duytu");
-		post.setModifiedDate(new Date());
-		post.setSubject("SubJect");
-		post.setMessage("Noi dung topic test chang co j ");
-		post.setRemoteAddr("khongbiet");
-		post.setIcon("classNameIcon");
-		post.setIsApproved(false);
-		
-		return post;
-  }
-  
-  private Topic createdTopic() {
-		Topic topicNew = new Topic();
-			  
-		topicNew.setOwner("duytu");
-		topicNew.setTopicName("TestTopic");
-		topicNew.setCreatedDate(new Date());
-		topicNew.setModifiedBy("vuduytu");
-		topicNew.setModifiedDate(new Date());
-		topicNew.setLastPostBy("tu");
-		topicNew.setLastPostDate(new Date());
-		topicNew.setDescription("TopicDescription");
-		topicNew.setPostCount(0);
-		topicNew.setViewCount(0);
-		topicNew.setIsNotifyWhenAddPost(false);
-		topicNew.setIsModeratePost(false);
-		topicNew.setIsClosed(false);
-		topicNew.setIsLock(false);
-		topicNew.setIcon("classNameIcon");
-		topicNew.setIsApproved(false);  
-		topicNew.setCanView(new String[] {});
-		topicNew.setCanPost(new String[] {});
-		return topicNew;
-  }
-  
-  private Forum createdForum() {
-		Forum forum = new Forum();
-		forum.setOwner("duytu");
-		forum.setForumName("TestForum");
-		forum.setForumOrder(1);
-		forum.setCreatedDate(new Date());
-		forum.setModifiedBy("duytu");
-		forum.setModifiedDate(new Date());
-//		forum.setLastPostBy("duytu");
-//		forum.setLastPostDate(new Date());
-		forum.setLastTopicPath("");
-		forum.setDescription("description");
-		forum.setPostCount(0);
-		forum.setTopicCount(0);
-		
-		forum.setNotifyWhenAddTopic(new String[] {});
-		forum.setNotifyWhenAddPost(new String[] {});
-		forum.setIsModeratePost(false);
-		forum.setIsModerateTopic(false);
-		forum.setIsClosed(false);
-		forum.setIsLock(false);
-	  
-		forum.setViewForumRole(new String[] {});
-		forum.setCreateTopicRole(new String[] {});
-		forum.setReplyTopicRole(new String[] {});
-		forum.setModerators(new String[] {});
-		return forum;
-  }
-  
-  private Category createCategory() {
-    Category cat = new Category() ;
-    cat.setOwner("nqhung") ;
-    cat.setCategoryName("testCategory") ;
-    cat.setCategoryOrder(1) ;
-    cat.setCreatedDate(new Date()) ;
-    cat.setDescription("desciption") ;
-    cat.setModifiedBy("nqhung") ;
-    cat.setModifiedDate(new Date()) ;    
-    return cat ;
-  }
-  
+//  
+//  private Post createdPost() {
+//		Post post = new Post();
+//		
+//		post.setOwner("duytu");
+//		post.setCreatedDate(new Date());
+//		post.setModifiedBy("duytu");
+//		post.setModifiedDate(new Date());
+//		post.setSubject("SubJect");
+//		post.setMessage("Noi dung topic test chang co j ");
+//		post.setRemoteAddr("khongbiet");
+//		post.setIcon("classNameIcon");
+//		post.setIsApproved(false);
+//		
+//		return post;
+//  }
+//  
+//  private Topic createdTopic() {
+//		Topic topicNew = new Topic();
+//			  
+//		topicNew.setOwner("duytu");
+//		topicNew.setTopicName("TestTopic");
+//		topicNew.setCreatedDate(new Date());
+//		topicNew.setModifiedBy("vuduytu");
+//		topicNew.setModifiedDate(new Date());
+//		topicNew.setLastPostBy("tu");
+//		topicNew.setLastPostDate(new Date());
+//		topicNew.setDescription("TopicDescription");
+//		topicNew.setPostCount(0);
+//		topicNew.setViewCount(0);
+//		topicNew.setIsNotifyWhenAddPost(false);
+//		topicNew.setIsModeratePost(false);
+//		topicNew.setIsClosed(false);
+//		topicNew.setIsLock(false);
+//		topicNew.setIcon("classNameIcon");
+//		topicNew.setIsApproved(false);  
+//		topicNew.setCanView(new String[] {});
+//		topicNew.setCanPost(new String[] {});
+//		return topicNew;
+//  }
+//  
+//  private Forum createdForum() {
+//		Forum forum = new Forum();
+//		forum.setOwner("duytu");
+//		forum.setForumName("TestForum");
+//		forum.setForumOrder(1);
+//		forum.setCreatedDate(new Date());
+//		forum.setModifiedBy("duytu");
+//		forum.setModifiedDate(new Date());
+////		forum.setLastPostBy("duytu");
+////		forum.setLastPostDate(new Date());
+//		forum.setLastTopicPath("");
+//		forum.setDescription("description");
+//		forum.setPostCount(0);
+//		forum.setTopicCount(0);
+//		
+//		forum.setNotifyWhenAddTopic(new String[] {});
+//		forum.setNotifyWhenAddPost(new String[] {});
+//		forum.setIsModeratePost(false);
+//		forum.setIsModerateTopic(false);
+//		forum.setIsClosed(false);
+//		forum.setIsLock(false);
+//	  
+//		forum.setViewForumRole(new String[] {});
+//		forum.setCreateTopicRole(new String[] {});
+//		forum.setReplyTopicRole(new String[] {});
+//		forum.setModerators(new String[] {});
+//		return forum;
+//  }
+//  
+//  private Category createCategory() {
+//    Category cat = new Category() ;
+//    cat.setOwner("nqhung") ;
+//    cat.setCategoryName("testCategory") ;
+//    cat.setCategoryOrder(1) ;
+//    cat.setCreatedDate(new Date()) ;
+//    cat.setDescription("desciption") ;
+//    cat.setModifiedBy("nqhung") ;
+//    cat.setModifiedDate(new Date()) ;    
+//    return cat ;
+//  }
+//  
 }

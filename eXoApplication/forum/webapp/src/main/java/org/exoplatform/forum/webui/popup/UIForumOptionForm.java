@@ -43,7 +43,7 @@ import org.exoplatform.webui.form.UIFormSelectBox;
  */
 @ComponentConfig(
 		lifecycle = UIFormLifecycle.class,
-		template = "app:/templates/forum/webui/popup/UICategoryForm.gtmpl",
+		template = "app:/templates/forum/webui/popup/UIForm.gtmpl",
 		events = {
 			@EventConfig(listeners = UIForumOptionForm.SaveActionListener.class), 
 			@EventConfig(listeners = UIForumOptionForm.CancelActionListener.class, phase=Phase.DECODE)
@@ -150,6 +150,24 @@ public class UIForumOptionForm extends UIForm implements UIPopupComponent {
 		return	findComponentById(name) ;
 	}
 	
+  @SuppressWarnings("deprecation")
+  public String getFormatDate(String format,Date postDate) {
+		 long time = postDate.getHours() ;
+		 StringBuffer stringBuffer = new StringBuffer() ;
+		 if(format.equals("24H")){
+			 stringBuffer.append(time).append(":").append(postDate.getMinutes());
+		 } else {
+			 String str = "" ;
+			 if(time < 12) str = "AM";
+			 else {
+				 str = "PM";
+				 if(time > 12) time = time - 12 ;
+			 }
+			 stringBuffer.append(time).append(":").append(postDate.getMinutes()).append(" ").append(str);
+		 }
+		return stringBuffer.toString();
+	}
+
 	private String getTimeZoneNumberInString(String string) {
 		if(string != null && string.length() > 0) {
 			StringBuffer stringBuffer = new StringBuffer();

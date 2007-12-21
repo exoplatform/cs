@@ -3,15 +3,61 @@
 		<div class="RightForumActionBar">
 			<div class="CenterForumActionBar">
 				<div class="ControlbarCotainer">
-					<a href="<%=uicomponent.event("AddCategory")%>" class="Icon AddCategory">
-						<%= _ctx.appRes("UIForumActionBar.label.addNewCategory"); %>
-					</a>
+					<div class="DefaultStyle ForumBar" onmouseover="eXo.forum.UIForumPortlet.OverButton(this)" onmouseout="eXo.forum.UIForumPortlet.OverButton(this)">
+						<a href="<%=uicomponent.event("AddCategory")%>">
+							<div class="LeftOverButton">
+								<div class="RightOverButton">
+									<div class="CenterOverButton">
+										<div class="Icon AddCategory">
+											<%= _ctx.appRes("UIForumActionBar.label.addNewCategory"); %>
+										</div>
+									</div>
+								</div>
+							</div>
+						</a>
+					</div>
 					<div class="SeparatorLine"><span></span></div>
-					<a href="<%=uicomponent.event("AddForum")%>" class="Icon AddForumIcon"><%= _ctx.appRes("UIForumActionBar.label.addNewForum"); %></a>
+					<div class="DefaultStyle ForumBar" onmouseover="eXo.forum.UIForumPortlet.OverButton(this)" onmouseout="eXo.forum.UIForumPortlet.OverButton(this)">
+						<a href="<%=uicomponent.event("AddForum")%>">
+							<div class="LeftOverButton">
+								<div class="RightOverButton">
+									<div class="CenterOverButton">
+										<div class="Icon AddForumIcon">
+											<%= _ctx.appRes("UIForumActionBar.label.addNewForum"); %>
+										</div>
+									</div>
+								</div>
+							</div>
+						</a>
+					</div>
 					<div class="SeparatorLine"><span></span></div>
-					<a href="<%=uicomponent.event("ManageModerator")%>" class="Icon ManageModerators"><%= _ctx.appRes("UIForumActionBar.label.manageModerators"); %></a>
+					<div class="DefaultStyle ForumBar" onmouseover="eXo.forum.UIForumPortlet.OverButton(this)" onmouseout="eXo.forum.UIForumPortlet.OverButton(this)">
+						<a href="<%=uicomponent.event("ManageModerator")%>">
+							<div class="LeftOverButton">
+								<div class="RightOverButton">
+									<div class="CenterOverButton">
+										<div class="Icon ManageModerators">
+											<%= _ctx.appRes("UIForumActionBar.label.manageModerators"); %>
+										</div>
+									</div>
+								</div>
+							</div>
+						</a>
+					</div>
 					<div class="SeparatorLine"><span></span></div>
-					<a href="<%=uicomponent.event("ForumOption")%>" class="Icon ForumOption"><%= _ctx.appRes("UIForumActionBar.label.forumsOptions"); %></a>
+					<div class="DefaultStyle ForumBar" onmouseover="eXo.forum.UIForumPortlet.OverButton(this)" onmouseout="eXo.forum.UIForumPortlet.OverButton(this)">
+						<a href="<%=uicomponent.event("ForumOption")%>">
+							<div class="LeftOverButton">
+								<div class="RightOverButton">
+									<div class="CenterOverButton">
+										<div class="Icon ForumOption">
+											<%= _ctx.appRes("UIForumActionBar.label.forumsOptions"); %>
+										</div>
+									</div>
+								</div>
+							</div>
+						</a>
+					</div>
 					<div style="clear: left;"><span></span></div>
 				</div>
 			</div>

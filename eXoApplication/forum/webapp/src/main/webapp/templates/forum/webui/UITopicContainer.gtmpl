@@ -92,13 +92,23 @@
 			<div class="ForumToolbar">
 				<div class="LeftBar">
 					<div class="RightBar">
-						<div class="CenterBar">
+						<div class="CenterBar" style="padding-right: 10px;">
 							<div class="Title"><span style="font-weight: normal;">Thread in forum: </span>$forumName</div>
-							<div class="StatusIcon ModerationIcon" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
-								<a class="DownArrow1Icon">Moderation</a>
+							<div class="ContentAction" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
+								<div class="DefaultStyle Forum" onmouseover="eXo.forum.UIForumPortlet.OverButton(this)" onmouseout="eXo.forum.UIForumPortlet.OverButton(this)">
+									<div class="LeftOverButton">
+										<div class="RightOverButton">
+											<div class="CenterOverButton">
+												<div class="StatusIcon ModerationIcon">
+													<div class="DownArrow1Icon">Moderation</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div style="position: relative; width:1px;">
 								<% /*Begin Popup Menu*/ %>
-								<div style="position: relative;">
-									<div class="UIPopupCategory" style="display: none; ">
+									<div class="UIPopupCategory" style="display: none; top: 2px;">
 										<div class="UIRightClickPopupMenu" style="display: block; left: -70px;">
 											<div class="UIContextMenuContainer">
 												<div class="TopLeftRightClickPopupMenu">
@@ -147,16 +157,40 @@
 											</div>
 										</div>
 									</div>
-								</div>
 								<% /*End Popup Menu*/ %>
+								</div>
 							</div>
 							<div class="SeparatorLine"><span></span></div>
-							<div class="StatusIcon SeachIcon">Search forum</div>
+							<div class="ContentAction">
+								<div class="DefaultStyle Forum" onmouseover="eXo.forum.UIForumPortlet.OverButton(this)" onmouseout="eXo.forum.UIForumPortlet.OverButton(this)">
+									<a href="<%=uicomponent.event("SearchForum")%>">
+										<div class="LeftOverButton">
+											<div class="RightOverButton">
+												<div class="CenterOverButton">
+													<div class="StatusIcon SeachIcon">
+														Search forum
+													</div>
+												</div>
+											</div>
+										</div>
+									</a>
+								</div>
+							</div>
 							<div class="SeparatorLine"><span></span></div>
-							<div class="StatusIcon ToolIcon" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
-								<a class="DownArrow1Icon">Forum tool</a>
-								<% /*Begin Popup Menu*/ %>
+							<div class="ContentAction" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
 								<div style="position: relative;">
+									<div class="DefaultStyle Forum" onmouseover="eXo.forum.UIForumPortlet.OverButton(this)" onmouseout="eXo.forum.UIForumPortlet.OverButton(this)">
+										<div class="LeftOverButton">
+											<div class="RightOverButton">
+												<div class="CenterOverButton">
+													<div class="StatusIcon ToolIcon">
+														<div class="DownArrow1Icon">Forum Tools</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								<% /*Begin Popup Menu*/ %>
 									<div class="UIPopupCategory" style="display: none; ">
 										<div class="UIRightClickPopupMenu" style="display: block;">
 											<div class="UIContextMenuContainer">
@@ -211,8 +245,8 @@
 											</div>
 										</div>
 									</div>
-								</div>
 								<% /*End Popup Menu*/ %>
+								</div>
 							</div>
 							<div style="clear: both;"><span></span></div>
 						</div>

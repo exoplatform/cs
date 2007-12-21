@@ -139,14 +139,12 @@
 	border-bottom: none;
 	background: url('background/BgToolbar1x28.gif') repeat-x ;
 	padding-left: 10px;
-	line-height: 28px;
 	height: 28px;
 }
 
 .UIForumPortlet .UIForumActionBar .Icon {
-	float: left;
-	padding-left: 30px;
-	margin: 0px 13px;
+	padding: 0px 2px 0px 30px;
+	background-position: left center ;
 }
 
 .UIForumPortlet .UIForumActionBar .SeparatorLine {
@@ -158,21 +156,15 @@
 
 .UIForumPortlet .UIForumActionBar .AddCategory {
 	background: url('icons/24x24/AddCategory.gif') no-repeat left center;
-	margin: 0px 13px 0px 0px;
 }
 
 .UIForumPortlet .ToolbarActionsTag {
 	float:right;
-	margin:2px 0px 0px;
-	width:120px;
+	margin: 2px 6px 0px 0px;
+	width: 120px;
+	cursor: pointer ;
 }
 
-.UIForumPortlet .ToolbarActionsTag .ManageTagButton {
-	cursor:pointer;
-	height:22px;
-	line-height:22px;
-	padding-left:22px;
-}
 
 /******************************************** UIForumDescription ****************************************/
 
