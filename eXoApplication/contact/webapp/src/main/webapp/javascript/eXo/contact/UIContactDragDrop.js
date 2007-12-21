@@ -22,6 +22,8 @@ UIContactDragDrop.prototype.getAllDropableSets = function() {
   for (var i=0; i<addressBooks.length; i++) {
     this.dropableSets[this.dropableSets.length] = addressBooks[i] ;
   }
+  var publicAddressBook = this.DOMUtil.findDescendantsByClass(uiAddressBooksNode, 'div', 'PublicAddress') ;
+  this.dropableSets[this.dropableSets.length] = publicAddressBook[0] ;
   var uiTagsNode = document.getElementById('UITags') ;
   var tagLists = this.DOMUtil.findDescendantsByClass(uiTagsNode, 'div', 'ItemList') ;
   for (var i=0; i<tagLists.length; i++) {
@@ -190,22 +192,22 @@ UIContactDragDrop.prototype.dropCallback = function(dndEvent) {
       contactTypeId = contactTypeNode.id ;
     }
 
-    var contactType = false ;
-    
-    if (eXo.core.DOMUtil.findAncestorByClass(this.foundTargetObjectCatch, 'PersonalAddress')) {
-      contactType = 'private'
-    } else if (eXo.core.DOMUtil.findAncestorByClass(this.foundTargetObjectCatch, 'PublicAddress')) {
-      contactType = 'public'
-    } else if (eXo.core.DOMUtil.findAncestorByClass(this.foundTargetObjectCatch, 'UITags')) {
+    if (eXo.core.DOMUtil.findAncestorByClass(this.foundTargetObjectCatch, 'UITags')) {
       var uiMsgList = document.getElementById('UIContacts') ;
 	    uiMsgList.action = uiMsgList.action + '&objectId=' + contactTypeId ;
 	    eXo.webui.UIForm.submitForm('UIContacts','DNDContactsToTag', true) ;
 	    return ;
     }
+
+    var addressBookTypeNode = eXo.core.DOMUtil.findAncestorByClass(this.foundTargetObjectCatch, 'ItemList') ;
+    var addressBookType = null ;
+    if (addressBookTypeNode) {
+      addressBookType = addressBookTypeNode.getAttribute('type') ;
+    }
     
     // request service
     var uiMsgList = document.getElementById('UIContacts') ;
-    uiMsgList.action = uiMsgList.action + '&objectId=' + contactTypeId + '&contactType=' + contactType ;
+    uiMsgList.action = uiMsgList.action + '&objectId=' + contactTypeId + '&addressType=' + addressBookType ;
     eXo.webui.UIForm.submitForm('UIContacts','DNDContacts', true)
   }
 } ;
