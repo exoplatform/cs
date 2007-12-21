@@ -64,6 +64,7 @@ UICombobox.prototype.getValue = function(evt) {
 	selectedIcon = eXo.core.DOMUtil.findFirstDescendantByClass(this,"div", "UIComboboxIcon") ;
 	eXo.core.DOMUtil.addClass(selectedIcon, "UIComboboxSelectedIcon") ;
 	UICombobox.list.style.display = "none" ;
+	UICombobox.synchronize(textbox) ;
 } ;
 
 // For validating
