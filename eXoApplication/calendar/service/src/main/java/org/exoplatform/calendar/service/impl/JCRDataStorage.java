@@ -1129,6 +1129,7 @@ public class JCRDataStorage{
       calendarSetting.setWeekStartOn(settingNode.getProperty("exo:weekStartOn").getString()) ;
       calendarSetting.setDateFormat(settingNode.getProperty("exo:dateFormat").getString()) ;
       calendarSetting.setTimeFormat(settingNode.getProperty("exo:timeFormat").getString()) ;
+      if(settingNode.hasProperty("exo:baseURL")) calendarSetting.setBaseURL(settingNode.getProperty("exo:baseURL").getString()) ;
       if(settingNode.hasProperty("exo:location"))
         calendarSetting.setLocation(settingNode.getProperty("exo:location").getString()) ;
       if(settingNode.hasProperty("exo:timeZone")) calendarSetting.setTimeZone(settingNode.getProperty("exo:timeZone").getString())  ;

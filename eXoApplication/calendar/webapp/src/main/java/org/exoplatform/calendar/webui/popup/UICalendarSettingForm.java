@@ -321,6 +321,7 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
       calendarSetting.setTimeFormat(uiForm.getTimeFormat()) ;
       calendarSetting.setLocation(uiForm.getLocale()) ;
       calendarSetting.setTimeZone(uiForm.getTimeZone()) ;
+      calendarSetting.setBaseURL(uiForm.getBaseUrl()) ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       if(uiForm.getShowWorkingTimes()) {
         if(uiForm.getWorkingBeginTime().after(uiForm.getWorkingEndTime())) {

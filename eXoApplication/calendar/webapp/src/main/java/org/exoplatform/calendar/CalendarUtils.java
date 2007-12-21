@@ -111,6 +111,18 @@ public class CalendarUtils {
 		}
 		return options ;
 	}
+  public static List<SelectItemOption<String>> getTimesSelectBoxOptions(String labelFormat, String valueFormat) {
+    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
+    Calendar cal = getBeginDay(GregorianCalendar.getInstance()) ;
+    DateFormat dfLabel = new SimpleDateFormat(labelFormat) ;
+    DateFormat dfValue = new SimpleDateFormat(valueFormat) ;
+    int time = 0 ;
+    while (time ++ < 24*60/(15)) {
+      options.add(new SelectItemOption<String>(dfLabel.format(cal.getTime()), dfValue.format(cal.getTime()))) ;
+      cal.add(java.util.Calendar.MINUTE, 15) ;
+    }
+    return options ;
+  }
 	public static List<SelectItemOption<String>> getTimesSelectBoxOptions(String timeFormat, int timeInteval) {
 		List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
 		Calendar cal = getBeginDay(GregorianCalendar.getInstance()) ;

@@ -108,8 +108,8 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
   }
 
   public void init(CalendarSetting  calendarSetting, String startTime, String endTime) throws Exception {
-    List<SelectItemOption<String>> fromOptions = CalendarUtils.getTimesSelectBoxOptions(calendarSetting.getTimeFormat()) ;
-    List<SelectItemOption<String>> toOptions = CalendarUtils.getTimesSelectBoxOptions(calendarSetting.getTimeFormat()) ;
+    List<SelectItemOption<String>> fromOptions = CalendarUtils.getTimesSelectBoxOptions(calendarSetting.getTimeFormat(),calendarSetting.getTimeFormat()) ;
+    List<SelectItemOption<String>> toOptions = CalendarUtils.getTimesSelectBoxOptions(calendarSetting.getTimeFormat(),calendarSetting.getTimeFormat()) ;
     getUIFormCombobox(FIELD_FROM_TIME).setOptions(fromOptions) ;
     getUIFormCombobox(FIELD_TO_TIME).setOptions(toOptions) ;
     java.util.Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
@@ -117,16 +117,16 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
     else {
       cal.set(java.util.Calendar.MINUTE, (cal.get(java.util.Calendar.MINUTE)/CalendarUtils.DEFAULT_TIMEITERVAL)*CalendarUtils.DEFAULT_TIMEITERVAL) ;
     }
-    setEventFromDate(cal.getTime()) ;
+    setEventFromDate(cal.getTime(), calendarSetting.getTimeFormat()) ;
     if(endTime != null )cal.setTimeInMillis(Long.parseLong(endTime)) ; 
     else {
       cal.add(java.util.Calendar.MINUTE, CalendarUtils.DEFAULT_TIMEITERVAL*2) ;
     }
-    setEventToDate(cal.getTime()) ;
+    setEventToDate(cal.getTime(), calendarSetting.getTimeFormat()) ;
   }
-
-
-
+  /**
+   * @deprecated replaced by {@link #setEventFromDate(Date value, Sring timeFormat)}
+   * */
   private void setEventFromDate(Date value) {
     UIFormDateTimeInput fromField = getChildById(FIELD_FROM) ;
     UIFormComboBox timeFile = getChildById(FIELD_FROM_TIME) ;
@@ -135,7 +135,9 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
     df = new SimpleDateFormat(CalendarUtils.TIMEFORMAT) ;
     timeFile.setValue(df.format(value)) ;
   }
-
+  /**
+   * @deprecated replaced by {@link #getEventFromDate(Sring timeFormat)}
+   * */
   private Date getEventFromDate() throws Exception {
     try {
       UIFormDateTimeInput fromField = getChildById(FIELD_FROM) ;
@@ -152,6 +154,45 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
       return null ;
     }
   }
+  
+  private void setEventFromDate(Date value, String timeFormat) {
+    UIFormDateTimeInput fromField = getChildById(FIELD_FROM) ;
+    UIFormComboBox timeFile = getChildById(FIELD_FROM_TIME) ;
+    DateFormat df = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
+    fromField.setValue(df.format(value)) ;
+    df = new SimpleDateFormat(timeFormat) ;
+    timeFile.setValue(df.format(value)) ;
+  }
+  private Date getEventFromDate(String timeFormat) throws Exception {
+    try {
+      UIFormDateTimeInput fromField = getChildById(FIELD_FROM) ;
+      UIFormComboBox timeFile = getChildById(FIELD_FROM_TIME) ;
+      if(getIsAllDay()) {
+        DateFormat df = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
+        return CalendarUtils.getBeginDay(df.parse(fromField.getValue())).getTime();
+      } 
+      DateFormat df = new SimpleDateFormat(CalendarUtils.DATEFORMAT + " "  + timeFormat) ;
+      return df.parse(fromField.getValue() + " " + timeFile.getValue() ) ;
+    }
+    catch (Exception e) {
+      e.printStackTrace() ;
+      return null ;
+    }
+  }
+  /**
+   * @deprecated replaced by {@link #setEventToDate(Date value, Sring timeFormat)}
+   * */
+  private void setEventToDate(Date value) {
+    UIFormDateTimeInput toField =  getChildById(FIELD_TO) ;
+    UIFormComboBox timeField =  getChildById(FIELD_TO_TIME) ;
+    DateFormat df = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
+    toField.setValue(df.format(value)) ;
+    df = new SimpleDateFormat(CalendarUtils.TIMEFORMAT) ;
+    timeField.setValue(df.format(value)) ;
+  }
+  /**
+   * @deprecated replaced by  {@link #getEventToDate(Sring timeFormat)}
+   * */
   private Date getEventToDate() throws Exception {
     try {
       UIFormDateTimeInput toField = getChildById(FIELD_TO) ;
@@ -167,15 +208,30 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
       return null ;
     }
   }
-  private void setEventToDate(Date value) {
+  private void setEventToDate(Date value, String timeFormat) {
     UIFormDateTimeInput toField =  getChildById(FIELD_TO) ;
     UIFormComboBox timeField =  getChildById(FIELD_TO_TIME) ;
     DateFormat df = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
     toField.setValue(df.format(value)) ;
-    df = new SimpleDateFormat(CalendarUtils.TIMEFORMAT) ;
+    df = new SimpleDateFormat(timeFormat) ;
     timeField.setValue(df.format(value)) ;
   }
-
+  private Date getEventToDate(String timeFormat) throws Exception {
+    try {
+      UIFormDateTimeInput toField = getChildById(FIELD_TO) ;
+      UIFormComboBox timeFile = getChildById(FIELD_TO_TIME) ;
+      if(getIsAllDay()) {
+        DateFormat df = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
+        return CalendarUtils.getBeginDay(df.parse(toField.getValue())).getTime();
+      } 
+      DateFormat df = new SimpleDateFormat(CalendarUtils.DATEFORMAT + " " + timeFormat) ;
+      return df.parse(toField.getValue() + " " + timeFile.getValue() ) ;
+    } catch (Exception e) {
+      e.printStackTrace() ;
+      return null ;
+    }
+  }
+  
   private List<SelectItemOption<String>> getCalendar() throws Exception {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
@@ -235,8 +291,8 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-      Date from = uiForm.getEventFromDate() ;
-      Date to = uiForm.getEventToDate() ;
+      Date from = uiForm.getEventFromDate(uiPortlet.getCalendarSetting().getTimeFormat()) ;
+      Date to = uiForm.getEventToDate(uiPortlet.getCalendarSetting().getTimeFormat()) ;
       if(from == null) {
         uiApp.addMessage(new ApplicationMessage(uiForm.getId() + ".msg.fromDate-format", null, ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -311,8 +367,8 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
         uiEventForm.initForm(calendarSetting, null) ;
         uiEventForm.setEventSumary(uiForm.getEventSummary()) ;
         uiEventForm.setEventDescription(uiForm.getEventDescription()) ;
-        uiEventForm.setEventFromDate(uiForm.getEventFromDate()) ;
-        uiEventForm.setEventToDate(uiForm.getEventToDate()) ;
+        uiEventForm.setEventFromDate(uiForm.getEventFromDate(calendarSetting.getTimeFormat()),calendarSetting.getTimeFormat()) ;
+        uiEventForm.setEventToDate(uiForm.getEventToDate(calendarSetting.getTimeFormat()),calendarSetting.getTimeFormat()) ;
         uiEventForm.setEventAllDate(uiForm.getIsAllDay()) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
       } else {
@@ -325,8 +381,8 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
         uiTaskForm.initForm(calendarSetting, null) ;
         uiTaskForm.setEventSumary(uiForm.getEventSummary()) ;
         uiTaskForm.setEventDescription(uiForm.getEventDescription()) ;
-        uiTaskForm.setEventFromDate(uiForm.getEventFromDate()) ;
-        uiTaskForm.setEventToDate(uiForm.getEventToDate()) ;
+        uiTaskForm.setEventFromDate(uiForm.getEventFromDate(calendarSetting.getTimeFormat()),calendarSetting.getTimeFormat()) ;
+        uiTaskForm.setEventToDate(uiForm.getEventToDate(calendarSetting.getTimeFormat()),calendarSetting.getTimeFormat()) ;
         uiTaskForm.setEventAllDate(uiForm.getIsAllDay()) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
       }

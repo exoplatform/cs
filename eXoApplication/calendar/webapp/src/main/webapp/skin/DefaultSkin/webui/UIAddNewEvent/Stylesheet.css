@@ -207,7 +207,7 @@
 	line-height: 20px;
 }
 .UIAddNewEvent .NewEventAttendee .DateTimeContainer input{
-	 width: 70px;
+	 width: 100px;
 }
 .UIAddNewEvent .NewEventAttendee .DateTimeContainer .checkbox{
 	 width: 16px;

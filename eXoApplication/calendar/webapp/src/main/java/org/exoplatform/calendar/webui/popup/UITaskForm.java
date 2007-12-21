@@ -109,8 +109,8 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
   public void initForm(CalendarSetting calSetting, CalendarEvent eventCalendar) throws Exception {
     reset() ;
     UITaskDetailTab taskDetailTab = getChildById(TAB_TASKDETAIL) ;
-    List<SelectItemOption<String>> fromTimes = CalendarUtils.getTimesSelectBoxOptions(calSetting.getTimeFormat()) ;
-    List<SelectItemOption<String>> toTimes = CalendarUtils.getTimesSelectBoxOptions(calSetting.getTimeFormat()) ;
+    List<SelectItemOption<String>> fromTimes = CalendarUtils.getTimesSelectBoxOptions(calSetting.getTimeFormat(), calSetting.getTimeFormat()) ;
+    List<SelectItemOption<String>> toTimes = CalendarUtils.getTimesSelectBoxOptions(calSetting.getTimeFormat(), calSetting.getTimeFormat()) ;
     taskDetailTab.getUIFormComboBox(UITaskDetailTab.FIELD_FROM_TIME).setOptions(fromTimes) ;
     taskDetailTab.getUIFormComboBox(UITaskDetailTab.FIELD_TO_TIME).setOptions(toTimes) ;
     if(eventCalendar != null) {
@@ -119,8 +119,8 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
       setEventSumary(eventCalendar.getSummary()) ;
       setEventDescription(eventCalendar.getDescription()) ;
       setEventAllDate(CalendarUtils.isAllDayEvent(eventCalendar)) ;
-      setEventFromDate(eventCalendar.getFromDateTime()) ;
-      setEventToDate(eventCalendar.getToDateTime()) ;
+      setEventFromDate(eventCalendar.getFromDateTime(), calSetting.getTimeFormat()) ;
+      setEventToDate(eventCalendar.getToDateTime(), calSetting.getTimeFormat()) ;
       setSelectedCalendarId(eventCalendar.getCalendarId()) ;
       setSelectedCategory(eventCalendar.getEventCategoryId()) ;
       setEventDelegation(eventCalendar.getTaskDelegator()) ;
@@ -135,9 +135,9 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
       java.util.Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
       int beginMinute = (cal.get(java.util.Calendar.MINUTE)/CalendarUtils.DEFAULT_TIMEITERVAL)*CalendarUtils.DEFAULT_TIMEITERVAL ;
       cal.set(java.util.Calendar.MINUTE, beginMinute) ;
-      setEventFromDate(cal.getTime()) ;
+      setEventFromDate(cal.getTime(), calSetting.getTimeFormat()) ;
       cal.add(java.util.Calendar.MINUTE, CalendarUtils.DEFAULT_TIMEITERVAL*2) ;
-      setEventToDate(cal.getTime()) ;
+      setEventToDate(cal.getTime(), calSetting.getTimeFormat()) ;
     }
   }
 
@@ -173,7 +173,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
     getUIStringInput(selectField).setValue(value) ;
   }
 
-  protected boolean isEventDetailValid(){
+  protected boolean isEventDetailValid(CalendarSetting calendarSetting){
     if(CalendarUtils.isEmpty(getEventSumary())) {
       errorMsg_ = getId() + ".msg.event-summary-required" ;
       return false ;
@@ -197,14 +197,14 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
       } 
     }
     try {
-      getEventFromDate() ;
+      getEventFromDate(calendarSetting.getTimeFormat()) ;
     } catch (Exception e) {
       e.printStackTrace() ;
       errorMsg_ = getId() +  ".msg.event-fromdate-notvalid" ;
       return false ;
     }
     try {
-      getEventToDate() ;
+      getEventToDate(calendarSetting.getTimeFormat()) ;
     } catch (Exception e) {
       e.printStackTrace() ;
       errorMsg_ = getId() +  ".msg.event-fromdate-notvalid" ;
@@ -251,7 +251,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
     taskDetailTab.getUIFormSelectBox(UITaskDetailTab.FIELD_CATEGORY).setValue(value) ;
   }
 
-  protected Date getEventFromDate() throws Exception {
+  protected Date getEventFromDate(String timeFormat) throws Exception {
     UITaskDetailTab taskDetailTab =  getChildById(TAB_TASKDETAIL) ;
     UIFormComboBox timeField = taskDetailTab.getUIFormComboBox(UITaskDetailTab.FIELD_FROM_TIME) ;
     UIFormDateTimeInput fromField = taskDetailTab.getChildById(UITaskDetailTab.FIELD_FROM) ;
@@ -259,7 +259,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
       DateFormat df = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
       return CalendarUtils.getBeginDay(df.parse(fromField.getValue())).getTime();
     } 
-    DateFormat df = new SimpleDateFormat(CalendarUtils.DATETIMEFORMAT) ;
+    DateFormat df = new SimpleDateFormat(CalendarUtils.DATEFORMAT + " "  + timeFormat) ;
     return df.parse(fromField.getValue() + " " + timeField.getValue()) ;
   }
   protected String getEventFormDateValue () {
@@ -267,16 +267,16 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
     UIFormDateTimeInput fromField = taskDetailTab.getChildById(UITaskDetailTab.FIELD_FROM) ;
     return fromField.getValue() ;
   }
-  protected void setEventFromDate(Date date) throws Exception{
+  protected void setEventFromDate(Date date, String timeFormat) throws Exception{
     UITaskDetailTab taskDetailTab =  getChildById(TAB_TASKDETAIL) ;
     ((UIFormDateTimeInput)taskDetailTab.getChildById(UITaskDetailTab.FIELD_FROM))
     .setValue(CalendarUtils.parse(date, CalendarUtils.DATEFORMAT)) ;
     taskDetailTab.getUIFormComboBox(UITaskDetailTab.FIELD_FROM_TIME)
-    .setValue(CalendarUtils.parse(date, CalendarUtils.TIMEFORMAT)) ;    
+    .setValue(CalendarUtils.parse(date,timeFormat)) ;    
 
   }
 
-  protected Date getEventToDate() throws Exception {
+  protected Date getEventToDate(String timeFormat) throws Exception {
     UITaskDetailTab taskDetailTab =  getChildById(TAB_TASKDETAIL) ;
     UIFormComboBox timeField = taskDetailTab.getUIFormComboBox(UITaskDetailTab.FIELD_TO_TIME) ;
     UIFormDateTimeInput toField = taskDetailTab.getChildById(UITaskDetailTab.FIELD_TO) ;
@@ -284,7 +284,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
       DateFormat df = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
       return CalendarUtils.getBeginDay(df.parse(toField.getValue())).getTime();
     } 
-    DateFormat df = new SimpleDateFormat(CalendarUtils.DATETIMEFORMAT) ;
+    DateFormat df = new SimpleDateFormat(CalendarUtils.DATEFORMAT + " " + timeFormat) ;
     return df.parse(toField.getValue() + " " + timeField.getValue()) ;
   }
   protected String getEventToDateValue () {
@@ -292,12 +292,12 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
     UIFormDateTimeInput toField = taskDetailTab.getChildById(UITaskDetailTab.FIELD_TO) ;
     return toField.getValue() ;
   }
-  protected void setEventToDate(Date date) throws Exception{
+  protected void setEventToDate(Date date, String timeFormat) throws Exception{
     UITaskDetailTab taskDetailTab =  getChildById(TAB_TASKDETAIL) ;
     ((UIFormDateTimeInput)taskDetailTab.getChildById(UITaskDetailTab.FIELD_TO))
     .setValue(CalendarUtils.parse(date, CalendarUtils.DATEFORMAT)) ;
     taskDetailTab.getUIFormComboBox(UITaskDetailTab.FIELD_TO_TIME)
-    .setValue(CalendarUtils.parse(date, CalendarUtils.TIMEFORMAT)) ; 
+    .setValue(CalendarUtils.parse(date, timeFormat)) ; 
   }
 
   protected boolean getEventAllDate() {
@@ -555,7 +555,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
       UICalendarViewContainer uiViewContainer = calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
-      if(uiForm.isEventDetailValid()) {
+      if(uiForm.isEventDetailValid(calendarPortlet.getCalendarSetting())) {
         String username = event.getRequestContext().getRemoteUser() ;
         String calendarId = uiForm.getCalendarId() ;
         CalendarEvent calendarEvent = new CalendarEvent() ;
@@ -566,8 +566,8 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
         calendarEvent.setSummary(uiForm.getEventSumary()) ;
         calendarEvent.setDescription(uiForm.getEventDescription()) ;
         calendarEvent.setTaskDelegator(uiForm.getEventDelegation()) ;
-        Date from = uiForm.getEventFromDate() ;
-        Date to = uiForm.getEventToDate() ;
+        Date from = uiForm.getEventFromDate(calendarPortlet.getCalendarSetting().getTimeFormat()) ;
+        Date to = uiForm.getEventToDate(calendarPortlet.getCalendarSetting().getTimeFormat()) ;
         if(from.after(to)) {
           uiApp.addMessage(new ApplicationMessage(uiForm.getId() + ".msg.event-date-time-logic", null, ApplicationMessage.WARNING)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
