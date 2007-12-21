@@ -138,7 +138,7 @@ public class UIEventCategoryForm extends UIForm {
           if(uiTaskForm != null) { 
             uiTaskForm.setSelectedTab(UITaskForm.TAB_TASKDETAIL) ;
             uiTaskForm.refreshCategory() ;
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiEventForm.getChildById(UITaskForm.TAB_TASKDETAIL)) ;
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiTaskForm.getChildById(UITaskForm.TAB_TASKDETAIL)) ;
           }
         }
       } catch (RepositoryException e) {
