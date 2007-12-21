@@ -216,21 +216,6 @@ public class UIMessageList extends UIForm {
     return messageList;
   }
   
-  public Tag getFirstTag(Message msg) throws Exception {
-    UIMailPortlet uiPortlet = getAncestorOfType(UIMailPortlet.class);
-    String username = uiPortlet.getCurrentUser();
-    String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-    MailService mailServ = uiPortlet.getApplicationComponent(MailService.class);
-    String[] tagIds = msg.getTags();
-    String tagId = "";
-    if (tagIds != null && tagIds.length > 0) tagId = tagIds[0];
-    List<Tag> tagList = mailServ.getTags(SessionsUtils.getSessionProvider(), username, accountId);
-    for (Tag tag : tagList) {
-      if (tag.getId().equals(tagId)) return tag;
-    }
-    return new Tag();
-  } 
-  
   public List<Message> getConversations(Message msg) throws Exception {
     List<Message> msgList = new ArrayList<Message>();
     String username = MailUtils.getCurrentUser();
@@ -272,23 +257,6 @@ public class UIMessageList extends UIForm {
     }
     return tagList;
   } 
-  
-  public String getAllTagName(Message msg) throws Exception {
-    UIMailPortlet uiPortlet = getAncestorOfType(UIMailPortlet.class);
-    String username = uiPortlet.getCurrentUser() ;
-    String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-    MailService mailSrv = getApplicationComponent(MailService.class);
-
-    String tags = "";
-    if (msg.getTags() != null && msg.getTags().length > 0) {
-      for (int i = 0; i < msg.getTags().length; i++) {
-        if (i > 0) tags += ", ";
-        Tag tag = mailSrv.getTag(SessionsUtils.getSessionProvider(), username, accountId, msg.getTags()[i]);
-        tags += "[" + tag.getName() + "]";
-      }
-    }
-    return tags;
-  }
   
   static public class SelectMessageActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
