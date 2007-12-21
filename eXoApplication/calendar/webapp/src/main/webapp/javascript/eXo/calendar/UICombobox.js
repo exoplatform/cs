@@ -53,7 +53,6 @@ UICombobox.prototype.getValue = function(evt) {
 	var UICombobox = eXo.calendar.UICombobox ;
 	var val = this.getAttribute("value") ;
 	var textbox = eXo.core.DOMUtil.findNextElementByTagName(UICombobox.list,"input") ;
-	val = eXo.calendar.UICombobox.setValue(val) ;
 	textbox.value = val ;
 	var len = UICombobox.items.length ;
 	var icon = null ;
@@ -65,7 +64,6 @@ UICombobox.prototype.getValue = function(evt) {
 	selectedIcon = eXo.core.DOMUtil.findFirstDescendantByClass(this,"div", "UIComboboxIcon") ;
 	eXo.core.DOMUtil.addClass(selectedIcon, "UIComboboxSelectedIcon") ;
 	UICombobox.list.style.display = "none" ;
-	UICombobox.synchronize(textbox) ;
 } ;
 
 // For validating
@@ -76,34 +74,32 @@ UICombobox.prototype.correct = function() {
 } ;
 
 UICombobox.prototype.setValue = function(value) {
-	var am = new RegExp("a","i") ;
-	var pm = new RegExp("p","i") ;
 	var setting = ["hh:mm a", "HH:mm"] ;
-	var timeFormat = eXo.calendar.UICalendarPortlet.timeFormat ;
-	var defaultValue = eXo.calendar.UICombobox.defaultValue ;
+	var timeSetting = eXo.calendar.UICalendarPortlet.timeFormat ;
 	var value = String(value).trim().toLowerCase() ;
-	var time = eXo.calendar.UICombobox.digitToTime(value) ;
+	var UICombobox = eXo.calendar.UICombobox ;
+	var time = UICombobox.digitToTime(value) ;
+	var timeFormat = UICombobox.getTimeFormat() ;
+	var am = String(timeFormat.am).toLowerCase() ;	
+	var pm = String(timeFormat.pm).toLowerCase() ;	
 	var hour = parseInt(time.hour) ;
 	var min = parseInt(time.minutes) ;
 	if (min > 60) min = "00" ;
 	else min = time.minutes ;
-	if (timeFormat == setting[0]) {
+	if (timeSetting == setting[0]) {
 		if (!time) {
-			return "12:00 AM" ;
+			return "12:00" ;
 		}
-		if (hour > 12) hour = "12" ;
-		else if(hour == 0) hour = "00" ;
-		else hour = time.hour ;
-		if (am.test(value) && !pm.test(value)) {
-			min += " AM" ;
-		} else if (!am.test(value) && pm.test(value)) {
-			min += " PM" ;
-		} else if (am.test(value) && pm.test(value)) {
-			if (value.indexOf("p") < value.indexOf("a")) min += " PM" ;
-			if (value.indexOf("p") > value.indexOf("a")) min += " AM" ;
-		} else {
-			min += " AM" ;
-		}		
+		if (hour > 12) {			
+			hour = "12" ;
+		} else if(hour == 0) {			
+			hour = "12" ;
+		}	else {			
+			hour = time.hour ;
+		}
+		if (value.indexOf(am) >= 0)	min += " " + timeFormat.am ;
+		else if(value.indexOf(pm) >= 0)	min += " " + timeFormat.pm ;
+		else 	min += " " + timeFormat.am ;
 	} else {
 		if (!time) {
 			return "12:00" ;
@@ -112,6 +108,15 @@ UICombobox.prototype.setValue = function(value) {
 		else hour = time.hour ;
 	}
 	return hour + ":" + min ;
+} ;
+
+UICombobox.prototype.getTimeFormat= function() {
+	var items = eXo.calendar.UICombobox.items ;
+	var first = eXo.core.DOMUtil.findFirstDescendantByClass(items[0], "div", "UIComboboxLabel").innerHTML ;
+	var last =  eXo.core.DOMUtil.findFirstDescendantByClass(items[items.length - 1], "div", "UIComboboxLabel").innerHTML ;
+	var am = first.match(/[A-Z]+/) ;
+	var pm = last.match(/[A-Z]+/) ;
+	return {"am":am, "pm":pm} ;
 } ;
 
 UICombobox.prototype.digitToTime = function(stringNo) {
@@ -154,6 +159,7 @@ UICombobox.prototype.synchronize = function(obj) {
 	var value = obj.value ;
 	obj.value = UICombobox.setValue(value) ;
 	var uiTabContentContainer = DOMUtil.findAncestorByClass(obj, "UITabContentContainer") ;
+	if (!uiTabContentContainer) return ;
 	var UIComboboxInputs = DOMUtil.findDescendantsByClass(uiTabContentContainer, "input","UIComboboxInput") ;
 	var len = UIComboboxInputs.length ;
 	var name = obj.name.toLowerCase() ;
