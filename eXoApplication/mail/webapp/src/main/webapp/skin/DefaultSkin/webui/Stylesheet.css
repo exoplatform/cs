@@ -518,6 +518,28 @@
 	margin: 0px 3px 0px 3px;
 }
 
+.UIMailPortlet .MailWorkingWorkspace .MessageHeader .MessageAttachment .AttachmentIcon {
+	margin: 0px 3px 0px 3px;
+	float: right;
+}
+
+.UIMailPortlet .MailWorkingWorkspace .MessageHeader .MessageAttachment .MonthDate {
+	margin: 0px 3px 0px 3px;
+	float: right;
+}
+
+.UIMailPortlet .MailWorkingWorkspace .MessageHeader .MessageAddress .SenderAddress {
+	margin: 0px 3px 0px 3px;
+	float: left;
+	font-weight: bold;
+	color:#2276AB;
+}
+
+.UIMailPortlet .MailWorkingWorkspace .MessageHeader .MessageAddress .HeadlineText {
+	margin: 0px 3px 0px 3px;
+	float: left;
+}
+
 .UIMailPortlet .MailWorkingWorkspace .TotalMessageIcon {
 	margin: 1px 0px 0px 4px;
 }
@@ -679,12 +701,21 @@
 
 .UIMailPortlet .DecoratorBox .MiddleCenterViewBoxStyle {
 	padding: 10px;
+	padding-top: 5px;
+}
+
+.UIMailPortlet .DecoratorBox .CollapseMessage .MiddleCenterViewBoxStyle {
+	padding: 5px 10px 5px 10px;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .MessageHeader {
 	font-size: 11px;
 	height: auto;
 	border-bottom: 1px dotted #acacac;
+}
+
+.UIMailPortlet .MailWorkingWorkspace .CollapseMessage .MessageHeader {
+	border-bottom: none;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .MessageCheck {
@@ -694,10 +725,6 @@
 
 .UIMailPortlet .MailWorkingWorkspace .MessageCheck .CheckBox {
 	float: left;
-}
-
-.UIMailPortlet .MailWorkingWorkspace .MessageCheck .UnStarredIcon {
-	float: left; 
 }
 
 .UIMailPortlet .MailWorkingWorkspace .MessageAddress {

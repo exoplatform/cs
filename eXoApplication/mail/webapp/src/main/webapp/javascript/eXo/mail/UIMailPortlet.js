@@ -326,6 +326,27 @@ UIMailPortlet.prototype.showHideMessageHeader = function(obj) {
   }
 } ;
 
+UIMailPortlet.prototype.showHideMessageDetails = function(obj) {
+	var DOMUtil = eXo.core.DOMUtil;
+	var paneDetails = DOMUtil.findAncestorByClass(obj, "ReadingPaneDetails");
+    var expands = DOMUtil.findDescendantsByClass(paneDetails, "div", "ExpandMessage");
+    var numberExpand = 0;
+    for (var i = 0; i < expands.length; i++) {
+    	if (expands[i].style.display == "block") numberExpand++;
+    }
+	var decorator = DOMUtil.findAncestorByClass(obj, "DecoratorBox");
+	if ((obj.id == "CollapseMessageAddressPreview") && numberExpand > 1){
+		var expand = DOMUtil.findFirstDescendantByClass(decorator, "div", "ExpandMessage");
+		var collapse = DOMUtil.findFirstDescendantByClass(decorator, "div", "CollapseMessage");
+	    expand.style.display = "none";
+	    collapse.style.display = "block";
+	} else if (obj.id == "CollapseMessage") {
+	    var expand = DOMUtil.findNextElementByTagName(obj, "div");
+	    obj.style.display = "none";
+	    expand.style.display= "block";
+	}
+}
+
 UIMailPortlet.prototype.isAllday = function(form) {
 	try{
 		if (typeof(form) == "string") form = document.getElementById(form) ;		

@@ -25,221 +25,281 @@
 		<div style="clear:both;"><span></span></div>
 	</div>
 	<div class="ReadingPaneDetails">
+  
 <!--  Start DecoratorBox ViewBoxStyle -->
-    <% for (Message msg : uicomponent.getConversations()) {%>
+    <% 
+    int msgIndex = 0;
+    for (Message msg : uicomponent.getConversations()) {%>
 		<div class="DecoratorBox" previewId="<%=msg.getId()%>">
-			<div class="ViewBoxStyle">
-				<div class="TopLeftViewBoxStyle">
-					<div class="TopRightViewBoxStyle">
-						<div class="TopCenterViewBoxStyle"><span></span></div>										
-					</div>
-				</div>
-				<div class="MiddleLeftViewBoxStyle">
-					<div class="MiddleRightViewBoxStyle">
-						<div class="MiddleCenterViewBoxStyle">
-							<div class="MessageHeader">
-								<div class="MessageCheck">
-                  <%
-                    String starClass = "UnStarredIcon" ;
-                    if (msg.hasStar()) starClass = "StarredIcon";
-                  %>
-									<div><a href="<%=uicomponent.event("AddStar", msg.getId())%>"><div  class="$starClass" title="Add star for this message"><span></span></div></a></div>
-									<div style="clear: left;"><span></span></div>
-								</div>
-								<div id="CollapseMessageAddressPreview" class="CollapseMessageAddress">
-									<div class="FieldContainer">
-										<div class="Title"></div>
-										<div class="LinkAddress">
-										  <%
-										    InternetAddress[] fromAddress1 = Utils.getInternetAddress(msg.getFrom());
-										    InternetAddress from1 = fromAddress1[0];
-										  %>
-										  <span><%=Utils.getPersonal(from1)%> &lt; <%=from1.getAddress()%> &gt; </span>
-										</div>  
+      <%
+        String styleCollapse = "block";
+        if (msgIndex == uicomponent.getConversations().size() -1) styleCollapse = "none";
+      %>
+      <div id="CollapseMessage" class="CollapseMessage" style="display: $styleCollapse ;" onclick="javascript:eXo.mail.UIMailPortlet.showHideMessageDetails(this)">
+        <div class="ViewBoxStyle">
+          <div class="TopLeftViewBoxStyle">
+            <div class="TopRightViewBoxStyle">
+              <div class="TopCenterViewBoxStyle"><span></span></div>                    
+            </div>
+          </div>
+          <div class="MiddleLeftViewBoxStyle">
+            <div class="MiddleRightViewBoxStyle">
+              <div class="MiddleCenterViewBoxStyle">
+                <div class="MessageHeader">
+                  <div class="MessageCheck">
+                    <div class="UnStarredIcon" title="Add star for this message"><span></span></div>
+                  </div>
+                  <div class="MessageAddress">
+                    <div class="FieldContainer">
+                      <div class="SenderAddress">
+                        <%
+                          InternetAddress[] fromAddress2 = Utils.getInternetAddress(msg.getFrom());
+                          InternetAddress from2 = fromAddress2[0];
+                        %>
+                        <span><%=Utils.getPersonal(from2)%> &lt; <%=from2.getAddress()%> &gt; </span>
+                      </div>
+                      <div class="HeadlineText">Java Performance Management for Large-Scale Systems ...</div>
+                      <div style="clear: left;"><span></span></div>
+                    </div>
+                  </div>
+                  <div class="MessageAttachment" >
+                    <div class="MonthDate">June 26</div>
+                    <div class="AttachmentIcon"><span></span></div>
+                    <div style="clear: right;"><span></span></div>
+                  </div>
+                  <div style="clear: both;"><span></span></div>
+                </div>
+              </div>                    
+            </div>
+          </div>
+          <div class="BottomLeftViewBoxStyle">
+            <div class="BottomRightViewBoxStyle">
+              <div class="BottomCenterViewBoxStyle"><span></span></div>                   
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <%
+        String styleExpand = "none";
+        if (msgIndex == uicomponent.getConversations().size() -1) styleExpand = "block";
+      %>
+      <div class="ExpandMessage" style="display: $styleExpand ;">
+  			<div class="ViewBoxStyle">
+  				<div class="TopLeftViewBoxStyle">
+  					<div class="TopRightViewBoxStyle">
+  						<div class="TopCenterViewBoxStyle"><span></span></div>										
+  					</div>
+  				</div>
+  				<div class="MiddleLeftViewBoxStyle">
+  					<div class="MiddleRightViewBoxStyle">
+  						<div class="MiddleCenterViewBoxStyle">
+  							<div class="MessageHeader">
+  								<div class="MessageCheck">
+                    <%
+                      String starClass = "UnStarredIcon" ;
+                      if (msg.hasStar()) starClass = "StarredIcon";
+                    %>
+  									<div><a href="<%=uicomponent.event("AddStar", msg.getId())%>"><div  class="$starClass" title="Add star for this message"><span></span></div></a></div>
+  									<div style="clear: left;"><span></span></div>
+  								</div>
+  								<div id="CollapseMessageAddressPreview" class="CollapseMessageAddress" onclick="javascript:eXo.mail.UIMailPortlet.showHideMessageDetails(this);">
+  									<div class="FieldContainer">
+  										<div class="Title"></div>
+  										<div class="LinkAddress">
+  										  <%
+  										    InternetAddress[] fromAddress1 = Utils.getInternetAddress(msg.getFrom());
+  										    InternetAddress from1 = fromAddress1[0];
+  										  %>
+  										  <span><%=Utils.getPersonal(from1)%> &lt; <%=from1.getAddress()%> &gt; </span>
+  										</div>  
+                      <div class="Title">To:</div>
+                      <div class="LinkAddress"> 
+                        <%
+                          InternetAddress[] toAddress1 = InternetAddress.parse(msg.getMessageTo());
+                          for (i in 0..(toAddress1.length-1)) {
+                            InternetAddress address1 = toAddress1[i];
+                            if (i > 0) print ",";
+                        %>
+                          <span><%=Utils.getPersonal(address1)%> </span> &lt; <%=address1.getAddress()%> &gt; 
+                        <%}%>                     
+                      </div>
+  										<div style="clear: left;"><span></span></div>
+  									</div>
+  								</div>
+                  
+                  <!-- Begin Expand Message Header -->
+                  <div id="MessageAddressPreview" class="MessageAddress" style="display : none;">
+                  <div class="FieldContainer">
+                    <div class="Title">From:</div>
+                    <div class="LinkAddress">
+                      <%
+                        InternetAddress[] fromAddress = Utils.getInternetAddress(msg.getFrom());
+                        InternetAddress from = fromAddress[0];
+                      %>
+                      <span><%=Utils.getPersonal(from)%> </span> &lt; <%=from.getAddress()%> &gt;
+                    </div>  
+                    <div style="clear: left;"><span></span></div>
+                  </div>
+                  <div class="FieldContainer">
+                    <div class="Title">Reply-to:</div>
+                    <div class="LinkAddress"> 
+                      <%
+                        InternetAddress[] replyAddress = Utils.getInternetAddress(msg.getReplyTo());
+                        InternetAddress reply = replyAddress[0];
+                      %>
+                      <span><%=Utils.getPersonal(reply)%> </span> &lt; <%=reply.getAddress()%> &gt;
+                    </div>
+                    <div style="clear: left;"><span></span></div>
+                  </div>
+                  <div class="FieldContainer">
                     <div class="Title">To:</div>
                     <div class="LinkAddress"> 
                       <%
-                        InternetAddress[] toAddress1 = InternetAddress.parse(msg.getMessageTo());
-                        for (i in 0..(toAddress1.length-1)) {
-                          InternetAddress address1 = toAddress1[i];
+                        InternetAddress[] toAddress = InternetAddress.parse(msg.getMessageTo());
+                        for (i in 0..(toAddress.length-1)) {
+                          InternetAddress address = toAddress[i];
                           if (i > 0) print ",";
                       %>
-                        <span><%=Utils.getPersonal(address1)%> </span> &lt; <%=address1.getAddress()%> &gt; 
+                        <span><%=Utils.getPersonal(address)%> </span> &lt; <%=address.getAddress()%> &gt; 
                       <%}%>                     
                     </div>
-										<div style="clear: left;"><span></span></div>
-									</div>
-								</div>
-                
-                <!-- Begin Expand Message Header -->
-                <div id="MessageAddressPreview" class="MessageAddress" style="display : none;">
-                <div class="FieldContainer">
-                  <div class="Title">From:</div>
-                  <div class="LinkAddress">
-                    <%
-                      InternetAddress[] fromAddress = Utils.getInternetAddress(msg.getFrom());
-                      InternetAddress from = fromAddress[0];
-                    %>
-                    <span><%=Utils.getPersonal(from)%> </span> &lt; <%=from.getAddress()%> &gt;
-                  </div>  
-                  <div style="clear: left;"><span></span></div>
-                </div>
-                <div class="FieldContainer">
-                  <div class="Title">Reply-to:</div>
-                  <div class="LinkAddress"> 
-                    <%
-                      InternetAddress[] replyAddress = Utils.getInternetAddress(msg.getReplyTo());
-                      InternetAddress reply = replyAddress[0];
-                    %>
-                    <span><%=Utils.getPersonal(reply)%> </span> &lt; <%=reply.getAddress()%> &gt;
+                    <div style="clear: left;"><span></span></div>
                   </div>
-                  <div style="clear: left;"><span></span></div>
-                </div>
-                <div class="FieldContainer">
-                  <div class="Title">To:</div>
-                  <div class="LinkAddress"> 
-                    <%
-                      InternetAddress[] toAddress = InternetAddress.parse(msg.getMessageTo());
-                      for (i in 0..(toAddress.length-1)) {
-                        InternetAddress address = toAddress[i];
-                        if (i > 0) print ",";
-                    %>
-                      <span><%=Utils.getPersonal(address)%> </span> &lt; <%=address.getAddress()%> &gt; 
-                    <%}%>                     
+                  <div class="FieldContainer">
+                    <div class="Title">Date & time:</div>
+                    <div class="Address"><%=Utils.formatDate('EEEE, dd MMMM, yyyy HH:mm:ss aaa', msg.getReceivedDate())%></div>
+                    <div style="clear: left;"><span></span></div>
                   </div>
-                  <div style="clear: left;"><span></span></div>
-                </div>
-                <div class="FieldContainer">
-                  <div class="Title">Date & time:</div>
-                  <div class="Address"><%=Utils.formatDate('EEEE, dd MMMM, yyyy HH:mm:ss aaa', msg.getReceivedDate())%></div>
-                  <div style="clear: left;"><span></span></div>
-                </div>
-                </div>
-                <!-- End Expand Message Header-->
-                
-								<div class="MessageActions" >
-									<div class="DownArrow1Icon"><span></span></div>
-									<div class="ShowHideTitle" onclick="javascript:eXo.mail.UIMailPortlet.showHideMessageHeader(this)">Show details</div>
-									<div class="MonthDate"></div>
-									<div class="Actions" title="Actions on this message" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
-                  <% /*Begin Popup Menu*/ %>
-                    <div style="position: relative;">
-                      <div class="UIPopupCategory" style="display: none;">
-                        <div class="PopupCategoryDecorator">
-                      
-                          <div class="UIRightClickPopupMenu" style="display: block;">
-                            <div class="UIContextMenuContainer">
-                              <div class="TopLeftRightClickPopupMenu">
-                                <div class="TopRightRightClickPopupMenu">
-                                  <div class="TopCenterRightClickPopupMenu"><span></span></div>
-                                </div>
-                              </div>
-                              <div class="MiddleLeftRightClickPopupMenu">
-                                <div class="MiddleRightRightClickPopupMenu">
-                                  <div class="UIRightPopupMenuContainer">
-                                    <a class="MenuItem" href="<%=uicomponent.event("Reply", msg.getId())%>">   
-                                      <div class="ItemIcon ReplyMailIcon"> Reply</div>
-                                    </a>  
-                                    <a class="MenuItem" href="<%=uicomponent.event("ReplyAll", msg.getId())%>">   
-                                      <div class="ItemIcon ReplyMailIcon"> Reply to All</div>
-                                    </a>  
-                                    <a class="MenuItem" href="<%=uicomponent.event("Forward", msg.getId())%>">   
-                                      <div class="ItemIcon ForwardMailIcon"> Forward </div>
-                                    </a>
-                                    <a class="MenuItem" href="<%=uicomponent.event("Print", msg.getId())%>">   
-                                      <div class="ItemIcon PrintMailIcon"> Print </div>
-                                    </a>
-                                    <a class="MenuItem" href="<%=uicomponent.event("Delete", msg.getId())%>">   
-                                      <div class="ItemIcon DeleteMailIcon"> Delete </div>
-                                    </a>
-                                    <a class="MenuItem" href="<%=uicomponent.event("AddTag", msg.getId())%>">   
-                                      <div class="ItemIcon TagMailIcon"> Tag </div>
-                                    </a>
-                                    <a class="MenuItem" href="<%=uicomponent.event("MoveMessages", msg.getId())%>">   
-                                      <div class="ItemIcon MoveMailIcon">Move to Folder </div>
-                                    </a>
-                                    <a class="MenuItem" href="<%=uicomponent.event("AddContact", msg.getId())%>">   
-                                      <div class="ItemIcon AddContactIcon"> Add to Contacts </div>
-                                    </a>
-                                    <a class="MenuItem" href="<%=uicomponent.event("Export", msg.getId())%>">   
-                                    <div class="ItemIcon ExportIcon"> Export (*.eml) </div>
-                                    </a>
-                                    <div class="RightClickCustomItem"></div>
+                  </div>
+                  <!-- End Expand Message Header-->
+                  
+  								<div class="MessageActions" >
+  									<div class="DownArrow1Icon"><span></span></div>
+  									<div class="ShowHideTitle" onclick="javascript:eXo.mail.UIMailPortlet.showHideMessageHeader(this)">Show details</div>
+  									<div class="MonthDate"></div>
+  									<div class="Actions" title="Actions on this message" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
+                    <% /*Begin Popup Menu*/ %>
+                      <div style="position: relative;">
+                        <div class="UIPopupCategory" style="display: none;">
+                          <div class="PopupCategoryDecorator">
+                        
+                            <div class="UIRightClickPopupMenu" style="display: block;">
+                              <div class="UIContextMenuContainer">
+                                <div class="TopLeftRightClickPopupMenu">
+                                  <div class="TopRightRightClickPopupMenu">
+                                    <div class="TopCenterRightClickPopupMenu"><span></span></div>
                                   </div>
                                 </div>
+                                <div class="MiddleLeftRightClickPopupMenu">
+                                  <div class="MiddleRightRightClickPopupMenu">
+                                    <div class="UIRightPopupMenuContainer">
+                                      <a class="MenuItem" href="<%=uicomponent.event("Reply", msg.getId())%>">   
+                                        <div class="ItemIcon ReplyMailIcon"> Reply</div>
+                                      </a>  
+                                      <a class="MenuItem" href="<%=uicomponent.event("ReplyAll", msg.getId())%>">   
+                                        <div class="ItemIcon ReplyMailIcon"> Reply to All</div>
+                                      </a>  
+                                      <a class="MenuItem" href="<%=uicomponent.event("Forward", msg.getId())%>">   
+                                        <div class="ItemIcon ForwardMailIcon"> Forward </div>
+                                      </a>
+                                      <a class="MenuItem" href="<%=uicomponent.event("Print", msg.getId())%>">   
+                                        <div class="ItemIcon PrintMailIcon"> Print </div>
+                                      </a>
+                                      <a class="MenuItem" href="<%=uicomponent.event("Delete", msg.getId())%>">   
+                                        <div class="ItemIcon DeleteMailIcon"> Delete </div>
+                                      </a>
+                                      <a class="MenuItem" href="<%=uicomponent.event("AddTag", msg.getId())%>">   
+                                        <div class="ItemIcon TagMailIcon"> Tag </div>
+                                      </a>
+                                      <a class="MenuItem" href="<%=uicomponent.event("MoveMessages", msg.getId())%>">   
+                                        <div class="ItemIcon MoveMailIcon">Move to Folder </div>
+                                      </a>
+                                      <a class="MenuItem" href="<%=uicomponent.event("AddContact", msg.getId())%>">   
+                                        <div class="ItemIcon AddContactIcon"> Add to Contacts </div>
+                                      </a>
+                                      <a class="MenuItem" href="<%=uicomponent.event("Export", msg.getId())%>">   
+                                      <div class="ItemIcon ExportIcon"> Export (*.eml) </div>
+                                      </a>
+                                      <div class="RightClickCustomItem"></div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="BottomLeftRightClickPopupMenu">
+                              <div class="BottomRightRightClickPopupMenu">
+                                <div class="BottomCenterRightClickPopupMenu"><span></span></div>
                               </div>
-                              <div class="BottomLeftRightClickPopupMenu">
-                            <div class="BottomRightRightClickPopupMenu">
-                              <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+                            </div>
+                              </div>
                             </div>
                           </div>
-                            </div>
-                          </div>
+                        
                         </div>
-                      
                       </div>
+                  <% /*End Popup Menu*/ %>
                     </div>
-                <% /*End Popup Menu*/ %>
-                  </div>
-									<div style="clear: both;"><span></span></div>
-								</div>
-								<div style="clear: both;"><span></span></div>
-							</div>
-							<div class="MessageDetails">
-								<%=msg.getMessageBody()%>
-							</div>
-							<%
-                if (msg.getAttachments().size() > 0) {
-              %>
-                <div class="AttachmentContainer">
-  						  	<div class="AttachmentTitle">Attachments:</div>
-                  
-                  <%
-                    DownloadService dservice = uicomponent.getDownloadService() ;
-                    String attLink ;
-                    for (Attachment attach : msg.getAttachments()) {
-                      String downloadAction = uicomponent.event("DownloadAttachment", attach.getId());
-                  %>
-    						  	<div class="AttachmentContent">
-                      <%
-                      attLink = MailUtils.getImageSource(attach, dservice) ;
-                        if (attLink != null ) {
-                          if (attach.getMimeType().indexOf("image") > -1) {
-                            
-                          } else if (attach.getMimeType().indexOf("msword") > -1) {
-                            attLink = "/mail/skin/DefaultSkin/webui/skinIcons/24x24/icons/WordIcon.gif";
-                          } else if (attach.getMimeType().indexOf("pdf") > -1) {
-                            attLink = "/mail/skin/DefaultSkin/webui/skinIcons/24x24/icons/PDFIcon.gif";
+  									<div style="clear: both;"><span></span></div>
+  								</div>
+  								<div style="clear: both;"><span></span></div>
+  							</div>
+  							<div class="MessageDetails">
+  								<%=msg.getMessageBody()%>
+  							</div>
+  							<%
+                  if (msg.getAttachments().size() > 0) {
+                %>
+                  <div class="AttachmentContainer">
+    						  	<div class="AttachmentTitle">Attachments:</div>
+                    
+                    <%
+                      DownloadService dservice = uicomponent.getDownloadService() ;
+                      String attLink ;
+                      for (Attachment attach : msg.getAttachments()) {
+                        String downloadAction = uicomponent.event("DownloadAttachment", attach.getId());
+                    %>
+      						  	<div class="AttachmentContent">
+                        <%
+                        attLink = MailUtils.getImageSource(attach, dservice) ;
+                          if (attLink != null ) {
+                            if (attach.getMimeType().indexOf("image") > -1) {
+                              
+                            } else if (attach.getMimeType().indexOf("msword") > -1) {
+                              attLink = "/mail/skin/DefaultSkin/webui/skinIcons/24x24/icons/WordIcon.gif";
+                            } else if (attach.getMimeType().indexOf("pdf") > -1) {
+                              attLink = "/mail/skin/DefaultSkin/webui/skinIcons/24x24/icons/PDFIcon.gif";
+                            }
+                        %> 
+      						  		      <img class="AttachmentFile" src="$attLink">
+      						  		<%
                           }
-                      %> 
-    						  		      <img class="AttachmentFile" src="$attLink">
-    						  		<%
-                        }
-                      %>
-                      <div class="AttachmentBox">
-    										<div class="AttachmentIcon"><%=attach.getName()%></div>
-    										<div class="Size">Size: 63K &nbsp;&nbsp;&nbsp;<span class="Icon ViewDownloadIcon"><a href="#">View</a></span><span class="Icon DownloadIcon"> <a href="$downloadAction">Download</a></span></div>
-    						  		</div>
-    						  		<div style="clear: left;"><span></span></div>
-    						  	</div>
-                  <% 
-                    }
-                  %>
-  						  </div>
-              <% 
-                } 
-              %>  
-						</div>										
-					</div>
-				</div>
-				<div class="BottomLeftViewBoxStyle">
-					<div class="BottomRightViewBoxStyle">
-						<div class="BottomCenterViewBoxStyle"><span></span></div>										
-					</div>
-				</div>
-			</div>
+                        %>
+                        <div class="AttachmentBox">
+      										<div class="AttachmentIcon"><%=attach.getName()%></div>
+      										<div class="Size">Size: 63K &nbsp;&nbsp;&nbsp;<span class="Icon ViewDownloadIcon"><a href="#">View</a></span><span class="Icon DownloadIcon"> <a href="$downloadAction">Download</a></span></div>
+      						  		</div>
+      						  		<div style="clear: left;"><span></span></div>
+      						  	</div>
+                    <% 
+                      }
+                    %>
+    						  </div>
+                <% 
+                  } 
+                %>  
+  						</div>										
+  					</div>
+  				</div>
+  				<div class="BottomLeftViewBoxStyle">
+  					<div class="BottomRightViewBoxStyle">
+  						<div class="BottomCenterViewBoxStyle"><span></span></div>										
+  					</div>
+  				</div>
+  			</div>
+      </div>
 		</div>
-    <%}%>
+    <%
+     msgIndex++;
+    }%>
 <!--  End DecoratorBox ViewBoxStyle -->
 	</div>
 <%} else {%>
