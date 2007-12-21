@@ -203,15 +203,15 @@ public class UIMonthView extends UICalendarView {
       try {
         CalendarEvent calEvent = calendarview.getDataMap().get(eventId); 
         if(calEvent != null) {
-          java.util.Calendar tempCal = CalendarUtils.getInstanceTempCalendar() ;
-          tempCal.setTime(calEvent.getFromDateTime()) ;
-          int moveAmount =   Integer.valueOf((int)(Long.parseLong(value) - tempCal.getTimeInMillis())) ; 
-          System.out.println("\n\nmoveAmount " + moveAmount);
-          tempCal.add(java.util.Calendar.MILLISECOND, moveAmount) ;
-          calEvent.setFromDateTime(tempCal.getTime()) ;
-          tempCal.setTime(calEvent.getToDateTime()) ;
-          tempCal.add(java.util.Calendar.MILLISECOND, moveAmount) ;
-          calEvent.setToDateTime(tempCal.getTime()) ;
+          java.util.Calendar tempCalFrom = CalendarUtils.getInstanceTempCalendar() ;
+          tempCalFrom.setTime(calEvent.getFromDateTime()) ;
+          int moveAmount =   Integer.valueOf((int)(Long.parseLong(value) - tempCalFrom.getTimeInMillis())) ; 
+          tempCalFrom.add(java.util.Calendar.MILLISECOND, moveAmount) ;
+          calEvent.setFromDateTime(tempCalFrom.getTime()) ;
+          java.util.Calendar tempCalTo = CalendarUtils.getInstanceTempCalendar() ;
+          tempCalTo.setTime(calEvent.getToDateTime()) ;
+          tempCalTo.add(java.util.Calendar.MILLISECOND, moveAmount) ;
+          calEvent.setToDateTime(tempCalTo.getTime()) ;
           if(calEvent.getCalType().equals(CalendarUtils.PRIVATE_TYPE)) {
             CalendarUtils.getCalendarService().saveUserEvent(SessionsUtils.getSessionProvider(), username, calendarId, calEvent, false) ;
           }else if(calEvent.getCalType().equals(CalendarUtils.SHARED_TYPE)){

@@ -132,7 +132,7 @@
 					      }
 					      display = "" ;
 					     	dateTime = calendar.getTimeInMillis() ; // new GregorianCalendar(currentYear,currentMonth,dayOfMonth).getTimeInMillis() ;
-						    actionUpdate = uicomponent.event('UpdateEvent',dayOfMonth + '&' + uicomponent.EVENTID + '=event&' + uicomponent.CALENDARID + '=cal&' + uicomponent.CALTYPE + '=caltype') ;
+						    actionUpdate = uicomponent.event('UpdateEvent', dateTime + '&' + uicomponent.EVENTID + '=event&' + uicomponent.CALENDARID + '=cal&' + uicomponent.CALTYPE + '=caltype') ;
 					      dayActionLink = uicomponent.TYPE_DATE +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"="+ currentMonth +"&"+ uicomponent.DAY + "=" + dayOfMonth ;
 					      if (validDay) { 
 					        if (uicomponent.isCurrentDay(dayOfMonth, currentMonth, currentYear )) {
@@ -144,7 +144,7 @@
 					        }
 						      month = currentMonth + 1 ;
 					        %>
-					        <td actionLink="$actionUpdate" class='CalendarContentNomal UICellBlock' currentDate='$dayOfMonth' startTime='$dateTime' > 
+					        <td actionLink="$actionUpdate" class='CalendarContentNomal UICellBlock' startTime='$dateTime' > 
 					        	<div class='DayBox $clazz' >
 						        <a href="<%=uicomponent.event("GotoDate",dayActionLink)%>">
 						         <%=sdf.format(calendar.getTime())%> 
@@ -170,13 +170,6 @@
 					%>
 				</tbody>
 			</table>
-			<!-- BO Block -->
-			<% 
-			i = 1 ;
-			while(i++ < week) {%>			
-				<div class="UserSelectionBlock" style="display:none ;"><span></span></div>				
-			<%}%>
-			<!-- EO Block -->
 		</div>
 			</div>
 		</div>
