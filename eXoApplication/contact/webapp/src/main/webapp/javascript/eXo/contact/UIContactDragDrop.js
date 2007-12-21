@@ -182,8 +182,12 @@ UIContactDragDrop.prototype.dropCallback = function(dndEvent) {
       dndEvent.clickObject.appendChild(checkBoxElement) ;
     }
     
-    if (this.foundTargetObjectCatch.className == 'UITags') {
+    if (this.foundTargetObjectCatch.className.indexOf('UITags') != -1) {
       eXo.webui.UIForm.submitForm('UIContacts','TagChecked', true) ;
+      return ;
+    }
+    if (this.foundTargetObjectCatch.className.indexOf('PublicAddress') != -1) {
+      eXo.webui.UIForm.submitForm('UIContacts','PublicContact', true) ;
       return ;
     }
     var contactTypeId = this.foundTargetObjectCatch.getAttribute('tagname') ;
