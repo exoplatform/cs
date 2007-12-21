@@ -85,8 +85,8 @@ public class UIListView extends UICalendarView {
       return "app:/templates/calendar/webui/UIListView.gtmpl" ;
     }
   }
-  
-  
+
+
   /* (non-Javadoc)
    * @see org.exoplatform.calendar.webui.UICalendarView#refresh()
    * duplicate
@@ -224,6 +224,12 @@ public class UIListView extends UICalendarView {
       String categoryId = uiListView.getUIFormSelectBox(EVENT_CATEGORIES).getValue() ;
       uiListView.refresh(categoryId) ;
       uiListView.getUIFormSelectBox(EVENT_CATEGORIES).setValue(categoryId) ;
+      UIPreview uiPreview = uiListView.getAncestorOfType(UIListContainer.class).getChild(UIPreview.class) ;
+      if(uiListView.getEvents().length >0) {
+        uiPreview.setEvent(uiListView.getEvents()[0]) ;
+      } else {
+        uiPreview.setEvent(null) ;
+      }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiListView.getParent());           
     }
   }
