@@ -544,7 +544,6 @@ public class MailServiceImpl implements MailService{
     filter.setAccountId(accountId);
     filter.setSubjectCondition(Utils.CONDITION_IS);
     String subject = newMsg.getSubject() ;
-    subject = subject.replace("&", "&amp;");
     if (subject.indexOf("Re:") == 0) {
       subject = subject.substring(3, subject.length()).trim();
     } else if(subject.indexOf("Fwd:") == 0) {

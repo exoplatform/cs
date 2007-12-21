@@ -238,6 +238,11 @@ public class MessageFilter {
     
     //jcr:contains(., 'JSR 170')
     if(subject != null && subject.trim().length() > 0) {
+      subject = subject.replace("&", "&amp;");
+      subject = subject.replace("<", "&lt;");
+      subject = subject.replace(">", "&gt;");
+      subject = subject.replace("'", "&apos;");
+      subject = subject.replace("\"", "&quot;");
       if(hasConjuntion) stringBuffer.append(" and (") ;
       else stringBuffer.append("(") ;
       switch (getSubjectCondition()) {
