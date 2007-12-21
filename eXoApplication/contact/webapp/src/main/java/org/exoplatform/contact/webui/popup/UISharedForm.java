@@ -21,19 +21,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.exoplatform.contact.ContactUtils;
+import org.exoplatform.contact.SessionsUtils;
 import org.exoplatform.contact.service.ContactGroup;
+import org.exoplatform.contact.service.ContactService;
+import org.exoplatform.contact.webui.UIAddressBooks;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
-import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
-import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormInputInfo;
 import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormStringInput;
@@ -55,23 +57,18 @@ import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
     }
 )
 public class UISharedForm extends UIForm implements UIPopupComponent, UISelector{
-  final static public String FIELD_NAME = "categoryName".intern() ;
+  final static public String FIELD_NAME = "addressName".intern() ;
   final static public String FIELD_USER = "username".intern() ;
-  final static public String FIELD_EDIT = "canEdit".intern() ;
+  //final static public String FIELD_EDIT = "canEdit".intern() ;
   private Map<String, String> permission_ = new HashMap<String, String>() ;
-  private String calendarId_ ;
-  private boolean isAddNew_ = true ;
+  private String addressId_ ;
+  //private boolean isAddNew_ = true ;
   public UISharedForm() throws Exception{
     UIFormInputWithActions inputset = new UIFormInputWithActions("UIInputUserSelect") ;
     inputset.addChild(new UIFormInputInfo(FIELD_NAME, FIELD_NAME, null)) ;
     inputset.addUIFormInput(new UIFormStringInput(FIELD_USER, FIELD_USER, null)) ;
     List<ActionData> actions = new ArrayList<ActionData>() ;
-    /* ActionData selectGroupAction = new ActionData() ;
-    selectGroupAction.setActionListener("SelectPermission") ;
-    selectGroupAction.setActionName("SelectGroup") ;
-    selectGroupAction.setActionType(ActionData.TYPE_ICON) ;
-    selectGroupAction.setActionParameter(UISelectComponent.TYPE_GROUP) ;
-    actions.add(selectGroupAction) ;*/
+
     ActionData selectUserAction = new ActionData() ;
     selectUserAction.setActionListener("SelectPermission") ;
     selectUserAction.setActionName("SelectUser") ;
@@ -80,22 +77,16 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
     selectUserAction.setActionParameter(UISelectComponent.TYPE_USER) ;
     actions.add(selectUserAction) ;
 
-    /*ActionData selectMemberAction = new ActionData() ;
-    selectMemberAction.setActionListener("SelectPermission") ;
-    selectMemberAction.setActionName("SelectMemberShip") ;
-    selectMemberAction.setActionType(ActionData.TYPE_ICON) ;
-    selectMemberAction.setCssIconClass("SelectMemberIcon") ;
-    selectMemberAction.setActionParameter(UISelectComponent.TYPE_MEMBERSHIP) ;
-    actions.add(selectMemberAction) ;*/
     inputset.setActionField(FIELD_USER, actions) ;
-    inputset.addChild(new UIFormCheckBoxInput<Boolean>(FIELD_EDIT, FIELD_EDIT, null)) ;
+    //inputset.addChild(new UIFormCheckBoxInput<Boolean>(FIELD_EDIT, FIELD_EDIT, null)) ;
     addChild(inputset) ;
   }
 
-  public void init(String username, ContactGroup group, boolean isAddNew) {
-    isAddNew_ = isAddNew ;
-    calendarId_ = group.getId() ;
-    setCalendarName(group.getName()) ;
+  public void init(String username, ContactGroup contactGroup, boolean isAddNew) {
+    //isAddNew_ = isAddNew ;
+    addressId_ = contactGroup.getId() ;
+    setAddressName(contactGroup.getName()) ;
+        
     /*
     boolean canEdit = false ;
     if(cal.getEditPermission() != null) {
@@ -106,28 +97,26 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
         }
       }
     }
-    setCanEdit(canEdit) ;
     */
+    //setCanEdit(canEdit) ;
   }
-  
   public String getLabel(String id) {
     try {
       return super.getLabel(id) ;
     } catch (Exception e) {
-      // TODO: handle exception
       return id ;
     }
   }
-  public void setSelectedCalendarId(String id) { calendarId_ = id ;}
-  public void setCalendarName(String value) {
+  public void setSelectedAddressId(String id) { addressId_ = id ;}
+  public void setAddressName(String value) {
     getUIFormInputInfo(FIELD_NAME).setValue(value) ;
   }
-  protected void setCanEdit(boolean canEdit) {
+  /*protected void setCanEdit(boolean canEdit) {
     getUIFormCheckBoxInput(FIELD_EDIT).setChecked(canEdit) ;
   }
   protected boolean canEdit() {
     return getUIFormCheckBoxInput(FIELD_EDIT).isChecked() ;
-  }
+  }*/
   protected void setSharedUser(String value) {
     getUIStringInput(FIELD_NAME).setValue(value) ;
   }
@@ -142,13 +131,13 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
     permission_.put(value, value) ;
     StringBuilder sb = new StringBuilder() ;
     for(String s : permission_.values()) {
-      sb.append(s).append(", ") ;
+      if(sb != null && sb.length() > 0) sb.append(", ") ;
+      sb.append(s) ;
     }
     fieldInput.setValue(sb.toString()) ;
   }  
   static  public class SaveActionListener extends EventListener<UISharedForm> {
     public void execute(Event<UISharedForm> event) throws Exception {
-      /*
       UISharedForm uiForm = event.getSource() ;
       String names = uiForm.getUIStringInput(FIELD_USER).getValue() ;
       if(names == null || names.length() < 1) {
@@ -156,8 +145,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
         uiApp.addMessage(new ApplicationMessage("UISharedForm.msg.invalid-username", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
-      }      
-      CalendarService calendarService = CalendarUtils.getCalendarService() ;
+      }
       List<String> receiverUser = new ArrayList<String>() ;
       if(names.indexOf(",") > 0) {
         String[] array = names.split(",") ;
@@ -166,20 +154,23 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
         }
       }else {
         receiverUser.add(names.trim()) ;
-      }      
+      }   
+      /*
       if(uiForm.canEdit()) {
-        Calendar cal = calendarService.getUserCalendar(SessionsUtils.getSessionProvider(), CalendarUtils.getCurrentUser(), uiForm.calendarId_) ;
+        ContactGroup contactGroup = contactService.getGroup(
+            SessionsUtils.getSessionProvider(), ContactUtils.getCurrentUser(), uiForm.addressId_) ;
         String[] perms =  new String[]{} ;
         receiverUser.toArray(perms) ;
-        cal.setEditPermission(perms) ;
-        calendarService.saveUserCalendar(SessionsUtils.getSessionProvider(), CalendarUtils.getCurrentUser(), cal, false) ;
-      }
-      calendarService.shareCalendar(SessionsUtils.getSystemProvider(), CalendarUtils.getCurrentUser(), uiForm.calendarId_, receiverUser) ;
-      UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
-      UICalendars uiCalendars = calendarPortlet.findFirstComponentOfType(UICalendars.class) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendars) ;
-      calendarPortlet.cancelAction() ;  
-    */
+        //contactGroup.setEditPermission(perms) ;
+        contactService.saveGroup(
+          SessionsUtils.getSessionProvider(), ContactUtils.getCurrentUser(), contactGroup, false) ;
+      }*/
+      ContactUtils.getContactService().shareAddressBook(SessionsUtils
+          .getSystemProvider(), ContactUtils.getCurrentUser(), uiForm.addressId_, receiverUser) ;
+      UIContactPortlet contactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
+      UIAddressBooks addressBooks = contactPortlet.findFirstComponentOfType(UIAddressBooks.class) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(addressBooks) ;
+      contactPortlet.cancelAction() ;       
     }
   }
   static  public class SelectPermissionActionListener extends EventListener<UISharedForm> {

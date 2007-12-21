@@ -109,7 +109,8 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
           List<SelectItemOption<String>> ls = uiCategorySelect.getCategoryList();
           ls.add(new SelectItemOption<String>(groupName, group.getId())) ;
           uiCategorySelect.setCategoryList(ls);
-          uiCategorySelect.setValue(selectedGroup) ;
+          if (ContactUtils.isEmpty(selectedGroup)) uiCategorySelect.setValue(group.getId()) ;
+          else uiCategorySelect.setValue(selectedGroup) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiCategorySelect) ;          
         } else {
           UIImportForm importForm = popupContainer.findFirstComponentOfType(UIImportForm.class) ;
