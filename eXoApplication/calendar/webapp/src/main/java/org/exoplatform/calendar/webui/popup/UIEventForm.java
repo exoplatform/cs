@@ -20,8 +20,10 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.SessionsUtils;
@@ -148,10 +150,15 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   public void initForm(CalendarSetting calSetting, CalendarEvent eventCalendar) throws Exception {
     reset() ;
     UIEventDetailTab eventDetailTab = getChildById(TAB_EVENTDETAIL) ;
+    UIEventAttenderTab attenderTab = getChildById(TAB_EVENTATTENDER) ;
     List<SelectItemOption<String>> fromTimes = CalendarUtils.getTimesSelectBoxOptions(calSetting.getTimeFormat(),calSetting.getTimeFormat()) ;
     List<SelectItemOption<String>> toTimes = CalendarUtils.getTimesSelectBoxOptions(calSetting.getTimeFormat(),calSetting.getTimeFormat()) ;
     eventDetailTab.getUIFormComboBox(UIEventDetailTab.FIELD_FROM_TIME).setOptions(fromTimes) ;
     eventDetailTab.getUIFormComboBox(UIEventDetailTab.FIELD_TO_TIME).setOptions(toTimes) ;
+    List<SelectItemOption<String>> fromOptions = CalendarUtils.getTimesSelectBoxOptions(calSetting.getTimeFormat(),calSetting.getTimeFormat()) ;
+    List<SelectItemOption<String>> toOptions = CalendarUtils.getTimesSelectBoxOptions(calSetting.getTimeFormat(),calSetting.getTimeFormat()) ;
+    attenderTab.getUIFormComboBox(UIEventAttenderTab.FIELD_FROM_TIME).setOptions(fromOptions) ;
+    attenderTab.getUIFormComboBox(UIEventAttenderTab.FIELD_TO_TIME).setOptions(toOptions) ;
     if(eventCalendar != null) {
       isAddNew_ = false ;
       calendarEvent_ = eventCalendar ;
@@ -182,10 +189,9 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
         }
       }
       setParticipant(pars.toString()) ;
-      UIEventAttenderTab attenderTab = getChildById(TAB_EVENTATTENDER) ;
       attenderTab.updateParticipants(pars.toString());
-      attenderTab.getUIFormComboBox(UIEventAttenderTab.FIELD_FROM_TIME).setOptions(fromTimes);
-      attenderTab.getUIFormComboBox(UIEventAttenderTab.FIELD_TO_TIME).setOptions(toTimes);
+      /*attenderTab.getUIFormComboBox(UIEventAttenderTab.FIELD_FROM_TIME).setOptions(fromOptions);
+      attenderTab.getUIFormComboBox(UIEventAttenderTab.FIELD_TO_TIME).setOptions(toOptions);*/
       eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CALENDAR).setEnable(false) ;
       if(CalendarUtils.SHARED_TYPE.equals(calType_)) {
         eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CATEGORY).setRendered(false) ;
