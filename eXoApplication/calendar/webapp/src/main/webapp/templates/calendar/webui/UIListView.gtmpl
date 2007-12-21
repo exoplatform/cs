@@ -90,7 +90,11 @@
   	   	</tbody>
 		</table>
 		<%if(uicomponent.getEvents().size() <= 0) { %>
-		<div style="text-align:center;">Have no data </div>
+		<table>
+			<tr>
+				<td class="Null">Have no data </td>
+			</tr>
+		</table>
 		<%} else { 
 		   _ctx.include("app:/templates/calendar/webui/UIPageIterator.gtmpl");
 		  }

@@ -691,41 +691,50 @@
 	padding: 0px 16px 0px 1px;
 	*padding: 0px 3px 0px 0px;
 }
-.UIWeekView .EventWeekBar .Day{
+
+.UIWeekView .EventWeekBar .Day {
 	 
 }
-.UIWeekView .EventWeekBar .Day a{
+
+.UIWeekView .EventWeekBar .Day a {
 	 font-weight: none ;
 }
+
 .UIWeekView .EventWeekBar .Day a:hover {
 	color:blue;
 }
-.UIWeekView .EventWeekBar .Today{
+
+.UIWeekView .EventWeekBar .Today {
 	 font-weight: bold ;
 }
-.UIWeekView .EventWeekBar .Weekday{
+
+.UIWeekView .EventWeekBar .Weekday {
 }
-.UIWeekView .EventWeekBar .Weekend{
+
+.UIWeekView .EventWeekBar .Weekend {
 }
-.UIWeekView .EventWeekBar .Weekend a{
+
+.UIWeekView .EventWeekBar .Weekend a {
 	color: red;
 }
-.UIWeekView .EventWeekBar .Today a{
+
+.UIWeekView .EventWeekBar .Today a {
 	 color:red;
 }
-.UIWeekView .TdLine{
+
+.UIWeekView .TdLine {
 	border-top:  1px solid #c7c7c7;
 	width: 13.2%;
 	*width: 14%;
 }
 
-.UIWeekView .TdDotLine{
+.UIWeekView .TdDotLine  {
 	border-top:  1px dotted #c7c7c7;
 	width: 13.2%;
 	*width: 14%;
 }
 
-.UIWeekView .TdTime{
+.UIWeekView .TdTime {
 	text-align: right;
 	width: 55px;
 	-moz-user-select : none ;
@@ -735,44 +744,47 @@
 	border-top: none;
 }
 
-.UIWeekView .UIGrid td{
+.UIWeekView .UIGrid td {
 	padding: 0px;
 	height: 30px ;
 }
 
-.UIWeekView .EventAllday{
+.UIWeekView .EventAllday {
 	background: #DFE6F8;
 	border-bottom: 1px solid #c7c7c7;;
 }
 
-.UIWeekView .Today{
+.UIWeekView .Today {
 	background: #F4F6FC;
 }
-.UIWeekView .Weekday{
+
+.UIWeekView .Weekday {
 	background: #FFFFFF;
 }
-.UIWeekView .Weekend{
+
+.UIWeekView .Weekend {
 	background:#FCFCFC;
 }
-.UIWeekView .EventContainerBorder{
+
+.UIWeekView .EventContainerBorder {
 	border:1px solid #808080;
 	-moz-user-select : none ;
 }
 
-.UIWeekView .EventContainerBar{
+.UIWeekView .EventContainerBar {
 	border:1px solid #ffffff;
 	border-bottom: none;
 	-moz-user-select : none ;
 	cursor: move ;
 }
 
-.UIWeekView .EventDayContent .EventContainer{
+.UIWeekView .EventDayContent .EventContainer {
 	border:1px solid #ffffff;
 	border-top: none;
 	border: solid 1px red ;
 }
 
-.UIWeekView .EventContainerBorder .ResizeEventContainer{
+.UIWeekView .EventContainerBorder .ResizeEventContainer {
 	background: transparent ;
 	width: 20%;
 	height: 2px;
@@ -790,7 +802,7 @@
 	height: 13px;
 }
 
-.UIWeekView .EventAlldayContainer .LeftResizeEvent{
+.UIWeekView .EventAlldayContainer .LeftResizeEvent {
 	background: url('background/LeftResizeEvent2x11.gif') no-repeat ;	
 	width: 2px;
 	height: 11px;
@@ -799,7 +811,7 @@
 	margin: 1px 3px 0px 0px ;
 }
 
-.UIWeekView .EventAlldayContainer .RightResizeEvent{
+.UIWeekView .EventAlldayContainer .RightResizeEvent {
 	background: url('background/RightResizeEvent2x11.gif') no-repeat ;	
 	width: 2px;
 	height: 11px;
@@ -1046,6 +1058,7 @@
 
 .UIListView {
 	overflow: auto;
+	padding-left: 1px;
 }
 
 .ListBar {
@@ -1088,11 +1101,6 @@
 	margin: 3px 6px 0px 3px;
 }
 
-.UIListView {
-	padding-left: 1px;
-}
-
-
 
 .UIListView  table {
 	width: 99.4%;
@@ -1124,6 +1132,15 @@
 	width: 16px;
 	height: 16px;
 	margin: 4px;
+}
+
+.UIListView  .Null {
+	color: red; 
+	border: 1px solid #c7c7c7; 
+	border-top: none; 
+	background: white; 
+	line-height: 25px; 
+	text-align:center;
 }
 
 .highPriorityIcon {

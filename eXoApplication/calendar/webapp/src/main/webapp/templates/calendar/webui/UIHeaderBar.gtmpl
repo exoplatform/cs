@@ -18,7 +18,7 @@ import org.exoplatform.calendar.webui.UIMonthView;
 		<%}%>
 		<%if(uicomponent instanceof UIListView){%>
 		<div class="SeparatorLine"><span></span></div>
-		<div class="ViewTypeSelect" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
+		<div class="ViewTypeSelect" style="cursor:pointer;" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
 			<div class="ControlButton">
 				<div class="IconHolder <%=uicomponent.getViewType()%>Icon">
 					<%=uicomponent.getViewType()%>

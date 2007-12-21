@@ -280,7 +280,7 @@
 }
 
 .AddCategoryIcon {
-background: url('icons/AddCategory.gif') no-repeat ;
+		background: url('icons/AddCategory.gif') no-repeat left center;
 }
 
 
