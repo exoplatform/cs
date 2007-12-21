@@ -89,7 +89,7 @@ UICombobox.prototype.setValue = function(value) {
 		var am = String(timeFormat.am).toLowerCase() ;	
 		var pm = String(timeFormat.pm).toLowerCase() ;	
 		if (!time) {
-			return "12:00" ;
+			return UICombobox.defaultValue ;
 		}
 		if (hour > 12) {			
 			hour = "12" ;
@@ -113,6 +113,7 @@ UICombobox.prototype.setValue = function(value) {
 
 UICombobox.prototype.getTimeFormat= function() {
 	var items = eXo.calendar.UICombobox.items ;
+	if (items.length <= 0) return {"am":"AM", "pm":"PM"} ;
 	var first = eXo.core.DOMUtil.findFirstDescendantByClass(items[0], "div", "UIComboboxLabel").innerHTML ;
 	var last =  eXo.core.DOMUtil.findFirstDescendantByClass(items[items.length - 1], "div", "UIComboboxLabel").innerHTML ;
 	var am = first.match(/[A-Z]+/) ;
