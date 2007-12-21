@@ -41,20 +41,20 @@ UIContactPortlet.prototype.contactCallback = function(evt) {
 		var checkbox = eXo.core.DOMUtil.findFirstDescendantByClass(tr, "input", "checkbox") ;		
 		id = checkbox.name ;
 		eXo.webui.UIContextMenu.changeAction(UIContextMenu.menuElement, id) ;
-		if (tr.getAttribute("selectedTag") && (tr.getAttribute("selectedTag").toLowerCase()!="null")) {		
-			var moveContactIcon =  eXo.core.DOMUtil.findFirstDescendantByClass(UIContextMenu.menuElement, "div", "MoveContactIcon") ;
-			moveContactIcon.parentNode.href = "javascript: void(0) ;" ;
-			moveContactIcon.parentNode.style.color = "#cccccc" ;
-		}
+//		if (tr.getAttribute("selectedTag") && (tr.getAttribute("selectedTag").toLowerCase()!="null")) {		
+//			var moveContactIcon =  eXo.core.DOMUtil.findFirstDescendantByClass(UIContextMenu.menuElement, "div", "MoveContactIcon") ;
+//			moveContactIcon.parentNode.href = "javascript: void(0) ;" ;
+//			moveContactIcon.parentNode.style.color = "#cccccc" ;
+//		}
 	} else {
 		var VCardContent = eXo.core.DOMUtil.findAncestorByClass(src, "VCardContent") ;
 		id = VCardContent.getAttribute("id") ;
 		eXo.webui.UIContextMenu.changeAction(UIContextMenu.menuElement, id) ;
-		if (VCardContent.getAttribute("selectedTag") && (VCardContent.getAttribute("selectedTag").toLowerCase()!="null")) {		
-			var moveContactIcon =  eXo.core.DOMUtil.findFirstDescendantByClass(UIContextMenu.menuElement, "div", "MoveContactIcon") ;
-			moveContactIcon.parentNode.href = "javascript: void(0) ;" ;
-			moveContactIcon.parentNode.style.color = "#cccccc" ;
-		}
+//		if (VCardContent.getAttribute("selectedTag") && (VCardContent.getAttribute("selectedTag").toLowerCase()!="null")) {		
+//			var moveContactIcon =  eXo.core.DOMUtil.findFirstDescendantByClass(UIContextMenu.menuElement, "div", "MoveContactIcon") ;
+//			moveContactIcon.parentNode.href = "javascript: void(0) ;" ;
+//			moveContactIcon.parentNode.style.color = "#cccccc" ;
+//		}
 	}
 } ;
 
