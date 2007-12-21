@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.exoplatform.forum.ForumFormatFunction;
 import org.exoplatform.forum.webui.UIFormSelectBoxForum;
 import org.exoplatform.forum.webui.UIForumPortlet;
 import org.exoplatform.forum.webui.UITopicContainer;
@@ -94,7 +95,7 @@ public class UIForumOptionForm extends UIForm implements UIPopupComponent {
 		List<SelectItemOption<String>> list ;
 		list = new ArrayList<SelectItemOption<String>>() ;
 		for(String string : timeZone) {
-			list.add(new SelectItemOption<String>(string + "/timeZone", getTimeZoneNumberInString(string))) ;
+			list.add(new SelectItemOption<String>(string + "/timeZone", ForumFormatFunction.getTimeZoneNumberInString(string))) ;
 		}
 		UIFormSelectBoxForum timeZone = new UIFormSelectBoxForum(FIELD_TIMEZONE_SELECTBOX, FIELD_TIMEZONE_SELECTBOX, list) ;
 		Date date = new Date() ;
@@ -149,43 +150,7 @@ public class UIForumOptionForm extends UIForm implements UIPopupComponent {
 	public UIFormSelectBoxForum getUIFormSelectBoxForum(String name) {
 		return	findComponentById(name) ;
 	}
-	
-  @SuppressWarnings("deprecation")
-  public String getFormatDate(String format,Date postDate) {
-		 long time = postDate.getHours() ;
-		 StringBuffer stringBuffer = new StringBuffer() ;
-		 if(format.equals("24H")){
-			 stringBuffer.append(time).append(":").append(postDate.getMinutes());
-		 } else {
-			 String str = "" ;
-			 if(time < 12) str = "AM";
-			 else {
-				 str = "PM";
-				 if(time > 12) time = time - 12 ;
-			 }
-			 stringBuffer.append(time).append(":").append(postDate.getMinutes()).append(" ").append(str);
-		 }
-		return stringBuffer.toString();
-	}
-
-	private String getTimeZoneNumberInString(String string) {
-		if(string != null && string.length() > 0) {
-			StringBuffer stringBuffer = new StringBuffer();
-			int t = 0;
-			for(int i = 0; i <	string.length(); ++i) {
-				char c = string.charAt(i) ; 
-				if (Character.isDigit(c) || c == '-' || c == '+' || c == ':'){
-					if(c == ':') c = '.';
-					if(c == '-' || c == '+') t = t + 1;
-					if(c == '3' && string.charAt(i-1) == ':') c = '5';
-					if(t == 1 || t == 0) stringBuffer.append(c);
-					if(t == 2) t = 1;
-				}
-			}
-			return stringBuffer.toString() ;
-		}
-		return null ;
-	}
+  
 	public void activate() throws Exception {
 		// TODO Auto-generated method stub
 	}

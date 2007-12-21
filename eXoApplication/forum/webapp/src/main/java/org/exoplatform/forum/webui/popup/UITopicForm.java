@@ -21,6 +21,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.forum.ForumFormatFunction;
 import org.exoplatform.forum.ForumUtils;
 import org.exoplatform.forum.service.BufferAttachment;
 import org.exoplatform.forum.service.ForumAttachment;
@@ -204,20 +205,11 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
 	
 	
 	private String[] splitForForum (String str) throws Exception {
-		if(str != null && str.length() > 0) {
-			if(str.contains(",")) return str.trim().split(",") ;
-			else return str.trim().split(";") ;
-		} else return new String[] {} ;
+		return ForumFormatFunction.splitForForum(str);
 	}
 	
 	private String unSplitForForum (String[] str) throws Exception {
-		StringBuilder rtn = new StringBuilder();
-		if(str.length > 0) {
-			for (String temp : str) {
-				rtn.append(temp).append(",") ; 
-			}
-		}
-		return rtn.toString() ;
+		return ForumFormatFunction.unSplitForForum(str) ;
 	}
 	
 	public void setUpdateTopic(Topic topic, boolean isUpdate) throws Exception {

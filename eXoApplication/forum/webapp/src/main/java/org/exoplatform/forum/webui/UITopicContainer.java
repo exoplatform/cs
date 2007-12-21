@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.forum.ForumFormatFunction;
 import org.exoplatform.forum.ForumUtils;
 import org.exoplatform.forum.service.Forum;
 import org.exoplatform.forum.service.ForumService;
@@ -184,30 +185,6 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
 		return null ;
 	}
 	
-	@SuppressWarnings("unused")
-	private String[] getStarNumber(Topic topic) throws Exception {
-		double voteRating = topic.getVoteRating() ;
-		int star = (int)voteRating ;
-		String[] className = new String[6] ;
-		float k = 0;
-		for (int i = 0; i < 5; i++) {
-			if(i < star) className[i] = "star" ;
-			else if(i == star) {
-				k = (float) (voteRating - i) ; 
-				if(k < 0.25) className[i] = "notStar" ;
-				if(k >= 0.25 && k < 0.75) className[i] = "halfStar" ;
-				if(k >= 0.75) className[i] = "star" ;
-			} else {
-				className[i] = "notStar" ;
-			}
-			
-			className[5] = ("" + voteRating) ;
-			if(className[5].length() >= 3) className[5] = className[5].substring(0, 3) ;
-			if(k == 0) className[5] = "" + star ; 
-		}
-		return className ;
-	}
-	
 	public void setMaxPostInPage(long maxPost) {
 		this.maxPost = maxPost ;
 	}
@@ -217,18 +194,19 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
 		pageListPost.setPageSize(this.maxPost) ;
 		return pageListPost;
 	}
+	
+	
+	@SuppressWarnings("unused")
+	private String[] getStarNumber(Topic topic) throws Exception {
+		double voteRating = topic.getVoteRating() ;
+		return ForumFormatFunction.getStarNumber(voteRating) ;
+	}
+	
 	@SuppressWarnings("unused")
 	private String getStringCleanHtmlCode(String sms) {
-		StringBuffer string = new StringBuffer();
-		char c; boolean get = true ;
-		for (int i = 0; i < sms.length(); i++) {
-			c = sms.charAt(i);
-			if(c == '<') get = false ;
-			if(get) string.append(c);
-			if(c == '>') get = true ;
-		}
-		return string.toString();
+		return ForumFormatFunction.getStringCleanHtmlCode(sms);
 	}
+
 	@SuppressWarnings("unused")
 	private List<Tag> getTagsByTopic(String[] tagIds) throws Exception {
 		return this.forumService.getTagsByTopic(ForumUtils.getSystemProvider(), tagIds);	
