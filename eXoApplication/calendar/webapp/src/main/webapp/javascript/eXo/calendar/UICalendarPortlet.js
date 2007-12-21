@@ -635,7 +635,6 @@ UICalendarPortlet.prototype.showContextMenu = function() {
 	UIContextMenu.attach(["EventWeekContent","EventAlldayContainer"],"UIWeekViewRightMenu") ;
 	
 	UIContextMenu.attach("UIListViewRow","UIListViewEventRightMenu") ;
-	//UIContextMenu.attach(["EventContainerBoder","EventContainerBar","EventContainer","ResizeEventContainer"],"UIWeekViewEventRightMenu") ;
 } ;
 
 UICalendarPortlet.prototype.dayViewCallback = function(evt){
@@ -790,9 +789,12 @@ UICalendarPortlet.prototype.filterByCalendar = function(calendarId, status) {
 			}
 		}
 	}
-	//if (document.getElementById("UIMonthViewGrid")) eXo.calendar.UIMonthView.init() ;
-	if (document.getElementById("UIDayViewGrid")) UICalendarPortlet.showEvent() ;
-	if (document.getElementById("UIWeekViewGrid")) eXo.calendar.UIWeekView.init() ;
+	try {	//TODO: review order javascript file loading
+		if (document.getElementById("UIMonthView")) eXo.calendar.UIMonthView.init() ;
+		if (document.getElementById("UIDayViewGrid")) UICalendarPortlet.showEvent() ;
+		if (document.getElementById("UIWeekViewGrid")) eXo.calendar.UIWeekView.init() ;
+	} 
+	catch(e) {} ;
 
 } ;
 
