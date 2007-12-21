@@ -2,6 +2,7 @@
 	import org.exoplatform.calendar.service.GroupCalendarData;
 	def rcontext = _ctx.getRequestContext() ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.checkLayout() ;') ;
+  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.checkFilter("' + uiform.id + '") ;') ;
 %>
 <div class="UICalendars" >
 <%uiform.begin()%>

@@ -798,7 +798,8 @@ UICalendarPortlet.prototype.filterByCalendar = function(calendarId, status) {
 
 UICalendarPortlet.prototype.initFilterByCategory = function(obj) {
 	var selectbox = eXo.core.DOMUtil.findFirstDescendantByClass(obj, "select", "selectbox") ;
-	selectbox.onchange = eXo.calendar.UICalendarPortlet.filterByCategory ;
+	var onchange = selectbox.getAttribute("onchange") ;
+	if (!onchange) selectbox.onchange = eXo.calendar.UICalendarPortlet.filterByCategory ;
 } ;
 
 UICalendarPortlet.prototype.filterByCategory = function() {
@@ -822,6 +823,18 @@ UICalendarPortlet.prototype.filterByCategory = function() {
 	if (document.getElementById("UIDayViewGrid")) eXo.calendar.UICalendarPortlet.showEvent() ;
 	if (document.getElementById("UIWeekViewGrid")) eXo.calendar.UIWeekView.init() ;
 } ;
+
+UICalendarPortlet.prototype.checkFilter = function(form) {
+	if(typeof(form) == "string") form = document.getElementById(form) ;
+	var calendarItem = eXo.core.DOMUtil.findDescendantsByClass(form, "div", "CalendarItem") ;
+	var len = calendarItem.length ;
+	var checkbox = null ;
+	for(var i = 0 ; i < len ; i ++) {
+		checkbox = eXo.core.DOMUtil.findFirstDescendantByClass(calendarItem[i], "div", "CheckBox") ;
+		this.initFilter(checkbox, 1) ;
+	}
+} ;
+
 UICalendarPortlet.prototype.showView = function(obj, evt) {
 	var _e = window.event || evt ;
 	_e.cancelBubble = true ;	
