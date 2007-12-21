@@ -40,13 +40,14 @@ public class ContactPageList extends JCRPageList {
   private NodeIterator iter_ = null ;
   private boolean isQuery_ = false ;
   private String value_ ;
-  
-  public ContactPageList(String username, NodeIterator iter, long pageSize, String value, boolean isQuery ) throws Exception{
+  private String contactType_ = "0" ;
+  public ContactPageList(String username, NodeIterator iter, long pageSize, String value, boolean isQuery, String type ) throws Exception{
     super(pageSize) ;
     username_ = username;
     iter_ = iter ;
     value_ = value ;
     isQuery_ = isQuery ;
+    contactType_ = type ;
     setAvailablePage(iter.getSize()) ;    
   }
   
@@ -78,7 +79,7 @@ public class ContactPageList extends JCRPageList {
       if(iter_.hasNext()){
         currentNode = iter_.nextNode() ;
         if(currentNode.isNodeType("exo:contact")) {
-          currentListPage_.add(getContact(currentNode)) ;        
+          currentListPage_.add(getContact(currentNode, contactType_)) ;        
         }
       }else {
         break ;
@@ -87,7 +88,7 @@ public class ContactPageList extends JCRPageList {
     iter_ = null ;    
   }
   
-  private Contact getContact(Node contactNode) throws Exception {
+  private Contact getContact(Node contactNode, String type) throws Exception {
     Contact contact = new Contact();
     if(contactNode.hasProperty("exo:id")) contact.setId(contactNode.getProperty("exo:id").getString()) ;
     if(contactNode.hasProperty("exo:fullName"))contact.setFullName(contactNode.getProperty("exo:fullName").getString());
@@ -129,7 +130,7 @@ public class ContactPageList extends JCRPageList {
     if(contactNode.hasProperty("exo:mobilePhone"))contact.setMobilePhone(contactNode.getProperty("exo:mobilePhone").getString());
     if(contactNode.hasProperty("exo:webPage"))contact.setWebPage(contactNode.getProperty("exo:webPage").getString());
     if(contactNode.hasProperty("exo:note"))contact.setNote(contactNode.getProperty("exo:note").getString());
-    if(contactNode.hasProperty("exo:categories"))contact.setCategories(ValuesToStrings(contactNode.getProperty("exo:categories").getValues()));
+    if(contactNode.hasProperty("exo:categories"))contact.setAddressBook(ValuesToStrings(contactNode.getProperty("exo:categories").getValues()));
     if(contactNode.hasProperty("exo:tags")) contact.setTags(ValuesToStrings(contactNode.getProperty("exo:tags").getValues()));
     if(contactNode.hasProperty("exo:editPermission")) contact.setEditPermission(ValuesToStrings(contactNode.getProperty("exo:editPermission").getValues()));
     if(contactNode.hasProperty("exo:lastUpdated"))contact.setLastUpdated(contactNode.getProperty("exo:lastUpdated").getDate().getTime());
@@ -146,6 +147,7 @@ public class ContactPageList extends JCRPageList {
         contact.setAttachment(file) ;
       }
     }
+    contact.setContactType(type) ;
     return contact ;
   }
   
@@ -183,7 +185,7 @@ public class ContactPageList extends JCRPageList {
     Contact contact;
     while (iter_.hasNext()) {
       Node contactNode = iter_.nextNode();
-      contact = getContact(contactNode);
+      contact = getContact(contactNode, contactType_);
       contacts.add(contact);
     }
     return contacts; 

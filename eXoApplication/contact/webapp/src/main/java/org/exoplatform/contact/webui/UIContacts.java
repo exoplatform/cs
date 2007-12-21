@@ -41,6 +41,7 @@ import org.exoplatform.contact.webui.popup.UIContactForm;
 import org.exoplatform.contact.webui.popup.UIPopupAction;
 import org.exoplatform.contact.webui.popup.UIPopupContainer;
 import org.exoplatform.download.DownloadService;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -223,7 +224,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       uiCategorySelect.setPrivateGroupMap(contactPortlet
           .findFirstComponentOfType(UIAddressBooks.class).getPrivateGroupMap()) ;
       uiCategorySelect.addCategories() ;
-      uiCategorySelect.setValue(contact.getCategories()[0]) ;
+      uiCategorySelect.setValue(contact.getAddressBook()[0]) ;
       uiCategorySelect.disableSelect() ;
       uiContactForm.setValues(contact);
       uiContactForm.setNew(false) ;
@@ -303,10 +304,10 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       UIContactPortlet uiContactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class) ;
       UIPopupAction popupAction = uiContactPortlet.getChild(UIPopupAction.class) ;
       UIMoveContactsForm uiMoveForm = popupAction.activate(UIMoveContactsForm.class, 540) ;
-      Map<String, String> movedContacts = new HashMap<String, String>() ;
+      Map<String, Contact> movedContacts = new HashMap<String, Contact>() ;
       Map<String, Contact> contacts = uiContacts.contactMap ;
       for (String contact : contactIds) {
-        movedContacts.put(contact, contacts.get(contact).getFullName()) ;
+        movedContacts.put(contact, uiContacts.contactMap.get(contact)) ;
       }
       uiMoveForm.setContacts(movedContacts) ;
       UIAddressBooks addressBooks = uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class) ;
@@ -321,21 +322,28 @@ public class UIContacts extends UIForm implements UIPopupComponent {
     public void execute(Event<UIContacts> event) throws Exception {
       UIContacts uiContacts = event.getSource();
       String addressBookId = event.getRequestContext().getRequestParameter(OBJECTID);
-      @SuppressWarnings("unused")
-      String type = event.getRequestContext().getRequestParameter("contactType");
+      String type = event.getRequestContext().getRequestParameter("addressType");
       String[] addressBooks = {addressBookId} ;
       List<String> contactIds = new ArrayList<String>();
-      @SuppressWarnings("unused")
+      List<Contact> contacts = new ArrayList<Contact>();
       UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
       contactIds = uiContacts.getCheckedContacts() ;
-      UIAddressBooks uiAddressBooks = uiContacts.getAncestorOfType(UIWorkingContainer.class)
+      for(String id : contactIds) {
+      	Contact ct = uiContacts.contactMap.get(id) ;
+      	if(ct != null) {
+      		ct.setAddressBook(addressBooks) ;
+      		contacts.add(ct) ;
+      	}
+      }
+      if(contacts.size() == 0) return ;
+      /*UIAddressBooks uiAddressBooks = uiContacts.getAncestorOfType(UIWorkingContainer.class)
         .findFirstComponentOfType(UIAddressBooks.class) ;
-      boolean toPublic = uiAddressBooks.getPublicGroupMap().containsKey(addressBookId) ;
-      ContactUtils.getContactService().moveContacts(SessionsUtils.getSystemProvider()
-        , ContactUtils.getCurrentUser(), contactIds, addressBooks, toPublic) ;
+      boolean toPublic = uiAddressBooks.getPublicGroupMap().containsKey(addressBookId) ;*/
+      
+      ContactUtils.getContactService().moveContacts(SessionProvider.createSystemProvider(), ContactUtils.getCurrentUser(), contacts, type);
       uiContacts.updateList() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBooks) ;
+      //event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBooks) ;
     }
   }
   

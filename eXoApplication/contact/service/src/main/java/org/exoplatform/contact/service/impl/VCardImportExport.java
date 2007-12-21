@@ -463,7 +463,7 @@ public class VCardImportExport implements ContactImportExport {
       // Then store it to JCR storage
       // ////////////////////////////////
 
-      contact.setCategories(new String[] { groupId });
+      contact.setAddressBook(new String[] { groupId });
       ContactService contactService = (ContactService) PortalContainer
           .getComponent(ContactService.class);
       contactService.saveContact(sProvider, username, contact, true);

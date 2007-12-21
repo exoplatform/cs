@@ -24,6 +24,7 @@ import java.util.MissingResourceException;
 
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.SessionsUtils;
+import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContacts;
 import org.exoplatform.contact.webui.UIWorkingContainer;
@@ -53,7 +54,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
     }
 )
 public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
-  private Map<String, String> movedContacts = new HashMap<String, String>() ;
+  private Map<String, Contact> movedContacts = new HashMap<String, Contact>() ;
   private static String[] FIELD_SHAREDCONTACT_BOX = null;
   private Map<String, String> privateGroupMap_ = new HashMap<String, String>() ;
   
@@ -74,8 +75,8 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
     }
   }
   
-  public void setContacts(Map<String, String> contacts) { movedContacts = contacts ; }
-  public Map<String, String> getContacts() { return movedContacts ; }
+  public void setContacts(Map<String, Contact> contacts) { movedContacts = contacts ; }
+  public Map<String, Contact> getContacts() { return movedContacts ; }
   
   public String getContactsName() {
     StringBuffer buffer = new StringBuffer() ;
@@ -105,10 +106,18 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
   static  public class SelectGroupActionListener extends EventListener<UIMoveContactsForm> {
     public void execute(Event<UIMoveContactsForm> event) throws Exception {
       UIMoveContactsForm uiMoveContactForm = event.getSource() ;
-      String groupId = event.getRequestContext().getRequestParameter(OBJECTID);
-      UIContactPortlet uiContactPortlet = uiMoveContactForm.getAncestorOfType(UIContactPortlet.class); 
+      String addressBookId = event.getRequestContext().getRequestParameter(OBJECTID);
+      String type = event.getRequestContext().getRequestParameter("addressType");
+      UIContactPortlet uiContactPortlet = uiMoveContactForm.getAncestorOfType(UIContactPortlet.class);
+      List<Contact> contacts = new ArrayList<Contact>() ;
+      for(String id : uiMoveContactForm.getContactIds()) {
+      	Contact ct = uiMoveContactForm.movedContacts.get(id) ;
+      	ct.setAddressBook(new String[]{addressBookId}) ;
+      	contacts.add(ct) ;
+      }
+      if(contacts.size() == 0) return ;
       ContactUtils.getContactService().moveContacts(SessionsUtils.getSystemProvider()
-        , ContactUtils.getCurrentUser(), uiMoveContactForm.getContactIds(), new String[] { groupId }, false) ;
+        , ContactUtils.getCurrentUser(), contacts, type) ;
       uiContactPortlet.findFirstComponentOfType(UIContacts.class).updateList() ;
       uiContactPortlet.cancelAction() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(
@@ -119,13 +128,14 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
   static  public class SaveActionListener extends EventListener<UIMoveContactsForm> {
     public void execute(Event<UIMoveContactsForm> event) throws Exception {
       UIMoveContactsForm uiMoveContactForm = event.getSource() ;
+      String type = event.getRequestContext().getRequestParameter("addressType");
       UIContactPortlet uiContactPortlet = uiMoveContactForm.getAncestorOfType(UIContactPortlet.class) ;
-      StringBuffer sharedGroups = new StringBuffer("");
+      StringBuffer publicGroups = new StringBuffer("");
       for (int i = 0; i < FIELD_SHAREDCONTACT_BOX.length; i ++) {
         if (uiMoveContactForm.getUIFormCheckBoxInput(FIELD_SHAREDCONTACT_BOX[i]).isChecked())
-          sharedGroups.append(FIELD_SHAREDCONTACT_BOX[i] + ",");
+          publicGroups.append(FIELD_SHAREDCONTACT_BOX[i] + ",");
       }
-      if (ContactUtils.isEmpty(sharedGroups.toString())) {
+      if (ContactUtils.isEmpty(publicGroups.toString())) {
         UIApplication uiApp = uiMoveContactForm.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.selectSharedGroups-required", null, 
             ApplicationMessage.WARNING)) ;
@@ -133,9 +143,16 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
         return ; 
       }
      
-      String[] categories = sharedGroups.toString().split(",") ;
+      String[] addressBooks = publicGroups.toString().split(",") ;
+      List<Contact> contacts = new ArrayList<Contact>() ;
+      for(String id : uiMoveContactForm.getContactIds()) {
+      	Contact ct = uiMoveContactForm.movedContacts.get(id) ;
+      	ct.setAddressBook(addressBooks) ;
+      	contacts.add(ct) ;
+      }
+      if(contacts.size() == 0) return ;      
       ContactUtils.getContactService().moveContacts(SessionsUtils.getSystemProvider()
-        , ContactUtils.getCurrentUser(), uiMoveContactForm.getContactIds(), categories, true) ;
+        , ContactUtils.getCurrentUser(), contacts, type) ;
       
       uiContactPortlet.findFirstComponentOfType(UIContacts.class).updateList() ;
       uiContactPortlet.cancelAction() ;

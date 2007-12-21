@@ -66,7 +66,7 @@
 				cssClass = "Normal" ;
 				if(contactGroup.getId().equals(uicomponent.getSelectedGroup()))	cssClass = "Selected" ;		
 		%>
-		<div  class="ItemList $cssClass" type="0">
+		<div  class="ItemList $cssClass" addressType="0">
 			<a href="$actionLink" id="<%= contactGroup.getId() %>" class="IconHolder AddressIcon" isPublic="false">
 				<%=contactGroup.getName()%>
 			</a>
@@ -87,7 +87,7 @@
 				String actionLink  = uicomponent.event("SelectSharedGroup", group) ;				
 				if(group.equals(uicomponent.getSelectedGroup()))	cssClass = "Selected" ;
 	 %>
-		<div class="ItemList $cssClass" type="1">
+		<div class="ItemList $cssClass" addressType="1">
 			<a id="$group" href="$actionLink" class="IconHolder AddressIcon"  isPublic="true">
 				<%= sharedGroups.get(group) %>
 			</a>
@@ -108,7 +108,7 @@
 				String actionLink  = uicomponent.event("SelectPublicGroup", group) ;				
 				if(group.equals(uicomponent.getSelectedGroup()))	cssClass = "Selected" ;	
 			%>
-				<div class="ItemList $cssClass" type="2">
+				<div class="ItemList $cssClass" addressType="2">
 					<a id="$group" href="$actionLink" class="IconHolder AddressIcon"  isPublic="true">$group</a>
 				</div>
 		<% } %>

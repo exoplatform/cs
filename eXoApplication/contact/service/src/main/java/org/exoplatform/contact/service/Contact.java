@@ -78,7 +78,7 @@ public class Contact {
    * 	2: Public */
   private String contactType = "0" ;
   
-  private String[] categories ;
+  private String[] addressBook ;
   private String[] tags ;
   private String[] editPermission ;
   private boolean isShared = false ;
@@ -206,8 +206,8 @@ public class Contact {
   public String getContactType()  { return contactType ; }
   public void   setContactType(String s) { contactType = s ; }
   
-  public String[] getCategories() { return categories ; }
-  public void   setCategories(String[] s) { categories = s ; }
+  public String[] getAddressBook() { return addressBook ; }
+  public void   setAddressBook(String[] s) { addressBook = s ; }
   
   public String[] getTags() { return tags ; }
   public void   setTags(String[] s) { tags = s ; }

@@ -202,12 +202,7 @@ UIContactDragDrop.prototype.dropCallback = function(dndEvent) {
 	    eXo.webui.UIForm.submitForm('UIContacts','DNDContactsToTag', true) ;
 	    return ;
     }
-
-    var addressBookTypeNode = eXo.core.DOMUtil.findAncestorByClass(this.foundTargetObjectCatch, 'ItemList') ;
-    var addressBookType = null ;
-    if (addressBookTypeNode) {
-      addressBookType = addressBookTypeNode.getAttribute('type') ;
-    }
+    var addressBookType = this.foundTargetObjectCatch.getAttribute('addresstype') ;
     
     // request service
     var uiMsgList = document.getElementById('UIContacts') ;

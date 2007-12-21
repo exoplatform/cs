@@ -224,7 +224,7 @@ public class UIContactForm extends UIFormTabPane implements UISelector {
   public void setValues(Contact contact) throws Exception {
     contact_ = contact ;
     if(contact.isShared()) {
-      String[] categories = contact.getCategories();
+      String[] categories = contact.getAddressBook();
       for (String category : categories) {
         UIFormCheckBoxInput checkBoxInput = getUIFormCheckBoxInput(category) ;
         if (checkBoxInput != null) checkBoxInput.setChecked(true) ;
@@ -377,7 +377,7 @@ public class UIContactForm extends UIFormTabPane implements UISelector {
       if (isNew) {
         List<String> sharedGroups = uiContactForm.getCheckedSharedGroup() ;
         if (sharedGroups.size() > 0) {
-          contact.setCategories(sharedGroups.toArray(new String[] {})) ;
+          contact.setAddressBook(sharedGroups.toArray(new String[] {})) ;
           String editPermission = uiContactForm.getUIStringInput(FIELD_EDITPERMISSION).getValue() ;
           if (!ContactUtils.isEmpty(editPermission))
             contact.setEditPermission(editPermission.split(","));
@@ -393,7 +393,7 @@ public class UIContactForm extends UIFormTabPane implements UISelector {
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
             return ;
           }
-          contact.setCategories(new String[] { category });
+          contact.setAddressBook(new String[] { category });
           contactService.saveContact(SessionsUtils.getSessionProvider(), username, contact, isNew);
         }
       } else {
