@@ -258,6 +258,21 @@ public class UIMessageList extends UIForm {
     return new ArrayList<String>(participators.values());
   }
   
+  public List<Tag> getTags(Message msg) throws Exception {
+    UIMailPortlet uiPortlet = getAncestorOfType(UIMailPortlet.class);
+    String username = uiPortlet.getCurrentUser() ;
+    String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+    MailService mailSrv = getApplicationComponent(MailService.class);
+    List<Tag> tagList = new ArrayList<Tag>();
+    if (msg.getTags() != null && msg.getTags().length > 0) {
+      for (int i = 0; i < msg.getTags().length; i++) {
+        Tag tag = mailSrv.getTag(SessionsUtils.getSessionProvider(), username, accountId, msg.getTags()[i]);
+        tagList.add(tag);
+      }
+    }
+    return tagList;
+  } 
+  
   public String getAllTagName(Message msg) throws Exception {
     UIMailPortlet uiPortlet = getAncestorOfType(UIMailPortlet.class);
     String username = uiPortlet.getCurrentUser() ;

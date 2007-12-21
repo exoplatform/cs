@@ -79,6 +79,9 @@
 	background: url('icons/YellowTag.gif') no-repeat left center;
 }
 
+.MultipTag {
+	background: url('icons/MultipTag.gif') no-repeat left center;
+}
 
 .MoreActionsIcon {
 	background: url('icons/MoreActions.gif') no-repeat left;

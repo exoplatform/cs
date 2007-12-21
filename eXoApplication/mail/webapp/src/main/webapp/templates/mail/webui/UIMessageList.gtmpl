@@ -1,6 +1,7 @@
 <%
  import org.exoplatform.mail.service.Message;
- import org.exoplatform.mail.service.Utils; 
+ import org.exoplatform.mail.service.Utils;
+ import org.exoplatform.mail.service.Tag ;
  import org.exoplatform.mail.service.MessagePageList;
  import org.exoplatform.mail.MailUtils;
  String compId = uicomponent.getId() ;
@@ -347,8 +348,16 @@
     				<td style="padding: 0px; border-right: 1px solid #ffffff;">
     				  <% 
                 if (msg.getTags() != null && msg.getTags().length > 0) {
-                  String colorCss = uicomponent.getFirstTag(msg).getColor() + "Tag"; 
-                  String title = uicomponent.getAllTagName(msg);
+                  String colorCss = "";
+                  String title = "";
+                  if (msg.getTags().length > 1) {
+                    colorCss = "MultipTag";
+                  } else if (uicomponent.getTags(msg).size() > 0) {
+                    colorCss = uicomponent.getTags(msg).get(0).getColor() + "Tag";
+                  }
+                  for (Tag tag : uicomponent.getTags(msg)) {
+                    title += "[" + tag.getName() + "] ";
+                  }
               %>
                 <a href="$actionLink" title="$title"><div class="IconTag $colorCss"><span></span></div></a>
               <%}%>
