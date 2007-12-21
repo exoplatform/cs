@@ -80,14 +80,14 @@ UICombobox.prototype.setValue = function(value) {
 	var value = String(value).trim().toLowerCase() ;
 	var UICombobox = eXo.calendar.UICombobox ;
 	var time = UICombobox.digitToTime(value) ;
-	var timeFormat = UICombobox.getTimeFormat() ;
-	var am = String(timeFormat.am).toLowerCase() ;	
-	var pm = String(timeFormat.pm).toLowerCase() ;	
 	var hour = parseInt(time.hour) ;
 	var min = parseInt(time.minutes) ;
 	if (min > 60) min = "00" ;
 	else min = time.minutes ;
 	if (timeSetting == setting[0]) {
+		var timeFormat = UICombobox.getTimeFormat() ;
+		var am = String(timeFormat.am).toLowerCase() ;	
+		var pm = String(timeFormat.pm).toLowerCase() ;	
 		if (!time) {
 			return "12:00" ;
 		}
