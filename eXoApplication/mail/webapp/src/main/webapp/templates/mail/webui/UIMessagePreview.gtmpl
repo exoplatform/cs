@@ -63,8 +63,14 @@
                     </div>
                   </div>
                   <div class="MessageAttachment" >
-                    <div class="MonthDate">June 26</div>
-                    <div class="AttachmentIcon"><span></span></div>
+                    <% if (msg.getAttachments().size() > 0) { %>
+                      <div class="AttachmentIcon"><span></span></div>
+                    <% } %>
+                   
+                    <div class="MonthDate">
+                      <%=Utils.formatDate('MMM dd', msg.getReceivedDate())%>
+                    </div>
+                    
                     <div style="clear: right;"><span></span></div>
                   </div>
                   <div style="clear: both;"><span></span></div>

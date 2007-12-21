@@ -524,7 +524,7 @@
 }
 
 .UIMailPortlet .MailWorkingWorkspace .MessageHeader .MessageAttachment .MonthDate {
-	margin: 0px 3px 0px 3px;
+	margin: 1px 3px 1px 3px;
 	float: right;
 }
 
@@ -705,7 +705,7 @@
 }
 
 .UIMailPortlet .DecoratorBox .CollapseMessage .MiddleCenterViewBoxStyle {
-	padding: 5px 10px 5px 10px;
+	padding: 2px 10px 2px 10px;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .MessageHeader {
