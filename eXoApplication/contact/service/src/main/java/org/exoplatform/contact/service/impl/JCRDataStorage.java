@@ -649,7 +649,8 @@ public class JCRDataStorage{
       PropertyIterator iter = sharedNode.getReferences() ;
       while(iter.hasNext()) {
         try{
-          addressBooks.add(iter.nextProperty().getParent().getName()) ;
+          Node addressNode = iter.nextProperty().getParent() ;
+          addressBooks.add(addressNode.getProperty("exo:name").getString()+"::"+addressNode.getName()) ;
         }catch(Exception e){
           e.printStackTrace() ;
         }

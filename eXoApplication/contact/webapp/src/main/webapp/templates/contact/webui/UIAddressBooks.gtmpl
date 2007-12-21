@@ -1,5 +1,6 @@
 <% 
 	import org.exoplatform.contact.service.ContactGroup;
+	import java.util.Map;
 %>
 
 <div class="UIAddressBooks" id="<%=uicomponent.getId()%>">
@@ -65,7 +66,7 @@
 				cssClass = "Normal" ;
 				if(contactGroup.getId().equals(uicomponent.getSelectedGroup()))	cssClass = "Selected" ;		
 		%>
-		<div  class="ItemList $cssClass">
+		<div  class="ItemList $cssClass" type="0">
 			<a href="$actionLink" id="<%= contactGroup.getId() %>" class="IconHolder AddressIcon" isPublic="false">
 				<%=contactGroup.getName()%>
 			</a>
@@ -80,14 +81,16 @@
       <div style="clear: left"><span></span></div>
 		</div>
 		<% 
-		List sharedGroups =	uicomponent.getSharedAddressBooks() ;
-		for(group in sharedGroups) {
+		Map sharedGroups =	uicomponent.getSharedAddressBooks() ;
+		for(group in sharedGroups.keySet()) {
 				cssClass = "Normal" ;
 				String actionLink  = uicomponent.event("SelectSharedGroup", group) ;				
 				if(group.equals(uicomponent.getSelectedGroup()))	cssClass = "Selected" ;
 	 %>
-		<div class="ItemList $cssClass">
-			<a id="$group" href="$actionLink" class="IconHolder AddressIcon"  isPublic="true">$group</a>
+		<div class="ItemList $cssClass" type="1">
+			<a id="$group" href="$actionLink" class="IconHolder AddressIcon"  isPublic="true">
+				<%= sharedGroups.get(group) %>
+			</a>
 		</div>
 		<% } %>
 	</div>
@@ -99,13 +102,13 @@
       <div style="clear: left"><span></span></div>
 		</div>
 		<%
-			List groupContacts = uicomponent.getSharedContactGroups();
+			List groupContacts = uicomponent.getPublicContactGroups();
 			for(group in groupContacts) {
 				cssClass = "Normal" ;
 				String actionLink  = uicomponent.event("SelectPublicGroup", group) ;				
 				if(group.equals(uicomponent.getSelectedGroup()))	cssClass = "Selected" ;	
 			%>
-				<div class="ItemList $cssClass">
+				<div class="ItemList $cssClass" type="2">
 					<a id="$group" href="$actionLink" class="IconHolder AddressIcon"  isPublic="true">$group</a>
 				</div>
 		<% } %>

@@ -16,7 +16,6 @@
  */
 package org.exoplatform.contact.webui;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -78,21 +77,22 @@ public class UIAddressBooks extends UIComponent {
     for (ContactGroup group : groupList) privateGroupMap_.put(group.getId(), group.getName()) ; 
     return groupList;
   }
-  public List<String> getSharedContactGroups() throws Exception {
+  public List<String> getPublicContactGroups() throws Exception {
     List<String> sharedGroup = ContactUtils.getContactService()
       .getPublicAddressBookContacts(SessionsUtils.getSystemProvider(), ContactUtils.getUserGroups());
     publicGroupMap_.clear() ;
     for (String group : sharedGroup) publicGroupMap_.put(group, group) ; 
     return sharedGroup ;
   }
-  public List<String> getSharedAddressBooks() throws Exception {
-    List<String> addressNames = new ArrayList<String>() ;
-    List<String> addressIds = ContactUtils.getContactService()
+  public Map<String, String> getSharedAddressBooks() throws Exception {
+    Map<String, String> addressMap = new HashMap<String, String>() ;
+    List<String> addressList = ContactUtils.getContactService()
       .getSharedAddressBooks(SessionsUtils.getSystemProvider(), ContactUtils.getCurrentUser()) ;
-    for (String addressId : addressIds) {
-      addressNames.add(privateGroupMap_.get(addressId)) ;
+    for (String address : addressList) {
+      String[] array = address.split("::") ;
+      addressMap.put(array[1], array[0]) ;
     }
-    return addressNames ;
+    return addressMap ;
   } 
 
   public void setSelectedGroup(String groupId) { selectedGroup = groupId ; }
