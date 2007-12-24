@@ -284,8 +284,9 @@ public class UIAddMessageFilter extends UIForm implements UIPopupComponent{
   static  public class CancelActionListener extends EventListener<UIAddMessageFilter> {
     public void execute(Event<UIAddMessageFilter> event) throws Exception {
       UIAddMessageFilter uiAddMessageFilter = event.getSource();
-      uiAddMessageFilter.deActivate();
-      event.getRequestContext().addUIComponentToUpdateByAjax((uiAddMessageFilter.getAncestorOfType(UIPopupActionContainer.class))) ;
+      UIPopupAction uiPopupAction = uiAddMessageFilter.getAncestorOfType(UIPopupAction.class) ;
+      uiPopupAction.deActivate() ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiAddMessageFilter.getAncestorOfType(UIPopupActionContainer.class)) ;
     }
   }
 }
