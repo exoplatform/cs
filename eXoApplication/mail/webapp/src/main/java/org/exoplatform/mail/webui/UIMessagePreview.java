@@ -79,7 +79,7 @@ public class UIMessagePreview extends UIComponent {
   
   public Message getMessage() throws Exception { 
     String username = MailUtils.getCurrentUser();
-    String accountId = MailUtils.getAccountId();
+    String accountId = getAncestorOfType(UIMailPortlet.class).findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
     MailService mailSrv = MailUtils.getMailService();
     if (selectedMessage_ != null) {
       return mailSrv.getMessageById(SessionsUtils.getSessionProvider(), username, accountId, selectedMessage_.getId());
@@ -89,7 +89,7 @@ public class UIMessagePreview extends UIComponent {
   
   public void setMessage(Message msg) throws Exception {
     String username = MailUtils.getCurrentUser();
-    String accountId = MailUtils.getAccountId();
+    String accountId = getAncestorOfType(UIMailPortlet.class).findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
     MailService mailSrv = MailUtils.getMailService();
     selectedMessage_ = mailSrv.getMessageById(SessionsUtils.getSessionProvider(), username, accountId, msg.getId()); 
   }
@@ -97,7 +97,7 @@ public class UIMessagePreview extends UIComponent {
   public List<Message> getConversations() throws Exception {
     List<Message> msgList = new ArrayList<Message>();
     String username = MailUtils.getCurrentUser();
-    String accountId = MailUtils.getAccountId();
+    String accountId = getAncestorOfType(UIMailPortlet.class).findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
     MailService mailSrv = MailUtils.getMailService();
     if (selectedMessage_.isRootConversation() && (selectedMessage_.getMessageIds() != null && selectedMessage_.getMessageIds().length > 0)) {
       for (int i=0; i < selectedMessage_.getMessageIds().length; i++) {

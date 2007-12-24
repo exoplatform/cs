@@ -77,7 +77,7 @@ public class UIFolderContainer extends UIContainer {
   public List<Folder> getSubFolders(String parentPath) throws Exception {
     MailService mailSvr = MailUtils.getMailService();
     String username = MailUtils.getCurrentUser() ;
-    String accountId = MailUtils.getAccountId();
+    String accountId = getAncestorOfType(UIMailPortlet.class).findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
     List<Folder> subFolders = new ArrayList<Folder>();
     for (Folder f : mailSvr.getSubFolders(SessionsUtils.getSessionProvider(), username, accountId, parentPath)) {
       subFolders.add(f);
@@ -88,7 +88,7 @@ public class UIFolderContainer extends UIContainer {
   public String getCustomerFolderPath() throws Exception {
     MailService mailSvr = MailUtils.getMailService();
     String username = MailUtils.getCurrentUser() ;
-    String accountId = MailUtils.getAccountId();
+    String accountId = getAncestorOfType(UIMailPortlet.class).findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
     String path = "";
     if (accountId != null) {
       path = mailSvr.getFolderHomePath(SessionsUtils.getSessionProvider(), username, accountId) ;
