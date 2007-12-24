@@ -144,7 +144,7 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
       } 
         
       Contact contact = new Contact();
-      contact.setCategories(new String[] {groupId});
+      contact.setAddressBook(new String[] {groupId});
       contact.setFullName(firstName + " " + lastName);
       contact.setFirstName(firstName);
       contact.setLastName(lastName);
