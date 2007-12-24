@@ -75,8 +75,6 @@ UICombobox.prototype.correct = function() {
 } ;
 
 UICombobox.prototype.setValue = function(value) {
-	var setting = ["hh:mm a", "HH:mm"] ;
-	var timeSetting = eXo.calendar.UICalendarPortlet.timeFormat ;
 	var value = String(value).trim().toLowerCase() ;
 	var UICombobox = eXo.calendar.UICombobox ;
 	var time = UICombobox.digitToTime(value) ;
@@ -84,8 +82,8 @@ UICombobox.prototype.setValue = function(value) {
 	var min = Number(time.minutes) ;
 	if (min > 60) min = "00" ;
 	else min = time.minutes ;
-	if (timeSetting == setting[0]) {
-		var timeFormat = UICombobox.getTimeFormat() ;
+	var timeFormat = UICombobox.getTimeFormat() ;
+	if (timeFormat.am) {
 		var am = String(timeFormat.am).toLowerCase() ;	
 		var pm = String(timeFormat.pm).toLowerCase() ;
 		if (!time) {
