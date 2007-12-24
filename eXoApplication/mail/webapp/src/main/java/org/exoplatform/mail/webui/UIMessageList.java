@@ -109,7 +109,9 @@ public class UIMessageList extends UIForm {
   
   final public String INFO = "INFO" ;
   
-  public UIMessageList() throws Exception {
+  public UIMessageList() throws Exception { }
+  
+  public void init() throws Exception {
     sortedBy_ = Utils.EXO_RECEIVEDDATE ;
     String accountId = MailUtils.getAccountId();
     String username = MailUtils.getCurrentUser();

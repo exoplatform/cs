@@ -165,7 +165,7 @@ public class UISelectAccount extends UIForm {
       MailService mailSrv = MailUtils.getMailService();
       String username = MailUtils.getCurrentUser();
       mailSrv.updateCurrentAccount(SessionsUtils.getSessionProvider(), username, accId);
-      uiPortlet.findFirstComponentOfType(UIMessageList.class).updateList();
+      uiPortlet.findFirstComponentOfType(UIMessageList.class).init();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet) ;
     }
   }  
