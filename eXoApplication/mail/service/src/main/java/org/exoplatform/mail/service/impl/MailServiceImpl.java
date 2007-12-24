@@ -361,31 +361,34 @@ public class MailServiceImpl implements MailService{
         while (i < totalNew) {
           javax.mail.Message msg = messages[i] ;
           Message newMsg = new Message();
-          Calendar gc = GregorianCalendar.getInstance();
-          Date receivedDate = gc.getTime();
           newMsg.setAccountId(account.getId());
+          newMsg.setFrom(InternetAddress.toString(msg.getFrom()));
           newMsg.setMessageTo(InternetAddress.toString(msg.getRecipients(javax.mail.Message.RecipientType.TO)));
           newMsg.setMessageCc(InternetAddress.toString(msg.getRecipients(javax.mail.Message.RecipientType.CC)));
           newMsg.setMessageBcc(InternetAddress.toString(msg.getRecipients(javax.mail.Message.RecipientType.BCC)));
-          newMsg.setSubject(msg.getSubject());
-          newMsg.setContentType(msg.getContentType());
-          newMsg.setFrom(InternetAddress.toString(msg.getFrom()));
           newMsg.setReplyTo(InternetAddress.toString(msg.getReplyTo()));
+          newMsg.setSubject(msg.getSubject());
+          
+          Calendar gc = GregorianCalendar.getInstance();
+          Date receivedDate = gc.getTime();
           newMsg.setReceivedDate(receivedDate);
           newMsg.setSendDate(msg.getSentDate());
+          
+          newMsg.setContentType(msg.getContentType());
           newMsg.setSize(msg.getSize());
           newMsg.setUnread(true);
-          newMsg.setHasStar(false);       
+          newMsg.setHasStar(false);     
+          
           newMsg.setPriority(Utils.PRIORITY_NORMAL);
           String[] xPriority = msg.getHeader("X-Priority");
           String[] importance = msg.getHeader("Importance");
           
+          // Get priority of message on header if it's available.
           if (xPriority != null && xPriority.length > 0) {
             for (int j = 0 ; j < xPriority.length; j++) {
               newMsg.setPriority(Long.valueOf(msg.getHeader("X-Priority")[j].substring(0,1)));
             }          
-          }
-          
+          }          
           if (importance != null && importance.length > 0) {
             for (int j = 0 ; j < importance.length; j++) {
               if (importance[j].equalsIgnoreCase("Low")) {
@@ -397,8 +400,10 @@ public class MailServiceImpl implements MailService{
           }
           
           newMsg.setAttachements(new ArrayList<Attachment>());
-          String[] folderIds = { Utils.createFolderId(accountId, account.getIncomingFolder(), false)};
-          if (getSpamFilter(sProvider, username, account.getId()).checkSpam(msg)) {
+          
+          String[] folderIds = { Utils.createFolderId(accountId, account.getIncomingFolder(), false) };
+          
+          if ( getSpamFilter(sProvider, username, account.getId()).checkSpam(msg) ) {
             folderIds = new String[] { Utils.createFolderId(accountId, Utils.FD_SPAM, false) } ;
           }
           newMsg.setFolders(folderIds);
@@ -409,8 +414,8 @@ public class MailServiceImpl implements MailService{
             setPart(msg, newMsg, username);
           }
           
-          boolean rootIsUnread = true; 
           // Use for conversation
+          boolean rootIsUnread = true; 
           Message rootMsg  = getRootMessage(sProvider, username, accountId, newMsg) ;
           if (rootMsg != null) {
             if (!rootMsg.isUnread()) {

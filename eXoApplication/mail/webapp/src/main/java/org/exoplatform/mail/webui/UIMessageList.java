@@ -218,12 +218,14 @@ public class UIMessageList extends UIForm {
   
   public List<Message> getConversations(Message msg) throws Exception {
     List<Message> msgList = new ArrayList<Message>();
+    UIMailPortlet uiPortlet = getAncestorOfType(UIMailPortlet.class);
     String username = MailUtils.getCurrentUser();
-    String accountId = MailUtils.getAccountId();
+    String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
     MailService mailSrv = MailUtils.getMailService();
     if (msg.isRootConversation() && (msg.getMessageIds() != null && msg.getMessageIds().length > 0)) {
       for (int i=0; i < msg.getMessageIds().length; i++) {
-        msgList.add(mailSrv.getMessageById(SessionsUtils.getSessionProvider(), username, accountId, msg.getMessageIds()[i]));
+        Message message = mailSrv.getMessageById(SessionsUtils.getSessionProvider(), username, accountId, msg.getMessageIds()[i]);
+        if (message != null) msgList.add(message) ;
       }
     }
     return msgList ;

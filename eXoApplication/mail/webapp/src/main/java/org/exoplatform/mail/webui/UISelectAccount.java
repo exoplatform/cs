@@ -107,7 +107,6 @@ public class UISelectAccount extends UIForm {
 
   static  public class AddAccountActionListener extends EventListener<UISelectAccount> {
     public void execute(Event<UISelectAccount> event) throws Exception {
-      System.out.println("========> AddAccountActionListener") ;
       UISelectAccount uiForm = event.getSource() ;
       UIMailPortlet uiPortlet = uiForm.getAncestorOfType(UIMailPortlet.class) ;
       UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class) ;
@@ -121,7 +120,6 @@ public class UISelectAccount extends UIForm {
   
   static  public class EditAccountActionListener extends EventListener<UISelectAccount> {
     public void execute(Event<UISelectAccount> event) throws Exception {
-      System.out.println("========> Edit Account Action Listener") ;
       UISelectAccount uiForm = event.getSource() ;
       UIMailPortlet uiPortlet = uiForm.getAncestorOfType(UIMailPortlet.class) ;
       
@@ -141,7 +139,6 @@ public class UISelectAccount extends UIForm {
   
   static  public class DeleteAccountActionListener extends EventListener<UISelectAccount> {
     public void execute(Event<UISelectAccount> event) throws Exception {
-      System.out.println("========> Delete Account Action Listener") ;
       UISelectAccount uiForm = event.getSource() ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       if(Utils.isEmptyField(uiForm.getSelectedValue())) {
@@ -163,12 +160,12 @@ public class UISelectAccount extends UIForm {
   static  public class SelectAccountActionListener extends EventListener<UISelectAccount> {
     public void execute(Event<UISelectAccount> event) throws Exception {
       UISelectAccount uiSelectAcc = event.getSource() ;
-      System.out.println("\n\n SelectAccountActionListener");
+      UIMailPortlet uiPortlet = uiSelectAcc.getAncestorOfType(UIMailPortlet.class);
       String accId = uiSelectAcc.getSelectedValue() ;
       MailService mailSrv = MailUtils.getMailService();
       String username = MailUtils.getCurrentUser();
       mailSrv.updateCurrentAccount(SessionsUtils.getSessionProvider(), username, accId);
-      UIMailPortlet uiPortlet = uiSelectAcc.getAncestorOfType(UIMailPortlet.class) ;
+      uiPortlet.findFirstComponentOfType(UIMessageList.class).updateList();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet) ;
     }
   }  
