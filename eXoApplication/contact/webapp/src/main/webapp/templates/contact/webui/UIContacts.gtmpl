@@ -178,7 +178,7 @@
 	  	 	    		Map publicGroupMap = uicomponent.getPublicGroupMap() ;
 	  	 	    		for(contact in contacts) {
 	  	 	    			String groupName ;	  	 	    			
-	  	 	    			String[] categories = contact.getCategories() ;
+	  	 	    			String[] categories = contact.getAddressBook() ;
 	  	 	    			if (contact.isShared()) { 
 		  	 	    			boolean hasComma = true ;
 		  	 	    			StringBuffer buffer = new StringBuffer()
