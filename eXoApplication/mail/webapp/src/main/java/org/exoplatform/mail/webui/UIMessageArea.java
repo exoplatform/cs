@@ -33,7 +33,7 @@ public class UIMessageArea extends UIContainer  {
   
   public UIMessageArea() throws Exception {
     UIMessageList uiMessageList = createUIComponent(UIMessageList.class, null, null);
-    uiMessageList.init();
+    uiMessageList.init(null);
     addChild(uiMessageList);
     addChild(UIMessagePreview.class, null, null);
   }

@@ -111,10 +111,12 @@ public class UIMessageList extends UIForm {
   
   public UIMessageList() throws Exception { }
   
-  public void init() throws Exception {
+  public void init(String accountId) throws Exception {
     sortedBy_ = Utils.EXO_RECEIVEDDATE ;
-    String accountId = MailUtils.getAccountId();
     String username = MailUtils.getCurrentUser();
+    if (accountId == null) {
+      accountId = MailUtils.getMailService().getCurrentAccount(SessionsUtils.getSessionProvider(), username);
+    }
     MailService mailSrv = getApplicationComponent(MailService.class);
     MessageFilter filter = new MessageFilter("Folder"); 
     filter.setAccountId(accountId);
