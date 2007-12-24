@@ -722,6 +722,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
           if(calendarview instanceof UIMiniCalendar) {
             ((UIMiniCalendar)calendarview).setCurrentCalendar(cal) ;
             ((UIMiniCalendar)calendarview).updateMiniCal() ;
+            event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
           }
         }break;
         case TYPE_WEEK : {
@@ -735,6 +736,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
           uiView.setCurrentCalendar(cal) ;
           uiView.refresh() ;
           uiContainer.setRenderedChild(UIMonthView.class) ;
+          //event.getRequestContext().addUIComponentToUpdateByAjax(uiView) ;
         }break;
         case TYPE_YEAR :{
           UIYearView uiView = uiContainer.getChild(UIYearView.class) ;
@@ -746,7 +748,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         }
         UIActionBar uiActionBar = portlet.findFirstComponentOfType(UIActionBar.class) ;
         uiActionBar.setCurrentView(uiContainer.getRenderedChild().getId()) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
+        //event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiActionBar) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;
       } catch (Exception e) {
