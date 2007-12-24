@@ -224,12 +224,5 @@ public class Contact {
   
   public Date getLastUpdated()  { return lastUpdated ; }
   public void   setLastUpdated(Date s) { lastUpdated = s ; }
-  
-  //TODO tuanpham added 2 functions for fixing build falue error of contact portlet
-  public void setCategories(String[] categories) {
-   this.categories = categories ;
-  }
-  public String[] getCategories(String[] categories) {
-    return  categories ;
-   }
+    
 }
