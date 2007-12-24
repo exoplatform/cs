@@ -353,7 +353,7 @@ public class JCRDataStorage{
     		if(addressType.equals(PRIVATE)) {
       		if(contact.getContactType().equals(SHARED)) {
       			saveContact(sysProvider, username, contact, true) ;
-      			//TODO: remove shared contact
+      			removeSharedContact(sysProvider, username, contact.getAddressBook()[0], contact.getId()) ;
       		}else if(contact.getContactType().equals(PUBLIC)) {
       			publicContactHome.getSession().move(publicContactHome.getPath() +"/" + contact.getId(), 
       					                                 privateContactHome.getPath() +"/" + contact.getId()) ;	
@@ -381,7 +381,7 @@ public class JCRDataStorage{
       			
       		}else if(contact.getContactType().equals(SHARED)) {
       			savePublicContact(sysProvider, contact, true) ;
-      			//TODO: remove shared contact
+      			removeSharedContact(sysProvider, username, contact.getAddressBook()[0], contact.getId()) ;
       		}else if(contact.getContactType().equals(PUBLIC)) {
       			savePublicContact(sysProvider, contact, false) ;
       		}
@@ -569,6 +569,26 @@ public class JCRDataStorage{
           addressBook.setProperty(SHARED_PROP, newValues.toArray(new Value[newValues.size()])) ;
           addressBook.save() ;
           break ;
+        }
+      }      
+    }
+  }
+  
+  public void removeSharedContact(SessionProvider sProvider, String username, String addressBookId, String contactId) throws Exception {
+    Node sharedAddressBookHome = getSharedAddressBookHome(SessionProvider.createSystemProvider()) ;
+    if(sharedAddressBookHome.hasNode(username)) {
+      Node userNode = sharedAddressBookHome.getNode(username) ;
+      PropertyIterator iter = userNode.getReferences() ;
+      Node addressBook ;
+      while(iter.hasNext()) {
+        addressBook = iter.nextProperty().getParent() ;
+        if(addressBook.getProperty("exo:id").getString().equals(addressBookId)) {
+        	Node contacts = addressBook.getParent().getParent().getNode(CONTACTS) ;
+        	if(contacts.hasNode(contactId)) {
+        		contacts.getNode(contactId).remove() ;
+        		contacts.save() ;
+        	}
+        	break ;          
         }
       }      
     }
