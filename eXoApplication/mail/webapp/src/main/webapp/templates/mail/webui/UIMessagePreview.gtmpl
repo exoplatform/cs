@@ -261,7 +261,7 @@
                       DownloadService dservice = uicomponent.getDownloadService() ;
                       String attLink ;
                       for (Attachment attach : msg.getAttachments()) {
-                        String downloadAction = uicomponent.event("DownloadAttachment", attach.getId());
+                        String downloadAction = uicomponent.event("DownloadAttachment", msg.getId() + "&attachId=" + attach.getId());
                     %>
       						  	<div class="AttachmentContent">
                         <%

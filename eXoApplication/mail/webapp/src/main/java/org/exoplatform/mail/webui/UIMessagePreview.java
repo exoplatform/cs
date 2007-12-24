@@ -114,16 +114,21 @@ public class UIMessagePreview extends UIComponent {
   public static class DownloadAttachmentActionListener extends EventListener<UIMessagePreview> {
     public void execute(Event<UIMessagePreview> event) throws Exception {
       UIMessagePreview uiMessagePreview = event.getSource();
-      String attId = event.getRequestContext().getRequestParameter(OBJECTID);
-      List<Attachment> attList = uiMessagePreview.getMessage().getAttachments();
+      String username = MailUtils.getCurrentUser();
+      String accountId = uiMessagePreview.getAncestorOfType(UIMailPortlet.class).findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      MailService mailSrv = MailUtils.getMailService();
+      String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
+      String attId = event.getRequestContext().getRequestParameter("attachId");
+      Message message = mailSrv.getMessageById(SessionsUtils.getSessionProvider(), username, accountId, msgId);
+      List<Attachment> attList = message.getAttachments();
       JCRMessageAttachment att = new JCRMessageAttachment();
       for (Attachment attach : attList) {
         if (attach.getId().equals(attId)) {
           att = (JCRMessageAttachment)attach;
         }
       }
-      ByteArrayInputStream bis = (ByteArrayInputStream)att.getInputStream();
-      DownloadResource dresource = new InputStreamDownloadResource(bis, att.getMimeType());
+      //ByteArrayInputStream bis = (ByteArrayInputStream)att.getInputStream();
+      DownloadResource dresource = new InputStreamDownloadResource(att.getInputStream(), att.getMimeType());
       DownloadService dservice = (DownloadService)PortalContainer.getInstance().getComponentInstanceOfType(DownloadService.class);
       dresource.setDownloadName(att.getName());
       String downloadLink = dservice.getDownloadLink(dservice.addDownloadResource(dresource));
