@@ -322,7 +322,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
   
   public void setFieldContentValue(String value) throws Exception {
     String username = MailUtils.getCurrentUser();
-    String accountId = MailUtils.getAccountId();
+    String accountId = getAncestorOfType(UIMailPortlet.class).findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
     MailService mailSrv = getApplicationComponent(MailService.class);
     Account account = mailSrv.getAccountById(SessionsUtils.getSessionProvider(), username, accountId);
     if (isVisualEditor) {

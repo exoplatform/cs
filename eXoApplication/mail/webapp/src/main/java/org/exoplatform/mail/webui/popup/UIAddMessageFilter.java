@@ -26,6 +26,8 @@ import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.Tag;
 import org.exoplatform.mail.service.Utils;
+import org.exoplatform.mail.webui.UIMailPortlet;
+import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
@@ -241,6 +243,9 @@ public class UIAddMessageFilter extends UIForm implements UIPopupComponent{
     public void execute(Event<UIAddMessageFilter> event) throws Exception {
       UIAddMessageFilter uiFilter = event.getSource();
       String filterName = uiFilter.getFilterName();
+      String username = MailUtils.getCurrentUser();
+      String accountId = uiFilter.getAncestorOfType(UIMailPortlet.class).findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      MailService mailSrv = MailUtils.getMailService();
       String from = uiFilter.getFrom();
       String fromCondition = uiFilter.getFromCondition();
       String to = uiFilter.getTo();
@@ -258,7 +263,7 @@ public class UIAddMessageFilter extends UIForm implements UIPopupComponent{
       } else {
         filter = new MessageFilter(filterName);
       }
-      filter.setAccountId(MailUtils.getAccountId());
+      filter.setAccountId(accountId);
       filter.setFrom(from);
       filter.setFromCondition(Integer.valueOf(fromCondition));
       filter.setTo(to);
@@ -270,9 +275,6 @@ public class UIAddMessageFilter extends UIForm implements UIPopupComponent{
       filter.setApplyFolder(applyFolder);
       filter.setApplyTag(applyTag);
       filter.setKeepInInbox(keepInbox);
-      String username = MailUtils.getCurrentUser();
-      String accountId = MailUtils.getAccountId();
-      MailService mailSrv = MailUtils.getMailService();
       try {
         mailSrv.saveFilter(SessionsUtils.getSessionProvider(), username, accountId, filter);
       } catch (Exception e) {
