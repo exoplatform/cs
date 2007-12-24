@@ -16,7 +16,6 @@
  */
 package org.exoplatform.mail.webui.popup;
 
-import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -509,13 +508,8 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
           att = (BufferAttachment) attach ;
         }
       }
-      if (att.getInputStream() != null) {
-        System.out.println("===================================" + att.getInputStream().toString());
-      } else {
-        System.out.println("==== nulll" + att.getName());
-      }
-      ByteArrayInputStream bis = (ByteArrayInputStream) att.getInputStream();
-      DownloadResource dresource = new InputStreamDownloadResource(bis, att.getMimeType());
+      //ByteArrayInputStream bis = (ByteArrayInputStream) att.getInputStream();
+      DownloadResource dresource = new InputStreamDownloadResource(att.getInputStream(), att.getMimeType());
       DownloadService dservice = (DownloadService)PortalContainer.getInstance().getComponentInstanceOfType(DownloadService.class);
       dresource.setDownloadName(att.getName());
       String downloadLink = dservice.getDownloadLink(dservice.addDownloadResource(dresource));

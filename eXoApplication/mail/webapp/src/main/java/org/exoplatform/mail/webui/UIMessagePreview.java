@@ -16,7 +16,6 @@
  */
 package org.exoplatform.mail.webui ;
 
-import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
