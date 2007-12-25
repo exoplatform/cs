@@ -792,9 +792,7 @@ public class UIMessageList extends UIForm {
   static public class ExportActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource() ;   
-      System.out.println("=== >>> Export Action Listener");
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      if (msgId == null) msgId = uiMessageList.getSelectedMessageId();
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
       UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
@@ -805,17 +803,18 @@ public class UIMessageList extends UIForm {
         uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-many-messages", null, ApplicationMessage.INFO)) ;
         return;
       }
+      if (msgId == null) msgId = uiMessageList.getCheckedRootMessage().get(0).getId();
+    
       UIExportForm uiExportForm = uiPopup.createUIComponent(UIExportForm.class, null, null);
       uiPopup.activate(uiExportForm, 600, 0, true);
       String username = uiPortlet.getCurrentUser();
-      String accountId = MailUtils.getAccountId();
+      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       MailService mailServ = MailUtils.getMailService();
       try {
-      Message msg = mailServ.getMessageById(SessionsUtils.getSessionProvider(), username, accountId, msgId);
-      uiExportForm.setExportMessage(msg);
-      } catch (Exception e) {
-        System.out.println("=====>>>> " + msgId + "\n" + e.getStackTrace()); 
-      }
+        Message msg = mailServ.getMessageById(SessionsUtils.getSessionProvider(), username, accountId, msgId);
+        uiExportForm.setExportMessage(msg);
+      } catch (Exception e) { }
+      
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup);  
     }
   }

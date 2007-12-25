@@ -113,7 +113,8 @@ public class UIMessagePreview extends UIComponent {
   public static class DownloadAttachmentActionListener extends EventListener<UIMessagePreview> {
     public void execute(Event<UIMessagePreview> event) throws Exception {
       UIMessagePreview uiMessagePreview = event.getSource();
-      String username = MailUtils.getCurrentUser();
+      UIMailPortlet uiPortlet = uiMessagePreview.getAncestorOfType(UIMailPortlet.class);
+      String username = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       String accountId = uiMessagePreview.getAncestorOfType(UIMailPortlet.class).findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       MailService mailSrv = MailUtils.getMailService();
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
@@ -131,7 +132,6 @@ public class UIMessagePreview extends UIComponent {
       DownloadService dservice = (DownloadService)PortalContainer.getInstance().getComponentInstanceOfType(DownloadService.class);
       dresource.setDownloadName(att.getName());
       String downloadLink = dservice.getDownloadLink(dservice.addDownloadResource(dresource));
-      UIMailPortlet uiPortlet = uiMessagePreview.getAncestorOfType(UIMailPortlet.class);
       event.getRequestContext().getJavascriptManager().addJavascript("ajaxRedirect('" + downloadLink + "');");
       uiPortlet.cancelAction() ;
     }
@@ -172,7 +172,7 @@ public class UIMessagePreview extends UIComponent {
       String username = uiPortlet.getCurrentUser() ;
       if (msgId != null) {
         Message message = mailSvr.getMessageById(SessionsUtils.getSessionProvider(), username, accId, msgId);
-        uiComposeForm.setMessage(message, uiComposeForm.MESSAGE_REPLY);
+        uiComposeForm.init(accId, message, uiComposeForm.MESSAGE_REPLY);
       }
       uiPopupContainer.addChild(uiComposeForm) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
@@ -196,7 +196,7 @@ public class UIMessagePreview extends UIComponent {
       String username = uiPortlet.getCurrentUser() ;
       if (msgId != null) {
         Message message = mailSvr.getMessageById(SessionsUtils.getSessionProvider(), username, accId, msgId);
-        uiComposeForm.setMessage(message, uiComposeForm.MESSAGE_REPLY_ALL);
+        uiComposeForm.init(accId, message, uiComposeForm.MESSAGE_REPLY_ALL);
       }
       uiPopupContainer.addChild(uiComposeForm) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
@@ -221,7 +221,7 @@ public class UIMessagePreview extends UIComponent {
       String username = uiPortlet.getCurrentUser() ;
       if (msgId != null) {
         Message message = mailSvr.getMessageById(SessionsUtils.getSessionProvider(), username, accId, msgId);
-        uiComposeForm.setMessage(message, uiComposeForm.MESSAGE_FOWARD);
+        uiComposeForm.init(accId, message, uiComposeForm.MESSAGE_FOWARD);
       }
       uiPopupContainer.addChild(uiComposeForm) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
