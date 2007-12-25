@@ -197,8 +197,15 @@ UIForumPortlet.prototype.cancel = function(evt) {
 	_e.cancelBubble = true ;
 } ;
 
-
-
+UIForumPortlet.prototype.goLastPost = function(idLastPost) {
+	if(idLastPost === "false") {
+		script:scroll(0,0);
+	}else {
+		var obj = document.getElementById(idLastPost);
+		var top = obj.offsetTop ;
+		script:scroll(0,(top-100));
+	}
+};
 
 
 

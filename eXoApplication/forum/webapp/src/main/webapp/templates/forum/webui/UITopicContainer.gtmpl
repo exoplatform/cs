@@ -303,6 +303,7 @@
 										iconTopicStatus = "HotThreadNewLockPost" ;
 										titleTopicStatus = "Hot thread with new post lock" ;
 									}
+									String number = "1";
 							%>
 								<tr class="$classRow">
 									<td class="Tdbox"><div class="ThreadStatusIcon $iconTopicStatus" title="$titleTopicStatus"><span></span></div></td>
@@ -312,22 +313,22 @@
 										<% if(topic.getIsSticky()) {%>
 											<span class="Text StickyIcon">Sticky:</span>
 										<% } %>
-											<a href="<%=uicomponent.event("OpenTopic", (topicId+","+1))%>" title="$titlePost" class="Title">$topicTitle</a>
+											<a href="<%=uicomponent.event("OpenTopic", (topicId+","+number + ",false"))%>" title="$titlePost" class="Title">$topicTitle</a>
 											<% if(max_page > 1) { %>
 											<span>(</span>	
 											<%	int t = 1;
 												while(t <= max_page) {
 												if(t <= 5) { 
-												String number = String.valueOf(t) ;
+													number = String.valueOf(t) ;
 											%>
-											<a href="<%=uicomponent.event("OpenTopic", (topicId+","+number))%>">$number</a>
+											<a href="<%=uicomponent.event("OpenTopic", (topicId+","+number + ",false"))%>">$number</a>
 											<% }
 											t = t + 1 ;
 											}
 											if(max_page > 5) { 
-											String number = String.valueOf(max_page) ;
+												number = String.valueOf(max_page) ;
 											%>
-											<span>... <a href="<%=uicomponent.event("OpenTopic", (topicId+","+number))%>">Last page</a> )</span>
+											<span>... <a href="<%=uicomponent.event("OpenTopic", (topicId+","+number + ",false"))%>">Last page</a> )</span>
 											<%} else {%>
 											<span>)</span>
 											<%} 
@@ -367,7 +368,7 @@
 									</td>
 								 	<td >
 								 		<div class="DateTime">$lastPostDate</div>
-								 		<div title="Go to last posts"><a href="#"><span class="RightArrowIcon"></span></a></div>
+								 		<div title="Go to last posts"><a href="<%=uicomponent.event("OpenTopic", (topicId+","+number + ",true"))%>"><span class="RightArrowIcon"></span></a></div>
 										<div class="PostInfos LastPostInfos">by <a href="#" class="PostBy">$postNewBy</a></div>
 										<div style="clear: right;"><span></span></div>
 									</td>

@@ -29,6 +29,7 @@ import org.exoplatform.forum.service.Post;
 import org.exoplatform.forum.service.Topic;
 import org.exoplatform.forum.webui.EmptyNameValidator;
 import org.exoplatform.forum.webui.UIForumPortlet;
+import org.exoplatform.forum.webui.UITopicDetail;
 import org.exoplatform.forum.webui.UITopicDetailContainer;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -273,19 +274,22 @@ public class UIPostForm extends UIForm implements UIPopupComponent {
 				post.setIcon(uiIconSelector.getSelectedIcon());
 				post.setIsApproved(false) ;
 				post.setAttachments(uiForm.attachments_) ;
+				UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
+				UITopicDetailContainer topicDetailContainer = forumPortlet.findFirstComponentOfType(UITopicDetailContainer.class) ;
 				if(uiForm.postId != null && uiForm.postId.length() > 0) {
 					if(uiForm.isQuote) {
 						uiForm.forumService.savePost(ForumUtils.getSystemProvider(), uiForm.categoryId, uiForm.forumId, uiForm.topicId, post, true) ;
+						topicDetailContainer.getChild(UITopicDetail.class).setIdPostView("true");
 					} else {
 						post.setId(uiForm.postId) ;
 						uiForm.forumService.savePost(ForumUtils.getSystemProvider(), uiForm.categoryId, uiForm.forumId, uiForm.topicId, post, false) ;
+						topicDetailContainer.getChild(UITopicDetail.class).setIdPostView(uiForm.postId);
 					}
 				} else {
 					uiForm.forumService.savePost(ForumUtils.getSystemProvider(), uiForm.categoryId, uiForm.forumId, uiForm.topicId, post, true) ;
+					topicDetailContainer.getChild(UITopicDetail.class).setIdPostView(post.getId());
 				}
-				UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
 				forumPortlet.cancelAction() ;
-				UITopicDetailContainer topicDetailContainer = forumPortlet.findFirstComponentOfType(UITopicDetailContainer.class) ;
 				event.getRequestContext().addUIComponentToUpdateByAjax(topicDetailContainer);
 			}else {
 				String[] args = { ""} ;

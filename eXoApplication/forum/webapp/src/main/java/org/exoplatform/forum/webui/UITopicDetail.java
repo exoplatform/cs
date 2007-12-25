@@ -103,6 +103,8 @@ public class UITopicDetail extends UIForm	{
 	private boolean isGopage = false ;
 	private boolean isEditTopic = false ;
 	private boolean isUpdatePageList = false ;
+	private String IdPostView = "false" ;
+	private String IdLastPost = "false" ;
 	private List<Post> posts ;
 	private long maxPost = 10 ;
 	private String userName = "" ;
@@ -122,6 +124,22 @@ public class UITopicDetail extends UIForm	{
 		this.getAncestorOfType(UIForumPortlet.class).getChild(UIBreadcumbs.class).setUpdataPath((categoryId + "/" + forumId + "/" + topicId)) ;
 		this.topic = forumService.getTopic(ForumUtils.getSystemProvider(), categoryId, forumId, topicId, viewTopic) ;
 	}
+	@SuppressWarnings("unused")
+	private String getIdPostView() {
+		if(this.IdPostView.equals("false")) {
+			return this.IdPostView ;
+		}
+		if(this.IdPostView.equals("true")){
+			return this.IdLastPost ;
+		}
+		String temp = this.IdPostView ;
+		this.IdPostView = "false" ;
+		return temp ;
+	}
+	
+	public void setIdPostView(String IdPostView) {
+	  this.IdPostView = IdPostView ;
+  }
 	
 	public void setUpdateContainer(String categoryId, String forumId, Topic topic, long numberPage) throws Exception {
 		if(this.topicId == null || !this.topicId.equals(topic.getId())) this.userName = "" ;
@@ -190,6 +208,7 @@ public class UITopicDetail extends UIForm	{
 			}else {
 				addUIFormInput(new UIFormCheckBoxInput(post.getId(), post.getId(), false) );
 			}
+			this.IdLastPost = post.getId() ;
 		}
 		this.isGopage = false ;
 		return this.posts ;

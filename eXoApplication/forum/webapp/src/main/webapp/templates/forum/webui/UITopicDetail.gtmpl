@@ -4,6 +4,9 @@
 	import org.exoplatform.forum.webui.UIForumPageIterator ;
 	import org.exoplatform.forum.service.Post ;
 	import org.exoplatform.forum.service.Topic ;
+	import org.exoplatform.web.application.JavascriptManager;
+  def rcontext = _ctx.getRequestContext() ;
+  JavascriptManager jsmanager = rcontext.getJavascriptManager();
 %>
 <%
 	uicomponent.initPage() ;	
@@ -43,7 +46,7 @@
 		<div title="Go to page Number " class="GotoPageIcon" >
 			<div onclick="eXo.forum.UIForumPortlet.showPopup(this, event);" style="width: 20px; height: 16px;"><span></span></div>
 			<% /*Begin Popup Menu*/ %>
-			<div style="position: relative; display: inline; ">
+			<div style="position: relative; ">
 				<div class="UIPopupCategory" style="display: none; ">
 					<div class="UIRightClickPopupMenu" style="display: block; left: -70px;">
 						<div class="UIContextMenuContainer">
@@ -308,7 +311,7 @@
 				List attachments = post.getAttachments() ;
 		%>
 
-		<div class="ContentContainer" style="margin: 2px 0px 0px 0px;">
+		<div class="ContentContainer" id="<%=post.getId();%>" style="margin: 2px 0px 0px 0px;">
 			<table class="TablePost" cellspacing="0" borderspacing="0">
 				<tbody>
 					<tr>
@@ -431,7 +434,10 @@
 		</div>
 		<% } %>
 <!-- End ContentContainer -->
-
+<%
+	String idLastPost = uicomponent.getIdPostView() ;
+	jsmanager.addJavascript("eXo.forum.UIForumPortlet.goLastPost('"+idLastPost+"');");
+%>
 	</div>	
 <!-- End PostsInThreadContainer -->
 	<div class="ButtomAndPageListContainer">

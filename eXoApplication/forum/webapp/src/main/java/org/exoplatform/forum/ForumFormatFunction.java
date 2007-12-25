@@ -35,11 +35,11 @@ import java.util.Date;
 public class ForumFormatFunction {
 	
 	@SuppressWarnings("deprecation")
-  public static String getFormatDate(String format,Date postDate) {
-		 long time = postDate.getHours() ;
+  public static String getFormatDate(String format,Date myDate) {
+		 long time = myDate.getHours() ;
 		 StringBuffer stringBuffer = new StringBuffer() ;
 		 if(format.equals("24H")){
-			 stringBuffer.append(time).append(":").append(postDate.getMinutes());
+			 stringBuffer.append(time).append(":").append(myDate.getMinutes());
 		 } else {
 			 String str = "" ;
 			 if(time < 12) str = "AM";
@@ -47,7 +47,7 @@ public class ForumFormatFunction {
 				 str = "PM";
 				 if(time > 12) time = time - 12 ;
 			 }
-			 stringBuffer.append(time).append(":").append(postDate.getMinutes()).append(" ").append(str);
+			 stringBuffer.append(time).append(":").append(myDate.getMinutes()).append(" ").append(str);
 		 }
 		return stringBuffer.toString();
 	}
