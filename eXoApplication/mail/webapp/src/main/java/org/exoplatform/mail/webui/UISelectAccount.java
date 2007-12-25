@@ -122,17 +122,14 @@ public class UISelectAccount extends UIForm {
     public void execute(Event<UISelectAccount> event) throws Exception {
       UISelectAccount uiForm = event.getSource() ;
       UIMailPortlet uiPortlet = uiForm.getAncestorOfType(UIMailPortlet.class) ;
-      
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
       UIPopupActionContainer uiPopupContainer = uiPopupAction.activate(UIPopupActionContainer.class, 730) ;
       
       uiPopupContainer.setId("UIAccountPopupSetting");
       UIAccountSetting uiAccountSetting = uiPopupContainer.createUIComponent(UIAccountSetting.class, null, null);
-       
-      uiAccountSetting.setSelectedAccountId(uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue());
-      uiAccountSetting.fillAllField();
-      
-      uiPopupContainer.addChild(uiAccountSetting) ;      
+      uiPopupContainer.addChild(uiAccountSetting) ; 
+      uiAccountSetting.setSelectedAccountId(uiForm.getSelectedValue());
+      uiAccountSetting.fillField();     
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }
   }
