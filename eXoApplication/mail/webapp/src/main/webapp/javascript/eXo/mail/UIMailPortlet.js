@@ -137,16 +137,25 @@ UIMailPortlet.prototype.readMessage = function() {} ;
 
 UIMailPortlet.prototype.showPrintPreview = function(obj1) {
 	document.getElementById("UIPortalApplication").style.display = "none";
-	var root1 = document.createElement('div') ;
-	root1.className = 'UIMailPortlet' ;
-	var root2 = document.createElement('div') ;
-	root2.className = 'MailWorkingWorkspace' ;
-	var root3 = document.createElement('div') ;
-	root3.className = 'UIMessagePreview' ;
-	root3.appendChild(obj1.cloneNode(true)) ;
-	root2.appendChild(root3) ;
-	root1.appendChild(root2) ;
-	document.body.appendChild(root1) ;
+	var uiMailPortletNode = document.createElement('div') ;
+	uiMailPortletNode.className = 'UIMailPortlet' ;
+	var mailWorkingWorkspaceNode = document.createElement('div') ;
+	mailWorkingWorkspaceNode.className = 'MailWorkingWorkspace' ;
+	var uiMessagePreviewNode = document.createElement('div') ;
+	uiMessagePreviewNode.className = 'UIMessagePreview' ;
+	uiMessagePreviewNode.appendChild(obj1.cloneNode(true)) ;
+	mailWorkingWorkspaceNode.appendChild(uiMessagePreviewNode) ;
+	uiMailPortletNode.appendChild(mailWorkingWorkspaceNode) ;
+
+  // Fit UIMailPortlet to window.
+  with(uiMessagePreviewNode.style) {
+    width = '100%' ;
+    height = '100%' ;
+    position = 'absolute' ;
+    top = '0px' ;
+    left = '0px' ;
+  }
+	document.body.appendChild(uiMailPortletNode) ;
 } ;
 
 UIMailPortlet.prototype.printMessage = function() {
