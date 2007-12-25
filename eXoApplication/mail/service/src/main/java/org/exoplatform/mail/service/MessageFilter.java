@@ -340,6 +340,14 @@ public class MessageFilter {
       hasConjuntion = true ;
     }
     
+    // Only filter on root message
+    if(hasConjuntion) stringBuffer.append(" and (") ;
+    else stringBuffer.append("(") ;
+    stringBuffer.append(" @exo:isRoot = 'true'") ;
+    stringBuffer.append(")") ;
+    hasConjuntion = true ;
+    
+    
     stringBuffer.append("]") ;
     
     if (orderBy != null && orderBy.trim().length() >0) {
