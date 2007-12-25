@@ -129,8 +129,8 @@ public class UIMessageList extends UIForm {
   }
   
   public String getSelectedMessageId() throws Exception {
-    if (getAppliedMessage() != null && getAppliedMessage().size() > 0) {
-      return getAppliedMessage().get(0).getId();
+    if (getCheckedMessage() != null && getAppliedMessage().size() > 0) {
+      return getCheckedMessage().get(0).getId();
     }
     return selectedMessageId_ ;
   }
@@ -528,13 +528,13 @@ public class UIMessageList extends UIForm {
       MailService mailSrv = uiMessageList.getApplicationComponent(MailService.class);
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-      List<Message> checkedMessageList = new ArrayList<Message>();
+      List<Message> appliedMsgList = new ArrayList<Message>();
       if (msgId != null) { 
-        checkedMessageList.add(mailSrv.getMessageById(SessionsUtils.getSessionProvider(), username, accountId, msgId));
+        appliedMsgList.add(mailSrv.getMessageById(SessionsUtils.getSessionProvider(), username, accountId, msgId));
       } else {
-        checkedMessageList = uiMessageList.getAppliedMessage();
+        appliedMsgList = uiMessageList.getAppliedMessage();
       }
-      for (Message message : checkedMessageList) {
+      for (Message message : appliedMsgList) {
         mailSrv.moveMessages(SessionsUtils.getSessionProvider(), username, accountId, message.getId(), message.getFolders()[0], Utils.createFolderId(accountId, Utils.FD_TRASH, false));
       }
       uiMessageList.updateList();
@@ -550,13 +550,13 @@ public class UIMessageList extends UIForm {
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class) ;
       String username = MailUtils.getCurrentUser();
-      String accountId = MailUtils.getAccountId();
+      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       MailService mailSrv = MailUtils.getMailService();
       List<Message> checkedMessageList = new ArrayList<Message>();
       if (msgId != null) { 
         checkedMessageList.add(mailSrv.getMessageById(SessionsUtils.getSessionProvider(), username, accountId, msgId));
       } else {
-        checkedMessageList = uiMessageList.getAppliedMessage();
+        checkedMessageList = uiMessageList.getCheckedMessage();
       }    
       
       SpamFilter spamFilter = mailSrv.getSpamFilter(SessionsUtils.getSessionProvider(), username, accountId);
@@ -585,7 +585,7 @@ public class UIMessageList extends UIForm {
       if (msgId != null) { 
         checkedMessageList.add(mailSrv.getMessageById(SessionsUtils.getSessionProvider(), username, accountId, msgId));
       } else {
-        checkedMessageList = uiMessageList.getAppliedMessage();
+        checkedMessageList = uiMessageList.getCheckedMessage();
       }    
       
       SpamFilter spamFilter = mailSrv.getSpamFilter(SessionsUtils.getSessionProvider(), username, accountId);
@@ -607,7 +607,7 @@ public class UIMessageList extends UIForm {
       UIMessageList uiMessageList = event.getSource();
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
-      if(uiMessageList.getAppliedMessage().isEmpty()) {
+      if(uiMessageList.getCheckedMessage().isEmpty()) {
         uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-no-messages", null, ApplicationMessage.INFO)) ;
         return;
       } else if (uiMessageList.getCheckedMessage().size() > 1){
@@ -698,7 +698,7 @@ public class UIMessageList extends UIForm {
       List<Tag> tagList = new ArrayList<Tag>();      
       tagList.add(mailSrv.getTag(SessionsUtils.getSessionProvider(), username, accountId, tagId));
       List<String> msgIdList = new ArrayList<String>();
-      for (Message message : uiMessageList.getAppliedMessage()) {
+      for (Message message : uiMessageList.getCheckedMessage()) {
         msgIdList.add(message.getId());
       }
       mailSrv.addTag(SessionsUtils.getSessionProvider(), username, accountId, msgIdList, tagList);
@@ -791,7 +791,7 @@ public class UIMessageList extends UIForm {
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
       UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
-      if(uiMessageList.getAppliedMessage().isEmpty()) {
+      if(uiMessageList.getCheckedMessage().isEmpty()) {
         uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-no-messages", null, ApplicationMessage.INFO)) ;
         return;
       } else if (uiMessageList.getCheckedMessage().size() > 1){
