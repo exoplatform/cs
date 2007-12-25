@@ -43,7 +43,7 @@ MaskLayerControl.prototype.showPicture = function(node) {
   }
   containerNode.appendChild(imageNode) ;
   containerNode.onclick = this.hidePicture ;
-  maskNode = eXo.core.UIMaskLayer.createMask('UIPortalApplication', containerNode, 70, 'CENTER') ;
+  maskNode = eXo.core.UIMaskLayer.createMask('UIPortalApplication', containerNode, 100, 'CENTER') ;
   eXo.core.Browser.addOnScrollCallback('MaskLayerControl', this.scrollHandler) ;
 } ;
 
