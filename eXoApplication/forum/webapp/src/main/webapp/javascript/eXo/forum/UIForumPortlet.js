@@ -208,15 +208,4 @@ UIForumPortlet.prototype.goLastPost = function(idLastPost) {
 };
 
 
-
-
-
-
-
-
-
-
-
-
-
 eXo.forum.UIForumPortlet = new UIForumPortlet() ;

@@ -78,7 +78,6 @@
 	width: 16px; height: 16px; 
 	margin: 5px 5px 0px 0px;
 	cursor: pointer;
-	
 }
 
 .UIForumPortlet .ForumToolbar .ExpandButton {
@@ -203,7 +202,6 @@
 	background: url('background/CenterOverButton1x23.gif') repeat-x top;
 	height: 23px;
 }
-
 
 /******************************	End OverButton	***************************************/
 .UIRightClickPopupMenu .UIRightPopupMenuContainer .DisableMenuItem {

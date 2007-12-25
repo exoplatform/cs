@@ -17,6 +17,8 @@
 package org.exoplatform.forum.webui;
 
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.forum.ForumFormatFunction;
@@ -63,8 +65,9 @@ public class UITopicsTag extends UIForm {
 	private List<Topic> topics ;
 	private long page = 1 ;
 	private Tag tag ;
+	private long maxPost = 10 ;
+	private long maxTopic = 10 ;
 	private boolean isUpdateTag = true ;
-	//private List <JCRPageList> listPageListPost = new ArrayList<JCRPageList>() ;
 	public UITopicsTag() throws Exception {
 		//addChild(UIForumPageIterator.class, null, null) ;
 	}
@@ -74,12 +77,33 @@ public class UITopicsTag extends UIForm {
 		this.isUpdateTag = true ;
   }
 	
+	public void setMaxItemInPage(long maxTopic, long maxPost) {
+		this.maxTopic = maxTopic ;
+		this.maxPost = maxPost ;
+	}
+	
 	@SuppressWarnings("unused")
   private JCRPageList getListTopicTag() throws Exception {
 		this.listTopic = forumService.getTopicsByTag(ForumUtils.getSystemProvider(), this.tagId) ;
+		this.listTopic.setPageSize(this.maxTopic) ;
 		return this.listTopic ;
 	}
+	
+	private TreeMap<String, JCRPageList> mapPostPage = new TreeMap<String, JCRPageList>();
+	@SuppressWarnings("unused")
+  private long getMaxPagePost(String Id) throws Exception {
+		String Ids[] = Id.split("/") ;
+		JCRPageList pageListPost = this.forumService.getPosts(ForumUtils.getSystemProvider(), Ids[(Ids.length - 3)], Ids[(Ids.length - 2)], Ids[(Ids.length - 1)])	; 
+		pageListPost.setPageSize(this.maxPost) ;
+		this.mapPostPage.put(Ids[(Ids.length - 1)], pageListPost) ; 
+		return pageListPost.getAvailablePage();
+	}
 
+	@SuppressWarnings("unused")
+  private JCRPageList getPagePost(String topicId) {
+		return this.mapPostPage.get(topicId) ;
+	}
+	
 	@SuppressWarnings({ "unchecked", "unused" })
   private List<Topic> getTopicsTag() throws Exception {
 		this.listTopic = forumService.getTopicsByTag(ForumUtils.getSystemProvider(), this.tagId) ;
@@ -138,8 +162,9 @@ public class UITopicsTag extends UIForm {
 	static public class OpenTopicActionListener extends EventListener<UITopicsTag> {
 		public void execute(Event<UITopicsTag> event) throws Exception {
 			UITopicsTag uiTopicsTag = event.getSource();
-			String topicId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-			Topic topic = uiTopicsTag.getTopic(topicId);
+			String idAndNumber = event.getRequestContext().getRequestParameter(OBJECTID) ;
+			String []id = idAndNumber.split(",") ;
+			Topic topic = uiTopicsTag.getTopic(id[0]);
 			String []temp = topic.getPath().split("/") ;
 			UIForumPortlet forumPortlet = uiTopicsTag.getAncestorOfType(UIForumPortlet.class) ;
 			forumPortlet.updateIsRendered(2);
@@ -147,8 +172,14 @@ public class UITopicsTag extends UIForm {
 			UITopicDetailContainer uiTopicDetailContainer = uiForumContainer.getChild(UITopicDetailContainer.class) ;
 			uiForumContainer.setIsRenderChild(false) ;
 			UITopicDetail uiTopicDetail = uiTopicDetailContainer.getChild(UITopicDetail.class) ;
-			uiTopicDetail.setUpdateContainer(temp[temp.length-3], temp[temp.length-2], topic, 1) ;
+			uiTopicDetail.setUpdateContainer(temp[temp.length-3], temp[temp.length-2], topic, Long.parseLong(id[1])) ;
+			uiTopicDetail.setUpdatePageList(uiTopicsTag.getPagePost(id[0]));
 			uiTopicDetailContainer.getChild(UITopicPoll.class).updatePoll(temp[temp.length-3], temp[temp.length-2], topic) ;
+			if(id[2].equals("true")) {
+				uiTopicDetail.setIdPostView("true") ;
+			} else {
+				uiTopicDetail.setIdPostView("false") ;
+			}
 			forumPortlet.getChild(UIForumLinks.class).setValueOption(temp[temp.length-3] + "/" + temp[temp.length-2] + "");
 			event.getRequestContext().addUIComponentToUpdateByAjax(forumPortlet) ;
 		}

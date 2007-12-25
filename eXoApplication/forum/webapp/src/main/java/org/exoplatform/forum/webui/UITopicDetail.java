@@ -121,15 +121,14 @@ public class UITopicDetail extends UIForm	{
 		this.forumId = forumId ;
 		this.topicId = topicId ;
 		this.viewTopic = viewTopic ;
+		this.isUpdatePageList = true ;
 		this.getAncestorOfType(UIForumPortlet.class).getChild(UIBreadcumbs.class).setUpdataPath((categoryId + "/" + forumId + "/" + topicId)) ;
 		this.topic = forumService.getTopic(ForumUtils.getSystemProvider(), categoryId, forumId, topicId, viewTopic) ;
 	}
 	@SuppressWarnings("unused")
 	private String getIdPostView() {
-		if(this.IdPostView.equals("false")) {
-			return this.IdPostView ;
-		}
 		if(this.IdPostView.equals("true")){
+			this.IdPostView = "false" ;
 			return this.IdLastPost ;
 		}
 		String temp = this.IdPostView ;

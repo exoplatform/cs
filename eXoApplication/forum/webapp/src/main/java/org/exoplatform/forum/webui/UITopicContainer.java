@@ -94,7 +94,6 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
 	private boolean isUpdate = false;
 	private long maxTopic = 10 ;
 	private long maxPost = 10 ;
-	private List <JCRPageList> listPageListPost = new ArrayList<JCRPageList>() ;
 	public UITopicContainer() throws Exception {
 		addUIFormInput( new UIFormStringInput("gopage1", null)) ;
 		addUIFormInput( new UIFormStringInput("gopage2", null)) ;
@@ -139,8 +138,9 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
 		this.getChild(UIForumPageIterator.class).updatePageList(this.pageList) ;
 	}
 	
-	public void setMaxTopicInPage(long maxTopic) {
+	public void setMaxItemInPage(long maxTopic, long maxPost) {
 		this.maxTopic = maxTopic ;
+		this.maxPost = maxPost ;
 	}
 	
 	@SuppressWarnings("unused")
@@ -183,10 +183,6 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
 			if(topic.getId().equals(topicId)) return topic ;
 		}
 		return null ;
-	}
-	
-	public void setMaxPostInPage(long maxPost) {
-		this.maxPost = maxPost ;
 	}
 	
 	private JCRPageList getPageListPost(String topicId) throws Exception {

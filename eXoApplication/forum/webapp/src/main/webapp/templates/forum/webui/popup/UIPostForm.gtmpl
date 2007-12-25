@@ -103,6 +103,11 @@
 				</tr>
 	 	  </table> 
     </div>
-
+<%
+	import org.exoplatform.web.application.JavascriptManager;  
+	def rcontext = _ctx.getRequestContext() ;
+  JavascriptManager jsmanager = rcontext.getJavascriptManager();
+  jsmanager.addJavascript("eXo.forum.UIForumPortlet.goLastPost('false');");
+%>
   <%uiform.end()%>
 </div>

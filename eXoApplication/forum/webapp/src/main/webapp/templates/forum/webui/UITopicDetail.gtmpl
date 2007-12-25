@@ -436,6 +436,7 @@
 <!-- End ContentContainer -->
 <%
 	String idLastPost = uicomponent.getIdPostView() ;
+	System.out.println("\n\nfhfkdshfs:  " + idLastPost);
 	jsmanager.addJavascript("eXo.forum.UIForumPortlet.goLastPost('"+idLastPost+"');");
 %>
 	</div>	
