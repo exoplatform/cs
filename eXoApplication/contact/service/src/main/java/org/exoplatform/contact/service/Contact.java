@@ -80,7 +80,6 @@ public class Contact {
   
   private String[] addressBook ;
   private String[] tags ;
-  private String[] categories ;
   private String[] editPermission ;
   private boolean isShared = false ;
   private ContactAttachment attachment ;

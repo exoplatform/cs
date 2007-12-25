@@ -74,7 +74,6 @@ public class UITagForm extends UIForm implements UIPopupComponent {
   
   public List<Contact> getContacts() { return contacts_ ;}
   public void setContacts(List<Contact> contacts) { contacts_ = contacts ; }
-  
   public void update() throws Exception {
     getChildren().clear() ;
     int i = 0 ;
@@ -159,6 +158,7 @@ public class UITagForm extends UIForm implements UIPopupComponent {
       String username = ContactUtils.getCurrentUser() ;
       UIApplication uiApp = uiTagForm.getAncestorOfType(UIApplication.class) ;
       List<Tag> tags = new ArrayList<Tag>();
+      List<String> tagIds = new ArrayList<String>();
       Tag tag;
       String inputTag = uiTagForm.getUIStringInput(FIELD_TAGNAME_INPUT).getValue();
       if (!ContactUtils.isEmpty(inputTag)) {
@@ -172,10 +172,12 @@ public class UITagForm extends UIForm implements UIPopupComponent {
         tag.setName(inputTag);
         tag.setColor(uiTagForm.getUIFormSelectBox(FIELD_COLOR).getValue()) ;
         tags.add(tag);
+        tagIds.add(tag.getId()) ;
       }
       for (String tagId : uiTagForm.getCheckedTags()) {
         tag = contactService.getTag(SessionsUtils.getSessionProvider(), username, tagId) ;
         tags.add(tag);
+        tagIds.add(tagId) ;
       } 
       if (tags.size() == 0) {
         uiApp.addMessage(new ApplicationMessage("UITagForm.msg.tagName-required", null, 
@@ -185,11 +187,14 @@ public class UITagForm extends UIForm implements UIPopupComponent {
       } 
       List<String> contactIds = new ArrayList<String>() ;
       for (Contact contact : uiTagForm.contacts_) {
+      	contact.setTags(tagIds.toArray(new String[]{})) ;
         contactIds.add(contact.getId()) ;
       }
       contactService.addTag(SessionsUtils.getSessionProvider(), username, contactIds, tags);
       UIContactPortlet uiContactPortlet = uiTagForm.getAncestorOfType(UIContactPortlet.class);
       UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
+      if(uiContacts.isDisplaySearchResult())uiContacts.setContact(uiTagForm.contacts_, true) ;     	
+      
       uiContacts.updateList() ;
       UITags uiTags = uiContactPortlet.findFirstComponentOfType(UITags.class) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiTags) ;
@@ -221,6 +226,7 @@ public class UITagForm extends UIForm implements UIPopupComponent {
       UITags uiTags = contactPortlet.findFirstComponentOfType(UITags.class) ;
       String selectedTag = uiTags.getSelectedTag() ;
       UIContacts uiContacts = contactPortlet.findFirstComponentOfType(UIContacts.class) ;
+      if(uiContacts.isDisplaySearchResult()) uiContacts.setContact(uiForm.contacts_, false) ;
       if (!ContactUtils.isEmpty(selectedTag)) {
         uiContacts.setContacts(contactService.getContactPageListByTag(
             SessionsUtils.getSystemProvider(), username, selectedTag)) ;

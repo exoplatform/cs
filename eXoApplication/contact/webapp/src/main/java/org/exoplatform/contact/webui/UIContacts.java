@@ -106,7 +106,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   public void activate() throws Exception { }
   public void deActivate() throws Exception { } 
   
-  protected boolean isDisplaySearchResult() {return isSearchResult ;}
+  public boolean isDisplaySearchResult() {return isSearchResult ;}
   public void setDisplaySearchResult(boolean search) { isSearchResult = search ; }
   
   public void setAscending(boolean isAsc) { isAscending_ = isAsc ; }
@@ -125,7 +125,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   public boolean isAscName() { return FullNameComparator.isAsc ; }
   public boolean isAscEmail() { return EmailComparator.isAsc ; }
   public boolean isAscJob() { return JobTitleComparator.isAsc ; }
-  
+  public void setContact(List<Contact> contacts, boolean isUpdate) throws Exception{ pageList_.setContact(contacts, isUpdate) ; }
   public void updateList() throws Exception {
     getChildren().clear() ;
     contactMap.clear();
@@ -205,11 +205,6 @@ public class UIContacts extends UIForm implements UIPopupComponent {
     return getAncestorOfType(UIWorkingContainer.class)
       .findFirstComponentOfType(UIAddressBooks.class).getPrivateGroupMap() ;
   }
-  public Map<String, String> getPublicGroupMap() {
-    return getAncestorOfType(UIWorkingContainer.class)
-      .findFirstComponentOfType(UIAddressBooks.class).getPublicGroupMap() ;
-  }
-  
   static public class EditContactActionListener extends EventListener<UIContacts> {
     public void execute(Event<UIContacts> event) throws Exception {
       UIContacts uiContacts = event.getSource();
@@ -264,6 +259,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       List<Contact> contacts = new ArrayList<Contact>() ;
       for (String id : contactIds) { contacts.add(uiContacts.contactMap.get(id)) ; }
       uiTagForm.setContacts(contacts) ;
+      System.out.println("uiContacts.isSearchResult ====="+ uiContacts.isSearchResult);
       uiTagForm.update() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
@@ -368,6 +364,13 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       
       contactService.removeContacts(SessionsUtils.getSystemProvider(), username, contactIds) ;
       
+      if(uiContacts.isSearchResult) {
+      	List<Contact> contacts = new ArrayList<Contact>();
+        for(String id : contactIds) {
+        	contacts.add(uiContacts.contactMap.get(id)) ;
+        }
+        uiContacts.setContact(contacts, false) ;
+      }
 //      if(contactIds.contains(uiContactPreview.getContact().getId())) 
 //        uiContactPreview.setContact(null) ;
     

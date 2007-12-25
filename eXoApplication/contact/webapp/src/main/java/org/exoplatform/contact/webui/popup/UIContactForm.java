@@ -175,7 +175,7 @@ public class UIContactForm extends UIFormTabPane implements UISelector {
     this.setSelectedTab(ProfileTab.getId());
   }
   
-  public List<String> getCheckedSharedGroup() {
+  public List<String> getCheckedPublicGroup() {
     List<String> groups = new ArrayList<String>() ;
     for (int i = 0; i < FIELD_SHAREDCONTACT_BOX.length; i ++) {
       if (getUIFormCheckBoxInput(FIELD_SHAREDCONTACT_BOX[i]).isChecked())
@@ -375,9 +375,9 @@ public class UIContactForm extends UIFormTabPane implements UISelector {
 
       
       if (isNew) {
-        List<String> sharedGroups = uiContactForm.getCheckedSharedGroup() ;
-        if (sharedGroups.size() > 0) {
-          contact.setAddressBook(sharedGroups.toArray(new String[] {})) ;
+        List<String> publicGroups = uiContactForm.getCheckedPublicGroup() ;
+        if (publicGroups.size() > 0) {
+          contact.setAddressBook(publicGroups.toArray(new String[] {})) ;
           String editPermission = uiContactForm.getUIStringInput(FIELD_EDITPERMISSION).getValue() ;
           if (!ContactUtils.isEmpty(editPermission))
             contact.setEditPermission(editPermission.split(","));
@@ -397,15 +397,19 @@ public class UIContactForm extends UIFormTabPane implements UISelector {
           contactService.saveContact(SessionsUtils.getSessionProvider(), username, contact, isNew);
         }
       } else {
-        if (contact.isShared()) contactService.savePublicContact(SessionsUtils.getSystemProvider(), contact, isNew) ;
-        else contactService.saveContact(SessionsUtils.getSessionProvider(), username, contact, isNew) ;
+        if (contact.getContactType().equals("0")) contactService.saveContact(SessionsUtils.getSessionProvider(), username, contact, false) ;
+        else if(contact.getContactType().equals("1")) contactService.saveContactToSharedAddressBook(SessionsUtils.getSystemProvider(), username, contact.getAddressBook()[0], contact, false) ;
+        else if(contact.getContactType().equals("2")) contactService.savePublicContact(SessionsUtils.getSystemProvider(), contact, false) ;
       }
       UIContactPortlet uiContactPortlet = uiContactForm.getAncestorOfType(UIContactPortlet.class) ;
       UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
       UIContactPreview uiContactPreview = uiContactPortlet.findFirstComponentOfType(UIContactPreview.class) ;
-      
-      //if (!ContactUtils.isEmpty(uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class).getSelectedGroup()))
-        uiContacts.updateList() ;
+      if(uiContacts.isDisplaySearchResult()) {
+      	List<Contact> contacts = new ArrayList<Contact>() ;
+      	contacts.add(contact) ;
+      	uiContacts.setContact(contacts, true) ;
+      }
+      uiContacts.updateList() ;
       String selectedContact = uiContacts.getSelectedContact() ;
       if (!ContactUtils.isEmpty(selectedContact) && selectedContact.equals(contact.getId())) 
         uiContactPreview.setContact(contact) ;
@@ -454,7 +458,7 @@ public class UIContactForm extends UIFormTabPane implements UISelector {
       String permType = event.getRequestContext().getRequestParameter(OBJECTID) ;
       
       uiForm.setRenderedChild(INPUT_SHARETAB) ;
-      List<String> checkedGroups = uiForm.getCheckedSharedGroup() ;
+      List<String> checkedGroups = uiForm.getCheckedPublicGroup() ;
       if(checkedGroups.size() == 0) {
         UIApplication app = uiForm.getAncestorOfType(UIApplication.class) ;
         app.addMessage(new ApplicationMessage("UIContactForm.msg.checkbox-public-notchecked", null,

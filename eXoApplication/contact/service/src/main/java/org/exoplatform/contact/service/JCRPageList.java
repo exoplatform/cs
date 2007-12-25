@@ -55,6 +55,23 @@ abstract public class JCRPageList {
     return currentListPage_  ;
   }
   
+  public void setContact(List<Contact> contacts, boolean isUpdate) throws Exception {
+  	if(currentListPage_ == null) return ;
+  	for(Contact ct : contacts) {
+  		for(int i = 0; i < currentListPage_.size(); i ++) {
+    		if(currentListPage_.get(i).getId().endsWith(ct.getId())){
+    			if(isUpdate) {
+    				currentListPage_.set(i, ct) ;
+    			}else {
+    				currentListPage_.remove(i) ;
+    			}
+    			break ;
+    		}
+    	}
+  	}
+  	
+  }
+  
   abstract protected void populateCurrentPage(long page, String username) throws Exception   ;
   
   public List<Contact> getPage(long page, String username) throws Exception   {
