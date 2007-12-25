@@ -113,12 +113,12 @@ public class UIMessagePreview extends UIComponent {
   public static class DownloadAttachmentActionListener extends EventListener<UIMessagePreview> {
     public void execute(Event<UIMessagePreview> event) throws Exception {
       UIMessagePreview uiMessagePreview = event.getSource();
-      UIMailPortlet uiPortlet = uiMessagePreview.getAncestorOfType(UIMailPortlet.class);
-      String username = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-      String accountId = uiMessagePreview.getAncestorOfType(UIMailPortlet.class).findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-      MailService mailSrv = MailUtils.getMailService();
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
       String attId = event.getRequestContext().getRequestParameter("attachId");
+      UIMailPortlet uiPortlet = uiMessagePreview.getAncestorOfType(UIMailPortlet.class);
+      String username = MailUtils.getCurrentUser();
+      String accountId = uiMessagePreview.getAncestorOfType(UIMailPortlet.class).findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      MailService mailSrv = MailUtils.getMailService();
       Message message = mailSrv.getMessageById(SessionsUtils.getSessionProvider(), username, accountId, msgId);
       List<Attachment> attList = message.getAttachments();
       JCRMessageAttachment att = new JCRMessageAttachment();
