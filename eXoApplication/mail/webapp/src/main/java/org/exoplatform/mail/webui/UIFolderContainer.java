@@ -139,7 +139,7 @@ public class UIFolderContainer extends UIContainer {
       UIFolderForm uiFolderForm = uiPopup.createUIComponent(UIFolderForm.class, null, null);
       uiFolderForm.setParentPath(folderId);
       uiPopup.activate(uiFolderForm, 450, 0, false) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiFolder.getAncestorOfType(UIMailPortlet.class)) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup) ;
     }
   }
   

@@ -80,7 +80,6 @@ public class UIFolderForm extends UIForm implements UIPopupComponent {
         String folderId = accountId + "UserFolder" + folderName;
         Folder folder = mailSvr.getFolder(SessionsUtils.getSessionProvider(), username, accountId, folderId) ;
         if(folder == null) {
-          System.out.println("d====" + folderId);
           folder = new Folder() ;
           folder.setId(folderId);
           folder.setName(folderName) ;
@@ -103,9 +102,9 @@ public class UIFolderForm extends UIForm implements UIPopupComponent {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessageArea.class)) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
     }
   }
+  
   static  public class CancelActionListener extends EventListener<UIFolderForm> {
     public void execute(Event<UIFolderForm> event) throws Exception {
       UIFolderForm uiForm = event.getSource() ;

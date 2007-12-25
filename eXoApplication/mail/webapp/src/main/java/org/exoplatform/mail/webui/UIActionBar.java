@@ -121,6 +121,7 @@ public class UIActionBar extends UIContainer {
       uiPopupAction.activate(uiPopupContainer, 850, 0, true);
       
       UIComposeForm uiComposeForm = uiPopupContainer.createUIComponent(UIComposeForm.class, null, null);
+      uiComposeForm.init(accId, null, 0);
       uiPopupContainer.addChild(uiComposeForm) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }

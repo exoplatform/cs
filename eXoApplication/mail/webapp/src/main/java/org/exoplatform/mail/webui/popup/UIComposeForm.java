@@ -82,7 +82,7 @@ import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
       @EventConfig(listeners = UIComposeForm.UseVisualEdiorActionListener.class)
     }
 )
-public class UIComposeForm extends UIForm implements UIPopupComponent{
+public class UIComposeForm extends UIForm implements UIPopupComponent {
   final static public String FIELD_FROM_INPUT = "fromInput" ;
   final static public String FIELD_FROM = "from" ;
   final static public String FIELD_SUBJECT = "subject" ;
@@ -105,6 +105,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
   private long priority_ = Utils.PRIORITY_NORMAL;
   private Boolean isVisualEditor = true;
   private int composeType_;
+  private String accountId_;
   
   public List<Contact> toContacts = new ArrayList<Contact>();
   public List<Contact> ccContacts = new ArrayList<Contact>();
@@ -113,9 +114,12 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
   public boolean isVisualEditor() { return isVisualEditor; }
   public void setVisualEditor(boolean b) { isVisualEditor = b; }
   
-  public UIComposeForm() throws Exception {
+  public UIComposeForm() throws Exception { }
+  
+  public void init(String accountId, Message msg, int composeType) throws Exception {
     List<SelectItemOption<String>>  options = new ArrayList<SelectItemOption<String>>() ;
     String username = MailUtils.getCurrentUser();
+    accountId_ = accountId ;
     MailService mailSrv = getApplicationComponent(MailService.class);
     for(Account acc : mailSrv.getAccounts(SessionsUtils.getSessionProvider(), username)) {
       SelectItemOption<String> itemOption = new SelectItemOption<String>(acc.getUserDisplayName() + " &lt;" + acc.getEmailAddress() + 
@@ -147,6 +151,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
       addUIFormInput(new UIFormTextAreaInput(FIELD_MESSAGECONTENT, null, null)) ;
     }  
     setPriority(Utils.PRIORITY_NORMAL);
+    setMessage(msg, composeType);
   }
   
   public List<Contact> getToContacts(){ return toContacts; }
@@ -322,9 +327,8 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
   
   public void setFieldContentValue(String value) throws Exception {
     String username = MailUtils.getCurrentUser();
-    String accountId = getAncestorOfType(UIMailPortlet.class).findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
     MailService mailSrv = getApplicationComponent(MailService.class);
-    Account account = mailSrv.getAccountById(SessionsUtils.getSessionProvider(), username, accountId);
+    Account account = mailSrv.getAccountById(SessionsUtils.getSessionProvider(), username, accountId_);
     if (isVisualEditor) {
       if (!MailUtils.isFieldEmpty(account.getSignature())) {value += "</br> -- <br />" + account.getSignature() + "";}
       getChild(UIFormWYSIWYGInput.class).setValue(value);
@@ -349,11 +353,9 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
     Message message = getMessage();
     if (getMessage() == null) { message = new Message(); }
     UIMailPortlet uiPortlet = getAncestorOfType(UIMailPortlet.class);
-    UISelectAccount uiSelectAcc = uiPortlet.findFirstComponentOfType(UISelectAccount.class) ;
-    String accountId = uiSelectAcc.getSelectedValue() ;
     String usename = uiPortlet.getCurrentUser() ;
     MailService mailSvr = this.getApplicationComponent(MailService.class) ;
-    Account account = mailSvr.getAccountById(SessionsUtils.getSessionProvider(), usename, accountId);
+    Account account = mailSvr.getAccountById(SessionsUtils.getSessionProvider(), usename, accountId_);
     String from = this.getFieldFromValue() ;
     String subject = this.getFieldSubjectValue() ;
     String to = this.getFieldToValue() ;
@@ -362,7 +364,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
     String body = this.getFieldContentValue() ;
     Long priority = this.getPriority();
     message.setSendDate(new Date()) ;
-    message.setAccountId(accountId) ;
+    message.setAccountId(accountId_) ;
     message.setFrom(from) ;
     String contentType = Utils.MIMETYPE_TEXTHTML;
     if (!isVisualEditor()) { contentType = Utils.MIMETYPE_TEXTPLAIN; }
@@ -384,8 +386,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent{
   }
   
   public boolean fromDrafts() {    
-    String accountId = getAncestorOfType(UIMailPortlet.class).findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
-    if (getMessage() != null && getMessage().getFolders()[0].equals(Utils.createFolderId(accountId, Utils.FD_DRAFTS, false)) ) { 
+    if (getMessage() != null && getMessage().getFolders()[0].equals(Utils.createFolderId(accountId_, Utils.FD_DRAFTS, false)) ) { 
       return true;
     } 
     return false;
