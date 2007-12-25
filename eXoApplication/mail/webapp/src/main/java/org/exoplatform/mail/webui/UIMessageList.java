@@ -320,7 +320,7 @@ public class UIMessageList extends UIForm {
         uiMessageList.setSelectedMessageId(msgId);
       } else {
         List<String> msgList = new ArrayList<String>() ;
-        for (Message msg : uiMessageList.getCheckedMessage()) {
+        for (Message msg : uiMessageList.getCheckedRootMessage()) {
           if (!msg.hasStar()) {
             msgList.add(msg.getId());
           }
@@ -685,7 +685,7 @@ public class UIMessageList extends UIForm {
       String accId = uiSelect.getSelectedValue() ;
       List<Tag> listTags = mailService.getTags(SessionsUtils.getSessionProvider(), username, accId);
       uiPopupAction.activate(uiTagForm, 600, 0, true);
-      uiTagForm.setMessageList(uiMessageList.getCheckedMessage());
+      uiTagForm.setMessageList(uiMessageList.getCheckedRootMessage());
       uiTagForm.setTagList(listTags) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
     }
