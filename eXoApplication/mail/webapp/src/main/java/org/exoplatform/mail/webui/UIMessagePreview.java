@@ -161,9 +161,7 @@ public class UIMessagePreview extends UIComponent {
       UIMessagePreview uiMessagePreview = event.getSource() ; 
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UIMailPortlet uiPortlet = uiMessagePreview.getAncestorOfType(UIMailPortlet.class) ;
-      UINavigationContainer uiNavigation = uiPortlet.getChild(UINavigationContainer.class) ;
-      UISelectAccount uiSelect = uiNavigation.getChild(UISelectAccount.class) ;
-      String accId = uiSelect.getSelectedValue() ;
+      String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
       UIPopupActionContainer uiPopupContainer = uiPopupAction.activate(UIPopupActionContainer.class, 850) ;
       
@@ -185,9 +183,7 @@ public class UIMessagePreview extends UIComponent {
       UIMessagePreview uiMessagePreview = event.getSource() ; 
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UIMailPortlet uiPortlet = uiMessagePreview.getAncestorOfType(UIMailPortlet.class) ;
-      UINavigationContainer uiNavigation = uiPortlet.getChild(UINavigationContainer.class) ;
-      UISelectAccount uiSelect = uiNavigation.getChild(UISelectAccount.class) ;
-      String accId = uiSelect.getSelectedValue() ;
+      String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
       UIPopupActionContainer uiPopupContainer = uiPopupAction.activate(UIPopupActionContainer.class, 850) ;
       
@@ -209,9 +205,7 @@ public class UIMessagePreview extends UIComponent {
       UIMessagePreview uiMessagePreview = event.getSource() ; 
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UIMailPortlet uiPortlet = uiMessagePreview.getAncestorOfType(UIMailPortlet.class) ;
-      UINavigationContainer uiNavigation = uiPortlet.getChild(UINavigationContainer.class) ;
-      UISelectAccount uiSelect = uiNavigation.getChild(UISelectAccount.class) ;
-      String accId = uiSelect.getSelectedValue() ;
+      String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
       UIPopupActionContainer uiPopupContainer = uiPopupAction.activate(UIPopupActionContainer.class, 850) ;
       
@@ -237,7 +231,7 @@ public class UIMessagePreview extends UIComponent {
       UIMessageArea uiMessageArea = uiPortlet.findFirstComponentOfType(UIMessageArea.class);
       MailService mailSrv = uiPreview.getApplicationComponent(MailService.class);
       String username = MailUtils.getCurrentUser();
-      String accountId = MailUtils.getAccountId();
+      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       List<String> msgList = new ArrayList<String>();
       for (Message message : uiPreview.getConversations()) {
         msgList.add(message.getId());
@@ -277,11 +271,11 @@ public class UIMessagePreview extends UIComponent {
     public void execute(Event<UIMessagePreview> event) throws Exception {
       UIMessagePreview uiMessagePreview = event.getSource() ;   
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      UIMailPortlet uiPortlet = uiMessagePreview.getAncestorOfType(UIMailPortlet.class);
       String username = MailUtils.getCurrentUser();
-      String accountId = MailUtils.getAccountId() ;
+      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       MailService mailServ = MailUtils.getMailService() ;
       Message msg = mailServ.getMessageById(SessionsUtils.getSessionProvider(), username, accountId, msgId);
-      UIMailPortlet uiPortlet = uiMessagePreview.getAncestorOfType(UIMailPortlet.class);
       UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
       UIAddContactForm uiAddContactForm = uiPopup.createUIComponent(UIAddContactForm.class, null, null);
       uiPopup.activate(uiAddContactForm, 560, 0, true);
@@ -310,7 +304,7 @@ public class UIMessagePreview extends UIComponent {
       UIExportForm uiExportForm = uiPopup.createUIComponent(UIExportForm.class, null, null);
       uiPopup.activate(uiExportForm, 600, 0, true);
       String username = uiPortlet.getCurrentUser();
-      String accountId = MailUtils.getAccountId();
+      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       MailService mailServ = MailUtils.getMailService();
       try {
       Message msg = mailServ.getMessageById(SessionsUtils.getSessionProvider(), username, accountId, msgId);
@@ -329,12 +323,9 @@ public class UIMessagePreview extends UIComponent {
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class);
       UITagForm uiTagForm = uiMessagePreview.createUIComponent(UITagForm.class, null, null) ;
       String username = uiPortlet.getCurrentUser();
-      String accountId = MailUtils.getAccountId();
+      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       MailService mailSrv = MailUtils.getMailService();
-      UINavigationContainer uiNavigation = uiPortlet.getChild(UINavigationContainer.class) ;
-      UISelectAccount uiSelect = uiNavigation.getChild(UISelectAccount.class) ;
-      String accId = uiSelect.getSelectedValue() ;
-      List<Tag> listTags = mailSrv.getTags(SessionsUtils.getSessionProvider(), username, accId);
+      List<Tag> listTags = mailSrv.getTags(SessionsUtils.getSessionProvider(), username, accountId);
       uiPopupAction.activate(uiTagForm, 600, 0, true);
       List<Message> msgList = new ArrayList<Message>();
       msgList.add(mailSrv.getMessageById(SessionsUtils.getSessionProvider(), username, accountId, msgId));
@@ -349,10 +340,10 @@ public class UIMessagePreview extends UIComponent {
     public void execute(Event<UIMessagePreview> event) throws Exception {
       UIMessagePreview uiMessagePreview = event.getSource() ;    
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      String username = MailUtils.getCurrentUser();
-      String accountId = MailUtils.getAccountId();
-      MailService mailSrv = MailUtils.getMailService();
       UIMailPortlet uiPortlet = uiMessagePreview.getAncestorOfType(UIMailPortlet.class);
+      String username = MailUtils.getCurrentUser();
+      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      MailService mailSrv = MailUtils.getMailService();
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class);     
       UIMoveMessageForm uiMoveMessageForm = uiMessagePreview.createUIComponent(UIMoveMessageForm.class,null, null);
       List<Message> msgList = new ArrayList<Message>();
