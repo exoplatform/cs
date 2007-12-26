@@ -26,8 +26,12 @@ import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.Tag;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.UIMailPortlet;
+import org.exoplatform.mail.webui.UINavigationContainer;
+import org.exoplatform.mail.webui.UISelectAccount;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -72,7 +76,7 @@ public class UIMessageFilter extends UIForm implements UIPopupComponent{
   
   public MessageFilter getSelectedFilter() throws Exception {
     String username = MailUtils.getCurrentUser();
-    String accountId = MailUtils.getAccountId();
+    String accountId = getAncestorOfType(UIMailPortlet.class).getChild(UINavigationContainer.class).getChild(UISelectAccount.class).getSelectedValue() ;
     MailService mailSrv = MailUtils.getMailService();
     if (getSelectedFilterId() != null) {
       return mailSrv.getFilterById(SessionsUtils.getSessionProvider(), username, accountId, getSelectedFilterId());
@@ -150,11 +154,19 @@ public class UIMessageFilter extends UIForm implements UIPopupComponent{
   static  public class EditFilterActionListener extends EventListener<UIMessageFilter> {
     public void execute(Event<UIMessageFilter> event) throws Exception {
       UIMessageFilter uiMessageFilter = event.getSource() ;
+      MessageFilter filter = uiMessageFilter.getSelectedFilter();
+      //    Verify
+      UIApplication uiApp = uiMessageFilter.getAncestorOfType(UIApplication.class) ;
+      if(filter == null) {
+        uiApp.addMessage(new ApplicationMessage("UIMessageFilter.msg.select-no-filter", null, ApplicationMessage.INFO)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return;
+      }
       UIPopupActionContainer uiActionContainer = uiMessageFilter.getAncestorOfType(UIPopupActionContainer.class) ;
       UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class) ;
       UIAddMessageFilter uiEditMessageFilter = uiChildPopup.createUIComponent(UIAddMessageFilter.class, null, null);
       uiChildPopup.activate(uiEditMessageFilter, 650, 0, false) ;
-      uiEditMessageFilter.setCurrentFilter(uiMessageFilter.getSelectedFilter());
+      uiEditMessageFilter.setCurrentFilter(filter);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiActionContainer) ;
     }
   }
@@ -165,14 +177,16 @@ public class UIMessageFilter extends UIForm implements UIPopupComponent{
       UIMailPortlet mailPortlet = uiMessageFilter.getAncestorOfType(UIMailPortlet.class);
       String filterId = uiMessageFilter.getSelectedFilterId();
       String username = MailUtils.getCurrentUser();
-      String accountId = MailUtils.getAccountId();
+      String accountId = mailPortlet.getChild(UINavigationContainer.class).getChild(UISelectAccount.class).getSelectedValue() ;
       MailService mailServ = MailUtils.getMailService();
       try {
         mailServ.removeFilter(SessionsUtils.getSessionProvider(), username, accountId, filterId);
+        uiMessageFilter.setSelectedFilterId(null);
         event.getRequestContext().addUIComponentToUpdateByAjax(mailPortlet.getChild(UIPopupAction.class)) ;
       } catch(Exception e) {
         e.printStackTrace();
       } 
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageFilter) ;
     }
   }
   
