@@ -172,6 +172,7 @@ public class UIFolderContainer extends UIContainer {
       UIPopupAction uiPopup = uiFolder.getAncestorOfType(UIMailPortlet.class).getChild(UIPopupAction.class) ;
       UIRenameFolderForm uiRenameFolderForm = uiPopup.activate(UIRenameFolderForm.class, 450) ;
       uiRenameFolderForm.setFolderId(folderId);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiFolder) ;
     }
   }
 
@@ -179,15 +180,21 @@ public class UIFolderContainer extends UIContainer {
     public void execute(Event<UIFolderContainer> event) throws Exception {
       String folderId = event.getRequestContext().getRequestParameter(OBJECTID) ;          
       UIFolderContainer uiFolderContainer = event.getSource() ;
-      UIMailPortlet uiMailPortlet = uiFolderContainer.getAncestorOfType(UIMailPortlet.class);
-      MailService mailService = uiMailPortlet.getApplicationComponent(MailService.class);
-      String username = uiMailPortlet.getCurrentUser();
+      UIMailPortlet uiPortlet = uiFolderContainer.getAncestorOfType(UIMailPortlet.class);
+      MailService mailService = uiPortlet.getApplicationComponent(MailService.class);
+      String username = uiPortlet.getCurrentUser();
       UINavigationContainer uiNavigationContainer = uiFolderContainer.getAncestorOfType(UINavigationContainer.class);
       String accountId = uiNavigationContainer.getChild(UISelectAccount.class).getSelectedValue();
       
       Account account = mailService.getAccountById(SessionsUtils.getSessionProvider(), username, accountId);
       Folder folder = mailService.getFolder(SessionsUtils.getSessionProvider(), username, accountId, folderId);  
-      mailService.removeUserFolder(SessionsUtils.getSessionProvider(), username, account, folder);      
+      mailService.removeUserFolder(SessionsUtils.getSessionProvider(), username, account, folder);     
+      UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
+      UIFolderContainer uiFolder = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
+      uiMessageList.init(accountId);
+      uiFolder.setSelectedFolder(Utils.createFolderId(accountId, Utils.FD_INBOX, false));
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiFolder) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent()) ;
     }
   }
   
@@ -203,6 +210,11 @@ public class UIFolderContainer extends UIContainer {
       for (Message message : messageList) {
         mailSrv.removeMessage(SessionsUtils.getSessionProvider(), username, accountId, message.getId());
       }
+      UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
+      UIFolderContainer uiFolder = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
+      uiMessageList.updateList();
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiFolder) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent()) ;
     }
   }
   
