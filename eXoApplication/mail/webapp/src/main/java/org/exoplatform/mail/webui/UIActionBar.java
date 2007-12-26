@@ -72,7 +72,6 @@ public class UIActionBar extends UIContainer {
   static  public class CheckMailActionListener extends EventListener<UIActionBar> {    
     public void execute(Event<UIActionBar> event) throws Exception {
       UIActionBar uiActionBar = event.getSource() ;
-      System.out.println(" =========== > Check Mail ...");
       UIMailPortlet uiPortlet = uiActionBar.getAncestorOfType(UIMailPortlet.class) ;
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
       UINavigationContainer uiNavigation = uiPortlet.getChild(UINavigationContainer.class) ;
@@ -97,8 +96,8 @@ public class UIActionBar extends UIContainer {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
       } catch (Exception e) {
         //e.printStackTrace() ;
-        //uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.check-mail-error", null)) ;
-        //event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.check-mail-error", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
       }
     }
   }
@@ -142,7 +141,6 @@ public class UIActionBar extends UIContainer {
   
   static public class AddEventActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {
-      System.out.println(" =========== > AddEventActionListener");
       UIActionBar uiActionBar = event.getSource() ; 
       CalendarService calendarService = uiActionBar.getApplicationComponent(CalendarService.class);
       UIMailPortlet uiPortlet = uiActionBar.getParent() ;
@@ -159,7 +157,6 @@ public class UIActionBar extends UIContainer {
   static public class RssActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {
       UIActionBar uiActionBar = event.getSource() ; 
-      System.out.println(" =========== > RssActionListener");
       UIMailPortlet uiPortlet = uiActionBar.getAncestorOfType(UIMailPortlet.class);
       UIPopupAction uiPopup = uiPortlet.findFirstComponentOfType(UIPopupAction.class);
       uiPopup.activate(UIFeed.class, 600);
@@ -183,7 +180,6 @@ public class UIActionBar extends UIContainer {
   static public class MailSettingsActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {
       UIActionBar uiActionBar = event.getSource() ; 
-      System.out.println(" =========== > Mail Settings Action");
       UIMailPortlet mailPortlet = uiActionBar.getParent() ;
       UIPopupAction uiPopupAction = mailPortlet.getChild(UIPopupAction.class) ;
       UIMailSettings uiMailSetting = uiPopupAction.activate(UIMailSettings.class, 750) ;

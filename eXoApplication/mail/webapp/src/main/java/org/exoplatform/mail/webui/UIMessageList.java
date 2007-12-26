@@ -105,19 +105,16 @@ public class UIMessageList extends UIForm {
   private boolean isAscending_ = true;
   private MessagePageList pageList_ = null ;
   private MessageFilter msgFilter_;
+  private String accountId_;
   private LinkedHashMap<String, Message> messageList_ = new LinkedHashMap<String, Message>();
-  
-  final public String INFO = "INFO" ;
   
   public UIMessageList() throws Exception { }
   
   public void init(String accountId) throws Exception {
+    accountId_ = accountId ;
     sortedBy_ = Utils.EXO_RECEIVEDDATE ;
     String username = MailUtils.getCurrentUser();
-    if (accountId == null) {
-      accountId = MailUtils.getMailService().getCurrentAccount(SessionsUtils.getSessionProvider(), username);
-    }
-    MailService mailSrv = getApplicationComponent(MailService.class);
+    MailService mailSrv = MailUtils.getMailService();
     MessageFilter filter = new MessageFilter("Folder"); 
     filter.setAccountId(accountId);
     if (accountId != null){
@@ -127,6 +124,8 @@ public class UIMessageList extends UIForm {
     }
     setMessageFilter(filter);
   }
+  
+  public String getAccountId() { return accountId_ ; }
   
   public String getSelectedMessageId() throws Exception {
     if (getCheckedMessage() != null && getAppliedMessage().size() > 0) {
@@ -144,11 +143,11 @@ public class UIMessageList extends UIForm {
   public void setSelectedTagId(String tagId) {selectedTagId_ = tagId ;}
   
   public boolean selectedSpamFolder() throws Exception {
-    return (getSelectedFolderId() != null) ? getSelectedFolderId().equals(Utils.createFolderId(MailUtils.getAccountId(), Utils.FD_SPAM, false)) : false ;
+    return (getSelectedFolderId() != null) ? getSelectedFolderId().equals(Utils.createFolderId(accountId_, Utils.FD_SPAM, false)) : false ;
   }
   
   public boolean selectedDraftFolder() throws Exception {
-    return (getSelectedFolderId() != null) ? getSelectedFolderId().equals(Utils.createFolderId(MailUtils.getAccountId(), Utils.FD_DRAFTS, false)) : false ;
+    return (getSelectedFolderId() != null) ? getSelectedFolderId().equals(Utils.createFolderId(accountId_, Utils.FD_DRAFTS, false)) : false ;
   }
   
   public String getViewQuery() {return viewQuery_ ;}
@@ -204,12 +203,11 @@ public class UIMessageList extends UIForm {
   public List<Message> getAppliedMessage() throws Exception {
     List<Message> messageList = new ArrayList<Message>();
     String username = MailUtils.getCurrentUser();
-    String accountId = getAncestorOfType(UIMailPortlet.class).findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
     MailService mailSrv = MailUtils.getMailService();
     for (Message msg : getCheckedMessage()) {
       if (msg.getMessageIds() != null) {
         for (int i = 0; i < msg.getMessageIds().length; i++) {
-          Message conversation = mailSrv.getMessageById(SessionsUtils.getSessionProvider(), username, accountId, msg.getMessageIds()[i]);
+          Message conversation = mailSrv.getMessageById(SessionsUtils.getSessionProvider(), username, accountId_, msg.getMessageIds()[i]);
           if (conversation != null) messageList.add(conversation);
         }
       }
@@ -220,11 +218,10 @@ public class UIMessageList extends UIForm {
   public List<Message> getConversations(Message msg) throws Exception {
     List<Message> msgList = new ArrayList<Message>();
     String username = MailUtils.getCurrentUser();
-    String accountId = getAncestorOfType(UIMailPortlet.class).findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
     MailService mailSrv = MailUtils.getMailService();
     if (msg.isRootConversation() && (msg.getMessageIds() != null && msg.getMessageIds().length > 0)) {
       for (int i=0; i < msg.getMessageIds().length; i++) {
-        Message message = mailSrv.getMessageById(SessionsUtils.getSessionProvider(), username, accountId, msg.getMessageIds()[i]);
+        Message message = mailSrv.getMessageById(SessionsUtils.getSessionProvider(), username, accountId_, msg.getMessageIds()[i]);
         if (message != null) msgList.add(message) ;
       }
     }
@@ -233,13 +230,12 @@ public class UIMessageList extends UIForm {
   
   public List<String> getParticipators(Message msg) throws Exception {
     String username = MailUtils.getCurrentUser();
-    String accountId = getAncestorOfType(UIMailPortlet.class).findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
     MailService mailSrv = MailUtils.getMailService();
     List<Message> msgList = getConversations(msg);
     LinkedHashMap<String, String> participators = new LinkedHashMap<String, String>();
     for (Message message : msgList) {
       String personal = Utils.getPersonal(Utils.getInternetAddress(message.getFrom())[0]);
-      if (personal.equals(mailSrv.getAccountById(SessionsUtils.getSessionProvider(), username, accountId).getUserDisplayName())) personal = "me";
+      if (personal.equals(mailSrv.getAccountById(SessionsUtils.getSessionProvider(), username, accountId_).getUserDisplayName())) personal = "me";
       participators.put(personal, personal);
     }
     return new ArrayList<String>(participators.values());
@@ -248,12 +244,11 @@ public class UIMessageList extends UIForm {
   public List<Tag> getTags(Message msg) throws Exception {
     UIMailPortlet uiPortlet = getAncestorOfType(UIMailPortlet.class);
     String username = uiPortlet.getCurrentUser() ;
-    String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
     MailService mailSrv = getApplicationComponent(MailService.class);
     List<Tag> tagList = new ArrayList<Tag>();
     if (msg.getTags() != null && msg.getTags().length > 0) {
       for (int i = 0; i < msg.getTags().length; i++) {
-        Tag tag = mailSrv.getTag(SessionsUtils.getSessionProvider(), username, accountId, msg.getTags()[i]);
+        Tag tag = mailSrv.getTag(SessionsUtils.getSessionProvider(), username, accountId_, msg.getTags()[i]);
         tagList.add(tag);
       }
     }
@@ -306,7 +301,7 @@ public class UIMessageList extends UIForm {
       UIMessageList uiMessageList = event.getSource();
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       String username = uiPortlet.getCurrentUser();
-      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      String accountId = uiMessageList.getAccountId() ;
       MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
       if ( msgId != null ) {
         List<String> msgList = new ArrayList<String>() ;
@@ -332,7 +327,6 @@ public class UIMessageList extends UIForm {
       UIMessageList uiMessageList = event.getSource();
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       String username = uiPortlet.getCurrentUser();
-      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
       List<String> msgList = new ArrayList<String>() ;
       for (Message msg : uiMessageList.getCheckedMessage()) {
@@ -340,7 +334,7 @@ public class UIMessageList extends UIForm {
           msgList.add(msg.getId());
         }
       }
-      mailSrv.toggleMessageProperty(SessionsUtils.getSessionProvider(), username, accountId, msgList, Utils.EXO_STAR);
+      mailSrv.toggleMessageProperty(SessionsUtils.getSessionProvider(), username, uiMessageList.getAccountId(), msgList, Utils.EXO_STAR);
       uiMessageList.updateList();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent());
     }

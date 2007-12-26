@@ -66,20 +66,19 @@ public class UISelectAccount extends UIForm {
     uiSelect.setOnChange("SelectAccount") ;
     addChild(uiSelect) ; 
   }
-
-  private List<Account> getAccounts() throws Exception {
-    MailService mailSvr = getApplicationComponent(MailService.class) ;
-    String currentUser = Util.getPortalRequestContext().getRemoteUser() ;
-    return mailSvr.getAccounts(SessionsUtils.getSessionProvider(), currentUser) ;
-  }
   
   private List<SelectItemOption<String>> getValues() throws Exception {
+    MailService mailSvr = getApplicationComponent(MailService.class) ;
+    String username = Util.getPortalRequestContext().getRemoteUser() ;
+    List<Account> accountList = new ArrayList<Account>(); 
+    accountList =  mailSvr.getAccounts(SessionsUtils.getSessionProvider(), username) ;
+    String defaultAcc = mailSvr.getCurrentAccount(SessionsUtils.getSessionProvider(), username);
     List<SelectItemOption<String>>  options = new ArrayList<SelectItemOption<String>>() ;
-    for(Account acc : getAccounts()) {
-      options.add(new SelectItemOption<String>(acc.getLabel(), acc.getId())) ;
+    for(Account acc : accountList) {
+      SelectItemOption<String> option = new SelectItemOption<String>(acc.getLabel(), acc.getId());
+      if (defaultAcc != null && acc.getId().equals(defaultAcc)) option.setSelected(true);
+      options.add(option) ;
     }
-    //TODO : get default account
-    //if (getAccounts().size() > 0) { MailUtils.setAccountId(getAccounts().get(0).getId()); }
     return options ;
   }
   
