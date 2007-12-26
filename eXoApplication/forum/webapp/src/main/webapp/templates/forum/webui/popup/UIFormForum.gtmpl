@@ -1,8 +1,8 @@
 
-<div class="UICategoryForm">
+<div class="UIFormForum $uicomponent.id">
 	<% uiform.begin() %>
 		<div class="HorizontalLayout">
-			<div class="UIFormInputSet">
+			<div class="UIFormInput">
 				<table class="UIFormGrid">
 					<tbody>						
 				<% 

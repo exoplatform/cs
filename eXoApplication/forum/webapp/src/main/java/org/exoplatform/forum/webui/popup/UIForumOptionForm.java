@@ -45,7 +45,7 @@ import org.exoplatform.webui.form.UIFormSelectBox;
  */
 @ComponentConfig(
 		lifecycle = UIFormLifecycle.class,
-		template = "app:/templates/forum/webui/popup/UIForm.gtmpl",
+		template = "app:/templates/forum/webui/popup/UIFormForum.gtmpl",
 		events = {
 			@EventConfig(listeners = UIForumOptionForm.SaveActionListener.class), 
 			@EventConfig(listeners = UIForumOptionForm.CancelActionListener.class, phase=Phase.DECODE)
@@ -53,11 +53,12 @@ import org.exoplatform.webui.form.UIFormSelectBox;
 )
 public class UIForumOptionForm extends UIForm implements UIPopupComponent {
 	public static final String FIELD_TIMEZONE_SELECTBOX = "TimeZone" ;
-	public static final String FIELD_DATEFORMAT_SELECTBOX = "Dateformat" ;
+	public static final String FIELD_SHORTDATEFORMAT_SELECTBOX = "ShortDateformat" ;
+	public static final String FIELD_LONGDATEFORMAT_SELECTBOX = "LongDateformat" ;
 	public static final String FIELD_TIMEFORMAT_SELECTBOX = "Timeformat" ;
 	public static final String FIELD_MAXTOPICS_SELECTBOX = "MaximumThreads" ;
 	public static final String FIELD_MAXPOSTS_SELECTBOX = "MaximumPosts" ;
-	public static final String FIELD_FORUMJUMP_CHECKBOX= "ShowForumJump" ;
+	public static final String FIELD_FORUMJUMP_CHECKBOX = "ShowForumJump" ;
 	
 	private static final String[] timeZone = {
 			"(GMT -12:00) Eniwetok, Kwajalein", 
@@ -91,7 +92,7 @@ public class UIForumOptionForm extends UIForm implements UIPopupComponent {
 			"(GMT +11:00) Magadan, Solomon Islands, New Caledonia", 
 			"(GMT +12:00) Auckland, Wellington, Fiji, Kamchatka", 
 		} ;
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "deprecation" })
 	public UIForumOptionForm() throws Exception {
 		List<SelectItemOption<String>> list ;
 		list = new ArrayList<SelectItemOption<String>>() ;
@@ -110,18 +111,29 @@ public class UIForumOptionForm extends UIForm implements UIPopupComponent {
 			timeZoneMyHost = 0.0 ;
 			mark = "";
 		}
-		System.out.println("\ntimeZoneMyHost: " + mark + timeZoneMyHost + "0");
 		timeZone.setValue(mark + timeZoneMyHost + "0");
 
 		list = new ArrayList<SelectItemOption<String>>() ;
-		list.add(new SelectItemOption<String>("mm-dd-yy (example: 07-20-2007)", "id1")) ;
-		list.add(new SelectItemOption<String>("dd-mm-yy (example: 20-07-2007)", "id2")) ;
-		UIFormSelectBox dateFormat = new UIFormSelectBox(FIELD_DATEFORMAT_SELECTBOX, FIELD_DATEFORMAT_SELECTBOX, list) ;
-		dateFormat.setDefaultValue("id1");
+		String []format = new String[] {"m-d-yyyy", "m-d-yy", "mm-dd-yy", "mm-dd-yyyy","yyyy-mm-dd", "yy-mm-dd", "mm-dd-yyyy", "dd-mm-yy",
+				"m/d/yyyy", "m/d/yy", "mm/dd/yy", "mm/dd/yyyy","yyyy/mm/dd", "yy/mm/dd", "mm/dd/yyyy", "dd/mm/yy"} ;
+		for (String frm : format) {
+			list.add(new SelectItemOption<String>((frm +" ("  + ForumFormatFunction.getFormatDate(frm, date)+")"), frm)) ;
+    }
+		UIFormSelectBox shortdateFormat = new UIFormSelectBox(FIELD_SHORTDATEFORMAT_SELECTBOX, FIELD_SHORTDATEFORMAT_SELECTBOX, list) ;
+		shortdateFormat.setDefaultValue("m-d-yyyy");
+
+		list = new ArrayList<SelectItemOption<String>>() ;
+		format = new String[] {"ddd, MMMM dd, yyyy", "dddd, MMMM dd, yyyy", "dddd, dd MMMM, yyyy", "MMMM dd, yyyy", "dd MMMM, yyyy"};
+		String []idFormat = new String[] {"ddd,mmm,dd,yyyy", "dddd,mmm,dd,yyyy", "dddd,dd,mmm,yyyy", "mmm,dd,yyyy", "dd,mmm,yyyy"} ;
+		for (int i = 0; i < idFormat.length; i++) {
+			list.add(new SelectItemOption<String>((format[i] +" (" + ForumFormatFunction.getFormatDate(idFormat[i], date)+")"), idFormat[i])) ;
+    }
+		UIFormSelectBox longDateFormat = new UIFormSelectBox(FIELD_LONGDATEFORMAT_SELECTBOX, FIELD_LONGDATEFORMAT_SELECTBOX, list) ;
+		longDateFormat.setDefaultValue("id1");
 
 		list = new ArrayList<SelectItemOption<String>>() ;
 		list.add(new SelectItemOption<String>("12-hour format", "id12")) ;
-		list.add(new SelectItemOption<String>("24-hour format", "id23")) ;
+		list.add(new SelectItemOption<String>("24-hour format", "id24")) ;
 		UIFormSelectBox timeFormat = new UIFormSelectBox(FIELD_TIMEFORMAT_SELECTBOX, FIELD_TIMEFORMAT_SELECTBOX, list) ;
 		timeFormat.setDefaultValue("id12");
 
@@ -141,7 +153,8 @@ public class UIForumOptionForm extends UIForm implements UIPopupComponent {
 		UIFormCheckBoxInput isShowForumJump = new UIFormCheckBoxInput<Boolean>(FIELD_FORUMJUMP_CHECKBOX, FIELD_FORUMJUMP_CHECKBOX, false);
 	
 		addUIFormInput(timeZone) ;
-		addUIFormInput(dateFormat) ;
+		addUIFormInput(shortdateFormat) ;
+		addUIFormInput(longDateFormat) ;
 		addUIFormInput(timeFormat) ;
 		addUIFormInput(maximumThreads) ;
 		addUIFormInput(maximumPosts) ;

@@ -50,7 +50,7 @@ import org.exoplatform.webui.form.UIFormTextAreaInput;
 
 @ComponentConfig(
 		lifecycle = UIFormLifecycle.class,
-		template = "app:/templates/forum/webui/popup/UIForm.gtmpl",
+		template = "app:/templates/forum/webui/popup/UIFormForum.gtmpl",
 		events = {
 			@EventConfig(listeners = UIAddTagForm.SaveActionListener.class),
 			@EventConfig(listeners = UIAddTagForm.CancelActionListener.class)

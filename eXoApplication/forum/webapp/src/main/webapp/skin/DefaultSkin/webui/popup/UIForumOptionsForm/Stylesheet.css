@@ -1,11 +1,16 @@
-.UIForumOptionsForm {
+.UIForumOptionForm {
 	background-color: #ffffff;
 	padding: 8px;
 }
 
-.UIForumOptionsForm .HorizontalLayout {
+.UIForumOptionForm .HorizontalLayout {
 	border:1px solid #AEAEAE;
 	background-color: #f7f7f7;
-	padding: 8px 0px 0px 0px;
 }
 
+.UIForumOptionForm .UIAction {
+	padding: 10px 0px;
+}
+.UIForumOptionForm .UIFormInput {
+	border: solid 1px #ffffff;
+} 

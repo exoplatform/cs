@@ -40,7 +40,7 @@ import org.exoplatform.webui.form.UIFormUploadInput;
  */
 @ComponentConfig(
 		lifecycle = UIFormLifecycle.class,
-		template =	"system:/groovy/webui/form/UIForm.gtmpl",
+		template =	"system:/groovy/webui/form/UIFormForum.gtmpl",
 		events = {
 			@EventConfig(listeners = UIAttachFileForm.SaveActionListener.class), 
 			@EventConfig(listeners = UIAttachFileForm.CancelActionListener.class, phase = Phase.DECODE)

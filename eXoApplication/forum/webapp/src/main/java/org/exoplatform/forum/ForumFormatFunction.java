@@ -21,6 +21,7 @@
 package org.exoplatform.forum;
 
 import java.util.Date;
+import java.util.TreeMap;
 
 /**
  * Created by The eXo Platform SARL
@@ -28,14 +29,11 @@ import java.util.Date;
  *          tu.duy@exoplatform.com
  * Dec 21, 2007 5:35:54 PM 
  */
-/**
- * @author Administrator
- *
- */
+
 public class ForumFormatFunction {
 	
 	@SuppressWarnings("deprecation")
-  public static String getFormatDate(String format,Date myDate) {
+  public static String getFormatTime(String format,Date myDate) {
 		 long time = myDate.getHours() ;
 		 StringBuffer stringBuffer = new StringBuffer() ;
 		 if(format.equals("24H")){
@@ -51,6 +49,125 @@ public class ForumFormatFunction {
 		 }
 		return stringBuffer.toString();
 	}
+	
+	@SuppressWarnings("deprecation")
+  public static String getFormatDate(String format,Date myDate) {
+		/* d, dd, ddd, dddd, m, mm, mmm, yy, yyyy
+		 * */
+		TreeMap<String, String>mapDate = new TreeMap<String, String>();
+		int date = myDate.getDate();
+		mapDate.put("d", String.valueOf(date));
+		if(date < 10){
+			mapDate.put("dd", "0" + String.valueOf(date));
+		} else {
+			mapDate.put("dd", String.valueOf(date));
+		}
+		int month = myDate.getMonth() ;
+		mapDate.put("m", String.valueOf(month));
+		if(month < 10){
+			mapDate.put("mm", "0" + String.valueOf(month));
+		} else {
+			mapDate.put("mm", String.valueOf(month));
+		}
+		String strCase = "" ;
+		switch (month) {
+		case 0:
+			strCase = "January";
+			break;
+		case 1:
+			strCase = "February";
+			break;
+		case 2:
+			strCase = "March";
+			break;
+		case 3:
+			strCase = "April";
+			break;
+		case 4:
+			strCase = "May";
+			break;
+		case 5:
+			strCase = "June";
+			break;
+		case 6:
+			strCase = "July";
+			break;
+		case 7:
+			strCase = "August";
+			break;
+		case 8:
+			strCase = "September";
+			break;
+		case 9:
+			strCase = "October";
+			break;
+		case 10:
+			strCase = "November";
+			break;
+		case 11:
+			strCase = "December";
+			break;
+		default:
+			break ;
+		}
+		mapDate.put("mmm", strCase);
+		int year = myDate.getYear() + 1900;
+		mapDate.put("yy", String.valueOf(year).substring(2));
+		mapDate.put("yyyy", String.valueOf(year));
+		int day = myDate.getDay() ;
+		switch (day) {
+    case 0:
+    	strCase = "Sunday" ;
+	    break;
+    case 1:
+    	strCase = "Monday" ;
+    	break;
+    case 2:
+    	strCase = "Tuesday" ;
+    	break;
+    case 3:
+    	strCase = "Webnesday" ;
+    	break;
+    case 4:
+    	strCase = "Thursday" ;
+    	break;
+    case 5:
+    	strCase = "Friday" ;
+    	break;
+    case 6:
+    	strCase = "Saturday" ;
+    	break;
+    default:
+	    break;
+    }
+		mapDate.put("ddd", strCase.replaceFirst("day", ""));
+		mapDate.put("dddd", strCase);
+		String []slipFormat = new String[] {};
+		String sl = "";
+		StringBuffer stringBuffer = new StringBuffer() ;
+		if(format.indexOf("/") > 0) {
+			sl = "/";
+		}
+		if(format.indexOf("-") > 0) {
+			sl = "-";
+		}
+		if(format.indexOf(",") > 0) {
+			sl = ",";
+		}
+		slipFormat = format.split(sl) ;
+		int sum = slipFormat.length ;
+		for (int i = 0; i < sum; i++) {
+			stringBuffer.append(mapDate.get(slipFormat[i]));
+			if(sl.equals(",")){
+				if(slipFormat[i].equals("dddd")|| (i<(sum-1) &&slipFormat[i+1].equals("yyyy")))
+					stringBuffer.append(sl);
+				stringBuffer.append(" ");
+			}else if(i < 2) {
+				stringBuffer.append(sl);
+			}
+		}
+	  return stringBuffer.toString();
+  }
 	
 	public static String getTimeZoneNumberInString(String string) {
 		if(string != null && string.length() > 0) {
