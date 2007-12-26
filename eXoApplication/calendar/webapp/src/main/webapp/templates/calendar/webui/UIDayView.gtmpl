@@ -35,11 +35,9 @@
 	String endWorkingTime = uicomponent.getEndTime() ;
 	def hoursMap = uicomponent.getTimeSteps(timeFormat, timeInterval) ;
 	boolean isShowWorkingTime = uicomponent.isShowWorkingTime() ;
-	//workingStart = uicomponent.getCalendarSetting().getWorkingTimeBegin() ;
-	//int defaultTimeInterval = uicomponent.getDefaultTimeInterval() ;
-  //rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.setting(' + defaultTimeInterval + ',"'+workingStart+'") ;') ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.showEvent() ;') ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.initSelection() ;') ;
+  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.checkFilter() ;') ;
   cssClass = "Day" ;
 %>
 <div class="UIDayView">

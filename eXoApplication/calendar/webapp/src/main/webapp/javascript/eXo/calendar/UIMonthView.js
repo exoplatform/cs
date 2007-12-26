@@ -17,7 +17,7 @@ UIMonthView.prototype.init = function() {
 	this.startMonth = parseInt(this.cells[0].getAttribute("startTime")) ;
 	this.endMonth = parseInt(this.cells[this.cells.length-1].getAttribute("startTime")) + 24*60*60*1000 - 1 ;
 	this.unitX = this.cells[0].offsetWidth - 1;
-	this.unitY = this.cells[0].offsetHeight - 1 ;
+	this.unitY = this.cells[0].offsetHeight - 1 ;		
 	for(var i = 0 ; i < len ; i++) {
 		this.createBars(this.items[i]) ;
 	}
@@ -56,7 +56,7 @@ UIMonthView.prototype.getStartIndex = function(start) {
 	var startCell = null ;
 	for(var i = 0 ; i < rowLength  ; i ++) {
 		startCell = DOMUtil.findFirstDescendantByClass(tr[i], "td", "UICellBlock") ;
-		startWeek = parseInt(startCell.getAttribute("startTime"))  ;//this.startMonth + i*24*7*60*60*1000 ;
+		startWeek = parseInt(startCell.getAttribute("startTime"))  ;
 		endWeek = startWeek + 24*7*60*60*1000;
 		if ((start >= startWeek) && (start < endWeek)) {
 			return (i+1) ;
@@ -78,12 +78,16 @@ UIMonthView.prototype.createBars = function(event) {
 	var startDay = UICalendarPortlet.getDay(start) ;
 	var endDay = UICalendarPortlet.getDay(end) ;
 	var checkbox = null ;
+	var fullDayEvent = new Array() ;
+	this.neweventContainer = document.createElement("div") ;
+	this.eventContainer.appendChild(this.neweventContainer) ;
 	if (delta == 0) {
 		event.style.top = (top - 1) * this.unitY + 16 + "px" ;
 		event.style.left = startDay * this.unitX + "px" ;
 		var datediff = UICalendarPortlet.dateDiff(start,end) ;
 		if ((datediff != 0) && UICalendarPortlet.isBeginDate(end)) event.style.width = datediff * this.unitX + "px" ;		
 		else event.style.width = datediff * this.unitX  + this.unitX  + "px" ;
+		fullDayEvent.push(event) ;
 	}	else if (delta == 1) {
 		event.style.top = (top - 1) * this.unitY + 16 + "px" ;
 		event.style.left = startDay * this.unitX + "px" ;
@@ -96,10 +100,11 @@ UIMonthView.prototype.createBars = function(event) {
 			else event1.style.width = endDay * this.unitX + this.unitX + "px" ;
 			checkbox = DOMUtil.findFirstDescendantByClass(event1, "input", "checkbox") ;
 			if (checkbox) DOMUtil.removeElement(checkbox) ;
-			this.eventContainer.appendChild(event1) ;
+			this.neweventContainer.appendChild(event1) ;
 		}
-	}else if(delta > 1) {
-		var fullDayEvent = new Array() ;
+		fullDayEvent.push(event) ;
+		fullDayEvent.push(event1) ;
+	} else {
 		fullDayEvent.push(event) ;
 		for(var i = 0 ; i < delta ; i ++) {
 			fullDayEvent.push(event.cloneNode(true)) ;			
@@ -108,12 +113,12 @@ UIMonthView.prototype.createBars = function(event) {
 		fullDayEvent[0].style.top =  (top - 1) * this.unitY + 16 + "px" ;
 		fullDayEvent[0].style.left = startDay * this.unitX  + "px" ;
 		fullDayEvent[0].style.width = (7 - startDay) * this.unitX + "px" ;
-		this.eventContainer.appendChild(fullDayEvent[0]) ;
+		this.neweventContainer.appendChild(fullDayEvent[0]) ;
 		for(var i = 1 ; i < len - 1 ; i ++) {
 			fullDayEvent[i].style.top = parseInt(fullDayEvent[i-1].style.top) + this.unitY + "px" ;
 			fullDayEvent[i].style.left = "0px" ;
 			fullDayEvent[i].style.width = 7*this.unitX + "px" ;
-			this.eventContainer.appendChild(fullDayEvent[i]) ;
+			this.neweventContainer.appendChild(fullDayEvent[i]) ;
 			checkbox = DOMUtil.findFirstDescendantByClass(fullDayEvent[i], "input", "checkbox") ;
 			if (checkbox) DOMUtil.removeElement(checkbox) ;
 		}
@@ -126,13 +131,11 @@ UIMonthView.prototype.createBars = function(event) {
 			else fullDayEvent[len - 1].style.width = endDay * this.unitX + this.unitX + "px" ;
 			checkbox = DOMUtil.findFirstDescendantByClass(fullDayEvent[len-1], "input", "checkbox") ;
 			if (checkbox) DOMUtil.removeElement(checkbox) ;
-			this.eventContainer.appendChild(fullDayEvent[len-1]) ;
+			this.neweventContainer.appendChild(fullDayEvent[len-1]) ;
 			}catch(e) {alert(e.message) ; }
 		}
-	} else {
-		//alert("adsfasd") ;
 	}
-}
+} ;
 
 UIMonthView.prototype.resetSize = function(bars) {
 	var len = bars.length ;

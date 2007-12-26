@@ -9,6 +9,7 @@
   rcontext.getJavascriptManager().importJavascript('eXo.calendar.UICalendarDragDrop','/calendar/javascript/') ;
 	rcontext.getJavascriptManager().importJavascript('eXo.calendar.UIMonthView','/calendar/javascript/') ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UIMonthView.init() ;') ;
+  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.checkFilter() ;') ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UIMonthView.initHighlighter("' + uiform.id + '") ;') ;
 	uiform.begin()
  	_ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");
