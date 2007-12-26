@@ -338,11 +338,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       SessionProvider sessionProvider = SessionProvider.createSystemProvider() ;
       String username = ContactUtils.getCurrentUser() ;
       contactService.moveContacts(
-          sessionProvider, username, contacts, type);
-      for(String id : contactIds) {
-        Contact contact = uiContacts.contactMap.get(id) ;
-        contactService.saveContactToSharedAddressBook(sessionProvider, username, addressBookId, contact, false) ;  
-      }      
+          sessionProvider, username, contacts, type);      
       uiContacts.updateList() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
       
