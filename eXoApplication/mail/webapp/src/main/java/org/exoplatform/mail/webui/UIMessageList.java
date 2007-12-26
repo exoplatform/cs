@@ -730,7 +730,8 @@ public class UIMessageList extends UIForm {
       for(Message message : uiMessageList.getAppliedMessage()) {
         mailSrv.moveMessages(SessionsUtils.getSessionProvider(), username, accountId, message.getId(), message.getFolders()[0], folderId);
      }       
-     uiMessageList.updateList();                   
+     uiMessageList.updateList();     
+     event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
   }
   

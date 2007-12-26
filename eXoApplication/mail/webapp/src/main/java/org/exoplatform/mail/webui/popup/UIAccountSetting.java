@@ -301,7 +301,7 @@ public class UIAccountSetting extends UIFormTabPane {
       acc.setCheckedAuto(uiSetting.getFieldCheckMailAuto());
       acc.setIncomingUser(userName); 
       acc.setIncomingPassword(uiSetting.getFieldIncomingPassword());
-      acc.setIncomingHost(uiSetting.getFieldIncomingPort());
+      acc.setIncomingHost(uiSetting.getFieldIncomingServer());
       acc.setIncomingPort(uiSetting.getFieldIncomingPort());  
       acc.setIncomingSsl(uiSetting.getFieldIsSSL());
       acc.setIncomingFolder(uiSetting.getFieldIncomingFolder()) ;
