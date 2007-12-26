@@ -171,6 +171,7 @@ UIContactDragDrop.prototype.dropCallback = function(dndEvent) {
   }
   this.foundTargetObjectCatch = dndEvent.foundTargetObject ;
   if (this.foundTargetObjectCatch) {
+    var uiContacts = document.getElementById('UIContacts') ;
     if (eXo.contact.UIContactDragDrop.listView) {
       eXo.core.DOMUtil.findDescendantsByClass(dndEvent.clickObject, 'input', 'checkbox')[0].checked = true ;
     } else {
@@ -187,6 +188,7 @@ UIContactDragDrop.prototype.dropCallback = function(dndEvent) {
       return ;
     }
     if (this.foundTargetObjectCatch.className.indexOf('PublicAddress') != -1) {
+      uiContacts.action = uiContacts.action + '&isDND=true' ;
       eXo.webui.UIForm.submitForm('UIContacts','MoveContacts', true) ;
       return ;
     }
@@ -197,16 +199,14 @@ UIContactDragDrop.prototype.dropCallback = function(dndEvent) {
     }
 
     if (eXo.core.DOMUtil.findAncestorByClass(this.foundTargetObjectCatch, 'UITags')) {
-      var uiMsgList = document.getElementById('UIContacts') ;
-	    uiMsgList.action = uiMsgList.action + '&objectId=' + contactTypeId ;
+	    uiContacts.action = uiContacts.action + '&objectId=' + contactTypeId ;
 	    eXo.webui.UIForm.submitForm('UIContacts','DNDContactsToTag', true) ;
 	    return ;
     }
     var addressBookType = this.foundTargetObjectCatch.getAttribute('addresstype') ;
     
     // request service
-    var uiMsgList = document.getElementById('UIContacts') ;
-    uiMsgList.action = uiMsgList.action + '&objectId=' + contactTypeId + '&addressType=' + addressBookType ;
+    uiContacts.action = uiContacts.action + '&objectId=' + contactTypeId + '&addressType=' + addressBookType ;
     eXo.webui.UIForm.submitForm('UIContacts','DNDContacts', true)
   }
 } ;
