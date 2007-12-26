@@ -544,7 +544,7 @@ public class JCRDataStorage{
               sender = personal + " ;" + address ;
             if(str.length() < 1)  {
               str = sender ;              
-            }else {
+            } else {
               str += "," + sender ;
             }           
             i++ ;

@@ -279,12 +279,13 @@ public class UIMessageList extends UIForm {
           List<String> msgIds  = new ArrayList<String>();
           msgIds.add(msg.getId());
           mailServ.toggleMessageProperty(SessionsUtils.getSessionProvider(), username, accountId, msgIds, Utils.EXO_ISUNREAD);
+          uiMessageList.setSelectedMessageId(msgId);
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent());
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer); 
         }
-        uiMessageList.setSelectedMessageId(msgId);
         uiMessagePreview.setMessage(msg);
         uiMessageList.updateList();
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent());
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer);        
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiMessagePreview);       
       }
     }
   }
