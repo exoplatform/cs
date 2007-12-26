@@ -21,3 +21,7 @@
 	background: url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/BlueCirclePlus.gif') ;
 	cursor: pointer;
 }
+
+.UICategoryForm .UIFormInput {
+	padding: 0px 0px 0px 20px;
+}

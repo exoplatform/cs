@@ -129,7 +129,7 @@ public class UIForumOptionForm extends UIForm implements UIPopupComponent {
 			list.add(new SelectItemOption<String>((format[i] +" (" + ForumFormatFunction.getFormatDate(idFormat[i], date)+")"), idFormat[i])) ;
     }
 		UIFormSelectBox longDateFormat = new UIFormSelectBox(FIELD_LONGDATEFORMAT_SELECTBOX, FIELD_LONGDATEFORMAT_SELECTBOX, list) ;
-		longDateFormat.setDefaultValue("id1");
+		longDateFormat.setDefaultValue("ddd,mmm,dd,yyyy");
 
 		list = new ArrayList<SelectItemOption<String>>() ;
 		list.add(new SelectItemOption<String>("12-hour format", "id12")) ;
@@ -184,6 +184,12 @@ public class UIForumOptionForm extends UIForm implements UIPopupComponent {
 			long maxTopic = Long.parseLong(uiForm.getUIFormSelectBox(FIELD_MAXTOPICS_SELECTBOX).getValue().replaceFirst("id", "")) ;
 			long maxPost = Long.parseLong(uiForm.getUIFormSelectBox(FIELD_MAXPOSTS_SELECTBOX).getValue().replaceFirst("id", "")) ;
 			double timezone = Double.parseDouble(uiForm.getUIFormSelectBoxForum(FIELD_TIMEZONE_SELECTBOX).getValue());
+			String shortDateFormat = uiForm.getUIFormSelectBox(FIELD_SHORTDATEFORMAT_SELECTBOX).getValue();
+			String longDateFormat = uiForm.getUIFormSelectBox(FIELD_LONGDATEFORMAT_SELECTBOX).getValue();
+			String timeFormat = uiForm.getUIFormSelectBox(FIELD_TIMEFORMAT_SELECTBOX).getValue();
+			System.out.println("\nTimeZone: " + timezone + "\nShortDate: " + shortDateFormat + 
+					"\nLongDate" + longDateFormat + "\nTime: " + timeFormat);
+			//ForumFormatFunction.setShortFormatDate(shortDateFormat);
 			UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
 			UITopicContainer topicContainer = forumPortlet.findFirstComponentOfType(UITopicContainer.class);
 			topicContainer.setMaxItemInPage(maxTopic,maxPost) ;

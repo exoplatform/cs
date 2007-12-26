@@ -59,7 +59,7 @@ public class UIForumActionBar extends UIContainer	{
 			UIForumActionBar uiActionBar = event.getSource() ;
 			UIForumPortlet forumPortlet = uiActionBar.getAncestorOfType(UIForumPortlet.class) ;
 			UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;
-			popupAction.activate(UICategoryForm.class, 600) ;
+			popupAction.activate(UICategoryForm.class, 500) ;
 			event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
 		}
 	}	
@@ -103,7 +103,7 @@ public class UIForumActionBar extends UIContainer	{
 			UIForumPortlet forumPortlet = uiActionBar.getAncestorOfType(UIForumPortlet.class) ;
 			UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;
 			UIForumOptionForm forumOptionForm = popupAction.createUIComponent(UIForumOptionForm.class, null, null) ;
-			popupAction.activate(forumOptionForm, 662, 300) ;
+			popupAction.activate(forumOptionForm, 580, 290) ;
 			event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
 		}
 	}	

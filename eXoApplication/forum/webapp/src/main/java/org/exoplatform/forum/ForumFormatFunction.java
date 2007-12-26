@@ -31,7 +31,7 @@ import java.util.TreeMap;
  */
 
 public class ForumFormatFunction {
-	
+
 	@SuppressWarnings("deprecation")
   public static String getFormatTime(String format,Date myDate) {
 		 long time = myDate.getHours() ;
@@ -63,11 +63,11 @@ public class ForumFormatFunction {
 			mapDate.put("dd", String.valueOf(date));
 		}
 		int month = myDate.getMonth() ;
-		mapDate.put("m", String.valueOf(month));
-		if(month < 10){
-			mapDate.put("mm", "0" + String.valueOf(month));
+		mapDate.put("m", String.valueOf(month+1));
+		if(month < 9){
+			mapDate.put("mm", "0" + String.valueOf(month+1));
 		} else {
-			mapDate.put("mm", String.valueOf(month));
+			mapDate.put("mm", String.valueOf(month+1));
 		}
 		String strCase = "" ;
 		switch (month) {
