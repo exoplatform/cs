@@ -270,6 +270,11 @@ public class MessageFilter {
     }
       
     if (body != null && body.trim().length() > 0) {
+      body = body.replace("&", "&amp;");
+      body = body.replace("<", "&lt;");
+      body = body.replace(">", "&gt;");
+      body = body.replace("'", "&apos;");
+      body = body.replace("\"", "&quot;");
       if(hasConjuntion) stringBuffer.append(" and (") ;
       else stringBuffer.append("(") ;
       switch (getBodyCondition()) {
