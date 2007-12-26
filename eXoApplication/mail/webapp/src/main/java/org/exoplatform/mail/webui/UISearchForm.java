@@ -65,6 +65,11 @@ public class UISearchForm extends UIForm {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       } else {
+        text = text.replace("&", "&amp;");
+        text = text.replace("<", "&lt;");
+        text = text.replace(">", "&gt;");
+        text = text.replace("'", "&apos;");
+        text = text.replace("\"", "&quot;");
         String searchQuery = "(jcr:contains(@" + Utils.EXO_TO + ", '" + text + "'))" +
         " or (jcr:contains(@" + Utils.EXO_FROM + ", '" + text + "'))" +
         " or (jcr:contains(@" + Utils.EXO_SUBJECT + ", '" + text + "'))" +
