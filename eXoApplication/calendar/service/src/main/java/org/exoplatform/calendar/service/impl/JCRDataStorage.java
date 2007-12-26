@@ -1050,10 +1050,12 @@ public class JCRDataStorage{
     } else {
       attachHome = eventNode.addNode(Utils.ATTACHMENT_NODE, Utils.NT_UNSTRUCTURED) ;
     }
-    if(attachHome.hasNode(attachment.getId())) {
-      attachNode = attachHome.getNode(attachment.getId()) ;
+    String name = attachment.getId() ;
+    if(!isNew) name = name.substring(attachment.getId().lastIndexOf("/")+1) ; 
+    if(attachHome.hasNode(name)) {
+      attachNode = attachHome.getNode(name) ;
     } else {
-      attachNode = attachHome.addNode(attachment.getId(), Utils.EXO_EVEN_TATTACHMENT) ;
+      attachNode = attachHome.addNode(name, Utils.EXO_EVEN_TATTACHMENT) ;
     }
     attachNode.setProperty(Utils.EXO_FILE_NAME, attachment.getName()) ;
     Node nodeContent = null;
@@ -1073,7 +1075,7 @@ public class JCRDataStorage{
         Node attchmentNode = iter.nextNode() ;
         if(attchmentNode.isNodeType(Utils.EXO_EVEN_TATTACHMENT)) {
           Attachment attachment = new Attachment() ;
-          attachment.setId(attchmentNode.getName()) ;
+          attachment.setId(attchmentNode.getPath()) ;
           if(attchmentNode.hasProperty(Utils.EXO_FILE_NAME)) attachment.setName(attchmentNode.getProperty(Utils.EXO_FILE_NAME).getString()) ;
           //attachment.setName(attchmentNode.getName()) ;
           Node contentNode = attchmentNode.getNode(Utils.JCR_CONTENT) ; 
@@ -1085,7 +1087,9 @@ public class JCRDataStorage{
               attachment.setInputStream(inputStream) ;
               attachment.setSize(inputStream.available()) ;
             }
+            //attachment.setId(contentNode.getPath()) ;
           }
+          attachment.setWorkspace(attchmentNode.getSession().getWorkspace().getName()) ;
           attachments.add(attachment) ;
         }
       }

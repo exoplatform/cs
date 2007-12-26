@@ -18,7 +18,6 @@ package org.exoplatform.calendar.webui.popup;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.exoplatform.calendar.CalendarUtils;
@@ -42,6 +41,7 @@ import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormDateTimeInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
@@ -59,7 +59,7 @@ import org.exoplatform.webui.form.validator.EmptyFieldValidator;
     template = "system:/groovy/webui/form/UIForm.gtmpl",
     events = {
       @EventConfig(listeners = UIAdvancedSearchForm.SearchActionListener.class),
-      @EventConfig(listeners = UIAdvancedSearchForm.CancelActionListener.class)
+      @EventConfig(listeners = UIAdvancedSearchForm.CancelActionListener.class, phase = Phase.DECODE)
     }
 )
 public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
@@ -113,7 +113,18 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
   static  public class SearchActionListener extends EventListener<UIAdvancedSearchForm> {
     public void execute(Event<UIAdvancedSearchForm> event) throws Exception {
       UIAdvancedSearchForm uiForm = event.getSource() ;
-      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;      
+      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;   
+
+      if(uiForm.getUIFormDateTimeInput(uiForm.FROMDATE).getCalendar() == null) {
+        uiApp.addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.from-date-time-invalid", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
+      if(uiForm.getUIFormDateTimeInput(uiForm.TODATE).getCalendar() == null) {
+        uiApp.addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.to-date-time-invalid", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
       if(uiForm.getUIFormDateTimeInput(uiForm.FROMDATE).getCalendar().getTimeInMillis() >= 
         uiForm.getUIFormDateTimeInput(uiForm.TODATE).getCalendar().getTimeInMillis()) {
         uiApp.addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.date-time-invalid", null)) ;

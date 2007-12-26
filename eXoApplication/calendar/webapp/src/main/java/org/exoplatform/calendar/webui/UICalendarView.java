@@ -546,6 +546,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         System.out.println("\n\n shared event not edit");
       }*/
       if(eventCalendar != null) {
+        System.out.println("\n\n eventCalendar " + eventCalendar);
         UIPreview uiPreview = uiPopupContainer.addChild(UIPreview.class, null, null) ;
         uiPreview.setEvent(eventCalendar) ;
         uiPreview.setShowPopup(true) ;

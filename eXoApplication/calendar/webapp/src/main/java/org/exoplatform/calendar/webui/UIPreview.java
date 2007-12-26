@@ -16,12 +16,14 @@
  **/
 package org.exoplatform.calendar.webui;
 
-import java.io.InputStream;
 import java.util.LinkedHashMap;
 
+import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.Attachment;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.webui.popup.UIPopupComponent;
+import org.exoplatform.container.PortalContainer;
+import org.exoplatform.download.DownloadResource;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -40,7 +42,8 @@ import org.exoplatform.webui.event.EventListener;
     lifecycle = UIFormLifecycle.class,
     template =  "app:/templates/calendar/webui/UIDefaultPreview.gtmpl",
     events = {
-      @EventConfig(listeners = UIPreview.ViewActionListener.class),  
+      //@EventConfig(listeners = UIPreview.ViewActionListener.class),  
+      @EventConfig(listeners = UIPreview.DownloadActionListener.class),  
       @EventConfig(listeners = UICalendarView.EditActionListener.class),  
       @EventConfig(listeners = UICalendarView.DeleteActionListener.class)
 
@@ -96,28 +99,57 @@ public class UIPreview extends UICalendarView implements UIPopupComponent {
     return isShowPopup_;
   }
 
-  public String getImage(Attachment att) throws Exception {
-    DownloadService dservice = getApplicationComponent(DownloadService.class) ;
-    InputStreamDownloadResource dresource ;
-    InputStream input = att.getInputStream() ;
-    dresource = new InputStreamDownloadResource(input, att.getName()) ;
-    dresource.setDownloadName(att.getName()) ;
-    return dservice.getDownloadLink(dservice.addDownloadResource(dresource)) ;
+  public Attachment getAttachment(String attId) {
+    System.out.println("\n\n event " + getEvent());
+    if(getEvent() != null) for(Attachment a : getEvent().getAttachment()) {
+      System.out.println("\n\n attId " + attId + "---" + a.getId());
+      if(a.getId().equals(attId)) return a ;
+    }
+    return null ;
   }
+  /* public String getImage(Attachment attach) throws Exception {
+    if(attach.getMimeType().contains("image")) {
+      DownloadService dservice = getApplicationComponent(DownloadService.class) ;
+      return CalendarUtils.getDataSource(attach, dservice) ;
+    }
+    return null ;
+  }*/
 
-  public String getDownloadLink(Attachment att) throws Exception {
+  public String getDownloadLink(Attachment attach) throws Exception {
     DownloadService dservice = getApplicationComponent(DownloadService.class) ;
-    InputStreamDownloadResource dresource ;
-    InputStream input = att.getInputStream() ;
-    dresource = new InputStreamDownloadResource(input, att.getName()) ;
-    dresource.setDownloadName(att.getName()) ;
-    return dservice.getDownloadLink(dservice.addDownloadResource(dresource)) ;
-  }
+    return CalendarUtils.getDataSource(attach, dservice) ;
+  } 
   @Override
   LinkedHashMap<String, CalendarEvent> getDataMap() {
     LinkedHashMap<String, CalendarEvent> dataMap = new LinkedHashMap<String, CalendarEvent>() ;
     dataMap.put(event_.getId(), event_) ;
     return dataMap ;
+  }
+
+  public String getPortalName() {
+    PortalContainer pcontainer =  PortalContainer.getInstance() ;
+    return pcontainer.getPortalContainerInfo().getContainerName() ;  
+  }
+  static  public class DownloadActionListener extends EventListener<UIPreview> {
+    public void execute(Event<UIPreview> event) throws Exception {
+      UIPreview uiPreview = event.getSource() ;
+      String attId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      Attachment attach = uiPreview.getAttachment(attId) ;
+      if(attach != null) {
+        String mimeType = attach.getMimeType().substring(attach.getMimeType().indexOf("/")+1) ;
+        DownloadResource dresource = new InputStreamDownloadResource(attach.getInputStream(), mimeType);
+        DownloadService dservice = (DownloadService)PortalContainer.getInstance().getComponentInstanceOfType(DownloadService.class);
+        dresource.setDownloadName(attach.getName());
+        String downloadLink = dservice.getDownloadLink(dservice.addDownloadResource(dresource));
+        event.getRequestContext().getJavascriptManager().addJavascript("ajaxRedirect('" + downloadLink + "');");
+        
+      }
+      /* 
+      String downloadLink = uiPreview.getDownloadLink(attach) ;
+      System.out.println("Download " + downloadLink);
+      event.getRequestContext().getJavascriptManager().addCustomizedOnLoadScript("ajaxRedirect('" + downloadLink + "');");
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPreview) ;*/
+    }
   }
   static  public class ViewActionListener extends EventListener<UIPreview> {
     public void execute(Event<UIPreview> event) throws Exception {

@@ -28,9 +28,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import javax.jcr.PathNotFoundException;
+
 import org.exoplatform.calendar.service.Attachment;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
+import org.exoplatform.contact.service.ContactAttachment;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
@@ -231,20 +234,25 @@ public class CalendarUtils {
 		cal.setTime(date) ;
 		return getEndDay(cal) ;
 	}
-	public static String getImageSource(Attachment attach, DownloadService dservice) throws Exception {      
-		if (attach != null) {
-			InputStream input = attach.getInputStream() ;
-			byte[] imageBytes = null ;
-			if (input != null) {
-				imageBytes = new byte[input.available()] ;
-				input.read(imageBytes) ;
-				ByteArrayInputStream byteImage = new ByteArrayInputStream(imageBytes) ;
-				InputStreamDownloadResource dresource = new InputStreamDownloadResource(byteImage, "image") ;
-				dresource.setDownloadName(attach.getName()) ;
-				return  dservice.getDownloadLink(dservice.addDownloadResource(dresource)) ;        
-			}
-		}
-		return null ;
+	public static String getDataSource(Attachment attach, DownloadService dservice) throws Exception {      
+    if (attach != null) {
+      try {
+        InputStream input = attach.getInputStream() ;
+        byte[] imageBytes = null ;
+        if (input != null) {
+          imageBytes = new byte[input.available()] ;
+          input.read(imageBytes) ;
+          ByteArrayInputStream byteImage = new ByteArrayInputStream(imageBytes) ;
+          InputStreamDownloadResource dresource = new InputStreamDownloadResource(byteImage, attach.getMimeType() ) ;
+          dresource.setDownloadName(attach.getName()) ;
+          return  dservice.getDownloadLink(dservice.addDownloadResource(dresource)) ;        
+        } 
+      } catch (PathNotFoundException ex) {
+        ex.printStackTrace() ;
+        return null ;
+      }
+    }
+    return null ;
 	}
 
 	public static boolean isNameValid(String name, String[] regexpression) {

@@ -37,8 +37,10 @@ uiform.begin() ;
 		          $attachFile.name  
 		         	 $attachFile.size Kb
 		         </div>
-		         <%if(uicomponent.getImage(attachFile) != null) {%>
-		         	<img src="<%=uicomponent.getImage(attachFile)%>" class="Img" />
+		         <%if(attachFile.getMimeType().startsWith("image"))  {
+		         		String rndString = String.valueOf(new Date().getTime());
+		         %>
+		         	<img src="/${uicomponent.getPortalName()}/jcr?workspace=${attachFile.workspace}&hash=${rndString}&path=${attachFile.getDataPath()}" class="Img" />
 		         <%}%>
 		         <div class="Actions" style="white-space: nowrap;">
 			         <a href="#" class="IconHolder ViewAttachmentIcon" style="padding-left:15px;"> View </a> 

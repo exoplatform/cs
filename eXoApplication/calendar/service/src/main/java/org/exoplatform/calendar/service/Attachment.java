@@ -19,6 +19,12 @@ package org.exoplatform.calendar.service;
 import java.io.InputStream;
 import java.util.Calendar;
 
+import javax.jcr.ItemNotFoundException;
+import javax.jcr.Node;
+import javax.jcr.Session;
+
+import org.exoplatform.container.PortalContainer;
+import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.util.IdGenerator;
 
 /**
@@ -35,22 +41,49 @@ public class Attachment  {
   private long size ;
   private InputStream data ;
   private Calendar lastModified ;
+  private String workspace ;
   public Attachment() {
     id =  "Attachment" + IdGenerator.generate() ;
   }
-  
+
   public String getId() { return id ; }
   public void setId(String id) { this.id = id ; }
-  
+
   public String getMimeType() { return mimeType ; }
   public void setMimeType(String mimeType_) { this.mimeType = mimeType_ ; }
-  
+
   public long getSize() { return size ; }
   public void setSize(long size_) { this.size = size_ ; }
-  
+
   public String getName() { return name ; }
   public void setName(String name_) { this.name = name_ ; }
-  public InputStream getInputStream() {return data ;}
+
+
+  public InputStream getInputStream() throws Exception {
+    if(data != null && data.available() >0 ) return data ;
+    Node attachmentData ;
+    try{
+      attachmentData = (Node)getSesison().getItem(getId()) ;      
+    }catch (ItemNotFoundException e) {
+      e.printStackTrace() ;
+      return null ;
+    }
+    return attachmentData.getNode("jcr:content").getProperty("jcr:data").getStream() ;
+  }
+  public String getDataPath() throws Exception {
+    Node attachmentData ;
+    try{
+      attachmentData = (Node)getSesison().getItem(getId()) ;      
+    }catch (ItemNotFoundException e) {
+      e.printStackTrace() ;
+      return null ;
+    }
+    return attachmentData.getNode("jcr:content").getPath() ;
+  }
+  private Session getSesison()throws Exception {
+    RepositoryService repoService = (RepositoryService)PortalContainer.getInstance().getComponentInstanceOfType(RepositoryService.class) ;
+    return repoService.getDefaultRepository().getSystemSession(workspace) ;
+  }
   public void setInputStream(InputStream input) {data = input ;}
 
   public void setLastModified(Calendar lastModified) {
@@ -59,5 +92,13 @@ public class Attachment  {
 
   public Calendar getLastModified() {
     return lastModified;
+  }
+
+  public void setWorkspace(String workspace) {
+    this.workspace = workspace;
+  }
+
+  public String getWorkspace() {
+    return workspace;
   }
 }
