@@ -367,7 +367,10 @@ public class JCRDataStorage{
       	}else if(addressType.equals(SHARED)) {
       		if(contact.getContactType().equals(PRIVATE)) {
       			saveContactToSharedAddressBook(sysProvider, username, contact.getAddressBook()[0], contact, true) ;
-      			privateContactHome.getNode(contact.getId()).remove() ;
+      			
+            // hoang hung add if
+            if (privateContactHome.hasNode(contact.getId()))
+              privateContactHome.getNode(contact.getId()).remove() ;
       			privateContactHome.save() ;
       		}else if(contact.getContactType().equals(PUBLIC)) {
       			saveContactToSharedAddressBook(sysProvider, username, contact.getAddressBook()[0], contact, true) ;

@@ -327,15 +327,22 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
       contactIds = uiContacts.getCheckedContacts() ;
       for(String id : contactIds) {
-      	Contact ct = uiContacts.contactMap.get(id) ;
-      	if(ct != null) {
-      		ct.setAddressBook(addressBooks) ;
-      		contacts.add(ct) ;
+      	Contact contact = uiContacts.contactMap.get(id) ;
+      	if(contact != null) {
+      		contact.setAddressBook(addressBooks) ;
+      		contacts.add(contact) ;
       	}
-      }
+      }      
       if(contacts.size() == 0) return ;
-      ContactUtils.getContactService().moveContacts(
-          SessionProvider.createSystemProvider(), ContactUtils.getCurrentUser(), contacts, type);
+      ContactService contactService = ContactUtils.getContactService() ;
+      SessionProvider sessionProvider = SessionProvider.createSystemProvider() ;
+      String username = ContactUtils.getCurrentUser() ;
+      contactService.moveContacts(
+          sessionProvider, username, contacts, type);
+      for(String id : contactIds) {
+        Contact contact = uiContacts.contactMap.get(id) ;
+        contactService.saveContactToSharedAddressBook(sessionProvider, username, addressBookId, contact, false) ;  
+      }      
       uiContacts.updateList() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
       

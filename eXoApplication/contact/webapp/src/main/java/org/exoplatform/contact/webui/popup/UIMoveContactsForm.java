@@ -26,6 +26,7 @@ import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.SessionsUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactService;
+import org.exoplatform.contact.service.impl.JCRDataStorage;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContacts;
 import org.exoplatform.contact.webui.UIWorkingContainer;
@@ -139,7 +140,7 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
   static  public class SaveActionListener extends EventListener<UIMoveContactsForm> {
     public void execute(Event<UIMoveContactsForm> event) throws Exception {
       UIMoveContactsForm uiMoveContactForm = event.getSource() ;
-      String type = event.getRequestContext().getRequestParameter("addressType");
+      //String type = event.getRequestContext().getRequestParameter("addressType");
       UIContactPortlet uiContactPortlet = uiMoveContactForm.getAncestorOfType(UIContactPortlet.class) ;
       
       List<String> categories = new ArrayList<String>() ;
@@ -170,13 +171,9 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
       String username = ContactUtils.getCurrentUser() ;
       SessionProvider sessionProvider = SessionsUtils.getSystemProvider() ;
       if(contacts.size() == 0) return ;   
-      contactService.moveContacts(sessionProvider, username, contacts, type) ;
-      for (String addressBook : sharedGroups) {
-        for(String id : uiMoveContactForm.getContactIds()) {
-          Contact contact = uiMoveContactForm.movedContacts.get(id) ;
-          contactService.saveContactToSharedAddressBook(sessionProvider, username, addressBook, contact, true) ;  
-        }
-      }            
+      contactService.moveContacts(sessionProvider, username, contacts, JCRDataStorage.PUBLIC) ;
+      contactService.moveContacts(sessionProvider, username, contacts, JCRDataStorage.SHARED) ;
+      //contactService.saveContactToSharedAddressBook(sessionProvider, username, addressBook, contact, false) ;  
       uiContactPortlet.findFirstComponentOfType(UIContacts.class).updateList() ;
       uiContactPortlet.cancelAction() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContactPortlet.getChild(UIWorkingContainer.class)) ;
