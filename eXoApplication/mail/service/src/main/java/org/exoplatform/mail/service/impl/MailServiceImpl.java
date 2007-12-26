@@ -461,13 +461,13 @@ public class MailServiceImpl implements MailService{
           
           i ++ ;
         }
-      }
+        execFilters(sProvider, username, accountId);
+      } 
       folder.close(false);
       store.close();
     }  catch (Exception e) { 
       e.printStackTrace();
     }
-    execFilters(sProvider, username, accountId);
     return messageList;
   }
 
