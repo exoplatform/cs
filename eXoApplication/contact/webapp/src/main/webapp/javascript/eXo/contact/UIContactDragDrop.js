@@ -187,7 +187,7 @@ UIContactDragDrop.prototype.dropCallback = function(dndEvent) {
       return ;
     }
     if (this.foundTargetObjectCatch.className.indexOf('PublicAddress') != -1) {
-      eXo.webui.UIForm.submitForm('UIContacts','PublicContact', true) ;
+      eXo.webui.UIForm.submitForm('UIContacts','MoveContacts', true) ;
       return ;
     }
     var contactTypeId = this.foundTargetObjectCatch.getAttribute('tagname') ;
