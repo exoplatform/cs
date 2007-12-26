@@ -230,7 +230,7 @@
 		                      Edit group
 		                    </div>
 		                   </a>	
-		                   <a class="MenuItem" href="<%=uicomponent.event("DeleteGroup","id")%>">   
+		                   <a class="MenuItem" href="<%=uicomponent.event("DeleteGroup",uicomponent.id,"id")%>">   
 		                    <div class="ItemIcon DeleteGroupIcon">
 		                      Delete group
 		                    </div>
@@ -289,7 +289,7 @@
 		                      Edit Calendar
 		                    </div>
 		                   </a>
-		                   <a class="MenuItem" href="<%=uicomponent.event("RemoveCalendar","id")%>">   
+		                   <a class="MenuItem" href="<%=uicomponent.event("RemoveCalendar",uicomponent.id,"id")%>">   
 		                    <div class="ItemIcon RemoveCalendarIcon">
 		                      Remove Calendar
 		                    </div>

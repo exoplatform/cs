@@ -130,7 +130,7 @@ uiform.begin() ;
 			           <div class="IconHolder EditEventIcon"> Edit event </div>
 			          </a>
 			          <div class="SeparatorDotLine"><span></span></div>
-			          <a href="<%=uicomponent.event("Delete",event.getId()+"&"+uicomponent.CALENDARID+"="+event.getCalendarId()+"&calType=" +event.getCalType())%>" class="ControlButton">
+			          <a href="<%=uicomponent.event("Delete",uicomponent.id,event.getId()+"&"+uicomponent.CALENDARID+"="+event.getCalendarId()+"&calType=" +event.getCalType())%>" class="ControlButton">
 			           <div class="IconHolder DeleteEventIcon"> Delete event </div>
 			          </a>
 			          <div style="clear:left;"><span></span></div>

@@ -49,7 +49,7 @@ import org.exoplatform.webui.form.UIFormSelectBox;
     //template =  "app:/templates/calendar/webui/UIEventView.gtmpl",
     events = {
       @EventConfig(listeners = UICalendarView.AddEventActionListener.class),      
-      @EventConfig(listeners = UICalendarView.DeleteEventActionListener.class),
+      @EventConfig(listeners = UICalendarView.DeleteEventActionListener.class, confirm="UICalendarVIew.msg.confirm-delete"),
       @EventConfig(listeners = UICalendarView.ChangeCategoryActionListener.class), 
       @EventConfig(listeners = UICalendarView.AddCategoryActionListener.class), 
       @EventConfig(listeners = UICalendarView.SwitchViewActionListener.class),

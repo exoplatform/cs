@@ -97,7 +97,7 @@ uiform.begin() ;
 													<div class="IconHolder EditTaskIcon"> Edit Task </div>
 												</a>
 												<div class="SeparatorDotLine"><span></span></div>
-												<a href="<%=uicomponent.event("Delete",task.getId()+"&"+uicomponent.CALENDARID+"="+task.getCalendarId()+"&calType=" +task.getCalType())%>" class="ControlButton">
+												<a href="<%=uicomponent.event("Delete",uicomponent.id,task.getId()+"&"+uicomponent.CALENDARID+"="+task.getCalendarId()+"&calType=" +task.getCalType())%>" class="ControlButton">
 													<div class="IconHolder DeleteTaskIcon"> Delete Task </div>
 												</a>
 												<div style="clear:left;"><span></span></div>
