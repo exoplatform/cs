@@ -30,6 +30,7 @@ import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarWorkingContainer;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -171,15 +172,34 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
   public void deActivate() throws Exception {
     // TODO Auto-generated method stub
   }
-  public void reset() {
-    /*   if(isAddNew_) {
-
+  public void resetField() throws Exception {
+    if(isAddNew_) {
+      isAddNew_ = true ;
+      calendarId_ = null ;
+      setDisplayName(null) ;
+      setDescription(null) ;
+      setSelectedGroup(null) ;
+      setLocale(null) ;
+      setTimeZone(null) ;
+      setSelectedColor(null) ;
+      lockCheckBoxFields(false) ;
+      UIFormInputWithActions sharing = getChildById(INPUT_SHARE) ;
+      sharing.getUIStringInput(EDIT_PERMISSION).setEnable(true) ;
+      sharing.getUIStringInput(EDIT_PERMISSION).setValue(null) ;
+      for(Object obj : getPublicGroups()) {
+       UIFormCheckBoxInput input = getUIFormCheckBoxInput(((Group)obj).getId()) ;
+       if(input != null && input.isChecked()) input.setChecked(false) ;
+      }
+    } else {
+        String username = Util.getPortalRequestContext().getRemoteUser() ;
+        SessionProvider sProvider = SessionsUtils.getSessionProvider() ;
+        Calendar calendar = CalendarUtils.getCalendarService().getUserCalendar(sProvider, username, calendarId_) ;
+        init(calendar) ;
     }
-    calendarId_ = null ;
-    isAddNew_ = true ;*/
+
   }
   public void init(Calendar calendar) throws Exception {
-    reset() ;
+    //reset() ;
     isAddNew_ = false ;
     calendarId_ = calendar.getId() ;
     setDisplayName(calendar.getName()) ;
@@ -325,7 +345,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
     public void execute(Event<UICalendarForm> event) throws Exception {
       System.out.println("\n\n ResetActionListener");
       UICalendarForm uiForm = event.getSource() ;
-      uiForm.reset() ;
+      uiForm.resetField() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
     }
   }
