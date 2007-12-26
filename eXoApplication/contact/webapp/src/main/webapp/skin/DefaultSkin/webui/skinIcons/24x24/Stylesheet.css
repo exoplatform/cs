@@ -51,3 +51,8 @@
 .ViewIcon {
 	background: url('icons/ViewIcon.gif') no-repeat left center;
 }
+
+.ActionsAddIcon {
+	background: url('icons/ActionsAdd.gif') no-repeat right center;
+	width: 26px; height: 18px;
+}

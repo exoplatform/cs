@@ -81,14 +81,14 @@
       <div style="clear: left"><span></span></div>
 		</div>
 		<% 
-		Map sharedGroups =	uicomponent.getSharedAddressBooks() ;
+		Map sharedGroups =	uicomponent.getSharedGroups() ;
 		for(group in sharedGroups.keySet()) {
 				cssClass = "Normal" ;
 				String actionLink  = uicomponent.event("SelectSharedGroup", group) ;				
 				if(group.equals(uicomponent.getSelectedGroup()))	cssClass = "Selected" ;
 	 %>
 		<div class="ItemList $cssClass" addressType="1">
-			<a id="$group" href="$actionLink" class="IconHolder AddressIcon"  isPublic="true">
+			<a id="$group" href="$actionLink" class="IconHolder AddressIcon"  isPublic="false">
 				<%= sharedGroups.get(group) %>
 			</a>
 		</div>

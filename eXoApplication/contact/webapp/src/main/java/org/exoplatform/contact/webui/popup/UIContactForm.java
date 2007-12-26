@@ -69,8 +69,6 @@ import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
     }
 )
 public class UIContactForm extends UIFormTabPane implements UISelector {
-  private Contact contact_ = null ;
-  private boolean isNew_ = true;
   public static final String FIELD_WORKADDRESS_INPUT = "workAddress";
   public static final String FIELD_WORKCITY_INPUT = "workCity";
   public static final String FIELD_WORKSTATE_INPUT = "workState_province";
@@ -103,8 +101,12 @@ public class UIContactForm extends UIFormTabPane implements UISelector {
   final static public String FIELD_EDITPERMISSION = "editPermission" ;
   public static String[] FIELD_SHAREDCONTACT_BOX = null ;
   public static String FIELD_INPUT_INFO = "selectGroups";
+  
+  private Contact contact_ = null ;
+  private boolean isNew_ = true;
   private Map<String, String> permission_ = new HashMap<String, String>() ;
-
+  private boolean isShared =false ;
+  
   public UIContactForm() throws Exception {
     super("UIContactForm");
     UIProfileInputSet ProfileTab = new UIProfileInputSet(INPUT_PROFILETAB) ;
@@ -174,6 +176,7 @@ public class UIContactForm extends UIFormTabPane implements UISelector {
     //setRenderedChild(UIProfileInputSet.class) ;  
     this.setSelectedTab(ProfileTab.getId());
   }
+  public void setShared(boolean shared) { isShared = shared ; }
   
   public List<String> getCheckedPublicGroup() {
     List<String> groups = new ArrayList<String>() ;
@@ -289,7 +292,6 @@ public class UIContactForm extends UIFormTabPane implements UISelector {
   }
   
   static  public class SaveActionListener extends EventListener<UIContactForm> {
-    @Override
     public void execute(Event<UIContactForm> event) throws Exception {
       UIContactForm uiContactForm = event.getSource() ;
       UIApplication uiApp = uiContactForm.getAncestorOfType(UIApplication.class) ;
@@ -309,8 +311,6 @@ public class UIContactForm extends UIFormTabPane implements UISelector {
         return ; 
       }
 
-      ContactService contactService = ContactUtils.getContactService();  
-      String username = ContactUtils.getCurrentUser() ;
       Contact contact ;
       boolean isNew = uiContactForm.isNew_ ;
       if (isNew) contact = new Contact() ;
@@ -373,7 +373,8 @@ public class UIContactForm extends UIFormTabPane implements UISelector {
       contact.setNote(uiContactForm.getUIFormTextAreaInput(FIELD_NOTE_INPUT).getValue());
       contact.setLastUpdated(new Date()) ;
 
-      
+      ContactService contactService = ContactUtils.getContactService();  
+      String username = ContactUtils.getCurrentUser() ;
       if (isNew) {
         List<String> publicGroups = uiContactForm.getCheckedPublicGroup() ;
         if (publicGroups.size() > 0) {
@@ -382,7 +383,7 @@ public class UIContactForm extends UIFormTabPane implements UISelector {
           if (!ContactUtils.isEmpty(editPermission))
             contact.setEditPermission(editPermission.split(","));
           contact.setShared(true) ;
-          contactService.savePublicContact(SessionsUtils.getSystemProvider(), contact, isNew);
+          contactService.savePublicContact(SessionsUtils.getSystemProvider(), contact, true);
         } else {       
           UIPopupContainer popupContainer = uiContactForm.getParent() ;
           UICategorySelect uiCategorySelect = popupContainer.getChild(UICategorySelect.class); 
@@ -394,7 +395,12 @@ public class UIContactForm extends UIFormTabPane implements UISelector {
             return ;
           }
           contact.setAddressBook(new String[] { category });
-          contactService.saveContact(SessionsUtils.getSessionProvider(), username, contact, isNew);
+          if (uiContactForm.isShared) {
+            contactService.saveContactToSharedAddressBook(
+                SessionsUtils.getSessionProvider(), username, category, contact, true) ;
+          } else {            
+            contactService.saveContact(SessionsUtils.getSessionProvider(), username, contact, true);
+          }
         }
       } else {
         if (contact.getContactType().equals("0")) contactService.saveContact(SessionsUtils.getSessionProvider(), username, contact, false) ;

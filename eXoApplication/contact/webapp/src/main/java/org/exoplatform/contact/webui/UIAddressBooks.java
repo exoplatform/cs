@@ -67,8 +67,16 @@ public class UIAddressBooks extends UIComponent {
   private String selectedGroup = null;
   private Map<String, String> privateGroupMap_ = new HashMap<String, String>() ;
   private Map<String, String> publicGroupMap_ = new HashMap<String, String>() ;
-  //private Map<String, String> sharedGroupMap_ = new HashMap<String, String>() ;
-  public UIAddressBooks() throws Exception { }
+  private Map<String, String> sharedGroupMap_ = new HashMap<String, String>() ;
+  public UIAddressBooks() throws Exception {    
+    sharedGroupMap_.clear() ;
+    List<String> addressList = ContactUtils.getContactService()
+      .getSharedAddressBooks(SessionsUtils.getSystemProvider(), ContactUtils.getCurrentUser()) ;
+    for (String address : addressList) {
+      String[] array = address.split("::") ;
+      sharedGroupMap_.put(array[1], array[0]) ;
+    }
+  }
 
   public List<ContactGroup> getGroups() throws Exception {
     List<ContactGroup> groupList = ContactUtils.getContactService()
@@ -84,16 +92,7 @@ public class UIAddressBooks extends UIComponent {
     for (String group : sharedGroup) publicGroupMap_.put(group, group) ; 
     return sharedGroup ;
   }
-  public Map<String, String> getSharedAddressBooks() throws Exception {
-    Map<String, String> addressMap = new HashMap<String, String>() ;
-    List<String> addressList = ContactUtils.getContactService()
-      .getSharedAddressBooks(SessionsUtils.getSystemProvider(), ContactUtils.getCurrentUser()) ;
-    for (String address : addressList) {
-      String[] array = address.split("::") ;
-      addressMap.put(array[1], array[0]) ;
-    }
-    return addressMap ;
-  } 
+  public Map<String, String> getSharedGroups() throws Exception { return sharedGroupMap_ ; } 
 
   public void setSelectedGroup(String groupId) { selectedGroup = groupId ; }
   public String getSelectedGroup() { return selectedGroup ; }
@@ -200,7 +199,13 @@ public class UIAddressBooks extends UIComponent {
       if (uiAddressBook.publicGroupMap_.containsKey(groupId)) {
         uiContactForm.getUIFormCheckBoxInput(groupId).setChecked(true) ;   
       } else {
-        uiCategorySelect.setPrivateGroupMap(uiAddressBook.privateGroupMap_) ;
+        if (uiAddressBook.privateGroupMap_.containsKey(groupId)) {
+          uiCategorySelect.setPrivateGroupMap(uiAddressBook.privateGroupMap_) ;
+          uiContactForm.setShared(false) ;
+        } else {
+          uiCategorySelect.setPrivateGroupMap(uiAddressBook.sharedGroupMap_) ;
+          uiContactForm.setShared(true) ;
+        }        
         uiCategorySelect.addCategories() ;
         uiCategorySelect.setValue(groupId) ; 
       }
@@ -260,8 +265,6 @@ public class UIAddressBooks extends UIComponent {
       String groupId = event.getRequestContext().getRequestParameter(OBJECTID);
       ContactService contactService = ContactUtils.getContactService();
       String username = ContactUtils.getCurrentUser();
-      
-      
       UIContactContainer contactContainer = uiAddressBook.getAncestorOfType(
         UIWorkingContainer.class).getChild(UIContactContainer.class);
       UIContacts uiContacts = contactContainer.getChild(UIContacts.class) ;
@@ -270,7 +273,11 @@ public class UIAddressBooks extends UIComponent {
         uiContacts.setContacts(null);
         event.getRequestContext().addUIComponentToUpdateByAjax(contactContainer);
       }
-      contactService.removeGroup(SessionsUtils.getSessionProvider(), username, groupId);
+      ContactGroup contactGroup = contactService
+        .removeGroup(SessionsUtils.getSessionProvider(), username, groupId);
+      if (contactGroup == null) {
+        contactService.removeSharedAddressBook(SessionsUtils.getSessionProvider(), username, groupId) ;
+      }
       String selectedTag = uiContacts.getSelectedTag() ;
       if (!ContactUtils.isEmpty(selectedTag)) {
         uiContacts.setContacts(

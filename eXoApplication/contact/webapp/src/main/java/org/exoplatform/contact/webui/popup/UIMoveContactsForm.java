@@ -25,9 +25,11 @@ import java.util.MissingResourceException;
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.SessionsUtils;
 import org.exoplatform.contact.service.Contact;
+import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContacts;
 import org.exoplatform.contact.webui.UIWorkingContainer;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -55,17 +57,18 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
 )
 public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
   private Map<String, Contact> movedContacts = new HashMap<String, Contact>() ;
-  private static String[] FIELD_SHAREDCONTACT_BOX = null;
+  private List<String> publicGroups = new ArrayList<String>();
   private Map<String, String> privateGroupMap_ = new HashMap<String, String>() ;
+  private Map<String, String> sharedGroupMap_ = new HashMap<String, String>() ;
   
   public UIMoveContactsForm() throws Exception { 
     String[] groups = ContactUtils.getUserGroups() ;
-    FIELD_SHAREDCONTACT_BOX = new String[groups.length];
-    for(int i = 0; i < groups.length; i ++) {
-      FIELD_SHAREDCONTACT_BOX[i] = groups[i] ; 
-      addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_SHAREDCONTACT_BOX[i], FIELD_SHAREDCONTACT_BOX[i], false));
+    for(String group : groups) {
+      publicGroups.add(group) ; 
+      addUIFormInput(new UIFormCheckBoxInput<Boolean>(group, group, false));
     }
   }
+  public List<String> getPublicGroups() { return publicGroups ; }
   
   public String getLabel(String id) throws Exception {
     try {
@@ -77,13 +80,13 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
   
   public void setContacts(Map<String, Contact> contacts) { movedContacts = contacts ; }
   public Map<String, Contact> getContacts() { return movedContacts ; }
-  
+
   public String getContactsName() {
     StringBuffer buffer = new StringBuffer() ;
     String[] contactIds = movedContacts.keySet().toArray(new String[] {}) ;
-    buffer.append(movedContacts.get(contactIds[0])) ;
+    buffer.append(movedContacts.get(contactIds[0]).getFullName()) ;
     for (int i = 1; i < contactIds.length; i ++) {
-      buffer.append(", " + movedContacts.get(contactIds[i])) ;
+      buffer.append(", " + movedContacts.get(contactIds[i]).getFullName()) ;
     }
     return buffer.toString() ;
   }
@@ -103,6 +106,14 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
   public Map<String, String> getPrivateGroupMap() { return privateGroupMap_ ; }
   public void setPrivateGroupMap(Map<String, String> map) { privateGroupMap_ = map ; }
 
+  public Map<String, String> getSharedGroupMap() { return sharedGroupMap_ ; }
+  public void setSharedGroupMap(Map<String, String> map) { 
+    sharedGroupMap_ = map ; 
+    for (String groupId : map.keySet()) {
+      addUIFormInput(new UIFormCheckBoxInput<Boolean>(groupId, map.get(groupId), false));
+    }
+  }
+  
   static  public class SelectGroupActionListener extends EventListener<UIMoveContactsForm> {
     public void execute(Event<UIMoveContactsForm> event) throws Exception {
       UIMoveContactsForm uiMoveContactForm = event.getSource() ;
@@ -111,9 +122,9 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
       UIContactPortlet uiContactPortlet = uiMoveContactForm.getAncestorOfType(UIContactPortlet.class);
       List<Contact> contacts = new ArrayList<Contact>() ;
       for(String id : uiMoveContactForm.getContactIds()) {
-      	Contact ct = uiMoveContactForm.movedContacts.get(id) ;
-      	ct.setAddressBook(new String[]{addressBookId}) ;
-      	contacts.add(ct) ;
+      	Contact contact = uiMoveContactForm.movedContacts.get(id) ;
+      	contact.setAddressBook(new String[]{addressBookId}) ;
+      	contacts.add(contact) ;
       }
       if(contacts.size() == 0) return ;
       ContactUtils.getContactService().moveContacts(SessionsUtils.getSystemProvider()
@@ -130,30 +141,42 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
       UIMoveContactsForm uiMoveContactForm = event.getSource() ;
       String type = event.getRequestContext().getRequestParameter("addressType");
       UIContactPortlet uiContactPortlet = uiMoveContactForm.getAncestorOfType(UIContactPortlet.class) ;
-      StringBuffer publicGroups = new StringBuffer("");
-      for (int i = 0; i < FIELD_SHAREDCONTACT_BOX.length; i ++) {
-        if (uiMoveContactForm.getUIFormCheckBoxInput(FIELD_SHAREDCONTACT_BOX[i]).isChecked())
-          publicGroups.append(FIELD_SHAREDCONTACT_BOX[i] + ",");
+      
+      List<String> categories = new ArrayList<String>() ;
+      List<String> sharedGroups = new ArrayList<String>() ;
+      for (String sharedGroup : uiMoveContactForm.getSharedGroupMap().keySet()) {
+        if (uiMoveContactForm.getUIFormCheckBoxInput(sharedGroup).isChecked())
+          categories.add(sharedGroup) ;
+          sharedGroups.add(sharedGroup) ;
       }
-      if (ContactUtils.isEmpty(publicGroups.toString())) {
+      for (String group : uiMoveContactForm.getPublicGroups()) {
+        if (uiMoveContactForm.getUIFormCheckBoxInput(group).isChecked())
+          categories.add(group);
+      }
+      if (categories.size() == 0) {
         UIApplication uiApp = uiMoveContactForm.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.selectSharedGroups-required", null, 
+        uiApp.addMessage(new ApplicationMessage("UIMoveContactsForm.msg.selectGroup-required", null, 
             ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ; 
       }
-     
-      String[] addressBooks = publicGroups.toString().split(",") ;
       List<Contact> contacts = new ArrayList<Contact>() ;
       for(String id : uiMoveContactForm.getContactIds()) {
-      	Contact ct = uiMoveContactForm.movedContacts.get(id) ;
-      	ct.setAddressBook(addressBooks) ;
-      	contacts.add(ct) ;
+      	Contact contact = uiMoveContactForm.movedContacts.get(id) ;
+        contact.setAddressBook(categories.toArray(new String[] {})) ;
+      	contacts.add(contact) ;
       }
-      if(contacts.size() == 0) return ;      
-      ContactUtils.getContactService().moveContacts(SessionsUtils.getSystemProvider()
-        , ContactUtils.getCurrentUser(), contacts, type) ;
-      
+      ContactService contactService = ContactUtils.getContactService() ;
+      String username = ContactUtils.getCurrentUser() ;
+      SessionProvider sessionProvider = SessionsUtils.getSystemProvider() ;
+      if(contacts.size() == 0) return ;   
+      contactService.moveContacts(sessionProvider, username, contacts, type) ;
+      for (String addressBook : sharedGroups) {
+        for(String id : uiMoveContactForm.getContactIds()) {
+          Contact contact = uiMoveContactForm.movedContacts.get(id) ;
+          contactService.saveContactToSharedAddressBook(sessionProvider, username, addressBook, contact, true) ;  
+        }
+      }            
       uiContactPortlet.findFirstComponentOfType(UIContacts.class).updateList() ;
       uiContactPortlet.cancelAction() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContactPortlet.getChild(UIWorkingContainer.class)) ;

@@ -63,9 +63,9 @@ public class JCRDataStorage{
   final private static String SHARED_CONTACT = "SharedContact".intern() ;
   final private static String SHARED_MIXIN = "exo:contactShared".intern();
   final private static String SHARED_PROP = "exo:sharedId".intern();
-  final private static String PRIVATE = "0".intern();
-  final private static String SHARED = "1".intern();
-  final private static String PUBLIC = "2".intern();
+  final public static String PRIVATE = "0".intern();
+  final public static String SHARED = "1".intern();
+  final public static String PUBLIC = "2".intern();
   private NodeHierarchyCreator nodeHierarchyCreator_ ;
   
   public JCRDataStorage(NodeHierarchyCreator nodeHierarchyCreator)throws Exception {
@@ -117,6 +117,8 @@ public class JCRDataStorage{
     return contactServiceHome.getNode(TAGS) ; 
   }
   
+  // hasnot been used
+  /*
   private Node getPublicContactGroupHome(SessionProvider sProvider) throws Exception {
     Node contactServiceHome = getPublicContactServiceHome(sProvider) ;
     if(!contactServiceHome.hasNode(ADDRESS_BOOK)) {
@@ -125,6 +127,7 @@ public class JCRDataStorage{
     }
     return contactServiceHome.getNode(ADDRESS_BOOK) ;
   }
+  */
   
   private Node getPublicContactHome(SessionProvider sProvider) throws Exception {
     Node contactServiceHome = getPublicContactServiceHome(sProvider) ;
@@ -603,6 +606,9 @@ public class JCRDataStorage{
       while(iter.hasNext()) {
         addressBook = iter.nextProperty().getParent() ;
         if(addressBook.getProperty("exo:id").getString().equals(addressBookId)) {
+          
+          //System.out.println("\n\n addressbook:" + addressBook.getPath());
+          
         	Node contactHomeNode = addressBook.getParent().getParent().getNode(CONTACTS) ;
           saveContact(contactHomeNode, contact, isNew) ;
           contactHomeNode.save() ;
@@ -666,6 +672,8 @@ public class JCRDataStorage{
     if(result.getNodes().getSize() > 0) return true;
     return false ;
   } 
+  
+  // not use ?
   public Contact removePublicContact(SessionProvider sysProvider, String contactId) throws Exception {
     Node contactHomeNode = getPublicContactHome(sysProvider);
     if (contactHomeNode.hasNode(contactId)) {
@@ -756,6 +764,9 @@ public class JCRDataStorage{
         if (nodeFile.hasNode("jcr:content")) nodeContent = nodeFile.getNode("jcr:content") ;
         else nodeContent = nodeFile.addNode("jcr:content", "nt:resource") ;
         nodeContent.setProperty("jcr:mimeType", attachment.getMimeType()) ;
+        
+       // if (!nodeContent.hasProperty("jcr:data")) System.out.println("\n\n no propertyyyyyy \n\n ");
+ 
         nodeContent.setProperty("jcr:data", attachment.getInputStream());
         nodeContent.setProperty("jcr:lastModified", Calendar.getInstance().getTimeInMillis());
       }

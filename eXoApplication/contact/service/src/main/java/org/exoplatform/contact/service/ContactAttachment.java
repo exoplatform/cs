@@ -58,8 +58,13 @@ public class ContactAttachment {
     if(inputStream != null) return inputStream ;
     Node attachment ;
     try{
+      
+      //System.out.println("\n\n atttttt:" + getSesison().getItem(getId()) + "\n\n");
+      
       attachment = (Node)getSesison().getItem(getId()) ;      
     }catch (ItemNotFoundException e) {
+      //System.out.println("\n\n item not founddddddddd \n\n");
+      
       return null ;
     }
     return attachment.getNode("jcr:content").getProperty("jcr:data").getStream() ;

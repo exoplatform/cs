@@ -5,26 +5,54 @@
 %>
 
 <div class="UIMoveContactsForm">
-	
-	<div class="MoveContactsName"><span style="font-weight: normal">Contacts :</span> <%=uicomponent.getContactsName()%></div>
-		
+	<div class="MoveContactsName"><span style="font-weight: normal">Contacts :</span>
+		<%=uicomponent.getContactsName()%>
+	</div>
 	<div class="MoveContainer">
+	
 		<div class="PrivateAdress">
 			<div class="TitleMoveContactsForm">Private Address Books:</div>
-			
 			<div class="MoveContactsFormContainer">
-			<%  Map map = uicomponent.getPrivateGroupMap() ;
-					for(groupId in map.keySet()) {
-						String param = groupId + "&addressType=0" ;
-						String actionLink  = uicomponent.event("SelectGroup", param) ;
-			%>
-			<div class="ItemList">
-				<div class="Icon AddressIcon"><a href="$actionLink"><%=map.get(groupId)%></a></div>
-			</div>
+				<%  Map map = uicomponent.getPrivateGroupMap() ;
+						for(groupId in map.keySet()) {
+							String param = groupId + "&addressType=0" ;
+							String actionLink  = uicomponent.event("SelectGroup", param) ;
+				%>
+				<div class="ItemList">
+					<div class="Icon AddressIcon"><a href="$actionLink"><%=map.get(groupId)%></a></div>
+				</div>
 			<% } %>
-		</div>
+			</div>
 		</div>		
 		
+			
+			
+			<div class="UIForm PublicAdress">
+				<div class="TitleMoveContactsForm">Shared Address Books</div>
+			  <div class="HorizontalLayout">
+			    <div class="FormContainer">
+			      <table class="UIFormGrid">
+				      <% 
+				      	Map sharedGroups = uicomponent.getSharedGroupMap() ;
+				        for(id in sharedGroups.keySet()) { 
+				        	field = uiform.getChildById(id) ;
+				          if(field.isRendered()) {
+	      			%>
+              <tr>                       
+  	              <td class="FieldLabel">
+                      <%=sharedGroups.get(id)%>
+                  </td>
+  	              <td class="FieldComponent"><% uiform.renderField(field) %></td>
+	            </tr>
+			      <%
+			          }
+			        }
+			      %>
+		      	</table>
+		    	</div>
+		  	</div>
+			</div>
+
 			<% String fieldName; %>
 			<div class="UIForm PublicAdress">
 				<div class="TitleMoveContactsForm">Public Address Books</div>
@@ -32,7 +60,8 @@
 			    <div class="FormContainer">
 			      <table class="UIFormGrid">
 				      <% 
-				        for(field in uiform.getChildren()) { 
+				        for(String id in uicomponent.getPublicGroups()) { 
+				        	field = uiform.getChildById(id) ;
 				          if(field.isRendered()) {
 	      			%>
               <tr>

@@ -139,9 +139,10 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
     public void execute(Event<UISharedForm> event) throws Exception {
       UISharedForm uiForm = event.getSource() ;
       String names = uiForm.getUIStringInput(FIELD_USER).getValue() ;
-      if(names == null || names.length() < 1) {
-        UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UISharedForm.msg.invalid-username", null)) ;
+      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+      if(names == null || names.length() < 1) {        
+        uiApp.addMessage(new ApplicationMessage("UISharedForm.msg.empty-username", null,
+            ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
@@ -153,7 +154,10 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
         }
       }else {
         receiverUser.add(names.trim()) ;
-      }   
+      } 
+      
+      // added
+      receiverUser.remove(ContactUtils.getCurrentUser()) ;
       /*
       if(uiForm.canEdit()) {
         ContactGroup contactGroup = contactService.getGroup(
@@ -166,10 +170,19 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
       }*/
       ContactUtils.getContactService().shareAddressBook(SessionsUtils
           .getSystemProvider(), ContactUtils.getCurrentUser(), uiForm.addressId_, receiverUser) ;
-      UIContactPortlet contactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
-      UIAddressBooks addressBooks = contactPortlet.findFirstComponentOfType(UIAddressBooks.class) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(addressBooks) ;
-      contactPortlet.cancelAction() ;       
+       
+      if (receiverUser.size() > 0) {
+        UIContactPortlet contactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
+        UIAddressBooks addressBooks = contactPortlet.findFirstComponentOfType(UIAddressBooks.class) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(addressBooks) ;
+        contactPortlet.cancelAction() ;
+        uiApp.addMessage(new ApplicationMessage("UISharedForm.msg.address-shared", null)) ;   
+      } else {
+        uiApp.addMessage(new ApplicationMessage("UISharedForm.msg.address-not-shared", null)) ;
+      }
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+      return ;
+      
     }
   }
   static  public class SelectPermissionActionListener extends EventListener<UISharedForm> {

@@ -24,7 +24,7 @@
 			              <td class="FieldComponent">
 			                <%uicomponent.renderUIComponent(field)%>
 			                <div id="<%=uicomponent.id%>_PopupMenu" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);" style="cursor: pointer; display: inline">
-                        <span>add more</span>
+                        <img class="ActionsAddIcon" src="/eXoResources/skin/DefaultSkin/background/Blank.gif"/>
                         <% /*Begin Popup Menu*/ %>
                         <span style="position: absolute;">
                           <div class="UIPopupCategory" style="display: none;">
