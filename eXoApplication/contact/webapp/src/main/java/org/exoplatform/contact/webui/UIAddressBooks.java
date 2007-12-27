@@ -57,7 +57,8 @@ import org.exoplatform.webui.event.EventListener;
     @EventConfig(listeners = UIAddressBooks.ExportAddressActionListener.class),
     @EventConfig(listeners = UIAddressBooks.EditGroupActionListener.class),
     @EventConfig(listeners = UIAddressBooks.ShareGroupActionListener.class),
-    @EventConfig(listeners = UIAddressBooks.DeleteGroupActionListener.class, confirm = "UIAddressBooks.msg.confirm-delete"),
+    @EventConfig(listeners = UIAddressBooks.DeleteGroupActionListener.class
+        , confirm = "UIAddressBooks.msg.confirm-delete"),
     @EventConfig(listeners = UIAddressBooks.SelectGroupActionListener.class),
     @EventConfig(listeners = UIAddressBooks.SelectPublicGroupActionListener.class),
     @EventConfig(listeners = UIAddressBooks.SelectSharedGroupActionListener.class),
@@ -68,15 +69,7 @@ public class UIAddressBooks extends UIComponent {
   private Map<String, String> privateGroupMap_ = new HashMap<String, String>() ;
   private Map<String, String> publicGroupMap_ = new HashMap<String, String>() ;
   private Map<String, String> sharedGroupMap_ = new HashMap<String, String>() ;
-  public UIAddressBooks() throws Exception {    
-    sharedGroupMap_.clear() ;
-    List<String> addressList = ContactUtils.getContactService()
-      .getSharedAddressBooks(SessionsUtils.getSystemProvider(), ContactUtils.getCurrentUser()) ;
-    for (String address : addressList) {
-      String[] array = address.split("::") ;
-      sharedGroupMap_.put(array[1], array[0]) ;
-    }
-  }
+  public UIAddressBooks() throws Exception { }
 
   public List<ContactGroup> getGroups() throws Exception {
     List<ContactGroup> groupList = ContactUtils.getContactService()
@@ -92,7 +85,16 @@ public class UIAddressBooks extends UIComponent {
     for (String group : sharedGroup) publicGroupMap_.put(group, group) ; 
     return sharedGroup ;
   }
-  public Map<String, String> getSharedGroups() throws Exception { return sharedGroupMap_ ; } 
+  public Map<String, String> getSharedGroups() throws Exception { 
+    sharedGroupMap_.clear() ;
+    List<String> addressList = ContactUtils.getContactService()
+      .getSharedAddressBooks(SessionsUtils.getSystemProvider(), ContactUtils.getCurrentUser()) ;
+    for (String address : addressList) {
+      String[] array = address.split("::") ;
+      sharedGroupMap_.put(array[1], array[0]) ;
+    }
+    return sharedGroupMap_ ;  
+  } 
 
   public void setSelectedGroup(String groupId) { selectedGroup = groupId ; }
   public String getSelectedGroup() { return selectedGroup ; }

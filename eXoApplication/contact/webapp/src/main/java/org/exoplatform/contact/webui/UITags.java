@@ -112,8 +112,8 @@ public class UITags extends UIComponent {
       uiExportForm.setSelectedTag(uiForm.tagMap_.get(tagId).getName()) ;
 
       Contact[] contacts = null ;
-      contacts = ContactUtils.getContactService().getContactPageListByTag(
-          SessionsUtils.getSystemProvider(), ContactUtils.getCurrentUser(), tagId).getAll().toArray(new Contact[] {});
+      contacts = ContactUtils.getContactService().getContactPageListByTag(SessionsUtils
+          .getSystemProvider(), ContactUtils.getCurrentUser(), tagId).getAll().toArray(new Contact[] {});
       if (contacts == null || contacts.length == 0) {
         UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UITag.msg.noContactToExport", null,
@@ -131,18 +131,16 @@ public class UITags extends UIComponent {
     public void execute(Event<UITags> event) throws Exception {
       UITags uiTags = event.getSource() ;
       String tagId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      ContactUtils.getContactService().removeTag(SessionsUtils.getSystemProvider(), ContactUtils.getCurrentUser(), tagId) ;
+      ContactUtils.getContactService()
+        .removeTag(SessionsUtils.getSystemProvider(), ContactUtils.getCurrentUser(), tagId) ;
       UIWorkingContainer uiWorkingContainer = uiTags.getAncestorOfType(UIWorkingContainer.class) ;
       UIContacts uiContacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class) ;
       if (tagId.equals(uiTags.getSelectedTag())) {
         uiTags.setSelectedTag(null) ;
         uiContacts.setContacts(null) ;
         uiWorkingContainer.findFirstComponentOfType(UIContactPreview.class).setContact(null) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer) ;
-      } else {
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiTags) ;        
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts) ;
       }
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer) ;
     }
   }
   

@@ -434,11 +434,13 @@
                                 <%
                                 for (String tagId : tagIds) {
                                   Tag tag = tagMap.get(tagId) ;
+                                  if (tag != null) {
                                 %>
                                 <a class="MenuItem" href="<%=uicomponent.event("SelectTag", "$tagId")%>">   
                                   <div class="ItemIcon <%=tag.getColor()%>Tag"><%=tag.getName()%></div>
                                 </a>
-                                <%}%>
+                                <% }
+                                 }%>
   
                                 
                               </div>
@@ -547,11 +549,13 @@
                               <%
                               for (String tagId : tagIds) {
                                 Tag tag = tagMap.get(tagId) ;
+                                if (tag != null) {
                               %>
                               <a class="MenuItem" href="<%=uicomponent.event("SelectTag", "$tagId")%>">   
                                 <div class="ItemIcon <%=tag.getColor()%>Tag"><%=tag.getName()%></div>
                               </a> 
-                              <%}%>
+                              <% }
+                                }%>
                             </div>
                           </div>
                         </div>

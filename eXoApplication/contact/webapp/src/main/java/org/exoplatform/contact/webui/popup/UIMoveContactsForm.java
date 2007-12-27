@@ -61,6 +61,7 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
   private List<String> publicGroups = new ArrayList<String>();
   private Map<String, String> privateGroupMap_ = new HashMap<String, String>() ;
   private Map<String, String> sharedGroupMap_ = new HashMap<String, String>() ;
+  private boolean isDND = false ;
   
   public UIMoveContactsForm() throws Exception { 
     String[] groups = ContactUtils.getUserGroups() ;
@@ -70,6 +71,8 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
     }
   }
   public List<String> getPublicGroups() { return publicGroups ; }
+  public void setDND(boolean dnd) { isDND = dnd ; }
+  public boolean isDND() { return isDND ; }
   
   public String getLabel(String id) throws Exception {
     try {
