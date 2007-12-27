@@ -36,6 +36,7 @@ import org.exoplatform.contact.webui.popup.UIPopupAction;
 import org.exoplatform.contact.webui.popup.UIPopupContainer;
 import org.exoplatform.contact.webui.popup.UISendEmail;
 import org.exoplatform.contact.webui.popup.UISharedForm;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -124,17 +125,24 @@ public class UIAddressBooks extends UIComponent {
         filter.setCategories(new String[] { addressBookId });
         Contact[] contacts = null ;
         UIExportForm uiExportForm = uiPopupAction.activate(UIExportForm.class, 500) ;
-        uiExportForm.setId("ExportForm");  
+        uiExportForm.setId("ExportForm");
+        ContactService contactService = ContactUtils.getContactService() ;
+        SessionProvider sessionProvider = SessionsUtils.getSessionProvider() ;
+        String username = ContactUtils.getCurrentUser() ;
         Map<String, String> privateGroup = uiAddressBook.privateGroupMap_ ;
         if (privateGroup.containsKey(addressBookId)) {
           uiExportForm.setSelectedGroup(privateGroup.get(addressBookId)) ;
-          contacts = ContactUtils.getContactService().getContactPageListByGroup(SessionsUtils.getSessionProvider()
-              , ContactUtils.getCurrentUser(), filter, false).getAll().toArray(new Contact[] {});
-        } else {
+          contacts = contactService.getContactPageListByGroup(
+              sessionProvider, username, filter, false).getAll().toArray(new Contact[] {});
+        } else if (uiAddressBook.publicGroupMap_.containsKey(addressBookId)){        
           uiExportForm.setSelectedGroup(addressBookId) ;
-          contacts = ContactUtils.getContactService().getContactPageListByGroup(SessionsUtils.getSystemProvider()
-              , ContactUtils.getCurrentUser(), filter, true).getAll().toArray(new Contact[] {});
-        } 
+          contacts = contactService.getContactPageListByGroup(
+              sessionProvider, username, filter, true).getAll().toArray(new Contact[] {});
+        } else {
+          uiExportForm.setSelectedGroup(uiAddressBook.sharedGroupMap_.get(addressBookId)) ;
+          contacts = contactService.getSharedContactsByAddressBook(
+              sessionProvider, username, addressBookId).getAll().toArray(new Contact[] {}) ;
+        }
         if (contacts == null || contacts.length == 0) {
           UIApplication uiApp = uiAddressBook.getAncestorOfType(UIApplication.class) ;
           uiApp.addMessage(new ApplicationMessage("UIAddressBooks.msg.noContactToExport", null,

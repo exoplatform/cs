@@ -66,7 +66,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
     events = {
         @EventConfig(listeners = UIContacts.EditContactActionListener.class),
         @EventConfig(listeners = UIContacts.InstantMessageActionListener.class),
-        @EventConfig(listeners = UIContacts.TagCheckedActionListener.class),
+        @EventConfig(listeners = UIContacts.TagActionListener.class),
         @EventConfig(listeners = UIContacts.MoveContactsActionListener.class),
         @EventConfig(listeners = UIContacts.DNDContactsActionListener.class),
         @EventConfig(listeners = UIContacts.DNDContactsToTagActionListener.class),
@@ -238,7 +238,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
     }
   }
   
-  static public class TagCheckedActionListener extends EventListener<UIContacts> {
+  static public class TagActionListener extends EventListener<UIContacts> {
     public void execute(Event<UIContacts> event) throws Exception {
       UIContacts uiContacts = event.getSource() ;
       String contactId = event.getRequestContext().getRequestParameter(OBJECTID);
@@ -259,7 +259,6 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       List<Contact> contacts = new ArrayList<Contact>() ;
       for (String id : contactIds) { contacts.add(uiContacts.contactMap.get(id)) ; }
       uiTagForm.setContacts(contacts) ;
-      System.out.println("uiContacts.isSearchResult ====="+ uiContacts.isSearchResult);
       uiTagForm.update() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;

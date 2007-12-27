@@ -30,6 +30,7 @@ import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContacts;
 import org.exoplatform.contact.webui.UITags;
 import org.exoplatform.contact.webui.UIWorkingContainer;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -156,6 +157,7 @@ public class UITagForm extends UIForm implements UIPopupComponent {
       UITagForm uiTagForm = event.getSource() ;
       ContactService contactService = ContactUtils.getContactService();
       String username = ContactUtils.getCurrentUser() ;
+      SessionProvider sessionProvider = SessionsUtils.getSessionProvider();
       UIApplication uiApp = uiTagForm.getAncestorOfType(UIApplication.class) ;
       List<Tag> tags = new ArrayList<Tag>();
       List<String> tagIds = new ArrayList<String>();
@@ -175,7 +177,7 @@ public class UITagForm extends UIForm implements UIPopupComponent {
         tagIds.add(tag.getId()) ;
       }
       for (String tagId : uiTagForm.getCheckedTags()) {
-        tag = contactService.getTag(SessionsUtils.getSessionProvider(), username, tagId) ;
+        tag = contactService.getTag(sessionProvider, username, tagId) ;
         tags.add(tag);
         tagIds.add(tagId) ;
       } 
@@ -190,7 +192,9 @@ public class UITagForm extends UIForm implements UIPopupComponent {
       	contact.setTags(tagIds.toArray(new String[]{})) ;
         contactIds.add(contact.getId()) ;
       }
-      contactService.addTag(SessionsUtils.getSessionProvider(), username, contactIds, tags);
+      
+
+      contactService.addTag(sessionProvider, username, contactIds, tags);
       UIContactPortlet uiContactPortlet = uiTagForm.getAncestorOfType(UIContactPortlet.class);
       UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
       if(uiContacts.isDisplaySearchResult())uiContacts.setContact(uiTagForm.contacts_, true) ;     	
