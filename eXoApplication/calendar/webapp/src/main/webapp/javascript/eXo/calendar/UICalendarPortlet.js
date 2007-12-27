@@ -870,8 +870,8 @@ UICalendarPortlet.prototype.getFilterSelect = function(form) {
 } ;
 
 UICalendarPortlet.prototype.checkFilter = function() {
-	this.checkCategoryFilter() ;
 	this.checkCalendarFilter() ;
+	this.checkCategoryFilter() ;
 } ;
 
 UICalendarPortlet.prototype.checkCalendarFilter = function() {
