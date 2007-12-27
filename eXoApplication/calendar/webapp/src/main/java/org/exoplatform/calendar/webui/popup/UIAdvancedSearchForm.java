@@ -118,16 +118,19 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
       }  
       if(!CalendarUtils.isEmpty(uiForm.getUIFormDateTimeInput(uiForm.TODATE).getValue()) &&
           uiForm.getUIFormDateTimeInput(uiForm.TODATE).getCalendar() == null)  {
-          uiApp.addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.to-date-time-invalid", null)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-          return ;
-      }
-
-      if(uiForm.getUIFormDateTimeInput(uiForm.FROMDATE).getCalendar().getTimeInMillis() >= 
-        uiForm.getUIFormDateTimeInput(uiForm.TODATE).getCalendar().getTimeInMillis()) {
-        uiApp.addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.date-time-invalid", null)) ;
+        uiApp.addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.to-date-time-invalid", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
+      }
+      if(uiForm.getUIFormDateTimeInput(uiForm.FROMDATE).getCalendar() != null &&
+          uiForm.getUIFormDateTimeInput(uiForm.TODATE).getCalendar() != null
+      ) {
+        if(uiForm.getUIFormDateTimeInput(uiForm.FROMDATE).getCalendar().getTimeInMillis() >= 
+          uiForm.getUIFormDateTimeInput(uiForm.TODATE).getCalendar().getTimeInMillis()) {
+          uiApp.addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.date-time-invalid", null)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        }
       }
       try {
         EventQuery query = new EventQuery() ;
