@@ -23,12 +23,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.jcr.Session;
-
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.SessionsUtils;
 import org.exoplatform.calendar.service.Calendar;
-import org.exoplatform.calendar.service.CalendarCategory;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.GroupCalendarData;
@@ -45,11 +42,7 @@ import org.exoplatform.calendar.webui.popup.UIPopupContainer;
 import org.exoplatform.calendar.webui.popup.UIQuickAddEvent;
 import org.exoplatform.calendar.webui.popup.UIRssForm;
 import org.exoplatform.calendar.webui.popup.UISharedForm;
-import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.services.jcr.RepositoryService;
-import org.exoplatform.services.jcr.core.ManageableRepository;
-import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
@@ -59,8 +52,6 @@ import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
-
-import antlr.Utils;
 
 /**
  * Created by The eXo Platform SARL

@@ -19,8 +19,10 @@ package org.exoplatform.calendar.webui.popup;
 import java.io.ByteArrayInputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.MissingResourceException;
 
 import org.exoplatform.calendar.CalendarUtils;
@@ -67,6 +69,8 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
   final static private String NAME = "name".intern() ;
   final static private String TYPE = "type".intern() ;
   private String calType = "0" ;
+  private Map<String,String> names_ = new HashMap<String, String>() ;
+  
   public UIExportForm() throws Exception {
     CalendarService calendarService = CalendarUtils.getCalendarService();
     addUIFormInput(new UIFormStringInput(NAME, NAME, null)) ;
@@ -79,6 +83,7 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
   public void setCalType(String type) {calType = type ; }
   public void update(String type, String selectedCalendarId) throws Exception {
     calType = type ;
+    names_.clear() ;
     Iterator iter = getChildren().iterator() ;
     while(iter.hasNext()) {
       if(iter instanceof UIFormCheckBoxInput) {
@@ -102,16 +107,18 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
   }
   public void initCheckBox(List<Calendar> calendars, String selectedCalendarId) {
     for(Calendar calendar : calendars) {
-      UIFormCheckBoxInput checkBox = new UIFormCheckBoxInput<String>(calendar.getName(), calendar.getId(), null);
+      UIFormCheckBoxInput checkBox = new UIFormCheckBoxInput<Boolean>(calendar.getId(), calendar.getId(), false);
       if(calendar.getId().equals(selectedCalendarId)) checkBox.setChecked(true) ; 
       else checkBox.setChecked(false) ;       
       addUIFormInput(checkBox) ;
+      names_.put(calendar.getId(), calendar.getName()) ;
     }
   }
   public String getLabel(String id) throws Exception {
     try {
       return  super.getLabel(id) ;
     } catch (MissingResourceException mre) {
+      if( names_.get(id) != null) return  names_.get(id) ;
       return id ;
     }
   } 
@@ -128,9 +135,8 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
       List<String> calendarIds = new ArrayList<String> () ;
       for(UIComponent child : children) {
         if(child instanceof UIFormCheckBoxInput) {
-          if(((UIFormCheckBoxInput)child).isChecked()) {
-            calendarIds.add(((UIFormCheckBoxInput)child).getBindingField()) ;
-          }
+          UIFormCheckBoxInput input =   ((UIFormCheckBoxInput)child) ;
+          if(input.isChecked()) calendarIds.add(((UIFormCheckBoxInput)child).getBindingField()) ;
         }
       }
       if(calendarIds.isEmpty()) {
@@ -158,6 +164,7 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
         event.getRequestContext().getJavascriptManager().addJavascript("ajaxRedirect('" + downloadLink + "');") ;
         calendarPortlet.cancelAction() ;      
       }catch(Exception e) {
+        //e.printStackTrace() ;
         uiApp.addMessage(new ApplicationMessage("UIExportForm.msg.event-does-not-existing", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
