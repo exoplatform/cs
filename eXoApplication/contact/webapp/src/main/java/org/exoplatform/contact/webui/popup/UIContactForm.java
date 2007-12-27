@@ -371,10 +371,12 @@ public class UIContactForm extends UIFormTabPane implements UISelector {
       contact.setHomeFax(uiContactForm.getUIStringInput(FIELD_HOMEFAX_INPUT).getValue());
       contact.setPersonalSite(uiContactForm.getUIStringInput(FIELD_PERSONALSITE_INPUT).getValue());
       contact.setNote(uiContactForm.getUIFormTextAreaInput(FIELD_NOTE_INPUT).getValue());
+
       contact.setLastUpdated(new Date()) ;
 
       ContactService contactService = ContactUtils.getContactService();  
       String username = ContactUtils.getCurrentUser() ;
+
       if (isNew) {
         List<String> publicGroups = uiContactForm.getCheckedPublicGroup() ;
         if (publicGroups.size() > 0) {
@@ -406,6 +408,7 @@ public class UIContactForm extends UIFormTabPane implements UISelector {
         if (contact.getContactType().equals("0")) contactService.saveContact(SessionsUtils.getSessionProvider(), username, contact, false) ;
         else if(contact.getContactType().equals("1")) contactService.saveContactToSharedAddressBook(SessionsUtils.getSystemProvider(), username, contact.getAddressBook()[0], contact, false) ;
         else if(contact.getContactType().equals("2")) contactService.savePublicContact(SessionsUtils.getSystemProvider(), contact, false) ;
+        
       }
       UIContactPortlet uiContactPortlet = uiContactForm.getAncestorOfType(UIContactPortlet.class) ;
       UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
