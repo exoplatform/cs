@@ -778,6 +778,7 @@ UICalendarPortlet.prototype.initFilter = function(obj, type){
 	if (type == 1) {
 		var checkbox = eXo.core.DOMUtil.findFirstChildByClass(obj, "input", "checkbox") ;
 		eXo.calendar.UICalendarPortlet.filterByCalendar(checkbox.name,checkbox.checked) ;
+		this.checkCategoryFilter() ;
 	} else if (type == 2) {
 		
 	} else {
@@ -871,7 +872,7 @@ UICalendarPortlet.prototype.getFilterSelect = function(form) {
 
 UICalendarPortlet.prototype.checkFilter = function() {
 	this.checkCalendarFilter() ;
-	this.checkCategoryFilter() ;
+	//this.checkCategoryFilter() ;
 } ;
 
 UICalendarPortlet.prototype.checkCalendarFilter = function() {
