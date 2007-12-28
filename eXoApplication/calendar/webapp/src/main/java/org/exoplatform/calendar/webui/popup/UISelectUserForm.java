@@ -122,7 +122,7 @@ public class UISelectUserForm extends UIForm implements UIPopupComponent {
         for(User u : uiForm.getData()) {
           UIFormCheckBoxInput input = uiForm.getUIFormCheckBoxInput(u.getUserName()) ;
           if(input != null && input.isChecked()) {
-            if(sb != null && sb.length() > 0) sb.append(CalendarUtils.COLON) ;
+            if(sb != null && sb.length() > 0) sb.append(CalendarUtils.COMMA) ;
             sb.append(u.getUserName()) ;
           }
         }

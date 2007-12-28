@@ -101,6 +101,7 @@
 						List calendars = groupData.getCalendars() ;
 						for(calendar in calendars) {
 						String calId = calendar.getId() ;
+						if(uicomponent.getChildById(calId) != null) {
 				%>
   					<div class="CalendarItem">
   						<div class="$calendar.calendarColor">
@@ -110,7 +111,7 @@
   							<div style="clear: both"><span></span></div>
   						</div>
   					</div>
-				<%
+				<% }
 						}
 				%>
 					</div>
@@ -138,6 +139,7 @@
 						List calendarList = sharedCalendars.getCalendars() ;
 						for(calendar in calendarList) {
 						calId = calendar.getId() ;
+						if(uicomponent.getChildById(calId) != null) {
 				%>
   					<div class="CalendarItem">
   						<div class="$calendar.calendarColor">
@@ -148,6 +150,7 @@
   						</div>
   					</div>
 				<%
+				}
 						}
 				%>
 					</div>
@@ -185,6 +188,7 @@
 						List calendarList = groupData.getCalendars() ;
 						for(calendar in calendarList) {
 							calId = calendar.getId() ;
+							if(uicomponent.getChildById(calId) != null) {
 				%>
   					<div class="CalendarItem">
   						<div class="$calendar.calendarColor">
@@ -195,6 +199,7 @@
   						</div>
   					</div>
 				<%
+				}
 						}
 				%>
 					</div>

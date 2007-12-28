@@ -624,14 +624,14 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTSHARE) ;
     String invitation = eventDetailTab.getUIFormTextAreaInput(FIELD_MEETING).getValue() ;
     if(CalendarUtils.isEmpty(invitation)) return null ;
-    else return invitation.split(CalendarUtils.COLON) ;
+    else return invitation.split(CalendarUtils.COMMA) ;
   } 
   protected void setMeetingInvitation(String[] values) {
     UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTSHARE) ;
     StringBuffer sb = new StringBuffer() ;
     if(values != null) {
       for(String s : values) {
-        sb.append(s).append(CalendarUtils.COLON) ;
+        sb.append(s).append(CalendarUtils.COMMA) ;
       }
     }
     eventDetailTab.getUIFormTextAreaInput(FIELD_MEETING).setValue(sb.toString()) ;
@@ -642,7 +642,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     String participant = eventDetailTab.getUIFormTextAreaInput(FIELD_PARTICIPANT).getValue() ;
     if(CalendarUtils.isEmpty(participant)) return null ;
     else {
-      String[] pars = participant.split(CalendarUtils.COLON) ;
+      String[] pars = participant.split(CalendarUtils.COMMA) ;
       for(int i = 0; i < pars.length; i++) {
         pars[i] = pars[i].trim() ;
       }

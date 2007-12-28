@@ -1121,6 +1121,7 @@ public class JCRDataStorage{
     settingNode.setProperty("exo:baseURL", setting.getBaseURL()) ;
     settingNode.setProperty("exo:defaultPrivateCalendars", setting.getDefaultPrivateCalendars()) ;
     settingNode.setProperty("exo:defaultPublicCalendars", setting.getDefaultPublicCalendars()) ;
+    settingNode.setProperty("exo:defaultSharedCalendars", setting.getDefaultSharedCalendars()) ;
     settingNode.setProperty("exo:sharedCalendarsColors", setting.getSharedCalendarsColors()) ;
   }
   public CalendarSetting getCalendarSetting(SessionProvider sProvider ,String username) throws Exception{
@@ -1146,13 +1147,30 @@ public class JCRDataStorage{
         if(settingNode.hasProperty("exo:workingTimeEnd"))
           calendarSetting.setWorkingTimeEnd(settingNode.getProperty("exo:workingTimeEnd").getString()) ;
       }
-      if(settingNode.hasProperty("exo:defaultCalendars")){
-        Value[] values = settingNode.getProperty("exo:defaultCalendars").getValues() ;
+      if(settingNode.hasProperty("exo:defaultPrivateCalendars")){
+        Value[] values = settingNode.getProperty("exo:defaultPrivateCalendars").getValues() ;
         String[] calendars = new String[values.length] ;
         for(int i = 0; i < values.length; i++) {
           calendars[i] = values[i].getString() ;
         }
         calendarSetting.setDefaultPrivateCalendars(calendars) ;
+      }
+      if(settingNode.hasProperty("exo:defaultPublicCalendars")){
+        Value[] values = settingNode.getProperty("exo:defaultPublicCalendars").getValues() ;
+        String[] calendars = new String[values.length] ;
+        for(int i = 0; i < values.length; i++) {
+          calendars[i] = values[i].getString() ;
+        }
+        calendarSetting.setDefaultPublicCalendars(calendars) ;
+      }
+      
+      if(settingNode.hasProperty("exo:defaultSharedCalendars")){
+        Value[] values = settingNode.getProperty("exo:defaultSharedCalendars").getValues() ;
+        String[] calendars = new String[values.length] ;
+        for(int i = 0; i < values.length; i++) {
+          calendars[i] = values[i].getString() ;
+        }
+        calendarSetting.setDefaultSharedCalendars(calendars) ;
       }
       if(settingNode.hasProperty("exo:sharedCalendarsColors")){
         Value[] values = settingNode.getProperty("exo:sharedCalendarsColors").getValues() ;

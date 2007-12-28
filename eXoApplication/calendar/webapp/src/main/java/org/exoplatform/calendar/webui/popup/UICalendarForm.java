@@ -262,7 +262,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
     permission_.put(value, value) ;
     StringBuilder sb = new StringBuilder() ;
     for(String s : permission_.values()) {
-      if(sb != null && sb.length() > 0) sb.append(CalendarUtils.COLON) ;
+      if(sb != null && sb.length() > 0) sb.append(CalendarUtils.COMMA) ;
       sb.append(s) ;
     }
     fieldInput.setValue(sb.toString()) ;
@@ -388,7 +388,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
         calendar.setGroups(selected.toArray(new String[]{})) ;
         String editPermission = uiForm.getUIStringInput(EDIT_PERMISSION).getValue() ;
         if(!CalendarUtils.isEmpty(editPermission)) {
-          calendar.setEditPermission(editPermission.split(CalendarUtils.COLON)) ;
+          calendar.setEditPermission(editPermission.split(CalendarUtils.COMMA)) ;
         }
         calendarService.saveGroupCalendar(SessionsUtils.getSystemProvider(), calendar, uiForm.isAddNew_) ;
       }else {

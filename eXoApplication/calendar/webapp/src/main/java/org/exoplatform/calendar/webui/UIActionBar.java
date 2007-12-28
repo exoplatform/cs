@@ -150,7 +150,7 @@ public class UIActionBar extends UIContainer  {
       CalendarService cservice = CalendarUtils.getCalendarService() ;
       String username = Util.getPortalRequestContext().getRemoteUser() ;
       CalendarSetting calendarSetting = cservice.getCalendarSetting(SessionsUtils.getSessionProvider(), username) ;
-      uiCalendarSettingForm.init(calendarSetting) ;
+      uiCalendarSettingForm.init(calendarSetting, cservice) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   }

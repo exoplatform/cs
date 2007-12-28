@@ -143,7 +143,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
     permission_.put(value, value) ;
     StringBuilder sb = new StringBuilder() ;
     for(String s : permission_.values()) {
-      if(sb != null && sb.length() > 0) sb.append(CalendarUtils.COLON) ;
+      if(sb != null && sb.length() > 0) sb.append(CalendarUtils.COMMA) ;
       sb.append(s) ;
     }
     fieldInput.setValue(sb.toString()) ;

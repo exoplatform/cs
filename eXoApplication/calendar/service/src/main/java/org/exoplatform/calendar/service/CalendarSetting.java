@@ -20,6 +20,8 @@ import java.util.Calendar;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import javax.jcr.Node;
+
 /**
  * Created by The eXo Platform SARL
  * Author : Hung Nguyen
@@ -54,6 +56,7 @@ public class CalendarSetting {
   private String baseURL ;
   private String[] defaultPrivateCalendars ;
   private String[] defaultPublicCalendars ;
+  private String[] defaultSharedCalendars ;
   private boolean isShowWorkingTime = false ; 
   private String workingTimeBegin ;
   private String workingTimeEnd ;
@@ -70,6 +73,7 @@ public class CalendarSetting {
     location = Locale.getDefault().getISO3Country() ;
     defaultPrivateCalendars = new String[]{} ;
     defaultPublicCalendars = new String[]{} ;
+    defaultSharedCalendars = new String[]{} ;
     sharedCalendarsColors = new String[]{} ;
   }
 
@@ -138,6 +142,12 @@ public class CalendarSetting {
 
   public String[] getSharedCalendarsColors() {
     return sharedCalendarsColors;
+  }
+  public void setDefaultSharedCalendars(String[] sharedCalendars) {
+    defaultSharedCalendars = sharedCalendars ;
+  }
+  public String[] getDefaultSharedCalendars() {
+    return defaultSharedCalendars ;
   }
 }
 

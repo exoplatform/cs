@@ -304,6 +304,9 @@
 	  		<propertyDefinition name="exo:defaultPublicCalendars" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
   				<valueConstraints/>
 	  		</propertyDefinition>	 
+	  		<propertyDefinition name="exo:defaultSharedCalendars" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
+  				<valueConstraints/>
+	  		</propertyDefinition>	 
 	  		<propertyDefinition name="exo:sharedCalendarsColors" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
   				<valueConstraints/>
 	  		</propertyDefinition>	  	

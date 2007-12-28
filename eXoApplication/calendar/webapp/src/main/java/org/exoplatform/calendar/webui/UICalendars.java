@@ -468,7 +468,7 @@ public class UICalendars extends UIForm  {
       CalendarService cservice = CalendarUtils.getCalendarService() ;
       String username = Util.getPortalRequestContext().getRemoteUser() ;
       CalendarSetting calendarSetting = cservice.getCalendarSetting(SessionsUtils.getSessionProvider(), username) ;
-      uiCalendarSettingForm.init(calendarSetting) ;
+      uiCalendarSettingForm.init(calendarSetting, cservice) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent.getParent()) ;
     }

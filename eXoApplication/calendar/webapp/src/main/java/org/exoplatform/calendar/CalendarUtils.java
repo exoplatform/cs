@@ -56,7 +56,8 @@ public class CalendarUtils {
 	public static final String PUBLIC_TYPE = "2".intern() ;
 
 	final public static String SEMICOLON = ";".intern() ;
-	final public static String COLON = ",".intern() ;
+  final public static String COLON = ":".intern() ;
+	final public static String COMMA = ",".intern() ;
 	final public static String SLASH = "/".intern() ;
 	final public static String BACKSLASH = "\\".intern() ;
 
@@ -68,7 +69,7 @@ public class CalendarUtils {
 	final public static long MILISECONS_OF_DAY = 24*60*60*1000 ;
 
 
-	final public static String SPECIALCHARACTER[] = {SEMICOLON,COLON,SLASH,BACKSLASH,"'","|",">","<","\"", "?", "!", "@", "#", "$", "%","^","&","*"} ;
+	final public static String SPECIALCHARACTER[] = {SEMICOLON,COMMA,SLASH,BACKSLASH,"'","|",">","<","\"", "?", "!", "@", "#", "$", "%","^","&","*"} ;
 
 	static public String[] getUserGroups(String username) throws Exception {
 		OrganizationService organization = (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
