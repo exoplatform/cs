@@ -90,9 +90,22 @@ public class UICategory extends UIForm	{
 	  this.longDateformat = longDateformat ;
 	  this.timeFormat = timeFormat ;
   }
-	private String getTime(Date date) {
-		return ForumFormatFunction.getFormatTime(timeFormat, date) ;
+	private String getTime(Date myDate) {
+		myDate.setHours(myDate.getHours() + (int)timeZone);
+		return ForumFormatFunction.getFormatTime(timeFormat, myDate) ;
 	}
+	@SuppressWarnings("deprecation")
+  private String getShortDate(Date myDate) {
+		myDate.setHours(myDate.getHours() + (int)timeZone);
+		return ForumFormatFunction.getFormatDate(shortDateformat, myDate) ;
+	}
+	@SuppressWarnings("deprecation")
+	private String getLongDate(Date myDate) {
+		myDate.setHours(myDate.getHours() + (int)timeZone);
+		return ForumFormatFunction.getFormatDate(longDateformat, myDate) ;
+	}
+	
+	
 	public void update(Category category, List<Forum> forums) throws Exception {
 		this.category = category ;
 		this.forums = forums ;

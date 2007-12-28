@@ -22,6 +22,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
+import java.util.TimeZone;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -662,7 +663,7 @@ public class JCRDataStorage{
 					// set InfoPost for Topic
 					long topicPostCount = topicNode.getProperty("exo:postCount").getLong() + 1 ;
 					topicNode.setProperty("exo:postCount", topicPostCount ) ;
-					topicNode.setProperty("exo:lastPostDate", GregorianCalendar.getInstance()) ;
+					topicNode.setProperty("exo:lastPostDate", getGreenwichMeanTime()) ;
 					long newNumberAttach =	topicNode.getProperty("exo:numberAttachments").getLong() + numberAttach ;
 					topicNode.setProperty("exo:numberAttachments", newNumberAttach);
 					// set InfoPost for Forum
@@ -801,7 +802,7 @@ public class JCRDataStorage{
 						pollNode.setProperty("exo:id", pollId) ;
 						pollNode.setProperty("exo:owner", poll.getOwner()) ;
 						pollNode.setProperty("exo:userVote", new String[] {}) ;
-						pollNode.setProperty("exo:createdDate", GregorianCalendar.getInstance()) ;
+						pollNode.setProperty("exo:createdDate", getGreenwichMeanTime()) ;
 						topicNode.setProperty("exo:isPoll", true);
 					} else {
 						pollNode = topicNode.getNode(pollId) ;
@@ -811,7 +812,7 @@ public class JCRDataStorage{
 					}
 					pollNode.setProperty("exo:vote", poll.getVote()) ;
 					pollNode.setProperty("exo:modifiedBy", poll.getModifiedBy()) ;
-					pollNode.setProperty("exo:modifiedDate", GregorianCalendar.getInstance()) ;
+					pollNode.setProperty("exo:modifiedDate", getGreenwichMeanTime()) ;
 					pollNode.setProperty("exo:timeOut", poll.getTimeOut()) ;
 					pollNode.setProperty("exo:question", poll.getQuestion()) ;
 					pollNode.setProperty("exo:option", poll.getOption()) ;
@@ -1030,10 +1031,11 @@ public class JCRDataStorage{
 	@SuppressWarnings("deprecation")
   private Calendar getGreenwichMeanTime() {
 		Date date = new Date() ;
-		int timeZone = date.getTimezoneOffset() ;
-		int time = date.getHours() ;
-		date.setHours(time + timeZone);
-		Calendar calendar  = GregorianCalendar.getInstance() ;
+		int hostZone = date.getTimezoneOffset()/60 ;
+		date.setHours(date.getHours() + hostZone);
+		TimeZone timeZone2 = TimeZone.getTimeZone("GMT+00:00") ;
+		Calendar calendar  = GregorianCalendar.getInstance(timeZone2) ;
+		calendar.setTimeZone(timeZone2);
 		calendar.setTime(date);
 		return calendar ;
 	}

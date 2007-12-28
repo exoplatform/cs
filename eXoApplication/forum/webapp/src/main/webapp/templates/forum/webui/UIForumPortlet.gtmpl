@@ -5,7 +5,7 @@
   def rcontext = _ctx.getRequestContext() ;
   JavascriptManager jsmanager = rcontext.getJavascriptManager();
   jsmanager.importJavascript('eXo.forum.UIForumPortlet', '/forum/javascript/');
-  jsmanager.addJavascript("window.setTimeout('window.location.reload(true)',240000);");
+ // jsmanager.addJavascript("window.setTimeout('window.location.reload(true)',240000);");
 %>
 
 <div class="UIForumPortlet" id="$uicomponent.id">

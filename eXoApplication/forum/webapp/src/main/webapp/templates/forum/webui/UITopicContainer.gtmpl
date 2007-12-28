@@ -278,6 +278,7 @@
 								String classRow = "whileRow";
 								int i = 0;
 								 for(topic in topics){
+								 System.out.println("\nngetrter: " + topic.getCreatedDate());
 									if(i%2 == 0) classRow = "whileRow";
 									else classRow = "OddRow";
 									String topicId = topic.getId();
