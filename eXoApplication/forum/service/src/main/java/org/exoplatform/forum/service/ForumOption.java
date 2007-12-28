@@ -17,22 +17,29 @@
 package org.exoplatform.forum.service;
 
 public class ForumOption {
+	private String userName ="";
 	private Double timeZone ;
-	private String dateFormat ;
+	private String shortDateformat ;
+	private String longDateformat ;
 	private String timeFormat ;
 	private long maxTopic ;
 	private long maxPost ;
 	private boolean isShowForumJump = false ;
-	//private String userName ;
 	
 	public ForumOption() {
 		// TODO Auto-generated constructor stub
 	}
+	public void setUserName(String userName) { this.userName = userName ;}
+	public String getUserName() { return this.userName;}
+
 	public void setTimeZone(Double timeZone) { this.timeZone = timeZone ; }
 	public double getTimeZone() {return this.timeZone ;	}
 	
-	public void setDateFormat(String dateFormat) { this.dateFormat = dateFormat ;}
-	public String getDateFormat() { return this.dateFormat;}
+	public void setShortDateFormat(String shortDateformat) { this.shortDateformat = shortDateformat ;}
+	public String getShortDateFormat() { return this.shortDateformat;}
+
+	public void setLongDateFormat(String longDateformat) { this.longDateformat = longDateformat ;}
+	public String getLongDateFormat() { return this.longDateformat;}
 
 	public void setTimeFormat(String timeFormat) {this.timeFormat = timeFormat;}
 	public String getTimeFormat() { return this.timeFormat ;}

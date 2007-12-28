@@ -17,9 +17,11 @@
 package org.exoplatform.forum.webui;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.forum.ForumFormatFunction;
 import org.exoplatform.forum.ForumUtils;
 import org.exoplatform.forum.service.Category;
 import org.exoplatform.forum.service.Forum;
@@ -68,6 +70,10 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
 		}
 )
 public class UICategory extends UIForm	{
+	private double timeZone ;
+	private String shortDateformat ;
+	private String longDateformat ;
+	private String timeFormat ;
 	private String categoryId ;
 	private Category category ;
 	private boolean	isEditCategory = false ;
@@ -78,6 +84,15 @@ public class UICategory extends UIForm	{
 		
 	}
 	
+	public void setFormat(double timeZone, String shortDateformat, String longDateformat, String timeFormat) {
+	  this.timeZone = timeZone ;
+	  this.shortDateformat = shortDateformat;
+	  this.longDateformat = longDateformat ;
+	  this.timeFormat = timeFormat ;
+  }
+	private String getTime(Date date) {
+		return ForumFormatFunction.getFormatTime(timeFormat, date) ;
+	}
 	public void update(Category category, List<Forum> forums) throws Exception {
 		this.category = category ;
 		this.forums = forums ;

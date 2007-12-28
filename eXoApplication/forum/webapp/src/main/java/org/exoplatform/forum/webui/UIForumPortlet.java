@@ -43,6 +43,7 @@ public class UIForumPortlet extends UIPortletApplication {
 		addChild(UITopicsTag.class, null, null).setRendered(isPostRendered) ;
 		addChild(UIForumLinks.class, null, null).setRendered(isForumRendered) ;
 		addChild(UIPopupAction.class, null, null) ;
+		addChild(UIForumOption.class, null, null).setRendered(true) ;
 	}
 
 	public void updateIsRendered(int selected) {

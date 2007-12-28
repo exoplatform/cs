@@ -281,4 +281,8 @@ public interface ForumService {
 	public JCRPageList getTopicsByTag(SessionProvider sProvider, String tagId) throws Exception ;
 	public void saveTag(SessionProvider sProvider, Tag newTag, boolean isNew) throws Exception ;
 	public void removeTag(SessionProvider sProvider, String tagId) throws Exception ;
+
+	public void saveOption(SessionProvider sProvider, ForumOption newOption, boolean isNew) throws Exception ;
+	public ForumOption getOption(SessionProvider sProvider, String userName) throws Exception ;
+	
 }

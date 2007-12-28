@@ -36,7 +36,7 @@ public class ForumFormatFunction {
   public static String getFormatTime(String format,Date myDate) {
 		 long time = myDate.getHours() ;
 		 StringBuffer stringBuffer = new StringBuffer() ;
-		 if(format.equals("24H")){
+		 if(format.equals("24h")){
 			 stringBuffer.append(time).append(":").append(myDate.getMinutes());
 		 } else {
 			 String str = "" ;

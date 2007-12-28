@@ -344,4 +344,36 @@
 		</propertyDefinitions>
 	</nodeType>	 	 	 	
 	
+	<nodeType name="exo:forumOption" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
+		<supertypes>
+			<supertype>nt:base</supertype>
+		</supertypes>
+		<propertyDefinitions>
+			<propertyDefinition name="exo:userName" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+				<valueConstraints/>
+			</propertyDefinition>
+			<propertyDefinition name="exo:timeZone" requiredType="Double" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">		
+				<valueConstraints/>
+			</propertyDefinition>
+			<propertyDefinition name="exo:timeFormat" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+				<valueConstraints/>
+			</propertyDefinition>		
+			<propertyDefinition name="exo:shortDateformat" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+				<valueConstraints/>
+			</propertyDefinition>		
+			<propertyDefinition name="exo:longDateformat" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+				<valueConstraints/>
+			</propertyDefinition>
+			<propertyDefinition name="exo:maxPost" requiredType="Long" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+				<valueConstraints/>
+			</propertyDefinition>
+			<propertyDefinition name="exo:maxTopic" requiredType="Long" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+				<valueConstraints/>
+			</propertyDefinition>
+			<propertyDefinition name="exo:isShowForumJump" requiredType="boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+				<valueConstraints/>
+			</propertyDefinition>
+		</propertyDefinitions>
+	</nodeType>	
+	 	 	 	
 </nodeTypes>

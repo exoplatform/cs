@@ -21,6 +21,7 @@ import java.util.List;
 import org.exoplatform.forum.service.Category;
 import org.exoplatform.forum.service.Forum;
 import org.exoplatform.forum.service.ForumLinkData;
+import org.exoplatform.forum.service.ForumOption;
 import org.exoplatform.forum.service.JCRPageList;
 import org.exoplatform.forum.service.Poll;
 import org.exoplatform.forum.service.Post;
@@ -80,4 +81,7 @@ public interface DataStorage {
 	public JCRPageList getTopicsByTag(SessionProvider sProvider, String tagId) throws Exception ;
 	public void saveTag(SessionProvider sProvider, Tag newTag, boolean isNew) throws Exception ;
 	public void removeTag(SessionProvider sProvider, String tagId) throws Exception ;
+
+	public void saveOption(SessionProvider sProvider, ForumOption newOption, boolean isNew) throws Exception ;
+	public ForumOption getOption(SessionProvider sProvider, String userName) throws Exception ;
 }

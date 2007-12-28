@@ -21,6 +21,7 @@ import java.util.List;
 import org.exoplatform.forum.service.Category;
 import org.exoplatform.forum.service.Forum;
 import org.exoplatform.forum.service.ForumLinkData;
+import org.exoplatform.forum.service.ForumOption;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.service.JCRPageList;
 import org.exoplatform.forum.service.Poll;
@@ -196,4 +197,12 @@ public class ForumServiceImpl implements ForumService{
 	public void removeTag(SessionProvider sProvider, String tagId) throws Exception {
 		storage_.removeTag(sProvider, tagId) ;
 	}
+
+	public ForumOption getOption(SessionProvider sProvider, String userName) throws Exception {
+	  return storage_.getOption(sProvider, userName);
+  }
+
+	public void saveOption(SessionProvider sProvider, ForumOption newOption, boolean isNew) throws Exception {
+		storage_.saveOption(sProvider, newOption, isNew) ;
+  }
 }

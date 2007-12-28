@@ -35,6 +35,7 @@ import org.exoplatform.forum.service.Category;
 import org.exoplatform.forum.service.Forum;
 import org.exoplatform.forum.service.ForumAttachment;
 import org.exoplatform.forum.service.ForumLinkData;
+import org.exoplatform.forum.service.ForumOption;
 import org.exoplatform.forum.service.ForumPageList;
 import org.exoplatform.forum.service.JCRForumAttachment;
 import org.exoplatform.forum.service.JCRPageList;
@@ -116,7 +117,7 @@ public class JCRDataStorage{
 			catNode.setProperty("exo:id", category.getId()) ;
 			catNode.setProperty("exo:owner", category.getOwner()) ;
 			catNode.setProperty("exo:path", catNode.getPath()) ;
-			catNode.setProperty("exo:createdDate", GregorianCalendar.getInstance()) ;
+			catNode.setProperty("exo:createdDate", getGreenwichMeanTime()) ;
 		} else {
 			catNode = forumHomeNode.getNode(category.getId()) ;
 		}
@@ -124,7 +125,7 @@ public class JCRDataStorage{
 		catNode.setProperty("exo:categoryOrder", category.getCategoryOrder()) ;
 		catNode.setProperty("exo:description", category.getDescription()) ;
 		catNode.setProperty("exo:modifiedBy", category.getModifiedBy()) ;
-		catNode.setProperty("exo:modifiedDate", GregorianCalendar.getInstance()) ;
+		catNode.setProperty("exo:modifiedDate", getGreenwichMeanTime()) ;
 		catNode.setProperty("exo:userPrivate", category.getUserPrivate()) ;
 		
 		//forumHomeNode.save() ;
@@ -186,7 +187,7 @@ public class JCRDataStorage{
 				forumNode.setProperty("exo:id", forum.getId()) ;
 				forumNode.setProperty("exo:owner", forum.getOwner()) ;
 				forumNode.setProperty("exo:path", forumNode.getPath()) ;
-				forumNode.setProperty("exo:createdDate", GregorianCalendar.getInstance()) ;
+				forumNode.setProperty("exo:createdDate", getGreenwichMeanTime()) ;
 				forumNode.setProperty("exo:lastTopicPath", forum.getLastTopicPath()) ;
 				forumNode.setProperty("exo:postCount", 0) ;
 				forumNode.setProperty("exo:topicCount", 0) ;
@@ -196,7 +197,7 @@ public class JCRDataStorage{
 			forumNode.setProperty("exo:name", forum.getForumName()) ;
 			forumNode.setProperty("exo:forumOrder", forum.getForumOrder()) ;
 			forumNode.setProperty("exo:modifiedBy", forum.getModifiedBy()) ;
-			forumNode.setProperty("exo:modifiedDate", GregorianCalendar.getInstance()) ;
+			forumNode.setProperty("exo:modifiedDate", getGreenwichMeanTime()) ;
 			forumNode.setProperty("exo:description", forum.getDescription()) ;
 			
 			forumNode.setProperty("exo:notifyWhenAddPost", forum.getNotifyWhenAddPost()) ;
@@ -425,9 +426,9 @@ public class JCRDataStorage{
 					topicNode = forumNode.addNode(topic.getId(), "exo:topic") ;
 					topicNode.setProperty("exo:id", topic.getId()) ;
 					topicNode.setProperty("exo:path", topicNode.getPath()) ;
-					topicNode.setProperty("exo:createdDate", GregorianCalendar.getInstance()) ;
+					topicNode.setProperty("exo:createdDate", getGreenwichMeanTime()) ;
 					topicNode.setProperty("exo:lastPostBy", topic.getLastPostBy()) ;
-					topicNode.setProperty("exo:lastPostDate", GregorianCalendar.getInstance()) ;
+					topicNode.setProperty("exo:lastPostDate", getGreenwichMeanTime()) ;
 					topicNode.setProperty("exo:postCount", -1) ;
 					topicNode.setProperty("exo:viewCount", 0) ;
 					topicNode.setProperty("exo:tagId", topic.getTagId());
@@ -440,7 +441,7 @@ public class JCRDataStorage{
 				topicNode.setProperty("exo:owner", topic.getOwner()) ;
 				topicNode.setProperty("exo:name", topic.getTopicName()) ;
 				topicNode.setProperty("exo:modifiedBy", topic.getModifiedBy()) ;
-				topicNode.setProperty("exo:modifiedDate", GregorianCalendar.getInstance()) ;
+				topicNode.setProperty("exo:modifiedDate", getGreenwichMeanTime()) ;
 				topicNode.setProperty("exo:description", topic.getDescription()) ;
 				topicNode.setProperty("exo:icon", topic.getIcon()) ;
 				
@@ -628,12 +629,12 @@ public class JCRDataStorage{
 					postNode.setProperty("exo:id", post.getId()) ;
 					postNode.setProperty("exo:owner", post.getOwner()) ;
 					postNode.setProperty("exo:path", postNode.getPath()) ;
-					postNode.setProperty("exo:createdDate", GregorianCalendar.getInstance()) ;
+					postNode.setProperty("exo:createdDate", getGreenwichMeanTime()) ;
 				} else {
 					postNode = topicNode.getNode(post.getId()) ;
 				}
 				postNode.setProperty("exo:modifiedBy", post.getModifiedBy()) ;
-				postNode.setProperty("exo:modifiedDate", GregorianCalendar.getInstance()) ;
+				postNode.setProperty("exo:modifiedDate", getGreenwichMeanTime()) ;
 				postNode.setProperty("exo:subject", post.getSubject()) ;
 				postNode.setProperty("exo:message", post.getMessage()) ;
 				postNode.setProperty("exo:remoteAddr", post.getRemoteAddr()) ;
@@ -965,6 +966,49 @@ public class JCRDataStorage{
 	}
 	
 	
+	
+	public ForumOption getOption(SessionProvider sProvider, String userName) throws Exception {
+		Node forumHomeNode = getForumHomeNode(sProvider) ;
+		Node newOptionNode ;
+		ForumOption forumOption = new ForumOption();
+		userName = userName.trim().replaceAll(" ", "0") ;
+		if(forumHomeNode.hasNode(userName)) {
+			newOptionNode = forumHomeNode.getNode(userName) ;
+			if(newOptionNode.hasProperty("exo:userName"))forumOption.setUserName(userName);
+			if(newOptionNode.hasProperty("exo:timeZone"))forumOption.setTimeZone(newOptionNode.getProperty("exo:timeZone").getDouble());
+			if(newOptionNode.hasProperty("exo:shortDateformat"))forumOption.setShortDateFormat(newOptionNode.getProperty("exo:shortDateformat").toString());
+			if(newOptionNode.hasProperty("exo:longDateformat"))forumOption.setLongDateFormat(newOptionNode.getProperty("exo:longDateformat").toString());
+			if(newOptionNode.hasProperty("exo:timeFormat"))forumOption.setTimeFormat(newOptionNode.getProperty("exo:timeFormat").toString());
+			if(newOptionNode.hasProperty("exo:maxPost"))forumOption.setMaxPostInPage(newOptionNode.getProperty("exo:maxPost").getLong());
+			if(newOptionNode.hasProperty("exo:maxTopic"))forumOption.setMaxTopicInPage(newOptionNode.getProperty("exo:maxTopic").getLong());
+			if(newOptionNode.hasProperty("exo:isShowForumJump"))forumOption.setIsShowForumJump(newOptionNode.getProperty("exo:isShowForumJump").getBoolean());
+			return forumOption;
+		}
+		return null ;
+  }
+
+	public void saveOption(SessionProvider sProvider, ForumOption newOption, boolean isNew) throws Exception {
+		Node forumHomeNode = getForumHomeNode(sProvider) ;
+		Node newOptionNode ;
+		if(isNew) {
+			String optionId = newOption.getUserName().trim().replaceAll(" ", "0") ;
+			newOptionNode = forumHomeNode.addNode(optionId, "exo:forumOption") ;
+			newOptionNode.setProperty("exo:userName", optionId);
+		} else {
+			newOptionNode = forumHomeNode.getNode(newOption.getUserName()) ;
+		}
+		newOptionNode.setProperty("exo:timeZone", newOption.getTimeZone());
+		newOptionNode.setProperty("exo:shortDateformat", newOption.getTimeZone());
+		newOptionNode.setProperty("exo:longDateformat", newOption.getTimeZone());
+		newOptionNode.setProperty("exo:timeFormat", newOption.getTimeZone());
+		newOptionNode.setProperty("exo:maxPost", newOption.getTimeZone());
+		newOptionNode.setProperty("exo:maxTopic", newOption.getTimeZone());
+		newOptionNode.setProperty("exo:isShowForumJump", newOption.getTimeZone());
+		forumHomeNode.save() ;
+		forumHomeNode.getSession().save() ;
+  }
+	
+	
 	@SuppressWarnings("unchecked")
 	public List getPage(long page, JCRPageList pageList, SessionProvider sProvider) throws Exception {
 		try {
@@ -981,6 +1025,17 @@ public class JCRDataStorage{
 			Str[i] = Val[i].getString() ;
 		}
 		return Str;
+	}
+	
+	@SuppressWarnings("deprecation")
+  private Calendar getGreenwichMeanTime() {
+		Date date = new Date() ;
+		int timeZone = date.getTimezoneOffset() ;
+		int time = date.getHours() ;
+		date.setHours(time + timeZone);
+		Calendar calendar  = GregorianCalendar.getInstance() ;
+		calendar.setTime(date);
+		return calendar ;
 	}
 	
 	public Object getObjectNameByPath(SessionProvider sProvider, String path) throws Exception {
@@ -1056,4 +1111,5 @@ public class JCRDataStorage{
 		}
 		return forumLinks ;
 	}
+
 }

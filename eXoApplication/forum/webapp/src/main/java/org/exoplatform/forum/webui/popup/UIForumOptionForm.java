@@ -60,6 +60,7 @@ public class UIForumOptionForm extends UIForm implements UIPopupComponent {
 	public static final String FIELD_MAXPOSTS_SELECTBOX = "MaximumPosts" ;
 	public static final String FIELD_FORUMJUMP_CHECKBOX = "ShowForumJump" ;
 	
+	
 	private static final String[] timeZone = {
 			"(GMT -12:00) Eniwetok, Kwajalein", 
 			"(GMT -11:00) Midway Island, Samoa", 
