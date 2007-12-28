@@ -27,6 +27,9 @@ import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.Tag;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.UIMailPortlet;
+import org.exoplatform.mail.webui.UIMessageArea;
+import org.exoplatform.mail.webui.UIMessageList;
+import org.exoplatform.mail.webui.UINavigationContainer;
 import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -245,18 +248,10 @@ public class UIAddMessageFilter extends UIForm implements UIPopupComponent{
     public void execute(Event<UIAddMessageFilter> event) throws Exception {
       UIAddMessageFilter uiAddFilter = event.getSource();
       UIMailPortlet uiPortlet = uiAddFilter.getAncestorOfType(UIMailPortlet.class);
-      UIMessageFilter uiFilter = uiPortlet.findFirstComponentOfType(UIMessageFilter.class);
-      String filterName = uiAddFilter.getFilterName();
-      if (filterName == null || "".equals(filterName.trim())) {
-        //    Verify
-        UIApplication uiApp = uiAddFilter.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIAddMessageFilter.msg.filter-name-blank", null, ApplicationMessage.INFO)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return;
-      }
       String username = MailUtils.getCurrentUser();
-      String accountId = uiAddFilter.getAncestorOfType(UIMailPortlet.class).findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       MailService mailSrv = MailUtils.getMailService();
+      String filterName = uiAddFilter.getFilterName();
       String from = uiAddFilter.getFrom();
       String fromCondition = uiAddFilter.getFromCondition();
       String to = uiAddFilter.getTo();
@@ -268,12 +263,20 @@ public class UIAddMessageFilter extends UIForm implements UIPopupComponent{
       String applyFolder = uiAddFilter.getApplyFolder();
       String applyTag = uiAddFilter.getApplyTag();
       boolean keepInbox = uiAddFilter.getKeepInInbox();
-      MessageFilter filter; 
-      if (uiAddFilter.getCurrentFilter() != null) {
-        filter = uiAddFilter.getCurrentFilter();
-      } else {
-        filter = new MessageFilter(filterName);
+      // Verify
+      UIApplication uiApp = uiAddFilter.getAncestorOfType(UIApplication.class) ;
+      if (Utils.isEmptyField(filterName)) {
+        uiApp.addMessage(new ApplicationMessage("UIAddMessageFilter.msg.filter-name-blank", null, ApplicationMessage.INFO)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return;
+      } else if (Utils.isEmptyField(from) && Utils.isEmptyField(to) && Utils.isEmptyField(subject) && Utils.isEmptyField(body)) {
+        uiApp.addMessage(new ApplicationMessage("UIAddMessageFilter.msg.fill-at-lease-field", null, ApplicationMessage.INFO)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return;
       }
+      MessageFilter filter = new MessageFilter(filterName);       
+      if (uiAddFilter.getCurrentFilter() != null) filter = uiAddFilter.getCurrentFilter();
+      
       filter.setAccountId(accountId);
       filter.setFrom(from);
       filter.setFromCondition(Integer.valueOf(fromCondition));
@@ -288,13 +291,18 @@ public class UIAddMessageFilter extends UIForm implements UIPopupComponent{
       filter.setKeepInInbox(keepInbox);
       try {
         mailSrv.saveFilter(SessionsUtils.getSessionProvider(), username, accountId, filter);
-        uiFilter.setSelectedFilterId(filter.getId());
+        mailSrv.runFilter(SessionsUtils.getSessionProvider(), username, accountId, filter);
+        uiPortlet.findFirstComponentOfType(UIMessageFilter.class).setSelectedFilterId(filter.getId());
       } catch (Exception e) {
         e.printStackTrace();
       }
       UIPopupAction uiPopupAction = uiAddFilter.getAncestorOfType(UIPopupAction.class) ;
       uiPopupAction.deActivate();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiAddFilter.getAncestorOfType(UIPopupActionContainer.class)) ;
+      UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
+      uiMessageList.updateList();
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UINavigationContainer.class));
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
   }
   

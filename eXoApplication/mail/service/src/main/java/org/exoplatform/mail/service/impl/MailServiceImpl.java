@@ -437,7 +437,9 @@ public class MailServiceImpl implements MailService{
             newMsg.setAddresses(addressMap.values().toArray(new String[] {}));
             newMsg.setRoot(newMsg.getId());
           }
+          
           storage_.saveMessage(sProvider, username, account.getId(), newMsg, true);
+       
           messageList.add(newMsg);
                     
           for(String folderId : folderIds) {
@@ -461,10 +463,10 @@ public class MailServiceImpl implements MailService{
           
           i ++ ;
         }
-        execFilters(sProvider, username, accountId);
       } 
       folder.close(false);
       store.close();
+      if (totalNew > 0) execActionFilter(sProvider, username, accountId, messageList);
     }  catch (Exception e) { 
       e.printStackTrace();
     }
@@ -717,8 +719,57 @@ public class MailServiceImpl implements MailService{
     return emlImportExport_.exportMessage(sProvider, username, accountId, messageId) ; 
   }
   
-  public void execFilters(SessionProvider sProvider, String username, String accountId) throws Exception {
-    storage_.execFilters(sProvider, username, accountId);
+  private void execActionFilter(SessionProvider sProvider, String username, String accountId, List<Message> msgList) throws Exception {
+    List<MessageFilter> msgFilters = getFilters(sProvider, username, accountId);
+    for (MessageFilter filter : msgFilters) {
+      String applyFolder = filter.getApplyFolder() ;
+      String applyTag = filter.getApplyTag() ;
+      filter.setAccountId(accountId);
+      List<Message> msgFilterList = getMessages(sProvider, username, filter).getAll(username);
+      if (msgFilterList != null && msgFilterList.size() > 0) {
+        for (Message msgFilter : msgFilterList) {
+          for (Message msg : msgList) {
+            if (msgFilter.getId().equals(msg.getId())) {
+              if (!Utils.isEmptyField(applyFolder) && (getFolder(sProvider, username, accountId, applyFolder) != null)) {
+                moveMessages(sProvider, username, accountId, msg.getId(), msg.getFolders()[0], applyFolder);               
+              }
+              if (!Utils.isEmptyField(applyTag)) {
+                Tag tag = getTag(sProvider, username, accountId, applyTag);
+                if (tag != null) {
+                  List<String> msgIdList = new ArrayList<String>();
+                  msgIdList.add(msg.getId());
+                  List<Tag> tagList = new ArrayList<Tag>();
+                  tagList.add(tag);
+                  addTag(sProvider, username, accountId, msgIdList , tagList);
+                }
+              }
+            }
+          }
+        }
+      }
+    } 
+  }
+  
+  public void runFilter(SessionProvider sProvider, String username, String accountId, MessageFilter filter) throws Exception {
+    List<Message> msgList = getMessages(sProvider, username, filter).getAll(username);
+    List<String> msgIdList = new ArrayList<String>();
+    String applyFolder = filter.getApplyFolder();
+    String applyTag = filter.getApplyTag();
+    List<Tag> tagList = new ArrayList<Tag>();
+    for (Message msg : msgList) {
+      Folder folder = getFolder(sProvider, username, accountId, applyFolder);
+      if (folder != null && (msg.getFolders()[0] != applyFolder)) {
+        moveMessages(sProvider, username, accountId, msg.getId(), msg.getFolders()[0], applyFolder);
+      }
+      msgIdList.add(msg.getId());
+    }
+    if (!Utils.isEmptyField(applyTag)) {
+      Tag tag = getTag(sProvider, username, accountId, applyTag);
+      if (tag != null) {
+        tagList.add(tag);
+        addTag(sProvider, username, accountId, msgIdList, tagList);
+      }
+    }
   }
   
   public SpamFilter getSpamFilter(SessionProvider sProvider, String username, String accountId) throws Exception {

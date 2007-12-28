@@ -18,11 +18,6 @@ package org.exoplatform.mail.service;
 
 import java.util.Calendar;
 
-import javax.jcr.Node;
-import javax.jcr.NodeIterator;
-import javax.jcr.Session;
-import javax.jcr.Value;
-
 import org.exoplatform.commons.utils.ISO8601;
 import org.exoplatform.services.jcr.util.IdGenerator;
 
@@ -364,47 +359,5 @@ public class MessageFilter {
     System.out.println(" ## Query Statement : " + stringBuffer.toString());
     if(hasConjuntion) queryString.append(stringBuffer.toString()) ;
     return queryString.toString() ;
-  }
-  
-  /**
-   * This function execute this filter to run query
-   * @param node iterator object
-   * @throws Exception
-   */
-  public void execActions(Session session, NodeIterator nodeIter) throws Exception {
-    while(nodeIter.hasNext()) {
-      Node msgNode = nodeIter.nextNode();
-      if (applyFolder != null && applyFolder.trim().length() > 0) {
-        if (msgNode.hasProperty(Utils.EXO_FOLDERS)) {
-          Value[] propFolders = msgNode.getProperty(Utils.EXO_FOLDERS).getValues();
-          String[] folders = new String[propFolders.length + 1];
-          for (int i = 0; i < propFolders.length; i++) {
-            if (keepInbox) {
-              folders[i] = propFolders[i].getString();
-            } else  if(propFolders[i].getString().equals(Utils.createFolderId(accountId, Utils.FD_INBOX, false))) {
-              folders[i] = "";
-            }
-          }
-          folders[propFolders.length] = applyFolder;
-          msgNode.setProperty(Utils.EXO_FOLDERS, folders);
-        }
-      }
-     
-      if (applyTag != null && applyTag.trim().length() > 0) {
-        if (msgNode.hasProperty(Utils.EXO_TAGS)) {
-          Value[] propTags = msgNode.getProperty(Utils.EXO_TAGS).getValues();
-          String[] tags = new String[propTags.length + 1];
-          for (int i = 0; i < propTags.length; i++) {
-            tags[i] = propTags[i].getString();
-          }
-          tags[propTags.length] = applyTag;
-          msgNode.setProperty(Utils.EXO_TAGS, tags);
-        } else {
-          msgNode.setProperty(Utils.EXO_TAGS, new String[] {applyTag});
-        }
-      }
-    }
-    
-    session.save();
   }
 }

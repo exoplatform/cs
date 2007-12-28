@@ -319,7 +319,7 @@ public interface MailService {
   public void importMessage(SessionProvider sProvider, String username, String accountId, String folderId, InputStream inputStream, String type) throws Exception;
   public OutputStream exportMessage(SessionProvider sProvider, String username,String accountId, String messageId) throws Exception;
   
-  public void execFilters(SessionProvider sProvider, String username, String accountId) throws Exception ;
+  public void runFilter(SessionProvider sProvider, String username, String accountId, MessageFilter filter) throws Exception ;
   
   public SpamFilter getSpamFilter(SessionProvider sProvider, String username, String accountId) throws Exception ;
   

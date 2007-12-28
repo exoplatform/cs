@@ -931,19 +931,6 @@ public class JCRDataStorage{
     return messages;
   }
   
-  public void execFilters(SessionProvider sProvider, String username, String accountId) throws Exception {
-    List<MessageFilter> filterList = getFilters(sProvider, username, accountId);
-    for (MessageFilter filter : filterList) {
-      Node homeMsg = getMessageHome(sProvider, username, accountId);
-      filter.setAccountPath(homeMsg.getPath()) ;
-      QueryManager qm = homeMsg.getSession().getWorkspace().getQueryManager();
-      Query query = qm.createQuery(filter.getStatement(), Query.XPATH);
-      QueryResult result = query.execute(); 
-      NodeIterator iter = result.getNodes();
-      filter.execActions(homeMsg.getSession(), iter);      
-    }
-  }
-  
   public Node getSpamFilterHome(SessionProvider sProvider, String username, String accountId) throws Exception {
     Node accountHome = getMailHomeNode(sProvider, username).getNode(accountId);
     if(accountHome.hasNode(Utils.KEY_SPAM_FILTER)) return accountHome.getNode(Utils.KEY_SPAM_FILTER) ;
