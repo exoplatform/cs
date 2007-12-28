@@ -203,7 +203,8 @@
 .UIRSSReaderPortlet .UIContentWorkingArea .ContentBreadcumbs .BreadcumbsContainer {
   padding: 3px 0px 0px 3px;
   height: 18px;
-  float: left;
+  float: left;]
+  width: 80%;
 }
 
 .UIRSSReaderPortlet .UIContentWorkingArea .ContentBreadcumbs .Icon {
