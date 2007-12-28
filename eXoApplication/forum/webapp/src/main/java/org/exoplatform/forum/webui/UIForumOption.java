@@ -24,7 +24,10 @@ import org.exoplatform.forum.ForumUtils;
 import org.exoplatform.forum.service.ForumOption;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIContainer;
+import org.exoplatform.webui.core.lifecycle.Lifecycle;
+import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
 
 /**
  * Created by The eXo Platform SARL
@@ -32,6 +35,9 @@ import org.exoplatform.webui.core.UIContainer;
  *          tu.duy@exoplatform.com
  * Dec 26, 2007 5:50:44 PM 
  */
+@ComponentConfig(
+		lifecycle = UIContainerLifecycle.class
+)
 public class UIForumOption extends UIContainer {
 	private	ForumService forumService = (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
 	private double timeZone ;
