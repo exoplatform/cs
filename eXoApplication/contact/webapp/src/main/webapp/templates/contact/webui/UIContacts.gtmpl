@@ -400,10 +400,10 @@
 					while (i < contacts.length) {						
 						contact = contacts[i ++] ;
 						iconTag = null ;
-						String[] tagIds = contact.getTags() ; 
+						String[] tagIds = contact.getTags() ;
 						if (tagIds != null && tagIds.length > 0) {
 							for (String tagId : tagIds) { 
-								Tag tag = tagMap.get(tagIds[0]) ;
+								Tag tag = tagMap.get(tagId) ;
 								if (tag != null) {
 									iconTag = "Icon " + tag.getColor() + "Tag" ;
 									break ;
@@ -519,7 +519,7 @@
   			tagIds = contact.getTags() ;
 				if (tagIds != null && tagIds.length > 0) {
 					for (String tagId : tagIds) { 
-						Tag tag = tagMap.get(tagIds[0]) ;
+						Tag tag = tagMap.get(tagId) ;
 						if (tag != null) {
 							iconTag = "Icon " + tag.getColor() + "Tag" ;
 							break ;

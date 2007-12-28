@@ -55,9 +55,10 @@ public class ContactServiceImpl implements ContactService {
     return storage_.getAllContact(sProvider, username);
   }
   
+  /*
   public ContactPageList getContactPageListByTag(String username, ContactFilter filter) throws Exception {
     return storage_.getContactPageListByTag(username, filter);
-  }
+  }*/
   
   public ContactPageList getContactPageListByGroup(SessionProvider sProvider, String username, String groupId) throws Exception {
     return storage_.getContactPageListByGroup(sProvider, username, groupId);
