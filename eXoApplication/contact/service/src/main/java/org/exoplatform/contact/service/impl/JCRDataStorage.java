@@ -76,7 +76,7 @@ public class JCRDataStorage{
     Node userApp = nodeHierarchyCreator_.getUserApplicationNode(sProvider, username)  ;
   	if(!userApp.hasNode(CONTACT_APP)){
   		userApp.addNode(CONTACT_APP, NT_UNSTRUCTURED) ;
-  		userApp.save() ;
+  		userApp.getSession().save() ;
   	}
   	return  userApp.getNode(CONTACT_APP) ;
   }
