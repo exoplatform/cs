@@ -2,12 +2,14 @@
 	import org.exoplatform.forum.service.Topic ;
 	import org.exoplatform.forum.webui.UITopicsTag ;
 	import org.exoplatform.forum.service.Tag ;
+	import org.exoplatform.forum.webui.UIForumPageIterator ;
 	
 	List topics = uicomponent.getTopicsTag() ; 
 	Tag tag_ = uicomponent.getTagById() ;
 	String tagName = tag_.getName() ;
 %>
 <% uiform.begin() %>
+
 <div class="UIForumContainer">
 	<div class="UIForumDescription">
 		<div class="LeftDescription">
@@ -18,6 +20,9 @@
 				</div>
 			</div>
 		</div>
+	</div>
+	<div style="overflow:auto; padding-bottom: 2px;">
+	<% uiform.renderChild(UIForumPageIterator.class) ; %>
 	</div>
 	<div class="ForumContainer">
 		<div class="ForumCategory">
@@ -118,16 +123,14 @@
 									if(i%2 == 0) classRow = "whileRow";
 									else classRow = "OddRow";
 									String topicId = topic.getId();
-									
 									long max_page = uicomponent.getMaxPagePost(topic.getPath()) ;
-									
 									String iconClassTopic = topic.getIcon();
 									if(iconClassTopic.length() <= 0) iconClassTopic = "NormalTopicIcon";
 									String topicTitle = topic.getTopicName();
 									String topicBy = topic.getOwner();
 									String postNewBy = topic.getLastPostBy() ;
-									String lastPostDate = topic.getLastPostDate().toString() ;
-									lastPostDate = lastPostDate.substring(0, (lastPostDate.length() - 8))
+									Date postDate = topic.getLastPostDate();
+									String lastPostDate = uicomponent.getShortDate(postDate) + ", " + uicomponent.getTime(postDate);
 									String titlePost = uicomponent.getStringCleanHtmlCode(topic.getDescription());
 									if(titlePost.length() > 100) {
 										titlePost = titlePost.substring(0, 99) + "...";
@@ -222,6 +225,9 @@
 				</div>
 			</div>
 		</div>
+	</div>
+	<div style="overflow:auto; padding-top: -2px;">
+	<% uiform.renderChild(UIForumPageIterator.class) ; %>
 	</div>
 </div>
 <%uiform.end()%>

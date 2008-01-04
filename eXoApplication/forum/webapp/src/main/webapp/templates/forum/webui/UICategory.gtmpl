@@ -142,7 +142,7 @@
 								topicNewPostTitle = topicNewPost.getTopicName();
 								lastPostBy = topicNewPost.getLastPostBy();
 								Date postDate = topicNewPost.getLastPostDate();
-								dateTime = (1+postDate.getMonth()) + "/" + postDate.getDate() + "/" + (1900 + postDate.getYear());
+								dateTime = uicomponent.getShortDate(postDate) + ", " + uicomponent.getTime(postDate);
 								long createdDate = topicNewPost.getLastPostDate().getTime();
 								if((toDay-createdDate)/86400000 < 4){
 									classIconForum = "ForumNewPostIcon";
@@ -175,7 +175,7 @@
 									</td>
 						 <% if(topicNewPost != null) { %>
 									<td >
-										 <div class="LastPostIcon $topicNewPostIcon" ><span></span></div><a href="$openLinkLastPost" title="Go to first Post in Therad '$topicNewPostTitle' " class="LastPostTitle">$topicNewPostTitle</a>
+										 <div class="LastPostIcon $topicNewPostIcon" ><span></span></div><a href="$openLinkLastPost" title="Go to first new post in thread '$topicNewPostTitle' " class="LastPostTitle">$topicNewPostTitle</a>
 										<div style="clear: left;"><span></span></div>
 										<div class="LastPostInfos">by&nbsp;<a style="color: #058EE6;" href="#">$lastPostBy</a><span class="DateTime">&nbsp;($dateTime)</span></div>
 								<% } else { %>	

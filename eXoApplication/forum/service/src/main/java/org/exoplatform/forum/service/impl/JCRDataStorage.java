@@ -969,17 +969,18 @@ public class JCRDataStorage{
 	
 	
 	public ForumOption getOption(SessionProvider sProvider, String userName) throws Exception {
+		if(userName == null || userName.length() <= 0) return null ;
 		Node forumHomeNode = getForumHomeNode(sProvider) ;
 		Node newOptionNode ;
 		ForumOption forumOption = new ForumOption();
-		userName = userName.trim().replaceAll(" ", "0") ;
+		userName = userName.trim().replaceAll(" ", "#") ;
 		if(forumHomeNode.hasNode(userName)) {
 			newOptionNode = forumHomeNode.getNode(userName) ;
 			if(newOptionNode.hasProperty("exo:userName"))forumOption.setUserName(userName);
 			if(newOptionNode.hasProperty("exo:timeZone"))forumOption.setTimeZone(newOptionNode.getProperty("exo:timeZone").getDouble());
-			if(newOptionNode.hasProperty("exo:shortDateformat"))forumOption.setShortDateFormat(newOptionNode.getProperty("exo:shortDateformat").toString());
-			if(newOptionNode.hasProperty("exo:longDateformat"))forumOption.setLongDateFormat(newOptionNode.getProperty("exo:longDateformat").toString());
-			if(newOptionNode.hasProperty("exo:timeFormat"))forumOption.setTimeFormat(newOptionNode.getProperty("exo:timeFormat").toString());
+			if(newOptionNode.hasProperty("exo:shortDateformat"))forumOption.setShortDateFormat(newOptionNode.getProperty("exo:shortDateformat").getString());
+			if(newOptionNode.hasProperty("exo:longDateformat"))forumOption.setLongDateFormat(newOptionNode.getProperty("exo:longDateformat").getString());
+			if(newOptionNode.hasProperty("exo:timeFormat"))forumOption.setTimeFormat(newOptionNode.getProperty("exo:timeFormat").getString());
 			if(newOptionNode.hasProperty("exo:maxPost"))forumOption.setMaxPostInPage(newOptionNode.getProperty("exo:maxPost").getLong());
 			if(newOptionNode.hasProperty("exo:maxTopic"))forumOption.setMaxTopicInPage(newOptionNode.getProperty("exo:maxTopic").getLong());
 			if(newOptionNode.hasProperty("exo:isShowForumJump"))forumOption.setIsShowForumJump(newOptionNode.getProperty("exo:isShowForumJump").getBoolean());
@@ -988,23 +989,23 @@ public class JCRDataStorage{
 		return null ;
   }
 
-	public void saveOption(SessionProvider sProvider, ForumOption newOption, boolean isNew) throws Exception {
+	public void saveOption(SessionProvider sProvider, ForumOption newOption) throws Exception {
 		Node forumHomeNode = getForumHomeNode(sProvider) ;
 		Node newOptionNode ;
-		if(isNew) {
-			String optionId = newOption.getUserName().trim().replaceAll(" ", "0") ;
+		String optionId = newOption.getUserName().trim().replaceAll(" ", "#") ;
+		if(forumHomeNode.hasNode(optionId)) {
+			newOptionNode = forumHomeNode.getNode(optionId) ;
+		} else {
 			newOptionNode = forumHomeNode.addNode(optionId, "exo:forumOption") ;
 			newOptionNode.setProperty("exo:userName", optionId);
-		} else {
-			newOptionNode = forumHomeNode.getNode(newOption.getUserName()) ;
 		}
 		newOptionNode.setProperty("exo:timeZone", newOption.getTimeZone());
-		newOptionNode.setProperty("exo:shortDateformat", newOption.getTimeZone());
-		newOptionNode.setProperty("exo:longDateformat", newOption.getTimeZone());
-		newOptionNode.setProperty("exo:timeFormat", newOption.getTimeZone());
-		newOptionNode.setProperty("exo:maxPost", newOption.getTimeZone());
-		newOptionNode.setProperty("exo:maxTopic", newOption.getTimeZone());
-		newOptionNode.setProperty("exo:isShowForumJump", newOption.getTimeZone());
+		newOptionNode.setProperty("exo:shortDateformat", newOption.getShortDateFormat());
+		newOptionNode.setProperty("exo:longDateformat", newOption.getLongDateFormat());
+		newOptionNode.setProperty("exo:timeFormat", newOption.getTimeFormat());
+		newOptionNode.setProperty("exo:maxPost", newOption.getMaxPostInPage());
+		newOptionNode.setProperty("exo:maxTopic", newOption.getMaxTopicInPage());
+		newOptionNode.setProperty("exo:isShowForumJump", newOption.getIsShowForumJump());
 		forumHomeNode.save() ;
 		forumHomeNode.getSession().save() ;
   }
@@ -1031,8 +1032,8 @@ public class JCRDataStorage{
 	@SuppressWarnings("deprecation")
   private Calendar getGreenwichMeanTime() {
 		Date date = new Date() ;
-		int hostZone = date.getTimezoneOffset()/60 ;
-		date.setHours(date.getHours() + hostZone);
+		double hostZone = date.getTimezoneOffset() ;
+		date.setMinutes(date.getMinutes() + (int)hostZone);
 		TimeZone timeZone2 = TimeZone.getTimeZone("GMT+00:00") ;
 		Calendar calendar  = GregorianCalendar.getInstance(timeZone2) ;
 		calendar.setTimeZone(timeZone2);

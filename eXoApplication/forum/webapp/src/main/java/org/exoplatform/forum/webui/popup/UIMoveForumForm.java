@@ -81,7 +81,8 @@ public class UIMoveForumForm extends UIForm implements UIPopupComponent {
 		return categorys ;
 	}
 	
-	private boolean getSeclectedCategory(String cactegoryId) throws Exception {
+	@SuppressWarnings("unused")
+  private boolean getSeclectedCategory(String cactegoryId) throws Exception {
 		if(cactegoryId.equalsIgnoreCase(this.newCategoryId_)) return true;
 		else return false ;
 	}

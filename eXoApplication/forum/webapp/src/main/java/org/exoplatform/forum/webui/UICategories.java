@@ -16,9 +16,11 @@
  ***************************************************************************/
 package org.exoplatform.forum.webui;
 
+import java.util.Date;
 import java.util.List;
 
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.forum.ForumFormatFunction;
 import org.exoplatform.forum.ForumUtils;
 import org.exoplatform.forum.service.Category;
 import org.exoplatform.forum.service.Forum;
@@ -46,14 +48,44 @@ import org.exoplatform.webui.event.EventListener;
 		}
 )
 public class UICategories extends UIContainer	{
+	private double timeZone ;
+	private String shortDateformat ;
+	private String longDateformat ;
+	private String timeFormat ;
 	protected ForumService forumService = (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
 	
 	public UICategories() throws Exception {
 	}
 
+	public void setFormat(double timeZone, String shortDateformat, String longDateformat, String timeFormat) {
+	  this.timeZone = timeZone ;
+	  this.shortDateformat = shortDateformat;
+	  this.longDateformat = longDateformat ;
+	  this.timeFormat = timeFormat ;
+  }
+	@SuppressWarnings({ "deprecation", "unused" })
+  private String getTime(Date myDate) {
+		return ForumFormatFunction.getFormatTime(timeFormat, myDate) ;
+	}
+	@SuppressWarnings({ "deprecation", "unused" })
+  private String getShortDate(Date myDate) {
+		int minute = (int)(timeZone*60);
+		myDate.setMinutes(myDate.getMinutes() - minute);
+		return ForumFormatFunction.getFormatDate(shortDateformat, myDate) ;
+	}
+	@SuppressWarnings({ "deprecation", "unused" })
+	private String getLongDate(Date myDate) {
+		int minute = (int)(timeZone*60) ;
+		myDate.setMinutes(myDate.getMinutes() - minute);
+		return ForumFormatFunction.getFormatDate(longDateformat, myDate) ;
+	}
 	private List<Category> getCategoryList() throws Exception {
 		this.getAncestorOfType(UIForumPortlet.class).getChild(UIBreadcumbs.class).setUpdataPath("ForumService") ;
 		List<Category> categoryList = forumService.getCategories(ForumUtils.getSystemProvider());
+		if(categoryList.size() > 0)
+			((UICategoryContainer)getParent()).getChild(UIForumActionBar.class).setHasCategory(true) ;
+		else 
+			((UICategoryContainer)getParent()).getChild(UIForumActionBar.class).setHasCategory(false) ;
 		return categoryList;
 	}	
 	
@@ -78,7 +110,7 @@ public class UICategories extends UIContainer	{
 		public void execute(Event<UICategories> event) throws Exception {
 			UICategories uiContainer = event.getSource();
 			String categoryId = event.getRequestContext().getRequestParameter(OBJECTID)	;
-			UICategoryContainer categoryContainer = uiContainer.getAncestorOfType(UICategoryContainer.class) ;
+			UICategoryContainer categoryContainer = uiContainer.getParent() ;
 			categoryContainer.updateIsRender(false) ;
 			UICategory uiCategory = categoryContainer.getChild(UICategory.class) ;
 			uiCategory.update(uiContainer.getCategory(categoryId), uiContainer.getForumList(categoryId)) ;
@@ -116,6 +148,7 @@ public class UICategories extends UIContainer	{
 			UITopicDetail uiTopicDetail = uiTopicDetailContainer.getChild(UITopicDetail.class) ;
 			uiForumContainer.getChild(UIForumDescription.class).setForumIds(id[0], id[1]);
 			uiTopicDetail.setUpdateTopic(id[0], id[1], id[2], true) ;
+			uiTopicDetail.setIdPostView("true") ;
 			uiTopicDetailContainer.getChild(UITopicPoll.class).updateFormPoll(id[0], id[1], id[2]) ;
 			forumPortlet.getChild(UIForumLinks.class).setValueOption((id[0]+"/"+id[1] + " "));
 			event.getRequestContext().addUIComponentToUpdateByAjax(forumPortlet) ;

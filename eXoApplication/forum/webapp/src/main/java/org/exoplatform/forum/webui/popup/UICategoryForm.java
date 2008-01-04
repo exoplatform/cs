@@ -85,7 +85,6 @@ public class UICategoryForm extends UIForm implements UIPopupComponent{
 	}
 	public void deActivate() throws Exception {
 		// TODO Auto-generated method stub
-		//System.out.println("\n\n description: sfdsf\n\n");
 	}
 	
 	public void setCategoryValue(Category category, boolean isUpdate) {

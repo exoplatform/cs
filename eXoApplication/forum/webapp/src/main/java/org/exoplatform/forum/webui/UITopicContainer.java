@@ -17,6 +17,7 @@
 package org.exoplatform.forum.webui;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.exoplatform.container.PortalContainer;
@@ -92,6 +93,10 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
 	private long page = 1 ;
 	private boolean isGoPage = false;
 	private boolean isUpdate = false;
+	private double timeZone ;
+	private String shortDateformat ;
+	private String longDateformat ;
+	private String timeFormat ;
 	private long maxTopic = 10 ;
 	private long maxPost = 10 ;
 	public UITopicContainer() throws Exception {
@@ -99,6 +104,34 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
 		addUIFormInput( new UIFormStringInput("gopage2", null)) ;
 		addChild(UIForumPageIterator.class, null, "ForumPageIterator") ;
 	}
+	
+	
+	public void setFormat(double timeZone, String shortDateformat, String longDateformat, String timeFormat) {
+	  this.timeZone = timeZone ;
+	  this.shortDateformat = shortDateformat;
+	  this.longDateformat = longDateformat ;
+	  this.timeFormat = timeFormat ;
+  }
+	@SuppressWarnings({ "deprecation", "unused" })
+	private String getTime(Date myDate) {
+		return ForumFormatFunction.getFormatTime(timeFormat, myDate) ;
+	}
+	@SuppressWarnings({ "deprecation", "unused" })
+  private String getShortDate(Date myDate) {
+		myDate.setMinutes(myDate.getMinutes() - (int)(timeZone*60));
+		return ForumFormatFunction.getFormatDate(shortDateformat, myDate) ;
+	}
+	@SuppressWarnings({ "deprecation", "unused" })
+	private String getLongDate(Date myDate) {
+		myDate.setMinutes(myDate.getMinutes() - (int)(timeZone*60));
+		return ForumFormatFunction.getFormatDate(longDateformat, myDate) ;
+	}
+	
+	public void setMaxItemInPage(long maxTopic, long maxPost) {
+		this.maxTopic = maxTopic ;
+		this.maxPost = maxPost ;
+	}
+	
 	
 	public void activate() throws Exception {
 	}
@@ -136,11 +169,6 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
 		this.pageList = forumService.getPageTopic(ForumUtils.getSystemProvider(), categoryId, forumId);
 		this.pageList.setPageSize(this.maxTopic);
 		this.getChild(UIForumPageIterator.class).updatePageList(this.pageList) ;
-	}
-	
-	public void setMaxItemInPage(long maxTopic, long maxPost) {
-		this.maxTopic = maxTopic ;
-		this.maxPost = maxPost ;
 	}
 	
 	@SuppressWarnings("unused")
@@ -398,7 +426,8 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
 	
 
 	static public class EditTopicActionListener extends EventListener<UITopicContainer> {
-		public void execute(Event<UITopicContainer> event) throws Exception {
+		@SuppressWarnings("unchecked")
+    public void execute(Event<UITopicContainer> event) throws Exception {
 			UITopicContainer uiTopicContainer = event.getSource();
 			List<UIComponent> children = uiTopicContainer.getChildren() ;
 			Topic topic = null ;
@@ -431,7 +460,8 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
 	}	
 	
 	static public class SetOpenTopicActionListener extends EventListener<UITopicContainer> {
-		public void execute(Event<UITopicContainer> event) throws Exception {
+		@SuppressWarnings("unchecked")
+    public void execute(Event<UITopicContainer> event) throws Exception {
 			UITopicContainer uiTopicContainer = event.getSource();
 			List<UIComponent> children = uiTopicContainer.getChildren() ;
 			List <Topic> topics = new ArrayList<Topic>();
@@ -466,7 +496,8 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
 	}	
 
 	static public class SetCloseTopicActionListener extends EventListener<UITopicContainer> {
-		public void execute(Event<UITopicContainer> event) throws Exception {
+		@SuppressWarnings("unchecked")
+    public void execute(Event<UITopicContainer> event) throws Exception {
 			UITopicContainer uiTopicContainer = event.getSource();
 			List<UIComponent> children = uiTopicContainer.getChildren() ;
 			List <Topic> topics = new ArrayList<Topic>();
@@ -501,7 +532,8 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
 	}	
 	
 	static public class SetLockedTopicActionListener extends EventListener<UITopicContainer> {
-		public void execute(Event<UITopicContainer> event) throws Exception {
+		@SuppressWarnings("unchecked")
+    public void execute(Event<UITopicContainer> event) throws Exception {
 			UITopicContainer uiTopicContainer = event.getSource();
 			List<UIComponent> children = uiTopicContainer.getChildren() ;
 			List <Topic> topics = new ArrayList<Topic>();
@@ -536,7 +568,8 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
 	}
 	
 	static public class SetUnLockTopicActionListener extends EventListener<UITopicContainer> {
-		public void execute(Event<UITopicContainer> event) throws Exception {
+		@SuppressWarnings("unchecked")
+    public void execute(Event<UITopicContainer> event) throws Exception {
 			UITopicContainer uiTopicContainer = event.getSource();
 			List<UIComponent> children = uiTopicContainer.getChildren() ;
 			List <Topic> topics = new ArrayList<Topic>();
@@ -571,7 +604,8 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
 	}	
 
 	static public class SetUnStickTopicActionListener extends EventListener<UITopicContainer> {
-		public void execute(Event<UITopicContainer> event) throws Exception {
+		@SuppressWarnings("unchecked")
+    public void execute(Event<UITopicContainer> event) throws Exception {
 			UITopicContainer uiTopicContainer = event.getSource();
 			List<UIComponent> children = uiTopicContainer.getChildren() ;
 			List <Topic> topics = new ArrayList<Topic>();
@@ -606,7 +640,8 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
 	}	
 	
 	static public class SetStickTopicActionListener extends EventListener<UITopicContainer> {
-		public void execute(Event<UITopicContainer> event) throws Exception {
+		@SuppressWarnings("unchecked")
+    public void execute(Event<UITopicContainer> event) throws Exception {
 			UITopicContainer uiTopicContainer = event.getSource();
 			List<UIComponent> children = uiTopicContainer.getChildren() ;
 			List <Topic> topics = new ArrayList<Topic>();
@@ -641,7 +676,8 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
 	}	
 	
 	static public class SetMoveTopicActionListener extends EventListener<UITopicContainer> {
-		public void execute(Event<UITopicContainer> event) throws Exception {
+		@SuppressWarnings("unchecked")
+    public void execute(Event<UITopicContainer> event) throws Exception {
 			UITopicContainer uiTopicContainer = event.getSource();
 			List<UIComponent> children = uiTopicContainer.getChildren() ;
 			List <Topic> topics = new ArrayList<Topic>();
@@ -669,7 +705,8 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
 	}	
 
 	static public class SetDeleteTopicActionListener extends EventListener<UITopicContainer> {
-		public void execute(Event<UITopicContainer> event) throws Exception {
+		@SuppressWarnings("unchecked")
+    public void execute(Event<UITopicContainer> event) throws Exception {
 			UITopicContainer uiTopicContainer = event.getSource();
 			List<UIComponent> children = uiTopicContainer.getChildren() ;
 			List <Topic> topics = new ArrayList<Topic>();

@@ -202,7 +202,7 @@ public class ForumServiceImpl implements ForumService{
 	  return storage_.getOption(sProvider, userName);
   }
 
-	public void saveOption(SessionProvider sProvider, ForumOption newOption, boolean isNew) throws Exception {
-		storage_.saveOption(sProvider, newOption, isNew) ;
+	public void saveOption(SessionProvider sProvider, ForumOption newOption) throws Exception {
+		storage_.saveOption(sProvider, newOption) ;
   }
 }

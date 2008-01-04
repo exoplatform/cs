@@ -1,5 +1,6 @@
 .UIForumPortlet {
 	min-height: 470px;
+	padding-bottom: 20px;
 }
 
 *html .UIForumPortlet {
@@ -320,4 +321,8 @@
 
 .UIForumPortlet .SelectFileFrame {
 	width: 300px;
+}
+
+.UIForumPortlet .ButtomAndPageListContainer {
+	height: 22px;
 }

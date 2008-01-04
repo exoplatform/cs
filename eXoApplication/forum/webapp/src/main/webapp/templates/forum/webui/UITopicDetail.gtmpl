@@ -304,10 +304,12 @@
 				if(classIconPost.length() <= 0) 
 					classIconPost = "NormalTopicIcon" ;
 				String subject = post.getSubject() ;
-				String createdDate = post.getCreatedDate().toString() ;
+				Date createdPostDate = post.getCreatedDate() ;
+				String createdDate = uicomponent.getLongDate(createdPostDate) + ", " + uicomponent.getTime(createdPostDate) ;
 				String messager = post.getMessage() ;
 				String editBy = post.getModifiedBy() ;
-				String editDate = post.getModifiedDate().toString() ;
+				Date modifileDate = post.getModifiedDate() ;
+				String editDate = uicomponent.getLongDate(modifileDate) + ", " + uicomponent.getTime(modifileDate) ;
 				List attachments = post.getAttachments() ;
 		%>
 
@@ -436,7 +438,6 @@
 <!-- End ContentContainer -->
 <%
 	String idLastPost = uicomponent.getIdPostView() ;
-	System.out.println("\n\nfhfkdshfs:  " + idLastPost);
 	jsmanager.addJavascript("eXo.forum.UIForumPortlet.goLastPost('"+idLastPost+"');");
 %>
 	</div>	

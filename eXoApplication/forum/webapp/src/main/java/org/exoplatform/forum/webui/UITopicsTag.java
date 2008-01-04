@@ -16,8 +16,8 @@
  ***************************************************************************/
 package org.exoplatform.forum.webui;
 
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.TreeMap;
 
 import org.exoplatform.container.PortalContainer;
@@ -67,26 +67,50 @@ public class UITopicsTag extends UIForm {
 	private Tag tag ;
 	private long maxPost = 10 ;
 	private long maxTopic = 10 ;
+	private double timeZone ;
+	private String shortDateformat ;
+	private String longDateformat ;
+	private String timeFormat ;
 	private boolean isUpdateTag = true ;
+	
 	public UITopicsTag() throws Exception {
-		//addChild(UIForumPageIterator.class, null, null) ;
+		addChild(UIForumPageIterator.class, null, "TagPageIterator") ;
 	}
 	
 	public void setIdTag(String tagId) {
 		this.tagId = tagId ;
 		this.isUpdateTag = true ;
   }
-	
+	public void setFormat(double timeZone, String shortDateformat, String longDateformat, String timeFormat) {
+	  this.timeZone = timeZone ;
+	  this.shortDateformat = shortDateformat;
+	  this.longDateformat = longDateformat ;
+	  this.timeFormat = timeFormat ;
+  }
+	@SuppressWarnings({ "deprecation", "unused" })
+	private String getTime(Date myDate) {
+		return ForumFormatFunction.getFormatTime(timeFormat, myDate) ;
+	}
+	@SuppressWarnings({ "deprecation", "unused" })
+  private String getShortDate(Date myDate) {
+		myDate.setMinutes(myDate.getMinutes() - (int)(timeZone*60));
+		return ForumFormatFunction.getFormatDate(shortDateformat, myDate) ;
+	}
+	@SuppressWarnings({ "deprecation", "unused" })
+	private String getLongDate(Date myDate) {
+		myDate.setMinutes(myDate.getMinutes() - (int)(timeZone*60));
+		return ForumFormatFunction.getFormatDate(longDateformat, myDate) ;
+	}
 	public void setMaxItemInPage(long maxTopic, long maxPost) {
 		this.maxTopic = maxTopic ;
 		this.maxPost = maxPost ;
 	}
 	
 	@SuppressWarnings("unused")
-  private JCRPageList getListTopicTag() throws Exception {
+  private void getListTopicTag() throws Exception {
 		this.listTopic = forumService.getTopicsByTag(ForumUtils.getSystemProvider(), this.tagId) ;
 		this.listTopic.setPageSize(this.maxTopic) ;
-		return this.listTopic ;
+		this.getChild(UIForumPageIterator.class).updatePageList(this.listTopic) ;
 	}
 	
 	private TreeMap<String, JCRPageList> mapPostPage = new TreeMap<String, JCRPageList>();
@@ -106,7 +130,10 @@ public class UITopicsTag extends UIForm {
 	
 	@SuppressWarnings({ "unchecked", "unused" })
   private List<Topic> getTopicsTag() throws Exception {
-		this.listTopic = forumService.getTopicsByTag(ForumUtils.getSystemProvider(), this.tagId) ;
+		//if(isUpdateTag) {
+			getListTopicTag() ;
+		//}
+		this.page = this.getChild(UIForumPageIterator.class).getPageSelected() ;
 		this.topics = forumService.getPage(page, this.listTopic, ForumUtils.getSystemProvider()) ;
 		for(Topic topic : this.topics) {
 			if(getUIFormCheckBoxInput(topic.getId()) != null) {

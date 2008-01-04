@@ -51,9 +51,13 @@ import org.exoplatform.webui.event.EventListener;
 		}
 )
 public class UIForumActionBar extends UIContainer	{
+	private boolean hasCategory = false ;
 	public UIForumActionBar() throws Exception {		
 	} 
 	
+	public void setHasCategory(boolean hasCategory) {
+	  this.hasCategory = hasCategory ;
+  }
 	static public class AddCategoryActionListener extends EventListener<UIForumActionBar> {
 		public void execute(Event<UIForumActionBar> event) throws Exception {
 			UIForumActionBar uiActionBar = event.getSource() ;
@@ -67,16 +71,14 @@ public class UIForumActionBar extends UIContainer	{
 	static public class AddForumActionListener extends EventListener<UIForumActionBar> {
 		@SuppressWarnings("unchecked")
 		public void execute(Event<UIForumActionBar> event) throws Exception {
-			UIForumActionBar uiActionBar = event.getSource() ;			
-			ForumService forumService =	(ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
-			List cates = forumService.getCategories(ForumUtils.getSystemProvider()) ;
-			if(cates.size() > 0) {
+			UIForumActionBar uiActionBar = event.getSource() ;
+			if(uiActionBar.hasCategory) {
 				UIForumPortlet forumPortlet = uiActionBar.getAncestorOfType(UIForumPortlet.class) ;
 				UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;
 				UIForumForm forumForm = popupAction.createUIComponent(UIForumForm.class, null, null) ;
 				forumForm.setCategoryValue("", true) ;
 				forumForm.setForumUpdate(false) ;
-				popupAction.activate(forumForm, 662, 466) ;
+				popupAction.activate(forumForm, 650, 450) ;
 				event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
 			} else {
 				UIApplication uiApp = uiActionBar.getAncestorOfType(UIApplication.class) ;

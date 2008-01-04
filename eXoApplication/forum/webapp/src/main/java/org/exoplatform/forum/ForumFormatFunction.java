@@ -33,11 +33,16 @@ import java.util.TreeMap;
 public class ForumFormatFunction {
 
 	@SuppressWarnings("deprecation")
-  public static String getFormatTime(String format,Date myDate) {
-		 long time = myDate.getHours();
+  public static String getFormatTime(String format, Date myDate) {
+		 int time = myDate.getHours();
+		 int minut = myDate.getMinutes() ;
+		 String strMinut;
+		 if(minut < 10) strMinut = "0" + minut ;
+		 else strMinut = "" + minut ;
 		 StringBuffer stringBuffer = new StringBuffer() ;
+		 if(time < 10)stringBuffer.append("0");
 		 if(format.equals("24h")){
-			 stringBuffer.append(time).append(":").append(myDate.getMinutes());
+			 stringBuffer.append(time).append(":").append(strMinut);
 		 } else {
 			 String str = "" ;
 			 if(time < 12) str = "AM";
@@ -45,13 +50,13 @@ public class ForumFormatFunction {
 				 str = "PM";
 				 if(time > 12) time = time - 12 ;
 			 }
-			 stringBuffer.append(time).append(":").append(myDate.getMinutes()).append(" ").append(str);
+			 stringBuffer.append(time).append(":").append(strMinut).append(" ").append(str);
 		 }
 		return stringBuffer.toString();
 	}
 	
 	@SuppressWarnings("deprecation")
-  public static String getFormatDate(String format,Date myDate) {
+  public static String getFormatDate(String format, Date myDate) {
 		/* d, dd, ddd, dddd, m, mm, mmm, yy, yyyy
 		 * */
 		TreeMap<String, String>mapDate = new TreeMap<String, String>();
@@ -166,21 +171,19 @@ public class ForumFormatFunction {
 				stringBuffer.append(sl);
 			}
 		}
-	  return stringBuffer.toString();
+	  return stringBuffer.toString().trim();
   }
 	
 	public static String getTimeZoneNumberInString(String string) {
 		if(string != null && string.length() > 0) {
 			StringBuffer stringBuffer = new StringBuffer();
-			int t = 0;
 			for(int i = 0; i <	string.length(); ++i) {
 				char c = string.charAt(i) ; 
+				if(c == ')') break ;
 				if (Character.isDigit(c) || c == '-' || c == '+' || c == ':'){
 					if(c == ':') c = '.';
-					if(c == '-' || c == '+') t = t + 1;
 					if(c == '3' && string.charAt(i-1) == ':') c = '5';
-					if(t == 1 || t == 0) stringBuffer.append(c);
-					if(t == 2) t = 1;
+					stringBuffer.append(c);
 				}
 			}
 			return stringBuffer.toString() ;

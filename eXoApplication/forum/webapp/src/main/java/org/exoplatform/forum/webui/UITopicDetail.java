@@ -17,9 +17,11 @@
 package org.exoplatform.forum.webui;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.forum.ForumFormatFunction;
 import org.exoplatform.forum.ForumUtils;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.service.JCRPageList;
@@ -106,7 +108,13 @@ public class UITopicDetail extends UIForm	{
 	private String IdPostView = "false" ;
 	private String IdLastPost = "false" ;
 	private List<Post> posts ;
+	
 	private long maxPost = 10 ;
+	private double timeZone ;
+	private String shortDateformat ;
+	private String longDateformat ;
+	private String timeFormat ;
+	
 	private String userName = "" ;
 	public UITopicDetail() throws Exception {
 		addUIFormInput( new UIFormStringInput("gopage1", null)) ;
@@ -116,12 +124,33 @@ public class UITopicDetail extends UIForm	{
 		//addChild(UIForumLinks.class, null, null);
 	}
 	
+	public void setFormat(double timeZone, String shortDateformat, String longDateformat, String timeFormat) {
+	  this.timeZone = timeZone ;
+	  this.shortDateformat = shortDateformat;
+	  this.longDateformat = longDateformat ;
+	  this.timeFormat = timeFormat ;
+  }
+	@SuppressWarnings({ "deprecation", "unused" })
+	private String getTime(Date myDate) {
+		return ForumFormatFunction.getFormatTime(timeFormat, myDate) ;
+	}
+	@SuppressWarnings({ "deprecation", "unused" })
+  private String getShortDate(Date myDate) {
+		myDate.setMinutes(myDate.getMinutes() - (int)(timeZone*60));
+		return ForumFormatFunction.getFormatDate(shortDateformat, myDate) ;
+	}
+	@SuppressWarnings({ "deprecation", "unused" })
+	private String getLongDate(Date myDate) {
+		myDate.setMinutes(myDate.getMinutes() - (int)(timeZone*60));
+		return ForumFormatFunction.getFormatDate(longDateformat, myDate) ;
+	}
+	
 	public void setUpdateTopic(String categoryId, String forumId, String topicId, boolean viewTopic) throws Exception {
 		this.categoryId = categoryId ;
 		this.forumId = forumId ;
 		this.topicId = topicId ;
 		this.viewTopic = viewTopic ;
-		this.isUpdatePageList = true ;
+		this.isUpdatePageList = false ;
 		this.getAncestorOfType(UIForumPortlet.class).getChild(UIBreadcumbs.class).setUpdataPath((categoryId + "/" + forumId + "/" + topicId)) ;
 		this.topic = forumService.getTopic(ForumUtils.getSystemProvider(), categoryId, forumId, topicId, viewTopic) ;
 	}
@@ -161,7 +190,7 @@ public class UITopicDetail extends UIForm	{
 	public void setIsEditTopic( boolean isEditTopic) {
 		this.isEditTopic = isEditTopic ;
 	}
-	
+
 	public void setUpdatePageList(JCRPageList pageList) throws Exception {
 		this.pageList = pageList ;
 		this.isUpdatePageList = true ;
@@ -190,7 +219,8 @@ public class UITopicDetail extends UIForm	{
 		} else {
 			this.pageList = forumService.getPosts(ForumUtils.getSystemProvider(), categoryId, forumId, topicId) ;
 		}
-		pageList.setPageSize(this.maxPost) ;
+		if(this.maxPost > 0)
+			pageList.setPageSize(this.maxPost) ;
 		this.getChild(UIForumPageIterator.class).updatePageList(this.pageList) ;
 	}
 	

@@ -278,7 +278,6 @@
 								String classRow = "whileRow";
 								int i = 0;
 								 for(topic in topics){
-								 System.out.println("\nngetrter: " + topic.getCreatedDate());
 									if(i%2 == 0) classRow = "whileRow";
 									else classRow = "OddRow";
 									String topicId = topic.getId();
@@ -289,8 +288,8 @@
 									String topicTitle = topic.getTopicName();
 									String topicBy = topic.getOwner();
 									String postNewBy = topic.getLastPostBy() ;
-									String lastPostDate = topic.getLastPostDate().toString() ;
-									lastPostDate = lastPostDate.substring(0, (lastPostDate.length() - 8))
+									Date postDate = topic.getLastPostDate() ;
+									String lastPostDate = uicomponent.getShortDate(postDate) + ", " + uicomponent.getTime(postDate);									
 									String titlePost = uicomponent.getStringCleanHtmlCode(topic.getDescription());
 									if(titlePost.length() > 100) {
 										titlePost = titlePost.substring(0, 99) + "...";

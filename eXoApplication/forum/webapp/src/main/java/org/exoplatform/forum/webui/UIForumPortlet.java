@@ -16,7 +16,14 @@
  ***************************************************************************/
 package org.exoplatform.forum.webui;
 
+import java.util.Date;
+
+import org.exoplatform.container.PortalContainer;
+import org.exoplatform.forum.ForumUtils;
+import org.exoplatform.forum.service.ForumOption;
+import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.webui.popup.UIPopupAction;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIPopupMessages;
@@ -33,9 +40,17 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 	 template = "app:/templates/forum/webui/UIForumPortlet.gtmpl"
 )
 public class UIForumPortlet extends UIPortletApplication {
+	private	ForumService forumService = (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
 	private boolean isCategoryRendered = true;
 	private boolean isForumRendered = false;
 	private boolean isPostRendered = false;
+	private double timeZone ;
+	private String shortDateformat ;
+	private String longDateformat ;
+	private String timeFormat ;
+	private long maxTopic ;
+	private long maxPost ;
+//	private boolean isShowForumJump = false ;
 	public UIForumPortlet() throws Exception {
 		addChild(UIBreadcumbs.class, null, null) ;
 		addChild(UICategoryContainer.class, null, null).setRendered(isCategoryRendered) ;
@@ -43,10 +58,10 @@ public class UIForumPortlet extends UIPortletApplication {
 		addChild(UITopicsTag.class, null, null).setRendered(isPostRendered) ;
 		addChild(UIForumLinks.class, null, null).setRendered(isForumRendered) ;
 		addChild(UIPopupAction.class, null, null) ;
-		addChild(UIForumOption.class, null, null).setRendered(true) ;
+		initOption();
 	}
 
-	public void updateIsRendered(int selected) {
+	public void updateIsRendered(int selected) throws Exception {
 		if(selected == 1) {
 			isCategoryRendered = true ;
 			isForumRendered = false ;
@@ -80,4 +95,44 @@ public class UIForumPortlet extends UIPortletApplication {
 		popupAction.deActivate() ;
 		context.addUIComponentToUpdateByAjax(popupAction) ;
 	}
+	
+
+  @SuppressWarnings("deprecation")
+	public void initOption() throws Exception {
+		String userName = Util.getPortalRequestContext().getRemoteUser() ;
+		ForumOption forumOption = new ForumOption() ;
+		forumOption = forumService.getOption(ForumUtils.getSystemProvider(), userName) ;
+		Date dateHost = new Date() ;
+		if(forumOption == null) {
+			timeZone = dateHost.getTimezoneOffset()/ 60 ;
+			shortDateformat = "mm/dd/yyyy";
+			longDateformat = "ddd,mmm,dd,yyyy";
+			timeFormat = "12h";
+			maxTopic = 10 ;
+			maxPost = 10 ;
+			//isShowForumJump = false ;
+		} else {
+			timeZone = forumOption.getTimeZone() ;
+			shortDateformat = forumOption.getShortDateFormat() ;
+			longDateformat = forumOption.getLongDateFormat() ;
+			timeFormat = forumOption.getTimeFormat() ;
+			maxTopic = forumOption.getMaxTopicInPage() ;
+			maxPost = forumOption.getMaxPostInPage() ;
+		//	isShowForumJump = false ;
+		}
+		UICategoryContainer categoryContainer = getChild(UICategoryContainer.class);
+		categoryContainer.getChild(UICategories.class).setFormat(timeZone, shortDateformat, longDateformat, timeFormat);
+		categoryContainer.getChild(UICategory.class).setFormat(timeZone, shortDateformat, longDateformat, timeFormat);
+		UITopicContainer topicContainer = findFirstComponentOfType(UITopicContainer.class);
+		topicContainer.setFormat(timeZone, shortDateformat, longDateformat, timeFormat);
+		topicContainer.setMaxItemInPage(maxTopic,maxPost) ;
+		UITopicDetail topicDetail = findFirstComponentOfType(UITopicDetail.class) ;
+		topicDetail.setMaxPostInPage(maxPost);
+		topicDetail.setFormat(timeZone, shortDateformat, longDateformat, timeFormat);
+		findFirstComponentOfType(UITopicPoll.class).setFormat(timeZone, shortDateformat, longDateformat, timeFormat);
+		UITopicsTag topicsTag = getChild(UITopicsTag.class);
+		topicsTag.setMaxItemInPage(maxTopic, maxPost);
+		topicsTag.setFormat(timeZone, shortDateformat, longDateformat, timeFormat);
+  }
+
 }

@@ -34,7 +34,9 @@
 	<div class="TopicPollContainer">
 		<% 
 		if(timeOut > 0) {
-			String timeOutDate = "" +  (poll.getCreatedDate() + timeOut) ;
+			Date dateOut = poll.getCreatedDate() ;
+			dateOut.setDate(dateOut.getDate() + timeOut);
+			String timeOutDate = uicomponent.getLongDate(dateOut) + ", " + uicomponent.getTime(dateOut) ;
 		%>
 		<div class="PollTime"><%=_ctx.appRes("UITopicPoll.label.timeOutPoll")%>$timeOutDate</div>
 		<% } %>

@@ -90,18 +90,18 @@ public class UICategory extends UIForm	{
 	  this.longDateformat = longDateformat ;
 	  this.timeFormat = timeFormat ;
   }
+	@SuppressWarnings({ "deprecation", "unused" })
 	private String getTime(Date myDate) {
-		myDate.setHours(myDate.getHours() + (int)timeZone);
 		return ForumFormatFunction.getFormatTime(timeFormat, myDate) ;
 	}
-	@SuppressWarnings("deprecation")
+	@SuppressWarnings({ "deprecation", "unused" })
   private String getShortDate(Date myDate) {
-		myDate.setHours(myDate.getHours() + (int)timeZone);
+		myDate.setMinutes(myDate.getMinutes() - (int)(timeZone*60));
 		return ForumFormatFunction.getFormatDate(shortDateformat, myDate) ;
 	}
-	@SuppressWarnings("deprecation")
+	@SuppressWarnings({ "deprecation", "unused" })
 	private String getLongDate(Date myDate) {
-		myDate.setHours(myDate.getHours() + (int)timeZone);
+		myDate.setMinutes(myDate.getMinutes() - (int)(timeZone*60));
 		return ForumFormatFunction.getFormatDate(longDateformat, myDate) ;
 	}
 	
@@ -195,7 +195,7 @@ public class UICategory extends UIForm	{
 			UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;
 			UIForumForm forumForm = popupAction.createUIComponent(UIForumForm.class, null, null) ;
 			forumForm.setCategoryValue(uiCategory.categoryId, false) ;
-			popupAction.activate(forumForm, 662, 466) ;
+			popupAction.activate(forumForm, 650, 450) ;
 			event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
 			uiCategory.isEditForum = true ; 
 		}
@@ -455,6 +455,7 @@ public class UICategory extends UIForm	{
 			UITopicDetail uiTopicDetail = uiTopicDetailContainer.getChild(UITopicDetail.class) ;
 			uiForumContainer.getChild(UIForumDescription.class).setForumIds(uiCategory.categoryId, id[0]);
 			uiTopicDetail.setUpdateTopic(uiCategory.categoryId, id[0], id[1], true) ;
+			uiTopicDetail.setIdPostView("true") ;
 			uiTopicDetailContainer.getChild(UITopicPoll.class).updateFormPoll(uiCategory.categoryId, id[0], id[1]) ;
 			forumPortlet.getChild(UIForumLinks.class).setValueOption((uiCategory.categoryId+"/"+id[0] + " "));
 			event.getRequestContext().addUIComponentToUpdateByAjax(forumPortlet) ;
