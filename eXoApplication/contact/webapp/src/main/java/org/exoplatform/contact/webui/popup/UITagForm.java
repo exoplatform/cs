@@ -208,12 +208,10 @@ public class UITagForm extends UIForm implements UIPopupComponent {
   }
   
   static  public class RemoveActionListener extends EventListener<UITagForm> {
-    public void execute(Event<UITagForm> event) throws Exception {
-      UITagForm uiForm = event.getSource() ;
-      ContactService contactService = ContactUtils.getContactService() ; 
-      String username = ContactUtils.getCurrentUser() ;
+    public void execute(Event<UITagForm> event) throws Exception {      
+      UITagForm uiForm = event.getSource() ;      
       List<String> checkedTags = uiForm.getCheckedTags() ;
-      if (checkedTags == null || checkedTags.size() ==0) {
+      if (checkedTags == null || checkedTags.size() == 0) {
         UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UITagForm.msg.checkTag-required", null,
             ApplicationMessage.WARNING)) ;
@@ -224,13 +222,17 @@ public class UITagForm extends UIForm implements UIPopupComponent {
       for (Contact contact : uiForm.contacts_) {
         contactIds.add(contact.getId()) ;
       }
+      ContactService contactService = ContactUtils.getContactService() ; 
+      String username = ContactUtils.getCurrentUser() ;
       contactService.removeContactTag(
           SessionsUtils.getSystemProvider(), username, contactIds, checkedTags) ;
       UIContactPortlet contactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
       UITags uiTags = contactPortlet.findFirstComponentOfType(UITags.class) ;
       String selectedTag = uiTags.getSelectedTag() ;
       UIContacts uiContacts = contactPortlet.findFirstComponentOfType(UIContacts.class) ;
-      if(uiContacts.isDisplaySearchResult()) uiContacts.setContact(uiForm.contacts_, false) ;
+
+      //hoang hung comment to fix bug 215
+      //if(uiContacts.isDisplaySearchResult()) uiContacts.setContact(uiForm.contacts_, false) ;      
       if (!ContactUtils.isEmpty(selectedTag)) {
         uiContacts.setContacts(contactService.getContactPageListByTag(
             SessionsUtils.getSystemProvider(), username, selectedTag)) ;

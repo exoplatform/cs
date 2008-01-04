@@ -20,6 +20,7 @@ import java.io.InputStream;
 
 import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
+import javax.jcr.PathNotFoundException;
 import javax.jcr.Session;
 
 import org.exoplatform.container.PortalContainer;
@@ -54,18 +55,17 @@ public class ContactAttachment {
   public void setInputStream(InputStream input) throws Exception {
     inputStream = input ;
   }
-  public InputStream getInputStream() throws Exception {
+  public InputStream getInputStream() throws Exception { 
     if(inputStream != null) return inputStream ;
     Node attachment ;
     try{
-      
-      //System.out.println("\n\n atttttt:" + getSesison().getItem(getId()) + "\n\n");
-      
       attachment = (Node)getSesison().getItem(getId()) ;      
-    }catch (ItemNotFoundException e) {
-      //System.out.println("\n\n item not founddddddddd \n\n");
-      
+    }catch (ItemNotFoundException e) {  
       return null ;
+    } catch (PathNotFoundException ex) {
+      System.out.println("\n\n path not found \n\n");
+      
+       return  null;
     }
     return attachment.getNode("jcr:content").getProperty("jcr:data").getStream() ;
   }

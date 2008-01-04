@@ -245,9 +245,13 @@ public class UIAddressBooks extends UIComponent {
       UIPopupContainer uiPopupContainer = popupAction.activate(UIPopupContainer.class, 600) ;
       uiPopupContainer.setId("UIPermissionSelectPopup") ;
       UISharedForm uiSharedForm = uiPopupContainer.addChild(UISharedForm.class, null, null) ;
-      uiSharedForm.init(null, ContactUtils.getContactService()
-        .getGroup(SessionsUtils.getSessionProvider(), ContactUtils.getCurrentUser(), groupId), true) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+      
+      ContactGroup contactGroup = ContactUtils.getContactService()
+        .getGroup(SessionsUtils.getSessionProvider(), ContactUtils.getCurrentUser(), groupId) ;
+      if (contactGroup != null) {
+        uiSharedForm.init(null, contactGroup, true) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+      }
     }
   }
 
@@ -275,13 +279,11 @@ public class UIAddressBooks extends UIComponent {
       String groupId = event.getRequestContext().getRequestParameter(OBJECTID);
       ContactService contactService = ContactUtils.getContactService();
       String username = ContactUtils.getCurrentUser();
-      UIContactContainer contactContainer = uiAddressBook.getAncestorOfType(
-        UIWorkingContainer.class).getChild(UIContactContainer.class);
-      UIContacts uiContacts = contactContainer.getChild(UIContacts.class) ;
+      UIWorkingContainer workingContainer = uiAddressBook.getAncestorOfType(UIWorkingContainer.class);
+      UIContacts uiContacts = workingContainer.findFirstComponentOfType(UIContacts.class) ;
       if (groupId.equals(uiAddressBook.selectedGroup)) {
         uiAddressBook.selectedGroup = null;
         uiContacts.setContacts(null);
-        event.getRequestContext().addUIComponentToUpdateByAjax(contactContainer);
       }
       ContactGroup contactGroup = contactService
         .removeGroup(SessionsUtils.getSessionProvider(), username, groupId);
@@ -292,9 +294,8 @@ public class UIAddressBooks extends UIComponent {
       if (!ContactUtils.isEmpty(selectedTag)) {
         uiContacts.setContacts(
             contactService.getContactPageListByTag(SessionsUtils.getSystemProvider(), username, selectedTag)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(contactContainer);
       }
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook);
+      event.getRequestContext().addUIComponentToUpdateByAjax(workingContainer);
     }
   }
 

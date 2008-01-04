@@ -405,10 +405,12 @@ public class UIContactForm extends UIFormTabPane implements UISelector {
           }
         }
       } else {
-        if (contact.getContactType().equals("0")) contactService.saveContact(SessionsUtils.getSessionProvider(), username, contact, false) ;
-        else if(contact.getContactType().equals("1")) contactService.saveContactToSharedAddressBook(SessionsUtils.getSystemProvider(), username, contact.getAddressBook()[0], contact, false) ;
-        else if(contact.getContactType().equals("2")) contactService.savePublicContact(SessionsUtils.getSystemProvider(), contact, false) ;
-        
+        if (contact.getContactType().equals("0")) 
+          contactService.saveContact(SessionsUtils.getSessionProvider(), username, contact, false) ;
+        else if(contact.getContactType().equals("1")) 
+          contactService.saveContactToSharedAddressBook(SessionsUtils.getSystemProvider(), username, contact.getAddressBook()[0], contact, false) ;
+        else if(contact.getContactType().equals("2")) 
+          contactService.savePublicContact(SessionsUtils.getSystemProvider(), contact, false) ;
       }
       UIContactPortlet uiContactPortlet = uiContactForm.getAncestorOfType(UIContactPortlet.class) ;
       UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;

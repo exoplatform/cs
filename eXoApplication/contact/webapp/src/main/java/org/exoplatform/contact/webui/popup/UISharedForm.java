@@ -168,10 +168,9 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
         contactService.saveGroup(
           SessionsUtils.getSessionProvider(), ContactUtils.getCurrentUser(), contactGroup, false) ;
       }*/
-      ContactUtils.getContactService().shareAddressBook(SessionsUtils
-          .getSystemProvider(), ContactUtils.getCurrentUser(), uiForm.addressId_, receiverUser) ;
-       
       if (receiverUser.size() > 0) {
+        ContactUtils.getContactService().shareAddressBook(SessionsUtils
+            .getSystemProvider(), ContactUtils.getCurrentUser(), uiForm.addressId_, receiverUser) ;
         UIContactPortlet contactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
         UIAddressBooks addressBooks = contactPortlet.findFirstComponentOfType(UIAddressBooks.class) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(addressBooks) ;
@@ -181,8 +180,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
         uiApp.addMessage(new ApplicationMessage("UISharedForm.msg.address-not-shared", null)) ;
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-      return ;
-      
+      return ;      
     }
   }
   static  public class SelectPermissionActionListener extends EventListener<UISharedForm> {

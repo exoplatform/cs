@@ -21,12 +21,15 @@ import java.util.Collection;
 import java.util.List;
 
 import org.exoplatform.commons.utils.PageList;
+import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIBreadcumbs;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UITree;
@@ -152,7 +155,17 @@ public class UIGroupSelector extends UIGroupMembershipSelector implements UIPopu
   
   static  public class SelectMembershipActionListener extends EventListener<UIGroupSelector> {   
     public void execute(Event<UIGroupSelector> event) throws Exception {
+      UIGroupSelector uiForm = event.getSource() ;
       String user = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+      if(user.equals(ContactUtils.getCurrentUser())) {        
+        uiApp.addMessage(new ApplicationMessage("UIGroupSelector.msg.invalid-username", null,
+            ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
+      
+      
       UIGroupSelector uiGroupSelector = event.getSource();
       UIPopupContainer uiPopupContainer = uiGroupSelector.getAncestorOfType(UIPopupContainer.class) ;
       UIPopupAction uiPopup = uiPopupContainer.getChild(UIPopupAction.class) ;

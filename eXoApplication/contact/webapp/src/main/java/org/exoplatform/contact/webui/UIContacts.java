@@ -125,7 +125,9 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   public boolean isAscName() { return FullNameComparator.isAsc ; }
   public boolean isAscEmail() { return EmailComparator.isAsc ; }
   public boolean isAscJob() { return JobTitleComparator.isAsc ; }
-  public void setContact(List<Contact> contacts, boolean isUpdate) throws Exception{ pageList_.setContact(contacts, isUpdate) ; }
+  public void setContact(List<Contact> contacts, boolean isUpdate) throws Exception{
+    pageList_.setContact(contacts, isUpdate) ; 
+  }
   public void updateList() throws Exception {
     getChildren().clear() ;
     contactMap.clear();

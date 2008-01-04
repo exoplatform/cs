@@ -23,32 +23,22 @@
 				</div>
 			<% } %>
 			</div>
-		</div>		
-
-		<div class="UIForm PublicAdress">
+		</div>	
+		
+		<div class="PrivateAdress">
 			<div class="TitleMoveContactsForm">Shared Address Books</div>
-		  <div class="HorizontalLayout">
-		    <div class="FormContainer">
-		      <table class="UIFormGrid">
-			      <% 
-			      	Map sharedGroups = uicomponent.getSharedGroupMap() ;
-			        for(id in sharedGroups.keySet()) { 
-			        	field = uiform.getChildById(id) ;
-			          if(field.isRendered()) {
-      			%>
-          <tr>                       
-  	              <td class="FieldLabel">
-                  <%=sharedGroups.get(id)%>
-              </td>
-  	              <td class="FieldComponent"><% uiform.renderField(field) %></td>
-            </tr>
-		      <%
-		          }
-		        }
-		      %>
-	      	</table>
-	    	</div>
-	  	</div>
+			<div class="MoveContactsFormContainer">
+				<% 
+	      	Map sharedGroups = uicomponent.getSharedGroupMap() ;
+	        for(groupId in sharedGroups.keySet()) { 
+	        	String param = groupId + "&addressType=1" ;
+						String actionLink  = uicomponent.event("SelectGroup", param) ;
+      	%>
+				<div class="ItemList">
+					<div class="Icon AddressIcon"><a href="$actionLink"><%=sharedGroups.get(groupId)%></a></div>
+				</div>
+			<% } %>
+			</div>
 		</div>
 		<% } %>
 		

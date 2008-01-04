@@ -76,6 +76,11 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
     ContactService contactService = ContactUtils.getContactService();
     String username = ContactUtils.getCurrentUser() ;
     ContactGroup contactGroup = contactService.getGroup(SessionsUtils.getSessionProvider(), username, groupId) ;
+    //contactService.getsh
+    
+
+    
+    
     if (contactGroup != null) {
       groupId_ = groupId ;
       getUIStringInput(FIELD_CATEGORYNAME_INPUT).setValue(contactGroup.getName()) ;
