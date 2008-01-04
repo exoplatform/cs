@@ -79,7 +79,9 @@ public class EventQuery {
   public void setOrderType(String type) { this.orderType = type ; }
   
   public String getQueryStatement() throws Exception {
-    StringBuffer queryString = new StringBuffer("/jcr:root" + calendarPath + "//element(*," + nodeType + ")") ;
+    StringBuffer queryString = null ;
+    if(calendarPath != null) queryString = new StringBuffer("/jcr:root" + calendarPath + "//element(*," + nodeType + ")") ;
+    else  queryString = new StringBuffer("/jcr:root//element(*," + nodeType + ")") ;
     boolean hasConjuntion = false ;
     StringBuffer stringBuffer = new StringBuffer("[") ;
     //desclared full text query

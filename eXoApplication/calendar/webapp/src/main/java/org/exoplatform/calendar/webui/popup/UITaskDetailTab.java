@@ -178,7 +178,7 @@ public class UITaskDetailTab extends UIFormInputWithActions {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
-    List<Calendar> calendars = calendarService.getUserCalendars(SessionsUtils.getSessionProvider(), username) ;
+    List<Calendar> calendars = calendarService.getUserCalendars(SessionsUtils.getSessionProvider(), username, true) ;
     for(Calendar c : calendars) {
       options.add(new SelectItemOption<String>(c.getName(), c.getId())) ;
     }

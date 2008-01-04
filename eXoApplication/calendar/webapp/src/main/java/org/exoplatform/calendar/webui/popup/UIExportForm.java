@@ -94,11 +94,11 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
     CalendarService calendarService = CalendarUtils.getCalendarService();
     List<Calendar> calendars = new ArrayList<Calendar>();
     if(calType.equals("0")) {
-      calendars = calendarService.getUserCalendars(SessionsUtils.getSessionProvider(), CalendarUtils.getCurrentUser()) ;
+      calendars = calendarService.getUserCalendars(SessionsUtils.getSessionProvider(), CalendarUtils.getCurrentUser(), true) ;
     }else if(calType.equals("1")) {
-      calendars = calendarService.getSharedCalendars(SessionsUtils.getSystemProvider(), CalendarUtils.getCurrentUser()).getCalendars() ;
+      calendars = calendarService.getSharedCalendars(SessionsUtils.getSystemProvider(), CalendarUtils.getCurrentUser(), true).getCalendars() ;
     }else if(calType.equals("2")){
-      List<GroupCalendarData> groups = calendarService.getGroupCalendars(SessionsUtils.getSystemProvider(), CalendarUtils.getUserGroups(CalendarUtils.getCurrentUser())) ;
+      List<GroupCalendarData> groups = calendarService.getGroupCalendars(SessionsUtils.getSystemProvider(), CalendarUtils.getUserGroups(CalendarUtils.getCurrentUser()), true, CalendarUtils.getCurrentUser()) ;
       for(GroupCalendarData group : groups) {
         calendars.addAll(group.getCalendars()) ;
       }

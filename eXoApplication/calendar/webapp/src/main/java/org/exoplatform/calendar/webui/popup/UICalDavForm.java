@@ -90,7 +90,7 @@ public class UICalDavForm extends UIFormTabPane implements UIPopupComponent{
     addUIFormInput(rssInfo) ;
     UIFormInputWithActions rssCalendars = new UIFormInputWithActions("rssCalendars") ;
     rssCalendars.addUIFormInput(new UIFormInputInfo(INFOR,INFOR, null)) ; 
-    List<Calendar> calendars = calendarService.getUserCalendars(SessionsUtils.getSessionProvider(), username) ;
+    List<Calendar> calendars = calendarService.getUserCalendars(SessionsUtils.getSessionProvider(), username, true) ;
     for(Calendar calendar : calendars) {
       rssCalendars.addUIFormInput(new UIFormCheckBoxInput<Boolean>(calendar.getName(), calendar.getId(), true)) ;
     }

@@ -81,7 +81,7 @@ public class UICalendarShareManager extends UIContainer implements UIPopupCompon
   public void updateGrid() throws Exception {
     CalendarService calService = getApplicationComponent(CalendarService.class) ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
-    List<GroupCalendarData> categories = calService.getCalendarCategories(SessionsUtils.getSessionProvider(), username) ;
+    List<GroupCalendarData> categories = calService.getCalendarCategories(SessionsUtils.getSessionProvider(), username, true) ;
     UIGrid uiGrid = getChild(UIGrid.class) ; 
     ObjectPageList objPageList = new ObjectPageList(categories, 10) ;
     uiGrid.getUIPageIterator().setPageList(objPageList) ;   

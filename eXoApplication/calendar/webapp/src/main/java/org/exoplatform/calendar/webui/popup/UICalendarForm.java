@@ -17,9 +17,12 @@
 package org.exoplatform.calendar.webui.popup;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TimeZone;
 
 import org.exoplatform.calendar.CalendarUtils;
@@ -27,6 +30,7 @@ import org.exoplatform.calendar.SessionsUtils;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarCategory;
 import org.exoplatform.calendar.service.CalendarService;
+import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarWorkingContainer;
 import org.exoplatform.portal.webui.util.Util;
@@ -187,14 +191,14 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
       sharing.getUIStringInput(EDIT_PERMISSION).setEnable(true) ;
       sharing.getUIStringInput(EDIT_PERMISSION).setValue(null) ;
       for(Object obj : getPublicGroups()) {
-       UIFormCheckBoxInput input = getUIFormCheckBoxInput(((Group)obj).getId()) ;
-       if(input != null && input.isChecked()) input.setChecked(false) ;
+        UIFormCheckBoxInput input = getUIFormCheckBoxInput(((Group)obj).getId()) ;
+        if(input != null && input.isChecked()) input.setChecked(false) ;
       }
     } else {
-        String username = Util.getPortalRequestContext().getRemoteUser() ;
-        SessionProvider sProvider = SessionsUtils.getSessionProvider() ;
-        Calendar calendar = CalendarUtils.getCalendarService().getUserCalendar(sProvider, username, calendarId_) ;
-        init(calendar) ;
+      String username = Util.getPortalRequestContext().getRemoteUser() ;
+      SessionProvider sProvider = SessionsUtils.getSessionProvider() ;
+      Calendar calendar = CalendarUtils.getCalendarService().getUserCalendar(sProvider, username, calendarId_) ;
+      init(calendar) ;
     }
 
   }
@@ -361,6 +365,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
       }
       String username = Util.getPortalRequestContext().getRemoteUser() ;
       CalendarService calendarService = CalendarUtils.getCalendarService() ;
+      SessionProvider sProvider = SessionsUtils.getSystemProvider() ;
       Calendar calendar = new Calendar() ;
       if(!uiForm.isAddNew_) calendar.setId(uiForm.calendarId_) ;
       calendar.setName(displayName) ;
@@ -390,14 +395,40 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
         if(!CalendarUtils.isEmpty(editPermission)) {
           calendar.setEditPermission(editPermission.split(CalendarUtils.COMMA)) ;
         }
-        calendarService.saveGroupCalendar(SessionsUtils.getSystemProvider(), calendar, uiForm.isAddNew_) ;
+        calendarService.saveGroupCalendar(sProvider, calendar, uiForm.isAddNew_) ;
+        if(uiForm.isAddNew_) {
+          CalendarSetting calSetting = calendarService.getCalendarSetting(sProvider, username) ;
+          if(calSetting == null) calSetting = new CalendarSetting() ;
+          Set<String> publicCalendars = new HashSet<String>() ;
+          if(calSetting.getDefaultPublicCalendars() != null) {
+            for(String id : calSetting.getDefaultPublicCalendars()) {
+              publicCalendars.add(id) ;
+            }
+          }
+         if(!publicCalendars.contains(calendar.getId())) publicCalendars.add(calendar.getId()) ;
+          calSetting.setDefaultPublicCalendars(publicCalendars.toArray(new String[publicCalendars.size()])) ;
+          calendarService.saveCalendarSetting(sProvider, username, calSetting) ;
+        }
       }else {
         if(CalendarUtils.isEmpty(uiForm.getUIFormSelectBox(CATEGORY).getValue())) {
           uiApp.addMessage(new ApplicationMessage("UICalendarForm.msg.category-empty", null, ApplicationMessage.WARNING) ) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;
         } 
-        calendarService.saveUserCalendar(SessionsUtils.getSystemProvider(), username, calendar, uiForm.isAddNew_) ;        
+        calendarService.saveUserCalendar(sProvider, username, calendar, uiForm.isAddNew_) ;    
+        if(uiForm.isAddNew_) {
+          CalendarSetting calSetting = calendarService.getCalendarSetting(sProvider, username) ;
+          if(calSetting == null) calSetting = new CalendarSetting() ;
+          Set<String> privateCalendars = new HashSet<String>() ;
+          if(calSetting.getDefaultPrivateCalendars() != null) {
+            for(String id : calSetting.getDefaultPrivateCalendars()) {
+              privateCalendars.add(id) ;
+            }
+          }
+          if(!privateCalendars.contains(calendar.getId()))privateCalendars.add(calendar.getId()) ;
+          calSetting.setDefaultPrivateCalendars(privateCalendars.toArray(new String[privateCalendars.size()])) ;
+          calendarService.saveCalendarSetting(sProvider, username, calSetting) ;
+        }
       }
       UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
       calendarPortlet.cancelAction() ;

@@ -16,9 +16,6 @@
  **/
 package org.exoplatform.calendar.webui;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.SessionsUtils;
 import org.exoplatform.calendar.service.CalendarService;
@@ -27,7 +24,6 @@ import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIComponent;
-import org.hibernate.type.YesNoType;
 
 /**
  * Created by The eXo Platform SARL
@@ -47,23 +43,75 @@ public class UICalendarViewContainer extends UIContainer  {
   final public static String YEAR_VIEW = "UIYearView".intern() ;
   final public static String LIST_VIEW = "UIListContainer".intern() ;
   final public static String SCHEDULE_VIEW = "UIScheduleView".intern() ;
-  
+
   final public static String[] TYPES = {DAY_VIEW, WEEK_VIEW, MONTH_VIEW, YEAR_VIEW, LIST_VIEW, SCHEDULE_VIEW} ;
 
   public UICalendarViewContainer() throws Exception {
-    addChild(UIMonthView.class, null, null).setRendered(false) ;
-    addChild(UIDayView.class, null, null).setRendered(false) ;
+    initView(null) ;
+    refresh() ;
+  }  
+  public void initView(String viewType) throws Exception {
+    
+    if(viewType == null) {
+      CalendarService cservice = CalendarUtils.getCalendarService() ;
+      String username = Util.getPortalRequestContext().getRemoteUser() ;
+      CalendarSetting calendarSetting = cservice.getCalendarSetting(SessionsUtils.getSessionProvider(), username) ;
+      viewType = TYPES[Integer.parseInt(calendarSetting.getViewType())] ;
+    }
+    if(viewType.equals("UIListContainer")) {
+      /*UIListView uiListView = uiViewContainer.findFirstComponentOfType(UIListView.class) ;
+      alendarService calendarService = uiActionBar.getApplicationComponent(CalendarService.class) ;
+      String username = CalendarUtils.getCurrentUser() ;
+      EventQuery eventQuery = new EventQuery() ;
+      java.util.Calendar fromcalendar =  uiListView.getBeginDay(new GregorianCalendar(uiListView.getCurrentYear(), uiListView.getCurrentMonth(), uiListView.getCurrentDay())) ;
+      eventQuery.setFromDate(fromcalendar) ;
+      java.util.Calendar tocalendar =  uiListView.getEndDay(new GregorianCalendar(uiListView.getCurrentYear(), uiListView.getCurrentMonth(), uiListView.getCurrentDay())) ;
+      eventQuery.setToDate(tocalendar) ;
+      uiListView.update(calendarService.searchEvent(SessionsUtils.getSystemProvider(), username, eventQuery, uiListView.getPublicCalendars())) ;*/ 
+      
+    }
+   /* addChild(UIMonthView.class, null, null).setRendered(false) ;
     addChild(UIWeekView.class, null, null).setRendered(false) ;
     addChild(UIYearView.class, null, null).setRendered(false) ;
     addChild(UIListContainer.class, null, null).setRendered(false) ;
     addChild(UIScheduleView.class, null, null).setRendered(false) ;
-    CalendarService cservice = CalendarUtils.getCalendarService() ;
-    String username = Util.getPortalRequestContext().getRemoteUser() ;
-    CalendarSetting calendarSetting = cservice.getCalendarSetting(SessionsUtils.getSessionProvider(), username) ;
-    setRenderedChild(TYPES[Integer.parseInt(calendarSetting.getViewType())]) ;
-    refresh() ;
-  }  
-
+    */
+    if(DAY_VIEW.equals(viewType)) {
+      UIDayView uiView = getChild(UIDayView.class) ;
+      if(uiView == null) uiView =  addChild(UIDayView.class, null, null) ;
+      setRenderedChild(viewType) ;
+    } else
+    if(WEEK_VIEW.equals(viewType)) {
+      UIWeekView uiView = getChild(UIWeekView.class) ;
+      if(uiView == null) uiView =  addChild(UIWeekView.class, null, null) ;
+      setRenderedChild(viewType) ;
+    } else
+    if(MONTH_VIEW.equals(viewType)) {
+      UIMonthView uiView = getChild(UIMonthView.class) ;
+      if(uiView == null) uiView =  addChild(UIMonthView.class, null, null) ;
+      setRenderedChild(viewType) ;
+    } else
+    if(YEAR_VIEW.equals(viewType)) {
+      UIYearView uiView = getChild(UIYearView.class) ;
+      if(uiView == null) uiView =  addChild(UIYearView.class, null, null) ;
+      setRenderedChild(viewType) ;
+    } else
+    if(LIST_VIEW.equals(viewType)) {
+      UIListContainer uiView = getChild(UIListContainer.class) ;
+      if(uiView == null) uiView =  addChild(UIListContainer.class, null, null) ;
+      UIListView uiListView = uiView.getChild(UIListView.class) ;
+      uiListView.refresh(null) ;
+      uiListView.setShowEventAndTask(false) ;
+      uiListView.setDisplaySearchResult(false) ;
+      uiListView.isShowEvent_ = true ;
+      setRenderedChild(viewType) ;
+    } else
+    if(SCHEDULE_VIEW.equals(viewType)) {
+      UIScheduleView uiView = getChild(UIScheduleView.class) ;
+      if(uiView == null) uiView =  addChild(UIScheduleView.class, null, null) ;
+      setRenderedChild(viewType) ;
+    }
+  }
   public void refresh() throws Exception {
     for(UIComponent comp : getChildren()) {
       if(comp.isRendered() && comp instanceof CalendarView){

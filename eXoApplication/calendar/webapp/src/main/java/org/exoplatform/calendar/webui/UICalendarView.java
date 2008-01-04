@@ -26,7 +26,6 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
@@ -64,10 +63,10 @@ import org.exoplatform.webui.form.UIFormSelectBox;
 public abstract class UICalendarView extends UIForm  implements CalendarView {
   final static protected String EVENT_CATEGORIES = "eventCategories".intern() ;
   
-  final public static int TYPE_DATE = 1 ;
-  final public static int TYPE_WEEK = 2 ;
-  final public static int TYPE_MONTH = 3 ;
-  final public static int TYPE_YEAR = 4 ;
+  final public static int TYPE_DAY = 0 ;
+  final public static int TYPE_WEEK = 1 ;
+  final public static int TYPE_MONTH = 2 ;
+  final public static int TYPE_YEAR = 3 ;
 
   final public static String ACT_NEXT = "MoveNext".intern() ;
   final public static String ACT_PREVIOUS  = "MovePrevious".intern() ;
@@ -160,7 +159,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       String[] groups = CalendarUtils.getUserGroups(CalendarUtils.getCurrentUser()) ;
       CalendarService calendarService = CalendarUtils.getCalendarService() ;
       Map<String, String> map = new HashMap<String, String> () ;    
-      for(GroupCalendarData group : calendarService.getGroupCalendars(SessionsUtils.getSystemProvider(), groups)) {
+      for(GroupCalendarData group : calendarService.getGroupCalendars(SessionsUtils.getSystemProvider(), groups, false, CalendarUtils.getCurrentUser())) {
         for(org.exoplatform.calendar.service.Calendar calendar : group.getCalendars()) {
           map.put(calendar.getId(), calendar.getId()) ;          
         }
@@ -171,7 +170,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   protected List<GroupCalendarData> getPublicCalendars(String username) throws Exception{
     String[] groups = CalendarUtils.getUserGroups(username) ;
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
-    List<GroupCalendarData> groupCalendars = calendarService.getGroupCalendars(SessionsUtils.getSystemProvider(), groups) ;
+    List<GroupCalendarData> groupCalendars = calendarService.getGroupCalendars(SessionsUtils.getSystemProvider(), groups, false, CalendarUtils.getCurrentUser()) ;
     return groupCalendars ;
   }
 
@@ -206,7 +205,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   protected Calendar getDateByValue(int year, int month, int day, int type, int value) {
     Calendar cl = new GregorianCalendar(year, month, day) ;
     switch (type){
-    case TYPE_DATE : cl.add(Calendar.DATE, value) ;break;
+    case TYPE_DAY : cl.add(Calendar.DATE, value) ;break;
     case TYPE_WEEK : cl.add(Calendar.WEEK_OF_YEAR, value) ;break;
     case TYPE_MONTH : cl.add(Calendar.MONTH, value) ;break;
     case TYPE_YEAR : cl.add(Calendar.YEAR, value) ;break;
@@ -419,7 +418,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       String username = event.getRequestContext().getRemoteUser() ;
       List<org.exoplatform.calendar.service.Calendar> privateCalendars = 
-        calendarService.getUserCalendars(SessionsUtils.getSessionProvider(), username) ;
+        calendarService.getUserCalendars(SessionsUtils.getSessionProvider(), username, true) ;
       if(privateCalendars.isEmpty()) {
         uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.calendar-list-empty", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -580,7 +579,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
           if(CalendarUtils.PRIVATE_TYPE.equals(calType)) {
             options = null ;
           } else if(CalendarUtils.SHARED_TYPE.equals(calType)) {
-            GroupCalendarData calendarData = calendarService.getSharedCalendars(SessionsUtils.getSystemProvider(), CalendarUtils.getCurrentUser())  ;
+            GroupCalendarData calendarData = calendarService.getSharedCalendars(SessionsUtils.getSystemProvider(), CalendarUtils.getCurrentUser(), true)  ;
             for(org.exoplatform.calendar.service.Calendar cal : calendarData.getCalendars()) {
               options.add(new SelectItemOption<String>(cal.getName(), cal.getId())) ;
             }
@@ -605,7 +604,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
           if(CalendarUtils.PRIVATE_TYPE.equals(calType)) {
             options = null ;
           } else if(CalendarUtils.SHARED_TYPE.equals(calType)) {
-            GroupCalendarData calendarData = calendarService.getSharedCalendars(SessionsUtils.getSystemProvider(), CalendarUtils.getCurrentUser())  ;
+            GroupCalendarData calendarData = calendarService.getSharedCalendars(SessionsUtils.getSystemProvider(), CalendarUtils.getCurrentUser(), true)  ;
             for(org.exoplatform.calendar.service.Calendar cal : calendarData.getCalendars()) {
               options.add(new SelectItemOption<String>(cal.getName(), cal.getId())) ;
             }
@@ -701,8 +700,9 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         cal.set(Calendar.MONTH, Integer.parseInt(month)) ;
         cal.set(Calendar.YEAR, Integer.parseInt(year)) ;
         int type = Integer.parseInt(viewType) ; 
+        //uiContainer.initView(UICalendarViewContainer.TYPES[type]) ;
         switch (type){
-        case TYPE_DATE : {
+        case TYPE_DAY : {
           if(uiContainer.getRenderedChild() instanceof UIDayView) {
             UIDayView uiView = uiContainer.getChild(UIDayView.class) ;
             uiView.setCurrentCalendar(cal) ;
@@ -777,7 +777,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       CalendarService calendarService = CalendarUtils.getCalendarService() ;
       UIApplication uiApp = calendarview.getAncestorOfType(UIApplication.class) ;
       List<org.exoplatform.calendar.service.Calendar> privateCalendars = 
-        calendarService.getUserCalendars(SessionsUtils.getSessionProvider(), CalendarUtils.getCurrentUser()) ;
+        calendarService.getUserCalendars(SessionsUtils.getSessionProvider(), CalendarUtils.getCurrentUser(), true) ;
       if(privateCalendars.isEmpty()) {
         uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.calendar-list-empty", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;

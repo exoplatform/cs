@@ -79,7 +79,7 @@ public class UIActionBar extends UIContainer  {
       CalendarService calendarService = uiActionBar.getApplicationComponent(CalendarService.class) ;
       UIApplication uiApp = uiActionBar.getAncestorOfType(UIApplication.class) ;
       List<org.exoplatform.calendar.service.Calendar> privateCalendars = 
-        calendarService.getUserCalendars(SessionsUtils.getSessionProvider(), CalendarUtils.getCurrentUser()) ;
+        calendarService.getUserCalendars(SessionsUtils.getSessionProvider(), CalendarUtils.getCurrentUser(), true) ;
       if(privateCalendars.isEmpty()) {
         uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.calendar-list-empty", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -107,22 +107,7 @@ public class UIActionBar extends UIContainer  {
       String viewType = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UICalendarPortlet uiPortlet = uiActionBar.getAncestorOfType(UICalendarPortlet.class) ;
       UICalendarViewContainer uiViewContainer = uiPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
-      if(viewType.equals("UIListContainer")) {
-        UIListView uiListView = uiViewContainer.findFirstComponentOfType(UIListView.class) ;
-        /*alendarService calendarService = uiActionBar.getApplicationComponent(CalendarService.class) ;
-        String username = CalendarUtils.getCurrentUser() ;
-        EventQuery eventQuery = new EventQuery() ;
-        java.util.Calendar fromcalendar =  uiListView.getBeginDay(new GregorianCalendar(uiListView.getCurrentYear(), uiListView.getCurrentMonth(), uiListView.getCurrentDay())) ;
-        eventQuery.setFromDate(fromcalendar) ;
-        java.util.Calendar tocalendar =  uiListView.getEndDay(new GregorianCalendar(uiListView.getCurrentYear(), uiListView.getCurrentMonth(), uiListView.getCurrentDay())) ;
-        eventQuery.setToDate(tocalendar) ;
-        uiListView.update(calendarService.searchEvent(SessionsUtils.getSystemProvider(), username, eventQuery, uiListView.getPublicCalendars())) ;*/ 
-        uiListView.refresh(null) ;
-        uiListView.setShowEventAndTask(false) ;
-        uiListView.setDisplaySearchResult(false) ;
-        uiListView.isShowEvent_ = true ;
-      }
-      uiViewContainer.setRenderedChild(viewType);      
+      uiViewContainer.initView(viewType);      
       uiViewContainer.refresh() ;
       uiActionBar.setCurrentView(viewType) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiActionBar) ;

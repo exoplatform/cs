@@ -84,7 +84,7 @@
 											      }
 											      if (validDay) {
 											      	highlight = "" ;
-											      	dayActionLink = uicomponent.TYPE_DATE +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"="+ month +"&"+ uicomponent.DAY + "=" + dayOfMonth ;
+											      	dayActionLink = uicomponent.TYPE_DAY +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"="+ month +"&"+ uicomponent.DAY + "=" + dayOfMonth ;
 											      	if(value.get(dayOfYear) != null) {
 											      		highlight = "Highlight" ;
 											      	}

@@ -220,7 +220,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     List<org.exoplatform.calendar.service.Calendar> calendars = 
-      calendarService.getUserCalendars(SessionsUtils.getSessionProvider(), CalendarUtils.getCurrentUser()) ;
+      calendarService.getUserCalendars(SessionsUtils.getSessionProvider(), CalendarUtils.getCurrentUser(), true) ;
     for(org.exoplatform.calendar.service.Calendar c : calendars) {
       options.add(new SelectItemOption<String>(c.getName(), c.getId())) ;
     }

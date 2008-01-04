@@ -17,16 +17,21 @@
 package org.exoplatform.calendar.webui.popup;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.SessionsUtils;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarService;
+import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendars;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -103,7 +108,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
     boolean canEdit = false ;
     if(cal.getEditPermission() != null) {
       for(String editPerm : cal.getEditPermission() ) {
-        if(editPerm.equals(username)) {
+        if(editPerm !=null && editPerm.equals(username)) {
           canEdit = true ;
           break ;
         }
@@ -115,7 +120,6 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
     try {
       return super.getLabel(id) ;
     } catch (Exception e) {
-      // TODO: handle exception
       return id ;
     }
   }
@@ -159,23 +163,28 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
         return ;
       }      
       CalendarService calendarService = CalendarUtils.getCalendarService() ;
-      List<String> receiverUser = new ArrayList<String>() ;
-      if(names.indexOf(",") > 0) {
-        String[] array = names.split(",") ;
-        for(String name : array) {
-          receiverUser.add(name.trim()) ;
-        }
-      }else {
-        receiverUser.add(names.trim()) ;
-      }      
+      SessionProvider sProvider = SessionsUtils.getSystemProvider() ;
+      String username = CalendarUtils.getCurrentUser() ;
+      List<String> receiverUsers  = Arrays.asList(names.split(CalendarUtils.COMMA)) ;  
       if(uiForm.canEdit()) {
         Calendar cal = calendarService.getUserCalendar(SessionsUtils.getSessionProvider(), CalendarUtils.getCurrentUser(), uiForm.calendarId_) ;
-        String[] perms =  new String[]{} ;
-        receiverUser.toArray(perms) ;
-        cal.setEditPermission(perms) ;
-        calendarService.saveUserCalendar(SessionsUtils.getSessionProvider(), CalendarUtils.getCurrentUser(), cal, false) ;
+        cal.setEditPermission(receiverUsers.toArray(new String[receiverUsers.size()])) ;
+        calendarService.saveUserCalendar(sProvider, username, cal, false) ;
       }
-      calendarService.shareCalendar(SessionsUtils.getSystemProvider(), CalendarUtils.getCurrentUser(), uiForm.calendarId_, receiverUser) ;
+      calendarService.shareCalendar(sProvider, username, uiForm.calendarId_, receiverUsers) ;
+      for(String receiver : receiverUsers) {
+        CalendarSetting calSetting = calendarService.getCalendarSetting(sProvider, receiver) ;
+        if(calSetting == null) calSetting = new CalendarSetting() ;
+        Set<String> sharedCaeldnars = new HashSet<String>() ;
+        if(calSetting.getDefaultSharedCalendars() != null) {
+          for(String id : calSetting.getDefaultPrivateCalendars()) {
+            sharedCaeldnars.add(id) ;
+          }
+        }
+        if(!sharedCaeldnars.contains(uiForm.calendarId_)) sharedCaeldnars.add(uiForm.calendarId_) ;
+        calSetting.setDefaultSharedCalendars(sharedCaeldnars.toArray(new String[sharedCaeldnars.size()])) ;
+        calendarService.saveCalendarSetting(sProvider, receiver, calSetting) ;
+      }
       UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
       UICalendars uiCalendars = calendarPortlet.findFirstComponentOfType(UICalendars.class) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendars) ;

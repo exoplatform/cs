@@ -102,15 +102,15 @@ public class UICalendars extends UIForm  {
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     //List<CalendarCategory> categories = calendarService.getCategories(SessionsUtils.getSessionProvider(), username) ;
-    List<GroupCalendarData> groupCalendars = calendarService.getCalendarCategories(SessionsUtils.getSessionProvider(), username) ;
+    List<GroupCalendarData> groupCalendars = calendarService.getCalendarCategories(SessionsUtils.getSessionProvider(), username, false) ;
     for(GroupCalendarData group : groupCalendars) {
       List<Calendar> calendars = group.getCalendars() ;
-      for(Calendar calendar : calendars) {
-        colorMap_.put(calendar.getId(), calendar.getCalendarColor()) ;
-        if(getUIFormCheckBoxInput(calendar.getId()) == null){
-          UIFormCheckBoxInput<Boolean> input = new UIFormCheckBoxInput<Boolean>(calendar.getId(), calendar.getId(), false) ;
-          input.setChecked(true) ;
-          addUIFormInput(input) ;
+      if(calendars != null) {
+        for(Calendar calendar : calendars) {
+          colorMap_.put(calendar.getId(), calendar.getCalendarColor()) ;
+          if(getUIFormCheckBoxInput(calendar.getId()) == null){
+            addUIFormInput(new UIFormCheckBoxInput<Boolean>(calendar.getId(), calendar.getId(), false).setChecked(true)) ;
+          }
         }
       }
     }
@@ -121,7 +121,7 @@ public class UICalendars extends UIForm  {
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     String[] groups = CalendarUtils.getUserGroups(username) ;
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
-    List<GroupCalendarData> groupCalendars = calendarService.getGroupCalendars(SessionsUtils.getSystemProvider(), groups) ;
+    List<GroupCalendarData> groupCalendars = calendarService.getGroupCalendars(SessionsUtils.getSystemProvider(), groups, false, username) ;
     Map<String, String> map = new HashMap<String, String> () ;    
     for(GroupCalendarData group : groupCalendars) {
       List<Calendar> calendars = group.getCalendars() ;
@@ -139,7 +139,7 @@ public class UICalendars extends UIForm  {
 
   protected GroupCalendarData getSharedCalendars() throws Exception{
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
-    GroupCalendarData groupCalendars = calendarService.getSharedCalendars(SessionsUtils.getSystemProvider(), CalendarUtils.getCurrentUser()) ;
+    GroupCalendarData groupCalendars = calendarService.getSharedCalendars(SessionsUtils.getSystemProvider(), CalendarUtils.getCurrentUser(), false) ;
     if(groupCalendars != null) {
       List<Calendar> calendars = groupCalendars.getCalendars() ;
       for(Calendar calendar : calendars) {
@@ -436,7 +436,7 @@ public class UICalendars extends UIForm  {
           calendar.setCalendarColor(color) ;
           calService.saveUserCalendar(SessionsUtils.getSessionProvider(), username, calendar, false) ;
         } else if(CalendarUtils.SHARED_TYPE.equals(calType)){
-          Iterator iter = calService.getSharedCalendars(SessionsUtils.getSystemProvider(), username).getCalendars().iterator() ;
+          Iterator iter = calService.getSharedCalendars(SessionsUtils.getSystemProvider(), username, true).getCalendars().iterator() ;
           while (iter.hasNext()) {
             Calendar cal = ((Calendar)iter.next()) ;
             if(cal.getId().equals(calendarId)) {

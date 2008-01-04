@@ -77,7 +77,7 @@
 						  	if(uicomponent.isCurrentDay(cl.get(Calendar.DATE), cl.get(Calendar.MONTH), cl.get(Calendar.YEAR))) {
 						  		cssClass = "Today" ;
 						  	}
-							  dayActionLink = uicomponent.TYPE_DATE +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"="+ cl.get(Calendar.MONTH)+"&"+ uicomponent.DAY + "=" +  cl.get(Calendar.DATE) ;
+							  dayActionLink = uicomponent.TYPE_DAY +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"="+ cl.get(Calendar.MONTH)+"&"+ uicomponent.DAY + "=" +  cl.get(Calendar.DATE) ;
 							  actionLink =  uicomponent.event("GotoDate",dayActionLink) ;
 							  styleCss = "" ;
 							  if(cl.get(Calendar.DAY_OF_WEEK) == 1){

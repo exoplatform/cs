@@ -466,7 +466,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
-    List<org.exoplatform.calendar.service.Calendar> calendars = calendarService.getUserCalendars(SessionsUtils.getSessionProvider(), username) ;
+    List<org.exoplatform.calendar.service.Calendar> calendars = calendarService.getUserCalendars(SessionsUtils.getSessionProvider(), username, true) ;
     for(org.exoplatform.calendar.service.Calendar c : calendars) {
       options.add(new SelectItemOption<String>(c.getName(), c.getId())) ;
     }

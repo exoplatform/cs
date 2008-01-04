@@ -60,8 +60,8 @@ public class CalendarServiceImpl implements CalendarService{
     return storage_.getCategories(sProvider, username) ;
   }
 
-  public List<GroupCalendarData> getCalendarCategories(SessionProvider sProvider, String username) throws Exception {
-    return storage_.getCalendarCategories(sProvider, username);
+  public List<GroupCalendarData> getCalendarCategories(SessionProvider sProvider, String username, boolean isShowAll) throws Exception {
+    return storage_.getCalendarCategories(sProvider, username, isShowAll);
   }
   public CalendarCategory getCalendarCategory(SessionProvider sProvider, String username, String calendarCategoryId) throws Exception {
     return storage_.getCalendarCategory(sProvider, username, calendarCategoryId) ;
@@ -76,8 +76,8 @@ public class CalendarServiceImpl implements CalendarService{
   public Calendar getUserCalendar(SessionProvider sProvider, String username, String calendarId) throws Exception {
     return storage_.getUserCalendar(sProvider, username, calendarId);
   }
-  public List<Calendar> getUserCalendars(SessionProvider sProvider, String username) throws Exception {
-    return storage_.getUserCalendars(sProvider, username) ;
+  public List<Calendar> getUserCalendars(SessionProvider sProvider, String username, boolean isShowAll) throws Exception {
+    return storage_.getUserCalendars(sProvider, username, isShowAll) ;
   }
   public List<Calendar> getUserCalendarsByCategory(SessionProvider sProvider, String username, String calendarCategoryId) throws Exception {
     return storage_.getUserCalendarsByCategory(sProvider, username, calendarCategoryId);
@@ -93,8 +93,8 @@ public class CalendarServiceImpl implements CalendarService{
   public Calendar getGroupCalendar(SessionProvider sProvider, String calendarId) throws Exception {
     return storage_.getGroupCalendar(sProvider, calendarId);
   }
-  public List<GroupCalendarData> getGroupCalendars(SessionProvider sProvider, String[] groupIds) throws Exception {
-    return storage_.getGroupCalendars(sProvider, groupIds);
+  public List<GroupCalendarData> getGroupCalendars(SessionProvider sProvider, String[] groupIds, boolean isShowAll, String username) throws Exception {
+    return storage_.getGroupCalendars(sProvider, groupIds, isShowAll, username);
   }
   public void saveGroupCalendar(SessionProvider sProvider, Calendar calendar, boolean isNew) throws Exception {
     storage_.saveGroupCalendar(sProvider, calendar, isNew) ;
@@ -200,8 +200,8 @@ public class CalendarServiceImpl implements CalendarService{
     storage_.shareCalendar(sProvider, username, calendarId, receiverUsers) ;
   }
   
-  public GroupCalendarData getSharedCalendars(SessionProvider sProvider, String username) throws Exception {
-    return storage_.getSharedCalendars(sProvider, username) ;
+  public GroupCalendarData getSharedCalendars(SessionProvider sProvider, String username, boolean isShowAll) throws Exception {
+    return storage_.getSharedCalendars(sProvider, username, isShowAll) ;
   }
   
   public List<CalendarEvent> getEvent(SessionProvider sProvider, String username, EventQuery eventQuery, String[] publicCalendarIds) throws Exception{

@@ -105,7 +105,7 @@ public class UIMonthView extends UICalendarView {
   protected void refreshSelectedCalendarIds() throws Exception {
     CalendarService calendarService = getApplicationComponent(CalendarService.class) ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
-    for(Calendar c : calendarService.getUserCalendars(SessionsUtils.getSessionProvider(), username)) {
+    for(Calendar c : calendarService.getUserCalendars(SessionsUtils.getSessionProvider(), username, false)) {
       addCalendarId(c.getId()) ;
     }
   }

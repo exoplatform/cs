@@ -38,10 +38,11 @@ public interface CalendarService {
    * 2. Check exists of Calendar category list in cache
    * 3. Get calendar category list and return
    * @param username
+   * @param isShowAll TODO
    * @return Calendar Category list
    * @throws Exception
    */
-  public List<GroupCalendarData> getCalendarCategories(SessionProvider sProvider, String username) throws Exception ;
+  public List<GroupCalendarData> getCalendarCategories(SessionProvider sProvider, String username, boolean isShowAll) throws Exception ;
   /**
    * This method should:
    * 1. Get calendar service root node by current user
@@ -88,7 +89,7 @@ public interface CalendarService {
    */
   public Calendar getUserCalendar(SessionProvider sProvider, String username, String calendarId) throws Exception ;
   
-  public List<Calendar> getUserCalendars(SessionProvider sProvider, String username) throws Exception ;
+  public List<Calendar> getUserCalendars(SessionProvider sProvider, String username, boolean isShowAll) throws Exception ;
   /**
    * This method should:
    * 1. Get calendar service root node by current user
@@ -144,11 +145,13 @@ public interface CalendarService {
    * 1. Get calendar service root node
    * 2. Check exists of calendar list in cache
    * 3. Get calendar list
+   * @param isShowAll TODO
+   * @param username TODO
    * @param username
    * @return Calendar list
    * @throws Exception
    */
-  public List<GroupCalendarData> getGroupCalendars(SessionProvider sProvider, String[] groupId) throws Exception ;  
+  public List<GroupCalendarData> getGroupCalendars(SessionProvider sProvider, String[] groupId, boolean isShowAll, String username) throws Exception ;  
   /**
    * This method should:
    * 1. Check calendar is private or public
@@ -348,7 +351,7 @@ public interface CalendarService {
   public Map<Integer, String > searchHightLightEvent(SessionProvider sProvider, String username, EventQuery eventQuery, String[] publicCalendarIds)throws Exception ; 
   
   public void shareCalendar(SessionProvider sProvider, String username, String calendarId, List<String> receiverUsers) throws Exception ;
-  public GroupCalendarData getSharedCalendars(SessionProvider sProvider, String username) throws Exception ;
+  public GroupCalendarData getSharedCalendars(SessionProvider sProvider, String username, boolean isShowAll) throws Exception ;
   public List<CalendarEvent> getEvent(SessionProvider sProvider, String username, EventQuery eventQuery, String[] publicCalendarIds) throws Exception ;
   public void removeSharedCalendar(SessionProvider sProvider, String username, String calendarId) throws Exception  ;
   public void saveEventToSharedCalendar(SessionProvider sProvider, String username, String calendarId, CalendarEvent event, boolean isNew) throws Exception  ;
