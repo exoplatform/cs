@@ -2,7 +2,7 @@
 import org.exoplatform.calendar.webui.UIListView;
 import org.exoplatform.calendar.webui.UIMonthView;
 def rcontext = _ctx.getRequestContext() ;
-rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.getFilterSelect("'+uiform.id+'")') ;
+rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.getFilterSelect("'+uiform.id+'") ;') ;
 %>
 <div class="UIHeaderBar ListBar">
 		<a href="<%=uicomponent.event("AddEvent",uicomponent.TYPE_EVENT)%>" class="ControlButton">
