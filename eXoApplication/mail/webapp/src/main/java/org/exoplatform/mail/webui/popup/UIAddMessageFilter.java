@@ -71,7 +71,8 @@ public class UIAddMessageFilter extends UIForm implements UIPopupComponent{
   public static final String FILTER_BODY_CONDITION = "filter-body-condition".intern();
   public static final String FILTER_APPLY_FOLDER = "filter-aplly-folder".intern();
   public static final String FILTER_APPLY_TAG = "filter-aplly-tag".intern();
-  public static final String FILTER_KEEP_INBOX = "filter-keep-in-inbox".intern();
+  //public static final String FILTER_KEEP_INBOX = "filter-keep-in-inbox".intern();
+  public static final String APPLY_ALL_MESSAGE = "apply-all-messages".intern();
   
   private MessageFilter currentFilter ;
   
@@ -123,7 +124,8 @@ public class UIAddMessageFilter extends UIForm implements UIPopupComponent{
       tagList.add(new SelectItemOption<String>(tag.getName(), tag.getId()));       
     }    
     addUIFormInput(new UIFormSelectBox(FILTER_APPLY_TAG, FILTER_APPLY_TAG, tagList));
-    addUIFormInput(new UIFormCheckBoxInput<Boolean>(FILTER_KEEP_INBOX, FILTER_KEEP_INBOX, true));
+    //addUIFormInput(new UIFormCheckBoxInput<Boolean>(FILTER_KEEP_INBOX, FILTER_KEEP_INBOX, true));
+    addUIFormInput(new UIFormCheckBoxInput<Boolean>(APPLY_ALL_MESSAGE, APPLY_ALL_MESSAGE, false));
   }
   
   public MessageFilter getCurrentFilter() { return currentFilter; }
@@ -141,7 +143,7 @@ public class UIAddMessageFilter extends UIForm implements UIPopupComponent{
     setBodyCondition(String.valueOf(filter.getBodyCondition()));
     setApplyFolder(filter.getApplyFolder());
     setApplyTag(filter.getApplyTag());
-    setKeepInInbox(filter.keepInInbox());
+    //setKeepInInbox(filter.keepInInbox());
   }
   
   public String getFilterName() throws Exception {
@@ -232,12 +234,20 @@ public class UIAddMessageFilter extends UIForm implements UIPopupComponent{
     getUIStringInput(FILTER_APPLY_TAG).setValue(s);
   }
   
-  public Boolean getKeepInInbox() throws Exception {
+  /*public Boolean getKeepInInbox() throws Exception {
     return getUIFormCheckBoxInput(FILTER_KEEP_INBOX).isChecked();
+  }*/
+  
+  /*public void setKeepInInbox(boolean s) throws Exception {
+    getUIFormCheckBoxInput(FILTER_KEEP_INBOX).setChecked(s);
+  }*/
+  
+  public Boolean getApplyAll() throws Exception {
+    return getUIFormCheckBoxInput(APPLY_ALL_MESSAGE).isChecked();
   }
   
-  public void setKeepInInbox(boolean s) throws Exception {
-    getUIFormCheckBoxInput(FILTER_KEEP_INBOX).setChecked(s);
+  public void setApplyAll(boolean b) throws Exception {
+    getUIFormCheckBoxInput(APPLY_ALL_MESSAGE).setChecked(b);
   }
   
   public void activate() throws Exception { }
@@ -262,7 +272,7 @@ public class UIAddMessageFilter extends UIForm implements UIPopupComponent{
       String bodyCondition = uiAddFilter.getBodyCondition();
       String applyFolder = uiAddFilter.getApplyFolder();
       String applyTag = uiAddFilter.getApplyTag();
-      boolean keepInbox = uiAddFilter.getKeepInInbox();
+      //boolean keepInbox = uiAddFilter.getKeepInInbox();
       // Verify
       UIApplication uiApp = uiAddFilter.getAncestorOfType(UIApplication.class) ;
       if (Utils.isEmptyField(filterName)) {
@@ -288,10 +298,11 @@ public class UIAddMessageFilter extends UIForm implements UIPopupComponent{
       filter.setBodyCondition(Integer.valueOf(bodyCondition));
       filter.setApplyFolder(applyFolder);
       filter.setApplyTag(applyTag);
-      filter.setKeepInInbox(keepInbox);
+      //filter.setKeepInInbox(keepInbox);
       try {
         mailSrv.saveFilter(SessionsUtils.getSessionProvider(), username, accountId, filter);
-        mailSrv.runFilter(SessionsUtils.getSessionProvider(), username, accountId, filter);
+        if (uiAddFilter.getApplyAll()) 
+          mailSrv.runFilter(SessionsUtils.getSessionProvider(), username, accountId, filter);
         uiPortlet.findFirstComponentOfType(UIMessageFilter.class).setSelectedFilterId(filter.getId());
       } catch (Exception e) {
         e.printStackTrace();

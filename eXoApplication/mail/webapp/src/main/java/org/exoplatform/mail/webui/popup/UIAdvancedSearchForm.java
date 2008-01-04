@@ -32,8 +32,10 @@ import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UIMessageArea;
 import org.exoplatform.mail.webui.UIMessageList;
 import org.exoplatform.mail.webui.UISelectAccount;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
@@ -224,26 +226,42 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       MailService mailService = uiPortlet.getApplicationComponent(MailService.class);
-      
+      String to = uiSearchForm.getFieldEmailTo() ;
+      String from = uiSearchForm.getFieldEmailFrom();
+      String subject = uiSearchForm.getSubject();
+      String body = uiSearchForm.getMessageBody();
+      Calendar fromDate = uiSearchForm.getFromDate();
+      Calendar toDate = uiSearchForm.getToDate();
+      boolean hasStar = uiSearchForm.hasStar();
+      boolean hasAttach = uiSearchForm.hasAttachment();
+      long priority = uiSearchForm.getPriority();
+      String folder = uiSearchForm.getSelectedFolder();
+      UIApplication uiApp = uiSearchForm.getAncestorOfType(UIApplication.class) ;
+      if (Utils.isEmptyField(folder) && Utils.isEmptyField(from) && Utils.isEmptyField(to) && Utils.isEmptyField(subject) && (fromDate == null) && 
+          (toDate == null) && Utils.isEmptyField(body) && !hasStar && !hasAttach && (priority == 0)) {
+        uiApp.addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.search-query-invalid", null, ApplicationMessage.INFO)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return;
+      }
       MessageFilter filter = new MessageFilter("Search");
       filter.setAccountId(accountId);
       String selectedFolderId = uiSearchForm.getSelectedFolder();
       if (selectedFolderId != null && selectedFolderId != "") {
-        filter.setFolder(new String[] {uiSearchForm.getSelectedFolder()});
+        filter.setFolder(new String[] {folder});
       }
-      filter.setTo(uiSearchForm.getFieldEmailTo());
+      filter.setTo(to);
       filter.setToCondition(Integer.valueOf(uiSearchForm.getToCondition()));
-      filter.setFrom(uiSearchForm.getFieldEmailFrom());
+      filter.setFrom(from);
       filter.setFromCondition(Integer.valueOf(uiSearchForm.getFromCondition()));
-      filter.setSubject(uiSearchForm.getSubject());
+      filter.setSubject(subject);
       filter.setSubjectCondition(Integer.valueOf(uiSearchForm.getSubjectCondition()));
-      filter.setBody(uiSearchForm.getMessageBody());
+      filter.setBody(body);
       filter.setBodyCondition(Integer.valueOf(uiSearchForm.getBodyCondition()));
-      filter.setFromDate(uiSearchForm.getFromDate());
-      filter.setToDate(uiSearchForm.getToDate());
-      filter.setHasStar(uiSearchForm.hasStar());
-      filter.setHasAttach(uiSearchForm.hasAttachment());
-      filter.setPriority(uiSearchForm.getPriority());
+      filter.setFromDate(fromDate);
+      filter.setToDate(toDate);
+      filter.setHasStar(hasStar);
+      filter.setHasAttach(hasAttach);
+      filter.setPriority(priority);
       uiMessageList.setSelectedFolderId(null);
       uiMessageList.setSelectedTagId(null);
       uiMessageList.setMessageFilter(filter);

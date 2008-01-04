@@ -23,7 +23,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.activation.DataHandler;
 import javax.mail.Multipart;
@@ -220,13 +222,23 @@ public class Utils {
     return personal;
   }
   
-  public static String[] getAddresses(String addressList)  throws Exception { 
+  public static String[] getAddresses(String addressList) throws Exception { 
     InternetAddress[] internetAddresses = getInternetAddress(addressList);
     String[] strs = new String[internetAddresses.length];
     for (int i = 0; i < internetAddresses.length; i++ ) {
       strs[i] = internetAddresses[i].getAddress();
     }
     return strs;
+  }
+  
+  public static Map<String, String> getAddressMap(String addressList) throws Exception { 
+    InternetAddress[] internetAddresses = getInternetAddress(addressList);
+    Map<String, String> addressMap = new HashMap<String, String>() ;
+    for (int i = 0; i < internetAddresses.length; i++ ) {
+      String address = internetAddresses[i].getAddress();
+      addressMap.put(address, address);
+    }
+    return addressMap;
   }
   
   public static InternetAddress[] getInternetAddress(String addressList) throws Exception {

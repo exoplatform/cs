@@ -705,7 +705,7 @@ public class JCRDataStorage{
       if (filterNode.hasProperty(Utils.EXO_BODY_CONDITION)) filter.setBodyCondition((int)(filterNode.getProperty(Utils.EXO_BODY_CONDITION).getLong()));
       if (filterNode.hasProperty(Utils.EXO_APPLY_FOLDER)) filter.setApplyFolder(filterNode.getProperty(Utils.EXO_APPLY_FOLDER).getString());
       if (filterNode.hasProperty(Utils.EXO_APPLY_TAG)) filter.setApplyTag(filterNode.getProperty(Utils.EXO_APPLY_TAG).getString());
-      if (filterNode.hasProperty(Utils.EXO_KEEP_IN_INBOX)) filter.setKeepInInbox(filterNode.getProperty(Utils.EXO_KEEP_IN_INBOX).getBoolean());
+      //if (filterNode.hasProperty(Utils.EXO_KEEP_IN_INBOX)) filter.setKeepInInbox(filterNode.getProperty(Utils.EXO_KEEP_IN_INBOX).getBoolean());
       filterList.add(filter);
     }
     return filterList ;
@@ -728,7 +728,7 @@ public class JCRDataStorage{
       if (filterNode.hasProperty(Utils.EXO_BODY_CONDITION)) filter.setBodyCondition((int)(filterNode.getProperty(Utils.EXO_BODY_CONDITION).getLong()));
       if (filterNode.hasProperty(Utils.EXO_APPLY_FOLDER)) filter.setApplyFolder(filterNode.getProperty(Utils.EXO_APPLY_FOLDER).getString());
       if (filterNode.hasProperty(Utils.EXO_APPLY_TAG)) filter.setApplyTag(filterNode.getProperty(Utils.EXO_APPLY_TAG).getString());
-      if (filterNode.hasProperty(Utils.EXO_KEEP_IN_INBOX)) filter.setKeepInInbox(filterNode.getProperty(Utils.EXO_KEEP_IN_INBOX).getBoolean());
+      //if (filterNode.hasProperty(Utils.EXO_KEEP_IN_INBOX)) filter.setKeepInInbox(filterNode.getProperty(Utils.EXO_KEEP_IN_INBOX).getBoolean());
     }
     return filter ;
   }
@@ -754,7 +754,7 @@ public class JCRDataStorage{
     filterNode.setProperty(Utils.EXO_BODY_CONDITION, (long)filter.getBodyCondition());
     filterNode.setProperty(Utils.EXO_APPLY_FOLDER, filter.getApplyFolder());
     filterNode.setProperty(Utils.EXO_APPLY_TAG, filter.getApplyTag());
-    filterNode.setProperty(Utils.EXO_KEEP_IN_INBOX, filter.keepInInbox());
+    //filterNode.setProperty(Utils.EXO_KEEP_IN_INBOX, filter.keepInInbox());
     home.getSession().save();
   }
   
@@ -1016,5 +1016,111 @@ public class JCRDataStorage{
       }
     }
     return childFolders ;
+  }
+  
+  public void execActionFilter(SessionProvider sProvider, String username, String accountId, Calendar checkTime) throws Exception {
+    List<MessageFilter> msgFilters = getFilters(sProvider, username, accountId);
+    Node homeMsg = getMessageHome(sProvider, username, accountId);
+    Session sess = getMailHomeNode(sProvider, username).getSession();
+    QueryManager qm = sess.getWorkspace().getQueryManager();
+    for (MessageFilter filter : msgFilters) {
+      String applyFolder = filter.getApplyFolder() ;
+      String applyTag = filter.getApplyTag() ;
+      filter.setAccountPath(homeMsg.getPath()) ;
+      filter.setAccountId(accountId);
+      filter.setFromDate(checkTime);
+      String queryString = filter.getStatement();
+      Query query = qm.createQuery(queryString, Query.XPATH);
+      QueryResult result = query.execute();
+      NodeIterator it = result.getNodes();
+      while (it.hasNext()) {
+        Message msg  = getMessage(it.nextNode());
+        if (!Utils.isEmptyField(applyFolder) && (getFolder(sProvider, username, accountId, applyFolder) != null)) {
+          Folder folder = getFolder(sProvider, username, accountId, applyFolder);
+          if (folder !=null)
+            moveMessages(sProvider, username, accountId, msg.getId(), msg.getFolders()[0], applyFolder);  
+        }
+        if (!Utils.isEmptyField(applyTag)) {
+          Tag tag = getTag(sProvider, username, accountId, applyTag);
+          if (tag != null) {
+            List<String> msgIdList = new ArrayList<String>();
+            msgIdList.add(msg.getId());
+            List<Tag> tagList = new ArrayList<Tag>();
+            tagList.add(tag);
+            addTag(sProvider, username, accountId, msgIdList , tagList);
+          }
+        }  
+      }
+    } 
+  }
+  
+  public Message groupConversation(SessionProvider sProvider, String username, String accountId, Message newMsg) throws Exception {
+    Node homeMsg = getMessageHome(sProvider, username, accountId);
+    Session sess = getMailHomeNode(sProvider, username).getSession();
+    QueryManager qm = sess.getWorkspace().getQueryManager();
+    MessageFilter filter = new MessageFilter("");
+    filter.setAccountPath(homeMsg.getPath()) ;
+    filter.setAccountId(accountId);
+    filter.setSubjectCondition(Utils.CONDITION_IS);
+    String subject = newMsg.getSubject() ;
+    if (subject.indexOf("Re:") == 0) subject = subject.substring(3, subject.length()).trim();
+    else if(subject.indexOf("Fwd:") == 0) subject = subject.substring(4, subject.length()).trim();
+    filter.setSubject(subject);
+    filter.setMemberOfConver(new String[]{Utils.getAddresses(newMsg.getFrom())[0]});
+    boolean rootIsUnread = true; 
+    Message rootMsg = null;
+    String queryString = filter.getStatement();
+    Query query = qm.createQuery(queryString, Query.XPATH);
+    QueryResult result = query.execute();
+    NodeIterator it = result.getNodes();
+    String addressList = "";
+    if (newMsg.getFrom() != null) addressList += newMsg.getFrom();
+    if (newMsg.getMessageTo() != null) addressList += "," + newMsg.getMessageTo();
+    if (newMsg.getMessageCc() != null) addressList += "," + newMsg.getMessageCc();
+    if (newMsg.getMessageBcc() != null) addressList += "," + newMsg.getMessageBcc();
+    Map<String, String> newAddressMap = Utils.getAddressMap(addressList) ;
+    
+    if (it.hasNext()) {
+      Node node = it.nextNode();
+      rootMsg = getMessage(node);
+      if (!rootMsg.isUnread()) rootIsUnread = false ;
+      
+      Map<String, String> addressMap = new HashMap<String, String> () ;
+      if (rootMsg.getAddresses() != null && rootMsg.getAddresses().length > 0) 
+        for (String address : rootMsg.getAddresses()) addressMap.put(address, address);
+      
+      addressMap.putAll(newAddressMap);
+      
+      newMsg.setAddresses(addressMap.values().toArray(new String[]{}));
+      
+      if (rootMsg.getMessageIds() != null && rootMsg.getMessageIds().length > 0) {
+        List<String> msgIdList = new ArrayList<String>() ;
+        for (String msgId : rootMsg.getMessageIds()) msgIdList.add(msgId) ;
+        msgIdList.add(newMsg.getId()) ;
+        newMsg.setMessageIds(msgIdList.toArray(new String[]{}));
+      }
+      
+      rootMsg.setIsRootConversation(false);
+      rootMsg.setUnread(false);
+      rootMsg.setRoot(newMsg.getId());
+      rootMsg.setAddresses(new String[] {});
+      rootMsg.setMessageIds(new String[] {rootMsg.getId()});
+      saveMessage(sProvider, username, accountId, rootMsg, false);
+      
+      for (String folderId : newMsg.getFolders()) {
+        Node folderNode = getFolderNodeById(sProvider, username, accountId, folderId) ;
+        if (rootMsg != null && (rootIsUnread)) 
+          folderNode.setProperty(Utils.EXO_UNREADMESSAGES, folderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong() - 1) ;
+        if (rootMsg != null) 
+          folderNode.setProperty(Utils.EXO_TOTALMESSAGE , folderNode.getProperty(Utils.EXO_TOTALMESSAGE).getLong() - 1) ;
+      }      
+    } else {
+      newMsg.setMessageIds(new String[] {newMsg.getId()});
+      newMsg.setAddresses(newAddressMap.values().toArray(new String[] {}));
+      newMsg.setRoot(newMsg.getId());
+    }
+    sess.save();
+    
+    return newMsg;
   }
 }

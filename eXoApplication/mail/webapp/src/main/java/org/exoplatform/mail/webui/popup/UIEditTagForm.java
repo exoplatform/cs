@@ -118,7 +118,7 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
       UIApplication uiApp = uiEditTagForm.getAncestorOfType(UIApplication.class) ;
 
       if(Utils.isEmptyField(newTagName)) {
-        uiApp.addMessage(new ApplicationMessage("UITagForm.msg.name-required", null)) ;
+        uiApp.addMessage(new ApplicationMessage("UIEditTagForm.msg.name-required", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
@@ -128,7 +128,7 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
         List<Tag> tagList = mailService.getTags(SessionsUtils.getSessionProvider(), username, accountId);
         for (Tag tag : tagList) {
           if(tag.getName().equals(newTagName)&&!tag.getId().equals(tagId)) {
-            uiApp.addMessage(new ApplicationMessage("UITagForm.msg.Tag-exist", new Object[]{newTagName})) ;
+            uiApp.addMessage(new ApplicationMessage("UIEditTagForm.msg.tag-already-exists", new Object[]{newTagName})) ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
             return ;
           }

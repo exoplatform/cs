@@ -222,8 +222,9 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
   static public class CancelActionListener extends EventListener<UIAddressForm> {
     public void execute(Event<UIAddressForm> event) throws Exception {
       UIAddressForm uiAddressForm = event.getSource();
-      uiAddressForm.deActivate();
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressForm.getAncestorOfType(UIPopupActionContainer.class));
+      UIPopupAction uiPopupAction = uiAddressForm.getAncestorOfType(UIPopupAction.class) ; 
+      uiPopupAction.deActivate() ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }
   }
 }

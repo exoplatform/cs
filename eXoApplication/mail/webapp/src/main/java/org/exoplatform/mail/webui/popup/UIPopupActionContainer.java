@@ -18,6 +18,7 @@ package org.exoplatform.mail.webui.popup;
 
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIContainer;
+import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
 
 /**
@@ -29,8 +30,8 @@ import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
 @ComponentConfig(lifecycle = UIContainerLifecycle.class)
 public class UIPopupActionContainer extends UIContainer implements UIPopupComponent {
   public UIPopupActionContainer() throws Exception {
-    //addChild(UIAccountCreation.class, null, null) ;
-    addChild(UIPopupAction.class, null, null) ;
+    UIPopupAction uiPopupAction = addChild(UIPopupAction.class, null, "UIChildPopup");
+    uiPopupAction.getChild(UIPopupWindow.class).setId("UIChildPopupWindow") ;
   }
   public void activate() throws Exception {
     // TODO Auto-generated method stub

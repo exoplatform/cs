@@ -19,7 +19,7 @@ package org.exoplatform.mail.webui ;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.exoplatform.container.PortalContainer;
+import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.SessionsUtils;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
@@ -55,12 +55,11 @@ public class UITagContainer extends UIComponent {
   
   public List<Tag> getTags() throws Exception {
     List<Tag> tagList = new ArrayList<Tag>();
-    MailService mailService = (MailService)PortalContainer.getComponent(MailService.class) ;
+    MailService mailService = MailUtils.getMailService() ;
     UIMailPortlet uiPortlet = getAncestorOfType(UIMailPortlet.class);
     String username = uiPortlet.getCurrentUser() ;
     String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
-    if (accountId != null && accountId != "")  
-      tagList = mailService.getTags(SessionsUtils.getSessionProvider(), username, accountId);
+    if (accountId != null && accountId != "") tagList = mailService.getTags(SessionsUtils.getSessionProvider(), username, accountId);
     return tagList;
   }
   

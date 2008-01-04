@@ -77,7 +77,7 @@ public class UIFolderForm extends UIForm implements UIPopupComponent {
         return ;
       }
       try {
-        String folderId = accountId + "UserFolder" + folderName;
+        String folderId = Utils.createFolderId(accountId, folderName, true);
         Folder folder = mailSvr.getFolder(SessionsUtils.getSessionProvider(), username, accountId, folderId) ;
         if(folder == null) {
           folder = new Folder() ;

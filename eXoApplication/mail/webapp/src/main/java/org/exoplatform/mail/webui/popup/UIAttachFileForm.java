@@ -134,9 +134,9 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
   static  public class CancelActionListener extends EventListener<UIAttachFileForm> {
     public void execute(Event<UIAttachFileForm> event) throws Exception {
       UIAttachFileForm uiAttach = event.getSource();
-      UIPopupAction uiPopupAction = uiAttach.getAncestorOfType(UIPopupAction.class) ;
-      uiPopupAction.deActivate();
-      event.getRequestContext().addUIComponentToUpdateByAjax((uiAttach.getAncestorOfType(UIPopupActionContainer.class))) ;
+      UIPopupAction uiPopupAction = uiAttach.getAncestorOfType(UIPopupAction.class) ; 
+      uiPopupAction.deActivate() ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }
   }
 }

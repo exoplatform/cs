@@ -43,10 +43,10 @@
                 <% if (filter.getSubject() != null) { %><div>Subject : <%=uicomponent.getCondition(filter.getSubjectCondition())%> "<%=filter.getSubject()%>"</div><% } %>
                 <% if (filter.getBody() != null) { %><div>Body : <%=uicomponent.getCondition(filter.getBodyCondition())%> "<%=filter.getBody()%>"</div><% } %>
               </div>
-              <div class="TitleFilter">Then apply for </div>
+              <div class="TitleFilter">Then apply for :</div>
               <div class="Text">
-                <% if (filter.getApplyFolder() != null) { %><div>Folder : <%=uicomponent.getFolder().getName()%> </div><% } %> 
-                <% if (filter.getApplyTag() != null && filter.getApplyTag() != "") { %><div>Tag : <%=uicomponent.getTag().getName()%></div><% } %> 
+                <% if (filter.getApplyFolder() != null && uicomponent.getFolder() != null) { %><div>Folder : <%=uicomponent.getFolder().getName()%> </div><% } %> 
+                <% if (filter.getApplyTag() != null && filter.getApplyTag() != "" && uicomponent.getTag()) { %><div>Tag : <%=uicomponent.getTag().getName()%></div><% } %> 
               </div>
             </div>
           </div>

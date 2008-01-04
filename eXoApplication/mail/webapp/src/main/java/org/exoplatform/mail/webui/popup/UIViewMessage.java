@@ -50,32 +50,32 @@ public class UIViewMessage extends UIComponent {
   
   static  public class ReplyActionListener extends EventListener<UIViewMessage> {
     public void execute(Event<UIViewMessage> event) throws Exception {
-      UIViewMessage uiForm = event.getSource() ;
+      //UIViewMessage uiForm = event.getSource() ;
     }
   }
   static  public class ReplyAllActionListener extends EventListener<UIViewMessage> {
     public void execute(Event<UIViewMessage> event) throws Exception {
-      UIViewMessage uiForm = event.getSource() ;
+      //UIViewMessage uiForm = event.getSource() ;
     }
   }
   static  public class ForwardActionListener extends EventListener<UIViewMessage> {
     public void execute(Event<UIViewMessage> event) throws Exception {
-      UIViewMessage uiForm = event.getSource() ;
+      //UIViewMessage uiForm = event.getSource() ;
     }
   }
   static  public class DeleteActionListener extends EventListener<UIViewMessage> {
     public void execute(Event<UIViewMessage> event) throws Exception {
-      UIViewMessage uiForm = event.getSource() ;
+      //UIViewMessage uiForm = event.getSource() ;
     }
   }
   static  public class PrintActionListener extends EventListener<UIViewMessage> {
     public void execute(Event<UIViewMessage> event) throws Exception {
-      UIViewMessage uiForm = event.getSource() ;
+      //UIViewMessage uiForm = event.getSource() ;
     }
   }
   static  public class CloseActionListener extends EventListener<UIViewMessage> {
     public void execute(Event<UIViewMessage> event) throws Exception {
-      UIViewMessage uiForm = event.getSource() ;
+      //UIViewMessage uiForm = event.getSource() ;
     }
   }
 }

@@ -85,17 +85,6 @@ public class UIFolderContainer extends UIContainer {
     return subFolders ;
   }
   
-  public String getCustomerFolderPath() throws Exception {
-    MailService mailSvr = MailUtils.getMailService();
-    String username = MailUtils.getCurrentUser() ;
-    String accountId = getAncestorOfType(UIMailPortlet.class).findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-    String path = "";
-    if (accountId != null) {
-      path = mailSvr.getFolderHomePath(SessionsUtils.getSessionProvider(), username, accountId) ;
-    } 
-    return path;
-  }
-  
   public Folder getCurrentFolder() throws Exception{
     MailService mailSvr = getApplicationComponent(MailService.class) ;
     String username = getAncestorOfType(UIMailPortlet.class).getCurrentUser() ;
@@ -172,7 +161,7 @@ public class UIFolderContainer extends UIContainer {
       UIPopupAction uiPopup = uiFolder.getAncestorOfType(UIMailPortlet.class).getChild(UIPopupAction.class) ;
       UIRenameFolderForm uiRenameFolderForm = uiPopup.activate(UIRenameFolderForm.class, 450) ;
       uiRenameFolderForm.setFolderId(folderId);
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiFolder) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup) ;
     }
   }
 

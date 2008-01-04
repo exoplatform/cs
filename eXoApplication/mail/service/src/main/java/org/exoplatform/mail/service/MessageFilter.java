@@ -57,6 +57,7 @@ public class MessageFilter {
   private String applyFolder ;
   private String applyTag ;
   private Boolean keepInbox ;
+  private String[] memberOfConver ;
 
   public MessageFilter(String name) {
     this.id = Utils.KEY_FILTER + IdGenerator.generate();
@@ -151,6 +152,10 @@ public class MessageFilter {
   
   public Boolean keepInInbox() { return keepInbox ; }
   public void setKeepInInbox(boolean keepInbox) { this.keepInbox = keepInbox ; }
+  
+  public String[] getMemberOfConver() { return memberOfConver ; }
+  public void setMemberOfConver(String[] memberOfConver) { this.memberOfConver = memberOfConver ; }
+  
   
   public String getStatement() throws Exception{
     StringBuffer queryString = new StringBuffer("/jcr:root" + accountPath + "//element(*,exo:message)") ;
@@ -336,6 +341,17 @@ public class MessageFilter {
       if(hasConjuntion) stringBuffer.append(" and (") ;
       else stringBuffer.append("(") ;
       stringBuffer.append(viewQuery) ;
+      stringBuffer.append(")") ;
+      hasConjuntion = true ;
+    }
+    
+    if(memberOfConver != null && memberOfConver.length > 0) {
+      if (hasConjuntion) stringBuffer.append(" and (") ; 
+      else stringBuffer.append("(") ;    
+      for(int i = 0; i < memberOfConver.length; i ++) {
+        if(i == 0) stringBuffer.append(" @exo:addresses='" + memberOfConver[i] +"'") ;
+        else stringBuffer.append(" or @exo:addresses='" + memberOfConver[i] +"'") ;
+      }
       stringBuffer.append(")") ;
       hasConjuntion = true ;
     }

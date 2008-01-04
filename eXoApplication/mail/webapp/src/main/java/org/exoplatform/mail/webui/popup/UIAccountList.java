@@ -106,19 +106,25 @@ public class UIAccountList extends UIGrid  implements UIPopupComponent{
     public void execute(Event<UIAccountList> event) throws Exception {
       System.out.println("=====>>> DeleteActionListener");
       UIAccountList uiAccountList = event.getSource() ;
+      UIMailPortlet uiPortlet = uiAccountList.getAncestorOfType(UIMailPortlet.class) ;
+      String currAccountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       String accId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UIApplication uiApp = uiAccountList.getAncestorOfType(UIApplication.class) ;
       MailService mailSvr = uiAccountList.getApplicationComponent(MailService.class) ;
       String username = event.getRequestContext().getRemoteUser() ;
-      UIMailPortlet uiPortlet = uiAccountList.getAncestorOfType(UIMailPortlet.class) ;
+
       Account account = mailSvr.getAccountById(SessionsUtils.getSessionProvider(), username, accId) ;
       try {
         mailSvr.removeAccount(SessionsUtils.getSessionProvider(), username, account) ;
         UISelectAccount uiSelectAccount = uiPortlet.findFirstComponentOfType(UISelectAccount.class) ;
         uiSelectAccount.refreshItems() ;
         uiAccountList.updateGrid() ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiAccountList.getAncestorOfType(UIPopupAction.class)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiSelectAccount) ;
+        if (currAccountId.equals(accId)) {
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet) ; 
+        } else {
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiAccountList.getAncestorOfType(UIPopupAction.class)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiSelectAccount) ;
+        }
       } catch (Exception e) {
         uiApp.addMessage(new ApplicationMessage("UIAccountList.msg.remove-accout-error", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;

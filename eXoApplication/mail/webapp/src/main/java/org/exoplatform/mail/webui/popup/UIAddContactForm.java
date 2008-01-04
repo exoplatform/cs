@@ -72,10 +72,12 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
   public static final String ICR_ID = "icrId".intern();
   public static final String SKYPE_ID = "skypeId".intern();
   public static final String ICQ_ID = "icqId".intern();
+  public static final String CHOOSE_GROUP = "-- Choose group --".intern();
   
   public UIAddContactForm() throws Exception { 
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>();
     ContactService contactSrv = getApplicationComponent(ContactService.class);
+    options.add(new SelectItemOption<String>(CHOOSE_GROUP, ""));
     for (ContactGroup group : contactSrv.getGroups(SessionsUtils.getSessionProvider(), MailUtils.getCurrentUser())) {
       options.add(new SelectItemOption<String>(group.getName(), group.getId()));
     }
@@ -117,7 +119,7 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
     public void execute(Event<UIAddContactForm> event) throws Exception {
       UIAddContactForm uiContact = event.getSource() ;
       UIMailPortlet uiPortlet = uiContact.getAncestorOfType(UIMailPortlet.class); 
-      UIApplication uiApp = uiPortlet.getAncestorOfType(UIApplication.class);
+      UIApplication uiApp = uiContact.getAncestorOfType(UIApplication.class) ;
       String groupId = uiContact.getUIFormSelectBox(SELECT_GROUP).getValue();
       String firstName = uiContact.getUIStringInput(FIRST_NAME).getValue();
       String lastName = uiContact.getUIStringInput(LAST_NAME).getValue();
@@ -127,18 +129,15 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
       String phone = uiContact.getUIStringInput(PHONE).getValue();
       
       if (MailUtils.isFieldEmpty(groupId)) {  
-        uiApp.addMessage(new ApplicationMessage("UIAddContactForm.msg.group-required", null, 
-            ApplicationMessage.WARNING)) ;
+        uiApp.addMessage(new ApplicationMessage("UIAddContactForm.msg.group-required", null, ApplicationMessage.INFO)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ; 
       } else if (MailUtils.isFieldEmpty(firstName) && MailUtils.isFieldEmpty(lastName)) {  
-        uiApp.addMessage(new ApplicationMessage("UIAddContactForm.msg.name-required", null, 
-            ApplicationMessage.WARNING)) ;
+        uiApp.addMessage(new ApplicationMessage("UIAddContactForm.msg.name-required", null, ApplicationMessage.INFO)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ; 
       } else if (MailUtils.isFieldEmpty(email)) {  
-        uiApp.addMessage(new ApplicationMessage("UIAddContactForm.msg.email-required", null, 
-            ApplicationMessage.WARNING)) ;
+        uiApp.addMessage(new ApplicationMessage("UIAddContactForm.msg.email-required", null, ApplicationMessage.INFO)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ; 
       } 

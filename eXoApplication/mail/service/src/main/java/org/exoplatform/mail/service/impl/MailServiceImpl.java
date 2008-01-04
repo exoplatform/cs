@@ -21,13 +21,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 
 import javax.activation.DataHandler;
@@ -325,6 +322,7 @@ public class MailServiceImpl implements MailService{
   }
 
   public List<Message> checkNewMessage(SessionProvider sProvider, String username, String accountId) throws Exception {
+    Calendar checkTime = GregorianCalendar.getInstance();
     Account account = getAccountById(sProvider, username, accountId) ;
     System.out.println(" #### Getting mail from " + account.getIncomingHost() + " ... !");
     List<Message> messageList = new ArrayList<Message>();
@@ -414,29 +412,7 @@ public class MailServiceImpl implements MailService{
             setPart(msg, newMsg, username);
           }
           
-          // Use for conversation
-          boolean rootIsUnread = true; 
-          Message rootMsg  = getRootMessage(sProvider, username, accountId, newMsg) ;
-          if (rootMsg != null) {
-            if (!rootMsg.isUnread()) {
-              rootIsUnread = false ;
-            }
-            newMsg = updateRootMessage(sProvider, username, accountId, rootMsg, newMsg);
-          } else {
-            newMsg.setMessageIds(new String[] {newMsg.getId()});
-            Map<String, String> addressMap = new HashMap<String, String> () ;
-            List<String> addressList = new ArrayList<String>(); 
-            if (newMsg.getFrom() != null) addressList.addAll(new ArrayList<String>(Arrays.asList(Utils.getAddresses(newMsg.getFrom()))));
-            if (newMsg.getMessageTo() != null) addressList.addAll(new ArrayList<String>(Arrays.asList(Utils.getAddresses(newMsg.getMessageTo()))));
-            if (newMsg.getMessageCc() != null) addressList.addAll(new ArrayList<String>(Arrays.asList(Utils.getAddresses(newMsg.getMessageCc()))));
-            if (newMsg.getMessageBcc() != null) addressList.addAll(new ArrayList<String>(Arrays.asList(Utils.getAddresses(newMsg.getMessageBcc()))));
-            
-            for(String value : addressList) {
-              addressMap.put(value, value) ;
-            }
-            newMsg.setAddresses(addressMap.values().toArray(new String[] {}));
-            newMsg.setRoot(newMsg.getId());
-          }
+          newMsg  = storage_.groupConversation(sProvider, username, accountId, newMsg) ;
           
           storage_.saveMessage(sProvider, username, account.getId(), newMsg, true);
        
@@ -451,25 +427,23 @@ public class MailServiceImpl implements MailService{
               storeFolder.setLabel(account.getIncomingFolder()) ;
               storeFolder.setPersonalFolder(false) ;
             }  
+            storeFolder.setNumberOfUnreadMessage((storeFolder.getNumberOfUnreadMessage() + 1)) ;
+            storeFolder.setTotalMessage(storeFolder.getTotalMessage() + 1) ;
 
-            if (rootMsg == null || (!rootIsUnread)) {
-              storeFolder.setNumberOfUnreadMessage((storeFolder.getNumberOfUnreadMessage() + 1)) ;
-            } 
-            if (rootMsg == null) {
-              storeFolder.setTotalMessage(storeFolder.getTotalMessage() + 1) ;
-            }
             storage_.saveFolder(sProvider, username, account.getId(), storeFolder) ;
           }
-          
           i ++ ;
         }
-      } 
-      folder.close(false);
-      store.close();
-      if (totalNew > 0) execActionFilter(sProvider, username, accountId, messageList);
+        folder.close(false);
+        store.close();
+        storage_.execActionFilter(sProvider, username, accountId, checkTime);
+      }
     }  catch (Exception e) { 
       e.printStackTrace();
     }
+    Date endDate = new Date();
+    long diff = endDate.getTime() - checkTime.getTime().getTime();
+    System.out.println("Different Time ========= >>>>> " + diff);
     return messageList;
   }
 
@@ -544,77 +518,6 @@ public class MailServiceImpl implements MailService{
       messageBody.append(inputLine + "\n");
     }
     newMail.setMessageBody(messageBody.toString());
-  }
-  
-  private Message getRootMessage(SessionProvider sProvider, String username, String accountId, Message newMsg) throws Exception {
-    MessageFilter filter = new MessageFilter("");
-    filter.setAccountId(accountId);
-    filter.setSubjectCondition(Utils.CONDITION_IS);
-    String subject = newMsg.getSubject() ;
-    if (subject.indexOf("Re:") == 0) {
-      subject = subject.substring(3, subject.length()).trim();
-    } else if(subject.indexOf("Fwd:") == 0) {
-      subject = subject.substring(4, subject.length()).trim();
-    }
-    filter.setSubject(subject);
-    List<Message> msgList = getMessages(sProvider, username, filter).getAll(username);
-    if (msgList != null && msgList.size() > 0) {
-      for (Message msg : msgList) {
-        if (msg.isRootConversation()) {
-          List<String> addressList = new ArrayList<String>() ;
-          if (msg.getAddresses() != null && msg.getAddresses().length > 0) {
-            addressList.addAll(new ArrayList<String>(Arrays.asList(msg.getAddresses())));
-          }
-          if (msg.getFrom() != null) addressList.addAll(new ArrayList<String>(Arrays.asList(Utils.getAddresses(msg.getFrom()))));
-          if (msg.getMessageTo() != null) addressList.addAll(new ArrayList<String>(Arrays.asList(Utils.getAddresses(msg.getMessageTo()))));
-          if (msg.getMessageCc() != null) addressList.addAll(new ArrayList<String>(Arrays.asList(Utils.getAddresses(msg.getMessageCc()))));
-          if (msg.getMessageBcc() != null) addressList.addAll(new ArrayList<String>(Arrays.asList(Utils.getAddresses(msg.getMessageBcc()))));
-          if (addressList.indexOf(Utils.getAddresses(newMsg.getFrom())[0]) > -1) {
-            return msg;
-          }
-        }
-      }
-    }
-    return null;
-  }
-  
-  private Message updateRootMessage(SessionProvider sProvider, String username, String accountId, Message rootMsg, Message newMsg) throws Exception {
-    Map<String, String> addressMap = new HashMap<String, String> () ;
-    List<String> addressList = new ArrayList<String>();
-    if (rootMsg.getAddresses() != null && rootMsg.getAddresses().length > 0) {
-      addressList.addAll(new ArrayList<String>(Arrays.asList(rootMsg.getAddresses())));
-    }
-    for(String value : addressList) {
-      addressMap.put(value, value) ;
-    }
-    
-    Map<String, String> newAddressMap = new HashMap<String, String> () ;
-    List<String> newAddressList = new ArrayList<String>(); 
-    if (newMsg.getFrom() != null) newAddressList.addAll(new ArrayList<String>(Arrays.asList(Utils.getAddresses(newMsg.getFrom()))));
-    if (newMsg.getMessageTo() != null) newAddressList.addAll(new ArrayList<String>(Arrays.asList(Utils.getAddresses(newMsg.getMessageTo()))));
-    if (newMsg.getMessageCc() != null) newAddressList.addAll(new ArrayList<String>(Arrays.asList(Utils.getAddresses(newMsg.getMessageCc()))));
-    if (newMsg.getMessageBcc() != null) newAddressList.addAll(new ArrayList<String>(Arrays.asList(Utils.getAddresses(newMsg.getMessageBcc()))));
-    
-    for(String value : newAddressList) {
-      newAddressMap.put(value, value) ;
-    }
-    addressMap.putAll(newAddressMap);
-    newMsg.setAddresses(addressMap.values().toArray(new String[]{}));
-    
-    List<String> msgIdList = new ArrayList<String>();
-    if (rootMsg.getMessageIds() != null && rootMsg.getMessageIds().length > 0) {
-      msgIdList.addAll(new ArrayList<String>(Arrays.asList(rootMsg.getMessageIds())));
-    }
-    msgIdList.add(newMsg.getId());
-    newMsg.setMessageIds(msgIdList.toArray(new String[]{}));
-    
-    rootMsg.setIsRootConversation(false);
-    rootMsg.setUnread(false);
-    rootMsg.setRoot(newMsg.getId());
-    rootMsg.setAddresses(new String[] {});
-    rootMsg.setMessageIds(new String[] {});
-    saveMessage(sProvider, username, accountId, rootMsg, false);
-    return newMsg ;
   }
   
   public void createAccount(SessionProvider sProvider, String username, Account account) throws Exception {
@@ -719,37 +622,6 @@ public class MailServiceImpl implements MailService{
     return emlImportExport_.exportMessage(sProvider, username, accountId, messageId) ; 
   }
   
-  private void execActionFilter(SessionProvider sProvider, String username, String accountId, List<Message> msgList) throws Exception {
-    List<MessageFilter> msgFilters = getFilters(sProvider, username, accountId);
-    for (MessageFilter filter : msgFilters) {
-      String applyFolder = filter.getApplyFolder() ;
-      String applyTag = filter.getApplyTag() ;
-      filter.setAccountId(accountId);
-      List<Message> msgFilterList = getMessages(sProvider, username, filter).getAll(username);
-      if (msgFilterList != null && msgFilterList.size() > 0) {
-        for (Message msgFilter : msgFilterList) {
-          for (Message msg : msgList) {
-            if (msgFilter.getId().equals(msg.getId())) {
-              if (!Utils.isEmptyField(applyFolder) && (getFolder(sProvider, username, accountId, applyFolder) != null)) {
-                moveMessages(sProvider, username, accountId, msg.getId(), msg.getFolders()[0], applyFolder);               
-              }
-              if (!Utils.isEmptyField(applyTag)) {
-                Tag tag = getTag(sProvider, username, accountId, applyTag);
-                if (tag != null) {
-                  List<String> msgIdList = new ArrayList<String>();
-                  msgIdList.add(msg.getId());
-                  List<Tag> tagList = new ArrayList<Tag>();
-                  tagList.add(tag);
-                  addTag(sProvider, username, accountId, msgIdList , tagList);
-                }
-              }
-            }
-          }
-        }
-      }
-    } 
-  }
-  
   public void runFilter(SessionProvider sProvider, String username, String accountId, MessageFilter filter) throws Exception {
     List<Message> msgList = getMessages(sProvider, username, filter).getAll(username);
     List<String> msgIdList = new ArrayList<String>();
@@ -759,7 +631,9 @@ public class MailServiceImpl implements MailService{
     for (Message msg : msgList) {
       Folder folder = getFolder(sProvider, username, accountId, applyFolder);
       if (folder != null && (msg.getFolders()[0] != applyFolder)) {
-        moveMessages(sProvider, username, accountId, msg.getId(), msg.getFolders()[0], applyFolder);
+        Folder appFolder = getFolder(sProvider, username, accountId, applyFolder);
+        if (appFolder != null)
+          moveMessages(sProvider, username, accountId, msg.getId(), msg.getFolders()[0], applyFolder);
       }
       msgIdList.add(msg.getId());
     }

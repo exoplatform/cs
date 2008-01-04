@@ -16,21 +16,6 @@
  */
 package org.exoplatform.mail.service.test;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-
-import org.exoplatform.mail.service.Account;
-import org.exoplatform.mail.service.Attachment;
-import org.exoplatform.mail.service.BufferAttachment;
-import org.exoplatform.mail.service.Folder;
-import org.exoplatform.mail.service.Message;
-import org.exoplatform.mail.service.MessageFilter;
-import org.exoplatform.mail.service.MessageHeader;
-import org.exoplatform.mail.service.Tag;
 
 /**
  * Created by The eXo Platform SARL
