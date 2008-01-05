@@ -1391,3 +1391,56 @@
 .UIContactsPopup .SelectFileFrame {
 	width: 300px;
 }
+
+/******************************* UIAddNewContact ******************************/
+
+.UIAddNewContact {
+	background: #F3F3F3;
+	border: 1px solid #c9c9c9;
+	padding: 10px;
+	margin: 10px 10px 0px 10px;
+}
+
+.UIAddNewContact .AddGroupContact .HorizontalLayout  td.FieldLabel {
+	width: 240px;
+}
+
+.UIAddNewContact .UIForm .HorizontalLayout {
+	border: 1px solid #c9c9c9;
+	padding: 10px;
+	background: white;
+}
+
+.UIAddNewContact .ProfileContent {
+	margin-top: 10px;
+}
+
+.UIAddNewContact .ProfileContent .HorizontalLayout select {
+	width: 61px;
+}
+
+.UIAddNewContact .ProfileContent .UIFormGrid {
+	float: left;
+	width: 480px;
+}
+
+.UIAddNewContact .ProfileContent .AvatarContent {
+	float: left;
+	text-align: center;
+	line-height: 25px;
+}
+
+.UIAddNewContact .ProfileContent .AvatarContent .Avatar {
+	padding: 20px 30px;
+	border: 1px solid #c9c9c9;
+	margin: 5px;
+}
+
+.UIAddNewContact .ProfileContent .AvatarContent img {
+	border: 1px solid #545454;
+}
+
+.UIAddNewContact .ProfileContent .AvatarContent .Action a {
+	color: #050E80;
+}
+

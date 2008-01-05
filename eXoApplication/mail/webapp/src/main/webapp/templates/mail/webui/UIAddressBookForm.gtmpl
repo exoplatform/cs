@@ -32,12 +32,14 @@
                     <div class="Label">Delete</div>
                   </div>
                 </a>
+                <!-- 
                 <div class="SearchForm">
                   <a href="#"><div title="Search" class="Search"><span/></div></a>
                   <input type="text" name="search" id="search" class="Input"/>
                   <div class="LabelSearch">Search:</div>
                   <div style="clear: right;"><span/></div>
                 </div>
+                -->
               </div>
             </div>
           </div>
