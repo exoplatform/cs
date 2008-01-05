@@ -222,6 +222,9 @@ public class UITopicDetail extends UIForm	{
 		if(this.maxPost > 0)
 			pageList.setPageSize(this.maxPost) ;
 		this.getChild(UIForumPageIterator.class).updatePageList(this.pageList) ;
+		if(IdPostView.equals("true")){
+			getChild(UIForumPageIterator.class).setSelectPage(pageList.getAvailablePage()) ;
+		}
 	}
 	
 	@SuppressWarnings({ "unchecked", "unused" })
@@ -262,7 +265,7 @@ public class UITopicDetail extends UIForm	{
 			topicDetail.viewTopic = false ;
 			popupContainer.setId("UIAddPostContainer") ;
 			popupAction.activate(popupContainer, 670, 440) ;
-			topicDetail.getChild(UIForumPageIterator.class).setSelectPage(topicDetail.pageList.getAvailablePage()) ;
+			//topicDetail.getChild(UIForumPageIterator.class).setSelectPage(topicDetail.pageList.getAvailablePage()) ;
 			event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
 		}
 	}
@@ -380,7 +383,7 @@ public class UITopicDetail extends UIForm	{
 			topicDetail.viewTopic = false ;
 			popupContainer.setId("UIQuoteContainer") ;
 			popupAction.activate(popupContainer, 670, 440) ;
-			topicDetail.getChild(UIForumPageIterator.class).setSelectPage(topicDetail.pageList.getAvailablePage()) ;
+			//topicDetail.getChild(UIForumPageIterator.class).setSelectPage(topicDetail.pageList.getAvailablePage()) ;
 			event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
 		}
 	}

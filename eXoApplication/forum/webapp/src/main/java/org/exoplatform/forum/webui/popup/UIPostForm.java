@@ -287,7 +287,7 @@ public class UIPostForm extends UIForm implements UIPopupComponent {
 					}
 				} else {
 					uiForm.forumService.savePost(ForumUtils.getSystemProvider(), uiForm.categoryId, uiForm.forumId, uiForm.topicId, post, true) ;
-					topicDetailContainer.getChild(UITopicDetail.class).setIdPostView(post.getId());
+					topicDetailContainer.getChild(UITopicDetail.class).setIdPostView("true");
 				}
 				forumPortlet.cancelAction() ;
 				event.getRequestContext().addUIComponentToUpdateByAjax(topicDetailContainer);
