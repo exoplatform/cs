@@ -945,6 +945,7 @@ public class JCRDataStorage{
       Node node = it.nextNode();
       if (node.isNodeType(Utils.EXO_SPAM_FILTER)) {
         spamFilterNode = node;
+        break ;
       }
     }
     SpamFilter spamFilter = new SpamFilter();
