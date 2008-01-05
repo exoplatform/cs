@@ -224,7 +224,7 @@ public class UIMessageList extends UIForm {
         Message message = mailSrv.getMessageById(SessionsUtils.getSessionProvider(), username, accountId_, msg.getMessageIds()[i]);
         if (message != null) msgList.add(message) ;
       }
-    }
+    } else if (msg.isRootConversation()) msgList.add(msg);
     return msgList ;
   }
   
@@ -529,9 +529,16 @@ public class UIMessageList extends UIForm {
       } else {
         appliedMsgList = uiMessageList.getAppliedMessage();
       }
-      for (Message message : appliedMsgList) {
-        mailSrv.moveMessages(SessionsUtils.getSessionProvider(), username, accountId, message.getId(), message.getFolders()[0], Utils.createFolderId(accountId, Utils.FD_TRASH, false));
+      String trashFolderId = Utils.createFolderId(accountId, Utils.FD_TRASH, false) ;
+      if (uiMessageList.getSelectedFolderId().equals(trashFolderId)) { 
+        List<String> appliedMsgIdList = new ArrayList<String>();
+        for (Message message : appliedMsgList) appliedMsgIdList.add(message.getId()) ;
+        mailSrv.removeMessage(SessionsUtils.getSessionProvider(), username, accountId, appliedMsgIdList);
+      } else {
+        for (Message message : appliedMsgList)
+          mailSrv.moveMessages(SessionsUtils.getSessionProvider(), username, accountId, message.getId(), message.getFolders()[0], trashFolderId);
       }
+        
       uiMessageList.updateList();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageArea);
