@@ -1,11 +1,13 @@
+<%
+  import org.exoplatform.mail.webui.UISelectFolder;
+%>
 <% uiform.begin() %>
   <div class="UIAddToContact">
     <div class="HorizontalLayout">
       <table class="UIFormGrid">
         <tr>
-          <td class="FieldLabel">Folder</td>
           <td class="FieldComponent">
-            <%uicomponent.renderField(uicomponent.SELECT_FOLDER)%>
+            <%uicomponent.renderChild(UISelectFolder.class)%>
           </td>
         </tr>
       </table>

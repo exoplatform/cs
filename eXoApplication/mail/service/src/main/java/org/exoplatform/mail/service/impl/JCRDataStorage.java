@@ -1117,10 +1117,6 @@ public class JCRDataStorage{
       }
       
       sess.save();
-    } else {
-      newMsg.setMessageIds(new String[] {newMsg.getId()});
-      newMsg.setAddresses(newAddressMap.values().toArray(new String[] {}));
-      newMsg.setRoot(newMsg.getId());
     }
     
     return newMsg;

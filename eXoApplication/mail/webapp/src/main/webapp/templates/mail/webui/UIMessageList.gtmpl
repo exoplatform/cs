@@ -163,7 +163,8 @@
             long fromIndex = (pageList.getCurrentPage()-1)* pageList.getPageSize() + 1;
             long endIndex = fromIndex + pageList.getPageSize() - 1;
             if (pageList.getCurrentPage() == pageList.getAvailablePage()) endIndex = pageList.getAvailable();
-            mailRange = fromIndex + " to " + endIndex + " of " + pageList.getAvailable();
+            if (fromIndex < endIndex) mailRange = fromIndex + " to " + endIndex + " of " + pageList.getAvailable();
+            else if (fromIndex == endIndex) mailRange = fromIndex + " of " + pageList.getAvailable()
           }         
         %>
         <a title="First Page" class="$cssPreviousPage FirstPageArrow" href="<%=uicomponent.event("FirstPage")%>"/></a>        

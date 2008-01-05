@@ -412,6 +412,10 @@ public class MailServiceImpl implements MailService{
             setPart(msg, newMsg, username);
           }
           
+          newMsg.setMessageIds(new String[] {newMsg.getId()});
+          newMsg.setAddresses(new String[] {});
+          newMsg.setRoot(newMsg.getId());
+          
           newMsg  = storage_.groupConversation(sProvider, username, accountId, newMsg) ;
           
           storage_.saveMessage(sProvider, username, account.getId(), newMsg, true);

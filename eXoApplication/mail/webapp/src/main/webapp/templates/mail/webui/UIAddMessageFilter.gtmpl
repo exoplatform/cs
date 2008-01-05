@@ -1,3 +1,6 @@
+<%
+  import org.exoplatform.mail.webui.UISelectFolder;
+%>
 <%uiform.begin()%>  
 <div class="UIAddMessageFilter" >
 
@@ -49,7 +52,7 @@
 			      <table class="UIFormGrid">
 			        <tr>
 			  	      <td class="FieldLabel"><%=uicomponent.getLabel(uicomponent.FILTER_APPLY_FOLDER)%>:</td>
-			  	      <td class="FieldComponent" style="width: 270px;"><%uicomponent.renderField(uicomponent.FILTER_APPLY_FOLDER)%></td>
+			  	      <td class="FieldComponent" style="width: 270px;"><%uicomponent.renderChild(UISelectFolder.class)%></td>
 			        </tr>
               <tr>
                 <td class="FieldLabel"><%=uicomponent.getLabel(uicomponent.FILTER_APPLY_TAG)%>:</td>

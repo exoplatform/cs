@@ -21,7 +21,6 @@ import java.util.List;
 
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.SessionsUtils;
-import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.Tag;
@@ -31,6 +30,7 @@ import org.exoplatform.mail.webui.UIMessageArea;
 import org.exoplatform.mail.webui.UIMessageList;
 import org.exoplatform.mail.webui.UINavigationContainer;
 import org.exoplatform.mail.webui.UISelectAccount;
+import org.exoplatform.mail.webui.UISelectFolder;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -113,11 +113,9 @@ public class UIAddMessageFilter extends UIForm implements UIPopupComponent{
     String username = MailUtils.getCurrentUser();
     String accountId = MailUtils.getAccountId();
     MailService mailSrv = MailUtils.getMailService();
-    List<SelectItemOption<String>> folderList = new ArrayList<SelectItemOption<String>>();   
-    for (Folder folder : mailSrv.getFolders(SessionsUtils.getSessionProvider(), username, accountId)) {   
-      folderList.add(new SelectItemOption<String>(folder.getName(), folder.getId()));       
-    }    
-    addUIFormInput(new UIFormSelectBox(FILTER_APPLY_FOLDER, FILTER_APPLY_FOLDER, folderList));
+    
+    addUIFormInput(new UISelectFolder("UISelectFolder"));
+    
     List<SelectItemOption<String>> tagList = new ArrayList<SelectItemOption<String>>();   
     tagList.add(new SelectItemOption<String>("-- Choose tag --", ""));       
     for (Tag tag : mailSrv.getTags(SessionsUtils.getSessionProvider(), username, accountId)) {   
@@ -219,11 +217,11 @@ public class UIAddMessageFilter extends UIForm implements UIPopupComponent{
   }
   
   public String getApplyFolder() throws Exception {
-    return getUIStringInput(FILTER_APPLY_FOLDER).getValue();
+    return getChild(UISelectFolder.class).getSelectedValue();
   }
   
   public void setApplyFolder(String s) throws Exception {
-    getUIStringInput(FILTER_APPLY_FOLDER).setValue(s);
+    getChild(UISelectFolder.class).setSelectedValue(s);
   }
   
   public String getApplyTag() throws Exception {

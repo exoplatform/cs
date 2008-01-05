@@ -21,21 +21,19 @@ import java.util.List;
 
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.SessionsUtils;
-import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.webui.UIFolderContainer;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UIMessageArea;
 import org.exoplatform.mail.webui.UIMessageList;
+import org.exoplatform.mail.webui.UISelectFolder;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
-import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
-import org.exoplatform.webui.form.UIFormSelectBox;
 
 
 /**
@@ -59,18 +57,7 @@ public class UIMoveMessageForm extends UIForm implements UIPopupComponent {
   public List<Message> messageList=new ArrayList<Message>();  
   
   public UIMoveMessageForm() throws Exception { 
-    MailService mailSrv = MailUtils.getMailService();
-    String username = MailUtils.getCurrentUser();
-    String accountId = MailUtils.getAccountId();
-    
-    List<SelectItemOption<String>> optionList = new ArrayList<SelectItemOption<String>>();   
-
-    for (Folder folder : mailSrv.getFolders(SessionsUtils.getSessionProvider(), username, accountId)) {   
-      if(!folder.getName().equals("Sent"))
-        optionList.add(new SelectItemOption<String>(folder.getName(), folder.getId()));       
-    }    
-
-    addUIFormInput(new UIFormSelectBox(SELECT_FOLDER, SELECT_FOLDER, optionList));
+    addUIFormInput(new UISelectFolder("UISelectFolder"));
   }
   
   public void setMessageList(List<Message> messageList){
@@ -91,8 +78,7 @@ public class UIMoveMessageForm extends UIForm implements UIPopupComponent {
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType((UIMessageList.class));
       String username = uiPortlet.getCurrentUser() ;
       String accountId =  MailUtils.getAccountId();
-      String destFolder = uiMoveMessageForm.getUIFormSelectBox(SELECT_FOLDER).getValue();     
-
+      String destFolder = uiMoveMessageForm.getChild(UISelectFolder.class).getSelectedValue();
       for(Message message: uiMoveMessageForm.getMessageList()) {
          mailSrv.moveMessages(SessionsUtils.getSessionProvider(), username, accountId, message.getId(), message.getFolders()[0], destFolder);
       }       
