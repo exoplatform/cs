@@ -88,7 +88,10 @@ public class UIAddGroupForm extends UIForm implements UIPopupComponent{
   
   static  public class CancelActionListener extends EventListener<UIAddGroupForm> {
     public void execute(Event<UIAddGroupForm> event) throws Exception {
-      
+      UIAddGroupForm uiAddGroup = event.getSource();
+      UIPopupAction uiPopupAction = uiAddGroup.getAncestorOfType(UIPopupAction.class) ; 
+      uiPopupAction.deActivate() ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }
   }
 
