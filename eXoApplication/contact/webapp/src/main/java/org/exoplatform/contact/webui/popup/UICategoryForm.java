@@ -25,6 +25,7 @@ import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.webui.UIAddressBooks;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContacts;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -62,9 +63,10 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
     addUIFormInput(new UIFormTextAreaInput(FIELD_DESCRIPTION_INPUT, FIELD_DESCRIPTION_INPUT, null)) ;    
   }
   
+  /*
   public String getGroupId() { return groupId_ ; }
   public void setGroupId(String group) { groupId_ = group ; }
-  
+  */
   public String[] getActions() { return new String[] {"Save", "Cancel"} ; }
   public void activate() throws Exception { }
   public void deActivate() throws Exception { }
@@ -75,12 +77,11 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
   public void setValues(String groupId) throws Exception {
     ContactService contactService = ContactUtils.getContactService();
     String username = ContactUtils.getCurrentUser() ;
-    ContactGroup contactGroup = contactService.getGroup(SessionsUtils.getSessionProvider(), username, groupId) ;
-    //contactService.getsh
-    
-
-    
-    
+    SessionProvider sessionProvider = SessionsUtils.getSessionProvider() ;
+    ContactGroup contactGroup = contactService.getGroup(sessionProvider, username, groupId) ;
+    if (contactGroup == null) {
+      contactGroup = contactService.getSharedGroup(sessionProvider, username, groupId) ;      
+    }   
     if (contactGroup != null) {
       groupId_ = groupId ;
       getUIStringInput(FIELD_CATEGORYNAME_INPUT).setValue(contactGroup.getName()) ;
@@ -91,6 +92,9 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
   static  public class SaveActionListener extends EventListener<UICategoryForm> {
     public void execute(Event<UICategoryForm> event) throws Exception {
       UICategoryForm uiCategoryForm = event.getSource() ;
+      UIContactPortlet uiContactPortlet = uiCategoryForm.getAncestorOfType(UIContactPortlet.class) ;
+      UIAddressBooks uiAddressBook = uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class) ;
+      
       String  groupName = uiCategoryForm.getUIStringInput(FIELD_CATEGORYNAME_INPUT).getValue(); 
       UIApplication uiApp = uiCategoryForm.getAncestorOfType(UIApplication.class) ;
       if (ContactUtils.isEmpty(groupName)) {
@@ -105,7 +109,7 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
       group.setDescription(uiCategoryForm.getUIFormTextAreaInput(FIELD_DESCRIPTION_INPUT).getValue()) ;
       ContactUtils.getContactService().saveGroup(
           SessionsUtils.getSessionProvider(), ContactUtils.getCurrentUser(), group, uiCategoryForm.isNew_) ; 
-      UIContactPortlet uiContactPortlet = uiCategoryForm.getAncestorOfType(UIContactPortlet.class) ;
+      
       UIPopupContainer popupContainer = uiCategoryForm.getAncestorOfType(UIPopupContainer.class) ;
       if (popupContainer != null) {
         UICategorySelect uiCategorySelect = popupContainer.findFirstComponentOfType(UICategorySelect.class);
@@ -133,14 +137,11 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
           event.getRequestContext().addUIComponentToUpdateByAjax(action) ;
         } 
       } else {
-        UIAddressBooks uiAddressBook = uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook) ;
         UIContacts contacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;        
         event.getRequestContext().addUIComponentToUpdateByAjax(contacts) ;
         uiContactPortlet.cancelAction() ;
       }
-      
-      UIAddressBooks uiAddressBook = uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook) ; 
     }
   }

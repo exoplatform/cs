@@ -196,4 +196,8 @@ public class ContactServiceImpl implements ContactService {
   public DataPageList searchContact(SessionProvider sProvider, String username, ContactFilter filter) throws Exception {
     return storage_.searchContact(sProvider, username, filter) ;
   }
+  public ContactGroup getSharedGroup(SessionProvider sProvider, String username, String groupId) throws Exception {
+    return storage_.getSharedGroup(sProvider, username, groupId) ;
+  }
+  
 }

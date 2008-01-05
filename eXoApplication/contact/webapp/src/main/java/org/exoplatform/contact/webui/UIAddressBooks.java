@@ -51,7 +51,6 @@ import org.exoplatform.webui.event.EventListener;
  */
 
 @ComponentConfig(template = "app:/templates/contact/webui/UIAddressBooks.gtmpl", events = {
-
     @EventConfig(listeners = UIAddressBooks.AddContactActionListener.class),
     @EventConfig(listeners = UIAddressBooks.AddAddressActionListener.class),
     @EventConfig(listeners = UIAddressBooks.ImportAddressActionListener.class), 
@@ -64,7 +63,9 @@ import org.exoplatform.webui.event.EventListener;
     @EventConfig(listeners = UIAddressBooks.SelectPublicGroupActionListener.class),
     @EventConfig(listeners = UIAddressBooks.SelectSharedGroupActionListener.class),
     @EventConfig(listeners = UIAddressBooks.PrintActionListener.class),
-    @EventConfig(listeners = UIAddressBooks.SendEmailActionListener.class) })
+    @EventConfig(listeners = UIAddressBooks.SendEmailActionListener.class) }
+)
+    
 public class UIAddressBooks extends UIComponent {
   private String selectedGroup = null;
   private Map<String, String> privateGroupMap_ = new HashMap<String, String>() ;
@@ -230,7 +231,7 @@ public class UIAddressBooks extends UIComponent {
       UIPopupAction popupAction = uiContactPortlet.getChild(UIPopupAction.class);
       UICategoryForm uiCategoryForm = popupAction.activate(UICategoryForm.class, 500) ;
       String groupId = event.getRequestContext().getRequestParameter(OBJECTID);
-      uiCategoryForm.setValues(groupId);
+      uiCategoryForm.setValues(groupId) ;
       uiCategoryForm.setNew(false) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction);
     }

@@ -305,6 +305,22 @@ public class JCRDataStorage{
       return getGroup(contactGroupHomeNode.getNode(str)) ;
     return null;
   }
+  
+  public ContactGroup getSharedGroup(SessionProvider sProvider, String username, String groupId) throws Exception {
+    Node sharedAddressBookHome = getSharedAddressBookHome(SessionProvider.createSystemProvider()) ;
+    if(sharedAddressBookHome.hasNode(username)) {
+      Node userNode = sharedAddressBookHome.getNode(username) ;
+      PropertyIterator iter = userNode.getReferences() ;
+      Node addressBook ;
+      while(iter.hasNext()) {
+        addressBook = iter.nextProperty().getParent() ;
+        if(addressBook.getProperty("exo:id").getString().equals(groupId)) {
+          return getGroup(addressBook) ; 
+        }
+      }      
+    } 
+    return null;
+  }
 
   public List<ContactGroup> getGroups(SessionProvider sProvider, String username) throws Exception {
     Node contactGroupHomeNode = getUserContactGroupHome(sProvider, username);
@@ -458,16 +474,35 @@ public class JCRDataStorage{
 
   public void saveGroup(SessionProvider sProvider, String username, ContactGroup group, boolean isNew) throws Exception {
     Node groupHomeNode = getUserContactGroupHome(sProvider, username);
-    Node groupNode;
+    Node sharedAddressBookHome = getSharedAddressBookHome(sProvider) ;
+    Node groupNode = null ;
     if (isNew) {
       groupNode = groupHomeNode.addNode(group.getId(), "exo:contactGroup");
       groupNode.setProperty("exo:id", group.getId());
-    } else {
+    } else if (groupHomeNode.hasNode(group.getId())){
       groupNode = groupHomeNode.getNode(group.getId());
-    }    
-    groupNode.setProperty("exo:name", group.getName());
-    groupNode.setProperty("exo:description", group.getDescription());
-    groupHomeNode.getSession().save();
+    } else {
+      
+      if(sharedAddressBookHome.hasNode(username)) {
+        Node userNode = sharedAddressBookHome.getNode(username) ;
+        PropertyIterator iter = userNode.getReferences() ;
+        Node addressBook ;
+        while(iter.hasNext()) {
+          addressBook = iter.nextProperty().getParent() ;
+          if(addressBook.getProperty("exo:id").getString().equals(group.getId())) {
+            groupNode = addressBook ;
+            break ;
+          }
+        }      
+      }   
+    }
+    if (groupNode != null) {
+      groupNode.setProperty("exo:name", group.getName());
+      groupNode.setProperty("exo:description", group.getDescription());
+      groupHomeNode.getSession().save();
+      sharedAddressBookHome.getSession().save() ;
+    }
+    
   }
   
   private Node getSharedAddressBookHome(SessionProvider sProvider) throws Exception {
