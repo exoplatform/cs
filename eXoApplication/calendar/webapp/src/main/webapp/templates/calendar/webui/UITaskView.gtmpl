@@ -59,30 +59,32 @@
   	 	      </thead>
   	 	      	<tbody>
 								<%
-			  					for(task in uicomponent.getEvents()){
+			  					for(event in uicomponent.getEvents()){
+			  						rowStyle = "" ;
+  									if(event.getId().equals(uicomponent.getLastUpdatedEventId())) {rowStyle = "background:#B0E0E6;";}
 			  						attachIcon = "" ;
-  									if(!task.getAttachment().isEmpty()) {attachIcon = "AttachmentIcon" ;}
-  									String actionLink = uicomponent.event("ViewDetail", task.getId()+"&calendarId="+task.getCalendarId()+"&calType="+task.getCalType()) ;	
+  									if(!event.getAttachment().isEmpty()) {attachIcon = "AttachmentIcon" ;}
+  									String actionLink = uicomponent.event("ViewDetail", event.getId()+"&calendarId="+event.getCalendarId()+"&calType="+event.getCalType()) ;	
 		  					%>
-			  					<tr class="UIListViewRow" eventid="<%=task.getId()%>" calid="<%=task.getCalendarId()%>" calType=<%=task.getCalType()%>>
-										<td><%uicomponent.renderField(uicomponent.getChildById(task.getId()))%></td>
+			  					<tr class="UIListViewRow" style="$rowStyle" eventid="<%=event.getId()%>" calid="<%=event.getCalendarId()%>" calType=<%=event.getCalType()%>>
+										<td><%uicomponent.renderField(uicomponent.getChildById(event.getId()))%></td>
 	  					      <td style="padding: 0px;"><div class="$attachIcon" >&nbsp;</div></td>
 		  							<td class="text">
 		  								<a href="$actionLink" class="ControlButton">
-												<%=task.getSummary()%>
+												<%=event.getSummary()%>
 											</a>	
 		  							</td>
-										<td class="text"><div class="<%=(uicomponent.getPriority(task.getPriority()) == null)? "" :  uicomponent.getPriority(task.getPriority())%>PriorityIcon">&nbsp;</div></td>
-										<td class="text"><%=(task.getEventState() == null)? "" : task.getEventState()%></td>
+										<td class="text"><div class="<%=(uicomponent.getPriority(event.getPriority()) == null)? "" :  uicomponent.getPriority(event.getPriority())%>PriorityIcon">&nbsp;</div></td>
+										<td class="text"><%=(event.getEventState() == null)? "" : event.getEventState()%></td>
 										<td class="text">
 										<%
-										 def amount = task.getToDateTime().getTime() - task.getFromDateTime().getTime();
+										 def amount = event.getToDateTime().getTime() - event.getFromDateTime().getTime();
 										 long days = (((amount/1000)/60)/60)/24 ; 
 										%>
 										$days days
 										</td>
 										<td class="text">
-											<%=(task.getTaskDelegator() == null)? "": task.getTaskDelegator()%>
+											<%=(event.getTaskDelegator() == null)? "": event.getTaskDelegator()%>
 										</td>
 									</tr>		
 		  					<%

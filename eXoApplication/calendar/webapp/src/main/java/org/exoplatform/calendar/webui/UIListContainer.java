@@ -30,7 +30,7 @@ import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
 
 @ComponentConfig(
     lifecycle = UIContainerLifecycle.class
-   // template =  "app:/templates/calendar/webui/UIListContainer.gtmpl"
+    // template =  "app:/templates/calendar/webui/UIListContainer.gtmpl"
 )
 public class UIListContainer extends UIContainer implements CalendarView {
   public UIListContainer() throws Exception {
@@ -40,20 +40,22 @@ public class UIListContainer extends UIContainer implements CalendarView {
 
   public void refresh() throws Exception {
     UIListView list = getChild(UIListView.class) ;
-    list.refresh() ;
+    list.refresh(null) ;
     UIPreview view = getChild(UIPreview.class) ;
     if(list.getEvents().length > 0) { 
       list.setSelectedEvent(list.getEvents()[0].getId()) ;  
       view.setEvent(list.getEvents()[0]) ;
+      list.setLastUpdatedEventId(list.getEvents()[0].getId()) ;
     }
     else {
       list.setSelectedEvent(null) ;
       view.setEvent(null) ;
+      list.setLastUpdatedEventId(null) ;
     }
     view.refresh() ;
   }
   public void update() {
-    
+
   }
 
   public void setCurrentCalendar(Calendar value) {
@@ -67,12 +69,13 @@ public class UIListContainer extends UIContainer implements CalendarView {
   }
 
   public String getLastUpdatedEventId() {
-    // TODO Auto-generated method stub
-    return null;
+    return getChild(UIListView.class).getLastUpdatedEventId();
   }
 
   public void setLastUpdatedEventId(String eventId) {
-    // TODO Auto-generated method stub
-    
+    getChild(UIListView.class).setLastUpdatedEventId(eventId) ;
   }
+
+  public boolean isDisplaySearchResult() {return getChild(UIListView.class).isDisplaySearchResult() ;}
+  public void setDisplaySearchResult(boolean show) {getChild(UIListView.class).setDisplaySearchResult(show) ;}
 }

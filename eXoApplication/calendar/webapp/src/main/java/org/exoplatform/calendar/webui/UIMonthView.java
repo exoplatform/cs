@@ -100,19 +100,19 @@ public class UIMonthView extends UICalendarView {
       eventIter.remove() ;
     }
   }
-  protected void addCalendarId(String id) {calendarIds_.put(id,id) ;}
+  /*protected void addCalendarId(String id) {calendarIds_.put(id,id) ;}
   protected Map<String, String> getCalendarIds() {return calendarIds_ ;}
   protected void refreshSelectedCalendarIds() throws Exception {
     CalendarService calendarService = getApplicationComponent(CalendarService.class) ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     for(Calendar c : calendarService.getUserCalendars(SessionsUtils.getSessionProvider(), username, false)) {
-      addCalendarId(c.getId()) ;
+      if(c != null) addCalendarId(c.getId()) ;
     }
-  }
+  }*/
 
   public void refresh() throws Exception {
     System.out.println("\n\n>>>>>>>>>> MONTH VIEW") ;
-    refreshSelectedCalendarIds() ;
+    //refreshSelectedCalendarIds() ;
     refreshEvents() ;
     
     //System.out.println("\n\n Begin month view " + getBeginDateOfMonthView().getTime());

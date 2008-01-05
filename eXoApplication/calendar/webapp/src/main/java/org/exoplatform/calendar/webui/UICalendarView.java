@@ -62,7 +62,7 @@ import org.exoplatform.webui.form.UIFormSelectBox;
 
 public abstract class UICalendarView extends UIForm  implements CalendarView {
   final static protected String EVENT_CATEGORIES = "eventCategories".intern() ;
-  
+
   final public static int TYPE_DAY = 0 ;
   final public static int TYPE_WEEK = 1 ;
   final public static int TYPE_MONTH = 2 ;
@@ -194,7 +194,9 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
     }
     addUIFormInput(new UIFormSelectBox(EVENT_CATEGORIES, EVENT_CATEGORIES, options)) ;
   }
-
+  protected String getSelectedCategory() {
+    return getUIFormSelectBox(EVENT_CATEGORIES).getValue() ;
+  }
   protected String[] getMonthsName() { 
     return monthsMap_.values().toArray(new String[]{})  ;
   }
@@ -466,30 +468,35 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
             e.printStackTrace() ;
             uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.delete-event-error", null, ApplicationMessage.WARNING)) ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            return ;
           }
         }
       } else if(uiCalendarView instanceof UIListView) {
-        List<CalendarEvent> list = ((UIListView)uiCalendarView).getSelectedEvents() ;
-        if(list.isEmpty()) {
+        UIListView uiListView = (UIListView)uiCalendarView ;
+        if(uiListView.getSelectedEvents() .isEmpty()) {
           uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.check-box-required", null)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        } else {
-          try {
-            uiCalendarView.removeEvents(((UIListView)uiCalendarView).getSelectedEvents()) ;
-            ((UIListView)uiCalendarView).refresh() ;
-            UIListContainer  uiListContainer = uiCalendarView.getParent() ;
-            uiListContainer.refresh() ;
-            uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.delete-event-successfully", null)) ;
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-          } catch (Exception e) {
-            e.printStackTrace() ;
-            uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.delete-event-error", null, ApplicationMessage.WARNING)) ;
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-          }
+          return ;
+        }  
+        try {
+
+          uiCalendarView.removeEvents(((UIListView)uiCalendarView).getSelectedEvents()) ;
+          uiListView.refresh(uiListView.getSelectedCategory()) ;
+          UIListContainer  uiListContainer = uiCalendarView.getParent() ;
+          uiListContainer.refresh() ;
+          uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.delete-event-successfully", null)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        
+        } catch (Exception e) {
+          e.printStackTrace() ;
+          uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.delete-event-error", null, ApplicationMessage.WARNING)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
         }
       } else {
         uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.function-not-supported", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
       }
       UIMiniCalendar uiMiniCalendar = uiCalendarView.getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UIMiniCalendar.class) ;
       uiMiniCalendar.updateMiniCal() ;
@@ -765,6 +772,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       uiView.refresh() ;
       UIListContainer uiListContainer = uiView.getAncestorOfType(UIListContainer.class) ;
       if(uiListContainer != null) { 
+        uiListContainer.setLastUpdatedEventId(null) ;
         uiListContainer.getChild(UIPreview.class).setEvent(null) ; 
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiView.getParent());

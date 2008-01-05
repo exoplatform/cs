@@ -109,6 +109,9 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
   public void deActivate() throws Exception {
 
   }
+  public void setSearchValue(String searchValue) {
+    getUIStringInput(TEXT).setValue(searchValue) ;
+  }  
   public String[] getPublicCalendars() throws Exception{
     String[] groups = CalendarUtils.getUserGroups(CalendarUtils.getCurrentUser()) ;
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
@@ -119,7 +122,7 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
       }
     }
     return map.values().toArray(new String[map.values().size()] ) ;
-}
+  }
   static  public class SearchActionListener extends EventListener<UIAdvancedSearchForm> {
     public void execute(Event<UIAdvancedSearchForm> event) throws Exception {
       UIAdvancedSearchForm uiForm = event.getSource() ;
@@ -171,6 +174,7 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
         uiListView.setViewType(UIListView.TYPE_BOTH) ;
         uiListView.setDisplaySearchResult(true) ;
         uiListView.setSelectedEvent(null) ;
+        uiListView.setLastUpdatedEventId(null) ;
         calendarViewContainer.findFirstComponentOfType(UIPreview.class).setEvent(null) ;
         UIActionBar uiActionBar = calendarPortlet.findFirstComponentOfType(UIActionBar.class) ;
         uiActionBar.setCurrentView(UICalendarViewContainer.LIST_VIEW) ;
@@ -187,5 +191,5 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
       UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
       calendarPortlet.cancelAction() ;
     }
-  }  
+  }
 }

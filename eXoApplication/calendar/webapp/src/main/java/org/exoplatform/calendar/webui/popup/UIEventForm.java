@@ -37,6 +37,7 @@ import org.exoplatform.calendar.webui.CalendarView;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
 import org.exoplatform.calendar.webui.UIFormComboBox;
+import org.exoplatform.calendar.webui.UIListContainer;
 import org.exoplatform.calendar.webui.UIMiniCalendar;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -839,8 +840,11 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
             CalendarUtils.getCalendarService().saveGroupEvent(SessionsUtils.getSystemProvider(), calendarId, calendarEvent, uiForm.isAddNew_) ;          
           }
           CalendarView calendarView = (CalendarView)uiViewContainer.getRenderedChild() ;
+          if ( uiForm.isAddNew_ ) {
+            if (calendarView instanceof UIListContainer)((UIListContainer)calendarView).setDisplaySearchResult(false) ;
+            uiViewContainer.refresh() ;
+          }
           calendarView.setLastUpdatedEventId(calendarEvent.getId()) ;
-          uiViewContainer.refresh() ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiViewContainer) ;
           UIMiniCalendar uiMiniCalendar = calendarPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;
           uiMiniCalendar.updateMiniCal() ;
@@ -866,10 +870,10 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       UIEventAttenderTab attendTab = uiForm.getChildById(TAB_EVENTATTENDER) ;
       boolean isCheckFreeTime = attendTab.getUIFormCheckBoxInput(attendTab.FIELD_CHECK_TIME).isChecked() ;
       if(isCheckFreeTime) {
-      	StringBuilder sb = new StringBuilder() ;
+        StringBuilder sb = new StringBuilder() ;
         for(String par : attendTab.getParticipants()) {
-        	if(sb != null && sb.length() > 0) sb.append(",") ;
-        	sb.append(par) ;
+          if(sb != null && sb.length() > 0) sb.append(",") ;
+          sb.append(par) ;
         }
         attendTab.updateParticipants(sb.toString()) ;
       }

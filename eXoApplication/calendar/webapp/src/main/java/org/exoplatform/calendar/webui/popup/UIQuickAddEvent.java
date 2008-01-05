@@ -20,10 +20,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.SessionsUtils;
@@ -31,11 +28,11 @@ import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
-import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.webui.CalendarView;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
 import org.exoplatform.calendar.webui.UIFormComboBox;
+import org.exoplatform.calendar.webui.UIListContainer;
 import org.exoplatform.calendar.webui.UIMiniCalendar;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -154,7 +151,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
       return null ;
     }
   }
-  
+
   private void setEventFromDate(Date value, String timeFormat) {
     UIFormDateTimeInput fromField = getChildById(FIELD_FROM) ;
     UIFormComboBox timeFile = getChildById(FIELD_FROM_TIME) ;
@@ -231,7 +228,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
       return null ;
     }
   }
-  
+
   private List<SelectItemOption<String>> getCalendar() throws Exception {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
@@ -340,6 +337,9 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
         uiMiniCalendar.updateMiniCal() ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
         CalendarView calendarView = (CalendarView)uiContainer.getRenderedChild() ;
+        if (calendarView instanceof UIListContainer) {
+          ((UIListContainer)calendarView).setDisplaySearchResult(false) ;
+        }
         calendarView.setLastUpdatedEventId(calEvent.getId()) ;
         uiContainer.refresh() ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;
@@ -390,7 +390,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
   }
   static  public class CancelActionListener extends EventListener<UIQuickAddEvent> {
     public void execute(Event<UIQuickAddEvent> event) throws Exception {    	
-    	event.getSource().getAncestorOfType(UICalendarPortlet.class).cancelAction() ;
+      event.getSource().getAncestorOfType(UICalendarPortlet.class).cancelAction() ;
     }
   }
 

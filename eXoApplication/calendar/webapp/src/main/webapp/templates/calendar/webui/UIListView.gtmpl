@@ -66,10 +66,12 @@
   	 	  <tbody>
   				<%
   					for(event in uicomponent.getEvents()){
+  					rowStyle = "" ;
+  					if(event.getId().equals(uicomponent.getLastUpdatedEventId())) {rowStyle = "background:#B0E0E6;";}
   					attachIcon = "" ;
   					if(!event.getAttachment().isEmpty()) {attachIcon = "AttachmentIcon" ;}
   					%>
-  						<tr class="UIListViewRow" eventid="<%=event.getId()%>" calid="<%=event.getCalendarId()%>" calType=<%=event.getCalType()%>>
+  						<tr class="UIListViewRow" style="$rowStyle" eventid="<%=event.getId()%>" calid="<%=event.getCalendarId()%>" calType=<%=event.getCalType()%>>
 		  					<%
 		  						String classIcon = event.getEventType() + "Icon" ;
 		  						String actionLink = uicomponent.event("ViewDetail", event.getId()+"&calendarId="+event.getCalendarId()+"&calType="+event.getCalType()) ;		  

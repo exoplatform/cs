@@ -34,6 +34,7 @@ import org.exoplatform.calendar.webui.CalendarView;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
 import org.exoplatform.calendar.webui.UIFormComboBox;
+import org.exoplatform.calendar.webui.UIListContainer;
 import org.exoplatform.calendar.webui.UIMiniCalendar;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -400,7 +401,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
     taskDetailTab.refreshUploadFileList() ;
   }
   protected void setEventReminders(List<Reminder> reminders){
-  	UIEventReminderTab taskDetailTab =  getChildById(TAB_TASKREMINDER) ;
+    UIEventReminderTab taskDetailTab =  getChildById(TAB_TASKREMINDER) ;
     for(Reminder r : reminders) {
       if(Reminder.TYPE_EMAIL.equals(r.getReminderType())) {
         setEmailReminder(true) ;
@@ -418,7 +419,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
       }      
     }
   }
-  
+
   protected List<Reminder>  getEventReminders(Date fromDateTime) {
     List<Reminder> reminders = new ArrayList<Reminder>() ;
     if(getEmailReminder()) { 
@@ -594,8 +595,11 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
             CalendarUtils.getCalendarService().saveGroupEvent(SessionsUtils.getSystemProvider(), calendarId, calendarEvent, uiForm.isAddNew_) ;          
           }
           CalendarView calendarView = (CalendarView)uiViewContainer.getRenderedChild() ;
+          if ( uiForm.isAddNew_ ) {
+            if (calendarView instanceof UIListContainer)((UIListContainer)calendarView).setDisplaySearchResult(false) ;
+            uiViewContainer.refresh() ;
+          }
           calendarView.setLastUpdatedEventId(calendarEvent.getId()) ;
-          uiViewContainer.refresh() ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiViewContainer) ;
           UIMiniCalendar uiMiniCalendar = calendarPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;
           uiMiniCalendar.updateMiniCal() ;

@@ -61,11 +61,13 @@
   	 	  <tbody>
   				<%
   					for(event in uicomponent.getEvents()){
+  						rowStyle = "" ;
+  						if(event.getId().equals(uicomponent.getLastUpdatedEventId())) {rowStyle = "background:#B0E0E6;";}
   						attachIcon = "" ;
-  					if(!event.getAttachment().isEmpty()) {attachIcon = "AttachmentIcon" ;}
-  					String actionLink = uicomponent.event("ViewDetail", event.getId()+"&calendarId="+event.getCalendarId()+"&calType="+event.getCalType()) ;		 
+  						if(!event.getAttachment().isEmpty()) {attachIcon = "AttachmentIcon" ;}
+  						String actionLink = uicomponent.event("ViewDetail", event.getId()+"&calendarId="+event.getCalendarId()+"&calType="+event.getCalType()) ;		 
   				%>
-  						<tr class="UIListViewRow" eventid="<%=event.getId()%>" calid="<%=event.getCalendarId()%>" calType=<%=event.getCalType()%>>
+  						<tr class="UIListViewRow" style="$rowStyle" eventid="<%=event.getId()%>" calid="<%=event.getCalendarId()%>" calType=<%=event.getCalType()%>>
 								<td><%uicomponent.renderField(uicomponent.getChildById(event.getId()))%></td>
 		  					<td style="padding: 0px;"><div class="$attachIcon" >&nbsp;</div></td>
 		  					<td class="text">

@@ -87,10 +87,9 @@ public class UIListView extends UICalendarView {
   }
 
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.webui.UICalendarView#refresh()
-   * duplicate
-   */
+  /**  
+   * @deprecated 
+   **/
   public void refresh() throws Exception{
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
@@ -179,6 +178,7 @@ public class UIListView extends UICalendarView {
       CalendarEvent calendarEvent = null ;
       if(uiListView.getDataMap() != null) {
         calendarEvent = uiListView.getDataMap().get(eventId) ;
+        uiListView.setLastUpdatedEventId(eventId) ;
         if(calendarEvent != null) {
           uiListView.setSelectedEvent(calendarEvent.getId()) ;
           uiPreview.setEvent(calendarEvent);
@@ -202,7 +202,7 @@ public class UIListView extends UICalendarView {
     public void execute(Event<UIListView> event) throws Exception {
       UIListView uiListView = event.getSource() ;
       uiListView.setDisplaySearchResult(false) ;
-      uiListView.refresh() ;
+      uiListView.refresh(null) ;
       UICalendarPortlet uiPortlet = uiListView.getAncestorOfType(UICalendarPortlet.class) ;
       UISearchForm uiSearchForm = uiPortlet.findFirstComponentOfType(UISearchForm.class) ;
       uiSearchForm.reset() ;
