@@ -182,7 +182,6 @@ UIContactDragDrop.prototype.dropCallback = function(dndEvent) {
       checkBoxElement.checked = true ;
       dndEvent.clickObject.appendChild(checkBoxElement) ;
     }
-    
     if (this.foundTargetObjectCatch.className.indexOf('UITags') != -1) {
       eXo.webui.UIForm.submitForm('UIContacts','TagChecked', true) ;
       return ;
@@ -194,8 +193,9 @@ UIContactDragDrop.prototype.dropCallback = function(dndEvent) {
     }
     var contactTypeId = this.foundTargetObjectCatch.getAttribute('tagname') ;
     if (!contactTypeId) {
-      var contactTypeNode = eXo.core.DOMUtil.findDescendantsByClass(this.foundTargetObjectCatch, 'a', 'IconHolder')[0] ;
-      contactTypeId = contactTypeNode.id ;
+//      var contactTypeNode = eXo.core.DOMUtil.findDescendantsByClass(this.foundTargetObjectCatch, 'a', 'IconHolder')[0] ;
+//      contactTypeId = contactTypeNode.id ;
+      contactTypeId = this.foundTargetObjectCatch.id ;
     }
 
     if (eXo.core.DOMUtil.findAncestorByClass(this.foundTargetObjectCatch, 'UITags')) {
