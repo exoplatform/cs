@@ -1066,7 +1066,7 @@ public class JCRDataStorage{
     if (subject.indexOf("Re:") == 0) subject = subject.substring(3, subject.length()).trim();
     else if(subject.indexOf("Fwd:") == 0) subject = subject.substring(4, subject.length()).trim();
     filter.setSubject(subject);
-    filter.setMemberOfConver(new String[]{Utils.getAddresses(newMsg.getFrom())[0]});
+    filter.setMemberOfConver(new String[]{ Utils.getAddresses(newMsg.getFrom())[0] });
     boolean rootIsUnread = true; 
     Message rootMsg = null;
     String queryString = filter.getStatement();
@@ -1094,18 +1094,18 @@ public class JCRDataStorage{
       newMsg.setAddresses(addressMap.values().toArray(new String[]{}));
       
       if (rootMsg.getMessageIds() != null && rootMsg.getMessageIds().length > 0) {
-        List<String> msgIdList = new ArrayList<String>() ;
-        for (String msgId : rootMsg.getMessageIds()) msgIdList.add(msgId) ;
-        msgIdList.add(newMsg.getId()) ;
-        newMsg.setMessageIds(msgIdList.toArray(new String[]{}));
+        int msgNumber = rootMsg.getMessageIds().length ;
+        String[] msgIds = new String[msgNumber + 1] ;
+        for (int i=0 ; i < msgNumber; i++) msgIds[i] = rootMsg.getMessageIds()[i] ;
+        msgIds[msgNumber] = newMsg.getId();
+        newMsg.setMessageIds(msgIds);
       }
       
-      rootMsg.setIsRootConversation(false);
-      rootMsg.setUnread(false);
-      rootMsg.setRoot(newMsg.getId());
-      rootMsg.setAddresses(new String[] {});
-      rootMsg.setMessageIds(new String[] {rootMsg.getId()});
-      saveMessage(sProvider, username, accountId, rootMsg, false);
+      node.setProperty(Utils.EXO_ISROOT, false) ;
+      node.setProperty(Utils.EXO_ISUNREAD, false) ; 
+      node.setProperty(Utils.EXO_ROOT, newMsg.getId()) ;
+      node.setProperty(Utils.EXO_ADDRESSES, new String[]{});
+      node.setProperty(Utils.EXO_MESSAGEIDS, new String[] {rootMsg.getId()}) ;
       
       for (String folderId : newMsg.getFolders()) {
         Node folderNode = getFolderNodeById(sProvider, username, accountId, folderId) ;
@@ -1113,13 +1113,14 @@ public class JCRDataStorage{
           folderNode.setProperty(Utils.EXO_UNREADMESSAGES, folderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong() - 1) ;
         if (rootMsg != null) 
           folderNode.setProperty(Utils.EXO_TOTALMESSAGE , folderNode.getProperty(Utils.EXO_TOTALMESSAGE).getLong() - 1) ;
-      }      
+      }
+      
+      sess.save();
     } else {
       newMsg.setMessageIds(new String[] {newMsg.getId()});
       newMsg.setAddresses(newAddressMap.values().toArray(new String[] {}));
       newMsg.setRoot(newMsg.getId());
     }
-    sess.save();
     
     return newMsg;
   }
