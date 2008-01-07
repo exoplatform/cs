@@ -21,13 +21,24 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.access.SystemIdentity;
 import org.exoplatform.services.jcr.ext.app.SessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.organization.OrganizationService;
+import org.exoplatform.services.organization.impl.GroupImpl;
 
 public class ForumUtils {
   public static String SYSTEM_SUFFIX = ":/" + SystemIdentity.SYSTEM ;
   public static String ANONIM_SUFFIX = ":/" + SystemIdentity.ANONIM ;
 
-  public static boolean isAnonim() {
-    String userId = Util.getPortalRequestContext().getRemoteUser() ;
+  static public String getCurrentUser() throws Exception {
+    return Util.getPortalRequestContext().getRemoteUser() ; 
+  }
+//  public static boolean isAnonim() {
+//    String userId = Util.getPortalRequestContext().getRemoteUser() ;
+//    if(userId == null) return true ;   
+//    return false ;
+//  }
+  
+  public static boolean isAnonim() throws Exception {
+    String userId = getCurrentUser() ;
     if(userId == null) return true ;   
     return false ;
   }
@@ -70,5 +81,14 @@ public class ForumUtils {
       }
     }   
   }
-
+  
+  public static String[] getUserGroups() throws Exception{
+    OrganizationService organizationService = (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
+    Object[] objGroupIds = organizationService.getGroupHandler().findGroupsOfUser(getCurrentUser()).toArray() ;
+    String[] groupIds = new String[objGroupIds.length];
+    for (int i = 0; i < groupIds.length; i++) {
+      groupIds[i] = ((GroupImpl)objGroupIds[i]).getId() ;
+    }
+    return groupIds ;
+  }
 }

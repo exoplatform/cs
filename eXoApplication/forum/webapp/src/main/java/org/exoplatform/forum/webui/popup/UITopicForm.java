@@ -130,7 +130,7 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
 		addUIFormInput(canView);
 		addUIFormInput(canPost);
 		UIFormInputIconSelector uiIconSelector = new UIFormInputIconSelector("Icon", "Icon") ;
-		//uiIconSelector.setRendered(false)	;
+		uiIconSelector.setSelectedIcon("IconsView");
 		addUIFormInput(uiIconSelector) ;
 		addUIFormInput(new UIFormWYSIWYGInput(FIELD_MESSAGECONTENT, null, null, true));
 		UIFormInputWithActions inputSet = new UIFormInputWithActions(FIELD_FROM_INPUT); 

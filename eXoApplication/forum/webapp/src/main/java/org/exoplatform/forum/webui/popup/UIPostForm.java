@@ -94,6 +94,7 @@ public class UIPostForm extends UIForm implements UIPopupComponent {
 		//addUIFormInput(messenger);
 		
 		UIFormInputIconSelector uiIconSelector = new UIFormInputIconSelector("Icon", "Icon") ;
+		uiIconSelector.setSelectedIcon("IconsView");
 		addUIFormInput(uiIconSelector) ;
 		
 		addUIFormInput(new UIFormWYSIWYGInput(FIELD_MESSAGECONTENT, null, null, true));

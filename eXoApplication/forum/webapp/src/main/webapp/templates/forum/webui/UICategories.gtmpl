@@ -114,9 +114,12 @@
 										 	<% if(topicNewPost != null) { %>
 										 	<td >
 										 		<div class="LastPostIcon $topicNewPostIcon" ><span></span></div>
-										 		<a href="$openLinkLastPost" title="Go to first new post in thread '$topicNewPostTitle' " class="LastPostTitle">$topicNewPostTitle</a>
+										 		<a href="$openLinkLastPost" title="Go to first new post in thread '$topicNewPostTitle'" id="idTitle" class="LastPostTitle">$topicNewPostTitle</a>
 												<div style="clear: left;"><span></span></div>
 												<div class="LastPostInfos">by&nbsp;<a style="color: #058EE6;" href="#">$lastPostBy</a><span class="DateTime">&nbsp;($dateTime)</span></div>
+											<script type="text/javascript">
+												document.getElementById('idTitle').title = "Go to first new post in thread '" + document.getElementById('idTitle').innerHTML + "'";
+											</script>
 											<% } else { %>	
 											<td class="Tdbox" style="height: 40px;">
 													Not Theard !	

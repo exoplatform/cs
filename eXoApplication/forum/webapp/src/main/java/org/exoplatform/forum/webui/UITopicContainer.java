@@ -144,6 +144,9 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
 		this.forum = forum ;
 		this.forumId = forum.getId() ;
 		this.categoryId = categoryId ;
+		this.page = 1;
+		this.isGoPage = false ;
+		getChild(UIForumPageIterator.class).setSelectPage(this.page) ;
 		this.getAncestorOfType(UIForumPortlet.class).getChild(UIBreadcumbs.class).setUpdataPath((categoryId + "/" + forumId)) ;
 	}
 	

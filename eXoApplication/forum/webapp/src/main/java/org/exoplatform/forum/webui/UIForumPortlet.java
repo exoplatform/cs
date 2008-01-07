@@ -59,6 +59,10 @@ public class UIForumPortlet extends UIPortletApplication {
 		addChild(UIForumLinks.class, null, null).setRendered(isForumRendered) ;
 		addChild(UIPopupAction.class, null, null) ;
 		initOption();
+		String []newStr = ForumUtils.getUserGroups() ;
+		for (String string : newStr) {
+      System.out.println("\n" + string);
+    }
 	}
 
 	public void updateIsRendered(int selected) throws Exception {
