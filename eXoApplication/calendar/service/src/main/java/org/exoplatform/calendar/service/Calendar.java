@@ -74,7 +74,7 @@ public class Calendar {
   private String id ;
   private String name ;
   private String calendarPath ;
-  private String calendarColor ;
+  private String calendarColor = " PowderBlue" ;
   private String description ;
   private String timeZone ;
   private String locale ;

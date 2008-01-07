@@ -16,7 +16,6 @@
  */
 package org.exoplatform.contact.service.impl;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -34,7 +33,6 @@ import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserEventListener;
-import org.exoplatform.services.organization.impl.NewUserConfig;
 
 /**
  * Created by The eXo Platform SARL
@@ -45,12 +43,15 @@ import org.exoplatform.services.organization.impl.NewUserConfig;
 public class NewUserListener extends UserEventListener {
   private ContactService cservice_ ;
   private NodeHierarchyCreator nodeHierarchyCreator_ ;
-  private NewUserConfig config_ ;
+  private String[] groups_ ;
   public NewUserListener(ContactService cservice, NodeHierarchyCreator nodeHierarchyCreator, 
   		InitParams params) throws Exception {
   	cservice_ = cservice ;
   	nodeHierarchyCreator_ = nodeHierarchyCreator ;
-  	config_ = (NewUserConfig)params.getObjectParamValues(NewUserConfig.class).get(0);
+  	String defaultGroup = params.getValueParam("defaultGroups").getValue() ;
+  	if(defaultGroup != null && defaultGroup.length() > 0) {
+  		groups_ = defaultGroup.split(",") ;
+  	}
   }
   
   public void postSave(User user, boolean isNew) throws Exception {
@@ -65,12 +66,9 @@ public class NewUserListener extends UserEventListener {
   	contact.setEmailAddress(user.getEmail()) ;
   	Calendar cal = new GregorianCalendar() ;
   	contact.setLastUpdated(cal.getTime()) ;
-  	List<String> groupList = new ArrayList<String>() ;
-  	for(Object obj : config_.getGroup()) {
-  		groupList.add(((NewUserConfig.JoinGroup)obj).getGroupId()) ; 
-  	}  	
-  	if(groupList.size() > 0) {
-  		contact.setAddressBook(groupList.toArray(new String[]{})) ;
+  	  	
+  	if(groups_ != null && groups_.length > 0) {
+  		contact.setAddressBook(groups_) ;
       cservice_.savePublicContact(SessionProvider.createSystemProvider(), contact, true) ;
   	}    
     Node userApp = nodeHierarchyCreator_.getUserApplicationNode(SessionProvider.createSystemProvider(), user.getUserName()) ;
