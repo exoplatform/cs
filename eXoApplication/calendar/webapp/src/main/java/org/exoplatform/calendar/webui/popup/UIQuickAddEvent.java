@@ -121,37 +121,6 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
     }
     setEventToDate(cal.getTime(), calendarSetting.getTimeFormat()) ;
   }
-  /**
-   * @deprecated replaced by {@link #setEventFromDate(Date value, Sring timeFormat)}
-   * */
-  private void setEventFromDate(Date value) {
-    UIFormDateTimeInput fromField = getChildById(FIELD_FROM) ;
-    UIFormComboBox timeFile = getChildById(FIELD_FROM_TIME) ;
-    DateFormat df = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
-    fromField.setValue(df.format(value)) ;
-    df = new SimpleDateFormat(CalendarUtils.TIMEFORMAT) ;
-    timeFile.setValue(df.format(value)) ;
-  }
-  /**
-   * @deprecated replaced by {@link #getEventFromDate(Sring timeFormat)}
-   * */
-  private Date getEventFromDate() throws Exception {
-    try {
-      UIFormDateTimeInput fromField = getChildById(FIELD_FROM) ;
-      UIFormComboBox timeFile = getChildById(FIELD_FROM_TIME) ;
-      if(getIsAllDay()) {
-        DateFormat df = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
-        return CalendarUtils.getBeginDay(df.parse(fromField.getValue())).getTime();
-      } 
-      DateFormat df = new SimpleDateFormat(CalendarUtils.DATETIMEFORMAT) ;
-      return df.parse(fromField.getValue() + " " + timeFile.getValue() ) ;
-    }
-    catch (Exception e) {
-      e.printStackTrace() ;
-      return null ;
-    }
-  }
-
   private void setEventFromDate(Date value, String timeFormat) {
     UIFormDateTimeInput fromField = getChildById(FIELD_FROM) ;
     UIFormComboBox timeFile = getChildById(FIELD_FROM_TIME) ;
@@ -176,35 +145,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
       return null ;
     }
   }
-  /**
-   * @deprecated replaced by {@link #setEventToDate(Date value, Sring timeFormat)}
-   * */
-  private void setEventToDate(Date value) {
-    UIFormDateTimeInput toField =  getChildById(FIELD_TO) ;
-    UIFormComboBox timeField =  getChildById(FIELD_TO_TIME) ;
-    DateFormat df = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
-    toField.setValue(df.format(value)) ;
-    df = new SimpleDateFormat(CalendarUtils.TIMEFORMAT) ;
-    timeField.setValue(df.format(value)) ;
-  }
-  /**
-   * @deprecated replaced by  {@link #getEventToDate(Sring timeFormat)}
-   * */
-  private Date getEventToDate() throws Exception {
-    try {
-      UIFormDateTimeInput toField = getChildById(FIELD_TO) ;
-      UIFormComboBox timeFile = getChildById(FIELD_TO_TIME) ;
-      if(getIsAllDay()) {
-        DateFormat df = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
-        return CalendarUtils.getBeginDay(df.parse(toField.getValue())).getTime();
-      } 
-      DateFormat df = new SimpleDateFormat(CalendarUtils.DATETIMEFORMAT) ;
-      return df.parse(toField.getValue() + " " + timeFile.getValue() ) ;
-    } catch (Exception e) {
-      e.printStackTrace() ;
-      return null ;
-    }
-  }
+  
   private void setEventToDate(Date value, String timeFormat) {
     UIFormDateTimeInput toField =  getChildById(FIELD_TO) ;
     UIFormComboBox timeField =  getChildById(FIELD_TO_TIME) ;

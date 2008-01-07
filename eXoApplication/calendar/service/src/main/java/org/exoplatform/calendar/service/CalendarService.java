@@ -170,12 +170,13 @@ public interface CalendarService {
    * 2. Check isNew parameter
    * 3. Create new of update calendar in private folder or service folder(public) 
    * 3. Invalidate cache
-   * @param username
    * @param calendar
    * @param isNew
+   * @param username TODO
+   * @param username
    * @throws Exception
    */
-  public void saveGroupCalendar(SessionProvider sProvider, Calendar calendar, boolean isNew) throws Exception ;  
+  public void savePublicCalendar(SessionProvider sProvider, Calendar calendar, boolean isNew, String username) throws Exception ;  
   /**
    * This method should:
    * 1. Get calendar service root node by current user
@@ -371,4 +372,5 @@ public interface CalendarService {
   public Map<String, String> checkFreeBusy(SessionProvider sysProvider, EventQuery eventQuery) throws Exception  ;
   
   public void generateCalDav(SessionProvider sProvider, String username, List<String> calendarIds, RssData rssData) throws Exception ;
+  public void removeSharedEvnet(SessionProvider sessionProvider, String username, String calendarId, String eventId) throws Exception ;
 }

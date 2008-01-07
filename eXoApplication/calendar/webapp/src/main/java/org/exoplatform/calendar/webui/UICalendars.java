@@ -450,7 +450,7 @@ public class UICalendars extends UIForm  {
         } else if(CalendarUtils.PUBLIC_TYPE.equals(calType)){
           calendar = calService.getGroupCalendar(SessionsUtils.getSystemProvider(), calendarId) ;
           calendar.setCalendarColor(color) ;
-          calService.saveGroupCalendar(SessionsUtils.getSystemProvider(), calendar, false) ;
+          calService.savePublicCalendar(SessionsUtils.getSystemProvider(), calendar, false, username) ;
         }
       } catch (Exception e) {
         e.printStackTrace() ;

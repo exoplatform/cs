@@ -97,7 +97,6 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
   public UICalendarSettingForm() throws Exception{
     super("UICalendarSettingForm") ;
     UIFormInputWithActions setting = new UIFormInputWithActions("setting") ;//.setRendered(true) ;
-
     List<SelectItemOption<String>> viewTypes = new ArrayList<SelectItemOption<String>>() ;
     viewTypes.add(new SelectItemOption<String>("Day view", CalendarSetting.DAY_VIEW)) ;
     viewTypes.add(new SelectItemOption<String>("Week view", CalendarSetting.WEEK_VIEW)) ;
@@ -120,12 +119,6 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
     for(int id =1 ;id<  dfs.getWeekdays().length; id++) {
       weekStartOn.add(new SelectItemOption<String>(dfs.getWeekdays()[id], String.valueOf(id))) ;
     }
-    /*weekStartOn.add(new SelectItemOption<String>(UICalendarView.TUESDAY, String.valueOf(java.util.Calendar.TUESDAY))) ;
-    weekStartOn.add(new SelectItemOption<String>(UICalendarView.WEDNESDAY, String.valueOf(java.util.Calendar.WEDNESDAY))) ;
-    weekStartOn.add(new SelectItemOption<String>(UICalendarView.THURSDAY, String.valueOf(java.util.Calendar.THURSDAY))) ;
-    weekStartOn.add(new SelectItemOption<String>(UICalendarView.FRIDAY, String.valueOf(java.util.Calendar.FRIDAY))) ;
-    weekStartOn.add(new SelectItemOption<String>(UICalendarView.SATURDAY, String.valueOf(java.util.Calendar.SATURDAY))) ;
-    weekStartOn.add(new SelectItemOption<String>(UICalendarView.SUNDAY, String.valueOf(java.util.Calendar.SUNDAY))) ;    */
 
     setting.addUIFormInput(new UIFormSelectBox(WEEK_START_ON, WEEK_START_ON, weekStartOn)) ;
 
@@ -407,7 +400,7 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
       calendarSetting.setBaseURL(uiForm.getBaseUrl()) ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       if(uiForm.getShowWorkingTimes()) {
-        if(uiForm.getWorkingBeginTime().after(uiForm.getWorkingEndTime())) {
+        if(uiForm.getWorkingBegin().equals(uiForm.getWorkingEnd()) || uiForm.getWorkingBeginTime().after(uiForm.getWorkingEndTime())) {
           uiApp.addMessage(new ApplicationMessage("UICalendarSettingForm.msg.working-time-logic", null, ApplicationMessage.WARNING)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;

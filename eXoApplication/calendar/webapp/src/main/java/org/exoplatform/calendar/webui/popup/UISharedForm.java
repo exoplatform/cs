@@ -172,19 +172,6 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
         calendarService.saveUserCalendar(sProvider, username, cal, false) ;
       }
       calendarService.shareCalendar(sProvider, username, uiForm.calendarId_, receiverUsers) ;
-      for(String receiver : receiverUsers) {
-        CalendarSetting calSetting = calendarService.getCalendarSetting(sProvider, receiver) ;
-        if(calSetting == null) calSetting = new CalendarSetting() ;
-        Set<String> sharedCaeldnars = new HashSet<String>() ;
-        if(calSetting.getDefaultSharedCalendars() != null) {
-          for(String id : calSetting.getDefaultPrivateCalendars()) {
-            sharedCaeldnars.add(id) ;
-          }
-        }
-        if(!sharedCaeldnars.contains(uiForm.calendarId_)) sharedCaeldnars.add(uiForm.calendarId_) ;
-        calSetting.setDefaultSharedCalendars(sharedCaeldnars.toArray(new String[sharedCaeldnars.size()])) ;
-        calendarService.saveCalendarSetting(sProvider, receiver, calSetting) ;
-      }
       UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
       UICalendars uiCalendars = calendarPortlet.findFirstComponentOfType(UICalendars.class) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendars) ;

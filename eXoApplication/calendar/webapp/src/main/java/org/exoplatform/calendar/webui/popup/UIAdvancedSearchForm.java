@@ -24,9 +24,9 @@ import java.util.Map;
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.SessionsUtils;
 import org.exoplatform.calendar.service.Calendar;
-import org.exoplatform.calendar.service.CalendarCategory;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
+import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.EventPageList;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.GroupCalendarData;
@@ -85,15 +85,19 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
     for(Calendar cal : cservice.getUserCalendars(SessionsUtils.getSessionProvider(), CalendarUtils.getCurrentUser(), true)) {
       options.add(new SelectItemOption<String>(cal.getName(), cal.getId())) ;
     }
+    GroupCalendarData groupCal  = cservice.getSharedCalendars(SessionsUtils.getSessionProvider(), CalendarUtils.getCurrentUser(), true) ;
+    if(groupCal != null) {
+      for(Calendar cal : groupCal.getCalendars()) {
+        options.add(new SelectItemOption<String>(cal.getName(), cal.getId())) ;
+      }
+    }
     addChild(new UIFormSelectBox(CALENDAR, CALENDAR, options)) ;
-
     options = new ArrayList<SelectItemOption<String>>() ;
     options.add(new SelectItemOption<String>("", "")) ;
-    for(CalendarCategory cat : cservice.getCategories(SessionsUtils.getSessionProvider(), CalendarUtils.getCurrentUser())) {
-      options.add(new SelectItemOption<String>(cat.getName(), cat.getId())) ;
+    for(EventCategory cat : cservice.getEventCategories(SessionsUtils.getSessionProvider(), CalendarUtils.getCurrentUser())) {
+      options.add(new SelectItemOption<String>(cat.getName(), cat.getName())) ;
     }
     addChild(new UIFormSelectBox(CATEGORY, CATEGORY, options)) ;
-
     options = new ArrayList<SelectItemOption<String>>() ;
     options.add(new SelectItemOption<String>("", "")) ;
     options.add(new SelectItemOption<String>(CalendarEvent.PRIORITY_LOW, CalendarEvent.PRIORITY_LOW)) ;

@@ -17,12 +17,9 @@
 package org.exoplatform.calendar.webui.popup;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.TimeZone;
 
 import org.exoplatform.calendar.CalendarUtils;
@@ -30,7 +27,6 @@ import org.exoplatform.calendar.SessionsUtils;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarCategory;
 import org.exoplatform.calendar.service.CalendarService;
-import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarWorkingContainer;
 import org.exoplatform.portal.webui.util.Util;
@@ -395,20 +391,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
         if(!CalendarUtils.isEmpty(editPermission)) {
           calendar.setEditPermission(editPermission.split(CalendarUtils.COMMA)) ;
         }
-        calendarService.saveGroupCalendar(sProvider, calendar, uiForm.isAddNew_) ;
-        if(uiForm.isAddNew_) {
-          CalendarSetting calSetting = calendarService.getCalendarSetting(sProvider, username) ;
-          if(calSetting == null) calSetting = new CalendarSetting() ;
-          Set<String> publicCalendars = new HashSet<String>() ;
-          if(calSetting.getDefaultPublicCalendars() != null) {
-            for(String id : calSetting.getDefaultPublicCalendars()) {
-              publicCalendars.add(id) ;
-            }
-          }
-         if(!publicCalendars.contains(calendar.getId())) publicCalendars.add(calendar.getId()) ;
-          calSetting.setDefaultPublicCalendars(publicCalendars.toArray(new String[publicCalendars.size()])) ;
-          calendarService.saveCalendarSetting(sProvider, username, calSetting) ;
-        }
+        calendarService.savePublicCalendar(sProvider, calendar, uiForm.isAddNew_, username) ;
       }else {
         if(CalendarUtils.isEmpty(uiForm.getUIFormSelectBox(CATEGORY).getValue())) {
           uiApp.addMessage(new ApplicationMessage("UICalendarForm.msg.category-empty", null, ApplicationMessage.WARNING) ) ;
@@ -416,19 +399,6 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
           return ;
         } 
         calendarService.saveUserCalendar(sProvider, username, calendar, uiForm.isAddNew_) ;    
-        if(uiForm.isAddNew_) {
-          CalendarSetting calSetting = calendarService.getCalendarSetting(sProvider, username) ;
-          if(calSetting == null) calSetting = new CalendarSetting() ;
-          Set<String> privateCalendars = new HashSet<String>() ;
-          if(calSetting.getDefaultPrivateCalendars() != null) {
-            for(String id : calSetting.getDefaultPrivateCalendars()) {
-              privateCalendars.add(id) ;
-            }
-          }
-          if(!privateCalendars.contains(calendar.getId()))privateCalendars.add(calendar.getId()) ;
-          calSetting.setDefaultPrivateCalendars(privateCalendars.toArray(new String[privateCalendars.size()])) ;
-          calendarService.saveCalendarSetting(sProvider, username, calSetting) ;
-        }
       }
       UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
       calendarPortlet.cancelAction() ;

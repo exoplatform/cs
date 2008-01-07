@@ -24,8 +24,10 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.jcr.ItemExistsException;
 import javax.jcr.Node;
@@ -247,6 +249,17 @@ public class JCRDataStorage{
       if(calendarHome.hasNode(calendar.getId())) throw new Exception("This calendar is already exists") ;
       calendarNode = calendarHome.addNode(calendar.getId(), "exo:calendar") ;
       calendarNode.setProperty("exo:id", calendar.getId()) ;
+      CalendarSetting setting = getCalendarSetting(sProvider, username) ;
+      if(setting == null) setting = new CalendarSetting() ;
+      Set<String> privateCalendars = new HashSet<String>() ;
+      if(setting.getDefaultPrivateCalendars() != null) {
+        for(String id : setting.getDefaultPrivateCalendars()) {
+          privateCalendars.add(id) ;
+        }
+      }
+      if(!privateCalendars.contains(calendar.getId())) privateCalendars.add(calendar.getId()) ;
+      setting.setDefaultPrivateCalendars(privateCalendars.toArray(new String[privateCalendars.size()])) ;
+      saveCalendarSetting(sProvider, username, setting) ;
     }else {
       calendarNode = calendarHome.getNode(calendar.getId()) ;
     }    
@@ -312,7 +325,6 @@ public class JCRDataStorage{
       Query query = qm.createQuery(queryString.toString(), Query.XPATH);
       QueryResult result = query.execute();
       NodeIterator it = result.getNodes();
-
       if(it.hasNext()) {
         calendars = new ArrayList<Calendar> () ;
         while(it.hasNext()){
@@ -327,13 +339,25 @@ public class JCRDataStorage{
     return groupCalendars;
   }
 
-  public void saveGroupCalendar(SessionProvider sProvider, Calendar calendar, boolean isNew) throws Exception {
+  public void savePublicCalendar(SessionProvider sProvider, Calendar calendar, boolean isNew, String username) throws Exception {
     Node calendarHome = getPublicCalendarHome(sProvider) ;
     Node calendarNode ;
     if(isNew) {
       if(calendarHome.hasNode(calendar.getId())) throw new Exception("This calendar is already exists") ;
       calendarNode = calendarHome.addNode(calendar.getId(), "exo:calendar") ;
-      calendarNode.setProperty("exo:id", calendar.getId()) ;      
+      calendarNode.setProperty("exo:id", calendar.getId()) ;    
+      CalendarSetting calSetting = getCalendarSetting(sProvider, username) ;
+      if(calSetting == null) calSetting = new CalendarSetting() ;
+      Set<String> publicCalendars = new HashSet<String>() ;
+      if(calSetting.getDefaultPublicCalendars() != null) {
+        for(String id : calSetting.getDefaultPublicCalendars()) {
+          publicCalendars.add(id) ;
+        }
+      }
+      if(!publicCalendars.contains(calendar.getId())) publicCalendars.add(calendar.getId()) ;
+      calSetting.setDefaultPublicCalendars(publicCalendars.toArray(new String[publicCalendars.size()])) ;
+      saveCalendarSetting(sProvider, username, calSetting) ;
+
     }else {
       calendarNode = calendarHome.getNode(calendar.getId()) ;
     }    
@@ -1549,6 +1573,17 @@ public class JCRDataStorage{
     Node userNode ;
     List<Value> valueList = new ArrayList<Value>() ;
     for(String user : receiverUsers) {
+      CalendarSetting calSetting = getCalendarSetting(sProvider, user) ;
+      if(calSetting == null) calSetting = new CalendarSetting() ;
+      Set<String> sharedCaeldnars = new HashSet<String>() ;
+      if(calSetting.getDefaultSharedCalendars() != null) {
+        for(String id : calSetting.getDefaultPrivateCalendars()) {
+          sharedCaeldnars.add(id) ;
+        }
+      }
+      if(!sharedCaeldnars.contains(calendarId)) sharedCaeldnars.add(calendarId) ;
+      calSetting.setDefaultSharedCalendars(sharedCaeldnars.toArray(new String[sharedCaeldnars.size()])) ;
+      saveCalendarSetting(sProvider, user, calSetting) ;
       if(sharedCalendarHome.hasNode(user)) {
         userNode = sharedCalendarHome.getNode(user) ;
       } else {
@@ -1782,6 +1817,23 @@ public class JCRDataStorage{
       participantMap.put(par, timeValues.toString()) ;
     }    
     return participantMap ;
+  }
+
+  public void removeSharedEvnet(SessionProvider sessionProvider, String username, String calendarId, String eventId) throws Exception {
+    Node sharedCalendarHome = getSharedCalendarHome(sessionProvider) ;
+    if(sharedCalendarHome.hasNode(username)) {
+      Node userNode = sharedCalendarHome.getNode(username) ;
+      PropertyIterator iter = userNode.getReferences() ;
+      Node calendar ;
+      while(iter.hasNext()) {
+        calendar = iter.nextProperty().getParent() ;
+        if(calendar.getProperty("exo:id").getString().equals(calendarId)) {
+          if(calendar.hasNode(eventId)) calendar.getNode(eventId).remove() ;
+          calendar.save() ;
+          break ;
+        }
+      }      
+    }
   }
 
 }

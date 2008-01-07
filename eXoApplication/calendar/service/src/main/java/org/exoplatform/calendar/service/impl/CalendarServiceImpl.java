@@ -96,8 +96,8 @@ public class CalendarServiceImpl implements CalendarService{
   public List<GroupCalendarData> getGroupCalendars(SessionProvider sProvider, String[] groupIds, boolean isShowAll, String username) throws Exception {
     return storage_.getGroupCalendars(sProvider, groupIds, isShowAll, username);
   }
-  public void saveGroupCalendar(SessionProvider sProvider, Calendar calendar, boolean isNew) throws Exception {
-    storage_.saveGroupCalendar(sProvider, calendar, isNew) ;
+  public void savePublicCalendar(SessionProvider sProvider, Calendar calendar, boolean isNew, String username) throws Exception {
+    storage_.savePublicCalendar(sProvider, calendar, isNew, username) ;
   }
   public Calendar removeGroupCalendar(SessionProvider sProvider, String calendarId) throws Exception {
     return storage_.removeGroupCalendar(sProvider, calendarId);
@@ -222,6 +222,11 @@ public class CalendarServiceImpl implements CalendarService{
 
   public void saveSharedCalendar(SessionProvider sProvider, String username, Calendar calendar) throws Exception {
     storage_.saveSharedCalendar(sProvider, username, calendar) ;
+    
+  }
+
+  public void removeSharedEvnet(SessionProvider sessionProvider, String username, String calendarId, String eventId)throws Exception  {
+    storage_.removeSharedEvnet(sessionProvider, username, calendarId, eventId) ;
     
   }
 }
