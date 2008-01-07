@@ -106,7 +106,7 @@ public class UIMessageList extends UIForm {
   private MessagePageList pageList_ = null ;
   private MessageFilter msgFilter_;
   private String accountId_;
-  private LinkedHashMap<String, Message> messageList_ = new LinkedHashMap<String, Message>();
+  public LinkedHashMap<String, Message> messageList_ = new LinkedHashMap<String, Message>();
   
   public UIMessageList() throws Exception { }
   
@@ -266,7 +266,8 @@ public class UIMessageList extends UIForm {
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       MailService mailServ = uiPortlet.getApplicationComponent(MailService.class);
-      Message msg = mailServ.getMessageById(SessionsUtils.getSessionProvider(), username, accountId, msgId);
+      Message msg = uiMessageList.messageList_.get(msgId);
+      System.out.println("msg ========== " + msg) ;
       if (uiMessageList.selectedDraftFolder()) {
         UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
         UIPopupActionContainer uiPopupContainer = uiPopupAction.activate(UIPopupActionContainer.class, 850) ;

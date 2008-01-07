@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Properties;
 
 import javax.activation.DataHandler;
+import javax.jcr.Node;
 import javax.mail.AuthenticationFailedException;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
@@ -324,7 +325,8 @@ public class MailServiceImpl implements MailService{
   public List<Message> checkNewMessage(SessionProvider sProvider, String username, String accountId) throws Exception {
     Calendar checkTime = GregorianCalendar.getInstance();
     Account account = getAccountById(sProvider, username, accountId) ;
-    System.out.println(" #### Getting mail from " + account.getIncomingHost() + " ... !");
+    long start = checkTime.getTimeInMillis() ;
+    System.out.println(" #### Getting mail from " + account.getIncomingHost() + " ... !" + checkTime.getTimeInMillis());
     List<Message> messageList = new ArrayList<Message>();
     int totalNew = -1;
     String protocol = account.getProtocol();
@@ -350,15 +352,21 @@ public class MailServiceImpl implements MailService{
       folder.open(javax.mail.Folder.READ_ONLY);
 
       javax.mail.Message[] messages = folder.getMessages() ;
+      
+      Calendar endCal = GregorianCalendar.getInstance();
+      
       totalNew = messages.length ;
       
-      System.out.println(" #### Folder contains " + totalNew + " messages !");
+      System.out.println(" #### Folder contains " + totalNew + " messages !" + (endCal.getTimeInMillis() - start));
       
       if (totalNew > 0) {
         int i = 0 ;
+        SpamFilter spamFilter = getSpamFilter(sProvider, username, account.getId());
+        Node messageHome = storage_.getMessageHome(sProvider, username, accountId) ;
         while (i < totalNew) {
-          javax.mail.Message msg = messages[i] ;
-          Message newMsg = new Message();
+          javax.mail.Message msg = messages[i] ;          
+          saveMessage(msg, messageHome, account.getId(), username) ;
+          /*Message newMsg = new Message();
           newMsg.setAccountId(account.getId());
           newMsg.setFrom(InternetAddress.toString(msg.getFrom()));
           newMsg.setMessageTo(InternetAddress.toString(msg.getRecipients(javax.mail.Message.RecipientType.TO)));
@@ -401,7 +409,7 @@ public class MailServiceImpl implements MailService{
           
           String[] folderIds = { Utils.createFolderId(accountId, account.getIncomingFolder(), false) };
           
-          if ( getSpamFilter(sProvider, username, account.getId()).checkSpam(msg) ) {
+          if ( spamFilter.checkSpam(msg) ) {
             folderIds = new String[] { Utils.createFolderId(accountId, Utils.FD_SPAM, false) } ;
           }
           newMsg.setFolders(folderIds);
@@ -416,13 +424,13 @@ public class MailServiceImpl implements MailService{
           newMsg.setAddresses(new String[] {});
           newMsg.setRoot(newMsg.getId());
           
-          newMsg  = storage_.groupConversation(sProvider, username, accountId, newMsg) ;
+          //newMsg  = storage_.groupConversation(sProvider, username, accountId, newMsg) ;
           
-          storage_.saveMessage(sProvider, username, account.getId(), newMsg, true);
-       
-          messageList.add(newMsg);
+          //storage_.saveMessage(sProvider, username, account.getId(), newMsg, true);
+          
+          messageList.add(newMsg);*/
                     
-          for(String folderId : folderIds) {
+          /*for(String folderId : folderIds) {
             Folder storeFolder = storage_.getFolder(sProvider, username, account.getId(), folderId) ;
             if(storeFolder == null) {
               storeFolder = new Folder() ;
@@ -435,28 +443,90 @@ public class MailServiceImpl implements MailService{
             storeFolder.setTotalMessage(storeFolder.getTotalMessage() + 1) ;
 
             storage_.saveFolder(sProvider, username, account.getId(), storeFolder) ;
-          }
-          i ++ ;
+          }*/
+          i ++ ;          
+          System.out.println(" ####  " + i + " messages saved");
         }
-        folder.close(false);
-        store.close();
+        messageHome.getSession().save() ;
         storage_.execActionFilter(sProvider, username, accountId, checkTime);
+        folder.close(false);      
+        store.close();
       }
     }  catch (Exception e) { 
       e.printStackTrace();
     }
-    Date endDate = new Date();
-    long diff = endDate.getTime() - checkTime.getTime().getTime();
-    System.out.println("Different Time ========= >>>>> " + diff);
     return messageList;
   }
-
-  private void setMultiPart(Multipart multipart, Message newMail, String username) {
+  
+  private void saveMessage(javax.mail.Message msg, Node messagesNode, String accId, String username) throws Exception {
+  	Message newMes = new Message() ;
+  	Node node = messagesNode.addNode(newMes.getId(), Utils.EXO_MESSAGE) ;
+  	node.setProperty(Utils.EXO_ACCOUNT, accId);
+    node.setProperty(Utils.EXO_FROM, InternetAddress.toString(msg.getFrom()));
+    node.setProperty(Utils.EXO_TO, InternetAddress.toString(msg.getRecipients(javax.mail.Message.RecipientType.TO)));
+    node.setProperty(Utils.EXO_CC, InternetAddress.toString(msg.getRecipients(javax.mail.Message.RecipientType.CC)));
+    node.setProperty(Utils.EXO_BCC, InternetAddress.toString(msg.getRecipients(javax.mail.Message.RecipientType.BCC)));
+    node.setProperty(Utils.EXO_REPLYTO, InternetAddress.toString(msg.getReplyTo()));
+    node.setProperty(Utils.EXO_SUBJECT, msg.getSubject());
+    
+    Calendar gc = GregorianCalendar.getInstance();
+    Date receivedDate = gc.getTime();
+    node.setProperty(Utils.EXO_RECEIVEDDATE, gc.getInstance());
+    node.setProperty(Utils.EXO_SENDDATE, gc.getInstance()); //TODO send date
+    
+    node.setProperty(Utils.EXO_CONTENT_TYPE, msg.getContentType());
+    node.setProperty(Utils.EXO_SIZE, msg.getSize());
+    node.setProperty(Utils.EXO_ISUNREAD, true);
+    node.setProperty(Utils.EXO_STAR, false);     
+    node.setProperty(Utils.EXO_ISROOT, true);
+    
+    node.setProperty(Utils.EXO_PRIORITY, Utils.PRIORITY_NORMAL);
+    String[] xPriority = msg.getHeader("X-Priority");
+    String[] importance = msg.getHeader("Importance");
+    
+    // Get priority of message on header if it's available.
+    if (xPriority != null && xPriority.length > 0) {
+      for (int j = 0 ; j < xPriority.length; j++) {
+        node.setProperty(Utils.EXO_PRIORITY, Long.valueOf(msg.getHeader("X-Priority")[j].substring(0,1)));
+      }          
+    }          
+    /*if (importance != null && importance.length > 0) {
+      for (int j = 0 ; j < importance.length; j++) {
+        if (importance[j].equalsIgnoreCase("Low")) {
+          node.setPriority(Utils.PRIORITY_LOW);
+        } else if (importance[j].equalsIgnoreCase("high")) {
+          node.setPriority(Utils.PRIORITY_HIGH);
+        } 
+      }
+    }*/
+    
+    //node.setAttachements(new ArrayList<Attachment>());
+    
+    String[] folderIds = { Utils.createFolderId(accId, Utils.FD_INBOX, false) };
+    
+    /*if ( spamFilter.checkSpam(msg) ) {
+      folderIds = new String[] { Utils.createFolderId(accountId, Utils.FD_SPAM, false) } ;
+    }*/
+    node.setProperty(Utils.EXO_FOLDERS, folderIds);
+    Object obj = msg.getContent() ;
+    if (obj instanceof Multipart) {
+      setMultiPart((Multipart)obj, node, username);
+    } else {
+      setPart(msg, node, username);
+    }
+    
+    node.setProperty(Utils.EXO_MESSAGEIDS, new String[] {newMes.getId()});
+    node.setProperty(Utils.EXO_ADDRESSES, new String[] {});
+    node.setProperty(Utils.EXO_ROOT, newMes.getId());
+  	
+  }
+  
+  private void setMultiPart(Multipart multipart, Node node, String username) {
     try {
       int i = 0 ;
       int n = multipart.getCount() ;
       while( i < n) {
-        setPart(multipart.getBodyPart(i), newMail, username);
+        setPart(multipart.getBodyPart(i), node, username);
         i++ ;
       }     
     }catch(Exception e) {
@@ -464,7 +534,7 @@ public class MailServiceImpl implements MailService{
     }   
   }
 
-  private void setPart(Part part, Message newMail, String username){
+  private void setPart(Part part, Node node, String username){
     try {
       String disposition = part.getDisposition();
       String contentType = part.getContentType();
@@ -473,16 +543,16 @@ public class MailServiceImpl implements MailService{
           MimeMultipart mimeMultiPart = (MimeMultipart) part.getContent() ;
           for (int i = 0; i< mimeMultiPart.getCount(); i++) {
             // for each part, set the body content
-            setPart(mimeMultiPart.getBodyPart(i), newMail, username);
+            setPart(mimeMultiPart.getBodyPart(i), node, username);
           }
         } else {
-          setMessageBody(part, newMail);
+          setMessageBody(part, node);
         }
       } else {
         if (disposition.equalsIgnoreCase(Part.INLINE)) {
           /* this must be presented INLINE, hence inside the body of the message */
           if (part.isMimeType("text/plain") || part.isMimeType("text/html")) {
-            setMessageBody(part, newMail);
+            setMessageBody(part, node);
           }
         } else if (disposition.equalsIgnoreCase(Part.ATTACHMENT)) {
           /* this part must be presented as an attachment, hence we add it to the attached files */
@@ -498,7 +568,13 @@ public class MailServiceImpl implements MailService{
           } else {
             file.setMimeType(contentType) ;
           }
-          newMail.getAttachments().add(file);
+          //node.getAttachments().add(file);
+          Node nodeFile = node.addNode(file.getName(), Utils.NT_FILE);
+          Node nodeContent = nodeFile.addNode(Utils.JCR_CONTENT, Utils.NT_RESOURCE);
+          nodeContent.setProperty(Utils.JCR_MIMETYPE, file.getMimeType());
+          nodeContent.setProperty(Utils.JCR_DATA, file.getInputStream());
+          nodeContent.setProperty(Utils.JCR_LASTMODIFIED, Calendar.getInstance().getTimeInMillis());
+          node.setProperty(Utils.EXO_HASATTACH, true);
         }
       }
     } catch(Exception e) {
@@ -506,7 +582,7 @@ public class MailServiceImpl implements MailService{
     }
   }
 
-  private void setMessageBody(Part part, Message newMail) throws Exception {
+  private void setMessageBody(Part part, Node node) throws Exception {
     StringBuffer messageBody =new StringBuffer();
     InputStream is = part.getInputStream();
     String contentType = part.getContentType() ;
@@ -521,7 +597,7 @@ public class MailServiceImpl implements MailService{
     while ((inputLine = reader.readLine()) != null) {
       messageBody.append(inputLine + "\n");
     }
-    newMail.setMessageBody(messageBody.toString());
+    node.setProperty(Utils.EXO_BODY, messageBody.toString());
   }
   
   public void createAccount(SessionProvider sProvider, String username, Account account) throws Exception {
