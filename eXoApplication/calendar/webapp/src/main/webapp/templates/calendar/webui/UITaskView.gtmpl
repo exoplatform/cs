@@ -99,7 +99,7 @@
 	<%_ctx.include("app:/templates/calendar/webui/UIPageIterator.gtmpl");%>
 	<div class="ResizeReadingPane"><span></span></div>
 		<% /*Begin Popup Menu*/ %>
-	<div class="UIRightClickPopupMenu" id="UIListViewEventRightMenu" exocallback="">
+	<div class="UIRightClickPopupMenu" id="UIListViewEventRightMenu" exocallback="eXo.calendar.UICalendarPortlet.listViewCallack">
 		<div class="UIContextMenuContainer">
 		  <div class="TopLeftRightClickPopupMenu">
 		    <div class="TopRightRightClickPopupMenu">

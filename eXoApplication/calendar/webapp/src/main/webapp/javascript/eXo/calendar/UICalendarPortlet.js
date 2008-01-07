@@ -704,9 +704,23 @@ UICalendarPortlet.prototype.showContextMenu = function() {
 	UIContextMenu.attach("EventOnDayContent","UIMonthViewEventRightMenu") ;
 	UIContextMenu.attach("TimeRule","UIDayViewRightMenu") ;
 	UIContextMenu.attach("EventBoxes","UIDayViewEventRightMenu") ;
-	UIContextMenu.attach(["EventWeekContent","EventAlldayContainer"],"UIWeekViewRightMenu") ;
-	
+	UIContextMenu.attach(["EventWeekContent","EventAlldayContainer"],"UIWeekViewRightMenu") ;	
 	UIContextMenu.attach("UIListViewRow","UIListViewEventRightMenu") ;
+} ;
+
+UICalendarPortlet.prototype.listViewCallack = function(evt){
+	var _e = window.event || evt ;
+	var src = _e.srcElement || _e.target ;
+	if(!eXo.core.DOMUtil.hasClass(src, "UIListViewRow")) src = eXo.core.DOMUtil.findAncestorByClass(src, "UIListViewRow") ;
+	var eventId = src.getAttribute("eventid") ;
+	var calendarId = src.getAttribute("calid") ;
+	var calType = src.getAttribute("calType") ;
+	map = {
+		"objectId\s*=\s*[A-Za-z0-9_]*(?=&|'|\")":"objectId=" + eventId ,
+		"calendarId\s*=\s*[A-Za-z0-9_]*(?=&|'|\")":"calendarId=" + calendarId,
+		"calType\s*=\s*[A-Za-z0-9_]*(?=&|'|\")":"calType=" + calType
+	} ;	
+	eXo.webui.UIContextMenu.changeAction(eXo.webui.UIContextMenu.menuElement, map) ;
 } ;
 
 UICalendarPortlet.prototype.dayViewCallback = function(evt){
