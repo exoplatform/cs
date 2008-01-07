@@ -65,9 +65,11 @@ UIContactPortlet.prototype.addressBookCallback = function(evt) {
 	var src = _e.srcElement || _e.target ;
 	var a = (DOMUtil.hasClass(src, "ItemList")) ? src : DOMUtil.findAncestorByClass(src, "ItemList") ;	
 	eXo.webui.UIContextMenu.changeAction(UIContextMenu.menuElement, a.id) ;
-	var isPublic = a.getAttribute("addressType") ;
+	var isPublic = a.getAttribute("addressType") ;	
+	var isList = a.getAttribute("isList") ;
 	var menuItems = DOMUtil.findDescendantsByClass(UIContextMenu.menuElement, "div", "ItemIcon") ;
-	var itemLength = menuItems.length ;
+	var itemLength = menuItems.length ;	
+
 	if (isPublic && (isPublic.toLowerCase() == "2")) {
 		for(var i = 0 ; i < itemLength ; i ++) {
 			if (DOMUtil.hasClass(menuItems[i],"ShareIcon") || DOMUtil.hasClass(menuItems[i],"EditActionIcon") || DOMUtil.hasClass(menuItems[i],"DeleteIcon") || DOMUtil.hasClass(menuItems[i],"ImportAddressIcon") || DOMUtil.hasClass(menuItems[i],"ImportContactIcon")) {
@@ -97,6 +99,28 @@ UIContactPortlet.prototype.addressBookCallback = function(evt) {
 	}	else {
 		for(var i = 0 ; i < itemLength ; i ++) {
 			if (DOMUtil.hasClass(menuItems[i],"ShareIcon") || DOMUtil.hasClass(menuItems[i],"EditActionIcon") || DOMUtil.hasClass(menuItems[i],"DeleteIcon") || DOMUtil.hasClass(menuItems[i],"ImportAddressIcon") || DOMUtil.hasClass(menuItems[i],"ImportContactIcon")) {
+				if (!menuItems[i].parentNode.getAttribute("oldHref")) continue ;
+				menuItems[i].parentNode.href = menuItems[i].parentNode.getAttribute("oldHref") ;
+				menuItems[i].parentNode.style.color = menuItems[i].parentNode.getAttribute("oldColor") ;
+				menuItems[i].parentNode.removeAttribute("oldColor") ;
+				menuItems[i].parentNode.removeAttribute("oldHref") ;
+			}
+		}
+	}
+	
+	if (isList == "true") {
+		for(var i = 0 ; i < itemLength ; i ++) {
+			if (DOMUtil.hasClass(menuItems[i],"PrintIcon")) {
+				if (menuItems[i].parentNode.getAttribute("oldHref")) continue ;
+				menuItems[i].parentNode.setAttribute("oldHref", menuItems[i].parentNode.href) ;
+				menuItems[i].parentNode.href = "javascript: void(0) ;" ;
+				menuItems[i].parentNode.setAttribute("oldColor", DOMUtil.getStyle(menuItems[i].parentNode, "color")) ;
+				menuItems[i].parentNode.style.color = "#cccccc" ;
+			}
+		}
+	} else {
+		for(var i = 0 ; i < itemLength ; i ++) {
+			if (DOMUtil.hasClass(menuItems[i],"PrintIcon")) {
 				if (!menuItems[i].parentNode.getAttribute("oldHref")) continue ;
 				menuItems[i].parentNode.href = menuItems[i].parentNode.getAttribute("oldHref") ;
 				menuItems[i].parentNode.style.color = menuItems[i].parentNode.getAttribute("oldColor") ;

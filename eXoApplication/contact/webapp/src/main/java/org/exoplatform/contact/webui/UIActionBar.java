@@ -46,7 +46,7 @@ import org.exoplatform.webui.event.EventListener;
         @EventConfig(listeners = UIActionBar.AddContactActionListener.class),
         @EventConfig(listeners = UIActionBar.AddAddressBookActionListener.class),
         @EventConfig(listeners = UIActionBar.ListViewActionListener.class),
-        @EventConfig(listeners = UIActionBar.VCardViewActionListener.class),
+        //@EventConfig(listeners = UIActionBar.VCardViewActionListener.class),
         @EventConfig(listeners = UIActionBar.ImportContactActionListener.class),
         @EventConfig(listeners = UIActionBar.ExportContactActionListener.class)
     }
@@ -100,13 +100,21 @@ public class UIActionBar extends UIContainer  {
   static public class ListViewActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {      
       UIActionBar uiActionBar = event.getSource() ;
+      String isList = event.getRequestContext().getRequestParameter(OBJECTID);
       UIContactPortlet uiContactPortlet = uiActionBar.getParent() ; 
       UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
-      uiContacts.setViewContactsList(true) ;  
+      
+      if (isList.equals("true")) uiContacts.setViewContactsList(true) ;
+      else uiContacts.setViewContactsList(false) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
+      
+      // remove when print address book improved
+      event.getRequestContext().addUIComponentToUpdateByAjax(
+          uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class)) ;
     }  
   }
   
+  /*
   static public class VCardViewActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {      
       UIActionBar uiActionBar = event.getSource() ;
@@ -115,9 +123,14 @@ public class UIActionBar extends UIContainer  {
       uiContacts.setRendered(true) ;
       uiContacts.setViewContactsList(false) ;  
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
+      
+//    remove when print address book improved
+      event.getRequestContext().addUIComponentToUpdateByAjax(
+          uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class)) ;
     }  
   }
-
+  */
+  
   static public class ExportContactActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {        
       UIActionBar uiActionBar = event.getSource();

@@ -104,6 +104,12 @@ public class UIAddressBooks extends UIComponent {
   public Map<String, String> getPrivateGroupMap() { return privateGroupMap_ ;}
   public Map<String, String> getPublicGroupMap() { return publicGroupMap_ ; }
 
+  // to show print address book when contacts view is Thumbnail ;
+  public boolean getListView() {
+    return getAncestorOfType(UIWorkingContainer.class)
+      .findFirstComponentOfType(UIContacts.class).getViewContactsList() ;
+  }
+  
   static public class AddAddressActionListener extends EventListener<UIAddressBooks> {
     public void execute(Event<UIAddressBooks> event) throws Exception {
       UIAddressBooks uiAddressBook = event.getSource();
@@ -159,8 +165,10 @@ public class UIAddressBooks extends UIComponent {
         UIExportAddressBookForm uiExportForm = uiPopupAction.activate(UIExportAddressBookForm.class, 500) ;
         uiExportForm.setId("UIExportAddressBookForm");
         Map<String, String> groups = uiAddressBook.privateGroupMap_ ;
-        Map<String, String> sharedGroups = uiAddressBook.publicGroupMap_ ;
-        if ((sharedGroups == null || sharedGroups.size() == 0) && (groups == null || groups.size() == 0)) {
+        Map<String, String> sharedGroups = uiAddressBook.sharedGroupMap_ ;
+        Map<String, String> publicGroups = uiAddressBook.publicGroupMap_ ;
+        if ((groups == null || groups.size() == 0) && (sharedGroups == null || sharedGroups.size() == 0)
+            && (publicGroups == null || publicGroups.size() == 0)) {
           UIApplication uiApp = uiAddressBook.getAncestorOfType(UIApplication.class) ;
           uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.no-addressbook", null,
             ApplicationMessage.WARNING)) ;
@@ -168,7 +176,8 @@ public class UIAddressBooks extends UIComponent {
           return ;   
         }
         uiExportForm.setContactGroups(groups) ;
-        uiExportForm.setPublicContactGroup(sharedGroups) ;
+        uiExportForm.setPublicContactGroup(publicGroups) ;
+        uiExportForm.setSharedContactGroups(sharedGroups) ;
         uiExportForm.updateList();
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
