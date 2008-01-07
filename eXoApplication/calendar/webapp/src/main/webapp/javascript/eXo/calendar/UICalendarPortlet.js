@@ -1,6 +1,6 @@
 eXo.require('eXo.webui.UIContextMenu') ;
 function UICalendarPortlet() {
-	this.clearSessionTimeout() ;
+	//this.clearSessionTimeout() ;
 }
 
 /* utility method */
