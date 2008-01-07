@@ -70,12 +70,11 @@
 		<%}%>	
 	  </div>				      
 	</div>
-	<%/*End Content Detail */%>
-	
+	<%/*End Content Detail */%>	
 	<%
-	  String display="display:none;" ;
-	  if(!uicomponent.getContentNode().getType().equals("desc") && uicomponent.getUIPageIterator().getAvailablePage() > 1) display = "display:block;" ;
+	  if(!uicomponent.getContentNode().getType().equals("desc") && uicomponent.getUIPageIterator().getAvailablePage() > 1) {
+	  	uicomponent.renderChild(UIPageIterator.class);
+	  }
 	%>
-	<div style="$display"><% uicomponent.renderChild(UIPageIterator.class); %></div>
 </div>	
 
