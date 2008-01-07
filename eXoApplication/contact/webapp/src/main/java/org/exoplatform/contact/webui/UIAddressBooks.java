@@ -168,7 +168,7 @@ public class UIAddressBooks extends UIComponent {
           return ;   
         }
         uiExportForm.setContactGroups(groups) ;
-        uiExportForm.setSharedContactGroup(sharedGroups) ;
+        uiExportForm.setPublicContactGroup(sharedGroups) ;
         uiExportForm.updateList();
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);

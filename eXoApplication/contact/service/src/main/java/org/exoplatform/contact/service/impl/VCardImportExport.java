@@ -82,12 +82,15 @@ public class VCardImportExport implements ContactImportExport {
   	List<String> publicAddress = new ArrayList<String> () ;
   	for(String address : addressBookIds){
   		Node contactGroupHome = storage_.getUserContactGroupHome(sProvider, username) ;
+      Node publicContactGroupHome = storage_.getPublicContactHome(sProvider);
   		try {
   			if(contactGroupHome.hasNode(address)) {
     			privateAddress.add(address) ;
-    		}else {
+    		}else if (publicContactGroupHome.hasNode(address)){
     			publicAddress.add(address) ;
-    		}
+    		} else {
+    		  contactList.addAll(storage_.getSharedContactsByAddressBook(sProvider, username, address).getAll()) ;
+        }
   		}catch(RepositoryException re) {
   			publicAddress.add(address) ;
   		}  		

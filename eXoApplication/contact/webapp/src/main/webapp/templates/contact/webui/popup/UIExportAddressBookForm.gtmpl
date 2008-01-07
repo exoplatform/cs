@@ -25,7 +25,7 @@
   	 	      </tr>
   	 	    </thead>
   	 	      <tbody>
-  	 	      <%  
+  	 	    <%  
 						Map contactGroups = uicomponent.getContactGroups();
 						for(group in contactGroups.keySet()) {
 							checkboxField = uicomponent.getChildById(group) ;
@@ -44,7 +44,7 @@
 		     	<% } %>  
 		     	
 		     	<%  
-						Map sharedGroups = uicomponent.getSharedContactGroup();
+						Map sharedGroups = uicomponent.getSharedContactGroups();
 						for(group in sharedGroups.keySet()) {
 							checkboxField = uicomponent.getChildById(group) ;
 					%>
@@ -56,6 +56,24 @@
   						  </td>
 							<td class="text">
 									<%=sharedGroups.get(group)%>
+							</td>
+
+   			     	</tr>
+		     	<% } %> 
+		     	
+		     	<%  
+						Map publicGroups = uicomponent.getPublicContactGroup();
+						for(group in publicGroups.keySet()) {
+							checkboxField = uicomponent.getChildById(group) ;
+					%>
+  						<tr class="UIContactList">
+  						  <td class="text" style="padding-left: 7px;">
+  						  	<%
+  						  		if(checkboxField != null) uicomponent.renderField(checkboxField) ;
+  						  	%>
+  						  </td>
+							<td class="text">
+									<%=publicGroups.get(group)%>
 							</td>
 
    			     	</tr>

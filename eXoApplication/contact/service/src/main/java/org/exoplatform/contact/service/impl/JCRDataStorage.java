@@ -108,6 +108,15 @@ public class JCRDataStorage{
     return contactServiceHome.getNode(ADDRESS_BOOK) ;
   }
   
+  protected Node getPublicContactHome(SessionProvider sProvider) throws Exception {
+    Node contactServiceHome = getPublicContactServiceHome(sProvider) ;
+    if(!contactServiceHome.hasNode(CONTACTS)) {
+      contactServiceHome.addNode(CONTACTS, NT_UNSTRUCTURED) ;
+      contactServiceHome.save() ;
+    }
+    return contactServiceHome.getNode(CONTACTS) ;
+  }
+  
   private Node getTagHome(SessionProvider sProvider, String username) throws Exception {
     Node contactServiceHome = getUserContactServiceHome(sProvider, username) ;
     if(!contactServiceHome.hasNode(TAGS)) {
@@ -129,14 +138,7 @@ public class JCRDataStorage{
   }
   */
   
-  private Node getPublicContactHome(SessionProvider sProvider) throws Exception {
-    Node contactServiceHome = getPublicContactServiceHome(sProvider) ;
-    if(!contactServiceHome.hasNode(CONTACTS)) {
-    	contactServiceHome.addNode(CONTACTS, NT_UNSTRUCTURED) ;
-    	contactServiceHome.save() ;
-    }
-    return contactServiceHome.getNode(CONTACTS) ;
-  }
+  
   
   private String [] ValuesToStrings(Value[] Val) throws Exception {
     if(Val.length == 1) return new String[]{Val[0].getString()};
@@ -806,9 +808,6 @@ public class JCRDataStorage{
 //  save image to contact
     ContactAttachment attachment = contact.getAttachment() ;
     if (attachment != null) {
-      
-      System.out.println("\n\n attactment not null \n\n");
-      
       if (attachment.getFileName() != null) {
         Node nodeFile = null ;
         if (contactNode.hasNode("image"))nodeFile = contactNode.getNode("image") ;
@@ -980,6 +979,7 @@ public class JCRDataStorage{
     }
     contactHomeNode.getSession().save() ;
     publicContactHomeNode.getSession().save();
+    sharedHome.getSession().save() ;
   }
 
   public void addTag(SessionProvider sysProvider, String username, List<String> contactIds, List<Tag> tags) throws Exception {

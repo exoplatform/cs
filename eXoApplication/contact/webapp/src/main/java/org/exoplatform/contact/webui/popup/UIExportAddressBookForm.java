@@ -62,10 +62,9 @@ public class UIExportAddressBookForm extends UIForm implements UIPopupComponent{
   
   private Map<String, String> privateGroupMap_ = new HashMap<String, String>() ;
   private Map<String, String> publicGroupMap_ = new HashMap <String, String>() ;
+  private Map<String, String> sharedGroupMap_ = new HashMap <String, String>() ;
   
-  public UIExportAddressBookForm() throws Exception {
-  }  
-
+  public UIExportAddressBookForm() throws Exception { }
   public String getLabel(String id) throws Exception {
     try {
       return  super.getLabel(id) ;
@@ -77,34 +76,43 @@ public class UIExportAddressBookForm extends UIForm implements UIPopupComponent{
   public void activate() throws Exception {}
   public void deActivate() throws Exception {}
   
-  public Map<String, String> getSharedContactGroup() { return publicGroupMap_ ; }
-  public void setSharedContactGroup(Map<String, String> groups) { publicGroupMap_ = groups ; }
-  
   public Map<String, String> getContactGroups() { return privateGroupMap_; }
   public void setContactGroups(Map<String, String> contactGroups) { privateGroupMap_ = contactGroups ; }
+
+  public Map<String, String> getSharedContactGroups() { return sharedGroupMap_; }
+  public void setSharedContactGroups(Map<String, String> contactGroups) { sharedGroupMap_ = contactGroups ; }
+  
+  public Map<String, String> getPublicContactGroup() { return publicGroupMap_ ; }//getSharedContactGroup
+  public void setPublicContactGroup(Map<String, String> groups) { publicGroupMap_ = groups ; }
 
   public void updateList() throws Exception { 
     getChildren().clear() ;
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-    ContactService contactService = ContactUtils.getContactService();
-    for(String type : contactService.getImportExportType()) {
+    for(String type : ContactUtils.getContactService().getImportExportType()) {
       options.add(new SelectItemOption<String>(type, type)) ;
     }  
     addUIFormInput(new UIFormStringInput(NAME, NAME, null)) ;
     addUIFormInput(new UIFormSelectBox(TYPE, TYPE, options)) ;
     for (String group : privateGroupMap_.keySet()) {
-      UIFormCheckBoxInput<Boolean> checkbox = new UIFormCheckBoxInput<Boolean>(group,privateGroupMap_.get(group), false);
-      addUIFormInput(checkbox);
+      addUIFormInput(new UIFormCheckBoxInput<Boolean>(group,privateGroupMap_.get(group), false));
     }
     for (String group : publicGroupMap_.keySet()) {
-      UIFormCheckBoxInput<Boolean> checkbox = new UIFormCheckBoxInput<Boolean>(group, group, false);
-      addUIFormInput(checkbox);
+      addUIFormInput(new UIFormCheckBoxInput<Boolean>(group, group, false));
+    }
+    for (String group : sharedGroupMap_.keySet()) {
+      addUIFormInput(new UIFormCheckBoxInput<Boolean>(group, sharedGroupMap_.get(group), false));
     }
   }
 
   public List<String> getCheckedGroups() throws Exception {
     List<String> checked = new ArrayList<String>();
     for (String group : privateGroupMap_.keySet()) {
+      UIFormCheckBoxInput uiCheckBox = getChildById(group);
+      if (uiCheckBox != null && uiCheckBox.isChecked()) {
+        checked.add(group);
+      }
+    }
+    for (String group : sharedGroupMap_.keySet()) {
       UIFormCheckBoxInput uiCheckBox = getChildById(group);
       if (uiCheckBox != null && uiCheckBox.isChecked()) {
         checked.add(group);
@@ -123,10 +131,6 @@ public class UIExportAddressBookForm extends UIForm implements UIPopupComponent{
     public void execute(Event<UIExportAddressBookForm> event) throws Exception {
       UIExportAddressBookForm uiForm = event.getSource() ;
       UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class);
-      
-      String username = ContactUtils.getCurrentUser() ;
-      ContactService contactService = ContactUtils.getContactService() ;
-      
       List<String> groupIds = uiForm.getCheckedGroups() ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       if (groupIds.size() < 1) {
@@ -143,7 +147,8 @@ public class UIExportAddressBookForm extends UIForm implements UIPopupComponent{
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-      OutputStream out = contactService.getContactImportExports(exportFormat).exportContact(SessionsUtils.getSystemProvider(), username, groupIds.toArray(new String[]{})) ;
+      OutputStream out = ContactUtils.getContactService().getContactImportExports(exportFormat).exportContact(
+          SessionsUtils.getSystemProvider(), ContactUtils.getCurrentUser(), groupIds.toArray(new String[]{})) ;
       if(out == null) {
       	 uiApp.addMessage(new ApplicationMessage("UIExportAddressBookForm.msg.there-is-not-contacts-exists", null,
            ApplicationMessage.WARNING)) ;

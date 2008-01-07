@@ -128,8 +128,11 @@ public class UIActionBar extends UIContainer  {
       UIAddressBooks uiAddressBooks = uiActionBar.getAncestorOfType(UIContactPortlet.class)
         .findFirstComponentOfType(UIAddressBooks.class) ;
       Map<String, String> groups = uiAddressBooks.getPrivateGroupMap() ;
-      Map<String, String> sharedGroups = uiAddressBooks.getPublicGroupMap() ;
-      if ((sharedGroups == null || sharedGroups.size() == 0) && (groups == null || groups.size() == 0)) {
+      Map<String, String> publicGroups = uiAddressBooks.getPublicGroupMap() ;
+      Map<String, String> sharedGroups = uiAddressBooks.getSharedGroups() ;
+      
+      if ((publicGroups == null || publicGroups.size() == 0) && (groups == null || groups.size() == 0)
+          && (sharedGroups == null || sharedGroups.size() == 0)) {
         UIApplication uiApp = uiActionBar.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.no-addressbook", null,
           ApplicationMessage.WARNING)) ;
@@ -137,7 +140,8 @@ public class UIActionBar extends UIContainer  {
         return ;   
       }
       uiExportForm.setContactGroups(groups) ;
-      uiExportForm.setSharedContactGroup(sharedGroups) ;
+      uiExportForm.setPublicContactGroup(publicGroups) ;
+      uiExportForm.setSharedContactGroups(sharedGroups) ;      
       uiExportForm.updateList();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
     }  
