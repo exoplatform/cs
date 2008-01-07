@@ -38,6 +38,7 @@
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.showEvent() ;') ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.initSelection() ;') ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.checkFilter() ;') ;
+ 	rcontext.getJavascriptManager().addOnResizeJavascript('eXo.calendar.UICalendarPortlet.browserResizeCallback') ;
   cssClass = "Day" ;
 %>
 <div class="UIDayView">
@@ -170,7 +171,7 @@
 			            			if(flag) {cssClass = "TdLine" ;} ;
                       %>
                       <tr startTime="$h"  class="$style">
-                        <td class="$cssClass"  startTime="$h">
+                        <td class="$cssClass"  startTime="$h"  unselectable="on" >
                           &nbsp;
                         </td>
                       </tr>

@@ -25,6 +25,7 @@
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.checkFilter() ;') ;
 	rcontext.getJavascriptManager().addJavascript('eXo.calendar.UIWeekView.initSelection() ;') ;
 	rcontext.getJavascriptManager().addJavascript('eXo.calendar.UIWeekView.initSelectionX() ;') ;
+	rcontext.getJavascriptManager().addOnResizeJavascript('eXo.calendar.UIWeekView.setSize') ;
  	yearViewAction = uicomponent.TYPE_YEAR +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"="+ currentMonth +"&"+ uicomponent.DAY + "=1" ;
  	dateFormat = uicomponent.getDateFormat() ;
 	timeFormat = uicomponent.getTimeFormat() ;

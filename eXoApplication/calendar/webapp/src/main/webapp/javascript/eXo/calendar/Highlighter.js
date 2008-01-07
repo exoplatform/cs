@@ -1,4 +1,5 @@
 function Highlighter() {
+
 }
 
 Highlighter.prototype.getPos = function(cell) {
