@@ -111,10 +111,10 @@ public class UIEventCategoryForm extends UIForm {
         if(uiForm.isAddNew_) calendarService.saveEventCategory(SessionsUtils.getSessionProvider(), username, eventCat, null, true) ;
         else { 
           eventCat = uiForm.getEventCategory() ;
-          EventCategory newEventCategory = new EventCategory() ;
+         /* EventCategory newEventCategory = new EventCategory() ;
           newEventCategory.setName(name) ;
-          newEventCategory.setDescription(uiForm.getCategoryDescription()) ;
-          calendarService.saveEventCategory(SessionsUtils.getSessionProvider(), username, eventCat, newEventCategory, false) ; 
+          newEventCategory.setDescription(uiForm.getCategoryDescription()) ;*/
+          calendarService.saveEventCategory(SessionsUtils.getSessionProvider(), username, eventCat, new String[]{name, uiForm.getCategoryDescription()}, false) ; 
         }
         uiManager.updateGrid() ;
         uiForm.reset() ;

@@ -112,6 +112,18 @@ public interface CalendarService {
    * @throws Exception
    */
   public void saveUserCalendar(SessionProvider sProvider, String username, Calendar calendar, boolean isNew) throws Exception ;
+  
+  /**
+   * This method should:
+   * 1. Save shared calendar
+   * 3. Update shared calendar  
+   * @param username
+   * @param calendar
+   * @throws Exception
+   */
+  public void saveSharedCalendar(SessionProvider sProvider, String username, Calendar calendar) throws Exception ;
+  
+  
   /**
    * This method should:
    * 1. Get calendar service root node
@@ -187,10 +199,11 @@ public interface CalendarService {
    * @param username
    * @param calendarId
    * @param category
+   * @param values
    * @param isNew
    * @throws Exception
    */
-  public void saveEventCategory(SessionProvider sProvider, String username, EventCategory eventCategory, EventCategory newEventCategory, boolean isNew) throws Exception ;
+  public void saveEventCategory(SessionProvider sProvider, String username, EventCategory eventCategory, String[] values, boolean isNew) throws Exception ;
   /**
    * This method should:
    * 1. Get calendar service root node by current user

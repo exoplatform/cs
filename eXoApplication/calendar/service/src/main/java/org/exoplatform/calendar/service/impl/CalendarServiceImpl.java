@@ -106,8 +106,8 @@ public class CalendarServiceImpl implements CalendarService{
   public List<EventCategory> getEventCategories(SessionProvider sProvider, String username) throws Exception {
     return storage_.getEventCategories(sProvider, username) ;
   }
-  public void saveEventCategory(SessionProvider sProvider, String username, EventCategory eventCategory, EventCategory newEventCategory, boolean isNew) throws Exception {
-    storage_.saveEventCategory(sProvider, username, eventCategory, newEventCategory, isNew) ;
+  public void saveEventCategory(SessionProvider sProvider, String username, EventCategory eventCategory, String[] values, boolean isNew) throws Exception {
+    storage_.saveEventCategory(sProvider, username, eventCategory, values, isNew) ;
   }
   public void removeEventCategory(SessionProvider sProvider, String username, String eventCategoryName) throws Exception {
     storage_.removeEventCategory(sProvider, username,eventCategoryName);
@@ -218,5 +218,10 @@ public class CalendarServiceImpl implements CalendarService{
   
   public Map<String, String> checkFreeBusy(SessionProvider sysProvider, EventQuery eventQuery) throws Exception {
   	return storage_.checkFreeBusy(sysProvider, eventQuery) ;
+  }
+
+  public void saveSharedCalendar(SessionProvider sProvider, String username, Calendar calendar) throws Exception {
+    storage_.saveSharedCalendar(sProvider, username, calendar) ;
+    
   }
 }
