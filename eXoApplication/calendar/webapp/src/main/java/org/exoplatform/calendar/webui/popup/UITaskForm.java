@@ -595,10 +595,8 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
             CalendarUtils.getCalendarService().saveGroupEvent(SessionsUtils.getSystemProvider(), calendarId, calendarEvent, uiForm.isAddNew_) ;          
           }
           CalendarView calendarView = (CalendarView)uiViewContainer.getRenderedChild() ;
-          if ( uiForm.isAddNew_ ) {
-            if (calendarView instanceof UIListContainer)((UIListContainer)calendarView).setDisplaySearchResult(false) ;
-            uiViewContainer.refresh() ;
-          }
+          if (calendarView instanceof UIListContainer)((UIListContainer)calendarView).setDisplaySearchResult(false) ;
+          uiViewContainer.refresh() ;
           calendarView.setLastUpdatedEventId(calendarEvent.getId()) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiViewContainer) ;
           UIMiniCalendar uiMiniCalendar = calendarPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;

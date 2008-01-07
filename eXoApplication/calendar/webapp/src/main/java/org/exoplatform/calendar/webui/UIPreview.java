@@ -100,9 +100,7 @@ public class UIPreview extends UICalendarView implements UIPopupComponent {
   }
 
   public Attachment getAttachment(String attId) {
-    System.out.println("\n\n event " + getEvent());
     if(getEvent() != null) for(Attachment a : getEvent().getAttachment()) {
-      System.out.println("\n\n attId " + attId + "---" + a.getId());
       if(a.getId().equals(attId)) return a ;
     }
     return null ;

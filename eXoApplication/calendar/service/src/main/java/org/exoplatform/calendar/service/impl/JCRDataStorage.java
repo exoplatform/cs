@@ -1202,6 +1202,7 @@ public class JCRDataStorage{
             //attachment.setId(contentNode.getPath()) ;
           }
           attachment.setWorkspace(attchmentNode.getSession().getWorkspace().getName()) ;
+          System.out.println("\n\n attachment " + attachment.getWorkspace());
           attachments.add(attachment) ;
         }
       }
