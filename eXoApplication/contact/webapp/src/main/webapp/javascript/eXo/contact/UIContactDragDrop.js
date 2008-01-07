@@ -183,7 +183,10 @@ UIContactDragDrop.prototype.dropCallback = function(dndEvent) {
       dndEvent.clickObject.appendChild(checkBoxElement) ;
     }
     if (this.foundTargetObjectCatch.className.indexOf('UITags') != -1) {
-      eXo.webui.UIForm.submitForm('UIContacts','TagChecked', true) ;
+      /* Commented by DungHM 
+        eXo.webui.UIForm.submitForm('UIContacts','TagChecked', true) ;
+      */
+      eXo.webui.UIForm.submitForm('UIContacts','Tag', true) ;
       return ;
     }
     if (this.foundTargetObjectCatch.className.indexOf('PublicAddress') != -1) {
@@ -193,9 +196,11 @@ UIContactDragDrop.prototype.dropCallback = function(dndEvent) {
     }
     var contactTypeId = this.foundTargetObjectCatch.getAttribute('tagname') ;
     if (!contactTypeId) {
-//      var contactTypeNode = eXo.core.DOMUtil.findDescendantsByClass(this.foundTargetObjectCatch, 'a', 'IconHolder')[0] ;
-//      contactTypeId = contactTypeNode.id ;
-      contactTypeId = this.foundTargetObjectCatch.id ;
+    	/* Commented by DungHM 
+  	    var contactTypeNode = eXo.core.DOMUtil.findDescendantsByClass(this.foundTargetObjectCatch, 'a', 'IconHolder')[0] ;
+	      contactTypeId = contactTypeNode.id ;
+      */
+    	contactTypeId = this.foundTargetObjectCatch.id ;
     }
 
     if (eXo.core.DOMUtil.findAncestorByClass(this.foundTargetObjectCatch, 'UITags')) {
