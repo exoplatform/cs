@@ -72,6 +72,7 @@ public class UITopicsTag extends UIForm {
 	private String longDateformat ;
 	private String timeFormat ;
 	private boolean isUpdateTag = true ;
+	private boolean isUpdateTopicTag = true ;
 	
 	public UITopicsTag() throws Exception {
 		addChild(UIForumPageIterator.class, null, "TagPageIterator") ;
@@ -80,6 +81,7 @@ public class UITopicsTag extends UIForm {
 	public void setIdTag(String tagId) {
 		this.tagId = tagId ;
 		this.isUpdateTag = true ;
+		this.isUpdateTopicTag = true ;
   }
 	public void setFormat(double timeZone, String shortDateformat, String longDateformat, String timeFormat) {
 	  this.timeZone = timeZone ;
@@ -111,6 +113,10 @@ public class UITopicsTag extends UIForm {
 		this.listTopic = forumService.getTopicsByTag(ForumUtils.getSystemProvider(), this.tagId) ;
 		this.listTopic.setPageSize(this.maxTopic) ;
 		this.getChild(UIForumPageIterator.class).updatePageList(this.listTopic) ;
+		if(this.isUpdateTopicTag) { 
+			this.getChild(UIForumPageIterator.class).setSelectPage(1);
+			this.isUpdateTopicTag = false ;
+		}
 	}
 	
 	private TreeMap<String, JCRPageList> mapPostPage = new TreeMap<String, JCRPageList>();
@@ -130,9 +136,7 @@ public class UITopicsTag extends UIForm {
 	
 	@SuppressWarnings({ "unchecked", "unused" })
   private List<Topic> getTopicsTag() throws Exception {
-		//if(isUpdateTag) {
-			getListTopicTag() ;
-		//}
+		getListTopicTag() ;
 		this.page = this.getChild(UIForumPageIterator.class).getPageSelected() ;
 		this.topics = forumService.getPage(page, this.listTopic, ForumUtils.getSystemProvider()) ;
 		for(Topic topic : this.topics) {

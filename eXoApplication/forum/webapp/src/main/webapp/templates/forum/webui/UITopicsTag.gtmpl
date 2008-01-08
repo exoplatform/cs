@@ -3,13 +3,13 @@
 	import org.exoplatform.forum.webui.UITopicsTag ;
 	import org.exoplatform.forum.service.Tag ;
 	import org.exoplatform.forum.webui.UIForumPageIterator ;
-	
+%>
+<% uiform.begin() %>
+<%  
 	List topics = uicomponent.getTopicsTag() ; 
 	Tag tag_ = uicomponent.getTagById() ;
 	String tagName = tag_.getName() ;
 %>
-<% uiform.begin() %>
-
 <div class="UIForumContainer">
 	<div class="UIForumDescription">
 		<div class="LeftDescription">
