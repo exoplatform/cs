@@ -306,22 +306,28 @@ public class UIMessageList extends UIForm {
       String username = uiPortlet.getCurrentUser();
       String accountId = uiMessageList.getAccountId() ;
       MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
-      if ( msgId != null ) {
+      Message msg = uiMessageList.messageList_.get(msgId);
+      if ( msg != null ) {
         List<String> msgList = new ArrayList<String>() ;
         msgList.add(msgId);
+        msg.setHasStar(!msg.hasStar());
+        System.out.println("=============sdf=>>> ");
+        uiMessageList.messageList_.put(msg.getId(), msg);
         mailSrv.toggleMessageProperty(SessionsUtils.getSessionProvider(), username, accountId, msgList, Utils.EXO_STAR);
         uiMessageList.setSelectedMessageId(msgId);
       } else {
         List<String> msgList = new ArrayList<String>() ;
-        for (Message msg : uiMessageList.getCheckedMessage()) {
-          if (!msg.hasStar()) {
-            msgList.add(msg.getId());
+        for (Message checkedMessage : uiMessageList.getCheckedMessage()) {
+          if (!checkedMessage.hasStar()) {
+            msgList.add(checkedMessage.getId());
+            checkedMessage.setHasStar(true);
+            System.out.println("==================>>> ");
+            uiMessageList.messageList_.put(checkedMessage.getId(), checkedMessage);
           }
         }
         mailSrv.toggleMessageProperty(SessionsUtils.getSessionProvider(), username, accountId, msgList, Utils.EXO_STAR);
       }
-      uiMessageList.updateList();
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList);
     }
   }
   
@@ -335,11 +341,12 @@ public class UIMessageList extends UIForm {
       for (Message msg : uiMessageList.getCheckedMessage()) {
         if (msg.hasStar()) {
           msgList.add(msg.getId());
+          msg.setHasStar(false);
+          uiMessageList.messageList_.put(msg.getId(), msg);
         }
       }
       mailSrv.toggleMessageProperty(SessionsUtils.getSessionProvider(), username, uiMessageList.getAccountId(), msgList, Utils.EXO_STAR);
-      uiMessageList.updateList();
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent());
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList);
     }
   }
   
