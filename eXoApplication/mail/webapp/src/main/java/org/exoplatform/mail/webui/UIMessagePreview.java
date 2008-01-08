@@ -77,20 +77,11 @@ public class UIMessagePreview extends UIComponent {
   public UIMessagePreview() throws Exception {}
   
   public Message getMessage() throws Exception { 
-    String username = MailUtils.getCurrentUser();
-    String accountId = getAncestorOfType(UIMailPortlet.class).findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-    MailService mailSrv = MailUtils.getMailService();
-    if (selectedMessage_ != null) {
-      return mailSrv.getMessageById(SessionsUtils.getSessionProvider(), username, accountId, selectedMessage_.getId());
-    }
-    return null;
+      return selectedMessage_ ;
   }
   
   public void setMessage(Message msg) throws Exception {
-    String username = MailUtils.getCurrentUser();
-    String accountId = getAncestorOfType(UIMailPortlet.class).findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-    MailService mailSrv = MailUtils.getMailService();
-    selectedMessage_ = mailSrv.getMessageById(SessionsUtils.getSessionProvider(), username, accountId, msg.getId()); 
+    selectedMessage_ = msg ;
   }
   
   public List<Message> getConversations() throws Exception {

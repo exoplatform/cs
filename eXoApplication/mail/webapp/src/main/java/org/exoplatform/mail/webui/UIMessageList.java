@@ -276,7 +276,7 @@ public class UIMessageList extends UIForm {
       } else {
         if (msg.isUnread()) {
           List<String> msgIds  = new ArrayList<String>();
-          msgIds.add(msg.getId());
+          msgIds.add(msgId);
           mailServ.toggleMessageProperty(SessionsUtils.getSessionProvider(), username, accountId, msgIds, Utils.EXO_ISUNREAD);
           msg.setUnread(false);
           uiMessageList.setSelectedMessageId(msgId);
@@ -284,7 +284,7 @@ public class UIMessageList extends UIForm {
           event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer); 
         }
         uiMessagePreview.setMessage(msg);
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList);       
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent());       
       }
     }
   }
