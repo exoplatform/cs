@@ -259,7 +259,6 @@ public class UIMessageList extends UIForm {
     public void execute(Event<UIMessageList> event) throws Exception {
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UIMessageList uiMessageList = event.getSource();
-      //TODO: update Unread counter to folder in saveMessage(...), avoid call service alot
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       UIMessagePreview uiMessagePreview = uiPortlet.findFirstComponentOfType(UIMessagePreview.class);
       UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
@@ -267,7 +266,6 @@ public class UIMessageList extends UIForm {
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       MailService mailServ = uiPortlet.getApplicationComponent(MailService.class);
       Message msg = uiMessageList.messageList_.get(msgId);
-      System.out.println("msg ========== " + msg) ;
       if (uiMessageList.selectedDraftFolder()) {
         UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
         UIPopupActionContainer uiPopupContainer = uiPopupAction.activate(UIPopupActionContainer.class, 850) ;
@@ -280,13 +278,13 @@ public class UIMessageList extends UIForm {
           List<String> msgIds  = new ArrayList<String>();
           msgIds.add(msg.getId());
           mailServ.toggleMessageProperty(SessionsUtils.getSessionProvider(), username, accountId, msgIds, Utils.EXO_ISUNREAD);
+          msg.setUnread(false);
           uiMessageList.setSelectedMessageId(msgId);
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent());
+          uiMessageList.messageList_.put(msg.getId(), msg);
           event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer); 
         }
         uiMessagePreview.setMessage(msg);
-        uiMessageList.updateList();
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiMessagePreview);       
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList);       
       }
     }
   }
