@@ -128,9 +128,6 @@ public class UIMessageList extends UIForm {
   public String getAccountId() { return accountId_ ; }
   
   public String getSelectedMessageId() throws Exception {
-    if (getCheckedMessage() != null && getAppliedMessage().size() > 0) {
-      return getCheckedMessage().get(0).getId();
-    }
     return selectedMessageId_ ;
   }
   
@@ -207,7 +204,10 @@ public class UIMessageList extends UIForm {
     for (Message msg : getCheckedMessage()) {
       if (msg.getMessageIds() != null) {
         for (int i = 0; i < msg.getMessageIds().length; i++) {
-          Message conversation = mailSrv.getMessageById(SessionsUtils.getSessionProvider(), username, accountId_, msg.getMessageIds()[i]);
+          Message conversation ;
+          if (!msg.getMessageIds()[i].equals(msg.getId()))
+            conversation = mailSrv.getMessageById(SessionsUtils.getSessionProvider(), username, accountId_, msg.getMessageIds()[i]);
+          else conversation = msg;
           if (conversation != null) messageList.add(conversation);
         }
       }
@@ -630,19 +630,20 @@ public class UIMessageList extends UIForm {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource() ;  
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class) ;
-      List<Message> appliedList = uiMessageList.getAppliedMessage();
+      List<Message> checkedMsgs = uiMessageList.getCheckedMessage();
       MailService mailSrv = uiMessageList.getApplicationComponent(MailService.class);
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       List<String> msgList = new ArrayList<String>();
-      for (Message msg : appliedList) {
+      for (Message msg : checkedMsgs) {
         if (msg.isUnread()) {
           msgList.add(msg.getId());
+          msg.setUnread(false);
+          uiMessageList.messageList_.put(msg.getId(), msg);
         }
       }
       mailSrv.toggleMessageProperty(SessionsUtils.getSessionProvider(), username, accountId, msgList, Utils.EXO_ISUNREAD);
-      uiMessageList.updateList();
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessageArea.class));
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessageList.class));
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIFolderContainer.class));
     }
   }
@@ -651,19 +652,19 @@ public class UIMessageList extends UIForm {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource() ;  
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class) ;
-      List<Message> appliedList = uiMessageList.getAppliedMessage();
+      List<Message> appliedList = uiMessageList.getCheckedMessage();
       MailService mailSrv = uiMessageList.getApplicationComponent(MailService.class);
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       List<String> msgList = new ArrayList<String>();
       for (Message msg : appliedList) {
         if (!msg.isUnread()) {
-          msgList.add(msg.getId());
+          msg.setUnread(true);
+          uiMessageList.messageList_.put(msg.getId(), msg);
         }
       }
       mailSrv.toggleMessageProperty(SessionsUtils.getSessionProvider(), username, accountId, msgList, Utils.EXO_ISUNREAD);
-      uiMessageList.updateList();
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessageArea.class));
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessageList.class));
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIFolderContainer.class));
     }
   }
