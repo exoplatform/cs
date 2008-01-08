@@ -31,7 +31,7 @@ UIMonthView.prototype.init = function() {
 	}
 	this.scrollTo(this.eventContainer, this.items)
 } ;
-
+ 
 UIMonthView.prototype.scrollTo = function(container, events) {
 	var len = events.length ;
 	var lastUpdatedId = container.getAttribute("lastUpdatedId") ;
