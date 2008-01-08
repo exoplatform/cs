@@ -162,7 +162,6 @@
 								classIconForum = "ForumLockedIcon";//TODO: Rename class ForumLockedIcon into ForumCloseIcon
 								titleIconForum = "Forum is Closed for Posting";
 							}
-
 							String topicCount = (String)forum.getTopicCount();
 							String postCount = (String)forum.getPostCount();
 							String [] forumModerators = forum.getModerators();
@@ -175,15 +174,12 @@
 									</td>
 						 <% if(topicNewPost != null) { %>
 									<td >
-										<div class="LastPostIcon $topicNewPostIcon" ><span></span></div><a id="idTitle1" href="$openLinkLastPost" title="Go to first new post in thread '$topicNewPostTitle' " class="LastPostTitle">$topicNewPostTitle</a>
+										<div class="LastPostIcon $topicNewPostIcon" ><span></span></div><a onmouseover="this.title='Go to first new post in thread: ' + this.innerHTML " href="$openLinkLastPost" class="LastPostTitle">$topicNewPostTitle</a>
 										<div style="clear: left;"><span></span></div>
 										<div class="LastPostInfos">by&nbsp;<a style="color: #058EE6;" href="#">$lastPostBy</a><span class="DateTime">&nbsp;($dateTime)</span></div>
-									<script type="text/javascript">
-										document.getElementById('idTitle1').title = "Go to first new post in thread '" + document.getElementById('idTitle1').innerHTML + "'";
-									</script>
-								<% } else { %>	
+								<%} else { %>	
 									<td class="Tdbox" style="height: 40px;">
-											<%= _ctx.appRes("UICategory.label.notTheard"); %>
+										 <%= _ctx.appRes("UICategory.label.notTheard"); %>
 								<% } %>	
 									</td>
 									 <td class="Tdbox">$topicCount</td>

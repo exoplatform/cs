@@ -98,7 +98,6 @@
 											classIconForum = "ForumLockedIcon";//TODO: Rename class ForumLockedIcon into ForumCloseIcon
 											titleIconForum = "Forum is Closed for Posting";
 										}
-
 										String topicCount = (String)forum.getTopicCount();
 										String postCount = (String)forum.getPostCount();
 										String [] forumModerators = forum.getModerators();
@@ -112,17 +111,17 @@
 												<div class="ForumDescription">$forumDescription</div>
 											</td>
 										 	<% if(topicNewPost != null) { %>
+										 	<%  
+										 	 String postTitle = ("Go to first new post in thread ' " + topicNewPostTitle + " '").replaceAll("'","&#39;").replaceAll('"',"&#34;").replaceAll(" ","&#32;") ;
+										 	%>
 										 	<td >
 										 		<div class="LastPostIcon $topicNewPostIcon" ><span></span></div>
-										 		<a href="$openLinkLastPost" title="Go to first new post in thread '$topicNewPostTitle'" id="idTitle" class="LastPostTitle">$topicNewPostTitle</a>
+										 		<a href="$openLinkLastPost" title=$postTitle class="LastPostTitle">$topicNewPostTitle</a>
 												<div style="clear: left;"><span></span></div>
 												<div class="LastPostInfos">by&nbsp;<a style="color: #058EE6;" href="#">$lastPostBy</a><span class="DateTime">&nbsp;($dateTime)</span></div>
-											<script type="text/javascript">
-												document.getElementById('idTitle').title = "Go to first new post in thread '" + document.getElementById('idTitle').innerHTML + "'";
-											</script>
-											<% } else { %>	
+											<%} else { %>	
 											<td class="Tdbox" style="height: 40px;">
-													Not Theard !	
+													<%=_ctx.appRes("UICategory.label.notTheard"); %>
 											<% } %>
 											</td>
 										 	<td class="Tdbox">$topicCount</td>
