@@ -324,7 +324,6 @@ public class MailServiceImpl implements MailService{
   public List<Message> checkNewMessage(SessionProvider sProvider, String username, String accountId) throws Exception {
     Calendar checkTime = GregorianCalendar.getInstance();
     Account account = getAccountById(sProvider, username, accountId) ;
-    long start = checkTime.getTimeInMillis() ;
     System.out.println(" #### Getting mail from " + account.getIncomingHost() + " ... !");
     List<Message> messageList = new ArrayList<Message>();
     int totalNew = -1;
@@ -373,10 +372,10 @@ public class MailServiceImpl implements MailService{
         while (i < totalNew) {
           javax.mail.Message msg = messages[i] ;          
           saveMessage(sProvider, msg, messageHome, account.getId(), username) ;
+          messageHome.getSession().save() ;
           i ++ ;          
           System.out.println(" ####  " + i + " messages saved");
         }
-        messageHome.getSession().save() ;
         
         storeFolder.setNumberOfUnreadMessage((storeFolder.getNumberOfUnreadMessage() + i)) ;
         storeFolder.setTotalMessage(storeFolder.getTotalMessage() + i) ;
