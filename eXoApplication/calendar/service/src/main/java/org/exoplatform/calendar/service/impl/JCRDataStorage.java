@@ -246,20 +246,23 @@ public class JCRDataStorage{
     Node calendarHome = getUserCalendarHome(sProvider, username) ;
     Node calendarNode ;
     if(isNew) {
-      if(calendarHome.hasNode(calendar.getId())) throw new Exception("This calendar is already exists") ;
-      calendarNode = calendarHome.addNode(calendar.getId(), "exo:calendar") ;
-      calendarNode.setProperty("exo:id", calendar.getId()) ;
-      CalendarSetting setting = getCalendarSetting(sProvider, username) ;
-      if(setting == null) setting = new CalendarSetting() ;
-      Set<String> privateCalendars = new HashSet<String>() ;
-      if(setting.getDefaultPrivateCalendars() != null) {
-        for(String id : setting.getDefaultPrivateCalendars()) {
-          privateCalendars.add(id) ;
+      if(calendarHome.hasNode(calendar.getId())) {
+      	calendarNode = calendarHome.getNode(calendar.getId()) ;
+      }else {
+      	calendarNode = calendarHome.addNode(calendar.getId(), "exo:calendar") ;
+        calendarNode.setProperty("exo:id", calendar.getId()) ;
+        CalendarSetting setting = getCalendarSetting(sProvider, username) ;
+        if(setting == null) setting = new CalendarSetting() ;
+        Set<String> privateCalendars = new HashSet<String>() ;
+        if(setting.getDefaultPrivateCalendars() != null) {
+          for(String id : setting.getDefaultPrivateCalendars()) {
+            privateCalendars.add(id) ;
+          }
         }
+        if(!privateCalendars.contains(calendar.getId())) privateCalendars.add(calendar.getId()) ;
+        setting.setDefaultPrivateCalendars(privateCalendars.toArray(new String[privateCalendars.size()])) ;
+        saveCalendarSetting(sProvider, username, setting) ;
       }
-      if(!privateCalendars.contains(calendar.getId())) privateCalendars.add(calendar.getId()) ;
-      setting.setDefaultPrivateCalendars(privateCalendars.toArray(new String[privateCalendars.size()])) ;
-      saveCalendarSetting(sProvider, username, setting) ;
     }else {
       calendarNode = calendarHome.getNode(calendar.getId()) ;
     }    
@@ -283,7 +286,6 @@ public class JCRDataStorage{
     }else {
       getUserRoot(sProvider, username).getSession().save() ;
     }
-
   }
 
   public Calendar removeUserCalendar(SessionProvider sProvider, String username, String calendarId) throws Exception {
@@ -657,7 +659,7 @@ public class JCRDataStorage{
     String name = null ;
     String description = null ;
     if(isNew){
-      if(eventCategoryHome.hasNode(eventCategory.getName())) throw new ItemExistsException("This event category is already exists!") ;
+      if(eventCategoryHome.hasNode(eventCategory.getName())) return ;
       eventCategoryNode = eventCategoryHome.addNode(eventCategory.getName(), "exo:eventCategory") ;
       name = eventCategory.getName() ;
       description = eventCategory.getDescription() ;
@@ -667,9 +669,8 @@ public class JCRDataStorage{
         name = eventCategory.getName() ;
         description = values[1] ;
       } else {
-        if(eventCategoryHome.hasNode(values[0])){
-          throw new ItemExistsException("This event category is already exists!") ;
-        } else {
+        if(eventCategoryHome.hasNode(values[0]))return ; 
+        else {
           eventCategoryNode.remove() ;
           eventCategoryHome.addNode(values[0], "exo:eventCategory") ;
           name = values[0] ;
