@@ -242,10 +242,6 @@ public class ForumFormatFunction {
 		return rtn.toString() ;
 	}
 	
-	String a = new String() ;
-	a = a.temp() ;
-	
-	
 	
 	
 }
