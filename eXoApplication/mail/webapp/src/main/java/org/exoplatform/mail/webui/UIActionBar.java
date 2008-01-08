@@ -87,7 +87,7 @@ public class UIActionBar extends UIContainer {
       String username =  uiPortlet.getCurrentUser() ;
       try {
         mailSvr.checkNewMessage(SessionsUtils.getSessionProvider(), username, accId) ;
-        uiMessageList.init(accId);
+        //uiMessageList.init(accId);
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UINavigationContainer.class)); 
         event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class)); 
       } catch (AuthenticationFailedException afe) {

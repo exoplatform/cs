@@ -108,7 +108,9 @@ public class UIMessageList extends UIForm {
   private String accountId_;
   public LinkedHashMap<String, Message> messageList_ = new LinkedHashMap<String, Message>();
   
-  public UIMessageList() throws Exception { }
+  public UIMessageList() throws Exception { 
+    init(MailUtils.getAccountId()) ;
+  }
   
   public void init(String accountId) throws Exception {
     accountId_ = accountId ;
@@ -225,6 +227,7 @@ public class UIMessageList extends UIForm {
         if (message != null) msgList.add(message) ;
       }
     } else if (msg.isRootConversation()) msgList.add(msg);
+    if (msgList.size() == 0) msgList.add(msg);
     return msgList ;
   }
   
