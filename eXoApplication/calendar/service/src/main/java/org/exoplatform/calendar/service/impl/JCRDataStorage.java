@@ -19,6 +19,7 @@ package org.exoplatform.calendar.service.impl;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -1453,28 +1454,11 @@ public class JCRDataStorage{
   }
 
   public EventPageList searchEvent(SessionProvider sProvider, String username, EventQuery eventQuery, String[] publicCalendarIds)throws Exception {
-    List<CalendarEvent> events = getEvent(sProvider, username, eventQuery, publicCalendarIds) ;
-    /*Query query ;
-    QueryManager qm ;
-    if(username != null && username.length() > 0) {
-      Node calendarHome = getCalendarHome(username) ;
-      eventQuery.setCalendarPath(calendarHome.getPath()) ;
-      qm = calendarHome.getSession().getWorkspace().getQueryManager() ;
-      query = qm.createQuery(eventQuery.getQueryStatement(), Query.XPATH) ;
-      NodeIterator it = query.execute().getNodes();
-      while(it.hasNext()) {
-        events.add(getEvent(it.nextNode())) ;        
-      }
-    }
-    Node publicCalHome = getCalendarHome() ;
-    eventQuery.setCalendarPath(publicCalHome.getPath()) ;
-    qm = publicCalHome.getSession().getWorkspace().getQueryManager() ;
-    query = qm.createQuery(eventQuery.getQueryStatement(), Query.XPATH) ;
-    NodeIterator it = query.execute().getNodes();
-    while(it.hasNext()) {
-      events.add(getEvent(it.nextNode())) ;
-    }    */
-    return new EventPageList(events, 10) ;    
+   List<CalendarEvent> events = new ArrayList<CalendarEvent>()  ; 
+   events.addAll(getUserEvents(sProvider, username, eventQuery)) ;
+   events.addAll(getPublicEvents(sProvider, eventQuery)) ;
+   events.addAll(getSharedEvents(sProvider, username, eventQuery)) ;
+   return new EventPageList(events, 10) ;    
   }
 
   public Map<Integer, String > searchHightLightEvent(SessionProvider sProvider, String username, EventQuery eventQuery, String[] publicCalendarIds)throws Exception {
@@ -1675,7 +1659,7 @@ public class JCRDataStorage{
     }      
   }
 
-  public List<CalendarEvent> getSharedEvent(SessionProvider sProvider, String username, EventQuery eventQuery) throws Exception {
+  public List<CalendarEvent> getSharedEvents(SessionProvider sProvider, String username, EventQuery eventQuery) throws Exception {
     List<CalendarEvent> events = new ArrayList<CalendarEvent>() ;
     if(getSharedCalendarHome(sProvider).hasNode(username)) {
       PropertyIterator iter = getSharedCalendarHome(sProvider).getNode(username).getReferences() ;
@@ -1779,7 +1763,7 @@ public class JCRDataStorage{
     //system session
     if(calSetting != null && calSetting.getDefaultSharedCalendars().length > 0) {
       eventQuery.setCalendarId(getCalendarSetting(sProvider, username).getDefaultSharedCalendars()) ;
-      events.addAll(getSharedEvent(sProvider, username, eventQuery)) ;
+      events.addAll(getSharedEvents(sProvider, username, eventQuery)) ;
     }
     if(calSetting != null && calSetting.getDefaultPublicCalendars().length > 0) {
       eventQuery.setCalendarId(getCalendarSetting(sProvider, username).getDefaultPublicCalendars()) ;

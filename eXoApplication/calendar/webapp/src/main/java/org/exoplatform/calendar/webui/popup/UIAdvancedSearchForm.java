@@ -80,14 +80,23 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
     types.add(new SelectItemOption<String>(CalendarEvent.TYPE_TASK, CalendarEvent.TYPE_TASK)) ;
     addChild(new UIFormSelectBox(TYPE, TYPE, types)) ;
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
+    String username = CalendarUtils.getCurrentUser() ;
     CalendarService cservice = CalendarUtils.getCalendarService() ;
     options.add(new SelectItemOption<String>("", "")) ;
-    for(Calendar cal : cservice.getUserCalendars(SessionsUtils.getSessionProvider(), CalendarUtils.getCurrentUser(), true)) {
+    for(Calendar cal : cservice.getUserCalendars(SessionsUtils.getSessionProvider(), username, true)) {
       options.add(new SelectItemOption<String>(cal.getName(), cal.getId())) ;
     }
-    GroupCalendarData groupCal  = cservice.getSharedCalendars(SessionsUtils.getSessionProvider(), CalendarUtils.getCurrentUser(), true) ;
-    if(groupCal != null) {
-      for(Calendar cal : groupCal.getCalendars()) {
+    List<GroupCalendarData> groupCals  = cservice.getGroupCalendars(SessionsUtils.getSessionProvider(), CalendarUtils.getUserGroups(username), true, username) ;
+    for(GroupCalendarData groupData : groupCals) {
+      if(groupData != null) {
+        for(Calendar cal : groupData.getCalendars()) {
+          options.add(new SelectItemOption<String>(cal.getName(), cal.getId())) ;
+        }
+      }
+    }
+    GroupCalendarData sharedData  = cservice.getSharedCalendars(SessionsUtils.getSessionProvider(), CalendarUtils.getCurrentUser(), true) ;
+    if(sharedData != null) {
+      for(Calendar cal : sharedData.getCalendars()) {
         options.add(new SelectItemOption<String>(cal.getName(), cal.getId())) ;
       }
     }
@@ -98,12 +107,7 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
       options.add(new SelectItemOption<String>(cat.getName(), cat.getName())) ;
     }
     addChild(new UIFormSelectBox(CATEGORY, CATEGORY, options)) ;
-    options = new ArrayList<SelectItemOption<String>>() ;
-    options.add(new SelectItemOption<String>("", "")) ;
-    options.add(new SelectItemOption<String>(CalendarEvent.PRIORITY_LOW, CalendarEvent.PRIORITY_LOW)) ;
-    options.add(new SelectItemOption<String>(CalendarEvent.PRIORITY_NORMAL, CalendarEvent.PRIORITY_NORMAL)) ;
-    options.add(new SelectItemOption<String>(CalendarEvent.PRIORITY_HIGH, CalendarEvent.PRIORITY_HIGH)) ;
-    addChild(new UIFormSelectBox(PRIORITY, PRIORITY, options)) ;
+    addChild(new UIFormSelectBox(PRIORITY, PRIORITY, getPriority())) ;
     java.util.Calendar calendar = CalendarUtils.getInstanceTempCalendar() ;
     addChild( new UIFormDateTimeInput(FROMDATE, FROMDATE, calendar.getTime(), false)) ;
     calendar.add(java.util.Calendar.DATE, 1) ;
@@ -116,6 +120,14 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
   public void setSearchValue(String searchValue) {
     getUIStringInput(TEXT).setValue(searchValue) ;
   }  
+  private List<SelectItemOption<String>> getPriority() throws Exception {
+    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
+    options.add(new SelectItemOption<String>("", "")) ;
+    options.add(new SelectItemOption<String>("normal", "2")) ;
+    options.add(new SelectItemOption<String>("high", "1")) ;
+    options.add(new SelectItemOption<String>("low", "3")) ;
+    return options ;
+  }
   public String[] getPublicCalendars() throws Exception{
     String[] groups = CalendarUtils.getUserGroups(CalendarUtils.getCurrentUser()) ;
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
@@ -158,18 +170,19 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
         query.setText(uiForm.getUIStringInput(UIAdvancedSearchForm.TEXT).getValue()) ;
         query.setEventType(uiForm.getUIFormSelectBox(UIAdvancedSearchForm.TYPE).getValue()) ;
         String calendarId = uiForm.getUIFormSelectBox(UIAdvancedSearchForm.CALENDAR).getValue() ;
-        if(calendarId != null && calendarId.length() > 0) query.setCalendarId(new String[]{calendarId}) ;
+        if(calendarId != null && calendarId.trim().length() > 0) query.setCalendarId(new String[]{calendarId}) ;
         String categoryId = uiForm.getUIFormSelectBox(UIAdvancedSearchForm.CATEGORY).getValue() ;
-        if(categoryId != null && categoryId.length() > 0) query.setCategoryId(new String[]{categoryId}) ;
+        if(categoryId != null && categoryId.trim().length() > 0) query.setCategoryId(new String[]{categoryId}) ;
         query.setFromDate(uiForm.getUIFormDateTimeInput(UIAdvancedSearchForm.FROMDATE).getCalendar()) ;
         query.setToDate(uiForm.getUIFormDateTimeInput(UIAdvancedSearchForm.TODATE).getCalendar()) ;
+        String priority = uiForm.getUIFormSelectBox(UIAdvancedSearchForm.PRIORITY).getValue() ;
+        if(priority != null && priority.trim().length() > 0) query.setPriority(priority) ;
         String username = CalendarUtils.getCurrentUser() ;
         UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
         UICalendarViewContainer calendarViewContainer = 
           calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
         calendarViewContainer.initView(UICalendarViewContainer.LIST_VIEW) ;
         UIListView uiListView = calendarViewContainer.findFirstComponentOfType(UIListView.class) ;
-        System.out.println("query " + query.getQueryStatement());
         EventPageList resultPageList =  
           CalendarUtils.getCalendarService().searchEvent(SessionsUtils.getSystemProvider(), username, query, uiForm.getPublicCalendars()) ;
         calendarPortlet.cancelAction() ;

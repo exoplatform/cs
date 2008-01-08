@@ -29,12 +29,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
+import javax.faces.component.UIViewRoot;
+
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.SessionsUtils;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.EventCategory;
+import org.exoplatform.calendar.service.EventPageList;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.webui.popup.UIEventCategoryManager;
@@ -660,6 +663,9 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         }
         uiMiniCalendar.updateMiniCal() ;
         calendarview.setLastUpdatedEventId(null) ;
+        if(uiContainer.getRenderedChild() instanceof UIListContainer) {
+          ((UIListContainer)uiContainer.getRenderedChild()).getChild(UIListView.class).setDisplaySearchResult(false) ;
+        }
         uiContainer.refresh() ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;
@@ -682,7 +688,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       eventQuery.setFromDate(fromcalendar) ;
       java.util.Calendar tocalendar = uiListView.getEndDay(new GregorianCalendar(uiListView.getCurrentYear(), uiListView.getCurrentMonth(), uiListView.getCurrentDay())) ;
       eventQuery.setToDate(tocalendar) ;
-      uiListView.update(calendarService.searchEvent(SessionsUtils.getSystemProvider(), username, eventQuery, uiCalendarView.getPublicCalendars())) ; 
+      uiListView.update(new EventPageList(calendarService.getEvent(SessionsUtils.getSystemProvider(), username, eventQuery, uiCalendarView.getPublicCalendars()), 10)) ; 
       uiListView.setShowEventAndTask(false) ;
       uiListView.setDisplaySearchResult(false) ;
       uiListView.isShowEvent_ = false ;

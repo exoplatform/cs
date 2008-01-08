@@ -20,13 +20,18 @@ import java.text.DateFormat;
 import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.TimeZone;
 
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarSetting;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.form.UIForm;
@@ -46,19 +51,19 @@ import org.exoplatform.webui.form.UIFormStringInput;
     template = "app:/templates/calendar/webui/UIPopup/UICalendarSettingTab.gtmpl"
 ) 
 public class UICalendarSettingTab extends UIFormInputWithActions {
-  final private static String VIEW_TYPE = "viewType".intern() ;
-  final private static String TIME_INTERVAL = "timeInterval".intern() ;
-  final private static String WEEK_START_ON = "weekStartOn".intern() ;
-  final private static String DATE_FORMAT = "dateFormat".intern() ;
-  final private static String TIME_FORMAT = "timeFormat".intern() ;
-  final private static String LOCATION = "location".intern() ;
-  final private static String TIMEZONE = "timeZone".intern() ;
-  final private static String ISSHOWWORKINGTIME = "showWorkingTime".intern() ;
+  final public static String VIEW_TYPE = "viewType".intern() ;
+  final public static String TIME_INTERVAL = "timeInterval".intern() ;
+  final public static String WEEK_START_ON = "weekStartOn".intern() ;
+  final public static String DATE_FORMAT = "dateFormat".intern() ;
+  final public static String TIME_FORMAT = "timeFormat".intern() ;
+  final public static String LOCATION = "location".intern() ;
+  final public static String TIMEZONE = "timeZone".intern() ;
+  final public static String ISSHOWWORKINGTIME = "showWorkingTime".intern() ;
   final public static String WORKINGTIME_BEGIN = "beginTime".intern() ;
   final public static String WORKINGTIME_END = "endTime".intern() ;
-  final private static String BASE_URL = "baseURL".intern() ;
-  
-  
+  final public static String BASE_URL = "baseURL".intern() ;
+  private Map<String, List<ActionData>> actionField_  = new HashMap<String, List<ActionData>>() ;
+
   public UICalendarSettingTab(String compId) throws Exception {
     super(compId);
     setComponentConfig(getClass(), null) ;
@@ -68,8 +73,8 @@ public class UICalendarSettingTab extends UIFormInputWithActions {
     viewTypes.add(new SelectItemOption<String>("Month view", CalendarSetting.MONTH_VIEW)) ;
     viewTypes.add(new SelectItemOption<String>("Year view", CalendarSetting.YEAR_VIEW)) ;
     viewTypes.add(new SelectItemOption<String>("List view", CalendarSetting.LIST_VIEW)) ;
-    viewTypes.add(new SelectItemOption<String>("Schedule view", CalendarSetting.SCHEDULE_VIEW)) ;
-    
+    //viewTypes.add(new SelectItemOption<String>("Schedule view", CalendarSetting.SCHEDULE_VIEW)) ;
+
     addUIFormInput(new UIFormSelectBox(VIEW_TYPE, VIEW_TYPE, viewTypes)) ;
 
     List<SelectItemOption<String>> timeInterval = new ArrayList<SelectItemOption<String>>() ;
@@ -98,10 +103,21 @@ public class UICalendarSettingTab extends UIFormInputWithActions {
     List<SelectItemOption<String>> timeFormat = new ArrayList<SelectItemOption<String>>() ;
     timeFormat.add(new SelectItemOption<String>("AM/PM", "hh:mm a")) ;
     timeFormat.add(new SelectItemOption<String>("24 Hours", "HH:mm")) ;
-
     addUIFormInput(new UIFormSelectBox(TIME_FORMAT, TIME_FORMAT, timeFormat)) ;
-    addUIFormInput(new UIFormSelectBox(LOCATION, LOCATION, getLocales())) ;
-    addUIFormInput(new UIFormSelectBox(TIMEZONE, TIMEZONE, getTimeZones())) ;
+    UIFormSelectBox localeSelect = new UIFormSelectBox(LOCATION, LOCATION, getLocales()) ;
+    //localeSelect.setOnChange("ChangeLocale") ;
+    addUIFormInput(localeSelect) ;
+    
+    addUIFormInput(new UIFormSelectBox(TIMEZONE, TIMEZONE, getTimeZones(null))) ;
+   /* List<ActionData> showAllActions = new ArrayList<ActionData>() ;
+    ActionData actionShowAllTimeZone = new ActionData() ;
+    //actionShowAllTimeZone.setActionListener("ShowAllTimeZone") ;
+    actionShowAllTimeZone.setActionType(ActionData.TYPE_ICON) ;
+    actionShowAllTimeZone.setCssIconClass("ShowAllTimeZone") ;
+    actionShowAllTimeZone.setActionName("ShowAllTimeZone") ;
+    showAllActions.add(actionShowAllTimeZone) ;
+    setActionField(TIMEZONE, showAllActions)  ;*/
+    
     addUIFormInput(new UIFormCheckBoxInput<Boolean>(ISSHOWWORKINGTIME, ISSHOWWORKINGTIME, false)) ;
     List<SelectItemOption<String>> startTimes = new ArrayList<SelectItemOption<String>>() ;
     List<SelectItemOption<String>> endTimes = CalendarUtils.getTimesSelectBoxOptions(CalendarUtils.TIMEFORMAT, 30) ;
@@ -112,6 +128,14 @@ public class UICalendarSettingTab extends UIFormInputWithActions {
   }
   protected UIForm getParentFrom() {
     return (UIForm)getParent() ;
+  }
+  public void setActionField(String fieldName, List<ActionData> actions) throws Exception {
+    actionField_.put(fieldName, actions) ;
+  }
+  public List<ActionData> getActionField(String fieldName) {return actionField_.get(fieldName) ;}
+  @Override
+  public void processRender(WebuiRequestContext arg0) throws Exception {
+    super.processRender(arg0);
   }
   protected String getViewType() {
     return getUIFormSelectBox(VIEW_TYPE).getValue() ;
@@ -225,8 +249,16 @@ public class UICalendarSettingTab extends UIFormInputWithActions {
   protected void setBaseUrl(String value) {
     getUIStringInput(BASE_URL).setValue(value) ;
   }
-  private List<SelectItemOption<String>> getTimeZones() {
-    return CalendarUtils.getTimeZoneSelectBoxOptions(TimeZone.getAvailableIDs()) ;
+  public List<SelectItemOption<String>> getTimeZones(String locale) {
+    if(locale == null || locale.trim().length() == 0) {
+      return CalendarUtils.getTimeZoneSelectBoxOptions(TimeZone.getAvailableIDs()) ;
+    }
+    System.out.println(locale);
+    int offSet = GregorianCalendar.getInstance(new Locale(locale)).get(Calendar.ZONE_OFFSET) ;
+    System.out.println(offSet);
+    System.out.println(GregorianCalendar.getInstance(new Locale(locale)).getTimeZone().getAvailableIDs().toString());
+    return CalendarUtils.getTimeZoneSelectBoxOptions(TimeZone.getAvailableIDs(offSet)) ;
+    
   }
   private List<SelectItemOption<String>> getLocales() {
     return CalendarUtils.getLocaleSelectBoxOptions(java.util.Calendar.getAvailableLocales()) ;

@@ -77,7 +77,8 @@
           <%=uiForm.getLabel(uicomponent.TIMEZONE)%>
         </td>
         <td class="FieldComponent">
-          <%uiForm.renderField(uicomponent.TIMEZONE)%>
+          <%uiForm.renderField(uicomponent.TIMEZONE);%>
+          <%renderActions(uicomponent.TIMEZONE);%>
         </td>
       </tr>
       <tr>

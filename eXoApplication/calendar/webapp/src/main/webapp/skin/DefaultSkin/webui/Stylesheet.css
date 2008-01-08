@@ -1813,7 +1813,10 @@
 .UICalendarPortlet .SelectGroupIcon {
 	width: 16px ; height: 16px;
 }
-
+.UICalendarPortlet .ShowAllTimeZone {
+	width: 16px ; height: 16px;
+	border:solid 1px red;
+}
 /********************************** UISelectUserForm ***************************************/
 .UISelectUserForm {
 	padding: 10px;

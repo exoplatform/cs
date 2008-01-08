@@ -104,7 +104,7 @@ public class UIListView extends UICalendarView {
     if(!getViewType().equals(TYPE_BOTH)) {
       eventQuery.setEventType(getViewType()) ;
     }
-    update(calendarService.searchEvent(SessionsUtils.getSystemProvider(), username, eventQuery, getPublicCalendars())) ;
+    update(new EventPageList(calendarService.getEvent(SessionsUtils.getSystemProvider(), username, eventQuery, getPublicCalendars()), 10)) ;
     UIFormSelectBox uiCategory = getUIFormSelectBox(EVENT_CATEGORIES) ;
     uiCategory.setOnChange("Onchange") ;
   }
@@ -121,7 +121,7 @@ public class UIListView extends UICalendarView {
     if(!getViewType().equals(TYPE_BOTH)) {
       eventQuery.setEventType(getViewType()) ;
     }
-    update(calendarService.searchEvent(SessionsUtils.getSystemProvider(), username, eventQuery, getPublicCalendars())) ; 
+    update(new EventPageList(calendarService.getEvent(SessionsUtils.getSystemProvider(), username, eventQuery, getPublicCalendars()), 10)) ;
     UIFormSelectBox uiCategory = getUIFormSelectBox(EVENT_CATEGORIES) ;
     uiCategory.setValue(categoryId) ;
     uiCategory.setOnChange("Onchange") ;

@@ -58,24 +58,6 @@ public class UICalendarViewContainer extends UIContainer  {
       CalendarSetting calendarSetting = cservice.getCalendarSetting(SessionsUtils.getSessionProvider(), username) ;
       viewType = TYPES[Integer.parseInt(calendarSetting.getViewType())] ;
     }
-    if(viewType.equals("UIListContainer")) {
-      /*UIListView uiListView = uiViewContainer.findFirstComponentOfType(UIListView.class) ;
-      alendarService calendarService = uiActionBar.getApplicationComponent(CalendarService.class) ;
-      String username = CalendarUtils.getCurrentUser() ;
-      EventQuery eventQuery = new EventQuery() ;
-      java.util.Calendar fromcalendar =  uiListView.getBeginDay(new GregorianCalendar(uiListView.getCurrentYear(), uiListView.getCurrentMonth(), uiListView.getCurrentDay())) ;
-      eventQuery.setFromDate(fromcalendar) ;
-      java.util.Calendar tocalendar =  uiListView.getEndDay(new GregorianCalendar(uiListView.getCurrentYear(), uiListView.getCurrentMonth(), uiListView.getCurrentDay())) ;
-      eventQuery.setToDate(tocalendar) ;
-      uiListView.update(calendarService.searchEvent(SessionsUtils.getSystemProvider(), username, eventQuery, uiListView.getPublicCalendars())) ;*/ 
-      
-    }
-   /* addChild(UIMonthView.class, null, null).setRendered(false) ;
-    addChild(UIWeekView.class, null, null).setRendered(false) ;
-    addChild(UIYearView.class, null, null).setRendered(false) ;
-    addChild(UIListContainer.class, null, null).setRendered(false) ;
-    addChild(UIScheduleView.class, null, null).setRendered(false) ;
-    */
     if(DAY_VIEW.equals(viewType)) {
       UIDayView uiView = getChild(UIDayView.class) ;
       if(uiView == null) uiView =  addChild(UIDayView.class, null, null) ;
@@ -100,9 +82,9 @@ public class UICalendarViewContainer extends UIContainer  {
       UIListContainer uiView = getChild(UIListContainer.class) ;
       if(uiView == null) uiView =  addChild(UIListContainer.class, null, null) ;
       UIListView uiListView = uiView.getChild(UIListView.class) ;
-      uiListView.refresh(null) ;
       uiListView.setShowEventAndTask(false) ;
       uiListView.setDisplaySearchResult(false) ;
+      uiListView.refresh(null) ;
       uiListView.isShowEvent_ = true ;
       setRenderedChild(viewType) ;
     } else
