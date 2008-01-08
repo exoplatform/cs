@@ -22,7 +22,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Properties;
@@ -326,7 +325,7 @@ public class MailServiceImpl implements MailService{
     Calendar checkTime = GregorianCalendar.getInstance();
     Account account = getAccountById(sProvider, username, accountId) ;
     long start = checkTime.getTimeInMillis() ;
-    System.out.println(" #### Getting mail from " + account.getIncomingHost() + " ... !" + checkTime.getTimeInMillis());
+    System.out.println(" #### Getting mail from " + account.getIncomingHost() + " ... !");
     List<Message> messageList = new ArrayList<Message>();
     int totalNew = -1;
     String protocol = account.getProtocol();
@@ -353,15 +352,13 @@ public class MailServiceImpl implements MailService{
 
       javax.mail.Message[] messages = folder.getMessages() ;
       
-      Calendar endCal = GregorianCalendar.getInstance();
-      
       totalNew = messages.length ;
       
-      System.out.println(" #### Folder contains " + totalNew + " messages !" + (endCal.getTimeInMillis() - start));
+      System.out.println(" #### Folder contains " + totalNew + " messages !");
       
       if (totalNew > 0) {
         int i = 0 ;
-        SpamFilter spamFilter = getSpamFilter(sProvider, username, account.getId());
+        //SpamFilter spamFilter = getSpamFilter(sProvider, username, account.getId());
         Node messageHome = storage_.getMessageHome(sProvider, username, accountId) ;
         String folderId = Utils.createFolderId(accountId, account.getIncomingFolder(), false) ;
         Folder storeFolder = storage_.getFolder(sProvider, username, account.getId(), folderId) ;
@@ -398,6 +395,7 @@ public class MailServiceImpl implements MailService{
   private void saveMessage(SessionProvider sProvider, javax.mail.Message msg, Node messagesNode, String accId, String username) throws Exception {
   	Message newMes = new Message() ;
   	Node node = messagesNode.addNode(newMes.getId(), Utils.EXO_MESSAGE) ;
+    node.setProperty(Utils.EXO_ID, newMes.getId());
   	node.setProperty(Utils.EXO_ACCOUNT, accId);
     node.setProperty(Utils.EXO_FROM, InternetAddress.toString(msg.getFrom()));
     node.setProperty(Utils.EXO_TO, InternetAddress.toString(msg.getRecipients(javax.mail.Message.RecipientType.TO)));
@@ -421,7 +419,7 @@ public class MailServiceImpl implements MailService{
     String[] folderIds = { Utils.createFolderId(accId, Utils.FD_INBOX, false) };
     
 //    if ( spamFilter.checkSpam(msg) ) {
-//      folderIds = new String[] { Utils.createFolderId(accountId, Utils.FD_SPAM, false) } ;
+//      folderIds = new String[] { Utils.createFolderId(accId, Utils.FD_SPAM, false) } ;
 //    }
     
     //storage_.groupConversation(sProvider, username, accId, newMsg) ;

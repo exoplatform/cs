@@ -274,7 +274,7 @@ public class UIMessageList extends UIForm {
         uiPopupContainer.addChild(uiComposeForm) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;  
       } else {
-        if (msg.isUnread()) {
+        if (msg != null && msg.isUnread()) {
           List<String> msgIds  = new ArrayList<String>();
           msgIds.add(msgId);
           mailServ.toggleMessageProperty(SessionsUtils.getSessionProvider(), username, accountId, msgIds, Utils.EXO_ISUNREAD);

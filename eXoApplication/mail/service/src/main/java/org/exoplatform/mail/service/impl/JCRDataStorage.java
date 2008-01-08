@@ -985,7 +985,8 @@ public class JCRDataStorage{
           msgNode.setProperty(Utils.EXO_STAR, ! msgNode.getProperty(Utils.EXO_STAR).getBoolean());
         } else if (property.equals(Utils.EXO_ISUNREAD)) {
           boolean isUnread = msgNode.getProperty(Utils.EXO_ISUNREAD).getBoolean();
-          msgNode.setProperty(Utils.EXO_ISUNREAD, ! isUnread);
+          msgNode.setProperty(Utils.EXO_ISUNREAD, !isUnread);
+          
           Boolean isRootConversation = msgNode.getProperty(Utils.EXO_ISROOT).getBoolean();
           Node currentFolderNode = folderHome.getNode(msgNode.getProperty(Utils.EXO_FOLDERS).getValues()[0].getString());
           if (isUnread && isRootConversation) {
