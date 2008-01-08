@@ -71,21 +71,23 @@ public class UIAddressBooks extends UIComponent {
   private Map<String, String> privateGroupMap_ = new HashMap<String, String>() ;
   private Map<String, String> publicGroupMap_ = new HashMap<String, String>() ;
   private Map<String, String> sharedGroupMap_ = new HashMap<String, String>() ;
+  private String defaultGroup ;
   public UIAddressBooks() throws Exception { }
 
   public List<ContactGroup> getGroups() throws Exception {
     List<ContactGroup> groupList = ContactUtils.getContactService()
       .getGroups(SessionsUtils.getSessionProvider(), ContactUtils.getCurrentUser());
+    defaultGroup = groupList.get(0).getId() ;
     privateGroupMap_.clear() ;
     for (ContactGroup group : groupList) privateGroupMap_.put(group.getId(), group.getName()) ; 
     return groupList;
   }
   public List<String> getPublicContactGroups() throws Exception {
-    List<String> sharedGroup = ContactUtils.getContactService()
+    List<String> publicGroup = ContactUtils.getContactService()
       .getPublicAddressBookContacts(SessionsUtils.getSystemProvider(), ContactUtils.getUserGroups());
     publicGroupMap_.clear() ;
-    for (String group : sharedGroup) publicGroupMap_.put(group, group) ; 
-    return sharedGroup ;
+    for (String group : publicGroup) publicGroupMap_.put(group, group) ; 
+    return publicGroup ;
   }
   public Map<String, String> getSharedGroups() throws Exception { 
     sharedGroupMap_.clear() ;
@@ -105,10 +107,12 @@ public class UIAddressBooks extends UIComponent {
   public Map<String, String> getPublicGroupMap() { return publicGroupMap_ ; }
 
   // to show print address book when contacts view is Thumbnail ;
-  public boolean getListView() {
+  public boolean getListView(String groupId) {
+    if (!groupId.equals(selectedGroup)) return true ;    
     return getAncestorOfType(UIWorkingContainer.class)
       .findFirstComponentOfType(UIContacts.class).getViewContactsList() ;
-  }
+  }  
+  public boolean isDefault(String groupId) { return groupId.equals(defaultGroup) ; }
   
   static public class AddAddressActionListener extends EventListener<UIAddressBooks> {
     public void execute(Event<UIAddressBooks> event) throws Exception {

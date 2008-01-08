@@ -207,6 +207,11 @@ public class UIContacts extends UIForm implements UIPopupComponent {
     return getAncestorOfType(UIWorkingContainer.class)
       .findFirstComponentOfType(UIAddressBooks.class).getPrivateGroupMap() ;
   }
+  public Map<String, String> getSharedGroupMap() throws Exception {
+    return getAncestorOfType(UIWorkingContainer.class)
+      .findFirstComponentOfType(UIAddressBooks.class).getSharedGroups() ;
+  }
+  
   static public class EditContactActionListener extends EventListener<UIContacts> {
     public void execute(Event<UIContacts> event) throws Exception {
       UIContacts uiContacts = event.getSource();

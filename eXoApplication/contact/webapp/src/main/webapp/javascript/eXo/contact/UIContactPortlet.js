@@ -66,7 +66,7 @@ UIContactPortlet.prototype.addressBookCallback = function(evt) {
 	var a = (DOMUtil.hasClass(src, "ItemList")) ? src : DOMUtil.findAncestorByClass(src, "ItemList") ;	
 	eXo.webui.UIContextMenu.changeAction(UIContextMenu.menuElement, a.id) ;
 	var isPublic = a.getAttribute("addressType") ;	
-	var isList = a.getAttribute("isList") ;
+	
 	var menuItems = DOMUtil.findDescendantsByClass(UIContextMenu.menuElement, "div", "ItemIcon") ;
 	var itemLength = menuItems.length ;	
 
@@ -108,6 +108,7 @@ UIContactPortlet.prototype.addressBookCallback = function(evt) {
 		}
 	}
 	
+	var isList = a.getAttribute("isList") ;
 	if (isList == "true") {
 		for(var i = 0 ; i < itemLength ; i ++) {
 			if (DOMUtil.hasClass(menuItems[i],"PrintIcon")) {
@@ -129,6 +130,20 @@ UIContactPortlet.prototype.addressBookCallback = function(evt) {
 			}
 		}
 	}
+	
+	var isDefault = a.getAttribute("isDefault") ;
+	if (isDefault == "true") {
+		for(var i = 0 ; i < itemLength ; i ++) {
+			if (DOMUtil.hasClass(menuItems[i],"EditActionIcon") || DOMUtil.hasClass(menuItems[i],"DeleteIcon")) {
+				if (menuItems[i].parentNode.getAttribute("oldHref")) continue ;
+				menuItems[i].parentNode.setAttribute("oldHref", menuItems[i].parentNode.href) ;
+				menuItems[i].parentNode.href = "javascript: void(0) ;" ;
+				menuItems[i].parentNode.setAttribute("oldColor", DOMUtil.getStyle(menuItems[i].parentNode, "color")) ;
+				menuItems[i].parentNode.style.color = "#cccccc" ;
+			}
+		}
+	}
+	
 } ;
 
 UIContactPortlet.prototype.tagCallback = function(evt) {

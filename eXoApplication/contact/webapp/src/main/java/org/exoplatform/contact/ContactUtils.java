@@ -31,7 +31,21 @@ import org.exoplatform.services.organization.impl.GroupImpl;
  * Jul 11, 2007  
  */
 public class ContactUtils {
-  
+  public static String[] specialString = {"!", "@", "#", "$", "%", "^", "&"
+                                            , ":", ">", "<", "~", "`", "]", "'", "/"} ;
+  public static String filterString(String text) {
+    for (String str : specialString) {
+      text = text.replaceAll(str, "") ;
+    }
+    for (int i = 0; i < text.length(); i ++) {
+      if (text.charAt(i) == '?' || text.charAt(i) == '[' || text.charAt(i) == '('
+        || text.charAt(i) == ')' || text.charAt(i) == '*' || text.charAt(i) == '\\' || text.charAt(i) == '+'
+        || text.charAt(i) == '}' || text.charAt(i) == '{' || text.charAt(i) == '^' || text.charAt(i) == '$') {
+        text = text.replace((text.charAt(i)) + "", "") ;
+      }        
+    }
+    return text ;
+  }
   static public String getCurrentUser() throws Exception {
     return Util.getPortalRequestContext().getRemoteUser() ; 
   }

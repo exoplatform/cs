@@ -175,6 +175,7 @@
 	  	 	    <%
 	  	 	    		Map tagMap = uicomponent.getTagMap() ;
 	  	 	    		Map privateGroupMap = uicomponent.getPrivateGroupMap() ;
+	  	 	    		Map sharedGroupMap = uicomponent.getSharedGroupMap() ;
 	  	 	    		for(contact in contacts) {
 	  	 	    			String groupName ;	  	 	    			
 	  	 	    			String[] addressBooks = contact.getAddressBook() ;
@@ -185,8 +186,10 @@
 		  	 	    				else buffer.append(address) ;
 		  	 	    			}
 								    groupName = buffer.toString() ;
-								  } else {
+								  } else if (privateGroupMap.containsKey(addressBooks[0])) {
 		  	 	    			groupName = privateGroupMap.get(addressBooks[0]) ;
+								  } else if (sharedGroupMap.containsKey(addressBooks[0])){
+								  	groupName = sharedGroupMap.get(addressBooks[0]) ;
 								  }
   	 	    				String actionLink  = uicomponent.event("SelectedContact", contact.getId()) ;
 									checkboxField = uicomponent.getChildById(contact.getId()) ;

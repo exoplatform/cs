@@ -56,19 +56,18 @@ public class UISearchForm extends UIForm {
   static  public class SearchActionListener extends EventListener<UISearchForm> {
     public void execute(Event<UISearchForm> event) throws Exception {
       UISearchForm uiForm = event.getSource() ;
-      UIFormStringInput stringInput = uiForm.getUIStringInput(UISearchForm.FIELD_SEARCHVALUE) ;
-      String text = stringInput.getValue() ;
+      String text = uiForm.getUIStringInput(UISearchForm.FIELD_SEARCHVALUE).getValue() ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       if(ContactUtils.isEmpty(text)) {
         uiApp.addMessage(new ApplicationMessage("UISearchForm.msg.no-text-to-search", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-      String s1 = "\"" + text + "\"" ; 
+  
       ContactFilter filter = new ContactFilter() ;
-      filter.setText(s1) ;
-      DataPageList resultPageList = 
-        ContactUtils.getContactService().searchContact(SessionsUtils.getSystemProvider(), ContactUtils.getCurrentUser(), filter) ;
+      filter.setText(ContactUtils.filterString(text)) ;
+      DataPageList resultPageList = ContactUtils.getContactService()
+        .searchContact(SessionsUtils.getSystemProvider(), ContactUtils.getCurrentUser(), filter) ;
       UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
       uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class).setSelectedGroup(null) ;
       uiContactPortlet.findFirstComponentOfType(UITags.class).setSelectedTag(null) ;      
