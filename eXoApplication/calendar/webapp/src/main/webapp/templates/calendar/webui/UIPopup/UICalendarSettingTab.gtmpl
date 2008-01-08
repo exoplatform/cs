@@ -27,7 +27,8 @@
 	    }
 	  }
 	}
-	def rcontext = _ctx.getRequestContext() ;	
+	def rcontext = _ctx.getRequestContext() ;
+	rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.initSettingTab("'+uicomponent.id+'") ;') ;
 %>
 <div id="$uicomponent.id" class="$uicomponent.id">
   <table class="UIFormGrid">
@@ -93,24 +94,17 @@
         <td class="FieldLabel">
           <%=uiForm.getLabel(uicomponent.ISSHOWWORKINGTIME)%>
         </td>
-        <td class="FieldComponent" onclick="eXo.calendar.UICalendarPortlet.showHideTime(this) ;"><!-- check all -->
-          <%uiForm.renderField(uicomponent.ISSHOWWORKINGTIME)%>
-        </td>
-      </tr>
-      <tr class="Time">
-        <td class="FieldLabel">
-          <%=uiForm.getLabel(uicomponent.WORKINGTIME_BEGIN)%>
-        </td>
         <td class="FieldComponent">
-          <%uiForm.renderField(uicomponent.WORKINGTIME_BEGIN)%>
-        </td>
-      </tr>
-      <tr class="Time"> 
-        <td class="FieldLabel">
-          <%=uiForm.getLabel(uicomponent.WORKINGTIME_END)%>
-        </td>
-        <td class="FieldComponent">
-          <%uiForm.renderField(uicomponent.WORKINGTIME_END)%>
+        	<div class="WorkingTimeCheck">
+          	<%uiForm.renderField(uicomponent.ISSHOWWORKINGTIME)%>
+          </div>
+          <div class="WorkingTime">
+	          <%=uiForm.getLabel(uicomponent.WORKINGTIME_BEGIN)%>
+	          <%uiForm.renderField(uicomponent.WORKINGTIME_BEGIN)%>
+	          <%=uiForm.getLabel(uicomponent.WORKINGTIME_END)%>
+	          <%uiForm.renderField(uicomponent.WORKINGTIME_END)%>
+          </div>
+          <div style="clear:left;"><span></span></div>
         </td>
       </tr>
       <tr>

@@ -1813,9 +1813,17 @@
 .UICalendarPortlet .SelectGroupIcon {
 	width: 16px ; height: 16px;
 }
-.UICalendarPortlet .ShowAllTimeZone {
-	width: 16px ; height: 16px;
-	border:solid 1px red;
+/********************************** UICalendarSettingForm ***************************************/
+.UICalendarPortlet .setting{
+}
+.UICalendarPortlet .setting .WorkingTime{
+ float: left;
+}
+.UICalendarPortlet .setting .WorkingTime .selectbox{
+ width: 70px;
+}
+.UICalendarPortlet .setting .WorkingTimeCheck {
+ float:left;
 }
 /********************************** UISelectUserForm ***************************************/
 .UISelectUserForm {
