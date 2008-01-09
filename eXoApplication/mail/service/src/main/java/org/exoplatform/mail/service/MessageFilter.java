@@ -372,7 +372,7 @@ public class MessageFilter {
       else stringBuffer.append("descending");
     }
     
-    System.out.println(" ## Query Statement : " + stringBuffer.toString());
+    //System.out.println(" ## Query Statement : " + stringBuffer.toString());
     if(hasConjuntion) queryString.append(stringBuffer.toString()) ;
     return queryString.toString() ;
   }

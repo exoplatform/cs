@@ -573,7 +573,7 @@ public class JCRDataStorage{
     return folder ;
   }
   
-  private Node getFolderNodeById(SessionProvider sProvider, String username, String accountId, String folderId) throws Exception {
+  public Node getFolderNodeById(SessionProvider sProvider, String username, String accountId, String folderId) throws Exception {
     Session sess = getMailHomeNode(sProvider, username).getSession();
     QueryManager qm = sess.getWorkspace().getQueryManager();
     // gets the specified folder node

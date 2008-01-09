@@ -67,7 +67,6 @@ import org.exoplatform.services.jcr.util.IdGenerator;
 import org.exoplatform.services.scheduler.JobInfo;
 import org.exoplatform.services.scheduler.JobSchedulerService;
 import org.exoplatform.services.scheduler.PeriodInfo;
-import org.quartz.JobDetail;
 
 import com.sun.mail.smtp.SMTPSendFailedException;
 
@@ -389,16 +388,11 @@ public class MailServiceImpl implements MailService{
         }
         while (i < totalNew) {
           javax.mail.Message msg = messages[i] ;          
-          saveMessage(sProvider, msg, messageHome, account.getId(), username) ;
+          saveMessage(sProvider, msg, messageHome, account.getId(), username, folderId) ;
           messageHome.getSession().save() ;
           i ++ ;          
           System.out.println(" ####  " + i + " messages saved");
         }
-        
-        
-        storeFolder.setNumberOfUnreadMessage((storeFolder.getNumberOfUnreadMessage() + i)) ;
-        storeFolder.setTotalMessage(storeFolder.getTotalMessage() + i) ;
-        storage_.saveFolder(sProvider, username, account.getId(), storeFolder) ;
         
         storage_.execActionFilter(sProvider, username, accountId, checkTime);
         folder.close(false);      
@@ -410,7 +404,7 @@ public class MailServiceImpl implements MailService{
     return messageList;
   }
   
-  private void saveMessage(SessionProvider sProvider, javax.mail.Message msg, Node messagesNode, String accId, String username) throws Exception {
+  private void saveMessage(SessionProvider sProvider, javax.mail.Message msg, Node messagesNode, String accId, String username, String folderId) throws Exception {
   	Message newMes = new Message() ;
   	Node node = messagesNode.addNode(newMes.getId(), Utils.EXO_MESSAGE) ;
     node.setProperty(Utils.EXO_ID, newMes.getId());
@@ -454,6 +448,12 @@ public class MailServiceImpl implements MailService{
     node.setProperty(Utils.EXO_ADDRESSES, new String[] {});
     node.setProperty(Utils.EXO_ROOT, newMes.getId());
   	
+    Node folderHomeNode = storage_.getFolderHome(sProvider, username, accId) ;
+    if (folderHomeNode.hasNode(folderId)) { 
+      Node folderNode = folderHomeNode.getNode(folderId);
+      folderNode.setProperty(Utils.EXO_UNREADMESSAGES, folderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong() + 1) ;
+      folderNode.setProperty(Utils.EXO_TOTALMESSAGE , folderNode.getProperty(Utils.EXO_TOTALMESSAGE).getLong() + 1) ;
+    }
   }
   
   
