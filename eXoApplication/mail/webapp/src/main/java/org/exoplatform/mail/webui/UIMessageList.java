@@ -228,12 +228,14 @@ public class UIMessageList extends UIForm {
       }
     } else if (msg.isRootConversation()) msgList.add(msg);
     if (msgList.size() == 0) msgList.add(msg);
+    System.out.println("==================>>>" + msgList.size());
     return msgList ;
   }
   
   public List<String> getParticipators(Message msg) throws Exception {
     String username = MailUtils.getCurrentUser();
     MailService mailSrv = MailUtils.getMailService();
+    System.out.println("=============s=====>>>" + getConversations(msg).get(0).getId());
     List<Message> msgList = getConversations(msg);
     LinkedHashMap<String, String> participators = new LinkedHashMap<String, String>();
     for (Message message : msgList) {
@@ -311,7 +313,6 @@ public class UIMessageList extends UIForm {
         List<String> msgList = new ArrayList<String>() ;
         msgList.add(msgId);
         msg.setHasStar(!msg.hasStar());
-        System.out.println("=============sdf=>>> ");
         uiMessageList.messageList_.put(msg.getId(), msg);
         mailSrv.toggleMessageProperty(SessionsUtils.getSessionProvider(), username, accountId, msgList, Utils.EXO_STAR);
         uiMessageList.setSelectedMessageId(msgId);
@@ -321,7 +322,6 @@ public class UIMessageList extends UIForm {
           if (!checkedMessage.hasStar()) {
             msgList.add(checkedMessage.getId());
             checkedMessage.setHasStar(true);
-            System.out.println("==================>>> ");
             uiMessageList.messageList_.put(checkedMessage.getId(), checkedMessage);
           }
         }
@@ -712,11 +712,11 @@ public class UIMessageList extends UIForm {
       List<String> msgIdList = new ArrayList<String>();
       for (Message message : uiMessageList.getCheckedMessage()) {
         msgIdList.add(message.getId());
+        message.setUnread(true);
+        uiMessageList.messageList_.put(message.getId(), message);
       }
       mailSrv.addTag(SessionsUtils.getSessionProvider(), username, accountId, msgIdList, tagList);
-      
-      uiMessageList.updateList();
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class)) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiTagContainer) ;
     }
   }

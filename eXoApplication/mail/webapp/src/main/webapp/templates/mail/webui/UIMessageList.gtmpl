@@ -337,13 +337,7 @@
     	  		</td>
     				<td style="padding: 0px auto;"><a href="$actionAddStar" ><div class="$starClass"><span></span></div></a></td>
             <td class="$readStatus">
-              <% if (msg.isRootConversation()) {
-                  int numberConver = 1;
-                  for (String conver : uicomponent.getParticipators(msg)) {
-                    String email = Utils.getAddresses(msg.getFrom())[0];
-               %>
-                 <a href="$actionLink" advancedtooltip="true" email="$email"><% if (numberConver>1){ %> , <% } %>  $conver <a>
-              <% numberConver++ }  }%>  
+               <a href="$actionLink" > <%=Utils.getPersonal(Utils.getInternetAddress(msg.getFrom())[0])%> </a> <%/*advancedtooltip="true" email="$email"--*/%>
             </td>
     				<td style="padding: 0px auto;">
     				  <% 
@@ -370,7 +364,7 @@
               <%}%>
     				</td>
     				<td class="$readStatus"><a href="$actionLink"><%=msg.getSubject()%></a></td>
-    				<td class="text">( <%= (msg.isRootConversation()) ? uicomponent.getConversations(msg).size() : 1 %> )</td>
+    				<td class="text">( 1 )</td>
     				<td class="$readStatus">
     				  <a href="$actionLink">
     				    <%if (msg.getReceivedDate() != null) { %>
