@@ -251,12 +251,12 @@
 		}
 	%>
   <div class="UIMessageList" >
-    <div class="AdvancedTooltipTmpl" id="mailAdvancedTooltipTmpl">
+    <% /* <div class="AdvancedTooltipTmpl" id="mailAdvancedTooltipTmpl">
       <div class="Item">
         <div class="Key">Email: </div>
         <div class="Value">email</div>
       </div>
-    </div>
+    </div>*/ %>
   	<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
     	<thead>
     		<tr>

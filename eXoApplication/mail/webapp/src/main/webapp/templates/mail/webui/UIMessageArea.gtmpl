@@ -10,7 +10,7 @@
   rcontext.getJavascriptManager().importJavascript('eXo.cs.TableDnD','/csResources/javascript/');
   rcontext.getJavascriptManager().importJavascript('eXo.mail.Spliter','/mail/javascript/');
   rcontext.getJavascriptManager().addOnLoadJavascript('eXo.mail.UIMailDragDrop.onLoad');
-  rcontext.getJavascriptManager().addOnLoadJavascript('eXo.cs.AdvancedTooltip.onLoad(\'UIListUsers\', \'mailAdvancedTooltipTmpl\')');
+  //rcontext.getJavascriptManager().addOnLoadJavascript('eXo.cs.AdvancedTooltip.onLoad(\'UIListUsers\', \'mailAdvancedTooltipTmpl\')');
   //rcontext.getJavascriptManager().addOnLoadJavascript('eXo.cs.TableDnD.init(\'UIListUsers\')');
 %>
 
