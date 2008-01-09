@@ -1538,7 +1538,7 @@ public class JCRDataStorage{
           }
         }
       }
-      for (int i = start.intValue(); i <= end.intValue(); i ++) {
+      for (int i = start.intValue(); i < end.intValue(); i ++) {
         data.put(i, VALUE) ;            
       }
       if (isVictory) break ;

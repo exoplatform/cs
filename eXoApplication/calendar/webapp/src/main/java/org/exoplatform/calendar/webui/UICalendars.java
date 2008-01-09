@@ -110,6 +110,9 @@ public class UICalendars extends UIForm  {
           colorMap_.put(calendar.getId(), calendar.getCalendarColor()) ;
           if(getUIFormCheckBoxInput(calendar.getId()) == null){
             addUIFormInput(new UIFormCheckBoxInput<Boolean>(calendar.getId(), calendar.getId(), false).setChecked(true)) ;
+          } else {
+            //TODO wait for dunghm about javaScript
+            //getUIFormCheckBoxInput(calendar.getId()).setChecked(true) ;
           }
         }
       }
