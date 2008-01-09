@@ -238,7 +238,18 @@
     </div>
   </div>  
   <% /* End popup menu for the message*/ %>
-  
+  <%
+		if(MailUtils.isChecking(MailUtils.getCurrentUser(), MailUtils.getAccountId())) {
+			%>
+				<div style="background: yellow; padding: 2px 0px 5px 10px;">
+					<div class="LoadingIcon"><span></span></div>
+					<div style=" float: left; margin-top: 2px">Receiving messages .... </div>
+					<div style="float: right; padding-right: 10px; margin-top: 2px" class="Here">Click <a href="<%=uicomponent.event("RefreshActionListener")%> "> here</a> to display received messages</div>
+					<div style="clear: both;"><span></span></div>
+				</div>
+			<%
+		}
+	%>
   <div class="UIMessageList" >
     <div class="AdvancedTooltipTmpl" id="mailAdvancedTooltipTmpl">
       <div class="Item">

@@ -422,7 +422,7 @@ public class UIMessageList extends UIForm {
       msgFilter.setTag((getSelectedTagId() == null) ? null : new String[] {getSelectedTagId()});
     }
     setMessagePageList(mailSrv.getMessages(SessionsUtils.getSessionProvider(), username, msgFilter));
-    //updateList();
+    updateList();
   }
   
   static public class ReplyActionListener extends EventListener<UIMessageList> {
@@ -866,9 +866,18 @@ public class UIMessageList extends UIForm {
   static public class LastPageActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource() ; 
-      MessagePageList pageList = uiMessageList.getMessagePageList(); 
-      uiMessageList.updateList(pageList.getAvailablePage());
+      uiMessageList.updateList(uiMessageList.getMessagePageList().getAvailablePage());
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList);
+    }
+  }
+  
+  static public class RefreshActionListener extends EventListener<UIMessageList> {
+    public void execute(Event<UIMessageList> event) throws Exception {
+      UIMessageList uiMessageList = event.getSource() ; 
+      uiMessageList.updateList(uiMessageList.getMessagePageList().getCurrentPage());
+      UIMailPortlet mailPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(mailPortlet.findFirstComponentOfType(UIFolderContainer.class));
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
   }
   

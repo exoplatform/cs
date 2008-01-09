@@ -417,6 +417,10 @@
 	color: #000000;
 }
 
+.UIMailPortlet .MailWorkingWorkspace .Here a {
+	color: #058ee6;
+}
+
 .UIMailPortlet .MailWorkingWorkspace .UIMessageActionsBar .IconHolder {
 	height: 26px;
 	width: 24px;
