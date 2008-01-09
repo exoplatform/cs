@@ -422,7 +422,6 @@ public class UIMessageList extends UIForm {
       msgFilter.setTag((getSelectedTagId() == null) ? null : new String[] {getSelectedTagId()});
     }
     setMessagePageList(mailSrv.getMessages(SessionsUtils.getSessionProvider(), username, msgFilter));
-    updateList();
   }
   
   static public class ReplyActionListener extends EventListener<UIMessageList> {
