@@ -4,7 +4,9 @@
  import org.exoplatform.mail.service.Tag ;
  import org.exoplatform.mail.service.MessagePageList;
  import org.exoplatform.mail.MailUtils;
- String compId = uicomponent.getId() ;
+ String compId = uicomponent.getId() ; 
+ def rcontext = _ctx.getRequestContext() ;	
+ rcontext.getJavascriptManager().addJavascript('eXo.mail.CheckBox.init("UIListUsers") ;') ;
 %>
 
 <% /*Start Message Action Bar*/ %>
@@ -146,7 +148,7 @@
       
     </div>
   </div>
-	
+
   <div class="UIMessagePageList">
     <div class="MailIteratorContainer">
       <div class="RightPageIteratorBlock">
@@ -236,13 +238,7 @@
     </div>
   </div>  
   <% /* End popup menu for the message*/ %>
-  <%
-		if(MailUtils.isChecking(MailUtils.getCurrentUser(), MailUtils.getAccountId())) {
-			%>
-				<div style="background: yellow; padding: 2px 0px 5px 10px">Receiving messages ....</div>
-			<%
-		}
-	%>
+  
   <div class="UIMessageList" >
     <div class="AdvancedTooltipTmpl" id="mailAdvancedTooltipTmpl">
       <div class="Item">
@@ -253,7 +249,7 @@
   	<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
     	<thead>
     		<tr>
-    			<th style="width: 20px; padding-left: 7px; " class="Border"><input type="checkbox" class="checkbox" title="Check all" value="4" onclick="eXo.mail.UIMailPortlet.checkAll(this);"/></th>
+    			<th style="width: 20px; padding-left: 7px; " class="Border"><input type="checkbox" class="checkbox" title="Check all" value="4"/></th>
     			<th style="width: 24px;"><div class="StarredIcon" title="Add star for this message"><span></span></div></th>
     		  <th style="padding-left: 8px; width: 20%;">
     		    <%
@@ -313,8 +309,8 @@
     	 	</tr>
     	</thead>
       <%if (uicomponent.getMessageList().size() > 0) {%>
-      <tbody>
-      	<%
+      <tbody class="MessageContainer">
+      <%
           int i = 0;
     			for(Message msg : uicomponent.getMessageList()) {
             if (msg.isRootConversation()) {
@@ -330,14 +326,20 @@
               if (msg.hasStar()) starClass = "StarredIcon";
     		%>
     		<tr class="MessageItem $selectedClass" msgId="<%=msg.getId()%>">
-    	  		<td onclick="eXo.mail.UIMailPortlet.selectItem(this);">
+    	  		<td>
               <%
     	  		    if (checkboxField != null) uicomponent.renderField(checkboxField);
     	  		  %>
     	  		</td>
     				<td style="padding: 0px auto;"><a href="$actionAddStar" ><div class="$starClass"><span></span></div></a></td>
             <td class="$readStatus">
-               <a href="$actionLink" > <%=Utils.getPersonal(Utils.getInternetAddress(msg.getFrom())[0])%> </a> <%/*advancedtooltip="true" email="$email"--*/%>
+              <% if (msg.isRootConversation()) {
+                  int numberConver = 1;
+                  for (String conver : uicomponent.getParticipators(msg)) {
+                    String email = Utils.getAddresses(msg.getFrom())[0];
+               %>
+                 <a href="$actionLink" advancedtooltip="true" email="$email"><% if (numberConver>1){ %> , <% } %>  $conver <a>
+              <% numberConver++ }  }%>  
             </td>
     				<td style="padding: 0px auto;">
     				  <% 
@@ -364,7 +366,7 @@
               <%}%>
     				</td>
     				<td class="$readStatus"><a href="$actionLink"><%=msg.getSubject()%></a></td>
-    				<td class="text">( 1 )</td>
+    				<td class="text">( <%= (msg.isRootConversation()) ? uicomponent.getConversations(msg).size() : 1 %> )</td>
     				<td class="$readStatus">
     				  <a href="$actionLink">
     				    <%if (msg.getReceivedDate() != null) { %>
