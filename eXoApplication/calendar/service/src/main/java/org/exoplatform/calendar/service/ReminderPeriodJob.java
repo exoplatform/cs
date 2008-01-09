@@ -31,21 +31,7 @@ public class ReminderPeriodJob extends  PeriodJob {
   private JobDataMap jdatamap_ ;
   public ReminderPeriodJob(InitParams params) throws Exception {
     super(params) ;
-  	/*ExoProperties props =  params.getPropertiesParam("job.info").getProperties() ;
-    
-    String jobName = props.getProperty("jobName") ;
-    String jobGroup= props.getProperty("groupName") ;
-    String jobClass = props.getProperty("job") ;
-    Class clazz = Class.forName(jobClass) ;
-    jinfo_ = new JobInfo(jobName,jobGroup,clazz);
-    
-    Date startTime = getDate(props.getProperty("startTime")) ;
-    Date endTime = getDate(props.getProperty("endTime"));
-    int repeatCount = Integer.parseInt(props.getProperty("repeatCount")) ;
-    long repeatInterval = Integer.parseInt(props.getProperty("period")) ;
-    pjinfo_ = new PeriodInfo(startTime,endTime,repeatCount,repeatInterval) ;   */ 
-    
-    ExoProperties props =  params.getPropertiesParam("reminder.info").getProperties() ;
+  	ExoProperties props =  params.getPropertiesParam("reminder.info").getProperties() ;
     jdatamap_ = new JobDataMap() ;
     String timeZone = props.getProperty("timeZone") ;
     String account = props.getProperty("account") ;

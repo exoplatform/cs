@@ -63,6 +63,7 @@
   <%for(Folder f : uicomponent.getDefaultFolders()) {
     String id = f.getId() ;
     String name = f.getName();
+    String status = "" ;
     String icon = name + "Icon" ;
     long msgQuantity = f.getNumberOfUnreadMessage();
     if (f.name == Utils.FD_SENT || f.name == Utils.FD_TRASH) msgQuantity = 0;

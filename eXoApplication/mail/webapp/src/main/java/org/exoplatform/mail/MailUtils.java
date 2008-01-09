@@ -18,15 +18,20 @@ package org.exoplatform.mail;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.util.List;
 
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactAttachment;
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.mail.service.Attachment;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.scheduler.JobSchedulerService;
+import org.quartz.JobDetail;
 
 
 /**
@@ -90,5 +95,16 @@ public class MailUtils {
   public static boolean isFieldEmpty(String s) {
     if (s == null || s.length() == 0) return true ;
     return false ;    
+  }
+  
+  public static boolean isChecking(String username, String accountId) throws Exception {
+  	ExoContainer container = ExoContainerContext.getCurrentContainer();
+		JobSchedulerService schedulerService = 
+			(JobSchedulerService) container.getComponentInstanceOfType(JobSchedulerService.class);
+		List allJobs = schedulerService.getAllJobs() ;
+		for(Object obj : allJobs) {
+			if(((JobDetail)obj).getName().equals(username + ":" + accountId)) return true ; 
+		}
+  	return false ;
   }
 }

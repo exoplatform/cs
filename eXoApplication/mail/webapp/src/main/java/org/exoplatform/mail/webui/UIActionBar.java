@@ -86,8 +86,13 @@ public class UIActionBar extends UIContainer {
       }
       String username =  uiPortlet.getCurrentUser() ;
       try {
-        mailSvr.checkNewMessage(SessionsUtils.getSessionProvider(), username, accId) ;
-        //uiMessageList.init(accId);
+      	if(MailUtils.isChecking(username, accId)) {
+      		System.out.println("####  You are checking mail ");
+      		return ; 
+        }else {
+        	mailSvr.checkMail(username, accId) ;        	
+        }
+      	        
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UINavigationContainer.class)); 
         event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class)); 
       } catch (AuthenticationFailedException afe) {
@@ -109,7 +114,7 @@ public class UIActionBar extends UIContainer {
       UIApplication uiApp = uiActionBar.getAncestorOfType(UIApplication.class) ;
       UINavigationContainer uiNavigation = uiPortlet.getChild(UINavigationContainer.class) ;
       UISelectAccount uiSelect = uiNavigation.getChild(UISelectAccount.class) ;
-      String accId = uiSelect.getSelectedValue() ;
+      String accId = uiSelect.getSelectedValue() ;      
       if(Utils.isEmptyField(accId)) {
         uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.account-list-empty", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;

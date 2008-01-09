@@ -36,6 +36,8 @@ import org.exoplatform.mail.service.ServerConfiguration;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.scheduler.JobInfo;
+import org.exoplatform.services.scheduler.JobSchedulerService;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
@@ -51,17 +53,24 @@ public class ReminderJob implements Job {
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 		try {
 			ExoContainer container = ExoContainerContext.getCurrentContainer();
-			MailService mailService = (MailService) container
-					.getComponentInstanceOfType(MailService.class);
+			MailService mailService = 
+				(MailService) container.getComponentInstanceOfType(MailService.class);
+			/*JobSchedulerService schedulerService = 
+				(JobSchedulerService) container.getComponentInstanceOfType(JobSchedulerService.class);
+			
+			System.out.println("\n\n\n ==== Name ==="+ context.getJobDetail().getName());
+			System.out.println("\n\n\n ==== FullName ==="+ context.getJobDetail().getFullName());
+			System.out.println("\n\n\n ==== Group ==="+ context.getJobDetail().getGroup());
+			JobInfo info = new JobInfo(context.getJobDetail().getName(), "CollaborationSuite", context.getJobDetail().getJobClass()) ;
+			System.out.println("\n\n\n ==== removed === " + schedulerService.removeJob(info));*/
 			if (log_.isDebugEnabled())
 				log_.debug("Calendar reminder service");
 			java.util.Calendar fromCalendar = new GregorianCalendar();
 			
-			/*long tmpTime = fromCalendar.getTimeInMillis() ;
+			long tmpTime = fromCalendar.getTimeInMillis() ;
 			tmpTime = tmpTime + (7 * 60 * 60 * 1000) ;
-			fromCalendar.setTimeInMillis(tmpTime) ;*/
+			fromCalendar.setTimeInMillis(tmpTime) ;
 			JobDataMap jdatamap = context.getJobDetail().getJobDataMap();
-
 			ServerConfiguration config = new ServerConfiguration();
 			String timeZone = jdatamap.getString("timeZone");
 			config.setUserName(jdatamap.getString("account"));

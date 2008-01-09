@@ -45,6 +45,8 @@ import javax.mail.internet.MimeMultipart;
 import javax.mail.internet.MimeUtility;
 import javax.mail.util.ByteArrayDataSource;
 
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.AccountData;
 import org.exoplatform.mail.service.Attachment;
@@ -62,6 +64,10 @@ import org.exoplatform.mail.service.Utils;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.jcr.util.IdGenerator;
+import org.exoplatform.services.scheduler.JobInfo;
+import org.exoplatform.services.scheduler.JobSchedulerService;
+import org.exoplatform.services.scheduler.PeriodInfo;
+import org.quartz.JobDetail;
 
 import com.sun.mail.smtp.SMTPSendFailedException;
 
@@ -320,7 +326,19 @@ public class MailServiceImpl implements MailService{
     } 
     return status ;
   }
-
+  
+  public void checkMail(String username, String accountId) throws Exception {
+  	Calendar cal = new GregorianCalendar() ;
+  	PeriodInfo periodInfo = new PeriodInfo(cal.getTime(), null, 1, 86400000) ;
+  	Class clazz = Class.forName("org.exoplatform.mail.service.CheckMailJob") ;
+  	JobInfo info = new JobInfo(username + ":" + accountId, "CollaborationSuite-webmail", clazz) ;
+  	ExoContainer container = ExoContainerContext.getCurrentContainer();
+		JobSchedulerService schedulerService = 
+			(JobSchedulerService) container.getComponentInstanceOfType(JobSchedulerService.class);
+		schedulerService.addPeriodJob(info, periodInfo) ;
+		
+  }
+  
   public List<Message> checkNewMessage(SessionProvider sProvider, String username, String accountId) throws Exception {
     Calendar checkTime = GregorianCalendar.getInstance();
     Account account = getAccountById(sProvider, username, accountId) ;
@@ -376,6 +394,7 @@ public class MailServiceImpl implements MailService{
           i ++ ;          
           System.out.println(" ####  " + i + " messages saved");
         }
+        
         
         storeFolder.setNumberOfUnreadMessage((storeFolder.getNumberOfUnreadMessage() + i)) ;
         storeFolder.setTotalMessage(storeFolder.getTotalMessage() + i) ;
