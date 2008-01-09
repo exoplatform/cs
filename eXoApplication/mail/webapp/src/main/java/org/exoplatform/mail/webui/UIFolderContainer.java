@@ -143,13 +143,13 @@ public class UIFolderContainer extends UIContainer {
       //String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       //uiMessageList.setMessagePageList(mailSrv.getMessagePageListByFolder(SessionsUtils.getSessionProvider(), username, accountId, folderId));
-      System.out.println("CHanged folder ============> ") ;
       MessageFilter filter = new MessageFilter("Folder"); 
       filter.setAccountId(accountId);
       filter.setFolder(new String[] {folderId});
       uiMessageList.setMessageFilter(filter);
       uiMessageList.setSelectedFolderId(folderId);
       uiMessageList.setSelectedTagId(null);
+      uiMessageList.init(accountId);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiFolder) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList) ;
     }

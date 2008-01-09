@@ -108,8 +108,14 @@ public class UIMessageList extends UIForm {
   private String accountId_;
   public LinkedHashMap<String, Message> messageList_ = new LinkedHashMap<String, Message>();
   
-  public UIMessageList() throws Exception { 
-    init(MailUtils.getAccountId()) ;
+  public UIMessageList() throws Exception {
+    MessageFilter filter = new MessageFilter("Folder"); 
+    String accId = MailUtils.getAccountId() ;
+    filter.setAccountId(accId);
+    selectedFolderId_ = Utils.createFolderId(accId, Utils.FD_INBOX, false);
+    filter.setFolder(new String[] {selectedFolderId_});
+    setMessageFilter(filter);
+    init(accId) ;
   }
   
   public void init(String accountId) throws Exception {
@@ -117,12 +123,13 @@ public class UIMessageList extends UIForm {
     sortedBy_ = Utils.EXO_RECEIVEDDATE ;
     String username = MailUtils.getCurrentUser();
     MailService mailSrv = MailUtils.getMailService();
-    MessageFilter filter = new MessageFilter("Folder"); 
+    MessageFilter filter = getMessageFilter();
+    if (filter == null) filter = new MessageFilter("Folder");
     filter.setAccountId(accountId);
     if (accountId != null){
+      System.out.println(selectedFolderId_ + "====dd=======>>>> vao day" + filter.getFolder()[0]);
       if(filter.getFolder() != null && (!filter.getFolder()[0].equals(selectedFolderId_) ||  pageList_ == null)) {
-      	System.out.println(" ==========> Here") ;
-      	selectedFolderId_ = Utils.createFolderId(accountId, Utils.FD_INBOX, false);
+        System.out.println(selectedFolderId_ + "===========>>>> vao day" + filter.getFolder()[0]);
         filter.setFolder(new String[] { selectedFolderId_ });
         setMessagePageList(mailSrv.getMessagePageListByFolder(SessionsUtils.getSessionProvider(), username, accountId, selectedFolderId_));
       }
@@ -231,14 +238,12 @@ public class UIMessageList extends UIForm {
       }
     } else if (msg.isRootConversation()) msgList.add(msg);
     if (msgList.size() == 0) msgList.add(msg);
-    System.out.println("==================>>>" + msgList.size());
     return msgList ;
   }
   
   public List<String> getParticipators(Message msg) throws Exception {
     String username = MailUtils.getCurrentUser();
     MailService mailSrv = MailUtils.getMailService();
-    System.out.println("=============s=====>>>" + getConversations(msg).get(0).getId());
     List<Message> msgList = getConversations(msg);
     LinkedHashMap<String, String> participators = new LinkedHashMap<String, String>();
     for (Message message : msgList) {
@@ -865,7 +870,7 @@ public class UIMessageList extends UIForm {
       UIMessageList uiMessageList = event.getSource() ; 
       MessagePageList pageList = uiMessageList.getMessagePageList(); 
       uiMessageList.updateList(pageList.getAvailablePage());
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList);
     }
   }
   
@@ -891,8 +896,7 @@ public class UIMessageList extends UIForm {
       }
       uiMessageList.setMessagePageList(mailSrv.getMessages(SessionsUtils.getSessionProvider(), username, msgFilter));
       uiMessageList.setMessageFilter(msgFilter);
-      uiMessageList.updateList();
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList);
     }
   }
 }
