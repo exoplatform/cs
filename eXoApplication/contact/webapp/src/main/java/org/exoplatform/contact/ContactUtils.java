@@ -47,8 +47,7 @@ public class ContactUtils {
       } else {
         i ++ ;
       }
-    }    
-    System.out.println("\n\n text:" + text + "\n\n");
+    }
     return text ;
   }
   static public String getCurrentUser() throws Exception {

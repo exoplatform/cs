@@ -17,7 +17,7 @@
   rcontext.getJavascriptManager().importJavascript('eXo.cs.TableDnD','/csResources/javascript/');
 	rcontext.getJavascriptManager().importJavascript("eXo.contact.UIContactDragDrop","/contact/javascript") ;
 	rcontext.getJavascriptManager().addJavascript("eXo.contact.UIContactDragDrop.init() ;") ;
-  rcontext.getJavascriptManager().addOnLoadJavascript('eXo.cs.TableDnD.init(\'UIListUsers\')');
+  //rcontext.getJavascriptManager().addOnLoadJavascript('eXo.cs.TableDnD.init(\'UIListUsers\')');
 	uiform.begin()
 	boolean isDisplaySearchResult = uicomponent.isDisplaySearchResult() ;
 	JCRPageList pageList = uicomponent.getContactPageList();

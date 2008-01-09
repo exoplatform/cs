@@ -302,15 +302,13 @@ public class UIContactForm extends UIFormTabPane implements UISelector {
             ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ; 
-      }
-      
+      }      
       if (ContactUtils.isEmpty(profileTab.getFieldLastName())) {  
         uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.lastName-required", null, 
             ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ; 
       }
-
       Contact contact ;
       boolean isNew = uiContactForm.isNew_ ;
       if (isNew) contact = new Contact() ;
@@ -407,14 +405,11 @@ public class UIContactForm extends UIFormTabPane implements UISelector {
         if (contact.getContactType().equals("0")) 
           contactService.saveContact(SessionsUtils.getSessionProvider(), username, contact, false) ;
         else if(contact.getContactType().equals("1")) 
-          contactService.saveContactToSharedAddressBook(SessionsUtils.getSystemProvider(), username, contact.getAddressBook()[0], contact, false) ;
+          contactService.saveContactToSharedAddressBook(
+              SessionsUtils.getSystemProvider(), username, contact.getAddressBook()[0], contact, false) ;
         else if(contact.getContactType().equals("2")) 
           contactService.savePublicContact(SessionsUtils.getSystemProvider(), contact, false) ;
       }
-      
-      System.out.println("\n\n saved \n\n");
-      
-      
       UIContactPortlet uiContactPortlet = uiContactForm.getAncestorOfType(UIContactPortlet.class) ;
       UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
       UIContactPreview uiContactPreview = uiContactPortlet.findFirstComponentOfType(UIContactPreview.class) ;
