@@ -139,10 +139,11 @@ public class UIFolderContainer extends UIContainer {
       UIMailPortlet uiPortlet = uiFolder.getAncestorOfType(UIMailPortlet.class);
       uiFolder.setSelectedFolder(folderId) ;
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
-      MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
-      String username = uiPortlet.getCurrentUser();
+      //MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
+      //String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-      uiMessageList.setMessagePageList(mailSrv.getMessagePageListByFolder(SessionsUtils.getSessionProvider(), username, accountId, folderId));
+      //uiMessageList.setMessagePageList(mailSrv.getMessagePageListByFolder(SessionsUtils.getSessionProvider(), username, accountId, folderId));
+      System.out.println("CHanged folder ============> ") ;
       MessageFilter filter = new MessageFilter("Folder"); 
       filter.setAccountId(accountId);
       filter.setFolder(new String[] {folderId});

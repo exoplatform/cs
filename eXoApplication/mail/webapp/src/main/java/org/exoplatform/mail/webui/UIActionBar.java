@@ -91,8 +91,7 @@ public class UIActionBar extends UIContainer {
       		return ; 
         }else {
         	mailSvr.checkMail(username, accId) ;        	
-        }
-      	        
+        }      	        
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UINavigationContainer.class)); 
         event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class)); 
       } catch (AuthenticationFailedException afe) {

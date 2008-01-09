@@ -120,9 +120,12 @@ public class UIMessageList extends UIForm {
     MessageFilter filter = new MessageFilter("Folder"); 
     filter.setAccountId(accountId);
     if (accountId != null){
-      selectedFolderId_ = Utils.createFolderId(accountId, Utils.FD_INBOX, false);
-      filter.setFolder(new String[] { selectedFolderId_ });
-      setMessagePageList(mailSrv.getMessagePageListByFolder(SessionsUtils.getSessionProvider(), username, accountId, selectedFolderId_));
+      if(filter.getFolder() != null && (!filter.getFolder()[0].equals(selectedFolderId_) ||  pageList_ == null)) {
+      	System.out.println(" ==========> Here") ;
+      	selectedFolderId_ = Utils.createFolderId(accountId, Utils.FD_INBOX, false);
+        filter.setFolder(new String[] { selectedFolderId_ });
+        setMessagePageList(mailSrv.getMessagePageListByFolder(SessionsUtils.getSessionProvider(), username, accountId, selectedFolderId_));
+      }
     }
     setMessageFilter(filter);
   }
@@ -416,7 +419,7 @@ public class UIMessageList extends UIForm {
       msgFilter.setTag((getSelectedTagId() == null) ? null : new String[] {getSelectedTagId()});
     }
     setMessagePageList(mailSrv.getMessages(SessionsUtils.getSessionProvider(), username, msgFilter));
-    updateList();
+    //updateList();
   }
   
   static public class ReplyActionListener extends EventListener<UIMessageList> {
