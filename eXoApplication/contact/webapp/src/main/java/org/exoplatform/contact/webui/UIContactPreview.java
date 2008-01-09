@@ -51,8 +51,7 @@ public class UIContactPreview extends UIComponent  {
   public boolean getIsMaximize() { return isMaximized_ ; }
   
   public String getImageSource() throws Exception {
-    DownloadService dservice = getApplicationComponent(DownloadService.class) ;
-    return ContactUtils.getImageSource(contact_, dservice) ; 
+    return ContactUtils.getImageSource(contact_, getApplicationComponent(DownloadService.class)) ; 
   }
   
   static public class MaximizeContactPaneActionListener extends EventListener<UIContactPreview> {

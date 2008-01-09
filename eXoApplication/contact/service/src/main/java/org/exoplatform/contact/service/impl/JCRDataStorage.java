@@ -816,9 +816,6 @@ public class JCRDataStorage{
         if (nodeFile.hasNode("jcr:content")) nodeContent = nodeFile.getNode("jcr:content") ;
         else nodeContent = nodeFile.addNode("jcr:content", "nt:resource") ;
         nodeContent.setProperty("jcr:mimeType", attachment.getMimeType()) ;
-           
-
-        
         nodeContent.setProperty("jcr:data", attachment.getInputStream());
         nodeContent.setProperty("jcr:lastModified", Calendar.getInstance().getTimeInMillis());
       }

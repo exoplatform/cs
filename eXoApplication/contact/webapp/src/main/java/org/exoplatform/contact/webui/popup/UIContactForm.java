@@ -339,7 +339,7 @@ public class UIContactForm extends UIFormTabPane implements UISelector {
         attachment.setInputStream(new ByteArrayInputStream(profileTab.getImage())) ;
         attachment.setFileName(profileTab.getFileName()) ;
         attachment.setMimeType(profileTab.getMimeType()) ;
-        contact.setAttachment(attachment) ;
+        contact.setAttachment(attachment) ;        
       }else {contact.setAttachment(null) ;}
       contact.setWorkAddress(uiContactForm.getUIStringInput(FIELD_WORKADDRESS_INPUT).getValue());
       contact.setWorkCity(uiContactForm.getUIStringInput(FIELD_WORKCITY_INPUT).getValue());
@@ -371,7 +371,6 @@ public class UIContactForm extends UIFormTabPane implements UISelector {
       contact.setHomeFax(uiContactForm.getUIStringInput(FIELD_HOMEFAX_INPUT).getValue());
       contact.setPersonalSite(uiContactForm.getUIStringInput(FIELD_PERSONALSITE_INPUT).getValue());
       contact.setNote(uiContactForm.getUIFormTextAreaInput(FIELD_NOTE_INPUT).getValue());
-
       contact.setLastUpdated(new Date()) ;
 
       ContactService contactService = ContactUtils.getContactService();  
@@ -412,6 +411,10 @@ public class UIContactForm extends UIFormTabPane implements UISelector {
         else if(contact.getContactType().equals("2")) 
           contactService.savePublicContact(SessionsUtils.getSystemProvider(), contact, false) ;
       }
+      
+      System.out.println("\n\n saved \n\n");
+      
+      
       UIContactPortlet uiContactPortlet = uiContactForm.getAncestorOfType(UIContactPortlet.class) ;
       UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
       UIContactPreview uiContactPreview = uiContactPortlet.findFirstComponentOfType(UIContactPreview.class) ;
@@ -430,7 +433,6 @@ public class UIContactForm extends UIFormTabPane implements UISelector {
   }
   
   static  public class CancelActionListener extends EventListener<UIContactForm> {
-    @Override
     public void execute(Event<UIContactForm> event) throws Exception {
       UIContactForm uiForm = event.getSource() ;
       UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
@@ -439,7 +441,6 @@ public class UIContactForm extends UIFormTabPane implements UISelector {
   }
   
   static  public class ChangeImageActionListener extends EventListener<UIContactForm> {
-    @Override
     public void execute(Event<UIContactForm> event) throws Exception {
       UIContactForm uiContactForm = event.getSource() ;
       UIPopupContainer popupContainer = uiContactForm.getAncestorOfType(UIPopupContainer.class) ;

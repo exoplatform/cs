@@ -16,6 +16,7 @@
  */
 package org.exoplatform.contact.service;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
 import javax.jcr.ItemNotFoundException;
@@ -38,7 +39,7 @@ public class ContactAttachment {
   private String fileName ;
   private String mimeType ;
   private String workspace ;
-  private InputStream inputStream ;
+  private byte[] imageBytes ;
   
   public String getId() { return id ; }
   public void   setId(String s) { id = s ; }
@@ -53,25 +54,28 @@ public class ContactAttachment {
   public void setMimeType(String s) { mimeType = s ;}
   
   public void setInputStream(InputStream input) throws Exception {
-    inputStream = input ;
+    if (input != null) {
+      imageBytes = new byte[input.available()] ; 
+      input.read(imageBytes) ;
+    }
+    else imageBytes = null ;
   }
   public InputStream getInputStream() throws Exception { 
-    if(inputStream != null) return inputStream ;
+    if(imageBytes != null) return new ByteArrayInputStream(imageBytes) ;  
     Node attachment ;
     try{
       attachment = (Node)getSesison().getItem(getId()) ;      
     }catch (ItemNotFoundException e) {  
       return null ;
     } catch (PathNotFoundException ex) {
-      System.out.println("\n\n path not found \n\n");
-      
-       return  null;
+      return  null;
     }
     return attachment.getNode("jcr:content").getProperty("jcr:data").getStream() ;
   }
   
   private Session getSesison()throws Exception {
-    RepositoryService repoService = (RepositoryService)PortalContainer.getInstance().getComponentInstanceOfType(RepositoryService.class) ;
+    RepositoryService repoService = (RepositoryService)PortalContainer
+      .getInstance().getComponentInstanceOfType(RepositoryService.class) ;
     return repoService.getDefaultRepository().getSystemSession(workspace) ;
   }
   

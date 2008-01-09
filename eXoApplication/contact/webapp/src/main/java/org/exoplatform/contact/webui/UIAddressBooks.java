@@ -77,7 +77,7 @@ public class UIAddressBooks extends UIComponent {
   public List<ContactGroup> getGroups() throws Exception {
     List<ContactGroup> groupList = ContactUtils.getContactService()
       .getGroups(SessionsUtils.getSessionProvider(), ContactUtils.getCurrentUser());
-    defaultGroup = groupList.get(0).getId() ;
+    if (groupList != null && groupList.size() > 0) defaultGroup = groupList.get(0).getId() ;
     privateGroupMap_.clear() ;
     for (ContactGroup group : groupList) privateGroupMap_.put(group.getId(), group.getName()) ; 
     return groupList;

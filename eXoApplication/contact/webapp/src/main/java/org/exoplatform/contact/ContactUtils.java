@@ -37,13 +37,18 @@ public class ContactUtils {
     for (String str : specialString) {
       text = text.replaceAll(str, "") ;
     }
-    for (int i = 0; i < text.length(); i ++) {
-      if (text.charAt(i) == '?' || text.charAt(i) == '[' || text.charAt(i) == '('
+    int i = 0 ;
+    while (i < text.length()) {
+      if (text.charAt(i) == '?' || text.charAt(i) == '[' || text.charAt(i) == '(' || text.charAt(i) == '|'
         || text.charAt(i) == ')' || text.charAt(i) == '*' || text.charAt(i) == '\\' || text.charAt(i) == '+'
-        || text.charAt(i) == '}' || text.charAt(i) == '{' || text.charAt(i) == '^' || text.charAt(i) == '$') {
+        || text.charAt(i) == '}' || text.charAt(i) == '{' || text.charAt(i) == '^' || text.charAt(i) == '$'
+        || text.charAt(i) == '"'  ) {
         text = text.replace((text.charAt(i)) + "", "") ;
-      }        
-    }
+      } else {
+        i ++ ;
+      }
+    }    
+    System.out.println("\n\n text:" + text + "\n\n");
     return text ;
   }
   static public String getCurrentUser() throws Exception {
