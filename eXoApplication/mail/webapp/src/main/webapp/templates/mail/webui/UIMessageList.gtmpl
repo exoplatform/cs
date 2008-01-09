@@ -359,24 +359,23 @@
     				  <a href="$actionLink"><div class="AttachmentIcon"><span></span></div></a>
     				  <%}%>
     				</td>
-    				<td style="padding: 0px; border-right: 1px solid #ffffff;">
-    				  <% 
-                if (msg.getTags() != null && msg.getTags().length > 0) {
-                  String colorCss = "";
-                  String title = "";
-                  if (msg.getTags().length > 1) {
-                    colorCss = "MultipTag";
-                  } else if (uicomponent.getTags(msg).size() > 0) {
-                    colorCss = uicomponent.getTags(msg).get(0).getColor() + "Tag";
-                  }
-                  for (Tag tag : uicomponent.getTags(msg)) {
-                    title += "[" + tag.getName() + "] ";
-                  }
-              %>
-                <a href="$actionLink" title="$title"><div class="IconTag $colorCss"><span></span></div></a>
+    				<td class="$readStatus" colspan="2">
+             <% 
+               if (msg.getTags() != null && msg.getTags().length > 0) {
+                 String colorCss = "";
+                 String title = "";
+                 if (msg.getTags().length > 1) {
+                   colorCss = "MultipTag";
+                 } else if (uicomponent.getTags(msg).size() > 0) {
+                   colorCss = uicomponent.getTags(msg).get(0).getColor() + "Tag";
+                 }
+                 for (Tag tag : uicomponent.getTags(msg)) {
+                   title += "[" + tag.getName() + "] ";
+                 }
+               %>
+                 <a href="$actionLink" title="$title"><div class="IconTag $colorCss"><span></span></div></a>
               <%}%>
-    				</td>
-    				<td class="$readStatus"><a href="$actionLink"><%=msg.getSubject()%></a></td>
+            <a href="$actionLink"><%=msg.getSubject()%></a></td>
     				<td class="text">( <%= (msg.isRootConversation()) ? uicomponent.getConversations(msg).size() : 1 %> )</td>
     				<td class="$readStatus">
     				  <a href="$actionLink">
