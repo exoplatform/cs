@@ -8,10 +8,8 @@
 	def rcontext = _ctx.getRequestContext() ;  
   rcontext.getJavascriptManager().importJavascript('eXo.calendar.UICalendarDragDrop','/calendar/javascript/') ;
   rcontext.getJavascriptManager().importJavascript('eXo.calendar.UICalendarMan','/calendar/javascript/') ;
-	rcontext.getJavascriptManager().importJavascript('eXo.calendar.UIMonthView','/calendar/javascript/') ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarMan.init() ;') ;
-  //rcontext.getJavascriptManager().addJavascript('eXo.calendar.UIMonthView.init() ;') ;
-  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UIMonthView.initHighlighter("' + uiform.id + '") ;') ;
+  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarMan.GUIMan.initHighlighter("' + uiform.id + '") ;') ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.checkFilter() ;') ;
 	uiform.begin()
  	_ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");
@@ -110,7 +108,7 @@
 					</div>
 					<%
 					}%>
-			<table class="UIGrid" id="UIMonthViewGrid" cellspacing="0" borderspacing="0" eXoCallback="eXo.calendar.UIMonthView.callbackHighlighter() ;">
+			<table class="UIGrid" id="UIMonthViewGrid" cellspacing="0" borderspacing="0" eXoCallback="eXo.calendar.UICalendarMan.GUIMan.callbackHighlighter() ;">
 				<col width="14%"><col width="14%"><col width="14%"><col width="14%"><col width="14%"><col width="14%"><col width="14%">
 				<tbody>
 				

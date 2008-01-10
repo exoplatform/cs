@@ -148,10 +148,10 @@ function DayMan(){
 DayMan.prototype.isVisibleEventExist = function(eventObj) {
   for (var i=0; i<this.visibleGroup.length; i++) {
     if (this.visibleGroup[i] == eventObj) {
-      return true;
+      return i;
     }
   }
-  return false;
+  return -1;
 };
 
 /**
@@ -161,10 +161,10 @@ DayMan.prototype.isVisibleEventExist = function(eventObj) {
 DayMan.prototype.isInvisibleEventExist = function(eventObj) {
   for (var i=0; i<this.invisibleGroup.length; i++) {
     if (this.invisibleGroup[i] == eventObj) {
-      return true;
+      return i;
     }
   }
-  return false;
+  return -1;
 };
 
 DayMan.prototype.synchronizeGroups = function(){
@@ -177,49 +177,41 @@ DayMan.prototype.synchronizeGroups = function(){
     this.totalEventVisible = this.MAX_EVENT_VISIBLE;
   }
   for (var i=0; i<this.events.length; i++) {
-    if (this.linkDay && this.linkDay.isInvisibleEventExist(this.events[i])) {
+    if (this.linkDay && this.linkDay.isInvisibleEventExist(this.events[i]) >= 0) {
       this.invisibleGroup.push(this.events[i]);
-//      this.invisibleGroup[i] = this.events[i];
     } else if(this.visibleGroup.length < this.totalEventVisible) {
       this.visibleGroup.push(this.events[i]);
-//      this.visibleGroup[i] = this.events[i];
     } else {
       this.invisibleGroup.push(this.events[i]);
-//      this.invisibleGroup[i] = this.events[i];
     }
-
-//    if (i<(this.totalEventVisible)) {
-//      this.visibleGroup.push(this.events[i]);
-////      this.visibleGroup[this.visibleGroup.length] = this.events[i];
-//    } else {
-//      this.invisibleGroup.push(this.events[i]);
-////      this.invisibleGroup[this.invisibleGroup.length] = this.events[i];
-//    }
   }
+  this.reIndex();
 };
 
-/**
- * 
- * This method will do: get free place event's index of currrent day for
- * next day paint event process.
- * Free place event's index are anything else visible group place index. 
- * 
- * @param {Integer} index
- */
-DayMan.prototype.getFreeEventIndex = function(index) {
+DayMan.prototype.reIndex = function() {
+  var tmp = new Array();
   var cnt = 0;
-  for (var i=0; i<this.visibleGroup.length; i++) {
-    if (!this.visibleGroup[i]) {
-      if (cnt == index) {
-        return i;
+  master : for (var i=0; i<this.visibleGroup.length; i++) {
+    var eventTmp = this.visibleGroup[i];
+    var eventIndex = i;
+    // check cross event
+    if (this.linkDay) {
+      eventIndex = this.linkDay.isVisibleEventExist(eventTmp);
+      if (eventIndex >= 0) {
+        tmp[eventIndex] = eventTmp;
+        continue;
       }
-      cnt ++;
     }
+    var cntTmp = 0;
+    for (var j=0; j<tmp.length; j++) {
+      if (!tmp[j] && cntTmp == cnt) {
+        tmp[j] = eventTmp;
+        continue master;
+      }
+    }
+    tmp[i] = eventTmp;
   }
-  if (this.visibleGroup.length == index) {
-    return this.visibleGroup.length;
-  }
-  return ((index - this.visibleGroup.length) + this.visibleGroup.length);
+  this.visibleGroup = tmp;
 };
 
 function WeekMan(){
@@ -294,7 +286,7 @@ WeekMan.prototype.compareEventByWeek = function(event1, event2, weekIndex){
 };
 
 function EventMan(){
-  this.events = false;
+  this.events = new Array();
   this.weeks = new Array();
 }
 
@@ -303,12 +295,12 @@ function EventMan(){
  * @param {Object} rootNode
  */
 EventMan.prototype.init = function(rootNode){
+  this.cleanUp();
   rootNode = typeof(rootNode) == 'string' ? document.getElementById(rootNode) : rootNode;
   this.rootNode = rootNode;
   var DOMUtil = eXo.core.DOMUtil;
   // Parse all event node to event object
   var allEvents = DOMUtil.findDescendantsByClass(rootNode, 'div', 'DayContentContainer');
-  this.events = new Array();
   // Create and init all event
   for (var i = 0; i < allEvents.length; i++) {
     var eventObj = new EventObject();
@@ -318,6 +310,21 @@ EventMan.prototype.init = function(rootNode){
   this.UIMonthViewGrid = document.getElementById('UIMonthViewGrid');
   this.groupByWeek();
   this.sortByWeek();
+};
+
+EventMan.prototype.cleanUp = function() {
+  var DOMUtil = eXo.core.DOMUtil;
+  for (var i=0; i<this.events.length; i++) {
+    var eventObj = this.events[i];
+    for (var j=0; j<eventObj.cutDownNodes.length; j++) {
+      DOMUtil.removeElement(eventObj.cutDownNodes[j]);
+    }
+    DOMUtil.removeElement(eventObj.rootNode);
+  }
+  this.events = null;
+  this.events = new Array();
+  this.weeks = null;
+  this.weeks = new Array();
 };
 
 EventMan.prototype.groupByWeek = function(){
@@ -362,6 +369,8 @@ EventMan.prototype.sortByWeek = function(){
 
 function GUIMan(){
   this.EVENT_BAR_HEIGH = 18;
+  this.moreNodes = new Array();
+  this.CELL_WIDTH = false;
 }
 
 /**
@@ -380,7 +389,34 @@ GUIMan.prototype.init = function(){
     var rowData = DOMUtil.findDescendantsByClass(rows[i], 'td', 'UICellBlock');
     this.tableData[i] = rowData;
   }
+  this.CELL_WIDTH = (this.tableData[0])[0].offsetWidth;
   this.paint();
+  this.setDynamicSize();
+//  this.initDND();
+};
+
+GUIMan.prototype.initDND = function() {
+  var events = eXo.calendar.UICalendarMan.EventMan.events;
+  for(var i=0 ; i<events.length ; i++) {
+    var eventNode = events[i].rootNode;
+    var checkbox = eXo.core.DOMUtil.findFirstDescendantByClass(eventNode, "input", "checkbox") ;
+    if (checkbox) {
+      checkbox.onmousedown = this.cancelEvent;
+    }
+    eventNode.onmousedown = eXo.calendar.UICalendarDragDrop.init ;
+  }
+};
+
+/**
+ * 
+ * @param {Event} event
+ */
+GUIMan.prototype.cancelEvent = function(event) {
+  event = window.event || event ;
+  event.cancelBubble = true ;
+  if (event.preventDefault) {
+    event.preventDefault();
+  }
 };
 
 GUIMan.prototype.paint = function(){
@@ -411,23 +447,19 @@ GUIMan.prototype.drawDay = function(weekObj, dayIndex) {
   var dayInfo = {
     width : dayNode.offsetWidth,
     left : dayNode.offsetLeft - 1,
-    top : dayNode.offsetTop
+    top : dayNode.offsetTop + 17
   }
   // Draw visible events
   for (var i=0; i<dayObj.visibleGroup.length; i++) {
     if (!dayObj.visibleGroup[i] || 
-        (dayObj.linkDay && dayObj.linkDay.isVisibleEventExist(dayObj.visibleGroup[i]))) {
+        (dayObj.linkDay && dayObj.linkDay.isVisibleEventExist(dayObj.visibleGroup[i]) >= 0)) {
       continue;
     }
     var eventObj = dayObj.visibleGroup[i];
     var startTime = eventObj.weekStartTimeIndex[weekObj.weekIndex];
     var endTime = eventObj.endTime > weekObj.endWeek ? weekObj.endWeek : eventObj.endTime;
-    var eventIndex = i;
-    if (dayObj.linkDay) {
-      eventIndex = dayObj.linkDay.getFreeEventIndex(i);
-    }
-    dayInfo.eventTop = dayInfo.top + ((this.EVENT_BAR_HEIGH) * eventIndex);
-    this.drawEvent(eventObj, startTime, endTime, weekObj.weekIndex, eventIndex, dayInfo);
+    dayInfo.eventTop = dayInfo.top + ((this.EVENT_BAR_HEIGH) * i);
+    this.drawEvent(eventObj, startTime, endTime, weekObj.weekIndex, i, dayInfo);
   }
   
   // Draw invisible events (put all into more)
@@ -439,7 +471,7 @@ GUIMan.prototype.drawDay = function(weekObj, dayIndex) {
       position = 'absolute';
       width = dayInfo.width + 'px';
       left = dayInfo.left + 'px' ;
-      top = dayInfo.top + (dayObj.visibleGroup.length * this.EVENT_BAR_HEIGH) + 5 + 'px';
+      top = dayInfo.top + ((dayObj.MAX_EVENT_VISIBLE - 1) * this.EVENT_BAR_HEIGH) + 5 + 'px';
       cursor = 'pointer';
       zIndex = '1';
     }
@@ -459,8 +491,7 @@ GUIMan.prototype.drawDay = function(weekObj, dayIndex) {
         continue;
       }
       var eventNode = eventObj.rootNode;
-//      debugger;
-      eventNode.style.display = 'none';
+      eventNode.display = 'none';
       eventNode = eventNode.cloneNode(true);
       eventNode.setAttribute('eventclone', 'true');
       // Remove checkbox on clone event
@@ -483,11 +514,18 @@ GUIMan.prototype.drawDay = function(weekObj, dayIndex) {
       }
     }
     moreNode.appendChild(moreContainerNode);
+    this.moreNodes.push(moreNode);
   }
 };
 
 GUIMan.prototype.toggleMore = function() {
   var moreNode = this;
+  var GUIMan = eXo.calendar.UICalendarMan.GUIMan;
+  if (GUIMan.preMoreNode && GUIMan.preMoreNode != moreNode) {
+    var moreContainerNode = eXo.core.DOMUtil.findFirstDescendantByClass(GUIMan.preMoreNode, 'div', 'MoreContainer');
+    moreContainerNode.style.display = 'none';
+  }
+  GUIMan.preMoreNode = moreNode;
   var moreContainerNode = eXo.core.DOMUtil.findFirstDescendantByClass(moreNode, 'div', 'MoreContainer');
   if (!moreContainerNode.style.display || 
       moreContainerNode.style.display == 'none') {
@@ -508,6 +546,7 @@ GUIMan.prototype.toggleMore = function() {
  */
 GUIMan.prototype.drawEvent = function(eventObj, startTime, endTime, weekIndex, eventIndex, dayInfo){
   var eventNode = eventObj.rootNode;
+  eventNode.setAttribute('visiblegroup', 'true');
   if (eventNode.getAttribute('used')) {
     eventNode = eventNode.cloneNode(true);
     eventNode.setAttribute('eventclone', 'true');
@@ -528,13 +567,58 @@ GUIMan.prototype.drawEvent = function(eventObj, startTime, endTime, weekIndex, e
   endDay ++ ;
   var eventLen = ((endDay - startDay) * (dayInfo.width)) - 1;
   with (eventNode.style) {
-    display = 'block';
+//    display = 'block';
     top = topPos + 'px';
     left = leftPos + 'px';
     width = eventLen + 'px';
   }
   eventNode.setAttribute('used', 'true');
-}
+};
+
+GUIMan.prototype.setDynamicSize = function() {
+  var DOMUtil = eXo.core.DOMUtil;
+  var events = eXo.calendar.UICalendarMan.EventMan.events;
+  var cellWidth = (this.tableData[0])[0].offsetWidth - 1;
+  var totalWidth = cellWidth * 7;
+  for (var i=0; i<events.length; i++) {
+    var eventNode = events[i].rootNode;
+    eventNode.style.width = parseFloat(parseInt(eventNode.style.width)/totalWidth)*100 + '%';
+    eventNode.style.left = parseFloat(parseInt(eventNode.style.left)/totalWidth)*100 + '%';
+    for (var j=0; j<events[i].cutDownNodes.length; j++) {
+      var tmpNode = events[i].cutDownNodes[j];
+      var containerNode = DOMUtil.findAncestorByClass(tmpNode, 'MoreContainer');
+      if (containerNode) {
+        tmpNode.style.width = '100%';
+      } else {
+        tmpNode.style.width = parseFloat(parseInt(tmpNode.style.width)/totalWidth)*100 + '%';
+      }
+    }
+  }
+  for (var i=0; i<this.moreNodes.length; i++) {
+    this.moreNodes[i].style.width = parseFloat(parseInt(this.moreNodes[i].style.width)/totalWidth)*100 + '%';
+    this.moreNodes[i].style.left = parseFloat(parseInt(this.moreNodes[i].style.left)/totalWidth)*100 + '%';
+    var moreContainer = DOMUtil.findFirstDescendantByClass(this.moreNodes[i], 'div', 'MoreContainer');
+    moreContainer.style.width = 100 + '%';
+  }
+};
+
+
+// Initialize  highlighter
+GUIMan.prototype.initHighlighter = function(form) {
+  for(var i=0 ; i<this.tableData.length; i++) {
+    var row = this.tableData[i];
+    for (var j=0; j<row.length; j++) {
+      row[j].onmousedown = eXo.calendar.Highlighter.start ;
+    }
+  }
+} ;
+
+GUIMan.prototype.callbackHighlighter = function() {
+  var Highlighter = eXo.calendar.Highlighter ;
+  var startTime = parseInt(Highlighter.firstCell.getAttribute("startTime")) ;
+  var endTime = parseInt(Highlighter.lastCell.getAttribute("startTime"))  + 24*60*60*1000 ;
+  eXo.webui.UIForm.submitEvent("UIMonthView" ,'QuickAdd','&objectId=Event&startTime=' + startTime + '&finishTime=' + endTime) ; 
+} ;
 
 eXo.calendar.UICalendarMan = {
   init : function(rootNode) {
