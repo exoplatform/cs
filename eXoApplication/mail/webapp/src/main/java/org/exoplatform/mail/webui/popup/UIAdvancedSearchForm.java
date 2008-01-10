@@ -21,9 +21,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import org.exoplatform.contact.service.Contact;
-import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.SessionsUtils;
-import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.Utils;
@@ -32,6 +30,7 @@ import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UIMessageArea;
 import org.exoplatform.mail.webui.UIMessageList;
 import org.exoplatform.mail.webui.UISelectAccount;
+import org.exoplatform.mail.webui.UISelectFolder;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -84,16 +83,7 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
   public void setToContacts(List<Contact> contactList){ ToContacts = contactList; } 
   
   public UIAdvancedSearchForm() throws Exception {
-    String username = MailUtils.getCurrentUser();
-    String accountId = MailUtils.getAccountId();
-    MailService mailSrv = getApplicationComponent(MailService.class);
-    List<SelectItemOption<String>> optionList = new ArrayList<SelectItemOption<String>>();    
-    List<Folder> folderList = mailSrv.getFolders(SessionsUtils.getSessionProvider(), username, accountId); 
-    optionList.add(new SelectItemOption<String>(ALL_FOLDER_SEARCH, ""));
-    for (Folder folder : folderList) {   
-      optionList.add(new SelectItemOption<String>(folder.getName(), folder.getId()));    
-    }    
-    addUIFormInput(new UIFormSelectBox(SELECT_FOLDER_SEARCH, SELECT_FOLDER_SEARCH, optionList));
+    addUIFormInput(new UISelectFolder("UISelectFolder"));
     
     addUIFormInput(new UIFormStringInput(FIELD_TO_SEARCH, null, null)) ;  
     addUIFormInput(new UIFormStringInput(FIELD_FROM_SEARCH, null, null)) ;  
@@ -167,11 +157,11 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
   }
   
   public String getSelectedFolder(){
-    return getUIFormSelectBox(SELECT_FOLDER_SEARCH).getValue() ;
+    return getChild(UISelectFolder.class).getSelectedValue();
   }
   
   public void setSelectedFolder(String folderId){
-    getUIFormSelectBox(SELECT_FOLDER_SEARCH).setValue(folderId) ;
+    getChild(UISelectFolder.class).setSelectedValue(folderId);
   }
   
   public String getSubject(){
