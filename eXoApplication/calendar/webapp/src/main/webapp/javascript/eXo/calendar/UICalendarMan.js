@@ -101,7 +101,7 @@ function EventObject(){
   this.startIndex = false;
   this.startTime = false;
   this.weekStartTimeIndex = new Array();
-  this.cutDownNodes = new Array();
+  this.cloneNodes = new Array();
   this.rootNode = false;
   this.name = false;
 }
@@ -132,7 +132,8 @@ EventObject.prototype.toString = function(){
 };
 
 function DayMan(){
-  this.linkDay = false;
+  this.previousDay = false;
+  this.nextDay = false;
   this.MAX_EVENT_VISIBLE = 4;
   this.totalEventVisible = 0;
   this.visibleGroup = new Array();
@@ -177,7 +178,7 @@ DayMan.prototype.synchronizeGroups = function(){
     this.totalEventVisible = this.MAX_EVENT_VISIBLE;
   }
   for (var i=0; i<this.events.length; i++) {
-    if (this.linkDay && this.linkDay.isInvisibleEventExist(this.events[i]) >= 0) {
+    if (this.previousDay && this.previousDay.isInvisibleEventExist(this.events[i]) >= 0) {
       this.invisibleGroup.push(this.events[i]);
     } else if(this.visibleGroup.length < this.totalEventVisible) {
       this.visibleGroup.push(this.events[i]);
@@ -195,8 +196,8 @@ DayMan.prototype.reIndex = function() {
     var eventTmp = this.visibleGroup[i];
     var eventIndex = i;
     // check cross event
-    if (this.linkDay) {
-      eventIndex = this.linkDay.isVisibleEventExist(eventTmp);
+    if (this.previousDay) {
+      eventIndex = this.previousDay.isVisibleEventExist(eventTmp);
       if (eventIndex >= 0) {
         tmp[eventIndex] = eventTmp;
         continue;
@@ -238,8 +239,12 @@ WeekMan.prototype.putEvents2Days = function(){
     this.days[i] = new DayMan();
     // link days
     if (i > 0) {
-      this.days[i].linkDay = this.days[i-1];
+      this.days[i].previousDay = this.days[i-1];
     }
+  }
+  
+  for (var i=0; i<this.days.length-1; i++) {
+    this.days[i].nextDay = this.days[i+1];    
   }
 
   // Put events to days
@@ -252,6 +257,9 @@ WeekMan.prototype.putEvents2Days = function(){
     for (var j=startDay; j<=endDay; j++) {
       this.days[j].events.push(eventObj);
     }
+  }
+  for (var i=0; i<this.days.length; i++) {
+    this.days[i].synchronizeGroups();
   }
 };
 
@@ -285,17 +293,15 @@ WeekMan.prototype.compareEventByWeek = function(event1, event2, weekIndex){
   }
 };
 
-function EventMan(){
-  this.events = new Array();
-  this.weeks = new Array();
-}
+function EventMan(){}
 
 /**
  *
  * @param {Object} rootNode
  */
 EventMan.prototype.init = function(rootNode){
-  this.cleanUp();
+  this.events = new Array();
+  this.weeks = new Array();
   rootNode = typeof(rootNode) == 'string' ? document.getElementById(rootNode) : rootNode;
   this.rootNode = rootNode;
   var DOMUtil = eXo.core.DOMUtil;
@@ -310,21 +316,6 @@ EventMan.prototype.init = function(rootNode){
   this.UIMonthViewGrid = document.getElementById('UIMonthViewGrid');
   this.groupByWeek();
   this.sortByWeek();
-};
-
-EventMan.prototype.cleanUp = function() {
-  var DOMUtil = eXo.core.DOMUtil;
-  for (var i=0; i<this.events.length; i++) {
-    var eventObj = this.events[i];
-    for (var j=0; j<eventObj.cutDownNodes.length; j++) {
-      DOMUtil.removeElement(eventObj.cutDownNodes[j]);
-    }
-    DOMUtil.removeElement(eventObj.rootNode);
-  }
-  this.events = null;
-  this.events = new Array();
-  this.weeks = null;
-  this.weeks = new Array();
 };
 
 EventMan.prototype.groupByWeek = function(){
@@ -363,6 +354,7 @@ EventMan.prototype.sortByWeek = function(){
     var currentWeek = this.weeks[i];
     if (currentWeek.events.length > 1) {
       currentWeek.sortEvents();
+      currentWeek.putEvents2Days();
     }
   }
 };
@@ -435,7 +427,6 @@ GUIMan.prototype.paint = function(){
   var weeks = eXo.calendar.UICalendarMan.EventMan.weeks;
   for (var i=0; i<weeks.length; i++) {
     var curentWeek = weeks[i];
-    curentWeek.putEvents2Days();
     if (curentWeek.events.length > 0) {
       for (var j=0; j<curentWeek.days.length; j++) {
         if (curentWeek.days[j].events.length > 0) {
@@ -453,7 +444,6 @@ GUIMan.prototype.paint = function(){
  */
 GUIMan.prototype.drawDay = function(weekObj, dayIndex) {
   var dayObj = weekObj.days[dayIndex];
-  dayObj.synchronizeGroups();
   // Pre-calculate event position
   var dayNode = (this.tableData[weekObj.weekIndex])[dayIndex];
   var dayInfo = {
@@ -464,12 +454,18 @@ GUIMan.prototype.drawDay = function(weekObj, dayIndex) {
   // Draw visible events
   for (var i=0; i<dayObj.visibleGroup.length; i++) {
     if (!dayObj.visibleGroup[i] || 
-        (dayObj.linkDay && dayObj.linkDay.isVisibleEventExist(dayObj.visibleGroup[i]) >= 0)) {
+        (dayObj.previousDay && dayObj.previousDay.isVisibleEventExist(dayObj.visibleGroup[i]) >= 0)) {
       continue;
     }
     var eventObj = dayObj.visibleGroup[i];
     var startTime = eventObj.weekStartTimeIndex[weekObj.weekIndex];
     var endTime = eventObj.endTime > weekObj.endWeek ? weekObj.endWeek : eventObj.endTime;
+    var delta = (new Date(parseInt(endTime))).getDate() - (new Date(parseInt(startTime))).getDate();
+    if (delta > 1 && 
+        dayObj.nextDay && 
+        dayObj.nextDay.isInvisibleEventExist(eventObj) >= 0) {
+      endTime = startTime;
+    }
     dayInfo.eventTop = dayInfo.top + ((this.EVENT_BAR_HEIGH) * i);
     this.drawEvent(eventObj, startTime, endTime, weekObj.weekIndex, i, dayInfo);
   }
@@ -477,6 +473,7 @@ GUIMan.prototype.drawDay = function(weekObj, dayIndex) {
   // Draw invisible events (put all into more)
   if (dayObj.invisibleGroup.length > 0) {
     var moreNode = document.createElement('div');
+    moreNode.className = 'MoreEvent';
     this.rowContainerDay.appendChild(moreNode);
     with (moreNode.style) {
       position = 'absolute';
@@ -507,17 +504,17 @@ GUIMan.prototype.drawDay = function(weekObj, dayIndex) {
       if (eventNode.getAttribute('used')) {
         eventNode = eventNode.cloneNode(true);
         eventNode.setAttribute('eventclone', 'true');
-        // Remove checkbox on clone event
-        try {
-          var checkBoxTmp = eventNode.getElementsByTagName('input')[0].parentNode;
-          checkBoxTmp.parentNode.removeChild(checkBoxTmp);
-        } catch(e) {}
         this.rowContainerDay.appendChild(eventNode);
-        eventObj.cutDownNodes.push(eventNode);
+        eventObj.cloneNodes.push(eventNode);
         eventNode.setAttribute('eventclone', 'true');
       }
+      // Remove checkbox on clone event
+      try {
+        var checkBoxTmp = eventNode.getElementsByTagName('input')[0];
+        eXo.core.DOMUtil.removeElement(checkBoxTmp.parentNode);
+      } catch(e) {}
       moreContainerNode.appendChild(eventNode);
-      eventObj.cutDownNodes.push(eventNode);
+      eventObj.cloneNodes.push(eventNode);
       startTime = new Date(parseInt(startTime));
       var startDay = startTime.getDay();
       var topPos = this.EVENT_BAR_HEIGH * i;
@@ -578,11 +575,11 @@ GUIMan.prototype.drawEvent = function(eventObj, startTime, endTime, weekIndex, e
     eventNode.setAttribute('eventclone', 'true');
     // Remove checkbox on clone event
     try {
-      var checkBoxTmp = eventNode.getElementsByTagName('input')[0].parentNode;
-      checkBoxTmp.parentNode.removeChild(checkBoxTmp);
+      var checkBoxTmp = eventNode.getElementsByTagName('input')[0];
+      eXo.core.DOMUtil.removeElement(checkBoxTmp.parentNode);
     } catch(e) {}
     this.rowContainerDay.appendChild(eventNode);
-    eventObj.cutDownNodes.push(eventNode);
+    eventObj.cloneNodes.push(eventNode);
   }
   startTime = new Date(parseInt(startTime));
   var startDay = startTime.getDay();
@@ -609,8 +606,8 @@ GUIMan.prototype.setDynamicSize = function() {
     var eventNode = events[i].rootNode;
     eventNode.style.width = parseFloat(parseInt(eventNode.style.width)/totalWidth)*100 + '%';
     eventNode.style.left = parseFloat(parseInt(eventNode.style.left)/totalWidth)*100 + '%';
-    for (var j=0; j<events[i].cutDownNodes.length; j++) {
-      var tmpNode = events[i].cutDownNodes[j];
+    for (var j=0; j<events[i].cloneNodes.length; j++) {
+      var tmpNode = events[i].cloneNodes[j];
       var containerNode = DOMUtil.findAncestorByClass(tmpNode, 'MoreContainer');
       if (containerNode) {
         tmpNode.style.width = '100%';
