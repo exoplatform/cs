@@ -750,10 +750,12 @@ public class UIMessageList extends UIForm {
       MailService mailSrv = MailUtils.getMailService();
       String username = MailUtils.getCurrentUser();
       String accountId = uiMessageList.getAncestorOfType(UIMailPortlet.class).findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       for(Message message : uiMessageList.getCheckedMessage()) {
         mailSrv.moveMessages(SessionsUtils.getSessionProvider(), username, accountId, message.getId(), message.getFolders()[0], folderId);
      }       
      uiMessageList.updateList();     
+     event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIFolderContainer.class)) ;
      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
   }
