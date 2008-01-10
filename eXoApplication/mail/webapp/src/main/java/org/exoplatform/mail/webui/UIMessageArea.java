@@ -16,9 +16,6 @@
  */
 package org.exoplatform.mail.webui;
 
-import org.exoplatform.mail.MailUtils;
-import org.exoplatform.mail.SessionsUtils;
-import org.exoplatform.mail.service.MailService;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIContainer;
 
@@ -37,8 +34,6 @@ public class UIMessageArea extends UIContainer  {
   public UIMessageArea() throws Exception {
     UIMessageList uiMessageList = createUIComponent(UIMessageList.class, null, null);
     addChild(uiMessageList);
-    MailService mailSrv = MailUtils.getMailService();
-    uiMessageList.init(mailSrv.getCurrentAccount(SessionsUtils.getSessionProvider(), MailUtils.getCurrentUser()));
     addChild(UIMessagePreview.class, null, null);
   }
 }
