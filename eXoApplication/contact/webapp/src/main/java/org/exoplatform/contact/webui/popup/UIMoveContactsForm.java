@@ -124,10 +124,16 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
       	contact.setAddressBook(new String[]{addressBookId}) ;
       	contacts.add(contact) ;
       }
-      if(contacts.size() == 0) return ;
       ContactUtils.getContactService().moveContacts(SessionsUtils.getSystemProvider()
         , ContactUtils.getCurrentUser(), contacts, type) ;
-      uiContactPortlet.findFirstComponentOfType(UIContacts.class).updateList() ;
+
+      UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
+      if (uiContacts.isDisplaySearchResult()) {
+        for (String contactId : uiMoveContactForm.getContactIds()) {
+          uiMoveContactForm.movedContacts.get(contactId).setContactType(type) ;
+        }
+      }
+      uiContacts.updateList() ;
       uiContactPortlet.cancelAction() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(
           uiContactPortlet.getChild(UIWorkingContainer.class)) ;
@@ -156,14 +162,22 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
       for(String id : uiMoveContactForm.getContactIds()) {
       	Contact contact = uiMoveContactForm.movedContacts.get(id) ;
         contact.setAddressBook(categories.toArray(new String[] {})) ;
+//      setContactType to represent in search result ;
+        //contact.setContactType(type) ;
       	contacts.add(contact) ;
       }
       ContactService contactService = ContactUtils.getContactService() ;
       String username = ContactUtils.getCurrentUser() ;
-      SessionProvider sessionProvider = SessionsUtils.getSystemProvider() ;
-      if(contacts.size() == 0) return ;   
+      SessionProvider sessionProvider = SessionsUtils.getSystemProvider() ; 
       contactService.moveContacts(sessionProvider, username, contacts, type) ;
-      uiContactPortlet.findFirstComponentOfType(UIContacts.class).updateList() ;
+      
+      UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
+      if (uiContacts.isDisplaySearchResult()) {
+        for (String contactId : uiMoveContactForm.getContactIds()) {
+          uiMoveContactForm.movedContacts.get(contactId).setContactType(type) ;
+        }
+      }      
+      uiContacts.updateList() ;
       uiContactPortlet.cancelAction() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContactPortlet.getChild(UIWorkingContainer.class)) ;
     }

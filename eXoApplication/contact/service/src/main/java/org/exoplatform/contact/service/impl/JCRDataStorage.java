@@ -406,8 +406,7 @@ public class JCRDataStorage{
       		}
       	}else if(addressType.equals(SHARED)) {
       		if(contact.getContactType().equals(PRIVATE)) {
-      			saveContactToSharedAddressBook(sysProvider, username, contact.getAddressBook()[0], contact, true) ;      			
-            // hoang hung add if
+      			saveContactToSharedAddressBook(sysProvider, username, contact.getAddressBook()[0], contact, true) ;
             if (privateContactHome.hasNode(contact.getId()))
               privateContactHome.getNode(contact.getId()).remove() ;
       			privateContactHome.save() ;
@@ -604,7 +603,7 @@ public class JCRDataStorage{
       }
     }
     return null ;    
-  }  
+  }
   
   public void removeSharedAddressBook(SessionProvider sProvider, String username, String addressBookId) throws Exception {
     Node sharedAddressBookHome = getSharedAddressBookHome(SessionProvider.createSystemProvider()) ;
@@ -645,11 +644,27 @@ public class JCRDataStorage{
       	if(contacts.hasNode(contactId)) {
       		contacts.getNode(contactId).remove() ;
       		contacts.save() ;
+          break ;
       	}
-      	break ;        
-        
       }      
     }
+  }
+  
+  public Contact getSharedContacts(SessionProvider sProvider, String username, String contactId) throws Exception {
+    Node sharedAddressBookHome = getSharedAddressBookHome(SessionProvider.createSystemProvider()) ;
+    if(sharedAddressBookHome.hasNode(username)) {
+      Node userNode = sharedAddressBookHome.getNode(username) ;
+      PropertyIterator iter = userNode.getReferences() ;
+      Node addressBook ;
+      while(iter.hasNext()) {
+        addressBook = iter.nextProperty().getParent() ;
+        Node contacts = addressBook.getParent().getParent().getNode(CONTACTS) ;
+        if(contacts.hasNode(contactId)) {
+          return getContact(contacts.getNode(contactId), "1") ;
+        }        
+      }      
+    }
+    return null ;
   }
   
   public void saveContactToSharedAddressBook(SessionProvider sProvider, String username, String addressBookId, Contact contact, boolean isNew) throws Exception  {

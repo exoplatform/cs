@@ -57,7 +57,7 @@ public interface ContactService {
   public ContactPageList getSharedContactsByAddressBook(SessionProvider sProvider, String username, String addressBookId) throws Exception ;
   public void removeSharedAddressBook(SessionProvider sProvider, String username, String addressBookId) throws Exception ;
   public void saveContactToSharedAddressBook(SessionProvider sProvider, String username, String addressBookId, Contact contact, boolean isNew) throws Exception ;
-  
+  public Contact getSharedContacts(SessionProvider sProvider, String username, String contactId) throws Exception ;
   //public List<Contact> shareContacts(SessionProvider sProvider, String username, List<String> contactIds, String[] groupIds) throws Exception;
   //public List<GroupContactData> getPublicContacts(SessionProvider sProvider, String[] groupIds) throws Exception ;
   

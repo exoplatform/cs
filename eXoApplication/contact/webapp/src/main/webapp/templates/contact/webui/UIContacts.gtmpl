@@ -179,17 +179,21 @@
 	  	 	    		for(contact in contacts) {
 	  	 	    			String groupName ;	  	 	    			
 	  	 	    			String[] addressBooks = contact.getAddressBook() ;
-	  	 	    			if (contact.getContactType().equals("2")) { 
+	  	 	    			contactType = contact.getContactType() ;
+	  	 	    			
+	  	 	    			if (contactType.equals("2")) {
 		  	 	    			StringBuffer buffer = new StringBuffer("")
 		  	 	    			for(address in addressBooks) {
 		  	 	    				if(buffer.length() > 0) buffer.append(", ").append(address) ;
 		  	 	    				else buffer.append(address) ;
 		  	 	    			}
 								    groupName = buffer.toString() ;
-								  } else if (privateGroupMap.containsKey(addressBooks[0])) {
-		  	 	    			groupName = privateGroupMap.get(addressBooks[0]) ;
-								  } else if (sharedGroupMap.containsKey(addressBooks[0])){
+								  } else if (contactType.equals("0")) {
+		  	 	    			groupName = privateGroupMap.get(addressBooks[0]) ;								  
+								  	if (groupName == null) continue ;								  
+								  } else if (contactType.equals("1")){
 								  	groupName = sharedGroupMap.get(addressBooks[0]) ;
+								  	if (groupName == null) continue ;
 								  }
   	 	    				String actionLink  = uicomponent.event("SelectedContact", contact.getId()) ;
 									checkboxField = uicomponent.getChildById(contact.getId()) ;

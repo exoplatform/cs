@@ -128,7 +128,9 @@ public class ContactServiceImpl implements ContactService {
   	storage_.saveContactToSharedAddressBook(sProvider, username, addressBookId, contact, isNew) ;
   }
   
-  
+  public Contact getSharedContacts(SessionProvider sProvider, String username, String contactId) throws Exception {
+    return storage_.getSharedContacts(sProvider, username, contactId) ;
+  }
   
   public Contact getPublicContact(SessionProvider sProvider, String contactId) throws Exception {
     return storage_.getPublicContact(sProvider, contactId);

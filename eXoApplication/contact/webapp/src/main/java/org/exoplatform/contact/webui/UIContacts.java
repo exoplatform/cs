@@ -217,7 +217,10 @@ public class UIContacts extends UIForm implements UIPopupComponent {
     String username = ContactUtils.getCurrentUser() ;
     SessionProvider sessionProvider = SessionsUtils.getSessionProvider() ;
     for (String contactId : contactIds) {
-      if (contactService.getContact(sessionProvider, username, contactId) == null) return false ;
+      if (contactService.getContact(sessionProvider, username, contactId) == null
+          && contactService.getPublicContact(sessionProvider, contactId) == null
+          && contactService.getSharedContacts(sessionProvider, username, contactId) == null) 
+        return false ;
     }
     return true ;
   }
@@ -373,9 +376,11 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-      for(String id : contactIds) {
-      	Contact contact = uiContacts.contactMap.get(id) ;
+      for(String contactId : contactIds) {
+      	Contact contact = uiContacts.contactMap.get(contactId) ;
       	if(contact != null) {
+//         setContactType to represent in search result ;
+          //contact.setContactType(type) ;
       		contact.setAddressBook(addressBooks) ;
       		contacts.add(contact) ;
       	}
@@ -385,7 +390,19 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       SessionProvider sessionProvider = SessionProvider.createSystemProvider() ;
       String username = ContactUtils.getCurrentUser() ;
       contactService.moveContacts(
-          sessionProvider, username, contacts, type);      
+          sessionProvider, username, contacts, type); 
+      
+      // update addressbook when search
+      if (uiContacts.isSearchResult) {
+        for (String contactId : contactIds) {
+          uiContacts.contactMap.get(contactId).setContactType(type) ;
+        }
+      }
+      
+      
+      
+      
+      
       uiContacts.updateList() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
       
