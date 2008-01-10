@@ -24,6 +24,7 @@ package org.exoplatform.mail.service;
  */
 public class MailSetting {
   
+  public static long NEVER_CHECK_AUTO = 0;
   public static long TEN_MINS = 10;
   public static long TWENTY_MINS = 20;
   public static long THIRTY_MINS = 30;
@@ -61,7 +62,7 @@ public class MailSetting {
     formatWhenReplyForward = FORMAT_AS_ORIGINAL;
     replyMessageWith = REPLY_AS_ORIGINAL;
     forwardMessageWith = FORWARD_AS_ORIGINAL;
-    periodCheckMailAuto = TEN_MINS;
+    periodCheckMailAuto = NEVER_CHECK_AUTO;
     editor = WYSIWYG;
     prefixMessageWith = PREFIX_WITH_MINUS;
   }
