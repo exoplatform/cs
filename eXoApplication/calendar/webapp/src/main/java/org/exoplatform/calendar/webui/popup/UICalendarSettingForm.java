@@ -31,7 +31,6 @@ import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.webui.UIActionBar;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
-import org.exoplatform.calendar.webui.UICalendarView;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
 import org.exoplatform.calendar.webui.UICalendars;
 import org.exoplatform.portal.webui.util.Util;
@@ -241,23 +240,33 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
         calendarSetting.setWorkingTimeEnd(settingTab.getWorkingEnd()) ;
       }
       CalendarService calendarService = CalendarUtils.getCalendarService() ;
+      UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
+      UICalendars uiCalendars = calendarPortlet.findFirstComponentOfType(UICalendars.class) ;
       String username = event.getRequestContext().getRemoteUser() ;
       List<String> defaultCalendars = new ArrayList<String>() ;
+      List<String> checkList = new ArrayList<String>() ;
       defaultCalendars = uiForm.getCheckedList(uiForm.getPrivateCalendars(calendarService, username)) ;
       if(!defaultCalendars.isEmpty()){
         calendarSetting.setDefaultPrivateCalendars(defaultCalendars.toArray(new String[] {})) ;
+        checkList.addAll(defaultCalendars) ;
+        defaultCalendars.clear() ;
       }
       defaultCalendars = uiForm.getCheckedList(uiForm.getPublicCalendars(calendarService, username)) ;
       if(!defaultCalendars.isEmpty()){
         calendarSetting.setDefaultPublicCalendars(defaultCalendars.toArray(new String[] {})) ;
+        checkList.addAll(defaultCalendars) ;
+        defaultCalendars.clear() ;
       }
       defaultCalendars = uiForm.getCheckedList(uiForm.getSharedCalendars(calendarService, username)) ;
       if(!defaultCalendars.isEmpty()){
         calendarSetting.setDefaultSharedCalendars(defaultCalendars.toArray(new String[] {})) ;
+        checkList.addAll(defaultCalendars) ;
         defaultCalendars.clear() ;
       }
+      for(String id : checkList) {
+        if(uiCalendars.getUIFormCheckBoxInput(id) != null)  uiCalendars.getUIFormCheckBoxInput(id).setChecked(true) ;
+      }
       calendarService.saveCalendarSetting(SessionsUtils.getSessionProvider(), event.getRequestContext().getRemoteUser(), calendarSetting) ;
-      UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
       calendarPortlet.setCalendarSetting(calendarSetting) ;
       String viewType = UICalendarViewContainer.TYPES[Integer.parseInt(calendarSetting.getViewType())] ;
       calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class).initView(viewType) ;
