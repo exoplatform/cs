@@ -275,7 +275,7 @@ public class UIMessageList extends UIForm {
       UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-      MailService mailServ = uiPortlet.getApplicationComponent(MailService.class);
+      
       Message msg = uiMessageList.messageList_.get(msgId);
       if (uiMessageList.selectedDraftFolder()) {
         UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
@@ -288,7 +288,7 @@ public class UIMessageList extends UIForm {
         if (msg != null && msg.isUnread()) {
           List<String> msgIds  = new ArrayList<String>();
           msgIds.add(msgId);
-          mailServ.toggleMessageProperty(SessionsUtils.getSessionProvider(), username, accountId, msgIds, Utils.EXO_ISUNREAD);
+          MailUtils.getMailService().toggleMessageProperty(SessionsUtils.getSessionProvider(), username, accountId, msgIds, Utils.EXO_ISUNREAD);
           msg.setUnread(false);
           uiMessageList.setSelectedMessageId(msgId);
           uiMessageList.messageList_.put(msg.getId(), msg);

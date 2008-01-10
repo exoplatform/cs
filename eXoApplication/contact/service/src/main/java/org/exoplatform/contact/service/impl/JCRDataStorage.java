@@ -395,8 +395,8 @@ public class JCRDataStorage{
     	try{
     		if(addressType.equals(PRIVATE)) {
       		if(contact.getContactType().equals(SHARED)) {
-            removeSharedContact(sysProvider, username, contact.getAddressBook()[0], contact.getId()) ;
-      			saveContact(sysProvider, username, contact, true) ;      			
+      			saveContact(sysProvider, username, contact, true) ;
+      			removeSharedContact(sysProvider, username, contact.getAddressBook()[0], contact.getId()) ;            
       		}else if(contact.getContactType().equals(PUBLIC)) {
       			publicContactHome.getSession().move(publicContactHome.getPath() +"/" + contact.getId(), 
       					                                 privateContactHome.getPath() +"/" + contact.getId()) ;	
@@ -424,8 +424,8 @@ public class JCRDataStorage{
       			publicContactHome.getNode(contact.getId()).setProperty("exo:categories", contact.getAddressBook()) ;      			
       			
       		}else if(contact.getContactType().equals(SHARED)) {
-            removeSharedContact(sysProvider, username, contact.getAddressBook()[0], contact.getId()) ;
-      			savePublicContact(sysProvider, contact, true) ;      			
+      			savePublicContact(sysProvider, contact, true) ;
+      			removeSharedContact(sysProvider, username, contact.getAddressBook()[0], contact.getId()) ;      			      			
       		}else if(contact.getContactType().equals(PUBLIC)) {
       			savePublicContact(sysProvider, contact, false) ;
       		}
