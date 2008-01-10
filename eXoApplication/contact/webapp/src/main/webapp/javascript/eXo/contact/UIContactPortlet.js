@@ -18,8 +18,9 @@ UIContactPortlet.prototype.toggleSelectAll = function(handler) {
   }
 } ;
 
-UIContactPortlet.prototype.showContextMenu = function() {
+UIContactPortlet.prototype.showContextMenu = function(compid) {
 	var UIContextMenu = eXo.webui.UIContextMenu ;//eXo.contact.ContextMenu ;
+	UIContextMenu.portletName = compid ;
 	var config = {
 		'preventDefault':false, 
 		'preventForms':false

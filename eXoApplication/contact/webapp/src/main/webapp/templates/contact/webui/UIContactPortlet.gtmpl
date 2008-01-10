@@ -6,7 +6,7 @@
 	String compId = uicomponent.getId() ;
 	def rcontext = _ctx.getRequestContext() ;
   rcontext.getJavascriptManager().importJavascript('eXo.contact.UIContactPortlet','/contact/javascript/') ;
- 	rcontext.getJavascriptManager().addJavascript("eXo.contact.UIContactPortlet.showContextMenu() ;") ;
+ 	rcontext.getJavascriptManager().addJavascript("eXo.contact.UIContactPortlet.showContextMenu('"+ compId +"') ;") ;
 %>
 
 <div class="UIContactPortlet" id="$compId">
