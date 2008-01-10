@@ -25,12 +25,17 @@ UICalendarPortlet.prototype.timeToMin = function(milliseconds) {
 	return min ;
 }	;
 
-UICalendarPortlet.prototype.minToTime = function(min) {
+UICalendarPortlet.prototype.minToTime = function(min,timeFormat) {
 	var minutes = min%60 ;
 	var hour = (min - minutes)/ 60 ;
+	if(this.timeFormat != "hh:mm a") return hour + ":" + minutes ;
 	if (hour < 10) hour = "0" + hour ;
 	if (minutes < 10) minutes = "0" + minutes ;
-	return hour + ":" + minutes ;
+	var time = hour + ":" + minutes ;
+	if(!timeFormat) return time ;
+	if(hour < 12) time += " " + timeFormat.am ;
+	else time += " " + timeFormat.pm ;
+ return time ;
 } ;
 
 UICalendarPortlet.prototype.getBeginDay = function(millis) {
@@ -381,7 +386,7 @@ UICalendarPortlet.prototype.setWidth = function(element, width) {
 UICalendarPortlet.prototype.getInterval = function(el) {
 	var bottom = new Array() ;
 	var interval = new Array() ;
-	if (el.length <= 0) return ;
+	if (!el || (el.length <= 0)) return ;
 	for(var i = 0 ; i < el.length ; i ++ ) {
 		bottom.push(el[i].offsetTop + el[i].offsetHeight) ;
 		if (bottom[i-1] && (el[i].offsetTop > bottom[i-1])) {
@@ -498,6 +503,7 @@ UICalendarPortlet.prototype.showEvent = function() {
 } ;
 
 UICalendarPortlet.prototype.browserResizeCallback = function() {
+	if (eXo.calendar.UICalendarPortlet.items) return ;
 	eXo.calendar.UICalendarPortlet.adjustWidth(eXo.calendar.UICalendarPortlet.items) ;
 }
 
@@ -1135,96 +1141,10 @@ UISelection.prototype.clear = function() {
 	document.onmouseup = null ;
 } ;
 
-//function UISelectionX() {
-//	
-//} ;
-//
-//UISelectionX.prototype.start = function(evt) {
-//	try{
-//		var UISelectionX = eXo.calendar.UISelectionX ;
-//		var _e = window.event || evt ;
-//		var src = _e.srcElement || _e.target ;
-//		if(src.tagName.toLowerCase() == "a") return ;
-//		UISelectionX.container = this ;
-//		if(document.getElementById("UserSelectionBlock")) eXo.core.DOMUtil.removeElement(document.getElementById("UserSelectionBlock")) ;
-//		UISelectionX.block = document.createElement("div") ;
-//		UISelectionX.block.setAttribute("id","UserSelectionBlock") ;
-//		UISelectionX.block.className = "UserSelectionBlock" ;
-//		UISelectionX.container.appendChild(UISelectionX.block) ;
-//		UISelectionX.step = UISelectionX.container.offsetWidth ;
-//		var len = eXo.core.DOMUtil.findDescendantsByTagName(UISelectionX.supObject.parentNode, UISelectionX.supObject.tagName.toLowerCase()).length - 1;
-//		UISelectionX.minX = eXo.core.Browser.findPosXInContainer(UISelectionX.supObject, UISelectionX.block.offsetParent) ;
-//		UISelectionX.maxX = UISelectionX.minX + UISelectionX.step*len ;
-//		if (UISelectionX.container.getAttribute("startTime")) UISelectionX.startTime = UISelectionX.container.getAttribute("startTime") ;
-//		if (UISelectionX.container.parentNode.parentNode.getAttribute("eXoCallback")) UISelectionX.callback = UISelectionX.container.parentNode.parentNode.getAttribute("eXoCallback") ;
-//		UISelectionX.startX = eXo.calendar.UICalendarPortlet.round(eXo.core.Browser.findMouseRelativeX(UISelectionX.block.offsetParent,_e),UISelectionX.step) ;
-//		if(eXo.core.DOMUtil.findAncestorByClass(UISelectionX.container,"EventWeekBar")) UISelectionX.startX = eXo.core.Browser.findPosXInContainer(UISelectionX.container, UISelectionX.block.offsetParent) ;
-//		UISelectionX.startY = (UISelectionX.relativeObject) ? (eXo.core.Browser.findPosYInContainer(UISelectionX.container, UISelectionX.block.offsetParent) - UISelectionX.relativeObject.scrollTop) : eXo.core.Browser.findPosYInContainer(UISelectionX.container, UISelectionX.block.offsetParent) ;
-//		UISelectionX.block.style.height = UISelectionX.container.offsetHeight - 1  + "px" ;
-//		UISelectionX.block.style.left = UISelectionX.startX  + "px" ;
-//		UISelectionX.block.style.top = UISelectionX.startY + "px" ;
-//		UISelectionX.block.style.width = UISelectionX.step + "px" ;
-//		eXo.calendar.UICalendarPortlet.resetZIndex(UISelectionX.block) ;
-//		document.onmousemove = UISelectionX.execute ;
-//		document.onmouseup = UISelectionX.clear ;		
-//	} catch(e) {
-//		alert(e.message) ;
-//	}
-//} ;
-//
-//UISelectionX.prototype.execute = function(evt) {
-//	var UISelectionX = eXo.calendar.UISelectionX ;
-//	var _e = window.event || evt ;
-//	var delta = null ;
-//	var mouseX = eXo.core.Browser.findMouseRelativeX(UISelectionX.block.offsetParent,_e) ;//eXo.core.Browser.findMouseXInPage(_e) ;
-//	var posX = UISelectionX.block.offsetLeft ;
-//	var width = UISelectionX.block.offsetWidth ;
-//	if (mouseX <= UISelectionX.minX) UISelectionX.block.style.left = UISelectionX.minX + "px" ;
-//	else if (mouseX >=  UISelectionX.maxX) UISelectionX.block.style.width = (UISelectionX.maxX - posX) + "px" ;
-//	else {		
-//		if((UISelectionX.startX - mouseX) < 0) {
-//			UISelectionX.block.style.left = UISelectionX.startX + "px" ;
-//			delta = posX + width - mouseX ;
-//			if (delta >= UISelectionX.step) {
-//				UISelectionX.block.style.width = parseInt(UISelectionX.block.style.width) - UISelectionX.step + "px" ;
-//			}
-//			if (mouseX >= (posX + width)) {		
-//				UISelectionX.block.style.width = parseInt(UISelectionX.block.style.width) + UISelectionX.step + "px" ;
-//			}
-//		} else {
-//			delta = mouseX - posX ;
-//			UISelectionX.block.style.right = UISelectionX.startX - UISelectionX.step + "px" ;
-//			if (mouseX <= posX) {
-//				UISelectionX.block.style.left = parseInt(UISelectionX.block.style.left) - UISelectionX.step + "px" ;
-//				UISelectionX.block.style.width = parseInt(UISelectionX.block.style.width) + UISelectionX.step + "px" ;
-//			}
-//			if(delta >= UISelectionX.step) {
-//				UISelectionX.block.style.left = parseInt(UISelectionX.block.style.left) + UISelectionX.step + "px" ;
-//				UISelectionX.block.style.width = parseInt(UISelectionX.block.style.width) - UISelectionX.step + "px" ;
-//			}
-//		}
-//	}
-//} ;
-//
-//UISelectionX.prototype.clear = function(evt) {
-//	var UISelectionX = eXo.calendar.UISelectionX ;
-//	if (UISelectionX.callback) eval(UISelectionX.callback) ;	
-//	document.onmousemove = null ;
-//	document.onmouseup = null ;
-//} ;
-
 // check free/busy time
 UICalendarPortlet.prototype.initCheck = function(container) {
 	var DOMUtil = eXo.core.DOMUtil ;
 	if(typeof(container) == "string") container = document.getElementById(container) ;
-//	var grandparent = container.parentNode.parentNode ;
-//	var child = DOMUtil.findDescendantsByClass(grandparent, "div", "UITabContent") ;
-//	var l = child.length ;
-//	for(var i = 0 ; i < l ; i++) {
-//		child[i].style.display = "none" ;
-//	}
-//	child[l - 1].style.display = "block" ;
-	
 	var table = DOMUtil.findFirstDescendantByClass(container, "table", "UIGrid") ;
 	var tr = DOMUtil.findDescendantsByTagName(table, "tr") ;	
 	var firstTr = tr[1] ;
@@ -1284,18 +1204,31 @@ UICalendarPortlet.prototype.initSelectionX = function(tr) {
 	}
 } ;
 
+UICalendarPortlet.prototype.getTimeFormat = function(input) {
+	var list = eXo.core.DOMUtil.findPreviousElementByTagName(input, "div") ;
+	var a = eXo.core.DOMUtil.findDescendantsByTagName(list, "a") ;
+	var am = a[0].getAttribute("value").match(/[A-Z]+/) ;
+	if(!am) return null ;
+	var pm = a[a.length - 1].getAttribute("value").match(/[A-Z]+/) ;
+	return {
+		"am": am,
+		"pm": pm
+	} ;
+} ;
+
 UICalendarPortlet.prototype.callbackSelectionX = function() {
 	var Highlighter = eXo.calendar.Highlighter ;
 	var DOMUtil = eXo.core.DOMUtil ;
 	var len = Math.abs(Highlighter.firstCell.cellIndex - Highlighter.lastCell.cellIndex - 1) ;
 	var start = (Highlighter.firstCell.cellIndex - 1)*15 ;
 	var end = start + len*15 ;
-	start = this.minToTime(start) ;
-	end = this.minToTime(end) ;
 	var uiTabContentContainer = DOMUtil.findAncestorByClass(Highlighter.startCell, "UITabContentContainer") ;
 	var UIComboboxInputs = DOMUtil.findDescendantsByClass(uiTabContentContainer, "input","UIComboboxInput") ;
 	var len = UIComboboxInputs.length ;
 	var name = null ;
+	var timeFormat = this.getTimeFormat(UIComboboxInputs[0]) ;
+	start = this.minToTime(start, timeFormat) ;
+	end = this.minToTime(end, timeFormat) ;
 	for(var i = 0 ; i < len ; i ++) {
 		name = UIComboboxInputs[i].name.toLowerCase() ;
 		if (name.indexOf("from") >= 0) UIComboboxInputs[i].value = start ;
@@ -1303,8 +1236,7 @@ UICalendarPortlet.prototype.callbackSelectionX = function() {
 	}
 	DOMUtil.addClass(Highlighter.block[1], "BlueBlock") ;
 	Highlighter.block[1].style.width = parseFloat(Highlighter.block[1].offsetWidth/Highlighter.container.offsetWidth)*100  + "%" ;
-	Highlighter.block[1].style.left = parseFloat(Highlighter.block[1].offsetLeft/Highlighter.container.offsetWidth)*100  + "%" ;	
-
+	Highlighter.block[1].style.left = parseFloat(Highlighter.block[1].offsetLeft/Highlighter.container.offsetWidth)*100  + "%" ;
 } ;
 
 UICalendarPortlet.prototype.initSettingTab = function(cpid) {
