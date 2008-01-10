@@ -222,17 +222,17 @@ public class UIAddressBooks extends UIComponent {
       String groupId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       if (uiAddressBook.publicGroupMap_.containsKey(groupId)) {
         uiContactForm.getUIFormCheckBoxInput(groupId).setChecked(true) ;   
-      } else {
-        if (uiAddressBook.privateGroupMap_.containsKey(groupId)) {
-          uiCategorySelect.setPrivateGroupMap(uiAddressBook.privateGroupMap_) ;
-          uiContactForm.setShared(false) ;
-        } else {
-          uiCategorySelect.setPrivateGroupMap(uiAddressBook.sharedGroupMap_) ;
-          uiContactForm.setShared(true) ;
-        }        
-        uiCategorySelect.addCategories() ;
-        uiCategorySelect.setValue(groupId) ; 
       }
+      if (uiAddressBook.privateGroupMap_.containsKey(groupId)) {
+        uiCategorySelect.setPrivateGroupMap(uiAddressBook.privateGroupMap_) ;
+        uiContactForm.setShared(false) ;
+      } else {
+        uiCategorySelect.setPrivateGroupMap(uiAddressBook.sharedGroupMap_) ;
+        uiContactForm.setShared(true) ;
+      }        
+      uiCategorySelect.addCategories() ;
+      uiCategorySelect.setValue(groupId) ; 
+      
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }
   }

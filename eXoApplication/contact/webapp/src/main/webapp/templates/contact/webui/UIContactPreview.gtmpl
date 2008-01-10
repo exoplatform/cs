@@ -5,10 +5,11 @@
 	String compId = uicomponent.getId() ;
 	Contact contact = uicomponent.getContact();
 	//print "Contacttttt:" + contact ":aa";
-	if(contact != null) {
+
 %>
 
 <div class="UIContactPreview" id="$compId" >
+<% if(contact != null) { %>	
 	<div class="ContactPreviewBar" >
 		<div class="Subject">Contact Details</div>
 		<a class="MaximizeContactPane" title="Maximize Reading Pane"  href="<%=uicomponent.event("MaximizeContactPane")%>">
@@ -240,11 +241,11 @@
 								<div class="InfoContainer">
 									<div class="TitleInfo">Note</div>
 									<div class="Content">
-										<div class="LeftContent">					
-											<div class="Member">
+										<!--<div class="LeftContent">					
+											<div class="Member">-->
 												<div class="Job">$note</div>
-											</div>	
-										</div>
+											<!--</div>	
+										</div>-->
 									</div>
 								</div>
 								<div style="clear: left;"><span></span></div>
@@ -265,55 +266,54 @@
 <!--  End DecoratorBox ViewBoxStyle -->
 		
 	</div>
-</div>
 
 <%} else { %>
-
-<div class="DecoratorBox">
-	<div class="ViewBoxStyle">
-		<div class="TopLeftViewBoxStyle">
-			<div class="TopRightViewBoxStyle">
-				<div class="TopCenterViewBoxStyle"><span></span></div>										
+	<div class="DecoratorBox">
+		<div class="ViewBoxStyle">
+			<div class="TopLeftViewBoxStyle">
+				<div class="TopRightViewBoxStyle">
+					<div class="TopCenterViewBoxStyle"><span></span></div>										
+				</div>
 			</div>
-		</div>
-		<div class="MiddleLeftViewBoxStyle">
-			<div class="MiddleRightViewBoxStyle">
-				<div class="MiddleCenterViewBoxStyle">
-				
-					<div class="UIWelcomeContact" >
+			<div class="MiddleLeftViewBoxStyle">
+				<div class="MiddleRightViewBoxStyle">
+					<div class="MiddleCenterViewBoxStyle">
 					
-					  <div class="WelcomeContact">
-					    <div class="LabelWelcomeContact">Welcome to</div>
-					    <div class="LabelComment">Your powerful Contact Manager</div>
-					    <div style="clear: both;"><span></span></div>
+						<div class="UIWelcomeContact" >
+						
+						  <div class="WelcomeContact">
+						    <div class="LabelWelcomeContact">Welcome to</div>
+						    <div class="LabelComment">Your powerful Contact Manager</div>
+						    <div style="clear: both;"><span></span></div>
+						  </div>
+						  <div class="LogoContact">
+						    <span></span>
+						  </div>
+						  <div class="OverviewContact">
+						    Overview
+						  </div>
+						  <div class="ContentContact">
+								    The eXo Address Book managed your private contacts and also public contacts in your organization. The contact contained informations about your self, your work and your home,...We supported VCard format and you can import/export contacts to Vcard format. You also can tags and do many actions on your contacts and refer your contacts from other application as eXo Calendar or eXo Web Mail....
+								  </div>
+						  <div class="FeaturesContact">
+						    Features
+						  </div>
+						  <div class="ContentContact">
+						    eXo Contact is an open-source Contact that is built on foudation of eXo WebOS with variety of new features designed to make your e-Contact experience more productive and convenience, User can easy do all helpfully actions on action menu or do some action with drag and drop feature, The searching for contacts also very convenience with fulltext search and excactly search on contact's properties.
+						  </div>
 					  </div>
-					  <div class="LogoContact">
-					    <span></span>
-					  </div>
-					  <div class="OverviewContact">
-					    Overview
-					  </div>
-					  <div class="ContentContact">
-							    The eXo Address Book managed your private contacts and also public contacts in your organization. The contact contained informations about your self, your work and your home,...We supported VCard format and you can import/export contacts to Vcard format. You also can tags and do many actions on your contacts and refer your contacts from other application as eXo Calendar or eXo Web Mail....
-							  </div>
-					  <div class="FeaturesContact">
-					    Features
-					  </div>
-					  <div class="ContentContact">
-					    eXo Contact is an open-source Contact that is built on foudation of eXo WebOS with variety of new features designed to make your e-Contact experience more productive and convenience, User can easy do all helpfully actions on action menu or do some action with drag and drop feature, The searching for contacts also very convenience with fulltext search and excactly search on contact's properties.
-					  </div>
-				  </div>
-					
-				</div>	
-													
+						
+					</div>	
+														
+				</div>
 			</div>
-		</div>
-		<div class="BottomLeftViewBoxStyle">
-			<div class="BottomRightViewBoxStyle">
-				<div class="BottomCenterViewBoxStyle"><span></span></div>										
+			<div class="BottomLeftViewBoxStyle">
+				<div class="BottomRightViewBoxStyle">
+					<div class="BottomCenterViewBoxStyle"><span></span></div>										
+				</div>
 			</div>
 		</div>
 	</div>
-</div>
 <% } %>
+</div>
 

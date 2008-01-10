@@ -4,7 +4,7 @@
 	  	<table class="UIFormGrid">
 	  		<tbody>
 	  		
-	  		<%for (field in uiform.getChildren()) {%>
+	  		<%for (field in uiform.getChildren()) { %>
 	  			<tr>
 	  				<td class="FieldComponent">	  				
 	  				  <% if (field.isRendered()) uiform.renderField(field) %>
