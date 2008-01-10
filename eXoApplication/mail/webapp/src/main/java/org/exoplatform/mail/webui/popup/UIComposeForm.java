@@ -386,7 +386,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
   }
   
   public boolean fromDrafts() {    
-    if (getMessage() != null && getMessage().getFolders()[0].equals(Utils.createFolderId(accountId_, Utils.FD_DRAFTS, false)) ) { 
+    if (getMessage() != null && getMessage().getFolders()[0].equals(Utils.createFolderId(accountId_, Utils.FD_DRAFTS, false)) || getComposeType() == MESSAGE_IN_DRAFT) { 
       return true;
     } 
     return false;
@@ -419,18 +419,18 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       try {
         MailSetting mailSetting = mailSvr.getMailSetting(SessionsUtils.getSessionProvider(), usename);
         if (mailSetting.saveMessageInSent()) {
+          System.out.println("=-===========================");
           message.setFolders(new String[]{Utils.createFolderId(accountId, Utils.FD_SENT, false)}) ;
-          Folder folder = mailSvr.getFolder(SessionsUtils.getSessionProvider(), usename, accountId, Utils.createFolderId(accountId, Utils.FD_SENT, false));
-          folder.setTotalMessage(folder.getTotalMessage() + 1);
-          mailSvr.saveFolder(SessionsUtils.getSessionProvider(), usename, accountId, folder);
         }
-        if (!uiForm.fromDrafts()) {
-          mailSvr.saveMessage(SessionsUtils.getSessionProvider(), usename, accountId, message, true) ;          
+        if (uiForm.fromDrafts()) {
+          System.out.println("=-==========================from=");
           Folder drafts = mailSvr.getFolder(SessionsUtils.getSessionProvider(), usename, accountId, Utils.createFolderId(accountId, Utils.FD_DRAFTS, false));
           drafts.setTotalMessage(drafts.getTotalMessage() - 1);
           mailSvr.saveFolder(SessionsUtils.getSessionProvider(), usename, accountId, drafts);
+          mailSvr.saveMessage(SessionsUtils.getSessionProvider(), usename, accountId, message, false) ;      
         } else {
-          mailSvr.saveMessage(SessionsUtils.getSessionProvider(), usename, accountId, message, false) ;
+          System.out.println("=-========ddd==================from=");
+          mailSvr.saveMessage(SessionsUtils.getSessionProvider(), usename, accountId, message, true) ;    
         }
       } catch (Exception e) {
         uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.save-sent-error", null)) ;
@@ -449,10 +449,8 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       //TODO review code and use only one SessionProvider, reduce call mailservice for performance problem 
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       UIMailPortlet uiPortlet = uiForm.getAncestorOfType(UIMailPortlet.class) ;
-      UISelectAccount uiSelectAcc = uiPortlet.findFirstComponentOfType(UISelectAccount.class) ;
-      UINavigationContainer uiNavigationContainer = uiPortlet.findFirstComponentOfType(UINavigationContainer.class) ;
-      UIFolderContainer uiFolderContainer = uiNavigationContainer.getChild(UIFolderContainer.class) ;
-      String accountId = uiSelectAcc.getSelectedValue() ;
+      UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class) ;
+      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
       String usename = uiPortlet.getCurrentUser() ;
       MailService mailSvr = uiForm.getApplicationComponent(MailService.class) ;
       UIPopupAction uiChildPopup = uiForm.getAncestorOfType(UIPopupAction.class) ;
@@ -462,6 +460,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
         if (! uiForm.fromDrafts()) {
           mailSvr.saveMessage(SessionsUtils.getSessionProvider(), usename, accountId, message, true) ;
           Folder drafts = mailSvr.getFolder(SessionsUtils.getSessionProvider(), usename, accountId, Utils.createFolderId(accountId, Utils.FD_DRAFTS, false));
+          System.out.println("==================>>.");
           drafts.setTotalMessage(drafts.getTotalMessage() + 1);
           mailSvr.saveFolder(SessionsUtils.getSessionProvider(), usename, accountId, drafts);
         } else {
