@@ -53,7 +53,7 @@ public class UIContactPreview extends UIComponent  {
   public String getImageSource() throws Exception {
     return ContactUtils.getImageSource(contact_, getApplicationComponent(DownloadService.class)) ; 
   }
-  
+
   static public class MaximizeContactPaneActionListener extends EventListener<UIContactPreview> {
     public void execute(Event<UIContactPreview> event) throws Exception {
       UIContactPreview uiContactPreview = event.getSource() ;
