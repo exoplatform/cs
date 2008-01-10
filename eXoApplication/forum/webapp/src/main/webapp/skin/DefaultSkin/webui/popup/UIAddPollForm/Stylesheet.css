@@ -1,65 +1,65 @@
-.UIAddPollForm {
+.UIForumPortlet .UIAddPollForm {
 	background-color: #ffffff;
 	padding: 8px;
 }
 
-.UIAddPollForm .HorizontalLayout {
+.UIForumPortlet .UIAddPollForm .HorizontalLayout {
 	background-color: #f7f7f7 ;
 	padding: 25px 50px 15px 50px;
 }
 
-.UIAddPollForm .Line {
+.UIForumPortlet .UIAddPollForm .Line {
 	background: url('background/Line1x2.gif') repeat-x ;
 	height: 2px ;
 	margin: 4px auto 10px auto ;
 }
 
-.UIAddPollForm .PollOptionConntent {
+.UIForumPortlet .UIAddPollForm .PollOptionConntent {
 	min-height: 152px ;
 	padding: 5px 0px;
 }
 
-*html .UIAddPollForm .PollOptionConntent {
+*html .UIForumPortlet .UIAddPollForm .PollOptionConntent {
 	height: 300px ;
 }
  
-.UIAddPollForm .HorizontalLayout .UIFormInputSet .Title {
+.UIForumPortlet .UIAddPollForm .HorizontalLayout .UIFormInputSet .Title {
 	color: black;
 	margin: 10px 0px 0px 3px;
 }
 
-.UIAddPollForm .Label {
+.UIForumPortlet .UIAddPollForm .Label {
 	text-align: left;
 	padding: 4px;
 }
 
-.UIAddPollForm .HorizontalLayout .UIFormGrid td.FieldLabel {
+.UIForumPortlet .UIAddPollForm .HorizontalLayout .UIFormGrid td.FieldLabel {
 	width: 140px;
 }
 
-.UIAddPollForm .HorizontalLayout .UIFormGrid td.FieldIcon {
+.UIForumPortlet .UIForumPortlet .UIAddPollForm .HorizontalLayout .UIFormGrid td.FieldIcon {
 	width: 110px;
 	padding: 4px 0px;
 }
 
-.UIAddPollForm .HorizontalLayout .UIFormGrid .QuestionInput input {
+.UIForumPortlet .UIAddPollForm .HorizontalLayout .UIFormGrid .QuestionInput input {
 	width: 400px;
 }
 
-.UIAddPollForm .HorizontalLayout .UIFormGrid .TimeOutInput input {
+.UIForumPortlet .UIAddPollForm .HorizontalLayout .UIFormGrid .TimeOutInput input {
 	width: 60px;
 }
 
-.UIAddPollForm .Icon {
+.UIForumPortlet .UIAddPollForm .Icon {
 	width: 16px; height: 16px;
 	float: left;
 	margin: 0px 2px;
 }
 
-.UIAddPollForm .AddNewNodeIcon {
+.UIForumPortlet .UIAddPollForm .AddNewNodeIcon {
 	cursor: pointer;
 }
 
-.UIAddPollForm .DeletePortalIcon {
+.UIForumPortlet .UIAddPollForm .DeletePortalIcon {
 	cursor: pointer;
 }

@@ -1,23 +1,23 @@
-.UISetting {
+.UICalendarPortlet .UISetting {
 	background-color: #ffffff;
 	padding: 8px;
 }
 
-.UISetting .HorizontalLayout {
+.UICalendarPortlet .UISetting .HorizontalLayout {
 	background-color: #f7f7f7;
 	padding: 8px;
 }
 
-.UISetting .UIFormWithTitle {
+.UICalendarPortlet .UISetting .UIFormWithTitle {
 	margin: 8px auto ;
 }
 
-.UISetting .HorizontalLayout .DateTime {
+.UICalendarPortlet .UISetting .HorizontalLayout .DateTime {
 	float: left;
 	margin-right: 3px;
 }
 
-.UISetting .HorizontalLayout .DateTime input {
+.UICalendarPortlet .UISetting .HorizontalLayout .DateTime input {
 	font-size: 11px;
 	width: 104px;
 }

@@ -511,13 +511,11 @@
 	margin-left: 243px;
 	padding-bottom: 8px;
 }
+
 .UICalendarViewContainer .UIHeaderBar{
 
 }
 
-.UICalendarViewContainer .ViewTypeSelect{
-
-}
 .UICalendarViewContainer .ViewTypeSelect .UIPopupCategory {
 	left: 315px;
 	position:absolute;

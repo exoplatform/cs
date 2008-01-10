@@ -1,45 +1,45 @@
-.UIAddTaskCategory {
+.UICalendarPortlet .UIAddTaskCategory {
 	width: 95%;
 	margin: 10px auto;
 }
 
-.UIAddTaskCategory .UIHorizontalLayout {
+.UICalendarPortlet .UIAddTaskCategory .UIHorizontalLayout {
 	background: #efefef;
 	border: solid 1px #cdcdcd;
 }
 
-.UIAddTaskCategory .UIHorizontalLayout .FormContainer {
+.UICalendarPortlet .UIAddTaskCategory .UIHorizontalLayout .FormContainer {
 	padding-top: 10px;
 	width: 400px;
 	margin: auto;
 }
 
-.UIAddTaskCategory .FormContainer .UIFormGrid .FieldLabel {
+.UICalendarPortlet .UIAddTaskCategory .FormContainer .UIFormGrid .FieldLabel {
 	width: 128px;
 	text-align: right;
 	padding: 4px;
 }
 
-.UIAddTaskCategory .FormContainer .UIFormGrid .FieldComponent {
+.UICalendarPortlet .UIAddTaskCategory .FormContainer .UIFormGrid .FieldComponent {
 	padding: 4px;
 }
 
-.UIAddTaskCategory .FormContainer .UIFormGrid input {
+.UICalendarPortlet .UIAddTaskCategory .FormContainer .UIFormGrid input {
 	width: 235px;
 	font-size: 11px;
 }
 
-.UIAddTaskCategory .FormContainer .UIFormGrid textarea {
+.UICalendarPortlet .UIAddTaskCategory .FormContainer .UIFormGrid textarea {
 	width: 230px;
 	font-size: 11px;
 }
 
-.UIAddTaskCategory .FormContainer .UIFormGrid select {
+.UICalendarPortlet .UIAddTaskCategory .FormContainer .UIFormGrid select {
 	width: 235px;
 	font-size: 11px;
 }
 
-.UIAddTaskCategory .FormContainer .UIAction{
+.UICalendarPortlet .UIAddTaskCategory .FormContainer .UIAction{
 	width: 160px;
 	padding-left: 90px;
 }

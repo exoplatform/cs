@@ -1,29 +1,29 @@
-.UIMergePostForm {
+.UIForumPortlet .UIMergePostForm {
 	padding: 10px;
 	background-color: white;
 	
 }
 
-.UIMergePostForm .MergePostsContainer {
+.UIForumPortlet .UIMergePostForm .MergePostsContainer {
 	border: 1px solid #c7c7c7;
 	background: #f7f7f7;
 	padding: 8px;
 }
 
-.UIMergePostForm .UIForm .HorizontalLayout {
+.UIForumPortlet .UIMergePostForm .UIForm .HorizontalLayout {
 	border: none;
 	padding: 0px 20px;
 }
 
-.UIMergePostForm .UIForm .HorizontalLayout select {
+.UIForumPortlet .UIMergePostForm .UIForm .HorizontalLayout select {
 	width: 374px;
 }
 
-.UIMergePostForm .UIForm .HorizontalLayout .Textinput {
+.UIForumPortlet .UIMergePostForm .UIForm .HorizontalLayout .Textinput {
 	width: 370px;
 }
 
-.UIMergePostForm .UIForm .HorizontalLayout .TexMessage {
+.UIForumPortlet .UIMergePostForm .UIForm .HorizontalLayout .TexMessage {
 	width: 370px;
 	height: 200px;
 }

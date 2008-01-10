@@ -1,54 +1,53 @@
-.UIAddTask {
+.UICalendarPortlet .UIAddTask {
 	background-color: #ffffff;
 	padding: 8px;
 }
 
-.UIAddTask .HorizontalLayout {
+.UICalendarPortlet .UIAddTask .HorizontalLayout {
 	background-color: #f7f7f7;
 	padding: 8px;
 }
 
-.UIAddTask .UIFormWithTitle {
+.UICalendarPortlet .UIAddTask .UIFormWithTitle {
 	margin: 8px auto ;
 }
 
-.UIAddTask .AddCategory {
+.UICalendarPortlet .UIAddTask .AddCategory {
 	width: 16px; height: 16px;
 	margin: 1px 0px 0px 6px;
 }
 
-.UIAddTask .HorizontalLayout .DateTime {
+.UICalendarPortlet .UIAddTask .HorizontalLayout .DateTime {
 	float: left;
 	margin-right: 3px;
 }
 
-.UIAddTask .HorizontalLayout .DateTime input {
+.UICalendarPortlet .UIAddTask .HorizontalLayout .DateTime input {
 	font-size: 11px;
 	width: 104px;
 }
 
-.UIAddTask .HorizontalLayout .AddIcon16x16 {
+.UICalendarPortlet .UIAddTask .HorizontalLayout .AddIcon16x16 {
 	width: 16px;
 	height: 16px;
 	margin: 0px 2px;
 }
 
-.UIAddTask .HorizontalLayout .SelectUserIcon {
+.UICalendarPortlet .UIAddTask .HorizontalLayout .SelectUserIcon {
 	background: url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/SmallUserIcon.gif') no-repeat;
 }
 
-.UIAddTask .HorizontalLayout .SelectMemberIcon {
+.UICalendarPortlet .UIAddTask .HorizontalLayout .SelectMemberIcon {
 	background: url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/SmallGroupIcon.gif') no-repeat;
 }
 
-.UIAddTask .HorizontalLayout .AddAnyIcon {
+.UICalendarPortlet .UIAddTask .HorizontalLayout .AddAnyIcon {
 	background: url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/SmallMemberIcon.gif') no-repeat;
 }
 
-.UIAddTask .HorizontalLayout .UIAction {
+.UICalendarPortlet .UIAddTask .HorizontalLayout .UIAction {
 	width: 65px;
 	float: left;
 	padding: 0px;
 	margin-left: 4px; 
 }
-

@@ -1,43 +1,43 @@
-.UIMessageCompose .MailListActionsbar .ControlButton {
+.UIMailPortlet .UIMessageCompose .MailListActionsbar .ControlButton {
 	float: left;
 	line-height: 26px;
 	cursor: pointer;
 }
 
-.UIMessageCompose .MailListActionsbar a {
+.UIMailPortlet .UIMessageCompose .MailListActionsbar a {
 	color: #000000;
 	margin: 3px 0px 0px 0px;
 	line-height: 26px;
 }
 
-.UIMessageCompose .MailListActionsbar a:hover {
+.UIMailPortlet .UIMessageCompose .MailListActionsbar a:hover {
 	background: url('background/ControlButtonBG1x26.gif') repeat-x ;
 	color: #058ee6; border: 1px solid #cbcbcb;
 	height: 24px;
 }
 
-.UIMessageCompose .MailListActionsbar .UIRightClickPopupMenu a {
+.UIMailPortlet .UIMessageCompose .MailListActionsbar .UIRightClickPopupMenu a {
 	color: #000000;
 	margin: 3px 0px 0px 0px;
 	line-height: 26px;
 }
 
-.UIMessageCompose .MailListActionsbar .UIRightClickPopupMenu a:hover {
+.UIMailPortlet .UIMessageCompose .MailListActionsbar .UIRightClickPopupMenu a:hover {
 	background: none;
 	color: #058ee6; border: none;
 	height: 24px;
 }
 
-.UIMessageCompose .MailListActionsbar .ControlButton .Label {
+.UIMailPortlet .UIMessageCompose .MailListActionsbar .ControlButton .Label {
 	line-height: 24px;
 }
 
-.UIMessageCompose .MailListActionsbar .SeparatorLine {
+.UIMailPortlet .UIMessageCompose .MailListActionsbar .SeparatorLine {
   float: left;
   margin: 3px 5px 2px 5px;
 }
 
-.UIMessageCompose .MailListActionsbar .ControlButton .IconHolder {
+.UIMailPortlet .UIMessageCompose .MailListActionsbar .ControlButton .IconHolder {
 	line-height: 26px;
 	margin: 1px 7px 0px 7px;
 	padding-left: 26px;

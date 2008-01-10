@@ -1,35 +1,35 @@
-.UIMessageFilter {
+.UIMailPortlet .UIMessageFilter {
 	background: #f3f3f3;
 }
 
-.UIMessageFilter .FilterSetting {
+.UIMailPortlet .UIMessageFilter .FilterSetting {
 	border: 1px solid #c0c0c0;
 	padding: 10px;
 }
 
 /*===========================FilterSettingCategory===========================*/
 
-.UIMessageFilter .FilterSettingCategory {
+.UIMailPortlet .UIMessageFilter .FilterSettingCategory {
 	width: 212px; height: 355px;
 	float: left;
 	background: white;
 	border: 1px solid #a5a5a5;
 }
 
-.CategoryControlBar {
+.UIMailPortlet .CategoryControlBar {
 	background: url('background/BgTitleTag1x20.gif') repeat-x ;
 	height: 20px; line-height: 20px;
 	padding: 0px 10px 0px 8px;
 	font-weight: bold;
 }
 
-.UIMessageFilter .FilterSettingCategory .CategoryControlBar .Title {
+.UIMailPortlet .UIMessageFilter .FilterSettingCategory .CategoryControlBar .Title {
 	color: #3d3d3d;
 	font-weight: bold;
 	float: left;
 }
 
-.UIMessageFilter .FilterSettingCategory .CategoryControlBar .ControlBarIcon {
+.UIMailPortlet .UIMessageFilter .FilterSettingCategory .CategoryControlBar .ControlBarIcon {
 	float: right;
 	height: 18px; width: 20px;
 	cursor: pointer;
@@ -38,36 +38,36 @@
 	background-repeat: no-reteat;
 }
 
-.UIMessageFilter .FilterSettingCategory .CategoryControlBar .FilterDelete {
+.UIMailPortlet .UIMessageFilter .FilterSettingCategory .CategoryControlBar .FilterDelete {
 	background: url('icons/FilterDeleteIcon.gif');
 }
 
-.UIMessageFilter .FilterSettingCategory .CategoryControlBar .FilterEdit {
+.UIMailPortlet .UIMessageFilter .FilterSettingCategory .CategoryControlBar .FilterEdit {
 	background: url('icons/FilterEditIcon.gif');
 }
 
-.UIMessageFilter .FilterSettingCategory .CategoryControlBar .FilterAdd {
+.UIMailPortlet .UIMessageFilter .FilterSettingCategory .CategoryControlBar .FilterAdd {
 	background: url('icons/FilterAddIcon.gif');
 }
 
-.UIMessageFilter .FilterSettingCategory .FilterSettingList {
+.UIMailPortlet .UIMessageFilter .FilterSettingCategory .FilterSettingList {
 	padding: 10px 0px;
 	color: #3d3d3d;
 }
 
-.UIMessageFilter .FilterSettingCategory .FilterSettingList .AddNewFilter{
+.UIMailPortlet .UIMessageFilter .FilterSettingCategory .FilterSettingList .AddNewFilter{
 	color: #0101ff;
 	text-decoration:underline;
 	text-align:center;
 }
 
-.UIMessageFilter .FilterSettingCategory .NormalItem {
+.UIMailPortlet .UIMessageFilter .FilterSettingCategory .NormalItem {
 	padding: 0px 27px;
 	line-height: 22px;
 	margin: 2px 0px;
 }
 
-.UIMessageFilter .FilterSettingCategory .SelectedItem {
+.UIMailPortlet .UIMessageFilter .FilterSettingCategory .SelectedItem {
 	padding: 0px 27px;
 	margin: 2px 0px;
 	line-height: 22px;
@@ -75,21 +75,21 @@
 }
 /************************************FilterSettingContainer*************************************/
 
-.UIMessageFilter .FilterSettingContainer {
+.UIMailPortlet .UIMessageFilter .FilterSettingContainer {
 	margin-left: 223px;
 	background: white;
 	border: 1px solid #a5a5a5;
 	height: 355px;
 }
 
-.UIMessageFilter .FilterSettingContainer .FilterSettingList {
+.UIMailPortlet .UIMessageFilter .FilterSettingContainer .FilterSettingList {
 	line-height: 20px;
 	padding: 5px 10px;
 	
 }
 /************************************Filter NULL*************************************/
 
-.UIMessageFilter .FilterSettingContainer .TitleFilterMail {
+.UIMailPortlet .UIMessageFilter .FilterSettingContainer .TitleFilterMail {
 	margin: 1px 1px 0px 1px;
 	background: #ccddf1;
 	line-height: 25px;
@@ -98,24 +98,24 @@
 	font-weight: bold;
 }
 
-.UIMessageFilter .FilterSettingContainer .FilterContent {
+.UIMailPortlet .UIMessageFilter .FilterSettingContainer .FilterContent {
 	background: url('background/BGIntroduction89x1.png') repeat-y right top ;
 	margin: 0px 1px;
 }
 
-.UIMessageFilter .FilterSettingContainer .IntroductionContent {
+.UIMailPortlet .UIMessageFilter .FilterSettingContainer .IntroductionContent {
 	background: url('background/BGMailFilter54x132.gif') no-repeat 265px 16px ;
 	height: 328px;
 	padding: 0px 85px 0px 12px;
 }
 
-.UIMessageFilter .FilterSettingContainer .IntroductionContent .TitleFilter {
+.UIMailPortlet .UIMessageFilter .FilterSettingContainer .IntroductionContent .TitleFilter {
 	color: #ff1b1b;
 	line-height: 20px;
 	padding-top: 20px;
 }
 
-.UIMessageFilter .FilterSettingContainer .IntroductionContent .Text {
+.UIMailPortlet s.UIMessageFilter .FilterSettingContainer .IntroductionContent .Text {
 	color: #2d2d2d;
 	padding-left: 5px;
 }

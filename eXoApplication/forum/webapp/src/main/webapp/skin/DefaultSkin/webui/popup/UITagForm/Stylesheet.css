@@ -1,33 +1,33 @@
-.UITagForm {
+.UIForumPortlet .UITagForm {
 	padding: 10px;
 	background:#ffffff;
 }
 
-.UITagForm .TagContent {
+.UIForumPortlet .UITagForm .TagContent {
 	border: 1px solid #c7c7c7;
 }
 
-.UITagForm .TagControlBar {
+.UIForumPortlet .UITagForm .TagControlBar {
 	background: url('background/BgTitleTag1x25.gif') repeat-x;
 	line-height: 25px;
 	padding: 0px 5px 0px 10px;
 }
 
-.UITagForm .TagTitle {
+.UIForumPortlet .UITagForm .TagTitle {
 	float: left;
 	font-weight: bold;
 }
 
-.UITagForm .TagIcon {
+.UIForumPortlet .UITagForm .TagIcon {
 	float: right;
 	margin: 5px 3px;
 }
 
-.UITagForm .TagsList {
+.UIForumPortlet .UITagForm .TagsList {
 	padding: 10px 1px 20px 1px;
 }
 
-.UITagForm .TagsList a {
+.UIForumPortlet .UITagForm .TagsList a {
 	line-height: 20px;
 	color: #3d3d3d;
 	display: block;

@@ -1,4 +1,4 @@
-.UIComboboxList {
+.UICalendarPortlet .UIComboboxList {
 	background: white ;
 	position: absolute ;
 	border: solid 1px gray ;
@@ -6,35 +6,33 @@
 	display: none ;
 	max-height: 150px;
 }
-.UIComboboxList {
+
+.UICalendarPortlet .UIComboboxList {
 	*height: 150px ;
 }
-.UIComboboxList .UIComboboxItem {
+
+.UICalendarPortlet .UIComboboxList .UIComboboxItem {
 	display: block ;
 	padding: 3px 5px ;
 	text-decoration: none ;
 	color: black ;
 }
 
-.UIComboboxList a:hover{
+.UICalendarPortlet .UIComboboxList a:hover{
 	background: blue ;
 	color: white ;
 }
 
-.UIComboboxList a:visit{
+.UICalendarPortlet .UIComboboxList a:visit{
 	background: white ;
 	color: black ;
 }
 
-.UIComboboxList .UIComboboxIcon {
-
-}
-
-.UIComboboxList .UIComboboxSelectedIcon a{
+.UICalendarPortlet .UIComboboxList .UIComboboxSelectedIcon a{
 	background: blue ;
 }
 
-.UIComboboxList .UIComboboxLabel {
+.UICalendarPortlet .UIComboboxList .UIComboboxLabel {
 	font-family: tahoma ;
 	font-size: 11px ;
 	margin-left: 16px ;

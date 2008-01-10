@@ -1,35 +1,35 @@
-.UIAddEventCategory {
+.UICalendarPortlet .UIAddEventCategory {
 	background: #ffffff;
 	padding:8px;
 }
 
-.UIAddEventCategory .UIHorizontalLayout {
+.UICalendarPortlet .UIAddEventCategory .UIHorizontalLayout {
 	padding: 8px;
 	background: #efefef;
 	border: 1px solid #c7c7c7;
 }
 
-.UIAddEventCategory .UIFormWithTitle .HorizontalLayout {
+.UICalendarPortlet .UIAddEventCategory .UIFormWithTitle .HorizontalLayout {
 	padding: 0px;
 	border-top: none;
 }
 
-.UIAddEventCategory .UIHorizontalLayout .FormContainer {
+.UICalendarPortlet .UIAddEventCategory .UIHorizontalLayout .FormContainer {
 	padding: 5px;
 	border: none;
 }
 
-.UIAddEventCategory .FormContainer .UIFormGrid .FieldLabel {
+.UICalendarPortlet .UIAddEventCategory .FormContainer .UIFormGrid .FieldLabel {
 	width: 128px;
 	text-align: right;
 	padding: 4px;
 }
 
-.UIAddEventCategory .FormContainer .UIFormGrid .FieldComponent {
+.UICalendarPortlet .UIAddEventCategory .FormContainer .UIFormGrid .FieldComponent {
 	padding: 4px;
 }
 
-.UIAddEventCategory .FormContainer .UIFormGrid input {
+.UICalendarPortlet .UIAddEventCategory .FormContainer .UIFormGrid input {
 	width: 235px;
 	font-size: 11px;
 }

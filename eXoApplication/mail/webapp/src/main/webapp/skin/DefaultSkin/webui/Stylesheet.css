@@ -103,11 +103,11 @@
 
 /********UISelectAccount*********/
 
-.UISelectAccount {
+.UIMailPortlet .UISelectAccount {
 	margin-bottom: 1px;
 }
 
-.UISelectAccount .selectbox {
+.UIMailPortlet .UISelectAccount .selectbox {
 	float: left;
 	margin: 8px 0px 0px 0px;
 	width: 194px;
@@ -116,33 +116,33 @@
 	border: 1px solid #A5A5A5;
 }
 
-.UISelectAccount .UIRightClickPopupMenu {
+.UIMailPortlet .UISelectAccount .UIRightClickPopupMenu {
 	 top :5px;
 	 left:100px ;
 }
 
-.UISelectAccount .ItemSelectorContainer {
+.UIMailPortlet .UISelectAccount .ItemSelectorContainer {
 	width: 194px;
 	float: left;
 	margin: 7px 0px 1px 0px;
 	border-right: none;
 }
 
-.UISelectAccount .ItemInfoBar {
+.UIMailPortlet .UISelectAccount .ItemInfoBar {
 	background: white url(background/DropDownItemSelectorBG1x2.gif) repeat-x top;
 	padding-left: 5px;
 	border: 1px solid #929292;
 	cursor: pointer;
 }
 
-.UISelectAccount .ItemInfoBar .SelectedItemLabel {
+.UIMailPortlet .UISelectAccount .ItemInfoBar .SelectedItemLabel {
 	float: left;
 	line-height: 19px;
 	font-size: 10px; font-weight: bold; color: #333333;
 	margin-left: 7px;
 }
 
-.UISelectAccount .ItemInfoBarDisable .SelectedItemLabel {
+.UIMailPortlet .UISelectAccount .ItemInfoBarDisable .SelectedItemLabel {
 	float: left;
 	line-height: 19px;
 	font-weight: bold;
@@ -150,18 +150,18 @@
 	overflow: hidden;
 }
 
-.UISelectAccount .DropDownSelectIcon {
+.UIMailPortlet .UISelectAccount .DropDownSelectIcon {
 	float: right; 
 	width: 20px; height: 19px;
 	background: url('background/DropDownButton.gif') no-repeat right;
 	cursor: pointer;	
 }
 
-.UISelectAccount .UIItemList .ItemSelectorLabel {
+.UIMailPortlet .UISelectAccount .UIItemList .ItemSelectorLabel {
 	text-transform: capitalize; 
 }
 
-.UISelectAccount .AddAccountIcon {
+.UIMailPortlet .UISelectAccount .AddAccountIcon {
 	background: url('/mail/skin/DefaultSkin/webui/skinIcons/24x24/icons/EditSelectAccount.gif') no-repeat left top;
 	cursor: pointer;
 	float: right; margin: 8px 0px 0px 0px;
@@ -851,27 +851,27 @@
 	margin: 0px;
 }
 
-.UIMessagePageList .MailIteratorContainer {
+.UIMailPortlet .UIMessagePageList .MailIteratorContainer {
 	line-height: 29px;
 	padding: 0px 10px 0px 15px;
 }
 
-.UIMessagePageList .MailIteratorContainer .RightPageIteratorBlock {
+.UIMailPortlet .UIMessagePageList .MailIteratorContainer .RightPageIteratorBlock {
 	float:right;
 }
 
-.UIMessagePageList .MailIteratorContainer .LeftPageIteratorBlock {
+.UIMailPortlet .UIMessagePageList .MailIteratorContainer .LeftPageIteratorBlock {
 	float:right;
 	margin-right:15px;
 }
 
-.UIMessagePageList .TotalPages {
+.UIMailPortlet .UIMessagePageList .TotalPages {
 	float:left;
 	line-height:25px;
 	vertical-align:middle;
 }
 
-.UIMessagePageList .Number {
+.UIMailPortlet .UIMessagePageList .Number {
 	float:left;
 	line-height: 25px;
 	vertical-align:middle;
@@ -879,7 +879,7 @@
 	margin: 0px 2px;
 }
 
-.ResizeReadingPane {
+.UIMailPortlet .ResizeReadingPane {
 	background: url('background/ResizeReadingPane38x3.gif') no-repeat center;
 	height: 5px;
 	cursor: n-resize;
@@ -904,28 +904,28 @@
 	white-space: nowrap;
 }
 
-.SeparatorLine {
+.UIMailPortlet .SeparatorLine {
   background: url('background/SeparatorLine2x26.gif') no-repeat ;	
   height: 26px; width: 2px;
 }
 
-.OddItem {
+.UIMailPortlet .OddItem {
 	background: #ffffff ;
 }
 
-.EvenItem {
+.UIMailPortlet .EvenItem {
 	background: #f6f6f6 ;
 }
 
-.SelectedItem{
+.UIMailPortlet .SelectedItem{
 	background: #eceffc ;
 }
 
-.ReadItem { 
+.UIMailPortlet .ReadItem { 
 	font-weight: normal ;
 }
 
-.UnreadItem { 
+.UIMailPortlet .UnreadItem { 
 	font-weight: bold ;
 }
 
@@ -1054,208 +1054,208 @@
 
 /*=======================UIAddToContact========================*/
 
-.UIAddToContact{
+.UIMailPortlet .UIAddToContact{
 	padding: 8px;
 }
 
-.UIAddToContact .HorizontalLayout {
+.UIMailPortlet .UIAddToContact .HorizontalLayout {
 	background-color: #f3f3f3;
 	padding: 8px;
 }
 
-.UIAddToContact .UIFormGrid {
+.UIMailPortlet .UIAddToContact .UIFormGrid {
 	width: 95%;
 }
 
-.UIAddToContact table {
+.UIMailPortlet .UIAddToContact table {
 	background: none;
 }
 
-.UIAddToContact .HorizontalLayout td.FieldLabel {
+.UIMailPortlet .UIAddToContact .HorizontalLayout td.FieldLabel {
 	font-weight: bold;
 	width: 120px;
 }
 
-.UIAddToContact .HorizontalLayout td {
+.UIMailPortlet .UIAddToContact .HorizontalLayout td {
 	border: none;
 }	
 	
-.UIAddToContact .HorizontalLayout {
+.UIMailPortlet .UIAddToContact .HorizontalLayout {
 	padding: 10px 0px;
 	border: 1px solid #cccccc;
 }
 
-.UIAddToContact .HorizontalLayout input {
+.UIMailPortlet .UIAddToContact .HorizontalLayout input {
 	width: 235px;
 }
 
-.UIAddToContact .HorizontalLayout .FieldComponentShort {
+.UIMailPortlet .UIAddToContact .HorizontalLayout .FieldComponentShort {
 	margin-right: 5px;
 }
 
-.UIAddToContact .HorizontalLayout .FieldComponentShort input {
+.UIMailPortlet .UIAddToContact .HorizontalLayout .FieldComponentShort input {
 	width: 113px;
 }
 
-.UIAddToContact .HorizontalLayout .FieldComponentShort select {
+.UIMailPortlet .UIAddToContact .HorizontalLayout .FieldComponentShort select {
 	width: 117px;
 }
 
 
 /*=======================UIAddToContact========================*/
 
-.UIAdvanceSearchMail{
+.UIMailPortlet .UIAdvanceSearchMail{
 	background-color: #f3f3f3;
 }
 
-.UIAdvanceSearchMail .SearchBox {
+.UIMailPortlet .UIAdvanceSearchMail .SearchBox {
 	background: white;
 	height: 30px;
 	padding: 10px;
 }
 
-.UIAdvanceSearchMail .AdvanSearchForm {
+.UIMailPortlet .UIAdvanceSearchMail .AdvanSearchForm {
 	border-top: 1px solid #cccccc;
 	border-bottom: 1px solid white;
 }
 
-.UIAdvanceSearchMail .SearchContent {
+.UIMailPortlet .UIAdvanceSearchMail .SearchContent {
 	border-top: 1px solid white;
 	border-bottom: 1px solid #cccccc;
 	padding: 10px;
 }
 
-.UIAdvanceSearchMail table {
+.UIMailPortlet .UIAdvanceSearchMail table {
 	background: none;
 }
 	
-.UIAdvanceSearchMail .HorizontalLayout {
+.UIMailPortlet .UIAdvanceSearchMail .HorizontalLayout {
 	border: none;
 }
 
-.UIAdvanceSearchMail .UIFormGrid td.FieldLabel {
+.UIMailPortlet .UIAdvanceSearchMail .UIFormGrid td.FieldLabel {
 	width: 150px;
 }
 
-.UIAdvanceSearchMail .HorizontalLayout .FieldShort select {
+.UIMailPortlet .UIAdvanceSearchMail .HorizontalLayout .FieldShort select {
 	width: 135px;
 }
 
-.UIAdvanceSearchMail .HorizontalLayout .SearchForDate {
+.UIMailPortlet .UIAdvanceSearchMail .HorizontalLayout .SearchForDate {
 	padding-left: 70px;
 }
 
-.UIAdvanceSearchMail .HorizontalLayout .SearchForDate .FieldLabel {
+.UIMailPortlet .UIAdvanceSearchMail .HorizontalLayout .SearchForDate .FieldLabel {
 	width: 81px;
 }
 
-.UIAdvanceSearchMail .HorizontalLayout .SearchForDate .FieldComponent {
+.UIMailPortlet .UIAdvanceSearchMail .HorizontalLayout .SearchForDate .FieldComponent {
 	width: 120px;
 }
 	
-.UIAdvanceSearchMail .HorizontalLayout .SearchForDate input {
+.UIMailPortlet .UIAdvanceSearchMail .HorizontalLayout .SearchForDate input {
 	width: 130px;
 }
 
-.UIAdvanceSearchMail .HorizontalLayout .SearchForPriority {
+.UIMailPortlet .UIAdvanceSearchMail .HorizontalLayout .SearchForPriority {
 	padding-left: 160px;
 }
 
-.UIAdvanceSearchMail .HorizontalLayout .SearchForPriority input.checkbox {
+.UIMailPortlet .UIAdvanceSearchMail .HorizontalLayout .SearchForPriority input.checkbox {
 	margin: 5px 0px 0px 8px;
 }
 
-.UIAdvanceSearchMail .HorizontalLayout .SearchContent .Short input {
+.UIMailPortlet .UIAdvanceSearchMail .HorizontalLayout .SearchContent .Short input {
 	width: 130px;
 }
 
-.UIAdvanceSearchMail .HorizontalLayout .SearchContent .Short select {
+.UIMailPortlet .UIAdvanceSearchMail .HorizontalLayout .SearchContent .Short select {
 	width: 135px;
 }
 
-.UIAdvanceSearchMail .HorizontalLayout .SearchForPriority .FieldLabel {
+.UIMailPortlet .UIAdvanceSearchMail .HorizontalLayout .SearchForPriority .FieldLabel {
 	width: 83px;
 }
 
-.UIAdvanceSearchMail .HorizontalLayout .SearchForPriority .ShortComponent {
+.UIMailPortlet .UIAdvanceSearchMail .HorizontalLayout .SearchForPriority .ShortComponent {
 	width: 25px;
 }
 
-.UIAdvanceSearchMail .HorizontalLayout .SearchForPriority .FieldComponent {
+.UIMailPortlet .UIAdvanceSearchMail .HorizontalLayout .SearchForPriority .FieldComponent {
 	width: 80px;
 }
 
 /********************* ContactsPopup************************/
 
-.UIContactsPopup {
+.UIMailPortlet .UIContactsPopup {
 }
 
-.UIContactsPopup .ContactPopup {
+.UIMailPortlet .UIContactsPopup .ContactPopup {
 	background:  #E7E7E7 url(skinIcons/24x24/icons/ContactPopup.gif) no-repeat scroll left center;
 }
 
-.UIContactsPopup .ContactContainer .IconHolder {
+.UIMailPortlet .UIContactsPopup .ContactContainer .IconHolder {
 	margin: 0px;
 	padding-left: 20px;
 }
 
-.UIContactsPopup .Input {
+.UIMailPortlet .UIContactsPopup .Input {
 	float: right;
 	margin-top: 5px;
 	height: 13px;
 }
 
-.UIContactsPopup .WorkContainer .BoxWorkContainer {
+.UIMailPortlet .UIContactsPopup .WorkContainer .BoxWorkContainer {
 	padding: 10px;
 }
 
-.UIContactsPopup .UISearch {
+.UIMailPortlet .UIContactsPopup .UISearch {
 	background: white;
 	height: auto;
 	margin: 10px 10px 0px 10px;
 	padding: 0px;
 }
 
-.UIContactsPopup .UIForm .HorizontalLayout {
+.UIMailPortlet .UIContactsPopup .UIForm .HorizontalLayout {
 	border: none;
 }
 
-.UIContactsPopup .WorkContainer {
+.UIMailPortlet .UIContactsPopup .WorkContainer {
 	margin: 0px 10px;
 	background: #f3f3f3;
 	border: 1px solid #cccccc;
 }
 
-.UIContactsPopup .WorkContainer .LeftContacts {
+.UIMailPortlet .UIContactsPopup .WorkContainer .LeftContacts {
 	width: 215px;
 	float: left;
 }
 
-.UIContactsPopup .WorkContainer .RightContacts {
+.UIMailPortlet .UIContactsPopup .WorkContainer .RightContacts {
 	margin-left: 220px;
 }
 
-.UIContactsPopup .WorkContainer .RightContacts .DecoratorBox {
+.UIMailPortlet .UIContactsPopup .WorkContainer .RightContacts .DecoratorBox {
 	overflow: auto;
 	background: #fff;
 }
 
-.UIContactsPopup .UISelectAccount .selectbox {
+.UIMailPortlet .UIContactsPopup .UISelectAccount .selectbox {
 	margin: 0px;
 	width: 215px;
 }
 
-.UIContactsPopup .UISelectAccount .AddAccountIcon {
+.UIMailPortlet .UIContactsPopup .UISelectAccount .AddAccountIcon {
 	margin: 0px;
 }
 
-.UIContactsPopup .ContactContainer {
+.UIMailPortlet .UIContactsPopup .ContactContainer {
 	border: 1px solid #c0c0c0;
 	border-top: none;
 	padding: 0px 1px 1px 1px;
 }
 
-.UIContactsPopup .ContactContainer .Title {
+.UIMailPortlet .UIContactsPopup .ContactContainer .Title {
 	background: #e7e7e7;
 	line-height: 27px;
 	height: 27px;
@@ -1264,36 +1264,36 @@
 	line-height: 20px;
 }
 
-.UIContactsPopup .ContactContainer .ListContact {
+.UIMailPortlet .UIContactsPopup .ContactContainer .ListContact {
 	padding: 10px;
 	overflow: auto;
 	background: #fff;
 }
 
-.UIContactsPopup .ContactContainer .NormalItem {
+.UIMailPortlet .UIContactsPopup .ContactContainer .NormalItem {
 	line-height: 20px;
 	height: 20px;
 	padding-left: 24px;
 }
 
-.UIContactsPopup .RightContacts .ContactContainer {
+.UIMailPortlet .UIContactsPopup .RightContacts .ContactContainer {
 	border: 1px solid #ccc;
 }
 
-.UIContactsPopup .BoxSearch {
+.UIMailPortlet .UIContactsPopup .BoxSearch {
 	padding-top: 15px;
 }
 
-.UIContactsPopup .BoxSearch .InputContact {
+.UIMailPortlet .UIContactsPopup .BoxSearch .InputContact {
 	float: left;
 	width: 190px;
 }
 
-.UIContactsPopup .FieldComponent .selectbox {
+.UIMailPortlet .UIContactsPopup .FieldComponent .selectbox {
 	width: 200px;
 }
 
-.UIContactsPopup .Search {
+.UIMailPortlet .UIContactsPopup .Search {
 	background: transparent url(skinIcons/16x16/icons/SearchIcon.png) no-repeat scroll 0%;
 	height: 25px;
 	margin: 2px 0px 0px 7px;
@@ -1301,7 +1301,7 @@
 	float: right;
 }
 
-.UIContactsPopup .LabelSearch {
+.UIMailPortlet .UIContactsPopup .LabelSearch {
 	color:#313030;
 	float:right;
 	line-height:20px;
@@ -1309,22 +1309,22 @@
 }
 
 
-.UIContactsPopup .ContactPreviewContainer {
+.UIMailPortlet .UIContactsPopup .ContactPreviewContainer {
 	padding: 10px 15px;
 	color: #1e1f21;
 }
 
-.UIContactsPopup .ContactPreviewContainer .Avatar {
+.UIMailPortlet .UIContactsPopup .ContactPreviewContainer .Avatar {
 	float: left;
 	margin: 0px 0px 5px 0px;
 	border: 1px solid #545454;
 }
 
-.UIContactsPopup .ContactPreviewContainer .Member {
+.UIMailPortlet .UIContactsPopup .ContactPreviewContainer .Member {
 	margin-left: 80px;
 }
 
-.UIContactsPopup .ContactPreviewContainer .State {
+.UIMailPortlet .UIContactsPopup .ContactPreviewContainer .State {
 	background: url(skinIcons/16x16/icons/OnlineIcon.gif) no-repeat left center;
 	padding-left: 20px;
 	line-height: 25px;
@@ -1332,109 +1332,109 @@
 	font-weight: bold;
 }
 
-.UIContactsPopup .ContactPreviewContainer .Job {
+.UIMailPortlet .UIContactsPopup .ContactPreviewContainer .Job {
 	font-size: 13px;
 	padding-left: 20px;
 }
 
-.UIContactsPopup .ContactPreviewContainer .InfoContainer {
+.UIMailPortlet .UIContactsPopup .ContactPreviewContainer .InfoContainer {
 	padding: 5px 0px;
 }
 
-.UIContactsPopup .InfoContainer .TitleInfo {
+.UIMailPortlet .UIContactsPopup .InfoContainer .TitleInfo {
 	color: #f56301;
 	font-size: 14px;
 	border-bottom: 1px solid #cbcbcb;
 	padding: 0px 0px 5px;
 }
 
-.UIContactsPopup .InfoContainer .Content {
+.UIMailPortlet .UIContactsPopup .InfoContainer .Content {
 	padding: 10px 0px;
 	line-height: 20px;
 	font-size: 12px;
 }
 
-.UIContactsPopup .InfoContainer .Content a {
+.UIMailPortlet .UIContactsPopup .InfoContainer .Content a {
 	color: blue;
 }
 
-.UIContactsPopup .InfoContainer .LeftContent {
+.UIMailPortlet .UIContactsPopup .InfoContainer .LeftContent {
 	float: left;
 	width: 250px;
 }
 
-.UIContactsPopup .InfoContainer .RightContent {
+.UIMailPortlet .UIContactsPopup .InfoContainer .RightContent {
 	margin-left: 255px;
 }
 
-.UIContactsPopup .InfoContainer .Content .InfoLabel1 {
+.UIMailPortlet .UIContactsPopup .InfoContainer .Content .InfoLabel1 {
 	float: left;
 	width: 60px;
 }
 
-.UIContactsPopup .InfoContainer .Content .InfoLabel {
+.UIMailPortlet .UIContactsPopup .InfoContainer .Content .InfoLabel {
 	width: 90px;
 	float: left;
 }
 
-.UIContactsPopup .InfoContainer .Content .Info1 {
+.UIMailPortlet .UIContactsPopup .InfoContainer .Content .Info1 {
 	margin-left: 65px;
 }
 
-.UIContactsPopup .InfoContainer .Content .Info {
+.UIMailPortlet .UIContactsPopup .InfoContainer .Content .Info {
 	background: none;
 	margin-left: 100px;
 }
 
-.UIContactsPopup .InfoContainer .Content .Email {
+.UIMailPortlet .UIContactsPopup .InfoContainer .Content .Email {
 	background: url(skinIcons/16x16/icons/EmailIcon.gif) no-repeat left center;
 	padding-left: 20px;
 	margin-left: 60px;
 }
 
-.UIContactsPopup .SelectFileFrame {
+.UIMailPortlet .UIContactsPopup .SelectFileFrame {
 	width: 300px;
 }
 
 /******************************* UIAddNewContact ******************************/
 
-.UIAddNewContact {
+.UIMailPortlet .UIAddNewContact {
 	background: #F3F3F3;
 	border: 1px solid #c9c9c9;
 	padding: 10px;
 	margin: 10px 10px 0px 10px;
 }
 
-.UIAddNewContact .AddGroupContact .HorizontalLayout  td.FieldLabel {
+.UIMailPortlet .UIAddNewContact .AddGroupContact .HorizontalLayout  td.FieldLabel {
 	width: 240px;
 }
 
-.UIAddNewContact .UIForm .HorizontalLayout {
+.UIMailPortlet .UIAddNewContact .UIForm .HorizontalLayout {
 	border: 1px solid #c9c9c9;
 	padding: 10px;
 	background: white;
 }
 
-.UIAddNewContact .ProfileContent {
+.UIMailPortlet .UIAddNewContact .ProfileContent {
 	margin-top: 10px;
 }
 
-.UIAddNewContact .ProfileContent .HorizontalLayout select {
+.UIMailPortlet .UIAddNewContact .ProfileContent .HorizontalLayout select {
 	width: 61px;
 }
 
-.UIAddNewContact .ProfileContent .UIFormGrid {
+.UIMailPortlet .UIAddNewContact .ProfileContent .UIFormGrid {
 	float: left;
 	width: 480px;
 }
 
-.UIAddNewContact .ProfileContent .AvatarContent {
+.UIMailPortlet .UIAddNewContact .ProfileContent .AvatarContent {
 	float: left;
 	text-align: center;
 	line-height: 25px;
 }
 
-.UIAddNewContact .ProfileContent .AvatarContent .Avatar {
+.UIMailPortlet .UIAddNewContact .ProfileContent .AvatarContent .Avatar {
 	padding: 20px 30px;
 	border: 1px solid #c9c9c9;
 	margin: 5px;

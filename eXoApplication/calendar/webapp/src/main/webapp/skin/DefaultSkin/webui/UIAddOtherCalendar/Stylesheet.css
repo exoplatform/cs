@@ -1,57 +1,57 @@
-.UIAddOtherCalendar {
+.UICalendarPortlet .UIAddOtherCalendar {
 	width: 95%;
 	margin: 10px auto;
 }
 
-.UIAddOtherCalendar .UIHorizontalLayout {
+.UICalendarPortlet .UIAddOtherCalendar .UIHorizontalLayout {
 	background: #efefef;
 	border: solid 1px #cdcdcd;
 }
 
-.UIAddOtherCalendar .UIHorizontalLayout .FormContainer {
+.UICalendarPortlet .UIAddOtherCalendar .UIHorizontalLayout .FormContainer {
 	padding: 10px;
 }
 
-.UIAddOtherCalendar .FormContainer .UIFormGrid .FieldComponent {
+.UICalendarPortlet .UIAddOtherCalendar .FormContainer .UIFormGrid .FieldComponent {
 	padding: 4px;
 }
 
-.UIAddOtherCalendar .FormContainer .UIFormGrid input {
+.UICalendarPortlet .UIAddOtherCalendar .FormContainer .UIFormGrid input {
 	width: 240px;
 	float: left;
 	margin:5px 0px 0px 0px;
 }
 
-.UIAddOtherCalendar .FormContainer .UIFormGrid .UIAction {
+.UICalendarPortlet .UIAddOtherCalendar .FormContainer .UIFormGrid .UIAction {
 	float: left;
 	width: 70px;
 	padding: 6px 0px 0px 4px;
 }
 
-.UIAddOtherCalendar .UIPropertyTab .UIGrid .Icon16x16{
+.UICalendarPortlet .UIAddOtherCalendar .UIPropertyTab .UIGrid .Icon16x16{
 	margin-right: 3px;
 }
 
-.UIAddOtherCalendar .SearchPublic {
+.UICalendarPortlet .UIAddOtherCalendar .SearchPublic {
 	padding-bottom: 10px;
 }
 
-.UIAddOtherCalendar .SearchPublic .UIFormGrid .FieldLabel {
+.UICalendarPortlet .UIAddOtherCalendar .SearchPublic .UIFormGrid .FieldLabel {
 	padding-left: 10px;
 	width: 115px;
 }
 
-.UIAddOtherCalendar .SearchPublic .LeftSearchPublic{
+.UICalendarPortlet .UIAddOtherCalendar .SearchPublic .LeftSearchPublic{
 	background: url('background/LeftPublicCalendar5x40.gif') no-repeat left;
 	padding-left: 5px;
 }
 
-.UIAddOtherCalendar .SearchPublic .RightSearchPublic{
+.UICalendarPortlet .UIAddOtherCalendar .SearchPublic .RightSearchPublic{
 	background: url('background/RightPublicCalendar5x40.gif') no-repeat right;
 	padding-right: 5px;
 }
 
-.UIAddOtherCalendar .SearchPublic .MiddleSerchPublic{
+.UICalendarPortlet .UIAddOtherCalendar .SearchPublic .MiddleSerchPublic{
 	background: url('background/MiddlePublicCalendar1x40.gif') repeat-x center;
 	height: 40px;
 	line-height: 36px;

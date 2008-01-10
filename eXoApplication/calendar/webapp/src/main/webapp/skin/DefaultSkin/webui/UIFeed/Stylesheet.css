@@ -1,25 +1,25 @@
-.UIFeed {
+.UICalendarPortlet .UIFeed {
 	margin: 10px;
 	border: 1px solid #c7c7c7;
 }
 
-.UIFeed .FeedContent {
+.UICalendarPortlet .UIFeed .FeedContent {
 	border: 1px solid white;
 	background: #f7f7f7;
 	padding: 15px 30px;
 }
 
-.UIFeed .FeedContent a {
+.UICalendarPortlet .UIFeed .FeedContent a {
 	display: block;
 	color: black;
 	font-weight: bold ;
 }
 
-.UIFeed .FeedLink {
+.UICalendarPortlet .UIFeed .FeedLink {
 	padding-left: 32px ;
 }
 
-.UIFeed .FeedContent a.Icon {
+.UICalendarPortlet .UIFeed .FeedContent a.Icon {
 	padding-left: 32px;
 	line-height: 25px;
 	background-position: left center;

@@ -1,48 +1,48 @@
 
-.UIMailSetting {
+.UIMailPortlet .UIMailSetting {
 	background: #f3f3f3;
 }
 
 /*****************************FlatTabStyle****************************************/
 
-.UIMailSetting .UITabSelector .FlatTabStyle .SelectedTab {
+.UIMailPortlet .UIMailSetting .UITabSelector .FlatTabStyle .SelectedTab {
 	float: left;
 }
 
-.UIMailSetting .UITabSelector .FlatTabStyle .NormalTab {
+.UIMailPortlet .UIMailSetting .UITabSelector .FlatTabStyle .NormalTab {
 	float: left;
 }
 
-.UIMailSetting .UITabSelector .FlatTabStyle .TabIcon {
+.UIMailPortlet .UIMailSetting .UITabSelector .FlatTabStyle .TabIcon {
 	margin: 1px 4px 0px 4px;
 }
 
-.UIMailSetting .UITabSelector .FlatTabStyle .SettingsIcon {
+.UIMailPortlet .UIMailSetting .UITabSelector .FlatTabStyle .SettingsIcon {
 	height: 25px; width: 24px;
 }
 
-.UIMailSetting .UITabSelector .FlatTabStyle .ShortcutKeyIcon {
+.UIMailPortlet .UIMailSetting .UITabSelector .FlatTabStyle .ShortcutKeyIcon {
 	background: url('icons/ShortcutkeyIcon.gif') no-repeat center;
 	height: 27px; width: 24px;
 }
 
-.UIMailSetting .UITabSelector .FlatTabStyle .AccountIcon {
+.UIMailPortlet .UIMailSetting .UITabSelector .FlatTabStyle .AccountIcon {
 	background: url('icons/AccountIcon.gif') no-repeat center;
 	height: 25px; width: 24px;
 }
 
-.UIMailSetting .UITabPane .UITabContentContainer {
+.UIMailPortlet .UIMailSetting .UITabPane .UITabContentContainer {
 	border: 1px solid #d5d5d5;
 }
 
-.UIMailSetting .UIForm .HorizontalLayout {
+.UIMailPortlet .UIMailSetting .UIForm .HorizontalLayout {
 	border: none;
 	padding: 10px 10px 20px 10px;
 }
 
-.UIMailSetting .UIForm .HorizontalLayout .UIFormGrid td.FieldLabel {
+.UIMailPortlet .UIMailSetting .UIForm .HorizontalLayout .UIFormGrid td.FieldLabel {
 	width: 250px;
 }
 
-.UIMailSetting .UIAction {
+.UIMailPortlet .UIMailSetting .UIAction {
 }

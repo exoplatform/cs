@@ -1,61 +1,61 @@
-.UIViewMemberProfile {
+.UIForumPortlet .UIViewMemberProfile {
 	background-color: #ffffff;
 	padding: 8px;
 }
 
-.UIViewMemberProfile .ViewMemberProfileContainer {
+.UIForumPortlet .UIViewMemberProfile .ViewMemberProfileContainer {
 	border: 1px solid #b4b4b4;
 	background-color: #f4f4f4;
 	padding: 1px;
 }
 
-.UIViewMemberProfile .ViewMemberProfileContainer .TitleBar {
+.UIForumPortlet .UIViewMemberProfile .ViewMemberProfileContainer .TitleBar {
 	height: 24px;
 	background-color: #d1d2fe;
 	padding: 6px 0px 0px 12px;
 	font-weight: bold;
 }
 
-.UIViewMemberProfile .ViewMemberProfileContainer .UserLabel {
+.UIForumPortlet .UIViewMemberProfile .ViewMemberProfileContainer .UserLabel {
 	color: #135bbe;
 }
 
-.UIViewMemberProfile .MemberContent .InfoMember {
+.UIForumPortlet .UIViewMemberProfile .MemberContent .InfoMember {
 	line-height: 18px;
 	color: #2c2c2c;
 }
 
-.UIViewMemberProfile .MemberContainer {
+.UIForumPortlet .UIViewMemberProfile .MemberContainer {
 	width: 192px;
 }
 
-.UIViewMemberProfile .MemberContent {
+.UIForumPortlet .UIViewMemberProfile .MemberContent {
 	padding: 10px 15px;
 }	
 
-.UIViewMemberProfile .MemberContent .Rank {
+.UIForumPortlet UIViewMemberProfile .MemberContent .Rank {
 	color: #2c2c2c;
 	font-size: 12px;
 	padding: 0px 0px 0px 2px;
 }
 
-.UIViewMemberProfile .ProfileContainer {
+.UIForumPortlet .UIViewMemberProfile .ProfileContainer {
 	color: #2c2c2c;
 	padding: 0px 8px;
 }
 
-.UIViewMemberProfile .ProfileContainer .Label {
+.UIForumPortlet .UIViewMemberProfile .ProfileContainer .Label {
 	line-height: 20px;
 	text-align: right;
 	padding-right: 6px;
 }
 
-.UIViewMemberProfile .ProfileContainer .LabelProfile {
+.UIForumPortlet .UIViewMemberProfile .ProfileContainer .LabelProfile {
 	line-height: 20px;
 	text-align: left;
 }
 
-.UIViewMemberProfile .ProfileContainer .LabelLink {
+.UIForumPortlet .UIViewMemberProfile .ProfileContainer .LabelLink {
 	line-height: 20px;
 	text-align: left;
 	cursor: pointer;

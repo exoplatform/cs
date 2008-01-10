@@ -1,37 +1,37 @@
-.UIForumForm {
+.UIForumPortlet .UIForumForm {
 	padding: 10px;
 	background: #f7f7f7;
 }
 
-.UIForumForm .AddForum .HorizontalLayout {
+.UIForumPortlet .UIForumForm .AddForum .HorizontalLayout {
 	border: none;
 	padding: 5px;
 }
 
-.UIForumForm .HorizontalLayout .NewForum {
+.UIForumPortlet .UIForumForm .HorizontalLayout .NewForum {
 	width: 400px;
 	padding: 15px 0px;
 }
 
-.UIForumForm .HorizontalLayout .NewForum textarea {
+.UIForumPortlet .UIForumForm .HorizontalLayout .NewForum textarea {
 	height: 100px;
 }
 
-.UIForumForm .HorizontalLayout .ModerationOptions  {
+.UIForumPortlet .UIForumForm .HorizontalLayout .ModerationOptions  {
 	width: 510px;
 	padding: 20px 0px 60px 0px;
 }
 
-.UIForumForm .HorizontalLayout .ModerationOptions textarea {
+.UIForumPortlet .UIForumForm .HorizontalLayout .ModerationOptions textarea {
 	width: 340px;
 	height: 40px;
 }
 
-.UIForumForm .ForumPermission {
+.UIForumPortlet .UIForumForm .ForumPermission {
 	padding: 5px;
 }
 
-.UIForumForm .ForumPermission .AddIcon16x16 {
+.UIForumPortlet .UIForumForm .ForumPermission .AddIcon16x16 {
 	width: 16px;
 	height: 16px;
 	margin: 0px 0px 0px 250px;
@@ -39,7 +39,7 @@
 	cursor: pointer;
 }
 
-.UIForumForm .ForumPermission input {
+.UIForumPortlet .UIForumForm .ForumPermission input {
 	float: left ;
 }
 

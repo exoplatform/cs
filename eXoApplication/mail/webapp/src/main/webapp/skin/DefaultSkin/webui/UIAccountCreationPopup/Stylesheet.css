@@ -1,49 +1,50 @@
-.UIAccountCreationWizard {
+.UIMailPortlet .UIAccountCreationWizard {
 	background: #f3f3f3;
 	border: 1px solid #c0c0c0;
 }
-.UIAccountCreationWizard .UIFormTabPane {
+
+.UIMailPortlet .UIAccountCreationWizard .UIFormTabPane {
 	padding: 0px;
 }
 
-.UIAccountCreationWizard .AccountCreationStep .InfoContainer{
+.UIMailPortlet .UIAccountCreationWizard .AccountCreationStep .InfoContainer{
 	padding: 0px 20px 10px 20px;
 	background: white;
 }
 
-.UIAccountCreationWizard .AccountCreationStep .StepInfos{
+.UIMailPortlet .UIAccountCreationWizard .AccountCreationStep .StepInfos{
  padding:  5px 20px;
  background: white;
 }
 
-.UIAccountCreationWizard .AccountCreationStep .StepInfos .InfoTitle{
+.UIMailPortlet .UIAccountCreationWizard .AccountCreationStep .StepInfos .InfoTitle{
   font-size: 11px;
 	line-height: 22px;
 	font-weight: bold;
 }
 
-.UIAccountCreationWizard .FieldLabel {
+.UIMailPortlet .UIAccountCreationWizard .FieldLabel {
 	width: 170px;
 }
 
-.UIAccountCreationWizard .UIWizardAction {
+.UIMailPortlet .UIAccountCreationWizard .UIWizardAction {
 	height: 36px;
   padding: 0px 15px;
 }
 
-.UIAccountCreationWizard .UIWizardAction .StepNavigationTitle {
+.UIMailPortlet .UIAccountCreationWizard .UIWizardAction .StepNavigationTitle {
   float: left;
   height: 33px; line-height: 33px; vertical-align: middle;
   font-size: 11px; font-weight: bold;
   margin: 0px 10px 0px 0px;
 }
 
-.UIAccountCreationWizard .UIWizardAction .StepNavigationBar {
+.UIMailPortlet .UIAccountCreationWizard .UIWizardAction .StepNavigationBar {
   float: left;
   height: 36px; line-height: 36px;
 }
 
-.UIAccountCreationWizard .UIWizardAction .StepNavigationBar a{
+.UIMailPortlet .UIAccountCreationWizard .UIWizardAction .StepNavigationBar a{
   float: left;
   width: 18px; height: 18px; 
   line-height: 18px; vertical-align: middle;
@@ -53,24 +54,24 @@
   border: solid 1px gray;
 }
 
-.UIAccountCreationWizard .UIWizardAction .StepNavigationBar a:hover {
+.UIMailPortlet .UIAccountCreationWizard .UIWizardAction .StepNavigationBar a:hover {
   height: 18px; line-height: 18px; vertical-align: middle;
   color: orange;
   background: #f8f8f8;
   border: solid 1px #fdb913 ;
 }
 
-.UIAccountCreationWizard .UIWizardAction .StepNavigationBar a.SelectedStep {
+.UIMailPortlet .UIAccountCreationWizard .UIWizardAction .StepNavigationBar a.SelectedStep {
   color: red;
 }
 
-.UIAccountCreationWizard .UIFormTabPane .TabPaneContent .UITabContentContainer {
+.UIMailPortlet .UIAccountCreationWizard .UIFormTabPane .TabPaneContent .UITabContentContainer {
 	border: 1px solid #c0c0c0;
 	border-left: none;
 	border-right: none;
 }
 
-.UIAccountCreationWizard .UITabPane .TabPaneContent .UITabContentContainer .UITabContent {
+.UIMailPortlet .UIAccountCreationWizard .UITabPane .TabPaneContent .UITabContentContainer .UITabContent {
 	border-right: none;
 	border-left: none;
 	border-top: 1px solid white;
@@ -79,11 +80,16 @@
 	height: 200px;
 }
 
-.UIAccountCreationWizard .UIForm .HorizontalLayout .UIFormInputSet {
+.UIMailPortlet .UIAccountCreationWizard .UIForm .HorizontalLayout .UIFormInputSet {
 	width: 400px;
 	margin: auto;
 }
 
-.UIAccountCreationWizard .UITabPane .TabPaneContent {
+.UIMailPortlet .UIAccountCreationWizard .UIAction {
+	float: right;
+	width: 200px;
+}
+
+.UIMailPortlet .UIAccountCreationWizard .UITabPane .TabPaneContent {
 	padding: 0px;
 }

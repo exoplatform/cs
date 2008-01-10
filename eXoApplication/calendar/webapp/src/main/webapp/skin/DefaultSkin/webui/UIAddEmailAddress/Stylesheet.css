@@ -1,61 +1,61 @@
-.UIAddEmailAdress {
+.UICalendarPortlet .UIAddEmailAdress {
 	width: 95%;
 	margin: 10px auto;
 }
 
-.UIAddEmailAdress .UIHorizontalLayout {
+.UICalendarPortlet .UIAddEmailAdress .UIHorizontalLayout {
 	background: #efefef;
 	border: solid 1px #cdcdcd;
 }
 
-.UIAddEmailAdress .UIHorizontalLayout .FormContainer {
+.UICalendarPortlet .UIAddEmailAdress .UIHorizontalLayout .FormContainer {
 	padding: 10px;
 }
 
-.UIAddEmailAdress .FormContainer .UIFormGrid .FieldLabel {
+.UICalendarPortlet .UIAddEmailAdress .FormContainer .UIFormGrid .FieldLabel {
 	width: 128px;
 	text-align: right;
 	padding: 4px;
 }
 
-.UIAddEmailAdress .FormContainer .UIFormGrid .FieldComponent {
+.UICalendarPortlet .UIAddEmailAdress .FormContainer .UIFormGrid .FieldComponent {
 	padding: 4px;
 }
 
-.UIAddEmailAdress .FormContainer .UIFormGrid input {
+.UICalendarPortlet .UIAddEmailAdress .FormContainer .UIFormGrid input {
 	width: 235px;
 	font-size: 11px;
 }
 
-.UIAddEmailAdress .FormContainer .UIFormGrid textarea {
+.UICalendarPortlet .UIAddEmailAdress .FormContainer .UIFormGrid textarea {
 	width: 230px;
 	font-size: 11px;
 }
 
-.UIAddEmailAdress .FormContainer .UIFormGrid select {
+.UICalendarPortlet .UIAddEmailAdress .FormContainer .UIFormGrid select {
 	width: 235px;
 	font-size: 11px;
 }
 
-.UIAddEmailAdress .UIPropertyTab .UIGrid .Icon16x16{
+.UICalendarPortlet .UIAddEmailAdress .UIPropertyTab .UIGrid .Icon16x16{
 	margin-right: 3px;
 }
 
-.UIAddEmailAdress .SearchPublic {
+.UICalendarPortlet .UIAddEmailAdress .SearchPublic {
 	padding-bottom: 10px;
 }
 
-.UIAddEmailAdress .SearchPublic .LeftSearchPublic{
+.UICalendarPortlet .UIAddEmailAdress .SearchPublic .LeftSearchPublic{
 	background: url('background/LeftPublicCalendar5x40.gif') no-repeat left;
 	padding-left: 5px;
 }
 
-.UIAddEmailAdress .SearchPublic .RightSearchPublic{
+.UICalendarPortlet .UIAddEmailAdress .SearchPublic .RightSearchPublic{
 	background: url('background/RightPublicCalendar5x40.gif') no-repeat right;
 	padding-right: 5px;
 }
 
-.UIAddEmailAdress .SearchPublic .MiddleSerchPublic{
+.UICalendarPortlet .UIAddEmailAdress .SearchPublic .MiddleSerchPublic{
 	background: url('background/MiddlePublicCalendar1x40.gif') repeat-x center;
 	height: 40px;
 	line-height: 36px;

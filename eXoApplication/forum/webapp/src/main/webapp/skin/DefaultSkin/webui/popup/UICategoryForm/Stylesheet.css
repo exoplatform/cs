@@ -1,19 +1,19 @@
-.UICategoryForm {
+.UIForumPortlet .UICategoryForm {
 	background: #f7f7f7;
 	margin: 8px;
 	border: 1px solid #c7c7c7;
 }
 
-.UICategoryForm .UIForm {
+.UIForumPortlet .UICategoryForm .UIForm {
 	border: 1px solid white;
 }
 
-.UICategoryForm .HorizontalLayout {
+.UIForumPortlet .UICategoryForm .HorizontalLayout {
 	padding: 8px 0px 0px 0px;
 	border: none;
 }
 
-.UICategoryForm .AddIcon16x16 {
+.UIForumPortlet .UICategoryForm .AddIcon16x16 {
 	float: left ;
 	width: 16px;
 	height: 16px;
@@ -22,6 +22,6 @@
 	cursor: pointer;
 }
 
-.UICategoryForm .UIFormInput {
+.UIForumPortlet .UICategoryForm .UIFormInput {
 	padding: 0px 0px 0px 20px;
 }

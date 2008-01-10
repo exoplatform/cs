@@ -1,50 +1,49 @@
-
-.UIForumLinks {
+.UIForumPortlet .UIForumLinks {
 	margin: 0px 10px;
 }
 
-.UIForumLinks .HorizontalLayout {
+.UIForumPortlet .UIForumLinks .HorizontalLayout {
 	width: 360px;
 	border: none;
 	float: right;
 }
 
-.UIForumLinks .HorizontalLayout .UIFormGrid td.FieldLabel {
+.UIForumPortlet .UIForumLinks .HorizontalLayout .UIFormGrid td.FieldLabel {
 	line-height: 20px;
 	white-space:nowrap;
 	padding: 0px 4px;
 }
 
-.UIForumLinks .HorizontalLayout .UIFormGrid .UIActionForum {
+.UIForumPortlet .UIForumLinks .HorizontalLayout .UIFormGrid .UIActionForum {
 	float: left;
 	margin-left: 4px;
 }
 
-.UIForumLinks .UIForm .HorizontalLayout select {
+.UIForumPortlet .UIForumLinks .UIForm .HorizontalLayout select {
 	float:left;
 	text-align:left;
 	white-space:nowrap;
 }
 
-.UIForumLinks .categoryLink {
+.UIForumPortlet .UIForumLinks .categoryLink {
 	line-height: 16px;
 	background: #eaf2fb ;
 }
 
-.UIForumLinks .forumLink {
+.UIForumPortlet .UIForumLinks .forumLink {
 	line-height: 16px;
 	white-space:nowrap;
 }
 
-.UIForumLinks .hompage {
+.UIForumPortlet .UIForumLinks .hompage {
 	line-height: 16px;
 	font-weight: bold;
 }
 
-.UIForumPortlet .optionSelected {
+.UIForumPortlet .UIForumPortlet .optionSelected {
 	background-color: #8eb3da ;
 }
 
-.UIForumPortlet .timeZone {
+.UIForumPortlet .UIForumPortlet .timeZone {
 	line-height: 16px;
 }

@@ -1,51 +1,51 @@
-.UIAddMessageFilter {
+.UIMailPortlet .UIAddMessageFilter {
 	background: #f3f3f3;
 }
 
-.UIAddMessageFilter .FinterName {
+.UIMailPortlet .UIAddMessageFilter .FinterName {
 	background: white;
 	height: 45px;
 }
 
-.UIAddMessageFilter .AddMessageFilter {
+.UIMailPortlet .UIAddMessageFilter .AddMessageFilter {
 	border-top: 1px solid #c0c0c0;
 	border-bottom: 1px solid white;
 }
 
-.UIAddMessageFilter .WorkingContent {
+.UIMailPortlet .UIAddMessageFilter .WorkingContent {
 	border-top: 1px solid white;
 	border-bottom: 1px solid #c0c0c0;
 	height: 100%;
 }
 
-.UIAddMessageFilter .WorkingContent .Title {
+.UIMailPortlet .UIAddMessageFilter .WorkingContent .Title {
 	background: #e9e9e9;
 	font-weight: bold;
 	padding-left: 20px;
 	line-height: 25px;
 }
 
-.UIAddMessageFilter .UIForm .HorizontalLayout {
+.UIMailPortlet .UIAddMessageFilter .UIForm .HorizontalLayout {
 	border: none;
 }
 
-.UIAddMessageFilter .UIForm .HorizontalLayout .UIFormGrid {
+.UIMailPortlet .UIAddMessageFilter .UIForm .HorizontalLayout .UIFormGrid {
 	margin: 10px auto;
 	width: auto;
 }
 
-.UIAddMessageFilter .UIForm .UIFormGrid td.FieldLabel {
+.UIMailPortlet .UIAddMessageFilter .UIForm .UIFormGrid td.FieldLabel {
 	width: 145px;
 }
 
-.UIAddMessageFilter .UIForm .HorizontalLayout .WorkingContent input {
+.UIMailPortlet .UIAddMessageFilter .UIForm .HorizontalLayout .WorkingContent input {
 	width: 125px;
 }
 
-.UIAddMessageFilter .UIForm .HorizontalLayout .WorkingContent select {
+.UIMailPortlet .UIAddMessageFilter .UIForm .HorizontalLayout .WorkingContent select {
 	width: 125px;
 }
 
-.UIAddMessageFilter .UIForm .HorizontalLayout .WorkingContent input.checkbox {
+.UIMailPortlet .UIAddMessageFilter .UIForm .HorizontalLayout .WorkingContent input.checkbox {
 	width: 16px;
 }

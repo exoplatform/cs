@@ -1,23 +1,23 @@
-.UIQuickAddTask {
+.UICalendarPortlet .UIQuickAddTask {
 	background-color: #ffffff;
 	padding: 8px;
 }
 
-.UIQuickAddTask .HorizontalLayout {
+.UICalendarPortlet .UIQuickAddTask .HorizontalLayout {
 	background-color: #f7f7f7;
 	padding: 8px;
 }
 
-.UIQuickAddTask .UIFormWithTitle {
+.UICalendarPortlet .UIQuickAddTask .UIFormWithTitle {
 	margin: 8px auto ;
 }
 
-.UIQuickAddTask .HorizontalLayout .DateTime {
+.UICalendarPortlet .UIQuickAddTask .HorizontalLayout .DateTime {
 	float: left;
 	margin-right: 3px;
 }
 
-.UIQuickAddTask .HorizontalLayout .DateTime input {
+.UICalendarPortlet .UIQuickAddTask .HorizontalLayout .DateTime input {
 	font-size: 11px;
 	width: 104px;
 }

@@ -22,18 +22,18 @@
 
 /*-----------------------UITagInfo-------------------*/
 
-.UITagInfo {
+.UIContactPortlet .UITagInfo {
 	padding: 10px;
 	background: #f3f3f3;
 }
 
-.UITagInfo .UIFormGrid {
+.UIContactPortlet .UITagInfo .UIFormGrid {
 	margin: auto;
 	border: 1px solid #a5a5a6;
 	background: white;
 }
 
-.UITagInfo .UIFormGrid th {
+.UIContactPortlet .UITagInfo .UIFormGrid th {
 	background: url('background/BGTitle1x21.gif') repeat-x ;
 	height: 21px;
 	line-height: 21px;
@@ -41,35 +41,36 @@
 	text-align: left;
 }
 
-.UITagInfo .UIFormGrid td {
+.UIContactPortlet .UITagInfo .UIFormGrid td {
 	padding: 0px 4px;
 	line-height: 20px;
 }
 
-.UITagInfo .UIFormGrid .TagIcon {
+.UIContactPortlet .UITagInfo .UIFormGrid .TagIcon {
 	height: 23px;
 	width: 20px;
 	margin: auto;
 }
 
-.UITagInfo .UIFormGrid .Border {
+.UIContactPortlet .UITagInfo .UIFormGrid .Border {
 	border-right: 1px solid #EBE7EA;
 	width: 30px;
 }
 
-.UIContactPortlet .UIWorkingContainer .UISearchForm {
+.UIContactPortlet .UIContactPortlet .UIWorkingContainer .UISearchForm {
   background: url('background/SearchForm1x34.gif') repeat-x;	
   line-height: 34px;
 	padding:4px 13px 0px 0px;
 	border: 1px solid #c7c7c7;
 	margin-bottom: 4px;
 }
-.SelectUserIcon {
+
+.UIContactPortlet .SelectUserIcon {
 	width : 16px ;
 	height : 16px ;
 }
 
-.SelectMemberIcon {
+.UIContactPortlet .SelectMemberIcon {
 	width : 16px ;
 	height : 16px ;
 }

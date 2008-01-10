@@ -1,15 +1,15 @@
-.UIAutoPruning {
+.UIForumPortlet .UIAutoPruning {
 	background-color: #ffffff;
 	padding: 8px;
 }
 
-.UIAutoPruning .AutoPruningContainer {
+.UIForumPortlet .UIAutoPruning .AutoPruningContainer {
 	background-color: #f7f7f7;
 	padding: 8px;
 	border: 1px solid #b4b4b4;
 }
 
-.UIAutoPruning .UIFormWithTitle {
+.UIForumPortlet .UIAutoPruning .UIFormWithTitle {
 	margin: 8px auto ;
 }
 

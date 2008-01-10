@@ -6,48 +6,48 @@
 }
 
 /********************* UIAttachFileForm ***************************/
-.UIAttachFileForm {
+.UICalendarPortlet .UIAttachFileForm {
 	background: #f3f3f3;
 	padding: 10px;
 }
 
-.UIAttachFileForm .HorizontalLayout {
+.UICalendarPortlet .UIAttachFileForm .HorizontalLayout {
 	border: none;
 }
 
-.UIAttachFileForm .SelectFileFrame {
+.UICalendarPortlet .UIAttachFileForm .SelectFileFrame {
 	width: 300px;
 }
 
 /********************* UICalendarCategoryManager ***************************/
-.UICalendarCategoryManager {
+.UICalendarPortlet .UICalendarCategoryManager {
 	padding: 10px;
 }
 
-.UICalendarCategoryManager .UICalendarCategoryForm {
+.UICalendarPortlet .UICalendarCategoryManager .UICalendarCategoryForm {
 	margin-top: 10px;
 }
 
 /********************* UIEventCategoryManager ***************************/
 
-.UIEventCategoryManager .UIEventCategoryForm {
+.UICalendarPortlet .UIEventCategoryManager .UIEventCategoryForm {
 	margin-top: 10px;
 }
 
 /********************* UIExportForm ***************************/
-.UIExportForm {
+.UICalendarPortlet .UIExportForm {
 	padding: 10px;
 }
 
-.UIExportForm .HorizontalLayout {
+.UICalendarPortlet .UIExportForm .HorizontalLayout {
 	border: none;
 }
 
 /********************* UIImportForm ***************************/
-.UIImportForm {
+.UICalendarPortlet .UIImportForm {
 	padding: 10px;
 }
 
-.UIImportForm .HorizontalLayout {
+.UICalendarPortlet .UIImportForm .HorizontalLayout {
 	border: none;
 }

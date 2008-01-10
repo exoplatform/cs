@@ -1,20 +1,21 @@
-.UIForumOptionForm {
+.UIForumPortlet .UIForumOptionForm {
 	background-color: #ffffff;
 	padding: 8px 8px 6px 8px;
 }
 
-.UIForumOptionForm .HorizontalLayout {
+.UIForumPortlet .UIForumOptionForm .HorizontalLayout {
 	border:1px solid #AEAEAE;
 	background-color: #f7f7f7;
 }
 
-.UIForumOptionForm .UIAction {
+.UIForumPortlet .UIForumOptionForm .UIAction {
 	padding: 10px 0px 0px 0px;
 }
-.UIForumOptionForm .UIFormInput {
+
+.UIForumPortlet .UIForumOptionForm .UIFormInput {
 	border: solid 1px #ffffff;
 } 
 
-.UIForumOptionForm .UIFormInput {
+.UIForumPortlet .UIForumOptionForm .UIFormInput {
 	padding: 8px 10px 8px 0px;
 }

@@ -1,22 +1,22 @@
-.UISendPrivateMessage {
+.UIForumPortlet .UISendPrivateMessage {
 	padding: 10px;
 	background:#ffffff;
 }
 
-.UISendPrivateMessage .SendPrivateMessage {
+.UIForumPortlet .UISendPrivateMessage .SendPrivateMessage {
 	border:1px solid #c7c7c7;
 	background: #f7f7f7;
 	padding: 10px;
 }
 
-.UISendPrivateMessage .UIForm .HorizontalLayout {
+.UIForumPortlet .UISendPrivateMessage .UIForm .HorizontalLayout {
 	border: none;
 }
 
-.UISendPrivateMessage .UIForm .HorizontalLayout .UIFormInputSet {
+.UIForumPortlet .UISendPrivateMessage .UIForm .HorizontalLayout .UIFormInputSet {
 	padding: 10px;
 }
 
-.UISendPrivateMessage .UIForm .HorizontalLayout .Textarea {
+.UIForumPortlet .UISendPrivateMessage .UIForm .HorizontalLayout .Textarea {
 	width: 370px; height: 265px;
 }

@@ -1,40 +1,40 @@
-.UIImportCalendar {
+.UICalendarPortlet .UIImportCalendar {
 	width: 95%;
 	margin: 10px auto;
 }
 
-.UIImportCalendar .UIHorizontalLayout {
+.UICalendarPortlet .UIImportCalendar .UIHorizontalLayout {
 	background: #efefef;
 	border: solid 1px #cdcdcd;
 }
 
-.UIImportCalendar .UIHorizontalLayout .FormContainer {
+.UICalendarPortlet .UIImportCalendar .UIHorizontalLayout .FormContainer {
 	padding-top: 10px;
 	width: 400px;
 	margin: auto;
 }
 
-.UIImportCalendar .FormContainer .UIFormGrid .FieldLabel {
+.UICalendarPortlet .UIImportCalendar .FormContainer .UIFormGrid .FieldLabel {
 	width: 128px;
 	text-align: right;
 	padding: 4px;
 }
 
-.UIImportCalendar .FormContainer .UIFormGrid .FieldComponent {
+.UICalendarPortlet .UIImportCalendar .FormContainer .UIFormGrid .FieldComponent {
 	padding: 4px;
 }
 
-.UIImportCalendar .FormContainer .UIFormGrid input {
+.UICalendarPortlet .UIImportCalendar .FormContainer .UIFormGrid input {
 	width: 235px;
 	font-size: 11px;
 }
 
-.UIImportCalendar .FormContainer .UIFormGrid textarea {
+.UICalendarPortlet .UIImportCalendar .FormContainer .UIFormGrid textarea {
 	width: 230px;
 	font-size: 11px;
 }
 
-.UIImportCalendar .FormContainer .UIFormGrid select {
+.UICalendarPortlet .UIImportCalendar .FormContainer .UIFormGrid select {
 	width: 235px;
 	font-size: 11px;
 }

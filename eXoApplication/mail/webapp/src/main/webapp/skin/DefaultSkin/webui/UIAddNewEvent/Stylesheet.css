@@ -1,65 +1,65 @@
-.UIAddNewEvent {
+.UIMailPortlet .UIAddNewEvent {
 	padding: 8px; 
 }
 
-.UIAddNewEvent .ReminderByEmail {
+.UIMailPortlet .UIAddNewEvent .ReminderByEmail {
 	background: url('background/ReminderTabHeader1x24.gif') repeat-x top ;
 	padding: 4px;
 }
 
-.UIAddNewEvent .ReminderByEmail input.checkbox{
+.UIMailPortlet .UIAddNewEvent .ReminderByEmail input.checkbox{
 	float: left;
 }
 
-.UIAddNewEvent .ReminderByPopup input.checkbox{
+.UIMailPortlet .UIAddNewEvent .ReminderByPopup input.checkbox{
 	float: left;
 }
 
-.UIAddNewEvent .ReminderByEmail .selectbox{
+.UIMailPortlet .UIAddNewEvent .ReminderByEmail .selectbox{
 	width: 80px;
 }
 
-.UIAddNewEvent .ReminderByEmail .FieldLabel{
+.UIMailPortlet .UIAddNewEvent .ReminderByEmail .FieldLabel{
 	padding-top: 2px;
 	padding-left: 2px;
 }
 
-.UIAddNewEvent .ReminderByPopup .selectbox{
+.UIMailPortlet .UIAddNewEvent .ReminderByPopup .selectbox{
 	width: 80px;
 }
 
-.UIAddNewEvent .ReminderByPopup .FieldLabel{
+.UIMailPortlet .UIAddNewEvent .ReminderByPopup .FieldLabel{
 	padding-top: 2px;
 	padding-left: 2px;
 }
 
-.UIAddNewEvent .ReminderByPopup {
+.UIMailPortlet .UIAddNewEvent .ReminderByPopup {
 	background: url('background/ReminderTabHeader1x24.gif') repeat-x top ;
 	padding: 4px;
 }
 
-.UIAddNewEvent .UIFormGrid{
+.UIMailPortlet .UIAddNewEvent .UIFormGrid{
 	margin-top: 10px;
 }
 
-.UIAddNewEvent .HorizontalLayout {
+.UIMailPortlet .UIAddNewEvent .HorizontalLayout {
 	border: none;
 }
 
-.UIAddNewEvent .UIFormWithTitle {
+.UIMailPortlet .UIAddNewEvent .UIFormWithTitle {
 	margin: 8px auto ;
 }
 
-.UIAddNewEvent .UITabContentContainer .UITabContent {
+.UIMailPortlet .UIAddNewEvent .UITabContentContainer .UITabContent {
 	border:none;
 }
 
-.UIAddNewEvent .HorizontalLayout .DateTime {
+.UIMailPortlet .UIAddNewEvent .HorizontalLayout .DateTime {
 	float: left;
 	margin-right: 3px;
 }
 
-.UIAddNewEvent .UIFormGrid .FieldComponent .Date {
+.UIMailPortlet .UIAddNewEvent .UIFormGrid .FieldComponent .Date {
 	float: left;
 }
 
