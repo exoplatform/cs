@@ -731,7 +731,7 @@ public class UIMessageList extends UIForm {
       UIMessageList uiMessageList = event.getSource() ;    
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class);    
-      if(uiMessageList.getAppliedMessage().isEmpty()) {
+      if(uiMessageList.getCheckedMessage().isEmpty()) {
         UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-no-messages", null, ApplicationMessage.INFO)) ;
         return;
@@ -750,7 +750,7 @@ public class UIMessageList extends UIForm {
       MailService mailSrv = MailUtils.getMailService();
       String username = MailUtils.getCurrentUser();
       String accountId = uiMessageList.getAncestorOfType(UIMailPortlet.class).findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-      for(Message message : uiMessageList.getAppliedMessage()) {
+      for(Message message : uiMessageList.getCheckedMessage()) {
         mailSrv.moveMessages(SessionsUtils.getSessionProvider(), username, accountId, message.getId(), message.getFolders()[0], folderId);
      }       
      uiMessageList.updateList();     
@@ -873,10 +873,13 @@ public class UIMessageList extends UIForm {
   static public class RefreshActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource() ; 
-      uiMessageList.updateList(uiMessageList.getMessagePageList().getCurrentPage());
-      UIMailPortlet mailPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(mailPortlet.findFirstComponentOfType(UIFolderContainer.class));
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
+      UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
+      MailService mailSrv = uiMessageList.getApplicationComponent(MailService.class);
+      String username = uiPortlet.getCurrentUser();
+      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      uiMessageList.setMessagePageList(mailSrv.getMessagePageListByFolder(SessionsUtils.getSessionProvider(), username, accountId, uiMessageList.selectedFolderId_));
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIFolderContainer.class));
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList);
     }
   }
   
