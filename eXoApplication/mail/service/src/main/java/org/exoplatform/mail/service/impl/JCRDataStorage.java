@@ -171,6 +171,22 @@ public class JCRDataStorage{
     MessagePageList pageList = new MessagePageList(result.getNodes(), pageSize, queryString, true) ;
     return pageList ;
   }
+  
+  public List<String> getMessageIds(SessionProvider sProvider, String username, MessageFilter filter) throws Exception {
+    Node homeMsg = getMessageHome(sProvider, username, filter.getAccountId());
+    filter.setAccountPath(homeMsg.getPath()) ;
+    QueryManager qm = homeMsg.getSession().getWorkspace().getQueryManager();
+    String queryString = filter.getStatement();
+    Query query = qm.createQuery(queryString, Query.XPATH);
+    QueryResult result = query.execute();  
+    NodeIterator iter = result.getNodes();
+    List<String> strList = new ArrayList<String>();
+    while (iter.hasNext()) {
+      Node node = iter.nextNode();
+      strList.add(node.getProperty(Utils.EXO_ID).getString());
+    }
+    return strList ;
+  }
 
   public Message getMessage(Node messageNode) throws Exception {
     Message msg = new Message();

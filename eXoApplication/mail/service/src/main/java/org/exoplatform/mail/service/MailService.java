@@ -242,6 +242,8 @@ public interface MailService {
    */
   public MessagePageList getMessages(SessionProvider sProvider, String username, MessageFilter filter) throws Exception ;
   
+  public List<String> getMessageIds(SessionProvider sProvider, String username, MessageFilter filter) throws Exception ;
+  
   public void saveMessage(SessionProvider sProvider, String username, String accountId, Message message, boolean isNew) throws Exception;
   /**
    * This method should:

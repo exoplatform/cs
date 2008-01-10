@@ -163,6 +163,10 @@ public class MailServiceImpl implements MailService{
   public MessagePageList getMessages(SessionProvider sProvider, String username, MessageFilter filter) throws Exception {
     return storage_.getMessages(sProvider, username, filter);
   }
+  
+  public List<String> getMessageIds(SessionProvider sProvider, String username, MessageFilter filter) throws Exception {
+    return storage_.getMessageIds(sProvider, username, filter) ;
+  }
 
   public void saveMessage(SessionProvider sProvider, String username, String accountId, Message message, boolean isNew) throws Exception {
     storage_.saveMessage(sProvider, username, accountId, message, isNew);
