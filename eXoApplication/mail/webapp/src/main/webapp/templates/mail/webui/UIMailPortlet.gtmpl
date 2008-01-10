@@ -9,6 +9,7 @@
   rcontext.getJavascriptManager().importJavascript('eXo.core.Spliter');
   rcontext.getJavascriptManager().importJavascript('eXo.mail.UIMailPortlet','/mail/javascript/');
   rcontext.getJavascriptManager().addJavascript('eXo.mail.UIMailPortlet.checkLayout() ;') ;
+  rcontext.getJavascriptManager().addJavascript("eXo.mail.UIMailPortlet.showContextMenu('" + uicomponent.id + "') ;") ;
 %>
 <div class="$uicomponent.id" id="$uicomponent.id">
   <div class="ApplicationMinWidth">

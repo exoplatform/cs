@@ -2,9 +2,7 @@
 	import org.exoplatform.mail.service.Folder;
   import org.exoplatform.mail.service.Utils;
   import org.exoplatform.mail.MailUtils;
-  def rcontext = _ctx.getRequestContext() ;  
-  rcontext.getJavascriptManager().addJavascript("eXo.mail.UIMailPortlet.showContextMenu() ;") ;
-
+  def rcontext = _ctx.getRequestContext() ;
 	String compId = uicomponent.getId() ;
 %>
 <div class="UIFolderContainer" id="<%=uicomponent.getId()%>">

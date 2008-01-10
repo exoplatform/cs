@@ -1,12 +1,10 @@
 eXo.require('eXo.webui.UIContextMenu') ;
-eXo.require('eXo.core.DOMUtil') ;
-
 function UIMailPortlet(){
 };
 
-UIMailPortlet.prototype.showContextMenu = function() {
-	
-	var UIContextMenu = eXo.webui.UIContextMenu ;//eXo.contact.ContextMenu ;
+UIMailPortlet.prototype.showContextMenu = function(compid) {	
+	var UIContextMenu = eXo.webui.UIContextMenu ; //eXo.contact.ContextMenu ;
+	UIContextMenu.portletName = compid ;
 	var config = {
 		'preventDefault':false, 
 		'preventForms':false
