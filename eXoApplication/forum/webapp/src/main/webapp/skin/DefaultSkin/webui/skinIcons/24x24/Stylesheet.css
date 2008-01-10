@@ -1,68 +1,68 @@
-.Icon24x24 {
+.UIForumPortlet .Icon24x24 {
 	width: 24px;
 	height: 24px;
 }
 
-.ForumNewPostIcon {
+.UIForumPortlet .ForumNewPostIcon {
 	background: url('icons/ForumNewPostIcon.gif') no-repeat;
 }
 
-.ForumLockedIcon {
+.UIForumPortlet .ForumLockedIcon {
 	background: url('icons/ForumCloseIcon.gif') no-repeat ;
 }
 
-.ForumCloseIcon {
+.UIForumPortlet .ForumCloseIcon {
 	background: url('icons/ForumCloseIcon.gif') no-repeat ;
 }
 
-.ForumNormalIcon {
+.UIForumPortlet .ForumNormalIcon {
 	background: url('icons/ForumNormalIcon.gif') no-repeat ;
 }
 
 
-.HotThreadNewPost {
+.UIForumPortlet .HotThreadNewPost {
 	background: url('icons/HotThreadNewPost.gif') no-repeat ;
 }
 
-.HotThreadNoNewPost {
+.UIForumPortlet .HotThreadNoNewPost {
 	background: url('icons/HotThreadNoNewPost.gif') no-repeat ;
 }
 
-.ThreadIsClose {
+.UIForumPortlet .ThreadIsClose {
 	background: url('icons/ThreadIsClose.gif') no-repeat ;
 }
 
-.ThreadNewPost {
+.UIForumPortlet .ThreadNewPost {
 	background: url('icons/ThreadNewPost.gif') no-repeat ;
 }
 
-.ThreadNoNewPost {
+.UIForumPortlet .ThreadNoNewPost {
 	background: url('icons/ThreadNoNewPost.gif') no-repeat ;
 }
 
-.HotThreadNewLockPost {
+.UIForumPortlet .HotThreadNewLockPost {
 	background: url('icons/HotThreadNewLockPost.gif') no-repeat ;
 }
 /*******************************  MenuCategoryIcon    **************************************/
 
-.AddForumIcon {
+.UIForumPortlet .AddForumIcon {
 	background: url('icons/AddNewForum.gif') no-repeat ;
 }
 
-.ForumOption {
+.UIForumPortlet .ForumOption {
 	background: url('icons/ForumOption.gif') no-repeat ;
 }
 
 /*===========================thread bar menu icon===========================*/
 
-.DeleteThisForumIcon {
+.UIForumPortlet .DeleteThisForumIcon {
 	background: url('icons/DeleteThisForumIcon.gif') no-repeat ;
 }
 
-.MoveThreadsIcon {
+.UIForumPortlet .MoveThreadsIcon {
 	background: url('icons/MoveThreadsIcon.gif') no-repeat ;
 }
 
-.DeleteThreadsIcon {
+.UIForumPortlet .DeleteThreadsIcon {
 	background: url('icons/DeleteThreadsIcon.gif') no-repeat ;
 }

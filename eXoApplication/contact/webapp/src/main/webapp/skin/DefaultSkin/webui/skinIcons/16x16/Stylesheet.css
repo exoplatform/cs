@@ -1,138 +1,138 @@
-.CheckedMenu {
+.UIContactPortlet .CheckedMenu {
 	background: url('icons/BlueCheckerIcon.gif') no-repeat left center;
 }
 
-.AddressIcon {
+.UIContactPortlet .AddressIcon {
 	background: url('icons/AddressBookIcon.gif') no-repeat left center;
 }
 
-.EmailListIcon {
+.UIContactPortlet .EmailListIcon {
 	background: url('icons/EmailListIcon.gif') no-repeat left center;
 }
 
-.BlueTag {
+.UIContactPortlet .BlueTag {
 	background: url('icons/BlueTag.gif') no-repeat left center;
 }
 
-.RedTag {
+.UIContactPortlet .RedTag {
 	background: url('icons/RedTag.gif') no-repeat left center;
 }
 
-.GreenTag {
+.UIContactPortlet .GreenTag {
 	background: url('icons/GreenTag.gif') no-repeat left center;
 }
 
-.VioletTag {
+.UIContactPortlet .VioletTag {
 	background: url('icons/VioletTag.gif') no-repeat left center;
 }
 
-.MoveIcon {
+.UIContactPortlet .MoveIcon {
 	background: url('icons/MoveActionIcon.gif') no-repeat left center;
 }
 
-.EditIcon {
+.UIContactPortlet .EditIcon {
 	background: url('icons/EditIcon.gif') no-repeat left center;
 }
 
-.SelectTagIcon {
+.UIContactPortlet .SelectTagIcon {
 	background: url('icons/TagIcon.gif') no-repeat left center;
 }
 
-.AddEmailIcon {
+.UIContactPortlet .AddEmailIcon {
 	background: url('icons/AddEmailIcon.gif') no-repeat center;
 }
 
-.DeleteEmailIcon {
+.UIContactPortlet .DeleteEmailIcon {
 	background: url('icons/DeleteEmailIcon.gif') no-repeat center;
 }
 
-.NextPageArrow {
+.UIContactPortlet .NextPageArrow {
 	background: url('icons/NextPage.gif') no-repeat;
 	width: 16px; height: 16px;
 	cursor: pointer;
 }
 
-.LastPageArrow {
+.UIContactPortlet .LastPageArrow {
 	background: url('icons/LastPage.gif') no-repeat;
 	width: 16px; height: 16px;
 	cursor: pointer;
 }
 
-.FirstPageArrow{
+.UIContactPortlet .FirstPageArrow{
 	background: url('icons/PreviousPage.gif') no-repeat;
 	width: 16px; height: 16px;
 	cursor: pointer;
 }
 
-.PreviousPageArrow {
+.UIContactPortlet .PreviousPageArrow {
 	background: url('icons/BackPage.gif') no-repeat;
 	width: 16px; height: 16px;
 	cursor: pointer;
 }
 
-.OnlineIcon {
+.UIContactPortlet .OnlineIcon {
 	background: url('icons/OnlineIcon.png') no-repeat;
 	height: 16px; width: 17px;
 }
 
-.OfflineIcon {
+.UIContactPortlet .OfflineIcon {
 	background: url('icons/OffLineIcon.png') no-repeat;
 	height: 16px; width: 17px;
 }
 
-.BusyIcon {
+.UIContactPortlet .BusyIcon {
 	background: url('icons/BusyIcon.png') no-repeat;
 	height: 16px; width: 17px;
 }
 
-.ContactListIcon {
+.UIContactPortlet .ContactListIcon {
 	background: url('icons/ContactListIcon.gif') no-repeat center;
 }
 
-.EmailIcon {
+.UIContactPortlet .EmailIcon {
 	background: url('icons/EmailIcon.gif') no-repeat left center;
 }
 
-.InstantMessage {
+.UIContactPortlet .InstantMessage {
 	background: url('icons/InstantMessage.gif') no-repeat left center;
 }
 
-.MoveContactIcon {
+.UIContactPortlet .MoveContactIcon {
 	background: url('icons/MoveIcon.gif') no-repeat left center;
 }
 
-.DeleteContactIcon {
+.UIContactPortlet .DeleteContactIcon {
 	background: url('icons/DeleteContactIcon.gif') no-repeat left center;
 }
 
-.ShareIcon {
+.UIContactPortlet .ShareIcon {
 	background: url('icons/ShareIcon.gif') no-repeat left center;
 }
 
-.ExportAddressIcon {
+.UIContactPortlet .ExportAddressIcon {
 	background: url('icons/ExportAddressIcon.gif') no-repeat left center;
 }
 
-.ImportAddressIcon {
+.UIContactPortlet .ImportAddressIcon {
 	background: url('icons/ImportAddressIcon.gif') no-repeat left center;
 }
 
-.EditActionIcon {
+.UIContactPortlet .EditActionIcon {
 	background: url('icons/EditActionIcon.gif') no-repeat left center;
 }
 
-.DeleteIcon {
+.UIContactPortlet .DeleteIcon {
 	background: url('icons/DeleteIcon.gif') no-repeat left center;
 }
 
-.MoveNavigationIcon {
+.UIContactPortlet .MoveNavigationIcon {
 	background: url('icons/MoveNavigationIcon.gif') no-repeat left center;
 }
 
-.SelectUserIcon {
+.UIContactPortlet .SelectUserIcon {
 	background:transparent url(icons/SmallUserIcon.gif) no-repeat;
 }
 
-.SelectMemberIcon {
+.UIContactPortlet .SelectMemberIcon {
 	background:transparent url(icons/SmallMemberIcon.gif) no-repeat;
 }

@@ -244,7 +244,6 @@
 	margin: 1px 0px 0px 4px;
 }
 
-
 .UIMiniCalendar .MonthSelector .PreviousMonthSelector {
 	background: url('background/PreviousMonth10x16.gif') no-repeat;
 	height: 16px; width: 10px;
@@ -279,17 +278,17 @@
 	height: 21px;
 }
 
-.UIMiniCalendar  .DayList {
+.UIMiniCalendar .DayList {
 	background: #ffffff;
 	border:solid 1px #c7c7c7;
 	padding: 3px;
 }
 
-.UIMiniCalendar  .DayList .UIGrid {
+.UIMiniCalendar .DayList .UIGrid {
 	border:none;
 }
 
-.UIMiniCalendar  .DayList .UIGrid td{
+.UIMiniCalendar .DayList .UIGrid td{
 	background: #f3f3f3;
 	border:solid 1px #ffffff;
 	text-align:center;
@@ -298,16 +297,19 @@
 	-moz-user-select : none ;
 }
 
-.UIMiniCalendar  .DayList .UIGrid tr{
+.UIMiniCalendar .DayList .UIGrid tr{
 	border:solid 1px #c7c7c7;
 	padding:0px;
 }
+
 .UIMiniCalendar .DayList .UIGrid .Highlight a{
 	font-weight:bold;
 }
+
 .UIMiniCalendar .DayList .UIGrid .Today {
 	background: #ABC7FE;
 }
+
 .UIMiniCalendar .DayList .UIGrid .SelectedDay {
 	background: #FFF6A3;
 }
@@ -424,7 +426,6 @@
   float: left;
   width: 87px;
   overflow: hidden;
-  
   line-height: 16px;
 }
 

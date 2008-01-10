@@ -1,97 +1,96 @@
-
-.Actions {
+.UIMailPortlet .Actions {
 	background: url(icons/ThisMessageAction.gif) no-repeat bottom;
 	cursor: pointer;
 	float: right;
 	width: 24px; height: 22px;
 }
 
-.CheckMailIcon {
+.UIMailPortlet .CheckMailIcon {
 	background: url('icons/CheckMailIcon.gif') no-repeat ;
 }
 
-.InboxIcon {
+.UIMailPortlet .InboxIcon {
 	background: url('icons/InboxIcon.gif') no-repeat left center ;
 }
-.inboxIcon {
+.UIMailPortlet .inboxIcon {
 	background: url('icons/InboxIcon.gif') no-repeat left center ;
 }
 
-.DraftsIcon {
+.UIMailPortlet .DraftsIcon {
 	background: url('icons/DraftsIcon.gif') no-repeat left center ;
 }
 
-.SentIcon {
+.UIMailPortlet .SentIcon {
 	background: url('icons/SentIcon.gif') no-repeat left center ;
 }
 
-.SpamIcon {
+.UIMailPortlet .SpamIcon {
 	background: url('icons/SpamIcon.gif') no-repeat left center ;
 }
 
-.TrashIcon {
+.UIMailPortlet .TrashIcon {
 	background: url('icons/TrashIcon.gif') no-repeat left center ;
 }
 
-.OpenFolder {
+.UIMailPortlet .OpenFolder {
 	background: url('icons/OpenFolder.gif') no-repeat left center;
 }
 
-.ComposeIcon {
+.UIMailPortlet .ComposeIcon {
 	background: url('icons/ComposeIcon.gif') no-repeat;
 }
 
-.ContactsIcon {
+.UIMailPortlet .ContactsIcon {
 	background: url('icons/ContactsIcon.gif') no-repeat;
 }
 
-.RssIcon {
+.UIMailPortlet .RssIcon {
 	background: url('icons/RssIcon.gif') no-repeat;
 }
 
-.CustomViewIcon {
+.UIMailPortlet .CustomViewIcon {
 	background: url('icons/CustomViewIcon.gif') no-repeat;
 	float: left;
 }
 
-.SettingsIcon {
+.UIMailPortlet .SettingsIcon {
 	background: url('icons/SettingsIcon.gif') no-repeat left center;
 }
 
-.AddEventIcon {
+.UIMailPortlet .AddEventIcon {
 	background: url('icons/AddEvent.gif') no-repeat left;
 }
 
-.MaximizeAllViewBoxStyle {
+.UIMailPortlet .MaximizeAllViewBoxStyle {
 	background: url(icons/MaximizeAllViewBoxStyle.gif) no-repeat;
 	width: 24px; height: 20px;
 	cursor: pointer;
 }
 
-.AddGroup {
+.UIMailPortlet .AddGroup {
 	background: url('icons/AddGroup.gif') no-repeat left;
 }
 
-.AddContact {
+.UIMailPortlet .AddContact {
 	background: url('icons/AddContact.gif') no-repeat left;
 }
 
-.DeleteContact {
+.UIMailPortlet .DeleteContact {
 	background: url('icons/DeleteContact.gif') no-repeat left;
 }
 
-.EditContact {
+.UIMailPortlet .EditContact {
 	background: url('icons/EditContact.gif') no-repeat left;
 }
 
-.FilterIcon {
+.UIMailPortlet .FilterIcon {
 	background: url('icons/FilterIcon.gif') no-repeat;
 }
 
-.SpamMail {
+.UIMailPortlet .SpamMail {
 	background: url('icons/SpamMail.gif') no-repeat;
 }
 
-.NotSpamMail {
+.UIMailPortlet .NotSpamMail {
 	background: url('icons/NotSpam.gif') no-repeat;
 }

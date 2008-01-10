@@ -177,27 +177,27 @@
   height: 23px;
   border: 1px solid #c7c7c7;
   border-bottom: none;
-  overflow: hidden;/*fix tam*/
-  line-height: 10px;/*fix tam*/
+  overflow: visible;/*fix tam*/
+  line-height: 20px;/*fix tam*/
 }
 
 .UIAddNewEvent .NewEventAttendee .BackIcon {
 	width: 16px; height: 16px;
 	margin: 2px 4px 0px 3px;
 	cursor: pointer;
-	float: left;
+	float: none;
 }
 
 .UIAddNewEvent .NewEventAttendee .NextIcon {
 	width: 16px; height: 16px;
 	margin: 2px 4px 0px 3px;
 	cursor: pointer;
-	float: left;
+	float: none;
 }
 
 .UIAddNewEvent .NewEventAttendee .TitleBar .Title {
 	margin: 4px 4px 0px 0px;
-	float: left;
+	float: none;
 	color: black;
 	font-weight: bold;
 }
@@ -205,24 +205,33 @@
 .UIAddNewEvent .NewEventAttendee .TimeNumber {
 	text-align: center;
 	line-height: 20px;
+	float: none;
+	margin: 0px;
 }
+
 .UIAddNewEvent .NewEventAttendee .DateTimeContainer input{
 	 width: 100px;
 }
+
 .UIAddNewEvent .NewEventAttendee .DateTimeContainer .checkbox{
 	 width: 16px;
 }
+
 .UIAddNewEvent .NewEventAttendee .TimeNumberDisable {
  display: none ;
 }
+
 .UIAddNewEvent .NewEventAttendee .LeftSide {
 	 width: 160px;
 	 height: 20px;
+	 text-align: center;
 }
+
 .UIAddNewEvent .NewEventAttendee .LeftSide .Input .checkbox{
 	 width: 13px;
 	 height: 13px;
 }
+
 .UIAddNewEvent .NewEventAttendee .ThiefBox {
 	border: 1px solid #c7c7c7;
 	border-top: none;

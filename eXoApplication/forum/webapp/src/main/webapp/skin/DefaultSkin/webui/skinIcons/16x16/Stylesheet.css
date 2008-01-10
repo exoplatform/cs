@@ -1,298 +1,298 @@
-.BusyIcon {
+.UIForumPortlet .BusyIcon {
 	background: url('icons/BusyIcon.gif') no-repeat ;
 }
 
-.BigGrinIcon {
+.UIForumPortlet .BigGrinIcon {
 	background: url('icons/BigGrinIcon.gif') no-repeat ;
 }
 
-.OfflineIcon {
+.UIForumPortlet .OfflineIcon {
 	background: url('icons/OffLineIcon.gif') no-repeat ;
 }
 
-.OnlineIcon {
+.UIForumPortlet .OnlineIcon {
 	background: url('icons/OnlineIcon.gif') no-repeat ;
 }
 
-.ManageCategoryButton {
+.UIForumPortlet .ManageCategoryButton {
 	background: url('icons/ManageCategory.gif') no-repeat left center;
 }
 
-.ToolIcon {
+.UIForumPortlet .ToolIcon {
 	background: url('icons/ToolIcon.gif') no-repeat ;
 }
 
-.ModeratedIcon {
+.UIForumPortlet .ModeratedIcon {
 	background: url('icons/ModeratedIcon.gif') no-repeat ;
 }
 
-.ModerationIcon {
+.UIForumPortlet .ModerationIcon {
 	background: url('icons/ModerationIcon.gif') no-repeat ;
 }
 
-.SmallGrayPlus {
+.UIForumPortlet .SmallGrayPlus {
 	background: url('icons/SmallGrayPlus.gif') no-repeat left top;
 }
 
-.SmallGrayMinus {
+.UIForumPortlet .SmallGrayMinus {
 	background: url('icons/SmallGrayMinus.gif') no-repeat left top;
 }
 
-.SeachIcon {
+.UIForumPortlet .SeachIcon {
 	background: url('icons/SeachIcon.gif') no-repeat ;
 }
 
-.StickyIcon {
+.UIForumPortlet .StickyIcon {
 	background: url('icons/StickyIcon.gif') no-repeat ;
 }
 
-.LeftArrowIcon {
+.UIForumPortlet .LeftArrowIcon {
 	background: url('icons/LeftArrowIcon.gif') no-repeat ;
 }
 
-.RightArrowIcon {
+.UIForumPortlet .RightArrowIcon {
 	background: url('icons/LeftArrowIcon.gif') no-repeat ;
 }
 
-.BlueTagIcon {
+.UIForumPortlet .BlueTagIcon {
 	background: url('icons/BlueTagIcon.gif') no-repeat ;
 }
 
-.AttachmentIcon {
+.UIForumPortlet .AttachmentIcon {
 	background: url('icons/AttachmentIcon.gif') no-repeat ;
 }
 
-.ExpandButton {
+.UIForumPortlet .ExpandButton {
 	background: url('icons/Expand.gif') no-repeat ;
 }
 
-.CollapseButton {
+.UIForumPortlet .CollapseButton {
 	background: url('icons/Collapser.gif') no-repeat ;
 }
 
-.Voted {
+.UIForumPortlet .Voted {
 	background: url('icons/SmallYellowStar.gif') no-repeat center;
 }
 
-.HalfVoted {
+.UIForumPortlet .HalfVoted {
 	background: url('icons/SmallHalfStar.gif') no-repeat center;
 }
 
-.Unvoted {
+.UIForumPortlet .Unvoted {
 	background: url('icons/SmallGreyStar.gif') no-repeat center;
 }
 
-.NormalTopicIcon {
+.UIForumPortlet .NormalTopicIcon {
 	background: url('icons/NormalTopicIcon.gif') no-repeat left;
 }
 
-.Download {
+.UIForumPortlet .Download {
 	background: url('icons/DownLoadIcon.gif') no-repeat left;
 }
 
-.ClosePoll {
+.UIForumPortlet .ClosePoll {
 	background: url('icons/ClosePollIcon.gif') no-repeat left center;
 }
 
-.EditPoll {
+.UIForumPortlet .EditPoll {
 	background: url('icons/EditPollIcon.gif')  no-repeat left center;
 }
 
-.ForumIcon {
+.UIForumPortlet .ForumIcon {
 	background: url('icons/ForumIcon.gif') no-repeat left center;
 }
 
-.ThreadsIcon {
+.UIForumPortlet .ThreadsIcon {
 	background: url('icons/ThreadIcon.gif') no-repeat left center;
 }
 
-.WordIcon {
+.UIForumPortlet .WordIcon {
 	background: url('icons/WordIcon.gif') no-repeat left center;
 }
 
-.PPTIcon {
+.UIForumPortlet .PPTIcon {
 	background: url('icons/PPTIcon.gif') no-repeat left center;
 }
 
-.PNGIcon {
+.UIForumPortlet .PNGIcon {
 	background: url('icons/PNGIcon.gif') no-repeat left center;
 }
 
-.JPGIcon {
+.UIForumPortlet .JPGIcon {
 	background: url('icons/JPGIcon.gif') no-repeat left center;
 }
 
-.LockIcon {
+.UIForumPortlet .LockIcon {
 	background: url('icons/Lock.gif') no-repeat left center;
 }
 
-.EditPostIcon {
+.UIForumPortlet .EditPostIcon {
 	background: url('icons/EditPost.gif') no-repeat left center;
 }
 
-.DeletePostIcon {
+.UIForumPortlet .DeletePostIcon {
 	background: url('icons/DeletePost.gif') no-repeat left center;
 }
 
-.AddPollIcon {
+.UIForumPortlet .AddPollIcon {
 	background: url('icons/AddPollThreadIcon.gif') no-repeat left center;
 }
 
-.SetApproveAttachmentIcon {
+.UIForumPortlet .SetApproveAttachmentIcon {
 	background: url('icons/ApproveAttachmentsIcon.gif') no-repeat left center;
 }
 
-.SetApprovePostIcon {
+.UIForumPortlet .SetApprovePostIcon {
 	background: url('icons/ApprovePostsIcon.gif') no-repeat left center;
 }
 
-.SetApproveIcon {
+.UIForumPortlet .SetApproveIcon {
 	background: url('icons/ApproveThreadsIcon.gif') no-repeat left center;
 }
 
-.SetUnApproveIcon {
+.UIForumPortlet .SetUnApproveIcon {
 	background: url('icons/ModeratedIcon.gif') no-repeat left center;
 }
 
-.SetCloseIcon {
+.UIForumPortlet .SetCloseIcon {
 	background: url('icons/CloseSelectedForum.gif') no-repeat left center;
 }
 
-.CloseThreadsIcon {
+.UIForumPortlet .CloseThreadsIcon {
 	background: url('icons/CloseThreadsIcon.gif') no-repeat left center;
 }
 
-.CopySelectedPostIcon {
+.UIForumPortlet .CopySelectedPostIcon {
 	background: url('icons/CopySelectedPostIcon.gif') no-repeat left center;
 }
 
-.DeleteCategoryIcon {
+.UIForumPortlet .DeleteCategoryIcon {
 	background: url('icons/DeleteCategoryIcon.gif') no-repeat left center;
 }
 
-.DeleteSelectedPostIcon {
+.UIForumPortlet .DeleteSelectedPostIcon {
 	background: url('icons/DeleteSelectedPostIcon.gif') no-repeat left center;
 }
 
-.RemoveForumIcon {
+.UIForumPortlet .RemoveForumIcon {
 	background: url('icons/DeleteThisForumIcon.gif') no-repeat left center;
 }
 
-.SetDeleteIcon {
+.UIForumPortlet .SetDeleteIcon {
 	background: url('icons/DeleteThreadsIcon.gif') no-repeat left center;
 }
 
-.DisplayOptionsIcon {
+.UIForumPortlet .DisplayOptionsIcon {
 	background: url('icons/DisplayOptionsIcon.gif') no-repeat left center;
 }
-.EditCategoryIcon {
+.UIForumPortlet .EditCategoryIcon {
 	background: url('icons/EditCategory.gif') no-repeat left center;
 }
 
-.EditForumIcon {
+.UIForumPortlet .EditForumIcon {
 	background: url('icons/EditForum.gif') no-repeat left center;
 }
 
-.EditTopicIcon {
+.UIForumPortlet .EditTopicIcon {
 	background: url('icons/EditSelectedThreadIcon.gif') no-repeat left center;
 }
 
-.EditForumIcon {
+.UIForumPortlet .EditForumIcon {
 	background: url('icons/EditthisForumIcon.gif') no-repeat left center;
 }
 
-.EmailThisPageIcon {
+.UIForumPortlet .EmailThisPageIcon {
 	background: url('icons/EmailThisPageIcon.gif') no-repeat left center;
 }
 
-.SetLockedIcon {
+.UIForumPortlet .SetLockedIcon {
 	background: url('icons/Lock.gif') no-repeat left center;
 }
 
-.ManageModerators {
+.UIForumPortlet .ManageModerators {
 	background: url('icons/Manage.gif') no-repeat left center;
 }
 
-.MergeSelectedPostsIcon {
+.UIForumPortlet .MergeSelectedPostsIcon {
 	background: url('icons/MergeSelectedPostsIcon.gif') no-repeat left center;
 }
 
-.MergeThreadsIcon {
+.UIForumPortlet .MergeThreadsIcon {
 	background: url('icons/MergeThreadsIcon.gif') no-repeat left center;
 }
 
-.ModerationPostIcon {
+.UIForumPortlet .ModerationPostIcon {
 	background: url('icons/ModerationPostIcon.gif') no-repeat left center;
 }
 
-.MoveForumIcon {
+.UIForumPortlet .MoveForumIcon {
 	background: url('icons/MoveSelectedForum.gif') no-repeat left center;
 }
 
-.MovePostIcon {
+.UIForumPortlet .MovePostIcon {
 	background: url('icons/MoveSelectedPostIcon.gif') no-repeat left center;
 }
 
-.MovethisForumIcon {
+.UIForumPortlet .MovethisForumIcon {
 	background: url('icons/MovethisForumIcon.gif') no-repeat left center;
 }
 
-.SetMoveIcon {
+.UIForumPortlet .SetMoveIcon {
 	background: url('icons/MoveThreadsIcon.gif') no-repeat left center;
 }
 
-.SetOpenIcon {
+.UIForumPortlet .SetOpenIcon {
 	background: url('icons/OpenSelectedForum.gif') no-repeat left center;
 }
 
-.OpenThreadsIcon {
+.UIForumPortlet .OpenThreadsIcon {
 	background: url('icons/OpenThreadsIcon.gif') no-repeat left center;
 }
 
-.PastePostsIcon {
+.UIForumPortlet .PastePostsIcon {
 	background: url('icons/PastePostsIcon.gif') no-repeat left center;
 }
 
-.PostnewThreadIcon {
+.UIForumPortlet .PostnewThreadIcon {
 	background: url('icons/PostnewThreadIcon.gif') no-repeat left center;
 }
 
-.PostsIcon {
+.UIForumPortlet .PostsIcon {
 	background: url('icons/PostsIcon.gif') no-repeat left center;
 }
 
-.PrintPageIcon {
+.UIForumPortlet .PrintPageIcon {
 	background: url('icons/PrintThisPageIcon.gif') no-repeat left center;
 }
 
-.SplitTopicIcon {
+.UIForumPortlet .SplitTopicIcon {
 	background: url('icons/SplitThisThreadIcon.gif') no-repeat left center;
 }
 
-.StickThreadsIcon {
+.UIForumPortlet .StickThreadsIcon {
 	background: url('icons/StickThreadsIcon.gif') no-repeat left center;
 }
 
-.ThreadsAuto-PruningIcon {
+.UIForumPortlet .ThreadsAuto-PruningIcon {
 	background: url('icons/ThreadsAuto-PruningIcon.gif') no-repeat left center;
 }
 
-.SetUnApproveAttachmentIcon {
+.UIForumPortlet .SetUnApproveAttachmentIcon {
 	background: url('icons/UnapproveAttachmentsIcon.gif') no-repeat left center;
 }
 
-.SetUnApprovePostIcon {
+.UIForumPortlet .SetUnApprovePostIcon {
 	background: url('icons/UnapprovePostsIcon.gif') no-repeat left center;
 }
 
-.SetUnLockIcon {
+.UIForumPortlet .SetUnLockIcon {
 	background: url('icons/UnLock.gif') no-repeat left center;
 }
 
-.SetStickIcon {
+.UIForumPortlet .SetStickIcon {
 	background: url('icons/StickThreadsIcon.gif') no-repeat left center;
 }
 
-.SetUnStickIcon {
+.UIForumPortlet .SetUnStickIcon {
 	background: url('icons/StickThreadsIcon.gif') no-repeat left center;
 }

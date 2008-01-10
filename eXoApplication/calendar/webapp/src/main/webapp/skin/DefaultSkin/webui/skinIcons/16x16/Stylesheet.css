@@ -1,289 +1,285 @@
 
-.DayIcon {
+.UICalendarPortlet .DayIcon {
 	background: url('icons/DayIcon.gif') no-repeat;
 }
 
-.FindIcon {
+.UICalendarPortlet .FindIcon {
 	background: url('icons/FindIcon.gif') no-repeat;
 }
 
-.PrintCalendarIcon {
+.UICalendarPortlet .PrintCalendarIcon {
 	background: url('icons/PrintIcon.gif') no-repeat;
 }
 
-.SearchIcon {
+.UICalendarPortlet .SearchIcon {
 	background: url('icons/SearchIcon.gif') no-repeat;
 }
 
-.TaskIcon {
+.UICalendarPortlet .TaskIcon {
 	background: url('icons/TaskIcon.gif') no-repeat left center;
 }
 
-.EventIcon {
+.UICalendarPortlet .EventIcon {
 	background: url('icons/EventIcon.gif') no-repeat left center;
 }
-.BothIcon {
+.UICalendarPortlet .BothIcon {
 	background: url('icons/BothIcon.gif') no-repeat left center;
 }
-.TodayIcon {
+.UICalendarPortlet .TodayIcon {
 	background: url('icons/TodayIcon.gif') no-repeat;
 }
 
-.NextIcon {
+.UICalendarPortlet .NextIcon {
 	background: url('icons/NextIcon.gif') no-repeat;
 	width: 16px;height: 16px;
 }
 
-.BackIcon {
+.UICalendarPortlet .BackIcon {
 	background: url('icons/BackIcon.gif') no-repeat;
 	width: 16px;height: 16px;
 }
 
-.CalendarGroupIcon {
+.UICalendarPortlet .CalendarGroupIcon {
 	background: url('icons/CalendarGroupIcon.gif') no-repeat;
 }
 
-.CalendarIcon {
+.UICalendarPortlet .CalendarIcon {
 	background: url('icons/CalendarIcon.gif') no-repeat;
 }
 
-.AttachmentIcon {
+.UICalendarPortlet .AttachmentIcon {
 	background: url('icons/AttachmentIcon.gif') no-repeat;
 }
 
-.MaximizeButton {
+.UICalendarPortlet .MaximizeButton {
 	background: url('icons/MaximizeReadingPane.gif') no-repeat;
 	width: 17px; height: 16px;
 }
 
-.ViewOnCalendar {
+.UICalendarPortlet .ViewOnCalendar {
 	background: url('icons/ViewOnCalendar.gif') no-repeat;
 }
 
-.ViewEventIcon {
+.UICalendarPortlet .ViewEventIcon {
 	background: url('icons/ViewEventIcon.gif') no-repeat left center;
+	border: 1px solid red;
 }
 
-.EditEventIcon {
+.UICalendarPortlet .EditEventIcon {
 	background: url('icons/EditEventIcon.gif') no-repeat left center;
 }
 
-.DeleteEventIcon {
+.UICalendarPortlet .DeleteEventIcon {
 	background: url('icons/EditEvent.gif') no-repeat left center;
 }
 
-.EditTaskIcon {
+.UICalendarPortlet .EditTaskIcon {
 	background: url('icons/EditTask.gif') no-repeat;
 }
 
-.SelectIcon {
+.UICalendarPortlet .SelectIcon {
 	background: url('icons/SelectIcon.gif') no-repeat;
 }
 
-.AddAnyIcon {
+.UICalendarPortlet .AddAnyIcon {
 	background: url('icons/SmallGroupIcon.gif') no-repeat;
 }
 
-.SelectMemberIcon {
+.UICalendarPortlet .SelectMemberIcon {
 	background: url('icons/SmallMemberIcon.gif') no-repeat;
 }
-.SelectGroupIcon {
+
+.UICalendarPortlet .SelectGroupIcon {
 	background: url('icons/SmallGroupIcon.gif') no-repeat;
 }
-.SelectUserIcon {
+
+.UICalendarPortlet .SelectUserIcon {
 	background: url('icons/SmallUserIcon.gif') no-repeat;
 }
 
-.AddCategory {
+.UICalendarPortlet .AddCategory {
 	background: url('icons/AddCategory.gif') no-repeat;
 }
 
-.ViewAttachmentIcon {
+.UICalendarPortlet .ViewAttachmentIcon {
 	background: url('icons/ViewIcon.gif') no-repeat;
 	height: 16px;
 }
 
-.DownLoadAttachmentIcon {
+.UICalendarPortlet .DownLoadAttachmentIcon {
 	background: url('icons/DownLoadIcon.gif') no-repeat;
 	height: 16px;
 }
 
-.IconFeed {
+.UICalendarPortlet .IconFeed {
 	background: url('icons/FeedIcon.gif') no-repeat;
 }
 
-.EditIcon {
+.UICalendarPortlet .EditIcon {
 	background: url('icons/EditTask.gif') no-repeat;
 	width: 16px;height: 16px;
 }
 
-.highPriorityIcon {
+.UICalendarPortlet .highPriorityIcon {
 	background: url('icons/HeighPriorityIcon.gif') no-repeat;
 }
 
-.normalPriorityIcon {
+.UICalendarPortlet .normalPriorityIcon {
 	background: url('icons/NormalPriorityIcon.gif') no-repeat;
 }
 
-.lowPriorityIcon{
+.UICalendarPortlet .lowPriorityIcon{
 	background: url('icons/LowPriorityIcon.gif') no-repeat;
 }
 
-
-.LayoutSwitcherIcon {
+.UICalendarPortlet .LayoutSwitcherIcon {
 	background: url('icons/LayoutSwitcherIcon.gif') no-repeat;
 }
 
-.DeleteEventIcon {
+.UICalendarPortlet .DeleteEventIcon {
 	background: url('icons/DeleteEvent.gif') no-repeat left center;
 }
 
-.SettingCalendarIcon {
+.UICalendarPortlet .SettingCalendarIcon {
 	background: url('icons/SettingCalendarIcon.gif') no-repeat left center;
 }
 
-.ImportCalendarIcon {
+.UICalendarPortlet .ImportCalendarIcon {
 	background: url('icons/ImportCalendarIcon.gif') no-repeat left center;
 }
 
-.GenerateRssIcon {
+.UICalendarPortlet .GenerateRssIcon {
 	background: url('icons/GenerateRssIcon.gif') no-repeat left center;
 }
 
-.AddpuplicCalendarIcon {
+.UICalendarPortlet .AddpuplicCalendarIcon {
 	background: url('icons/AddpuplicCalendarIcon.gif') no-repeat left center;
 }
 
-.AddCalendarIcon {
+.UICalendarPortlet .AddCalendarIcon {
 	background: url('icons/AddCalendarIcon.gif') no-repeat left center;
 }
 
-.AddGroupIcon {
+.UICalendarPortlet .AddGroupIcon {
 	background: url('icons/AddGroupIcon.gif') no-repeat left center;
 }
 
-.DeleteTaskIcon {
+.UICalendarPortlet .DeleteTaskIcon {
 	background: url('icons/DeleteTask.gif') no-repeat left center;
 }
 
-.UIScheduleViewIcon {
+.UICalendarPortlet .UIScheduleViewIcon {
 	background: url('icons/ScheduleIcon.gif') no-repeat left center;
 }
 
-.UIYearViewIcon {
+.UICalendarPortlet .UIYearViewIcon {
 	background: url('icons/UIYearViewIcon.gif') no-repeat left center;
 }
 
-.EventIcon {
+.UICalendarPortlet .EventIcon {
 	background: url('icons/EventIcon.gif') no-repeat left center;
 }
 
-.UIMonthViewIcon {
+.UICalendarPortlet .UIMonthViewIcon {
 	background: url('icons/MonthIcon.gif') no-repeat left center;
 }
 
-.WeekWorkIcon {
+.UICalendarPortlet .WeekWorkIcon {
 	background: url('icons/WeekWorkIcon.gif') no-repeat left center;
 }
 
-.UIWeekViewIcon {
+.UICalendarPortlet .UIWeekViewIcon {
 	background: url('icons/WeekIcon.gif') no-repeat left center;
 }
 
-.UIDayViewIcon {
+.UICalendarPortlet .UIDayViewIcon {
 	background: url('icons/DayIcon.gif') no-repeat left center;
 }
 
-.UIListContainerIcon {
+.UICalendarPortlet .UIListContainerIcon {
 	background: url('icons/UIListViewIcon.gif') no-repeat center left;
 }
 
-.DeleteGroupIcon {
+.UICalendarPortlet .DeleteGroupIcon {
 	background: url('icons/DeleteGroupIcon.gif') no-repeat left center;
 }
 
-.EditGroupIcon {
+.UICalendarPortlet .EditGroupIcon {
 	background: url('icons/EditGroupIcon.gif') no-repeat left center;
 }
 
-.PasteGroupIcon {
+.UICalendarPortlet .PasteGroupIcon {
 	background: url('icons/PasteGroupIcon.gif') no-repeat left center;
 }
 
-.ExportCalendarIcon {
+.UICalendarPortlet .ExportCalendarIcon {
 	background: url('icons/ExportCalendarIcon.gif') no-repeat left center;
 }
 
-.CopyCalendarIcon {
+.UICalendarPortlet .CopyCalendarIcon {
 	background: url('icons/CopyCalendarIcon.gif') no-repeat left center;
 }
 
-.CutCalendarIcon {
+.UICalendarPortlet .CutCalendarIcon {
 	background: url('icons/CutCalendarIcon.gif') no-repeat left center;
 }
 
-.RemoveCalendarIcon {
+.UICalendarPortlet .RemoveCalendarIcon {
 	background: url('icons/DeleteCalendarIcon.gif') no-repeat left center;
 }
 
-.SendMailCalendarIcon {
+.UICalendarPortlet .SendMailCalendarIcon {
 	background: url('icons/SendToFriend.gif') no-repeat left center;
 }
 
-.GotoDate {
+.UICalendarPortlet .GotoDate {
 	background: url('icons/GotoDateIcon.gif') no-repeat left center;
 }
 
-.AddNewEvent {
+.UICalendarPortlet .AddNewEvent {
 	background: url('icons/AddNewEvent.gif') no-repeat left center;
 }
 
-.AddNewTask {
+.UICalendarPortlet .AddNewTask {
 	background: url('icons/AddTaskIcon.gif') no-repeat left center;
 }
 
-.QuickAddEvent {
+.UICalendarPortlet .QuickAddEvent {
 	background: url('icons/AddNewEvent.gif') no-repeat left center;
 }
 
-.QuickAddTask {
+.UICalendarPortlet .QuickAddTask {
 	background: url('icons/AddTaskIcon.gif') no-repeat left center;
 }
 
-.ChangeColorCalendarIcon {
+.UICalendarPortlet .ChangeColorCalendarIcon {
 	background: url('icons/ChangeColorCalendarIcon.gif') no-repeat;
 }
 
-.EditCalendarIcon {
+.UICalendarPortlet .EditCalendarIcon {
 	background: url('icons/EditCalendarIcon.gif') no-repeat left center;
 }
 
-.SharedCalendarIcon {
+.UICalendarPortlet .SharedCalendarIcon {
 	background: url('icons/SharedCalendarIcon.gif') no-repeat left center;
 }
 
-
-.ShowMinicalendar {
+.UICalendarPortlet .ShowMinicalendar {
 	background: url('icons/ShowMinicalendar.gif') no-repeat;
 }
 
-.HidenMinicalendar {
+.UICalendarPortlet .HidenMinicalendar {
 	background: url('icons/HidenMinicalendar.gif') no-repeat left center;
 }
 
-.HidenAllCalendar {
+.UICalendarPortlet .HidenAllCalendar {
 	background: url('icons/HidenAllCalendar.gif') no-repeat left center;
 }
 
-.CalDavIcon {
+.UICalendarPortlet .CalDavIcon {
 	background: url('icons/CalDavIcon.gif') no-repeat left center;
 }
 
-.AddCategoryIcon {
+.UICalendarPortlet .AddCategoryIcon {
 		background: url('icons/AddCategory.gif') no-repeat left center;
 }
-
-
-
-
-

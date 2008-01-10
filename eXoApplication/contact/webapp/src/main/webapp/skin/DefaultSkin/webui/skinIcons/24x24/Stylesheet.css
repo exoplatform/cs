@@ -1,58 +1,58 @@
-.AddNew {
+.UIContactPortlet .AddNew {
 	background: url('icons/Add.gif') no-repeat center;
 	height: 20px; width: 24px;
 }
 
-.AddressOptionIcon {
+.UIContactPortlet .AddressOptionIcon {
 	background: url('icons/AddressOptionIcon.gif') no-repeat left center;
 }
 
-.ContactIcon {
+.UIContactPortlet .ContactIcon {
 	background: url('icons/ContactIcon.gif') no-repeat left center;;
 }
 
-.CustomLayoutIcon {
+.UIContactPortlet .CustomLayoutIcon {
 	background: url('icons/CustomLayoutIcon.gif') no-repeat left center;
 }
 
-.ExportContactIcon {
+.UIContactPortlet .ExportContactIcon {
 	background: url('icons/ExportContactIcon.gif') no-repeat left center;
 }
 
-.ChatIcon {
+.UIContactPortlet .ChatIcon {
 	background: url('icons/GoChatIcon.gif') no-repeat left center;
 	width: 16px ; height: 20px;
 }
 
-.ImportContactIcon {
+.UIContactPortlet .ImportContactIcon {
 	background: url('icons/ImportContactIcon.gif') no-repeat left center;
 }
 
-.MessageIcon {
+.UIContactPortlet .MessageIcon {
 	background: url('icons/MessageIcon.gif') no-repeat left center;
 }
 
-.MoveAddressIcon {
+.UIContactPortlet .MoveAddressIcon {
 	background: url('icons/MoveAddressIcon.gif') no-repeat left center;
 }
 
-.MoveTagIcon {
+.UIContactPortlet .MoveTagIcon {
 	background: url('icons/MoveTagIcon.gif') no-repeat left center;
 }
 
-.MyLDAPIcon {
+.UIContactPortlet .MyLDAPIcon {
 	background: url('icons/MyLDAPIcon.gif') no-repeat left center;
 }
 
-.PrintIcon {
+.UIContactPortlet .PrintIcon {
 	background: url('icons/PrintIcon.gif') no-repeat left center;
 }
 
-.ViewIcon {
+.UIContactPortlet .ViewIcon {
 	background: url('icons/ViewIcon.gif') no-repeat left center;
 }
 
-.ActionsAddIcon {
+.UIContactPortlet .ActionsAddIcon {
 	background: url('icons/ActionsAdd.gif') no-repeat right center;
 	width: 26px; height: 18px;
 }

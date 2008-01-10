@@ -55,9 +55,9 @@
             	<tr class="TitleBar">
 								<td>
 									<div class="LeftSide">
-										<a href="<%=uiForm.event("MovePrevious")%>"><div class="BackIcon" title="Back day">&nbsp;</div></a>
-										<div class="Title"><%=df.format(uicomponent.calendar_.getTime())%></div>
-										<a href="<%=uiForm.event("MoveNext")%>"><div class="NextIcon" title="Next day">&nbsp;</div></a>
+										<a href="<%=uiForm.event("MovePrevious")%>"><img src="/eXoResources/skin/sharedImages/Blank.gif" class="BackIcon" title="Back day"></a>
+										<span class="Title"><%=df.format(uicomponent.calendar_.getTime())%></span>
+										<a href="<%=uiForm.event("MoveNext")%>"><img src="/eXoResources/skin/sharedImages/Blank.gif" class="NextIcon" title="Next day"></a>
 									</div>
 								</td>
 								

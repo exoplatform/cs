@@ -27,6 +27,13 @@
   width: 240px;
 }
 
+.UIRSSReaderPortlet .CategoryControlBar {
+	background: none;
+	height: 26px;
+	padding: 0px;
+	line-height: 26px;
+}
+
 .UIRSSReaderPortlet .CategoryControlBar .LeftBar {
 	background: url('DefaultSkin/background/LeftControlBar4x26.gif') no-repeat left; 
 	padding-left: 4px;

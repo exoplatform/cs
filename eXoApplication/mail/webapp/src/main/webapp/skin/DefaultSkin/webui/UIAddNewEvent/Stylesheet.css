@@ -54,179 +54,38 @@
 	border:none;
 }
 
-.UIAddNewEvent .AddEmailAddress {
-	float: left;
-	background: url('icons/16x16/AddEmailAddress.gif') no-repeat ;
-	width: 18px; height: 16px;
-	margin: 1px 0px 0px 6px;
-	cursor: pointer;
-}
-
-.UIAddNewEvent .AddUserIcon {
-	float: right;
-	background: url('icons/16x16/AddUser.gif') no-repeat ;
-	width: 16px; height: 16px;
-	margin: 4px 0px 0px 6px;
-	cursor: pointer;
-	
-}
-
-.UIAddNewEvent .DeleteUserIcon {
-	float: right;
-	background: url('icons/16x16/DeleteUser.gif') no-repeat ;
-	width: 16px; height: 16px;
-	margin: 4px 4px 0px 6px;
-	cursor: pointer;
-}
-
-.UIAddNewEvent .SaveUserIcon {
-	float: right;
-	background: url('icons/16x16/SaveUser.gif') no-repeat ;
-	width: 16px; height: 16px;
-	margin: 4px 0px 0px 6px;
-	cursor: pointer;
-}
-
 .UIAddNewEvent .HorizontalLayout .DateTime {
 	float: left;
 	margin-right: 3px;
 }
+
 .UIAddNewEvent .UIFormGrid .FieldComponent .Date {
 	float: left;
 }
+
 .UIAddNewEvent .UIFormGrid .FieldComponent .Date input{
 	font-size: 11px;
 	width: 104px;
 }
+
 .UIAddNewEvent .UIFormGrid .FieldComponent .Time{
 	font-size: 11px;
 }
+
 .UIAddNewEvent .UIFormGrid .FieldComponent .Time .selectbox{
 	width: 104px;
 }
+
 .UIAddNewEvent .UIFormGrid .FieldComponent .ReminderLabel{
 	float:left;
 }
-.UIAddNewEvent .UIFormGrid .FieldComponent .ReminderTime{
-}
+
 .UIAddNewEvent .UIFormGrid .FieldComponent .ReminderTime .selectbox{
 	width: 60px;
 }
+
 .UIAddNewEvent .HorizontalLayout .FieldComponent .UIAction {
 	float: left;
 	padding: 0px;
 	margin-left: 4px; 
-}
-
-.UIAddNewEvent .NewEventSharing input {
-	width: 12px;
-}
-
-.UIAddNewEvent .NewEventAttendee .DateTimeContainer {
-	margin: 8px;
-}
-
-.UIAddNewEvent .NewEventAttendee input {
-	width: 100px;
-}
-
-.UIAddNewEvent .NewEventAttendee .Label {
-	float: right;
-	margin: 0px 3px;
-}
-
-.UIAddNewEvent .NewEventAttendee .Field {
-	float: right;
-}
-
-.UIAddNewEvent .NewEventAttendee .UIGrid td {
-	border-top:1px solid #cccccc;
-	height: 24px;
-	padding: 0px;
-}
-
-.UIAddNewEvent .NewEventAttendee .FreeTime {
-	background-color: white; 
-	width: 11px;
-}
-
-.UIAddNewEvent .NewEventAttendee .BusyTime {
-	background-color: #c41616;
-	width: 11px;
-}
-
-.UIAddNewEvent .NewEventAttendee .UIGrid .Title {
-	float: left;
-	color: black;
-	margin: 4px;
-}
-
-.UIAddNewEvent .NewEventAttendee .UIGrid .Input {
-	float: left;
-	margin: 1px 0px 0px 2px;
-}
-
-.UIAddNewEvent .NewEventAttendee .UIGrid input {
-	width: 115px;
-}
-
-.UIAddNewEvent .NewEventAttendee .TitleBar {
-  background: url('background/TitleBarBG1x23.gif') repeat-x ;	
-  height: 23px;
-  border: 1px solid #c7c7c7;
-  border-bottom: none;
-  overflow: hidden;/*fix tam*/
-  line-height: 10px;/*fix tam*/
-}
-
-.UIAddNewEvent .NewEventAttendee .BackIcon {
-	width: 16px; height: 16px;
-	margin: 2px 4px 0px 3px;
-	cursor: pointer;
-	float: left;
-}
-
-.UIAddNewEvent .NewEventAttendee .NextIcon {
-	width: 16px; height: 16px;
-	margin: 2px 4px 0px 3px;
-	cursor: pointer;
-	float: left;
-}
-
-.UIAddNewEvent .NewEventAttendee .TitleBar .Title {
-	margin: 4px 4px 0px 0px;
-	float: left;
-	color: black;
-	font-weight: bold;
-}
-
-.UIAddNewEvent .NewEventAttendee .TimeNumber {
-	float: right;
-	width: 24px;
-	text-align: center;
-	margin-top: 9px;
-}
-
-.UIAddNewEvent .NewEventAttendee .ThiefBox {
-	border: 1px solid #c7c7c7;
-	border-top: none;
-}
-
-.UIAddNewEvent .NewEventAttendee .ThiefBox .FreeTime {
-	border: 1px solid #c7c7c7;
-	width: 15px; height: 15px;
-	margin: 4px;
-	float: right;
-}
-
-.UIAddNewEvent .NewEventAttendee .ThiefBox .BusyTime{
-	border: 1px solid #c7c7c7;
-	width: 15px; height: 15px;
-	margin: 4px;
-	float: right;
-}
-
-.UIAddNewEvent .NewEventAttendee .ThiefBox .Label{
-	margin: 4px;
-	float: right;
 }
