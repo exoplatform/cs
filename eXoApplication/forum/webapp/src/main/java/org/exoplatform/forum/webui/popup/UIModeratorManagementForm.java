@@ -55,6 +55,7 @@ public class UIModeratorManagementForm extends UIForm implements UIPopupComponen
 	}
   
   static  public class SaveActionListener extends EventListener<UIModeratorManagementForm> {
+    @Override
     public void execute(Event<UIModeratorManagementForm> event) throws Exception {
       UIModeratorManagementForm uiForm = event.getSource() ;
       UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
@@ -63,6 +64,7 @@ public class UIModeratorManagementForm extends UIForm implements UIPopupComponen
   }
   
   static  public class CancelActionListener extends EventListener<UIModeratorManagementForm> {
+    @Override
     public void execute(Event<UIModeratorManagementForm> event) throws Exception {
       UIForumPortlet forumPortlet = event.getSource().getAncestorOfType(UIForumPortlet.class) ;
       forumPortlet.cancelAction() ;

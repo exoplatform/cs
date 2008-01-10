@@ -14,7 +14,7 @@
 			  				<div style="float:left;">
 			  				<% uicomponent.renderChild("forumLink"); %>
 			  				</div>
-		  					<div class="UIActionForum">
+		  					<div class="UIActionForum" onclick="script:scroll(0,0)">
 							  	<div class="NormalButtom">
 							  		<div class="ButtonLeft">
 							  			<div class="ButtonRight">

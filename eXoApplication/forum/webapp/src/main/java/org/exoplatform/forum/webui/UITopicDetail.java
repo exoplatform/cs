@@ -36,7 +36,6 @@ import org.exoplatform.forum.webui.popup.UIPostForm;
 import org.exoplatform.forum.webui.popup.UIRatingForm;
 import org.exoplatform.forum.webui.popup.UITagForm;
 import org.exoplatform.forum.webui.popup.UITopicForm;
-import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -169,6 +168,11 @@ public class UITopicDetail extends UIForm	{
 	  this.IdPostView = IdPostView ;
   }
 	
+	@SuppressWarnings("unused")
+  private String convertLinkHTML(String s) {
+	  return ForumFormatFunction.convertLinkHTML(s) ;
+  }
+	
 	public void setUpdateContainer(String categoryId, String forumId, Topic topic, long numberPage) throws Exception {
 		if(this.topicId == null || !this.topicId.equals(topic.getId())) this.userName = "" ;
 		this.categoryId = categoryId ;
@@ -178,7 +182,7 @@ public class UITopicDetail extends UIForm	{
 		this.pageSelect = numberPage ;
 		this.isGopage = true ;
 		this.isEditTopic = false ;
-		String userName = Util.getPortalRequestContext().getRemoteUser() ;
+		String userName = ForumUtils.getCurrentUser() ;
 		if(!userName.equals(this.userName)) {
 			this.topic = forumService.getTopic(ForumUtils.getSystemProvider(), categoryId, forumId, topic.getId(), true) ;
 			this.userName = userName ;
@@ -254,7 +258,8 @@ public class UITopicDetail extends UIForm	{
 	}
 	
 	static public class AddPostActionListener extends EventListener<UITopicDetail> {
-		public void execute(Event<UITopicDetail> event) throws Exception {
+		@Override
+    public void execute(Event<UITopicDetail> event) throws Exception {
 			UITopicDetail topicDetail = event.getSource() ;
 			UIForumPortlet forumPortlet = topicDetail.getAncestorOfType(UIForumPortlet.class) ;
 			UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;
@@ -271,9 +276,10 @@ public class UITopicDetail extends UIForm	{
 	}
 
 	static public class RatingTopicActionListener extends EventListener<UITopicDetail> {
-		public void execute(Event<UITopicDetail> event) throws Exception {
+		@Override
+    public void execute(Event<UITopicDetail> event) throws Exception {
 			UITopicDetail topicDetail = event.getSource() ;
-			String userName = Util.getPortalRequestContext().getRemoteUser() ;
+			String userName = ForumUtils.getCurrentUser() ;
 			String[] userVoteRating = topicDetail.topic.getUserVoteRating() ;
 			boolean erro = false ;
 			for (String string : userVoteRating) {
@@ -296,7 +302,8 @@ public class UITopicDetail extends UIForm	{
 	}
 	
 	static public class AddTagTopicActionListener extends EventListener<UITopicDetail> {
-		public void execute(Event<UITopicDetail> event) throws Exception {
+		@Override
+    public void execute(Event<UITopicDetail> event) throws Exception {
 			UITopicDetail topicDetail = event.getSource() ;
 			UIForumPortlet forumPortlet = topicDetail.getAncestorOfType(UIForumPortlet.class) ;
 			UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;
@@ -309,13 +316,15 @@ public class UITopicDetail extends UIForm	{
 	}
 
 	static public class PrintActionListener extends EventListener<UITopicDetail> {
-		public void execute(Event<UITopicDetail> event) throws Exception {
+		@Override
+    public void execute(Event<UITopicDetail> event) throws Exception {
 			UITopicDetail topicDetail = event.getSource() ;
 		}
 	}
 
 	static public class GoNumberPageActionListener extends EventListener<UITopicDetail> {
-		public void execute(Event<UITopicDetail> event) throws Exception {
+		@Override
+    public void execute(Event<UITopicDetail> event) throws Exception {
 			UITopicDetail topicDetail = event.getSource() ;
 			UIFormStringInput stringInput1 = topicDetail.getUIStringInput("gopage1") ;
 			UIFormStringInput stringInput2 = topicDetail.getUIStringInput("gopage2") ;
@@ -345,7 +354,8 @@ public class UITopicDetail extends UIForm	{
 	}
 
 	static public class EditActionListener extends EventListener<UITopicDetail> {
-		public void execute(Event<UITopicDetail> event) throws Exception {
+		@Override
+    public void execute(Event<UITopicDetail> event) throws Exception {
 			UITopicDetail topicDetail = event.getSource() ;
 			String postId = event.getRequestContext().getRequestParameter(OBJECTID) ;
 			UIForumPortlet forumPortlet = topicDetail.getAncestorOfType(UIForumPortlet.class) ;
@@ -362,7 +372,8 @@ public class UITopicDetail extends UIForm	{
 	}
 	
 	static public class DeleteActionListener extends EventListener<UITopicDetail> {
-		public void execute(Event<UITopicDetail> event) throws Exception {
+		@Override
+    public void execute(Event<UITopicDetail> event) throws Exception {
 			UITopicDetail topicDetail = event.getSource() ;
 			String postId = event.getRequestContext().getRequestParameter(OBJECTID) ;
 			topicDetail.forumService.removePost(ForumUtils.getSystemProvider(), topicDetail.categoryId, topicDetail.forumId, topicDetail.topicId, postId) ;
@@ -371,7 +382,8 @@ public class UITopicDetail extends UIForm	{
 	}
 	
 	static public class QuoteActionListener extends EventListener<UITopicDetail> {
-		public void execute(Event<UITopicDetail> event) throws Exception {
+		@Override
+    public void execute(Event<UITopicDetail> event) throws Exception {
 			UITopicDetail topicDetail = event.getSource() ;
 			String postId = event.getRequestContext().getRequestParameter(OBJECTID) ;
 			UIForumPortlet forumPortlet = topicDetail.getAncestorOfType(UIForumPortlet.class) ;
@@ -389,7 +401,8 @@ public class UITopicDetail extends UIForm	{
 	}
 //--------------------------------	 Topic Menu		-------------------------------------------//
 	static public class EditTopicActionListener extends EventListener<UITopicDetail> {
-		public void execute(Event<UITopicDetail> event) throws Exception {
+		@Override
+    public void execute(Event<UITopicDetail> event) throws Exception {
 			UITopicDetail topicDetail = event.getSource() ;
 			UIForumPortlet forumPortlet = topicDetail.getAncestorOfType(UIForumPortlet.class) ;
 			UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;
@@ -405,13 +418,15 @@ public class UITopicDetail extends UIForm	{
 	}
 	
 	static public class PrintPageActionListener extends EventListener<UITopicDetail> {
-		public void execute(Event<UITopicDetail> event) throws Exception {
+		@Override
+    public void execute(Event<UITopicDetail> event) throws Exception {
 			UITopicDetail topicDetail = event.getSource() ;
 		}
 	}
 
 	static public class AddPollActionListener extends EventListener<UITopicDetail> {
-		public void execute(Event<UITopicDetail> event) throws Exception {
+		@Override
+    public void execute(Event<UITopicDetail> event) throws Exception {
 			UITopicDetail topicDetail = event.getSource() ;
 			Topic topic = topicDetail.topic ;
 			UIForumPortlet forumPortlet = topicDetail.getAncestorOfType(UIForumPortlet.class) ;
@@ -424,7 +439,8 @@ public class UITopicDetail extends UIForm	{
 	}
 
 	static public class SetOpenTopicActionListener extends EventListener<UITopicDetail> {
-		public void execute(Event<UITopicDetail> event) throws Exception {
+		@Override
+    public void execute(Event<UITopicDetail> event) throws Exception {
 			UITopicDetail topicDetail = event.getSource() ;
 			Topic topic = topicDetail.topic ;
 			if(topic.getIsClosed()) {
@@ -441,7 +457,8 @@ public class UITopicDetail extends UIForm	{
 	}
 
 	static public class SetCloseTopicActionListener extends EventListener<UITopicDetail> {
-		public void execute(Event<UITopicDetail> event) throws Exception {
+		@Override
+    public void execute(Event<UITopicDetail> event) throws Exception {
 			UITopicDetail topicDetail = event.getSource() ;
 			Topic topic = topicDetail.topic ;
 			if(!topic.getIsClosed()) {
@@ -458,7 +475,8 @@ public class UITopicDetail extends UIForm	{
 	}
 
 	static public class SetLockedTopicActionListener extends EventListener<UITopicDetail> {
-		public void execute(Event<UITopicDetail> event) throws Exception {
+		@Override
+    public void execute(Event<UITopicDetail> event) throws Exception {
 			UITopicDetail topicDetail = event.getSource() ;
 			Topic topic = topicDetail.topic ;
 			if(!topic.getIsLock()) {
@@ -475,7 +493,8 @@ public class UITopicDetail extends UIForm	{
 	}
 
 	static public class SetUnLockTopicActionListener extends EventListener<UITopicDetail> {
-		public void execute(Event<UITopicDetail> event) throws Exception {
+		@Override
+    public void execute(Event<UITopicDetail> event) throws Exception {
 			UITopicDetail topicDetail = event.getSource() ;
 			Topic topic = topicDetail.topic ;
 			if(topic.getIsLock()) {
@@ -492,7 +511,8 @@ public class UITopicDetail extends UIForm	{
 	}
 
 	static public class SetMoveTopicActionListener extends EventListener<UITopicDetail> {
-		public void execute(Event<UITopicDetail> event) throws Exception {
+		@Override
+    public void execute(Event<UITopicDetail> event) throws Exception {
 			UITopicDetail topicDetail = event.getSource() ;
 			UIForumPortlet forumPortlet = topicDetail.getAncestorOfType(UIForumPortlet.class) ;
 			UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;
@@ -507,7 +527,8 @@ public class UITopicDetail extends UIForm	{
 	}
 	
 	static public class SetStickTopicActionListener extends EventListener<UITopicDetail> {
-		public void execute(Event<UITopicDetail> event) throws Exception {
+		@Override
+    public void execute(Event<UITopicDetail> event) throws Exception {
 			UITopicDetail topicDetail = event.getSource() ;
 			Topic topic = topicDetail.topic ;
 			if(!topic.getIsSticky()) {
@@ -524,7 +545,8 @@ public class UITopicDetail extends UIForm	{
 	}
 
 	static public class SetUnStickTopicActionListener extends EventListener<UITopicDetail> {
-		public void execute(Event<UITopicDetail> event) throws Exception {
+		@Override
+    public void execute(Event<UITopicDetail> event) throws Exception {
 			UITopicDetail topicDetail = event.getSource() ;
 			Topic topic = topicDetail.topic ;
 			if(topic.getIsSticky()) {
@@ -541,25 +563,29 @@ public class UITopicDetail extends UIForm	{
 	}
 
 	static public class SplitTopicActionListener extends EventListener<UITopicDetail> {
-		public void execute(Event<UITopicDetail> event) throws Exception {
+		@Override
+    public void execute(Event<UITopicDetail> event) throws Exception {
 			UITopicDetail topicDetail = event.getSource() ;
 		}
 	}
 
 	static public class SetApproveTopicActionListener extends EventListener<UITopicDetail> {
-		public void execute(Event<UITopicDetail> event) throws Exception {
+		@Override
+    public void execute(Event<UITopicDetail> event) throws Exception {
 			UITopicDetail topicDetail = event.getSource() ;
 		}
 	}
 
 	static public class SetUnApproveTopicActionListener extends EventListener<UITopicDetail> {
-		public void execute(Event<UITopicDetail> event) throws Exception {
+		@Override
+    public void execute(Event<UITopicDetail> event) throws Exception {
 			UITopicDetail topicDetail = event.getSource() ;
 		}
 	}
 
 	static public class SetDeleteTopicActionListener extends EventListener<UITopicDetail> {
-		public void execute(Event<UITopicDetail> event) throws Exception {
+		@Override
+    public void execute(Event<UITopicDetail> event) throws Exception {
 			UITopicDetail topicDetail = event.getSource() ;
 			Topic topic = topicDetail.topic ;
 			topicDetail.forumService.removeTopic(ForumUtils.getSystemProvider(), topicDetail.categoryId, topicDetail.forumId, topic.getId()) ;
@@ -575,12 +601,14 @@ public class UITopicDetail extends UIForm	{
 
 	//---------------------------------	Post Menu	 --------------------------------------//
 	static public class MergePostActionListener extends EventListener<UITopicDetail> {
-		public void execute(Event<UITopicDetail> event) throws Exception {
+		@Override
+    public void execute(Event<UITopicDetail> event) throws Exception {
 		}
 	}
 
 	static public class MovePostActionListener extends EventListener<UITopicDetail> {
-		@SuppressWarnings("unchecked")
+		@Override
+    @SuppressWarnings("unchecked")
 		public void execute(Event<UITopicDetail> event) throws Exception {
 			UITopicDetail topicDetail = event.getSource() ;
 			UIForumPortlet forumPortlet = topicDetail.getAncestorOfType(UIForumPortlet.class) ;
@@ -607,27 +635,32 @@ public class UITopicDetail extends UIForm	{
 	}
 
 	static public class SetApprovePostActionListener extends EventListener<UITopicDetail> {
-		public void execute(Event<UITopicDetail> event) throws Exception {
+		@Override
+    public void execute(Event<UITopicDetail> event) throws Exception {
 		}
 	}
 	
 	static public class SetUnApprovePostActionListener extends EventListener<UITopicDetail> {
-		public void execute(Event<UITopicDetail> event) throws Exception {
+		@Override
+    public void execute(Event<UITopicDetail> event) throws Exception {
 		}
 	}
 
 	static public class SetApproveAttachmentActionListener extends EventListener<UITopicDetail> {
-		public void execute(Event<UITopicDetail> event) throws Exception {
+		@Override
+    public void execute(Event<UITopicDetail> event) throws Exception {
 		}
 	}
 	
 	static public class SetUnApproveAttachmentActionListener extends EventListener<UITopicDetail> {
-		public void execute(Event<UITopicDetail> event) throws Exception {
+		@Override
+    public void execute(Event<UITopicDetail> event) throws Exception {
 		}
 	}
 	
 	static public class DeletePostActionListener extends EventListener<UITopicDetail> {
-		@SuppressWarnings("unchecked")
+		@Override
+    @SuppressWarnings("unchecked")
 		public void execute(Event<UITopicDetail> event) throws Exception {
 			UITopicDetail topicDetail = event.getSource() ;
 			List<UIComponent> children = topicDetail.getChildren() ;

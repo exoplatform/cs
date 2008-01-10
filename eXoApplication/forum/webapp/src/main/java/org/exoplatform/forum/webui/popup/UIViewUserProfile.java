@@ -45,7 +45,8 @@ public class UIViewUserProfile extends UIComponent {
 	}
 	
 	static	public class CloseActionListener extends EventListener<UIViewUserProfile> {
-		public void execute(Event<UIViewUserProfile> event) throws Exception {
+		@Override
+    public void execute(Event<UIViewUserProfile> event) throws Exception {
 			UIViewUserProfile uiForm = event.getSource() ;
 		}
 	}

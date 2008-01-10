@@ -100,7 +100,8 @@ public class UIMovePostForm extends UIForm implements UIPopupComponent {
 	}
 	
 	static	public class SaveActionListener extends EventListener<UIMovePostForm> {
-		public void execute(Event<UIMovePostForm> event) throws Exception {
+		@Override
+    public void execute(Event<UIMovePostForm> event) throws Exception {
 			UIMovePostForm uiForm = event.getSource() ;
 			String topicPath = event.getRequestContext().getRequestParameter(OBJECTID) ;
 			if(topicPath != null && topicPath.length() > 0) {
@@ -120,7 +121,8 @@ public class UIMovePostForm extends UIForm implements UIPopupComponent {
 	}
 	
 	static	public class CancelActionListener extends EventListener<UIMovePostForm> {
-		public void execute(Event<UIMovePostForm> event) throws Exception {
+		@Override
+    public void execute(Event<UIMovePostForm> event) throws Exception {
 			UIMovePostForm uiForm = event.getSource() ;
 			UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
 			forumPortlet.cancelAction() ;

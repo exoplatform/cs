@@ -31,7 +31,6 @@ import org.exoplatform.forum.webui.EmptyNameValidator;
 import org.exoplatform.forum.webui.UIForumPortlet;
 import org.exoplatform.forum.webui.UITopicDetail;
 import org.exoplatform.forum.webui.UITopicDetailContainer;
-import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -201,12 +200,13 @@ public class UIPostForm extends UIForm implements UIPopupComponent {
 	}
 		
 	static	public class PreviewPostActionListener extends EventListener<UIPostForm> {
-		public void execute(Event<UIPostForm> event) throws Exception {
+		@Override
+    public void execute(Event<UIPostForm> event) throws Exception {
 			UIPostForm uiForm = event.getSource() ;
 			int t = 0, k = 1 ;
 			String postTitle = uiForm.getUIStringInput(FIELD_POSTTITLE_INPUT).getValue().trim();
 			String message = uiForm.getChild(UIFormWYSIWYGInput.class).getValue();
-			String userName = Util.getPortalRequestContext().getRemoteUser() ;
+			String userName = ForumUtils.getCurrentUser() ;
 			if(message != null && message.length() > 0) message = message.trim() ;
 			t = message.length() ;
 			if(postTitle.length() <= 3) {k = 0;}
@@ -248,13 +248,14 @@ public class UIPostForm extends UIForm implements UIPopupComponent {
 	}
 	
 	static	public class SubmitPostActionListener extends EventListener<UIPostForm> {
-		public void execute(Event<UIPostForm> event) throws Exception {
+		@Override
+    public void execute(Event<UIPostForm> event) throws Exception {
 			UIPostForm uiForm = event.getSource() ;
 			int t = 0, k = 1 ;
 			String postTitle = uiForm.getUIStringInput(FIELD_POSTTITLE_INPUT).getValue().trim();
 			String message = uiForm.getChild(UIFormWYSIWYGInput.class).getValue();
 				//uiForm.getUIFormTextAreaInput(FIELD_MESSENGER_TEXTAREA).getValue() ;
-			String userName = Util.getPortalRequestContext().getRemoteUser() ;
+			String userName = ForumUtils.getCurrentUser() ;
 			if(message != null && message.length() > 0) message = message.trim() ;
 			t = message.length() ;
 			if(postTitle.length() <= 3) {k = 0;}
@@ -307,7 +308,8 @@ public class UIPostForm extends UIForm implements UIPopupComponent {
 	}
 	
 	static public class AttachmentActionListener extends EventListener<UIPostForm> {
-		public void execute(Event<UIPostForm> event) throws Exception {
+		@Override
+    public void execute(Event<UIPostForm> event) throws Exception {
 			UIPostForm uiForm = event.getSource() ;
 			UIPopupContainer popupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
 			UIPopupAction uiChildPopup = popupContainer.getChild(UIPopupAction.class).setRendered(true) ;
@@ -318,7 +320,8 @@ public class UIPostForm extends UIForm implements UIPopupComponent {
 	}
 	
 	static public class RemoveAttachmentActionListener extends EventListener<UIPostForm> {
-		public void execute(Event<UIPostForm> event) throws Exception {
+		@Override
+    public void execute(Event<UIPostForm> event) throws Exception {
 			UIPostForm uiPostForm = event.getSource() ;
 			String attFileId = event.getRequestContext().getRequestParameter(OBJECTID);
 			BufferAttachment attachfile = new BufferAttachment();
@@ -333,7 +336,8 @@ public class UIPostForm extends UIForm implements UIPopupComponent {
 	}
 	
 	static	public class CancelActionListener extends EventListener<UIPostForm> {
-		public void execute(Event<UIPostForm> event) throws Exception {
+		@Override
+    public void execute(Event<UIPostForm> event) throws Exception {
 			UIPostForm uiForm = event.getSource() ;
 			UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
 			forumPortlet.cancelAction() ;

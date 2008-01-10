@@ -66,7 +66,8 @@ public class UIFormSelectBoxForum extends UIFormStringInput {
 		size_ = i ; return this ;
 	}
 	
-	public UIFormSelectBoxForum setValue(String value) {
+	@Override
+  public UIFormSelectBoxForum setValue(String value) {
 		value_ = value ;
 		for(SelectItemOption<String> option : options_) {
 			if(option.getValue().equals(value_)) option.setSelected(true) ;
@@ -119,7 +120,8 @@ public class UIFormSelectBoxForum extends UIFormStringInput {
 		return this;
 	}
 	
-	@SuppressWarnings("unused")
+	@Override
+  @SuppressWarnings("unused")
 	public void decode(Object input, WebuiRequestContext context) throws Exception {
 		String[] values = context.getRequestParameterValues(getId()) ;
 		if(values == null) {
@@ -144,7 +146,8 @@ public class UIFormSelectBoxForum extends UIFormStringInput {
 		return uiForm.event(onchange_, (String)null);
 	}
 	
-	public void processRender(WebuiRequestContext context) throws Exception {
+	@Override
+  public void processRender(WebuiRequestContext context) throws Exception {
 		ResourceBundle res = context.getApplicationResourceBundle() ;
 		UIForm uiForm = getAncestorOfType(UIForm.class) ;
 		String formId =	null ;

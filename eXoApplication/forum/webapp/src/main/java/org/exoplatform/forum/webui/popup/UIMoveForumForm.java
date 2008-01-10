@@ -93,7 +93,8 @@ public class UIMoveForumForm extends UIForm implements UIPopupComponent {
 	}
 	
 	static	public class SaveActionListener extends EventListener<UIMoveForumForm> {
-		public void execute(Event<UIMoveForumForm> event) throws Exception {
+		@Override
+    public void execute(Event<UIMoveForumForm> event) throws Exception {
 			UIMoveForumForm uiForm = event.getSource() ;
 			String categoryId = event.getRequestContext().getRequestParameter(OBJECTID)	;
 			ForumService forumService =	(ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
@@ -126,7 +127,8 @@ public class UIMoveForumForm extends UIForm implements UIPopupComponent {
 	}
  
 	static	public class CancelActionListener extends EventListener<UIMoveForumForm> {
-		public void execute(Event<UIMoveForumForm> event) throws Exception {
+		@Override
+    public void execute(Event<UIMoveForumForm> event) throws Exception {
 			UIForumPortlet forumPortlet = event.getSource().getAncestorOfType(UIForumPortlet.class) ;
 			forumPortlet.cancelAction() ;
 		}

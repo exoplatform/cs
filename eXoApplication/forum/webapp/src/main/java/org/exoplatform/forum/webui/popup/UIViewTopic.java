@@ -62,7 +62,8 @@ public class UIViewTopic extends UIForm implements UIPopupComponent {
 	}
 	
 	static	public class CloseActionListener extends EventListener<UIViewTopic> {
-		public void execute(Event<UIViewTopic> event) throws Exception {
+		@Override
+    public void execute(Event<UIViewTopic> event) throws Exception {
 			UIViewTopic uiForm = event.getSource() ;
 			UIPopupContainer popupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
 			popupContainer.getChild(UIPopupAction.class).deActivate() ;

@@ -98,7 +98,8 @@ public class UIForumPageIterator extends UIContainer {
 	}
 		
 	static public class GoPageActionListener extends EventListener<UIForumPageIterator> {
-		public void execute(Event<UIForumPageIterator> event) throws Exception {
+		@Override
+    public void execute(Event<UIForumPageIterator> event) throws Exception {
 			UIForumPageIterator forumPageIterator = event.getSource() ;
 			String stateClick = event.getRequestContext().getRequestParameter(OBJECTID).trim() ;
 			long maxPage = forumPageIterator.pageList.getAvailablePage() ;

@@ -191,7 +191,8 @@ public class UITopicsTag extends UIForm {
 	}
 	
 	static public class OpenTopicActionListener extends EventListener<UITopicsTag> {
-		public void execute(Event<UITopicsTag> event) throws Exception {
+		@Override
+    public void execute(Event<UITopicsTag> event) throws Exception {
 			UITopicsTag uiTopicsTag = event.getSource();
 			String idAndNumber = event.getRequestContext().getRequestParameter(OBJECTID) ;
 			String []id = idAndNumber.split(",") ;
@@ -217,7 +218,8 @@ public class UITopicsTag extends UIForm {
 	}
 	
 	static public class OpenTopicsTagActionListener extends EventListener<UITopicsTag> {
-		public void execute(Event<UITopicsTag> event) throws Exception {
+		@Override
+    public void execute(Event<UITopicsTag> event) throws Exception {
 			UITopicsTag topicsTag = event.getSource() ;
 			String tagId = event.getRequestContext().getRequestParameter(OBJECTID) ;
 			UIForumPortlet forumPortlet = topicsTag.getParent() ;
@@ -228,7 +230,8 @@ public class UITopicsTag extends UIForm {
 	}
 	
 	static public class EditTagActionListener extends EventListener<UITopicsTag> {
-		public void execute(Event<UITopicsTag> event) throws Exception {
+		@Override
+    public void execute(Event<UITopicsTag> event) throws Exception {
 			UITopicsTag topicsTag = event.getSource() ;
 			UIForumPortlet forumPortlet = topicsTag.getParent() ;
       UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;
@@ -241,7 +244,8 @@ public class UITopicsTag extends UIForm {
 	}
 	
 	static public class RemoveTopicActionListener extends EventListener<UITopicsTag> {
-		@SuppressWarnings("unchecked")
+		@Override
+    @SuppressWarnings("unchecked")
     public void execute(Event<UITopicsTag> event) throws Exception {
 			UITopicsTag topicsTag = event.getSource() ;
 			List<UIComponent> children = topicsTag.getChildren() ;
@@ -270,7 +274,8 @@ public class UITopicsTag extends UIForm {
 	}
 	
 	static public class RemoveTagActionListener extends EventListener<UITopicsTag> {
-		public void execute(Event<UITopicsTag> event) throws Exception {
+		@Override
+    public void execute(Event<UITopicsTag> event) throws Exception {
 			UITopicsTag topicsTag = event.getSource() ;
 			UIForumPortlet forumPortlet = topicsTag.getParent() ;
 			topicsTag.forumService.removeTag(ForumUtils.getSystemProvider(), topicsTag.tagId) ;

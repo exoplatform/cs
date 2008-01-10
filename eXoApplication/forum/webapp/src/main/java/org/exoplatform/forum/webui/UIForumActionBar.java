@@ -16,11 +16,6 @@
  ***************************************************************************/
 package org.exoplatform.forum.webui;
 
-import java.util.List;
-
-import org.exoplatform.container.PortalContainer;
-import org.exoplatform.forum.ForumUtils;
-import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.webui.popup.UICategoryForm;
 import org.exoplatform.forum.webui.popup.UIForumForm;
 import org.exoplatform.forum.webui.popup.UIForumOptionForm;
@@ -59,7 +54,8 @@ public class UIForumActionBar extends UIContainer	{
 	  this.hasCategory = hasCategory ;
   }
 	static public class AddCategoryActionListener extends EventListener<UIForumActionBar> {
-		public void execute(Event<UIForumActionBar> event) throws Exception {
+		@Override
+    public void execute(Event<UIForumActionBar> event) throws Exception {
 			UIForumActionBar uiActionBar = event.getSource() ;
 			UIForumPortlet forumPortlet = uiActionBar.getAncestorOfType(UIForumPortlet.class) ;
 			UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;
@@ -69,7 +65,8 @@ public class UIForumActionBar extends UIContainer	{
 	}	
 	
 	static public class AddForumActionListener extends EventListener<UIForumActionBar> {
-		@SuppressWarnings("unchecked")
+		@Override
+    @SuppressWarnings("unchecked")
 		public void execute(Event<UIForumActionBar> event) throws Exception {
 			UIForumActionBar uiActionBar = event.getSource() ;
 			if(uiActionBar.hasCategory) {
@@ -90,7 +87,8 @@ public class UIForumActionBar extends UIContainer	{
 	} 
 	
 	static public class ManageModeratorActionListener extends EventListener<UIForumActionBar> {
-		public void execute(Event<UIForumActionBar> event) throws Exception {
+		@Override
+    public void execute(Event<UIForumActionBar> event) throws Exception {
 			UIForumActionBar uiActionBar = event.getSource() ;
 				UIForumPortlet forumPortlet = uiActionBar.getAncestorOfType(UIForumPortlet.class) ;
 				UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;
@@ -100,7 +98,8 @@ public class UIForumActionBar extends UIContainer	{
 	}	
 	
 	static public class ForumOptionActionListener extends EventListener<UIForumActionBar> {
-		public void execute(Event<UIForumActionBar> event) throws Exception {
+		@Override
+    public void execute(Event<UIForumActionBar> event) throws Exception {
 			UIForumActionBar uiActionBar = event.getSource() ;
 			UIForumPortlet forumPortlet = uiActionBar.getAncestorOfType(UIForumPortlet.class) ;
 			UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;

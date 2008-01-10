@@ -80,7 +80,8 @@ public class UIForumLinks extends UIForm {
 	}
 	
 	static	public class SelectActionListener extends EventListener<UIForumLinks> {
-		public void execute(Event<UIForumLinks> event) throws Exception {
+		@Override
+    public void execute(Event<UIForumLinks> event) throws Exception {
 			UIForumLinks uiForm = event.getSource() ;
 			UIFormSelectBoxForum selectBoxForum = uiForm.getUIFormSelectBoxForum(FIELD_FORUMLINK_SELECTBOX) ;
 			String path = selectBoxForum.getValue();

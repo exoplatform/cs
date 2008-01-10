@@ -30,7 +30,6 @@ import org.exoplatform.forum.webui.UIBreadcumbs;
 import org.exoplatform.forum.webui.UIFormSelectBoxForum;
 import org.exoplatform.forum.webui.UIForumPortlet;
 import org.exoplatform.forum.webui.UITopicsTag;
-import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
@@ -118,7 +117,8 @@ public class UIAddTagForm extends UIForm implements UIPopupComponent {
 	
 	
 	static	public class SaveActionListener extends EventListener<UIAddTagForm> {
-		public void execute(Event<UIAddTagForm> event) throws Exception {
+		@Override
+    public void execute(Event<UIAddTagForm> event) throws Exception {
 			UIAddTagForm uiForm = event.getSource() ;
 			UIFormStringInput tagNameInput = uiForm.getUIStringInput(FIELD_TAGNAME_INPUT) ;
 			tagNameInput.addValidator(EmptyNameValidator.class) ;
@@ -134,7 +134,7 @@ public class UIAddTagForm extends UIForm implements UIPopupComponent {
 				newTag.setId(uiForm.tagId); 
 				forumService.saveTag(ForumUtils.getSystemProvider(), newTag, false);
 			} else {
-				String userName = Util.getPortalRequestContext().getRemoteUser() ;
+				String userName = ForumUtils.getCurrentUser() ;
 				newTag.setOwner(userName) ;
 				forumService.saveTag(ForumUtils.getSystemProvider(), newTag, true);
 			}
@@ -156,7 +156,8 @@ public class UIAddTagForm extends UIForm implements UIPopupComponent {
 	}
 	
 	static	public class CancelActionListener extends EventListener<UIAddTagForm> {
-		public void execute(Event<UIAddTagForm> event) throws Exception {
+		@Override
+    public void execute(Event<UIAddTagForm> event) throws Exception {
 			UIAddTagForm uiForm = event.getSource() ;
 			if(uiForm.isTopicTag) {
 				uiForm.getAncestorOfType(UIForumPortlet.class).cancelAction() ;

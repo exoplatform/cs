@@ -23,7 +23,7 @@ import org.exoplatform.forum.ForumUtils;
 import org.exoplatform.forum.service.ForumOption;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.webui.popup.UIPopupAction;
-import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.web.application.RequestContext;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIPopupMessages;
@@ -89,12 +89,12 @@ public class UIForumPortlet extends UIPortletApplication {
 	public void renderPopupMessages() throws Exception {
 		UIPopupMessages popupMess = getUIPopupMessages();
 		if(popupMess == null)	return ;
-		WebuiRequestContext	context =	WebuiRequestContext.getCurrentInstance() ;
+		WebuiRequestContext	context =	RequestContext.getCurrentInstance() ;
 		popupMess.processRender(context);
 	}
 
 	public void cancelAction() throws Exception {
-		WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+		WebuiRequestContext context = RequestContext.getCurrentInstance() ;
 		UIPopupAction popupAction = getChild(UIPopupAction.class) ;
 		popupAction.deActivate() ;
 		context.addUIComponentToUpdateByAjax(popupAction) ;
@@ -103,11 +103,9 @@ public class UIForumPortlet extends UIPortletApplication {
 
   @SuppressWarnings("deprecation")
 	public void initOption() throws Exception {
-		String userName = Util.getPortalRequestContext().getRemoteUser() ;
-		ForumOption forumOption = new ForumOption() ;
-		forumOption = forumService.getOption(ForumUtils.getSystemProvider(), userName) ;
-		Date dateHost = new Date() ;
-		if(forumOption == null) {
+  	String userId = ForumUtils.getCurrentUser() ;
+		if(userId == null || userId.length() <= 0) {
+			Date dateHost = new Date() ;
 			timeZone = dateHost.getTimezoneOffset()/ 60 ;
 			shortDateformat = "mm/dd/yyyy";
 			longDateformat = "ddd,mmm,dd,yyyy";
@@ -116,6 +114,8 @@ public class UIForumPortlet extends UIPortletApplication {
 			maxPost = 10 ;
 			//isShowForumJump = false ;
 		} else {
+			ForumOption forumOption = new ForumOption() ;
+			forumOption = forumService.getOption(ForumUtils.getSystemProvider(), ForumUtils.getCurrentUser()) ;
 			timeZone = forumOption.getTimeZone() ;
 			shortDateformat = forumOption.getShortDateFormat() ;
 			longDateformat = forumOption.getLongDateFormat() ;

@@ -21,7 +21,6 @@ import org.exoplatform.forum.ForumUtils;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.service.Topic;
 import org.exoplatform.forum.webui.UIForumPortlet;
-import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
@@ -66,12 +65,13 @@ public class UIRatingForm extends UIForm implements UIPopupComponent {
 	}
 	
 	static	public class VoteTopicActionListener extends EventListener<UIRatingForm> {
-		public void execute(Event<UIRatingForm> event) throws Exception {
+		@Override
+    public void execute(Event<UIRatingForm> event) throws Exception {
 			UIRatingForm uiForm = event.getSource() ;
 			String vote = event.getRequestContext().getRequestParameter(OBJECTID)	;
 			Topic topic = uiForm.topic ;
 			
-			String userName = Util.getPortalRequestContext().getRemoteUser() ;
+			String userName = ForumUtils.getCurrentUser() ;
 			String[] Vote = topic.getUserVoteRating() ;
 			int k = Vote.length ;
 			Double voteRating = topic.getVoteRating() ;
@@ -91,7 +91,8 @@ public class UIRatingForm extends UIForm implements UIPopupComponent {
 	}
 	
 	static	public class CancelActionListener extends EventListener<UIRatingForm> {
-		public void execute(Event<UIRatingForm> event) throws Exception {
+		@Override
+    public void execute(Event<UIRatingForm> event) throws Exception {
 			UIForumPortlet forumPortlet = event.getSource().getAncestorOfType(UIForumPortlet.class) ;
 			forumPortlet.cancelAction() ;
 		}

@@ -28,7 +28,6 @@ import org.exoplatform.forum.webui.UIForumPortlet;
 import org.exoplatform.forum.webui.UITopicDetail;
 import org.exoplatform.forum.webui.UITopicDetailContainer;
 import org.exoplatform.forum.webui.UITopicPoll;
-import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -122,7 +121,8 @@ public class UIPollForm extends UIForm implements UIPopupComponent {
 	}
 	
 	static	public class SaveActionListener extends EventListener<UIPollForm> {
-		@SuppressWarnings("unchecked")
+		@Override
+    @SuppressWarnings("unchecked")
 		public void execute(Event<UIPollForm> event) throws Exception {
 			UIPollForm uiForm = event.getSource() ;
 			UIFormStringInput questionInput = uiForm.getUIStringInput(FIELD_QUESTION_INPUT) ;
@@ -154,7 +154,7 @@ public class UIPollForm extends UIForm implements UIPopupComponent {
 			}
 			if(sizeOption >= 2 && sizeOption <= 10) {
 				String[] newUser = new String[] {};
-				String userName = Util.getPortalRequestContext().getRemoteUser() ;
+				String userName = ForumUtils.getCurrentUser() ;
 				String[] vote = new String[sizeOption]	;
 				if(uiForm.isUpdate) {
 					String[] oldVote = uiForm.poll.getVote() ;
@@ -168,7 +168,7 @@ public class UIPollForm extends UIForm implements UIPopupComponent {
 						rmPecent = 100 - rmPecent ;
 						for(int k = 0; k < sizeOption; ++k) {
 							double newVote = Double.parseDouble(oldVote[k]) ;
-							vote[k] = String.valueOf((double)(newVote*100)/rmPecent) ;
+							vote[k] = String.valueOf((newVote*100)/rmPecent) ;
 						}
 						int newSize	= (int) Math.round((temps*rmPecent)/100) ;
 						newUser = new String[newSize] ;
@@ -234,7 +234,8 @@ public class UIPollForm extends UIForm implements UIPopupComponent {
 	}
 
 	static	public class RefreshActionListener extends EventListener<UIPollForm> {
-		public void execute(Event<UIPollForm> event) throws Exception {
+		@Override
+    public void execute(Event<UIPollForm> event) throws Exception {
 			UIPollForm uiForm = event.getSource() ;
 			List<String> list = new ArrayList<String>() ;
 			list.add("");
@@ -247,7 +248,8 @@ public class UIPollForm extends UIForm implements UIPopupComponent {
 	}
 	
 	static	public class CancelActionListener extends EventListener<UIPollForm> {
-		public void execute(Event<UIPollForm> event) throws Exception {
+		@Override
+    public void execute(Event<UIPollForm> event) throws Exception {
 			UIPollForm uiForm = event.getSource() ;
 			UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
 			forumPortlet.cancelAction() ;

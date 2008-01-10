@@ -27,7 +27,6 @@ import org.exoplatform.forum.service.ForumOption;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.webui.UIFormSelectBoxForum;
 import org.exoplatform.forum.webui.UIForumPortlet;
-import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
@@ -177,16 +176,16 @@ public class UIForumOptionForm extends UIForm implements UIPopupComponent {
 	}
 	
 	public void setUpdate() throws Exception {
-		String userName = Util.getPortalRequestContext().getRemoteUser() ;
+		String userName = ForumUtils.getCurrentUser() ;
 		ForumOption forumOption = new ForumOption() ;
 		forumOption = forumService.getOption(ForumUtils.getSystemProvider(), userName) ;
 		if(forumOption != null) {
 			double timeZone = forumOption.getTimeZone();
-			String mark = "-";
+			String mark = "+";
 			if(timeZone < 0) {
 				timeZone = -timeZone ;
 			} else if(timeZone > 0){
-				mark = "+" ;
+				mark = "-" ;
 			} else {
 				timeZone = 0.0 ;
 				mark = "";
@@ -201,7 +200,8 @@ public class UIForumOptionForm extends UIForm implements UIPopupComponent {
 	}
 	
 	static	public class SaveActionListener extends EventListener<UIForumOptionForm> {
-		public void execute(Event<UIForumOptionForm> event) throws Exception {
+		@Override
+    public void execute(Event<UIForumOptionForm> event) throws Exception {
 			UIForumOptionForm uiForm = event.getSource() ;
 			long maxTopic = Long.parseLong(uiForm.getUIFormSelectBox(FIELD_MAXTOPICS_SELECTBOX).getValue().substring(2)) ;
 			long maxPost = Long.parseLong(uiForm.getUIFormSelectBox(FIELD_MAXPOSTS_SELECTBOX).getValue().substring(2)) ;
@@ -209,7 +209,7 @@ public class UIForumOptionForm extends UIForm implements UIPopupComponent {
 			String shortDateFormat = uiForm.getUIFormSelectBox(FIELD_SHORTDATEFORMAT_SELECTBOX).getValue();
 			String longDateFormat = uiForm.getUIFormSelectBox(FIELD_LONGDATEFORMAT_SELECTBOX).getValue();
 			String timeFormat = uiForm.getUIFormSelectBox(FIELD_TIMEFORMAT_SELECTBOX).getValue().substring(2);
-			String userName = Util.getPortalRequestContext().getRemoteUser() ;
+			String userName = ForumUtils.getCurrentUser() ;
 			UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
 			if(userName != null && userName.length() > 0) {
 				ForumOption forumOption = new ForumOption() ;
@@ -230,7 +230,8 @@ public class UIForumOptionForm extends UIForm implements UIPopupComponent {
 	}
 	
 	static	public class CancelActionListener extends EventListener<UIForumOptionForm> {
-		public void execute(Event<UIForumOptionForm> event) throws Exception {
+		@Override
+    public void execute(Event<UIForumOptionForm> event) throws Exception {
 			UIForumOptionForm uiForm = event.getSource() ;
 			UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
 			forumPortlet.cancelAction() ;

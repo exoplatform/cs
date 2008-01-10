@@ -28,7 +28,6 @@ import org.exoplatform.forum.service.Poll;
 import org.exoplatform.forum.service.Topic;
 import org.exoplatform.forum.webui.popup.UIPollForm;
 import org.exoplatform.forum.webui.popup.UIPopupAction;
-import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -146,7 +145,7 @@ public class UITopicPoll extends UIForm	{
 		if(this.isMultiCheck) {
 			return false ;
 		}
-		String userVote = Util.getPortalRequestContext().getRemoteUser() ;
+		String userVote = ForumUtils.getCurrentUser() ;
 		String[] userVotes = poll.getUserVote() ;
 		for (String string : userVotes) {
 			string = string.substring(0, string.length() - 2) ;
@@ -168,7 +167,7 @@ public class UITopicPoll extends UIForm	{
 		int i = 0;
 		for (String string : voteNumber) {
 			double tmp = Double.parseDouble(string) ;
-			double k = (double)(tmp*size)/100 ;
+			double k = (tmp*size)/100 ;
 			int t = (int)Math.round(k) ;
 			string = "" + (double) t*100/size ;
 			infoVote[i] = string + ":" + t ;
@@ -184,7 +183,8 @@ public class UITopicPoll extends UIForm	{
 	}
 	
 	static public class VoteActionListener extends EventListener<UITopicPoll> {
-		public void execute(Event<UITopicPoll> event) throws Exception {
+		@Override
+    public void execute(Event<UITopicPoll> event) throws Exception {
 			UITopicPoll topicPoll = event.getSource() ;
 			UIFormRadioBoxInput radioInput = null ;
 			List<UIComponent> children = topicPoll.getChildren() ;
@@ -212,7 +212,7 @@ public class UITopicPoll extends UIForm	{
 					size = temporary.length ;
 				}
 				String[] setUserVote ; int index = 0 ;
-				String userVote = Util.getPortalRequestContext().getRemoteUser() ;
+				String userVote = ForumUtils.getCurrentUser() ;
 				if(topicPoll.isMultiCheck) {
 					setUserVote = new String[size] ;
 					for (int t = 0; t < size; t++) {
@@ -261,7 +261,8 @@ public class UITopicPoll extends UIForm	{
 	}
 	
 	static public class EditPollActionListener extends EventListener<UITopicPoll> {
-		public void execute(Event<UITopicPoll> event) throws Exception {
+		@Override
+    public void execute(Event<UITopicPoll> event) throws Exception {
 			UITopicPoll topicPoll = event.getSource() ;
 			UIForumPortlet forumPortlet = topicPoll.getAncestorOfType(UIForumPortlet.class) ;
 			UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;
@@ -275,7 +276,8 @@ public class UITopicPoll extends UIForm	{
 	}
 
 	static public class RemovePollActionListener extends EventListener<UITopicPoll> {
-		public void execute(Event<UITopicPoll> event) throws Exception {
+		@Override
+    public void execute(Event<UITopicPoll> event) throws Exception {
 			UITopicPoll topicPoll = event.getSource() ;
 			topicPoll.forumService.removePoll(ForumUtils.getSystemProvider(), topicPoll.categoryId, topicPoll.forumId, topicPoll.topicId) ;
 			topicPoll.removeChild(UIFormRadioBoxInput.class) ;
@@ -285,7 +287,8 @@ public class UITopicPoll extends UIForm	{
 	}
 
 	static public class VoteAgainPollActionListener extends EventListener<UITopicPoll> {
-		public void execute(Event<UITopicPoll> event) throws Exception {
+		@Override
+    public void execute(Event<UITopicPoll> event) throws Exception {
 			UITopicPoll topicPoll = event.getSource() ;
 			topicPoll.isMultiCheck = true ;
 			topicPoll.removeChild(UIFormRadioBoxInput.class) ;

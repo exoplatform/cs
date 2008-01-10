@@ -190,7 +190,8 @@ public class UIForumForm extends UIForm implements UIPopupComponent {
 	}
 	
 	static	public class SaveActionListener extends EventListener<UIForumForm> {
-		public void execute(Event<UIForumForm> event) throws Exception {
+		@Override
+    public void execute(Event<UIForumForm> event) throws Exception {
 			UIForumForm uiForm = event.getSource() ;
 			UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
 			
@@ -272,7 +273,8 @@ public class UIForumForm extends UIForm implements UIPopupComponent {
 	}
 	
 	static	public class CancelActionListener extends EventListener<UIForumForm> {
-		public void execute(Event<UIForumForm> event) throws Exception {
+		@Override
+    public void execute(Event<UIForumForm> event) throws Exception {
 			UIForumPortlet forumPortlet = event.getSource().getAncestorOfType(UIForumPortlet.class) ;
 			forumPortlet.cancelAction() ;
 		}

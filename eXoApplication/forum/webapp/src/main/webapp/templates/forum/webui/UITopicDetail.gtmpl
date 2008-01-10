@@ -306,7 +306,7 @@
 				String subject = post.getSubject() ;
 				Date createdPostDate = post.getCreatedDate() ;
 				String createdDate = uicomponent.getLongDate(createdPostDate) + ", " + uicomponent.getTime(createdPostDate) ;
-				String messager = post.getMessage() ;
+				String messager = uicomponent.convertLinkHTML(post.getMessage()) ;
 				String editBy = post.getModifiedBy() ;
 				Date modifileDate = post.getModifiedDate() ;
 				String editDate = uicomponent.getLongDate(modifileDate) + ", " + uicomponent.getTime(modifileDate) ;

@@ -46,12 +46,14 @@ public class UIMergeTopicForm extends UIForm {
 	}
 	
 	static	public class SaveActionListener extends EventListener<UIMergeTopicForm> {
-		public void execute(Event<UIMergeTopicForm> event) throws Exception {
+		@Override
+    public void execute(Event<UIMergeTopicForm> event) throws Exception {
 			UIMergeTopicForm uiForm = event.getSource() ;
 		}
 	}
 	static	public class CancelActionListener extends EventListener<UIMergeTopicForm> {
-		public void execute(Event<UIMergeTopicForm> event) throws Exception {
+		@Override
+    public void execute(Event<UIMergeTopicForm> event) throws Exception {
 			UIMergeTopicForm uiForm = event.getSource() ;
 		}
 	}

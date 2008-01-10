@@ -40,7 +40,7 @@ import org.exoplatform.webui.form.UIFormUploadInput;
  */
 @ComponentConfig(
 		lifecycle = UIFormLifecycle.class,
-		template =	"system:/groovy/webui/form/UIFormForum.gtmpl",
+		template =	"app:/templates/forum/webui/popup/UIFormForum.gtmpl",
 		events = {
 			@EventConfig(listeners = UIAttachFileForm.SaveActionListener.class), 
 			@EventConfig(listeners = UIAttachFileForm.CancelActionListener.class, phase = Phase.DECODE)
@@ -66,7 +66,8 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
 	public void deActivate() throws Exception {}
 
 	static	public class SaveActionListener extends EventListener<UIAttachFileForm> {
-		public void execute(Event<UIAttachFileForm> event) throws Exception {
+		@Override
+    public void execute(Event<UIAttachFileForm> event) throws Exception {
 			UIAttachFileForm uiForm = event.getSource();
 			UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
 			UIFormUploadInput input = (UIFormUploadInput)uiForm.getUIInput(FIELD_UPLOAD);
@@ -118,7 +119,8 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
 	}
 
 	static	public class CancelActionListener extends EventListener<UIAttachFileForm> {
-		public void execute(Event<UIAttachFileForm> event) throws Exception {
+		@Override
+    public void execute(Event<UIAttachFileForm> event) throws Exception {
 			UIAttachFileForm uiForm = event.getSource() ;
 			UIPopupContainer popupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
 			popupContainer.getChild(UIPopupAction.class).deActivate() ;

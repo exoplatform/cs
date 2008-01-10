@@ -20,7 +20,9 @@
 
 package org.exoplatform.forum;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.TreeMap;
 
 /**
@@ -241,6 +243,60 @@ public class ForumFormatFunction {
 		}
 		return rtn.toString() ;
 	}
+	
+	public static String convertLinkHTML(String s) {
+		int i = 0, j , l;
+		StringBuffer buffer ;String str ;
+		boolean isWrite = true, Retu = false ;
+		List<String> Link = new ArrayList<String>() ; 
+		l = s.length() ;
+		while (true) {
+			j = i ; isWrite = true ;
+			i = i + s.substring(i , l).indexOf("http:") ;
+			if(i <= j || i >= l)break ;
+			if(i > 1 && s.charAt(i-1) == '"') continue ;
+			buffer = new StringBuffer() ;
+			while (true) {
+	     char c = s.charAt(i);
+	     	if(c == '"') {isWrite = false ; break ;}
+	      if(c == ' ' || c == '<') break ;
+	      if(c == '?' || c == '#' || c == '&' || c == '\'') buffer.append("\\") ;
+	      buffer.append(c);
+	      i++ ;
+	      if(i >= (l)) {Retu = true; break ;}
+      }
+			
+			str = buffer.toString() ;
+			for (String string : Link) {
+	      if(string.equalsIgnoreCase(str)) { 
+	      	isWrite = false ;
+	      	break ;
+	      }
+      }
+			if(isWrite)	Link.add(str) ;
+			if(Retu) break ;
+		}
+		for (String link : Link) {
+			link = link.trim() ;
+			s = s.replaceAll(link, "<a target=\"_blank\" href=\"" + link + "\">" + link + "</a>") ;
+    }
+	  return s ;
+  }
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	

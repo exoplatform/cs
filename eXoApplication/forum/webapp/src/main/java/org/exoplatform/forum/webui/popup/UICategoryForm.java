@@ -29,7 +29,6 @@ import org.exoplatform.forum.webui.UICategory;
 import org.exoplatform.forum.webui.UICategoryContainer;
 import org.exoplatform.forum.webui.UIForumLinks;
 import org.exoplatform.forum.webui.UIForumPortlet;
-import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -98,13 +97,14 @@ public class UICategoryForm extends UIForm implements UIPopupComponent{
 	}
 	
 	static	public class SaveActionListener extends EventListener<UICategoryForm> {
-		public void execute(Event<UICategoryForm> event) throws Exception {
+		@Override
+    public void execute(Event<UICategoryForm> event) throws Exception {
 			UICategoryForm uiForm = event.getSource() ;
 			String categoryTitle = uiForm.getUIStringInput(FIELD_CATEGORYTITLE_INPUT).getValue();
 			String categoryOrder = uiForm.getUIStringInput(FIELD_CATEGORYORDER_INPUT).getValue();
 			String description = uiForm.getUIFormTextAreaInput(FIELD_DESCRIPTION_TEXTAREA).getValue();
 			String userPrivate = uiForm.getUIStringInput(FIELD_USERPRIVATE_INPUT).getValue();
-			String userName = Util.getPortalRequestContext().getRemoteUser() ;
+			String userName = ForumUtils.getCurrentUser();
 			Category cat = new Category();
 			cat.setOwner(userName) ;
 			cat.setCategoryName(categoryTitle.trim()) ;
@@ -137,7 +137,8 @@ public class UICategoryForm extends UIForm implements UIPopupComponent{
 	}
 	
 	static	public class CancelActionListener extends EventListener<UICategoryForm> {
-		public void execute(Event<UICategoryForm> event) throws Exception {
+		@Override
+    public void execute(Event<UICategoryForm> event) throws Exception {
 			UIForumPortlet forumPortlet = event.getSource().getAncestorOfType(UIForumPortlet.class) ;
 			forumPortlet.cancelAction() ;
 		}
