@@ -1,178 +1,149 @@
-function UICalendarDragDrop () {
-
-}
-UICalendarDragDrop.prototype.init = function(evt) {
-	var _e = window.event || evt ;
-	if(_e.button == 2) return ;
-  _e.cancelBubble = true;
-  if (_e.preventDefault) {
-    _e.preventDefault();
-  }
-	var UICalendarDragDrop = eXo.calendar.UICalendarDragDrop ;
-	var DragDrop = eXo.core.DragDrop ;
-	DragDrop.initCallback = UICalendarDragDrop.initCallback ;
-  DragDrop.dragCallback = UICalendarDragDrop.dragCallback ;
-  DragDrop.dropCallback = UICalendarDragDrop.dropCallback ;
-  var dragObject = this.cloneNode(true) ;
-  this.parentNode.appendChild(dragObject) ;
-	DragDrop.init(null, dragObject, dragObject, _e) ;
+/**
+ * @author uocnb
+ */
+function UICalendarDragDrop() {
+  this.scKey = 'background' ;
+  this.scValue = '#c0c0c0' ;
+  this.DOMUtil = eXo.core.DOMUtil ;
+  this.DragDrop = eXo.core.DragDrop ;
+  this.dropableSets = [] ;
+  this.listView = false ;
 } ;
 
 /**
  * 
- * @param {DragDropEvent} dndEvent
+ * @param {Array} tableData
+ * @param {Array} events
  */
+UICalendarDragDrop.prototype.init = function(tableData, events) {
+  this.tableData = tableData;
+  this.events = events;
+  this.getAllDropableSets() ;
+  this.regDnDItem() ;
+} ;
+
+UICalendarDragDrop.prototype.getAllDropableSets = function() {
+  this.dropableSets = new Array();
+  for (var i=0; i<this.tableData.length; i++) {
+    var row = this.tableData[i];
+    for (var j=0; j<row.length; j++) {
+      this.dropableSets.push(row[j]);
+    }
+  }
+} ;
+
+UICalendarDragDrop.prototype.regDnDItem = function() {
+  for (var i=0; i<this.events.length; i++) {
+    this.events[i].rootNode.onmousedown = this.dndTrigger;
+  } ; 
+} ;
+
+UICalendarDragDrop.prototype.dndTrigger = function(e){
+  e = e ? e : window.event;
+  if (e.button == 0 || e.which == 1) {
+    return eXo.calendar.UICalendarDragDrop.initDnD(eXo.calendar.UICalendarDragDrop.dropableSets, this, this, e);
+  }
+  return true ;
+} ;
+
+/**
+ * 
+ * @param {Array} dropableObjs
+ * @param {Element} clickObj
+ * @param {Element} dragObj
+ * @param {Event} e
+ */
+UICalendarDragDrop.prototype.initDnD = function(dropableObjs, clickObj, dragObj, e) {
+  var clickBlock = (clickObj && clickObj.tagName) ? clickObj : document.getElementById(clickObj) ;
+  var dragBlock = (dragObj && dragObj.tagName) ? dragObj : document.getElementById(dragObj) ;
+  
+  var blockWidth = clickBlock.offsetWidth ;
+  var blockHeight = clickBlock.offsetHeight ;
+  var tmpNode = clickBlock.cloneNode(true);
+  with (tmpNode.style) {
+    background = "rgb(237,237,237)";
+    width = dropableObjs[0].offsetWidth + 'px';
+  }
+  eXo.core.Browser.setOpacity(tmpNode, 50) ;
+//  clickBlock.parentNode.appendChild(tmpNode);
+  document.body.appendChild(tmpNode);
+  
+  this.DragDrop.initCallback = this.initCallback ;
+  this.DragDrop.dragCallback = this.dragCallback ;
+  this.DragDrop.dropCallback = this.dropCallback ;
+  
+  this.DragDrop.init(dropableObjs, clickBlock, tmpNode, e) ;
+  return false ;
+} ;
+
+UICalendarDragDrop.prototype.synDragObjectPos = function(dndEvent) {
+  if (!dndEvent.backupMouseEvent) {
+    dndEvent.backupMouseEvent = window.event ;
+    if (!dndEvent.backupMouseEvent) {
+      return ;
+    }
+  }
+  var dragObject = dndEvent.dragObject ;
+  var mouseX = eXo.core.Browser.findMouseXInPage(dndEvent.backupMouseEvent) ;
+  var mouseY = eXo.core.Browser.findMouseYInPage(dndEvent.backupMouseEvent) ;
+  dragObject.style.top = mouseY + 'px' ;
+  dragObject.style.left = mouseX + 'px' ;
+} ;
+
 UICalendarDragDrop.prototype.initCallback = function(dndEvent) {
-	var UICalendarDragDrop = eXo.calendar.UICalendarDragDrop ;
-	var dragObject = dndEvent.dragObject ;
-	dragObject.style.left = eXo.core.Mouse.mousexInPage - eXo.core.Browser.findPosX(dragObject.offsetParent) - 10 + "px" ;
-	eXo.core.Browser.setOpacity(dragObject, 50) ;
-  dragObject.style.width = eXo.calendar.UIMonthView.cells[0].offsetWidth + "px" ;
-  var div = document.createElement("div") ; ;
-	div.innerHTML = "<span></span>" ;
-	var styles = {
-		"position" : "absolute",
-		"background" : "rgb(237,237,237)"
-	} ;
-	eXo.calendar.UICalendarPortlet.setStyle(div,styles) ;
-	eXo.core.Browser.setOpacity(div, 50) ;
-	eXo.calendar.UIMonthView.eventContainer.appendChild(div) ;
+  eXo.calendar.UICalendarDragDrop.synDragObjectPos(dndEvent) ;
 } ;
 
-UICalendarDragDrop.prototype.dragCallback = function(evt) {
-	var UICalendarDragDrop = eXo.calendar.UICalendarDragDrop ;
-	var dragObject = evt.dragObject ;
-	var currentTarget = 
-	UICalendarDragDrop.currentTarget = currentTarget ;
-	var styles = {
-		"top" : currentTarget.offsetTop + 1 + "px",
-		"left" : currentTarget.offsetLeft + "px",
-		"height" : currentTarget.offsetHeight - 1 + "px",
-		"width" : currentTarget.offsetWidth - 1 + "px"
-	} ;
-	eXo.calendar.UICalendarPortlet.setStyle(UICalendarDragDrop.tmp, styles) ;
+UICalendarDragDrop.prototype.dragCallback = function(dndEvent) {
+  var dragObject = dndEvent.dragObject ;
+  if (!dragObject.style.display ||
+      dragObject.style.display == 'none') {
+    dragObject.style.display = 'block' ;
+  }
+
+  eXo.calendar.UICalendarDragDrop.synDragObjectPos(dndEvent) ;
+  
+  if (dndEvent.foundTargetObject) {
+    if (this.foundTargetObjectCatch != dndEvent.foundTargetObject) {
+      if(this.foundTargetObjectCatch) {
+        this.foundTargetObjectCatch.style[eXo.calendar.UICalendarDragDrop.scKey] = this.foundTargetObjectCatchStyle ;
+      }
+      this.foundTargetObjectCatch = dndEvent.foundTargetObject ;
+      this.foundTargetObjectCatchStyle = this.foundTargetObjectCatch.style[eXo.calendar.UICalendarDragDrop.scKey] ;
+      this.foundTargetObjectCatch.style[eXo.calendar.UICalendarDragDrop.scKey] = eXo.calendar.UICalendarDragDrop.scValue ;
+    }
+  } else {
+    if (this.foundTargetObjectCatch) {
+      this.foundTargetObjectCatch.style[eXo.calendar.UICalendarDragDrop.scKey] = this.foundTargetObjectCatchStyle ;
+    }
+    this.foundTargetObjectCatch = null ;
+  }
 } ;
 
-UICalendarDragDrop.prototype.dropCallback = function(evt) {
-	var UICalendarDragDrop = eXo.calendar.UICalendarDragDrop ;
-	var dragObject = evt.dragObject ;
-	var currentTarget = UICalendarDragDrop.currentTarget ;
-	eXo.core.DOMUtil.removeElement(dragObject) ;
-	eXo.core.DOMUtil.removeElement(UICalendarDragDrop.tmp) ;
-	if (currentTarget) {
-		if (currentTarget == UICalendarDragDrop.startCell) return ;
-		var actionlink = "" ;
-		if (actionlink = currentTarget.getAttribute("actionLink")) {
-			var currentDate = currentTarget.getAttribute("startTime") ;
-			var eventId = dragObject.getAttribute("eventId") ;
-			var calId = dragObject.getAttribute("calId") ;
-			var calType = dragObject.getAttribute("calType") ;
-			actionlink = actionlink.replace(/objectId\s*=\s*[a-zA-Z0-9_]*(?=&|'|\")/,"objectId=" + currentDate) ;
-			actionlink = actionlink.replace(/eventId\s*=\s*[a-zA-Z0-9_]*(?=&|'|\")/,"eventId=" + eventId) ;
-			actionlink = actionlink.replace(/calendarId\s*=\s*[a-zA-Z0-9_]*(?=&|'|\")/,"calendarId=" + calId) ;
-			actionlink = actionlink.replace(/calType\s*=\s*[a-zA-Z0-9_]*(?=&|'|\")/,"calType=" + calType) ;
-			actionlink = actionlink.replace("javascript:","") ;
-			currentTarget = null ;
-			eval(actionlink) ;
-		}
-	}
+UICalendarDragDrop.prototype.dropCallback = function(dndEvent) {
+  eXo.core.DOMUtil.removeElement(dndEvent.dragObject);
+  if (this.foundTargetObjectCatch) {
+    this.foundTargetObjectCatch.style[eXo.calendar.UICalendarDragDrop.scKey] = this.foundTargetObjectCatchStyle ;
+  }
+  this.foundTargetObjectCatch = dndEvent.foundTargetObject ;
+  if (this.foundTargetObjectCatch) {
+    if (this.foundTargetObjectCatch.getAttribute('starttime') == dndEvent.clickObject.getAttribute('starttime')) {
+      return;
+    }
+    if (actionlink = this.foundTargetObjectCatch.getAttribute("actionLink")) {
+      var clickObject = dndEvent.clickObject;
+      var currentDate = this.foundTargetObjectCatch.getAttribute("startTime") ;
+      var eventId = clickObject.getAttribute("eventId") ;
+      var calId = clickObject.getAttribute("calId") ;
+      var calType = clickObject.getAttribute("calType") ;
+      actionlink = actionlink.replace(/objectId\s*=\s*[a-zA-Z0-9_]*(?=&|'|\")/,"objectId=" + currentDate) ;
+      actionlink = actionlink.replace(/eventId\s*=\s*[a-zA-Z0-9_]*(?=&|'|\")/,"eventId=" + eventId) ;
+      actionlink = actionlink.replace(/calendarId\s*=\s*[a-zA-Z0-9_]*(?=&|'|\")/,"calendarId=" + calId) ;
+      actionlink = actionlink.replace(/calType\s*=\s*[a-zA-Z0-9_]*(?=&|'|\")/,"calType=" + calType) ;
+      actionlink = actionlink.replace("javascript:","") ;
+      eval(actionlink) ;
+    }
+  }
 } ;
 
-UICalendarDragDrop.prototype.getStartCell = function(targets, object) {	
-	var len = targets.length ;
-	var targetStart = null ;
-	var objStart = object.getAttribute("startTime") ;
-	for(var i = 0 ; i < len ; i ++ ) {
-		targetStart = targets[i].getAttribute("startTime") ;
-		if(objStart == targetStart) return targets[i] ;
-	}
-	return false ;
-} ;
-
-eXo.calendar.UICalendarDragDrop = new UICalendarDragDrop() ;
-//function UICalendarDragDrop () {
-//
-//}
-//UICalendarDragDrop.prototype.init = function(evt) {
-//	var _e = window.event || evt ;
-//	if(_e.button == 2) return ;
-//	var UICalendarDragDrop = eXo.calendar.UICalendarDragDrop ;
-//	var DragDrop = eXo.core.DragDrop ;
-//	DragDrop.initCallback = UICalendarDragDrop.initCallback ;
-//  DragDrop.dragCallback = UICalendarDragDrop.dragCallback ;
-//  DragDrop.dropCallback = UICalendarDragDrop.dropCallback ;
-//  var dragObject = this.cloneNode(true) ;
-//  this.parentNode.appendChild(dragObject) ;
-//	DragDrop.init(null, dragObject, dragObject, _e) ;
-//	UICalendarDragDrop.targets = eXo.calendar.UIMonthView.cells ;
-//} ;
-//
-//UICalendarDragDrop.prototype.initCallback = function(evt) {
-//	var UICalendarDragDrop = eXo.calendar.UICalendarDragDrop ;
-//	var dragObject = evt.dragObject ;
-//	dragObject.style.left = eXo.core.Mouse.mousexInPage - eXo.core.Browser.findPosX(dragObject.offsetParent) - 10 + "px" ;
-//	dragObject.style.opacity = 0.5 ;
-//  dragObject.style.width = eXo.calendar.UIMonthView.cells[0].offsetWidth + "px" ;
-//	UICalendarDragDrop.tmp = document.createElement("div") ;
-//	UICalendarDragDrop.tmp.innerHTML = "<span></span>" ;
-//	UICalendarDragDrop.tmp.style.position = "absolute" ;
-//	UICalendarDragDrop.tmp.style.background = "rgb(237,237,237)" ;
-//	UICalendarDragDrop.tmp.style.opacity = 0.5 ;
-//	eXo.calendar.UIMonthView.eventContainer.appendChild(UICalendarDragDrop.tmp) ;
-//} ;
-//
-//UICalendarDragDrop.prototype.dragCallback = function(evt) {
-//	var UICalendarDragDrop = eXo.calendar.UICalendarDragDrop ;
-//	var dragObject = evt.dragObject ;
-//	var len = UICalendarDragDrop.targets.length ;
-//	var isTarget = null ;
-//	for(var i = 0 ; i < len ; i ++) {
-//		isTarget = UICalendarDragDrop.isTarget(UICalendarDragDrop.targets[i], dragObject) ;
-//		if(isTarget) {
-//			UICalendarDragDrop.tmp.style.top = UICalendarDragDrop.targets[i].offsetTop + 1 + "px" ;
-//			UICalendarDragDrop.tmp.style.left = UICalendarDragDrop.targets[i].offsetLeft + "px" ;
-//			UICalendarDragDrop.tmp.style.height = UICalendarDragDrop.targets[i].offsetHeight - 1 + "px" ;
-//			UICalendarDragDrop.tmp.style.width = UICalendarDragDrop.targets[i].offsetWidth - 1 + "px" ;
-//			UICalendarDragDrop.currentTarget = UICalendarDragDrop.targets[i] ;
-//		}
-//	}
-//	
-//} ;
-//
-//UICalendarDragDrop.prototype.dropCallback = function(evt) {
-//	var UICalendarDragDrop = eXo.calendar.UICalendarDragDrop ;
-//	var dragObject = evt.dragObject ;
-//	eXo.core.DOMUtil.removeElement(dragObject) ;
-//	eXo.core.DOMUtil.removeElement(UICalendarDragDrop.tmp) ;
-//	if (UICalendarDragDrop.currentTarget) {
-//		if (UICalendarDragDrop.currentTarget.className == "CalendarContentDisable") return ;
-//	var actionlink = "" ;
-//	if (actionlink = UICalendarDragDrop.currentTarget.getAttribute("actionLink")) {
-//		var currentDate = UICalendarDragDrop.currentTarget.getAttribute("startTime") ;
-//		var eventId = dragObject.getAttribute("eventId") ;
-//		var calId = dragObject.getAttribute("calId") ;
-//		var calType = dragObject.getAttribute("calType") ;
-//		actionlink = actionlink.replace(/objectId\s*=\s*[a-zA-Z0-9_]*(?=&|'|\")/,"objectId=" + currentDate) ;
-//		actionlink = actionlink.replace(/eventId\s*=\s*[a-zA-Z0-9_]*(?=&|'|\")/,"eventId=" + eventId) ;
-//		actionlink = actionlink.replace(/calendarId\s*=\s*[a-zA-Z0-9_]*(?=&|'|\")/,"calendarId=" + calId) ;
-//		actionlink = actionlink.replace(/calType\s*=\s*[a-zA-Z0-9_]*(?=&|'|\")/,"calType=" + calType) ;
-//		actionlink = actionlink.replace("javascript:","") ;
-//		UICalendarDragDrop.currentTarget = null ;
-//		eval(actionlink) ;
-//	}
-//	}
-//} ;
-//
-//UICalendarDragDrop.prototype.isTarget = function(target, object) {	
-//	object.x = eXo.core.Browser.findPosX(object) ;
-//	object.y = eXo.core.Browser.findPosY(object) ;
-//	target.x = eXo.core.Browser.findPosX(target) ;
-//	target.y = eXo.core.Browser.findPosY(target) ;
-//	if ((object.x > target.x) && (object.x < (target.x + target.offsetWidth)) && (object.y > target.y) && (object.y < (target.y + target.offsetHeight))) {
-//		return true ;
-//	} else {
-//		return false ;
-//	}
-//} ;
-//
-//eXo.calendar.UICalendarDragDrop = new UICalendarDragDrop() ;
+eXo.calendar.UICalendarDragDrop = new UICalendarDragDrop();

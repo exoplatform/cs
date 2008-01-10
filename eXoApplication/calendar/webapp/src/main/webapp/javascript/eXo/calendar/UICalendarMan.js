@@ -392,8 +392,20 @@ GUIMan.prototype.init = function(){
   this.CELL_WIDTH = (this.tableData[0])[0].offsetWidth;
   this.paint();
   this.setDynamicSize();
-//  this.initDND();
+  this.scrollTo();
+  this.initDND();
 };
+ 
+GUIMan.prototype.scrollTo = function() {
+  var lastUpdatedId = this.rowContainerDay.getAttribute("lastUpdatedId") ;
+  var events = eXo.calendar.UICalendarMan.EventMan.events; 
+  for(var i=0 ; i<events.length ; i++) {
+    if(events[i].eventId == lastUpdatedId) {
+      this.rowContainerDay.scrollTop = events[i].rootNode.offsetTop - 16;
+      return ;
+    }
+  }
+} ;
 
 GUIMan.prototype.initDND = function() {
   var events = eXo.calendar.UICalendarMan.EventMan.events;
@@ -403,8 +415,8 @@ GUIMan.prototype.initDND = function() {
     if (checkbox) {
       checkbox.onmousedown = this.cancelEvent;
     }
-    eventNode.onmousedown = eXo.calendar.UICalendarDragDrop.init ;
   }
+  eXo.calendar.UICalendarDragDrop.init(this.tableData, eXo.calendar.UICalendarMan.EventMan.events);
 };
 
 /**
@@ -466,7 +478,6 @@ GUIMan.prototype.drawDay = function(weekObj, dayIndex) {
   if (dayObj.invisibleGroup.length > 0) {
     var moreNode = document.createElement('div');
     this.rowContainerDay.appendChild(moreNode);
-    moreNode.innerHTML = 'more...';
     with (moreNode.style) {
       position = 'absolute';
       width = dayInfo.width + 'px';
@@ -485,20 +496,26 @@ GUIMan.prototype.drawDay = function(weekObj, dayIndex) {
     }
     moreContainerNode.className = 'MoreContainer';
     // Create invisible event
+    var cnt = 0
     for (var i=0; i<dayObj.invisibleGroup.length; i++) {
       var eventObj = dayObj.invisibleGroup[i];
       if (!eventObj) {
         continue;
       }
+      cnt ++;
       var eventNode = eventObj.rootNode;
-      eventNode.display = 'none';
-      eventNode = eventNode.cloneNode(true);
-      eventNode.setAttribute('eventclone', 'true');
-      // Remove checkbox on clone event
-      try {
-        var checkBoxTmp = eventNode.getElementsByTagName('input')[0].parentNode;
-        checkBoxTmp.parentNode.removeChild(checkBoxTmp);
-      } catch(e) {}
+      if (eventNode.getAttribute('used')) {
+        eventNode = eventNode.cloneNode(true);
+        eventNode.setAttribute('eventclone', 'true');
+        // Remove checkbox on clone event
+        try {
+          var checkBoxTmp = eventNode.getElementsByTagName('input')[0].parentNode;
+          checkBoxTmp.parentNode.removeChild(checkBoxTmp);
+        } catch(e) {}
+        this.rowContainerDay.appendChild(eventNode);
+        eventObj.cutDownNodes.push(eventNode);
+        eventNode.setAttribute('eventclone', 'true');
+      }
       moreContainerNode.appendChild(eventNode);
       eventObj.cutDownNodes.push(eventNode);
       startTime = new Date(parseInt(startTime));
@@ -512,7 +529,17 @@ GUIMan.prototype.drawDay = function(weekObj, dayIndex) {
         left = '0px';
         width = dayInfo.width + 'px';
       }
+      eventNode.setAttribute('used', 'true');
     }
+    var moreLabel = document.createElement('div');
+    with (moreLabel.style) {
+      position = 'absolute';
+      top = '0px';
+      left = '0px';
+      padding = '2px';
+    }
+    moreLabel.innerHTML = 'more ' + cnt + '+';
+    moreNode.appendChild(moreLabel);
     moreNode.appendChild(moreContainerNode);
     this.moreNodes.push(moreNode);
   }
@@ -546,7 +573,6 @@ GUIMan.prototype.toggleMore = function() {
  */
 GUIMan.prototype.drawEvent = function(eventObj, startTime, endTime, weekIndex, eventIndex, dayInfo){
   var eventNode = eventObj.rootNode;
-  eventNode.setAttribute('visiblegroup', 'true');
   if (eventNode.getAttribute('used')) {
     eventNode = eventNode.cloneNode(true);
     eventNode.setAttribute('eventclone', 'true');
@@ -567,7 +593,6 @@ GUIMan.prototype.drawEvent = function(eventObj, startTime, endTime, weekIndex, e
   endDay ++ ;
   var eventLen = ((endDay - startDay) * (dayInfo.width)) - 1;
   with (eventNode.style) {
-//    display = 'block';
     top = topPos + 'px';
     left = leftPos + 'px';
     width = eventLen + 'px';
