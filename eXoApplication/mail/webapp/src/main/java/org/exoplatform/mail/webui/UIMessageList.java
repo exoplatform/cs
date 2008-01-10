@@ -541,7 +541,7 @@ public class UIMessageList extends UIForm {
       if (msgId != null) { 
         appliedMsgList.add(mailSrv.getMessageById(SessionsUtils.getSessionProvider(), username, accountId, msgId));
       } else {
-        appliedMsgList = uiMessageList.getAppliedMessage();
+        appliedMsgList = uiMessageList.getCheckedMessage();
       }
       String trashFolderId = Utils.createFolderId(accountId, Utils.FD_TRASH, false) ;
       if (uiMessageList.getSelectedFolderId().equals(trashFolderId)) { 
@@ -737,7 +737,7 @@ public class UIMessageList extends UIForm {
         return;
       }
       UIMoveMessageForm uiMoveMessageForm = uiMessageList.createUIComponent(UIMoveMessageForm.class,null, null);
-      uiMoveMessageForm.setMessageList(uiMessageList.getAppliedMessage());
+      uiMoveMessageForm.setMessageList(uiMessageList.getCheckedMessage());
       uiPopupAction.activate(uiMoveMessageForm, 600, 0, true);             
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);        
     }
