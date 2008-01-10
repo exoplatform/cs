@@ -326,7 +326,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       } else if(CalendarUtils.PRIVATE_TYPE.equals(ce.getCalType())) {
         calService.removeUserEvent(SessionsUtils.getSessionProvider(), username, ce.getCalendarId(), ce.getId()) ;
       } else if(CalendarUtils.SHARED_TYPE.equals(ce.getCalType())){
-        calService.removeSharedEvnet(SessionsUtils.getSessionProvider(), username, ce.getCalendarId(), ce.getId()) ;
+        calService.removeSharedEvent(SessionsUtils.getSessionProvider(), username, ce.getCalendarId(), ce.getId()) ;
       }
     }
   }
@@ -659,7 +659,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         } else if(CalendarUtils.PRIVATE_TYPE.equals(calType)){
           calService.removeUserEvent(SessionsUtils.getSessionProvider(), username, calendarId, eventId) ;
         } else if(CalendarUtils.SHARED_TYPE.equals(calType)) {
-          calService.removeSharedEvnet(SessionsUtils.getSessionProvider(), username, calendarId, eventId) ;
+          calService.removeSharedEvent(SessionsUtils.getSessionProvider(), username, calendarId, eventId) ;
         }
         uiMiniCalendar.updateMiniCal() ;
         calendarview.setLastUpdatedEventId(null) ;

@@ -225,8 +225,8 @@ public class CalendarServiceImpl implements CalendarService{
     
   }
 
-  public void removeSharedEvnet(SessionProvider sessionProvider, String username, String calendarId, String eventId)throws Exception  {
-    storage_.removeSharedEvnet(sessionProvider, username, calendarId, eventId) ;
+  public void removeSharedEvent(SessionProvider sessionProvider, String username, String calendarId, String eventId)throws Exception  {
+    storage_.removeSharedEvent(sessionProvider, username, calendarId, eventId) ;
     
   }
 }

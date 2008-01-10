@@ -830,8 +830,10 @@ public class JCRDataStorage{
 
   private void removeReminder(SessionProvider sProvider, Node eventNode)throws Exception {
     // Need to use system session
-    Node node = getReminderFolder(sProvider, eventNode.getProperty("exo:fromDateTime").getDate().getTime()) ;
-    if(node.hasNode(eventNode.getName())) node.getNode(eventNode.getName()).remove() ;
+    Node reminders = getReminderFolder(sProvider, eventNode.getProperty("exo:fromDateTime").getDate().getTime()) ;
+    if(reminders.hasNode(eventNode.getName())) reminders.getNode(eventNode.getName()).remove() ;
+    Node events = reminders.getParent().getNode(EVENTS) ;
+    if(events != null && events.hasNode(eventNode.getName())) events.getNode(eventNode.getName()).remove() ;
     //node.save() ;  	
   } 
 
@@ -1805,7 +1807,7 @@ public class JCRDataStorage{
     return participantMap ;
   }
 
-  public void removeSharedEvnet(SessionProvider sessionProvider, String username, String calendarId, String eventId) throws Exception {
+  public void removeSharedEvent(SessionProvider sessionProvider, String username, String calendarId, String eventId) throws Exception {
     Node sharedCalendarHome = getSharedCalendarHome(sessionProvider) ;
     if(sharedCalendarHome.hasNode(username)) {
       Node userNode = sharedCalendarHome.getNode(username) ;
@@ -1814,7 +1816,11 @@ public class JCRDataStorage{
       while(iter.hasNext()) {
         calendar = iter.nextProperty().getParent() ;
         if(calendar.getProperty("exo:id").getString().equals(calendarId)) {
-          if(calendar.hasNode(eventId)) calendar.getNode(eventId).remove() ;
+          if(calendar.hasNode(eventId)) {
+          	Node event = calendar.getNode(eventId) ;
+          	removeReminder(sessionProvider, event) ;
+          	event.remove() ;
+          }
           calendar.save() ;
           break ;
         }
