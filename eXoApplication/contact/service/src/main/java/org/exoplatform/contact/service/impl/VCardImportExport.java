@@ -271,12 +271,8 @@ public class VCardImportExport implements ContactImportExport {
     addExtensionHandler(eXoYahooId);
     unmarshaller.setStrict(false);
     unmarshaller.setEncoding(ENCODING);
-    
-    System.out.println("\n\n 3.3333333333333333 deaddddddddddddddddddd  \n\n");
+
     net.wimpi.pim.contact.model.Contact[] pimContacts = unmarshaller.unmarshallContacts(input);
-    
-    System.out.println("\n\n 3.444444444444444 \n\n");
-    
     for (int index = 0; index < pimContacts.length; index++) {
 
       Contact contact = new Contact();
