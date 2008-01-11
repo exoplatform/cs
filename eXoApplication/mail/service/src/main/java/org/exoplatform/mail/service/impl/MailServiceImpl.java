@@ -22,13 +22,17 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Enumeration;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Properties;
+import java.util.Vector;
 
 import javax.activation.DataHandler;
 import javax.jcr.Node;
 import javax.mail.AuthenticationFailedException;
+import javax.mail.Flags;
+import javax.mail.Header;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.Part;
@@ -368,18 +372,23 @@ public class MailServiceImpl implements MailService{
       store.connect();
       
       javax.mail.Folder folder = store.getFolder(account.getIncomingFolder());
-      folder.open(javax.mail.Folder.READ_ONLY);
+      folder.open(javax.mail.Folder.READ_WRITE);
 
       javax.mail.Message[] messages = folder.getMessages() ;
-      
-      totalNew = messages.length ;
+      Vector<javax.mail.Message> vector = new Vector<javax.mail.Message>();
+      Node messageHome = storage_.getMessageHome(sProvider, username, accountId) ;
+      for (int i=1 ; i< messages.length; i++) {
+        if (!messages[i].isSet(Flags.Flag.SEEN)) vector.add(messages[i]); 
+        messages[i].setFlag(Flags.Flag.SEEN, true); 
+      }  
+
+      totalNew = vector.size() ;
       
       System.out.println(" #### Folder contains " + totalNew + " messages !");
       
       if (totalNew > 0) {
         int i = 0 ;
         //SpamFilter spamFilter = getSpamFilter(sProvider, username, account.getId());
-        Node messageHome = storage_.getMessageHome(sProvider, username, accountId) ;
         String folderId = Utils.createFolderId(accountId, account.getIncomingFolder(), false) ;
         Folder storeFolder = storage_.getFolder(sProvider, username, account.getId(), folderId) ;
         if(storeFolder == null) {
@@ -391,7 +400,7 @@ public class MailServiceImpl implements MailService{
           storage_.saveFolder(sProvider, username, account.getId(), storeFolder) ;
         }
         while (i < totalNew) {
-          javax.mail.Message msg = messages[i] ;          
+          javax.mail.Message msg = vector.get(i) ;          
           saveMessage(sProvider, msg, messageHome, account.getId(), username, folderId) ;
           messageHome.getSession().save() ;
           i ++ ;          
@@ -399,7 +408,7 @@ public class MailServiceImpl implements MailService{
         }
         
         storage_.execActionFilter(sProvider, username, accountId, checkTime);
-        folder.close(false);      
+        folder.close(true);      
         store.close();
       }
     }  catch (Exception e) { 
@@ -409,9 +418,9 @@ public class MailServiceImpl implements MailService{
   }
   
   private void saveMessage(SessionProvider sProvider, javax.mail.Message msg, Node messagesNode, String accId, String username, String folderId) throws Exception {
-  	Message newMes = new Message() ;
-  	Node node = messagesNode.addNode(newMes.getId(), Utils.EXO_MESSAGE) ;
-    node.setProperty(Utils.EXO_ID, newMes.getId());
+    String messageId = getMessageId(msg) ;
+  	Node node = messagesNode.addNode(messageId, Utils.EXO_MESSAGE) ;
+    node.setProperty(Utils.EXO_ID, messageId);
   	node.setProperty(Utils.EXO_ACCOUNT, accId);
     node.setProperty(Utils.EXO_FROM, InternetAddress.toString(msg.getFrom()));
     node.setProperty(Utils.EXO_TO, InternetAddress.toString(msg.getRecipients(javax.mail.Message.RecipientType.TO)));
@@ -448,9 +457,9 @@ public class MailServiceImpl implements MailService{
       setPart(msg, node);
     }
     
-    node.setProperty(Utils.EXO_MESSAGEIDS, new String[] {newMes.getId()});
+    node.setProperty(Utils.EXO_MESSAGEIDS, new String[] {messageId});
     node.setProperty(Utils.EXO_ADDRESSES, new String[] {});
-    node.setProperty(Utils.EXO_ROOT, newMes.getId());
+    node.setProperty(Utils.EXO_ROOT, messageId);
   	
     Node folderHomeNode = storage_.getFolderHome(sProvider, username, accId) ;
     if (folderHomeNode.hasNode(folderId)) { 
@@ -458,6 +467,25 @@ public class MailServiceImpl implements MailService{
       folderNode.setProperty(Utils.EXO_UNREADMESSAGES, folderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong() + 1) ;
       folderNode.setProperty(Utils.EXO_TOTALMESSAGE , folderNode.getProperty(Utils.EXO_TOTALMESSAGE).getLong() + 1) ;
     }
+  }
+  
+  public String getMessageId(javax.mail.Message message) {
+    String messageid = "";
+    try {
+      // Retrieve message id from headers
+      Enumeration e = message.getAllHeaders();
+      while (messageid.equals(""))
+      {
+        Header header = (Header) e.nextElement();
+        if (header.getName().equals("Message-ID"))
+        {
+          messageid = header.getValue();
+        }
+      }
+    } catch (Exception e) {
+      System.out.println("Error in getMessageId()" + e);
+    }
+    return messageid;
   }
   
   
