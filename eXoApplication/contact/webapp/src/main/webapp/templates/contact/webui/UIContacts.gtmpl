@@ -102,7 +102,7 @@
 	  		        	<%
 	  		        		String fullName = uicomponent.fullName ;
 			    		      String sortedByName = uicomponent.event("Sort",fullName);
-			              String classArrowName = "";
+			              String classArrowName = "UpArrow1Icon";
 			              group = uicomponent.getSelectedGroup() ;
 			              if (uicomponent.getSortedBy().equals(fullName)) {
 			              	if (!ContactUtils.isEmpty(group)) {

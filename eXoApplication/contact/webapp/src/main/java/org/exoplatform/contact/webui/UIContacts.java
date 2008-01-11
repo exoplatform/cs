@@ -611,7 +611,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   }
   
   static public class FullNameComparator implements Comparator {
-    private static boolean isAsc ;
+    public static boolean isAsc ;
     public int compare(Object o1, Object o2) throws ClassCastException {
       String name1 = ((Contact) o1).getFullName() ;
       String name2 = ((Contact) o2).getFullName() ;

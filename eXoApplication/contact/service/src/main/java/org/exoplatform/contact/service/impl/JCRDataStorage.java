@@ -237,7 +237,7 @@ public class JCRDataStorage{
       filter.setAccountPath(contactHomeNode.getPath()) ;
       qm = contactHomeNode.getSession().getWorkspace().getQueryManager();
     }
-    Query query = qm.createQuery(filter.getStatement(), Query.XPATH);    
+    Query query = qm.createQuery(filter.getStatement(), Query.XPATH);  
     QueryResult result = query.execute();    
     return new ContactPageList(username, result.getNodes(), 10, filter.getStatement(), true, "0") ;
   }
@@ -263,7 +263,7 @@ public class JCRDataStorage{
     StringBuffer queryString = new StringBuffer("/jcr:root" + contactHome.getPath() 
                                                 + "//element(*,exo:contact)[@exo:categories='").
                                                 append(groupId).
-                                                append("']");
+                                                append("']").append("order by @exo:fullName ascending");
     Query query = qm.createQuery(queryString.toString(), Query.XPATH);
     QueryResult result = query.execute();
     ContactPageList pageList = new ContactPageList(username, result.getNodes(), 10, queryString.toString(), true, "0") ;
@@ -274,9 +274,10 @@ public class JCRDataStorage{
     Node contactHome = getUserContactHome(sProvider, username);
     QueryManager qm = contactHome.getSession().getWorkspace().getQueryManager();
     StringBuffer queryString = new StringBuffer("/jcr:root" + contactHome.getPath() 
-                                                + "//element(*,exo:contact)[@exo:categories='").
-                                                append(groupId).
-                                                append("']");
+                                                + "//element(*,exo:contact)[@exo:categories='")
+                                                .append(groupId).append("']")
+                                                .append("order by @exo:fullname ascending") ;
+                                                
     Query query = qm.createQuery(queryString.toString(), Query.XPATH);
     QueryResult result = query.execute();
     NodeIterator it = result.getNodes();
@@ -409,7 +410,6 @@ public class JCRDataStorage{
       			saveContactToSharedAddressBook(sysProvider, username, contact.getAddressBook()[0], contact, true) ;
             if (privateContactHome.hasNode(contact.getId()))
               privateContactHome.getNode(contact.getId()).remove() ;
-      			privateContactHome.save() ;
       		}else if(contact.getContactType().equals(PUBLIC)) {
       			saveContactToSharedAddressBook(sysProvider, username, contact.getAddressBook()[0], contact, true) ;
       			publicContactHome.getNode(contact.getId()).remove() ;
@@ -590,9 +590,9 @@ public class JCRDataStorage{
           if(addressBookId.equals(addressBook.getProperty("exo:id").getString())) {
           	QueryManager qm = sharedHome.getSession().getWorkspace().getQueryManager();
             StringBuffer queryString = new StringBuffer("/jcr:root" + addressBook.getParent().getParent().getNode(CONTACTS).getPath() 
-                                                        + "//element(*,exo:contact)[@exo:categories='").
-                                                        append(addressBookId).
-                                                        append("']");
+                                                        + "//element(*,exo:contact)[(@exo:categories='").
+                                                        append(addressBookId).append("')]")
+                                                        .append(" order by @exo:fullName ascending");
             Query query = qm.createQuery(queryString.toString(), Query.XPATH);
             QueryResult result = query.execute();
             return new ContactPageList(username, result.getNodes(), 10, queryString.toString(), true, "1") ;
@@ -700,9 +700,9 @@ public class JCRDataStorage{
     Node contactHome = getPublicContactHome(sysProvider);
     QueryManager qm = contactHome.getSession().getWorkspace().getQueryManager();
     StringBuffer queryString = new StringBuffer("/jcr:root" + contactHome.getPath() 
-                                                + "//element(*,exo:contact)[@exo:categories='").
-                                                append(groupId).
-                                                append("']");
+                                                + "//element(*,exo:contact)[@exo:categories='")
+                                                .append(groupId).append("']")
+                                                .append("order by @exo:fullname ascending");
     Query query = qm.createQuery(queryString.toString(), Query.XPATH);
     QueryResult result = query.execute();
     return new ContactPageList(null, result.getNodes(), 10, queryString.toString(), true, "2") ;
@@ -895,13 +895,13 @@ public class JCRDataStorage{
     return tags;
   }
 
-  public DataPageList getContactPageListByTag(SessionProvider sysProvider, String username, String tagName) throws Exception {
+  public DataPageList getContactPageListByTag(SessionProvider sysProvider, String username, String tagId) throws Exception {
     //query on private contacts
     Node contactHome = getUserContactHome(sysProvider, username);
     QueryManager qm = contactHome.getSession().getWorkspace().getQueryManager();
     StringBuffer queryString = new StringBuffer("/jcr:root" + contactHome.getPath() 
                                                 + "//element(*,exo:contact)[@exo:tags='").
-                                                append(tagName).
+                                                append(tagId).
                                                 append("']");
     Query query = qm.createQuery(queryString.toString(), Query.XPATH);
     QueryResult result = query.execute();
@@ -915,7 +915,7 @@ public class JCRDataStorage{
     Node publicContactHome = getPublicContactHome(sysProvider);
     queryString = new StringBuffer("/jcr:root" + publicContactHome.getPath() 
                                                 + "//element(*,exo:contact)[@exo:tags='").
-                                                append(tagName).
+                                                append(tagId).
                                                 append("']");
     query = qm.createQuery(queryString.toString(), Query.XPATH);
     result = query.execute();
@@ -934,7 +934,7 @@ public class JCRDataStorage{
           Node shareContactHomeNode = addressBook.getParent().getParent().getNode(CONTACTS) ;
           queryString = new StringBuffer("/jcr:root" + shareContactHomeNode.getPath() 
                                                       + "//element(*,exo:contact)[@exo:tags='").
-                                                      append(tagName).
+                                                      append(tagId).
                                                       append("']");
           query = qm.createQuery(queryString.toString(), Query.XPATH);
           result = query.execute();

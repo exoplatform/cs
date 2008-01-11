@@ -16,6 +16,8 @@
  */
 package org.exoplatform.contact.webui;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +26,9 @@ import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.SessionsUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactService;
+import org.exoplatform.contact.service.DataPageList;
 import org.exoplatform.contact.service.Tag;
+import org.exoplatform.contact.webui.UIContacts.FullNameComparator;
 import org.exoplatform.contact.webui.popup.UIExportForm;
 import org.exoplatform.contact.webui.popup.UIEditTagForm;
 import org.exoplatform.contact.webui.popup.UIPopupAction;
@@ -73,6 +77,7 @@ public class UITags extends UIComponent {
   public String getSelectedTag() { return selectedTag_ ; }
   
   static  public class SelectTagActionListener extends EventListener<UITags> {
+    @SuppressWarnings("unchecked")
     public void execute(Event<UITags> event) throws Exception {
       UITags uiForm = event.getSource() ;
       String tagId = event.getRequestContext().getRequestParameter(OBJECTID) ;
@@ -80,8 +85,17 @@ public class UITags extends UIComponent {
       UIWorkingContainer uiWorkingContainer = uiForm.getAncestorOfType(UIWorkingContainer.class) ;
       uiWorkingContainer.findFirstComponentOfType(UIAddressBooks.class).setSelectedGroup(null) ;
       UIContacts uiContacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class) ;
-      uiContacts.setContacts(ContactUtils.getContactService()
-        .getContactPageListByTag(SessionsUtils.getSystemProvider(), ContactUtils.getCurrentUser(), tagId)) ;
+      
+      DataPageList pageList =ContactUtils.getContactService().getContactPageListByTag(
+          SessionsUtils.getSystemProvider(), ContactUtils.getCurrentUser(), tagId) ;
+      if (pageList != null) {
+        List<Contact> contacts = new ArrayList<Contact>() ;
+        contacts = pageList.getAll() ;
+        FullNameComparator.isAsc = true ;
+        Collections.sort(contacts, new FullNameComparator()) ;          
+        pageList.setList(contacts) ;      
+      }
+      uiContacts.setContacts(pageList) ;
       uiContacts.setSelectedGroup(null) ;
       uiContacts.setSelectedTag(tagId) ;
       uiContacts.setDisplaySearchResult(false) ;

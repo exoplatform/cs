@@ -256,8 +256,8 @@ public class VCardImportExport implements ContactImportExport {
   }
   
   public void importContact(SessionProvider sProvider, String username, InputStream input, String groupId) throws Exception {
-
     ContactIOFactory ciof = Pim.getContactIOFactory();
+    
     ContactUnmarshaller unmarshaller = ciof.createContactUnmarshaller();
     // unmarshall contact
     addExtensionHandler(eXoGender);
@@ -269,11 +269,14 @@ public class VCardImportExport implements ContactImportExport {
     addExtensionHandler(eXoSkypeId);
     addExtensionHandler(eXoMsnId);
     addExtensionHandler(eXoYahooId);
-    
     unmarshaller.setStrict(false);
-    
     unmarshaller.setEncoding(ENCODING);
+    
+    System.out.println("\n\n 3.3333333333333333 deaddddddddddddddddddd  \n\n");
     net.wimpi.pim.contact.model.Contact[] pimContacts = unmarshaller.unmarshallContacts(input);
+    
+    System.out.println("\n\n 3.444444444444444 \n\n");
+    
     for (int index = 0; index < pimContacts.length; index++) {
 
       Contact contact = new Contact();
@@ -299,14 +302,12 @@ public class VCardImportExport implements ContactImportExport {
       contact.setNickName(nickName);
 
       contact.setBirthday(identity.getBirthDate());
-      
       ContactAttachment attachment = new ContactAttachment();
       Image photo = identity.getPhoto();
       if (photo != null) {
         InputStream is = photo.getInputStream();
         if (is != null) {
           attachment.setInputStream(is);
-
           String filename = lastName;
           if ((filename == null) || filename.equals(""))
             filename = firstName;
