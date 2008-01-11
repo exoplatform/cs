@@ -559,6 +559,7 @@ GUIMan.prototype.drawDay = function(weekObj, dayIndex) {
       padding = '2px';
     }
     moreLabel.innerHTML = 'more ' + cnt + '+';
+    moreLabel.style.color = '#00f';
     moreNode.appendChild(moreLabel);
     moreNode.appendChild(moreContainerNode);
     this.moreNodes.push(moreNode);
